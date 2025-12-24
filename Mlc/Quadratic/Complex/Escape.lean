@@ -89,9 +89,8 @@ lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
       have h_zk_ge : ‖z_k‖ ≥ ‖w‖ := by
         calc ‖z_k‖ ≥ ‖w‖ * lam ^ k := ih
           _ ≥ ‖w‖ * 1 := by
-            apply mul_le_mul_of_nonneg_left
-            · exact one_le_pow k (le_of_lt hlam)
-            · exact le_of_lt hw_pos
+            gcongr
+            exact one_le_pow₀ (le_of_lt hlam)
           _ = ‖w‖ := by simp
 
       have h_zk_pos : ‖z_k‖ > 0 := lt_of_lt_of_le hw_pos h_zk_ge
@@ -107,9 +106,8 @@ lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
           · exact h_zk_pos
           · exact h_zk_ge
         _ ≥ (‖w‖ * lam ^ k) * lam := by
-          apply mul_le_mul_of_nonneg_right
-          · exact ih
-          · exact le_of_lt (lt_trans zero_lt_one hlam)
+          gcongr
+          exact le_of_lt hlam
         _ = ‖w‖ * lam ^ (k + 1) := by rw [pow_succ]; ring
 
   intro M
@@ -117,19 +115,20 @@ lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
     apply Filter.Tendsto.const_mul_atTop hw_pos
     apply tendsto_pow_atTop_atTop_of_one_lt hlam
 
-  rcases (Filter.tendsto_atTop_atTop.mp h_tendsto) M with ⟨N0, hN0⟩
+  rcases (Filter.tendsto_atTop_atTop.mp h_tendsto) (M + 1) with ⟨N0, hN0⟩
   use n + N0
   intro m hm
   let k := m - n
-  have hk : m = n + k := by
-    rw [Nat.add_comm] at hm
-    exact (Nat.sub_eq_of_eq_add (Nat.add_sub_of_le hm).symm).symm
+  have hnm : n ≤ m := le_trans (Nat.le_add_right n N0) hm
+  have hk : m = n + k := (Nat.add_sub_of_le hnm).symm
   rw [hk, add_comm]
   dsimp [orbit]
   rw [Function.iterate_add_apply]
-  specialize hN0 k (Nat.le_sub_of_add_le hm)
-  apply lt_of_lt_of_le hN0
-  exact growth k
+  have hm' : N0 + n ≤ m := by rwa [add_comm]
+  specialize hN0 k (Nat.le_sub_of_add_le hm')
+  calc ‖orbit c w k‖ ≥ ‖w‖ * lam ^ k := growth k
+    _ ≥ M + 1 := hN0
+    _ > M := lt_add_one M
 
 end
 
