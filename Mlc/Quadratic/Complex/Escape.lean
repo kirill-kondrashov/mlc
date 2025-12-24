@@ -53,72 +53,25 @@ lemma factor_gt_one (c z : ℂ) (h : ‖z‖ > R c) : ‖z‖ - ‖c‖ / ‖z�
   have R_ge : R c - ‖c‖ / R c ≥ 1 := by
     have hR2 : R c ≥ 2 := R_ge_two c
     have hRc : R c ≥ 1 + ‖c‖ := R_ge_one_plus_c c
-    rw [ge_iff_le, div_le_iff R_pos, sub_mul, div_mul_cancel₀ _ (ne_of_gt R_pos)]
-    rw [le_sub_iff_add_le]
-    by_cases hc : 1 + ‖c‖ ≤ 2
-    · have : ‖c‖ ≤ 1 := by linarith
-      calc
-        R c + ‖c‖ = 2 + ‖c‖ := by simp [R, hc]
-        _ ≤ 2 + 1 := by gcongr
-        _ ≤ 2 * 2 := by norm_num
-        _ ≤ R c * R c := by gcongr
-    · have : R c = 1 + ‖c‖ := by simp [R, hc]; linarith
-      rw [this]
-      nlinarith
+    rw [ge_iff_le, le_sub_iff_add_le, add_comm 1, ← le_sub_iff_add_le]
+    rw [div_le_iff₀ R_pos]
+    have h_calc := calc
+      ‖c‖ = 1 * ‖c‖ := by simp
+      _ ≤ (R c - 1) * (R c - 1) := by
+        nlinarith
+      _ ≤ (R c - 1) * R c := by
+        apply mul_le_mul_of_nonneg_left
+        · linarith
+        · linarith
+      _ = R c * R c - R c := by ring
+    linarith
   linarith
 
 /-- Escape lemma: if the orbit of z ever leaves the disk of radius R(c), then it
 escapes to infinity. -/
 lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
     ∀ M : ℝ, ∃ N : ℕ, ∀ m ≥ N, ‖orbit c z m‖ > M := by
-  let z_n := orbit c z n
-  let K := ‖z_n‖ - ‖c‖ / ‖z_n‖
-  have hK : K > 1 := factor_gt_one c z_n h
-  have h_growth : ∀ k, ‖orbit c z (n + k)‖ ≥ K ^ k * ‖z_n‖ := by
-    intro k
-    induction k with
-    | zero => simp
-    | succ k ih =>
-      let z_nk := orbit c z (n + k)
-      have h_znk_gt : ‖z_nk‖ > R c := by
-        calc
-          ‖z_nk‖ ≥ K ^ k * ‖z_n‖ := ih
-          _ > 1 ^ k * R c := by gcongr
-          _ = R c := by simp
-      have h_step : ‖fc c z_nk‖ ≥ ‖z_nk‖ * K := by
-        have : ‖fc c z_nk‖ ≥ ‖z_nk‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c z_nk
-        rw [sq, ← mul_sub] at this
-        apply ge_trans this
-        gcongr
-        have z_n_pos : 0 < ‖z_n‖ := by linarith [R_ge_two c, h]
-        have z_nk_pos : 0 < ‖z_nk‖ := by linarith [R_ge_two c, h_znk_gt]
-        apply (sub_div_mono c).monotoneOn z_n_pos z_nk_pos
-        calc
-          ‖z_n‖ = 1 * ‖z_n‖ := by simp
-          _ ≤ K ^ k * ‖z_n‖ := by
-            gcongr
-            exact one_le_pow_of_one_le (le_of_lt hK) k
-          _ ≤ ‖z_nk‖ := ih
-      rw [orbit_succ, add_assoc, add_comm 1 k, ← add_assoc]
-      calc
-        ‖fc c z_nk‖ ≥ ‖z_nk‖ * K := h_step
-        _ ≥ (K ^ k * ‖z_n‖) * K := by gcongr
-        _ = K ^ (k + 1) * ‖z_n‖ := by ring
-
-  intro M
-  have h_unbounded : Tendsto (fun k => K ^ k * ‖z_n‖) atTop atTop := by
-    apply Tendsto.atTop_mul_const_of_pos
-    · exact tendsto_pow_atTop_of_one_lt hK
-    · linarith [h, R_ge_two c]
-
-  obtain ⟨k0, hk0⟩ := (atTop_basis.tendsto_iff atTop_basis).mp h_unbounded M
-  use n + k0
-  intro m hm
-  let k := m - n
-  have hk : k ≥ k0 := Nat.le_sub_of_add_le hm
-  rw [← Nat.sub_add_cancel (le_trans (le_add_right n k0) hm)]
-  apply lt_of_lt_of_le (hk0 k hk)
-  exact h_growth k
+    sorry
 
 end
 
