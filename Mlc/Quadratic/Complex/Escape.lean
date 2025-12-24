@@ -67,11 +67,69 @@ lemma factor_gt_one (c z : ℂ) (h : ‖z‖ > R c) : ‖z‖ - ‖c‖ / ‖z�
     linarith
   linarith
 
+lemma R_pos (c : ℂ) : R c > 0 := by
+  have := R_ge_two c
+  linarith
+
 /-- Escape lemma: if the orbit of z ever leaves the disk of radius R(c), then it
 escapes to infinity. -/
 lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
     ∀ M : ℝ, ∃ N : ℕ, ∀ m ≥ N, ‖orbit c z m‖ > M := by
-    sorry
+  let w := orbit c z n
+  let lam := ‖w‖ - ‖c‖ / ‖w‖
+  have hlam : lam > 1 := factor_gt_one c w h
+  have hw_pos : ‖w‖ > 0 := lt_trans (R_pos c) h
+
+  have growth : ∀ k, ‖orbit c w k‖ ≥ ‖w‖ * lam ^ k := by
+    intro k
+    induction k with
+    | zero => simp
+    | succ k ih =>
+      let z_k := orbit c w k
+      have h_zk_ge : ‖z_k‖ ≥ ‖w‖ := by
+        calc ‖z_k‖ ≥ ‖w‖ * lam ^ k := ih
+          _ ≥ ‖w‖ * 1 := by
+            apply mul_le_mul_of_nonneg_left
+            · exact one_le_pow k (le_of_lt hlam)
+            · exact le_of_lt hw_pos
+          _ = ‖w‖ := by simp
+
+      have h_zk_pos : ‖z_k‖ > 0 := lt_of_lt_of_le hw_pos h_zk_ge
+
+      calc ‖orbit c w (k + 1)‖
+        _ = ‖fc c z_k‖ := by rw [orbit_succ]
+        _ ≥ ‖z_k‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c z_k
+        _ = ‖z_k‖ * (‖z_k‖ - ‖c‖ / ‖z_k‖) := by field_simp [h_zk_pos.ne']; ring
+        _ ≥ ‖z_k‖ * lam := by
+          gcongr
+          apply (sub_div_mono c).monotoneOn
+          · exact hw_pos
+          · exact h_zk_pos
+          · exact h_zk_ge
+        _ ≥ (‖w‖ * lam ^ k) * lam := by
+          apply mul_le_mul_of_nonneg_right
+          · exact ih
+          · exact le_of_lt (lt_trans zero_lt_one hlam)
+        _ = ‖w‖ * lam ^ (k + 1) := by rw [pow_succ]; ring
+
+  intro M
+  have h_tendsto : Tendsto (fun k => ‖w‖ * lam ^ k) atTop atTop := by
+    apply Filter.Tendsto.const_mul_atTop hw_pos
+    apply tendsto_pow_atTop_atTop_of_one_lt hlam
+
+  rcases (Filter.tendsto_atTop_atTop.mp h_tendsto) M with ⟨N0, hN0⟩
+  use n + N0
+  intro m hm
+  let k := m - n
+  have hk : m = n + k := by
+    rw [Nat.add_comm] at hm
+    exact (Nat.sub_eq_of_eq_add (Nat.add_sub_of_le hm).symm).symm
+  rw [hk, add_comm]
+  dsimp [orbit]
+  rw [Function.iterate_add_apply]
+  specialize hN0 k (Nat.le_sub_of_add_le hm)
+  apply lt_of_lt_of_le hN0
+  exact growth k
 
 end
 
