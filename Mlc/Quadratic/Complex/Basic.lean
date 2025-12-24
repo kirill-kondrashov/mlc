@@ -15,7 +15,6 @@ open scoped Complex
 open Complex Topology Filter
 noncomputable section
 
-
 /-- The quadratic polynomial `f_c(z) = z^2 + c`. -/
 def fc (c : ℂ) : ℂ → ℂ := fun z => z^2 + c
 
@@ -49,9 +48,8 @@ def J (c : ℂ) : Set ℂ := frontier (K c)
 /-- A convenient escape radius depending on `‖c‖`. -/
 def R (c : ℂ) : ℝ := max 2 (1 + ‖c‖)
 
-/-- Basic lemmas. -/
-@[simp] lemma R_ge_two (c : ℂ) : R c ≥ 2 := by simp[R]
-@[simp] lemma R_ge_one_plus_c (c : ℂ) : R c ≥ 1 + ‖c‖ := by simp[R]
+@[simp] lemma R_ge_two (c : ℂ) : R c ≥ 2 := by simp [R]
+@[simp] lemma R_ge_one_plus_c (c : ℂ) : R c ≥ 1 + ‖c‖ := by simp [R]
 
 end
 
