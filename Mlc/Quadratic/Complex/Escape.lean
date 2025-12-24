@@ -98,7 +98,7 @@ lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
       calc ‖orbit c w (k + 1)‖
         _ = ‖fc c z_k‖ := by rw [orbit_succ]
         _ ≥ ‖z_k‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c z_k
-        _ = ‖z_k‖ * (‖z_k‖ - ‖c‖ / ‖z_k‖) := by field_simp [h_zk_pos.ne']; ring
+        _ = ‖z_k‖ * (‖z_k‖ - ‖c‖ / ‖z_k‖) := by field_simp [h_zk_pos.ne']
         _ ≥ ‖z_k‖ * lam := by
           gcongr
           apply (sub_div_mono c).monotoneOn
@@ -106,9 +106,11 @@ lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
           · exact h_zk_pos
           · exact h_zk_ge
         _ ≥ (‖w‖ * lam ^ k) * lam := by
-          gcongr
-          exact le_of_lt hlam
-        _ = ‖w‖ * lam ^ (k + 1) := by rw [pow_succ]; ring
+          apply mul_le_mul_of_nonneg_right ih
+          exact le_of_lt (lt_trans zero_lt_one hlam)
+        _ = ‖w‖ * lam ^ (k + 1) := by
+          rw [pow_succ]
+          ring
 
   intro M
   have h_tendsto : Tendsto (fun k => ‖w‖ * lam ^ k) atTop atTop := by
