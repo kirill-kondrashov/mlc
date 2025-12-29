@@ -13,9 +13,9 @@ elab "ensure_no_sorry" n:ident : command => do
   let name ← resolveGlobalConstNoOverload n
   let axioms ← collectAxioms name
   if axioms.contains ``sorryAx then
-    throwError "{name} depends on sorryAx!"
+    throwError m!"{name} depends on sorryAx!"
   else
-    logInfo "{name} is sorry-free!"
+    logInfo m!"{name} is sorry-free!"
 
 namespace MLC
 
