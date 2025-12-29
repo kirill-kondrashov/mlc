@@ -111,4 +111,12 @@ axiom groetzsch_criterion {P : ℕ → Set ℂ} :
   ¬ Summable (fun n => modulus (P n \ P (n + 1))) →
   (⋂ n, P n) = {0}
 
+/-- A para-puzzle piece in the parameter plane. -/
+def ParaPuzzlePiece (n : ℕ) : Set ℂ := {c | c ∈ DynamicalPuzzlePiece c n 0}
+
+/-- Correspondence between parameter and dynamical pieces. -/
+lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
+    c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c n 0 := by
+  simp [ParaPuzzlePiece, fc]
+
 end MLC.Quadratic
