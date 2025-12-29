@@ -2,3 +2,5 @@
 -- Import modules here that should be built as part of the library.
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Escape
+import Mlc.Quadratic.Complex.Green
+import Mlc.Quadratic.Complex.Bottcher
