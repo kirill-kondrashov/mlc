@@ -250,7 +250,18 @@ lemma green_function_functional_eq (c z : ℂ) :
 
 /-- The Green's function is non-negative. -/
 lemma green_function_nonneg (c z : ℂ) : 0 ≤ green_function c z := by
-  sorry
+  have h_lim : Tendsto (fun n => - potential_seq c z n) atTop (𝓝 (- green_function c z)) :=
+    (green_function_eq_lim c z).neg
+  have h_le : - green_function c z ≤ 0 := by
+    apply le_of_tendsto' h_lim
+    intro n
+    simp only [neg_nonpos]
+    rw [potential_seq]
+    apply mul_nonneg
+    · positivity
+    · apply Real.log_nonneg
+      apply le_max_left
+  linarith
 
 /-- A point is in the filled Julia set iff its Green's function is zero. -/
 lemma green_function_eq_zero_iff_mem_K (c z : ℂ) :
