@@ -120,4 +120,4 @@ ensure_no_sorry MLC.yoccoz_theorem
 ensure_no_sorry MLC.non_renormalizable_moduli_diverge
 
 -- Verify that the main conjecture does not depend on sorry
--- ensure_no_sorry MLC.MLC_Conjecture
+ensure_no_sorry MLC.MLC_Conjecture
