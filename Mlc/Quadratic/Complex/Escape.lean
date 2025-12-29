@@ -150,6 +150,40 @@ lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
     _ ≥ M + 1 := hN0
     _ > M := lt_add_one M
 
+lemma norm_orbit_ge_of_norm_ge_R (c z : ℂ) (n : ℕ) (h : ‖z‖ > R c) :
+    ‖orbit c z n‖ ≥ ‖z‖ := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    have h_n : ‖orbit c z n‖ ≥ ‖z‖ := ih
+    have h_n_R : ‖orbit c z n‖ > R c := lt_of_lt_of_le h h_n
+    rw [orbit_succ]
+    have : ‖fc c (orbit c z n)‖ ≥ ‖orbit c z n‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c _
+    apply le_trans h_n
+    apply le_trans _ this
+    have h_zn : ‖orbit c z n‖ > R c := h_n_R
+    have h_R : R c ≥ 1 + ‖c‖ := R_ge_one_plus_c c
+    have h_R2 : R c ≥ 2 := R_ge_two c
+    have h_zn_gt_1 : ‖orbit c z n‖ > 1 := lt_of_le_of_lt (by linarith) h_zn
+    have h_zn_sub_1 : ‖orbit c z n‖ - 1 > ‖c‖ := by linarith
+    have : ‖orbit c z n‖ * (‖orbit c z n‖ - 1) > 1 * ‖c‖ := by
+      by_cases hc : ‖c‖ = 0
+      · rw [hc, mul_zero]
+        apply mul_pos
+        · linarith
+        · linarith
+      · have h_calc : 1 * ‖c‖ < ‖orbit c z n‖ * (‖orbit c z n‖ - 1) := calc
+          1 * ‖c‖ < 1 * (‖orbit c z n‖ - 1) := by
+            gcongr
+          _ < ‖orbit c z n‖ * (‖orbit c z n‖ - 1) := by
+            apply mul_lt_mul_of_pos_right
+            · exact h_zn_gt_1
+            · linarith
+        exact h_calc
+    rw [one_mul] at this
+    rw [mul_sub, mul_one] at this
+    linarith
+
 end
 
 end MLC.Quadratic
