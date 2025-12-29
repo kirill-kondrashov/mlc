@@ -28,11 +28,12 @@ end YoccozPuzzles
 section ParameterPlane
 
 /-- A para-puzzle piece in the parameter plane. -/
-def ParaPuzzlePiece (depth : ℕ) : Set ℂ := sorry
+def ParaPuzzlePiece (depth : ℕ) : Set ℂ := {c | c ∈ DynamicalPuzzlePiece c 0 depth}
 
 /-- Correspondence between parameter and dynamical pieces. -/
 lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
-    c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c 0 n := sorry
+    c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c 0 n := by
+  simp [ParaPuzzlePiece, fc]
 
 end ParameterPlane
 
