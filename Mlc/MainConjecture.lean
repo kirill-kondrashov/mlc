@@ -130,4 +130,4 @@ ensure_no_sorry MLC.InfinitelyRenormalizable
 ensure_no_sorry MLC.dichotomy
 
 -- Verify that the main conjecture does not depend on sorry
--- ensure_no_sorry MLC.MLC_Conjecture
+ensure_no_sorry MLC.MLC_Conjecture
