@@ -79,4 +79,4 @@ ensure_no_sorry MLC.parameter_shrink
 ensure_no_sorry MLC.lc_at_of_shrink
 
 -- Verify that the main conjecture does not depend on sorry
--- ensure_no_sorry MLC.MLC_Conjecture
+ensure_no_sorry MLC.MLC_Conjecture
