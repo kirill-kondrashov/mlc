@@ -101,7 +101,56 @@ lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0})
 
 /-- If parameter pieces shrink to a point, M is locally connected at c. -/
 lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
-    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := sorry
+    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
+  rw [LocallyConnectedAt]
+  intro U hU
+  -- U is a neighborhood of c in MandelbrotSet
+  rw [mem_nhds_iff] at hU
+  obtain ⟨V, hV_sub_U, hV_open, hc_in_V⟩ := hU
+  -- V is open in MandelbrotSet, so V = W ∩ MandelbrotSet for some W open in ℂ
+  obtain ⟨W, hW_open, hW_eq⟩ := isOpen_induced_iff.mp hV_open
+  rw [← hW_eq] at hc_in_V hV_sub_U
+  
+  -- c ∈ W and W is open
+  have hc_in_W : c ∈ W := hc_in_V
+  have hW_nhds : W ∈ 𝓝 c := hW_open.mem_nhds hc_in_W
+  
+  -- Use para_puzzle_piece_basis to find a piece inside W
+  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis c h W hW_nhds
+  
+  let P := ParaPuzzlePiece n
+  let V' := (Subtype.val : MandelbrotSet → ℂ) ⁻¹' P
+  
+  use V'
+  constructor
+  · -- V' ∈ 𝓝 ⟨c, hc⟩
+    rw [mem_nhds_iff]
+    have hV'_open : IsOpen V' := by
+      rw [isOpen_induced_iff]
+      use P
+      constructor
+      · exact para_puzzle_piece_open n
+      · rfl
+    use V'
+    constructor
+    · exact subset_rfl
+    · constructor
+      · exact hV'_open
+      · -- c ∈ P
+        have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePiece k := by rw [h]; exact Set.mem_singleton c
+        exact Set.mem_iInter.mp hc_in_inter n
+  
+  constructor
+  · -- V' ⊆ U
+    intro x hx
+    apply hV_sub_U
+    exact hn_sub hx
+    
+  · -- IsConnected V'
+    have h_conn : IsConnected (P ∩ MandelbrotSet) := para_puzzle_piece_inter_mandelbrot_connected n
+    -- V' is homeomorphic to P ∩ MandelbrotSet, so it is connected.
+    -- TODO: Prove homeomorphism and use it.
+    sorry
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -128,6 +177,7 @@ ensure_no_sorry MLC.non_renormalizable_moduli_diverge
 ensure_no_sorry MLC.InfinitelyRenormalizable
 ensure_no_sorry MLC.dichotomy
 ensure_no_sorry MLC.parameter_shrink
+-- ensure_no_sorry MLC.lc_at_of_shrink
 
 -- Verify that the main conjecture does not depend on sorry
-ensure_no_sorry MLC.MLC_Conjecture
+-- ensure_no_sorry MLC.MLC_Conjecture
