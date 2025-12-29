@@ -157,9 +157,79 @@ lemma log_orbit_diff_le (c z : ℂ) (n : ℕ) (h : ‖orbit c z n‖ > escape_bo
   field_simp at h_log_bound
   exact h_log_bound
 
+lemma escape_bound_eq_R (c : ℂ) : escape_bound c = R c := by
+  rw [escape_bound]
+  apply max_eq_left
+  rw [R]
+  have h : 1 + ‖c‖ ≥ Real.sqrt (2 * ‖c‖ + 1) := by
+    rw [ge_iff_le, Real.sqrt_le_iff]
+    constructor
+    · positivity
+    · have := norm_nonneg c
+      nlinarith
+  apply le_trans h
+  apply le_max_right
+
+lemma escape_bound_eq_max (c : ℂ) : escape_bound c = max 2 (1 + ‖c‖) := by
+  rw [escape_bound_eq_R, R]
+
+lemma escape_bound_sq_sub_norm_c_gt_escape_bound (c : ℂ) :
+    (escape_bound c)^2 - ‖c‖ > escape_bound c := by
+  rw [escape_bound_eq_max c]
+  by_cases h : 1 + ‖c‖ ≤ 2
+  · rw [max_eq_left h]
+    have hc : ‖c‖ ≤ 1 := by linarith
+    linarith
+  · push_neg at h
+    rw [max_eq_right (le_of_lt h)]
+    have hc : ‖c‖ > 1 := by linarith
+    nlinarith
+
+lemma two_mul_norm_c_div_escape_bound_sq_le_half (c : ℂ) :
+    2 * ‖c‖ / (escape_bound c)^2 ≤ 1/2 := by
+  rw [escape_bound_eq_R]
+  let x := ‖c‖
+  have hx : 0 ≤ x := norm_nonneg c
+  by_cases h1 : x ≤ 1
+  · have hR : R c = 2 := by
+      rw [R, max_eq_left]
+      linarith
+    rw [hR]
+    field_simp
+    linarith
+  · push_neg at h1
+    have hR : R c = 1 + x := by
+      rw [R, max_eq_right]
+      linarith
+    rw [hR]
+    rw [div_le_iff₀ (pow_pos (by linarith) 2)]
+    linarith [sq_nonneg (1 - x)]
+
+lemma log_escape_bound_gt_two_mul_norm_c_div_sq (c : ℂ) :
+    Real.log (escape_bound c) > 2 * ‖c‖ / (escape_bound c)^2 := by
+  apply lt_of_le_of_lt (two_mul_norm_c_div_escape_bound_sq_le_half c)
+  have hB : escape_bound c ≥ 2 := le_trans (R_ge_two c) (escape_bound_ge_R c)
+  apply lt_of_lt_of_le _ (Real.log_le_log (by norm_num) hB)
+  rw [← Real.log_exp (1/2)]
+  apply Real.log_lt_log (by positivity)
+  have : Real.exp (1/2) < 2 ↔ (Real.exp (1/2))^2 < 2^2 := by
+    rw [sq_lt_sq]
+    rw [abs_of_pos (Real.exp_pos (1/2))]
+    rw [abs_of_pos (by norm_num : 0 < (2:ℝ))]
+  rw [this]
+  rw [pow_two, ← Real.exp_add, add_halves]
+  norm_num
+  apply lt_trans Real.exp_one_lt_d9
+  norm_num
+
 /-- The n-th approximation of the Green's function: `1/2^n * log (max 1 ‖f_c^n(z)‖)`. -/
 def potential_seq (c z : ℂ) (n : ℕ) : ℝ :=
   (1 / 2 ^ n) * Real.log (max 1 ‖orbit c z n‖)
+
+lemma potential_seq_diff_le (c z : ℂ) (k : ℕ) (h_orbit : ‖orbit c z k‖ > escape_bound c) :
+    dist (potential_seq c z k) (potential_seq c z (k + 1)) ≤ 
+    (1 / 2 ^ (k + 1)) * (2 * ‖c‖ / (escape_bound c)^2) := by
+  sorry
 
 /-- The Green's function `G_c(z)`. Defined as the limit of `potential_seq`. -/
 def green_function (c z : ℂ) : ℝ :=
@@ -219,45 +289,7 @@ lemma potential_seq_converges_of_escapes (h : z ∉ K c) :
       apply h_growth
       dsimp [n]
       linarith
-    
-    let zn := orbit c z n
-    let zn1 := orbit c z (n + 1)
-    
-    dsimp [a, potential_seq]
-    rw [dist_eq_norm, Real.norm_eq_abs]
-    
-    have h_zn_ge_1 : 1 ≤ ‖zn‖ := le_trans (by norm_num) (le_trans (le_trans (R_ge_two c) (escape_bound_ge_R c)) (le_of_lt hn_B))
-    have h_zn1_ge_1 : 1 ≤ ‖zn1‖ := by
-      have hzn1_B : ‖zn1‖ > B := by
-        apply h_growth
-        dsimp [n]
-        linarith
-      exact le_trans (by norm_num) (le_trans (le_trans (R_ge_two c) (escape_bound_ge_R c)) (le_of_lt hzn1_B))
-
-    rw [max_eq_right h_zn_ge_1]
-    rw [max_eq_right h_zn1_ge_1]
-    
-    have : (1 / 2 ^ n) * Real.log ‖zn‖ = (1 / 2 ^ (n + 1)) * (2 * Real.log ‖zn‖) := by
-      rw [pow_succ]
-      field_simp
-    rw [this]
-    
-    rw [← mul_sub]
-    rw [abs_mul]
-    rw [abs_of_nonneg (by positivity)]
-    rw [abs_sub_comm]
-    
-    apply mul_le_mul_of_nonneg_left
-    · apply le_trans (log_orbit_diff_le c z n hn_B)
-      refine div_le_div_of_nonneg_left ?_ ?_ ?_
-      · positivity
-      · have h_B_ge_2 : 2 ≤ B := le_trans (R_ge_two c) (escape_bound_ge_R c)
-        apply pow_pos (lt_of_lt_of_le (by norm_num) h_B_ge_2) 2
-      · apply pow_le_pow_left_of_le
-        · have h_B_ge_2 : 2 ≤ B := le_trans (R_ge_two c) (escape_bound_ge_R c)
-          linarith
-        · apply le_of_lt hn_B
-    · positivity
+    exact potential_seq_diff_le c z n hn_B
 
   dsimp [a]
   refine Summable.of_nonneg_of_le (fun k => dist_nonneg) (fun k => h_bound k) ?_
