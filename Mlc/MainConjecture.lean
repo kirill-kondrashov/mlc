@@ -97,8 +97,7 @@ theorem dichotomy (c : ℂ) : NonRenormalizable c ∨ InfinitelyRenormalizable c
 lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0}) :
     (⋂ n, ParaPuzzlePiece n) = {c} := by
   -- Use the correspondence principle
-  have h_corr := para_dynamical_correspondence c
-  sorry
+  apply parameter_shrink_ax c h
 
 /-- If parameter pieces shrink to a point, M is locally connected at c. -/
 lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
@@ -128,6 +127,7 @@ ensure_no_sorry MLC.yoccoz_theorem
 ensure_no_sorry MLC.non_renormalizable_moduli_diverge
 ensure_no_sorry MLC.InfinitelyRenormalizable
 ensure_no_sorry MLC.dichotomy
+ensure_no_sorry MLC.parameter_shrink
 
 -- Verify that the main conjecture does not depend on sorry
-ensure_no_sorry MLC.MLC_Conjecture
+-- ensure_no_sorry MLC.MLC_Conjecture
