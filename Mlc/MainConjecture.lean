@@ -1,6 +1,7 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Green
 import Mlc.Quadratic.Complex.Bottcher
+import Mlc.Quadratic.Complex.Puzzle
 import Mathlib.Topology.Connected.LocallyConnected
 
 namespace MLC
@@ -16,7 +17,8 @@ This file outlines the proof strategy for the MLC conjecture based on Yoccoz puz
 section YoccozPuzzles
 
 /-- A Yoccoz puzzle piece in the dynamical plane of `f_c` containing `z`. -/
-def DynamicalPuzzlePiece (c z : ℂ) (depth : ℕ) : Set ℂ := sorry
+def DynamicalPuzzlePiece (c z : ℂ) (depth : ℕ) : Set ℂ :=
+  Quadratic.DynamicalPuzzlePiece c depth z
 
 /-- The sequence of puzzle pieces containing a point `z`. -/
 def puzzle_sequence (c z : ℂ) : ℕ → Set ℂ := fun n => DynamicalPuzzlePiece c z n
