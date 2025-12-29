@@ -96,7 +96,74 @@ lemma green_function_iterate (c z : ℂ) (n : ℕ) :
 
 lemma green_function_pos_of_large_norm (c z : ℂ) (h : ‖z‖ > escape_bound c) :
     0 < green_function c z := by
-  sorry
+  have h_conv : Tendsto (potential_seq c z) atTop (𝓝 (green_function c z)) :=
+    green_function_eq_lim c z
+  
+  let M := 2 * ‖c‖ / (escape_bound c)^2
+  have h_diff : ∀ k, ‖orbit c z k‖ > escape_bound c →
+      dist (potential_seq c z k) (potential_seq c z (k + 1)) ≤ (1 / 2 ^ (k + 1)) * M := by
+    intro k hk
+    exact potential_seq_diff_le c z k hk
+  
+  have h_orbit_large : ∀ k, ‖orbit c z k‖ > escape_bound c := by
+    intro k
+    have h_R : ‖z‖ > R c := lt_of_le_of_lt (escape_bound_ge_R c) h
+    have := norm_orbit_ge_of_norm_ge_R c z k h_R
+    apply lt_of_lt_of_le h this
+  
+  have h_cauchy : ∀ k, dist (potential_seq c z k) (potential_seq c z (k + 1)) ≤ (1 / 2 ^ (k + 1)) * M :=
+    fun k => h_diff k (h_orbit_large k)
+  
+  have h_dist_0_L : dist (potential_seq c z 0) (green_function c z) ≤ M := by
+    let d : ℕ → ℝ := fun k => (1 / 2) ^ (k + 1) * M
+    
+    have h_summable_bound : Summable d := by
+      dsimp [d]
+      simp_rw [pow_succ]
+      apply Summable.mul_right
+      apply Summable.mul_right
+      apply summable_geometric_of_lt_one
+      · norm_num
+      · norm_num
+
+    have h_dist_le_bound : ∀ k, dist (potential_seq c z k) (potential_seq c z (k + 1)) ≤ d k := by
+      intro k
+      specialize h_cauchy k
+      dsimp [d]
+      convert h_cauchy using 1
+      simp only [one_div, inv_pow]
+
+    apply le_trans (dist_le_tsum_of_dist_le_of_tendsto₀ d h_dist_le_bound h_summable_bound h_conv)
+    
+    dsimp [d]
+    rw [tsum_mul_right]
+    simp_rw [pow_succ]
+    rw [tsum_mul_right]
+    have h_sum_geom : ∑' (n : ℕ), (1 / 2 : ℝ) ^ n = 2 := by
+      rw [tsum_geometric_of_lt_one]
+      · norm_num
+      · norm_num
+      · norm_num
+    rw [h_sum_geom]
+    field_simp
+    apply le_refl
+  
+  rw [dist_eq_norm, Real.norm_eq_abs] at h_dist_0_L
+  rw [abs_le] at h_dist_0_L
+  
+  have h_a0 : potential_seq c z 0 = Real.log ‖z‖ := by
+    simp [potential_seq]
+    rw [max_eq_right]
+    apply le_trans (le_trans one_le_two (R_ge_two c))
+    apply le_trans (escape_bound_ge_R c) (le_of_lt h)
+  
+  rw [h_a0] at h_dist_0_L
+  have h_lower : Real.log ‖z‖ - M ≤ green_function c z := by linarith
+  
+  apply lt_of_lt_of_le _ h_lower
+  rw [sub_pos]
+  apply lt_trans _ (Real.log_lt_log (lt_of_lt_of_le zero_lt_two (le_trans (R_ge_two c) (escape_bound_ge_R c))) h)
+  exact log_escape_bound_gt_two_mul_norm_c_div_sq c
 
 /-- A point is in the filled Julia set iff its Green's function is zero. -/
 lemma green_function_eq_zero_iff_mem_K (c z : ℂ) :

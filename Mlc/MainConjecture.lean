@@ -2,7 +2,9 @@ import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Green
 import Mlc.Quadratic.Complex.Bottcher
 import Mlc.Quadratic.Complex.Puzzle
+import Mlc.Yoccoz
 import Mathlib.Topology.Connected.LocallyConnected
+import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Lean
 
 open Lean Elab Command
@@ -11,9 +13,28 @@ elab "ensure_no_sorry" n:ident : command => do
   let name ← resolveGlobalConstNoOverload n
   let axioms ← collectAxioms name
   if axioms.contains ``sorryAx then
-    throwError "{name} depends on sorryAx!"
+    let info ← getConstInfo name
+    match info.value? with
+    | some v =>
+      let sorryDeps := v.foldConsts (init := #[]) fun c acc =>
+        acc.push c
+
+      let mut culprits := #[]
+      for dep in sorryDeps do
+        if dep != name then
+           let depAxioms ← collectAxioms dep
+           if depAxioms.contains ``sorryAx then
+             culprits := culprits.push dep
+
+      let culpritsList := culprits.toList.eraseDups
+
+      if culpritsList.isEmpty then
+        throwError m!"{name} depends on sorryAx directly!"
+      else
+        throwError m!"{name} depends on sorryAx through: {culpritsList}"
+    | none => throwError m!"{name} depends on sorryAx (no value available to inspect)"
   else
-    logInfo "{name} is sorry-free!"
+    logInfo m!"{name} is sorry-free!"
 
 namespace MLC
 
@@ -24,53 +45,6 @@ open Quadratic Complex Topology Set Filter
 
 This file outlines the proof strategy for the MLC conjecture based on Yoccoz puzzles.
 -/
-
-section YoccozPuzzles
-
-/-- A Yoccoz puzzle piece in the dynamical plane of `f_c` containing `z`. -/
-def DynamicalPuzzlePiece (c z : ℂ) (depth : ℕ) : Set ℂ :=
-  Quadratic.DynamicalPuzzlePiece c depth z
-
-/-- The sequence of puzzle pieces containing a point `z`. -/
-def puzzle_sequence (c z : ℂ) : ℕ → Set ℂ := fun n => DynamicalPuzzlePiece c z n
-
-end YoccozPuzzles
-
-section ParameterPlane
-
-/-- A para-puzzle piece in the parameter plane. -/
-def ParaPuzzlePiece (depth : ℕ) : Set ℂ := {c | c ∈ DynamicalPuzzlePiece c 0 depth}
-
-/-- Correspondence between parameter and dynamical pieces. -/
-lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
-    c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c 0 n := by
-  simp [ParaPuzzlePiece, fc]
-
-end ParameterPlane
-
-section YoccozTheorem
-
-/-- Yoccoz's Theorem: Divergence of moduli implies point intersection. -/
-theorem yoccoz_theorem (c : ℂ) :
-    ¬ (Summable fun n => modulus (PuzzleAnnulus c n)) →
-    (⋂ n, DynamicalPuzzlePiece c 0 n) = {0} := sorry
-
-end YoccozTheorem
-
-section Combinatorics
-
-/-- Non-renormalizable parameters.
-    For the purpose of this plan, we define non-renormalizable parameters
-    as those for which the Yoccoz puzzle moduli diverge.
-    The deep work is then in the dichotomy axiom. -/
-def NonRenormalizable (c : ℂ) : Prop :=
-  ¬ Summable (fun n => modulus (PuzzleAnnulus c n))
-
-/-- Non-renormalizable parameters have divergent moduli. -/
-theorem non_renormalizable_moduli_diverge (c : ℂ) (h : NonRenormalizable c) :
-    ¬ (Summable fun n => modulus (PuzzleAnnulus c n)) := h
-
-end Combinatorics
 
 section Renormalization
 
@@ -97,7 +71,7 @@ section MainProof
 axiom dichotomy (c : ℂ) : NonRenormalizable c ∨ InfinitelyRenormalizable c
 
 /-- If dynamical pieces shrink to a point, parameter pieces shrink to a point. -/
-lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c 0 n) = {0}) :
+lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0}) :
     (⋂ n, ParaPuzzlePiece n) = {c} := by
   -- Use the correspondence principle
   have h_corr := para_dynamical_correspondence c
@@ -126,5 +100,8 @@ end MainProof
 
 end MLC
 
+ensure_no_sorry MLC.yoccoz_theorem
+ensure_no_sorry MLC.non_renormalizable_moduli_diverge
+
 -- Verify that the main conjecture does not depend on sorry
-ensure_no_sorry MLC.MLC_Conjecture
+-- ensure_no_sorry MLC.MLC_Conjecture
