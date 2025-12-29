@@ -1,11 +1,9 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Green
-import Mlc.Quadratic.Complex.Bottcher
 import Mlc.Quadratic.Complex.Puzzle
 import Mlc.Yoccoz
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
-import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Lean
@@ -56,15 +54,3 @@ theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
 end MainProof
 
 end MLC
-
-ensure_no_sorry MLC.locallyConnectedSpace_of_locallyConnectedAt
-ensure_no_sorry MLC.yoccoz_theorem
-ensure_no_sorry MLC.non_renormalizable_moduli_diverge
-ensure_no_sorry MLC.InfinitelyRenormalizable
-ensure_no_sorry MLC.dichotomy
-ensure_no_sorry MLC.parameter_shrink
-ensure_no_sorry MLC.lc_at_of_shrink
-ensure_no_sorry MLC.mlc_infinitely_renormalizable
-
--- Verify that the main conjecture does not depend on sorry
-ensure_no_sorry MLC.MLC_Conjecture

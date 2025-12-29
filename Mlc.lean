@@ -4,7 +4,6 @@ import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Escape
 import Mlc.Quadratic.Complex.Green
 import Mlc.Quadratic.Complex.GreenLemmas
-import Mlc.Quadratic.Complex.Bottcher
 import Mlc.Quadratic.Complex.Puzzle
 import Mlc.MainConjecture
 import Mlc.Yoccoz
