@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Escape
+import Mlc.Quadratic.Complex.GreenLemmas
 
 /-!
 # Green's Function for the Quadratic Family
@@ -41,6 +42,8 @@ noncomputable section
 
 variable {c z : ℂ}
 
+set_option maxHeartbeats 400000
+
 /-- The n-th approximation of the Green's function: `1/2^n * log (max 1 ‖f_c^n(z)‖)`. -/
 def potential_seq (c z : ℂ) (n : ℕ) : ℝ :=
   (1 / 2 ^ n) * Real.log (max 1 ‖orbit c z n‖)
@@ -77,22 +80,128 @@ lemma potential_seq_converges_of_mem_K (h : z ∈ K c) :
     simp [one_div, inv_pow]
     ring
 
+/-! ### Convergence for escaping points -/
+
+lemma log_orbit_diff_le (c z : ℂ) (n : ℕ) (h : ‖orbit c z n‖ > escape_bound c) :
+    |Real.log ‖orbit c z (n + 1)‖ - 2 * Real.log ‖orbit c z n‖| ≤ 2 * ‖c‖ / ‖orbit c z n‖^2 := by
+  let zn := orbit c z n
+  let zn1 := orbit c z (n + 1)
+  have h_zn : ‖zn‖ > escape_bound c := h
+  have h_R : R c ≥ 2 := R_ge_two c
+  have h_esc : escape_bound c ≥ R c := escape_bound_ge_R c
+  have h_zn_gt_2 : ‖zn‖ > 2 := lt_of_le_of_lt (le_trans h_R h_esc) h_zn
+  have h_zn_pos : 0 < ‖zn‖ := lt_trans zero_lt_two h_zn_gt_2
+  
+  rw [show 2 * Real.log ‖zn‖ = Real.log (‖zn‖ ^ 2) by
+    rw [Real.log_pow, Nat.cast_ofNat]
+  ]
+  
+  have h_zn1_eq : zn1 = fc c zn := by
+    dsimp [zn1, zn]
+    rw [orbit_succ]
+
+  have h_zn_sq_pos : 0 < ‖zn‖^2 := pow_pos h_zn_pos 2
+  have h_zn1_pos : 0 < ‖zn1‖ := by
+    rw [h_zn1_eq]
+    have : ‖fc c zn‖ ≥ ‖zn‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c zn
+    apply lt_of_lt_of_le _ this
+    have : ‖c‖ < ‖zn‖^2 := by
+      have h_esc_nonneg : 0 ≤ escape_bound c := le_trans (le_trans zero_le_two (R_ge_two c)) (escape_bound_ge_R c)
+      have h_sq : (escape_bound c)^2 < ‖zn‖^2 := by gcongr
+      have h_esc : 2 * ‖c‖ + 1 ≤ (escape_bound c)^2 := escape_bound_sq_ge c
+      linarith
+    linarith
+
+  rw [← Real.log_div h_zn1_pos.ne' h_zn_sq_pos.ne']
+  
+  rw [norm_orbit_succ_div_sq_eq c z n h_zn_pos]
+  
+  let u := c / zn^2
+  have h_u_norm : ‖u‖ = ‖c‖ / ‖zn‖^2 := by
+    rw [norm_div, norm_pow]
+  
+  have h_u_le_half : ‖u‖ ≤ 1/2 := norm_u_le_half c z n h
+  
+  have h_log_bound : |Real.log ‖1 + u‖| ≤ 2 * ‖u‖ := log_bound_helper u h_u_le_half
+  
+  rw [h_u_norm] at h_log_bound
+  rw [le_div_iff₀ (pow_pos h_zn_pos 2)]
+  field_simp at h_log_bound
+  exact h_log_bound
+
 /-- Convergence of the potential sequence for `z ∉ K(c)`. -/
 lemma potential_seq_converges_of_escapes (h : z ∉ K c) :
     ∃ L, Tendsto (potential_seq c z) atTop (𝓝 L) := by
   dsimp [K, boundedOrbit] at h
   push_neg at h
-  -- h is ∀ M, ∃ n, ‖orbit c z n‖ > M
-  obtain ⟨n0, hn0⟩ := h (R c)
-  obtain ⟨N_large, h_growth⟩ := escape_lemma n0 hn0 (R c)
-  have h_esc : ∃ N, ∀ n ≥ N, ‖orbit c z n‖ > R c := by
-    use n0 + N_large
-    intro n hn
-    apply h_growth
-    linarith
-  rcases h_esc with ⟨N, hN⟩
+  
+  let B := escape_bound c
+  obtain ⟨n0, hn0⟩ := h B
+  have hn0_R : ‖orbit c z n0‖ > R c := lt_of_le_of_lt (escape_bound_ge_R c) hn0
+  
+  obtain ⟨N_large, h_growth⟩ := escape_lemma n0 hn0_R B
+  
   refine cauchySeq_tendsto_of_complete (cauchySeq_of_summable_dist ?_)
-  sorry
+  
+  let a := potential_seq c z
+  rw [← summable_nat_add_iff (n0 + N_large)]
+  
+  have h_bound : ∀ k, dist (a (k + (n0 + N_large))) (a (k + (n0 + N_large) + 1)) ≤ (1 / 2 ^ (k + (n0 + N_large) + 1)) * (2 * ‖c‖ / B^2) := by
+    intro k
+    let n := k + (n0 + N_large)
+    have hn_B : ‖orbit c z n‖ > B := by
+      apply h_growth
+      dsimp [n]
+      linarith
+    
+    let zn := orbit c z n
+    let zn1 := orbit c z (n + 1)
+    
+    dsimp [a, potential_seq]
+    rw [dist_eq_norm, Real.norm_eq_abs]
+    
+    have h_zn_ge_1 : 1 ≤ ‖zn‖ := le_trans (by norm_num) (le_trans (le_trans (R_ge_two c) (escape_bound_ge_R c)) (le_of_lt hn_B))
+    have h_zn1_ge_1 : 1 ≤ ‖zn1‖ := by
+      have hzn1_B : ‖zn1‖ > B := by
+        apply h_growth
+        dsimp [n]
+        linarith
+      exact le_trans (by norm_num) (le_trans (le_trans (R_ge_two c) (escape_bound_ge_R c)) (le_of_lt hzn1_B))
+
+    rw [max_eq_right h_zn_ge_1]
+    rw [max_eq_right h_zn1_ge_1]
+    
+    have : (1 / 2 ^ n) * Real.log ‖zn‖ = (1 / 2 ^ (n + 1)) * (2 * Real.log ‖zn‖) := by
+      rw [pow_succ]
+      field_simp
+    rw [this]
+    
+    rw [← mul_sub]
+    rw [abs_mul]
+    rw [abs_of_nonneg (by positivity)]
+    rw [abs_sub_comm]
+    
+    apply mul_le_mul_of_nonneg_left
+    · apply le_trans (log_orbit_diff_le c z n hn_B)
+      refine div_le_div_of_nonneg_left ?_ ?_ ?_
+      · positivity
+      · have h_B_ge_2 : 2 ≤ B := le_trans (R_ge_two c) (escape_bound_ge_R c)
+        apply pow_pos (lt_of_lt_of_le (by norm_num) h_B_ge_2) 2
+      · apply pow_le_pow_left_of_le
+        · have h_B_ge_2 : 2 ≤ B := le_trans (R_ge_two c) (escape_bound_ge_R c)
+          linarith
+        · apply le_of_lt hn_B
+    · positivity
+
+  dsimp [a]
+  refine Summable.of_nonneg_of_le (fun k => dist_nonneg) (fun k => h_bound k) ?_
+  simp only [pow_add, one_div, mul_inv]
+  have : ∀ i : ℕ, (2 ^ i : ℝ)⁻¹ = (2⁻¹) ^ i := fun i => by rw [inv_pow]
+  simp_rw [this]
+  apply Summable.mul_right
+  apply Summable.mul_right
+  apply Summable.mul_right
+  apply summable_geometric_of_lt_one (by norm_num) (by norm_num)
 
 /-- Convergence of the potential sequence for all `z`. -/
 lemma potential_seq_converges (c z : ℂ) :
