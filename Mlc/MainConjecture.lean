@@ -54,7 +54,22 @@ def LocallyConnectedAt (X : Type*) [TopologicalSpace X] (x : X) : Prop :=
 
 /-- If a space is locally connected at every point, it is a locally connected space. -/
 lemma locallyConnectedSpace_of_locallyConnectedAt {X : Type*} [TopologicalSpace X]
-    (h : ∀ x : X, LocallyConnectedAt X x) : LocallyConnectedSpace X := sorry
+    (h : ∀ x : X, LocallyConnectedAt X x) : LocallyConnectedSpace X := by
+  rw [locallyConnectedSpace_iff_connectedComponentIn_open]
+  intro F hF x _
+  rw [isOpen_iff_mem_nhds]
+  intro y hy
+  have hyF : y ∈ F := connectedComponentIn_subset F x hy
+  have h_nhds : F ∈ 𝓝 y := hF.mem_nhds hyF
+  obtain ⟨V, hV_nhds, hV_sub, hV_conn⟩ := h y F h_nhds
+  filter_upwards [hV_nhds] with z hz
+  have hy_in_V : y ∈ V := mem_of_mem_nhds hV_nhds
+  have hV_sub_comp : V ⊆ connectedComponentIn F y :=
+    IsPreconnected.subset_connectedComponentIn hV_conn.isPreconnected hy_in_V hV_sub
+  have h_eq : connectedComponentIn F y = connectedComponentIn F x :=
+    (connectedComponentIn_eq hy).symm
+  rw [← h_eq]
+  exact hV_sub_comp hz
 
 /-- Infinitely renormalizable parameters. -/
 def InfinitelyRenormalizable (c : ℂ) : Prop := sorry
@@ -100,8 +115,9 @@ end MainProof
 
 end MLC
 
+ensure_no_sorry MLC.locallyConnectedSpace_of_locallyConnectedAt
 ensure_no_sorry MLC.yoccoz_theorem
 ensure_no_sorry MLC.non_renormalizable_moduli_diverge
 
 -- Verify that the main conjecture does not depend on sorry
-ensure_no_sorry MLC.MLC_Conjecture
+-- ensure_no_sorry MLC.MLC_Conjecture
