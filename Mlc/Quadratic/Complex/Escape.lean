@@ -8,6 +8,23 @@ radius `R(c)`, then it escapes to infinity.
 
 Reference: https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf
 (p. 125, Section 21.2)
+
+## Connection to MLC
+
+The escape lemma is the foundational result for the construction of Yoccoz puzzles,
+which are central to the proof of the Mandelbrot Local Connectivity (MLC) conjecture.
+
+1.  **Basin of Infinity**: It establishes that the basin of attraction of infinity,
+    $A(\infty) = \{z \mid f_c^n(z) \to \infty\}$, contains the complement of the disk $D(0, R(c))$.
+2.  **Green's Function**: This allows defining the Green's function $G(z) = \lim \frac{1}{2^n} \log|f_c^n(z)|$
+    for $z \in A(\infty)$.
+3.  **Böttcher Coordinates**: The Green's function is used to construct the Böttcher coordinate
+    $\phi_c(z)$ near infinity, which conjugates $f_c$ to $z \mapsto z^2$.
+4.  **Rays and Equipotentials**: The level sets of $G(z)$ (equipotentials) and the gradient lines
+    of $G(z)$ (external rays) form the grid for the Yoccoz puzzle partition.
+
+Thus, this lemma justifies the existence of the dynamical plane structures required for the
+combinatorial analysis in the MLC proof.
 -/
 
 namespace MLC.Quadratic
