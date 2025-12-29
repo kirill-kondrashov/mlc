@@ -16,7 +16,7 @@ def InfinitelyRenormalizable (c : ℂ) : Prop :=
   Summable (fun n => modulus (PuzzleAnnulus c n))
 
 /-- MLC holds for infinitely renormalizable parameters (Lyubich). -/
-theorem mlc_infinitely_renormalizable (c : ℂ) (hc : c ∈ MandelbrotSet) (h : InfinitelyRenormalizable c) :
-    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := sorry
+theorem mlc_infinitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := sorry
 
 end MLC
