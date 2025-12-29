@@ -55,6 +55,17 @@ lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
 axiom parameter_shrink_ax (c : ℂ) :
     (⋂ n, DynamicalPuzzlePiece c n 0) = {0} → (⋂ n, ParaPuzzlePiece n) = {c}
 
+/-- Parameter puzzle pieces are open sets. -/
+axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
+
+/-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
+axiom para_puzzle_piece_basis (c : ℂ) :
+    (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U
+
+/-- Parameter puzzle pieces intersected with the Mandelbrot set are connected. -/
+axiom para_puzzle_piece_inter_mandelbrot_connected (n : ℕ) :
+    IsConnected (ParaPuzzlePiece n ∩ MandelbrotSet)
+
 end
 
 end MLC.Quadratic

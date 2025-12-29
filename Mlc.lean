@@ -8,3 +8,4 @@ import Mlc.Quadratic.Complex.Bottcher
 import Mlc.Quadratic.Complex.Puzzle
 import Mlc.MainConjecture
 import Mlc.Yoccoz
+import Mlc.LcAtOfShrink
