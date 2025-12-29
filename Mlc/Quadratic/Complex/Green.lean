@@ -7,6 +7,18 @@ import Mlc.Quadratic.Complex.Escape
 This file defines the Green's function `G_c(z)` for the filled Julia set `K(c)`.
 The Green's function measures the rate of escape to infinity.
 
+## Connection to MLC
+
+The Green's function is used to construct Yoccoz puzzles, which are central to the proof of the
+Mandelbrot Local Connectivity (MLC) conjecture.
+
+*   **Equipotentials and Rays**: Level sets of `G_c` (equipotentials) and their orthogonal trajectories
+    (external rays) form a grid on `ℂ \ K(c)`.
+*   **Yoccoz Puzzles**: Intersections of these curves define puzzle pieces used to analyze the combinatorics
+    of orbits.
+*   **Böttcher Coordinates**: `G_c` is the real part of the Böttcher coordinate, conjugating `f_c` to `z ↦ z^2`
+    near infinity.
+
 ## Main Definitions
 
 * `potential_seq c z n`: The sequence `1/2^n * log ‖f_c^n(z)‖`.
@@ -37,6 +49,7 @@ def potential_seq (c z : ℂ) (n : ℕ) : ℝ :=
 def green_function (c z : ℂ) : ℝ :=
   limUnder atTop (fun n => potential_seq c z n)
 
+/-- Convergence of the potential sequence to 0 for `z ∈ K(c)`. -/
 lemma potential_seq_converges_of_mem_K (h : z ∈ K c) :
     Tendsto (potential_seq c z) atTop (𝓝 0) := by
   rcases h with ⟨M, hM⟩
@@ -64,6 +77,7 @@ lemma potential_seq_converges_of_mem_K (h : z ∈ K c) :
     simp [one_div, inv_pow]
     ring
 
+/-- Convergence of the potential sequence for `z ∉ K(c)`. -/
 lemma potential_seq_converges_of_escapes (h : z ∉ K c) :
     ∃ L, Tendsto (potential_seq c z) atTop (𝓝 L) := by
   dsimp [K, boundedOrbit] at h
@@ -80,12 +94,14 @@ lemma potential_seq_converges_of_escapes (h : z ∉ K c) :
   refine cauchySeq_tendsto_of_complete (cauchySeq_of_summable_dist ?_)
   sorry
 
+/-- Convergence of the potential sequence for all `z`. -/
 lemma potential_seq_converges (c z : ℂ) :
     ∃ L, Tendsto (potential_seq c z) atTop (𝓝 L) := by
   by_cases h : z ∈ K c
   · use 0; exact potential_seq_converges_of_mem_K h
   · exact potential_seq_converges_of_escapes h
 
+/-- `G_c(z)` equals the limit of the potential sequence. -/
 lemma green_function_eq_lim (c z : ℂ) :
     Tendsto (potential_seq c z) atTop (𝓝 (green_function c z)) := by
   obtain ⟨L, hL⟩ := potential_seq_converges c z
