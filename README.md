@@ -9,6 +9,10 @@ $ lake exe cache get
 $ lake build
 ```
 
+## Main Conjecture
+
+The formal statement of the Mandelbrot Local Connectivity conjecture can be found in `Mlc/MainConjecture.lean`.
+
 ## Proof Scheme for MLC
 
 Based on "Conformal Geometry and Dynamics of Quadratic Polynomials", the strategy to prove that the Mandelbrot set $M$ is locally connected (MLC) relies on the theory of Yoccoz Puzzles.

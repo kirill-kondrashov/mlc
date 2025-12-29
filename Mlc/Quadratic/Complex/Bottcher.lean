@@ -17,9 +17,6 @@ in a neighborhood of infinity.
 * `bottcher_asymptotic`: `φ_c(z) ~ z` as `z → ∞`.
 * `log_norm_bottcher_eq_green`: `log ‖φ_c(z)‖ = G_c(z)`.
 
-Reference: "Conformal Geometry and Dynamics of Quadratic Polynomials",
-https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf
-(See Section 21.2 for the construction of Böttcher coordinates)
 -/
 
 namespace MLC.Quadratic
