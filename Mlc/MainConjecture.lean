@@ -13,7 +13,26 @@ elab "ensure_no_sorry" n:ident : command => do
   let name ← resolveGlobalConstNoOverload n
   let axioms ← collectAxioms name
   if axioms.contains ``sorryAx then
-    throwError m!"{name} depends on sorryAx!"
+    let info ← getConstInfo name
+    match info.value? with
+    | some v =>
+      let sorryDeps := v.foldConsts (init := #[]) fun c acc =>
+        acc.push c
+
+      let mut culprits := #[]
+      for dep in sorryDeps do
+        if dep != name then
+           let depAxioms ← collectAxioms dep
+           if depAxioms.contains ``sorryAx then
+             culprits := culprits.push dep
+
+      let culpritsList := culprits.toList.eraseDups
+
+      if culpritsList.isEmpty then
+        throwError m!"{name} depends on sorryAx directly!"
+      else
+        throwError m!"{name} depends on sorryAx through: {culpritsList}"
+    | none => throwError m!"{name} depends on sorryAx (no value available to inspect)"
   else
     logInfo m!"{name} is sorry-free!"
 
@@ -81,7 +100,8 @@ end MainProof
 
 end MLC
 
--- Verify that the main conjecture does not depend on sorry
--- ensure_no_sorry MLC.MLC_Conjecture
 ensure_no_sorry MLC.yoccoz_theorem
 ensure_no_sorry MLC.non_renormalizable_moduli_diverge
+
+-- Verify that the main conjecture does not depend on sorry
+-- ensure_no_sorry MLC.MLC_Conjecture
