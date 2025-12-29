@@ -45,7 +45,7 @@ lemma isConnected_image_of_embedding {X Y : Type*} [TopologicalSpace X] [Topolog
     ext y
     simp only [Set.mem_range, Set.mem_image, Function.comp_apply, Subtype.exists, exists_prop, f']
   rw [← h_range]
-  
+
   constructor
   · rintro ⟨h_non, h_pre⟩
     refine ⟨?_, ?_⟩
@@ -53,25 +53,22 @@ lemma isConnected_image_of_embedding {X Y : Type*} [TopologicalSpace X] [Topolog
       exact Set.nonempty_coe_sort.mp (h_non.to_subtype.map e.symm)
     · -- IsPreconnected s
       rw [isPreconnected_iff_preconnectedSpace] at h_pre ⊢
-      -- Convert PreconnectedSpace s to IsPreconnected (Set.univ : Set s)
-      rw [← isPreconnected_iff_preconnectedSpace] at h_pre ⊢
+      apply PreconnectedSpace.mk
       have h_ind := e.symm.isInducing
-      rw [← h_ind.isPreconnected_image]
-      rw [Set.image_univ]
-      rw [e.symm.range_coe]
-      exact h_pre
+      rw [← Set.image_univ_of_surjective (Homeomorph.surjective e.symm)]
+      rw [h_ind.isPreconnected_image]
+      exact @PreconnectedSpace.isPreconnected_univ _ _ h_pre
   · rintro ⟨h_non, h_pre⟩
     refine ⟨?_, ?_⟩
     · -- (range f').Nonempty
       exact Set.nonempty_coe_sort.mp (h_non.to_subtype.map e)
     · -- IsPreconnected (range f')
       rw [isPreconnected_iff_preconnectedSpace] at h_pre ⊢
-      rw [← isPreconnected_iff_preconnectedSpace] at h_pre ⊢
+      apply PreconnectedSpace.mk
       have h_ind := e.isInducing
-      rw [← h_ind.isPreconnected_image]
-      rw [Set.image_univ]
-      rw [e.range_coe]
-      exact h_pre
+      rw [← Set.image_univ_of_surjective (Homeomorph.surjective e)]
+      rw [h_ind.isPreconnected_image]
+      exact @PreconnectedSpace.isPreconnected_univ _ _ h_pre
 
 lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → Prop}
     (s : Set { x // p x }) :
