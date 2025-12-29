@@ -1,6 +1,8 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Puzzle
 import Mathlib.Topology.Connected.LocallyConnected
+import Mathlib.Topology.Homeomorph.Defs
+import Mathlib.Topology.Homeomorph.Lemmas
 import Lean
 
 open Lean Elab Command
@@ -32,57 +34,73 @@ lemma locallyConnectedSpace_of_locallyConnectedAt {X : Type*} [TopologicalSpace 
   rw [← h_eq]
   exact hV_sub_comp hz
 
+/-- A set in a subtype is connected iff its image in the ambient space is connected. -/
+lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → Prop}
+    (s : Set { x // p x }) :
+    IsConnected ((Subtype.val : { x // p x } → X) '' s) ↔ IsConnected s := by
+  sorry
+
+/-- The intersection of a parameter puzzle piece with the Mandelbrot set is connected in the subtype topology. -/
+lemma para_puzzle_piece_induced_connected (n : ℕ) :
+    IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } := by
+  rw [← isConnected_subtype_val_image]
+  have h_img : (Subtype.val : MandelbrotSet → ℂ) '' { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } =
+      ParaPuzzlePiece n ∩ MandelbrotSet := by
+    ext z
+    constructor
+    · intro h
+      rcases h with ⟨x, hx, rfl⟩
+      exact ⟨hx, x.property⟩
+    · intro h
+      rcases h with ⟨hP, hM⟩
+      use ⟨z, hM⟩
+      constructor
+      · exact hP
+      · rfl
+  rw [h_img]
+  exact para_puzzle_piece_inter_mandelbrot_connected n
+
+/-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set. -/
+lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
+    (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
+    ∀ U ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet), ∃ n, { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } ⊆ U := by
+  intro U hU
+  rw [mem_nhds_iff] at hU
+  obtain ⟨V, hV_sub_U, hV_open, hc_in_V⟩ := hU
+  obtain ⟨W, hW_open, hW_eq⟩ := isOpen_induced_iff.mp hV_open
+  rw [← hW_eq] at hc_in_V hV_sub_U
+  have hc_in_W : c ∈ W := hc_in_V
+  have hW_nhds : W ∈ 𝓝 c := hW_open.mem_nhds hc_in_W
+  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis c h W hW_nhds
+  use n
+  intro x hx
+  apply hV_sub_U
+  exact hn_sub hx
+
 /-- If parameter pieces shrink to a point, M is locally connected at c. -/
 lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
   rw [LocallyConnectedAt]
   intro U hU
-  -- U is a neighborhood of c in MandelbrotSet
-  rw [mem_nhds_iff] at hU
-  obtain ⟨V, hV_sub_U, hV_open, hc_in_V⟩ := hU
-  -- V is open in MandelbrotSet, so V = W ∩ MandelbrotSet for some W open in ℂ
-  obtain ⟨W, hW_open, hW_eq⟩ := isOpen_induced_iff.mp hV_open
-  rw [← hW_eq] at hc_in_V hV_sub_U
-
-  -- c ∈ W and W is open
-  have hc_in_W : c ∈ W := hc_in_V
-  have hW_nhds : W ∈ 𝓝 c := hW_open.mem_nhds hc_in_W
-
-  -- Use para_puzzle_piece_basis to find a piece inside W
-  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis c h W hW_nhds
-
-  let P := ParaPuzzlePiece n
-  let V' := (Subtype.val : MandelbrotSet → ℂ) ⁻¹' P
-
+  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis_induced c hc h U hU
+  let V' := { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n }
   use V'
   constructor
   · -- V' ∈ 𝓝 ⟨c, hc⟩
     rw [mem_nhds_iff]
-    have hV'_open : IsOpen V' := by
-      rw [isOpen_induced_iff]
-      use P
-      constructor
-      · exact para_puzzle_piece_open n
-      · rfl
     use V'
     constructor
     · exact subset_rfl
     · constructor
-      · exact hV'_open
-      · -- c ∈ P
-        have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePiece k := by rw [h]; exact Set.mem_singleton c
+      · rw [isOpen_induced_iff]
+        use ParaPuzzlePiece n
+        constructor
+        · exact para_puzzle_piece_open n
+        · rfl
+      · have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePiece k := by rw [h]; exact Set.mem_singleton c
         exact Set.mem_iInter.mp hc_in_inter n
-
-  constructor
-  · -- V' ⊆ U
-    intro x hx
-    apply hV_sub_U
-    exact hn_sub hx
-
-  · -- IsConnected V'
-    have h_conn : IsConnected (P ∩ MandelbrotSet) := para_puzzle_piece_inter_mandelbrot_connected n
-    -- V' is homeomorphic to P ∩ MandelbrotSet, so it is connected.
-    -- TODO: Prove homeomorphism and use it.
-    sorry
+  · constructor
+    · exact hn_sub
+    · exact para_puzzle_piece_induced_connected n
 
 end MLC
