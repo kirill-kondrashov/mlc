@@ -39,13 +39,6 @@ end ParameterPlane
 
 section YoccozTheorem
 
-/-- The modulus of an annulus. -/
-def modulus (A : Set ℂ) : ℝ := sorry
-
-/-- The annulus between two nested puzzle pieces around the critical point. -/
-def PuzzleAnnulus (c : ℂ) (n : ℕ) : Set ℂ :=
-  DynamicalPuzzlePiece c 0 n \ DynamicalPuzzlePiece c 0 (n + 1)
-
 /-- Yoccoz's Theorem: Divergence of moduli implies point intersection. -/
 theorem yoccoz_theorem (c : ℂ) :
     (Summable fun n => modulus (PuzzleAnnulus c n)) →

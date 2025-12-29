@@ -36,4 +36,12 @@ def DynamicalPuzzlePiece (n : ℕ) (z : ℂ) : Set ℂ :=
 
 end
 
+/-- The modulus of an annulus. -/
+noncomputable def modulus (A : Set ℂ) : ℝ := sorry
+
+/-- The annulus between two nested puzzle pieces around the critical point. -/
+def PuzzleAnnulus (c : ℂ) (n : ℕ) : Set ℂ :=
+  DynamicalPuzzlePiece c n 0 \ DynamicalPuzzlePiece c (n + 1) 0
+
+
 end MLC.Quadratic
