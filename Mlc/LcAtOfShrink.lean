@@ -35,10 +35,50 @@ lemma locallyConnectedSpace_of_locallyConnectedAt {X : Type*} [TopologicalSpace 
   exact hV_sub_comp hz
 
 /-- A set in a subtype is connected iff its image in the ambient space is connected. -/
+lemma isConnected_image_of_embedding {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {f : X → Y} (hf : IsEmbedding f) (s : Set X) :
+    IsConnected (f '' s) ↔ IsConnected s := by
+  let f' : s → Y := f ∘ Subtype.val
+  have h_emb : IsEmbedding f' := hf.comp IsEmbedding.subtypeVal
+  let e : s ≃ₜ Set.range f' := h_emb.toHomeomorph
+  have h_range : Set.range f' = f '' s := by
+    ext y
+    simp only [Set.mem_range, Set.mem_image, Function.comp_apply, Subtype.exists, exists_prop, f']
+  rw [← h_range]
+  
+  constructor
+  · rintro ⟨h_non, h_pre⟩
+    refine ⟨?_, ?_⟩
+    · -- s.Nonempty
+      exact Set.nonempty_coe_sort.mp (h_non.to_subtype.map e.symm)
+    · -- IsPreconnected s
+      rw [isPreconnected_iff_preconnectedSpace] at h_pre ⊢
+      -- Convert PreconnectedSpace s to IsPreconnected (Set.univ : Set s)
+      rw [← isPreconnected_iff_preconnectedSpace] at h_pre ⊢
+      have h_ind := e.symm.isInducing
+      rw [← h_ind.isPreconnected_image]
+      rw [Set.image_univ]
+      rw [e.symm.range_coe]
+      exact h_pre
+  · rintro ⟨h_non, h_pre⟩
+    refine ⟨?_, ?_⟩
+    · -- (range f').Nonempty
+      exact Set.nonempty_coe_sort.mp (h_non.to_subtype.map e)
+    · -- IsPreconnected (range f')
+      rw [isPreconnected_iff_preconnectedSpace] at h_pre ⊢
+      rw [← isPreconnected_iff_preconnectedSpace] at h_pre ⊢
+      have h_ind := e.isInducing
+      rw [← h_ind.isPreconnected_image]
+      rw [Set.image_univ]
+      rw [e.range_coe]
+      exact h_pre
+
 lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → Prop}
     (s : Set { x // p x }) :
     IsConnected ((Subtype.val : { x // p x } → X) '' s) ↔ IsConnected s := by
-  sorry
+  let f := (Subtype.val : { x // p x } → X)
+  have h_emb : IsEmbedding f := IsEmbedding.subtypeVal
+  exact isConnected_image_of_embedding h_emb s
 
 /-- The intersection of a parameter puzzle piece with the Mandelbrot set is connected in the subtype topology. -/
 lemma para_puzzle_piece_induced_connected (n : ℕ) :
