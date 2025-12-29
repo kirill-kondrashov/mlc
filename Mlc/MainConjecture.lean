@@ -4,38 +4,12 @@ import Mlc.Quadratic.Complex.Bottcher
 import Mlc.Quadratic.Complex.Puzzle
 import Mlc.Yoccoz
 import Mlc.LcAtOfShrink
+import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Lean
 
 open Lean Elab Command
-
-elab "ensure_no_sorry" n:ident : command => do
-  let name ← resolveGlobalConstNoOverload n
-  let axioms ← collectAxioms name
-  if axioms.contains ``sorryAx then
-    let info ← getConstInfo name
-    match info.value? with
-    | some v =>
-      let sorryDeps := v.foldConsts (init := #[]) fun c acc =>
-        acc.push c
-
-      let mut culprits := #[]
-      for dep in sorryDeps do
-        if dep != name then
-           let depAxioms ← collectAxioms dep
-           if depAxioms.contains ``sorryAx then
-             culprits := culprits.push dep
-
-      let culpritsList := culprits.toList.eraseDups
-
-      if culpritsList.isEmpty then
-        throwError m!"{name} depends on sorryAx directly!"
-      else
-        throwError m!"{name} depends on sorryAx through: {culpritsList}"
-    | none => throwError m!"{name} depends on sorryAx (no value available to inspect)"
-  else
-    logInfo m!"{name} is sorry-free!"
 
 namespace MLC
 
@@ -102,7 +76,7 @@ ensure_no_sorry MLC.non_renormalizable_moduli_diverge
 ensure_no_sorry MLC.InfinitelyRenormalizable
 ensure_no_sorry MLC.dichotomy
 ensure_no_sorry MLC.parameter_shrink
--- ensure_no_sorry MLC.lc_at_of_shrink
+ensure_no_sorry MLC.lc_at_of_shrink
 
 -- Verify that the main conjecture does not depend on sorry
 -- ensure_no_sorry MLC.MLC_Conjecture
