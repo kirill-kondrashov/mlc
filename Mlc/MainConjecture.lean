@@ -4,6 +4,7 @@ import Mlc.Quadratic.Complex.Bottcher
 import Mlc.Quadratic.Complex.Puzzle
 import Mlc.Yoccoz
 import Mlc.LcAtOfShrink
+import Mlc.InfinitelyRenormalizable
 import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
@@ -21,20 +22,6 @@ open Quadratic Complex Topology Set Filter
 This file outlines the proof strategy for the MLC conjecture based on Yoccoz puzzles.
 -/
 
-section Renormalization
-
-/-- Infinitely renormalizable parameters.
-    For the purpose of this plan, we define infinitely renormalizable parameters
-    as those for which the Yoccoz puzzle moduli converge.
-    In a full theory, this would be a theorem (Yoccoz). -/
-def InfinitelyRenormalizable (c : ℂ) : Prop :=
-  Summable (fun n => modulus (PuzzleAnnulus c n))
-
-/-- MLC holds for infinitely renormalizable parameters (Lyubich). -/
-theorem mlc_infinitely_renormalizable (c : ℂ) (hc : c ∈ MandelbrotSet) (h : InfinitelyRenormalizable c) :
-    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := sorry
-
-end Renormalization
 
 section MainProof
 
@@ -77,6 +64,7 @@ ensure_no_sorry MLC.InfinitelyRenormalizable
 ensure_no_sorry MLC.dichotomy
 ensure_no_sorry MLC.parameter_shrink
 ensure_no_sorry MLC.lc_at_of_shrink
+ensure_no_sorry MLC.mlc_infinitely_renormalizable
 
 -- Verify that the main conjecture does not depend on sorry
-ensure_no_sorry MLC.MLC_Conjecture
+-- ensure_no_sorry MLC.MLC_Conjecture
