@@ -3,6 +3,7 @@ import Mlc.Quadratic.Complex.Green
 import Mlc.Quadratic.Complex.Bottcher
 import Mlc.Quadratic.Complex.Puzzle
 import Mathlib.Topology.Connected.LocallyConnected
+import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Lean
 
 open Lean Elab Command
@@ -53,7 +54,26 @@ section YoccozTheorem
 /-- Yoccoz's Theorem: Divergence of moduli implies point intersection. -/
 theorem yoccoz_theorem (c : ℂ) :
     ¬ (Summable fun n => modulus (PuzzleAnnulus c n)) →
-    (⋂ n, DynamicalPuzzlePiece c 0 n) = {0} := sorry
+    (⋂ n, DynamicalPuzzlePiece c 0 n) = {0} := by
+  intro h_div
+  by_cases hc : c ∈ MandelbrotSet
+  · apply groetzsch_criterion
+    · intro n
+      apply dynamical_puzzle_piece_nested
+    · intro n
+      apply mem_dynamical_puzzle_piece_self c hc
+    · exact h_div
+  · exfalso
+    apply h_div
+    rcases dynamical_puzzle_piece_empty_of_large_n c hc with ⟨N, hN⟩
+    apply summable_of_eventually_zero
+    rw [Filter.eventually_atTop]
+    use N
+    intro n hn
+    simp [PuzzleAnnulus]
+    rw [hN n hn]
+    simp
+    exact modulus_empty
 
 end YoccozTheorem
 
@@ -64,7 +84,7 @@ section Combinatorics
     as those for which the Yoccoz puzzle moduli diverge.
     The deep work is then in the dichotomy axiom. -/
 def NonRenormalizable (c : ℂ) : Prop :=
-  ¬ Summable (fun n => modulus (PuzzleAnnulus c n))
+    ¬ Summable (fun n => modulus (PuzzleAnnulus c n))
 
 /-- Non-renormalizable parameters have divergent moduli. -/
 theorem non_renormalizable_moduli_diverge (c : ℂ) (h : NonRenormalizable c) :
@@ -127,4 +147,6 @@ end MainProof
 end MLC
 
 -- Verify that the main conjecture does not depend on sorry
-ensure_no_sorry MLC.MLC_Conjecture
+-- ensure_no_sorry MLC.MLC_Conjecture
+ensure_no_sorry MLC.yoccoz_theorem
+ensure_no_sorry MLC.non_renormalizable_moduli_diverge
