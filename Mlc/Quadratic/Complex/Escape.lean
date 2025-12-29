@@ -6,8 +6,9 @@ import Mlc.Quadratic.Complex.Basic
 This file proves the escape lemma: if the orbit of a point ever leaves the disk of
 radius `R(c)`, then it escapes to infinity.
 
-Reference: https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf
-(p. 125, Section 21.2)
+Reference: "Conformal Geometry and Dynamics of Quadratic Polynomials",
+https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf
+(See Section 21.2, p. 125 for the escape lemma)
 
 ## Connection to MLC
 

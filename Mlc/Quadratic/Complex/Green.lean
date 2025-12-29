@@ -31,6 +31,9 @@ Mandelbrot Local Connectivity (MLC) conjecture.
 * `green_function_functional_eq`: `G_c(f_c(z)) = 2 * G_c(z)`.
 * `green_function_harmonic`: `G_c` is harmonic on `ℂ \ K(c)`.
 
+Reference: "Conformal Geometry and Dynamics of Quadratic Polynomials",
+https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf
+(See Section 21.2 for the definition and properties of the Green's function)
 -/
 
 namespace MLC.Quadratic

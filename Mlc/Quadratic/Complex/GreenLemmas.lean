@@ -8,6 +8,12 @@ open Complex Topology Filter Real
 
 noncomputable section
 
+/-!
+Reference: "Conformal Geometry and Dynamics of Quadratic Polynomials",
+https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf
+(Lemmas supporting the Green's function construction in Section 21.2)
+-/
+
 lemma log_ge_one_sub_inv {x : ℝ} (hx : 0 < x) : Real.log x ≥ 1 - 1/x := by
   have h := Real.log_le_sub_one_of_pos (inv_pos.mpr hx)
   rw [Real.log_inv] at h

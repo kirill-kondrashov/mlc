@@ -6,6 +6,10 @@ import Mathlib
 We set up the quadratic family `f_c(z) = z^2 + c`, iterates, filled Julia set `K(c)`,
 and Julia set `J(c) = ∂K(c)`. We also state (and stub) the standard escape and
 compactness lemmas you’ll prove next.
+
+Reference: "Conformal Geometry and Dynamics of Quadratic Polynomials",
+https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf
+(See Section 21.1 for basic definitions of K(c) and J(c))
 -/
 
 namespace MLC
@@ -38,6 +42,9 @@ def K (c : ℂ) : Set ℂ := { z | boundedOrbit c z }
 
 /-- Julia set as the topological boundary of `K(c)`. -/
 def J (c : ℂ) : Set ℂ := frontier (K c)
+
+/-- The Mandelbrot set is the set of parameters `c` for which the orbit of `0` is bounded. -/
+def MandelbrotSet : Set ℂ := { c | boundedOrbit c 0 }
 
 /-! ## Elementary norm facts -/
 
