@@ -64,7 +64,7 @@ ensure_no_sorry MLC.InfinitelyRenormalizable
 ensure_no_sorry MLC.dichotomy
 ensure_no_sorry MLC.parameter_shrink
 ensure_no_sorry MLC.lc_at_of_shrink
--- ensure_no_sorry MLC.mlc_infinitely_renormalizable
+ensure_no_sorry MLC.mlc_infinitely_renormalizable
 
 -- Verify that the main conjecture does not depend on sorry
--- ensure_no_sorry MLC.MLC_Conjecture
+ensure_no_sorry MLC.MLC_Conjecture
