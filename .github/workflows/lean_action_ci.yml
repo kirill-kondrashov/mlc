@@ -12,3 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: leanprover/lean-action@v1
+      - name: Check Axioms
+        run: |
+          lake exe check_axioms
+          if [ $? -ne 0 ]; then
+            echo "Axiom check failed!"
+            exit 1
+          fi
