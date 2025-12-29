@@ -110,6 +110,53 @@ lemma pow_le_pow_left_of_le {x y : ℝ} (n : ℕ) (hx : 0 ≤ x) (hxy : x ≤ y)
     rw [mul_comm (x^n), mul_comm (y^n)]
     apply mul_le_mul hxy ih (pow_nonneg hx n) (le_trans hx hxy)
 
+lemma log_orbit_diff_le (c z : ℂ) (n : ℕ) (h : ‖orbit c z n‖ > escape_bound c) :
+    |Real.log ‖orbit c z (n + 1)‖ - 2 * Real.log ‖orbit c z n‖| ≤ 2 * ‖c‖ / ‖orbit c z n‖^2 := by
+  let zn := orbit c z n
+  let zn1 := orbit c z (n + 1)
+  have h_zn : ‖zn‖ > escape_bound c := h
+  have h_R : R c ≥ 2 := R_ge_two c
+  have h_esc : escape_bound c ≥ R c := escape_bound_ge_R c
+  have h_zn_gt_2 : ‖zn‖ > 2 := lt_of_le_of_lt (le_trans h_R h_esc) h_zn
+  have h_zn_pos : 0 < ‖zn‖ := lt_trans zero_lt_two h_zn_gt_2
+  
+  rw [show 2 * Real.log ‖zn‖ = Real.log (‖zn‖ ^ 2) by
+    rw [Real.log_pow, Nat.cast_ofNat]
+  ]
+  
+  have h_zn1_eq : zn1 = fc c zn := by
+    dsimp [zn1, zn]
+    rw [orbit_succ]
+
+  have h_zn_sq_pos : 0 < ‖zn‖^2 := pow_pos h_zn_pos 2
+  have h_zn1_pos : 0 < ‖zn1‖ := by
+    rw [h_zn1_eq]
+    have : ‖fc c zn‖ ≥ ‖zn‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c zn
+    apply lt_of_lt_of_le _ this
+    have : ‖c‖ < ‖zn‖^2 := by
+      have h_esc_nonneg : 0 ≤ escape_bound c := le_trans (le_trans zero_le_two (R_ge_two c)) (escape_bound_ge_R c)
+      have h_sq : (escape_bound c)^2 < ‖zn‖^2 := by gcongr
+      have h_esc : 2 * ‖c‖ + 1 ≤ (escape_bound c)^2 := escape_bound_sq_ge c
+      linarith
+    linarith
+
+  rw [← Real.log_div h_zn1_pos.ne' h_zn_sq_pos.ne']
+  
+  rw [norm_orbit_succ_div_sq_eq c z n h_zn_pos]
+  
+  let u := c / zn^2
+  have h_u_norm : ‖u‖ = ‖c‖ / ‖zn‖^2 := by
+    rw [norm_div, norm_pow]
+  
+  have h_u_le_half : ‖u‖ ≤ 1/2 := norm_u_le_half c z n h
+  
+  have h_log_bound : |Real.log ‖1 + u‖| ≤ 2 * ‖u‖ := log_bound_helper u h_u_le_half
+  
+  rw [h_u_norm] at h_log_bound
+  rw [le_div_iff₀ (pow_pos h_zn_pos 2)]
+  field_simp at h_log_bound
+  exact h_log_bound
+
 end
 
 end MLC.Quadratic

@@ -82,53 +82,6 @@ lemma potential_seq_converges_of_mem_K (h : z ∈ K c) :
 
 /-! ### Convergence for escaping points -/
 
-lemma log_orbit_diff_le (c z : ℂ) (n : ℕ) (h : ‖orbit c z n‖ > escape_bound c) :
-    |Real.log ‖orbit c z (n + 1)‖ - 2 * Real.log ‖orbit c z n‖| ≤ 2 * ‖c‖ / ‖orbit c z n‖^2 := by
-  let zn := orbit c z n
-  let zn1 := orbit c z (n + 1)
-  have h_zn : ‖zn‖ > escape_bound c := h
-  have h_R : R c ≥ 2 := R_ge_two c
-  have h_esc : escape_bound c ≥ R c := escape_bound_ge_R c
-  have h_zn_gt_2 : ‖zn‖ > 2 := lt_of_le_of_lt (le_trans h_R h_esc) h_zn
-  have h_zn_pos : 0 < ‖zn‖ := lt_trans zero_lt_two h_zn_gt_2
-  
-  rw [show 2 * Real.log ‖zn‖ = Real.log (‖zn‖ ^ 2) by
-    rw [Real.log_pow, Nat.cast_ofNat]
-  ]
-  
-  have h_zn1_eq : zn1 = fc c zn := by
-    dsimp [zn1, zn]
-    rw [orbit_succ]
-
-  have h_zn_sq_pos : 0 < ‖zn‖^2 := pow_pos h_zn_pos 2
-  have h_zn1_pos : 0 < ‖zn1‖ := by
-    rw [h_zn1_eq]
-    have : ‖fc c zn‖ ≥ ‖zn‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c zn
-    apply lt_of_lt_of_le _ this
-    have : ‖c‖ < ‖zn‖^2 := by
-      have h_esc_nonneg : 0 ≤ escape_bound c := le_trans (le_trans zero_le_two (R_ge_two c)) (escape_bound_ge_R c)
-      have h_sq : (escape_bound c)^2 < ‖zn‖^2 := by gcongr
-      have h_esc : 2 * ‖c‖ + 1 ≤ (escape_bound c)^2 := escape_bound_sq_ge c
-      linarith
-    linarith
-
-  rw [← Real.log_div h_zn1_pos.ne' h_zn_sq_pos.ne']
-  
-  rw [norm_orbit_succ_div_sq_eq c z n h_zn_pos]
-  
-  let u := c / zn^2
-  have h_u_norm : ‖u‖ = ‖c‖ / ‖zn‖^2 := by
-    rw [norm_div, norm_pow]
-  
-  have h_u_le_half : ‖u‖ ≤ 1/2 := norm_u_le_half c z n h
-  
-  have h_log_bound : |Real.log ‖1 + u‖| ≤ 2 * ‖u‖ := log_bound_helper u h_u_le_half
-  
-  rw [h_u_norm] at h_log_bound
-  rw [le_div_iff₀ (pow_pos h_zn_pos 2)]
-  field_simp at h_log_bound
-  exact h_log_bound
-
 /-- Convergence of the potential sequence for `z ∉ K(c)`. -/
 lemma potential_seq_converges_of_escapes (h : z ∉ K c) :
     ∃ L, Tendsto (potential_seq c z) atTop (𝓝 L) := by
@@ -263,15 +216,193 @@ lemma green_function_nonneg (c z : ℂ) : 0 ≤ green_function c z := by
       apply le_max_left
   linarith
 
+lemma green_function_iterate (c z : ℂ) (n : ℕ) :
+    green_function c (orbit c z n) = 2^n * green_function c z := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [orbit_succ, green_function_functional_eq, ih]
+    rw [pow_succ]
+    ring
+
+lemma green_function_pos_of_large_norm (c z : ℂ) (h : ‖z‖ > escape_bound c) :
+    0 < green_function c z := by
+  let B := escape_bound c
+  have hB_R : B ≥ R c := escape_bound_ge_R c
+  have hR_2 : R c ≥ 2 := R_ge_two c
+  have hB_2 : B ≥ 2 := le_trans hR_2 hB_R
+  
+  have h_orbit_ge : ∀ k, ‖orbit c z k‖ ≥ ‖z‖ := by
+    intro k
+    induction k with
+    | zero => simp
+    | succ k ih =>
+      rw [orbit_succ]
+      have h_zk_ge_z : ‖orbit c z k‖ ≥ ‖z‖ := ih
+      have h_zk_gt_R : ‖orbit c z k‖ > R c := lt_of_lt_of_le (lt_of_le_of_lt hB_R h) h_zk_ge_z
+      have h_zk_pos : 0 < ‖orbit c z k‖ := lt_trans (lt_of_lt_of_le zero_lt_two hR_2) h_zk_gt_R
+      
+      calc ‖fc c (orbit c z k)‖ 
+        _ ≥ ‖orbit c z k‖^2 - ‖c‖ := norm_fc_ge_norm_sq_sub_norm_c c _
+        _ = ‖orbit c z k‖ * (‖orbit c z k‖ - ‖c‖ / ‖orbit c z k‖) := by field_simp [h_zk_pos.ne']
+        _ ≥ ‖orbit c z k‖ * 1 := by
+          gcongr
+          have := factor_gt_one c (orbit c z k) h_zk_gt_R
+          linarith
+        _ = ‖orbit c z k‖ := mul_one _
+        _ ≥ ‖z‖ := ih
+
+  have h_diff : ∀ k, |potential_seq c z k - potential_seq c z (k + 1)| ≤ (1 / 2 ^ (k + 1)) * (2 * ‖c‖ / B^2) := by
+    intro k
+    let zn := orbit c z k
+    have h_zn_gt_B : ‖zn‖ > B := lt_of_lt_of_le h (h_orbit_ge k)
+    
+    have h_log_diff := log_orbit_diff_le c z k h_zn_gt_B
+    
+    rw [potential_seq, potential_seq]
+    rw [max_eq_right (le_trans one_le_two (le_trans hB_2 (le_of_lt h_zn_gt_B)))]
+    
+    let zn1 := orbit c z (k + 1)
+    have h_zn1_gt_B : ‖zn1‖ > B := lt_of_lt_of_le h (h_orbit_ge (k + 1))
+    rw [max_eq_right (le_trans one_le_two (le_trans hB_2 (le_of_lt h_zn1_gt_B)))]
+    
+    rw [pow_succ]
+    have : (1 / (2 ^ k * 2)) * Real.log ‖zn1‖ - (1 / 2 ^ k) * Real.log ‖zn‖ = 
+           (1 / 2 ^ (k + 1)) * (Real.log ‖zn1‖ - 2 * Real.log ‖zn‖) := by
+      field_simp
+      ring
+    rw [abs_sub_comm]
+    rw [this]
+    rw [abs_mul, abs_of_nonneg (by positivity)]
+    
+    apply le_trans (mul_le_mul_of_nonneg_left h_log_diff (by positivity))
+    rw [pow_succ]
+    gcongr
+    rw [div_le_div_iff₀ (pow_pos (lt_trans (lt_of_lt_of_le zero_lt_two hB_2) (le_of_lt h_zn_gt_B)) 2) (pow_pos (lt_of_lt_of_le zero_lt_two hB_2) 2)]
+    gcongr
+    exact le_of_lt h_zn_gt_B
+
+  have h_cauchy : |potential_seq c z 0 - green_function c z| ≤ 2 * ‖c‖ / B^2 := by
+    let C := 2 * ‖c‖ / B^2
+    let d := fun k => (1 / 2 ^ (k + 1)) * C
+    have h_sum : Summable d := by
+      dsimp [d]
+      simp_rw [pow_succ, one_div, mul_inv, mul_assoc]
+      have : ∀ i : ℕ, (2 ^ i : ℝ)⁻¹ = (2⁻¹) ^ i := fun i => by rw [inv_pow]
+      simp_rw [this]
+      apply Summable.mul_right
+      apply Summable.mul_left
+      exact summable_geometric_of_lt_one (by norm_num) (by norm_num)
+    
+    have h_tsum_eq : ∑' k, d k = C := by
+      dsimp [d]
+      simp_rw [pow_succ, one_div, mul_inv, mul_assoc]
+      have : ∀ i : ℕ, (2 ^ i : ℝ)⁻¹ = (2⁻¹) ^ i := fun i => by rw [inv_pow]
+      simp_rw [this]
+      rw [tsum_mul_right, tsum_mul_left]
+      rw [tsum_geometric_of_lt_one (by norm_num) (by norm_num)]
+      field_simp
+    
+    rw [abs_sub_comm]
+    change _ ≤ C
+    rw [← h_tsum_eq]
+    have h_diff' : ∀ k, dist (potential_seq c z k) (potential_seq c z (k + 1)) ≤ d k := by
+      intro k
+      rw [dist_eq_norm, Real.norm_eq_abs]
+      exact h_diff k
+    
+    have h_dist_le := dist_le_tsum_of_dist_le_of_tendsto₀ d h_diff' h_sum (green_function_eq_lim c z)
+    rw [dist_eq_norm, Real.norm_eq_abs] at h_dist_le
+    exact h_dist_le
+    
+  rw [potential_seq, Nat.cast_zero, pow_zero, inv_one, one_mul] at h_cauchy
+  rw [max_eq_right (le_trans one_le_two (le_trans hB_2 (le_of_lt h)))] at h_cauchy
+  
+  have h_lower : green_function c z ≥ Real.log ‖z‖ - 2 * ‖c‖ / B^2 := by
+    linarith [abs_le.mp h_cauchy]
+    
+  apply lt_of_lt_of_le _ h_lower
+  
+  have h_log_B : Real.log ‖z‖ > Real.log B := Real.log_lt_log (lt_trans (lt_of_lt_of_le zero_lt_two hB_2) h) h
+  apply lt_trans _ h_log_B
+  
+  by_cases hc : ‖c‖ ≤ 1
+  · have hB_eq_2 : B = 2 := by
+      rw [escape_bound, R]
+      have : 1 + ‖c‖ ≤ 2 := by linarith
+      have : Real.sqrt (2 * ‖c‖ + 1) ≤ Real.sqrt 3 := by
+        apply Real.sqrt_le_sqrt
+        linarith
+      have : Real.sqrt 3 < 2 := by
+        rw [Real.sqrt_lt_iff_sq_lt] <;> norm_num
+      simp [max_eq_left, this, *]
+    rw [hB_eq_2]
+    calc 2 * ‖c‖ / 2^2 = ‖c‖ / 2 := by ring
+      _ ≤ 1 / 2 := by gcongr
+      _ < Real.log 2 := by
+        rw [← Real.log_exp (1/2)]
+        apply Real.log_lt_log (by positivity)
+        apply lt_of_le_of_lt (le_of_lt (Real.add_one_lt_exp _))
+        norm_num
+  · push_neg at hc
+    have hB_eq : B = 1 + ‖c‖ := by
+      rw [escape_bound, R]
+      have : 1 + ‖c‖ > 2 := by linarith
+      have : (1 + ‖c‖)^2 > 2 * ‖c‖ + 1 := by
+        nlinarith
+      have : 1 + ‖c‖ > Real.sqrt (2 * ‖c‖ + 1) := by
+        rw [Real.lt_sqrt_iff_sq_lt]
+        · linarith
+        · linarith
+      simp [max_eq_left, le_of_lt this, le_of_lt (lt_trans zero_lt_two this)]
+    rw [hB_eq]
+    let u := 1 + ‖c‖
+    have hu : u > 2 := by linarith
+    have : 2 * ‖c‖ / u^2 < Real.log u := by
+      have : 2 * ‖c‖ / u^2 < 1/2 := by
+        rw [div_lt_iff₀ (pow_pos (lt_trans zero_lt_two hu) 2)]
+        rw [lt_div_iff₀ (by norm_num : (0:ℝ) < 2)]
+        dsimp [u]
+        nlinarith
+      apply lt_trans this
+      rw [← Real.log_exp (1/2)]
+      apply Real.log_lt_log (by positivity)
+      apply lt_trans (Real.add_one_lt_exp (1/2))
+      apply lt_trans (by norm_num : 1 + 1/2 = 1.5 < 2) hu
+    exact this
+
 /-- A point is in the filled Julia set iff its Green's function is zero. -/
 lemma green_function_eq_zero_iff_mem_K (c z : ℂ) :
     green_function c z = 0 ↔ z ∈ K c := by
-  sorry
+  constructor
+  · intro h
+    by_contra h_esc
+    dsimp [K, boundedOrbit] at h_esc
+    push_neg at h_esc
+    obtain ⟨n, hn⟩ := h_esc (escape_bound c)
+    have h_pos : 0 < green_function c (orbit c z n) := 
+      green_function_pos_of_large_norm c (orbit c z n) hn
+    rw [green_function_iterate] at h_pos
+    rw [h, mul_zero] at h_pos
+    linarith
+  · intro h
+    apply le_antisymm
+    · have h_lim := potential_seq_converges_of_mem_K h
+      rw [green_function]
+      exact le_of_eq (tendsto_nhds_unique (green_function_eq_lim c z) h_lim)
+    · exact green_function_nonneg c z
 
 /-- The Green's function is positive on the basin of infinity. -/
 lemma green_function_pos_iff_not_mem_K (c z : ℂ) :
     0 < green_function c z ↔ z ∉ K c := by
-  sorry
+  rw [← not_iff_not]
+  push_neg
+  have : green_function c z ≤ 0 ↔ green_function c z = 0 := by
+    constructor
+    · intro h; exact le_antisymm h (green_function_nonneg c z)
+    · intro h; rw [h]
+  rw [this]
+  rw [green_function_eq_zero_iff_mem_K]
 
 end
 
