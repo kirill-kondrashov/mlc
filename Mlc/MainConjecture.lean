@@ -41,17 +41,10 @@ section ParameterPlane
 /-- A para-puzzle piece in the parameter plane. -/
 def ParaPuzzlePiece (depth : ℕ) : Set ℂ := {c | c ∈ DynamicalPuzzlePiece c 0 depth}
 
-/-- The annulus between two nested para-puzzle pieces. -/
-def ParaPuzzleAnnulus (n : ℕ) : Set ℂ :=
-  ParaPuzzlePiece n \ ParaPuzzlePiece (n + 1)
-
 /-- Correspondence between parameter and dynamical pieces. -/
 lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
     c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c 0 n := by
-  -- This is essentially the definition, but requires careful checking of
-  -- how DynamicalPuzzlePiece is defined relative to the critical value.
-  -- For now we assume the standard correspondence.
-  sorry
+  simp [ParaPuzzlePiece, fc]
 
 end ParameterPlane
 
@@ -101,7 +94,10 @@ axiom dichotomy (c : ℂ) : NonRenormalizable c ∨ InfinitelyRenormalizable c
 
 /-- If dynamical pieces shrink to a point, parameter pieces shrink to a point. -/
 lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c 0 n) = {0}) :
-    (⋂ n, ParaPuzzlePiece n) = {c} := sorry
+    (⋂ n, ParaPuzzlePiece n) = {c} := by
+  -- Use the correspondence principle
+  have h_corr := para_dynamical_correspondence c
+  sorry
 
 /-- If parameter pieces shrink to a point, M is locally connected at c. -/
 lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :

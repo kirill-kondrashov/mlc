@@ -13,6 +13,20 @@ $ lake build
 
 The formal statement of the Mandelbrot Local Connectivity conjecture can be found in `Mlc/MainConjecture.lean`.
 
+## Verification
+
+We use `ensure_no_sorry` to check the proof:
+
+```lean
+ensure_no_sorry MLC.MLC_Conjecture
+```
+
+From now on, the pipeline on `main` will pass **only if the MLC conjecture is proven** (which is a very unlikely event).
+
+Development of proofs will go on in branches and correspondent PRs.
+
+To enable the pipeline to pass for each individual PR, there will be a commit allowed with commented out `ensure_no_sorry MLC.MLC_Conjecture`, but the next commit must enable it.
+
 ## Proof Scheme for MLC
 
 Based on "Conformal Geometry and Dynamics of Quadratic Polynomials", the strategy to prove that the Mandelbrot set $M$ is locally connected (MLC) relies on the theory of Yoccoz Puzzles.
