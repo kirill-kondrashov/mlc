@@ -115,7 +115,38 @@ lemma green_function_pos_of_large_norm (c z : ℂ) (h : ‖z‖ > escape_bound c
     fun k => h_diff k (h_orbit_large k)
   
   have h_dist_0_L : dist (potential_seq c z 0) (green_function c z) ≤ M := by
-    sorry
+    let d : ℕ → ℝ := fun k => (1 / 2) ^ (k + 1) * M
+    
+    have h_summable_bound : Summable d := by
+      dsimp [d]
+      simp_rw [pow_succ]
+      apply Summable.mul_right
+      apply Summable.mul_right
+      apply summable_geometric_of_lt_one
+      · norm_num
+      · norm_num
+
+    have h_dist_le_bound : ∀ k, dist (potential_seq c z k) (potential_seq c z (k + 1)) ≤ d k := by
+      intro k
+      specialize h_cauchy k
+      dsimp [d]
+      convert h_cauchy using 1
+      simp only [one_div, inv_pow]
+
+    apply le_trans (dist_le_tsum_of_dist_le_of_tendsto₀ d h_dist_le_bound h_summable_bound h_conv)
+    
+    dsimp [d]
+    rw [tsum_mul_right]
+    simp_rw [pow_succ]
+    rw [tsum_mul_right]
+    have h_sum_geom : ∑' (n : ℕ), (1 / 2 : ℝ) ^ n = 2 := by
+      rw [tsum_geometric_of_lt_one]
+      · norm_num
+      · norm_num
+      · norm_num
+    rw [h_sum_geom]
+    field_simp
+    apply le_refl
   
   rw [dist_eq_norm, Real.norm_eq_abs] at h_dist_0_L
   rw [abs_le] at h_dist_0_L
