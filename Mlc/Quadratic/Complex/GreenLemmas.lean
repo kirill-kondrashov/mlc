@@ -229,7 +229,33 @@ def potential_seq (c z : ℂ) (n : ℕ) : ℝ :=
 lemma potential_seq_diff_le (c z : ℂ) (k : ℕ) (h_orbit : ‖orbit c z k‖ > escape_bound c) :
     dist (potential_seq c z k) (potential_seq c z (k + 1)) ≤ 
     (1 / 2 ^ (k + 1)) * (2 * ‖c‖ / (escape_bound c)^2) := by
-  sorry
+  rw [dist_eq_norm, Real.norm_eq_abs]
+  rw [potential_seq, potential_seq]
+  have h_max_k : max 1 ‖orbit c z k‖ = ‖orbit c z k‖ := by
+    rw [max_eq_right]
+    apply le_trans (le_trans zero_le_two (R_ge_two c))
+    apply le_trans (escape_bound_ge_R c) (le_of_lt h_orbit)
+  have h_max_k1 : max 1 ‖orbit c z (k + 1)‖ = ‖orbit c z (k + 1)‖ := by
+    rw [max_eq_right]
+    apply le_trans (le_trans zero_le_two (R_ge_two c))
+    apply le_trans (escape_bound_ge_R c)
+    apply lt_of_lt_of_le h_orbit
+    have := norm_orbit_ge_norm_orbit_of_ge_escape_bound c z k h_orbit
+    exact this
+  rw [h_max_k, h_max_k1]
+  rw [pow_add, pow_one, one_div, inv_mul_eq_div, div_mul_eq_mul_div, div_div]
+  rw [show (1 / 2 ^ k) * Real.log ‖orbit c z k‖ = (2 * Real.log ‖orbit c z k‖) / 2 ^ (k + 1) by
+    field_simp
+    ring
+  ]
+  rw [← sub_div, abs_div, abs_of_nonneg (pow_nonneg (by norm_num) _)]
+  rw [div_le_div_iff (pow_pos (by norm_num) _) (pow_pos (by norm_num) _)]
+  rw [mul_comm (2 * ‖c‖) _, ← mul_assoc]
+  apply mul_le_mul_of_nonneg_right _ (pow_nonneg (by norm_num) _)
+  apply le_trans (log_orbit_diff_le c z k h_orbit)
+  rw [div_le_div_iff (pow_pos (lt_trans (by norm_num) h_orbit) 2) (pow_pos (lt_trans (by norm_num) (lt_trans (escape_bound_ge_R c) h_orbit)) 2)]
+  apply mul_le_mul_of_nonneg_left _ (mul_nonneg (by norm_num) (norm_nonneg c))
+  apply pow_le_pow_left_of_le 2 (le_trans (le_trans zero_le_two (R_ge_two c)) (escape_bound_ge_R c)) (le_of_lt h_orbit)
 
 /-- The Green's function `G_c(z)`. Defined as the limit of `potential_seq`. -/
 def green_function (c z : ℂ) : ℝ :=
