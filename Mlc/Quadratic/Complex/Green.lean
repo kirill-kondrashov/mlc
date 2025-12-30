@@ -198,6 +198,9 @@ lemma green_function_pos_iff_not_mem_K (c z : ℂ) :
   rw [this]
   rw [green_function_eq_zero_iff_mem_K]
 
+/-- The Green's function is continuous in both arguments. -/
+axiom green_function_continuous : Continuous (fun p : ℂ × ℂ => green_function p.1 p.2)
+
 end
 
 end MLC.Quadratic
