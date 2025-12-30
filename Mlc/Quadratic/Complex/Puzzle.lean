@@ -43,8 +43,16 @@ theorem dynamical_puzzle_piece_nested (c : ℂ) (n : ℕ) :
 
 ensure_no_sorry dynamical_puzzle_piece_nested
 
-axiom mem_dynamical_puzzle_piece_self (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
-    0 ∈ DynamicalPuzzlePiece c n 0
+theorem mem_dynamical_puzzle_piece_self (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
+    0 ∈ DynamicalPuzzlePiece c n 0 := by
+  have h0 : 0 ∈ K c := hc
+  rw [← green_function_eq_zero_iff_mem_K] at h0
+  dsimp [DynamicalPuzzlePiece]
+  rw [h0]
+  apply pow_pos
+  norm_num
+
+ensure_no_sorry mem_dynamical_puzzle_piece_self
 
 axiom dynamical_puzzle_piece_empty_of_large_n (c : ℂ) (hc : c ∉ MandelbrotSet) :
     ∃ N, ∀ n ≥ N, DynamicalPuzzlePiece c n 0 = ∅
