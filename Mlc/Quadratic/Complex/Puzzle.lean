@@ -245,26 +245,23 @@ lemma para_puzzle_piece_basis (c : ℂ) :
     unfold MandelbrotSet boundedOrbit
     use 2
     intro n
-    induction n with
-    | zero => simp; norm_num
-    | succ n ih =>
-      simp [orbit_succ, fc]
-      have : orbit 0 0 n = 0 := by
-        induction n with
-        | zero => simp [orbit]
-        | succ n ih => simp [orbit_succ, fc, ih]
-      rw [this]
-      simp; norm_num
+    have h_orb_0 : ∀ k, orbit 0 0 k = 0 := by
+      intro k
+      induction k with
+      | zero => simp [orbit]
+      | succ k ih => simp [orbit_succ, fc, ih]
+    rw [h_orb_0 n]
+    norm_num
 
   have h_neg2_in_M : -2 ∈ MandelbrotSet := by
     unfold MandelbrotSet boundedOrbit
     use 2
     intro n
     cases n with
-    | zero => simp; norm_num
+    | zero => simp
     | succ n =>
       cases n with
-      | zero => simp [orbit_succ, fc]; norm_num
+      | zero => simp [orbit_succ, fc]
       | succ n =>
         simp [orbit_succ, fc]
         have h_orb : ∀ k, orbit (-2) 0 (k + 2) = 2 := by
@@ -275,17 +272,16 @@ lemma para_puzzle_piece_basis (c : ℂ) :
             rw [orbit_succ]
             rw [ih]
             simp [fc]; norm_num
+        change ‖orbit (-2) 0 (n + 2)‖ ≤ 2
         rw [h_orb n]
         norm_num
 
   have h_0_eq_c : 0 = c := by
-    have : 0 ∈ (⋂ n, ParaPuzzlePiece n) := h_M_sub h_0_in_M
-    rw [h_inter] at this
+    have : (0 : ℂ) ∈ {c} := h_M_sub h_0_in_M
     exact mem_singleton_iff.1 this
 
   have h_neg2_eq_c : -2 = c := by
-    have : -2 ∈ (⋂ n, ParaPuzzlePiece n) := h_M_sub h_neg2_in_M
-    rw [h_inter] at this
+    have : (-2 : ℂ) ∈ {c} := h_M_sub h_neg2_in_M
     exact mem_singleton_iff.1 this
 
   rw [← h_0_eq_c] at h_neg2_eq_c
