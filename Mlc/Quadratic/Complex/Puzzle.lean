@@ -272,7 +272,9 @@ lemma para_puzzle_piece_basis (c : ℂ) :
             rw [orbit_succ]
             rw [ih]
             simp [fc]; norm_num
-        change ‖orbit (-2) 0 (n + 2)‖ ≤ 2
+        have h_eq : (orbit (-2) 0 n ^ 2 + -2) ^ 2 + -2 = orbit (-2) 0 (n + 2) := by
+          simp [orbit_succ, fc]
+        rw [h_eq]
         rw [h_orb n]
         norm_num
 
