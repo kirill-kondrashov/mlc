@@ -5,6 +5,8 @@ import Mlc.Quadratic.Complex.Escape
 import Mlc.Quadratic.Complex.Green
 import Mlc.Quadratic.Complex.GreenLemmas
 import Mlc.Quadratic.Complex.Puzzle
+import Mlc.Quadratic.Complex.PuzzleLemmas
+import Mlc.Quadratic.Complex.PuzzleLemmas2
 import Mlc.MainConjecture
 import Mlc.Yoccoz
 import Mlc.LcAtOfShrink

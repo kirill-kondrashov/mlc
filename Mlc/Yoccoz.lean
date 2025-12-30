@@ -1,6 +1,8 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Green
 import Mlc.Quadratic.Complex.Puzzle
+import Mlc.Quadratic.Complex.PuzzleLemmas
+import Mlc.Quadratic.Complex.PuzzleLemmas2
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Data.Set.Finite.Basic

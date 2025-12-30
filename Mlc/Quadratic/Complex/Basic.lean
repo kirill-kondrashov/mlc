@@ -54,6 +54,24 @@ def R (c : ℂ) : ℝ := max 2 (1 + ‖c‖)
 @[simp] lemma R_ge_two (c : ℂ) : R c ≥ 2 := by simp [R]
 @[simp] lemma R_ge_one_plus_c (c : ℂ) : R c ≥ 1 + ‖c‖ := by simp [R]
 
+/-- The modulus of an annulus. -/
+opaque modulus (A : Set ℂ) : ℝ
+
+axiom modulus_empty : modulus ∅ = 0
+
+/-- Grötzsch's Inequality / Criterion -/
+axiom groetzsch_criterion {P : ℕ → Set ℂ} :
+  (∀ n, P (n + 1) ⊆ P n) →
+  (∀ n, 0 ∈ P n) →
+  ¬ Summable (fun n => modulus (P n \ P (n + 1))) →
+  (⋂ n, P n) = {0}
+
+/-- The Mandelbrot set is connected. -/
+axiom mandelbrot_set_connected : IsConnected MandelbrotSet
+
+/-- The filled Julia set is connected if c is in the Mandelbrot set. -/
+axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnected (K c)
+
 end
 
 end Quadratic
