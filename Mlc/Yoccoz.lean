@@ -50,7 +50,16 @@ theorem yoccoz_theorem (c : ℂ) :
       simp at h_ge
       have : modulus (PuzzleAnnulus c n) = 0 := by
         rw [PuzzleAnnulus]
-        rw [hN n h_ge]
+        have h_empty : DynamicalPuzzlePiece c n 0 = ∅ := by
+          ext x
+          simp
+          intro hx
+          have h0 : 0 ∈ DynamicalPuzzlePiece c n 0 := by
+            rw [DynamicalPuzzlePiece] at hx ⊢
+            apply mem_connectedComponentIn
+            exact connectedComponentIn_nonempty_iff.1 ⟨x, hx⟩
+          exact hN n h_ge h0
+        rw [h_empty]
         simp
         exact modulus_empty
       contradiction
