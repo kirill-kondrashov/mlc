@@ -99,6 +99,12 @@ axiom groetzsch_criterion {P : ℕ → Set ℂ} :
 /-- A para-puzzle piece in the parameter plane. -/
 def ParaPuzzlePiece (n : ℕ) : Set ℂ := {c | c ∈ DynamicalPuzzlePiece c n 0}
 
+/-- The Mandelbrot set is connected. -/
+axiom mandelbrot_set_connected : IsConnected MandelbrotSet
+
+/-- The filled Julia set is connected if c is in the Mandelbrot set. -/
+axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnected (K c)
+
 /-- Correspondence between parameter and dynamical pieces. -/
 lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
     c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c n 0 := by
@@ -106,8 +112,86 @@ lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
 
 /-- The Correspondence Principle:
     If the dynamical pieces shrink to a point, the parameter pieces shrink to a point. -/
-axiom parameter_shrink_ax (c : ℂ) :
-    (⋂ n, DynamicalPuzzlePiece c n 0) = {0} → (⋂ n, ParaPuzzlePiece n) = {c}
+lemma parameter_shrink_ax (c : ℂ) :
+    (⋂ n, DynamicalPuzzlePiece c n 0) = {0} → (⋂ n, ParaPuzzlePiece n) = {c} := by
+  intro h_shrink
+  by_cases hc : c ∈ MandelbrotSet
+  · -- Case c ∈ M
+    have h_K_sub : K c ⊆ {0} := by
+      rw [← h_shrink]
+      apply subset_iInter
+      intro n
+      have h_K_subset : K c ⊆ {w | green_function c w < (1 / 2) ^ n} := by
+        intro z hz
+        rw [mem_setOf_eq]
+        rw [← green_function_eq_zero_iff_mem_K] at hz
+        rw [hz]
+        apply pow_pos
+        norm_num
+      have h_0_in_K : 0 ∈ K c := hc
+      apply (filled_julia_set_connected hc).isPreconnected.subset_connectedComponentIn h_0_in_K h_K_subset
+
+    have hc_in_K : c ∈ K c := by
+      rw [K, MandelbrotSet] at *
+      unfold boundedOrbit at *
+      obtain ⟨M, hM⟩ := hc
+      use max M ‖c‖
+      intro n
+      cases n with
+      | zero => simp
+      | succ n =>
+        simp only [orbit_succ]
+        have h_shift : orbit c c n = orbit c 0 (n + 1) := by
+          induction n with
+          | zero => simp [orbit, fc]
+          | succ n ih => simp [orbit_succ, ih]
+        rw [h_shift]
+        rw [← orbit_succ]
+        apply le_trans (hM (n + 2)) (le_max_left _ _)
+
+    have hc_eq_0 : c = 0 := h_K_sub hc_in_K
+    subst hc_eq_0
+    have h1_in_K : 1 ∈ K 0 := by
+      rw [K]
+      use 1
+      intro n
+      have : orbit 0 1 n = 1 := by
+        induction n with
+        | zero => simp
+        | succ n ih => simp [orbit_succ, fc, ih]
+      rw [this]
+      norm_num
+    have h1_eq_0 : (1 : ℂ) = 0 := by
+      have : (1 : ℂ) ∈ ({0} : Set ℂ) := h_K_sub h1_in_K
+      rw [Set.mem_singleton_iff] at this
+      exact this
+    exfalso
+    exact one_ne_zero h1_eq_0
+
+  · -- Case c ∉ M
+    have h_empty : (⋂ n, DynamicalPuzzlePiece c n 0) = ∅ := by
+      obtain ⟨N, hN⟩ := dynamical_puzzle_piece_empty_of_large_n c hc
+      apply Set.eq_empty_of_subset_empty
+      intro x hx
+      rw [mem_iInter] at hx
+      have hxN := hx N
+      have h0_in_s : 0 ∈ {w | green_function c w < (1 / 2) ^ N} := by
+        dsimp [DynamicalPuzzlePiece] at hxN
+        by_contra h_not
+        rw [connectedComponentIn_eq_empty h_not] at hxN
+        exact hxN
+      have h0_not_in_comp : 0 ∉ DynamicalPuzzlePiece c N 0 := hN N (le_refl N)
+      dsimp [DynamicalPuzzlePiece] at h0_not_in_comp
+      have h0_in_comp : 0 ∈ connectedComponentIn {w | green_function c w < (1 / 2) ^ N} 0 := by
+        apply isPreconnected_singleton.subset_connectedComponentIn (mem_singleton 0)
+        · rw [singleton_subset_iff]; exact h0_in_s
+        · exact mem_singleton 0
+      contradiction
+
+    rw [h_empty] at h_shrink
+    simp at h_shrink
+
+ensure_no_sorry parameter_shrink_ax
 
 /-- Parameter puzzle pieces are open sets. -/
 axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
@@ -116,12 +200,6 @@ axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
 axiom para_puzzle_piece_basis (c : ℂ) :
     (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U
 
-/-- The Mandelbrot set is connected. -/
-axiom mandelbrot_set_connected : IsConnected MandelbrotSet
-
-/-- The filled Julia set is connected if c is in the Mandelbrot set. -/
-axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnected (K c)
-
 /-- Parameter puzzle pieces intersected with the Mandelbrot set are connected. -/
 theorem para_puzzle_piece_inter_mandelbrot_connected (n : ℕ) :
     IsConnected (ParaPuzzlePiece n ∩ MandelbrotSet) := by
@@ -129,7 +207,7 @@ theorem para_puzzle_piece_inter_mandelbrot_connected (n : ℕ) :
     intro c hc
     rw [ParaPuzzlePiece, mem_setOf_eq]
     rw [DynamicalPuzzlePiece]
-    
+
     have hc_in_K : c ∈ K c := by
       rw [K]
       unfold boundedOrbit
