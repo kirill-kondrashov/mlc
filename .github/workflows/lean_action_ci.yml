@@ -2,7 +2,9 @@ name: Lean Action CI
 
 on:
   push:
+    branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -10,12 +12,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
-      - uses: leanprover/lean-action@v1
-      - name: Check Axioms
-        run: |
-          lake exe check_axioms
-          if [ $? -ne 0 ]; then
-            echo "Axiom check failed!"
-            exit 1
-          fi
+    - uses: actions/checkout@v4
+
+    - name: Install Elan
+      run: |
+        curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+        echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+    - name: Get Mathlib Cache
+      run: lake exe cache get
+
+    - name: Build Mlc
+      run: lake build
+
+    - name: Check Axioms
+      run: |
+        lake exe check_axioms
+        if [ $? -ne 0 ]; then
+          echo "Axiom check failed!"
+          exit 1
+        fi

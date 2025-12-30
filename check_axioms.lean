@@ -5,7 +5,7 @@ open Lean Meta
 
 def main : IO UInt32 := do
   initSearchPath (← findSysroot)
-  let env ← importModules [{ module := `Mlc.MainConjecture }] {}
+  let env ← importModules #[{ module := `Mlc.MainConjecture }] {}
   
   let name := ``MLC.MLC_Conjecture
   
@@ -15,15 +15,15 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   
   try
-    let ((axioms, _), _) ← (metaM.run).run coreContext coreState
+    let ((axioms, _), _) ← (metaM.run).run coreContext coreState |>.toIO (fun e => IO.userError "Axiom check failed")
     
     if axioms.contains ``sorryAx then
       IO.println s!"❌ The proof of '{name}' relies on 'sorry'!"
-      return 1
+      return (1 : UInt32)
     else
       IO.println s!"✅ The proof of '{name}' is free of 'sorry'."
       IO.println s!"All axioms used: {axioms.toList}"
-      return 0
+      return (0 : UInt32)
   catch e =>
-    IO.println s!"Error: {← e.toMessageData.toString}"
-    return 1
+    IO.println s!"Error: {e}"
+    return (1 : UInt32)
