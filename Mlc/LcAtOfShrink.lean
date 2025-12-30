@@ -1,8 +1,6 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Puzzle
 import Mathlib.Topology.Connected.LocallyConnected
-import Mathlib.Topology.Homeomorph.Defs
-import Mathlib.Topology.Homeomorph.Lemmas
 import Lean
 
 open Lean Elab Command
@@ -35,66 +33,39 @@ lemma locallyConnectedSpace_of_locallyConnectedAt {X : Type*} [TopologicalSpace 
   exact hV_sub_comp hz
 
 /-- A set in a subtype is connected iff its image in the ambient space is connected. -/
-lemma isConnected_image_of_embedding {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-    {f : X → Y} (hf : IsEmbedding f) (s : Set X) :
-    IsConnected (f '' s) ↔ IsConnected s := by
-  let f' : s → Y := f ∘ Subtype.val
-  have h_emb : IsEmbedding f' := hf.comp IsEmbedding.subtypeVal
-  let e : s ≃ₜ Set.range f' := h_emb.toHomeomorph
-  have h_range : Set.range f' = f '' s := by
-    ext y
-    simp only [Set.mem_range, Set.mem_image, Function.comp_apply, Subtype.exists, exists_prop, f']
-  rw [← h_range]
-
-  constructor
-  · rintro ⟨h_non, h_pre⟩
-    refine ⟨?_, ?_⟩
-    · -- s.Nonempty
-      exact Set.nonempty_coe_sort.mp (h_non.to_subtype.map e.symm)
-    · -- IsPreconnected s
-      rw [isPreconnected_iff_preconnectedSpace] at h_pre ⊢
-      apply PreconnectedSpace.mk
-      have h_ind := e.symm.isInducing
-      rw [← Set.image_univ_of_surjective (Homeomorph.surjective e.symm)]
-      rw [h_ind.isPreconnected_image]
-      exact @PreconnectedSpace.isPreconnected_univ _ _ h_pre
-  · rintro ⟨h_non, h_pre⟩
-    refine ⟨?_, ?_⟩
-    · -- (range f').Nonempty
-      exact Set.nonempty_coe_sort.mp (h_non.to_subtype.map e)
-    · -- IsPreconnected (range f')
-      rw [isPreconnected_iff_preconnectedSpace] at h_pre ⊢
-      apply PreconnectedSpace.mk
-      have h_ind := e.isInducing
-      rw [← Set.image_univ_of_surjective (Homeomorph.surjective e)]
-      rw [h_ind.isPreconnected_image]
-      exact @PreconnectedSpace.isPreconnected_univ _ _ h_pre
-
 lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → Prop}
     (s : Set { x // p x }) :
     IsConnected ((Subtype.val : { x // p x } → X) '' s) ↔ IsConnected s := by
-  let f := (Subtype.val : { x // p x } → X)
-  have h_emb : IsEmbedding f := IsEmbedding.subtypeVal
-  exact isConnected_image_of_embedding h_emb s
+  classical
+  -- First reduce to preconnectedness using the general theorem for inducing maps.
+  have h_pre :
+      IsPreconnected ((Subtype.val : { x // p x } → X) '' s) ↔ IsPreconnected s :=
+    Topology.IsInducing.isPreconnected_image (s := s)
+      (f := (Subtype.val : { x // p x } → X))
+      (IsEmbedding.subtypeVal.isInducing)
+  constructor
+  · intro h
+    refine ⟨?_, ?_⟩
+    · -- Nonemptiness transfers from the image back to the subtype.
+      rcases h.1 with ⟨x, hx⟩
+      rcases hx with ⟨y, hy, rfl⟩
+      exact ⟨y, hy⟩
+    · -- And preconnectedness is equivalent by `isPreconnected_image`.
+      exact h_pre.1 h.2
+  · intro h
+    refine ⟨?_, ?_⟩
+    · -- Nonemptiness transfers from the subtype to the image.
+      rcases h.1 with ⟨y, hy⟩
+      exact ⟨Subtype.val y, ⟨y, hy, rfl⟩⟩
+    · exact h_pre.2 h.2
 
 /-- The intersection of a parameter puzzle piece with the Mandelbrot set is connected in the subtype topology. -/
 lemma para_puzzle_piece_induced_connected (n : ℕ) :
     IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } := by
   rw [← isConnected_subtype_val_image]
-  have h_img : (Subtype.val : MandelbrotSet → ℂ) '' { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } =
-      ParaPuzzlePiece n ∩ MandelbrotSet := by
-    ext z
-    constructor
-    · intro h
-      rcases h with ⟨x, hx, rfl⟩
-      exact ⟨hx, x.property⟩
-    · intro h
-      rcases h with ⟨hP, hM⟩
-      use ⟨z, hM⟩
-      constructor
-      · exact hP
-      · rfl
-  rw [h_img]
+  rw [show { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } = (Subtype.val : MandelbrotSet → ℂ) ⁻¹' (ParaPuzzlePiece n) by rfl]
+  rw [Subtype.image_preimage_coe]
+  try rw [Set.inter_comm]
   exact para_puzzle_piece_inter_mandelbrot_connected n
 
 /-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set. -/

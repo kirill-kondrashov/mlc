@@ -52,7 +52,7 @@ The proof relies on the following axioms, which abstract away deep geometric and
 *   **`parameter_shrink_ax`** (Correspondence Principle): If dynamical puzzle pieces shrink to a point, the corresponding parameter pieces also shrink to a point.
 *   **`para_puzzle_piece_inter_mandelbrot_connected`**: The intersection of a parameter puzzle piece with the Mandelbrot set is connected.
 *   **Topological Properties**: `para_puzzle_piece_open` (pieces are open) and `para_puzzle_piece_basis` (pieces form a basis of neighborhoods).
-*   **Basic Properties**: `dynamical_puzzle_piece_empty_of_large_n`, `modulus_empty`.
+*   **Basic Properties**: `modulus_empty`.
 
 ### 2. Deep Theorems
 *   **`mlc_infinitely_renormalizable_ax`**: Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
@@ -70,5 +70,5 @@ This will output any axioms used in the proof. The goal is to reduce the axioms 
 Example output:
 ```
 ✅ The proof of 'MLC.MLC_Conjecture' is free of 'sorry'.
-All axioms used: [Quot.sound, propext, Classical.choice, MLC.Quadratic.groetzsch_criterion, MLC.Quadratic.dynamical_puzzle_piece_empty_of_large_n, MLC.Quadratic.modulus_empty, MLC.Quadratic.parameter_shrink_ax, MLC.Quadratic.para_puzzle_piece_basis, MLC.Quadratic.para_puzzle_piece_open, MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected, MLC.mlc_infinitely_renormalizable_ax]
+All axioms used: [Quot.sound, propext, Classical.choice, MLC.Quadratic.groetzsch_criterion, MLC.Quadratic.modulus_empty, MLC.Quadratic.parameter_shrink_ax, MLC.Quadratic.para_puzzle_piece_basis, MLC.Quadratic.para_puzzle_piece_open, MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected, MLC.mlc_infinitely_renormalizable_ax]
 ```
