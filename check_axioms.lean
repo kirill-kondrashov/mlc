@@ -15,7 +15,7 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   
   try
-    let ((axioms, _), _) ← (metaM.run).run coreContext coreState |>.toIO (fun e => IO.userError "Axiom check failed")
+    let ((axioms, _), _) ← (metaM.run).run coreContext coreState |>.toIO (fun _ => IO.userError "Axiom check failed")
     
     if axioms.contains ``sorryAx then
       IO.println s!"❌ The proof of '{name}' relies on 'sorry'!"
