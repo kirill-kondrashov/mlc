@@ -62,7 +62,7 @@ The proof relies on the following axioms, which abstract away deep geometric and
 To verify the proof and check for axioms (sorry), run:
 
 ```bash
-lake exe check_axioms
+make check
 ```
 
 This will output any axioms used in the proof. The goal is to reduce the axioms to only standard mathematical ones (and the ones explicitly stated for deep theorems).
