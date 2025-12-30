@@ -49,7 +49,7 @@ The proof relies on the following axioms, which abstract away deep geometric and
 
 ### 1. Yoccoz Puzzles & Geometry
 *   **`groetzsch_criterion`**: The Grötzsch inequality, stating that if the moduli of annuli diverge, the intersection of nested pieces is a single point.
-*   **Topological Properties**: `para_puzzle_piece_open` (pieces are open).
+*   **Topological Properties**: `para_puzzle_piece_open` (pieces are open) and `para_puzzle_piece_basis` (pieces form a basis of neighborhoods).
 *   **Basic Properties**: `modulus_empty`.
 *   **Connectivity**: `mandelbrot_set_connected` (Mandelbrot set is connected) and `filled_julia_set_connected` (Filled Julia set is connected for $c \in M$).
 
@@ -76,6 +76,7 @@ All axioms used:
 - MLC.Quadratic.groetzsch_criterion
 - MLC.Quadratic.modulus_empty
 - MLC.Quadratic.filled_julia_set_connected
+- MLC.Quadratic.para_puzzle_piece_basis
 - MLC.Quadratic.para_puzzle_piece_open
 - MLC.Quadratic.mandelbrot_set_connected
 - MLC.mlc_infinitely_renormalizable_ax
