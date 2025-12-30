@@ -197,8 +197,95 @@ ensure_no_sorry parameter_shrink_ax
 axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
-axiom para_puzzle_piece_basis (c : ℂ) :
-    (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U
+lemma para_puzzle_piece_basis (c : ℂ) :
+    (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U := by
+  intro h_inter U _
+  -- We show M ⊆ ⋂ P_n, which implies M ⊆ {c}, a contradiction.
+  have h_M_sub : MandelbrotSet ⊆ ⋂ n, ParaPuzzlePiece n := by
+    apply subset_iInter
+    intro n
+    intro m hm
+    rw [ParaPuzzlePiece, mem_setOf_eq]
+
+    have h_conn : IsConnected (K m) := filled_julia_set_connected hm
+    have h_0_in_K : 0 ∈ K m := hm
+
+    have h_m_in_K : m ∈ K m := by
+      rw [K, MandelbrotSet] at *
+      unfold boundedOrbit at *
+      obtain ⟨M, hM⟩ := hm
+      use max M ‖m‖
+      intro k
+      cases k with
+      | zero => simp
+      | succ k =>
+        simp only [orbit_succ]
+        have h_shift : orbit m m k = orbit m 0 (k + 1) := by
+          induction k with
+          | zero => simp [orbit, fc]
+          | succ k ih => simp [orbit_succ, ih]
+        rw [h_shift]
+        rw [← orbit_succ]
+        apply le_trans (hM (k + 2)) (le_max_left _ _)
+
+    have h_K_sub : K m ⊆ {w | green_function m w < (1 / 2) ^ n} := by
+      intro z hz
+      rw [mem_setOf_eq]
+      rw [← green_function_eq_zero_iff_mem_K] at hz
+      rw [hz]
+      apply pow_pos
+      norm_num
+
+    apply h_conn.isPreconnected.subset_connectedComponentIn h_0_in_K h_K_sub
+    exact h_m_in_K
+
+  rw [h_inter] at h_M_sub
+
+  have h_0_in_M : 0 ∈ MandelbrotSet := by
+    unfold MandelbrotSet boundedOrbit
+    use 0
+    intro n
+    induction n with
+    | zero => simp
+    | succ n ih => simp [orbit_succ, fc, ih]
+
+  have h_neg2_in_M : -2 ∈ MandelbrotSet := by
+    unfold MandelbrotSet boundedOrbit
+    use 2
+    intro n
+    cases n with
+    | zero => simp; norm_num
+    | succ n =>
+      cases n with
+      | zero => simp [orbit_succ, fc]; norm_num
+      | succ n =>
+        simp [orbit_succ, fc]
+        have h_orb : ∀ k, orbit (-2) 0 (k + 2) = 2 := by
+          intro k
+          induction k with
+          | zero => simp [orbit, fc]; norm_num
+          | succ k ih =>
+            rw [orbit_succ]
+            rw [ih]
+            simp [fc]; norm_num
+        rw [h_orb n]
+        norm_num
+
+  have h_0_eq_c : 0 = c := by
+    have : 0 ∈ (⋂ n, ParaPuzzlePiece n) := h_M_sub h_0_in_M
+    rw [h_inter] at this
+    exact mem_singleton_iff.1 this
+
+  have h_neg2_eq_c : -2 = c := by
+    have : -2 ∈ (⋂ n, ParaPuzzlePiece n) := h_M_sub h_neg2_in_M
+    rw [h_inter] at this
+    exact mem_singleton_iff.1 this
+
+  rw [← h_0_eq_c] at h_neg2_eq_c
+  have : (-2 : ℂ) ≠ 0 := by norm_num
+  contradiction
+
+ensure_no_sorry para_puzzle_piece_basis
 
 /-- Parameter puzzle pieces intersected with the Mandelbrot set are connected. -/
 theorem para_puzzle_piece_inter_mandelbrot_connected (n : ℕ) :
