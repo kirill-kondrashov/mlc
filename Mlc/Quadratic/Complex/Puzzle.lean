@@ -3,6 +3,7 @@ import Mlc.Quadratic.Complex.Green
 import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.GCongr
@@ -54,8 +55,30 @@ theorem mem_dynamical_puzzle_piece_self (c : ℂ) (hc : c ∈ MandelbrotSet) (n 
 
 ensure_no_sorry mem_dynamical_puzzle_piece_self
 
-axiom dynamical_puzzle_piece_empty_of_large_n (c : ℂ) (hc : c ∉ MandelbrotSet) :
-    ∃ N, ∀ n ≥ N, DynamicalPuzzlePiece c n 0 = ∅
+theorem dynamical_puzzle_piece_empty_of_large_n (c : ℂ) (hc : c ∉ MandelbrotSet) :
+    ∃ N, ∀ n ≥ N, 0 ∉ DynamicalPuzzlePiece c n 0 := by
+  have h_not_in_K : 0 ∉ K c := hc
+  rw [← green_function_pos_iff_not_mem_K] at h_not_in_K
+  have h_pos : 0 < green_function c 0 := h_not_in_K
+  
+  obtain ⟨N, hN⟩ : ∃ N : ℕ, (1 / 2 : ℝ) ^ N < green_function c 0 := by
+    have h_tendsto : Tendsto (fun n : ℕ => (1 / 2 : ℝ) ^ n) atTop (𝓝 0) := by
+      apply tendsto_pow_atTop_nhds_zero_of_lt_one
+      · norm_num
+      · norm_num
+    exact ((tendsto_order.1 h_tendsto).2 (green_function c 0) h_pos).exists
+  
+  use N
+  intro n hn
+  dsimp [DynamicalPuzzlePiece]
+  rw [not_lt]
+  apply le_trans _ (le_of_lt hN)
+  apply pow_le_pow_of_le_one
+  · norm_num
+  · norm_num
+  · exact hn
+
+ensure_no_sorry dynamical_puzzle_piece_empty_of_large_n
 
 /-- Grötzsch's Inequality / Criterion -/
 axiom groetzsch_criterion {P : ℕ → Set ℂ} :
