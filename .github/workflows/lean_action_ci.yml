@@ -19,16 +19,19 @@ jobs:
         curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
         echo "$HOME/.elan/bin" >> $GITHUB_PATH
 
+    - name: Cache .lake
+      uses: actions/cache@v4
+      with:
+        path: .lake
+        key: ${{ runner.os }}-lake-${{ hashFiles('lake-manifest.json') }}
+        restore-keys: |
+          ${{ runner.os }}-lake-
+
     - name: Get Mathlib Cache
-      run: lake exe cache get
+      run: make cache
 
     - name: Build Mlc
-      run: lake build
+      run: make build
 
     - name: Check Axioms
-      run: |
-        lake exe check_axioms
-        if [ $? -ne 0 ]; then
-          echo "Axiom check failed!"
-          exit 1
-        fi
+      run: make check
