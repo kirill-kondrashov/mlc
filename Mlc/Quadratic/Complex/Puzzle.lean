@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Green
+import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic.Linarith
@@ -15,7 +16,8 @@ noncomputable section
 variable (c : ℂ)
 
 /-- The dynamical puzzle piece of depth n containing z. -/
-opaque DynamicalPuzzlePiece (c : ℂ) (n : ℕ) (z : ℂ) : Set ℂ
+def DynamicalPuzzlePiece (c : ℂ) (n : ℕ) (z : ℂ) : Set ℂ :=
+  {w | green_function c w < (1 / 2) ^ n}
 
 /-- The modulus of an annulus. -/
 opaque modulus (A : Set ℂ) : ℝ
@@ -26,8 +28,20 @@ axiom modulus_empty : modulus ∅ = 0
 def PuzzleAnnulus (c : ℂ) (n : ℕ) : Set ℂ :=
   DynamicalPuzzlePiece c n 0 \ DynamicalPuzzlePiece c (n + 1) 0
 
-axiom dynamical_puzzle_piece_nested (c : ℂ) (n : ℕ) :
-    DynamicalPuzzlePiece c (n + 1) 0 ⊆ DynamicalPuzzlePiece c n 0
+theorem dynamical_puzzle_piece_nested (c : ℂ) (n : ℕ) :
+    DynamicalPuzzlePiece c (n + 1) 0 ⊆ DynamicalPuzzlePiece c n 0 := by
+  intro w hw
+  dsimp [DynamicalPuzzlePiece] at *
+  apply lt_trans hw
+  rw [pow_succ]
+  nth_rw 2 [← one_mul ((1 / 2 : ℝ) ^ n)]
+  rw [mul_comm]
+  apply mul_lt_mul_of_pos_right
+  · norm_num
+  · apply pow_pos
+    norm_num
+
+ensure_no_sorry dynamical_puzzle_piece_nested
 
 axiom mem_dynamical_puzzle_piece_self (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
     0 ∈ DynamicalPuzzlePiece c n 0
