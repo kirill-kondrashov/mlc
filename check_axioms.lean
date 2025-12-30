@@ -22,7 +22,9 @@ def main : IO UInt32 := do
       return (1 : UInt32)
     else
       IO.println s!"✅ The proof of '{name}' is free of 'sorry'."
-      IO.println s!"All axioms used: {axioms.toList}"
+      IO.println "All axioms used:"
+      for ax in axioms.toList do
+        IO.println s!"- {ax}"
       return (0 : UInt32)
   catch e =>
     IO.println s!"Error: {e}"

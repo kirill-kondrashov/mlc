@@ -49,8 +49,6 @@ The proof relies on the following axioms, which abstract away deep geometric and
 
 ### 1. Yoccoz Puzzles & Geometry
 *   **`groetzsch_criterion`**: The Grötzsch inequality, stating that if the moduli of annuli diverge, the intersection of nested pieces is a single point.
-*   **`parameter_shrink_ax`** (Correspondence Principle): If dynamical puzzle pieces shrink to a point, the corresponding parameter pieces also shrink to a point.
-*   **`para_puzzle_piece_inter_mandelbrot_connected`**: The intersection of a parameter puzzle piece with the Mandelbrot set is connected.
 *   **Topological Properties**: `para_puzzle_piece_open` (pieces are open) and `para_puzzle_piece_basis` (pieces form a basis of neighborhoods).
 *   **Basic Properties**: `modulus_empty`.
 *   **Connectivity**: `mandelbrot_set_connected` (Mandelbrot set is connected) and `filled_julia_set_connected` (Filled Julia set is connected for $c \in M$).
@@ -71,5 +69,15 @@ This will output any axioms used in the proof. The goal is to reduce the axioms 
 Example output:
 ```
 ✅ The proof of 'MLC.MLC_Conjecture' is free of 'sorry'.
-All axioms used: [Quot.sound, propext, Classical.choice, MLC.Quadratic.groetzsch_criterion, MLC.Quadratic.modulus_empty, MLC.Quadratic.parameter_shrink_ax, MLC.Quadratic.para_puzzle_piece_basis, MLC.Quadratic.para_puzzle_piece_open, MLC.Quadratic.filled_julia_set_connected, MLC.Quadratic.mandelbrot_set_connected, MLC.mlc_infinitely_renormalizable_ax]
+All axioms used:
+- Quot.sound
+- propext
+- Classical.choice
+- MLC.Quadratic.groetzsch_criterion
+- MLC.Quadratic.modulus_empty
+- MLC.Quadratic.filled_julia_set_connected
+- MLC.Quadratic.para_puzzle_piece_basis
+- MLC.Quadratic.para_puzzle_piece_open
+- MLC.Quadratic.mandelbrot_set_connected
+- MLC.mlc_infinitely_renormalizable_ax
 ```
