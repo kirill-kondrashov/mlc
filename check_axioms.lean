@@ -1,13 +1,29 @@
 import Mlc.MainConjecture
 import Lean
 
-open Lean Meta Elab Command
+open Lean Meta
 
-run_cmd liftTermElabM do
+def main : IO UInt32 := do
+  initSearchPath (← findSysroot)
+  let env ← importModules [{ module := `Mlc.MainConjecture }] {}
+  
   let name := ``MLC.MLC_Conjecture
-  let axioms ← Lean.collectAxioms name
-  if axioms.contains ``sorryAx then
-    throwError "❌ The proof of '{name}' relies on 'sorry'!"
-  else
-    logInfo s!"✅ The proof of '{name}' is free of 'sorry'."
-    logInfo s!"All axioms used: {axioms.toList}"
+  
+  let coreContext : Core.Context := { fileName := "<check_axioms>", fileMap := default }
+  let coreState : Core.State := { env := env }
+  
+  let metaM : MetaM (Array Name) := Lean.collectAxioms name
+  
+  try
+    let ((axioms, _), _) ← (metaM.run).run coreContext coreState
+    
+    if axioms.contains ``sorryAx then
+      IO.println s!"❌ The proof of '{name}' relies on 'sorry'!"
+      return 1
+    else
+      IO.println s!"✅ The proof of '{name}' is free of 'sorry'."
+      IO.println s!"All axioms used: {axioms.toList}"
+      return 0
+  catch e =>
+    IO.println s!"Error: {← e.toMessageData.toString}"
+    return 1
