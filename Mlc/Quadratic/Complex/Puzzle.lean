@@ -63,14 +63,14 @@ theorem dynamical_puzzle_piece_empty_of_large_n (c : ℂ) (hc : c ∉ Mandelbrot
   have h_not_in_K : 0 ∉ K c := hc
   rw [← green_function_pos_iff_not_mem_K] at h_not_in_K
   have h_pos : 0 < green_function c 0 := h_not_in_K
-  
+
   obtain ⟨N, hN⟩ : ∃ N : ℕ, (1 / 2 : ℝ) ^ N < green_function c 0 := by
     have h_tendsto : Tendsto (fun n : ℕ => (1 / 2 : ℝ) ^ n) atTop (𝓝 0) := by
       apply tendsto_pow_atTop_nhds_zero_of_lt_one
       · norm_num
       · norm_num
     exact ((tendsto_order.1 h_tendsto).2 (green_function c 0) h_pos).exists
-  
+
   use N
   intro n hn
   dsimp [DynamicalPuzzlePiece]
@@ -116,9 +116,59 @@ axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
 axiom para_puzzle_piece_basis (c : ℂ) :
     (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U
 
+/-- The Mandelbrot set is connected. -/
+axiom mandelbrot_set_connected : IsConnected MandelbrotSet
+
+/-- The filled Julia set is connected if c is in the Mandelbrot set. -/
+axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnected (K c)
+
 /-- Parameter puzzle pieces intersected with the Mandelbrot set are connected. -/
-axiom para_puzzle_piece_inter_mandelbrot_connected (n : ℕ) :
-    IsConnected (ParaPuzzlePiece n ∩ MandelbrotSet)
+theorem para_puzzle_piece_inter_mandelbrot_connected (n : ℕ) :
+    IsConnected (ParaPuzzlePiece n ∩ MandelbrotSet) := by
+  have h_subset : MandelbrotSet ⊆ ParaPuzzlePiece n := by
+    intro c hc
+    rw [ParaPuzzlePiece, mem_setOf_eq]
+    rw [DynamicalPuzzlePiece]
+    
+    have hc_in_K : c ∈ K c := by
+      rw [K]
+      unfold boundedOrbit
+      rw [MandelbrotSet] at hc
+      unfold boundedOrbit at hc
+      obtain ⟨M, hM⟩ := hc
+      use max M ‖c‖
+      intro k
+      cases k with
+      | zero => simp
+      | succ k =>
+        simp only [orbit_succ]
+        have h_shift : orbit c c k = orbit c 0 (k + 1) := by
+          induction k with
+          | zero => simp [orbit, fc]
+          | succ k ih => simp [orbit_succ, ih]
+        rw [h_shift]
+        rw [← orbit_succ]
+        apply le_trans (hM (k + 2)) (le_max_left _ _)
+
+    have h_K_subset : K c ⊆ {w | green_function c w < (1 / 2) ^ n} := by
+      intro z hz
+      rw [mem_setOf_eq]
+      rw [← green_function_eq_zero_iff_mem_K] at hz
+      rw [hz]
+      apply pow_pos
+      norm_num
+
+    have h_0_in_K : 0 ∈ K c := hc
+
+    have h_K_sub_comp : K c ⊆ connectedComponentIn {w | green_function c w < (1 / 2) ^ n} 0 :=
+      (filled_julia_set_connected hc).isPreconnected.subset_connectedComponentIn h_0_in_K h_K_subset
+
+    exact h_K_sub_comp hc_in_K
+
+  rw [inter_eq_right.mpr h_subset]
+  exact mandelbrot_set_connected
+
+ensure_no_sorry para_puzzle_piece_inter_mandelbrot_connected
 
 end
 
