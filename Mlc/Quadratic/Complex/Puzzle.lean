@@ -243,11 +243,18 @@ lemma para_puzzle_piece_basis (c : ℂ) :
 
   have h_0_in_M : 0 ∈ MandelbrotSet := by
     unfold MandelbrotSet boundedOrbit
-    use 0
+    use 2
     intro n
     induction n with
-    | zero => simp
-    | succ n ih => simp [orbit_succ, fc, ih]
+    | zero => simp; norm_num
+    | succ n ih =>
+      simp [orbit_succ, fc]
+      have : orbit 0 0 n = 0 := by
+        induction n with
+        | zero => simp [orbit]
+        | succ n ih => simp [orbit_succ, fc, ih]
+      rw [this]
+      simp; norm_num
 
   have h_neg2_in_M : -2 ∈ MandelbrotSet := by
     unfold MandelbrotSet boundedOrbit
