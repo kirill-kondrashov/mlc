@@ -61,8 +61,7 @@ opaque modulus (A : Set ℂ) : ℝ
 axiom modulus_empty : modulus ∅ = 0
 
 /-- Grötzsch's Inequality: If the intersection is non-trivial, the moduli sum converges.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] or
-    [Hubbard, Teichmüller Theory and Applications to Geometry, Topology, and Dynamics, Vol 1, Theorem 4.6.1] -/
+    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] -/
 axiom modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ} :
   (∀ n, P (n + 1) ⊆ P n) →
   (∀ n, IsConnected (P n)) →
