@@ -55,13 +55,15 @@ def R (c : ℂ) : ℝ := max 2 (1 + ‖c‖)
 @[simp] lemma R_ge_one_plus_c (c : ℂ) : R c ≥ 1 + ‖c‖ := by simp [R]
 
 /-- The modulus of an annulus.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] -/
+    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf> -/
 opaque modulus (A : Set ℂ) : ℝ
 
+/-- The modulus of the empty set is 0.
+    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf> -/
 axiom modulus_empty : modulus ∅ = 0
 
 /-- Grötzsch's Inequality: If the intersection is non-trivial, the moduli sum converges.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] -/
+    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf> (see also Appendix B) -/
 axiom modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ} :
   (∀ n, P (n + 1) ⊆ P n) →
   (∀ n, IsConnected (P n)) →
@@ -98,11 +100,11 @@ theorem groetzsch_criterion {P : ℕ → Set ℂ}
   contradiction
 
 /-- The Mandelbrot set is connected.
-    See: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984] -/
+    See: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984, Theorem 1, Chapter VIII] <https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf> (p. 47) -/
 axiom mandelbrot_set_connected : IsConnected MandelbrotSet
 
 /-- The filled Julia set is connected if c is in the Mandelbrot set.
-    See: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984] -/
+    See: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984, Proposition 1, Chapter VIII] <https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf> (p. 47) -/
 axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnected (K c)
 
 end

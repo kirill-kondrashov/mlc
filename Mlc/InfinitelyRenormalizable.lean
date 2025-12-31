@@ -17,7 +17,7 @@ def InfinitelyRenormalizable (c : ℂ) : Prop :=
 
 /-- MLC holds for infinitely renormalizable parameters (Lyubich).
     This is a deep theorem in complex dynamics, proved by Mikhail Lyubich.
-    See: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997)]
+    See: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997), Main Theorem] <https://projecteuclid.org/journals/acta-mathematica/volume-178/issue-2/Dynamics-of-quadratic-polynomials-III/10.1007/BF02392694.full>
     Also cited in the provided document as [L10] "How big is the set of infinitely renormalizable quadratics?".
     Since the proof is beyond the scope of this formalization (which focuses on Yoccoz puzzles),
     we accept it as an axiom. -/
