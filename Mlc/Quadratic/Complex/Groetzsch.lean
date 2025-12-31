@@ -44,8 +44,8 @@ lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆
 /-- Grötzsch's Inequality implies summability if the intersection is non-trivial. -/
 theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
-    (h_conn : ∀ n, IsConnected (P n))
-    (h_nontriv : Set.Nontrivial (⋂ n, P n)) :
+    (_h_conn : ∀ n, IsConnected (P n))
+    (_h_nontriv : Set.Nontrivial (⋂ n, P n)) :
     Summable (fun n => modulus (P n \ P (n + 1))) := by
   let A := fun n => P n \ P (n + 1)
   have h_disj : ∀ i j, i < j → Disjoint (A i) (A j) := by
