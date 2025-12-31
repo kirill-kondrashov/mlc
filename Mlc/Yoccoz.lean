@@ -40,6 +40,10 @@ theorem yoccoz_theorem (c : ℂ) :
       apply dynamical_puzzle_piece_nested
     · intro n
       apply mem_dynamical_puzzle_piece_self c hc
+    · intro n
+      have h_ne : (DynamicalPuzzlePiece c n 0).Nonempty := ⟨0, mem_dynamical_puzzle_piece_self c hc n⟩
+      rw [DynamicalPuzzlePiece] at h_ne ⊢
+      exact ⟨h_ne, isPreconnected_connectedComponentIn⟩
     · exact h_div
   · exfalso
     apply h_div
