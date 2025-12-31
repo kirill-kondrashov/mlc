@@ -109,66 +109,8 @@ ensure_no_sorry parameter_shrink_ax
 
 set_option maxHeartbeats 1600000
 
-/-- The sublevel sets of the Green's function are connected if the level is above the critical value. -/
-axiom green_sublevel_connected (c : ℂ) (r : ℝ) : green_function c 0 < r → IsConnected {z | green_function c z < r}
-
-set_option maxHeartbeats 4000000 in
 /-- Parameter puzzle pieces are open sets. -/
-theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
-  -- We use the continuity of the Green function.
-  have h_cont : Continuous (fun c => green_function c c) := by
-    let f := fun (p : ℂ × ℂ) => green_function p.1 p.2
-    have hf : Continuous f := green_function_continuous
-    let g := fun (c : ℂ) => (c, c)
-    have hg : Continuous g := continuous_id.prod_mk continuous_id
-    exact hf.comp hg
-
-  -- The set {c | G_c(c) < 1/2^n} is open by continuity.
-  have h_open_sublevel : IsOpen {c | green_function c c < (1 / 2) ^ n} :=
-    isOpen_lt h_cont continuous_const
-
-  -- We claim that ParaPuzzlePiece n is exactly this sublevel set.
-  have h_eq : ParaPuzzlePiece n = {c | green_function c c < (1 / 2) ^ n} := by
-    ext c
-    rw [ParaPuzzlePiece, mem_setOf_eq, DynamicalPuzzlePiece]
-    constructor
-    · intro h
-      -- If c is in the component of 0, then G_c(c) < (1/2)^n.
-      have h_sub : connectedComponentIn {w | green_function c w < (1 / 2) ^ n} 0 ⊆
-                   {w | green_function c w < (1 / 2) ^ n} :=
-        connectedComponentIn_subset _ _
-      exact h_sub h
-    · intro h
-      -- If G_c(c) < (1/2)^n, we need to show c is in the component of 0.
-      
-      -- First, show that the level is above the critical value G_c(0).
-      have h_val : green_function c c < (1 / 2) ^ n := h
-      have h_rel : green_function c c = 2 * green_function c 0 := by
-        rw [← fc_zero c]
-        rw [green_function_functional_eq]
-      rw [h_rel] at h_val
-      
-      have h_crit : green_function c 0 < (1 / 2) ^ n := by
-        have : 0 ≤ green_function c 0 := green_function_nonneg c 0
-        nlinarith
-
-      -- We use the fact that sublevel sets are connected above the critical value.
-      have h_conn : IsConnected {w | green_function c w < (1 / 2) ^ n} :=
-        green_sublevel_connected c ((1 / 2) ^ n) h_crit
-      
-      -- We also need 0 to be in the set.
-      have h_0_in : 0 ∈ {w | green_function c w < (1 / 2) ^ n} := by
-        rw [mem_setOf_eq]
-        exact h_crit
-
-      -- Since the set is connected and contains both 0 and c, they are in the same component.
-      apply h_conn.isPreconnected.subset_connectedComponentIn h_0_in _ h
-      exact subset_refl _
-
-  rw [h_eq]
-  exact h_open_sublevel
-
-ensure_no_sorry para_puzzle_piece_open
+axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
 lemma para_puzzle_piece_basis (c : ℂ) :

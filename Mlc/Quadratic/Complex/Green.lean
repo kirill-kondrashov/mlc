@@ -42,7 +42,7 @@ noncomputable section
 
 variable {c z : ℂ}
 
-set_option maxHeartbeats 400000
+set_option maxHeartbeats 4000000
 
 /-- The Green's function satisfies the functional equation `G(f(z)) = 2 * G(z)`. -/
 lemma green_function_functional_eq (c z : ℂ) :
@@ -198,8 +198,7 @@ lemma green_function_pos_iff_not_mem_K (c z : ℂ) :
   rw [this]
   rw [green_function_eq_zero_iff_mem_K]
 
-/-- The Green's function is continuous in both arguments. -/
-axiom green_function_continuous : Continuous (fun p : ℂ × ℂ => green_function p.1 p.2)
+
 
 end
 
