@@ -48,7 +48,7 @@ The formalization is organized as follows:
 The proof relies on the following axioms, which abstract away deep geometric and analytic results. These are defined in `Mlc/Quadratic/Complex/Puzzle.lean` and `Mlc/InfinitelyRenormalizable.lean`.
 
 ### 1. Yoccoz Puzzles & Geometry
-*   **`groetzsch_criterion`**: The Grötzsch inequality, stating that if the moduli of annuli diverge, the intersection of nested pieces is a single point.
+*   **`modulus_summable_of_nontrivial_intersection`**: Grötzsch's Inequality, stating that if the intersection of nested pieces is non-trivial, the sum of moduli converges.
 *   **Topological Properties**: `para_puzzle_piece_open` (pieces are open).
 *   **Basic Properties**: `modulus_empty`.
 *   **Connectivity**: `mandelbrot_set_connected` (Mandelbrot set is connected) and `filled_julia_set_connected` (Filled Julia set is connected for $c \in M$).
@@ -73,7 +73,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.groetzsch_criterion
+- MLC.Quadratic.modulus_summable_of_nontrivial_intersection
 - MLC.Quadratic.modulus_empty
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_open

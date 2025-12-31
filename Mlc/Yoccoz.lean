@@ -41,8 +41,9 @@ theorem yoccoz_theorem (c : ℂ) :
     · intro n
       apply mem_dynamical_puzzle_piece_self c hc
     · intro n
-      rw [DynamicalPuzzlePiece]
-      exact isConnected_connectedComponentIn_iff.mpr (connectedComponentIn_nonempty_iff.mpr ⟨0, mem_dynamical_puzzle_piece_self c hc n⟩)
+      have h_ne : (DynamicalPuzzlePiece c n 0).Nonempty := ⟨0, mem_dynamical_puzzle_piece_self c hc n⟩
+      rw [DynamicalPuzzlePiece] at h_ne ⊢
+      exact ⟨h_ne, isPreconnected_connectedComponentIn⟩
     · exact h_div
   · exfalso
     apply h_div

@@ -109,7 +109,8 @@ ensure_no_sorry parameter_shrink_ax
 
 set_option maxHeartbeats 1600000
 
-/-- Parameter puzzle pieces are open sets. -/
+/-- Parameter puzzle pieces are open sets.
+    See: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997)] -/
 axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
