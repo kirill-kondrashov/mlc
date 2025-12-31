@@ -1,3 +1,16 @@
+# ⚠️ **EXPERIMENTAL PROJECT DISCLAIMER** ⚠️
+
+> 🧪 **This repository is an experimental attempt to explore the MLC Conjecture using Lean 4 and LLMs.** 🤖
+>
+> This work is inspired by **[DeepSeek-Prover-V1.5: Unleashing the Potential of Long-Chain-of-Thought Reasoning for Theorem Proving](https://arxiv.org/abs/2511.02864)** and similar AI-assisted formalization approaches.
+>
+> 🚧 **Please Note:**
+> *   This is a **proof-of-concept** exploration, not a complete mathematical verification.
+> *   The goal is to test the limits of LLMs in formalizing deep mathematical theory.
+> *   Expect experimental code and potential axioms!
+
+---
+
 # MLC Conjecture Formalization
 
 This repository contains a formalization of the MLC (Mandelbrot Set is Locally Connected) Conjecture for quadratic polynomials in Lean 4.
