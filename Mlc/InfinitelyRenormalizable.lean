@@ -1,4 +1,5 @@
 import Mlc.Quadratic.Complex.Basic
+import Mlc.Quadratic.Complex.Groetzsch
 import Mlc.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mathlib.Topology.Connected.LocallyConnected
