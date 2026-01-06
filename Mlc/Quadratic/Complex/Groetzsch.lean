@@ -15,18 +15,24 @@ open Complex Topology Filter Set BigOperators
 noncomputable section
 
 /-- The modulus of an annulus.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf> -/
+    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf>
+    Local Reference: `refs/9201272v1.pdf` -/
 opaque modulus (A : Set ℂ) : ℝ
 
 /-- The modulus of the empty set is 0.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf> -/
+    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf>
+    Local Reference: `refs/9201272v1.pdf` -/
 axiom modulus_empty : modulus ∅ = 0
 
-/-- Modulus is non-negative. -/
+/-- Modulus is non-negative.
+    This follows from the definition of modulus as a conformal invariant.
+    See: [Milnor, Dynamics in One Complex Variable] <https://arxiv.org/pdf/math/9201272.pdf>
+    Local Reference: `refs/9201272v1.pdf` -/
 axiom modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A
 
 /-- Grötzsch's Inequality: Superadditivity of modulus for disjoint essential annuli.
-    See: [Milnor, Dynamics in One Complex Variable, Corollary B.5] <https://arxiv.org/pdf/math/9201272.pdf> -/
+    See: [Milnor, Dynamics in One Complex Variable, Corollary B.5] <https://arxiv.org/pdf/math/9201272.pdf>
+    Local Reference: `refs/9201272v1.pdf` -/
 axiom groetzsch_inequality {A B S : Set ℂ} (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
     modulus A + modulus B ≤ modulus S
 
