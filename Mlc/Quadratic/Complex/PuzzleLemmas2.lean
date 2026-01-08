@@ -111,7 +111,10 @@ ensure_no_sorry parameter_shrink_ax
 set_option maxHeartbeats 1600000
 
 /-- Slodkowski's Theorem (Generalized Lambda Lemma).
-    See: [Slodkowski, Holomorphic motions and polynomial hulls] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
+    "Every holomorphic motion f : D × E → ℂ of an arbitrary subset E of ℂ can be
+    extended to a holomorphic motion F : D × ℂ → ℂ (that is F|D×E = f) of ℂ,
+    parametrized by the same unit disc D."
+    See: [Slodkowski, Holomorphic motions and polynomial hulls, Theorem 1.3] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
     Local Reference: `refs/S0002-9939-1991-1037218-8.pdf` -/
 axiom slodkowski_theorem {E : Set ℂ} (h : ℂ → E → ℂ) :
     -- We abstract the specific consequence needed:
