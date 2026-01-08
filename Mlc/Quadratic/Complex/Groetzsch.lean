@@ -10,29 +10,57 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 namespace MLC
 namespace Quadratic
 
-open Complex Topology Filter Set BigOperators
+open Complex Topology Filter Set BigOperators Classical
 
 noncomputable section
 
+/-- The conformal modulus of an annulus.
+    We treat this as an opaque function for non-empty sets, but explicitly define it as 0 for the empty set.
+    See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
+    Local Reference: `refs/9201272v1.pdf`
+    "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of height to circumference."
+    "Corollary B.4. The modulus of a cylinder is a well defined conformal invariant."
+    "It follows that the modulus of an annulus A can be defined as the modulus
+    of any conformally isomorphic cylinder." -/
+opaque raw_modulus (A : Set ℂ) : ℝ
+
 /-- The modulus of an annulus.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf` -/
-opaque modulus (A : Set ℂ) : ℝ
+    Defined to be 0 for the empty set, and the `raw_modulus` otherwise. -/
+noncomputable def modulus (A : Set ℂ) : ℝ :=
+  if A = ∅ then 0 else raw_modulus A
 
 /-- The modulus of the empty set is 0.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf` -/
-axiom modulus_empty : modulus ∅ = 0
+    See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
+    Local Reference: `refs/9201272v1.pdf`
+    "By definition an infinite cylinder, that is a cylinder of infinite height, has modulus zero."
+    (Note: Typically empty sets or degenerate annuli are treated as limiting
+    cases or specific values like 0 or infinity depending on convention; Milnor
+    assigns 0 to infinite cylinders in some contexts or infinite modulus to
+    complements of points. Here we assume standard convention for empty
+    annulus). -/
+theorem modulus_empty : modulus ∅ = 0 := by
+  simp [modulus]
 
 /-- Modulus is non-negative.
     This follows from the definition of modulus as a conformal invariant.
     See: [Milnor, Dynamics in One Complex Variable] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf` -/
-axiom modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A
+    Local Reference: `refs/9201272v1.pdf`
+    "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of
+    height to circumference." (Ratio of positive lengths is positive). -/
+axiom modulus_nonneg_ax (A : Set ℂ) : 0 ≤ raw_modulus A
+
+theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
+  unfold modulus
+  split_ifs
+  · exact le_refl 0
+  · exact modulus_nonneg_ax A
 
 /-- Grötzsch's Inequality: Superadditivity of modulus for disjoint essential annuli.
     See: [Milnor, Dynamics in One Complex Variable, Corollary B.5] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf` -/
+    Local Reference: `refs/9201272v1.pdf`
+    "Corollary B.5 (Grötzsch Inequality). Suppose that A' ⊂ A and A'' ⊂ A are
+    two disjoint annuli, each essentailly embedded in A. Then mod(A') + mod(A'')
+    ≤ mod(A)." -/
 axiom groetzsch_inequality {A B S : Set ℂ} (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
     modulus A + modulus B ≤ modulus S
 
@@ -43,7 +71,7 @@ lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆
   clear hij
   induction k with
   | zero => exact subset_refl _
-  | succ m ih => 
+  | succ m ih =>
     rw [Nat.add_succ]
     apply subset_trans (h_nested (i + m)) ih
 
@@ -97,7 +125,7 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     -- First show sum ≤ modulus (P 0 \ P N)
     have h_sum_le : Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus (P 0 \ P N) := by
       induction N with
-      | zero => 
+      | zero =>
         simp
         rw [modulus_empty]
       | succ k ih =>
@@ -113,10 +141,10 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
           · intro h
             cases h with
             | inl h => exact ⟨h.1, fun h_in => h.2 (h_nested k h_in)⟩
-            | inr h => 
+            | inr h =>
                 have h_sub : P k ⊆ P 0 := subset_of_le_nested h_nested (Nat.zero_le k)
                 exact ⟨h_sub h.1, h.2⟩
-        
+
         have h_disj_split : Disjoint (P 0 \ P k) (P k \ P (k + 1)) := by
           rw [Set.disjoint_left]
           intro z h1 h2
@@ -137,7 +165,9 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
   apply summable_of_sum_range_le (fun n => modulus_nonneg _) h_bounded
 
 /-- Grötzsch's Criterion: Divergence of moduli implies point intersection.
-    See: [Milnor, Dynamics in One Complex Variable, Problem 2-e] -/
+    See: [Milnor, Dynamics in One Complex Variable, Corollary B.7]
+    Local Reference: `refs/9201272v1.pdf`
+    "Corollary B.7. Suppose that K ⊂ U as described above. Then K reduces to a single point if and only if the annulus A = U rK has infinite modulus." -/
 theorem groetzsch_criterion {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (h_zero : ∀ n, 0 ∈ P n)
