@@ -61,7 +61,7 @@ The formalization is organized as follows:
 The proof relies on the following axioms, which abstract away deep geometric and analytic results. These are defined in `Mlc/Quadratic/Complex/Puzzle.lean` and `Mlc/InfinitelyRenormalizable.lean`.
 
 ### 1. Yoccoz Puzzles & Geometry
-*   **[`groetzsch_inequality`](Mlc/Quadratic/Complex/Groetzsch.lean)**: Grötzsch's Inequality (Superadditivity of modulus).
+*   [`groetzsch_inequality`](Mlc/Quadratic/Complex/Groetzsch.lean): Grötzsch's Inequality (Superadditivity of modulus).
     *   Source: [Milnor, Dynamics in One Complex Variable, Corollary B.5] (Local: `refs/9201272v1.pdf`)
     *   Note: This axiom is used to prove **`modulus_summable_of_nontrivial_intersection`**, which states that if the intersection of nested pieces is non-trivial, the sum of moduli converges.
 *   **Topological Properties**: [`para_puzzle_piece_open`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean) (pieces are open).
@@ -73,7 +73,7 @@ The proof relies on the following axioms, which abstract away deep geometric and
     *   Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984]
 
 ### 2. Deep Theorems
-*   **[`mlc_infinitely_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean)**: Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
+*   [`mlc_infinitely_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean): Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
     *   Source: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Main Theorem] (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
 
 ## Verification
