@@ -67,10 +67,8 @@ The proof relies on the following axioms, which abstract away deep geometric and
 *   **Topological Properties**: [`para_puzzle_piece_open`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean) (pieces are open).
     *   Source: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Lemma 3.1] (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
 *   **Basic Properties**:
-    *   [`modulus_empty`](Mlc/Quadratic/Complex/Groetzsch.lean): Modulus of empty set is 0.
-        *   Source: [Milnor, Dynamics in One Complex Variable] (Local: `refs/9201272v1.pdf`)
-    *   [`modulus_nonneg`](Mlc/Quadratic/Complex/Groetzsch.lean): Modulus is non-negative.
-        *   Source: [Milnor, Dynamics in One Complex Variable] (Local: `refs/9201272v1.pdf`)
+    *   [`modulus_nonneg_ax`](Mlc/Quadratic/Complex/Groetzsch.lean): Modulus is non-negative.
+        *   Source: [Milnor, Dynamics in One Complex Variable] (Local: `refs/9201272v1.pdf`, Appendix B)
 *   **Connectivity**: [`mandelbrot_set_connected`](Mlc/Quadratic/Complex/Basic.lean) (Mandelbrot set is connected) and [`filled_julia_set_connected`](Mlc/Quadratic/Complex/Basic.lean) (Filled Julia set is connected for $c \in M$).
     *   Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984]
 
@@ -96,8 +94,7 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.Quadratic.groetzsch_inequality
-- MLC.Quadratic.modulus_empty
-- MLC.Quadratic.modulus_nonneg
+- MLC.Quadratic.modulus_nonneg_ax
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_open
 - MLC.Quadratic.mandelbrot_set_connected
