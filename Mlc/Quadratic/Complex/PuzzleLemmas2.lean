@@ -111,8 +111,12 @@ ensure_no_sorry parameter_shrink_ax
 set_option maxHeartbeats 1600000
 
 /-- Parameter puzzle pieces are open sets.
-    See: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997), Lemma 3.1] <https://projecteuclid.org/journals/acta-mathematica/volume-178/issue-2/Dynamics-of-quadratic-polynomials-III/10.1007/BF02392694.full>
-    Local Reference: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf` -/
+    This follows from the fact that dynamical puzzle pieces move holomorphically,
+    which relies on Slodkowski's Theorem (Generalized Lambda Lemma).
+    See: [Lyubich, Conformal Geometry and Dynamics of Quadratic Polynomials, Lemma 3.1]
+    Local Reference: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`
+    "Lemma 3.1. A holomorphic motion h of any set X ⊂ Ĉ extends to a continuous motion of the whole sphere."
+    See also: [Slodkowski, Holomorphic motions and polynomial hulls] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/> -/
 axiom para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n)
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
