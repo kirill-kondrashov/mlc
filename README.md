@@ -65,7 +65,8 @@ The proof relies on the following axioms, which abstract away deep geometric and
     *   Source: [Milnor, Dynamics in One Complex Variable, Corollary B.5] (Local: `refs/9201272v1.pdf`)
     *   Note: This axiom is used to prove **`modulus_summable_of_nontrivial_intersection`**, which states that if the intersection of nested pieces is non-trivial, the sum of moduli converges.
 *   **Topological Properties**: [`para_puzzle_piece_open`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L116) (pieces are open).
-    *   Source: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Lemma 3.1] (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
+    *   Source: [Lyubich, Conformal Geometry and Dynamics of Quadratic Polynomials, Lemma 3.1] (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
+    *   Note: Relies on Slodkowski's Theorem (Generalized Lambda Lemma): [Holomorphic motions and polynomial hulls](https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/).
 *   **Basic Properties**:
     *   [`modulus_nonneg_ax`](Mlc/Quadratic/Complex/Groetzsch.lean#L50): Modulus is non-negative.
         *   Source: [Milnor, Dynamics in One Complex Variable] (Local: `refs/9201272v1.pdf`, Appendix B)
