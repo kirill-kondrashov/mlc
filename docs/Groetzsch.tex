@@ -1,73 +1,55 @@
-\section{Groetzsch}
-\textit{Source: \texttt{Quadratic/Complex/Groetzsch.lean}}
+\section{Grötzsch's Inequality and Criterion}
+\label{sec:Groetzsch}
 
-This module contains the formal definitions and proofs.
-\subsection*{modulus\_empty}
-The conformal modulus of an annulus.
-    We treat this as an opaque function for non-empty sets, but explicitly define it as 0 for the empty set.
-    See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf`
-    "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of height to circumference."
-    "Corollary B.4. The modulus of a cylinder is a well defined conformal invariant."
-    "It follows that the modulus of an annulus A can be defined as the modulus
-    of any conformally isomorphic cylinder." -/
-opaque raw_modulus (A : Set ℂ) : ℝ
+This section formalizes the key analytical tool used in Yoccoz's theorem: the modulus of annuli and Grötzsch's Inequality.
 
-/-- The modulus of an annulus.
-    Defined to be 0 for the empty set, and the `raw_modulus` otherwise. -/
-noncomputable def modulus (A : Set ℂ) : ℝ :=
-  if A = ∅ then 0 else raw_modulus A
+\subsection{Modulus of an Annulus}
 
-/-- The modulus of the empty set is 0.
-    See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf`
-    "By definition an infinite cylinder, that is a cylinder of infinite height, has modulus zero."
-    (Note: Typically empty sets or degenerate annuli are treated as limiting
-    cases or specific values like 0 or infinity depending on convention; Milnor
-    assigns 0 to infinite cylinders in some contexts or infinite modulus to
-    complements of points. Here we assume standard convention for empty
-    annulus).
+\textbf{Definition}: The conformal \emph{modulus} is a non-negative real number associated with an annulus (topological cylinder). It is a conformal invariant.
+\[ \text{mod}(A) \in [0, \infty) \]
+A "fat" annulus has a large modulus, while a "thin" annulus has a small modulus. An empty or degenerate annulus has modulus 0.
 
-\subsection*{modulus\_summable\_of\_nontrivial\_intersection}
-Modulus is non-negative.
-    This follows from the definition of modulus as a conformal invariant.
-    See: [Milnor, Dynamics in One Complex Variable] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf`
-    "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of
-    height to circumference." (Ratio of positive lengths is positive). -/
-axiom modulus_nonneg_ax (A : Set ℂ) : 0 ≤ raw_modulus A
+\subsection{Grötzsch's Inequality}
 
-theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
-  unfold modulus
-  split_ifs
-  · exact le_refl 0
-  · exact modulus_nonneg_ax A
+The core inequality states that for a set of disjoint annuli $A_i$ nested inside a larger annulus $S$, the sum of their moduli is bounded by the modulus of $S$.
+\[ \sum \text{mod}(A_i) \le \text{mod}(S) \]
+This reflects the "length-area" type properties of the modulus (specifically, extrem length).
 
-/-- Grötzsch's Inequality: Superadditivity of modulus for disjoint essential annuli.
-    See: [Milnor, Dynamics in One Complex Variable, Corollary B.5] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf`
-    "Corollary B.5 (Grötzsch Inequality). Suppose that A' ⊂ A and A'' ⊂ A are
-    two disjoint annuli, each essentailly embedded in A. Then mod(A') + mod(A'')
-    ≤ mod(A)." -/
-axiom groetzsch_inequality {A B S : Set ℂ} (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
-    modulus A + modulus B ≤ modulus S
+\textbf{Axiom} (\texttt{groetzsch\_inequality}):
 
-lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆ P n)
-    {i j : ℕ} (hij : i ≤ j) : P j ⊆ P i := by
-  have h_diff : ∃ k, j = i + k := Nat.exists_eq_add_of_le hij
-  obtain ⟨k, rfl⟩ := h_diff
-  clear hij
-  induction k with
-  | zero => exact subset_refl _
-  | succ m ih =>
-    rw [Nat.add_succ]
-    apply subset_trans (h_nested (i + m)) ih
+\begin{lstlisting}[language=Lean]
+axiom groetzsch_inequality {A B S : Set $\mathbb{C}$} (h_disj : Disjoint A B) (h_sub : A $\cup$ B $\subseteq$ S) :
+    modulus A + modulus B $\le$ modulus S
+\end{lstlisting}
 
-/-- Grötzsch's Inequality implies summability if the intersection is non-trivial.
+\subsection{Criterion: \texttt{groetzsch\_criterion}}
 
-\subsection*{groetzsch\_criterion}
-Grötzsch's Criterion: Divergence of moduli implies point intersection.
-    See: [Milnor, Dynamics in One Complex Variable, Corollary B.7]
-    Local Reference: `refs/9201272v1.pdf`
-    "Corollary B.7. Suppose that K ⊂ U as described above. Then K reduces to a single point if and only if the annulus A = U rK has infinite modulus."
+The criterion relates the geometry of a nested sequence of sets $P_0 \supseteq P_1 \supseteq \dots$ to the sum of the moduli of the annuli $A_n = P_n \setminus P_{n+1}$.
 
+\textbf{Theorem} (\texttt{groetzsch\_criterion}): If $\sum \text{mod}(A_n) = \infty$, then the intersection $\bigcap P_n$ is a single point (assuming the sets are connected and non-empty).
+
+\subsubsection{Proof Formalization}
+The proof is formalized by contrapositive:
+1.  Assume the intersection $\bigcap P_n$ is non-trivial (contains at least two points).
+2.  Then there exists a "core" set $K = \bigcap P_n$ with non-zero capacity/size.
+3.  The annuli $A_n$ are all disjoint and contained in $P_0 \setminus K$.
+4.  By monotonicity and Grötzsch's inequality, the sum of their moduli is bounded by the modulus of $P_0 \setminus K$.
+5.  Since $P_0 \setminus K$ is a fixed annulus (finite modulus), the sum $\sum \text{mod}(A_n)$ must converge.
+
+This contradicts the divergence hypothesis.
+
+\begin{lstlisting}[language=Lean]
+theorem groetzsch_criterion {P : $\mathbb{N}$ $\to$ Set $\mathbb{C}$}
+    (h_nested : $\forall$ n, P (n + 1) $\subseteq$ P n)
+    (h_zero : $\forall$ n, 0 $\in$ P n)
+    (h_conn : $\forall$ n, IsConnected (P n))
+    (h_div : $\neg$ Summable (fun n => modulus (P n \ P (n + 1)))) :
+    ($\bigcap$ n, P n) = {0} := by
+  by_contra h_neq
+  -- Assume non-trivial intersection
+  have h_nontriv : Set.Nontrivial ($\bigcap$ n, P n) := ...
+  -- Deduce summability
+  have h_sum := modulus_summable_of_nontrivial_intersection h_nested h_conn h_nontriv
+  -- Contradiction
+  contradiction
+\end{lstlisting}

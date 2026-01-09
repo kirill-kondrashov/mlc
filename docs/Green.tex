@@ -1,19 +1,31 @@
-\section{Green}
-\textit{Source: \texttt{Quadratic/Complex/Green.lean}}
+\section{Green's Function}
+\label{sec:Green}
 
-\begin{quotation}
-# Green's Function for the Quadratic Family  This file defines the Green's function `G_c(z)` for the filled Julia set `K(c)`. The Green's function measures the rate of escape to infinity.  ## Connection to MLC  The Green's function is used to construct Yoccoz puzzles, which are central to the proof of the Mandelbrot Local Connectivity (MLC) conjecture.  *   **Equipotentials and Rays**: Level sets of `G_c` (equipotentials) and their orthogonal trajectories     (external rays) form a grid on `ℂ \ K(c)`. *   **Yoccoz Puzzles**: Intersections of these curves define puzzle pieces used to analyze the combinatorics     of orbits. *   **Böttcher Coordinates**: `G_c` is the real part of the Böttcher coordinate, conjugating `f_c` to `z ↦ z^2`     near infinity.  ## Main Definitions  * `potential_seq c z n`: The sequence `1/2^n * log ‖f_c^n(z)‖`. * `green_function c z`: The limit of `potential_seq` as `n → ∞`.  ## Main Results (Sketched)  * `green_function_eq_zero_iff_mem_K`: `G_c(z) = 0 ↔ z ∈ K(c)`. * `green_function_functional_eq`: `G_c(f_c(z)) = 2 * G_c(z)`. * `green_function_harmonic`: `G_c` is harmonic on `ℂ \ K(c)`.
-\end{quotation}
+The Green's function $G_c(z)$ measures the rate of escape to infinity. It is the potential function for the domain $\mathbb{C} \setminus K_c$.
 
-\subsection*{green\_function\_functional\_eq}
-The Green's function satisfies the functional equation `G(f(z)) = 2 * G(z)`.
+\subsection{Definition: \texttt{green\_function}}
 
-\subsection*{green\_function\_nonneg}
-The Green's function is non-negative.
+\textbf{Definition}: $G_c(z)$ is defined as the limit:
+\[ G_c(z) = \lim_{n \to \infty} \frac{1}{2^n} \log^+ |f_c^{\circ n}(z)| \]
+where $\log^+(x) = \max(0, \log x)$.
 
-\subsection*{green\_function\_eq\_zero\_iff\_mem\_K}
-A point is in the filled Julia set iff its Green's function is zero.
+\begin{lstlisting}[language=Lean]
+def potential_seq (c z : $\mathbb{C}$) (n : $\mathbb{N}$) : $\mathbb{R}$ :=
+  (1 / 2 ^ n) * Real.log (max 1 $\|$orbit c z n$\|$)
 
-\subsection*{green\_function\_pos\_iff\_not\_mem\_K}
-The Green's function is positive on the basin of infinity.
+def green_function (c z : $\mathbb{C}$) : $\mathbb{R}$ :=
+  limUnder atTop (fun n => potential_seq c z n)
+\end{lstlisting}
 
+\subsection{Convergence}
+
+We prove that this sequence converges for all $z$.
+\begin{itemize}
+    \item If $z \in K_c$, the orbit is bounded, so $\frac{1}{2^n} \log |z_n| \to 0$. Thus $G_c(z) = 0$.
+    \item If $z \notin K_c$, the orbit escapes. We show that the sequence is Cauchy using the escape estimates from Section \ref{sec:Escape}.
+\end{itemize}
+
+\begin{lstlisting}[language=Lean]
+lemma green_function_eq_lim (c z : $\mathbb{C}$) :
+    Tendsto (potential_seq c z) atTop ($\mathcal{N}$ (green_function c z))
+\end{lstlisting}

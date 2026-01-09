@@ -1,11 +1,24 @@
-\section{Escape}
-\textit{Source: \texttt{Quadratic/Complex/Escape.lean}}
+\section{Escape Dynamics}
+\label{sec:Escape}
 
-\begin{quotation}
-# Escape Lemma for the Quadratic Family  This file proves the escape lemma: if the orbit of a point ever leaves the disk of radius `R(c)`, then it escapes to infinity.  Reference: "Conformal Geometry and Dynamics of Quadratic Polynomials", https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf (See Section 21.2, p. 125 for the escape lemma)  ## Connection to MLC  The escape lemma is the foundational result for the construction of Yoccoz puzzles, which are central to the proof of the Mandelbrot Local Connectivity (MLC) conjecture.  1.  **Basin of Infinity**: It establishes that the basin of attraction of infinity,     $A(\infty) = \{z \mid f_c^n(z) \to \infty\}$, contains the complement of the disk $D(0, R(c))$. 2.  **Green's Function**: This allows defining the Green's function $G(z) = \lim \frac{1}{2^n} \log|f_c^n(z)|$     for $z \in A(\infty)$. 3.  **Böttcher Coordinates**: The Green's function is used to construct the Böttcher coordinate     $\phi_c(z)$ near infinity, which conjugates $f_c$ to $z \mapsto z^2$. 4.  **Rays and Equipotentials**: The level sets of $G(z)$ (equipotentials) and the gradient lines     of $G(z)$ (external rays) form the grid for the Yoccoz puzzle partition.  Thus, this lemma justifies the existence of the dynamical plane structures required for the combinatorial analysis in the MLC proof.
-\end{quotation}
+This section formalizes the escape criterion for the quadratic family.
 
-\subsection*{escape\_lemma}
-Escape lemma: if the orbit of z ever leaves the disk of radius R(c), then it
-escapes to infinity.
+\subsection{Escape Radius}
 
+We define a bound $R(c) = \max(2, |c|+1)$.
+The main lemma (\texttt{escape\_lemma}) states that if $|z| > R(c)$, then $|f_c(z)| > |z|$ and the orbit escapes to infinity geometrically.
+
+\[ |f_c(z)| = |z^2 + c| \ge |z|^2 - |c| = |z|(|z| - \frac{|c|}{|z|}) \]
+Since $|z| > 2$ and $|z| > |c|$, the factor is greater than 1.
+
+\subsection{Formalization}
+
+\textbf{Lemma} (\texttt{norm\_orbit\_ge\_of\_norm\_ge\_R}): Points starting outside the escape radius remain outside and their norm grows.
+
+\begin{lstlisting}[language=Lean]
+/-- Points outside the escape radius escape to infinity. -/
+lemma norm_orbit_ge_of_norm_ge_R (c z : $\mathbb{C}$) (n : $\mathbb{N}$) (h : $\|$z$\|$ > R c) :
+    $\|$orbit c z n$\|$ $\ge$ $\|$z$\|$
+\end{lstlisting}
+
+This property is crucial for defining the Green's function, as it ensures that the series defining the potential converges for points outside $K_c$.

@@ -22,6 +22,9 @@ theorem dynamical_puzzle_piece_nested (c : ℂ) (n : ℕ) :
   apply connectedComponentIn_mono
   intro w hw
   dsimp at *
+  -- Proof idea: The level sets are defined by `G(w) < 1/2^n`.
+  -- Since `1/2^{n+1} < 1/2^n`, the set for `n+1` is contained in the set for `n`.
+  -- Connected component of a subset is contained in the connected component of the superset.
   apply lt_trans hw
   rw [pow_succ]
   nth_rw 2 [← one_mul ((1 / 2 : ℝ) ^ n)]
@@ -35,6 +38,10 @@ ensure_no_sorry dynamical_puzzle_piece_nested
 
 theorem mem_dynamical_puzzle_piece_self (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
     0 ∈ DynamicalPuzzlePiece c n 0 := by
+  -- Proof idea: Since `c ∈ M`, `0 ∈ K(c)`.
+  -- Points in `K(c)` have Green's function 0.
+  -- Since `0 < 1/2^n`, `0` satisfies the condition `G(0) < 1/2^n`.
+  -- Thus `0` is in the connected component of the level set containing `0`.
   have h0 : 0 ∈ K c := hc
   rw [← green_function_eq_zero_iff_mem_K] at h0
   dsimp [DynamicalPuzzlePiece]
@@ -48,6 +55,9 @@ ensure_no_sorry mem_dynamical_puzzle_piece_self
 
 theorem dynamical_puzzle_piece_empty_of_large_n (c : ℂ) (hc : c ∉ MandelbrotSet) :
     ∃ N, ∀ n ≥ N, 0 ∉ DynamicalPuzzlePiece c n 0 := by
+  -- Proof idea: If `c ∉ M`, then `0 ∉ K(c)`, so `G(0) > 0`.
+  -- Since `1/2^n → 0`, eventually `1/2^n < G(0)`.
+  -- At that point, `0` is no longer in the set `{w | G(w) < 1/2^n}`.
   have h_not_in_K : 0 ∉ K c := hc
   rw [← green_function_pos_iff_not_mem_K] at h_not_in_K
   have h_pos : 0 < green_function c 0 := h_not_in_K

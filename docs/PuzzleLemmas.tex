@@ -1,4 +1,34 @@
-\section{PuzzleLemmas}
-\textit{Source: \texttt{Quadratic/Complex/PuzzleLemmas.lean}}
+\section{Basic Puzzle Properties}
+\label{sec:PuzzleLemmas}
 
-This module contains the formal definitions and proofs.
+This section establishes elementary properties of the puzzle pieces defined in Section \ref{sec:Puzzle}.
+
+\subsection{Nested Structure}
+
+The puzzle pieces form a nested sequence:
+\[ D_0(z) \supseteq D_1(z) \supseteq D_2(z) \supseteq \dots \]
+This follows immediately from the definition involving sublevel sets of the Green's function: if $G_c(w) < 2^{-(n+1)}$, then certainly $G_c(w) < 2^{-n}$.
+
+\textbf{Theorem} (\texttt{dynamical\_puzzle\_piece\_nested}):
+The dynamical puzzle piece of depth $n+1$ is contained in the piece of depth $n$.
+
+\begin{lstlisting}[language=Lean]
+theorem dynamical_puzzle_piece_nested (c : $\mathbb{C}$) (n : $\mathbb{N}$) :
+    DynamicalPuzzlePiece c (n + 1) 0 $\subseteq$ DynamicalPuzzlePiece c n 0
+\end{lstlisting}
+
+\subsection{Self-Containment}
+
+By definition, the point $z$ is always contained in its puzzle piece $D_n(z)$ (assuming the Green's function value allows it, or if $z=0$ and $c \in \mathcal{M}$, then $G_c(0)=0 < 2^{-n}$).
+
+\textbf{Lemma} (\texttt{mem\_dynamical\_puzzle\_piece\_self}):
+If $c \in \mathcal{M}$, then $0$ is contained in $D_n(0)$ for all $n$.
+
+\begin{lstlisting}[language=Lean]
+lemma mem_dynamical_puzzle_piece_self (c : $\mathbb{C}$) (hc : c $\in$ MandelbrotSet) (n : $\mathbb{N}$) :
+    0 $\in$ DynamicalPuzzlePiece c n 0
+\end{lstlisting}
+
+\subsection{Intersection Properties}
+
+We also relate the puzzle pieces to the filled Julia set $K_c$. Since $K_c = \{z \mid G_c(z) = 0\}$, and puzzle pieces are defined by $G_c(z) < \epsilon$, we have $K_c \subseteq D_n(0)$ (for the component containing 0).

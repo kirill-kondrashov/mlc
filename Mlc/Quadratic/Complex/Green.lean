@@ -44,7 +44,12 @@ variable {c z : ℂ}
 
 set_option maxHeartbeats 4000000
 
-/-- The Green's function satisfies the functional equation `G(f(z)) = 2 * G(z)`. -/
+/-- The Green's function satisfies the functional equation `G(f(z)) = 2 * G(z)`.
+    Proof idea:
+    `G(f(z)) = lim_{n→∞} 1/2^n log |f^n(f(z))|`
+    `= lim_{n→∞} 1/2^n log |f^{n+1}(z)|`
+    `= lim_{n→∞} 2 * (1/2^{n+1} log |f^{n+1}(z)|)`
+    `= 2 * G(z)`. -/
 lemma green_function_functional_eq (c z : ℂ) :
     green_function c (fc c z) = 2 * green_function c z := by
   have h_lim : Tendsto (fun n => potential_seq c (fc c z) n) atTop (𝓝 (2 * green_function c z)) := by
@@ -165,7 +170,11 @@ lemma green_function_pos_of_large_norm (c z : ℂ) (h : ‖z‖ > escape_bound c
   apply lt_trans _ (Real.log_lt_log (lt_of_lt_of_le zero_lt_two (le_trans (R_ge_two c) (escape_bound_ge_R c))) h)
   exact log_escape_bound_gt_two_mul_norm_c_div_sq c
 
-/-- A point is in the filled Julia set iff its Green's function is zero. -/
+/-- A point is in the filled Julia set iff its Green's function is zero.
+    Proof idea:
+    *   `→`: If `G(z) = 0`, suppose `z ∉ K(c)`. Then `z` escapes, and we can show `G(z) > 0`
+        (using the positive growth rate outside `K(c)`). Contradiction.
+    *   `←`: If `z ∈ K(c)`, the orbit is bounded, so `potential_seq` converges to 0. -/
 lemma green_function_eq_zero_iff_mem_K (c z : ℂ) :
     green_function c z = 0 ↔ z ∈ K c := by
   constructor

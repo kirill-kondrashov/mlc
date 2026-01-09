@@ -70,7 +70,11 @@ lemma para_puzzle_piece_induced_connected (n : ℕ) :
   try rw [Set.inter_comm]
   exact para_puzzle_piece_inter_mandelbrot_connected n
 
-/-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set. -/
+/-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set.
+    Proof idea: Since the intersection of all parameter pieces `ParaPuzzlePiece n` is exactly `{c}`,
+    for any open neighborhood `U` of `c`, there must be some `n` such that `ParaPuzzlePiece n ⊆ U`.
+    This uses the compactness argument implicit in the "shrink to point" property for nested compact sets
+    (or similar topological argument). Here we formalize it by showing `M ∩ P_n` eventually lies in `U`. -/
 lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
     (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
     ∀ U ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet), ∃ n, { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } ⊆ U := by
@@ -87,7 +91,13 @@ lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
   apply hV_sub_U
   exact hn_sub hx
 
-/-- If parameter pieces shrink to a point, M is locally connected at c. -/
+/-- If parameter pieces shrink to a point, M is locally connected at c.
+    Proof idea: We construct a basis of connected neighborhoods for `c`.
+    1.  The parameter pieces `P_n` are open (by `para_puzzle_piece_open`).
+    2.  Their intersection with `M` is connected (by `para_puzzle_piece_induced_connected`).
+    3.  They shrink to `{c}` (hypothesis).
+    4.  Therefore, for any neighborhood `U`, we can find a `P_n` inside it. `P_n ∩ M` serves
+        as the connected neighborhood of `c` contained in `U`, proving local connectivity. -/
 lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
   rw [LocallyConnectedAt]

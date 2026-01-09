@@ -90,7 +90,13 @@ lemma R_pos (c : ℂ) : R c > 0 := by
   linarith
 
 /-- Escape lemma: if the orbit of z ever leaves the disk of radius R(c), then it
-escapes to infinity. -/
+escapes to infinity.
+
+Proof idea:
+We define a 'growth factor' `λ(w) = |w| - |c|/|w|`.
+We show that if `|w| > R(c)`, then `λ(w) > 1`.
+We then prove by induction that `|f_c^k(w)| ≥ |w| * λ(w)^k`.
+Since `λ(w) > 1`, the term `λ(w)^k` grows to infinity, so the orbit norm grows unbounded. -/
 lemma escape_lemma (n : ℕ) (h : ‖orbit c z n‖ > R c) :
     ∀ M : ℝ, ∃ N : ℕ, ∀ m ≥ N, ‖orbit c z m‖ > M := by
   let w := orbit c z n
