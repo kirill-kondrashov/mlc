@@ -134,9 +134,20 @@ axiom slodkowski_theorem {E : Set ℂ} (h : HolomorphicMotion E) :
       ∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z
 
 /-- Axiom: The boundary of a puzzle piece moves holomorphically.
-    This axiom bridges the geometric properties of quadratic polynomials with the
-    Slodkowski theorem. It states that locally, the puzzle boundary moves holomorphically.
-    Strictly speaking, one constructs this motion from the Böttcher coordinate. -/
+    This axiom provides the existence of a holomorphic motion on the boundary of the puzzle piece,
+    which serves as the input for Slodkowski's Extension Theorem.
+
+    **Definition** [Slodkowski, p. 347]:
+    "A holomorphic motion of E in C, parametrized by the unit disc D, is a map f: D × E → C
+    such that (a) for any fixed w ∈ E, the map z ↦ f(z, w): D → C is holomorphic;
+    (b) for any fixed z ∈ D, the map w ↦ f(z, w) is one-to-one; and (c) f₀ is the identity map on E."
+
+    In this context:
+    *   `E` is the boundary of the puzzle piece (or a neighborhood of it).
+    *   The parameter `z` (or `t`) corresponds to the quadratic parameter `c`.
+    *   This motion is constructed using the Böttcher coordinate, which depends holomorphically on `c`.
+
+    Ref: `refs/S0002-9939-1991-1037218-8.pdf` (Slodkowski, Holomorphic motions and polynomial hulls). -/
 axiom puzzle_boundary_motion_exists (n : ℕ) (c₀ : ℂ) (hc₀ : c₀ ∈ ParaPuzzlePiece n) :
     ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
       -- The motion is defined for parameters c in D(c₀, r) via a rescaling map
