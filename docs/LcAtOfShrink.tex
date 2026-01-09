@@ -10,15 +10,15 @@ We begin by defining local connectivity at a point for a general topological spa
 \begin{lstlisting}[language=Lean]
 /-- Local connectivity at a point in a topological space. -/
 def LocallyConnectedAt (X : Type*) [TopologicalSpace X] (x : X) : Prop :=
-  ∀ U ∈ 𝓝 x, ∃ V ∈ 𝓝 x, V ⊆ U ∧ IsConnected V
+  ∀ U ∈ $\mathcal{N}$ x, ∃ V ∈ $\mathcal{N}$ x, V ⊆ U ∧ IsConnected V
 \end{lstlisting}
 
 \noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
     \item \texttt{LocallyConnectedAt (X : Type*) (x : X)}: A predicate asserting the space $X$ is locally connected at the point $x$.
-    \item \texttt{∀ U ∈ 𝓝 x}: For every neighborhood $U$ of $x$...
-    \item \texttt{∃ V ∈ 𝓝 x}: ...there exists a neighborhood $V$ of $x$...
+    \item \texttt{∀ U ∈ $\mathcal{N}$ x}: For every neighborhood $U$ of $x$...
+    \item \texttt{∃ V ∈ $\mathcal{N}$ x}: ...there exists a neighborhood $V$ of $x$...
     \item \texttt{V ⊆ U ∧ IsConnected V}: ...such that $V$ is contained in $U$ and $V$ is connected.
     \item This is the standard definition: a basis of connected neighborhoods.
 \end{itemize}
@@ -90,14 +90,14 @@ The shrinking property implies that parameter pieces form a neighborhood basis.
 \begin{lstlisting}[language=Lean]
 lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
     (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
-    ∀ U ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet), ∃ n, { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } ⊆ U := by
+    ∀ U ∈ $\mathcal{N}$ (⟨c, hc⟩ : MandelbrotSet), ∃ n, { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } ⊆ U := by
   intro U hU
   rw [mem_nhds_iff] at hU
   obtain ⟨V, hV_sub_U, hV_open, hc_in_V⟩ := hU
   obtain ⟨W, hW_open, hW_eq⟩ := isOpen_induced_iff.mp hV_open
   rw [← hW_eq] at hc_in_V hV_sub_U
   have hc_in_W : c ∈ W := hc_in_V
-  have hW_nhds : W ∈ 𝓝 c := hW_open.mem_nhds hc_in_W
+  have hW_nhds : W ∈ $\mathcal{N}$ c := hW_open.mem_nhds hc_in_W
   obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis c h W hW_nhds
   use n
   intro x hx
@@ -134,7 +134,7 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzz
   let V' := { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n }
   use V'
   constructor
-  · -- V' ∈ 𝓝 ⟨c, hc⟩
+  · -- V' ∈ $\mathcal{N}$ ⟨c, hc⟩
     rw [mem_nhds_iff]
     use V'
     constructor
