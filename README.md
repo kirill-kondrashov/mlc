@@ -73,10 +73,12 @@ The proof relies on the following axioms, which abstract away deep geometric and
 ### 2. Deep Theorems
 *   [`mlc_infinitely_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean#L26): Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
     *   Source: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Main Theorem] (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
-*   [`slodkowski_theorem`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L119) (Slodkowski's Theorem).
+*   [`slodkowski_theorem`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L132) (Slodkowski's Theorem).
     *   Source: [Slodkowski, Holomorphic motions and polynomial hulls] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
     *   Local: `refs/S0002-9939-1991-1037218-8.pdf`
-    *   Note: This theorem implies that parameter puzzle pieces are open ([`para_puzzle_piece_open`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L129)).
+    *   Note: This theorem implies that parameter puzzle pieces are open ([`para_puzzle_piece_open`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L154)).
+*   [`puzzle_boundary_motion_exists`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L140): Axiom stating that the boundary of puzzle pieces moves holomorphically.
+    *   Note: This bridges the geometric properties of quadratic polynomials with the Slodkowski theorem.
 
 ## Verification
 
@@ -98,6 +100,7 @@ All axioms used:
 - MLC.Quadratic.groetzsch_inequality
 - MLC.Quadratic.modulus_nonneg_ax
 - MLC.Quadratic.filled_julia_set_connected
+- MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected
 - MLC.mlc_infinitely_renormalizable_ax

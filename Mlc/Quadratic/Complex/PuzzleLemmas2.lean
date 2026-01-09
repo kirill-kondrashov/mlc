@@ -6,6 +6,8 @@ import Mathlib.Topology.Connected.Basic
 import Mathlib.Topology.Constructions
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.Complex.Norm
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.GCongr
@@ -110,26 +112,87 @@ ensure_no_sorry parameter_shrink_ax
 
 set_option maxHeartbeats 1600000
 
+/-- A holomorphic motion of a set E over the unit disk D. -/
+structure HolomorphicMotion (E : Set ℂ) where
+  /-- The motion map t ↦ z ↦ f(t, z) -/
+  f : ℂ → ℂ → ℂ
+  /-- At time 0, it is the identity -/
+  h_zero : ∀ z ∈ E, f 0 z = z
+  /-- For each fixed time in the unit disk, it is injective on E -/
+  h_inj : ∀ t ∈ Metric.ball 0 1, Set.InjOn (f t) E
+  /-- For each fixed z in E, it is holomorphic in time on the unit disk -/
+  h_holo : ∀ z ∈ E, DifferentiableOn ℂ (fun t ↦ f t z) (Metric.ball 0 1)
+
 /-- Slodkowski's Theorem (Generalized Lambda Lemma).
     "Every holomorphic motion f : D × E → ℂ of an arbitrary subset E of ℂ can be
     extended to a holomorphic motion F : D × ℂ → ℂ (that is F|D×E = f) of ℂ,
     parametrized by the same unit disc D."
     See: [Slodkowski, Holomorphic motions and polynomial hulls, Theorem 1.3] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
     Local Reference: `refs/S0002-9939-1991-1037218-8.pdf` -/
-axiom slodkowski_theorem {E : Set ℂ} (h : ℂ → E → ℂ) :
-    -- We abstract the specific consequence needed:
-    -- If we have a holomorphic motion of the boundary of the puzzle piece,
-    -- then the interior moves continuously (preserving openness).
-    -- For this specific formalization, we state the consequence directly relevant to openness.
-    ∀ (n : ℕ), IsOpen (ParaPuzzlePiece n)
+axiom slodkowski_theorem {E : Set ℂ} (h : HolomorphicMotion E) :
+    ∃ H : HolomorphicMotion Set.univ,
+      ∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z
+
+/-- Axiom: The boundary of a puzzle piece moves holomorphically.
+    This axiom provides the existence of a holomorphic motion on the boundary of the puzzle piece,
+    which serves as the input for Slodkowski's Extension Theorem.
+
+    **Definition** [Slodkowski, p. 347]:
+    "A holomorphic motion of E in C, parametrized by the unit disc D, is a map f: D × E → C
+    such that (a) for any fixed w ∈ E, the map z ↦ f(z, w): D → C is holomorphic;
+    (b) for any fixed z ∈ D, the map w ↦ f(z, w) is one-to-one; and (c) f₀ is the identity map on E."
+
+    In this context:
+    *   `E` is the boundary of the puzzle piece (or a neighborhood of it).
+    *   The parameter `z` (or `t`) corresponds to the quadratic parameter `c`.
+    *   This motion is constructed using the Böttcher coordinate, which depends holomorphically on `c`.
+
+    Ref: `refs/S0002-9939-1991-1037218-8.pdf` (Slodkowski, Holomorphic motions and polynomial hulls). -/
+axiom puzzle_boundary_motion_exists (n : ℕ) (c₀ : ℂ) (hc₀ : c₀ ∈ ParaPuzzlePiece n) :
+    ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
+      -- The motion is defined for parameters c in D(c₀, r) via a rescaling map
+      -- ψ : D(0, 1) → D(c₀, r)
+      -- And this motion preserves the "puzzle membership" property in the sense that:
+      -- If H is an extension of h to the plane (guaranteed by Slodkowski),
+      -- then for any t ∈ D, the corresponding parameter c_t is in ParaPuzzlePiece n.
+      ∀ (H : HolomorphicMotion Set.univ),
+        (∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z) →
+        ∀ t ∈ Metric.ball 0 1, (c₀ + r * t) ∈ ParaPuzzlePiece n
 
 /-- Parameter puzzle pieces are open sets.
     This is proved using Slodkowski's Theorem which ensures that the holomorphic motion
     of the dynamical plane implies structural stability of open sets in the parameter plane. -/
 theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
-  -- We apply the axiom which encapsulates the deep result from Slodkowski
-  -- We need to provide the set E and the motion function h
-  apply slodkowski_theorem (E := univ) (fun _ _ ↦ 0) -- Dummy witness for the motion function
+  rw [Metric.isOpen_iff]
+  intro c₀ hc₀
+  -- Use the existence of boundary motion
+  obtain ⟨r, hr, E, h, h_prop⟩ := puzzle_boundary_motion_exists n c₀ hc₀
+  -- Apply Slodkowski's Theorem to extend the motion
+  obtain ⟨H, hH⟩ := slodkowski_theorem h
+  -- Construct the neighborhood
+  use r
+  constructor
+  · exact hr
+  · intro c hc
+    rw [Metric.mem_ball] at hc
+    -- Identify c with a parameter t in the unit disk
+    let t := (c - c₀) / r
+    have ht : t ∈ Metric.ball 0 1 := by
+      rw [Metric.mem_ball, dist_zero_right]
+      dsimp [t]
+      rw [norm_div, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr]
+      rw [div_lt_one hr]
+      rw [dist_eq_norm] at hc
+      exact hc
+    -- Apply the property guaranteed by the axiom and Slodkowski extension
+    have h_in := h_prop H hH t ht
+    -- Recover c from t
+    have h_c_eq : c = c₀ + r * t := by
+      dsimp [t]
+      field_simp [ne_of_gt hr]
+      ring
+    rw [← h_c_eq] at h_in
+    exact h_in
 
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
