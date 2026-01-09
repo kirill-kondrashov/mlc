@@ -1,25 +1,171 @@
 \section{Local Connectivity from Shrinking}
 \label{sec:LcAtOfShrink}
 
-This section connects the analytic property of "shrinking puzzle pieces" to the topological property of "local connectivity".
+This section describes the verification of the file \texttt{Mlc/LcAtOfShrink.lean}. It connects the geometric result "puzzle pieces shrink to a point" to the topological property "local connectivity".
 
-\subsection{Theorem: \texttt{lc\_at\_of\_shrink}}
+\subsection{Definition of Local Connectivity}
 
-The theorem states that if the parameter puzzle pieces $\mathcal{P}_n(c)$ form a neighborhood basis of $c$ (i.e., their intersection is just $\{c\}$ and they are small), then $\mathcal{M}$ is locally connected at $c$.
-
-\textbf{Theorem} (\texttt{lc\_at\_of\_shrink}):
-Let $c \in \mathcal{M}$. If $\bigcap_n \mathcal{P}_n(c) = \{c\}$, then $\mathcal{M}$ is locally connected at $c$.
+We begin by defining local connectivity at a point for a general topological space.
 
 \begin{lstlisting}[language=Lean]
-theorem lc_at_of_shrink (c : $\mathbb{C}$) (hc : c $\in$ MandelbrotSet)
-    (h_shrink : ($\bigcap$ n, ParaPuzzlePiece n) = {c}) :
-    IsLocallyConnectedAt c MandelbrotSet := by
-  -- Proof omitted
+/-- Local connectivity at a point in a topological space. -/
+def LocallyConnectedAt (X : Type*) [TopologicalSpace X] (x : X) : Prop :=
+  ∀ U ∈ 𝓝 x, ∃ V ∈ 𝓝 x, V ⊆ U ∧ IsConnected V
 \end{lstlisting}
 
-\textit{Proof Sketch.}
-1.  The puzzle pieces $\mathcal{P}_n(c)$ are connected sets (specifically, their intersection with $\mathcal{M}$ is connected, or they form a nested sequence of compact connected sets).
-2.  They contain $c$.
-3.  If they shrink to $c$ (intersection is $\{c\}$), then for any neighborhood $U$ of $c$, there exists some $n$ such that $\mathcal{P}_n(c) \subset U$.
-4.  Since $\mathcal{P}_n(c) \cap \mathcal{M}$ is connected, this provides arbitrarily small connected neighborhoods of $c$ in $\mathcal{M}$.
-5.  This is the definition of local connectivity at $c$. \qed
+\noindent
+\textbf{Detailed Explanation:}
+\begin{itemize}
+    \item \texttt{LocallyConnectedAt (X : Type*) (x : X)}: A predicate asserting the space $X$ is locally connected at the point $x$.
+    \item \texttt{∀ U ∈ 𝓝 x}: For every neighborhood $U$ of $x$...
+    \item \texttt{∃ V ∈ 𝓝 x}: ...there exists a neighborhood $V$ of $x$...
+    \item \texttt{V ⊆ U ∧ IsConnected V}: ...such that $V$ is contained in $U$ and $V$ is connected.
+    \item This is the standard definition: a basis of connected neighborhoods.
+\end{itemize}
+
+\subsection{Auxiliary Lemmas}
+
+We prove several technical lemmas to relate subsets of the complex plane to the subspace topology of the Mandelbrot set.
+
+\begin{lstlisting}[language=Lean]
+/-- A set in a subtype is connected iff its image in the ambient space is connected. -/
+lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → Prop}
+    (s : Set { x // p x }) :
+    IsConnected ((Subtype.val : { x // p x } → X) '' s) ↔ IsConnected s := by
+  classical
+  -- First reduce to preconnectedness using the general theorem for inducing maps.
+  have h_pre :
+      IsPreconnected ((Subtype.val : { x // p x } → X) '' s) ↔ IsPreconnected s :=
+    Topology.IsInducing.isPreconnected_image (s := s)
+      (f := (Subtype.val : { x // p x } → X))
+      (IsEmbedding.subtypeVal.isInducing)
+  constructor
+  · intro h
+    refine ⟨?_, ?_⟩
+    · -- Nonemptiness transfers from the image back to the subtype.
+      rcases h.1 with ⟨x, hx⟩
+      rcases hx with ⟨y, hy, rfl⟩
+      exact ⟨y, hy⟩
+    · -- And preconnectedness is equivalent by `isPreconnected_image`.
+      exact h_pre.1 h.2
+  · intro h
+    refine ⟨?_, ?_⟩
+    · -- Nonemptiness transfers from the subtype to the image.
+      rcases h.1 with ⟨y, hy⟩
+      exact ⟨Subtype.val y, ⟨y, hy, rfl⟩⟩
+    · exact h_pre.2 h.2
+\end{lstlisting}
+
+\noindent
+\textbf{Detailed Explanation:}
+\begin{itemize}
+    \item This lemma handles the topology of subtypes (like the Mandelbrot set $\mathcal{M} \subset \mathbb{C}$).
+    \item It asserts that a set $S \subseteq \mathcal{M}$ is connected if and only if its image under the inclusion map (i.e., the set viewed as a subset of $\mathbb{C}$) is connected.
+    \item The proof utilizes \texttt{Topology.IsInducing.isPreconnected\_image} to handle the connectivity property, with manual handling of the non-empty condition.
+\end{itemize}
+
+\begin{lstlisting}[language=Lean]
+/-- The intersection of a parameter puzzle piece with the Mandelbrot set is connected in the subtype topology. -/
+lemma para_puzzle_piece_induced_connected (n : ℕ) :
+    IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } := by
+  rw [← isConnected_subtype_val_image]
+  rw [show { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } = (Subtype.val : MandelbrotSet → ℂ) ⁻¹' (ParaPuzzlePiece n) by rfl]
+  rw [Subtype.image_preimage_coe]
+  try rw [Set.inter_comm]
+  exact para_puzzle_piece_inter_mandelbrot_connected n
+\end{lstlisting}
+
+\noindent
+\textbf{Detailed Explanation:}
+\begin{itemize}
+    \item This lemma establishes that the set $\mathcal{M}_n = \mathcal{M} \cap \mathcal{P}_n$ is connected.
+    \item It uses the previous lemma to switch to the ambient space $\mathbb{C}$.
+    \item It applies \texttt{para\_puzzle\_piece\_inter\_mandelbrot\_connected} (from \texttt{PuzzleLemmas2}) which asserts the connectedness of the intersection in $\mathbb{C}$.
+\end{itemize}
+
+\subsection{Neighborhood Basis}
+
+The shrinking property implies that parameter pieces form a neighborhood basis.
+
+\begin{lstlisting}[language=Lean]
+lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
+    (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
+    ∀ U ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet), ∃ n, { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } ⊆ U := by
+  intro U hU
+  rw [mem_nhds_iff] at hU
+  obtain ⟨V, hV_sub_U, hV_open, hc_in_V⟩ := hU
+  obtain ⟨W, hW_open, hW_eq⟩ := isOpen_induced_iff.mp hV_open
+  rw [← hW_eq] at hc_in_V hV_sub_U
+  have hc_in_W : c ∈ W := hc_in_V
+  have hW_nhds : W ∈ 𝓝 c := hW_open.mem_nhds hc_in_W
+  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis c h W hW_nhds
+  use n
+  intro x hx
+  apply hV_sub_U
+  exact hn_sub hx
+\end{lstlisting}
+
+\noindent
+\textbf{Detailed Explanation:}
+\begin{itemize}
+    \item \textbf{Goal}: Show that for any open neighborhood $U$ of $c$ in $\mathcal{M}$, some puzzle piece $\mathcal{M}_n$ is contained in $U$.
+    \item \texttt{isOpen\_induced\_iff}: We characterize the open set $V$ in the subtype $\mathcal{M}$ as the intersection of $\mathcal{M}$ with some open set $W$ in $\mathbb{C}$.
+    \item \texttt{para\_puzzle\_piece\_basis}: We invoke the property that puzzle pieces form a basis in $\mathbb{C}$ (proved in \texttt{PuzzleLemmas2} using the shrinking property). This gives us an $n$ such that $\mathcal{P}_n \subseteq W$.
+    \item \textbf{Conclusion}: If $\mathcal{P}_n \subseteq W$, then $\mathcal{P}_n \cap \mathcal{M} \subseteq W \cap \mathcal{M} = V \subseteq U$.
+\end{itemize}
+
+\subsection{Main Theorem: Local Connectivity}
+
+Finally, we prove that shrinking implies local connectivity.
+
+\begin{lstlisting}[language=Lean]
+/-- If parameter pieces shrink to a point, M is locally connected at c.
+    Proof idea: We construct a basis of connected neighborhoods for `c`.
+    1.  The parameter pieces `P_n` are open (by `para_puzzle_piece_open`).
+    2.  Their intersection with `M` is connected (by `para_puzzle_piece_induced_connected`).
+    3.  They shrink to `{c}` (hypothesis).
+    4.  Therefore, for any neighborhood `U`, we can find a `P_n` inside it. `P_n ∩ M` serves
+        as the connected neighborhood of `c` contained in `U`, proving local connectivity. -/
+lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
+    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
+  rw [LocallyConnectedAt]
+  intro U hU
+  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis_induced c hc h U hU
+  let V' := { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n }
+  use V'
+  constructor
+  · -- V' ∈ 𝓝 ⟨c, hc⟩
+    rw [mem_nhds_iff]
+    use V'
+    constructor
+    · exact subset_rfl
+    · constructor
+      · rw [isOpen_induced_iff]
+        use ParaPuzzlePiece n
+        constructor
+        · exact para_puzzle_piece_open n
+        · rfl
+      · have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePiece k := by rw [h]; exact Set.mem_singleton c
+        exact Set.mem_iInter.mp hc_in_inter n
+  · constructor
+    · exact hn_sub
+    · exact para_puzzle_piece_induced_connected n
+\end{lstlisting}
+
+\noindent
+\textbf{Detailed Explanation:}
+\begin{itemize}
+    \item \texttt{h}: The hypothesis that the intersection of puzzle pieces is exactly $\{c\}$.
+    \item \texttt{para\_puzzle\_piece\_basis\_induced}: Used to find an index $n$ such that $V' = \mathcal{P}_n \cap \mathcal{M}$ fits inside the arbitrary neighborhood $U$.
+    \item \texttt{use V'}: We propose $V'$ as the required connected neighborhood.
+    \item \textbf{Proof that $V'$ is a neighborhood}:
+        \begin{itemize}
+            \item We show $V'$ is open in the subspace topology because $\mathcal{P}_n$ is open in $\mathbb{C}$ (\texttt{para\_puzzle\_piece\_open}).
+            \item We show $c \in V'$ because $c$ is in the intersection of all pieces.
+        \end{itemize}
+    \item \textbf{Proof that $V'$ works}:
+        \begin{itemize}
+            \item $V' \subseteq U$ follows from the basis lemma.
+            \item $V'$ is connected follows from \texttt{para\_puzzle\_piece\_induced\_connected}.
+        \end{itemize}
+\end{itemize}
