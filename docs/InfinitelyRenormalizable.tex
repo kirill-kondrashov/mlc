@@ -27,7 +27,9 @@ def InfinitelyRenormalizable (c : ℂ) : Prop :=
 \noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
-    \item \texttt{Summable (fun n => modulus (PuzzleAnnulus c n))}: This predicate asserts that the infinite sum $\sum_{n=0}^\infty \text{mod}(A_n(c))$ is finite.
+    \item \texttt{Summable (fun n => modulus (PuzzleAnnulus c n))}:
+    
+    This predicate asserts that the infinite sum $\sum_{n=0}^\infty \text{mod}(A_n(c))$ is finite.
     \item \textbf{Why this definition?}: In the full mathematical theory, "infinitely renormalizable" is defined combinatorially (existence of infinitely many "small Julia sets" embedded in the dynamics). However, a key result by Yoccoz is that the combinatorial definition implies the convergence of these moduli. For the purpose of formalizing the \emph{structure} of the proof, we use this modulus convergence as the working definition to distinguish it from the Yoccoz case.
 \end{itemize}
 
