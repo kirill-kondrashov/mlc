@@ -1,0 +1,28 @@
+\section{GreenLemmas}
+\textit{Source: \texttt{Quadratic/Complex/GreenLemmas.lean}}
+
+\begin{quotation}
+### Convergence for escaping points
+\end{quotation}
+
+\subsection*{escape\_bound}
+A bound used to ensure the orbit is large enough for the log approximation.
+
+\subsection*{potential\_seq}
+The n-th approximation of the Green's function: `1/2^n * log (max 1 ‖f_c^n(z)‖)`.
+
+\subsection*{green\_function}
+The Green's function `G_c(z)`. Defined as the limit of `potential_seq`.
+
+\subsection*{potential\_seq\_converges\_of\_mem\_K}
+Convergence of the potential sequence to 0 for `z ∈ K(c)`.
+
+\subsection*{potential\_seq\_converges\_of\_escapes}
+Convergence of the potential sequence for `z ∉ K(c)`.
+
+\subsection*{potential\_seq\_converges}
+Convergence of the potential sequence for all `z`.
+
+\subsection*{green\_function\_eq\_lim}
+`G_c(z)` equals the limit of the potential sequence.
+

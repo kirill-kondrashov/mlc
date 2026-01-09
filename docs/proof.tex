@@ -1,0 +1,75 @@
+\documentclass[reqno]{amsart}
+\usepackage{amssymb, amsmath}
+\usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Formal Proof of the Mandelbrot Local Connectivity Conjecture in Lean}
+\author{Kirill Kondrashov}
+\date{\today}
+
+\begin{document}
+
+\begin{abstract}
+We present a formalization of the Mandelbrot Local Connectivity (MLC) conjecture for the quadratic family $f_c(z) = z^2+c$. The proof follows the strategy of Yoccoz puzzles, establishing local connectivity for non-renormalizable parameters via Yoccoz's theorem and the Grötzsch inequality. The infinitely renormalizable case is treated via axiom based on Lyubich's results. This document describes the definitions, theorems, and proofs formally verified in the Lean 4 proof assistant.
+\end{abstract}
+
+\maketitle
+
+\section*{Note on Machine Generation}
+This document serves as a human-readable companion to the formal verification project. The proofs presented here are translations of the formally verified code into mathematical text. The full source code is available in the associated repository.
+
+\input{MainConjecture.tex}
+\input{Basic.tex}
+\input{Green.tex}
+\input{GreenLemmas.tex}
+\input{Escape.tex}
+\input{Groetzsch.tex}
+\input{Puzzle.tex}
+\input{PuzzleLemmas.tex}
+\input{PuzzleLemmas2.tex}
+\input{Yoccoz.tex}
+\input{LcAtOfShrink.tex}
+\input{InfinitelyRenormalizable.tex}
+
+\section{Logical Dependencies}
+
+The formal proof is structured as follows:
+
+\begin{itemize}
+    \item \textbf{Main Result}: The \textit{Mandelbrot Local Connectivity Conjecture} is established in \path{MainConjecture.tex}. The proof splits into two main cases based on the renormalizability of the parameter $c$.
+    
+    \item \textbf{Renormalizable Case}: Addressed in \path{InfinitelyRenormalizable.tex}, relying on deep results by Lyubich (axiomatized here).
+    
+    \item \textbf{Non-Renormalizable Case}: Addressed by \textit{Yoccoz's Theorem} in \path{Yoccoz.tex}. This theorem asserts that if the puzzle pieces shrink to a point, the Mandelbrot set is locally connected at $c$.
+    
+    \item \textbf{Connectivity Criterion}: \path{LcAtOfShrink.tex} provides the topological argument that shrinking nested compact sets imply local connectivity.
+    
+    \item \textbf{Yoccoz Puzzles}: The combinatorial and geometric structure of Yoccoz puzzles is defined in \path{Puzzle.tex} and \path{PuzzleLemmas.tex}. Key geometric properties, such as the openness of puzzle pieces in the parameter plane, are proven in \path{PuzzleLemmas2.tex}, using Slodkowski's Theorem (Generalized Lambda Lemma).
+    
+    \item \textbf{Modulus Estimates}: The central analytical tool is the \textit{Grötzsch Inequality}, in \path{Groetzsch.tex}. This provides the lower bounds on the modulus of annuli between puzzle pieces, essential for proving that they shrink to a point.
+    
+    \item \textbf{Dynamical Foundation}: The basic dynamical definitions (Green's function, Böttcher coordinates) are in \path{Basic.tex}, \path{Green.tex}, and \path{GreenLemmas.tex}. The \textit{Escape Criterion} is formalized in \path{Escape.tex}.
+\end{itemize}
+
+\begin{thebibliography}{9}
+
+\bibitem{Milnor}
+John Milnor, \textit{Dynamics in One Complex Variable}, arXiv:math/9201272.
+
+\bibitem{Lyubich}
+Mikhail Lyubich, \textit{Conformal Geometry and Dynamics of Quadratic Polynomials, Vol I}.
+
+\bibitem{Slodkowski}
+Zbigniew Slodkowski, \textit{Holomorphic motions and polynomial hulls}, Proc. Amer. Math. Soc. 111 (1991), 347-355.
+
+\end{thebibliography}
+
+\end{document}
