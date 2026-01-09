@@ -10,9 +10,9 @@ The proof strategy relies on Yoccoz puzzles and integrates deep results from com
 
 ## Disclaimer
 
-> **This is an AI-generated attempt to formalize modern mathematics.**
+> **This is an AI-assisted attempt to formalize modern mathematics.**
 >
-> The code, proofs, and documentation in this repository were produced by an AI assistant. While the definitions and logical structure are checked by the Lean 4 kernel, the choice of axioms and the mathematical fidelity of the formalization to the standard literature should be verified by human experts. This project is inspired by [recent work on AI for math](https://arxiv.org/abs/2511.02864).
+> The code, proofs, and documentation in this repository were produced partially by an AI assistant. While the definitions and logical structure are checked by the Lean 4 kernel, the choice of axioms and the mathematical fidelity of the formalization to the standard literature should be verified by human experts. This project is inspired by [recent work on AI for math](https://arxiv.org/abs/2511.02864).
 
 ## Axioms & Theorems
 
@@ -40,7 +40,7 @@ The formalization relies on the following key axioms:
 
 ## Verification
 
-To verify the proof and check for axioms (sorry), run:
+To verify the proof and check for axioms (`sorry` keyword in Lean), run:
 
 ```bash
 make check
