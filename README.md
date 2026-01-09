@@ -29,13 +29,13 @@ The formalization relies on the following key axioms:
     *   Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984]
 
 ### 2. Deep Theorems
-*   [`mlc_infinitely_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean#L26): Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
+*   [`mlc_infinitely_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean#L29): Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
     *   Source: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Main Theorem] (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
-*   [`slodkowski_theorem`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L132) (Slodkowski's Theorem).
+*   [`slodkowski_theorem`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L145) (Slodkowski's Theorem).
     *   Source: [Slodkowski, Holomorphic motions and polynomial hulls] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
     *   Local: `refs/S0002-9939-1991-1037218-8.pdf`
-    *   Note: This theorem implies that parameter puzzle pieces are open ([`para_puzzle_piece_open`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L154)).
-*   [`puzzle_boundary_motion_exists`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L140): Axiom stating that the boundary of puzzle pieces moves holomorphically.
+    *   Note: This theorem implies that parameter puzzle pieces are open ([`para_puzzle_piece_open`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L188)).
+*   [`puzzle_boundary_motion_exists`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L164): Axiom stating that the boundary of puzzle pieces moves holomorphically.
     *   Note: This bridges the geometric properties of quadratic polynomials with the Slodkowski theorem.
 
 ## Verification
