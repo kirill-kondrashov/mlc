@@ -35,11 +35,15 @@ lemma norm_sq_sub_norm_c_ge (c z : $\mathbb{C}$) : $\|$z^2$\|$ - $\|$c$\|$ $\ge$
   linarith [R_ge_one_plus_c c]
 \end{lstlisting}
 
-\textbf{Explanation:}
-This lemma asserts that $|z^2| - |c| \ge |z|^2 - (R(c) - 1)$.
+\textbf{Explanation of \texttt{norm\_sq\_sub\_norm\_c\_ge}:}
 \begin{itemize}
-    \item \texttt{simp only [norm\_sq]}: Rewrites $|z^2|$ as $|z|^2$ (since $|z^2| = |z|^2$).
-    \item \texttt{linarith [R\_ge\_one\_plus\_c c]}: Uses linear arithmetic. We know $R(c) \ge 1 + |c|$, so $|c| \le R(c) - 1$. Subtracting $|c|$ is like subtracting something smaller than $R(c)-1$, so the result is greater than subtracting $R(c)-1$.
+    \item \texttt{simp only [norm\_sq]}: We simplify $|z^2|$ to $|z|^2$ using the property $|z^2| = |z|^2$.
+    \item \texttt{linarith [R\_ge\_one\_plus\_c c]}: We use linear arithmetic with the hypothesis $R(c) \ge 1 + |c|$.
+    \begin{itemize}
+        \item From $R(c) \ge 1 + |c|$, we get $|c| \le R(c) - 1$.
+        \item Therefore, $-|c| \ge -(R(c) - 1)$.
+        \item Adding $|z|^2$ to both sides yields $|z|^2 - |c| \ge |z|^2 - (R(c) - 1)$.
+    \end{itemize}
 \end{itemize}
 
 \subsubsection{Norm Growth Estimate}
@@ -55,12 +59,17 @@ lemma norm_growth (c z : $\mathbb{C}$) : $\|$fc c z$\|$ $\ge$ $\|$z$\|$^2 - (R c
   linarith [R_ge_one_plus_c c]
 \end{lstlisting}
 
-\textbf{Explanation:}
-This lemma shows $|f_c(z)| \ge |z|^2 - (R(c) - 1)$.
+\textbf{Explanation of \texttt{norm\_growth}:}
 \begin{itemize}
-    \item \texttt{rw [fc]}: Unfolds $f_c(z) = z^2 + c$.
-    \item \texttt{h\_tri}: Proves $|z^2 + c| \ge |z^2| - |c|$ using the reverse triangle inequality.
-    \item \texttt{linarith}: Combines this with $|c| \le R(c) - 1$.
+    \item \texttt{rw [fc]}: Expand the definition $f_c(z) = z^2 + c$.
+    \item \texttt{have h\_tri}: We prove the reverse triangle inequality $|z^2+c| \ge |z^2| - |c|$.
+        \begin{itemize}
+            \item \texttt{norm\_add\_le}: Standard triangle inequality $|(z^2+c) + (-c)| \le |z^2+c| + |-c|$.
+            \item \texttt{simp}: Simplifies to $|z^2| \le |z^2+c| + |c|$.
+            \item \texttt{linarith}: Rearranges to $|z^2+c| \ge |z^2| - |c|$.
+        \end{itemize}
+    \item \texttt{rw [norm\_sq]}: Replace $|z^2|$ with $|z|^2$.
+    \item \texttt{linarith}: Combine $|z^2+c| \ge |z|^2 - |c|$ with the fact $|c| \le R(c) - 1$ to get $|z^2+c| \ge |z|^2 - (R(c)-1)$.
 \end{itemize}
 
 \subsubsection{Refined Lower Bound}
@@ -74,8 +83,12 @@ lemma norm_fc_ge_norm_sq_sub_norm_c (c z : $\mathbb{C}$) : $\|$fc c z$\|$ $\ge$ 
   linarith
 \end{lstlisting}
 
-\textbf{Explanation:}
-A slightly tighter direct bound: $|f_c(z)| \ge |z|^2 - |c|$. This is useful for deriving the growth factor.
+\textbf{Explanation of \texttt{norm\_fc\_ge\_norm\_sq\_sub\_norm\_c}:}
+This is a more direct application of the reverse triangle inequality without substituting $R(c)$.
+\begin{itemize}
+    \item It establishes $|f_c(z)| \ge |z|^2 - |c|$.
+    \item This form is crucial for factoring out $|z|$ later: $|z|^2 - |c| = |z|(|z| - |c|/|z|)$.
+\end{itemize}
 
 \subsubsection{Monotonicity of Growth Factor}
 
@@ -88,11 +101,13 @@ lemma sub_div_mono (c : $\mathbb{C}$) : StrictMonoOn (fun x : $\mathbb{R}$ => x 
   apply div_le_div_of_nonneg_left (norm_nonneg c) hx (le_of_lt hxy)
 \end{lstlisting}
 
-\textbf{Explanation:}
-The function $g(x) = x - |c|/x$ is strictly increasing for $x > 0$.
+\textbf{Explanation of \texttt{sub\_div\_mono}:}
+We prove that $g(x) = x - |c|/x$ is strictly increasing for $x > 0$.
 \begin{itemize}
-    \item As $x$ increases, $-|c|/x$ also increases (becomes less negative).
-    \item Thus the sum of two increasing functions is increasing.
+    \item \texttt{intro x hx y \_ hxy}: Let $0 < x < y$.
+    \item \texttt{add\_lt\_add...}: We split the inequality into proving $x < y$ (which is true by assumption) and $-|c|/x \le -|c|/y$.
+    \item \texttt{neg\_le\_neg\_iff}: Proving $-|c|/x \le -|c|/y$ is equivalent to $|c|/x \ge |c|/y$.
+    \item \texttt{div\_le\_div...}: Since $x < y$, $1/x > 1/y$. With $|c| \ge 0$, multiplying preserves the order (or equality if $c=0$), so $|c|/x \ge |c|/y$.
 \end{itemize}
 
 \subsubsection{Factor Greater Than One}
@@ -103,16 +118,31 @@ lemma factor_gt_one (c z : $\mathbb{C}$) (h : $\|$z$\|$ > R c) : $\|$z$\|$ - $\|
   have z_pos : $\|$z$\|$ > 0 := by linarith
   have key : $\|$z$\|$ - $\|$c$\|$ / $\|$z$\|$ > R c - $\|$c$\|$ / R c := sub_div_mono c R_pos z_pos h
   have R_ge : R c - $\|$c$\|$ / R c $\ge$ 1 := by
-    -- (Omitted algebraic calculation showing R(c) - |c|/R(c) >= 1)
+    have hR2 : R c $\ge$ 2 := R_ge_two c
+    have hRc : R c $\ge$ 1 + $\|$c$\|$ := R_ge_one_plus_c c
+    rw [ge_iff_le, le_sub_iff_add_le, add_comm 1, $\leftarrow$ le_sub_iff_add_le]
+    rw [div_le_iff₀ R_pos]
+    have h_calc := calc
+      $\|$c$\|$ = 1 * $\|$c$\|$ := by simp
+      _ $\le$ (R c - 1) * (R c - 1) := by
+        nlinarith
+      _ $\le$ (R c - 1) * R c := by
+        apply mul_le_mul_of_nonneg_left
+        · linarith
+        · linarith
+      _ = R c * R c - R c := by ring
     linarith
   linarith
 \end{lstlisting}
 
-\textbf{Explanation:}
-If $|z| > R(c)$, then the growth factor $\lambda(z) = |z| - |c|/|z|$ is strictly greater than 1.
+\textbf{Explanation of \texttt{factor\_gt\_one}:}
+We show that if $|z| > R(c)$, then $|z| - |c|/|z| > 1$.
 \begin{itemize}
-    \item We use monotonicity (\texttt{sub\_div\_mono}) to show $\lambda(|z|) > \lambda(R(c))$.
-    \item We calculate that $\lambda(R(c)) = R(c) - |c|/R(c) \ge 1$. This relies on $R(c) \ge 2$ and $R(c) \ge |c| + 1$.
+    \item \texttt{sub\_div\_mono}: Since $|z| > R(c) > 0$ and the function $x - |c|/x$ is monotonic, we have $|z| - |c|/|z| > R(c) - |c|/R(c)$.
+    \item \textbf{The Lower Bound}: We need to prove $R(c) - |c|/R(c) \ge 1$.
+        \item Rearranging, this is equivalent to $R(c) - 1 \ge |c|/R(c)$, or $R(c)(R(c)-1) \ge |c|$.
+        \item Since $R(c) \ge 1+|c|$, we have $R(c)-1 \ge |c|$.
+        \item So the product $R(c)(R(c)-1) \ge R(c)|c| \ge 2|c| \ge |c|$. (The formalized proof uses a slightly different calc block essentially establishing the same inequality $R(c)^2 - R(c) \ge |c|$).
 \end{itemize}
 
 \subsubsection{Escape Lemma}
@@ -164,16 +194,35 @@ lemma escape_lemma (n : $\mathbb{N}$) (h : $\|$orbit c z n$\|$ > R c) :
 
   rcases (Filter.tendsto_atTop_atTop.mp h_tendsto) (M + 1) with $\langle$N0, hN0$\rangle$
   use n + N0
-  -- (Conclusion logic handling indices)
+  intro m hm
+  let k := m - n
+  have hnm : n $\le$ m := le_trans (Nat.le_add_right n N0) hm
+  have hk : m = n + k := (Nat.add_sub_of_le hnm).symm
+  rw [hk, add_comm]
+  dsimp [orbit]
+  rw [Function.iterate_add_apply]
+  have hm' : N0 + n $\le$ m := by rwa [add_comm]
+  specialize hN0 k (Nat.le_sub_of_add_le hm')
+  calc $\|$orbit c w k$\|$ $\ge$ $\|$w$\|$ * lam ^ k := growth k
+    _ $\ge$ M + 1 := hN0
+    _ > M := lt_add_one M
 \end{lstlisting}
 
-\textbf{Explanation:}
+\textbf{Explanation of \texttt{escape\_lemma}:}
 \begin{itemize}
-    \item We define $w$ as the point in the orbit that has escaped.
-    \item We define $\lambda = |w| - |c|/|w| > 1$.
-    \item \texttt{growth}: We prove by induction that the orbit grows geometrically: $|\text{orbit}(w, k)| \ge |w| \lambda^k$.
-    \item The inductive step uses $|f_c(z_k)| \ge |z_k|(|z_k| - |c|/|z_k|)$ and monotonicity to replace the factor with $\lambda$.
-    \item Finally, since $\lambda > 1$, the geometric sequence tends to infinity, so the orbit tends to infinity.
+    \item \texttt{lam}: We define $\lambda = |w| - |c|/|w|$.
+    \item \texttt{hlam}: We proved $\lambda > 1$ in \texttt{factor\_gt\_one}.
+    \item \texttt{growth}: By induction, we show $|f^k(w)| \ge |w| \cdot \lambda^k$.
+        \begin{itemize}
+            \item \textbf{Base case}: For $k=0$, $|w| \ge |w| \cdot 1$.
+            \item \textbf{Step}:
+                \item $|f(z_k)| \ge |z_k|^2 - |c| = |z_k|(|z_k| - |c|/|z_k|)$.
+                \item Since $|z_k| \ge |w|$, by monotonicity \texttt{sub\_div\_mono}, $(|z_k| - |c|/|z_k|) \ge (|w| - |c|/|w|) = \lambda$.
+                \item So $|f(z_k)| \ge |z_k| \cdot \lambda$.
+                \item Using IH $|z_k| \ge |w|\lambda^k$, we get $|f(z_k)| \ge |w|\lambda^k \cdot \lambda = |w|\lambda^{k+1}$.
+        \end{itemize}
+    \item \texttt{h\_tendsto}: Since $\lambda > 1$, the sequence $|w|\lambda^k$ tends to infinity.
+    \item \textbf{Conclusion}: For any $M$, there is a time when the orbit exceeds $M$ and stays there.
 \end{itemize}
 
 \subsubsection{Norm Non-Decreasing}
@@ -187,13 +236,41 @@ lemma norm_orbit_ge_of_norm_ge_R (c z : $\mathbb{C}$) (n : $\mathbb{N}$) (h : $\
     have h_n : $\|$orbit c z n$\|$ $\ge$ $\|$z$\|$ := ih
     have h_n_R : $\|$orbit c z n$\|$ > R c := lt_of_lt_of_le h h_n
     rw [orbit_succ]
-    -- (Proof uses norm_fc_ge_norm_sq_sub_norm_c and properties of R(c))
+    have : $\|$fc c (orbit c z n)$\|$ $\ge$ $\|$orbit c z n$\|^2$ - $\|$c$\|$ := norm_fc_ge_norm_sq_sub_norm_c c _
+    apply le_trans h_n
+    apply le_trans _ this
+    have h_zn : $\|$orbit c z n$\|$ > R c := h_n_R
+    have h_R : R c $\ge$ 1 + $\|$c$\|$ := R_ge_one_plus_c c
+    have h_R2 : R c $\ge$ 2 := R_ge_two c
+    have h_zn_gt_1 : $\|$orbit c z n$\|$ > 1 := lt_of_le_of_lt (by linarith) h_zn
+    have h_zn_sub_1 : $\|$orbit c z n$\|$ - 1 > $\|$c$\|$ := by linarith
+    have : $\|$orbit c z n$\|$ * ($\|$orbit c z n$\|$ - 1) > 1 * $\|$c$\|$ := by
+      by_cases hc : $\|$c$\|$ = 0
+      · rw [hc, mul_zero]
+        apply mul_pos
+        · linarith
+        · linarith
+      · have h_calc : 1 * $\|$c$\|$ < $\|$orbit c z n$\|$ * ($\|$orbit c z n$\|$ - 1) := calc
+          1 * $\|$c$\|$ < 1 * ($\|$orbit c z n$\|$ - 1) := by
+            gcongr
+          _ < $\|$orbit c z n$\|$ * ($\|$orbit c z n$\|$ - 1) := by
+            apply mul_lt_mul_of_pos_right
+            · exact h_zn_gt_1
+            · linarith
+        exact h_calc
+    rw [one_mul] at this
+    rw [mul_sub, mul_one] at this
     linarith
 \end{lstlisting}
 
-\textbf{Explanation:}
-This lemma confirms that if we start outside $R(c)$, the norm never decreases.
+\textbf{Explanation of \texttt{norm\_orbit\_ge\_of\_norm\_ge\_R}:}
+We prove by induction that if $|z| > R(c)$, then $|f^n(z)| \ge |z|$.
 \begin{itemize}
-    \item By induction, if the current point has norm $\ge |z| > R(c)$, then the next point has even larger norm (or at least as large).
-    \item This ensures the orbit stays in the "escape region".
+    \item \textbf{Step}: Assuming $|z_n| \ge |z|$, we need $|z_{n+1}| \ge |z_n|$ to prove monotonicity (and hence $|z_{n+1}| \ge |z|$).
+    \item We know $|z_{n+1}| \ge |z_n|^2 - |c|$.
+    \item We want $|z_n|^2 - |c| \ge |z_n|$, or $|z_n|^2 - |z_n| \ge |c|$, or $|z_n|(|z_n|-1) \ge |c|$.
+    \item Since $|z_n| > R(c) \ge 1+|c|$, we have $|z_n|-1 > |c|$.
+    \item Also $|z_n| > 2 \ge 1$.
+    \item So $|z_n|(|z_n|-1) > 1 \cdot |c| = |c|$.
+    \item Therefore $|z_{n+1}| > |z_n|$.
 \end{itemize}
