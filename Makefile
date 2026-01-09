@@ -36,7 +36,7 @@ docs:
 
 # Compile proof.tex to PDF
 pdf:
-	cd docs && rm proof.pdf && xelatex proof.tex
+	cd docs && xelatex proof.tex
 
 # Clean build artifacts
 clean:

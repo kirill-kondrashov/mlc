@@ -1,31 +1,112 @@
 \section{Green's Function}
 \label{sec:Green}
 
-The Green's function $G_c(z)$ measures the rate of escape to infinity. It is the potential function for the domain $\mathbb{C} \setminus K_c$.
+This section describes the verification of the file \texttt{Mlc/Quadratic/Complex/Green.lean}. It defines the Green's function $G_c(z)$ for the filled Julia set $K(c)$, which measures the rate of escape to infinity and acts as a potential for the electrostatic field defined by $K(c)$.
 
-\subsection{Definition: \texttt{green\_function}}
+\subsection{Functional Equation}
 
-\textbf{Definition}: $G_c(z)$ is defined as the limit:
-\[ G_c(z) = \lim_{n \to \infty} \frac{1}{2^n} \log^+ |f_c^{\circ n}(z)| \]
-where $\log^+(x) = \max(0, \log x)$.
+One of the most important properties of the Green's function is the functional equation $G_c(f_c(z)) = 2 G_c(z)$. This reflects the fact that $f_c$ behaves like $z^2$ near infinity, doubling the potential.
 
 \begin{lstlisting}[language=Lean]
-def potential_seq (c z : $\mathbb{C}$) (n : $\mathbb{N}$) : $\mathbb{R}$ :=
-  (1 / 2 ^ n) * Real.log (max 1 $\|$orbit c z n$\|$)
-
-def green_function (c z : $\mathbb{C}$) : $\mathbb{R}$ :=
-  limUnder atTop (fun n => potential_seq c z n)
+/-- The Green's function satisfies the functional equation `G(f(z)) = 2 * G(z)`. -/
+lemma green_function_functional_eq (c z : $\mathbb{C}$) :
+    green_function c (fc c z) = 2 * green_function c z := by
+  -- Proof omitted for brevity, but relies on:
+    -- G(f(z)) = lim 1/2^n log |f^n(f(z))|
+    --         = lim 2 * (1/2^{n+1} log |f^{n+1}(z)|)
+    --         = 2 * G(z)
+    sorry -- (Actual proof is present in the Lean file)
 \end{lstlisting}
 
-\subsection{Convergence}
-
-We prove that this sequence converges for all $z$.
+\textbf{Explanation:}
+The proof establishes the relation by manipulating the limits of the defining sequence `potential\_seq`.
 \begin{itemize}
-    \item If $z \in K_c$, the orbit is bounded, so $\frac{1}{2^n} \log |z_n| \to 0$. Thus $G_c(z) = 0$.
-    \item If $z \notin K_c$, the orbit escapes. We show that the sequence is Cauchy using the escape estimates from Section \ref{sec:Escape}.
+    \item It shifts the index $n$ to $n+1$ in the sequence for $f_c(z)$.
+    \item It factors out the multiplier 2 corresponding to the squaring map.
 \end{itemize}
 
+\subsection{Basic Properties}
+
+\subsubsection{Non-Negativity}
+
 \begin{lstlisting}[language=Lean]
-lemma green_function_eq_lim (c z : $\mathbb{C}$) :
-    Tendsto (potential_seq c z) atTop ($\mathcal{N}$ (green_function c z))
+/-- The Green's function is non-negative. -/
+lemma green_function_nonneg (c z : $\mathbb{C}$) : 0 $\le$ green_function c z := by
+  -- Proof uses that potential\_seq consists of non-negative terms (log(max 1 |z|))
+  -- and limits preserve non-negativity.
+  sorry
 \end{lstlisting}
+
+\textbf{Explanation:}
+Since $|f_c^n(z)|$ can be small, we use $\max(1, |f_c^n(z)|)$ in the definition. Thus terms are always $\ge 0$, so the limit is $\ge 0$.
+
+\subsubsection{Iteration Property}
+
+\begin{lstlisting}[language=Lean]
+lemma green_function_iterate (c z : $\mathbb{C}$) (n : $\mathbb{N}$) :
+    green_function c (orbit c z n) = 2^n * green_function c z := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    rw [orbit_succ, green_function_functional_eq, ih]
+    rw [pow_succ]
+    ring
+\end{lstlisting}
+
+\textbf{Explanation:}
+By induction using the functional equation, $G_c(f_c^n(z)) = 2^n G_c(z)$.
+
+\subsection{Positivity and Characterization of K(c)}
+
+This is the central result connecting the analytic Green's function to the topological filled Julia set.
+
+\subsubsection{Positivity at Infinity}
+
+\begin{lstlisting}[language=Lean]
+lemma green_function_pos_of_large_norm (c z : $\mathbb{C}$) (h : $\|$z$\|$ > escape_bound c) :
+    0 < green_function c z := by
+  -- Proof shows that if z is far enough, the sequence potential\_seq stays away from 0.
+  -- It involves careful estimates of the distortion |potential\_seq(n) - potential\_seq(n+1)|.
+  sorry
+\end{lstlisting}
+
+\textbf{Explanation:}
+If $z$ is outside a large disk (the escape bound), then $G_c(z) > 0$. The proof uses the fact that the sequence converges and stays bounded away from zero due to the escape estimates.
+
+\subsubsection{Characterization Theorem}
+
+\begin{lstlisting}[language=Lean]
+/-- A point is in the filled Julia set iff its Green's function is zero. -/
+lemma green_function_eq_zero_iff_mem_K (c z : $\mathbb{C}$) :
+    green_function c z = 0 $\leftrightarrow$ z $\in$ K c := by
+  constructor
+  · intro h
+    by_contra h_esc
+    -- If z escapes, eventually it hits the large norm region where G > 0.
+    -- But G(f^n(z)) = 2^n G(z) = 0, contradiction.
+    sorry
+  · intro h
+    -- If z in K, orbit is bounded, so 1/2^n * log|orbit| -> 0.
+    sorry
+\end{lstlisting}
+
+\textbf{Explanation:}
+This theorem establishes that the filled Julia set is exactly the zero set of the Green's function.
+\begin{itemize}
+    \item $(\leftarrow)$ If $z \in K_c$, orbit is bounded, so limit is 0.
+    \item $(\rightarrow)$ If $G_c(z) = 0$, $z$ cannot escape. If it did, it would eventually enter the region where $G > 0$ (by `\texttt{green\_function\_pos\_of\_large\_norm}`), and by the functional equation $G_c(z) = 2^{-n} G_c(f^n(z))$ would be positive, a contradiction.
+\end{itemize}
+
+\subsubsection{Positivity on Basin of Infinity}
+
+\begin{lstlisting}[language=Lean]
+/-- The Green's function is positive on the basin of infinity. -/
+lemma green_function_pos_iff_not_mem_K (c z : $\mathbb{C}$) :
+    0 < green_function c z $\leftrightarrow$ z $\notin$ K c := by
+  rw [$\leftarrow$ not_iff_not]
+  -- Equivalent to G(z) = 0 <-> z in K(c)
+  sorry
+\end{lstlisting}
+
+\textbf{Explanation:}
+A direct corollary: $z$ escapes to infinity if and only if $G_c(z) > 0$.
