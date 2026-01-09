@@ -1,0 +1,31 @@
+\section{Green's Function Properties}
+\label{sec:GreenLemmas}
+
+This section contains technical lemmas establishing the properties of the Green's function defined in Section \ref{sec:Green}.
+
+\subsection{Convergence of the Potential Sequence}
+
+The main result of this section is the convergence of the potential sequence, which establishes the well-definedness of the Green's function \texttt{green\_function} ($G_c(z)$). The formalization proves that the sequence \texttt{potential\_seq} converges for all $z \in \mathbb{C}$.
+
+\subsubsection{Convergence on $K_c$}
+
+For points in the filled Julia set ($z \in K_c$), the sequence converges to 0.
+
+\textbf{Theorem} (\texttt{potential\_seq\_converges\_of\_mem\_K}):
+If $z \in K_c$, then $\lim_{n \to \infty} \frac{1}{2^n} \log^+ |f_c^n(z)| = 0$.
+
+\subsubsection{Convergence on $I_c$}
+
+For escaping points ($z \notin K_c$), the convergence is established by showing the sequence is Cauchy, using geometric bounds on the differences.
+
+\textbf{Theorem} (\texttt{potential\_seq\_converges\_of\_escapes}):
+If $z \notin K_c$, the sequence $\frac{1}{2^n} \log^+ |f_c^n(z)|$ is a Cauchy sequence and therefore converges.
+
+\subsubsection{Global Convergence}
+
+Combining these, we have the global convergence.
+
+\textbf{Theorem} (\texttt{potential\_seq\_converges}):
+For any $c, z \in \mathbb{C}$, the potential sequence converges to a limit, denoted $G_c(z)$.
+
+This is formalized as \texttt{green\_function\_eq\_lim}.

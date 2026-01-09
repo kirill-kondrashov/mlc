@@ -1,0 +1,24 @@
+\section{Escape Dynamics}
+\label{sec:Escape}
+
+This section formalizes the escape criterion for the quadratic family.
+
+\subsection{Escape Radius}
+
+We define a bound $R(c) = \max(2, |c|+1)$.
+The main lemma (\texttt{escape\_lemma}) states that if $|z| > R(c)$, then $|f_c(z)| > |z|$ and the orbit escapes to infinity geometrically.
+
+\[ |f_c(z)| = |z^2 + c| \ge |z|^2 - |c| = |z|(|z| - \frac{|c|}{|z|}) \]
+Since $|z| > 2$ and $|z| > |c|$, the factor is greater than 1.
+
+\subsection{Formalization}
+
+\textbf{Lemma} (\texttt{norm\_orbit\_ge\_of\_norm\_ge\_R}): Points starting outside the escape radius remain outside and their norm grows.
+
+\begin{lstlisting}[language=Lean]
+/-- Points outside the escape radius escape to infinity. -/
+lemma norm_orbit_ge_of_norm_ge_R (c z : $\mathbb{C}$) (n : $\mathbb{N}$) (h : $\|$z$\|$ > R c) :
+    $\|$orbit c z n$\|$ $\ge$ $\|$z$\|$
+\end{lstlisting}
+
+This property is crucial for defining the Green's function, as it ensures that the series defining the potential converges for points outside $K_c$.

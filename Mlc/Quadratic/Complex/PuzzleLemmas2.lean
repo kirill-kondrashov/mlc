@@ -22,13 +22,26 @@ noncomputable section
 
 variable (c : ℂ)
 
-/-- Correspondence between parameter and dynamical pieces. -/
+/-- Correspondence between parameter and dynamical pieces.
+    Proof idea: Follows directly from the definitions. `c` is in `ParaPuzzlePiece n` if and only if
+    `0` (the critical value `f_c(0) = c`? No, `0` is critical point, `c` is critical value.
+    Actually def is: `c ∈ ParaPuzzlePiece n ↔ c ∈ DynamicalPuzzlePiece c n 0`.
+    Wait, `DynamicalPuzzlePiece c n 0` is the piece containing 0.
+    The definition of `ParaPuzzlePiece` is `{c | c ∈ DynamicalPuzzlePiece c n 0}`.
+    So it is tautological by definition. -/
 lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
     c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c n 0 := by
   simp [ParaPuzzlePiece, fc]
 
 /-- The Correspondence Principle:
-    If the dynamical pieces shrink to a point, the parameter pieces shrink to a point. -/
+    If the dynamical pieces shrink to a point, the parameter pieces shrink to a point.
+    Proof idea: We analyze two cases:
+    1.  `c ∈ M`: The filled Julia set `K(c)` is connected. The dynamical pieces `P_n` contain `0`.
+        Since `0 ∈ K(c)` and `K(c)` is connected, `K(c) ⊆ P_n` for all `n` (actually `K(c)` is the "core").
+        If `⋂ P_n = {0}`, then `K(c) ⊆ {0}`, which implies `c=0`.
+    2.  `c ∉ M`: The pieces eventually become empty (`dynamical_puzzle_piece_empty_of_large_n`),
+        forcing the intersection to be empty. This case is handled by contradiction or vacuous truth
+        depending on exact statement (here we show if intersection is {0} then parameter intersection is {c}). -/
 lemma parameter_shrink_ax (c : ℂ) :
     (⋂ n, DynamicalPuzzlePiece c n 0) = {0} → (⋂ n, ParaPuzzlePiece n) = {c} := by
   intro h_shrink
@@ -161,7 +174,17 @@ axiom puzzle_boundary_motion_exists (n : ℕ) (c₀ : ℂ) (hc₀ : c₀ ∈ Par
 
 /-- Parameter puzzle pieces are open sets.
     This is proved using Slodkowski's Theorem which ensures that the holomorphic motion
-    of the dynamical plane implies structural stability of open sets in the parameter plane. -/
+    of the dynamical plane implies structural stability of open sets in the parameter plane.
+
+    Proof idea:
+    1.  We invoke `puzzle_boundary_motion_exists` (axiom) to obtain a holomorphic motion `h`
+        of the boundary of the puzzle piece over a small disk `D` in parameter space.
+    2.  We apply **Slodkowski's Theorem** (`slodkowski_theorem`) to extend this motion to a
+        holomorphic motion `H` of the entire plane.
+    3.  The existence of this extension implies that the combinatorics of the puzzle piece are stable.
+        Specifically, for any parameter `c'` in the disk `D`, the point `0` remains inside the
+        puzzle piece if it started there. This shows `ParaPuzzlePiece n` contains a neighborhood `D`,
+        hence is open. -/
 theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
   rw [Metric.isOpen_iff]
   intro c₀ hc₀
@@ -195,7 +218,12 @@ theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
     exact h_in
 
 
-/-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
+/-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point.
+    Proof idea: If the intersection of all parameter pieces `P_n` is exactly `{c}`, then for any
+    neighborhood `U` of `c`, the pieces must eventually be contained in `U`.
+    We prove this by showing that `M \ U` is compact and disjoint from `{c}`, so it must be
+    disjoint from some `P_n`.
+    (Formal proof details involve set-theoretic manipulations and properties of `K(c)`). -/
 lemma para_puzzle_piece_basis (c : ℂ) :
     (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U := by
   intro h_inter U _
@@ -291,7 +319,15 @@ lemma para_puzzle_piece_basis (c : ℂ) :
 
 ensure_no_sorry para_puzzle_piece_basis
 
-/-- Parameter puzzle pieces intersected with the Mandelbrot set are connected. -/
+/-- Parameter puzzle pieces intersected with the Mandelbrot set are connected.
+    Proof idea:
+    The set `P_n ∩ M` corresponds to parameters `c ∈ M` such that `c` (or `0`? via correspondence)
+    is in the dynamical piece `D_n(c)`.
+    Since `c ∈ M`, the filled Julia set `K(c)` is connected (Douady-Hubbard).
+    The dynamical piece `D_n(c)` is defined by level sets of Green's function, which surrounds `K(c)`.
+    Since `0 ∈ K(c) ⊆ D_n(c)`, the condition is satisfied for all `c ∈ M`.
+    So `P_n ∩ M` is effectively just `M`?
+    (The proof shows `M ⊆ P_n` implies `P_n ∩ M = M`, and `M` is connected). -/
 theorem para_puzzle_piece_inter_mandelbrot_connected (n : ℕ) :
     IsConnected (ParaPuzzlePiece n ∩ MandelbrotSet) := by
   have h_subset : MandelbrotSet ⊆ ParaPuzzlePiece n := by

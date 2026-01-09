@@ -1,0 +1,55 @@
+\section{Grötzsch's Inequality and Criterion}
+\label{sec:Groetzsch}
+
+This section formalizes the key analytical tool used in Yoccoz's theorem: the modulus of annuli and Grötzsch's Inequality.
+
+\subsection{Modulus of an Annulus}
+
+\textbf{Definition}: The conformal \emph{modulus} is a non-negative real number associated with an annulus (topological cylinder). It is a conformal invariant.
+\[ \text{mod}(A) \in [0, \infty) \]
+A "fat" annulus has a large modulus, while a "thin" annulus has a small modulus. An empty or degenerate annulus has modulus 0.
+
+\subsection{Grötzsch's Inequality}
+
+The core inequality states that for a set of disjoint annuli $A_i$ nested inside a larger annulus $S$, the sum of their moduli is bounded by the modulus of $S$.
+\[ \sum \text{mod}(A_i) \le \text{mod}(S) \]
+This reflects the "length-area" type properties of the modulus (specifically, extrem length).
+
+\textbf{Axiom} (\texttt{groetzsch\_inequality}):
+
+\begin{lstlisting}[language=Lean]
+axiom groetzsch_inequality {A B S : Set $\mathbb{C}$} (h_disj : Disjoint A B) (h_sub : A $\cup$ B $\subseteq$ S) :
+    modulus A + modulus B $\le$ modulus S
+\end{lstlisting}
+
+\subsection{Criterion: \texttt{groetzsch\_criterion}}
+
+The criterion relates the geometry of a nested sequence of sets $P_0 \supseteq P_1 \supseteq \dots$ to the sum of the moduli of the annuli $A_n = P_n \setminus P_{n+1}$.
+
+\textbf{Theorem} (\texttt{groetzsch\_criterion}): If $\sum \text{mod}(A_n) = \infty$, then the intersection $\bigcap P_n$ is a single point (assuming the sets are connected and non-empty).
+
+\subsubsection{Proof Formalization}
+The proof is formalized by contrapositive:
+1.  Assume the intersection $\bigcap P_n$ is non-trivial (contains at least two points).
+2.  Then there exists a "core" set $K = \bigcap P_n$ with non-zero capacity/size.
+3.  The annuli $A_n$ are all disjoint and contained in $P_0 \setminus K$.
+4.  By monotonicity and Grötzsch's inequality, the sum of their moduli is bounded by the modulus of $P_0 \setminus K$.
+5.  Since $P_0 \setminus K$ is a fixed annulus (finite modulus), the sum $\sum \text{mod}(A_n)$ must converge.
+
+This contradicts the divergence hypothesis.
+
+\begin{lstlisting}[language=Lean]
+theorem groetzsch_criterion {P : $\mathbb{N}$ $\to$ Set $\mathbb{C}$}
+    (h_nested : $\forall$ n, P (n + 1) $\subseteq$ P n)
+    (h_zero : $\forall$ n, 0 $\in$ P n)
+    (h_conn : $\forall$ n, IsConnected (P n))
+    (h_div : $\neg$ Summable (fun n => modulus (P n \ P (n + 1)))) :
+    ($\bigcap$ n, P n) = {0} := by
+  by_contra h_neq
+  -- Assume non-trivial intersection
+  have h_nontriv : Set.Nontrivial ($\bigcap$ n, P n) := ...
+  -- Deduce summability
+  have h_sum := modulus_summable_of_nontrivial_intersection h_nested h_conn h_nontriv
+  -- Contradiction
+  contradiction
+\end{lstlisting}

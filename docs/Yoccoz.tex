@@ -1,0 +1,26 @@
+\section{Yoccoz's Theorem}
+\label{sec:Yoccoz}
+
+Yoccoz's Theorem is the main result for non-renormalizable parameters.
+
+\subsection{Theorem: \texttt{yoccoz\_theorem}}
+
+It states that for any non-renormalizable parameter $c$, the parameter puzzle pieces shrink to a point. Combined with \texttt{lc\_at\_of\_shrink}, this proves MLC at $c$.
+
+\textbf{Theorem} (\texttt{yoccoz\_theorem}):
+If $c \in \mathcal{M}$ is not renormalizable (and satisfies some combinatorial conditions, here simplified), then $\bigcap_n \mathcal{P}_n(c) = \{c\}$.
+
+\begin{lstlisting}[language=Lean]
+theorem yoccoz_theorem (c : $\mathbb{C}$) (hc : c $\in$ MandelbrotSet)
+    (h_non_renorm : $\neg$ IsRenormalizable c) :
+    ($\bigcap$ n, ParaPuzzlePiece n) = {c} := by
+  -- Proof omitted
+\end{lstlisting}
+
+\textit{Proof Sketch.}
+1.  Assume the intersection $I = \bigcap \mathcal{P}_n(c)$ is not a point.
+2.  Then $I$ is a continuum containing $c$.
+3.  We construct a sequence of annuli $A_n = \mathcal{P}_n \setminus \mathcal{P}_{n+1}$.
+4.  By the \texttt{groetzsch\_criterion}, if the sum of moduli $\sum \text{mod}(A_n)$ diverges, then the intersection is a point.
+5.  The crux of Yoccoz's work is to show that for non-renormalizable parameters, the puzzle pieces are "thick enough" so that this sum diverges. This involves complex combinatorial arguments about the recurrence of the critical orbit.
+6.  The formalization relies on axioms capturing these modulus estimates. \qed

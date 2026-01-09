@@ -1,0 +1,31 @@
+\section{Green's Function}
+\label{sec:Green}
+
+The Green's function $G_c(z)$ measures the rate of escape to infinity. It is the potential function for the domain $\mathbb{C} \setminus K_c$.
+
+\subsection{Definition: \texttt{green\_function}}
+
+\textbf{Definition}: $G_c(z)$ is defined as the limit:
+\[ G_c(z) = \lim_{n \to \infty} \frac{1}{2^n} \log^+ |f_c^{\circ n}(z)| \]
+where $\log^+(x) = \max(0, \log x)$.
+
+\begin{lstlisting}[language=Lean]
+def potential_seq (c z : $\mathbb{C}$) (n : $\mathbb{N}$) : $\mathbb{R}$ :=
+  (1 / 2 ^ n) * Real.log (max 1 $\|$orbit c z n$\|$)
+
+def green_function (c z : $\mathbb{C}$) : $\mathbb{R}$ :=
+  limUnder atTop (fun n => potential_seq c z n)
+\end{lstlisting}
+
+\subsection{Convergence}
+
+We prove that this sequence converges for all $z$.
+\begin{itemize}
+    \item If $z \in K_c$, the orbit is bounded, so $\frac{1}{2^n} \log |z_n| \to 0$. Thus $G_c(z) = 0$.
+    \item If $z \notin K_c$, the orbit escapes. We show that the sequence is Cauchy using the escape estimates from Section \ref{sec:Escape}.
+\end{itemize}
+
+\begin{lstlisting}[language=Lean]
+lemma green_function_eq_lim (c z : $\mathbb{C}$) :
+    Tendsto (potential_seq c z) atTop ($\mathcal{N}$ (green_function c z))
+\end{lstlisting}

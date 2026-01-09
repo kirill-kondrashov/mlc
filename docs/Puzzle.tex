@@ -1,0 +1,43 @@
+\section{Puzzle Definitions}
+\label{sec:Puzzle}
+
+This section defines the fundamental geometric objects used in the proof: dynamical and parameter puzzle pieces.
+
+\subsection{Dynamical Puzzle Pieces}
+
+Dynamical puzzle pieces are defined using the Green's function $G_c(z)$ of the filled Julia set $K_c$.
+The level sets of the Green's function (equipotentials) provide a natural filtration of the dynamical plane.
+
+\textbf{Definition}: A \emph{dynamical puzzle piece} of depth $n$ containing $z$, denoted $D_n(z)$, is the connected component of the sublevel set $\{w \mid G_c(w) < 2^{-n}\}$ that contains $z$.
+
+\begin{lstlisting}[language=Lean]
+def DynamicalPuzzlePiece (c : $\mathbb{C}$) (n : $\mathbb{N}$) (z : $\mathbb{C}$) : Set $\mathbb{C}$ :=
+  connectedComponentIn {w | green_function c w < (1 / 2) ^ n} z
+\end{lstlisting}
+
+Typically, we are interested in $D_n(0)$, the piece containing the critical point.
+
+\subsection{Puzzle Annuli}
+
+\textbf{Definition}: The \emph{Puzzle Annulus} $A_n(c)$ is the region between two consecutive puzzle pieces.
+\[ A_n(c) = D_n(0) \setminus D_{n+1}(0) \]
+
+\begin{lstlisting}[language=Lean]
+def PuzzleAnnulus (c : $\mathbb{C}$) (n : $\mathbb{N}$) : Set $\mathbb{C}$ :=
+  DynamicalPuzzlePiece c n 0 \ DynamicalPuzzlePiece c (n + 1) 0
+\end{lstlisting}
+
+The divergence of the moduli of these annuli is the key condition in Yoccoz's theorem.
+
+\subsection{Parameter Puzzle Pieces}
+
+Parameter puzzle pieces are subsets of the parameter plane defined by the behavior of the critical point $0$ relative to the dynamical puzzle pieces.
+
+\textbf{Definition}: The \emph{parameter puzzle piece} $\mathcal{P}_n$ is the set of parameters $c$ such that the critical point $c$ (which is $f_c(0)$) lands in the dynamical puzzle piece of depth $n$ (or rather, the critical value implies the critical point is "good").
+
+In this formalization, we define $\mathcal{P}_n$ as:
+\begin{lstlisting}[language=Lean]
+def ParaPuzzlePiece (n : $\mathbb{N}$) : Set $\mathbb{C}$ :=
+  {c | c $\in$ DynamicalPuzzlePiece c n 0}
+\end{lstlisting}
+This definition captures the parameters $c$ for which the critical point $0$ remains "deeply embedded" in the puzzle structure up to depth $n$.

@@ -1,0 +1,25 @@
+\section{Local Connectivity from Shrinking}
+\label{sec:LcAtOfShrink}
+
+This section connects the analytic property of "shrinking puzzle pieces" to the topological property of "local connectivity".
+
+\subsection{Theorem: \texttt{lc\_at\_of\_shrink}}
+
+The theorem states that if the parameter puzzle pieces $\mathcal{P}_n(c)$ form a neighborhood basis of $c$ (i.e., their intersection is just $\{c\}$ and they are small), then $\mathcal{M}$ is locally connected at $c$.
+
+\textbf{Theorem} (\texttt{lc\_at\_of\_shrink}):
+Let $c \in \mathcal{M}$. If $\bigcap_n \mathcal{P}_n(c) = \{c\}$, then $\mathcal{M}$ is locally connected at $c$.
+
+\begin{lstlisting}[language=Lean]
+theorem lc_at_of_shrink (c : $\mathbb{C}$) (hc : c $\in$ MandelbrotSet)
+    (h_shrink : ($\bigcap$ n, ParaPuzzlePiece n) = {c}) :
+    IsLocallyConnectedAt c MandelbrotSet := by
+  -- Proof omitted
+\end{lstlisting}
+
+\textit{Proof Sketch.}
+1.  The puzzle pieces $\mathcal{P}_n(c)$ are connected sets (specifically, their intersection with $\mathcal{M}$ is connected, or they form a nested sequence of compact connected sets).
+2.  They contain $c$.
+3.  If they shrink to $c$ (intersection is $\{c\}$), then for any neighborhood $U$ of $c$, there exists some $n$ such that $\mathcal{P}_n(c) \subset U$.
+4.  Since $\mathcal{P}_n(c) \cap \mathcal{M}$ is connected, this provides arbitrarily small connected neighborhoods of $c$ in $\mathcal{M}$.
+5.  This is the definition of local connectivity at $c$. \qed

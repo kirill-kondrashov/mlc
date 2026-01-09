@@ -75,7 +75,13 @@ lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆
     rw [Nat.add_succ]
     apply subset_trans (h_nested (i + m)) ih
 
-/-- Grötzsch's Inequality implies summability if the intersection is non-trivial. -/
+/-- Grötzsch's Inequality implies summability if the intersection is non-trivial.
+    Proof idea: We construct a sequence of disjoint annuli `A_n = P_n \ P_{n+1}`.
+    By the contrapositive of Grötzsch's criterion (or directly by inequality), if the intersection
+    is non-trivial (contains more than just a point), there is a core `K` inside all `P_n`.
+    The disjoint annuli are all nested around `K`. Grötzsch's inequality implies their moduli
+    sum up to at most the modulus of the container `P_0 \ K`, which is finite.
+    Thus the sum converges. -/
 theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (_h_conn : ∀ n, IsConnected (P n))
@@ -167,7 +173,12 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
 /-- Grötzsch's Criterion: Divergence of moduli implies point intersection.
     See: [Milnor, Dynamics in One Complex Variable, Corollary B.7]
     Local Reference: `refs/9201272v1.pdf`
-    "Corollary B.7. Suppose that K ⊂ U as described above. Then K reduces to a single point if and only if the annulus A = U rK has infinite modulus." -/
+    "Corollary B.7. Suppose that K ⊂ U as described above. Then K reduces to a single point if and only if the annulus A = U rK has infinite modulus."
+
+    Proof idea: We argue by contrapositive. If the intersection is non-trivial (contains more than just `{0}`),
+    then `modulus_summable_of_nontrivial_intersection` implies the sum of moduli converges.
+    This contradicts the hypothesis that the sum diverges.
+    Therefore, the intersection must be trivial (equal to `{0}`). -/
 theorem groetzsch_criterion {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (h_zero : ∀ n, 0 ∈ P n)

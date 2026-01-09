@@ -22,7 +22,10 @@ def InfinitelyRenormalizable (c : ℂ) : Prop :=
     Also cited in the provided document as [L10] "How big is the set of infinitely renormalizable quadratics?".
     Local Reference: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`
     Since the proof is beyond the scope of this formalization (which focuses on Yoccoz puzzles),
-    we accept it as an axiom. -/
+    we accept it as an axiom.
+
+    Proof idea: The proof involves complex renormalization theory and the analysis of the
+    geometry of small Julia sets. -/
 axiom mlc_infinitely_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 

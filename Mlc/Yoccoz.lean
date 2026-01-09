@@ -29,7 +29,16 @@ end Combinatorics
 
 section YoccozTheorem
 
-/-- Yoccoz's Theorem: Divergence of moduli implies point intersection. -/
+/-- Yoccoz's Theorem: Divergence of moduli implies point intersection.
+    Proof idea:
+    *   If `c ∈ M`: We apply **Grötzsch's criterion** to the nested sequence of dynamical puzzle pieces.
+        These pieces contain 0 and are connected. The divergence of the moduli of the annuli between
+        them forces the intersection of the pieces to be a single point `{0}`.
+    *   If `c ∉ M`: The orbit of 0 escapes. For large enough `n`, the potential level `1/2^n`
+        is smaller than `G(0)`, so `0` is no longer in the puzzle piece (which is defined by `G(z) < 1/2^n`).
+        Thus, the puzzle pieces eventually become empty. This would imply the sum of moduli is finite
+        (sum of zeros), contradicting the divergence hypothesis. Thus, this case is impossible under
+        the assumption of divergence. -/
 theorem yoccoz_theorem (c : ℂ) :
     ¬ (Summable fun n => modulus (PuzzleAnnulus c n)) →
     (⋂ n, DynamicalPuzzlePiece c n 0) = {0} := by

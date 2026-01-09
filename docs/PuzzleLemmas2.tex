@@ -1,0 +1,54 @@
+\section{Parameter Puzzle Properties}
+\label{sec:PuzzleLemmas2}
+
+This section establishes key topological properties of the parameter puzzle pieces $\mathcal{P}_n(c)$, specifically their openness and their role as a neighborhood basis.
+
+\subsection{Openness: \texttt{para\_puzzle\_piece\_open}}
+
+A crucial step in the proof is showing that the parameter puzzle pieces are open sets. This relies on the structural stability of holomorphic motions.
+
+\subsubsection{Holomorphic Motions}
+\textbf{Definition}: A \emph{holomorphic motion} of a set $E \subset \mathbb{C}$ over the unit disk $\mathbb{D}$ is a map $f: \mathbb{D} \times E \to \mathbb{C}$ such that:
+\begin{enumerate}
+    \item For fixed $z \in E$, the map $\lambda \mapsto f(\lambda, z)$ is holomorphic on $\mathbb{D}$.
+    \item For fixed $\lambda \in \mathbb{D}$, the map $z \mapsto f(\lambda, z)$ is injective.
+    \item $f(0, z) = z$ for all $z \in E$ (Identity at time 0).
+\end{enumerate}
+
+\subsubsection{Slodkowski's Theorem}
+We use a powerful result by Z. Slodkowski (Generalized Lambda Lemma):
+
+\textbf{Axiom} (\texttt{slodkowski\_theorem}): Every holomorphic motion of a subset $E \subset \mathbb{C}$ parametrized by the unit disk can be extended to a holomorphic motion of the entire plane $\mathbb{C}$.
+
+\begin{lstlisting}[language=Lean]
+axiom slodkowski_theorem {E : Set $\mathbb{C}$} (h : HolomorphicMotion E) :
+    $\exists$ H : HolomorphicMotion Set.univ,
+      ($\forall$ $\lambda$ z, z $\in$ E $\to$ H.val $\lambda$ z = h.val $\lambda$ z)
+\end{lstlisting}
+
+\subsubsection{Theorem Application}
+The theorem \texttt{para\_puzzle\_piece\_open} states that each parameter puzzle piece $\mathcal{P}_n$ is an open subset of the complex plane.
+
+\begin{lstlisting}[language=Lean]
+theorem para_puzzle_piece_open (n : $\mathbb{N}$) : IsOpen (ParaPuzzlePiece n) := by
+  -- Proof omitted for brevity
+\end{lstlisting}
+
+\textit{Proof Sketch.}
+The proof relies on the stability of the dynamical system under small perturbations of the parameter $c$.
+1.  We construct a holomorphic motion of the boundary of the dynamical puzzle piece $P_n(c)$ as $c$ varies in a small disk. This follows from the fact that the boundary consists of equipotentials and external rays which move holomorphically (Axiom \texttt{puzzle\_boundary\_motion\_exists}).
+2.  By Slodkowski's Theorem, this motion extends to a motion of the entire plane.
+3.  The extended motion provides a conjugation between the dynamics at $c_0$ and nearby $c$.
+4.  The property defining the puzzle piece (orbit of 0 relative to the puzzle boundary) is preserved by this conjugation.
+5.  Thus, if $c_0 \in \mathcal{P}_n$, then all sufficiently close $c$ are also in $\mathcal{P}_n$. This implies openness. \qed
+
+\subsection{Connectivity: \texttt{para\_puzzle\_piece\_inter\_mandelbrot\_connected}}
+
+We also prove that the intersection of a parameter puzzle piece with the Mandelbrot set is connected.
+\[ \text{IsConnected}(\mathcal{P}_n \cap \mathcal{M}) \]
+This actually simplifies significantly because $\mathcal{M} \subseteq \mathcal{P}_n$ for all $n$ (by construction of the puzzle pieces based on Green's function, which is 0 on $\mathcal{M}$). Thus, the intersection is just $\mathcal{M}$ itself, which is connected (Douady-Hubbard).
+
+\begin{lstlisting}[language=Lean]
+theorem para_puzzle_piece_inter_mandelbrot_connected (n : $\mathbb{N}$) :
+    IsConnected (ParaPuzzlePiece n $\cap$ MandelbrotSet)
+\end{lstlisting}

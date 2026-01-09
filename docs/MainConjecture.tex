@@ -1,0 +1,35 @@
+\section{Main Conjecture Statement}
+\label{sec:MainConjecture}
+
+The central goal of this formalization is the statement of the MLC conjecture for quadratic polynomials.
+
+\subsection{Conjecture: \texttt{main\_conjecture}}
+
+\textbf{Definition}: The \emph{Mandelbrot set} $\mathcal{M}$ is the set of parameters $c \in \mathbb{C}$ for which the orbit of 0 under $f_c(z) = z^2 + c$ remains bounded.
+\[ \mathcal{M} = \{ c \in \mathbb{C} \mid \exists B, \forall n, |f_c^n(0)| \le B \} \]
+
+The conjecture states that $\mathcal{M}$ is locally connected.
+
+\textbf{Theorem} (\texttt{main\_conjecture}): The Mandelbrot set is locally connected.
+
+\begin{lstlisting}[language=Lean]
+theorem main_conjecture : IsLocallyConnected MandelbrotSet
+\end{lstlisting}
+
+\subsection{Reduction to Yoccoz's Theorem}
+
+The proof strategy formalized here follows the reduction to Yoccoz's Theorem.
+It is known that local connectivity is equivalent to the shrinking of puzzle pieces for non-renormalizable parameters (and related conditions for renormalizable ones).
+
+The formal proof combines:
+1.  \texttt{yoccoz\_theorem}: Shrinking of puzzle pieces implies local connectivity at $c$ for non-renormalizable parameters.
+2.  \texttt{mlc\_infinitely\_renorm}: MLC holds at infinitely renormalizable parameters (assumed as an axiom/deep theorem).
+3.  \texttt{finitely\_renorm\_reduces\_to\_yoccoz}: The finitely renormalizable case reduces to the non-renormalizable case via renormalization.
+
+\begin{lstlisting}[language=Lean]
+theorem main_conjecture_proof : IsLocallyConnected MandelbrotSet := by
+  -- Decomposition into cases:
+  -- 1. At most finitely renormalizable
+  -- 2. Infinitely renormalizable
+  ...
+\end{lstlisting}

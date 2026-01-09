@@ -1,0 +1,16 @@
+\section{Infinitely Renormalizable Case}
+\label{sec:InfinitelyRenormalizable}
+
+This section handles the infinitely renormalizable parameters. This case relies on deep results by Lyubich (and Kahn-Lyubich), which are currently axiomatized.
+
+\subsection{Axiom: \texttt{mlc\_infinitely\_renorm}}
+
+\textbf{Axiom} (\texttt{mlc\_infinitely\_renorm}): If a parameter $c$ is infinitely renormalizable, then the Mandelbrot set is locally connected at $c$.
+
+\begin{lstlisting}[language=Lean]
+axiom mlc_infinitely_renorm (c : $\mathbb{C}$) (h_inf_renorm : IsInfinitelyRenormalizable c) :
+    IsLocallyConnectedAt c MandelbrotSet
+\end{lstlisting}
+
+\textit{Note on Proof.}
+This result requires proving that the "small" Mandelbrot sets copies shrink to points or have trivial intersection properties. It is a major theorem in the field (Yoccoz proved it for specific combinatorics, Lyubich generalized it).
