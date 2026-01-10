@@ -28,6 +28,12 @@ theorem dichotomy (c : ℂ) : NonRenormalizable c ∨ InfinitelyRenormalizable c
     \item The proof is a simple application of the law of excluded middle on the proposition \texttt{Summable ...}.
 \end{itemize}
 
+\begin{proof}
+We partition the parameter plane based on the behavior of the series of moduli $\sum \text{mod}(A_n(c))$.
+In this formalization, \texttt{NonRenormalizable c} is defined as the divergence of this series (the condition for Yoccoz's theorem), while \texttt{InfinitelyRenormalizable c} is defined as its convergence (the condition for Lyubich's theorem).
+The theorem then follows directly from the law of excluded middle applied to the summability of the series.
+\end{proof}
+
 \subsection{Correspondence Principle}
 
 Before proving the main theorem, we need a lemma to transfer the shrinking result from the dynamical plane to the parameter plane.
