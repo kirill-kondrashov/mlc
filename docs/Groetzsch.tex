@@ -89,6 +89,10 @@ lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆
     \item Inductive step (\texttt{succ}): Uses transitivity: $P_{i+m+1} \subseteq P_{i+m} \subseteq P_i$.
 \end{itemize}
 
+\begin{proof}
+Write $j=i+k$ and proceed by induction on $k$. The base case $k=0$ is trivial since $P_i\subseteq P_i$. For the inductive step, assume $P_{i+m+1}\subseteq P_i$ when $j=i+m$; then using $P_{i+m+1}\subseteq P_{i+m}$ and the transitive inclusion $P_{i+m}\subseteq P_i$ yields $P_{i+m+1}\subseteq P_i$, completing the induction.
+\end{proof}
+
 \subsection{Summability from Non-trivial Intersection}
 
 The core logical step for the criterion is proving that if the intersection of nested sets is "fat" (non-trivial), the sum of moduli of the difference annuli must converge.
@@ -250,3 +254,7 @@ theorem groetzsch_criterion {P : ℕ → Set ℂ}
     \item \textbf{Contradiction}: We have derived that the sum is summable (\texttt{h\_sum}), which contradicts the hypothesis \texttt{h\_div} (that the sum is not summable).
     \item Therefore, the assumption \texttt{h\_neq} must be false, and the intersection is indeed exactly $\{0\}$.
 \end{itemize}
+
+\begin{proof}
+Assume the intersection contains a point $z\neq0$; then it is nontrivial and by the previous theorem the series of moduli is summable. This contradicts the hypothesis that the series diverges, so the intersection must equal $\{0\}$.
+\end{proof}

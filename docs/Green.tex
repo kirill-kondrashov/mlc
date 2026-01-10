@@ -220,6 +220,10 @@ lemma green_function_eq_zero_iff_mem_K (c z : $\mathbb{C}$) :
         \end{itemize}
 \end{itemize}
 
+\begin{proof}
+If $G(z)=0$ but $z\notin K_c$ then for some $n$ the iterate $f^n(z)$ lies beyond the escape bound, so by positivity at infinity $G(f^n(z))>0$. But $G(f^n(z))=2^nG(z)=0$, contradiction, hence $z\in K_c$. Conversely, if $z\in K_c$ the potential sequence tends to $0$, so by uniqueness of limits $G(z)=0$; combined with non-negativity this yields the equality.
+\end{proof}
+
 \subsubsection{Positivity on Basin of Infinity}
 
 \begin{lstlisting}[language=Lean]
@@ -242,3 +246,7 @@ lemma green_function_pos_iff_not_mem_K (c z : $\mathbb{C}$) :
     \item \texttt{have ... le\_antisymm}: Since $G \ge 0$ always, $G \le 0$ implies $G=0$.
     \item \texttt{rw [green\_function\_eq\_zero\_iff\_mem\_K]}: We reduce to the previous theorem: $G=0 \iff z \in K_c$.
 \end{itemize}
+
+\begin{proof}
+Since $G(z)\ge0$ for all $z$, the negation of $0<G(z)$ is $G(z)\le0$, and together these force $G(z)=0$. Therefore $0<G(z)$ holds exactly when $G(z)\neq0$, which by the previous lemma $\texttt{green\_function\_eq\_zero\_iff\_mem\_K}$ is equivalent to $z\notin K_c$.
+\end{proof}
