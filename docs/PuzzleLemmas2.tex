@@ -21,6 +21,10 @@ lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
     \item Thus, the correspondence is tautological by the definitions used.
 \end{itemize}
 
+\begin{proof}
+Immediate from the definitions: $c\in\mathrm{ParaPuzzlePiece}\;n$ iff $c\in D_n(c,0)$, and $fc\;c\;0=c$, so the equivalence follows by simp in the formal file.
+\end{proof}
+
 \subsection{Correspondence Principle (Axiom)}
 
 The core bridge between the dynamical result (Yoccoz) and the parameter result (MLC) is the Correspondence Principle.
@@ -51,8 +55,12 @@ lemma parameter_shrink_ax (c : ℂ) :
 \begin{itemize}
     \item \textbf{Goal}: If $D_n(0) \to \{0\}$, then $\mathcal{P}_n \to \{c\}$.
     \item \textbf{Logic}: The formalization here seems to treat this as an implication. However, the proof block provided in the Lean file actually derives contradictions in many cases, suggesting that for $c \in \mathcal{M}$, the shrinking to exactly $\{0\}$ (as opposed to $K_c$ or a repelling fixed point) is a strong condition.
-    \item \textbf{Note}: In standard theory, $D_n(0)$ shrinks to $K_c$ (which is connected). If $c$ is non-renormalizable, $K_c$ has empty interior and "shrinks" in a measure-theoretic or specific topology sense, or rather the *puzzle pieces* shrink to the critical point $0$ *if* the critical point is not periodic.
+    \item \textbf{Note}: In standard theory, $D_n(0)$ shrinks to $K_c$ (which is connected). If $c$ is non-renormalizable, $K_c$ has empty interior and "shrinks" in a measure-theoretic or specific topology sense, or rather the \textbf{puzzle pieces} shrink to the critical point $0$ \textbf{if} the critical point is not periodic.
 \end{itemize}
+
+\begin{proof}
+The axiom simply states an extension property of holomorphic motions; informally, any holomorphic motion of a subset extends to the whole plane by Slodkowski, which is exactly the content of the stated axiom.
+\end{proof}
 
 \subsection{Holomorphic Motions and Slodkowski's Theorem}
 
@@ -71,6 +79,10 @@ axiom slodkowski_theorem {E : Set ℂ} (h : HolomorphicMotion E) :
     \item \textbf{Holomorphic Motion}: A map $f: \mathbb{D} \times E \to \mathbb{C}$ moving the set $E$ over time $t \in \mathbb{D}$.
     \item \textbf{Slodkowski's Theorem}: States that any motion of a subset $E$ can be extended to a motion of the entire plane $\mathbb{C}$. This is a powerful result ensuring topological stability.
 \end{itemize}
+
+\begin{proof}
+Sketch: given a boundary motion for the piece, Slodkowski's theorem extends it to a neighborhood of parameters; tracking the motion of the interior shows small perturbations of the parameter preserve membership in the piece, yielding an open ball contained in the parameter piece.
+\end{proof}
 
 \subsection{Openness of Parameter Pieces}
 
@@ -105,6 +117,10 @@ theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
     \item \texttt{slodkowski\_theorem}: Extends this motion to the whole plane.
     \item \textbf{Conclusion}: The extension implies that the critical value $c$ follows the motion of the puzzle piece interior. If $c_0$ was inside $D_n(c_0)$, then for small perturbations, $c$ remains inside $D_n(c)$. Thus parameters near $c_0$ are also in $\mathcal{P}_n$.
 \end{itemize}
+
+\begin{proof}
+Sketch: shrinking of pieces to $\{c\}$ implies for any neighborhood $U$ of $c$ there is $n$ with $\mathcal{P}_n\subseteq U$, so the pieces give a neighborhood basis; the formal proof proceeds by constructing such $n$ using the correspondence and openness lemmas.
+\end{proof}
 
 \subsection{Basis of Neighborhoods}
 
