@@ -188,28 +188,6 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
 \end{lstlisting}
 
 \noindent
-Proof explanation of the modulus summable theorem:
-The central step is the induction which shows for every N:
-
-\[
-\sum_{n=0}^{N-1}\mathrm{mod}(A_n)\le\mathrm{mod}(P_0\setminus P_N).
-\]
-
-For the base case $N=0$ this is trivial. For the inductive step use the decomposition
-
-\[
-P_0\setminus P_{k+1}=(P_0\setminus P_k)\cup(P_k\setminus P_{k+1}),
-\]
-
-observe the union is disjoint, and apply Grötzsch's inequality to obtain
-
-\[
-\mathrm{mod}(P_0\setminus P_k)+\mathrm{mod}(P_k\setminus P_{k+1})\le\mathrm{mod}(P_0\setminus P_{k+1}).
-\]
-
-By the inductive hypothesis the left-hand side bounds the partial sum up to index $k$, hence the partial sum up to $k+1$ is bounded by the modulus of the outer difference. Iterating and passing to the intersection gives a uniform bound for all partial sums, and since the terms are non-negative the series is summable.
-
-\noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
     \item \textbf{Goal}: Prove that $\sum \text{mod}(P_n \setminus P_{n+1})$ converges.
@@ -226,6 +204,22 @@ By the inductive hypothesis the left-hand side bounds the partial sum up to inde
         \end{itemize}
     \item \texttt{summable\_of\_sum\_range\_le}: Concludes convergence since the partial sums are bounded and terms are non-negative.
 \end{itemize}
+
+\begin{proof}
+The central step is the induction which shows for every N:
+\[
+\sum_{n=0}^{N-1}\mathrm{mod}(A_n)\le\mathrm{mod}(P_0\setminus P_N).
+\]
+For $N=0$ the claim is trivial. For the inductive step decompose
+\[
+P_0\setminus P_{k+1}=(P_0\setminus P_k)\cup(P_k\setminus P_{k+1}),
+\]
+and note the union is disjoint. Applying Grötzsch's inequality to this decomposition yields
+\[
+\mathrm{mod}(P_0\setminus P_k)+\mathrm{mod}(P_k\setminus P_{k+1})\le\mathrm{mod}(P_0\setminus P_{k+1}).
+\]
+By the inductive hypothesis the left-hand side bounds the partial sum up to index $k$, hence the partial sum up to $k+1$ is bounded by the modulus of the outer difference. Iterating and passing to the intersection gives a uniform bound for all partial sums, and since the terms are non-negative the series is summable.
+\end{proof}
 
 \subsection{Grötzsch's Criterion}
 
