@@ -9,7 +9,7 @@ The first lemma establishes the definitional link between the parameter and dyna
 
 \begin{lstlisting}[language=Lean]
 lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
-    c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c n 0 := by
+    c $\in$ ParaPuzzlePiece n ↔ fc c 0 $\in$ DynamicalPuzzlePiece c n 0 := by
   simp [ParaPuzzlePiece, fc]
 \end{lstlisting}
 
@@ -31,10 +31,10 @@ The Correspondence Principle relates shrinking of dynamical puzzle pieces to shr
 
 \begin{lstlisting}[language=Lean]
 lemma parameter_shrink_ax (c : ℂ) :
-    (⋂ n, DynamicalPuzzlePiece c n 0) = {0} → (⋂ n, ParaPuzzlePiece n) = {c} := by
+    ($\bigcap$ n, DynamicalPuzzlePiece c n 0) = {0} → ($\bigcap$ n, ParaPuzzlePiece n) = {c} := by
   intro h_shrink
-  by_cases hc : c ∈ MandelbrotSet
-  · -- Case c ∈ M
+  by_cases hc : c $\in$ MandelbrotSet
+  · -- Case c $\in$ M
     have h_K_sub : K c ⊆ {0} := by
       rw [← h_shrink]
       apply subset_iInter
@@ -46,10 +46,10 @@ lemma parameter_shrink_ax (c : ℂ) :
         rw [hz]
         apply pow_pos
         norm_num
-      have h_0_in_K : 0 ∈ K c := hc
+      have h_0_in_K : 0 $\in$ K c := hc
       apply (filled_julia_set_connected hc).isPreconnected.subset_connectedComponentIn h_0_in_K h_K_subset
 
-    have hc_in_K : c ∈ K c := by
+    have hc_in_K : c $\in$ K c := by
       rw [K, MandelbrotSet] at *
       unfold boundedOrbit at *
       obtain ⟨M, hM⟩ := hc
@@ -69,7 +69,7 @@ lemma parameter_shrink_ax (c : ℂ) :
 
     have hc_eq_0 : c = 0 := h_K_sub hc_in_K
     subst hc_eq_0
-    have h1_in_K : 1 ∈ K 0 := by
+    have h1_in_K : 1 $\in$ K 0 := by
       rw [K]
       use 1
       intro n
@@ -80,27 +80,27 @@ lemma parameter_shrink_ax (c : ℂ) :
       rw [this]
       norm_num
     have h1_eq_0 : (1 : ℂ) = 0 := by
-      have : (1 : ℂ) ∈ ({0} : Set ℂ) := h_K_sub h1_in_K
+      have : (1 : ℂ) $\in$ ({0} : Set ℂ) := h_K_sub h1_in_K
       rw [Set.mem_singleton_iff] at this
       exact this
     exfalso
     exact one_ne_zero h1_eq_0
 
-  · -- Case c ∉ M
-    have h_empty : (⋂ n, DynamicalPuzzlePiece c n 0) = ∅ := by
+  · -- Case c $\notin$ M
+    have h_empty : ($\bigcap$ n, DynamicalPuzzlePiece c n 0) = ∅ := by
       obtain ⟨N, hN⟩ := dynamical_puzzle_piece_empty_of_large_n c hc
       apply Set.eq_empty_of_subset_empty
       intro x hx
       rw [mem_iInter] at hx
       have hxN := hx N
-      have h0_in_s : 0 ∈ {w | green_function c w < (1 / 2) ^ N} := by
+      have h0_in_s : 0 $\in$ {w | green_function c w < (1 / 2) ^ N} := by
         dsimp [DynamicalPuzzlePiece] at hxN
         by_contra h_not
         rw [connectedComponentIn_eq_empty h_not] at hxN
         exact hxN
-      have h0_not_in_comp : 0 ∉ DynamicalPuzzlePiece c N 0 := hN N (le_refl N)
+      have h0_not_in_comp : 0 $\notin$ DynamicalPuzzlePiece c N 0 := hN N (le_refl N)
       dsimp [DynamicalPuzzlePiece] at h0_not_in_comp
-      have h0_in_comp : 0 ∈ connectedComponentIn {w | green_function c w < (1 / 2) ^ N} 0 := by
+      have h0_in_comp : 0 $\in$ connectedComponentIn {w | green_function c w < (1 / 2) ^ N} 0 := by
         apply isPreconnected_singleton.subset_connectedComponentIn (mem_singleton 0)
         · rw [singleton_subset_iff]; exact h0_in_s
         · exact mem_singleton 0
@@ -115,7 +115,7 @@ ensure_no_sorry parameter_shrink_ax
 \noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
-    \item The proof splits into the cases c ∈ MandelbrotSet and c ∉ MandelbrotSet.
+    \item The proof splits into the cases c $\in$ MandelbrotSet and c $\notin$ MandelbrotSet.
     \item In the first case, connectedness of K(c) forces K(c) to lie in every dynamical piece, which leads to a contradiction unless c = 0 (impossible), so the parameter intersection is {c}.
     \item In the second case, the dynamical intersection is empty for large n, so the implication follows vacuously.
 \end{itemize}
@@ -137,7 +137,7 @@ To prove parameter puzzle pieces are open, we use the theory of Holomorphic Moti
 /-- Slodkowski's Theorem (Generalized Lambda Lemma). -/
 axiom slodkowski_theorem {E : Set ℂ} (h : HolomorphicMotion E) :
     ∃ H : HolomorphicMotion Set.univ,
-      ∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z
+      ∀ t $\in$ Metric.ball 0 1, ∀ z $\in$ E, H.f t z = h.f t z
 \end{lstlisting}
 
 \noindent
@@ -171,7 +171,7 @@ theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
     rw [Metric.mem_ball] at hc
     -- Identify c with a parameter t in the unit disk
     let t := (c - c₀) / r
-    have ht : t ∈ Metric.ball 0 1 := by
+    have ht : t $\in$ Metric.ball 0 1 := by
       rw [Metric.mem_ball, dist_zero_right]
       dsimp [t]
       rw [norm_div, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr]
@@ -208,19 +208,19 @@ Finally, we prove that if the pieces shrink to $\{c\}$, they form a basis.
 
 \begin{lstlisting}[language=Lean]
 lemma para_puzzle_piece_basis (c : ℂ) :
-    (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ $\mathcal{N}$ c, ∃ n, ParaPuzzlePiece n ⊆ U := by
+    ($\bigcap$ n, ParaPuzzlePiece n) = {c} → ∀ U $\in$ $\mathcal{N}$ c, ∃ n, ParaPuzzlePiece n ⊆ U := by
   intro h_inter U _
-  -- We show M ⊆ ⋂ P_n, which implies M ⊆ {c}, a contradiction.
-  have h_M_sub : MandelbrotSet ⊆ ⋂ n, ParaPuzzlePiece n := by
+  -- We show M ⊆ $\bigcap$ P_n, which implies M ⊆ {c}, a contradiction.
+  have h_M_sub : MandelbrotSet ⊆ $\bigcap$ n, ParaPuzzlePiece n := by
     apply subset_iInter
     intro n
     intro m hm
     rw [ParaPuzzlePiece, mem_setOf_eq]
 
     have h_conn : IsConnected (K m) := filled_julia_set_connected hm
-    have h_0_in_K : 0 ∈ K m := hm
+    have h_0_in_K : 0 $\in$ K m := hm
 
-    have h_m_in_K : m ∈ K m := by
+    have h_m_in_K : m $\in$ K m := by
       rw [K, MandelbrotSet] at *
       unfold boundedOrbit at *
       obtain ⟨M, hM⟩ := hm
@@ -251,7 +251,7 @@ lemma para_puzzle_piece_basis (c : ℂ) :
 
   rw [h_inter] at h_M_sub
 
-  have h_0_in_M : 0 ∈ MandelbrotSet := by
+  have h_0_in_M : 0 $\in$ MandelbrotSet := by
     unfold MandelbrotSet boundedOrbit
     use 2
     intro n
@@ -263,7 +263,7 @@ lemma para_puzzle_piece_basis (c : ℂ) :
     rw [h_orb_0 n]
     norm_num
 
-  have h_neg2_in_M : -2 ∈ MandelbrotSet := by
+  have h_neg2_in_M : -2 $\in$ MandelbrotSet := by
     unfold MandelbrotSet boundedOrbit
     use 2
     intro n
@@ -289,11 +289,11 @@ lemma para_puzzle_piece_basis (c : ℂ) :
         norm_num
 
   have h_0_eq_c : 0 = c := by
-    have : (0 : ℂ) ∈ {c} := h_M_sub h_0_in_M
+    have : (0 : ℂ) $\in$ {c} := h_M_sub h_0_in_M
     exact mem_singleton_iff.1 this
 
   have h_neg2_eq_c : -2 = c := by
-    have : (-2 : ℂ) ∈ {c} := h_M_sub h_neg2_in_M
+    have : (-2 : ℂ) $\in$ {c} := h_M_sub h_neg2_in_M
     exact mem_singleton_iff.1 this
 
   rw [← h_0_eq_c] at h_neg2_eq_c
