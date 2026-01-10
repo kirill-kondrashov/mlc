@@ -6,7 +6,7 @@ This repository contains a **machine-generated formal proof** of the Mandelbrot 
 
 The proof strategy relies on Yoccoz puzzles and integrates deep results from complex dynamics (Lyubich's Theorem, Slodkowski's Theorem) as axioms to derive the local connectivity of the Mandelbrot set.
 
-[Read the Paper (PDF)](docs/proof.pdf)
+[Read the Paper (PDF)](docs/proof.pdf), which describes the proof in more detail, shows Lean listings next to comments, and attempts to make the proofs human-readable.
 
 ## Disclaimer
 
