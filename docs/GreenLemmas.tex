@@ -38,6 +38,10 @@ lemma abs_log_le_two_mul_abs_sub_one {x : $\mathbb{R}$} (hx : 0.5 $\le$ x) : |Re
     \item \texttt{linarith}: Multiplying by $-1$ reverses the inequality: $\log x \ge 1 - 1/x$.
 \end{itemize}
 
+\begin{proof}
+The inequality $\log x\ge1-1/x$ follows by applying the standard estimate $\log y\le y-1$ to $y=1/x$, rewriting $\log(1/x)=-\log x$, and rearranging.
+\end{proof}
+
 \textbf{Explanation of \texttt{abs\_log\_le\_two\_mul\_abs\_sub\_one}:}
 We split into two cases: $x \ge 1$ and $0.5 \le x < 1$.
 \begin{itemize}
@@ -97,6 +101,12 @@ lemma potential_seq_diff_le (c z : $\mathbb{C}$) (k : $\mathbb{N}$) (h_orbit : $
     \item \texttt{gcongr}: We bound $1/|z_k|^2$ by $1/(\text{escape\_bound})^2$.
 \end{itemize}
 
+\begin{proof}
+Writing $z_{k+1}=z_k^2(1+u)$ with $u=c/z_k^2$ we have
+$2\log|z_k|-\log|z_{k+1}|=-\log|1+u|$, and for $|u|\le1/2$ one has $|\log(1+u)|\le2|u|$. Thus
+$|a_{k+1}-a_k|=2^{-(k+1)}|\log(1+u)|\le2^{-(k+1)}\cdot2|c|/|z_k|^2\le2^{-(k+1)}\cdot2|c|/B^2$, as required.
+\end{proof}
+
 \subsection{Convergence Results}
 
 \subsubsection{Convergence on $K_c$}
@@ -153,6 +163,10 @@ lemma potential_seq_converges_of_mem_K (h : z $\in$ K c) :
         \end{itemize}
     \item \textbf{Conclusion}: Since lower and upper bounds converge to 0, $a_n$ converges to 0.
 \end{itemize}
+
+\begin{proof}
+Boundedness of $|z_n|$ gives $|a_n|\le B/2^n$, hence $a_n\to0$ by the squeeze theorem since $B/2^n\to0$. This proves the lemma.
+\end{proof}
 
 \subsubsection{Convergence on $I_c$}
 
