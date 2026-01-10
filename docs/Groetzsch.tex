@@ -45,6 +45,10 @@ theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
     \item \texttt{modulus\_nonneg}: Ensures the modulus is always non-negative. This is split into cases: 0 for the empty set, and non-negative by axiom for non-empty sets.
 \end{itemize}
 
+\begin{proof}
+If $A=\varnothing$ then $\text{modulus}(A)=0$, so $0\le \text{modulus}(A)$. Otherwise $\text{modulus}(A)=\text{raw\_modulus}(A)$ and by the axiom $0\le \text{raw\_modulus}(A)$, hence $0\le \text{modulus}(A)$.
+\end{proof}
+
 \subsection{Grötzsch's Inequality}
 
 The fundamental property of the modulus used here is superadditivity for disjoint nested annuli. This is known as Grötzsch's Inequality.
