@@ -64,6 +64,10 @@ lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → 
     \item The proof utilizes \texttt{Topology.IsInducing.isPreconnected\_image} to handle the connectivity property, with manual handling of the non-empty condition.
 \end{itemize}
 
+\begin{proof}
+Non-emptiness is transferred between the subtype and its image by unpacking the existential witnesses. The connectivity/preconnectedness property is handled by the general image lemma for inducing maps (\texttt{isPreconnected\_image}), which gives the equivalence of preconnectedness; combining these two observations yields the equivalence of connectedness.
+\end{proof}
+
 \begin{lstlisting}[language=Lean]
 /-- The intersection of a parameter puzzle piece with the Mandelbrot set is connected in the subtype topology. -/
 lemma para_puzzle_piece_induced_connected (n : ℕ) :
@@ -82,6 +86,10 @@ lemma para_puzzle_piece_induced_connected (n : ℕ) :
     \item It uses the previous lemma to switch to the ambient space $\mathbb{C}$.
     \item It applies \texttt{para\_puzzle\_piece\_inter\_mandelbrot\_connected} (from \texttt{PuzzleLemmas2}) which asserts the connectedness of the intersection in $\mathbb{C}$.
 \end{itemize}
+
+\begin{proof}
+Apply the equivalence from the previous lemma to reduce connectedness of the subtype image to connectedness of the corresponding subset of $\mathbb{C}$. The latter is exactly the content of \texttt{para\_puzzle\_piece\_inter\_mandelbrot\_connected}, so the result follows.
+\end{proof}
 
 \subsection{Neighborhood Basis}
 
@@ -113,6 +121,10 @@ lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
     \item \texttt{para\_puzzle\_piece\_basis}: We invoke the property that puzzle pieces form a basis in $\mathbb{C}$ (proved in \texttt{PuzzleLemmas2} using the shrinking property). This gives us an $n$ such that $\mathcal{P}_n \subseteq W$.
     \item \textbf{Conclusion}: If $\mathcal{P}_n \subseteq W$, then $\mathcal{P}_n \cap \mathcal{M} \subseteq W \cap \mathcal{M} = V \subseteq U$.
 \end{itemize}
+
+\begin{proof}
+Open sets in the induced topology arise as intersections with open sets in the ambient space; hence find an open $W\subseteq \mathbb{C}$ with $V=W\cap\mathcal{M}$. By the puzzle basis property in $\mathbb{C}$ there exists $n$ with $\mathcal{P}_n\subseteq W$. Intersecting both sides with $\mathcal{M}$ yields $\mathcal{P}_n\cap\mathcal{M}\subseteq V$, and since $V\subseteq U$ this proves the claim.
+\end{proof}
 
 \subsection{Main Theorem: Local Connectivity}
 
@@ -169,3 +181,7 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzz
             \item $V'$ is connected follows from \texttt{para\_puzzle\_piece\_induced\_connected}.
         \end{itemize}
 \end{itemize}
+
+\begin{proof}
+Given an arbitrary neighborhood $U$ of $c$, the basis lemma supplies an index $n$ with $\mathcal{P}_n\cap\mathcal{M}\subseteq U$. The set $V'=\mathcal{P}_n\cap\mathcal{M}$ is open in the subtype topology because $\mathcal{P}_n$ is open in $\mathbb{C}$, and $c\in V'$ by the shrinking hypothesis. Connectedness of $V'$ was established earlier, so $V'$ is the required connected neighborhood contained in $U$, proving local connectivity at $c$.
+\end{proof}
