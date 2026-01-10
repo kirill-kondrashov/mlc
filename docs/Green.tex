@@ -56,6 +56,10 @@ lemma green_function_functional_eq (c z : $\mathbb{C}$) :
         \end{itemize}
 \end{itemize}
 
+\begin{proof}
+From the relation $a_n(f(z))=2a_{n+1}(z)$ one gets $a_n(f(z))\to2G(z)$ as $n\to\infty$. By definition $G(f(z))$ is the limit of $a_n(f(z))$, hence $G(f(z))=2G(z)$ by uniqueness of limits.
+\end{proof}
+
 \subsection{Basic Properties}
 
 \subsubsection{Non-Negativity}
@@ -89,6 +93,10 @@ lemma green_function_nonneg (c z : $\mathbb{C}$) : 0 $\le$ green_function c z :=
         \item \texttt{le\_max\_left}: Our term is $\log(\max(1, |z_n|))$. Since $\max(1, \dots) \ge 1$, the log is non-negative.
     \item \texttt{linarith}: Conclude $G \ge 0$ from $-G \le 0$.
 \end{itemize}
+
+\begin{proof}
+The iterate formula follows by induction from the functional equation $G(f(w))=2G(w)$: the base case is trivial and the inductive step applies the functional equation to $w=f^n(z)$ then simplifies $2\cdot 2^n=2^{n+1}$.
+\end{proof}
 
 \subsubsection{Iteration Property}
 
@@ -165,6 +173,10 @@ lemma green_function_pos_of_large_norm (c z : $\mathbb{C}$) (h : $\|$z$\|$ > esc
     \item \texttt{h\_a0}: We compute the first term $a_0 = \log|z|$ (since $|z|$ is large, $\max(1, |z|) = |z|$).
     \item \textbf{Conclusion}: $G(z) \ge \log|z| - M$. Since $|z|$ is very large, $\log|z|$ dominates the small error term $M$, so $G(z) > 0$.
 \end{itemize}
+
+\begin{proof}
+For the forward direction, if $G(z)=0$ and $z$ escaped then for large $n$ one would have $G(f^n(z))>0$, but $G(f^n(z))=2^nG(z)=0$, contradiction. For the reverse direction, if $z\in K$ then $a_n(z)\to0$, so by uniqueness of limits $G(z)=0$; combined with non-negativity this gives the equality.
+\end{proof}
 
 \subsubsection{Characterization Theorem}
 
