@@ -35,7 +35,9 @@ docs:
 	cd scripts && poetry run python3 graph_gen.py
 
 # Compile proof.tex to PDF
+# Runs xelatex twice to resolve cross-references and bookmarks
 pdf:
+	cd docs && xelatex proof.tex
 	cd docs && xelatex proof.tex
 
 # Clean build artifacts
