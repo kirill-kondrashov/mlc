@@ -122,6 +122,16 @@ lemma green_function_iterate (c z : $\mathbb{C}$) (n : $\mathbb{N}$) :
     \item \texttt{ring}: Algebraic simplification to show $2 \cdot 2^n = 2^{n+1}$.
 \end{itemize}
 
+\begin{proof}
+By induction on $n$: the base case $n=0$ is trivial. For the inductive step, using \texttt{orbit\_succ} and the functional equation we have
+
+\[
+G(\text{orbit } c\ z\ (n+1)) = G(fc\ c\ (\text{orbit } c\ z\ n)) = 2\,G(\text{orbit } c\ z\ n) = 2\cdot(2^n\,G(z)) = 2^{n+1}\,G(z).
+\]
+
+This completes the induction.
+\end{proof}
+
 \subsection{Positivity and Characterization of K(c)}
 
 \subsubsection{Positivity at Infinity}
