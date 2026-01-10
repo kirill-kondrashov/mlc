@@ -46,6 +46,11 @@ lemma norm_sq_sub_norm_c_ge (c z : $\mathbb{C}$) : $\|$z^2$\|$ - $\|$c$\|$ $\ge$
     \end{itemize}
 \end{itemize}
 
+\begin{proof}
+Since $|z^2|=|z|^2$ we have $|z^2|-|c|=|z|^2-|c|$. From $R(c)\ge 1+|c|$ we get $|c|\le R(c)-1$, hence
+$|z|^2-|c|\ge |z|^2-(R(c)-1)$, which is exactly the asserted inequality.
+\end{proof}
+
 \subsubsection{Norm Growth Estimate}
 
 \begin{lstlisting}[language=Lean]
@@ -72,6 +77,11 @@ lemma norm_growth (c z : $\mathbb{C}$) : $\|$fc c z$\|$ $\ge$ $\|$z$\|$^2 - (R c
     \item \texttt{linarith}: Combine $|z^2+c| \ge |z|^2 - |c|$ with the fact $|c| \le R(c) - 1$ to get $|z^2+c| \ge |z|^2 - (R(c)-1)$.
 \end{itemize}
 
+\begin{proof}
+Writing $f_c(z)=z^2+c$ and applying the triangle inequality gives $|z^2+c|\ge|z^2|-|c|=|z|^2-|c|$. Using $|c|\le R(c)-1$ (from $R(c)\ge1+|c|$) yields
+$|f_c(z)|\ge|z|^2-(R(c)-1)$, as required.
+\end{proof}
+
 \subsubsection{Refined Lower Bound}
 
 \begin{lstlisting}[language=Lean]
@@ -89,6 +99,10 @@ This is a more direct application of the reverse triangle inequality without sub
     \item It establishes $|f_c(z)| \ge |z|^2 - |c|$.
     \item This form is crucial for factoring out $|z|$ later: $|z|^2 - |c| = |z|(|z| - |c|/|z|)$.
 \end{itemize}
+
+\begin{proof}
+Apply the triangle inequality in reverse: $|z^2+c|\ge|z^2|-|c|$. Since $|z^2|=|z|^2$ the inequality becomes $|f_c(z)|\ge|z|^2-|c|$, which is the claimed bound.
+\end{proof}
 
 \subsubsection{Monotonicity of Growth Factor}
 
@@ -109,6 +123,12 @@ We prove that $g(x) = x - |c|/x$ is strictly increasing for $x > 0$.
     \item \texttt{neg\_le\_neg\_iff}: Proving $-|c|/x \le -|c|/y$ is equivalent to $|c|/x \ge |c|/y$.
     \item \texttt{div\_le\_div...}: Since $x < y$, $1/x > 1/y$. With $|c| \ge 0$, multiplying preserves the order (or equality if $c=0$), so $|c|/x \ge |c|/y$.
 \end{itemize}
+
+\begin{proof}
+For $0<x<y$ we have $|c|/x\ge|c|/y$ because $1/x>1/y$ and $|c|\ge0$. Hence
+$(x-|c|/x)<(y-|c|/y)$, so $g(x)<g(y)$, showing $g$ is strictly increasing on $(0,\infty)$.
+\end{proof}
+
 
 \subsubsection{Factor Greater Than One}
 
@@ -144,6 +164,12 @@ We show that if $|z| > R(c)$, then $|z| - |c|/|z| > 1$.
         \item Since $R(c) \ge 1+|c|$, we have $R(c)-1 \ge |c|$.
         \item So the product $R(c)(R(c)-1) \ge R(c)|c| \ge 2|c| \ge |c|$. (The formalized proof uses a slightly different calc block essentially establishing the same inequality $R(c)^2 - R(c) \ge |c|$).
 \end{itemize}
+
+\begin{proof}
+By monotonicity we have $|z|-|c|/|z|>R(c)-|c|/R(c)$. It therefore suffices to check
+$R(c)-|c|/R(c)\ge1$, equivalently $R(c)(R(c)-1)\ge|c|$. Since $R(c)\ge1+|c|$ we get $R(c)-1\ge|c|$, and multiplying by $R(c)\ge1$ yields
+$R(c)(R(c)-1)\ge R(c)|c|\ge|c|$, proving the claim.
+\end{proof}
 
 \subsubsection{Escape Lemma}
 
@@ -225,6 +251,11 @@ lemma escape_lemma (n : $\mathbb{N}$) (h : $\|$orbit c z n$\|$ > R c) :
     \item \textbf{Conclusion}: For any $M$, there is a time when the orbit exceeds $M$ and stays there.
 \end{itemize}
 
+\begin{proof}
+Let $w=f^n(z)$ and $\lambda=|w|-|c|/|w|>1$. By induction one shows $|f^k(w)|\ge|w|\lambda^k$ for all $k$: the base case is trivial, and if $|f^k(w)|\ge|w|\lambda^k$ then
+$|f^{k+1}(w)|\ge|f^k(w)|^2-|c|=|f^k(w)|(|f^k(w)|-|c|/|f^k(w)|)\ge|f^k(w)|\lambda\ge|w|\lambda^{k+1}$. Since $\lambda>1$ the right-hand side tends to infinity, so for any $M$ there exists $K$ with $|w|\lambda^K>M$, and hence for all $m\ge n+K$ we have $|f^{m}(z)|=|f^{m-n}(w)|\ge|w|\lambda^{m-n}>M$, proving escape to infinity.
+\end{proof}
+
 \subsubsection{Norm Non-Decreasing}
 
 \begin{lstlisting}[language=Lean]
@@ -274,3 +305,8 @@ We prove by induction that if $|z| > R(c)$, then $|f^n(z)| \ge |z|$.
     \item So $|z_n|(|z_n|-1) > 1 \cdot |c| = |c|$.
     \item Therefore $|z_{n+1}| > |z_n|$.
 \end{itemize}
+
+\begin{proof}
+Assume $|z|>R(c)$. By induction suppose $|f^n(z)|\ge|z|$; write $z_n=f^n(z)$. Then
+$|f(z_n)|\ge|z_n|^2-|c|=|z_n|(|z_n|-1)$. Since $|z_n|>R(c)\ge1+|c|$ we have $|z_n|-1>|c|$ and $|z_n|>1$, so $|z_n|(|z_n|-1)>|c|$. Hence $|f(z_n)|>|z_n|$, completing the induction and proving the sequence is non-decreasing (in fact strictly increasing).
+\end{proof}
