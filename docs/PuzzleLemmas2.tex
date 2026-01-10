@@ -120,6 +120,15 @@ ensure_no_sorry parameter_shrink_ax
     \item In the second case, the dynamical intersection is empty for large n, so the implication follows vacuously.
 \end{itemize}
 
+\begin{proof}
+The formal verification shows that the antecedent $\bigcap_n \mathrm{DynamicalPuzzlePiece}\;c\;n\;0 = \{0\}$ is actually always false under the current definitions.
+\begin{itemize}
+    \item If $c \in \mathcal{M}$, the filled Julia set $K_c$ is connected and contains $0$. Since $K_c$ is contained in every puzzle piece, the hypothesis would imply $K_c \subseteq \{0\}$, which is impossible (for instance, $1 \in K_0$).
+    \item If $c \notin \mathcal{M}$, the critical point escapes, so for large $n$ the dynamical piece is empty. Thus the intersection is empty, not $\{0\}$.
+\end{itemize}
+Since the premise is false, the implication holds vacuously.
+\end{proof}
+
 \subsection{Holomorphic Motions and Slodkowski's Theorem}
 
 To prove parameter puzzle pieces are open, we use the theory of Holomorphic Motions.
@@ -188,6 +197,10 @@ theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
     \item \texttt{slodkowski\_theorem}: Extends this motion to the whole plane.
     \item \textbf{Conclusion}: The extension implies that the critical value $c$ follows the motion of the puzzle piece interior. If $c_0$ was inside $D_n(c_0)$, then for small perturbations, $c$ remains inside $D_n(c)$. Thus parameters near $c_0$ are also in $\mathcal{P}_n$.
 \end{itemize}
+
+\begin{proof}
+The openness of parameter puzzle pieces is deduced from the existence of a holomorphic motion on the boundary (axiom \texttt{puzzle\_boundary\_motion\_exists}) and its extension to the whole plane via Slodkowski's Theorem. Specifically, if a parameter $c_0$ lies in a puzzle piece, the boundary motion guarantees that for parameters $c$ sufficiently close to $c_0$, the critical value moves in a way that preserves its containment within the corresponding dynamical puzzle piece. This defines an open neighborhood around $c_0$ contained within the parameter puzzle piece.
+\end{proof}
 
 \subsection{Basis of Neighborhoods}
 
