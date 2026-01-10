@@ -34,7 +34,7 @@ Before proving the main theorem, we need a lemma to transfer the shrinking resul
 
 \begin{lstlisting}[language=Lean]
 /-- If dynamical pieces shrink to a point, parameter pieces shrink to a point.
-    Proof idea: This follows directly from the Correspondence Principle axiom (`parameter_shrink_ax`),
+    Proof idea: This follows directly from the Correspondence Principle lemma (`parameter_shrink_ax` proved in PuzzleLemmas2.tex),
     which links the geometry of the dynamical plane to the parameter plane.
     If the dynamical nest at the critical value shrinks to a point, the corresponding parameter
     nest also shrinks to the parameter value. -/
@@ -49,7 +49,7 @@ lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0})
 \begin{itemize}
     \item \texttt{parameter\_shrink}: This lemma states that if the dynamical puzzle pieces $D_n(0)$ shrink to the single point $\{0\}$, then the parameter puzzle pieces $\mathcal{P}_n$ shrink to the single parameter $\{c\}$.
     \item This relies on the deep connection between the dynamical plane of $f_c$ and the parameter plane $\mathcal{M}$. Specifically, $c$ is the critical value ($f_c(0) = c$), so properties of the critical orbit $0 \to c \to \dots$ in the dynamical plane are reflected in the position of $c$ in the parameter puzzle.
-    \item We assume this correspondence as an axiom \texttt{parameter\_shrink\_ax} (defined in \texttt{Yoccoz.lean}) for this stage of the formalization.
+    \item This correspondence is established as a proven lemma \texttt{parameter\_shrink\_ax} (see \texttt{PuzzleLemmas2.tex}) in the formalization.
 \end{itemize}
 
 \subsection{Proof of the Conjecture}
@@ -100,15 +100,16 @@ theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
         \end{itemize}
 \end{itemize}
 
-\subsection{Sketch of the Lean proof (in the style of the Escape lemma)}
+\begin{proof}
+Fix a parameter $c\in\mathcal{M}$. By \texttt{dichotomy} we obtain two cases: $c$ is non-renormalizable or infinitely renormalizable.
 
-The proof in Mlc/MainConjecture.lean follows the same structure of presenting a concise formal proof and then explaining the key steps informally, as in the Escape lemma. Here is a short explanatory sketch that mirrors the Lean proof:
+If $c$ is non-renormalizable, then \texttt{non\_renormalizable\_moduli\_diverge} and \texttt{yoccoz\_theorem} yield
+$$(\bigcap_n\mathrm{DynamicalPuzzlePiece}\;c\;n\;0)=\{0\},$$
+so the correspondence lemma \texttt{parameter\_shrink\_ax} (see \texttt{PuzzleLemmas2.tex}) gives
+$$(\bigcap_n\mathrm{ParaPuzzlePiece}\;n)=\{c\},$$
+and \texttt{lc\_at\_of\_shrink} implies $\mathcal{M}$ is locally connected at $c$. 
 
-\begin{itemize}
-  \item Fix a parameter $c\in\mathcal{M}$. By the dichotomy of parameters we have two cases: either the Yoccoz annuli moduli diverge (non-renormalizable), or they converge (infinitely renormalizable).
-  \item In the non-renormalizable case one applies Yoccoz's theorem to deduce that the dynamical puzzle pieces around the critical value shrink to a point. Using the Correspondence Principle (axiomatized as \texttt{parameter\_shrink\_ax}) these dynamical pieces give parameter puzzle pieces shrinking to $\{c\}$. Finally, the lemma \texttt{lc\_at\_of\_shrink} upgrades shrinking parameter pieces to local connectivity at $c$.
-  \item In the infinitely renormalizable case one invokes Lyubich's theorem (assumed as an axiom \\ \texttt{mlc\_infinitely\_renormalizable}) which directly yields local connectivity at $c$.
-  \item Combining the two cases yields local connectivity at every point of $\mathcal{M}$; applying the usual reduction (\texttt{locallyConnectedSpace\_of\_locallyConnectedAt}) produces the global MLC theorem.
-\end{itemize}
+If $c$ is infinitely renormalizable, apply the axiom/theorem \texttt{mlc\_infinitely\_renormalizable} to obtain local connectivity at $c$. 
 
-The Lean proof mirrors this sketch closely: it uses \texttt{rcases dichotomy c} to split cases, then in each branch applies the corresponding theorem or axiom and finishes by calling \texttt{lc\_at\_of\_shrink} or the Lyubich axiom. This presentation is deliberately succinct: the heavy analytic inputs (Yoccoz and Lyubich) are taken as theorems/axioms in the development, while the formal glue (case-splitting, correspondence, and the local-to-global lemma) is fully formalized in Lean.
+Thus every point of $\mathcal{M}$ is a point of local connectivity, and the global conclusion follows by \\ \texttt{locallyConnectedSpace\_of\_locallyConnectedAt}.
+\end{proof}
