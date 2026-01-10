@@ -104,8 +104,21 @@ theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
     rw [Metric.mem_ball] at hc
     -- Identify c with a parameter t in the unit disk
     let t := (c - c₀) / r
-    -- (Verification of bounds and application of motion property)
-    ...
+    have ht : t ∈ Metric.ball 0 1 := by
+      rw [Metric.mem_ball, dist_zero_right]
+      dsimp [t]
+      rw [norm_div, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr]
+      rw [div_lt_one hr]
+      rw [dist_eq_norm] at hc
+      exact hc
+    -- Apply the property guaranteed by the axiom and Slodkowski extension
+    have h_in := h_prop H hH t ht
+    -- Recover c from t
+    have h_c_eq : c = c₀ + r * t := by
+      dsimp [t]
+      field_simp [ne_of_gt hr]
+      ring
+    rw [← h_c_eq] at h_in
     exact h_in
 \end{lstlisting}
 
