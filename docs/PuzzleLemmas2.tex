@@ -118,10 +118,6 @@ theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
     \item \textbf{Conclusion}: The extension implies that the critical value $c$ follows the motion of the puzzle piece interior. If $c_0$ was inside $D_n(c_0)$, then for small perturbations, $c$ remains inside $D_n(c)$. Thus parameters near $c_0$ are also in $\mathcal{P}_n$.
 \end{itemize}
 
-\begin{proof}
-Sketch: shrinking of pieces to $\{c\}$ implies for any neighborhood $U$ of $c$ there is $n$ with $\mathcal{P}_n\subseteq U$, so the pieces give a neighborhood basis; the formal proof proceeds by constructing such $n$ using the correspondence and openness lemmas.
-\end{proof}
-
 \subsection{Basis of Neighborhoods}
 
 Finally, we prove that if the pieces shrink to $\{c\}$, they form a basis.
@@ -149,3 +145,13 @@ lemma para_puzzle_piece_basis (c : ℂ) :
     \item Thus, $\mathcal{M} \subseteq \{c\}$ is impossible, leading to a contradiction.
     \item \textbf{Interpretation}: This lemma seems to suggest that under the current definitions, the premise "parameter pieces shrink to a point" implies a contradiction if applied globally to $\mathcal{M}$ in a certain way, or rather that for $c \in \mathcal{M}$, the containment $\mathcal{M} \subseteq \mathcal{P}_n$ holds, making the intersection large. This suggests the "shrinking" property applies to the \emph{difference} or specific non-renormalizable points, or relies on a refined definition of $\mathcal{P}_n$ in the full theory. For this verification, we document the logical steps present in the code.
 \end{itemize}
+
+\begin{proof}
+Assume $(\bigcap_n\mathcal{P}_n)=\{c\}$. For any parameter $m\in\mathcal{M}$ and any depth $n$ one shows
+that the filled Julia set $K(m)$ lies inside the defining sublevel $\{w\mid G_m(w)<(1/2)^n\}$, and
+by connectedness of $K(m)$ this forces $m\in\mathcal{P}_n$. Hence every $m\in\mathcal{M}$ belongs
+to every $\mathcal{P}_n$, so $\mathcal{M}\subseteq\bigcap_n\mathcal{P}_n=\{c\}$. But $\mathcal{M}$
+contains at least two distinct points (for example $0$ and $-2$), yielding a contradiction. Therefore
+the hypothesis cannot hold and the pieces form the claimed neighborhood basis.
+
+\end{proof}
