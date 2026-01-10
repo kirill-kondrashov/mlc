@@ -36,6 +36,10 @@ theorem dynamical_puzzle_piece_nested (c : ℂ) (n : ℕ) :
     \item \texttt{mul\_lt\_mul\_of\_pos\_right}: The inequality $(1/2) \cdot (1/2)^n < 1 \cdot (1/2)^n$ holds since $1/2 < 1$.
 \end{itemize}
 
+\begin{proof}
+Since $(1/2)^{n+1}<(1/2)^n$ the defining sublevel for depth $n+1$ is contained in that for depth $n$, and \texttt{connectedComponentIn\_mono} yields the inclusion of components; hence $P_{n+1}(0)\subseteq P_n(0)$.
+\end{proof}
+
 \subsection{Membership of the Critical Point}
 
 For parameters in the Mandelbrot set, the critical point 0 is always contained in its puzzle piece (which is defined *around* 0, but this confirms the set is non-empty and well-defined).
@@ -66,6 +70,10 @@ theorem mem_dynamical_puzzle_piece_self (c : ℂ) (hc : c ∈ MandelbrotSet) (n 
     \item \texttt{mem\_connectedComponentIn}: To show $z \in \text{Component}(S, z)$, it suffices to show $z \in S$.
     \item \textbf{Inequality}: We need $G_c(0) < (1/2)^n$. Since $G_c(0)=0$ and $(1/2)^n > 0$, this is always true.
 \end{itemize}
+
+\begin{proof}
+Because $c\in\mathcal{M}$ we have $0\in K_c$ and hence $G_c(0)=0$. Since $0<(1/2)^n$ it follows that $0$ belongs to the defining sublevel set and therefore to its connected component, proving $0\in P_n(0)$.
+\end{proof}
 
 \subsection{Behavior Outside the Mandelbrot Set}
 
@@ -115,3 +123,7 @@ theorem dynamical_puzzle_piece_empty_of_large_n (c : ℂ) (hc : c ∉ Mandelbrot
     \item But for $n \ge N$, $(1/2)^n \le (1/2)^N < G_c(0)$.
     \item This gives $G_c(0) < G_c(0)$, a contradiction (\texttt{linarith}).
 \end{itemize}
+
+\begin{proof}
+If $c\notin\mathcal{M}$ then $G_c(0)>0$ and $(1/2)^n\to0$, so choose $N$ with $(1/2)^N<G_c(0)$. For any $n\ge N$ the condition $G_c(0)<(1/2)^n$ fails, hence $0\notin P_n(0)$ for all such $n$, as required.
+\end{proof}
