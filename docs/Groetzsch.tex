@@ -45,6 +45,10 @@ theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
     \item \texttt{modulus\_nonneg}: Ensures the modulus is always non-negative. This is split into cases: 0 for the empty set, and non-negative by axiom for non-empty sets.
 \end{itemize}
 
+\begin{proof}
+If $A=\varnothing$ then $\text{modulus}(A)=0$, so $0\le \text{modulus}(A)$. Otherwise $\text{modulus}(A)=\text{raw\_modulus}(A)$ and by the axiom $0\le \text{raw\_modulus}(A)$, hence $0\le \text{modulus}(A)$.
+\end{proof}
+
 \subsection{Grötzsch's Inequality}
 
 The fundamental property of the modulus used here is superadditivity for disjoint nested annuli. This is known as Grötzsch's Inequality.
@@ -88,6 +92,10 @@ lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆
     \item Base case (\texttt{zero}): $P_i \subseteq P_i$ is reflexive.
     \item Inductive step (\texttt{succ}): Uses transitivity: $P_{i+m+1} \subseteq P_{i+m} \subseteq P_i$.
 \end{itemize}
+
+\begin{proof}
+Write $j=i+k$ and proceed by induction on $k$. The base case $k=0$ is trivial since $P_i\subseteq P_i$. For the inductive step, assume $P_{i+m+1}\subseteq P_i$ when $j=i+m$; then using $P_{i+m+1}\subseteq P_{i+m}$ and the transitive inclusion $P_{i+m}\subseteq P_i$ yields $P_{i+m+1}\subseteq P_i$, completing the induction.
+\end{proof}
 
 \subsection{Summability from Non-trivial Intersection}
 
@@ -201,6 +209,22 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     \item \texttt{summable\_of\_sum\_range\_le}: Concludes convergence since the partial sums are bounded and terms are non-negative.
 \end{itemize}
 
+\begin{proof}
+The central step is the induction which shows for every N:
+\[
+\sum_{n=0}^{N-1}\mathrm{mod}(A_n)\le\mathrm{mod}(P_0\setminus P_N).
+\]
+For $N=0$ the claim is trivial. For the inductive step decompose
+\[
+P_0\setminus P_{k+1}=(P_0\setminus P_k)\cup(P_k\setminus P_{k+1}),
+\]
+and note the union is disjoint. Applying Grötzsch's inequality to this decomposition yields
+\[
+\mathrm{mod}(P_0\setminus P_k)+\mathrm{mod}(P_k\setminus P_{k+1})\le\mathrm{mod}(P_0\setminus P_{k+1}).
+\]
+By the inductive hypothesis the left-hand side bounds the partial sum up to index $k$, hence the partial sum up to $k+1$ is bounded by the modulus of the outer difference. Iterating and passing to the intersection gives a uniform bound for all partial sums, and since the terms are non-negative the series is summable.
+\end{proof}
+
 \subsection{Grötzsch's Criterion}
 
 Finally, we prove the main criterion: if the sum of moduli diverges, the intersection must be a single point (assuming it contains 0).
@@ -250,3 +274,7 @@ theorem groetzsch_criterion {P : ℕ → Set ℂ}
     \item \textbf{Contradiction}: We have derived that the sum is summable (\texttt{h\_sum}), which contradicts the hypothesis \texttt{h\_div} (that the sum is not summable).
     \item Therefore, the assumption \texttt{h\_neq} must be false, and the intersection is indeed exactly $\{0\}$.
 \end{itemize}
+
+\begin{proof}
+Assume the intersection contains a point $z\neq0$; then it is nontrivial and by the previous theorem the series of moduli is summable. This contradicts the hypothesis that the series diverges, so the intersection must equal $\{0\}$.
+\end{proof}

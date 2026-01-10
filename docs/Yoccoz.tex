@@ -21,6 +21,17 @@ theorem non_renormalizable_moduli_diverge (c : ℂ) (h : NonRenormalizable c) :
 \end{lstlisting}
 
 \noindent
+\textbf{Simple proof idea:}
+\begin{itemize}
+    \item The definition \texttt{NonRenormalizable c} is exactly the proposition that the sequence of annulus moduli is not summable.
+    \item The Lean theorem \texttt{non\_renormalizable\_moduli\_diverge} is therefore a one-line wrapper that returns the hypothesis: given \texttt{h : NonRenormalizable c}, the conclusion follows immediately by returning \texttt{h}.
+\end{itemize}
+
+\begin{proof}
+Immediate from the definition: the hypothesis \texttt{h} is the required conclusion, so the proof is simply \texttt{exact h}.
+\end{proof}
+
+\noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
     \item \texttt{NonRenormalizable c}: Defined as the negation of summability for the moduli of puzzle annuli.
@@ -100,3 +111,7 @@ theorem yoccoz_theorem (c : ℂ) :
             \item Thus, non-renormalizable parameters (by this definition) must lie in the Mandelbrot set.
         \end{itemize}
 \end{itemize}
+
+\begin{proof}
+Simplified proof: If $c\in\mathcal{M}$, apply Grötzsch's criterion to the nested, connected dynamical pieces that all contain $0$; divergence of the annulus moduli forces their intersection to be the single point $\{0\}$. If $c\notin\mathcal{M}$ the pieces are eventually empty, so the moduli vanish and their sum is finite, contradicting the divergence hypothesis. Therefore only the first case can occur and the intersection equals $\{0\}$.
+\end{proof}

@@ -56,6 +56,10 @@ lemma green_function_functional_eq (c z : $\mathbb{C}$) :
         \end{itemize}
 \end{itemize}
 
+\begin{proof}
+From the relation $a_n(f(z))=2a_{n+1}(z)$ one gets $a_n(f(z))\to2G(z)$ as $n\to\infty$. By definition $G(f(z))$ is the limit of $a_n(f(z))$, hence $G(f(z))=2G(z)$ by uniqueness of limits.
+\end{proof}
+
 \subsection{Basic Properties}
 
 \subsubsection{Non-Negativity}
@@ -90,6 +94,10 @@ lemma green_function_nonneg (c z : $\mathbb{C}$) : 0 $\le$ green_function c z :=
     \item \texttt{linarith}: Conclude $G \ge 0$ from $-G \le 0$.
 \end{itemize}
 
+\begin{proof}
+The iterate formula follows by induction from the functional equation $G(f(w))=2G(w)$: the base case is trivial and the inductive step applies the functional equation to $w=f^n(z)$ then simplifies $2\cdot 2^n=2^{n+1}$.
+\end{proof}
+
 \subsubsection{Iteration Property}
 
 \begin{lstlisting}[language=Lean]
@@ -113,6 +121,16 @@ lemma green_function_iterate (c z : $\mathbb{C}$) (n : $\mathbb{N}$) :
     \item \texttt{rw [ih]}: Substitute the inductive hypothesis: $2 \cdot (2^n G(z))$.
     \item \texttt{ring}: Algebraic simplification to show $2 \cdot 2^n = 2^{n+1}$.
 \end{itemize}
+
+\begin{proof}
+By induction on $n$: the base case $n=0$ is trivial. For the inductive step, using \texttt{orbit\_succ} and the functional equation we have
+
+\[
+G(\text{orbit } c\ z\ (n+1)) = G(fc\ c\ (\text{orbit } c\ z\ n)) = 2\,G(\text{orbit } c\ z\ n) = 2\cdot(2^n\,G(z)) = 2^{n+1}\,G(z).
+\]
+
+This completes the induction.
+\end{proof}
 
 \subsection{Positivity and Characterization of K(c)}
 
@@ -166,6 +184,10 @@ lemma green_function_pos_of_large_norm (c z : $\mathbb{C}$) (h : $\|$z$\|$ > esc
     \item \textbf{Conclusion}: $G(z) \ge \log|z| - M$. Since $|z|$ is very large, $\log|z|$ dominates the small error term $M$, so $G(z) > 0$.
 \end{itemize}
 
+\begin{proof}
+For the forward direction, if $G(z)=0$ and $z$ escaped then for large $n$ one would have $G(f^n(z))>0$, but $G(f^n(z))=2^nG(z)=0$, contradiction. For the reverse direction, if $z\in K$ then $a_n(z)\to0$, so by uniqueness of limits $G(z)=0$; combined with non-negativity this gives the equality.
+\end{proof}
+
 \subsubsection{Characterization Theorem}
 
 \begin{lstlisting}[language=Lean]
@@ -208,6 +230,10 @@ lemma green_function_eq_zero_iff_mem_K (c z : $\mathbb{C}$) :
         \end{itemize}
 \end{itemize}
 
+\begin{proof}
+If $G(z)=0$ but $z\notin K_c$ then for some $n$ the iterate $f^n(z)$ lies beyond the escape bound, so by positivity at infinity $G(f^n(z))>0$. But $G(f^n(z))=2^nG(z)=0$, contradiction, hence $z\in K_c$. Conversely, if $z\in K_c$ the potential sequence tends to $0$, so by uniqueness of limits $G(z)=0$; combined with non-negativity this yields the equality.
+\end{proof}
+
 \subsubsection{Positivity on Basin of Infinity}
 
 \begin{lstlisting}[language=Lean]
@@ -230,3 +256,7 @@ lemma green_function_pos_iff_not_mem_K (c z : $\mathbb{C}$) :
     \item \texttt{have ... le\_antisymm}: Since $G \ge 0$ always, $G \le 0$ implies $G=0$.
     \item \texttt{rw [green\_function\_eq\_zero\_iff\_mem\_K]}: We reduce to the previous theorem: $G=0 \iff z \in K_c$.
 \end{itemize}
+
+\begin{proof}
+Since $G(z)\ge0$ for all $z$, the negation of $0<G(z)$ is $G(z)\le0$, and together these force $G(z)=0$. Therefore $0<G(z)$ holds exactly when $G(z)\neq0$, which by the previous lemma $\texttt{green\_function\_eq\_zero\_iff\_mem\_K}$ is equivalent to $z\notin K_c$.
+\end{proof}

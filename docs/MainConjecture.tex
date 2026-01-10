@@ -28,13 +28,19 @@ theorem dichotomy (c : ℂ) : NonRenormalizable c ∨ InfinitelyRenormalizable c
     \item The proof is a simple application of the law of excluded middle on the proposition \texttt{Summable ...}.
 \end{itemize}
 
+\begin{proof}
+We partition the parameter plane based on the behavior of the series of moduli $\sum \text{mod}(A_n(c))$.
+In this formalization, \texttt{NonRenormalizable c} is defined as the divergence of this series (the condition for Yoccoz's theorem), while \texttt{InfinitelyRenormalizable c} is defined as its convergence (the condition for Lyubich's theorem).
+The theorem then follows directly from the law of excluded middle applied to the summability of the series.
+\end{proof}
+
 \subsection{Correspondence Principle}
 
 Before proving the main theorem, we need a lemma to transfer the shrinking result from the dynamical plane to the parameter plane.
 
 \begin{lstlisting}[language=Lean]
 /-- If dynamical pieces shrink to a point, parameter pieces shrink to a point.
-    Proof idea: This follows directly from the Correspondence Principle axiom (`parameter_shrink_ax`),
+    Proof idea: This follows directly from the Correspondence Principle lemma (`parameter_shrink_ax` proved in PuzzleLemmas2.tex),
     which links the geometry of the dynamical plane to the parameter plane.
     If the dynamical nest at the critical value shrinks to a point, the corresponding parameter
     nest also shrinks to the parameter value. -/
@@ -49,7 +55,7 @@ lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0})
 \begin{itemize}
     \item \texttt{parameter\_shrink}: This lemma states that if the dynamical puzzle pieces $D_n(0)$ shrink to the single point $\{0\}$, then the parameter puzzle pieces $\mathcal{P}_n$ shrink to the single parameter $\{c\}$.
     \item This relies on the deep connection between the dynamical plane of $f_c$ and the parameter plane $\mathcal{M}$. Specifically, $c$ is the critical value ($f_c(0) = c$), so properties of the critical orbit $0 \to c \to \dots$ in the dynamical plane are reflected in the position of $c$ in the parameter puzzle.
-    \item We assume this correspondence as an axiom \texttt{parameter\_shrink\_ax} (defined in \texttt{Yoccoz.lean}) for this stage of the formalization.
+    \item This correspondence is established as a proven lemma \texttt{parameter\_shrink\_ax} (see \texttt{PuzzleLemmas2.tex}) in the formalization.
 \end{itemize}
 
 \subsection{Proof of the Conjecture}
@@ -99,3 +105,17 @@ theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
             \item \texttt{mlc\_infinitely\_renormalizable}: Directly applies Lyubich's theorem (axiomatized) to conclude local connectivity.
         \end{itemize}
 \end{itemize}
+
+\begin{proof}
+Fix a parameter $c\in\mathcal{M}$. By \texttt{dichotomy} we obtain two cases: $c$ is non-renormalizable or infinitely renormalizable.
+
+If $c$ is non-renormalizable, then \texttt{non\_renormalizable\_moduli\_diverge} and \texttt{yoccoz\_theorem} yield
+$$(\bigcap_n\mathrm{DynamicalPuzzlePiece}\;c\;n\;0)=\{0\},$$
+so the correspondence lemma \texttt{parameter\_shrink\_ax} (see \texttt{PuzzleLemmas2.tex}) gives
+$$(\bigcap_n\mathrm{ParaPuzzlePiece}\;n)=\{c\},$$
+and \texttt{lc\_at\_of\_shrink} implies $\mathcal{M}$ is locally connected at $c$. 
+
+If $c$ is infinitely renormalizable, apply the axiom/theorem \texttt{mlc\_infinitely\_renormalizable} to obtain local connectivity at $c$. 
+
+Thus every point of $\mathcal{M}$ is a point of local connectivity, and the global conclusion follows by \\ \texttt{locallyConnectedSpace\_of\_locallyConnectedAt}.
+\end{proof}
