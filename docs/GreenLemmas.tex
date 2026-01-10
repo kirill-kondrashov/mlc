@@ -55,6 +55,10 @@ We split into two cases: $x \ge 1$ and $0.5 \le x < 1$.
         \item Algebra shows $-(1 - 1/x) \le 2(1-x)$ for $x \ge 0.5$.
 \end{itemize}
 
+\begin{proof}
+Consider the two cases. If $x\ge1$ then $\log x\le x-1\le2(x-1)$ so $|\log x|\le2|x-1|$. If $0.5\le x<1$ apply the bound $\log x\ge1-1/x$ and rearrange to get $-\log x\le2(1-x)$, hence $|\log x|\le2|x-1|$. Thus the inequality holds in both cases.
+\end{proof}
+
 \subsubsection{Escape Bounds}
 
 We define a specific escape bound that ensures the quadratic behavior dominates.
@@ -220,6 +224,10 @@ lemma potential_seq_converges_of_escapes (h : z $\notin$ K c) :
     \item \texttt{summable\_geometric\_of\_lt\_one}: The geometric series $\sum (1/2)^k$ converges because $|1/2| < 1$.
 \end{itemize}
 
+\begin{proof}
+By unboundedness choose $n_0$ with $|z_{n_0}|>B$ and apply the escape lemma to obtain growth from $n_0$ onward. For the tail we have $|a_{n+1}-a_n|\le C\,2^{-(n+1)}$ by \texttt{potential\_seq\_diff\_le}, so the series of consecutive differences is dominated by a convergent geometric series; hence $(a_n)$ is Cauchy and therefore converges in $\mathbb{R}$.
+\end{proof}
+
 \subsubsection{Global Convergence}
 
 Combining these, we have the global convergence.
@@ -255,3 +263,7 @@ lemma green_function_eq_lim (c z : $\mathbb{C}$) :
     \item \texttt{Classical.epsilon\_spec}: The \texttt{lim} operator is defined using Hilbert's epsilon operator to pick \emph{a} limit if one exists.
     \item \texttt{tendsto\_nhds\_unique}: In a Hausdorff space (like $\mathbb{R}$), limits are unique. Thus, the value picked by \texttt{lim} must be exactly the $L$ we established.
 \end{itemize}
+
+\begin{proof}
+Combine the two previous cases: if $z\in K_c$ the sequence tends to $0$, otherwise it converges to some $L$ by the Cauchy argument above. The definition of the Green function uses \texttt{lim} to select a limit when one exists, and uniqueness of limits in $\mathbb{R}$ identifies this $L$ with $G_c(z)$; therefore the potential sequence tends to $G_c(z)$.
+\end{proof}
