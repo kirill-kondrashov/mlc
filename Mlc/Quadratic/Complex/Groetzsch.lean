@@ -14,20 +14,47 @@ open Complex Topology Filter Set BigOperators Classical
 
 noncomputable section
 
+/-- An annulus in the complex plane.
+    Mathematically, an annulus is a topological cylinder (a doubly connected open set).
+    It is conformally isomorphic to a standard annulus {z | r < |z| < R}.
+    In this formalization, we wrap `Set ℂ` in a structure to distinguish it,
+    though we do not strictly enforce the topological properties in the type
+    to facilitate usage with `modulus` on general sets (where non-annuli have modulus 0 or undefined). -/
+structure Annulus where
+  val : Set ℂ
+
 /-- The conformal modulus of an annulus.
     We treat this as an opaque function for non-empty sets, but explicitly define it as 0 for the empty set.
+
+    Human-readable explanation:
+    An annulus is a region of the complex plane that is topologically a cylinder (doubly connected).
+    Any such region is conformally equivalent to a straight cylinder of circumference 1 and some height m,
+    or equivalently to a standard round annulus {z | r < |z| < R} where m = (1 / 2π) * log(R/r).
+    This value m is the modulus. It measures how "thick" the annulus is; a very thin annulus has small modulus,
+    and a very thick one has large modulus. It is a conformal invariant.
+
+    Formalization Note:
+    The mathematical definition of modulus applies specifically to annuli (topological cylinders).
+    In this formalization, we use the `Annulus` type to signal that the input is treated as an annulus.
+    However, the `modulus` function is exposed as a total function `Set ℂ → ℝ` for convenience,
+    wrapping the set into an `Annulus`.
+    For a set `A` that is not an annulus, `raw_modulus (Annulus.mk A)` is underspecified (or can be considered 0).
+    The axioms regarding modulus are intended to be applied when the relevant sets are annuli.
+    We do not formally define the predicate `IsAnnulus` here, but in the context of the puzzle proofs,
+    the sets `P n \ P (n+1)` are difference of nested connected open sets, forming annuli.
+
     See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
     Local Reference: `refs/9201272v1.pdf`
     "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of height to circumference."
     "Corollary B.4. The modulus of a cylinder is a well defined conformal invariant."
     "It follows that the modulus of an annulus A can be defined as the modulus
     of any conformally isomorphic cylinder." -/
-opaque raw_modulus (A : Set ℂ) : ℝ
+opaque raw_modulus (A : Annulus) : ℝ
 
 /-- The modulus of an annulus.
     Defined to be 0 for the empty set, and the `raw_modulus` otherwise. -/
 noncomputable def modulus (A : Set ℂ) : ℝ :=
-  if A = ∅ then 0 else raw_modulus A
+  if A = ∅ then 0 else raw_modulus ⟨A⟩
 
 /-- The modulus of the empty set is 0.
     See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
@@ -47,13 +74,13 @@ theorem modulus_empty : modulus ∅ = 0 := by
     Local Reference: `refs/9201272v1.pdf`
     "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of
     height to circumference." (Ratio of positive lengths is positive). -/
-axiom modulus_nonneg_ax (A : Set ℂ) : 0 ≤ raw_modulus A
+axiom modulus_nonneg_ax (A : Annulus) : 0 ≤ raw_modulus A
 
 theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
   unfold modulus
   split_ifs
   · exact le_refl 0
-  · exact modulus_nonneg_ax A
+  · exact modulus_nonneg_ax ⟨A⟩
 
 /-- Grötzsch's Inequality: Superadditivity of modulus for disjoint essential annuli.
     See: [Milnor, Dynamics in One Complex Variable, Corollary B.5] <https://arxiv.org/pdf/math/9201272.pdf>

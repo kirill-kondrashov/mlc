@@ -7,20 +7,39 @@ This section describes the verification of the file \texttt{Mlc/Quadratic/Comple
 
 We begin by defining the modulus of an annulus. Following Milnor (Appendix B), the modulus is a conformal invariant.
 
+An annulus is a region of the complex plane $\mathbb{C}$ that is topologically a cylinder (doubly connected). Any such region is conformally equivalent to a straight cylinder of circumference 1 and some height $m$, or equivalently to a standard round annulus $\{z \mid r < |z| < R\}$ where $m = \frac{1}{2\pi} \log(R/r)$. This value $m$ is the modulus. It measures how ``thick'' the annulus is; a very thin annulus has small modulus, and a very thick one has large modulus. It is a conformal invariant.
+
+\begin{quote}
+    ``Define the modulus mod($C$) of such a cylinder to be the ratio $\Delta y/\Delta x$ of height to circumference.''\cite{Milnor}
+\end{quote}
+
+\begin{quote}
+    ``Corollary B.4. The modulus of a cylinder is a well defined conformal invariant.''\cite{Milnor}
+\end{quote}
+
+\begin{quote}
+    ``It follows that the modulus of an annulus $A$ can be defined as the modulus of any conformally isomorphic cylinder.''\cite{Milnor}
+\end{quote}
+
 \begin{lstlisting}[language=Lean]
-opaque raw_modulus (A : Set ℂ) : ℝ
+/-- An annulus in the complex plane. -/
+structure Annulus where
+  val : Set ℂ
+
+opaque raw_modulus (A : Annulus) : ℝ
 
 /-- The modulus of an annulus.
     Defined to be 0 for the empty set, and the `raw_modulus` otherwise. -/
 noncomputable def modulus (A : Set ℂ) : ℝ :=
-  if A = ∅ then 0 else raw_modulus A
+  if A = ∅ then 0 else raw_modulus ⟨A⟩
 \end{lstlisting}
 
 \noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
-    \item \texttt{raw\_modulus (A : Set ℂ)}: This is an opaque definition representing the conformal modulus. In a full formalization from first principles, this would be defined via extremal length or conformal mapping to a standard cylinder. Here, we treat it axiomatically as a real-valued function.
-    \item \texttt{modulus}: A wrapper around \texttt{raw\_modulus} that explicitly handles the empty set case, ensuring \texttt{modulus ∅ = 0}.
+    \item \texttt{Annulus}: A structure wrapping \texttt{Set ℂ} to distinguish sets that are intended to be treated as annuli. This type does not enforce topological properties but serves as a semantic marker.
+    \item \texttt{raw\_modulus (A : Annulus)}: This is an opaque definition representing the conformal modulus. In a full formalization from first principles, this would be defined via extremal length or conformal mapping to a standard cylinder. Here, we treat it axiomatically as a real-valued function on the \texttt{Annulus} type.
+    \item \texttt{modulus}: A wrapper around \texttt{raw\_modulus} that explicitly handles the empty set case, ensuring \texttt{modulus ∅ = 0}. It lifts a \texttt{Set ℂ} to an \texttt{Annulus} before calling \texttt{raw\_modulus}.
 \end{itemize}
 
 We establish basic properties of the modulus:
@@ -29,20 +48,20 @@ We establish basic properties of the modulus:
 theorem modulus_empty : modulus ∅ = 0 := by
   simp [modulus]
 
-axiom modulus_nonneg_ax (A : Set ℂ) : 0 ≤ raw_modulus A
+axiom modulus_nonneg_ax (A : Annulus) : 0 ≤ raw_modulus A
 
 theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
   unfold modulus
   split_ifs
   · exact le_refl 0
-  · exact modulus_nonneg_ax A
+  · exact modulus_nonneg_ax ⟨A⟩
 \end{lstlisting}
 
 \noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
     \item \texttt{modulus\_empty}: Trivially true by the definition of \texttt{modulus}.
-    \item \texttt{modulus\_nonneg}: Ensures the modulus is always non-negative. This is split into cases: 0 for the empty set, and non-negative by axiom for non-empty sets.
+    \item \texttt{modulus\_nonneg}: Ensures the modulus is always non-negative. This is split into cases: 0 for the empty set, and non-negative by axiom for non-empty sets (which are wrapped into an \texttt{Annulus}).
 \end{itemize}
 
 \begin{proof}
