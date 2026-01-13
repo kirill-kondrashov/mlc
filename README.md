@@ -38,6 +38,16 @@ Some of the statements used in the proof are stated as `axiom`s (keyword in Lean
 *   [`puzzle_boundary_motion_exists`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L164): Axiom stating that the boundary of puzzle pieces moves holomorphically.
     *   Note: This bridges the geometric properties of quadratic polynomials with the Slodkowski theorem.
 
+## Future Directions
+
+The following axioms are identified as targets for future formalization. Replacing these with formal proofs would make the result fully self-contained:
+
+*   `MLC.Quadratic.groetzsch_inequality_axiom`
+*   `MLC.Quadratic.modulus_nonneg`
+*   `MLC.Quadratic.puzzle_boundary_motion_exists`
+*   `MLC.Quadratic.slodkowski_theorem`
+*   `MLC.mlc_infinitely_renormalizable_ax`
+
 ## Verification
 
 To verify the proof and check for axioms (`sorry` keyword in Lean), run:
