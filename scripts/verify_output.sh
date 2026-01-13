@@ -13,7 +13,7 @@ sed -n '/^Output:/,$p' "$README" | sed -n '/^```$/,/^```$/p' | sed '1d;$d' > "$E
 # Run make check and capture output
 # We filter out lines starting with "lake" or containing progress bars if necessary
 # Assuming the relevant output is at the end.
-echo "Running make check..."
+echo "Re-running make check..."
 make check > "$ACTUAL" 2>&1
 EXIT_CODE=$?
 
