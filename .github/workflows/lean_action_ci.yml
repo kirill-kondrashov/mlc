@@ -29,11 +29,17 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-lake-
 
-    - name: Get Mathlib Cache
+    - name: Get mathlib cache
       run: make cache
 
     - name: Build Mlc
       run: make build
 
-    - name: Check Axioms
-      run: make check
+    - name: Check axioms
+      run:
+        make check
+
+    - name: Check the list of axioms in the README.md
+      run: |
+        chmod +x scripts/verify_output.sh
+        ./scripts/verify_output.sh
