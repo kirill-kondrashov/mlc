@@ -1,121 +1,43 @@
-\section{Main Conjecture Statement}
-\label{sec:MainConjecture}
+\section{Main Conjecture}
 
-This section describes the verification of the file \texttt{Mlc/MainConjecture.lean}. It consolidates all previous results to prove the Local Connectivity of the Mandelbrot Set (MLC) for quadratic polynomials.
+\subsection*{Theorem dichotomy}
+\textbf{Description:} Every parameter is either non-renormalizable or infinitely renormalizable.
 
-\subsection{Dichotomy of Parameters}
-
-The first step in the proof is to establish a dichotomy for all parameters $c \in \mathbb{C}$ based on the behavior of their Yoccoz puzzle moduli.
+\textbf{Proof Description:} By the law of excluded middle, the sum of moduli either converges or diverges.
+    We use the definition of NonRenormalizable and InfinitelyRenormalizable which directly
+    map to this divergence/convergence behavior.
 
 \begin{lstlisting}[language=Lean]
-/-- Every parameter is either non-renormalizable or infinitely renormalizable.
-    Proof idea: By the law of excluded middle, the sum of moduli either converges or diverges.
-    We use the definition of NonRenormalizable and InfinitelyRenormalizable which directly
-    map to this divergence/convergence behavior. -/
 theorem dichotomy (c : ℂ) : NonRenormalizable c ∨ InfinitelyRenormalizable c := by
-  rw [NonRenormalizable, InfinitelyRenormalizable]
-  by_cases h : Summable (fun n => modulus (PuzzleAnnulus c n))
-  · right; exact h
-  · left; exact h
 \end{lstlisting}
 
-\noindent
-\textbf{Detailed Explanation:}
-\begin{itemize}
-    \item We partition the parameter plane into two sets based on the convergence of the series $\sum \text{mod}(A_n(c))$.
-    \item \texttt{NonRenormalizable c} is defined as the divergence of this sum (which is the condition for Yoccoz's theorem).
-    \item \texttt{InfinitelyRenormalizable c} is defined as the convergence of this sum (which is the condition for Lyubich's theorem).
-    \item The proof is a simple application of the law of excluded middle on the proposition \texttt{Summable ...}.
-\end{itemize}
+\subsection*{Lemma parameter\_shrink}
+\textbf{Description:} If dynamical pieces shrink to a point, parameter pieces shrink to a point.
 
-\begin{proof}
-We partition the parameter plane based on the behavior of the series of moduli $\sum \text{mod}(A_n(c))$.
-In this formalization, \texttt{NonRenormalizable c} is defined as the divergence of this series (the condition for Yoccoz's theorem), while \texttt{InfinitelyRenormalizable c} is defined as its convergence (the condition for Lyubich's theorem).
-The theorem then follows directly from the law of excluded middle applied to the summability of the series.
-\end{proof}
-
-\subsection{Correspondence Principle}
-
-Before proving the main theorem, we need a lemma to transfer the shrinking result from the dynamical plane to the parameter plane.
-
-\begin{lstlisting}[language=Lean]
-/-- If dynamical pieces shrink to a point, parameter pieces shrink to a point.
-    Proof idea: This follows directly from the Correspondence Principle lemma (`parameter_shrink_ax` proved in PuzzleLemmas2.tex),
+\textbf{Proof Description:} This follows directly from the Correspondence Principle axiom (\texttt{parameter\_shrink\_ax}),
     which links the geometry of the dynamical plane to the parameter plane.
     If the dynamical nest at the critical value shrinks to a point, the corresponding parameter
-    nest also shrinks to the parameter value. -/
-lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0}) :
-    (⋂ n, ParaPuzzlePiece n) = {c} := by
-  -- Use the correspondence principle
-  apply parameter_shrink_ax c h
-\end{lstlisting}
-
-\noindent
-\textbf{Detailed Explanation:}
-\begin{itemize}
-    \item \texttt{parameter\_shrink}: This lemma states that if the dynamical puzzle pieces $D_n(0)$ shrink to the single point $\{0\}$, then the parameter puzzle pieces $\mathcal{P}_n$ shrink to the single parameter $\{c\}$.
-    \item This relies on the deep connection between the dynamical plane of $f_c$ and the parameter plane $\mathcal{M}$. Specifically, $c$ is the critical value ($f_c(0) = c$), so properties of the critical orbit $0 \to c \to \dots$ in the dynamical plane are reflected in the position of $c$ in the parameter puzzle.
-    \item This correspondence is established as a proven lemma \texttt{parameter\_shrink\_ax} (see \texttt{PuzzleLemmas2.tex}) in the formalization.
-\end{itemize}
-
-\subsection{Proof of the Conjecture}
-
-Finally, we prove that the Mandelbrot set is a locally connected space.
+    nest also shrinks to the parameter value.
 
 \begin{lstlisting}[language=Lean]
-/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    The Mandelbrot set is locally connected.
-    Proof idea: We prove local connectivity at every point `c` in the Mandelbrot set.
-    We split the proof into two cases based on the `dichotomy`:
-    1.  **Non-renormalizable**: The moduli of the puzzle annuli diverge. Yoccoz's theorem
-        implies the dynamical pieces shrink to a point. The Correspondence Principle then
-        implies the parameter pieces shrink to `c`. Finally, `lc_at_of_shrink` shows this
-        implies local connectivity at `c`.
-    2.  **Infinitely renormalizable**: We invoke Lyubich's deep theorem (`mlc_infinitely_renormalizable`)
-        which establishes MLC in this case. -/
-theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
-  -- We need to show local connectivity at every point c ∈ MandelbrotSet
-  apply locallyConnectedSpace_of_locallyConnectedAt
-  intro ⟨c, hc⟩
-  rcases dichotomy c with h_non_renorm | h_inf_renorm
-  · -- Case 1: Non-renormalizable
-    have h_div := non_renormalizable_moduli_diverge c h_non_renorm
-    have h_dyn := yoccoz_theorem c h_div
-    have h_para := parameter_shrink c h_dyn
-    exact lc_at_of_shrink c hc h_para
-  · -- Case 2: Infinitely renormalizable
-    exact mlc_infinitely_renormalizable c hc h_inf_renorm
+lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0}) :
+    (⋂ n, ParaPuzzlePiece n) = {c} := by
 \end{lstlisting}
 
-\noindent
-\textbf{Detailed Explanation:}
-\begin{itemize}
-    \item \texttt{MLC\_Conjecture}: The statement that $\mathcal{M}$ is a \texttt{LocallyConnectedSpace}.
-    \item \texttt{apply locallyConnectedSpace\_of\_locallyConnectedAt}: We reduce the global property to a local property: we must show $\mathcal{M}$ is locally connected at every point $c \in \mathcal{M}$.
-    \item \texttt{rcases dichotomy c}: We split the proof into two cases based on the behavior of the puzzle moduli.
-    \item \textbf{Case 1: Non-Renormalizable} (divergent moduli):
-        \begin{itemize}
-            \item \texttt{non\_renormalizable\_moduli\_diverge}: Confirms the hypothesis for Yoccoz's theorem.
-            \item \texttt{yoccoz\_theorem}: Applies Yoccoz's theorem to conclude that the dynamical puzzle pieces shrink to $\{0\}$.
-            \item \texttt{parameter\_shrink}: Transfers this result to the parameter plane, concluding parameter pieces shrink to $\{c\}$.
-            \item \texttt{lc\_at\_of\_shrink}: Concludes that shrinking parameter pieces imply local connectivity at $c$.
-        \end{itemize}
-    \item \textbf{Case 2: Infinitely Renormalizable} (convergent moduli):
-        \begin{itemize}
-            \item \texttt{mlc\_infinitely\_renormalizable}: Directly applies Lyubich's theorem (axiomatized) to conclude local connectivity.
-        \end{itemize}
-\end{itemize}
+\subsection*{Theorem MLC\_Conjecture}
+\textbf{Description:} The Mandelbrot Local Connectivity (MLC) Conjecture:
+    The Mandelbrot set is locally connected.
 
-\begin{proof}
-Fix a parameter $c\in\mathcal{M}$. By \texttt{dichotomy} we obtain two cases: $c$ is non-renormalizable or infinitely renormalizable.
+\textbf{Proof Description:} We prove local connectivity at every point \texttt{c} in the Mandelbrot set.
+    We split the proof into two cases based on the \texttt{dichotomy}:
+    1.  **Non-renormalizable**: The moduli of the puzzle annuli diverge. Yoccoz's theorem
+        implies the dynamical pieces shrink to a point. The Correspondence Principle then
+        implies the parameter pieces shrink to \texttt{c}. Finally, \texttt{lc\_at\_of\_shrink} shows this
+        implies local connectivity at \texttt{c}.
+    2.  **Infinitely renormalizable**: We invoke Lyubich's deep theorem (\texttt{mlc\_infinitely\_renormalizable})
+        which establishes MLC in this case.
 
-If $c$ is non-renormalizable, then \texttt{non\_renormalizable\_moduli\_diverge} and \texttt{yoccoz\_theorem} yield
-$$(\bigcap_n\mathrm{DynamicalPuzzlePiece}\;c\;n\;0)=\{0\},$$
-so the correspondence lemma \texttt{parameter\_shrink\_ax} (see \texttt{PuzzleLemmas2.tex}) gives
-$$(\bigcap_n\mathrm{ParaPuzzlePiece}\;n)=\{c\},$$
-and \texttt{lc\_at\_of\_shrink} implies $\mathcal{M}$ is locally connected at $c$. 
+\begin{lstlisting}[language=Lean]
+theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
+\end{lstlisting}
 
-If $c$ is infinitely renormalizable, apply the axiom/theorem \texttt{mlc\_infinitely\_renormalizable} to obtain local connectivity at $c$. 
-
-Thus every point of $\mathcal{M}$ is a point of local connectivity, and the global conclusion follows by \\ \texttt{locallyConnectedSpace\_of\_locallyConnectedAt}.
-\end{proof}

@@ -1,117 +1,136 @@
 \section{Basic Definitions}
-\label{sec:Basic}
 
-This section describes the verification of the file \texttt{Mlc/Quadratic/Complex/Basic.lean}. It establishes the fundamental definitions for the dynamics of quadratic polynomials, utilizing Lyubich's notation.
+\subsection*{Def fc}
+\textbf{Description:} The quadratic polynomial $f_c(z) = z^2 + c$.
 
-\subsection{Quadratic Family}
-
-We set up the quadratic family $f_c(z) = z^2 + c$, its iterates, the filled Julia set $K(c)$, and the Julia set $J(c) = \partial K(c)$.
-
-\subsubsection{Definitions}
-
-We begin by defining the quadratic polynomial and its orbit.
+\textbf{Details:} This is the fundamental map of the quadratic family. The parameter $c$ defines the specific polynomial.
+This map is the simplest non-trivial holomorphic dynamical system.
 
 \begin{lstlisting}[language=Lean]
-/-- The quadratic polynomial `f_c(z) = z^2 + c`. -/
-def fc (c : $\mathbb{C}$) : $\mathbb{C}$ $\to$ $\mathbb{C}$ := fun z => z^2 + c
-
-/-- The forward orbit of `z0` under `f_c`. -/
-def orbit (c : $\mathbb{C}$) (z0 : $\mathbb{C}$) : $\mathbb{N}$ $\to$ $\mathbb{C}$ := fun n => (Nat.iterate (fc c) n) z0
+def fc (c : ℂ) : ℂ → ℂ := fun z => z^2 + c
 \end{lstlisting}
 
-\textbf{Explanation:}
-\begin{itemize}
-    \item \texttt{fc}: Defines the map $z \mapsto z^2 + c$.
-    \item \texttt{orbit}: Defines the sequence $z_n = f_c^n(z_0)$ using \texttt{Nat.iterate}.
-\end{itemize}
+\subsection*{Def orbit}
+\textbf{Description:} The forward orbit of $z_0$ under $f_c$.
 
-\subsubsection{Orbit Lemmas}
+\textbf{Details:} The orbit is the sequence of points $z_0, z_1, z_2, \dots$ where $z_{n+1} = f_c(z_n)$.
+Formally, \texttt{orbit c z n} is the $n$-th iterate of $f_c$ applied to $z$.
 
 \begin{lstlisting}[language=Lean]
-@[simp] lemma orbit_zero (c z : $\mathbb{C}$) : orbit c z 0 = z := rfl
-
-@[simp] lemma orbit_succ (c z : $\mathbb{C}$) (n : $\mathbb{N}$) :
-    orbit c z (n+1) = fc c (orbit c z n) := by
-  simpa [orbit, Function.comp] using
-    congrArg (fun g => g z) (Function.iterate_succ' (fc c) n)
+def orbit (c : ℂ) (z0 : ℂ) : ℕ → ℂ := fun n => (Nat.iterate (fc c) n) z0
 \end{lstlisting}
 
-\textbf{Explanation:}
-These lemmas provide the recursive structure of the orbit:
-\begin{itemize}
-    \item \texttt{orbit\_zero}: The 0-th iterate is the starting point $z$.
-    \item \texttt{orbit\_succ}: The $(n+1)$-th iterate is $f_c$ applied to the $n$-th iterate. The proof uses properties of function iteration.
-\end{itemize}
+\subsection*{Def boundedOrbit}
+\textbf{Description:} Boundedness of an orbit.
 
-\subsection{Julia and Mandelbrot Sets}
-
-\subsubsection{Boundedness and Sets}
+\textbf{Details:} An orbit is bounded if there exists a real number $M$ such that $|f_c^n(z)| \le M$ for all $n$.
+This property determines whether a point belongs to the filled Julia set.
 
 \begin{lstlisting}[language=Lean]
-/-- Boundedness of an orbit. -/
-def boundedOrbit (c z : $\mathbb{C}$) : Prop :=
-  $\exists$ M : $\mathbb{R}$, $\forall$ n, $\|$orbit c z n$\|$ $\le$ M
-
-/-- Filled Julia set. -/
-def K (c : $\mathbb{C}$) : Set $\mathbb{C}$ := { z | boundedOrbit c z }
-
-/-- Julia set as the topological boundary of `K(c)`. -/
-def J (c : $\mathbb{C}$) : Set $\mathbb{C}$ := frontier (K c)
-
-/-- The Mandelbrot set is the set of parameters `c` for which the orbit of `0` is bounded. -/
-def MandelbrotSet : Set $\mathbb{C}$ := { c | boundedOrbit c 0 }
+def boundedOrbit (c z : ℂ) : Prop :=
 \end{lstlisting}
 
-\textbf{Explanation:}
-\begin{itemize}
-    \item \texttt{boundedOrbit}: A proposition stating that the sequence of norms $|f_c^n(z)|$ is bounded by some real number $M$.
-    \item \texttt{K}: The set of points $z$ with bounded orbits (filled Julia set).
-    \item \texttt{J}: The topological boundary of $K$.
-    \item \texttt{MandelbrotSet}: The set of parameters $c$ where the critical point $0$ has a bounded orbit ($0 \in K_c$).
-\end{itemize}
+\subsection*{Def K}
+\textbf{Description:} Filled Julia set.
 
-\subsection{Elementary Norm Facts and Escape Radius}
-
-\subsubsection{Norm Squared}
+\textbf{Details:} The filled Julia set $K(c)$ consists of all initial points $z$ whose orbit under $f_c$ remains bounded.
+This is a compact subset of the complex plane.
 
 \begin{lstlisting}[language=Lean]
-@[simp] lemma norm_sq (z : $\mathbb{C}$) : $\|$z^2$\|$ = $\|$z$\|^2$ := by
-  simp [pow_two]
+def K (c : ℂ) : Set ℂ := { z | boundedOrbit c z }
 \end{lstlisting}
 
-\textbf{Explanation:}
-A simple helper lemma stating $|z^2| = |z|^2$.
+\subsection*{Def J}
+\textbf{Description:} Julia set as the topological boundary of $K(c)$.
 
-\subsubsection{Escape Radius R(c)}
+\textbf{Details:} The Julia set $J(c)$ is the common boundary of the filled Julia set $K(c)$ and its complement (the basin of infinity).
+It is the locus of chaotic dynamics.
 
 \begin{lstlisting}[language=Lean]
-/-- A convenient escape radius depending on `$\|$c$\|$`. -/
-def R (c : $\mathbb{C}$) : $\mathbb{R}$ := max 2 (1 + $\|$c$\|$)
-
-@[simp] lemma R_ge_two (c : $\mathbb{C}$) : R c $\ge$ 2 := by simp [R]
-@[simp] lemma R_ge_one_plus_c (c : $\mathbb{C}$) : R c $\ge$ 1 + $\|$c$\|$ := by simp [R]
+def J (c : ℂ) : Set ℂ := frontier (K c)
 \end{lstlisting}
 
-\textbf{Explanation:}
-We define the escape radius $R(c) = \max(2, 1+|c|)$. This specific choice is standard in the literature (e.g., Milnor, Lyubich) because:
-\begin{itemize}
-    \item $R(c) \ge 2$: Ensures $|z| > 2 \implies |z|^2 > 2|z|$, helping expansion.
-    \item $R(c) > |c|$: Ensures the quadratic term dominates the constant term $c$.
-\end{itemize}
+\subsection*{Def MandelbrotSet}
+\textbf{Description:} The Mandelbrot set.
 
-\subsection{Connectivity Axioms}
+\textbf{Details:} The Mandelbrot set $\mathcal{M}$ is the set of parameters $c$ for which the orbit of the critical point $0$ is bounded.
+If $c \in \mathcal{M}$, the filled Julia set $K(c)$ is connected. If $c \notin \mathcal{M}$, $K(c)$ is a Cantor set.
 
 \begin{lstlisting}[language=Lean]
-/-- The Mandelbrot set is connected. -/
+def MandelbrotSet : Set ℂ := { c | boundedOrbit c 0 }
+\end{lstlisting}
+
+\subsection*{Def R}
+\textbf{Description:} A convenient escape radius depending on $|c|$.
+
+\textbf{Details:} $R(c) = \max(2, 1 + |c|)$ is chosen large enough so that if $|z| > R(c)$, the orbit of $z$ necessarily escapes to infinity.
+See the Escape Lemma for the proof of this property.
+
+\begin{lstlisting}[language=Lean]
+def R (c : ℂ) : ℝ := max 2 (1 + ‖c‖)
+\end{lstlisting}
+
+\subsection*{Axiom mandelbrot\_set\_connected}
+\textbf{Description:} The Mandelbrot set is connected.
+
+\textbf{Details:} This is a fundamental theorem by Douady and Hubbard. It states that the set of parameters $c$ for which $0$ has a bounded orbit is connected.
+Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984, Theorem 1, Chapter VIII] <https://pi.math.cornell.edu/\textasciitilde{}hubbard/OrsayEnglish.pdf> (p. 47)
+
+\begin{lstlisting}[language=Lean]
 axiom mandelbrot_set_connected : IsConnected MandelbrotSet
-
-/-- The filled Julia set is connected if c is in the Mandelbrot set. -/
-axiom filled_julia_set_connected {c : $\mathbb{C}$} (h : c $\in$ MandelbrotSet) : IsConnected (K c)
 \end{lstlisting}
 
-\textbf{Explanation:}
-We state two deep results from Douady and Hubbard as axioms for this formalization:
-\begin{itemize}
-    \item The Mandelbrot set is connected.
-    \item For $c \in \mathcal{M}$, the filled Julia set $K_c$ is connected.
-\end{itemize}
+\subsection*{Axiom filled\_julia\_set\_connected}
+\textbf{Description:} The filled Julia set is connected if $c$ is in the Mandelbrot set.
+
+\textbf{Details:} If the critical point $0$ has a bounded orbit, then the filled Julia set $K(c)$ is connected.
+Otherwise, $K(c)$ is a Cantor set (totally disconnected).
+Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984, Proposition 1, Chapter VIII] <https://pi.math.cornell.edu/\textasciitilde{}hubbard/OrsayEnglish.pdf> (p. 47)
+
+\begin{lstlisting}[language=Lean]
+axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnected (K c)
+\end{lstlisting}
+
+\subsection*{Opaque modulus}
+\textbf{Description:} The conformal modulus of a set in the complex plane.
+
+\textbf{Details:} For an annulus $A = \{z \mid r < |z| < R\}$, the modulus is defined as $\frac{1}{2\pi} \ln(R/r)$.
+The modulus is a conformal invariant: it is preserved under biholomorphic maps.
+For general doubly connected domains, it is defined via conformal equivalence to a standard annulus.
+We extend the definition to arbitrary sets (returning 0 for degenerate sets).
+
+\begin{lstlisting}[language=Lean]
+opaque modulus (S : Set ℂ) : ℝ
+\end{lstlisting}
+
+\subsection*{Axiom modulus\_empty}
+\textbf{Description:} The modulus of the empty set is 0.
+
+\textbf{Details:} This is a basic property of the modulus. An empty set has no "width".
+
+\begin{lstlisting}[language=Lean]
+axiom modulus_empty : modulus ∅ = 0
+\end{lstlisting}
+
+\subsection*{Axiom modulus\_nonneg}
+\textbf{Description:} Modulus is non-negative.
+
+\textbf{Details:} The modulus measures the "thickness" of an annulus, which must be non-negative.
+
+\begin{lstlisting}[language=Lean]
+axiom modulus_nonneg (S : Set ℂ) : 0 ≤ modulus S
+\end{lstlisting}
+
+\subsection*{Axiom groetzsch\_inequality\_axiom}
+\textbf{Description:} Axiom: Superadditivity of modulus for disjoint essential annuli (Grötzsch Inequality).
+
+\textbf{Details:} If $A$ and $B$ are disjoint annuli nested within $S$, then the sum of their moduli is less than or equal to the modulus of $S$.
+This inequality is crucial for proving convergence of moduli sums in the Yoccoz puzzle analysis.
+Reference: Milnor, Dynamics in One Complex Variable, Corollary B.5
+
+\begin{lstlisting}[language=Lean]
+axiom groetzsch_inequality_axiom {A B S : Set ℂ}
+  (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
+  modulus A + modulus B ≤ modulus S
+\end{lstlisting}
+

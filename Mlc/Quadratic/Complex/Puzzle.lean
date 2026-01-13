@@ -1,5 +1,4 @@
 import Mlc.Quadratic.Complex.Basic
-import Mlc.Quadratic.Complex.Groetzsch
 import Mlc.Quadratic.Complex.Green
 import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.Basic

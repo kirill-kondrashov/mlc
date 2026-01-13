@@ -19,12 +19,13 @@ The proof strategy relies on Yoccoz puzzles and integrates deep results from com
 Some of the statements used in the proof are stated as `axiom`s (keyword in Lean). They include:
 
 ### 1. Yoccoz Puzzles & Geometry
-*   [`groetzsch_inequality`](Mlc/Quadratic/Complex/Groetzsch.lean#L64): Grötzsch's Inequality (Superadditivity of modulus).
+*   [`groetzsch_inequality_axiom`](Mlc/Quadratic/Complex/Basic.lean#L81): Grötzsch's Inequality (Superadditivity of modulus).
     *   Source: [Milnor, Dynamics in One Complex Variable, Corollary B.5] (Local: `refs/9201272v1.pdf`)
     *   Note: This axiom is used to prove `modulus_summable_of_nontrivial_intersection`, which states that if the intersection of nested pieces is non-trivial, the sum of moduli converges.
 *   **Basic Properties**:
-    *   [`modulus_nonneg_ax`](Mlc/Quadratic/Complex/Groetzsch.lean#L50): Modulus is non-negative.
+    *   [`modulus_nonneg`](Mlc/Quadratic/Complex/Basic.lean#L77): Modulus is non-negative.
         *   Source: [Milnor, Dynamics in One Complex Variable] (Local: `refs/9201272v1.pdf`, Appendix B)
+    *   [`modulus_empty`](Mlc/Quadratic/Complex/Basic.lean#L74): Modulus of empty set is 0.
 *   **Connectivity**: [`mandelbrot_set_connected`](Mlc/Quadratic/Complex/Basic.lean#L59) (Mandelbrot set is connected) and [`filled_julia_set_connected`](Mlc/Quadratic/Complex/Basic.lean#L63) (Filled Julia set is connected for $c \in M$).
     *   Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984]
 
@@ -55,8 +56,9 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.groetzsch_inequality
-- MLC.Quadratic.modulus_nonneg_ax
+- MLC.Quadratic.groetzsch_inequality_axiom
+- MLC.Quadratic.modulus_empty
+- MLC.Quadratic.modulus_nonneg
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem
