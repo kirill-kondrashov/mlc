@@ -14,14 +14,14 @@ The proof strategy relies on Yoccoz puzzles and integrates deep results from com
 >
 > The code, proofs, and documentation in this repository were produced by a combination of actions of AI assistant and manual fixes. While the definitions and logical structure are checked by the Lean 4 kernel, the choice of axioms and the mathematical fidelity of the formalization to the standard literature should be verified by human experts. This project is inspired by [recent work on AI for math](https://arxiv.org/abs/2511.02864).
 
-## Axioms & Theorems
+## Axioms
 
-The formalization relies on the following key axioms:
+Some of the statements used in the proof are stated as `axiom`s (keyword in Lean) that. They include:
 
 ### 1. Yoccoz Puzzles & Geometry
 *   [`groetzsch_inequality`](Mlc/Quadratic/Complex/Groetzsch.lean#L64): Grötzsch's Inequality (Superadditivity of modulus).
     *   Source: [Milnor, Dynamics in One Complex Variable, Corollary B.5] (Local: `refs/9201272v1.pdf`)
-    *   Note: This axiom is used to prove **`modulus_summable_of_nontrivial_intersection`**, which states that if the intersection of nested pieces is non-trivial, the sum of moduli converges.
+    *   Note: This axiom is used to prove `modulus_summable_of_nontrivial_intersection`, which states that if the intersection of nested pieces is non-trivial, the sum of moduli converges.
 *   **Basic Properties**:
     *   [`modulus_nonneg_ax`](Mlc/Quadratic/Complex/Groetzsch.lean#L50): Modulus is non-negative.
         *   Source: [Milnor, Dynamics in One Complex Variable] (Local: `refs/9201272v1.pdf`, Appendix B)
@@ -48,7 +48,7 @@ make check
 
 This will output any axioms used in the proof. The goal is to reduce the axioms to only standard mathematical ones (and the ones explicitly stated for deep theorems).
 
-Example output:
+Output:
 ```
 ✅ The proof of 'MLC.MLC_Conjecture' is free of 'sorry'.
 All axioms used:
