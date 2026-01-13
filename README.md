@@ -16,7 +16,7 @@ The proof strategy relies on Yoccoz puzzles and integrates deep results from com
 
 ## Axioms
 
-Some of the statements used in the proof are stated as `axiom`s (keyword in Lean) that. They include:
+Some of the statements used in the proof are stated as `axiom`s (keyword in Lean). They include:
 
 ### 1. Yoccoz Puzzles & Geometry
 *   [`groetzsch_inequality`](Mlc/Quadratic/Complex/Groetzsch.lean#L64): Grötzsch's Inequality (Superadditivity of modulus).
