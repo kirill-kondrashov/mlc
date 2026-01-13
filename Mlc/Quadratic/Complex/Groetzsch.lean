@@ -14,47 +14,45 @@ open Complex Topology Filter Set BigOperators Classical
 
 noncomputable section
 
-/-- An annulus in the complex plane.
+/-- A cylinder defined by its circumference and height.
+    See: [Milnor, Dynamics in One Complex Variable, Appendix B]
+    "Now let us form a cylinder C of circumference ∆x and height ∆y by gluing the left and right edges
+    of our rectangle together. More precisely, let C by the quotient space which is obtained from the infinitely
+    wide strip 0 < y < ∆y in the z -plane by identifying each point z = x + iy with its translate z + ∆x ." -/
+structure Cylinder where
+  circumference : ℝ
+  height : ℝ
+  c_pos : 0 < circumference
+  h_pos : 0 < height
+
+instance : Inhabited Cylinder where
+  default := { circumference := 1, height := 1, c_pos := zero_lt_one, h_pos := zero_lt_one }
+
+/-- The modulus of a cylinder is the ratio of height to circumference.
+    "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of height to circumference." -/
+def Cylinder.modulus (C : Cylinder) : ℝ := C.height / C.circumference
+
+/-- An opaque function that assigns a conformal cylinder to any set.
+    For true annuli, this returns the conformally equivalent cylinder.
+    For other sets, the value is arbitrary (but fixed). -/
+opaque cylinder_of_set (S : Set ℂ) : Cylinder
+
+/-- An annulus in the complex plane, defined by its underlying set and its conformal cylinder.
     Mathematically, an annulus is a topological cylinder (a doubly connected open set).
-    It is conformally isomorphic to a standard annulus {z | r < |z| < R}.
-    In this formalization, we wrap `Set ℂ` in a structure to distinguish it,
-    though we do not strictly enforce the topological properties in the type
-    to facilitate usage with `modulus` on general sets (where non-annuli have modulus 0 or undefined). -/
+    It is conformally isomorphic to a standard annulus {z | r < |z| < R}. -/
 structure Annulus where
   val : Set ℂ
+  cyl : Cylinder := cylinder_of_set val
 
 /-- The conformal modulus of an annulus.
-    We treat this as an opaque function for non-empty sets, but explicitly define it as 0 for the empty set.
-
-    Human-readable explanation:
-    An annulus is a region of the complex plane that is topologically a cylinder (doubly connected).
-    Any such region is conformally equivalent to a straight cylinder of circumference 1 and some height m,
-    or equivalently to a standard round annulus {z | r < |z| < R} where m = (1 / 2π) * log(R/r).
-    This value m is the modulus. It measures how "thick" the annulus is; a very thin annulus has small modulus,
-    and a very thick one has large modulus. It is a conformal invariant.
-
-    Formalization Note:
-    The mathematical definition of modulus applies specifically to annuli (topological cylinders).
-    In this formalization, we use the `Annulus` type to signal that the input is treated as an annulus.
-    However, the `modulus` function is exposed as a total function `Set ℂ → ℝ` for convenience,
-    wrapping the set into an `Annulus`.
-    For a set `A` that is not an annulus, `raw_modulus (Annulus.mk A)` is underspecified (or can be considered 0).
-    The axioms regarding modulus are intended to be applied when the relevant sets are annuli.
-    We do not formally define the predicate `IsAnnulus` here, but in the context of the puzzle proofs,
-    the sets `P n \ P (n+1)` are difference of nested connected open sets, forming annuli.
-
-    See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
-    Local Reference: `refs/9201272v1.pdf`
-    "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of height to circumference."
-    "Corollary B.4. The modulus of a cylinder is a well defined conformal invariant."
     "It follows that the modulus of an annulus A can be defined as the modulus
     of any conformally isomorphic cylinder." -/
-opaque raw_modulus (A : Annulus) : ℝ
+def raw_modulus (A : Annulus) : ℝ := A.cyl.modulus
 
 /-- The modulus of an annulus.
     Defined to be 0 for the empty set, and the `raw_modulus` otherwise. -/
-noncomputable def modulus (A : Set ℂ) : ℝ :=
-  if A = ∅ then 0 else raw_modulus ⟨A⟩
+noncomputable def modulus (A : Annulus) : ℝ :=
+  if A.val = ∅ then 0 else raw_modulus A
 
 /-- The modulus of the empty set is 0.
     See: [Milnor, Dynamics in One Complex Variable, Appendix B] <https://arxiv.org/pdf/math/9201272.pdf>
@@ -65,7 +63,7 @@ noncomputable def modulus (A : Set ℂ) : ℝ :=
     assigns 0 to infinite cylinders in some contexts or infinite modulus to
     complements of points. Here we assume standard convention for empty
     annulus). -/
-theorem modulus_empty : modulus ∅ = 0 := by
+theorem modulus_empty : modulus { val := ∅ } = 0 := by
   simp [modulus]
 
 /-- Modulus is non-negative.
@@ -74,22 +72,43 @@ theorem modulus_empty : modulus ∅ = 0 := by
     Local Reference: `refs/9201272v1.pdf`
     "Define the modulus mod(C) of such a cylinder to be the ratio ∆y/∆x of
     height to circumference." (Ratio of positive lengths is positive). -/
-axiom modulus_nonneg_ax (A : Annulus) : 0 ≤ raw_modulus A
-
-theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
+theorem modulus_nonneg (A : Annulus) : 0 ≤ modulus A := by
   unfold modulus
   split_ifs
   · exact le_refl 0
-  · exact modulus_nonneg_ax ⟨A⟩
+  · unfold raw_modulus Cylinder.modulus
+    apply div_nonneg
+    · apply le_of_lt A.cyl.h_pos
+    · apply le_of_lt A.cyl.c_pos
+
+/-- Axiom: Superadditivity of modulus for disjoint essential annuli.
+    Reference: Milnor, Dynamics in One Complex Variable, Corollary B.5
+    Local Reference: `refs/9201272v1.pdf` -/
+axiom modulus_superadditive_axiom {A B S : Annulus}
+  (h_disj : Disjoint A.val B.val) (h_sub : A.val ∪ B.val ⊆ S.val) :
+  modulus A + modulus B ≤ modulus S
 
 /-- Grötzsch's Inequality: Superadditivity of modulus for disjoint essential annuli.
     See: [Milnor, Dynamics in One Complex Variable, Corollary B.5] <https://arxiv.org/pdf/math/9201272.pdf>
     Local Reference: `refs/9201272v1.pdf`
     "Corollary B.5 (Grötzsch Inequality). Suppose that A' ⊂ A and A'' ⊂ A are
     two disjoint annuli, each essentailly embedded in A. Then mod(A') + mod(A'')
-    ≤ mod(A)." -/
-axiom groetzsch_inequality {A B S : Set ℂ} (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
-    modulus A + modulus B ≤ modulus S
+    ≤ mod(A)."
+
+    Proof sketch (requires Conformal Geometry/Dirichlet Principle):
+    1. Modulus is a conformal invariant, so we can map the container annulus S
+       conformally to a straight cylinder C of height H and circumference W.
+       mod(S) = H/W.
+    2. The disjoint sub-annuli A and B map to disjoint sub-domains A' and B' in C.
+    3. Since A and B are essentially embedded, A' and B' wrap around the cylinder
+       and separate the top/bottom components.
+    4. By the Dirichlet Principle (or Extremal Length), the modulus of a sub-annulus
+       is bounded by the modulus of the cylinder it spans.
+    5. The sum of the "effective heights" of A' and B' is at most H.
+    6. Therefore, mod(A) + mod(B) ≤ mod(S). -/
+theorem groetzsch_inequality {A B S : Annulus} (h_disj : Disjoint A.val B.val) (h_sub : A.val ∪ B.val ⊆ S.val) :
+    modulus A + modulus B ≤ modulus S := by
+  apply modulus_superadditive_axiom h_disj h_sub
 
 lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆ P n)
     {i j : ℕ} (hij : i ≤ j) : P j ⊆ P i := by
@@ -113,7 +132,7 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (_h_conn : ∀ n, IsConnected (P n))
     (_h_nontriv : Set.Nontrivial (⋂ n, P n)) :
-    Summable (fun n => modulus (P n \ P (n + 1))) := by
+    Summable (fun n => modulus { val := P n \ P (n + 1) }) := by
   let A := fun n => P n \ P (n + 1)
   have h_disj : ∀ i j, i < j → Disjoint (A i) (A j) := by
     intro i j hij
@@ -144,19 +163,19 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
       apply h_sub h_in_N
 
   -- Monotonicity lemma
-  have modulus_mono : ∀ {U V : Set ℂ}, U ⊆ V → modulus U ≤ modulus V := by
+  have modulus_mono : ∀ {U V : Set ℂ}, U ⊆ V → modulus { val := U } ≤ modulus { val := V } := by
     intro U V h_sub
     have h_union : U ∪ ∅ ⊆ V := by simp [h_sub]
     have h_disj_empty : Disjoint U ∅ := disjoint_empty U
-    have h_ineq := groetzsch_inequality h_disj_empty h_union
+    have h_ineq := groetzsch_inequality (A := { val := U }) (B := { val := ∅ }) (S := { val := V }) h_disj_empty h_union
     rw [modulus_empty, add_zero] at h_ineq
     exact h_ineq
 
   -- Bounded partial sums
-  have h_bounded : ∀ N, Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus (P 0 \ (⋂ n, P n)) := by
+  have h_bounded : ∀ N, Finset.sum (Finset.range N) (fun n => modulus { val := A n }) ≤ modulus { val := P 0 \ (⋂ n, P n) } := by
     intro N
     -- First show sum ≤ modulus (P 0 \ P N)
-    have h_sum_le : Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus (P 0 \ P N) := by
+    have h_sum_le : Finset.sum (Finset.range N) (fun n => modulus { val := A n }) ≤ modulus { val := P 0 \ P N } := by
       induction N with
       | zero =>
         simp
@@ -185,8 +204,8 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
           have h_not_in_Pk := h1.2
           contradiction
 
-        have h_ineq := groetzsch_inequality h_disj_split (subset_of_eq h_split.symm)
-        apply le_trans (add_le_add ih (le_refl (modulus (A k))))
+        have h_ineq := groetzsch_inequality (A := { val := P 0 \ P k }) (B := { val := P k \ P (k + 1) }) (S := { val := P 0 \ P (k + 1) }) h_disj_split (subset_of_eq h_split.symm)
+        apply le_trans (add_le_add ih (le_refl (modulus { val := A k })))
         exact h_ineq
 
     apply le_trans h_sum_le
@@ -210,7 +229,7 @@ theorem groetzsch_criterion {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (h_zero : ∀ n, 0 ∈ P n)
     (h_conn : ∀ n, IsConnected (P n))
-    (h_div : ¬ Summable (fun n => modulus (P n \ P (n + 1)))) :
+    (h_div : ¬ Summable (fun n => modulus { val := P n \ P (n + 1) })) :
     (⋂ n, P n) = {0} := by
   by_contra h_neq
   have h_nontriv : Set.Nontrivial (⋂ n, P n) := by

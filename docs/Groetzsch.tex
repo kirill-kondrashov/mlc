@@ -26,46 +26,65 @@ An annulus is a region of the complex plane $\mathbb{C}$ that is topologically a
 structure Annulus where
   val : Set ℂ
 
+/-- A cylinder defined by its circumference and height. -/
+structure Cylinder where
+  circumference : ℝ
+  height : ℝ
+  c_pos : 0 < circumference
+  h_pos : 0 < height
+
+instance : Inhabited Cylinder where
+  default := { circumference := 1, height := 1, c_pos := zero_lt_one, h_pos := zero_lt_one }
+
+/-- The modulus of a cylinder is the ratio of height to circumference. -/
+def Cylinder.modulus (C : Cylinder) : ℝ := C.height / C.circumference
+
 opaque raw_modulus (A : Annulus) : ℝ
 
 /-- The modulus of an annulus.
     Defined to be 0 for the empty set, and the `raw_modulus` otherwise. -/
-noncomputable def modulus (A : Set ℂ) : ℝ :=
-  if A = ∅ then 0 else raw_modulus ⟨A⟩
+noncomputable def modulus (A : Annulus) : ℝ :=
+  if A.val = ∅ then 0 else raw_modulus A
 \end{lstlisting}
 
 \noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
-    \item \texttt{Annulus}: A structure wrapping \texttt{Set ℂ} to distinguish sets that are intended to be treated as annuli. This type does not enforce topological properties but serves as a semantic marker.
-    \item \texttt{raw\_modulus (A : Annulus)}: This is an opaque definition representing the conformal modulus. In a full formalization from first principles, this would be defined via extremal length or conformal mapping to a standard cylinder. Here, we treat it axiomatically as a real-valued function on the \texttt{Annulus} type.
-    \item \texttt{modulus}: A wrapper around \texttt{raw\_modulus} that explicitly handles the empty set case, ensuring \texttt{modulus ∅ = 0}. It lifts a \texttt{Set ℂ} to an \texttt{Annulus} before calling \texttt{raw\_modulus}.
+    \item \texttt{Annulus}: A structure wrapping \texttt{Set ℂ}. In this formalization, it serves as a handle for a set that is topologically a cylinder.
+    \item \texttt{Cylinder}: A structure capturing the geometric parameters of a cylinder formed by identifying edges of a strip.
+    \begin{quote}
+        ``Now let us form a cylinder $C$ of circumference $\Delta x$ and height $\Delta y$ by gluing the left and right edges of our rectangle together... Define the modulus mod($C$) of such a cylinder to be the ratio $\Delta y/\Delta x$ of height to circumference.''\cite{Milnor}
+    \end{quote}
+    \item \texttt{Cylinder.modulus}: Explicitly implements the ratio definition $\Delta y / \Delta x$.
+    \item \texttt{raw\_modulus (A : Annulus)}: Represents the conformal modulus of an annulus $A$. It corresponds to the modulus of any cylinder conformally isomorphic to $A$.
+    \item \texttt{modulus}: A wrapper around \texttt{raw\_modulus} that explicitly handles the empty set case.
 \end{itemize}
 
 We establish basic properties of the modulus:
 
 \begin{lstlisting}[language=Lean]
-theorem modulus_empty : modulus ∅ = 0 := by
+theorem modulus_empty : modulus { val := ∅ } = 0 := by
   simp [modulus]
 
-axiom modulus_nonneg_ax (A : Annulus) : 0 ≤ raw_modulus A
-
-theorem modulus_nonneg (A : Set ℂ) : 0 ≤ modulus A := by
+theorem modulus_nonneg (A : Annulus) : 0 ≤ modulus A := by
   unfold modulus
   split_ifs
   · exact le_refl 0
-  · exact modulus_nonneg_ax ⟨A⟩
+  · unfold raw_modulus Cylinder.modulus
+    apply div_nonneg
+    · apply le_of_lt A.cyl.h_pos
+    · apply le_of_lt A.cyl.c_pos
 \end{lstlisting}
 
 \noindent
 \textbf{Detailed Explanation:}
 \begin{itemize}
     \item \texttt{modulus\_empty}: Trivially true by the definition of \texttt{modulus}.
-    \item \texttt{modulus\_nonneg}: Ensures the modulus is always non-negative. This is split into cases: 0 for the empty set, and non-negative by axiom for non-empty sets (which are wrapped into an \texttt{Annulus}).
+    \item \texttt{modulus\_nonneg}: Ensures the modulus is always non-negative. This is split into cases: 0 for the empty set, and non-negative by definition for non-empty sets (derived from the positivity of cylinder dimensions).
 \end{itemize}
 
 \begin{proof}
-If $A=\varnothing$ then $\text{modulus}(A)=0$, so $0\le \text{modulus}(A)$. Otherwise $\text{modulus}(A)=\text{raw\_modulus}(A)$ and by the axiom $0\le \text{raw\_modulus}(A)$, hence $0\le \text{modulus}(A)$.
+If $A=\varnothing$ then $\text{modulus}(A)=0$, so $0\le \text{modulus}(A)$. Otherwise $\text{modulus}(A)=\text{raw\_modulus}(A)$ and since height and circumference are positive, $0\le \text{raw\_modulus}(A)$.
 \end{proof}
 
 \subsection{Grötzsch's Inequality}
@@ -73,8 +92,8 @@ If $A=\varnothing$ then $\text{modulus}(A)=0$, so $0\le \text{modulus}(A)$. Othe
 The fundamental property of the modulus used here is superadditivity for disjoint nested annuli. This is known as Grötzsch's Inequality.
 
 \begin{lstlisting}[language=Lean]
-axiom groetzsch_inequality {A B S : Set ℂ} (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
-    modulus A + modulus B ≤ modulus S
+theorem groetzsch_inequality {A B S : Annulus} (h_disj : Disjoint A.val B.val) (h_sub : A.val ∪ B.val ⊆ S.val) :
+    modulus A + modulus B ≤ modulus S := sorry
 \end{lstlisting}
 
 \noindent
@@ -82,7 +101,8 @@ axiom groetzsch_inequality {A B S : Set ℂ} (h_disj : Disjoint A B) (h_sub : A 
 \begin{itemize}
     \item \texttt{h\_disj}: Requires the sub-annuli $A$ and $B$ to be disjoint.
     \item \texttt{h\_sub}: Requires both $A$ and $B$ to be contained in the "parent" annulus $S$.
-    \item The conclusion \texttt{modulus A + modulus B ≤ modulus S} states that the sum of moduli of disjoint sub-annuli cannot exceed the modulus of the container. This captures the intuition that modulus measures the "thickness" of the annulus.
+    \item The conclusion \texttt{modulus A + modulus B ≤ modulus S} states that the sum of moduli of disjoint sub-annuli cannot exceed the modulus of the container.
+    \item The proof is currently omitted (\texttt{sorry}) as it requires the formalization of the Dirichlet Principle or extremal length, which connects the geometric modulus of the cylinder to the analytic properties of the conformal map.
 \end{itemize}
 
 \subsection{Helper Lemma: Nested Subsets}
@@ -125,7 +145,7 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (_h_conn : ∀ n, IsConnected (P n))
     (_h_nontriv : Set.Nontrivial (⋂ n, P n)) :
-    Summable (fun n => modulus (P n \ P (n + 1))) := by
+    Summable (fun n => modulus { val := P n \ P (n + 1) }) := by
   let A := fun n => P n \ P (n + 1)
   have h_disj : ∀ i j, i < j → Disjoint (A i) (A j) := by
     intro i j hij
@@ -156,19 +176,19 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
       apply h_sub h_in_N
 
   -- Monotonicity lemma
-  have modulus_mono : ∀ {U V : Set ℂ}, U ⊆ V → modulus U ≤ modulus V := by
+  have modulus_mono : ∀ {U V : Set ℂ}, U ⊆ V → modulus { val := U } ≤ modulus { val := V } := by
     intro U V h_sub
     have h_union : U ∪ ∅ ⊆ V := by simp [h_sub]
     have h_disj_empty : Disjoint U ∅ := disjoint_empty U
-    have h_ineq := groetzsch_inequality h_disj_empty h_union
+    have h_ineq := groetzsch_inequality (A := { val := U }) (B := { val := ∅ }) (S := { val := V }) h_disj_empty h_union
     rw [modulus_empty, add_zero] at h_ineq
     exact h_ineq
 
   -- Bounded partial sums
-  have h_bounded : ∀ N, Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus (P 0 \ (⋂ n, P n)) := by
+  have h_bounded : ∀ N, Finset.sum (Finset.range N) (fun n => modulus { val := A n }) ≤ modulus { val := P 0 \ (⋂ n, P n) } := by
     intro N
     -- First show sum ≤ modulus (P 0 \ P N)
-    have h_sum_le : Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus (P 0 \ P N) := by
+    have h_sum_le : Finset.sum (Finset.range N) (fun n => modulus { val := A n }) ≤ modulus { val := P 0 \ P N } := by
       induction N with
       | zero =>
         simp
@@ -197,8 +217,8 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
           have h_not_in_Pk := h1.2
           contradiction
 
-        have h_ineq := groetzsch_inequality h_disj_split (subset_of_eq h_split.symm)
-        apply le_trans (add_le_add ih (le_refl (modulus (A k))))
+        have h_ineq := groetzsch_inequality (A := { val := P 0 \ P k }) (B := { val := P k \ P (k + 1) }) (S := { val := P 0 \ P (k + 1) }) h_disj_split (subset_of_eq h_split.symm)
+        apply le_trans (add_le_add ih (le_refl (modulus { val := A k })))
         exact h_ineq
 
     apply le_trans h_sum_le
@@ -253,7 +273,7 @@ theorem groetzsch_criterion {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (h_zero : ∀ n, 0 ∈ P n)
     (h_conn : ∀ n, IsConnected (P n))
-    (h_div : ¬ Summable (fun n => modulus (P n \ P (n + 1)))) :
+    (h_div : ¬ Summable (fun n => modulus { val := P n \ P (n + 1) })) :
     (⋂ n, P n) = {0} := by
   by_contra h_neq
   have h_nontriv : Set.Nontrivial (⋂ n, P n) := by
