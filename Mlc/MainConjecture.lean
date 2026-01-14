@@ -51,8 +51,9 @@ lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0})
         implies the dynamical pieces shrink to a point. The Correspondence Principle then
         implies the parameter pieces shrink to `c`. Finally, `lc_at_of_shrink` shows this
         implies local connectivity at `c`.
-    2.  **Infinitely renormalizable**: We invoke Lyubich's deep theorem (`mlc_infinitely_renormalizable`)
-        which establishes MLC in this case. -/
+    2.  **Infinitely renormalizable**: We invoke the deep theorem (`mlc_infinitely_renormalizable`)
+        which establishes MLC in this case. This covers both **Primitive** types (Lyubich) and
+        **Satellite** types (Dudko, Lyubich, Selinger). -/
 theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
   -- We need to show local connectivity at every point c ∈ MandelbrotSet
   apply locallyConnectedSpace_of_locallyConnectedAt

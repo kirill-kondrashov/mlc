@@ -15,16 +15,27 @@ open Quadratic Complex Topology Set Filter
 def InfinitelyRenormalizable (c : ℂ) : Prop :=
   Summable (fun n => modulus (PuzzleAnnulus c n))
 
-/-- MLC holds for infinitely renormalizable parameters (Lyubich).
-    This is a deep theorem in complex dynamics, proved by Mikhail Lyubich.
-    See: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997), Main Theorem] <https://projecteuclid.org/journals/acta-mathematica/volume-178/issue-2/Dynamics-of-quadratic-polynomials-III/10.1007/BF02392694.full>
-    Also cited in the provided document as [L10] "How big is the set of infinitely renormalizable quadratics?".
-    Local Reference: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`
-    Since the proof is beyond the scope of this formalization (which focuses on Yoccoz puzzles),
-    we accept it as an axiom.
+/-- Classification of Infinitely Renormalizable parameters.
+    Infinitely renormalizable parameters are classified into two types:
+    1. **Primitive**: The small copy of the Mandelbrot set is detached from the main body (except at the root).
+       These are handled by Quadratic-like renormalization (Lyubich).
+    2. **Satellite**: The small copy is attached to the main body (or another component).
+       These are handled by near-parabolic or Pacman renormalization (Dudko, Lyubich, Selinger).
 
-    Proof idea: The proof involves complex renormalization theory and the analysis of the
-    geometry of small Julia sets. -/
+    Reference: Dudko, Lyubich, Selinger, "Pacman Renormalization and Self-Similarity of the Mandelbrot Set near Siegel Parameters", arXiv:1703.01206v3. -/
+opaque PrimitiveRenormalizable (c : ℂ) : Prop
+opaque SatelliteRenormalizable (c : ℂ) : Prop
+
+/-- Every infinitely renormalizable parameter is either Primitive or Satellite. -/
+axiom infinitely_renormalizable_classification (c : ℂ) (h : InfinitelyRenormalizable c) :
+    PrimitiveRenormalizable c ∨ SatelliteRenormalizable c
+
+/-- MLC holds for infinitely renormalizable parameters.
+    This is a deep theorem in complex dynamics.
+    - For **Primitive** parameters, it was proved by Lyubich: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997)].
+    - For **Satellite** parameters, it is partially covered by recent work on Pacman renormalization (Dudko, Lyubich, Selinger), though full coverage for all combinatorics (e.g., unbounded type) remains an active area of research (Molecule Conjecture).
+
+    We accept this as an axiom for the purpose of this formalization. -/
 axiom mlc_infinitely_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
