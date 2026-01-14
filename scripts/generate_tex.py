@@ -12,7 +12,7 @@ def parse_lean_file(filepath):
     
     # Regex to find docstrings and associated declarations
     # This is a heuristic parser
-    pattern = re.compile(r'(/--\s*(.*?)\s*-/)\s*((?:theorem|lemma|def|axiom|structure)\s+(\w+).*?)(?=\n\n|\n/--|$)', re.DOTALL)
+    pattern = re.compile(r'(/--\s*(.*?)\s*-/)\s*((?:theorem|lemma|def|axiom|structure|opaque)\s+(\w+).*?)(?=\n\n|\n/--|$)', re.DOTALL)
     
     matches = pattern.findall(content)
     
@@ -24,6 +24,7 @@ def parse_lean_file(filepath):
         
         # Check if it has "Proof idea" or similar
         proof_desc = ""
+        details_desc = ""
         description = doc_content.strip()
         
         # Split description and proof idea if explicitly marked
@@ -35,6 +36,10 @@ def parse_lean_file(filepath):
             parts = description.split("Proof:")
             description = parts[0].strip()
             proof_desc = parts[1].strip()
+        elif "Details:" in description:
+            parts = description.split("Details:")
+            description = parts[0].strip()
+            details_desc = parts[1].strip()
         
         items.append({
             'name': name,
@@ -42,13 +47,136 @@ def parse_lean_file(filepath):
             'decl': decl_line.strip(),
             'description': description,
             'proof_desc': proof_desc,
+            'details_desc': details_desc,
             'full_doc': doc_content
         })
     return items
 
+def escape_latex(text):
+    # Escape special characters in text for LaTeX
+    
+    # Mappings for TEXT mode
+    special_chars_text = {
+        '\\': r'\textbackslash{}',
+        '&': r'\&',
+        '%': r'\%',
+        '$': r'\$', # Escaped in text mode
+        '#': r'\#',
+        '_': r'\_',
+        '{': r'\{',
+        '}': r'\}',
+        '~': r'\textasciitilde{}',
+        '^': r'\^{}',
+    }
+    ordered_chars_text = ['\\', '&', '%', '$', '#', '_', '{', '}', '~', '^']
+    
+    # Mappings for MATH mode (inside $...$)
+    # We generally preserve formatting but might want to map unicode
+    special_chars_math = {
+        '%': r'\%', # Still comment char
+        '#': r'\#',
+        # Do not escape _ ^ \ { } & (alignment) etc
+    }
+    
+    # Unicode replacements
+    # Text mode: wrap in math delimiters
+    unicode_replacements_text = {
+        'π': r'$\pi$',
+        '∈': r'$\in$',
+        '⊆': r'$\subseteq$',
+        '∪': r'$\cup$',
+        '∩': r'$\cap$',
+        '→': r'$\to$',
+        '↔': r'$\leftrightarrow$',
+        '∀': r'$\forall$',
+        '∃': r'$\exists$',
+        '≤': r'$\le$',
+        '≥': r'$\ge$',
+        '≠': r'$\ne$',
+        'ℂ': r'$\mathbb{C}$',
+        'ℝ': r'$\mathbb{R}$',
+        'ℕ': r'$\mathbb{N}$',
+        'ℤ': r'$\mathbb{Z}$',
+        '𝓝': r'$\mathcal{N}$',
+    }
+    
+    # Math mode: straight replacement
+    unicode_replacements_math = {
+        'π': r'\pi',
+        '∈': r'\in',
+        '⊆': r'\subseteq',
+        '∪': r'\cup',
+        '∩': r'\cap',
+        '→': r'\to',
+        '↔': r'\leftrightarrow',
+        '∀': r'\forall',
+        '∃': r'\exists',
+        '≤': r'\le',
+        '≥': r'\ge',
+        '≠': r'\ne',
+        'ℂ': r'\mathbb{C}',
+        'ℝ': r'\mathbb{R}',
+        'ℕ': r'\mathbb{N}',
+        'ℤ': r'\mathbb{Z}',
+        '𝓝': r'\mathcal{N}',
+    }
+
+    # Split by backticks first (CODE blocks)
+    parts = text.split('`')
+    result = ""
+    for i, part in enumerate(parts):
+        if i % 2 == 1:
+            # CODE BLOCK (inside backticks)
+            # Escape everything for texttt
+            escaped = part
+            for char in ordered_chars_text:
+                replacement = special_chars_text[char]
+                escaped = escaped.replace(char, replacement)
+            
+            # Use text unicode replacements but without the $ wrapper? 
+            # Or just let them be and hope listings/font handles it?
+            # The current setup seems to rely on literate replacements in listings.
+            # But here we are in \texttt{}.
+            # Let's map unicode to latex math inside $...$ inside texttt? 
+            # \texttt{... $\pi$ ...} works.
+            for u, l in unicode_replacements_text.items():
+                escaped = escaped.replace(u, l)
+                
+            result += f"\\texttt{{{escaped}}}"
+        else:
+            # TEXT/MATH segments
+            # Split by '$' to find math mode
+            math_parts = part.split('$')
+            for j, subpart in enumerate(math_parts):
+                if j % 2 == 1:
+                    # MATH MODE
+                    escaped = subpart
+                    # Minimal escaping
+                    escaped = escaped.replace('%', r'\%')
+                    escaped = escaped.replace('#', r'\#')
+                    
+                    for u, l in unicode_replacements_math.items():
+                        escaped = escaped.replace(u, l)
+                        
+                    result += f"${escaped}$"
+                else:
+                    # TEXT MODE
+                    escaped = subpart
+                    for char in ordered_chars_text:
+                        replacement = special_chars_text[char]
+                        escaped = escaped.replace(char, replacement)
+                        
+                    for u, l in unicode_replacements_text.items():
+                        escaped = escaped.replace(u, l)
+                        
+                    result += escaped
+            
+    return result
+
 def generate_tex(filename, items, module_name):
     # Escape underscores in filename for title
-    title = module_name.replace('_', r'\_')
+    # AND escape the title itself!
+    title = escape_latex(module_name)
     tex_content = f"\\section{{{title}}}\n\n"
     
     for item in items:
@@ -56,8 +184,9 @@ def generate_tex(filename, items, module_name):
         
         # Format the description (convert markdown links to latex, etc?)
         # For now, minimal formatting
-        desc = item['description']
-        proof = item['proof_desc']
+        desc = escape_latex(item['description'])
+        proof = escape_latex(item['proof_desc'])
+        details = escape_latex(item['details_desc'])
         
         tex_content += f"\\subsection*{{{item['type'].capitalize()} {name}}}\n"
         
@@ -66,6 +195,9 @@ def generate_tex(filename, items, module_name):
             
         if proof:
             tex_content += f"\\textbf{{Proof Description:}} {proof}\n\n"
+
+        if details:
+            tex_content += f"\\textbf{{Details:}} {details}\n\n"
             
         # We also want to show the formal statement (decl)
         # We'll use verbatim or lstlisting
@@ -105,7 +237,6 @@ def main():
         ('LcAtOfShrink.lean', 'Local Connectivity from Shrinking'),
         ('Yoccoz.lean', 'Yoccoz Theorem'),
         ('InfinitelyRenormalizable.lean', 'Infinitely Renormalizable Case'),
-        ('Quadratic/Complex/Groetzsch.lean', 'Groetzsch Inequality'),
         ('Quadratic/Complex/PuzzleLemmas2.lean', 'Puzzle Lemmas (Correspondence & Openness)'),
         ('Quadratic/Complex/Escape.lean', 'Escape Lemma'),
         ('Quadratic/Complex/Green.lean', 'Green\'s Function'),

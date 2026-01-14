@@ -1,5 +1,4 @@
 import Mlc.Quadratic.Complex.Basic
-import Mlc.Quadratic.Complex.Groetzsch
 import Mlc.Quadratic.Complex.Green
 import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.Basic
@@ -26,8 +25,8 @@ def DynamicalPuzzlePiece (c : ℂ) (n : ℕ) (z : ℂ) : Set ℂ :=
 /-- The annulus between two nested puzzle pieces around the critical point.
     Definition: The annulus between two nested puzzle pieces `P_n \ P_{n+1}`.
     The sum of their moduli determines renormalizability. -/
-def PuzzleAnnulus (c : ℂ) (n : ℕ) : Set ℂ :=
-  DynamicalPuzzlePiece c n 0 \ DynamicalPuzzlePiece c (n + 1) 0
+def PuzzleAnnulus (c : ℂ) (n : ℕ) : Annulus :=
+  ⟨DynamicalPuzzlePiece c n 0 \ DynamicalPuzzlePiece c (n + 1) 0⟩
 
 /-- A para-puzzle piece in the parameter plane.
     Definition: The set of parameters `c` for which the critical point 0 lies in the

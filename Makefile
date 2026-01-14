@@ -1,4 +1,4 @@
-.PHONY: all build check cache docs pdf clean
+.PHONY: all build check cache clean
 
 # Default target
 all: check
@@ -29,17 +29,12 @@ auto-build: .cache_marker
 	lake build
 	lake exe check_axioms
 
-# Generate LaTeX documentation for all Lean files
-docs:
-	cd scripts && poetry run python3 generate_text_docs.py
-	cd scripts && poetry run python3 graph_gen.py
-
 # Compile proof.tex to PDF
 # Runs xelatex twice to resolve cross-references and bookmarks
 pdf:
-	cd docs && xelatex proof.tex
+	cd docs && xelatex -interaction=nonstopmode proof.tex && xelatex -interaction=nonstopmode proof.tex
 
 # Clean build artifacts
 clean:
-	rm -f docs/proof.aux docs/proof.log docs/proof.out docs/proof.pdf .cache_marker
-	rm -rf docs/*.tex
+	rm -f docs/proof.aux docs/proof.log docs/proof.out docs/proof.pdf docs/proof.toc .cache_marker
+
