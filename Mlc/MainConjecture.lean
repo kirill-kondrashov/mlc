@@ -28,10 +28,9 @@ section MainProof
     We use the definition of FinitelyRenormalizable and InfinitelyRenormalizable which directly
     map to this divergence/convergence behavior. -/
 theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormalizable c := by
-  rw [FinitelyRenormalizable, InfinitelyRenormalizable]
-  by_cases h : Summable (fun n => modulus (PuzzleAnnulus c n))
-  · right; exact h
-  · left; exact h
+  unfold FinitelyRenormalizable InfinitelyRenormalizable
+  rw [or_comm]
+  exact Classical.em _
 
 /-- If dynamical pieces shrink to a point, parameter pieces shrink to a point.
     Proof idea: This follows directly from the Correspondence Principle axiom (`parameter_shrink_ax`),

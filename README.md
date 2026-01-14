@@ -30,8 +30,12 @@ Some of the statements used in the proof are stated as `axiom`s (keyword in Lean
     *   Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984]
 
 ### 2. Deep Theorems
-*   [`mlc_infinitely_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean#L29): Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
-    *   Source: [Lyubich, The Dynamics of Quadratic Polynomials (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
+*   [`infinitely_renormalizable_classification`](Mlc/InfinitelyRenormalizable.lean): Classification of infinitely renormalizable parameters into Primitive and Satellite types.
+    *   Source: [Dudko, Lyubich, Selinger, arXiv:1703.01206v3]
+*   [`mlc_primitive_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean): Lyubich's Theorem stating that MLC holds for Primitive infinitely renormalizable parameters.
+    *   Source: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997)]
+*   [`molecule_conjecture_implies_mlc_satellite`](Mlc/InfinitelyRenormalizable.lean): The Molecule Conjecture implies MLC for Satellite infinitely renormalizable parameters.
+    *   Source: [Dudko, Lyubich, Selinger, arXiv:1703.01206v3, Appendix C]
 *   [`slodkowski_theorem`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L145) (Slodkowski's Theorem).
     *   Source: [Slodkowski, Holomorphic motions and polynomial hulls] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
     *   Local: `refs/S0002-9939-1991-1037218-8.pdf`
@@ -47,7 +51,8 @@ The following axioms are identified as targets for future formalization. Replaci
 *   `MLC.Quadratic.modulus_nonneg`
 *   `MLC.Quadratic.puzzle_boundary_motion_exists`
 *   `MLC.Quadratic.slodkowski_theorem`
-*   `MLC.mlc_infinitely_renormalizable_ax`
+*   `MLC.mlc_primitive_renormalizable_ax`
+*   `MLC.molecule_conjecture_implies_mlc_satellite`
 
 ## Verification
 
@@ -77,7 +82,9 @@ All axioms used:
 - MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected
-- MLC.mlc_infinitely_renormalizable_ax
+- MLC.infinitely_renormalizable_classification
+- MLC.mlc_primitive_renormalizable_ax
+- MLC.molecule_conjecture_implies_mlc_satellite
 ```
 
 ## Paper

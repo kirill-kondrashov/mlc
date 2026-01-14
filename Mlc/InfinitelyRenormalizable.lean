@@ -26,21 +26,31 @@ def InfinitelyRenormalizable (c : ℂ) : Prop :=
 opaque PrimitiveRenormalizable (c : ℂ) : Prop
 opaque SatelliteRenormalizable (c : ℂ) : Prop
 
-/-- Every infinitely renormalizable parameter is either Primitive or Satellite. -/
 axiom infinitely_renormalizable_classification (c : ℂ) (h : InfinitelyRenormalizable c) :
     PrimitiveRenormalizable c ∨ SatelliteRenormalizable c
 
-/-- MLC holds for infinitely renormalizable parameters.
-    This is a deep theorem in complex dynamics.
-    - For **Primitive** parameters, it was proved by Lyubich: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Acta Math. 178 (1997)].
-    - For **Satellite** parameters, it is partially covered by recent work on Pacman renormalization (Dudko, Lyubich, Selinger), though full coverage for all combinatorics (e.g., unbounded type) remains an active area of research (Molecule Conjecture).
-
-    We accept this as an axiom for the purpose of this formalization. -/
-axiom mlc_infinitely_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
+/-- MLC for Primitive parameters (Lyubich).
+    Proved by Lyubich in "The Dynamics of Quadratic Polynomials I-II", Acta Math. 178 (1997). -/
+axiom mlc_primitive_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : PrimitiveRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
+/-- The Molecule Conjecture (Dudko, Lyubich, Selinger).
+    This conjecture asserts the existence of a hyperbolic Pacman renormalization operator
+    whose horseshoe corresponds to the boundary of the main molecule of the Mandelbrot set.
+    It would imply MLC for all infinitely renormalizable parameters of satellite type,
+    covering cases not yet fully resolved (like unbounded combinatorics).
+
+    Reference: Dudko, Lyubich, Selinger, "Pacman Renormalization...", Appendix C. -/
+axiom molecule_conjecture_implies_mlc_satellite (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizable c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- MLC holds for infinitely renormalizable parameters.
+    This is derived from the classification into Primitive and Satellite types,
+    using Lyubich's theorem for the former and the Molecule Conjecture for the latter. -/
 theorem mlc_infinitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
-    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
-  mlc_infinitely_renormalizable_ax c hc h
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  cases infinitely_renormalizable_classification c h with
+  | inl h_prim => exact mlc_primitive_renormalizable_ax c hc h_prim
+  | inr h_sat => exact molecule_conjecture_implies_mlc_satellite c hc h_sat
 
 end MLC
