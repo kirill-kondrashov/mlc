@@ -81,6 +81,20 @@
 
 \maketitle
 
+\vspace{1em}
+\noindent
+\fcolorbox{red}{white}{%
+    \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule}
+        \centering
+        \textbf{\huge WARNING: This document is OUTDATED.}\\
+        \vspace{0.5em}
+        The latest and authoritative source of the proof is the Lean 4 code in this repository.\\
+        The documentation in this PDF will be updated later to reflect the current state of the formalization.\\
+        Please refer to \texttt{README.md} and the \texttt{.lean} files for accurate information.
+    \end{minipage}%
+}
+\vspace{1em}
+
 \section{Introduction}
 
 The Mandelbrot set $\mathcal{M}$ is the set of parameters $c \in \mathbb{C}$ for which the orbit of 0 under $f_c(z) = z^2 + c$ is bounded. The MLC conjecture asserts that $\mathcal{M}$ is locally connected. This result implies the density of hyperbolic components (structural stability).

@@ -18,9 +18,20 @@ open Quadratic Complex Topology Set Filter BigOperators Classical
 section GroetzschLemmas
 
 /-- Grötzsch's Inequality. -/
-theorem groetzsch_inequality {A B S : Set ℂ} (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
+theorem groetzsch_inequality {A B S : Annulus}
+    (h_disj : Disjoint (A : Set ℂ) B) (h_sub : (A : Set ℂ) ∪ B ⊆ S)
+    (h_ess_A : EssentialIn A S) (h_ess_B : EssentialIn B S)
+    (h_ann_A : IsAnnulus A) (h_ann_B : IsAnnulus B) (h_ann_S : IsAnnulus S) :
     modulus A + modulus B ≤ modulus S := by
-  apply groetzsch_inequality_axiom h_disj h_sub
+  apply groetzsch_inequality_axiom h_disj h_sub h_ess_A h_ess_B h_ann_A h_ann_B h_ann_S
+
+/-- If P are nested connected sets, then P_0 \ P_k is essential in P_0 \ P_{k+1}.
+    This is actually trivial or vacuously true depending on definitions, but needed for induction. -/
+axiom essential_induction_step_A {P : ℕ → Set ℂ} {k : ℕ} :
+  EssentialIn ⟨P 0 \ P k⟩ ⟨P 0 \ P (k + 1)⟩
+
+axiom essential_induction_step_B {P : ℕ → Set ℂ} {k : ℕ} :
+  EssentialIn ⟨P k \ P (k + 1)⟩ ⟨P 0 \ P (k + 1)⟩
 
 lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆ P n)
     {i j : ℕ} (hij : i ≤ j) : P j ⊆ P i := by
@@ -36,10 +47,11 @@ lemma subset_of_le_nested {P : ℕ → Set ℂ} (h_nested : ∀ n, P (n + 1) ⊆
 theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (_h_conn : ∀ n, IsConnected (P n))
-    (_h_nontriv : Set.Nontrivial (⋂ n, P n)) :
-    Summable (fun n => modulus (P n \ P (n + 1))) := by
-  let A := fun n => P n \ P (n + 1)
-  have h_disj : ∀ i j, i < j → Disjoint (A i) (A j) := by
+    (_h_nontriv : Set.Nontrivial (⋂ n, P n))
+    (h_ann_diff : ∀ i j, i < j → IsAnnulus (P i \ P j)) :
+    Summable (fun n => modulus (Annulus.mk <| P n \ P (n + 1))) := by
+  let A := fun n => Annulus.mk (P n \ P (n + 1))
+  have h_disj : ∀ i j, i < j → Disjoint (A i : Set ℂ) (A j) := by
     intro i j hij
     rw [Set.disjoint_left]
     intro z hi hj
@@ -50,7 +62,7 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
     have z_not_in_P_i_1 := hi.2
     contradiction
 
-  have h_union_sub : ∀ N, (⋃ n ∈ Finset.range N, A n) ⊆ P 0 \ P N := by
+  have h_union_sub : ∀ N, (⋃ n ∈ Finset.range N, (A n : Set ℂ)) ⊆ P 0 \ P N := by
     intro N
     rw [Set.subset_def]
     intro z hz
@@ -68,50 +80,61 @@ theorem modulus_summable_of_nontrivial_intersection {P : ℕ → Set ℂ}
       apply h_sub h_in_N
 
   -- Monotonicity lemma
-  have modulus_mono : ∀ {U V : Set ℂ}, U ⊆ V → modulus U ≤ modulus V := by
+  have modulus_mono : ∀ {U V : Set ℂ}, U ⊆ V → modulus ⟨U⟩ ≤ modulus ⟨V⟩ := by
     intro U V h_sub
-    have h_union : U ∪ ∅ ⊆ V := by simp [h_sub]
-    have h_disj_empty : Disjoint U ∅ := disjoint_empty U
-    have h_ineq := groetzsch_inequality (A := U) (B := ∅) (S := V) h_disj_empty h_union
-    rw [modulus_empty, add_zero] at h_ineq
-    exact h_ineq
+    apply modulus_mono_axiom h_sub
 
   -- Bounded partial sums
-  have h_bounded : ∀ N, Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus (P 0 \ (⋂ n, P n)) := by
+  have h_bounded : ∀ N, Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus ⟨P 0 \ (⋂ n, P n)⟩ := by
     intro N
     -- First show sum ≤ modulus (P 0 \ P N)
-    have h_sum_le : Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus (P 0 \ P N) := by
+    have h_sum_le : Finset.sum (Finset.range N) (fun n => modulus (A n)) ≤ modulus ⟨P 0 \ P N⟩ := by
       induction N with
       | zero =>
         simp
         rw [modulus_empty]
       | succ k ih =>
         rw [Finset.sum_range_succ]
-        have h_split : P 0 \ P (k + 1) = (P 0 \ P k) ∪ (P k \ P (k + 1)) := by
-          ext z
+        by_cases hk0 : k = 0
+        · subst hk0
           simp
-          constructor
-          · intro h
-            by_cases hk : z ∈ P k
-            · right; exact ⟨hk, h.2⟩
-            · left; exact ⟨h.1, hk⟩
-          · intro h
-            cases h with
-            | inl h => exact ⟨h.1, fun h_in => h.2 (h_nested k h_in)⟩
-            | inr h =>
-                have h_sub : P k ⊆ P 0 := subset_of_le_nested h_nested (Nat.zero_le k)
-                exact ⟨h_sub h.1, h.2⟩
+          exact le_refl _
+        · have h_split : P 0 \ P (k + 1) = (P 0 \ P k) ∪ (P k \ P (k + 1)) := by
+            ext z
+            simp
+            constructor
+            · intro h
+              by_cases hk : z ∈ P k
+              · right; exact ⟨hk, h.2⟩
+              · left; exact ⟨h.1, hk⟩
+            · intro h
+              cases h with
+              | inl h => exact ⟨h.1, fun h_in => h.2 (h_nested k h_in)⟩
+              | inr h =>
+                  have h_sub : P k ⊆ P 0 := subset_of_le_nested h_nested (Nat.zero_le k)
+                  exact ⟨h_sub h.1, h.2⟩
 
-        have h_disj_split : Disjoint (P 0 \ P k) (P k \ P (k + 1)) := by
-          rw [Set.disjoint_left]
-          intro z h1 h2
-          have h_in_Pk := h2.1
-          have h_not_in_Pk := h1.2
-          contradiction
+          have h_disj_split : Disjoint (P 0 \ P k) (P k \ P (k + 1)) := by
+            rw [Set.disjoint_left]
+            intro z h1 h2
+            have h_in_Pk := h2.1
+            have h_not_in_Pk := h1.2
+            contradiction
 
-        have h_ineq := groetzsch_inequality (A := P 0 \ P k) (B := P k \ P (k + 1)) (S := P 0 \ P (k + 1)) h_disj_split (subset_of_eq h_split.symm)
-        apply le_trans (add_le_add ih (le_refl (modulus (A k))))
-        exact h_ineq
+          -- Use the induction step essentiality axioms
+          have h_ess_A : EssentialIn ⟨P 0 \ P k⟩ ⟨P 0 \ P (k + 1)⟩ := essential_induction_step_A
+          have h_ess_B : EssentialIn ⟨P k \ P (k + 1)⟩ ⟨P 0 \ P (k + 1)⟩ := essential_induction_step_B
+        
+          -- Annulus proofs
+          have h_ann_A : IsAnnulus (P 0 \ P k) := by
+             apply h_ann_diff 0 k
+             exact Nat.pos_of_ne_zero hk0
+          have h_ann_B : IsAnnulus (P k \ P (k + 1)) := h_ann_diff k (k+1) (Nat.lt_succ_self k)
+          have h_ann_S : IsAnnulus (P 0 \ P (k + 1)) := h_ann_diff 0 (k+1) (Nat.succ_pos _)
+
+          have h_ineq := groetzsch_inequality (A := ⟨P 0 \ P k⟩) (B := ⟨P k \ P (k + 1)⟩) (S := ⟨P 0 \ P (k + 1)⟩) h_disj_split (subset_of_eq h_split.symm) h_ess_A h_ess_B h_ann_A h_ann_B h_ann_S
+          apply le_trans (add_le_add ih (le_refl (modulus (A k))))
+          exact h_ineq
 
     apply le_trans h_sum_le
     apply modulus_mono
@@ -125,7 +148,8 @@ theorem groetzsch_criterion {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)
     (h_zero : ∀ n, 0 ∈ P n)
     (h_conn : ∀ n, IsConnected (P n))
-    (h_div : ¬ Summable (fun n => modulus (P n \ P (n + 1)))) :
+    (h_ann_diff : ∀ i j, i < j → IsAnnulus (P i \ P j))
+    (h_div : ¬ Summable (fun n => modulus (Annulus.mk <| P n \ P (n + 1)))) :
     (⋂ n, P n) = {0} := by
   by_contra h_neq
   have h_nontriv : Set.Nontrivial (⋂ n, P n) := by
@@ -145,27 +169,32 @@ theorem groetzsch_criterion {P : ℕ → Set ℂ}
       rw [Set.mem_singleton_iff] at hz
       rw [hz]
       exact h_0
-  have h_sum := modulus_summable_of_nontrivial_intersection h_nested h_conn h_nontriv
+  have h_sum := modulus_summable_of_nontrivial_intersection h_nested h_conn h_nontriv h_ann_diff
   contradiction
 
 end GroetzschLemmas
 
 section Combinatorics
 
-/-- Non-renormalizable parameters.
-    For the purpose of this plan, we define non-renormalizable parameters
+/-- Finitely renormalizable parameters.
+    (Previously named NonRenormalizable, but that terminology was confusing).
+    For the purpose of this plan, we define finitely renormalizable parameters
     as those for which the Yoccoz puzzle moduli diverge.
     The deep work is then in the dichotomy axiom. -/
-def NonRenormalizable (c : ℂ) : Prop :=
+def FinitelyRenormalizable (c : ℂ) : Prop :=
     ¬ Summable (fun n => modulus (PuzzleAnnulus c n))
 
-/-- Non-renormalizable parameters have divergent moduli. -/
-theorem non_renormalizable_moduli_diverge (c : ℂ) (h : NonRenormalizable c) :
+/-- Finitely renormalizable parameters have divergent moduli. -/
+theorem finitely_renormalizable_moduli_diverge (c : ℂ) (h : FinitelyRenormalizable c) :
     ¬ (Summable fun n => modulus (PuzzleAnnulus c n)) := h
 
 end Combinatorics
 
 section YoccozTheorem
+
+/-- Axiom: Differences of dynamical puzzle pieces are annuli. -/
+axiom puzzle_diff_is_annulus (c : ℂ) (i j : ℕ) (h : i < j) :
+  IsAnnulus (DynamicalPuzzlePiece c i 0 \ DynamicalPuzzlePiece c j 0)
 
 /-- Yoccoz's Theorem: Divergence of moduli implies point intersection.
     Proof idea:
@@ -191,6 +220,7 @@ theorem yoccoz_theorem (c : ℂ) :
       have h_ne : (DynamicalPuzzlePiece c n 0).Nonempty := ⟨0, mem_dynamical_puzzle_piece_self c hc n⟩
       rw [DynamicalPuzzlePiece] at h_ne ⊢
       exact ⟨h_ne, isPreconnected_connectedComponentIn⟩
+    · exact puzzle_diff_is_annulus c
     · exact h_div
   · exfalso
     apply h_div

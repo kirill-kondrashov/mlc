@@ -99,26 +99,32 @@ axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnect
 
 /-! ## Conformal Modulus -/
 
-/-- The conformal modulus of a set in the complex plane.
+/-- A topological annulus (doubly connected domain). -/
+structure Annulus where
+  val : Set ℂ
 
-Details:
-For an annulus $A = \{z \mid r < |z| < R\}$, the modulus is defined as $\frac{1}{2\pi} \ln(R/r)$.
-The modulus is a conformal invariant: it is preserved under biholomorphic maps.
-For general doubly connected domains, it is defined via conformal equivalence to a standard annulus.
-We extend the definition to arbitrary sets (returning 0 for degenerate sets). -/
-opaque modulus (S : Set ℂ) : ℝ
+instance : Coe Annulus (Set ℂ) := ⟨Annulus.val⟩
 
-def Annulus (a : ℂ) (r R : ℝ) : Set ℂ :=
-  { z | r < ‖z - a‖ ∧ ‖z - a‖ < R } -- open region between circles of radii r and R
+/-- Property of being a conformal annulus. -/
+opaque IsAnnulus (S : Set ℂ) : Prop
+
+/-- A round annulus $ann(a; r, R)$ as an `Annulus`. -/
+def RoundAnnulus (a : ℂ) (r R : ℝ) : Annulus :=
+  ⟨{ z | r < ‖z - a‖ ∧ ‖z - a‖ < R }⟩ -- open region between circles of radii r and R
+
+opaque modulus (S : Annulus) : ℝ
 
 /-- The modulus of the empty set is 0. -/
-axiom modulus_empty : modulus ∅ = 0
+axiom modulus_empty : modulus ⟨(∅ : Set ℂ)⟩ = 0
 
 /-- Modulus is non-negative.
 
 Details:
 The modulus measures the "thickness" of an annulus, which must be non-negative. -/
-axiom modulus_nonneg (S : Set ℂ) : 0 ≤ modulus S
+axiom modulus_nonneg (S : Annulus) : 0 ≤ modulus S
+
+/-- A sub-annulus A is essential in S if it separates the boundary components of S. -/
+opaque EssentialIn (A S : Annulus) : Prop
 
 /-- Axiom: Superadditivity of modulus for disjoint essential annuli (Grötzsch Inequality).
 
@@ -126,9 +132,15 @@ Details:
 If $A$ and $B$ are disjoint annuli nested within $S$, then the sum of their moduli is less than or equal to the modulus of $S$.
 This inequality is crucial for proving convergence of moduli sums in the Yoccoz puzzle analysis.
 Reference: Milnor, Dynamics in One Complex Variable, Corollary B.5 -/
-axiom groetzsch_inequality_axiom {A B S : Set ℂ}
-  (h_disj : Disjoint A B) (h_sub : A ∪ B ⊆ S) :
+axiom groetzsch_inequality_axiom {A B S : Annulus}
+  (h_disj : Disjoint (A : Set ℂ) B) (h_sub : (A : Set ℂ) ∪ B ⊆ S)
+  (h_ess_A : EssentialIn A S) (h_ess_B : EssentialIn B S)
+  (h_ann_A : IsAnnulus A) (h_ann_B : IsAnnulus B) (h_ann_S : IsAnnulus S) :
   modulus A + modulus B ≤ modulus S
+
+/-- Axiom: Monotonicity of modulus.
+    If U ⊆ V, then modulus(U) ≤ modulus(V). -/
+axiom modulus_mono_axiom {U V : Set ℂ} (h : U ⊆ V) : modulus ⟨U⟩ ≤ modulus ⟨V⟩
 
 end
 

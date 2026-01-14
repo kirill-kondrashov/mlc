@@ -8,8 +8,6 @@ This is a work in progress; there will be an update when (or if ☺ ) the proof 
 
 The benefit of using Lean is that it is verified by the Lean kernel, even when it is generated. Some essential parts, such as definitions, useful lemmas, and theorems from the references, are included here. To have a closed loop, a few theorems (see below) are stated as axioms.
 
-[Read the Paper (PDF)](docs/proof.pdf), it includes Lean listings next to comments, and attempts to make the proofs human-readable.
-
 ## Disclaimer
 
 > **This is an AI-assisted attempt to formalize modern mathematics.**
@@ -68,12 +66,21 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.groetzsch_inequality_axiom
+- MLC.Quadratic.modulus_mono_axiom
 - MLC.Quadratic.modulus_empty
+- MLC.essential_induction_step_A
+- MLC.essential_induction_step_B
+- MLC.Quadratic.groetzsch_inequality_axiom
 - MLC.Quadratic.modulus_nonneg
+- MLC.puzzle_diff_is_annulus
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected
 - MLC.mlc_infinitely_renormalizable_ax
 ```
+
+## Paper
+
+[Read the Paper (PDF)](docs/proof.pdf). It includes Lean listings next to comments, and attempts to make the proofs human-readable.
+*Note: The paper might be updated with a lag. The Lean code in this repository is the higher priority source of truth.*

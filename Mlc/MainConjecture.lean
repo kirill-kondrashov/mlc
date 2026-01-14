@@ -23,12 +23,12 @@ This file outlines the proof strategy for the MLC conjecture based on Yoccoz puz
 
 section MainProof
 
-/-- Every parameter is either non-renormalizable or infinitely renormalizable.
+/-- Every parameter is either finitely renormalizable (including non-renormalizable) or infinitely renormalizable.
     Proof idea: By the law of excluded middle, the sum of moduli either converges or diverges.
-    We use the definition of NonRenormalizable and InfinitelyRenormalizable which directly
+    We use the definition of FinitelyRenormalizable and InfinitelyRenormalizable which directly
     map to this divergence/convergence behavior. -/
-theorem dichotomy (c : ℂ) : NonRenormalizable c ∨ InfinitelyRenormalizable c := by
-  rw [NonRenormalizable, InfinitelyRenormalizable]
+theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormalizable c := by
+  rw [FinitelyRenormalizable, InfinitelyRenormalizable]
   by_cases h : Summable (fun n => modulus (PuzzleAnnulus c n))
   · right; exact h
   · left; exact h
@@ -47,7 +47,7 @@ lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0})
     The Mandelbrot set is locally connected.
     Proof idea: We prove local connectivity at every point `c` in the Mandelbrot set.
     We split the proof into two cases based on the `dichotomy`:
-    1.  **Non-renormalizable**: The moduli of the puzzle annuli diverge. Yoccoz's theorem
+    1.  **Finitely Renormalizable**: The moduli of the puzzle annuli diverge. Yoccoz's theorem
         implies the dynamical pieces shrink to a point. The Correspondence Principle then
         implies the parameter pieces shrink to `c`. Finally, `lc_at_of_shrink` shows this
         implies local connectivity at `c`.
@@ -57,9 +57,9 @@ theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
   -- We need to show local connectivity at every point c ∈ MandelbrotSet
   apply locallyConnectedSpace_of_locallyConnectedAt
   intro ⟨c, hc⟩
-  rcases dichotomy c with h_non_renorm | h_inf_renorm
-  · -- Case 1: Non-renormalizable
-    have h_div := non_renormalizable_moduli_diverge c h_non_renorm
+  rcases dichotomy c with h_fin_renorm | h_inf_renorm
+  · -- Case 1: Finitely Renormalizable
+    have h_div := finitely_renormalizable_moduli_diverge c h_fin_renorm
     have h_dyn := yoccoz_theorem c h_div
     have h_para := parameter_shrink c h_dyn
     exact lc_at_of_shrink c hc h_para
