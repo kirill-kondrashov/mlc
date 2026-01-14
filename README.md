@@ -1,18 +1,20 @@
-# Machine-Generated Proof of the MLC Conjecture
+# Machine-Generated Proof Skeleton of the MLC Conjecture
 
+This repository contains a **machine-generated formal proof skeleton** of the Mandelbrot Local Connectivity (MLC) Conjecture in Lean 4.
 
+Essentially, this is software that can help with moving forward with an exact proof **together** with human verification (if it allows formalizing with Lean).
 
-This repository contains a **machine-generated formal proof** of the Mandelbrot Local Connectivity (MLC) Conjecture in Lean 4.
+This is a work in progress; there will be an update when (or if ☺ ) the proof is fully verified. This repository is shared at an early stage to simplify collaboration (not everyone has a github account).
 
-The proof strategy relies on Yoccoz puzzles and integrates deep results from complex dynamics (Lyubich's Theorem, Slodkowski's Theorem) as axioms to derive the local connectivity of the Mandelbrot set.
+The benefit of using Lean is that it is verified by the Lean kernel, even when it is generated. Some essential parts, such as definitions, useful lemmas, and theorems from the references, are included here. To have a closed loop, a few theorems (see below) are stated as axioms.
 
-[Read the Paper (PDF)](docs/proof.pdf), which describes the proof in more detail, shows Lean listings next to comments, and attempts to make the proofs human-readable.
+[Read the Paper (PDF)](docs/proof.pdf), it includes Lean listings next to comments, and attempts to make the proofs human-readable.
 
 ## Disclaimer
 
 > **This is an AI-assisted attempt to formalize modern mathematics.**
 >
-> The code, proofs, and documentation in this repository were produced by a combination of actions of AI assistant and manual fixes. While the definitions and logical structure are checked by the Lean 4 kernel, the choice of axioms and the mathematical fidelity of the formalization to the standard literature should be verified by human experts. This project is inspired by [recent work on AI for math](https://arxiv.org/abs/2511.02864).
+> The code and documentation in this repository were produced by a combination of actions of AI assistant and manual fixes. While the definitions and logical structure are checked by the Lean 4 kernel, the choice of axioms and the mathematical fidelity of the formalization to the standard literature should be verified by human experts. This project is inspired by [recent work on AI for math](https://arxiv.org/abs/2511.02864).
 
 ## Axioms
 
@@ -31,7 +33,7 @@ Some of the statements used in the proof are stated as `axiom`s (keyword in Lean
 
 ### 2. Deep Theorems
 *   [`mlc_infinitely_renormalizable_ax`](Mlc/InfinitelyRenormalizable.lean#L29): Lyubich's Theorem stating that the Mandelbrot set is locally connected at infinitely renormalizable parameters.
-    *   Source: [Lyubich, The Dynamics of Quadratic Polynomials I-II, Main Theorem] (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
+    *   Source: [Lyubich, The Dynamics of Quadratic Polynomials (Local: `refs/Conformal Geometry and Dynamics of Quadratic Polynomials.pdf`)
 *   [`slodkowski_theorem`](Mlc/Quadratic/Complex/PuzzleLemmas2.lean#L145) (Slodkowski's Theorem).
     *   Source: [Slodkowski, Holomorphic motions and polynomial hulls] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
     *   Local: `refs/S0002-9939-1991-1037218-8.pdf`
