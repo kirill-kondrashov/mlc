@@ -108,10 +108,10 @@ For general doubly connected domains, it is defined via conformal equivalence to
 We extend the definition to arbitrary sets (returning 0 for degenerate sets). -/
 opaque modulus (S : Set ℂ) : ℝ
 
-/-- The modulus of the empty set is 0.
+def Annulus (a : ℂ) (r R : ℝ) : Set ℂ :=
+  { z | r < ‖z - a‖ ∧ ‖z - a‖ < R }
 
-Details:
-This is a basic property of the modulus. An empty set has no "width". -/
+/-- The modulus of the empty set is 0. -/
 axiom modulus_empty : modulus ∅ = 0
 
 /-- Modulus is non-negative.
