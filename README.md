@@ -4,7 +4,7 @@ This repository contains a **machine-generated formal proof skeleton** of the Ma
 
 Essentially, this is software that can help with moving forward with an exact proof **together** with human verification (if it allows formalizing with Lean).
 
-This is a work in progress; there will be an update when (or if ☺ ) the proof is fully verified.
+This is a work in progress; there will be an update when (or if ☺ ) the proof is fully verified. This repository is shared at an early stage to simplify collaboration (not everyone has a github account).
 
 The benefit of using Lean is that it is verified by the Lean kernel, even when it is generated. Some essential parts, such as definitions, useful lemmas, and theorems from the references, are included here. To have a closed loop, a few theorems (see below) are stated as axioms.
 
