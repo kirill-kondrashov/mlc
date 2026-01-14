@@ -59,10 +59,7 @@ theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
   intro ⟨c, hc⟩
   rcases dichotomy c with h_fin_renorm | h_inf_renorm
   · -- Case 1: Finitely Renormalizable
-    have h_div := finitely_renormalizable_moduli_diverge c h_fin_renorm
-    have h_dyn := yoccoz_theorem c h_div
-    have h_para := parameter_shrink c h_dyn
-    exact lc_at_of_shrink c hc h_para
+    exact mlc_finitely_renormalizable c hc h_fin_renorm
   · -- Case 2: Infinitely renormalizable
     exact mlc_infinitely_renormalizable c hc h_inf_renorm
 

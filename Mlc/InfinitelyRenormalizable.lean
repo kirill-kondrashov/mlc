@@ -1,5 +1,7 @@
 import Mlc.Quadratic.Complex.Basic
 import Mlc.Quadratic.Complex.Puzzle
+import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.Yoccoz
 import Mlc.LcAtOfShrink
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
@@ -14,6 +16,27 @@ open Quadratic Complex Topology Set Filter
     In a full theory, this would be a theorem (Yoccoz). -/
 def InfinitelyRenormalizable (c : ℂ) : Prop :=
   Summable (fun n => modulus (PuzzleAnnulus c n))
+
+/-- Yoccoz's Theorem (MLC for Finitely Renormalizable Parameters).
+    Proved by Jean-Christophe Yoccoz in the early 1990s.
+    If the Yoccoz puzzle moduli diverge (Finitely Renormalizable),
+    then the intersection of puzzle pieces is a point, implying local connectivity. -/
+theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : FinitelyRenormalizable c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  -- The proof of this theorem relies on the geometric fact that if the intersection
+  -- of the parameter puzzle pieces shrinks to a point, then the Mandelbrot set
+  -- is locally connected at that parameter.
+  -- This implication is standard but requires setting up the parameter pieces machinery.
+  -- Here we link the divergence of moduli (combinatorics) to the shrinkage (geometry).
+  have h_shrink : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} :=
+    yoccoz_theorem c h
+  
+  -- The full proof that shrinking dynamical pieces implies shrinking parameter pieces
+  -- and thus MLC is a consequence of the relation between dynamical and parameter planes.
+  -- For this skeleton, we use the axiom that parameter pieces shrink if dynamical pieces do,
+  -- combined with the fact that shrinking parameter pieces implies MLC.
+  have h_para_shrink := MLC.Quadratic.parameter_shrink_ax c h_shrink
+  apply lc_at_of_shrink c hc h_para_shrink
 
 /-- Classification of Infinitely Renormalizable parameters.
     Infinitely renormalizable parameters are classified into two types:
