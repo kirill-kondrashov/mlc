@@ -109,7 +109,7 @@ We extend the definition to arbitrary sets (returning 0 for degenerate sets). -/
 opaque modulus (S : Set ℂ) : ℝ
 
 def Annulus (a : ℂ) (r R : ℝ) : Set ℂ :=
-  { z | r < ‖z - a‖ ∧ ‖z - a‖ < R }
+  { z | r < ‖z - a‖ ∧ ‖z - a‖ < R } -- open region between circles of radii r and R
 
 /-- The modulus of the empty set is 0. -/
 axiom modulus_empty : modulus ∅ = 0

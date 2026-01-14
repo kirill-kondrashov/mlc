@@ -110,7 +110,7 @@ opaque modulus (S : Set ℂ) : ℝ
 Wikipedia: https://en.wikipedia.org/wiki/Annulus\_(mathematics)\#:\textasciitilde{}:text=In\%20complex\%20analysis\%20an\%20annulus,may\%20take\%20inside\%20an\%20annulus.
 
 \begin{lstlisting}[language=Lean]
-def Annulus (a : ℂ) (r R : ℝ) : Set ℂ :=
+def Annulus (a : ℂ) (r R : ℝ) : Set ℂ := { z | r < ‖z - a‖ ∧ ‖z - a‖ < R } -- open region between circles of radii r and R
 \end{lstlisting}
 
 \subsection*{Axiom modulus\_empty}
