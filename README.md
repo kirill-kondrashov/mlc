@@ -57,6 +57,29 @@ Run `make check` to see the authoritative list. Key axioms include:
 *   `MLC.Quadratic.groetzsch_inequality_axiom`
 *   `MLC.Quadratic.slodkowski_theorem`
 
+Output:
+```
+✅ The proof of 'MLC.MLC_Conjecture' is free of 'sorry'.
+All axioms used:
+- Quot.sound
+- propext
+- Classical.choice
+- MLC.Quadratic.modulus_mono_axiom
+- MLC.Quadratic.modulus_empty
+- MLC.essential_induction_step_A
+- MLC.essential_induction_step_B
+- MLC.Quadratic.groetzsch_inequality_axiom
+- MLC.Quadratic.modulus_nonneg
+- MLC.puzzle_diff_is_annulus
+- MLC.Quadratic.filled_julia_set_connected
+- MLC.Quadratic.puzzle_boundary_motion_exists
+- MLC.Quadratic.slodkowski_theorem
+- MLC.Quadratic.mandelbrot_set_connected
+- MLC.infinitely_renormalizable_classification
+- MLC.mlc_primitive_renormalizable_ax
+- MLC.molecule_conjecture_implies_mlc_satellite
+```
+
 ## Documentation
 
 *   [Read the Proof Overview (PDF)](docs/proof.pdf): *Note: This PDF is a work in progress and may lag behind the Lean code.*
