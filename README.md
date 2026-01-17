@@ -54,7 +54,7 @@ Run `make check` to see the authoritative list. Key axioms include:
 *   `MLC.molecule_conjecture_implies_mlc_satellite`
 *   `MLC.mlc_primitive_renormalizable_ax`
 *   `MLC.infinitely_renormalizable_classification`
-*   `MLC.Quadratic.groetzsch_inequality_axiom`
+*   `MLC.Quadratic.parameter_shrink_ax`
 *   `MLC.Quadratic.slodkowski_theorem`
 
 Output:
@@ -64,13 +64,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.modulus_mono_axiom
-- MLC.Quadratic.modulus_empty
-- MLC.essential_induction_step_A
-- MLC.essential_induction_step_B
-- MLC.Quadratic.groetzsch_inequality_axiom
-- MLC.Quadratic.modulus_nonneg
-- MLC.puzzle_diff_is_annulus
+- MLC.Quadratic.parameter_shrink_ax
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem

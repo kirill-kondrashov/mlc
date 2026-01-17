@@ -1,7 +1,6 @@
-import Mlc.Quadratic.Complex.Basic
-import Mlc.Quadratic.Complex.Green
-import Mlc.Quadratic.Complex.Puzzle
-import Mlc.Yoccoz
+import Yoccoz.Quadratic.Complex.Basic
+import Yoccoz.Quadratic.Complex.Green
+import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mathlib.Topology.Connected.LocallyConnected
