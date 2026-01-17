@@ -1,7 +1,7 @@
-import Mlc.Quadratic.Complex.Basic
-import Mlc.Quadratic.Complex.Puzzle
+import Yoccoz.Quadratic.Complex.Basic
+import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.Quadratic.Complex.PuzzleLemmas2
-import Mlc.Yoccoz
+import Yoccoz.Yoccoz
 import Mlc.LcAtOfShrink
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
@@ -9,6 +9,10 @@ import Mathlib.Topology.Algebra.InfiniteSum.Basic
 namespace MLC
 
 open Quadratic Complex Topology Set Filter
+
+/-- Finitely renormalizable parameters.
+    Alias for NonRenormalizable from the library. -/
+abbrev FinitelyRenormalizable := NonRenormalizable
 
 /-- Infinitely renormalizable parameters.
     For the purpose of this plan, we define infinitely renormalizable parameters

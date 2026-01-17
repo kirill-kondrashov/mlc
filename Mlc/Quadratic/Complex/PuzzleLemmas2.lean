@@ -1,5 +1,5 @@
-import Mlc.Quadratic.Complex.Basic
-import Mlc.Quadratic.Complex.Green
+import Yoccoz.Quadratic.Complex.Basic
+import Yoccoz.Quadratic.Complex.Green
 import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Topology.Constructions
@@ -10,8 +10,9 @@ import Mathlib.Analysis.Complex.Norm
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.GCongr
-import Mlc.Quadratic.Complex.Puzzle
-import Mlc.Quadratic.Complex.PuzzleLemmas
+import Yoccoz.Quadratic.Complex.Puzzle
+import Yoccoz.Quadratic.Complex.PuzzleLemmas
+import Mlc.Quadratic.Complex.Axioms
 
 namespace MLC.Quadratic
 
@@ -32,144 +33,7 @@ lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
     c ∈ ParaPuzzlePiece n ↔ fc c 0 ∈ DynamicalPuzzlePiece c n 0 := by
   simp [ParaPuzzlePiece, fc]
 
-/-- The Correspondence Principle:
-    If the dynamical pieces shrink to a point, the parameter pieces shrink to a point.
-    Proof idea: We analyze two cases:
-    1.  `c ∈ M`: The filled Julia set `K(c)` is connected. The dynamical pieces `P_n` contain `0`.
-        Since `0 ∈ K(c)` and `K(c)` is connected, `K(c) ⊆ P_n` for all `n` (actually `K(c)` is the "core").
-        If `⋂ P_n = {0}`, then `K(c) ⊆ {0}`, which implies `c=0`.
-    2.  `c ∉ M`: The pieces eventually become empty (`dynamical_puzzle_piece_empty_of_large_n`),
-        forcing the intersection to be empty. This case is handled by contradiction or vacuous truth
-        depending on exact statement (here we show if intersection is {0} then parameter intersection is {c}). -/
-lemma parameter_shrink_ax (c : ℂ) :
-    (⋂ n, DynamicalPuzzlePiece c n 0) = {0} → (⋂ n, ParaPuzzlePiece n) = {c} := by
-  intro h_shrink
-  by_cases hc : c ∈ MandelbrotSet
-  · -- Case c ∈ M
-    have h_K_sub : K c ⊆ {0} := by
-      rw [← h_shrink]
-      apply subset_iInter
-      intro n
-      have h_K_subset : K c ⊆ {w | green_function c w < (1 / 2) ^ n} := by
-        intro z hz
-        rw [mem_setOf_eq]
-        rw [← green_function_eq_zero_iff_mem_K] at hz
-        rw [hz]
-        apply pow_pos
-        norm_num
-      have h_0_in_K : 0 ∈ K c := hc
-      apply (filled_julia_set_connected hc).isPreconnected.subset_connectedComponentIn h_0_in_K h_K_subset
-
-    have hc_in_K : c ∈ K c := by
-      rw [K, MandelbrotSet] at *
-      unfold boundedOrbit at *
-      obtain ⟨M, hM⟩ := hc
-      use max M ‖c‖
-      intro n
-      cases n with
-      | zero => simp
-      | succ n =>
-        simp only [orbit_succ]
-        have h_shift : orbit c c n = orbit c 0 (n + 1) := by
-          induction n with
-          | zero => simp [orbit, fc]
-          | succ n ih => simp [orbit_succ, ih]
-        rw [h_shift]
-        rw [← orbit_succ]
-        apply le_trans (hM (n + 2)) (le_max_left _ _)
-
-    have hc_eq_0 : c = 0 := h_K_sub hc_in_K
-    subst hc_eq_0
-    have h1_in_K : 1 ∈ K 0 := by
-      rw [K]
-      use 1
-      intro n
-      have : orbit 0 1 n = 1 := by
-        induction n with
-        | zero => simp
-        | succ n ih => simp [orbit_succ, fc, ih]
-      rw [this]
-      norm_num
-    have h1_eq_0 : (1 : ℂ) = 0 := by
-      have : (1 : ℂ) ∈ ({0} : Set ℂ) := h_K_sub h1_in_K
-      rw [Set.mem_singleton_iff] at this
-      exact this
-    exfalso
-    exact one_ne_zero h1_eq_0
-
-  · -- Case c ∉ M
-    have h_empty : (⋂ n, DynamicalPuzzlePiece c n 0) = ∅ := by
-      obtain ⟨N, hN⟩ := dynamical_puzzle_piece_empty_of_large_n c hc
-      apply Set.eq_empty_of_subset_empty
-      intro x hx
-      rw [mem_iInter] at hx
-      have hxN := hx N
-      have h0_in_s : 0 ∈ {w | green_function c w < (1 / 2) ^ N} := by
-        dsimp [DynamicalPuzzlePiece] at hxN
-        by_contra h_not
-        rw [connectedComponentIn_eq_empty h_not] at hxN
-        exact hxN
-      have h0_not_in_comp : 0 ∉ DynamicalPuzzlePiece c N 0 := hN N (le_refl N)
-      dsimp [DynamicalPuzzlePiece] at h0_not_in_comp
-      have h0_in_comp : 0 ∈ connectedComponentIn {w | green_function c w < (1 / 2) ^ N} 0 := by
-        apply isPreconnected_singleton.subset_connectedComponentIn (mem_singleton 0)
-        · rw [singleton_subset_iff]; exact h0_in_s
-        · exact mem_singleton 0
-      contradiction
-
-    rw [h_empty] at h_shrink
-    simp at h_shrink
-
-ensure_no_sorry parameter_shrink_ax
-
 set_option maxHeartbeats 1600000
-
-/-- A holomorphic motion of a set E over the unit disk D. -/
-structure HolomorphicMotion (E : Set ℂ) where
-  /-- The motion map t ↦ z ↦ f(t, z) -/
-  f : ℂ → ℂ → ℂ
-  /-- At time 0, it is the identity -/
-  h_zero : ∀ z ∈ E, f 0 z = z
-  /-- For each fixed time in the unit disk, it is injective on E -/
-  h_inj : ∀ t ∈ Metric.ball 0 1, Set.InjOn (f t) E
-  /-- For each fixed z in E, it is holomorphic in time on the unit disk -/
-  h_holo : ∀ z ∈ E, DifferentiableOn ℂ (fun t ↦ f t z) (Metric.ball 0 1)
-
-/-- Slodkowski's Theorem (Generalized Lambda Lemma).
-    "Every holomorphic motion f : D × E → ℂ of an arbitrary subset E of ℂ can be
-    extended to a holomorphic motion F : D × ℂ → ℂ (that is F|D×E = f) of ℂ,
-    parametrized by the same unit disc D."
-    See: [Slodkowski, Holomorphic motions and polynomial hulls, Theorem 1.3] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
-    Local Reference: `refs/S0002-9939-1991-1037218-8.pdf` -/
-axiom slodkowski_theorem {E : Set ℂ} (h : HolomorphicMotion E) :
-    ∃ H : HolomorphicMotion Set.univ,
-      ∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z
-
-/-- Axiom: The boundary of a puzzle piece moves holomorphically.
-    This axiom provides the existence of a holomorphic motion on the boundary of the puzzle piece,
-    which serves as the input for Slodkowski's Extension Theorem.
-
-    **Definition** [Slodkowski, p. 347]:
-    "A holomorphic motion of E in C, parametrized by the unit disc D, is a map f: D × E → C
-    such that (a) for any fixed w ∈ E, the map z ↦ f(z, w): D → C is holomorphic;
-    (b) for any fixed z ∈ D, the map w ↦ f(z, w) is one-to-one; and (c) f₀ is the identity map on E."
-
-    In this context:
-    *   `E` is the boundary of the puzzle piece (or a neighborhood of it).
-    *   The parameter `z` (or `t`) corresponds to the quadratic parameter `c`.
-    *   This motion is constructed using the Böttcher coordinate, which depends holomorphically on `c`.
-
-    Ref: `refs/S0002-9939-1991-1037218-8.pdf` (Slodkowski, Holomorphic motions and polynomial hulls). -/
-axiom puzzle_boundary_motion_exists (n : ℕ) (c₀ : ℂ) (hc₀ : c₀ ∈ ParaPuzzlePiece n) :
-    ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
-      -- The motion is defined for parameters c in D(c₀, r) via a rescaling map
-      -- ψ : D(0, 1) → D(c₀, r)
-      -- And this motion preserves the "puzzle membership" property in the sense that:
-      -- If H is an extension of h to the plane (guaranteed by Slodkowski),
-      -- then for any t ∈ D, the corresponding parameter c_t is in ParaPuzzlePiece n.
-      ∀ (H : HolomorphicMotion Set.univ),
-        (∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z) →
-        ∀ t ∈ Metric.ball 0 1, (c₀ + r * t) ∈ ParaPuzzlePiece n
 
 /-- Parameter puzzle pieces are open sets.
     This is proved using Slodkowski's Theorem which ensures that the holomorphic motion
