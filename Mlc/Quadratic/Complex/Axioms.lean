@@ -76,16 +76,4 @@ axiom puzzle_boundary_motion_exists (n : ℕ) (c₀ : ℂ) (hc₀ : c₀ ∈ Par
         (∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z) →
         ∀ t ∈ Metric.ball 0 1, (c₀ + r * t) ∈ ParaPuzzlePiece n
 
-/-- The Correspondence Principle:
-    If the dynamical pieces shrink to a point, the parameter pieces shrink to a point.
-    Proof idea: We analyze two cases:
-    1.  `c ∈ M`: The filled Julia set `K(c)` is connected. The dynamical pieces `P_n` contain `0`.
-        Since `0 ∈ K(c)` and `K(c)` is connected, `K(c) ⊆ P_n` for all `n` (actually `K(c)` is the "core").
-        If `⋂ P_n = {0}`, then `K(c) ⊆ {0}`, which implies `c=0`.
-    2.  `c ∉ M`: The pieces eventually become empty (`dynamical_puzzle_piece_empty_of_large_n`),
-        forcing the intersection to be empty. This case is handled by contradiction or vacuous truth
-        depending on exact statement (here we show if intersection is {0} then parameter intersection is {c}). -/
-axiom parameter_shrink_ax (c : ℂ) :
-    (⋂ n, DynamicalPuzzlePiece c n 0) = {0} → (⋂ n, ParaPuzzlePiece n) = {c}
-
 end MLC.Quadratic
