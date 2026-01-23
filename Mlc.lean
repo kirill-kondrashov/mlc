@@ -9,3 +9,6 @@ import Mlc.CheckAxioms
 import Mlc.MainConjecture
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
+import Mlc.MoleculeConjecture
+import Mlc.RenormalizationTypes
+import Mlc.MoleculeConjectureBridge

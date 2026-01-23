@@ -15,5 +15,8 @@ require «doc-gen4» from git
 require «yoccoz-theorem» from git
   "https://github.com/kirill-kondrashov/yoccoz-theorem" @ "main"
 
+require «molecule-conjecture» from git
+  "https://github.com/kirill-kondrashov/molecule-conjecture" @ "main"
+
 lean_exe check_axioms where
   root := `check_axioms

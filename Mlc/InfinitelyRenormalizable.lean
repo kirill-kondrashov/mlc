@@ -3,6 +3,8 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.Quadratic.Complex.PuzzleLemmas2
 import Yoccoz.Yoccoz
 import Mlc.LcAtOfShrink
+import Mlc.RenormalizationTypes
+import Mlc.MoleculeConjectureBridge
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 
@@ -50,9 +52,6 @@ theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.Mandelbr
        These are handled by near-parabolic or Pacman renormalization (Dudko, Lyubich, Selinger).
 
     Reference: Dudko, Lyubich, Selinger, "Pacman Renormalization and Self-Similarity of the Mandelbrot Set near Siegel Parameters", arXiv:1703.01206v3. -/
-opaque PrimitiveRenormalizable (c : ℂ) : Prop
-opaque SatelliteRenormalizable (c : ℂ) : Prop
-
 axiom infinitely_renormalizable_classification (c : ℂ) (h : InfinitelyRenormalizable c) :
     PrimitiveRenormalizable c ∨ SatelliteRenormalizable c
 
@@ -61,23 +60,18 @@ axiom infinitely_renormalizable_classification (c : ℂ) (h : InfinitelyRenormal
 axiom mlc_primitive_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : PrimitiveRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
-/-- The Molecule Conjecture (Dudko, Lyubich, Selinger).
-    This conjecture asserts the existence of a hyperbolic Pacman renormalization operator
-    whose horseshoe corresponds to the boundary of the main molecule of the Mandelbrot set.
-    It would imply MLC for all infinitely renormalizable parameters of satellite type,
-    covering cases not yet fully resolved (like unbounded combinatorics).
-
-    Reference: Dudko, Lyubich, Selinger, "Pacman Renormalization...", Appendix C. -/
-axiom molecule_conjecture_implies_mlc_satellite (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizable c) :
-    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
-
 /-- MLC holds for infinitely renormalizable parameters.
     This is derived from the classification into Primitive and Satellite types,
     using Lyubich's theorem for the former and the Molecule Conjecture for the latter. -/
-theorem mlc_infinitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
+theorem mlc_infinitely_renormalizable
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   cases infinitely_renormalizable_classification c h with
   | inl h_prim => exact mlc_primitive_renormalizable_ax c hc h_prim
-  | inr h_sat => exact molecule_conjecture_implies_mlc_satellite c hc h_sat
+  | inr h_sat => exact molecule_conjecture_implies_mlc_satellite h_bridge c hc h_sat
 
 end MLC
