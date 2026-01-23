@@ -46,7 +46,8 @@ The proof is structured around the dichotomy of renormalizability:
     *   This case is further split into:
         *   **Primitive:** Handled by Lyubich's Theorem (axiom).
         *   **Satellite:** Uses the **Molecule Conjecture** (re-exported) plus a bridge axiom;
-            the current formalization is conditional and still assumes major analytic inputs.
+            the current formalization is conditional and still assumes major analytic inputs,
+            with the intended proof path going via Pacman renormalization.
     *   Key files: `Mlc/InfinitelyRenormalizable.lean`, `Mlc/MoleculeConjecture.lean`,
         `Mlc/MoleculeConjectureBridge.lean`.
     *   Reference for the primitive MLC axiom: Lyubich, "Conformal Geometry and Dynamics of
