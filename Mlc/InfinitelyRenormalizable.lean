@@ -56,7 +56,10 @@ axiom infinitely_renormalizable_classification (c : ℂ) (h : InfinitelyRenormal
     PrimitiveRenormalizable c ∨ SatelliteRenormalizable c
 
 /-- MLC for Primitive parameters (Lyubich).
-    Proved by Lyubich in "The Dynamics of Quadratic Polynomials I-II", Acta Math. 178 (1997). -/
+    Proved by Lyubich in "Dynamics of Quadratic Polynomials I-II", Acta Mathematica 178 (1997).
+    See also: Lyubich, "Conformal Geometry and Dynamics of Quadratic Polynomials",
+    §42.6 "MLC on the main cardioid", p. 204 (printed page number), p. 205 (PDF index):
+    "The Mandelbrot set is locally connected at any point of the main cardioid C." -/
 axiom mlc_primitive_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : PrimitiveRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
