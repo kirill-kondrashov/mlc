@@ -50,6 +50,7 @@ theorem MLC_Conjecture
     (h_param_shrink :
       ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
         (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c})
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
       PrimitiveRenormalizable c ∨ SatelliteRenormalizable c)
     (h_bridge :
@@ -62,7 +63,7 @@ theorem MLC_Conjecture
   intro ⟨c, hc⟩
   rcases dichotomy c with h_fin_renorm | h_inf_renorm
   · -- Case 1: Finitely Renormalizable
-    exact mlc_finitely_renormalizable c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
+    exact mlc_finitely_renormalizable c hc h_motion h_fin_renorm (h_param_shrink c hc h_fin_renorm)
   · -- Case 2: Infinitely renormalizable
     exact mlc_infinitely_renormalizable h_classify h_bridge c hc h_inf_renorm
 

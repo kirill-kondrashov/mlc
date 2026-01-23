@@ -97,7 +97,9 @@ lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
     3.  They shrink to `{c}` (hypothesis).
     4.  Therefore, for any neighborhood `U`, we can find a `P_n` inside it. `P_n ∩ M` serves
         as the connected neighborhood of `c` contained in `U`, proving local connectivity. -/
-lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
+lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
+    (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
   rw [LocallyConnectedAt]
   intro U hU
@@ -114,7 +116,7 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet) (h : (⋂ n, ParaPuzz
       · rw [isOpen_induced_iff]
         use ParaPuzzlePiece n
         constructor
-        · exact para_puzzle_piece_open n
+        · exact para_puzzle_piece_open n h_motion
         · rfl
       · have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePiece k := by rw [h]; exact Set.mem_singleton c
         exact Set.mem_iInter.mp hc_in_inter n
