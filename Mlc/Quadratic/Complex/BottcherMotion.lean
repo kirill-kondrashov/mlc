@@ -1,6 +1,8 @@
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
 
+set_option linter.unnecessarySimpa false
+
 namespace MLC.Quadratic
 
 open Complex Topology Set

@@ -3,6 +3,8 @@ import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Basic
 
+set_option linter.unnecessarySimpa false
+
 namespace MLC.Quadratic
 
 open Complex Topology Set
@@ -74,9 +76,8 @@ theorem para_puzzle_piece_of_sublevel_connected (c : ℂ) (n : ℕ)
       exact hx)
   have hc_in : c ∈ connectedComponentIn (GreenSublevel c n) 0 := hsubset hc
   -- Avoid `simpa` here to keep the linter quiet.
-  have : c ∈ ParaPuzzlePiece n := by
-    simpa [ParaPuzzlePiece, DynamicalPuzzlePiece, GreenSublevel] using hc_in
-  exact this
+  exact (by
+    simpa [ParaPuzzlePiece, DynamicalPuzzlePiece, GreenSublevel] using hc_in)
 
 /-- Rescale the unit disk to the parameter disk centered at `c₀` with radius `r`. -/
 def rescale_param (c₀ : ℂ) (r : ℝ) (t : ℂ) : ℂ :=
