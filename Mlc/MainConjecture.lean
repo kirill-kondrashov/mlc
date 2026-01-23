@@ -50,6 +50,8 @@ theorem MLC_Conjecture
     (h_param_shrink :
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
         (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c})
+    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizable c)
     (h_bridge :
       MoleculeConjectureRefined →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
@@ -62,7 +64,7 @@ theorem MLC_Conjecture
   · -- Case 1: Finitely Renormalizable
     exact mlc_finitely_renormalizable c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
   · -- Case 2: Infinitely renormalizable
-    exact mlc_infinitely_renormalizable h_bridge c hc h_inf_renorm
+    exact mlc_infinitely_renormalizable h_classify h_bridge c hc h_inf_renorm
 
 end MainProof
 

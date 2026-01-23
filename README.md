@@ -30,7 +30,9 @@ So while the package provides a rigorous dependency graph, it should be read as
 “formalized assumptions + logical pipeline” rather than a finished proof.
 
 For the finitely renormalizable case, the current proof skeleton assumes
-parameter-piece shrinkage as an explicit hypothesis.
+parameter-piece shrinkage as an explicit hypothesis. For the infinitely
+renormalizable case, the Primitive/Satellite classification is also taken as
+an explicit hypothesis.
 
 ## Formalization Structure
 
@@ -79,7 +81,6 @@ This will compile the main conjecture file and output the list of axioms relied 
 Run `make check` to see the authoritative list. Key axioms include:
 
 *   `MLC.mlc_primitive_renormalizable_ax`
-*   `MLC.infinitely_renormalizable_classification`
 *   `MLC.Quadratic.slodkowski_theorem`
 
 Reference note:
@@ -101,6 +102,5 @@ All axioms used:
 - MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected
-- MLC.infinitely_renormalizable_classification
 - MLC.mlc_primitive_renormalizable_ax
 ```
