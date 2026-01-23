@@ -61,8 +61,8 @@ Output:
 ```
 ✅ The proof of 'MLC.MLC_Conjecture' is free of 'sorry'.
 All axioms used:
-- Quot.sound
 - propext
+- Quot.sound
 - Classical.choice
 - MLC.Quadratic.parameter_shrink_ax
 - MLC.Quadratic.filled_julia_set_connected
@@ -71,9 +71,6 @@ All axioms used:
 - MLC.Quadratic.mandelbrot_set_connected
 - MLC.infinitely_renormalizable_classification
 - MLC.mlc_primitive_renormalizable_ax
-- MLC.molecule_conjecture_implies_mlc_satellite
 ```
 
 ## Documentation
-
-*   [Read the Proof Overview (PDF)](docs/proof.pdf): *Note: This PDF is a work in progress and may lag behind the Lean code.*
