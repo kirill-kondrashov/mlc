@@ -39,8 +39,10 @@ theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.Mandelbr
     See also: Lyubich, "Conformal Geometry and Dynamics of Quadratic Polynomials",
     §42.6 "MLC on the main cardioid", p. 204 (printed page number), p. 205 (PDF index):
     "The Mandelbrot set is locally connected at any point of the main cardioid C." -/
-axiom mlc_primitive_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : PrimitiveRenormalizable c) :
-    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+theorem mlc_primitive_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (h : PrimitiveRenormalizable c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact h hc
 
 /-- MLC holds for infinitely renormalizable parameters.
     This is derived from the classification into Primitive and Satellite types,

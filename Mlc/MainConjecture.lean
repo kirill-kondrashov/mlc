@@ -48,7 +48,7 @@ lemma parameter_shrink_basis (c : ℂ) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
         **Satellite** types (Dudko, Lyubich, Selinger). -/
 theorem MLC_Conjecture
     (h_param_shrink :
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
         (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c})
     (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
       PrimitiveRenormalizable c ∨ SatelliteRenormalizable c)
