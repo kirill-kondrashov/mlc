@@ -25,6 +25,8 @@ The proof is structured around the dichotomy of renormalizability:
         *   **Primitive:** Handled by Lyubich's Theorem (axiom).
         *   **Satellite:** Handled by the **Molecule Conjecture** (axiom) and Pacman Renormalization.
     *   Key files: `Mlc/InfinitelyRenormalizable.lean`.
+    *   Reference for the primitive MLC axiom: Lyubich, "Conformal Geometry and Dynamics of
+        Quadratic Polynomials", §42.6 "MLC on the main cardioid".
 
 ## Verification
 
@@ -56,6 +58,10 @@ Run `make check` to see the authoritative list. Key axioms include:
 *   `MLC.infinitely_renormalizable_classification`
 *   `MLC.Quadratic.parameter_shrink_ax`
 *   `MLC.Quadratic.slodkowski_theorem`
+
+Reference note:
+*   `MLC.mlc_primitive_renormalizable_ax`: Lyubich, "Conformal Geometry and Dynamics of
+    Quadratic Polynomials", §42.6 "MLC on the main cardioid".
 
 Output:
 ```
