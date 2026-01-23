@@ -183,7 +183,7 @@ lemma para_puzzle_piece_basis (c : ℂ) :
 ensure_no_sorry para_puzzle_piece_basis
 
 /-- If parameter pieces shrink to a point, they form a neighborhood basis at `c`. -/
-theorem parameter_shrink_ax (c : ℂ) :
+theorem parameter_shrink (c : ℂ) :
     (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U := by
   exact para_puzzle_piece_basis c
 

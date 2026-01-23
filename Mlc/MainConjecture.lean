@@ -32,9 +32,9 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
   exact Classical.em _
 
 /-- If parameter pieces shrink to a point, they form a neighborhood basis at `c`. -/
-lemma parameter_shrink (c : ℂ) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
+lemma parameter_shrink_basis (c : ℂ) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
     ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U := by
-  exact parameter_shrink_ax c h
+  exact MLC.Quadratic.parameter_shrink c h
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected.
