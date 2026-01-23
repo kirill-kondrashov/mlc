@@ -31,7 +31,9 @@ So while the package provides a rigorous dependency graph, it should be read as
 
 For the finitely renormalizable case, the current proof skeleton assumes
 parameter-piece shrinkage as an explicit hypothesis and also takes a holomorphic
-motion hypothesis (`PuzzleBoundaryMotionHyp`). For the infinitely renormalizable case,
+motion hypothesis derived from two inputs: a parameter-disk inclusion in `M`
+(`BottcherOnMHyp`) and connectedness of Green sublevels on `M`
+(`GreenSublevelConnectedHyp`). For the infinitely renormalizable case,
 the Primitive/Satellite classification is also taken as an explicit hypothesis.
 The primitive case itself is currently baked into the definition of
 `PrimitiveRenormalizable`.

@@ -79,8 +79,7 @@ theorem para_puzzle_piece_open (n : ℕ) (h_motion : PuzzleBoundaryMotionHyp) :
       dsimp [t]
       field_simp [ne_of_gt hr]
       ring
-    rw [← h_c_eq] at h_in
-    exact h_in
+    simpa [rescale_param, h_c_eq] using h_in
 
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point.
