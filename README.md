@@ -32,7 +32,8 @@ So while the package provides a rigorous dependency graph, it should be read as
 For the finitely renormalizable case, the current proof skeleton assumes
 parameter-piece shrinkage as an explicit hypothesis. For the infinitely
 renormalizable case, the Primitive/Satellite classification is also taken as
-an explicit hypothesis.
+an explicit hypothesis. The primitive case itself is currently baked into the
+definition of `PrimitiveRenormalizable`.
 
 ## Formalization Structure
 
@@ -80,12 +81,11 @@ This will compile the main conjecture file and output the list of axioms relied 
 
 Run `make check` to see the authoritative list. Key axioms include:
 
-*   `MLC.mlc_primitive_renormalizable_ax`
 *   `MLC.Quadratic.slodkowski_theorem`
 
 Reference note:
-*   `MLC.mlc_primitive_renormalizable_ax`: Lyubich, "Conformal Geometry and Dynamics of
-    Quadratic Polynomials", §42.6 "MLC on the main cardioid".
+*   Lyubich, "Conformal Geometry and Dynamics of Quadratic Polynomials",
+    §42.6 "MLC on the main cardioid".
 
 Status note:
 *   The Molecule Conjecture currently appears as an imported statement and a bridge
@@ -102,5 +102,4 @@ All axioms used:
 - MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected
-- MLC.mlc_primitive_renormalizable_ax
 ```
