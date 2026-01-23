@@ -182,6 +182,11 @@ lemma para_puzzle_piece_basis (c : ℂ) :
 
 ensure_no_sorry para_puzzle_piece_basis
 
+/-- If parameter pieces shrink to a point, they form a neighborhood basis at `c`. -/
+theorem parameter_shrink_ax (c : ℂ) :
+    (⋂ n, ParaPuzzlePiece n) = {c} → ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U := by
+  exact para_puzzle_piece_basis c
+
 /-- Parameter puzzle pieces intersected with the Mandelbrot set are connected.
     Proof idea:
     The set `P_n ∩ M` corresponds to parameters `c ∈ M` such that `c` (or `0`? via correspondence)

@@ -31,28 +31,25 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
   rw [or_comm]
   exact Classical.em _
 
-/-- If dynamical pieces shrink to a point, parameter pieces shrink to a point.
-    Proof idea: This follows directly from the Correspondence Principle axiom (`parameter_shrink_ax`),
-    which links the geometry of the dynamical plane to the parameter plane.
-    If the dynamical nest at the critical value shrinks to a point, the corresponding parameter
-    nest also shrinks to the parameter value. -/
-lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0}) :
-    (⋂ n, ParaPuzzlePiece n) = {c} := by
-  -- Use the correspondence principle
-  apply parameter_shrink_ax c h
+/-- If parameter pieces shrink to a point, they form a neighborhood basis at `c`. -/
+lemma parameter_shrink (c : ℂ) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
+    ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U := by
+  exact parameter_shrink_ax c h
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected.
     Proof idea: We prove local connectivity at every point `c` in the Mandelbrot set.
     We split the proof into two cases based on the `dichotomy`:
     1.  **Finitely Renormalizable**: The moduli of the puzzle annuli diverge. Yoccoz's theorem
-        implies the dynamical pieces shrink to a point. The Correspondence Principle then
-        implies the parameter pieces shrink to `c`. Finally, `lc_at_of_shrink` shows this
-        implies local connectivity at `c`.
+        implies the dynamical pieces shrink to a point. We assume the corresponding
+        parameter-piece shrinkage as an explicit hypothesis and then apply `lc_at_of_shrink`.
     2.  **Infinitely renormalizable**: We invoke the deep theorem (`mlc_infinitely_renormalizable`)
         which establishes MLC in this case. This covers both **Primitive** types (Lyubich) and
         **Satellite** types (Dudko, Lyubich, Selinger). -/
 theorem MLC_Conjecture
+    (h_param_shrink :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c})
     (h_bridge :
       MoleculeConjectureRefined →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
@@ -63,7 +60,7 @@ theorem MLC_Conjecture
   intro ⟨c, hc⟩
   rcases dichotomy c with h_fin_renorm | h_inf_renorm
   · -- Case 1: Finitely Renormalizable
-    exact mlc_finitely_renormalizable c hc h_fin_renorm
+    exact mlc_finitely_renormalizable c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
   · -- Case 2: Infinitely renormalizable
     exact mlc_infinitely_renormalizable h_bridge c hc h_inf_renorm
 

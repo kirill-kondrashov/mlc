@@ -8,10 +8,11 @@ This repository is a proof skeleton. It compiles and isolates the main logical
 dependencies, but several deep inputs remain axiomatic.
 
 For the Molecule Conjecture track, `Mlc/MoleculeConjecture.lean` currently
-re-exports the refined conjecture statement from an external `Molecule` package.
-The file `Mlc/MoleculeConjectureBridge.lean` then assumes a bridge axiom that
-turns this refined conjecture into MLC for satellite infinitely renormalizable
-parameters (as referenced in the literature).
+re-exports the refined conjecture statement from an external `Molecule` package
+located at `./.lake/packages/molecule-conjecture`. The file
+`Mlc/MoleculeConjectureBridge.lean` then assumes a bridge axiom that turns this
+refined conjecture into MLC for satellite infinitely renormalizable parameters
+(as referenced in the literature).
 
 The external package is `molecule-conjecture` (vendored via Lake). It is a
 substantial formal scaffold, but it is not yet a complete proof. In particular:
@@ -28,13 +29,16 @@ substantial formal scaffold, but it is not yet a complete proof. In particular:
 So while the package provides a rigorous dependency graph, it should be read as
 “formalized assumptions + logical pipeline” rather than a finished proof.
 
+For the finitely renormalizable case, the current proof skeleton assumes
+parameter-piece shrinkage as an explicit hypothesis.
+
 ## Formalization Structure
 
 The proof is structured around the dichotomy of renormalizability:
 
 1.  **Finitely Renormalizable (Yoccoz's Theorem):**
     *   Parameters where the Yoccoz puzzle moduli diverge.
-    *   We prove that the intersection of puzzle pieces is a point, implying local connectivity.
+    *   We assume the parameter-piece shrinkage needed to apply the local-connectivity criterion.
     *   Key files: `Mlc/Yoccoz.lean`, `Mlc/Quadratic/Complex/Puzzle.lean`.
 
 2.  **Infinitely Renormalizable:**
@@ -42,7 +46,7 @@ The proof is structured around the dichotomy of renormalizability:
     *   This case is further split into:
         *   **Primitive:** Handled by Lyubich's Theorem (axiom).
         *   **Satellite:** Uses the **Molecule Conjecture** (re-exported) plus a bridge axiom;
-            the intended proof path goes via Pacman renormalization.
+            the current formalization is conditional and still assumes major analytic inputs.
     *   Key files: `Mlc/InfinitelyRenormalizable.lean`, `Mlc/MoleculeConjecture.lean`,
         `Mlc/MoleculeConjectureBridge.lean`.
     *   Reference for the primitive MLC axiom: Lyubich, "Conformal Geometry and Dynamics of
@@ -75,7 +79,6 @@ Run `make check` to see the authoritative list. Key axioms include:
 
 *   `MLC.mlc_primitive_renormalizable_ax`
 *   `MLC.infinitely_renormalizable_classification`
-*   `MLC.Quadratic.parameter_shrink_ax`
 *   `MLC.Quadratic.slodkowski_theorem`
 
 Reference note:
@@ -93,7 +96,6 @@ All axioms used:
 - propext
 - Quot.sound
 - Classical.choice
-- MLC.Quadratic.parameter_shrink_ax
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.puzzle_boundary_motion_exists
 - MLC.Quadratic.slodkowski_theorem
@@ -101,5 +103,3 @@ All axioms used:
 - MLC.infinitely_renormalizable_classification
 - MLC.mlc_primitive_renormalizable_ax
 ```
-
-## Documentation
