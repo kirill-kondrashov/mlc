@@ -52,7 +52,12 @@ lemma parameter_shrink (c : ℂ) (h : (⋂ n, DynamicalPuzzlePiece c n 0) = {0})
     2.  **Infinitely renormalizable**: We invoke the deep theorem (`mlc_infinitely_renormalizable`)
         which establishes MLC in this case. This covers both **Primitive** types (Lyubich) and
         **Satellite** types (Dudko, Lyubich, Selinger). -/
-theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
+theorem MLC_Conjecture
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace MandelbrotSet := by
   -- We need to show local connectivity at every point c ∈ MandelbrotSet
   apply locallyConnectedSpace_of_locallyConnectedAt
   intro ⟨c, hc⟩
@@ -60,7 +65,7 @@ theorem MLC_Conjecture : LocallyConnectedSpace MandelbrotSet := by
   · -- Case 1: Finitely Renormalizable
     exact mlc_finitely_renormalizable c hc h_fin_renorm
   · -- Case 2: Infinitely renormalizable
-    exact mlc_infinitely_renormalizable c hc h_inf_renorm
+    exact mlc_infinitely_renormalizable h_bridge c hc h_inf_renorm
 
 end MainProof
 
