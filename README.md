@@ -2,13 +2,31 @@
 
 ## 🚧 WORK IN PROGRESS 🚧
 
-**Current Status:** This repository is in active development.
+## Current Status
 
-The original direction of this formalization focused heavily on the classical Yoccoz theorem for non-renormalizable parameters. While that remains a valid component, the project has pivoted to address the most challenging open cases of the MLC conjecture.
+This repository is a proof skeleton. It compiles and isolates the main logical
+dependencies, but several deep inputs remain axiomatic.
 
-**The main target is now the formalization of the [Molecule Conjecture](https://arxiv.org/abs/1703.01206) (Dudko, Lyubich, Selinger).**
+For the Molecule Conjecture track, `Mlc/MoleculeConjecture.lean` currently
+re-exports the refined conjecture statement from an external `Molecule` package.
+The file `Mlc/MoleculeConjectureBridge.lean` then assumes a bridge axiom that
+turns this refined conjecture into MLC for satellite infinitely renormalizable
+parameters (as referenced in the literature).
 
-This conjecture is key to resolving the local connectivity for "satellite" infinitely renormalizable parameters, particularly those with unbounded combinatorics, which are not covered by Lyubich's prior theorems for primitive renormalization.
+The external package is `molecule-conjecture` (vendored via Lake). It is a
+substantial formal scaffold, but it is not yet a complete proof. In particular:
+
+- The top-level statement `Molecule.molecule_conjecture_refined` is conditional,
+  with large analytic/dynamical hypotheses left as explicit parameters.
+- The Banach slice model is still stubbed (e.g. `SliceSpace` is instantiated as `ℂ`,
+  and `slice_chart` / `slice_operator` are placeholder constant maps).
+- The renormalization operator `Rfast` is totalized with `Classical.choose`, so
+  existence is assumed rather than constructed.
+- Key analytic ingredients (a priori bounds, spectral gap, orbit control, etc.)
+  are not yet derived inside Lean; they remain hypotheses.
+
+So while the package provides a rigorous dependency graph, it should be read as
+“formalized assumptions + logical pipeline” rather than a finished proof.
 
 ## Formalization Structure
 
@@ -23,8 +41,10 @@ The proof is structured around the dichotomy of renormalizability:
     *   Parameters where the moduli sum converges.
     *   This case is further split into:
         *   **Primitive:** Handled by Lyubich's Theorem (axiom).
-        *   **Satellite:** Handled by the **Molecule Conjecture** (axiom) and Pacman Renormalization.
-    *   Key files: `Mlc/InfinitelyRenormalizable.lean`.
+        *   **Satellite:** Uses the **Molecule Conjecture** (re-exported) plus a bridge axiom;
+            the intended proof path goes via Pacman renormalization.
+    *   Key files: `Mlc/InfinitelyRenormalizable.lean`, `Mlc/MoleculeConjecture.lean`,
+        `Mlc/MoleculeConjectureBridge.lean`.
     *   Reference for the primitive MLC axiom: Lyubich, "Conformal Geometry and Dynamics of
         Quadratic Polynomials", §42.6 "MLC on the main cardioid".
 
@@ -53,7 +73,6 @@ This will compile the main conjecture file and output the list of axioms relied 
 
 Run `make check` to see the authoritative list. Key axioms include:
 
-*   `MLC.molecule_conjecture_implies_mlc_satellite`
 *   `MLC.mlc_primitive_renormalizable_ax`
 *   `MLC.infinitely_renormalizable_classification`
 *   `MLC.Quadratic.parameter_shrink_ax`
@@ -62,6 +81,10 @@ Run `make check` to see the authoritative list. Key axioms include:
 Reference note:
 *   `MLC.mlc_primitive_renormalizable_ax`: Lyubich, "Conformal Geometry and Dynamics of
     Quadratic Polynomials", §42.6 "MLC on the main cardioid".
+
+Status note:
+*   The Molecule Conjecture currently appears as an imported statement and a bridge
+    hypothesis; it is not listed as an axiom by `make check`.
 
 Output:
 ```
