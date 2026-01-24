@@ -81,11 +81,41 @@ lemma jordan_compl_path_to_zero_or_one_plan (γ : ℝ → ℂ) (hγ : JordanCurv
       (∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) := by
   sorry
 
+private lemma mem_connectedComponentIn_of_path_plan {F : Set ℂ} {x y : ℂ} (γ : Path x y)
+    (hγ : ∀ t, γ t ∈ F) :
+    x ∈ connectedComponentIn F y := by
+  have hpre : IsPreconnected (Set.range γ) :=
+    (isConnected_range γ.continuous).isPreconnected
+  have hx : x ∈ Set.range γ := ⟨0, by simpa using γ.source⟩
+  have hy : y ∈ Set.range γ := ⟨1, by simpa using γ.target⟩
+  have hsubset : Set.range γ ⊆ F := by
+    intro z hz
+    rcases hz with ⟨t, rfl⟩
+    exact hγ t
+  have hsub := hpre.subset_connectedComponentIn hy hsubset
+  exact hsub hx
+
+private lemma mem_jordanInterior_of_path_plan (γ : ℝ → ℂ) {z : ℂ} (p : Path z 0)
+    (hp : ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) :
+    z ∈ JordanInterior γ := by
+  have hz : z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 0 :=
+    mem_connectedComponentIn_of_path_plan p hp
+  simpa [JordanInterior] using hz
+
+private lemma mem_jordanExterior_of_path_plan (γ : ℝ → ℂ) {z : ℂ} (p : Path z 1)
+    (hp : ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) :
+    z ∈ JordanExterior γ := by
+  have hz : z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 1 :=
+    mem_connectedComponentIn_of_path_plan p hp
+  simpa [JordanExterior] using hz
+
 /-- Core separation: the complement is the union of the two components based at `0` and `1`. -/
 lemma jordan_compl_mem_interior_or_exterior_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
     (hz : z ∈ Set.compl (JordanCurveImage γ)) :
     z ∈ JordanInterior γ ∪ JordanExterior γ := by
-  sorry
+  rcases jordan_compl_path_to_zero_or_one_plan γ hγ hz with ⟨p, hp⟩ | ⟨p, hp⟩
+  · exact Or.inl (mem_jordanInterior_of_path_plan γ p hp)
+  · exact Or.inr (mem_jordanExterior_of_path_plan γ p hp)
 
 /-- Abstract separation statement: the complement has exactly two connected components. -/
 lemma jordan_curve_complement_has_two_components (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
