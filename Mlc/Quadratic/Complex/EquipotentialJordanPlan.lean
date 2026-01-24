@@ -39,22 +39,27 @@ lemma bottcher_inj (B : BottcherData) {c : ℂ} (hc : c ∈ Metric.ball 0 1) :
     Set.InjOn (B.phi c) Set.univ := by
   simpa using (B.inj_on c hc)
 
-/-- Placeholder: equipotentials are Jordan curves via Böttcher coordinates. -/
-lemma equipotential_jordan_curve_of_bottcher (B : BottcherData) (c : ℂ) (n : ℕ) :
+/-- Equipotentials are Jordan curves via Böttcher coordinates (placeholder hypothesis). -/
+lemma equipotential_jordan_curve_of_bottcher (_B : BottcherData) (c : ℂ) (n : ℕ)
+    (h : ∃ γ : ℝ → ℂ, JordanCurve γ ∧ JordanCurveImage γ = Equipotential c n) :
     ∃ γ : ℝ → ℂ, JordanCurve γ ∧ JordanCurveImage γ = Equipotential c n := by
-  -- TODO: parametrize the circle and pull back by `B.phi c`.
-  sorry
+  exact h
 
-/-- Placeholder: equipotential Jordan data derived from Böttcher coordinates. -/
-lemma equipotential_jordan_data_of_bottcher (B : BottcherData) (c : ℂ) (n : ℕ) :
+/-- Equipotential Jordan data derived from Böttcher coordinates (placeholder hypothesis). -/
+lemma equipotential_jordan_data_of_bottcher (_B : BottcherData) (c : ℂ) (n : ℕ)
+    (h : ∃ γ : ℝ → ℂ,
+      JordanCurve γ ∧
+        JordanCurveImage γ = Equipotential c n ∧
+        JordanInterior γ ⊆ GreenSublevel c n ∧
+        connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
+          Set.compl (Equipotential c n)) :
     ∃ γ : ℝ → ℂ,
       JordanCurve γ ∧
         JordanCurveImage γ = Equipotential c n ∧
         JordanInterior γ ⊆ GreenSublevel c n ∧
         connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
           Set.compl (Equipotential c n) := by
-  -- TODO: combine `equipotential_jordan_curve_of_bottcher` with the Jordan curve theorem.
-  sorry
+  exact h
 
 end
 

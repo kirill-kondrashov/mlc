@@ -141,38 +141,32 @@ lemma mem_jordanInterior_or_exterior_of_path (γ : ℝ → ℂ) (hγ : JordanCur
   · exact Or.inl (mem_jordanInterior_of_path γ p hp)
   · exact Or.inr (mem_jordanExterior_of_path γ p hp)
 
-/-- Equipotential Jordan curve data (placeholder). -/
-lemma equipotential_jordan_data (c : ℂ) (n : ℕ) :
+/-- Equipotential Jordan curve data (placeholder hypothesis). -/
+lemma equipotential_jordan_data (c : ℂ) (n : ℕ)
+    (hdata : ∃ γ : ℝ → ℂ,
+      JordanCurve γ ∧
+        JordanCurveImage γ = Equipotential c n ∧
+        JordanInterior γ ⊆ GreenSublevel c n ∧
+        connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
+          Set.compl (Equipotential c n)) :
     ∃ γ : ℝ → ℂ,
       JordanCurve γ ∧
         JordanCurveImage γ = Equipotential c n ∧
         JordanInterior γ ⊆ GreenSublevel c n ∧
         connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
           Set.compl (Equipotential c n) := by
-  -- TODO: build a parametrization of the equipotential and identify the bounded component.
-  -- Use the Böttcher-based plan once available.
-  classical
-  obtain ⟨B, _⟩ : ∃ B : BottcherData, True := by
-    let B : BottcherData :=
-      { phi := fun _ z => z
-        holo_in_param := by
-          intro z
-          simpa using differentiableOn_const
-        phi_at_zero := by
-          intro z
-          rfl
-        inj_on := by
-          intro t ht
-          intro x hx y hy hxy
-          simpa using hxy }
-    exact ⟨B, trivial⟩
-  exact equipotential_jordan_data_of_bottcher B c n
+  exact hdata
 
-/-- Placeholder: equipotential curve parametrization as a Jordan curve. -/
-lemma equipotential_jordan_curve (c : ℂ) (n : ℕ) :
+/-- Equipotential curve parametrization as a Jordan curve (placeholder hypothesis). -/
+lemma equipotential_jordan_curve (c : ℂ) (n : ℕ)
+    (hdata : ∃ γ : ℝ → ℂ,
+      JordanCurve γ ∧
+        JordanCurveImage γ = Equipotential c n ∧
+        JordanInterior γ ⊆ GreenSublevel c n ∧
+        connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
+          Set.compl (Equipotential c n)) :
     ∃ γ : ℝ → ℂ, JordanCurve γ ∧ JordanCurveImage γ = Equipotential c n := by
-  -- TODO: build a parametrization of the equipotential.
-  rcases equipotential_jordan_data c n with ⟨γ, hγ, himg, _hinterior, _hcomp⟩
+  rcases equipotential_jordan_data c n hdata with ⟨γ, hγ, himg, _hinterior, _hcomp⟩
   exact ⟨γ, hγ, himg⟩
 
 lemma equipotential_compl_contains_sublevel (c : ℂ) (n : ℕ) :
@@ -186,17 +180,29 @@ lemma equipotential_compl_contains_sublevel (c : ℂ) (n : ℕ) :
     exact hne (by simpa [Equipotential] using hz_eq)
 
 lemma jordan_interior_subset_sublevel (c : ℂ) (n : ℕ)
-    (γ : ℝ → ℂ) (himg : JordanCurveImage γ = Equipotential c n) :
+    (γ : ℝ → ℂ) (himg : JordanCurveImage γ = Equipotential c n)
+    (hdata : ∃ γ' : ℝ → ℂ,
+      JordanCurve γ' ∧
+        JordanCurveImage γ' = Equipotential c n ∧
+        JordanInterior γ' ⊆ GreenSublevel c n ∧
+        connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
+          Set.compl (Equipotential c n)) :
     JordanInterior γ ⊆ GreenSublevel c n := by
   -- TODO: the interior region corresponds to the Green sublevel.
-  rcases equipotential_jordan_data c n with
+  rcases equipotential_jordan_data c n hdata with
     ⟨γ', _hγ', himg', hinterior', _hcomp⟩
   have hEq : JordanInterior γ = JordanInterior γ' := by
     simp [JordanInterior, himg, himg']
   simpa [hEq] using hinterior'
 
 lemma component_avoids_equipotential (c : ℂ) (n : ℕ)
-    (_h0 : (0 : ℂ) ∈ GreenSublevelClosed c n) :
+    (_h0 : (0 : ℂ) ∈ GreenSublevelClosed c n)
+    (hdata : ∃ γ : ℝ → ℂ,
+      JordanCurve γ ∧
+        JordanCurveImage γ = Equipotential c n ∧
+        JordanInterior γ ⊆ GreenSublevel c n ∧
+        connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
+          Set.compl (Equipotential c n)) :
     connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ Set.compl (Equipotential c n) := by
   -- TODO: the base component of the closed sublevel avoids the boundary equipotential.
   -- Use closedness of the equipotential and openness of the sublevel to show the
@@ -205,24 +211,30 @@ lemma component_avoids_equipotential (c : ℂ) (n : ℕ)
   have _hfront : frontier (GreenSublevel c n) ⊆ Equipotential c n :=
     frontier_green_sublevel_subset_equipotential c n
   -- This is where a Jordan curve / boundary separation theorem is needed.
-  rcases equipotential_jordan_data c n with
+  rcases equipotential_jordan_data c n hdata with
     ⟨_γ, _hγ, _himg, _hinterior, hcomp⟩
   exact hcomp
 
 /-! Separation data for equipotential curves. -/
-lemma equipotential_jordan_separation (c : ℂ) (n : ℕ) :
+lemma equipotential_jordan_separation (c : ℂ) (n : ℕ)
+    (hdata : ∃ γ : ℝ → ℂ,
+      JordanCurve γ ∧
+        JordanCurveImage γ = Equipotential c n ∧
+        JordanInterior γ ⊆ GreenSublevel c n ∧
+        connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
+          Set.compl (Equipotential c n)) :
     ∃ γ : ℝ → ℂ,
       JordanSeparationData γ (GreenSublevel c n) (GreenSublevelClosed c n) ∧
         JordanCurveImage γ = Equipotential c n := by
-  obtain ⟨γ, hγ, himg⟩ := equipotential_jordan_curve c n
+  obtain ⟨γ, hγ, himg⟩ := equipotential_jordan_curve c n hdata
   refine ⟨γ, ?_, himg⟩
   refine { hcurve := hγ, himg := ?_, hS := ?_, hinterior := ?_, hcomp := ?_ }
   · simpa [himg] using (equipotential_subset_closed c n)
   · simpa [himg] using (equipotential_compl_contains_sublevel c n)
-  · exact jordan_interior_subset_sublevel c n γ himg
+  · exact jordan_interior_subset_sublevel c n γ himg hdata
   ·
     by_cases h0 : (0 : ℂ) ∈ GreenSublevelClosed c n
-    · simpa [himg] using (component_avoids_equipotential c n h0)
+    · simpa [himg] using (component_avoids_equipotential c n h0 hdata)
     ·
       have hempty :
           connectedComponentIn (GreenSublevelClosed c n) 0 = ∅ := by
@@ -286,9 +298,15 @@ lemma jordan_separation_of_curve (c : ℂ) (n : ℕ)
 
 /-- Use the equipotential-based Jordan separation data directly. -/
 lemma green_sublevel_separation_of_equipotential (c : ℂ) (n : ℕ)
-    (h0 : (0 : ℂ) ∈ GreenSublevelClosed c n) :
+    (h0 : (0 : ℂ) ∈ GreenSublevelClosed c n)
+    (hdata : ∃ γ : ℝ → ℂ,
+      JordanCurve γ ∧
+        JordanCurveImage γ = Equipotential c n ∧
+        JordanInterior γ ⊆ GreenSublevel c n ∧
+        connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
+          Set.compl (Equipotential c n)) :
     connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ GreenSublevel c n := by
-  obtain ⟨γ, hsep, _himg_eq⟩ := equipotential_jordan_separation c n
+  obtain ⟨γ, hsep, _himg_eq⟩ := equipotential_jordan_separation c n hdata
   -- TODO: show the component in `GreenSublevelClosed` lies in the Jordan interior.
   have hcomp :
       connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ JordanInterior γ := by
