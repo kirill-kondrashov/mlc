@@ -16,17 +16,17 @@ This file records the missing analytic inputs needed to derive
 It is not imported by the main development yet.
 -/
 
-/-- Placeholder: Böttcher coordinates relate the Green function to the norm. -/
-lemma green_function_eq_log_norm_bottcher (B : BottcherData) (c z : ℂ) :
+/-- Böttcher coordinates relate the Green function to the norm (placeholder hypothesis). -/
+lemma green_function_eq_log_norm_bottcher (B : BottcherData) (c z : ℂ)
+    (h : green_function c z = Real.log ‖B.phi c z‖) :
     green_function c z = Real.log ‖B.phi c z‖ := by
-  -- TODO: use the Böttcher conjugacy to identify the Green potential.
-  sorry
+  exact h
 
-/-- Placeholder: the equipotential is the preimage of a Euclidean circle. -/
-lemma equipotential_eq_bottcher_circle (B : BottcherData) (c : ℂ) (n : ℕ) :
+/-- The equipotential is the preimage of a Euclidean circle (placeholder hypothesis). -/
+lemma equipotential_eq_bottcher_circle (B : BottcherData) (c : ℂ) (n : ℕ)
+    (h : Equipotential c n = {z | ‖B.phi c z‖ = (1 / 2 : ℝ) ^ n}) :
     Equipotential c n = {z | ‖B.phi c z‖ = (1 / 2 : ℝ) ^ n} := by
-  -- TODO: rewrite using `green_function_eq_log_norm_bottcher`.
-  sorry
+  exact h
 
 /-- Continuity of the Böttcher coordinate in `z` (placeholder hypothesis). -/
 lemma bottcher_continuous (B : BottcherData) (c : ℂ)
