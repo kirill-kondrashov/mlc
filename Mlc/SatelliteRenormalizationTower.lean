@@ -10,13 +10,12 @@ noncomputable section
 /-!
 An *infinite* satellite renormalization tower in the Molecule framework.
 
-Our current `SatelliteRenormalizable c` is a one-step predicate (`IsFastRenormalizable` of a
-BMol object attached to `c`). For DLS-style principal nests we ultimately need infinitely many
-renormalizations; this file introduces that stronger notion and packages it as a
-`RenormalizationTower`.
+`SatelliteRenormalizable c` is defined in `Mlc/RenormalizationTypes.lean` as infinite fast
+renormalizability (`∀ n, IsFastRenormalizable ((Rfast^[n]) (parameterToBMol c))`).
+This file packages that hypothesis as a `RenormalizationTower` and extracts canonical depths.
 -/
 
-def IsInfinitelyFastRenormalizable (g : BMol) : Prop :=
+abbrev IsInfinitelyFastRenormalizable (g : BMol) : Prop :=
   ∀ n : ℕ, IsFastRenormalizable ((Rfast^[n]) g)
 
 noncomputable def renormalizationTower_of_infinitelyFast (g : BMol)
@@ -34,8 +33,8 @@ noncomputable def renormalizationTower_of_infinitelyFast (g : BMol)
   -- Rewrite `Rfast ((Rfast^[n]) g)` as the next iterate.
   simpa [Function.iterate_succ_apply'] using this
 
-def SatelliteRenormalizableTower (c : ℂ) : Prop :=
-  IsInfinitelyFastRenormalizable (parameterToBMol c)
+abbrev SatelliteRenormalizableTower (c : ℂ) : Prop :=
+  SatelliteRenormalizable c
 
 noncomputable def satelliteTower (c : ℂ) (h : SatelliteRenormalizableTower c) :
     RenormalizationTower (parameterToBMol c) :=

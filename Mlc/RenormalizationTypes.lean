@@ -169,7 +169,11 @@ lemma parameterToBMol_criticalValue (c : ℂ) :
 
 /-- Satellite renormalizable parameters, modeled by fast renormalizability of the associated BMol map. -/
 def SatelliteRenormalizable (c : ℂ) : Prop :=
-  IsFastRenormalizable (parameterToBMol c)
+  ∀ n : ℕ, IsFastRenormalizable ((Rfast^[n]) (parameterToBMol c))
+
+theorem satelliteRenormalizable_isFast (c : ℂ) (h : SatelliteRenormalizable c) :
+    IsFastRenormalizable (parameterToBMol c) := by
+  simpa using h 0
 
 end
 end MLC
