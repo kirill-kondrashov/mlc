@@ -1,7 +1,6 @@
 import Yoccoz.Quadratic.Complex.Groetzsch
 import Yoccoz.Quadratic.Complex.PuzzleLemmas
 import Mlc.Quadratic.Complex.PrincipalNestAnnulus
-import Mlc.Quadratic.Complex.ModulusLowerBound
 
 namespace MLC
 
@@ -106,19 +105,14 @@ theorem para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
     simpa [ParaPuzzlePieceAt, hz'] using h0
 
 /--
-If a principal nest has uniformly bounded-below annulus moduli, then the full parameter puzzle
+If the moduli of the principal nest annuli are not summable, then the full parameter puzzle
 nests shrink to `{c}`.
-
-This is the analytic/core topological reduction we will use once we prove the a priori bounds
-imply such a modulus lower bound for the DLS principal nest.
 -/
-theorem para_iInter_eq_singleton_of_principal_modulus_lower_bound
+theorem para_iInter_eq_singleton_of_principal_modulus_not_summable
     (c : ℂ) (hc : c ∈ MandelbrotSet) (depths : ℕ → ℕ)
     (hmono : Monotone depths) (hcof : Cofinal depths)
-    {m : ℝ} (hm : 0 < m) (hmod : ∀ n, m ≤ modulus (dynAnnulus c depths n)) :
+    (h_div : ¬ Summable (fun n => modulus (dynAnnulus c depths n))) :
     (⋂ n, ParaPuzzlePieceAt c n) = {c} := by
-  have h_div : ¬ Summable (fun n => modulus (dynAnnulus c depths n)) :=
-    not_summable_of_lower_bound (f := fun n => modulus (dynAnnulus c depths n)) hm hmod
   have h_principal : (⋂ n, dyn c depths n) = {0} :=
     dyn_iInter_eq_singleton_zero_of_not_summable_modulus c hc depths hmono h_div
   have h_dyn : (⋂ n, DynamicalPuzzlePiece c n 0) = {0} :=

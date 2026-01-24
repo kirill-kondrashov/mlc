@@ -31,28 +31,25 @@ theorem depthsFromSatelliteTower_cofinal (c : ℂ) (h : SatelliteRenormalizableT
     MLC.Quadratic.PrincipalNest.Cofinal (depthsFromSatelliteTower c h) :=
   satelliteTower_depths_cofinal c h
 
-/-- The remaining analytic target: uniform modulus lower bound for the principal nest annuli. -/
-def ModulusLowerBoundTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
-  ∃ m : ℝ, 0 < m ∧
-    ∀ n : ℕ,
-      m ≤ MLC.Quadratic.modulus
-        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n)
+/-- The remaining analytic target: divergence (non-summability) of principal nest annulus moduli. -/
+def ModulusNotSummableTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
+  ¬ Summable (fun n =>
+    MLC.Quadratic.modulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
 
-theorem paraPuzzle_shrink_of_modulusLowerBoundTarget (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (hTower : SatelliteRenormalizableTower c) (hmod : ModulusLowerBoundTarget c hTower) :
+theorem paraPuzzle_shrink_of_modulusNotSummableTarget (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c) (hdiv : ModulusNotSummableTarget c hTower) :
     (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
-  rcases hmod with ⟨m, hm, hmod⟩
   exact
-    MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_principal_modulus_lower_bound
+    MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_principal_modulus_not_summable
       c hc
       (depthsFromSatelliteTower c hTower)
       (depthsFromSatelliteTower_monotone c hTower)
       (depthsFromSatelliteTower_cofinal c hTower)
-      hm hmod
+      hdiv
 
 end PrincipalNestTarget
 
 end
 
 end MLC
-

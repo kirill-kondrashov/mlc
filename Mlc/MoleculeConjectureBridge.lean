@@ -86,7 +86,7 @@ principal nest annuli of satellite parameters (for the canonical depths coming f
 axiom molecule_modulusLowerBoundTarget
     (h_mol : MoleculeConjectureRefined) (c : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
-    PrincipalNestTarget.ModulusLowerBoundTarget c hTower
+    PrincipalNestTarget.ModulusNotSummableTarget c hTower
 
 /-- Molecule Conjecture implies parameter-piece shrinkage for satellite parameters. -/
 theorem molecule_parameter_shrink
@@ -94,9 +94,9 @@ theorem molecule_parameter_shrink
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
     (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
   have hTower : SatelliteRenormalizableTower c := h_sat
-  have hmod : PrincipalNestTarget.ModulusLowerBoundTarget c hTower :=
+  have hdiv : PrincipalNestTarget.ModulusNotSummableTarget c hTower :=
     molecule_modulusLowerBoundTarget h_mol c hc hTower
-  exact PrincipalNestTarget.paraPuzzle_shrink_of_modulusLowerBoundTarget c hc hTower hmod
+  exact PrincipalNestTarget.paraPuzzle_shrink_of_modulusNotSummableTarget c hc hTower hdiv
 
 /-- Local connectivity from Molecule shrinkage and a puzzle-boundary motion. -/
 theorem refined_conjecture_implies_lc
