@@ -1,6 +1,7 @@
 import Yoccoz.Quadratic.Complex.Green
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Topology.Basic
+import Mathlib.Topology.Order.OrderClosed
 
 namespace MLC.Quadratic
 
@@ -45,6 +46,27 @@ lemma closure_green_sublevel_subset_closed (c : ℂ) (n : ℕ) :
   have hsubset : GreenSublevel c n ⊆ GreenSublevelClosed c n :=
     green_sublevel_subset_closed c n
   exact hclosed.closure_subset_iff.2 hsubset hz
+
+/-- Equipotentials are contained in the closed sublevel. -/
+lemma equipotential_subset_closed (c : ℂ) (n : ℕ) :
+    Equipotential c n ⊆ GreenSublevelClosed c n := by
+  intro z hz
+  have hz' : green_function c z = (1 / 2 : ℝ) ^ n := by
+    simpa [Equipotential] using hz
+  have hle : green_function c z ≤ (1 / 2 : ℝ) ^ n := by
+    simp [hz']
+  simpa [GreenSublevelClosed] using hle
+
+/-- The boundary of an open Green sublevel lies in the equipotential. -/
+lemma frontier_green_sublevel_subset_equipotential (c : ℂ) (n : ℕ) :
+    frontier (GreenSublevel c n) ⊆ Equipotential c n := by
+  have hcont : Continuous (green_function c) := continuous_green_function c
+  have hconst : Continuous (fun _ : ℂ => (1 / 2 : ℝ) ^ n) := continuous_const
+  have hfront :
+      frontier {z : ℂ | green_function c z < (1 / 2 : ℝ) ^ n} ⊆
+        {z : ℂ | green_function c z = (1 / 2 : ℝ) ^ n} :=
+    frontier_lt_subset_eq hcont hconst
+  simpa [GreenSublevel, Equipotential] using hfront
 
 end
 

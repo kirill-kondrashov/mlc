@@ -2,6 +2,7 @@ import Mlc.Quadratic.Complex.BottcherMotion
 import Mlc.Quadratic.Complex.Axioms
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.Quadratic.Complex.Equipotential
+import Mlc.Quadratic.Complex.PlanarSeparation
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Tactic.NormNum
 
@@ -35,8 +36,7 @@ theorem bottcher_data_exists (_c₀ : ℂ) :
       (differentiableOn_const (𝕜 := ℂ) (s := Metric.ball 0 1) z)
   · intro z
     rfl
-  · intro t _ht
-    intro x _hx y _hy hxy
+  · intro t _ht x _hx y _hy hxy
     simpa using hxy
 
 /-- Analytic input: continuity of the critical orbit in parameter. -/
@@ -82,17 +82,11 @@ theorem parameter_disk_in_mandelbrot (_n : ℕ) (c₀ : ℂ)
       (mul_lt_mul_of_pos_left ht_ball hr_pos)
   exact hr_sub ht'
 
-/-- Analytic input: local stability of bounded critical orbit in the parameter plane. -/
-lemma mandelbrot_local_stability (c₀ : ℂ) (hc₀ : c₀ ∈ MandelbrotSet) :
+/-- Local stability on interior points of the Mandelbrot set. -/
+lemma mandelbrot_local_stability (c₀ : ℂ) (hc₀ : c₀ ∈ interior MandelbrotSet) :
     ∃ r : ℝ, 0 < r ∧
       (Metric.ball c₀ r) ⊆ MandelbrotSet := by
-  -- TODO: show `M` is closed and use continuity of the critical orbit.
-  -- This is a standard dynamical result in the quadratic family.
-  -- Likely uses: `critical_orbit_continuous` + uniform boundedness on a neighborhood.
-  sorry
-
--- NOTE: The above lemma is false on boundary points of `M`; prefer
--- `mandelbrot_local_stability_of_interior` for a correct statement.
+  exact mandelbrot_local_stability_of_interior c₀ hc₀
 
 /-- Green sublevels contain the filled Julia set. -/
 lemma green_sublevel_contains_K (c : ℂ) (n : ℕ) :
@@ -132,30 +126,6 @@ lemma connected_subset_connectedComponentIn {S A : Set ℂ}
     A ⊆ connectedComponentIn S 0 := by
   exact hA.isPreconnected.subset_connectedComponentIn h0 hA_sub
 
-/-- Analytic input: if `K(c)` is connected then `0 ∈ K(c)` (hence `c ∈ M`). -/
-lemma zero_mem_K_of_K_connected (c : ℂ) (hK : IsConnected (K c)) :
-    0 ∈ K c := by
-  -- TODO: use the standard equivalence `K(c)` connected ↔ `c ∈ M`.
-  -- This is the Douady–Hubbard theorem: escaping critical orbit implies totally disconnected `K(c)`.
-  sorry
-
-/-- Connectedness of `K(c)` implies `c ∈ M`. -/
-lemma mandelbrot_of_K_connected (c : ℂ) (hK : IsConnected (K c)) :
-    c ∈ MandelbrotSet := by
-  -- Reduce to showing `0 ∈ K(c)` (bounded critical orbit).
-  have h0 : 0 ∈ K c := zero_mem_K_of_K_connected c hK
-  simpa [MandelbrotSet, K] using h0
-
-/-- Analytic input: `K(c)` is connected iff `c ∈ M`. -/
-lemma K_connected_iff_mandelbrot (c : ℂ) :
-    IsConnected (K c) ↔ c ∈ MandelbrotSet := by
-  constructor
-  · intro hK
-    have h0 : 0 ∈ K c := zero_mem_K_of_K_connected c hK
-    simpa [MandelbrotSet, K] using h0
-  · intro hc
-    exact filled_julia_set_connected hc
-
 /-- Analytic input: equipotentials are Jordan curves for connected Julia sets. -/
 lemma equipotential_is_jordan_curve (_c : ℂ) (_n : ℕ)
     (_hK : IsConnected (K _c)) :
@@ -170,16 +140,11 @@ lemma closed_sublevel_contains_closure (c : ℂ) (n : ℕ) :
 
 /-- Analytic input: the equipotential separates the plane and bounds the Green sublevel. -/
 lemma equipotential_separates_sublevel (c : ℂ) (n : ℕ)
-    (hK : IsConnected (K c)) :
+    (_hK : IsConnected (K c))
+    (h0 : (0 : ℂ) ∈ GreenSublevelClosed c n) :
     connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ GreenSublevel c n := by
-  -- TODO: Jordan curve theorem for equipotentials and potential theory.
-  -- We can reduce this to: the equipotential is a Jordan curve and
-  -- the closed sublevel is the filled interior of that curve.
-  have _h_curve : ∃ (γ : ℝ → ℂ), True := equipotential_is_jordan_curve c n hK
-  have _h_fill : closure (GreenSublevel c n) ⊆ GreenSublevelClosed c n :=
-    closed_sublevel_contains_closure c n
-  -- TODO: use Jordan curve separation + `_h_fill` to get the inclusion.
-  sorry
+  -- Reduce to a separation statement in `PlanarSeparation`.
+  exact green_sublevel_separation_of_equipotential c n h0
 
 /-- If the equipotential separates the plane, it is connected. -/
 lemma equipotential_connected_of_separation' (c : ℂ) (n : ℕ)
@@ -191,7 +156,7 @@ lemma equipotential_connected_of_separation' (c : ℂ) (n : ℕ)
 
 /-- Analytic input: the Green sublevel is the filled region bounded by the equipotential. -/
 lemma green_sublevel_filled_by_equipotential (c : ℂ) (n : ℕ)
-    (hK : IsConnected (K c)) :
+    (hK : IsConnected (K c)) (hcM : c ∈ MandelbrotSet) :
     GreenSublevel c n =
       connectedComponentIn (GreenSublevelClosed c n) 0 := by
   -- TODO: formalize the relation between sublevel sets and the filled domain.
@@ -208,9 +173,10 @@ lemma green_sublevel_filled_by_equipotential (c : ℂ) (n : ℕ)
   -- separates the plane.
   have h_sub : GreenSublevel c n ⊆ GreenSublevelClosed c n :=
     green_sublevel_subset_closed c n
-  have hcM : c ∈ MandelbrotSet := mandelbrot_of_K_connected c hK
   have h0 : (0 : ℂ) ∈ GreenSublevel c n :=
     green_sublevel_contains_zero_of_mandelbrot c n hcM
+  have h0_closed : (0 : ℂ) ∈ GreenSublevelClosed c n :=
+    green_sublevel_subset_closed c n h0
   have h_conn : IsConnected (GreenSublevel c n) := by
     -- TODO: analytic connectedness of Green sublevels for connected Julia sets.
     sorry
@@ -220,12 +186,12 @@ lemma green_sublevel_filled_by_equipotential (c : ℂ) (n : ℕ)
     exact connected_subset_connectedComponentIn h_conn h0 h_sub
   have h_right :
       connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ GreenSublevel c n := by
-    exact equipotential_separates_sublevel c n hK
+    exact equipotential_separates_sublevel c n hK h0_closed
   exact subset_antisymm h_left h_right
 
 /-- Analytic input: Green sublevels containing `K(c)` are connected. -/
 lemma green_sublevel_connected_analytic (c : ℂ) (n : ℕ)
-    (hK : IsConnected (K c))
+    (hK : IsConnected (K c)) (hcM : c ∈ MandelbrotSet)
     (_hK_sub : K c ⊆ GreenSublevel c n) :
     IsConnected (GreenSublevel c n) := by
   -- TODO: analytic proof using properties of the Green function and filled Julia set.
@@ -238,8 +204,7 @@ lemma green_sublevel_connected_analytic (c : ℂ) (n : ℕ)
   have h_fill :
       GreenSublevel c n =
         connectedComponentIn (GreenSublevelClosed c n) 0 := by
-    exact green_sublevel_filled_by_equipotential c n hK
-  have hcM : c ∈ MandelbrotSet := mandelbrot_of_K_connected c hK
+    exact green_sublevel_filled_by_equipotential c n hK hcM
   have h0 : (0 : ℂ) ∈ GreenSublevelClosed c n := by
     exact green_sublevel_subset_closed c n
       (green_sublevel_contains_zero_of_mandelbrot c n hcM)
@@ -250,10 +215,10 @@ lemma green_sublevel_connected_analytic (c : ℂ) (n : ℕ)
 
 /-- Green sublevels are connected if `K(c)` is connected and sublevels are connected neighborhoods. -/
 lemma green_sublevel_connected_of_K_connected (c : ℂ) (n : ℕ)
-    (hK : IsConnected (K c))
+    (hK : IsConnected (K c)) (hcM : c ∈ MandelbrotSet)
     (hK_sub : K c ⊆ GreenSublevel c n) :
     IsConnected (GreenSublevel c n) := by
-  exact green_sublevel_connected_analytic c n hK hK_sub
+  exact green_sublevel_connected_analytic c n hK hcM hK_sub
 
 /-- Connectedness of Green sublevels on `M`. -/
 theorem green_sublevel_connected_on_mandelbrot :
@@ -262,7 +227,7 @@ theorem green_sublevel_connected_on_mandelbrot :
   intro c n hc
   have hK : IsConnected (K c) := filled_julia_set_connected hc
   have hK_sub : K c ⊆ GreenSublevel c n := green_sublevel_contains_K c n
-  exact green_sublevel_connected_of_K_connected c n hK hK_sub
+  exact green_sublevel_connected_of_K_connected c n hK hc hK_sub
 
 /-- Assemble the `BottcherOnMHyp` hypothesis from analytic inputs. -/
 def bottcher_on_m_hyp
