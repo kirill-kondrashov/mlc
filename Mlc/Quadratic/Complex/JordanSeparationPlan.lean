@@ -42,6 +42,27 @@ lemma jordan_compl_mem_interior_or_exterior_plan (γ : ℝ → ℂ) (hγ : Jorda
     z ∈ JordanInterior γ ∪ JordanExterior γ := by
   sorry
 
+/-- Abstract separation statement: the complement has exactly two connected components. -/
+lemma jordan_curve_complement_has_two_components (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+    ∃ U V : Set ℂ,
+      IsConnected U ∧ IsConnected V ∧
+      U ⊆ Set.compl (JordanCurveImage γ) ∧
+      V ⊆ Set.compl (JordanCurveImage γ) ∧
+      Disjoint U V ∧ U ∪ V = Set.compl (JordanCurveImage γ) ∧
+      (0 : ℂ) ∈ U ∧ (1 : ℂ) ∈ V := by
+  sorry
+
+/-- Boundary formulation: each component has frontier equal to the curve image. -/
+lemma jordan_curve_component_frontier (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+    ∃ U V : Set ℂ,
+      IsConnected U ∧ IsConnected V ∧
+      IsOpen U ∧ IsOpen V ∧
+      Disjoint U V ∧
+      U ∪ V = Set.compl (JordanCurveImage γ) ∧
+      frontier U = JordanCurveImage γ ∧
+      frontier V = JordanCurveImage γ := by
+  sorry
+
 /-- The two components are disjoint (no third component). -/
 lemma jordan_interior_exterior_disjoint_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
     Disjoint (JordanInterior γ) (JordanExterior γ) := by
