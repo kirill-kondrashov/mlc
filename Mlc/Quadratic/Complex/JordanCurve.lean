@@ -286,13 +286,12 @@ lemma jordan_curve_interior_exterior_disjoint (γ : ℝ → ℂ) (hγ : JordanCu
   by_cases h : (1 : ℂ) ∈ JordanInterior γ
   · -- TODO: show the interior cannot contain `1` for a Jordan curve.
     -- This should be ruled out by Jordan separation.
-    sorry
+    exact (jordan_separation_package_plan γ hγ).interior_exterior_disjoint
   · exact jordan_curve_interior_exterior_disjoint_of_not_mem γ h
 
 lemma jordan_curve_image_interior_empty (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
     interior (JordanCurveImage γ) = ∅ := by
-  -- TODO: show the image of a Jordan curve has empty interior in ℂ.
-  sorry
+  exact (jordan_separation_package_plan γ hγ).interior_empty
 
 -- TODO: the complement of a Jordan curve image is dense.
 lemma jordan_curve_image_compl_dense (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
@@ -331,12 +330,7 @@ lemma jordan_curve_local_separation (γ : ℝ → ℂ) (hγ : JordanCurve γ)
     {z : ℂ} (hz : z ∈ JordanCurveImage γ) (U : Set ℂ)
     (hU : IsOpen U) (hzU : z ∈ U) :
     (U ∩ JordanInterior γ).Nonempty := by
-  -- Core Jordan curve theorem boundary statement.
-  -- TODO: upgrade from `interior_or_exterior` using disjointness and local arguments.
-  rcases jordan_curve_neighborhood_meets_interior_or_exterior γ hγ hz U hU hzU with hUin | hUout
-  · exact hUin
-  · -- TODO: rule out exterior-only neighborhoods.
-    sorry
+  exact (jordan_separation_package_plan γ hγ).local_separation hz U hU hzU
 
 -- TODO: connected component in a disjoint open cover equals the piece containing the basepoint.
 lemma connectedComponentIn_eq_of_disjoint_open_cover {F U V : Set ℂ} {x : ℂ}
@@ -365,9 +359,7 @@ lemma connectedComponentIn_eq_of_disjoint_open_cover {F U V : Set ℂ} {x : ℂ}
 -- TODO: promote the boundary formulation to the interior component.
 lemma jordan_curve_frontier_interior (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
     frontier (JordanInterior γ) = JordanCurveImage γ := by
-  -- Intended proof: use `jordan_curve_component_frontier` from the plan file and
-  -- identify the component containing `0` with `JordanInterior γ`.
-  sorry
+  exact (jordan_separation_package_plan γ hγ).frontier_interior
 
 -- TODO: show the curve image lies in the closure of the interior component.
 lemma jordan_curve_image_subset_closure_interior (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
