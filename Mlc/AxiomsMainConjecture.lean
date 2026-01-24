@@ -38,10 +38,5 @@ axiom classify_infinitely_renormalizable :
     ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
       PrimitiveRenormalizable c ∨ SatelliteRenormalizable c
 
-/-- Bridge from the Molecule Conjecture to MLC for satellite parameters (axiom). -/
-axiom molecule_conjecture_bridge :
-    MoleculeConjectureRefined →
-    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
-      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
 end MLC
