@@ -34,14 +34,10 @@ lemma bottcher_continuous (B : BottcherData) (c : ℂ) :
   -- TODO: continuity of the Böttcher coordinate in the dynamical variable.
   sorry
 
-/-- Placeholder: Böttcher coordinates are injective on the basin of infinity. -/
-lemma bottcher_inj (B : BottcherData) (c : ℂ) :
+/-- Placeholder: Böttcher coordinates are injective on the unit parameter disk. -/
+lemma bottcher_inj (B : BottcherData) {c : ℂ} (hc : c ∈ Metric.ball 0 1) :
     Set.InjOn (B.phi c) Set.univ := by
-  -- TODO: injectivity of the Böttcher coordinate in `z`.
-  simpa using (B.inj_on c (by
-    -- This uses the unit disk in parameter space; adjust when `c` is restricted.
-    -- For now, keep as a placeholder.
-    sorry))
+  simpa using (B.inj_on c hc)
 
 /-- Placeholder: equipotentials are Jordan curves via Böttcher coordinates. -/
 lemma equipotential_jordan_curve_of_bottcher (B : BottcherData) (c : ℂ) (n : ℕ) :
