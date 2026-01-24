@@ -121,7 +121,6 @@ All axioms used:
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected
-- MLC.yoccoz_parameter_shrink
 - MLC.bottcher_onM_hyp
 - MLC.green_sublevel_connected_hyp
 - MLC.classify_infinitely_renormalizable

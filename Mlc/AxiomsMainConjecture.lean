@@ -3,6 +3,7 @@ import Mlc.RenormalizationTypes
 import Mlc.MoleculeConjectureBridge
 import Mlc.LcAtOfShrink
 import Mlc.Quadratic.Complex.BottcherMotion
+import Yoccoz.Yoccoz
 
 namespace MLC
 
@@ -14,9 +15,16 @@ open Quadratic Complex Topology Set Filter
 These axioms package deep results used in the main conjecture proof outline.
 -/
 
-/-- Yoccoz's parameter-shrinkage theorem for finitely renormalizable parameters (axiom). -/
-axiom yoccoz_parameter_shrink :
+/-- Yoccoz's theorem: divergence of moduli implies dynamical puzzle pieces shrink to `{0}`. -/
+def yoccoz_parameter_shrink (c : ℂ) (h : FinitelyRenormalizable c) :
+    (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
+  apply MLC.yoccoz_theorem
+  simpa [FinitelyRenormalizable, NonRenormalizable] using h
+
+/-- Parameter-plane shrinkage derived from Yoccoz's dynamical conclusion (axiom). -/
+axiom parameter_shrink_of_yoccoz :
     ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} →
       (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c}
 
 /-- Existence of Böttcher coordinates on the Mandelbrot set (axiom). -/

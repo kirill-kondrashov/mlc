@@ -97,7 +97,10 @@ theorem mlc_conjecture : LocallyConnectedSpace mandelbrotSet := by
   apply mlc_strategy
   · -- Finitely Renormalizable case (Yoccoz)
     intro c hc h_fin
-    exact yoccoz_parameter_shrink c hc h_fin
+    have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
+      apply MLC.yoccoz_theorem
+      simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin
+    exact parameter_shrink_of_yoccoz c hc h_fin h_dyn
   · -- Bottcher coordinates exist on M
     exact bottcher_onM_hyp
   · -- Green sublevel sets connected
