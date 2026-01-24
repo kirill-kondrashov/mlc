@@ -270,10 +270,14 @@ lemma jordan_interior_exterior_disjoint_plan (γ : ℝ → ℂ) (_hγ : JordanCu
 /-- Bundles the plan lemmas into a single package. -/
 lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
     (h_interior_empty : interior (JordanCurveImage γ) = ∅)
-    (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ))
-    (h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ))
-    (h_mem : ∀ {z : ℂ}, z ∈ Set.compl (JordanCurveImage γ) →
-      z ∈ JordanInterior γ ∪ JordanExterior γ)
+    (_h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ))
+    (_h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ))
+    (h_two : ∃ U V : Set ℂ,
+      IsConnected U ∧ IsConnected V ∧
+      U ⊆ Set.compl (JordanCurveImage γ) ∧
+      V ⊆ Set.compl (JordanCurveImage γ) ∧
+      Disjoint U V ∧ U ∪ V = Set.compl (JordanCurveImage γ) ∧
+      (0 : ℂ) ∈ U ∧ (1 : ℂ) ∈ V)
     (h_disj : Disjoint (JordanInterior γ) (JordanExterior γ))
     (h_frontier : ∃ U V : Set ℂ,
       IsConnected U ∧ IsConnected V ∧
@@ -290,11 +294,15 @@ lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
   · exact jordan_curve_image_interior_empty_plan γ hγ h_interior_empty
   · exact jordan_curve_compl_locPathConnected_plan γ hγ
   · intro z hz
-    exact jordan_compl_path_to_zero_or_one_plan γ hγ hz (h_mem hz)
+    have h_mem : z ∈ JordanInterior γ ∪ JordanExterior γ :=
+      jordan_compl_mem_interior_or_exterior_of_two_components γ hγ hz h_two
+    exact jordan_compl_path_to_zero_or_one_plan γ hγ hz h_mem
   · intro z hz
-    exact jordan_compl_mem_interior_or_exterior_plan γ hγ hz (h_mem hz)
+    have h_mem : z ∈ JordanInterior γ ∪ JordanExterior γ :=
+      jordan_compl_mem_interior_or_exterior_of_two_components γ hγ hz h_two
+    exact jordan_compl_mem_interior_or_exterior_plan γ hγ hz h_mem
   · exact jordan_interior_exterior_disjoint_plan γ hγ h_disj
-  · exact jordan_curve_complement_has_two_components γ hγ h0 h1 h_mem h_disj
+  · exact h_two
   · exact jordan_curve_component_frontier γ hγ h_frontier
   · exact jordan_curve_frontier_interior_plan γ hγ h_frontier_interior
   · intro z hz U hU hzU
