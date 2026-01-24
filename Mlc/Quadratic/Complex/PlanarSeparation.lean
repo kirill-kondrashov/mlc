@@ -134,10 +134,11 @@ lemma mem_jordanExterior_of_segment (γ : ℝ → ℂ) {z : ℂ}
     exact hrange ⟨t, rfl⟩
   exact mem_jordanExterior_of_path γ p hp
 
-lemma mem_jordanInterior_or_exterior_of_path (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
+lemma mem_jordanInterior_or_exterior_of_path (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (pkg : JordanSeparationPackage γ) {z : ℂ}
     (hz : z ∈ Set.compl (JordanCurveImage γ)) :
     z ∈ JordanInterior γ ∪ JordanExterior γ := by
-  rcases (jordan_separation_package_plan γ hγ).compl_path_to_zero_or_one hz with ⟨p, hp⟩ | ⟨p, hp⟩
+  rcases pkg.compl_path_to_zero_or_one hz with ⟨p, hp⟩ | ⟨p, hp⟩
   · exact Or.inl (mem_jordanInterior_of_path γ p hp)
   · exact Or.inr (mem_jordanExterior_of_path γ p hp)
 

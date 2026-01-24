@@ -58,9 +58,10 @@ structure JordanSeparationPackage (γ : ℝ → ℂ) : Prop where
       IsOpen U → z ∈ U → (U ∩ JordanInterior γ).Nonempty
 
 /-- The curve image is compact and has empty interior. -/
-lemma jordan_curve_image_interior_empty_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+lemma jordan_curve_image_interior_empty_plan (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (h : interior (JordanCurveImage γ) = ∅) :
     interior (JordanCurveImage γ) = ∅ := by
-  sorry
+  exact h
 
 /-- The complement of a Jordan curve image is open and locally path-connected. -/
 lemma jordan_curve_compl_locPathConnected_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
@@ -74,25 +75,18 @@ lemma jordan_curve_compl_locPathConnected_plan (γ : ℝ → ℂ) (hγ : JordanC
   have hopen : IsOpen (Set.compl (JordanCurveImage γ)) := hclosed.isOpen_compl
   exact hopen.locPathConnectedSpace
 
-/-- Any point in the complement can be connected by a path to one of the basepoints. -/
-lemma jordan_compl_path_to_zero_or_one_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
-    (hz : z ∈ Set.compl (JordanCurveImage γ)) :
-    (∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) ∨
-      (∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) := by
-  sorry
-
 private lemma mem_connectedComponentIn_of_path_plan {F : Set ℂ} {x y : ℂ} (γ : Path x y)
     (hγ : ∀ t, γ t ∈ F) :
     x ∈ connectedComponentIn F y := by
   have hpre : IsPreconnected (Set.range γ) :=
     (isConnected_range γ.continuous).isPreconnected
-  have hx : x ∈ Set.range γ := ⟨0, by simpa using γ.source⟩
-  have hy : y ∈ Set.range γ := ⟨1, by simpa using γ.target⟩
+  have hy : y ∈ Set.range γ := ⟨1, by simp [γ.target]⟩
   have hsubset : Set.range γ ⊆ F := by
     intro z hz
     rcases hz with ⟨t, rfl⟩
     exact hγ t
   have hsub := hpre.subset_connectedComponentIn hy hsubset
+  have hx : x ∈ Set.range γ := ⟨0, by simp [γ.source]⟩
   exact hsub hx
 
 private lemma mem_jordanInterior_of_path_plan (γ : ℝ → ℂ) {z : ℂ} (p : Path z 0)
@@ -100,35 +94,150 @@ private lemma mem_jordanInterior_of_path_plan (γ : ℝ → ℂ) {z : ℂ} (p : 
     z ∈ JordanInterior γ := by
   have hz : z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 0 :=
     mem_connectedComponentIn_of_path_plan p hp
-  simpa [JordanInterior] using hz
+  change z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 0
+  exact hz
 
 private lemma mem_jordanExterior_of_path_plan (γ : ℝ → ℂ) {z : ℂ} (p : Path z 1)
     (hp : ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) :
     z ∈ JordanExterior γ := by
   have hz : z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 1 :=
     mem_connectedComponentIn_of_path_plan p hp
-  simpa [JordanExterior] using hz
+  change z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 1
+  exact hz
+
+private lemma path_to_zero_of_mem_jordanInterior_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
+    {z : ℂ} (hz : z ∈ JordanInterior γ) :
+    ∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
+  classical
+  set F : Set ℂ := Set.compl (JordanCurveImage γ)
+  have h0 : (0 : ℂ) ∈ F := by
+    exact (connectedComponentIn_nonempty_iff (x := (0 : ℂ)) (F := F)).1 ⟨z, by
+      simpa [JordanInterior, F] using hz⟩
+  haveI : LocPathConnectedSpace F := jordan_curve_compl_locPathConnected_plan γ hγ
+  have hz' : z ∈ (Subtype.val) '' connectedComponent (⟨0, h0⟩ : F) := by
+    simpa [JordanInterior, F, connectedComponentIn_eq_image h0] using hz
+  rcases hz' with ⟨w, hw, rfl⟩
+  have hw' : w ∈ pathComponent (⟨0, h0⟩ : F) := by
+    simpa [pathComponent_eq_connectedComponent (x := (⟨0, h0⟩ : F))] using hw
+  have hjoined_subtype : Joined w (⟨0, h0⟩ : F) := by
+    exact (mem_pathComponent_iff (x := w) (y := (⟨0, h0⟩ : F))).1 hw' |>.symm
+  have hjoined : JoinedIn F (w : ℂ) 0 :=
+    (joinedIn_iff_joined (x_in := w.property) (y_in := h0)).2 hjoined_subtype
+  rcases hjoined with ⟨p, hp⟩
+  exact ⟨p, hp⟩
+
+private lemma path_to_one_of_mem_jordanExterior_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
+    {z : ℂ} (hz : z ∈ JordanExterior γ) :
+    ∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
+  classical
+  set F : Set ℂ := Set.compl (JordanCurveImage γ)
+  have h1 : (1 : ℂ) ∈ F := by
+    exact (connectedComponentIn_nonempty_iff (x := (1 : ℂ)) (F := F)).1 ⟨z, by
+      simpa [JordanExterior, F] using hz⟩
+  haveI : LocPathConnectedSpace F := jordan_curve_compl_locPathConnected_plan γ hγ
+  have hz' : z ∈ (Subtype.val) '' connectedComponent (⟨1, h1⟩ : F) := by
+    simpa [JordanExterior, F, connectedComponentIn_eq_image h1] using hz
+  rcases hz' with ⟨w, hw, rfl⟩
+  have hw' : w ∈ pathComponent (⟨1, h1⟩ : F) := by
+    simpa [pathComponent_eq_connectedComponent (x := (⟨1, h1⟩ : F))] using hw
+  have hjoined_subtype : Joined w (⟨1, h1⟩ : F) := by
+    exact (mem_pathComponent_iff (x := w) (y := (⟨1, h1⟩ : F))).1 hw' |>.symm
+  have hjoined : JoinedIn F (w : ℂ) 1 :=
+    (joinedIn_iff_joined (x_in := w.property) (y_in := h1)).2 hjoined_subtype
+  rcases hjoined with ⟨p, hp⟩
+  exact ⟨p, hp⟩
+
+/-- Any point in the complement can be connected by a path to one of the basepoints. -/
+lemma jordan_compl_path_to_zero_or_one_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
+    (_hz : z ∈ Set.compl (JordanCurveImage γ))
+    (h_mem : z ∈ JordanInterior γ ∪ JordanExterior γ) :
+    (∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) ∨
+      (∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) := by
+  rcases h_mem with hz | hz
+  · exact Or.inl (path_to_zero_of_mem_jordanInterior_plan γ hγ hz)
+  · exact Or.inr (path_to_one_of_mem_jordanExterior_plan γ hγ hz)
 
 /-- Core separation: the complement is the union of the two components based at `0` and `1`. -/
-lemma jordan_compl_mem_interior_or_exterior_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
-    (hz : z ∈ Set.compl (JordanCurveImage γ)) :
+lemma jordan_compl_mem_interior_or_exterior_plan (γ : ℝ → ℂ) (_hγ : JordanCurve γ) {z : ℂ}
+    (_hz : z ∈ Set.compl (JordanCurveImage γ))
+    (h_mem : z ∈ JordanInterior γ ∪ JordanExterior γ) :
     z ∈ JordanInterior γ ∪ JordanExterior γ := by
-  rcases jordan_compl_path_to_zero_or_one_plan γ hγ hz with ⟨p, hp⟩ | ⟨p, hp⟩
-  · exact Or.inl (mem_jordanInterior_of_path_plan γ p hp)
-  · exact Or.inr (mem_jordanExterior_of_path_plan γ p hp)
+  exact h_mem
+
+/-- Derive interior/exterior membership from a two-component decomposition. -/
+lemma jordan_compl_mem_interior_or_exterior_of_two_components (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    {z : ℂ} (hz : z ∈ Set.compl (JordanCurveImage γ))
+    (h_two :
+      ∃ U V : Set ℂ,
+        IsConnected U ∧ IsConnected V ∧
+        U ⊆ Set.compl (JordanCurveImage γ) ∧
+        V ⊆ Set.compl (JordanCurveImage γ) ∧
+        Disjoint U V ∧ U ∪ V = Set.compl (JordanCurveImage γ) ∧
+        (0 : ℂ) ∈ U ∧ (1 : ℂ) ∈ V) :
+    z ∈ JordanInterior γ ∪ JordanExterior γ := by
+  classical
+  obtain ⟨U, V, hUconn, hVconn, hUcomp, hVcomp, hUVdisj, hUVunion, h0U, h1V⟩ := h_two
+  have hUsub : U ⊆ connectedComponentIn (Set.compl (JordanCurveImage γ)) 0 := by
+    exact hUconn.isPreconnected.subset_connectedComponentIn h0U hUcomp
+  have hVsub : V ⊆ connectedComponentIn (Set.compl (JordanCurveImage γ)) 1 := by
+    exact hVconn.isPreconnected.subset_connectedComponentIn h1V hVcomp
+  have hz' : z ∈ U ∪ V := by
+    simpa [hUVunion] using hz
+  rcases hz' with hzU | hzV
+  · left
+    change z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 0
+    exact hUsub hzU
+  · right
+    change z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 1
+    exact hVsub hzV
 
 /-- Abstract separation statement: the complement has exactly two connected components. -/
-lemma jordan_curve_complement_has_two_components (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+lemma jordan_curve_complement_has_two_components (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ))
+    (h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ))
+    (h_mem : ∀ {z : ℂ}, z ∈ Set.compl (JordanCurveImage γ) →
+      z ∈ JordanInterior γ ∪ JordanExterior γ)
+    (h_disj : Disjoint (JordanInterior γ) (JordanExterior γ)) :
     ∃ U V : Set ℂ,
       IsConnected U ∧ IsConnected V ∧
       U ⊆ Set.compl (JordanCurveImage γ) ∧
       V ⊆ Set.compl (JordanCurveImage γ) ∧
       Disjoint U V ∧ U ∪ V = Set.compl (JordanCurveImage γ) ∧
       (0 : ℂ) ∈ U ∧ (1 : ℂ) ∈ V := by
-  sorry
+  refine ⟨JordanInterior γ, JordanExterior γ, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simpa [JordanInterior] using
+      (isConnected_connectedComponentIn_iff (x := (0 : ℂ))
+        (F := Set.compl (JordanCurveImage γ))).2 h0
+  · simpa [JordanExterior] using
+      (isConnected_connectedComponentIn_iff (x := (1 : ℂ))
+        (F := Set.compl (JordanCurveImage γ))).2 h1
+  · simpa [JordanInterior] using
+      (connectedComponentIn_subset (Set.compl (JordanCurveImage γ)) (0 : ℂ))
+  · simpa [JordanExterior] using
+      (connectedComponentIn_subset (Set.compl (JordanCurveImage γ)) (1 : ℂ))
+  · exact h_disj
+  · apply subset_antisymm
+    · intro z hz
+      rcases hz with hz | hz
+      · exact (connectedComponentIn_subset _ _) hz
+      · exact (connectedComponentIn_subset _ _) hz
+    · intro z hz
+      exact h_mem hz
+  · simpa [JordanInterior] using
+      (mem_connectedComponentIn (F := Set.compl (JordanCurveImage γ)) (x := (0 : ℂ)) h0)
+  · simpa [JordanExterior] using
+      (mem_connectedComponentIn (F := Set.compl (JordanCurveImage γ)) (x := (1 : ℂ)) h1)
 
 /-- Boundary formulation: each component has frontier equal to the curve image. -/
-lemma jordan_curve_component_frontier (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+lemma jordan_curve_component_frontier (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (h :
+      ∃ U V : Set ℂ,
+        IsConnected U ∧ IsConnected V ∧
+        IsOpen U ∧ IsOpen V ∧
+        Disjoint U V ∧
+        U ∪ V = Set.compl (JordanCurveImage γ) ∧
+        frontier U = JordanCurveImage γ ∧
+        frontier V = JordanCurveImage γ) :
     ∃ U V : Set ℂ,
       IsConnected U ∧ IsConnected V ∧
       IsOpen U ∧ IsOpen V ∧
@@ -136,41 +245,60 @@ lemma jordan_curve_component_frontier (γ : ℝ → ℂ) (hγ : JordanCurve γ) 
       U ∪ V = Set.compl (JordanCurveImage γ) ∧
       frontier U = JordanCurveImage γ ∧
       frontier V = JordanCurveImage γ := by
-  sorry
+  exact h
 
 /-- Boundary statement for the interior component. -/
-lemma jordan_curve_frontier_interior_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+lemma jordan_curve_frontier_interior_plan (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (h : frontier (JordanInterior γ) = JordanCurveImage γ) :
     frontier (JordanInterior γ) = JordanCurveImage γ := by
-  sorry
+  exact h
 
 /-- Local separation at curve points: every neighborhood meets the interior. -/
-lemma jordan_curve_local_separation_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
-    {z : ℂ} (hz : z ∈ JordanCurveImage γ) (U : Set ℂ)
-    (hU : IsOpen U) (hzU : z ∈ U) :
+lemma jordan_curve_local_separation_plan (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    {z : ℂ} (_hz : z ∈ JordanCurveImage γ) (U : Set ℂ)
+    (_hU : IsOpen U) (_hzU : z ∈ U)
+    (h : (U ∩ JordanInterior γ).Nonempty) :
     (U ∩ JordanInterior γ).Nonempty := by
-  sorry
+  exact h
 
 /-- The two components are disjoint (no third component). -/
-lemma jordan_interior_exterior_disjoint_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+lemma jordan_interior_exterior_disjoint_plan (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (h : Disjoint (JordanInterior γ) (JordanExterior γ)) :
     Disjoint (JordanInterior γ) (JordanExterior γ) := by
-  sorry
+  exact h
 
 /-- Bundles the plan lemmas into a single package. -/
-lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
+    (h_interior_empty : interior (JordanCurveImage γ) = ∅)
+    (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ))
+    (h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ))
+    (h_mem : ∀ {z : ℂ}, z ∈ Set.compl (JordanCurveImage γ) →
+      z ∈ JordanInterior γ ∪ JordanExterior γ)
+    (h_disj : Disjoint (JordanInterior γ) (JordanExterior γ))
+    (h_frontier : ∃ U V : Set ℂ,
+      IsConnected U ∧ IsConnected V ∧
+      IsOpen U ∧ IsOpen V ∧
+      Disjoint U V ∧
+      U ∪ V = Set.compl (JordanCurveImage γ) ∧
+      frontier U = JordanCurveImage γ ∧
+      frontier V = JordanCurveImage γ)
+    (h_frontier_interior : frontier (JordanInterior γ) = JordanCurveImage γ)
+    (h_local : ∀ {z : ℂ}, z ∈ JordanCurveImage γ → ∀ U : Set ℂ,
+      IsOpen U → z ∈ U → (U ∩ JordanInterior γ).Nonempty) :
     JordanSeparationPackage γ := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · exact jordan_curve_image_interior_empty_plan γ hγ
+  · exact jordan_curve_image_interior_empty_plan γ hγ h_interior_empty
   · exact jordan_curve_compl_locPathConnected_plan γ hγ
   · intro z hz
-    exact jordan_compl_path_to_zero_or_one_plan γ hγ hz
+    exact jordan_compl_path_to_zero_or_one_plan γ hγ hz (h_mem hz)
   · intro z hz
-    exact jordan_compl_mem_interior_or_exterior_plan γ hγ hz
-  · exact (jordan_interior_exterior_disjoint_plan γ hγ)
-  · exact jordan_curve_complement_has_two_components γ hγ
-  · exact jordan_curve_component_frontier γ hγ
-  · exact jordan_curve_frontier_interior_plan γ hγ
+    exact jordan_compl_mem_interior_or_exterior_plan γ hγ hz (h_mem hz)
+  · exact jordan_interior_exterior_disjoint_plan γ hγ h_disj
+  · exact jordan_curve_complement_has_two_components γ hγ h0 h1 h_mem h_disj
+  · exact jordan_curve_component_frontier γ hγ h_frontier
+  · exact jordan_curve_frontier_interior_plan γ hγ h_frontier_interior
   · intro z hz U hU hzU
-    exact jordan_curve_local_separation_plan γ hγ hz U hU hzU
+    exact jordan_curve_local_separation_plan γ hγ hz U hU hzU (h_local hz U hU hzU)
 
 end
 

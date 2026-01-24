@@ -94,8 +94,7 @@ lemma para_puzzle_piece_basis (c : ℂ) :
   -- We show M ⊆ ⋂ P_n, which implies M ⊆ {c}, a contradiction.
   have h_M_sub : MandelbrotSet ⊆ ⋂ n, ParaPuzzlePiece n := by
     apply subset_iInter
-    intro n
-    intro m hm
+    intro n m hm
     rw [ParaPuzzlePiece, mem_setOf_eq]
 
     have h_conn : IsConnected (K m) := filled_julia_set_connected hm
