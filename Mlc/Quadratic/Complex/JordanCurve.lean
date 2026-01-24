@@ -1,7 +1,12 @@
 import Mlc.Quadratic.Complex.JordanBasics
+import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.LocallyConvex.WithSeminorms
 import Mathlib.Topology.Connected.Basic
+import Mathlib.Topology.Connected.LocPathConnected
+import Mathlib.Topology.Connected.PathConnected
 import Mathlib.Topology.Path
 import Mathlib.Topology.Closure
+import Mathlib.Topology.Order.Compact
 
 namespace MLC.Quadratic
 
@@ -25,6 +30,35 @@ lemma jordan_interior_subset_compl (γ : ℝ → ℂ) :
 lemma jordan_exterior_subset_compl (γ : ℝ → ℂ) :
     JordanExterior γ ⊆ Set.compl (JordanCurveImage γ) := by
   exact connectedComponentIn_subset _ _
+
+lemma jordan_curve_image_compact (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+    IsCompact (JordanCurveImage γ) := by
+  have hcont : Continuous γ := hγ.1
+  have hcont_on : ContinuousOn γ (Set.Icc (0 : ℝ) 1) := hcont.continuousOn
+  simpa [JordanCurveImage] using
+    (IsCompact.image_of_continuousOn (s := Set.Icc (0 : ℝ) 1) isCompact_Icc hcont_on)
+
+lemma jordan_curve_image_closed (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+    IsClosed (JordanCurveImage γ) := by
+  exact (jordan_curve_image_compact γ hγ).isClosed
+
+lemma jordan_curve_compl_open (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+    IsOpen (Set.compl (JordanCurveImage γ)) := by
+  exact (jordan_curve_image_closed γ hγ).isOpen_compl
+
+lemma jordan_interior_isConnected (γ : ℝ → ℂ)
+    (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ)) :
+    IsConnected (JordanInterior γ) := by
+  simpa [JordanInterior] using
+    (isConnected_connectedComponentIn_iff (x := (0 : ℂ))
+        (F := Set.compl (JordanCurveImage γ))).2 h0
+
+lemma jordan_exterior_isConnected (γ : ℝ → ℂ)
+    (h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ)) :
+    IsConnected (JordanExterior γ) := by
+  simpa [JordanExterior] using
+    (isConnected_connectedComponentIn_iff (x := (1 : ℂ))
+        (F := Set.compl (JordanCurveImage γ))).2 h1
 
 lemma mem_connectedComponentIn_of_path {F : Set ℂ} {x y : ℂ} (γ : Path x y)
     (hγ : ∀ t, γ t ∈ F) :
@@ -107,13 +141,86 @@ lemma jordan_curve_interior_exterior_disjoint_of_not_mem (γ : ℝ → ℂ)
     (connectedComponentIn_disjoint_of_not_mem (F := Set.compl (JordanCurveImage γ))
       (x := (0 : ℂ)) (y := (1 : ℂ)) h')
 
+/-- TODO: path-connectedness of the interior component (requires local path-connectedness of ℂ). -/
+lemma path_to_zero_of_mem_jordanInterior (γ : ℝ → ℂ) (hγ : JordanCurve γ)
+    {z : ℂ} (hz : z ∈ JordanInterior γ) :
+    ∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
+  classical
+  set F : Set ℂ := Set.compl (JordanCurveImage γ)
+  have h0 : (0 : ℂ) ∈ F := by
+    exact (connectedComponentIn_nonempty_iff (x := (0 : ℂ)) (F := F)).1 ⟨z, by simpa [F] using hz⟩
+  have hFopen : IsOpen F := (jordan_curve_image_closed γ hγ).isOpen_compl
+  haveI : LocPathConnectedSpace F := hFopen.locPathConnectedSpace
+  have hz' : z ∈ (Subtype.val) '' connectedComponent (⟨0, h0⟩ : F) := by
+    simpa [JordanInterior, F, connectedComponentIn_eq_image h0] using hz
+  rcases hz' with ⟨w, hw, rfl⟩
+  have hw' : w ∈ pathComponent (⟨0, h0⟩ : F) := by
+    simpa [pathComponent_eq_connectedComponent (x := (⟨0, h0⟩ : F))] using hw
+  have hjoined_subtype : Joined w (⟨0, h0⟩ : F) := by
+    exact (mem_pathComponent_iff (x := w) (y := (⟨0, h0⟩ : F))).1 hw' |>.symm
+  have hjoined : JoinedIn F (w : ℂ) 0 :=
+    (joinedIn_iff_joined (x_in := w.property) (y_in := h0)).2 hjoined_subtype
+  rcases hjoined with ⟨p, hp⟩
+  exact ⟨p, hp⟩
+
+/-- TODO: path-connectedness of the exterior component (requires local path-connectedness of ℂ). -/
+lemma path_to_one_of_mem_jordanExterior (γ : ℝ → ℂ) (hγ : JordanCurve γ)
+    {z : ℂ} (hz : z ∈ JordanExterior γ) :
+    ∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
+  classical
+  set F : Set ℂ := Set.compl (JordanCurveImage γ)
+  have h1 : (1 : ℂ) ∈ F := by
+    exact (connectedComponentIn_nonempty_iff (x := (1 : ℂ)) (F := F)).1 ⟨z, by simpa [F] using hz⟩
+  have hFopen : IsOpen F := (jordan_curve_image_closed γ hγ).isOpen_compl
+  haveI : LocPathConnectedSpace F := hFopen.locPathConnectedSpace
+  have hz' : z ∈ (Subtype.val) '' connectedComponent (⟨1, h1⟩ : F) := by
+    simpa [JordanExterior, F, connectedComponentIn_eq_image h1] using hz
+  rcases hz' with ⟨w, hw, rfl⟩
+  have hw' : w ∈ pathComponent (⟨1, h1⟩ : F) := by
+    simpa [pathComponent_eq_connectedComponent (x := (⟨1, h1⟩ : F))] using hw
+  have hjoined_subtype : Joined w (⟨1, h1⟩ : F) := by
+    exact (mem_pathComponent_iff (x := w) (y := (⟨1, h1⟩ : F))).1 hw' |>.symm
+  have hjoined : JoinedIn F (w : ℂ) 1 :=
+    (joinedIn_iff_joined (x_in := w.property) (y_in := h1)).2 hjoined_subtype
+  rcases hjoined with ⟨p, hp⟩
+  exact ⟨p, hp⟩
+
+/-- Membership in the interior is equivalent to existence of a complement path to `0`. -/
+lemma mem_jordanInterior_iff_path (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ} :
+    z ∈ JordanInterior γ ↔
+      ∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
+  constructor
+  · exact path_to_zero_of_mem_jordanInterior γ hγ
+  · intro hz
+    rcases hz with ⟨p, hp⟩
+    exact mem_jordanInterior_of_path γ p hp
+
+/-- Membership in the exterior is equivalent to existence of a complement path to `1`. -/
+lemma mem_jordanExterior_iff_path (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ} :
+    z ∈ JordanExterior γ ↔
+      ∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
+  constructor
+  · exact path_to_one_of_mem_jordanExterior γ hγ
+  · intro hz
+    rcases hz with ⟨p, hp⟩
+    exact mem_jordanExterior_of_path γ p hp
+
+/-- TODO: any point in the complement lies in the interior or exterior component. -/
+lemma jordan_compl_mem_interior_or_exterior (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
+    (hz : z ∈ Set.compl (JordanCurveImage γ)) :
+    z ∈ JordanInterior γ ∪ JordanExterior γ := by
+  -- This is the core separation statement of the Jordan curve theorem.
+  sorry
+
 /-- Placeholder: any point in the complement connects to `0` or `1` in the complement. -/
 lemma jordan_compl_path_to_zero_or_one (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
     (hz : z ∈ Set.compl (JordanCurveImage γ)) :
     (∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) ∨
       (∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) := by
   -- TODO: core Jordan curve theorem separation (existence of paths).
-  sorry
+  rcases jordan_compl_mem_interior_or_exterior γ hγ hz with hz' | hz'
+  · exact Or.inl (path_to_zero_of_mem_jordanInterior γ hγ hz')
+  · exact Or.inr (path_to_one_of_mem_jordanExterior γ hγ hz')
 
 /-- Placeholder: every point in the complement is in the interior or exterior component. -/
 lemma jordan_curve_compl_subset_union (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
@@ -161,28 +268,32 @@ lemma jordan_curve_interior_exterior_disjoint (γ : ℝ → ℂ) (hγ : JordanCu
 
 -- TODO: local separation at curve points: every neighborhood hits the interior.
 -- TODO: the curve has empty interior; any neighborhood of a curve point meets the complement.
-lemma jordan_curve_image_interior_empty (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
-    interior (JordanCurveImage γ) = ∅ := by
-  -- TODO: show the image of a Jordan curve has empty interior in ℂ.
-  sorry
-
 lemma jordan_curve_neighborhood_meets_compl (γ : ℝ → ℂ) (hγ : JordanCurve γ)
-    {z : ℂ} (hz : z ∈ JordanCurveImage γ) (U : Set ℂ)
+    {z : ℂ} (_hz : z ∈ JordanCurveImage γ) (U : Set ℂ)
     (hU : IsOpen U) (hzU : z ∈ U) :
     (U ∩ Set.compl (JordanCurveImage γ)).Nonempty := by
   -- Core Jordan curve theorem: the curve has empty interior and is a separator.
-  by_contra hne
-  have hsubset : U ⊆ JordanCurveImage γ := by
-    intro w hw
-    by_contra hnot
-    exact hne ⟨w, hw, hnot⟩
-  have hU_nhds : U ∈ 𝓝 z := IsOpen.mem_nhds hU hzU
-  have hnhds : JordanCurveImage γ ∈ 𝓝 z :=
-    Filter.mem_of_superset hU_nhds hsubset
-  have hz_int : z ∈ interior (JordanCurveImage γ) :=
-    (mem_interior_iff_mem_nhds).2 hnhds
-  have h_empty := jordan_curve_image_interior_empty γ hγ
-  simpa [h_empty] using hz_int
+  sorry
+
+-- TODO: the complement of a Jordan curve image is dense.
+lemma jordan_curve_image_compl_dense (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+    Dense (Set.compl (JordanCurveImage γ)) := by
+  -- This is another formulation of the local separation property.
+  refine (dense_iff_inter_open).2 ?_
+  intro U hU hU_ne
+  classical
+  by_cases hsub : U ⊆ JordanCurveImage γ
+  · rcases hU_ne with ⟨z, hzU⟩
+    have hz : z ∈ JordanCurveImage γ := hsub hzU
+    exact jordan_curve_neighborhood_meets_compl γ hγ hz U hU hzU
+  · rcases hU_ne with ⟨z, hzU⟩
+    rcases not_subset.mp hsub with ⟨w, hwU, hwnot⟩
+    exact ⟨w, hwU, hwnot⟩
+
+lemma jordan_curve_image_interior_empty (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
+    interior (JordanCurveImage γ) = ∅ := by
+  -- TODO: show the image of a Jordan curve has empty interior in ℂ.
+  exact (interior_eq_empty_iff_dense_compl).2 (jordan_curve_image_compl_dense γ hγ)
 
 -- TODO: local separation inside the complement near a curve point.
 lemma jordan_curve_neighborhood_meets_interior_or_exterior (γ : ℝ → ℂ) (hγ : JordanCurve γ)
@@ -190,7 +301,16 @@ lemma jordan_curve_neighborhood_meets_interior_or_exterior (γ : ℝ → ℂ) (h
     (hU : IsOpen U) (hzU : z ∈ U) :
     (U ∩ JordanInterior γ).Nonempty ∨ (U ∩ JordanExterior γ).Nonempty := by
   -- Use a point of `U` in the complement and the path-to-zero-or-one lemma.
-  sorry
+  obtain ⟨w, hwU, hwcompl⟩ := jordan_curve_neighborhood_meets_compl γ hγ hz U hU hzU
+  have hpath :
+      (∃ p : Path w 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) ∨
+        (∃ p : Path w 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) :=
+    jordan_compl_path_to_zero_or_one γ hγ hwcompl
+  rcases hpath with ⟨p, hp⟩ | ⟨p, hp⟩
+  · have hw : w ∈ JordanInterior γ := mem_jordanInterior_of_path γ p hp
+    exact Or.inl ⟨w, hwU, hw⟩
+  · have hw : w ∈ JordanExterior γ := mem_jordanExterior_of_path γ p hp
+    exact Or.inr ⟨w, hwU, hw⟩
 
 lemma jordan_curve_local_separation (γ : ℝ → ℂ) (hγ : JordanCurve γ)
     {z : ℂ} (hz : z ∈ JordanCurveImage γ) (U : Set ℂ)

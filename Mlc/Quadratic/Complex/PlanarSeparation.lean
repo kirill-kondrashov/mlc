@@ -2,6 +2,7 @@ import Mlc.Quadratic.Complex.Equipotential
 import Mlc.Quadratic.Complex.EquipotentialJordanPlan
 import Mlc.Quadratic.Complex.JordanBasics
 import Mlc.Quadratic.Complex.JordanCurve
+import Mlc.Quadratic.Complex.JordanSeparationPlan
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Topology.Connected.LocallyConnected
@@ -34,13 +35,6 @@ structure JordanSeparationData (γ : ℝ → ℂ) (S T : Set ℂ) : Prop where
   hcomp : connectedComponentIn T 0 ⊆ Set.compl (JordanCurveImage γ)
 
 /-- Jordan curve images of the unit interval are compact. -/
-lemma jordan_curve_image_compact (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
-    IsCompact (JordanCurveImage γ) := by
-  have hcont : Continuous γ := hγ.1
-  have hcont_on : ContinuousOn γ (Set.Icc (0 : ℝ) 1) := hcont.continuousOn
-  simpa [JordanCurveImage] using
-    (IsCompact.image_of_continuousOn (s := Set.Icc (0 : ℝ) 1) isCompact_Icc hcont_on)
-
 lemma jordan_curve_image_nonempty (γ : ℝ → ℂ) : (JordanCurveImage γ).Nonempty := by
   refine ⟨γ 0, ?_⟩
   refine ⟨0, ?_, rfl⟩
@@ -52,24 +46,6 @@ lemma jordan_curve_image_connected (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
   have hcont_on : ContinuousOn γ (Set.Icc (0 : ℝ) 1) := hcont.continuousOn
   have hconn : IsConnected (Set.Icc (0 : ℝ) 1) := isConnected_Icc (by exact zero_le_one)
   simpa [JordanCurveImage] using hconn.image _ hcont_on
-
-lemma jordan_curve_image_closed (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
-    IsClosed (JordanCurveImage γ) := by
-  exact (jordan_curve_image_compact γ hγ).isClosed
-
-lemma jordan_curve_compl_open (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
-    IsOpen (Set.compl (JordanCurveImage γ)) := by
-  exact (jordan_curve_image_closed γ hγ).isOpen_compl
-
-/-- Placeholder: a Jordan curve separates the plane into interior/exterior components. -/
-lemma jordan_curve_separates (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
-    IsOpen (JordanInterior γ) ∧ IsOpen (JordanExterior γ) := by
-  have hopen : IsOpen (Set.compl (JordanCurveImage γ)) := jordan_curve_compl_open γ hγ
-  have h_int : IsOpen (JordanInterior γ) := by
-    simpa [JordanInterior] using (IsOpen.connectedComponentIn (F := Set.compl (JordanCurveImage γ)) hopen)
-  have h_ext : IsOpen (JordanExterior γ) := by
-    simpa [JordanExterior] using (IsOpen.connectedComponentIn (F := Set.compl (JordanCurveImage γ)) hopen)
-  exact ⟨h_int, h_ext⟩
 
 lemma jordan_curve_compl_decomp_of_partition (γ : ℝ → ℂ)
     (hpart : ∀ z ∈ Set.compl (JordanCurveImage γ),
@@ -136,78 +112,6 @@ lemma path_in_curve_image_between {γ : ℝ → ℂ} (hγ : JordanCurve γ)
 
 
 
-
-lemma jordan_interior_isConnected (γ : ℝ → ℂ)
-    (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ)) :
-    IsConnected (JordanInterior γ) := by
-  simpa [JordanInterior] using
-    (isConnected_connectedComponentIn_iff (x := (0 : ℂ))
-        (F := Set.compl (JordanCurveImage γ))).2 h0
-
-lemma jordan_exterior_isConnected (γ : ℝ → ℂ)
-    (h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ)) :
-    IsConnected (JordanExterior γ) := by
-  simpa [JordanExterior] using
-    (isConnected_connectedComponentIn_iff (x := (1 : ℂ))
-        (F := Set.compl (JordanCurveImage γ))).2 h1
-
-lemma jordan_interior_isPathConnected (γ : ℝ → ℂ) (hγ : JordanCurve γ)
-    (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ)) :
-    IsPathConnected (JordanInterior γ) := by
-  have hopen : IsOpen (JordanInterior γ) := (jordan_curve_separates γ hγ).1
-  have hconn : IsConnected (JordanInterior γ) := jordan_interior_isConnected γ h0
-  exact (IsOpen.isConnected_iff_isPathConnected hopen).1 hconn
-
-lemma jordan_exterior_isPathConnected (γ : ℝ → ℂ) (hγ : JordanCurve γ)
-    (h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ)) :
-    IsPathConnected (JordanExterior γ) := by
-  have hopen : IsOpen (JordanExterior γ) := (jordan_curve_separates γ hγ).2
-  have hconn : IsConnected (JordanExterior γ) := jordan_exterior_isConnected γ h1
-  exact (IsOpen.isConnected_iff_isPathConnected hopen).1 hconn
-
-lemma path_to_zero_of_mem_jordanInterior (γ : ℝ → ℂ) (hγ : JordanCurve γ)
-    {z : ℂ} (hz : z ∈ JordanInterior γ) :
-    ∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
-  have hnonempty : (JordanInterior γ).Nonempty := ⟨z, hz⟩
-  have h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ) := by
-    have hnonempty' :
-        (connectedComponentIn (Set.compl (JordanCurveImage γ)) 0).Nonempty := by
-      simpa [JordanInterior] using hnonempty
-    exact (connectedComponentIn_nonempty_iff
-        (x := (0 : ℂ)) (F := Set.compl (JordanCurveImage γ))).1 hnonempty'
-  have h0_in : (0 : ℂ) ∈ JordanInterior γ := by
-    simpa [JordanInterior] using
-      mem_connectedComponentIn (x := (0 : ℂ))
-        (F := Set.compl (JordanCurveImage γ)) h0
-  have hpathconn : IsPathConnected (JordanInterior γ) :=
-    jordan_interior_isPathConnected γ hγ h0
-  have hjoined : JoinedIn (JordanInterior γ) z 0 :=
-    hpathconn.joinedIn z hz 0 h0_in
-  refine ⟨hjoined.somePath, ?_⟩
-  intro t
-  exact jordan_interior_subset_compl γ (hjoined.somePath_mem t)
-
-lemma path_to_one_of_mem_jordanExterior (γ : ℝ → ℂ) (hγ : JordanCurve γ)
-    {z : ℂ} (hz : z ∈ JordanExterior γ) :
-    ∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ) := by
-  have hnonempty : (JordanExterior γ).Nonempty := ⟨z, hz⟩
-  have h1 : (1 : ℂ) ∈ Set.compl (JordanCurveImage γ) := by
-    have hnonempty' :
-        (connectedComponentIn (Set.compl (JordanCurveImage γ)) 1).Nonempty := by
-      simpa [JordanExterior] using hnonempty
-    exact (connectedComponentIn_nonempty_iff
-        (x := (1 : ℂ)) (F := Set.compl (JordanCurveImage γ))).1 hnonempty'
-  have h1_in : (1 : ℂ) ∈ JordanExterior γ := by
-    simpa [JordanExterior] using
-      mem_connectedComponentIn (x := (1 : ℂ))
-        (F := Set.compl (JordanCurveImage γ)) h1
-  have hpathconn : IsPathConnected (JordanExterior γ) :=
-    jordan_exterior_isPathConnected γ hγ h1
-  have hjoined : JoinedIn (JordanExterior γ) z 1 :=
-    hpathconn.joinedIn z hz 1 h1_in
-  refine ⟨hjoined.somePath, ?_⟩
-  intro t
-  exact jordan_exterior_subset_compl γ (hjoined.somePath_mem t)
 
 lemma mem_jordanInterior_of_segment (γ : ℝ → ℂ) {z : ℂ}
     (hseg : [z -[ℝ] (0 : ℂ)] ⊆ Set.compl (JordanCurveImage γ)) :
