@@ -75,20 +75,21 @@ theorem mlc_strategy
       PrimitiveRenormalizable c ∨ SatelliteRenormalizable c)
     (h_bridge :
       MoleculeConjectureRefined →
+      MLC.Quadratic.PuzzleBoundaryMotionHyp →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
   -- We need to show local connectivity at every point c ∈ MandelbrotSet
+  have h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp :=
+    MLC.Quadratic.puzzle_boundary_motion_hyp_of_onM_connected
+      (MLC.Quadratic.bottcher_green_sublevel_hyp_onM_connected_of_onM h_bottcher_onM h_green_conn)
   apply locallyConnectedSpace_of_locallyConnectedAt
   intro ⟨c, hc⟩
   rcases dichotomy c with h_fin_renorm | h_inf_renorm
   · -- Case 1: Finitely Renormalizable
-    have h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp :=
-      MLC.Quadratic.puzzle_boundary_motion_hyp_of_onM_connected
-        (MLC.Quadratic.bottcher_green_sublevel_hyp_onM_connected_of_onM h_bottcher_onM h_green_conn)
     exact mlc_finitely_renormalizable c hc h_motion h_fin_renorm (h_param_shrink c hc h_fin_renorm)
   · -- Case 2: Infinitely renormalizable
-    exact mlc_infinitely_renormalizable h_classify h_bridge c hc h_inf_renorm
+    exact mlc_infinitely_renormalizable h_classify h_bridge h_motion c hc h_inf_renorm
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -109,8 +110,8 @@ theorem mlc_conjecture : LocallyConnectedSpace mandelbrotSet := by
     intro c h_inf
     exact classify_infinitely_renormalizable c h_inf
   · -- Bridge from Molecule Conjecture to Satellite MLC
-    intro h_mol c hc h_sat
-    exact molecule_conjecture_bridge h_mol c hc h_sat
+    intro h_mol h_motion c hc h_sat
+    exact molecule_conjecture_bridge h_mol h_motion c hc h_sat
 
 end MainProof
 

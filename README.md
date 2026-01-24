@@ -125,5 +125,5 @@ All axioms used:
 - MLC.bottcher_onM_hyp
 - MLC.green_sublevel_connected_hyp
 - MLC.classify_infinitely_renormalizable
-- MLC.refined_conjecture_implies_lc
+- MLC.molecule_parameter_shrink
 ```

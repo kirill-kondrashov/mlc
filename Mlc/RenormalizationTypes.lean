@@ -122,10 +122,10 @@ theorem parameterToBMol_spec (c : ℂ) :
         refine ⟨0, ?_, ?_⟩
         · constructor
           · simp [U]
-          · simp [f, deriv_add_const, deriv_pow_field]
+          · simp [f]
         · intro y hy
           have h1 : deriv f y = 2 * y := by
-            simp [f, deriv_add_const, deriv_pow_field]
+            simp [f]
           have hzero : (2:ℂ) * y = 0 := by
             simpa [h1] using hy.2
           rcases mul_eq_zero.mp hzero with h2 | hy0
@@ -134,10 +134,10 @@ theorem parameterToBMol_spec (c : ℂ) :
       simple_critical_point := by
         intro c0 _hc0 h_deriv
         have h1 : deriv f c0 = 2 * c0 := by
-          simp [f, deriv_add_const, deriv_pow_field]
+          simp [f]
         have h_deriv_fun : deriv f = fun z => 2 * z := by
           ext z
-          simp [f, deriv_add_const, deriv_pow_field]
+          simp [f]
         rw [h1] at h_deriv
         rw [h_deriv_fun]
         rw [deriv_const_mul]
@@ -146,7 +146,7 @@ theorem parameterToBMol_spec (c : ℂ) :
         · exact differentiableAt_id
     }
   have h0 : 0 ∈ g.U ∧ deriv g.f 0 = 0 := by
-    simpa [g, f, U, deriv_add_const, deriv_pow_field]
+    simp [g, f, U]
   rcases g.unique_critical_point with ⟨c0, hc0, huniq⟩
   have hcp : criticalPoint g ∈ g.U ∧ deriv g.f (criticalPoint g) = 0 :=
     (Classical.choose_spec g.unique_critical_point).1

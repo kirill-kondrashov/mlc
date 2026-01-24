@@ -71,54 +71,45 @@ abbrev MoleculeConjectureRefined : Prop :=
     CombinatoriallyAssociated Rfast_HMol R_target ∧
     (∃ N, IsConjugateToShift R_target N)
 
-/-- Extract a parameter from a quadratic-like map (the critical value). -/
-noncomputable def bmolToParameter (g : BMol) : ℂ :=
-  criticalValue g
-
 /-! ### Bridge assumptions
 
 These capture the missing dictionary between quadratic parameters and the Molecule
 renormalization objects. They are intended to be discharged by constructing `parameterToBMol`
 explicitly and proving its analytic properties. -/
 
-/-- Molecule Conjecture implies local connectivity at parameters of renormalizable maps. -/
-axiom refined_conjecture_implies_lc
-    (h_mol : MoleculeConjectureRefined) (g : BMol)
-    (hc : bmolToParameter g ∈ MLC.Quadratic.MandelbrotSet)
-    (h_renorm : IsFastRenormalizable g) :
-    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet
-      ⟨bmolToParameter g, hc⟩
+/-- Molecule Conjecture implies parameter-piece shrinkage for satellite parameters. -/
+axiom molecule_parameter_shrink
+    (h_mol : MoleculeConjectureRefined) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c}
+
+/-- Local connectivity from Molecule shrinkage and a puzzle-boundary motion. -/
+theorem refined_conjecture_implies_lc
+    (h_mol : MoleculeConjectureRefined)
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact lc_at_of_shrink c hc h_motion (molecule_parameter_shrink h_mol c hc h_sat)
 
 /-- The bridge from the Molecule Conjecture to MLC for satellite parameters. -/
 theorem molecule_conjecture_bridge
     (h_mol : MoleculeConjectureRefined)
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  -- Reduce to the Molecule-side local connectivity statement and transport along the parameter map.
-  have hparam : bmolToParameter (parameterToBMol c) = c := by
-    simpa [bmolToParameter] using parameterToBMol_criticalValue c
-  have hc' : bmolToParameter (parameterToBMol c) ∈ MLC.Quadratic.MandelbrotSet := by
-    simpa [hparam] using hc
-  have h_lc :=
-    refined_conjecture_implies_lc h_mol (parameterToBMol c) hc' _h
-  have h_eq :
-      (⟨bmolToParameter (parameterToBMol c),
-        hc'⟩ :
-        MLC.Quadratic.MandelbrotSet) =
-      ⟨c, hc⟩ := by
-    apply Subtype.ext
-    simpa [bmolToParameter] using parameterToBMol_criticalValue c
-  simpa [h_eq] using h_lc
+  exact refined_conjecture_implies_lc h_mol h_motion c hc _h
 
 theorem molecule_conjecture_implies_mlc_satellite
     (h_bridge :
       -- The literature asserts this bridge; see Appendix C of arXiv:1703.01206v3
       -- and Conjecture 1.2 discussion in arXiv:2512.24171v1.
       MoleculeConjectureRefined →
+      MLC.Quadratic.PuzzleBoundaryMotionHyp →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact h_bridge Molecule.molecule_conjecture_refined c hc h
+  exact h_bridge Molecule.molecule_conjecture_refined h_motion c hc h
 
 end MLC
