@@ -112,12 +112,18 @@ Status note:
 
 Output:
 ```
-✅ The proof of 'MLC.MLC_Conjecture' is free of 'sorry'.
+✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
-- propext
 - Quot.sound
+- propext
 - Classical.choice
+- Mlc.MandelbrotEquivalence.boundedOrbit_of_not_tendsto_infinity
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected
+- MLC.yoccoz_parameter_shrink
+- MLC.bottcher_onM_hyp
+- MLC.green_sublevel_connected_hyp
+- MLC.classify_infinitely_renormalizable
+- MLC.molecule_conjecture_bridge
 ```
