@@ -117,7 +117,6 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- Mlc.MandelbrotEquivalence.boundedOrbit_of_not_tendsto_infinity
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.slodkowski_theorem
 - MLC.Quadratic.mandelbrot_set_connected

@@ -1,4 +1,5 @@
 import Yoccoz.Quadratic.Complex.Basic
+import Yoccoz.Quadratic.Complex.Escape
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Dynamics.FixedPoints.Basic
@@ -35,13 +36,38 @@ abbrev ourMandelbrotSet := MLC.Quadratic.MandelbrotSet
 /-- The quadratic map `z ↦ z^2 + c`. -/
 def fc (c : ℂ) (z : ℂ) : ℂ := z^2 + c
 
-/-! ### Escape radius axiom
+/-! ### Escape radius lemma
 
-This axiom packages the standard escape radius argument for quadratic polynomials:
-if the critical orbit does not tend to infinity, then it is bounded. -/
-axiom boundedOrbit_of_not_tendsto_infinity (c : ℂ) :
+If the critical orbit does not tend to infinity, then it is bounded. -/
+theorem boundedOrbit_of_not_tendsto_infinity (c : ℂ) :
     ¬ Tendsto (fun k ↦ ‖(fc c)^[k] 0‖) atTop atTop →
-      MLC.Quadratic.boundedOrbit c 0
+      MLC.Quadratic.boundedOrbit c 0 := by
+  intro h_not_tendsto
+  by_contra h_unbounded
+  -- Unbounded orbit: exceed any radius, hence exceed the escape radius R(c).
+  have h_unbounded' : ∀ M : ℝ, ∃ n : ℕ, ‖MLC.Quadratic.orbit c 0 n‖ > M := by
+    intro M
+    by_contra hM
+    have h_le : ∀ n : ℕ, ‖MLC.Quadratic.orbit c 0 n‖ ≤ M := by
+      intro n
+      by_contra h_le
+      exact hM ⟨n, lt_of_not_ge h_le⟩
+    exact h_unbounded ⟨M, h_le⟩
+  rcases h_unbounded' (MLC.Quadratic.R c) with ⟨n0, hn0⟩
+  have h_tendsto_orbit :
+      Tendsto (fun k ↦ ‖MLC.Quadratic.orbit c 0 k‖) atTop atTop := by
+    -- Escape lemma: once past R(c), the orbit grows without bound.
+    rw [Filter.tendsto_atTop]
+    intro M
+    rcases MLC.Quadratic.escape_lemma (c:=c) (z:=0) n0 hn0 M with ⟨N, hN⟩
+    rw [Filter.eventually_atTop]
+    refine ⟨N, ?_⟩
+    intro m hm
+    exact le_of_lt (hN m hm)
+  have h_tendsto :
+      Tendsto (fun k ↦ ‖(fc c)^[k] 0‖) atTop atTop := by
+    simpa [MLC.Quadratic.orbit, MLC.Quadratic.fc, fc] using h_tendsto_orbit
+  exact h_not_tendsto h_tendsto
 
 lemma tendsto_cobounded_iff_norm_tendsto_atTop {α : Type*} [NormedAddCommGroup α] (f : ℕ → α) :
     Tendsto f atTop (cobounded α) ↔ Tendsto (fun n ↦ ‖f n‖) atTop atTop := by
