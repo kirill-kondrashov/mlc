@@ -5,6 +5,8 @@ import Yoccoz.Quadratic.Complex.Green
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.PuzzleLemmas
 import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.Quadratic.Complex.Equipotential
+import Mlc.Quadratic.Complex.PuzzleBoundaryMotionPlan
 import Mlc.CheckAxioms
 import Mlc.MainConjecture
 import Mlc.LcAtOfShrink

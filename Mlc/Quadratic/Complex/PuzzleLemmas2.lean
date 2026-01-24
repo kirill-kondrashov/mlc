@@ -13,6 +13,7 @@ import Mathlib.Tactic.GCongr
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.PuzzleLemmas
 import Mlc.Quadratic.Complex.Axioms
+import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 
 namespace MLC.Quadratic
 
@@ -40,7 +41,7 @@ set_option maxHeartbeats 1600000
     of the dynamical plane implies structural stability of open sets in the parameter plane.
 
     Proof idea:
-    1.  We invoke `puzzle_boundary_motion_exists` (axiom) to obtain a holomorphic motion `h`
+    1.  We invoke the boundary motion hypothesis to obtain a holomorphic motion `h`
         of the boundary of the puzzle piece over a small disk `D` in parameter space.
     2.  We apply **Slodkowski's Theorem** (`slodkowski_theorem`) to extend this motion to a
         holomorphic motion `H` of the entire plane.
@@ -48,11 +49,12 @@ set_option maxHeartbeats 1600000
         Specifically, for any parameter `c'` in the disk `D`, the point `0` remains inside the
         puzzle piece if it started there. This shows `ParaPuzzlePiece n` contains a neighborhood `D`,
         hence is open. -/
-theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
+theorem para_puzzle_piece_open (n : ℕ) (h_motion : PuzzleBoundaryMotionHyp) :
+    IsOpen (ParaPuzzlePiece n) := by
   rw [Metric.isOpen_iff]
   intro c₀ hc₀
   -- Use the existence of boundary motion
-  obtain ⟨r, hr, E, h, h_prop⟩ := puzzle_boundary_motion_exists n c₀ hc₀
+  obtain ⟨r, hr, E, h, h_prop⟩ := h_motion.motion n c₀ hc₀
   -- Apply Slodkowski's Theorem to extend the motion
   obtain ⟨H, hH⟩ := slodkowski_theorem h
   -- Construct the neighborhood
@@ -77,8 +79,7 @@ theorem para_puzzle_piece_open (n : ℕ) : IsOpen (ParaPuzzlePiece n) := by
       dsimp [t]
       field_simp [ne_of_gt hr]
       ring
-    rw [← h_c_eq] at h_in
-    exact h_in
+    simpa [rescale_param, h_c_eq] using h_in
 
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point.
@@ -93,8 +94,7 @@ lemma para_puzzle_piece_basis (c : ℂ) :
   -- We show M ⊆ ⋂ P_n, which implies M ⊆ {c}, a contradiction.
   have h_M_sub : MandelbrotSet ⊆ ⋂ n, ParaPuzzlePiece n := by
     apply subset_iInter
-    intro n
-    intro m hm
+    intro n m hm
     rw [ParaPuzzlePiece, mem_setOf_eq]
 
     have h_conn : IsConnected (K m) := filled_julia_set_connected hm
