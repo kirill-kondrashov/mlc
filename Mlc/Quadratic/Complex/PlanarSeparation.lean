@@ -137,39 +137,6 @@ lemma path_in_curve_image_between {γ : ℝ → ℂ} (hγ : JordanCurve γ)
 
 
 
-lemma mem_connectedComponentIn_of_path {F : Set ℂ} {x y : ℂ} (γ : Path x y)
-    (hγ : ∀ t, γ t ∈ F) :
-    x ∈ connectedComponentIn F y := by
-  have hconn : IsConnected (Set.range γ) := by
-    have hcont_on : ContinuousOn γ (Set.univ : Set unitInterval) :=
-      (Path.continuous γ).continuousOn
-    have hconn_univ : IsConnected (Set.univ : Set unitInterval) := isConnected_univ
-    have hconn_img : IsConnected (γ '' (Set.univ : Set unitInterval)) :=
-      hconn_univ.image γ hcont_on
-    simpa [Set.image_univ] using hconn_img
-  have hy : y ∈ Set.range γ := Path.target_mem_range γ
-  have hsub : Set.range γ ⊆ F := by
-    intro z hz
-    rcases hz with ⟨t, rfl⟩
-    exact hγ t
-  have hsubset : Set.range γ ⊆ connectedComponentIn F y :=
-    hconn.isPreconnected.subset_connectedComponentIn hy hsub
-  exact hsubset (Path.source_mem_range γ)
-
-lemma mem_jordanInterior_of_path (γ : ℝ → ℂ) {z : ℂ} (p : Path z 0)
-    (hp : ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) :
-    z ∈ JordanInterior γ := by
-  have hz : z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 0 :=
-    mem_connectedComponentIn_of_path p hp
-  simpa [JordanInterior] using hz
-
-lemma mem_jordanExterior_of_path (γ : ℝ → ℂ) {z : ℂ} (p : Path z 1)
-    (hp : ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) :
-    z ∈ JordanExterior γ := by
-  have hz : z ∈ connectedComponentIn (Set.compl (JordanCurveImage γ)) 1 :=
-    mem_connectedComponentIn_of_path p hp
-  simpa [JordanExterior] using hz
-
 lemma jordan_interior_isConnected (γ : ℝ → ℂ)
     (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ)) :
     IsConnected (JordanInterior γ) := by
@@ -263,20 +230,6 @@ lemma mem_jordanExterior_of_segment (γ : ℝ → ℂ) {z : ℂ}
     intro t
     exact hrange ⟨t, rfl⟩
   exact mem_jordanExterior_of_path γ p hp
-
-lemma jordan_compl_path_to_zero_or_one (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
-    (hz : z ∈ Set.compl (JordanCurveImage γ)) :
-    (∃ p : Path z 0, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) ∨
-      (∃ p : Path z 1, ∀ t, p t ∈ Set.compl (JordanCurveImage γ)) := by
-  -- TODO: replace the use of `jordan_curve_compl_decomp` once the Jordan curve theorem
-  -- is available as a theorem instead of a placeholder.
-  have hdecomp : Set.compl (JordanCurveImage γ) =
-      JordanInterior γ ∪ JordanExterior γ := jordan_curve_compl_decomp γ hγ
-  have hz' : z ∈ JordanInterior γ ∪ JordanExterior γ := by
-    simpa [hdecomp] using hz
-  rcases hz' with hz' | hz'
-  · exact Or.inl (path_to_zero_of_mem_jordanInterior γ hγ hz')
-  · exact Or.inr (path_to_one_of_mem_jordanExterior γ hγ hz')
 
 lemma mem_jordanInterior_or_exterior_of_path (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
     (hz : z ∈ Set.compl (JordanCurveImage γ)) :
