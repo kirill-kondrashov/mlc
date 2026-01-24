@@ -213,7 +213,7 @@ lemma jordan_compl_mem_component_zero_or_one (γ : ℝ → ℂ) (hγ : JordanCur
       connectedComponentIn (Set.compl (JordanCurveImage γ)) 1 := by
   classical
   obtain ⟨U, V, hUconn, hVconn, hUcomp, hVcomp, hUVdisj, hUVunion, h0U, h1V⟩ :=
-    jordan_curve_complement_has_two_components γ hγ
+    (jordan_separation_package_plan γ hγ).complement_has_two_components
   have hUsub : U ⊆ connectedComponentIn (Set.compl (JordanCurveImage γ)) 0 := by
     exact hUconn.isPreconnected.subset_connectedComponentIn h0U hUcomp
   have hVsub : V ⊆ connectedComponentIn (Set.compl (JordanCurveImage γ)) 1 := by
