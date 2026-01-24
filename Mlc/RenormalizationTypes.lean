@@ -15,7 +15,16 @@ def PrimitiveRenormalizable (c : ℂ) : Prop :=
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
 /-- Satellite renormalizable parameters (Dudko-Lyubich-Selinger). -/
-opaque parameterToBMol : ℂ → BMol
+axiom parameterToBMol_spec (c : ℂ) :
+  ∃ g : BMol, g.f = (fun z : ℂ => z^2 + c) ∧ criticalValue g = c
+
+/-- A quadratic-like map attached to parameter `c` for the Molecule framework. -/
+noncomputable def parameterToBMol (c : ℂ) : BMol :=
+  Classical.choose (parameterToBMol_spec c)
+
+lemma parameterToBMol_criticalValue (c : ℂ) :
+    criticalValue (parameterToBMol c) = c := by
+  simpa using (Classical.choose_spec (parameterToBMol_spec c)).2
 
 /-- Satellite renormalizable parameters, modeled by fast renormalizability of the associated BMol map. -/
 def SatelliteRenormalizable (c : ℂ) : Prop :=

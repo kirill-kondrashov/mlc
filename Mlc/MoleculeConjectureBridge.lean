@@ -71,14 +71,18 @@ abbrev MoleculeConjectureRefined : Prop :=
     CombinatoriallyAssociated Rfast_HMol R_target ∧
     (∃ N, IsConjugateToShift R_target N)
 
-/-- Extract a parameter from a quadratic-like map. -/
-opaque bmolToParameter : BMol → ℂ
+/-- Extract a parameter from a quadratic-like map (the critical value). -/
+noncomputable def bmolToParameter (g : BMol) : ℂ :=
+  criticalValue g
+
+/-! ### Bridge assumptions
+
+These capture the missing dictionary between quadratic parameters and the Molecule
+renormalization objects. They are intended to be discharged by constructing `parameterToBMol`
+explicitly and proving its analytic properties. -/
 
 /-- The parameter attached to a quadratic-like map belongs to the Mandelbrot set. -/
 axiom bmol_param_in_mandelbrot (g : BMol) : bmolToParameter g ∈ MLC.Quadratic.MandelbrotSet
-
-/-- The parameter map is a left inverse of `parameterToBMol`. -/
-axiom parameter_roundtrip (c : ℂ) : bmolToParameter (parameterToBMol c) = c
 
 /-- Molecule Conjecture implies local connectivity at parameters of renormalizable maps. -/
 axiom refined_conjecture_implies_lc
@@ -100,7 +104,7 @@ theorem molecule_conjecture_bridge
         MLC.Quadratic.MandelbrotSet) =
       ⟨c, hc⟩ := by
     apply Subtype.ext
-    simp [parameter_roundtrip]
+    simpa [bmolToParameter] using parameterToBMol_criticalValue c
   simpa [h_eq] using h_lc
 
 theorem molecule_conjecture_implies_mlc_satellite
