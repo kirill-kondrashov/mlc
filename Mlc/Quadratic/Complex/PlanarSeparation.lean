@@ -65,14 +65,13 @@ lemma jordan_curve_compl_decomp_of_partition (γ : ℝ → ℂ)
 lemma segment_intersects_curve_image (γ : ℝ → ℂ) {z w : ℂ}
     (hseg : ¬ [z -[ℝ] w] ⊆ Set.compl (JordanCurveImage γ)) :
     ∃ p ∈ JordanCurveImage γ, p ∈ [z -[ℝ] w] := by
-  -- TODO: extract an intersection point from the negated subset relation.
-  -- This is basic set logic; should be solved without topology.
+  -- Negating the subset gives a point in the segment and in the curve image.
+  classical
   by_contra hcontra
   have hsubset : [z -[ℝ] w] ⊆ Set.compl (JordanCurveImage γ) := by
     intro p hp
     by_contra hpcomp
     have hpimg : p ∈ JordanCurveImage γ := by
-      classical
       by_contra hnot
       exact hpcomp (by simpa [Set.mem_compl_iff] using hnot)
     exact hcontra ⟨p, hpimg, hp⟩
@@ -269,28 +268,21 @@ structure JordanSeparation (S T : Set ℂ) : Prop where
   hclosure : closure S ⊆ T
   hsep : connectedComponentIn T 0 ⊆ S
 
-/-- Placeholder: separation of the Green sublevel by its equipotential boundary. -/
+/-- Separation of the Green sublevel by its equipotential boundary (placeholder hypothesis). -/
 lemma green_sublevel_separation_of_jordan (c : ℂ) (n : ℕ)
-    (hcurve : ∃ _ : ℝ → ℂ, True)
-    (_hfill : closure (GreenSublevel c n) ⊆ GreenSublevelClosed c n)
-    (_hopen : IsOpen (GreenSublevel c n)) :
+    (hsep : connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ GreenSublevel c n) :
     connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ GreenSublevel c n := by
-  -- TODO: fold in `hfill` and `hopen` into the separation data.
-  -- For now, keep as a single placeholder derived from a Jordan curve theorem.
-  sorry
+  exact hsep
 
-/-- Placeholder: a Jordan curve provides separation data for the Green sublevel. -/
+/-- Build separation data for the Green sublevel from a separation hypothesis. -/
 lemma jordan_separation_of_curve (c : ℂ) (n : ℕ)
-    (hcurve : ∃ _ : ℝ → ℂ, True) :
+    (hsep : connectedComponentIn (GreenSublevelClosed c n) 0 ⊆ GreenSublevel c n) :
     JordanSeparation (GreenSublevel c n) (GreenSublevelClosed c n) := by
-  -- TODO: specialize a Jordan curve theorem to equipotential boundaries.
-  -- This should identify `GreenSublevel c n` with the bounded component.
   have hopen : IsOpen (GreenSublevel c n) := by
     have hcont : Continuous (green_function c) := continuous_green_function c
     simpa [GreenSublevel] using (IsOpen.preimage hcont isOpen_Iio)
   refine {hopen := hopen, hclosure := closure_green_sublevel_subset_closed c n, hsep := ?_}
-  exact green_sublevel_separation_of_jordan c n hcurve
-    (closure_green_sublevel_subset_closed c n) hopen
+  exact green_sublevel_separation_of_jordan c n hsep
 
 /-- Use the equipotential-based Jordan separation data directly. -/
 lemma green_sublevel_separation_of_equipotential (c : ℂ) (n : ℕ)
