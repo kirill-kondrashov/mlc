@@ -329,6 +329,49 @@ lemma jordan_compl_mem_interior_or_exterior_of_frontier (γ : ℝ → ℂ) (_hγ
     · left
       simpa [hJV] using hzV
 
+/-- Derive the interior frontier equality from the boundary decomposition. -/
+lemma jordan_curve_frontier_interior_of_frontier (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ))
+    (h_frontier : ∃ U V : Set ℂ,
+      IsConnected U ∧ IsConnected V ∧
+      IsOpen U ∧ IsOpen V ∧
+      Disjoint U V ∧
+      U ∪ V = Set.compl (JordanCurveImage γ) ∧
+      frontier U = JordanCurveImage γ ∧
+      frontier V = JordanCurveImage γ) :
+    frontier (JordanInterior γ) = JordanCurveImage γ := by
+  classical
+  obtain ⟨U, V, hUconn, hVconn, hUopen, hVopen, hUVdisj, hUVunion, hfrontU, hfrontV⟩ :=
+    h_frontier
+  have hUsub : U ⊆ Set.compl (JordanCurveImage γ) := by
+    intro w hw
+    have : w ∈ U ∪ V := Or.inl hw
+    simpa [hUVunion] using this
+  have hVsub : V ⊆ Set.compl (JordanCurveImage γ) := by
+    intro w hw
+    have : w ∈ U ∪ V := Or.inr hw
+    simpa [hUVunion] using this
+  by_cases h0U : (0 : ℂ) ∈ U
+  · have hJU : JordanInterior γ = U := by
+      have hF : Set.compl (JordanCurveImage γ) = U ∪ V := hUVunion.symm
+      simpa [JordanInterior] using
+        connectedComponentIn_eq_of_disjoint_open_cover_plan (F := Set.compl (JordanCurveImage γ))
+          (U := U) (V := V) (x := (0 : ℂ)) hF hUopen hVopen hUconn hUVdisj h0U hUsub
+    simp [hJU, hfrontU]
+  · have h0V : (0 : ℂ) ∈ V := by
+      have h0UV : (0 : ℂ) ∈ U ∪ V := by
+        simpa [hUVunion] using h0
+      rcases h0UV with h0U' | h0V
+      · exact (h0U h0U').elim
+      · exact h0V
+    have hJV : JordanInterior γ = V := by
+      have hF : Set.compl (JordanCurveImage γ) = V ∪ U := by
+        simp [hUVunion, Set.union_comm]
+      simpa [JordanInterior] using
+        connectedComponentIn_eq_of_disjoint_open_cover_plan (F := Set.compl (JordanCurveImage γ))
+          (U := V) (V := U) (x := (0 : ℂ)) hF hVopen hUopen hVconn hUVdisj.symm h0V hVsub
+    simp [hJV, hfrontV]
+
 /-- Abstract separation statement: the complement has exactly two connected components. -/
 lemma jordan_curve_complement_has_two_components (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
     (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ))
@@ -424,7 +467,6 @@ lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
       U ∪ V = Set.compl (JordanCurveImage γ) ∧
       frontier U = JordanCurveImage γ ∧
       frontier V = JordanCurveImage γ)
-    (h_frontier_interior : frontier (JordanInterior γ) = JordanCurveImage γ)
     (h_local : ∀ {z : ℂ}, z ∈ JordanCurveImage γ → ∀ U : Set ℂ,
       IsOpen U → z ∈ U → (U ∩ JordanInterior γ).Nonempty) :
     JordanSeparationPackage γ := by
@@ -457,7 +499,7 @@ lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
   · exact jordan_interior_exterior_disjoint_plan γ hγ h_disj
   · exact h_two
   · exact jordan_curve_component_frontier γ hγ h_frontier
-  · exact jordan_curve_frontier_interior_plan γ hγ h_frontier_interior
+  · exact jordan_curve_frontier_interior_of_frontier γ hγ h0 h_frontier
   · intro z hz U hU hzU
     exact jordan_curve_local_separation_plan γ hγ hz U hU hzU (h_local hz U hU hzU)
 
