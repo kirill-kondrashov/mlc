@@ -18,7 +18,15 @@ noncomputable section
 Plan for proving the Jordan separation statement used by `JordanCurve.lean`.
 
 The goal is to show the complement of a Jordan curve image has exactly two components.
-This file records the intended steps with `sorry` placeholders, without adding axioms.
+This file now replaces sorries with hypothesis-style lemmas, but the core inputs
+are still assumptions: empty interior of the curve image, the boundary decomposition
+of the complement into two open components with the curve as frontier, and a
+component-separation hypothesis distinguishing the `0`/`1` components.
+
+Until these inputs are proved, `JordanCurve.lean` and `PlanarSeparation.lean`
+remain conditional, and the puzzle-boundary motion chain in
+`Mlc/Quadratic/Complex/PuzzleBoundaryMotionPlan.lean` cannot be fully discharged.
+That, in turn, keeps the MLC proof skeleton dependent on analytic hypotheses.
 -/
 
 /-- Consolidated Jordan separation package (placeholders until fully proved). -/

@@ -13,7 +13,11 @@ Plan for proving equipotential Jordan curve data.
 
 This file records the missing analytic inputs needed to derive
 `equipotential_jordan_data` from Böttcher coordinates and Green function facts.
-It is not imported by the main development yet.
+The remaining work is to prove the Böttcher/Green identities, continuity, and
+injectivity needed to show that equipotentials are Jordan curves with the
+correct separation properties. Until then, downstream separation results in
+`PlanarSeparation.lean` and the puzzle-boundary motion plan remain conditional,
+which keeps the MLC pipeline dependent on these analytic hypotheses.
 -/
 
 /-- Böttcher coordinates relate the Green function to the norm (placeholder hypothesis). -/

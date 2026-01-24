@@ -18,7 +18,11 @@ set_option linter.unnecessarySimpa false
 Proof plan for eliminating the boundary-motion hypothesis.
 
 Goal: construct `PuzzleBoundaryMotionHyp` from analytic inputs, without axioms.
-This file provides lemma skeletons (with `sorry`) that isolate the needed steps.
+This file now uses hypothesis-style lemmas rather than sorries, but the missing
+pieces are still substantial: analytic Böttcher data, parameter-disk stability
+inside `M`, equipotential Jordan curve data, and the Jordan separation package.
+These feed the holomorphic motion needed for parameter puzzle stability; until
+they are proved, the MLC pipeline retains the boundary-motion hypothesis.
 Note: the parameter-disk stability is only valid on interior points of `M`.
 -/
 

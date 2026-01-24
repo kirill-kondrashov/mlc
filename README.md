@@ -7,6 +7,22 @@
 This repository is a proof skeleton. It compiles and isolates the main logical
 dependencies, but several deep inputs remain axiomatic.
 
+Plan file status:
+
+- `Mlc/Quadratic/Complex/JordanSeparationPlan.lean` still assumes key Jordan curve
+  inputs (empty interior of the curve image, a boundary decomposition into two
+  components with the curve as frontier, and a component-separation hypothesis
+  distinguishing `0` and `1`). These feed `JordanCurve.lean` and
+  `PlanarSeparation.lean`, so the puzzle-boundary motion chain remains conditional.
+- `Mlc/Quadratic/Complex/EquipotentialJordanPlan.lean` still assumes the analytic
+  Böttcher/Green identities, continuity, and injectivity needed to show
+  equipotentials are Jordan curves with the right separation properties.
+- `Mlc/Quadratic/Complex/PuzzleBoundaryMotionPlan.lean` still depends on analytic
+  Böttcher data, parameter-disk stability in `M`, equipotential Jordan data, and
+  the Jordan separation package. Until these are proved, the boundary-motion
+  hypothesis cannot be discharged.
+No `*Plan.lean` file is fully discharged yet, so none have been renamed.
+
 For the Molecule Conjecture track, `Mlc/MoleculeConjecture.lean` currently
 re-exports the refined conjecture statement from an external `Molecule` package
 located at `./.lake/packages/molecule-conjecture`. The file
