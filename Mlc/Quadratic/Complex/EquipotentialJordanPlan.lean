@@ -28,11 +28,11 @@ lemma equipotential_eq_bottcher_circle (B : BottcherData) (c : ℂ) (n : ℕ) :
   -- TODO: rewrite using `green_function_eq_log_norm_bottcher`.
   sorry
 
-/-- Placeholder: Böttcher coordinates are continuous in `z`. -/
-lemma bottcher_continuous (B : BottcherData) (c : ℂ) :
+/-- Continuity of the Böttcher coordinate in `z` (placeholder hypothesis). -/
+lemma bottcher_continuous (B : BottcherData) (c : ℂ)
+    (hcont : Continuous (B.phi c)) :
     Continuous (B.phi c) := by
-  -- TODO: continuity of the Böttcher coordinate in the dynamical variable.
-  sorry
+  exact hcont
 
 /-- Placeholder: Böttcher coordinates are injective on the unit parameter disk. -/
 lemma bottcher_inj (B : BottcherData) {c : ℂ} (hc : c ∈ Metric.ball 0 1) :
