@@ -372,6 +372,18 @@ lemma jordan_curve_frontier_interior_of_frontier (γ : ℝ → ℂ) (_hγ : Jord
           (U := V) (V := U) (x := (0 : ℂ)) hF hVopen hUopen hVconn hUVdisj.symm h0V hVsub
     simp [hJV, hfrontV]
 
+/-- Derive local separation from the frontier characterization. -/
+lemma jordan_curve_local_separation_of_frontier (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
+    (h_frontier_interior : frontier (JordanInterior γ) = JordanCurveImage γ)
+    {z : ℂ} (hz : z ∈ JordanCurveImage γ) (U : Set ℂ)
+    (hU : IsOpen U) (hzU : z ∈ U) :
+    (U ∩ JordanInterior γ).Nonempty := by
+  have hz_frontier : z ∈ frontier (JordanInterior γ) := by
+    simpa [h_frontier_interior] using hz
+  have hz_closure : z ∈ closure (JordanInterior γ) :=
+    (frontier_subset_closure (s := JordanInterior γ)) hz_frontier
+  exact (mem_closure_iff).1 hz_closure U hU hzU
+
 /-- Abstract separation statement: the complement has exactly two connected components. -/
 lemma jordan_curve_complement_has_two_components (γ : ℝ → ℂ) (_hγ : JordanCurve γ)
     (h0 : (0 : ℂ) ∈ Set.compl (JordanCurveImage γ))
@@ -466,9 +478,7 @@ lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
       Disjoint U V ∧
       U ∪ V = Set.compl (JordanCurveImage γ) ∧
       frontier U = JordanCurveImage γ ∧
-      frontier V = JordanCurveImage γ)
-    (h_local : ∀ {z : ℂ}, z ∈ JordanCurveImage γ → ∀ U : Set ℂ,
-      IsOpen U → z ∈ U → (U ∩ JordanInterior γ).Nonempty) :
+      frontier V = JordanCurveImage γ) :
     JordanSeparationPackage γ := by
   have h_two :
       ∃ U V : Set ℂ,
@@ -501,7 +511,10 @@ lemma jordan_separation_package_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ)
   · exact jordan_curve_component_frontier γ hγ h_frontier
   · exact jordan_curve_frontier_interior_of_frontier γ hγ h0 h_frontier
   · intro z hz U hU hzU
-    exact jordan_curve_local_separation_plan γ hγ hz U hU hzU (h_local hz U hU hzU)
+    have h_frontier_interior :
+        frontier (JordanInterior γ) = JordanCurveImage γ :=
+      jordan_curve_frontier_interior_of_frontier γ hγ h0 h_frontier
+    exact jordan_curve_local_separation_of_frontier γ hγ h_frontier_interior hz U hU hzU
 
 end
 
