@@ -1,6 +1,5 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
-import Mlc.CheckAxioms
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Topology.Constructions
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
@@ -22,11 +21,6 @@ open Complex Topology Filter Set
 noncomputable section
 
 variable (c : ℂ)
-
-/-- Correspondence between parameter and dynamical pieces. -/
-lemma para_dynamical_correspondence (c : ℂ) (n : ℕ) :
-    c ∈ ParaPuzzlePieceAt c n ↔ 0 ∈ DynamicalPuzzlePiece c n 0 := by
-  simp [ParaPuzzlePieceAt]
 
 set_option maxHeartbeats 1600000
 

@@ -54,15 +54,6 @@ structure BottcherMotionData (n : ℕ) (c₀ : ℂ) where
 structure BottcherMotionHyp where
   data : ∀ (n : ℕ) (c₀ : ℂ), BottcherMotionData n c₀
 
-/-- If the parameter disk stays inside the puzzle piece, then the motion preserves
-    parameter puzzle membership. -/
-theorem motion_preserves_para_piece_of_bottcher
-    (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)
-    (h_piece : ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ ParaPuzzlePieceAt c₀ n) :
-    motion_preserves_para_piece n c₀ r E (bottcher_motion B E) := by
-  intro _ _ t ht
-  exact h_piece t ht
-
 /-- Green-sublevel control yields parameter-piece preservation (axiom). -/
 axiom motion_preserves_para_piece_of_green_sublevel
     (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)

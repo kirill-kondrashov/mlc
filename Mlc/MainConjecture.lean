@@ -59,11 +59,6 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
   rw [or_comm]
   exact Classical.em _
 
-/-- If parameter pieces shrink to a point, they form a neighborhood basis at `c`. -/
-lemma parameter_shrink_basis (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
-    ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePieceAt c n ⊆ U := by
-  exact MLC.Quadratic.parameter_shrink c h
-
 /-- The core strategy theorem (internal). -/
 theorem mlc_strategy
     (h_param_shrink :

@@ -17,12 +17,6 @@ set_option linter.unnecessarySimpa false
 These axioms package deep results used in the main conjecture proof outline.
 -/
 
-/-- Yoccoz's theorem: divergence of moduli implies dynamical puzzle pieces shrink to `{0}`. -/
-def yoccoz_parameter_shrink (c : ℂ) (h : FinitelyRenormalizable c) :
-    (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
-  apply MLC.yoccoz_theorem
-  simpa [FinitelyRenormalizable, NonRenormalizable] using h
-
 /-- Parameter-plane shrinkage derived from Yoccoz's dynamical conclusion. -/
 theorem parameter_shrink_of_yoccoz :
     ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),

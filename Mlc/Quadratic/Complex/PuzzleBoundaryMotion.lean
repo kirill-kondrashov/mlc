@@ -64,18 +64,6 @@ theorem green_sublevel_contains_c (c : ℂ) (n : ℕ) (hc : c ∈ MandelbrotSet)
 structure GreenSublevelConnectedHyp : Prop where
   connected : ∀ (c : ℂ) (n : ℕ), c ∈ MandelbrotSet → IsConnected (GreenSublevel c n)
 
-/-- If the Green sublevel set is connected and contains both `0` and `c`,
-    then `c` lies in the corresponding parameter puzzle piece. -/
-theorem para_puzzle_piece_of_sublevel_connected (c : ℂ) (n : ℕ)
-    (h0 : 0 ∈ GreenSublevel c n)
-    (_hc : c ∈ GreenSublevel c n)
-    (_hconn : IsConnected (GreenSublevel c n)) :
-    c ∈ ParaPuzzlePieceAt c n := by
-  have h0_in : 0 ∈ DynamicalPuzzlePiece c n 0 := by
-    simpa [DynamicalPuzzlePiece, GreenSublevel] using
-      (mem_connectedComponentIn h0)
-  simpa [ParaPuzzlePieceAt] using h0_in
-
 /-- Rescale the unit disk to the parameter disk centered at `c₀` with radius `r`. -/
 def rescale_param (c₀ : ℂ) (r : ℝ) (t : ℂ) : ℂ :=
   c₀ + r * t
@@ -93,26 +81,6 @@ structure PuzzleBoundaryMotionHyp : Prop where
     ∀ (n : ℕ) (c₀ : ℂ) (_hc₀ : c₀ ∈ ParaPuzzlePieceAt c₀ n),
       ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
         motion_preserves_para_piece n c₀ r E h
-
-/-- The identity holomorphic motion on any set. -/
-def identity_motion (E : Set ℂ) : HolomorphicMotion E :=
-  { f := fun _ z => z
-    h_zero := by intro z hz; rfl
-    h_inj := by
-      intro t ht x hx y hy hxy
-      simpa using hxy
-    h_holo := by
-      intro z hz
-      simpa using (differentiableOn_const : DifferentiableOn ℂ (fun _ : ℂ => z) (Metric.ball 0 1)) }
-
-/-- Existence of a holomorphic motion on any set (trivial identity motion). -/
-theorem exists_holomorphic_motion (E : Set ℂ) : Nonempty (HolomorphicMotion E) := by
-  exact ⟨identity_motion E⟩
-
-/-- A holomorphic motion on the puzzle boundary (trivial identity motion). -/
-theorem puzzle_boundary_motion_trivial (c : ℂ) (n : ℕ) :
-    Nonempty (HolomorphicMotion (PuzzleBoundary c n)) := by
-  exact exists_holomorphic_motion (PuzzleBoundary c n)
 
 /-- Assemble the data needed for a parameter-stability motion. -/
 structure PuzzleBoundaryMotionData (n : ℕ) (c₀ : ℂ) where
