@@ -1,8 +1,10 @@
 import Mlc.Quadratic.Complex.JordanBasics
 import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.LocallyConvex.WithSeminorms
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Topology.Connected.PathConnected
 import Mathlib.Topology.Connected.LocPathConnected
+import Mathlib.Topology.Order.Compact
 import Mathlib.Topology.Path
 import Mathlib.Topology.Closure
 
@@ -63,7 +65,14 @@ lemma jordan_curve_image_interior_empty_plan (γ : ℝ → ℂ) (hγ : JordanCur
 /-- The complement of a Jordan curve image is open and locally path-connected. -/
 lemma jordan_curve_compl_locPathConnected_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) :
     LocPathConnectedSpace (Set.compl (JordanCurveImage γ)) := by
-  sorry
+  have hcont : Continuous γ := hγ.1
+  have hcont_on : ContinuousOn γ (Set.Icc (0 : ℝ) 1) := hcont.continuousOn
+  have hcompact : IsCompact (JordanCurveImage γ) := by
+    simpa [JordanCurveImage] using
+      (IsCompact.image_of_continuousOn (s := Set.Icc (0 : ℝ) 1) isCompact_Icc hcont_on)
+  have hclosed : IsClosed (JordanCurveImage γ) := hcompact.isClosed
+  have hopen : IsOpen (Set.compl (JordanCurveImage γ)) := hclosed.isOpen_compl
+  exact hopen.locPathConnectedSpace
 
 /-- Any point in the complement can be connected by a path to one of the basepoints. -/
 lemma jordan_compl_path_to_zero_or_one_plan (γ : ℝ → ℂ) (hγ : JordanCurve γ) {z : ℂ}
