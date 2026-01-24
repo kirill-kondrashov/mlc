@@ -2,6 +2,7 @@ import Molecule.Conjecture
 import Mlc.LcAtOfShrink
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.RenormalizationTypes
+import Mlc.MoleculeToParameterShrink
 
 namespace MLC
 
@@ -78,11 +79,28 @@ These capture the missing dictionary between quadratic parameters and the Molecu
 renormalization objects. They are intended to be discharged by constructing `parameterToBMol`
 explicitly and proving its analytic properties. -/
 
+/-- Satellite renormalizability in the Molecule framework should be an infinite tower. -/
+axiom satelliteTower_of_satellite (c : ℂ) :
+    SatelliteRenormalizable c → SatelliteRenormalizableTower c
+
+/--
+Remaining analytic bridge: the Molecule package should imply uniform modulus bounds for the
+principal nest annuli of satellite parameters (for the canonical depths coming from the tower).
+-/
+axiom molecule_modulusLowerBoundTarget
+    (h_mol : MoleculeConjectureRefined) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
+    PrincipalNestTarget.ModulusLowerBoundTarget c hTower
+
 /-- Molecule Conjecture implies parameter-piece shrinkage for satellite parameters. -/
-axiom molecule_parameter_shrink
+theorem molecule_parameter_shrink
     (h_mol : MoleculeConjectureRefined) (c : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
-    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  have hTower : SatelliteRenormalizableTower c := satelliteTower_of_satellite c h_sat
+  have hmod : PrincipalNestTarget.ModulusLowerBoundTarget c hTower :=
+    molecule_modulusLowerBoundTarget h_mol c hc hTower
+  exact PrincipalNestTarget.paraPuzzle_shrink_of_modulusLowerBoundTarget c hc hTower hmod
 
 /-- Local connectivity from Molecule shrinkage and a puzzle-boundary motion. -/
 theorem refined_conjecture_implies_lc
