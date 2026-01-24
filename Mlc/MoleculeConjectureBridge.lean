@@ -81,14 +81,13 @@ These capture the missing dictionary between quadratic parameters and the Molecu
 renormalization objects. They are intended to be discharged by constructing `parameterToBMol`
 explicitly and proving its analytic properties. -/
 
-/-- The parameter attached to a quadratic-like map belongs to the Mandelbrot set. -/
-axiom bmol_param_in_mandelbrot (g : BMol) : bmolToParameter g ∈ MLC.Quadratic.MandelbrotSet
-
 /-- Molecule Conjecture implies local connectivity at parameters of renormalizable maps. -/
 axiom refined_conjecture_implies_lc
-    (h_mol : MoleculeConjectureRefined) (g : BMol) (h_renorm : IsFastRenormalizable g) :
+    (h_mol : MoleculeConjectureRefined) (g : BMol)
+    (hc : bmolToParameter g ∈ MLC.Quadratic.MandelbrotSet)
+    (h_renorm : IsFastRenormalizable g) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet
-      ⟨bmolToParameter g, bmol_param_in_mandelbrot g⟩
+      ⟨bmolToParameter g, hc⟩
 
 /-- The bridge from the Molecule Conjecture to MLC for satellite parameters. -/
 theorem molecule_conjecture_bridge
@@ -96,11 +95,15 @@ theorem molecule_conjecture_bridge
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   -- Reduce to the Molecule-side local connectivity statement and transport along the parameter map.
+  have hparam : bmolToParameter (parameterToBMol c) = c := by
+    simpa [bmolToParameter] using parameterToBMol_criticalValue c
+  have hc' : bmolToParameter (parameterToBMol c) ∈ MLC.Quadratic.MandelbrotSet := by
+    simpa [hparam] using hc
   have h_lc :=
-    refined_conjecture_implies_lc h_mol (parameterToBMol c) _h
+    refined_conjecture_implies_lc h_mol (parameterToBMol c) hc' _h
   have h_eq :
       (⟨bmolToParameter (parameterToBMol c),
-        bmol_param_in_mandelbrot (parameterToBMol c)⟩ :
+        hc'⟩ :
         MLC.Quadratic.MandelbrotSet) =
       ⟨c, hc⟩ := by
     apply Subtype.ext
