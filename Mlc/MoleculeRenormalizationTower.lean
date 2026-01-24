@@ -40,6 +40,17 @@ noncomputable def cumulativePeriod {g : BMol} (T : RenormalizationTower g) : ℕ
   | 0 => 0
   | n + 1 => cumulativePeriod T n + T.period n
 
+theorem cumulativePeriod_monotone {g : BMol} (T : RenormalizationTower g) :
+    Monotone T.cumulativePeriod := by
+  intro a b hab
+  -- Induct from `a` up to `b`.
+  refine Nat.le_induction (m := a) (n := b) ?base ?step hab
+  · rfl
+  · intro k _hk ih
+    -- `cumulativePeriod (k+1) = cumulativePeriod k + period k ≥ cumulativePeriod k`.
+    simpa [RenormalizationTower.cumulativePeriod] using
+      le_trans ih (Nat.le_add_right _ _)
+
 theorem le_cumulativePeriod_of_le {g : BMol} (T : RenormalizationTower g) :
     ∀ N : ℕ, ∃ n : ℕ, N ≤ T.cumulativePeriod n := by
   intro N
