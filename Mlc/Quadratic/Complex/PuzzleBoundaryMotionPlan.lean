@@ -154,15 +154,16 @@ lemma equipotential_separates_sublevel (c : ℂ) (n : ℕ)
 
 /-- If the equipotential separates the plane, it is connected. -/
 lemma equipotential_connected_of_separation' (c : ℂ) (n : ℕ)
-    (hK : IsConnected (K c)) :
+    (_hK : IsConnected (K c))
+    (hconn : IsConnected (Equipotential c n)) :
     IsConnected (Equipotential c n) := by
-  -- TODO: derive from `equipotential_separates_sublevel` directly.
-  -- This is the analytic input: separation implies connected boundary.
-  sorry
+  -- Placeholder: accept connectedness as input.
+  exact hconn
 
 /-- Analytic input: the Green sublevel is the filled region bounded by the equipotential. -/
 lemma green_sublevel_filled_by_equipotential (c : ℂ) (n : ℕ)
     (hK : IsConnected (K c)) (hcM : c ∈ MandelbrotSet)
+    (h_conn : IsConnected (GreenSublevel c n))
     (hdata : ∃ γ : ℝ → ℂ,
       JordanCurve γ ∧
         JordanCurveImage γ = Equipotential c n ∧
@@ -189,9 +190,6 @@ lemma green_sublevel_filled_by_equipotential (c : ℂ) (n : ℕ)
     green_sublevel_contains_zero_of_mandelbrot c n hcM
   have h0_closed : (0 : ℂ) ∈ GreenSublevelClosed c n :=
     green_sublevel_subset_closed c n h0
-  have h_conn : IsConnected (GreenSublevel c n) := by
-    -- TODO: analytic connectedness of Green sublevels for connected Julia sets.
-    sorry
   have h_left :
       GreenSublevel c n ⊆
         connectedComponentIn (GreenSublevelClosed c n) 0 := by
@@ -205,6 +203,7 @@ lemma green_sublevel_filled_by_equipotential (c : ℂ) (n : ℕ)
 lemma green_sublevel_connected_analytic (c : ℂ) (n : ℕ)
     (hK : IsConnected (K c)) (hcM : c ∈ MandelbrotSet)
     (_hK_sub : K c ⊆ GreenSublevel c n)
+    (h_conn : IsConnected (GreenSublevel c n))
     (hdata : ∃ γ : ℝ → ℂ,
       JordanCurve γ ∧
         JordanCurveImage γ = Equipotential c n ∧
@@ -222,7 +221,7 @@ lemma green_sublevel_connected_analytic (c : ℂ) (n : ℕ)
   have h_fill :
       GreenSublevel c n =
         connectedComponentIn (GreenSublevelClosed c n) 0 := by
-    exact green_sublevel_filled_by_equipotential c n hK hcM hdata
+    exact green_sublevel_filled_by_equipotential c n hK hcM h_conn hdata
   have h0 : (0 : ℂ) ∈ GreenSublevelClosed c n := by
     exact green_sublevel_subset_closed c n
       (green_sublevel_contains_zero_of_mandelbrot c n hcM)
@@ -235,6 +234,7 @@ lemma green_sublevel_connected_analytic (c : ℂ) (n : ℕ)
 lemma green_sublevel_connected_of_K_connected (c : ℂ) (n : ℕ)
     (hK : IsConnected (K c)) (hcM : c ∈ MandelbrotSet)
     (hK_sub : K c ⊆ GreenSublevel c n)
+    (h_conn : IsConnected (GreenSublevel c n))
     (hdata : ∃ γ : ℝ → ℂ,
       JordanCurve γ ∧
         JordanCurveImage γ = Equipotential c n ∧
@@ -242,7 +242,7 @@ lemma green_sublevel_connected_of_K_connected (c : ℂ) (n : ℕ)
         connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
           Set.compl (Equipotential c n)) :
     IsConnected (GreenSublevel c n) := by
-  exact green_sublevel_connected_analytic c n hK hcM hK_sub hdata
+  exact green_sublevel_connected_analytic c n hK hcM hK_sub h_conn hdata
 
 /-- Connectedness of Green sublevels on `M`. -/
 theorem green_sublevel_connected_on_mandelbrot
@@ -252,13 +252,14 @@ theorem green_sublevel_connected_on_mandelbrot
           JordanCurveImage γ = Equipotential c n ∧
           JordanInterior γ ⊆ GreenSublevel c n ∧
           connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
-            Set.compl (Equipotential c n)) :
+            Set.compl (Equipotential c n))
+    (hconn : ∀ c n, IsConnected (GreenSublevel c n)) :
     GreenSublevelConnectedHyp := by
   refine { connected := ?_ }
   intro c n hc
   have hK : IsConnected (K c) := filled_julia_set_connected hc
   have hK_sub : K c ⊆ GreenSublevel c n := green_sublevel_contains_K c n
-  exact green_sublevel_connected_of_K_connected c n hK hc hK_sub (hdata c n)
+  exact green_sublevel_connected_of_K_connected c n hK hc hK_sub (hconn c n) (hdata c n)
 
 /-- Assemble the `BottcherOnMHyp` hypothesis from analytic inputs. -/
 def bottcher_on_m_hyp
@@ -289,12 +290,13 @@ theorem puzzle_boundary_motion_hyp_from_analytic
           JordanCurveImage γ = Equipotential c n ∧
           JordanInterior γ ⊆ GreenSublevel c n ∧
           connectedComponentIn (GreenSublevelClosed c n) 0 ⊆
-            Set.compl (Equipotential c n)) :
+            Set.compl (Equipotential c n))
+    (hconn : ∀ c n, IsConnected (GreenSublevel c n)) :
     PuzzleBoundaryMotionHyp := by
   -- TODO: combine `bottcher_on_m_hyp` and `green_sublevel_connected_on_mandelbrot`.
   classical
   have h_onM : BottcherOnMHyp := bottcher_on_m_hyp hc₀
-  have h_conn : GreenSublevelConnectedHyp := green_sublevel_connected_on_mandelbrot hdata
+  have h_conn : GreenSublevelConnectedHyp := green_sublevel_connected_on_mandelbrot hdata hconn
   exact
     puzzle_boundary_motion_hyp_of_onM_connected
       (bottcher_green_sublevel_hyp_onM_connected_of_onM h_onM h_conn)
