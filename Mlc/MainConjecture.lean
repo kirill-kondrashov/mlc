@@ -60,15 +60,15 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
   exact Classical.em _
 
 /-- If parameter pieces shrink to a point, they form a neighborhood basis at `c`. -/
-lemma parameter_shrink_basis (c : ℂ) (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
-    ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePiece n ⊆ U := by
+lemma parameter_shrink_basis (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePieceAt c n ⊆ U := by
   exact MLC.Quadratic.parameter_shrink c h
 
 /-- The core strategy theorem (internal). -/
 theorem mlc_strategy
     (h_param_shrink :
       ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c})
+        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
     (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
     (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
     (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
@@ -87,7 +87,7 @@ theorem mlc_strategy
   intro ⟨c, hc⟩
   rcases dichotomy c with h_fin_renorm | h_inf_renorm
   · -- Case 1: Finitely Renormalizable
-    exact mlc_finitely_renormalizable c hc h_motion h_fin_renorm (h_param_shrink c hc h_fin_renorm)
+    exact mlc_finitely_renormalizable c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
   · -- Case 2: Infinitely renormalizable
     exact mlc_infinitely_renormalizable h_classify h_bridge h_motion c hc h_inf_renorm
 

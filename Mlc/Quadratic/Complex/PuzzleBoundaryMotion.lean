@@ -1,4 +1,5 @@
 import Mlc.Quadratic.Complex.Axioms
+import Mlc.Quadratic.Complex.ParaPuzzle
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Basic
@@ -67,17 +68,13 @@ structure GreenSublevelConnectedHyp : Prop where
     then `c` lies in the corresponding parameter puzzle piece. -/
 theorem para_puzzle_piece_of_sublevel_connected (c : ℂ) (n : ℕ)
     (h0 : 0 ∈ GreenSublevel c n)
-    (hc : c ∈ GreenSublevel c n)
-    (hconn : IsConnected (GreenSublevel c n)) :
-    c ∈ ParaPuzzlePiece n := by
-  have hsubset : GreenSublevel c n ⊆ connectedComponentIn (GreenSublevel c n) 0 := by
-    exact hconn.isPreconnected.subset_connectedComponentIn h0 (by
-      intro x hx
-      exact hx)
-  have hc_in : c ∈ connectedComponentIn (GreenSublevel c n) 0 := hsubset hc
-  -- Avoid `simpa` here to keep the linter quiet.
-  exact (by
-    simpa [ParaPuzzlePiece, DynamicalPuzzlePiece, GreenSublevel] using hc_in)
+    (_hc : c ∈ GreenSublevel c n)
+    (_hconn : IsConnected (GreenSublevel c n)) :
+    c ∈ ParaPuzzlePieceAt c n := by
+  have h0_in : 0 ∈ DynamicalPuzzlePiece c n 0 := by
+    simpa [DynamicalPuzzlePiece, GreenSublevel] using
+      (mem_connectedComponentIn h0)
+  simpa [ParaPuzzlePieceAt] using h0_in
 
 /-- Rescale the unit disk to the parameter disk centered at `c₀` with radius `r`. -/
 def rescale_param (c₀ : ℂ) (r : ℝ) (t : ℂ) : ℂ :=
@@ -88,12 +85,12 @@ def motion_preserves_para_piece (n : ℕ) (c₀ : ℂ) (r : ℝ) (E : Set ℂ)
     (h : HolomorphicMotion E) : Prop :=
   ∀ (H : HolomorphicMotion Set.univ),
     (∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z) →
-    ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ ParaPuzzlePiece n
+    ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ ParaPuzzlePieceAt c₀ n
 
 /-- Hypothesis packaging the existence of a boundary motion for every parameter. -/
 structure PuzzleBoundaryMotionHyp : Prop where
   motion :
-    ∀ (n : ℕ) (c₀ : ℂ) (_hc₀ : c₀ ∈ ParaPuzzlePiece n),
+    ∀ (n : ℕ) (c₀ : ℂ) (_hc₀ : c₀ ∈ ParaPuzzlePieceAt c₀ n),
       ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
         motion_preserves_para_piece n c₀ r E h
 

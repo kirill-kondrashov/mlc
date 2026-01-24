@@ -1,6 +1,7 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.Quadratic.Complex.ParaPuzzle
 import Mathlib.Topology.Connected.LocallyConnected
 import Lean
 
@@ -61,22 +62,24 @@ lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → 
     · exact h_pre.2 h.2
 
 /-- The intersection of a parameter puzzle piece with the Mandelbrot set is connected in the subtype topology. -/
-lemma para_puzzle_piece_induced_connected (n : ℕ) :
-    IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } := by
+lemma para_puzzle_piece_induced_connected (c : ℂ) (n : ℕ) :
+    IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } := by
   rw [← isConnected_subtype_val_image]
-  rw [show { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } = (Subtype.val : MandelbrotSet → ℂ) ⁻¹' (ParaPuzzlePiece n) by rfl]
+  rw [show { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } =
+        (Subtype.val : MandelbrotSet → ℂ) ⁻¹' (ParaPuzzlePieceAt c n) by rfl]
   rw [Subtype.image_preimage_coe]
   try rw [Set.inter_comm]
-  exact para_puzzle_piece_inter_mandelbrot_connected n
+  exact para_puzzle_piece_inter_mandelbrot_connected c n
 
 /-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set.
-    Proof idea: Since the intersection of all parameter pieces `ParaPuzzlePiece n` is exactly `{c}`,
-    for any open neighborhood `U` of `c`, there must be some `n` such that `ParaPuzzlePiece n ⊆ U`.
+    Proof idea: Since the intersection of all parameter pieces `ParaPuzzlePieceAt c n` is exactly `{c}`,
+    for any open neighborhood `U` of `c`, there must be some `n` such that `ParaPuzzlePieceAt c n ⊆ U`.
     This uses the compactness argument implicit in the "shrink to point" property for nested compact sets
     (or similar topological argument). Here we formalize it by showing `M ∩ P_n` eventually lies in `U`. -/
 lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
-    (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
-    ∀ U ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet), ∃ n, { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n } ⊆ U := by
+    (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    ∀ U ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet), ∃ n,
+      { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } ⊆ U := by
   intro U hU
   rw [mem_nhds_iff] at hU
   obtain ⟨V, hV_sub_U, hV_open, hc_in_V⟩ := hU
@@ -98,13 +101,12 @@ lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
     4.  Therefore, for any neighborhood `U`, we can find a `P_n` inside it. `P_n ∩ M` serves
         as the connected neighborhood of `c` contained in `U`, proving local connectivity. -/
 lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
-    (h : (⋂ n, ParaPuzzlePiece n) = {c}) :
+    (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
   rw [LocallyConnectedAt]
   intro U hU
   obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis_induced c hc h U hU
-  let V' := { x : MandelbrotSet | x.val ∈ ParaPuzzlePiece n }
+  let V' := { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n }
   use V'
   constructor
   · -- V' ∈ 𝓝 ⟨c, hc⟩
@@ -114,14 +116,16 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
     · exact subset_rfl
     · constructor
       · rw [isOpen_induced_iff]
-        use ParaPuzzlePiece n
+        use ParaPuzzlePieceAt c n
         constructor
-        · exact para_puzzle_piece_open n h_motion
+        · exact para_puzzle_piece_open c n
         · rfl
-      · have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePiece k := by rw [h]; exact Set.mem_singleton c
+      · have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePieceAt c k := by
+          rw [h]
+          exact Set.mem_singleton c
         exact Set.mem_iInter.mp hc_in_inter n
   · constructor
     · exact hn_sub
-    · exact para_puzzle_piece_induced_connected n
+    · exact para_puzzle_piece_induced_connected c n
 
 end MLC

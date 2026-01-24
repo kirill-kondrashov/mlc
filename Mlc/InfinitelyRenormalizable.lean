@@ -29,12 +29,11 @@ def InfinitelyRenormalizable (c : ℂ) : Prop :=
     then the intersection of puzzle pieces is a point, implying local connectivity.
     In this skeleton, we take the parameter-plane shrinkage as an explicit hypothesis. -/
 theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (_h : FinitelyRenormalizable c)
-    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c}) :
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   -- The dynamical shrinkage is provided by Yoccoz; the parameter shrinkage is assumed here.
-  exact lc_at_of_shrink c hc h_motion h_para_shrink
+  exact lc_at_of_shrink c hc h_para_shrink
 
 /-- MLC for Primitive parameters (Lyubich).
     Proved by Lyubich in "Dynamics of Quadratic Polynomials I-II", Acta Mathematica 178 (1997).

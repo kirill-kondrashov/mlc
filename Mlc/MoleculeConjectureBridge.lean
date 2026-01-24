@@ -1,5 +1,6 @@
 import Molecule.Conjecture
 import Mlc.LcAtOfShrink
+import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.RenormalizationTypes
 
 namespace MLC
@@ -81,15 +82,15 @@ explicitly and proving its analytic properties. -/
 axiom molecule_parameter_shrink
     (h_mol : MoleculeConjectureRefined) (c : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
-    (⋂ n, MLC.Quadratic.ParaPuzzlePiece n) = {c}
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}
 
 /-- Local connectivity from Molecule shrinkage and a puzzle-boundary motion. -/
 theorem refined_conjecture_implies_lc
     (h_mol : MoleculeConjectureRefined)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
+    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact lc_at_of_shrink c hc h_motion (molecule_parameter_shrink h_mol c hc h_sat)
+  exact lc_at_of_shrink c hc (molecule_parameter_shrink h_mol c hc h_sat)
 
 /-- The bridge from the Molecule Conjecture to MLC for satellite parameters. -/
 theorem molecule_conjecture_bridge
