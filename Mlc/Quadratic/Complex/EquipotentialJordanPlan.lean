@@ -24,8 +24,8 @@ lemma green_function_eq_log_norm_bottcher (B : BottcherData) (c z : ℂ)
 
 /-- The equipotential is the preimage of a Euclidean circle (placeholder hypothesis). -/
 lemma equipotential_eq_bottcher_circle (B : BottcherData) (c : ℂ) (n : ℕ)
-    (h : Equipotential c n = {z | ‖B.phi c z‖ = (1 / 2 : ℝ) ^ n}) :
-    Equipotential c n = {z | ‖B.phi c z‖ = (1 / 2 : ℝ) ^ n} := by
+    (h : Equipotential c n = {z | ‖B.phi c z‖ = Real.exp ((1 / 2 : ℝ) ^ n)}) :
+    Equipotential c n = {z | ‖B.phi c z‖ = Real.exp ((1 / 2 : ℝ) ^ n)} := by
   exact h
 
 /-- Continuity of the Böttcher coordinate in `z` (placeholder hypothesis). -/
