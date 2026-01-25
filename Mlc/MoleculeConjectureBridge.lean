@@ -1,6 +1,8 @@
 import Molecule.Conjecture
 import Mlc.LcAtOfShrink
+import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.RenormalizationTypes
+import Mlc.MoleculeToParameterShrink
 
 namespace MLC
 
@@ -71,15 +73,58 @@ abbrev MoleculeConjectureRefined : Prop :=
     CombinatoriallyAssociated Rfast_HMol R_target ∧
     (∃ N, IsConjugateToShift R_target N)
 
+/-! ### Bridge assumptions
+
+These capture the missing dictionary between quadratic parameters and the Molecule
+renormalization objects. They are intended to be discharged by constructing `parameterToBMol`
+explicitly and proving its analytic properties. -/
+
+/--
+Remaining analytic bridge: the Molecule package should imply uniform modulus bounds for the
+principal nest annuli of satellite parameters (for the canonical depths coming from the tower).
+-/
+axiom molecule_modulusLowerBoundTarget
+    (h_mol : MoleculeConjectureRefined) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
+    PrincipalNestTarget.ModulusNotSummableTarget c hTower
+
+/-- Molecule Conjecture implies parameter-piece shrinkage for satellite parameters. -/
+theorem molecule_parameter_shrink
+    (h_mol : MoleculeConjectureRefined) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  have hTower : SatelliteRenormalizableTower c := h_sat
+  have hdiv : PrincipalNestTarget.ModulusNotSummableTarget c hTower :=
+    molecule_modulusLowerBoundTarget h_mol c hc hTower
+  exact PrincipalNestTarget.paraPuzzle_shrink_of_modulusNotSummableTarget c hc hTower hdiv
+
+/-- Local connectivity from Molecule shrinkage and a puzzle-boundary motion. -/
+theorem refined_conjecture_implies_lc
+    (h_mol : MoleculeConjectureRefined)
+    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact lc_at_of_shrink c hc (molecule_parameter_shrink h_mol c hc h_sat)
+
+/-- The bridge from the Molecule Conjecture to MLC for satellite parameters. -/
+theorem molecule_conjecture_bridge
+    (h_mol : MoleculeConjectureRefined)
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact refined_conjecture_implies_lc h_mol h_motion c hc _h
+
 theorem molecule_conjecture_implies_mlc_satellite
     (h_bridge :
       -- The literature asserts this bridge; see Appendix C of arXiv:1703.01206v3
       -- and Conjecture 1.2 discussion in arXiv:2512.24171v1.
       MoleculeConjectureRefined →
+      MLC.Quadratic.PuzzleBoundaryMotionHyp →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact h_bridge Molecule.molecule_conjecture_refined c hc h
+  exact h_bridge Molecule.molecule_conjecture_refined h_motion c hc h
 
 end MLC

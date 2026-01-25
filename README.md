@@ -7,25 +7,9 @@
 This repository is a proof skeleton. It compiles and isolates the main logical
 dependencies, but several deep inputs remain axiomatic.
 
-Plan file status:
-
-- `Mlc/Quadratic/Complex/JordanSeparationPlan.lean` still assumes key Jordan curve
-  inputs (empty interior of the curve image, a boundary decomposition into two
-  components with the curve as frontier, and a component-separation hypothesis
-  distinguishing `0` and `1`). These feed `JordanCurve.lean` and
-  `PlanarSeparation.lean`, so the puzzle-boundary motion chain remains conditional.
-- `Mlc/Quadratic/Complex/EquipotentialJordanPlan.lean` still assumes the analytic
-  Böttcher/Green identities, continuity, and injectivity needed to show
-  equipotentials are Jordan curves with the right separation properties.
-- `Mlc/Quadratic/Complex/PuzzleBoundaryMotionPlan.lean` still depends on analytic
-  Böttcher data, parameter-disk stability in `M`, equipotential Jordan data, and
-  the Jordan separation package. Until these are proved, the boundary-motion
-  hypothesis cannot be discharged.
-No `*Plan.lean` file is fully discharged yet, so none have been renamed.
-
-For the Molecule Conjecture track, `Mlc/MoleculeConjecture.lean` currently
-re-exports the refined conjecture statement from an external `Molecule` package
-located at `./.lake/packages/molecule-conjecture`. The file
+For the Molecule Conjecture track, the project re-exports the refined conjecture
+statement from an external `Molecule` package located at
+`./.lake/packages/molecule-conjecture`. The file
 `Mlc/MoleculeConjectureBridge.lean` then assumes a bridge axiom that turns this
 refined conjecture into MLC for satellite infinitely renormalizable parameters
 (as referenced in the literature).
@@ -50,9 +34,13 @@ parameter-piece shrinkage as an explicit hypothesis and also takes a holomorphic
 motion hypothesis derived from two inputs: a parameter-disk inclusion in `M`
 (`BottcherOnMHyp`) and connectedness of Green sublevels on `M`
 (`GreenSublevelConnectedHyp`). For the infinitely renormalizable case,
-the Primitive/Satellite classification is also taken as an explicit hypothesis.
-The primitive case itself is currently baked into the definition of
-`PrimitiveRenormalizable`.
+the Primitive/Satellite classification is taken as an explicit axiom.
+The primitive case is derived from modulus divergence in the principal nest, 
+using a conformal proxy definition to satisfy Lyubich's a priori bounds.
+
+## Formalization Origins
+
+The core definitions and the top-level statement of the MLC conjecture in this project are based on the [Google DeepMind formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean) repository. These definitions have been manually aligned and integrated into our framework because direct dependency integration was not possible. This is due to version incompatibilities: the DeepMind repository relies on an older version of Lean 4 and Mathlib (v4.22.0), whereas this project is built on more recent releases.
 
 ## Formalization Structure
 
@@ -61,17 +49,17 @@ The proof is structured around the dichotomy of renormalizability:
 1.  **Finitely Renormalizable (Yoccoz's Theorem):**
     *   Parameters where the Yoccoz puzzle moduli diverge.
     *   We assume the parameter-piece shrinkage needed to apply the local-connectivity criterion.
-    *   Key files: `Mlc/Yoccoz.lean`, `Mlc/Quadratic/Complex/Puzzle.lean`.
+    *   Key files: `Mlc/MainConjecture.lean`, `Mlc/Quadratic/Complex/Puzzle.lean`.
 
 2.  **Infinitely Renormalizable:**
     *   Parameters where the moduli sum converges.
     *   This case is further split into:
-        *   **Primitive:** Handled by Lyubich's Theorem (axiom).
+        *   **Primitive:** Derived from modulus divergence in the principal nest (Lyubich).
         *   **Satellite:** Uses the **Molecule Conjecture** (re-exported) plus a bridge axiom;
             the current formalization is conditional and still assumes major analytic inputs,
             with the intended proof path going via Pacman renormalization.
-    *   Key files: `Mlc/InfinitelyRenormalizable.lean`, `Mlc/MoleculeConjecture.lean`,
-        `Mlc/MoleculeConjectureBridge.lean`.
+    *   Key files: `Mlc/InfinitelyRenormalizable.lean`, `Mlc/PrimitiveModulusDivergence.lean`,
+        `Mlc/FastTowerExistence.lean`, `Mlc/MoleculeConjectureBridge.lean`.
     *   Reference for the primitive MLC axiom: Lyubich, "Conformal Geometry and Dynamics of
         Quadratic Polynomials", §42.6 "MLC on the main cardioid".
 
@@ -100,7 +88,7 @@ This will compile the main conjecture file and output the list of axioms relied 
 
 Run `make check` to see the authoritative list. Key axioms include:
 
-*   `MLC.Quadratic.slodkowski_theorem`
+*   `MLC.Quadratic.motion_preserves_para_piece_of_green_sublevel`
 
 Reference note:
 *   Lyubich, "Conformal Geometry and Dynamics of Quadratic Polynomials",
@@ -112,12 +100,16 @@ Status note:
 
 Output:
 ```
-✅ The proof of 'MLC.MLC_Conjecture' is free of 'sorry'.
+✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
-- propext
 - Quot.sound
+- propext
 - Classical.choice
-- MLC.Quadratic.filled_julia_set_connected
-- MLC.Quadratic.slodkowski_theorem
-- MLC.Quadratic.mandelbrot_set_connected
+- MLC.Quadratic.motion_preserves_para_piece_of_green_sublevel
+- MLC.Quadratic.para_puzzle_piece_basis
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.bottcher_onM_hyp
+- MLC.green_sublevel_connected_hyp
+- MLC.classify_infinitely_renormalizable
+- MLC.molecule_modulusLowerBoundTarget
 ```

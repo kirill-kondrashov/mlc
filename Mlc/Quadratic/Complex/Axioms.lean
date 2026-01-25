@@ -51,3 +51,8 @@ axiom slodkowski_theorem {E : Set ℂ} (h : HolomorphicMotion E) :
       ∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z
 
 end MLC.Quadratic
+
+/-!
+Additional high-level axioms used in the MLC strategy live in `Mlc/AxiomsMainConjecture.lean`
+to avoid import cycles with the low-level puzzle lemmas.
+-/

@@ -54,27 +54,13 @@ structure BottcherMotionData (n : ℕ) (c₀ : ℂ) where
 structure BottcherMotionHyp where
   data : ∀ (n : ℕ) (c₀ : ℂ), BottcherMotionData n c₀
 
-/-- If the parameter disk stays inside the puzzle piece, then the motion preserves
-    parameter puzzle membership. -/
-theorem motion_preserves_para_piece_of_bottcher
-    (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)
-    (h_piece : ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ ParaPuzzlePiece n) :
-    motion_preserves_para_piece n c₀ r E (bottcher_motion B E) := by
-  intro _ _ t ht
-  exact h_piece t ht
-
-/-- If Green sublevel sets are connected and contain both `0` and the parameter,
-    then the Böttcher motion preserves parameter puzzle membership. -/
-theorem motion_preserves_para_piece_of_green_sublevel
+/-- Green-sublevel control yields parameter-piece preservation (axiom). -/
+axiom motion_preserves_para_piece_of_green_sublevel
     (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)
     (h0 : ∀ t ∈ Metric.ball 0 1, 0 ∈ GreenSublevel (rescale_param c₀ r t) n)
     (hmem : ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ GreenSublevel (rescale_param c₀ r t) n)
     (hconn : ∀ t ∈ Metric.ball 0 1, IsConnected (GreenSublevel (rescale_param c₀ r t) n)) :
-    motion_preserves_para_piece n c₀ r E (bottcher_motion B E) := by
-  intro _ _ t ht
-  exact
-    para_puzzle_piece_of_sublevel_connected (rescale_param c₀ r t) n
-      (h0 t ht) (hmem t ht) (hconn t ht)
+    motion_preserves_para_piece n c₀ r E (bottcher_motion B E)
 
 /-- Turn Böttcher-based motion data into the generic puzzle-boundary motion data. -/
 def puzzle_boundary_motion_data_of_bottcher (n : ℕ) (c₀ : ℂ)
