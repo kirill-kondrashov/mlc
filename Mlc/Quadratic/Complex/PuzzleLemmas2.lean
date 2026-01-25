@@ -13,6 +13,7 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.PuzzleLemmas
 import Mlc.Quadratic.Complex.ParaPuzzle
 import Mlc.Quadratic.Complex.Axioms
+import Mlc.Quadratic.Complex.ParaPuzzleBasis
 
 namespace MLC.Quadratic
 
@@ -40,21 +41,17 @@ theorem para_puzzle_piece_open (c : ℂ) (n : ℕ) :
   simpa [h_eq] using h_open.preimage h_cont
 
 
-/-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point.
-    Proof idea: If the intersection of all parameter pieces `P_n` is exactly `{c}`, then for any
-    neighborhood `U` of `c`, the pieces must eventually be contained in `U`.
-    We prove this by showing that `M \ U` is compact and disjoint from `{c}`, so it must be
-    disjoint from some `P_n`.
-    (Formal proof details involve set-theoretic manipulations and properties of `K(c)`). -/
-axiom para_puzzle_piece_basis (c : ℂ) :
-    (⋂ n, ParaPuzzlePieceAt c n) = {c} →
-      ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePieceAt c n ⊆ U
+/-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
+theorem para_puzzle_piece_basis (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePieceAt c n ⊆ U := 
+  para_puzzle_piece_basis_sketch c h
 
 /-- If parameter pieces shrink to a point, they form a neighborhood basis at `c`. -/
 theorem parameter_shrink (c : ℂ) :
     (⋂ n, ParaPuzzlePieceAt c n) = {c} →
       ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePieceAt c n ⊆ U := by
-  exact para_puzzle_piece_basis c
+  intro h
+  exact para_puzzle_piece_basis c h
 
 /-- Parameter puzzle pieces intersected with the Mandelbrot set are connected.
     Proof idea:
