@@ -19,12 +19,16 @@ def main : IO UInt32 := do
     
     if axioms.contains ``sorryAx then
       IO.println s!"❌ The proof of '{name}' relies on 'sorry'!"
-      return (1 : UInt32)
     else
       IO.println s!"✅ The proof of '{name}' is free of 'sorry'."
-      IO.println "All axioms used:"
-      for ax in axioms.toList do
-        IO.println s!"- {ax}"
+    
+    IO.println "All axioms used:"
+    for ax in axioms.toList do
+      IO.println s!"- {ax}"
+    
+    if axioms.contains ``sorryAx then
+      return (1 : UInt32)
+    else
       return (0 : UInt32)
   catch e =>
     IO.println s!"Error: {e}"

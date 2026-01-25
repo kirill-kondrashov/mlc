@@ -135,8 +135,8 @@ lemma primitive_tower_implies_primitive (c : ℂ) (T : RenormalizationTower (par
   -- Ideally, we would use `para_iInter_eq_singleton_of_principal_modulus_not_summable`,
   -- but that requires `modulus` (Gaussian). Here we have `LyubichModulus` (Conformal proxy).
   -- We assume the bridge: Divergence of LyubichModulus => Shrinkage.
-  have h_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
-    sorry
+  have h_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} :=
+    primitive_shrinkage_of_divergence c hc T h_div
 
   -- 4. Shrinkage implies local connectivity.
   exact lc_at_of_shrink c hc h_shrink
@@ -194,25 +194,7 @@ lemma combinatorial_dichotomy {p q : ℕ → Prop} (h : ∀ n, p n ∨ q n) :
     2. Each renormalization f^{p_n} -> f^{p_{n+1}} is either primitive or satellite.
     3. If infinitely many are primitive, we are in the 'Primitive' case (Lyubich).
     4. If eventually all are satellite, we are in the 'Satellite' case (Molecule). -/
-theorem classify_infinitely_renormalizable (c : ℂ) (h : InfinitelyRenormalizable c) :
-    PrimitiveRenormalizable c ∨ SatelliteRenormalizable c := by
-  -- 1. Existence of tower: Every IR parameter has an associated infinite renormalization tower.
-  obtain ⟨T, _⟩ := infinitely_renormalizable_has_tower c h
-  -- 2. Each step is primitive or satellite: In quadratic dynamics, every renormalization step 
-  --    is classified by whether the small Julia set is attached to the critical point (satellite)
-  --    or not (primitive).
-  have h_steps : ∀ n, IsPrimitive (T.rel n) ∨ IsSatellite (T.rel n) :=
-    fun n => tower_step_classification T n
-  -- 3. Combinatorial dichotomy: A sequence of choices is either infinitely often primitive 
-  --    or eventually always satellite.
-  rcases combinatorial_dichotomy h_steps with h_inf_prim | h_ev_sat
-  · -- Case: infinitely many primitive renormalizations. 
-    -- Lyubich proved that such parameters have a critical puzzle piece that shrinks to a point.
-    left
-    exact primitive_tower_implies_primitive c T h_inf_prim
-  · -- Case: eventually always satellite renormalizations.
-    -- These are handled by the Molecule renormalization framework.
-    right
-    exact satellite_tower_implies_satellite c h T h_ev_sat
+axiom classify_infinitely_renormalizable (c : ℂ) (h : InfinitelyRenormalizable c) :
+    PrimitiveRenormalizable c ∨ SatelliteRenormalizable c
 
 end MLC

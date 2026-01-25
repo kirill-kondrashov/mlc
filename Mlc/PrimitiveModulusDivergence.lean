@@ -1,7 +1,7 @@
 import Mlc.RenormalizationTypes
 import Mlc.MoleculeRenormalizationTower
 import Mlc.Quadratic.Complex.PrincipalNestShrink
-import Mlc.Quadratic.Complex.ConformalGroetzsch
+import Mlc.Quadratic.Complex.YoccozConformal
 import Mlc.Quadratic.Complex.GaussianModulusSummable
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Data.Set.Finite.Basic
@@ -86,5 +86,69 @@ lemma primitive_modulus_divergence (c : ℂ) (T : RenormalizationTower (paramete
   rw [dist_zero_right, Real.norm_eq_abs, abs_one] at hN
   linarith
 
+/-- 
+A definition capturing the bridge between the primitive a priori bound 
+and the standard conformal theory.
+-/
+def LyubichConformalBridge (c : ℂ) (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  (¬ Summable (fun n => LyubichModulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))) →
+  (¬ Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)))
+
+/-- 
+A placeholder for the bridge. 
+Eliminating this sorry requires reconciling the Gaussian placeholder `cmodulus` 
+with the Lyubich a priori bounds.
+-/
+def lyubich_conformal_bridge_placeholder (c : ℂ) (T : RenormalizationTower (parameterToBMol c)) : 
+    LyubichConformalBridge c T := by
+  sorry
+
+/-- 
+Divergence of the full Yoccoz puzzle nest derived from principal nest divergence.
+This bridges the primitive renormalization tower's specific annuli to the general 
+Yoccoz nest.
+-/
+lemma full_nest_divergence_of_primitive_divergence (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (h_div : ¬ Summable (fun n => LyubichModulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))) :
+    ¬ Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)) := 
+  lyubich_conformal_bridge_placeholder c T h_div
+
+/-- 
+The bridge between LyubichModulus (conformal proxy) and geometric shrinkage.
+This definition encapsulates the Grötzsch criterion for the custom modulus.
+-/
+def LyubichGrötzschCriterion (c : ℂ) (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ¬ Summable (fun n => LyubichModulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) →
+  (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}
+
+/-- 
+A placeholder for the Lyubich-Grötzsch bridge.
+This requires formalizing the conformal theory to connect the proxy modulus to 
+the actual geometry of puzzle pieces.
+-/
+lemma lyubich_bridge_placeholder (c : ℂ) (T : RenormalizationTower (parameterToBMol c)) : 
+    LyubichGrötzschCriterion c T := by
+  intro h_div_lyubich
+  -- 1. Full nest divergence from principal nest divergence.
+  have h_full_div := full_nest_divergence_of_primitive_divergence c T h_div_lyubich
+
+  -- 2. Dynamical shrinkage from full nest divergence.
+  -- This result is provided by the YoccozConformal module in the project.
+  have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} :=
+    MLC.Quadratic.yoccoz_theorem_conformal c h_full_div
+  
+  -- 3. Parameter shrinkage from dynamical shrinkage.
+  -- This result is provided by the PrincipalNestShrink module in the project.
+  exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_dyn_iInter_eq_singleton c h_dyn
+
+/-- 
+Parameter shrinkage derived from primitive modulus divergence.
+According to Lyubich's Theorem, if the moduli of the principal nest annuli diverge,
+then the intersection of the puzzle pieces is a single point.
+-/
+lemma primitive_shrinkage_of_divergence (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (T : RenormalizationTower (parameterToBMol c))
+    (h_div : ¬ Summable (fun n => LyubichModulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := 
+  lyubich_bridge_placeholder c T h_div
 
 end MLC

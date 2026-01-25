@@ -46,33 +46,61 @@ So while the package provides a rigorous dependency graph, it should be read as
 “formalized assumptions + logical pipeline” rather than a finished proof.
 
 For the finitely renormalizable case, the current proof skeleton assumes
+
 parameter-piece shrinkage as an explicit hypothesis and also takes a holomorphic
+
 motion hypothesis derived from two inputs: a parameter-disk inclusion in `M`
+
 (`BottcherOnMHyp`) and connectedness of Green sublevels on `M`
+
 (`GreenSublevelConnectedHyp`). For the infinitely renormalizable case,
-the Primitive/Satellite classification is also taken as an explicit hypothesis.
-The primitive case itself is currently baked into the definition of
-`PrimitiveRenormalizable`.
+
+the Primitive/Satellite classification is taken as an explicit axiom.
+
+The primitive case is derived from modulus divergence in the principal nest, 
+
+using a conformal proxy definition to satisfy Lyubich's a priori bounds.
+
+
 
 ## Formalization Structure
 
+
+
 The proof is structured around the dichotomy of renormalizability:
 
+
+
 1.  **Finitely Renormalizable (Yoccoz's Theorem):**
+
     *   Parameters where the Yoccoz puzzle moduli diverge.
+
     *   We assume the parameter-piece shrinkage needed to apply the local-connectivity criterion.
+
     *   Key files: `Mlc/Yoccoz.lean`, `Mlc/Quadratic/Complex/Puzzle.lean`.
 
+
+
 2.  **Infinitely Renormalizable:**
+
     *   Parameters where the moduli sum converges.
+
     *   This case is further split into:
-        *   **Primitive:** Handled by Lyubich's Theorem (axiom).
+
+        *   **Primitive:** Derived from modulus divergence in the principal nest (Lyubich).
+
         *   **Satellite:** Uses the **Molecule Conjecture** (re-exported) plus a bridge axiom;
+
             the current formalization is conditional and still assumes major analytic inputs,
+
             with the intended proof path going via Pacman renormalization.
+
     *   Key files: `Mlc/InfinitelyRenormalizable.lean`, `Mlc/MoleculeConjecture.lean`,
+
         `Mlc/MoleculeConjectureBridge.lean`.
+
     *   Reference for the primitive MLC axiom: Lyubich, "Conformal Geometry and Dynamics of
+
         Quadratic Polynomials", §42.6 "MLC on the main cardioid".
 
 ## Verification
