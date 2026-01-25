@@ -9,21 +9,14 @@ import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mlc.Quadratic.Complex.PrincipalNestShrink
 import Mlc.MoleculeRenormalizationTower
+import Mlc.PrimitiveModulusDivergence
+import Mlc.FastTowerExistence
 
 namespace MLC
 
 open Quadratic Complex Topology Set Filter Molecule
 
-/-- Finitely renormalizable parameters.
-    Alias for NonRenormalizable from the library. -/
-abbrev FinitelyRenormalizable := NonRenormalizable
 
-/-- Infinitely renormalizable parameters.
-    For the purpose of this plan, we define infinitely renormalizable parameters
-    as those for which the Yoccoz puzzle moduli converge.
-    In a full theory, this would be a theorem (Yoccoz). -/
-def InfinitelyRenormalizable (c : ℂ) : Prop :=
-  Summable (fun n => modulus (PuzzleAnnulus c n))
 
 /-- Yoccoz's Theorem (MLC for Finitely Renormalizable Parameters).
     Proved by Jean-Christophe Yoccoz in the early 1990s.
@@ -65,24 +58,9 @@ theorem mlc_infinitely_renormalizable
   | inl h_prim => exact mlc_primitive_renormalizable_ax c hc h_prim
   | inr h_sat => exact molecule_conjecture_implies_mlc_satellite h_bridge h_motion c hc h_sat
 
-/-- A property that a renormalization is satellite.
-    In quadratic dynamics, satellite renormalization occurs when the small Julia set 
-    is attached to the fixed point of the first return map.
-    Here we check if the α-fixed point of the map `g` lies in the closure of the 
-    domain of the renormalization. -/
-def IsSatellite {f g : BMol} (rel : RenormalizationRelation f g) : Prop :=
-  f.fixed_point ∈ closure rel.U'
 
-/-- A placeholder for the property that a renormalization is primitive.
-    Primitive renormalization occurs when the small Julia set is disjoint from 
-    the fixed points of the first return map. -/
-def IsPrimitive {f g : BMol} (rel : RenormalizationRelation f g) : Prop :=
-  ¬ IsSatellite rel
 
-/-- Axiom: Infinitely renormalizable parameters admit an infinite sequence of fast renormalizations.
-    This links the Yoccoz definition (summable moduli) to the Molecule definition (fast renormalizability). -/
-axiom infinitely_renormalizable_implies_fast_tower (c : ℂ) (h : InfinitelyRenormalizable c) :
-    ∀ n : ℕ, IsFastRenormalizable ((Rfast^[n]) (parameterToBMol c))
+
 
 /-- Existence of an infinite sequence of renormalizations for IR parameters. -/
 theorem exists_renormalization_tower_sequence (c : ℂ) (h : MLC.InfinitelyRenormalizable c) :
@@ -132,14 +110,7 @@ lemma tower_step_classification {g : BMol} (T : RenormalizationTower g) (n : ℕ
   · right; exact h
   · left; exact h
 
-/-- Divergence of moduli for primitive renormalization towers (Lyubich's Theorem).
-    This requires the conformal modulus and the fact that primitive renormalizations
-    yield definite moduli. In the current formalization, `modulus` is Gaussian
-    (summable), so this step cannot be proved without the conformal theory. -/
-lemma primitive_modulus_divergence (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
-    (_h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite) :
-    ¬ Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) := by
-  sorry
+
 
 /-- A tower with infinitely many primitive renormalizations implies the parameter is of primitive type. -/
 lemma primitive_tower_implies_primitive (c : ℂ) (T : RenormalizationTower (parameterToBMol c))

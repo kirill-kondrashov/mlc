@@ -1,4 +1,6 @@
 import Yoccoz.Quadratic.Complex.Basic
+import Yoccoz.Quadratic.Complex.Puzzle
+import Yoccoz.Yoccoz
 import Mlc.LcAtOfShrink
 import Molecule.Rfast
 import Mathlib.Analysis.Calculus.Deriv.Polynomial
@@ -6,6 +8,7 @@ import Mathlib.Analysis.Convex.Contractible
 import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
 import Mathlib.Topology.Algebra.Group.Basic
 import Mathlib.Topology.Maps.Proper.CompactlyGenerated
+import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Tactic.NormNum
 
 namespace MLC
@@ -174,6 +177,31 @@ def SatelliteRenormalizable (c : ℂ) : Prop :=
 theorem satelliteRenormalizable_isFast (c : ℂ) (h : SatelliteRenormalizable c) :
     IsFastRenormalizable (parameterToBMol c) := by
   simpa using h 0
+
+/-- A property that a renormalization is satellite.
+    In quadratic dynamics, satellite renormalization occurs when the small Julia set 
+    is attached to the fixed point of the first return map.
+    Here we check if the α-fixed point of the map `g` lies in the closure of the 
+    domain of the renormalization. -/
+def IsSatellite {f g : BMol} (rel : RenormalizationRelation f g) : Prop :=
+  f.fixed_point ∈ closure rel.U'
+
+/-- A placeholder for the property that a renormalization is primitive.
+    Primitive renormalization occurs when the small Julia set is disjoint from 
+    the fixed points of the first return map. -/
+def IsPrimitive {f g : BMol} (rel : RenormalizationRelation f g) : Prop :=
+  ¬ IsSatellite rel
+
+/-- Finitely renormalizable parameters.
+    Alias for NonRenormalizable from the library. -/
+abbrev FinitelyRenormalizable := NonRenormalizable
+
+/-- Infinitely renormalizable parameters.
+    For the purpose of this plan, we define infinitely renormalizable parameters
+    as those for which the Yoccoz puzzle moduli converge.
+    In a full theory, this would be a theorem (Yoccoz). -/
+def InfinitelyRenormalizable (c : ℂ) : Prop :=
+  Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c n))
 
 end
 end MLC
