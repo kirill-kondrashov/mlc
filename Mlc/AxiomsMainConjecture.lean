@@ -59,10 +59,4 @@ axiom bottcher_onM_hyp : MLC.Quadratic.BottcherOnMHyp
 /-- Green sublevel connectedness on the Mandelbrot set (axiom). -/
 axiom green_sublevel_connected_hyp : MLC.Quadratic.GreenSublevelConnectedHyp
 
-/-- Classification of infinitely renormalizable parameters (axiom). -/
-axiom classify_infinitely_renormalizable :
-    ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizable c
-
-
 end MLC

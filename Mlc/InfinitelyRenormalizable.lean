@@ -63,4 +63,21 @@ theorem mlc_infinitely_renormalizable
   | inl h_prim => exact mlc_primitive_renormalizable_ax c hc h_prim
   | inr h_sat => exact molecule_conjecture_implies_mlc_satellite h_bridge h_motion c hc h_sat
 
+/-- Classification of infinitely renormalizable parameters (Lyubich).
+    Every infinitely renormalizable quadratic polynomial is either of primitive type
+    (infinitely many primitive renormalizations) or satellite type (eventually only
+    satellite renormalizations).
+    
+    Proof sketch:
+    1. An infinitely renormalizable map has a sequence of periods p_1 < p_2 < ...
+    2. Each renormalization f^{p_n} -> f^{p_{n+1}} is either primitive or satellite.
+    3. If infinitely many are primitive, we are in the 'Primitive' case (Lyubich).
+    4. If eventually all are satellite, we are in the 'Satellite' case (Molecule). -/
+theorem classify_infinitely_renormalizable (c : ℂ) (_h : InfinitelyRenormalizable c) :
+    PrimitiveRenormalizable c ∨ SatelliteRenormalizable c := by
+  -- Classification based on the renormalization tower combinatorics.
+  -- This is a fundamental result in quadratic dynamics.
+  -- For parameters in the Mandelbrot set, we can always distinguish these two cases.
+  sorry
+
 end MLC
