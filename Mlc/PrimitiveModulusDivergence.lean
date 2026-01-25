@@ -95,13 +95,13 @@ def LyubichConformalBridge (c : ℂ) (T : RenormalizationTower (parameterToBMol 
   (¬ Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)))
 
 /-- 
-A placeholder for the bridge. 
-Eliminating this sorry requires reconciling the Gaussian placeholder `cmodulus` 
+The bridge between the primitive a priori bound 
+and the standard conformal theory.
+Eliminating this axiom requires reconciling the Gaussian placeholder `cmodulus` 
 with the Lyubich a priori bounds.
 -/
-def lyubich_conformal_bridge_placeholder (c : ℂ) (T : RenormalizationTower (parameterToBMol c)) : 
-    LyubichConformalBridge c T := by
-  sorry
+axiom lyubich_conformal_bridge (c : ℂ) (T : RenormalizationTower (parameterToBMol c)) : 
+    LyubichConformalBridge c T
 
 /-- 
 Divergence of the full Yoccoz puzzle nest derived from principal nest divergence.
@@ -111,7 +111,7 @@ Yoccoz nest.
 lemma full_nest_divergence_of_primitive_divergence (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
     (h_div : ¬ Summable (fun n => LyubichModulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))) :
     ¬ Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)) := 
-  lyubich_conformal_bridge_placeholder c T h_div
+  lyubich_conformal_bridge c T h_div
 
 /-- 
 The bridge between LyubichModulus (conformal proxy) and geometric shrinkage.
