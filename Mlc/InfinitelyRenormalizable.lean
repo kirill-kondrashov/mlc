@@ -7,6 +7,8 @@ import Mlc.RenormalizationTypes
 import Mlc.MoleculeConjectureBridge
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
+import Mlc.Quadratic.Complex.PrincipalNestShrink
+import Mlc.MoleculeRenormalizationTower
 
 namespace MLC
 
@@ -130,6 +132,15 @@ lemma tower_step_classification {g : BMol} (T : RenormalizationTower g) (n : ℕ
   · right; exact h
   · left; exact h
 
+/-- Divergence of moduli for primitive renormalization towers (Lyubich's Theorem).
+    This requires the conformal modulus and the fact that primitive renormalizations
+    yield definite moduli. In the current formalization, `modulus` is Gaussian
+    (summable), so this step cannot be proved without the conformal theory. -/
+lemma primitive_modulus_divergence (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (_h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite) :
+    ¬ Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) := by
+  sorry
+
 /-- A tower with infinitely many primitive renormalizations implies the parameter is of primitive type. -/
 lemma primitive_tower_implies_primitive (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
     (_h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite) :
@@ -139,8 +150,23 @@ lemma primitive_tower_implies_primitive (c : ℂ) (T : RenormalizationTower (par
   -- The proof uses the fact that primitive renormalizations produce 'large' annuli
   -- in the principal nest, leading to modulus divergence for the critical piece.
   intro hc
-  -- This is Lyubich's Theorem ("Dynamics of Quadratic Polynomials", Acta Math. 1997).
-  sorry
+  
+  -- 1. Construct the principal nest depths from the tower.
+  let depths := T.cumulativePeriod
+  have h_mono : Monotone depths := T.cumulativePeriod_monotone
+  have h_cof : MLC.Quadratic.PrincipalNest.Cofinal depths := T.cumulativePeriod_cofinal
+
+  -- 2. Divergence of moduli (Lyubich's Theorem).
+  have h_div : ¬ Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PrincipalNest.dynAnnulus c depths n)) :=
+    primitive_modulus_divergence c T _h_inf_prim
+
+  -- 3. Apply Grötzsch criterion to get parameter shrinkage.
+  have h_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} :=
+    MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_principal_modulus_not_summable 
+      c hc depths h_mono h_cof h_div
+
+  -- 4. Shrinkage implies local connectivity.
+  exact lc_at_of_shrink c hc h_shrink
 
 /-- A tower that eventually consists only of satellite renormalizations implies the parameter is of satellite type. -/
 lemma satellite_tower_implies_satellite (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
