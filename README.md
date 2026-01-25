@@ -1,5 +1,7 @@
 # Machine-Generated Proof Skeleton of the MLC Conjecture
 
+[![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
+
 ## 🚧 WORK IN PROGRESS 🚧
 
 ## Current Status
