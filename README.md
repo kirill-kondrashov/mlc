@@ -38,6 +38,10 @@ the Primitive/Satellite classification is taken as an explicit axiom.
 The primitive case is derived from modulus divergence in the principal nest, 
 using a conformal proxy definition to satisfy Lyubich's a priori bounds.
 
+## Formalization Origins
+
+The core definitions and the top-level statement of the MLC conjecture in this project are based on the [Google DeepMind formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean) repository. These definitions have been manually aligned and integrated into our framework because direct dependency integration was not possible. This is due to version incompatibilities: the DeepMind repository relies on an older version of Lean 4 and Mathlib (v4.22.0), whereas this project is built on more recent releases.
+
 ## Formalization Structure
 
 The proof is structured around the dichotomy of renormalizability:
