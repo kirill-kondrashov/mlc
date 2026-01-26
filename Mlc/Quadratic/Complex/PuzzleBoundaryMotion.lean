@@ -3,12 +3,13 @@ import Mlc.Quadratic.Complex.ParaPuzzle
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Basic
+import Mathlib.Topology.Homeomorph.Defs
 
 set_option linter.unnecessarySimpa false
 
 namespace MLC.Quadratic
 
-open Complex Topology Set
+open Complex Topology Set Metric
 
 noncomputable section
 
@@ -68,12 +69,16 @@ structure GreenSublevelConnectedHyp : Prop where
 def rescale_param (c₀ : ℂ) (r : ℝ) (t : ℂ) : ℂ :=
   c₀ + r * t
 
-/-- Predicate asserting that a motion preserves parameter puzzle membership. -/
+/-- Predicate asserting that a motion preserves parameter puzzle membership.
+    We include the homeomorphism and component preservation properties as hypotheses
+    on the extension H, as guaranteed by the Lambda Lemma. -/
 def motion_preserves_para_piece (n : ℕ) (c₀ : ℂ) (r : ℝ) (E : Set ℂ)
     (h : HolomorphicMotion E) : Prop :=
   ∀ (H : HolomorphicMotion Set.univ),
-    (∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z) →
-    ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ ParaPuzzlePieceAt c₀ n
+    (∀ t ∈ ball 0 1, ∀ z ∈ E, H.f t z = h.f t z) →
+    (∀ t ∈ ball 0 1, ∃ h_t : Homeomorph ℂ ℂ, h_t.toFun = H.f t) →
+    (∀ t ∈ ball 0 1, ∀ S₀ S_t, H.f t '' frontier S₀ = frontier S_t → (∀ x, x ∈ S₀ ↔ H.f t x ∈ S_t)) →
+    ∀ t ∈ ball 0 1, rescale_param c₀ r t ∈ ParaPuzzlePieceAt c₀ n
 
 /-- Hypothesis packaging the existence of a boundary motion for every parameter. -/
 structure PuzzleBoundaryMotionHyp : Prop where

@@ -26,6 +26,13 @@ structure BottcherData where
   /-- Injectivity of the Böttcher coordinate on the unit disk (placeholder). -/
   inj_on : ∀ t ∈ ball 0 1, Set.InjOn (phi t) Set.univ
 
+  /-- Böttcher coordinate is a homeomorphism of the complex plane at each time t. -/
+  is_homeo : ∀ t ∈ ball 0 1, ∃ h : Homeomorph ℂ ℂ, h.toFun = phi t
+
+  /-- Böttcher motion follows equipotentials of the Green's function. -/
+  green_inv : ∀ (c₀ : ℂ) (r : ℝ) (t : ℂ) (_ht : t ∈ ball 0 1) (z : ℂ),
+    green_function (rescale_param c₀ r t) (phi t z) = green_function c₀ z
+
 /-- The equipotential of level `n` under a Böttcher coordinate. -/
 def equipotential (B : BottcherData) (c : ℂ) (n : ℕ) : Set ℂ :=
   {z | ‖B.phi c z‖ = (1 / 2) ^ n}
@@ -43,29 +50,17 @@ def bottcher_motion (B : BottcherData) (E : Set ℂ) : HolomorphicMotion E :=
       intro z hz
       simpa using (B.holo_in_param z) }
 
-/-- Holomorphic motion of the whole plane is a homeomorphism at each time t (axiom). -/
-axiom holomorphic_motion_univ_homeomorph (H : HolomorphicMotion Set.univ) (t : ℂ) (ht : t ∈ ball 0 1) :
-    ∃ h : Homeomorph ℂ ℂ, h.toFun = H.f t
-
 /-- A homeomorphism mapping the boundary of a component to the boundary of another component
-    maps the component to the component. (Topological Axiom) -/
-axiom homeomorphism_maps_component {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-    (h : X ≃ₜ Y) (S : Set X) (T : Set Y) (h_bound : h '' frontier S = frontier T)
-    (h_pt : ∃ x ∈ S, h x ∈ T) : h '' S = T
+    maps the component to the component. (Topological Hypothesis) -/
+def homeomorphism_maps_component_hyp :=
+    ∀ (h : Homeomorph ℂ ℂ) (S T : Set ℂ),
+      h '' frontier S = frontier T → (∃ x ∈ S, h x ∈ T) → h '' S = T
 
 /-- Parameter-dynamics correspondence: membership in the parameter piece is equivalent to
-    membership of the rescaled critical value in the moved dynamical piece. (Axiom) -/
-axiom parameter_dynamics_stability (n : ℕ) (c₀ : ℂ) (r : ℝ) (t : ℂ) (ht : t ∈ ball 0 1)
-    (H : HolomorphicMotion Set.univ) (h_piece : H.f t '' (DynamicalPuzzlePiece c₀ n 0) = DynamicalPuzzlePiece (rescale_param c₀ r t) n 0) :
-    rescale_param c₀ r t ∈ ParaPuzzlePieceAt c₀ n ↔ rescale_param c₀ r t ∈ DynamicalPuzzlePiece (rescale_param c₀ r t) n 0
-
-/-- Böttcher motion follows equipotentials of the Green's function (axiom). -/
-axiom green_invariant_under_bottcher_motion (B : BottcherData) (c₀ : ℂ) (r : ℝ) :
-    ∀ t ∈ ball 0 1, ∀ z, green_function (rescale_param c₀ r t) (B.phi t z) = green_function c₀ z
-
-/-- Böttcher motion is a homeomorphism of the complex plane at each time t (axiom). -/
-axiom bottcher_motion_homeomorph (B : BottcherData) (t : ℂ) (ht : t ∈ ball 0 1) :
-    ∃ h : Homeomorph ℂ ℂ, h.toFun = B.phi t
+    membership of the rescaled critical value in the moved dynamical piece. (Hypothesis) -/
+def parameter_dynamics_stability_hyp := ∀ (n : ℕ) (c₀ : ℂ) (r : ℝ) (t : ℂ) (_ht : t ∈ ball 0 1)
+    (H : HolomorphicMotion Set.univ), (H.f t '' (DynamicalPuzzlePiece c₀ n 0) = DynamicalPuzzlePiece (rescale_param c₀ r t) n 0) →
+    (rescale_param c₀ r t ∈ ParaPuzzlePieceAt c₀ n ↔ rescale_param c₀ r t ∈ DynamicalPuzzlePiece (rescale_param c₀ r t) n 0)
 
 /-- Identification of the dynamical puzzle piece when the sublevel set is connected. -/
 lemma dynamical_puzzle_piece_eq_green_sublevel (c : ℂ) (n : ℕ) (z : ℂ)
@@ -80,7 +75,7 @@ lemma dynamical_puzzle_piece_eq_green_sublevel (c : ℂ) (n : ℕ) (z : ℂ)
 lemma bottcher_motion_preserves_boundary (B : BottcherData) (c₀ : ℂ) (r : ℝ) (n : ℕ) (t : ℂ) (ht : t ∈ ball 0 1) :
     (bottcher_motion B (PuzzleBoundary c₀ n)).f t '' (PuzzleBoundary c₀ n) = PuzzleBoundary (rescale_param c₀ r t) n := by
   let c_t := rescale_param c₀ r t
-  obtain ⟨h_t, hh_t⟩ := bottcher_motion_homeomorph B t ht
+  obtain ⟨h_t, hh_t⟩ := B.is_homeo t ht
   let S₀ := {w | green_function c₀ w < (1 / 2) ^ n}
   let S_t := {w | green_function c_t w < (1 / 2) ^ n}
   have h_S : h_t '' S₀ = S_t := by
@@ -89,13 +84,13 @@ lemma bottcher_motion_preserves_boundary (B : BottcherData) (c₀ : ℂ) (r : �
     · rintro ⟨z, (hz : green_function c₀ z < (1 / 2) ^ n), rfl⟩
       show green_function c_t (h_t z) < (1 / 2) ^ n
       have : h_t z = B.phi t z := by rw [← hh_t]; rfl
-      rw [this, green_invariant_under_bottcher_motion B c₀ r t ht z]
+      rw [this, B.green_inv c₀ r t ht z]
       exact hz
     · intro (hw : green_function c_t w < (1 / 2) ^ n)
       use h_t.symm w
       constructor
       · show green_function c₀ (h_t.symm w) < (1 / 2) ^ n
-        rw [← green_invariant_under_bottcher_motion B c₀ r t ht]
+        rw [← B.green_inv c₀ r t ht]
         have : B.phi t (h_t.symm w) = h_t (h_t.symm w) := by rw [← hh_t]; rfl
         rw [this, h_t.apply_symm_apply]
         exact hw
@@ -105,26 +100,24 @@ lemma bottcher_motion_preserves_boundary (B : BottcherData) (c₀ : ℂ) (r : �
     apply image_congr
     intro z _
     dsimp [bottcher_motion]
-    rw [← hh_t]; rfl
+    have : B.phi t z = h_t z := by rw [← hh_t]; rfl
+    exact this
   rw [h_f_img, h_t.image_frontier, h_S]
-
-/-- A holomorphic motion of the whole plane preserves component membership (axiom). -/
-axiom holomorphic_motion_preserves_component (H : HolomorphicMotion Set.univ) (t : ℂ) (ht : t ∈ ball 0 1)
-    (S₀ S_t : Set ℂ) (h_bound : H.f t '' frontier S₀ = frontier S_t) :
-    ∀ x, x ∈ S₀ ↔ H.f t x ∈ S_t
 
 /-- Green-sublevel control yields parameter-piece preservation (theorem). -/
 theorem motion_preserves_para_piece_of_green_sublevel
+    (h_top : homeomorphism_maps_component_hyp)
+    (h_stab : parameter_dynamics_stability_hyp)
     (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)
     (hE : E = PuzzleBoundary c₀ n)
-    (h0 : ∀ t ∈ Metric.ball 0 1, 0 ∈ GreenSublevel (rescale_param c₀ r t) n)
-    (hmem : ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ GreenSublevel (rescale_param c₀ r t) n)
-    (hconn : ∀ t ∈ Metric.ball 0 1, IsConnected (GreenSublevel (rescale_param c₀ r t) n)) :
+    (h0 : ∀ t ∈ ball 0 1, 0 ∈ GreenSublevel (rescale_param c₀ r t) n)
+    (hmem : ∀ t ∈ ball 0 1, rescale_param c₀ r t ∈ GreenSublevel (rescale_param c₀ r t) n)
+    (hconn : ∀ t ∈ ball 0 1, IsConnected (GreenSublevel (rescale_param c₀ r t) n)) :
     motion_preserves_para_piece n c₀ r E (bottcher_motion B E) := by
-  intro H h_ext t ht
+  intro H h_ext h_H_homeo h_H_comp t ht
   let c_t := rescale_param c₀ r t
   have h_piece_to_piece : H.f t '' (DynamicalPuzzlePiece c₀ n 0) = DynamicalPuzzlePiece c_t n 0 := by
-    obtain ⟨h_t, hh_t⟩ := holomorphic_motion_univ_homeomorph H t ht
+    obtain ⟨h_t, hh_t⟩ := h_H_homeo t ht
     let S₀ := GreenSublevel c₀ n
     let S_t := GreenSublevel c_t n
     have hr0 : rescale_param c₀ r 0 = c₀ := by dsimp [rescale_param]; simp
@@ -151,20 +144,20 @@ theorem motion_preserves_para_piece_of_green_sublevel
       exact bottcher_motion_preserves_boundary B c₀ r n t ht
     
     rw [h_f_t]
-    apply homeomorphism_maps_component h_t S₀ S_t
+    apply h_top h_t S₀ S_t
     · change h_t.toFun '' frontier S₀ = frontier S_t
       rw [← h_f_t, h_boundary]
     · use 0
       constructor
-      · have := h0 0 (Metric.mem_ball_self (by positivity))
+      · have := h0 0 (mem_ball_self (by positivity))
         rwa [hr0] at this
       · have h_mem : h_t.toFun 0 ∈ S_t := by
           rw [← h_f_t]
-          apply (holomorphic_motion_preserves_component H t ht S₀ S_t h_boundary) 0 |>.mp
-          have := h0 0 (Metric.mem_ball_self (by positivity))
+          apply (h_H_comp t ht S₀ S_t h_boundary) 0 |>.mp
+          have := h0 0 (mem_ball_self (by positivity))
           rwa [hr0] at this
         exact h_mem
-  apply (parameter_dynamics_stability n c₀ r t ht H h_piece_to_piece).mpr
+  apply (h_stab n c₀ r t ht H h_piece_to_piece).mpr
   apply (dynamical_puzzle_piece_eq_green_sublevel c_t n 0 (hconn t ht) (h0 t ht)).symm ▸ (hmem t ht)
 
 /-- Data needed to build a puzzle-boundary motion from a Böttcher coordinate. -/
@@ -198,11 +191,14 @@ def puzzle_boundary_motion_hyp_of_bottcher (h : BottcherMotionHyp) :
         (puzzle_boundary_motion_data_of_bottcher n c₀ (h.data n c₀)) }
 
 /-- Build Böttcher motion data from Green sublevel hypotheses. -/
-def bottcher_motion_data_of_green_sublevel (n : ℕ) (c₀ : ℂ) (B : BottcherData)
+def bottcher_motion_data_of_green_sublevel
+    (h_top : homeomorphism_maps_component_hyp)
+    (h_stab : parameter_dynamics_stability_hyp)
+    (n : ℕ) (c₀ : ℂ) (B : BottcherData)
     (r : ℝ) (r_pos : 0 < r)
-    (h0 : ∀ t ∈ Metric.ball 0 1, 0 ∈ GreenSublevel (rescale_param c₀ r t) n)
-    (hmem : ∀ t ∈ Metric.ball 0 1, rescale_param c₀ r t ∈ GreenSublevel (rescale_param c₀ r t) n)
-    (hconn : ∀ t ∈ Metric.ball 0 1, IsConnected (GreenSublevel (rescale_param c₀ r t) n)) :
+    (h0 : ∀ t ∈ ball 0 1, 0 ∈ GreenSublevel (rescale_param c₀ r t) n)
+    (hmem : ∀ t ∈ ball 0 1, rescale_param c₀ r t ∈ GreenSublevel (rescale_param c₀ r t) n)
+    (hconn : ∀ t ∈ ball 0 1, IsConnected (GreenSublevel (rescale_param c₀ r t) n)) :
     BottcherMotionData n c₀ := 
   { B := B
     r := r
@@ -210,61 +206,71 @@ def bottcher_motion_data_of_green_sublevel (n : ℕ) (c₀ : ℂ) (B : BottcherD
     E := PuzzleBoundary c₀ n
     E_eq := rfl
     preserves :=
-      motion_preserves_para_piece_of_green_sublevel n c₀ r B (PuzzleBoundary c₀ n) rfl
+      motion_preserves_para_piece_of_green_sublevel h_top h_stab n c₀ r B (PuzzleBoundary c₀ n) rfl
         h0 hmem hconn }
 
 /-- Global hypothesis: Green sublevel control for every parameter and depth. -/
 structure BottcherGreenSublevelHyp where
+  h_top : homeomorphism_maps_component_hyp
+  h_stab : parameter_dynamics_stability_hyp
   B : ℕ → ℂ → BottcherData
   r : ℕ → ℂ → ℝ
   r_pos : ∀ n c₀, 0 < r n c₀
-  h0 : ∀ n c₀ t, t ∈ Metric.ball 0 1 →
+  h0 : ∀ n c₀ t, t ∈ ball 0 1 →
     0 ∈ GreenSublevel (rescale_param c₀ (r n c₀) t) n
-  hmem : ∀ n c₀ t, t ∈ Metric.ball 0 1 →
+  hmem : ∀ n c₀ t, t ∈ ball 0 1 →
     rescale_param c₀ (r n c₀) t ∈ GreenSublevel (rescale_param c₀ (r n c₀) t) n
-  hconn : ∀ n c₀ t, t ∈ Metric.ball 0 1 →
+  hconn : ∀ n c₀ t, t ∈ ball 0 1 →
     IsConnected (GreenSublevel (rescale_param c₀ (r n c₀) t) n)
 
 /-- Produce Böttcher motion data from Green sublevel hypotheses. -/
 def bottcher_motion_hyp_of_green_sublevel (h : BottcherGreenSublevelHyp) :
     BottcherMotionHyp :=
   { data := fun n c₀ =>
-      bottcher_motion_data_of_green_sublevel n c₀ (h.B n c₀) (h.r n c₀) (h.r_pos n c₀)
+      bottcher_motion_data_of_green_sublevel h.h_top h.h_stab n c₀ (h.B n c₀) (h.r n c₀) (h.r_pos n c₀)
         (fun t ht => h.h0 n c₀ t ht)
         (fun t ht => h.hmem n c₀ t ht)
         (fun t ht => h.hconn n c₀ t ht) }
 
 /-- A weaker hypothesis: the parameter disk stays in `M`, and sublevels are connected. -/
 structure BottcherGreenSublevelHypOnM where
+  h_top : homeomorphism_maps_component_hyp
+  h_stab : parameter_dynamics_stability_hyp
   B : ℕ → ℂ → BottcherData
   r : ℕ → ℂ → ℝ
   r_pos : ∀ n c₀, 0 < r n c₀
-  in_M : ∀ n c₀ t, t ∈ Metric.ball 0 1 →
+  in_M : ∀ n c₀ t, t ∈ ball 0 1 →
     rescale_param c₀ (r n c₀) t ∈ MandelbrotSet
-  hconn : ∀ n c₀ t, t ∈ Metric.ball 0 1 →
+  hconn : ∀ n c₀ t, t ∈ ball 0 1 →
     IsConnected (GreenSublevel (rescale_param c₀ (r n c₀) t) n)
 
 /-- Hypothesis: parameter disk lies in `M`, and Green sublevels are connected on `M`. -/
 structure BottcherGreenSublevelHypOnMConnected where
+  h_top : homeomorphism_maps_component_hyp
+  h_stab : parameter_dynamics_stability_hyp
   B : ℕ → ℂ → BottcherData
   r : ℕ → ℂ → ℝ
   r_pos : ∀ n c₀, 0 < r n c₀
-  in_M : ∀ n c₀ t, t ∈ Metric.ball 0 1 →
+  in_M : ∀ n c₀ t, t ∈ ball 0 1 →
     rescale_param c₀ (r n c₀) t ∈ MandelbrotSet
   hconn : GreenSublevelConnectedHyp
 
 /-- Base hypothesis: parameter disk stays in `M`. -/
 structure BottcherOnMHyp where
+  h_top : homeomorphism_maps_component_hyp
+  h_stab : parameter_dynamics_stability_hyp
   B : ℕ → ℂ → BottcherData
   r : ℕ → ℂ → ℝ
   r_pos : ∀ n c₀, 0 < r n c₀
-  in_M : ∀ n c₀ t, t ∈ Metric.ball 0 1 →
+  in_M : ∀ n c₀ t, t ∈ ball 0 1 →
     rescale_param c₀ (r n c₀) t ∈ MandelbrotSet
 
 /-- Derive Green-sublevel hypotheses from Mandelbrot-set control. -/
 def bottcher_green_sublevel_hyp_of_onM (h : BottcherGreenSublevelHypOnM) :
     BottcherGreenSublevelHyp :=
-  { B := h.B
+  { h_top := h.h_top
+    h_stab := h.h_stab
+    B := h.B
     r := h.r
     r_pos := h.r_pos
     h0 := fun n c₀ t ht =>
@@ -277,7 +283,9 @@ def bottcher_green_sublevel_hyp_of_onM (h : BottcherGreenSublevelHypOnM) :
 def bottcher_green_sublevel_hyp_of_onM_connected (h : BottcherGreenSublevelHypOnMConnected) :
     BottcherGreenSublevelHyp :=
   bottcher_green_sublevel_hyp_of_onM
-    { B := h.B
+    { h_top := h.h_top
+      h_stab := h.h_stab
+      B := h.B
       r := h.r
       r_pos := h.r_pos
       in_M := h.in_M
@@ -288,7 +296,9 @@ def bottcher_green_sublevel_hyp_of_onM_connected (h : BottcherGreenSublevelHypOn
 def bottcher_green_sublevel_hyp_onM_connected_of_onM
     (h : BottcherOnMHyp) (hconn : GreenSublevelConnectedHyp) :
     BottcherGreenSublevelHypOnMConnected :=
-  { B := h.B
+  { h_top := h.h_top
+    h_stab := h.h_stab
+    B := h.B
     r := h.r
     r_pos := h.r_pos
     in_M := h.in_M
