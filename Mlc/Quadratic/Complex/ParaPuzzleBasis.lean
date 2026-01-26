@@ -1,6 +1,7 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.Green
+import Yoccoz.Quadratic.Complex.GreenLemmas
 import Mlc.Quadratic.Complex.ParaPuzzle
 import Mlc.Quadratic.Complex.Axioms
 import Mathlib.Topology.Connected.Basic
@@ -9,16 +10,76 @@ import Mathlib.Order.Filter.Bases.Basic
 import Mathlib.Topology.Sets.Closeds
 import Mathlib.Topology.UniformSpace.Compact
 import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
+import Mathlib.Analysis.SpecialFunctions.Exp
+import Mathlib.Topology.MetricSpace.ProperSpace
+import Mathlib.Topology.MetricSpace.Bounded
 
 namespace MLC.Quadratic
 
-open Complex Topology Set Filter
+open Complex Topology Set Filter Metric Bornology
+
+/-- The Green's function is bounded below by a logarithmic growth term. -/
+lemma green_function_bdd_below_log (c z : ℂ) (h : ‖z‖ > escape_bound c) :
+    green_function c z ≥ Real.log ‖z‖ - (2 * ‖c‖ / (escape_bound c)^2) := by
+  have h_dist := dist_potential_seq_green_function_le_of_escaping c z 0 h
+  simp only [pow_zero, one_div_one, one_mul] at h_dist
+  have h_pot0 : potential_seq c z 0 = Real.log ‖z‖ := by
+    dsimp [potential_seq]
+    rw [max_eq_right]
+    · simp
+    · have h_eb := escape_bound_ge_R c
+      have h_R := R_ge_two c
+      linarith
+  rw [h_pot0, dist_comm, dist_eq_norm, Real.norm_eq_abs] at h_dist
+  linarith [abs_le.mp h_dist]
+
+/-- Sublevel sets of the Green's function are bounded. -/
+lemma bounded_sublevel_green_function (c : ℂ) (r : ℝ) :
+    IsBounded {z | green_function c z < r} := by
+  let M := 2 * ‖c‖ / (escape_bound c)^2
+  let R_max := max (escape_bound c) (Real.exp (r + M))
+  refine isBounded_iff_forall_norm_le.mpr ⟨R_max, ?_⟩
+  intro z hz
+  dsimp at hz
+  by_cases h_esc : ‖z‖ ≤ escape_bound c
+  · exact le_trans h_esc (le_max_left _ _)
+  · push_neg at h_esc
+    have h_log := green_function_bdd_below_log c z h_esc
+    have : Real.log ‖z‖ < r + M := by linarith
+    have h_pos : 0 < ‖z‖ := by
+      have h_eb := escape_bound_ge_R c
+      have h_R := R_ge_two c
+      linarith
+    rw [Real.log_lt_iff_lt_exp h_pos] at this
+    exact le_trans (le_of_lt this) (le_max_right _ _)
 
 /-- The closure of a parameter puzzle piece is compact. -/
 lemma isCompact_closure_para_puzzle_piece (c : ℂ) (n : ℕ) :
     IsCompact (closure (ParaPuzzlePieceAt c n)) := by
-  -- Proof sketch: Properness of green_function implies sublevel sets are compact.
-  sorry
+  -- A set in ℂ is compact iff it is closed and bounded.
+  rw [isCompact_iff_isClosed_bounded]
+  constructor
+  · exact isClosed_closure
+  · -- Closure of a set is bounded iff the set itself is bounded.
+    rw [isBounded_closure_iff]
+    -- ParaPuzzlePieceAt c n is a translate of DynamicalPuzzlePiece c n 0.
+    have h_trans : ParaPuzzlePieceAt c n = (fun w => w + c) '' (DynamicalPuzzlePiece c n 0) := by
+      ext c'
+      constructor
+      · intro h
+        use c' - c
+        simpa [ParaPuzzlePieceAt] using h
+      · rintro ⟨w, hw, rfl⟩
+        simp [ParaPuzzlePieceAt, hw]
+    rw [h_trans]
+    -- Use isBounded_iff_forall_norm_le
+    rw [isBounded_iff_forall_norm_le]
+    obtain ⟨R_val, hR_val⟩ := isBounded_iff_forall_norm_le.mp (bounded_sublevel_green_function c ((1 / 2) ^ n))
+    use R_val + ‖c‖
+    rintro _ ⟨w, hw, rfl⟩
+    calc ‖w + c‖ ≤ ‖w‖ + ‖c‖ := norm_add_le _ _
+      _ ≤ R_val + ‖c‖ := add_le_add_left (hR_val _ (connectedComponentIn_subset _ _ hw)) ‖c‖
 
 /-- The intersection of closures of parameter puzzle pieces is the same as the intersection of pieces,
     provided they shrink to a point. -/
