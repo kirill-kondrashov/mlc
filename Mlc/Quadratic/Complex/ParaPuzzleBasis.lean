@@ -1,3 +1,4 @@
+import Mathlib.Topology.Connected.LocallyConnected
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.Green
@@ -16,6 +17,8 @@ import Mathlib.Topology.MetricSpace.ProperSpace
 import Mathlib.Topology.MetricSpace.Bounded
 
 namespace MLC.Quadratic
+
+lemma complex_locally_connected : LocallyConnectedSpace ℂ := inferInstance
 
 open Complex Topology Set Filter Metric Bornology
 
@@ -81,26 +84,69 @@ lemma isCompact_closure_para_puzzle_piece (c : ℂ) (n : ℕ) :
     calc ‖w + c‖ ≤ ‖w‖ + ‖c‖ := norm_add_le _ _
       _ ≤ R_val + ‖c‖ := add_le_add_left (hR_val _ (connectedComponentIn_subset _ _ hw)) ‖c‖
 
+/-- Parameter puzzle pieces are open. -/
+lemma para_puzzle_piece_at_isOpen (c : ℂ) (n : ℕ) :
+    IsOpen (ParaPuzzlePieceAt c n) := by
+  have h_open_sublevel : IsOpen {w | green_function c w < (1 / 2) ^ n} :=
+    IsOpen.preimage (continuous_green_function c) isOpen_Iio
+  have h_comp_open : IsOpen (connectedComponentIn {w | green_function c w < (1 / 2) ^ n} 0) :=
+    IsOpen.connectedComponentIn h_open_sublevel
+  rw [ParaPuzzlePieceAt]
+  let f := fun z : ℂ => z - c
+  have hf : Continuous f := continuous_id.sub continuous_const
+  exact h_comp_open.preimage hf
+
 /-- The intersection of closures of parameter puzzle pieces is the same as the intersection of pieces,
     provided they shrink to a point. -/
 lemma iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
     (⋂ n, closure (ParaPuzzlePieceAt c n)) = {c} := by
-  -- Proof sketch: For nested compact sets, intersection of closures equals intersection.
+  -- For connected nested sets in ℂ, if the intersection of the sets is a point,
+  -- then the intersection of their closures is also that point.
+  -- This follows from the fact that the diameters must shrink to zero.
   sorry
 
 /-- Nested compact sets with a singleton intersection form a neighborhood basis. -/
 theorem hasBasis_nhds_of_iInter_singleton {α : Type*} [TopologicalSpace α] [T2Space α]
     {K : ℕ → Set α} (h_compact : ∀ n, IsCompact (K n)) (h_nested : ∀ n, K (n + 1) ⊆ K n)
-    {x : α} (h_inter : (⋂ n, K n) = {x}) :
+    {x : α} (h_inter : (⋂ n, K n) = {x}) (h_nhd : ∀ n, K n ∈ 𝓝 x) :
     (𝓝 x).HasBasis (fun _ => True) K := by
-  -- This is a standard topological result.
-  sorry
+  refine ⟨fun U => ⟨fun hU => ?_, fun ⟨n, _, hn_sub⟩ => ?_⟩⟩
+  · obtain ⟨V, hV_sub, hV_open, hxV⟩ := mem_nhds_iff.mp hU
+    by_contra! h_neg
+    let F := fun n => K n \ V
+    have hF_nonempty : ∀ n, (F n).Nonempty := by
+      intro n
+      rw [Set.diff_nonempty]
+      intro h_sub
+      exact (h_neg n trivial) (h_sub.trans hV_sub)
+    have hF_nested : ∀ n, F (n + 1) ⊆ F n := fun n => diff_subset_diff (h_nested n) (subset_refl V)
+    have hF_compact : ∀ n, IsCompact (F n) := fun n => (h_compact n).diff hV_open
+    have hF_closed : ∀ n, IsClosed (F n) := fun n => (hF_compact n).isClosed
+    obtain ⟨y, hy⟩ := IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed F hF_nested hF_nonempty (hF_compact 0) hF_closed
+    have h_inter_F : (⋂ n, F n) = (⋂ n, K n) \ V := by
+      ext z
+      simp [F, forall_and]
+    rw [h_inter_F, h_inter] at hy
+    have h_empty : ({x} : Set α) \ V = ∅ := Set.diff_eq_empty.mpr (singleton_subset_iff.mpr hxV)
+    rw [h_empty] at hy
+    exact (Set.mem_empty_iff_false y).mp hy
+  · exact mem_of_superset (h_nhd n) hn_sub
 
 /-- Parameter puzzle pieces are nested. -/
 lemma para_puzzle_piece_nested (c : ℂ) (n : ℕ) :
     ParaPuzzlePieceAt c (n + 1) ⊆ ParaPuzzlePieceAt c n := by
-  -- Proof sketch: (1/2)^(n+1) < (1/2)^n implies sublevel set inclusion.
-  sorry
+  intro c' h
+  simp [ParaPuzzlePieceAt] at h ⊢
+  apply connectedComponentIn_mono (0 : ℂ) _ h
+  intro w hw
+  dsimp at hw ⊢
+  calc green_function c w < (1 / 2) ^ (n + 1) := hw
+    _ = (1 / 2) ^ n * (1 / 2) := by rw [pow_succ]
+    _ < (1 / 2) ^ n * 1 := by
+      apply mul_lt_mul_of_pos_left
+      · norm_num
+      · positivity
+    _ = (1 / 2) ^ n := by rw [mul_one]
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
 theorem para_puzzle_piece_basis_sketch (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
@@ -110,8 +156,17 @@ theorem para_puzzle_piece_basis_sketch (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt 
   have h_nested : ∀ n, K (n + 1) ⊆ K n := fun n => closure_mono (para_puzzle_piece_nested c n)
   have h_inter : (⋂ n, K n) = {c} := iInter_closure_para_puzzle_piece c h
   
+  have h_nhd : ∀ n, K n ∈ 𝓝 c := by
+    intro n
+    have h_c_in : c ∈ ParaPuzzlePieceAt c n := by
+      have : {c} ⊆ ParaPuzzlePieceAt c n := by
+        rw [← h]
+        exact iInter_subset _ n
+      exact singleton_subset_iff.mp this
+    exact mem_of_superset ((para_puzzle_piece_at_isOpen c n).mem_nhds h_c_in) subset_closure
+
   -- Apply the topological lemma to K n
-  have h_basis := hasBasis_nhds_of_iInter_singleton h_compact h_nested h_inter
+  have h_basis := hasBasis_nhds_of_iInter_singleton h_compact h_nested h_inter h_nhd
   
   intro U hU
   obtain ⟨n, _, hn_sub⟩ := h_basis.mem_iff.mp hU
