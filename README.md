@@ -108,7 +108,7 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.Quadratic.motion_preserves_para_piece_of_green_sublevel
-- MLC.Quadratic.para_puzzle_piece_basis
+- MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.bottcher_onM_hyp
 - MLC.green_sublevel_connected_hyp
