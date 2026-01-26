@@ -40,15 +40,8 @@ structure HolomorphicMotion (E : Set ℂ) where
   /-- For each fixed z in E, it is holomorphic in time on the unit disk -/
   h_holo : ∀ z ∈ E, DifferentiableOn ℂ (fun t ↦ f t z) (Metric.ball 0 1)
 
-/-- Slodkowski's Theorem (Generalized Lambda Lemma).
-    "Every holomorphic motion f : D × E → ℂ of an arbitrary subset E of ℂ can be
-    extended to a holomorphic motion F : D × ℂ → ℂ (that is F|D×E = f) of ℂ,
-    parametrized by the same unit disc D."
-    See: [Slodkowski, Holomorphic motions and polynomial hulls, Theorem 1.3] <https://www.ams.org/journals/proc/1991-111-02/S0002-9939-1991-1037218-8/>
-    Local Reference: `refs/S0002-9939-1991-1037218-8.pdf` -/
-axiom slodkowski_theorem {E : Set ℂ} (h : HolomorphicMotion E) :
-    ∃ H : HolomorphicMotion Set.univ,
-      ∀ t ∈ Metric.ball 0 1, ∀ z ∈ E, H.f t z = h.f t z
+/-- The Mandelbrot set is compact. -/
+axiom mandelbrot_set_compact : IsCompact MandelbrotSet
 
 end MLC.Quadratic
 

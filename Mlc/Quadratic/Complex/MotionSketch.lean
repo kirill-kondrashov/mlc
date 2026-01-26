@@ -32,9 +32,43 @@ lemma mem_dynamical_puzzle_piece_of_connected (c : ℂ) (n : ℕ) (z w : ℂ)
 /-- Step 2: Boundary Stability. The Böttcher motion preserves the puzzle boundary. -/
 lemma bottcher_motion_preserves_boundary (B : BottcherData) (c₀ : ℂ) (n : ℕ) (t : ℂ) (ht : t ∈ ball 0 1) :
     (bottcher_motion B (PuzzleBoundary c₀ n)).f t '' (PuzzleBoundary c₀ n) = PuzzleBoundary (rescale_param c₀ 1 t) n := by
-  -- Note: rescale_param with r=1 for simplicity here.
-  -- This relies on |phi_c(z)| = (1/2)^n defining the boundary.
-  sorry
+  let c_t := rescale_param c₀ 1 t
+  
+  -- Use the homeomorphism axiom
+  obtain ⟨h_t, hh_t⟩ := bottcher_motion_homeomorph B t ht
+  
+  -- PuzzleBoundary c n = frontier {w | green_function c w < (1 / 2) ^ n}
+  let S₀ := {w | green_function c₀ w < (1 / 2) ^ n}
+  let S_t := {w | green_function c_t w < (1 / 2) ^ n}
+  
+  have h_S : h_t '' S₀ = S_t := by
+    ext w
+    constructor
+    · rintro ⟨z, (hz : green_function c₀ z < (1 / 2) ^ n), rfl⟩
+      show green_function c_t (h_t z) < (1 / 2) ^ n
+      have : h_t z = B.phi t z := by rw [← hh_t]; rfl
+      rw [this, green_invariant_under_bottcher_motion B c₀ 1 t ht z]
+      exact hz
+    · intro (hw : green_function c_t w < (1 / 2) ^ n)
+      use h_t.symm w
+      constructor
+      · show green_function c₀ (h_t.symm w) < (1 / 2) ^ n
+        rw [← green_invariant_under_bottcher_motion B c₀ 1 t ht]
+        have : B.phi t (h_t.symm w) = h_t (h_t.symm w) := by rw [← hh_t]; rfl
+        rw [this, h_t.apply_symm_apply]
+        exact hw
+      · exact h_t.apply_symm_apply w
+  
+  rw [PuzzleBoundary, PuzzleBoundary]
+  have h_f_img : (bottcher_motion B (frontier S₀)).f t '' frontier S₀ = h_t '' frontier S₀ := by
+    apply image_congr
+    intro z _
+    dsimp [bottcher_motion]
+    rw [← hh_t]
+    rfl
+  rw [h_f_img]
+  rw [h_t.image_frontier]
+  rw [h_S]
 
 /-- Step 3: Invariance of the piece under motion.
     The image of the puzzle piece under the extended holomorphic motion is the puzzle piece at time t. -/

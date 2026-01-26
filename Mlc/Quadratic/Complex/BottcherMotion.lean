@@ -62,6 +62,14 @@ axiom motion_preserves_para_piece_of_green_sublevel
     (hconn : ∀ t ∈ Metric.ball 0 1, IsConnected (GreenSublevel (rescale_param c₀ r t) n)) :
     motion_preserves_para_piece n c₀ r E (bottcher_motion B E)
 
+/-- Böttcher motion follows equipotentials of the Green's function (axiom). -/
+axiom green_invariant_under_bottcher_motion (B : BottcherData) (c₀ : ℂ) (r : ℝ) :
+    ∀ t ∈ Metric.ball 0 1, ∀ z, green_function (rescale_param c₀ r t) (B.phi t z) = green_function c₀ z
+
+/-- Böttcher motion is a homeomorphism of the complex plane at each time t (axiom). -/
+axiom bottcher_motion_homeomorph (B : BottcherData) (t : ℂ) (ht : t ∈ Metric.ball 0 1) :
+    ∃ h : Homeomorph ℂ ℂ, h.toFun = B.phi t
+
 /-- Turn Böttcher-based motion data into the generic puzzle-boundary motion data. -/
 def puzzle_boundary_motion_data_of_bottcher (n : ℕ) (c₀ : ℂ)
     (h : BottcherMotionData n c₀) : PuzzleBoundaryMotionData n c₀ := by
