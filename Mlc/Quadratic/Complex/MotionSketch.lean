@@ -5,8 +5,8 @@ namespace MLC.Quadratic
 
 open Complex Topology Set Filter
 
-/--
-Detailed Sketch Proof of `motion_preserves_para_piece_of_green_sublevel`.
+/-!
+# Detailed Sketch Proof of `motion_preserves_para_piece_of_green_sublevel`
 
 Axiom Statement:
 For a sequence of parameters `c_t = c₀ + r * t` in a disk, if:
@@ -15,7 +15,7 @@ For a sequence of parameters `c_t = c₀ + r * t` in a disk, if:
   (hconn) G_n(c_t) is connected
 then the parameter `c_t` remains in the parameter puzzle piece `P_n(c₀)`.
 
-Proof Steps:
+## Proof Steps:
 
 1. **Dynamical Piece Identification**:
    - `DynamicalPuzzlePiece c_t n 0` is defined as the connected component of `GreenSublevel c_t n` containing `0`.
@@ -43,7 +43,7 @@ Proof Steps:
      without any topological changes (like the boundary hitting 0), the parameter `c_t` is restricted 
      to the para-puzzle piece `P_n`.
 
-6. **Parameter Rescaling and the Unit Disk**:
+5. **Parameter Rescaling and the Unit Disk**:
    - `rescale_param c₀ r t = c₀ + r * t` maps the unit disk `t ∈ Metric.ball 0 1` to a parameter disk `D(c₀, r)`.
    - The holomorphic motion extension `H` is defined over this unit disk.
    - For every `t`, `H.f t` is a homeomorphism of `ℂ` such that `H.f t (D_n(c₀)) = D_n(c_t)`.
