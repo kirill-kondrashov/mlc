@@ -90,7 +90,7 @@ This will compile the main conjecture file and output the list of axioms relied 
 
 Run `make check` to see the authoritative list. Key axioms include:
 
-*   `MLC.Quadratic.motion_preserves_para_piece_of_green_sublevel`
+*   `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
 
 Reference note:
 *   Lyubich, "Conformal Geometry and Dynamics of Quadratic Polynomials",
@@ -107,7 +107,6 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.motion_preserves_para_piece_of_green_sublevel
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.bottcher_onM_hyp
