@@ -3,6 +3,7 @@ import Mlc.RenormalizationTypes
 import Mlc.MoleculeConjectureBridge
 import Mlc.LcAtOfShrink
 import Mlc.Quadratic.Complex.BottcherMotion
+import Mlc.GreenSublevelConnected
 import Yoccoz.Yoccoz
 
 namespace MLC
@@ -55,8 +56,5 @@ theorem parameter_shrink_of_yoccoz :
 
 /-- Existence of Böttcher coordinates on the Mandelbrot set (axiom). -/
 axiom bottcher_onM_hyp : MLC.Quadratic.BottcherOnMHyp
-
-/-- Green sublevel connectedness on the Mandelbrot set (axiom). -/
-axiom green_sublevel_connected_hyp : MLC.Quadratic.GreenSublevelConnectedHyp
 
 end MLC

@@ -100,7 +100,7 @@ theorem mlc_conjecture : LocallyConnectedSpace mandelbrotSet := by
   · -- Bottcher coordinates exist on M
     exact bottcher_onM_hyp
   · -- Green sublevel sets connected
-    exact green_sublevel_connected_hyp
+    exact green_sublevel_connected
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
     exact classify_infinitely_renormalizable c h_inf
