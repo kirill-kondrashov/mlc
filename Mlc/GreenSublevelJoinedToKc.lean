@@ -1,52 +1,105 @@
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Topology.Connected.PathConnected
+import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.SpecialFunctions.PolarCoord
 
 namespace MLC
 
-open Quadratic Complex Topology Set Filter
+open Quadratic Complex Topology Set Filter Metric
+
+namespace Quadratic
+
+/-- The Böttcher map `φ_c` conjugates `f_c(z) = z^2 + c` to `z^2` near infinity. -/
+noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
+  -- Ideally: lim_{n \to \infty} (f_c^n(z))^(1/2^n)
+  -- For now, we postulate its existence and properties.
+  sorry
+
+/-- The domain where the Böttcher map is defined (basin of infinity). -/
+def basin_of_infinity (c : ℂ) : Set ℂ :=
+  {z | ¬ MLC.Quadratic.boundedOrbit c z}
+
+theorem basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ := by
+  ext z
+  simp [basin_of_infinity, MLC.Quadratic.K, MLC.Quadratic.boundedOrbit]
+
+/-- The Böttcher map is a conformal isomorphism from the basin to the exterior of the disk. -/
+axiom bottcher_map_image (c : ℂ) :
+    bottcher_map c '' basin_of_infinity c = {w | 1 < ‖w‖}
+
+/-- The Böttcher map satisfies |φ_c(z)| = exp(G_c(z)). -/
+axiom norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
+    ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z)
+
+/-- The Böttcher map is continuous on the basin. -/
+axiom bottcher_continuous_on (c : ℂ) :
+    ContinuousOn (bottcher_map c) (basin_of_infinity c)
+
+/-- The inverse of the Böttcher map exists (ray map). -/
+noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
+  if 1 < ‖w‖ then
+    -- inverse of bottcher_map
+    sorry
+  else 0
+
+/-- The ray map is the inverse of the Böttcher map. -/
+axiom bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    bottcher_map c (external_ray_map c w) = w
+
+axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
+    external_ray_map c (bottcher_map c z) = z
+
+/-- The ray map is continuous on the exterior of the disk. -/
+axiom ray_map_continuous_on (c : ℂ) :
+    ContinuousOn (external_ray_map c) {w | 1 < ‖w‖}
+
+end Quadratic
+
+open Quadratic
 
 /--
 Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
-This essentially means that equipotential lines (or rather gradient lines) connect points to K.
-For now, we assume this as a lemma, relying on the dynamical properties of the Green function
-(foliation by external rays).
 -/
 lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ) :
     let S := MLC.Quadratic.GreenSublevel c n
     let K := MLC.Quadratic.K c
     ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w := by
   intro S K z hz
-  -- Sketch of proof:
-  -- 1. If z ∈ K, then w = z and we are done.
+  have hK_sub_S : K ⊆ S := by
+    intro w hw
+    simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq]
+    have hGw : MLC.Quadratic.green_function c w = 0 :=
+      (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).2 hw
+    rw [hGw]
+    positivity
+
   by_cases h_in_K : z ∈ K
   · use z
-    exact ⟨h_in_K, JoinedIn.refl hz⟩
+    exact ⟨h_in_K, JoinedIn.refl (hK_sub_S h_in_K)⟩
 
-  -- 2. If z ∉ K, then G_c(z) > 0.
-  have h_G_pos : 0 < MLC.Quadratic.green_function c z := by
-    rw [← MLC.Quadratic.green_function_eq_zero_iff_mem_K c z] at h_in_K
-    apply lt_of_le_of_ne (MLC.Quadratic.green_function_nonneg c z) (Ne.symm h_in_K)
+  -- If z ∉ K, we use Böttcher coordinates.
+  have h_basin : z ∈ basin_of_infinity c := by
+    rw [basin_eq_compl_K]
+    exact h_in_K
 
-  -- 3. There exists an external ray passing through z.
-  -- We need to introduce the concept of external rays or dynamic rays here.
-  -- Since we don't have Böttcher coordinates fully formalized for the dynamical plane in the imports seen so far,
-  -- we might need to assume their existence or use the property that z lies on some dynamic ray R_t.
+  -- Let w = φ_c(z). Then |w| = exp(G_c(z)).
+  let w := bottcher_map c z
+  have hw_norm : ‖w‖ = Real.exp (green_function c z) := norm_bottcher_eq_exp_green c z
   
-  -- 4. Following the ray downwards reduces the Green function.
-  -- The ray R_t is parameterized by potential level. 
-  -- Let R_t(s) be the point on ray t at potential s.
-  -- z = R_t(G(z)).
-  -- Consider the path γ(u) = R_t((1-u)*G(z)) for u ∈ [0, 1].
-  -- This path starts at z and approaches K as u -> 1.
+  -- Since z ∈ S, G_c(z) < (1/2)^n. So 1 < |w| < exp((1/2)^n).
+  have h_norm_lt : ‖w‖ < Real.exp ((1 / 2) ^ n) := by
+    rw [hw_norm]
+    apply Real.exp_lt_exp.mpr
+    simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq] at hz
+    exact hz
   
-  -- 5. The ray lands on K (or accumulates on it) because K is connected (c ∈ M).
-  -- Since c ∈ M, K_c is connected. Dynamic rays accumulate on K_c.
-  -- In fact, since G_c is proper on ℂ \ K_c, any gradient flow line accumulates on K_c (or infinity, but we are going down).
+  have h_norm_gt : 1 < ‖w‖ := by
+    rw [hw_norm]
+    apply Real.one_lt_exp_iff.mpr
+    rw [← green_function_eq_zero_iff_mem_K c z] at h_in_K
+    exact lt_of_le_of_ne (green_function_nonneg c z) (Ne.symm h_in_K)
 
-  -- 6. The segment of the ray from z to K lies in the sublevel set because G decreases.
-  -- For u ∈ [0, 1), G(γ(u)) = (1-u)*G(z) < G(z) < 1/2^n.
-  -- So the entire path stays in S.
-  
+  -- Define a path in the w-plane: radial segment from w towards the circle.
   sorry
 
 end MLC
