@@ -1,3 +1,5 @@
+import Mathlib.Topology.Order
+import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Topology.Connected.LocallyConnected
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
@@ -100,10 +102,84 @@ lemma para_puzzle_piece_at_isOpen (c : ℂ) (n : ℕ) :
     provided they shrink to a point. -/
 lemma iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
     (⋂ n, closure (ParaPuzzlePieceAt c n)) = {c} := by
-  -- For connected nested sets in ℂ, if the intersection of the sets is a point,
-  -- then the intersection of their closures is also that point.
-  -- This follows from the fact that the diameters must shrink to zero.
-  sorry
+  ext c'
+  constructor
+  · intro h'
+    simp only [mem_iInter] at h'
+    -- We want to show c' = c.
+    -- First, show c ∈ MandelbrotSet.
+    have h_c_in_P : ∀ n, c ∈ ParaPuzzlePieceAt c n := by
+      intro n
+      have : {c} ⊆ ParaPuzzlePieceAt c n := h ▸ iInter_subset _ n
+      exact this (mem_singleton c)
+    have h_0_in_D : ∀ n, 0 ∈ DynamicalPuzzlePiece c n 0 := by
+      intro n
+      specialize h_c_in_P n
+      simpa [ParaPuzzlePieceAt] using h_c_in_P
+    have h_G0_eq : green_function c 0 = 0 := by
+      refine le_antisymm (le_of_forall_pos_le_add ?_) (green_function_nonneg c 0)
+      intro ε hε
+      obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one hε (by norm_num : (1/2 : ℝ) < 1)
+      have h_sub := connectedComponentIn_subset {w | green_function c w < (1 / 2) ^ n} 0
+      calc green_function c 0 ≤ (1/2)^n := le_of_lt (h_sub (h_0_in_D n))
+        _ ≤ 0 + ε := by linarith
+    have hcM : c ∈ MandelbrotSet := by
+      rw [MandelbrotSet, mem_setOf_eq, boundedOrbit]
+      exact (green_function_eq_zero_iff_mem_K c 0).mp h_G0_eq
+    
+    -- Now show K c ⊆ {0}.
+    have hK_sub : K c ⊆ {0} := by
+      intro w hw
+      have : w + c ∈ ⋂ n, ParaPuzzlePieceAt c n := by
+        rw [mem_iInter]
+        intro n
+        rw [ParaPuzzlePieceAt, mem_setOf_eq, add_sub_cancel_right]
+        let S := {z | green_function c z < (1 / 2) ^ n}
+        have hKS : K c ⊆ S := by
+          intro z hz
+          have hGz : green_function c z = 0 := (green_function_eq_zero_iff_mem_K c z).mpr hz
+          show green_function c z < (1 / 2) ^ n
+          rw [hGz]
+          positivity
+        have h0K : 0 ∈ K c := (green_function_eq_zero_iff_mem_K c 0).mp h_G0_eq
+        have h_comp := (filled_julia_set_connected hcM).isPreconnected.subset_connectedComponentIn h0K hKS
+        exact h_comp hw
+      rw [h] at this
+      simpa using this
+    
+    -- Finally show c' - c ∈ K c.
+    have h_Gc'_eq : green_function c (c' - c) = 0 := by
+      refine le_antisymm (le_of_forall_pos_le_add ?_) (green_function_nonneg c _)
+      intro ε hε
+      obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one hε (by norm_num : (1/2 : ℝ) < 1)
+      specialize h' n
+      let S := {z | green_function c (z - c) ≤ (1 / 2) ^ n}
+      have hS_closed : IsClosed S := by
+        apply isClosed_le
+        · exact (continuous_green_function c).comp (continuous_id.sub continuous_const)
+        · exact continuous_const
+      have h_piece_sub_S : ParaPuzzlePieceAt c n ⊆ S := by
+        intro z hz
+        simp only [ParaPuzzlePieceAt, mem_setOf_eq] at hz
+        have h_sub := connectedComponentIn_subset {w | green_function c w < (1 / 2) ^ n} 0
+        exact (le_of_lt (h_sub hz) : green_function c (z - c) ≤ (1 / 2) ^ n)
+      have h_cl_sub_S : closure (ParaPuzzlePieceAt c n) ⊆ S := hS_closed.closure_subset_iff.mpr h_piece_sub_S
+      have h_le_n : green_function c (c' - c) ≤ (1 / 2) ^ n := h_cl_sub_S h'
+      linarith
+    
+    rw [mem_singleton_iff]
+    rw [← sub_eq_zero]
+    apply hK_sub
+    exact (green_function_eq_zero_iff_mem_K c (c' - c)).mp h_Gc'_eq
+
+  · intro h'
+    rw [mem_singleton_iff] at h'
+    rw [h']
+    rw [mem_iInter]
+    intro n
+    apply subset_closure
+    have : {c} ⊆ ParaPuzzlePieceAt c n := h ▸ iInter_subset _ n
+    exact this (mem_singleton c)
 
 /-- Nested compact sets with a singleton intersection form a neighborhood basis. -/
 theorem hasBasis_nhds_of_iInter_singleton {α : Type*} [TopologicalSpace α] [T2Space α]
