@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Topology.Connected.PathConnected
+import Mlc.GreenSublevelJoinedToKc
 
 namespace MLC
 
@@ -12,26 +13,6 @@ lemma Kc_connected (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) : IsConnec
 /-- The Green function is continuous on ℂ. -/
 lemma green_continuous (c : ℂ) : Continuous (MLC.Quadratic.green_function c) := by
   exact MLC.Quadratic.continuous_green_function c
-
-/--
-Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
-This essentially means that equipotential lines (or rather gradient lines) connect points to K.
-For now, we assume this as a lemma, relying on the dynamical properties of the Green function
-(foliation by external rays).
--/
-lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ) :
-    let S := MLC.Quadratic.GreenSublevel c n
-    let K := MLC.Quadratic.K c
-    ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w := by
-  intro S K z hz
-  -- Sketch of proof:
-  -- 1. If z ∈ K, then w = z and we are done.
-  -- 2. If z ∉ K, then G_c(z) > 0.
-  -- 3. There exists an external ray passing through z.
-  -- 4. Following the ray downwards reduces the Green function.
-  -- 5. The ray lands on K (or accumulates on it) because K is connected (c ∈ M).
-  -- 6. The segment of the ray from z to K lies in the sublevel set because G decreases.
-  sorry
 
 /--
 If K_c is connected and the Green function is continuous and proper (implied by properties),
@@ -105,6 +86,7 @@ lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ) (hK : IsConne
     · refine ⟨x0, hx0_S, x0, hx0, JoinedIn.refl hx0_S, rfl⟩
     · right; exact hx0
   · exact h_pre
+
 
 /--
 Theorem: Green sublevel sets are connected on the Mandelbrot set.
