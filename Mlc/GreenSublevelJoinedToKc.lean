@@ -10,7 +10,8 @@ open Quadratic Complex Topology Set Filter Metric
 namespace Quadratic
 
 /-- The Böttcher map `φ_c` conjugates `f_c(z) = z^2 + c` to `z^2` near infinity. -/
-noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ := sorry
+noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
+  lim (map (fun n => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)) atTop)
 
 /-- The domain where the Böttcher map is defined (basin of infinity). -/
 def basin_of_infinity (c : ℂ) : Set ℂ :=
@@ -34,7 +35,7 @@ axiom bottcher_continuous_on (c : ℂ) :
 
 /-- The inverse of the Böttcher map exists (ray map). -/
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
-  if 1 < ‖w‖ then sorry else 0
+  if 1 < ‖w‖ then Function.invFun (bottcher_map c) w else 0
 
 /-- The ray map is the inverse of the Böttcher map. -/
 axiom bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
@@ -49,7 +50,7 @@ axiom ray_map_continuous_on (c : ℂ) :
 
 /-- Extension of the ray map to the closed exterior of the disk. -/
 noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
-  if 1 ≤ ‖w‖ then sorry else 0
+  if 1 ≤ ‖w‖ then lim (map (external_ray_map c) (nhdsWithin w {z | 1 < ‖z‖})) else 0
 
 /-- The extended ray map agrees with the external ray map on the open exterior. -/
 axiom extended_ray_map_eq (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
@@ -104,13 +105,49 @@ lemma bottcher_norm_of_mem_sublevel (c : ℂ) (n : ℕ) (z : ℂ)
 lemma radial_path_norm_ge_one (w : ℂ) (hw : 1 < ‖w‖) :
     ∀ (t : unitInterval), 1 ≤ ‖w * (1 - t + t / ↑‖w‖)‖ := by
   intro t
-  sorry
+  let r_t : ℝ := (t : ℝ)
+  have ht0 : 0 ≤ r_t := t.2.1
+  have ht1 : r_t ≤ 1 := t.2.2
+  have hw0 : 0 < ‖w‖ := lt_trans zero_lt_one hw
+  have h_pos : 0 ≤ 1 - r_t + r_t / ‖w‖ := by
+    apply add_nonneg (sub_nonneg.mpr ht1) (div_nonneg ht0 hw0.le)
+  rw [norm_mul]
+  have h_norm_real : ‖(1 : ℂ) - ↑r_t + ↑r_t / ↑‖w‖‖ = 1 - r_t + r_t / ‖w‖ := by
+    rw [← Complex.ofReal_one, ← Complex.ofReal_sub, ← Complex.ofReal_div, ← Complex.ofReal_add]
+    rw [Complex.norm_real]
+    exact abs_of_nonneg h_pos
+  rw [h_norm_real]
+  have h_linear : ‖w‖ * (1 - r_t + r_t / ‖w‖) = ‖w‖ * (1 - r_t) + r_t := by
+    field_simp [hw0.ne.symm]
+  rw [h_linear]
+  calc (1 : ℝ) = 1 * (1 - r_t) + r_t := by ring
+    _ ≤ ‖w‖ * (1 - r_t) + r_t := by
+      rw [add_le_add_iff_right]
+      apply mul_le_mul_of_nonneg_right (le_of_lt hw) (sub_nonneg.mpr ht1)
 
 /-- The radial path γ(t) has norm decreasing from |w| to 1. -/
 lemma radial_path_norm_le_w (w : ℂ) (hw : 1 < ‖w‖) :
     ∀ (t : unitInterval), ‖w * (1 - t + t / ↑‖w‖)‖ ≤ ‖w‖ := by
   intro t
-  sorry
+  let r_t : ℝ := (t : ℝ)
+  have ht0 : 0 ≤ r_t := t.2.1
+  have ht1 : r_t ≤ 1 := t.2.2
+  have hw0 : 0 < ‖w‖ := lt_trans zero_lt_one hw
+  have h_pos : 0 ≤ 1 - r_t + r_t / ‖w‖ := by
+    apply add_nonneg (sub_nonneg.mpr ht1) (div_nonneg ht0 hw0.le)
+  rw [norm_mul]
+  have h_norm_real : ‖(1 : ℂ) - ↑r_t + ↑r_t / ↑‖w‖‖ = 1 - r_t + r_t / ‖w‖ := by
+    rw [← Complex.ofReal_one, ← Complex.ofReal_sub, ← Complex.ofReal_div, ← Complex.ofReal_add]
+    rw [Complex.norm_real]
+    exact abs_of_nonneg h_pos
+  rw [h_norm_real]
+  have h_linear : ‖w‖ * (1 - r_t + r_t / ‖w‖) = ‖w‖ * (1 - r_t) + r_t := by
+    field_simp [hw0.ne.symm]
+  rw [h_linear]
+  calc ‖w‖ * (1 - r_t) + r_t = ‖w‖ - r_t * (‖w‖ - 1) := by ring
+    _ ≤ ‖w‖ := by
+      rw [sub_le_self_iff]
+      apply mul_nonneg ht0 (sub_nonneg.mpr (le_of_lt hw))
 
 /-- Auxiliary lemma to construct the path. -/
 lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ) 
