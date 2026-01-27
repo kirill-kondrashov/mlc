@@ -21,9 +21,6 @@ theorem basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)�
   ext z
   simp [basin_of_infinity, MLC.Quadratic.K, MLC.Quadratic.boundedOrbit]
 
-/-- The Böttcher map is a conformal isomorphism from the basin to the exterior of the disk. -/
-axiom bottcher_map_image (c : ℂ) :
-    bottcher_map c '' basin_of_infinity c = {w | 1 < ‖w‖}
 
 /-- The Böttcher map satisfies |φ_c(z)| = exp(G_c(z)). -/
 axiom norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
@@ -43,6 +40,31 @@ axiom bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
 
 axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
     external_ray_map c (bottcher_map c z) = z
+
+/-- The Böttcher map is a conformal isomorphism from the basin to the exterior of the disk. -/
+theorem bottcher_map_image (c : ℂ) :
+    bottcher_map c '' basin_of_infinity c = {w | 1 < ‖w‖} := by
+  ext w
+  constructor
+  · rintro ⟨z, hz, rfl⟩
+    rw [mem_setOf_eq, norm_bottcher_eq_exp_green]
+    apply Real.one_lt_exp_iff.mpr
+    rw [basin_eq_compl_K] at hz
+    have hG := (MLC.Quadratic.green_function_eq_zero_iff_mem_K c z).not.mpr hz
+    exact lt_of_le_of_ne (MLC.Quadratic.green_function_nonneg c z) (Ne.symm hG)
+  · intro hw
+    rw [mem_setOf_eq] at hw
+    use external_ray_map c w
+    constructor
+    · rw [basin_eq_compl_K]
+      intro hK
+      have hG : MLC.Quadratic.green_function c (external_ray_map c w) = 0 :=
+        (MLC.Quadratic.green_function_eq_zero_iff_mem_K c _).mpr hK
+      have h_norm : ‖bottcher_map c (external_ray_map c w)‖ = 1 := by
+        rw [norm_bottcher_eq_exp_green, hG, Real.exp_zero]
+      rw [bottcher_right_inv c w hw] at h_norm
+      linarith
+    · exact bottcher_right_inv c w hw
 
 /-- The ray map is continuous on the exterior of the disk. -/
 axiom ray_map_continuous_on (c : ℂ) :
