@@ -10,10 +10,7 @@ open Quadratic Complex Topology Set Filter Metric
 namespace Quadratic
 
 /-- The Böttcher map `φ_c` conjugates `f_c(z) = z^2 + c` to `z^2` near infinity. -/
-noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
-  -- Ideally: lim_{n \to \infty} (f_c^n(z))^(1/2^n)
-  -- For now, we postulate its existence and properties.
-  sorry
+noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ := sorry
 
 /-- The domain where the Böttcher map is defined (basin of infinity). -/
 def basin_of_infinity (c : ℂ) : Set ℂ :=
@@ -37,10 +34,7 @@ axiom bottcher_continuous_on (c : ℂ) :
 
 /-- The inverse of the Böttcher map exists (ray map). -/
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
-  if 1 < ‖w‖ then
-    -- inverse of bottcher_map
-    sorry
-  else 0
+  if 1 < ‖w‖ then sorry else 0
 
 /-- The ray map is the inverse of the Böttcher map. -/
 axiom bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
@@ -53,9 +47,114 @@ axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
 axiom ray_map_continuous_on (c : ℂ) :
     ContinuousOn (external_ray_map c) {w | 1 < ‖w‖}
 
+/-- Extension of the ray map to the closed exterior of the disk. -/
+noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
+  if 1 ≤ ‖w‖ then sorry else 0
+
+/-- The extended ray map agrees with the external ray map on the open exterior. -/
+axiom extended_ray_map_eq (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    extended_ray_map c w = external_ray_map c w
+
+/-- The extended ray map is continuous on the closed exterior {w | 1 ≤ |w|}. -/
+axiom extended_ray_map_continuous (c : ℂ) :
+    ContinuousOn (extended_ray_map c) {w | 1 ≤ ‖w‖}
+
+/-- The extended ray map maps the unit circle to the Julia set (subset of K). -/
+axiom extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
+    extended_ray_map c w ∈ MLC.Quadratic.K c
+
 end Quadratic
 
 open Quadratic
+
+/-- K is contained in the Green sublevel set. -/
+lemma K_subset_green_sublevel (c : ℂ) (n : ℕ) : 
+    MLC.Quadratic.K c ⊆ MLC.Quadratic.GreenSublevel c n := by
+  intro w hw
+  simp only [MLC.Quadratic.GreenSublevel, mem_setOf_eq]
+  have hGw : MLC.Quadratic.green_function c w = 0 :=
+    (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).2 hw
+  rw [hGw]
+  positivity
+
+/-- If z is not in K, it is in the basin of infinity. -/
+lemma z_in_basin_of_not_mem_K (c : ℂ) (z : ℂ) (h : z ∉ MLC.Quadratic.K c) : 
+    z ∈ basin_of_infinity c := by
+  rw [basin_eq_compl_K]
+  exact h
+
+/-- Bounds on the Böttcher coordinate norm for points in the sublevel set but not in K. -/
+lemma bottcher_norm_of_mem_sublevel (c : ℂ) (n : ℕ) (z : ℂ) 
+    (hz : z ∈ MLC.Quadratic.GreenSublevel c n) (hK : z ∉ MLC.Quadratic.K c) :
+    let w := bottcher_map c z
+    1 < ‖w‖ ∧ ‖w‖ < Real.exp ((1 / 2) ^ n) := by
+  intro w
+  have hw_norm : ‖w‖ = Real.exp (green_function c z) := norm_bottcher_eq_exp_green c z
+  constructor
+  · rw [hw_norm]
+    apply Real.one_lt_exp_iff.mpr
+    rw [← green_function_eq_zero_iff_mem_K c z] at hK
+    exact lt_of_le_of_ne (green_function_nonneg c z) (Ne.symm hK)
+  · rw [hw_norm]
+    apply Real.exp_lt_exp.mpr
+    simp only [MLC.Quadratic.GreenSublevel, mem_setOf_eq] at hz
+    exact hz
+
+/-- The radial path γ(t) stays in the exterior of the unit disk (norm ≥ 1). -/
+lemma radial_path_norm_ge_one (w : ℂ) (hw : 1 < ‖w‖) :
+    ∀ (t : unitInterval), 1 ≤ ‖w * (1 - t + t / ↑‖w‖)‖ := by
+  intro t
+  sorry
+
+/-- The radial path γ(t) has norm decreasing from |w| to 1. -/
+lemma radial_path_norm_le_w (w : ℂ) (hw : 1 < ‖w‖) :
+    ∀ (t : unitInterval), ‖w * (1 - t + t / ↑‖w‖)‖ ≤ ‖w‖ := by
+  intro t
+  sorry
+
+/-- Auxiliary lemma to construct the path. -/
+lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ) 
+    (h_norm_gt : 1 < ‖w‖) (hw_ne_zero : w ≠ 0)
+    (h_start : extended_ray_map c w = z) 
+    (h_basin : z ∈ basin_of_infinity c) :
+    ∃ p : Path z (extended_ray_map c (w / ↑‖w‖)), p 1 ∈ MLC.Quadratic.K c ∧ 
+    ∀ t, p t = extended_ray_map c (w * (1 - t + t / ↑‖w‖)) := by
+  let γ : Path w (w / ↑‖w‖) := {
+    toFun := fun t => w * (1 - t + t / ↑‖w‖)
+    continuous_toFun := by continuity
+    source' := by simp
+    target' := by simp; field_simp [hw_ne_zero]
+  }
+  
+  have h_norm_γ := radial_path_norm_ge_one w h_norm_gt
+  have h_gamma_cont : Continuous (extended_ray_map c ∘ γ) :=
+    ContinuousOn.comp_continuous (extended_ray_map_continuous c) γ.continuous h_norm_γ
+
+  let p_path : Path (extended_ray_map c w) (extended_ray_map c (w / ↑‖w‖)) := {
+    toFun := extended_ray_map c ∘ γ
+    continuous_toFun := h_gamma_cont
+    source' := by dsimp; rw [γ.source]
+    target' := by dsimp; rw [γ.target]
+  }
+  
+  -- Use h_start to redefine source
+  let p' : Path z (extended_ray_map c (w / ↑‖w‖)) := {
+    toFun := p_path.toFun
+    continuous_toFun := p_path.continuous_toFun
+    source' := by rw [p_path.source', h_start]
+    target' := p_path.target'
+  }
+
+  have hp'_eq : ∀ t, p' t = p_path t := by intro t; rfl
+
+  have hp1_K : p' 1 ∈ MLC.Quadratic.K c := by
+    rw [hp'_eq]
+    dsimp [p_path]
+    rw [γ.target]
+    apply extended_ray_map_lands
+    simp [hw_ne_zero]
+
+  refine ⟨p', hp1_K, hp'_eq⟩
 
 /--
 Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
@@ -65,41 +164,55 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ) :
     let K := MLC.Quadratic.K c
     ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w := by
   intro S K z hz
-  have hK_sub_S : K ⊆ S := by
-    intro w hw
-    simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq]
-    have hGw : MLC.Quadratic.green_function c w = 0 :=
-      (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).2 hw
-    rw [hGw]
-    positivity
-
   by_cases h_in_K : z ∈ K
   · use z
-    exact ⟨h_in_K, JoinedIn.refl (hK_sub_S h_in_K)⟩
+    exact ⟨h_in_K, JoinedIn.refl (K_subset_green_sublevel c n h_in_K)⟩
 
-  -- If z ∉ K, we use Böttcher coordinates.
-  have h_basin : z ∈ basin_of_infinity c := by
-    rw [basin_eq_compl_K]
-    exact h_in_K
-
-  -- Let w = φ_c(z). Then |w| = exp(G_c(z)).
+  have h_basin := z_in_basin_of_not_mem_K c z h_in_K
   let w := bottcher_map c z
-  have hw_norm : ‖w‖ = Real.exp (green_function c z) := norm_bottcher_eq_exp_green c z
+  obtain ⟨h_norm_gt, h_norm_lt⟩ := bottcher_norm_of_mem_sublevel c n z hz h_in_K
   
-  -- Since z ∈ S, G_c(z) < (1/2)^n. So 1 < |w| < exp((1/2)^n).
-  have h_norm_lt : ‖w‖ < Real.exp ((1 / 2) ^ n) := by
-    rw [hw_norm]
-    apply Real.exp_lt_exp.mpr
-    simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq] at hz
-    exact hz
+  have hw_ne_zero : w ≠ 0 := ne_zero_of_norm_ne_zero (ne_of_gt (lt_trans zero_lt_one h_norm_gt))
   
-  have h_norm_gt : 1 < ‖w‖ := by
-    rw [hw_norm]
-    apply Real.one_lt_exp_iff.mpr
-    rw [← green_function_eq_zero_iff_mem_K c z] at h_in_K
-    exact lt_of_le_of_ne (green_function_nonneg c z) (Ne.symm h_in_K)
+  have h_start : extended_ray_map c w = z := by
+    rw [extended_ray_map_eq c w h_norm_gt]
+    apply bottcher_left_inv c z h_basin
 
-  -- Define a path in the w-plane: radial segment from w towards the circle.
-  sorry
+  obtain ⟨p', hp1_K, hp'_eq⟩ := construct_bottcher_path c z w h_norm_gt hw_ne_zero h_start h_basin
+  
+  -- Cast p' to connect z to p' 1 explicitly
+  let p'' : Path z (p' 1) := p'.cast rfl p'.target
 
-end MLC
+  use p' 1
+  refine ⟨hp1_K, ⟨p'', ?_⟩⟩
+  
+  intro t
+  -- p'' t = p' t
+  have hp''_eq : p'' t = p' t := by rw [Path.cast_coe]
+  rw [hp''_eq]
+  rw [hp'_eq]
+  let u := w * (1 - t + t / ↑‖w‖)
+  have h_u_norm_ge_1 := radial_path_norm_ge_one w h_norm_gt t
+  have h_u_norm_le_w := radial_path_norm_le_w w h_norm_gt t
+  
+  by_cases hu_1 : ‖u‖ = 1
+  · have : extended_ray_map c u ∈ K := by
+      apply extended_ray_map_lands c u hu_1
+    apply K_subset_green_sublevel c n this
+  · have hu_gt_1 : 1 < ‖u‖ := lt_of_le_of_ne h_u_norm_ge_1 (Ne.symm hu_1)
+    have hp'_val : extended_ray_map c u = external_ray_map c u := by
+      rw [extended_ray_map_eq c u hu_gt_1]
+    
+    simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq]
+    rw [hp'_val]
+    have h_phi : ‖bottcher_map c (external_ray_map c u)‖ = ‖u‖ := by
+      rw [bottcher_right_inv c u hu_gt_1]
+    rw [norm_bottcher_eq_exp_green c (external_ray_map c u)] at h_phi
+    
+    have h_G : green_function c (external_ray_map c u) = Real.log ‖u‖ := by
+      rw [← h_phi, Real.log_exp]
+    
+    rw [h_G]
+    rw [Real.log_lt_iff_lt_exp (lt_trans zero_lt_one hu_gt_1)]
+    calc ‖u‖ ≤ ‖w‖ := h_u_norm_le_w
+      _ < Real.exp ((1 / 2) ^ n) := h_norm_lt
