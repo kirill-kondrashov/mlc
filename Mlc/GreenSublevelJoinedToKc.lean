@@ -40,10 +40,6 @@ theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
       exact div_self (norm_ne_zero_iff.mpr h)
   rw [this, one_mul]
 
-/-- The Böttcher map is continuous on the basin. -/
-axiom bottcher_continuous_on (c : ℂ) :
-    ContinuousOn (bottcher_map c) (basin_of_infinity c)
-
 /-- The inverse of the Böttcher map exists (ray map). -/
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
   if 1 < ‖w‖ then Function.invFun (bottcher_map c) w else 0
@@ -54,6 +50,124 @@ axiom bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
 
 axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
     external_ray_map c (bottcher_map c z) = z
+
+/-- The ray map is continuous on the exterior of the disk. -/
+axiom ray_map_continuous_on (c : ℂ) :
+    ContinuousOn (external_ray_map c) {w | 1 < ‖w‖}
+
+/-- The Böttcher map is continuous on the basin.
+    This follows from Böttcher's theorem regarding the locally uniform convergence
+    of the sequence `(f_c^n(z))^(1/2^n)` in the basin of infinity.
+    Here we prove it using the Invariance of Domain on the inverse map. -/
+axiom invariance_of_domain_complex {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
+    (hf : ContinuousOn f U) (hinj : Set.InjOn f U) : IsOpenMap (U.restrict f)
+
+theorem bottcher_continuous_on (c : ℂ) :
+    ContinuousOn (bottcher_map c) (basin_of_infinity c) := by
+  -- Prove basin is open
+  have h_G_cont : Continuous (MLC.Quadratic.green_function c) := MLC.Quadratic.continuous_green_function c
+  have h_basin_open : IsOpen (basin_of_infinity c) := by
+    rw [basin_eq_compl_K]
+    have h_K_closed : IsClosed (MLC.Quadratic.K c) := by
+      have : MLC.Quadratic.K c = MLC.Quadratic.green_function c ⁻¹' {0} := by
+        ext z
+        rw [mem_preimage, mem_singleton_iff, MLC.Quadratic.green_function_eq_zero_iff_mem_K]
+      rw [this]
+      exact isClosed_singleton.preimage h_G_cont
+    exact h_K_closed.isOpen_compl
+
+  -- Prove exterior is open
+  have h_ext_open : IsOpen {w : ℂ | 1 < ‖w‖} :=
+    isOpen_Ioi.preimage continuous_norm
+
+  -- Prove injectivity of ray map
+  have h_inj : Set.InjOn (external_ray_map c) {w | 1 < ‖w‖} := by
+    intro x hx y hy h_eq
+    rw [← bottcher_right_inv c x hx, ← bottcher_right_inv c y hy, h_eq]
+
+  -- Apply Invariance of Domain
+  have h_open_map : IsOpenMap ({w | 1 < ‖w‖}.restrict (external_ray_map c)) :=
+    invariance_of_domain_complex h_ext_open (ray_map_continuous_on c) h_inj
+
+  -- ContinuousOn via open map property of inverse
+  rw [continuousOn_iff_continuous_restrict]
+  rw [continuous_def]
+  intro U hU
+  
+  let V := U ∩ {w | 1 < ‖w‖}
+  have hV_open : IsOpen V := IsOpen.inter hU h_ext_open
+  
+  let V' : Set {w | 1 < ‖w‖} := Subtype.val ⁻¹' V
+  have hV'_open : IsOpen V' := isOpen_induced hV_open
+  
+  have h_image_open : IsOpen (external_ray_map c '' V) := by
+    have h_eq : external_ray_map c '' V = ({w | 1 < ‖w‖}.restrict (external_ray_map c)) '' V' := by
+      ext y
+      constructor
+      · rintro ⟨x, hx, rfl⟩
+        refine ⟨⟨x, hx.2⟩, ?_, rfl⟩
+        simp only [V', mem_preimage, hx]
+      · rintro ⟨⟨x, hx_ext⟩, hx_V', rfl⟩
+        simp only [V', mem_preimage] at hx_V'
+        use x
+        exact ⟨hx_V', rfl⟩
+    rw [h_eq]
+    exact h_open_map V' hV'_open
+  
+  have h_eq_image : { z ∈ basin_of_infinity c | bottcher_map c z ∈ V } = external_ray_map c '' V := by
+    ext z
+    constructor
+    · intro hz
+      use bottcher_map c z
+      constructor
+      · exact hz.2
+      · exact bottcher_left_inv c z hz.1
+    · rintro ⟨w, hw, rfl⟩
+      have hw_gt : 1 < ‖w‖ := hw.2
+      constructor
+      · rw [basin_eq_compl_K]
+        intro hK
+        have hG : MLC.Quadratic.green_function c (external_ray_map c w) = 0 :=
+          (MLC.Quadratic.green_function_eq_zero_iff_mem_K c _).mpr hK
+        have h_norm : ‖bottcher_map c (external_ray_map c w)‖ = 1 := by
+          rw [norm_bottcher_eq_exp_green, hG, Real.exp_zero]
+        rw [bottcher_right_inv c w hw_gt] at h_norm
+        linarith
+      · rw [bottcher_right_inv c w hw_gt]
+        exact hw
+    
+  rw [isOpen_induced_iff]
+  use external_ray_map c '' V
+  constructor
+  · exact h_image_open
+  · ext ⟨z, hz_basin⟩
+    simp only [mem_preimage, restrict_apply]
+    show z ∈ external_ray_map c '' V ↔ bottcher_map c z ∈ U
+    constructor
+    · intro h_in_RHS
+      have h_in_LHS : z ∈ { w ∈ basin_of_infinity c | bottcher_map c w ∈ V } := by
+        rw [h_eq_image]
+        exact h_in_RHS
+      exact h_in_LHS.2.1
+      
+    · intro h_in_U
+      have h_ext : 1 < ‖bottcher_map c z‖ := by
+        rw [norm_bottcher_eq_exp_green]
+        apply Real.one_lt_exp_iff.mpr
+        have hK : z ∉ MLC.Quadratic.K c := by
+          rw [basin_eq_compl_K] at hz_basin
+          exact hz_basin
+        rw [← MLC.Quadratic.green_function_eq_zero_iff_mem_K] at hK
+        exact lt_of_le_of_ne (MLC.Quadratic.green_function_nonneg c z) (Ne.symm hK)
+      
+      have h_in_LHS : z ∈ { w ∈ basin_of_infinity c | bottcher_map c w ∈ V } := 
+        ⟨hz_basin, ⟨h_in_U, h_ext⟩⟩
+      
+      have h_in_RHS : z ∈ external_ray_map c '' V := by
+        rw [← h_eq_image]
+        exact h_in_LHS
+        
+      exact h_in_RHS
 
 /-- The Böttcher map is a conformal isomorphism from the basin to the exterior of the disk. -/
 theorem bottcher_map_image (c : ℂ) :
@@ -79,10 +193,6 @@ theorem bottcher_map_image (c : ℂ) :
       rw [bottcher_right_inv c w hw] at h_norm
       linarith
     · exact bottcher_right_inv c w hw
-
-/-- The ray map is continuous on the exterior of the disk. -/
-axiom ray_map_continuous_on (c : ℂ) :
-    ContinuousOn (external_ray_map c) {w | 1 < ‖w‖}
 
 /-- Extension of the ray map to the closed exterior of the disk. -/
 noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
