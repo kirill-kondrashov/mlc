@@ -148,8 +148,11 @@ theorem escaping_set_contains_large_ball
 def basin_of_infinity (c : ℂ) : Set ℂ :=
   {z | Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop}
 
+def outside_disk (c : ℂ) : Set ℂ :=
+  {z | ‖z‖ ≥ ‖c‖ + 2}
+
 theorem basin_of_infinity_contains_large_ball (c : ℂ) :
-    {z | ‖z‖ ≥ ‖c‖ + 2} ⊆ basin_of_infinity c := by
+    outside_disk c ⊆ basin_of_infinity c := by
   intro z hz
   exact (escaping_set_contains_large_ball c) hz
 
@@ -255,33 +258,33 @@ conjugacy and normalization properties.
 structure BottcherCoordinate (c : ℂ) where
   phi : ℂ → ℂ
   cont : Continuous phi
-  conj : ∀ z, z ∈ basin_of_infinity c → phi (quadratic_map c z) = (phi z) ^ 2
-  norm : ∀ z, z ∈ basin_of_infinity c → ‖phi z‖ ≥ 1
+  conj : ∀ z, z ∈ outside_disk c → phi (quadratic_map c z) = (phi z) ^ 2
+  norm : ∀ z, z ∈ outside_disk c → ‖phi z‖ ≥ 1
 
-def BottcherCoordinate.of_basin
+def BottcherCoordinate.of_outside
     (_c : ℂ) (φ : ℂ → ℂ) (hφ : Continuous φ)
-    (_conj : ∀ z, z ∈ basin_of_infinity _c → φ (quadratic_map _c z) = (φ z) ^ 2)
-    (_norm : ∀ z, z ∈ basin_of_infinity _c → ‖φ z‖ ≥ 1) :
+    (_conj : ∀ z, z ∈ outside_disk _c → φ (quadratic_map _c z) = (φ z) ^ 2)
+    (_norm : ∀ z, z ∈ outside_disk _c → ‖φ z‖ ≥ 1) :
     BottcherCoordinate _c :=
   { phi := φ
     cont := hφ
     conj := _conj
     norm := _norm }
 
-theorem bottcher_coordinate_exists_on_basin
+theorem bottcher_coordinate_exists_on_outside
     (_c : ℂ) (φ : ℂ → ℂ) (hφ : Continuous φ)
-    (_conj : ∀ z, z ∈ basin_of_infinity _c → φ (quadratic_map _c z) = (φ z) ^ 2)
-    (_norm : ∀ z, z ∈ basin_of_infinity _c → ‖φ z‖ ≥ 1) :
+    (_conj : ∀ z, z ∈ outside_disk _c → φ (quadratic_map _c z) = (φ z) ^ 2)
+    (_norm : ∀ z, z ∈ outside_disk _c → ‖φ z‖ ≥ 1) :
     ∃ (_φ : BottcherCoordinate _c), True := by
-  refine ⟨BottcherCoordinate.of_basin _c φ hφ _conj _norm, trivial⟩
+  refine ⟨BottcherCoordinate.of_outside _c φ hφ _conj _norm, trivial⟩
 
-theorem bottcher_coordinate_exists_on_basin_strong'
+theorem bottcher_coordinate_exists_on_outside_strong'
     (_c : ℂ) (φ : ℂ → ℂ) (hφ : Continuous φ)
-    (_conj : ∀ z, z ∈ basin_of_infinity _c → φ (quadratic_map _c z) = (φ z) ^ 2)
-    (_norm : ∀ z, z ∈ basin_of_infinity _c → ‖φ z‖ ≥ 1) :
+    (_conj : ∀ z, z ∈ outside_disk _c → φ (quadratic_map _c z) = (φ z) ^ 2)
+    (_norm : ∀ z, z ∈ outside_disk _c → ‖φ z‖ ≥ 1) :
     ∃ (B : BottcherCoordinate _c), Continuous B.phi := by
-  refine ⟨BottcherCoordinate.of_basin _c φ hφ _conj _norm, ?_⟩
-  exact (BottcherCoordinate.of_basin _c φ hφ _conj _norm).cont
+  refine ⟨BottcherCoordinate.of_outside _c φ hφ _conj _norm, ?_⟩
+  exact (BottcherCoordinate.of_outside _c φ hφ _conj _norm).cont
 
 theorem iterate_norm_ge_of_norm_ge
     {f : ℂ → ℂ} {R : ℝ}
@@ -360,13 +363,13 @@ theorem bottcher_coordinate_exists_strong
       (∀ z, ‖z‖ ≥ ‖_c‖ + 2 → ‖φ z‖ ≥ 1) := by
   exact ⟨φ, hφ, _conj, _norm⟩
 
-theorem bottcher_coordinate_exists_on_basin_strong
+theorem bottcher_coordinate_exists_on_outside_strong
     (_c : ℂ) (φ : ℂ → ℂ) (hφ : Continuous φ)
-    (_conj : ∀ z, z ∈ basin_of_infinity _c → φ (quadratic_map _c z) = (φ z) ^ 2)
-    (_norm : ∀ z, z ∈ basin_of_infinity _c → ‖φ z‖ ≥ 1) :
+    (_conj : ∀ z, z ∈ outside_disk _c → φ (quadratic_map _c z) = (φ z) ^ 2)
+    (_norm : ∀ z, z ∈ outside_disk _c → ‖φ z‖ ≥ 1) :
     ∃ (φ : ℂ → ℂ), Continuous φ ∧
-      (∀ z, z ∈ basin_of_infinity _c → φ (quadratic_map _c z) = (φ z) ^ 2) ∧
-      (∀ z, z ∈ basin_of_infinity _c → ‖φ z‖ ≥ 1) := by
+      (∀ z, z ∈ outside_disk _c → φ (quadratic_map _c z) = (φ z) ^ 2) ∧
+      (∀ z, z ∈ outside_disk _c → ‖φ z‖ ≥ 1) := by
   exact ⟨φ, hφ, _conj, _norm⟩
 
 theorem holomorphic_motion_external_strong
