@@ -110,7 +110,6 @@ All axioms used:
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.Quadratic.extended_ray_map_eq
-- MLC.Quadratic.bottcher_left_inv
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.Quadratic.extended_ray_map_lands
 - MLC.classify_infinitely_renormalizable

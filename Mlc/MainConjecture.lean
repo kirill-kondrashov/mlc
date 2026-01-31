@@ -89,7 +89,8 @@ theorem mlc_strategy
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
-    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c) :
+    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
+    (h_inj : ∀ c, Function.Injective (Quadratic.bottcher_map c)) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply mlc_strategy
@@ -102,7 +103,7 @@ theorem mlc_conjecture
   · -- Bottcher coordinates exist on M
     exact bottcher_onM_hyp
   · -- Green sublevel sets connected
-    exact green_sublevel_connected h_surj
+    exact green_sublevel_connected h_surj h_inj
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
     exact classify_infinitely_renormalizable c h_inf

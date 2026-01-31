@@ -137,7 +137,8 @@ lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ)
 Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
 -/
 lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
-    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ bottcher_map c '' bottcher_domain c) :
+    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ bottcher_map c '' bottcher_domain c)
+    (h_inj : Function.Injective (bottcher_map c)) :
     let S := MLC.Quadratic.GreenSublevel c n
     let K := MLC.Quadratic.K c
     ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w := by
@@ -154,7 +155,7 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
   
   have h_start : extended_ray_map c w = z := by
     rw [extended_ray_map_eq c w h_norm_gt]
-    apply bottcher_left_inv c z h_basin
+    apply bottcher_left_inv c z h_basin h_inj
 
   obtain ⟨p', hp1_K, hp'_eq⟩ := construct_bottcher_path c z w h_norm_gt hw_ne_zero h_start h_basin
   

@@ -20,7 +20,8 @@ then the sublevel sets {z | G_c(z) < ε} are connected.
 -/
 lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
     (hK : IsConnected (MLC.Quadratic.K c))
-    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c) :
+    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
+    (h_inj : Function.Injective (Quadratic.bottcher_map c)) :
     IsConnected (MLC.Quadratic.GreenSublevel c n) := by
   let S := MLC.Quadratic.GreenSublevel c n
   let K := MLC.Quadratic.K c
@@ -37,7 +38,7 @@ lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
   
   -- 2. Every point in the Green sublevel set is in the same component as K_c.
   have h_same_comp : ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w :=
-    green_sublevel_joined_to_Kc c n h_surj
+    green_sublevel_joined_to_Kc c n h_surj h_inj
 
   -- 3. Show S is connected.
   -- We construct S as the union of connected sets (path components) that all intersect K (which is connected).
@@ -95,13 +96,15 @@ Theorem: Green sublevel sets are connected on the Mandelbrot set.
 (Formerly an axiom).
 -/
 theorem green_sublevel_connected
-    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c) :
+    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
+    (h_inj : ∀ c, Function.Injective (Quadratic.bottcher_map c)) :
     MLC.Quadratic.GreenSublevelConnectedHyp := {
   connected := by
     intro c n hc
     apply green_sublevel_connected_of_connected_Kc
     · exact Kc_connected c hc
     · exact h_surj c
+    · exact h_inj c
 }
 
 end MLC

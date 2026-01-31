@@ -65,8 +65,24 @@ lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
   apply Function.invFun_eq
   exact ⟨a, rfl⟩
 
-axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
-    external_ray_map c (bottcher_map c z) = z
+theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
+    (h_inj : Function.Injective (bottcher_map c)) :
+    external_ray_map c (bottcher_map c z) = z := by
+  have hz' : z ∉ MLC.Quadratic.K c := by
+    have : z ∈ (MLC.Quadratic.K c)ᶜ := by
+      simpa [basin_eq_compl_K c] using hz
+    simpa [Set.mem_compl_iff] using this
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    (MLC.Quadratic.green_function_pos_iff_not_mem_K c z).2 hz'
+  have hnorm : 1 < ‖bottcher_map c z‖ := by
+    have hnorm' : ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) :=
+      norm_bottcher_eq_exp_green c z
+    have hgt : 1 < Real.exp (MLC.Quadratic.green_function c z) := by
+      simpa using (Real.one_lt_exp_iff.mpr hpos)
+    simpa [hnorm'] using hgt
+  unfold external_ray_map
+  rw [if_pos hnorm]
+  exact (Function.leftInverse_invFun h_inj) z
 
 axiom invariance_of_domain_complex {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
     (hf : ContinuousOn f U) (hinj : Set.InjOn f U) : IsOpenMap (U.restrict f)

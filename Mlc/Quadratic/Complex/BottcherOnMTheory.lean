@@ -1,4 +1,5 @@
 import Mlc.Quadratic.Complex.BottcherMotion
+import Mlc.Quadratic.Complex.BottcherAxioms
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
 
@@ -158,6 +159,52 @@ theorem basin_of_infinity_contains_large_ball (c : ℂ) :
 
 theorem outside_disk_subset_basin (c : ℂ) : outside_disk c ⊆ basin_of_infinity c :=
   basin_of_infinity_contains_large_ball c
+
+theorem bottcher_left_inv_of_injective
+    (c : ℂ) (z : ℂ) (h_norm : 1 < ‖bottcher_map c z‖)
+    (h_inj : Function.Injective (bottcher_map c)) :
+    external_ray_map c (bottcher_map c z) = z := by
+  unfold external_ray_map
+  rw [if_pos h_norm]
+  exact (Function.leftInverse_invFun h_inj) z
+
+theorem bottcher_map_norm_gt_one_of_basin
+    (c : ℂ) (z : ℂ) (_hz : z ∈ Quadratic.basin_of_infinity c)
+    (hpos : 0 < MLC.Quadratic.green_function c z) :
+    1 < ‖Quadratic.bottcher_map c z‖ := by
+  -- `‖bottcher_map c z‖ = exp(green_function c z)` and `exp` is > 1 for positive input.
+  have hnorm : ‖Quadratic.bottcher_map c z‖ =
+      Real.exp (MLC.Quadratic.green_function c z) :=
+    Quadratic.norm_bottcher_eq_exp_green c z
+  have hgt : 1 < Real.exp (MLC.Quadratic.green_function c z) := by
+    simpa using (Real.one_lt_exp_iff.mpr hpos)
+  simpa [hnorm] using hgt
+
+theorem green_function_pos_of_basin
+    (c : ℂ) (z : ℂ) (hz : z ∈ Quadratic.basin_of_infinity c) :
+    0 < MLC.Quadratic.green_function c z := by
+  have hz' : z ∈ (MLC.Quadratic.K c)ᶜ := by
+    simpa [Quadratic.basin_eq_compl_K c] using hz
+  have hz'' : z ∉ MLC.Quadratic.K c := by
+    simpa [Set.mem_compl_iff] using hz'
+  exact (MLC.Quadratic.green_function_pos_iff_not_mem_K c z).2 hz''
+
+theorem bottcher_left_inv_of_basin
+    (c : ℂ) (z : ℂ) (hz : z ∈ Quadratic.basin_of_infinity c)
+    (hpos : 0 < MLC.Quadratic.green_function c z)
+    (h_inj : Function.Injective (Quadratic.bottcher_map c)) :
+    Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+  have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
+    bottcher_map_norm_gt_one_of_basin c z hz hpos
+  exact bottcher_left_inv_of_injective c z hnorm h_inj
+
+theorem bottcher_left_inv_of_basin'
+    (c : ℂ) (z : ℂ) (hz : z ∈ Quadratic.basin_of_infinity c)
+    (h_inj : Function.Injective (Quadratic.bottcher_map c)) :
+    Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    green_function_pos_of_basin c z hz
+  exact bottcher_left_inv_of_basin c z hz hpos h_inj
 
 theorem basin_of_infinity_nonempty (c : ℂ) : (basin_of_infinity c).Nonempty := by
   refine ⟨((‖c‖ + 2 : ℝ) : ℂ), ?_⟩
