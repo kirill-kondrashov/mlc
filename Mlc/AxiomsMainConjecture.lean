@@ -2,7 +2,7 @@ import Mlc.InfinitelyRenormalizable
 import Mlc.RenormalizationTypes
 import Mlc.MoleculeConjectureBridge
 import Mlc.LcAtOfShrink
-import Mlc.Quadratic.Complex.BottcherMotion
+import Mlc.Quadratic.Complex.BottcherOnM
 import Mlc.GreenSublevelConnected
 import Yoccoz.Yoccoz
 
@@ -53,8 +53,5 @@ theorem parameter_shrink_of_yoccoz :
     have : z ∈ MLC.Quadratic.ParaPuzzlePieceAt c n := by
       simpa [MLC.Quadratic.ParaPuzzlePieceAt, hz'] using this
     exact this
-
-/-- Existence of Böttcher coordinates on the Mandelbrot set (axiom). -/
-axiom bottcher_onM_hyp : MLC.Quadratic.BottcherOnMHyp
 
 end MLC
