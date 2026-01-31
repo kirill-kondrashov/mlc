@@ -156,6 +156,9 @@ theorem basin_of_infinity_contains_large_ball (c : ℂ) :
   intro z hz
   exact (escaping_set_contains_large_ball c) hz
 
+theorem outside_disk_subset_basin (c : ℂ) : outside_disk c ⊆ basin_of_infinity c :=
+  basin_of_infinity_contains_large_ball c
+
 theorem basin_of_infinity_nonempty (c : ℂ) : (basin_of_infinity c).Nonempty := by
   refine ⟨((‖c‖ + 2 : ℝ) : ℂ), ?_⟩
   have h0 : ‖((‖c‖ + 2 : ℝ) : ℂ)‖ ≥ ‖c‖ + 2 := by
@@ -260,6 +263,16 @@ structure BottcherCoordinate (c : ℂ) where
   cont : Continuous phi
   conj : ∀ z, z ∈ outside_disk c → phi (quadratic_map c z) = (phi z) ^ 2
   norm : ∀ z, z ∈ outside_disk c → ‖phi z‖ ≥ 1
+
+theorem BottcherCoordinate.conj_on_basin_of_outside
+    {c : ℂ} (B : BottcherCoordinate c) {z : ℂ} (hz : z ∈ outside_disk c) :
+    B.phi (quadratic_map c z) = (B.phi z) ^ 2 := by
+  exact B.conj z hz
+
+theorem BottcherCoordinate.norm_on_basin_of_outside
+    {c : ℂ} (B : BottcherCoordinate c) {z : ℂ} (hz : z ∈ outside_disk c) :
+    ‖B.phi z‖ ≥ 1 := by
+  exact B.norm z hz
 
 def BottcherCoordinate.of_outside
     (_c : ℂ) (φ : ℂ → ℂ) (hφ : Continuous φ)
