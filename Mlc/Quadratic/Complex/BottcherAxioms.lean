@@ -68,10 +68,6 @@ lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
 axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
     external_ray_map c (bottcher_map c z) = z
 
-/-- The ray map is continuous on the exterior of the disk. -/
-axiom ray_map_continuous_on (c : ℂ) :
-    ContinuousOn (external_ray_map c) {w | 1 < ‖w‖}
-
 axiom invariance_of_domain_complex {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
     (hf : ContinuousOn f U) (hinj : Set.InjOn f U) : IsOpenMap (U.restrict f)
 
