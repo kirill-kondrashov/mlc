@@ -20,6 +20,10 @@ noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
 def basin_of_infinity (c : ℂ) : Set ℂ :=
   {z | ¬ MLC.Quadratic.boundedOrbit c z}
 
+theorem basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ := by
+  ext z
+  simp [basin_of_infinity, MLC.Quadratic.K, MLC.Quadratic.boundedOrbit]
+
 /-- The inverse of the Böttcher map exists (ray map). -/
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
   if 1 < ‖w‖ then Function.invFun (bottcher_map c) w else 0
@@ -33,24 +37,33 @@ namespace Axioms
 axiom bottcher_continuous_on (c : ℂ) :
     ContinuousOn (bottcher_map c) (bottcher_domain c)
 
-axiom bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    bottcher_map c (external_ray_map c w) = w
-
 end Axioms
+
+theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
+    ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) := by
+  dsimp [bottcher_map]
+  rw [norm_mul, Complex.norm_real, Real.norm_of_nonneg (Real.exp_nonneg _)]
+  let w := lim (map (fun n => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)) atTop)
+  let u := if w = 0 then 1 else w / ↑‖w‖
+  have : ‖u‖ = 1 := by
+    dsimp [u]
+    split_ifs with h
+    · simp
+    · rw [norm_div, Complex.norm_real, norm_norm]
+      exact div_self (norm_ne_zero_iff.mpr h)
+  rw [this, one_mul]
 
 lemma bottcher_continuous_on (c : ℂ) :
     ContinuousOn (bottcher_map c) (bottcher_domain c) :=
   Axioms.bottcher_continuous_on c
 
-lemma bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    bottcher_map c (external_ray_map c w) = w :=
-  Axioms.bottcher_right_inv c w hw
-
-lemma bottcher_surj (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    w ∈ bottcher_map c '' bottcher_domain c := by
-  refine ⟨external_ray_map c w, ?_, ?_⟩
-  · exact ⟨w, hw, rfl⟩
-  · exact bottcher_right_inv c w hw
+lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
+    (hw : w ∈ bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
+    bottcher_map c (external_ray_map c w) = w := by
+  rcases hw with ⟨a, _ha, rfl⟩
+  rw [external_ray_map, if_pos hw']
+  apply Function.invFun_eq
+  exact ⟨a, rfl⟩
 
 axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
     external_ray_map c (bottcher_map c z) = z

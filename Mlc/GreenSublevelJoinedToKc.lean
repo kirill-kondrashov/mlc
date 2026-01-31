@@ -6,26 +6,6 @@ namespace MLC
 open Quadratic Complex Topology Set Filter Metric
 
 namespace Quadratic
-
-theorem basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ := by
-  ext z
-  simp [basin_of_infinity, MLC.Quadratic.K, MLC.Quadratic.boundedOrbit]
-
--- The Böttcher map satisfies |φ_c(z)| = exp(G_c(z)).
-theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
-    ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) := by
-  dsimp [bottcher_map]
-  rw [norm_mul, Complex.norm_real, Real.norm_of_nonneg (Real.exp_nonneg _)]
-  let w := lim (map (fun n => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)) atTop)
-  let u := if w = 0 then 1 else w / ↑‖w‖
-  have : ‖u‖ = 1 := by
-    dsimp [u]
-    split_ifs with h
-    · simp
-    · rw [norm_div, Complex.norm_real, norm_norm]
-      exact div_self (norm_ne_zero_iff.mpr h)
-  rw [this, one_mul]
-
 end Quadratic
 
 open Quadratic
@@ -156,7 +136,8 @@ lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ)
 /--
 Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
 -/
-lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ) :
+lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
+    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ bottcher_map c '' bottcher_domain c) :
     let S := MLC.Quadratic.GreenSublevel c n
     let K := MLC.Quadratic.K c
     ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w := by
@@ -203,7 +184,7 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ) :
     simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq]
     rw [hp'_val]
     have h_phi : ‖bottcher_map c (external_ray_map c u)‖ = ‖u‖ := by
-      rw [bottcher_right_inv c u hu_gt_1]
+      rw [bottcher_right_inv_of_mem c u (h_surj u hu_gt_1) hu_gt_1]
     rw [norm_bottcher_eq_exp_green c (external_ray_map c u)] at h_phi
     
     have h_G : green_function c (external_ray_map c u) = Real.log ‖u‖ := by
