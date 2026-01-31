@@ -91,9 +91,7 @@ theorem mlc_strategy
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
-    (h_pre : ∀ c z, 1 < ‖Quadratic.bottcher_map c z‖ → z ∈ Quadratic.basin_of_infinity c)
-    (h_norm : ∀ c z, 1 < ‖Quadratic.bottcher_map c z‖)
-    (h_inj_basin : ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    (h_inj : ∀ c, Function.Injective (Quadratic.bottcher_map c)) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply mlc_strategy
@@ -106,9 +104,6 @@ theorem mlc_conjecture
   · -- Bottcher coordinates exist on M
     exact bottcher_onM_hyp
   · -- Green sublevel sets connected
-    have h_inj : ∀ c, Function.Injective (Quadratic.bottcher_map c) := by
-      intro c
-      exact MLC.bottcher_map_injective_of_basin_characterization c (h_pre c) (h_norm c) (h_inj_basin c)
     exact green_sublevel_connected h_surj h_inj
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
