@@ -18,7 +18,8 @@ lemma green_continuous (c : ℂ) : Continuous (MLC.Quadratic.green_function c) :
 If K_c is connected and the Green function is continuous and proper (implied by properties),
 then the sublevel sets {z | G_c(z) < ε} are connected.
 -/
-lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ) (hK : IsConnected (MLC.Quadratic.K c)) :
+lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
+    (hK : IsConnected (MLC.Quadratic.K c)) :
     IsConnected (MLC.Quadratic.GreenSublevel c n) := by
   let S := MLC.Quadratic.GreenSublevel c n
   let K := MLC.Quadratic.K c

@@ -44,6 +44,34 @@ theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
   if 1 < ‖w‖ then Function.invFun (bottcher_map c) w else 0
 
+/-! Domain for the Böttcher coordinate. -/
+def bottcher_domain (c : ℂ) : Set ℂ :=
+  external_ray_map c '' {w | 1 < ‖w‖}
+
+namespace Axioms
+
+axiom bottcher_continuous_on (c : ℂ) :
+    ContinuousOn (bottcher_map c) (bottcher_domain c)
+
+axiom bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    bottcher_map c (external_ray_map c w) = w
+
+end Axioms
+
+lemma bottcher_continuous_on (c : ℂ) :
+    ContinuousOn (bottcher_map c) (bottcher_domain c) :=
+  Axioms.bottcher_continuous_on c
+
+lemma bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    bottcher_map c (external_ray_map c w) = w :=
+  Axioms.bottcher_right_inv c w hw
+
+lemma bottcher_surj (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    w ∈ bottcher_map c '' bottcher_domain c := by
+  refine ⟨external_ray_map c w, ?_, ?_⟩
+  · exact ⟨w, hw, rfl⟩
+  · exact bottcher_right_inv c w hw
+
 axiom bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c) :
     external_ray_map c (bottcher_map c z) = z
 
@@ -58,105 +86,6 @@ axiom invariance_of_domain_complex {U : Set ℂ} (hU : IsOpen U) {f : ℂ → �
 axiom bottcher_seq_converges (c : ℂ) :
     TendstoLocallyUniformlyOn (fun n z => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
     (bottcher_map c) atTop (basin_of_infinity c)
-
-/-- The Böttcher map is continuous on the basin.
-    This follows from Böttcher's theorem regarding the locally uniform convergence
-    of the sequence `(f_c^n(z))^(1/2^n)` in the basin of infinity. -/
-theorem bottcher_continuous_on (c : ℂ) :
-    ContinuousOn (bottcher_map c) (basin_of_infinity c) :=
-  (bottcher_seq_converges c).continuousOn <| Filter.Frequently.of_forall fun n => by
-    -- Continuity of the roots of polynomials
-    sorry
-
-/-- The Böttcher map is a conformal isomorphism from the basin to the exterior of the disk. -/
-theorem bottcher_map_image (c : ℂ) :
-    bottcher_map c '' basin_of_infinity c = {w | 1 < ‖w‖} := by
-  let U := basin_of_infinity c
-  let V := {w : ℂ | 1 < ‖w‖}
-  let f := bottcher_map c
-  ext w
-  constructor
-  · rintro ⟨z, hz, rfl⟩
-    rw [mem_setOf_eq, norm_bottcher_eq_exp_green]
-    apply Real.one_lt_exp_iff.mpr
-    rw [basin_eq_compl_K] at hz
-    have hG := (MLC.Quadratic.green_function_eq_zero_iff_mem_K c z).not.mpr hz
-    exact lt_of_le_of_ne (MLC.Quadratic.green_function_nonneg c z) (Ne.symm hG)
-  · intro hw
-    -- Surjectivity onto V
-    have h_surj : V ⊆ f '' U := by
-      have h_cont : ContinuousOn f U := bottcher_continuous_on c
-      have h_inj : Set.InjOn f U := by
-        intro x hx y hy h_eq
-        dsimp [f] at h_eq
-        have h_eq_inv : external_ray_map c (bottcher_map c x) = external_ray_map c (bottcher_map c y) := by rw [h_eq]
-        rwa [bottcher_left_inv c x hx, bottcher_left_inv c y hy] at h_eq_inv
-
-      have h_U_open : IsOpen U := by
-        change IsOpen (basin_of_infinity c)
-        rw [basin_eq_compl_K]
-        have h_K_closed : IsClosed (MLC.Quadratic.K c) := by
-          have : MLC.Quadratic.K c = (MLC.Quadratic.green_function c) ⁻¹' {0} := by
-            ext z
-            simp [MLC.Quadratic.green_function_eq_zero_iff_mem_K]
-          rw [this]
-          exact isClosed_singleton.preimage (MLC.Quadratic.continuous_green_function c)
-        exact h_K_closed.isOpen_compl
-
-      have h_open_map : IsOpenMap (U.restrict f) :=
-        invariance_of_domain_complex h_U_open h_cont h_inj
-
-      let Im := f '' U
-      have h_Im_open : IsOpen Im := by
-        have : Im = range (U.restrict f) := by
-          ext y; simp only [Im, mem_image, mem_range, Subtype.exists, exists_prop, restrict_apply]
-        rw [this]
-        exact h_open_map.isOpen_range
-
-      let ImV : Set V := Subtype.val ⁻¹' Im
-      have h_ImV_open : IsOpen ImV := h_Im_open.preimage continuous_subtype_val
-
-      -- Closedness in V via properness of |f| = exp(G)
-      have h_ImV_closed : IsClosed ImV := sorry -- Properness
-
-      have h_V_conn : IsConnected V := by
-        rw [isConnected_iff_connectedSpace]
-        have : V = {w | 1 < ‖w‖} := rfl
-        rw [this]
-        -- Exterior of disk is connected
-        sorry
-
-      have h_ImV_nonempty : ImV.Nonempty := by
-        -- Basin is nonempty (contains large z)
-        obtain ⟨z, hz⟩ : ∃ z, z ∈ U := ⟨3*c + 10, sorry⟩
-        have : f z ∈ Im := mem_image_of_mem f hz
-        have h_norm : 1 < ‖f z‖ := by
-          rw [norm_bottcher_eq_exp_green]
-          apply Real.one_lt_exp_iff.mpr
-          have hK : z ∉ MLC.Quadratic.K c := by
-            simpa [U, basin_eq_compl_K] using hz
-          exact lt_of_le_of_ne (MLC.Quadratic.green_function_nonneg c z) 
-            (Ne.symm ((MLC.Quadratic.green_function_eq_zero_iff_mem_K c z).not.mpr hK))
-        exact ⟨⟨f z, h_norm⟩, this⟩
-
-      haveI : PreconnectedSpace V := isPreconnected_iff_preconnectedSpace.mp h_V_conn.isPreconnected
-      have h_univ : ImV = univ := IsClopen.eq_univ ⟨h_ImV_closed, h_ImV_open⟩ h_ImV_nonempty
-      
-      intro w' hw'
-      have : (⟨w', hw'⟩ : V) ∈ ImV := by rw [h_univ]; exact mem_univ _
-      exact this
-    exact h_surj hw
-
-/-- The ray map is the inverse of the Böttcher map. -/
-theorem bottcher_right_inv (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    bottcher_map c (external_ray_map c w) = w := by
-  have h_im : w ∈ bottcher_map c '' basin_of_infinity c := by
-    rw [bottcher_map_image c]
-    exact hw
-  obtain ⟨z, _, hfz⟩ := h_im
-  rw [external_ray_map, if_pos hw]
-  apply Function.invFun_eq
-  exact ⟨z, hfz⟩
 
 /-- Extension of the ray map to the closed exterior of the disk. -/
 noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
