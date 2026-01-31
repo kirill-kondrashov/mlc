@@ -160,6 +160,15 @@ theorem basin_of_infinity_contains_large_ball (c : ℂ) :
 theorem outside_disk_subset_basin (c : ℂ) : outside_disk c ⊆ basin_of_infinity c :=
   basin_of_infinity_contains_large_ball c
 
+theorem outside_disk_iterate_mem
+    (c : ℂ) (n : ℕ) {z : ℂ} (hz : z ∈ outside_disk c) :
+    (quadratic_map c)^[n] z ∈ outside_disk c := by
+  have h_map : MapsTo (quadratic_map c) (outside_disk c) (outside_disk c) :=
+    quadratic_map_closed_ball_forward_invariant c
+  have h_iter : MapsTo (quadratic_map c)^[n] (outside_disk c) (outside_disk c) :=
+    MapsTo.iterate h_map n
+  exact h_iter hz
+
 theorem bottcher_left_inv_of_injective
     (c : ℂ) (z : ℂ) (h_norm : 1 < ‖bottcher_map c z‖)
     (h_inj : Function.Injective (bottcher_map c)) :
@@ -215,6 +224,58 @@ theorem bottcher_map_injective_of_basin_characterization
   have hz' : z ∈ Quadratic.basin_of_infinity c := h_pre z hz
   have hw' : w ∈ Quadratic.basin_of_infinity c := h_pre w hw
   exact h_inj_basin hz' hw' hzw
+
+theorem bottcher_map_inj_on_basin_of_outside_left_inv
+    (c : ℂ)
+    (h_left : ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+    (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
+    (h_conj : ∀ n z, Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+      (Quadratic.bottcher_map c z) ^ (2 ^ n))
+    (h_iter_inj : ∀ n, Function.Injective ((quadratic_map c)^[n])) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro z hz w hw hzw
+  rcases h_escape z hz with ⟨nz, hnz⟩
+  rcases h_escape w hw with ⟨nw, hnw⟩
+  let N := Nat.max nz nw
+  have hnz' : (quadratic_map c)^[N] z ∈ outside_disk c := by
+    have hle : nz ≤ N := Nat.le_max_left _ _
+    rcases Nat.exists_eq_add_of_le hle with ⟨k, hk⟩
+    have hk' : (quadratic_map c)^[k] ((quadratic_map c)^[nz] z) ∈ outside_disk c :=
+      outside_disk_iterate_mem c k hnz
+    have hk'' : (quadratic_map c)^[k + nz] z ∈ outside_disk c := by
+      simpa [Function.iterate_add, Function.comp_apply] using hk'
+    have hk''' : (quadratic_map c)^[nz + k] z ∈ outside_disk c := by
+      simpa [Nat.add_comm] using hk''
+    simpa [hk] using hk'''
+  have hnw' : (quadratic_map c)^[N] w ∈ outside_disk c := by
+    have hle : nw ≤ N := Nat.le_max_right _ _
+    rcases Nat.exists_eq_add_of_le hle with ⟨k, hk⟩
+    have hk' : (quadratic_map c)^[k] ((quadratic_map c)^[nw] w) ∈ outside_disk c :=
+      outside_disk_iterate_mem c k hnw
+    have hk'' : (quadratic_map c)^[k + nw] w ∈ outside_disk c := by
+      simpa [Function.iterate_add, Function.comp_apply] using hk'
+    have hk''' : (quadratic_map c)^[nw + k] w ∈ outside_disk c := by
+      simpa [Nat.add_comm] using hk''
+    simpa [hk] using hk'''
+  have h_eq_iter : Quadratic.bottcher_map c ((quadratic_map c)^[N] z) =
+      Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
+    have hzN := h_conj N z
+    have hwN := h_conj N w
+    -- rewrite using equality at base
+    simp [hzN, hwN, hzw]
+  have h_left_z : Quadratic.external_ray_map c
+      (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) = (quadratic_map c)^[N] z :=
+    h_left _ hnz'
+  have h_left_w : Quadratic.external_ray_map c
+      (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) = (quadratic_map c)^[N] w :=
+    h_left _ hnw'
+  have h_iter_eq : (quadratic_map c)^[N] z = (quadratic_map c)^[N] w := by
+    have h := congrArg (Quadratic.external_ray_map c) h_eq_iter
+    simp [h_left_z, h_left_w] at h
+    exact h
+  exact h_iter_inj N h_iter_eq
 
 theorem basin_of_infinity_nonempty (c : ℂ) : (basin_of_infinity c).Nonempty := by
   refine ⟨((‖c‖ + 2 : ℝ) : ℂ), ?_⟩
