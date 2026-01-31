@@ -206,6 +206,17 @@ theorem bottcher_left_inv_of_basin'
     green_function_pos_of_basin c z hz
   exact bottcher_left_inv_of_basin c z hz hpos h_inj
 
+theorem bottcher_map_injective_of_basin_characterization
+    (c : ℂ)
+    (h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ → z ∈ Quadratic.basin_of_infinity c)
+    (h_norm : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖)
+    (h_inj_basin : Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    Function.Injective (Quadratic.bottcher_map c) := by
+  intro z w hzw
+  have hz : z ∈ Quadratic.basin_of_infinity c := h_pre z (h_norm z)
+  have hw : w ∈ Quadratic.basin_of_infinity c := h_pre w (h_norm w)
+  exact h_inj_basin hz hw hzw
+
 theorem basin_of_infinity_nonempty (c : ℂ) : (basin_of_infinity c).Nonempty := by
   refine ⟨((‖c‖ + 2 : ℝ) : ℂ), ?_⟩
   have h0 : ‖((‖c‖ + 2 : ℝ) : ℂ)‖ ≥ ‖c‖ + 2 := by
