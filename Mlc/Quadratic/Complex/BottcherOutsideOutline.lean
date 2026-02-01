@@ -51,6 +51,42 @@ lemma bottcher_map_norm_gt_one_of_outside (c : ℂ) {z : ℂ} (hz : z ∈ outsid
     green_function_pos_of_basin c z hz_basin
   exact bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
 
+lemma bottcher_map_norm_gt_one_implies_basin (c : ℂ) {z : ℂ}
+    (hz : 1 < ‖Quadratic.bottcher_map c z‖) :
+    z ∈ Quadratic.basin_of_infinity c := by
+  have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+      Real.exp (MLC.Quadratic.green_function c z) :=
+    Quadratic.norm_bottcher_eq_exp_green c z
+  have hpos : 0 < MLC.Quadratic.green_function c z := by
+    have hgt : 1 < Real.exp (MLC.Quadratic.green_function c z) := by
+      simpa [hnorm'] using hz
+    exact (Real.one_lt_exp_iff).1 hgt
+  have hz' : z ∉ MLC.Quadratic.K c :=
+    (MLC.Quadratic.green_function_pos_iff_not_mem_K c z).1 hpos
+  have : z ∈ (MLC.Quadratic.K c)ᶜ := by
+    simpa [Set.mem_compl_iff] using hz'
+  simpa [Quadratic.basin_eq_compl_K c] using this
+
+def bottcher_preimage_exterior_outside_cond (c : ℂ) : Prop :=
+  ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ → z ∈ outside_disk c
+
+lemma bottcher_map_preimage_exterior_subset_outside_of
+    (c : ℂ) (hcond : bottcher_preimage_exterior_outside_cond c) :
+    (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c := by
+  intro z hz
+  have : 1 < ‖Quadratic.bottcher_map c z‖ := by
+    simpa [Set.preimage] using hz
+  exact hcond z this
+
+def bottcher_basin_subset_outside_cond (c : ℂ) : Prop :=
+  ∀ z, z ∈ Quadratic.basin_of_infinity c → z ∈ outside_disk c
+
+lemma bottcher_preimage_exterior_outside_cond_of_basin
+    (c : ℂ) (hbasin : bottcher_basin_subset_outside_cond c) :
+    bottcher_preimage_exterior_outside_cond c := by
+  intro z hz
+  exact hbasin z (bottcher_map_norm_gt_one_implies_basin c hz)
+
 lemma bottcher_map_analytic_on_outside_of_slit (c : ℂ)
     (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
     AnalyticOnNhd ℂ (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
