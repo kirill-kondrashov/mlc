@@ -4,6 +4,7 @@ import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+import Mathlib.Analysis.Complex.LocallyUniformLimit
 
 namespace MLC
 
@@ -94,6 +95,26 @@ lemma bottcher_map_continuousOn_slit_orbit (c : ℂ) :
       ∃ᶠ n in atTop, ContinuousOn (F n) (slit_orbit c ∩ Quadratic.basin_of_infinity c) :=
     Filter.Frequently.of_forall hcont
   exact TendstoLocallyUniformlyOn.continuousOn hseq' hcont'
+
+theorem bottcher_map_differentiableOn_open
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c) :
+    DifferentiableOn ℂ (Quadratic.bottcher_map c) U := by
+  let F : ℕ → ℂ → ℂ :=
+    fun n z => ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
+  have hseq :
+      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+        (Quadratic.basin_of_infinity c) := by
+    simpa [F, quadratic_map] using (Quadratic.bottcher_seq_converges c)
+  have hseq' :
+      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop U :=
+    hseq.mono (by intro z hz; exact hUbasin hz)
+  have hF :
+      ∀ᶠ n in atTop, DifferentiableOn ℂ (F n) U :=
+    Filter.Eventually.of_forall (fun n =>
+      (bottcher_approx_differentiableOn_slit c n).mono (by intro z hz; exact hUslit hz))
+  exact TendstoLocallyUniformlyOn.differentiableOn hseq' hF hUopen
 
 theorem quadratic_map_norm_lower (c z : ℂ) :
     ‖quadratic_map c z‖ ≥ ‖z‖ ^ 2 - ‖c‖ := by
