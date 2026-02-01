@@ -5,6 +5,7 @@ import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 import Mathlib.Analysis.Complex.LocallyUniformLimit
+import Mathlib.Analysis.Calculus.InverseFunctionTheorem.Deriv
 
 namespace MLC
 
@@ -115,6 +116,12 @@ theorem bottcher_map_differentiableOn_open
     Filter.Eventually.of_forall (fun n =>
       (bottcher_approx_differentiableOn_slit c n).mono (by intro z hz; exact hUslit hz))
   exact TendstoLocallyUniformlyOn.differentiableOn hseq' hF hUopen
+
+theorem local_inverse_of_hasStrictDerivAt {f : ℂ → ℂ} {f' z : ℂ}
+    (h : HasStrictDerivAt f f' z) (h' : f' ≠ 0) :
+    ∀ᶠ y in 𝓝 (f z), f (HasStrictDerivAt.localInverse f f' z h h' y) = y := by
+  simpa using (HasStrictDerivAt.eventually_right_inverse (f := f) (a := z)
+    (f' := f') h h')
 
 theorem quadratic_map_norm_lower (c z : ℂ) :
     ‖quadratic_map c z‖ ≥ ‖z‖ ^ 2 - ‖c‖ := by
