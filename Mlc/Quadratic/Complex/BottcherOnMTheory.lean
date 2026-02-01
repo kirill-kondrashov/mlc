@@ -551,7 +551,7 @@ theorem external_ray_map_mem_outside (c : ℂ) {w : ℂ} (hw : 1 < ‖w‖) :
     external_ray_map_right_inverse_on_exterior c w hw
   have hpre : Quadratic.external_ray_map c w ∈
       (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
-    simpa [Set.preimage, hright, hw]
+    simp [Set.preimage, hright, hw]
   exact bottcher_map_preimage_exterior_subset_outside c hpre
 
 theorem external_ray_map_continuousOn_exterior (c : ℂ) :
