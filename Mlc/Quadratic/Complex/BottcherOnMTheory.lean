@@ -339,9 +339,11 @@ theorem escaping_set_contains_large_ball
 High-level axioms for the Böttcher injectivity strategy.
 These encode the dynamical inputs needed by `bottcher_map_inj_theorem`.
 -/
-axiom bottcher_theorem_outside (c : ℂ) :
-    ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z
+axiom bottcher_map_inj_on_outside (c : ℂ) :
+    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)
+
+axiom external_ray_map_mem_outside (c : ℂ) {w : ℂ} (hw : 1 < ‖w‖) :
+    Quadratic.external_ray_map c w ∈ outside_disk c
 
 theorem basin_escape_outside (c : ℂ) :
     ∀ z, z ∈ Quadratic.basin_of_infinity c →
@@ -491,11 +493,6 @@ theorem bottcher_conj_iter (c : ℂ) :
 axiom bottcher_map_inj_on_K (c : ℂ) :
     Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)
 
-lemma bottcher_left_inv_outside (c : ℂ) :
-    ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
-  bottcher_theorem_outside c
-
 theorem basin_of_infinity_contains_large_ball (c : ℂ) :
     outside_disk c ⊆ basin_of_infinity c := by
   intro z hz
@@ -503,6 +500,24 @@ theorem basin_of_infinity_contains_large_ball (c : ℂ) :
 
 theorem outside_disk_subset_basin (c : ℂ) : outside_disk c ⊆ basin_of_infinity c :=
   basin_of_infinity_contains_large_ball c
+
+theorem outside_disk_subset_quadratic_basin (c : ℂ) :
+    outside_disk c ⊆ Quadratic.basin_of_infinity c := by
+  intro z hz h_bdd
+  have h_tend : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop :=
+    (escaping_set_contains_large_ball c) hz
+  have h_unbounded : ∀ M : ℝ, ∃ n : ℕ, M < ‖(quadratic_map c)^[n] z‖ := by
+    intro M
+    have h_event : ∀ᶠ n in atTop, M + 1 ≤ ‖(quadratic_map c)^[n] z‖ :=
+      (tendsto_atTop.1 h_tend) (M + 1)
+    rcases (Filter.eventually_atTop.1 h_event) with ⟨N, hN⟩
+    exact ⟨N, lt_of_lt_of_le (by nlinarith) (hN N (le_rfl))⟩
+  rcases h_bdd with ⟨M, hM⟩
+  rcases h_unbounded M with ⟨n, hn⟩
+  have hM' : ‖(quadratic_map c)^[n] z‖ ≤ M := by
+    simpa [MLC.Quadratic.orbit, MLC.Quadratic.fc, quadratic_map] using hM n
+  have hcontr : M < M := lt_of_lt_of_le hn hM'
+  exact (lt_irrefl _ hcontr).elim
 
 
 
@@ -603,6 +618,26 @@ theorem bottcher_left_inv_of_basin'
   have hpos : 0 < MLC.Quadratic.green_function c z :=
     green_function_pos_of_basin c z hz
   exact bottcher_left_inv_of_basin c z hz hpos h_inj
+
+theorem bottcher_theorem_outside (c : ℂ) :
+    ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+  intro z hz
+  have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+    outside_disk_subset_quadratic_basin c hz
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    green_function_pos_of_basin c z hz_basin
+  have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
+    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+  have hmem : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) ∈ outside_disk c :=
+    external_ray_map_mem_outside c hnorm
+  exact external_ray_map_left_inverse_of_injOn c (s := outside_disk c)
+    (bottcher_map_inj_on_outside c) hmem hz hnorm
+
+lemma bottcher_left_inv_outside (c : ℂ) :
+    ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+  bottcher_theorem_outside c
 
 theorem bottcher_map_injective_of_basin_characterization
     (c : ℂ)
