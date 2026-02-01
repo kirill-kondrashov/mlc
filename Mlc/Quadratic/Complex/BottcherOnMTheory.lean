@@ -181,9 +181,129 @@ theorem basin_escape_outside (c : ℂ) :
   refine ⟨N, ?_⟩
   exact le_of_lt hN
 
-axiom bottcher_conj_iter (c : ℂ) :
-    ∀ n z, Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-      (Quadratic.bottcher_map c z) ^ (2 ^ n)
+theorem quadratic_basin_forward_invariant (c : ℂ) :
+    MapsTo (quadratic_map c) (Quadratic.basin_of_infinity c)
+      (Quadratic.basin_of_infinity c) := by
+  intro z hz h_bdd
+  rcases h_bdd with ⟨M, hM⟩
+  refine hz ?_
+  refine ⟨max M ‖z‖, ?_⟩
+  intro n
+  cases n with
+  | zero =>
+      simp [MLC.Quadratic.orbit]
+  | succ n =>
+      have hM' : ‖MLC.Quadratic.orbit c (quadratic_map c z) n‖ ≤ M := hM n
+      have : ‖MLC.Quadratic.orbit c z n.succ‖ ≤ M := by
+        simpa [MLC.Quadratic.orbit, MLC.Quadratic.fc, quadratic_map,
+          Function.iterate_succ_apply] using hM'
+      exact le_trans this (le_max_left _ _)
+
+lemma cpow_one_div_pow_succ_eq_sq (x : ℂ) (n : ℕ) :
+    x ^ ((1 : ℂ) / (2 : ℂ) ^ n) =
+      (x ^ ((1 : ℂ) / (2 : ℂ) ^ (n + 1))) ^ 2 := by
+  by_cases hx : x = 0
+  · simp [Complex.cpow_def, hx]
+  · have hdiv :
+        (1 : ℂ) / (2 : ℂ) ^ n =
+          (1 : ℂ) / (2 : ℂ) ^ (n + 1) + (1 : ℂ) / (2 : ℂ) ^ (n + 1) := by
+      have hdiv' : (1 : ℂ) / (2 : ℂ) ^ n = (1 : ℂ) / (2 : ℂ) ^ (n + 1) * 2 := by
+        field_simp [pow_succ]
+        simp [pow_succ]
+      calc
+        (1 : ℂ) / (2 : ℂ) ^ n = (1 : ℂ) / (2 : ℂ) ^ (n + 1) * 2 := hdiv'
+        _ = (1 : ℂ) / (2 : ℂ) ^ (n + 1) + (1 : ℂ) / (2 : ℂ) ^ (n + 1) := by
+              ring
+    calc
+      x ^ ((1 : ℂ) / (2 : ℂ) ^ n)
+          = x ^ ((1 : ℂ) / (2 : ℂ) ^ (n + 1) + (1 : ℂ) / (2 : ℂ) ^ (n + 1)) := by
+              simp [hdiv]
+      _ = x ^ ((1 : ℂ) / (2 : ℂ) ^ (n + 1)) *
+            x ^ ((1 : ℂ) / (2 : ℂ) ^ (n + 1)) := by
+              simpa using
+                (Complex.cpow_add (x := x)
+                  ((1 : ℂ) / (2 : ℂ) ^ (n + 1))
+                  ((1 : ℂ) / (2 : ℂ) ^ (n + 1)) hx)
+      _ = (x ^ ((1 : ℂ) / (2 : ℂ) ^ (n + 1))) ^ 2 := by
+              simp [pow_two]
+
+theorem bottcher_conj_on_basin (c : ℂ) (z : ℂ)
+    (hz : z ∈ Quadratic.basin_of_infinity c) :
+    Quadratic.bottcher_map c (quadratic_map c z) =
+      (Quadratic.bottcher_map c z) ^ 2 := by
+  let F : ℕ → ℂ → ℂ :=
+    fun n z => ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
+  have hseq :
+      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+        (Quadratic.basin_of_infinity c) := by
+    simpa [F, quadratic_map] using (Quadratic.bottcher_seq_converges c)
+  have hz_tend : Tendsto (fun n => F n z) atTop (𝓝 (Quadratic.bottcher_map c z)) :=
+    hseq.tendsto_at hz
+  have hzf : quadratic_map c z ∈ Quadratic.basin_of_infinity c :=
+    (quadratic_basin_forward_invariant c) hz
+  have hfz_tend :
+      Tendsto (fun n => F n (quadratic_map c z)) atTop
+        (𝓝 (Quadratic.bottcher_map c (quadratic_map c z))) :=
+    hseq.tendsto_at hzf
+  have hshift : ∀ n, F n (quadratic_map c z) = (F (n + 1) z) ^ 2 := by
+    intro n
+    have hiter : (quadratic_map c)^[n] (quadratic_map c z) = (quadratic_map c)^[n + 1] z := by
+      simp [Function.iterate_succ_apply]
+    dsimp [F]
+    calc
+      ((quadratic_map c)^[n] (quadratic_map c z)) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
+          = ((quadratic_map c)^[n + 1] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n) := by
+              rw [hiter]
+      _ = (((quadratic_map c)^[n + 1] z) ^ ((1 : ℂ) / (2 : ℂ) ^ (n + 1))) ^ 2 := by
+              exact cpow_one_div_pow_succ_eq_sq ((quadratic_map c)^[n + 1] z) n
+      _ = (F (n + 1) z) ^ 2 := by
+              rfl
+  have hz_shift :
+      Tendsto (fun n => F (n + 1) z) atTop (𝓝 (Quadratic.bottcher_map c z)) :=
+    (tendsto_add_atTop_iff_nat (f := fun n => F n z) (k := 1)).2 hz_tend
+  have hz_sq :
+      Tendsto (fun n => (F (n + 1) z) ^ 2) atTop
+        (𝓝 ((Quadratic.bottcher_map c z) ^ 2)) := by
+    have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+    exact (hcont.tendsto _).comp hz_shift
+  have hfz_tend' :
+      Tendsto (fun n => (F (n + 1) z) ^ 2) atTop
+        (𝓝 (Quadratic.bottcher_map c (quadratic_map c z))) := by
+    simpa [hshift] using hfz_tend
+  exact tendsto_nhds_unique hfz_tend' hz_sq
+
+theorem bottcher_conj_iter (c : ℂ) :
+    ∀ n z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.bottcher_map c z) ^ (2 ^ n) := by
+  intro n z hz
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      have hz' : (quadratic_map c)^[n] z ∈ Quadratic.basin_of_infinity c := by
+        have hmap : MapsTo (quadratic_map c) (Quadratic.basin_of_infinity c)
+            (Quadratic.basin_of_infinity c) :=
+          quadratic_basin_forward_invariant c
+        have hiter :
+            MapsTo (quadratic_map c)^[n] (Quadratic.basin_of_infinity c)
+              (Quadratic.basin_of_infinity c) :=
+          MapsTo.iterate hmap n
+        exact hiter hz
+      have h1 :
+          Quadratic.bottcher_map c ((quadratic_map c)^[n.succ] z) =
+            (Quadratic.bottcher_map c ((quadratic_map c)^[n] z)) ^ 2 := by
+        simpa [Function.iterate_succ_apply'] using
+          (bottcher_conj_on_basin c ((quadratic_map c)^[n] z) hz')
+      calc
+        Quadratic.bottcher_map c ((quadratic_map c)^[n.succ] z)
+            = (Quadratic.bottcher_map c ((quadratic_map c)^[n] z)) ^ 2 := h1
+        _ = ((Quadratic.bottcher_map c z) ^ (2 ^ n)) ^ 2 := by
+              simp [ih]
+        _ = (Quadratic.bottcher_map c z) ^ (2 ^ n * 2) := by
+              simp [pow_mul]
+        _ = (Quadratic.bottcher_map c z) ^ (2 ^ n.succ) := by
+              simp [pow_succ, mul_comm]
 
 axiom quadratic_map_iter_inj (c : ℂ) :
     ∀ n, Function.Injective ((quadratic_map c)^[n])
@@ -275,8 +395,9 @@ theorem bottcher_map_inj_on_basin_of_outside_left_inv
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
-    (h_conj : ∀ n z, Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-      (Quadratic.bottcher_map c z) ^ (2 ^ n))
+    (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.bottcher_map c z) ^ (2 ^ n))
     (h_iter_inj : ∀ n, Function.Injective ((quadratic_map c)^[n])) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
   intro z hz w hw hzw
@@ -305,8 +426,8 @@ theorem bottcher_map_inj_on_basin_of_outside_left_inv
     simpa [hk] using hk'''
   have h_eq_iter : Quadratic.bottcher_map c ((quadratic_map c)^[N] z) =
       Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
-    have hzN := h_conj N z
-    have hwN := h_conj N w
+    have hzN := h_conj N z hz
+    have hwN := h_conj N w hw
     -- rewrite using equality at base
     simp [hzN, hwN, hzw]
   have h_left_z : Quadratic.external_ray_map c
@@ -338,8 +459,9 @@ theorem bottcher_map_inj_theorem
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
-    (h_conj : ∀ n z, Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-      (Quadratic.bottcher_map c z) ^ (2 ^ n))
+    (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.bottcher_map c z) ^ (2 ^ n))
     (h_iter_inj : ∀ n, Function.Injective ((quadratic_map c)^[n]))
     (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)) :
     Function.Injective (Quadratic.bottcher_map c) := by
