@@ -156,7 +156,7 @@ def outside_disk (c : ℂ) : Set ℂ :=
 High-level axioms for the Böttcher injectivity strategy.
 These encode the dynamical inputs needed by `bottcher_map_inj_theorem`.
 -/
-axiom bottcher_left_inv_outside (c : ℂ) :
+axiom bottcher_theorem_outside (c : ℂ) :
     ∀ z, z ∈ outside_disk c →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z
 
@@ -173,6 +173,11 @@ axiom quadratic_map_iter_inj (c : ℂ) :
 
 axiom bottcher_map_inj_on_K (c : ℂ) :
     Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)
+
+lemma bottcher_left_inv_outside (c : ℂ) :
+    ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+  bottcher_theorem_outside c
 
 theorem basin_of_infinity_contains_large_ball (c : ℂ) :
     outside_disk c ⊆ basin_of_infinity c := by

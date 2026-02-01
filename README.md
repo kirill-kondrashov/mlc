@@ -113,7 +113,7 @@ All axioms used:
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.Quadratic.extended_ray_map_lands
 - MLC.Quadratic.bottcher_map_surj
-- MLC.bottcher_left_inv_outside
+- MLC.bottcher_theorem_outside
 - MLC.basin_escape_outside
 - MLC.bottcher_conj_iter
 - MLC.quadratic_map_iter_inj
