@@ -342,6 +342,9 @@ These encode the dynamical inputs needed by `bottcher_map_inj_theorem`.
 axiom bottcher_map_preimage_exterior_subset_outside (c : ℂ) :
     (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c
 
+axiom bottcher_map_inj_on_outside (c : ℂ) :
+    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)
+
 theorem basin_escape_outside (c : ℂ) :
     ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c := by
@@ -625,8 +628,7 @@ theorem bottcher_left_inv_of_basin'
     green_function_pos_of_basin c z hz
   exact bottcher_left_inv_of_basin c z hz hpos h_inj
 
-theorem bottcher_theorem_outside (c : ℂ)
-    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+theorem bottcher_theorem_outside (c : ℂ) :
     ∀ z, z ∈ outside_disk c →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
   intro z hz
@@ -639,13 +641,12 @@ theorem bottcher_theorem_outside (c : ℂ)
   have hmem : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) ∈ outside_disk c :=
     external_ray_map_mem_outside c hnorm
   exact external_ray_map_left_inverse_of_injOn c (s := outside_disk c)
-    h_inj_outside hmem hz hnorm
+    (bottcher_map_inj_on_outside c) hmem hz hnorm
 
-lemma bottcher_left_inv_outside (c : ℂ)
-    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+lemma bottcher_left_inv_outside (c : ℂ) :
     ∀ z, z ∈ outside_disk c →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
-  bottcher_theorem_outside c h_inj_outside
+  bottcher_theorem_outside c
 
 theorem bottcher_map_injective_of_basin_characterization
     (c : ℂ)

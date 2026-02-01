@@ -38,9 +38,9 @@ Roadmap (target: injectivity on `outside_disk c`):
    - `‖bottcher_map c z‖ > 1` for `z` in the exterior, and surjectivity onto
      `{w | 1 < ‖w‖}`. This also yields the preimage inclusion axiom.
 
-Once the above lemmas are formalized, the axiom
-`bottcher_map_preimage_exterior_subset_outside` can be removed, and
-`bottcher_theorem_outside` becomes a direct corollary.
+Once the above lemmas are formalized, the axioms
+`bottcher_map_inj_on_outside` and `bottcher_map_preimage_exterior_subset_outside`
+can be removed, and `bottcher_theorem_outside` becomes a direct corollary.
 -/
 
 lemma bottcher_map_norm_gt_one_of_outside (c : ℂ) {z : ℂ} (hz : z ∈ outside_disk c) :

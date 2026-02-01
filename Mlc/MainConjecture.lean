@@ -90,9 +90,7 @@ theorem mlc_strategy
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
-    (h_inj_outside :
-      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
-    LocallyConnectedSpace mandelbrotSet := by
+    : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply mlc_strategy
   · -- Finitely Renormalizable case (Yoccoz)
@@ -108,7 +106,7 @@ theorem mlc_conjecture
       (fun c w hw => Quadratic.bottcher_map_surj c w hw)
       (fun c =>
         bottcher_map_inj_theorem c
-          (bottcher_left_inv_outside c (h_inj_outside c))
+          (bottcher_left_inv_outside c)
           (basin_escape_outside c)
           (bottcher_conj_iter c)
           (bottcher_map_inj_on_K c))
