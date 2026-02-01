@@ -3,6 +3,7 @@ import Mlc.Quadratic.Complex.BottcherAxioms
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 
 namespace MLC
 
@@ -58,6 +59,19 @@ lemma bottcher_approx_continuousOn_slit (c : ℂ) (n : ℕ) :
   have hcomp : ContinuousAt (fun z => (quadratic_map c)^[n] z ^ ((1 : ℂ) / (2 : ℂ) ^ n)) z :=
     hcpow.comp hcont
   exact hcomp.continuousWithinAt
+
+lemma bottcher_approx_differentiableOn_slit (c : ℂ) (n : ℕ) :
+    DifferentiableOn ℂ (fun z =>
+      ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
+      (slit_orbit c) := by
+  have hdiff : Differentiable ℂ (fun z => (quadratic_map c)^[n] z) :=
+    (quadratic_map_differentiable c).iterate n
+  have h0 : ∀ z ∈ slit_orbit c, (quadratic_map c)^[n] z ∈ Complex.slitPlane := by
+    intro z hz
+    exact hz n
+  simpa using (DifferentiableOn.cpow_const (f := fun z => (quadratic_map c)^[n] z)
+    (s := slit_orbit c) (c := (1 : ℂ) / (2 : ℂ) ^ n)
+    hdiff.differentiableOn h0)
 
 lemma bottcher_map_continuousOn_slit_orbit (c : ℂ) :
     ContinuousOn (Quadratic.bottcher_map c) (slit_orbit c ∩ Quadratic.basin_of_infinity c) := by
