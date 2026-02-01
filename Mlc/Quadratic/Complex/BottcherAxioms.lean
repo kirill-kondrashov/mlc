@@ -108,6 +108,13 @@ axiom extended_ray_map_continuous (c : ℂ) :
 axiom extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
     extended_ray_map c w ∈ MLC.Quadratic.K c
 
+/-- Surjectivity of Böttcher map onto the exterior ray parameters. -/
+axiom bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
+    w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c
+
+/-- Injectivity of the Böttcher map. -/
+axiom bottcher_map_inj (c : ℂ) : Function.Injective (Quadratic.bottcher_map c)
+
 end Quadratic
 
 end MLC

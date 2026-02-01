@@ -104,14 +104,16 @@ Output:
 ```
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
-- propext
 - Quot.sound
+- propext
 - Classical.choice
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.Quadratic.extended_ray_map_eq
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.Quadratic.extended_ray_map_lands
+- MLC.Quadratic.bottcher_map_surj
+- MLC.Quadratic.bottcher_map_inj
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget
 ```
