@@ -5,6 +5,7 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.BottcherMotion
+import Mlc.Quadratic.Complex.BottcherOnMTheory
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
@@ -88,7 +89,8 @@ theorem mlc_strategy
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
-theorem mlc_conjecture : LocallyConnectedSpace mandelbrotSet := by
+theorem mlc_conjecture
+    : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply mlc_strategy
   · -- Finitely Renormalizable case (Yoccoz)
@@ -100,7 +102,14 @@ theorem mlc_conjecture : LocallyConnectedSpace mandelbrotSet := by
   · -- Bottcher coordinates exist on M
     exact bottcher_onM_hyp
   · -- Green sublevel sets connected
-    exact green_sublevel_connected_hyp
+    exact green_sublevel_connected
+      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
+      (fun c =>
+        bottcher_map_inj_theorem c
+          (bottcher_left_inv_outside c)
+          (basin_escape_outside c)
+          (bottcher_conj_iter c)
+          (bottcher_map_inj_on_K c))
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
     exact classify_infinitely_renormalizable c h_inf

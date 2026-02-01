@@ -109,8 +109,14 @@ All axioms used:
 - Classical.choice
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
-- MLC.bottcher_onM_hyp
-- MLC.green_sublevel_connected_hyp
+- MLC.Quadratic.extended_ray_map_eq
+- MLC.Quadratic.extended_ray_map_continuous
+- MLC.Quadratic.extended_ray_map_lands
+- MLC.Quadratic.bottcher_map_surj
+- MLC.Quadratic.quadratic_map_iter_eq_imp_eq
+- MLC.bottcher_theorem_outside
+- MLC.Quadratic.bottcher_seq_converges
+- MLC.bottcher_map_inj_on_K
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget
 ```
