@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.BottcherMotion
 import Mlc.Quadratic.Complex.BottcherAxioms
+import Mlc.Quadratic.Complex.BottcherOnMDefs
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.CauchyIntegral
@@ -24,9 +25,6 @@ References:
 These statements are intentionally left as `sorry` placeholders. The outline
 file keeps the build clean; this file records the intended endpoints.
 -/
-
-def quadratic_map (c : ℂ) (z : ℂ) : ℂ :=
-  z ^ 2 + c
 
 theorem continuous_quadratic_map (c : ℂ) : Continuous (quadratic_map c) := by
   have h_pow : Continuous (fun z : ℂ => z ^ 2) := (continuous_id.pow 2)
@@ -118,11 +116,42 @@ theorem bottcher_map_differentiableOn_open
       (bottcher_approx_differentiableOn_slit c n).mono (by intro z hz; exact hUslit hz))
   exact TendstoLocallyUniformlyOn.differentiableOn hseq' hF hUopen
 
+theorem bottcher_map_analyticOnNhd_open
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c) :
+    AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U := by
+  have hdiff : DifferentiableOn ℂ (Quadratic.bottcher_map c) U :=
+    bottcher_map_differentiableOn_open c U hUopen hUslit hUbasin
+  exact (analyticOnNhd_iff_differentiableOn hUopen).2 hdiff
+
+theorem bottcher_map_analyticAt_of_open
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
+    {z : ℂ} (hz : z ∈ U) :
+    AnalyticAt ℂ (Quadratic.bottcher_map c) z := by
+  exact (bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin) z hz
+
 theorem local_inverse_of_hasStrictDerivAt {f : ℂ → ℂ} {f' z : ℂ}
     (h : HasStrictDerivAt f f' z) (h' : f' ≠ 0) :
     ∀ᶠ y in 𝓝 (f z), f (HasStrictDerivAt.localInverse f f' z h h' y) = y := by
   simpa using (HasStrictDerivAt.eventually_right_inverse (f := f) (a := z)
     (f' := f') h h')
+
+theorem hasStrictDerivAt_injOn_nhds {f : ℂ → ℂ} {f' z : ℂ}
+    (h : HasStrictDerivAt f f' z) (h' : f' ≠ 0) :
+    ∃ s, IsOpen s ∧ z ∈ s ∧ Set.InjOn f s := by
+  classical
+  let f'' : ℂ →L[ℂ] ℂ :=
+    (ContinuousLinearEquiv.unitsEquivAut ℂ (Units.mk0 f' h'))
+  have hF : HasStrictFDerivAt f f'' z := h.hasStrictFDerivAt_equiv h'
+  let e := hF.toOpenPartialHomeomorph f
+  refine ⟨e.source, e.open_source, ?_, ?_⟩
+  · exact hF.mem_toOpenPartialHomeomorph_source
+  · intro x hx y hy hxy
+    exact e.toPartialEquiv.injOn hx hy hxy
+
 
 theorem hasStrictDerivAt_of_differentiableOn
     {f : ℂ → ℂ} {U : Set ℂ} (hUopen : IsOpen U)
@@ -160,6 +189,46 @@ theorem bottcher_map_eventually_right_inverse_of_open
             hderiv y) = y := by
   exact local_inverse_of_hasStrictDerivAt
     (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz) hderiv
+
+noncomputable def external_ray_map_local
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
+    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    ℂ → ℂ :=
+  HasStrictDerivAt.localInverse
+    (Quadratic.bottcher_map c)
+    (deriv (Quadratic.bottcher_map c) z) z
+    (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz) hderiv
+
+theorem external_ray_map_local_right_inverse
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
+    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    ∀ᶠ y in 𝓝 (Quadratic.bottcher_map c z),
+      Quadratic.bottcher_map c
+        (external_ray_map_local c U hUopen hUslit hUbasin z hz hderiv y) = y := by
+  simpa [external_ray_map_local] using
+    (bottcher_map_eventually_right_inverse_of_open c U hUopen hUslit hUbasin hz hderiv)
+
+theorem external_ray_map_local_left_inverse
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
+    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    ∀ᶠ x in 𝓝 z,
+      external_ray_map_local c U hUopen hUslit hUbasin z hz hderiv
+        (Quadratic.bottcher_map c x) = x := by
+  have h :=
+    HasStrictDerivAt.eventually_left_inverse
+      (f := Quadratic.bottcher_map c)
+      (f' := deriv (Quadratic.bottcher_map c) z)
+      (a := z)
+      (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz)
+      hderiv
+  simpa [external_ray_map_local] using h
+
 
 theorem quadratic_map_norm_lower (c z : ℂ) :
     ‖quadratic_map c z‖ ≥ ‖z‖ ^ 2 - ‖c‖ := by
@@ -265,12 +334,6 @@ theorem escaping_set_contains_large_ball
       {z | Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop} := by
   intro z hz
   exact iterate_quadratic_map_tendsto_infty c z hz
-
-def basin_of_infinity (c : ℂ) : Set ℂ :=
-  {z | Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop}
-
-def outside_disk (c : ℂ) : Set ℂ :=
-  {z | ‖z‖ ≥ ‖c‖ + 2}
 
 /-!
 High-level axioms for the Böttcher injectivity strategy.
@@ -445,6 +508,8 @@ theorem basin_of_infinity_contains_large_ball (c : ℂ) :
 theorem outside_disk_subset_basin (c : ℂ) : outside_disk c ⊆ basin_of_infinity c :=
   basin_of_infinity_contains_large_ball c
 
+
+
 theorem outside_disk_iterate_mem
     (c : ℂ) (n : ℕ) {z : ℂ} (hz : z ∈ outside_disk c) :
     (quadratic_map c)^[n] z ∈ outside_disk c := by
@@ -461,6 +526,49 @@ theorem bottcher_left_inv_of_injective
   unfold external_ray_map
   rw [if_pos h_norm]
   exact (Function.leftInverse_invFun h_inj) z
+
+theorem external_ray_map_right_inverse_on_exterior
+    (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w := by
+  have hw' : w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c :=
+    Quadratic.bottcher_map_surj c w hw
+  exact Quadratic.bottcher_right_inv_of_mem c w hw' hw
+
+theorem external_ray_map_continuousOn_exterior (c : ℂ) :
+    ContinuousOn (Quadratic.external_ray_map c) {w | 1 < ‖w‖} := by
+  have hcont : ContinuousOn (Quadratic.extended_ray_map c) {w | 1 ≤ ‖w‖} :=
+    Quadratic.extended_ray_map_continuous c
+  have hcont' : ContinuousOn (Quadratic.extended_ray_map c) {w | 1 < ‖w‖} :=
+    hcont.mono (by intro w hw; exact le_of_lt (by simpa using hw))
+  refine hcont'.congr ?_
+  intro w hw
+  exact (Quadratic.extended_ray_map_eq c w hw).symm
+
+theorem external_ray_map_eventually_right_inverse
+    (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    ∀ᶠ y in 𝓝 w,
+      Quadratic.bottcher_map c (Quadratic.external_ray_map c y) = y := by
+  have hopen : IsOpen {y : ℂ | 1 < ‖y‖} := by
+    simpa using (isOpen_lt continuous_const continuous_norm)
+  have hmem : w ∈ {y : ℂ | 1 < ‖y‖} := hw
+  have hnhds : {y : ℂ | 1 < ‖y‖} ∈ 𝓝 w := hopen.mem_nhds hmem
+  refine (Filter.eventually_iff).2 ?_
+  refine mem_of_superset hnhds ?_
+  intro y hy
+  exact external_ray_map_right_inverse_on_exterior c y hy
+
+theorem external_ray_map_left_inverse_of_injOn
+    (c : ℂ) {s : Set ℂ} {z : ℂ}
+    (hsinj : Set.InjOn (Quadratic.bottcher_map c) s)
+    (hmem : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) ∈ s)
+    (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.bottcher_map c z‖) :
+    Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+  have hright :
+      Quadratic.bottcher_map c
+          (Quadratic.external_ray_map c (Quadratic.bottcher_map c z)) =
+        Quadratic.bottcher_map c z :=
+    external_ray_map_right_inverse_on_exterior c (Quadratic.bottcher_map c z) hnorm
+  exact hsinj hmem hzs (by simpa using hright)
 
 theorem bottcher_map_norm_gt_one_of_basin
     (c : ℂ) (z : ℂ) (_hz : z ∈ Quadratic.basin_of_infinity c)
