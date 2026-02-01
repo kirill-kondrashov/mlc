@@ -112,6 +112,19 @@ axiom extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
 axiom bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
     w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c
 
+/-!
+Auxiliary dynamical axiom used by the Böttcher injectivity strategy.
+
+We assume that if two points in the basin of infinity have a common
+iterate under `z ↦ z^2 + c`, then the points are equal. This is stronger
+than true dynamics in general, but it captures the intended injectivity
+input for the proof outline.
+-/
+axiom quadratic_map_iter_eq_imp_eq (c : ℂ) :
+    ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+      w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (MLC.quadratic_map c)^[n] z = (MLC.quadratic_map c)^[n] w) → z = w
+
 end Quadratic
 
 end MLC

@@ -1,8 +1,9 @@
-import Mlc.Quadratic.Complex.BottcherAxioms
+import Mathlib.Analysis.Complex.Basic
+import Mathlib.Topology.Basic
 
 namespace MLC
 
-open Quadratic Complex Topology Set Filter
+open Complex Topology Set Filter
 
 def quadratic_map (c : ℂ) (z : ℂ) : ℂ :=
   z ^ 2 + c

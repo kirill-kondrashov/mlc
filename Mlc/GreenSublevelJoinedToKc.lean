@@ -21,9 +21,9 @@ lemma K_subset_green_sublevel (c : ℂ) (n : ℕ) :
   positivity
 
 /-- If z is not in K, it is in the basin of infinity. -/
-lemma z_in_basin_of_not_mem_K (c : ℂ) (z : ℂ) (h : z ∉ MLC.Quadratic.K c) : 
-    z ∈ basin_of_infinity c := by
-  rw [basin_eq_compl_K]
+lemma z_in_basin_of_not_mem_K (c : ℂ) (z : ℂ) (h : z ∉ MLC.Quadratic.K c) :
+    z ∈ Quadratic.basin_of_infinity c := by
+  rw [Quadratic.basin_eq_compl_K]
   exact h
 
 /-- Bounds on the Böttcher coordinate norm for points in the sublevel set but not in K. -/
@@ -93,7 +93,7 @@ lemma radial_path_norm_le_w (w : ℂ) (hw : 1 < ‖w‖) :
 lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ) 
     (h_norm_gt : 1 < ‖w‖) (hw_ne_zero : w ≠ 0)
     (h_start : extended_ray_map c w = z) 
-    (h_basin : z ∈ basin_of_infinity c) :
+    (h_basin : z ∈ Quadratic.basin_of_infinity c) :
     ∃ p : Path z (extended_ray_map c (w / ↑‖w‖)), p 1 ∈ MLC.Quadratic.K c ∧ 
     ∀ t, p t = extended_ray_map c (w * (1 - t + t / ↑‖w‖)) := by
   let γ : Path w (w / ↑‖w‖) := {
