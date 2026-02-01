@@ -114,7 +114,8 @@ All axioms used:
 - MLC.Quadratic.extended_ray_map_lands
 - MLC.Quadratic.bottcher_map_surj
 - MLC.Quadratic.quadratic_map_iter_eq_imp_eq
-- MLC.bottcher_outside_data
+- MLC.bottcher_map_preimage_exterior_subset_outside
+- MLC.bottcher_map_inj_on_outside
 - MLC.Quadratic.bottcher_seq_converges
 - MLC.bottcher_map_inj_on_K
 - MLC.classify_infinitely_renormalizable
