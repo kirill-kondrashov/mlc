@@ -2,6 +2,7 @@ import Mlc.Quadratic.Complex.BottcherMotion
 import Mlc.Quadratic.Complex.BottcherAxioms
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 
 namespace MLC
 
@@ -40,6 +41,45 @@ theorem quadratic_map_differentiable (c : ℂ) :
 theorem quadratic_map_differentiableOn (c : ℂ) :
     DifferentiableOn ℂ (quadratic_map c) Set.univ := by
   simpa using (quadratic_map_differentiable c).differentiableOn
+
+def slit_orbit (c : ℂ) : Set ℂ :=
+  {z | ∀ n, (quadratic_map c)^[n] z ∈ Complex.slitPlane}
+
+lemma bottcher_approx_continuousOn_slit (c : ℂ) (n : ℕ) :
+    ContinuousOn (fun z =>
+      ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
+      (slit_orbit c) := by
+  intro z hz
+  have hcont : ContinuousAt (fun z => (quadratic_map c)^[n] z) z :=
+    ((continuous_quadratic_map c).iterate n).continuousAt
+  have hcpow : ContinuousAt (fun w : ℂ => w ^ ((1 : ℂ) / (2 : ℂ) ^ n))
+      ((quadratic_map c)^[n] z) :=
+    continuousAt_cpow_const (hz n)
+  have hcomp : ContinuousAt (fun z => (quadratic_map c)^[n] z ^ ((1 : ℂ) / (2 : ℂ) ^ n)) z :=
+    hcpow.comp hcont
+  exact hcomp.continuousWithinAt
+
+lemma bottcher_map_continuousOn_slit_orbit (c : ℂ) :
+    ContinuousOn (Quadratic.bottcher_map c) (slit_orbit c ∩ Quadratic.basin_of_infinity c) := by
+  let F : ℕ → ℂ → ℂ :=
+    fun n z => ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
+  have hseq :
+      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+        (Quadratic.basin_of_infinity c) := by
+    simpa [F, quadratic_map] using (Quadratic.bottcher_seq_converges c)
+  have hseq' :
+      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+        (slit_orbit c ∩ Quadratic.basin_of_infinity c) :=
+    hseq.mono (by intro z hz; exact hz.2)
+  have hcont : ∀ n, ContinuousOn (F n) (slit_orbit c ∩ Quadratic.basin_of_infinity c) := by
+    intro n
+    have hcont' : ContinuousOn (F n) (slit_orbit c) := by
+      simpa [F] using bottcher_approx_continuousOn_slit c n
+    exact hcont'.mono (by intro z hz; exact hz.1)
+  have hcont' :
+      ∃ᶠ n in atTop, ContinuousOn (F n) (slit_orbit c ∩ Quadratic.basin_of_infinity c) :=
+    Filter.Frequently.of_forall hcont
+  exact TendstoLocallyUniformlyOn.continuousOn hseq' hcont'
 
 theorem quadratic_map_norm_lower (c z : ℂ) :
     ‖quadratic_map c z‖ ≥ ‖z‖ ^ 2 - ‖c‖ := by
