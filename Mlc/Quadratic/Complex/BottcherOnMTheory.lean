@@ -2,6 +2,7 @@ import Mlc.Quadratic.Complex.BottcherMotion
 import Mlc.Quadratic.Complex.BottcherAxioms
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
+import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 import Mathlib.Analysis.Complex.LocallyUniformLimit
@@ -122,6 +123,43 @@ theorem local_inverse_of_hasStrictDerivAt {f : ℂ → ℂ} {f' z : ℂ}
     ∀ᶠ y in 𝓝 (f z), f (HasStrictDerivAt.localInverse f f' z h h' y) = y := by
   simpa using (HasStrictDerivAt.eventually_right_inverse (f := f) (a := z)
     (f' := f') h h')
+
+theorem hasStrictDerivAt_of_differentiableOn
+    {f : ℂ → ℂ} {U : Set ℂ} (hUopen : IsOpen U)
+    (hf : DifferentiableOn ℂ f U) {z : ℂ} (hz : z ∈ U) :
+    HasStrictDerivAt f (deriv f z) z := by
+  have hcontdiff : ContDiffOn ℂ (1 : WithTop ℕ∞) f U :=
+    (DifferentiableOn.contDiffOn (n := (1 : WithTop ℕ∞)) hf hUopen)
+  have hcontdiffAt : ContDiffAt ℂ (1 : WithTop ℕ∞) f z :=
+    hcontdiff.contDiffAt (hUopen.mem_nhds hz)
+  exact hcontdiffAt.hasStrictDerivAt (by decide)
+
+theorem bottcher_map_hasStrictDerivAt_of_open
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
+    {z : ℂ} (hz : z ∈ U) :
+    HasStrictDerivAt (Quadratic.bottcher_map c)
+      (deriv (Quadratic.bottcher_map c) z) z := by
+  have hdiff : DifferentiableOn ℂ (Quadratic.bottcher_map c) U :=
+    bottcher_map_differentiableOn_open c U hUopen hUslit hUbasin
+  exact hasStrictDerivAt_of_differentiableOn hUopen hdiff hz
+
+theorem bottcher_map_eventually_right_inverse_of_open
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : U ⊆ slit_orbit c)
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
+    {z : ℂ} (hz : z ∈ U)
+    (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    ∀ᶠ y in 𝓝 (Quadratic.bottcher_map c z),
+      Quadratic.bottcher_map c
+          (HasStrictDerivAt.localInverse
+            (Quadratic.bottcher_map c)
+            (deriv (Quadratic.bottcher_map c) z) z
+            (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz)
+            hderiv y) = y := by
+  exact local_inverse_of_hasStrictDerivAt
+    (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz) hderiv
 
 theorem quadratic_map_norm_lower (c z : ℂ) :
     ‖quadratic_map c z‖ ≥ ‖z‖ ^ 2 - ‖c‖ := by
