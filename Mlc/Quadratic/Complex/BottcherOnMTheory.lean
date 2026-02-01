@@ -160,9 +160,26 @@ axiom bottcher_theorem_outside (c : ℂ) :
     ∀ z, z ∈ outside_disk c →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z
 
-axiom basin_escape_outside (c : ℂ) :
+theorem basin_escape_outside (c : ℂ) :
     ∀ z, z ∈ Quadratic.basin_of_infinity c →
-      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c
+      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c := by
+  intro z hz
+  classical
+  have h_unbounded : ∀ M : ℝ, ∃ n : ℕ, ‖(quadratic_map c)^[n] z‖ > M := by
+    intro M
+    by_contra hM
+    have h_le : ∀ n : ℕ, ‖(quadratic_map c)^[n] z‖ ≤ M := by
+      intro n
+      by_contra h_le
+      exact hM ⟨n, lt_of_not_ge h_le⟩
+    have h_bdd : MLC.Quadratic.boundedOrbit c z := by
+      refine ⟨M, ?_⟩
+      intro n
+      simpa [MLC.Quadratic.orbit, MLC.Quadratic.fc, quadratic_map] using h_le n
+    exact hz h_bdd
+  rcases h_unbounded (‖c‖ + 2) with ⟨N, hN⟩
+  refine ⟨N, ?_⟩
+  exact le_of_lt hN
 
 axiom bottcher_conj_iter (c : ℂ) :
     ∀ n z, Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
