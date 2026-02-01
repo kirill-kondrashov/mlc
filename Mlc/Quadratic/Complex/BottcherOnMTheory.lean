@@ -339,11 +339,10 @@ theorem escaping_set_contains_large_ball
 High-level axioms for the Böttcher injectivity strategy.
 These encode the dynamical inputs needed by `bottcher_map_inj_theorem`.
 -/
-axiom bottcher_map_inj_on_outside (c : ℂ) :
-    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)
-
-axiom external_ray_map_mem_outside (c : ℂ) {w : ℂ} (hw : 1 < ‖w‖) :
-    Quadratic.external_ray_map c w ∈ outside_disk c
+axiom bottcher_outside_data (c : ℂ) :
+    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) ∧
+      ∀ {w : ℂ}, 1 < ‖w‖ →
+        Quadratic.external_ray_map c w ∈ outside_disk c
 
 theorem basin_escape_outside (c : ℂ) :
     ∀ z, z ∈ Quadratic.basin_of_infinity c →
@@ -630,9 +629,9 @@ theorem bottcher_theorem_outside (c : ℂ) :
   have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
     bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
   have hmem : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) ∈ outside_disk c :=
-    external_ray_map_mem_outside c hnorm
+    (bottcher_outside_data c).2 hnorm
   exact external_ray_map_left_inverse_of_injOn c (s := outside_disk c)
-    (bottcher_map_inj_on_outside c) hmem hz hnorm
+    (bottcher_outside_data c).1 hmem hz hnorm
 
 lemma bottcher_left_inv_outside (c : ℂ) :
     ∀ z, z ∈ outside_disk c →
