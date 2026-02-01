@@ -112,9 +112,6 @@ axiom extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
 axiom bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
     w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c
 
-/-- Injectivity of the Böttcher map. -/
-axiom bottcher_map_inj (c : ℂ) : Function.Injective (Quadratic.bottcher_map c)
-
 end Quadratic
 
 end MLC

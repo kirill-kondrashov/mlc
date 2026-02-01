@@ -113,7 +113,11 @@ All axioms used:
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.Quadratic.extended_ray_map_lands
 - MLC.Quadratic.bottcher_map_surj
-- MLC.Quadratic.bottcher_map_inj
+- MLC.bottcher_left_inv_outside
+- MLC.basin_escape_outside
+- MLC.bottcher_conj_iter
+- MLC.quadratic_map_iter_inj
+- MLC.bottcher_map_inj_on_K
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget
 ```

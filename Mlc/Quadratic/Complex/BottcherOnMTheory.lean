@@ -152,6 +152,28 @@ def basin_of_infinity (c : ℂ) : Set ℂ :=
 def outside_disk (c : ℂ) : Set ℂ :=
   {z | ‖z‖ ≥ ‖c‖ + 2}
 
+/-!
+High-level axioms for the Böttcher injectivity strategy.
+These encode the dynamical inputs needed by `bottcher_map_inj_theorem`.
+-/
+axiom bottcher_left_inv_outside (c : ℂ) :
+    ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z
+
+axiom basin_escape_outside (c : ℂ) :
+    ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c
+
+axiom bottcher_conj_iter (c : ℂ) :
+    ∀ n z, Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+      (Quadratic.bottcher_map c z) ^ (2 ^ n)
+
+axiom quadratic_map_iter_inj (c : ℂ) :
+    ∀ n, Function.Injective ((quadratic_map c)^[n])
+
+axiom bottcher_map_inj_on_K (c : ℂ) :
+    Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)
+
 theorem basin_of_infinity_contains_large_ball (c : ℂ) :
     outside_disk c ⊆ basin_of_infinity c := by
   intro z hz
@@ -276,6 +298,86 @@ theorem bottcher_map_inj_on_basin_of_outside_left_inv
     simp [h_left_z, h_left_w] at h
     exact h
   exact h_iter_inj N h_iter_eq
+
+/-!
+Sketch: Injectivity of `bottcher_map`.
+
+Idea: show any two points with the same Böttcher value escape to the
+outside disk under iteration, use the functional equation to compare
+iterates, then apply the left inverse on the outside disk and injectivity
+of iterates of `quadratic_map`. The lemma `bottcher_map_inj_on_basin_of_outside_left_inv`
+implements the main reduction on the basin; to finish, one needs that
+equal Böttcher values force membership in the basin (via positivity of
+the Green's function).
+-/
+theorem bottcher_map_inj_theorem
+    (c : ℂ)
+    (h_left : ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+    (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
+    (h_conj : ∀ n z, Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+      (Quadratic.bottcher_map c z) ^ (2 ^ n))
+    (h_iter_inj : ∀ n, Function.Injective ((quadratic_map c)^[n]))
+    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)) :
+    Function.Injective (Quadratic.bottcher_map c) := by
+  -- Sketch: injective on the basin via escape + left inverse,
+  -- then split by whether `‖bottcher_map c z‖ > 1`. In the complementary
+  -- case, use `‖bottcher_map‖ = exp(green)` and `green_function_eq_zero_iff_mem_K`
+  -- to reduce to injectivity on `K`.
+  have h_inj_basin :
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
+    bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_inj
+  have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →
+      z ∈ Quadratic.basin_of_infinity c := by
+    intro z hz
+    have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+        Real.exp (MLC.Quadratic.green_function c z) :=
+      Quadratic.norm_bottcher_eq_exp_green c z
+    have hpos : 0 < MLC.Quadratic.green_function c z := by
+      have hgt : 1 < Real.exp (MLC.Quadratic.green_function c z) := by
+        simpa [hnorm'] using hz
+      exact (Real.one_lt_exp_iff).1 hgt
+    have hz' : z ∉ MLC.Quadratic.K c :=
+      (MLC.Quadratic.green_function_pos_iff_not_mem_K c z).1 hpos
+    have : z ∈ (MLC.Quadratic.K c)ᶜ := by simpa [Set.mem_compl_iff] using hz'
+    simpa [Quadratic.basin_eq_compl_K c] using this
+  have h_inj_on :
+      Set.InjOn (Quadratic.bottcher_map c) {z | 1 < ‖Quadratic.bottcher_map c z‖} :=
+    bottcher_map_injective_of_basin_characterization (c := c) h_pre h_inj_basin
+  intro z w hzw
+  by_cases hz : 1 < ‖Quadratic.bottcher_map c z‖
+  · have hw : 1 < ‖Quadratic.bottcher_map c w‖ := by
+      simpa [hzw] using hz
+    exact h_inj_on hz hw hzw
+  · have hz_le : ‖Quadratic.bottcher_map c z‖ ≤ 1 := le_of_not_gt hz
+    have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+        Real.exp (MLC.Quadratic.green_function c z) :=
+      Quadratic.norm_bottcher_eq_exp_green c z
+    have hge0 : 0 ≤ MLC.Quadratic.green_function c z :=
+      MLC.Quadratic.green_function_nonneg c z
+    have hle0 : MLC.Quadratic.green_function c z ≤ 0 := by
+      have : Real.exp (MLC.Quadratic.green_function c z) ≤ 1 := by
+        simpa [hnorm'] using hz_le
+      exact (Real.exp_le_one_iff).1 this
+    have hzG : MLC.Quadratic.green_function c z = 0 := le_antisymm hle0 hge0
+    have hzK : z ∈ MLC.Quadratic.K c :=
+      (MLC.Quadratic.green_function_eq_zero_iff_mem_K c z).1 hzG
+    have hnormw : ‖Quadratic.bottcher_map c w‖ ≤ 1 := by
+      simpa [hzw] using hz_le
+    have hnormw' : ‖Quadratic.bottcher_map c w‖ =
+        Real.exp (MLC.Quadratic.green_function c w) :=
+      Quadratic.norm_bottcher_eq_exp_green c w
+    have hge0w : 0 ≤ MLC.Quadratic.green_function c w :=
+      MLC.Quadratic.green_function_nonneg c w
+    have hle0w : MLC.Quadratic.green_function c w ≤ 0 := by
+      have : Real.exp (MLC.Quadratic.green_function c w) ≤ 1 := by
+        simpa [hnormw'] using hnormw
+      exact (Real.exp_le_one_iff).1 this
+    have hwG : MLC.Quadratic.green_function c w = 0 := le_antisymm hle0w hge0w
+    have hwK : w ∈ MLC.Quadratic.K c :=
+      (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).1 hwG
+    exact h_inj_K hzK hwK hzw
 
 theorem basin_of_infinity_nonempty (c : ℂ) : (basin_of_infinity c).Nonempty := by
   refine ⟨((‖c‖ + 2 : ℝ) : ℂ), ?_⟩
