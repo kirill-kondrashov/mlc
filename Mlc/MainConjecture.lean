@@ -109,7 +109,7 @@ theorem mlc_conjecture
           (bottcher_left_inv_outside c)
           (basin_escape_outside c)
           (bottcher_conj_iter c)
-          (quadratic_map_iter_inj c)
+          (quadratic_map_iter_eq_imp_eq c)
           (bottcher_map_inj_on_K c))
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf

@@ -115,7 +115,7 @@ All axioms used:
 - MLC.Quadratic.bottcher_map_surj
 - MLC.bottcher_theorem_outside
 - MLC.Quadratic.bottcher_seq_converges
-- MLC.quadratic_map_iter_inj
+- MLC.quadratic_map_iter_eq_imp_eq
 - MLC.bottcher_map_inj_on_K
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget

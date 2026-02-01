@@ -305,8 +305,9 @@ theorem bottcher_conj_iter (c : ℂ) :
         _ = (Quadratic.bottcher_map c z) ^ (2 ^ n.succ) := by
               simp [pow_succ, mul_comm]
 
-axiom quadratic_map_iter_inj (c : ℂ) :
-    ∀ n, Function.Injective ((quadratic_map c)^[n])
+axiom quadratic_map_iter_eq_imp_eq (c : ℂ) :
+    ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w
 
 axiom bottcher_map_inj_on_K (c : ℂ) :
     Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)
@@ -398,7 +399,8 @@ theorem bottcher_map_inj_on_basin_of_outside_left_inv
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
       Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
         (Quadratic.bottcher_map c z) ^ (2 ^ n))
-    (h_iter_inj : ∀ n, Function.Injective ((quadratic_map c)^[n])) :
+    (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
   intro z hz w hw hzw
   rcases h_escape z hz with ⟨nz, hnz⟩
@@ -440,7 +442,7 @@ theorem bottcher_map_inj_on_basin_of_outside_left_inv
     have h := congrArg (Quadratic.external_ray_map c) h_eq_iter
     simp [h_left_z, h_left_w] at h
     exact h
-  exact h_iter_inj N h_iter_eq
+  exact h_iter_eq_imp z w hz hw ⟨N, h_iter_eq⟩
 
 /-!
 Sketch: Injectivity of `bottcher_map`.
@@ -462,7 +464,8 @@ theorem bottcher_map_inj_theorem
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
       Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
         (Quadratic.bottcher_map c z) ^ (2 ^ n))
-    (h_iter_inj : ∀ n, Function.Injective ((quadratic_map c)^[n]))
+    (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w)
     (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)) :
     Function.Injective (Quadratic.bottcher_map c) := by
   -- Sketch: injective on the basin via escape + left inverse,
@@ -471,7 +474,7 @@ theorem bottcher_map_inj_theorem
   -- to reduce to injectivity on `K`.
   have h_inj_basin :
       Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
-    bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_inj
+    bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_eq_imp
   have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →
       z ∈ Quadratic.basin_of_infinity c := by
     intro z hz
