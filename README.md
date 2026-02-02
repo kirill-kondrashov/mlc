@@ -88,9 +88,25 @@ This will compile the main conjecture file and output the list of axioms relied 
 
 ## Axioms Used
 
-Run `make check` to see the authoritative list. Key axioms include:
+Run `make check` to see the authoritative list. As of the latest check, the
+axioms used are:
 
+*   `Quot.sound`
+*   `propext`
+*   `Classical.choice`
+*   `MLC.Quadratic.filled_julia_set_connected`
 *   `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+*   `MLC.Quadratic.extended_ray_map_eq`
+*   `MLC.Quadratic.extended_ray_map_continuous`
+*   `MLC.Quadratic.extended_ray_map_lands`
+*   `MLC.Quadratic.bottcher_map_surj`
+*   `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`
+*   `MLC.bottcher_map_preimage_exterior_subset_outside`
+*   `MLC.bottcher_map_inj_on_outside`
+*   `MLC.Quadratic.bottcher_seq_converges`
+*   `MLC.bottcher_map_inj_on_K`
+*   `MLC.classify_infinitely_renormalizable`
+*   `MLC.molecule_modulusLowerBoundTarget`
 
 Reference note:
 *   Lyubich, "Conformal Geometry and Dynamics of Quadratic Polynomials",

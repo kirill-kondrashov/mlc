@@ -187,6 +187,139 @@ lemma norm_bottcher_root_seq_eq_rpow_of_ne_zero
         simp [r, one_div]
   simpa [him, hre] using h
 
+lemma potential_seq_eq_log_norm_iterate
+    (c : ℂ) (z : ℂ) (n : ℕ)
+    (h1 : 1 ≤ ‖(quadratic_map c)^[n] z‖) :
+    Quadratic.potential_seq c z n =
+      (1 / 2 ^ n) * Real.log ‖(quadratic_map c)^[n] z‖ := by
+  dsimp [Quadratic.potential_seq]
+  have hmax : max 1 ‖Quadratic.orbit c z n‖ = ‖Quadratic.orbit c z n‖ := by
+    exact max_eq_right h1
+  have horb : Quadratic.orbit c z n = (quadratic_map c)^[n] z := by
+    rfl
+  have hmax' : max 1 ‖(quadratic_map c)^[n] z‖ = ‖(quadratic_map c)^[n] z‖ := by
+    exact max_eq_right h1
+  simp [horb, hmax']
+
+lemma bottcher_root_seq_norm_eq_exp_potential
+    (c : ℂ) (z : ℂ) (n : ℕ)
+    (h1 : 1 ≤ ‖(quadratic_map c)^[n] z‖) :
+    ‖bottcher_root_seq c n z‖ = Real.exp (Quadratic.potential_seq c z n) := by
+  have hzero : (quadratic_map c)^[n] z ≠ 0 := by
+    have hpos : 0 < ‖(quadratic_map c)^[n] z‖ := lt_of_lt_of_le zero_lt_one h1
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  have hnorm :
+      ‖bottcher_root_seq c n z‖ =
+        ‖(quadratic_map c)^[n] z‖ ^ ((1 : ℝ) / (2 : ℝ) ^ n) :=
+    norm_bottcher_root_seq_eq_rpow_of_ne_zero (c := c) (n := n) (z := z) hzero
+  have hpos : 0 < ‖(quadratic_map c)^[n] z‖ := by
+    have hpos' : 0 < ‖(quadratic_map c)^[n] z‖ := lt_of_lt_of_le zero_lt_one h1
+    exact hpos'
+  have hpow :
+      ‖(quadratic_map c)^[n] z‖ ^ ((1 : ℝ) / (2 : ℝ) ^ n) =
+        Real.exp (((1 : ℝ) / (2 : ℝ) ^ n) * Real.log ‖(quadratic_map c)^[n] z‖) := by
+    -- `x ^ y = exp (y * log x)` for `x > 0`
+    simp [Real.rpow_def_of_pos hpos, mul_comm, one_div]
+  have hpot := potential_seq_eq_log_norm_iterate c z n h1
+  -- Assemble.
+  calc
+    ‖bottcher_root_seq c n z‖
+        = ‖(quadratic_map c)^[n] z‖ ^ ((1 : ℝ) / (2 : ℝ) ^ n) := hnorm
+    _ = Real.exp (((1 : ℝ) / (2 : ℝ) ^ n) * Real.log ‖(quadratic_map c)^[n] z‖) := hpow
+    _ = Real.exp (Quadratic.potential_seq c z n) := by
+          simp [hpot]
+
+lemma norm_iterate_ge_one_of_escape
+    (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
+    ∀ n, 1 ≤ ‖(quadratic_map c)^[n] z‖ := by
+  intro n
+  have hR : ‖z‖ > R c := lt_of_le_of_lt (escape_bound_ge_R c) hz
+  have hge : ‖Quadratic.orbit c z n‖ ≥ ‖z‖ :=
+    norm_orbit_ge_of_norm_ge_R c z n hR
+  have horb : Quadratic.orbit c z n = (quadratic_map c)^[n] z := by
+    rfl
+  have hz1 : 1 ≤ ‖z‖ := by
+    have hR2 : (2 : ℝ) ≤ escape_bound c := by
+      have hR' := escape_bound_ge_R c
+      have hR2' := R_ge_two c
+      linarith
+    linarith
+  have hge' : ‖(quadratic_map c)^[n] z‖ ≥ ‖z‖ := by
+    simpa [horb] using hge
+  exact le_trans hz1 hge'
+
+lemma bottcher_root_seq_norm_bounds_of_escape
+    (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
+    let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
+    ∀ n,
+      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ ≤ ‖bottcher_root_seq c n z‖ ∧
+        ‖bottcher_root_seq c n z‖ ≤ Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+  intro M n
+  have hdist :
+      dist (Quadratic.potential_seq c z n) (Quadratic.green_function c z) ≤
+        (1 / 2 ^ n) * M := by
+    have hesc0 : ‖Quadratic.orbit c z 0‖ > escape_bound c := by
+      simpa [Quadratic.orbit] using hz
+    have hesc : ‖Quadratic.orbit c z n‖ > escape_bound c := by
+      exact norm_orbit_gt_escape_bound_of_ge c z 0 n (Nat.zero_le _) hesc0
+    simpa [M] using
+      (dist_potential_seq_green_function_le_of_escaping c z n hesc)
+  have hpot_le :
+      Quadratic.green_function c z - (1 / 2 ^ n) * M ≤ Quadratic.potential_seq c z n ∧
+        Quadratic.potential_seq c z n ≤ Quadratic.green_function c z + (1 / 2 ^ n) * M := by
+    have h' : |Quadratic.potential_seq c z n - Quadratic.green_function c z| ≤
+        (1 / 2 ^ n) * M := by
+      simpa [Real.dist_eq, abs_sub_comm] using hdist
+    have h'' := abs_sub_le_iff.mp h'
+    constructor <;> linarith
+  have hnorm_root :
+      ‖bottcher_root_seq c n z‖ = Real.exp (Quadratic.potential_seq c z n) := by
+    have h1 := norm_iterate_ge_one_of_escape c z hz n
+    exact bottcher_root_seq_norm_eq_exp_potential c z n h1
+  have hnorm_bottcher :
+      ‖Quadratic.bottcher_map c z‖ = Real.exp (Quadratic.green_function c z) :=
+    Quadratic.norm_bottcher_eq_exp_green c z
+  have hlow :
+      Real.exp (Quadratic.green_function c z - (1 / 2 ^ n) * M) ≤
+        Real.exp (Quadratic.potential_seq c z n) := by
+    exact Real.exp_le_exp.mpr hpot_le.1
+  have hhigh :
+      Real.exp (Quadratic.potential_seq c z n) ≤
+        Real.exp (Quadratic.green_function c z + (1 / 2 ^ n) * M) := by
+    exact Real.exp_le_exp.mpr hpot_le.2
+  have hlow' :
+      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ ≤
+        ‖bottcher_root_seq c n z‖ := by
+    calc
+      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖
+          = Real.exp (Quadratic.green_function c z - (1 / 2 ^ n) * M) := by
+              calc
+                Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖
+                    = Real.exp (Quadratic.green_function c z) * Real.exp (-(1 / 2 ^ n) * M) := by
+                        simp [hnorm_bottcher, mul_comm]
+                _ = Real.exp (Quadratic.green_function c z + (-(1 / 2 ^ n) * M)) := by
+                        simp [Real.exp_add]
+                _ = Real.exp (Quadratic.green_function c z - (1 / 2 ^ n) * M) := by
+                        ring_nf
+      _ ≤ Real.exp (Quadratic.potential_seq c z n) := hlow
+      _ = ‖bottcher_root_seq c n z‖ := by
+            symm; exact hnorm_root
+  have hhigh' :
+      ‖bottcher_root_seq c n z‖ ≤
+        Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+    calc
+      ‖bottcher_root_seq c n z‖
+          = Real.exp (Quadratic.potential_seq c z n) := hnorm_root
+      _ ≤ Real.exp (Quadratic.green_function c z + (1 / 2 ^ n) * M) := hhigh
+      _ = Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+            calc
+              Real.exp (Quadratic.green_function c z + (1 / 2 ^ n) * M)
+                  = Real.exp (Quadratic.green_function c z) * Real.exp ((1 / 2 ^ n) * M) := by
+                      simp [Real.exp_add]
+              _ = Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+                      simp [hnorm_bottcher, mul_comm]
+  exact ⟨hlow', hhigh'⟩
+
 
 lemma bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
     let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
@@ -255,6 +388,36 @@ lemma bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_boun
   · have : Real.exp (Quadratic.green_function c z) ≤ Real.exp M * ‖z‖ := by
       simpa [hhigh'] using hhigh
     simpa [hnorm] using this
+
+lemma eventually_atInfinity_norm_bottcher_map_ge (c : ℂ) (R : ℝ) :
+    ∀ᶠ z in atInfinity, R ≤ ‖Quadratic.bottcher_map c z‖ := by
+  let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
+  have hR : ∀ᶠ z in atInfinity,
+      max (escape_bound c) (R * Real.exp M) < ‖z‖ :=
+    eventually_atInfinity_norm_gt (max (escape_bound c) (R * Real.exp M))
+  refine hR.mono ?_
+  intro z hz
+  have hzesc : ‖z‖ > escape_bound c := lt_of_le_of_lt (le_max_left _ _) hz
+  have hbound := (bottcher_map_norm_bounds_of_escape c z hzesc)
+  have hRle : R ≤ Real.exp (-M) * ‖z‖ := by
+    have hzR : R * Real.exp M ≤ ‖z‖ := by
+      exact le_of_lt (lt_of_le_of_lt (le_max_right _ _) hz)
+    have hpos : 0 ≤ Real.exp (-M) := by
+      exact le_of_lt (Real.exp_pos _)
+    have hzR' : R * Real.exp M * Real.exp (-M) ≤ ‖z‖ * Real.exp (-M) :=
+      mul_le_mul_of_nonneg_right hzR hpos
+    have hmul : Real.exp M * Real.exp (-M) = 1 := by
+      calc
+        Real.exp M * Real.exp (-M) = Real.exp (M + -M) := by
+          simpa using (Real.exp_add M (-M)).symm
+        _ = 1 := by simp
+    calc
+      R = R * (Real.exp M * Real.exp (-M)) := by
+            simp [hmul]
+      _ = R * Real.exp M * Real.exp (-M) := by ring
+      _ ≤ ‖z‖ * Real.exp (-M) := hzR'
+      _ = Real.exp (-M) * ‖z‖ := by ring
+  exact hRle.trans hbound.1
 
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
 lemma bottcher_normalized_at_infty_of_root_seq
@@ -578,6 +741,29 @@ lemma slit_orbit_rot_zero (c : ℂ) : slit_orbit_rot c 0 = slit_orbit c := by
   ext z
   simp [slit_orbit_rot, slit_orbit, slitPlaneRot_zero]
 
+lemma slitPlaneRot_eq_slitPlane_of_exp_eq_one (θ : ℝ)
+    (hθ : Complex.exp (Complex.I * θ) = 1) :
+    slitPlaneRot θ = Complex.slitPlane := by
+  have hneg : Complex.exp (-Complex.I * θ) = 1 := by
+    calc
+      Complex.exp (-Complex.I * θ)
+          = Complex.exp (-(Complex.I * θ)) := by ring_nf
+      _ = (Complex.exp (Complex.I * θ))⁻¹ := by
+            simp [Complex.exp_neg]
+      _ = 1 := by simp [hθ]
+  have hneg' : Complex.exp (-(Complex.I * θ)) = 1 := by
+    calc
+      Complex.exp (-(Complex.I * θ)) = Complex.exp (-Complex.I * θ) := by ring_nf
+      _ = 1 := hneg
+  ext z
+  simp [slitPlaneRot, hneg']
+
+lemma slit_orbit_rot_eq_slit_orbit_of_exp_eq_one (c : ℂ) (θ : ℝ)
+    (hθ : Complex.exp (Complex.I * θ) = 1) :
+    slit_orbit_rot c θ = slit_orbit c := by
+  ext z
+  simp [slit_orbit_rot, slit_orbit, slitPlaneRot_eq_slitPlane_of_exp_eq_one θ hθ]
+
 lemma slit_orbit_rot_iff (c : ℂ) (θ : ℝ) (z : ℂ) :
     z ∈ slit_orbit_rot c θ ↔
       ∀ n, (quadratic_map c)^[n] z * Complex.exp (-Complex.I * θ) ∈ Complex.slitPlane := by
@@ -619,6 +805,47 @@ lemma quadratic_map_rotate (c : ℂ) (θ : ℝ) (z : ℂ) :
     _ = (quadratic_map (c * Complex.exp (-Complex.I * θ * 2)) z) *
         Complex.exp (Complex.I * θ * 2) := by
           simp [quadratic_map, mul_add, mul_assoc, mul_comm, mul_left_comm]
+
+noncomputable def quadratic_map_rot_param (c : ℂ) (θ : ℝ) (n : ℕ) : ℂ :=
+  c * Complex.exp (-Complex.I * θ * (2 : ℂ) ^ n)
+
+noncomputable def quadratic_map_rot_iter (c : ℂ) (θ : ℝ) : ℕ → ℂ → ℂ
+  | 0, z => z
+  | n + 1, z => quadratic_map (quadratic_map_rot_param c θ (n + 1))
+      (quadratic_map_rot_iter c θ n z)
+
+lemma quadratic_map_rotate_iter (c : ℂ) (θ : ℝ) (n : ℕ) (z : ℂ) :
+    (quadratic_map c)^[n] (z * Complex.exp (Complex.I * θ)) =
+      (quadratic_map_rot_iter c θ n z) * Complex.exp (Complex.I * θ * (2 : ℂ) ^ n) := by
+  induction n with
+  | zero =>
+      simp [quadratic_map_rot_iter]
+  | succ n ih =>
+      have hpow : (2 : ℂ) ^ (n + 1) = (2 : ℂ) ^ n * 2 := by
+        simp [pow_succ, mul_comm]
+      have hExp :
+          Complex.exp (Complex.I * θ * (2 : ℂ) ^ n * 2) =
+            Complex.exp (Complex.I * θ * (2 : ℂ) ^ (n + 1)) := by
+        simp [hpow, mul_assoc]
+      calc
+        (quadratic_map c)^[n + 1] (z * Complex.exp (Complex.I * θ))
+            = quadratic_map c ((quadratic_map c)^[n] (z * Complex.exp (Complex.I * θ))) := by
+                simpa using
+                  (Function.iterate_succ_apply' (f := quadratic_map c) n
+                    (z * Complex.exp (Complex.I * θ)))
+        _ = quadratic_map c
+              ((quadratic_map_rot_iter c θ n z) *
+                Complex.exp (Complex.I * θ * (2 : ℂ) ^ n)) := by
+                simp [ih]
+        _ =
+            (quadratic_map (quadratic_map_rot_param c θ (n + 1)) (quadratic_map_rot_iter c θ n z)) *
+              Complex.exp (Complex.I * θ * (2 : ℂ) ^ n * 2) := by
+                simpa [quadratic_map_rot_param, hpow, mul_assoc, mul_left_comm, mul_comm] using
+                  (quadratic_map_rotate c (θ * (2 : ℝ) ^ n) (quadratic_map_rot_iter c θ n z))
+        _ =
+            (quadratic_map_rot_iter c θ (n + 1) z) *
+              Complex.exp (Complex.I * θ * (2 : ℂ) ^ (n + 1)) := by
+                simp [quadratic_map_rot_iter, hExp]
 
 lemma quadratic_map_rotate_only_trivial
     (c c' : ℂ) (θ : ℝ)
@@ -679,8 +906,63 @@ lemma local_slit_isOpen (z₀ : ℂ) (ε : ℝ) : IsOpen (local_slit z₀ ε) :=
     exact (isOpen_slitPlane.preimage hcont)
   exact hball.inter hslit
 
--- TODO: for each exterior point z₀, choose ε>0 with
--- `local_slit z₀ ε ⊆ slit_orbit c` (avoid the branch cut locally).
+lemma local_slit_subset_ball (z₀ : ℂ) (ε : ℝ) :
+    local_slit z₀ ε ⊆ {z : ℂ | dist z z₀ < ε} := by
+  intro z hz
+  exact hz.1
+
+def slit_orbit_prefix (c : ℂ) (N : ℕ) : Set ℂ :=
+  {z | ∀ n ≤ N, (quadratic_map c)^[n] z ∈ Complex.slitPlane}
+
+lemma exists_local_slit_subset_slit_orbit_of_ball
+    (c z₀ : ℂ)
+    (hball : ∃ ε > 0, ∀ z, dist z z₀ < ε → z ∈ slit_orbit c) :
+    ∃ ε > 0, local_slit z₀ ε ⊆ slit_orbit c := by
+  rcases hball with ⟨ε, εpos, hε⟩
+  refine ⟨ε, εpos, ?_⟩
+  intro z hz
+  exact hε z (local_slit_subset_ball z₀ ε hz)
+
+lemma exists_local_slit_subset_slit_orbit_of_mem_nhds
+    (c z₀ : ℂ) (hz₀ : slit_orbit c ∈ 𝓝 z₀) :
+    ∃ ε > 0, local_slit z₀ ε ⊆ slit_orbit c := by
+  rcases Metric.mem_nhds_iff.mp hz₀ with ⟨ε, εpos, hε⟩
+  refine exists_local_slit_subset_slit_orbit_of_ball c z₀ ?_
+  refine ⟨ε, εpos, ?_⟩
+  intro z hz
+  exact hε hz
+
+lemma exists_local_slit_subset_basin_of_mem_nhds
+    (c z₀ : ℂ) (hz₀ : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
+    ∃ ε > 0, local_slit z₀ ε ⊆ Quadratic.basin_of_infinity c := by
+  rcases Metric.mem_nhds_iff.mp hz₀ with ⟨ε, εpos, hε⟩
+  refine ⟨ε, εpos, ?_⟩
+  intro z hz
+  exact hε (local_slit_subset_ball z₀ ε hz)
+
+lemma exists_local_slit_subset_slit_orbit_basin_of_mem_nhds
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
+    ∃ ε > 0, local_slit z₀ ε ⊆ slit_orbit c ∩ Quadratic.basin_of_infinity c := by
+  rcases exists_local_slit_subset_slit_orbit_of_mem_nhds c z₀ hslit with ⟨ε1, ε1pos, hε1⟩
+  rcases exists_local_slit_subset_basin_of_mem_nhds c z₀ hbasin with ⟨ε2, ε2pos, hε2⟩
+  let ε := min ε1 ε2
+  have εpos : 0 < ε := lt_min ε1pos ε2pos
+  refine ⟨ε, εpos, ?_⟩
+  intro z hz
+  have hz1 : z ∈ local_slit z₀ ε1 := by
+    refine ⟨?_, hz.2⟩
+    have hzdist : dist z z₀ < ε := by
+      simpa using hz.1
+    exact lt_of_lt_of_le hzdist (min_le_left _ _)
+  have hz2 : z ∈ local_slit z₀ ε2 := by
+    refine ⟨?_, hz.2⟩
+    have hzdist : dist z z₀ < ε := by
+      simpa using hz.1
+    exact lt_of_lt_of_le hzdist (min_le_right _ _)
+  exact ⟨hε1 hz1, hε2 hz2⟩
+
 
 lemma bottcher_map_analytic_on_local_slit
     (c z₀ : ℂ) (ε : ℝ)
@@ -689,6 +971,18 @@ lemma bottcher_map_analytic_on_local_slit
     AnalyticOnNhd ℂ (Quadratic.bottcher_map c) (local_slit z₀ ε) := by
   have hopen : IsOpen (local_slit z₀ ε) := local_slit_isOpen z₀ ε
   exact bottcher_map_analyticOnNhd_open c (local_slit z₀ ε) hopen hslit hbasin
+
+lemma bottcher_map_analytic_on_local_slit_of_mem_nhds
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
+    ∃ ε > 0, AnalyticOnNhd ℂ (Quadratic.bottcher_map c) (local_slit z₀ ε) := by
+  rcases exists_local_slit_subset_slit_orbit_basin_of_mem_nhds c z₀ hslit hbasin with
+    ⟨ε, εpos, hsub⟩
+  refine ⟨ε, εpos, ?_⟩
+  have hslit' : local_slit z₀ ε ⊆ slit_orbit c := fun z hz => (hsub hz).1
+  have hbasin' : local_slit z₀ ε ⊆ Quadratic.basin_of_infinity c := fun z hz => (hsub hz).2
+  exact bottcher_map_analytic_on_local_slit c z₀ ε hslit' hbasin'
 
 lemma isOpen_preimage_slitPlane_iter (c : ℂ) (n : ℕ) :
     IsOpen {z : ℂ | (quadratic_map c)^[n] z ∈ Complex.slitPlane} := by
@@ -733,6 +1027,14 @@ lemma exists_ball_subset_slit_orbit_prefix
       | inr hEq =>
           subst hEq
           exact hball2 hzε2
+
+lemma exists_local_slit_subset_slit_orbit_prefix
+    (c z₀ : ℂ) (N : ℕ) (hz₀ : z₀ ∈ slit_orbit c) :
+    ∃ ε > 0, local_slit z₀ ε ⊆ slit_orbit_prefix c N := by
+  rcases exists_ball_subset_slit_orbit_prefix c z₀ N hz₀ with ⟨ε, εpos, hε⟩
+  refine ⟨ε, εpos, ?_⟩
+  intro z hz
+  exact hε z (local_slit_subset_ball z₀ ε hz)
 
 -- TODO: iterate-level conjugacy under rotation.
 -- This should follow from `quadratic_map_rotate` by induction, with a corrected
