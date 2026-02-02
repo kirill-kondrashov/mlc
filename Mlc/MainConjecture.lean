@@ -4,8 +4,8 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
-import Mlc.Quadratic.Complex.BottcherMotion
-import Mlc.Quadratic.Complex.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic

@@ -2,7 +2,7 @@ import Mlc.InfinitelyRenormalizable
 import Mlc.RenormalizationTypes
 import Mlc.MoleculeConjectureBridge
 import Mlc.LcAtOfShrink
-import Mlc.Quadratic.Complex.BottcherOnM
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnM
 import Mlc.GreenSublevelConnected
 import Yoccoz.Yoccoz
 

@@ -1,6 +1,6 @@
-import Mlc.Quadratic.Complex.BottcherMotion
-import Mlc.Quadratic.Complex.BottcherAxioms
-import Mlc.Quadratic.Complex.BottcherOnMDefs
+import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
+import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMDefs
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.CauchyIntegral

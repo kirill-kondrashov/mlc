@@ -1,4 +1,4 @@
-import Mlc.Quadratic.Complex.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mathlib.Analysis.Analytic.Binomial
 
 namespace MLC

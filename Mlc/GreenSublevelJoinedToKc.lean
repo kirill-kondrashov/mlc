@@ -1,4 +1,4 @@
-import Mlc.Quadratic.Complex.BottcherAxioms
+import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
 import Mathlib.Topology.Connected.PathConnected
 
 namespace MLC

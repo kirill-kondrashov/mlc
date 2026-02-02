@@ -1,5 +1,5 @@
-import Mlc.Quadratic.Complex.BottcherMotion
-import Mlc.Quadratic.Complex.BottcherOnM
+import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnM
 
 namespace MLC
 

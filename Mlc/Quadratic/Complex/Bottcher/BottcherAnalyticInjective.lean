@@ -1,6 +1,6 @@
-import Mlc.Quadratic.Complex.BottcherOnMTheory
-import Mlc.Quadratic.Complex.BottcherAnalyticRoot
-import Mlc.Quadratic.Complex.BottcherAnalyticOrder
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticRoot
+import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticOrder
 import Mathlib.Analysis.Analytic.Order
 import Mathlib.RingTheory.RootsOfUnity.Complex
 

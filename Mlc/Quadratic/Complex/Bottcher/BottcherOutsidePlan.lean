@@ -1,5 +1,5 @@
-import Mlc.Quadratic.Complex.BottcherOutsideOutline
-import Mlc.Quadratic.Complex.BottcherAnalyticInjective
+import Mlc.Quadratic.Complex.Bottcher.BottcherOutsideOutline
+import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticInjective
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Maps.Proper.CompactlyGenerated
 import Mathlib.Analysis.Complex.Liouville
