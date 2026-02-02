@@ -1,9 +1,11 @@
 import Mlc.Quadratic.Complex.BottcherOutsideOutline
 import Mlc.Quadratic.Complex.BottcherAnalyticInjective
+import Yoccoz.Quadratic.Complex.Green
 
 namespace MLC
 
 open Quadratic Complex Topology Set Filter
+open scoped Uniformity
 
 /-!
 Plan: eliminate `bottcher_map_inj_on_outside`.
@@ -94,6 +96,444 @@ lemma eventually_atInfinity_mem_outside_open (c : ℂ) :
     ∀ᶠ z in atInfinity, z ∈ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   have h := eventually_atInfinity_norm_gt (‖c‖ + 2)
   simpa using h
+
+lemma eventually_atInfinity_mem_outside_disk (c : ℂ) :
+    ∀ᶠ z in atInfinity, z ∈ outside_disk c := by
+  have h := eventually_atInfinity_mem_outside_open c
+  refine h.mono ?_
+  intro z hz
+  exact le_of_lt (by simpa using hz)
+
+-- TODO (Step 2): use the defining root-sequence for `bottcher_map` to show
+-- `Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 1)`.
+-- A plausible route:
+-- 1) show for each fixed `z` in the basin, the root sequence converges to `bottcher_map c z`;
+-- 2) normalize by dividing by `z` and use escape estimates to pass to `atInfinity`;
+-- 3) use `eventually_atInfinity_mem_outside_open` to restrict to the exterior where
+--    the slit-orbit branch is well-defined.
+
+noncomputable def bottcher_root_seq (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
+  ((fun w => w ^ 2 + c)^[n] z) ^ ((2 : ℂ) ^ n)⁻¹
+
+lemma bottcher_root_seq_tendsto (c : ℂ) :
+    TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+      (Quadratic.basin_of_infinity c) := by
+  simpa [bottcher_root_seq, quadratic_map] using (Quadratic.bottcher_seq_converges c)
+
+lemma bottcher_root_seq_tendsto_uniform_on_of_compact
+    (c : ℂ) (K : Set ℂ) (hK : IsCompact K)
+    (hKbasin : K ⊆ Quadratic.basin_of_infinity c) :
+    TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop K := by
+  -- Locally uniform convergence on the basin yields uniform convergence on compacts.
+  have hloc :
+      TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop K :=
+    (bottcher_root_seq_tendsto c).mono hKbasin
+  exact (tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact (s := K) hK).1 hloc
+
+lemma bottcher_root_seq_tendsto_at (c : ℂ) {z : ℂ}
+    (hz : z ∈ Quadratic.basin_of_infinity c) :
+    Tendsto (fun n => bottcher_root_seq c n z) atTop (𝓝 (Quadratic.bottcher_map c z)) :=
+  (bottcher_root_seq_tendsto c).tendsto_at hz
+
+lemma bottcher_root_seq_ratio_tendsto_at (c : ℂ) {z : ℂ}
+    (hz : z ∈ Quadratic.basin_of_infinity c) :
+    Tendsto (fun n => (bottcher_root_seq c n z) / z) atTop
+      (𝓝 (Quadratic.bottcher_map c z / z)) := by
+  have hcont : Continuous (fun w : ℂ => w / z) := by
+    simpa [div_eq_mul_inv] using (continuous_id.mul continuous_const)
+  exact (hcont.tendsto _).comp (bottcher_root_seq_tendsto_at c hz)
+
+lemma norm_bottcher_root_seq_of_ne_zero
+    (c : ℂ) (n : ℕ) (z : ℂ)
+    (hzero : (quadratic_map c)^[n] z ≠ 0) :
+    ‖bottcher_root_seq c n z‖ =
+      ‖(quadratic_map c)^[n] z‖ ^ (((2 : ℂ) ^ n)⁻¹).re /
+        Real.exp (Complex.arg ((quadratic_map c)^[n] z) * (((2 : ℂ) ^ n)⁻¹).im) := by
+  simpa [bottcher_root_seq] using
+    (Complex.norm_cpow_of_ne_zero (z := (quadratic_map c)^[n] z) hzero
+      (w := ((2 : ℂ) ^ n)⁻¹))
+
+lemma norm_bottcher_root_seq_eq_rpow_of_ne_zero
+    (c : ℂ) (n : ℕ) (z : ℂ)
+    (hzero : (quadratic_map c)^[n] z ≠ 0) :
+    ‖bottcher_root_seq c n z‖ =
+      ‖(quadratic_map c)^[n] z‖ ^ ((1 : ℝ) / (2 : ℝ) ^ n) := by
+  have h := norm_bottcher_root_seq_of_ne_zero (c := c) (n := n) (z := z) hzero
+  have hreal : ((2 : ℂ) ^ n) = (↑((2 : ℝ) ^ n) : ℂ) := by
+    exact (Complex.ofReal_pow (2 : ℝ) n).symm
+  have him : (((2 : ℂ) ^ n)⁻¹).im = 0 := by
+    set r : ℝ := (2 : ℝ) ^ n
+    have h_inv : ((r : ℂ)⁻¹) = ((r⁻¹ : ℝ) : ℂ) := by
+      exact (Complex.ofReal_inv r).symm
+    calc
+      (((2 : ℂ) ^ n)⁻¹).im = ((r : ℂ)⁻¹).im := by
+        rw [hreal]
+      _ = ((r⁻¹ : ℝ) : ℂ).im := by
+        rw [h_inv]
+      _ = 0 := by
+        exact Complex.ofReal_im _
+  have hre : (((2 : ℂ) ^ n)⁻¹).re = (1 : ℝ) / (2 : ℝ) ^ n := by
+    set r : ℝ := (2 : ℝ) ^ n
+    have h_inv : ((r : ℂ)⁻¹) = ((r⁻¹ : ℝ) : ℂ) := by
+      exact (Complex.ofReal_inv r).symm
+    calc
+      (((2 : ℂ) ^ n)⁻¹).re = ((r : ℂ)⁻¹).re := by
+        rw [hreal]
+      _ = ((r⁻¹ : ℝ) : ℂ).re := by
+        rw [h_inv]
+      _ = r⁻¹ := by
+        exact Complex.ofReal_re _
+      _ = (1 : ℝ) / (2 : ℝ) ^ n := by
+        simp [r, one_div]
+  simpa [him, hre] using h
+
+
+lemma bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
+    let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
+    Real.exp (-M) * ‖z‖ ≤ ‖Quadratic.bottcher_map c z‖ ∧
+      ‖Quadratic.bottcher_map c z‖ ≤ Real.exp M * ‖z‖ := by
+  intro M
+  have hdist :
+      dist (Quadratic.potential_seq c z 0) (Quadratic.green_function c z) ≤ M := by
+    simpa [M] using (Quadratic.dist_potential_seq_green_function_le_of_escaping c z 0 hz)
+  have hpos : 0 < ‖z‖ := by
+    have hR : (2 : ℝ) ≤ escape_bound c := by
+      have hR' := Quadratic.escape_bound_ge_R c
+      have hR2 := Quadratic.R_ge_two c
+      linarith
+    linarith
+  have hpot :
+      Quadratic.potential_seq c z 0 = Real.log ‖z‖ := by
+    dsimp [Quadratic.potential_seq]
+    have h1 : (1 : ℝ) ≤ ‖z‖ := by
+      have hR : (2 : ℝ) ≤ escape_bound c := by
+        have hR' := Quadratic.escape_bound_ge_R c
+        have hR2 := Quadratic.R_ge_two c
+        linarith
+      linarith
+    have hmax : max 1 ‖z‖ = ‖z‖ := max_eq_right h1
+    simp [hmax]
+  have hdist' :
+      |Real.log ‖z‖ - Quadratic.green_function c z| ≤ M := by
+    simpa [hpot, Real.dist_eq, abs_sub_comm] using hdist
+  have hle : Real.log ‖z‖ - M ≤ Quadratic.green_function c z ∧
+      Quadratic.green_function c z ≤ Real.log ‖z‖ + M := by
+    have h := abs_sub_le_iff.mp hdist'
+    constructor <;> linarith
+  have hnorm : ‖Quadratic.bottcher_map c z‖ =
+      Real.exp (Quadratic.green_function c z) :=
+    Quadratic.norm_bottcher_eq_exp_green c z
+  have hlow :
+      Real.exp (Real.log ‖z‖ - M) ≤ Real.exp (Quadratic.green_function c z) := by
+    exact Real.exp_le_exp.mpr hle.1
+  have hhigh :
+      Real.exp (Quadratic.green_function c z) ≤ Real.exp (Real.log ‖z‖ + M) := by
+    exact Real.exp_le_exp.mpr hle.2
+  have hlow' : Real.exp (Real.log ‖z‖ - M) = Real.exp (-M) * ‖z‖ := by
+    calc
+      Real.exp (Real.log ‖z‖ - M)
+          = Real.exp (Real.log ‖z‖ + (-M)) := by ring_nf
+      _ = Real.exp (Real.log ‖z‖) * Real.exp (-M) := by
+            simp [Real.exp_add]
+      _ = ‖z‖ * Real.exp (-M) := by
+            simp [Real.exp_log hpos]
+      _ = Real.exp (-M) * ‖z‖ := by
+            ring
+  have hhigh' : Real.exp (Real.log ‖z‖ + M) = Real.exp M * ‖z‖ := by
+    calc
+      Real.exp (Real.log ‖z‖ + M)
+          = Real.exp (Real.log ‖z‖) * Real.exp M := by
+            simp [Real.exp_add]
+      _ = ‖z‖ * Real.exp M := by
+            simp [Real.exp_log hpos]
+      _ = Real.exp M * ‖z‖ := by
+            ring
+  constructor
+  · have : Real.exp (-M) * ‖z‖ ≤ Real.exp (Quadratic.green_function c z) := by
+      simpa [hlow'] using hlow
+    simpa [hnorm] using this
+  · have : Real.exp (Quadratic.green_function c z) ≤ Real.exp M * ‖z‖ := by
+      simpa [hhigh'] using hhigh
+    simpa [hnorm] using this
+
+-- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
+lemma bottcher_normalized_at_infty_of_root_seq
+    (c : ℂ) (N : ℕ)
+    (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
+    (herror : Tendsto (fun z => (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z)
+      atInfinity (𝓝 (0 : ℂ))) :
+    bottcher_normalized_at_infty c := by
+  dsimp [bottcher_normalized_at_infty]
+  have hsum :
+      Tendsto
+        (fun z =>
+          bottcher_root_seq c N z / z +
+            (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z)
+        atInfinity (𝓝 ((1 : ℂ) + 0)) := by
+    exact hroot.add herror
+  have hsplit :
+      (fun z => (Quadratic.bottcher_map c z) / z) =
+        fun z =>
+          bottcher_root_seq c N z / z +
+            (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z := by
+    funext z
+    -- Combine the fractions using `add_div` and simplify the numerator.
+    have hnum :
+        bottcher_root_seq c N z + (Quadratic.bottcher_map c z - bottcher_root_seq c N z) =
+          Quadratic.bottcher_map c z := by
+      calc
+        bottcher_root_seq c N z + (Quadratic.bottcher_map c z - bottcher_root_seq c N z)
+            = Quadratic.bottcher_map c z + bottcher_root_seq c N z - bottcher_root_seq c N z := by
+                simp [sub_eq_add_neg, add_left_comm, add_comm]
+        _ = Quadratic.bottcher_map c z := by
+                simp
+    calc
+      (Quadratic.bottcher_map c z) / z
+          = (bottcher_root_seq c N z +
+              (Quadratic.bottcher_map c z - bottcher_root_seq c N z)) / z := by
+              simp [hnum]
+      _ =
+          bottcher_root_seq c N z / z +
+            (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z := by
+              simpa using
+                (add_div (bottcher_root_seq c N z)
+                  (Quadratic.bottcher_map c z - bottcher_root_seq c N z) z)
+  simpa [hsplit] using hsum
+
+lemma bottcher_root_seq_error_tendsto
+    (c : ℂ) (N : ℕ)
+    (hbound :
+      ∀ ε > 0, ∀ᶠ z in atInfinity,
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+    Tendsto (fun z => (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z)
+      atInfinity (𝓝 (0 : ℂ)) := by
+  refine (tendsto_iff_norm_sub_tendsto_zero).2 ?_
+  have hgoal :
+      Tendsto
+        (fun z => ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖)
+        atInfinity (𝓝 (0 : ℝ)) := by
+    refine (tendsto_order.2 ?_)
+    constructor
+    · intro a ha
+      have hnonneg : ∀ z,
+          0 ≤ ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖ := by
+        intro z
+        exact norm_nonneg _
+      exact Filter.Eventually.of_forall (fun z => lt_of_lt_of_le ha (hnonneg z))
+    · intro a ha
+      have ha' : 0 < a / 2 := by
+        nlinarith
+      have hbound' := hbound (a / 2) ha'
+      have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+        (eventually_atInfinity_norm_gt (0 : ℝ))
+      refine (hbound'.and hpos).mono ?_
+      intro z hz
+      rcases hz with ⟨hbd, hzpos⟩
+      have hnorm :
+          ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖ =
+            ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ / ‖z‖ := by
+        exact norm_div (Quadratic.bottcher_map c z - bottcher_root_seq c N z) z
+      have hle :
+          ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖ ≤ a / 2 := by
+        have hle' :
+            ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ / ‖z‖ ≤ a / 2 := by
+          have : ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ (a / 2) * ‖z‖ :=
+            hbd
+          exact (div_le_iff₀ hzpos).2 (by simpa [mul_comm] using this)
+        simpa [hnorm] using hle'
+      have hlt : a / 2 < a := by
+        nlinarith
+      exact lt_of_le_of_lt hle hlt
+  simpa using hgoal
+
+lemma bottcher_root_seq_error_bound_of_exterior
+    (c : ℂ) (N : ℕ)
+    (hR :
+      ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+    ∀ ε > 0, ∀ᶠ z in atInfinity,
+      ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
+  intro ε hε
+  rcases hR ε hε with ⟨R, hR'⟩
+  have hlarge : ∀ᶠ z in atInfinity, R < ‖z‖ :=
+    eventually_atInfinity_norm_gt R
+  refine hlarge.mono ?_
+  intro z hz
+  exact hR' z (le_of_lt hz)
+
+lemma bottcher_root_seq_error_bound_of_uniform_on
+    (c : ℂ) (N : ℕ)
+    (hU :
+      ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * R) :
+    ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
+      ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
+  intro ε hε
+  rcases hU ε hε with ⟨R, hR⟩
+  refine ⟨R, ?_⟩
+  intro z hz
+  have hle : ε * R ≤ ε * ‖z‖ :=
+    mul_le_mul_of_nonneg_left hz (le_of_lt hε)
+  exact (hR z hz).trans hle
+
+lemma bottcher_root_seq_error_bound_of_tendstoUniformlyOn
+    (c : ℂ) (R : ℝ)
+    (hU : TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+      {z : ℂ | R ≤ ‖z‖}) :
+    ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
+      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε := by
+  intro ε hε
+  let u : Set (ℂ × ℂ) := {p | dist p.1 p.2 < ε}
+  have hu : u ∈ 𝓤 ℂ := Metric.mem_uniformity_dist.mpr ⟨ε, hε, by simp [u]⟩
+  have hU' := hU u hu
+  rcases (Filter.eventually_atTop.1 hU') with ⟨N, hN⟩
+  refine ⟨N, ?_⟩
+  intro n hn z hz
+  have hmem : (Quadratic.bottcher_map c z, bottcher_root_seq c n z) ∈ u :=
+    hN n hn z hz
+  have hdist : dist (Quadratic.bottcher_map c z) (bottcher_root_seq c n z) < ε := by
+    simpa [u] using hmem
+  have hle : dist (Quadratic.bottcher_map c z) (bottcher_root_seq c n z) ≤ ε :=
+    le_of_lt hdist
+  simpa [dist_eq] using hle
+
+lemma uniform_bound_of_tendstoUniformlyOn
+    {F : ℕ → ℂ → ℂ} {f : ℂ → ℂ} {s : Set ℂ}
+    (hU : TendstoUniformlyOn F f atTop s) :
+    ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, z ∈ s → ‖f z - F n z‖ ≤ ε := by
+  intro ε hε
+  let u : Set (ℂ × ℂ) := {p | dist p.1 p.2 < ε}
+  have hu : u ∈ 𝓤 ℂ := Metric.mem_uniformity_dist.mpr ⟨ε, hε, by simp [u]⟩
+  have hU' := hU u hu
+  rcases (Filter.eventually_atTop.1 hU') with ⟨N, hN⟩
+  refine ⟨N, ?_⟩
+  intro n hn z hz
+  have hmem : (f z, F n z) ∈ u := hN n hn z hz
+  have hdist : dist (f z) (F n z) < ε := by
+    simpa [u] using hmem
+  have hle : dist (f z) (F n z) ≤ ε :=
+    le_of_lt hdist
+  simpa [dist_eq] using hle
+
+def exterior_annulus (R S : ℝ) : Set ℂ :=
+  {z : ℂ | R ≤ ‖z‖ ∧ ‖z‖ ≤ S}
+
+lemma isCompact_exterior_annulus (R S : ℝ) : IsCompact (exterior_annulus R S) := by
+  have hclosed1 : IsClosed {z : ℂ | R ≤ ‖z‖} := by
+    simpa using (isClosed_le continuous_const continuous_norm)
+  have hclosed2 : IsClosed {z : ℂ | ‖z‖ ≤ S} := by
+    simpa using (isClosed_le continuous_norm continuous_const)
+  have hclosed : IsClosed (exterior_annulus R S) := by
+    simpa [exterior_annulus] using hclosed1.inter hclosed2
+  have hsubset : exterior_annulus R S ⊆ Metric.closedBall (0 : ℂ) S := by
+    intro z hz
+    have hz' : ‖z‖ ≤ S := hz.2
+    simpa [Metric.mem_closedBall, dist_eq_norm] using hz'
+  exact (isCompact_closedBall (0 : ℂ) S).of_isClosed_subset hclosed hsubset
+
+lemma exterior_annulus_subset_outside_disk (c : ℂ) {R S : ℝ}
+    (hR : ‖c‖ + 2 ≤ R) :
+    exterior_annulus R S ⊆ outside_disk c := by
+  intro z hz
+  have hz' : ‖z‖ ≥ R := hz.1
+  exact le_trans hR hz'
+
+lemma bottcher_root_seq_tendsto_uniform_on_annulus_of_large_R
+    (c : ℂ) {R S : ℝ} (hR : ‖c‖ + 2 ≤ R) :
+    TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+      (exterior_annulus R S) := by
+  have hK : IsCompact (exterior_annulus R S) := isCompact_exterior_annulus R S
+  have hKbasin : exterior_annulus R S ⊆ Quadratic.basin_of_infinity c := by
+    intro z hz
+    have hz_out : z ∈ outside_disk c :=
+      exterior_annulus_subset_outside_disk c (S := S) hR hz
+    exact outside_disk_subset_quadratic_basin c hz_out
+  exact bottcher_root_seq_tendsto_uniform_on_of_compact c _ hK hKbasin
+
+lemma bottcher_root_seq_error_bound_of_annulus_and_tail
+    (c : ℂ) (R : ℝ)
+    (hannulus :
+      ∀ S, R ≤ S →
+        TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+          (exterior_annulus R S))
+    (htail :
+      ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε) :
+    ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
+      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε := by
+  intro ε hε
+  rcases htail ε hε with ⟨S, hSR, htail'⟩
+  have hann := hannulus S hSR
+  rcases uniform_bound_of_tendstoUniformlyOn (F := bottcher_root_seq c)
+    (f := Quadratic.bottcher_map c) (s := exterior_annulus R S) hann ε hε with ⟨N, hN⟩
+  refine ⟨N, ?_⟩
+  intro n hn z hz
+  by_cases hzs : ‖z‖ ≤ S
+  · have hz' : z ∈ exterior_annulus R S := ⟨hz, hzs⟩
+    have h := hN n hn z hz'
+    exact h
+  · have hzs' : S ≤ ‖z‖ := le_of_not_ge hzs
+    exact htail' n z hzs'
+
+lemma bottcher_root_seq_error_bound_of_large_R
+    (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R)
+    (htail :
+      ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε) :
+    ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
+      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε := by
+  refine bottcher_root_seq_error_bound_of_annulus_and_tail c R ?_ htail
+  intro S hRS
+  have hR' : ‖c‖ + 2 ≤ R := hR
+  exact bottcher_root_seq_tendsto_uniform_on_annulus_of_large_R c (R := R) (S := S) hR'
+
+lemma bottcher_normalized_at_infty_of_root_seq_bound
+    (c : ℂ) (N : ℕ)
+    (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
+    (hbound :
+      ∀ ε > 0, ∀ᶠ z in atInfinity,
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+    bottcher_normalized_at_infty c := by
+  refine bottcher_normalized_at_infty_of_root_seq c N hroot ?_
+  exact bottcher_root_seq_error_tendsto c N hbound
+
+lemma bottcher_normalized_at_infty_of_large_R
+    (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R) (N : ℕ)
+    (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
+    (htail :
+      ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε) :
+    bottcher_normalized_at_infty c := by
+  have hbound' :
+      ∀ ε > 0, ∀ᶠ z in atInfinity,
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
+    intro ε hε
+    rcases htail ε hε with ⟨S, hSR, htail'⟩
+    have hlarge : ∀ᶠ z in atInfinity, S < ‖z‖ :=
+      eventually_atInfinity_norm_gt S
+    refine hlarge.mono ?_
+    intro z hz
+    have habs : ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε :=
+      htail' N z (le_of_lt hz)
+    have hle : ε ≤ ε * ‖z‖ := by
+      have hR1 : (1 : ℝ) ≤ R := by
+        have hcn : (0 : ℝ) ≤ ‖c‖ := by exact norm_nonneg _
+        nlinarith
+      have hzge : 1 ≤ ‖z‖ := le_trans (le_trans hR1 hSR) (le_of_lt hz)
+      nlinarith
+    exact habs.trans hle
+  exact bottcher_normalized_at_infty_of_root_seq_bound c N hroot hbound'
+
+def bottcher_tail_bound (c : ℂ) (R : ℝ) : Prop :=
+  ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
+    ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε
+
+theorem bottcher_normalized_at_infty_of_tail_bound
+    (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R) (N : ℕ)
+    (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
+    (htail : bottcher_tail_bound c R) :
+    bottcher_normalized_at_infty c :=
+  bottcher_normalized_at_infty_of_large_R c R hR N hroot htail
 
 lemma outside_open_subset_outside_disk (c : ℂ) :
     {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ outside_disk c := by
