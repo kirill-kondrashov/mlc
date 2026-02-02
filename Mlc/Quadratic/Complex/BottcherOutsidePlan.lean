@@ -1,6 +1,8 @@
 import Mlc.Quadratic.Complex.BottcherOutsideOutline
 import Mlc.Quadratic.Complex.BottcherAnalyticInjective
 import Yoccoz.Quadratic.Complex.Green
+import Mathlib.Topology.Maps.Proper.CompactlyGenerated
+import Mathlib.Analysis.Complex.Liouville
 
 namespace MLC
 
@@ -50,6 +52,32 @@ lemma deriv_ne_zero_of_injOn_nhds
   intro hzero
   have hnot := not_injOn_nhds_of_deriv_eq_zero hf hzero s hs
   exact hnot hinj
+
+lemma injOn_nhds_of_hasStrictDerivAt
+    {f : ℂ → ℂ} {f' z : ℂ} (hf : HasStrictDerivAt f f' z) (hf' : f' ≠ 0) :
+    ∃ s ∈ 𝓝 z, Set.InjOn f s := by
+  let g := HasStrictDerivAt.localInverse f f' z hf hf'
+  let s : Set ℂ := {x | g (f x) = x}
+  have hs : s ∈ 𝓝 z :=
+    (HasStrictDerivAt.eventually_left_inverse (f := f) (f' := f') (a := z) hf hf')
+  refine ⟨s, hs, ?_⟩
+  intro x hx y hy hxy
+  have hx' : g (f x) = x := by
+    simp [s] at hx
+    exact hx
+  have hy' : g (f y) = y := by
+    simp [s] at hy
+    exact hy
+  calc
+    x = g (f x) := by symm; exact hx'
+    _ = g (f y) := by simp [hxy]
+    _ = y := hy'
+
+lemma injOn_nhds_of_analyticAt
+    {f : ℂ → ℂ} {z : ℂ} (hf : AnalyticAt ℂ f z) (hderiv : deriv f z ≠ 0) :
+    ∃ s ∈ 𝓝 z, Set.InjOn f s := by
+  have hf' : HasStrictDerivAt f (deriv f z) z := hf.hasStrictDerivAt
+  exact injOn_nhds_of_hasStrictDerivAt (f := f) (f' := deriv f z) (z := z) hf' hderiv
 
 lemma bottcher_ratio_analytic_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
@@ -419,6 +447,103 @@ lemma eventually_atInfinity_norm_bottcher_map_ge (c : ℂ) (R : ℝ) :
       _ = Real.exp (-M) * ‖z‖ := by ring
   exact hRle.trans hbound.1
 
+lemma exists_norm_bottcher_map_ge_of_large_norm (c : ℂ) (R : ℝ) :
+    ∃ S, ∀ z, S ≤ ‖z‖ → R ≤ ‖Quadratic.bottcher_map c z‖ := by
+  have h := eventually_atInfinity_norm_bottcher_map_ge c R
+  dsimp [atInfinity] at h
+  have h' := (Filter.eventually_comap).1 h
+  rcases (Filter.eventually_atTop.1 h') with ⟨S, hS⟩
+  refine ⟨S, ?_⟩
+  intro z hz
+  have := hS ‖z‖ hz z rfl
+  simpa using this
+
+lemma exists_norm_bottcher_map_gt_of_large_norm (c : ℂ) (R : ℝ) :
+    ∃ S, ∀ z, S ≤ ‖z‖ → R < ‖Quadratic.bottcher_map c z‖ := by
+  rcases exists_norm_bottcher_map_ge_of_large_norm c (R + 1) with ⟨S, hS⟩
+  refine ⟨S, ?_⟩
+  intro z hz
+  have h := hS z hz
+  linarith
+
+lemma preimage_closedBall_bounded (c : ℂ) (R : ℝ) :
+    ∃ S, {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} ⊆ {z : ℂ | ‖z‖ ≤ S} := by
+  rcases exists_norm_bottcher_map_gt_of_large_norm c R with ⟨S, hS⟩
+  refine ⟨S, ?_⟩
+  intro z hz
+  by_contra h
+  have hz' : S ≤ ‖z‖ := le_of_not_ge h
+  have hgt : R < ‖Quadratic.bottcher_map c z‖ := hS z hz'
+  exact (not_lt_of_ge (show R ≥ ‖Quadratic.bottcher_map c z‖ from hz)) hgt
+
+lemma isCompact_preimage_closedBall_of_continuous
+    {f : ℂ → ℂ} (R : ℝ) (hcont : Continuous f)
+    (hbound : ∃ S, {z : ℂ | ‖f z‖ ≤ R} ⊆ {z : ℂ | ‖z‖ ≤ S}) :
+    IsCompact {z : ℂ | ‖f z‖ ≤ R} := by
+  rcases hbound with ⟨S, hS⟩
+  have hclosed : IsClosed {z : ℂ | ‖f z‖ ≤ R} := by
+    have hcont' : Continuous (fun z => ‖f z‖) := continuous_norm.comp hcont
+    simpa using (isClosed_le hcont' continuous_const)
+  have hsubset : {z : ℂ | ‖f z‖ ≤ R} ⊆ Metric.closedBall (0 : ℂ) S := by
+    intro z hz
+    have hz' : ‖z‖ ≤ S := hS hz
+    simpa [Metric.mem_closedBall, dist_eq_norm] using hz'
+  have hbounded : Bornology.IsBounded {z : ℂ | ‖f z‖ ≤ R} :=
+    (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset hsubset
+  exact (Metric.isCompact_iff_isClosed_bounded).2 ⟨hclosed, hbounded⟩
+
+lemma isCompact_preimage_closedBall_bottcher_map_of_closed
+    (c : ℂ) (R : ℝ)
+    (hclosed : IsClosed {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R}) :
+    IsCompact {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} := by
+  rcases preimage_closedBall_bounded c R with ⟨S, hS⟩
+  have hsubset : {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} ⊆ Metric.closedBall (0 : ℂ) S := by
+    intro z hz
+    have hz' : ‖z‖ ≤ S := hS hz
+    simpa [Metric.mem_closedBall, dist_eq_norm] using hz'
+  have hbounded : Bornology.IsBounded {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} :=
+    (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset hsubset
+  exact (Metric.isCompact_iff_isClosed_bounded).2 ⟨hclosed, hbounded⟩
+
+lemma bottcher_map_continuous_on_outside
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    ContinuousOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  exact (bottcher_map_analytic_on_outside c hslit).continuousOn
+
+lemma isCompact_preimage_of_isCompact
+    {f : ℂ → ℂ} (hcont : Continuous f)
+    (hbound : ∀ R, ∃ S, {z : ℂ | ‖f z‖ ≤ R} ⊆ {z : ℂ | ‖z‖ ≤ S})
+    {K : Set ℂ} (hK : IsCompact K) :
+    IsCompact (f ⁻¹' K) := by
+  rcases hK.isBounded.subset_closedBall (0 : ℂ) with ⟨R, hR⟩
+  have hpre_ball : IsCompact {z : ℂ | ‖f z‖ ≤ R} :=
+    isCompact_preimage_closedBall_of_continuous R hcont (hbound R)
+  have hclosed : IsClosed (f ⁻¹' K) := hK.isClosed.preimage hcont
+  have hsubset : f ⁻¹' K ⊆ {z : ℂ | ‖f z‖ ≤ R} := by
+    intro z hz
+    have hz' : f z ∈ Metric.closedBall (0 : ℂ) R := hR hz
+    have : dist (f z) (0 : ℂ) ≤ R := by
+      simpa [Metric.mem_closedBall] using hz'
+    simpa [dist_eq_norm] using this
+  exact hpre_ball.of_isClosed_subset hclosed hsubset
+
+lemma bottcher_map_preimage_compact_of_isCompact
+    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c))
+    {K : Set ℂ} (hK : IsCompact K) :
+    IsCompact ((Quadratic.bottcher_map c) ⁻¹' K) := by
+  exact isCompact_preimage_of_isCompact hcont
+    (fun R => preimage_closedBall_bounded c R) hK
+
+lemma bottcher_map_isProperMap_of_continuous
+    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
+    IsProperMap (Quadratic.bottcher_map c) := by
+  have hpre : ∀ ⦃K : Set ℂ⦄, IsCompact K →
+      IsCompact ((Quadratic.bottcher_map c) ⁻¹' K) := by
+    intro K hK
+    exact bottcher_map_preimage_compact_of_isCompact c hcont hK
+  exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
+    ⟨hcont, hpre⟩
+
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
 lemma bottcher_normalized_at_infty_of_root_seq
     (c : ℂ) (N : ℕ)
@@ -718,6 +843,190 @@ lemma bottcher_map_deriv_ne_zero_on_outside
   have hinjU : Set.InjOn (Quadratic.bottcher_map c) U :=
     hinj.mono (by simpa [U] using outside_open_subset_outside_disk c)
   exact deriv_ne_zero_of_injOn_nhds hf U hUnhds hinjU
+
+lemma bottcher_map_local_inj_on_outside
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hinj : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.bottcher_map c) s := by
+  intro z hz
+  have hf : AnalyticAt ℂ (Quadratic.bottcher_map c) z :=
+    (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+  have hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0 :=
+    bottcher_map_deriv_ne_zero_on_outside c hslit hinj z hz
+  exact injOn_nhds_of_analyticAt hf hderiv
+
+lemma isLocalHomeomorphOn_of_analytic_deriv_ne_zero
+    {f : ℂ → ℂ} {s : Set ℂ}
+    (hf : ∀ z ∈ s, AnalyticAt ℂ f z) (hderiv : ∀ z ∈ s, deriv f z ≠ 0) :
+    IsLocalHomeomorphOn f s := by
+  intro z hz
+  have hstrict : HasStrictDerivAt f (deriv f z) z := (hf z hz).hasStrictDerivAt
+  have hstrict' :=
+    HasStrictDerivAt.hasStrictFDerivAt_equiv (f := f) (f' := deriv f z) hstrict (hderiv z hz)
+  refine ⟨hstrict'.toOpenPartialHomeomorph f, ?_, ?_⟩
+  · exact hstrict'.mem_toOpenPartialHomeomorph_source
+  · simp [HasStrictFDerivAt.toOpenPartialHomeomorph_coe]
+
+lemma bottcher_map_isLocalHomeomorphOn_outside
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hinj : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ ?_
+  · intro z hz
+    exact (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+  · intro z hz
+    exact bottcher_map_deriv_ne_zero_on_outside c hslit hinj z (by simpa using hz)
+
+lemma bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ ?_
+  · intro z hz
+    exact (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+  · intro z hz
+    exact hderiv z (by simpa using hz)
+
+lemma isOpenMap_of_analytic_deriv_ne_zero
+    {f : ℂ → ℂ} (hf : ∀ z, AnalyticAt ℂ f z) (hderiv : ∀ z, deriv f z ≠ 0) :
+    IsOpenMap f := by
+  have hstrict : ∀ z, HasStrictDerivAt f (deriv f z) z :=
+    fun z => (hf z).hasStrictDerivAt
+  exact (isOpenMap_of_hasStrictDerivAt (f := f)
+    (f' := fun z => deriv f z) hstrict hderiv)
+
+lemma norm_deriv_sub_id_le_of_sphere_bound
+    {f : ℂ → ℂ} {z₀ : ℂ} {R C : ℝ}
+    (hR : 0 < R) (hDiff : DiffContOnCl ℂ f (Metric.ball z₀ R))
+    (hC : ∀ z ∈ Metric.sphere z₀ R, ‖f z - z‖ ≤ C) :
+    ‖deriv f z₀ - 1‖ ≤ C / R := by
+  have h_id : DiffContOnCl ℂ (fun z : ℂ => z) (Metric.ball z₀ R) := by
+    simpa using (Differentiable.diffContOnCl (f := fun z : ℂ => z)
+      (s := Metric.ball z₀ R) (differentiable_id : Differentiable ℂ fun z : ℂ => z))
+  have hDiff' : DiffContOnCl ℂ (fun z : ℂ => f z - z) (Metric.ball z₀ R) :=
+    hDiff.sub h_id
+  have hC' : ∀ z ∈ Metric.sphere z₀ R, ‖(fun z => f z - z) z‖ ≤ C := by
+    intro z hz
+    simpa using hC z hz
+  have hderiv := Complex.norm_deriv_le_of_forall_mem_sphere_norm_le (c := z₀) (R := R)
+    (f := fun z : ℂ => f z - z) hR hDiff' hC'
+  have hdf : DifferentiableAt ℂ f z₀ :=
+    (hDiff.differentiableAt Metric.isOpen_ball (Metric.mem_ball_self hR))
+  have hid : DifferentiableAt ℂ (fun z : ℂ => z) z₀ :=
+    differentiable_id.differentiableAt
+  have hderiv' : deriv (fun z : ℂ => f z - z) z₀ = deriv f z₀ - 1 := by
+    simpa using (deriv_fun_sub hdf hid)
+  have hle' : ‖deriv f z₀ - 1‖ ≤ C / R := by
+    simpa [hderiv'] using hderiv
+  exact hle'
+
+lemma deriv_ne_zero_of_sphere_bound
+    {f : ℂ → ℂ} {z₀ : ℂ} {R C : ℝ}
+    (hR : 0 < R) (hDiff : DiffContOnCl ℂ f (Metric.ball z₀ R))
+    (hC : ∀ z ∈ Metric.sphere z₀ R, ‖f z - z‖ ≤ C)
+    (hC' : C / R < 1) :
+    deriv f z₀ ≠ 0 := by
+  have hle := norm_deriv_sub_id_le_of_sphere_bound (f := f) (z₀ := z₀)
+    (R := R) (C := C) hR hDiff hC
+  intro hzero
+  have hnorm : ‖deriv f z₀ - 1‖ = 1 := by
+    simp [hzero]
+  have hge : (1 : ℝ) ≤ C / R := by
+    simpa [hnorm] using hle
+  exact (not_lt_of_ge hge) hC'
+
+lemma bottcher_map_minus_id_bound_of_normalized
+    (c : ℂ) (hnorm : bottcher_normalized_at_infty c) :
+    ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
+      ‖Quadratic.bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
+  intro ε hε
+  have h0 :
+      Tendsto (fun z => ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖) atInfinity
+        (𝓝 (0 : ℝ)) := by
+    have h := (bottcher_normalized_at_infty_iff c).1 hnorm
+    simpa using h
+  have hball : Metric.ball (0 : ℝ) ε ∈ 𝓝 (0 : ℝ) := Metric.ball_mem_nhds _ hε
+  have hε' : ∀ᶠ z in atInfinity,
+      ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ < ε := by
+    simpa [Metric.ball, Set.mem_setOf_eq] using (tendsto_def.1 h0 _ hball)
+  have hε'' := (Filter.eventually_comap).1 hε'
+  rcases (Filter.eventually_atTop.1 hε'') with ⟨R, hR⟩
+  let R' := max R 1
+  refine ⟨R', ?_⟩
+  intro z hz
+  have hzR : R ≤ ‖z‖ := le_trans (le_max_left _ _) hz
+  have hzpos : 0 < ‖z‖ := lt_of_lt_of_le (by linarith : (0 : ℝ) < 1) (le_trans (le_max_right _ _) hz)
+  have hne : z ≠ 0 := by
+    exact (norm_ne_zero_iff).1 (ne_of_gt hzpos)
+  have hratio : ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ < ε := hR ‖z‖ hzR z rfl
+  have hmul :
+      Quadratic.bottcher_map c z - z =
+        z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ)) := by
+    have hmul1 : z * (Quadratic.bottcher_map c z / z) = Quadratic.bottcher_map c z := by
+      calc
+        z * (Quadratic.bottcher_map c z / z)
+            = z * (Quadratic.bottcher_map c z * z⁻¹) := by
+                simp [div_eq_mul_inv]
+        _ = Quadratic.bottcher_map c z * (z * z⁻¹) := by
+                ring
+        _ = Quadratic.bottcher_map c z := by
+                simp [hne]
+    calc
+      Quadratic.bottcher_map c z - z
+          = z * (Quadratic.bottcher_map c z / z) - z := by
+              simp [hmul1]
+      _ = z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ)) := by
+              ring
+  have hle : ‖Quadratic.bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
+    have hle' : ‖z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ))‖ ≤ ε * ‖z‖ := by
+      have hle'' : ‖z‖ * ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ ≤
+          ‖z‖ * ε := by
+        exact mul_le_mul_of_nonneg_left (le_of_lt hratio) (norm_nonneg _)
+      have hle''' : ‖z‖ * ε = ε * ‖z‖ := by ring
+      have hle'''' : ‖z‖ * ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ ≤ ε * ‖z‖ :=
+        hle''.trans_eq hle'''
+      calc
+        ‖z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ))‖
+            = ‖z‖ * ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ := by
+                exact (norm_mul z ((Quadratic.bottcher_map c z) / z - (1 : ℂ)))
+        _ ≤ ε * ‖z‖ := hle''''
+    have hle'' : ‖Quadratic.bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
+      simpa [hmul] using hle'
+    exact hle''
+  exact hle
+
+lemma isOpen_image_of_isLocalHomeomorphOn
+    {f : ℂ → ℂ} {s : Set ℂ} (hlocal : IsLocalHomeomorphOn f s) :
+    ∀ t ⊆ s, IsOpen t → IsOpen (f '' t) := by
+  intro t ht htop
+  refine isOpen_iff_mem_nhds.mpr ?_
+  rintro y ⟨x, hx, rfl⟩
+  obtain ⟨U, hU, hEmb⟩ :=
+    (isLocalHomeomorphOn_iff_isOpenEmbedding_restrict (f := f) (s := s)).1 hlocal x (ht hx)
+  have hOpenMap : IsOpenMap (U.restrict f) := hEmb.isOpenMap
+  have hUopen : IsOpen ((Subtype.val : U → ℂ) ⁻¹' t) := by
+    exact htop.preimage continuous_subtype_val
+  have hxU : x ∈ U := by
+    have hxint : x ∈ interior U := mem_interior_iff_mem_nhds.mpr hU
+    exact interior_subset hxint
+  have hmem : (⟨x, hxU⟩ : U) ∈ (Subtype.val : U → ℂ) ⁻¹' t := by
+    simpa using hx
+  have hnhds : (U.restrict f) '' ((Subtype.val : U → ℂ) ⁻¹' t) ∈ 𝓝 (f x) := by
+    have hopen : IsOpen ((U.restrict f) '' ((Subtype.val : U → ℂ) ⁻¹' t)) :=
+      hOpenMap _ hUopen
+    exact hopen.mem_nhds ⟨⟨x, hxU⟩, hmem, rfl⟩
+  refine mem_of_superset hnhds ?_
+  rintro _ ⟨z, hz, rfl⟩
+  exact ⟨z.1, hz, rfl⟩
+
+lemma bottcher_map_isOpen_on_outside_of_deriv_ne_zero
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    ∀ t ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}, IsOpen t →
+      IsOpen (Quadratic.bottcher_map c '' t) := by
+  intro t ht htop
+  have hlocal := bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit hderiv
+  exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
 
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.
