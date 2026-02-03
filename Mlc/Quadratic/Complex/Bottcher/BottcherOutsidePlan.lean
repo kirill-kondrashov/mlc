@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsideOutline
 import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticInjective
+import Mlc.Quadratic.Complex.Bottcher.BottcherCpowSlit
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Maps.Proper.CompactlyGenerated
 import Mathlib.Analysis.Complex.Liouville
@@ -221,6 +222,7 @@ lemma tendsto_quadratic_iter_div_pow_atInfinity (c : ℂ) :
                     (div_pow (a := (quadratic_map c)^[N] z) (b := z ^ (2 ^ N)) (n := 2)).symm
       simp [quadratic_map, Function.iterate_succ_apply', add_div, hdiv, g]
 
+
 -- TODO (Step 2): use the defining root-sequence for `bottcher_map` to show
 -- `Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 1)`.
 -- A plausible route:
@@ -235,6 +237,11 @@ noncomputable def bottcher_root_seq (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
 lemma bottcher_root_seq_zero (c : ℂ) (z : ℂ) :
     bottcher_root_seq c 0 z = z := by
   simp [bottcher_root_seq]
+
+lemma bottcher_root_seq_succ (c : ℂ) (N : ℕ) (z : ℂ) :
+    bottcher_root_seq c (N + 1) z =
+      (((fun w => w ^ 2 + c)^[N] z) ^ 2 + c) ^ ((2 : ℂ) ^ (N + 1))⁻¹ := by
+  simp [bottcher_root_seq, Function.iterate_succ_apply']
 
 lemma bottcher_root_seq_tendsto (c : ℂ) :
     TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
@@ -263,6 +270,689 @@ lemma bottcher_root_seq_ratio_tendsto_at (c : ℂ) {z : ℂ}
   have hcont : Continuous (fun w : ℂ => w / z) := by
     simpa [div_eq_mul_inv] using (continuous_id.mul continuous_const)
   exact (hcont.tendsto _).comp (bottcher_root_seq_tendsto_at c hz)
+
+lemma bottcher_root_seq_ratio_tendsto_atInfinity_one_add
+    (c : ℂ) (N : ℕ) :
+    Tendsto (fun z => (1 + c / z ^ (2 ^ N)) ^ ((2 : ℂ) ^ N)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+  have hsmall : Tendsto (fun z : ℂ => c / z ^ (2 ^ N)) atInfinity (𝓝 (0 : ℂ)) := by
+    have hk : 0 < 2 ^ N := pow_pos (by norm_num : (0 : ℕ) < 2) _
+    exact tendsto_atInfinity_const_div_pow_zero c (2 ^ N) hk
+  have hsum : Tendsto (fun z : ℂ => (1 : ℂ) + c / z ^ (2 ^ N)) atInfinity (𝓝 (1 : ℂ)) := by
+    simpa using (tendsto_const_nhds.add hsmall)
+  exact tendsto_cpow_const_of_tendsto_one (f := fun z : ℂ => (1 : ℂ) + c / z ^ (2 ^ N))
+    (a := ((2 : ℂ) ^ N)⁻¹) hsum
+
+lemma eventually_atInfinity_norm_div_pow_lt_one
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity, ‖c / z ^ (2 ^ N)‖ < (1 : ℝ) := by
+  have hsmall : Tendsto (fun z : ℂ => c / z ^ (2 ^ N)) atInfinity (𝓝 (0 : ℂ)) := by
+    have hk : 0 < 2 ^ N := pow_pos (by norm_num : (0 : ℕ) < 2) _
+    exact tendsto_atInfinity_const_div_pow_zero c (2 ^ N) hk
+  have hball : Metric.ball (0 : ℂ) 1 ∈ 𝓝 (0 : ℂ) := Metric.ball_mem_nhds _ (by norm_num)
+  have h := tendsto_def.1 hsmall _ hball
+  simpa [Metric.ball, Set.mem_setOf_eq, dist_eq_norm] using h
+
+lemma eventually_atInfinity_one_add_mem_slitPlane
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity, (1 + c / z ^ (2 ^ N)) ∈ Complex.slitPlane := by
+  have hlt := eventually_atInfinity_norm_div_pow_lt_one c N
+  refine hlt.mono ?_
+  intro z hz
+  have hlt' : ‖(1 + c / z ^ (2 ^ N)) - (1 : ℂ)‖ < 1 := by
+    simpa using hz
+  exact mem_slitPlane_of_norm_sub_one_lt_one hlt'
+
+lemma eventually_atInfinity_abs_arg_lt_pi_div_two_one_add
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity, |Complex.arg (1 + c / z ^ (2 ^ N))| < Real.pi / 2 := by
+  have hlt := eventually_atInfinity_norm_div_pow_lt_one c N
+  refine hlt.mono ?_
+  intro z hz
+  have hlt' : ‖(1 + c / z ^ (2 ^ N)) - (1 : ℂ)‖ < 1 := by
+    simpa using hz
+  have hre : 0 < (1 + c / z ^ (2 ^ N)).re :=
+    re_pos_of_norm_sub_one_lt_one hlt'
+  exact abs_arg_lt_pi_div_two_of_re_pos hre
+
+lemma eventually_atInfinity_abs_arg_lt_pi_div_two_quadratic_iter_ratio_sq
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity,
+      |Complex.arg (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)| < Real.pi / 2 := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have harg : Tendsto (fun z => Complex.arg (g z)) atInfinity (𝓝 (0 : ℝ)) := by
+    have harg' : Tendsto (fun z => Complex.arg (g z)) atInfinity (𝓝 (Complex.arg (1 : ℂ))) := by
+      have hcont : ContinuousAt Complex.arg (1 : ℂ) := by
+        exact
+          (Complex.continuousAt_arg (by exact (one_mem_slitPlane : (1 : ℂ) ∈ Complex.slitPlane)))
+      exact hcont.tendsto.comp hG
+    simpa using harg'
+  have hball : Metric.ball (0 : ℝ) (Real.pi / 4) ∈ 𝓝 (0 : ℝ) := by
+    have hpi : (0 : ℝ) < Real.pi / 4 := by nlinarith [Real.pi_pos]
+    exact Metric.ball_mem_nhds _ hpi
+  have hargsmall : ∀ᶠ z in atInfinity, |Complex.arg (g z)| < Real.pi / 4 := by
+    have h := tendsto_def.1 harg _ hball
+    simpa [Metric.ball, Set.mem_setOf_eq, Real.dist_eq] using h
+  have hne : ∀ᶠ z in atInfinity, g z ≠ 0 :=
+    hG.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have hboth : ∀ᶠ z in atInfinity, g z ≠ 0 ∧ |Complex.arg (g z)| < Real.pi / 4 :=
+    hne.and hargsmall
+  refine hboth.mono ?_
+  intro z hz
+  rcases hz with ⟨hzne, hzarg⟩
+  have hzarg' : |Complex.arg (g z)| < Real.pi / 2 := by
+    nlinarith [hzarg, Real.pi_pos]
+  have hsum : Complex.arg (g z) + Complex.arg (g z) ∈ Set.Ioc (-Real.pi) Real.pi :=
+    arg_add_mem_Ioc_of_abs_lt_pi_div_two hzarg' hzarg'
+  have hargmul : Complex.arg (g z * g z) = Complex.arg (g z) + Complex.arg (g z) :=
+    (Complex.arg_mul_eq_add_arg_iff hzne hzne).2 hsum
+  have hargpow : Complex.arg ((g z) ^ 2) = Complex.arg (g z) + Complex.arg (g z) := by
+    simpa [pow_two, mul_comm, mul_left_comm, mul_assoc] using hargmul
+  have hlt' : |Complex.arg (g z) + Complex.arg (g z)| < Real.pi / 2 := by
+    calc
+      |Complex.arg (g z) + Complex.arg (g z)|
+          = |(2 : ℝ) * Complex.arg (g z)| := by ring_nf
+      _ = (2 : ℝ) * |Complex.arg (g z)| := by simp
+      _ < (2 : ℝ) * (Real.pi / 4) := by nlinarith [hzarg]
+      _ = Real.pi / 2 := by ring_nf
+  have hlt : |Complex.arg ((g z) ^ 2)| < Real.pi / 2 := by
+    rw [hargpow]
+    exact hlt'
+  exact hlt
+
+lemma eventually_atInfinity_abs_arg_lt_pi_div_two_ratio_term
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity,
+      |Complex.arg
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)|
+        < Real.pi / 2 := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hG2 : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+    have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+    simpa using (hcont.tendsto (1 : ℂ)).comp hG
+  have hG2inv : Tendsto (fun z => ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+    have h := (continuousAt_inv₀ (by norm_num : (1 : ℂ) ≠ 0)).tendsto.comp hG2
+    simpa using h
+  have ht : Tendsto (fun z : ℂ => c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (0 : ℂ)) := by
+    have hk : 0 < 2 ^ (N + 1) := pow_pos (by norm_num : (0 : ℕ) < 2) _
+    exact tendsto_atInfinity_const_div_pow_zero c (2 ^ (N + 1)) hk
+  have hprod :
+      Tendsto (fun z : ℂ => (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹) atInfinity (𝓝 (0 : ℂ)) := by
+    simpa using ht.mul hG2inv
+  have hsum :
+      Tendsto (fun z : ℂ => (1 : ℂ) +
+        (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+    simpa using (tendsto_const_nhds.add hprod)
+  have hball : Metric.ball (1 : ℂ) 1 ∈ 𝓝 (1 : ℂ) := Metric.ball_mem_nhds _ (by norm_num)
+  have hlt : ∀ᶠ z in atInfinity,
+      ‖(1 : ℂ) + (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹ - (1 : ℂ)‖ < 1 := by
+    have h := tendsto_def.1 hsum _ hball
+    simpa [Metric.ball, Set.mem_setOf_eq, dist_eq_norm] using h
+  refine hlt.mono ?_
+  intro z hz
+  have hlt' :
+      ‖(1 : ℂ) + (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹ - (1 : ℂ)‖ < 1 := hz
+  have hre :
+      0 < ((1 : ℂ) + (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹).re :=
+    re_pos_of_norm_sub_one_lt_one hlt'
+  have harg : |Complex.arg ((1 : ℂ) + (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹)|
+      < Real.pi / 2 := abs_arg_lt_pi_div_two_of_re_pos hre
+  simpa [g, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using harg
+
+lemma eventually_atInfinity_abs_arg_lt_quadratic_iter_ratio_sq_of_pos
+    (c : ℂ) (N : ℕ) (ε : ℝ) (hε : 0 < ε) :
+    ∀ᶠ z in atInfinity,
+      |Complex.arg (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)| < ε := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hG2 : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+    have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+    simpa using (hcont.tendsto (1 : ℂ)).comp hG
+  have harg : Tendsto (fun z => Complex.arg ((g z) ^ 2)) atInfinity (𝓝 (0 : ℝ)) := by
+    have hcont : ContinuousAt Complex.arg (1 : ℂ) := by
+      exact (Complex.continuousAt_arg (by exact (one_mem_slitPlane : (1 : ℂ) ∈ Complex.slitPlane)))
+    have h := hcont.tendsto.comp hG2
+    simpa using h
+  have hball : Metric.ball (0 : ℝ) ε ∈ 𝓝 (0 : ℝ) := Metric.ball_mem_nhds _ hε
+  have h := tendsto_def.1 harg _ hball
+  simpa [Metric.ball, Set.mem_setOf_eq, Real.dist_eq] using h
+
+lemma eventually_atInfinity_abs_arg_lt_ratio_term_of_pos
+    (c : ℂ) (N : ℕ) (ε : ℝ) (hε : 0 < ε) :
+    ∀ᶠ z in atInfinity,
+      |Complex.arg
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)|
+        < ε := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hG2 : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+    have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+    simpa using (hcont.tendsto (1 : ℂ)).comp hG
+  have hG2inv : Tendsto (fun z => ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+    have h := (continuousAt_inv₀ (by norm_num : (1 : ℂ) ≠ 0)).tendsto.comp hG2
+    simpa using h
+  have ht : Tendsto (fun z : ℂ => c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (0 : ℂ)) := by
+    have hk : 0 < 2 ^ (N + 1) := pow_pos (by norm_num : (0 : ℕ) < 2) _
+    exact tendsto_atInfinity_const_div_pow_zero c (2 ^ (N + 1)) hk
+  have hprod :
+      Tendsto (fun z : ℂ => (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹) atInfinity (𝓝 (0 : ℂ)) := by
+    simpa using ht.mul hG2inv
+  have hsum :
+      Tendsto (fun z : ℂ =>
+          (1 : ℂ) + (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+    simpa using (tendsto_const_nhds.add hprod)
+  have harg : Tendsto
+      (fun z =>
+        Complex.arg ((1 : ℂ) + (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹))
+      atInfinity (𝓝 (0 : ℝ)) := by
+    have hcont : ContinuousAt Complex.arg (1 : ℂ) := by
+      exact (Complex.continuousAt_arg (by exact (one_mem_slitPlane : (1 : ℂ) ∈ Complex.slitPlane)))
+    have h := hcont.tendsto.comp hsum
+    simpa using h
+  have hball : Metric.ball (0 : ℝ) ε ∈ 𝓝 (0 : ℝ) := Metric.ball_mem_nhds _ hε
+  have h := tendsto_def.1 harg _ hball
+  simpa [Metric.ball, Set.mem_setOf_eq, Real.dist_eq, g, div_eq_mul_inv, mul_comm, mul_left_comm,
+    mul_assoc] using h
+
+lemma eventually_atInfinity_abs_arg_lt_pi_div_four_candidate
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity,
+      |Complex.arg
+          (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+        < Real.pi / 2 := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hε : 0 < (Real.pi / 4) := by
+    nlinarith [Real.pi_pos]
+  have harg1 : ∀ᶠ z in atInfinity, |Complex.arg ((g z) ^ 2)| < Real.pi / 4 :=
+    eventually_atInfinity_abs_arg_lt_quadratic_iter_ratio_sq_of_pos c N (Real.pi / 4) hε
+  have harg2 : ∀ᶠ z in atInfinity,
+      |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 4 :=
+    eventually_atInfinity_abs_arg_lt_ratio_term_of_pos c N (Real.pi / 4) hε
+  have hne : ∀ᶠ z in atInfinity, g z ≠ 0 := by
+    have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+      tendsto_quadratic_iter_div_pow_atInfinity c N
+    exact hG.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have hterm_ne : ∀ᶠ z in atInfinity,
+      (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ≠ 0 := by
+    have hterm : Tendsto (fun z => (1 : ℂ) + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)
+        atInfinity (𝓝 (1 : ℂ)) := by
+      have hG2 : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+        have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+        simpa using (hcont.tendsto (1 : ℂ)).comp
+          (tendsto_quadratic_iter_div_pow_atInfinity c N)
+      have hG2inv : Tendsto (fun z => ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+        have h := (continuousAt_inv₀ (by norm_num : (1 : ℂ) ≠ 0)).tendsto.comp hG2
+        simpa using h
+      have ht : Tendsto (fun z : ℂ => c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (0 : ℂ)) := by
+        have hk : 0 < 2 ^ (N + 1) := pow_pos (by norm_num : (0 : ℕ) < 2) _
+        exact tendsto_atInfinity_const_div_pow_zero c (2 ^ (N + 1)) hk
+      have hprod :
+          Tendsto (fun z : ℂ => (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹)
+            atInfinity (𝓝 (0 : ℂ)) := by
+        simpa using ht.mul hG2inv
+      simpa [g, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using
+        (tendsto_const_nhds.add hprod)
+    exact hterm.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have hboth : ∀ᶠ z in atInfinity,
+      g z ≠ 0 ∧
+        (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ≠ 0 ∧
+          |Complex.arg ((g z) ^ 2)| < Real.pi / 4 ∧
+            |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 4 :=
+    hne.and (hterm_ne.and (harg1.and harg2))
+  refine hboth.mono ?_
+  intro z hz
+  rcases hz with ⟨hgne, htermne, harg1z, harg2z⟩
+  have hsum : Complex.arg ((g z) ^ 2) + Complex.arg
+        (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ∈ Set.Ioc (-Real.pi) Real.pi :=
+    arg_add_mem_Ioc_of_abs_lt_pi_div_two
+      (by nlinarith [harg1z, Real.pi_pos])
+      (by nlinarith [harg2z, Real.pi_pos])
+  have hargmul :
+      Complex.arg ((g z) ^ 2 *
+        (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)) =
+        Complex.arg ((g z) ^ 2) +
+          Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) :=
+    (Complex.arg_mul_eq_add_arg_iff (by exact pow_ne_zero 2 hgne) htermne).2 hsum
+  have hlt : |Complex.arg ((g z) ^ 2) + Complex.arg
+        (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 2 := by
+    have h1 : |Complex.arg ((g z) ^ 2)| < Real.pi / 4 := harg1z
+    have h2 : |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 4 := harg2z
+    have htri :
+        |Complex.arg ((g z) ^ 2) + Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| ≤
+          |Complex.arg ((g z) ^ 2)| +
+            |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| := by
+      simpa using
+        (norm_add_le (Complex.arg ((g z) ^ 2))
+          (Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)))
+    nlinarith [h1, h2, htri]
+  have hlt' :
+      |Complex.arg ((g z) ^ 2 *
+        (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2))| < Real.pi / 2 := by
+    simpa [hargmul] using hlt
+  simpa [g, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using hlt'
+
+lemma abs_arg_pow_lt_pi_div_two_of_abs_arg_lt
+    {z : ℂ} {n : ℕ} (hn : n ≠ 0)
+    (harg : |Complex.arg z| < Real.pi / (2 * (n : ℝ))) :
+    |Complex.arg (z ^ n)| < Real.pi / 2 := by
+  have hn' : (0 : ℝ) < n := by
+    exact_mod_cast (Nat.pos_of_ne_zero hn)
+  -- `arg(z^n)` is the `n`-multiple of `arg z` in `Real.Angle`.
+  have hcoe : (Complex.arg (z ^ n) : Real.Angle) = n • (Complex.arg z : Real.Angle) := by
+    simpa using (Complex.arg_pow_coe_angle z n)
+  have htoReal :
+      (Complex.arg (z ^ n) : Real.Angle).toReal =
+        (n • (Complex.arg z : Real.Angle)).toReal := by
+    simp [hcoe]
+  have hleft :
+      |Complex.arg (z ^ n)| =
+        |(n • (Complex.arg z : Real.Angle)).toReal| := by
+    calc
+      |Complex.arg (z ^ n)| = |(Complex.arg (z ^ n) : Real.Angle).toReal| := by
+        simp [Complex.arg_coe_angle_toReal_eq_arg]
+      _ = |(n • (Complex.arg z : Real.Angle)).toReal| := by
+        simp [htoReal]
+  -- From `|arg z| < π/(2n)` we get `arg z ∈ Ioc (-π/n, π/n)`.
+  have harg' : |Complex.arg z| < Real.pi / (n : ℝ) := by
+    have hle : Real.pi / (2 * (n : ℝ)) ≤ Real.pi / (n : ℝ) := by
+      have hcmp : (n : ℝ) ≤ 2 * (n : ℝ) := by nlinarith [hn']
+      have h1 : (1 : ℝ) / (2 * (n : ℝ)) ≤ 1 / (n : ℝ) := by
+        exact one_div_le_one_div_of_le hn' hcmp
+      have hpi : 0 ≤ Real.pi := le_of_lt Real.pi_pos
+      calc
+        Real.pi / (2 * (n : ℝ)) = Real.pi * (1 / (2 * (n : ℝ))) := by ring
+        _ ≤ Real.pi * (1 / (n : ℝ)) := by
+              exact mul_le_mul_of_nonneg_left h1 hpi
+        _ = Real.pi / (n : ℝ) := by ring
+    exact lt_of_lt_of_le harg hle
+  have hmem' : Complex.arg z ∈ Set.Ioc (-Real.pi / (n : ℝ)) (Real.pi / (n : ℝ)) := by
+    refine ⟨?_, ?_⟩
+    ·
+      have h := (abs_lt.1 harg').1
+      simpa [neg_div] using h
+    · exact le_of_lt (abs_lt.1 harg').2
+  have hmem : (Complex.arg z : Real.Angle).toReal ∈
+      Set.Ioc (-Real.pi / (n : ℝ)) (Real.pi / (n : ℝ)) := by
+    simpa [Complex.arg_coe_angle_toReal_eq_arg] using hmem'
+  have hmul :
+      (n • (Complex.arg z : Real.Angle)).toReal =
+        (n : ℝ) * (Complex.arg z : Real.Angle).toReal :=
+    (Real.Angle.nsmul_toReal_eq_mul hn).2 hmem
+  have hmul' :
+      |(n • (Complex.arg z : Real.Angle)).toReal|
+        = (n : ℝ) * |(Complex.arg z : Real.Angle).toReal| := by
+    have hn0 : 0 ≤ (n : ℝ) := by
+      exact_mod_cast (Nat.cast_nonneg n)
+    calc
+      |(n • (Complex.arg z : Real.Angle)).toReal|
+          = |(n : ℝ) * (Complex.arg z : Real.Angle).toReal| := by
+              simp [hmul]
+      _ = (n : ℝ) * |(Complex.arg z : Real.Angle).toReal| := by
+              simp [abs_mul, abs_of_nonneg hn0]
+  have hmul'' : (n : ℝ) * |(Complex.arg z : Real.Angle).toReal| < Real.pi / 2 := by
+    have hn0 : (n : ℝ) ≠ 0 := by
+      exact_mod_cast (Nat.ne_of_gt (Nat.pos_of_ne_zero hn))
+    have hmul : (n : ℝ) * |Complex.arg z| < (n : ℝ) * (Real.pi / (2 * (n : ℝ))) := by
+      exact (mul_lt_mul_of_pos_left harg hn')
+    have hmul' : (n : ℝ) * (Real.pi / (2 * (n : ℝ))) = Real.pi / 2 := by
+      field_simp [hn0]
+    have : (n : ℝ) * |Complex.arg z| < Real.pi / 2 := by
+      simpa [hmul'] using hmul
+    simpa [Complex.arg_coe_angle_toReal_eq_arg] using this
+  have hbound :
+      |(n • (Complex.arg z : Real.Angle)).toReal| < Real.pi / 2 := by
+    simpa [hmul'] using hmul''
+  simpa [hleft] using hbound
+lemma eventually_atInfinity_cpow_mul_split
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity,
+      (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+        (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+          ((2 : ℂ) ^ (N + 1))⁻¹
+        =
+      (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2) ^ ((2 : ℂ) ^ (N + 1))⁻¹ *
+        (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2) ^
+          ((2 : ℂ) ^ (N + 1))⁻¹ := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hne : ∀ᶠ z in atInfinity, g z ≠ 0 :=
+    hG.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have harg1 : ∀ᶠ z in atInfinity, |Complex.arg ((g z) ^ 2)| < Real.pi / 2 :=
+    eventually_atInfinity_abs_arg_lt_pi_div_two_quadratic_iter_ratio_sq c N
+  have harg2 : ∀ᶠ z in atInfinity,
+      |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 2 :=
+    eventually_atInfinity_abs_arg_lt_pi_div_two_ratio_term c N
+  have hterm_ne : ∀ᶠ z in atInfinity,
+      (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ≠ 0 := by
+    have hterm : Tendsto (fun z => (1 : ℂ) + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)
+        atInfinity (𝓝 (1 : ℂ)) := by
+      -- reuse the construction from the ratio-term lemma
+      have hG2 : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+        have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+        simpa using (hcont.tendsto (1 : ℂ)).comp hG
+      have hG2inv : Tendsto (fun z => ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+        have h := (continuousAt_inv₀ (by norm_num : (1 : ℂ) ≠ 0)).tendsto.comp hG2
+        simpa using h
+      have ht : Tendsto (fun z : ℂ => c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (0 : ℂ)) := by
+        have hk : 0 < 2 ^ (N + 1) := pow_pos (by norm_num : (0 : ℕ) < 2) _
+        exact tendsto_atInfinity_const_div_pow_zero c (2 ^ (N + 1)) hk
+      have hprod :
+          Tendsto (fun z : ℂ => (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹) atInfinity (𝓝 (0 : ℂ)) := by
+        simpa using ht.mul hG2inv
+      simpa using (tendsto_const_nhds.add hprod)
+    exact hterm.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have hboth : ∀ᶠ z in atInfinity,
+      g z ≠ 0 ∧
+        (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ≠ 0 ∧
+          |Complex.arg ((g z) ^ 2)| < Real.pi / 2 ∧
+            |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 2 :=
+    hne.and (hterm_ne.and (harg1.and harg2))
+  refine hboth.mono ?_
+  intro z hz
+  rcases hz with ⟨hgne, htermne, harg1z, harg2z⟩
+  have hsum : Complex.arg ((g z) ^ 2) + Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ∈
+      Set.Ioc (-Real.pi) Real.pi :=
+    arg_add_mem_Ioc_of_abs_lt_pi_div_two harg1z harg2z
+  have hmul :
+      Complex.log (((g z) ^ 2) * (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)) =
+        Complex.log ((g z) ^ 2) + Complex.log (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) :=
+    (Complex.log_mul_eq_add_log_iff (by exact pow_ne_zero 2 hgne) htermne).2 hsum
+  have hpow := cpow_mul_of_log_mul ((g z) ^ 2)
+    (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ((2 : ℂ) ^ (N + 1))⁻¹
+    (by exact pow_ne_zero 2 hgne) htermne hmul
+  simpa [g, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using hpow
+
+lemma tendsto_quadratic_iter_ratio_sq_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto (fun z => ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+      atInfinity (𝓝 (1 : ℂ)) := by
+  have hG : Tendsto (fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)) atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+  simpa using (hcont.tendsto (1 : ℂ)).comp hG
+
+lemma tendsto_ratio_term_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto
+      (fun z =>
+        (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+      atInfinity (𝓝 (0 : ℂ)) := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hG2 : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+    have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+    simpa using (hcont.tendsto (1 : ℂ)).comp hG
+  have hG2inv : Tendsto (fun z => ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+    have h := (continuousAt_inv₀ (by norm_num : (1 : ℂ) ≠ 0)).tendsto.comp hG2
+    simpa using h
+  have ht : Tendsto (fun z : ℂ => c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (0 : ℂ)) := by
+    have hk : 0 < 2 ^ (N + 1) := pow_pos (by norm_num : (0 : ℕ) < 2) _
+    exact tendsto_atInfinity_const_div_pow_zero c (2 ^ (N + 1)) hk
+  have hprod :
+      Tendsto (fun z : ℂ => (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹)
+        atInfinity (𝓝 (0 : ℂ)) := by
+    simpa using ht.mul hG2inv
+  simpa [g, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using hprod
+
+lemma tendsto_root_ratio_term_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto
+      (fun z =>
+        (1 : ℂ) +
+          (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+      atInfinity (𝓝 (1 : ℂ)) := by
+  have hterm : Tendsto
+      (fun z =>
+        (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+      atInfinity (𝓝 (0 : ℂ)) :=
+    tendsto_ratio_term_atInfinity c N
+  simpa using (tendsto_const_nhds.add hterm)
+
+lemma tendsto_root_seq_ratio_candidate_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto
+      (fun z =>
+        (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+            ((2 : ℂ) ^ (N + 1))⁻¹)
+      atInfinity (𝓝 (1 : ℂ)) := by
+  have hG2 : Tendsto
+      (fun z => ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+      atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_ratio_sq_atInfinity c N
+  have hterm :
+      Tendsto
+        (fun z =>
+          (1 : ℂ) +
+            (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+        atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_root_ratio_term_atInfinity c N
+  have hprod :
+      Tendsto
+        (fun z =>
+          ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) /
+              ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
+        atInfinity (𝓝 (1 : ℂ)) := by
+    simpa using hG2.mul hterm
+  exact tendsto_cpow_const_of_tendsto_one (f := fun z =>
+      (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+        (1 + (c / z ^ (2 ^ (N + 1))) /
+          ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)))
+    (a := ((2 : ℂ) ^ (N + 1))⁻¹) hprod
+
+lemma root_seq_ratio_candidate_eq_div
+    (c : ℂ) (N : ℕ) (z : ℂ) (hz : z ≠ 0)
+    (hA : (quadratic_map c)^[N] z ≠ 0) :
+    (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+        (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
+      = (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) := by
+  have hz' : z ^ (2 ^ (N + 1)) ≠ 0 := by
+    exact pow_ne_zero _ hz
+  have hA' : ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ≠ 0 := by
+    have hB : z ^ (2 ^ N) ≠ 0 := by
+      exact pow_ne_zero _ hz
+    exact div_ne_zero hA hB
+  have hpow : z ^ (2 ^ (N + 1)) = (z ^ (2 ^ N)) ^ 2 := by
+    simp [pow_mul, pow_succ]
+  field_simp [hz', hA', hpow, pow_succ, pow_mul, mul_comm, mul_left_comm, mul_assoc]
+  ring
+
+lemma pow_cpow_nat_inv_of_abs_arg_lt {z : ℂ} {n : ℕ} (hn : n ≠ 0)
+    (harg : |Complex.arg z| < Real.pi / n) :
+    (z ^ n) ^ ((n⁻¹ : ℂ)) = z := by
+  have hlt : -(Real.pi / n) < Complex.arg z := by
+    have h := (abs_lt.1 harg).1
+    linarith
+  have hle : Complex.arg z ≤ Real.pi / n := by
+    have h := (abs_lt.1 harg).2
+    linarith
+  exact Complex.pow_cpow_nat_inv hn hlt hle
+
+lemma correction_factor_eq_one_of_abs_arg_lt {z : ℂ} {n : ℕ} (hn : n ≠ 0) (hz : z ≠ 0)
+    (harg : |Complex.arg z| < Real.pi / n) :
+    (z ^ n) ^ ((n⁻¹ : ℂ)) / z = (1 : ℂ) := by
+  have h := pow_cpow_nat_inv_of_abs_arg_lt (z := z) (n := n) hn harg
+  simp [h, hz]
+
+lemma log_mul_eq_add_log_of_abs_arg_lt_pi_div_two
+    {x y : ℂ} (hx : x ≠ 0) (hy : y ≠ 0)
+    (hxarg : |Complex.arg x| < Real.pi / 2)
+    (hyarg : |Complex.arg y| < Real.pi / 2) :
+    Complex.log (x * y) = Complex.log x + Complex.log y := by
+  have hsum : Complex.arg x + Complex.arg y ∈ Set.Ioc (-Real.pi) Real.pi :=
+    arg_add_mem_Ioc_of_abs_lt_pi_div_two hxarg hyarg
+  exact (Complex.log_mul_eq_add_log_iff hx hy).2 hsum
+
+lemma eventually_atInfinity_log_candidate_eq_add
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity,
+      Complex.log
+          (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
+        =
+      Complex.log (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2) +
+        Complex.log
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2) := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hne : ∀ᶠ z in atInfinity, g z ≠ 0 :=
+    hG.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have harg1 : ∀ᶠ z in atInfinity, |Complex.arg ((g z) ^ 2)| < Real.pi / 2 :=
+    eventually_atInfinity_abs_arg_lt_pi_div_two_quadratic_iter_ratio_sq c N
+  have harg2 : ∀ᶠ z in atInfinity,
+      |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 2 :=
+    eventually_atInfinity_abs_arg_lt_pi_div_two_ratio_term c N
+  have hterm_ne : ∀ᶠ z in atInfinity,
+      (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ≠ 0 := by
+    have hterm : Tendsto (fun z => (1 : ℂ) + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)
+        atInfinity (𝓝 (1 : ℂ)) := by
+      have hG2 : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+        have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+        simpa using (hcont.tendsto (1 : ℂ)).comp hG
+      have hG2inv : Tendsto (fun z => ((g z) ^ 2)⁻¹) atInfinity (𝓝 (1 : ℂ)) := by
+        have h := (continuousAt_inv₀ (by norm_num : (1 : ℂ) ≠ 0)).tendsto.comp hG2
+        simpa using h
+      have ht : Tendsto (fun z : ℂ => c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (0 : ℂ)) := by
+        have hk : 0 < 2 ^ (N + 1) := pow_pos (by norm_num : (0 : ℕ) < 2) _
+        exact tendsto_atInfinity_const_div_pow_zero c (2 ^ (N + 1)) hk
+      have hprod :
+          Tendsto (fun z : ℂ => (c / z ^ (2 ^ (N + 1))) * ((g z) ^ 2)⁻¹)
+            atInfinity (𝓝 (0 : ℂ)) := by
+        simpa using ht.mul hG2inv
+      simpa [g, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using
+        (tendsto_const_nhds.add hprod)
+    exact hterm.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have hboth : ∀ᶠ z in atInfinity,
+      g z ≠ 0 ∧
+        (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2) ≠ 0 ∧
+          |Complex.arg ((g z) ^ 2)| < Real.pi / 2 ∧
+            |Complex.arg (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2)| < Real.pi / 2 :=
+    hne.and (hterm_ne.and (harg1.and harg2))
+  refine hboth.mono ?_
+  intro z hz
+  rcases hz with ⟨hgne, htermne, harg1z, harg2z⟩
+  have hlog := log_mul_eq_add_log_of_abs_arg_lt_pi_div_two
+    (x := (g z) ^ 2)
+    (y := (1 + (c / z ^ (2 ^ (N + 1))) / (g z) ^ 2))
+    (hx := by exact pow_ne_zero 2 hgne)
+    (hy := htermne)
+    (hxarg := harg1z)
+    (hyarg := harg2z)
+  simpa [g, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using hlog
+
+lemma bottcher_root_seq_ratio_eq_candidate_of_log_and_arg
+    (c : ℂ) (N : ℕ) (z : ℂ) (hz : z ≠ 0)
+    (hA0 : (quadratic_map c)^[N] z ≠ 0)
+    (hA : ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0)
+    (hlog :
+      Complex.log (((quadratic_map c)^[N] z) ^ 2 + c) =
+        Complex.log ((((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1))) +
+          Complex.log (z ^ (2 ^ (N + 1))))
+    (harg : |Complex.arg z| < Real.pi / (2 ^ (N + 1))) :
+    bottcher_root_seq c (N + 1) z / z =
+      (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+        ((2 : ℂ) ^ (N + 1))⁻¹ := by
+  let A : ℂ := ((quadratic_map c)^[N] z) ^ 2 + c
+  let x : ℂ := A / z ^ (2 ^ (N + 1))
+  let y : ℂ := z ^ (2 ^ (N + 1))
+  have hz' : y ≠ 0 := by
+    dsimp [y]
+    exact pow_ne_zero _ hz
+  have hx : x ≠ 0 := by
+    dsimp [x]
+    exact div_ne_zero hA hz'
+  have hxy : x * y = A := by
+    dsimp [x, y]
+    field_simp [hz']
+  have hlog' : Complex.log (x * y) = Complex.log x + Complex.log y := by
+    simpa [x, y, hxy] using hlog
+  have hsplit :
+      (x * y) ^ ((2 : ℂ) ^ (N + 1))⁻¹ =
+        x ^ ((2 : ℂ) ^ (N + 1))⁻¹ * y ^ ((2 : ℂ) ^ (N + 1))⁻¹ :=
+    cpow_mul_of_log_mul x y ((2 : ℂ) ^ (N + 1))⁻¹ hx hz' hlog'
+  have hrewrite :
+      (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
+        = x := by
+    have h := root_seq_ratio_candidate_eq_div c N z hz hA0
+    simpa [x] using h
+  have hcorr :
+      y ^ ((2 : ℂ) ^ (N + 1))⁻¹ / z = (1 : ℂ) := by
+    have hn : (2 ^ (N + 1) : ℕ) ≠ 0 := by
+      exact pow_ne_zero _ (by norm_num : (2 : ℕ) ≠ 0)
+    have harg' : |Complex.arg z| < Real.pi / (2 ^ (N + 1) : ℕ) := by
+      simpa using harg
+    simpa [y] using
+      (correction_factor_eq_one_of_abs_arg_lt (z := z) (n := 2 ^ (N + 1)) hn hz harg')
+  calc
+    bottcher_root_seq c (N + 1) z / z
+        = (((fun w => w ^ 2 + c)^[N] z) ^ 2 + c) ^ ((2 : ℂ) ^ (N + 1))⁻¹ / z := by
+            simp [bottcher_root_seq_succ]
+    _ = A ^ ((2 : ℂ) ^ (N + 1))⁻¹ / z := by
+            change (((quadratic_map c)^[N] z) ^ 2 + c) ^ ((2 : ℂ) ^ (N + 1))⁻¹ / z =
+              A ^ ((2 : ℂ) ^ (N + 1))⁻¹ / z
+            simp [A]
+    _ = (x ^ ((2 : ℂ) ^ (N + 1))⁻¹ * y ^ ((2 : ℂ) ^ (N + 1))⁻¹) / z := by
+            -- replace `A` by `x*y` and use the log-branch split
+            simpa [A, hxy] using congrArg (fun t => t / z) hsplit
+    _ = x ^ ((2 : ℂ) ^ (N + 1))⁻¹ := by
+            -- use the correction factor
+            calc
+              (x ^ ((2 : ℂ) ^ (N + 1))⁻¹ * y ^ ((2 : ℂ) ^ (N + 1))⁻¹) / z
+                  = x ^ ((2 : ℂ) ^ (N + 1))⁻¹ * (y ^ ((2 : ℂ) ^ (N + 1))⁻¹ / z) := by
+                      ring
+              _ = x ^ ((2 : ℂ) ^ (N + 1))⁻¹ := by
+                      simp [hcorr]
+    _ =
+        (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+          ((2 : ℂ) ^ (N + 1))⁻¹ := by
+            simp [hrewrite]
+lemma eventually_atInfinity_iter_ne_zero (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 := by
+  let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+  have hG : Tendsto g atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hne : ∀ᶠ z in atInfinity, g z ≠ 0 :=
+    hG.eventually_ne (by exact (one_ne_zero : (1 : ℂ) ≠ (0 : ℂ)))
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hboth : ∀ᶠ z in atInfinity, g z ≠ 0 ∧ z ≠ 0 := hne.and hzne
+  refine hboth.mono ?_
+  intro z hz
+  rcases hz with ⟨hgz, hz⟩
+  have hzn : z ^ (2 ^ N) ≠ 0 := pow_ne_zero _ hz
+  exact (div_ne_zero_iff.mp hgz).1
+
+lemma eventually_atInfinity_root_seq_ratio_candidate_eq_div
+    (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity,
+      (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) =
+        (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) := by
+  have hA : ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 :=
+    eventually_atInfinity_iter_ne_zero c N
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hboth : ∀ᶠ z in atInfinity, z ≠ 0 ∧ (quadratic_map c)^[N] z ≠ 0 :=
+    hzne.and hA
+  refine hboth.mono ?_
+  intro z hz
+  rcases hz with ⟨hz, hA⟩
+  exact root_seq_ratio_candidate_eq_div c N z hz hA
+
+
 
 lemma norm_bottcher_root_seq_of_ne_zero
     (c : ℂ) (n : ℕ) (z : ℂ)
@@ -440,6 +1130,61 @@ lemma bottcher_root_seq_norm_bounds_of_escape
               _ = Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
                       simp [hnorm_bottcher, mul_comm]
   exact ⟨hlow', hhigh'⟩
+
+lemma bottcher_root_seq_norm_diff_bound_of_escape
+    (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
+    let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
+    ∀ n,
+      |‖bottcher_root_seq c n z‖ - ‖Quadratic.bottcher_map c z‖| ≤
+        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+  intro M n
+  have hbound := (bottcher_root_seq_norm_bounds_of_escape c z hz) n
+  have hlow : Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ ≤
+      ‖bottcher_root_seq c n z‖ := hbound.1
+  have hhigh : ‖bottcher_root_seq c n z‖ ≤
+      Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := hbound.2
+  have hpos : 0 ≤ ‖Quadratic.bottcher_map c z‖ := norm_nonneg _
+  have hlow' : ‖Quadratic.bottcher_map c z‖ - ‖bottcher_root_seq c n z‖ ≤
+      (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+    have hsum :
+        ‖Quadratic.bottcher_map c z‖ - ‖bottcher_root_seq c n z‖ ≤
+          ‖Quadratic.bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ := by
+      have hb : 0 ≤ ‖bottcher_root_seq c n z‖ := norm_nonneg _
+      nlinarith
+    have hle : ‖Quadratic.bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ ≤
+        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+      have hle' : ‖bottcher_root_seq c n z‖ ≤
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := hhigh
+      have hsum' : ‖Quadratic.bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ ≤
+          ‖Quadratic.bottcher_map c z‖ + Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+        nlinarith [hle']
+      have hsum'' :
+          ‖Quadratic.bottcher_map c z‖ + Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ =
+            (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+        ring
+      exact hsum'.trans_eq hsum''
+    exact hsum.trans hle
+  have hhigh' : ‖bottcher_root_seq c n z‖ - ‖Quadratic.bottcher_map c z‖ ≤
+      (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+    have hsum :
+        ‖bottcher_root_seq c n z‖ - ‖Quadratic.bottcher_map c z‖ ≤
+          ‖bottcher_root_seq c n z‖ + ‖Quadratic.bottcher_map c z‖ := by
+      have hb : 0 ≤ ‖Quadratic.bottcher_map c z‖ := norm_nonneg _
+      nlinarith
+    have hle : ‖bottcher_root_seq c n z‖ + ‖Quadratic.bottcher_map c z‖ ≤
+        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+      have hle' : ‖bottcher_root_seq c n z‖ ≤
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := hhigh
+      have hsum' : ‖bottcher_root_seq c n z‖ + ‖Quadratic.bottcher_map c z‖ ≤
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ + ‖Quadratic.bottcher_map c z‖ := by
+        nlinarith [hle']
+      have hsum'' :
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ + ‖Quadratic.bottcher_map c z‖ =
+            (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+        ring
+      exact hsum'.trans_eq hsum''
+    exact hsum.trans hle
+  exact abs_le.mpr ⟨by simpa [sub_eq_add_neg, add_comm] using hlow', hhigh'⟩
 
 
 lemma bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
@@ -818,6 +1563,7 @@ lemma bottcher_root_seq_error_bound_of_exterior
   intro z hz
   exact hR' z (le_of_lt hz)
 
+
 lemma bottcher_root_seq_error_bound_of_uniform_on
     (c : ℂ) (N : ℕ)
     (hU :
@@ -908,27 +1654,30 @@ lemma bottcher_root_seq_tendsto_uniform_on_annulus_of_large_R
   exact bottcher_root_seq_tendsto_uniform_on_of_compact c _ hK hKbasin
 
 lemma bottcher_root_seq_error_bound_of_annulus_and_tail
-    (c : ℂ) (R : ℝ)
+    (c : ℂ) (R : ℝ) (hRpos : 0 < R)
     (hannulus :
       ∀ S, R ≤ S →
         TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
           (exterior_annulus R S))
     (htail :
       ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε) :
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖) :
     ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
-      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε := by
+      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖ := by
   intro ε hε
   rcases htail ε hε with ⟨S, hSR, htail'⟩
   have hann := hannulus S hSR
   rcases uniform_bound_of_tendstoUniformlyOn (F := bottcher_root_seq c)
-    (f := Quadratic.bottcher_map c) (s := exterior_annulus R S) hann ε hε with ⟨N, hN⟩
+    (f := Quadratic.bottcher_map c) (s := exterior_annulus R S) hann (ε * R)
+    (mul_pos hε hRpos) with ⟨N, hN⟩
   refine ⟨N, ?_⟩
   intro n hn z hz
   by_cases hzs : ‖z‖ ≤ S
   · have hz' : z ∈ exterior_annulus R S := ⟨hz, hzs⟩
     have h := hN n hn z hz'
-    exact h
+    have hle : ε * R ≤ ε * ‖z‖ :=
+      mul_le_mul_of_nonneg_left hz (le_of_lt hε)
+    exact h.trans hle
   · have hzs' : S ≤ ‖z‖ := le_of_not_ge hzs
     exact htail' n z hzs'
 
@@ -936,10 +1685,13 @@ lemma bottcher_root_seq_error_bound_of_large_R
     (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R)
     (htail :
       ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε) :
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖) :
     ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
-      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε := by
-  refine bottcher_root_seq_error_bound_of_annulus_and_tail c R ?_ htail
+      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖ := by
+  have hRpos : 0 < R := by
+    have hcn : (0 : ℝ) ≤ ‖c‖ := by exact norm_nonneg _
+    linarith
+  refine bottcher_root_seq_error_bound_of_annulus_and_tail c R hRpos ?_ htail
   intro S hRS
   have hR' : ‖c‖ + 2 ≤ R := hR
   exact bottcher_root_seq_tendsto_uniform_on_annulus_of_large_R c (R := R) (S := S) hR'
@@ -954,12 +1706,30 @@ lemma bottcher_normalized_at_infty_of_root_seq_bound
   refine bottcher_normalized_at_infty_of_root_seq c N hroot ?_
   exact bottcher_root_seq_error_tendsto c N hbound
 
+def bottcher_tail_bound_at (c : ℂ) (R : ℝ) (N : ℕ) : Prop :=
+  ∀ ε > 0, ∃ S ≥ R, ∀ z, S ≤ ‖z‖ →
+    ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖
+
+def bottcher_tail_bound (c : ℂ) (R : ℝ) : Prop :=
+  ∃ N, bottcher_tail_bound_at c R N
+
+lemma bottcher_tail_bound_at_of_exterior
+    (c : ℂ) (R : ℝ) (N : ℕ)
+    (hR :
+      ∀ ε > 0, ∃ S, ∀ z, S ≤ ‖z‖ →
+        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+    bottcher_tail_bound_at c R N := by
+  intro ε hε
+  rcases hR ε hε with ⟨S, hS⟩
+  refine ⟨max S R, le_max_right _ _, ?_⟩
+  intro z hz
+  have hz' : S ≤ ‖z‖ := le_trans (le_max_left _ _) hz
+  exact hS z hz'
+
 lemma bottcher_normalized_at_infty_of_large_R
-    (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R) (N : ℕ)
+    (c : ℂ) (R : ℝ) (N : ℕ)
     (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
-    (htail :
-      ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε) :
+    (htail : bottcher_tail_bound_at c R N) :
     bottcher_normalized_at_infty c := by
   have hbound' :
       ∀ ε > 0, ∀ᶠ z in atInfinity,
@@ -970,33 +1740,30 @@ lemma bottcher_normalized_at_infty_of_large_R
       eventually_atInfinity_norm_gt S
     refine hlarge.mono ?_
     intro z hz
-    have habs : ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε :=
-      htail' N z (le_of_lt hz)
-    have hle : ε ≤ ε * ‖z‖ := by
-      have hR1 : (1 : ℝ) ≤ R := by
-        have hcn : (0 : ℝ) ≤ ‖c‖ := by exact norm_nonneg _
-        nlinarith
-      have hzge : 1 ≤ ‖z‖ := le_trans (le_trans hR1 hSR) (le_of_lt hz)
-      nlinarith
-    exact habs.trans hle
+    exact htail' z (le_of_lt hz)
   exact bottcher_normalized_at_infty_of_root_seq_bound c N hroot hbound'
 
-def bottcher_tail_bound (c : ℂ) (R : ℝ) : Prop :=
-  ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
-    ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε
+theorem bottcher_normalized_at_infty_of_tail_bound_at
+    (c : ℂ) (R : ℝ) (N : ℕ)
+    (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
+    (htail : bottcher_tail_bound_at c R N) :
+    bottcher_normalized_at_infty c :=
+  bottcher_normalized_at_infty_of_large_R c R N hroot htail
 
 theorem bottcher_normalized_at_infty_of_tail_bound
-    (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R) (N : ℕ)
-    (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
-    (htail : bottcher_tail_bound c R) :
-    bottcher_normalized_at_infty c :=
-  bottcher_normalized_at_infty_of_large_R c R hR N hroot htail
+    (c : ℂ) (R : ℝ)
+    (htail :
+      ∃ N, bottcher_tail_bound_at c R N ∧
+        Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ))) :
+    bottcher_normalized_at_infty c := by
+  rcases htail with ⟨N, htailN, hrootN⟩
+  exact bottcher_normalized_at_infty_of_tail_bound_at c R N hrootN htailN
 
 theorem bottcher_normalized_at_infty_of_tail_bound_zero
-    (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R)
-    (htail : bottcher_tail_bound c R) :
+    (c : ℂ) (R : ℝ)
+    (htail : bottcher_tail_bound_at c R 0) :
     bottcher_normalized_at_infty c := by
-  refine bottcher_normalized_at_infty_of_tail_bound c R hR 0 ?_ htail
+  refine bottcher_normalized_at_infty_of_tail_bound_at c R 0 ?_ htail
   exact bottcher_root_seq_ratio_tendsto_atInfinity_zero c
 
 lemma outside_open_subset_outside_disk (c : ℂ) :
