@@ -132,6 +132,95 @@ lemma eventually_atInfinity_mem_outside_disk (c : ℂ) :
   intro z hz
   exact le_of_lt (by simpa using hz)
 
+lemma tendsto_atInfinity_norm_atTop :
+    Tendsto (fun z : ℂ => ‖z‖) atInfinity atTop := by
+  simpa [atInfinity] using
+    (tendsto_comap : Tendsto (fun z : ℂ => ‖z‖) (Filter.comap (fun z : ℂ => ‖z‖) atTop) atTop)
+
+lemma tendsto_atInfinity_norm_pow_atTop (k : ℕ) (hk : 0 < k) :
+    Tendsto (fun z : ℂ => ‖z‖ ^ k) atInfinity atTop := by
+  refine tendsto_atTop.2 ?_
+  intro R
+  by_cases hR : R ≤ 0
+  · exact Filter.Eventually.of_forall (fun z => le_trans hR (pow_nonneg (norm_nonneg _) _))
+  · have hR' : 0 < R := lt_of_not_ge hR
+    have hlarge : ∀ᶠ z in atInfinity, max 1 R < ‖z‖ :=
+      eventually_atInfinity_norm_gt (max 1 R)
+    refine hlarge.mono ?_
+    intro z hz
+    have hz1 : (1 : ℝ) ≤ ‖z‖ := le_of_lt (lt_of_le_of_lt (le_max_left _ _) hz)
+    have hzR : R ≤ ‖z‖ := le_of_lt (lt_of_le_of_lt (le_max_right _ _) hz)
+    rcases Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hk) with ⟨n, rfl⟩
+    have hpow1 : (1 : ℝ) ≤ ‖z‖ ^ n := by
+      exact one_le_pow₀ hz1
+    have hpow : ‖z‖ ≤ ‖z‖ ^ (n + 1) := by
+      have hmul := mul_le_mul_of_nonneg_right hpow1 (norm_nonneg z)
+      simpa [pow_succ, mul_comm, mul_left_comm, mul_assoc] using hmul
+    exact le_trans hzR hpow
+
+lemma tendsto_atInfinity_norm_pow_atTop' (k : ℕ) (hk : 0 < k) :
+    Tendsto (fun z : ℂ => ‖z ^ k‖) atInfinity atTop := by
+  simpa [norm_pow] using (tendsto_atInfinity_norm_pow_atTop k hk)
+
+lemma tendsto_atInfinity_inv_pow_zero (k : ℕ) (hk : 0 < k) :
+    Tendsto (fun z : ℂ => (z ^ k)⁻¹) atInfinity (𝓝 (0 : ℂ)) := by
+  refine (tendsto_iff_norm_sub_tendsto_zero).2 ?_
+  have hpow : Tendsto (fun z : ℂ => ‖z ^ k‖) atInfinity atTop :=
+    tendsto_atInfinity_norm_pow_atTop' k hk
+  have hpow_inv : Tendsto (fun z : ℂ => (‖z ^ k‖)⁻¹) atInfinity (𝓝 (0 : ℝ)) :=
+    tendsto_inv_atTop_zero.comp hpow
+  simpa [norm_inv] using hpow_inv
+
+lemma tendsto_atInfinity_const_div_pow_zero (c : ℂ) (k : ℕ) (hk : 0 < k) :
+    Tendsto (fun z : ℂ => c / z ^ k) atInfinity (𝓝 (0 : ℂ)) := by
+  simpa [div_eq_mul_inv] using
+    (tendsto_const_nhds.mul (tendsto_atInfinity_inv_pow_zero (k := k) hk))
+
+lemma tendsto_quadratic_iter_div_pow_atInfinity (c : ℂ) :
+    ∀ N, Tendsto (fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)) atInfinity (𝓝 (1 : ℂ))
+  | 0 => by
+      have hne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+        have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+          (eventually_atInfinity_norm_gt (0 : ℝ))
+        exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+      have hconst : Tendsto (fun _ : ℂ => (1 : ℂ)) atInfinity (𝓝 (1 : ℂ)) :=
+        tendsto_const_nhds
+      refine (tendsto_congr' ?_).1 hconst
+      refine hne.mono ?_
+      intro z hz
+      simp [hz]
+  | N + 1 => by
+      have hN : Tendsto (fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)) atInfinity (𝓝 (1 : ℂ)) :=
+        tendsto_quadratic_iter_div_pow_atInfinity c N
+      let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
+      have hsq : Tendsto (fun z => (g z) ^ 2) atInfinity (𝓝 (1 : ℂ)) := by
+        have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
+        have h := (hcont.tendsto (1 : ℂ)).comp hN
+        simpa using h
+      have hsmall : Tendsto (fun z => c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (0 : ℂ)) := by
+        have hk : 0 < 2 ^ (N + 1) := pow_pos (by norm_num : (0 : ℕ) < 2) _
+        exact tendsto_atInfinity_const_div_pow_zero c (2 ^ (N + 1)) hk
+      have hsum :
+          Tendsto
+            (fun z => (g z) ^ 2 + c / z ^ (2 ^ (N + 1))) atInfinity (𝓝 (1 : ℂ)) := by
+        simpa using hsq.add hsmall
+      refine (tendsto_congr' ?_).1 hsum
+      refine Filter.Eventually.of_forall ?_
+      intro z
+      have hpow : z ^ (2 ^ (N + 1)) = (z ^ (2 ^ N)) ^ 2 := by
+        simp [pow_succ, pow_mul]
+      have hdiv :
+          ((quadratic_map c)^[N] z) ^ 2 / z ^ (2 ^ (N + 1)) =
+            (g z) ^ 2 := by
+        calc
+          ((quadratic_map c)^[N] z) ^ 2 / z ^ (2 ^ (N + 1))
+              = ((quadratic_map c)^[N] z) ^ 2 / (z ^ (2 ^ N)) ^ 2 := by
+                  simp [hpow]
+          _ = (g z) ^ 2 := by
+                  simpa [g, pow_two] using
+                    (div_pow (a := (quadratic_map c)^[N] z) (b := z ^ (2 ^ N)) (n := 2)).symm
+      simp [quadratic_map, Function.iterate_succ_apply', add_div, hdiv, g]
+
 -- TODO (Step 2): use the defining root-sequence for `bottcher_map` to show
 -- `Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 1)`.
 -- A plausible route:
@@ -142,6 +231,10 @@ lemma eventually_atInfinity_mem_outside_disk (c : ℂ) :
 
 noncomputable def bottcher_root_seq (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
   ((fun w => w ^ 2 + c)^[n] z) ^ ((2 : ℂ) ^ n)⁻¹
+
+lemma bottcher_root_seq_zero (c : ℂ) (z : ℂ) :
+    bottcher_root_seq c 0 z = z := by
+  simp [bottcher_root_seq]
 
 lemma bottcher_root_seq_tendsto (c : ℂ) :
     TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
@@ -634,6 +727,82 @@ lemma bottcher_root_seq_error_tendsto
       exact lt_of_le_of_lt hle hlt
   simpa using hgoal
 
+lemma bottcher_root_seq_ratio_tendsto_of_bound
+    (c : ℂ) (N : ℕ)
+    (hbound :
+      ∀ ε > 0, ∀ᶠ z in atInfinity, ‖bottcher_root_seq c N z - z‖ ≤ ε * ‖z‖) :
+    Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)) := by
+  refine (tendsto_iff_norm_sub_tendsto_zero).2 ?_
+  have hgoal :
+      Tendsto (fun z => ‖(bottcher_root_seq c N z - z) / z‖)
+        atInfinity (𝓝 (0 : ℝ)) := by
+    refine (tendsto_order.2 ?_)
+    constructor
+    · intro a ha
+      have hnonneg : ∀ z, 0 ≤ ‖(bottcher_root_seq c N z - z) / z‖ := by
+        intro z
+        exact norm_nonneg _
+      exact Filter.Eventually.of_forall (fun z => lt_of_lt_of_le ha (hnonneg z))
+    · intro a ha
+      have ha' : 0 < a / 2 := by
+        nlinarith
+      have hbound' := hbound (a / 2) ha'
+      have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+        (eventually_atInfinity_norm_gt (0 : ℝ))
+      refine (hbound'.and hpos).mono ?_
+      intro z hz
+      rcases hz with ⟨hbd, hzpos⟩
+      have hnorm :
+          ‖(bottcher_root_seq c N z - z) / z‖ =
+            ‖bottcher_root_seq c N z - z‖ / ‖z‖ := by
+        exact norm_div (bottcher_root_seq c N z - z) z
+      have hle :
+          ‖(bottcher_root_seq c N z - z) / z‖ ≤ a / 2 := by
+        have hle' :
+            ‖bottcher_root_seq c N z - z‖ / ‖z‖ ≤ a / 2 := by
+          have : ‖bottcher_root_seq c N z - z‖ ≤ (a / 2) * ‖z‖ := hbd
+          exact (div_le_iff₀ hzpos).2 (by simpa [mul_comm] using this)
+        simpa [hnorm] using hle'
+      have hlt : a / 2 < a := by
+        nlinarith
+      exact lt_of_le_of_lt hle hlt
+  have hne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      (eventually_atInfinity_norm_gt (0 : ℝ))
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hsplit :
+      ∀ᶠ z in atInfinity,
+        ‖(bottcher_root_seq c N z - z) / z‖ =
+          ‖bottcher_root_seq c N z / z - (1 : ℂ)‖ := by
+    refine hne.mono ?_
+    intro z hz
+    have hsplit' :
+        bottcher_root_seq c N z / z - (1 : ℂ) =
+          (bottcher_root_seq c N z - z) / z := by
+      field_simp [hz]
+    simp [hsplit']
+  have hgoal' :
+      Tendsto (fun z => ‖bottcher_root_seq c N z / z - (1 : ℂ)‖)
+        atInfinity (𝓝 (0 : ℝ)) := by
+    exact (tendsto_congr' hsplit).1 hgoal
+  simpa using hgoal'
+
+lemma bottcher_root_seq_zero_error_bound (c : ℂ) :
+    ∀ ε > 0, ∀ᶠ z in atInfinity, ‖bottcher_root_seq c 0 z - z‖ ≤ ε * ‖z‖ := by
+  intro ε hε
+  refine Filter.Eventually.of_forall ?_
+  intro z
+  have hnonneg : 0 ≤ ε * ‖z‖ :=
+    mul_nonneg (le_of_lt hε) (norm_nonneg _)
+  simpa [bottcher_root_seq] using hnonneg
+
+lemma bottcher_root_seq_ratio_tendsto_atInfinity_zero (c : ℂ) :
+    Tendsto (fun z => bottcher_root_seq c 0 z / z) atInfinity (𝓝 (1 : ℂ)) := by
+  have hbound : ∀ ε > 0, ∀ᶠ z in atInfinity,
+      ‖bottcher_root_seq c 0 z - z‖ ≤ ε * ‖z‖ :=
+    bottcher_root_seq_zero_error_bound c
+  exact bottcher_root_seq_ratio_tendsto_of_bound c 0 hbound
+
 lemma bottcher_root_seq_error_bound_of_exterior
     (c : ℂ) (N : ℕ)
     (hR :
@@ -822,6 +991,13 @@ theorem bottcher_normalized_at_infty_of_tail_bound
     (htail : bottcher_tail_bound c R) :
     bottcher_normalized_at_infty c :=
   bottcher_normalized_at_infty_of_large_R c R hR N hroot htail
+
+theorem bottcher_normalized_at_infty_of_tail_bound_zero
+    (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R)
+    (htail : bottcher_tail_bound c R) :
+    bottcher_normalized_at_infty c := by
+  refine bottcher_normalized_at_infty_of_tail_bound c R hR 0 ?_ htail
+  exact bottcher_root_seq_ratio_tendsto_atInfinity_zero c
 
 lemma outside_open_subset_outside_disk (c : ℂ) :
     {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ outside_disk c := by
