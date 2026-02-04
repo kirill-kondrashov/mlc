@@ -2305,6 +2305,35 @@ lemma deriv_ne_zero_of_sphere_bound
     simpa [hnorm] using hle
   exact (not_lt_of_ge hge) hC'
 
+lemma closedBall_subset_outside_open_of_large_norm
+    (c z₀ : ℂ) (hlarge : 2 * (‖c‖ + 2) < ‖z₀‖) :
+    Metric.closedBall z₀ (‖z₀‖ / 2) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z hz
+  have hdist : dist z z₀ ≤ ‖z₀‖ / 2 := by
+    simp [Metric.mem_closedBall] at hz
+    exact hz
+  have htri : ‖z₀‖ ≤ ‖z₀ - z‖ + ‖z‖ := by
+    have h := norm_add_le (z₀ - z) z
+    simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using h
+  have hle : ‖z₀‖ - ‖z₀ - z‖ ≤ ‖z‖ := by
+    linarith
+  have hnorm_sub : ‖z₀ - z‖ = dist z z₀ := by
+    have h1 : dist z₀ z = ‖z₀ - z‖ := by simp [dist_eq_norm]
+    have h2 : dist z₀ z = dist z z₀ := dist_comm _ _
+    exact h1.trans h2
+  have hge : ‖z‖ ≥ ‖z₀‖ - ‖z₀‖ / 2 := by
+    have : ‖z₀ - z‖ ≤ ‖z₀‖ / 2 := by simpa [hnorm_sub] using hdist
+    exact le_trans (by linarith) hle
+  have hhalf : (‖z₀‖ - ‖z₀‖ / 2 : ℝ) = ‖z₀‖ / 2 := by
+    ring
+  have hge' : ‖z‖ ≥ ‖z₀‖ / 2 := by
+    simp [hhalf] at hge
+    exact hge
+  have hlt : ‖c‖ + 2 < ‖z₀‖ / 2 := by
+    nlinarith
+  exact lt_of_lt_of_le hlt hge'
+
+
 lemma bottcher_map_minus_id_bound_of_normalized
     (c : ℂ) (hnorm : bottcher_normalized_at_infty c) :
     ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
@@ -2364,6 +2393,116 @@ lemma bottcher_map_minus_id_bound_of_normalized
       simpa [hmul] using hle'
     exact hle''
   exact hle
+
+lemma bottcher_map_deriv_ne_zero_of_normalized
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hnorm : bottcher_normalized_at_infty c) :
+    ∃ R, ∀ z, R ≤ ‖z‖ → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
+  -- Use the normalization to control `bottcher_map c z - z` on large circles.
+  have hbound := bottcher_map_minus_id_bound_of_normalized c hnorm
+  rcases hbound (1 / 4) (by norm_num) with ⟨R0, hR0⟩
+  let R1 : ℝ := max (2 * (‖c‖ + 2) + 1) (2 * R0)
+  refine ⟨R1, ?_⟩
+  intro z hz
+  have hzlarge : 2 * (‖c‖ + 2) < ‖z‖ := by
+    have : 2 * (‖c‖ + 2) + 1 ≤ R1 := le_max_left _ _
+    have hz' : 2 * (‖c‖ + 2) + 1 ≤ ‖z‖ := le_trans this hz
+    nlinarith
+  have hzR0 : R0 ≤ ‖z‖ / 2 := by
+    have : 2 * R0 ≤ R1 := le_max_right _ _
+    have hz' : 2 * R0 ≤ ‖z‖ := le_trans this hz
+    nlinarith
+  let r : ℝ := ‖z‖ / 2
+  have hrpos : 0 < r := by
+    have hposR1 : 0 < R1 := by
+      have hpos : 0 < 2 * (‖c‖ + 2) + 1 := by
+        have hc : 0 ≤ ‖c‖ := norm_nonneg _
+        nlinarith
+      exact lt_of_lt_of_le hpos (le_max_left _ _)
+    have hposz : 0 < ‖z‖ := lt_of_lt_of_le hposR1 hz
+    have : 0 < ‖z‖ / 2 := by nlinarith [hposz]
+    simpa [r] using this
+  have hsubset :
+      Metric.closedBall z r ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    closedBall_subset_outside_open_of_large_norm c z (by simpa [r] using hzlarge)
+  have hUopen : IsOpen {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    simpa using (isOpen_lt continuous_const continuous_norm)
+  have hUbasin : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ Quadratic.basin_of_infinity c := by
+    intro w hw
+    have hw' : w ∈ outside_disk c := by
+      simpa [outside_disk] using (le_of_lt hw)
+    exact outside_disk_subset_quadratic_basin c hw'
+  have hdiff :
+      DifferentiableOn ℂ (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    bottcher_map_differentiableOn_open c _ hUopen hslit hUbasin
+  have hDiff : DiffContOnCl ℂ (Quadratic.bottcher_map c) (Metric.ball z r) :=
+    (hdiff.diffContOnCl_ball (hc := hsubset))
+  have hC :
+      ∀ w ∈ Metric.sphere z r, ‖Quadratic.bottcher_map c w - w‖ ≤ (1 / 4) * (‖z‖ + r) := by
+    intro w hw
+    have hw' : ‖w‖ ≥ r := by
+      have hdist : dist w z = r := by
+        simp at hw
+        exact hw
+      have htri : ‖z‖ ≤ ‖z - w‖ + ‖w‖ := by
+        have h := norm_add_le (z - w) w
+        simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using h
+      have hle : ‖z‖ - ‖z - w‖ ≤ ‖w‖ := by linarith
+      have hnorm_sub : ‖z - w‖ = dist w z := by
+        have h1 : dist z w = ‖z - w‖ := by simp [dist_eq_norm]
+        have h2 : dist z w = dist w z := dist_comm _ _
+        exact h1.trans h2
+      have hge : ‖w‖ ≥ ‖z‖ - r := by
+        have : ‖z - w‖ = r := by
+          simp [hnorm_sub, hdist]
+        nlinarith [hle, this]
+      have hle' : ‖z‖ - r = r := by
+        simp [r]; ring
+      simpa [hle'] using hge
+    have hwR0 : R0 ≤ ‖w‖ := by
+      exact le_trans hzR0 hw'
+    have hbd := hR0 w hwR0
+    have hle' : (1 / 4 : ℝ) * ‖w‖ ≤ (1 / 4 : ℝ) * (‖z‖ + r) := by
+      have : ‖w‖ ≤ ‖z‖ + r := by
+        have hdist : dist w z = r := by
+          simp at hw
+          exact hw
+        have htri : ‖w‖ ≤ ‖w - z‖ + ‖z‖ := by
+          have h := norm_add_le (w - z) z
+          simpa [sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using h
+        have hnorm_sub : dist w z = ‖w - z‖ := by
+          simp [dist_eq_norm]
+        nlinarith [htri, hdist, hnorm_sub]
+      exact mul_le_mul_of_nonneg_left this (by norm_num)
+    exact hbd.trans hle'
+  have hC' : ((1 / 4 : ℝ) * (‖z‖ + r)) / r < 1 := by
+    have hposz : 0 < ‖z‖ := lt_of_lt_of_le (by
+      have hpos : 0 < 2 * (‖c‖ + 2) + 1 := by
+        have hc : 0 ≤ ‖c‖ := norm_nonneg _
+        nlinarith
+      exact lt_of_lt_of_le hpos (le_max_left _ _)) hz
+    have hnorm_ne : ‖z‖ ≠ 0 := ne_of_gt hposz
+    have hcalc : (‖z‖ + r) / r = 3 := by
+      calc
+        (‖z‖ + r) / r = (‖z‖ + ‖z‖ / 2) / (‖z‖ / 2) := by
+          simp [r]
+        _ = ((3 / 2 : ℝ) * ‖z‖) / (‖z‖ / 2) := by
+          ring
+        _ = 3 := by
+          field_simp [hnorm_ne]
+    have hcalc' : ((1 / 4 : ℝ) * (‖z‖ + r)) / r = (3 / 4 : ℝ) := by
+      calc
+        ((1 / 4 : ℝ) * (‖z‖ + r)) / r = (1 / 4 : ℝ) * ((‖z‖ + r) / r) := by
+          ring
+        _ = (1 / 4 : ℝ) * 3 := by simp [hcalc]
+        _ = (3 / 4 : ℝ) := by ring
+    have hlt' : ((1 / 4 : ℝ) * (‖z‖ + r)) / r < 1 := by
+      calc
+        ((1 / 4 : ℝ) * (‖z‖ + r)) / r = (3 / 4 : ℝ) := hcalc'
+        _ < 1 := by norm_num
+    exact hlt'
+  exact deriv_ne_zero_of_sphere_bound (f := Quadratic.bottcher_map c) (z₀ := z)
+    (R := r) hrpos hDiff hC hC'
 
 lemma isOpen_image_of_isLocalHomeomorphOn
     {f : ℂ → ℂ} {s : Set ℂ} (hlocal : IsLocalHomeomorphOn f s) :
