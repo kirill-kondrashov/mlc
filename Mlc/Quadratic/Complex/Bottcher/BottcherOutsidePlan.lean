@@ -2504,6 +2504,117 @@ lemma bottcher_map_deriv_ne_zero_of_normalized
   exact deriv_ne_zero_of_sphere_bound (f := Quadratic.bottcher_map c) (z₀ := z)
     (R := r) hrpos hDiff hC hC'
 
+lemma quadratic_map_norm_gt_outside
+    (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    ‖quadratic_map c z‖ > ‖c‖ + 2 := by
+  have hge : ‖quadratic_map c z‖ ≥ ‖z‖ + 1 :=
+    quadratic_map_norm_ge_add_one c z (le_of_lt hz)
+  have hlt : ‖z‖ + 1 > ‖c‖ + 2 := by
+    nlinarith
+  exact lt_of_lt_of_le hlt hge
+
+lemma bottcher_conj_deriv_on_outside
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) :
+    deriv (Quadratic.bottcher_map c) (quadratic_map c z) * (2 * z) =
+      2 * (Quadratic.bottcher_map c z) * deriv (Quadratic.bottcher_map c) z := by
+  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
+  have hUopen : IsOpen U := by
+    simpa [U] using (isOpen_lt continuous_const continuous_norm)
+  have hzU : z ∈ U := by simpa [U] using hz
+  have hzU' : quadratic_map c z ∈ U := by
+    have : ‖quadratic_map c z‖ > ‖c‖ + 2 := quadratic_map_norm_gt_outside c z hz
+    simpa [U] using this
+  have hbasin : U ⊆ Quadratic.basin_of_infinity c := by
+    intro w hw
+    have hw' : w ∈ outside_disk c := by
+      simpa [outside_disk] using (le_of_lt hw)
+    exact outside_disk_subset_quadratic_basin c hw'
+  have hφz : HasDerivAt (Quadratic.bottcher_map c)
+      (deriv (Quadratic.bottcher_map c) z) z := by
+    have h := (bottcher_map_analytic_on_outside c hslit) z hzU
+    exact h.differentiableAt.hasDerivAt
+  have hφfz : HasDerivAt (Quadratic.bottcher_map c)
+      (deriv (Quadratic.bottcher_map c) (quadratic_map c z)) (quadratic_map c z) := by
+    have h := (bottcher_map_analytic_on_outside c hslit) (quadratic_map c z) hzU'
+    exact h.differentiableAt.hasDerivAt
+  have hquad : HasDerivAt (fun w => quadratic_map c w) (2 * z) z := by
+    simpa [quadratic_map, pow_two, two_mul, mul_comm, mul_left_comm, mul_assoc] using
+      (hasDerivAt_pow (n := 2) z).add_const c
+  have hcomp :
+      HasDerivAt (fun w => Quadratic.bottcher_map c (quadratic_map c w))
+        (deriv (Quadratic.bottcher_map c) (quadratic_map c z) * (2 * z)) z := by
+    simpa using hφfz.comp z hquad
+  have hpow :
+      HasDerivAt (fun w => (Quadratic.bottcher_map c w) ^ 2)
+        (2 * (Quadratic.bottcher_map c z) * deriv (Quadratic.bottcher_map c) z) z := by
+    simpa [pow_two, two_mul, mul_comm, mul_left_comm, mul_assoc] using hφz.pow 2
+  have hEq : (fun w => Quadratic.bottcher_map c (quadratic_map c w))
+      =ᶠ[𝓝 z] fun w => (Quadratic.bottcher_map c w) ^ 2 := by
+    have hUmem : ∀ᶠ w in 𝓝 z, w ∈ U := by
+      simpa using hUopen.mem_nhds (by simpa [U] using hz)
+    refine hUmem.mono ?_
+    intro w hw
+    have hw' : w ∈ Quadratic.basin_of_infinity c := hbasin hw
+    exact bottcher_conj_on_basin c w hw'
+  have hcomp' :
+      HasDerivAt (fun w => (Quadratic.bottcher_map c w) ^ 2)
+        (deriv (Quadratic.bottcher_map c) (quadratic_map c z) * (2 * z)) z :=
+    hcomp.congr_of_eventuallyEq hEq.symm
+  exact (hpow.unique hcomp').symm
+
+lemma deriv_zero_iter_of_outside
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) (hzero : deriv (Quadratic.bottcher_map c) z = 0) :
+    ∀ n, deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n] z) = 0 := by
+  intro n
+  induction n with
+  | zero =>
+      simpa using hzero
+  | succ n ih =>
+      have hz' : ‖(quadratic_map c)^[n] z‖ > ‖c‖ + 2 := by
+        have hge : ‖(quadratic_map c)^[n] z‖ ≥ ‖z‖ + n :=
+          iterate_quadratic_map_norm_ge_add c z n (le_of_lt hz)
+        nlinarith
+      have hrel := bottcher_conj_deriv_on_outside c hslit (z := (quadratic_map c)^[n] z) hz'
+      have hne : (2 * (quadratic_map c)^[n] z) ≠ 0 := by
+        have hposc : (0 : ℝ) < ‖c‖ + 2 := by
+          have hc : 0 ≤ ‖c‖ := norm_nonneg _
+          nlinarith
+        have hpos : 0 < ‖(quadratic_map c)^[n] z‖ := lt_trans hposc hz'
+        exact (mul_ne_zero (by norm_num : (2 : ℂ) ≠ 0) (by
+          exact (norm_ne_zero_iff).1 (ne_of_gt hpos)))
+      have : deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n.succ] z) = 0 := by
+        have hrel' :
+            deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n.succ] z) * (2 * (quadratic_map c)^[n] z) =
+              2 * (Quadratic.bottcher_map c ((quadratic_map c)^[n] z)) *
+                deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n] z) := by
+          simpa [Function.iterate_succ_apply'] using hrel
+        have hrel'' :
+            deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n.succ] z) * (2 * (quadratic_map c)^[n] z) =
+              0 * (2 * (quadratic_map c)^[n] z) := by
+          simpa [ih] using hrel'
+        exact mul_right_cancel₀ hne hrel''
+      simpa using this
+
+lemma bottcher_map_deriv_ne_zero_on_outside_open_of_normalized
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hnorm : bottcher_normalized_at_infty c) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
+  rcases bottcher_map_deriv_ne_zero_of_normalized c hslit hnorm with ⟨R, hR⟩
+  intro z hz hzero
+  have hescape : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop :=
+    (escaping_set_contains_large_ball c) (by
+      have : z ∈ outside_disk c := by simpa [outside_disk] using (le_of_lt hz)
+      exact this)
+  have hlarge : ∀ᶠ n in atTop, R ≤ ‖(quadratic_map c)^[n] z‖ :=
+    (tendsto_atTop.1 hescape) R
+  rcases (Filter.eventually_atTop.1 hlarge) with ⟨N, hN⟩
+  have hzeroN : deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[N] z) = 0 :=
+    (deriv_zero_iter_of_outside c hslit hz hzero) N
+  have hcontr := hR ((quadratic_map c)^[N] z) (hN N (le_rfl))
+  exact (hcontr hzeroN)
+
 lemma isOpen_image_of_isLocalHomeomorphOn
     {f : ℂ → ℂ} {s : Set ℂ} (hlocal : IsLocalHomeomorphOn f s) :
     ∀ t ⊆ s, IsOpen t → IsOpen (f '' t) := by
