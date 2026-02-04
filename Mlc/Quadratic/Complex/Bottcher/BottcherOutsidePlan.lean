@@ -134,7 +134,16 @@ lemma eventually_atInfinity_mem_outside_disk (c : ℂ) :
   have h := eventually_atInfinity_mem_outside_open c
   refine h.mono ?_
   intro z hz
-  exact le_of_lt (by simpa using hz)
+  have hz' : z ∈ {w : ℂ | ‖w‖ ≥ ‖c‖ + 2} := by
+    have : ‖z‖ > ‖c‖ + 2 := by simpa using hz
+    exact le_of_lt this
+  simpa [outside_disk, basin_of_infinity] using (escaping_set_contains_large_ball c hz')
+
+lemma large_norm_mem_outside_disk (c z : ℂ) (hz : ‖z‖ ≥ ‖c‖ + 2) :
+    z ∈ outside_disk c := by
+  have hz' : z ∈ {w : ℂ | ‖w‖ ≥ ‖c‖ + 2} := by
+    simpa [Set.mem_setOf_eq] using hz
+  simpa [outside_disk, basin_of_infinity] using (escaping_set_contains_large_ball c hz')
 
 lemma tendsto_atInfinity_norm_atTop :
     Tendsto (fun z : ℂ => ‖z‖) atInfinity atTop := by
@@ -1841,12 +1850,6 @@ lemma bottcher_map_preimage_compact_of_isCompact
   exact isCompact_preimage_of_isCompact hcont
     (fun R => preimage_closedBall_bounded c R) hK
 
-lemma isClosed_outside_disk (c : ℂ) : IsClosed (outside_disk c) := by
-  have hconst : Continuous (fun _ : ℂ => (‖c‖ + 2 : ℝ)) := continuous_const
-  have hnorm : Continuous (fun z : ℂ => ‖z‖) := continuous_norm
-  have hclosed : IsClosed {z : ℂ | (‖c‖ + 2 : ℝ) ≤ ‖z‖} := isClosed_le hconst hnorm
-  simpa [outside_disk, ge_iff_le] using hclosed
-
 lemma bottcher_map_isProperMap_of_continuous
     (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
     IsProperMap (Quadratic.bottcher_map c) := by
@@ -1856,29 +1859,6 @@ lemma bottcher_map_isProperMap_of_continuous
     exact bottcher_map_preimage_compact_of_isCompact c hcont hK
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
-
-lemma bottcher_map_isProperMap_on_outside_disk
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
-    IsProperMap (fun z : outside_disk c => Quadratic.bottcher_map c z) := by
-  have hproper : IsProperMap (Quadratic.bottcher_map c) :=
-    bottcher_map_isProperMap_of_continuous c hcont
-  exact hproper.restrict (isClosed_outside_disk c)
-
-lemma bottcher_map_image_outside_disk_isClosed
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
-    IsClosed (Quadratic.bottcher_map c '' outside_disk c) := by
-  have hproper := bottcher_map_isProperMap_on_outside_disk c hcont
-  have hclosed : IsClosed (Set.range (fun z : outside_disk c => Quadratic.bottcher_map c z)) :=
-    hproper.isClosed_range
-  have hrange :
-      Set.range (fun z : outside_disk c => Quadratic.bottcher_map c z) =
-        Quadratic.bottcher_map c '' outside_disk c := by
-    ext w; constructor
-    · rintro ⟨z, rfl⟩
-      exact ⟨z.1, z.2, rfl⟩
-    · rintro ⟨z, hz, rfl⟩
-      exact ⟨⟨z, hz⟩, rfl⟩
-  simpa [hrange] using hclosed
 
 
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
@@ -2137,8 +2117,8 @@ lemma exterior_annulus_subset_outside_disk (c : ℂ) {R S : ℝ}
     (hR : ‖c‖ + 2 ≤ R) :
     exterior_annulus R S ⊆ outside_disk c := by
   intro z hz
-  have hz' : ‖z‖ ≥ R := hz.1
-  exact le_trans hR hz'
+  have hz' : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR hz.1
+  exact large_norm_mem_outside_disk c z hz'
 
 lemma bottcher_root_seq_tendsto_uniform_on_annulus_of_large_R
     (c : ℂ) {R S : ℝ} (hR : ‖c‖ + 2 ≤ R) :
@@ -2269,7 +2249,7 @@ lemma outside_open_subset_outside_disk (c : ℂ) :
     {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ outside_disk c := by
   intro z hz
   have hz' : ‖z‖ > ‖c‖ + 2 := by simpa using hz
-  exact le_of_lt hz'
+  exact large_norm_mem_outside_disk c z (le_of_lt hz')
 
 
 lemma bottcher_map_deriv_ne_zero_on_outside
@@ -2502,8 +2482,8 @@ lemma bottcher_map_deriv_ne_zero_of_normalized
     simpa using (isOpen_lt continuous_const continuous_norm)
   have hUbasin : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ Quadratic.basin_of_infinity c := by
     intro w hw
-    have hw' : w ∈ outside_disk c := by
-      simpa [outside_disk] using (le_of_lt hw)
+    have hw' : w ∈ outside_disk c :=
+      large_norm_mem_outside_disk c w (le_of_lt hw)
     exact outside_disk_subset_quadratic_basin c hw'
   have hdiff :
       DifferentiableOn ℂ (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
@@ -2600,8 +2580,8 @@ lemma bottcher_conj_deriv_on_outside
     simpa [U] using this
   have hbasin : U ⊆ Quadratic.basin_of_infinity c := by
     intro w hw
-    have hw' : w ∈ outside_disk c := by
-      simpa [outside_disk] using (le_of_lt hw)
+    have hw' : w ∈ outside_disk c :=
+      large_norm_mem_outside_disk c w (le_of_lt hw)
     exact outside_disk_subset_quadratic_basin c hw'
   have hφz : HasDerivAt (Quadratic.bottcher_map c)
       (deriv (Quadratic.bottcher_map c) z) z := by
@@ -2676,10 +2656,10 @@ lemma bottcher_map_deriv_ne_zero_on_outside_open_of_normalized
     ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
   rcases bottcher_map_deriv_ne_zero_of_normalized c hslit hnorm with ⟨R, hR⟩
   intro z hz hzero
-  have hescape : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop :=
-    (escaping_set_contains_large_ball c) (by
-      have : z ∈ outside_disk c := by simpa [outside_disk] using (le_of_lt hz)
-      exact this)
+  have hescape : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop := by
+    have hz' : z ∈ outside_disk c :=
+      large_norm_mem_outside_disk c z (le_of_lt hz)
+    simpa [outside_disk, basin_of_infinity] using hz'
   have hlarge : ∀ᶠ n in atTop, R ≤ ‖(quadratic_map c)^[n] z‖ :=
     (tendsto_atTop.1 hescape) R
   rcases (Filter.eventually_atTop.1 hlarge) with ⟨N, hN⟩
@@ -2769,98 +2749,6 @@ lemma bottcher_map_image_outside_open_subset_outside_disk
   intro w hw
   rcases hw with ⟨z, hz, rfl⟩
   exact ⟨z, outside_open_subset_outside_disk c hz, rfl⟩
-
-lemma outside_disk_subset_closure_outside_open (c : ℂ) :
-    outside_disk c ⊆ closure {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
-  intro z hz
-  have hposc : 0 < ‖c‖ + 2 := by
-    have hc : 0 ≤ ‖c‖ := norm_nonneg _
-    nlinarith
-  have hzpos : 0 < ‖z‖ := lt_of_lt_of_le hposc hz
-  refine Metric.mem_closure_iff.2 ?_
-  intro ε hε
-  have hε' : 0 < ε / (2 * ‖z‖) := by
-    have hden : 0 < (2 : ℝ) * ‖z‖ := by nlinarith
-    exact div_pos hε hden
-  let δ : ℝ := ε / (2 * ‖z‖)
-  refine ⟨(1 + (δ : ℂ)) * z, ?_, ?_⟩
-  · have hnorm : ‖(1 + (δ : ℂ)) * z‖ = ‖(1 + (δ : ℂ))‖ * ‖z‖ := by
-      exact norm_mul (1 + (δ : ℂ)) z
-    have hnorm' : ‖(1 + (δ : ℂ))‖ = |1 + δ| := by
-      simpa [Real.norm_eq_abs] using (Complex.norm_real (1 + δ))
-    have habs : |1 + δ| = 1 + δ := by
-      exact abs_of_pos (by linarith : 0 < (1 + δ : ℝ))
-    have hgt : (1 + δ) * ‖z‖ > ‖c‖ + 2 := by
-      have hz' : ‖z‖ ≥ ‖c‖ + 2 := hz
-      have hδ : 0 < δ := hε'
-      nlinarith
-    simpa [hnorm, hnorm', habs] using hgt
-  · have hdist' : dist z ((1 + (δ : ℂ)) * z) = ‖z‖ * |δ| := by
-      have : z - (1 + (δ : ℂ)) * z = -(z * (δ : ℂ)) := by
-        ring
-      calc
-        dist z ((1 + (δ : ℂ)) * z) = ‖-(z * (δ : ℂ))‖ := by
-          simp [dist_eq_norm, this]
-        _ = ‖z * (δ : ℂ)‖ := by simp
-        _ = ‖z‖ * ‖(δ : ℂ)‖ := by
-          exact norm_mul z (δ : ℂ)
-        _ = ‖z‖ * |δ| := by
-          simp [Complex.norm_real, Real.norm_eq_abs]
-    have hδnonneg : 0 ≤ δ := le_of_lt hε'
-    have hdist : dist z ((1 + (δ : ℂ)) * z) = ‖z‖ * δ := by
-      simp [abs_of_nonneg hδnonneg] at hdist'
-      exact hdist'
-    have hδ : δ * ‖z‖ = ε / 2 := by
-      dsimp [δ]
-      have hzpos' : ‖z‖ ≠ 0 := ne_of_gt hzpos
-      field_simp [hzpos']
-    calc
-      dist z ((1 + (δ : ℂ)) * z) = ‖z‖ * δ := hdist
-      _ = δ * ‖z‖ := by ring
-      _ = ε / 2 := hδ
-      _ < ε := by nlinarith
-
-lemma closure_outside_open_eq_outside_disk (c : ℂ) :
-    closure {z : ℂ | ‖z‖ > ‖c‖ + 2} = outside_disk c := by
-  have hsubset : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ outside_disk c :=
-    outside_open_subset_outside_disk c
-  have hclosed : IsClosed (outside_disk c) := isClosed_outside_disk c
-  have hclo : closure {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ outside_disk c :=
-    closure_minimal hsubset hclosed
-  have hrev : outside_disk c ⊆ closure {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
-    outside_disk_subset_closure_outside_open c
-  exact subset_antisymm hclo hrev
-
-lemma bottcher_map_image_outside_disk_subset_closure_image_outside_open
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
-    Quadratic.bottcher_map c '' outside_disk c ⊆
-      closure (Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
-  have hsubset := outside_disk_subset_closure_outside_open c
-  have himage :
-      Quadratic.bottcher_map c '' outside_disk c ⊆
-        Quadratic.bottcher_map c '' closure {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
-    image_mono (f := Quadratic.bottcher_map c) hsubset
-  have hclo := image_closure_subset_closure_image hcont (s := {z : ℂ | ‖z‖ > ‖c‖ + 2})
-  exact himage.trans hclo
-
-lemma closure_bottcher_map_image_outside_open_eq_image_outside_disk
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
-    closure (Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) =
-      Quadratic.bottcher_map c '' outside_disk c := by
-  have hsubset :
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆
-        Quadratic.bottcher_map c '' outside_disk c :=
-    bottcher_map_image_outside_open_subset_outside_disk c
-  have hclo_subset :
-      closure (Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) ⊆
-        Quadratic.bottcher_map c '' outside_disk c := by
-    have hclosed := bottcher_map_image_outside_disk_isClosed c hcont
-    exact closure_minimal hsubset hclosed
-  have hsubset' :
-      Quadratic.bottcher_map c '' outside_disk c ⊆
-        closure (Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :=
-    bottcher_map_image_outside_disk_subset_closure_image_outside_open c hcont
-  exact subset_antisymm hclo_subset hsubset'
 
 lemma bottcher_map_image_outside_disk_subset_exterior (c : ℂ) :
     Quadratic.bottcher_map c '' outside_disk c ⊆ {w : ℂ | 1 < ‖w‖} := by
@@ -2963,39 +2851,6 @@ lemma isPathConnected_exterior : IsPathConnected {w : ℂ | 1 < ‖w‖} := by
 lemma isConnected_exterior : IsConnected {w : ℂ | 1 < ‖w‖} := by
   exact isPathConnected_exterior.isConnected
 
-lemma bottcher_map_image_outside_disk_eq_exterior_of_isOpen
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c))
-    (hopen : IsOpen (Quadratic.bottcher_map c '' outside_disk c)) :
-    Quadratic.bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖} := by
-  let E : Set ℂ := {w : ℂ | 1 < ‖w‖}
-  have hsub : Quadratic.bottcher_map c '' outside_disk c ⊆ E :=
-    bottcher_map_image_outside_disk_subset_exterior c
-  have hclosed : IsClosed (Quadratic.bottcher_map c '' outside_disk c) :=
-    bottcher_map_image_outside_disk_isClosed c hcont
-  have hclopen : IsClopen (Quadratic.bottcher_map c '' outside_disk c) :=
-    ⟨hclosed, hopen⟩
-  have hne : (E ∩ (Quadratic.bottcher_map c '' outside_disk c)).Nonempty := by
-    have hz : ((‖c‖ + 2 : ℝ) : ℂ) ∈ outside_disk c := by
-      change ‖((‖c‖ + 2 : ℝ) : ℂ)‖ ≥ ‖c‖ + 2
-      have hnonneg : 0 ≤ ‖c‖ + 2 := by
-        have : 0 ≤ ‖c‖ := norm_nonneg _
-        linarith
-      have hnorm' : ‖((‖c‖ + 2 : ℝ) : ℂ)‖ = ‖(‖c‖ + 2 : ℝ)‖ := by
-        simpa using (Complex.norm_real (‖c‖ + 2))
-      have hreal : ‖(‖c‖ + 2 : ℝ)‖ = ‖c‖ + 2 := by
-        simp [Real.norm_eq_abs, abs_of_nonneg hnonneg]
-      have hnorm : ‖((‖c‖ + 2 : ℝ) : ℂ)‖ = ‖c‖ + 2 := hnorm'.trans hreal
-      exact hnorm.ge
-    have hw : Quadratic.bottcher_map c ((‖c‖ + 2 : ℝ) : ℂ) ∈
-        Quadratic.bottcher_map c '' outside_disk c := by
-      exact ⟨((‖c‖ + 2 : ℝ) : ℂ), hz, rfl⟩
-    exact ⟨Quadratic.bottcher_map c ((‖c‖ + 2 : ℝ) : ℂ), ⟨hsub hw, hw⟩⟩
-  have hpre : IsPreconnected E := isConnected_exterior.isPreconnected
-  have hEsubset :
-      E ⊆ Quadratic.bottcher_map c '' outside_disk c :=
-    hpre.subset_isClopen hclopen hne
-  exact subset_antisymm hsub hEsubset
-
 lemma bottcher_map_image_outside_disk_eq_exterior_of_preimage
     (c : ℂ)
     (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
@@ -3009,21 +2864,11 @@ lemma bottcher_map_image_outside_disk_eq_exterior_of_preimage
     simp [Set.preimage, hw']
   exact ⟨z, hpre hzpre, rfl⟩
 
-lemma bottcher_map_image_outside_disk_isOpen_of_preimage
+lemma bottcher_map_image_outside_disk_eq_exterior
     (c : ℂ)
     (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
-    IsOpen (Quadratic.bottcher_map c '' outside_disk c) := by
-  have himage :
-      Quadratic.bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖} :=
-    bottcher_map_image_outside_disk_eq_exterior_of_preimage c hpre
-  simpa [himage] using (isOpen_lt continuous_const continuous_norm)
-
-lemma bottcher_map_image_outside_disk_eq_exterior
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c))
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
     Quadratic.bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖} := by
-  have hopen := bottcher_map_image_outside_disk_isOpen_of_preimage c hpre
-  exact bottcher_map_image_outside_disk_eq_exterior_of_isOpen c hcont hopen
+  exact bottcher_map_image_outside_disk_eq_exterior_of_preimage c hpre
 
 lemma bottcher_preimage_exterior_subset_outside_of_inj
     (c : ℂ) (hinj : Function.Injective (Quadratic.bottcher_map c))

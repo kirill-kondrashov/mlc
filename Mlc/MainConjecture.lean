@@ -105,8 +105,14 @@ theorem mlc_conjecture
     exact green_sublevel_connected
       (fun c w hw => Quadratic.bottcher_map_surj c w hw)
       (fun c =>
+        let hpre :
+            (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c :=
+          bottcher_map_preimage_exterior_subset_outside_of_basin c
+            (by
+              intro z hz
+              simpa [outside_disk] using hz)
         bottcher_map_inj_theorem c
-          (bottcher_left_inv_outside c)
+          (bottcher_left_inv_outside c hpre)
           (basin_escape_outside c)
           (bottcher_conj_iter c)
           (bottcher_map_inj_on_K c))

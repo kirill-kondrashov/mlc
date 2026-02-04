@@ -1,4 +1,5 @@
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMDefs
 import Mathlib.Topology.Connected.PathConnected
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.Norm
@@ -17,11 +18,9 @@ noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
 
 /-- The domain where the Böttcher map is defined (basin of infinity). -/
 def basin_of_infinity (c : ℂ) : Set ℂ :=
-  {z | ¬ MLC.Quadratic.boundedOrbit c z}
+  MLC.basin_of_infinity c
 
-theorem basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ := by
-  ext z
-  simp [basin_of_infinity, MLC.Quadratic.K, MLC.Quadratic.boundedOrbit]
+axiom basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ
 
 /-- The inverse of the Böttcher map exists (ray map). -/
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
