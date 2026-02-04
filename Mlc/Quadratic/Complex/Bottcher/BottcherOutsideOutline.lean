@@ -110,6 +110,9 @@ lemma bottcher_normalized_at_infty_implies_nontrivial (c : ℂ)
     Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 (1 : ℂ)) :=
   hnorm
 
+def bottcher_normalized_at_infty_norm (c : ℂ) : Prop :=
+  Tendsto (fun z => ‖Quadratic.bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 (1 : ℝ))
+
 def bottcher_deriv_nonzero_on_outside (c : ℂ) : Prop :=
   ∀ z, z ∈ outside_disk c → deriv (Quadratic.bottcher_map c) z ≠ 0
 

@@ -18,8 +18,9 @@ Step 1: Analyticity on the exterior.
   Requires: `outside_disk` (or the open exterior) is contained in `slit_orbit c`.
 
 Step 2: Normalization at infinity.
-  Goal: `Tendsto (fun z => bottcher_map c z / z) atInfinity (𝓝 1)`.
-  Use: the root sequence, branch coherence on slit, and escape estimates.
+  Goal: `Tendsto (fun z => ‖bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 1)`.
+  Use: Green function asymptotics at infinity.
+  (The full complex ratio requires a different normalization for `bottcher_map`.)
 
 Step 3: Derivative nonvanishing on the exterior.
   Goal: `deriv (bottcher_map c) z ≠ 0` on `outside_disk c`.
@@ -108,6 +109,7 @@ lemma bottcher_normalized_at_infty_iff
   simpa [bottcher_normalized_at_infty, dist_eq_norm] using
     (tendsto_iff_dist_tendsto_zero (f := fun z => (Quadratic.bottcher_map c z) / z)
       (a := (1 : ℂ)) (x := atInfinity))
+
 
 lemma eventually_atInfinity_norm_gt (R : ℝ) :
     ∀ᶠ z in atInfinity, R < ‖z‖ := by
@@ -223,13 +225,10 @@ lemma tendsto_quadratic_iter_div_pow_atInfinity (c : ℂ) :
       simp [quadratic_map, Function.iterate_succ_apply', add_div, hdiv, g]
 
 
--- TODO (Step 2): use the defining root-sequence for `bottcher_map` to show
+-- TODO (strong normalization): show
 -- `Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 1)`.
--- A plausible route:
--- 1) show for each fixed `z` in the basin, the root sequence converges to `bottcher_map c z`;
--- 2) normalize by dividing by `z` and use escape estimates to pass to `atInfinity`;
--- 3) use `eventually_atInfinity_mem_outside_open` to restrict to the exterior where
---    the slit-orbit branch is well-defined.
+-- This is not expected for the current `bottcher_map` definition (e.g. `c = 0` gives
+-- the radial normalization), but can hold on argument sectors.
 
 noncomputable def bottcher_root_seq (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
   ((fun w => w ^ 2 + c)^[n] z) ^ ((2 : ℂ) ^ n)⁻¹
@@ -1482,6 +1481,10 @@ lemma tendsto_norm_bottcher_map_div_norm_atInfinity (c : ℂ) :
       atInfinity (𝓝 (1 : ℝ)) := by
     simpa using hExp
   exact (tendsto_congr' hratio).2 hExp'
+
+lemma bottcher_normalized_at_infty_norm_proof (c : ℂ) :
+    bottcher_normalized_at_infty_norm c := by
+  exact tendsto_norm_bottcher_map_div_norm_atInfinity c
 
 lemma bottcher_root_seq_norm_bounds_of_escape
     (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
