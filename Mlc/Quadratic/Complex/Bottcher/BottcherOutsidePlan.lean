@@ -1296,7 +1296,7 @@ lemma tendsto_potential_seq_minus_log_norm_atInfinity (c : ℂ) (N : ℕ) :
     rcases hz with ⟨hne', hne⟩
     have hlogdiv :
         Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) =
-          Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℕ) * Real.log ‖z‖ := by
+          Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℝ) * Real.log ‖z‖ := by
       have hlogdiv' :
           Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) =
             Real.log ‖(quadratic_map c)^[N] z‖ - Real.log (‖z‖ ^ (2 ^ N)) := by
@@ -1304,11 +1304,14 @@ lemma tendsto_potential_seq_minus_log_norm_atInfinity (c : ℂ) (N : ℕ) :
       have hlogpow :
           Real.log (‖z‖ ^ (2 ^ N)) = (2 ^ N : ℕ) * Real.log ‖z‖ := by
         exact (Real.log_pow ‖z‖ (2 ^ N))
+      have hlogpow' :
+          Real.log (‖z‖ ^ (2 ^ N)) = (2 ^ N : ℝ) * Real.log ‖z‖ := by
+        simp [hlogpow]
       calc
         Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N))
             = Real.log ‖(quadratic_map c)^[N] z‖ - Real.log (‖z‖ ^ (2 ^ N)) := hlogdiv'
-        _ = Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℕ) * Real.log ‖z‖ := by
-              simp [hlogpow]
+        _ = Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℝ) * Real.log ‖z‖ := by
+              simp [hlogpow']
     have hcoef : (1 / (2 : ℝ) ^ N) * ((2 ^ N : ℝ) * Real.log ‖z‖) = Real.log ‖z‖ := by
       have h2 : (2 : ℝ) ≠ 0 := by norm_num
       have hpow : (1 / (2 : ℝ) ^ N) * (2 ^ N : ℝ) = 1 := by
@@ -1332,8 +1335,8 @@ lemma tendsto_potential_seq_minus_log_norm_atInfinity (c : ℂ) (N : ℕ) :
             (Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℝ) * Real.log ‖z‖) := by
             ring
       _ = (1 / (2 : ℝ) ^ N) *
-            (Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℕ) * Real.log ‖z‖) := by
-            simp
+            Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) := by
+            simp [hlogdiv]
       _ = (1 / (2 : ℝ) ^ N) *
             Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) := by
             simp [hlogdiv]
@@ -1345,6 +1348,140 @@ lemma tendsto_potential_seq_minus_log_norm_atInfinity (c : ℂ) (N : ℕ) :
           atInfinity (𝓝 (0 : ℝ)) := by
     simpa using (tendsto_const_nhds.mul hlog)
   exact (tendsto_congr' hsplit).2 hmul
+
+lemma tendsto_green_function_minus_log_norm_atInfinity (c : ℂ) :
+    Tendsto (fun z => Quadratic.green_function c z - Real.log ‖z‖) atInfinity (𝓝 (0 : ℝ)) := by
+  refine (tendsto_iff_norm_sub_tendsto_zero).2 ?_
+  have hgoal :
+      Tendsto (fun z => |Quadratic.green_function c z - Real.log ‖z‖|)
+        atInfinity (𝓝 (0 : ℝ)) := by
+    refine (tendsto_order.2 ?_)
+    constructor
+    · intro a ha
+      have hnonneg : ∀ z, 0 ≤ |Quadratic.green_function c z - Real.log ‖z‖| := by
+        intro z
+        exact abs_nonneg _
+      exact Filter.Eventually.of_forall (fun z => lt_of_lt_of_le ha (hnonneg z))
+    · intro a ha
+      have ha' : 0 < a / 2 := by
+        nlinarith
+      let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
+      have hpow0 :
+          Tendsto (fun n : ℕ => (1 / 2 : ℝ) ^ n) atTop (𝓝 (0 : ℝ)) :=
+        tendsto_pow_atTop_nhds_zero_of_lt_one (by norm_num : (0 : ℝ) ≤ (1 / 2))
+          (by norm_num : (1 / 2 : ℝ) < 1)
+      have hpow :
+          Tendsto (fun n : ℕ => (1 / 2 : ℝ) ^ n * M) atTop (𝓝 (0 : ℝ)) :=
+        by
+          simpa using (hpow0.mul tendsto_const_nhds)
+      have hball : Metric.ball (0 : ℝ) (a / 2) ∈ 𝓝 (0 : ℝ) :=
+        Metric.ball_mem_nhds _ ha'
+      have hN' := (tendsto_def.1 hpow _ hball)
+      rcases (Filter.eventually_atTop.1 hN') with ⟨N, hN⟩
+      have hNbound : (2 ^ N : ℝ)⁻¹ * M < a / 2 := by
+        have h := hN N (le_rfl)
+        have hM : 0 ≤ M := by
+          have hnum : 0 ≤ 2 * ‖c‖ := by
+            nlinarith [norm_nonneg c]
+          have hden : 0 ≤ (escape_bound c) ^ 2 := by
+            nlinarith
+          exact div_nonneg hnum hden
+        have h' : |(1 / 2 : ℝ) ^ N| * |M| < a / 2 := by
+          simpa [Metric.ball, Set.mem_setOf_eq, Real.dist_eq, abs_mul] using h
+        have h'' : |(1 / 2 : ℝ) ^ N| * M < a / 2 := by
+          simpa [abs_of_nonneg hM] using h'
+        have hpow_nonneg : 0 ≤ (1 / 2 : ℝ) ^ N := by
+          exact pow_nonneg (by norm_num : (0 : ℝ) ≤ (1 / 2)) _
+        have hpow_abs : |(1 / 2 : ℝ) ^ N| = (1 / 2 : ℝ) ^ N :=
+          abs_of_nonneg hpow_nonneg
+        have h''' : (1 / 2 : ℝ) ^ N * M < a / 2 := by
+          simpa [hpow_abs] using h''
+        -- rewrite `(1/2)^N` as `(2^N)⁻¹`
+        simpa [one_div, inv_pow] using h'''
+      have hpot : ∀ᶠ z in atInfinity,
+          |(1 / (2 : ℝ) ^ N) * Real.log ‖(quadratic_map c)^[N] z‖ - Real.log ‖z‖| < a / 2 := by
+        have hpot' := tendsto_potential_seq_minus_log_norm_atInfinity c N
+        have hball' : Metric.ball (0 : ℝ) (a / 2) ∈ 𝓝 (0 : ℝ) :=
+          Metric.ball_mem_nhds _ ha'
+        have h := (tendsto_def.1 hpot' _ hball')
+        simpa [Metric.ball, Set.mem_setOf_eq, Real.dist_eq] using h
+      have hesc : ∀ᶠ z in atInfinity, ‖z‖ > escape_bound c :=
+        eventually_atInfinity_norm_gt (escape_bound c)
+      have hboth := (hpot.and hesc)
+      refine hboth.mono ?_
+      intro z hz
+      rcases hz with ⟨hpotz, hzesc⟩
+      have hesc0 : ‖Quadratic.orbit c z 0‖ > escape_bound c := by
+        simpa [Quadratic.orbit] using hzesc
+      have hescN :
+          ‖Quadratic.orbit c z N‖ > escape_bound c := by
+        exact norm_orbit_gt_escape_bound_of_ge c z 0 N (Nat.zero_le _) hesc0
+      have hdist :
+          dist (Quadratic.potential_seq c z N) (Quadratic.green_function c z) ≤
+            (2 ^ N : ℝ)⁻¹ * M := by
+        simpa [M, one_div, inv_pow] using
+          (dist_potential_seq_green_function_le_of_escaping c z N hescN)
+      have h1 : 1 ≤ ‖(quadratic_map c)^[N] z‖ :=
+        norm_iterate_ge_one_of_escape c z hzesc N
+      have hpot_eq :
+          Quadratic.potential_seq c z N =
+            (1 / (2 : ℝ) ^ N) * Real.log ‖(quadratic_map c)^[N] z‖ := by
+        exact potential_seq_eq_log_norm_iterate c z N h1
+      have hpotz' :
+          |Quadratic.potential_seq c z N - Real.log ‖z‖| < a / 2 := by
+        simpa [hpot_eq] using hpotz
+      have hpotz'' :
+          |Quadratic.potential_seq c z N - Real.log ‖z‖| ≤ a / 2 := le_of_lt hpotz'
+      have hdist' :
+          |Quadratic.green_function c z - Quadratic.potential_seq c z N| ≤ (2 ^ N : ℝ)⁻¹ * M := by
+        simpa [Real.dist_eq, abs_sub_comm] using hdist
+      have htri :
+          |Quadratic.green_function c z - Real.log ‖z‖| ≤
+            |Quadratic.green_function c z - Quadratic.potential_seq c z N| +
+              |Quadratic.potential_seq c z N - Real.log ‖z‖| :=
+        abs_sub_le _ _ _
+      have hle :
+          |Quadratic.green_function c z - Real.log ‖z‖| ≤ (2 ^ N : ℝ)⁻¹ * M + a / 2 :=
+        htri.trans (add_le_add hdist' hpotz'')
+      have hlt : (2 ^ N : ℝ)⁻¹ * M + a / 2 < a := by
+        have h := add_lt_add_right hNbound (a / 2)
+        have h' : a / 2 + a / 2 = a := by
+          ring
+        simpa [h', add_comm, add_left_comm, add_assoc] using h
+      exact lt_of_le_of_lt hle hlt
+  simpa [Real.norm_eq_abs] using hgoal
+
+lemma tendsto_norm_bottcher_map_div_norm_atInfinity (c : ℂ) :
+    Tendsto (fun z => ‖Quadratic.bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 (1 : ℝ)) := by
+  have hgreen := tendsto_green_function_minus_log_norm_atInfinity c
+  have hExp :
+      Tendsto (fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖))
+        atInfinity (𝓝 (Real.exp (0 : ℝ))) :=
+    (Real.continuous_exp.tendsto (0 : ℝ)).comp hgreen
+  have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+    eventually_atInfinity_norm_gt (0 : ℝ)
+  have hratio :
+      (fun z => ‖Quadratic.bottcher_map c z‖ / ‖z‖) =ᶠ[atInfinity]
+        fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖) := by
+    refine hpos.mono ?_
+    intro z hz
+    have hb : ‖Quadratic.bottcher_map c z‖ =
+        Real.exp (Quadratic.green_function c z) :=
+      Quadratic.norm_bottcher_eq_exp_green c z
+    have hz' : Real.exp (Real.log ‖z‖) = ‖z‖ := by
+      simpa using (Real.exp_log hz)
+    calc
+      ‖Quadratic.bottcher_map c z‖ / ‖z‖
+          = Real.exp (Quadratic.green_function c z) / ‖z‖ := by
+              simp [hb]
+      _ = Real.exp (Quadratic.green_function c z) / Real.exp (Real.log ‖z‖) := by
+              simp [hz']
+      _ = Real.exp (Quadratic.green_function c z - Real.log ‖z‖) := by
+              simp [Real.exp_sub]
+  have hExp' : Tendsto (fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖))
+      atInfinity (𝓝 (1 : ℝ)) := by
+    simpa using hExp
+  exact (tendsto_congr' hratio).2 hExp'
 
 lemma bottcher_root_seq_norm_bounds_of_escape
     (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
