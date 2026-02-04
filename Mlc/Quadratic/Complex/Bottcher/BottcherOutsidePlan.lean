@@ -609,6 +609,7 @@ lemma abs_arg_pow_lt_pi_div_two_of_abs_arg_lt
       |(n • (Complex.arg z : Real.Angle)).toReal| < Real.pi / 2 := by
     simpa [hmul'] using hmul''
   simpa [hleft] using hbound
+
 lemma eventually_atInfinity_cpow_mul_split
     (c : ℂ) (N : ℕ) :
     ∀ᶠ z in atInfinity,
@@ -788,6 +789,54 @@ lemma log_mul_eq_add_log_of_abs_arg_lt_pi_div_two
     arg_add_mem_Ioc_of_abs_lt_pi_div_two hxarg hyarg
   exact (Complex.log_mul_eq_add_log_iff hx hy).2 hsum
 
+lemma log_mul_eq_add_log_candidate_of_sector
+    (c : ℂ) (N : ℕ) (z : ℂ)
+    (hz : z ≠ 0)
+    (hA0 : (quadratic_map c)^[N] z ≠ 0)
+    (hA : ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0)
+    (hcand_arg :
+      |Complex.arg
+          (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+        < Real.pi / 2)
+    (hzarg : |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ))) :
+    Complex.log (((quadratic_map c)^[N] z) ^ 2 + c) =
+      Complex.log
+          (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) +
+        Complex.log (z ^ (2 ^ (N + 1))) := by
+  let cand : ℂ :=
+    ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+      (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+  have hrewrite : cand = (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) := by
+    simpa [cand] using (root_seq_ratio_candidate_eq_div c N z hz hA0)
+  have hzy : z ^ (2 ^ (N + 1)) ≠ 0 := by
+    exact pow_ne_zero _ hz
+  have hcand_ne : cand ≠ 0 := by
+    have : (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) ≠ 0 := by
+      exact div_ne_zero hA hzy
+    simpa [hrewrite] using this
+  have hyarg : |Complex.arg (z ^ (2 ^ (N + 1)))| < Real.pi / 2 := by
+    have hn : (2 ^ (N + 1) : ℕ) ≠ 0 := by
+      exact pow_ne_zero _ (by norm_num : (2 : ℕ) ≠ 0)
+    have hzarg' : |Complex.arg z| < Real.pi / (2 * ((2 ^ (N + 1) : ℕ) : ℝ)) := by
+      simpa using hzarg
+    exact abs_arg_pow_lt_pi_div_two_of_abs_arg_lt (n := 2 ^ (N + 1)) hn hzarg'
+  have hlog :=
+    log_mul_eq_add_log_of_abs_arg_lt_pi_div_two
+      (x := cand) (y := z ^ (2 ^ (N + 1))) hcand_ne hzy hcand_arg hyarg
+  -- `cand * z^(2^(N+1)) = A`.
+  have hmul : cand * z ^ (2 ^ (N + 1)) = ((quadratic_map c)^[N] z) ^ 2 + c := by
+    calc
+      cand * z ^ (2 ^ (N + 1))
+          = (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) *
+              z ^ (2 ^ (N + 1)) := by
+                simp [hrewrite]
+      _ = ((quadratic_map c)^[N] z) ^ 2 + c := by
+            field_simp [hzy]
+  simpa [hmul, cand] using hlog
+
+
 lemma eventually_atInfinity_log_candidate_eq_add
     (c : ℂ) (N : ℕ) :
     ∀ᶠ z in atInfinity,
@@ -915,6 +964,36 @@ lemma bottcher_root_seq_ratio_eq_candidate_of_log_and_arg
             (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
           ((2 : ℂ) ^ (N + 1))⁻¹ := by
             simp [hrewrite]
+
+lemma bottcher_root_seq_ratio_eq_candidate_of_sector
+    (c : ℂ) (N : ℕ) (z : ℂ)
+    (hz : z ≠ 0)
+    (hA0 : (quadratic_map c)^[N] z ≠ 0)
+    (hA : ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0)
+    (hcand_arg :
+      |Complex.arg
+          (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+        < Real.pi / 2)
+    (hzarg : |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ))) :
+    bottcher_root_seq c (N + 1) z / z =
+      (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+          (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+        ((2 : ℂ) ^ (N + 1))⁻¹ := by
+  have hlog := log_mul_eq_add_log_candidate_of_sector c N z hz hA0 hA hcand_arg hzarg
+  have hlog' :
+      Complex.log (((quadratic_map c)^[N] z) ^ 2 + c) =
+        Complex.log ((((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1))) +
+          Complex.log (z ^ (2 ^ (N + 1))) := by
+    -- rewrite the candidate as `A / z^(2^(N+1))`
+    have hrewrite :
+        (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
+          = (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) := by
+      simpa using (root_seq_ratio_candidate_eq_div c N z hz hA0)
+    simpa [hrewrite, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using hlog
+  exact bottcher_root_seq_ratio_eq_candidate_of_log_and_arg
+    c N z hz hA0 hA hlog' hzarg
 lemma eventually_atInfinity_iter_ne_zero (c : ℂ) (N : ℕ) :
     ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 := by
   let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
