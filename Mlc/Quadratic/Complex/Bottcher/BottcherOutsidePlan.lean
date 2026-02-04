@@ -991,9 +991,23 @@ lemma bottcher_root_seq_ratio_eq_candidate_of_sector
             (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
           = (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) := by
       simpa using (root_seq_ratio_candidate_eq_div c N z hz hA0)
-    simpa [hrewrite, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using hlog
+    simpa [hrewrite] using hlog
+  have hzarg' :
+      |Complex.arg z| < Real.pi / (2 ^ (N + 1) : ℝ) := by
+    have hpos : (0 : ℝ) < (2 ^ (N + 1) : ℝ) := by
+      exact pow_pos (by norm_num : (0 : ℝ) < 2) _
+    have hle' : (2 ^ (N + 1) : ℝ) ≤ 2 * (2 ^ (N + 1) : ℝ) := by
+      nlinarith
+    have hle'' :
+        (1 : ℝ) / (2 * (2 ^ (N + 1) : ℝ)) ≤ (1 : ℝ) / (2 ^ (N + 1) : ℝ) :=
+      one_div_le_one_div_of_le hpos hle'
+    have hpi : 0 ≤ (Real.pi : ℝ) := le_of_lt Real.pi_pos
+    have hle :
+        Real.pi / (2 * (2 ^ (N + 1) : ℝ)) ≤ Real.pi / (2 ^ (N + 1) : ℝ) := by
+      simpa [div_eq_mul_inv] using (mul_le_mul_of_nonneg_left hle'' hpi)
+    exact lt_of_lt_of_le hzarg hle
   exact bottcher_root_seq_ratio_eq_candidate_of_log_and_arg
-    c N z hz hA0 hA hlog' hzarg
+    c N z hz hA0 hA hlog' hzarg'
 lemma eventually_atInfinity_iter_ne_zero (c : ℂ) (N : ℕ) :
     ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 := by
   let g : ℂ → ℂ := fun z => (quadratic_map c)^[N] z / z ^ (2 ^ N)
@@ -1031,6 +1045,111 @@ lemma eventually_atInfinity_root_seq_ratio_candidate_eq_div
   rcases hz with ⟨hz, hA⟩
   exact root_seq_ratio_candidate_eq_div c N z hz hA
 
+def arg_sector (N : ℕ) : Set ℂ :=
+  {z | |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ))}
+
+lemma eventually_atInfinity_iter_sq_add_c_ne_zero (c : ℂ) (N : ℕ) :
+    ∀ᶠ z in atInfinity, ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 := by
+  let cand : ℂ → ℂ := fun z =>
+    (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+        (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+      ((2 : ℂ) ^ (N + 1))⁻¹
+  have hCand : Tendsto cand atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_root_seq_ratio_candidate_atInfinity c N
+  have hCand_ne : ∀ᶠ z in atInfinity, cand z ≠ 0 :=
+    hCand.eventually_ne (by exact one_ne_zero)
+  have hdiv :
+      ∀ᶠ z in atInfinity,
+        (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) =
+          (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) :=
+    eventually_atInfinity_root_seq_ratio_candidate_eq_div c N
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hboth := hCand_ne.and (hdiv.and hzne)
+  refine hboth.mono ?_
+  intro z hz
+  rcases hz with ⟨hcand, hdiv, hzne⟩
+  have hzpow : z ^ (2 ^ (N + 1)) ≠ 0 := pow_ne_zero _ hzne
+  intro hA
+  have hdiv' :
+      cand z =
+        ((((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1))) ^
+          ((2 : ℂ) ^ (N + 1))⁻¹ := by
+    simp [cand, hdiv]
+  have : cand z = 0 := by
+    have hzero : (((quadratic_map c)^[N] z) ^ 2 + c) / z ^ (2 ^ (N + 1)) = 0 := by
+      simp [hA]
+    simp [hdiv', hzero]
+  exact hcand this
+
+lemma tendsto_bottcher_root_seq_ratio_atInfinity_in_sector
+    (c : ℂ) (N : ℕ) :
+    Tendsto (fun z => bottcher_root_seq c (N + 1) z / z)
+      (atInfinity ⊓ 𝓟 (arg_sector N)) (𝓝 (1 : ℂ)) := by
+  let cand : ℂ → ℂ := fun z =>
+    (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+        (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+      ((2 : ℂ) ^ (N + 1))⁻¹
+  have hCand : Tendsto cand atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_root_seq_ratio_candidate_atInfinity c N
+  have hCand' : Tendsto cand (atInfinity ⊓ 𝓟 (arg_sector N)) (𝓝 (1 : ℂ)) :=
+    hCand.mono_left inf_le_left
+  have hA0 : ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 :=
+    eventually_atInfinity_iter_ne_zero c N
+  have hA : ∀ᶠ z in atInfinity, ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 :=
+    eventually_atInfinity_iter_sq_add_c_ne_zero c N
+  have hargCand : ∀ᶠ z in atInfinity,
+      |Complex.arg
+          (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+        < Real.pi / 2 :=
+    eventually_atInfinity_abs_arg_lt_pi_div_four_candidate c N
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hsector :
+      ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)),
+        |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ)) := by
+    have : ∀ᶠ z in (𝓟 (arg_sector N)),
+        |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ)) := by
+      exact Filter.eventually_principal.2 (by intro z hz; exact hz)
+    exact this.filter_mono inf_le_right
+  have hbase :
+      ∀ᶠ z in atInfinity,
+        z ≠ 0 ∧
+          (quadratic_map c)^[N] z ≠ 0 ∧
+            ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 ∧
+              |Complex.arg
+                  (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+                    (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+                < Real.pi / 2 := by
+    exact hzne.and (hA0.and (hA.and hargCand))
+  have hbase' :
+      ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)),
+        z ≠ 0 ∧
+          (quadratic_map c)^[N] z ≠ 0 ∧
+            ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 ∧
+              |Complex.arg
+                  (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+                    (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+                < Real.pi / 2 := by
+    exact hbase.filter_mono inf_le_left
+  have hEq :
+      ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)),
+        bottcher_root_seq c (N + 1) z / z = cand z := by
+    refine (hbase'.and hsector).mono ?_
+    intro z hz
+    rcases hz with ⟨⟨hzne, hA0, hA, hargCand⟩, hzarg⟩
+    have hzarg' :
+        |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ)) := hzarg
+    have h := bottcher_root_seq_ratio_eq_candidate_of_sector
+      (c := c) (N := N) (z := z) hzne hA0 hA hargCand hzarg'
+    simpa [cand] using h
+  exact (tendsto_congr' hEq).2 hCand'
 
 
 lemma norm_bottcher_root_seq_of_ne_zero
