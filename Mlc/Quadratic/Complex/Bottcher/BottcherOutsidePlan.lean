@@ -2648,6 +2648,33 @@ lemma bottcher_map_isOpen_on_outside_of_deriv_ne_zero
   have hlocal := bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit hderiv
   exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
 
+lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hnorm : bottcher_normalized_at_infty c) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  refine bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit ?_
+  exact bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm
+
+lemma bottcher_map_isOpen_on_outside_of_normalized
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hnorm : bottcher_normalized_at_infty c) :
+    ∀ t ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}, IsOpen t →
+      IsOpen (Quadratic.bottcher_map c '' t) := by
+  intro t ht htop
+  have hlocal := bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized c hslit hnorm
+  exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
+
+lemma bottcher_map_local_inj_on_outside_open_of_normalized
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (hnorm : bottcher_normalized_at_infty c) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.bottcher_map c) s := by
+  intro z hz
+  have hf : AnalyticAt ℂ (Quadratic.bottcher_map c) z :=
+    (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+  have hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0 :=
+    bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm z hz
+  exact injOn_nhds_of_analyticAt hf hderiv
+
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.
 
