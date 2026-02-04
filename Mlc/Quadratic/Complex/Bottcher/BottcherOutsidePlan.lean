@@ -1257,6 +1257,95 @@ lemma norm_iterate_ge_one_of_escape
     simpa [horb] using hge
   exact le_trans hz1 hge'
 
+lemma tendsto_norm_quadratic_iter_div_pow_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto (fun z => ‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) atInfinity (𝓝 (1 : ℝ)) := by
+  have h := tendsto_quadratic_iter_div_pow_atInfinity c N
+  have hnorm :
+      Tendsto (fun z => ‖(quadratic_map c)^[N] z / z ^ (2 ^ N)‖) atInfinity (𝓝 (‖(1 : ℂ)‖)) :=
+    (continuous_norm.tendsto (1 : ℂ)).comp h
+  simpa [norm_div, norm_pow] using hnorm
+
+lemma tendsto_log_norm_quadratic_iter_div_pow_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto (fun z => Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)))
+      atInfinity (𝓝 (0 : ℝ)) := by
+  have h := tendsto_norm_quadratic_iter_div_pow_atInfinity c N
+  have hlog := (Real.continuousAt_log (by norm_num : (1 : ℝ) ≠ 0)).tendsto.comp h
+  simpa using hlog
+
+lemma tendsto_potential_seq_minus_log_norm_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto
+        (fun z =>
+          (1 / (2 : ℝ) ^ N) * Real.log ‖(quadratic_map c)^[N] z‖ - Real.log ‖z‖)
+        atInfinity (𝓝 (0 : ℝ)) := by
+  have hlog := tendsto_log_norm_quadratic_iter_div_pow_atInfinity c N
+  have hne : ∀ᶠ z in atInfinity, ‖z‖ ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => ne_of_gt hz)
+  have hne' : ∀ᶠ z in atInfinity, ‖(quadratic_map c)^[N] z‖ ≠ 0 := by
+    have hA : ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 :=
+      eventually_atInfinity_iter_ne_zero c N
+    exact hA.mono (fun _ hz => by simpa using (norm_ne_zero_iff.mpr hz))
+  have hsplit :
+      ∀ᶠ z in atInfinity,
+        (1 / (2 : ℝ) ^ N) * Real.log ‖(quadratic_map c)^[N] z‖ - Real.log ‖z‖ =
+          (1 / (2 : ℝ) ^ N) *
+            Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) := by
+    refine (hne'.and hne).mono ?_
+    intro z hz
+    rcases hz with ⟨hne', hne⟩
+    have hlogdiv :
+        Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) =
+          Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℕ) * Real.log ‖z‖ := by
+      have hlogdiv' :
+          Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) =
+            Real.log ‖(quadratic_map c)^[N] z‖ - Real.log (‖z‖ ^ (2 ^ N)) := by
+        exact (Real.log_div hne' (pow_ne_zero (2 ^ N) hne))
+      have hlogpow :
+          Real.log (‖z‖ ^ (2 ^ N)) = (2 ^ N : ℕ) * Real.log ‖z‖ := by
+        exact (Real.log_pow ‖z‖ (2 ^ N))
+      calc
+        Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N))
+            = Real.log ‖(quadratic_map c)^[N] z‖ - Real.log (‖z‖ ^ (2 ^ N)) := hlogdiv'
+        _ = Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℕ) * Real.log ‖z‖ := by
+              simp [hlogpow]
+    have hcoef : (1 / (2 : ℝ) ^ N) * ((2 ^ N : ℝ) * Real.log ‖z‖) = Real.log ‖z‖ := by
+      have h2 : (2 : ℝ) ≠ 0 := by norm_num
+      have hpow : (1 / (2 : ℝ) ^ N) * (2 ^ N : ℝ) = 1 := by
+        calc
+          (1 / (2 : ℝ) ^ N) * (2 ^ N : ℝ) = ((2 : ℝ) ^ N)⁻¹ * (2 ^ N : ℝ) := by
+              simp [one_div]
+          _ = 1 := by
+              simp [h2]
+      calc
+        (1 / (2 : ℝ) ^ N) * ((2 ^ N : ℝ) * Real.log ‖z‖)
+            = ((1 / (2 : ℝ) ^ N) * (2 ^ N : ℝ)) * Real.log ‖z‖ := by
+                ring
+        _ = Real.log ‖z‖ := by
+                simp
+    calc
+      (1 / (2 : ℝ) ^ N) * Real.log ‖(quadratic_map c)^[N] z‖ - Real.log ‖z‖
+          = (1 / (2 : ℝ) ^ N) * Real.log ‖(quadratic_map c)^[N] z‖ -
+              (1 / (2 : ℝ) ^ N) * ((2 ^ N : ℝ) * Real.log ‖z‖) := by
+                simp
+      _ = (1 / (2 : ℝ) ^ N) *
+            (Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℝ) * Real.log ‖z‖) := by
+            ring
+      _ = (1 / (2 : ℝ) ^ N) *
+            (Real.log ‖(quadratic_map c)^[N] z‖ - (2 ^ N : ℕ) * Real.log ‖z‖) := by
+            simp
+      _ = (1 / (2 : ℝ) ^ N) *
+            Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)) := by
+            simp [hlogdiv]
+  have hmul :
+      Tendsto
+          (fun z =>
+            (1 / (2 : ℝ) ^ N) *
+              Real.log (‖(quadratic_map c)^[N] z‖ / ‖z‖ ^ (2 ^ N)))
+          atInfinity (𝓝 (0 : ℝ)) := by
+    simpa using (tendsto_const_nhds.mul hlog)
+  exact (tendsto_congr' hsplit).2 hmul
+
 lemma bottcher_root_seq_norm_bounds_of_escape
     (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
     let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
