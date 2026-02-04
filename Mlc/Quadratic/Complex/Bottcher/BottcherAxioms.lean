@@ -12,8 +12,7 @@ namespace Quadratic
 
 /-- The Böttcher map `φ_c` conjugates `f_c(z) = z^2 + c` to `z^2` near infinity. -/
 noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
-  let w := lim (map (fun n => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)) atTop)
-  let u := if w = 0 then 1 else w / ↑‖w‖
+  let u := if z = 0 then 1 else z / ↑‖z‖
   u * ↑(Real.exp (MLC.Quadratic.green_function c z))
 
 /-- The domain where the Böttcher map is defined (basin of infinity). -/
@@ -43,14 +42,15 @@ theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
     ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) := by
   dsimp [bottcher_map]
   rw [norm_mul, Complex.norm_real, Real.norm_of_nonneg (Real.exp_nonneg _)]
-  let w := lim (map (fun n => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)) atTop)
-  let u := if w = 0 then 1 else w / ↑‖w‖
+  let u := if z = 0 then 1 else z / ↑‖z‖
   have : ‖u‖ = 1 := by
     dsimp [u]
     split_ifs with h
     · simp
     · rw [norm_div, Complex.norm_real, norm_norm]
-      exact div_self (norm_ne_zero_iff.mpr h)
+      have hz : (‖z‖ : ℝ) ≠ 0 := by
+        simpa using (norm_ne_zero_iff.mpr h)
+      exact div_self hz
   rw [this, one_mul]
 
 lemma bottcher_continuous_on (c : ℂ) :

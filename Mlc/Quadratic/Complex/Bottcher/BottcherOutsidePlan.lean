@@ -111,6 +111,7 @@ lemma bottcher_normalized_at_infty_iff
       (a := (1 : ℂ)) (x := atInfinity))
 
 
+
 lemma eventually_atInfinity_norm_gt (R : ℝ) :
     ∀ᶠ z in atInfinity, R < ‖z‖ := by
   -- unfold `atInfinity` and use the `atTop` basis.
@@ -1482,6 +1483,47 @@ lemma tendsto_norm_bottcher_map_div_norm_atInfinity (c : ℂ) :
     simpa using hExp
   exact (tendsto_congr' hratio).2 hExp'
 
+lemma tendsto_bottcher_map_div_atInfinity (c : ℂ) :
+    Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 (1 : ℂ)) := by
+  have hgreen := tendsto_green_function_minus_log_norm_atInfinity c
+  have hExpR :
+      Tendsto (fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖))
+        atInfinity (𝓝 (Real.exp (0 : ℝ))) :=
+    (Real.continuous_exp.tendsto (0 : ℝ)).comp hgreen
+  have hExpR' :
+      Tendsto (fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖))
+        atInfinity (𝓝 (1 : ℝ)) := by
+    simpa using hExpR
+  have hExpC :
+      Tendsto (fun z => ((Real.exp (Quadratic.green_function c z - Real.log ‖z‖)) : ℂ))
+        atInfinity (𝓝 (1 : ℂ)) := by
+    exact (Filter.tendsto_ofReal_iff).2 hExpR'
+  have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+    eventually_atInfinity_norm_gt (0 : ℝ)
+  have hratio :
+      (fun z => (Quadratic.bottcher_map c z) / z) =ᶠ[atInfinity]
+        fun z => ((Real.exp (Quadratic.green_function c z - Real.log ‖z‖)) : ℂ) := by
+    refine hpos.mono ?_
+    intro z hz
+    have hz' : z ≠ 0 := by
+      exact (norm_ne_zero_iff).1 (ne_of_gt hz)
+    have hz'' : (‖z‖ : ℝ) ≠ 0 := by
+      exact ne_of_gt hz
+    have hz''' : ((‖z‖ : ℝ) : ℂ) ≠ 0 := by
+      exact_mod_cast hz''
+    calc
+      (Quadratic.bottcher_map c z) / z
+          = ((z / ↑‖z‖) * (Real.exp (Quadratic.green_function c z)) : ℂ) / z := by
+              simp [Quadratic.bottcher_map, hz']
+      _ = ((Real.exp (Quadratic.green_function c z)) : ℂ) / (‖z‖ : ℂ) := by
+              field_simp [hz', hz''', mul_comm, mul_left_comm, mul_assoc]
+      _ = ((Real.exp (Quadratic.green_function c z - Real.log ‖z‖)) : ℂ) := by
+              simp [Real.exp_sub, Real.exp_log hz, div_eq_mul_inv]
+  exact (tendsto_congr' hratio).2 hExpC
+
+lemma bottcher_normalized_at_infty_of_green (c : ℂ) : bottcher_normalized_at_infty c := by
+  exact tendsto_bottcher_map_div_atInfinity c
+
 lemma bottcher_normalized_at_infty_norm_proof (c : ℂ) :
     bottcher_normalized_at_infty_norm c := by
   exact tendsto_norm_bottcher_map_div_norm_atInfinity c
@@ -2655,6 +2697,12 @@ lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized
   refine bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit ?_
   exact bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm
 
+lemma bottcher_map_isLocalHomeomorphOn_outside_open
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  have hnorm := bottcher_normalized_at_infty_of_green c
+  exact bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized c hslit hnorm
+
 lemma bottcher_map_isOpen_on_outside_of_normalized
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     (hnorm : bottcher_normalized_at_infty c) :
@@ -2662,6 +2710,14 @@ lemma bottcher_map_isOpen_on_outside_of_normalized
       IsOpen (Quadratic.bottcher_map c '' t) := by
   intro t ht htop
   have hlocal := bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized c hslit hnorm
+  exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
+
+lemma bottcher_map_isOpen_on_outside
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    ∀ t ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}, IsOpen t →
+      IsOpen (Quadratic.bottcher_map c '' t) := by
+  intro t ht htop
+  have hlocal := bottcher_map_isLocalHomeomorphOn_outside_open c hslit
   exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
 
 lemma bottcher_map_local_inj_on_outside_open_of_normalized
@@ -2674,6 +2730,13 @@ lemma bottcher_map_local_inj_on_outside_open_of_normalized
   have hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0 :=
     bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm z hz
   exact injOn_nhds_of_analyticAt hf hderiv
+
+lemma bottcher_map_local_inj_on_outside_open
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.bottcher_map c) s := by
+  intro z hz
+  have hnorm := bottcher_normalized_at_infty_of_green c
+  exact bottcher_map_local_inj_on_outside_open_of_normalized c hslit hnorm z hz
 
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.
