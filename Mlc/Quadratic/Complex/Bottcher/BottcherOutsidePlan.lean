@@ -1841,6 +1841,12 @@ lemma bottcher_map_preimage_compact_of_isCompact
   exact isCompact_preimage_of_isCompact hcont
     (fun R => preimage_closedBall_bounded c R) hK
 
+lemma isClosed_outside_disk (c : ℂ) : IsClosed (outside_disk c) := by
+  have hconst : Continuous (fun _ : ℂ => (‖c‖ + 2 : ℝ)) := continuous_const
+  have hnorm : Continuous (fun z : ℂ => ‖z‖) := continuous_norm
+  have hclosed : IsClosed {z : ℂ | (‖c‖ + 2 : ℝ) ≤ ‖z‖} := isClosed_le hconst hnorm
+  simpa [outside_disk, ge_iff_le] using hclosed
+
 lemma bottcher_map_isProperMap_of_continuous
     (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
     IsProperMap (Quadratic.bottcher_map c) := by
@@ -1850,6 +1856,13 @@ lemma bottcher_map_isProperMap_of_continuous
     exact bottcher_map_preimage_compact_of_isCompact c hcont hK
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
+
+lemma bottcher_map_isProperMap_on_outside_disk
+    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
+    IsProperMap (fun z : outside_disk c => Quadratic.bottcher_map c z) := by
+  have hproper : IsProperMap (Quadratic.bottcher_map c) :=
+    bottcher_map_isProperMap_of_continuous c hcont
+  exact hproper.restrict (isClosed_outside_disk c)
 
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
 lemma bottcher_normalized_at_infty_of_root_seq
