@@ -1,4 +1,4 @@
-import Mlc.Quadratic.Complex.BottcherMotion
+import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 import Mathlib.Topology.MetricSpace.Basic
 
 namespace MLC

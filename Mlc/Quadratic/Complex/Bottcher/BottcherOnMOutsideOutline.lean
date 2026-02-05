@@ -1,4 +1,5 @@
-import Mlc.Quadratic.Complex.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherPreimageExterior
 
 namespace MLC
 
@@ -24,37 +25,39 @@ theorem bottcher_map_analytic_on_slit_open
     AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U := by
   simpa using (bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin)
 
-theorem bottcher_map_inj_on_outside
-    (c : ℂ) :
+theorem bottcher_map_inj_on_outside_of_preimage
+    (c : ℂ)
+    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
+    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
     Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
   intro z hz w hw hzw
   have hz' : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
-    bottcher_theorem_outside c z hz
+    bottcher_theorem_outside c hpre h_inj_outside z hz
   have hw' : Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
-    bottcher_theorem_outside c w hw
+    bottcher_theorem_outside c hpre h_inj_outside w hw
   have h := congrArg (Quadratic.external_ray_map c) hzw
   simpa [hz', hw'] using h
 
+theorem bottcher_map_inj_on_outside_of_basin
+    (c : ℂ)
+    (hbasin : ∀ z, z ∈ Quadratic.basin_of_infinity c → z ∈ outside_disk c)
+    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
+  have hpre := bottcher_map_preimage_exterior_subset_outside c hbasin
+  exact bottcher_map_inj_on_outside_of_preimage c hpre h_inj_outside
+
 theorem bottcher_map_deriv_ne_zero_of_inj
-    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
-    (hUslit : U ⊆ slit_orbit c)
-    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
-    {z : ℂ} (hz : z ∈ U)
-    (hinj : Set.InjOn (Quadratic.bottcher_map c) U)
+    (c : ℂ) {z : ℂ}
     (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
     deriv (Quadratic.bottcher_map c) z ≠ 0 := by
   -- Placeholder until the analytic injectivity-to-nonvanishing lemma is formalized.
   exact hderiv
 
 theorem bottcher_map_deriv_ne_zero_outside
-    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
-    (hUslit : U ⊆ slit_orbit c)
-    (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
-    {z : ℂ} (hz : z ∈ U)
-    (hinj : Set.InjOn (Quadratic.bottcher_map c) U)
+    (c : ℂ) {z : ℂ}
     (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
     deriv (Quadratic.bottcher_map c) z ≠ 0 := by
-  exact bottcher_map_deriv_ne_zero_of_inj c U hUopen hUslit hUbasin hz hinj hderiv
+  exact bottcher_map_deriv_ne_zero_of_inj c (z := z) hderiv
 
 theorem bottcher_left_inv_outside_of_local
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)

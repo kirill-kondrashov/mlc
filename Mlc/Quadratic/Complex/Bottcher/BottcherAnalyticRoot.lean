@@ -1,4 +1,4 @@
-import Mlc.Quadratic.Complex.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mathlib.Analysis.Analytic.Binomial
 
 namespace MLC
@@ -7,7 +7,7 @@ open Quadratic Complex Topology Set Filter
 
 lemma analyticAt_one_add_cpow (a : ℂ) :
     AnalyticAt ℂ (fun x => (1 + x) ^ a) (0 : ℂ) := by
-  exact (one_add_cpow_hasFPowerSeriesAt_zero (a := a)).analyticAt
+  exact (Complex.one_add_cpow_hasFPowerSeriesAt_zero (a := a)).analyticAt
 
 lemma analyticAt_one_add_cpow_comp {h : ℂ → ℂ} {z : ℂ} (a : ℂ)
     (hh : AnalyticAt ℂ h z) (hh0 : h z = 0) :
@@ -38,19 +38,37 @@ lemma analytic_root_aux_pow_nat {h : ℂ → ℂ} {z : ℂ} {n : ℕ} (hn : n �
     (analytic_root_aux h z ((1 : ℂ) / n)) ^ n =
       fun w => h z * (1 + (h w / h z - 1)) := by
   funext w
-  have h1 : ((h z) ^ ((1 : ℂ) / n)) ^ n = h z := by
-    have : (h z) ^ ((1 : ℂ) / n * n) = (h z) ^ (1 : ℂ) := by
+  have h1 : ((h z) ^ ((↑n : ℂ)⁻¹)) ^ n = h z := by
+    have hmul : ((↑n : ℂ)⁻¹) * (n : ℂ) = (1 : ℂ) := by
       field_simp [hn]
-    simpa [Complex.cpow_mul_nat, this] using
-      (Complex.cpow_mul_nat (h z) ((1 : ℂ) / n) n)
-  have h2 : ((1 + (h w / h z - 1)) ^ ((1 : ℂ) / n)) ^ n =
+    calc
+      ((h z) ^ ((↑n : ℂ)⁻¹)) ^ n
+          = (h z) ^ (((↑n : ℂ)⁻¹) * n) := by
+              exact (Complex.cpow_mul_nat (h z) ((↑n : ℂ)⁻¹) n).symm
+      _ = (h z) ^ (1 : ℂ) := by
+              simp [hmul]
+      _ = h z := by
+              simp [Complex.cpow_one]
+  have h2 : ((1 + (h w / h z - 1)) ^ ((↑n : ℂ)⁻¹)) ^ n =
       (1 + (h w / h z - 1)) := by
-    have : (1 + (h w / h z - 1)) ^ ((1 : ℂ) / n * n) =
-        (1 + (h w / h z - 1)) ^ (1 : ℂ) := by
+    have hmul : ((↑n : ℂ)⁻¹) * (n : ℂ) = (1 : ℂ) := by
       field_simp [hn]
-    simpa [Complex.cpow_mul_nat, this] using
-      (Complex.cpow_mul_nat (1 + (h w / h z - 1)) ((1 : ℂ) / n) n)
-  simp [analytic_root_aux, mul_pow, h1, h2]
+    calc
+      ((1 + (h w / h z - 1)) ^ ((↑n : ℂ)⁻¹)) ^ n
+          = (1 + (h w / h z - 1)) ^ (((↑n : ℂ)⁻¹) * n) := by
+              exact (Complex.cpow_mul_nat (1 + (h w / h z - 1)) ((↑n : ℂ)⁻¹) n).symm
+      _ = (1 + (h w / h z - 1)) ^ (1 : ℂ) := by
+              simp [hmul]
+      _ = (1 + (h w / h z - 1)) := by
+              simp [Complex.cpow_one]
+  calc
+    (analytic_root_aux h z ((1 : ℂ) / n) w) ^ n
+        =
+          ((h z) ^ ((↑n : ℂ)⁻¹)) ^ n *
+            ((1 + (h w / h z - 1)) ^ ((↑n : ℂ)⁻¹)) ^ n := by
+            simp [analytic_root_aux, div_eq_mul_inv, mul_pow]
+    _ = h z * (1 + (h w / h z - 1)) := by
+            rw [h1, h2]
 
 lemma analytic_root_aux_eq_mul {h : ℂ → ℂ} {z : ℂ} (w : ℂ) (hc : h z ≠ 0) :
     h z * (1 + (h w / h z - 1)) = h w := by

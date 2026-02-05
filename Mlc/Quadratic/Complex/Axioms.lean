@@ -1,6 +1,6 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
-import Mlc.Quadratic.Complex.BottcherOnMDefs
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMDefs
 import Mathlib.Topology.Connected.Basic
 
 namespace MLC.Quadratic

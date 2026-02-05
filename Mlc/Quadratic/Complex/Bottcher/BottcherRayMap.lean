@@ -1,4 +1,4 @@
-import Mlc.Quadratic.Complex.BottcherAxioms
+import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
 import Mathlib.Topology.OpenPartialHomeomorph.Basic
 
 namespace MLC
@@ -25,9 +25,13 @@ lemma ray_map_eq_on_symm
   intro w hw
   have hw' : w ∈ Set.range (bottcher_map c) := h_surj hw
   rcases hw' with ⟨a, rfl⟩
-  have h_inv : bottcher_map c (Function.invFun (bottcher_map c) (bottcher_map c a)) =
-      bottcher_map c a :=
-    Function.invFun_eq ⟨a, rfl⟩
+  have h_inv :
+      bottcher_map c (external_ray_map c (bottcher_map c a)) =
+        bottcher_map c a := by
+    have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
+    have hw' : 1 < ‖bottcher_map c a‖ := by
+      simpa using hw
+    simpa using (hspec (bottcher_map c a) hw')
   have h_symm :
       bottcher_map c
         ((h_emb.toOpenPartialHomeomorph (bottcher_map c)).symm (bottcher_map c a)) =
@@ -36,12 +40,19 @@ lemma ray_map_eq_on_symm
       (Topology.IsOpenEmbedding.toOpenPartialHomeomorph_right_inv (f := bottcher_map c)
         (h := h_emb) (x := bottcher_map c a) ⟨a, rfl⟩)
   have h_eq :
-      Function.invFun (bottcher_map c) (bottcher_map c a) =
-        (h_emb.toOpenPartialHomeomorph (bottcher_map c)).symm (bottcher_map c a) :=
-    h_emb.injective (by simpa [h_inv] using h_symm.symm)
-  have hw' : 1 < ‖bottcher_map c a‖ := by
-    simpa using hw
-  simp [external_ray_map, hw', h_eq]
+      external_ray_map c (bottcher_map c a) =
+        (h_emb.toOpenPartialHomeomorph (bottcher_map c)).symm (bottcher_map c a) := by
+    have hpre :
+        bottcher_map c (external_ray_map c (bottcher_map c a)) =
+          bottcher_map c
+            ((h_emb.toOpenPartialHomeomorph (bottcher_map c)).symm (bottcher_map c a)) := by
+      calc
+        bottcher_map c (external_ray_map c (bottcher_map c a)) = bottcher_map c a := h_inv
+        _ = bottcher_map c
+              ((h_emb.toOpenPartialHomeomorph (bottcher_map c)).symm (bottcher_map c a)) := by
+              simpa using h_symm.symm
+    exact h_emb.injective hpre
+  simpa using h_eq
 
 lemma ray_map_target_subset
     (c : ℂ)
@@ -82,6 +93,18 @@ theorem ray_map_continuous_on
 
   -- 5) Conclude continuity of `external_ray_map` on the exterior.
   exact (e.continuousOn_symm.congr_mono h_eq_on h_subset)
+
+theorem external_ray_map_continuousOn_exterior_of_inj_open
+    (c : ℂ)
+    (h_cont : Continuous (bottcher_map c))
+    (h_inj : Function.Injective (bottcher_map c))
+    (h_open : IsOpenMap (bottcher_map c)) :
+    ContinuousOn (external_ray_map c) {w | 1 < ‖w‖} := by
+  have h_surj : {w : ℂ | 1 < ‖w‖} ⊆ Set.range (bottcher_map c) := by
+    intro w hw
+    rcases (bottcher_map_surj c w hw) with ⟨a, _ha, rfl⟩
+    exact ⟨a, rfl⟩
+  exact ray_map_continuous_on c h_cont h_inj h_open h_surj
 
 end Quadratic
 
