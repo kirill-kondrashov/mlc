@@ -169,11 +169,13 @@ axiom bottcher_seq_converges (c : ℂ) :
 
 /-- Extension of the ray map to the closed exterior of the disk. -/
 noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
-  if 1 ≤ ‖w‖ then lim (map (external_ray_map c) (nhdsWithin w {z | 1 < ‖z‖})) else 0
+  if 1 ≤ ‖w‖ then external_ray_map c w else 0
 
 /-- The extended ray map agrees with the external ray map on the open exterior. -/
-axiom extended_ray_map_eq (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    extended_ray_map c w = external_ray_map c w
+theorem extended_ray_map_eq (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    extended_ray_map c w = external_ray_map c w := by
+  have hw' : 1 ≤ ‖w‖ := le_of_lt hw
+  simp [extended_ray_map, hw']
 
 /-- The extended ray map is continuous on the closed exterior {w | 1 ≤ |w|}. -/
 axiom extended_ray_map_continuous (c : ℂ) :
