@@ -110,6 +110,58 @@ theorem bottcher_map_inj_theorem_of_eventual_slit_global_inverse
     exact h_inj_K hzK hwK hzw
 
 /-!
+Step 2: extension bridge to a left inverse for all iterates on the basin.
+
+This is a hypothesis-only interface that captures the remaining gap.
+-/
+
+def EventualSlitGlobalInverseExtendsToBasinIter (c : ℂ) : Prop :=
+  ∀ n : ℕ, HasLeftInverseOn ((quadratic_map c)^[n]) (basin_of_infinity c) (basin_of_infinity c)
+
+def BasinEventuallyInEventualSlit (c : ℂ) : Prop :=
+  ∀ z, z ∈ basin_of_infinity c → ∃ N, (quadratic_map c)^[N] z ∈ eventual_slit_set c
+
+def OrbitInverseBranchSystem (c : ℂ) : Prop :=
+  ∀ n : ℕ, ∃ g : ℂ → ℂ,
+    (∀ z, z ∈ basin_of_infinity c → g ((quadratic_map c)^[n] z) = z) ∧
+    (∀ z, z ∈ basin_of_infinity c → g z ∈ basin_of_infinity c)
+
+def EventualSlitGlobalInverseExtensionHyp (c : ℂ) : Prop :=
+  BasinEventuallyInEventualSlit c ∧ OrbitInverseBranchSystem c
+
+lemma EventualSlitGlobalInverseExtendsToBasinIter_of_extension_hyp
+    (c : ℂ) (h_ext : EventualSlitGlobalInverseExtensionHyp c) :
+    EventualSlitGlobalInverseExtendsToBasinIter c := by
+  intro n
+  rcases h_ext.2 n with ⟨g, hleft, hmap⟩
+  refine ⟨g, ?_, ?_⟩
+  · intro z hz
+    exact hleft z hz
+  · intro z hz
+    exact hmap z hz
+
+def EventualSlitGlobalInverseExtensionToIter (c : ℂ)
+    (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) : Prop :=
+  EventualSlitGlobalInverseExtendsToBasinIter c
+
+lemma quadratic_map_iter_eq_imp_eq_of_extension_iter
+    (c : ℂ) (hiter : EventualSlitGlobalInverseExtendsToBasinIter c) :
+    ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
+  intro z w hz hw hiter_eq
+  have h_inj : ∀ n, Set.InjOn ((quadratic_map c)^[n]) (basin_of_infinity c) := by
+    intro n
+    exact injOn_of_hasLeftInverseOn (hiter n)
+  exact quadratic_map_iter_eq_imp_eq_of_all_iter_inj c h_inj z w hz hw hiter_eq
+
+lemma quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_extension
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA)
+    (h_ext : EventualSlitGlobalInverseExtensionToIter c hA hG) :
+    ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
+  exact quadratic_map_iter_eq_imp_eq_of_extension_iter c h_ext
+
+/-!
 Step 2 scaffolding: extend the eventual-slit global inverse to the full basin.
 This is the precise missing bridge needed to derive a left inverse for
 `quadratic_map` on the basin and eliminate `quadratic_map_iter_eq_imp_eq`.

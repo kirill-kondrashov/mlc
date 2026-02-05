@@ -97,6 +97,19 @@ lemma global_inverse_on_eventual_slit_of_gluing
     GlobalInverseOnEventualSlit c hA :=
   hglue hA hcompat
 
+def EventualSlitInverseGluingWithUniqueness (c : ℂ) : Prop :=
+  ∀ hA : EventualSlitInverseAtlas c,
+    EventualSlitLocalUniqueness c →
+      EventualSlitInverseCompatible hA → GlobalInverseOnEventualSlit c hA
+
+lemma global_inverse_on_eventual_slit_of_gluing_with_uniqueness
+    {c : ℂ} (hA : EventualSlitInverseAtlas c)
+    (huniq : EventualSlitLocalUniqueness c)
+    (hcompat : EventualSlitInverseCompatible hA)
+    (hglue : EventualSlitInverseGluingWithUniqueness c) :
+    GlobalInverseOnEventualSlit c hA :=
+  hglue hA huniq hcompat
+
 /-!
 Local inverse existence on the eventual slit orbit requires a nonvanishing
 derivative hypothesis at the point. We record this as a helper for building
@@ -121,6 +134,24 @@ lemma local_inverse_at_of_eventual_slit
            , hUbasin := hUbasin
            , hz := hzU
            , hderiv := hder }, trivial⟩
+
+lemma eventual_slit_inverse_atlas_of_nonzero_deriv
+    (c : ℂ) (hderiv : EventualSlitNonzeroDeriv c) :
+    EventualSlitInverseAtlas c :=
+  local_inverse_at_of_eventual_slit c hderiv
+
+/-!
+Compatibility can follow from a local uniqueness principle: if two local
+inverses are left inverses near the same point, they agree near the image.
+We record this as a hypothesis for future use.
+-/
+
+def EventualSlitLocalUniqueness (c : ℂ) : Prop :=
+  ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+    ∀ h₁ h₂ : LocalInverseAt c z,
+      (∀ᶠ x in 𝓝 z, local_inverse_at h₁ (bottcher_map c x) = x) →
+      (∀ᶠ x in 𝓝 z, local_inverse_at h₂ (bottcher_map c x) = x) →
+        ∀ᶠ y in 𝓝 (bottcher_map c z), local_inverse_at h₁ y = local_inverse_at h₂ y
 
 /-- Choose a local inverse at a slit-orbit basin point (noncomputably). -/
 noncomputable def choose_local_inverse
