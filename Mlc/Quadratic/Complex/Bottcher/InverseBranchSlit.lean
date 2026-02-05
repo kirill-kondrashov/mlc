@@ -153,6 +153,16 @@ def EventualSlitLocalUniqueness (c : ℂ) : Prop :=
       (∀ᶠ x in 𝓝 z, local_inverse_at h₂ (bottcher_map c x) = x) →
         ∀ᶠ y in 𝓝 (bottcher_map c z), local_inverse_at h₁ y = local_inverse_at h₂ y
 
+def EventualSlitOverlapHyp (c : ℂ) : Prop :=
+  ∀ z w, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+    w ∈ eventual_slit_set c ∩ basin_of_infinity c →
+      (𝓝 (bottcher_map c z) ⊓ 𝓝 (bottcher_map c w)).Nonempty
+
+def EventualSlitCompatibilityFromOverlap (c : ℂ) : Prop :=
+  ∀ hA : EventualSlitInverseAtlas c,
+    EventualSlitLocalUniqueness c →
+      EventualSlitOverlapHyp c → EventualSlitInverseCompatible hA
+
 /-- Choose a local inverse at a slit-orbit basin point (noncomputably). -/
 noncomputable def choose_local_inverse
     {c : ℂ} (hA : SlitInverseAtlas c) (z : ℂ)
