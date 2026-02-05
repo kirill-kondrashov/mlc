@@ -2,6 +2,8 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMDefs
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
+import Mlc.Quadratic.Complex.InverseBranch
+import Mlc.Quadratic.Complex.InverseBranchQuadratic
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
@@ -659,6 +661,38 @@ lemma bottcher_theorem_outside_of_basin (c : ℂ)
   have hpre := bottcher_map_preimage_exterior_subset_outside_of_basin c hbasin
   exact bottcher_theorem_outside c hpre h_inj_outside
 
+/-!
+Inverse-branch scaffolding.
+
+If we can build left inverses for the iterates of `quadratic_map` on the basin,
+then we can eliminate `quadratic_map_iter_eq_imp_eq` by reducing to injectivity
+of each iterate. This is a placeholder for future theory development.
+-/
+
+lemma quadratic_map_iter_inj_of_left_inverse
+    (c : ℂ) (n : ℕ)
+    (h_left :
+      HasLeftInverseOn ((quadratic_map c)^[n]) Set.univ (Quadratic.basin_of_infinity c)) :
+    Set.InjOn ((quadratic_map c)^[n]) (Quadratic.basin_of_infinity c) := by
+  simpa using (injOn_of_hasLeftInverseOn h_left)
+
+lemma quadratic_map_iter_eq_imp_eq_of_all_iter_inj
+    (c : ℂ)
+    (h_inj : ∀ n, Set.InjOn ((quadratic_map c)^[n]) (Quadratic.basin_of_infinity c)) :
+    ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
+  intro z w hz hw hiter
+  rcases hiter with ⟨n, h⟩
+  exact h_inj n hz hw h
+
+/-!
+Optional hypothesis path: global inverse on the eventual slit orbit.
+
+This is a scaffolding route to replace `quadratic_map_iter_eq_imp_eq`,
+but it still requires strong local invertibility and compatibility assumptions.
+-/
+
+
 theorem bottcher_map_injective_of_basin_characterization
     (c : ℂ)
     (h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ → z ∈ Quadratic.basin_of_infinity c)
@@ -757,6 +791,23 @@ theorem bottcher_map_inj_on_basin_of_outside_left_inv
       ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w :=
     bottcher_map_iter_eq_on_basin_of_outside_left_inv c h_left h_escape h_conj z w hz hw hzw
   exact h_iter_eq_imp z w hz hw h_iter_eq
+
+-- TODO: replace `h_iter_eq_imp` with a derivable inverse-branch principle on the basin.
+
+theorem bottcher_map_inj_on_basin_of_outside_left_inv_of_iter_left_inverse
+    (c : ℂ)
+    (h_left : ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+    (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
+    (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.bottcher_map c z) ^ (2 ^ n))
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have h_iter_eq_imp :=
+    quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter
+  exact bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_eq_imp
 
 theorem bottcher_map_inj_on_basin_of_left_inv
     (c : ℂ) (S : Set ℂ)
