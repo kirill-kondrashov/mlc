@@ -6,6 +6,7 @@ import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
@@ -111,8 +112,11 @@ theorem mlc_conjecture
             (by
               intro z hz
               simpa [outside_disk] using hz)
+        let h_inj_outside :
+            Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) :=
+          bottcher_map_inj_on_outside_of_slit c (slit_orbit_contains_outside c)
         bottcher_map_inj_theorem c
-          (bottcher_left_inv_outside c hpre)
+          (bottcher_left_inv_outside c hpre h_inj_outside)
           (basin_escape_outside c)
           (bottcher_conj_iter c)
           (bottcher_map_inj_on_K c))

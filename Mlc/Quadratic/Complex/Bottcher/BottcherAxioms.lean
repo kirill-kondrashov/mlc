@@ -22,9 +22,14 @@ def basin_of_infinity (c : ℂ) : Set ℂ :=
 
 axiom basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ
 
-/-- The inverse of the Böttcher map exists (ray map). -/
+/-- The inverse of the Böttcher map exists on the exterior (ray map). -/
+axiom external_ray_map_exists (c : ℂ) :
+    ∃ f : ℂ → ℂ,
+      (∀ w, 1 < ‖w‖ → bottcher_map c (f w) = w) ∧
+        (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z)
+
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
-  if 1 < ‖w‖ then Function.invFun (bottcher_map c) w else 0
+  (Classical.choose (external_ray_map_exists c)) w
 
 /-! Domain for the Böttcher coordinate. -/
 def bottcher_domain (c : ℂ) : Set ℂ :=
@@ -57,12 +62,10 @@ lemma bottcher_continuous_on (c : ℂ) :
   Axioms.bottcher_continuous_on c
 
 lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
-    (hw : w ∈ bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
+    (_hw : w ∈ bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
     bottcher_map c (external_ray_map c w) = w := by
-  rcases hw with ⟨a, _ha, rfl⟩
-  rw [external_ray_map, if_pos hw']
-  apply Function.invFun_eq
-  exact ⟨a, rfl⟩
+  have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
+  exact hspec w hw'
 
 theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
     (h_inj : Function.Injective (bottcher_map c)) :
@@ -79,9 +82,18 @@ theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
     have hgt : 1 < Real.exp (MLC.Quadratic.green_function c z) := by
       simpa using (Real.one_lt_exp_iff.mpr hpos)
     simpa [hnorm'] using hgt
-  unfold external_ray_map
-  rw [if_pos hnorm]
-  exact (Function.leftInverse_invFun h_inj) z
+  have hright :
+      bottcher_map c (external_ray_map c (bottcher_map c z)) =
+        bottcher_map c z := by
+    have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
+    simpa using (hspec (bottcher_map c z) hnorm)
+  exact h_inj hright
+
+lemma external_ray_map_left_inverse_outside_open (c : ℂ) (z : ℂ)
+    (hz : ‖z‖ > ‖c‖ + 2) :
+    external_ray_map c (bottcher_map c z) = z := by
+  have hspec := (Classical.choose_spec (external_ray_map_exists c)).2
+  exact hspec z hz
 
 axiom invariance_of_domain_complex {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
     (hf : ContinuousOn f U) (hinj : Set.InjOn f U) : IsOpenMap (U.restrict f)

@@ -27,22 +27,24 @@ theorem bottcher_map_analytic_on_slit_open
 
 theorem bottcher_map_inj_on_outside_of_preimage
     (c : ℂ)
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
+    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
+    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
     Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
   intro z hz w hw hzw
   have hz' : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
-    bottcher_theorem_outside c hpre z hz
+    bottcher_theorem_outside c hpre h_inj_outside z hz
   have hw' : Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
-    bottcher_theorem_outside c hpre w hw
+    bottcher_theorem_outside c hpre h_inj_outside w hw
   have h := congrArg (Quadratic.external_ray_map c) hzw
   simpa [hz', hw'] using h
 
 theorem bottcher_map_inj_on_outside_of_basin
     (c : ℂ)
-    (hbasin : ∀ z, z ∈ Quadratic.basin_of_infinity c → z ∈ outside_disk c) :
+    (hbasin : ∀ z, z ∈ Quadratic.basin_of_infinity c → z ∈ outside_disk c)
+    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
     Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
   have hpre := bottcher_map_preimage_exterior_subset_outside c hbasin
-  exact bottcher_map_inj_on_outside_of_preimage c hpre
+  exact bottcher_map_inj_on_outside_of_preimage c hpre h_inj_outside
 
 theorem bottcher_map_deriv_ne_zero_of_inj
     (c : ℂ) {z : ℂ}

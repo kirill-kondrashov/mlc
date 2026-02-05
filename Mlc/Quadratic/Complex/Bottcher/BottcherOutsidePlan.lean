@@ -1,6 +1,7 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsideOutline
 import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticInjective
 import Mlc.Quadratic.Complex.Bottcher.BottcherCpowSlit
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMOutsideOutline
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Maps.Proper.CompactlyGenerated
 import Mathlib.Analysis.Complex.Liouville
@@ -80,6 +81,7 @@ lemma injOn_nhds_of_analyticAt
     ∃ s ∈ 𝓝 z, Set.InjOn f s := by
   have hf' : HasStrictDerivAt f (deriv f z) z := hf.hasStrictDerivAt
   exact injOn_nhds_of_hasStrictDerivAt (f := f) (f' := deriv f z) (z := z) hf' hderiv
+
 
 lemma bottcher_ratio_analytic_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
@@ -2566,6 +2568,11 @@ lemma quadratic_map_norm_gt_outside
     nlinarith
   exact lt_of_lt_of_le hlt hge
 
+lemma quadratic_map_maps_outside_open (c : ℂ) :
+    MapsTo (quadratic_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z hz
+  exact quadratic_map_norm_gt_outside c z (by simpa using hz)
+
 lemma bottcher_conj_deriv_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) :
@@ -2730,6 +2737,37 @@ lemma bottcher_map_isOpen_on_outside
   intro t ht htop
   have hlocal := bottcher_map_isLocalHomeomorphOn_outside_open c hslit
   exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
+
+lemma bottcher_map_isOpenMap_on_outside_open
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    IsOpenMap (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) := by
+  intro t ht
+  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
+  have hUopen : IsOpen U := by
+    simpa [U] using (isOpen_lt continuous_const continuous_norm)
+  rcases isOpen_induced_iff.mp ht with ⟨u, hu, rfl⟩
+  have hopen_image :
+      IsOpen (Quadratic.bottcher_map c '' (u ∩ U)) := by
+    refine bottcher_map_isOpen_on_outside c hslit (t := u ∩ U) ?_ (hu.inter hUopen)
+    exact Set.inter_subset_right
+  have himage :
+      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) ''
+          (Subtype.val ⁻¹' u) =
+        Quadratic.bottcher_map c '' (u ∩ U) := by
+    calc
+      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) ''
+          (Subtype.val ⁻¹' u)
+          = Quadratic.bottcher_map c '' (Subtype.val '' (Subtype.val ⁻¹' u)) := by
+              ext y
+              constructor
+              · rintro ⟨x, hx, rfl⟩
+                exact ⟨x.1, ⟨x, hx, rfl⟩, rfl⟩
+              · rintro ⟨x, hx, rfl⟩
+                rcases hx with ⟨x', hx', rfl⟩
+                exact ⟨x', hx', rfl⟩
+      _ = Quadratic.bottcher_map c '' (u ∩ U) := by
+            simp [U, Subtype.image_preimage_coe, Set.inter_comm]
+  simpa [himage] using hopen_image
 
 lemma bottcher_map_image_outside_open_isOpen
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
@@ -2902,6 +2940,47 @@ lemma bottcher_map_local_inj_on_outside_open
   intro z hz
   have hnorm := bottcher_normalized_at_infty_of_green c
   exact bottcher_map_local_inj_on_outside_open_of_normalized c hslit hnorm z hz
+
+lemma basin_escape_outside_open (c : ℂ) :
+    ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z hz
+  have h := (tendsto_atTop.1 hz) (‖c‖ + 2 + 1)
+  rcases (Filter.eventually_atTop.1 h) with ⟨N, hN⟩
+  refine ⟨N, ?_⟩
+  have hle : ‖c‖ + 2 + 1 ≤ ‖(quadratic_map c)^[N] z‖ := hN N (le_rfl)
+  have hlt : ‖c‖ + 2 < ‖(quadratic_map c)^[N] z‖ := by
+    linarith
+  simpa using hlt
+
+lemma bottcher_left_inv_outside_open_of_local
+    (c : ℂ) (_hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
+    (_hnorm : bottcher_normalized_at_infty c) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+  intro z hz
+  exact Quadratic.external_ray_map_left_inverse_outside_open c z hz
+
+theorem bottcher_map_inj_on_outside_of_slit
+    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
+  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
+  have hnorm : bottcher_normalized_at_infty c := bottcher_normalized_at_infty_of_green c
+  have h_left : ∀ z, z ∈ U →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+    intro z hz
+    exact bottcher_left_inv_outside_open_of_local c hslit hnorm z (by simpa [U] using hz)
+  have h_maps : MapsTo (quadratic_map c) U U := by
+    simpa [U] using (quadratic_map_maps_outside_open c)
+  have h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ U := by
+    intro z hz
+    simpa [U] using (basin_escape_outside_open c z hz)
+  have h_inj_basin :
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
+    bottcher_map_inj_on_basin_of_left_inv c U h_left h_maps h_escape
+      (bottcher_conj_iter c) (Quadratic.quadratic_map_iter_eq_imp_eq c)
+  simpa [outside_disk] using h_inj_basin
 
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.
