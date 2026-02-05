@@ -161,6 +161,9 @@ def EventualSlitDerivNonzero (c : ℂ) : Prop :=
   ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
     deriv (bottcher_map c) z ≠ 0
 
+def EventualSlitNonzeroDerivHyp (c : ℂ) : Prop :=
+  EventualSlitOpenNeighborhood c ∧ EventualSlitDerivNonzero c
+
 lemma eventual_slit_nonzero_deriv_of_open
     (c : ℂ) (hopen : EventualSlitOpenNeighborhood c)
     (hder : EventualSlitDerivNonzero c) :
@@ -168,6 +171,11 @@ lemma eventual_slit_nonzero_deriv_of_open
   intro z hz
   rcases hopen z hz with ⟨U, hUopen, hzU, hUslit, hUbasin⟩
   exact ⟨U, hUopen, hzU, hUslit, hUbasin, hder z hz⟩
+
+lemma eventual_slit_nonzero_deriv_of_hyp
+    (c : ℂ) (h : EventualSlitNonzeroDerivHyp c) :
+    EventualSlitNonzeroDeriv c :=
+  eventual_slit_nonzero_deriv_of_open c h.1 h.2
 
 lemma local_inverse_at_of_eventual_slit
     (c : ℂ) (hderiv : EventualSlitNonzeroDeriv c) :

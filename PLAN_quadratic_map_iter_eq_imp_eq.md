@@ -6,8 +6,8 @@
     (`EventualSlitOpenNeighborhood` + `EventualSlitDerivNonzero`).
   - [x] Use `eventual_slit_inverse_atlas_of_nonzero_deriv` to get `EventualSlitInverseAtlas c`.
 - [ ] Prove compatibility on overlaps:
-  - [ ] Establish `EventualSlitInverseCompatible` for the atlas (likely via a local
-    uniqueness lemma on overlaps).
+  - [x] Establish `EventualSlitInverseCompatible` from hypotheses
+    (`EventualSlitLocalUniqueness` + `EventualSlitOverlapHyp` + `EventualSlitCompatibilityFromOverlap`).
 - [x] Prove a gluing principle:
   - [x] Establish `EventualSlitInverseGluingWithUniqueness c` (or `EventualSlitInverseGluing c`)
     to obtain `GlobalInverseOnEventualSlit c hA`.
