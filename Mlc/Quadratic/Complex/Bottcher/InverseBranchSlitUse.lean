@@ -109,5 +109,28 @@ theorem bottcher_map_inj_theorem_of_eventual_slit_global_inverse
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).1 hwG
     exact h_inj_K hzK hwK hzw
 
+/-!
+Step 2 scaffolding: extend the eventual-slit global inverse to the full basin.
+This is the precise missing bridge needed to derive a left inverse for
+`quadratic_map` on the basin and eliminate `quadratic_map_iter_eq_imp_eq`.
+-/
+
+def EventualSlitGlobalInverseExtendsToBasin (c : ℂ)
+    (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) : Prop :=
+  ∃ g : ℂ → ℂ,
+    (∀ z, z ∈ basin_of_infinity c → g (quadratic_map c z) = z) ∧
+    (∀ z, z ∈ basin_of_infinity c → g z ∈ basin_of_infinity c)
+
+lemma quadratic_map_left_inverse_on_basin_of_global_inverse
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA)
+    (h_ext : EventualSlitGlobalInverseExtendsToBasin c hA hG) :
+    HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
+  rcases h_ext with ⟨g, hleft, hmap⟩
+  refine ⟨g, ?_, ?_⟩
+  · intro z hz
+    exact hleft z hz
+  · intro z hz
+    exact hmap z hz
+
 end Quadratic
 end MLC
