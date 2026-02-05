@@ -1,4 +1,5 @@
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
+import Yoccoz.Quadratic.Complex.Escape
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMDefs
 import Mathlib.Topology.Connected.PathConnected
 import Mathlib.Analysis.Complex.Basic
@@ -20,7 +21,70 @@ noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
 def basin_of_infinity (c : ℂ) : Set ℂ :=
   MLC.basin_of_infinity c
 
-axiom basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ
+lemma orbit_eq_iter_quadratic_map (c z : ℂ) (n : ℕ) :
+    MLC.Quadratic.orbit c z n = (MLC.quadratic_map c)^[n] z := by
+  have hfc : MLC.Quadratic.fc c = MLC.quadratic_map c := by
+    funext w
+    rfl
+  simpa [MLC.Quadratic.orbit] using congrArg (fun f => f^[n] z) hfc
+
+lemma boundedOrbit_iff_not_tendsto_infty (c z : ℂ) :
+    MLC.Quadratic.boundedOrbit c z ↔
+      ¬ Tendsto (fun n => ‖(MLC.quadratic_map c)^[n] z‖) atTop atTop := by
+  constructor
+  · intro h_bounded h_tendsto
+    rcases h_bounded with ⟨M, hM⟩
+    have h_tendsto' := (Filter.tendsto_atTop.1 h_tendsto) (M + 1)
+    rcases (Filter.eventually_atTop.1 h_tendsto') with ⟨N, hN⟩
+    have hN' : M + 1 ≤ ‖(MLC.quadratic_map c)^[N] z‖ := hN N (le_rfl)
+    have hbound' : ‖(MLC.quadratic_map c)^[N] z‖ ≤ M := by
+      have h := hM N
+      simpa [orbit_eq_iter_quadratic_map c z N] using h
+    linarith
+  · intro h_not_tendsto
+    by_contra h_unbounded
+    have h_unbounded' : ∀ M : ℝ, ∃ n : ℕ, ‖MLC.Quadratic.orbit c z n‖ > M := by
+      intro M
+      by_contra hM
+      have h_le : ∀ n : ℕ, ‖MLC.Quadratic.orbit c z n‖ ≤ M := by
+        intro n
+        by_contra h_le
+        exact hM ⟨n, lt_of_not_ge h_le⟩
+      exact h_unbounded ⟨M, h_le⟩
+    rcases h_unbounded' (MLC.Quadratic.R c) with ⟨n0, hn0⟩
+    have h_tendsto_orbit :
+        Tendsto (fun k => ‖MLC.Quadratic.orbit c z k‖) atTop atTop := by
+      rw [Filter.tendsto_atTop]
+      intro M
+      rcases (MLC.Quadratic.escape_lemma (c := c) (z := z) n0 hn0 M) with ⟨N, hN⟩
+      rw [Filter.eventually_atTop]
+      refine ⟨N, ?_⟩
+      intro m hm
+      exact le_of_lt (hN m hm)
+    have h_tendsto :
+        Tendsto (fun n => ‖(MLC.quadratic_map c)^[n] z‖) atTop atTop := by
+      simpa [orbit_eq_iter_quadratic_map c z] using h_tendsto_orbit
+    exact h_not_tendsto h_tendsto
+
+theorem basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)ᶜ := by
+  ext z
+  constructor
+  · intro hz
+    have hz' : Tendsto (fun n => ‖(MLC.quadratic_map c)^[n] z‖) atTop atTop := by
+      simpa [basin_of_infinity, MLC.basin_of_infinity] using hz
+    have hnot : ¬ MLC.Quadratic.boundedOrbit c z := by
+      intro hbounded
+      have hnt : ¬ Tendsto (fun n => ‖(MLC.quadratic_map c)^[n] z‖) atTop atTop :=
+        (boundedOrbit_iff_not_tendsto_infty c z).1 hbounded
+      exact hnt hz'
+    simpa [Set.mem_compl_iff, MLC.Quadratic.K, Set.mem_setOf_eq] using hnot
+  · intro hz
+    have hnot : ¬ MLC.Quadratic.boundedOrbit c z := by
+      simpa [Set.mem_compl_iff, MLC.Quadratic.K, Set.mem_setOf_eq] using hz
+    have hz' : Tendsto (fun n => ‖(MLC.quadratic_map c)^[n] z‖) atTop atTop := by
+      by_contra hnt
+      exact hnot ((boundedOrbit_iff_not_tendsto_infty c z).2 hnt)
+    simpa [basin_of_infinity, MLC.basin_of_infinity] using hz'
 
 /-- The inverse of the Böttcher map exists on the exterior (ray map). -/
 axiom external_ray_map_exists (c : ℂ) :
