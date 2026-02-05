@@ -14,8 +14,12 @@
 
 ## Step 2: Extend the global inverse from eventual slit orbit to the full basin
 - [ ] Provide an extension bridge:
-  - [ ] Prove `EventualSlitGlobalInverseExtensionHyp c` (currently defined as:
-    `BasinEventuallyInEventualSlit c ∧ OrbitInverseBranchSystem c`).
+  - [x] Prove `BasinEventuallyInEventualSlit c`.
+  - [x] Reduce `OrbitInverseBranchSystem c` to a single left inverse for `quadratic_map c`
+    (`orbit_inverse_branch_system_of_left_inverse`).
+  - [ ] Provide `OrbitInverseBranchSystem c`.
+  - [ ] Combine into `EventualSlitGlobalInverseExtensionHyp c`
+    (currently defined as `BasinEventuallyInEventualSlit c ∧ OrbitInverseBranchSystem c`).
   - [x] Use `EventualSlitGlobalInverseExtendsToBasinIter_of_extension_hyp` to get
     `EventualSlitGlobalInverseExtendsToBasinIter c`.
 - [x] Deduce the axiom replacement (once Step 2 bridge exists):

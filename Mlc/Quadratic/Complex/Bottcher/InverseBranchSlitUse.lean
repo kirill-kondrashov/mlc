@@ -1,10 +1,11 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.Quadratic.Complex.Bottcher.InverseBranchSlit
 
 namespace MLC
 namespace Quadratic
 
-open Topology Filter
+open Topology Filter Set
 
 lemma bottcher_left_inverse_on_slit_orbit_of_global_inverse
     (c : ℂ) (hA : SlitInverseAtlas c) (hG : GlobalInverseOnSlit c hA) :
@@ -123,6 +124,25 @@ def EventualSlitGlobalInverseExtendsToBasinIter (c : ℂ) : Prop :=
 def BasinEventuallyInEventualSlit (c : ℂ) : Prop :=
   ∀ z, z ∈ basin_of_infinity c → ∃ N, (quadratic_map c)^[N] z ∈ eventual_slit_set c
 
+lemma basin_eventually_in_eventual_slit (c : ℂ) :
+    BasinEventuallyInEventualSlit c := by
+  intro z hz
+  rcases basin_escape_outside_open c z hz with ⟨n0, hn0⟩
+  have h_eventual := outside_eventually_slit_orbit c ((quadratic_map c)^[n0] z) hn0
+  rcases h_eventual with ⟨N, hN⟩
+  refine ⟨N + n0, ?_⟩
+  change eventually_slit_orbit c ((quadratic_map c)^[N + n0] z)
+  refine ⟨0, ?_⟩
+  intro m hm
+  have hslit :
+      (quadratic_map c)^[m + N] ((quadratic_map c)^[n0] z) ∈ Complex.slitPlane :=
+    hN (m + N) (Nat.le_add_left _ _)
+  have hrewrite :
+      (quadratic_map c)^[m] ((quadratic_map c)^[N + n0] z) =
+        (quadratic_map c)^[m + N] ((quadratic_map c)^[n0] z) := by
+    simpa [Function.iterate_add, Function.comp_apply, Nat.add_assoc]
+  simpa [hrewrite] using hslit
+
 def OrbitInverseBranchSystem (c : ℂ) : Prop :=
   ∀ n : ℕ, ∃ g : ℂ → ℂ,
     (∀ z, z ∈ basin_of_infinity c → g ((quadratic_map c)^[n] z) = z) ∧
@@ -130,6 +150,78 @@ def OrbitInverseBranchSystem (c : ℂ) : Prop :=
 
 def EventualSlitGlobalInverseExtensionHyp (c : ℂ) : Prop :=
   BasinEventuallyInEventualSlit c ∧ OrbitInverseBranchSystem c
+
+lemma eventual_slit_global_inverse_extension_hyp_of_orbit_system
+    (c : ℂ) (h_orbit : OrbitInverseBranchSystem c) :
+    EventualSlitGlobalInverseExtensionHyp c := by
+  exact ⟨basin_eventually_in_eventual_slit c, h_orbit⟩
+
+lemma orbit_inverse_branch_system_of_left_inverse
+    (c : ℂ)
+    (hleft : HasLeftInverseOn (quadratic_map c)
+      (basin_of_infinity c) (basin_of_infinity c)) :
+    OrbitInverseBranchSystem c := by
+  rcases hleft with ⟨g, hleft, hmap⟩
+  have hmap' : MapsTo g (basin_of_infinity c) (basin_of_infinity c) := by
+    intro z hz
+    exact hmap z hz
+  have hfmap :
+      MapsTo (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) :=
+    basin_of_infinity_forward_invariant c
+  have hfiter :
+      ∀ n, MapsTo (quadratic_map c)^[n] (basin_of_infinity c) (basin_of_infinity c) :=
+    MapsTo.iterate hfmap
+  intro n
+  refine ⟨g^[n], ?_, ?_⟩
+  · intro z hz
+    induction n with
+    | zero =>
+        simp
+    | succ n ih =>
+        have hz' : (quadratic_map c)^[n] z ∈ basin_of_infinity c :=
+          (hfiter n) hz
+        have hstep :
+            g ((quadratic_map c)^[n + 1] z) = (quadratic_map c)^[n] z := by
+          simpa [Function.iterate_succ_apply'] using hleft ((quadratic_map c)^[n] z) hz'
+        have hstep' :
+            g ((quadratic_map c)^[n] (quadratic_map c z)) = (quadratic_map c)^[n] z := by
+          simpa [Function.iterate_succ_apply] using hstep
+        have hgsucc :
+            (g^[n + 1]) ((quadratic_map c)^[n + 1] z) =
+              (g^[n]) (g ((quadratic_map c)^[n + 1] z)) := by
+          simpa using
+            (Function.iterate_succ_apply (f := g) (n := n)
+              (x := (quadratic_map c)^[n + 1] z))
+        calc
+          (g^[n + 1]) ((quadratic_map c)^[n + 1] z)
+              = (g^[n]) (g ((quadratic_map c)^[n + 1] z)) := hgsucc
+          _ = (g^[n]) ((quadratic_map c)^[n] z) := by
+                  simp [hstep']
+          _ = z := ih
+  · intro z hz
+    exact (MapsTo.iterate hmap' n) hz
+
+lemma orbit_inverse_branch_system_of_iter_left_inverse
+    (c : ℂ) (hiter : EventualSlitGlobalInverseExtendsToBasinIter c) :
+    OrbitInverseBranchSystem c := by
+  intro n
+  rcases hiter n with ⟨g, hleft, hmap⟩
+  refine ⟨g, ?_, ?_⟩
+  · intro z hz
+    exact hleft z hz
+  · intro z hz
+    exact hmap z hz
+
+lemma iter_left_inverse_of_orbit_inverse_branch_system
+    (c : ℂ) (h_orbit : OrbitInverseBranchSystem c) :
+    EventualSlitGlobalInverseExtendsToBasinIter c := by
+  intro n
+  rcases h_orbit n with ⟨g, hleft, hmap⟩
+  refine ⟨g, ?_, ?_⟩
+  · intro z hz
+    exact hleft z hz
+  · intro z hz
+    exact hmap z hz
 
 lemma EventualSlitGlobalInverseExtendsToBasinIter_of_extension_hyp
     (c : ℂ) (h_ext : EventualSlitGlobalInverseExtensionHyp c) :
