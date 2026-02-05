@@ -2954,22 +2954,20 @@ lemma basin_escape_outside_open (c : ℂ) :
   simpa using hlt
 
 lemma bottcher_left_inv_outside_open_of_local
-    (c : ℂ) (_hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (_hnorm : bottcher_normalized_at_infty c) :
+    (c : ℂ) :
     ∀ z, ‖z‖ > ‖c‖ + 2 →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
   intro z hz
   exact Quadratic.external_ray_map_left_inverse_outside_open c z hz
 
 theorem bottcher_map_inj_on_outside_of_slit
-    (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    (c : ℂ) :
     Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
-  have hnorm : bottcher_normalized_at_infty c := bottcher_normalized_at_infty_of_green c
   have h_left : ∀ z, z ∈ U →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
     intro z hz
-    exact bottcher_left_inv_outside_open_of_local c hslit hnorm z (by simpa [U] using hz)
+    exact bottcher_left_inv_outside_open_of_local c z (by simpa [U] using hz)
   have h_maps : MapsTo (quadratic_map c) U U := by
     simpa [U] using (quadratic_map_maps_outside_open c)
   have h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →

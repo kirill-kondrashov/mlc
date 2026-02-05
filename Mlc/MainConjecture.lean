@@ -114,7 +114,7 @@ theorem mlc_conjecture
               simpa [outside_disk] using hz)
         let h_inj_outside :
             Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) :=
-          bottcher_map_inj_on_outside_of_slit c (slit_orbit_contains_outside c)
+          bottcher_map_inj_on_outside_of_slit c
         bottcher_map_inj_theorem c
           (bottcher_left_inv_outside c hpre h_inj_outside)
           (basin_escape_outside c)

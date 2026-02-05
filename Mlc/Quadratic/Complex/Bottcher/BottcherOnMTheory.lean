@@ -231,11 +231,12 @@ theorem external_ray_map_local_left_inverse
   simpa [external_ray_map_local] using h
 
 axiom bottcher_outside_axiom :
-    ∀ c : ℂ, {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c
+    ∀ c : ℂ, ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 →
+      ∃ N : ℕ, ∀ n ≥ N, (quadratic_map c)^[n] z ∈ Complex.slitPlane
 
-lemma slit_orbit_contains_outside (c : ℂ) :
-    {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c :=
-  bottcher_outside_axiom c
+lemma eventually_slit_orbit_of_outside (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    ∃ N : ℕ, ∀ n ≥ N, (quadratic_map c)^[n] z ∈ Complex.slitPlane :=
+  bottcher_outside_axiom c z hz
 
 theorem quadratic_map_norm_lower (c z : ℂ) :
     ‖quadratic_map c z‖ ≥ ‖z‖ ^ 2 - ‖c‖ := by
