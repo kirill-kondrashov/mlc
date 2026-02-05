@@ -4,6 +4,8 @@ import Mlc.Quadratic.Complex.Bottcher.InverseBranchSlit
 namespace MLC
 namespace Quadratic
 
+open Topology Filter
+
 lemma bottcher_left_inverse_on_slit_orbit_of_global_inverse
     (c : ℂ) (hA : SlitInverseAtlas c) (hG : GlobalInverseOnSlit c hA) :
     ∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c →
@@ -15,7 +17,7 @@ lemma bottcher_left_inverse_on_eventual_slit_of_global_inverse
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
     ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
       ∀ᶠ x in 𝓝 z, (Classical.choose hG) (bottcher_map c x) = x := by
-  rcases hG with ⟨g, _hlocal, hleft⟩
+  have hleft := (Classical.choose_spec hG).2
   intro z hz
   simpa using (hleft z hz)
 

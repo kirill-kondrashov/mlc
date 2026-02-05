@@ -35,11 +35,11 @@ lemma local_inverse_left_inverse
   simpa [local_inverse_at] using
     (external_ray_map_local_left_inverse c h.U h.hUopen h.hUslit h.hUbasin z h.hz h.hderiv)
 
-/--
+/-!
 A hypothesis: every slit-orbit basin point admits a local inverse branch.
 This is the minimal local input needed to attempt a global inverse-branch
 construction along slit orbits.
--/-
+-/
 def SlitInverseAtlas (c : ℂ) : Prop :=
   ∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c → ∃ h : LocalInverseAt c z, True
 
@@ -97,6 +97,36 @@ lemma global_inverse_on_eventual_slit_of_gluing
     GlobalInverseOnEventualSlit c hA :=
   hglue hA hcompat
 
+/-!
+Compatibility can follow from a local uniqueness principle: if two local
+inverses are left inverses near the same point, they agree near the image.
+We record this as a hypothesis for future use.
+-/
+
+def EventualSlitLocalUniqueness (c : ℂ) : Prop :=
+  ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+    ∀ h₁ h₂ : LocalInverseAt c z,
+      (∀ᶠ x in 𝓝 z, local_inverse_at h₁ (bottcher_map c x) = x) →
+      (∀ᶠ x in 𝓝 z, local_inverse_at h₂ (bottcher_map c x) = x) →
+        ∀ᶠ y in 𝓝 (bottcher_map c z), local_inverse_at h₁ y = local_inverse_at h₂ y
+
+def EventualSlitOverlapHyp (c : ℂ) : Prop :=
+  ∀ z w, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+    w ∈ eventual_slit_set c ∩ basin_of_infinity c →
+      Filter.NeBot (𝓝 (bottcher_map c z) ⊓ 𝓝 (bottcher_map c w))
+
+def EventualSlitCompatibilityFromOverlap (c : ℂ) : Prop :=
+  ∀ hA : EventualSlitInverseAtlas c,
+    EventualSlitLocalUniqueness c →
+      EventualSlitOverlapHyp c → EventualSlitInverseCompatible hA
+
+lemma eventual_slit_inverse_compatible_of_overlap
+    (c : ℂ) (hA : EventualSlitInverseAtlas c)
+    (huniq : EventualSlitLocalUniqueness c) (hover : EventualSlitOverlapHyp c)
+    (hcomp : EventualSlitCompatibilityFromOverlap c) :
+    EventualSlitInverseCompatible hA :=
+  hcomp hA huniq hover
+
 def EventualSlitInverseGluingWithUniqueness (c : ℂ) : Prop :=
   ∀ hA : EventualSlitInverseAtlas c,
     EventualSlitLocalUniqueness c →
@@ -122,6 +152,23 @@ def EventualSlitNonzeroDeriv (c : ℂ) : Prop :=
       U ⊆ slit_orbit c ∧ U ⊆ basin_of_infinity c ∧
       deriv (bottcher_map c) z ≠ 0
 
+def EventualSlitOpenNeighborhood (c : ℂ) : Prop :=
+  ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+    ∃ U : Set ℂ, IsOpen U ∧ z ∈ U ∧
+      U ⊆ slit_orbit c ∧ U ⊆ basin_of_infinity c
+
+def EventualSlitDerivNonzero (c : ℂ) : Prop :=
+  ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+    deriv (bottcher_map c) z ≠ 0
+
+lemma eventual_slit_nonzero_deriv_of_open
+    (c : ℂ) (hopen : EventualSlitOpenNeighborhood c)
+    (hder : EventualSlitDerivNonzero c) :
+    EventualSlitNonzeroDeriv c := by
+  intro z hz
+  rcases hopen z hz with ⟨U, hUopen, hzU, hUslit, hUbasin⟩
+  exact ⟨U, hUopen, hzU, hUslit, hUbasin, hder z hz⟩
+
 lemma local_inverse_at_of_eventual_slit
     (c : ℂ) (hderiv : EventualSlitNonzeroDeriv c) :
     ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
@@ -139,29 +186,6 @@ lemma eventual_slit_inverse_atlas_of_nonzero_deriv
     (c : ℂ) (hderiv : EventualSlitNonzeroDeriv c) :
     EventualSlitInverseAtlas c :=
   local_inverse_at_of_eventual_slit c hderiv
-
-/-!
-Compatibility can follow from a local uniqueness principle: if two local
-inverses are left inverses near the same point, they agree near the image.
-We record this as a hypothesis for future use.
--/
-
-def EventualSlitLocalUniqueness (c : ℂ) : Prop :=
-  ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-    ∀ h₁ h₂ : LocalInverseAt c z,
-      (∀ᶠ x in 𝓝 z, local_inverse_at h₁ (bottcher_map c x) = x) →
-      (∀ᶠ x in 𝓝 z, local_inverse_at h₂ (bottcher_map c x) = x) →
-        ∀ᶠ y in 𝓝 (bottcher_map c z), local_inverse_at h₁ y = local_inverse_at h₂ y
-
-def EventualSlitOverlapHyp (c : ℂ) : Prop :=
-  ∀ z w, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-    w ∈ eventual_slit_set c ∩ basin_of_infinity c →
-      (𝓝 (bottcher_map c z) ⊓ 𝓝 (bottcher_map c w)).Nonempty
-
-def EventualSlitCompatibilityFromOverlap (c : ℂ) : Prop :=
-  ∀ hA : EventualSlitInverseAtlas c,
-    EventualSlitLocalUniqueness c →
-      EventualSlitOverlapHyp c → EventualSlitInverseCompatible hA
 
 /-- Choose a local inverse at a slit-orbit basin point (noncomputably). -/
 noncomputable def choose_local_inverse
@@ -205,7 +229,7 @@ lemma global_inverse_left_inverse_on_slit
     (hG : GlobalInverseOnSlit c hA) :
     ∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c →
       ∀ᶠ x in 𝓝 z, (Classical.choose hG) (bottcher_map c x) = x := by
-  rcases hG with ⟨g, _hlocal, hleft⟩
+  have hleft := (Classical.choose_spec hG).2
   intro z hz
   simpa using (hleft z hz)
 

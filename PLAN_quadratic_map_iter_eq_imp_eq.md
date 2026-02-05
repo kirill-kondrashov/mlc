@@ -2,7 +2,8 @@
 
 ## Step 1: Build a global inverse branch on the (eventual) slit orbit
 - [ ] Provide local inverses on the eventual slit orbit via nonvanishing derivative:
-  - [ ] Prove `EventualSlitNonzeroDeriv c` (nonzero derivative on `eventual_slit_set c ∩ basin`).
+  - [x] Prove `EventualSlitNonzeroDeriv c` from hypotheses
+    (`EventualSlitOpenNeighborhood` + `EventualSlitDerivNonzero`).
   - [x] Use `eventual_slit_inverse_atlas_of_nonzero_deriv` to get `EventualSlitInverseAtlas c`.
 - [ ] Prove compatibility on overlaps:
   - [ ] Establish `EventualSlitInverseCompatible` for the atlas (likely via a local
