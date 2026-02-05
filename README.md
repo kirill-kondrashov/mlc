@@ -104,7 +104,6 @@ All axioms used:
 - MLC.Quadratic.extended_ray_map_eq
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.Quadratic.extended_ray_map_lands
-- MLC.Quadratic.bottcher_map_surj
 - MLC.Quadratic.bottcher_seq_converges
 - MLC.Quadratic.quadratic_map_iter_eq_imp_eq
 - MLC.bottcher_map_inj_on_K

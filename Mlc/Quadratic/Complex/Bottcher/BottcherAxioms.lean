@@ -184,8 +184,13 @@ axiom extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
     extended_ray_map c w ∈ MLC.Quadratic.K c
 
 /-- Surjectivity of Böttcher map onto the exterior ray parameters. -/
-axiom bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
-    w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c
+theorem bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
+    w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c := by
+  refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
+  · exact ⟨w, hw, rfl⟩
+  ·
+    have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
+    exact hspec w hw
 
 /-!
 Auxiliary dynamical axiom used by the Böttcher injectivity strategy.
