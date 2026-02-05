@@ -101,9 +101,7 @@ All axioms used:
 - MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.Quadratic.external_ray_map_exists
-- MLC.Quadratic.extended_ray_map_eq
 - MLC.Quadratic.extended_ray_map_continuous
-- MLC.Quadratic.extended_ray_map_lands
 - MLC.Quadratic.bottcher_seq_converges
 - MLC.Quadratic.quadratic_map_iter_eq_imp_eq
 - MLC.bottcher_map_inj_on_K

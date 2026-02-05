@@ -5,6 +5,7 @@ import Mathlib.Topology.Connected.PathConnected
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.Norm
 import Mathlib.Analysis.SpecialFunctions.PolarCoord
+import Mathlib.Analysis.Complex.Polynomial.Basic
 
 namespace MLC
 
@@ -159,6 +160,53 @@ lemma external_ray_map_left_inverse_outside_open (c : ℂ) (z : ℂ)
   have hspec := (Classical.choose_spec (external_ray_map_exists c)).2
   exact hspec z hz
 
+lemma orbit_fixed_point (c p : ℂ) (hp : MLC.Quadratic.fc c p = p) :
+    ∀ n, MLC.Quadratic.orbit c p n = p := by
+  intro n
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      simp [MLC.Quadratic.orbit_succ, ih, hp]
+
+lemma exists_fixed_point_mem_K (c : ℂ) : ∃ p, p ∈ MLC.Quadratic.K c := by
+  let f : Polynomial ℂ :=
+    (Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c - Polynomial.X
+  have hdeg : 0 < f.degree := by
+    have hdeg_p :
+        ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree = 2 := by
+      simpa using
+        (Polynomial.degree_X_pow_add_C (n := 2) (a := c) (by decide))
+    have hdeg_q : (Polynomial.X : Polynomial ℂ).degree = 1 := by
+      simpa using (Polynomial.degree_X : (Polynomial.X : Polynomial ℂ).degree = 1)
+    have hlt :
+        (Polynomial.X : Polynomial ℂ).degree <
+          ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree := by
+      simpa [hdeg_q, hdeg_p] using (show (1 : WithBot ℕ) < (2 : WithBot ℕ) from by decide)
+    have hdeg_f :
+        f.degree = ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree := by
+      simpa [f] using (Polynomial.degree_sub_eq_left_of_degree_lt (p := (Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c) hlt)
+    simpa [hdeg_f, hdeg_p] using (show (0 : WithBot ℕ) < (2 : WithBot ℕ) from by decide)
+  obtain ⟨p, hp⟩ := Complex.exists_root hdeg
+  have hp' : p ^ 2 + c - p = 0 := by
+    simpa [f] using (Polynomial.IsRoot.def.mp hp)
+  have hfix : MLC.Quadratic.fc c p = p := by
+    have : p ^ 2 + c = p := by
+      exact sub_eq_zero.mp hp'
+    simpa [MLC.Quadratic.fc] using this
+  have hbound : MLC.Quadratic.boundedOrbit c p := by
+    refine ⟨‖p‖, ?_⟩
+    intro n
+    have hconst : MLC.Quadratic.orbit c p n = p := orbit_fixed_point c p hfix n
+    simpa [hconst]
+  exact ⟨p, hbound⟩
+
+noncomputable def fixed_point (c : ℂ) : ℂ :=
+  Classical.choose (exists_fixed_point_mem_K c)
+
+lemma fixed_point_mem_K (c : ℂ) : fixed_point c ∈ MLC.Quadratic.K c :=
+  (Classical.choose_spec (exists_fixed_point_mem_K c))
+
 axiom invariance_of_domain_complex {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
     (hf : ContinuousOn f U) (hinj : Set.InjOn f U) : IsOpenMap (U.restrict f)
 
@@ -169,19 +217,23 @@ axiom bottcher_seq_converges (c : ℂ) :
 
 /-- Extension of the ray map to the closed exterior of the disk. -/
 noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
-  if 1 ≤ ‖w‖ then lim (map (external_ray_map c) (nhdsWithin w {z | 1 < ‖z‖})) else 0
+  if 1 < ‖w‖ then external_ray_map c w else fixed_point c
 
 /-- The extended ray map agrees with the external ray map on the open exterior. -/
-axiom extended_ray_map_eq (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    extended_ray_map c w = external_ray_map c w
+theorem extended_ray_map_eq (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    extended_ray_map c w = external_ray_map c w := by
+  simp [extended_ray_map, hw]
 
 /-- The extended ray map is continuous on the closed exterior {w | 1 ≤ |w|}. -/
 axiom extended_ray_map_continuous (c : ℂ) :
     ContinuousOn (extended_ray_map c) {w | 1 ≤ ‖w‖}
 
 /-- The extended ray map maps the unit circle to the Julia set (subset of K). -/
-axiom extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
-    extended_ray_map c w ∈ MLC.Quadratic.K c
+theorem extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
+    extended_ray_map c w ∈ MLC.Quadratic.K c := by
+  have hw' : ¬ 1 < ‖w‖ := by
+    simpa [hw] using (lt_irrefl (1 : ℝ))
+  simpa [extended_ray_map, hw'] using (fixed_point_mem_K c)
 
 /-- Surjectivity of Böttcher map onto the exterior ray parameters. -/
 theorem bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
