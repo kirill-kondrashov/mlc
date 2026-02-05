@@ -161,6 +161,14 @@ lemma quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_extension
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
   exact quadratic_map_iter_eq_imp_eq_of_extension_iter c h_ext
 
+lemma quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_extension_hyp
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA)
+    (h_ext : EventualSlitGlobalInverseExtensionHyp c) :
+    ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
+  have hiter := EventualSlitGlobalInverseExtendsToBasinIter_of_extension_hyp c h_ext
+  exact quadratic_map_iter_eq_imp_eq_of_extension_iter c hiter
+
 /-!
 Step 2 scaffolding: extend the eventual-slit global inverse to the full basin.
 This is the precise missing bridge needed to derive a left inverse for
