@@ -27,6 +27,9 @@ def SquareRootRightInverseOn (S : Set ℂ) (sqrt : ℂ → ℂ) : Prop :=
   ∀ w ∈ S, sqrt (w ^ 2) = w
 
 def exteriorRight : Set ℂ := {w | 1 < ‖w‖ ∧ 0 < w.re}
+def slitPlaneRight : Set ℂ := {w | w ∈ Complex.slitPlane ∧ 0 < w.re}
+def slitPlaneRotRight (θ : ℝ) : Set ℂ :=
+  {w | w * Complex.exp (-Complex.I * θ / 2) ∈ slitPlaneRight}
 
 lemma sqrt_right_inverse_on_exteriorRight :
     SquareRootRightInverseOn exteriorRight (fun z => z ^ ((1 : ℂ) / 2)) := by
@@ -54,6 +57,86 @@ lemma sqrt_right_inverse_on_exteriorRight :
       simpa [mul_comm] using hmul.symm
     _ = w ^ (1 : ℂ) := by ring_nf
     _ = w := by simp
+
+lemma sqrt_right_inverse_on_slitPlaneRight :
+    SquareRootRightInverseOn slitPlaneRight (fun z => z ^ ((1 : ℂ) / 2)) := by
+  intro w hw
+  have hre : 0 < w.re := hw.2
+  have harg : |Complex.arg w| < Real.pi / 2 :=
+    MLC.abs_arg_lt_pi_div_two_of_re_pos hre
+  have h1 : -Real.pi < (Complex.log w * (2 : ℂ)).im := by
+    have hlog : (Complex.log w * (2 : ℂ)).im = 2 * Complex.arg w := by
+      simp [Complex.mul_im, Complex.log_im, mul_comm, mul_assoc]
+    have hlt : -Real.pi < 2 * Complex.arg w := by
+      have h' := (abs_lt.1 harg)
+      linarith
+    simpa [hlog] using hlt
+  have h2 : (Complex.log w * (2 : ℂ)).im ≤ Real.pi := by
+    have hlog : (Complex.log w * (2 : ℂ)).im = 2 * Complex.arg w := by
+      simp [Complex.mul_im, Complex.log_im, mul_comm, mul_assoc]
+    have hle : 2 * Complex.arg w ≤ Real.pi := by
+      have h' := (abs_lt.1 harg)
+      linarith
+    exact (by simpa [hlog] using hle)
+  have hmul := Complex.cpow_mul (x := w) (y := (2 : ℂ)) (z := ((1 : ℂ) / 2)) h1 h2
+  calc
+    (w ^ 2) ^ ((1 : ℂ) / 2) = w ^ ((2 : ℂ) * ((1 : ℂ) / 2)) := by
+      simpa [mul_comm] using hmul.symm
+    _ = w ^ (1 : ℂ) := by ring_nf
+    _ = w := by simp
+
+lemma sqrt_right_inverse_on_slitPlaneRotRight (θ : ℝ) :
+    SquareRootRightInverseOn (slitPlaneRotRight θ)
+      (fun z =>
+        (z * Complex.exp (-Complex.I * θ)) ^ ((1 : ℂ) / 2) *
+          Complex.exp (Complex.I * θ / 2)) := by
+  intro w hw
+  have hw' : w * Complex.exp (-Complex.I * θ / 2) ∈ slitPlaneRight := hw
+  have hexp : (Complex.exp (-Complex.I * θ / 2)) ^ 2 =
+      Complex.exp (-Complex.I * θ) := by
+    have h := (Complex.exp_nat_mul (-Complex.I * θ / 2) 2).symm
+    -- `exp (2 * x) = exp x ^ 2`
+    -- rewrite `(-I*θ/2) * 2` as `-I*θ`
+    simpa [mul_comm, mul_left_comm, mul_assoc, two_mul, mul_add, add_mul, mul_div_assoc] using h
+  have hsq :
+      w ^ 2 * Complex.exp (-Complex.I * θ) =
+        (w * Complex.exp (-Complex.I * θ / 2)) ^ 2 := by
+    calc
+      w ^ 2 * Complex.exp (-Complex.I * θ)
+          = w ^ 2 * (Complex.exp (-Complex.I * θ / 2)) ^ 2 := by
+              rw [hexp]
+      _ = (w * Complex.exp (-Complex.I * θ / 2)) ^ 2 := by
+            simp [pow_two, mul_assoc, mul_comm, mul_left_comm]
+  have hright :=
+    sqrt_right_inverse_on_slitPlaneRight (w := w * Complex.exp (-Complex.I * θ / 2)) hw'
+  have hright' :
+      ((w * Complex.exp (-Complex.I * θ / 2)) ^ 2) ^ ((2 : ℂ)⁻¹) =
+        w * Complex.exp (-Complex.I * θ / 2) := by
+    simpa [div_eq_mul_inv] using hright
+  calc
+    (w ^ 2 * Complex.exp (-Complex.I * θ)) ^ ((1 : ℂ) / 2) *
+        Complex.exp (Complex.I * θ / 2)
+        = (w ^ 2 * Complex.exp (-Complex.I * θ)) ^ ((2 : ℂ)⁻¹) *
+            Complex.exp (Complex.I * θ / 2) := by
+              simp [div_eq_mul_inv]
+    _ = ((w * Complex.exp (-Complex.I * θ / 2)) ^ 2) ^ ((2 : ℂ)⁻¹) *
+          Complex.exp (Complex.I * θ / 2) := by
+            rw [hsq]
+    _ = w * Complex.exp (-Complex.I * θ / 2) * Complex.exp (Complex.I * θ / 2) := by
+          have h := congrArg (fun t => t * Complex.exp (Complex.I * θ / 2)) hright'
+          simpa using h
+    _ = w := by
+      have hmul :
+          Complex.exp (-Complex.I * θ / 2) * Complex.exp (Complex.I * θ / 2) = 1 := by
+        rw [← Complex.exp_add]
+        ring_nf
+        simp
+      calc
+        w * Complex.exp (-Complex.I * θ / 2) * Complex.exp (Complex.I * θ / 2)
+            = w * (Complex.exp (-Complex.I * θ / 2) * Complex.exp (Complex.I * θ / 2)) := by
+                ring
+        _ = w * 1 := by rw [hmul]
+        _ = w := by simp
 
 lemma no_square_root_right_inverse_on_exterior :
     ¬ ∃ sqrt : ℂ → ℂ, SquareRootRightInverseOn exterior sqrt := by
@@ -148,6 +231,60 @@ lemma quadratic_map_left_inverse_on_basin_of_sqrt_branch
     have hz_ext : bottcher_map c z ∈ exterior := hz'
     have hsq : sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z :=
       h_sqrt (bottcher_map c z) hz_ext
+    have hconj := h_conj z hz
+    calc
+      external_ray_map c (sqrt (bottcher_map c (quadratic_map c z)))
+          = external_ray_map c (sqrt ((bottcher_map c z) ^ 2)) := by
+              simp [hconj]
+      _ = external_ray_map c (bottcher_map c z) := by simp [hsq]
+      _ = z := h_left_bottcher z hz
+  · intro y hy
+    exact h_maps hy
+
+lemma quadratic_map_left_inverse_on_basin_of_sqrt_branch_slitPlaneRight
+    (c : ℂ)
+    (sqrt : ℂ → ℂ)
+    (h_sqrt : SquareRootRightInverseOn slitPlaneRight sqrt)
+    (h_conj : ∀ z, z ∈ basin_of_infinity c →
+      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+    (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
+      external_ray_map c (bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      (basin_of_infinity c) (basin_of_infinity c)) :
+    HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
+  refine ⟨fun z => external_ray_map c (sqrt (bottcher_map c z)), ?_, ?_⟩
+  · intro z hz
+    have hz_mem : bottcher_map c z ∈ slitPlaneRight := h_mem z hz
+    have hsq : sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z :=
+      h_sqrt (bottcher_map c z) hz_mem
+    have hconj := h_conj z hz
+    calc
+      external_ray_map c (sqrt (bottcher_map c (quadratic_map c z)))
+          = external_ray_map c (sqrt ((bottcher_map c z) ^ 2)) := by
+              simp [hconj]
+      _ = external_ray_map c (bottcher_map c z) := by simp [hsq]
+      _ = z := h_left_bottcher z hz
+  · intro y hy
+    exact h_maps hy
+
+lemma quadratic_map_left_inverse_on_basin_of_sqrt_branch_slitPlaneRotRight
+    (c : ℂ) (θ : ℝ)
+    (sqrt : ℂ → ℂ)
+    (h_sqrt : SquareRootRightInverseOn (slitPlaneRotRight θ) sqrt)
+    (h_conj : ∀ z, z ∈ basin_of_infinity c →
+      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+    (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
+      external_ray_map c (bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      (basin_of_infinity c) (basin_of_infinity c)) :
+    HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
+  refine ⟨fun z => external_ray_map c (sqrt (bottcher_map c z)), ?_, ?_⟩
+  · intro z hz
+    have hz_mem : bottcher_map c z ∈ slitPlaneRotRight θ := h_mem z hz
+    have hsq : sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z :=
+      h_sqrt (bottcher_map c z) hz_mem
     have hconj := h_conj z hz
     calc
       external_ray_map c (sqrt (bottcher_map c (quadratic_map c z)))

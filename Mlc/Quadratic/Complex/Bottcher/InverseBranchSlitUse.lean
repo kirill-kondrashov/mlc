@@ -22,6 +22,15 @@ lemma bottcher_left_inverse_on_eventual_slit_of_global_inverse
   intro z hz
   simpa using (hleft z hz)
 
+lemma bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
+    ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+      (Classical.choose hG) (bottcher_map c z) = z := by
+  intro z hz
+  have h := bottcher_left_inverse_on_eventual_slit_of_global_inverse c hA hG z hz
+  refine (Filter.Eventually.self_of_nhds
+    (p := fun x => (Classical.choose hG) (bottcher_map c x) = x) h)
+
 theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
@@ -32,7 +41,7 @@ theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse
       Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
         (Quadratic.bottcher_map c z) ^ (2 ^ n))
     (hA : EventualSlitInverseAtlas c)
-    (hG : GlobalInverseOnEventualSlit c hA)
+    (_hG : GlobalInverseOnEventualSlit c hA)
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
@@ -52,13 +61,13 @@ theorem bottcher_map_inj_theorem_of_eventual_slit_global_inverse
         (Quadratic.bottcher_map c z) ^ (2 ^ n))
     (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
     (hA : EventualSlitInverseAtlas c)
-    (hG : GlobalInverseOnEventualSlit c hA)
+    (_hG : GlobalInverseOnEventualSlit c hA)
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     Function.Injective (Quadratic.bottcher_map c) := by
   have h_inj_basin :
       Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
-    bottcher_map_inj_on_basin_of_eventual_slit_global_inverse c h_left h_escape h_conj hA hG
+    bottcher_map_inj_on_basin_of_eventual_slit_global_inverse c h_left h_escape h_conj hA _hG
       h_iter_eq_imp
   have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →
       z ∈ Quadratic.basin_of_infinity c := by
@@ -235,7 +244,7 @@ lemma EventualSlitGlobalInverseExtendsToBasinIter_of_extension_hyp
     exact hmap z hz
 
 def EventualSlitGlobalInverseExtensionToIter (c : ℂ)
-    (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) : Prop :=
+    (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA) : Prop :=
   EventualSlitGlobalInverseExtendsToBasinIter c
 
 lemma quadratic_map_iter_eq_imp_eq_of_extension_iter
@@ -249,14 +258,14 @@ lemma quadratic_map_iter_eq_imp_eq_of_extension_iter
   exact quadratic_map_iter_eq_imp_eq_of_all_iter_inj c h_inj z w hz hw hiter_eq
 
 lemma quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_extension
-    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA)
-    (h_ext : EventualSlitGlobalInverseExtensionToIter c hA hG) :
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA)
+    (h_ext : EventualSlitGlobalInverseExtensionToIter c hA _hG) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
   exact quadratic_map_iter_eq_imp_eq_of_extension_iter c h_ext
 
 lemma quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_extension_hyp
-    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA)
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA)
     (h_ext : EventualSlitGlobalInverseExtensionHyp c) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
@@ -269,15 +278,46 @@ This is the precise missing bridge needed to derive a left inverse for
 `quadratic_map` on the basin and eliminate `quadratic_map_iter_eq_imp_eq`.
 -/
 
-def EventualSlitGlobalInverseExtendsToBasin (c : ℂ)
+/-!
+Concrete bridge data (still missing): a global left inverse on the basin that
+is explicitly realized by pulling back the eventual-slit inverse along some
+escape time. This makes the remaining gap explicit without introducing `sorry`.
+-/
+def EventualSlitGlobalInverseIterateCompatibility (c : ℂ)
     (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) : Prop :=
+  ∀ z, z ∈ basin_of_infinity c →
+    ∀ N M,
+      (quadratic_map c)^[N] z ∈ eventual_slit_set c →
+      (quadratic_map c)^[M] z ∈ eventual_slit_set c →
+      (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] z)) =
+        (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[M] z))
+
+def EventualSlitGlobalInverseExtensionBridge (c : ℂ)
+    (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) : Prop :=
+  ∃ g : ℂ → ℂ,
+    (∀ z, z ∈ basin_of_infinity c → g (quadratic_map c z) = z) ∧
+    (∀ z, z ∈ basin_of_infinity c → g z ∈ basin_of_infinity c) ∧
+    (∀ z, z ∈ basin_of_infinity c →
+      ∃ N, (quadratic_map c)^[N] z ∈ eventual_slit_set c ∧
+        g z =
+          (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] z)))
+
+def EventualSlitGlobalInverseExtendsToBasin (c : ℂ)
+    (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA) : Prop :=
   ∃ g : ℂ → ℂ,
     (∀ z, z ∈ basin_of_infinity c → g (quadratic_map c z) = z) ∧
     (∀ z, z ∈ basin_of_infinity c → g z ∈ basin_of_infinity c)
 
+lemma EventualSlitGlobalInverseExtendsToBasin_of_bridge
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA)
+    (h_bridge : EventualSlitGlobalInverseExtensionBridge c hA _hG) :
+    EventualSlitGlobalInverseExtendsToBasin c hA _hG := by
+  rcases h_bridge with ⟨g, hleft, hmap, hbridge⟩
+  exact ⟨g, hleft, hmap⟩
+
 lemma quadratic_map_left_inverse_on_basin_of_global_inverse
-    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA)
-    (h_ext : EventualSlitGlobalInverseExtendsToBasin c hA hG) :
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA)
+    (h_ext : EventualSlitGlobalInverseExtendsToBasin c hA _hG) :
     HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
   rcases h_ext with ⟨g, hleft, hmap⟩
   refine ⟨g, ?_, ?_⟩
@@ -285,6 +325,14 @@ lemma quadratic_map_left_inverse_on_basin_of_global_inverse
     exact hleft z hz
   · intro z hz
     exact hmap z hz
+
+lemma orbit_inverse_branch_system_of_global_inverse_extension
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA)
+    (h_ext : EventualSlitGlobalInverseExtendsToBasin c hA _hG) :
+    OrbitInverseBranchSystem c := by
+  have hleft :=
+    quadratic_map_left_inverse_on_basin_of_global_inverse c hA _hG h_ext
+  exact orbit_inverse_branch_system_of_left_inverse c hleft
 
 end Quadratic
 end MLC

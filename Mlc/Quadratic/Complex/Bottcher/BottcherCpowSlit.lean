@@ -7,6 +7,7 @@ namespace MLC
 
 open Complex Filter Topology
 
+
 lemma tendsto_log_of_tendsto_slitPlane {α : Type*} {l : Filter α}
     {f : α → ℂ} {x : ℂ}
     (hf : Tendsto f l (𝓝 x)) (hx : x ∈ Complex.slitPlane) :
