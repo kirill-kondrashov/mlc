@@ -2,8 +2,11 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherOutsideOutline
 import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticInjective
 import Mlc.Quadratic.Complex.Bottcher.BottcherCpowSlit
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMOutsideOutline
+import Mlc.Quadratic.Complex.InverseBranchQuadratic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Maps.Proper.CompactlyGenerated
+import Mathlib.Topology.SeparatedMap
+import Mathlib.Topology.DiscreteSubset
 import Mathlib.Analysis.Complex.Liouville
 
 namespace MLC
@@ -1862,6 +1865,188 @@ lemma bottcher_map_isProperMap_of_continuous
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
 
+lemma isDiscrete_fiber_of_isLocallyInjective
+    {f : ℂ → ℂ} (hlocal : IsLocallyInjective f) (y : ℂ) :
+    IsDiscrete {x : ℂ | f x = y} := by
+  classical
+  -- Use the characterization: each point has an open neighborhood
+  -- whose intersection with the fiber is a singleton.
+  refine (isDiscrete_iff_forall_exists_isOpen).2 ?_
+  intro x hx
+  rcases hlocal x with ⟨U, hUopen, hxU, hUinj⟩
+  refine ⟨U, hUopen, ?_⟩
+  ext z
+  constructor
+  · intro hz
+    have hzU : z ∈ U := hz.1
+    have hzf : f z = y := hz.2
+    have hxf : f x = y := hx
+    have : z = x := hUinj hzU hxU (by simpa [hxf, hzf])
+    simpa [this]
+  · intro hz
+    rcases hz with rfl
+    exact ⟨hxU, hx⟩
+
+lemma finite_fiber_of_isProperMap_isLocallyInjective
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocallyInjective f) (y : ℂ) :
+    ({x : ℂ | f x = y} : Set ℂ).Finite := by
+  have hcompact : IsCompact ((fun x : ℂ => f x) ⁻¹' {y}) :=
+    hproper.isCompact_preimage isCompact_singleton
+  have hdisc : IsDiscrete ({x : ℂ | f x = y} : Set ℂ) :=
+    isDiscrete_fiber_of_isLocallyInjective hlocal y
+  -- Convert preimage of singleton into the fiber set.
+  have hpre : (f ⁻¹' ({y} : Set ℂ)) = ({x : ℂ | f x = y} : Set ℂ) := by
+    ext x
+    simp
+  simpa [hpre] using hcompact.finite hdisc
+
+lemma finite_of_isCompact_isDiscrete {s : Set ℂ} (hs : IsCompact s) (hs' : IsDiscrete s) :
+    s.Finite :=
+  hs.finite hs'
+
+lemma range_isOpen_of_isLocalHomeomorph {f : ℂ → ℂ} (hlocal : IsLocalHomeomorph f) :
+    IsOpen (Set.range f) := by
+  have hOpenMap : IsOpenMap f := hlocal.isOpenMap
+  simpa [Set.image_univ] using (hOpenMap Set.univ isOpen_univ)
+
+lemma range_isClosed_of_isProperMap {f : ℂ → ℂ} (hproper : IsProperMap f) :
+    IsClosed (Set.range f) := by
+  have hClosedMap : IsClosedMap f := hproper.isClosedMap
+  simpa [Set.image_univ] using (hClosedMap Set.univ isClosed_univ)
+
+lemma range_eq_univ_of_isProperMap_isLocalHomeomorph
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f)
+    (hnonempty : (Set.range f).Nonempty) :
+    Set.range f = Set.univ := by
+  have hopen : IsOpen (Set.range f) := range_isOpen_of_isLocalHomeomorph hlocal
+  have hclosed : IsClosed (Set.range f) := range_isClosed_of_isProperMap hproper
+  have hclopen : IsClopen (Set.range f) := ⟨hclosed, hopen⟩
+  simpa using (IsClopen.eq_univ (α := ℂ) hclopen hnonempty)
+
+lemma exists_open_preimage_subset_union_of_finite_fiber
+    {f : ℂ → ℂ} (hlocal : IsLocalHomeomorph f) (hclosed : IsClosedMap f)
+    {y : ℂ} (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : Set ℂ, f ⁻¹' V ⊆ U := by
+  classical
+  -- Choose local homeomorphs around each point in the fiber.
+  let F : Finset ℂ := hfinite.toFinset
+  have hF : (F : Set ℂ) = {x : ℂ | f x = y} := by
+    exact Finite.coe_toFinset hfinite
+  let e : ℂ → OpenPartialHomeomorph ℂ ℂ := fun x => Classical.choose (hlocal x)
+  have hx_source : ∀ x : ℂ, x ∈ (e x).source := fun x => (Classical.choose_spec (hlocal x)).1
+  have hfeq : ∀ x : ℂ, f = (e x) := fun x => (Classical.choose_spec (hlocal x)).2
+  let U : Set ℂ := ⋃ x ∈ F, (e x).source
+  let V0 : Set ℂ := ⋂ x ∈ F, (e x).target
+  have hUmem : {x : ℂ | f x = y} ⊆ U := by
+    intro x hx
+    have hxF : x ∈ F := by
+      have : x ∈ (F : Set ℂ) := by simpa [hF] using hx
+      simpa using this
+    exact mem_iUnion₂.mpr ⟨x, hxF, hx_source x⟩
+  have hyV0 : y ∈ V0 := by
+    -- `y` lies in every target, since `f x = y` and `f = e x`.
+    classical
+    simp [V0]
+    intro x hxF
+    have hx : f x = y := by
+      have : x ∈ (F : Set ℂ) := by simpa using hxF
+      simpa [hF] using this
+    have hxsource : x ∈ (e x).source := hx_source x
+    have hmap : (e x) x ∈ (e x).target := (e x).source_preimage_target hxsource
+    have hfa : f = (e x) := hfeq x
+    have hyx : (e x) x = y := by simpa [hfa] using hx
+    exact hyx ▸ hmap
+  have hV0open : IsOpen V0 := by
+    classical
+    unfold V0
+    refine isOpen_biInter_finset ?_
+    intro x hx
+    exact (e x).open_target
+  have hy_not_in : y ∉ f '' Uᶜ := by
+    intro hy
+    rcases hy with ⟨x, hxU, rfl⟩
+    exact hxU (hUmem rfl)
+  have hUopen : IsOpen U := by
+    unfold U
+    refine isOpen_iUnion ?_
+    intro x
+    refine isOpen_iUnion ?_
+    intro hx
+    exact (e x).open_source
+  have hclosedU : IsClosed (f '' Uᶜ) := hclosed _ ((isClosed_compl_iff).2 hUopen)
+  let V : Set ℂ := V0 \ f '' Uᶜ
+  have hVopen : IsOpen V := IsOpen.sdiff hV0open hclosedU
+  have hyV : y ∈ V := by
+    exact ⟨hyV0, hy_not_in⟩
+  refine ⟨V, hVopen, hyV, U, ?_⟩
+  intro x hx
+  have hxV : f x ∈ V := hx
+  have hnot : f x ∉ f '' Uᶜ := hxV.2
+  by_contra hxU
+  exact hnot ⟨x, hxU, rfl⟩
+
+lemma exists_pairwise_disjoint_ball_of_finite {s : Set ℂ} (hs : s.Finite) :
+    ∃ r : s → ℝ, (∀ x, 0 < r x) ∧
+      Pairwise (fun x y => Disjoint (Metric.ball x.1 (r x)) (Metric.ball y.1 (r y))) := by
+  classical
+  by_cases hsubs : s.Subsingleton
+  · refine ⟨fun _ => (1 : ℝ), ?_, ?_⟩
+    · intro x; norm_num
+    · intro x y hne
+      have : x = y := by
+        have hxy : x.1 = y.1 := hsubs x.property y.property
+        exact Subtype.ext hxy
+      exact (hne this).elim
+  · -- Define radii using `infDist` to the rest of the finite set.
+    let r : s → ℝ := fun x =>
+      if hne : (s \ {x.1}).Nonempty then
+        (Metric.infDist x.1 (s \ {x.1})) / 2
+      else 1
+    have hrpos : ∀ x, 0 < r x := by
+      intro x
+      by_cases hne : (s \ {x.1}).Nonempty
+      · have hclosed : IsClosed (s \ {x.1}) :=
+          (hs.subset (by intro y hy; exact hy.1)).isClosed
+        have hxnot : x.1 ∉ s \ {x.1} := by
+          simp
+        have hpos : 0 < Metric.infDist x.1 (s \ {x.1}) := by
+          have := (IsClosed.notMem_iff_infDist_pos (x := x.1) (s := s \ {x.1}) hclosed hne).1
+          exact this hxnot
+        have hpos' : 0 < Metric.infDist x.1 (s \ {x.1}) / 2 := by
+          nlinarith
+        simpa [r, hne] using hpos'
+      · simp [r, hne]
+    refine ⟨r, hrpos, ?_⟩
+    intro x y hne
+    have hxy : x.1 ≠ y.1 := by
+      intro h
+      apply hne
+      exact Subtype.ext h
+    have hy_mem : y.1 ∈ s \ {x.1} := by
+      exact ⟨y.property, by simpa [Set.mem_singleton_iff, eq_comm] using hxy⟩
+    have hx_mem : x.1 ∈ s \ {y.1} := by
+      exact ⟨x.property, by simpa [Set.mem_singleton_iff] using hxy⟩
+    have hxne : (s \ {x.1}).Nonempty := ⟨y.1, hy_mem⟩
+    have hyne : (s \ {y.1}).Nonempty := ⟨x.1, hx_mem⟩
+    have hxle : r x ≤ dist x.1 y.1 / 2 := by
+      have h := Metric.infDist_le_dist_of_mem (x := x.1) (s := s \ {x.1}) hy_mem
+      have h' : Metric.infDist x.1 (s \ {x.1}) / 2 ≤ dist x.1 y.1 / 2 := by
+        nlinarith [h]
+      simpa [r, hxne] using h'
+    have hyle : r y ≤ dist x.1 y.1 / 2 := by
+      have h := Metric.infDist_le_dist_of_mem (x := y.1) (s := s \ {y.1}) hx_mem
+      have h' : Metric.infDist y.1 (s \ {y.1}) / 2 ≤ dist y.1 x.1 / 2 := by
+        nlinarith [h]
+      have h'' : dist y.1 x.1 = dist x.1 y.1 := by simpa [dist_comm]
+      simpa [r, hyne, h''] using h'
+    have hsum : r x + r y ≤ dist x.1 y.1 := by
+      have : r x + r y ≤ dist x.1 y.1 / 2 + dist x.1 y.1 / 2 :=
+        add_le_add hxle hyle
+      have hhalf : dist x.1 y.1 / 2 + dist x.1 y.1 / 2 = dist x.1 y.1 := by ring
+      simpa [hhalf] using this
+    exact Metric.ball_disjoint_ball hsum
+
 
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
 lemma bottcher_normalized_at_infty_of_root_seq
@@ -2246,6 +2431,71 @@ theorem bottcher_normalized_at_infty_of_tail_bound_zero
     bottcher_normalized_at_infty c := by
   refine bottcher_normalized_at_infty_of_tail_bound_at c R 0 ?_ htail
   exact bottcher_root_seq_ratio_tendsto_atInfinity_zero c
+
+lemma eventually_atInfinity_bottcher_map_div_mem_slitPlaneRight (c : ℂ) :
+    ∀ᶠ z in atInfinity, (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have h := tendsto_bottcher_map_div_atInfinity c
+  have h' : Tendsto (fun z => ‖(Quadratic.bottcher_map c z / z) - (1 : ℂ)‖)
+      atInfinity (𝓝 (0 : ℝ)) := by
+    simpa using (tendsto_iff_norm_sub_tendsto_zero.1 h)
+  have hball : ∀ᶠ z in atInfinity, ‖(Quadratic.bottcher_map c z / z) - (1 : ℂ)‖ < 1 := by
+    have hε :=
+      (tendsto_def.1 h') (Metric.ball (0 : ℝ) 1)
+        (by simpa using (Metric.ball_mem_nhds (0 : ℝ) (by norm_num : (0 : ℝ) < 1)))
+    simpa [Metric.ball, Real.norm_eq_abs] using hε
+  refine hball.mono ?_
+  intro z hz
+  have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane :=
+    mem_slitPlane_of_norm_sub_one_lt_one hz
+  have hre : 0 < (Quadratic.bottcher_map c z / z).re :=
+    re_pos_of_norm_sub_one_lt_one hz
+  exact ⟨hslit, hre⟩
+
+lemma bottcher_map_div_mem_slitPlaneRight_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz
+  have hexp : 0 < Real.exp (Quadratic.green_function c z) := Real.exp_pos _
+  have hpos : 0 < Real.exp (Quadratic.green_function c z) / ‖z‖ := by
+    exact div_pos hexp hzpos
+  have hratio :
+      Quadratic.bottcher_map c z / z =
+        ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
+    have hznorm : (‖z‖ : ℂ) ≠ 0 := by
+      exact_mod_cast (norm_ne_zero_iff.mpr hz)
+    have hdiv : (z / ‖z‖) / z = (1 : ℂ) / ‖z‖ := by
+      field_simp [div_eq_mul_inv, hz, hznorm, mul_assoc, mul_comm, mul_left_comm]
+    calc
+      Quadratic.bottcher_map c z / z
+          = ((z / ‖z‖) * (Real.exp (Quadratic.green_function c z) : ℂ)) / z := by
+              simp [Quadratic.bottcher_map, hz]
+      _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((z / ‖z‖) / z) := by
+              ring
+      _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((1 : ℂ) / ‖z‖) := by
+              simp [hdiv]
+      _ = ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
+              simp [div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
+  have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane := by
+    have h1 : (1 : ℂ) ∈ Complex.slitPlane := by
+      simpa using (Complex.one_mem_slitPlane : (1 : ℂ) ∈ Complex.slitPlane)
+    have hslit' :
+        (1 : ℂ) * (Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) ∈
+          Complex.slitPlane :=
+      slitPlane_mul_of_real_pos (x := 1) h1 (Real.exp (Quadratic.green_function c z) / ‖z‖) hpos
+    simpa [hratio] using hslit'
+  have hre : 0 < (Quadratic.bottcher_map c z / z).re := by
+    simpa [hratio] using hpos
+  exact ⟨hslit, hre⟩
+
+lemma exists_bottcher_map_div_mem_slitPlaneRight_of_large_norm (c : ℂ) :
+    ∃ S, ∀ z, S ≤ ‖z‖ → (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have h := eventually_atInfinity_bottcher_map_div_mem_slitPlaneRight c
+  dsimp [atInfinity] at h
+  have h' := (Filter.eventually_comap).1 h
+  rcases (Filter.eventually_atTop.1 h') with ⟨S, hS⟩
+  refine ⟨S, ?_⟩
+  intro z hz
+  have := hS ‖z‖ hz z rfl
+  simpa using this
 
 lemma outside_open_subset_outside_disk (c : ℂ) :
     {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ outside_disk c := by
@@ -2960,8 +3210,23 @@ lemma bottcher_left_inv_outside_open_of_local
   intro z hz
   exact Quadratic.external_ray_map_left_inverse_outside_open c z hz
 
+lemma bottcher_map_inj_on_outside_open (c : ℂ) :
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z hz w hw hzw
+  have hz' :
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+    Quadratic.external_ray_map_left_inverse_outside_open c z hz
+  have hw' :
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
+    Quadratic.external_ray_map_left_inverse_outside_open c w hw
+  have h := congrArg (Quadratic.external_ray_map c) hzw
+  simpa [hz', hw'] using h
+
 theorem bottcher_map_inj_on_outside_of_slit
-    (c : ℂ) :
+    (c : ℂ)
+    (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+      w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   have h_left : ∀ z, z ∈ U →
@@ -2977,8 +3242,15 @@ theorem bottcher_map_inj_on_outside_of_slit
   have h_inj_basin :
       Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
     bottcher_map_inj_on_basin_of_left_inv c U h_left h_maps h_escape
-      (bottcher_conj_iter c) (Quadratic.quadratic_map_iter_eq_imp_eq c)
+      (bottcher_conj_iter c) h_iter_eq_imp
   simpa [outside_disk] using h_inj_basin
+
+theorem bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse
+    (c : ℂ) (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
+    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
+  have h_iter_eq_imp :=
+    quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter
+  exact bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
 
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.

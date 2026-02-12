@@ -112,14 +112,20 @@ theorem mlc_conjecture
             (by
               intro z hz
               simpa [outside_disk] using hz)
+        let h_iter_eq_imp :
+            ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+              w ∈ Quadratic.basin_of_infinity c →
+              (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w :=
+          Quadratic.quadratic_map_iter_eq_imp_eq c
         let h_inj_outside :
             Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) :=
-          bottcher_map_inj_on_outside_of_slit c
+          bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
         bottcher_map_inj_theorem c
           (bottcher_left_inv_outside c hpre h_inj_outside)
           (basin_escape_outside c)
           (bottcher_conj_iter c)
-          (bottcher_map_inj_on_K c))
+          (bottcher_map_inj_on_K c)
+          h_iter_eq_imp)
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
     exact classify_infinitely_renormalizable c h_inf

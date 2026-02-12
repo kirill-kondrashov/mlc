@@ -103,7 +103,6 @@ All axioms used:
 - MLC.Quadratic.external_ray_map_exists
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.Quadratic.bottcher_seq_converges
-- MLC.Quadratic.quadratic_map_iter_eq_imp_eq
 - MLC.bottcher_map_inj_on_K
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget

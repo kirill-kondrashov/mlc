@@ -848,7 +848,10 @@ theorem bottcher_map_inj_theorem
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
       Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
         (Quadratic.bottcher_map c z) ^ (2 ^ n))
-    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)) :
+    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
+    (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+      w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     Function.Injective (Quadratic.bottcher_map c) := by
   -- Sketch: injective on the basin via escape + left inverse,
   -- then split by whether `‖bottcher_map c z‖ > 1`. In the complementary
@@ -857,7 +860,7 @@ theorem bottcher_map_inj_theorem
   have h_inj_basin :
       Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
     bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj
-      (Quadratic.quadratic_map_iter_eq_imp_eq c)
+      h_iter_eq_imp
   have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →
       z ∈ Quadratic.basin_of_infinity c := by
     intro z hz
@@ -908,6 +911,22 @@ theorem bottcher_map_inj_theorem
     have hwK : w ∈ MLC.Quadratic.K c :=
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).1 hwG
     exact h_inj_K hzK hwK hzw
+
+theorem bottcher_map_inj_theorem_of_iter_left_inverse
+    (c : ℂ)
+    (h_left : ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+    (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
+    (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.bottcher_map c z) ^ (2 ^ n))
+    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
+    Function.Injective (Quadratic.bottcher_map c) := by
+  have h_iter_eq_imp :=
+    quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter
+  exact bottcher_map_inj_theorem c h_left h_escape h_conj h_inj_K h_iter_eq_imp
 
 theorem basin_of_infinity_nonempty (c : ℂ) : (basin_of_infinity c).Nonempty := by
   refine ⟨((‖c‖ + 2 : ℝ) : ℂ), ?_⟩
