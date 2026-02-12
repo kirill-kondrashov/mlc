@@ -1881,8 +1881,8 @@ lemma isDiscrete_fiber_of_isLocallyInjective
     have hzU : z ∈ U := hz.1
     have hzf : f z = y := hz.2
     have hxf : f x = y := hx
-    have : z = x := hUinj hzU hxU (by simpa [hxf, hzf])
-    simpa [this]
+    have : z = x := hUinj hzU hxU (by simp [hxf, hzf])
+    simp [this]
   · intro hz
     rcases hz with rfl
     exact ⟨hxU, hx⟩
@@ -2038,7 +2038,7 @@ lemma exists_pairwise_disjoint_ball_of_finite {s : Set ℂ} (hs : s.Finite) :
       have h := Metric.infDist_le_dist_of_mem (x := y.1) (s := s \ {y.1}) hx_mem
       have h' : Metric.infDist y.1 (s \ {y.1}) / 2 ≤ dist y.1 x.1 / 2 := by
         nlinarith [h]
-      have h'' : dist y.1 x.1 = dist x.1 y.1 := by simpa [dist_comm]
+      have h'' : dist y.1 x.1 = dist x.1 y.1 := by simp [dist_comm]
       simpa [r, hyne, h''] using h'
     have hsum : r x + r y ≤ dist x.1 y.1 := by
       have : r x + r y ≤ dist x.1 y.1 / 2 + dist x.1 y.1 / 2 :=
@@ -2473,10 +2473,10 @@ lemma bottcher_map_div_mem_slitPlaneRight_of_ne_zero (c z : ℂ) (hz : z ≠ 0) 
       _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((1 : ℂ) / ‖z‖) := by
               simp [hdiv]
       _ = ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
-              simp [div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
+              simp [div_eq_mul_inv, mul_comm]
   have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane := by
     have h1 : (1 : ℂ) ∈ Complex.slitPlane := by
-      simpa using (Complex.one_mem_slitPlane : (1 : ℂ) ∈ Complex.slitPlane)
+      exact Complex.one_mem_slitPlane
     have hslit' :
         (1 : ℂ) * (Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) ∈
           Complex.slitPlane :=

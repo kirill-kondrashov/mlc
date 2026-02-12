@@ -39,14 +39,14 @@ lemma sqrt_right_inverse_on_exteriorRight :
     MLC.abs_arg_lt_pi_div_two_of_re_pos hre
   have h1 : -Real.pi < (Complex.log w * (2 : ℂ)).im := by
     have hlog : (Complex.log w * (2 : ℂ)).im = 2 * Complex.arg w := by
-      simp [Complex.mul_im, Complex.log_im, mul_comm, mul_assoc]
+      simp [Complex.mul_im, Complex.log_im, mul_comm]
     have hlt : -Real.pi < 2 * Complex.arg w := by
       have h' := (abs_lt.1 harg)
       linarith
     simpa [hlog] using hlt
   have h2 : (Complex.log w * (2 : ℂ)).im ≤ Real.pi := by
     have hlog : (Complex.log w * (2 : ℂ)).im = 2 * Complex.arg w := by
-      simp [Complex.mul_im, Complex.log_im, mul_comm, mul_assoc]
+      simp [Complex.mul_im, Complex.log_im, mul_comm]
     have hle : 2 * Complex.arg w ≤ Real.pi := by
       have h' := (abs_lt.1 harg)
       linarith
@@ -66,14 +66,14 @@ lemma sqrt_right_inverse_on_slitPlaneRight :
     MLC.abs_arg_lt_pi_div_two_of_re_pos hre
   have h1 : -Real.pi < (Complex.log w * (2 : ℂ)).im := by
     have hlog : (Complex.log w * (2 : ℂ)).im = 2 * Complex.arg w := by
-      simp [Complex.mul_im, Complex.log_im, mul_comm, mul_assoc]
+      simp [Complex.mul_im, Complex.log_im, mul_comm]
     have hlt : -Real.pi < 2 * Complex.arg w := by
       have h' := (abs_lt.1 harg)
       linarith
     simpa [hlog] using hlt
   have h2 : (Complex.log w * (2 : ℂ)).im ≤ Real.pi := by
     have hlog : (Complex.log w * (2 : ℂ)).im = 2 * Complex.arg w := by
-      simp [Complex.mul_im, Complex.log_im, mul_comm, mul_assoc]
+      simp [Complex.mul_im, Complex.log_im, mul_comm]
     have hle : 2 * Complex.arg w ≤ Real.pi := by
       have h' := (abs_lt.1 harg)
       linarith
@@ -144,16 +144,16 @@ lemma no_square_root_right_inverse_on_exterior :
   rcases h with ⟨sqrt, hsqrt⟩
   have hpos : (2 : ℂ) ∈ exterior := by
     show (1 : ℝ) < ‖(2 : ℂ)‖
-    simpa using (by norm_num : (1 : ℝ) < (2 : ℝ))
+    norm_num
   have hneg : (-2 : ℂ) ∈ exterior := by
     show (1 : ℝ) < ‖(-2 : ℂ)‖
-    simpa using (by norm_num : (1 : ℝ) < (2 : ℝ))
+    norm_num
   have h1 : sqrt ((2 : ℂ) ^ 2) = (2 : ℂ) := hsqrt (2 : ℂ) hpos
   have h2 : sqrt ((-2 : ℂ) ^ 2) = (-2 : ℂ) := hsqrt (-2 : ℂ) hneg
   have hsq : ((2 : ℂ) ^ 2) = ((-2 : ℂ) ^ 2) := by
     simp
   have hsq' : ((-2 : ℂ) ^ 2) = ((2 : ℂ) ^ 2) := by
-    simpa using hsq.symm
+    exact hsq.symm
   have h2' : sqrt ((2 : ℂ) ^ 2) = (-2 : ℂ) := by
     simpa [hsq'] using h2
   have hcontra : (2 : ℂ) = (-2 : ℂ) := by

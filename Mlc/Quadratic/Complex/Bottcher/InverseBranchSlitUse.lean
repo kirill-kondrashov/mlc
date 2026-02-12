@@ -149,7 +149,7 @@ lemma basin_eventually_in_eventual_slit (c : ℂ) :
   have hrewrite :
       (quadratic_map c)^[m] ((quadratic_map c)^[N + n0] z) =
         (quadratic_map c)^[m + N] ((quadratic_map c)^[n0] z) := by
-    simpa [Function.iterate_add, Function.comp_apply, Nat.add_assoc]
+    simp [Function.iterate_add, Function.comp_apply]
   simpa [hrewrite] using hslit
 
 def OrbitInverseBranchSystem (c : ℂ) : Prop :=
@@ -198,7 +198,7 @@ lemma orbit_inverse_branch_system_of_left_inverse
         have hgsucc :
             (g^[n + 1]) ((quadratic_map c)^[n + 1] z) =
               (g^[n]) (g ((quadratic_map c)^[n + 1] z)) := by
-          simpa using
+          exact
             (Function.iterate_succ_apply (f := g) (n := n)
               (x := (quadratic_map c)^[n + 1] z))
         calc

@@ -178,15 +178,15 @@ lemma exists_fixed_point_mem_K (c : ℂ) : ∃ p, p ∈ MLC.Quadratic.K c := by
       simpa using
         (Polynomial.degree_X_pow_add_C (n := 2) (a := c) (by decide))
     have hdeg_q : (Polynomial.X : Polynomial ℂ).degree = 1 := by
-      simpa using (Polynomial.degree_X : (Polynomial.X : Polynomial ℂ).degree = 1)
+      simp
     have hlt :
         (Polynomial.X : Polynomial ℂ).degree <
           ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree := by
-      simpa [hdeg_q, hdeg_p] using (show (1 : WithBot ℕ) < (2 : WithBot ℕ) from by decide)
+      simp [hdeg_q, hdeg_p]
     have hdeg_f :
         f.degree = ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree := by
       simpa [f] using (Polynomial.degree_sub_eq_left_of_degree_lt (p := (Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c) hlt)
-    simpa [hdeg_f, hdeg_p] using (show (0 : WithBot ℕ) < (2 : WithBot ℕ) from by decide)
+    simp [hdeg_f, hdeg_p]
   obtain ⟨p, hp⟩ := Complex.exists_root hdeg
   have hp' : p ^ 2 + c - p = 0 := by
     simpa [f] using (Polynomial.IsRoot.def.mp hp)
@@ -198,7 +198,7 @@ lemma exists_fixed_point_mem_K (c : ℂ) : ∃ p, p ∈ MLC.Quadratic.K c := by
     refine ⟨‖p‖, ?_⟩
     intro n
     have hconst : MLC.Quadratic.orbit c p n = p := orbit_fixed_point c p hfix n
-    simpa [hconst]
+    simp [hconst]
   exact ⟨p, hbound⟩
 
 noncomputable def fixed_point (c : ℂ) : ℂ :=
@@ -232,7 +232,7 @@ axiom extended_ray_map_continuous (c : ℂ) :
 theorem extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
     extended_ray_map c w ∈ MLC.Quadratic.K c := by
   have hw' : ¬ 1 < ‖w‖ := by
-    simpa [hw] using (lt_irrefl (1 : ℝ))
+    simp [hw]
   simpa [extended_ray_map, hw'] using (fixed_point_mem_K c)
 
 /-- Surjectivity of Böttcher map onto the exterior ray parameters. -/

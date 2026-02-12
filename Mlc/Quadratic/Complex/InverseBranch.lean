@@ -49,7 +49,7 @@ lemma injOn_of_hasLeftInverseOn {f : α → β} {S : Set β} {T : Set α}
   intro x hx y hy hxy
   calc
     x = g (f x) := (h_left x hx).symm
-    _ = g (f y) := by simpa [hxy]
+    _ = g (f y) := by simp [hxy]
     _ = y := h_left y hy
 
 /-- Coercion to a right inverse on `S` from `InverseBranch`. -/

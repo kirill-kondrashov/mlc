@@ -41,7 +41,7 @@ This is the minimal local input needed to attempt a global inverse-branch
 construction along slit orbits.
 -/
 def SlitInverseAtlas (c : ℂ) : Prop :=
-  ∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c → ∃ h : LocalInverseAt c z, True
+  ∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c → ∃ _h : LocalInverseAt c z, True
 
 def eventually_slit_orbit (c : ℂ) (z : ℂ) : Prop :=
   ∃ N : ℕ, ∀ n ≥ N, (quadratic_map c)^[n] z ∈ Complex.slitPlane
@@ -69,7 +69,7 @@ target of `bottcher_outside_axiom`.
 -/
 
 def EventualSlitInverseAtlas (c : ℂ) : Prop :=
-  ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c → ∃ h : LocalInverseAt c z, True
+  ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c → ∃ _h : LocalInverseAt c z, True
 
 def EventualSlitInverseCompatible {c : ℂ} (hA : EventualSlitInverseAtlas c) : Prop :=
   ∀ z w
@@ -180,7 +180,7 @@ lemma eventual_slit_nonzero_deriv_of_hyp
 lemma local_inverse_at_of_eventual_slit
     (c : ℂ) (hderiv : EventualSlitNonzeroDeriv c) :
     ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-      ∃ h : LocalInverseAt c z, True := by
+      ∃ _h : LocalInverseAt c z, True := by
   intro z hz
   rcases hderiv z hz with ⟨U, hUopen, hzU, hUslit, hUbasin, hder⟩
   refine ⟨{ U := U
