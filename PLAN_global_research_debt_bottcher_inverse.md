@@ -54,6 +54,7 @@
   - `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data`
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data`
   - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
+  - `external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin`
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse`

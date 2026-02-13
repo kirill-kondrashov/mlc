@@ -286,10 +286,10 @@ lemma bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
   simpa [hzleft, hwleft] using h
 
 
-lemma basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin
+
+lemma external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin
     (c : ℂ) (h_inj_basin : Set.InjOn (bottcher_map c) (basin_of_infinity c)) :
-    BasinBottcherPointwiseLeftInverseData c := by
-  refine ⟨external_ray_map c, ?_⟩
+    ∀ z, z ∈ basin_of_infinity c → external_ray_map c (bottcher_map c z) = z := by
   intro z hz
   have hpos : 0 < MLC.Quadratic.green_function c z :=
     green_function_pos_of_basin c z hz
@@ -304,6 +304,11 @@ lemma basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin
     simpa [hright] using hnorm
   exact external_ray_map_left_inverse_of_injOn c (s := basin_of_infinity c)
     h_inj_basin hmem hz hnorm
+lemma basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin
+    (c : ℂ) (h_inj_basin : Set.InjOn (bottcher_map c) (basin_of_infinity c)) :
+    BasinBottcherPointwiseLeftInverseData c := by
+  refine ⟨external_ray_map c, ?_⟩
+  exact external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin c h_inj_basin
 
 lemma basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin
     (c : ℂ) :
