@@ -89,6 +89,8 @@
   - generic `hasLeftInverseOn_of_injOn` in `Mlc/Quadratic/Complex/InverseBranch.lean`
   - `quadratic_map_left_inverse_on_basin_of_iter_eq_imp`
   - `exists_pullback_root_data_of_iter_eq_imp`
+  - top-level bridge `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
+    in `Mlc/MainConjecture.lean`
   These are scaffolding lemmas only; `mlc_conjecture` still keeps its original
   signature and current axiom footprint (no additional axioms introduced there).
 - [x] Added a formal obstruction for one naive sqrt-branch side condition:

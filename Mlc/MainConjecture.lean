@@ -187,6 +187,28 @@ theorem mlc_conjecture_of_pullback_root
   exact Quadratic.quadratic_map_iter_eq_imp_eq_of_pullback_root c root
     h_root h_left_bottcher h_maps
 
+/-- Bridge theorem: the pullback-root route is derivable from the
+    iterate-equality implication hypothesis. -/
+theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
+    (h_iter_eq_imp :
+      ∀ c, ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+        w ∈ Quadratic.basin_of_infinity c →
+        (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_pullback_root
+  intro c
+  have hleft :
+      Quadratic.HasLeftInverseOn (quadratic_map c)
+        (Quadratic.basin_of_infinity c) (Quadratic.basin_of_infinity c) :=
+    Quadratic.quadratic_map_left_inverse_on_basin_of_iter_eq_imp c (h_iter_eq_imp c)
+  have h_left_bottcher :
+      ∀ z, z ∈ Quadratic.basin_of_infinity c →
+        Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+    Quadratic.bottcher_left_inverse_on_basin_of_quadratic_left_inverse c hleft
+  rcases Quadratic.exists_pullback_root_data_of_left_inverse c hleft with
+    ⟨root, h_root, h_maps⟩
+  exact ⟨root, h_root, h_left_bottcher, h_maps⟩
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
