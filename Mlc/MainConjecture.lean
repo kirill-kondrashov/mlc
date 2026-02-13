@@ -492,13 +492,19 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
   exfalso
   exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
 
+/-- Current axiom-backed construction of the minimal basin redesign target. -/
+lemma basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom :
+    BasinBottcherPointwiseLeftInverseData := by
+  intro c
+  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
+    (bottcher_map_inj_on_basin_via_iter_eq_axiom c)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin
-  intro c
-  exact bottcher_map_inj_on_basin_via_iter_eq_axiom c
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
+    basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom
 
 end MainProof
 

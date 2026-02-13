@@ -38,7 +38,9 @@
   `Mlc/MainConjecture.lean:144`.
 - [x] Remaining axiom bridge is now explicitly factored:
   - `bottcher_map_inj_on_basin_via_iter_eq_axiom`
-  This is the single replacement target for Step 2b.
+  - `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`
+  This is the single replacement target for Step 2b, now routed through the
+  minimal basin target wrapper.
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise`
   - `EventualSlitGlobalInverseData`
