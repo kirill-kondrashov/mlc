@@ -1135,6 +1135,18 @@ lemma exists_pullback_root_data_of_global_inverse_extension
     quadratic_map_left_inverse_on_basin_of_global_inverse c hA _hG h_ext
   exact exists_pullback_root_data_of_left_inverse c hleft
 
+lemma exists_pullback_root_data_of_bridge
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA)
+    (h_bridge : EventualSlitGlobalInverseExtensionBridge c hA _hG) :
+    ∃ root : ℂ → ℂ,
+      BasinQuadraticPullbackRoot c root ∧
+      MapsTo (fun z => external_ray_map c (root z))
+        (basin_of_infinity c) (basin_of_infinity c) := by
+  have h_ext :
+      EventualSlitGlobalInverseExtendsToBasin c hA _hG :=
+    EventualSlitGlobalInverseExtendsToBasin_of_bridge c hA _hG h_bridge
+  exact exists_pullback_root_data_of_global_inverse_extension c hA _hG h_ext
+
 lemma orbit_inverse_branch_system_of_global_inverse_extension
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA)
     (h_ext : EventualSlitGlobalInverseExtendsToBasin c hA _hG) :

@@ -187,6 +187,18 @@ theorem mlc_conjecture_of_pullback_root
   exact Quadratic.quadratic_map_iter_eq_imp_eq_of_pullback_root c root
     h_root h_left_bottcher h_maps
 
+/-- Top-level hook: enough eventual-slit bridge data per parameter implies MLC. -/
+theorem mlc_conjecture_of_eventual_slit_global_bridge
+    (h_bridge :
+      ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
+        ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
+          Quadratic.EventualSlitGlobalInverseExtensionBridge c hA hG) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_iter_eq_imp
+  intro c
+  rcases h_bridge c with ⟨hA, hG, hbr⟩
+  exact Quadratic.quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_bridge c hA hG hbr
+
 /-- Bridge theorem: the pullback-root route is derivable from the
     iterate-equality implication hypothesis. -/
 theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root

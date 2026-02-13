@@ -93,6 +93,11 @@
     in `Mlc/MainConjecture.lean`
   These are scaffolding lemmas only; `mlc_conjecture` still keeps its original
   signature and current axiom footprint (no additional axioms introduced there).
+- [x] Added direct top-level bridge hooks from eventual-slit bridge data:
+  - `exists_pullback_root_data_of_bridge`
+  - `mlc_conjecture_of_eventual_slit_global_bridge`
+  This isolates the remaining work to constructing bridge data, without touching
+  `mlc_conjecture`.
 - [x] Added a formal obstruction for one naive sqrt-branch side condition:
   - `not_bottcher_map_mem_slitPlaneRight_on_basin`
   - `no_sqrt_branch_slitPlaneRight_data_on_full_basin`
