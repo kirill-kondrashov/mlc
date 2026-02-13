@@ -190,6 +190,47 @@ lemma bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse
   exact bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG z
     ⟨hz_eventual, hz⟩
 
+lemma bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
+    Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
+  intro z hz w hw hzw
+  have hzleft :
+      (Classical.choose hG) (bottcher_map c z) = z :=
+    bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse c hA hG z hz
+  have hwleft :
+      (Classical.choose hG) (bottcher_map c w) = w :=
+    bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse c hA hG w hw
+  have h := congrArg (Classical.choose hG) hzw
+  simpa [hzleft, hwleft] using h
+
+lemma not_EventualSlitOverlapHyp (c : ℂ) :
+    ¬ EventualSlitOverlapHyp c := by
+  intro h_over
+  have hw2 : 1 < ‖(2 : ℂ)‖ := by norm_num
+  have hw3 : 1 < ‖(3 : ℂ)‖ := by norm_num
+  rcases bottcher_map_surj c (2 : ℂ) hw2 with ⟨z2, _hz2dom, hz2eq⟩
+  rcases bottcher_map_surj c (3 : ℂ) hw3 with ⟨z3, _hz3dom, hz3eq⟩
+  have hz2norm : 1 < ‖bottcher_map c z2‖ := by
+    rw [hz2eq]
+    exact hw2
+  have hz3norm : 1 < ‖bottcher_map c z3‖ := by
+    rw [hz3eq]
+    exact hw3
+  have hz2_basin : z2 ∈ basin_of_infinity c :=
+    bottcher_map_norm_gt_one_implies_basin c (z := z2) hz2norm
+  have hz3_basin : z3 ∈ basin_of_infinity c :=
+    bottcher_map_norm_gt_one_implies_basin c (z := z3) hz3norm
+  have hz2_eventual : z2 ∈ eventual_slit_set c := basin_subset_eventual_slit_set c hz2_basin
+  have hz3_eventual : z3 ∈ eventual_slit_set c := basin_subset_eventual_slit_set c hz3_basin
+  have h_nebot :
+      Filter.NeBot (𝓝 (bottcher_map c z2) ⊓ 𝓝 (bottcher_map c z3)) :=
+    h_over z2 z3 ⟨hz2_eventual, hz2_basin⟩ ⟨hz3_eventual, hz3_basin⟩
+  have hphi_eq : bottcher_map c z2 = bottcher_map c z3 := eq_of_nhds_neBot h_nebot
+  have h23 : (2 : ℂ) = (3 : ℂ) := by
+    rw [hz2eq, hz3eq] at hphi_eq
+    exact hphi_eq
+  norm_num at h23
+
 def OrbitInverseBranchSystem (c : ℂ) : Prop :=
   ∀ n : ℕ, ∃ g : ℂ → ℂ,
     (∀ z, z ∈ basin_of_infinity c → g ((quadratic_map c)^[n] z) = z) ∧

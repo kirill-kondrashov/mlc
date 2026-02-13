@@ -4,10 +4,12 @@
 - [ ] Not eliminated yet.
 - [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] Only remaining production use-site:
-  `Mlc/MainConjecture.lean:152`
+  `Mlc/MainConjecture.lean:148`
   (isolated behind `bottcher_map_inj_on_basin_via_iter_eq_axiom`).
 - [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
   `MLC.mlc_conjecture` after the basin-injectivity refactor.
+- [x] `MLC.Quadratic.bottcher_seq_converges` is no longer in the axiom
+  footprint of `MLC.mlc_conjecture`.
 
 ## What Is Already Done
 - [x] Main theorem wiring is parameterized:
@@ -36,6 +38,14 @@
 - [x] Remaining axiom bridge is now explicitly factored:
   - `bottcher_map_inj_on_basin_via_iter_eq_axiom`
   This is the single replacement target for Step 2b.
+- [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
+  - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise`
+  - `mlc_conjecture_of_eventual_slit_global_inverse`
+  - `mlc_conjecture_of_eventual_slit_inverse_gluing`
+  - `mlc_conjecture_of_eventual_slit_local_to_global`
+  - `mlc_conjecture_of_eventual_slit_nonzero_deriv_compatible_gluing`
+  - `mlc_conjecture_of_eventual_slit_global_extension` now uses basin-injectivity
+    directly through that route.
 - [x] Green-sublevel connectivity path is now basin-injectivity-native:
   - `green_sublevel_joined_to_Kc` uses
     `Set.InjOn (bottcher_map c) (basin_of_infinity c)` (not global injectivity).
@@ -55,6 +65,12 @@
   - `not_quadratic_map_iter_eq_imp_eq`
   The current proposition implies injectivity of `quadratic_map` on the basin,
   so it is not a viable “true replacement target” under present definitions.
+- [x] Local-to-global eventual-slit package with explicit overlap hypothesis is
+  inconsistent:
+  - `not_eventual_slit_overlap_hyp_data`
+  - `not_eventual_slit_local_to_global_data`
+  So the overlap-based route is not a viable Step 2b replacement target under
+  current definitions.
 - [x] Inconsistent hook routes are now discharged directly by contradiction
   (without routing through `quadratic_map_iter_eq_imp_eq_*` bridge lemmas):
   - `mlc_conjecture_of_iter_eq_imp`
@@ -70,6 +86,9 @@
 - [x] Current bridge predicate is inconsistent:
   - `not_EventualSlitGlobalInverseExtensionBridge`
   - `not_eventual_slit_global_bridge_data`.
+- [x] Eventual-slit extension-to-basin data is inconsistent:
+  - `not_eventual_slit_global_extension_data`.
+  This route is equivalent to a basin-wide left inverse of `quadratic_map`.
 - [x] Global fixed-slit and rotated-slit branch assumptions are inconsistent.
 - [x] Global single-`sqrt` basin branch assumption is inconsistent.
 - [x] Basin-wide left-inverse target is inconsistent with current dynamics model:
@@ -83,13 +102,21 @@
 - [ ] Identify and prove the minimal *true* replacement needed in the main path
   (`Mlc/MainConjecture.lean`), likely by avoiding any requirement equivalent to
   injectivity of `quadratic_map` on the whole basin.
+- [ ] Concretely, replace `bottcher_map_inj_on_basin_via_iter_eq_axiom` by proving
+  one non-axiomatic basin-injectivity route (now fully factored). The
+  overlap-based local-to-global variant is ruled out; remaining viable
+  candidates are:
+  - eventual-slit global inverse route
+  - eventual-slit compatible-atlas + gluing route (without overlap-based compatibility)
+  - overlap-free decomposed route:
+    `EventualSlitNonzeroDeriv` + direct atlas compatibility + gluing
 
 ## Execution Steps Left
 - [x] Step 1: Refactor the bottcher-injectivity chain so it does not depend on
   `quadratic_map_iter_eq_imp_eq` directly.
 - [x] Step 2a: Replace the wrapper instantiation with the basin-injectivity route.
 - [ ] Step 2b: Replace the remaining axiom-backed construction of basin injectivity
-  (currently via `bottcher_map_inj_on_outside_of_slit ... quadratic_map_iter_eq_imp_eq`)
+  (currently `bottcher_map_inj_on_basin_via_iter_eq_axiom`)
   with a non-axiomatic proof.
 - [ ] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
 - [ ] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
