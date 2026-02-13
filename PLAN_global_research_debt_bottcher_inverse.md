@@ -57,6 +57,8 @@
   so it is not a viable “true replacement target” under present definitions.
 - [x] Inconsistent hook routes are now discharged directly by contradiction
   (without routing through `quadratic_map_iter_eq_imp_eq_*` bridge lemmas):
+  - `mlc_conjecture_of_iter_eq_imp`
+  - `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
   - `mlc_conjecture_of_quadratic_left_inverse`
   - `mlc_conjecture_of_basin_sqrt_branch_of_injective`
   - `mlc_conjecture_of_basin_sqrt_branch`

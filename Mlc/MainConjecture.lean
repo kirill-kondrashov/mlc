@@ -135,12 +135,8 @@ theorem mlc_conjecture_of_iter_eq_imp
         w ∈ Quadratic.basin_of_infinity c →
         (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin
-  intro c
-  have h_inj_outside :
-      Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) :=
-    bottcher_map_inj_on_outside_of_slit c (h_iter_eq_imp c)
-  simpa [outside_disk] using h_inj_outside
+  exfalso
+  exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
 
 /-- Current axiom-backed bridge from iterate-equality to basin injectivity of
     the Böttcher map. Replacing this lemma with a non-axiomatic proof is the
@@ -280,19 +276,8 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
         w ∈ Quadratic.basin_of_infinity c →
         (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_pullback_root
-  intro c
-  have hleft :
-      Quadratic.HasLeftInverseOn (quadratic_map c)
-        (Quadratic.basin_of_infinity c) (Quadratic.basin_of_infinity c) :=
-    Quadratic.quadratic_map_left_inverse_on_basin_of_iter_eq_imp c (h_iter_eq_imp c)
-  have h_left_bottcher :
-      ∀ z, z ∈ Quadratic.basin_of_infinity c →
-        Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
-    Quadratic.bottcher_left_inverse_on_basin_of_quadratic_left_inverse c hleft
-  rcases Quadratic.exists_pullback_root_data_of_left_inverse c hleft with
-    ⟨root, h_root, h_maps⟩
-  exact ⟨root, h_root, h_left_bottcher, h_maps⟩
+  exfalso
+  exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
