@@ -383,6 +383,15 @@ lemma not_quadratic_map_left_inverse_on_basin (c : ℂ) :
     injOn_of_hasLeftInverseOn hleft
   exact quadratic_map_not_injOn_basin c hinj
 
+lemma not_quadratic_map_iter_eq_imp_eq (c : ℂ) :
+    ¬ (∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) := by
+  intro h_iter_eq_imp
+  have h_inj : Set.InjOn (quadratic_map c) (basin_of_infinity c) := by
+    intro z hz w hw hzw
+    exact h_iter_eq_imp z w hz hw ⟨1, by simpa using hzw⟩
+  exact quadratic_map_not_injOn_basin c h_inj
+
 def BasinBottcherSquareRootRightInverse (c : ℂ) (sqrt : ℂ → ℂ) : Prop :=
   ∀ z, z ∈ basin_of_infinity c →
     sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z

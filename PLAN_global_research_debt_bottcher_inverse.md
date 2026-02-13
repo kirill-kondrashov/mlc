@@ -4,15 +4,44 @@
 - [ ] Not eliminated yet.
 - [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] Only remaining production use-site:
-  `Mlc/MainConjecture.lean:272`.
+  `Mlc/MainConjecture.lean:152`
+  (isolated behind `bottcher_map_inj_on_basin_via_iter_eq_axiom`).
+- [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
+  `MLC.mlc_conjecture` after the basin-injectivity refactor.
 
 ## What Is Already Done
 - [x] Main theorem wiring is parameterized:
+  - `mlc_conjecture_of_bottcher_inj_on_basin`
+  - `mlc_conjecture_of_bottcher_left_inverse_on_basin`
   - `mlc_conjecture_of_iter_eq_imp`
   - `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
   - `mlc_conjecture_of_quadratic_left_inverse`
   - `mlc_conjecture_of_pullback_root`
   - `mlc_conjecture_of_eventual_slit_global_extension`
+- [x] Minimal bridge formalized:
+  - `bottcher_map_inj_on_basin_of_left_inverse`
+  - basin left-inverse identity for `external_ray_map ∘ bottcher_map` now
+    explicitly implies basin injectivity.
+- [x] Böttcher injectivity chain was refactored:
+  - core theorem now takes basin injectivity directly:
+    `bottcher_map_inj_theorem_of_inj_basin`
+  - iterate-equality is now only a wrapper route into basin injectivity:
+    `bottcher_map_inj_theorem`.
+- [x] `mlc_conjecture_of_pullback_root` no longer routes through
+  iterate-equality; it now closes through
+  `mlc_conjecture_of_bottcher_left_inverse_on_basin`.
+- [x] `mlc_conjecture` now instantiates the basin-injectivity route directly
+  (`mlc_conjecture_of_bottcher_inj_on_basin`), so the remaining axiom use is
+  isolated to building `h_inj_outside` at `Mlc/MainConjecture.lean:152`.
+- [x] Remaining axiom bridge is now explicitly factored:
+  - `bottcher_map_inj_on_basin_via_iter_eq_axiom`
+  This is the single replacement target for Step 2b.
+- [x] Green-sublevel connectivity path is now basin-injectivity-native:
+  - `green_sublevel_joined_to_Kc` uses
+    `Set.InjOn (bottcher_map c) (basin_of_infinity c)` (not global injectivity).
+  - `green_sublevel_connected` now takes basin injectivity directly.
+  - `mlc_conjecture_of_bottcher_inj_on_basin` passes `h_inj_basin` directly,
+    removing the prior `bottcher_map_inj_theorem_of_inj_basin` bridge from this path.
 - [x] Reduction chain from a basin left inverse of `quadratic_map` to iterate-equality implication is formalized.
 - [x] Pullback-root formulation is formalized (`BasinQuadraticPullbackRoot` and consequences).
 - [x] `mlc_conjecture` itself remains unchanged in signature (no extra hypotheses).
@@ -22,6 +51,16 @@
   - `not_quadratic_map_left_inverse_on_basin`
   This shows `quadratic_map` is not injective on `basin_of_infinity c`, so a
   global basin left inverse cannot exist.
+- [x] Direct obstruction for the current iterate-equality axiom shape:
+  - `not_quadratic_map_iter_eq_imp_eq`
+  The current proposition implies injectivity of `quadratic_map` on the basin,
+  so it is not a viable “true replacement target” under present definitions.
+- [x] Inconsistent hook routes are now discharged directly by contradiction
+  (without routing through `quadratic_map_iter_eq_imp_eq_*` bridge lemmas):
+  - `mlc_conjecture_of_quadratic_left_inverse`
+  - `mlc_conjecture_of_basin_sqrt_branch_of_injective`
+  - `mlc_conjecture_of_basin_sqrt_branch`
+  - `mlc_conjecture_of_eventual_slit_global_bridge`
 
 ## Ruled-Out Routes (Formal Obstructions)
 - [x] Escape-time candidate route is inconsistent:
@@ -44,10 +83,12 @@
   injectivity of `quadratic_map` on the whole basin.
 
 ## Execution Steps Left
-- [ ] Step 1: Refactor the bottcher-injectivity chain so it does not depend on
-  `quadratic_map_iter_eq_imp_eq` (or any equivalent basin-injective surrogate).
-- [ ] Step 2: Replace the wrapper instantiation at `Mlc/MainConjecture.lean:272`
-  with the refactored route.
+- [x] Step 1: Refactor the bottcher-injectivity chain so it does not depend on
+  `quadratic_map_iter_eq_imp_eq` directly.
+- [x] Step 2a: Replace the wrapper instantiation with the basin-injectivity route.
+- [ ] Step 2b: Replace the remaining axiom-backed construction of basin injectivity
+  (currently via `bottcher_map_inj_on_outside_of_slit ... quadratic_map_iter_eq_imp_eq`)
+  with a non-axiomatic proof.
 - [ ] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
 - [ ] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
 

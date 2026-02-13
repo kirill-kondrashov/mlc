@@ -138,7 +138,7 @@ Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
 -/
 lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
     (h_surj : ∀ w, 1 < ‖w‖ → w ∈ bottcher_map c '' bottcher_domain c)
-    (h_inj : Function.Injective (bottcher_map c)) :
+    (h_inj_basin : Set.InjOn (bottcher_map c) (basin_of_infinity c)) :
     let S := MLC.Quadratic.GreenSublevel c n
     let K := MLC.Quadratic.K c
     ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w := by
@@ -155,7 +155,28 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
   
   have h_start : extended_ray_map c w = z := by
     rw [extended_ray_map_eq c w h_norm_gt]
-    apply bottcher_left_inv c z h_basin h_inj
+    have hright :
+        bottcher_map c (external_ray_map c w) = w :=
+      bottcher_right_inv_of_mem c w (h_surj w h_norm_gt) h_norm_gt
+    have hphi_ext :
+        1 < ‖bottcher_map c (external_ray_map c w)‖ := by
+      simpa [hright] using h_norm_gt
+    have hnorm_ext :
+        ‖bottcher_map c (external_ray_map c w)‖ =
+          Real.exp (green_function c (external_ray_map c w)) :=
+      norm_bottcher_eq_exp_green c (external_ray_map c w)
+    have hpos_ext : 0 < green_function c (external_ray_map c w) := by
+      have hgt_ext : 1 < Real.exp (green_function c (external_ray_map c w)) := by
+        simpa [hnorm_ext] using hphi_ext
+      exact (Real.one_lt_exp_iff).1 hgt_ext
+    have hnotK_ext : external_ray_map c w ∉ MLC.Quadratic.K c :=
+      (green_function_pos_iff_not_mem_K c (external_ray_map c w)).1 hpos_ext
+    have h_basin_ext : external_ray_map c w ∈ basin_of_infinity c :=
+      z_in_basin_of_not_mem_K c (external_ray_map c w) hnotK_ext
+    have h_eq_phi :
+        bottcher_map c (external_ray_map c w) = bottcher_map c z := by
+      simpa [w] using hright
+    exact h_inj_basin h_basin_ext h_basin h_eq_phi
 
   obtain ⟨p', hp1_K, hp'_eq⟩ := construct_bottcher_path c z w h_norm_gt hw_ne_zero h_start h_basin
   

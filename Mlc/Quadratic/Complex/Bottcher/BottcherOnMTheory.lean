@@ -703,6 +703,21 @@ theorem bottcher_map_injective_of_basin_characterization
   have hw' : w ∈ Quadratic.basin_of_infinity c := h_pre w hw
   exact h_inj_basin hz' hw' hzw
 
+theorem bottcher_map_inj_on_basin_of_left_inverse
+    (c : ℂ)
+    (h_left_basin : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro z hz w hw hzw
+  have hleft_z :
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+    h_left_basin z hz
+  have hleft_w :
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
+    h_left_basin w hw
+  have h := congrArg (Quadratic.external_ray_map c) hzw
+  simpa [hleft_z, hleft_w] using h
+
 theorem bottcher_map_iter_eq_on_basin_of_left_inv
     (c : ℂ) (S : Set ℂ)
     (h_left : ∀ z, z ∈ S →
@@ -839,28 +854,15 @@ implements the main reduction on the basin; to finish, one needs that
 equal Böttcher values force membership in the basin (via positivity of
 the Green's function).
 -/
-theorem bottcher_map_inj_theorem
+theorem bottcher_map_inj_theorem_of_inj_basin
     (c : ℂ)
-    (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
-    (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
-      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
-    (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
     (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
-    (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c →
-      w ∈ Quadratic.basin_of_infinity c →
-      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
+    (h_inj_basin :
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     Function.Injective (Quadratic.bottcher_map c) := by
-  -- Sketch: injective on the basin via escape + left inverse,
-  -- then split by whether `‖bottcher_map c z‖ > 1`. In the complementary
-  -- case, use `‖bottcher_map‖ = exp(green)` and `green_function_eq_zero_iff_mem_K`
-  -- to reduce to injectivity on `K`.
-  have h_inj_basin :
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
-    bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj
-      h_iter_eq_imp
+  -- Sketch: split by whether `‖bottcher_map c z‖ > 1`. For the exterior branch,
+  -- reduce to basin injectivity via Green positivity. For the complementary branch,
+  -- reduce to injectivity on `K` via `green = 0`.
   have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →
       z ∈ Quadratic.basin_of_infinity c := by
     intro z hz
@@ -911,6 +913,26 @@ theorem bottcher_map_inj_theorem
     have hwK : w ∈ MLC.Quadratic.K c :=
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).1 hwG
     exact h_inj_K hzK hwK hzw
+
+theorem bottcher_map_inj_theorem
+    (c : ℂ)
+    (h_left : ∀ z, z ∈ outside_disk c →
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+    (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
+    (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.bottcher_map c z) ^ (2 ^ n))
+    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
+    (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+      w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
+    Function.Injective (Quadratic.bottcher_map c) := by
+  have h_inj_basin :
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
+    bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj
+      h_iter_eq_imp
+  exact bottcher_map_inj_theorem_of_inj_basin c h_inj_K h_inj_basin
 
 theorem bottcher_map_inj_theorem_of_iter_left_inverse
     (c : ℂ)
