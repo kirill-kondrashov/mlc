@@ -244,6 +244,15 @@ theorem not_eventual_slit_global_bridge_data :
   rcases h 0 with ⟨hA, hG, hbr⟩
   exact Quadratic.not_EventualSlitGlobalInverseExtensionBridge 0 hA hG hbr
 
+/-- The remaining Step 2b global-inverse target is currently inconsistent:
+    even at `c = 0`, an eventual-slit inverse atlas cannot exist. -/
+theorem not_eventual_slit_global_inverse_data :
+    ¬ (∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
+      Quadratic.GlobalInverseOnEventualSlit c hA) := by
+  intro h
+  rcases h 0 with ⟨hA, _hG⟩
+  exact Quadratic.not_EventualSlitInverseAtlas_zero hA
+
 /-- Extension-to-basin data is inconsistent with the current dynamics model,
     since it is equivalent to a basin-wide left inverse of `quadratic_map`. -/
 theorem not_eventual_slit_global_extension_data :
@@ -277,6 +286,56 @@ theorem not_eventual_slit_local_to_global_data :
   rcases h with ⟨_h_deriv, _h_uniq, h_over, _h_comp, _h_glue⟩
   exact not_eventual_slit_overlap_hyp_data h_over
 
+/-- Remaining Step 2b target, stated as global eventual-slit inverse data. -/
+def EventualSlitGlobalInverseData : Prop :=
+  ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
+    Quadratic.GlobalInverseOnEventualSlit c hA
+
+/-- Overlap-free decomposed target: nonzero derivative provides the atlas;
+    compatibility for that chosen atlas and gluing provide the global inverse. -/
+def EventualSlitNonzeroDerivCompatibleGluingData : Prop :=
+  ∀ c,
+    ∃ h_deriv : Quadratic.EventualSlitNonzeroDeriv c,
+      let hA : Quadratic.EventualSlitInverseAtlas c :=
+        Quadratic.eventual_slit_inverse_atlas_of_nonzero_deriv c h_deriv
+      Quadratic.EventualSlitInverseCompatible hA ∧ Quadratic.EventualSlitInverseGluing c
+
+/-- The overlap-free decomposed target implies global eventual-slit inverse
+    data, hence it is sufficient to replace the remaining axiom bridge. -/
+theorem eventual_slit_global_inverse_data_of_nonzero_deriv_compatible_gluing_data
+    (h_data : EventualSlitNonzeroDerivCompatibleGluingData) :
+    EventualSlitGlobalInverseData := by
+  intro c
+  rcases h_data c with ⟨h_deriv, hcompat, hglue⟩
+  let hA : Quadratic.EventualSlitInverseAtlas c :=
+    Quadratic.eventual_slit_inverse_atlas_of_nonzero_deriv c h_deriv
+  exact ⟨hA, Quadratic.global_inverse_on_eventual_slit_of_gluing hA (by simpa [hA] using hcompat) hglue⟩
+
+/-- The overlap-free decomposed eventual-slit data is also inconsistent under
+    current definitions, since it implies global eventual-slit inverse data. -/
+theorem not_eventual_slit_nonzero_deriv_compatible_gluing_data :
+    ¬ EventualSlitNonzeroDerivCompatibleGluingData := by
+  intro h_data
+  have h_global : EventualSlitGlobalInverseData :=
+    eventual_slit_global_inverse_data_of_nonzero_deriv_compatible_gluing_data h_data
+  exact not_eventual_slit_global_inverse_data (by simpa [EventualSlitGlobalInverseData] using h_global)
+
+/-- The global eventual-slit inverse data directly yields basin injectivity
+    of the Böttcher map for all parameters. -/
+theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data
+    (h_global : EventualSlitGlobalInverseData) :
+    ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro c
+  rcases h_global c with ⟨hA, hG⟩
+  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise c hA hG
+
+/-- Main-conjecture wrapper for the remaining Step 2b target. -/
+theorem mlc_conjecture_of_eventual_slit_global_inverse_data
+    (h_global : EventualSlitGlobalInverseData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin
+  exact bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data h_global
+
 /-- Parameterized extension route: enough eventual-slit extension data implies
     MLC (this route is currently ruled out by
     `not_eventual_slit_global_extension_data`). -/
@@ -294,14 +353,9 @@ theorem mlc_conjecture_of_eventual_slit_global_extension
 /-- Alternative route: a global inverse on the eventual slit orbit already
     gives basin injectivity of the Böttcher map, hence MLC. -/
 theorem mlc_conjecture_of_eventual_slit_global_inverse
-    (h_global :
-      ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-        Quadratic.GlobalInverseOnEventualSlit c hA) :
+    (h_global : EventualSlitGlobalInverseData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin
-  intro c
-  rcases h_global c with ⟨hA, hG⟩
-  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise c hA hG
+  exact mlc_conjecture_of_eventual_slit_global_inverse_data h_global
 
 /-- If eventual-slit local inverse atlases are compatible and can be glued to
     global inverses, MLC follows. -/
@@ -339,20 +393,10 @@ theorem mlc_conjecture_of_eventual_slit_local_to_global
     MLC. This isolates the remaining viable local-to-global target after
     ruling out overlap-based compatibility assumptions. -/
 theorem mlc_conjecture_of_eventual_slit_nonzero_deriv_compatible_gluing
-    (h_deriv : ∀ c, Quadratic.EventualSlitNonzeroDeriv c)
-    (h_compat :
-      ∀ c,
-        let hA : Quadratic.EventualSlitInverseAtlas c :=
-          Quadratic.eventual_slit_inverse_atlas_of_nonzero_deriv c (h_deriv c)
-        Quadratic.EventualSlitInverseCompatible hA)
-    (h_glue : ∀ c, Quadratic.EventualSlitInverseGluing c) :
+    (h_data : EventualSlitNonzeroDerivCompatibleGluingData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_eventual_slit_inverse_gluing
-  · intro c
-    let hA : Quadratic.EventualSlitInverseAtlas c :=
-      Quadratic.eventual_slit_inverse_atlas_of_nonzero_deriv c (h_deriv c)
-    exact ⟨hA, by simpa [hA] using (h_compat c)⟩
-  · exact h_glue
+  exact mlc_conjecture_of_eventual_slit_global_inverse_data
+    (eventual_slit_global_inverse_data_of_nonzero_deriv_compatible_gluing_data h_data)
 
 /-- Bridge theorem: the pullback-root route is derivable from the
     iterate-equality implication hypothesis. -/

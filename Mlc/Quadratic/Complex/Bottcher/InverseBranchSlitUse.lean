@@ -231,6 +231,34 @@ lemma not_EventualSlitOverlapHyp (c : ℂ) :
     exact hphi_eq
   norm_num at h23
 
+lemma eventual_slit_subset_slit_orbit_of_inverse_atlas
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) :
+    eventual_slit_set c ∩ basin_of_infinity c ⊆ slit_orbit c := by
+  intro z hz
+  rcases hA z hz with ⟨hLocal, _⟩
+  exact hLocal.hUslit hLocal.hz
+
+lemma not_EventualSlitInverseAtlas_zero :
+    ¬ EventualSlitInverseAtlas (0 : ℂ) := by
+  intro hA
+  have hz_large : ‖(-3 : ℂ)‖ > ‖(0 : ℂ)‖ + 2 := by norm_num
+  have hz_eventual : (-3 : ℂ) ∈ eventual_slit_set (0 : ℂ) :=
+    outside_eventually_slit_orbit 0 (-3 : ℂ) hz_large
+  have hz_outside : (-3 : ℂ) ∈ outside_disk (0 : ℂ) :=
+    large_norm_mem_outside_disk 0 (-3 : ℂ) (le_of_lt hz_large)
+  have hz_basin : (-3 : ℂ) ∈ basin_of_infinity (0 : ℂ) :=
+    outside_disk_subset_quadratic_basin 0 hz_outside
+  have hz_slit_orbit : (-3 : ℂ) ∈ slit_orbit (0 : ℂ) :=
+    eventual_slit_subset_slit_orbit_of_inverse_atlas (0 : ℂ) hA ⟨hz_eventual, hz_basin⟩
+  have hz_slit : (-3 : ℂ) ∈ Complex.slitPlane := hz_slit_orbit 0
+  have hz_not_slit : (-3 : ℂ) ∉ Complex.slitPlane := by
+    intro hslit
+    have harg : Complex.arg (-3 : ℂ) = Real.pi := by
+      have hneg : (-3 : ℝ) < 0 := by norm_num
+      simpa using (Complex.arg_ofReal_of_neg hneg)
+    exact (Complex.mem_slitPlane_iff_arg.mp hslit).1 harg
+  exact hz_not_slit hz_slit
+
 def OrbitInverseBranchSystem (c : ℂ) : Prop :=
   ∀ n : ℕ, ∃ g : ℂ → ℂ,
     (∀ z, z ∈ basin_of_infinity c → g ((quadratic_map c)^[n] z) = z) ∧

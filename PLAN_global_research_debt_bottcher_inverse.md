@@ -34,15 +34,21 @@
   `mlc_conjecture_of_bottcher_left_inverse_on_basin`.
 - [x] `mlc_conjecture` now instantiates the basin-injectivity route directly
   (`mlc_conjecture_of_bottcher_inj_on_basin`), so the remaining axiom use is
-  isolated to building `h_inj_outside` at `Mlc/MainConjecture.lean:152`.
+  isolated to `bottcher_map_inj_on_basin_via_iter_eq_axiom` in
+  `Mlc/MainConjecture.lean:144`.
 - [x] Remaining axiom bridge is now explicitly factored:
   - `bottcher_map_inj_on_basin_via_iter_eq_axiom`
   This is the single replacement target for Step 2b.
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise`
+  - `EventualSlitGlobalInverseData`
+  - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data`
+  - `mlc_conjecture_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse`
   - `mlc_conjecture_of_eventual_slit_inverse_gluing`
   - `mlc_conjecture_of_eventual_slit_local_to_global`
+  - `EventualSlitNonzeroDerivCompatibleGluingData`
+  - `eventual_slit_global_inverse_data_of_nonzero_deriv_compatible_gluing_data`
   - `mlc_conjecture_of_eventual_slit_nonzero_deriv_compatible_gluing`
   - `mlc_conjecture_of_eventual_slit_global_extension` now uses basin-injectivity
     directly through that route.
@@ -86,6 +92,15 @@
 - [x] Current bridge predicate is inconsistent:
   - `not_EventualSlitGlobalInverseExtensionBridge`
   - `not_eventual_slit_global_bridge_data`.
+- [x] Eventual-slit global-inverse data is inconsistent:
+  - `eventual_slit_subset_slit_orbit_of_inverse_atlas`
+  - `not_EventualSlitInverseAtlas_zero`
+  - `not_eventual_slit_global_inverse_data`.
+  Consequently, the direct global-inverse replacement target
+  (`EventualSlitGlobalInverseData`) is not viable under current definitions.
+- [x] Overlap-free decomposed eventual-slit data is also inconsistent:
+  - `not_eventual_slit_nonzero_deriv_compatible_gluing_data`.
+  This route implies `EventualSlitGlobalInverseData`, which is already ruled out.
 - [x] Eventual-slit extension-to-basin data is inconsistent:
   - `not_eventual_slit_global_extension_data`.
   This route is equivalent to a basin-wide left inverse of `quadratic_map`.
@@ -103,13 +118,10 @@
   (`Mlc/MainConjecture.lean`), likely by avoiding any requirement equivalent to
   injectivity of `quadratic_map` on the whole basin.
 - [ ] Concretely, replace `bottcher_map_inj_on_basin_via_iter_eq_axiom` by proving
-  one non-axiomatic basin-injectivity route (now fully factored). The
-  overlap-based local-to-global variant is ruled out; remaining viable
-  candidates are:
-  - eventual-slit global inverse route
-  - eventual-slit compatible-atlas + gluing route (without overlap-based compatibility)
-  - overlap-free decomposed route:
-    `EventualSlitNonzeroDeriv` + direct atlas compatibility + gluing
+  one non-axiomatic basin-injectivity route. Current eventual-slit candidates
+  are all blocked by formal obstructions, so the next step is to redesign the
+  replacement target/predicate shape (not add axioms or hypotheses to
+  `mlc_conjecture`).
 
 ## Execution Steps Left
 - [x] Step 1: Refactor the bottcher-injectivity chain so it does not depend on
