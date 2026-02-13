@@ -91,8 +91,15 @@
   - `exists_pullback_root_data_of_iter_eq_imp`
   - top-level bridge `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
     in `Mlc/MainConjecture.lean`
+  - rewired left-inverse reductions to avoid routing through
+    `EventualSlitGlobalInverseExtensionHyp` when unnecessary:
+    `EventualSlitGlobalInverseExtendsToBasinIter_of_left_inverse`
+    now uses orbit-branch iteration directly.
   These are scaffolding lemmas only; `mlc_conjecture` still keeps its original
   signature and current axiom footprint (no additional axioms introduced there).
+  Axiom check note: `mlc_conjecture_of_iter_eq_imp_via_pullback_root` does not
+  pull `MLC.bottcher_outside_axiom`; it depends only on its explicit
+  `h_iter_eq_imp` parameter plus the existing baseline axioms.
 - [x] Added direct top-level bridge hooks from eventual-slit bridge data:
   - `exists_pullback_root_data_of_bridge`
   - `mlc_conjecture_of_eventual_slit_global_bridge`

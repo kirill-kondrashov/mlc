@@ -294,8 +294,8 @@ lemma EventualSlitGlobalInverseExtendsToBasinIter_of_left_inverse
     (hleft : HasLeftInverseOn (quadratic_map c)
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasinIter c := by
-  exact EventualSlitGlobalInverseExtendsToBasinIter_of_extension_hyp c
-    (EventualSlitGlobalInverseExtensionHyp_of_left_inverse c hleft)
+  exact iter_left_inverse_of_orbit_inverse_branch_system c
+    (orbit_inverse_branch_system_of_left_inverse c hleft)
 
 def EventualSlitGlobalInverseExtensionToIter (c : ℂ)
     (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA) : Prop :=
@@ -317,8 +317,10 @@ lemma quadratic_map_iter_eq_imp_eq_of_left_inverse
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
-  exact quadratic_map_iter_eq_imp_eq_of_extension_iter c
-    (EventualSlitGlobalInverseExtendsToBasinIter_of_left_inverse c hleft)
+  have hiter :
+      EventualSlitGlobalInverseExtendsToBasinIter c :=
+    EventualSlitGlobalInverseExtendsToBasinIter_of_left_inverse c hleft
+  exact quadratic_map_iter_eq_imp_eq_of_extension_iter c hiter
 
 lemma quadratic_map_left_inverse_on_basin_of_iter_eq_imp
     (c : ℂ)
