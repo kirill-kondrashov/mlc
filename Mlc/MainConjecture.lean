@@ -133,6 +133,17 @@ theorem mlc_conjecture_of_iter_eq_imp
     intro h_mol h_motion c hc h_sat
     exact molecule_conjecture_bridge h_mol h_motion c hc h_sat
 
+/-- If each parameter admits a left inverse of `quadratic_map` on the basin,
+    MLC follows via derived iterate-equality. -/
+theorem mlc_conjecture_of_quadratic_left_inverse
+    (hleft :
+      ∀ c, Quadratic.HasLeftInverseOn (quadratic_map c)
+        (Quadratic.basin_of_infinity c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_iter_eq_imp
+  intro c
+  exact Quadratic.quadratic_map_iter_eq_imp_eq_of_left_inverse c (hleft c)
+
 /-- A concrete replacement route for iterate-equality, parameterized by a
     variable square-root pullback construction on the Böttcher image of the basin. -/
 theorem mlc_conjecture_of_basin_sqrt_branch_of_injective
@@ -198,6 +209,15 @@ theorem mlc_conjecture_of_eventual_slit_global_bridge
   intro c
   rcases h_bridge c with ⟨hA, hG, hbr⟩
   exact Quadratic.quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_bridge c hA hG hbr
+
+/-- The old bridge premise is globally inconsistent with current definitions. -/
+theorem not_eventual_slit_global_bridge_data :
+    ¬ (∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
+      ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
+        Quadratic.EventualSlitGlobalInverseExtensionBridge c hA hG) := by
+  intro h
+  rcases h 0 with ⟨hA, hG, hbr⟩
+  exact Quadratic.not_EventualSlitGlobalInverseExtensionBridge 0 hA hG hbr
 
 /-- Viable top-level route: enough eventual-slit extension data to a basin
     left inverse implies MLC (without using the inconsistent bridge predicate). -/

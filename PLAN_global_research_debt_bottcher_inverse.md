@@ -109,8 +109,15 @@
   - `mlc_conjecture_of_eventual_slit_global_extension`
   reducing MLC from per-parameter
   `EventualSlitGlobalInverseExtendsToBasin c hA hG` data.
+- [x] Collapsed extension data to the core left-inverse object:
+  - `EventualSlitGlobalInverseExtendsToBasin_iff_left_inverse`
+  - top-level `mlc_conjecture_of_quadratic_left_inverse`
+  This makes the blocker target explicit: construct
+  `HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c)`
+  from dynamics without using `quadratic_map_iter_eq_imp_eq`.
 - [x] Added a formal obstruction for the current bridge predicate itself:
   - `not_EventualSlitGlobalInverseExtensionBridge`
+  - top-level `not_eventual_slit_global_bridge_data`
   Using the bridge representation plus `GlobalInverseOnEventualSlit` pointwise
   left-inverse on the basin forces periodic points in the basin, contradiction.
   So the present bridge shape is inconsistent and cannot be the final Step 1 target.

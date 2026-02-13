@@ -1032,6 +1032,17 @@ lemma EventualSlitGlobalInverseExtendsToBasin_of_left_inverse
   rcases hleft with ⟨g, hleft, hmap⟩
   exact ⟨g, hleft, hmap⟩
 
+lemma EventualSlitGlobalInverseExtendsToBasin_iff_left_inverse
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA) :
+    EventualSlitGlobalInverseExtendsToBasin c hA _hG ↔
+      HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
+  constructor
+  · intro h_ext
+    rcases h_ext with ⟨g, hleft, hmap⟩
+    exact ⟨g, hleft, hmap⟩
+  · intro hleft
+    exact EventualSlitGlobalInverseExtendsToBasin_of_left_inverse c hA _hG hleft
+
 lemma EventualSlitGlobalInverseExtensionHyp_of_sqrt_branch_slitPlaneRight
     (c : ℂ)
     (sqrt : ℂ → ℂ)
