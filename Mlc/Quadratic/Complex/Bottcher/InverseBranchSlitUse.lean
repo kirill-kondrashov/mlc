@@ -31,6 +31,20 @@ lemma bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse
   refine (Filter.Eventually.self_of_nhds
     (p := fun x => (Classical.choose hG) (bottcher_map c x) = x) h)
 
+/-- Redesigned Step 2b target at a fixed parameter: a pointwise left-inverse
+    identity for `bottcher_map` on the eventual-slit basin set. -/
+def EventualSlitPointwiseLeftInverseData (c : ℂ) : Prop :=
+  ∃ g : ℂ → ℂ,
+    ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
+      g (bottcher_map c z) = z
+
+lemma eventual_slit_pointwise_left_inverse_data_of_global_inverse
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
+    EventualSlitPointwiseLeftInverseData c := by
+  refine ⟨Classical.choose hG, ?_⟩
+  intro z hz
+  exact bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG z hz
+
 theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
@@ -190,6 +204,13 @@ lemma bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse
   exact bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG z
     ⟨hz_eventual, hz⟩
 
+lemma bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_data
+    (c : ℂ) (h_data : EventualSlitPointwiseLeftInverseData c) :
+    ∀ z, z ∈ basin_of_infinity c → (Classical.choose h_data) (bottcher_map c z) = z := by
+  intro z hz
+  have hz_eventual : z ∈ eventual_slit_set c := basin_subset_eventual_slit_set c hz
+  exact (Classical.choose_spec h_data) z ⟨hz_eventual, hz⟩
+
 lemma bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
     Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
@@ -201,6 +222,19 @@ lemma bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise
       (Classical.choose hG) (bottcher_map c w) = w :=
     bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse c hA hG w hw
   have h := congrArg (Classical.choose hG) hzw
+  simpa [hzleft, hwleft] using h
+
+lemma bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data
+    (c : ℂ) (h_data : EventualSlitPointwiseLeftInverseData c) :
+    Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
+  intro z hz w hw hzw
+  have hzleft :
+      (Classical.choose h_data) (bottcher_map c z) = z :=
+    bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_data c h_data z hz
+  have hwleft :
+      (Classical.choose h_data) (bottcher_map c w) = w :=
+    bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_data c h_data w hw
+  have h := congrArg (Classical.choose h_data) hzw
   simpa [hzleft, hwleft] using h
 
 lemma not_EventualSlitOverlapHyp (c : ℂ) :

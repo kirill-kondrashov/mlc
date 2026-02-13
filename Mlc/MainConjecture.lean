@@ -291,6 +291,19 @@ def EventualSlitGlobalInverseData : Prop :=
   ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
     Quadratic.GlobalInverseOnEventualSlit c hA
 
+/-- Redesigned Step 2b target: only require a pointwise left-inverse identity
+    for `bottcher_map` on the eventual-slit basin set (for each parameter). -/
+def EventualSlitPointwiseLeftInverseData : Prop :=
+  ∀ c, Quadratic.EventualSlitPointwiseLeftInverseData c
+
+/-- Any global eventual-slit inverse data yields the weaker redesigned target. -/
+theorem eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data
+    (h_global : EventualSlitGlobalInverseData) :
+    EventualSlitPointwiseLeftInverseData := by
+  intro c
+  rcases h_global c with ⟨hA, hG⟩
+  exact Quadratic.eventual_slit_pointwise_left_inverse_data_of_global_inverse c hA hG
+
 /-- Overlap-free decomposed target: nonzero derivative provides the atlas;
     compatibility for that chosen atlas and gluing provide the global inverse. -/
 def EventualSlitNonzeroDerivCompatibleGluingData : Prop :=
@@ -325,16 +338,33 @@ theorem not_eventual_slit_nonzero_deriv_compatible_gluing_data :
 theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data
     (h_global : EventualSlitGlobalInverseData) :
     ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have h_point : EventualSlitPointwiseLeftInverseData :=
+    eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data h_global
   intro c
-  rcases h_global c with ⟨hA, hG⟩
-  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise c hA hG
+  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data c (h_point c)
+
+/-- The redesigned Step 2b target directly yields basin injectivity of the
+    Böttcher map for all parameters. -/
+theorem bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data
+    (h_point : EventualSlitPointwiseLeftInverseData) :
+    ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro c
+  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data c
+    (h_point c)
+
+/-- Main-conjecture wrapper for the redesigned Step 2b target. -/
+theorem mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data
+    (h_point : EventualSlitPointwiseLeftInverseData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin
+  exact bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data h_point
 
 /-- Main-conjecture wrapper for the remaining Step 2b target. -/
 theorem mlc_conjecture_of_eventual_slit_global_inverse_data
     (h_global : EventualSlitGlobalInverseData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin
-  exact bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data h_global
+  exact mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data
+    (eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data h_global)
 
 /-- Parameterized extension route: enough eventual-slit extension data implies
     MLC (this route is currently ruled out by

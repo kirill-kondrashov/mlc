@@ -42,6 +42,10 @@
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise`
   - `EventualSlitGlobalInverseData`
+  - `EventualSlitPointwiseLeftInverseData`
+  - `eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data`
+  - `bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data`
+  - `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data`
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse`
@@ -118,10 +122,14 @@
   (`Mlc/MainConjecture.lean`), likely by avoiding any requirement equivalent to
   injectivity of `quadratic_map` on the whole basin.
 - [ ] Concretely, replace `bottcher_map_inj_on_basin_via_iter_eq_axiom` by proving
-  one non-axiomatic basin-injectivity route. Current eventual-slit candidates
-  are all blocked by formal obstructions, so the next step is to redesign the
-  replacement target/predicate shape (not add axioms or hypotheses to
-  `mlc_conjecture`).
+  one non-axiomatic basin-injectivity route. Atlas/global-inverse/gluing
+  eventual-slit candidates are blocked by formal obstructions. Current open
+  redesign target:
+  - `EventualSlitPointwiseLeftInverseData`
+  This is now wired to MLC via
+  `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data` and remains the
+  next candidate to realize without new axioms or new hypotheses in
+  `mlc_conjecture`.
 
 ## Execution Steps Left
 - [x] Step 1: Refactor the bottcher-injectivity chain so it does not depend on
