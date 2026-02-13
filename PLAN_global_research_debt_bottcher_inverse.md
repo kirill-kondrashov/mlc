@@ -4,7 +4,7 @@
 - [ ] Not fully eliminated yet.
 - [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] Current explicit use-site in the MLC pipeline:
-  `Mlc/MainConjecture.lean` (wrapper call at line 195).
+  `Mlc/MainConjecture.lean` (wrapper call at line 272).
 
 ## Completed work
 - [x] Added the eventual-slit extension scaffolding and helper interfaces in
