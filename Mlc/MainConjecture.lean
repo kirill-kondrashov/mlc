@@ -7,6 +7,7 @@ import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
+import Mlc.Quadratic.Complex.Bottcher.InverseBranchSlitUse
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
@@ -88,10 +89,14 @@ theorem mlc_strategy
   · -- Case 2: Infinitely renormalizable
     exact mlc_infinitely_renormalizable h_classify h_bridge h_motion c hc h_inf_renorm
 
-/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    The Mandelbrot set is locally connected. -/
-theorem mlc_conjecture
-    : LocallyConnectedSpace mandelbrotSet := by
+/-- A parameterized MLC statement: if iterate-equality on the basin is available,
+    then the MLC strategy closes. -/
+theorem mlc_conjecture_of_iter_eq_imp
+    (h_iter_eq_imp :
+      ∀ c, ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+        w ∈ Quadratic.basin_of_infinity c →
+        (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
+    LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply mlc_strategy
   · -- Finitely Renormalizable case (Yoccoz)
@@ -112,26 +117,82 @@ theorem mlc_conjecture
             (by
               intro z hz
               simpa [outside_disk] using hz)
-        let h_iter_eq_imp :
-            ∀ z w, z ∈ Quadratic.basin_of_infinity c →
-              w ∈ Quadratic.basin_of_infinity c →
-              (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w :=
-          Quadratic.quadratic_map_iter_eq_imp_eq c
         let h_inj_outside :
             Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) :=
-          bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
+          bottcher_map_inj_on_outside_of_slit c (h_iter_eq_imp c)
         bottcher_map_inj_theorem c
           (bottcher_left_inv_outside c hpre h_inj_outside)
           (basin_escape_outside c)
           (bottcher_conj_iter c)
           (bottcher_map_inj_on_K c)
-          h_iter_eq_imp)
+          (h_iter_eq_imp c))
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
     exact classify_infinitely_renormalizable c h_inf
   · -- Bridge from Molecule Conjecture to Satellite MLC
     intro h_mol h_motion c hc h_sat
     exact molecule_conjecture_bridge h_mol h_motion c hc h_sat
+
+/-- A concrete replacement route for iterate-equality, parameterized by a
+    variable square-root pullback construction on the Böttcher image of the basin. -/
+theorem mlc_conjecture_of_basin_sqrt_branch_of_injective
+    (h_branch :
+      ∀ c, ∃ sqrt : ℂ → ℂ,
+        Quadratic.BasinBottcherSquareRootRightInverse c sqrt ∧
+        Function.Injective (Quadratic.bottcher_map c) ∧
+        MapsTo (fun z => Quadratic.external_ray_map c (sqrt (Quadratic.bottcher_map c z)))
+          (Quadratic.basin_of_infinity c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_iter_eq_imp
+  intro c
+  rcases h_branch c with ⟨sqrt, h_sqrt, h_inj, h_maps⟩
+  exact Quadratic.quadratic_map_iter_eq_imp_eq_of_basin_sqrt_branch_of_injective c sqrt
+    h_sqrt h_inj h_maps
+
+/-- A concrete replacement route for iterate-equality from variable branch data
+    plus a basin-wide left inverse identity for the Böttcher/ray map pair. -/
+theorem mlc_conjecture_of_basin_sqrt_branch
+    (h_branch :
+      ∀ c, ∃ sqrt : ℂ → ℂ,
+        Quadratic.BasinBottcherSquareRootRightInverse c sqrt ∧
+        (∀ z, z ∈ Quadratic.basin_of_infinity c →
+          Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) ∧
+        MapsTo (fun z => Quadratic.external_ray_map c (sqrt (Quadratic.bottcher_map c z)))
+          (Quadratic.basin_of_infinity c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_iter_eq_imp
+  intro c
+  rcases h_branch c with ⟨sqrt, h_sqrt, h_left_bottcher, h_maps⟩
+  have h_conj : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      Quadratic.bottcher_map c (quadratic_map c z) = (Quadratic.bottcher_map c z) ^ 2 := by
+    intro z hz
+    simpa using (bottcher_conj_iter c 1 z hz)
+  exact Quadratic.quadratic_map_iter_eq_imp_eq_of_basin_sqrt_branch c sqrt
+    h_sqrt h_conj h_left_bottcher h_maps
+
+/-- A concrete non-vacuous replacement route: provide a pullback root along
+    quadratic dynamics on the basin, plus basin mapping and Böttcher left inverse. -/
+theorem mlc_conjecture_of_pullback_root
+    (h_pull :
+      ∀ c, ∃ root : ℂ → ℂ,
+        Quadratic.BasinQuadraticPullbackRoot c root ∧
+        (∀ z, z ∈ Quadratic.basin_of_infinity c →
+          Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) ∧
+        MapsTo (fun z => Quadratic.external_ray_map c (root z))
+          (Quadratic.basin_of_infinity c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_iter_eq_imp
+  intro c
+  rcases h_pull c with ⟨root, h_root, h_left_bottcher, h_maps⟩
+  exact Quadratic.quadratic_map_iter_eq_imp_eq_of_pullback_root c root
+    h_root h_left_bottcher h_maps
+
+/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
+    The Mandelbrot set is locally connected. -/
+theorem mlc_conjecture
+    : LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_iter_eq_imp
+    (fun c => Quadratic.quadratic_map_iter_eq_imp_eq c)
 
 end MainProof
 
