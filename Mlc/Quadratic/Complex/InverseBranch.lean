@@ -52,6 +52,36 @@ lemma injOn_of_hasLeftInverseOn {f : α → β} {S : Set β} {T : Set α}
     _ = g (f y) := by simp [hxy]
     _ = y := h_left y hy
 
+/-- Injectivity on a nonempty set yields a left inverse on that set
+    (with arbitrary values off the image). -/
+lemma hasLeftInverseOn_of_injOn {f : α → β} {S : Set β} {T : Set α}
+    (hT : T.Nonempty) (hinj : Set.InjOn f T) :
+    HasLeftInverseOn f S T := by
+  classical
+  rcases hT with ⟨t0, ht0⟩
+  let g : β → α := fun y =>
+    if hy : y ∈ f '' T then Classical.choose hy else t0
+  refine ⟨g, ?_, ?_⟩
+  · intro x hx
+    have hy : f x ∈ f '' T := ⟨x, hx, rfl⟩
+    by_cases h : f x ∈ f '' T
+    · have hchoose_mem : Classical.choose h ∈ T :=
+        (Classical.choose_spec h).1
+      have hchoose_eq : f (Classical.choose h) = f x :=
+        (Classical.choose_spec h).2
+      have hchoose_id : Classical.choose h = x := hinj hchoose_mem hx hchoose_eq
+      unfold g
+      simp [h, hchoose_id]
+    · exact (h hy).elim
+  · intro y hyS
+    by_cases hy : y ∈ f '' T
+    · have hchoose_mem : Classical.choose hy ∈ T :=
+        (Classical.choose_spec hy).1
+      unfold g
+      simp [hy, hchoose_mem]
+    · unfold g
+      simp [hy, ht0]
+
 /-- Coercion to a right inverse on `S` from `InverseBranch`. -/
 lemma inverseBranch_hasRightInverseOn {f : α → β} {S : Set β}
     (g : InverseBranch f S) : HasRightInverseOn f S := by

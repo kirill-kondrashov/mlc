@@ -320,6 +320,20 @@ lemma quadratic_map_iter_eq_imp_eq_of_left_inverse
   exact quadratic_map_iter_eq_imp_eq_of_extension_iter c
     (EventualSlitGlobalInverseExtendsToBasinIter_of_left_inverse c hleft)
 
+lemma quadratic_map_left_inverse_on_basin_of_iter_eq_imp
+    (c : ℂ)
+    (h_iter_eq_imp : ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
+    HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
+  have h_inj : Set.InjOn (quadratic_map c) (basin_of_infinity c) := by
+    intro z hz w hw hzw
+    refine h_iter_eq_imp z w hz hw ?_
+    exact ⟨1, by simpa using hzw⟩
+  have h_nonempty : (basin_of_infinity c).Nonempty := by
+    rcases basin_of_infinity_nonempty c with ⟨z, hz⟩
+    exact ⟨z, hz⟩
+  exact hasLeftInverseOn_of_injOn (S := basin_of_infinity c) h_nonempty h_inj
+
 def BasinBottcherSquareRootRightInverse (c : ℂ) (sqrt : ℂ → ℂ) : Prop :=
   ∀ z, z ∈ basin_of_infinity c →
     sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z
@@ -582,6 +596,19 @@ lemma exists_pullback_root_data_of_left_inverse
     have hmem : external_ray_map c (bottcher_map c (g z)) ∈ basin_of_infinity c := by
       exact hlg.symm ▸ hg
     simpa using hmem
+
+lemma exists_pullback_root_data_of_iter_eq_imp
+    (c : ℂ)
+    (h_iter_eq_imp : ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
+    ∃ root : ℂ → ℂ,
+      BasinQuadraticPullbackRoot c root ∧
+      MapsTo (fun z => external_ray_map c (root z))
+        (basin_of_infinity c) (basin_of_infinity c) := by
+  have hleft :
+      HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) :=
+    quadratic_map_left_inverse_on_basin_of_iter_eq_imp c h_iter_eq_imp
+  exact exists_pullback_root_data_of_left_inverse c hleft
 
 lemma quadratic_map_iter_eq_imp_eq_of_sqrt_branch_slitPlaneRight
     (c : ℂ)

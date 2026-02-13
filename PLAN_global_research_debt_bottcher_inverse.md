@@ -85,6 +85,12 @@
   - `exists_pullback_root_data_of_left_inverse`
   - `exists_pullback_root_data_of_global_inverse_extension`
   - top-level hook `mlc_conjecture_of_pullback_root` in `Mlc/MainConjecture.lean`
+- [x] Added internal reductions from iterate-equality implication to left-inverse data:
+  - generic `hasLeftInverseOn_of_injOn` in `Mlc/Quadratic/Complex/InverseBranch.lean`
+  - `quadratic_map_left_inverse_on_basin_of_iter_eq_imp`
+  - `exists_pullback_root_data_of_iter_eq_imp`
+  These are scaffolding lemmas only; `mlc_conjecture` still keeps its original
+  signature and current axiom footprint (no additional axioms introduced there).
 - [x] Added a formal obstruction for one naive sqrt-branch side condition:
   - `not_bottcher_map_mem_slitPlaneRight_on_basin`
   - `no_sqrt_branch_slitPlaneRight_data_on_full_basin`
