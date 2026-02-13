@@ -285,6 +285,35 @@ lemma bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
   have h := congrArg (Classical.choose h_data) hzw
   simpa [hzleft, hwleft] using h
 
+
+lemma basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin
+    (c : ℂ) (h_inj_basin : Set.InjOn (bottcher_map c) (basin_of_infinity c)) :
+    BasinBottcherPointwiseLeftInverseData c := by
+  refine ⟨external_ray_map c, ?_⟩
+  intro z hz
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    green_function_pos_of_basin c z hz
+  have hnorm : 1 < ‖bottcher_map c z‖ :=
+    bottcher_map_norm_gt_one_of_basin c z hz hpos
+  have hright :
+      bottcher_map c (external_ray_map c (bottcher_map c z)) = bottcher_map c z :=
+    external_ray_map_right_inverse_on_exterior c (bottcher_map c z) hnorm
+  have hmem :
+      external_ray_map c (bottcher_map c z) ∈ basin_of_infinity c := by
+    refine bottcher_map_norm_gt_one_implies_basin c ?_
+    simpa [hright] using hnorm
+  exact external_ray_map_left_inverse_of_injOn c (s := basin_of_infinity c)
+    h_inj_basin hmem hz hnorm
+
+lemma basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin
+    (c : ℂ) :
+    BasinBottcherPointwiseLeftInverseData c ↔
+      Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
+  constructor
+  · intro h_data
+    exact bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c h_data
+  · intro h_inj_basin
+    exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c h_inj_basin
 lemma not_EventualSlitOverlapHyp (c : ℂ) :
     ¬ EventualSlitOverlapHyp c := by
   intro h_over

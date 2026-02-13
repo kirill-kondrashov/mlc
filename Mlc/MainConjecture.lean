@@ -385,6 +385,19 @@ theorem bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
   exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
     (h_basin c)
 
+
+/-- The minimal basin redesign target is equivalent to basin injectivity of
+    `bottcher_map`; this is the exact remaining Step 2b obligation. -/
+theorem basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin :
+    BasinBottcherPointwiseLeftInverseData ↔
+      (∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) := by
+  constructor
+  · intro h_basin c
+    exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
+      (h_basin c)
+  · intro h_inj c
+    exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
+      (h_inj c)
 /-- Main-conjecture wrapper for the minimal basin redesign target. -/
 theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
     (h_basin : BasinBottcherPointwiseLeftInverseData) :

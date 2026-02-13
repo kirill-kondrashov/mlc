@@ -43,9 +43,15 @@
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise`
   - `EventualSlitGlobalInverseData`
   - `EventualSlitPointwiseLeftInverseData`
+  - `BasinBottcherPointwiseLeftInverseData`
   - `eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data`
+  - `basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data`
+  - `eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_pointwise_left_inverse_data`
   - `bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data`
+  - `bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data`
   - `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data`
+  - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data`
+  - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse`
@@ -123,11 +129,15 @@
   injectivity of `quadratic_map` on the whole basin.
 - [ ] Concretely, replace `bottcher_map_inj_on_basin_via_iter_eq_axiom` by proving
   one non-axiomatic basin-injectivity route. Atlas/global-inverse/gluing
-  eventual-slit candidates are blocked by formal obstructions. Current open
-  redesign target:
-  - `EventualSlitPointwiseLeftInverseData`
+  eventual-slit candidates are blocked by formal obstructions. Current open redesign target:
+  - `BasinBottcherPointwiseLeftInverseData`
+  (equivalent to `EventualSlitPointwiseLeftInverseData` via
+  `basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data` and
+  `eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_pointwise_left_inverse_data`,
+  and equivalent to basin injectivity via
+  `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`).
   This is now wired to MLC via
-  `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data` and remains the
+  `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data` and remains the
   next candidate to realize without new axioms or new hypotheses in
   `mlc_conjecture`.
 
