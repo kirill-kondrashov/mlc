@@ -1923,6 +1923,29 @@ lemma range_eq_univ_of_isProperMap_isLocalHomeomorph
   have hclopen : IsClopen (Set.range f) := ⟨hclosed, hopen⟩
   simpa using (IsClopen.eq_univ (α := ℂ) hclopen hnonempty)
 
+lemma exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) {y : ℂ} {U : Set ℂ}
+    (hUopen : IsOpen U)
+    (hfiber : ({x : ℂ | f x = y} : Set ℂ) ⊆ U) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧ f ⁻¹' V ⊆ U := by
+  have hy_not_in : y ∉ f '' Uᶜ := by
+    intro hy
+    rcases hy with ⟨x, hxU, hxy⟩
+    have hxFiber : x ∈ ({x : ℂ | f x = y} : Set ℂ) := by
+      simp [Set.mem_setOf_eq, hxy]
+    exact hxU (hfiber hxFiber)
+  let V : Set ℂ := (f '' Uᶜ)ᶜ
+  have hVopen : IsOpen V := by
+    change IsOpen ((f '' Uᶜ)ᶜ)
+    exact (hclosed _ hUopen.isClosed_compl).isOpen_compl
+  have hyV : y ∈ V := by
+    simpa [V] using hy_not_in
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro x hx
+  by_contra hxU
+  have : f x ∈ f '' Uᶜ := ⟨x, hxU, rfl⟩
+  exact hx this
+
 lemma exists_open_preimage_subset_union_of_finite_fiber
     {f : ℂ → ℂ} (hlocal : IsLocalHomeomorph f) (hclosed : IsClosedMap f)
     {y : ℂ} (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
@@ -2046,6 +2069,73 @@ lemma exists_pairwise_disjoint_ball_of_finite {s : Set ℂ} (hs : s.Finite) :
       have hhalf : dist x.1 y.1 / 2 + dist x.1 y.1 / 2 = dist x.1 y.1 := by ring
       simpa [hhalf] using this
     exact Metric.ball_disjoint_ball hsum
+
+lemma exists_open_preimage_subset_iUnion_ball_of_finite_fiber
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) {y : ℂ}
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ r : ({x : ℂ // f x = y}) → ℝ,
+        (∀ x, 0 < r x) ∧
+        Pairwise (fun x x' =>
+          Disjoint (Metric.ball x.1 (r x)) (Metric.ball x'.1 (r x'))) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), Metric.ball x.1 (r x) := by
+  let s : Set ℂ := {x : ℂ | f x = y}
+  have hsfinite : s.Finite := by simpa [s] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let U : Set ℂ := ⋃ x : ({x : ℂ // f x = y}), Metric.ball x.1 (r x)
+  have hUopen : IsOpen U := by
+    unfold U
+    exact isOpen_iUnion (fun x => Metric.isOpen_ball)
+  have hsU : s ⊆ U := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact Metric.mem_ball_self (hrpos ⟨x, hx⟩)
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := U) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, r, hrpos, hrdisj, ?_⟩
+  simpa [U] using hpre
+
+lemma exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorph f) {y : ℂ}
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : ({x : ℂ // f x = y}) → Set ℂ,
+        (∀ x, IsOpen (U x)) ∧
+        (∀ x, x.1 ∈ U x) ∧
+        (∀ x, Set.InjOn f (U x)) ∧
+        Pairwise (fun x x' => Disjoint (U x) (U x')) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x := by
+  classical
+  have hlocinj : IsLocallyInjective f := hlocal.isLocallyInjective
+  choose N hNopen hxN hNinj using (fun x : ({x : ℂ // f x = y}) => hlocinj x.1)
+  let s : Set ℂ := {x : ℂ | f x = y}
+  have hsfinite : s.Finite := by simpa [s] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let U : ({x : ℂ // f x = y}) → Set ℂ := fun x => Metric.ball x.1 (r x) ∩ N x
+  let Uunion : Set ℂ := ⋃ x : ({x : ℂ // f x = y}), U x
+  have hUopen : IsOpen Uunion := by
+    unfold Uunion
+    refine isOpen_iUnion ?_
+    intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  have hsU : s ⊆ Uunion := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact ⟨Metric.mem_ball_self (hrpos ⟨x, hx⟩), hxN ⟨x, hx⟩⟩
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := Uunion) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, U, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  · intro x
+    exact ⟨Metric.mem_ball_self (hrpos x), hxN x⟩
+  · intro x
+    exact (hNinj x).mono (by intro z hz; exact hz.2)
+  · intro x x' hxx'
+    exact (hrdisj hxx').mono (by intro z hz; exact hz.1) (by intro z hz; exact hz.1)
+  · simpa [Uunion] using hpre
 
 
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.

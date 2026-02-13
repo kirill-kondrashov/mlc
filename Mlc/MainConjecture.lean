@@ -90,10 +90,11 @@ theorem mlc_strategy
     exact mlc_infinitely_renormalizable h_classify h_bridge h_motion c hc h_inf_renorm
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
-    is enough to close the strategy. -/
-theorem mlc_conjecture_of_bottcher_inj_on_basin
-    (h_inj_basin :
-      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    on Mandelbrot parameters is enough to close the strategy. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply mlc_strategy
@@ -106,15 +107,25 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin
   · -- Bottcher coordinates exist on M
     exact bottcher_onM_hyp
   · -- Green sublevel sets connected
-    exact green_sublevel_connected
+    exact green_sublevel_connected_onM
       (fun c w hw => Quadratic.bottcher_map_surj c w hw)
-      (fun c => h_inj_basin c)
+      h_inj_basin_onM
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
     exact classify_infinitely_renormalizable c h_inf
   · -- Bridge from Molecule Conjecture to Satellite MLC
     intro h_mol h_motion c hc h_sat
     exact molecule_conjecture_bridge h_mol h_motion c hc h_sat
+
+/-- A parameterized MLC statement: basin injectivity of the Böttcher map
+    is enough to close the strategy. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin
+    (h_inj_basin :
+      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM
+  intro c _hc
+  exact h_inj_basin c
 
 /-- Basin-wise left-inverse identity for `external_ray_map ∘ bottcher_map`
     is enough to obtain MLC. -/
@@ -300,6 +311,12 @@ def EventualSlitPointwiseLeftInverseData : Prop :=
     directly on the basin (for each parameter). -/
 def BasinBottcherPointwiseLeftInverseData : Prop :=
   ∀ c, Quadratic.BasinBottcherPointwiseLeftInverseData c
+
+/-- On-M minimal redesign target: pointwise left-inverse identity for
+    `bottcher_map` on the basin for Mandelbrot parameters. -/
+def BasinBottcherPointwiseLeftInverseDataOnM : Prop :=
+  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+    Quadratic.BasinBottcherPointwiseLeftInverseData c
 
 /-- Any global eventual-slit inverse data yields the weaker redesigned target. -/
 theorem eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data

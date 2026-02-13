@@ -98,6 +98,17 @@
   - `mlc_conjecture_of_basin_sqrt_branch_of_injective`
   - `mlc_conjecture_of_basin_sqrt_branch`
   - `mlc_conjecture_of_eventual_slit_global_bridge`
+- [x] Added topology prelims for a future non-axiomatic basin-injectivity route
+  (currently in `BottcherOutsidePlan`):
+  - `isDiscrete_fiber_of_isLocallyInjective`
+  - `finite_fiber_of_isProperMap_isLocallyInjective`
+  - `range_isOpen_of_isLocalHomeomorph`
+  - `range_isClosed_of_isProperMap`
+  - `range_eq_univ_of_isProperMap_isLocalHomeomorph`
+  - `exists_open_preimage_subset_of_closedMap_of_fiber_subset`
+  - `exists_pairwise_disjoint_ball_of_finite`
+  - `exists_open_preimage_subset_iUnion_ball_of_finite_fiber`
+  - `exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber`
 
 ## Ruled-Out Routes (Formal Obstructions)
 - [x] Escape-time candidate route is inconsistent:
