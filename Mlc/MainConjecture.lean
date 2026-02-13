@@ -296,6 +296,11 @@ def EventualSlitGlobalInverseData : Prop :=
 def EventualSlitPointwiseLeftInverseData : Prop :=
   ∀ c, Quadratic.EventualSlitPointwiseLeftInverseData c
 
+/-- Minimal redesign target: pointwise left-inverse identity for `bottcher_map`
+    directly on the basin (for each parameter). -/
+def BasinBottcherPointwiseLeftInverseData : Prop :=
+  ∀ c, Quadratic.BasinBottcherPointwiseLeftInverseData c
+
 /-- Any global eventual-slit inverse data yields the weaker redesigned target. -/
 theorem eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data
     (h_global : EventualSlitGlobalInverseData) :
@@ -303,6 +308,20 @@ theorem eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_invers
   intro c
   rcases h_global c with ⟨hA, hG⟩
   exact Quadratic.eventual_slit_pointwise_left_inverse_data_of_global_inverse c hA hG
+
+/-- Eventual-slit pointwise-left-inverse data and basin pointwise-left-inverse
+    data are equivalent (because `basin ⊆ eventual_slit_set`). -/
+theorem basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data
+    (h_point : EventualSlitPointwiseLeftInverseData) :
+    BasinBottcherPointwiseLeftInverseData := by
+  intro c
+  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_data c (h_point c)
+
+theorem eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_pointwise_left_inverse_data
+    (h_basin : BasinBottcherPointwiseLeftInverseData) :
+    EventualSlitPointwiseLeftInverseData := by
+  intro c
+  exact Quadratic.eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_data c (h_basin c)
 
 /-- Overlap-free decomposed target: nonzero derivative provides the atlas;
     compatibility for that chosen atlas and gluing provide the global inverse. -/
@@ -340,24 +359,45 @@ theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data
     ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
   have h_point : EventualSlitPointwiseLeftInverseData :=
     eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data h_global
+  have h_basin : BasinBottcherPointwiseLeftInverseData :=
+    basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point
   intro c
-  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data c (h_point c)
+  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
+    (h_basin c)
 
 /-- The redesigned Step 2b target directly yields basin injectivity of the
     Böttcher map for all parameters. -/
 theorem bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data
     (h_point : EventualSlitPointwiseLeftInverseData) :
     ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have h_basin : BasinBottcherPointwiseLeftInverseData :=
+    basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point
   intro c
-  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data c
-    (h_point c)
+  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
+    (h_basin c)
+
+/-- The minimal basin redesign target directly yields basin injectivity of the
+    Böttcher map for all parameters. -/
+theorem bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
+    (h_basin : BasinBottcherPointwiseLeftInverseData) :
+    ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro c
+  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
+    (h_basin c)
+
+/-- Main-conjecture wrapper for the minimal basin redesign target. -/
+theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
+    (h_basin : BasinBottcherPointwiseLeftInverseData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin
+  exact bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data h_basin
 
 /-- Main-conjecture wrapper for the redesigned Step 2b target. -/
 theorem mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data
     (h_point : EventualSlitPointwiseLeftInverseData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin
-  exact bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data h_point
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
+    (basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point)
 
 /-- Main-conjecture wrapper for the remaining Step 2b target. -/
 theorem mlc_conjecture_of_eventual_slit_global_inverse_data
