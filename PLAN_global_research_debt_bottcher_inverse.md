@@ -127,8 +127,11 @@
   route is impossible, so `quadratic_map_iter_eq_imp_eq` cannot be replaced by that
   statement.
 - [ ] Identify and prove the minimal *true* replacement needed in the main path
-  (`Mlc/MainConjecture.lean`), likely by avoiding any requirement equivalent to
-  injectivity of `quadratic_map` on the whole basin.
+  (`Mlc/MainConjecture.lean`). After the latest reductions, the current minimal
+  target is equivalent to basin injectivity of `bottcher_map`
+  (`basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`),
+  so the remaining choice is: prove that injectivity non-axiomatically, or
+  redesign the MLC path to avoid requiring it.
 - [ ] Concretely, replace `bottcher_map_inj_on_basin_via_iter_eq_axiom` by proving
   one non-axiomatic basin-injectivity route. Atlas/global-inverse/gluing
   eventual-slit candidates are blocked by formal obstructions. Current open redesign target:
