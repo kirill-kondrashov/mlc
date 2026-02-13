@@ -336,6 +336,53 @@ lemma quadratic_map_left_inverse_on_basin_of_iter_eq_imp
     exact ⟨z, hz⟩
   exact hasLeftInverseOn_of_injOn (S := basin_of_infinity c) h_nonempty h_inj
 
+lemma quadratic_map_not_injOn_basin (c : ℂ) :
+    ¬ Set.InjOn (quadratic_map c) (basin_of_infinity c) := by
+  let z : ℂ := ((‖c‖ + 3 : ℝ) : ℂ)
+  have hz_norm : ‖z‖ = ‖c‖ + 3 := by
+    have hnonneg : 0 ≤ ‖c‖ + 3 := by nlinarith [norm_nonneg c]
+    simpa [z] using (Complex.norm_of_nonneg hnonneg)
+  have hz_large : ‖z‖ > ‖c‖ + 2 := by
+    linarith [hz_norm]
+  have hz_basin : z ∈ basin_of_infinity c :=
+    open_large_ball_subset_basin c hz_large
+  have hnegz_large : ‖-z‖ > ‖c‖ + 2 := by
+    simpa [norm_neg] using hz_large
+  have hnegz_basin : -z ∈ basin_of_infinity c :=
+    open_large_ball_subset_basin c hnegz_large
+  have hz_ne_negz : z ≠ -z := by
+    have hz_ne_zero : z ≠ 0 := by
+      intro hz0
+      have hz_norm_zero : ‖z‖ = 0 := by simp [hz0]
+      have hpos : 0 < ‖z‖ := by
+        rw [hz_norm]
+        linarith [norm_nonneg c]
+      have : (0 : ℝ) < 0 := by
+        calc
+          (0 : ℝ) < ‖z‖ := hpos
+          _ = 0 := hz_norm_zero
+      exact (lt_irrefl (0 : ℝ)) this
+    intro h
+    have hmul : (2 : ℂ) * z = 0 := by
+      calc
+        (2 : ℂ) * z = z + z := by ring
+        _ = z + (-z) := by
+              exact congrArg (fun t : ℂ => z + t) h
+        _ = 0 := by simp
+    have h2ne : (2 : ℂ) ≠ 0 := by norm_num
+    exact hz_ne_zero ((mul_eq_zero.mp hmul).resolve_left h2ne)
+  have hsame : quadratic_map c z = quadratic_map c (-z) := by
+    simp [quadratic_map, pow_two]
+  intro hinj
+  exact hz_ne_negz (hinj hz_basin hnegz_basin hsame)
+
+lemma not_quadratic_map_left_inverse_on_basin (c : ℂ) :
+    ¬ HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
+  intro hleft
+  have hinj : Set.InjOn (quadratic_map c) (basin_of_infinity c) :=
+    injOn_of_hasLeftInverseOn hleft
+  exact quadratic_map_not_injOn_basin c hinj
+
 def BasinBottcherSquareRootRightInverse (c : ℂ) (sqrt : ℂ → ℂ) : Prop :=
   ∀ z, z ∈ basin_of_infinity c →
     sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z
