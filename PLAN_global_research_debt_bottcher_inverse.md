@@ -105,6 +105,15 @@
   - `mlc_conjecture_of_eventual_slit_global_bridge`
   This isolates the remaining work to constructing bridge data, without touching
   `mlc_conjecture`.
+- [x] Added a viable top-level extension hook (non-vacuous target):
+  - `mlc_conjecture_of_eventual_slit_global_extension`
+  reducing MLC from per-parameter
+  `EventualSlitGlobalInverseExtendsToBasin c hA hG` data.
+- [x] Added a formal obstruction for the current bridge predicate itself:
+  - `not_EventualSlitGlobalInverseExtensionBridge`
+  Using the bridge representation plus `GlobalInverseOnEventualSlit` pointwise
+  left-inverse on the basin forces periodic points in the basin, contradiction.
+  So the present bridge shape is inconsistent and cannot be the final Step 1 target.
 - [x] Added a formal obstruction for one naive sqrt-branch side condition:
   - `not_bottcher_map_mem_slitPlaneRight_on_basin`
   - `no_sqrt_branch_slitPlaneRight_data_on_full_basin`
@@ -125,7 +134,7 @@
 
 ## Remaining research/debt (blocking elimination)
 - [ ] Step 1: Prove a concrete global extension bridge:
-  `EventualSlitGlobalInverseExtensionBridge c hA hG` from actual dynamics.
+  `EventualSlitGlobalInverseExtendsToBasin c hA hG` from actual dynamics.
   Current reduced target from the escape-time candidate route
   (`EventualSlitBridgeCandidateLeftInverse` / `EventualSlitEscapeIterateLeftInverse`)
   is now formally shown inconsistent with basin dynamics
@@ -137,6 +146,10 @@
   Also, the naive full-basin single-slit membership side conditions have been
   formally ruled out (both fixed and rotated slit halves), so Step 1 must use
   genuinely local/variable branch data or a different pullback/gluing mechanism.
+  Moreover, the current `EventualSlitGlobalInverseExtensionBridge` predicate has
+  now been formally shown inconsistent (`not_EventualSlitGlobalInverseExtensionBridge`);
+  Step 1 has been reformulated around
+  `EventualSlitGlobalInverseExtendsToBasin` / pullback-root / left-inverse route.
 - [ ] Step 2: Derive `EventualSlitGlobalInverseExtensionHyp c` from concrete extension data and obtain
   `EventualSlitGlobalInverseExtendsToBasinIter c` without fallback assumptions.
   This reduction is formalized (`..._of_left_inverse`, `..._of_sqrt_branch_*`);

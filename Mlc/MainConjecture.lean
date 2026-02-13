@@ -199,6 +199,29 @@ theorem mlc_conjecture_of_eventual_slit_global_bridge
   rcases h_bridge c with ⟨hA, hG, hbr⟩
   exact Quadratic.quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_bridge c hA hG hbr
 
+/-- Viable top-level route: enough eventual-slit extension data to a basin
+    left inverse implies MLC (without using the inconsistent bridge predicate). -/
+theorem mlc_conjecture_of_eventual_slit_global_extension
+    (h_ext :
+      ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
+        ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
+          Quadratic.EventualSlitGlobalInverseExtendsToBasin c hA hG) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_pullback_root
+  intro c
+  rcases h_ext c with ⟨hA, hG, hext⟩
+  have hleft :
+      Quadratic.HasLeftInverseOn (quadratic_map c)
+        (Quadratic.basin_of_infinity c) (Quadratic.basin_of_infinity c) :=
+    Quadratic.quadratic_map_left_inverse_on_basin_of_global_inverse c hA hG hext
+  have h_left_bottcher :
+      ∀ z, z ∈ Quadratic.basin_of_infinity c →
+        Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+    Quadratic.bottcher_left_inverse_on_basin_of_quadratic_left_inverse c hleft
+  rcases Quadratic.exists_pullback_root_data_of_global_inverse_extension c hA hG hext with
+    ⟨root, h_root, h_maps⟩
+  exact ⟨root, h_root, h_left_bottcher, h_maps⟩
+
 /-- Bridge theorem: the pullback-root route is derivable from the
     iterate-equality implication hypothesis. -/
 theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root

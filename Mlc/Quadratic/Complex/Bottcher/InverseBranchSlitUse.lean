@@ -984,6 +984,40 @@ lemma EventualSlitGlobalInverseExtensionBridge_of_escape_iterate
   exact EventualSlitGlobalInverseExtensionBridge_of_candidate_left_inverse c hA hG
     (EventualSlitBridgeCandidateLeftInverse_of_escape_iterate c hA hG hesc)
 
+lemma not_EventualSlitGlobalInverseExtensionBridge
+    (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
+    ¬ EventualSlitGlobalInverseExtensionBridge c hA hG := by
+  intro hbridge
+  rcases hbridge with ⟨g, hleft, _hmap, hrepr⟩
+  rcases basin_of_infinity_nonempty c with ⟨z, hz⟩
+  have hzq : quadratic_map c z ∈ basin_of_infinity c :=
+    (basin_of_infinity_forward_invariant c) hz
+  rcases hrepr (quadratic_map c z) hzq with ⟨N, hNslit, hreprN⟩
+  have hfiter :
+      ∀ n, MapsTo (quadratic_map c)^[n] (basin_of_infinity c) (basin_of_infinity c) :=
+    MapsTo.iterate (basin_of_infinity_forward_invariant c)
+  have hNbasin : (quadratic_map c)^[N] (quadratic_map c z) ∈ basin_of_infinity c :=
+    (hfiter N) hzq
+  have hchoose :
+      (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] (quadratic_map c z))) =
+        (quadratic_map c)^[N] (quadratic_map c z) :=
+    bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG
+      ((quadratic_map c)^[N] (quadratic_map c z)) ⟨hNslit, hNbasin⟩
+  have hgq :
+      g (quadratic_map c z) =
+        (quadratic_map c)^[N] (quadratic_map c z) := hreprN.trans hchoose
+  have hperiod_base :
+      (quadratic_map c)^[N] (quadratic_map c z) = z := by
+    calc
+      (quadratic_map c)^[N] (quadratic_map c z) = g (quadratic_map c z) := hgq.symm
+      _ = z := hleft z hz
+  have hsucc :
+      (quadratic_map c)^[N + 1] z = (quadratic_map c)^[N] (quadratic_map c z) :=
+    Function.iterate_succ_apply (f := quadratic_map c) (n := N) (x := z)
+  have hperiod : (quadratic_map c)^[N + 1] z = z := hsucc.trans hperiod_base
+  have hp_pos : 0 < N + 1 := Nat.succ_pos _
+  exact not_mem_basin_of_periodic c z hp_pos hperiod hz
+
 def EventualSlitGlobalInverseExtendsToBasin (c : ℂ)
     (hA : EventualSlitInverseAtlas c) (_hG : GlobalInverseOnEventualSlit c hA) : Prop :=
   ∃ g : ℂ → ℂ,
