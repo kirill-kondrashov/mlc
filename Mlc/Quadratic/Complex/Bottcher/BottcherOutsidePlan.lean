@@ -2175,6 +2175,61 @@ lemma exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
     exact (hrdisj hxx').mono (by intro z hz; exact hz.1) (by intro z hz; exact hz.1)
   · simpa [Uunion] using hpre
 
+lemma exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber_on
+    {f : ℂ → ℂ} {s : Set ℂ} (hclosed : IsClosedMap f)
+    (hlocal : IsLocalHomeomorphOn f s) {y : ℂ}
+    (hfiberS : ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : ({x : ℂ // f x = y}) → Set ℂ,
+        (∀ x, IsOpen (U x)) ∧
+        (∀ x, x.1 ∈ U x) ∧
+        (∀ x, Set.InjOn f (U x)) ∧
+        Pairwise (fun x x' => Disjoint (U x) (U x')) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x := by
+  classical
+  let s0 : Set ℂ := {x : ℂ | f x = y}
+  have hsfinite : s0.Finite := by simpa [s0] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s0) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let N : ({x : ℂ // f x = y}) → Set ℂ := fun x =>
+    (Classical.choose (hlocal x.1 (hfiberS x.2))).source
+  have hNopen : ∀ x, IsOpen (N x) := by
+    intro x
+    exact (Classical.choose (hlocal x.1 (hfiberS x.2))).open_source
+  have hxN : ∀ x, x.1 ∈ N x := by
+    intro x
+    exact (Classical.choose_spec (hlocal x.1 (hfiberS x.2))).1
+  have hNinj : ∀ x, Set.InjOn f (N x) := by
+    intro x a ha b hb hab
+    let e : OpenPartialHomeomorph ℂ ℂ := Classical.choose (hlocal x.1 (hfiberS x.2))
+    have hfeq : f = e := (Classical.choose_spec (hlocal x.1 (hfiberS x.2))).2
+    have heq : e a = e b := by simpa [hfeq] using hab
+    exact e.toPartialEquiv.injOn (by simpa [N, e] using ha) (by simpa [N, e] using hb) heq
+  let U : ({x : ℂ // f x = y}) → Set ℂ := fun x => Metric.ball x.1 (r x) ∩ N x
+  let Uunion : Set ℂ := ⋃ x : ({x : ℂ // f x = y}), U x
+  have hUopen : IsOpen Uunion := by
+    unfold Uunion
+    refine isOpen_iUnion ?_
+    intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  have hsU : s0 ⊆ Uunion := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact ⟨Metric.mem_ball_self (hrpos ⟨x, hx⟩), hxN ⟨x, hx⟩⟩
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := Uunion) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, U, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  · intro x
+    exact ⟨Metric.mem_ball_self (hrpos x), hxN x⟩
+  · intro x
+    exact (hNinj x).mono (by intro z hz; exact hz.2)
+  · intro x x' hxx'
+    exact (hrdisj hxx').mono (by intro z hz; exact hz.1) (by intro z hz; exact hz.1)
+  · simpa [Uunion] using hpre
+
 lemma exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj
     {f : ℂ → ℂ} {y : ℂ} {V : Set ℂ}
     {U : ({x : ℂ // f x = y}) → Set ℂ}

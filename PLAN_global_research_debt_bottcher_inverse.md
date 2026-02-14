@@ -113,6 +113,7 @@
   - `exists_pairwise_disjoint_ball_of_finite`
   - `exists_open_preimage_subset_iUnion_ball_of_finite_fiber`
   - `exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber`
+  - `exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber_on`
   - `exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj`
   - `finite_fiber_of_mem_open_of_preimage_subset_iUnion_inj`
   - `natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj`
