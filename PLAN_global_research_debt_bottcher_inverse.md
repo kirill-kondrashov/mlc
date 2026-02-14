@@ -15,6 +15,7 @@
 - [x] Main theorem wiring is parameterized:
   - `mlc_conjecture_of_bottcher_inj_on_basin`
   - `mlc_conjecture_of_bottcher_left_inverse_on_basin`
+  - `mlc_conjecture_of_bottcher_isLocalHomeomorph`
   - `mlc_conjecture_of_iter_eq_imp`
   - `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
   - `mlc_conjecture_of_quadratic_left_inverse`

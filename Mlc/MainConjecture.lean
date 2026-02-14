@@ -138,6 +138,16 @@ theorem mlc_conjecture_of_bottcher_left_inverse_on_basin
   intro c
   exact bottcher_map_inj_on_basin_of_left_inverse c (h_left_basin c)
 
+/-- A parameterized MLC statement: if each Böttcher map is a local homeomorphism
+    on `ℂ`, basin injectivity follows from the proper/local-homeomorphism
+    finite-fiber route. -/
+theorem mlc_conjecture_of_bottcher_isLocalHomeomorph
+    (hlocal : ∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin
+  intro c
+  exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c)
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp
