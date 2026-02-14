@@ -2318,6 +2318,20 @@ lemma exists_open_natCard_fiber_le_of_closedMap_localHomeomorph_of_finite_fiber
   exact natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
     (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hy'
 
+lemma exists_open_natCard_fiber_le_of_closedMap_localHomeomorphOn_of_finite_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorphOn f s) {y : ℂ}
+    (hfiberS : ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, Nat.card ({x : ℂ // f x = y'}) ≤ Nat.card ({x : ℂ // f x = y}) := by
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber_on
+      (f := f) (s := s) hclosed hlocal (y := y) hfiberS hfinite with
+    ⟨V, hVopen, hyV, U, _hUopen, _hxU, hUinj, _hUdisj, hpre⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
+    (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hy'
+
 lemma exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint
     {f : ℂ → ℂ} {y : ℂ}
     {U : ({x : ℂ // f x = y}) → Set ℂ}

@@ -119,6 +119,7 @@
   - `natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj`
   - `exists_open_finite_fiber_of_closedMap_localHomeomorph_of_finite_fiber`
   - `exists_open_natCard_fiber_le_of_closedMap_localHomeomorph_of_finite_fiber`
+  - `exists_open_natCard_fiber_le_of_closedMap_localHomeomorphOn_of_finite_fiber_subset`
   - `exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint`
   - `natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image`
   - `exists_open_natCard_fiber_eq_of_closedMap_localHomeomorph_of_finite_fiber`
