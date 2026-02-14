@@ -114,18 +114,24 @@
   - `exists_open_preimage_subset_iUnion_ball_of_finite_fiber`
   - `exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber`
   - `exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber_on`
+  - `exists_open_preimage_subset_iUnion_disjoint_inj_subset_of_finite_fiber_on`
   - `exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj`
   - `finite_fiber_of_mem_open_of_preimage_subset_iUnion_inj`
   - `natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj`
   - `exists_open_finite_fiber_of_closedMap_localHomeomorph_of_finite_fiber`
   - `exists_open_natCard_fiber_le_of_closedMap_localHomeomorph_of_finite_fiber`
   - `exists_open_natCard_fiber_le_of_closedMap_localHomeomorphOn_of_finite_fiber_subset`
+  - `isOpen_image_of_isLocalHomeomorphOn_aux`
   - `exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint`
   - `natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image`
   - `exists_open_natCard_fiber_eq_of_closedMap_localHomeomorph_of_finite_fiber`
+  - `exists_open_natCard_fiber_eq_of_closedMap_localHomeomorphOn_of_open_of_finite_fiber_subset`
   - `natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorph`
   - `natCard_fiber_eq_of_isProperMap_isLocalHomeomorph`
+  - `natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset`
+  - `natCard_fiber_eq_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset`
   - `injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one`
+  - `injective_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_of_exists_natCard_fiber_eq_one`
   - `natCard_fiber_eq_one_of_existsUnique`
   - `natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset`
   - `injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset`

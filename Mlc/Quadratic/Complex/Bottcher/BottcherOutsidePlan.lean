@@ -2390,6 +2390,30 @@ lemma exists_open_natCard_fiber_le_of_closedMap_localHomeomorphOn_of_finite_fibe
   exact natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
     (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hy'
 
+lemma isOpen_image_of_isLocalHomeomorphOn_aux
+    {f : ℂ → ℂ} {s t : Set ℂ} (hlocal : IsLocalHomeomorphOn f s)
+    (ht : t ⊆ s) (htop : IsOpen t) :
+    IsOpen (f '' t) := by
+  refine isOpen_iff_mem_nhds.mpr ?_
+  rintro y ⟨x, hx, rfl⟩
+  obtain ⟨U, hU, hEmb⟩ :=
+    (isLocalHomeomorphOn_iff_isOpenEmbedding_restrict (f := f) (s := s)).1 hlocal x (ht hx)
+  have hOpenMap : IsOpenMap (U.restrict f) := hEmb.isOpenMap
+  have hUopen : IsOpen ((Subtype.val : U → ℂ) ⁻¹' t) := by
+    exact htop.preimage continuous_subtype_val
+  have hxU : x ∈ U := by
+    have hxint : x ∈ interior U := mem_interior_iff_mem_nhds.mpr hU
+    exact interior_subset hxint
+  have hmem : (⟨x, hxU⟩ : U) ∈ (Subtype.val : U → ℂ) ⁻¹' t := by
+    simpa using hx
+  have hnhds : (U.restrict f) '' ((Subtype.val : U → ℂ) ⁻¹' t) ∈ 𝓝 (f x) := by
+    have hopen : IsOpen ((U.restrict f) '' ((Subtype.val : U → ℂ) ⁻¹' t)) :=
+      hOpenMap _ hUopen
+    exact hopen.mem_nhds ⟨⟨x, hxU⟩, hmem, rfl⟩
+  refine mem_of_superset hnhds ?_
+  rintro _ ⟨z, hz, rfl⟩
+  exact ⟨z.1, hz, rfl⟩
+
 lemma exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint
     {f : ℂ → ℂ} {y : ℂ}
     {U : ({x : ℂ // f x = y}) → Set ℂ}
@@ -2475,6 +2499,42 @@ lemma exists_open_natCard_fiber_eq_of_closedMap_localHomeomorph_of_finite_fiber
   exact natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image
     (f := f) (y := y) (V := V0) (U := U) hpre hUinj hUdisj hfinite hyV0' hyI'
 
+lemma exists_open_natCard_fiber_eq_of_closedMap_localHomeomorphOn_of_open_of_finite_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) {y : ℂ}
+    (hfiberS : ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, Nat.card ({x : ℂ // f x = y'}) = Nat.card ({x : ℂ // f x = y}) := by
+  classical
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_subset_of_finite_fiber_on
+      (f := f) (s := s) hclosed hlocal hsopen (y := y) hfiberS hfinite with
+    ⟨V0, hV0open, hyV0, U, hUopen, hxU, hUsub, hUinj, hUdisj, hpre⟩
+  let I : Type := ({x : ℂ // f x = y})
+  haveI : Finite I := hfinite.to_subtype
+  letI : Fintype I := Fintype.ofFinite I
+  let Iimgs : Set ℂ := ⋂ x : I, f '' U x
+  have hIimgsOpen : IsOpen Iimgs := by
+    unfold Iimgs
+    simpa using
+      (isOpen_biInter_finset (s := (Finset.univ : Finset I))
+        (f := fun x : I => f '' U x) (by
+          intro x _hx
+          exact isOpen_image_of_isLocalHomeomorphOn_aux hlocal (hUsub x) (hUopen x)))
+  let V : Set ℂ := V0 ∩ Iimgs
+  have hVopen : IsOpen V := hV0open.inter hIimgsOpen
+  have hyIimgs : y ∈ Iimgs := by
+    refine Set.mem_iInter.mpr ?_
+    intro x
+    exact ⟨x.1, hxU x, by simp [x.2]⟩
+  have hyV : y ∈ V := ⟨hyV0, hyIimgs⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  have hyV0' : y' ∈ V0 := hy'.1
+  have hyI' : y' ∈ Iimgs := hy'.2
+  exact natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image
+    (f := f) (y := y) (V := V0) (U := U) hpre hUinj hUdisj hfinite hyV0' hyI'
+
 lemma natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorph
     {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) :
     IsLocallyConstant (fun y : ℂ => Nat.card ({x : ℂ // f x = y})) := by
@@ -2517,6 +2577,62 @@ lemma injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one
     finite_fiber_of_isProperMap_isLocallyInjective
       (f := f) hproper hlocal.isLocallyInjective (f z)
   haveI : Finite ({x : ℂ // f x = f z}) := hfinite.to_subtype
+  letI : Fintype ({x : ℂ // f x = f z}) := Fintype.ofFinite ({x : ℂ // f x = f z})
+  have hcardF : Fintype.card ({x : ℂ // f x = f z}) = 1 := by
+    simpa [Nat.card_eq_fintype_card] using hcard
+  have hsub : Subsingleton ({x : ℂ // f x = f z}) := by
+    apply (Fintype.card_le_one_iff_subsingleton).1
+    simp [hcardF]
+  have hs :
+      (⟨z, rfl⟩ : {x : ℂ // f x = f z}) =
+        (⟨w, hzw.symm⟩ : {x : ℂ // f x = f z}) :=
+    Subsingleton.elim _ _
+  exact congrArg Subtype.val hs
+
+lemma natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hfiberS : ∀ y, ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    IsLocallyConstant (fun y : ℂ => Nat.card ({x : ℂ // f x = y})) := by
+  refine (IsLocallyConstant.iff_exists_open _).2 ?_
+  intro y
+  have hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite :=
+    finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := y) (hfiberS y)
+  rcases exists_open_natCard_fiber_eq_of_closedMap_localHomeomorphOn_of_open_of_finite_fiber_subset
+      (f := f) (s := s) hproper.isClosedMap hlocal hsopen (y := y) (hfiberS y) hfinite with
+    ⟨V, hVopen, hyV, hcard⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact hcard y' hy'
+
+lemma natCard_fiber_eq_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hfiberS : ∀ y, ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    ∀ y y', Nat.card ({x : ℂ // f x = y}) = Nat.card ({x : ℂ // f x = y'}) := by
+  have hloc :
+      IsLocallyConstant (fun y : ℂ => Nat.card ({x : ℂ // f x = y})) :=
+    natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+      (f := f) (s := s) hproper hlocal hsopen hfiberS
+  exact (IsLocallyConstant.iff_is_const (f := fun y : ℂ =>
+    Nat.card ({x : ℂ // f x = y}))).1 hloc
+
+lemma injective_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_of_exists_natCard_fiber_eq_one
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hfiberS : ∀ y, ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hdeg1 : ∃ y : ℂ, Nat.card ({x : ℂ // f x = y}) = 1) :
+    Function.Injective f := by
+  rcases hdeg1 with ⟨y0, hy0⟩
+  have hcard_const := natCard_fiber_eq_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+    (f := f) (s := s) hproper hlocal hsopen hfiberS
+  intro z w hzw
+  have hcard : Nat.card ({x : ℂ // f x = f z}) = 1 := by
+    calc
+      Nat.card ({x : ℂ // f x = f z})
+          = Nat.card ({x : ℂ // f x = y0}) := hcard_const (f z) y0
+      _ = 1 := hy0
+  letI : Finite ({x : ℂ // f x = f z}) := by
+    exact (finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := f z) (hfiberS (f z))).to_subtype
   letI : Fintype ({x : ℂ // f x = f z}) := Fintype.ofFinite ({x : ℂ // f x = f z})
   have hcardF : Fintype.card ({x : ℂ // f x = f z}) = 1 := by
     simpa [Nat.card_eq_fintype_card] using hcard
