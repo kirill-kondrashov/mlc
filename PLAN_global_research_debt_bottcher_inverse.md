@@ -17,6 +17,7 @@
   - `mlc_conjecture_of_bottcher_left_inverse_on_basin`
   - `mlc_conjecture_of_bottcher_isLocalHomeomorph`
   - `mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin`
+  - `mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit`
   - `mlc_conjecture_of_iter_eq_imp`
   - `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
   - `mlc_conjecture_of_quadratic_left_inverse`

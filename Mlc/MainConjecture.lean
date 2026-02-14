@@ -159,6 +159,22 @@ theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin
   intro c
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c (hproper c) (hlocal c)
 
+/-- A parameterized MLC statement: properness plus nonvanishing derivative
+    on basin points (with slit-orbit neighborhoods) yields basin injectivity
+    through the basin-local-homeomorphism route. -/
+theorem mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit
+    (hproper : ∀ c, IsProperMap (Quadratic.bottcher_map c))
+    (hslit :
+      ∀ c z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
+    (hderiv :
+      ∀ c z, z ∈ Quadratic.basin_of_infinity c →
+        deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin hproper
+  intro c
+  exact bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
+    (hslit c) (hderiv c)
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp
