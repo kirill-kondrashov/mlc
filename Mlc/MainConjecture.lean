@@ -148,6 +148,17 @@ theorem mlc_conjecture_of_bottcher_isLocalHomeomorph
   intro c
   exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c)
 
+/-- A parameterized MLC statement: properness plus local-homeomorphism on the basin
+    is enough to obtain basin injectivity of the Böttcher map. -/
+theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin
+    (hproper : ∀ c, IsProperMap (Quadratic.bottcher_map c))
+    (hlocal :
+      ∀ c, IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin
+  intro c
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c (hproper c) (hlocal c)
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp
@@ -427,6 +438,17 @@ theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph
   intro c
   exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
     (bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c))
+
+/-- The basin-local-homeomorphism route plus properness also implies the
+    minimal basin redesign target. -/
+theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin
+    (hproper : ∀ c, IsProperMap (Quadratic.bottcher_map c))
+    (hlocal :
+      ∀ c, IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    BasinBottcherPointwiseLeftInverseData := by
+  intro c
+  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
+    (bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c (hproper c) (hlocal c))
 
 
 /-- The minimal basin redesign target is equivalent to basin injectivity of

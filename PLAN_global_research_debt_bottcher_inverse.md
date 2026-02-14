@@ -16,6 +16,7 @@
   - `mlc_conjecture_of_bottcher_inj_on_basin`
   - `mlc_conjecture_of_bottcher_left_inverse_on_basin`
   - `mlc_conjecture_of_bottcher_isLocalHomeomorph`
+  - `mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin`
   - `mlc_conjecture_of_iter_eq_imp`
   - `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
   - `mlc_conjecture_of_quadratic_left_inverse`
@@ -132,6 +133,9 @@
   - `natCard_fiber_eq_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset`
   - `injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one`
   - `injective_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_of_exists_natCard_fiber_eq_one`
+  - `natCard_fiber_isLocallyConstant_on_image_of_isProperMap_isLocalHomeomorphOn_of_open`
+  - `natCard_fiber_eq_on_image_of_isProperMap_isLocalHomeomorphOn_of_open_of_connected_image`
+  - `injOn_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_on_image_of_connected_image`
   - `natCard_fiber_eq_one_of_existsUnique`
   - `natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset`
   - `injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset`
@@ -140,8 +144,10 @@
   - `bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'`
   - `exists_bottcher_outside_seed_of_continuous`
   - `bottcher_map_inj_on_basin_of_proper_localHomeomorph`
+  - `bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`
   - `bottcher_map_inj_on_basin_of_isLocalHomeomorph`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`
+  - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin`
   - `exists_open_subset_slit_orbit_basin_of_mem_nhds`
   - `bottcher_map_analyticAt_of_mem_nhds_slit_basin`
   - `bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin`
@@ -194,6 +200,10 @@
   - `∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)`
   via `bottcher_map_inj_on_basin_of_isLocalHomeomorph` and
   `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`.
+  A weaker sufficient route is now also isolated:
+  - `∀ c, IsProperMap (Quadratic.bottcher_map c)` and
+    `IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)`
+  via `bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`.
   This is now wired to MLC via
   `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data` and remains the
   next candidate to realize without new axioms or new hypotheses in

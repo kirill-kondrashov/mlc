@@ -2645,6 +2645,70 @@ lemma injective_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_of_ex
     Subsingleton.elim _ _
   exact congrArg Subtype.val hs
 
+lemma natCard_fiber_isLocallyConstant_on_image_of_isProperMap_isLocalHomeomorphOn_of_open
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s)
+    (hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    IsLocallyConstant (fun y : f '' s => Nat.card ({x : ℂ // f x = y.1})) := by
+  refine (IsLocallyConstant.iff_exists_open _).2 ?_
+  intro y
+  have hfinite : ({x : ℂ | f x = y.1} : Set ℂ).Finite :=
+    finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := y.1) (hfiberS y.1 y.2)
+  rcases exists_open_natCard_fiber_eq_of_closedMap_localHomeomorphOn_of_open_of_finite_fiber_subset
+      (f := f) (s := s) hproper.isClosedMap hlocal hsopen (y := y.1)
+      (hfiberS y.1 y.2) hfinite with
+    ⟨V, hVopen, hyV, hcard⟩
+  refine ⟨Subtype.val ⁻¹' V, hVopen.preimage continuous_subtype_val, ?_, ?_⟩
+  · simpa using hyV
+  · intro y' hy'
+    exact hcard y'.1 hy'
+
+lemma natCard_fiber_eq_on_image_of_isProperMap_isLocalHomeomorphOn_of_open_of_connected_image
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hconn : IsConnected (f '' s))
+    (hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    ∀ y y' : f '' s, Nat.card ({x : ℂ // f x = y.1}) = Nat.card ({x : ℂ // f x = y'.1}) := by
+  letI : PreconnectedSpace (f '' s) := Subtype.preconnectedSpace hconn.isPreconnected
+  have hloc :
+      IsLocallyConstant (fun y : f '' s => Nat.card ({x : ℂ // f x = y.1})) :=
+    natCard_fiber_isLocallyConstant_on_image_of_isProperMap_isLocalHomeomorphOn_of_open
+      (f := f) (s := s) hproper hlocal hsopen hfiberS
+  exact (IsLocallyConstant.iff_is_const (f := fun y : f '' s =>
+    Nat.card ({x : ℂ // f x = y.1}))).1 hloc
+
+lemma injOn_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_on_image_of_connected_image
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hconn : IsConnected (f '' s))
+    (hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hdeg1 : ∃ y : f '' s, Nat.card ({x : ℂ // f x = y.1}) = 1) :
+    Set.InjOn f s := by
+  intro z hz w hw hzw
+  have hcard_const := natCard_fiber_eq_on_image_of_isProperMap_isLocalHomeomorphOn_of_open_of_connected_image
+    (f := f) (s := s) hproper hlocal hsopen hconn hfiberS
+  have hyz : f z ∈ f '' s := ⟨z, hz, rfl⟩
+  let yz : f '' s := ⟨f z, hyz⟩
+  rcases hdeg1 with ⟨y0, hy0⟩
+  have hcard : Nat.card ({x : ℂ // f x = f z}) = 1 := by
+    calc
+      Nat.card ({x : ℂ // f x = f z})
+          = Nat.card ({x : ℂ // f x = y0.1}) := hcard_const yz y0
+      _ = 1 := hy0
+  letI : Finite ({x : ℂ // f x = f z}) := by
+    exact (finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := f z) (hfiberS (f z) hyz)).to_subtype
+  letI : Fintype ({x : ℂ // f x = f z}) := Fintype.ofFinite ({x : ℂ // f x = f z})
+  have hcardF : Fintype.card ({x : ℂ // f x = f z}) = 1 := by
+    simpa [Nat.card_eq_fintype_card] using hcard
+  have hsub : Subsingleton ({x : ℂ // f x = f z}) := by
+    apply (Fintype.card_le_one_iff_subsingleton).1
+    simp [hcardF]
+  have hs :
+      (⟨z, rfl⟩ : {x : ℂ // f x = f z}) =
+        (⟨w, hzw.symm⟩ : {x : ℂ // f x = f z}) :=
+    Subsingleton.elim _ _
+  exact congrArg Subtype.val hs
+
 lemma natCard_fiber_eq_one_of_existsUnique
     {f : ℂ → ℂ} {y : ℂ} (huniq : ∃! x, f x = y) :
     Nat.card ({x : ℂ // f x = y}) = 1 := by
@@ -3966,6 +4030,56 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph
   rcases exists_bottcher_outside_seed_of_continuous c hlocal.continuous with ⟨y, hyimg, hfiberU⟩
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed' c hproper hlocal
     hyimg hfiberU
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  let f : ℂ → ℂ := Quadratic.bottcher_map c
+  let s : Set ℂ := Quadratic.basin_of_infinity c
+  have hsopen : IsOpen s := basin_of_infinity_isOpen c
+  have hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s := by
+    intro y hyimg x hx
+    have hygt : 1 < ‖y‖ := by
+      rcases hyimg with ⟨z, hz, rfl⟩
+      exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+    have hxy : f x = y := by
+      simpa using hx
+    have hxgt : 1 < ‖f x‖ := by
+      calc
+        1 < ‖y‖ := hygt
+        _ = ‖f x‖ := by simp [hxy]
+    exact bottcher_map_norm_gt_one_implies_basin c (z := x) hxgt
+  have himage_eq : f '' s = {w : ℂ | 1 < ‖w‖} := by
+    refine subset_antisymm ?_ ?_
+    · intro w hw
+      rcases hw with ⟨z, hz, rfl⟩
+      exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+    · intro w hw
+      have hright : f (Quadratic.external_ray_map c w) = w :=
+        external_ray_map_right_inverse_on_exterior c w hw
+      have hbasin : Quadratic.external_ray_map c w ∈ s :=
+        bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map c w)
+          (by simpa [f, hright] using hw)
+      exact ⟨Quadratic.external_ray_map c w, hbasin, hright⟩
+  have hconn : IsConnected (f '' s) := by
+    simpa [himage_eq] using isConnected_exterior
+  have hdeg1 : ∃ y : f '' s, Nat.card ({x : ℂ // f x = y.1}) = 1 := by
+    rcases exists_bottcher_outside_seed_of_continuous c hproper.continuous with
+      ⟨y, hyimg, hfiberU⟩
+    have hcard1 : Nat.card ({x : ℂ // f x = y}) = 1 :=
+      natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset
+        (f := f) (U := {z : ℂ | ‖z‖ > ‖c‖ + 2}) (y := y)
+        (bottcher_map_inj_on_outside_open c) hyimg hfiberU
+    have hyimgBasin : y ∈ f '' s := by
+      rcases hyimg with ⟨z, hz, rfl⟩
+      refine ⟨z, ?_, rfl⟩
+      exact outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz)
+    exact ⟨⟨y, hyimgBasin⟩, hcard1⟩
+  simpa [f, s] using
+    (injOn_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_on_image_of_connected_image
+      (f := f) (s := s) hproper hlocal hsopen hconn hfiberS hdeg1)
 
 lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph
     (c : ℂ)
