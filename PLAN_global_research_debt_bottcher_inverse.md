@@ -132,6 +132,9 @@
   - `bottcher_map_inj_on_basin_of_proper_localHomeomorph`
   - `bottcher_map_inj_on_basin_of_isLocalHomeomorph`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`
+  - `exists_open_subset_slit_orbit_basin_of_mem_nhds`
+  - `bottcher_map_analyticAt_of_mem_nhds_slit_basin`
+  - `bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin`
 
 ## Ruled-Out Routes (Formal Obstructions)
 - [x] Escape-time candidate route is inconsistent:

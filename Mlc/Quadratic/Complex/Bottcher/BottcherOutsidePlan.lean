@@ -3894,6 +3894,48 @@ lemma slit_orbit_rot_forward (c : ℂ) (θ : ℝ) :
   -- unfold `slit_orbit_rot` and shift the index
   simpa [Function.iterate_succ_apply] using (hz (n + 1))
 
+lemma exists_open_subset_slit_orbit_basin_of_mem_nhds
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
+    ∃ U : Set ℂ, IsOpen U ∧ z₀ ∈ U ∧ U ⊆ slit_orbit c ∩ Quadratic.basin_of_infinity c := by
+  rcases Metric.mem_nhds_iff.mp hslit with ⟨ε1, ε1pos, hε1⟩
+  rcases Metric.mem_nhds_iff.mp hbasin with ⟨ε2, ε2pos, hε2⟩
+  let ε := min ε1 ε2
+  let U : Set ℂ := {z : ℂ | dist z z₀ < ε}
+  have hUopen : IsOpen U := by
+    simpa [U, Metric.ball, Set.mem_setOf_eq] using
+      (Metric.isOpen_ball : IsOpen (Metric.ball z₀ ε))
+  have hz₀U : z₀ ∈ U := by
+    have hεpos : 0 < ε := lt_min ε1pos ε2pos
+    simpa [U, dist_self] using hεpos
+  have hUsub : U ⊆ slit_orbit c ∩ Quadratic.basin_of_infinity c := by
+    intro z hz
+    have hz1 : dist z z₀ < ε1 := lt_of_lt_of_le hz (min_le_left _ _)
+    have hz2 : dist z z₀ < ε2 := lt_of_lt_of_le hz (min_le_right _ _)
+    exact ⟨hε1 hz1, hε2 hz2⟩
+  exact ⟨U, hUopen, hz₀U, hUsub⟩
+
+lemma bottcher_map_analyticAt_of_mem_nhds_slit_basin
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
+    AnalyticAt ℂ (Quadratic.bottcher_map c) z₀ := by
+  rcases exists_open_subset_slit_orbit_basin_of_mem_nhds c z₀ hslit hbasin with
+    ⟨U, hUopen, hz₀U, hUsub⟩
+  have hUslit : U ⊆ slit_orbit c := fun z hz => (hUsub hz).1
+  have hUbasin : U ⊆ Quadratic.basin_of_infinity c := fun z hz => (hUsub hz).2
+  exact bottcher_map_analyticAt_of_open c U hUopen hUslit hUbasin hz₀U
+
+lemma bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀)
+    (hderiv : deriv (Quadratic.bottcher_map c) z₀ ≠ 0) :
+    ∃ s ∈ 𝓝 z₀, Set.InjOn (Quadratic.bottcher_map c) s := by
+  exact injOn_nhds_of_analyticAt
+    (bottcher_map_analyticAt_of_mem_nhds_slit_basin c z₀ hslit hbasin) hderiv
+
 def local_slit (z₀ : ℂ) (ε : ℝ) : Set ℂ :=
   {z | dist z z₀ < ε} ∩ {z | z - z₀ ∈ Complex.slitPlane}
 
