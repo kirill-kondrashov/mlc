@@ -2364,6 +2364,80 @@ lemma injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one
     Subsingleton.elim _ _
   exact congrArg Subtype.val hs
 
+lemma natCard_fiber_eq_one_of_existsUnique
+    {f : ℂ → ℂ} {y : ℂ} (huniq : ∃! x, f x = y) :
+    Nat.card ({x : ℂ // f x = y}) = 1 := by
+  rcases huniq with ⟨z, hz, hu⟩
+  letI : Unique ({x : ℂ // f x = y}) := {
+    default := ⟨z, hz⟩
+    uniq := by
+      intro a
+      apply Subtype.ext
+      exact (hu a.1 a.2)
+  }
+  letI : Fintype ({x : ℂ // f x = y}) := Fintype.ofFinite ({x : ℂ // f x = y})
+  calc
+    Nat.card ({x : ℂ // f x = y}) = Fintype.card ({x : ℂ // f x = y}) := by
+      simp [Nat.card_eq_fintype_card]
+    _ = 1 := Fintype.card_unique
+
+lemma natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset
+    {f : ℂ → ℂ} {U : Set ℂ} {y : ℂ}
+    (hUinj : Set.InjOn f U) (hyimg : y ∈ f '' U)
+    (hfiberU : ({x : ℂ | f x = y} : Set ℂ) ⊆ U) :
+    Nat.card ({x : ℂ // f x = y}) = 1 := by
+  rcases hyimg with ⟨z, hzU, hzy⟩
+  have huniq : ∃! x, f x = y := by
+    refine ⟨z, hzy, ?_⟩
+    intro x hx
+    have hxU : x ∈ U := hfiberU (by simp [hx])
+    exact hUinj hxU hzU (by simpa [hzy] using hx)
+  exact natCard_fiber_eq_one_of_existsUnique (f := f) (y := y) huniq
+
+lemma injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f)
+    {U : Set ℂ} {y : ℂ}
+    (hUinj : Set.InjOn f U) (hyimg : y ∈ f '' U)
+    (hfiberU : ({x : ℂ | f x = y} : Set ℂ) ⊆ U) :
+    Function.Injective f := by
+  have hdeg1 : ∃ y0 : ℂ, Nat.card ({x : ℂ // f x = y0}) = 1 := by
+    refine ⟨y, ?_⟩
+    exact natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset
+      (f := f) (U := U) (y := y) hUinj hyimg hfiberU
+  exact injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one
+    (f := f) hproper hlocal hdeg1
+
+lemma bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hUinj :
+      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    {y : ℂ}
+    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hfiberU :
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Function.Injective (Quadratic.bottcher_map c) := by
+  exact injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset
+    (f := Quadratic.bottcher_map c) hproper hlocal hUinj hyimg hfiberU
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hUinj :
+      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    {y : ℂ}
+    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hfiberU :
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hglobal :
+      Function.Injective (Quadratic.bottcher_map c) :=
+    bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
+      hUinj hyimg hfiberU
+  exact hglobal.injOn
+
 
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
 lemma bottcher_normalized_at_infty_of_root_seq
@@ -3538,6 +3612,87 @@ lemma bottcher_map_inj_on_outside_open (c : ℂ) :
     Quadratic.external_ray_map_left_inverse_outside_open c w hw
   have h := congrArg (Quadratic.external_ray_map c) hzw
   simpa [hz', hw'] using h
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    {y : ℂ}
+    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hfiberU :
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
+    (bottcher_map_inj_on_outside_open c) hyimg hfiberU
+
+lemma exists_bottcher_outside_seed_of_isLocalHomeomorph
+    (c : ℂ) (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+    ∃ y, y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ∧
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  let K : Set ℂ := {z : ℂ | ‖z‖ ≤ ‖c‖ + 2}
+  have hKcompact : IsCompact K := by
+    have hK :
+        K = Metric.closedBall (0 : ℂ) (‖c‖ + 2) := by
+      ext z
+      simp [K, Metric.mem_closedBall, dist_eq_norm]
+    rw [hK]
+    exact isCompact_closedBall (0 : ℂ) (‖c‖ + 2)
+  have himageKcompact : IsCompact (Quadratic.bottcher_map c '' K) :=
+    hKcompact.image hlocal.continuous
+  rcases himageKcompact.isBounded.subset_closedBall (0 : ℂ) with ⟨B, hBsubset⟩
+  rcases exists_norm_bottcher_map_gt_of_large_norm c B with ⟨S, hS⟩
+  let R : ℝ := max S (‖c‖ + 3)
+  let z0 : ℂ := (R : ℂ)
+  have hRnonneg : 0 ≤ R := by
+    have hc : 0 ≤ ‖c‖ + 3 := by nlinarith [norm_nonneg c]
+    exact le_trans hc (le_max_right _ _)
+  have hz0norm : ‖z0‖ = R := by
+    simp [z0, Real.norm_eq_abs, abs_of_nonneg hRnonneg]
+  have hz0S : S ≤ ‖z0‖ := by
+    calc
+      S ≤ R := le_max_left _ _
+      _ = ‖z0‖ := hz0norm.symm
+  have hygt : B < ‖Quadratic.bottcher_map c z0‖ := hS z0 hz0S
+  have hz0U : z0 ∈ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    have hRge : ‖c‖ + 3 ≤ R := le_max_right _ _
+    have : ‖c‖ + 2 < R := by linarith
+    simpa [hz0norm]
+  let y : ℂ := Quadratic.bottcher_map c z0
+  refine ⟨y, ?_, ?_⟩
+  · exact ⟨z0, hz0U, rfl⟩
+  · intro x hx
+    by_contra hxU
+    have hxK : x ∈ K := by
+      have hxle : ‖x‖ ≤ ‖c‖ + 2 := by
+        exact le_of_not_gt (by
+          intro hgt
+          exact hxU (by simpa using hgt))
+      exact hxle
+    have hyK : y ∈ Quadratic.bottcher_map c '' K := by
+      refine ⟨x, hxK, ?_⟩
+      simpa [y] using hx
+    have hyB : ‖y‖ ≤ B := by
+      have : y ∈ Metric.closedBall (0 : ℂ) B := hBsubset hyK
+      simpa [Metric.mem_closedBall, dist_eq_norm] using this
+    have hygt' : B < ‖y‖ := by simpa [y] using hygt
+    exact (not_lt_of_ge hyB) hygt'
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  rcases exists_bottcher_outside_seed_of_isLocalHomeomorph c hlocal with ⟨y, hyimg, hfiberU⟩
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed' c hproper hlocal
+    hyimg hfiberU
+
+lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph
+    (c : ℂ)
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hproper : IsProperMap (Quadratic.bottcher_map c) :=
+    bottcher_map_isProperMap_of_continuous c hlocal.continuous
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph c hproper hlocal
 
 theorem bottcher_map_inj_on_outside_of_slit
     (c : ℂ)

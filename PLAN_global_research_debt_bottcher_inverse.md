@@ -120,6 +120,15 @@
   - `natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorph`
   - `natCard_fiber_eq_of_isProperMap_isLocalHomeomorph`
   - `injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one`
+  - `natCard_fiber_eq_one_of_existsUnique`
+  - `natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset`
+  - `injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset`
+  - `bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed`
+  - `bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed`
+  - `bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'`
+  - `exists_bottcher_outside_seed_of_isLocalHomeomorph`
+  - `bottcher_map_inj_on_basin_of_proper_localHomeomorph`
+  - `bottcher_map_inj_on_basin_of_isLocalHomeomorph`
 
 ## Ruled-Out Routes (Formal Obstructions)
 - [x] Escape-time candidate route is inconsistent:
