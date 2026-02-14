@@ -130,6 +130,7 @@
   - `exists_bottcher_outside_seed_of_isLocalHomeomorph`
   - `bottcher_map_inj_on_basin_of_proper_localHomeomorph`
   - `bottcher_map_inj_on_basin_of_isLocalHomeomorph`
+  - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`
 
 ## Ruled-Out Routes (Formal Obstructions)
 - [x] Escape-time candidate route is inconsistent:
@@ -174,6 +175,10 @@
   `eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_pointwise_left_inverse_data`,
   and equivalent to basin injectivity via
   `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`).
+  A newly isolated sufficient route is:
+  - `∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)`
+  via `bottcher_map_inj_on_basin_of_isLocalHomeomorph` and
+  `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`.
   This is now wired to MLC via
   `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data` and remains the
   next candidate to realize without new axioms or new hypotheses in

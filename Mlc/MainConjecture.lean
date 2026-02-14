@@ -412,6 +412,14 @@ theorem bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
   exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
     (h_basin c)
 
+/-- The local-homeomorphism target implies the minimal basin redesign target. -/
+theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph
+    (hlocal : ∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+    BasinBottcherPointwiseLeftInverseData := by
+  intro c
+  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
+    (bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c))
+
 
 /-- The minimal basin redesign target is equivalent to basin injectivity of
     `bottcher_map`; this is the exact remaining Step 2b obligation. -/
