@@ -38,6 +38,7 @@
   isolated to `bottcher_map_inj_on_basin_via_iter_eq_axiom` in
   `Mlc/MainConjecture.lean:144`.
 - [x] Remaining axiom bridge is now explicitly factored:
+  - `bottcher_map_isLocalHomeomorph_via_iter_eq_axiom`
   - `bottcher_map_inj_on_basin_via_iter_eq_axiom`
   - `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`
   This is the single replacement target for Step 2b, now routed through the
@@ -127,7 +128,7 @@
   - `bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed`
   - `bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed`
   - `bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'`
-  - `exists_bottcher_outside_seed_of_isLocalHomeomorph`
+  - `exists_bottcher_outside_seed_of_continuous`
   - `bottcher_map_inj_on_basin_of_proper_localHomeomorph`
   - `bottcher_map_inj_on_basin_of_isLocalHomeomorph`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`

@@ -162,11 +162,19 @@ theorem mlc_conjecture_of_iter_eq_imp
 /-- Current axiom-backed bridge from iterate-equality to basin injectivity of
     the Böttcher map. Replacing this lemma with a non-axiomatic proof is the
     remaining elimination target. -/
-lemma bottcher_map_inj_on_basin_via_iter_eq_axiom (c : ℂ) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+lemma bottcher_map_isLocalHomeomorph_via_iter_eq_axiom (c : ℂ) :
+    IsLocalHomeomorph (Quadratic.bottcher_map c) := by
   exfalso
   exact Quadratic.not_quadratic_map_iter_eq_imp_eq c
     (Quadratic.quadratic_map_iter_eq_imp_eq c)
+
+/-- Current axiom-backed bridge from iterate-equality to basin injectivity of
+    the Böttcher map. Replacing this lemma with a non-axiomatic proof is the
+    remaining elimination target. -/
+lemma bottcher_map_inj_on_basin_via_iter_eq_axiom (c : ℂ) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c
+    (bottcher_map_isLocalHomeomorph_via_iter_eq_axiom c)
 
 /-- If each parameter admits a left inverse of `quadratic_map` on the basin,
     MLC follows via derived iterate-equality. -/

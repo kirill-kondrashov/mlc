@@ -3625,8 +3625,8 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
     (bottcher_map_inj_on_outside_open c) hyimg hfiberU
 
-lemma exists_bottcher_outside_seed_of_isLocalHomeomorph
-    (c : ℂ) (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+lemma exists_bottcher_outside_seed_of_continuous
+    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
     ∃ y, y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ∧
       ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   let K : Set ℂ := {z : ℂ | ‖z‖ ≤ ‖c‖ + 2}
@@ -3638,7 +3638,7 @@ lemma exists_bottcher_outside_seed_of_isLocalHomeomorph
     rw [hK]
     exact isCompact_closedBall (0 : ℂ) (‖c‖ + 2)
   have himageKcompact : IsCompact (Quadratic.bottcher_map c '' K) :=
-    hKcompact.image hlocal.continuous
+    hKcompact.image hcont
   rcases himageKcompact.isBounded.subset_closedBall (0 : ℂ) with ⟨B, hBsubset⟩
   rcases exists_norm_bottcher_map_gt_of_large_norm c B with ⟨S, hS⟩
   let R : ℝ := max S (‖c‖ + 3)
@@ -3682,7 +3682,7 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph
     (hproper : IsProperMap (Quadratic.bottcher_map c))
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  rcases exists_bottcher_outside_seed_of_isLocalHomeomorph c hlocal with ⟨y, hyimg, hfiberU⟩
+  rcases exists_bottcher_outside_seed_of_continuous c hlocal.continuous with ⟨y, hyimg, hfiberU⟩
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed' c hproper hlocal
     hyimg hfiberU
 
