@@ -135,6 +135,7 @@
   - `exists_open_subset_slit_orbit_basin_of_mem_nhds`
   - `bottcher_map_analyticAt_of_mem_nhds_slit_basin`
   - `bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin`
+  - `bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit`
 
 ## Ruled-Out Routes (Formal Obstructions)
 - [x] Escape-time candidate route is inconsistent:

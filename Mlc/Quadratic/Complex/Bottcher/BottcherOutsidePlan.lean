@@ -3936,6 +3936,17 @@ lemma bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin
   exact injOn_nhds_of_analyticAt
     (bottcher_map_analyticAt_of_mem_nhds_slit_basin c z₀ hslit hbasin) hderiv
 
+lemma bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit
+    (c : ℂ)
+    (hslit : ∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
+    (hderiv : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ hderiv
+  intro z hz
+  exact bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
+    (hslit z hz) ((basin_of_infinity_isOpen c).mem_nhds hz)
+
 def local_slit (z₀ : ℂ) (ε : ℝ) : Set ℂ :=
   {z | dist z z₀ < ε} ∩ {z | z - z₀ ∈ Complex.slitPlane}
 
