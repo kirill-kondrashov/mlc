@@ -104,6 +104,8 @@
   (currently in `BottcherOutsidePlan`):
   - `isDiscrete_fiber_of_isLocallyInjective`
   - `finite_fiber_of_isProperMap_isLocallyInjective`
+  - `isDiscrete_fiber_of_isLocalHomeomorphOn_of_fiber_subset`
+  - `finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset`
   - `range_isOpen_of_isLocalHomeomorph`
   - `range_isClosed_of_isProperMap`
   - `range_eq_univ_of_isProperMap_isLocalHomeomorph`

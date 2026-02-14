@@ -1900,6 +1900,44 @@ lemma finite_fiber_of_isProperMap_isLocallyInjective
     simp
   simpa [hpre] using hcompact.finite hdisc
 
+lemma isDiscrete_fiber_of_isLocalHomeomorphOn_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hlocal : IsLocalHomeomorphOn f s) {y : ℂ}
+    (hfiber : ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    IsDiscrete ({x : ℂ | f x = y} : Set ℂ) := by
+  classical
+  refine (isDiscrete_iff_forall_exists_isOpen).2 ?_
+  intro x hx
+  have hxS : x ∈ s := hfiber hx
+  rcases hlocal x hxS with ⟨e, hx_source, hfeq⟩
+  refine ⟨e.source, e.open_source, ?_⟩
+  ext z
+  constructor
+  · intro hz
+    have hz_source : z ∈ e.source := hz.1
+    have hzf : f z = y := hz.2
+    have hxf : f x = y := hx
+    have hEq : f z = f x := by simp [hzf, hxf]
+    have hzEq : z = x := by
+      have heq : e z = e x := by simpa [hfeq] using hEq
+      exact e.toPartialEquiv.injOn hz_source hx_source heq
+    simp [hzEq]
+  · intro hz
+    rcases hz with rfl
+    exact ⟨hx_source, hx⟩
+
+lemma finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    {y : ℂ} (hfiber : ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    ({x : ℂ | f x = y} : Set ℂ).Finite := by
+  have hcompact : IsCompact ((fun x : ℂ => f x) ⁻¹' {y}) :=
+    hproper.isCompact_preimage isCompact_singleton
+  have hdisc : IsDiscrete ({x : ℂ | f x = y} : Set ℂ) :=
+    isDiscrete_fiber_of_isLocalHomeomorphOn_of_fiber_subset hlocal hfiber
+  have hpre : (f ⁻¹' ({y} : Set ℂ)) = ({x : ℂ | f x = y} : Set ℂ) := by
+    ext x
+    simp
+  simpa [hpre] using hcompact.finite hdisc
+
 lemma finite_of_isCompact_isDiscrete {s : Set ℂ} (hs : IsCompact s) (hs' : IsDiscrete s) :
     s.Finite :=
   hs.finite hs'
