@@ -6,6 +6,7 @@
 - [x] No production use-site remains in `Mlc/MainConjecture.lean`.
 - [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
   `MLC.mlc_conjecture`; the bridge now routes via
+  `bottcher_map_inj_on_basin_onM_via_external_ray_axioms` and
   `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`.
 - [x] `MLC.Quadratic.bottcher_seq_converges` is no longer in the axiom
   footprint of `MLC.mlc_conjecture`.
@@ -41,6 +42,7 @@
   (`mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM`), and the
   old `quadratic_map_iter_eq_imp_eq` bridge has been removed from this path.
 - [x] Remaining axiom bridge is now explicitly factored:
+  - `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
   - `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`
   This is the current replacement target for Step 2b, routed through the
   minimal basin target wrapper without `quadratic_map_iter_eq_imp_eq`.
@@ -58,7 +60,9 @@
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data`
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM`
   - `basin_bottcher_pointwise_left_inverse_data_onM_of_global`
+  - `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
   - `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`
+  - `basin_bottcher_pointwise_left_inverse_data_onM_of_bottcher_map_inj_on_basin_onM`
   - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
   - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM`
   - `external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin`
@@ -215,9 +219,14 @@
   - `bottcher_map_continuousAt_of_ne_zero`
   - `ofReal_mem_basin_two`
   - `ofReal_not_mem_K_two`
+  - `bottcher_map_eq_one_not_mem_K_two`
   - `bottcher_map_fixed_point_two_ne_one`
-  - `bottcher_map_fixed_point_two_eq_one_of_external_ray_axioms`
   - `false_of_external_ray_axioms`.
+- [x] Refined the contradiction witness to remove `extended_ray_map_continuous`
+  from that local bridge:
+  - `log_norm_le_green_add_escape_const_of_norm_gt_escape_bound`
+  - `false_of_external_ray_axioms` now uses a bounded-subsequence/Green-limit
+    argument and depends only on `external_ray_map_exists`.
 
 ## Remaining Work (Single Real Blocker)
 - [x] Reformulate the elimination target: `quadratic_map_iter_eq_imp_eq` has been
@@ -251,7 +260,8 @@
   `quadratic_map_iter_eq_imp_eq` directly.
 - [x] Step 2a: Replace the wrapper instantiation with the basin-injectivity route.
 - [ ] Step 2b: Replace the remaining axiom-backed construction of basin injectivity
-  (currently `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`)
+  (currently `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`, routed
+  through `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`)
   with a non-axiomatic proof.
 - [x] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
 - [x] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
