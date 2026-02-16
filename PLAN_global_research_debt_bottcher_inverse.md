@@ -239,9 +239,9 @@
   (currently `basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom`)
   with a non-axiomatic proof.
 - [x] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
-- [ ] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
+- [x] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
 
 ## Completion Checklist
 - [x] `rg -n "Quadratic\\.quadratic_map_iter_eq_imp_eq\\b" Mlc` has no production use-site in main MLC path.
 - [x] `make check` no longer reports `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
-- [ ] README axiom block is synchronized with final `make check` output.
+- [x] README axiom block is synchronized with final `make check` output.
