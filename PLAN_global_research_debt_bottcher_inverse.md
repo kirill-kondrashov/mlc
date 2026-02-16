@@ -214,7 +214,7 @@
   the production MLC bridge by replacing it with an external-ray contradiction:
   - `bottcher_map_continuousAt_of_ne_zero`
   - `ofReal_mem_basin_two`
-  - `ofReal_not_mem_K_two_of_nonneg`
+  - `ofReal_not_mem_K_two`
   - `bottcher_map_fixed_point_two_ne_one`
   - `bottcher_map_fixed_point_two_eq_one_of_external_ray_axioms`
   - `false_of_external_ray_axioms`.

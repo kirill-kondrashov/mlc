@@ -375,12 +375,12 @@ lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
         (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
   exact hdir.mul hexp
 
-/-- Every nonnegative real point escapes for `c = 2`, hence lies in the basin. -/
+/-- Every real point escapes for `c = 2`, hence lies in the basin. -/
 lemma ofReal_mem_basin_two (x : ℝ) :
     (x : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
   have hiter2 :
       (quadratic_map (2 : ℂ))^[2] (x : ℂ) = (((x ^ 2 + 2) ^ 2 + 2 : ℝ) : ℂ) := by
-    simp [quadratic_map, pow_two, mul_add, add_comm, add_left_comm, add_assoc]
+    simp [quadratic_map, pow_two, mul_add, add_comm]
   have hnorm_ge : ‖(((x ^ 2 + 2) ^ 2 + 2 : ℝ) : ℂ)‖ ≥ ‖(2 : ℂ)‖ + 2 := by
     have hnonneg : 0 ≤ (x ^ 2 + 2) ^ 2 + 2 := by
       nlinarith [sq_nonneg x]
@@ -411,8 +411,8 @@ lemma ofReal_mem_basin_two (x : ℝ) :
       (f := fun n => ‖(quadratic_map (2 : ℂ))^[n] (x : ℂ)‖) (k := 2)).1 hshift
   simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hbase
 
-/-- Nonnegative real points are not in `K(2)`. -/
-lemma ofReal_not_mem_K_two_of_nonneg (x : ℝ) :
+/-- Real points are not in `K(2)`. -/
+lemma ofReal_not_mem_K_two (x : ℝ) :
     (x : ℂ) ∉ MLC.Quadratic.K (2 : ℂ) := by
   have hbasin : (x : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) :=
     ofReal_mem_basin_two x
@@ -444,7 +444,7 @@ lemma bottcher_map_fixed_point_two_ne_one :
   have hpK' : (((‖p‖ : ℝ) : ℂ)) ∈ MLC.Quadratic.K (2 : ℂ) := by
     rw [← hp_eq]
     exact hpK
-  exact ofReal_not_mem_K_two_of_nonneg ‖p‖ hpK'
+  exact ofReal_not_mem_K_two ‖p‖ hpK'
 
 /-- The exterior ray axioms force `bottcher_map (fixed_point 2) = 1` under the
     current model. -/
