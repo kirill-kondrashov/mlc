@@ -1,11 +1,14 @@
-# Plan: Eliminate IR Classification/Fast-Tower Bridge Debt
+# Plan: Eliminate IR Classification/Tower Bridge Debt
 
 ## Status (2026-02-16)
 - [x] Phase 1 complete: eliminated `MLC.classify_infinitely_renormalizable`
   from the `MLC.mlc_conjecture` axiom footprint.
-- [x] Phase 2 active: eliminate
+- [x] Phase 2 complete: eliminated
   `MLC.infinitely_renormalizable_implies_fast_tower` from that footprint.
-- [x] `make check` currently reports the Phase 2 target axiom explicitly.
+- [x] Footprint now records the weaker replacement target:
+  `MLC.infinitely_renormalizable_has_tower_data`.
+- [ ] Phase 3 active: eliminate
+  `MLC.infinitely_renormalizable_has_tower_data`.
 
 ## Scope
 - Keep the top-level theorem interface stable.
@@ -22,66 +25,104 @@
 - [x] Verified: `make check` no longer lists
   `MLC.classify_infinitely_renormalizable`.
 
-## Phase 2 (In Progress): `MLC.infinitely_renormalizable_implies_fast_tower`
+## Phase 2 (Completed): `MLC.infinitely_renormalizable_implies_fast_tower`
 
 ### What Is Already Done
-- [x] Introduced a minimal replacement-target data wrapper in
+- [x] Introduced replacement-target data wrappers in
   `Mlc/FastTowerExistence.lean`:
-  - `InfinitelyRenormalizableImpliesSatelliteData`
-  - `infinitely_renormalizable_implies_satellite_data_via_axiom`
-- [x] Routed key IR bridge uses through that wrapper:
+  - `InfinitelyRenormalizableHasTowerData`
+  - `infinitely_renormalizable_has_tower_data_via_axiom`
+- [x] Switched `SatelliteRenormalizableTower` to an explicit tower-style target:
+  `Nonempty (RenormalizationTower (parameterToBMol c))`.
+- [x] Added legacy conversion wrapper:
+  `satelliteRenormalizableTower_of_satelliteRenormalizable`.
+- [x] Routed key IR bridge uses through the tower wrapper:
   - `Mlc/MainConjecture.lean`
   - `Mlc/InfinitelyRenormalizable.lean`
-- [x] Collapsed direct production references to
-  `infinitely_renormalizable_implies_fast_tower` down to the axiom declaration
-  plus the single wrapper constructor site.
-- [x] Refactored tower-construction lemmas to separate concerns:
+- [x] Refactored tower-construction lemmas to separate concerns and consume
+  tower data directly:
   - `exists_renormalization_tower_sequence_of_satellite`
   - `exists_renormalization_tower_sequence` now just applies the IR bridge once
   - `infinitely_renormalizable_has_tower` now routes through `satelliteTower`
     instead of reconstructing iterate chains locally.
-- [x] Verified the footprint remains stable and explicit:
-  `make check` still lists `MLC.infinitely_renormalizable_implies_fast_tower`.
+- [x] Added tower-native Molecule bridge entry points:
+  - `molecule_parameter_shrink_of_tower`
+  - `refined_conjecture_implies_lc_of_tower`
+  - `molecule_conjecture_bridge_of_tower`
+  - `molecule_conjecture_implies_mlc_satellite_of_tower`
+- [x] Verified footprint migration:
+  `make check` no longer lists
+  `MLC.infinitely_renormalizable_implies_fast_tower`.
+
+## Phase 3 (In Progress): `MLC.infinitely_renormalizable_has_tower_data`
 
 ### Remaining Work
-- [ ] Replace `infinitely_renormalizable_implies_satellite_data_via_axiom`
-  with a non-axiomatic proof (or a strictly weaker/independently justified
-  bridge) that yields:
-  `∀ c, InfinitelyRenormalizable c → SatelliteRenormalizable c`.
+- [ ] Replace `infinitely_renormalizable_has_tower_data_via_axiom` with a
+  non-axiomatic proof (or a strictly weaker/independently justified bridge)
+  yielding:
+  `∀ c, InfinitelyRenormalizable c → SatelliteRenormalizableTower c`.
 - [ ] Re-run `make check` and confirm
-  `MLC.infinitely_renormalizable_implies_fast_tower` disappears.
-- [ ] Update README axiom block after the final replacement.
+  `MLC.infinitely_renormalizable_has_tower_data` disappears.
+- [ ] Update README axiom block after final replacement.
 
 ### Current Obstruction
 - `InfinitelyRenormalizable` is defined via summability of puzzle moduli,
-  while `SatelliteRenormalizable` is defined via fast renormalizability
-  iterates on `parameterToBMol`.
-- The dictionary from summability/moduli control to fast-tower existence is not
-  formalized yet; this is the missing mathematical bridge.
+  while the new bridge target requires constructing a renormalization tower in
+  the Molecule framework.
+- The dictionary from summability/moduli control to existence of such a tower
+  is not formalized yet; this remains the missing mathematical bridge.
+- Under the current Gaussian proxy `modulus`, this bridge is formally
+  obstructed when combined with the existing Molecule bridge axiom:
+  - `infinitely_renormalizable_of_gaussian_modulus`
+  - `not_satelliteRenormalizableTower_of_mem_mandelbrot`
+  - `not_infinitely_renormalizable_has_tower_data`
+  (all in `Mlc/FastTowerExistenceObstruction.lean`).
 
-## Execution Steps (Phase 2)
+## Execution Steps
 - [x] Step 2.1: Isolate the active target behind a named data wrapper.
 - [x] Step 2.2: Route production use-sites through the wrapper.
 - [x] Step 2.2b: Decouple tower-building lemmas from IR assumptions by first
   proving satellite-parameter variants.
-- [ ] Step 2.3: Implement or import the non-axiomatic bridge theorem.
-- [ ] Step 2.4: Remove the axiom declaration from
-  `Mlc/FastTowerExistence.lean`.
-- [ ] Step 2.5: Run `make check` and `scripts/verify_output.sh`, then sync
+- [x] Step 2.3: Replace the fast-iterate target in production with the
+  tower-style target and verify footprint migration.
+- [ ] Step 3.1: Implement/import the non-axiomatic IR→tower bridge theorem.
+- [ ] Step 3.2: Remove the axiom declaration
+  `infinitely_renormalizable_has_tower_data`.
+- [ ] Step 3.3: Run `make check` and `scripts/verify_output.sh`, then sync
   README.
+
+### Phase 3 Progress
+- [x] Added a single bridge hook theorem:
+  `tower_of_infinitely_renormalizable`.
+- [x] Rewired production and auxiliary callers to use that theorem.
+- [x] Collapsed direct downstream references to
+  `infinitely_renormalizable_has_tower_data_via_axiom` to
+  `Mlc/FastTowerExistence.lean` only.
+- [x] Removed one unnecessary bridge dependency:
+  `satellite_tower_implies_satellite` now returns `⟨T⟩` directly from its
+  explicit tower argument.
+- [x] Added a formal obstruction module:
+  `Mlc/FastTowerExistenceObstruction.lean`.
+  It proves the current Phase 3 target conflicts with the existing
+  Molecule-bridge axiom under the current Gaussian proxy modulus.
 
 ## Completion Checklist
 - [x] `make check` does not contain
   `MLC.classify_infinitely_renormalizable`.
 - [x] A single named Phase 2 replacement target exists and is used in
   production.
-- [ ] `rg -n "^axiom infinitely_renormalizable_implies_fast_tower"` returns no
+- [x] `make check` output does not contain
+  `MLC.infinitely_renormalizable_implies_fast_tower`.
+- [x] `make check` output does contain
+  `MLC.infinitely_renormalizable_has_tower_data`.
+- [ ] `rg -n "^axiom infinitely_renormalizable_has_tower_data"` returns no
   matches.
 - [ ] `make check` output does not contain
-  `MLC.infinitely_renormalizable_implies_fast_tower`.
+  `MLC.infinitely_renormalizable_has_tower_data`.
 - [ ] README axiom block matches final `make check` output.
 
 ## Outcome So Far
 - Phase 1 delivered footprint cleanup and symbol-level elimination.
-- Phase 2 now has a single replacement hook and explicit obstruction, so future
-  work can target one bridge theorem instead of refactoring core wiring again.
+- Phase 2 replaced the fast-iterate axiom in the production footprint with a
+  weaker tower-existence bridge target.
+- Phase 3 now has a single remaining IR bridge hook to eliminate.

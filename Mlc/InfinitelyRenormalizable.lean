@@ -46,18 +46,19 @@ theorem mlc_primitive_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.Mand
     using Lyubich's theorem for the former and the Molecule Conjecture for the latter. -/
 theorem mlc_infinitely_renormalizable
     (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizable c)
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
     (h_bridge :
       MoleculeConjectureRefined →
       MLC.Quadratic.PuzzleBoundaryMotionHyp →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
     (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   cases h_classify c h with
   | inl h_prim => exact mlc_primitive_renormalizable_ax c hc h_prim
-  | inr h_sat => exact molecule_conjecture_implies_mlc_satellite h_bridge h_motion c hc h_sat
+  | inr h_tower =>
+      exact molecule_conjecture_implies_mlc_satellite_of_tower h_bridge h_motion c hc h_tower
 
 
 
@@ -65,7 +66,7 @@ theorem mlc_infinitely_renormalizable
 
 /-- Existence of an infinite sequence of renormalizations from satellite data. -/
 theorem exists_renormalization_tower_sequence_of_satellite
-    (c : ℂ) (h_sat : SatelliteRenormalizable c) :
+    (c : ℂ) (h_sat : SatelliteRenormalizableTower c) :
     ∃ (g : ℕ → BMol), g 0 = parameterToBMol c ∧ 
       ∀ n, Nonempty (RenormalizationRelation (g n) (g (n+1))) := by
   let T : RenormalizationTower (parameterToBMol c) := satelliteTower c h_sat
@@ -76,7 +77,7 @@ theorem exists_renormalization_tower_sequence (c : ℂ) (h : MLC.InfinitelyRenor
     ∃ (g : ℕ → BMol), g 0 = parameterToBMol c ∧
       ∀ n, Nonempty (RenormalizationRelation (g n) (g (n+1))) := by
   exact exists_renormalization_tower_sequence_of_satellite c
-    (infinitely_renormalizable_implies_satellite_data_via_axiom c h)
+    (tower_of_infinitely_renormalizable c h)
 
 /-- Infinitely renormalizable parameters admit a renormalization tower.
     This is a consequence of Yoccoz's work: if puzzle moduli diverge, the intersection
@@ -84,9 +85,7 @@ theorem exists_renormalization_tower_sequence (c : ℂ) (h : MLC.InfinitelyRenor
     the critical point must be involved in an infinite sequence of renormalizations. -/
 lemma infinitely_renormalizable_has_tower (c : ℂ) (h : InfinitelyRenormalizable c) :
     ∃ (_T : RenormalizationTower (parameterToBMol c)), True := by
-  have h_sat : SatelliteRenormalizable c :=
-    infinitely_renormalizable_implies_satellite_data_via_axiom c h
-  exact ⟨satelliteTower c h_sat, True.intro⟩
+  exact ⟨satelliteTower c (tower_of_infinitely_renormalizable c h), True.intro⟩
 
 /-- Each renormalization step in a tower is either primitive or satellite.
     In the quadratic case, these two combinatorial types are exhaustive. -/
@@ -129,13 +128,10 @@ lemma primitive_tower_implies_primitive (c : ℂ) (T : RenormalizationTower (par
   exact lc_at_of_shrink c hc h_shrink
 
 /-- A tower that eventually consists only of satellite renormalizations implies the parameter is of satellite type. -/
-lemma satellite_tower_implies_satellite (c : ℂ) (h : InfinitelyRenormalizable c) (T : RenormalizationTower (parameterToBMol c))
+lemma satellite_tower_implies_satellite (c : ℂ) (_h : InfinitelyRenormalizable c) (T : RenormalizationTower (parameterToBMol c))
     (_h_ev_sat : ∀ᶠ n in Filter.atTop, IsSatellite (T.rel n)) :
-    SatelliteRenormalizable c := by
-  -- If the renormalizations are eventually all satellite, they can be modeled by 
-  -- the Dudko-Lyubich-Selinger theory of Molecule renormalization.
-  -- In this formalization, we route through the current IR bridge target.
-  exact infinitely_renormalizable_implies_satellite_data_via_axiom c h
+    SatelliteRenormalizableTower c := by
+  exact ⟨T⟩
 
 /-- Combinatorial dichotomy: a sequence of binary choices is either infinitely often 'left' or eventually always 'right'. -/
 lemma combinatorial_dichotomy {p q : ℕ → Prop} (h : ∀ n, p n ∨ q n) :
@@ -173,7 +169,7 @@ lemma combinatorial_dichotomy {p q : ℕ → Prop} (h : ∀ n, p n ∨ q n) :
     In the current formalization this is discharged through the fast-tower route,
     yielding the satellite branch directly. -/
 theorem classify_infinitely_renormalizable (c : ℂ) (h : InfinitelyRenormalizable c) :
-    PrimitiveRenormalizable c ∨ SatelliteRenormalizable c := by
-  exact Or.inr (infinitely_renormalizable_implies_satellite_data_via_axiom c h)
+    PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c := by
+  exact Or.inr (tower_of_infinitely_renormalizable c h)
 
 end MLC

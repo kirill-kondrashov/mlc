@@ -70,11 +70,11 @@ theorem mlc_strategy
     (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
     (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
     (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizable c)
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
     (h_bridge :
       MoleculeConjectureRefined →
       MLC.Quadratic.PuzzleBoundaryMotionHyp →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
   -- We need to show local connectivity at every point c ∈ MandelbrotSet
@@ -112,10 +112,10 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
       h_inj_basin_onM
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
-    exact Or.inr (infinitely_renormalizable_implies_satellite_data_via_axiom c h_inf)
+    exact Or.inr (tower_of_infinitely_renormalizable c h_inf)
   · -- Bridge from Molecule Conjecture to Satellite MLC
-    intro h_mol h_motion c hc h_sat
-    exact molecule_conjecture_bridge h_mol h_motion c hc h_sat
+    intro h_mol h_motion c hc hTower
+    exact molecule_conjecture_bridge_of_tower h_mol h_motion c hc hTower
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
     is enough to close the strategy. -/

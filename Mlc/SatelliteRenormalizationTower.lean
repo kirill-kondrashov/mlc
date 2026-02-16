@@ -33,12 +33,25 @@ noncomputable def renormalizationTower_of_infinitelyFast (g : BMol)
   -- Rewrite `Rfast ((Rfast^[n]) g)` as the next iterate.
   simpa [Function.iterate_succ_apply'] using this
 
+/-- Build a tower from the legacy satellite-renormalizable hypothesis. -/
+noncomputable def satelliteTower_of_satelliteRenormalizable
+    (c : ℂ) (h : SatelliteRenormalizable c) :
+    RenormalizationTower (parameterToBMol c) :=
+  renormalizationTower_of_infinitelyFast (parameterToBMol c) h
+
+/-- Tower-style satellite bridge target used by the current main path. -/
 abbrev SatelliteRenormalizableTower (c : ℂ) : Prop :=
-  SatelliteRenormalizable c
+  Nonempty (RenormalizationTower (parameterToBMol c))
+
+/-- Legacy satellite data implies the tower-style target. -/
+theorem satelliteRenormalizableTower_of_satelliteRenormalizable
+    (c : ℂ) (h : SatelliteRenormalizable c) :
+    SatelliteRenormalizableTower c :=
+  ⟨satelliteTower_of_satelliteRenormalizable c h⟩
 
 noncomputable def satelliteTower (c : ℂ) (h : SatelliteRenormalizableTower c) :
     RenormalizationTower (parameterToBMol c) :=
-  renormalizationTower_of_infinitelyFast (parameterToBMol c) h
+  Classical.choice h
 
 theorem satelliteTower_depths_cofinal (c : ℂ) (h : SatelliteRenormalizableTower c) :
     MLC.Quadratic.PrincipalNest.Cofinal (RenormalizationTower.cumulativePeriod (satelliteTower c h)) :=
