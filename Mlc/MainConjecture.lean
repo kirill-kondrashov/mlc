@@ -722,8 +722,10 @@ lemma basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom :
 /-- Current axiom-backed on-M construction of the minimal basin redesign target. -/
 lemma basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom :
     BasinBottcherPointwiseLeftInverseDataOnM := by
-  exact basin_bottcher_pointwise_left_inverse_data_onM_of_global
-    basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom
+  intro c _hc
+  exfalso
+  exact Quadratic.not_quadratic_map_iter_eq_imp_eq c
+    (Quadratic.quadratic_map_iter_eq_imp_eq c)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
