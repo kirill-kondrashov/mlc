@@ -313,6 +313,43 @@ theorem not_bottcher_map_inj_on_K_data :
 lemma false_of_bottcher_map_inj_on_K_axiom : False := by
   exact not_bottcher_map_inj_on_K_data (fun c => bottcher_map_inj_on_K c)
 
+/-- A concrete escaping witness: `0` is in the basin for `c = 2`. -/
+lemma zero_mem_basin_two : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+  have hnorm : ‖(6 : ℂ)‖ ≥ ‖(2 : ℂ)‖ + 2 := by norm_num
+  have htail :
+      Tendsto (fun n => ‖(quadratic_map (2 : ℂ))^[n] (6 : ℂ)‖) atTop atTop := by
+    exact iterate_quadratic_map_tendsto_infty (2 : ℂ) (6 : ℂ) hnorm
+  have htwo : (quadratic_map (2 : ℂ))^[2] (0 : ℂ) = (6 : ℂ) := by
+    norm_num [quadratic_map]
+  have htail' :
+      Tendsto (fun n => ‖(quadratic_map (2 : ℂ))^[n] ((quadratic_map (2 : ℂ))^[2] (0 : ℂ))‖)
+        atTop atTop := by
+    simpa [htwo] using htail
+  have hshift :
+      Tendsto (fun n => ‖(quadratic_map (2 : ℂ))^[n + 2] (0 : ℂ)‖) atTop atTop := by
+    simpa [Function.iterate_add, Function.comp_apply] using htail'
+  have hbase :
+      Tendsto (fun n => ‖(quadratic_map (2 : ℂ))^[n] (0 : ℂ)‖) atTop atTop :=
+    (tendsto_add_atTop_iff_nat
+      (f := fun n => ‖(quadratic_map (2 : ℂ))^[n] (0 : ℂ)‖) (k := 2)).1 hshift
+  simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hbase
+
+/-- Consequently, `0 ∉ K(2)`. -/
+lemma zero_not_mem_K_two : (0 : ℂ) ∉ MLC.Quadratic.K (2 : ℂ) := by
+  have hbasin : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := zero_mem_basin_two
+  have hcompl : (0 : ℂ) ∈ (MLC.Quadratic.K (2 : ℂ))ᶜ := by
+    simpa [Quadratic.basin_eq_compl_K (2 : ℂ)] using hbasin
+  simpa [Set.mem_compl_iff] using hcompl
+
+/-- The chosen fixed point for `c = 2` cannot be `0`. -/
+lemma fixed_point_two_ne_zero : Quadratic.fixed_point (2 : ℂ) ≠ 0 := by
+  intro hzero
+  have hmem : Quadratic.fixed_point (2 : ℂ) ∈ MLC.Quadratic.K (2 : ℂ) :=
+    Quadratic.fixed_point_mem_K (2 : ℂ)
+  have h0 : (0 : ℂ) ∈ MLC.Quadratic.K (2 : ℂ) := by
+    simpa [hzero] using hmem
+  exact zero_not_mem_K_two h0
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp

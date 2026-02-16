@@ -205,6 +205,11 @@
   - `not_bottcher_map_inj_on_K_zero`.
   - `not_bottcher_map_inj_on_K_data`.
   - `false_of_bottcher_map_inj_on_K_axiom`.
+- [x] Added concrete non-Mandelbrot escape/fixed-point witnesses for follow-up
+  bridge work:
+  - `zero_mem_basin_two`
+  - `zero_not_mem_K_two`
+  - `fixed_point_two_ne_zero`.
 
 ## Remaining Work (Single Real Blocker)
 - [x] Reformulate the elimination target: `quadratic_map_iter_eq_imp_eq` has been
