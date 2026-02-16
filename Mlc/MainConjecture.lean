@@ -1069,12 +1069,17 @@ lemma bottcher_map_inj_on_basin_onM_via_external_ray_axioms :
   intro c hc
   exact False.elim false_of_external_ray_axioms
 
+/-- Single Step 2b replacement target for the top-level theorem wiring. -/
+lemma bottcher_map_inj_on_basin_onM_target :
+    BottcherMapInjOnBasinOnMData := by
+  exact bottcher_map_inj_on_basin_onM_via_external_ray_axioms
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data
-    bottcher_map_inj_on_basin_onM_via_external_ray_axioms
+    bottcher_map_inj_on_basin_onM_target
 
 end MainProof
 
