@@ -953,14 +953,21 @@ theorem basin_bottcher_pointwise_left_inverse_data_onM_of_global
   intro c _hc
   exact h_basin c
 
+/-- On-M basin pointwise-left-inverse data implies on-M basin injectivity data. -/
+theorem bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inverse_data_onM
+    (h_basin_onM : BasinBottcherPointwiseLeftInverseDataOnM) :
+    BottcherMapInjOnBasinOnMData := by
+  intro c hc
+  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
+    (h_basin_onM c hc)
+
 /-- Main-conjecture wrapper for the on-M minimal basin redesign target. -/
 theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
     (h_basin_onM : BasinBottcherPointwiseLeftInverseDataOnM) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin_onM
-  intro c hc
-  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
-    (h_basin_onM c hc)
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM
+    (bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inverse_data_onM
+      h_basin_onM)
 
 /-- Equivalent on-M Step 2b wrapper formulated directly as basin injectivity
     of `bottcher_map`. -/

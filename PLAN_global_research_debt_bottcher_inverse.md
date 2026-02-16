@@ -65,6 +65,7 @@
   - `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
   - `bottcher_map_inj_on_basin_onM_target`
   - `basin_bottcher_pointwise_left_inverse_data_onM_of_bottcher_map_inj_on_basin_onM`
+  - `bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inverse_data_onM`
   - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
   - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM`
   - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM_data`
