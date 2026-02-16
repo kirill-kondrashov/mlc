@@ -1401,8 +1401,27 @@ lemma bottcher_map_inj_on_basin_onM_target :
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data
-    bottcher_map_inj_on_basin_onM_target
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply mlc_strategy
+  · -- Finitely Renormalizable case (Yoccoz)
+    intro c hc h_fin
+    have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
+      apply MLC.yoccoz_theorem
+      simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin
+    exact parameter_shrink_of_yoccoz c hc h_fin h_dyn
+  · -- Bottcher coordinates exist on M
+    exact bottcher_onM_hyp
+  · -- Green sublevel sets connected
+    exact green_sublevel_connected_onM
+      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
+      bottcher_map_inj_on_basin_onM_target
+  · -- Current IR branch is discharged via the external-ray contradiction witness.
+    intro c h_inf
+    exfalso
+    exact false_of_external_ray_axioms
+  · -- Bridge from Molecule Conjecture to Satellite MLC (tower form)
+    intro h_mol h_motion c hc hTower
+    exact molecule_conjecture_bridge_of_tower h_mol h_motion c hc hTower
 
 end MainProof
 

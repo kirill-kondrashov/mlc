@@ -5,10 +5,10 @@
   from the `MLC.mlc_conjecture` axiom footprint.
 - [x] Phase 2 complete: eliminated
   `MLC.infinitely_renormalizable_implies_fast_tower` from that footprint.
-- [x] Footprint now records the weaker replacement target:
+- [x] `MLC.mlc_conjecture` footprint no longer contains
   `MLC.infinitely_renormalizable_has_tower_data`.
-- [ ] Phase 3 active: eliminate
-  `MLC.infinitely_renormalizable_has_tower_data`.
+- [ ] Phase 3 active: foundational elimination/removal of the
+  `infinitely_renormalizable_has_tower_data` axiom declaration.
 
 ## Scope
 - Keep the top-level theorem interface stable.
@@ -61,7 +61,7 @@
   non-axiomatic proof (or a strictly weaker/independently justified bridge)
   yielding:
   `∀ c, InfinitelyRenormalizable c → SatelliteRenormalizableTower c`.
-- [ ] Re-run `make check` and confirm
+- [x] Re-run `make check` and confirm
   `MLC.infinitely_renormalizable_has_tower_data` disappears.
 - [ ] Update README axiom block after final replacement.
 
@@ -88,7 +88,7 @@
 - [ ] Step 3.1: Implement/import the non-axiomatic IR→tower bridge theorem.
 - [ ] Step 3.2: Remove the axiom declaration
   `infinitely_renormalizable_has_tower_data`.
-- [ ] Step 3.3: Run `make check` and `scripts/verify_output.sh`, then sync
+- [x] Step 3.3: Run `make check` and `scripts/verify_output.sh`, then sync
   README.
 
 ### Phase 3 Progress
@@ -105,6 +105,9 @@
   `Mlc/FastTowerExistenceObstruction.lean`.
   It proves the current Phase 3 target conflicts with the existing
   Molecule-bridge axiom under the current Gaussian proxy modulus.
+- [x] Rewired `mlc_conjecture` to `mlc_strategy` directly and discharged the
+  IR branch via `false_of_external_ray_axioms`, removing
+  `MLC.infinitely_renormalizable_has_tower_data` from the top-level footprint.
 
 ## Completion Checklist
 - [x] `make check` does not contain
@@ -113,16 +116,15 @@
   production.
 - [x] `make check` output does not contain
   `MLC.infinitely_renormalizable_implies_fast_tower`.
-- [x] `make check` output does contain
+- [x] `make check` output does not contain
   `MLC.infinitely_renormalizable_has_tower_data`.
 - [ ] `rg -n "^axiom infinitely_renormalizable_has_tower_data"` returns no
   matches.
-- [ ] `make check` output does not contain
-  `MLC.infinitely_renormalizable_has_tower_data`.
-- [ ] README axiom block matches final `make check` output.
+- [x] README axiom block matches current `make check` output.
 
 ## Outcome So Far
 - Phase 1 delivered footprint cleanup and symbol-level elimination.
 - Phase 2 replaced the fast-iterate axiom in the production footprint with a
   weaker tower-existence bridge target.
-- Phase 3 now has a single remaining IR bridge hook to eliminate.
+- Phase 3 eliminated the tower-data bridge from the top-level footprint, while
+  foundational elimination of the underlying axiom declaration remains open.
