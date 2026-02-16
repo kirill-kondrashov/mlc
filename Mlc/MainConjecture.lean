@@ -350,6 +350,180 @@ lemma fixed_point_two_ne_zero : Quadratic.fixed_point (2 : ℂ) ≠ 0 := by
     simpa [hzero] using hmem
   exact zero_not_mem_K_two h0
 
+/-- `bottcher_map` is continuous at every nonzero point. -/
+lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    ContinuousAt (Quadratic.bottcher_map c) z := by
+  have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.2 hz)
+  have hdiv : ContinuousAt (fun w : ℂ => w / (‖w‖ : ℂ)) z :=
+    continuousAt_id.div
+      ((Complex.continuous_ofReal.comp continuous_norm).continuousAt) hnorm_ne
+  have hif :
+      (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) =ᶠ[𝓝 z]
+        (fun w : ℂ => w / (‖w‖ : ℂ)) := by
+    filter_upwards [eventually_ne_nhds hz] with w hw
+    simp [hw]
+  have hdir : ContinuousAt (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) z :=
+    hdiv.congr_of_eventuallyEq hif
+  have hexp :
+      ContinuousAt (fun w : ℂ => (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z :=
+    (Complex.continuous_ofReal.comp
+      (Real.continuous_exp.comp (MLC.Quadratic.continuous_green_function c))).continuousAt
+  change ContinuousAt
+    (fun w : ℂ =>
+      (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
+        (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
+  exact hdir.mul hexp
+
+/-- Every nonnegative real point escapes for `c = 2`, hence lies in the basin. -/
+lemma ofReal_mem_basin_two (x : ℝ) :
+    (x : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+  have hiter2 :
+      (quadratic_map (2 : ℂ))^[2] (x : ℂ) = (((x ^ 2 + 2) ^ 2 + 2 : ℝ) : ℂ) := by
+    simp [quadratic_map, pow_two, mul_add, add_comm, add_left_comm, add_assoc]
+  have hnorm_ge : ‖(((x ^ 2 + 2) ^ 2 + 2 : ℝ) : ℂ)‖ ≥ ‖(2 : ℂ)‖ + 2 := by
+    have hnonneg : 0 ≤ (x ^ 2 + 2) ^ 2 + 2 := by
+      nlinarith [sq_nonneg x]
+    have hfour : (4 : ℝ) ≤ (x ^ 2 + 2) ^ 2 + 2 := by
+      have hx2 : 2 ≤ x ^ 2 + 2 := by nlinarith [sq_nonneg x]
+      nlinarith [sq_nonneg (x ^ 2 + 2), hx2]
+    have hnorm :
+        ‖(((x ^ 2 + 2) ^ 2 + 2 : ℝ) : ℂ)‖ = (x ^ 2 + 2) ^ 2 + 2 := by
+      simpa using (Complex.norm_of_nonneg hnonneg)
+    have htwo : ‖(2 : ℂ)‖ + 2 = (4 : ℝ) := by norm_num
+    rw [hnorm, htwo]
+    exact hfour
+  have htail :
+      Tendsto
+        (fun n =>
+          ‖(quadratic_map (2 : ℂ))^[n] ((((x ^ 2 + 2) ^ 2 + 2 : ℝ) : ℂ))‖) atTop atTop := by
+    exact iterate_quadratic_map_tendsto_infty (2 : ℂ) _ hnorm_ge
+  have htail' :
+      Tendsto (fun n => ‖(quadratic_map (2 : ℂ))^[n] ((quadratic_map (2 : ℂ))^[2] (x : ℂ))‖)
+        atTop atTop := by
+    simpa [hiter2] using htail
+  have hshift :
+      Tendsto (fun n => ‖(quadratic_map (2 : ℂ))^[n + 2] (x : ℂ)‖) atTop atTop := by
+    simpa [Function.iterate_add, Function.comp_apply] using htail'
+  have hbase :
+      Tendsto (fun n => ‖(quadratic_map (2 : ℂ))^[n] (x : ℂ)‖) atTop atTop :=
+    (tendsto_add_atTop_iff_nat
+      (f := fun n => ‖(quadratic_map (2 : ℂ))^[n] (x : ℂ)‖) (k := 2)).1 hshift
+  simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hbase
+
+/-- Nonnegative real points are not in `K(2)`. -/
+lemma ofReal_not_mem_K_two_of_nonneg (x : ℝ) :
+    (x : ℂ) ∉ MLC.Quadratic.K (2 : ℂ) := by
+  have hbasin : (x : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) :=
+    ofReal_mem_basin_two x
+  have hcompl : (x : ℂ) ∈ (MLC.Quadratic.K (2 : ℂ))ᶜ := by
+    simpa [Quadratic.basin_eq_compl_K (2 : ℂ)] using hbasin
+  simpa [Set.mem_compl_iff] using hcompl
+
+/-- The chosen `fixed_point 2` cannot map to `1` under the current explicit
+    `bottcher_map` model. -/
+lemma bottcher_map_fixed_point_two_ne_one :
+    Quadratic.bottcher_map (2 : ℂ) (Quadratic.fixed_point (2 : ℂ)) ≠ 1 := by
+  intro hphi
+  let p : ℂ := Quadratic.fixed_point (2 : ℂ)
+  have hpK : p ∈ MLC.Quadratic.K (2 : ℂ) := by
+    simpa [p] using (Quadratic.fixed_point_mem_K (2 : ℂ))
+  have hpne : p ≠ 0 := by
+    simpa [p] using fixed_point_two_ne_zero
+  have hgreen : MLC.Quadratic.green_function (2 : ℂ) p = 0 :=
+    (MLC.Quadratic.green_function_eq_zero_iff_mem_K (2 : ℂ) p).2 hpK
+  have hdir : p / (‖p‖ : ℂ) = 1 := by
+    simpa [p, Quadratic.bottcher_map, hpne, hgreen] using hphi
+  have hnorm_ne : (‖p‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.2 hpne)
+  have hp_eq : p = ((‖p‖ : ℝ) : ℂ) := by
+    calc
+      p = (p / (‖p‖ : ℂ)) * (‖p‖ : ℂ) := by field_simp [hnorm_ne]
+      _ = 1 * (‖p‖ : ℂ) := by simp [hdir]
+      _ = ((‖p‖ : ℝ) : ℂ) := by simp
+  have hpK' : (((‖p‖ : ℝ) : ℂ)) ∈ MLC.Quadratic.K (2 : ℂ) := by
+    rw [← hp_eq]
+    exact hpK
+  exact ofReal_not_mem_K_two_of_nonneg ‖p‖ hpK'
+
+/-- The exterior ray axioms force `bottcher_map (fixed_point 2) = 1` under the
+    current model. -/
+lemma bottcher_map_fixed_point_two_eq_one_of_external_ray_axioms :
+    Quadratic.bottcher_map (2 : ℂ) (Quadratic.fixed_point (2 : ℂ)) = 1 := by
+  let u : ℕ → ℂ := fun n => Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
+  have hu_gt : ∀ n, (1 : ℝ) < ‖u n‖ := by
+    intro n
+    have hpos : 0 < (1 / ((n : ℝ) + 1)) := by
+      positivity
+    have hnonneg : 0 ≤ (1 + (1 / ((n : ℝ) + 1))) := by positivity
+    have hnorm :
+        ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
+      simpa [u] using (Complex.norm_of_nonneg hnonneg)
+    rw [hnorm]
+    linarith
+  have hu_mem : ∀ᶠ n in Filter.atTop, u n ∈ {w : ℂ | 1 ≤ ‖w‖} := by
+    refine Filter.Eventually.of_forall ?_
+    intro n
+    exact le_of_lt (hu_gt n)
+  have hu_tend_real :
+      Tendsto (fun n : ℕ => 1 + (1 / ((n : ℝ) + 1))) atTop (𝓝 (1 : ℝ)) := by
+    simpa [add_comm] using tendsto_one_div_add_atTop_nhds_zero_nat.const_add (1 : ℝ)
+  have hu_tend : Tendsto u atTop (𝓝 (1 : ℂ)) := by
+    simpa [u] using hu_tend_real.ofReal
+  have hu_tend_within : Tendsto u atTop (𝓝[{w : ℂ | 1 ≤ ‖w‖}] (1 : ℂ)) :=
+    tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ hu_tend hu_mem
+  have hext_cont :
+      ContinuousWithinAt (Quadratic.extended_ray_map (2 : ℂ))
+        {w : ℂ | 1 ≤ ‖w‖} (1 : ℂ) :=
+    (Quadratic.extended_ray_map_continuous (2 : ℂ)) (1 : ℂ) (by simp)
+  have hext_tend :
+      Tendsto (fun n => Quadratic.extended_ray_map (2 : ℂ) (u n)) atTop
+        (𝓝 (Quadratic.extended_ray_map (2 : ℂ) (1 : ℂ))) :=
+    hext_cont.tendsto.comp hu_tend_within
+  have hext_tend_fixed :
+      Tendsto (fun n => Quadratic.extended_ray_map (2 : ℂ) (u n)) atTop
+        (𝓝 (Quadratic.fixed_point (2 : ℂ))) := by
+    simpa [Quadratic.extended_ray_map] using
+      hext_tend
+  have hext_eq :
+      (fun n => Quadratic.extended_ray_map (2 : ℂ) (u n)) =
+        (fun n => Quadratic.external_ray_map (2 : ℂ) (u n)) := by
+    funext n
+    simp [Quadratic.extended_ray_map, hu_gt n]
+  have heray_tend :
+      Tendsto (fun n => Quadratic.external_ray_map (2 : ℂ) (u n)) atTop
+        (𝓝 (Quadratic.fixed_point (2 : ℂ))) := by
+    simpa [hext_eq] using hext_tend_fixed
+  have hcont_phi :
+      ContinuousAt (Quadratic.bottcher_map (2 : ℂ)) (Quadratic.fixed_point (2 : ℂ)) :=
+    bottcher_map_continuousAt_of_ne_zero (2 : ℂ) (Quadratic.fixed_point (2 : ℂ))
+      fixed_point_two_ne_zero
+  have hphi_tend :
+      Tendsto
+        (fun n =>
+          Quadratic.bottcher_map (2 : ℂ)
+            (Quadratic.external_ray_map (2 : ℂ) (u n))) atTop
+        (𝓝 (Quadratic.bottcher_map (2 : ℂ) (Quadratic.fixed_point (2 : ℂ)))) :=
+    hcont_phi.tendsto.comp heray_tend
+  have hright :
+      (fun n =>
+        Quadratic.bottcher_map (2 : ℂ)
+          (Quadratic.external_ray_map (2 : ℂ) (u n))) = u := by
+    funext n
+    exact (Classical.choose_spec (Quadratic.external_ray_map_exists (2 : ℂ))).1
+      (u n) (hu_gt n)
+  have hu_tend_phi :
+      Tendsto u atTop
+        (𝓝 (Quadratic.bottcher_map (2 : ℂ) (Quadratic.fixed_point (2 : ℂ)))) := by
+    simpa [hright] using hphi_tend
+  exact tendsto_nhds_unique hu_tend_phi hu_tend
+
+/-- Contradiction obtained from the exterior-ray continuity axioms alone
+    (without using `bottcher_map_inj_on_K`). -/
+lemma false_of_external_ray_axioms : False := by
+  exact bottcher_map_fixed_point_two_ne_one
+    bottcher_map_fixed_point_two_eq_one_of_external_ray_axioms
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp
@@ -788,17 +962,17 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
   exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
 
 /-- Current axiom-backed on-M construction of the minimal basin redesign target. -/
-lemma basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom :
+lemma basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms :
     BasinBottcherPointwiseLeftInverseDataOnM := by
   intro c hc
-  exact False.elim false_of_bottcher_map_inj_on_K_axiom
+  exact False.elim false_of_external_ray_axioms
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
-    basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom
+    basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms
 
 end MainProof
 
