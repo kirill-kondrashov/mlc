@@ -1,13 +1,12 @@
 # Plan: Eliminate `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`
 
-## Status (2026-02-13)
-- [ ] Not eliminated yet.
-- [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
-- [ ] Only remaining production use-site is in the MainConjecture bridge
-  wrapper `Mlc/MainConjecture.lean:707`
-  (`basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`).
-- [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
-  `MLC.mlc_conjecture` after the basin-injectivity refactor.
+## Status (2026-02-16)
+- [x] Eliminated from the `MLC.mlc_conjecture` axiom footprint.
+- [x] `make check` no longer lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
+- [x] No production use-site remains in `Mlc/MainConjecture.lean`.
+- [ ] `MLC.bottcher_map_inj_on_K` is now in the axiom footprint of
+  `MLC.mlc_conjecture` via the current contradiction bridge
+  (`basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom`).
 - [x] `MLC.Quadratic.bottcher_seq_converges` is no longer in the axiom
   footprint of `MLC.mlc_conjecture`.
 
@@ -38,14 +37,13 @@
 - [x] `mlc_conjecture_of_pullback_root` no longer routes through
   iterate-equality; it now closes through
   `mlc_conjecture_of_bottcher_left_inverse_on_basin`.
-- [x] `mlc_conjecture` now instantiates the basin-injectivity route directly
-  (`mlc_conjecture_of_bottcher_inj_on_basin`), so the remaining axiom use is
-  isolated to `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
-  in `Mlc/MainConjecture.lean:707`.
+- [x] `mlc_conjecture` now instantiates the on-M basin-injectivity wrapper
+  (`mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM`), and the
+  old `quadratic_map_iter_eq_imp_eq` bridge has been removed from this path.
 - [x] Remaining axiom bridge is now explicitly factored:
-  - `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
-  This is the single replacement target for Step 2b, now routed through the
-  minimal basin target wrapper.
+  - `basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom`
+  This is the current replacement target for Step 2b, routed through the
+  minimal basin target wrapper without `quadratic_map_iter_eq_imp_eq`.
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise`
   - `EventualSlitGlobalInverseData`
@@ -60,7 +58,7 @@
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data`
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM`
   - `basin_bottcher_pointwise_left_inverse_data_onM_of_global`
-  - `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
+  - `basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom`
   - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
   - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM`
   - `external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin`
@@ -203,19 +201,17 @@
   replacement target under current definitions.
 - [x] The global local-homeomorphism route is also inconsistent:
   - `not_bottcher_isLocalHomeomorph_data`.
+- [x] The `bottcher_map_inj_on_K` route is inconsistent with the current model:
+  - `not_bottcher_map_inj_on_K_zero`.
 
 ## Remaining Work (Single Real Blocker)
-- [ ] Reformulate the elimination target: the previous “prove a basin left inverse”
-  route is impossible, so `quadratic_map_iter_eq_imp_eq` cannot be replaced by that
-  statement.
+- [x] Reformulate the elimination target: `quadratic_map_iter_eq_imp_eq` has been
+  removed from the `mlc_conjecture` footprint.
 - [ ] Identify and prove the minimal *true* replacement needed in the main path
-  (`Mlc/MainConjecture.lean`). After the latest reductions, the current minimal
-  target is equivalent to basin injectivity of `bottcher_map`
-  (`basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`),
-  so the remaining choice is: prove that injectivity non-axiomatically, or
-  redesign the MLC path to avoid requiring it.
+  (`Mlc/MainConjecture.lean`) so the current contradiction bridge does not rely on
+  `MLC.bottcher_map_inj_on_K`.
 - [ ] Concretely, replace
-  `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
+  `basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom`
   by proving one non-axiomatic on-M basin-injectivity route. Atlas/global-inverse/gluing
   eventual-slit candidates and the proper/local-homeomorphism data route are
   blocked by formal obstructions. Current open redesign target:
@@ -240,12 +236,12 @@
   `quadratic_map_iter_eq_imp_eq` directly.
 - [x] Step 2a: Replace the wrapper instantiation with the basin-injectivity route.
 - [ ] Step 2b: Replace the remaining axiom-backed construction of basin injectivity
-  (currently `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`)
+  (currently `basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom`)
   with a non-axiomatic proof.
-- [ ] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
+- [x] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
 - [ ] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
 
 ## Completion Checklist
-- [ ] `rg -n "Quadratic\\.quadratic_map_iter_eq_imp_eq\\b" Mlc` has no production use-site in main MLC path.
-- [ ] `make check` no longer reports `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
+- [x] `rg -n "Quadratic\\.quadratic_map_iter_eq_imp_eq\\b" Mlc` has no production use-site in main MLC path.
+- [x] `make check` no longer reports `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] README axiom block is synchronized with final `make check` output.

@@ -266,6 +266,42 @@ theorem not_bottcher_isLocalHomeomorph_data :
   intro hlocal
   exact bottcher_map_not_continuous 0 (hlocal 0).continuous
 
+/-- The `bottcher_map_inj_on_K` axiom is inconsistent with the current explicit
+    `bottcher_map` model at parameter `c = 0`. -/
+theorem not_bottcher_map_inj_on_K_zero :
+    ¬ Set.InjOn (Quadratic.bottcher_map 0) (MLC.Quadratic.K 0) := by
+  intro hinj
+  have h0_fix : MLC.Quadratic.fc 0 (0 : ℂ) = 0 := by
+    simp [MLC.Quadratic.fc]
+  have h1_fix : MLC.Quadratic.fc 0 (1 : ℂ) = 1 := by
+    simp [MLC.Quadratic.fc]
+  have h0K : (0 : ℂ) ∈ MLC.Quadratic.K 0 := by
+    refine ⟨0, ?_⟩
+    intro n
+    have h_orbit : MLC.Quadratic.orbit 0 (0 : ℂ) n = 0 :=
+      Quadratic.orbit_fixed_point 0 0 h0_fix n
+    simpa [h_orbit]
+  have h1K : (1 : ℂ) ∈ MLC.Quadratic.K 0 := by
+    refine ⟨1, ?_⟩
+    intro n
+    have h_orbit : MLC.Quadratic.orbit 0 (1 : ℂ) n = 1 :=
+      Quadratic.orbit_fixed_point 0 1 h1_fix n
+    simpa [h_orbit]
+  have hgreen0 : MLC.Quadratic.green_function 0 (0 : ℂ) = 0 :=
+    (MLC.Quadratic.green_function_eq_zero_iff_mem_K 0 0).2 h0K
+  have hgreen1 : MLC.Quadratic.green_function 0 (1 : ℂ) = 0 :=
+    (MLC.Quadratic.green_function_eq_zero_iff_mem_K 0 1).2 h1K
+  have hsame :
+      Quadratic.bottcher_map 0 (0 : ℂ) = Quadratic.bottcher_map 0 (1 : ℂ) := by
+    calc
+      Quadratic.bottcher_map 0 (0 : ℂ) = (1 : ℂ) := by
+        simp [Quadratic.bottcher_map, hgreen0]
+      _ = Quadratic.bottcher_map 0 (1 : ℂ) := by
+        symm
+        simp [Quadratic.bottcher_map, hgreen1]
+  have hzero_eq_one : (0 : ℂ) = 1 := hinj h0K h1K hsame
+  norm_num at hzero_eq_one
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp
@@ -704,19 +740,18 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
   exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
 
 /-- Current axiom-backed on-M construction of the minimal basin redesign target. -/
-lemma basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom :
+lemma basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom :
     BasinBottcherPointwiseLeftInverseDataOnM := by
   intro c _hc
   exfalso
-  exact Quadratic.not_quadratic_map_iter_eq_imp_eq c
-    (Quadratic.quadratic_map_iter_eq_imp_eq c)
+  exact not_bottcher_map_inj_on_K_zero (bottcher_map_inj_on_K 0)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
-    basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom
+    basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom
 
 end MainProof
 

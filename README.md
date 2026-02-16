@@ -105,9 +105,7 @@ All axioms used:
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.Quadratic.external_ray_map_exists
 - MLC.Quadratic.extended_ray_map_continuous
-- MLC.Quadratic.quadratic_map_iter_eq_imp_eq
-- MLC.Quadratic.bottcher_seq_converges
-- MLC.bottcher_map_inj_on_K
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget
+- MLC.bottcher_map_inj_on_K
 ```
