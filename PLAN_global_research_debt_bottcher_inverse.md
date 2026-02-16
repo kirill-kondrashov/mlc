@@ -4,9 +4,10 @@
 - [ ] Not eliminated yet.
 - [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] Only remaining production use-site is in the MainConjecture bridge
-  wrappers (currently around `Mlc/MainConjecture.lean:276` and
-  `Mlc/MainConjecture.lean:679`), isolated behind
-  `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`.
+  wrappers (currently around `Mlc/MainConjecture.lean:283`,
+  `Mlc/MainConjecture.lean:703`, and `Mlc/MainConjecture.lean:709`),
+  isolated behind `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`
+  and `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`.
 - [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
   `MLC.mlc_conjecture` after the basin-injectivity refactor.
 - [x] `MLC.Quadratic.bottcher_seq_converges` is no longer in the axiom
@@ -43,12 +44,14 @@
   (`mlc_conjecture_of_bottcher_inj_on_basin`), so the remaining axiom use is
   isolated to
   `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom` in
-  `Mlc/MainConjecture.lean:276` (feeding
-  `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`).
+  `Mlc/MainConjecture.lean:283` (feeding
+  `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom` and then
+  `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`).
 - [x] Remaining axiom bridge is now explicitly factored:
   - `BottcherProperLocalHomeomorphOnBasinData`
   - `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`
   - `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`
+  - `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
   This is the single replacement target for Step 2b, now routed through the
   minimal basin target wrapper.
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
@@ -63,7 +66,11 @@
   - `bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data`
   - `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data`
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data`
+  - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM`
+  - `basin_bottcher_pointwise_left_inverse_data_onM_of_global`
+  - `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
   - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
+  - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM`
   - `external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin`
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse_data`
@@ -216,8 +223,9 @@
   so the remaining choice is: prove that injectivity non-axiomatically, or
   redesign the MLC path to avoid requiring it.
 - [ ] Concretely, replace
-  `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom` by proving
-  one non-axiomatic basin-injectivity route. Atlas/global-inverse/gluing
+  `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom` (currently
+  routed through `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`)
+  by proving one non-axiomatic on-M basin-injectivity route. Atlas/global-inverse/gluing
   eventual-slit candidates and the proper/local-homeomorphism data route are
   blocked by formal obstructions. Current open redesign target:
   - `BasinBottcherPointwiseLeftInverseData`
@@ -232,7 +240,7 @@
   (`BottcherProperLocalHomeomorphOnBasinData` and
   `BottcherContinuousDerivNeZeroMemNhdsSlitData`) is now formally ruled out.
   This is now wired to MLC via
-  `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data` and remains the
+  `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM` and remains the
   next candidate to realize without new axioms or new hypotheses in
   `mlc_conjecture`.
 
@@ -241,7 +249,8 @@
   `quadratic_map_iter_eq_imp_eq` directly.
 - [x] Step 2a: Replace the wrapper instantiation with the basin-injectivity route.
 - [ ] Step 2b: Replace the remaining axiom-backed construction of basin injectivity
-  (currently `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`)
+  (currently `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`,
+  fed by `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`)
   with a non-axiomatic proof.
 - [ ] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
 - [ ] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.

@@ -588,12 +588,43 @@ theorem basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin
   · intro h_inj c
     exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
       (h_inj c)
+
+/-- On-M variant of the minimal-target equivalence: on-M basin pointwise
+    left-inverse data is equivalent to on-M basin injectivity of `bottcher_map`. -/
+theorem basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM :
+    BasinBottcherPointwiseLeftInverseDataOnM ↔
+      (∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) := by
+  constructor
+  · intro h_basin c hc
+    exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
+      (h_basin c hc)
+  · intro h_inj c hc
+    exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
+      (h_inj c hc)
+
+/-- Global basin pointwise-left-inverse data implies the on-M variant. -/
+theorem basin_bottcher_pointwise_left_inverse_data_onM_of_global
+    (h_basin : BasinBottcherPointwiseLeftInverseData) :
+    BasinBottcherPointwiseLeftInverseDataOnM := by
+  intro c _hc
+  exact h_basin c
+
+/-- Main-conjecture wrapper for the on-M minimal basin redesign target. -/
+theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
+    (h_basin_onM : BasinBottcherPointwiseLeftInverseDataOnM) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM
+  intro c hc
+  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
+    (h_basin_onM c hc)
+
 /-- Main-conjecture wrapper for the minimal basin redesign target. -/
 theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
     (h_basin : BasinBottcherPointwiseLeftInverseData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin
-  exact bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data h_basin
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
+    (basin_bottcher_pointwise_left_inverse_data_onM_of_global h_basin)
 
 /-- Main-conjecture wrapper for the redesigned Step 2b target. -/
 theorem mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data
@@ -688,12 +719,18 @@ lemma basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom :
   exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin_data
     bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom
 
+/-- Current axiom-backed on-M construction of the minimal basin redesign target. -/
+lemma basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom :
+    BasinBottcherPointwiseLeftInverseDataOnM := by
+  exact basin_bottcher_pointwise_left_inverse_data_onM_of_global
+    basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
-    basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
+    basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom
 
 end MainProof
 
