@@ -1069,12 +1069,6 @@ lemma bottcher_map_inj_on_basin_onM_via_external_ray_axioms :
   intro c hc
   exact False.elim false_of_external_ray_axioms
 
-/-- Current axiom-backed on-M construction of the minimal basin redesign target. -/
-lemma basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms :
-    BasinBottcherPointwiseLeftInverseDataOnM := by
-  exact basin_bottcher_pointwise_left_inverse_data_onM_of_bottcher_map_inj_on_basin_onM
-    bottcher_map_inj_on_basin_onM_via_external_ray_axioms
-
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture

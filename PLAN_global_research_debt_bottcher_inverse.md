@@ -6,8 +6,7 @@
 - [x] No production use-site remains in `Mlc/MainConjecture.lean`.
 - [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
   `MLC.mlc_conjecture`; the bridge now routes via
-  `bottcher_map_inj_on_basin_onM_via_external_ray_axioms` and
-  `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`.
+  `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`.
 - [x] `MLC.Quadratic.bottcher_seq_converges` is no longer in the axiom
   footprint of `MLC.mlc_conjecture`.
 
@@ -44,7 +43,6 @@
 - [x] Remaining axiom bridge is now explicitly factored:
   - `BottcherMapInjOnBasinOnMData`
   - `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
-  - `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`
   This is the current replacement target for Step 2b, routed through explicit
   on-M basin injectivity without `quadratic_map_iter_eq_imp_eq`.
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
@@ -64,7 +62,6 @@
   - `basin_bottcher_pointwise_left_inverse_data_onM_of_global`
   - `BottcherMapInjOnBasinOnMData`
   - `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
-  - `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`
   - `basin_bottcher_pointwise_left_inverse_data_onM_of_bottcher_map_inj_on_basin_onM`
   - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
   - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM`
@@ -264,8 +261,7 @@
   `quadratic_map_iter_eq_imp_eq` directly.
 - [x] Step 2a: Replace the wrapper instantiation with the basin-injectivity route.
 - [ ] Step 2b: Replace the remaining axiom-backed construction of basin injectivity
-  (currently `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`, routed
-  through `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`)
+  (currently `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`)
   with a non-axiomatic proof.
 - [x] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
 - [x] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
