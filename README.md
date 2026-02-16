@@ -39,7 +39,8 @@ parameter-piece shrinkage as an explicit hypothesis and also takes a holomorphic
 motion hypothesis derived from two inputs: a parameter-disk inclusion in `M`
 (`BottcherOnMHyp`) and connectedness of Green sublevels on `M`
 (`GreenSublevelConnectedHyp`). For the infinitely renormalizable case,
-the Primitive/Satellite classification is taken as an explicit axiom.
+the current route assumes fast-tower existence as an explicit axiom and derives
+the Primitive/Satellite wrapper from that route.
 The primitive case is derived from modulus divergence in the principal nest, 
 using a conformal proxy definition to satisfy Lyubich's a priori bounds.
 
@@ -105,7 +106,7 @@ All axioms used:
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.Quadratic.external_ray_map_exists
 - MLC.Quadratic.extended_ray_map_continuous
-- MLC.classify_infinitely_renormalizable
+- MLC.infinitely_renormalizable_implies_fast_tower
 - MLC.molecule_modulusLowerBoundTarget
 - MLC.Quadratic.bottcher_seq_converges
 ```

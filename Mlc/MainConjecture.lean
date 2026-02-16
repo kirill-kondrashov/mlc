@@ -112,7 +112,7 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
       h_inj_basin_onM
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
-    exact classify_infinitely_renormalizable c h_inf
+    exact Or.inr (infinitely_renormalizable_implies_satellite_data_via_axiom c h_inf)
   · -- Bridge from Molecule Conjecture to Satellite MLC
     intro h_mol h_motion c hc h_sat
     exact molecule_conjecture_bridge h_mol h_motion c hc h_sat
