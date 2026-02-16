@@ -2,8 +2,11 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherOutsideOutline
 import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticInjective
 import Mlc.Quadratic.Complex.Bottcher.BottcherCpowSlit
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMOutsideOutline
+import Mlc.Quadratic.Complex.InverseBranchQuadratic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Maps.Proper.CompactlyGenerated
+import Mathlib.Topology.SeparatedMap
+import Mathlib.Topology.DiscreteSubset
 import Mathlib.Analysis.Complex.Liouville
 
 namespace MLC
@@ -1862,6 +1865,970 @@ lemma bottcher_map_isProperMap_of_continuous
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
 
+lemma bottcher_map_re_neg_of_pos_real (c : ℂ) {t : ℝ} (ht : 0 < t) :
+    (Quadratic.bottcher_map c (-t)).re < 0 := by
+  have ht0 : (-t : ℂ) ≠ 0 := by
+    exact neg_ne_zero.mpr (by exact_mod_cast (ne_of_gt ht))
+  rw [Quadratic.bottcher_map, if_neg ht0, Complex.mul_re]
+  have hr : (((-t : ℂ) / ‖(-t : ℂ)‖).re) = -1 := by
+    simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht, ht.ne']
+  have hi : (((-t : ℂ) / ‖(-t : ℂ)‖).im) = 0 := by
+    simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht, ht.ne']
+  rw [hr, hi]
+  simpa [Complex.exp_ofReal_re] using Real.exp_pos (MLC.Quadratic.green_function c (-t))
+
+lemma bottcher_map_not_continuousAt_zero (c : ℂ) :
+    ¬ ContinuousAt (Quadratic.bottcher_map c) 0 := by
+  intro hcont
+  let U : Set ℂ := {w : ℂ | 0 < w.re}
+  have hU_nhds : U ∈ 𝓝 (Quadratic.bottcher_map c 0) := by
+    have hUopen : IsOpen U := isOpen_lt continuous_const Complex.continuous_re
+    have hmem : Quadratic.bottcher_map c 0 ∈ U := by
+      simp [U, Quadratic.bottcher_map, Complex.exp_ofReal_re, Real.exp_pos]
+    exact hUopen.mem_nhds hmem
+  have hpre : (Quadratic.bottcher_map c) ⁻¹' U ∈ 𝓝 (0 : ℂ) :=
+    hcont.preimage_mem_nhds hU_nhds
+  rcases Metric.mem_nhds_iff.mp hpre with ⟨ε, hεpos, hball⟩
+  have hhalfpos : 0 < ε / 2 := by linarith
+  let z : ℂ := (-(ε / 2) : ℝ)
+  have hzdist : dist z 0 = ε / 2 := by
+    simp [z, dist_eq_norm, Real.norm_eq_abs, abs_of_pos hεpos]
+  have hzball : z ∈ Metric.ball (0 : ℂ) ε := by
+    have : dist z 0 < ε := by rw [hzdist]; linarith
+    simpa [Metric.ball, Set.mem_setOf_eq] using this
+  have hzU : Quadratic.bottcher_map c z ∈ U := hball hzball
+  have hzneg : (Quadratic.bottcher_map c z).re < 0 := by
+    simpa [z] using bottcher_map_re_neg_of_pos_real c hhalfpos
+  exact (not_lt_of_ge (le_of_lt hzneg)) hzU
+
+lemma bottcher_map_not_continuous (c : ℂ) :
+    ¬ Continuous (Quadratic.bottcher_map c) := by
+  intro hcont
+  exact bottcher_map_not_continuousAt_zero c hcont.continuousAt
+
+lemma bottcher_map_not_isProperMap (c : ℂ) :
+    ¬ IsProperMap (Quadratic.bottcher_map c) := by
+  intro hproper
+  exact bottcher_map_not_continuous c hproper.continuous
+
+lemma isDiscrete_fiber_of_isLocallyInjective
+    {f : ℂ → ℂ} (hlocal : IsLocallyInjective f) (y : ℂ) :
+    IsDiscrete {x : ℂ | f x = y} := by
+  classical
+  -- Use the characterization: each point has an open neighborhood
+  -- whose intersection with the fiber is a singleton.
+  refine (isDiscrete_iff_forall_exists_isOpen).2 ?_
+  intro x hx
+  rcases hlocal x with ⟨U, hUopen, hxU, hUinj⟩
+  refine ⟨U, hUopen, ?_⟩
+  ext z
+  constructor
+  · intro hz
+    have hzU : z ∈ U := hz.1
+    have hzf : f z = y := hz.2
+    have hxf : f x = y := hx
+    have : z = x := hUinj hzU hxU (by simp [hxf, hzf])
+    simp [this]
+  · intro hz
+    rcases hz with rfl
+    exact ⟨hxU, hx⟩
+
+lemma finite_fiber_of_isProperMap_isLocallyInjective
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocallyInjective f) (y : ℂ) :
+    ({x : ℂ | f x = y} : Set ℂ).Finite := by
+  have hcompact : IsCompact ((fun x : ℂ => f x) ⁻¹' {y}) :=
+    hproper.isCompact_preimage isCompact_singleton
+  have hdisc : IsDiscrete ({x : ℂ | f x = y} : Set ℂ) :=
+    isDiscrete_fiber_of_isLocallyInjective hlocal y
+  -- Convert preimage of singleton into the fiber set.
+  have hpre : (f ⁻¹' ({y} : Set ℂ)) = ({x : ℂ | f x = y} : Set ℂ) := by
+    ext x
+    simp
+  simpa [hpre] using hcompact.finite hdisc
+
+lemma isDiscrete_fiber_of_isLocalHomeomorphOn_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hlocal : IsLocalHomeomorphOn f s) {y : ℂ}
+    (hfiber : ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    IsDiscrete ({x : ℂ | f x = y} : Set ℂ) := by
+  classical
+  refine (isDiscrete_iff_forall_exists_isOpen).2 ?_
+  intro x hx
+  have hxS : x ∈ s := hfiber hx
+  rcases hlocal x hxS with ⟨e, hx_source, hfeq⟩
+  refine ⟨e.source, e.open_source, ?_⟩
+  ext z
+  constructor
+  · intro hz
+    have hz_source : z ∈ e.source := hz.1
+    have hzf : f z = y := hz.2
+    have hxf : f x = y := hx
+    have hEq : f z = f x := by simp [hzf, hxf]
+    have hzEq : z = x := by
+      have heq : e z = e x := by simpa [hfeq] using hEq
+      exact e.toPartialEquiv.injOn hz_source hx_source heq
+    simp [hzEq]
+  · intro hz
+    rcases hz with rfl
+    exact ⟨hx_source, hx⟩
+
+lemma finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    {y : ℂ} (hfiber : ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    ({x : ℂ | f x = y} : Set ℂ).Finite := by
+  have hcompact : IsCompact ((fun x : ℂ => f x) ⁻¹' {y}) :=
+    hproper.isCompact_preimage isCompact_singleton
+  have hdisc : IsDiscrete ({x : ℂ | f x = y} : Set ℂ) :=
+    isDiscrete_fiber_of_isLocalHomeomorphOn_of_fiber_subset hlocal hfiber
+  have hpre : (f ⁻¹' ({y} : Set ℂ)) = ({x : ℂ | f x = y} : Set ℂ) := by
+    ext x
+    simp
+  simpa [hpre] using hcompact.finite hdisc
+
+lemma finite_of_isCompact_isDiscrete {s : Set ℂ} (hs : IsCompact s) (hs' : IsDiscrete s) :
+    s.Finite :=
+  hs.finite hs'
+
+lemma range_isOpen_of_isLocalHomeomorph {f : ℂ → ℂ} (hlocal : IsLocalHomeomorph f) :
+    IsOpen (Set.range f) := by
+  have hOpenMap : IsOpenMap f := hlocal.isOpenMap
+  simpa [Set.image_univ] using (hOpenMap Set.univ isOpen_univ)
+
+lemma range_isClosed_of_isProperMap {f : ℂ → ℂ} (hproper : IsProperMap f) :
+    IsClosed (Set.range f) := by
+  have hClosedMap : IsClosedMap f := hproper.isClosedMap
+  simpa [Set.image_univ] using (hClosedMap Set.univ isClosed_univ)
+
+lemma range_eq_univ_of_isProperMap_isLocalHomeomorph
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f)
+    (hnonempty : (Set.range f).Nonempty) :
+    Set.range f = Set.univ := by
+  have hopen : IsOpen (Set.range f) := range_isOpen_of_isLocalHomeomorph hlocal
+  have hclosed : IsClosed (Set.range f) := range_isClosed_of_isProperMap hproper
+  have hclopen : IsClopen (Set.range f) := ⟨hclosed, hopen⟩
+  simpa using (IsClopen.eq_univ (α := ℂ) hclopen hnonempty)
+
+lemma exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) {y : ℂ} {U : Set ℂ}
+    (hUopen : IsOpen U)
+    (hfiber : ({x : ℂ | f x = y} : Set ℂ) ⊆ U) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧ f ⁻¹' V ⊆ U := by
+  have hy_not_in : y ∉ f '' Uᶜ := by
+    intro hy
+    rcases hy with ⟨x, hxU, hxy⟩
+    have hxFiber : x ∈ ({x : ℂ | f x = y} : Set ℂ) := by
+      simp [Set.mem_setOf_eq, hxy]
+    exact hxU (hfiber hxFiber)
+  let V : Set ℂ := (f '' Uᶜ)ᶜ
+  have hVopen : IsOpen V := by
+    change IsOpen ((f '' Uᶜ)ᶜ)
+    exact (hclosed _ hUopen.isClosed_compl).isOpen_compl
+  have hyV : y ∈ V := by
+    simpa [V] using hy_not_in
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro x hx
+  by_contra hxU
+  have : f x ∈ f '' Uᶜ := ⟨x, hxU, rfl⟩
+  exact hx this
+
+lemma exists_open_preimage_subset_union_of_finite_fiber
+    {f : ℂ → ℂ} (hlocal : IsLocalHomeomorph f) (hclosed : IsClosedMap f)
+    {y : ℂ} (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : Set ℂ, f ⁻¹' V ⊆ U := by
+  classical
+  -- Choose local homeomorphs around each point in the fiber.
+  let F : Finset ℂ := hfinite.toFinset
+  have hF : (F : Set ℂ) = {x : ℂ | f x = y} := by
+    exact Finite.coe_toFinset hfinite
+  let e : ℂ → OpenPartialHomeomorph ℂ ℂ := fun x => Classical.choose (hlocal x)
+  have hx_source : ∀ x : ℂ, x ∈ (e x).source := fun x => (Classical.choose_spec (hlocal x)).1
+  have hfeq : ∀ x : ℂ, f = (e x) := fun x => (Classical.choose_spec (hlocal x)).2
+  let U : Set ℂ := ⋃ x ∈ F, (e x).source
+  let V0 : Set ℂ := ⋂ x ∈ F, (e x).target
+  have hUmem : {x : ℂ | f x = y} ⊆ U := by
+    intro x hx
+    have hxF : x ∈ F := by
+      have : x ∈ (F : Set ℂ) := by simpa [hF] using hx
+      simpa using this
+    exact mem_iUnion₂.mpr ⟨x, hxF, hx_source x⟩
+  have hyV0 : y ∈ V0 := by
+    -- `y` lies in every target, since `f x = y` and `f = e x`.
+    classical
+    simp [V0]
+    intro x hxF
+    have hx : f x = y := by
+      have : x ∈ (F : Set ℂ) := by simpa using hxF
+      simpa [hF] using this
+    have hxsource : x ∈ (e x).source := hx_source x
+    have hmap : (e x) x ∈ (e x).target := (e x).source_preimage_target hxsource
+    have hfa : f = (e x) := hfeq x
+    have hyx : (e x) x = y := by simpa [hfa] using hx
+    exact hyx ▸ hmap
+  have hV0open : IsOpen V0 := by
+    classical
+    unfold V0
+    refine isOpen_biInter_finset ?_
+    intro x hx
+    exact (e x).open_target
+  have hy_not_in : y ∉ f '' Uᶜ := by
+    intro hy
+    rcases hy with ⟨x, hxU, rfl⟩
+    exact hxU (hUmem rfl)
+  have hUopen : IsOpen U := by
+    unfold U
+    refine isOpen_iUnion ?_
+    intro x
+    refine isOpen_iUnion ?_
+    intro hx
+    exact (e x).open_source
+  have hclosedU : IsClosed (f '' Uᶜ) := hclosed _ ((isClosed_compl_iff).2 hUopen)
+  let V : Set ℂ := V0 \ f '' Uᶜ
+  have hVopen : IsOpen V := IsOpen.sdiff hV0open hclosedU
+  have hyV : y ∈ V := by
+    exact ⟨hyV0, hy_not_in⟩
+  refine ⟨V, hVopen, hyV, U, ?_⟩
+  intro x hx
+  have hxV : f x ∈ V := hx
+  have hnot : f x ∉ f '' Uᶜ := hxV.2
+  by_contra hxU
+  exact hnot ⟨x, hxU, rfl⟩
+
+lemma exists_pairwise_disjoint_ball_of_finite {s : Set ℂ} (hs : s.Finite) :
+    ∃ r : s → ℝ, (∀ x, 0 < r x) ∧
+      Pairwise (fun x y => Disjoint (Metric.ball x.1 (r x)) (Metric.ball y.1 (r y))) := by
+  classical
+  by_cases hsubs : s.Subsingleton
+  · refine ⟨fun _ => (1 : ℝ), ?_, ?_⟩
+    · intro x; norm_num
+    · intro x y hne
+      have : x = y := by
+        have hxy : x.1 = y.1 := hsubs x.property y.property
+        exact Subtype.ext hxy
+      exact (hne this).elim
+  · -- Define radii using `infDist` to the rest of the finite set.
+    let r : s → ℝ := fun x =>
+      if hne : (s \ {x.1}).Nonempty then
+        (Metric.infDist x.1 (s \ {x.1})) / 2
+      else 1
+    have hrpos : ∀ x, 0 < r x := by
+      intro x
+      by_cases hne : (s \ {x.1}).Nonempty
+      · have hclosed : IsClosed (s \ {x.1}) :=
+          (hs.subset (by intro y hy; exact hy.1)).isClosed
+        have hxnot : x.1 ∉ s \ {x.1} := by
+          simp
+        have hpos : 0 < Metric.infDist x.1 (s \ {x.1}) := by
+          have := (IsClosed.notMem_iff_infDist_pos (x := x.1) (s := s \ {x.1}) hclosed hne).1
+          exact this hxnot
+        have hpos' : 0 < Metric.infDist x.1 (s \ {x.1}) / 2 := by
+          nlinarith
+        simpa [r, hne] using hpos'
+      · simp [r, hne]
+    refine ⟨r, hrpos, ?_⟩
+    intro x y hne
+    have hxy : x.1 ≠ y.1 := by
+      intro h
+      apply hne
+      exact Subtype.ext h
+    have hy_mem : y.1 ∈ s \ {x.1} := by
+      exact ⟨y.property, by simpa [Set.mem_singleton_iff, eq_comm] using hxy⟩
+    have hx_mem : x.1 ∈ s \ {y.1} := by
+      exact ⟨x.property, by simpa [Set.mem_singleton_iff] using hxy⟩
+    have hxne : (s \ {x.1}).Nonempty := ⟨y.1, hy_mem⟩
+    have hyne : (s \ {y.1}).Nonempty := ⟨x.1, hx_mem⟩
+    have hxle : r x ≤ dist x.1 y.1 / 2 := by
+      have h := Metric.infDist_le_dist_of_mem (x := x.1) (s := s \ {x.1}) hy_mem
+      have h' : Metric.infDist x.1 (s \ {x.1}) / 2 ≤ dist x.1 y.1 / 2 := by
+        nlinarith [h]
+      simpa [r, hxne] using h'
+    have hyle : r y ≤ dist x.1 y.1 / 2 := by
+      have h := Metric.infDist_le_dist_of_mem (x := y.1) (s := s \ {y.1}) hx_mem
+      have h' : Metric.infDist y.1 (s \ {y.1}) / 2 ≤ dist y.1 x.1 / 2 := by
+        nlinarith [h]
+      have h'' : dist y.1 x.1 = dist x.1 y.1 := by simp [dist_comm]
+      simpa [r, hyne, h''] using h'
+    have hsum : r x + r y ≤ dist x.1 y.1 := by
+      have : r x + r y ≤ dist x.1 y.1 / 2 + dist x.1 y.1 / 2 :=
+        add_le_add hxle hyle
+      have hhalf : dist x.1 y.1 / 2 + dist x.1 y.1 / 2 = dist x.1 y.1 := by ring
+      simpa [hhalf] using this
+    exact Metric.ball_disjoint_ball hsum
+
+lemma exists_open_preimage_subset_iUnion_ball_of_finite_fiber
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) {y : ℂ}
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ r : ({x : ℂ // f x = y}) → ℝ,
+        (∀ x, 0 < r x) ∧
+        Pairwise (fun x x' =>
+          Disjoint (Metric.ball x.1 (r x)) (Metric.ball x'.1 (r x'))) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), Metric.ball x.1 (r x) := by
+  let s : Set ℂ := {x : ℂ | f x = y}
+  have hsfinite : s.Finite := by simpa [s] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let U : Set ℂ := ⋃ x : ({x : ℂ // f x = y}), Metric.ball x.1 (r x)
+  have hUopen : IsOpen U := by
+    unfold U
+    exact isOpen_iUnion (fun x => Metric.isOpen_ball)
+  have hsU : s ⊆ U := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact Metric.mem_ball_self (hrpos ⟨x, hx⟩)
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := U) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, r, hrpos, hrdisj, ?_⟩
+  simpa [U] using hpre
+
+lemma exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorph f) {y : ℂ}
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : ({x : ℂ // f x = y}) → Set ℂ,
+        (∀ x, IsOpen (U x)) ∧
+        (∀ x, x.1 ∈ U x) ∧
+        (∀ x, Set.InjOn f (U x)) ∧
+        Pairwise (fun x x' => Disjoint (U x) (U x')) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x := by
+  classical
+  have hlocinj : IsLocallyInjective f := hlocal.isLocallyInjective
+  choose N hNopen hxN hNinj using (fun x : ({x : ℂ // f x = y}) => hlocinj x.1)
+  let s : Set ℂ := {x : ℂ | f x = y}
+  have hsfinite : s.Finite := by simpa [s] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let U : ({x : ℂ // f x = y}) → Set ℂ := fun x => Metric.ball x.1 (r x) ∩ N x
+  let Uunion : Set ℂ := ⋃ x : ({x : ℂ // f x = y}), U x
+  have hUopen : IsOpen Uunion := by
+    unfold Uunion
+    refine isOpen_iUnion ?_
+    intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  have hsU : s ⊆ Uunion := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact ⟨Metric.mem_ball_self (hrpos ⟨x, hx⟩), hxN ⟨x, hx⟩⟩
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := Uunion) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, U, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  · intro x
+    exact ⟨Metric.mem_ball_self (hrpos x), hxN x⟩
+  · intro x
+    exact (hNinj x).mono (by intro z hz; exact hz.2)
+  · intro x x' hxx'
+    exact (hrdisj hxx').mono (by intro z hz; exact hz.1) (by intro z hz; exact hz.1)
+  · simpa [Uunion] using hpre
+
+lemma exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber_on
+    {f : ℂ → ℂ} {s : Set ℂ} (hclosed : IsClosedMap f)
+    (hlocal : IsLocalHomeomorphOn f s) {y : ℂ}
+    (hfiberS : ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : ({x : ℂ // f x = y}) → Set ℂ,
+        (∀ x, IsOpen (U x)) ∧
+        (∀ x, x.1 ∈ U x) ∧
+        (∀ x, Set.InjOn f (U x)) ∧
+        Pairwise (fun x x' => Disjoint (U x) (U x')) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x := by
+  classical
+  let s0 : Set ℂ := {x : ℂ | f x = y}
+  have hsfinite : s0.Finite := by simpa [s0] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s0) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let N : ({x : ℂ // f x = y}) → Set ℂ := fun x =>
+    (Classical.choose (hlocal x.1 (hfiberS x.2))).source
+  have hNopen : ∀ x, IsOpen (N x) := by
+    intro x
+    exact (Classical.choose (hlocal x.1 (hfiberS x.2))).open_source
+  have hxN : ∀ x, x.1 ∈ N x := by
+    intro x
+    exact (Classical.choose_spec (hlocal x.1 (hfiberS x.2))).1
+  have hNinj : ∀ x, Set.InjOn f (N x) := by
+    intro x a ha b hb hab
+    let e : OpenPartialHomeomorph ℂ ℂ := Classical.choose (hlocal x.1 (hfiberS x.2))
+    have hfeq : f = e := (Classical.choose_spec (hlocal x.1 (hfiberS x.2))).2
+    have heq : e a = e b := by simpa [hfeq] using hab
+    exact e.toPartialEquiv.injOn (by simpa [N, e] using ha) (by simpa [N, e] using hb) heq
+  let U : ({x : ℂ // f x = y}) → Set ℂ := fun x => Metric.ball x.1 (r x) ∩ N x
+  let Uunion : Set ℂ := ⋃ x : ({x : ℂ // f x = y}), U x
+  have hUopen : IsOpen Uunion := by
+    unfold Uunion
+    refine isOpen_iUnion ?_
+    intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  have hsU : s0 ⊆ Uunion := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact ⟨Metric.mem_ball_self (hrpos ⟨x, hx⟩), hxN ⟨x, hx⟩⟩
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := Uunion) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, U, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  · intro x
+    exact ⟨Metric.mem_ball_self (hrpos x), hxN x⟩
+  · intro x
+    exact (hNinj x).mono (by intro z hz; exact hz.2)
+  · intro x x' hxx'
+    exact (hrdisj hxx').mono (by intro z hz; exact hz.1) (by intro z hz; exact hz.1)
+  · simpa [Uunion] using hpre
+
+lemma exists_open_preimage_subset_iUnion_disjoint_inj_subset_of_finite_fiber_on
+    {f : ℂ → ℂ} {s : Set ℂ} (hclosed : IsClosedMap f)
+    (hlocal : IsLocalHomeomorphOn f s) (hsopen : IsOpen s) {y : ℂ}
+    (hfiberS : ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : ({x : ℂ // f x = y}) → Set ℂ,
+        (∀ x, IsOpen (U x)) ∧
+        (∀ x, x.1 ∈ U x) ∧
+        (∀ x, U x ⊆ s) ∧
+        (∀ x, Set.InjOn f (U x)) ∧
+        Pairwise (fun x x' => Disjoint (U x) (U x')) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x := by
+  classical
+  let s0 : Set ℂ := {x : ℂ | f x = y}
+  have hsfinite : s0.Finite := by simpa [s0] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s0) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let N : ({x : ℂ // f x = y}) → Set ℂ := fun x =>
+    (Classical.choose (hlocal x.1 (hfiberS x.2))).source
+  have hNopen : ∀ x, IsOpen (N x) := by
+    intro x
+    exact (Classical.choose (hlocal x.1 (hfiberS x.2))).open_source
+  have hxN : ∀ x, x.1 ∈ N x := by
+    intro x
+    exact (Classical.choose_spec (hlocal x.1 (hfiberS x.2))).1
+  have hNinj : ∀ x, Set.InjOn f (N x) := by
+    intro x a ha b hb hab
+    let e : OpenPartialHomeomorph ℂ ℂ := Classical.choose (hlocal x.1 (hfiberS x.2))
+    have hfeq : f = e := (Classical.choose_spec (hlocal x.1 (hfiberS x.2))).2
+    have heq : e a = e b := by simpa [hfeq] using hab
+    exact e.toPartialEquiv.injOn (by simpa [N, e] using ha) (by simpa [N, e] using hb) heq
+  let U : ({x : ℂ // f x = y}) → Set ℂ := fun x => Metric.ball x.1 (r x) ∩ N x ∩ s
+  let Uunion : Set ℂ := ⋃ x : ({x : ℂ // f x = y}), U x
+  have hUopen : IsOpen Uunion := by
+    unfold Uunion
+    refine isOpen_iUnion ?_
+    intro x
+    exact (Metric.isOpen_ball.inter (hNopen x)).inter hsopen
+  have hsU : s0 ⊆ Uunion := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact ⟨⟨Metric.mem_ball_self (hrpos ⟨x, hx⟩), hxN ⟨x, hx⟩⟩, hfiberS hx⟩
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := Uunion) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, U, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    exact (Metric.isOpen_ball.inter (hNopen x)).inter hsopen
+  · intro x
+    exact ⟨⟨Metric.mem_ball_self (hrpos x), hxN x⟩, hfiberS x.2⟩
+  · intro x z hz
+    exact hz.2
+  · intro x
+    exact (hNinj x).mono (by intro z hz; exact hz.1.2)
+  · intro x x' hxx'
+    exact (hrdisj hxx').mono (by intro z hz; exact hz.1.1) (by intro z hz; exact hz.1.1)
+  · simpa [Uunion] using hpre
+
+lemma exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj
+    {f : ℂ → ℂ} {y : ℂ} {V : Set ℂ}
+    {U : ({x : ℂ // f x = y}) → Set ℂ}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    {y' : ℂ} (hy' : y' ∈ V) :
+    ∃ g : ({x : ℂ // f x = y'}) → ({x : ℂ // f x = y}),
+      Function.Injective g := by
+  classical
+  let g : ({x : ℂ // f x = y'}) → ({x : ℂ // f x = y}) := fun z =>
+    Classical.choose <| by
+      have hzpre : z.1 ∈ f ⁻¹' V := by
+        simpa [Set.preimage, z.2] using hy'
+      have hzU : z.1 ∈ ⋃ x : ({x : ℂ // f x = y}), U x := hpre hzpre
+      exact Set.mem_iUnion.mp hzU
+  have hgmem : ∀ z : ({x : ℂ // f x = y'}), z.1 ∈ U (g z) := by
+    intro z
+    exact Classical.choose_spec <| by
+      have hzpre : z.1 ∈ f ⁻¹' V := by
+        simpa [Set.preimage, z.2] using hy'
+      have hzU : z.1 ∈ ⋃ x : ({x : ℂ // f x = y}), U x := hpre hzpre
+      exact Set.mem_iUnion.mp hzU
+  refine ⟨g, ?_⟩
+  intro z₁ z₂ hz
+  have hz₁U : z₁.1 ∈ U (g z₁) := hgmem z₁
+  have hz₂U : z₂.1 ∈ U (g z₁) := by
+    simpa [hz] using hgmem z₂
+  have hf : f z₁.1 = f z₂.1 := by
+    simp [z₁.2, z₂.2]
+  have hz₁₂ : z₁.1 = z₂.1 := (hUinj (g z₁)) hz₁U hz₂U hf
+  exact Subtype.ext hz₁₂
+
+lemma finite_fiber_of_mem_open_of_preimage_subset_iUnion_inj
+    {f : ℂ → ℂ} {y : ℂ} {V : Set ℂ}
+    {U : ({x : ℂ // f x = y}) → Set ℂ}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite)
+    {y' : ℂ} (hy' : y' ∈ V) :
+    ({x : ℂ | f x = y'} : Set ℂ).Finite := by
+  classical
+  rcases exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hy' with ⟨g, hg⟩
+  haveI : Finite ({x : ℂ // f x = y}) := hfinite.to_subtype
+  haveI : Finite ({x : ℂ // f x = y'}) := Finite.of_injective g hg
+  exact (Set.finite_def).2 ⟨Fintype.ofFinite ({x : ℂ // f x = y'})⟩
+
+lemma natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
+    {f : ℂ → ℂ} {y : ℂ} {V : Set ℂ}
+    {U : ({x : ℂ // f x = y}) → Set ℂ}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite)
+    {y' : ℂ} (hy' : y' ∈ V) :
+    Nat.card ({x : ℂ // f x = y'}) ≤ Nat.card ({x : ℂ // f x = y}) := by
+  classical
+  rcases exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hy' with ⟨g, hg⟩
+  haveI : Finite ({x : ℂ // f x = y}) := hfinite.to_subtype
+  haveI : Finite ({x : ℂ // f x = y'}) := Finite.of_injective g hg
+  exact Nat.card_le_card_of_injective g hg
+
+lemma exists_open_finite_fiber_of_closedMap_localHomeomorph_of_finite_fiber
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorph f) {y : ℂ}
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, ({x : ℂ | f x = y'} : Set ℂ).Finite := by
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+      (f := f) hclosed hlocal (y := y) hfinite with
+    ⟨V, hVopen, hyV, U, _hUopen, _hxU, hUinj, _hUdisj, hpre⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact finite_fiber_of_mem_open_of_preimage_subset_iUnion_inj
+    (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hy'
+
+lemma exists_open_natCard_fiber_le_of_closedMap_localHomeomorph_of_finite_fiber
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorph f) {y : ℂ}
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, Nat.card ({x : ℂ // f x = y'}) ≤ Nat.card ({x : ℂ // f x = y}) := by
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+      (f := f) hclosed hlocal (y := y) hfinite with
+    ⟨V, hVopen, hyV, U, _hUopen, _hxU, hUinj, _hUdisj, hpre⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
+    (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hy'
+
+lemma exists_open_natCard_fiber_le_of_closedMap_localHomeomorphOn_of_finite_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorphOn f s) {y : ℂ}
+    (hfiberS : ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, Nat.card ({x : ℂ // f x = y'}) ≤ Nat.card ({x : ℂ // f x = y}) := by
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber_on
+      (f := f) (s := s) hclosed hlocal (y := y) hfiberS hfinite with
+    ⟨V, hVopen, hyV, U, _hUopen, _hxU, hUinj, _hUdisj, hpre⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
+    (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hy'
+
+lemma isOpen_image_of_isLocalHomeomorphOn_aux
+    {f : ℂ → ℂ} {s t : Set ℂ} (hlocal : IsLocalHomeomorphOn f s)
+    (ht : t ⊆ s) (htop : IsOpen t) :
+    IsOpen (f '' t) := by
+  refine isOpen_iff_mem_nhds.mpr ?_
+  rintro y ⟨x, hx, rfl⟩
+  obtain ⟨U, hU, hEmb⟩ :=
+    (isLocalHomeomorphOn_iff_isOpenEmbedding_restrict (f := f) (s := s)).1 hlocal x (ht hx)
+  have hOpenMap : IsOpenMap (U.restrict f) := hEmb.isOpenMap
+  have hUopen : IsOpen ((Subtype.val : U → ℂ) ⁻¹' t) := by
+    exact htop.preimage continuous_subtype_val
+  have hxU : x ∈ U := by
+    have hxint : x ∈ interior U := mem_interior_iff_mem_nhds.mpr hU
+    exact interior_subset hxint
+  have hmem : (⟨x, hxU⟩ : U) ∈ (Subtype.val : U → ℂ) ⁻¹' t := by
+    simpa using hx
+  have hnhds : (U.restrict f) '' ((Subtype.val : U → ℂ) ⁻¹' t) ∈ 𝓝 (f x) := by
+    have hopen : IsOpen ((U.restrict f) '' ((Subtype.val : U → ℂ) ⁻¹' t)) :=
+      hOpenMap _ hUopen
+    exact hopen.mem_nhds ⟨⟨x, hxU⟩, hmem, rfl⟩
+  refine mem_of_superset hnhds ?_
+  rintro _ ⟨z, hz, rfl⟩
+  exact ⟨z.1, hz, rfl⟩
+
+lemma exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint
+    {f : ℂ → ℂ} {y : ℂ}
+    {U : ({x : ℂ // f x = y}) → Set ℂ}
+    (hUdisj : Pairwise (fun x x' => Disjoint (U x) (U x')))
+    {y' : ℂ} (hy' : y' ∈ ⋂ x : ({x : ℂ // f x = y}), f '' U x) :
+    ∃ g : ({x : ℂ // f x = y}) → ({x : ℂ // f x = y'}),
+      Function.Injective g := by
+  classical
+  let g : ({x : ℂ // f x = y}) → ({x : ℂ // f x = y'}) := fun x =>
+    let hximg : y' ∈ f '' U x := Set.mem_iInter.mp hy' x
+    ⟨Classical.choose hximg, (Classical.choose_spec hximg).2⟩
+  have hgmem : ∀ x : ({x : ℂ // f x = y}), (g x).1 ∈ U x := by
+    intro x
+    dsimp [g]
+    exact (Classical.choose_spec (Set.mem_iInter.mp hy' x)).1
+  refine ⟨g, ?_⟩
+  intro x₁ x₂ hx
+  by_contra hne
+  have hx₁U : (g x₁).1 ∈ U x₁ := hgmem x₁
+  have hx₂U : (g x₂).1 ∈ U x₂ := hgmem x₂
+  have hx₁U' : (g x₁).1 ∈ U x₂ := by
+    simpa [hx] using hx₂U
+  have hdisj : Disjoint (U x₁) (U x₂) := hUdisj hne
+  exact (Set.disjoint_left.mp hdisj) hx₁U hx₁U'
+
+lemma natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image
+    {f : ℂ → ℂ} {y : ℂ} {V : Set ℂ}
+    {U : ({x : ℂ // f x = y}) → Set ℂ}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : ℂ // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    (hUdisj : Pairwise (fun x x' => Disjoint (U x) (U x')))
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite)
+    {y' : ℂ} (hyV : y' ∈ V)
+    (hyI : y' ∈ ⋂ x : ({x : ℂ // f x = y}), f '' U x) :
+    Nat.card ({x : ℂ // f x = y'}) = Nat.card ({x : ℂ // f x = y}) := by
+  classical
+  have hle :
+      Nat.card ({x : ℂ // f x = y'}) ≤ Nat.card ({x : ℂ // f x = y}) :=
+    natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hyV
+  have hfinite' : ({x : ℂ | f x = y'} : Set ℂ).Finite :=
+    finite_fiber_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hyV
+  rcases exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint
+      (f := f) (y := y) (U := U) hUdisj hyI with ⟨g, hg⟩
+  haveI : Finite ({x : ℂ // f x = y}) := hfinite.to_subtype
+  haveI : Finite ({x : ℂ // f x = y'}) := hfinite'.to_subtype
+  have hge :
+      Nat.card ({x : ℂ // f x = y}) ≤ Nat.card ({x : ℂ // f x = y'}) :=
+    Nat.card_le_card_of_injective g hg
+  exact le_antisymm hle hge
+
+lemma exists_open_natCard_fiber_eq_of_closedMap_localHomeomorph_of_finite_fiber
+    {f : ℂ → ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorph f) {y : ℂ}
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, Nat.card ({x : ℂ // f x = y'}) = Nat.card ({x : ℂ // f x = y}) := by
+  classical
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+      (f := f) hclosed hlocal (y := y) hfinite with
+    ⟨V0, hV0open, hyV0, U, hUopen, hxU, hUinj, hUdisj, hpre⟩
+  let I : Type := ({x : ℂ // f x = y})
+  haveI : Finite I := hfinite.to_subtype
+  letI : Fintype I := Fintype.ofFinite I
+  have hOpenMap : IsOpenMap f := hlocal.isOpenMap
+  let Iimgs : Set ℂ := ⋂ x : I, f '' U x
+  have hIimgsOpen : IsOpen Iimgs := by
+    unfold Iimgs
+    simpa using
+      (isOpen_biInter_finset (s := (Finset.univ : Finset I))
+        (f := fun x : I => f '' U x) (by intro x _; exact hOpenMap _ (hUopen x)))
+  let V : Set ℂ := V0 ∩ Iimgs
+  have hVopen : IsOpen V := hV0open.inter hIimgsOpen
+  have hyIimgs : y ∈ Iimgs := by
+    refine Set.mem_iInter.mpr ?_
+    intro x
+    exact ⟨x.1, hxU x, by simp [x.2]⟩
+  have hyV : y ∈ V := ⟨hyV0, hyIimgs⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  have hyV0' : y' ∈ V0 := hy'.1
+  have hyI' : y' ∈ Iimgs := hy'.2
+  exact natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image
+    (f := f) (y := y) (V := V0) (U := U) hpre hUinj hUdisj hfinite hyV0' hyI'
+
+lemma exists_open_natCard_fiber_eq_of_closedMap_localHomeomorphOn_of_open_of_finite_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) {y : ℂ}
+    (hfiberS : ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, Nat.card ({x : ℂ // f x = y'}) = Nat.card ({x : ℂ // f x = y}) := by
+  classical
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_subset_of_finite_fiber_on
+      (f := f) (s := s) hclosed hlocal hsopen (y := y) hfiberS hfinite with
+    ⟨V0, hV0open, hyV0, U, hUopen, hxU, hUsub, hUinj, hUdisj, hpre⟩
+  let I : Type := ({x : ℂ // f x = y})
+  haveI : Finite I := hfinite.to_subtype
+  letI : Fintype I := Fintype.ofFinite I
+  let Iimgs : Set ℂ := ⋂ x : I, f '' U x
+  have hIimgsOpen : IsOpen Iimgs := by
+    unfold Iimgs
+    simpa using
+      (isOpen_biInter_finset (s := (Finset.univ : Finset I))
+        (f := fun x : I => f '' U x) (by
+          intro x _hx
+          exact isOpen_image_of_isLocalHomeomorphOn_aux hlocal (hUsub x) (hUopen x)))
+  let V : Set ℂ := V0 ∩ Iimgs
+  have hVopen : IsOpen V := hV0open.inter hIimgsOpen
+  have hyIimgs : y ∈ Iimgs := by
+    refine Set.mem_iInter.mpr ?_
+    intro x
+    exact ⟨x.1, hxU x, by simp [x.2]⟩
+  have hyV : y ∈ V := ⟨hyV0, hyIimgs⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  have hyV0' : y' ∈ V0 := hy'.1
+  have hyI' : y' ∈ Iimgs := hy'.2
+  exact natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image
+    (f := f) (y := y) (V := V0) (U := U) hpre hUinj hUdisj hfinite hyV0' hyI'
+
+lemma natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorph
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) :
+    IsLocallyConstant (fun y : ℂ => Nat.card ({x : ℂ // f x = y})) := by
+  refine (IsLocallyConstant.iff_exists_open _).2 ?_
+  intro y
+  have hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite :=
+    finite_fiber_of_isProperMap_isLocallyInjective
+      (f := f) hproper hlocal.isLocallyInjective y
+  rcases exists_open_natCard_fiber_eq_of_closedMap_localHomeomorph_of_finite_fiber
+      (f := f) hproper.isClosedMap hlocal (y := y) hfinite with
+    ⟨V, hVopen, hyV, hcard⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact hcard y' hy'
+
+lemma natCard_fiber_eq_of_isProperMap_isLocalHomeomorph
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) :
+    ∀ y y', Nat.card ({x : ℂ // f x = y}) = Nat.card ({x : ℂ // f x = y'}) := by
+  have hloc :
+      IsLocallyConstant (fun y : ℂ => Nat.card ({x : ℂ // f x = y})) :=
+    natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorph
+      (f := f) hproper hlocal
+  exact (IsLocallyConstant.iff_is_const (f := fun y : ℂ =>
+    Nat.card ({x : ℂ // f x = y}))).1 hloc
+
+lemma injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f)
+    (hdeg1 : ∃ y : ℂ, Nat.card ({x : ℂ // f x = y}) = 1) :
+    Function.Injective f := by
+  rcases hdeg1 with ⟨y0, hy0⟩
+  have hcard_const := natCard_fiber_eq_of_isProperMap_isLocalHomeomorph
+    (f := f) hproper hlocal
+  intro z w hzw
+  have hcard : Nat.card ({x : ℂ // f x = f z}) = 1 := by
+    calc
+      Nat.card ({x : ℂ // f x = f z})
+          = Nat.card ({x : ℂ // f x = y0}) := hcard_const (f z) y0
+      _ = 1 := hy0
+  have hfinite : ({x : ℂ | f x = f z} : Set ℂ).Finite :=
+    finite_fiber_of_isProperMap_isLocallyInjective
+      (f := f) hproper hlocal.isLocallyInjective (f z)
+  haveI : Finite ({x : ℂ // f x = f z}) := hfinite.to_subtype
+  letI : Fintype ({x : ℂ // f x = f z}) := Fintype.ofFinite ({x : ℂ // f x = f z})
+  have hcardF : Fintype.card ({x : ℂ // f x = f z}) = 1 := by
+    simpa [Nat.card_eq_fintype_card] using hcard
+  have hsub : Subsingleton ({x : ℂ // f x = f z}) := by
+    apply (Fintype.card_le_one_iff_subsingleton).1
+    simp [hcardF]
+  have hs :
+      (⟨z, rfl⟩ : {x : ℂ // f x = f z}) =
+        (⟨w, hzw.symm⟩ : {x : ℂ // f x = f z}) :=
+    Subsingleton.elim _ _
+  exact congrArg Subtype.val hs
+
+lemma natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hfiberS : ∀ y, ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    IsLocallyConstant (fun y : ℂ => Nat.card ({x : ℂ // f x = y})) := by
+  refine (IsLocallyConstant.iff_exists_open _).2 ?_
+  intro y
+  have hfinite : ({x : ℂ | f x = y} : Set ℂ).Finite :=
+    finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := y) (hfiberS y)
+  rcases exists_open_natCard_fiber_eq_of_closedMap_localHomeomorphOn_of_open_of_finite_fiber_subset
+      (f := f) (s := s) hproper.isClosedMap hlocal hsopen (y := y) (hfiberS y) hfinite with
+    ⟨V, hVopen, hyV, hcard⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact hcard y' hy'
+
+lemma natCard_fiber_eq_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hfiberS : ∀ y, ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    ∀ y y', Nat.card ({x : ℂ // f x = y}) = Nat.card ({x : ℂ // f x = y'}) := by
+  have hloc :
+      IsLocallyConstant (fun y : ℂ => Nat.card ({x : ℂ // f x = y})) :=
+    natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+      (f := f) (s := s) hproper hlocal hsopen hfiberS
+  exact (IsLocallyConstant.iff_is_const (f := fun y : ℂ =>
+    Nat.card ({x : ℂ // f x = y}))).1 hloc
+
+lemma injective_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_of_exists_natCard_fiber_eq_one
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hfiberS : ∀ y, ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hdeg1 : ∃ y : ℂ, Nat.card ({x : ℂ // f x = y}) = 1) :
+    Function.Injective f := by
+  rcases hdeg1 with ⟨y0, hy0⟩
+  have hcard_const := natCard_fiber_eq_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset
+    (f := f) (s := s) hproper hlocal hsopen hfiberS
+  intro z w hzw
+  have hcard : Nat.card ({x : ℂ // f x = f z}) = 1 := by
+    calc
+      Nat.card ({x : ℂ // f x = f z})
+          = Nat.card ({x : ℂ // f x = y0}) := hcard_const (f z) y0
+      _ = 1 := hy0
+  letI : Finite ({x : ℂ // f x = f z}) := by
+    exact (finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := f z) (hfiberS (f z))).to_subtype
+  letI : Fintype ({x : ℂ // f x = f z}) := Fintype.ofFinite ({x : ℂ // f x = f z})
+  have hcardF : Fintype.card ({x : ℂ // f x = f z}) = 1 := by
+    simpa [Nat.card_eq_fintype_card] using hcard
+  have hsub : Subsingleton ({x : ℂ // f x = f z}) := by
+    apply (Fintype.card_le_one_iff_subsingleton).1
+    simp [hcardF]
+  have hs :
+      (⟨z, rfl⟩ : {x : ℂ // f x = f z}) =
+        (⟨w, hzw.symm⟩ : {x : ℂ // f x = f z}) :=
+    Subsingleton.elim _ _
+  exact congrArg Subtype.val hs
+
+lemma natCard_fiber_isLocallyConstant_on_image_of_isProperMap_isLocalHomeomorphOn_of_open
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s)
+    (hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    IsLocallyConstant (fun y : f '' s => Nat.card ({x : ℂ // f x = y.1})) := by
+  refine (IsLocallyConstant.iff_exists_open _).2 ?_
+  intro y
+  have hfinite : ({x : ℂ | f x = y.1} : Set ℂ).Finite :=
+    finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := y.1) (hfiberS y.1 y.2)
+  rcases exists_open_natCard_fiber_eq_of_closedMap_localHomeomorphOn_of_open_of_finite_fiber_subset
+      (f := f) (s := s) hproper.isClosedMap hlocal hsopen (y := y.1)
+      (hfiberS y.1 y.2) hfinite with
+    ⟨V, hVopen, hyV, hcard⟩
+  refine ⟨Subtype.val ⁻¹' V, hVopen.preimage continuous_subtype_val, ?_, ?_⟩
+  · simpa using hyV
+  · intro y' hy'
+    exact hcard y'.1 hy'
+
+lemma natCard_fiber_eq_on_image_of_isProperMap_isLocalHomeomorphOn_of_open_of_connected_image
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hconn : IsConnected (f '' s))
+    (hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s) :
+    ∀ y y' : f '' s, Nat.card ({x : ℂ // f x = y.1}) = Nat.card ({x : ℂ // f x = y'.1}) := by
+  letI : PreconnectedSpace (f '' s) := Subtype.preconnectedSpace hconn.isPreconnected
+  have hloc :
+      IsLocallyConstant (fun y : f '' s => Nat.card ({x : ℂ // f x = y.1})) :=
+    natCard_fiber_isLocallyConstant_on_image_of_isProperMap_isLocalHomeomorphOn_of_open
+      (f := f) (s := s) hproper hlocal hsopen hfiberS
+  exact (IsLocallyConstant.iff_is_const (f := fun y : f '' s =>
+    Nat.card ({x : ℂ // f x = y.1}))).1 hloc
+
+lemma injOn_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_on_image_of_connected_image
+    {f : ℂ → ℂ} {s : Set ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorphOn f s)
+    (hsopen : IsOpen s) (hconn : IsConnected (f '' s))
+    (hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s)
+    (hdeg1 : ∃ y : f '' s, Nat.card ({x : ℂ // f x = y.1}) = 1) :
+    Set.InjOn f s := by
+  intro z hz w hw hzw
+  have hcard_const := natCard_fiber_eq_on_image_of_isProperMap_isLocalHomeomorphOn_of_open_of_connected_image
+    (f := f) (s := s) hproper hlocal hsopen hconn hfiberS
+  have hyz : f z ∈ f '' s := ⟨z, hz, rfl⟩
+  let yz : f '' s := ⟨f z, hyz⟩
+  rcases hdeg1 with ⟨y0, hy0⟩
+  have hcard : Nat.card ({x : ℂ // f x = f z}) = 1 := by
+    calc
+      Nat.card ({x : ℂ // f x = f z})
+          = Nat.card ({x : ℂ // f x = y0.1}) := hcard_const yz y0
+      _ = 1 := hy0
+  letI : Finite ({x : ℂ // f x = f z}) := by
+    exact (finite_fiber_of_isProperMap_isLocalHomeomorphOn_of_fiber_subset
+      (f := f) hproper hlocal (y := f z) (hfiberS (f z) hyz)).to_subtype
+  letI : Fintype ({x : ℂ // f x = f z}) := Fintype.ofFinite ({x : ℂ // f x = f z})
+  have hcardF : Fintype.card ({x : ℂ // f x = f z}) = 1 := by
+    simpa [Nat.card_eq_fintype_card] using hcard
+  have hsub : Subsingleton ({x : ℂ // f x = f z}) := by
+    apply (Fintype.card_le_one_iff_subsingleton).1
+    simp [hcardF]
+  have hs :
+      (⟨z, rfl⟩ : {x : ℂ // f x = f z}) =
+        (⟨w, hzw.symm⟩ : {x : ℂ // f x = f z}) :=
+    Subsingleton.elim _ _
+  exact congrArg Subtype.val hs
+
+lemma natCard_fiber_eq_one_of_existsUnique
+    {f : ℂ → ℂ} {y : ℂ} (huniq : ∃! x, f x = y) :
+    Nat.card ({x : ℂ // f x = y}) = 1 := by
+  rcases huniq with ⟨z, hz, hu⟩
+  letI : Unique ({x : ℂ // f x = y}) := {
+    default := ⟨z, hz⟩
+    uniq := by
+      intro a
+      apply Subtype.ext
+      exact (hu a.1 a.2)
+  }
+  letI : Fintype ({x : ℂ // f x = y}) := Fintype.ofFinite ({x : ℂ // f x = y})
+  calc
+    Nat.card ({x : ℂ // f x = y}) = Fintype.card ({x : ℂ // f x = y}) := by
+      simp [Nat.card_eq_fintype_card]
+    _ = 1 := Fintype.card_unique
+
+lemma natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset
+    {f : ℂ → ℂ} {U : Set ℂ} {y : ℂ}
+    (hUinj : Set.InjOn f U) (hyimg : y ∈ f '' U)
+    (hfiberU : ({x : ℂ | f x = y} : Set ℂ) ⊆ U) :
+    Nat.card ({x : ℂ // f x = y}) = 1 := by
+  rcases hyimg with ⟨z, hzU, hzy⟩
+  have huniq : ∃! x, f x = y := by
+    refine ⟨z, hzy, ?_⟩
+    intro x hx
+    have hxU : x ∈ U := hfiberU (by simp [hx])
+    exact hUinj hxU hzU (by simpa [hzy] using hx)
+  exact natCard_fiber_eq_one_of_existsUnique (f := f) (y := y) huniq
+
+lemma injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset
+    {f : ℂ → ℂ} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f)
+    {U : Set ℂ} {y : ℂ}
+    (hUinj : Set.InjOn f U) (hyimg : y ∈ f '' U)
+    (hfiberU : ({x : ℂ | f x = y} : Set ℂ) ⊆ U) :
+    Function.Injective f := by
+  have hdeg1 : ∃ y0 : ℂ, Nat.card ({x : ℂ // f x = y0}) = 1 := by
+    refine ⟨y, ?_⟩
+    exact natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset
+      (f := f) (U := U) (y := y) hUinj hyimg hfiberU
+  exact injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one
+    (f := f) hproper hlocal hdeg1
+
+lemma bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hUinj :
+      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    {y : ℂ}
+    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hfiberU :
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Function.Injective (Quadratic.bottcher_map c) := by
+  exact injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset
+    (f := Quadratic.bottcher_map c) hproper hlocal hUinj hyimg hfiberU
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hUinj :
+      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    {y : ℂ}
+    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hfiberU :
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hglobal :
+      Function.Injective (Quadratic.bottcher_map c) :=
+    bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
+      hUinj hyimg hfiberU
+  exact hglobal.injOn
+
 
 -- Step 2 (route 2): reduce normalization at infinity to a root-sequence estimate.
 lemma bottcher_normalized_at_infty_of_root_seq
@@ -2246,6 +3213,71 @@ theorem bottcher_normalized_at_infty_of_tail_bound_zero
     bottcher_normalized_at_infty c := by
   refine bottcher_normalized_at_infty_of_tail_bound_at c R 0 ?_ htail
   exact bottcher_root_seq_ratio_tendsto_atInfinity_zero c
+
+lemma eventually_atInfinity_bottcher_map_div_mem_slitPlaneRight (c : ℂ) :
+    ∀ᶠ z in atInfinity, (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have h := tendsto_bottcher_map_div_atInfinity c
+  have h' : Tendsto (fun z => ‖(Quadratic.bottcher_map c z / z) - (1 : ℂ)‖)
+      atInfinity (𝓝 (0 : ℝ)) := by
+    simpa using (tendsto_iff_norm_sub_tendsto_zero.1 h)
+  have hball : ∀ᶠ z in atInfinity, ‖(Quadratic.bottcher_map c z / z) - (1 : ℂ)‖ < 1 := by
+    have hε :=
+      (tendsto_def.1 h') (Metric.ball (0 : ℝ) 1)
+        (by simpa using (Metric.ball_mem_nhds (0 : ℝ) (by norm_num : (0 : ℝ) < 1)))
+    simpa [Metric.ball, Real.norm_eq_abs] using hε
+  refine hball.mono ?_
+  intro z hz
+  have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane :=
+    mem_slitPlane_of_norm_sub_one_lt_one hz
+  have hre : 0 < (Quadratic.bottcher_map c z / z).re :=
+    re_pos_of_norm_sub_one_lt_one hz
+  exact ⟨hslit, hre⟩
+
+lemma bottcher_map_div_mem_slitPlaneRight_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz
+  have hexp : 0 < Real.exp (Quadratic.green_function c z) := Real.exp_pos _
+  have hpos : 0 < Real.exp (Quadratic.green_function c z) / ‖z‖ := by
+    exact div_pos hexp hzpos
+  have hratio :
+      Quadratic.bottcher_map c z / z =
+        ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
+    have hznorm : (‖z‖ : ℂ) ≠ 0 := by
+      exact_mod_cast (norm_ne_zero_iff.mpr hz)
+    have hdiv : (z / ‖z‖) / z = (1 : ℂ) / ‖z‖ := by
+      field_simp [div_eq_mul_inv, hz, hznorm, mul_assoc, mul_comm, mul_left_comm]
+    calc
+      Quadratic.bottcher_map c z / z
+          = ((z / ‖z‖) * (Real.exp (Quadratic.green_function c z) : ℂ)) / z := by
+              simp [Quadratic.bottcher_map, hz]
+      _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((z / ‖z‖) / z) := by
+              ring
+      _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((1 : ℂ) / ‖z‖) := by
+              simp [hdiv]
+      _ = ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
+              simp [div_eq_mul_inv, mul_comm]
+  have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane := by
+    have h1 : (1 : ℂ) ∈ Complex.slitPlane := by
+      exact Complex.one_mem_slitPlane
+    have hslit' :
+        (1 : ℂ) * (Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) ∈
+          Complex.slitPlane :=
+      slitPlane_mul_of_real_pos (x := 1) h1 (Real.exp (Quadratic.green_function c z) / ‖z‖) hpos
+    simpa [hratio] using hslit'
+  have hre : 0 < (Quadratic.bottcher_map c z / z).re := by
+    simpa [hratio] using hpos
+  exact ⟨hslit, hre⟩
+
+lemma exists_bottcher_map_div_mem_slitPlaneRight_of_large_norm (c : ℂ) :
+    ∃ S, ∀ z, S ≤ ‖z‖ → (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have h := eventually_atInfinity_bottcher_map_div_mem_slitPlaneRight c
+  dsimp [atInfinity] at h
+  have h' := (Filter.eventually_comap).1 h
+  rcases (Filter.eventually_atTop.1 h') with ⟨S, hS⟩
+  refine ⟨S, ?_⟩
+  intro z hz
+  have := hS ‖z‖ hz z rfl
+  simpa using this
 
 lemma outside_open_subset_outside_disk (c : ℂ) :
     {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ outside_disk c := by
@@ -2960,8 +3992,154 @@ lemma bottcher_left_inv_outside_open_of_local
   intro z hz
   exact Quadratic.external_ray_map_left_inverse_outside_open c z hz
 
+lemma bottcher_map_inj_on_outside_open (c : ℂ) :
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z hz w hw hzw
+  have hz' :
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+    Quadratic.external_ray_map_left_inverse_outside_open c z hz
+  have hw' :
+      Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
+    Quadratic.external_ray_map_left_inverse_outside_open c w hw
+  have h := congrArg (Quadratic.external_ray_map c) hzw
+  simpa [hz', hw'] using h
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    {y : ℂ}
+    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hfiberU :
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
+    (bottcher_map_inj_on_outside_open c) hyimg hfiberU
+
+lemma exists_bottcher_outside_seed_of_continuous
+    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
+    ∃ y, y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ∧
+      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  let K : Set ℂ := {z : ℂ | ‖z‖ ≤ ‖c‖ + 2}
+  have hKcompact : IsCompact K := by
+    have hK :
+        K = Metric.closedBall (0 : ℂ) (‖c‖ + 2) := by
+      ext z
+      simp [K, Metric.mem_closedBall, dist_eq_norm]
+    rw [hK]
+    exact isCompact_closedBall (0 : ℂ) (‖c‖ + 2)
+  have himageKcompact : IsCompact (Quadratic.bottcher_map c '' K) :=
+    hKcompact.image hcont
+  rcases himageKcompact.isBounded.subset_closedBall (0 : ℂ) with ⟨B, hBsubset⟩
+  rcases exists_norm_bottcher_map_gt_of_large_norm c B with ⟨S, hS⟩
+  let R : ℝ := max S (‖c‖ + 3)
+  let z0 : ℂ := (R : ℂ)
+  have hRnonneg : 0 ≤ R := by
+    have hc : 0 ≤ ‖c‖ + 3 := by nlinarith [norm_nonneg c]
+    exact le_trans hc (le_max_right _ _)
+  have hz0norm : ‖z0‖ = R := by
+    simp [z0, Real.norm_eq_abs, abs_of_nonneg hRnonneg]
+  have hz0S : S ≤ ‖z0‖ := by
+    calc
+      S ≤ R := le_max_left _ _
+      _ = ‖z0‖ := hz0norm.symm
+  have hygt : B < ‖Quadratic.bottcher_map c z0‖ := hS z0 hz0S
+  have hz0U : z0 ∈ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    have hRge : ‖c‖ + 3 ≤ R := le_max_right _ _
+    have : ‖c‖ + 2 < R := by linarith
+    simpa [hz0norm]
+  let y : ℂ := Quadratic.bottcher_map c z0
+  refine ⟨y, ?_, ?_⟩
+  · exact ⟨z0, hz0U, rfl⟩
+  · intro x hx
+    by_contra hxU
+    have hxK : x ∈ K := by
+      have hxle : ‖x‖ ≤ ‖c‖ + 2 := by
+        exact le_of_not_gt (by
+          intro hgt
+          exact hxU (by simpa using hgt))
+      exact hxle
+    have hyK : y ∈ Quadratic.bottcher_map c '' K := by
+      refine ⟨x, hxK, ?_⟩
+      simpa [y] using hx
+    have hyB : ‖y‖ ≤ B := by
+      have : y ∈ Metric.closedBall (0 : ℂ) B := hBsubset hyK
+      simpa [Metric.mem_closedBall, dist_eq_norm] using this
+    have hygt' : B < ‖y‖ := by simpa [y] using hygt
+    exact (not_lt_of_ge hyB) hygt'
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  rcases exists_bottcher_outside_seed_of_continuous c hlocal.continuous with ⟨y, hyimg, hfiberU⟩
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed' c hproper hlocal
+    hyimg hfiberU
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  let f : ℂ → ℂ := Quadratic.bottcher_map c
+  let s : Set ℂ := Quadratic.basin_of_infinity c
+  have hsopen : IsOpen s := basin_of_infinity_isOpen c
+  have hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s := by
+    intro y hyimg x hx
+    have hygt : 1 < ‖y‖ := by
+      rcases hyimg with ⟨z, hz, rfl⟩
+      exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+    have hxy : f x = y := by
+      simpa using hx
+    have hxgt : 1 < ‖f x‖ := by
+      calc
+        1 < ‖y‖ := hygt
+        _ = ‖f x‖ := by simp [hxy]
+    exact bottcher_map_norm_gt_one_implies_basin c (z := x) hxgt
+  have himage_eq : f '' s = {w : ℂ | 1 < ‖w‖} := by
+    refine subset_antisymm ?_ ?_
+    · intro w hw
+      rcases hw with ⟨z, hz, rfl⟩
+      exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+    · intro w hw
+      have hright : f (Quadratic.external_ray_map c w) = w :=
+        external_ray_map_right_inverse_on_exterior c w hw
+      have hbasin : Quadratic.external_ray_map c w ∈ s :=
+        bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map c w)
+          (by simpa [f, hright] using hw)
+      exact ⟨Quadratic.external_ray_map c w, hbasin, hright⟩
+  have hconn : IsConnected (f '' s) := by
+    simpa [himage_eq] using isConnected_exterior
+  have hdeg1 : ∃ y : f '' s, Nat.card ({x : ℂ // f x = y.1}) = 1 := by
+    rcases exists_bottcher_outside_seed_of_continuous c hproper.continuous with
+      ⟨y, hyimg, hfiberU⟩
+    have hcard1 : Nat.card ({x : ℂ // f x = y}) = 1 :=
+      natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset
+        (f := f) (U := {z : ℂ | ‖z‖ > ‖c‖ + 2}) (y := y)
+        (bottcher_map_inj_on_outside_open c) hyimg hfiberU
+    have hyimgBasin : y ∈ f '' s := by
+      rcases hyimg with ⟨z, hz, rfl⟩
+      refine ⟨z, ?_, rfl⟩
+      exact outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz)
+    exact ⟨⟨y, hyimgBasin⟩, hcard1⟩
+  simpa [f, s] using
+    (injOn_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_on_image_of_connected_image
+      (f := f) (s := s) hproper hlocal hsopen hconn hfiberS hdeg1)
+
+lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph
+    (c : ℂ)
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hproper : IsProperMap (Quadratic.bottcher_map c) :=
+    bottcher_map_isProperMap_of_continuous c hlocal.continuous
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph c hproper hlocal
+
 theorem bottcher_map_inj_on_outside_of_slit
-    (c : ℂ) :
+    (c : ℂ)
+    (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c →
+      w ∈ Quadratic.basin_of_infinity c →
+      (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
     Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   have h_left : ∀ z, z ∈ U →
@@ -2977,8 +4155,15 @@ theorem bottcher_map_inj_on_outside_of_slit
   have h_inj_basin :
       Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
     bottcher_map_inj_on_basin_of_left_inv c U h_left h_maps h_escape
-      (bottcher_conj_iter c) (Quadratic.quadratic_map_iter_eq_imp_eq c)
+      (bottcher_conj_iter c) h_iter_eq_imp
   simpa [outside_disk] using h_inj_basin
+
+theorem bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse
+    (c : ℂ) (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
+    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
+  have h_iter_eq_imp :=
+    quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter
+  exact bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
 
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.
@@ -3149,6 +4334,59 @@ lemma slit_orbit_rot_forward (c : ℂ) (θ : ℝ) :
   intro z hz n
   -- unfold `slit_orbit_rot` and shift the index
   simpa [Function.iterate_succ_apply] using (hz (n + 1))
+
+lemma exists_open_subset_slit_orbit_basin_of_mem_nhds
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
+    ∃ U : Set ℂ, IsOpen U ∧ z₀ ∈ U ∧ U ⊆ slit_orbit c ∩ Quadratic.basin_of_infinity c := by
+  rcases Metric.mem_nhds_iff.mp hslit with ⟨ε1, ε1pos, hε1⟩
+  rcases Metric.mem_nhds_iff.mp hbasin with ⟨ε2, ε2pos, hε2⟩
+  let ε := min ε1 ε2
+  let U : Set ℂ := {z : ℂ | dist z z₀ < ε}
+  have hUopen : IsOpen U := by
+    simpa [U, Metric.ball, Set.mem_setOf_eq] using
+      (Metric.isOpen_ball : IsOpen (Metric.ball z₀ ε))
+  have hz₀U : z₀ ∈ U := by
+    have hεpos : 0 < ε := lt_min ε1pos ε2pos
+    simpa [U, dist_self] using hεpos
+  have hUsub : U ⊆ slit_orbit c ∩ Quadratic.basin_of_infinity c := by
+    intro z hz
+    have hz1 : dist z z₀ < ε1 := lt_of_lt_of_le hz (min_le_left _ _)
+    have hz2 : dist z z₀ < ε2 := lt_of_lt_of_le hz (min_le_right _ _)
+    exact ⟨hε1 hz1, hε2 hz2⟩
+  exact ⟨U, hUopen, hz₀U, hUsub⟩
+
+lemma bottcher_map_analyticAt_of_mem_nhds_slit_basin
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
+    AnalyticAt ℂ (Quadratic.bottcher_map c) z₀ := by
+  rcases exists_open_subset_slit_orbit_basin_of_mem_nhds c z₀ hslit hbasin with
+    ⟨U, hUopen, hz₀U, hUsub⟩
+  have hUslit : U ⊆ slit_orbit c := fun z hz => (hUsub hz).1
+  have hUbasin : U ⊆ Quadratic.basin_of_infinity c := fun z hz => (hUsub hz).2
+  exact bottcher_map_analyticAt_of_open c U hUopen hUslit hUbasin hz₀U
+
+lemma bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin
+    (c z₀ : ℂ)
+    (hslit : slit_orbit c ∈ 𝓝 z₀)
+    (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀)
+    (hderiv : deriv (Quadratic.bottcher_map c) z₀ ≠ 0) :
+    ∃ s ∈ 𝓝 z₀, Set.InjOn (Quadratic.bottcher_map c) s := by
+  exact injOn_nhds_of_analyticAt
+    (bottcher_map_analyticAt_of_mem_nhds_slit_basin c z₀ hslit hbasin) hderiv
+
+lemma bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit
+    (c : ℂ)
+    (hslit : ∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
+    (hderiv : ∀ z, z ∈ Quadratic.basin_of_infinity c →
+      deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ hderiv
+  intro z hz
+  exact bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
+    (hslit z hz) ((basin_of_infinity_isOpen c).mem_nhds hz)
 
 def local_slit (z₀ : ℂ) (ε : ℝ) : Set ℂ :=
   {z | dist z z₀ < ε} ∩ {z | z - z₀ ∈ Complex.slitPlane}

@@ -21,12 +21,13 @@ then the sublevel sets {z | G_c(z) < ε} are connected.
 lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
     (hK : IsConnected (MLC.Quadratic.K c))
     (h_surj : ∀ w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
-    (h_inj : Function.Injective (Quadratic.bottcher_map c)) :
+    (h_inj_basin :
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     IsConnected (MLC.Quadratic.GreenSublevel c n) := by
   let S := MLC.Quadratic.GreenSublevel c n
   let K := MLC.Quadratic.K c
   have h_S_def : S = MLC.Quadratic.GreenSublevel c n := rfl
-  
+
   -- 1. The filled Julia set K_c is contained in the Green sublevel set.
   have hK_sub : K ⊆ S := by
     intro z hz
@@ -35,15 +36,15 @@ lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K c z).2 hz
     rw [hGz]
     positivity
-  
+
   -- 2. Every point in the Green sublevel set is in the same component as K_c.
   have h_same_comp : ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w :=
-    green_sublevel_joined_to_Kc c n h_surj h_inj
+    green_sublevel_joined_to_Kc c n h_surj h_inj_basin
 
   -- 3. Show S is connected.
   -- We construct S as the union of connected sets (path components) that all intersect K (which is connected).
   let family := {C | ∃ z ∈ S, ∃ w ∈ K, ∃ p : JoinedIn S z w, C = range p.somePath ∪ K}
-  
+
   -- S is the union of this family
   have h_union : S = ⋃₀ family := by
     ext z
@@ -95,16 +96,29 @@ lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
 Theorem: Green sublevel sets are connected on the Mandelbrot set.
 (Formerly an axiom).
 -/
-theorem green_sublevel_connected
+theorem green_sublevel_connected_onM
     (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
-    (h_inj : ∀ c, Function.Injective (Quadratic.bottcher_map c)) :
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     MLC.Quadratic.GreenSublevelConnectedHyp := {
   connected := by
     intro c n hc
     apply green_sublevel_connected_of_connected_Kc
     · exact Kc_connected c hc
     · exact h_surj c
-    · exact h_inj c
+    · exact h_inj_basin_onM c hc
 }
+
+/--
+Theorem: Green sublevel sets are connected on the Mandelbrot set.
+(Formerly an axiom).
+-/
+theorem green_sublevel_connected
+    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
+    (h_inj_basin :
+      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    MLC.Quadratic.GreenSublevelConnectedHyp :=
+  green_sublevel_connected_onM h_surj (fun c _hc => h_inj_basin c)
 
 end MLC

@@ -9,6 +9,9 @@
 This repository is a proof skeleton. It compiles and isolates the main logical
 dependencies, but several deep inputs remain axiomatic.
 
+Active research-debt tracking for the Böttcher inverse-branch route:
+`PLAN_global_research_debt_bottcher_inverse.md`.
+
 For the Molecule Conjecture track, the project re-exports the refined conjecture
 statement from an external `Molecule` package located at
 `./.lake/packages/molecule-conjecture`. The file
@@ -102,9 +105,7 @@ All axioms used:
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.Quadratic.external_ray_map_exists
 - MLC.Quadratic.extended_ray_map_continuous
-- MLC.Quadratic.bottcher_seq_converges
-- MLC.Quadratic.quadratic_map_iter_eq_imp_eq
-- MLC.bottcher_map_inj_on_K
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget
+- MLC.Quadratic.bottcher_seq_converges
 ```
