@@ -4,8 +4,9 @@
 - [ ] Not eliminated yet.
 - [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] Only remaining production use-site is in the MainConjecture bridge
-  wrappers (currently around `Mlc/MainConjecture.lean:176`–`Mlc/MainConjecture.lean:198`),
-  isolated behind `bottcher_map_inj_on_basin_via_iter_eq_axiom`.
+  wrappers (currently around `Mlc/MainConjecture.lean:248` and
+  `Mlc/MainConjecture.lean:643`), isolated behind
+  `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`.
 - [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
   `MLC.mlc_conjecture` after the basin-injectivity refactor.
 - [x] `MLC.Quadratic.bottcher_seq_converges` is no longer in the axiom
@@ -17,7 +18,10 @@
   - `mlc_conjecture_of_bottcher_left_inverse_on_basin`
   - `mlc_conjecture_of_bottcher_isLocalHomeomorph`
   - `mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin`
+  - `mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data`
   - `mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit`
+  - `mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit`
+  - `mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data`
   - `mlc_conjecture_of_iter_eq_imp`
   - `mlc_conjecture_of_iter_eq_imp_via_pullback_root`
   - `mlc_conjecture_of_quadratic_left_inverse`
@@ -37,12 +41,13 @@
   `mlc_conjecture_of_bottcher_left_inverse_on_basin`.
 - [x] `mlc_conjecture` now instantiates the basin-injectivity route directly
   (`mlc_conjecture_of_bottcher_inj_on_basin`), so the remaining axiom use is
-  isolated to `bottcher_map_inj_on_basin_via_iter_eq_axiom` in
-  `Mlc/MainConjecture.lean:194`.
+  isolated to
+  `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom` in
+  `Mlc/MainConjecture.lean:248` (feeding
+  `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`).
 - [x] Remaining axiom bridge is now explicitly factored:
-  - `bottcher_map_isProperMap_via_iter_eq_axiom`
-  - `bottcher_map_isLocalHomeomorphOn_basin_via_iter_eq_axiom`
-  - `bottcher_map_inj_on_basin_via_iter_eq_axiom`
+  - `BottcherProperLocalHomeomorphOnBasinData`
+  - `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`
   - `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`
   This is the single replacement target for Step 2b, now routed through the
   minimal basin target wrapper.
@@ -150,6 +155,7 @@
   - `bottcher_map_inj_on_basin_of_isLocalHomeomorph`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin`
+  - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit`
   - `exists_open_subset_slit_orbit_basin_of_mem_nhds`
   - `bottcher_map_analyticAt_of_mem_nhds_slit_basin`
   - `bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin`
@@ -189,7 +195,8 @@
   (`basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`),
   so the remaining choice is: prove that injectivity non-axiomatically, or
   redesign the MLC path to avoid requiring it.
-- [ ] Concretely, replace `bottcher_map_inj_on_basin_via_iter_eq_axiom` by proving
+- [ ] Concretely, replace
+  `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom` by proving
   one non-axiomatic basin-injectivity route. Atlas/global-inverse/gluing
   eventual-slit candidates are blocked by formal obstructions. Current open redesign target:
   - `BasinBottcherPointwiseLeftInverseData`
@@ -216,7 +223,7 @@
   `quadratic_map_iter_eq_imp_eq` directly.
 - [x] Step 2a: Replace the wrapper instantiation with the basin-injectivity route.
 - [ ] Step 2b: Replace the remaining axiom-backed construction of basin injectivity
-  (currently `bottcher_map_inj_on_basin_via_iter_eq_axiom`)
+  (currently `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`)
   with a non-axiomatic proof.
 - [ ] Step 3: Run `make check` and confirm `MLC.Quadratic.quadratic_map_iter_eq_imp_eq` disappears.
 - [ ] Step 4: Run `scripts/verify_output.sh` and update README axiom section to match final output.
