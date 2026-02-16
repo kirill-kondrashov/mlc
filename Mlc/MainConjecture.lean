@@ -277,16 +277,6 @@ theorem mlc_conjecture_of_iter_eq_imp
   exfalso
   exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
 
-/-- Current axiom-backed bridge from iterate-equality to basin injectivity of
-    the Böttcher map. Replacing this lemma with a non-axiomatic proof is the
-    remaining elimination target. -/
-lemma bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom :
-    BottcherProperLocalHomeomorphOnBasinData := by
-  intro c
-  exfalso
-  exact Quadratic.not_quadratic_map_iter_eq_imp_eq c
-    (Quadratic.quadratic_map_iter_eq_imp_eq c)
-
 /-- If each parameter admits a left inverse of `quadratic_map` on the basin,
     MLC follows via derived iterate-equality. -/
 theorem mlc_conjecture_of_quadratic_left_inverse
@@ -712,12 +702,6 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
     LocallyConnectedSpace mandelbrotSet := by
   exfalso
   exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
-
-/-- Current axiom-backed construction of the minimal basin redesign target. -/
-lemma basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom :
-    BasinBottcherPointwiseLeftInverseData := by
-  exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin_data
-    bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom
 
 /-- Current axiom-backed on-M construction of the minimal basin redesign target. -/
 lemma basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom :

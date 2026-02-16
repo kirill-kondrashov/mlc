@@ -4,7 +4,7 @@
 - [ ] Not eliminated yet.
 - [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] Only remaining production use-site is in the MainConjecture bridge
-  wrapper `Mlc/MainConjecture.lean:723`
+  wrapper `Mlc/MainConjecture.lean:707`
   (`basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`).
 - [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
   `MLC.mlc_conjecture` after the basin-injectivity refactor.
@@ -41,12 +41,9 @@
 - [x] `mlc_conjecture` now instantiates the basin-injectivity route directly
   (`mlc_conjecture_of_bottcher_inj_on_basin`), so the remaining axiom use is
   isolated to `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
-  in `Mlc/MainConjecture.lean:723`.
+  in `Mlc/MainConjecture.lean:707`.
 - [x] Remaining axiom bridge is now explicitly factored:
   - `basin_bottcher_pointwise_left_inverse_data_onM_via_iter_eq_axiom`
-  - (legacy, no longer on the main MLC path)
-    `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`
-    and `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`
   This is the single replacement target for Step 2b, now routed through the
   minimal basin target wrapper.
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
