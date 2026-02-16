@@ -203,6 +203,8 @@
   - `not_bottcher_isLocalHomeomorph_data`.
 - [x] The `bottcher_map_inj_on_K` route is inconsistent with the current model:
   - `not_bottcher_map_inj_on_K_zero`.
+  - `not_bottcher_map_inj_on_K_data`.
+  - `false_of_bottcher_map_inj_on_K_axiom`.
 
 ## Remaining Work (Single Real Blocker)
 - [x] Reformulate the elimination target: `quadratic_map_iter_eq_imp_eq` has been

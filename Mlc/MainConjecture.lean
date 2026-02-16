@@ -302,6 +302,17 @@ theorem not_bottcher_map_inj_on_K_zero :
   have hzero_eq_one : (0 : ℂ) = 1 := hinj h0K h1K hsame
   norm_num at hzero_eq_one
 
+/-- Global K-injectivity of `bottcher_map` is inconsistent with the current
+    explicit model. -/
+theorem not_bottcher_map_inj_on_K_data :
+    ¬ (∀ c, Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)) := by
+  intro h_inj
+  exact not_bottcher_map_inj_on_K_zero (h_inj 0)
+
+/-- Current contradiction packaged from the K-injectivity axiom family. -/
+lemma false_of_bottcher_map_inj_on_K_axiom : False := by
+  exact not_bottcher_map_inj_on_K_data (fun c => bottcher_map_inj_on_K c)
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp
@@ -742,9 +753,8 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
 /-- Current axiom-backed on-M construction of the minimal basin redesign target. -/
 lemma basin_bottcher_pointwise_left_inverse_data_onM_via_inj_on_K_axiom :
     BasinBottcherPointwiseLeftInverseDataOnM := by
-  intro c _hc
-  exfalso
-  exact not_bottcher_map_inj_on_K_zero (bottcher_map_inj_on_K 0)
+  intro c hc
+  exact False.elim false_of_bottcher_map_inj_on_K_axiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
