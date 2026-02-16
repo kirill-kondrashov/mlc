@@ -245,6 +245,27 @@ theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data
     (fun c z hz => (hdata c).2.1 z hz)
     (fun c z hz => (hdata c).2.2 z hz)
 
+/-- The current `bottcher_map` model is nowhere globally continuous at `0`,
+    so the proper/local-homeomorphism-on-basin data target is inconsistent. -/
+theorem not_bottcher_proper_localHomeomorphOn_basin_data :
+    ¬ BottcherProperLocalHomeomorphOnBasinData := by
+  intro hdata
+  exact bottcher_map_not_isProperMap 0 (hdata 0).1
+
+/-- The stronger continuity/derivative/slit-neighborhood data target is also
+    inconsistent, since it implies global continuity of `bottcher_map`. -/
+theorem not_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data :
+    ¬ BottcherContinuousDerivNeZeroMemNhdsSlitData := by
+  intro hdata
+  exact bottcher_map_not_continuous 0 (hdata 0).1
+
+/-- The global local-homeomorphism route is inconsistent for the current
+    `bottcher_map` model, since it would force global continuity. -/
+theorem not_bottcher_isLocalHomeomorph_data :
+    ¬ (∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)) := by
+  intro hlocal
+  exact bottcher_map_not_continuous 0 (hlocal 0).continuous
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp

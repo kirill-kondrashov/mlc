@@ -4,8 +4,8 @@
 - [ ] Not eliminated yet.
 - [ ] `make check` still lists `MLC.Quadratic.quadratic_map_iter_eq_imp_eq`.
 - [ ] Only remaining production use-site is in the MainConjecture bridge
-  wrappers (currently around `Mlc/MainConjecture.lean:248` and
-  `Mlc/MainConjecture.lean:643`), isolated behind
+  wrappers (currently around `Mlc/MainConjecture.lean:276` and
+  `Mlc/MainConjecture.lean:679`), isolated behind
   `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom`.
 - [x] `MLC.bottcher_map_inj_on_K` is no longer in the axiom footprint of
   `MLC.mlc_conjecture` after the basin-injectivity refactor.
@@ -43,7 +43,7 @@
   (`mlc_conjecture_of_bottcher_inj_on_basin`), so the remaining axiom use is
   isolated to
   `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom` in
-  `Mlc/MainConjecture.lean:248` (feeding
+  `Mlc/MainConjecture.lean:276` (feeding
   `basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom`).
 - [x] Remaining axiom bridge is now explicitly factored:
   - `BottcherProperLocalHomeomorphOnBasinData`
@@ -157,10 +157,18 @@
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin_data`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit`
+  - `bottcher_proper_localHomeomorphOn_basin_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit`
+  - `not_bottcher_proper_localHomeomorphOn_basin_data`
+  - `not_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data`
+  - `not_bottcher_isLocalHomeomorph_data`
   - `exists_open_subset_slit_orbit_basin_of_mem_nhds`
   - `bottcher_map_analyticAt_of_mem_nhds_slit_basin`
   - `bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin`
   - `bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit`
+  - `bottcher_map_re_neg_of_pos_real`
+  - `bottcher_map_not_continuousAt_zero`
+  - `bottcher_map_not_continuous`
+  - `bottcher_map_not_isProperMap`
 
 ## Ruled-Out Routes (Formal Obstructions)
 - [x] Escape-time candidate route is inconsistent:
@@ -185,6 +193,17 @@
 - [x] Basin-wide left-inverse target is inconsistent with current dynamics model:
   - `quadratic_map_not_injOn_basin`
   - `not_quadratic_map_left_inverse_on_basin`.
+- [x] Proper/local-homeomorphism Step 2b redesign data is inconsistent with the
+  current `bottcher_map` model:
+  - `bottcher_map_not_continuousAt_zero`
+  - `bottcher_map_not_continuous`
+  - `bottcher_map_not_isProperMap`
+  - `not_bottcher_proper_localHomeomorphOn_basin_data`
+  - `not_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data`.
+  So the proper/local-homeomorphism data route cannot be the final non-axiomatic
+  replacement target under current definitions.
+- [x] The global local-homeomorphism route is also inconsistent:
+  - `not_bottcher_isLocalHomeomorph_data`.
 
 ## Remaining Work (Single Real Blocker)
 - [ ] Reformulate the elimination target: the previous “prove a basin left inverse”
@@ -199,27 +218,19 @@
 - [ ] Concretely, replace
   `bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom` by proving
   one non-axiomatic basin-injectivity route. Atlas/global-inverse/gluing
-  eventual-slit candidates are blocked by formal obstructions. Current open redesign target:
+  eventual-slit candidates and the proper/local-homeomorphism data route are
+  blocked by formal obstructions. Current open redesign target:
   - `BasinBottcherPointwiseLeftInverseData`
   (equivalent to `EventualSlitPointwiseLeftInverseData` via
   `basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data` and
   `eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_pointwise_left_inverse_data`,
   and equivalent to basin injectivity via
   `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`).
-  A newly isolated sufficient route is:
-  - `∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)`
-  via `bottcher_map_inj_on_basin_of_isLocalHomeomorph` and
-  `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`.
-  A weaker sufficient route is now also isolated:
-  - `∀ c, IsProperMap (Quadratic.bottcher_map c)` and
-    `IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)`
-  via `bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`.
-  A structured sufficient refinement of that route is also isolated:
-  - `BottcherContinuousDerivNeZeroMemNhdsSlitData`
-  via
-  `bottcher_proper_localHomeomorphOn_basin_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit`
-  and then
-  `mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data`.
+  The previously isolated global local-homeomorphism route
+  (`∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)`) is now formally ruled out.
+  The previously isolated weaker route
+  (`BottcherProperLocalHomeomorphOnBasinData` and
+  `BottcherContinuousDerivNeZeroMemNhdsSlitData`) is now formally ruled out.
   This is now wired to MLC via
   `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data` and remains the
   next candidate to realize without new axioms or new hypotheses in

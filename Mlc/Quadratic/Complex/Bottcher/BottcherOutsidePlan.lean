@@ -1865,6 +1865,52 @@ lemma bottcher_map_isProperMap_of_continuous
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
 
+lemma bottcher_map_re_neg_of_pos_real (c : ℂ) {t : ℝ} (ht : 0 < t) :
+    (Quadratic.bottcher_map c (-t)).re < 0 := by
+  have ht0 : (-t : ℂ) ≠ 0 := by
+    exact neg_ne_zero.mpr (by exact_mod_cast (ne_of_gt ht))
+  rw [Quadratic.bottcher_map, if_neg ht0, Complex.mul_re]
+  have hr : (((-t : ℂ) / ‖(-t : ℂ)‖).re) = -1 := by
+    simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht, ht.ne']
+  have hi : (((-t : ℂ) / ‖(-t : ℂ)‖).im) = 0 := by
+    simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht, ht.ne']
+  rw [hr, hi]
+  simpa [Complex.exp_ofReal_re] using Real.exp_pos (MLC.Quadratic.green_function c (-t))
+
+lemma bottcher_map_not_continuousAt_zero (c : ℂ) :
+    ¬ ContinuousAt (Quadratic.bottcher_map c) 0 := by
+  intro hcont
+  let U : Set ℂ := {w : ℂ | 0 < w.re}
+  have hU_nhds : U ∈ 𝓝 (Quadratic.bottcher_map c 0) := by
+    have hUopen : IsOpen U := isOpen_lt continuous_const Complex.continuous_re
+    have hmem : Quadratic.bottcher_map c 0 ∈ U := by
+      simp [U, Quadratic.bottcher_map, Complex.exp_ofReal_re, Real.exp_pos]
+    exact hUopen.mem_nhds hmem
+  have hpre : (Quadratic.bottcher_map c) ⁻¹' U ∈ 𝓝 (0 : ℂ) :=
+    hcont.preimage_mem_nhds hU_nhds
+  rcases Metric.mem_nhds_iff.mp hpre with ⟨ε, hεpos, hball⟩
+  have hhalfpos : 0 < ε / 2 := by linarith
+  let z : ℂ := (-(ε / 2) : ℝ)
+  have hzdist : dist z 0 = ε / 2 := by
+    simp [z, dist_eq_norm, Real.norm_eq_abs, abs_of_pos hεpos]
+  have hzball : z ∈ Metric.ball (0 : ℂ) ε := by
+    have : dist z 0 < ε := by rw [hzdist]; linarith
+    simpa [Metric.ball, Set.mem_setOf_eq] using this
+  have hzU : Quadratic.bottcher_map c z ∈ U := hball hzball
+  have hzneg : (Quadratic.bottcher_map c z).re < 0 := by
+    simpa [z] using bottcher_map_re_neg_of_pos_real c hhalfpos
+  exact (not_lt_of_ge (le_of_lt hzneg)) hzU
+
+lemma bottcher_map_not_continuous (c : ℂ) :
+    ¬ Continuous (Quadratic.bottcher_map c) := by
+  intro hcont
+  exact bottcher_map_not_continuousAt_zero c hcont.continuousAt
+
+lemma bottcher_map_not_isProperMap (c : ℂ) :
+    ¬ IsProperMap (Quadratic.bottcher_map c) := by
+  intro hproper
+  exact bottcher_map_not_continuous c hproper.continuous
+
 lemma isDiscrete_fiber_of_isLocallyInjective
     {f : ℂ → ℂ} (hlocal : IsLocallyInjective f) (y : ℂ) :
     IsDiscrete {x : ℂ | f x = y} := by
