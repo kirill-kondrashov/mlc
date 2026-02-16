@@ -107,4 +107,5 @@ All axioms used:
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.classify_infinitely_renormalizable
 - MLC.molecule_modulusLowerBoundTarget
+- MLC.Quadratic.bottcher_seq_converges
 ```

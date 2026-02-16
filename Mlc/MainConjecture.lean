@@ -166,6 +166,17 @@ def BottcherProperLocalHomeomorphOnBasinData : Prop :=
     IsProperMap (Quadratic.bottcher_map c) ∧
     IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)
 
+/-- On-M variant of the proper/local-homeomorphism Step 2b redesign data. -/
+def BottcherProperLocalHomeomorphOnBasinOnMData : Prop :=
+  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+    IsProperMap (Quadratic.bottcher_map c) ∧
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)
+
+/-- On-M variant of the global local-homeomorphism redesign data. -/
+def BottcherIsLocalHomeomorphOnMData : Prop :=
+  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+    IsLocalHomeomorph (Quadratic.bottcher_map c)
+
 /-- Main-conjecture wrapper for proper/local-homeomorphism redesign data. -/
 theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data
     (hdata : BottcherProperLocalHomeomorphOnBasinData) :
@@ -175,6 +186,40 @@ theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data
     exact (hdata c).1
   · intro c
     exact (hdata c).2
+
+/-- On-M wrapper for proper/local-homeomorphism redesign data. -/
+theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_onM_data
+    (hdata : BottcherProperLocalHomeomorphOnBasinOnMData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM
+  intro c hc
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c
+    (hdata c hc).1 (hdata c hc).2
+
+/-- On-M proper/local-homeomorphism data implies on-M basin injectivity data. -/
+theorem bottcher_map_inj_on_basin_onM_data_of_bottcher_proper_localHomeomorphOn_basin_onM_data
+    (hdata : BottcherProperLocalHomeomorphOnBasinOnMData) :
+    ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro c hc
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c
+    (hdata c hc).1 (hdata c hc).2
+
+/-- On-M global local-homeomorphism data implies on-M basin injectivity data. -/
+theorem bottcher_map_inj_on_basin_onM_data_of_bottcher_isLocalHomeomorph_onM_data
+    (hlocal : BottcherIsLocalHomeomorphOnMData) :
+    ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro c hc
+  exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c hc)
+
+/-- On-M wrapper for global local-homeomorphism redesign data. -/
+theorem mlc_conjecture_of_bottcher_isLocalHomeomorph_onM_data
+    (hlocal : BottcherIsLocalHomeomorphOnMData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM
+  intro c hc
+  exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c hc)
 
 /-- A parameterized MLC statement: properness plus nonvanishing derivative
     on basin points (with slit-orbit neighborhoods) yields basin injectivity
@@ -235,6 +280,14 @@ def BottcherContinuousDerivNeZeroMemNhdsSlitData : Prop :=
     (∀ z, z ∈ Quadratic.basin_of_infinity c →
       deriv (Quadratic.bottcher_map c) z ≠ 0)
 
+/-- On-M variant of continuity/derivative/slit-neighborhood Step 2b data. -/
+def BottcherContinuousDerivNeZeroMemNhdsSlitOnMData : Prop :=
+  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+    Continuous (Quadratic.bottcher_map c) ∧
+    (∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z) ∧
+    (∀ z, z ∈ Quadratic.basin_of_infinity c →
+      deriv (Quadratic.bottcher_map c) z ≠ 0)
+
 /-- Main-conjecture wrapper for the consolidated Step 2b redesign data. -/
 theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data
     (hdata : BottcherContinuousDerivNeZeroMemNhdsSlitData) :
@@ -245,12 +298,57 @@ theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data
     (fun c z hz => (hdata c).2.1 z hz)
     (fun c z hz => (hdata c).2.2 z hz)
 
+/-- On-M wrapper for continuity/derivative/slit-neighborhood redesign data. -/
+theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_onM_data
+    (hdata : BottcherContinuousDerivNeZeroMemNhdsSlitOnMData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_onM_data
+  intro c hc
+  refine ⟨?_, ?_⟩
+  · exact bottcher_map_isProperMap_of_continuous c (hdata c hc).1
+  · exact bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
+      (fun z hz => (hdata c hc).2.1 z hz)
+      (fun z hz => (hdata c hc).2.2 z hz)
+
+/-- On-M continuity/derivative/slit-neighborhood data implies on-M basin
+    injectivity data. -/
+theorem bottcher_map_inj_on_basin_onM_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_onM_data
+    (hdata : BottcherContinuousDerivNeZeroMemNhdsSlitOnMData) :
+    ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  exact bottcher_map_inj_on_basin_onM_data_of_bottcher_proper_localHomeomorphOn_basin_onM_data
+    (fun c hc =>
+      ⟨bottcher_map_isProperMap_of_continuous c (hdata c hc).1,
+        bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
+          (fun z hz => (hdata c hc).2.1 z hz)
+          (fun z hz => (hdata c hc).2.2 z hz)⟩)
+
+/-- `0` belongs to the Mandelbrot set (`boundedOrbit 0 0`). -/
+lemma zero_mem_mandelbrotSet : (0 : ℂ) ∈ MLC.Quadratic.MandelbrotSet := by
+  change MLC.Quadratic.boundedOrbit (0 : ℂ) (0 : ℂ)
+  refine ⟨0, ?_⟩
+  intro n
+  have horbit_zero : MLC.Quadratic.orbit (0 : ℂ) (0 : ℂ) n = 0 := by
+    induction n with
+    | zero =>
+        simp [MLC.Quadratic.orbit]
+    | succ n ih =>
+        simp [MLC.Quadratic.orbit_succ, MLC.Quadratic.fc, ih]
+  simpa [horbit_zero]
+
 /-- The current `bottcher_map` model is nowhere globally continuous at `0`,
     so the proper/local-homeomorphism-on-basin data target is inconsistent. -/
 theorem not_bottcher_proper_localHomeomorphOn_basin_data :
     ¬ BottcherProperLocalHomeomorphOnBasinData := by
   intro hdata
   exact bottcher_map_not_isProperMap 0 (hdata 0).1
+
+/-- The on-M proper/local-homeomorphism redesign data is also inconsistent,
+    since it includes parameter `c = 0 ∈ M`. -/
+theorem not_bottcher_proper_localHomeomorphOn_basin_onM_data :
+    ¬ BottcherProperLocalHomeomorphOnBasinOnMData := by
+  intro hdata
+  exact bottcher_map_not_isProperMap 0 (hdata 0 zero_mem_mandelbrotSet).1
 
 /-- The stronger continuity/derivative/slit-neighborhood data target is also
     inconsistent, since it implies global continuity of `bottcher_map`. -/
@@ -259,12 +357,26 @@ theorem not_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data :
   intro hdata
   exact bottcher_map_not_continuous 0 (hdata 0).1
 
+/-- The on-M continuity/derivative/slit-neighborhood redesign data is also
+    inconsistent, again because `0 ∈ M`. -/
+theorem not_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_onM_data :
+    ¬ BottcherContinuousDerivNeZeroMemNhdsSlitOnMData := by
+  intro hdata
+  exact bottcher_map_not_continuous 0 (hdata 0 zero_mem_mandelbrotSet).1
+
 /-- The global local-homeomorphism route is inconsistent for the current
     `bottcher_map` model, since it would force global continuity. -/
 theorem not_bottcher_isLocalHomeomorph_data :
     ¬ (∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)) := by
   intro hlocal
   exact bottcher_map_not_continuous 0 (hlocal 0).continuous
+
+/-- The on-M global local-homeomorphism route is also inconsistent, because
+    `0 ∈ M` and `bottcher_map 0` is not continuous. -/
+theorem not_bottcher_isLocalHomeomorph_onM_data :
+    ¬ BottcherIsLocalHomeomorphOnMData := by
+  intro hlocal
+  exact bottcher_map_not_continuous 0 (hlocal 0 zero_mem_mandelbrotSet).continuous
 
 /-- The `bottcher_map_inj_on_K` axiom is inconsistent with the current explicit
     `bottcher_map` model at parameter `c = 0`. -/
@@ -374,6 +486,210 @@ lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
       (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
         (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
   exact hdir.mul hexp
+
+/-- Equality of Böttcher values forces equality of Green-function values. -/
+lemma bottcher_map_eq_imp_green_eq (c z w : ℂ)
+    (hzw : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
+    MLC.Quadratic.green_function c z = MLC.Quadratic.green_function c w := by
+  have hnorm : ‖Quadratic.bottcher_map c z‖ = ‖Quadratic.bottcher_map c w‖ :=
+    congrArg norm hzw
+  rw [Quadratic.norm_bottcher_eq_exp_green c z,
+    Quadratic.norm_bottcher_eq_exp_green c w] at hnorm
+  exact Real.exp_injective hnorm
+
+/-- For Mandelbrot parameters, `0` does not lie in the basin of infinity. -/
+lemma zero_not_mem_basin_of_mem_mandelbrot (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
+    (0 : ℂ) ∉ Quadratic.basin_of_infinity c := by
+  intro h0basin
+  have h0K : (0 : ℂ) ∈ MLC.Quadratic.K c := hc
+  have h0compl : (0 : ℂ) ∈ (MLC.Quadratic.K c)ᶜ := by
+    simpa [Quadratic.basin_eq_compl_K c] using h0basin
+  exact h0compl h0K
+
+/-- Basin points are nonzero for Mandelbrot parameters. -/
+lemma ne_zero_of_mem_basin_of_mem_mandelbrot (c z : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hz : z ∈ Quadratic.basin_of_infinity c) :
+    z ≠ 0 := by
+  intro hz0
+  have h0basin : (0 : ℂ) ∈ Quadratic.basin_of_infinity c := by
+    simpa [hz0] using hz
+  exact zero_not_mem_basin_of_mem_mandelbrot c hc h0basin
+
+/-- For nonzero points, Böttcher values at `z` and `-z` cannot coincide. -/
+lemma bottcher_map_ne_of_neg_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    Quadratic.bottcher_map c z ≠ Quadratic.bottcher_map c (-z) := by
+  intro hphi
+  have hgreen :
+      MLC.Quadratic.green_function c z = MLC.Quadratic.green_function c (-z) :=
+    bottcher_map_eq_imp_green_eq c z (-z) hphi
+  have hexp_ne : (Real.exp (MLC.Quadratic.green_function c z) : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.exp_ne_zero (MLC.Quadratic.green_function c z))
+  have hdir_eq :
+      z / (‖z‖ : ℂ) = (-z) / (‖z‖ : ℂ) := by
+    have hphi' :
+        (z / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c z) : ℂ) =
+          ((-z) / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c z) : ℂ) := by
+      simpa [Quadratic.bottcher_map, hz, neg_ne_zero.mpr hz, norm_neg, hgreen] using hphi
+    exact mul_right_cancel₀ hexp_ne hphi'
+  have hneg :
+      z / (‖z‖ : ℂ) = -(z / (‖z‖ : ℂ)) := by
+    simpa [neg_div] using hdir_eq
+  have hsum : z / (‖z‖ : ℂ) + z / (‖z‖ : ℂ) = 0 := by
+    exact (eq_neg_iff_add_eq_zero).1 hneg
+  have htwo : (2 : ℂ) * (z / (‖z‖ : ℂ)) = 0 := by
+    simpa [two_mul] using hsum
+  have hdiv_zero : z / (‖z‖ : ℂ) = 0 := by
+    refine (mul_eq_zero.mp htwo).resolve_left ?_
+    norm_num
+  have hdiv_ne : z / (‖z‖ : ℂ) ≠ 0 := by
+    refine div_ne_zero hz ?_
+    exact_mod_cast (norm_ne_zero_iff.2 hz)
+  exact hdiv_ne hdiv_zero
+
+/-- If two basin points have equal Böttcher values and equal quadratic images,
+    then they are equal (for Mandelbrot parameters). -/
+lemma eq_of_bottcher_eq_and_quadratic_eq_of_mem_mandelbrot
+    (c z w : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hz : z ∈ Quadratic.basin_of_infinity c)
+    (_hw : w ∈ Quadratic.basin_of_infinity c)
+    (hphi : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w)
+    (hquad : quadratic_map c z = quadratic_map c w) :
+    z = w := by
+  have hsq : z ^ 2 = w ^ 2 := by
+    have hquad' : z ^ 2 + c = w ^ 2 + c := by
+      simpa [quadratic_map] using hquad
+    exact add_right_cancel hquad'
+  have hcases : z = w ∨ z = -w := by
+    have hmul : (z - w) * (z + w) = 0 := by
+      calc
+        (z - w) * (z + w) = z ^ 2 - w ^ 2 := by ring
+        _ = 0 := by
+              exact sub_eq_zero.mpr hsq
+    rcases mul_eq_zero.mp hmul with hsub | hadd
+    · exact Or.inl (sub_eq_zero.mp hsub)
+    · exact Or.inr (eq_neg_iff_add_eq_zero.mpr hadd)
+  rcases hcases with hzw | hneg
+  · exact hzw
+  · exfalso
+    have hz0 : z ≠ 0 :=
+      ne_zero_of_mem_basin_of_mem_mandelbrot c z hc hz
+    have hw_neg : w = -z := by
+      have htmp : -z = w := by
+        simpa using congrArg Neg.neg hneg
+      exact htmp.symm
+    have hphi_neg : Quadratic.bottcher_map c z = Quadratic.bottcher_map c (-z) := by
+      simpa [hw_neg] using hphi
+    exact (bottcher_map_ne_of_neg_of_ne_zero c z hz0) hphi_neg
+
+/-- Backward induction on iterate equality using Böttcher-value equality on the basin. -/
+lemma eq_of_iterate_eq_and_bottcher_eq_on_basin_onM
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
+    ∀ n z w,
+      z ∈ Quadratic.basin_of_infinity c →
+      w ∈ Quadratic.basin_of_infinity c →
+      (quadratic_map c)^[n] z = (quadratic_map c)^[n] w →
+      Quadratic.bottcher_map c z = Quadratic.bottcher_map c w →
+      z = w := by
+  intro n
+  induction n with
+  | zero =>
+      intro z w hz hw hiter hphi
+      simpa using hiter
+  | succ n ih =>
+      intro z w hz hw hiter hphi
+      have hz1 : quadratic_map c z ∈ Quadratic.basin_of_infinity c :=
+        quadratic_basin_forward_invariant c hz
+      have hw1 : quadratic_map c w ∈ Quadratic.basin_of_infinity c :=
+        quadratic_basin_forward_invariant c hw
+      have hiter1 :
+          (quadratic_map c)^[n] (quadratic_map c z) =
+            (quadratic_map c)^[n] (quadratic_map c w) := by
+        simpa [Function.iterate_succ] using hiter
+      have hphi1 :
+          Quadratic.bottcher_map c (quadratic_map c z) =
+            Quadratic.bottcher_map c (quadratic_map c w) := by
+        calc
+          Quadratic.bottcher_map c (quadratic_map c z)
+              = (Quadratic.bottcher_map c z) ^ 2 := by
+                  simpa using bottcher_conj_on_basin c z hz
+          _ = (Quadratic.bottcher_map c w) ^ 2 := by simpa [hphi]
+          _ = Quadratic.bottcher_map c (quadratic_map c w) := by
+                simpa using (bottcher_conj_on_basin c w hw).symm
+      have hquad_eq : quadratic_map c z = quadratic_map c w :=
+        ih (quadratic_map c z) (quadratic_map c w) hz1 hw1 hiter1 hphi1
+      exact eq_of_bottcher_eq_and_quadratic_eq_of_mem_mandelbrot c z w hc hz hw hphi hquad_eq
+
+/-- Equal Böttcher values on basin points force equality of some iterates,
+    using only outside left-inverse data from `external_ray_map_exists`. -/
+lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
+    (c z w : ℂ)
+    (hz : z ∈ Quadratic.basin_of_infinity c)
+    (hw : w ∈ Quadratic.basin_of_infinity c)
+    (hphi : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
+    ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w := by
+  have hz_tend : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop := by
+    simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hz
+  have hw_tend : Tendsto (fun n => ‖(quadratic_map c)^[n] w‖) atTop atTop := by
+    simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hw
+  have hz_event : ∀ᶠ n in atTop, ‖(quadratic_map c)^[n] z‖ ≥ ‖c‖ + 3 :=
+    (tendsto_atTop.1 hz_tend) (‖c‖ + 3)
+  have hw_event : ∀ᶠ n in atTop, ‖(quadratic_map c)^[n] w‖ ≥ ‖c‖ + 3 :=
+    (tendsto_atTop.1 hw_tend) (‖c‖ + 3)
+  have hboth :
+      ∀ᶠ n in atTop,
+        ‖(quadratic_map c)^[n] z‖ ≥ ‖c‖ + 3 ∧ ‖(quadratic_map c)^[n] w‖ ≥ ‖c‖ + 3 :=
+    hz_event.and hw_event
+  rcases (eventually_atTop.1 hboth) with ⟨N, hN⟩
+  have hzN_ge : ‖(quadratic_map c)^[N] z‖ ≥ ‖c‖ + 3 := (hN N le_rfl).1
+  have hwN_ge : ‖(quadratic_map c)^[N] w‖ ≥ ‖c‖ + 3 := (hN N le_rfl).2
+  have hzN : ‖(quadratic_map c)^[N] z‖ > ‖c‖ + 2 := by linarith
+  have hwN : ‖(quadratic_map c)^[N] w‖ > ‖c‖ + 2 := by linarith
+  have hz_left :
+      Quadratic.external_ray_map c
+          (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) =
+        (quadratic_map c)^[N] z := by
+    exact (Classical.choose_spec (Quadratic.external_ray_map_exists c)).2
+      ((quadratic_map c)^[N] z) hzN
+  have hw_left :
+      Quadratic.external_ray_map c
+          (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) =
+        (quadratic_map c)^[N] w := by
+    exact (Classical.choose_spec (Quadratic.external_ray_map_exists c)).2
+      ((quadratic_map c)^[N] w) hwN
+  have hphiN :
+      Quadratic.bottcher_map c ((quadratic_map c)^[N] z) =
+        Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
+    calc
+      Quadratic.bottcher_map c ((quadratic_map c)^[N] z)
+          = (Quadratic.bottcher_map c z) ^ (2 ^ N) := by
+              simpa using bottcher_conj_iter c N z hz
+      _ = (Quadratic.bottcher_map c w) ^ (2 ^ N) := by
+            simpa [hphi]
+      _ = Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
+            simpa using (bottcher_conj_iter c N w hw).symm
+  have hiter : (quadratic_map c)^[N] z = (quadratic_map c)^[N] w := by
+    calc
+      (quadratic_map c)^[N] z
+          = Quadratic.external_ray_map c
+              (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) := by
+                symm
+                exact hz_left
+      _ = Quadratic.external_ray_map c
+            (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) := by
+              simpa [hphiN]
+      _ = (quadratic_map c)^[N] w := hw_left
+  exact ⟨N, hiter⟩
+
+/-- Non-axiomatic on-M basin injectivity, derived from basin dynamics and
+    outside left-inverse data. -/
+lemma bottcher_map_inj_on_basin_of_mem_mandelbrot
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  intro z hz w hw hphi
+  rcases exists_iter_eq_of_bottcher_eq_on_basin_via_outside c z w hz hw hphi with ⟨n, hiter⟩
+  exact eq_of_iterate_eq_and_bottcher_eq_on_basin_onM c hc n z w hz hw hiter hphi
 
 /-- Every real point escapes for `c = 2`, hence lies in the basin. -/
 lemma ofReal_mem_basin_two (x : ℝ) :
@@ -1070,16 +1386,16 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
   exfalso
   exact Quadratic.not_quadratic_map_iter_eq_imp_eq 0 (h_iter_eq_imp 0)
 
-/-- Current axiom-backed on-M basin-injectivity bridge used by Step 2b. -/
-lemma bottcher_map_inj_on_basin_onM_via_external_ray_axioms :
+/-- Constructive on-M basin-injectivity bridge used by Step 2b. -/
+lemma bottcher_map_inj_on_basin_onM_via_basin_dynamics :
     BottcherMapInjOnBasinOnMData := by
   intro c hc
-  exact False.elim false_of_external_ray_axioms
+  exact bottcher_map_inj_on_basin_of_mem_mandelbrot c hc
 
 /-- Single Step 2b replacement target for the top-level theorem wiring. -/
 lemma bottcher_map_inj_on_basin_onM_target :
     BottcherMapInjOnBasinOnMData := by
-  exact bottcher_map_inj_on_basin_onM_via_external_ray_axioms
+  exact bottcher_map_inj_on_basin_onM_via_basin_dynamics
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
