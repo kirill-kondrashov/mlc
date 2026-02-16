@@ -73,19 +73,23 @@ theorem exists_renormalization_tower_sequence_of_satellite
   exact ⟨T.gₙ, T.g0, T.step⟩
 
 /-- Existence of an infinite sequence of renormalizations for IR parameters. -/
-theorem exists_renormalization_tower_sequence (c : ℂ) (h : MLC.InfinitelyRenormalizable c) :
+theorem exists_renormalization_tower_sequence
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (c : ℂ) (h : MLC.InfinitelyRenormalizable c) :
     ∃ (g : ℕ → BMol), g 0 = parameterToBMol c ∧
       ∀ n, Nonempty (RenormalizationRelation (g n) (g (n+1))) := by
   exact exists_renormalization_tower_sequence_of_satellite c
-    (tower_of_infinitely_renormalizable c h)
+    (tower_of_infinitely_renormalizable h_tower_data c h)
 
 /-- Infinitely renormalizable parameters admit a renormalization tower.
     This is a consequence of Yoccoz's work: if puzzle moduli diverge, the intersection
     of puzzle pieces is a point (finitely renormalizable); if they converge,
     the critical point must be involved in an infinite sequence of renormalizations. -/
-lemma infinitely_renormalizable_has_tower (c : ℂ) (h : InfinitelyRenormalizable c) :
+lemma infinitely_renormalizable_has_tower
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (c : ℂ) (h : InfinitelyRenormalizable c) :
     ∃ (_T : RenormalizationTower (parameterToBMol c)), True := by
-  exact ⟨satelliteTower c (tower_of_infinitely_renormalizable c h), True.intro⟩
+  exact ⟨satelliteTower c (tower_of_infinitely_renormalizable h_tower_data c h), True.intro⟩
 
 /-- Each renormalization step in a tower is either primitive or satellite.
     In the quadratic case, these two combinatorial types are exhaustive. -/
@@ -168,8 +172,10 @@ lemma combinatorial_dichotomy {p q : ℕ → Prop} (h : ∀ n, p n ∨ q n) :
 /-- Classification wrapper used by the main MLC strategy.
     In the current formalization this is discharged through the fast-tower route,
     yielding the satellite branch directly. -/
-theorem classify_infinitely_renormalizable (c : ℂ) (h : InfinitelyRenormalizable c) :
+theorem classify_infinitely_renormalizable
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (c : ℂ) (h : InfinitelyRenormalizable c) :
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c := by
-  exact Or.inr (tower_of_infinitely_renormalizable c h)
+  exact Or.inr (tower_of_infinitely_renormalizable h_tower_data c h)
 
 end MLC

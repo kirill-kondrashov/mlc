@@ -7,8 +7,10 @@
   `MLC.infinitely_renormalizable_implies_fast_tower` from that footprint.
 - [x] `MLC.mlc_conjecture` footprint no longer contains
   `MLC.infinitely_renormalizable_has_tower_data`.
-- [ ] Phase 3 active: foundational elimination/removal of the
-  `infinitely_renormalizable_has_tower_data` axiom declaration.
+- [x] Removed the global declaration
+  `axiom infinitely_renormalizable_has_tower_data`.
+- [ ] Phase 3 active: replace the remaining explicit IR-classification/tower
+  hook inputs with a non-axiomatic mathematical bridge.
 
 ## Scope
 - Keep the top-level theorem interface stable.
@@ -31,7 +33,6 @@
 - [x] Introduced replacement-target data wrappers in
   `Mlc/FastTowerExistence.lean`:
   - `InfinitelyRenormalizableHasTowerData`
-  - `infinitely_renormalizable_has_tower_data_via_axiom`
 - [x] Switched `SatelliteRenormalizableTower` to an explicit tower-style target:
   `Nonempty (RenormalizationTower (parameterToBMol c))`.
 - [x] Added legacy conversion wrapper:
@@ -57,13 +58,11 @@
 ## Phase 3 (In Progress): `MLC.infinitely_renormalizable_has_tower_data`
 
 ### Remaining Work
-- [ ] Replace `infinitely_renormalizable_has_tower_data_via_axiom` with a
-  non-axiomatic proof (or a strictly weaker/independently justified bridge)
-  yielding:
-  `∀ c, InfinitelyRenormalizable c → SatelliteRenormalizableTower c`.
+- [ ] Provide a concrete non-axiomatic implementation of
+  `InfinitelyRenormalizableHasTowerData`.
 - [x] Re-run `make check` and confirm
   `MLC.infinitely_renormalizable_has_tower_data` disappears.
-- [ ] Update README axiom block after final replacement.
+- [x] Update README axiom block for the current `make check` footprint.
 
 ### Current Obstruction
 - `InfinitelyRenormalizable` is defined via summability of puzzle moduli,
@@ -86,7 +85,7 @@
 - [x] Step 2.3: Replace the fast-iterate target in production with the
   tower-style target and verify footprint migration.
 - [ ] Step 3.1: Implement/import the non-axiomatic IR→tower bridge theorem.
-- [ ] Step 3.2: Remove the axiom declaration
+- [x] Step 3.2: Remove the axiom declaration
   `infinitely_renormalizable_has_tower_data`.
 - [x] Step 3.3: Run `make check` and `scripts/verify_output.sh`, then sync
   README.
@@ -95,9 +94,9 @@
 - [x] Added a single bridge hook theorem:
   `tower_of_infinitely_renormalizable`.
 - [x] Rewired production and auxiliary callers to use that theorem.
-- [x] Collapsed direct downstream references to
-  `infinitely_renormalizable_has_tower_data_via_axiom` to
-  `Mlc/FastTowerExistence.lean` only.
+- [x] Replaced the global axiom declaration with explicit parameters
+  (`InfinitelyRenormalizableHasTowerData`/`IRClassificationData`) at the few
+  remaining helper/wrapper entry points.
 - [x] Removed one unnecessary bridge dependency:
   `satellite_tower_implies_satellite` now returns `⟨T⟩` directly from its
   explicit tower argument.
@@ -118,7 +117,7 @@
   `MLC.infinitely_renormalizable_implies_fast_tower`.
 - [x] `make check` output does not contain
   `MLC.infinitely_renormalizable_has_tower_data`.
-- [ ] `rg -n "^axiom infinitely_renormalizable_has_tower_data"` returns no
+- [x] `rg -n "^axiom infinitely_renormalizable_has_tower_data"` returns no
   matches.
 - [x] README axiom block matches current `make check` output.
 
@@ -127,4 +126,5 @@
 - Phase 2 replaced the fast-iterate axiom in the production footprint with a
   weaker tower-existence bridge target.
 - Phase 3 eliminated the tower-data bridge from the top-level footprint, while
-  foundational elimination of the underlying axiom declaration remains open.
+  foundational elimination of the remaining explicit bridge inputs remains
+  open.

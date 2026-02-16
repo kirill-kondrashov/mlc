@@ -51,9 +51,9 @@ theorem not_infinitely_renormalizable_has_tower_data :
     (not_satelliteRenormalizableTower_of_mem_mandelbrot 0 zero_mem_mandelbrotSet_fastTower)
       hTower0
 
-/-- Consequence for the current axiom-backed implementation hook. -/
-theorem false_of_infinitely_renormalizable_has_tower_data_axiom : False := by
-  exact not_infinitely_renormalizable_has_tower_data
-    infinitely_renormalizable_has_tower_data
+/-- Any concrete IR→tower bridge datum contradicts the current Gaussian proxy setup. -/
+theorem false_of_infinitely_renormalizable_has_tower_data
+    (hdata : InfinitelyRenormalizableHasTowerData) : False := by
+  exact not_infinitely_renormalizable_has_tower_data hdata
 
 end
