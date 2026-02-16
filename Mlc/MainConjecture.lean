@@ -209,6 +209,22 @@ theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
   · exact hslit
   · exact hderiv
 
+/-- Continuity plus basin-local slit-neighborhood/nonzero-derivative data
+    upgrades to properness and basin local-homeomorphism data. -/
+theorem bottcher_proper_localHomeomorphOn_basin_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
+    (hcont : ∀ c, Continuous (Quadratic.bottcher_map c))
+    (hslit :
+      ∀ c z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
+    (hderiv :
+      ∀ c z, z ∈ Quadratic.basin_of_infinity c →
+        deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    BottcherProperLocalHomeomorphOnBasinData := by
+  intro c
+  refine ⟨?_, ?_⟩
+  · exact bottcher_map_isProperMap_of_continuous c (hcont c)
+  · exact bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
+      (hslit c) (hderiv c)
+
 /-- Consolidated Step 2b redesign data:
     continuity of `bottcher_map` plus basin-local slit-neighborhood and
     nonvanishing-derivative conditions. -/
@@ -223,13 +239,11 @@ def BottcherContinuousDerivNeZeroMemNhdsSlitData : Prop :=
 theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data
     (hdata : BottcherContinuousDerivNeZeroMemNhdsSlitData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
-  · intro c
-    exact (hdata c).1
-  · intro c z hz
-    exact (hdata c).2.1 z hz
-  · intro c z hz
-    exact (hdata c).2.2 z hz
+  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data
+  exact bottcher_proper_localHomeomorphOn_basin_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
+    (fun c => (hdata c).1)
+    (fun c z hz => (hdata c).2.1 z hz)
+    (fun c z hz => (hdata c).2.2 z hz)
 
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
@@ -515,6 +529,14 @@ theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeo
   exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
     (bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c (hproper c) (hlocal c))
 
+/-- Data-wrapper form of the proper/local-homeomorphism-on-basin route. -/
+theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin_data
+    (hdata : BottcherProperLocalHomeomorphOnBasinData) :
+    BasinBottcherPointwiseLeftInverseData := by
+  exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin
+    (fun c => (hdata c).1)
+    (fun c => (hdata c).2)
+
 /-- Continuity plus basin-local derivative/non-neighborhood slit hypotheses
     imply the minimal basin redesign target. -/
 theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
@@ -642,9 +664,8 @@ theorem mlc_conjecture_of_iter_eq_imp_via_pullback_root
 /-- Current axiom-backed construction of the minimal basin redesign target. -/
 lemma basin_bottcher_pointwise_left_inverse_data_via_iter_eq_axiom :
     BasinBottcherPointwiseLeftInverseData := by
-  exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin
-    (fun c => (bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom c).1)
-    (fun c => (bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom c).2)
+  exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin_data
+    bottcher_proper_localHomeomorphOn_basin_data_via_iter_eq_axiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

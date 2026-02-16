@@ -155,6 +155,7 @@
   - `bottcher_map_inj_on_basin_of_isLocalHomeomorph`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin`
+  - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin_data`
   - `basin_bottcher_pointwise_left_inverse_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit`
   - `exists_open_subset_slit_orbit_basin_of_mem_nhds`
   - `bottcher_map_analyticAt_of_mem_nhds_slit_basin`
@@ -213,6 +214,12 @@
   - `∀ c, IsProperMap (Quadratic.bottcher_map c)` and
     `IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)`
   via `bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`.
+  A structured sufficient refinement of that route is also isolated:
+  - `BottcherContinuousDerivNeZeroMemNhdsSlitData`
+  via
+  `bottcher_proper_localHomeomorphOn_basin_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit`
+  and then
+  `mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data`.
   This is now wired to MLC via
   `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data` and remains the
   next candidate to realize without new axioms or new hypotheses in
