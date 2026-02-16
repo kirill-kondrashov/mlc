@@ -39,13 +39,14 @@
   iterate-equality; it now closes through
   `mlc_conjecture_of_bottcher_left_inverse_on_basin`.
 - [x] `mlc_conjecture` now instantiates the on-M basin-injectivity wrapper
-  (`mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM`), and the
-  old `quadratic_map_iter_eq_imp_eq` bridge has been removed from this path.
+  (`mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data`), and the old
+  `quadratic_map_iter_eq_imp_eq` bridge has been removed from this path.
 - [x] Remaining axiom bridge is now explicitly factored:
+  - `BottcherMapInjOnBasinOnMData`
   - `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
   - `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`
-  This is the current replacement target for Step 2b, routed through the
-  minimal basin target wrapper without `quadratic_map_iter_eq_imp_eq`.
+  This is the current replacement target for Step 2b, routed through explicit
+  on-M basin injectivity without `quadratic_map_iter_eq_imp_eq`.
 - [x] Added non-axiomatic eventual-slit global-inverse injectivity route:
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise`
   - `EventualSlitGlobalInverseData`
@@ -59,12 +60,15 @@
   - `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data`
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data`
   - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM`
+  - `mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data`
   - `basin_bottcher_pointwise_left_inverse_data_onM_of_global`
+  - `BottcherMapInjOnBasinOnMData`
   - `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
   - `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`
   - `basin_bottcher_pointwise_left_inverse_data_onM_of_bottcher_map_inj_on_basin_onM`
   - `basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin`
   - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM`
+  - `basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM_data`
   - `external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin`
   - `bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data`
   - `mlc_conjecture_of_eventual_slit_global_inverse_data`
@@ -235,7 +239,7 @@
   (`Mlc/MainConjecture.lean`) so the current contradiction bridge does not rely on
   deriving `False` from the external-ray axioms.
 - [ ] Concretely, replace
-  `basin_bottcher_pointwise_left_inverse_data_onM_via_external_ray_axioms`
+  `bottcher_map_inj_on_basin_onM_via_external_ray_axioms`
   by proving one non-axiomatic on-M basin-injectivity route. Atlas/global-inverse/gluing
   eventual-slit candidates and the proper/local-homeomorphism data route are
   blocked by formal obstructions. Current open redesign target:
@@ -251,7 +255,7 @@
   (`BottcherProperLocalHomeomorphOnBasinData` and
   `BottcherContinuousDerivNeZeroMemNhdsSlitData`) is now formally ruled out.
   This is now wired to MLC via
-  `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM` and remains the
+  `mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data` and remains the
   next candidate to realize without new axioms or new hypotheses in
   `mlc_conjecture`.
 
