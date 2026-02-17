@@ -114,7 +114,14 @@
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportData`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportExistsData`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportWitness`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleMotionWitnessHyp`
   so future motion/transport proofs can plug in directly.
+- [x] Added motion-side hypothesis packaging in
+  `Mlc/Quadratic/Complex/PuzzleBoundaryMotion.lean`:
+  - `ParaPuzzleTransportWitnessHyp`
+  - `para_puzzle_transport_exists_data_of_motion_witness_hyp`
+  and linked it to the strategy layer via
+  `paraPuzzleTransportExistsData_ofMotionWitnessHyp`.
 - [x] Canonical axiom-backed connectedness hook now routes through the
   existential transport layer:
   `para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom` is defined via

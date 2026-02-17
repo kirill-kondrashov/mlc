@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.Axioms
 import Mlc.Quadratic.Complex.ParaPuzzle
+import Mlc.Quadratic.Complex.PuzzleLemmas2
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Basic
@@ -97,6 +98,20 @@ theorem puzzle_boundary_motion_exists_of_data (n : ℕ) (c₀ : ℂ)
     ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
       motion_preserves_para_piece n c₀ r E h := by
   refine ⟨h.r, h.r_pos, h.E, h.motion, h.preserves⟩
+
+/-- Motion-side witness hypothesis for para-puzzle connectedness on `M`.
+    This is the intended target shape for boundary-motion transport arguments. -/
+structure ParaPuzzleTransportWitnessHyp : Prop where
+  witness :
+    ∀ c, c ∈ MandelbrotSet → ∀ n,
+      ∃ S : Set ℂ, IsConnected S ∧ S = ParaPuzzlePieceAt c n ∩ MandelbrotSet
+
+/-- Convert a motion-side witness hypothesis into the existential transport
+    bridge data used by the MLC strategy layer. -/
+theorem para_puzzle_transport_exists_data_of_motion_witness_hyp
+    (h : ParaPuzzleTransportWitnessHyp) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  para_puzzle_transport_exists_data_of_witness h.witness
 
 end
 end MLC.Quadratic

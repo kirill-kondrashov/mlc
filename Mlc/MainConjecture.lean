@@ -108,6 +108,12 @@ def paraPuzzleTransportExistsData_ofWitness
     ParaPuzzleInterMandelbrotTransportExistsData :=
   Quadratic.para_puzzle_transport_exists_data_of_witness h_witness
 
+/-- Build existential transport data from a motion-side witness hypothesis. -/
+def paraPuzzleTransportExistsData_ofMotionWitnessHyp
+    (h_motion_witness : MLC.Quadratic.ParaPuzzleTransportWitnessHyp) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  MLC.Quadratic.para_puzzle_transport_exists_data_of_motion_witness_hyp h_motion_witness
+
 /-- The core strategy theorem (internal). -/
 theorem mlc_strategy_of_paraPuzzleConnectedData
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
@@ -305,6 +311,19 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportWitnes
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportExistsData
     (paraPuzzleTransportExistsData_ofWitness h_witness)
+    h_classify_ir h_mod h_inj_basin_onM
+
+/-- A parameterized MLC statement from a motion-side witness hypothesis. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleMotionWitnessHyp
+    (h_motion_witness : MLC.Quadratic.ParaPuzzleTransportWitnessHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportExistsData
+    (paraPuzzleTransportExistsData_ofMotionWitnessHyp h_motion_witness)
     h_classify_ir h_mod h_inj_basin_onM
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
