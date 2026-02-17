@@ -53,6 +53,16 @@
   - `PrincipalNestTarget.conformalModulusNotSummableTarget_iff_modulusNotSummableTarget`
   - `moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData`
   so this scaffold does not yet change provability under the current model.
+- [x] Added matching obstruction for the conformal-target alias in the current model:
+  - `PrincipalNestTarget.not_conformalModulusNotSummableTarget`
+  - `not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal`.
+- [x] Added global no-go lemmas parameterized by existence of a Mandelbrot
+  satellite tower:
+  - `not_moleculeModulusLowerBoundData_of_exists_mem_mandelbrot_tower`
+  - `not_moleculeConformalModulusLowerBoundData_of_exists_mem_mandelbrot_tower`.
+- [x] Added combined inconsistency lemmas with global IR→tower data:
+  - `false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data`
+  - `false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data`.
 - [ ] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.

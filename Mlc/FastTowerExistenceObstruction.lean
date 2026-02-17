@@ -40,6 +40,46 @@ lemma not_satelliteRenormalizableTower_of_mem_mandelbrot
     h_mod Molecule.molecule_conjecture_refined c hc hTower
   exact PrincipalNestTarget.not_modulusNotSummableTarget c hTower hdiv
 
+/-- Any single Mandelbrot satellite tower refutes the current Gaussian-target bridge data. -/
+theorem not_moleculeModulusLowerBoundData_of_mem_mandelbrot_tower
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
+    ¬ MoleculeModulusLowerBoundData := by
+  intro h_mod
+  exact (not_satelliteRenormalizableTower_of_mem_mandelbrot h_mod c hc) hTower
+
+/-- Globalized version of the Gaussian-target obstruction. -/
+theorem not_moleculeModulusLowerBoundData_of_exists_mem_mandelbrot_tower :
+    (∃ c, c ∈ MLC.Quadratic.MandelbrotSet ∧ SatelliteRenormalizableTower c) →
+    ¬ MoleculeModulusLowerBoundData := by
+  intro h_exists h_mod
+  rcases h_exists with ⟨c, hc, hTower⟩
+  exact (not_satelliteRenormalizableTower_of_mem_mandelbrot h_mod c hc) hTower
+
+/-- Conformal-target variant of the same obstruction. -/
+lemma not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal
+    (h_mod : MoleculeConformalModulusLowerBoundData) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
+    ¬ SatelliteRenormalizableTower c := by
+  intro hTower
+  have hdiv : PrincipalNestTarget.ConformalModulusNotSummableTarget c hTower :=
+    h_mod Molecule.molecule_conjecture_refined c hc hTower
+  exact PrincipalNestTarget.not_conformalModulusNotSummableTarget c hTower hdiv
+
+/-- Any single Mandelbrot satellite tower refutes conformal-target bridge data. -/
+theorem not_moleculeConformalModulusLowerBoundData_of_mem_mandelbrot_tower
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
+    ¬ MoleculeConformalModulusLowerBoundData := by
+  intro h_mod
+  exact (not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_mod c hc) hTower
+
+/-- Globalized version of the conformal-target obstruction. -/
+theorem not_moleculeConformalModulusLowerBoundData_of_exists_mem_mandelbrot_tower :
+    (∃ c, c ∈ MLC.Quadratic.MandelbrotSet ∧ SatelliteRenormalizableTower c) →
+    ¬ MoleculeConformalModulusLowerBoundData := by
+  intro h_exists h_mod
+  rcases h_exists with ⟨c, hc, hTower⟩
+  exact (not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_mod c hc) hTower
+
 /-- Current obstruction: the Phase 3 target is inconsistent with the
     Molecule bridge axiom plus Gaussian proxy modulus. -/
 theorem not_infinitely_renormalizable_has_tower_data :
@@ -53,10 +93,27 @@ theorem not_infinitely_renormalizable_has_tower_data :
     (not_satelliteRenormalizableTower_of_mem_mandelbrot h_mod 0 zero_mem_mandelbrotSet_fastTower)
       hTower0
 
+/-- Combined obstruction: current Gaussian-target Molecule bridge data and
+    global IR→tower data are inconsistent. -/
+theorem false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
+    (h_mod : MoleculeModulusLowerBoundData)
+    (hdata : InfinitelyRenormalizableHasTowerData) : False := by
+  exact not_infinitely_renormalizable_has_tower_data h_mod hdata
+
+/-- Conformal-target variant of the combined obstruction. -/
+theorem false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
+    (h_mod : MoleculeConformalModulusLowerBoundData)
+    (hdata : InfinitelyRenormalizableHasTowerData) : False := by
+  have h_mod' : MoleculeModulusLowerBoundData :=
+    moleculeModulusLowerBoundData_of_moleculeConformalModulusLowerBoundData h_mod
+  exact false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
+    h_mod' hdata
+
 /-- Any concrete IR→tower bridge datum contradicts the current Gaussian proxy setup. -/
 theorem false_of_infinitely_renormalizable_has_tower_data
     (h_mod : MoleculeModulusLowerBoundData)
     (hdata : InfinitelyRenormalizableHasTowerData) : False := by
-  exact not_infinitely_renormalizable_has_tower_data h_mod hdata
+  exact false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
+    h_mod hdata
 
 end
