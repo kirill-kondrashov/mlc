@@ -11,6 +11,10 @@ namespace MLC
 
 open Quadratic Complex Topology Set Filter
 
+/-- Replacement hook for connectivity of parameter puzzle pieces on `M`. -/
+def ParaPuzzlePieceInterMandelbrotConnectedData : Prop :=
+  ∀ c n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet)
+
 /-- Local connectivity at a point in a topological space. -/
 def LocallyConnectedAt (X : Type*) [TopologicalSpace X] (x : X) : Prop :=
   ∀ U ∈ 𝓝 x, ∃ V ∈ 𝓝 x, V ⊆ U ∧ IsConnected V
@@ -61,15 +65,22 @@ lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → 
       exact ⟨Subtype.val y, ⟨y, hy, rfl⟩⟩
     · exact h_pre.2 h.2
 
-/-- The intersection of a parameter puzzle piece with the Mandelbrot set is connected in the subtype topology. -/
-lemma para_puzzle_piece_induced_connected (c : ℂ) (n : ℕ) :
+/-- Connectedness in the subtype, parameterized by the replacement hook. -/
+lemma para_puzzle_piece_induced_connected_of_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) (c : ℂ) (n : ℕ) :
     IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } := by
   rw [← isConnected_subtype_val_image]
   rw [show { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } =
         (Subtype.val : MandelbrotSet → ℂ) ⁻¹' (ParaPuzzlePieceAt c n) by rfl]
   rw [Subtype.image_preimage_coe]
   try rw [Set.inter_comm]
-  exact para_puzzle_piece_inter_mandelbrot_connected c n
+  exact h_conn c n
+
+/-- The intersection of a parameter puzzle piece with the Mandelbrot set is
+    connected in the subtype topology. -/
+lemma para_puzzle_piece_induced_connected (c : ℂ) (n : ℕ) :
+    IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } :=
+  para_puzzle_piece_induced_connected_of_data para_puzzle_piece_inter_mandelbrot_connected c n
 
 /-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set.
     Proof idea: Since the intersection of all parameter pieces `ParaPuzzlePieceAt c n` is exactly `{c}`,
@@ -93,14 +104,9 @@ lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
   apply hV_sub_U
   exact hn_sub hx
 
-/-- If parameter pieces shrink to a point, M is locally connected at c.
-    Proof idea: We construct a basis of connected neighborhoods for `c`.
-    1.  The parameter pieces `P_n` are open (by `para_puzzle_piece_open`).
-    2.  Their intersection with `M` is connected (by `para_puzzle_piece_induced_connected`).
-    3.  They shrink to `{c}` (hypothesis).
-    4.  Therefore, for any neighborhood `U`, we can find a `P_n` inside it. `P_n ∩ M` serves
-        as the connected neighborhood of `c` contained in `U`, proving local connectivity. -/
-lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
+lemma lc_at_of_shrink_of_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (c : ℂ) (hc : c ∈ MandelbrotSet)
     (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
   rw [LocallyConnectedAt]
@@ -109,8 +115,7 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
   let V' := { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n }
   use V'
   constructor
-  · -- V' ∈ 𝓝 ⟨c, hc⟩
-    rw [mem_nhds_iff]
+  · rw [mem_nhds_iff]
     use V'
     constructor
     · exact subset_rfl
@@ -126,6 +131,18 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
         exact Set.mem_iInter.mp hc_in_inter n
   · constructor
     · exact hn_sub
-    · exact para_puzzle_piece_induced_connected c n
+    · exact para_puzzle_piece_induced_connected_of_data h_conn c n
+
+/-- If parameter pieces shrink to a point, M is locally connected at c.
+    Proof idea: We construct a basis of connected neighborhoods for `c`.
+    1.  The parameter pieces `P_n` are open (by `para_puzzle_piece_open`).
+    2.  Their intersection with `M` is connected (by `para_puzzle_piece_induced_connected`).
+    3.  They shrink to `{c}` (hypothesis).
+    4.  Therefore, for any neighborhood `U`, we can find a `P_n` inside it. `P_n ∩ M` serves
+        as the connected neighborhood of `c` contained in `U`, proving local connectivity. -/
+lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
+    (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ :=
+  lc_at_of_shrink_of_data para_puzzle_piece_inter_mandelbrot_connected c hc h
 
 end MLC
