@@ -64,6 +64,32 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
   exact Classical.em _
 
 /-- The core strategy theorem (internal). -/
+theorem mlc_strategy_of_paraPuzzleConnectedData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_param_shrink :
+      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
+    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
+    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
+    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      MLC.Quadratic.PuzzleBoundaryMotionHyp →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
+  have h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp :=
+    MLC.Quadratic.puzzle_boundary_motion_hyp_of_onM_connected
+      (MLC.Quadratic.bottcher_green_sublevel_hyp_onM_connected_of_onM h_bottcher_onM h_green_conn)
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  rcases dichotomy c with h_fin_renorm | h_inf_renorm
+  · exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+      h_conn c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
+  · exact mlc_infinitely_renormalizable h_classify h_bridge h_motion c hc h_inf_renorm
+
+/-- The core strategy theorem (internal). -/
 theorem mlc_strategy
     (h_param_shrink :
       ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
@@ -78,22 +104,41 @@ theorem mlc_strategy
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
-  -- We need to show local connectivity at every point c ∈ MandelbrotSet
-  have h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp :=
-    MLC.Quadratic.puzzle_boundary_motion_hyp_of_onM_connected
-      (MLC.Quadratic.bottcher_green_sublevel_hyp_onM_connected_of_onM h_bottcher_onM h_green_conn)
-  apply locallyConnectedSpace_of_locallyConnectedAt
-  intro ⟨c, hc⟩
-  rcases dichotomy c with h_fin_renorm | h_inf_renorm
-  · -- Case 1: Finitely Renormalizable
-    exact mlc_finitely_renormalizable c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
-  · -- Case 2: Infinitely renormalizable
-    exact mlc_infinitely_renormalizable h_classify h_bridge h_motion c hc h_inf_renorm
+  exact mlc_strategy_of_paraPuzzleConnectedData
+    para_puzzle_piece_inter_mandelbrot_connected
+    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
 
 /-- Explicit classification data hook for infinitely renormalizable parameters. -/
 def IRClassificationData : Prop :=
   ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
+
+/-- A parameterized MLC statement: basin injectivity of the Böttcher map
+    on Mandelbrot parameters is enough to close the strategy. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply mlc_strategy_of_paraPuzzleConnectedData h_conn
+  · intro c hc h_fin
+    have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
+      apply MLC.yoccoz_theorem
+      simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin
+    exact parameter_shrink_of_yoccoz c hc h_fin h_dyn
+  · exact bottcher_onM_hyp
+  · exact green_sublevel_connected_onM
+      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
+      h_inj_basin_onM
+  · intro c h_inf
+    exact h_classify_ir c h_inf
+  · intro h_mol h_motion c hc hTower
+    exact molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData
+      h_mod h_mol h_motion c hc hTower
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
     on Mandelbrot parameters is enough to close the strategy. -/
@@ -104,27 +149,9 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
       ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
         Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
-  rw [mandelbrotSet_eq_MandelbrotSet]
-  apply mlc_strategy
-  · -- Finitely Renormalizable case (Yoccoz)
-    intro c hc h_fin
-    have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
-      apply MLC.yoccoz_theorem
-      simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin
-    exact parameter_shrink_of_yoccoz c hc h_fin h_dyn
-  · -- Bottcher coordinates exist on M
-    exact bottcher_onM_hyp
-  · -- Green sublevel sets connected
-    exact green_sublevel_connected_onM
-      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
-      h_inj_basin_onM
-  · -- Classification of infinitely renormalizable parameters (Lyubich)
-    intro c h_inf
-    exact h_classify_ir c h_inf
-  · -- Bridge from Molecule Conjecture to Satellite MLC.
-    intro h_mol h_motion c hc hTower
-    exact molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData
-      h_mod h_mol h_motion c hc hTower
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
+    para_puzzle_piece_inter_mandelbrot_connected
+    h_classify_ir h_mod h_inj_basin_onM
 
 /-- Uniform conformal lower-bound variant of
     `mlc_conjecture_of_bottcher_inj_on_basin_onM`. -/

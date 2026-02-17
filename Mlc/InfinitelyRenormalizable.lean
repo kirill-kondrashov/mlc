@@ -24,12 +24,21 @@ open Quadratic Complex Topology Set Filter Molecule
     If the Yoccoz puzzle moduli diverge (Finitely Renormalizable),
     then the intersection of puzzle pieces is a point, implying local connectivity.
     In this skeleton, we take the parameter-plane shrinkage as an explicit hypothesis. -/
+theorem mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact lc_at_of_shrink_of_data h_conn c hc h_para_shrink
+
+/-- Axiom-backed wrapper for `mlc_finitely_renormalizable_of_paraPuzzleConnectedData`. -/
 theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (_h : FinitelyRenormalizable c)
     (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  -- The dynamical shrinkage is provided by Yoccoz; the parameter shrinkage is assumed here.
-  exact lc_at_of_shrink c hc h_para_shrink
+  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    para_puzzle_piece_inter_mandelbrot_connected c hc _h h_para_shrink
 
 /-- MLC for Primitive parameters (Lyubich).
     Proved by Lyubich in "Dynamics of Quadratic Polynomials I-II", Acta Mathematica 178 (1997).

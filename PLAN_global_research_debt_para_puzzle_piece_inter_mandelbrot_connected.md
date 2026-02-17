@@ -28,8 +28,15 @@
 - [x] Add `ParaPuzzlePieceInterMandelbrotConnectedData`.
 - [x] Route subtype-connectedness through `_of_data` theorem.
 - [x] Route local-connectivity-from-shrink through `_of_data` theorem.
-- [ ] Ensure all production callers can be switched to data-parameterized route
-  without changing top-level signature.
+- [x] Add data-parameterized finite/strategy wrappers so production callers can
+  be switched without changing top-level signature:
+  - `mlc_finitely_renormalizable_of_paraPuzzleConnectedData`
+  - `mlc_strategy_of_paraPuzzleConnectedData`
+  Existing theorems remain axiom-backed wrappers.
+- [x] Add a data-parameterized on-M MLC entry point:
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData`
+  and keep `mlc_conjecture_of_bottcher_inj_on_basin_onM` as an
+  axiom-backed wrapper.
 
 ## Phase 2: Implement Non-Axiomatic Theorem
 - [ ] Replace the axiom declaration in
