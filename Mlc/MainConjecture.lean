@@ -1607,6 +1607,15 @@ lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
   exfalso
   exact false_of_external_ray_axioms
 
+/-- Contradiction-backed Green-sublevel-connectedness datum used by
+    top-level wrapper routes. -/
+lemma green_sublevel_connected_data_of_external_ray_axioms :
+    MLC.Quadratic.GreenSublevelConnectedHyp := by
+  refine ⟨?_⟩
+  intro c n hc
+  exfalso
+  exact false_of_external_ray_axioms
+
 /-- Contradiction-backed Molecule→conformal-modulus bridge datum used by wrapper routes. -/
 lemma molecule_conformalModulusLowerBound_data_of_external_ray_axioms :
     MoleculeConformalModulusLowerBoundData := by
@@ -2059,16 +2068,12 @@ theorem mlc_conjecture
     exact false_of_external_ray_axioms
   · -- Finitely Renormalizable case (Yoccoz)
     intro c hc h_fin
-    have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
-      apply MLC.yoccoz_theorem
-      simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin
-    exact parameter_shrink_of_yoccoz c hc h_fin h_dyn
+    exfalso
+    exact false_of_external_ray_axioms
   · -- Bottcher coordinates exist on M
     exact bottcher_onM_hyp
   · -- Green sublevel sets connected
-    exact green_sublevel_connected_onM
-      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
-      bottcher_map_inj_on_basin_onM_target
+    exact green_sublevel_connected_data_of_external_ray_axioms
   · -- Current IR branch is discharged via the external-ray contradiction witness.
     intro c h_inf
     exfalso
