@@ -67,6 +67,10 @@
   `MoleculeConformalModulusLowerBoundData` directly, with
   `molecule_conformalModulusLowerBound_data_of_external_ray_axioms` as the
   current contradiction-backed instantiation.
+- [x] Switched primary bridge API in `Mlc/MoleculeConjectureBridge.lean`
+  (`molecule_parameter_shrink_of_tower`, `refined_conjecture_implies_lc_of_tower`,
+  `molecule_conjecture_bridge_of_tower`, and legacy satellite wrappers) to
+  conformal data input, keeping `_of_modulusLowerBoundData` compatibility lemmas.
 - [ ] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
