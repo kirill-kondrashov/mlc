@@ -442,6 +442,21 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget_of_p
     (paraPuzzleConnectedData_of_paraPuzzleMandelbrotSubsetData hsub)
     h_classify_ir h_target h_inj_basin_onM
 
+/-- Strong principal-nest bridge-target variant routed through
+    `ParaPuzzleTransportWitnessHyp`. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget_of_paraPuzzleMotionWitnessHyp
+    (h_motion_witness : MLC.Quadratic.ParaPuzzleTransportWitnessHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget_of_paraPuzzleConnectedData
+    (paraPuzzleConnectedData_of_paraPuzzleTransportExistsData
+      (paraPuzzleTransportExistsData_ofMotionWitnessHyp h_motion_witness))
+    h_classify_ir h_target h_inj_basin_onM
+
 /-- Strong principal-nest bridge-target variant of
     `mlc_conjecture_of_bottcher_inj_on_basin_onM`. -/
 theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget
@@ -451,8 +466,8 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget
       ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
         Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget_of_paraPuzzleConnectedData
-    Quadratic.para_puzzle_connected_data
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget_of_paraPuzzleMotionWitnessHyp
+    MLC.Quadratic.para_puzzle_transport_witness_hyp_of_axiom
     h_classify_ir h_target h_inj_basin_onM
 
 /-- Canonical-depth uniform bridge-target variant of
