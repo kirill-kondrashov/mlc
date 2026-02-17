@@ -132,6 +132,10 @@
   `para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom` is defined via
   `para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data`
   and `para_puzzle_transport_exists_data_of_axiom`.
+- [x] Raw use of `para_puzzle_piece_inter_mandelbrot_connected` is now isolated
+  to a single constructor site:
+  `para_puzzle_transport_exists_data_of_axiom` in
+  `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
 - [ ] Next concrete proof target: derive

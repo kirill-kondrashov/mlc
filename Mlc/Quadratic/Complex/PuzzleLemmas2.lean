@@ -190,16 +190,17 @@ def para_puzzle_transport_data_of_mandelbrot_subset_data
   para_puzzle_transport_data_of_connected_data
     (para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
 
-def para_puzzle_transport_data_of_axiom :
-    ParaPuzzleInterMandelbrotTransportData where
-  transportSet c n := ParaPuzzlePieceAt c n ∩ MandelbrotSet
-  connected c hc n := para_puzzle_piece_inter_mandelbrot_connected c hc n
-  eq_inter _c _hc _n := rfl
-
 def para_puzzle_transport_exists_data_of_axiom :
-    ParaPuzzleInterMandelbrotTransportExistsData :=
-  para_puzzle_transport_exists_data_of_transport_data
-    para_puzzle_transport_data_of_axiom
+    ParaPuzzleInterMandelbrotTransportExistsData where
+  witness c hc n :=
+    ⟨ParaPuzzlePieceAt c n ∩ MandelbrotSet,
+      para_puzzle_piece_inter_mandelbrot_connected c hc n,
+      rfl⟩
+
+noncomputable def para_puzzle_transport_data_of_axiom :
+    ParaPuzzleInterMandelbrotTransportData :=
+  para_puzzle_transport_data_of_exists_data
+    para_puzzle_transport_exists_data_of_axiom
 
 lemma para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
     ParaPuzzlePieceInterMandelbrotConnectedData :=
