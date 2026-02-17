@@ -54,6 +54,50 @@ theorem conformalModulusNotSummableTarget_iff_modulusNotSummableTarget
     ConformalModulusNotSummableTarget c h ↔ ModulusNotSummableTarget c h := by
   rfl
 
+/-- Stronger sufficient target: a uniform positive conformal-modulus lower bound
+    along canonical tower depths. -/
+def UniformConformalLowerBoundTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
+  ∃ μ > 0, ∀ n,
+    μ ≤ MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n)
+
+/-- A uniform positive lower bound implies conformal non-summability. -/
+theorem conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
+    (c : ℂ) (h : SatelliteRenormalizableTower c) :
+    UniformConformalLowerBoundTarget c h →
+    ConformalModulusNotSummableTarget c h := by
+  intro h_uniform h_sum
+  rcases h_uniform with ⟨μ, hμ_pos, hμ_lb⟩
+  have h_lim : Filter.Tendsto
+      (fun n =>
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
+      Filter.atTop (nhds 0) :=
+    Summable.tendsto_atTop_zero h_sum
+  rw [Metric.tendsto_atTop] at h_lim
+  specialize h_lim (μ / 2) (by positivity)
+  rcases h_lim with ⟨N, hN⟩
+  have h_dist : dist
+      (MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N)) 0
+      < μ / 2 := hN N (le_refl N)
+  have h_lbN : μ ≤
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) := hμ_lb N
+  have h_nonnegN : 0 ≤
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) :=
+    le_trans (le_of_lt hμ_pos) h_lbN
+  have h_ltN :
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) < μ / 2 := by
+    simpa [Real.dist_eq, abs_of_nonneg h_nonnegN] using h_dist
+  have : ¬ MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) < μ := by
+    exact not_lt_of_ge h_lbN
+  have hhalf_le : μ / 2 ≤ μ := by nlinarith [hμ_pos]
+  exact this (lt_of_lt_of_le h_ltN hhalf_le)
+
 /--
 The principal nest annulus is the disjoint union of consecutive puzzle annuli.
 -/

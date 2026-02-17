@@ -80,6 +80,24 @@ theorem not_moleculeConformalModulusLowerBoundData_of_exists_mem_mandelbrot_towe
   rcases h_exists with ⟨c, hc, hTower⟩
   exact (not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_mod c hc) hTower
 
+/-- Uniform conformal-target variant: any Mandelbrot satellite tower refutes the
+    stronger uniform bridge data. -/
+theorem not_moleculeUniformConformalLowerBoundData_of_mem_mandelbrot_tower
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
+    ¬ MoleculeUniformConformalLowerBoundData := by
+  intro h_uniform
+  have h_conf : MoleculeConformalModulusLowerBoundData :=
+    moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
+  exact (not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_conf c hc) hTower
+
+/-- Globalized version of the uniform conformal-target obstruction. -/
+theorem not_moleculeUniformConformalLowerBoundData_of_exists_mem_mandelbrot_tower :
+    (∃ c, c ∈ MLC.Quadratic.MandelbrotSet ∧ SatelliteRenormalizableTower c) →
+    ¬ MoleculeUniformConformalLowerBoundData := by
+  intro h_exists h_uniform
+  rcases h_exists with ⟨c, hc, hTower⟩
+  exact (not_moleculeUniformConformalLowerBoundData_of_mem_mandelbrot_tower c hc hTower) h_uniform
+
 /-- Current obstruction: the Phase 3 target is inconsistent with the
     Molecule bridge axiom plus Gaussian proxy modulus. -/
 theorem not_infinitely_renormalizable_has_tower_data :
@@ -108,6 +126,15 @@ theorem false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormali
     moleculeModulusLowerBoundData_of_moleculeConformalModulusLowerBoundData h_mod
   exact false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
     h_mod' hdata
+
+/-- Uniform conformal-target variant of the combined obstruction. -/
+theorem false_of_moleculeUniformConformalLowerBoundData_and_infinitely_renormalizable_has_tower_data
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (hdata : InfinitelyRenormalizableHasTowerData) : False := by
+  have h_mod : MoleculeModulusLowerBoundData :=
+    moleculeModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
+  exact false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
+    h_mod hdata
 
 /-- Any concrete IR→tower bridge datum contradicts the current Gaussian proxy setup. -/
 theorem false_of_infinitely_renormalizable_has_tower_data

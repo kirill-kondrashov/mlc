@@ -953,12 +953,19 @@ lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
   exfalso
   exact false_of_external_ray_axioms
 
-/-- Contradiction-backed Molecule→conformal-modulus bridge datum used by wrapper routes. -/
-lemma molecule_conformalModulusLowerBound_data_of_external_ray_axioms :
-    MoleculeConformalModulusLowerBoundData := by
+/-- Contradiction-backed Molecule→uniform conformal lower-bound datum used by
+    wrapper routes. -/
+lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
+    MoleculeUniformConformalLowerBoundData := by
   intro h_mol c hc hTower
   exfalso
   exact false_of_external_ray_axioms
+
+/-- Contradiction-backed Molecule→conformal-modulus bridge datum used by wrapper routes. -/
+lemma molecule_conformalModulusLowerBound_data_of_external_ray_axioms :
+    MoleculeConformalModulusLowerBoundData := by
+  exact moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
 
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/

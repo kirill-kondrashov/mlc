@@ -91,6 +91,32 @@ def MoleculeConformalModulusLowerBoundData : Prop :=
     (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c),
     PrincipalNestTarget.ConformalModulusNotSummableTarget c hTower
 
+/-- Stronger redesign target: uniform positive conformal-modulus lower bounds
+    along canonical tower depths. -/
+def MoleculeUniformConformalLowerBoundData : Prop :=
+  ∀ (_h_mol : MoleculeConjectureRefined) (c : ℂ)
+    (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c),
+    PrincipalNestTarget.UniformConformalLowerBoundTarget c hTower
+
+/-- Uniform conformal lower-bound data implies conformal bridge data. -/
+theorem moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData
+    (h_uniform : MoleculeUniformConformalLowerBoundData) :
+    MoleculeConformalModulusLowerBoundData := by
+  intro h_mol c hc hTower
+  exact PrincipalNestTarget.conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
+    c hTower (h_uniform h_mol c hc hTower)
+
+/-- Parameter-piece shrinkage directly from uniform conformal lower-bound data. -/
+theorem molecule_parameter_shrink_of_tower_of_uniformConformalLowerBoundData
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_mol : MoleculeConjectureRefined) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  have hdiv : PrincipalNestTarget.ConformalModulusNotSummableTarget c hTower :=
+    PrincipalNestTarget.conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
+      c hTower (h_uniform h_mol c hc hTower)
+  exact PrincipalNestTarget.paraPuzzle_shrink_of_conformalModulusNotSummableTarget c hc hTower hdiv
+
 /-- Under the current model, conformal and Gaussian bridge data are equivalent. -/
 theorem moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData :
     MoleculeConformalModulusLowerBoundData ↔ MoleculeModulusLowerBoundData := by
@@ -107,6 +133,11 @@ theorem moleculeConformalModulusLowerBoundData_of_moleculeModulusLowerBoundData
 theorem moleculeModulusLowerBoundData_of_moleculeConformalModulusLowerBoundData
     (h : MoleculeConformalModulusLowerBoundData) : MoleculeModulusLowerBoundData :=
   (moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData).1 h
+
+theorem moleculeModulusLowerBoundData_of_uniformConformalLowerBoundData
+    (h : MoleculeUniformConformalLowerBoundData) : MoleculeModulusLowerBoundData := by
+  exact moleculeModulusLowerBoundData_of_moleculeConformalModulusLowerBoundData
+    (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h)
 
 /-- Parameter-piece shrinkage from an explicit Molecule→modulus bridge datum. -/
 theorem molecule_parameter_shrink_of_tower_of_modulusLowerBoundData
@@ -166,6 +197,17 @@ theorem refined_conjecture_implies_lc_of_tower_of_conformalModulusLowerBoundData
   exact lc_at_of_shrink c hc
     (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData h_mod h_mol c hc hTower)
 
+/-- Local connectivity directly from uniform conformal lower-bound bridge data. -/
+theorem refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_mol : MoleculeConjectureRefined)
+    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact lc_at_of_shrink c hc
+    (molecule_parameter_shrink_of_tower_of_uniformConformalLowerBoundData
+      h_uniform h_mol c hc hTower)
+
 /-- Local connectivity from Molecule shrinkage and a puzzle-boundary motion. -/
 theorem refined_conjecture_implies_lc_of_tower
     (h_mod : MoleculeConformalModulusLowerBoundData)
@@ -205,6 +247,17 @@ theorem molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact refined_conjecture_implies_lc_of_tower_of_conformalModulusLowerBoundData
     h_mod h_mol h_motion c hc _h
+
+/-- Bridge from Molecule Conjecture to satellite MLC from uniform conformal
+    lower-bound data. -/
+theorem molecule_conjecture_bridge_of_tower_of_uniformConformalLowerBoundData
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_mol : MoleculeConjectureRefined)
+    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData
+    h_uniform h_mol h_motion c hc _h
 
 /-- The bridge from the Molecule Conjecture to MLC for satellite parameters. -/
 theorem molecule_conjecture_bridge_of_tower

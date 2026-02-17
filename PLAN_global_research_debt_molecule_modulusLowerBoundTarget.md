@@ -71,9 +71,31 @@
   (`molecule_parameter_shrink_of_tower`, `refined_conjecture_implies_lc_of_tower`,
   `molecule_conjecture_bridge_of_tower`, and legacy satellite wrappers) to
   conformal data input, keeping `_of_modulusLowerBoundData` compatibility lemmas.
+- [x] Added a concrete Step-3 proof route scaffold:
+  - `PrincipalNestTarget.UniformConformalLowerBoundTarget`
+  - `conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget`
+  - `MoleculeUniformConformalLowerBoundData`
+  - `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
+- [x] Added direct route wrappers from uniform-conformal data to final bridge use:
+  - `molecule_parameter_shrink_of_tower_of_uniformConformalLowerBoundData`
+  - `refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData`
+  - `molecule_conjecture_bridge_of_tower_of_uniformConformalLowerBoundData`.
+- [x] Added explicit compatibility conversion:
+  - `moleculeModulusLowerBoundData_of_uniformConformalLowerBoundData`.
+- [x] Extended obstruction layer to include the stronger uniform target:
+  - `not_moleculeUniformConformalLowerBoundData_of_mem_mandelbrot_tower`
+  - `not_moleculeUniformConformalLowerBoundData_of_exists_mem_mandelbrot_tower`
+  - `false_of_moleculeUniformConformalLowerBoundData_and_infinitely_renormalizable_has_tower_data`.
+- [x] Routed MainConjecture contradiction-backed bridge data through the stronger
+  uniform scaffold first:
+  - `molecule_uniformConformalLowerBound_data_of_external_ray_axioms`
+  - `molecule_conformalModulusLowerBound_data_of_external_ray_axioms` now derived
+    via `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
 - [ ] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
+  Current progress: proved a sufficient condition (uniform positive conformal
+  lower bound) that implies the conformal non-summability target.
 
 ## Phase 3: Replace Axiom with Theorem
 - [x] Remove axiom declaration `molecule_modulusLowerBoundTarget`.
