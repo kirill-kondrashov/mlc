@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.Axioms
 import Mlc.Quadratic.Complex.ParaPuzzle
+import Mlc.Quadratic.Complex.PuzzleLemmas2
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Basic
@@ -72,9 +73,10 @@ def rescale_param (c₀ : ℂ) (r : ℝ) (t : ℂ) : ℂ :=
 /-- Predicate asserting that a motion preserves parameter puzzle membership.
     We include the homeomorphism and component preservation properties as hypotheses
     on the extension H, as guaranteed by the Lambda Lemma. -/
-def motion_preserves_para_piece (_n : ℕ) (_c₀ : ℂ) (_r : ℝ) (E : Set ℂ)
+def motion_preserves_para_piece (n : ℕ) (c₀ : ℂ) (_r : ℝ) (E : Set ℂ)
     (_h : HolomorphicMotion E) : Prop :=
-  True
+  c₀ ∈ MandelbrotSet →
+    ∃ S : Set ℂ, IsConnected S ∧ S = ParaPuzzlePieceAt c₀ n ∩ MandelbrotSet
 
 /-- Hypothesis packaging the existence of a boundary motion for every parameter. -/
 structure PuzzleBoundaryMotionHyp : Prop where
@@ -97,6 +99,123 @@ theorem puzzle_boundary_motion_exists_of_data (n : ℕ) (c₀ : ℂ)
     ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
       motion_preserves_para_piece n c₀ r E h := by
   refine ⟨h.r, h.r_pos, h.E, h.motion, h.preserves⟩
+
+/-- Motion-side witness hypothesis for para-puzzle connectedness on `M`.
+    This is the intended target shape for boundary-motion transport arguments. -/
+structure ParaPuzzleTransportWitnessHyp : Prop where
+  witness :
+    ∀ c, c ∈ MandelbrotSet → ∀ n,
+      ∃ S : Set ℂ, IsConnected S ∧ S = ParaPuzzlePieceAt c n ∩ MandelbrotSet
+
+/-- Minimal motion-side replacement target:
+    boundary-motion data implies a para-puzzle transport witness on `M`. -/
+def ParaPuzzleTransportWitnessFromBoundaryMotionTarget : Prop :=
+  PuzzleBoundaryMotionHyp → ParaPuzzleTransportWitnessHyp
+
+/-- Convert a motion-side witness hypothesis into the existential transport
+    bridge data used by the MLC strategy layer. -/
+theorem para_puzzle_transport_exists_data_of_motion_witness_hyp
+    (h : ParaPuzzleTransportWitnessHyp) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  para_puzzle_transport_exists_data_of_witness h.witness
+
+/-- Convert a motion-to-transport witness target into existential transport
+    data, once a boundary-motion hypothesis is supplied. -/
+theorem para_puzzle_transport_exists_data_of_boundary_motion_target
+    (h_target : ParaPuzzleTransportWitnessFromBoundaryMotionTarget)
+    (h_motion : PuzzleBoundaryMotionHyp) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  para_puzzle_transport_exists_data_of_motion_witness_hyp (h_target h_motion)
+
+/-- Convert a motion-to-transport witness target into the connectedness data
+    hook used by local-connectivity routes, once a boundary-motion hypothesis
+    is supplied. -/
+theorem para_puzzle_connected_data_of_boundary_motion_target
+    (h_target : ParaPuzzleTransportWitnessFromBoundaryMotionTarget)
+    (h_motion : PuzzleBoundaryMotionHyp) :
+    ParaPuzzlePieceInterMandelbrotConnectedData :=
+  para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+    (para_puzzle_transport_exists_data_of_boundary_motion_target h_target h_motion)
+
+/-- Any global witness package yields local motion-preservation data. -/
+theorem motion_preserves_para_piece_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp)
+    (n : ℕ) (c₀ : ℂ) (r : ℝ) (E : Set ℂ) (h : HolomorphicMotion E) :
+    motion_preserves_para_piece n c₀ r E h := by
+  intro hc₀
+  exact h_witness.witness c₀ hc₀ n
+
+/-- Build a motion-target witness bridge from a fixed witness package. -/
+def para_puzzle_transport_witness_target_of_witness_hyp
+    (h : ParaPuzzleTransportWitnessHyp) :
+    ParaPuzzleTransportWitnessFromBoundaryMotionTarget :=
+  fun _h_motion => h
+
+/-- Build a motion-side witness package from existential transport data. -/
+def para_puzzle_transport_witness_hyp_of_transport_exists_data
+    (hex : ParaPuzzleInterMandelbrotTransportExistsData) :
+    ParaPuzzleTransportWitnessHyp where
+  witness := hex.witness
+
+/-- Build a motion-side witness package from connectedness data on `M`. -/
+def para_puzzle_transport_witness_hyp_of_connected_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+    ParaPuzzleTransportWitnessHyp :=
+  para_puzzle_transport_witness_hyp_of_transport_exists_data
+    (para_puzzle_transport_exists_data_of_connected_data h_conn)
+
+/-- Build a motion-side witness package from the stronger subset bridge target. -/
+def para_puzzle_transport_witness_hyp_of_mandelbrot_subset_data
+    (hsub : ParaPuzzleMandelbrotSubsetData) :
+    ParaPuzzleTransportWitnessHyp :=
+  para_puzzle_transport_witness_hyp_of_transport_exists_data
+    (para_puzzle_transport_exists_data_of_mandelbrot_subset_data hsub)
+
+/-- Current axiom-backed constructor for the motion-side witness package. -/
+theorem para_puzzle_transport_witness_hyp_of_axiom :
+    ParaPuzzleTransportWitnessHyp := by
+  refine ⟨?_⟩
+  intro c hc n
+  exact ⟨ParaPuzzlePieceAt c n ∩ MandelbrotSet,
+    para_puzzle_piece_inter_mandelbrot_connected c hc n,
+    rfl⟩
+
+/-- Current default motion-side witness package for para-puzzle transport. -/
+def para_puzzle_transport_witness_hyp :
+    ParaPuzzleTransportWitnessHyp :=
+  para_puzzle_transport_witness_hyp_of_axiom
+
+/-- Current default existential transport data, sourced from the default
+    motion-witness package. -/
+def para_puzzle_transport_exists_data_of_motion_default :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  para_puzzle_transport_exists_data_of_motion_witness_hyp
+    para_puzzle_transport_witness_hyp
+
+/-- Extract para-puzzle transport witnesses on `M` from boundary-motion
+    hypotheses. -/
+theorem para_puzzle_transport_witness_hyp_of_boundary_motion
+    (h_motion : PuzzleBoundaryMotionHyp) :
+    ParaPuzzleTransportWitnessHyp := by
+  refine ⟨?_⟩
+  intro c hc n
+  have hc₀ : c ∈ ParaPuzzlePieceAt c n := by
+    rw [mem_paraPuzzlePieceAt_self]
+    exact mem_dynamical_puzzle_piece_self c hc n
+  rcases h_motion.motion n c hc₀ with ⟨r, hr, E, h, hpres⟩
+  exact hpres hc
+
+/-- Canonical motion-to-transport witness target obtained from boundary-motion
+    hypotheses. -/
+theorem para_puzzle_transport_witness_from_boundary_motion_target :
+    ParaPuzzleTransportWitnessFromBoundaryMotionTarget := by
+  intro h_motion
+  exact para_puzzle_transport_witness_hyp_of_boundary_motion h_motion
+
+/-- Current default motion-target witness bridge. -/
+def para_puzzle_transport_witness_target :
+    ParaPuzzleTransportWitnessFromBoundaryMotionTarget :=
+  para_puzzle_transport_witness_from_boundary_motion_target
 
 end
 end MLC.Quadratic

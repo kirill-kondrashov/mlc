@@ -1,6 +1,7 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Yoccoz.Yoccoz
 import Mlc.LcAtOfShrink
 import Mlc.RenormalizationTypes
@@ -24,12 +25,58 @@ open Quadratic Complex Topology Set Filter Molecule
     If the Yoccoz puzzle moduli diverge (Finitely Renormalizable),
     then the intersection of puzzle pieces is a point, implying local connectivity.
     In this skeleton, we take the parameter-plane shrinkage as an explicit hypothesis. -/
+theorem mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact lc_at_of_shrink_of_data h_conn c hc h_para_shrink
+
+/-- Stronger bridge-target variant routed through
+    `ParaPuzzleMandelbrotSubsetData`. -/
+theorem mlc_finitely_renormalizable_of_paraPuzzleMandelbrotSubsetData
+    (hsub : ParaPuzzleMandelbrotSubsetData)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+    c hc _h h_para_shrink
+
+/-- Transport-witness bridge-target variant routed through
+    `ParaPuzzleInterMandelbrotTransportData`. -/
+theorem mlc_finitely_renormalizable_of_paraPuzzleTransportData
+    (htr : ParaPuzzleInterMandelbrotTransportData)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
+    c hc _h h_para_shrink
+
+/-- Existential-transport bridge-target variant routed through
+    `ParaPuzzleInterMandelbrotTransportExistsData`. -/
+theorem mlc_finitely_renormalizable_of_paraPuzzleTransportExistsData
+    (hex : ParaPuzzleInterMandelbrotTransportExistsData)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
+    c hc _h h_para_shrink
+
+/-- Axiom-backed wrapper for `mlc_finitely_renormalizable_of_paraPuzzleConnectedData`. -/
 theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (_h : FinitelyRenormalizable c)
     (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  -- The dynamical shrinkage is provided by Yoccoz; the parameter shrinkage is assumed here.
-  exact lc_at_of_shrink c hc h_para_shrink
+  exact mlc_finitely_renormalizable_of_paraPuzzleTransportExistsData
+    Quadratic.para_puzzle_transport_exists_data_of_motion_default
+    c hc _h h_para_shrink
 
 /-- MLC for Primitive parameters (Lyubich).
     Proved by Lyubich in "Dynamics of Quadratic Polynomials I-II", Acta Mathematica 178 (1997).
@@ -49,16 +96,14 @@ theorem mlc_infinitely_renormalizable
       PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
     (h_bridge :
       MoleculeConjectureRefined →
-      MLC.Quadratic.PuzzleBoundaryMotionHyp →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   cases h_classify c h with
   | inl h_prim => exact mlc_primitive_renormalizable_ax c hc h_prim
   | inr h_tower =>
-      exact molecule_conjecture_implies_mlc_satellite_of_tower h_bridge h_motion c hc h_tower
+      exact molecule_conjecture_implies_mlc_satellite_of_tower h_bridge c hc h_tower
 
 
 
