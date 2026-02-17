@@ -45,6 +45,14 @@
   - `mlc_conjecture_of_bottcher_inj_on_basin_of_paraPuzzleConnectedData`
   - `mlc_conjecture_of_bottcher_left_inverse_on_basin_of_paraPuzzleConnectedData`
   with existing non-suffixed theorems preserved as wrappers.
+- [x] Extend data-parameterized variants to uniform and Molecule bridge-target
+  entry points:
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoundData_of_paraPuzzleConnectedData`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget_of_paraPuzzleConnectedData`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeUniformBridgeTarget_of_paraPuzzleConnectedData`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundData_of_paraPuzzleConnectedData`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_of_moleculeUniformBridgeTarget_of_paraPuzzleConnectedData`
+  with existing non-suffixed theorems preserved as wrappers.
 - [x] Centralize axiom-backed instantiation through
   `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
   (instead of passing the raw axiom constant directly at call sites).
