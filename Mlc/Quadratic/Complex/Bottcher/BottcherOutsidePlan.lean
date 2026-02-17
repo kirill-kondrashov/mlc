@@ -3985,24 +3985,42 @@ lemma basin_escape_outside_open (c : ℂ) :
     linarith
   simpa using hlt
 
+lemma bottcher_left_inv_outside_open_of_local_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 →
+      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z := by
+  intro z hz
+  exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
+
 lemma bottcher_left_inv_outside_open_of_local
     (c : ℂ) :
     ∀ z, ‖z‖ > ‖c‖ + 2 →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
   intro z hz
-  exact Quadratic.external_ray_map_left_inverse_outside_open c z hz
+  simpa [Quadratic.external_ray_map] using
+    bottcher_left_inv_outside_open_of_local_of_data (Quadratic.external_ray_map_exists c) z hz
+
+lemma bottcher_map_inj_on_outside_open_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z hz w hw hzw
+  have hz' :
+      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z :=
+    Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
+  have hw' :
+      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c w) = w :=
+    Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data w hw
+  have h := congrArg (Quadratic.external_ray_map_of_data h_data) hzw
+  simpa [hz', hw'] using h
 
 lemma bottcher_map_inj_on_outside_open (c : ℂ) :
     Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   intro z hz w hw hzw
-  have hz' :
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
-    Quadratic.external_ray_map_left_inverse_outside_open c z hz
-  have hw' :
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
-    Quadratic.external_ray_map_left_inverse_outside_open c w hw
-  have h := congrArg (Quadratic.external_ray_map c) hzw
-  simpa [hz', hw'] using h
+  have h_inj_data :
+      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    bottcher_map_inj_on_outside_open_of_data (Quadratic.external_ray_map_exists c)
+  have hzw' : z = w := h_inj_data hz hw hzw
+  exact hzw'
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
     (c : ℂ)

@@ -59,6 +59,12 @@
     `external_ray_map_eventually_right_inverse_of_data`,
     `external_ray_map_left_inverse_of_injOn_of_data`,
     with existing non-parameterized lemmas rewritten as wrappers.
+  - Extended the split into
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean` for outside-open
+    seed lemmas:
+    `bottcher_left_inv_outside_open_of_local_of_data`,
+    `bottcher_map_inj_on_outside_open_of_data`,
+    with existing non-parameterized versions rewritten as wrappers.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 
