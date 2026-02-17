@@ -37,6 +37,11 @@
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData`
   and keep `mlc_conjecture_of_bottcher_inj_on_basin_onM` as an
   axiom-backed wrapper.
+- [x] Extend data-parameterized variants to basin-injectivity and left-inverse
+  entry points:
+  - `mlc_conjecture_of_bottcher_inj_on_basin_of_paraPuzzleConnectedData`
+  - `mlc_conjecture_of_bottcher_left_inverse_on_basin_of_paraPuzzleConnectedData`
+  with existing non-suffixed theorems preserved as wrappers.
 
 ## Phase 2: Implement Non-Axiomatic Theorem
 - [ ] Replace the axiom declaration in

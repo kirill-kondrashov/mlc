@@ -204,15 +204,29 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeUniformBridgeTarg
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
     is enough to close the strategy. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_of_paraPuzzleConnectedData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData)
+    (h_inj_basin :
+      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
+    h_conn h_classify_ir h_mod
+  intro c _hc
+  exact h_inj_basin c
+
+/-- A parameterized MLC statement: basin injectivity of the Böttcher map
+    is enough to close the strategy. -/
 theorem mlc_conjecture_of_bottcher_inj_on_basin
     (h_classify_ir : IRClassificationData)
     (h_mod : MoleculeConformalModulusLowerBoundData)
     (h_inj_basin :
       ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir h_mod
-  intro c _hc
-  exact h_inj_basin c
+  exact mlc_conjecture_of_bottcher_inj_on_basin_of_paraPuzzleConnectedData
+    para_puzzle_piece_inter_mandelbrot_connected
+    h_classify_ir h_mod h_inj_basin
 
 /-- Uniform conformal lower-bound variant of
     `mlc_conjecture_of_bottcher_inj_on_basin`. -/
@@ -239,6 +253,21 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_of_moleculeUniformBridgeTarget
 
 /-- Basin-wise left-inverse identity for `external_ray_map ∘ bottcher_map`
     is enough to obtain MLC. -/
+theorem mlc_conjecture_of_bottcher_left_inverse_on_basin_of_paraPuzzleConnectedData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData)
+    (h_left_basin :
+      ∀ c, ∀ z, z ∈ Quadratic.basin_of_infinity c →
+        Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) :
+    LocallyConnectedSpace mandelbrotSet := by
+  apply mlc_conjecture_of_bottcher_inj_on_basin_of_paraPuzzleConnectedData
+    h_conn h_classify_ir h_mod
+  intro c
+  exact bottcher_map_inj_on_basin_of_left_inverse c (h_left_basin c)
+
+/-- Basin-wise left-inverse identity for `external_ray_map ∘ bottcher_map`
+    is enough to obtain MLC. -/
 theorem mlc_conjecture_of_bottcher_left_inverse_on_basin
     (h_classify_ir : IRClassificationData)
     (h_mod : MoleculeConformalModulusLowerBoundData)
@@ -246,9 +275,9 @@ theorem mlc_conjecture_of_bottcher_left_inverse_on_basin
       ∀ c, ∀ z, z ∈ Quadratic.basin_of_infinity c →
         Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir h_mod
-  intro c
-  exact bottcher_map_inj_on_basin_of_left_inverse c (h_left_basin c)
+  exact mlc_conjecture_of_bottcher_left_inverse_on_basin_of_paraPuzzleConnectedData
+    para_puzzle_piece_inter_mandelbrot_connected
+    h_classify_ir h_mod h_left_basin
 
 /-- A parameterized MLC statement: if each Böttcher map is a local homeomorphism
     on `ℂ`, basin injectivity follows from the proper/local-homeomorphism
