@@ -65,10 +65,24 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
 
 /-- Bridge from the stronger para-puzzle subset target to the connectedness
     hook used by the strategy theorems. -/
+def paraPuzzleTransportData_of_paraPuzzleMandelbrotSubsetData
+    (hsub : ParaPuzzleMandelbrotSubsetData) :
+    ParaPuzzleInterMandelbrotTransportData :=
+  Quadratic.para_puzzle_transport_data_of_mandelbrot_subset_data hsub
+
+/-- Bridge from the stronger para-puzzle subset target to the connectedness
+    hook used by the strategy theorems. -/
 lemma paraPuzzleConnectedData_of_paraPuzzleMandelbrotSubsetData
     (hsub : ParaPuzzleMandelbrotSubsetData) :
     ParaPuzzlePieceInterMandelbrotConnectedData :=
   Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub
+
+/-- Bridge from the transport-witness target to the connectedness hook used by
+    the strategy theorems. -/
+lemma paraPuzzleConnectedData_of_paraPuzzleTransportData
+    (htr : ParaPuzzleInterMandelbrotTransportData) :
+    ParaPuzzlePieceInterMandelbrotConnectedData :=
+  Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr
 
 /-- The core strategy theorem (internal). -/
 theorem mlc_strategy_of_paraPuzzleConnectedData
@@ -115,6 +129,27 @@ theorem mlc_strategy_of_paraPuzzleMandelbrotSubsetData
     LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
   exact mlc_strategy_of_paraPuzzleConnectedData
     (paraPuzzleConnectedData_of_paraPuzzleMandelbrotSubsetData hsub)
+    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
+
+/-- The core strategy theorem (internal), routed through
+    `ParaPuzzleInterMandelbrotTransportData`. -/
+theorem mlc_strategy_of_paraPuzzleTransportData
+    (htr : ParaPuzzleInterMandelbrotTransportData)
+    (h_param_shrink :
+      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
+    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
+    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
+    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      MLC.Quadratic.PuzzleBoundaryMotionHyp →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
+  exact mlc_strategy_of_paraPuzzleConnectedData
+    (paraPuzzleConnectedData_of_paraPuzzleTransportData htr)
     h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
 
 /-- The core strategy theorem (internal). -/
@@ -180,6 +215,20 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleMandelbrotSubse
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
     (paraPuzzleConnectedData_of_paraPuzzleMandelbrotSubsetData hsub)
+    h_classify_ir h_mod h_inj_basin_onM
+
+/-- A parameterized MLC statement routed through
+    `ParaPuzzleInterMandelbrotTransportData`. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportData
+    (htr : ParaPuzzleInterMandelbrotTransportData)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
+    (paraPuzzleConnectedData_of_paraPuzzleTransportData htr)
     h_classify_ir h_mod h_inj_basin_onM
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map

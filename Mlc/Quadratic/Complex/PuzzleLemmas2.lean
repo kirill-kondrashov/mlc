@@ -76,6 +76,16 @@ def ParaPuzzlePieceInterMandelbrotConnectedData : Prop :=
 def ParaPuzzleMandelbrotSubsetData : Prop :=
   ∀ c, c ∈ MandelbrotSet → ∀ n, MandelbrotSet ⊆ ParaPuzzlePieceAt c n
 
+/-- Transport-witness bridge target: each para-puzzle intersection on `M` is
+    identified with an explicitly connected set. -/
+structure ParaPuzzleInterMandelbrotTransportData where
+  transportSet : ℂ → ℕ → Set ℂ
+  connected :
+    ∀ c, c ∈ MandelbrotSet → ∀ n, IsConnected (transportSet c n)
+  eq_inter :
+    ∀ c, c ∈ MandelbrotSet → ∀ n,
+      transportSet c n = ParaPuzzlePieceAt c n ∩ MandelbrotSet
+
 theorem para_puzzle_piece_inter_mandelbrot_connected_of_data
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
     (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
@@ -99,6 +109,34 @@ theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_d
     ParaPuzzlePieceInterMandelbrotConnectedData := by
   intro c hc n
   exact para_puzzle_piece_inter_mandelbrot_connected_of_mandelbrot_subset c n (hsub c hc n)
+
+theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data
+    (htr : ParaPuzzleInterMandelbrotTransportData) :
+    ParaPuzzlePieceInterMandelbrotConnectedData := by
+  intro c hc n
+  have h_conn : IsConnected (htr.transportSet c n) := htr.connected c hc n
+  have h_eq : htr.transportSet c n = ParaPuzzlePieceAt c n ∩ MandelbrotSet :=
+    htr.eq_inter c hc n
+  simpa [h_eq] using h_conn
+
+def para_puzzle_transport_data_of_connected_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+    ParaPuzzleInterMandelbrotTransportData where
+  transportSet c n := ParaPuzzlePieceAt c n ∩ MandelbrotSet
+  connected c hc n := h_conn c hc n
+  eq_inter _c _hc _n := rfl
+
+def para_puzzle_transport_data_of_mandelbrot_subset_data
+    (hsub : ParaPuzzleMandelbrotSubsetData) :
+    ParaPuzzleInterMandelbrotTransportData :=
+  para_puzzle_transport_data_of_connected_data
+    (para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+
+def para_puzzle_transport_data_of_axiom :
+    ParaPuzzleInterMandelbrotTransportData where
+  transportSet c n := ParaPuzzlePieceAt c n ∩ MandelbrotSet
+  connected c hc n := para_puzzle_piece_inter_mandelbrot_connected c hc n
+  eq_inter _c _hc _n := rfl
 
 lemma para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
     ParaPuzzlePieceInterMandelbrotConnectedData := by

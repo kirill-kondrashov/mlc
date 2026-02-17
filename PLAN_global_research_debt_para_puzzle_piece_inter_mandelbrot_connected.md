@@ -88,6 +88,20 @@
 - [x] Propagated `ParaPuzzleMandelbrotSubsetData` wrappers through the full
   parameterized `MainConjecture` entrypoint family (on-M, basin, uniform,
   molecule-target, and left-inverse routes), keeping legacy wrappers unchanged.
+- [x] Added a transport-witness bridge target in
+  `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`:
+  - `ParaPuzzleInterMandelbrotTransportData`
+  - `para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data`
+  - conversion defs:
+    `para_puzzle_transport_data_of_connected_data`,
+    `para_puzzle_transport_data_of_mandelbrot_subset_data`,
+    `para_puzzle_transport_data_of_axiom`
+  and threaded it through core finite/strategy entrypoints:
+  - `lc_at_of_shrink_of_transport_data`
+  - `mlc_finitely_renormalizable_of_paraPuzzleTransportData`
+  - `mlc_strategy_of_paraPuzzleTransportData`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportData`
+  so future motion/transport proofs can plug in directly.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
 - [ ] Next concrete proof target: derive
