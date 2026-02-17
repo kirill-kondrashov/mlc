@@ -1370,7 +1370,7 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
     ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w := by
   simpa [Quadratic.external_ray_map] using
     exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data
-      (Quadratic.external_ray_map_exists c) z w hz hw hphi
+      (Quadratic.external_ray_map_data c) z w hz hw hphi
 
 /-- Non-axiomatic on-M basin injectivity, derived from basin dynamics and
     outside left-inverse data. -/

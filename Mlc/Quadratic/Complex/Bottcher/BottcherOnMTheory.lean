@@ -517,7 +517,7 @@ theorem bottcher_left_inv_of_injective
     (h_inj : Function.Injective (bottcher_map c)) :
     external_ray_map c (bottcher_map c z) = z := by
   simpa [Quadratic.external_ray_map] using
-    bottcher_left_inv_of_injective_of_data (Quadratic.external_ray_map_exists c) z h_norm h_inj
+    bottcher_left_inv_of_injective_of_data (Quadratic.external_ray_map_data c) z h_norm h_inj
 
 theorem external_ray_map_right_inverse_on_exterior_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) (w : ℂ) (hw : 1 < ‖w‖) :
@@ -548,7 +548,7 @@ theorem external_ray_map_mem_outside (c : ℂ)
     {w : ℂ} (hw : 1 < ‖w‖) :
     Quadratic.external_ray_map c w ∈ outside_disk c := by
   simpa [Quadratic.external_ray_map] using
-    external_ray_map_mem_outside_of_data (Quadratic.external_ray_map_exists c) hpre hw
+    external_ray_map_mem_outside_of_data (Quadratic.external_ray_map_data c) hpre hw
 
 theorem external_ray_map_continuousOn_exterior (c : ℂ) :
     ContinuousOn (Quadratic.external_ray_map c) {w | 1 < ‖w‖} := by
@@ -580,7 +580,7 @@ theorem external_ray_map_eventually_right_inverse
       Quadratic.bottcher_map c (Quadratic.external_ray_map c y) = y := by
   simpa [Quadratic.external_ray_map] using
     external_ray_map_eventually_right_inverse_of_data
-      (Quadratic.external_ray_map_exists c) w hw
+      (Quadratic.external_ray_map_data c) w hw
 
 theorem external_ray_map_left_inverse_of_injOn_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) {s : Set ℂ} {z : ℂ}
@@ -603,7 +603,7 @@ theorem external_ray_map_left_inverse_of_injOn
     (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.bottcher_map c z‖) :
     Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
   simpa [Quadratic.external_ray_map] using
-    external_ray_map_left_inverse_of_injOn_of_data (Quadratic.external_ray_map_exists c)
+    external_ray_map_left_inverse_of_injOn_of_data (Quadratic.external_ray_map_data c)
       hsinj hmem hzs hnorm
 
 theorem bottcher_map_norm_gt_one_of_basin

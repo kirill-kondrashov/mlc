@@ -79,6 +79,10 @@
   - Added corresponding top-level closure route in
     `Mlc/MainConjecture.lean`:
     `mlc_conjecture_of_outside_inj_and_surj_two`.
+  - Replaced direct `external_ray_map_exists` uses in active proof files
+    (`MainConjecture`, `BottcherOnMTheory`, `BottcherOutsidePlan`) with
+    `Quadratic.external_ray_map_data`; direct axiom calls are now confined to
+    `BottcherAxioms` API wrappers.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 
