@@ -41,9 +41,6 @@ structure HolomorphicMotion (E : Set ℂ) where
   /-- For each fixed z in E, it is holomorphic in time on the unit disk -/
   h_holo : ∀ z ∈ E, DifferentiableOn ℂ (fun t ↦ f t z) (Metric.ball 0 1)
 
-/-- The Mandelbrot set is compact. -/
-axiom mandelbrot_set_compact : IsCompact MandelbrotSet
-
 end MLC.Quadratic
 
 /-!

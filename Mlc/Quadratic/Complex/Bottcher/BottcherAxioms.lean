@@ -100,13 +100,6 @@ noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
 def bottcher_domain (c : ℂ) : Set ℂ :=
   external_ray_map c '' {w | 1 < ‖w‖}
 
-namespace Axioms
-
-axiom bottcher_continuous_on (c : ℂ) :
-    ContinuousOn (bottcher_map c) (bottcher_domain c)
-
-end Axioms
-
 theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
     ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) := by
   dsimp [bottcher_map]
@@ -121,10 +114,6 @@ theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
         simpa using (norm_ne_zero_iff.mpr h)
       exact div_self hz
   rw [this, one_mul]
-
-lemma bottcher_continuous_on (c : ℂ) :
-    ContinuousOn (bottcher_map c) (bottcher_domain c) :=
-  Axioms.bottcher_continuous_on c
 
 lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
     (_hw : w ∈ bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
@@ -207,9 +196,6 @@ noncomputable def fixed_point (c : ℂ) : ℂ :=
 lemma fixed_point_mem_K (c : ℂ) : fixed_point c ∈ MLC.Quadratic.K c :=
   (Classical.choose_spec (exists_fixed_point_mem_K c))
 
-axiom invariance_of_domain_complex {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
-    (hf : ContinuousOn f U) (hinj : Set.InjOn f U) : IsOpenMap (U.restrict f)
-
 /-- The sequence of roots converges locally uniformly to the Böttcher map. -/
 axiom bottcher_seq_converges (c : ℂ) :
     TendstoLocallyUniformlyOn (fun n z => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
@@ -243,19 +229,6 @@ theorem bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
   ·
     have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
     exact hspec w hw
-
-/-!
-Auxiliary dynamical axiom used by the Böttcher injectivity strategy.
-
-We assume that if two points in the basin of infinity have a common
-iterate under `z ↦ z^2 + c`, then the points are equal. This is stronger
-than true dynamics in general, but it captures the intended injectivity
-input for the proof outline.
--/
-axiom quadratic_map_iter_eq_imp_eq (c : ℂ) :
-    ∀ z w, z ∈ Quadratic.basin_of_infinity c →
-      w ∈ Quadratic.basin_of_infinity c →
-      (∃ n, (MLC.quadratic_map c)^[n] z = (MLC.quadratic_map c)^[n] w) → z = w
 
 end Quadratic
 
