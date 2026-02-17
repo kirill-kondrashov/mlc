@@ -53,7 +53,8 @@ theorem parameter_shrink (c : ℂ) :
   intro h
   exact para_puzzle_piece_basis c h
 
-/-- Parameter puzzle pieces intersected with the Mandelbrot set are connected.
+/-- Parameter puzzle pieces intersected with the Mandelbrot set are connected
+    for Mandelbrot base parameters.
     Proof idea:
     The set `P_n ∩ M` corresponds to parameters `c ∈ M` such that `c` (or `0`? via correspondence)
     is in the dynamical piece `D_n(c)`.
@@ -62,7 +63,8 @@ theorem parameter_shrink (c : ℂ) :
     Since `0 ∈ K(c) ⊆ D_n(c)`, the condition is satisfied for all `c ∈ M`.
     So `P_n ∩ M` is effectively just `M`?
     (The proof shows `M ⊆ P_n` implies `P_n ∩ M = M`, and `M` is connected). -/
-axiom para_puzzle_piece_inter_mandelbrot_connected (c : ℂ) (n : ℕ) :
+axiom para_puzzle_piece_inter_mandelbrot_connected (c : ℂ)
+    (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet)
 
 /-- Replacement hook for `para_puzzle_piece_inter_mandelbrot_connected`. -/
@@ -101,7 +103,7 @@ theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_d
 lemma para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
     ParaPuzzlePieceInterMandelbrotConnectedData := by
   intro c hc n
-  exact para_puzzle_piece_inter_mandelbrot_connected c n
+  exact para_puzzle_piece_inter_mandelbrot_connected c hc n
 
 end
 

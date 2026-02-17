@@ -62,6 +62,9 @@
 - [x] Narrow the data target to the actually required domain:
   `∀ c ∈ MandelbrotSet, ∀ n, IsConnected (...)`
   (rather than all `c : ℂ`).
+- [x] Narrow the remaining axiom statement itself to the on-`M` form
+  (`c ∈ MandelbrotSet`) while keeping the same axiom name, so no broader
+  dependence remains hidden behind wrappers.
 
 ## Phase 2: Implement Non-Axiomatic Theorem
 - [ ] Replace the axiom declaration in
