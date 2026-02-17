@@ -63,6 +63,10 @@
 - [x] Added combined inconsistency lemmas with global IR→tower data:
   - `false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data`
   - `false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data`.
+- [x] Migrated `Mlc/MainConjecture.lean` wrapper interfaces to consume
+  `MoleculeConformalModulusLowerBoundData` directly, with
+  `molecule_conformalModulusLowerBound_data_of_external_ray_axioms` as the
+  current contradiction-backed instantiation.
 - [ ] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
