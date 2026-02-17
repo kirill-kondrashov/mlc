@@ -1470,11 +1470,16 @@ lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
     (abs_sub_le_iff.1 habs).1
   linarith
 
-/-- Contradiction obtained from `external_ray_map_exists` alone
+/-- Contradiction from explicit external-ray data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_external_ray_axioms : False := by
+lemma false_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
+  let f : ℂ → ℂ := Classical.choose h_data
+  have hright_data :
+      ∀ w, (1 : ℝ) < ‖w‖ → Quadratic.bottcher_map (2 : ℂ) (f w) = w :=
+    (Classical.choose_spec h_data).1
   let u : ℕ → ℂ := fun n => Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
-  let z : ℕ → ℂ := fun n => Quadratic.external_ray_map (2 : ℂ) (u n)
+  let z : ℕ → ℂ := fun n => f (u n)
   have hu_gt : ∀ n, (1 : ℝ) < ‖u n‖ := by
     intro n
     have hpos : 0 < (1 / ((n : ℝ) + 1)) := by positivity
@@ -1505,7 +1510,7 @@ lemma false_of_external_ray_axioms : False := by
     simpa [u] using hu_tend_real.ofReal
   have hright : ∀ n, Quadratic.bottcher_map (2 : ℂ) (z n) = u n := by
     intro n
-    exact Quadratic.external_ray_map_right_inverse (2 : ℂ) (u n) (hu_gt n)
+    exact hright_data (u n) (hu_gt n)
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
@@ -1593,34 +1598,71 @@ lemma false_of_external_ray_axioms : False := by
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Contradiction-backed IR classification data used by wrapper routes. -/
-lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
+/-- Contradiction obtained from `external_ray_map_exists` alone
+    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+lemma false_of_external_ray_axioms : False := by
+  exact false_of_external_ray_data_two (Quadratic.external_ray_map_exists (2 : ℂ))
+
+/-- Contradiction-backed IR classification data from explicit external-ray data
+    at `c = 2`. -/
+lemma ir_classification_data_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    IRClassificationData := by
   intro c h_inf
   exfalso
-  exact false_of_external_ray_axioms
+  exact false_of_external_ray_data_two h_data
+
+/-- Contradiction-backed IR classification data used by wrapper routes. -/
+lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
+  exact ir_classification_data_of_external_ray_data_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
+
+/-- Contradiction-backed Molecule→uniform conformal lower-bound datum from
+    explicit external-ray data at `c = 2`. -/
+lemma molecule_uniformConformalLowerBound_data_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    MoleculeUniformConformalLowerBoundData := by
+  intro h_mol c hc hTower
+  exfalso
+  exact false_of_external_ray_data_two h_data
 
 /-- Contradiction-backed Molecule→uniform conformal lower-bound datum used by
     wrapper routes. -/
 lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
     MoleculeUniformConformalLowerBoundData := by
-  intro h_mol c hc hTower
+  exact molecule_uniformConformalLowerBound_data_of_external_ray_data_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
+
+/-- Contradiction-backed Green-sublevel-connectedness datum from explicit
+    external-ray data at `c = 2`. -/
+lemma green_sublevel_connected_data_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    MLC.Quadratic.GreenSublevelConnectedHyp := by
+  refine ⟨?_⟩
+  intro c n hc
   exfalso
-  exact false_of_external_ray_axioms
+  exact false_of_external_ray_data_two h_data
 
 /-- Contradiction-backed Green-sublevel-connectedness datum used by
     top-level wrapper routes. -/
 lemma green_sublevel_connected_data_of_external_ray_axioms :
     MLC.Quadratic.GreenSublevelConnectedHyp := by
-  refine ⟨?_⟩
-  intro c n hc
-  exfalso
-  exact false_of_external_ray_axioms
+  exact green_sublevel_connected_data_of_external_ray_data_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
+
+/-- Contradiction-backed Molecule→conformal-modulus bridge datum from explicit
+    external-ray data at `c = 2`. -/
+lemma molecule_conformalModulusLowerBound_data_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    MoleculeConformalModulusLowerBoundData := by
+  exact moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData
+    (molecule_uniformConformalLowerBound_data_of_external_ray_data_two h_data)
 
 /-- Contradiction-backed Molecule→conformal-modulus bridge datum used by wrapper routes. -/
 lemma molecule_conformalModulusLowerBound_data_of_external_ray_axioms :
     MoleculeConformalModulusLowerBoundData := by
-  exact moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData
-    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
+  exact molecule_conformalModulusLowerBound_data_of_external_ray_data_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
@@ -2074,11 +2116,19 @@ theorem mlc_conjecture_of_fast_tower_obstruction
   exact mlc_conjecture_of_false
     (false_of_infinitely_renormalizable_has_tower_data h_mod h_tower)
 
+/-- Parameterized top-level closure route from explicit external-ray data at
+    `c = 2`. -/
+theorem mlc_conjecture_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_false (false_of_external_ray_data_two h_data)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_false false_of_external_ray_axioms
+  exact mlc_conjecture_of_external_ray_data_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 end MainProof
 

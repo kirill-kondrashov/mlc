@@ -33,6 +33,13 @@
   - Replaced non-local direct
     `Classical.choose_spec (external_ray_map_exists ...)` usages with helper
     lemmas from `BottcherAxioms`.
+  - Parameterized the contradiction stack in `Mlc/MainConjecture.lean` by
+    explicit `ExternalRayMapData (2 : ℂ)`:
+    `false_of_external_ray_data_two` and data-parameterized wrapper builders,
+    with existing axiom-backed lemmas now thin specializations.
+  - Added `mlc_conjecture_of_external_ray_data_two` and rewired
+    `mlc_conjecture` as a one-line specialization. Axiom usage is now
+    concentrated at a single instantiation site.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 
@@ -66,7 +73,7 @@
   - `ExternalRayMapData c : Prop`
   capturing the two properties currently returned by
   `external_ray_map_exists c`.
-- [ ] **M4:** prove `external_ray_map_exists_of_data` and thread data through
+- [x] **M4:** prove `external_ray_map_exists_of_data` and thread data through
   call sites.
 - [ ] **M5:** either:
   - prove `ExternalRayMapData c` from existing inverse-branch machinery, or
