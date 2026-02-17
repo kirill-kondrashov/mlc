@@ -93,11 +93,18 @@
   - `molecule_uniformConformalLowerBound_data_of_external_ray_axioms`
   - `molecule_conformalModulusLowerBound_data_of_external_ray_axioms` now derived
     via `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
-- [ ] Prove analog of
+- [x] Added MainConjecture uniform-data entry points so the MLC strategy can be
+  fed directly by the stronger target:
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoundData`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundData`.
+- [x] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
-  Current progress: proved a sufficient condition (uniform positive conformal
-  lower bound) that implies the conformal non-summability target.
+  Completed via
+  `PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget`.
+- [ ] Construct `MoleculeUniformConformalLowerBoundData` non-contradictorily
+  from Molecule-conjecture hypotheses (current wrappers still instantiate via
+  `false_of_external_ray_axioms`).
 
 ## Phase 3: Replace Axiom with Theorem
 - [x] Remove axiom declaration `molecule_modulusLowerBoundTarget`.

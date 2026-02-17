@@ -125,6 +125,19 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
     exact molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData
       h_mod h_mol h_motion c hc hTower
 
+/-- Uniform conformal lower-bound variant of
+    `mlc_conjecture_of_bottcher_inj_on_basin_onM`. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoundData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir
+    (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
+    h_inj_basin_onM
+
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
     is enough to close the strategy. -/
 theorem mlc_conjecture_of_bottcher_inj_on_basin
@@ -136,6 +149,18 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin
   apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir h_mod
   intro c _hc
   exact h_inj_basin c
+
+/-- Uniform conformal lower-bound variant of
+    `mlc_conjecture_of_bottcher_inj_on_basin`. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_inj_basin :
+      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir
+    (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
+    h_inj_basin
 
 /-- Basin-wise left-inverse identity for `external_ray_map ∘ bottcher_map`
     is enough to obtain MLC. -/
