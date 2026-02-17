@@ -126,6 +126,14 @@
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeUniformBridgeTarget`
   - `mlc_conjecture_of_bottcher_inj_on_basin_of_moleculeUniformBridgeTarget`.
+- [x] Added explicit hardening-oriented Step 2b wrapper variants in
+  `Mlc/MainConjecture.lean` that accept IR-classification data and uniform
+  bridge data directly (non-contradictory entry points), including:
+  - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM_of_uniformConformalLowerBoundData`
+  - `mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data_of_uniformConformalLowerBoundData`
+  - `mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_of_uniformConformalLowerBoundData`
+  - `mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data_of_uniformConformalLowerBoundData`
+  - `mlc_conjecture_of_eventual_slit_global_inverse_data_of_uniformConformalLowerBoundData`.
 - [x] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
@@ -163,6 +171,8 @@
 - [x] `scripts/verify_output.sh` passes with updated README.
 
 ### Hardening Completion (Still Open)
+- [x] Non-contradictory entry points exist for the Step 2b wrapper family
+  (explicit IR classification + uniform bridge data arguments).
 - [ ] Active MainConjecture bridge wrappers no longer use
   contradiction-backed data instantiation.
 - [ ] `MoleculeUniformConformalLowerBoundData` (or equivalent stronger bridge

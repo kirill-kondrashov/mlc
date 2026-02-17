@@ -1402,46 +1402,106 @@ theorem bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inve
   exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
     (h_basin_onM c hc)
 
+/-- Parameterized wrapper for the on-M minimal basin redesign target, using
+    explicit IR classification and uniform Molecule bridge data. -/
+theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM_of_uniformConformalLowerBoundData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_basin_onM : BasinBottcherPointwiseLeftInverseDataOnM) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoundData
+    h_classify_ir h_uniform
+    (bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inverse_data_onM
+      h_basin_onM)
+
+/-- Parameterized on-M Step 2b wrapper formulated directly as basin injectivity
+    of `bottcher_map`, with explicit IR classification and uniform bridge data. -/
+theorem mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data_of_uniformConformalLowerBoundData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_inj_onM : BottcherMapInjOnBasinOnMData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoundData
+    h_classify_ir h_uniform h_inj_onM
+
+/-- Parameterized wrapper for the global minimal basin redesign target, using
+    explicit IR classification and uniform Molecule bridge data. -/
+theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_basin : BasinBottcherPointwiseLeftInverseData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM_of_uniformConformalLowerBoundData
+    h_classify_ir h_uniform
+    (basin_bottcher_pointwise_left_inverse_data_onM_of_global h_basin)
+
+/-- Parameterized wrapper for the redesigned Step 2b target, using explicit
+    IR classification and uniform Molecule bridge data. -/
+theorem mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_point : EventualSlitPointwiseLeftInverseData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
+    h_classify_ir h_uniform
+    (basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point)
+
+/-- Parameterized wrapper for the remaining Step 2b target, using explicit
+    IR classification and uniform Molecule bridge data. -/
+theorem mlc_conjecture_of_eventual_slit_global_inverse_data_of_uniformConformalLowerBoundData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData)
+    (h_global : EventualSlitGlobalInverseData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
+    h_classify_ir h_uniform
+    (eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data h_global)
+
 /-- Main-conjecture wrapper for the on-M minimal basin redesign target. -/
 theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
     (h_basin_onM : BasinBottcherPointwiseLeftInverseDataOnM) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_inj_on_basin_onM
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM_of_uniformConformalLowerBoundData
     ir_classification_data_of_external_ray_axioms
-    molecule_conformalModulusLowerBound_data_of_external_ray_axioms
-    (bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inverse_data_onM
-      h_basin_onM)
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
+    h_basin_onM
 
 /-- Equivalent on-M Step 2b wrapper formulated directly as basin injectivity
     of `bottcher_map`. -/
 theorem mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data
     (h_inj_onM : BottcherMapInjOnBasinOnMData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_inj_on_basin_onM
+  exact mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data_of_uniformConformalLowerBoundData
     ir_classification_data_of_external_ray_axioms
-    molecule_conformalModulusLowerBound_data_of_external_ray_axioms
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
     h_inj_onM
 
 /-- Main-conjecture wrapper for the minimal basin redesign target. -/
 theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
     (h_basin : BasinBottcherPointwiseLeftInverseData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
-    (basin_bottcher_pointwise_left_inverse_data_onM_of_global h_basin)
+  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
+    ir_classification_data_of_external_ray_axioms
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
+    h_basin
 
 /-- Main-conjecture wrapper for the redesigned Step 2b target. -/
 theorem mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data
     (h_point : EventualSlitPointwiseLeftInverseData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
-    (basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point)
+  exact mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
+    ir_classification_data_of_external_ray_axioms
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
+    h_point
 
 /-- Main-conjecture wrapper for the remaining Step 2b target. -/
 theorem mlc_conjecture_of_eventual_slit_global_inverse_data
     (h_global : EventualSlitGlobalInverseData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data
-    (eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data h_global)
+  exact mlc_conjecture_of_eventual_slit_global_inverse_data_of_uniformConformalLowerBoundData
+    ir_classification_data_of_external_ray_axioms
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
+    h_global
 
 /-- Parameterized extension route: enough eventual-slit extension data implies
     MLC (this route is currently ruled out by
@@ -1452,9 +1512,9 @@ theorem mlc_conjecture_of_eventual_slit_global_extension
         ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
           Quadratic.EventualSlitGlobalInverseExtendsToBasin c hA hG) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin
+  apply mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundData
     ir_classification_data_of_external_ray_axioms
-    molecule_conformalModulusLowerBound_data_of_external_ray_axioms
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
   intro c
   rcases h_ext c with ⟨hA, hG, _hext⟩
   exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise c hA hG
