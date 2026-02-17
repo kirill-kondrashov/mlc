@@ -138,6 +138,13 @@ lemma external_ray_map_left_inverse_large (c : ℂ) (z : ℂ) (hz : ‖z‖ > �
   simpa [external_ray_map] using
     external_ray_map_of_data_left_inverse_large (external_ray_map_exists c) z hz
 
+theorem external_ray_map_data (c : ℂ) : ExternalRayMapData c := by
+  refine ⟨external_ray_map c, ?_, ?_⟩
+  · intro w hw
+    exact external_ray_map_right_inverse c w hw
+  · intro z hz
+    exact external_ray_map_left_inverse_large c z hz
+
 /-! Domain for the Böttcher coordinate. -/
 def bottcher_domain (c : ℂ) : Set ℂ :=
   external_ray_map c '' {w | 1 < ‖w‖}

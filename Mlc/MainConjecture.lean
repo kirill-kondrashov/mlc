@@ -1614,7 +1614,7 @@ lemma false_of_external_ray_data_two
 /-- Contradiction obtained from `external_ray_map_exists` alone
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma external_ray_data_two_axiom : Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_exists (2 : ℂ)
+  Quadratic.external_ray_map_data (2 : ℂ)
 
 /-- Contradiction obtained from `external_ray_map_exists` alone
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/

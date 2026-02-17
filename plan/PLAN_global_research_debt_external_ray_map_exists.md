@@ -127,10 +127,10 @@
 
 ## Current Blocker for M5
 - The axiom dependency is now concentrated at one specialization site:
-  `Mlc/MainConjecture.lean` defines `external_ray_data_two_axiom` as the single
-  direct use of `Quadratic.external_ray_map_exists (2 : ℂ)`, and all
-  contradiction/closure wrappers (including `mlc_conjecture`) specialize through
-  that handle.
+  `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` now exposes
+  `Quadratic.external_ray_map_data`, and `Mlc/MainConjecture.lean` consumes that
+  theorem via `external_ray_data_two_axiom`; `MainConjecture` no longer calls
+  `external_ray_map_exists` directly.
 - To remove `MLC.Quadratic.external_ray_map_exists` from the footprint, we need
   a non-axiomatic proof of `Quadratic.ExternalRayMapData (2 : ℂ)` (or an
   alternative contradiction route that stays axiom-neutral and does not replace
