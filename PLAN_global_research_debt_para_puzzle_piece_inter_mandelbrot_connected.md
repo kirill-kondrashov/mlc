@@ -45,6 +45,9 @@
   - `mlc_conjecture_of_bottcher_inj_on_basin_of_paraPuzzleConnectedData`
   - `mlc_conjecture_of_bottcher_left_inverse_on_basin_of_paraPuzzleConnectedData`
   with existing non-suffixed theorems preserved as wrappers.
+- [x] Centralize axiom-backed instantiation through
+  `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
+  (instead of passing the raw axiom constant directly at call sites).
 
 ## Phase 2: Implement Non-Axiomatic Theorem
 - [ ] Replace the axiom declaration in

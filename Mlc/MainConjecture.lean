@@ -105,7 +105,7 @@ theorem mlc_strategy
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
   exact mlc_strategy_of_paraPuzzleConnectedData
-    para_puzzle_piece_inter_mandelbrot_connected
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
     h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
 
 /-- Explicit classification data hook for infinitely renormalizable parameters. -/
@@ -150,7 +150,7 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
         Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
-    para_puzzle_piece_inter_mandelbrot_connected
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
     h_classify_ir h_mod h_inj_basin_onM
 
 /-- Uniform conformal lower-bound variant of
@@ -225,7 +225,7 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin
       ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_inj_on_basin_of_paraPuzzleConnectedData
-    para_puzzle_piece_inter_mandelbrot_connected
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
     h_classify_ir h_mod h_inj_basin
 
 /-- Uniform conformal lower-bound variant of
@@ -276,7 +276,7 @@ theorem mlc_conjecture_of_bottcher_left_inverse_on_basin
         Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_left_inverse_on_basin_of_paraPuzzleConnectedData
-    para_puzzle_piece_inter_mandelbrot_connected
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
     h_classify_ir h_mod h_left_basin
 
 /-- A parameterized MLC statement: if each Böttcher map is a local homeomorphism

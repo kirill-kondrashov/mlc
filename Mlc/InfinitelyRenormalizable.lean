@@ -38,7 +38,8 @@ theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.Mandelbr
     (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
-    para_puzzle_piece_inter_mandelbrot_connected c hc _h h_para_shrink
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
+    c hc _h h_para_shrink
 
 /-- MLC for Primitive parameters (Lyubich).
     Proved by Lyubich in "Dynamics of Quadratic Polynomials I-II", Acta Mathematica 178 (1997).
