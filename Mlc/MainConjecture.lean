@@ -1130,17 +1130,6 @@ theorem mlc_conjecture_of_pullback_root
   rcases h_pull c with ⟨_root, _h_root, h_left_bottcher, _h_maps⟩
   exact h_left_bottcher z hz
 
-/-- Top-level hook: enough eventual-slit bridge data per parameter implies MLC. -/
-theorem mlc_conjecture_of_eventual_slit_global_bridge
-    (h_bridge :
-      ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-        ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
-          Quadratic.EventualSlitGlobalInverseExtensionBridge c hA hG) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exfalso
-  rcases h_bridge 0 with ⟨hA, hG, hbr⟩
-  exact Quadratic.not_EventualSlitGlobalInverseExtensionBridge 0 hA hG hbr
-
 /-- The old bridge premise is globally inconsistent with current definitions. -/
 theorem not_eventual_slit_global_bridge_data :
     ¬ (∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
@@ -1435,28 +1424,6 @@ theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_of_uniformC
     h_classify_ir h_uniform
     (basin_bottcher_pointwise_left_inverse_data_onM_of_global h_basin)
 
-/-- Parameterized wrapper for the redesigned Step 2b target, using explicit
-    IR classification and uniform Molecule bridge data. -/
-theorem mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
-    (h_classify_ir : IRClassificationData)
-    (h_uniform : MoleculeUniformConformalLowerBoundData)
-    (h_point : EventualSlitPointwiseLeftInverseData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
-    h_classify_ir h_uniform
-    (basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point)
-
-/-- Parameterized wrapper for the remaining Step 2b target, using explicit
-    IR classification and uniform Molecule bridge data. -/
-theorem mlc_conjecture_of_eventual_slit_global_inverse_data_of_uniformConformalLowerBoundData
-    (h_classify_ir : IRClassificationData)
-    (h_uniform : MoleculeUniformConformalLowerBoundData)
-    (h_global : EventualSlitGlobalInverseData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
-    h_classify_ir h_uniform
-    (eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data h_global)
-
 /-- Main-conjecture wrapper for the on-M minimal basin redesign target. -/
 theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
     (h_basin_onM : BasinBottcherPointwiseLeftInverseDataOnM) :
@@ -1484,88 +1451,6 @@ theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
     ir_classification_data_of_external_ray_axioms
     molecule_uniformConformalLowerBound_data_of_external_ray_axioms
     h_basin
-
-/-- Main-conjecture wrapper for the redesigned Step 2b target. -/
-theorem mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data
-    (h_point : EventualSlitPointwiseLeftInverseData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_eventual_slit_pointwise_left_inverse_data_of_uniformConformalLowerBoundData
-    ir_classification_data_of_external_ray_axioms
-    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
-    h_point
-
-/-- Main-conjecture wrapper for the remaining Step 2b target. -/
-theorem mlc_conjecture_of_eventual_slit_global_inverse_data
-    (h_global : EventualSlitGlobalInverseData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_eventual_slit_global_inverse_data_of_uniformConformalLowerBoundData
-    ir_classification_data_of_external_ray_axioms
-    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
-    h_global
-
-/-- Parameterized extension route: enough eventual-slit extension data implies
-    MLC (this route is currently ruled out by
-    `not_eventual_slit_global_extension_data`). -/
-theorem mlc_conjecture_of_eventual_slit_global_extension
-    (h_ext :
-      ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-        ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
-          Quadratic.EventualSlitGlobalInverseExtendsToBasin c hA hG) :
-    LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundData
-    ir_classification_data_of_external_ray_axioms
-    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
-  intro c
-  rcases h_ext c with ⟨hA, hG, _hext⟩
-  exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise c hA hG
-
-/-- Alternative route: a global inverse on the eventual slit orbit already
-    gives basin injectivity of the Böttcher map, hence MLC. -/
-theorem mlc_conjecture_of_eventual_slit_global_inverse
-    (h_global : EventualSlitGlobalInverseData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_eventual_slit_global_inverse_data h_global
-
-/-- If eventual-slit local inverse atlases are compatible and can be glued to
-    global inverses, MLC follows. -/
-theorem mlc_conjecture_of_eventual_slit_inverse_gluing
-    (h_data :
-      ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-        Quadratic.EventualSlitInverseCompatible hA)
-    (h_glue : ∀ c, Quadratic.EventualSlitInverseGluing c) :
-    LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_eventual_slit_global_inverse
-  intro c
-  rcases h_data c with ⟨hA, hcompat⟩
-  exact ⟨hA, Quadratic.global_inverse_on_eventual_slit_of_gluing hA hcompat (h_glue c)⟩
-
-/-- A decomposed eventual-slit route: nonzero-derivative local inverses, overlap
-    compatibility, and gluing suffice to conclude MLC. -/
-theorem mlc_conjecture_of_eventual_slit_local_to_global
-    (h_deriv : ∀ c, Quadratic.EventualSlitNonzeroDeriv c)
-    (h_uniq : ∀ c, Quadratic.EventualSlitLocalUniqueness c)
-    (h_over : ∀ c, Quadratic.EventualSlitOverlapHyp c)
-    (h_comp : ∀ c, Quadratic.EventualSlitCompatibilityFromOverlap c)
-    (h_glue : ∀ c, Quadratic.EventualSlitInverseGluing c) :
-    LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_eventual_slit_inverse_gluing
-  · intro c
-    let hA : Quadratic.EventualSlitInverseAtlas c :=
-      Quadratic.eventual_slit_inverse_atlas_of_nonzero_deriv c (h_deriv c)
-    have hcompat : Quadratic.EventualSlitInverseCompatible hA :=
-      Quadratic.eventual_slit_inverse_compatible_of_overlap c hA (h_uniq c) (h_over c) (h_comp c)
-    exact ⟨hA, hcompat⟩
-  · exact h_glue
-
-/-- Overlap-free decomposed route: if nonzero-derivative data builds an atlas
-    and compatibility is provided directly for that atlas, then gluing implies
-    MLC. This isolates the remaining viable local-to-global target after
-    ruling out overlap-based compatibility assumptions. -/
-theorem mlc_conjecture_of_eventual_slit_nonzero_deriv_compatible_gluing
-    (h_data : EventualSlitNonzeroDerivCompatibleGluingData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_eventual_slit_global_inverse_data
-    (eventual_slit_global_inverse_data_of_nonzero_deriv_compatible_gluing_data h_data)
 
 /-- Bridge theorem: the pullback-root route is derivable from the
     iterate-equality implication hypothesis. -/
