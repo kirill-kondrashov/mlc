@@ -363,7 +363,7 @@ lemma zero_mem_mandelbrotSet : (0 : ℂ) ∈ MLC.Quadratic.MandelbrotSet := by
         simp [MLC.Quadratic.orbit]
     | succ n ih =>
         simp [MLC.Quadratic.orbit_succ, MLC.Quadratic.fc, ih]
-  simpa [horbit_zero]
+  simp [horbit_zero]
 
 /-- The current `bottcher_map` model is nowhere globally continuous at `0`,
     so the proper/local-homeomorphism-on-basin data target is inconsistent. -/
@@ -421,13 +421,13 @@ theorem not_bottcher_map_inj_on_K_zero :
     intro n
     have h_orbit : MLC.Quadratic.orbit 0 (0 : ℂ) n = 0 :=
       Quadratic.orbit_fixed_point 0 0 h0_fix n
-    simpa [h_orbit]
+    simp [h_orbit]
   have h1K : (1 : ℂ) ∈ MLC.Quadratic.K 0 := by
     refine ⟨1, ?_⟩
     intro n
     have h_orbit : MLC.Quadratic.orbit 0 (1 : ℂ) n = 1 :=
       Quadratic.orbit_fixed_point 0 1 h1_fix n
-    simpa [h_orbit]
+    simp [h_orbit]
   have hgreen0 : MLC.Quadratic.green_function 0 (0 : ℂ) = 0 :=
     (MLC.Quadratic.green_function_eq_zero_iff_mem_K 0 0).2 h0K
   have hgreen1 : MLC.Quadratic.green_function 0 (1 : ℂ) = 0 :=
@@ -643,7 +643,7 @@ lemma eq_of_iterate_eq_and_bottcher_eq_on_basin_onM
           Quadratic.bottcher_map c (quadratic_map c z)
               = (Quadratic.bottcher_map c z) ^ 2 := by
                   simpa using bottcher_conj_on_basin c z hz
-          _ = (Quadratic.bottcher_map c w) ^ 2 := by simpa [hphi]
+          _ = (Quadratic.bottcher_map c w) ^ 2 := by simp [hphi]
           _ = Quadratic.bottcher_map c (quadratic_map c w) := by
                 simpa using (bottcher_conj_on_basin c w hw).symm
       have hquad_eq : quadratic_map c z = quadratic_map c w :=
@@ -695,7 +695,7 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
           = (Quadratic.bottcher_map c z) ^ (2 ^ N) := by
               simpa using bottcher_conj_iter c N z hz
       _ = (Quadratic.bottcher_map c w) ^ (2 ^ N) := by
-            simpa [hphi]
+            simp [hphi]
       _ = Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
             simpa using (bottcher_conj_iter c N w hw).symm
   have hiter : (quadratic_map c)^[N] z = (quadratic_map c)^[N] w := by
@@ -707,7 +707,7 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
                 exact hz_left
       _ = Quadratic.external_ray_map c
             (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) := by
-              simpa [hphiN]
+              simp [hphiN]
       _ = (quadratic_map c)^[N] w := hw_left
   exact ⟨N, hiter⟩
 
@@ -867,7 +867,7 @@ lemma false_of_external_ray_axioms : False := by
         Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) =
             ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
               simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
-        _ = ‖u n‖ := by simpa [hright n]
+        _ = ‖u n‖ := by simp [hright n]
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2

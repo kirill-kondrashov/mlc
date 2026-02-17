@@ -18,7 +18,7 @@ lemma zero_mem_mandelbrotSet_fastTower : (0 : ℂ) ∈ MLC.Quadratic.MandelbrotS
     | zero =>
         simp [MLC.Quadratic.orbit]
     | succ n ih =>
-        simpa [MLC.Quadratic.orbit_succ, MLC.Quadratic.fc, ih]
+        simp [MLC.Quadratic.orbit_succ, MLC.Quadratic.fc, ih]
   simp [horbit]
 
 /-- Under the Gaussian proxy `modulus`, every parameter is infinitely renormalizable
