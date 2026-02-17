@@ -26,6 +26,9 @@
   - hook is now source-localized in `PuzzleLemmas2`:
     `ParaPuzzlePieceInterMandelbrotConnectedData` and
     `para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`.
+- [x] Raw-constant uses have been centralized: outside
+  `PuzzleLemmas2.lean`, production code now depends on the data hook rather than
+  directly on `para_puzzle_piece_inter_mandelbrot_connected`.
 
 ## Phase 1: Isolate Replacement Hook
 - [x] Add `ParaPuzzlePieceInterMandelbrotConnectedData`.
