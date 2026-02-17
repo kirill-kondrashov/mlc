@@ -23,6 +23,9 @@
 - Production dependency path:
   - `Mlc/LcAtOfShrink.lean` (`para_puzzle_piece_induced_connected`)
   - used by `lc_at_of_shrink`, then by main MLC strategy wrappers.
+  - hook is now source-localized in `PuzzleLemmas2`:
+    `ParaPuzzlePieceInterMandelbrotConnectedData` and
+    `para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`.
 
 ## Phase 1: Isolate Replacement Hook
 - [x] Add `ParaPuzzlePieceInterMandelbrotConnectedData`.
