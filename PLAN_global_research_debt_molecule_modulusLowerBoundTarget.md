@@ -114,6 +114,10 @@
   `Mlc/MoleculeToSatelliteNestData.lean`:
   - `bridge_of_moleculeBridgeTarget`
   - `bridge_of_moleculeUniformBridgeTarget`.
+- [x] Added MainConjecture entry points for these bridge targets:
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeUniformBridgeTarget`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_of_moleculeUniformBridgeTarget`.
 - [x] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.

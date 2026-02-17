@@ -9,6 +9,7 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.Quadratic.Complex.Bottcher.InverseBranchSlitUse
 import Mlc.MandelbrotEquivalence
+import Mlc.MoleculeToSatelliteNestData
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Topology.Bornology.Basic
@@ -138,6 +139,42 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoun
     (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
     h_inj_basin_onM
 
+/-- Strong principal-nest bridge-target variant of
+    `mlc_conjecture_of_bottcher_inj_on_basin_onM`. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply mlc_strategy
+  · intro c hc h_fin
+    have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
+      apply MLC.yoccoz_theorem
+      simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin
+    exact parameter_shrink_of_yoccoz c hc h_fin h_dyn
+  · exact bottcher_onM_hyp
+  · exact green_sublevel_connected_onM
+      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
+      h_inj_basin_onM
+  · intro c h_inf
+    exact h_classify_ir c h_inf
+  · exact MoleculeBridgeTarget.bridge_of_moleculeBridgeTarget h_target
+
+/-- Canonical-depth uniform bridge-target variant of
+    `mlc_conjecture_of_bottcher_inj_on_basin_onM`. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeUniformBridgeTarget
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoundData
+    h_classify_ir h_target h_inj_basin_onM
+
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
     is enough to close the strategy. -/
 theorem mlc_conjecture_of_bottcher_inj_on_basin
@@ -161,6 +198,17 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundDat
   exact mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir
     (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
     h_inj_basin
+
+/-- Canonical-depth uniform bridge-target variant of
+    `mlc_conjecture_of_bottcher_inj_on_basin`. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_of_moleculeUniformBridgeTarget
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget)
+    (h_inj_basin :
+      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundData
+    h_classify_ir h_target h_inj_basin
 
 /-- Basin-wise left-inverse identity for `external_ray_map ∘ bottcher_map`
     is enough to obtain MLC. -/
