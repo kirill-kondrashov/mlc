@@ -69,6 +69,16 @@
     data-parameterized form
     `exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data` and made the
     existing axiom-backed lemma a wrapper specialization.
+  - Added a concrete M5 bridge theorem in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+    `external_ray_map_data_of_injOn_outside_open_of_surj_exterior`,
+    reducing `ExternalRayMapData` construction to:
+    1) outside-open injectivity of `bottcher_map`, and
+    2) surjectivity onto `{w | 1 < ‖w‖}` by outside-open preimages
+       (`BottcherSurjOnExteriorFromOutsideOpen`).
+  - Added corresponding top-level closure route in
+    `Mlc/MainConjecture.lean`:
+    `mlc_conjecture_of_outside_inj_and_surj_two`.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 

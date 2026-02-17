@@ -2141,6 +2141,16 @@ theorem mlc_conjecture_of_external_ray_data_two
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_false (false_of_external_ray_data_two h_data)
 
+/-- M5-oriented closure route: enough to build external-ray data at `c = 2`
+    from outside-open injectivity plus exterior surjectivity. -/
+theorem mlc_conjecture_of_outside_inj_and_surj_two
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_data_two
+    (external_ray_map_data_of_injOn_outside_open_of_surj_exterior (2 : ℂ) h_inj h_surj)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture

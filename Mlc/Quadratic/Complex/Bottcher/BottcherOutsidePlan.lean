@@ -4022,6 +4022,42 @@ lemma bottcher_map_inj_on_outside_open (c : ℂ) :
   have hzw' : z = w := h_inj_data hz hw hzw
   exact hzw'
 
+/-- M5 target: surjectivity of `bottcher_map` onto the exterior by preimages in
+    the outside-open seed region. -/
+def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+
+/-- Construct external-ray data from outside-open injectivity + exterior
+    surjectivity by outside-open preimages. -/
+theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
+    (c : ℂ)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    Quadratic.ExternalRayMapData c := by
+  classical
+  let f : ℂ → ℂ := fun w =>
+    if hw : 1 < ‖w‖ then Classical.choose (h_surj w hw) else 0
+  refine ⟨f, ?_, ?_⟩
+  · intro w hw
+    have hspec : Quadratic.bottcher_map c (Classical.choose (h_surj w hw)) = w :=
+      (Classical.choose_spec (h_surj w hw)).2
+    simpa [f, hw] using hspec
+  · intro z hz
+    have hz_out : z ∈ ({z : ℂ | ‖z‖ > ‖c‖ + 2} : Set ℂ) := hz
+    have hz_disk : z ∈ outside_disk c := outside_open_subset_outside_disk c hz_out
+    have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+      outside_disk_subset_quadratic_basin c hz_disk
+    have hpos : 0 < MLC.Quadratic.green_function c z :=
+      green_function_pos_of_basin c z hz_basin
+    have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
+      bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+    have hspec := Classical.choose_spec (h_surj (Quadratic.bottcher_map c z) hnorm)
+    have hz_choose :
+        Classical.choose (h_surj (Quadratic.bottcher_map c z) hnorm) = z := by
+      apply h_inj hspec.1 hz_out
+      simpa using hspec.2
+    simp [f, hnorm, hz_choose]
+
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
     (c : ℂ)
     (hproper : IsProperMap (Quadratic.bottcher_map c))
