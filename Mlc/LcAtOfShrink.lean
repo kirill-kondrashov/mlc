@@ -95,7 +95,9 @@ lemma para_puzzle_piece_induced_connected_of_data
 lemma para_puzzle_piece_induced_connected (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } :=
   para_puzzle_piece_induced_connected_of_data
-    Quadratic.para_puzzle_connected_data c hc n
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+      Quadratic.para_puzzle_transport_exists_data)
+    c hc n
 
 /-- Subset-data route for subtype connectedness. -/
 lemma para_puzzle_piece_induced_connected_of_mandelbrot_subset_data
@@ -186,7 +188,9 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
     (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ :=
   lc_at_of_shrink_of_data
-    Quadratic.para_puzzle_connected_data c hc h
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+      Quadratic.para_puzzle_transport_exists_data)
+    c hc h
 
 /-- Subset-data route for local-connectivity from para-puzzle shrinkage. -/
 lemma lc_at_of_shrink_of_mandelbrot_subset_data

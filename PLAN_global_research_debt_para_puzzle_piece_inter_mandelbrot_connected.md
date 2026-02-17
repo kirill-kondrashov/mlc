@@ -144,8 +144,9 @@
 - [x] Further rerouted non-suffixed strategy/on-M/basin wrappers through
   motion-witness and on-M routes; `Mlc/MainConjecture.lean` no longer contains
   direct fallback uses of `Quadratic.para_puzzle_connected_data`.
-  Remaining fallback uses are currently localized to lower-level wrappers in
-  `Mlc/LcAtOfShrink.lean` and `Mlc/InfinitelyRenormalizable.lean`.
+- [x] Lower-level wrappers were likewise rerouted through
+  `Quadratic.para_puzzle_transport_exists_data`; there are currently no
+  remaining call sites of `Quadratic.para_puzzle_connected_data`.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
 - [ ] Next concrete proof target: derive

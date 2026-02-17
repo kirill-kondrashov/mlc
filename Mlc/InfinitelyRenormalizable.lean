@@ -73,8 +73,8 @@ theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.Mandelbr
     (_h : FinitelyRenormalizable c)
     (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
-    Quadratic.para_puzzle_connected_data
+  exact mlc_finitely_renormalizable_of_paraPuzzleTransportExistsData
+    Quadratic.para_puzzle_transport_exists_data
     c hc _h h_para_shrink
 
 /-- MLC for Primitive parameters (Lyubich).
