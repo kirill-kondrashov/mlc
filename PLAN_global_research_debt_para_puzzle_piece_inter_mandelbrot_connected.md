@@ -141,6 +141,11 @@
   `Quadratic.para_puzzle_connected_data` (instead of directly calling
   `..._of_axiom`), further localizing the final replacement to
   `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`.
+- [x] Further rerouted non-suffixed strategy/on-M/basin wrappers through
+  motion-witness and on-M routes; `Quadratic.para_puzzle_connected_data` now
+  appears only at the non-suffixed
+  `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget`
+  wrapper in `Mlc/MainConjecture.lean`.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
 - [ ] Next concrete proof target: derive
