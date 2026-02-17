@@ -30,6 +30,15 @@ theorem not_modulusNotSummableTarget (c : ℂ) (hTower : SatelliteRenormalizable
   intro hdiv
   exact hdiv hs
 
+/-- The conformal-target variant is also ruled out in the current model,
+    since `cmodulus` is definitionally `modulus`. -/
+theorem not_conformalModulusNotSummableTarget (c : ℂ) (hTower : SatelliteRenormalizableTower c) :
+    ¬ ConformalModulusNotSummableTarget c hTower := by
+  intro hdiv
+  have hdiv' : ModulusNotSummableTarget c hTower :=
+    (conformalModulusNotSummableTarget_iff_modulusNotSummableTarget c hTower).1 hdiv
+  exact not_modulusNotSummableTarget c hTower hdiv'
+
 end PrincipalNestTarget
 
 end

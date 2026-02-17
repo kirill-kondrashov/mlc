@@ -42,6 +42,62 @@ def ModulusNotSummableTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Pr
     MLC.Quadratic.modulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
 
+/-- Conformal-target variant of principal-nest modulus divergence. -/
+def ConformalModulusNotSummableTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
+  ¬ Summable (fun n =>
+    MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
+
+/-- In the current model, conformal and Gaussian proxy targets are definitionally equal. -/
+theorem conformalModulusNotSummableTarget_iff_modulusNotSummableTarget
+    (c : ℂ) (h : SatelliteRenormalizableTower c) :
+    ConformalModulusNotSummableTarget c h ↔ ModulusNotSummableTarget c h := by
+  rfl
+
+/-- Stronger sufficient target: a uniform positive conformal-modulus lower bound
+    along canonical tower depths. -/
+def UniformConformalLowerBoundTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
+  ∃ μ > 0, ∀ n,
+    μ ≤ MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n)
+
+/-- A uniform positive lower bound implies conformal non-summability. -/
+theorem conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
+    (c : ℂ) (h : SatelliteRenormalizableTower c) :
+    UniformConformalLowerBoundTarget c h →
+    ConformalModulusNotSummableTarget c h := by
+  intro h_uniform h_sum
+  rcases h_uniform with ⟨μ, hμ_pos, hμ_lb⟩
+  have h_lim : Filter.Tendsto
+      (fun n =>
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
+      Filter.atTop (nhds 0) :=
+    Summable.tendsto_atTop_zero h_sum
+  rw [Metric.tendsto_atTop] at h_lim
+  specialize h_lim (μ / 2) (by positivity)
+  rcases h_lim with ⟨N, hN⟩
+  have h_dist : dist
+      (MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N)) 0
+      < μ / 2 := hN N (le_refl N)
+  have h_lbN : μ ≤
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) := hμ_lb N
+  have h_nonnegN : 0 ≤
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) :=
+    le_trans (le_of_lt hμ_pos) h_lbN
+  have h_ltN :
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) < μ / 2 := by
+    simpa [Real.dist_eq, abs_of_nonneg h_nonnegN] using h_dist
+  have : ¬ MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) N) < μ := by
+    exact not_lt_of_ge h_lbN
+  have hhalf_le : μ / 2 ≤ μ := by nlinarith [hμ_pos]
+  exact this (lt_of_lt_of_le h_ltN hhalf_le)
+
 /--
 The principal nest annulus is the disjoint union of consecutive puzzle annuli.
 -/
@@ -213,6 +269,53 @@ theorem paraPuzzle_shrink_of_modulusNotSummableTarget (c : ℂ) (hc : c ∈ MLC.
     exact h_full_div
 
   exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_dyn_iInter_eq_singleton c h_dyn
+
+/-- Parameter shrinkage from the conformal principal-nest target. -/
+theorem paraPuzzle_shrink_of_conformalModulusNotSummableTarget
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c) (hdiv : ConformalModulusNotSummableTarget c hTower) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
+    apply MLC.Quadratic.yoccoz_theorem_conformal
+    have h_full_div : ¬ Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)) := by
+      intro h_sum
+      apply hdiv
+
+      let depths := depthsFromSatelliteTower c hTower
+      let A := fun n => MLC.Quadratic.PuzzleAnnulus c n
+      let B := fun n => MLC.Quadratic.PrincipalNest.dynAnnulus c depths n
+
+      have h_summable_B : Summable (fun n => MLC.Quadratic.cmodulus (B n)) := by
+        apply summable_of_sum_range_le (c := ∑' k, MLC.Quadratic.cmodulus (A k))
+        · intro n
+          apply MLC.Quadratic.modulus_nonneg
+        · intro N
+          have h_collapse : ∑ n ∈ Finset.range N, MLC.Quadratic.cmodulus (B n) =
+              ∑ k ∈ Finset.Ico (depths 0) (depths N), MLC.Quadratic.cmodulus (A k) := by
+            induction N with
+            | zero => simp
+            | succ n ih =>
+              rw [Finset.sum_range_succ, ih, principal_nest_modulus_sum c hc hTower n]
+              rw [Finset.sum_Ico_consecutive]
+              · exact depthsFromSatelliteTower_monotone c hTower (Nat.zero_le n)
+              · exact depthsFromSatelliteTower_monotone c hTower (Nat.le_succ n)
+          rw [h_collapse]
+          apply sum_le_hasSum _ (fun k _ => MLC.Quadratic.modulus_nonneg _) h_sum.hasSum
+
+      exact h_summable_B
+    exact h_full_div
+
+  exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_dyn_iInter_eq_singleton c h_dyn
+
+/-- Parameter shrinkage from a uniform conformal-modulus lower bound along the
+    canonical tower depths. -/
+theorem paraPuzzle_shrink_of_uniformConformalLowerBoundTarget
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c)
+    (h_uniform : UniformConformalLowerBoundTarget c hTower) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  exact paraPuzzle_shrink_of_conformalModulusNotSummableTarget c hc hTower
+    (conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget c hTower h_uniform)
 
 end PrincipalNestTarget
 
