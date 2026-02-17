@@ -504,9 +504,8 @@ theorem bottcher_left_inv_of_injective
     (c : ℂ) (z : ℂ) (h_norm : 1 < ‖bottcher_map c z‖)
     (h_inj : Function.Injective (bottcher_map c)) :
     external_ray_map c (bottcher_map c z) = z := by
-  have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
   have hright : bottcher_map c (external_ray_map c (bottcher_map c z)) = bottcher_map c z :=
-    by simpa using (hspec (bottcher_map c z) h_norm)
+    by simpa using external_ray_map_right_inverse c (bottcher_map c z) h_norm
   exact h_inj hright
 
 theorem external_ray_map_right_inverse_on_exterior

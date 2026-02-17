@@ -28,10 +28,9 @@ lemma ray_map_eq_on_symm
   have h_inv :
       bottcher_map c (external_ray_map c (bottcher_map c a)) =
         bottcher_map c a := by
-    have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
     have hw' : 1 < ‖bottcher_map c a‖ := by
       simpa using hw
-    simpa using (hspec (bottcher_map c a) hw')
+    simpa using external_ray_map_right_inverse c (bottcher_map c a) hw'
   have h_symm :
       bottcher_map c
         ((h_emb.toOpenPartialHomeomorph (bottcher_map c)).symm (bottcher_map c a)) =

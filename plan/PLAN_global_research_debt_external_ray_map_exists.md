@@ -22,6 +22,19 @@
   `false_of_external_ray_axioms`.
 - That contradiction explicitly uses `Classical.choose_spec (external_ray_map_exists (2 : ℂ))`.
 - Therefore this axiom is currently the single non-core dependency.
+- Latest code status:
+  - `mlc_conjecture` is now routed through a generic closure helper
+    `mlc_conjecture_of_false`.
+  - An alternate non-external closure API now exists:
+    `mlc_conjecture_of_fast_tower_obstruction`.
+  - Introduced `Quadratic.ExternalRayMapData` in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` with conversion lemmas
+    `external_ray_map_exists_of_data` / `external_ray_map_data_of_exists`.
+  - Replaced non-local direct
+    `Classical.choose_spec (external_ray_map_exists ...)` usages with helper
+    lemmas from `BottcherAxioms`.
+  - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
+    the footprint is unchanged.
 
 ## Strategy Options
 1. **Primary target (recommended): remove contradiction route dependency**
@@ -43,13 +56,13 @@
      - left inverse on sufficiently large `z`.
 
 ## Concrete Milestones
-- [ ] **M1 (footprint):** isolate all `mlc_conjecture` references to
-  `false_of_external_ray_axioms`; introduce an alternate closure path and re-run
-  `make check`.
+- [x] **M1 (footprint):** isolate `mlc_conjecture` closure through
+  `mlc_conjecture_of_false`, introduce an alternate closure path
+  (`mlc_conjecture_of_fast_tower_obstruction`), and re-run `make check`.
 - [ ] **M2 (API hygiene):** split Böttcher helper lemmas into:
   - ones requiring explicit inverse data
   - ones independent of `external_ray_map_exists`
-- [ ] **M3 (constructive inverse package):** define a replacement data target:
+- [x] **M3 (constructive inverse package):** define a replacement data target:
   - `ExternalRayMapData c : Prop`
   capturing the two properties currently returned by
   `external_ray_map_exists c`.
@@ -62,9 +75,9 @@
 - [ ] **M6:** remove/replace the axiom declaration and update README output.
 
 ## Validation
-- [ ] `make build`
-- [ ] `make check`
-- [ ] `scripts/verify_output.sh`
+- [x] `make build`
+- [x] `make check`
+- [x] `scripts/verify_output.sh`
 - [ ] Confirm `MLC.Quadratic.external_ray_map_exists` is absent from
   `check_axioms.lean` output for `MLC.mlc_conjecture`.
 

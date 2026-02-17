@@ -87,14 +87,40 @@ theorem basin_eq_compl_K (c : ℂ) : basin_of_infinity c = (MLC.Quadratic.K c)�
       exact hnot ((boundedOrbit_iff_not_tendsto_infty c z).2 hnt)
     simpa [basin_of_infinity, MLC.basin_of_infinity] using hz'
 
-/-- The inverse of the Böttcher map exists on the exterior (ray map). -/
-axiom external_ray_map_exists (c : ℂ) :
+/-- Data package for an exterior inverse of the Böttcher map. -/
+def ExternalRayMapData (c : ℂ) : Prop :=
     ∃ f : ℂ → ℂ,
       (∀ w, 1 < ‖w‖ → bottcher_map c (f w) = w) ∧
         (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z)
 
+/-- The inverse of the Böttcher map exists on the exterior (ray map). -/
+axiom external_ray_map_exists (c : ℂ) : ExternalRayMapData c
+
+/-- Unpack the ray-map data package into its existential form. -/
+theorem external_ray_map_exists_of_data (c : ℂ) (h_data : ExternalRayMapData c) :
+    ∃ f : ℂ → ℂ,
+      (∀ w, 1 < ‖w‖ → bottcher_map c (f w) = w) ∧
+        (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z) :=
+  h_data
+
+theorem external_ray_map_data_of_exists (c : ℂ)
+    (h_exists :
+      ∃ f : ℂ → ℂ,
+        (∀ w, 1 < ‖w‖ → bottcher_map c (f w) = w) ∧
+          (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z)) :
+    ExternalRayMapData c :=
+  h_exists
+
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
   (Classical.choose (external_ray_map_exists c)) w
+
+lemma external_ray_map_right_inverse (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    bottcher_map c (external_ray_map c w) = w := by
+  exact (Classical.choose_spec (external_ray_map_exists c)).1 w hw
+
+lemma external_ray_map_left_inverse_large (c : ℂ) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    external_ray_map c (bottcher_map c z) = z := by
+  exact (Classical.choose_spec (external_ray_map_exists c)).2 z hz
 
 /-! Domain for the Böttcher coordinate. -/
 def bottcher_domain (c : ℂ) : Set ℂ :=
@@ -118,8 +144,7 @@ theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
 lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
     (_hw : w ∈ bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
     bottcher_map c (external_ray_map c w) = w := by
-  have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
-  exact hspec w hw'
+  exact external_ray_map_right_inverse c w hw'
 
 theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
     (h_inj : Function.Injective (bottcher_map c)) :
@@ -139,15 +164,13 @@ theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
   have hright :
       bottcher_map c (external_ray_map c (bottcher_map c z)) =
         bottcher_map c z := by
-    have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
-    simpa using (hspec (bottcher_map c z) hnorm)
+    simpa using external_ray_map_right_inverse c (bottcher_map c z) hnorm
   exact h_inj hright
 
 lemma external_ray_map_left_inverse_outside_open (c : ℂ) (z : ℂ)
     (hz : ‖z‖ > ‖c‖ + 2) :
     external_ray_map c (bottcher_map c z) = z := by
-  have hspec := (Classical.choose_spec (external_ray_map_exists c)).2
-  exact hspec z hz
+  exact external_ray_map_left_inverse_large c z hz
 
 lemma orbit_fixed_point (c p : ℂ) (hp : MLC.Quadratic.fc c p = p) :
     ∀ n, MLC.Quadratic.orbit c p n = p := by
@@ -226,9 +249,7 @@ theorem bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
     w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c := by
   refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
   · exact ⟨w, hw, rfl⟩
-  ·
-    have hspec := (Classical.choose_spec (external_ray_map_exists c)).1
-    exact hspec w hw
+  · exact external_ray_map_right_inverse c w hw
 
 end Quadratic
 

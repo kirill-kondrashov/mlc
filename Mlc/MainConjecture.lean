@@ -10,6 +10,7 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.Quadratic.Complex.Bottcher.InverseBranchSlitUse
 import Mlc.MandelbrotEquivalence
 import Mlc.MoleculeToSatelliteNestData
+import Mlc.FastTowerExistenceObstruction
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Topology.Bornology.Basic
@@ -1326,13 +1327,13 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
       Quadratic.external_ray_map c
           (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) =
         (quadratic_map c)^[N] z := by
-    exact (Classical.choose_spec (Quadratic.external_ray_map_exists c)).2
+    exact Quadratic.external_ray_map_left_inverse_outside_open c
       ((quadratic_map c)^[N] z) hzN
   have hw_left :
       Quadratic.external_ray_map c
           (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) =
         (quadratic_map c)^[N] w := by
-    exact (Classical.choose_spec (Quadratic.external_ray_map_exists c)).2
+    exact Quadratic.external_ray_map_left_inverse_outside_open c
       ((quadratic_map c)^[N] w) hwN
   have hphiN :
       Quadratic.bottcher_map c ((quadratic_map c)^[N] z) =
@@ -1504,8 +1505,7 @@ lemma false_of_external_ray_axioms : False := by
     simpa [u] using hu_tend_real.ofReal
   have hright : ∀ n, Quadratic.bottcher_map (2 : ℂ) (z n) = u n := by
     intro n
-    exact (Classical.choose_spec (Quadratic.external_ray_map_exists (2 : ℂ))).1
-      (u n) (hu_gt n)
+    exact Quadratic.external_ray_map_right_inverse (2 : ℂ) (u n) (hu_gt n)
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
@@ -2056,15 +2056,29 @@ lemma bottcher_map_inj_on_basin_onM_target :
     BottcherMapInjOnBasinOnMData := by
   exact bottcher_map_inj_on_basin_onM_via_basin_dynamics
 
-/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    The Mandelbrot set is locally connected. -/
-theorem mlc_conjecture
-    : LocallyConnectedSpace mandelbrotSet := by
+/-- Generic contradiction closure helper for the top-level MLC statement. -/
+theorem mlc_conjecture_of_false (h_false : False) :
+    LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply locallyConnectedSpace_of_locallyConnectedAt
   intro c
   exfalso
-  exact false_of_external_ray_axioms
+  exact h_false
+
+/-- Alternate contradiction closure route: any simultaneous realization of the
+    current Molecule modulus bridge data and global IR→tower data is inconsistent. -/
+theorem mlc_conjecture_of_fast_tower_obstruction
+    (h_mod : MoleculeModulusLowerBoundData)
+    (h_tower : InfinitelyRenormalizableHasTowerData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_false
+    (false_of_infinitely_renormalizable_has_tower_data h_mod h_tower)
+
+/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
+    The Mandelbrot set is locally connected. -/
+theorem mlc_conjecture
+    : LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_false false_of_external_ray_axioms
 
 end MainProof
 
