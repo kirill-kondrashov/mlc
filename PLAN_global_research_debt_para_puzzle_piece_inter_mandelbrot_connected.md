@@ -111,6 +111,7 @@
   - `mlc_finitely_renormalizable_of_paraPuzzleTransportExistsData`
   - `mlc_strategy_of_paraPuzzleTransportData`
   - `mlc_strategy_of_paraPuzzleTransportExistsData`
+  - `mlc_strategy_of_paraPuzzleMotionWitnessHyp`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportData`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportExistsData`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportWitness`

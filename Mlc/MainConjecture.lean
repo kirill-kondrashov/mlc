@@ -203,6 +203,27 @@ theorem mlc_strategy_of_paraPuzzleTransportExistsData
     (paraPuzzleConnectedData_of_paraPuzzleTransportExistsData hex)
     h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
 
+/-- The core strategy theorem (internal), routed through
+    `ParaPuzzleTransportWitnessHyp`. -/
+theorem mlc_strategy_of_paraPuzzleMotionWitnessHyp
+    (h_motion_witness : MLC.Quadratic.ParaPuzzleTransportWitnessHyp)
+    (h_param_shrink :
+      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
+    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
+    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
+    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      MLC.Quadratic.PuzzleBoundaryMotionHyp →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
+  exact mlc_strategy_of_paraPuzzleTransportExistsData
+    (paraPuzzleTransportExistsData_ofMotionWitnessHyp h_motion_witness)
+    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
+
 /-- The core strategy theorem (internal). -/
 theorem mlc_strategy
     (h_param_shrink :
