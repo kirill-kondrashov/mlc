@@ -15,6 +15,10 @@ open Quadratic Complex Topology Set Filter
 abbrev ParaPuzzlePieceInterMandelbrotConnectedData : Prop :=
   Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
 
+/-- Stronger bridge target implying para-puzzle connectedness on `M`. -/
+abbrev ParaPuzzleMandelbrotSubsetData : Prop :=
+  Quadratic.ParaPuzzleMandelbrotSubsetData
+
 /-- Local connectivity at a point in a topological space. -/
 def LocallyConnectedAt (X : Type*) [TopologicalSpace X] (x : X) : Prop :=
   ∀ U ∈ 𝓝 x, ∃ V ∈ 𝓝 x, V ⊆ U ∧ IsConnected V
@@ -84,6 +88,15 @@ lemma para_puzzle_piece_induced_connected (c : ℂ) (hc : c ∈ MandelbrotSet) (
   para_puzzle_piece_induced_connected_of_data
     Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom c hc n
 
+/-- Subset-data route for subtype connectedness. -/
+lemma para_puzzle_piece_induced_connected_of_mandelbrot_subset_data
+    (hsub : ParaPuzzleMandelbrotSubsetData)
+    (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
+    IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } :=
+  para_puzzle_piece_induced_connected_of_data
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+    c hc n
+
 /-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set.
     Proof idea: Since the intersection of all parameter pieces `ParaPuzzlePieceAt c n` is exactly `{c}`,
     for any open neighborhood `U` of `c`, there must be some `n` such that `ParaPuzzlePieceAt c n ⊆ U`.
@@ -147,5 +160,15 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ :=
   lc_at_of_shrink_of_data
     Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom c hc h
+
+/-- Subset-data route for local-connectivity from para-puzzle shrinkage. -/
+lemma lc_at_of_shrink_of_mandelbrot_subset_data
+    (hsub : ParaPuzzleMandelbrotSubsetData)
+    (c : ℂ) (hc : c ∈ MandelbrotSet)
+    (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ :=
+  lc_at_of_shrink_of_data
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+    c hc h
 
 end MLC

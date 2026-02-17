@@ -32,6 +32,18 @@ theorem mlc_finitely_renormalizable_of_paraPuzzleConnectedData
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact lc_at_of_shrink_of_data h_conn c hc h_para_shrink
 
+/-- Stronger bridge-target variant routed through
+    `ParaPuzzleMandelbrotSubsetData`. -/
+theorem mlc_finitely_renormalizable_of_paraPuzzleMandelbrotSubsetData
+    (hsub : ParaPuzzleMandelbrotSubsetData)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+    c hc _h h_para_shrink
+
 /-- Axiom-backed wrapper for `mlc_finitely_renormalizable_of_paraPuzzleConnectedData`. -/
 theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (_h : FinitelyRenormalizable c)

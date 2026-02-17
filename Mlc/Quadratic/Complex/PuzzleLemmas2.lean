@@ -69,11 +69,34 @@ axiom para_puzzle_piece_inter_mandelbrot_connected (c : ℂ) (n : ℕ) :
 def ParaPuzzlePieceInterMandelbrotConnectedData : Prop :=
   ∀ c, c ∈ MandelbrotSet → ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet)
 
+/-- Stronger candidate bridge target: every Mandelbrot parameter belongs to each
+    para-puzzle piece centered at a Mandelbrot parameter. -/
+def ParaPuzzleMandelbrotSubsetData : Prop :=
+  ∀ c, c ∈ MandelbrotSet → ∀ n, MandelbrotSet ⊆ ParaPuzzlePieceAt c n
+
 theorem para_puzzle_piece_inter_mandelbrot_connected_of_data
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
     (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet) :=
   h_conn c hc n
+
+theorem para_puzzle_piece_inter_mandelbrot_connected_of_mandelbrot_subset
+    (c : ℂ) (n : ℕ) (hsub : MandelbrotSet ⊆ ParaPuzzlePieceAt c n) :
+    IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet) := by
+  have h_eq : ParaPuzzlePieceAt c n ∩ MandelbrotSet = MandelbrotSet := by
+    ext z
+    constructor
+    · intro hz
+      exact hz.2
+    · intro hz
+      exact ⟨hsub hz, hz⟩
+  simpa [h_eq] using (mandelbrot_set_connected : IsConnected MandelbrotSet)
+
+theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data
+    (hsub : ParaPuzzleMandelbrotSubsetData) :
+    ParaPuzzlePieceInterMandelbrotConnectedData := by
+  intro c hc n
+  exact para_puzzle_piece_inter_mandelbrot_connected_of_mandelbrot_subset c n (hsub c hc n)
 
 lemma para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
     ParaPuzzlePieceInterMandelbrotConnectedData := by

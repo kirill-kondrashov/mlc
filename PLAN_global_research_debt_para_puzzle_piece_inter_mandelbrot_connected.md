@@ -70,6 +70,17 @@
   prove connectedness of `ParaPuzzlePieceAt c n ∩ MandelbrotSet` via existing
   para-puzzle/Green-sublevel topology lemmas (or an equivalent stronger lemma
   in `ParaPuzzleBasis` that implies this statement).
+- [x] Added explicit stronger bridge decomposition in
+  `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`:
+  - `ParaPuzzleMandelbrotSubsetData`
+  - `para_puzzle_piece_inter_mandelbrot_connected_of_mandelbrot_subset`
+  - `para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data`
+- [x] Added strategy-level and finitely-renormalizable route variants depending
+  on `ParaPuzzleMandelbrotSubsetData` so this stronger bridge can be targeted
+  directly while preserving existing APIs.
+- [x] Propagated `ParaPuzzleMandelbrotSubsetData` wrappers through the full
+  parameterized `MainConjecture` entrypoint family (on-M, basin, uniform,
+  molecule-target, and left-inverse routes), keeping legacy wrappers unchanged.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
 - [ ] Keep any new assumptions explicit and local; avoid introducing new axioms.
