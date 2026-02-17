@@ -35,6 +35,19 @@ def MoleculeImpliesSatellitePrincipalNestData : Prop :=
 abbrev MoleculeImpliesUniformConformalLowerBoundTarget : Prop :=
   MoleculeUniformConformalLowerBoundData
 
+/-- Canonical-depth strengthening of the principal-nest bridge target. -/
+def MoleculeImpliesCanonicalSatellitePrincipalNestData : Prop :=
+  ∀ (_h_mol : MoleculeConjectureRefined) (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c),
+    ∃ hdata : SatellitePrincipalNestData c,
+      hdata.depths = PrincipalNestTarget.depthsFromSatelliteTower c hTower
+
+/-- Compatibility predicate: a principal-nest package uses the tower-selected
+    canonical depth schedule. -/
+def HasCanonicalDepths (c : ℂ) (hTower : SatelliteRenormalizableTower c)
+    (hdata : SatellitePrincipalNestData c) : Prop :=
+  hdata.depths = PrincipalNestTarget.depthsFromSatelliteTower c hTower
+
 /--
 Once `MoleculeImpliesSatellitePrincipalNestData` is proved, the axiom
 `MLC.molecule_parameter_shrink` can be replaced by a theorem (after strengthening
@@ -60,6 +73,35 @@ theorem parameter_shrink_of_moleculeUniformBridgeTarget
     (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
   exact PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget c hc hTower
     (hTarget h_mol c hc hTower)
+
+/-- Canonical-depth principal-nest data gives the uniform conformal lower-bound
+    target used by the redesigned bridge route. -/
+theorem uniformConformalLowerBoundTarget_of_satellitePrincipalNestData_of_hasCanonicalDepths
+    (c : ℂ) (hTower : SatelliteRenormalizableTower c)
+    (hdata : SatellitePrincipalNestData c)
+    (hcanon : HasCanonicalDepths c hTower hdata) :
+    PrincipalNestTarget.UniformConformalLowerBoundTarget c hTower := by
+  rw [HasCanonicalDepths] at hcanon
+  rcases hdata.modulus_lower with ⟨m, hm_pos, hm_lb⟩
+  refine ⟨m, hm_pos, ?_⟩
+  intro n
+  have hm_lb' := hm_lb n
+  rw [hcanon] at hm_lb'
+  have hm_lb'' : m ≤
+      MLC.Quadratic.modulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c
+          (PrincipalNestTarget.depthsFromSatelliteTower c hTower) n) := hm_lb'
+  simpa [MLC.Quadratic.cmodulus] using hm_lb''
+
+/-- Canonical-depth principal-nest bridge data implies the canonical uniform
+    conformal bridge target. -/
+theorem moleculeUniformBridgeTarget_of_moleculeCanonicalSatellitePrincipalNestData
+    (hTarget : MoleculeImpliesCanonicalSatellitePrincipalNestData) :
+    MoleculeImpliesUniformConformalLowerBoundTarget := by
+  intro h_mol c hc hTower
+  rcases hTarget h_mol c hc hTower with ⟨hdata, hcanon⟩
+  exact uniformConformalLowerBoundTarget_of_satellitePrincipalNestData_of_hasCanonicalDepths
+    c hTower hdata hcanon
 
 /-- Local connectivity from the strong satellite principal-nest bridge target. -/
 theorem lc_of_moleculeBridgeTarget

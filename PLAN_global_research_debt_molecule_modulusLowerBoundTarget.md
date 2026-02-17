@@ -122,6 +122,12 @@
   `Mlc/MoleculeToSatelliteNestData.lean`:
   - `bridge_of_moleculeBridgeTarget`
   - `bridge_of_moleculeUniformBridgeTarget`.
+- [x] Added canonical-depth constructive reduction in
+  `Mlc/MoleculeToSatelliteNestData.lean`:
+  - `MoleculeImpliesCanonicalSatellitePrincipalNestData`
+  - `HasCanonicalDepths`
+  - `uniformConformalLowerBoundTarget_of_satellitePrincipalNestData_of_hasCanonicalDepths`
+  - `moleculeUniformBridgeTarget_of_moleculeCanonicalSatellitePrincipalNestData`.
 - [x] Added MainConjecture entry points for these bridge targets:
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeBridgeTarget`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_moleculeUniformBridgeTarget`
