@@ -95,7 +95,8 @@
 - [x] **M1 (footprint):** isolate `mlc_conjecture` closure through
   `mlc_conjecture_of_false`, introduce an alternate closure path
   (`mlc_conjecture_of_fast_tower_obstruction`), and re-run `make check`.
-- [ ] **M2 (API hygiene):** split Böttcher helper lemmas into:
+- [x] **M2 (API hygiene):** split Böttcher helper lemmas (active proof path)
+  into:
   - ones requiring explicit inverse data
   - ones independent of `external_ray_map_exists`
 - [x] **M3 (constructive inverse package):** define a replacement data target:
@@ -123,3 +124,12 @@
 - Some inverse-branch routes in `InverseBranchSlitUse.lean` have formal
   obstruction lemmas; these may block a direct constructive proof in current
   model and require route redesign rather than theorem completion.
+
+## Current Blocker for M5
+- The axiom dependency is now concentrated at one specialization site:
+  `MLC.mlc_conjecture` applies
+  `mlc_conjecture_of_external_ray_data_two (Quadratic.external_ray_map_exists (2 : ℂ))`.
+- To remove `MLC.Quadratic.external_ray_map_exists` from the footprint, we need
+  a non-axiomatic proof of `Quadratic.ExternalRayMapData (2 : ℂ)` (or an
+  alternative contradiction route that stays axiom-neutral and does not replace
+  this with another project axiom).
