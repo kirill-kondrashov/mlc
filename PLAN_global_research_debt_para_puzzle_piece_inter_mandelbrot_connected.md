@@ -73,6 +73,10 @@
   prove connectedness of `ParaPuzzlePieceAt c n ∩ MandelbrotSet` via existing
   para-puzzle/Green-sublevel topology lemmas (or an equivalent stronger lemma
   in `ParaPuzzleBasis` that implies this statement).
+- [x] Dependency scan (`yoccoz-theorem`, `molecule-conjecture`) did not reveal
+  an existing theorem directly proving
+  `IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet)`.
+  Remaining work is genuinely local to this repository.
 - [x] Added explicit stronger bridge decomposition in
   `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`:
   - `ParaPuzzleMandelbrotSubsetData`
@@ -86,6 +90,10 @@
   molecule-target, and left-inverse routes), keeping legacy wrappers unchanged.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
+- [ ] Next concrete proof target: derive
+  `ParaPuzzlePieceInterMandelbrotConnectedData` from a non-axiomatic
+  parameter-plane transport/motion statement (likely via puzzle boundary motion
+  machinery) rather than from a global subset claim.
 - [ ] Keep any new assumptions explicit and local; avoid introducing new axioms.
 
 ## Phase 3: Rewire and Verify
