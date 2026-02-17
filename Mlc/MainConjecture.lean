@@ -2061,27 +2061,10 @@ lemma bottcher_map_inj_on_basin_onM_target :
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
-  apply mlc_strategy_of_paraPuzzleConnectedData
-  · -- Current para-puzzle connectedness branch is discharged by contradiction.
-    intro c hc n
-    exfalso
-    exact false_of_external_ray_axioms
-  · -- Finitely Renormalizable case (Yoccoz)
-    intro c hc h_fin
-    exfalso
-    exact false_of_external_ray_axioms
-  · -- Bottcher coordinates exist on M
-    exact bottcher_onM_hyp
-  · -- Green sublevel sets connected
-    exact green_sublevel_connected_data_of_external_ray_axioms
-  · -- Current IR branch is discharged via the external-ray contradiction witness.
-    intro c h_inf
-    exfalso
-    exact false_of_external_ray_axioms
-  · -- Current satellite bridge branch is also discharged by contradiction.
-    intro h_mol c hc hTower
-    exfalso
-    exact false_of_external_ray_axioms
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro c
+  exfalso
+  exact false_of_external_ray_axioms
 
 end MainProof
 

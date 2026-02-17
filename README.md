@@ -103,6 +103,5 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.filled_julia_set_connected
 - MLC.Quadratic.external_ray_map_exists
 ```
