@@ -79,6 +79,11 @@
   - Added corresponding top-level closure route in
     `Mlc/MainConjecture.lean`:
     `mlc_conjecture_of_outside_inj_and_surj_two`.
+  - Added an equivalent M5 image-equality route:
+    `BottcherImageOutsideOpenIsExterior`,
+    `bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`,
+    `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior`,
+    and `mlc_conjecture_of_outside_inj_and_image_eq_exterior_two`.
   - Replaced direct `external_ray_map_exists` uses in active proof files
     (`MainConjecture`, `BottcherOnMTheory`, `BottcherOutsidePlan`) with
     `Quadratic.external_ray_map_data`; direct axiom calls are now confined to

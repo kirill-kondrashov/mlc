@@ -4027,6 +4027,22 @@ lemma bottcher_map_inj_on_outside_open (c : ℂ) :
 def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
   ∀ w, 1 < ‖w‖ → ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
 
+/-- Alternative M5 target: the image of outside-open under `bottcher_map` is
+    exactly the exterior. -/
+def BottcherImageOutsideOpenIsExterior (c : ℂ) : Prop :=
+  Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} = {w : ℂ | 1 < ‖w‖}
+
+/-- Image-equality target implies the outside-open surjectivity target. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior
+    (c : ℂ) (h_img : BottcherImageOutsideOpenIsExterior c) :
+    BottcherSurjOnExteriorFromOutsideOpen c := by
+  intro w hw
+  have himg : w ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    rw [h_img]
+    exact hw
+  rcases himg with ⟨z, hz, hzw⟩
+  exact ⟨z, hz, hzw⟩
+
 /-- Construct external-ray data from outside-open injectivity + exterior
     surjectivity by outside-open preimages. -/
 theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
@@ -4057,6 +4073,16 @@ theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
       apply h_inj hspec.1 hz_out
       simpa using hspec.2
     simp [f, hnorm, hz_choose]
+
+/-- Variant of the previous construction using image equality as the input
+    target instead of a separate surjectivity witness. -/
+theorem external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior
+    (c : ℂ)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (h_img : BottcherImageOutsideOpenIsExterior c) :
+    Quadratic.ExternalRayMapData c := by
+  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
+    (bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior c h_img)
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
     (c : ℂ)
