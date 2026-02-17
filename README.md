@@ -10,7 +10,7 @@ This repository is a proof skeleton. It compiles and isolates the main logical
 dependencies, but several deep inputs remain axiomatic.
 
 Active research-debt tracking for the Böttcher inverse-branch route:
-`PLAN_global_research_debt_bottcher_inverse.md`.
+`plan/PLAN_global_research_debt_bottcher_inverse.md`.
 
 For the Molecule Conjecture track, the project re-exports the refined conjecture
 statement from an external `Molecule` package located at
