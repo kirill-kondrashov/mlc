@@ -46,6 +46,10 @@
     `external_ray_map_of_data_right_inverse`,
     `external_ray_map_of_data_left_inverse_large`, and routed
     `external_ray_map` through this data-based definition.
+  - Added data-parameterized Böttcher-left-inverse lemmas:
+    `bottcher_left_inv_of_data`,
+    `external_ray_map_left_inverse_outside_open_of_data`,
+    with axiom-backed variants now wrappers.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 

@@ -162,9 +162,10 @@ lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
     bottcher_map c (external_ray_map c w) = w := by
   exact external_ray_map_right_inverse c w hw'
 
-theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
+theorem bottcher_left_inv_of_data {c : ℂ} (h_data : ExternalRayMapData c)
+    (z : ℂ) (hz : z ∈ basin_of_infinity c)
     (h_inj : Function.Injective (bottcher_map c)) :
-    external_ray_map c (bottcher_map c z) = z := by
+    external_ray_map_of_data h_data (bottcher_map c z) = z := by
   have hz' : z ∉ MLC.Quadratic.K c := by
     have : z ∈ (MLC.Quadratic.K c)ᶜ := by
       simpa [basin_eq_compl_K c] using hz
@@ -178,15 +179,27 @@ theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
       simpa using (Real.one_lt_exp_iff.mpr hpos)
     simpa [hnorm'] using hgt
   have hright :
-      bottcher_map c (external_ray_map c (bottcher_map c z)) =
+      bottcher_map c (external_ray_map_of_data h_data (bottcher_map c z)) =
         bottcher_map c z := by
-    simpa using external_ray_map_right_inverse c (bottcher_map c z) hnorm
+    simpa using external_ray_map_of_data_right_inverse h_data (bottcher_map c z) hnorm
   exact h_inj hright
+
+theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
+    (h_inj : Function.Injective (bottcher_map c)) :
+    external_ray_map c (bottcher_map c z) = z := by
+  simpa [external_ray_map] using
+    bottcher_left_inv_of_data (external_ray_map_exists c) z hz h_inj
+
+lemma external_ray_map_left_inverse_outside_open_of_data {c : ℂ}
+    (h_data : ExternalRayMapData c) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    external_ray_map_of_data h_data (bottcher_map c z) = z := by
+  exact external_ray_map_of_data_left_inverse_large h_data z hz
 
 lemma external_ray_map_left_inverse_outside_open (c : ℂ) (z : ℂ)
     (hz : ‖z‖ > ‖c‖ + 2) :
     external_ray_map c (bottcher_map c z) = z := by
-  exact external_ray_map_left_inverse_large c z hz
+  simpa [external_ray_map] using
+    external_ray_map_left_inverse_outside_open_of_data (external_ray_map_exists c) z hz
 
 lemma orbit_fixed_point (c p : ℂ) (hp : MLC.Quadratic.fc c p = p) :
     ∀ n, MLC.Quadratic.orbit c p n = p := by
