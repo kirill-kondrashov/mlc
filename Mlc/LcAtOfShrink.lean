@@ -1,6 +1,7 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.Quadratic.Complex.ParaPuzzle
 import Mathlib.Topology.Connected.LocallyConnected
 import Lean
@@ -96,7 +97,7 @@ lemma para_puzzle_piece_induced_connected (c : ℂ) (hc : c ∈ MandelbrotSet) (
     IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } :=
   para_puzzle_piece_induced_connected_of_data
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
-      Quadratic.para_puzzle_transport_exists_data)
+      Quadratic.para_puzzle_transport_exists_data_of_motion_default)
     c hc n
 
 /-- Subset-data route for subtype connectedness. -/
@@ -189,7 +190,7 @@ lemma lc_at_of_shrink (c : ℂ) (hc : c ∈ MandelbrotSet)
     LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ :=
   lc_at_of_shrink_of_data
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
-      Quadratic.para_puzzle_transport_exists_data)
+      Quadratic.para_puzzle_transport_exists_data_of_motion_default)
     c hc h
 
 /-- Subset-data route for local-connectivity from para-puzzle shrinkage. -/

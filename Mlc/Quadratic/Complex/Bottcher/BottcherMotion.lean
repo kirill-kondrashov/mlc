@@ -63,7 +63,8 @@ theorem motion_preserves_para_piece_of_green_sublevel
     (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)
     (_hE : E = PuzzleBoundary c₀ n) :
     motion_preserves_para_piece n c₀ r E (bottcher_motion B E) := by
-  trivial
+  exact motion_preserves_para_piece_of_witness_hyp
+    para_puzzle_transport_witness_hyp n c₀ r E (bottcher_motion B E)
 
 /-- Data needed to build a puzzle-boundary motion from a Böttcher coordinate. -/
 structure BottcherMotionData (n : ℕ) (c₀ : ℂ) where
@@ -109,7 +110,8 @@ def bottcher_motion_data_of_green_sublevel
     E := PuzzleBoundary c₀ n
     E_eq := rfl
     preserves := by
-      trivial }
+      exact motion_preserves_para_piece_of_green_sublevel
+        _h_top _h_stab n c₀ r B (PuzzleBoundary c₀ n) rfl }
 
 /-- Global hypothesis: Green sublevel control for every parameter and depth. -/
 structure BottcherGreenSublevelHyp where

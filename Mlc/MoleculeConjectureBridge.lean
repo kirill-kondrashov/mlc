@@ -179,7 +179,6 @@ theorem molecule_parameter_shrink
 theorem refined_conjecture_implies_lc_of_tower_of_modulusLowerBoundData
     (h_mod : MoleculeModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact lc_at_of_shrink c hc
@@ -189,7 +188,6 @@ theorem refined_conjecture_implies_lc_of_tower_of_modulusLowerBoundData
 theorem refined_conjecture_implies_lc_of_tower_of_conformalModulusLowerBoundData
     (h_mod : MoleculeConformalModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact lc_at_of_shrink c hc
@@ -199,7 +197,6 @@ theorem refined_conjecture_implies_lc_of_tower_of_conformalModulusLowerBoundData
 theorem refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData
     (h_uniform : MoleculeUniformConformalLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact lc_at_of_shrink c hc
@@ -210,71 +207,64 @@ theorem refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData
 theorem refined_conjecture_implies_lc_of_tower
     (h_mod : MoleculeConformalModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact refined_conjecture_implies_lc_of_tower_of_conformalModulusLowerBoundData
-    h_mod h_mol _h_motion c hc hTower
+    h_mod h_mol c hc hTower
 
 /-- Legacy satellite-input wrapper for `refined_conjecture_implies_lc_of_tower`. -/
 theorem refined_conjecture_implies_lc
     (h_mod : MoleculeConformalModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (_h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h_sat : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact refined_conjecture_implies_lc_of_tower h_mod h_mol _h_motion c hc
+  exact refined_conjecture_implies_lc_of_tower h_mod h_mol c hc
     (satelliteRenormalizableTower_of_satelliteRenormalizable c h_sat)
 
 /-- The bridge from the Molecule Conjecture to MLC for satellite parameters. -/
 theorem molecule_conjecture_bridge_of_tower_of_modulusLowerBoundData
     (h_mod : MoleculeModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact refined_conjecture_implies_lc_of_tower_of_modulusLowerBoundData
-    h_mod h_mol h_motion c hc _h
+    h_mod h_mol c hc _h
 
 /-- Bridge to satellite MLC from conformal-target Molecule bridge data. -/
 theorem molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData
     (h_mod : MoleculeConformalModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact refined_conjecture_implies_lc_of_tower_of_conformalModulusLowerBoundData
-    h_mod h_mol h_motion c hc _h
+    h_mod h_mol c hc _h
 
 /-- Bridge from Molecule Conjecture to satellite MLC from uniform conformal
     lower-bound data. -/
 theorem molecule_conjecture_bridge_of_tower_of_uniformConformalLowerBoundData
     (h_uniform : MoleculeUniformConformalLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData
-    h_uniform h_mol h_motion c hc _h
+    h_uniform h_mol c hc _h
 
 /-- The bridge from the Molecule Conjecture to MLC for satellite parameters. -/
 theorem molecule_conjecture_bridge_of_tower
     (h_mod : MoleculeConformalModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   exact molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData
-    h_mod h_mol h_motion c hc _h
+    h_mod h_mol c hc _h
 
 /-- Legacy satellite-input wrapper for `molecule_conjecture_bridge_of_tower`. -/
 theorem molecule_conjecture_bridge
     (h_mod : MoleculeConformalModulusLowerBoundData)
     (h_mol : MoleculeConjectureRefined)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact molecule_conjecture_bridge_of_tower h_mod h_mol h_motion c hc
+  exact molecule_conjecture_bridge_of_tower h_mod h_mol c hc
     (satelliteRenormalizableTower_of_satelliteRenormalizable c _h)
 
 theorem molecule_conjecture_implies_mlc_satellite
@@ -282,23 +272,19 @@ theorem molecule_conjecture_implies_mlc_satellite
       -- The literature asserts this bridge; see Appendix C of arXiv:1703.01206v3
       -- and Conjecture 1.2 discussion in arXiv:2512.24171v1.
       MoleculeConjectureRefined →
-      MLC.Quadratic.PuzzleBoundaryMotionHyp →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizable c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact h_bridge Molecule.molecule_conjecture_refined h_motion c hc h
+  exact h_bridge Molecule.molecule_conjecture_refined c hc h
 
 theorem molecule_conjecture_implies_mlc_satellite_of_tower
     (h_bridge :
       MoleculeConjectureRefined →
-      MLC.Quadratic.PuzzleBoundaryMotionHyp →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
-    (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact h_bridge Molecule.molecule_conjecture_refined h_motion c hc h
+  exact h_bridge Molecule.molecule_conjecture_refined c hc h
 
 end MLC
