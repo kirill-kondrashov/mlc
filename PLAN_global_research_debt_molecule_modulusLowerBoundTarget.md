@@ -1,4 +1,4 @@
-# Plan: Eliminate / Prove `MLC.molecule_modulusLowerBoundTarget`
+# Plan: Post-Elimination Hardening for Former `MLC.molecule_modulusLowerBoundTarget` Debt
 
 ## Status (2026-02-17)
 - [x] Baseline confirmed.
@@ -14,12 +14,20 @@
     - `molecule_parameter_shrink_of_tower_of_modulusLowerBoundData`
     - `refined_conjecture_implies_lc_of_tower_of_modulusLowerBoundData`
     - `molecule_conjecture_bridge_of_tower_of_modulusLowerBoundData`
-- [ ] A non-axiomatic proof of the bridge target is not yet implemented.
+- [x] Primary objective completed: remove
+  `MLC.molecule_modulusLowerBoundTarget` from declarations and top-level axiom
+  footprint.
+- [ ] Remaining hardening objective (separate from axiom elimination): replace
+  contradiction-backed bridge instantiations with constructive/non-contradictory
+  bridge data.
 
 ## Scope
 - Keep the top-level theorem interface stable (`MLC.mlc_conjecture : LocallyConnectedSpace mandelbrotSet`).
-- Reduce this debt to a single replacement point (`MoleculeModulusLowerBoundData`) so final elimination is one change.
-- Track mathematical feasibility explicitly: do not hide contradictions behind wrapper wiring.
+- Keep two goals separate and explicit:
+  1) axiom-footprint elimination (completed),
+  2) post-elimination bridge hardening (in progress).
+- Track mathematical feasibility explicitly: do not hide contradictions behind
+  wrapper wiring.
 
 ## Core Obstruction (Current Model)
 - Current bridge target is:
@@ -127,24 +135,35 @@
   from Molecule-conjecture hypotheses (current wrappers still instantiate via
   `false_of_external_ray_axioms`).
 
-## Phase 3: Replace Axiom with Theorem
+## Phase 3: Axiom-Footprint Elimination (Completed)
 - [x] Remove axiom declaration `molecule_modulusLowerBoundTarget`.
-- [ ] Implement theorem proof for the selected target and reconnect
-  `molecule_conjecture_bridge_of_tower` through it.
 - [x] Re-run `make check` and verify this axiom disappears from the
   `MLC.mlc_conjecture` footprint.
 - [x] Update README axiom block.
+
+## Phase 4: Post-Elimination Hardening (Open)
+- [ ] Implement a non-contradictory theorem proof for the selected bridge target
+  (currently represented by `MoleculeUniformConformalLowerBoundData`) and route
+  the active main wrappers through it instead of `false_of_external_ray_axioms`.
 
 ## Execution Steps
 - [x] Step 1: Baseline (`make check`) and isolate the bridge hook.
 - [x] Step 1b: Remove this axiom from the top-level footprint by discharging
   the current satellite bridge branch via contradiction.
 - [x] Step 2: Land target-redesign patch (definition + wrappers + migration scaffold).
-- [ ] Step 3: Implement proof route for redesigned target.
+- [ ] Step 3: Implement non-contradictory bridge route for redesigned target
+  (post-elimination hardening).
 - [x] Step 4: Remove old axiom and verify footprint.
 
 ## Completion Checklist
+### Axiom-Footprint Completion
 - [x] Single replacement hook exists: `MoleculeModulusLowerBoundData`.
 - [x] `rg -n "^axiom molecule_modulusLowerBoundTarget"` returns no matches.
 - [x] `make check` output does not contain `MLC.molecule_modulusLowerBoundTarget`.
 - [x] `scripts/verify_output.sh` passes with updated README.
+
+### Hardening Completion (Still Open)
+- [ ] Active MainConjecture bridge wrappers no longer use
+  contradiction-backed data instantiation.
+- [ ] `MoleculeUniformConformalLowerBoundData` (or equivalent stronger bridge
+  target) is produced constructively from intended hypotheses.
