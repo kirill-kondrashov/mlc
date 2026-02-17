@@ -120,8 +120,13 @@
   `Mlc/Quadratic/Complex/PuzzleBoundaryMotion.lean`:
   - `ParaPuzzleTransportWitnessHyp`
   - `para_puzzle_transport_exists_data_of_motion_witness_hyp`
+  - `para_puzzle_transport_witness_hyp_of_axiom`
   and linked it to the strategy layer via
   `paraPuzzleTransportExistsData_ofMotionWitnessHyp`.
+- [x] Re-routed the default on-M wrapper
+  `mlc_conjecture_of_bottcher_inj_on_basin_onM` through the
+  motion-witness path (`...of_paraPuzzleMotionWitnessHyp`) using
+  `para_puzzle_transport_witness_hyp_of_axiom` as the current constructor.
 - [x] Canonical axiom-backed connectedness hook now routes through the
   existential transport layer:
   `para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom` is defined via

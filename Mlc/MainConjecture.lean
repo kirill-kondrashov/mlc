@@ -335,8 +335,8 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
       ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
         Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
-    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleMotionWitnessHyp
+    MLC.Quadratic.para_puzzle_transport_witness_hyp_of_axiom
     h_classify_ir h_mod h_inj_basin_onM
 
 /-- Uniform conformal lower-bound variant of

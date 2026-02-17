@@ -113,5 +113,13 @@ theorem para_puzzle_transport_exists_data_of_motion_witness_hyp
     ParaPuzzleInterMandelbrotTransportExistsData :=
   para_puzzle_transport_exists_data_of_witness h.witness
 
+/-- Current axiom-backed constructor for motion-side transport witnesses. -/
+def para_puzzle_transport_witness_hyp_of_axiom :
+    ParaPuzzleTransportWitnessHyp where
+  witness c hc n :=
+    ⟨ParaPuzzlePieceAt c n ∩ MandelbrotSet,
+      para_puzzle_piece_inter_mandelbrot_connected c hc n,
+      rfl⟩
+
 end
 end MLC.Quadratic
