@@ -48,6 +48,9 @@
 - [x] Centralize axiom-backed instantiation through
   `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
   (instead of passing the raw axiom constant directly at call sites).
+- [x] Narrow the data target to the actually required domain:
+  `∀ c ∈ MandelbrotSet, ∀ n, IsConnected (...)`
+  (rather than all `c : ℂ`).
 
 ## Phase 2: Implement Non-Axiomatic Theorem
 - [ ] Replace the axiom declaration in
@@ -56,6 +59,8 @@
   prove connectedness of `ParaPuzzlePieceAt c n ∩ MandelbrotSet` via existing
   para-puzzle/Green-sublevel topology lemmas (or an equivalent stronger lemma
   in `ParaPuzzleBasis` that implies this statement).
+- [ ] Prove the on-M replacement data first (minimal needed target), then
+  derive any broader wrappers only if still needed.
 - [ ] Keep any new assumptions explicit and local; avoid introducing new axioms.
 
 ## Phase 3: Rewire and Verify

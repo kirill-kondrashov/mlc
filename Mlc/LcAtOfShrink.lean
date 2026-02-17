@@ -67,21 +67,22 @@ lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → 
 
 /-- Connectedness in the subtype, parameterized by the replacement hook. -/
 lemma para_puzzle_piece_induced_connected_of_data
-    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) (c : ℂ) (n : ℕ) :
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } := by
   rw [← isConnected_subtype_val_image]
   rw [show { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } =
         (Subtype.val : MandelbrotSet → ℂ) ⁻¹' (ParaPuzzlePieceAt c n) by rfl]
   rw [Subtype.image_preimage_coe]
   try rw [Set.inter_comm]
-  exact h_conn c n
+  exact h_conn c hc n
 
 /-- The intersection of a parameter puzzle piece with the Mandelbrot set is
     connected in the subtype topology. -/
-lemma para_puzzle_piece_induced_connected (c : ℂ) (n : ℕ) :
+lemma para_puzzle_piece_induced_connected (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } :=
   para_puzzle_piece_induced_connected_of_data
-    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom c n
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom c hc n
 
 /-- If parameter pieces shrink to a point, they form a basis of neighborhoods for c in the Mandelbrot set.
     Proof idea: Since the intersection of all parameter pieces `ParaPuzzlePieceAt c n` is exactly `{c}`,
@@ -132,7 +133,7 @@ lemma lc_at_of_shrink_of_data
         exact Set.mem_iInter.mp hc_in_inter n
   · constructor
     · exact hn_sub
-    · exact para_puzzle_piece_induced_connected_of_data h_conn c n
+    · exact para_puzzle_piece_induced_connected_of_data h_conn c hc n
 
 /-- If parameter pieces shrink to a point, M is locally connected at c.
     Proof idea: We construct a basis of connected neighborhoods for `c`.

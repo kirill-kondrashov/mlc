@@ -67,16 +67,18 @@ axiom para_puzzle_piece_inter_mandelbrot_connected (c : ℂ) (n : ℕ) :
 
 /-- Replacement hook for `para_puzzle_piece_inter_mandelbrot_connected`. -/
 def ParaPuzzlePieceInterMandelbrotConnectedData : Prop :=
-  ∀ c n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet)
+  ∀ c, c ∈ MandelbrotSet → ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet)
 
 theorem para_puzzle_piece_inter_mandelbrot_connected_of_data
-    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) (c : ℂ) (n : ℕ) :
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet) :=
-  h_conn c n
+  h_conn c hc n
 
 lemma para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
-    ParaPuzzlePieceInterMandelbrotConnectedData :=
-  para_puzzle_piece_inter_mandelbrot_connected
+    ParaPuzzlePieceInterMandelbrotConnectedData := by
+  intro c hc n
+  exact para_puzzle_piece_inter_mandelbrot_connected c n
 
 end
 
