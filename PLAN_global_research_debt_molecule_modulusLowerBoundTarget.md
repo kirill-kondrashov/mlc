@@ -103,6 +103,13 @@
   - verified `Mlc/MoleculeToSatelliteNestData.lean` builds,
   - added `import Mlc.MoleculeToSatelliteNestData` to `Mlc.lean` so this path
     stays in the regular build.
+- [x] Tightened bridge-target semantics in `Mlc/MoleculeToSatelliteNestData.lean`:
+  - `MoleculeImpliesSatellitePrincipalNestData` now explicitly depends on
+    `MoleculeConjectureRefined`,
+  - added canonical-depth uniform target alias
+    `MoleculeImpliesUniformConformalLowerBoundTarget`,
+  - added shrink theorem
+    `parameter_shrink_of_moleculeUniformBridgeTarget`.
 - [x] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.

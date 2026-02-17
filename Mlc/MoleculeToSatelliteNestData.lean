@@ -10,8 +10,8 @@ open Quadratic Complex Topology Set Filter
 noncomputable section
 
 /-!
-This file records the precise remaining bridge needed to eliminate the axiom
-`MLC.molecule_parameter_shrink`.
+This file records explicit remaining bridge targets for the Molecule→satellite
+part of the MLC strategy.
 
 What we *have* (proved in this repo):
 * if we can produce `SatellitePrincipalNestData c`, then the parameter pieces shrink.
@@ -26,8 +26,13 @@ namespace MoleculeBridgeTarget
 
 /-- A strong, explicit bridge target: produce DLS principal nest data from Molecule inputs. -/
 def MoleculeImpliesSatellitePrincipalNestData : Prop :=
-  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet),
+  ∀ (_h_mol : MoleculeConjectureRefined) (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet),
     SatelliteRenormalizableTower c → Nonempty (SatellitePrincipalNestData c)
+
+/-- Canonical-depth variant: produce a uniform conformal lower bound along the
+    tower-selected principal annuli. -/
+abbrev MoleculeImpliesUniformConformalLowerBoundTarget : Prop :=
+  MoleculeUniformConformalLowerBoundData
 
 /--
 Once `MoleculeImpliesSatellitePrincipalNestData` is proved, the axiom
@@ -36,13 +41,24 @@ Once `MoleculeImpliesSatellitePrincipalNestData` is proved, the axiom
 -/
 theorem parameter_shrink_of_moleculeBridgeTarget
     (hTarget : MoleculeImpliesSatellitePrincipalNestData)
+    (h_mol : MoleculeConjectureRefined)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (hTower : SatelliteRenormalizableTower c) :
     (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
   classical
   exact
     paraPuzzle_shrink_of_satellitePrincipalNestData c hc
-      (Classical.choice (hTarget c hc hTower))
+      (Classical.choice (hTarget h_mol c hc hTower))
+
+/-- Shrinkage from the canonical-depth uniform conformal bridge target. -/
+theorem parameter_shrink_of_moleculeUniformBridgeTarget
+    (hTarget : MoleculeImpliesUniformConformalLowerBoundTarget)
+    (h_mol : MoleculeConjectureRefined)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  exact PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget c hc hTower
+    (hTarget h_mol c hc hTower)
 
 end MoleculeBridgeTarget
 
