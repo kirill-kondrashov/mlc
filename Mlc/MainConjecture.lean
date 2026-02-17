@@ -1613,8 +1613,13 @@ lemma false_of_external_ray_data_two
 
 /-- Contradiction obtained from `external_ray_map_exists` alone
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+lemma external_ray_data_two_axiom : Quadratic.ExternalRayMapData (2 : ℂ) :=
+  Quadratic.external_ray_map_exists (2 : ℂ)
+
+/-- Contradiction obtained from `external_ray_map_exists` alone
+    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_external_ray_axioms : False := by
-  exact false_of_external_ray_data_two (Quadratic.external_ray_map_exists (2 : ℂ))
+  exact false_of_external_ray_data_two external_ray_data_two_axiom
 
 /-- Contradiction-backed IR classification data from explicit external-ray data
     at `c = 2`. -/
@@ -1628,7 +1633,7 @@ lemma ir_classification_data_of_external_ray_data_two
 /-- Contradiction-backed IR classification data used by wrapper routes. -/
 lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
   exact ir_classification_data_of_external_ray_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+    external_ray_data_two_axiom
 
 /-- Contradiction-backed Molecule→uniform conformal lower-bound datum from
     explicit external-ray data at `c = 2`. -/
@@ -1644,7 +1649,7 @@ lemma molecule_uniformConformalLowerBound_data_of_external_ray_data_two
 lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
     MoleculeUniformConformalLowerBoundData := by
   exact molecule_uniformConformalLowerBound_data_of_external_ray_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+    external_ray_data_two_axiom
 
 /-- Contradiction-backed Green-sublevel-connectedness datum from explicit
     external-ray data at `c = 2`. -/
@@ -1661,7 +1666,7 @@ lemma green_sublevel_connected_data_of_external_ray_data_two
 lemma green_sublevel_connected_data_of_external_ray_axioms :
     MLC.Quadratic.GreenSublevelConnectedHyp := by
   exact green_sublevel_connected_data_of_external_ray_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+    external_ray_data_two_axiom
 
 /-- Contradiction-backed Molecule→conformal-modulus bridge datum from explicit
     external-ray data at `c = 2`. -/
@@ -1675,7 +1680,7 @@ lemma molecule_conformalModulusLowerBound_data_of_external_ray_data_two
 lemma molecule_conformalModulusLowerBound_data_of_external_ray_axioms :
     MoleculeConformalModulusLowerBoundData := by
   exact molecule_conformalModulusLowerBound_data_of_external_ray_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+    external_ray_data_two_axiom
 
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
@@ -2141,7 +2146,7 @@ theorem mlc_conjecture_of_external_ray_data_two
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_external_ray_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+    external_ray_data_two_axiom
 
 end MainProof
 
