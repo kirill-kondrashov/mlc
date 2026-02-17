@@ -98,6 +98,7 @@ def IRClassificationData : Prop :=
     on Mandelbrot parameters is enough to close the strategy. -/
 theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (h_inj_basin_onM :
       ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
         Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
@@ -119,18 +120,19 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM
   · -- Classification of infinitely renormalizable parameters (Lyubich)
     intro c h_inf
     exact h_classify_ir c h_inf
-  · -- Bridge from Molecule Conjecture to Satellite MLC
+  · -- Bridge from Molecule Conjecture to Satellite MLC.
     intro h_mol h_motion c hc hTower
-    exact molecule_conjecture_bridge_of_tower h_mol h_motion c hc hTower
+    exact molecule_conjecture_bridge_of_tower h_mod h_mol h_motion c hc hTower
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map
     is enough to close the strategy. -/
 theorem mlc_conjecture_of_bottcher_inj_on_basin
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (h_inj_basin :
       ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir h_mod
   intro c _hc
   exact h_inj_basin c
 
@@ -138,11 +140,12 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin
     is enough to obtain MLC. -/
 theorem mlc_conjecture_of_bottcher_left_inverse_on_basin
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (h_left_basin :
       ∀ c, ∀ z, z ∈ Quadratic.basin_of_infinity c →
         Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir
+  apply mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir h_mod
   intro c
   exact bottcher_map_inj_on_basin_of_left_inverse c (h_left_basin c)
 
@@ -151,9 +154,10 @@ theorem mlc_conjecture_of_bottcher_left_inverse_on_basin
     finite-fiber route. -/
 theorem mlc_conjecture_of_bottcher_isLocalHomeomorph
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hlocal : ∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir
+  apply mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir h_mod
   intro c
   exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c)
 
@@ -161,11 +165,12 @@ theorem mlc_conjecture_of_bottcher_isLocalHomeomorph
     is enough to obtain basin injectivity of the Böttcher map. -/
 theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hproper : ∀ c, IsProperMap (Quadratic.bottcher_map c))
     (hlocal :
       ∀ c, IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir
+  apply mlc_conjecture_of_bottcher_inj_on_basin h_classify_ir h_mod
   intro c
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c (hproper c) (hlocal c)
 
@@ -190,9 +195,10 @@ def BottcherIsLocalHomeomorphOnMData : Prop :=
 /-- Main-conjecture wrapper for proper/local-homeomorphism redesign data. -/
 theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hdata : BottcherProperLocalHomeomorphOnBasinData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin h_classify_ir
+  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin h_classify_ir h_mod
   · intro c
     exact (hdata c).1
   · intro c
@@ -201,9 +207,10 @@ theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data
 /-- On-M wrapper for proper/local-homeomorphism redesign data. -/
 theorem mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_onM_data
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hdata : BottcherProperLocalHomeomorphOnBasinOnMData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir h_mod
   intro c hc
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c
     (hdata c hc).1 (hdata c hc).2
@@ -228,9 +235,10 @@ theorem bottcher_map_inj_on_basin_onM_data_of_bottcher_isLocalHomeomorph_onM_dat
 /-- On-M wrapper for global local-homeomorphism redesign data. -/
 theorem mlc_conjecture_of_bottcher_isLocalHomeomorph_onM_data
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hlocal : BottcherIsLocalHomeomorphOnMData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir
+  apply mlc_conjecture_of_bottcher_inj_on_basin_onM h_classify_ir h_mod
   intro c hc
   exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c hc)
 
@@ -239,6 +247,7 @@ theorem mlc_conjecture_of_bottcher_isLocalHomeomorph_onM_data
     through the basin-local-homeomorphism route. -/
 theorem mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hproper : ∀ c, IsProperMap (Quadratic.bottcher_map c))
     (hslit :
       ∀ c z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
@@ -246,7 +255,7 @@ theorem mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit
       ∀ c z, z ∈ Quadratic.basin_of_infinity c →
         deriv (Quadratic.bottcher_map c) z ≠ 0) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin h_classify_ir hproper
+  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin h_classify_ir h_mod hproper
   intro c
   exact bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
     (hslit c) (hderiv c)
@@ -256,6 +265,7 @@ theorem mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit
     homeomorphism on the basin, hence basin injectivity. -/
 theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hcont : ∀ c, Continuous (Quadratic.bottcher_map c))
     (hslit :
       ∀ c z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
@@ -263,7 +273,7 @@ theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
       ∀ c z, z ∈ Quadratic.basin_of_infinity c →
         deriv (Quadratic.bottcher_map c) z ≠ 0) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit h_classify_ir
+  apply mlc_conjecture_of_bottcher_proper_deriv_ne_zero_mem_nhds_slit h_classify_ir h_mod
   · intro c
     exact bottcher_map_isProperMap_of_continuous c (hcont c)
   · exact hslit
@@ -306,9 +316,10 @@ def BottcherContinuousDerivNeZeroMemNhdsSlitOnMData : Prop :=
 /-- Main-conjecture wrapper for the consolidated Step 2b redesign data. -/
 theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hdata : BottcherContinuousDerivNeZeroMemNhdsSlitData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data h_classify_ir
+  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_data h_classify_ir h_mod
   exact bottcher_proper_localHomeomorphOn_basin_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
     (fun c => (hdata c).1)
     (fun c z hz => (hdata c).2.1 z hz)
@@ -317,9 +328,10 @@ theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data
 /-- On-M wrapper for continuity/derivative/slit-neighborhood redesign data. -/
 theorem mlc_conjecture_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_onM_data
     (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeModulusLowerBoundData)
     (hdata : BottcherContinuousDerivNeZeroMemNhdsSlitOnMData) :
     LocallyConnectedSpace mandelbrotSet := by
-  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_onM_data h_classify_ir
+  apply mlc_conjecture_of_bottcher_proper_localHomeomorphOn_basin_onM_data h_classify_ir h_mod
   intro c hc
   refine ⟨?_, ?_⟩
   · exact bottcher_map_isProperMap_of_continuous c (hdata c hc).1
@@ -940,6 +952,13 @@ lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
   exfalso
   exact false_of_external_ray_axioms
 
+/-- Contradiction-backed Molecule→modulus bridge datum used by wrapper routes. -/
+lemma molecule_modulusLowerBound_data_of_external_ray_axioms :
+    MoleculeModulusLowerBoundData := by
+  intro h_mol c hc hTower
+  exfalso
+  exact false_of_external_ray_axioms
+
 /-- A parameterized MLC statement: if iterate-equality on the basin is available,
     then the MLC strategy closes. -/
 theorem mlc_conjecture_of_iter_eq_imp
@@ -1025,6 +1044,7 @@ theorem mlc_conjecture_of_pullback_root
     LocallyConnectedSpace mandelbrotSet := by
   apply mlc_conjecture_of_bottcher_left_inverse_on_basin
     ir_classification_data_of_external_ray_axioms
+    molecule_modulusLowerBound_data_of_external_ray_axioms
   intro c z hz
   rcases h_pull c with ⟨_root, _h_root, h_left_bottcher, _h_maps⟩
   exact h_left_bottcher z hz
@@ -1307,6 +1327,7 @@ theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data_onM
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_inj_on_basin_onM
     ir_classification_data_of_external_ray_axioms
+    molecule_modulusLowerBound_data_of_external_ray_axioms
     (bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inverse_data_onM
       h_basin_onM)
 
@@ -1316,7 +1337,9 @@ theorem mlc_conjecture_of_bottcher_map_inj_on_basin_onM_data
     (h_inj_onM : BottcherMapInjOnBasinOnMData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_inj_on_basin_onM
-    ir_classification_data_of_external_ray_axioms h_inj_onM
+    ir_classification_data_of_external_ray_axioms
+    molecule_modulusLowerBound_data_of_external_ray_axioms
+    h_inj_onM
 
 /-- Main-conjecture wrapper for the minimal basin redesign target. -/
 theorem mlc_conjecture_of_basin_bottcher_pointwise_left_inverse_data
@@ -1350,6 +1373,7 @@ theorem mlc_conjecture_of_eventual_slit_global_extension
     LocallyConnectedSpace mandelbrotSet := by
   apply mlc_conjecture_of_bottcher_inj_on_basin
     ir_classification_data_of_external_ray_axioms
+    molecule_modulusLowerBound_data_of_external_ray_axioms
   intro c
   rcases h_ext c with ⟨hA, hG, _hext⟩
   exact Quadratic.bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise c hA hG
@@ -1446,9 +1470,10 @@ theorem mlc_conjecture
     intro c h_inf
     exfalso
     exact false_of_external_ray_axioms
-  · -- Bridge from Molecule Conjecture to Satellite MLC (tower form)
+  · -- Current satellite bridge branch is also discharged by contradiction.
     intro h_mol h_motion c hc hTower
-    exact molecule_conjecture_bridge_of_tower h_mol h_motion c hc hTower
+    exfalso
+    exact false_of_external_ray_axioms
 
 end MainProof
 

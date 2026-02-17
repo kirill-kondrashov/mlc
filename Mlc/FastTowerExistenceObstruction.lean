@@ -31,29 +31,32 @@ lemma infinitely_renormalizable_of_gaussian_modulus (c : ℂ) :
 
 /-- With the current bridge axioms and Gaussian proxy modulus, no satellite tower can
     exist on Mandelbrot parameters. -/
-lemma not_satelliteRenormalizableTower_of_mem_mandelbrot (c : ℂ)
+lemma not_satelliteRenormalizableTower_of_mem_mandelbrot
+    (h_mod : MoleculeModulusLowerBoundData) (c : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
     ¬ SatelliteRenormalizableTower c := by
   intro hTower
   have hdiv : PrincipalNestTarget.ModulusNotSummableTarget c hTower :=
-    molecule_modulusLowerBoundTarget Molecule.molecule_conjecture_refined c hc hTower
+    h_mod Molecule.molecule_conjecture_refined c hc hTower
   exact PrincipalNestTarget.not_modulusNotSummableTarget c hTower hdiv
 
 /-- Current obstruction: the Phase 3 target is inconsistent with the
     Molecule bridge axiom plus Gaussian proxy modulus. -/
 theorem not_infinitely_renormalizable_has_tower_data :
+    MoleculeModulusLowerBoundData →
     ¬ InfinitelyRenormalizableHasTowerData := by
-  intro hdata
+  intro h_mod hdata
   have hIR0 : InfinitelyRenormalizable (0 : ℂ) :=
     infinitely_renormalizable_of_gaussian_modulus 0
   have hTower0 : SatelliteRenormalizableTower (0 : ℂ) := hdata 0 hIR0
   exact
-    (not_satelliteRenormalizableTower_of_mem_mandelbrot 0 zero_mem_mandelbrotSet_fastTower)
+    (not_satelliteRenormalizableTower_of_mem_mandelbrot h_mod 0 zero_mem_mandelbrotSet_fastTower)
       hTower0
 
 /-- Any concrete IR→tower bridge datum contradicts the current Gaussian proxy setup. -/
 theorem false_of_infinitely_renormalizable_has_tower_data
+    (h_mod : MoleculeModulusLowerBoundData)
     (hdata : InfinitelyRenormalizableHasTowerData) : False := by
-  exact not_infinitely_renormalizable_has_tower_data hdata
+  exact not_infinitely_renormalizable_has_tower_data h_mod hdata
 
 end

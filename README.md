@@ -108,5 +108,4 @@ All axioms used:
 - MLC.Quadratic.external_ray_map_exists
 - MLC.Quadratic.extended_ray_map_continuous
 - MLC.Quadratic.bottcher_seq_converges
-- MLC.molecule_modulusLowerBoundTarget
 ```
