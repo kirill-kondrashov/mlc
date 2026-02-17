@@ -1474,10 +1474,10 @@ lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_external_ray_data_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
-  let f : ℂ → ℂ := Classical.choose h_data
+  let f : ℂ → ℂ := Quadratic.external_ray_map_of_data h_data
   have hright_data :
       ∀ w, (1 : ℝ) < ‖w‖ → Quadratic.bottcher_map (2 : ℂ) (f w) = w :=
-    (Classical.choose_spec h_data).1
+    Quadratic.external_ray_map_of_data_right_inverse h_data
   let u : ℕ → ℂ := fun n => Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
   let z : ℕ → ℂ := fun n => f (u n)
   have hu_gt : ∀ n, (1 : ℝ) < ‖u n‖ := by

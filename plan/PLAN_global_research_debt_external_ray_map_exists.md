@@ -40,6 +40,12 @@
   - Added `mlc_conjecture_of_external_ray_data_two` and rewired
     `mlc_conjecture` as a one-line specialization. Axiom usage is now
     concentrated at a single instantiation site.
+  - Added constructive map API wrappers in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`:
+    `external_ray_map_of_data`,
+    `external_ray_map_of_data_right_inverse`,
+    `external_ray_map_of_data_left_inverse_large`, and routed
+    `external_ray_map` through this data-based definition.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 

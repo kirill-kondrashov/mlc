@@ -111,16 +111,32 @@ theorem external_ray_map_data_of_exists (c : ℂ)
     ExternalRayMapData c :=
   h_exists
 
+noncomputable def external_ray_map_of_data {c : ℂ}
+    (h_data : ExternalRayMapData c) (w : ℂ) : ℂ :=
+  (Classical.choose h_data) w
+
+lemma external_ray_map_of_data_right_inverse {c : ℂ}
+    (h_data : ExternalRayMapData c) (w : ℂ) (hw : 1 < ‖w‖) :
+    bottcher_map c (external_ray_map_of_data h_data w) = w := by
+  exact (Classical.choose_spec h_data).1 w hw
+
+lemma external_ray_map_of_data_left_inverse_large {c : ℂ}
+    (h_data : ExternalRayMapData c) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    external_ray_map_of_data h_data (bottcher_map c z) = z := by
+  exact (Classical.choose_spec h_data).2 z hz
+
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
-  (Classical.choose (external_ray_map_exists c)) w
+  external_ray_map_of_data (external_ray_map_exists c) w
 
 lemma external_ray_map_right_inverse (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
     bottcher_map c (external_ray_map c w) = w := by
-  exact (Classical.choose_spec (external_ray_map_exists c)).1 w hw
+  simpa [external_ray_map] using
+    external_ray_map_of_data_right_inverse (external_ray_map_exists c) w hw
 
 lemma external_ray_map_left_inverse_large (c : ℂ) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
     external_ray_map c (bottcher_map c z) = z := by
-  exact (Classical.choose_spec (external_ray_map_exists c)).2 z hz
+  simpa [external_ray_map] using
+    external_ray_map_of_data_left_inverse_large (external_ray_map_exists c) z hz
 
 /-! Domain for the Böttcher coordinate. -/
 def bottcher_domain (c : ℂ) : Set ℂ :=
