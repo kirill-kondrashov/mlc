@@ -98,7 +98,12 @@
     `para_puzzle_transport_data_of_connected_data`,
     `para_puzzle_transport_data_of_mandelbrot_subset_data`,
     `para_puzzle_transport_data_of_axiom`,
-    `para_puzzle_transport_data_of_exists_data`
+    `para_puzzle_transport_data_of_exists_data`,
+    `para_puzzle_transport_exists_data_of_connected_data`,
+    `para_puzzle_transport_exists_data_of_transport_data`,
+    `para_puzzle_transport_exists_data_of_mandelbrot_subset_data`,
+    `para_puzzle_transport_exists_data_of_axiom`,
+    `para_puzzle_transport_exists_data_of_witness`
   and threaded it through core finite/strategy entrypoints:
   - `lc_at_of_shrink_of_transport_data`
   - `lc_at_of_shrink_of_transport_exists_data`
@@ -108,7 +113,13 @@
   - `mlc_strategy_of_paraPuzzleTransportExistsData`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportData`
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportExistsData`
+  - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportWitness`
   so future motion/transport proofs can plug in directly.
+- [x] Canonical axiom-backed connectedness hook now routes through the
+  existential transport layer:
+  `para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom` is defined via
+  `para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data`
+  and `para_puzzle_transport_exists_data_of_axiom`.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
 - [ ] Next concrete proof target: derive

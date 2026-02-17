@@ -65,10 +65,18 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
 
 /-- Bridge from the stronger para-puzzle subset target to the connectedness
     hook used by the strategy theorems. -/
-def paraPuzzleTransportData_of_paraPuzzleMandelbrotSubsetData
+def paraPuzzleTransportExistsData_of_paraPuzzleMandelbrotSubsetData
+    (hsub : ParaPuzzleMandelbrotSubsetData) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  Quadratic.para_puzzle_transport_exists_data_of_mandelbrot_subset_data hsub
+
+/-- Bridge from the stronger para-puzzle subset target to the connectedness
+    hook used by the strategy theorems. -/
+noncomputable def paraPuzzleTransportData_of_paraPuzzleMandelbrotSubsetData
     (hsub : ParaPuzzleMandelbrotSubsetData) :
     ParaPuzzleInterMandelbrotTransportData :=
-  Quadratic.para_puzzle_transport_data_of_mandelbrot_subset_data hsub
+  Quadratic.para_puzzle_transport_data_of_exists_data
+    (paraPuzzleTransportExistsData_of_paraPuzzleMandelbrotSubsetData hsub)
 
 /-- Bridge from the stronger para-puzzle subset target to the connectedness
     hook used by the strategy theorems. -/
@@ -90,6 +98,15 @@ lemma paraPuzzleConnectedData_of_paraPuzzleTransportExistsData
     (hex : ParaPuzzleInterMandelbrotTransportExistsData) :
     ParaPuzzlePieceInterMandelbrotConnectedData :=
   Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex
+
+/-- Build existential transport data from a direct witness function. -/
+def paraPuzzleTransportExistsData_ofWitness
+    (h_witness :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet → ∀ n,
+        ∃ S : Set ℂ, IsConnected S ∧
+          S = MLC.Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  Quadratic.para_puzzle_transport_exists_data_of_witness h_witness
 
 /-- The core strategy theorem (internal). -/
 theorem mlc_strategy_of_paraPuzzleConnectedData
@@ -271,6 +288,23 @@ theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportExists
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleConnectedData
     (paraPuzzleConnectedData_of_paraPuzzleTransportExistsData hex)
+    h_classify_ir h_mod h_inj_basin_onM
+
+/-- A parameterized MLC statement from a direct para-puzzle transport witness
+    function. -/
+theorem mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportWitness
+    (h_witness :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet → ∀ n,
+        ∃ S : Set ℂ, IsConnected S ∧
+          S = MLC.Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData)
+    (h_inj_basin_onM :
+      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
+        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_inj_on_basin_onM_of_paraPuzzleTransportExistsData
+    (paraPuzzleTransportExistsData_ofWitness h_witness)
     h_classify_ir h_mod h_inj_basin_onM
 
 /-- A parameterized MLC statement: basin injectivity of the Böttcher map

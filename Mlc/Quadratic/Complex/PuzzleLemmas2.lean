@@ -94,6 +94,14 @@ structure ParaPuzzleInterMandelbrotTransportExistsData : Prop where
     ∀ c, c ∈ MandelbrotSet → ∀ n,
       ∃ S : Set ℂ, IsConnected S ∧ S = ParaPuzzlePieceAt c n ∩ MandelbrotSet
 
+/-- Build existential transport data directly from a witness function. -/
+def para_puzzle_transport_exists_data_of_witness
+    (h :
+      ∀ c, c ∈ MandelbrotSet → ∀ n,
+        ∃ S : Set ℂ, IsConnected S ∧ S = ParaPuzzlePieceAt c n ∩ MandelbrotSet) :
+    ParaPuzzleInterMandelbrotTransportExistsData where
+  witness := h
+
 /-- Build concrete transport data from the existential witness target. -/
 noncomputable def para_puzzle_transport_data_of_exists_data
     (hex : ParaPuzzleInterMandelbrotTransportExistsData) :
@@ -153,6 +161,22 @@ theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_da
   para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data
     (para_puzzle_transport_data_of_exists_data hex)
 
+def para_puzzle_transport_exists_data_of_connected_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+    ParaPuzzleInterMandelbrotTransportExistsData where
+  witness c hc n := ⟨ParaPuzzlePieceAt c n ∩ MandelbrotSet, h_conn c hc n, rfl⟩
+
+def para_puzzle_transport_exists_data_of_transport_data
+    (htr : ParaPuzzleInterMandelbrotTransportData) :
+    ParaPuzzleInterMandelbrotTransportExistsData where
+  witness c hc n := ⟨htr.transportSet c n, htr.connected c hc n, htr.eq_inter c hc n⟩
+
+def para_puzzle_transport_exists_data_of_mandelbrot_subset_data
+    (hsub : ParaPuzzleMandelbrotSubsetData) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  para_puzzle_transport_exists_data_of_connected_data
+    (para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+
 def para_puzzle_transport_data_of_connected_data
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
     ParaPuzzleInterMandelbrotTransportData where
@@ -172,10 +196,15 @@ def para_puzzle_transport_data_of_axiom :
   connected c hc n := para_puzzle_piece_inter_mandelbrot_connected c hc n
   eq_inter _c _hc _n := rfl
 
+def para_puzzle_transport_exists_data_of_axiom :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  para_puzzle_transport_exists_data_of_transport_data
+    para_puzzle_transport_data_of_axiom
+
 lemma para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
-    ParaPuzzlePieceInterMandelbrotConnectedData := by
-  intro c hc n
-  exact para_puzzle_piece_inter_mandelbrot_connected c hc n
+    ParaPuzzlePieceInterMandelbrotConnectedData :=
+  para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+    para_puzzle_transport_exists_data_of_axiom
 
 end
 
