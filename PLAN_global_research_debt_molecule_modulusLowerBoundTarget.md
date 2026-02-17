@@ -80,6 +80,8 @@
   - `molecule_parameter_shrink_of_tower_of_uniformConformalLowerBoundData`
   - `refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData`
   - `molecule_conjecture_bridge_of_tower_of_uniformConformalLowerBoundData`.
+- [x] Lifted the uniform-target route to a direct principal-nest shrink theorem:
+  - `PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget`.
 - [x] Added explicit compatibility conversion:
   - `moleculeModulusLowerBoundData_of_uniformConformalLowerBoundData`.
 - [x] Extended obstruction layer to include the stronger uniform target:

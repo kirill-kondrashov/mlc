@@ -307,6 +307,16 @@ theorem paraPuzzle_shrink_of_conformalModulusNotSummableTarget
 
   exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_dyn_iInter_eq_singleton c h_dyn
 
+/-- Parameter shrinkage from a uniform conformal-modulus lower bound along the
+    canonical tower depths. -/
+theorem paraPuzzle_shrink_of_uniformConformalLowerBoundTarget
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c)
+    (h_uniform : UniformConformalLowerBoundTarget c hTower) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  exact paraPuzzle_shrink_of_conformalModulusNotSummableTarget c hc hTower
+    (conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget c hTower h_uniform)
+
 end PrincipalNestTarget
 
 end

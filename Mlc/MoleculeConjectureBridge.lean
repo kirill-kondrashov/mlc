@@ -112,10 +112,8 @@ theorem molecule_parameter_shrink_of_tower_of_uniformConformalLowerBoundData
     (h_mol : MoleculeConjectureRefined) (c : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
-  have hdiv : PrincipalNestTarget.ConformalModulusNotSummableTarget c hTower :=
-    PrincipalNestTarget.conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
-      c hTower (h_uniform h_mol c hc hTower)
-  exact PrincipalNestTarget.paraPuzzle_shrink_of_conformalModulusNotSummableTarget c hc hTower hdiv
+  exact PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget c hc hTower
+    (h_uniform h_mol c hc hTower)
 
 /-- Under the current model, conformal and Gaussian bridge data are equivalent. -/
 theorem moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData :
