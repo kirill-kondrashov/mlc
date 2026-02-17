@@ -97,6 +97,12 @@
   fed directly by the stronger target:
   - `mlc_conjecture_of_bottcher_inj_on_basin_onM_of_uniformConformalLowerBoundData`
   - `mlc_conjecture_of_bottcher_inj_on_basin_of_uniformConformalLowerBoundData`.
+- [x] Repaired and activated the explicit satellite principal-nest bridge modules:
+  - fixed `Mlc/SatellitePrincipalNestData.lean` to use the current principal-nest
+    shrink theorem (`..._principal_modulus_not_summable`),
+  - verified `Mlc/MoleculeToSatelliteNestData.lean` builds,
+  - added `import Mlc.MoleculeToSatelliteNestData` to `Mlc.lean` so this path
+    stays in the regular build.
 - [x] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
