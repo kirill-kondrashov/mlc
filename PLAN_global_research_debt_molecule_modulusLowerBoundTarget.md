@@ -110,6 +110,10 @@
     `MoleculeImpliesUniformConformalLowerBoundTarget`,
   - added shrink theorem
     `parameter_shrink_of_moleculeUniformBridgeTarget`.
+- [x] Added `mlc_strategy`-compatible bridge wrappers in
+  `Mlc/MoleculeToSatelliteNestData.lean`:
+  - `bridge_of_moleculeBridgeTarget`
+  - `bridge_of_moleculeUniformBridgeTarget`.
 - [x] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
