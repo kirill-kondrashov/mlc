@@ -136,6 +136,10 @@
   to a single constructor site:
   `para_puzzle_transport_exists_data_of_axiom` in
   `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`.
+- [x] Wrapper call sites now consume the canonical default
+  `Quadratic.para_puzzle_connected_data` (instead of directly calling
+  `..._of_axiom`), further localizing the final replacement to
+  `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`.
 - [ ] Prove the on-M replacement data first (minimal needed target), then
   derive any broader wrappers only if still needed.
 - [ ] Next concrete proof target: derive

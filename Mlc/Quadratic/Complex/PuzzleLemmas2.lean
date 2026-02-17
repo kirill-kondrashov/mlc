@@ -197,15 +197,24 @@ def para_puzzle_transport_exists_data_of_axiom :
       para_puzzle_piece_inter_mandelbrot_connected c hc n,
       rfl⟩
 
+/-- Current default existential transport data for para-puzzle connectedness. -/
+def para_puzzle_transport_exists_data :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  para_puzzle_transport_exists_data_of_axiom
+
 noncomputable def para_puzzle_transport_data_of_axiom :
     ParaPuzzleInterMandelbrotTransportData :=
   para_puzzle_transport_data_of_exists_data
-    para_puzzle_transport_exists_data_of_axiom
+    para_puzzle_transport_exists_data
+
+/-- Current default connectedness data for para-puzzle intersections on `M`. -/
+def para_puzzle_connected_data : ParaPuzzlePieceInterMandelbrotConnectedData :=
+  para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+    para_puzzle_transport_exists_data
 
 lemma para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
     ParaPuzzlePieceInterMandelbrotConnectedData :=
-  para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
-    para_puzzle_transport_exists_data_of_axiom
+  para_puzzle_connected_data
 
 end
 
