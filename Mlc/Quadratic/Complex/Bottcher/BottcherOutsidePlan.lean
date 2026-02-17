@@ -4032,6 +4032,24 @@ def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
 def BottcherImageOutsideOpenIsExterior (c : ℂ) : Prop :=
   Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} = {w : ℂ | 1 < ‖w‖}
 
+/-- Outside-open surjectivity immediately yields the image-equality target. -/
+theorem bottcherImageOutsideOpenIsExterior_of_surj
+    (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    BottcherImageOutsideOpenIsExterior c := by
+  apply Set.Subset.antisymm
+  · intro w hw
+    rcases hw with ⟨z, hz, rfl⟩
+    exact bottcher_map_norm_gt_one_of_outside c (outside_open_subset_outside_disk c hz)
+  · intro w hw
+    rcases h_surj w hw with ⟨z, hz, hzw⟩
+    exact ⟨z, hz, hzw⟩
+
+/-- `c = 2` specialization of the previous bridge theorem. -/
+theorem bottcherImageOutsideOpenIsExterior_two_of_surj
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    BottcherImageOutsideOpenIsExterior (2 : ℂ) := by
+  exact bottcherImageOutsideOpenIsExterior_of_surj (2 : ℂ) h_surj
+
 /-- Image-equality target implies the outside-open surjectivity target. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior
     (c : ℂ) (h_img : BottcherImageOutsideOpenIsExterior c) :

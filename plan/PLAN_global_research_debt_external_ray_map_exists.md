@@ -81,6 +81,8 @@
     `mlc_conjecture_of_outside_inj_and_surj_two`.
   - Added an equivalent M5 image-equality route:
     `BottcherImageOutsideOpenIsExterior`,
+    `bottcherImageOutsideOpenIsExterior_of_surj`,
+    `bottcherImageOutsideOpenIsExterior_two_of_surj`,
     `bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`,
     `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior`,
     and `mlc_conjecture_of_outside_inj_and_image_eq_exterior_two`.
