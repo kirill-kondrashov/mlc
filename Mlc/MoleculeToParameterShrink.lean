@@ -48,6 +48,12 @@ def ConformalModulusNotSummableTarget (c : ℂ) (h : SatelliteRenormalizableTowe
     MLC.Quadratic.cmodulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
 
+/-- In the current model, conformal and Gaussian proxy targets are definitionally equal. -/
+theorem conformalModulusNotSummableTarget_iff_modulusNotSummableTarget
+    (c : ℂ) (h : SatelliteRenormalizableTower c) :
+    ConformalModulusNotSummableTarget c h ↔ ModulusNotSummableTarget c h := by
+  rfl
+
 /--
 The principal nest annulus is the disjoint union of consecutive puzzle annuli.
 -/

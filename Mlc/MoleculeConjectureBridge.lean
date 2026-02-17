@@ -91,6 +91,23 @@ def MoleculeConformalModulusLowerBoundData : Prop :=
     (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c),
     PrincipalNestTarget.ConformalModulusNotSummableTarget c hTower
 
+/-- Under the current model, conformal and Gaussian bridge data are equivalent. -/
+theorem moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData :
+    MoleculeConformalModulusLowerBoundData ↔ MoleculeModulusLowerBoundData := by
+  constructor <;> intro h h_mol c hc hTower
+  · exact (PrincipalNestTarget.conformalModulusNotSummableTarget_iff_modulusNotSummableTarget c hTower).1
+      (h h_mol c hc hTower)
+  · exact (PrincipalNestTarget.conformalModulusNotSummableTarget_iff_modulusNotSummableTarget c hTower).2
+      (h h_mol c hc hTower)
+
+theorem moleculeConformalModulusLowerBoundData_of_moleculeModulusLowerBoundData
+    (h : MoleculeModulusLowerBoundData) : MoleculeConformalModulusLowerBoundData :=
+  (moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData).2 h
+
+theorem moleculeModulusLowerBoundData_of_moleculeConformalModulusLowerBoundData
+    (h : MoleculeConformalModulusLowerBoundData) : MoleculeModulusLowerBoundData :=
+  (moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData).1 h
+
 /-- Parameter-piece shrinkage from an explicit Molecule→modulus bridge datum. -/
 theorem molecule_parameter_shrink_of_tower_of_modulusLowerBoundData
     (h_mod : MoleculeModulusLowerBoundData)

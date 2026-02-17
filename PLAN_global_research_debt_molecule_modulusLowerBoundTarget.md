@@ -10,7 +10,6 @@
   (`MoleculeModulusLowerBoundData` / conformal variant).
 - [x] Began isolation refactor in `Mlc/MoleculeConjectureBridge.lean`:
   - `MoleculeModulusLowerBoundData`
-  - `molecule_modulusLowerBoundTarget_via_axiom`
   - data-parameterized wrappers:
     - `molecule_parameter_shrink_of_tower_of_modulusLowerBoundData`
     - `refined_conjecture_implies_lc_of_tower_of_modulusLowerBoundData`
@@ -50,6 +49,10 @@
   - `paraPuzzle_shrink_of_conformalModulusNotSummableTarget`
   - `MoleculeConformalModulusLowerBoundData`
   - conformal-data bridge wrappers in `Mlc/MoleculeConjectureBridge.lean`.
+- [x] Explicitly recorded current equivalence of redesign and old target:
+  - `PrincipalNestTarget.conformalModulusNotSummableTarget_iff_modulusNotSummableTarget`
+  - `moleculeConformalModulusLowerBoundData_iff_moleculeModulusLowerBoundData`
+  so this scaffold does not yet change provability under the current model.
 - [ ] Prove analog of
   `paraPuzzle_shrink_of_modulusNotSummableTarget`
   for the viable target.
