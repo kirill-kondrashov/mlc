@@ -56,6 +56,18 @@ theorem mlc_finitely_renormalizable_of_paraPuzzleTransportData
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
     c hc _h h_para_shrink
 
+/-- Existential-transport bridge-target variant routed through
+    `ParaPuzzleInterMandelbrotTransportExistsData`. -/
+theorem mlc_finitely_renormalizable_of_paraPuzzleTransportExistsData
+    (hex : ParaPuzzleInterMandelbrotTransportExistsData)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
+    c hc _h h_para_shrink
+
 /-- Axiom-backed wrapper for `mlc_finitely_renormalizable_of_paraPuzzleConnectedData`. -/
 theorem mlc_finitely_renormalizable (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (_h : FinitelyRenormalizable c)

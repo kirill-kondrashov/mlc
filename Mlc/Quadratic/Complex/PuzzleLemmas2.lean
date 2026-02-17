@@ -86,6 +86,34 @@ structure ParaPuzzleInterMandelbrotTransportData where
     ∀ c, c ∈ MandelbrotSet → ∀ n,
       transportSet c n = ParaPuzzlePieceAt c n ∩ MandelbrotSet
 
+/-- Existential transport-witness target: for each Mandelbrot base parameter
+    and depth, there exists a connected witness set for the para-puzzle
+    intersection. -/
+structure ParaPuzzleInterMandelbrotTransportExistsData : Prop where
+  witness :
+    ∀ c, c ∈ MandelbrotSet → ∀ n,
+      ∃ S : Set ℂ, IsConnected S ∧ S = ParaPuzzlePieceAt c n ∩ MandelbrotSet
+
+/-- Build concrete transport data from the existential witness target. -/
+noncomputable def para_puzzle_transport_data_of_exists_data
+    (hex : ParaPuzzleInterMandelbrotTransportExistsData) :
+    ParaPuzzleInterMandelbrotTransportData := by
+  classical
+  refine
+    { transportSet := fun c n =>
+        if hc : c ∈ MandelbrotSet then
+          Classical.choose (hex.witness c hc n)
+        else
+          ∅
+      connected := ?_
+      eq_inter := ?_ }
+  · intro c hc n
+    simp [hc]
+    exact (Classical.choose_spec (hex.witness c hc n)).1
+  · intro c hc n
+    simp [hc]
+    exact (Classical.choose_spec (hex.witness c hc n)).2
+
 theorem para_puzzle_piece_inter_mandelbrot_connected_of_data
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
     (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
@@ -118,6 +146,12 @@ theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data
   have h_eq : htr.transportSet c n = ParaPuzzlePieceAt c n ∩ MandelbrotSet :=
     htr.eq_inter c hc n
   simpa [h_eq] using h_conn
+
+theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+    (hex : ParaPuzzleInterMandelbrotTransportExistsData) :
+    ParaPuzzlePieceInterMandelbrotConnectedData :=
+  para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data
+    (para_puzzle_transport_data_of_exists_data hex)
 
 def para_puzzle_transport_data_of_connected_data
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
