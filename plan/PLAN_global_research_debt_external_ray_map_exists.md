@@ -50,6 +50,15 @@
     `bottcher_left_inv_of_data`,
     `external_ray_map_left_inverse_outside_open_of_data`,
     with axiom-backed variants now wrappers.
+  - Extended the same split into
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOnMTheory.lean` for the core
+    exterior inverse pipeline:
+    `bottcher_left_inv_of_injective_of_data`,
+    `external_ray_map_right_inverse_on_exterior_of_data`,
+    `external_ray_map_mem_outside_of_data`,
+    `external_ray_map_eventually_right_inverse_of_data`,
+    `external_ray_map_left_inverse_of_injOn_of_data`,
+    with existing non-parameterized lemmas rewritten as wrappers.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 

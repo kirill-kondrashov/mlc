@@ -500,13 +500,29 @@ theorem outside_disk_iterate_mem
     MapsTo.iterate h_map n
   exact h_iter hz
 
+theorem bottcher_left_inv_of_injective_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c)
+    (z : ℂ) (h_norm : 1 < ‖bottcher_map c z‖)
+    (h_inj : Function.Injective (bottcher_map c)) :
+    Quadratic.external_ray_map_of_data h_data (bottcher_map c z) = z := by
+  have hright :
+      bottcher_map c (Quadratic.external_ray_map_of_data h_data (bottcher_map c z)) =
+        bottcher_map c z := by
+    simpa using Quadratic.external_ray_map_of_data_right_inverse h_data
+      (bottcher_map c z) h_norm
+  exact h_inj hright
+
 theorem bottcher_left_inv_of_injective
     (c : ℂ) (z : ℂ) (h_norm : 1 < ‖bottcher_map c z‖)
     (h_inj : Function.Injective (bottcher_map c)) :
     external_ray_map c (bottcher_map c z) = z := by
-  have hright : bottcher_map c (external_ray_map c (bottcher_map c z)) = bottcher_map c z :=
-    by simpa using external_ray_map_right_inverse c (bottcher_map c z) h_norm
-  exact h_inj hright
+  simpa [Quadratic.external_ray_map] using
+    bottcher_left_inv_of_injective_of_data (Quadratic.external_ray_map_exists c) z h_norm h_inj
+
+theorem external_ray_map_right_inverse_on_exterior_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) (w : ℂ) (hw : 1 < ‖w‖) :
+    Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w := by
+  simpa using Quadratic.external_ray_map_of_data_right_inverse h_data w hw
 
 theorem external_ray_map_right_inverse_on_exterior
     (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
@@ -515,16 +531,24 @@ theorem external_ray_map_right_inverse_on_exterior
     Quadratic.bottcher_map_surj c w hw
   exact Quadratic.bottcher_right_inv_of_mem c w hw' hw
 
+theorem external_ray_map_mem_outside_of_data {c : ℂ}
+    (h_data : Quadratic.ExternalRayMapData c)
+    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
+    {w : ℂ} (hw : 1 < ‖w‖) :
+    Quadratic.external_ray_map_of_data h_data w ∈ outside_disk c := by
+  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w :=
+    external_ray_map_right_inverse_on_exterior_of_data h_data w hw
+  have hpre' : Quadratic.external_ray_map_of_data h_data w ∈
+      (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
+    simp [Set.preimage, hright, hw]
+  exact hpre hpre'
+
 theorem external_ray_map_mem_outside (c : ℂ)
     (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
     {w : ℂ} (hw : 1 < ‖w‖) :
     Quadratic.external_ray_map c w ∈ outside_disk c := by
-  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
-    external_ray_map_right_inverse_on_exterior c w hw
-  have hpre' : Quadratic.external_ray_map c w ∈
-      (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
-    simp [Set.preimage, hright, hw]
-  exact hpre hpre'
+  simpa [Quadratic.external_ray_map] using
+    external_ray_map_mem_outside_of_data (Quadratic.external_ray_map_exists c) hpre hw
 
 theorem external_ray_map_continuousOn_exterior (c : ℂ) :
     ContinuousOn (Quadratic.external_ray_map c) {w | 1 < ‖w‖} := by
@@ -537,10 +561,10 @@ theorem external_ray_map_continuousOn_exterior (c : ℂ) :
   exact (Quadratic.extended_ray_map_eq c w hw).symm
 
 
-theorem external_ray_map_eventually_right_inverse
-    (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+theorem external_ray_map_eventually_right_inverse_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) (w : ℂ) (hw : 1 < ‖w‖) :
     ∀ᶠ y in 𝓝 w,
-      Quadratic.bottcher_map c (Quadratic.external_ray_map c y) = y := by
+      Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data y) = y := by
   have hopen : IsOpen {y : ℂ | 1 < ‖y‖} := by
     simpa using (isOpen_lt continuous_const continuous_norm)
   have hmem : w ∈ {y : ℂ | 1 < ‖y‖} := hw
@@ -548,7 +572,29 @@ theorem external_ray_map_eventually_right_inverse
   refine (Filter.eventually_iff).2 ?_
   refine mem_of_superset hnhds ?_
   intro y hy
-  exact external_ray_map_right_inverse_on_exterior c y hy
+  exact external_ray_map_right_inverse_on_exterior_of_data h_data y hy
+
+theorem external_ray_map_eventually_right_inverse
+    (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
+    ∀ᶠ y in 𝓝 w,
+      Quadratic.bottcher_map c (Quadratic.external_ray_map c y) = y := by
+  simpa [Quadratic.external_ray_map] using
+    external_ray_map_eventually_right_inverse_of_data
+      (Quadratic.external_ray_map_exists c) w hw
+
+theorem external_ray_map_left_inverse_of_injOn_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) {s : Set ℂ} {z : ℂ}
+    (hsinj : Set.InjOn (Quadratic.bottcher_map c) s)
+    (hmem : Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) ∈ s)
+    (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.bottcher_map c z‖) :
+    Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z := by
+  have hright :
+      Quadratic.bottcher_map c
+          (Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z)) =
+        Quadratic.bottcher_map c z :=
+    external_ray_map_right_inverse_on_exterior_of_data h_data
+      (Quadratic.bottcher_map c z) hnorm
+  exact hsinj hmem hzs (by simpa using hright)
 
 theorem external_ray_map_left_inverse_of_injOn
     (c : ℂ) {s : Set ℂ} {z : ℂ}
@@ -556,12 +602,9 @@ theorem external_ray_map_left_inverse_of_injOn
     (hmem : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) ∈ s)
     (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.bottcher_map c z‖) :
     Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
-  have hright :
-      Quadratic.bottcher_map c
-          (Quadratic.external_ray_map c (Quadratic.bottcher_map c z)) =
-        Quadratic.bottcher_map c z :=
-    external_ray_map_right_inverse_on_exterior c (Quadratic.bottcher_map c z) hnorm
-  exact hsinj hmem hzs (by simpa using hright)
+  simpa [Quadratic.external_ray_map] using
+    external_ray_map_left_inverse_of_injOn_of_data (Quadratic.external_ray_map_exists c)
+      hsinj hmem hzs hnorm
 
 theorem bottcher_map_norm_gt_one_of_basin
     (c : ℂ) (z : ℂ) (_hz : z ∈ Quadratic.basin_of_infinity c)
