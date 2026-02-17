@@ -65,6 +65,10 @@
     `bottcher_left_inv_outside_open_of_local_of_data`,
     `bottcher_map_inj_on_outside_open_of_data`,
     with existing non-parameterized versions rewritten as wrappers.
+  - In `Mlc/MainConjecture.lean`, split the basin-iterate bridge into a
+    data-parameterized form
+    `exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data` and made the
+    existing axiom-backed lemma a wrapper specialization.
   - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
     the footprint is unchanged.
 

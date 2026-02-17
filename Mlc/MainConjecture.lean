@@ -1299,9 +1299,10 @@ lemma eq_of_iterate_eq_and_bottcher_eq_on_basin_onM
       exact eq_of_bottcher_eq_and_quadratic_eq_of_mem_mandelbrot c z w hc hz hw hphi hquad_eq
 
 /-- Equal Böttcher values on basin points force equality of some iterates,
-    using only outside left-inverse data from `external_ray_map_exists`. -/
-lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
-    (c z w : ℂ)
+    using only outside left-inverse data from explicit external-ray data. -/
+lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c)
+    (z w : ℂ)
     (hz : z ∈ Quadratic.basin_of_infinity c)
     (hw : w ∈ Quadratic.basin_of_infinity c)
     (hphi : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
@@ -1324,16 +1325,16 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
   have hzN : ‖(quadratic_map c)^[N] z‖ > ‖c‖ + 2 := by linarith
   have hwN : ‖(quadratic_map c)^[N] w‖ > ‖c‖ + 2 := by linarith
   have hz_left :
-      Quadratic.external_ray_map c
+      Quadratic.external_ray_map_of_data h_data
           (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) =
         (quadratic_map c)^[N] z := by
-    exact Quadratic.external_ray_map_left_inverse_outside_open c
+    exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data
       ((quadratic_map c)^[N] z) hzN
   have hw_left :
-      Quadratic.external_ray_map c
+      Quadratic.external_ray_map_of_data h_data
           (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) =
         (quadratic_map c)^[N] w := by
-    exact Quadratic.external_ray_map_left_inverse_outside_open c
+    exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data
       ((quadratic_map c)^[N] w) hwN
   have hphiN :
       Quadratic.bottcher_map c ((quadratic_map c)^[N] z) =
@@ -1349,15 +1350,27 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
   have hiter : (quadratic_map c)^[N] z = (quadratic_map c)^[N] w := by
     calc
       (quadratic_map c)^[N] z
-          = Quadratic.external_ray_map c
+          = Quadratic.external_ray_map_of_data h_data
               (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) := by
                 symm
                 exact hz_left
-      _ = Quadratic.external_ray_map c
+      _ = Quadratic.external_ray_map_of_data h_data
             (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) := by
               simp [hphiN]
       _ = (quadratic_map c)^[N] w := hw_left
   exact ⟨N, hiter⟩
+
+/-- Equal Böttcher values on basin points force equality of some iterates,
+    using only outside left-inverse data from `external_ray_map_exists`. -/
+lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
+    (c z w : ℂ)
+    (hz : z ∈ Quadratic.basin_of_infinity c)
+    (hw : w ∈ Quadratic.basin_of_infinity c)
+    (hphi : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
+    ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w := by
+  simpa [Quadratic.external_ray_map] using
+    exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data
+      (Quadratic.external_ray_map_exists c) z w hz hw hphi
 
 /-- Non-axiomatic on-M basin injectivity, derived from basin dynamics and
     outside left-inverse data. -/
