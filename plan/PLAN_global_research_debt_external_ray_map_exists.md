@@ -174,8 +174,37 @@
   - Added an intermediate stronger reduction target:
     `ExternalRayLandsOutsideOpen (2 : ℂ)` and theorem
     `bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen`.
+- [x] Add an unconditional exterior-to-`outside_disk` image bridge and factor
+  the outside-open target through a refinement property.
+  - Added theorem
+    `exterior_subset_image_outside_disk`.
+  - Added refinement target
+    `BottcherOutsideDiskToOutsideOpenImageRefinement`.
+  - Added reduction theorem
+    `exterior_subset_image_outside_open_of_outside_disk_refinement`.
+  - Added converse and equivalence:
+    `outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open`
+    and
+    `exterior_subset_image_outside_open_iff_outside_disk_refinement`.
+  - Added `c = 2` specialization:
+    `bottcherExteriorSubsetImageOutsideOpenTwo_iff_outside_disk_refinement`.
+  - Added top-level closure route in `Mlc/MainConjecture.lean`:
+    `mlc_conjecture_of_outside_inj_and_outside_disk_refinement_two`.
+  - Re-routed
+    `exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen` through
+    `outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen`.
 - [ ] Package the resulting theorem as
   `bottcherImageOutsideOpenIsExterior_two`.
 - [ ] Instantiate
   `mlc_conjecture_of_outside_inj_and_image_eq_exterior_two` with that theorem,
   then re-check axiom footprint.
+
+## Immediate Next Target
+- Prove `BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)` without using
+  `external_ray_map_exists`.
+- Candidate route:
+  - start from `z ∈ outside_disk`,
+  - use escape to get `n` with `(quadratic_map 2)^[n] z` in outside-open,
+  - use conjugacy to relate Böttcher images,
+  - pull back from the outside-open representative via iterate-left-inverse data
+    (existing basin/iterate scaffolding in `BottcherOnMTheory`).

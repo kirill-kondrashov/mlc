@@ -4063,18 +4063,100 @@ def BottcherExteriorSubsetImageOutsideOpenTwo : Prop :=
   ({w : ℂ | 1 < ‖w‖} ⊆
     Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
 
+/-- Exterior points are always in the image of `outside_disk` under
+    `bottcher_map`. This is unconditional in the current model because
+    `outside_disk = basin_of_infinity`. -/
+theorem exterior_subset_image_outside_disk (c : ℂ) :
+    ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c) := by
+  intro w hw
+  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
+    external_ray_map_right_inverse_on_exterior c w hw
+  have hw' : w ∈ Quadratic.bottcher_map c '' outside_disk c := by
+    refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
+    · have hnorm : 1 < ‖Quadratic.bottcher_map c (Quadratic.external_ray_map c w)‖ := by
+        simpa [hright] using hw
+      exact bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map c w) hnorm
+    · exact hright
+  exact hw'
+
+/-- Intermediate reduction target: every outside-disk point has an
+    outside-open point with the same Böttcher image. -/
+def BottcherOutsideDiskToOutsideOpenImageRefinement (c : ℂ) : Prop :=
+  ∀ z, z ∈ outside_disk c →
+    ∃ u, ‖u‖ > ‖c‖ + 2 ∧
+      Quadratic.bottcher_map c u = Quadratic.bottcher_map c z
+
+/-- Outside-open exterior inclusion follows from the refinement target above. -/
+theorem exterior_subset_image_outside_open_of_outside_disk_refinement
+    (c : ℂ) (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  intro w hw
+  rcases exterior_subset_image_outside_disk c hw with ⟨z, hz, hzw⟩
+  rcases h_refine z hz with ⟨u, hu, hEq⟩
+  exact ⟨u, hu, by simpa [hzw] using hEq⟩
+
+/-- Converse direction: outside-open exterior inclusion yields the refinement
+    target on `outside_disk`. -/
+theorem outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open
+    (c : ℂ)
+    (h_sub : {w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    BottcherOutsideDiskToOutsideOpenImageRefinement c := by
+  intro z hz
+  have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+    outside_disk_subset_quadratic_basin c hz
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    green_function_pos_of_basin c z hz_basin
+  have hw : 1 < ‖Quadratic.bottcher_map c z‖ :=
+    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+  rcases h_sub hw with ⟨u, hu, hEq⟩
+  exact ⟨u, hu, hEq⟩
+
+/-- Reformulation: outside-open exterior inclusion is equivalent to
+    outside-disk-to-outside-open image refinement. -/
+theorem exterior_subset_image_outside_open_iff_outside_disk_refinement
+    (c : ℂ) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) ↔
+      BottcherOutsideDiskToOutsideOpenImageRefinement c := by
+  constructor
+  · exact outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open c
+  · exact exterior_subset_image_outside_open_of_outside_disk_refinement c
+
+/-- `c = 2` specialization of the refinement equivalence. -/
+theorem bottcherExteriorSubsetImageOutsideOpenTwo_iff_outside_disk_refinement :
+    BottcherExteriorSubsetImageOutsideOpenTwo ↔
+      BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) := by
+  simpa [BottcherExteriorSubsetImageOutsideOpenTwo] using
+    (exterior_subset_image_outside_open_iff_outside_disk_refinement (2 : ℂ))
+
 /-- Stronger landing target: exterior rays land in outside-open. -/
 def ExternalRayLandsOutsideOpen (c : ℂ) : Prop :=
   ∀ w, 1 < ‖w‖ → ‖Quadratic.external_ray_map c w‖ > ‖c‖ + 2
+
+/-- The stronger exterior-ray landing target implies outside-disk to
+    outside-open image refinement. -/
+theorem outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen
+    (c : ℂ) (h_land : ExternalRayLandsOutsideOpen c) :
+    BottcherOutsideDiskToOutsideOpenImageRefinement c := by
+  intro z hz
+  have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+    outside_disk_subset_quadratic_basin c hz
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    green_function_pos_of_basin c z hz_basin
+  have hw : 1 < ‖Quadratic.bottcher_map c z‖ :=
+    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+  refine ⟨Quadratic.external_ray_map c (Quadratic.bottcher_map c z), h_land _ hw, ?_⟩
+  exact external_ray_map_right_inverse_on_exterior c (Quadratic.bottcher_map c z) hw
 
 /-- Exterior-subset-image from the stronger exterior-ray landing target. -/
 theorem exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen
     (c : ℂ) (h_land : ExternalRayLandsOutsideOpen c) :
     ({w : ℂ | 1 < ‖w‖} ⊆
       Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
-  intro w hw
-  refine ⟨Quadratic.external_ray_map c w, h_land w hw, ?_⟩
-  exact external_ray_map_right_inverse_on_exterior c w hw
+  exact exterior_subset_image_outside_open_of_outside_disk_refinement c
+    (outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen c h_land)
 
 /-- `c = 2` specialization of the previous reduction theorem. -/
 theorem bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen

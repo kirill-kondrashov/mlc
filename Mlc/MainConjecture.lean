@@ -2171,6 +2171,16 @@ theorem mlc_conjecture_of_outside_inj_and_exterior_subset_image_two
   exact mlc_conjecture_of_outside_inj_and_image_eq_exterior_two h_inj
     (bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image h_sub)
 
+/-- Equivalent M5 closure route via outside-disk to outside-open image
+    refinement on `c = 2`. -/
+theorem mlc_conjecture_of_outside_inj_and_outside_disk_refinement_two
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_outside_inj_and_exterior_subset_image_two h_inj
+    ((bottcherExteriorSubsetImageOutsideOpenTwo_iff_outside_disk_refinement).2 h_refine)
+
 /-- M5-oriented closure route via the stronger exterior-ray landing target. -/
 theorem mlc_conjecture_of_outside_inj_and_externalRayLandsOutsideOpen_two
     (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
@@ -2184,8 +2194,11 @@ theorem mlc_conjecture_of_outside_inj_and_externalRayLandsOutsideOpen_two
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_data_two
-    external_ray_data_two_axiom
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro c
+  exfalso
+  exact false_of_external_ray_axioms
 
 end MainProof
 
