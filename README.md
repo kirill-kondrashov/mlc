@@ -110,5 +110,4 @@ All axioms used:
 - MLC.Quadratic.external_ray_map_exists
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.Quadratic.filled_julia_set_connected
-- MLC.Quadratic.extended_ray_map_continuous
 ```
