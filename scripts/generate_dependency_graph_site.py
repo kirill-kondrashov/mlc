@@ -260,6 +260,10 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(100,116,139,0.7);
       --cycle-ring: #ef4444;
       --cycle-edge: #f97316;
+      --status-yes-bg: #fee2e2;
+      --status-yes-fg: #991b1b;
+      --status-no-bg: #dcfce7;
+      --status-no-fg: #14532d;
     }}
     :root[data-theme="dark"] {{
       --bg: #0b1220;
@@ -275,6 +279,10 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(151,175,210,0.72);
       --cycle-ring: #fb7185;
       --cycle-edge: #f59e0b;
+      --status-yes-bg: rgba(251,113,133,0.22);
+      --status-yes-fg: #fecdd3;
+      --status-no-bg: rgba(34,197,94,0.2);
+      --status-no-fg: #bbf7d0;
     }}
     * {{ box-sizing: border-box; }}
     body {{
@@ -305,6 +313,23 @@ def graph_page_html(title: str) -> str:
     .toolbar .meta {{
       color: var(--muted);
       font-size: 13px;
+    }}
+    .status-pill {{
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }}
+    .status-pill.detected {{
+      background: var(--status-yes-bg);
+      color: var(--status-yes-fg);
+    }}
+    .status-pill.none {{
+      background: var(--status-no-bg);
+      color: var(--status-no-fg);
     }}
     .toolbar label {{
       font-size: 13px;
@@ -364,6 +389,7 @@ def graph_page_html(title: str) -> str:
   <div class="toolbar">
     <h1>{esc_title}</h1>
     <span class="meta" id="summary"></span>
+    <span class="status-pill" id="cycleStatus"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
     <button id="fitBtn" type="button">Fit</button>
     <button id="themeBtn" type="button">Theme</button>
@@ -630,6 +656,18 @@ function renderLegend() {{
   `;
 }}
 
+function renderCycleStatus() {{
+  const status = document.getElementById("cycleStatus");
+  if (!status) return;
+  if (state.cycleComponentCount > 0) {{
+    status.textContent = `Cycles detected: yes (${{state.cycleComponentCount}})`;
+    status.className = "status-pill detected";
+  }} else {{
+    status.textContent = "Cycles detected: no";
+    status.className = "status-pill none";
+  }}
+}}
+
 function initGraph(payload) {{
   const byDepth = new Map();
   for (const n of payload.nodes) {{
@@ -694,6 +732,7 @@ function initGraph(payload) {{
 
   detectCycles();
   renderLegend();
+  renderCycleStatus();
 
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
@@ -909,6 +948,11 @@ function start(payload) {{
 
 loadGraph().then(start).catch((err) => {{
   document.getElementById("summary").textContent = err.message;
+  const status = document.getElementById("cycleStatus");
+  if (status) {{
+    status.textContent = "Cycles detected: unavailable";
+    status.className = "status-pill";
+  }}
   ctx.clearRect(0, 0, state.width || 800, state.height || 300);
   ctx.fillStyle = "#9b2226";
   ctx.font = "14px IBM Plex Sans, Segoe UI, sans-serif";
