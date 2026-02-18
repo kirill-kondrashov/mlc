@@ -107,7 +107,7 @@ lemma iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt 
   · intro h'
     simp only [mem_iInter] at h'
     -- We want to show c' = c.
-    -- First, show c ∈ MandelbrotSet.
+    -- First, show `0` belongs to every dynamical puzzle piece.
     have h_c_in_P : ∀ n, c ∈ ParaPuzzlePieceAt c n := by
       intro n
       have : {c} ⊆ ParaPuzzlePieceAt c n := h ▸ iInter_subset _ n
@@ -116,38 +116,9 @@ lemma iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt 
       intro n
       specialize h_c_in_P n
       simpa [ParaPuzzlePieceAt] using h_c_in_P
-    have h_G0_eq : green_function c 0 = 0 := by
-      refine le_antisymm (le_of_forall_pos_le_add ?_) (green_function_nonneg c 0)
-      intro ε hε
-      obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one hε (by norm_num : (1/2 : ℝ) < 1)
-      have h_sub := connectedComponentIn_subset {w | green_function c w < (1 / 2) ^ n} 0
-      calc green_function c 0 ≤ (1/2)^n := le_of_lt (h_sub (h_0_in_D n))
-        _ ≤ 0 + ε := by linarith
-    have hcM : c ∈ MandelbrotSet := by
-      rw [MandelbrotSet, mem_setOf_eq, boundedOrbit]
-      exact (green_function_eq_zero_iff_mem_K c 0).mp h_G0_eq
-    
-    -- Now show K c ⊆ {0}.
-    have hK_sub : K c ⊆ {0} := by
-      intro w hw
-      have : w + c ∈ ⋂ n, ParaPuzzlePieceAt c n := by
-        rw [mem_iInter]
-        intro n
-        rw [ParaPuzzlePieceAt, mem_setOf_eq, add_sub_cancel_right]
-        let S := {z | green_function c z < (1 / 2) ^ n}
-        have hKS : K c ⊆ S := by
-          intro z hz
-          have hGz : green_function c z = 0 := (green_function_eq_zero_iff_mem_K c z).mpr hz
-          show green_function c z < (1 / 2) ^ n
-          rw [hGz]
-          positivity
-        have h0K : 0 ∈ K c := (green_function_eq_zero_iff_mem_K c 0).mp h_G0_eq
-        have h_comp := (filled_julia_set_connected hcM).isPreconnected.subset_connectedComponentIn h0K hKS
-        exact h_comp hw
-      rw [h] at this
-      simpa using this
-    
-    -- Finally show c' - c ∈ K c.
+
+    -- Show `green_function c (c' - c) = 0` from closure-membership in all pieces.
+    let w : ℂ := c' - c
     have h_Gc'_eq : green_function c (c' - c) = 0 := by
       refine le_antisymm (le_of_forall_pos_le_add ?_) (green_function_nonneg c _)
       intro ε hε
@@ -166,11 +137,62 @@ lemma iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt 
       have h_cl_sub_S : closure (ParaPuzzlePieceAt c n) ⊆ S := hS_closed.closure_subset_iff.mpr h_piece_sub_S
       have h_le_n : green_function c (c' - c) ≤ (1 / 2) ^ n := h_cl_sub_S h'
       linarith
-    
-    rw [mem_singleton_iff]
-    rw [← sub_eq_zero]
-    apply hK_sub
-    exact (green_function_eq_zero_iff_mem_K c (c' - c)).mp h_Gc'_eq
+
+    -- From `w ∈ closure P_n` and `G(w)=0`, show `w` is in each connected component.
+    have hw_in_piece : ∀ n, c' ∈ ParaPuzzlePieceAt c n := by
+      intro n
+      let S : Set ℂ := {z | green_function c z < (1 / 2) ^ n}
+      let C : Set ℂ := DynamicalPuzzlePiece c n 0
+      have hS_open : IsOpen S := IsOpen.preimage (continuous_green_function c) isOpen_Iio
+      have h0S : (0 : ℂ) ∈ S := by
+        have h0D : (0 : ℂ) ∈ connectedComponentIn S 0 := by
+          simpa [S, C, DynamicalPuzzlePiece] using (h_0_in_D n)
+        exact connectedComponentIn_subset S 0 h0D
+      have hwS : w ∈ S := by
+        dsimp [S, w]
+        rw [h_Gc'_eq]
+        positivity
+      have h_image_eq :
+          (fun z : ℂ => z - c) '' ParaPuzzlePieceAt c n = C := by
+        ext y
+        constructor
+        · rintro ⟨z, hz, rfl⟩
+          simpa [C, ParaPuzzlePieceAt] using hz
+        · intro hy
+          refine ⟨y + c, ?_, by ring_nf⟩
+          simpa [C, ParaPuzzlePieceAt] using hy
+      have hw_closureC : w ∈ closure C := by
+        have hw_img :
+            w ∈ (fun z : ℂ => z - c) '' closure (ParaPuzzlePieceAt c n) := by
+          refine ⟨c', h' n, by simp [w]⟩
+        have h_closure_img :
+            (fun z : ℂ => z - c) '' closure (ParaPuzzlePieceAt c n) ⊆
+              closure ((fun z : ℂ => z - c) '' ParaPuzzlePieceAt c n) :=
+          image_closure_subset_closure_image (continuous_id.sub continuous_const)
+        exact (by simpa [h_image_eq] using h_closure_img hw_img)
+      have hwC : w ∈ C := by
+        by_contra hw_not_C
+        let D : Set ℂ := connectedComponentIn S w
+        have hwD : w ∈ D := mem_connectedComponentIn hwS
+        have hD_open : IsOpen D := hS_open.connectedComponentIn
+        have h_disj : Disjoint D C := by
+          refine Set.disjoint_left.2 ?_
+          intro y hyD hyC
+          have hDw : D = connectedComponentIn S y := connectedComponentIn_eq hyD
+          have hCw : C = connectedComponentIn S y := connectedComponentIn_eq hyC
+          have hDC : D = C := hDw.trans hCw.symm
+          exact hw_not_C (hDC ▸ hwD)
+        have hD_nhds : D ∈ 𝓝 w := hD_open.mem_nhds hwD
+        have h_meet : (D ∩ C).Nonempty := (mem_closure_iff_nhds.1 hw_closureC) D hD_nhds
+        rcases h_meet with ⟨y, hy⟩
+        exact h_disj.le_bot hy
+      simpa [w, C, S, ParaPuzzlePieceAt] using hwC
+
+    have hc'_in_iInter : c' ∈ ⋂ n, ParaPuzzlePieceAt c n := by
+      exact Set.mem_iInter.2 hw_in_piece
+    have hc'_eq : c' = c := by
+      simpa [h] using hc'_in_iInter
+    simp [mem_singleton_iff, hc'_eq]
 
   · intro h'
     rw [mem_singleton_iff] at h'
