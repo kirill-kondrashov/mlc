@@ -3,41 +3,49 @@
 ## Goal
 - Remove `MLC.Quadratic.filled_julia_set_connected` from the axiom footprint of
   `MLC.mlc_conjecture`.
-- Keep `mlc_strategy` and its wrapper chain present in `Mlc/MainConjecture.lean`.
-- Keep `mlc_conjecture` signature unchanged and avoid new axioms/hypotheses.
+- Keep `mlc_conjecture` non-tautological and keep its signature unchanged.
+- Do not introduce new axioms or new hypotheses.
 
-## Root Cause
-- `mlc_conjecture` routed through `mlc_strategy_of_paraPuzzleConnectedData`.
-- That theorem invokes
-  `mlc_finitely_renormalizable_of_paraPuzzleConnectedData`, which depends on
-  machinery importing `filled_julia_set_connected`.
+## Root Cause (was)
+- The dependency entered through:
+  - `Quadratic.iInter_closure_para_puzzle_piece`
+  - `Quadratic.para_puzzle_piece_basis`
+  - `MLC.para_puzzle_piece_basis_induced`
+  - `MLC.lc_at_of_shrink_of_data`
+  - finite branch of `mlc_conjecture`.
+- The critical use was inside `iInter_closure_para_puzzle_piece`, where
+  `filled_julia_set_connected` was used to force all `K c` points into the same
+  connected component as `0`.
 
-## Implementation
-1. Add a new strategy core theorem in `Mlc/MainConjecture.lean`:
-   - `mlc_strategy_of_branchLocalData`
-   - Inputs:
-     - explicit finite-branch local-connectivity hook
-     - IR classification hook
-     - molecule bridge hook
-   - Proof structure kept nontrivial: `dichotomy` split + finite/infinite
-     branch assembly.
-2. Refactor `mlc_strategy_of_paraPuzzleConnectedData` into a wrapper:
-   - Build finite-branch hook from existing `h_conn` + `h_param_shrink`.
-   - Delegate to `mlc_strategy_of_branchLocalData`.
-3. Add contradiction-backed finite branch helper in `Mlc/MainConjecture.lean`:
-   - `finite_lc_data_of_external_ray_data_two`.
-4. Rewire `mlc_conjecture`:
-   - keep IR classification and bridge hook construction;
-   - replace application of `mlc_strategy_of_paraPuzzleConnectedData` with
-     `mlc_strategy_of_branchLocalData` instantiated by
-     `finite_lc_data_of_external_ray_data_two external_ray_data_two_axiom`.
-5. Remove now-dead contradiction wrappers that are no longer in the final path.
-6. Re-run `make build`, `make check`, and `scripts/verify_output.sh`.
-7. Update README axiom output block to match current `make check`.
+## Implemented Strategy
+1. Reworked `iInter_closure_para_puzzle_piece` in
+   `Mlc/Quadratic/Complex/ParaPuzzleBasis.lean` to avoid any use of
+   `filled_julia_set_connected`.
+2. Replaced the old `K c` connectedness argument with a component-separation
+   argument:
+   - derive `w := c' - c` has `green_function c w = 0` from closure-membership;
+   - for each depth `n`, show `w` belongs to the open Green sublevel;
+   - transport `c' ∈ closure (ParaPuzzlePieceAt c n)` to
+     `w ∈ closure (DynamicalPuzzlePiece c n 0)`;
+   - use connected-component disjointness in the open sublevel to prove
+     `w ∈ DynamicalPuzzlePiece c n 0`;
+   - recover `c' ∈ ⋂ n ParaPuzzlePieceAt c n` and conclude `c' = c` from shrink.
+3. Kept `mlc_conjecture` finite branch routed via Yoccoz (no contradiction route
+   reintroduced).
 
-## Acceptance Criteria
-- `#print axioms MLC.mlc_conjecture` no longer lists
-  `MLC.Quadratic.filled_julia_set_connected`.
-- `mlc_strategy` theorem still exists in `Mlc/MainConjecture.lean`.
-- No new axiom appears in `MLC.mlc_conjecture`.
-- `scripts/verify_output.sh` passes.
+## Verification
+- `lake build Mlc.Quadratic.Complex.ParaPuzzleBasis Mlc.MainConjecture`
+- `make check`
+- `scripts/verify_output.sh`
+- targeted checks:
+  - `#print axioms MLC.Quadratic.iInter_closure_para_puzzle_piece`
+  - `#print axioms MLC.Quadratic.para_puzzle_piece_basis`
+  - `#print axioms MLC.lc_at_of_shrink_of_data`
+  - `#print axioms MLC.mlc_conjecture`
+
+## Result
+- `MLC.Quadratic.filled_julia_set_connected` is eliminated from
+  `MLC.mlc_conjecture`.
+- Current non-core axioms in `MLC.mlc_conjecture`:
+  - `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+  - `MLC.Quadratic.external_ray_map_exists`
