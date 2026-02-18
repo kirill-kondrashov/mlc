@@ -464,6 +464,8 @@ const state = {{
   cycleNodeCount: 0,
   cycleEdgeCount: 0,
   cycleComponentCount: 0,
+  undirectedComponentCount: 0,
+  undirectedCycleRank: 0,
   axiomCount: 0,
   search: "",
   width: 0,
@@ -589,12 +591,15 @@ function fitToGraph() {{
 function detectCycles() {{
   const idx = new Map(state.nodes.map((n, i) => [n.id, i]));
   const adj = state.nodes.map(() => []);
+  const undAdj = state.nodes.map(() => []);
   const selfLoop = state.nodes.map(() => false);
   for (const e of state.edges) {{
     const s = idx.get(e.source.id);
     const t = idx.get(e.target.id);
     if (s === undefined || t === undefined) continue;
     adj[s].push(t);
+    undAdj[s].push(t);
+    if (s !== t) undAdj[t].push(s);
     if (s === t) selfLoop[s] = true;
   }}
 
@@ -665,6 +670,26 @@ function detectCycles() {{
   state.cycleNodeCount = cycleNodes;
   state.cycleEdgeCount = cycleEdges;
   state.cycleComponentCount = cycleComp.reduce((acc, x) => acc + (x ? 1 : 0), 0);
+
+  const seen = new Array(n).fill(false);
+  let undirectedComponents = 0;
+  for (let i = 0; i < n; i++) {{
+    if (seen[i]) continue;
+    undirectedComponents += 1;
+    const stackUnd = [i];
+    seen[i] = true;
+    while (stackUnd.length > 0) {{
+      const v = stackUnd.pop();
+      for (const w of undAdj[v]) {{
+        if (!seen[w]) {{
+          seen[w] = true;
+          stackUnd.push(w);
+        }}
+      }}
+    }}
+  }}
+  state.undirectedComponentCount = undirectedComponents;
+  state.undirectedCycleRank = Math.max(0, state.edges.length - n + undirectedComponents);
 }}
 
 function renderLegend() {{
@@ -689,13 +714,18 @@ function renderLegend() {{
 function renderCycleStatus() {{
   const status = document.getElementById("cycleStatus");
   if (!status) return;
-  if (state.cycleComponentCount > 0) {{
-    status.textContent = `Cycles detected: yes (${{state.cycleComponentCount}})`;
-    status.className = "status-pill detected";
-  }} else {{
-    status.textContent = "Cycles detected: no";
-    status.className = "status-pill none";
-  }}
+  const directedDetected = state.cycleComponentCount > 0;
+  const undirectedDetected = state.undirectedCycleRank > 0;
+  const directedText = directedDetected
+    ? `yes (${{state.cycleComponentCount}})`
+    : "no";
+  const undirectedText = undirectedDetected
+    ? `yes (rank ${{state.undirectedCycleRank}})`
+    : "no";
+  status.textContent = `Directed cycles: ${{directedText}} | Undirected cycles: ${{undirectedText}}`;
+  status.className = directedDetected || undirectedDetected
+    ? "status-pill detected"
+    : "status-pill none";
 }}
 
 function initGraph(payload) {{
@@ -767,8 +797,10 @@ function initGraph(payload) {{
 
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
-    `${{state.cycleNodeCount}} cycle nodes (${{state.cycleComponentCount}} components), ` +
-    `${{state.cycleEdgeCount}} cycle edges, ${{state.axiomCount}} axioms`;
+    `${{state.cycleNodeCount}} directed-cycle nodes (${{state.cycleComponentCount}} components), ` +
+    `${{state.cycleEdgeCount}} directed-cycle edges, undirected cycle rank ` +
+    `${{state.undirectedCycleRank}} (${{state.undirectedComponentCount}} components), ` +
+    `${{state.axiomCount}} axioms`;
 
   const searchInput = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
@@ -992,7 +1024,7 @@ loadGraph().then(start).catch((err) => {{
   document.getElementById("summary").textContent = err.message;
   const status = document.getElementById("cycleStatus");
   if (status) {{
-    status.textContent = "Cycles detected: unavailable";
+    status.textContent = "Cycle metrics: unavailable";
     status.className = "status-pill";
   }}
   ctx.clearRect(0, 0, state.width || 800, state.height || 300);
