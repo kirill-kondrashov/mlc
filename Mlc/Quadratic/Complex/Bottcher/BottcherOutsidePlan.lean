@@ -4063,6 +4063,25 @@ def BottcherExteriorSubsetImageOutsideOpenTwo : Prop :=
   ({w : ℂ | 1 < ‖w‖} ⊆
     Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
 
+/-- Stronger landing target: exterior rays land in outside-open. -/
+def ExternalRayLandsOutsideOpen (c : ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ‖Quadratic.external_ray_map c w‖ > ‖c‖ + 2
+
+/-- Exterior-subset-image from the stronger exterior-ray landing target. -/
+theorem exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen
+    (c : ℂ) (h_land : ExternalRayLandsOutsideOpen c) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  intro w hw
+  refine ⟨Quadratic.external_ray_map c w, h_land w hw, ?_⟩
+  exact external_ray_map_right_inverse_on_exterior c w hw
+
+/-- `c = 2` specialization of the previous reduction theorem. -/
+theorem bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen
+    (h_land : ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    BottcherExteriorSubsetImageOutsideOpenTwo := by
+  exact exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen (2 : ℂ) h_land
+
 /-- `c = 2` image-equality target from the named inclusion target. -/
 theorem bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image
     (h_sub : BottcherExteriorSubsetImageOutsideOpenTwo) :

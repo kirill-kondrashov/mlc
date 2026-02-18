@@ -171,6 +171,9 @@
   machinery.
   - Candidate route: local homeomorphism on outside-open +
     connectedness/openness of image + nonempty seed point.
+  - Added an intermediate stronger reduction target:
+    `ExternalRayLandsOutsideOpen (2 : ℂ)` and theorem
+    `bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen`.
 - [ ] Package the resulting theorem as
   `bottcherImageOutsideOpenIsExterior_two`.
 - [ ] Instantiate
