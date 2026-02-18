@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean graphs
+.PHONY: all build check cache clean graphs serve
 
 # Default target
 all: check
@@ -20,7 +20,11 @@ check:
 
 # Build static dependency-graph pages under site/
 graphs:
-	python3 scripts/generate_dependency_graph_site.py --output site
+	cd scripts && poetry run python generate_dependency_graph_site.py --output site
+
+# Serve the generated graph site locally over HTTP
+serve: graphs
+	cd scripts && poetry run python serve_graph_site.py --directory ../site --port 8000
 
 # A target that ensures cache is fetched if lake-manifest.json is newer than a marker file
 # This attempts to satisfy "getting cache on change of files"

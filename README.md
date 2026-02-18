@@ -94,6 +94,20 @@ Generate locally:
 make graphs
 ```
 
+Poetry entry points are also available under `scripts/pyproject.toml`:
+
+```bash
+cd scripts
+poetry run mlc-graph-site --output site
+poetry run mlc-graph-serve --directory ../site --port 8000
+```
+
+Serve locally (recommended, avoids `file://` browser fetch restrictions):
+
+```bash
+make serve
+```
+
 This writes a browsable site to `site/`, with entry point:
 
 ```text
@@ -107,6 +121,9 @@ URLs shaped like:
 ```text
 https://<org>.github.io/<repo>/mlc_conjecture/
 ```
+
+Current repository link:
+https://kirill-kondrashov.github.io/mlc/mlc_conjecture/
 
 ## Dependencies
 

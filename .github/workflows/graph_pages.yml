@@ -26,8 +26,13 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install Poetry
+        run: pip install poetry
+
       - name: Generate dependency graph site
-        run: python3 scripts/generate_dependency_graph_site.py --output site
+        run: |
+          cd scripts
+          poetry run python generate_dependency_graph_site.py --output site
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -47,4 +52,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
