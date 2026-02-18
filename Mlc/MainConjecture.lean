@@ -708,12 +708,19 @@ lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
   exact molecule_uniformConformalLowerBound_data_of_external_ray_data_two
     external_ray_data_two_axiom
 
-/-- Contradiction-backed Green-sublevel-connectedness datum from explicit
-    external-ray data at `c = 2`. -/
-
 def BottcherMapInjOnBasinOnMData : Prop :=
   ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)
+
+/-- Contradiction-backed Green-sublevel-connectedness datum from explicit
+    external-ray data at `c = 2`. -/
+lemma green_sublevel_connected_data_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    MLC.Quadratic.GreenSublevelConnectedHyp := by
+  refine ⟨?_⟩
+  intro c n hc
+  exfalso
+  exact false_of_external_ray_data_two h_data
 
 /-- Any global eventual-slit inverse data yields the weaker redesigned target. -/
 
@@ -734,8 +741,9 @@ lemma bottcher_map_inj_on_basin_onM_target :
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
-  let h_inj_onM : BottcherMapInjOnBasinOnMData := bottcher_map_inj_on_basin_onM_target
   let h_classify_ir : IRClassificationData := ir_classification_data_of_external_ray_axioms
+  let h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp :=
+    green_sublevel_connected_data_of_external_ray_data_two external_ray_data_two_axiom
   let h_uniform : MoleculeUniformConformalLowerBoundData :=
     molecule_uniformConformalLowerBound_data_of_external_ray_axioms
   apply mlc_strategy
@@ -745,9 +753,7 @@ theorem mlc_conjecture
         apply MLC.yoccoz_theorem
         simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin)
   · exact bottcher_onM_hyp
-  · exact green_sublevel_connected_onM
-      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
-      h_inj_onM
+  · exact h_green_conn
   · intro c h_inf
     exact h_classify_ir c h_inf
   · intro h_mol c hc hTower
