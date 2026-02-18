@@ -83,6 +83,31 @@ make check
 
 This will compile the main conjecture file and output the list of axioms relied upon.
 
+## Dependency Graph Pages
+
+This repository includes a static graph-site generator for declaration-level
+Lean dependencies (intra-file, for all `Mlc/*.lean` files).
+
+Generate locally:
+
+```bash
+make graphs
+```
+
+This writes a browsable site to `site/`, with entry point:
+
+```text
+site/graphs/index.html
+```
+
+A GitHub Pages workflow is also included in
+`.github/workflows/graph_pages.yml`, so on `main` it can publish pages with
+URLs shaped like:
+
+```text
+https://<org>.github.io/<repo>/graphs/Mlc/MainConjecture/
+```
+
 ## Dependencies
 
 *   [Lean 4](https://leanprover.github.io/)

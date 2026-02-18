@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean
+.PHONY: all build check cache clean graphs
 
 # Default target
 all: check
@@ -17,6 +17,10 @@ build:
 # However, lake handles its own dependencies well.
 check:
 	lake env lean --run check_axioms.lean
+
+# Build static dependency-graph pages under site/
+graphs:
+	python3 scripts/generate_dependency_graph_site.py --output site
 
 # A target that ensures cache is fetched if lake-manifest.json is newer than a marker file
 # This attempts to satisfy "getting cache on change of files"
