@@ -3985,24 +3985,260 @@ lemma basin_escape_outside_open (c : ℂ) :
     linarith
   simpa using hlt
 
+lemma bottcher_left_inv_outside_open_of_local_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 →
+      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z := by
+  intro z hz
+  exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
+
 lemma bottcher_left_inv_outside_open_of_local
     (c : ℂ) :
     ∀ z, ‖z‖ > ‖c‖ + 2 →
       Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
   intro z hz
-  exact Quadratic.external_ray_map_left_inverse_outside_open c z hz
+  simpa [Quadratic.external_ray_map] using
+    bottcher_left_inv_outside_open_of_local_of_data (Quadratic.external_ray_map_data c) z hz
+
+lemma bottcher_map_inj_on_outside_open_of_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z hz w hw hzw
+  have hz' :
+      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z :=
+    Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
+  have hw' :
+      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c w) = w :=
+    Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data w hw
+  have h := congrArg (Quadratic.external_ray_map_of_data h_data) hzw
+  simpa [hz', hw'] using h
 
 lemma bottcher_map_inj_on_outside_open (c : ℂ) :
     Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   intro z hz w hw hzw
-  have hz' :
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
-    Quadratic.external_ray_map_left_inverse_outside_open c z hz
-  have hw' :
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
-    Quadratic.external_ray_map_left_inverse_outside_open c w hw
-  have h := congrArg (Quadratic.external_ray_map c) hzw
-  simpa [hz', hw'] using h
+  have h_inj_data :
+      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    bottcher_map_inj_on_outside_open_of_data (Quadratic.external_ray_map_data c)
+  have hzw' : z = w := h_inj_data hz hw hzw
+  exact hzw'
+
+/-- M5 target: surjectivity of `bottcher_map` onto the exterior by preimages in
+    the outside-open seed region. -/
+def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+
+/-- Alternative M5 target: the image of outside-open under `bottcher_map` is
+    exactly the exterior. -/
+def BottcherImageOutsideOpenIsExterior (c : ℂ) : Prop :=
+  Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} = {w : ℂ | 1 < ‖w‖}
+
+/-- Image-equality target reduced to a single inclusion obligation:
+    `exterior ⊆ image(outside-open)`. The reverse inclusion is automatic from
+    the norm estimate on outside points. -/
+theorem bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image
+    (c : ℂ) :
+    BottcherImageOutsideOpenIsExterior c ↔
+      ({w : ℂ | 1 < ‖w‖} ⊆
+        Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  constructor
+  · intro h_img w hw
+    rw [h_img]
+    exact hw
+  · intro h_sub
+    apply Set.Subset.antisymm
+    · intro w hw
+      rcases hw with ⟨z, hz, rfl⟩
+      exact bottcher_map_norm_gt_one_of_outside c (outside_open_subset_outside_disk c hz)
+    · exact h_sub
+
+/-- `c = 2` specialization of the previous reduction theorem. -/
+theorem bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image :
+    BottcherImageOutsideOpenIsExterior (2 : ℂ) ↔
+      ({w : ℂ | 1 < ‖w‖} ⊆
+        Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) := by
+  exact bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image (2 : ℂ)
+
+/-- Named `c = 2` inclusion target for the outside-open image step. -/
+def BottcherExteriorSubsetImageOutsideOpenTwo : Prop :=
+  ({w : ℂ | 1 < ‖w‖} ⊆
+    Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+
+/-- Exterior points are always in the image of `outside_disk` under
+    `bottcher_map`. This is unconditional in the current model because
+    `outside_disk = basin_of_infinity`. -/
+theorem exterior_subset_image_outside_disk (c : ℂ) :
+    ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c) := by
+  intro w hw
+  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
+    external_ray_map_right_inverse_on_exterior c w hw
+  have hw' : w ∈ Quadratic.bottcher_map c '' outside_disk c := by
+    refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
+    · have hnorm : 1 < ‖Quadratic.bottcher_map c (Quadratic.external_ray_map c w)‖ := by
+        simpa [hright] using hw
+      exact bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map c w) hnorm
+    · exact hright
+  exact hw'
+
+/-- Intermediate reduction target: every outside-disk point has an
+    outside-open point with the same Böttcher image. -/
+def BottcherOutsideDiskToOutsideOpenImageRefinement (c : ℂ) : Prop :=
+  ∀ z, z ∈ outside_disk c →
+    ∃ u, ‖u‖ > ‖c‖ + 2 ∧
+      Quadratic.bottcher_map c u = Quadratic.bottcher_map c z
+
+/-- Outside-open exterior inclusion follows from the refinement target above. -/
+theorem exterior_subset_image_outside_open_of_outside_disk_refinement
+    (c : ℂ) (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  intro w hw
+  rcases exterior_subset_image_outside_disk c hw with ⟨z, hz, hzw⟩
+  rcases h_refine z hz with ⟨u, hu, hEq⟩
+  exact ⟨u, hu, by simpa [hzw] using hEq⟩
+
+/-- Converse direction: outside-open exterior inclusion yields the refinement
+    target on `outside_disk`. -/
+theorem outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open
+    (c : ℂ)
+    (h_sub : {w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    BottcherOutsideDiskToOutsideOpenImageRefinement c := by
+  intro z hz
+  have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+    outside_disk_subset_quadratic_basin c hz
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    green_function_pos_of_basin c z hz_basin
+  have hw : 1 < ‖Quadratic.bottcher_map c z‖ :=
+    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+  rcases h_sub hw with ⟨u, hu, hEq⟩
+  exact ⟨u, hu, hEq⟩
+
+/-- Reformulation: outside-open exterior inclusion is equivalent to
+    outside-disk-to-outside-open image refinement. -/
+theorem exterior_subset_image_outside_open_iff_outside_disk_refinement
+    (c : ℂ) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) ↔
+      BottcherOutsideDiskToOutsideOpenImageRefinement c := by
+  constructor
+  · exact outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open c
+  · exact exterior_subset_image_outside_open_of_outside_disk_refinement c
+
+/-- `c = 2` specialization of the refinement equivalence. -/
+theorem bottcherExteriorSubsetImageOutsideOpenTwo_iff_outside_disk_refinement :
+    BottcherExteriorSubsetImageOutsideOpenTwo ↔
+      BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) := by
+  simpa [BottcherExteriorSubsetImageOutsideOpenTwo] using
+    (exterior_subset_image_outside_open_iff_outside_disk_refinement (2 : ℂ))
+
+/-- Stronger landing target: exterior rays land in outside-open. -/
+def ExternalRayLandsOutsideOpen (c : ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ‖Quadratic.external_ray_map c w‖ > ‖c‖ + 2
+
+/-- The stronger exterior-ray landing target implies outside-disk to
+    outside-open image refinement. -/
+theorem outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen
+    (c : ℂ) (h_land : ExternalRayLandsOutsideOpen c) :
+    BottcherOutsideDiskToOutsideOpenImageRefinement c := by
+  intro z hz
+  have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+    outside_disk_subset_quadratic_basin c hz
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    green_function_pos_of_basin c z hz_basin
+  have hw : 1 < ‖Quadratic.bottcher_map c z‖ :=
+    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+  refine ⟨Quadratic.external_ray_map c (Quadratic.bottcher_map c z), h_land _ hw, ?_⟩
+  exact external_ray_map_right_inverse_on_exterior c (Quadratic.bottcher_map c z) hw
+
+/-- Exterior-subset-image from the stronger exterior-ray landing target. -/
+theorem exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen
+    (c : ℂ) (h_land : ExternalRayLandsOutsideOpen c) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  exact exterior_subset_image_outside_open_of_outside_disk_refinement c
+    (outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen c h_land)
+
+/-- `c = 2` specialization of the previous reduction theorem. -/
+theorem bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen
+    (h_land : ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    BottcherExteriorSubsetImageOutsideOpenTwo := by
+  exact exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen (2 : ℂ) h_land
+
+/-- `c = 2` image-equality target from the named inclusion target. -/
+theorem bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image
+    (h_sub : BottcherExteriorSubsetImageOutsideOpenTwo) :
+    BottcherImageOutsideOpenIsExterior (2 : ℂ) := by
+  exact (bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image).2 h_sub
+
+/-- Outside-open surjectivity immediately yields the image-equality target. -/
+theorem bottcherImageOutsideOpenIsExterior_of_surj
+    (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    BottcherImageOutsideOpenIsExterior c := by
+  apply Set.Subset.antisymm
+  · intro w hw
+    rcases hw with ⟨z, hz, rfl⟩
+    exact bottcher_map_norm_gt_one_of_outside c (outside_open_subset_outside_disk c hz)
+  · intro w hw
+    rcases h_surj w hw with ⟨z, hz, hzw⟩
+    exact ⟨z, hz, hzw⟩
+
+/-- `c = 2` specialization of the previous bridge theorem. -/
+theorem bottcherImageOutsideOpenIsExterior_two_of_surj
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    BottcherImageOutsideOpenIsExterior (2 : ℂ) := by
+  exact bottcherImageOutsideOpenIsExterior_of_surj (2 : ℂ) h_surj
+
+/-- Image-equality target implies the outside-open surjectivity target. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior
+    (c : ℂ) (h_img : BottcherImageOutsideOpenIsExterior c) :
+    BottcherSurjOnExteriorFromOutsideOpen c := by
+  intro w hw
+  have himg : w ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    rw [h_img]
+    exact hw
+  rcases himg with ⟨z, hz, hzw⟩
+  exact ⟨z, hz, hzw⟩
+
+/-- Construct external-ray data from outside-open injectivity + exterior
+    surjectivity by outside-open preimages. -/
+theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
+    (c : ℂ)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    Quadratic.ExternalRayMapData c := by
+  classical
+  let f : ℂ → ℂ := fun w =>
+    if hw : 1 < ‖w‖ then Classical.choose (h_surj w hw) else 0
+  refine ⟨f, ?_, ?_⟩
+  · intro w hw
+    have hspec : Quadratic.bottcher_map c (Classical.choose (h_surj w hw)) = w :=
+      (Classical.choose_spec (h_surj w hw)).2
+    simpa [f, hw] using hspec
+  · intro z hz
+    have hz_out : z ∈ ({z : ℂ | ‖z‖ > ‖c‖ + 2} : Set ℂ) := hz
+    have hz_disk : z ∈ outside_disk c := outside_open_subset_outside_disk c hz_out
+    have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+      outside_disk_subset_quadratic_basin c hz_disk
+    have hpos : 0 < MLC.Quadratic.green_function c z :=
+      green_function_pos_of_basin c z hz_basin
+    have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
+      bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+    have hspec := Classical.choose_spec (h_surj (Quadratic.bottcher_map c z) hnorm)
+    have hz_choose :
+        Classical.choose (h_surj (Quadratic.bottcher_map c z) hnorm) = z := by
+      apply h_inj hspec.1 hz_out
+      simpa using hspec.2
+    simp [f, hnorm, hz_choose]
+
+/-- Variant of the previous construction using image equality as the input
+    target instead of a separate surjectivity witness. -/
+theorem external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior
+    (c : ℂ)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (h_img : BottcherImageOutsideOpenIsExterior c) :
+    Quadratic.ExternalRayMapData c := by
+  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
+    (bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior c h_img)
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
     (c : ℂ)

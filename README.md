@@ -10,7 +10,7 @@ This repository is a proof skeleton. It compiles and isolates the main logical
 dependencies, but several deep inputs remain axiomatic.
 
 Active research-debt tracking for the Böttcher inverse-branch route:
-`PLAN_global_research_debt_bottcher_inverse.md`.
+`plan/PLAN_global_research_debt_bottcher_inverse.md`.
 
 For the Molecule Conjecture track, the project re-exports the refined conjecture
 statement from an external `Molecule` package located at
@@ -103,5 +103,9 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
+- MLC.Quadratic.bottcher_seq_converges
 - MLC.Quadratic.external_ray_map_exists
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.Quadratic.filled_julia_set_connected
+- MLC.Quadratic.extended_ray_map_continuous
 ```

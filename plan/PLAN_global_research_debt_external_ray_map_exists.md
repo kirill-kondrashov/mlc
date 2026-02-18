@@ -1,0 +1,210 @@
+# Plan: Eliminate `MLC.Quadratic.external_ray_map_exists`
+
+## Scope
+- Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
+  `MLC.mlc_conjecture`.
+- Keep top-level theorem signatures stable.
+- Avoid introducing replacement axioms.
+
+## Current Status (2026-02-17)
+- `make check` for `MLC.mlc_conjecture` currently reports only:
+  - `Quot.sound`
+  - `propext`
+  - `Classical.choice`
+  - `MLC.Quadratic.external_ray_map_exists`
+- `external_ray_map_exists` is used by:
+  - `Quadratic.external_ray_map` (choice of inverse branch)
+  - `MLC.false_of_external_ray_axioms` in `Mlc/MainConjecture.lean`
+  - several Böttcher helper lemmas (`bottcher_left_inv`, `bottcher_map_surj`, etc.)
+
+## Root Cause
+- The current `mlc_conjecture` closes by contradiction via
+  `false_of_external_ray_axioms`.
+- That contradiction explicitly uses `Classical.choose_spec (external_ray_map_exists (2 : ℂ))`.
+- Therefore this axiom is currently the single non-core dependency.
+- Latest code status:
+  - `mlc_conjecture` is now routed through a generic closure helper
+    `mlc_conjecture_of_false`.
+  - An alternate non-external closure API now exists:
+    `mlc_conjecture_of_fast_tower_obstruction`.
+  - Introduced `Quadratic.ExternalRayMapData` in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` with conversion lemmas
+    `external_ray_map_exists_of_data` / `external_ray_map_data_of_exists`.
+  - Replaced non-local direct
+    `Classical.choose_spec (external_ray_map_exists ...)` usages with helper
+    lemmas from `BottcherAxioms`.
+  - Parameterized the contradiction stack in `Mlc/MainConjecture.lean` by
+    explicit `ExternalRayMapData (2 : ℂ)`:
+    `false_of_external_ray_data_two` and data-parameterized wrapper builders,
+    with existing axiom-backed lemmas now thin specializations.
+  - Added `mlc_conjecture_of_external_ray_data_two` and rewired
+    `mlc_conjecture` as a one-line specialization. Axiom usage is now
+    concentrated at a single instantiation site.
+  - Added constructive map API wrappers in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`:
+    `external_ray_map_of_data`,
+    `external_ray_map_of_data_right_inverse`,
+    `external_ray_map_of_data_left_inverse_large`, and routed
+    `external_ray_map` through this data-based definition.
+  - Added data-parameterized Böttcher-left-inverse lemmas:
+    `bottcher_left_inv_of_data`,
+    `external_ray_map_left_inverse_outside_open_of_data`,
+    with axiom-backed variants now wrappers.
+  - Extended the same split into
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOnMTheory.lean` for the core
+    exterior inverse pipeline:
+    `bottcher_left_inv_of_injective_of_data`,
+    `external_ray_map_right_inverse_on_exterior_of_data`,
+    `external_ray_map_mem_outside_of_data`,
+    `external_ray_map_eventually_right_inverse_of_data`,
+    `external_ray_map_left_inverse_of_injOn_of_data`,
+    with existing non-parameterized lemmas rewritten as wrappers.
+  - Extended the split into
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean` for outside-open
+    seed lemmas:
+    `bottcher_left_inv_outside_open_of_local_of_data`,
+    `bottcher_map_inj_on_outside_open_of_data`,
+    with existing non-parameterized versions rewritten as wrappers.
+  - In `Mlc/MainConjecture.lean`, split the basin-iterate bridge into a
+    data-parameterized form
+    `exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data` and made the
+    existing axiom-backed lemma a wrapper specialization.
+  - Added a concrete M5 bridge theorem in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+    `external_ray_map_data_of_injOn_outside_open_of_surj_exterior`,
+    reducing `ExternalRayMapData` construction to:
+    1) outside-open injectivity of `bottcher_map`, and
+    2) surjectivity onto `{w | 1 < ‖w‖}` by outside-open preimages
+       (`BottcherSurjOnExteriorFromOutsideOpen`).
+  - Added corresponding top-level closure route in
+    `Mlc/MainConjecture.lean`:
+    `mlc_conjecture_of_outside_inj_and_surj_two`.
+  - Added an equivalent M5 image-equality route:
+    `BottcherImageOutsideOpenIsExterior`,
+    `bottcherImageOutsideOpenIsExterior_of_surj`,
+    `bottcherImageOutsideOpenIsExterior_two_of_surj`,
+    `bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`,
+    `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior`,
+    and `mlc_conjecture_of_outside_inj_and_image_eq_exterior_two`.
+  - Replaced direct `external_ray_map_exists` uses in active proof files
+    (`MainConjecture`, `BottcherOnMTheory`, `BottcherOutsidePlan`) with
+    `Quadratic.external_ray_map_data`; direct axiom calls are now confined to
+    `BottcherAxioms` API wrappers.
+  - Top-level closure still instantiates via `false_of_external_ray_axioms`, so
+    the footprint is unchanged.
+
+## Strategy Options
+1. **Primary target (recommended): remove contradiction route dependency**
+   - Refactor top-level closure to avoid `false_of_external_ray_axioms`.
+   - Replace with a constructive/parameterized route whose assumptions are
+     already represented as data structures in `MainConjecture`.
+   - This is likely the fastest way to remove the axiom from
+     `MLC.mlc_conjecture` footprint.
+
+2. **Secondary target (harder): prove an inverse-map existence theorem**
+   - Replace axiom `external_ray_map_exists` in
+     `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` with a theorem.
+   - Build from existing local inverse infrastructure:
+     - `InverseBranchSlit.lean` / `InverseBranchSlitUse.lean`
+     - outside-disk injectivity/local-homeomorph routes in
+       `BottcherOnMTheory.lean` and `BottcherOutsidePlan.lean`
+   - Upgrade local/eventual inverse data to a global exterior inverse with:
+     - right inverse on `{w | 1 < ‖w‖}`
+     - left inverse on sufficiently large `z`.
+
+## Concrete Milestones
+- [x] **M1 (footprint):** isolate `mlc_conjecture` closure through
+  `mlc_conjecture_of_false`, introduce an alternate closure path
+  (`mlc_conjecture_of_fast_tower_obstruction`), and re-run `make check`.
+- [x] **M2 (API hygiene):** split Böttcher helper lemmas (active proof path)
+  into:
+  - ones requiring explicit inverse data
+  - ones independent of `external_ray_map_exists`
+- [x] **M3 (constructive inverse package):** define a replacement data target:
+  - `ExternalRayMapData c : Prop`
+  capturing the two properties currently returned by
+  `external_ray_map_exists c`.
+- [x] **M4:** prove `external_ray_map_exists_of_data` and thread data through
+  call sites.
+- [ ] **M5:** either:
+  - prove `ExternalRayMapData c` from existing inverse-branch machinery, or
+  - keep it as an explicit parameter and ensure `mlc_conjecture` no longer
+    depends on the axiom.
+- [ ] **M6:** remove/replace the axiom declaration and update README output.
+
+## Validation
+- [x] `make build`
+- [x] `make check`
+- [x] `scripts/verify_output.sh`
+- [ ] Confirm `MLC.Quadratic.external_ray_map_exists` is absent from
+  `check_axioms.lean` output for `MLC.mlc_conjecture`.
+
+## Risks
+- Existing contradiction-based top-level wiring may still import helper theorems
+  that reference `external_ray_map_exists` in proof terms.
+- Some inverse-branch routes in `InverseBranchSlitUse.lean` have formal
+  obstruction lemmas; these may block a direct constructive proof in current
+  model and require route redesign rather than theorem completion.
+
+## Current Blocker for M5
+- The axiom dependency is now concentrated at one specialization site:
+  `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` now exposes
+  `Quadratic.external_ray_map_data`, and `Mlc/MainConjecture.lean` consumes that
+  theorem via `external_ray_data_two_axiom`; `MainConjecture` no longer calls
+  `external_ray_map_exists` directly.
+- To remove `MLC.Quadratic.external_ray_map_exists` from the footprint, we need
+  a non-axiomatic proof of `Quadratic.ExternalRayMapData (2 : ℂ)` (or an
+  alternative contradiction route that stays axiom-neutral and does not replace
+  this with another project axiom).
+
+## Next Steps (Active)
+- [x] Reduce `BottcherImageOutsideOpenIsExterior (2 : ℂ)` to one hard inclusion.
+  - Added theorem
+    `bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image` in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`.
+  - Added named target
+    `BottcherExteriorSubsetImageOutsideOpenTwo` and bridge theorem
+    `bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image`.
+  - Remaining target is now:
+    `{w | 1 < ‖w‖} ⊆ bottcher_map (2) '' {z | ‖z‖ > ‖(2:ℂ)‖ + 2}`.
+- [ ] Build the inclusion proof for `c = 2` from existing outside-open
+  machinery.
+  - Candidate route: local homeomorphism on outside-open +
+    connectedness/openness of image + nonempty seed point.
+  - Added an intermediate stronger reduction target:
+    `ExternalRayLandsOutsideOpen (2 : ℂ)` and theorem
+    `bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen`.
+- [x] Add an unconditional exterior-to-`outside_disk` image bridge and factor
+  the outside-open target through a refinement property.
+  - Added theorem
+    `exterior_subset_image_outside_disk`.
+  - Added refinement target
+    `BottcherOutsideDiskToOutsideOpenImageRefinement`.
+  - Added reduction theorem
+    `exterior_subset_image_outside_open_of_outside_disk_refinement`.
+  - Added converse and equivalence:
+    `outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open`
+    and
+    `exterior_subset_image_outside_open_iff_outside_disk_refinement`.
+  - Added `c = 2` specialization:
+    `bottcherExteriorSubsetImageOutsideOpenTwo_iff_outside_disk_refinement`.
+  - Added top-level closure route in `Mlc/MainConjecture.lean`:
+    `mlc_conjecture_of_outside_inj_and_outside_disk_refinement_two`.
+  - Re-routed
+    `exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen` through
+    `outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen`.
+- [ ] Package the resulting theorem as
+  `bottcherImageOutsideOpenIsExterior_two`.
+- [ ] Instantiate
+  `mlc_conjecture_of_outside_inj_and_image_eq_exterior_two` with that theorem,
+  then re-check axiom footprint.
+
+## Immediate Next Target
+- Prove `BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)` without using
+  `external_ray_map_exists`.
+- Candidate route:
+  - start from `z ∈ outside_disk`,
+  - use escape to get `n` with `(quadratic_map 2)^[n] z` in outside-open,
+  - use conjugacy to relate Böttcher images,
+  - pull back from the outside-open representative via iterate-left-inverse data
+    (existing basin/iterate scaffolding in `BottcherOnMTheory`).
