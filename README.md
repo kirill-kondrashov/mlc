@@ -85,8 +85,8 @@ This will compile the main conjecture file and output the list of axioms relied 
 
 ## Dependency Graph Pages
 
-This repository includes a static graph-site generator for declaration-level
-Lean dependencies (intra-file, for all `Mlc/*.lean` files).
+This repository includes a static graph-site generator for one declaration-level
+graph rooted at `MLC.mlc_conjecture` (transitive dependencies across `Mlc/*.lean`).
 
 Generate locally:
 
@@ -97,7 +97,7 @@ make graphs
 This writes a browsable site to `site/`, with entry point:
 
 ```text
-site/graphs/index.html
+site/mlc_conjecture/index.html
 ```
 
 A GitHub Pages workflow is also included in
@@ -105,7 +105,7 @@ A GitHub Pages workflow is also included in
 URLs shaped like:
 
 ```text
-https://<org>.github.io/<repo>/graphs/Mlc/MainConjecture/
+https://<org>.github.io/<repo>/mlc_conjecture/
 ```
 
 ## Dependencies

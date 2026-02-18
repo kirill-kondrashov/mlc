@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
-"""Generate a static dependency-graph site for Lean files in `Mlc/`.
+"""Generate a single dependency graph rooted at `MLC.mlc_conjecture`.
 
-The graph is declaration-level and intra-file:
-- Nodes: top-level declarations (`lemma`, `theorem`, `def`, ...)
-- Edges: textual references from one declaration body to another declaration
-  name in the same file.
-
-Output layout (default):
+The graph is declaration-level and cross-file (all `Mlc/*.lean`).
+Edges are textual usage edges: source declaration body references target name.
+Output layout:
   site/
     index.html
-    graphs/
+    mlc_conjecture/
       index.html
-      Mlc/MainConjecture/index.html
-      Mlc/MainConjecture/graph.json
-      ...
+      graph.json
 """
 
 from __future__ import annotations
@@ -25,20 +20,26 @@ import html
 import json
 import re
 import shutil
-from typing import Iterable
+from collections import deque
 
 
 DECL_RE = re.compile(
     r"^\s*(?:(?:noncomputable|private|protected|unsafe|partial|mutual)\s+)*"
     r"(lemma|theorem|def|abbrev|axiom|structure|class|instance)\s+([^\s(:=\[{]+)"
 )
-TOKEN_CHARS = r"A-Za-z0-9_'."
+NS_RE = re.compile(r"^\s*namespace\s+([A-Za-z0-9_.']+)\s*$")
+SECTION_RE = re.compile(r"^\s*(?:noncomputable\s+)?section\b")
+END_RE = re.compile(r"^\s*end(?:\s+[A-Za-z0-9_.']+)?\s*$")
+TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
+TOKEN_CHARS = r"A-Za-z0-9_.']"
 
 
 @dataclass(frozen=True)
 class Decl:
     kind: str
     name: str
+    fq_name: str
+    file: str
     line: int
     end_line: int
 
@@ -48,7 +49,6 @@ class Decl:
 
 
 def strip_comments(line: str, block_depth: int) -> tuple[str, int]:
-    """Remove Lean line/block comments from one line."""
     i = 0
     out: list[str] = []
     while i < len(line):
@@ -62,106 +62,189 @@ def strip_comments(line: str, block_depth: int) -> tuple[str, int]:
             else:
                 i += 1
             continue
-
         if line.startswith("--", i):
             break
         if line.startswith("/-", i):
             block_depth += 1
             i += 2
             continue
-
         out.append(line[i])
         i += 1
     return "".join(out), block_depth
 
 
-def find_decls(lines: list[str]) -> list[Decl]:
-    stripped: list[str] = []
-    block_depth = 0
-    for line in lines:
-        s, block_depth = strip_comments(line, block_depth)
-        stripped.append(s)
+def parse_decls_from_file(file_path: Path, repo_root: Path) -> tuple[list[Decl], list[str]]:
+    text = file_path.read_text(encoding="utf-8")
+    raw_lines = text.splitlines()
 
-    raw_decls: list[tuple[str, str, int]] = []
-    for i, line in enumerate(stripped, start=1):
+    stripped_lines: list[str] = []
+    block_depth = 0
+    for line in raw_lines:
+        stripped, block_depth = strip_comments(line, block_depth)
+        stripped_lines.append(stripped)
+
+    rel_file = str(file_path.relative_to(repo_root))
+    decl_meta: list[tuple[int, str, str, str]] = []  # line, kind, name, fq_name
+    scope_stack: list[tuple[str, list[str] | None]] = []
+    ns_parts: list[str] = []
+
+    for line_no, line in enumerate(stripped_lines, start=1):
+        ns_match = NS_RE.match(line)
+        if ns_match:
+            parts = ns_match.group(1).split(".")
+            scope_stack.append(("namespace", parts))
+            ns_parts.extend(parts)
+            continue
+
+        if SECTION_RE.match(line):
+            scope_stack.append(("section", None))
+            continue
+
+        if END_RE.match(line):
+            if scope_stack:
+                kind, payload = scope_stack.pop()
+                if kind == "namespace" and payload is not None:
+                    del ns_parts[-len(payload) :]
+            continue
+
         m = DECL_RE.match(line)
         if not m:
             continue
         kind, name = m.group(1), m.group(2)
         if name.startswith(("(", ":", "{", "[")):
             continue
-        raw_decls.append((kind, name, i))
-
-    if not raw_decls:
-        return []
+        fq_name = ".".join(ns_parts + [name]) if ns_parts else name
+        decl_meta.append((line_no, kind, name, fq_name))
 
     decls: list[Decl] = []
-    for idx, (kind, name, line) in enumerate(raw_decls):
-        if idx + 1 < len(raw_decls):
-            end_line = raw_decls[idx + 1][2] - 1
-        else:
-            end_line = len(lines)
-        decls.append(Decl(kind=kind, name=name, line=line, end_line=end_line))
-    return decls
+    for i, (line_no, kind, name, fq_name) in enumerate(decl_meta):
+        end_line = decl_meta[i + 1][0] - 1 if i + 1 < len(decl_meta) else len(raw_lines)
+        decls.append(
+            Decl(
+                kind=kind,
+                name=name,
+                fq_name=fq_name,
+                file=rel_file,
+                line=line_no,
+                end_line=end_line,
+            )
+        )
+    return decls, stripped_lines
 
 
-def symbol_regex(name: str) -> re.Pattern[str]:
-    return re.compile(
-        rf"(?<![{TOKEN_CHARS}]){re.escape(name)}(?![{TOKEN_CHARS}])"
+def common_prefix_len(a: list[str], b: list[str]) -> int:
+    n = min(len(a), len(b))
+    i = 0
+    while i < n and a[i] == b[i]:
+        i += 1
+    return i
+
+
+def resolve_token(
+    token: str,
+    src: Decl,
+    fq_index: dict[str, Decl],
+    short_index: dict[str, list[Decl]],
+    suffix_index: dict[str, list[Decl]],
+) -> list[Decl]:
+    if token in fq_index:
+        return [fq_index[token]]
+
+    if "." in token and token in suffix_index:
+        cands = suffix_index[token]
+        if len(cands) == 1:
+            return cands
+
+    short = token.split(".")[-1]
+    cands = short_index.get(short, [])
+    if not cands:
+        return []
+    if len(cands) == 1:
+        return cands
+
+    same_file = [d for d in cands if d.file == src.file]
+    if len(same_file) == 1:
+        return same_file
+
+    src_parts = src.fq_name.split(".")[:-1]
+    scored = sorted(
+        cands,
+        key=lambda d: common_prefix_len(src_parts, d.fq_name.split(".")[:-1]),
+        reverse=True,
     )
+    if scored:
+        top_score = common_prefix_len(src_parts, scored[0].fq_name.split(".")[:-1])
+        top = [d for d in scored if common_prefix_len(src_parts, d.fq_name.split(".")[:-1]) == top_score]
+        if len(top) == 1 and top_score > 0:
+            return top
+    return []
 
 
-def build_graph_for_file(file_path: Path, root: Path) -> dict:
-    text = file_path.read_text(encoding="utf-8")
-    lines = text.splitlines()
-    decls = find_decls(lines)
+def build_full_graph(repo_root: Path) -> tuple[dict[str, Decl], dict[str, set[str]]]:
+    lean_files = sorted((repo_root / "Mlc").rglob("*.lean"))
+    all_decls: list[Decl] = []
+    stripped_by_file: dict[str, list[str]] = {}
 
-    rel_path = file_path.relative_to(root)
-    module_name = ".".join(rel_path.with_suffix("").parts)
+    for f in lean_files:
+        decls, stripped = parse_decls_from_file(f, repo_root)
+        all_decls.extend(decls)
+        stripped_by_file[str(f.relative_to(repo_root))] = stripped
 
-    node_payload = [
-        {
-            "id": d.name,
-            "label": d.name,
-            "kind": d.kind,
-            "line": d.line,
-            "span": d.span,
-        }
-        for d in decls
-    ]
+    fq_index: dict[str, Decl] = {}
+    for d in all_decls:
+        if d.fq_name not in fq_index:
+            fq_index[d.fq_name] = d
 
-    compiled = {d.name: symbol_regex(d.name) for d in decls}
-    edges: set[tuple[str, str]] = set()
-    for src in decls:
+    short_index: dict[str, list[Decl]] = {}
+    suffix_index: dict[str, list[Decl]] = {}
+    for d in all_decls:
+        short_index.setdefault(d.name, []).append(d)
+        parts = d.fq_name.split(".")
+        for i in range(len(parts)):
+            suffix = ".".join(parts[i:])
+            suffix_index.setdefault(suffix, []).append(d)
+
+    edges: dict[str, set[str]] = {d.fq_name: set() for d in all_decls}
+    for src in all_decls:
+        lines = stripped_by_file[src.file]
         body = "\n".join(lines[src.line - 1 : src.end_line])
-        for dst in decls:
-            if src.name == dst.name:
+        tokens = set(TOKEN_RE.findall(body))
+        for tok in tokens:
+            cands = resolve_token(tok, src, fq_index, short_index, suffix_index)
+            for dst in cands:
+                if dst.fq_name == src.fq_name:
+                    continue
+                edges[src.fq_name].add(dst.fq_name)
+
+    return fq_index, edges
+
+
+def rooted_closure(root: str, edges: dict[str, set[str]]) -> tuple[set[str], dict[str, int]]:
+    reachable: set[str] = set()
+    depth: dict[str, int] = {}
+    q: deque[str] = deque([root])
+    reachable.add(root)
+    depth[root] = 0
+
+    while q:
+        u = q.popleft()
+        for v in edges.get(u, set()):
+            if v in reachable:
                 continue
-            if compiled[dst.name].search(body):
-                edges.add((src.name, dst.name))
-
-    edge_payload = [
-        {"source": s, "target": t}
-        for (s, t) in sorted(edges)
-    ]
-
-    return {
-        "module": module_name,
-        "file": str(rel_path),
-        "nodes": node_payload,
-        "edges": edge_payload,
-    }
+            reachable.add(v)
+            depth[v] = depth[u] + 1
+            q.append(v)
+    return reachable, depth
 
 
-def page_html(module: str, rel_to_graph_root: str) -> str:
-    escaped_module = html.escape(module)
-    back_href = rel_to_graph_root + "index.html"
+def graph_page_html(title: str) -> str:
+    esc_title = html.escape(title)
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{escaped_module} - Lean Dependency Graph</title>
+  <title>{esc_title}</title>
   <link rel="stylesheet" href="https://unpkg.com/vis-network@9.1.9/styles/vis-network.min.css">
   <style>
     :root {{
@@ -197,10 +280,6 @@ def page_html(module: str, rel_to_graph_root: str) -> str:
       font-size: 16px;
       font-weight: 600;
     }}
-    .toolbar a {{
-      color: #0b57d0;
-      text-decoration: none;
-    }}
     .toolbar .meta {{
       color: var(--muted);
       font-size: 13px;
@@ -223,9 +302,6 @@ def page_html(module: str, rel_to_graph_root: str) -> str:
       min-width: 220px;
       font-size: 13px;
     }}
-    input[type="range"] {{
-      width: 160px;
-    }}
     button {{
       border: 1px solid var(--border);
       background: #f8fafc;
@@ -239,11 +315,9 @@ def page_html(module: str, rel_to_graph_root: str) -> str:
 <body>
 <div class="wrap">
   <div class="toolbar">
-    <h1>{escaped_module}</h1>
-    <a href="{back_href}">Graph Index</a>
+    <h1>{esc_title}</h1>
     <span class="meta" id="summary"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
-    <label>Spacing <input id="spacing" type="range" min="60" max="320" value="170"></label>
     <button id="fitBtn" type="button">Fit</button>
   </div>
   <div id="graph"></div>
@@ -276,6 +350,7 @@ function makeNetwork(payload) {{
   const nodes = payload.nodes.map(n => ({{
     id: n.id,
     label: n.label,
+    level: n.depth,
     shape: "dot",
     size: Math.min(34, 10 + Math.sqrt(Math.max(1, n.span)) * 3),
     color: {{
@@ -291,7 +366,7 @@ function makeNetwork(payload) {{
       size: 13,
       color: "#0f172a"
     }},
-    title: `${{n.kind}} ${{n.id}}\\nline ${{n.line}}, span ${{n.span}}`
+    title: `${{n.fq_name}}\\n${{n.kind}} line ${{n.line}}\\n${{n.file}}`
   }}));
 
   const edges = payload.edges.map(e => ({{
@@ -299,32 +374,31 @@ function makeNetwork(payload) {{
     to: e.target,
     arrows: "to",
     color: {{ color: "#64748b", highlight: "#0f172a" }},
-    width: 1.2
+    width: 1.1,
+    smooth: {{
+      enabled: true,
+      type: "cubicBezier",
+      roundness: 0.3
+    }}
   }}));
 
   const network = new vis.Network(
     document.getElementById("graph"),
     {{ nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) }},
     {{
-      autoResize: true,
       interaction: {{ hover: true, tooltipDelay: 120 }},
-      physics: {{
-        enabled: true,
-        solver: "forceAtlas2Based",
-        forceAtlas2Based: {{
-          gravitationalConstant: -68,
-          centralGravity: 0.018,
-          springLength: 170,
-          springConstant: 0.09,
-          damping: 0.52,
-          avoidOverlap: 0.9
-        }},
-        stabilization: {{ iterations: 220 }}
-      }},
-      edges: {{
-        smooth: {{
+      physics: false,
+      layout: {{
+        hierarchical: {{
           enabled: true,
-          type: "dynamic"
+          direction: "UD",
+          sortMethod: "directed",
+          levelSeparation: 120,
+          nodeSpacing: 180,
+          treeSpacing: 220,
+          blockShifting: true,
+          edgeMinimization: true,
+          parentCentralization: true
         }}
       }}
     }}
@@ -334,7 +408,6 @@ function makeNetwork(payload) {{
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges`;
 
   const searchInput = document.getElementById("search");
-  const spacing = document.getElementById("spacing");
   const fitBtn = document.getElementById("fitBtn");
   const allNodes = nodes;
   const ds = network.body.data.nodes;
@@ -350,7 +423,7 @@ function makeNetwork(payload) {{
       return;
     }}
     ds.update(allNodes.map(n => {{
-      const hit = n.id.toLowerCase().includes(needle);
+      const hit = n.label.toLowerCase().includes(needle) || n.id.toLowerCase().includes(needle);
       return {{
         id: n.id,
         hidden: false,
@@ -359,24 +432,11 @@ function makeNetwork(payload) {{
     }}));
   }});
 
-  spacing.addEventListener("input", () => {{
-    const value = Number(spacing.value);
-    network.setOptions({{
-      physics: {{
-        forceAtlas2Based: {{
-          springLength: value
-        }}
-      }}
-    }});
-  }});
-
   fitBtn.addEventListener("click", () => {{
     network.fit({{ animation: true }});
   }});
 
-  network.once("stabilizationIterationsDone", () => {{
-    network.fit({{ animation: false }});
-  }});
+  network.fit({{ animation: false }});
 }}
 
 loadGraph().then(makeNetwork).catch((err) => {{
@@ -388,137 +448,96 @@ loadGraph().then(makeNetwork).catch((err) => {{
 """
 
 
-def root_index_html() -> str:
-    return """<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=graphs/index.html">
-  <title>Lean Dependency Graphs</title>
-</head>
-<body>
-  <p>Redirecting to <a href="graphs/index.html">graphs/index.html</a>...</p>
-</body>
-</html>
-"""
-
-
-def graph_index_html(entries: Iterable[dict]) -> str:
-    rows = []
-    for e in entries:
-        module = html.escape(e["module"])
-        href = html.escape(e["href"])
-        file_ = html.escape(e["file"])
-        nodes = e["nodes"]
-        edges = e["edges"]
-        rows.append(
-            f'<tr><td><a href="{href}">{module}</a></td>'
-            f"<td>{nodes}</td><td>{edges}</td><td><code>{file_}</code></td></tr>"
-        )
-    body_rows = "\n".join(rows)
+def redirect_html(target: str) -> str:
+    esc_target = html.escape(target)
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Lean Dependency Graphs</title>
-  <style>
-    body {{
-      margin: 24px;
-      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
-      color: #0f172a;
-      background: #f5f7fb;
-    }}
-    h1 {{ margin: 0 0 8px; }}
-    p {{ margin: 0 0 18px; color: #475569; }}
-    table {{
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-      border: 1px solid #dbe2ea;
-    }}
-    th, td {{
-      border-bottom: 1px solid #e2e8f0;
-      padding: 10px 12px;
-      text-align: left;
-      font-size: 14px;
-    }}
-    th {{ background: #f8fafc; }}
-    tr:hover td {{ background: #f8fbff; }}
-    a {{ color: #0b57d0; text-decoration: none; }}
-  </style>
+  <meta http-equiv="refresh" content="0; url={esc_target}">
+  <title>MLC Graph</title>
 </head>
 <body>
-  <h1>Lean Dependency Graphs</h1>
-  <p>Declaration-level intra-file dependency graphs generated from <code>Mlc/*.lean</code>.</p>
-  <table>
-    <thead>
-      <tr><th>Module</th><th>Nodes</th><th>Edges</th><th>Source File</th></tr>
-    </thead>
-    <tbody>
-      {body_rows}
-    </tbody>
-  </table>
+  <p>Redirecting to <a href="{esc_target}">{esc_target}</a>...</p>
 </body>
 </html>
 """
 
 
-def generate_site(repo_root: Path, output_root: Path) -> None:
-    mlc_dir = repo_root / "Mlc"
-    lean_files = sorted(mlc_dir.rglob("*.lean"))
+def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
+    fq_index, edges = build_full_graph(repo_root)
+
+    root_decl: Decl | None = fq_index.get(root_symbol)
+    if root_decl is None:
+        matches = [d for d in fq_index.values() if d.name == root_symbol.split(".")[-1]]
+        if len(matches) == 1:
+            root_decl = matches[0]
+        elif matches:
+            root_decl = sorted(matches, key=lambda d: d.fq_name == "MLC.mlc_conjecture", reverse=True)[0]
+        else:
+            raise RuntimeError(f"Root symbol not found: {root_symbol}")
+
+    reachable, depth = rooted_closure(root_decl.fq_name, edges)
+    nodes = []
+    for node_id in sorted(reachable):
+        d = fq_index[node_id]
+        nodes.append(
+            {
+                "id": d.fq_name,
+                "label": d.name,
+                "fq_name": d.fq_name,
+                "kind": d.kind,
+                "file": d.file,
+                "line": d.line,
+                "span": d.span,
+                "depth": depth.get(d.fq_name, 0),
+            }
+        )
+    edge_payload = []
+    for src in sorted(reachable):
+        for dst in sorted(edges.get(src, set())):
+            if dst in reachable:
+                edge_payload.append({"source": src, "target": dst})
+
+    payload = {
+        "root": root_decl.fq_name,
+        "nodes": nodes,
+        "edges": edge_payload,
+    }
 
     if output_root.exists():
         shutil.rmtree(output_root)
-    graphs_root = output_root / "graphs"
-    graphs_root.mkdir(parents=True, exist_ok=True)
+    graph_dir = output_root / "mlc_conjecture"
+    graph_dir.mkdir(parents=True, exist_ok=True)
 
-    entries: list[dict] = []
-    for lean_file in lean_files:
-        graph = build_graph_for_file(lean_file, repo_root)
-        rel = Path(graph["file"]).with_suffix("")
-        page_dir = graphs_root / rel
-        page_dir.mkdir(parents=True, exist_ok=True)
-
-        (page_dir / "graph.json").write_text(
-            json.dumps(graph, ensure_ascii=False, indent=2),
-            encoding="utf-8",
-        )
-
-        up = "../" * len(rel.parts)
-        (page_dir / "index.html").write_text(
-            page_html(graph["module"], up),
-            encoding="utf-8",
-        )
-
-        entries.append(
-            {
-                "module": graph["module"],
-                "file": graph["file"],
-                "href": str((rel / "index.html").as_posix()),
-                "nodes": len(graph["nodes"]),
-                "edges": len(graph["edges"]),
-            }
-        )
-
-    entries.sort(key=lambda x: x["module"])
-    (graphs_root / "index.html").write_text(graph_index_html(entries), encoding="utf-8")
-    (output_root / "index.html").write_text(root_index_html(), encoding="utf-8")
+    (graph_dir / "graph.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    (graph_dir / "index.html").write_text(
+        graph_page_html(f"Lean Dependency Graph: {root_decl.fq_name}"),
+        encoding="utf-8",
+    )
+    (output_root / "index.html").write_text(
+        redirect_html("mlc_conjecture/index.html"),
+        encoding="utf-8",
+    )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate dependency-graph static site.")
+    parser = argparse.ArgumentParser(description="Generate root dependency-graph static site.")
+    parser.add_argument("--output", default="site", help="Output directory (default: site)")
     parser.add_argument(
-        "--output",
-        default="site",
-        help="Output directory (default: site)",
+        "--root",
+        default="MLC.mlc_conjecture",
+        help="Root declaration name (default: MLC.mlc_conjecture)",
     )
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
     output_root = (repo_root / args.output).resolve()
-    generate_site(repo_root, output_root)
-    print(f"Generated dependency graph site at: {output_root}")
+    generate_site(repo_root, output_root, args.root)
+    print(f"Generated rooted dependency graph at: {output_root}/mlc_conjecture/index.html")
 
 
 if __name__ == "__main__":
