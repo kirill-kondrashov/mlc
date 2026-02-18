@@ -260,6 +260,7 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(100,116,139,0.7);
       --cycle-ring: #ef4444;
       --cycle-edge: #f97316;
+      --axiom-ring: #7c3aed;
       --status-yes-bg: #fee2e2;
       --status-yes-fg: #991b1b;
       --status-no-bg: #dcfce7;
@@ -279,6 +280,7 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(151,175,210,0.72);
       --cycle-ring: #fb7185;
       --cycle-edge: #f59e0b;
+      --axiom-ring: #c4b5fd;
       --status-yes-bg: rgba(251,113,133,0.22);
       --status-yes-fg: #fecdd3;
       --status-no-bg: rgba(34,197,94,0.2);
@@ -431,13 +433,15 @@ const state = {{
     label: "#0f172a",
     labelMuted: "rgba(100,116,139,0.7)",
     cycleRing: "#ef4444",
-    cycleEdge: "#f97316"
+    cycleEdge: "#f97316",
+    axiomRing: "#7c3aed"
   }},
   minDegree: 0,
   maxDegree: 0,
   cycleNodeCount: 0,
   cycleEdgeCount: 0,
   cycleComponentCount: 0,
+  axiomCount: 0,
   search: "",
   width: 0,
   height: 0,
@@ -467,6 +471,7 @@ function refreshPalette() {{
   state.palette.labelMuted = cssVar("--label-muted", "rgba(100,116,139,0.7)");
   state.palette.cycleRing = cssVar("--cycle-ring", "#ef4444");
   state.palette.cycleEdge = cssVar("--cycle-edge", "#f97316");
+  state.palette.axiomRing = cssVar("--axiom-ring", "#7c3aed");
 }}
 
 function systemTheme() {{
@@ -653,6 +658,7 @@ function renderLegend() {{
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.maxDegree, state.minDegree, state.maxDegree)}}"></span>${{state.maxDegree}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.cycleEdge}}"></span>Cycle edge</span>
     <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.cycleRing}}"></span>Cycle node</span>
+    <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.axiomRing}}"></span>Axiom node</span>
   `;
 }}
 
@@ -729,6 +735,7 @@ function initGraph(payload) {{
   for (const n of state.nodes) {{
     n.r = Math.max(6, Math.min(24, 6 + Math.sqrt(n.degree + 1) * 2.9));
   }}
+  state.axiomCount = state.nodes.filter(n => n.kind === "axiom").length;
 
   detectCycles();
   renderLegend();
@@ -737,7 +744,7 @@ function initGraph(payload) {{
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
     `${{state.cycleNodeCount}} cycle nodes (${{state.cycleComponentCount}} components), ` +
-    `${{state.cycleEdgeCount}} cycle edges`;
+    `${{state.cycleEdgeCount}} cycle edges, ${{state.axiomCount}} axioms`;
 
   const searchInput = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
@@ -909,6 +916,14 @@ function draw() {{
     ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
+
+    if (n.kind === "axiom") {{
+      ctx.beginPath();
+      ctx.strokeStyle = hit ? state.palette.axiomRing : state.palette.edgeMuted;
+      ctx.lineWidth = Math.max(1.2, 1.8 / state.scale);
+      ctx.arc(n.x, n.y, n.r + 2.6, 0, Math.PI * 2);
+      ctx.stroke();
+    }}
   }}
 
   for (const n of state.nodes) {{

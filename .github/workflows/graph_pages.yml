@@ -2,7 +2,7 @@ name: Dependency Graph Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "external_ray_map_exists"]
   workflow_dispatch:
 
 permissions:
