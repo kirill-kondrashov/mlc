@@ -2195,10 +2195,25 @@ theorem mlc_conjecture_of_outside_inj_and_externalRayLandsOutsideOpen_two
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
-  apply locallyConnectedSpace_of_locallyConnectedAt
-  intro c
-  exfalso
-  exact false_of_external_ray_axioms
+  let h_inj_onM : BottcherMapInjOnBasinOnMData := bottcher_map_inj_on_basin_onM_target
+  let h_classify_ir : IRClassificationData := ir_classification_data_of_external_ray_axioms
+  let h_uniform : MoleculeUniformConformalLowerBoundData :=
+    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
+  apply mlc_strategy
+  · intro c hc h_fin
+    exact parameter_shrink_of_yoccoz c hc h_fin
+      (by
+        apply MLC.yoccoz_theorem
+        simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin)
+  · exact bottcher_onM_hyp
+  · exact green_sublevel_connected_onM
+      (fun c w hw => Quadratic.bottcher_map_surj c w hw)
+      h_inj_onM
+  · intro c h_inf
+    exact h_classify_ir c h_inf
+  · intro h_mol c hc hTower
+    exact molecule_conjecture_bridge_of_tower_of_uniformConformalLowerBoundData
+      h_uniform h_mol c hc hTower
 
 end MainProof
 
