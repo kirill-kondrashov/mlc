@@ -32,6 +32,7 @@ SECTION_RE = re.compile(r"^\s*(?:noncomputable\s+)?section\b")
 END_RE = re.compile(r"^\s*end(?:\s+[A-Za-z0-9_.']+)?\s*$")
 TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
 TOKEN_CHARS = r"A-Za-z0-9_.']"
+EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
 
 
 @dataclass(frozen=True)
@@ -190,6 +191,23 @@ def build_full_graph(repo_root: Path) -> tuple[dict[str, Decl], dict[str, set[st
         all_decls.extend(decls)
         stripped_by_file[str(f.relative_to(repo_root))] = stripped
 
+    # Add embedded/core axioms so they can appear as explicit nodes in the graph.
+    existing = {d.fq_name for d in all_decls}
+    for ax_name in EMBEDDED_AXIOMS:
+        if ax_name in existing:
+            continue
+        short = ax_name.split(".")[-1]
+        all_decls.append(
+            Decl(
+                kind="axiom",
+                name=short,
+                fq_name=ax_name,
+                file="[embedded]",
+                line=0,
+                end_line=0,
+            )
+        )
+
     fq_index: dict[str, Decl] = {}
     for d in all_decls:
         if d.fq_name not in fq_index:
@@ -206,6 +224,8 @@ def build_full_graph(repo_root: Path) -> tuple[dict[str, Decl], dict[str, set[st
 
     edges: dict[str, set[str]] = {d.fq_name: set() for d in all_decls}
     for src in all_decls:
+        if src.file not in stripped_by_file:
+            continue
         lines = stripped_by_file[src.file]
         body = "\n".join(lines[src.line - 1 : src.end_line])
         tokens = set(TOKEN_RE.findall(body))
@@ -260,7 +280,8 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(100,116,139,0.7);
       --cycle-ring: #ef4444;
       --cycle-edge: #f97316;
-      --axiom-ring: #7c3aed;
+      --axiom-ring: #dc2626;
+      --axiom-fill: rgba(220,38,38,0.26);
       --status-yes-bg: #fee2e2;
       --status-yes-fg: #991b1b;
       --status-no-bg: #dcfce7;
@@ -280,7 +301,8 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(151,175,210,0.72);
       --cycle-ring: #fb7185;
       --cycle-edge: #f59e0b;
-      --axiom-ring: #c4b5fd;
+      --axiom-ring: #f87171;
+      --axiom-fill: rgba(248,113,113,0.30);
       --status-yes-bg: rgba(251,113,133,0.22);
       --status-yes-fg: #fecdd3;
       --status-no-bg: rgba(34,197,94,0.2);
@@ -434,7 +456,8 @@ const state = {{
     labelMuted: "rgba(100,116,139,0.7)",
     cycleRing: "#ef4444",
     cycleEdge: "#f97316",
-    axiomRing: "#7c3aed"
+    axiomRing: "#dc2626",
+    axiomFill: "rgba(220,38,38,0.26)"
   }},
   minDegree: 0,
   maxDegree: 0,
@@ -471,7 +494,8 @@ function refreshPalette() {{
   state.palette.labelMuted = cssVar("--label-muted", "rgba(100,116,139,0.7)");
   state.palette.cycleRing = cssVar("--cycle-ring", "#ef4444");
   state.palette.cycleEdge = cssVar("--cycle-edge", "#f97316");
-  state.palette.axiomRing = cssVar("--axiom-ring", "#7c3aed");
+  state.palette.axiomRing = cssVar("--axiom-ring", "#dc2626");
+  state.palette.axiomFill = cssVar("--axiom-fill", "rgba(220,38,38,0.26)");
 }}
 
 function systemTheme() {{
@@ -658,7 +682,7 @@ function renderLegend() {{
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.maxDegree, state.minDegree, state.maxDegree)}}"></span>${{state.maxDegree}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.cycleEdge}}"></span>Cycle edge</span>
     <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.cycleRing}}"></span>Cycle node</span>
-    <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.axiomRing}}"></span>Axiom node</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Axiom node</span>
   `;
 }}
 
@@ -907,20 +931,23 @@ function draw() {{
 
   for (const n of state.nodes) {{
     const hit = (!state.search) || matchNode(n);
+    const isAxiom = n.kind === "axiom";
     ctx.beginPath();
     ctx.fillStyle = hit
-      ? degreeColor(n.degree, state.minDegree, state.maxDegree)
+      ? (isAxiom ? state.palette.axiomFill : degreeColor(n.degree, state.minDegree, state.maxDegree))
       : "rgba(148,163,184,0.25)";
-    ctx.strokeStyle = n.inCycle ? state.palette.cycleRing : nodeColor(n.kind);
+    ctx.strokeStyle = isAxiom
+      ? state.palette.axiomRing
+      : (n.inCycle ? state.palette.cycleRing : nodeColor(n.kind));
     ctx.lineWidth = lw;
     ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
 
-    if (n.kind === "axiom") {{
+    if (isAxiom) {{
       ctx.beginPath();
       ctx.strokeStyle = hit ? state.palette.axiomRing : state.palette.edgeMuted;
-      ctx.lineWidth = Math.max(1.2, 1.8 / state.scale);
+      ctx.lineWidth = Math.max(1.8, 2.2 / state.scale);
       ctx.arc(n.x, n.y, n.r + 2.6, 0, Math.PI * 2);
       ctx.stroke();
     }}
@@ -1009,6 +1036,16 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
             raise RuntimeError(f"Root symbol not found: {root_symbol}")
 
     reachable, depth = rooted_closure(root_decl.fq_name, edges)
+    # The dependency extractor is textual over `Mlc/*.lean`, so kernel/core axioms
+    # are not discoverable as regular declaration tokens. Include them explicitly
+    # as first-level axiom dependencies of the root.
+    edges.setdefault(root_decl.fq_name, set())
+    for ax_name in EMBEDDED_AXIOMS:
+        if ax_name in fq_index:
+            reachable.add(ax_name)
+            depth.setdefault(ax_name, 1)
+            edges[root_decl.fq_name].add(ax_name)
+
     nodes = []
     for node_id in sorted(reachable):
         d = fq_index[node_id]
