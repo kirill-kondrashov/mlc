@@ -60,8 +60,27 @@ theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormaliza
   rw [or_comm]
   exact Classical.em _
 
-/-- Core local-connectivity strategy theorem parameterized by the connectedness,
-    finite-branch shrink, IR classification, and molecule bridge hooks. -/
+/-- Core local-connectivity strategy theorem parameterized by explicit finite-branch
+    local-connectivity data, IR classification, and molecule bridge hooks. -/
+theorem mlc_strategy_of_branchLocalData
+    (h_fin_lc :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  rcases dichotomy c with h_fin_renorm | h_inf_renorm
+  · exact h_fin_lc c hc h_fin_renorm
+  · exact mlc_infinitely_renormalizable h_classify h_bridge c hc h_inf_renorm
+
+/-- Local-connectivity strategy wrapper parameterized by connectedness and finite
+    branch shrink data together with IR classification and molecule bridge hooks. -/
 
 theorem mlc_strategy_of_paraPuzzleConnectedData
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
@@ -77,12 +96,13 @@ theorem mlc_strategy_of_paraPuzzleConnectedData
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
-  apply locallyConnectedSpace_of_locallyConnectedAt
-  intro ⟨c, hc⟩
-  rcases dichotomy c with h_fin_renorm | h_inf_renorm
-  · exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+  have h_fin_lc :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+    intro c hc h_fin_renorm
+    exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
       h_conn c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
-  · exact mlc_infinitely_renormalizable h_classify h_bridge c hc h_inf_renorm
+  exact mlc_strategy_of_branchLocalData h_fin_lc h_classify h_bridge
 
 /-- `mlc_strategy` route parameterized by an explicit transport-witness target
     plus a boundary-motion hypothesis. -/
@@ -212,232 +232,6 @@ lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
       (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
         (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
   exact hdir.mul hexp
-
-/-- Equality of Böttcher values forces equality of Green-function values. -/
-
-lemma bottcher_map_eq_imp_green_eq (c z w : ℂ)
-    (hzw : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
-    MLC.Quadratic.green_function c z = MLC.Quadratic.green_function c w := by
-  have hnorm : ‖Quadratic.bottcher_map c z‖ = ‖Quadratic.bottcher_map c w‖ :=
-    congrArg norm hzw
-  rw [Quadratic.norm_bottcher_eq_exp_green c z,
-    Quadratic.norm_bottcher_eq_exp_green c w] at hnorm
-  exact Real.exp_injective hnorm
-
-/-- For Mandelbrot parameters, `0` does not lie in the basin of infinity. -/
-
-lemma zero_not_mem_basin_of_mem_mandelbrot (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
-    (0 : ℂ) ∉ Quadratic.basin_of_infinity c := by
-  intro h0basin
-  have h0K : (0 : ℂ) ∈ MLC.Quadratic.K c := hc
-  have h0compl : (0 : ℂ) ∈ (MLC.Quadratic.K c)ᶜ := by
-    simpa [Quadratic.basin_eq_compl_K c] using h0basin
-  exact h0compl h0K
-
-/-- Basin points are nonzero for Mandelbrot parameters. -/
-
-lemma ne_zero_of_mem_basin_of_mem_mandelbrot (c z : ℂ)
-    (hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (hz : z ∈ Quadratic.basin_of_infinity c) :
-    z ≠ 0 := by
-  intro hz0
-  have h0basin : (0 : ℂ) ∈ Quadratic.basin_of_infinity c := by
-    simpa [hz0] using hz
-  exact zero_not_mem_basin_of_mem_mandelbrot c hc h0basin
-
-/-- For nonzero points, Böttcher values at `z` and `-z` cannot coincide. -/
-
-lemma bottcher_map_ne_of_neg_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
-    Quadratic.bottcher_map c z ≠ Quadratic.bottcher_map c (-z) := by
-  intro hphi
-  have hgreen :
-      MLC.Quadratic.green_function c z = MLC.Quadratic.green_function c (-z) :=
-    bottcher_map_eq_imp_green_eq c z (-z) hphi
-  have hexp_ne : (Real.exp (MLC.Quadratic.green_function c z) : ℂ) ≠ 0 := by
-    exact_mod_cast (Real.exp_ne_zero (MLC.Quadratic.green_function c z))
-  have hdir_eq :
-      z / (‖z‖ : ℂ) = (-z) / (‖z‖ : ℂ) := by
-    have hphi' :
-        (z / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c z) : ℂ) =
-          ((-z) / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c z) : ℂ) := by
-      simpa [Quadratic.bottcher_map, hz, neg_ne_zero.mpr hz, norm_neg, hgreen] using hphi
-    exact mul_right_cancel₀ hexp_ne hphi'
-  have hneg :
-      z / (‖z‖ : ℂ) = -(z / (‖z‖ : ℂ)) := by
-    simpa [neg_div] using hdir_eq
-  have hsum : z / (‖z‖ : ℂ) + z / (‖z‖ : ℂ) = 0 := by
-    exact (eq_neg_iff_add_eq_zero).1 hneg
-  have htwo : (2 : ℂ) * (z / (‖z‖ : ℂ)) = 0 := by
-    simpa [two_mul] using hsum
-  have hdiv_zero : z / (‖z‖ : ℂ) = 0 := by
-    refine (mul_eq_zero.mp htwo).resolve_left ?_
-    norm_num
-  have hdiv_ne : z / (‖z‖ : ℂ) ≠ 0 := by
-    refine div_ne_zero hz ?_
-    exact_mod_cast (norm_ne_zero_iff.2 hz)
-  exact hdiv_ne hdiv_zero
-
-/-- If two basin points have equal Böttcher values and equal quadratic images,
-    then they are equal (for Mandelbrot parameters). -/
-
-lemma eq_of_bottcher_eq_and_quadratic_eq_of_mem_mandelbrot
-    (c z w : ℂ)
-    (hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (hz : z ∈ Quadratic.basin_of_infinity c)
-    (_hw : w ∈ Quadratic.basin_of_infinity c)
-    (hphi : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w)
-    (hquad : quadratic_map c z = quadratic_map c w) :
-    z = w := by
-  have hsq : z ^ 2 = w ^ 2 := by
-    have hquad' : z ^ 2 + c = w ^ 2 + c := by
-      simpa [quadratic_map] using hquad
-    exact add_right_cancel hquad'
-  have hcases : z = w ∨ z = -w := by
-    have hmul : (z - w) * (z + w) = 0 := by
-      calc
-        (z - w) * (z + w) = z ^ 2 - w ^ 2 := by ring
-        _ = 0 := by
-              exact sub_eq_zero.mpr hsq
-    rcases mul_eq_zero.mp hmul with hsub | hadd
-    · exact Or.inl (sub_eq_zero.mp hsub)
-    · exact Or.inr (eq_neg_iff_add_eq_zero.mpr hadd)
-  rcases hcases with hzw | hneg
-  · exact hzw
-  · exfalso
-    have hz0 : z ≠ 0 :=
-      ne_zero_of_mem_basin_of_mem_mandelbrot c z hc hz
-    have hw_neg : w = -z := by
-      have htmp : -z = w := by
-        simpa using congrArg Neg.neg hneg
-      exact htmp.symm
-    have hphi_neg : Quadratic.bottcher_map c z = Quadratic.bottcher_map c (-z) := by
-      simpa [hw_neg] using hphi
-    exact (bottcher_map_ne_of_neg_of_ne_zero c z hz0) hphi_neg
-
-/-- Backward induction on iterate equality using Böttcher-value equality on the basin. -/
-
-lemma eq_of_iterate_eq_and_bottcher_eq_on_basin_onM
-    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
-    ∀ n z w,
-      z ∈ Quadratic.basin_of_infinity c →
-      w ∈ Quadratic.basin_of_infinity c →
-      (quadratic_map c)^[n] z = (quadratic_map c)^[n] w →
-      Quadratic.bottcher_map c z = Quadratic.bottcher_map c w →
-      z = w := by
-  intro n
-  induction n with
-  | zero =>
-      intro z w hz hw hiter hphi
-      simpa using hiter
-  | succ n ih =>
-      intro z w hz hw hiter hphi
-      have hz1 : quadratic_map c z ∈ Quadratic.basin_of_infinity c :=
-        quadratic_basin_forward_invariant c hz
-      have hw1 : quadratic_map c w ∈ Quadratic.basin_of_infinity c :=
-        quadratic_basin_forward_invariant c hw
-      have hiter1 :
-          (quadratic_map c)^[n] (quadratic_map c z) =
-            (quadratic_map c)^[n] (quadratic_map c w) := by
-        simpa [Function.iterate_succ] using hiter
-      have hphi1 :
-          Quadratic.bottcher_map c (quadratic_map c z) =
-            Quadratic.bottcher_map c (quadratic_map c w) := by
-        calc
-          Quadratic.bottcher_map c (quadratic_map c z)
-              = (Quadratic.bottcher_map c z) ^ 2 := by
-                  simpa using bottcher_conj_on_basin c z hz
-          _ = (Quadratic.bottcher_map c w) ^ 2 := by simp [hphi]
-          _ = Quadratic.bottcher_map c (quadratic_map c w) := by
-                simpa using (bottcher_conj_on_basin c w hw).symm
-      have hquad_eq : quadratic_map c z = quadratic_map c w :=
-        ih (quadratic_map c z) (quadratic_map c w) hz1 hw1 hiter1 hphi1
-      exact eq_of_bottcher_eq_and_quadratic_eq_of_mem_mandelbrot c z w hc hz hw hphi hquad_eq
-
-/-- Equal Böttcher values on basin points force equality of some iterates,
-    using only outside left-inverse data from explicit external-ray data. -/
-
-lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data
-    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c)
-    (z w : ℂ)
-    (hz : z ∈ Quadratic.basin_of_infinity c)
-    (hw : w ∈ Quadratic.basin_of_infinity c)
-    (hphi : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
-    ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w := by
-  have hz_tend : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop := by
-    simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hz
-  have hw_tend : Tendsto (fun n => ‖(quadratic_map c)^[n] w‖) atTop atTop := by
-    simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hw
-  have hz_event : ∀ᶠ n in atTop, ‖(quadratic_map c)^[n] z‖ ≥ ‖c‖ + 3 :=
-    (tendsto_atTop.1 hz_tend) (‖c‖ + 3)
-  have hw_event : ∀ᶠ n in atTop, ‖(quadratic_map c)^[n] w‖ ≥ ‖c‖ + 3 :=
-    (tendsto_atTop.1 hw_tend) (‖c‖ + 3)
-  have hboth :
-      ∀ᶠ n in atTop,
-        ‖(quadratic_map c)^[n] z‖ ≥ ‖c‖ + 3 ∧ ‖(quadratic_map c)^[n] w‖ ≥ ‖c‖ + 3 :=
-    hz_event.and hw_event
-  rcases (eventually_atTop.1 hboth) with ⟨N, hN⟩
-  have hzN_ge : ‖(quadratic_map c)^[N] z‖ ≥ ‖c‖ + 3 := (hN N le_rfl).1
-  have hwN_ge : ‖(quadratic_map c)^[N] w‖ ≥ ‖c‖ + 3 := (hN N le_rfl).2
-  have hzN : ‖(quadratic_map c)^[N] z‖ > ‖c‖ + 2 := by linarith
-  have hwN : ‖(quadratic_map c)^[N] w‖ > ‖c‖ + 2 := by linarith
-  have hz_left :
-      Quadratic.external_ray_map_of_data h_data
-          (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) =
-        (quadratic_map c)^[N] z := by
-    exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data
-      ((quadratic_map c)^[N] z) hzN
-  have hw_left :
-      Quadratic.external_ray_map_of_data h_data
-          (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) =
-        (quadratic_map c)^[N] w := by
-    exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data
-      ((quadratic_map c)^[N] w) hwN
-  have hphiN :
-      Quadratic.bottcher_map c ((quadratic_map c)^[N] z) =
-        Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
-    calc
-      Quadratic.bottcher_map c ((quadratic_map c)^[N] z)
-          = (Quadratic.bottcher_map c z) ^ (2 ^ N) := by
-              simpa using bottcher_conj_iter c N z hz
-      _ = (Quadratic.bottcher_map c w) ^ (2 ^ N) := by
-            simp [hphi]
-      _ = Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
-            simpa using (bottcher_conj_iter c N w hw).symm
-  have hiter : (quadratic_map c)^[N] z = (quadratic_map c)^[N] w := by
-    calc
-      (quadratic_map c)^[N] z
-          = Quadratic.external_ray_map_of_data h_data
-              (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) := by
-                symm
-                exact hz_left
-      _ = Quadratic.external_ray_map_of_data h_data
-            (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) := by
-              simp [hphiN]
-      _ = (quadratic_map c)^[N] w := hw_left
-  exact ⟨N, hiter⟩
-
-/-- Equal Böttcher values on basin points force equality of some iterates,
-    using only outside left-inverse data from `external_ray_map_exists`. -/
-
-lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
-    (c z w : ℂ)
-    (hz : z ∈ Quadratic.basin_of_infinity c)
-    (hw : w ∈ Quadratic.basin_of_infinity c)
-    (hphi : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
-    ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w := by
-  simpa [Quadratic.external_ray_map] using
-    exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data
-      (Quadratic.external_ray_map_data c) z w hz hw hphi
-
-/-- Non-axiomatic on-M basin injectivity, derived from basin dynamics and
-    outside left-inverse data. -/
-
-lemma bottcher_map_inj_on_basin_of_mem_mandelbrot
-    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  intro z hz w hw hphi
-  rcases exists_iter_eq_of_bottcher_eq_on_basin_via_outside c z w hz hw hphi with ⟨n, hiter⟩
-  exact eq_of_iterate_eq_and_bottcher_eq_on_basin_onM c hc n z w hz hw hiter hphi
 
 /-- Every real point escapes for `c = 2`, hence lies in the basin. -/
 
@@ -690,50 +484,14 @@ lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
   exact ir_classification_data_of_external_ray_data_two
     external_ray_data_two_axiom
 
-/-- Contradiction-backed Molecule→uniform conformal lower-bound datum from
-    explicit external-ray data at `c = 2`. -/
-
-lemma molecule_uniformConformalLowerBound_data_of_external_ray_data_two
+lemma molecule_bridge_data_of_external_ray_data_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    MoleculeUniformConformalLowerBoundData := by
+    MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   intro h_mol c hc hTower
   exfalso
   exact false_of_external_ray_data_two h_data
-
-/-- Contradiction-backed Molecule→uniform conformal lower-bound datum used by
-    wrapper routes. -/
-
-lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
-    MoleculeUniformConformalLowerBoundData := by
-  exact molecule_uniformConformalLowerBound_data_of_external_ray_data_two
-    external_ray_data_two_axiom
-
-def BottcherMapInjOnBasinOnMData : Prop :=
-  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)
-
-/-- Contradiction-backed Green-sublevel-connectedness datum from explicit
-    external-ray data at `c = 2`. -/
-lemma green_sublevel_connected_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    MLC.Quadratic.GreenSublevelConnectedHyp := by
-  refine ⟨?_⟩
-  intro c n hc
-  exfalso
-  exact false_of_external_ray_data_two h_data
-
-/-- Any global eventual-slit inverse data yields the weaker redesigned target. -/
-
-lemma bottcher_map_inj_on_basin_onM_via_basin_dynamics :
-    BottcherMapInjOnBasinOnMData := by
-  intro c hc
-  exact bottcher_map_inj_on_basin_of_mem_mandelbrot c hc
-
-/-- Single Step 2b replacement target for the top-level theorem wiring. -/
-
-lemma bottcher_map_inj_on_basin_onM_target :
-    BottcherMapInjOnBasinOnMData := by
-  exact bottcher_map_inj_on_basin_onM_via_basin_dynamics
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -741,24 +499,26 @@ lemma bottcher_map_inj_on_basin_onM_target :
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
+  let h_fin_lc :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+    by
+      intro c hc h_fin
+      exact mlc_finitely_renormalizable c hc h_fin
+        (parameter_shrink_of_yoccoz c hc h_fin
+          (by
+            apply MLC.yoccoz_theorem
+            simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
   let h_classify_ir : IRClassificationData := ir_classification_data_of_external_ray_axioms
-  let h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp :=
-    green_sublevel_connected_data_of_external_ray_data_two external_ray_data_two_axiom
-  let h_uniform : MoleculeUniformConformalLowerBoundData :=
-    molecule_uniformConformalLowerBound_data_of_external_ray_axioms
-  apply mlc_strategy
-  · intro c hc h_fin
-    exact parameter_shrink_of_yoccoz c hc h_fin
-      (by
-        apply MLC.yoccoz_theorem
-        simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin)
-  · exact bottcher_onM_hyp
-  · exact h_green_conn
+  let h_bridge :
+      MoleculeConjectureRefined →
+        ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+          MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+    molecule_bridge_data_of_external_ray_data_two external_ray_data_two_axiom
+  apply mlc_strategy_of_branchLocalData h_fin_lc
   · intro c h_inf
     exact h_classify_ir c h_inf
-  · intro h_mol c hc hTower
-    exact molecule_conjecture_bridge_of_tower_of_uniformConformalLowerBoundData
-      h_uniform h_mol c hc hTower
+  · exact h_bridge
 
 end MainProof
 
