@@ -2,6 +2,8 @@
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
 
+[Live dependency graph (rooted at `MLC.mlc_conjecture`)](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
+
 ## 🚧 WORK IN PROGRESS 🚧
 
 ## Current Status
@@ -82,6 +84,48 @@ make check
 ```
 
 This will compile the main conjecture file and output the list of axioms relied upon.
+
+## Dependency Graph Pages
+
+This repository includes a static graph-site generator for one declaration-level
+graph rooted at `MLC.mlc_conjecture` (transitive dependencies across `Mlc/*.lean`).
+
+Generate locally:
+
+```bash
+make graphs
+```
+
+Poetry entry points are also available under `scripts/pyproject.toml`:
+
+```bash
+cd scripts
+poetry run mlc-graph-site --output site
+poetry run mlc-graph-serve --directory ../site --port 8000
+```
+
+Serve locally (recommended, avoids `file://` browser fetch restrictions):
+
+```bash
+make serve
+```
+
+This writes a browsable site to `site/`, with entry point:
+
+```text
+site/mlc_conjecture/index.html
+```
+
+A GitHub Pages workflow is also included in
+`.github/workflows/graph_pages.yml`, so on `main` it can publish pages with
+URLs shaped like:
+
+```text
+https://<org>.github.io/<repo>/mlc_conjecture/
+```
+
+Current repository link:
+[https://kirill-kondrashov.github.io/mlc/mlc_conjecture/](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
 ## Dependencies
 

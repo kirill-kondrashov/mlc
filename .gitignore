@@ -3,3 +3,4 @@ output*.txt
 *.log
 *.out
 *.aux
+site/

@@ -11,6 +11,10 @@ dependencies = [
     "graphviz (>=0.21,<0.22)"
 ]
 
+[project.scripts]
+mlc-graph-site = "generate_dependency_graph_site:main"
+mlc-graph-serve = "serve_graph_site:main"
+
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
