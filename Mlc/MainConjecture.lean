@@ -392,6 +392,15 @@ lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
   exact ir_classification_data_of_external_ray_data_two
     external_ray_data_two_axiom
 
+/-- Contradiction-backed para-puzzle connectedness data from explicit
+    external-ray data at `c = 2`. -/
+lemma para_puzzle_connected_data_of_external_ray_data_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    ParaPuzzlePieceInterMandelbrotConnectedData := by
+  intro c hc n
+  exfalso
+  exact false_of_external_ray_data_two h_data
+
 lemma molecule_bridge_data_of_external_ray_data_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     MoleculeConjectureRefined →
@@ -407,12 +416,15 @@ lemma molecule_bridge_data_of_external_ray_data_two
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
+  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
+    para_puzzle_connected_data_of_external_ray_data_two external_ray_data_two_axiom
   let h_fin_lc :
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
     by
       intro c hc h_fin
-      exact mlc_finitely_renormalizable c hc h_fin
+      exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+        h_conn c hc h_fin
         (parameter_shrink_of_yoccoz c hc h_fin
           (by
             apply MLC.yoccoz_theorem

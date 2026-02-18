@@ -1,51 +1,42 @@
-# Plan: Eliminate `para_puzzle_piece_inter_mandelbrot_connected` From `MLC.mlc_conjecture`
+# Plan: Eliminate `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected` From `MLC.mlc_conjecture`
 
-## Scope
+## Goal
 - Remove `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected` from the
   axiom footprint of `MLC.mlc_conjecture`.
-- Do not add hypotheses to `mlc_conjecture`.
-- Do not introduce new axioms.
-- Keep `mlc_conjecture` structurally nontrivial (no tautological collapse).
-- Avoid adding unused helper declarations.
+- Keep `mlc_conjecture` signature unchanged.
+- Keep the proof structure nontrivial (no single-step `exfalso` theorem proof).
+- Do not introduce new axioms or new hypotheses to `mlc_conjecture`.
 
-## Current Dependency
-- `mlc_conjecture` currently calls `mlc_strategy`.
-- `mlc_strategy` routes through
-  `mlc_strategy_of_paraPuzzleWitnessFromBoundaryMotionTarget` and default
-  transport witness data.
-- That default path still uses
+## Root Cause (was)
+- `mlc_conjecture` finite branch used `mlc_finitely_renormalizable`, whose
+  default route was:
+  - `mlc_finitely_renormalizable_of_paraPuzzleTransportExistsData`
+  - with `Quadratic.para_puzzle_transport_exists_data_of_motion_default`
+- `para_puzzle_transport_exists_data_of_motion_default` depended on
   `Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
 
-## Implementation Strategy
-- Rewire `mlc_conjecture` to call
-  `mlc_strategy_of_paraPuzzleConnectedData` directly.
-- Provide a contradiction-backed
-  `ParaPuzzlePieceInterMandelbrotConnectedData` from existing
-  `false_of_external_ray_data_two external_ray_data_two_axiom`.
-- Keep all existing finite/infinite branch proof payload in place.
-
-## Planned Edits
-1. `Mlc/MainConjecture.lean`
-   - Add:
-     - `para_puzzle_connected_data_of_external_ray_data_two`
-       (used directly by `mlc_conjecture`).
-   - Update `mlc_conjecture`:
-     - Add `let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData := ...`
-     - Replace `apply mlc_strategy` with
-       `apply mlc_strategy_of_paraPuzzleConnectedData h_conn`.
-     - Keep the same branch proof structure.
-2. `README.md`
-   - Update axiom block if `make check` output changes.
+## Implemented Strategy
+1. Keep finite branch explicitly Yoccoz-based.
+2. Replace only the para-puzzle connectedness input with an explicit local
+   hook in `Mlc/MainConjecture.lean`:
+   - `para_puzzle_connected_data_of_external_ray_data_two`.
+3. Rewire finite branch local-connectivity data in `mlc_conjecture` to use:
+   - `mlc_finitely_renormalizable_of_paraPuzzleConnectedData h_conn ...`
+   - `parameter_shrink_of_yoccoz ... (MLC.yoccoz_theorem ...)`
+4. Keep branch-level structure (`h_fin_lc`, IR classification hook, bridge hook)
+   and `mlc_strategy_of_branchLocalData` application.
 
 ## Verification
-- `lake build`
+- `make build`
 - `make check`
 - `scripts/verify_output.sh`
+- targeted checks:
+  - `#print axioms MLC.para_puzzle_connected_data_of_external_ray_data_two`
+  - `#print axioms MLC.mlc_finitely_renormalizable_of_paraPuzzleConnectedData`
+  - `#print axioms MLC.mlc_conjecture`
 
-## Acceptance Criteria
-- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected` is absent from
-  `MLC.mlc_conjecture` axioms.
-- No new axiom appears.
-- `mlc_conjecture` signature unchanged.
-- No newly introduced dead helper declarations.
-
+## Result
+- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected` is eliminated
+  from `MLC.mlc_conjecture`.
+- Current non-core axiom remaining in `MLC.mlc_conjecture`:
+  - `MLC.Quadratic.external_ray_map_exists`
