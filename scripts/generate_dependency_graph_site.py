@@ -245,7 +245,6 @@ def graph_page_html(title: str) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{esc_title}</title>
-  <link rel="stylesheet" href="https://unpkg.com/vis-network@9.1.9/styles/vis-network.min.css">
   <style>
     :root {{
       --bg: #f5f7fb;
@@ -291,10 +290,6 @@ def graph_page_html(title: str) -> str:
       align-items: center;
       gap: 8px;
     }}
-    #graph {{
-      width: 100%;
-      height: 100%;
-    }}
     input[type="search"] {{
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -310,6 +305,13 @@ def graph_page_html(title: str) -> str:
       cursor: pointer;
       font-size: 13px;
     }}
+    #graphCanvas {{
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #f8fafc;
+      cursor: grab;
+    }}
   </style>
 </head>
 <body>
@@ -320,10 +322,9 @@ def graph_page_html(title: str) -> str:
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
     <button id="fitBtn" type="button">Fit</button>
   </div>
-  <div id="graph"></div>
+  <canvas id="graphCanvas"></canvas>
 </div>
 
-<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <script>
 const KIND_COLOR = {{
   theorem: "#ffb703",
@@ -340,107 +341,329 @@ function nodeColor(kind) {{
   return KIND_COLOR[kind] || "#adb5bd";
 }}
 
+const state = {{
+  nodes: [],
+  edges: [],
+  idToNode: new Map(),
+  search: "",
+  width: 0,
+  height: 0,
+  scale: 1,
+  tx: 0,
+  ty: 0,
+  dragNode: null,
+  panning: false,
+  lastX: 0,
+  lastY: 0,
+  running: true
+}};
+
+const canvas = document.getElementById("graphCanvas");
+const ctx = canvas.getContext("2d");
+
 async function loadGraph() {{
   const response = await fetch("graph.json");
   if (!response.ok) throw new Error("Failed to load graph.json");
   return response.json();
 }}
 
-function makeNetwork(payload) {{
-  const nodes = payload.nodes.map(n => ({{
-    id: n.id,
-    label: n.label,
-    level: n.depth,
-    shape: "dot",
-    size: Math.min(34, 10 + Math.sqrt(Math.max(1, n.span)) * 3),
-    color: {{
-      background: nodeColor(n.kind),
-      border: "#334155",
-      highlight: {{
-        background: nodeColor(n.kind),
-        border: "#0f172a"
-      }}
-    }},
-    font: {{
-      face: "IBM Plex Sans, Segoe UI, sans-serif",
-      size: 13,
-      color: "#0f172a"
-    }},
-    title: `${{n.fq_name}}\\n${{n.kind}} line ${{n.line}}\\n${{n.file}}`
-  }}));
+function resizeCanvas() {{
+  const ratio = window.devicePixelRatio || 1;
+  const w = Math.max(200, canvas.clientWidth);
+  const h = Math.max(200, canvas.clientHeight);
+  canvas.width = Math.floor(w * ratio);
+  canvas.height = Math.floor(h * ratio);
+  state.width = w;
+  state.height = h;
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+}}
 
-  const edges = payload.edges.map(e => ({{
-    from: e.source,
-    to: e.target,
-    arrows: "to",
-    color: {{ color: "#64748b", highlight: "#0f172a" }},
-    width: 1.1,
-    smooth: {{
-      enabled: true,
-      type: "cubicBezier",
-      roundness: 0.3
-    }}
-  }}));
+function screenToWorld(sx, sy) {{
+  return {{
+    x: (sx - state.tx) / state.scale,
+    y: (sy - state.ty) / state.scale
+  }};
+}}
 
-  const network = new vis.Network(
-    document.getElementById("graph"),
-    {{ nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) }},
-    {{
-      interaction: {{ hover: true, tooltipDelay: 120 }},
-      physics: false,
-      layout: {{
-        hierarchical: {{
-          enabled: true,
-          direction: "UD",
-          sortMethod: "directed",
-          levelSeparation: 120,
-          nodeSpacing: 180,
-          treeSpacing: 220,
-          blockShifting: true,
-          edgeMinimization: true,
-          parentCentralization: true
-        }}
-      }}
-    }}
+function matchNode(n) {{
+  if (!state.search) return true;
+  return (
+    n.label.toLowerCase().includes(state.search) ||
+    n.id.toLowerCase().includes(state.search) ||
+    n.fq_name.toLowerCase().includes(state.search) ||
+    n.file.toLowerCase().includes(state.search)
   );
+}}
+
+function findNodeAt(wx, wy) {{
+  for (let i = state.nodes.length - 1; i >= 0; i--) {{
+    const n = state.nodes[i];
+    const dx = wx - n.x;
+    const dy = wy - n.y;
+    if (dx * dx + dy * dy <= n.r * n.r) return n;
+  }}
+  return null;
+}}
+
+function fitToGraph() {{
+  if (state.nodes.length === 0) return;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const n of state.nodes) {{
+    minX = Math.min(minX, n.x - n.r - 20);
+    minY = Math.min(minY, n.y - n.r - 20);
+    maxX = Math.max(maxX, n.x + n.r + 90);
+    maxY = Math.max(maxY, n.y + n.r + 20);
+  }}
+  const gw = Math.max(1, maxX - minX);
+  const gh = Math.max(1, maxY - minY);
+  const pad = 30;
+  state.scale = Math.max(0.08, Math.min(2.2, Math.min(
+    (state.width - 2 * pad) / gw,
+    (state.height - 2 * pad) / gh
+  )));
+  state.tx = (state.width - state.scale * (minX + maxX)) / 2;
+  state.ty = (state.height - state.scale * (minY + maxY)) / 2;
+}}
+
+function initGraph(payload) {{
+  const byDepth = new Map();
+  for (const n of payload.nodes) {{
+    const d = Number(n.depth || 0);
+    if (!byDepth.has(d)) byDepth.set(d, []);
+    byDepth.get(d).push(n);
+  }}
+  const orderedDepths = Array.from(byDepth.keys()).sort((a, b) => a - b);
+  const positioned = [];
+  const dx = 260;
+  const dy = 170;
+  for (const d of orderedDepths) {{
+    const layer = byDepth.get(d);
+    layer.sort((a, b) => a.fq_name.localeCompare(b.fq_name));
+    const mid = (layer.length - 1) / 2;
+    for (let i = 0; i < layer.length; i++) {{
+      const n = layer[i];
+      positioned.push({{
+        ...n,
+        x0: (i - mid) * dx,
+        y0: d * dy
+      }});
+    }}
+  }}
+
+  state.nodes = positioned.map((n, i) => ({{
+    ...n,
+    x: n.x0 + 18 * Math.cos(i * 1.618),
+    y: n.y0 + 18 * Math.sin(i * 1.618),
+    vx: 0,
+    vy: 0,
+    r: Math.min(19, 7 + Math.sqrt(Math.max(1, n.span)) * 1.9)
+  }}));
+  state.idToNode = new Map(state.nodes.map(n => [n.id, n]));
+  state.edges = payload.edges
+    .map(e => ({{
+      source: state.idToNode.get(e.source),
+      target: state.idToNode.get(e.target)
+    }}))
+    .filter(e => e.source && e.target);
 
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges`;
 
   const searchInput = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
-  const allNodes = nodes;
-  const ds = network.body.data.nodes;
 
   searchInput.addEventListener("input", () => {{
-    const needle = searchInput.value.trim().toLowerCase();
-    if (!needle) {{
-      ds.update(allNodes.map(n => ({{
-        id: n.id,
-        hidden: false,
-        font: {{ color: "#0f172a", size: 13 }}
-      }})));
-      return;
-    }}
-    ds.update(allNodes.map(n => {{
-      const hit = n.label.toLowerCase().includes(needle) || n.id.toLowerCase().includes(needle);
-      return {{
-        id: n.id,
-        hidden: false,
-        font: {{ color: hit ? "#9b2226" : "#94a3b8", size: hit ? 15 : 12 }}
-      }};
-    }}));
+    state.search = searchInput.value.trim().toLowerCase();
+    state.running = true;
   }});
 
   fitBtn.addEventListener("click", () => {{
-    network.fit({{ animation: true }});
+    fitToGraph();
+    state.running = true;
   }});
 
-  network.fit({{ animation: false }});
+  canvas.addEventListener("mousedown", (ev) => {{
+    const p = screenToWorld(ev.offsetX, ev.offsetY);
+    const hit = findNodeAt(p.x, p.y);
+    state.lastX = ev.offsetX;
+    state.lastY = ev.offsetY;
+    if (hit) {{
+      state.dragNode = hit;
+      canvas.style.cursor = "grabbing";
+    }} else {{
+      state.panning = true;
+      canvas.style.cursor = "grabbing";
+    }}
+    state.running = true;
+  }});
+
+  canvas.addEventListener("mousemove", (ev) => {{
+    const dx = ev.offsetX - state.lastX;
+    const dy = ev.offsetY - state.lastY;
+    state.lastX = ev.offsetX;
+    state.lastY = ev.offsetY;
+    if (state.dragNode) {{
+      const p = screenToWorld(ev.offsetX, ev.offsetY);
+      state.dragNode.x = p.x;
+      state.dragNode.y = p.y;
+      state.dragNode.vx = 0;
+      state.dragNode.vy = 0;
+    }} else if (state.panning) {{
+      state.tx += dx;
+      state.ty += dy;
+    }}
+  }});
+
+  function endPointer() {{
+    state.dragNode = null;
+    state.panning = false;
+    canvas.style.cursor = "grab";
+  }}
+  canvas.addEventListener("mouseup", endPointer);
+  canvas.addEventListener("mouseleave", endPointer);
+
+  canvas.addEventListener("wheel", (ev) => {{
+    ev.preventDefault();
+    const oldScale = state.scale;
+    const factor = Math.exp(-ev.deltaY * 0.0012);
+    const newScale = Math.max(0.04, Math.min(6, oldScale * factor));
+    const wx = (ev.offsetX - state.tx) / oldScale;
+    const wy = (ev.offsetY - state.ty) / oldScale;
+    state.scale = newScale;
+    state.tx = ev.offsetX - wx * newScale;
+    state.ty = ev.offsetY - wy * newScale;
+    state.running = true;
+  }}, {{ passive: false }});
+
+  fitToGraph();
+  state.running = true;
 }}
 
-loadGraph().then(makeNetwork).catch((err) => {{
+function stepForces() {{
+  const nodes = state.nodes;
+  const edges = state.edges;
+  const n = nodes.length;
+  const repulsion = 13000;
+  const springK = 0.0014;
+  const ideal = 140;
+  const anchorK = 0.03;
+  const damp = 0.83;
+
+  for (let i = 0; i < n; i++) {{
+    const a = nodes[i];
+    for (let j = i + 1; j < n; j++) {{
+      const b = nodes[j];
+      let dx = a.x - b.x;
+      let dy = a.y - b.y;
+      let d2 = dx * dx + dy * dy + 0.01;
+      let d = Math.sqrt(d2);
+      let f = repulsion / d2;
+      let fx = (dx / d) * f;
+      let fy = (dy / d) * f;
+      a.vx += fx;
+      a.vy += fy;
+      b.vx -= fx;
+      b.vy -= fy;
+    }}
+  }}
+
+  for (const e of edges) {{
+    const a = e.source;
+    const b = e.target;
+    let dx = b.x - a.x;
+    let dy = b.y - a.y;
+    let d = Math.sqrt(dx * dx + dy * dy) + 0.001;
+    let f = (d - ideal) * springK;
+    let fx = (dx / d) * f;
+    let fy = (dy / d) * f;
+    a.vx += fx;
+    a.vy += fy;
+    b.vx -= fx;
+    b.vy -= fy;
+  }}
+
+  let kinetic = 0;
+  for (const node of nodes) {{
+    if (node !== state.dragNode) {{
+      node.vx += (node.x0 - node.x) * anchorK;
+      node.vy += (node.y0 - node.y) * anchorK;
+      node.vx *= damp;
+      node.vy *= damp;
+      node.x += node.vx;
+      node.y += node.vy;
+    }}
+    kinetic += node.vx * node.vx + node.vy * node.vy;
+  }}
+  if (kinetic < 0.02 && !state.dragNode && !state.panning) {{
+    state.running = false;
+  }}
+}}
+
+function draw() {{
+  ctx.clearRect(0, 0, state.width, state.height);
+  ctx.save();
+  ctx.translate(state.tx, state.ty);
+  ctx.scale(state.scale, state.scale);
+
+  const lw = Math.max(0.8, 1.0 / state.scale);
+  for (const e of state.edges) {{
+    const a = e.source;
+    const b = e.target;
+    const hit = (!state.search) || matchNode(a) || matchNode(b);
+    ctx.beginPath();
+    ctx.strokeStyle = hit ? "#64748b" : "rgba(148,163,184,0.25)";
+    ctx.lineWidth = lw;
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  }}
+
+  for (const n of state.nodes) {{
+    const hit = (!state.search) || matchNode(n);
+    ctx.beginPath();
+    ctx.fillStyle = hit ? nodeColor(n.kind) : "rgba(148,163,184,0.35)";
+    ctx.strokeStyle = "#334155";
+    ctx.lineWidth = lw;
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }}
+
+  for (const n of state.nodes) {{
+    const hit = (!state.search) || matchNode(n);
+    if (!hit && state.scale < 0.9) continue;
+    if (state.scale < 0.35) continue;
+    ctx.fillStyle = hit ? "#0f172a" : "rgba(100,116,139,0.7)";
+    ctx.font = `${{Math.max(8, 12 / state.scale)}}px IBM Plex Sans, Segoe UI, sans-serif`;
+    ctx.textBaseline = "middle";
+    ctx.fillText(n.label, n.x + n.r + 5, n.y);
+  }}
+  ctx.restore();
+}}
+
+function animate() {{
+  if (state.running) stepForces();
+  draw();
+  requestAnimationFrame(animate);
+}}
+
+function start(payload) {{
+  resizeCanvas();
+  initGraph(payload);
+  animate();
+  window.addEventListener("resize", () => {{
+    resizeCanvas();
+    draw();
+  }});
+  canvas.style.cursor = "grab";
+}}
+
+loadGraph().then(start).catch((err) => {{
   document.getElementById("summary").textContent = err.message;
+  ctx.clearRect(0, 0, state.width || 800, state.height || 300);
+  ctx.fillStyle = "#9b2226";
+  ctx.font = "14px IBM Plex Sans, Segoe UI, sans-serif";
+  ctx.fillText(err.message, 16, 28);
 }});
 </script>
 </body>
@@ -542,4 +765,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
