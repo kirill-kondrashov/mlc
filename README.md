@@ -50,6 +50,16 @@ that route.
 The primitive case is derived from modulus divergence in the principal nest, 
 using a conformal proxy definition to satisfy Lyubich's a priori bounds.
 
+> [!IMPORTANT]
+> **External-ray axiom elimination status (February 18, 2026):** removing
+> `MLC.Quadratic.external_ray_map_exists` from `MLC.mlc_conjecture` is currently
+> blocked under the active constraints (no new axioms, no new hypotheses in
+> `mlc_conjecture`, and no contradiction-only routing). The current
+> `Mlc/MainConjecture.lean` path still uses external-ray-driven providers for
+> finite-branch para-puzzle connectedness, IR classification, and satellite
+> bridge data. Constructive replacements for these three providers are required
+> before this axiom can be removed from the `make check` footprint.
+
 ## Formalization Origins
 
 The core definitions and the top-level statement of the MLC conjecture in this project are based on the [Google DeepMind formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean) repository. These definitions have been manually aligned and integrated into our framework because direct dependency integration was not possible. This is due to version incompatibilities: the DeepMind repository relies on an older version of Lean 4 and Mathlib (v4.22.0), whereas this project is built on more recent releases.
