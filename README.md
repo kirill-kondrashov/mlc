@@ -2,7 +2,7 @@
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
 
-[Live dependency graph (rooted at `MLC.mlc_conjecture`)](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/index.html)
+[Live dependency graph (rooted at `MLC.mlc_conjecture`)](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
 ## 🚧 WORK IN PROGRESS 🚧
 
@@ -125,7 +125,7 @@ https://<org>.github.io/<repo>/mlc_conjecture/
 ```
 
 Current repository link:
-[https://kirill-kondrashov.github.io/mlc/mlc_conjecture/index.html](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/index.html)
+[https://kirill-kondrashov.github.io/mlc/mlc_conjecture/](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
 ## Dependencies
 
