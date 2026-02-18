@@ -2162,6 +2162,15 @@ theorem mlc_conjecture_of_outside_inj_and_image_eq_exterior_two
     (external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior
       (2 : ℂ) h_inj h_img)
 
+/-- M5-oriented closure route via the named inclusion target on `c = 2`. -/
+theorem mlc_conjecture_of_outside_inj_and_exterior_subset_image_two
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (h_sub : BottcherExteriorSubsetImageOutsideOpenTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_outside_inj_and_image_eq_exterior_two h_inj
+    (bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image h_sub)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 theorem mlc_conjecture

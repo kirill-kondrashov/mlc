@@ -156,3 +156,23 @@
   a non-axiomatic proof of `Quadratic.ExternalRayMapData (2 : ℂ)` (or an
   alternative contradiction route that stays axiom-neutral and does not replace
   this with another project axiom).
+
+## Next Steps (Active)
+- [x] Reduce `BottcherImageOutsideOpenIsExterior (2 : ℂ)` to one hard inclusion.
+  - Added theorem
+    `bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image` in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`.
+  - Added named target
+    `BottcherExteriorSubsetImageOutsideOpenTwo` and bridge theorem
+    `bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image`.
+  - Remaining target is now:
+    `{w | 1 < ‖w‖} ⊆ bottcher_map (2) '' {z | ‖z‖ > ‖(2:ℂ)‖ + 2}`.
+- [ ] Build the inclusion proof for `c = 2` from existing outside-open
+  machinery.
+  - Candidate route: local homeomorphism on outside-open +
+    connectedness/openness of image + nonempty seed point.
+- [ ] Package the resulting theorem as
+  `bottcherImageOutsideOpenIsExterior_two`.
+- [ ] Instantiate
+  `mlc_conjecture_of_outside_inj_and_image_eq_exterior_two` with that theorem,
+  then re-check axiom footprint.

@@ -4032,6 +4032,43 @@ def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
 def BottcherImageOutsideOpenIsExterior (c : ℂ) : Prop :=
   Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} = {w : ℂ | 1 < ‖w‖}
 
+/-- Image-equality target reduced to a single inclusion obligation:
+    `exterior ⊆ image(outside-open)`. The reverse inclusion is automatic from
+    the norm estimate on outside points. -/
+theorem bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image
+    (c : ℂ) :
+    BottcherImageOutsideOpenIsExterior c ↔
+      ({w : ℂ | 1 < ‖w‖} ⊆
+        Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  constructor
+  · intro h_img w hw
+    rw [h_img]
+    exact hw
+  · intro h_sub
+    apply Set.Subset.antisymm
+    · intro w hw
+      rcases hw with ⟨z, hz, rfl⟩
+      exact bottcher_map_norm_gt_one_of_outside c (outside_open_subset_outside_disk c hz)
+    · exact h_sub
+
+/-- `c = 2` specialization of the previous reduction theorem. -/
+theorem bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image :
+    BottcherImageOutsideOpenIsExterior (2 : ℂ) ↔
+      ({w : ℂ | 1 < ‖w‖} ⊆
+        Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) := by
+  exact bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image (2 : ℂ)
+
+/-- Named `c = 2` inclusion target for the outside-open image step. -/
+def BottcherExteriorSubsetImageOutsideOpenTwo : Prop :=
+  ({w : ℂ | 1 < ‖w‖} ⊆
+    Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+
+/-- `c = 2` image-equality target from the named inclusion target. -/
+theorem bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image
+    (h_sub : BottcherExteriorSubsetImageOutsideOpenTwo) :
+    BottcherImageOutsideOpenIsExterior (2 : ℂ) := by
+  exact (bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image).2 h_sub
+
 /-- Outside-open surjectivity immediately yields the image-equality target. -/
 theorem bottcherImageOutsideOpenIsExterior_of_surj
     (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
