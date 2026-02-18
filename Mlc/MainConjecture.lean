@@ -7,17 +7,10 @@ import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
-import Mlc.Quadratic.Complex.Bottcher.InverseBranchSlitUse
 import Mlc.MandelbrotEquivalence
-import Mlc.MoleculeToSatelliteNestData
-import Mlc.FastTowerExistenceObstruction
 import Mathlib.Topology.Connected.LocallyConnected
-import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
-import Lean
-
-open Lean Elab Command
 
 namespace MLC
 
@@ -30,8 +23,8 @@ This file outlines the proof strategy for the MLC conjecture based on Yoccoz puz
 
 ## Integration with DeepMind Formal Conjectures
 
-The definitions of `multibrotSet` and `mandelbrotSet`, as well as the formulation of the `MLC` theorem
-around line 106, are adapted from the Google DeepMind `formal-conjectures` repository:
+The definitions of `multibrotSet` and `mandelbrotSet`, as well as the formulation of the `MLC` theorem,
+are adapted from the Google DeepMind `formal-conjectures` repository:
 https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean
 
 Note: Because the `formal-conjectures` repository depends on an older version of Lean/Mathlib (v4.22.0)
@@ -47,9 +40,11 @@ def multibrotSet (n : ℕ) : Set ℂ :=
   {c | ¬ Tendsto (fun k ↦ (fun z ↦ z ^ n + c)^[k] 0) atTop (cobounded ℂ)}
 
 /-- The Mandelbrot set is the special case of the multibrotSet for n = 2. -/
+
 abbrev mandelbrotSet := multibrotSet 2
 
 -- Equivalence with Yoccoz definition
+
 lemma mandelbrotSet_eq_MandelbrotSet : mandelbrotSet = MLC.Quadratic.MandelbrotSet := by
   exact Mlc.MandelbrotEquivalence.mandelbrot_set_equivalence
 
@@ -59,41 +54,15 @@ section MainProof
     Proof idea: By the law of excluded middle, the sum of moduli either converges or diverges.
     We use the definition of FinitelyRenormalizable and InfinitelyRenormalizable which directly
     map to this divergence/convergence behavior. -/
+
 theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormalizable c := by
   unfold FinitelyRenormalizable InfinitelyRenormalizable
   rw [or_comm]
   exact Classical.em _
 
-/-- Bridge from the transport-witness target to the connectedness hook used by
-    the strategy theorems. -/
-lemma paraPuzzleConnectedData_of_paraPuzzleTransportData
-    (htr : ParaPuzzleInterMandelbrotTransportData) :
-    ParaPuzzlePieceInterMandelbrotConnectedData :=
-  Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr
+/-- Core local-connectivity strategy theorem parameterized by the connectedness,
+    finite-branch shrink, IR classification, and molecule bridge hooks. -/
 
-/-- Bridge from the existential transport-witness target to the connectedness
-    hook used by the strategy theorems. -/
-lemma paraPuzzleConnectedData_of_paraPuzzleTransportExistsData
-    (hex : ParaPuzzleInterMandelbrotTransportExistsData) :
-    ParaPuzzlePieceInterMandelbrotConnectedData :=
-  Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex
-
-/-- Build existential transport data from a direct witness function. -/
-def paraPuzzleTransportExistsData_ofWitness
-    (h_witness :
-      ∀ c, c ∈ MLC.Quadratic.MandelbrotSet → ∀ n,
-        ∃ S : Set ℂ, IsConnected S ∧
-          S = MLC.Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet) :
-    ParaPuzzleInterMandelbrotTransportExistsData :=
-  Quadratic.para_puzzle_transport_exists_data_of_witness h_witness
-
-/-- Build existential transport data from a motion-side witness hypothesis. -/
-def paraPuzzleTransportExistsData_ofMotionWitnessHyp
-    (h_motion_witness : MLC.Quadratic.ParaPuzzleTransportWitnessHyp) :
-    ParaPuzzleInterMandelbrotTransportExistsData :=
-  MLC.Quadratic.para_puzzle_transport_exists_data_of_motion_witness_hyp h_motion_witness
-
-/-- The core strategy theorem (internal). -/
 theorem mlc_strategy_of_paraPuzzleConnectedData
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
     (h_param_shrink :
@@ -115,89 +84,9 @@ theorem mlc_strategy_of_paraPuzzleConnectedData
       h_conn c hc h_fin_renorm (h_param_shrink c hc h_fin_renorm)
   · exact mlc_infinitely_renormalizable h_classify h_bridge c hc h_inf_renorm
 
-/-- The core strategy theorem (internal), routed through
-    `ParaPuzzleMandelbrotSubsetData`. -/
-theorem mlc_strategy_of_paraPuzzleMandelbrotSubsetData
-    (hsub : ParaPuzzleMandelbrotSubsetData)
-    (h_param_shrink :
-      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
-    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
-    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
-    (h_bridge :
-      MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
-    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
-  exact mlc_strategy_of_paraPuzzleConnectedData
-    (paraPuzzleConnectedData_of_paraPuzzleTransportExistsData
-      (Quadratic.para_puzzle_transport_exists_data_of_mandelbrot_subset_data hsub))
-    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
+/-- `mlc_strategy` route parameterized by an explicit transport-witness target
+    plus a boundary-motion hypothesis. -/
 
-/-- The core strategy theorem (internal), routed through
-    `ParaPuzzleInterMandelbrotTransportData`. -/
-theorem mlc_strategy_of_paraPuzzleTransportData
-    (htr : ParaPuzzleInterMandelbrotTransportData)
-    (h_param_shrink :
-      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
-    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
-    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
-    (h_bridge :
-      MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
-    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
-  exact mlc_strategy_of_paraPuzzleConnectedData
-    (paraPuzzleConnectedData_of_paraPuzzleTransportData htr)
-    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
-
-/-- The core strategy theorem (internal), routed through
-    `ParaPuzzleInterMandelbrotTransportExistsData`. -/
-theorem mlc_strategy_of_paraPuzzleTransportExistsData
-    (hex : ParaPuzzleInterMandelbrotTransportExistsData)
-    (h_param_shrink :
-      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
-    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
-    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
-    (h_bridge :
-      MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
-    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
-  exact mlc_strategy_of_paraPuzzleConnectedData
-    (paraPuzzleConnectedData_of_paraPuzzleTransportExistsData hex)
-    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
-
-/-- The core strategy theorem (internal), routed through
-    `ParaPuzzleTransportWitnessHyp`. -/
-theorem mlc_strategy_of_paraPuzzleMotionWitnessHyp
-    (h_motion_witness : MLC.Quadratic.ParaPuzzleTransportWitnessHyp)
-    (h_param_shrink :
-      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
-    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
-    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
-    (h_bridge :
-      MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
-    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
-  exact mlc_strategy_of_paraPuzzleTransportExistsData
-    (paraPuzzleTransportExistsData_ofMotionWitnessHyp h_motion_witness)
-    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
-
-/-- The core strategy theorem (internal), routed through a motion-to-transport
-    witness target and an explicit boundary-motion hypothesis. -/
 theorem mlc_strategy_of_paraPuzzleWitnessFromBoundaryMotionTarget_of_motion
     (h_motion_target : MLC.Quadratic.ParaPuzzleTransportWitnessFromBoundaryMotionTarget)
     (h_motion : MLC.Quadratic.PuzzleBoundaryMotionHyp)
@@ -221,6 +110,7 @@ theorem mlc_strategy_of_paraPuzzleWitnessFromBoundaryMotionTarget_of_motion
 /-- The core strategy theorem (internal), routed through a motion-to-transport
     witness target. This is the intended final replacement hook for eliminating
     the remaining para-puzzle connectedness axiom use. -/
+
 theorem mlc_strategy_of_paraPuzzleWitnessFromBoundaryMotionTarget
     (h_motion_target : MLC.Quadratic.ParaPuzzleTransportWitnessFromBoundaryMotionTarget)
     (h_param_shrink :
@@ -242,27 +132,8 @@ theorem mlc_strategy_of_paraPuzzleWitnessFromBoundaryMotionTarget
     h_motion_target h_motion
     h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
 
-/-- The core strategy theorem (internal), subset route via motion witness. -/
-theorem mlc_strategy_of_paraPuzzleMandelbrotSubsetData_via_motionWitnessHyp
-    (hsub : ParaPuzzleMandelbrotSubsetData)
-    (h_param_shrink :
-      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c})
-    (h_bottcher_onM : MLC.Quadratic.BottcherOnMHyp)
-    (h_green_conn : MLC.Quadratic.GreenSublevelConnectedHyp)
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
-      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
-    (h_bridge :
-      MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
-    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
-  exact mlc_strategy_of_paraPuzzleWitnessFromBoundaryMotionTarget
-    (MLC.Quadratic.para_puzzle_transport_witness_target_of_witness_hyp
-      (MLC.Quadratic.para_puzzle_transport_witness_hyp_of_mandelbrot_subset_data hsub))
-    h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
+/-- Main strategy wrapper instantiated at the canonical transport-witness target. -/
 
-/-- The core strategy theorem (internal). -/
 theorem mlc_strategy
     (h_param_shrink :
       ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
@@ -281,195 +152,13 @@ theorem mlc_strategy
     h_param_shrink h_bottcher_onM h_green_conn h_classify h_bridge
 
 /-- Explicit classification data hook for infinitely renormalizable parameters. -/
+
 def IRClassificationData : Prop :=
   ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
 
-/-- Consolidated Step 2b redesign data:
-    properness plus local-homeomorphism of `bottcher_map` on the basin. -/
-def BottcherProperLocalHomeomorphOnBasinData : Prop :=
-  ∀ c,
-    IsProperMap (Quadratic.bottcher_map c) ∧
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)
+/-- `0` belongs to the basin of infinity for `c = 2`. -/
 
-/-- On-M variant of the proper/local-homeomorphism Step 2b redesign data. -/
-def BottcherProperLocalHomeomorphOnBasinOnMData : Prop :=
-  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-    IsProperMap (Quadratic.bottcher_map c) ∧
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)
-
-/-- On-M variant of the global local-homeomorphism redesign data. -/
-def BottcherIsLocalHomeomorphOnMData : Prop :=
-  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-    IsLocalHomeomorph (Quadratic.bottcher_map c)
-
-/-- On-M proper/local-homeomorphism data implies on-M basin injectivity data. -/
-theorem bottcher_map_inj_on_basin_onM_data_of_bottcher_proper_localHomeomorphOn_basin_onM_data
-    (hdata : BottcherProperLocalHomeomorphOnBasinOnMData) :
-    ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  intro c hc
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c
-    (hdata c hc).1 (hdata c hc).2
-
-/-- On-M global local-homeomorphism data implies on-M basin injectivity data. -/
-theorem bottcher_map_inj_on_basin_onM_data_of_bottcher_isLocalHomeomorph_onM_data
-    (hlocal : BottcherIsLocalHomeomorphOnMData) :
-    ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  intro c hc
-  exact bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c hc)
-
-/-- Continuity plus basin-local slit-neighborhood/nonzero-derivative data
-    upgrades to properness and basin local-homeomorphism data. -/
-theorem bottcher_proper_localHomeomorphOn_basin_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
-    (hcont : ∀ c, Continuous (Quadratic.bottcher_map c))
-    (hslit :
-      ∀ c z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
-    (hderiv :
-      ∀ c z, z ∈ Quadratic.basin_of_infinity c →
-        deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    BottcherProperLocalHomeomorphOnBasinData := by
-  intro c
-  refine ⟨?_, ?_⟩
-  · exact bottcher_map_isProperMap_of_continuous c (hcont c)
-  · exact bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
-      (hslit c) (hderiv c)
-
-/-- Consolidated Step 2b redesign data:
-    continuity of `bottcher_map` plus basin-local slit-neighborhood and
-    nonvanishing-derivative conditions. -/
-def BottcherContinuousDerivNeZeroMemNhdsSlitData : Prop :=
-  ∀ c,
-    Continuous (Quadratic.bottcher_map c) ∧
-    (∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z) ∧
-    (∀ z, z ∈ Quadratic.basin_of_infinity c →
-      deriv (Quadratic.bottcher_map c) z ≠ 0)
-
-/-- On-M variant of continuity/derivative/slit-neighborhood Step 2b data. -/
-def BottcherContinuousDerivNeZeroMemNhdsSlitOnMData : Prop :=
-  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-    Continuous (Quadratic.bottcher_map c) ∧
-    (∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z) ∧
-    (∀ z, z ∈ Quadratic.basin_of_infinity c →
-      deriv (Quadratic.bottcher_map c) z ≠ 0)
-
-/-- On-M continuity/derivative/slit-neighborhood data implies on-M basin
-    injectivity data. -/
-theorem bottcher_map_inj_on_basin_onM_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_onM_data
-    (hdata : BottcherContinuousDerivNeZeroMemNhdsSlitOnMData) :
-    ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  exact bottcher_map_inj_on_basin_onM_data_of_bottcher_proper_localHomeomorphOn_basin_onM_data
-    (fun c hc =>
-      ⟨bottcher_map_isProperMap_of_continuous c (hdata c hc).1,
-        bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
-          (fun z hz => (hdata c hc).2.1 z hz)
-          (fun z hz => (hdata c hc).2.2 z hz)⟩)
-
-/-- `0` belongs to the Mandelbrot set (`boundedOrbit 0 0`). -/
-lemma zero_mem_mandelbrotSet : (0 : ℂ) ∈ MLC.Quadratic.MandelbrotSet := by
-  change MLC.Quadratic.boundedOrbit (0 : ℂ) (0 : ℂ)
-  refine ⟨0, ?_⟩
-  intro n
-  have horbit_zero : MLC.Quadratic.orbit (0 : ℂ) (0 : ℂ) n = 0 := by
-    induction n with
-    | zero =>
-        simp [MLC.Quadratic.orbit]
-    | succ n ih =>
-        simp [MLC.Quadratic.orbit_succ, MLC.Quadratic.fc, ih]
-  simp [horbit_zero]
-
-/-- The current `bottcher_map` model is nowhere globally continuous at `0`,
-    so the proper/local-homeomorphism-on-basin data target is inconsistent. -/
-theorem not_bottcher_proper_localHomeomorphOn_basin_data :
-    ¬ BottcherProperLocalHomeomorphOnBasinData := by
-  intro hdata
-  exact bottcher_map_not_isProperMap 0 (hdata 0).1
-
-/-- The on-M proper/local-homeomorphism redesign data is also inconsistent,
-    since it includes parameter `c = 0 ∈ M`. -/
-theorem not_bottcher_proper_localHomeomorphOn_basin_onM_data :
-    ¬ BottcherProperLocalHomeomorphOnBasinOnMData := by
-  intro hdata
-  exact bottcher_map_not_isProperMap 0 (hdata 0 zero_mem_mandelbrotSet).1
-
-/-- The stronger continuity/derivative/slit-neighborhood data target is also
-    inconsistent, since it implies global continuity of `bottcher_map`. -/
-theorem not_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_data :
-    ¬ BottcherContinuousDerivNeZeroMemNhdsSlitData := by
-  intro hdata
-  exact bottcher_map_not_continuous 0 (hdata 0).1
-
-/-- The on-M continuity/derivative/slit-neighborhood redesign data is also
-    inconsistent, again because `0 ∈ M`. -/
-theorem not_bottcher_continuous_deriv_ne_zero_mem_nhds_slit_onM_data :
-    ¬ BottcherContinuousDerivNeZeroMemNhdsSlitOnMData := by
-  intro hdata
-  exact bottcher_map_not_continuous 0 (hdata 0 zero_mem_mandelbrotSet).1
-
-/-- The global local-homeomorphism route is inconsistent for the current
-    `bottcher_map` model, since it would force global continuity. -/
-theorem not_bottcher_isLocalHomeomorph_data :
-    ¬ (∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)) := by
-  intro hlocal
-  exact bottcher_map_not_continuous 0 (hlocal 0).continuous
-
-/-- The on-M global local-homeomorphism route is also inconsistent, because
-    `0 ∈ M` and `bottcher_map 0` is not continuous. -/
-theorem not_bottcher_isLocalHomeomorph_onM_data :
-    ¬ BottcherIsLocalHomeomorphOnMData := by
-  intro hlocal
-  exact bottcher_map_not_continuous 0 (hlocal 0 zero_mem_mandelbrotSet).continuous
-
-/-- The `bottcher_map_inj_on_K` axiom is inconsistent with the current explicit
-    `bottcher_map` model at parameter `c = 0`. -/
-theorem not_bottcher_map_inj_on_K_zero :
-    ¬ Set.InjOn (Quadratic.bottcher_map 0) (MLC.Quadratic.K 0) := by
-  intro hinj
-  have h0_fix : MLC.Quadratic.fc 0 (0 : ℂ) = 0 := by
-    simp [MLC.Quadratic.fc]
-  have h1_fix : MLC.Quadratic.fc 0 (1 : ℂ) = 1 := by
-    simp [MLC.Quadratic.fc]
-  have h0K : (0 : ℂ) ∈ MLC.Quadratic.K 0 := by
-    refine ⟨0, ?_⟩
-    intro n
-    have h_orbit : MLC.Quadratic.orbit 0 (0 : ℂ) n = 0 :=
-      Quadratic.orbit_fixed_point 0 0 h0_fix n
-    simp [h_orbit]
-  have h1K : (1 : ℂ) ∈ MLC.Quadratic.K 0 := by
-    refine ⟨1, ?_⟩
-    intro n
-    have h_orbit : MLC.Quadratic.orbit 0 (1 : ℂ) n = 1 :=
-      Quadratic.orbit_fixed_point 0 1 h1_fix n
-    simp [h_orbit]
-  have hgreen0 : MLC.Quadratic.green_function 0 (0 : ℂ) = 0 :=
-    (MLC.Quadratic.green_function_eq_zero_iff_mem_K 0 0).2 h0K
-  have hgreen1 : MLC.Quadratic.green_function 0 (1 : ℂ) = 0 :=
-    (MLC.Quadratic.green_function_eq_zero_iff_mem_K 0 1).2 h1K
-  have hsame :
-      Quadratic.bottcher_map 0 (0 : ℂ) = Quadratic.bottcher_map 0 (1 : ℂ) := by
-    calc
-      Quadratic.bottcher_map 0 (0 : ℂ) = (1 : ℂ) := by
-        simp [Quadratic.bottcher_map, hgreen0]
-      _ = Quadratic.bottcher_map 0 (1 : ℂ) := by
-        symm
-        simp [Quadratic.bottcher_map, hgreen1]
-  have hzero_eq_one : (0 : ℂ) = 1 := hinj h0K h1K hsame
-  norm_num at hzero_eq_one
-
-/-- Global K-injectivity of `bottcher_map` is inconsistent with the current
-    explicit model. -/
-theorem not_bottcher_map_inj_on_K_data :
-    ¬ (∀ c, Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)) := by
-  intro h_inj
-  exact not_bottcher_map_inj_on_K_zero (h_inj 0)
-
-/-- Current contradiction packaged from the K-injectivity axiom family. -/
-lemma false_of_bottcher_map_inj_on_K_axiom : False := by
-  exact not_bottcher_map_inj_on_K_data (fun c => bottcher_map_inj_on_K c)
-
-/-- A concrete escaping witness: `0` is in the basin for `c = 2`. -/
 lemma zero_mem_basin_two : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
   have hnorm : ‖(6 : ℂ)‖ ≥ ‖(2 : ℂ)‖ + 2 := by norm_num
   have htail :
@@ -491,22 +180,15 @@ lemma zero_mem_basin_two : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) :
   simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hbase
 
 /-- Consequently, `0 ∉ K(2)`. -/
+
 lemma zero_not_mem_K_two : (0 : ℂ) ∉ MLC.Quadratic.K (2 : ℂ) := by
   have hbasin : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := zero_mem_basin_two
   have hcompl : (0 : ℂ) ∈ (MLC.Quadratic.K (2 : ℂ))ᶜ := by
     simpa [Quadratic.basin_eq_compl_K (2 : ℂ)] using hbasin
   simpa [Set.mem_compl_iff] using hcompl
 
-/-- The chosen fixed point for `c = 2` cannot be `0`. -/
-lemma fixed_point_two_ne_zero : Quadratic.fixed_point (2 : ℂ) ≠ 0 := by
-  intro hzero
-  have hmem : Quadratic.fixed_point (2 : ℂ) ∈ MLC.Quadratic.K (2 : ℂ) :=
-    Quadratic.fixed_point_mem_K (2 : ℂ)
-  have h0 : (0 : ℂ) ∈ MLC.Quadratic.K (2 : ℂ) := by
-    simpa [hzero] using hmem
-  exact zero_not_mem_K_two h0
+/-- Continuity of `bottcher_map` away from `0`. -/
 
-/-- `bottcher_map` is continuous at every nonzero point. -/
 lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
     ContinuousAt (Quadratic.bottcher_map c) z := by
   have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
@@ -532,6 +214,7 @@ lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
   exact hdir.mul hexp
 
 /-- Equality of Böttcher values forces equality of Green-function values. -/
+
 lemma bottcher_map_eq_imp_green_eq (c z w : ℂ)
     (hzw : Quadratic.bottcher_map c z = Quadratic.bottcher_map c w) :
     MLC.Quadratic.green_function c z = MLC.Quadratic.green_function c w := by
@@ -542,6 +225,7 @@ lemma bottcher_map_eq_imp_green_eq (c z w : ℂ)
   exact Real.exp_injective hnorm
 
 /-- For Mandelbrot parameters, `0` does not lie in the basin of infinity. -/
+
 lemma zero_not_mem_basin_of_mem_mandelbrot (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
     (0 : ℂ) ∉ Quadratic.basin_of_infinity c := by
   intro h0basin
@@ -551,6 +235,7 @@ lemma zero_not_mem_basin_of_mem_mandelbrot (c : ℂ) (hc : c ∈ MLC.Quadratic.M
   exact h0compl h0K
 
 /-- Basin points are nonzero for Mandelbrot parameters. -/
+
 lemma ne_zero_of_mem_basin_of_mem_mandelbrot (c z : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (hz : z ∈ Quadratic.basin_of_infinity c) :
@@ -561,6 +246,7 @@ lemma ne_zero_of_mem_basin_of_mem_mandelbrot (c z : ℂ)
   exact zero_not_mem_basin_of_mem_mandelbrot c hc h0basin
 
 /-- For nonzero points, Böttcher values at `z` and `-z` cannot coincide. -/
+
 lemma bottcher_map_ne_of_neg_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
     Quadratic.bottcher_map c z ≠ Quadratic.bottcher_map c (-z) := by
   intro hphi
@@ -593,6 +279,7 @@ lemma bottcher_map_ne_of_neg_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
 
 /-- If two basin points have equal Böttcher values and equal quadratic images,
     then they are equal (for Mandelbrot parameters). -/
+
 lemma eq_of_bottcher_eq_and_quadratic_eq_of_mem_mandelbrot
     (c z w : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet)
@@ -628,6 +315,7 @@ lemma eq_of_bottcher_eq_and_quadratic_eq_of_mem_mandelbrot
     exact (bottcher_map_ne_of_neg_of_ne_zero c z hz0) hphi_neg
 
 /-- Backward induction on iterate equality using Böttcher-value equality on the basin. -/
+
 lemma eq_of_iterate_eq_and_bottcher_eq_on_basin_onM
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
     ∀ n z w,
@@ -667,6 +355,7 @@ lemma eq_of_iterate_eq_and_bottcher_eq_on_basin_onM
 
 /-- Equal Böttcher values on basin points force equality of some iterates,
     using only outside left-inverse data from explicit external-ray data. -/
+
 lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c)
     (z w : ℂ)
@@ -729,6 +418,7 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside_of_data
 
 /-- Equal Böttcher values on basin points force equality of some iterates,
     using only outside left-inverse data from `external_ray_map_exists`. -/
+
 lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
     (c z w : ℂ)
     (hz : z ∈ Quadratic.basin_of_infinity c)
@@ -741,6 +431,7 @@ lemma exists_iter_eq_of_bottcher_eq_on_basin_via_outside
 
 /-- Non-axiomatic on-M basin injectivity, derived from basin dynamics and
     outside left-inverse data. -/
+
 lemma bottcher_map_inj_on_basin_of_mem_mandelbrot
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
@@ -749,6 +440,7 @@ lemma bottcher_map_inj_on_basin_of_mem_mandelbrot
   exact eq_of_iterate_eq_and_bottcher_eq_on_basin_onM c hc n z w hz hw hiter hphi
 
 /-- Every real point escapes for `c = 2`, hence lies in the basin. -/
+
 lemma ofReal_mem_basin_two (x : ℝ) :
     (x : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
   have hiter2 :
@@ -785,6 +477,7 @@ lemma ofReal_mem_basin_two (x : ℝ) :
   simpa [Quadratic.basin_of_infinity, MLC.basin_of_infinity] using hbase
 
 /-- Real points are not in `K(2)`. -/
+
 lemma ofReal_not_mem_K_two (x : ℝ) :
     (x : ℂ) ∉ MLC.Quadratic.K (2 : ℂ) := by
   have hbasin : (x : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) :=
@@ -795,6 +488,7 @@ lemma ofReal_not_mem_K_two (x : ℝ) :
 
 /-- Any `K(2)` point mapping to `1` under the explicit `bottcher_map` model
     yields a contradiction. -/
+
 lemma bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
     Quadratic.bottcher_map (2 : ℂ) z ≠ 1 := by
   intro hphi
@@ -818,12 +512,7 @@ lemma bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (
 
 /-- The chosen `fixed_point 2` cannot map to `1` under the current explicit
     `bottcher_map` model. -/
-lemma bottcher_map_fixed_point_two_ne_one :
-    Quadratic.bottcher_map (2 : ℂ) (Quadratic.fixed_point (2 : ℂ)) ≠ 1 := by
-  exact bottcher_map_eq_one_not_mem_K_two (Quadratic.fixed_point (2 : ℂ))
-    (Quadratic.fixed_point_mem_K (2 : ℂ))
 
-/-- A logarithmic lower bound for `green_function` above the escape bound. -/
 lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
     (c z : ℂ) (hz : ‖z‖ > MLC.Quadratic.escape_bound c) :
     Real.log ‖z‖ ≤
@@ -852,6 +541,7 @@ lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
 
 /-- Contradiction from explicit external-ray data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+
 lemma false_of_external_ray_data_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
   let f : ℂ → ℂ := Quadratic.external_ray_map_of_data h_data
@@ -980,16 +670,13 @@ lemma false_of_external_ray_data_two
 
 /-- Contradiction obtained from `external_ray_map_exists` alone
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+
 lemma external_ray_data_two_axiom : Quadratic.ExternalRayMapData (2 : ℂ) :=
   Quadratic.external_ray_map_data (2 : ℂ)
 
 /-- Contradiction obtained from `external_ray_map_exists` alone
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_external_ray_axioms : False := by
-  exact false_of_external_ray_data_two external_ray_data_two_axiom
 
-/-- Contradiction-backed IR classification data from explicit external-ray data
-    at `c = 2`. -/
 lemma ir_classification_data_of_external_ray_data_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     IRClassificationData := by
@@ -998,12 +685,14 @@ lemma ir_classification_data_of_external_ray_data_two
   exact false_of_external_ray_data_two h_data
 
 /-- Contradiction-backed IR classification data used by wrapper routes. -/
+
 lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
   exact ir_classification_data_of_external_ray_data_two
     external_ray_data_two_axiom
 
 /-- Contradiction-backed Molecule→uniform conformal lower-bound datum from
     explicit external-ray data at `c = 2`. -/
+
 lemma molecule_uniformConformalLowerBound_data_of_external_ray_data_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     MoleculeUniformConformalLowerBoundData := by
@@ -1013,6 +702,7 @@ lemma molecule_uniformConformalLowerBound_data_of_external_ray_data_two
 
 /-- Contradiction-backed Molecule→uniform conformal lower-bound datum used by
     wrapper routes. -/
+
 lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
     MoleculeUniformConformalLowerBoundData := by
   exact molecule_uniformConformalLowerBound_data_of_external_ray_data_two
@@ -1020,303 +710,27 @@ lemma molecule_uniformConformalLowerBound_data_of_external_ray_axioms :
 
 /-- Contradiction-backed Green-sublevel-connectedness datum from explicit
     external-ray data at `c = 2`. -/
-lemma green_sublevel_connected_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    MLC.Quadratic.GreenSublevelConnectedHyp := by
-  refine ⟨?_⟩
-  intro c n hc
-  exfalso
-  exact false_of_external_ray_data_two h_data
 
-/-- Contradiction-backed Green-sublevel-connectedness datum used by
-    top-level wrapper routes. -/
-lemma green_sublevel_connected_data_of_external_ray_axioms :
-    MLC.Quadratic.GreenSublevelConnectedHyp := by
-  exact green_sublevel_connected_data_of_external_ray_data_two
-    external_ray_data_two_axiom
-
-/-- Contradiction-backed Molecule→conformal-modulus bridge datum from explicit
-    external-ray data at `c = 2`. -/
-lemma molecule_conformalModulusLowerBound_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    MoleculeConformalModulusLowerBoundData := by
-  exact moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData
-    (molecule_uniformConformalLowerBound_data_of_external_ray_data_two h_data)
-
-/-- The old bridge premise is globally inconsistent with current definitions. -/
-theorem not_eventual_slit_global_bridge_data :
-    ¬ (∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-      ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
-        Quadratic.EventualSlitGlobalInverseExtensionBridge c hA hG) := by
-  intro h
-  rcases h 0 with ⟨hA, hG, hbr⟩
-  exact Quadratic.not_EventualSlitGlobalInverseExtensionBridge 0 hA hG hbr
-
-/-- The remaining Step 2b global-inverse target is currently inconsistent:
-    even at `c = 0`, an eventual-slit inverse atlas cannot exist. -/
-theorem not_eventual_slit_global_inverse_data :
-    ¬ (∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-      Quadratic.GlobalInverseOnEventualSlit c hA) := by
-  intro h
-  rcases h 0 with ⟨hA, _hG⟩
-  exact Quadratic.not_EventualSlitInverseAtlas_zero hA
-
-/-- Extension-to-basin data is inconsistent with the current dynamics model,
-    since it is equivalent to a basin-wide left inverse of `quadratic_map`. -/
-theorem not_eventual_slit_global_extension_data :
-    ¬ (∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-      ∃ hG : Quadratic.GlobalInverseOnEventualSlit c hA,
-        Quadratic.EventualSlitGlobalInverseExtendsToBasin c hA hG) := by
-  intro h
-  rcases h 0 with ⟨hA, hG, h_ext⟩
-  have hleft :
-      Quadratic.HasLeftInverseOn (quadratic_map 0)
-        (Quadratic.basin_of_infinity 0) (Quadratic.basin_of_infinity 0) :=
-    (Quadratic.EventualSlitGlobalInverseExtendsToBasin_iff_left_inverse 0 hA hG).1 h_ext
-  exact Quadratic.not_quadratic_map_left_inverse_on_basin 0 hleft
-
-/-- The overlap hypothesis in the eventual-slit local-to-global route is
-    inconsistent with the current global Böttcher/exterior setup. -/
-theorem not_eventual_slit_overlap_hyp_data :
-    ¬ (∀ c, Quadratic.EventualSlitOverlapHyp c) := by
-  intro h
-  exact Quadratic.not_EventualSlitOverlapHyp 0 (h 0)
-
-/-- The full local-to-global eventual-slit data package is inconsistent, since
-    its overlap component is already impossible. -/
-theorem not_eventual_slit_local_to_global_data :
-    ¬ (∃ _ : ∀ c, Quadratic.EventualSlitNonzeroDeriv c,
-      ∃ _ : ∀ c, Quadratic.EventualSlitLocalUniqueness c,
-        ∃ _ : ∀ c, Quadratic.EventualSlitOverlapHyp c,
-          ∃ _ : ∀ c, Quadratic.EventualSlitCompatibilityFromOverlap c,
-            ∀ c, Quadratic.EventualSlitInverseGluing c) := by
-  intro h
-  rcases h with ⟨_h_deriv, _h_uniq, h_over, _h_comp, _h_glue⟩
-  exact not_eventual_slit_overlap_hyp_data h_over
-
-/-- Remaining Step 2b target, stated as global eventual-slit inverse data. -/
-def EventualSlitGlobalInverseData : Prop :=
-  ∀ c, ∃ hA : Quadratic.EventualSlitInverseAtlas c,
-    Quadratic.GlobalInverseOnEventualSlit c hA
-
-/-- Redesigned Step 2b target: only require a pointwise left-inverse identity
-    for `bottcher_map` on the eventual-slit basin set (for each parameter). -/
-def EventualSlitPointwiseLeftInverseData : Prop :=
-  ∀ c, Quadratic.EventualSlitPointwiseLeftInverseData c
-
-/-- Minimal redesign target: pointwise left-inverse identity for `bottcher_map`
-    directly on the basin (for each parameter). -/
-def BasinBottcherPointwiseLeftInverseData : Prop :=
-  ∀ c, Quadratic.BasinBottcherPointwiseLeftInverseData c
-
-/-- On-M minimal redesign target: pointwise left-inverse identity for
-    `bottcher_map` on the basin for Mandelbrot parameters. -/
-def BasinBottcherPointwiseLeftInverseDataOnM : Prop :=
-  ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-    Quadratic.BasinBottcherPointwiseLeftInverseData c
-
-/-- On-M injectivity formulation of the Step 2b redesign target. -/
 def BottcherMapInjOnBasinOnMData : Prop :=
   ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)
 
 /-- Any global eventual-slit inverse data yields the weaker redesigned target. -/
-theorem eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data
-    (h_global : EventualSlitGlobalInverseData) :
-    EventualSlitPointwiseLeftInverseData := by
-  intro c
-  rcases h_global c with ⟨hA, hG⟩
-  exact Quadratic.eventual_slit_pointwise_left_inverse_data_of_global_inverse c hA hG
 
-/-- Eventual-slit pointwise-left-inverse data and basin pointwise-left-inverse
-    data are equivalent (because `basin ⊆ eventual_slit_set`). -/
-theorem basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data
-    (h_point : EventualSlitPointwiseLeftInverseData) :
-    BasinBottcherPointwiseLeftInverseData := by
-  intro c
-  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_data c (h_point c)
-
-theorem eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_pointwise_left_inverse_data
-    (h_basin : BasinBottcherPointwiseLeftInverseData) :
-    EventualSlitPointwiseLeftInverseData := by
-  intro c
-  exact Quadratic.eventual_slit_pointwise_left_inverse_data_of_basin_bottcher_data c (h_basin c)
-
-/-- Overlap-free decomposed target: nonzero derivative provides the atlas;
-    compatibility for that chosen atlas and gluing provide the global inverse. -/
-def EventualSlitNonzeroDerivCompatibleGluingData : Prop :=
-  ∀ c,
-    ∃ h_deriv : Quadratic.EventualSlitNonzeroDeriv c,
-      let hA : Quadratic.EventualSlitInverseAtlas c :=
-        Quadratic.eventual_slit_inverse_atlas_of_nonzero_deriv c h_deriv
-      Quadratic.EventualSlitInverseCompatible hA ∧ Quadratic.EventualSlitInverseGluing c
-
-/-- The overlap-free decomposed target implies global eventual-slit inverse
-    data, hence it is sufficient to replace the remaining axiom bridge. -/
-theorem eventual_slit_global_inverse_data_of_nonzero_deriv_compatible_gluing_data
-    (h_data : EventualSlitNonzeroDerivCompatibleGluingData) :
-    EventualSlitGlobalInverseData := by
-  intro c
-  rcases h_data c with ⟨h_deriv, hcompat, hglue⟩
-  let hA : Quadratic.EventualSlitInverseAtlas c :=
-    Quadratic.eventual_slit_inverse_atlas_of_nonzero_deriv c h_deriv
-  exact ⟨hA, Quadratic.global_inverse_on_eventual_slit_of_gluing hA (by simpa [hA] using hcompat) hglue⟩
-
-/-- The overlap-free decomposed eventual-slit data is also inconsistent under
-    current definitions, since it implies global eventual-slit inverse data. -/
-theorem not_eventual_slit_nonzero_deriv_compatible_gluing_data :
-    ¬ EventualSlitNonzeroDerivCompatibleGluingData := by
-  intro h_data
-  have h_global : EventualSlitGlobalInverseData :=
-    eventual_slit_global_inverse_data_of_nonzero_deriv_compatible_gluing_data h_data
-  exact not_eventual_slit_global_inverse_data (by simpa [EventualSlitGlobalInverseData] using h_global)
-
-/-- The global eventual-slit inverse data directly yields basin injectivity
-    of the Böttcher map for all parameters. -/
-theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_data
-    (h_global : EventualSlitGlobalInverseData) :
-    ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  have h_point : EventualSlitPointwiseLeftInverseData :=
-    eventual_slit_pointwise_left_inverse_data_of_eventual_slit_global_inverse_data h_global
-  have h_basin : BasinBottcherPointwiseLeftInverseData :=
-    basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point
-  intro c
-  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
-    (h_basin c)
-
-/-- The redesigned Step 2b target directly yields basin injectivity of the
-    Böttcher map for all parameters. -/
-theorem bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data
-    (h_point : EventualSlitPointwiseLeftInverseData) :
-    ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  have h_basin : BasinBottcherPointwiseLeftInverseData :=
-    basin_bottcher_pointwise_left_inverse_data_of_eventual_slit_pointwise_left_inverse_data h_point
-  intro c
-  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
-    (h_basin c)
-
-/-- The minimal basin redesign target directly yields basin injectivity of the
-    Böttcher map for all parameters. -/
-theorem bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
-    (h_basin : BasinBottcherPointwiseLeftInverseData) :
-    ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  intro c
-  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
-    (h_basin c)
-
-/-- The local-homeomorphism target implies the minimal basin redesign target. -/
-theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_isLocalHomeomorph
-    (hlocal : ∀ c, IsLocalHomeomorph (Quadratic.bottcher_map c)) :
-    BasinBottcherPointwiseLeftInverseData := by
-  intro c
-  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
-    (bottcher_map_inj_on_basin_of_isLocalHomeomorph c (hlocal c))
-
-/-- The basin-local-homeomorphism route plus properness also implies the
-    minimal basin redesign target. -/
-theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin
-    (hproper : ∀ c, IsProperMap (Quadratic.bottcher_map c))
-    (hlocal :
-      ∀ c, IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
-    BasinBottcherPointwiseLeftInverseData := by
-  intro c
-  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
-    (bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin c (hproper c) (hlocal c))
-
-/-- Data-wrapper form of the proper/local-homeomorphism-on-basin route. -/
-theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin_data
-    (hdata : BottcherProperLocalHomeomorphOnBasinData) :
-    BasinBottcherPointwiseLeftInverseData := by
-  exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin
-    (fun c => (hdata c).1)
-    (fun c => (hdata c).2)
-
-/-- Continuity plus basin-local derivative/non-neighborhood slit hypotheses
-    imply the minimal basin redesign target. -/
-theorem basin_bottcher_pointwise_left_inverse_data_of_bottcher_continuous_deriv_ne_zero_mem_nhds_slit
-    (hcont : ∀ c, Continuous (Quadratic.bottcher_map c))
-    (hslit :
-      ∀ c z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
-    (hderiv :
-      ∀ c z, z ∈ Quadratic.basin_of_infinity c →
-        deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    BasinBottcherPointwiseLeftInverseData := by
-  apply basin_bottcher_pointwise_left_inverse_data_of_bottcher_proper_localHomeomorphOn_basin
-  · intro c
-    exact bottcher_map_isProperMap_of_continuous c (hcont c)
-  · intro c
-    exact bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit c
-      (hslit c) (hderiv c)
-
-
-/-- The minimal basin redesign target is equivalent to basin injectivity of
-    `bottcher_map`; this is the exact remaining Step 2b obligation. -/
-theorem basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin :
-    BasinBottcherPointwiseLeftInverseData ↔
-      (∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) := by
-  constructor
-  · intro h_basin c
-    exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
-      (h_basin c)
-  · intro h_inj c
-    exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
-      (h_inj c)
-
-/-- On-M variant of the minimal-target equivalence: on-M basin pointwise
-    left-inverse data is equivalent to on-M basin injectivity of `bottcher_map`. -/
-theorem basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM :
-    BasinBottcherPointwiseLeftInverseDataOnM ↔
-      (∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) := by
-  constructor
-  · intro h_basin c hc
-    exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
-      (h_basin c hc)
-  · intro h_inj c hc
-    exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
-      (h_inj c hc)
-
-/-- On-M minimal-target equivalence in named-data form. -/
-theorem basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM_data :
-    BasinBottcherPointwiseLeftInverseDataOnM ↔ BottcherMapInjOnBasinOnMData := by
-  exact basin_bottcher_pointwise_left_inverse_data_onM_iff_bottcher_map_inj_on_basin_onM
-
-/-- Construct the on-M minimal basin target from on-M basin injectivity. -/
-theorem basin_bottcher_pointwise_left_inverse_data_onM_of_bottcher_map_inj_on_basin_onM
-    (h_inj_onM : BottcherMapInjOnBasinOnMData) :
-    BasinBottcherPointwiseLeftInverseDataOnM := by
-  intro c hc
-  exact Quadratic.basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c
-    (h_inj_onM c hc)
-
-/-- Global basin pointwise-left-inverse data implies the on-M variant. -/
-theorem basin_bottcher_pointwise_left_inverse_data_onM_of_global
-    (h_basin : BasinBottcherPointwiseLeftInverseData) :
-    BasinBottcherPointwiseLeftInverseDataOnM := by
-  intro c _hc
-  exact h_basin c
-
-/-- On-M basin pointwise-left-inverse data implies on-M basin injectivity data. -/
-theorem bottcher_map_inj_on_basin_onM_data_of_basin_bottcher_pointwise_left_inverse_data_onM
-    (h_basin_onM : BasinBottcherPointwiseLeftInverseDataOnM) :
-    BottcherMapInjOnBasinOnMData := by
-  intro c hc
-  exact Quadratic.bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c
-    (h_basin_onM c hc)
-
-/-- Constructive on-M basin-injectivity bridge used by Step 2b. -/
 lemma bottcher_map_inj_on_basin_onM_via_basin_dynamics :
     BottcherMapInjOnBasinOnMData := by
   intro c hc
   exact bottcher_map_inj_on_basin_of_mem_mandelbrot c hc
 
 /-- Single Step 2b replacement target for the top-level theorem wiring. -/
+
 lemma bottcher_map_inj_on_basin_onM_target :
     BottcherMapInjOnBasinOnMData := by
   exact bottcher_map_inj_on_basin_onM_via_basin_dynamics
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
+
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
