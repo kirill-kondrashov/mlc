@@ -9,6 +9,9 @@
 This repository is a proof skeleton. It compiles and isolates the main logical
 dependencies, but several deep inputs remain axiomatic.
 
+`Mlc/MainConjecture.lean` is now restricted to the declarations on the direct
+dependency path to `MLC.mlc_conjecture`.
+
 Active research-debt tracking for the Böttcher inverse-branch route:
 `plan/PLAN_global_research_debt_bottcher_inverse.md`.
 
