@@ -107,6 +107,4 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.Quadratic.external_ray_map_exists
-- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
-- MLC.Quadratic.filled_julia_set_connected
 ```
