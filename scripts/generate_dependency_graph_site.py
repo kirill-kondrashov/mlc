@@ -252,6 +252,29 @@ def graph_page_html(title: str) -> str:
       --text: #0f172a;
       --muted: #475569;
       --border: #dbe2ea;
+      --button-bg: #f8fafc;
+      --canvas-bg: #f8fafc;
+      --edge-color: #64748b;
+      --edge-muted: rgba(148,163,184,0.25);
+      --label-color: #0f172a;
+      --label-muted: rgba(100,116,139,0.7);
+      --cycle-ring: #ef4444;
+      --cycle-edge: #f97316;
+    }}
+    :root[data-theme="dark"] {{
+      --bg: #0b1220;
+      --panel: #101a2d;
+      --text: #dbe7ff;
+      --muted: #9db0cf;
+      --border: #20304d;
+      --button-bg: #13203a;
+      --canvas-bg: #0a1428;
+      --edge-color: #7f93b4;
+      --edge-muted: rgba(93,118,156,0.28);
+      --label-color: #e7efff;
+      --label-muted: rgba(151,175,210,0.72);
+      --cycle-ring: #fb7185;
+      --cycle-edge: #f59e0b;
     }}
     * {{ box-sizing: border-box; }}
     body {{
@@ -290,6 +313,27 @@ def graph_page_html(title: str) -> str:
       align-items: center;
       gap: 8px;
     }}
+    .legend {{
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }}
+    .legend-item {{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }}
+    .legend-dot {{
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: inline-block;
+    }}
     input[type="search"] {{
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -299,17 +343,18 @@ def graph_page_html(title: str) -> str:
     }}
     button {{
       border: 1px solid var(--border);
-      background: #f8fafc;
+      background: var(--button-bg);
       border-radius: 8px;
       padding: 6px 9px;
       cursor: pointer;
       font-size: 13px;
+      color: var(--text);
     }}
     #graphCanvas {{
       width: 100%;
       height: 100%;
       display: block;
-      background: #f8fafc;
+      background: var(--canvas-bg);
       cursor: grab;
     }}
   </style>
@@ -321,6 +366,8 @@ def graph_page_html(title: str) -> str:
     <span class="meta" id="summary"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
     <button id="fitBtn" type="button">Fit</button>
+    <button id="themeBtn" type="button">Theme</button>
+    <div id="legend" class="legend"></div>
   </div>
   <canvas id="graphCanvas"></canvas>
 </div>
@@ -341,10 +388,30 @@ function nodeColor(kind) {{
   return KIND_COLOR[kind] || "#adb5bd";
 }}
 
+function degreeColor(d, minD, maxD) {{
+  if (maxD <= minD) return "hsl(196, 70%, 62%)";
+  const t = (d - minD) / (maxD - minD);
+  const light = 82 - 40 * t;
+  return `hsl(196, 74%, ${{light.toFixed(1)}}%)`;
+}}
+
 const state = {{
   nodes: [],
   edges: [],
   idToNode: new Map(),
+  palette: {{
+    edge: "#64748b",
+    edgeMuted: "rgba(148,163,184,0.25)",
+    label: "#0f172a",
+    labelMuted: "rgba(100,116,139,0.7)",
+    cycleRing: "#ef4444",
+    cycleEdge: "#f97316"
+  }},
+  minDegree: 0,
+  maxDegree: 0,
+  cycleNodeCount: 0,
+  cycleEdgeCount: 0,
+  cycleComponentCount: 0,
   search: "",
   width: 0,
   height: 0,
@@ -360,6 +427,45 @@ const state = {{
 
 const canvas = document.getElementById("graphCanvas");
 const ctx = canvas.getContext("2d");
+const THEME_KEY = "mlc_graph_theme";
+
+function cssVar(name, fallback) {{
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return value || fallback;
+}}
+
+function refreshPalette() {{
+  state.palette.edge = cssVar("--edge-color", "#64748b");
+  state.palette.edgeMuted = cssVar("--edge-muted", "rgba(148,163,184,0.25)");
+  state.palette.label = cssVar("--label-color", "#0f172a");
+  state.palette.labelMuted = cssVar("--label-muted", "rgba(100,116,139,0.7)");
+  state.palette.cycleRing = cssVar("--cycle-ring", "#ef4444");
+  state.palette.cycleEdge = cssVar("--cycle-edge", "#f97316");
+}}
+
+function systemTheme() {{
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}}
+
+function applyTheme(theme) {{
+  const finalTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", finalTheme);
+  try {{
+    localStorage.setItem(THEME_KEY, finalTheme);
+  }} catch (_err) {{}}
+  const themeBtn = document.getElementById("themeBtn");
+  if (themeBtn) {{
+    themeBtn.textContent = finalTheme === "dark" ? "Theme: Dark" : "Theme: Light";
+    themeBtn.title = "Toggle light/dark theme";
+  }}
+  refreshPalette();
+  if (state.nodes.length > 0) {{
+    renderLegend();
+    draw();
+  }}
+}}
 
 async function loadGraph() {{
   const response = await fetch("graph.json");
@@ -425,6 +531,105 @@ function fitToGraph() {{
   state.ty = (state.height - state.scale * (minY + maxY)) / 2;
 }}
 
+function detectCycles() {{
+  const idx = new Map(state.nodes.map((n, i) => [n.id, i]));
+  const adj = state.nodes.map(() => []);
+  const selfLoop = state.nodes.map(() => false);
+  for (const e of state.edges) {{
+    const s = idx.get(e.source.id);
+    const t = idx.get(e.target.id);
+    if (s === undefined || t === undefined) continue;
+    adj[s].push(t);
+    if (s === t) selfLoop[s] = true;
+  }}
+
+  const n = state.nodes.length;
+  const index = new Array(n).fill(-1);
+  const low = new Array(n).fill(0);
+  const onStack = new Array(n).fill(false);
+  const stack = [];
+  const comp = new Array(n).fill(-1);
+  const compSize = [];
+  let nextIndex = 0;
+
+  function strongConnect(v) {{
+    index[v] = nextIndex;
+    low[v] = nextIndex;
+    nextIndex += 1;
+    stack.push(v);
+    onStack[v] = true;
+
+    for (const w of adj[v]) {{
+      if (index[w] === -1) {{
+        strongConnect(w);
+        low[v] = Math.min(low[v], low[w]);
+      }} else if (onStack[w]) {{
+        low[v] = Math.min(low[v], index[w]);
+      }}
+    }}
+
+    if (low[v] === index[v]) {{
+      const cid = compSize.length;
+      let size = 0;
+      while (true) {{
+        const w = stack.pop();
+        onStack[w] = false;
+        comp[w] = cid;
+        size += 1;
+        if (w === v) break;
+      }}
+      compSize.push(size);
+    }}
+  }}
+
+  for (let v = 0; v < n; v++) {{
+    if (index[v] === -1) strongConnect(v);
+  }}
+
+  const cycleComp = compSize.map(sz => sz > 1);
+  for (let i = 0; i < n; i++) {{
+    if (selfLoop[i]) cycleComp[comp[i]] = true;
+  }}
+
+  let cycleNodes = 0;
+  for (let i = 0; i < n; i++) {{
+    const cid = comp[i];
+    const inCycle = Boolean(cycleComp[cid]);
+    state.nodes[i].cycleId = cid;
+    state.nodes[i].inCycle = inCycle;
+    if (inCycle) cycleNodes += 1;
+  }}
+
+  let cycleEdges = 0;
+  for (const e of state.edges) {{
+    const sameCycle = e.source.inCycle && e.target.inCycle && e.source.cycleId === e.target.cycleId;
+    e.inCycle = sameCycle;
+    if (sameCycle) cycleEdges += 1;
+  }}
+
+  state.cycleNodeCount = cycleNodes;
+  state.cycleEdgeCount = cycleEdges;
+  state.cycleComponentCount = cycleComp.reduce((acc, x) => acc + (x ? 1 : 0), 0);
+}}
+
+function renderLegend() {{
+  const legend = document.getElementById("legend");
+  if (!legend) return;
+  if (state.nodes.length === 0) {{
+    legend.textContent = "";
+    return;
+  }}
+  const midD = Math.round((state.minDegree + state.maxDegree) / 2);
+  legend.innerHTML = `
+    <span>Links</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.minDegree, state.minDegree, state.maxDegree)}}"></span>${{state.minDegree}}</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(midD, state.minDegree, state.maxDegree)}}"></span>${{midD}}</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.maxDegree, state.minDegree, state.maxDegree)}}"></span>${{state.maxDegree}}</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.cycleEdge}}"></span>Cycle edge</span>
+    <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.cycleRing}}"></span>Cycle node</span>
+  `;
+}}
+
 function initGraph(payload) {{
   const byDepth = new Map();
   for (const n of payload.nodes) {{
@@ -466,11 +671,38 @@ function initGraph(payload) {{
     }}))
     .filter(e => e.source && e.target);
 
+  const degree = new Map(state.nodes.map(n => [n.id, 0]));
+  for (const e of state.edges) {{
+    degree.set(e.source.id, (degree.get(e.source.id) || 0) + 1);
+    degree.set(e.target.id, (degree.get(e.target.id) || 0) + 1);
+  }}
+  let minD = Infinity;
+  let maxD = -Infinity;
+  for (const n of state.nodes) {{
+    n.degree = degree.get(n.id) || 0;
+    minD = Math.min(minD, n.degree);
+    maxD = Math.max(maxD, n.degree);
+  }}
+  if (!Number.isFinite(minD)) minD = 0;
+  if (!Number.isFinite(maxD)) maxD = 0;
+  state.minDegree = minD;
+  state.maxDegree = maxD;
+
+  for (const n of state.nodes) {{
+    n.r = Math.max(6, Math.min(24, 6 + Math.sqrt(n.degree + 1) * 2.9));
+  }}
+
+  detectCycles();
+  renderLegend();
+
   document.getElementById("summary").textContent =
-    `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges`;
+    `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
+    `${{state.cycleNodeCount}} cycle nodes (${{state.cycleComponentCount}} components), ` +
+    `${{state.cycleEdgeCount}} cycle edges`;
 
   const searchInput = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
+  const themeBtn = document.getElementById("themeBtn");
 
   searchInput.addEventListener("input", () => {{
     state.search = searchInput.value.trim().toLowerCase();
@@ -479,6 +711,14 @@ function initGraph(payload) {{
 
   fitBtn.addEventListener("click", () => {{
     fitToGraph();
+    state.running = true;
+  }});
+
+  themeBtn.addEventListener("click", () => {{
+    const nextTheme = document.documentElement.getAttribute("data-theme") === "dark"
+      ? "light"
+      : "dark";
+    applyTheme(nextTheme);
     state.running = true;
   }});
 
@@ -611,7 +851,8 @@ function draw() {{
     const b = e.target;
     const hit = (!state.search) || matchNode(a) || matchNode(b);
     ctx.beginPath();
-    ctx.strokeStyle = hit ? "#64748b" : "rgba(148,163,184,0.25)";
+    const edgeColor = e.inCycle ? state.palette.cycleEdge : state.palette.edge;
+    ctx.strokeStyle = hit ? edgeColor : state.palette.edgeMuted;
     ctx.lineWidth = lw;
     ctx.moveTo(a.x, a.y);
     ctx.lineTo(b.x, b.y);
@@ -621,8 +862,10 @@ function draw() {{
   for (const n of state.nodes) {{
     const hit = (!state.search) || matchNode(n);
     ctx.beginPath();
-    ctx.fillStyle = hit ? nodeColor(n.kind) : "rgba(148,163,184,0.35)";
-    ctx.strokeStyle = "#334155";
+    ctx.fillStyle = hit
+      ? degreeColor(n.degree, state.minDegree, state.maxDegree)
+      : "rgba(148,163,184,0.25)";
+    ctx.strokeStyle = n.inCycle ? state.palette.cycleRing : nodeColor(n.kind);
     ctx.lineWidth = lw;
     ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
     ctx.fill();
@@ -633,7 +876,7 @@ function draw() {{
     const hit = (!state.search) || matchNode(n);
     if (!hit && state.scale < 0.9) continue;
     if (state.scale < 0.35) continue;
-    ctx.fillStyle = hit ? "#0f172a" : "rgba(100,116,139,0.7)";
+    ctx.fillStyle = hit ? state.palette.label : state.palette.labelMuted;
     ctx.font = `${{Math.max(8, 12 / state.scale)}}px IBM Plex Sans, Segoe UI, sans-serif`;
     ctx.textBaseline = "middle";
     ctx.fillText(n.label, n.x + n.r + 5, n.y);
@@ -648,6 +891,12 @@ function animate() {{
 }}
 
 function start(payload) {{
+  let initialTheme = systemTheme();
+  try {{
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === "light" || saved === "dark") initialTheme = saved;
+  }} catch (_err) {{}}
+  applyTheme(initialTheme);
   resizeCanvas();
   initGraph(payload);
   animate();
