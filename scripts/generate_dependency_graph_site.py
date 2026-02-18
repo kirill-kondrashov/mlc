@@ -181,6 +181,15 @@ def resolve_token(
     return []
 
 
+def is_external_candidate_token(token: str) -> bool:
+    """Heuristic for unresolved qualified names that should remain visible."""
+    if not token.startswith("MLC."):
+        return False
+    if token[0].isdigit():
+        return False
+    return "." in token
+
+
 def build_full_graph(repo_root: Path) -> tuple[dict[str, Decl], dict[str, set[str]]]:
     lean_files = sorted((repo_root / "Mlc").rglob("*.lean"))
     all_decls: list[Decl] = []
@@ -223,6 +232,7 @@ def build_full_graph(repo_root: Path) -> tuple[dict[str, Decl], dict[str, set[st
             suffix_index.setdefault(suffix, []).append(d)
 
     edges: dict[str, set[str]] = {d.fq_name: set() for d in all_decls}
+    external_decls: dict[str, Decl] = {}
     for src in all_decls:
         if src.file not in stripped_by_file:
             continue
@@ -231,10 +241,31 @@ def build_full_graph(repo_root: Path) -> tuple[dict[str, Decl], dict[str, set[st
         tokens = set(TOKEN_RE.findall(body))
         for tok in tokens:
             cands = resolve_token(tok, src, fq_index, short_index, suffix_index)
-            for dst in cands:
-                if dst.fq_name == src.fq_name:
-                    continue
-                edges[src.fq_name].add(dst.fq_name)
+            if cands:
+                for dst in cands:
+                    if dst.fq_name == src.fq_name:
+                        continue
+                    edges[src.fq_name].add(dst.fq_name)
+                continue
+            if not is_external_candidate_token(tok):
+                continue
+            if tok == src.fq_name:
+                continue
+            if tok not in external_decls and tok not in fq_index:
+                external_decls[tok] = Decl(
+                    kind="external",
+                    name=tok.split(".")[-1],
+                    fq_name=tok,
+                    file="[external]",
+                    line=0,
+                    end_line=0,
+                )
+            if tok in external_decls or tok in fq_index:
+                edges[src.fq_name].add(tok)
+
+    for ext in external_decls.values():
+        fq_index[ext.fq_name] = ext
+        edges.setdefault(ext.fq_name, set())
 
     return fq_index, edges
 
@@ -464,8 +495,6 @@ const state = {{
   cycleNodeCount: 0,
   cycleEdgeCount: 0,
   cycleComponentCount: 0,
-  undirectedComponentCount: 0,
-  undirectedCycleRank: 0,
   axiomCount: 0,
   search: "",
   width: 0,
@@ -591,15 +620,12 @@ function fitToGraph() {{
 function detectCycles() {{
   const idx = new Map(state.nodes.map((n, i) => [n.id, i]));
   const adj = state.nodes.map(() => []);
-  const undAdj = state.nodes.map(() => []);
   const selfLoop = state.nodes.map(() => false);
   for (const e of state.edges) {{
     const s = idx.get(e.source.id);
     const t = idx.get(e.target.id);
     if (s === undefined || t === undefined) continue;
     adj[s].push(t);
-    undAdj[s].push(t);
-    if (s !== t) undAdj[t].push(s);
     if (s === t) selfLoop[s] = true;
   }}
 
@@ -670,26 +696,6 @@ function detectCycles() {{
   state.cycleNodeCount = cycleNodes;
   state.cycleEdgeCount = cycleEdges;
   state.cycleComponentCount = cycleComp.reduce((acc, x) => acc + (x ? 1 : 0), 0);
-
-  const seen = new Array(n).fill(false);
-  let undirectedComponents = 0;
-  for (let i = 0; i < n; i++) {{
-    if (seen[i]) continue;
-    undirectedComponents += 1;
-    const stackUnd = [i];
-    seen[i] = true;
-    while (stackUnd.length > 0) {{
-      const v = stackUnd.pop();
-      for (const w of undAdj[v]) {{
-        if (!seen[w]) {{
-          seen[w] = true;
-          stackUnd.push(w);
-        }}
-      }}
-    }}
-  }}
-  state.undirectedComponentCount = undirectedComponents;
-  state.undirectedCycleRank = Math.max(0, state.edges.length - n + undirectedComponents);
 }}
 
 function renderLegend() {{
@@ -715,15 +721,11 @@ function renderCycleStatus() {{
   const status = document.getElementById("cycleStatus");
   if (!status) return;
   const directedDetected = state.cycleComponentCount > 0;
-  const undirectedDetected = state.undirectedCycleRank > 0;
   const directedText = directedDetected
     ? `yes (${{state.cycleComponentCount}})`
     : "no";
-  const undirectedText = undirectedDetected
-    ? `yes (rank ${{state.undirectedCycleRank}})`
-    : "no";
-  status.textContent = `Directed cycles: ${{directedText}} | Undirected cycles: ${{undirectedText}}`;
-  status.className = directedDetected || undirectedDetected
+  status.textContent = `Directed cycles: ${{directedText}}`;
+  status.className = directedDetected
     ? "status-pill detected"
     : "status-pill none";
 }}
@@ -798,9 +800,7 @@ function initGraph(payload) {{
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
     `${{state.cycleNodeCount}} directed-cycle nodes (${{state.cycleComponentCount}} components), ` +
-    `${{state.cycleEdgeCount}} directed-cycle edges, undirected cycle rank ` +
-    `${{state.undirectedCycleRank}} (${{state.undirectedComponentCount}} components), ` +
-    `${{state.axiomCount}} axioms`;
+    `${{state.cycleEdgeCount}} directed-cycle edges, ${{state.axiomCount}} axioms`;
 
   const searchInput = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
@@ -952,13 +952,38 @@ function draw() {{
     const a = e.source;
     const b = e.target;
     const hit = (!state.search) || matchNode(a) || matchNode(b);
-    ctx.beginPath();
     const edgeColor = e.inCycle ? state.palette.cycleEdge : state.palette.edge;
-    ctx.strokeStyle = hit ? edgeColor : state.palette.edgeMuted;
+    const color = hit ? edgeColor : state.palette.edgeMuted;
+    ctx.strokeStyle = color;
     ctx.lineWidth = lw;
-    ctx.moveTo(a.x, a.y);
-    ctx.lineTo(b.x, b.y);
+    let dx = b.x - a.x;
+    let dy = b.y - a.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d < 1e-6) continue;
+    const ux = dx / d;
+    const uy = dy / d;
+    const startPad = a.r + 1.4;
+    const endPad = b.r + 6.2;
+    const sx = a.x + ux * startPad;
+    const sy = a.y + uy * startPad;
+    const tx = b.x - ux * endPad;
+    const ty = b.y - uy * endPad;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(tx, ty);
     ctx.stroke();
+
+    const arrowLen = Math.max(4.6, 7.0 / state.scale);
+    const arrowHalf = arrowLen * 0.52;
+    const bx = tx - ux * arrowLen;
+    const by = ty - uy * arrowLen;
+    ctx.beginPath();
+    ctx.moveTo(tx, ty);
+    ctx.lineTo(bx - uy * arrowHalf, by + ux * arrowHalf);
+    ctx.lineTo(bx + uy * arrowHalf, by - ux * arrowHalf);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
   }}
 
   for (const n of state.nodes) {{
@@ -1024,7 +1049,7 @@ loadGraph().then(start).catch((err) => {{
   document.getElementById("summary").textContent = err.message;
   const status = document.getElementById("cycleStatus");
   if (status) {{
-    status.textContent = "Cycle metrics: unavailable";
+    status.textContent = "Directed cycle metrics: unavailable";
     status.className = "status-pill";
   }}
   ctx.clearRect(0, 0, state.width || 800, state.height || 300);
