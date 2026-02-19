@@ -258,12 +258,12 @@ Date: 2026-02-19
     `mlc_conjecture_of_external_ray_map_data_two` now route through this one
     lemma, making replacement scope explicit and auditable.
   - Extracted named current provider lemmas from the external seam:
-    - `motion_provider_of_external_ray_map_data_two`
+    - `connected_provider_of_external_ray_map_data_two`
     - `tower_data_provider_of_external_ray_map_data_two`
     - `classify_provider_of_external_ray_map_data_two`
     - `conformal_modulus_provider_of_external_ray_map_data_two`
     `mlc_conjecture_of_external_ray_map_data_two` now composes these into
-    `mlc_conjecture_of_motionClassificationConformalData`.
+    `mlc_conjecture_of_connectedClassificationConformalData`.
   - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
     inlined their bodies into the active route:
     - `main_branch_data_of_transportExists_of_classifyData_of_bridgeData`
@@ -276,8 +276,8 @@ Date: 2026-02-19
     `BottcherMotion` import with `PuzzleBoundaryMotion`, keeping only interfaces
     used by the active theorem path.
   - Kept the *active* branch-data assembly surface at
-    `(PuzzleBoundaryMotionHyp, IRClassificationData, MoleculeConformalModulusLowerBoundData)`
-    to avoid exposing the known-inconsistent pair
+    `(ParaPuzzlePieceInterMandelbrotConnectedData, IRClassificationData,
+    MoleculeConformalModulusLowerBoundData)` to avoid exposing the known-inconsistent pair
     `(InfinitelyRenormalizableHasTowerData, MoleculeConformalModulusLowerBoundData)`
     as top-level inputs.
   - Axiom-audited candidate direct replacements:

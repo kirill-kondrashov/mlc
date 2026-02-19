@@ -4,7 +4,6 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
-import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
 import Mlc.MandelbrotEquivalence
@@ -405,17 +404,13 @@ theorem mlc_conjecture_of_branchData
     exact h_data.h_classify_ir c h_inf
   · exact h_data.h_bridge
 
-/-- Main MLC assembly from boundary-motion finite-branch data, IR
-    classification, and conformal-modulus bridge data. -/
-theorem mlc_conjecture_of_motionClassificationConformalData
-    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+/-- Main MLC assembly from finite-branch connectedness data, IR classification,
+    and conformal-modulus bridge data. -/
+theorem mlc_conjecture_of_connectedClassificationConformalData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
     (h_classify_ir : IRClassificationData)
     (h_mod : MoleculeConformalModulusLowerBoundData) :
     LocallyConnectedSpace mandelbrotSet := by
-  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
-    Quadratic.para_puzzle_connected_data_of_boundary_motion_target
-      Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
-      h_motion
   refine mlc_conjecture_of_branchData ?_
   refine ⟨h_conn, h_classify_ir, ?_⟩
   intro h_mol c hc hTower
@@ -433,10 +428,11 @@ lemma false_of_external_ray_map_data_two
       (norm_approach_one_seq_gt_one n)
   exact false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
 
-/-- Current fallback provider for boundary-motion data from external-ray seam data at `c = 2`. -/
-lemma motion_provider_of_external_ray_map_data_two
+/-- Current fallback provider for finite-branch connectedness data from
+    external-ray seam data at `c = 2`. -/
+lemma connected_provider_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    Quadratic.PuzzleBoundaryMotionHyp :=
+    ParaPuzzlePieceInterMandelbrotConnectedData :=
   False.elim (false_of_external_ray_map_data_two h_data_two)
 
 /-- Current fallback provider for IR-to-tower data from external-ray seam data at `c = 2`. -/
@@ -463,8 +459,8 @@ lemma conformal_modulus_provider_of_external_ray_map_data_two
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_motionClassificationConformalData
-    (motion_provider_of_external_ray_map_data_two h_data_two)
+  exact mlc_conjecture_of_connectedClassificationConformalData
+    (connected_provider_of_external_ray_map_data_two h_data_two)
     (classify_provider_of_external_ray_map_data_two h_data_two)
     (conformal_modulus_provider_of_external_ray_map_data_two h_data_two)
 
