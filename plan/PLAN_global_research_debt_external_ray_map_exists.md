@@ -22,13 +22,11 @@ Date: 2026-02-19
 - `MLC.mlc_conjecture` still instantiates all three branch-data slots from
   contradiction-backed providers routed from explicit `c = 2` exterior data:
   - `mlc_conjecture_of_external_ray_map_data_two`
-  - `main_branch_data_of_bottcher_approach_one_point_surj_data_two`
   - `false_of_bottcher_approach_one_point_surj_data_two`
 - Direct contradiction-backed providers currently on-path in
   `Mlc/MainConjecture.lean`:
   - field-level `False.elim` instantiations inside
-    `main_branch_data_of_bottcher_approach_one_point_surj_data_two`
-  - `main_branch_data_of_bottcher_approach_one_point_surj_data_two`
+    `mlc_conjecture_of_external_ray_map_data_two`
 
 ## Critical Issues in Previous Plan
 
@@ -187,13 +185,13 @@ Date: 2026-02-19
     connectedness data via
     `para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data`.
   - Inlined branch-data assembly in
-    `main_branch_data_of_bottcher_approach_one_point_surj_data_two` using
+    `mlc_conjecture_of_external_ray_map_data_two` using
     boundary-motion transport conversion plus explicit connectedness/bridge construction.
     Active external-ray wiring now instantiates this conformal-target route via a single
     contradiction-seed builder
-    `main_branch_data_of_bottcher_approach_one_point_surj_data_two`.
+    `mlc_conjecture_of_external_ray_map_data_two`.
   - Current branch-data assembly is centralized at
-    `main_branch_data_of_bottcher_approach_one_point_surj_data_two`,
+    `mlc_conjecture_of_external_ray_map_data_two`,
     with contradiction seeded by
     `false_of_bottcher_approach_one_point_surj_data_two` at `c = 2`.
   - Rebased the finite-branch slot onto the boundary-motion interface with the
@@ -201,14 +199,14 @@ Date: 2026-02-19
     `Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target`. This exposes
     an axiom-clean finite-branch replacement target (`PuzzleBoundaryMotionHyp`)
     directly in `Mlc/MainConjecture.lean`, with current routing through
-    `main_branch_data_of_bottcher_approach_one_point_surj_data_two`.
+    `mlc_conjecture_of_external_ray_map_data_two`.
   - Removed the unused Böttcher-motion wrapper from `Mlc/MainConjecture.lean`
     to keep only declarations that contribute to the active MLC path.
   - External-ray dependence for the current path is routed through the
     single explicit seed `Quadratic.ExternalRayMapData (2 : ℂ)`.
   - Rebuilt the satellite bridge through explicit finite-branch connectedness:
     the inline bridge lambda in
-    `main_branch_data_of_bottcher_approach_one_point_surj_data_two`
+    `mlc_conjecture_of_external_ray_map_data_two`
     (using `lc_at_of_shrink_of_data` and
     `molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData`).
     This avoids routing bridge construction through `lc_at_of_shrink`, which is
@@ -216,7 +214,7 @@ Date: 2026-02-19
     candidate replacement paths.
   - Simplified IR-classification placeholder routing by inlining contradiction
     instantiation directly in
-    `main_branch_data_of_bottcher_approach_one_point_surj_data_two`, and removed the
+    `mlc_conjecture_of_external_ray_map_data_two`, and removed the
     intermediate tower-data hop from the active
     `MLC.mlc_conjecture` path in `Mlc/MainConjecture.lean`.
   - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
@@ -252,6 +250,13 @@ Date: 2026-02-19
     - analytic local-homeomorph route on outside-open currently pulls
       `MLC.Quadratic.bottcher_seq_converges`, which would violate the
       no-new-axiom constraint if activated in `MLC.mlc_conjecture`.
+  - Narrowed direct import debt in `Mlc/MainConjecture.lean` by replacing
+    `Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan` with the smaller
+    `Mlc.Quadratic.Complex.Bottcher.BottcherAxioms` import (while retaining
+    `BottcherOnMTheory` for `iterate_quadratic_map_tendsto_infty`).
+  - Re-audited rooted declaration usage for `Mlc/MainConjecture.lean` against
+    `site/mlc_conjecture/graph.json`: no declarations in that file are outside
+    the `MLC.mlc_conjecture` dependency closure.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

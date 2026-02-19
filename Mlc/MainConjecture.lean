@@ -6,7 +6,7 @@ import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
-import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
+import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
@@ -383,28 +383,6 @@ lemma false_of_bottcher_approach_one_point_surj_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Current branch-data provider from pointwise approach-sequence surjectivity
-    data at `c = 2`. -/
-lemma main_branch_data_of_bottcher_approach_one_point_surj_data_two
-    (h_data_two : BottcherApproachOnePointSurjData (2 : ℂ)) :
-    MainBranchData := by
-  let hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_data_two
-  let h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
-  let h_classify_ir : IRClassificationData := False.elim hFalse
-  let h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
-  let h_transport : ParaPuzzleInterMandelbrotTransportExistsData :=
-    Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target
-      Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
-      h_motion
-  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
-    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
-      h_transport
-  refine ⟨h_conn, h_classify_ir, ?_⟩
-  intro h_mol c hc hTower
-  exact lc_at_of_shrink_of_data h_conn c hc
-    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
-      h_mod h_mol c hc hTower)
-
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
 theorem mlc_conjecture_of_branchData
@@ -431,13 +409,28 @@ theorem mlc_conjecture_of_branchData
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_branchData
-    (main_branch_data_of_bottcher_approach_one_point_surj_data_two
-      (by
-        intro n
-        refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
-        exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
-          (norm_approach_one_seq_gt_one n)))
+  let h_data_two_surj : BottcherApproachOnePointSurjData (2 : ℂ) := by
+    intro n
+    refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
+    exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
+      (norm_approach_one_seq_gt_one n)
+  let hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
+  let h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
+  let h_classify_ir : IRClassificationData := False.elim hFalse
+  let h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
+  let h_transport : ParaPuzzleInterMandelbrotTransportExistsData :=
+    Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target
+      Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
+      h_motion
+  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+      h_transport
+  refine mlc_conjecture_of_branchData ?_
+  refine ⟨h_conn, h_classify_ir, ?_⟩
+  intro h_mol c hc hTower
+  exact lc_at_of_shrink_of_data h_conn c hc
+    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
+      h_mod h_mol c hc hTower)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -445,7 +438,7 @@ theorem mlc_conjecture_of_external_ray_map_data_two
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_external_ray_map_data_two
-    (Quadratic.external_ray_map_data (2 : ℂ))
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 end MainProof
 
