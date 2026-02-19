@@ -240,6 +240,11 @@ Date: 2026-02-19
   - Current blocker remains data provisioning, not the assembly surface:
     e.g. `molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData`
     still pulls `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
+  - Added a single named contradiction seed
+    `false_of_external_ray_map_data_two` in `Mlc/MainConjecture.lean`.
+    All current fallback providers in
+    `mlc_conjecture_of_external_ray_map_data_two` now route through this one
+    lemma, making replacement scope explicit and auditable.
   - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
     inlined their bodies into the active route:
     - `main_branch_data_of_transportExists_of_classifyData_of_bridgeData`

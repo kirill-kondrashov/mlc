@@ -424,15 +424,20 @@ theorem mlc_conjecture_of_motionClassificationConformalData
       h_mod h_mol c hc hTower)
 
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
-theorem mlc_conjecture_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
+lemma false_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
   let h_data_two_surj : BottcherApproachOnePointSurjData (2 : ℂ) := by
     intro n
     refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
     exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
       (norm_approach_one_seq_gt_one n)
-  let hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
+  exact false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
+
+/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
+theorem mlc_conjecture_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  let hFalse : False := false_of_external_ray_map_data_two h_data_two
   let h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
   let h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
   let h_classify_ir : IRClassificationData := by
