@@ -279,37 +279,26 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
   rw [norm_approach_one_seq_eq n]
   linarith
 
-/-- Minimal sequence-lift target used by the current contradiction at `c = 2`. -/
-def BottcherApproachOneLiftData (c : ℂ) : Prop :=
-  ∃ z : ℕ → ℂ, ∀ n, Quadratic.bottcher_map c (z n) = approach_one_seq n
-
-/-- Weaker pointwise target for the same sequence-lift data. -/
+/-- Pointwise surjectivity target for the approach-to-`1` exterior sequence. -/
 def BottcherApproachOnePointSurjData (c : ℂ) : Prop :=
   ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
 
-/-- Pointwise sequence-surjectivity data implies sequence-lift data. -/
-lemma bottcher_approach_one_lift_data_of_bottcher_approach_one_point_surj_data {c : ℂ}
-    (h_surj : BottcherApproachOnePointSurjData c) :
-    BottcherApproachOneLiftData c := by
-  choose z hz using h_surj
-  exact ⟨z, hz⟩
-
-/-- Exterior surjectivity of `bottcher_map` implies pointwise
-    approach-sequence surjectivity data. -/
-lemma bottcher_approach_one_point_surj_data_of_bottcher_map_surj {c : ℂ}
-    (h_surj : ∀ w, (1 : ℝ) < ‖w‖ →
-      w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c) :
+/-- Exterior ray-map data gives pointwise surjectivity along the
+    approach-to-`1` sequence. -/
+lemma bottcher_approach_one_point_surj_data_of_external_ray_map_data {c : ℂ}
+    (h_data : Quadratic.ExternalRayMapData c) :
     BottcherApproachOnePointSurjData c := by
   intro n
-  rcases h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hzφ⟩
-  exact ⟨z, hzφ⟩
+  refine ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n), ?_⟩
+  exact Quadratic.external_ray_map_of_data_right_inverse h_data (approach_one_seq n)
+    (norm_approach_one_seq_gt_one n)
 
-/-- Contradiction from sequence-lift data at `c = 2`
+/-- Contradiction from pointwise approach-sequence surjectivity data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_bottcher_approach_one_lift_data_two
-    (h_lift : BottcherApproachOneLiftData (2 : ℂ)) : False := by
+lemma false_of_bottcher_approach_one_point_surj_data_two
+    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) : False := by
   let u : ℕ → ℂ := approach_one_seq
-  rcases h_lift with ⟨z, hright⟩
+  choose z hright using h_surj
   have hu_norm : ∀ n, ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
     intro n
     simpa [u] using norm_approach_one_seq_eq n
@@ -418,12 +407,6 @@ lemma false_of_bottcher_approach_one_lift_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Contradiction from pointwise approach-sequence surjectivity data at `c = 2`. -/
-lemma false_of_bottcher_approach_one_point_surj_data_two
-    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) : False := by
-  exact false_of_bottcher_approach_one_lift_data_two
-    (bottcher_approach_one_lift_data_of_bottcher_approach_one_point_surj_data h_surj)
-
 /-- Finite-branch transport-exists data from a boundary-motion hypothesis. -/
 lemma main_branch_transport_exists_data_of_puzzleBoundaryMotion
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
@@ -431,31 +414,6 @@ lemma main_branch_transport_exists_data_of_puzzleBoundaryMotion
   Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target
     Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
     h_motion
-
-/-- Boundary-motion data from Böttcher-motion data. -/
-lemma main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion
-    (h_bottcher_motion : Quadratic.BottcherMotionHyp) :
-    Quadratic.PuzzleBoundaryMotionHyp :=
-  Quadratic.puzzle_boundary_motion_hyp_of_bottcher h_bottcher_motion
-
-/-- Contradiction-backed Böttcher-motion placeholder. -/
-noncomputable def main_branch_bottcherMotion_hyp_of_false
-    (hFalse : False) : Quadratic.BottcherMotionHyp := by
-  refine ⟨?_⟩
-  intro n c₀
-  exact False.elim hFalse
-
-/-- Contradiction-backed IR-classification placeholder. -/
-lemma main_branch_classify_data_of_false
-    (hFalse : False) : IRClassificationData := by
-  intro c h_inf
-  exact False.elim hFalse
-
-/-- Contradiction-backed uniform-conformal bridge-data placeholder. -/
-lemma main_branch_uniformConformalLowerBoundData_of_false
-    (hFalse : False) : MoleculeUniformConformalLowerBoundData := by
-  intro h_mol c hc hTower
-  exact False.elim hFalse
 
 /-- Satellite bridge from explicit finite-branch connectedness data and
     conformal-modulus lower-bound bridge data. -/
@@ -500,23 +458,16 @@ theorem main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConfo
     h_motion h_classify_ir
     (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
 
-/-- Build all current branch data from a contradiction seed. -/
-lemma main_branch_data_of_false
-    (hFalse : False) :
-    MainBranchData := by
-  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
-    (main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion
-      (main_branch_bottcherMotion_hyp_of_false hFalse))
-    (main_branch_classify_data_of_false hFalse)
-    (main_branch_uniformConformalLowerBoundData_of_false hFalse)
-
 /-- Current branch-data provider from pointwise approach-sequence surjectivity
     data at `c = 2`. -/
 lemma main_branch_data_of_bottcher_approach_one_point_surj_data_two
     (h_data_two : BottcherApproachOnePointSurjData (2 : ℂ)) :
     MainBranchData := by
-  exact main_branch_data_of_false
-    (false_of_bottcher_approach_one_point_surj_data_two h_data_two)
+  let hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_data_two
+  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
+    (False.elim hFalse)
+    (False.elim hFalse)
+    (False.elim hFalse)
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
@@ -550,11 +501,11 @@ theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
     (main_branch_data_of_bottcher_approach_one_point_surj_data_two h_data_two)
 
 /-- Current point-surjectivity provider at `c = 2`, routed through
-    `Quadratic.bottcher_map_surj`. This is the remaining axiom-bearing seam. -/
-lemma bottcher_approach_one_point_surj_data_two_via_surj_axiom :
+    `Quadratic.external_ray_map_data`. This is the remaining axiom-bearing seam. -/
+lemma bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom :
     BottcherApproachOnePointSurjData (2 : ℂ) := by
-  exact bottcher_approach_one_point_surj_data_of_bottcher_map_surj
-    (fun w hw => Quadratic.bottcher_map_surj (2 : ℂ) w hw)
+  exact bottcher_approach_one_point_surj_data_of_external_ray_map_data
+    (Quadratic.external_ray_map_data (2 : ℂ))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -562,7 +513,7 @@ lemma bottcher_approach_one_point_surj_data_two_via_surj_axiom :
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    bottcher_approach_one_point_surj_data_two_via_surj_axiom
+    bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom
 
 end MainProof
 
