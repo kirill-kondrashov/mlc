@@ -487,22 +487,20 @@ lemma bottcher_approach_one_point_surj_data_two_of_approach_one_range_data
   rcases h_range n with ⟨z, hz⟩
   exact ⟨z, hz⟩
 
-/-- Build the minimal range seam datum at `c = 2` from explicit external-ray
-    data. -/
-lemma bottcher_approach_one_range_data_two_of_external_ray_map_data
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+/-- Build the minimal range seam datum at `c = 2` from surjectivity of
+    `bottcher_map` on the exterior. -/
+lemma bottcher_approach_one_range_data_two_of_bottcher_map_surj :
     BottcherApproachOneRangeData (2 : ℂ) := by
   intro n
-  refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
-    (norm_approach_one_seq_gt_one n)
+  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
+      (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hzw⟩
+  exact ⟨z, hzw⟩
 
 /-- Current default approach-sequence range seam at `c = 2`, sourced from the
-    external-ray axiom package. -/
+    current exterior-surjectivity interface. -/
 lemma bottcher_approach_one_range_data_two :
     BottcherApproachOneRangeData (2 : ℂ) :=
-  bottcher_approach_one_range_data_two_of_external_ray_map_data
-    (Quadratic.external_ray_map_data (2 : ℂ))
+  bottcher_approach_one_range_data_two_of_bottcher_map_surj
 
 /-- Main MLC assembly from the weaker approach-sequence range seam at `c = 2`. -/
 theorem mlc_conjecture_of_bottcher_approach_one_range_data_two

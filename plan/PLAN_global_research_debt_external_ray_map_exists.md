@@ -674,6 +674,27 @@ Date: 2026-02-19
         range-seam provider
         (`bottcher_approach_one_range_data_two`) and therefore at
         `MLC.mlc_conjecture`.
+  - Provider simplification on the rooted range seam:
+    - removed explicit `ExternalRayMapData (2 : ℂ)` constructor usage from
+      `Mlc/MainConjecture.lean`;
+    - replaced it with
+      `bottcher_approach_one_range_data_two_of_bottcher_map_surj`, i.e. the
+      default seam now consumes only `Quadratic.bottcher_map_surj` for
+      `approach_one_seq`.
+    This keeps the rooted interface cleaner and centered on Böttcher-map
+    surjectivity statements rather than explicit ray-map data packages.
+  - Verification after provider simplification:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `bottcher_approach_one_range_data_two_of_bottcher_map_surj` still
+        depends on `MLC.Quadratic.external_ray_map_exists` (via
+        `Quadratic.bottcher_map_surj`);
+      - therefore the remaining elimination task is unchanged: replace this
+        surjectivity source constructively.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
