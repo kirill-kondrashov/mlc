@@ -60,6 +60,12 @@ using a conformal proxy definition to satisfy Lyubich's a priori bounds.
 > bridge data. Constructive replacements for these three providers are required
 > before this axiom can be removed from the `make check` footprint.
 
+> [!NOTE]
+> **Axiom frontier guardrail (February 19, 2026):** `make check` now enforces
+> the exact approved axiom frontier for `MLC.mlc_conjecture`
+> (`Quot.sound`, `propext`, `Classical.choice`,
+> `MLC.Quadratic.external_ray_map_exists`) and fails on any drift.
+
 ## Formalization Origins
 
 The core definitions and the top-level statement of the MLC conjecture in this project are based on the [Google DeepMind formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean) repository. These definitions have been manually aligned and integrated into our framework because direct dependency integration was not possible. This is due to version incompatibilities: the DeepMind repository relies on an older version of Lean 4 and Mathlib (v4.22.0), whereas this project is built on more recent releases.
