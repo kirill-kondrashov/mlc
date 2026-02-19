@@ -588,6 +588,92 @@ Date: 2026-02-19
     - `scripts/verify_output.sh` passes
     - rooted graph closure for `Mlc/MainConjecture.lean` remains complete
       (no off-path declarations in that file).
+  - Further seam normalization in `Mlc/MainConjecture.lean`:
+    - added
+      `exterior_subset_image_outside_disk_of_external_ray_map_data`:
+      explicit external-data route to exterior image coverage on
+      `outside_disk`;
+    - added
+      `bottcher_approach_one_point_surj_data_two_of_exterior_subset_image_outside_disk`;
+    - rewired
+      `bottcher_approach_one_point_surj_data_two_of_external_ray_map_data`
+      through this intermediate image-coverage seam.
+    This keeps `MLC.mlc_conjecture` unchanged while expressing the active
+    replacement target one layer closer to pure `bottcher_map` image data
+    (instead of direct pointwise right-inverse construction).
+  - Verification after seam normalization:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Rooted seam narrowed again in `Mlc/MainConjecture.lean`:
+    - added `BottcherExteriorSubsetImageOutsideDiskData`;
+    - added
+      `mlc_conjecture_of_bottcher_exterior_subset_image_outside_disk_data_two`;
+    - rewired `mlc_conjecture` to consume this new minimal seam directly;
+    - kept current default seam provider
+      `bottcher_exterior_subset_image_outside_disk_data_two` sourced from
+      `Quadratic.external_ray_map_data (2 : ℂ)`.
+    This isolates the external dependency at a strictly weaker image-coverage
+    interface than direct approach-sequence preimage construction.
+  - Verification after rooted seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `mlc_conjecture_of_bottcher_exterior_subset_image_outside_disk_data_two`
+        is core-only;
+      - `MLC.Quadratic.external_ray_map_exists` enters only at the default seam
+        provider (`bottcher_exterior_subset_image_outside_disk_data_two`) and
+        therefore at `MLC.mlc_conjecture`.
+  - Rooted seam narrowed once more in `Mlc/MainConjecture.lean`:
+    - added `BottcherApproachOneSubsetImageOutsideDiskData`;
+    - added conversion
+      `bottcher_approach_one_subset_image_outside_disk_data_of_exterior_subset_image_outside_disk_data`;
+    - added
+      `mlc_conjecture_of_bottcher_approach_one_subset_image_outside_disk_data_two`;
+    - rewired `mlc_conjecture` to consume this sequence-only image seam.
+    This further weakens the active replacement target from global exterior
+    image coverage to just the canonical approach-to-`1` sequence image.
+  - Verification after sequence-only seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `mlc_conjecture_of_bottcher_approach_one_subset_image_outside_disk_data_two`
+        is core-only;
+      - `MLC.Quadratic.external_ray_map_exists` enters only at the default
+        sequence-seam provider
+        (`bottcher_approach_one_subset_image_outside_disk_data_two`) and
+        therefore at `MLC.mlc_conjecture`.
+  - Rooted seam narrowed further in `Mlc/MainConjecture.lean` by removing the
+    outside-disk image layer from the active path:
+    - removed `BottcherExteriorSubsetImageOutsideDiskData` and its
+      sequence-image conversion from the rooted chain;
+    - introduced `BottcherApproachOneRangeData` (`approach_one_seq` points in
+      `Set.range (Quadratic.bottcher_map c)`);
+    - added
+      `mlc_conjecture_of_bottcher_approach_one_range_data_two` and rewired
+      `mlc_conjecture` through this direct range seam.
+    This is a strict weakening of the replacement interface compared to
+    sequence-image-in-`outside_disk`.
+  - Verification after direct range-seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `mlc_conjecture_of_bottcher_approach_one_range_data_two` is core-only;
+      - `MLC.Quadratic.external_ray_map_exists` enters only at the default
+        range-seam provider
+        (`bottcher_approach_one_range_data_two`) and therefore at
+        `MLC.mlc_conjecture`.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

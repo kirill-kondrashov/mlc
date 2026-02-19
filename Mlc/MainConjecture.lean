@@ -473,22 +473,51 @@ theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
     (False.elim hFalse)
     (False.elim hFalse)
 
-/-- Point-surjectivity seam at `c = 2` produced by the current external-ray
-    existence axiom. -/
-lemma bottcher_approach_one_point_surj_data_two_of_external_ray_map_exists :
+/-- Current minimal external seam target: only the canonical approach-to-`1`
+    sequence is in the range of `bottcher_map`. -/
+def BottcherApproachOneRangeData (c : ℂ) : Prop :=
+  ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)
+
+/-- Build point-surjectivity at `c = 2` from the weaker sequence-only image
+    seam. -/
+lemma bottcher_approach_one_point_surj_data_two_of_approach_one_range_data
+    (h_range : BottcherApproachOneRangeData (2 : ℂ)) :
     BottcherApproachOnePointSurjData (2 : ℂ) := by
   intro n
-  refine ⟨Quadratic.external_ray_map (2 : ℂ) (approach_one_seq n), ?_⟩
-  exact Quadratic.external_ray_map_right_inverse (2 : ℂ) (approach_one_seq n)
+  rcases h_range n with ⟨z, hz⟩
+  exact ⟨z, hz⟩
+
+/-- Build the minimal range seam datum at `c = 2` from explicit external-ray
+    data. -/
+lemma bottcher_approach_one_range_data_two_of_external_ray_map_data
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    BottcherApproachOneRangeData (2 : ℂ) := by
+  intro n
+  refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
+  exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
     (norm_approach_one_seq_gt_one n)
+
+/-- Current default approach-sequence range seam at `c = 2`, sourced from the
+    external-ray axiom package. -/
+lemma bottcher_approach_one_range_data_two :
+    BottcherApproachOneRangeData (2 : ℂ) :=
+  bottcher_approach_one_range_data_two_of_external_ray_map_data
+    (Quadratic.external_ray_map_data (2 : ℂ))
+
+/-- Main MLC assembly from the weaker approach-sequence range seam at `c = 2`. -/
+theorem mlc_conjecture_of_bottcher_approach_one_range_data_two
+    (h_range : BottcherApproachOneRangeData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+    (bottcher_approach_one_point_surj_data_two_of_approach_one_range_data h_range)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    bottcher_approach_one_point_surj_data_two_of_external_ray_map_exists
+  exact mlc_conjecture_of_bottcher_approach_one_range_data_two
+    bottcher_approach_one_range_data_two
 
 end MainProof
 
