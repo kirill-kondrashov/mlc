@@ -252,6 +252,15 @@ Date: 2026-02-19
     - analytic local-homeomorph route on outside-open currently pulls
       `MLC.Quadratic.bottcher_seq_converges`, which would violate the
       no-new-axiom constraint if activated in `MLC.mlc_conjecture`.
+  - Axiom audit on the eventual-slit bridge route confirms it is currently
+    incompatible with constraints for on-path use:
+    - `quadratic_map_iter_eq_imp_eq_of_eventual_slit_global_bridge` depends on
+      `MLC.bottcher_outside_axiom` and
+      `MLC.Quadratic.bottcher_seq_converges`.
+    - `bottcher_map_inj_on_outside_of_slit(_of_iter_left_inverse)` still pulls
+      `MLC.Quadratic.external_ray_map_exists` and
+      `MLC.Quadratic.bottcher_seq_converges`.
+    Therefore this route is excluded until those dependencies are eliminated.
   - Narrowed direct import debt in `Mlc/MainConjecture.lean` by replacing
     `Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan` with the smaller
     `Mlc.Quadratic.Complex.Bottcher.BottcherAxioms` import (while retaining
