@@ -133,6 +133,11 @@ Date: 2026-02-19
 
 ## Status
 - Progress (2026-02-19):
+  - Added theorem-level seam
+    `mlc_conjecture_of_external_ray_data_two` and routed
+    `MLC.mlc_conjecture` through it, so the active external dependency surface
+    is now explicit at the theorem boundary:
+    `Quadratic.ExternalRayMapData (2 : ℂ)`.
   - Extracted a dedicated assembly theorem
     `mlc_conjecture_of_branchData` in `Mlc/MainConjecture.lean`.
   - `MLC.mlc_conjecture` now routes through that theorem with the current

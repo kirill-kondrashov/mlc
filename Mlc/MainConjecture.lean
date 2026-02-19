@@ -499,13 +499,6 @@ lemma main_branch_data_of_external_ray_data_two
   exact main_branch_data_of_false
     (false_of_external_ray_data_two_seed h_data_two)
 
-/-- Current branch-data provider sourced from explicit external-ray data at
-    `c = 2` (still contradiction-backed). -/
-lemma main_branch_data_of_external_ray_axiom :
-    MainBranchData := by
-  exact main_branch_data_of_external_ray_data_two
-    (Quadratic.external_ray_map_data (2 : ℂ))
-
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
 theorem mlc_conjecture_of_branchData
@@ -528,13 +521,21 @@ theorem mlc_conjecture_of_branchData
     exact h_data.h_classify_ir c h_inf
   · exact h_data.h_bridge
 
+/-- Current MLC assembly from explicit external-ray data at `c = 2`
+    (still contradiction-backed). -/
+theorem mlc_conjecture_of_external_ray_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_branchData
+    (main_branch_data_of_external_ray_data_two h_data_two)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_branchData
-    main_branch_data_of_external_ray_axiom
+  exact mlc_conjecture_of_external_ray_data_two
+    (Quadratic.external_ray_map_data (2 : ℂ))
 
 end MainProof
 
