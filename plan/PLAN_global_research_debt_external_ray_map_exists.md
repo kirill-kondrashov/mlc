@@ -556,6 +556,21 @@ Date: 2026-02-19
     - in parallel, pursue a constructive `BottcherMotionHyp` constructor and
       test whether it can provide a non-contradiction
       `PuzzleBoundaryMotionHyp` for the main seam.
+  - Active seam reduced further from full external-ray data to a weaker
+    point-surjectivity target:
+    - added `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`
+      and routed
+      `mlc_conjecture_of_external_ray_map_data_two` through this theorem;
+    - removed the now-redundant wrapper
+      `false_of_external_ray_map_data_two`.
+    This makes the replacement obligation strictly smaller:
+    constructing pointwise preimages for `approach_one_seq` at `c = 2` is now
+    the direct seam, rather than constructing full `ExternalRayMapData (2)`.
+  - Verification after this seam reduction:
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

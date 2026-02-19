@@ -420,16 +420,6 @@ lemma finite_lc_provider_of_motionHyp
           apply MLC.yoccoz_theorem
           simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
 
-/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
-lemma false_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
-  let h_data_two_surj : BottcherApproachOnePointSurjData (2 : ℂ) := by
-    intro n
-    refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
-    exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
-      (norm_approach_one_seq_gt_one n)
-  exact false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
-
 /-- Main seam assembly from global boundary-motion data, IR classification, and
     the satellite bridge. The finite branch is routed pointwise from the
     boundary-motion witness payload. -/
@@ -472,15 +462,27 @@ theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     h_classify_ir
     (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
 
-/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
-theorem mlc_conjecture_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+/-- Current explicit seam theorem from pointwise approach-sequence surjectivity
+    data at `c = 2`. -/
+theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hFalse : False := false_of_external_ray_map_data_two h_data_two
+  have hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_surj
   exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     (False.elim hFalse)
     (False.elim hFalse)
     (False.elim hFalse)
+
+/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
+theorem mlc_conjecture_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  let h_data_two_surj : BottcherApproachOnePointSurjData (2 : ℂ) := by
+    intro n
+    refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
+    exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
+      (norm_approach_one_seq_gt_one n)
+  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
