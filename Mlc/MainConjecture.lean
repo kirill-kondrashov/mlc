@@ -416,7 +416,10 @@ theorem mlc_conjecture_of_external_ray_map_data_two
       (norm_approach_one_seq_gt_one n)
   let hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
   let h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
-  let h_classify_ir : IRClassificationData := False.elim hFalse
+  let h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
+  let h_classify_ir : IRClassificationData := by
+    intro c h_inf
+    exact classify_infinitely_renormalizable h_tower_data c h_inf
   let h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
   let h_transport : ParaPuzzleInterMandelbrotTransportExistsData :=
     Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target

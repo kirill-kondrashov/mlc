@@ -212,11 +212,13 @@ Date: 2026-02-19
     This avoids routing bridge construction through `lc_at_of_shrink`, which is
     where `para_puzzle_piece_inter_mandelbrot_connected` previously leaked into
     candidate replacement paths.
-  - Simplified IR-classification placeholder routing by inlining contradiction
-    instantiation directly in
-    `mlc_conjecture_of_external_ray_map_data_two`, and removed the
-    intermediate tower-data hop from the active
-    `MLC.mlc_conjecture` path in `Mlc/MainConjecture.lean`.
+  - IR-classification slot is now routed through
+    `classify_infinitely_renormalizable` with a localized seam
+    `h_tower_data : InfinitelyRenormalizableHasTowerData` inside
+    `mlc_conjecture_of_external_ray_map_data_two`.
+  - Current instantiation of `h_tower_data` remains contradiction-backed
+    (`False.elim hFalse`), but the classification path is now explicit and
+    replacement-ready.
   - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
     inlined their bodies into the active route:
     - `main_branch_data_of_transportExists_of_classifyData_of_bridgeData`
