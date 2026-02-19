@@ -30,9 +30,14 @@ jobs:
         run: pip install poetry
 
       - name: Generate dependency graph site
+        run: make graphs
+
+      - name: Verify generated site layout
         run: |
-          cd scripts
-          poetry run python generate_dependency_graph_site.py --output site
+          test -f site/index.html
+          test -f site/mlc_conjecture/index.html
+          test -f site/mlc_conjecture/graph.json
+          find site -maxdepth 3 -type f | sort
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -40,7 +45,7 @@ jobs:
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: ./site
 
   deploy:
     environment:
