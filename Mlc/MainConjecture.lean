@@ -265,30 +265,65 @@ lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
     (abs_sub_le_iff.1 habs).1
   linarith
 
-/-- Contradiction from explicit external-ray data at `c = 2`
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+/-- Minimal external-ray input used by the current contradiction at `c = 2`:
+    only a right-inverse of `bottcher_map` on the exterior. -/
+def ExternalRayRightInverseData (c : ℂ) : Prop :=
+  ∃ f : ℂ → ℂ, ∀ w, (1 : ℝ) < ‖w‖ → Quadratic.bottcher_map c (f w) = w
 
-lemma false_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
-  let f : ℂ → ℂ := Quadratic.external_ray_map_of_data h_data
-  have hright_data :
-      ∀ w, (1 : ℝ) < ‖w‖ → Quadratic.bottcher_map (2 : ℂ) (f w) = w :=
-    Quadratic.external_ray_map_of_data_right_inverse h_data
-  let u : ℕ → ℂ := fun n => Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
-  let z : ℕ → ℂ := fun n => f (u n)
-  have hu_gt : ∀ n, (1 : ℝ) < ‖u n‖ := by
-    intro n
-    have hpos : 0 < (1 / ((n : ℝ) + 1)) := by positivity
-    have hnonneg : 0 ≤ (1 + (1 / ((n : ℝ) + 1))) := by positivity
-    have hnorm :
-        ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
-      simpa [u] using (Complex.norm_of_nonneg hnonneg)
-    rw [hnorm]
-    linarith
+/-- Weaker target: surjectivity of `bottcher_map` on the exterior. -/
+def BottcherExteriorSurjData (c : ℂ) : Prop :=
+  ∀ w, (1 : ℝ) < ‖w‖ → ∃ z, Quadratic.bottcher_map c z = w
+
+/-- Canonical sequence in the exterior converging to the unit circle from outside. -/
+noncomputable def approach_one_seq (n : ℕ) : ℂ :=
+  Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
+
+lemma norm_approach_one_seq_eq (n : ℕ) :
+    ‖approach_one_seq n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
+  have hnonneg : 0 ≤ (1 + (1 / ((n : ℝ) + 1))) := by positivity
+  simpa [approach_one_seq] using (Complex.norm_of_nonneg hnonneg)
+
+lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n‖ := by
+  have hpos : 0 < (1 / ((n : ℝ) + 1)) := by positivity
+  rw [norm_approach_one_seq_eq n]
+  linarith
+
+/-- Minimal sequence-lift target used by the current contradiction at `c = 2`. -/
+def BottcherApproachOneLiftData (c : ℂ) : Prop :=
+  ∃ z : ℕ → ℂ, ∀ n, Quadratic.bottcher_map c (z n) = approach_one_seq n
+
+/-- Exterior surjectivity data implies the sequence-lift target. -/
+lemma bottcher_approach_one_lift_data_of_bottcher_exterior_surj_data {c : ℂ}
+    (h_surj : BottcherExteriorSurjData c) :
+    BottcherApproachOneLiftData c := by
+  choose z hz using (fun n => h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n))
+  exact ⟨z, hz⟩
+
+/-- Full external-ray data implies right-inverse data. -/
+lemma external_ray_right_inverse_data_of_external_ray_data {c : ℂ}
+    (h_data : Quadratic.ExternalRayMapData c) :
+    ExternalRayRightInverseData c := by
+  refine ⟨Quadratic.external_ray_map_of_data h_data, ?_⟩
+  intro w hw
+  exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
+
+/-- Exterior right-inverse data implies exterior surjectivity of `bottcher_map`. -/
+lemma bottcher_exterior_surj_data_of_external_ray_right_inverse_data {c : ℂ}
+    (h_data : ExternalRayRightInverseData c) :
+    BottcherExteriorSurjData c := by
+  rcases h_data with ⟨f, hf⟩
+  intro w hw
+  exact ⟨f w, hf w hw⟩
+
+/-- Contradiction from sequence-lift data at `c = 2`
+    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+lemma false_of_bottcher_approach_one_lift_data_two
+    (h_lift : BottcherApproachOneLiftData (2 : ℂ)) : False := by
+  let u : ℕ → ℂ := approach_one_seq
+  rcases h_lift with ⟨z, hright⟩
   have hu_norm : ∀ n, ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
     intro n
-    have hnonneg : 0 ≤ (1 + (1 / ((n : ℝ) + 1))) := by positivity
-    simpa [u] using (Complex.norm_of_nonneg hnonneg)
+    simpa [u] using norm_approach_one_seq_eq n
   have hu_le_two : ∀ n, ‖u n‖ ≤ 2 := by
     intro n
     have hden_pos : 0 < (n : ℝ) + 1 := by positivity
@@ -303,10 +338,9 @@ lemma false_of_external_ray_data_two
       Tendsto (fun n : ℕ => 1 + (1 / ((n : ℝ) + 1))) atTop (𝓝 (1 : ℝ)) := by
     simpa [add_comm] using tendsto_one_div_add_atTop_nhds_zero_nat.const_add (1 : ℝ)
   have hu_tend : Tendsto u atTop (𝓝 (1 : ℂ)) := by
-    simpa [u] using hu_tend_real.ofReal
-  have hright : ∀ n, Quadratic.bottcher_map (2 : ℂ) (z n) = u n := by
-    intro n
-    exact hright_data (u n) (hu_gt n)
+    change Tendsto (fun n : ℕ => Complex.ofReal (1 + (1 / ((n : ℝ) + 1))))
+      atTop (𝓝 (Complex.ofReal 1))
+    simpa using hu_tend_real.ofReal
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
@@ -315,7 +349,7 @@ lemma false_of_external_ray_data_two
         Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) =
             ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
               simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
-        _ = ‖u n‖ := by simp [hright n]
+        _ = ‖u n‖ := by simpa [u] using congrArg norm (hright n)
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2
@@ -329,7 +363,8 @@ lemma false_of_external_ray_data_two
           log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
             (2 : ℂ) (z n) hlarge
       have hlog_u_le : Real.log ‖u n‖ ≤ Real.log 2 := by
-        have hu_pos : 0 < ‖u n‖ := lt_trans zero_lt_one (hu_gt n)
+        have hu_pos : 0 < ‖u n‖ := by
+          exact lt_trans zero_lt_one (by simpa [u] using norm_approach_one_seq_gt_one n)
         exact Real.log_le_log hu_pos (hu_le_two n)
       have hlog' : Real.log ‖z n‖ ≤ Real.log 2 + C := by
         linarith [hlog, hgreen_eq n, hlog_u_le]
@@ -394,10 +429,11 @@ lemma false_of_external_ray_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Contradiction seed from explicit external-ray data at `c = 2`. -/
-lemma false_of_external_ray_data_two_seed
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
-  exact false_of_external_ray_data_two h_data_two
+/-- Contradiction from exterior surjectivity data at `c = 2`. -/
+lemma false_of_bottcher_exterior_surj_data_two
+    (h_surj : BottcherExteriorSurjData (2 : ℂ)) : False := by
+  exact false_of_bottcher_approach_one_lift_data_two
+    (bottcher_approach_one_lift_data_of_bottcher_exterior_surj_data h_surj)
 
 /-- Finite-branch transport-exists data from a boundary-motion hypothesis. -/
 lemma main_branch_transport_exists_data_of_puzzleBoundaryMotion
@@ -420,18 +456,11 @@ noncomputable def main_branch_bottcherMotion_hyp_of_false
   intro n c₀
   exact False.elim hFalse
 
-/-- Contradiction-backed IR-to-tower-data placeholder. -/
-lemma main_branch_towerData_of_false
-    (hFalse : False) : InfinitelyRenormalizableHasTowerData := by
+/-- Contradiction-backed IR-classification placeholder. -/
+lemma main_branch_classify_data_of_false
+    (hFalse : False) : IRClassificationData := by
   intro c h_inf
   exact False.elim hFalse
-
-/-- IR-classification data from explicit IR-to-tower data. -/
-theorem main_branch_classify_data_of_towerData
-    (h_tower_data : InfinitelyRenormalizableHasTowerData) :
-    IRClassificationData := by
-  intro c h_inf
-  exact classify_infinitely_renormalizable h_tower_data c h_inf
 
 /-- Contradiction-backed uniform-conformal bridge-data placeholder. -/
 lemma main_branch_uniformConformalLowerBoundData_of_false
@@ -489,15 +518,15 @@ lemma main_branch_data_of_false
   exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
     (main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion
       (main_branch_bottcherMotion_hyp_of_false hFalse))
-    (main_branch_classify_data_of_towerData (main_branch_towerData_of_false hFalse))
+    (main_branch_classify_data_of_false hFalse)
     (main_branch_uniformConformalLowerBoundData_of_false hFalse)
 
-/-- Current branch-data provider from explicit external-ray data at `c = 2`. -/
-lemma main_branch_data_of_external_ray_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+/-- Current branch-data provider from exterior surjectivity data at `c = 2`. -/
+lemma main_branch_data_of_bottcher_exterior_surj_data_two
+    (h_data_two : BottcherExteriorSurjData (2 : ℂ)) :
     MainBranchData := by
   exact main_branch_data_of_false
-    (false_of_external_ray_data_two_seed h_data_two)
+    (false_of_bottcher_exterior_surj_data_two h_data_two)
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
@@ -523,11 +552,27 @@ theorem mlc_conjecture_of_branchData
 
 /-- Current MLC assembly from explicit external-ray data at `c = 2`
     (still contradiction-backed). -/
+theorem mlc_conjecture_of_bottcher_exterior_surj_data_two
+    (h_data_two : BottcherExteriorSurjData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_branchData
+    (main_branch_data_of_bottcher_exterior_surj_data_two h_data_two)
+
+/-- Current MLC assembly from explicit external-ray data at `c = 2`
+    (still contradiction-backed). -/
+theorem mlc_conjecture_of_external_ray_right_inverse_data_two
+    (h_data_two : ExternalRayRightInverseData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_exterior_surj_data_two
+    (bottcher_exterior_surj_data_of_external_ray_right_inverse_data h_data_two)
+
+/-- Current MLC assembly from explicit external-ray data at `c = 2`
+    (still contradiction-backed). -/
 theorem mlc_conjecture_of_external_ray_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_branchData
-    (main_branch_data_of_external_ray_data_two h_data_two)
+  exact mlc_conjecture_of_external_ray_right_inverse_data_two
+    (external_ray_right_inverse_data_of_external_ray_data h_data_two)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

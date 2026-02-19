@@ -20,14 +20,19 @@ Date: 2026-02-19
   - `Classical.choice`
   - `MLC.Quadratic.external_ray_map_exists`
 - `MLC.mlc_conjecture` still instantiates all three branch-data slots from
-  contradiction wrappers around:
-  - `external_ray_data_two_axiom`
-  - `false_of_external_ray_data_two`
+  contradiction-backed providers routed from explicit `c = 2` exterior data:
+  - `mlc_conjecture_of_external_ray_data_two`
+  - `mlc_conjecture_of_external_ray_right_inverse_data_two`
+  - `mlc_conjecture_of_bottcher_exterior_surj_data_two`
+  - `main_branch_data_of_false`
+  - `false_of_bottcher_exterior_surj_data_two`
+  - `false_of_bottcher_approach_one_lift_data_two`
 - Direct contradiction-backed providers currently on-path in
   `Mlc/MainConjecture.lean`:
-  - `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`
-  - `main_branch_classify_data_of_external_ray_axiom`
-  - `main_branch_uniformConformalLowerBoundData_of_external_ray_axiom`
+  - `main_branch_bottcherMotion_hyp_of_false`
+  - `main_branch_classify_data_of_false`
+  - `main_branch_uniformConformalLowerBoundData_of_false`
+  - `main_branch_data_of_false`
 
 ## Critical Issues in Previous Plan
 
@@ -64,8 +69,9 @@ Date: 2026-02-19
 1. `MLC.mlc_conjecture` must not depend on any declaration whose proof body
    uses contradiction as the sole provider of branch data.
 2. No active dependency from `MLC.mlc_conjecture` may use:
-   - `false_of_external_ray_data_two`
-   - `external_ray_data_two_axiom`
+   - `false_of_bottcher_approach_one_lift_data_two`
+   - `false_of_bottcher_exterior_surj_data_two`
+   - `Quadratic.external_ray_map_data`
 3. No active dependency may use placeholder stubs as constructive witnesses:
    - `bottcher_onM_hyp`
    - `homeomorphism_maps_component_hyp`
@@ -119,8 +125,9 @@ Date: 2026-02-19
 2. Confirm `make check` output for `MLC.mlc_conjecture` excludes
    `MLC.Quadratic.external_ray_map_exists`.
 3. Confirm dependency graph rooted at `MLC.mlc_conjecture` has no path through:
-   - `false_of_external_ray_data_two`
-   - `external_ray_data_two_axiom`.
+   - `false_of_bottcher_approach_one_lift_data_two`
+   - `false_of_bottcher_exterior_surj_data_two`
+   - `Quadratic.external_ray_map_data`.
 4. Confirm Yoccoz linkage remains in the finite branch path.
 
 ## Exit Criteria
@@ -133,22 +140,25 @@ Date: 2026-02-19
 
 ## Status
 - Progress (2026-02-19):
-  - Added theorem-level seam
+  - Added theorem-level seams
+    `mlc_conjecture_of_external_ray_right_inverse_data_two` and
+    `mlc_conjecture_of_bottcher_exterior_surj_data_two` and
     `mlc_conjecture_of_external_ray_data_two` and routed
     `MLC.mlc_conjecture` through it, so the active external dependency surface
-    is now explicit at the theorem boundary:
-    `Quadratic.ExternalRayMapData (2 : ℂ)`.
+    is explicit at the theorem boundary.
+  - Reduced the external seam used by the contradiction core from full
+    `Quadratic.ExternalRayMapData (2 : ℂ)` to
+    `BottcherApproachOneLiftData (2 : ℂ)`.
+    The full-data route is now only conversion steps via
+    `external_ray_right_inverse_data_of_external_ray_data` and
+    `bottcher_exterior_surj_data_of_external_ray_right_inverse_data`,
+    then `bottcher_approach_one_lift_data_of_bottcher_exterior_surj_data`.
   - Extracted a dedicated assembly theorem
     `mlc_conjecture_of_branchData` in `Mlc/MainConjecture.lean`.
   - `MLC.mlc_conjecture` now routes through that theorem with the current
     external-ray-backed branch-data providers.
   - This isolates the exact replacement interface for Phases 2–4 without
     changing theorem signatures or introducing new axioms.
-  - Consolidated current external-ray-backed providers into
-    a single declaration
-    `main_branch_data_of_external_ray_axiom : MainBranchData`.
-  - Removed redundant per-slot contradiction wrappers from active code, so
-    the current replacement point is a single branch-data provider.
   - Reworked the branch-data assembly surface to accept explicit
     `IRClassificationData` directly (instead of requiring global
     `InfinitelyRenormalizableHasTowerData`). This removes active reliance on
@@ -175,14 +185,9 @@ Date: 2026-02-19
     `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
     Current external-ray route instantiates this theorem via a single
     contradiction-seed builder `main_branch_data_of_false`.
-  - Factored the explicit `c = 2` contradiction seed into
-    `false_of_external_ray_data_two_seed` and rewired the active branch-data
-    provider as:
-    - `main_branch_data_of_external_ray_data_two`
-    - `main_branch_data_of_external_ray_axiom`
-    This collapses external-ray wiring to one replacement seam:
-    `Quadratic.ExternalRayMapData (2 : ℂ)`, keeping the current axiom
-    footprint unchanged while removing per-slot wrapper duplication.
+  - Current branch-data assembly is centralized at
+    `main_branch_data_of_false`, with contradiction seeded by
+    `false_of_bottcher_exterior_surj_data_two` at `c = 2`.
   - Rebased the finite-branch slot onto the boundary-motion interface with the
     conversion theorem
     `main_branch_transport_exists_data_of_puzzleBoundaryMotion`. This exposes
@@ -208,13 +213,11 @@ Date: 2026-02-19
     This avoids routing bridge construction through `lc_at_of_shrink`, which is
     where `para_puzzle_piece_inter_mandelbrot_connected` previously leaked into
     candidate replacement paths.
-  - Reworked IR-classification placeholder routing through the explicit
-    tower-data interface:
-    - `main_branch_towerData_of_false`
-    - `main_branch_classify_data_of_towerData`
-    so the current classification slot has a single constructive replacement
-    seam (`InfinitelyRenormalizableHasTowerData`) instead of direct
-    contradiction output.
+  - Simplified IR-classification placeholder routing to a direct contradiction
+    wrapper:
+    - `main_branch_classify_data_of_false`
+    and removed the intermediate tower-data hop from the active
+    `MLC.mlc_conjecture` path in `Mlc/MainConjecture.lean`.
   - Kept the *active* branch-data assembly surface at
     `(PuzzleBoundaryMotionHyp, IRClassificationData, MoleculeConformalModulusLowerBoundData)`
     to avoid exposing the known-inconsistent pair
