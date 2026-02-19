@@ -285,6 +285,26 @@ Date: 2026-02-19
     This isolates finite-branch replacement explicitly: once
     `ParaPuzzlePieceInterMandelbrotConnectedData` is constructed without the
     external seam, only classification/bridge providers remain on that seam.
+  - Axiom audit for Step-2 seams:
+    - `mlc_conjecture_of_connectedClassificationConformalData`
+    - `connected_provider_of_external_ray_map_data_two`
+    - `mlc_conjecture_of_connected_data_of_external_ray_map_data_two`
+    - `mlc_conjecture_of_external_ray_map_data_two`
+    are all core-only (`Quot.sound`, `propext`, `Classical.choice`).
+    `MLC.Quadratic.external_ray_map_exists` now appears only at the final
+    `mlc_conjecture` instantiation boundary.
+  - Re-audited finite-branch constructor candidates:
+    - `Quadratic.para_puzzle_connected_data_of_boundary_motion_target` and
+      `Quadratic.para_puzzle_transport_witness_from_boundary_motion_target`
+      are core-only.
+    - but available boundary-motion constructors
+      `Quadratic.puzzle_boundary_motion_hyp_of_onM` and
+      `Quadratic.puzzle_boundary_motion_hyp_of_onM_connected`
+      still depend on
+      `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
+    So Step 2 remains blocked on a non-axiom constructor for
+    `ParaPuzzlePieceInterMandelbrotConnectedData` (or equivalent upstream
+    boundary-motion data) that does not reintroduce removed axiom debt.
   - Axiom-audited candidate direct replacements:
     - `Quadratic.para_puzzle_transport_exists_data_of_motion_default`
     - `molecule_conjecture_bridge_of_tower` (and conformal/uniform variants)
