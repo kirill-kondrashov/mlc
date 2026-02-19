@@ -240,6 +240,11 @@ Date: 2026-02-19
   - Current blocker remains data provisioning, not the assembly surface:
     e.g. `molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData`
     still pulls `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
+  - Classification-provider audit confirms:
+    `classify_infinitely_renormalizable` is axiom-clean, but its only active
+    route still requires `InfinitelyRenormalizableHasTowerData`. There is no
+    in-repo constructive `InfinitelyRenormalizable → SatelliteRenormalizableTower`
+    theorem independent of that seam at present.
   - Added a single named contradiction seed
     `false_of_external_ray_map_data_two` in `Mlc/MainConjecture.lean`.
     All current fallback providers in
