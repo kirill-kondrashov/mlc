@@ -1,6 +1,9 @@
-.PHONY: all build check cache clean graphs serve
+.PHONY: all build check cache clean serve auto-build
 
 PORT ?= 8000
+GRAPH_JSON := site/mlc_conjecture/graph.json
+LEAN_SOURCES := $(shell find Mlc -type f -name '*.lean')
+GRAPH_SOURCES := $(LEAN_SOURCES) check_axioms.lean scripts/generate_dependency_graph_site.py scripts/pyproject.toml scripts/poetry.lock
 
 # Default target
 all: check
@@ -13,6 +16,7 @@ cache:
 # Build the project
 build:
 	lake build
+	$(MAKE) --no-print-directory graphs
 
 # Check axioms
 # Depends on build implicitly via lake, but we can make it explicit if we want make to handle it.
@@ -21,7 +25,9 @@ check:
 	lake env lean --run check_axioms.lean
 
 # Build static dependency-graph pages under site/
-graphs:
+graphs: $(GRAPH_JSON)
+
+$(GRAPH_JSON): $(GRAPH_SOURCES)
 	cd scripts && poetry run python generate_dependency_graph_site.py --output site
 
 # Serve the generated graph site locally over HTTP
