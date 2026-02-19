@@ -65,7 +65,8 @@ theorem mlc_strategy_of_branchLocalData
     (h_fin_lc :
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+    (h_classify : ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : InfinitelyRenormalizable c),
       PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
     (h_bridge :
       MoleculeConjectureRefined →
@@ -81,7 +82,8 @@ theorem mlc_strategy_of_branchLocalData
 /-- Explicit classification data hook for infinitely renormalizable parameters. -/
 
 def IRClassificationData : Prop :=
-  ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
 
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
@@ -386,19 +388,33 @@ theorem mlc_conjecture_of_finiteClassificationBridgeData
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   exact mlc_strategy_of_branchLocalData h_fin_lc
-    (fun c h_inf => h_classify_ir c h_inf)
+    (fun c hc h_inf => h_classify_ir c hc h_inf)
     h_bridge
 
-/-- Build the finite-branch local-connectivity provider from explicit
-    para-puzzle connectedness data via the Yoccoz shrinkage route. -/
-lemma finite_lc_provider_of_connected_data
-    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+/-- Build pointwise finite-branch connectedness data from boundary-motion
+    hypotheses. -/
+lemma finite_connectedAt_provider_of_motionHyp
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
+    ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet),
+      ∀ n, IsConnected (Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet) := by
+  intro c hc n
+  have hc₀ : c ∈ Quadratic.ParaPuzzlePieceAt c n := by
+    rw [Quadratic.mem_paraPuzzlePieceAt_self]
+    exact Quadratic.mem_dynamical_puzzle_piece_self c hc n
+  rcases h_motion.motion n c hc₀ with ⟨r, hr, E, hHol, hpres⟩
+  rcases hpres hc with ⟨S, hSconn, hSeq⟩
+  simpa [hSeq] using hSconn
+
+/-- Build the finite-branch local-connectivity provider directly from
+    boundary-motion hypotheses via the Yoccoz shrinkage route. -/
+lemma finite_lc_provider_of_motionHyp
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
     ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
       MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
   by
     intro c hc h_fin
-    exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
-      h_conn c hc h_fin
+    exact lc_at_of_shrink_of_connected_at c hc
+      (finite_connectedAt_provider_of_motionHyp h_motion c hc)
       (parameter_shrink_of_yoccoz c hc h_fin
         (by
           apply MLC.yoccoz_theorem
@@ -414,53 +430,57 @@ lemma false_of_external_ray_map_data_two
       (norm_approach_one_seq_gt_one n)
   exact false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
 
-/-- Current fallback provider for finite-branch connectedness data from
-    external-ray seam data at `c = 2`. -/
-lemma connected_provider_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    ParaPuzzlePieceInterMandelbrotConnectedData :=
-  False.elim (false_of_external_ray_map_data_two h_data_two)
+/-- Main seam assembly from global boundary-motion data, IR classification, and
+    the satellite bridge. The finite branch is routed pointwise from the
+    boundary-motion witness payload. -/
+theorem mlc_conjecture_of_motionHyp_classify_bridge_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_finiteClassificationBridgeData
+    (finite_lc_provider_of_motionHyp h_motion)
+    h_classify_ir
+    h_bridge
 
-/-- Current fallback provider for IR-to-tower data from external-ray seam data at `c = 2`. -/
-lemma tower_data_provider_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    InfinitelyRenormalizableHasTowerData :=
-  False.elim (false_of_external_ray_map_data_two h_data_two)
-
-/-- Current fallback provider for IR classification from external-ray seam data at `c = 2`. -/
-lemma classify_provider_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    IRClassificationData := by
-  intro c h_inf
-  exact classify_infinitely_renormalizable
-    (tower_data_provider_of_external_ray_map_data_two h_data_two) c h_inf
-
-/-- Current fallback provider for finite-branch local connectivity from
-    external-ray seam data at `c = 2`. -/
-lemma finite_lc_provider_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
-  finite_lc_provider_of_connected_data
-    (connected_provider_of_external_ray_map_data_two h_data_two)
-
-/-- Current fallback provider for satellite-bridge local connectivity from
-    external-ray seam data at `c = 2`. -/
-lemma bridge_provider_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+/-- Bridge provider from boundary-motion finite data and conformal-modulus
+    bridge data. -/
+lemma bridge_provider_of_motionHyp_conformalModulus_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
     MoleculeConjectureRefined →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
-  False.elim (false_of_external_ray_map_data_two h_data_two)
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  intro h_mol c hc hTower
+  exact lc_at_of_shrink_of_connected_at c hc
+    (finite_connectedAt_provider_of_motionHyp h_motion c hc)
+    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
+      h_mod h_mol c hc hTower)
+
+/-- Main seam assembly from global boundary-motion data, IR classification, and
+    conformal-modulus bridge data. -/
+theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_classify_bridge_data
+    h_motion
+    h_classify_ir
+    (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
 
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_finiteClassificationBridgeData
-    (finite_lc_provider_of_external_ray_map_data_two h_data_two)
-    (classify_provider_of_external_ray_map_data_two h_data_two)
-    (bridge_provider_of_external_ray_map_data_two h_data_two)
+  have hFalse : False := false_of_external_ray_map_data_two h_data_two
+  exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+    (False.elim hFalse)
+    (False.elim hFalse)
+    (False.elim hFalse)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

@@ -91,6 +91,19 @@ lemma para_puzzle_piece_induced_connected_of_data
   try rw [Set.inter_comm]
   exact h_conn c hc n
 
+/-- Pointwise-at-`c` route for subtype connectedness. -/
+lemma para_puzzle_piece_induced_connected_of_at
+    (c : ℂ)
+    (h_conn_at : ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet))
+    (n : ℕ) :
+    IsConnected { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } := by
+  rw [← isConnected_subtype_val_image]
+  rw [show { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n } =
+        (Subtype.val : MandelbrotSet → ℂ) ⁻¹' (ParaPuzzlePieceAt c n) by rfl]
+  rw [Subtype.image_preimage_coe]
+  try rw [Set.inter_comm]
+  exact h_conn_at n
+
 /-- The intersection of a parameter puzzle piece with the Mandelbrot set is
     connected in the subtype topology. -/
 lemma para_puzzle_piece_induced_connected (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ) :
@@ -177,6 +190,37 @@ lemma lc_at_of_shrink_of_data
   · constructor
     · exact hn_sub
     · exact para_puzzle_piece_induced_connected_of_data h_conn c hc n
+
+/-- Pointwise-at-`c` connectedness route for local-connectivity from
+    para-puzzle shrinkage. -/
+lemma lc_at_of_shrink_of_connected_at
+    (c : ℂ) (hc : c ∈ MandelbrotSet)
+    (h_conn_at : ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet))
+    (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
+  rw [LocallyConnectedAt]
+  intro U hU
+  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis_induced c hc h U hU
+  let V' := { x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n }
+  use V'
+  constructor
+  · rw [mem_nhds_iff]
+    use V'
+    constructor
+    · exact subset_rfl
+    · constructor
+      · rw [isOpen_induced_iff]
+        use ParaPuzzlePieceAt c n
+        constructor
+        · exact para_puzzle_piece_open c n
+        · rfl
+      · have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePieceAt c k := by
+          rw [h]
+          exact Set.mem_singleton c
+        exact Set.mem_iInter.mp hc_in_inter n
+  · constructor
+    · exact hn_sub
+    · exact para_puzzle_piece_induced_connected_of_at c h_conn_at n
 
 /-- If parameter pieces shrink to a point, M is locally connected at c.
     Proof idea: We construct a basis of connected neighborhoods for `c`.

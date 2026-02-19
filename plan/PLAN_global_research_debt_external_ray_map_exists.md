@@ -330,6 +330,73 @@ Date: 2026-02-19
     `finite_lc_provider_of_external_ray_map_data_two` and
     `bridge_provider_of_external_ray_map_data_two` depend only on
     `Quot.sound`, `propext`, `Classical.choice`.
+  - Removed the extra connectedness fallback wrapper
+    `connected_provider_of_external_ray_map_data_two` from the active path and
+    inlined its role inside
+    `finite_lc_provider_of_external_ray_map_data_two`, while keeping the
+    Yoccoz finite-branch route on-path through
+    `finite_lc_provider_of_connected_data`.
+  - Added a tighter Step-2 seam theorem:
+    `mlc_conjecture_of_finite_lc_of_external_ray_map_data_two`.
+    This isolates finite-branch replacement directly at the
+    `h_fin_lc` interface: once that provider is constructive, only
+    classification/bridge providers remain seam-backed.
+  - Refined Step-2 finite target from global connectedness data to pointwise
+    finite-branch data:
+    - `FiniteBranchConnectedAtData`
+    - `finite_lc_provider_of_connectedAtData`
+    with supporting pointwise route in `Mlc/LcAtOfShrink.lean`:
+    - `para_puzzle_piece_induced_connected_of_at`
+    - `lc_at_of_shrink_of_connected_at`
+    Active fallback in `mlc_conjecture_of_external_ray_map_data_two` now routes
+    through this pointwise target, keeping Yoccoz finite-branch reasoning
+    explicit while lowering the constructive replacement burden for Phase 2.
+  - Axiom audit confirms the pointwise finite seam is core-only:
+    `finite_lc_provider_of_connectedAtData` and
+    `mlc_conjecture_of_finite_lc_of_external_ray_map_data_two` depend only on
+    `Quot.sound`, `propext`, `Classical.choice`.
+  - Removed single-use wrapper `tower_data_provider_of_external_ray_map_data_two`
+    and inlined tower fallback construction inside
+    `classify_provider_of_external_ray_map_data_two`, while preserving the
+    explicit call to `classify_infinitely_renormalizable`.
+  - Promoted the Step-2 seam to the explicit pointwise finite target theorem:
+    `mlc_conjecture_of_finite_connectedAt_data_of_external_ray_map_data_two`.
+    `mlc_conjecture_of_external_ray_map_data_two` now instantiates
+    `FiniteBranchConnectedAtData` at the seam and routes through this theorem.
+    The intermediate fallback wrapper
+    `finite_lc_provider_of_external_ray_map_data_two` was removed.
+  - Current Phase-2 minimal remaining target is now explicit:
+    construct `FiniteBranchConnectedAtData` non-axiomatically (or redesign the
+    finite branch so this target is no longer required), without introducing
+    new axioms/hypotheses and without collapsing to contradiction-only routing.
+  - Added a Phase-3 seam-reduction theorem:
+    `mlc_conjecture_of_finite_connectedAt_classify_of_external_ray_map_data_two`.
+    With `FiniteBranchConnectedAtData` and `IRClassificationData` supplied,
+    only the bridge provider remains seam-backed.
+  - Removed newly off-path intermediate seam theorem
+    `mlc_conjecture_of_finite_lc_of_external_ray_map_data_two` to keep
+    `Mlc/MainConjecture.lean` rooted-closure clean.
+  - Added finite-branch motion seam target:
+    - `FiniteBranchMotionAtData`
+    - `finite_connectedAtData_of_motionAtData`
+    - `mlc_conjecture_of_finite_motionAt_data_of_external_ray_map_data_two`
+    and routed `mlc_conjecture_of_external_ray_map_data_two` through this new
+    seam by instantiating `FiniteBranchMotionAtData` at `c = 2`.
+  - This makes the finite replacement interface closer to the intended
+    boundary-motion strategy (Phase 2), while keeping all new declarations
+    on-path and core-only.
+  - Tightened classification seam routing by replacing
+    `classify_provider_of_external_ray_map_data_two` with tower-data routing:
+    - `tower_provider_of_external_ray_map_data_two`
+    - `mlc_conjecture_of_finite_connectedAt_tower_bridge_data`
+    so classification now flows explicitly through
+    `classify_infinitely_renormalizable` from `InfinitelyRenormalizableHasTowerData`.
+  - Routed the active finite seam through global motion hypothesis instantiation:
+    - `motion_hyp_provider_of_external_ray_map_data_two`
+    - `finite_motionAtData_of_puzzleBoundaryMotionHyp`
+    - `mlc_conjecture_of_finite_motionAt_data_of_external_ray_map_data_two`
+    This keeps the finite branch aligned with boundary-motion semantics while
+    preserving the same axiom footprint.
   - Removed now-unused assembly wrappers from the active rooted file:
     `MainBranchData`, `mlc_conjecture_of_branchData`, and the prior conformal
     wrapper route. Rooted graph audit confirms remaining `Mlc/MainConjecture.lean`
@@ -381,6 +448,74 @@ Date: 2026-02-19
   - Re-audited rooted declaration usage for `Mlc/MainConjecture.lean` against
     `site/mlc_conjecture/graph.json`: no declarations in that file are outside
     the `MLC.mlc_conjecture` dependency closure.
+  - Consolidated external seam routing through:
+    `mlc_conjecture_of_motionHyp_tower_bridge_data`, with explicit inputs
+    `(PuzzleBoundaryMotionHyp, InfinitelyRenormalizableHasTowerData, h_bridge)`.
+    `mlc_conjecture_of_external_ray_map_data_two` now instantiates exactly
+    those three providers from external-seam fallback.
+  - Removed newly off-path external wrappers:
+    - `mlc_conjecture_of_finite_connectedAt_data_of_external_ray_map_data_two`
+    - `mlc_conjecture_of_finite_motionAt_data_of_external_ray_map_data_two`
+    keeping the active rooted declaration set minimal.
+  - Removed single-use external fallback wrappers for motion/tower/bridge data.
+    `mlc_conjecture_of_external_ray_map_data_two` now creates one
+    contradiction seed `hFalse` and instantiates the three seam inputs via
+    `False.elim hFalse` directly at the final external seam boundary.
+  - Rebased the active seam away from tower-specific classification routing:
+    `mlc_conjecture_of_motionHyp_classify_bridge_data` is now the primary
+    assembly surface, with inputs:
+    - `PuzzleBoundaryMotionHyp`
+    - `IRClassificationData`
+    - satellite bridge `h_bridge`
+    and finite branch routed via
+    `finite_motionAtData_of_puzzleBoundaryMotionHyp →
+     finite_connectedAtData_of_motionAtData →
+     finite_lc_provider_of_connectedAtData`.
+  - Removed now-off-path tower-specific seam wrapper
+    `mlc_conjecture_of_finite_connectedAt_tower_bridge_data`.
+  - Replaced abstract bridge-input routing on the active external path with a
+    conformal-modulus bridge constructor:
+    - `bridge_provider_of_motionHyp_conformalModulus_data`
+    - `mlc_conjecture_of_motionHyp_classify_conformalModulus_data`
+    `mlc_conjecture_of_external_ray_map_data_two` now routes through this
+    conformal-modulus seam, still with core-only axioms.
+  - Reduced finite-branch seam indirection in `Mlc/MainConjecture.lean` by
+    replacing global connected-data conversion with pointwise boundary-motion
+    extraction:
+    - added `finite_connectedAt_provider_of_motionHyp`
+    - added `finite_lc_provider_of_motionHyp`
+    - rewired `mlc_conjecture_of_motionHyp_classify_bridge_data` to consume
+      `finite_lc_provider_of_motionHyp` directly.
+    This keeps the Yoccoz finite branch explicit while removing one
+    intermediate wrapper layer from the active path.
+  - Rewired `bridge_provider_of_motionHyp_conformalModulus_data` to use
+    `lc_at_of_shrink_of_connected_at` with
+    `finite_connectedAt_provider_of_motionHyp` directly, eliminating another
+    intermediate connected-data bridge in the active route.
+  - Verification after this refactor:
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Aligned IR classification seam with the Mandelbrot-domain strategy:
+    - updated `mlc_infinitely_renormalizable` to classify with explicit
+      `hc : c ∈ MandelbrotSet`
+    - updated `mlc_strategy_of_branchLocalData` and `IRClassificationData`
+      accordingly in `Mlc/MainConjecture.lean`.
+    This keeps theorem statements unchanged while removing off-domain
+    classification obligations from the active replacement interface.
+  - Re-audit of classification constructors shows only one in-repo route to
+    `IRClassificationData`:
+    `classify_infinitely_renormalizable`, which requires
+    `InfinitelyRenormalizableHasTowerData`.
+    Combined with active conformal-modulus bridge assumptions, this remains
+    blocked by
+    `consistency_checkpoint_conformal_bridge_excludes_global_ir_tower`.
+  - Additional type-level blocker:
+    `InfinitelyRenormalizable` is currently defined without Mandelbrot-set
+    membership in `Mlc/RenormalizationTypes.lean`, so conformal-modulus
+    obstructions that require `c ∈ MandelbrotSet` cannot by themselves force a
+    contradiction against all `IRClassificationData`.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
