@@ -85,6 +85,16 @@ def IRClassificationData : Prop :=
   ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
 
+/-- Finite-branch, IR-classification, and satellite-bridge data needed by the
+    main MLC assembly theorem. -/
+structure MainBranchData : Prop where
+  h_conn : ParaPuzzlePieceInterMandelbrotConnectedData
+  h_classify_ir : IRClassificationData
+  h_bridge :
+    MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
 lemma zero_mem_basin_two : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
@@ -376,49 +386,26 @@ lemma false_of_external_ray_data_two
 lemma external_ray_data_two_axiom : Quadratic.ExternalRayMapData (2 : ℂ) :=
   Quadratic.external_ray_map_data (2 : ℂ)
 
-/-- Contradiction obtained from `external_ray_map_exists` alone
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-
-lemma ir_classification_data_of_external_ray_data_two
+/-- Current branch-data provider sourced from explicit external-ray data at
+    `c = 2` (still contradiction-backed). -/
+lemma main_branch_data_of_external_ray_data_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    IRClassificationData := by
-  intro c h_inf
-  exfalso
-  exact false_of_external_ray_data_two h_data
-
-/-- Contradiction-backed IR classification data used by wrapper routes. -/
-
-lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
-  exact ir_classification_data_of_external_ray_data_two
-    external_ray_data_two_axiom
-
-/-- Contradiction-backed para-puzzle connectedness data from explicit
-    external-ray data at `c = 2`. -/
-lemma para_puzzle_connected_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    ParaPuzzlePieceInterMandelbrotConnectedData := by
-  intro c hc n
-  exfalso
-  exact false_of_external_ray_data_two h_data
-
-lemma molecule_bridge_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  intro h_mol c hc hTower
-  exfalso
-  exact false_of_external_ray_data_two h_data
+    MainBranchData := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro c hc n
+    exfalso
+    exact false_of_external_ray_data_two h_data
+  · intro c h_inf
+    exfalso
+    exact false_of_external_ray_data_two h_data
+  · intro h_mol c hc hTower
+    exfalso
+    exact false_of_external_ray_data_two h_data
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
 theorem mlc_conjecture_of_branchData
-    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
-    (h_classify_ir : IRClassificationData)
-    (h_bridge :
-      MoleculeConjectureRefined →
-        ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-          MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    (h_data : MainBranchData) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   let h_fin_lc :
@@ -427,15 +414,15 @@ theorem mlc_conjecture_of_branchData
     by
       intro c hc h_fin
       exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
-        h_conn c hc h_fin
+        h_data.h_conn c hc h_fin
         (parameter_shrink_of_yoccoz c hc h_fin
           (by
             apply MLC.yoccoz_theorem
             simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
   apply mlc_strategy_of_branchLocalData h_fin_lc
   · intro c h_inf
-    exact h_classify_ir c h_inf
-  · exact h_bridge
+    exact h_data.h_classify_ir c h_inf
+  · exact h_data.h_bridge
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -443,9 +430,7 @@ theorem mlc_conjecture_of_branchData
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_branchData
-    (para_puzzle_connected_data_of_external_ray_data_two external_ray_data_two_axiom)
-    ir_classification_data_of_external_ray_axioms
-    (molecule_bridge_data_of_external_ray_data_two external_ray_data_two_axiom)
+    (main_branch_data_of_external_ray_data_two external_ray_data_two_axiom)
 
 end MainProof
 
