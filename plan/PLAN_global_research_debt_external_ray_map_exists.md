@@ -219,6 +219,11 @@ Date: 2026-02-19
   - Current instantiation of `h_tower_data` remains contradiction-backed
     (`False.elim hFalse`), but the classification path is now explicit and
     replacement-ready.
+  - Finite-branch connectedness wiring inside
+    `mlc_conjecture_of_external_ray_map_data_two` now uses the direct bridge
+    `Quadratic.para_puzzle_connected_data_of_boundary_motion_target`
+    (instead of an intermediate transport-data local), keeping the active
+    replacement seam centered on `PuzzleBoundaryMotionHyp`.
   - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
     inlined their bodies into the active route:
     - `main_branch_data_of_transportExists_of_classifyData_of_bridgeData`

@@ -421,13 +421,10 @@ theorem mlc_conjecture_of_external_ray_map_data_two
     intro c h_inf
     exact classify_infinitely_renormalizable h_tower_data c h_inf
   let h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
-  let h_transport : ParaPuzzleInterMandelbrotTransportExistsData :=
-    Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target
+  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
+    Quadratic.para_puzzle_connected_data_of_boundary_motion_target
       Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
       h_motion
-  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
-    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
-      h_transport
   refine mlc_conjecture_of_branchData ?_
   refine ⟨h_conn, h_classify_ir, ?_⟩
   intro h_mol c hc hTower
