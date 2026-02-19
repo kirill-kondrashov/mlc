@@ -394,12 +394,10 @@ lemma false_of_external_ray_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Current finite-branch transport-exists placeholder sourced from the
-    contradiction seed from explicit external-ray data at `c = 2`. -/
-lemma false_of_external_ray_axiom : False := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    Quadratic.external_ray_map_data (2 : ℂ)
-  exact false_of_external_ray_data_two h_data
+/-- Contradiction seed from explicit external-ray data at `c = 2`. -/
+lemma false_of_external_ray_data_two_seed
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
+  exact false_of_external_ray_data_two h_data_two
 
 /-- Finite-branch transport-exists data from a boundary-motion hypothesis. -/
 lemma main_branch_transport_exists_data_of_puzzleBoundaryMotion
@@ -421,13 +419,6 @@ noncomputable def main_branch_bottcherMotion_hyp_of_false
   refine ⟨?_⟩
   intro n c₀
   exact False.elim hFalse
-
-/-- Current boundary-motion placeholder sourced from the external-ray
-    contradiction at `c = 2`. -/
-lemma main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom :
-    Quadratic.PuzzleBoundaryMotionHyp :=
-  main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion
-    (main_branch_bottcherMotion_hyp_of_false false_of_external_ray_axiom)
 
 /-- Contradiction-backed IR-to-tower-data placeholder. -/
 lemma main_branch_towerData_of_false
@@ -491,32 +482,29 @@ theorem main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConfo
     h_motion h_classify_ir
     (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
 
-/-- Current IR-to-tower-data placeholder sourced from the external-ray contradiction
-    at `c = 2`. -/
-lemma main_branch_towerData_of_external_ray_axiom :
-    InfinitelyRenormalizableHasTowerData :=
-  main_branch_towerData_of_false false_of_external_ray_axiom
+/-- Build all current branch data from a contradiction seed. -/
+lemma main_branch_data_of_false
+    (hFalse : False) :
+    MainBranchData := by
+  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
+    (main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion
+      (main_branch_bottcherMotion_hyp_of_false hFalse))
+    (main_branch_classify_data_of_towerData (main_branch_towerData_of_false hFalse))
+    (main_branch_uniformConformalLowerBoundData_of_false hFalse)
 
-/-- Current IR-classification placeholder sourced from the external-ray
-    contradiction at `c = 2`, routed through the tower-data interface. -/
-lemma main_branch_classify_data_of_external_ray_axiom :
-    IRClassificationData :=
-  main_branch_classify_data_of_towerData main_branch_towerData_of_external_ray_axiom
-
-/-- Current conformal-modulus bridge-data placeholder sourced from the
-    external-ray contradiction at `c = 2`. -/
-lemma main_branch_uniformConformalLowerBoundData_of_external_ray_axiom :
-    MoleculeUniformConformalLowerBoundData :=
-  main_branch_uniformConformalLowerBoundData_of_false false_of_external_ray_axiom
+/-- Current branch-data provider from explicit external-ray data at `c = 2`. -/
+lemma main_branch_data_of_external_ray_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    MainBranchData := by
+  exact main_branch_data_of_false
+    (false_of_external_ray_data_two_seed h_data_two)
 
 /-- Current branch-data provider sourced from explicit external-ray data at
     `c = 2` (still contradiction-backed). -/
 lemma main_branch_data_of_external_ray_axiom :
     MainBranchData := by
-  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
-    main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom
-    main_branch_classify_data_of_external_ray_axiom
-    main_branch_uniformConformalLowerBoundData_of_external_ray_axiom
+  exact main_branch_data_of_external_ray_data_two
+    (Quadratic.external_ray_map_data (2 : ℂ))
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/

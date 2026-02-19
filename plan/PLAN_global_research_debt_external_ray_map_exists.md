@@ -168,49 +168,44 @@ Date: 2026-02-19
     `main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData`,
     with conformal data derived via
     `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
-    Current external-ray route now instantiates this theorem with
-    contradiction-derived placeholders, exposed as dedicated provider lemmas:
-    - `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`
-    - `main_branch_classify_data_of_external_ray_axiom`
-    - `main_branch_uniformConformalLowerBoundData_of_external_ray_axiom`
-    so future elimination work is localized to those three inputs.
-  - Factored the contradiction source into a single local lemma
-    `false_of_external_ray_axiom`, and rewired each slot through generic
-    builders:
-    - `main_branch_bottcherMotion_hyp_of_false`
-    - `main_branch_towerData_of_false`
-    - `main_branch_uniformConformalLowerBoundData_of_false`
-    This keeps the current axiom footprint unchanged while making contradiction
-    usage explicit and minimizing duplicated placeholder logic.
+    Current external-ray route instantiates this theorem via a single
+    contradiction-seed builder `main_branch_data_of_false`.
+  - Factored the explicit `c = 2` contradiction seed into
+    `false_of_external_ray_data_two_seed` and rewired the active branch-data
+    provider as:
+    - `main_branch_data_of_external_ray_data_two`
+    - `main_branch_data_of_external_ray_axiom`
+    This collapses external-ray wiring to one replacement seam:
+    `Quadratic.ExternalRayMapData (2 : ℂ)`, keeping the current axiom
+    footprint unchanged while removing per-slot wrapper duplication.
   - Rebased the finite-branch slot onto the boundary-motion interface with the
-    active provider `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`
-    and conversion theorem
+    conversion theorem
     `main_branch_transport_exists_data_of_puzzleBoundaryMotion`. This exposes
     an axiom-clean finite-branch replacement target (`PuzzleBoundaryMotionHyp`)
-    directly in `Mlc/MainConjecture.lean`.
+    directly in `Mlc/MainConjecture.lean`, with current routing through
+    `main_branch_data_of_false`.
   - Lifted that finite-branch replacement surface one layer higher to
     Böttcher-motion packaging via
     `main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion`, with current
     temporary input routed through
-    `main_branch_bottcherMotion_hyp_of_false false_of_external_ray_axiom`.
+    `main_branch_bottcherMotion_hyp_of_false` (inside `main_branch_data_of_false`).
     Axiom audit confirms:
     - `main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion` is axiom-clean
       (only `Quot.sound`/`propext`/`Classical.choice`)
-    - external-ray dependence remains localized in
-      `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`.
+    - external-ray dependence for the current path is routed through the
+      single explicit seed `Quadratic.ExternalRayMapData (2 : ℂ)`.
   - Rebuilt the satellite bridge through explicit finite-branch connectedness:
     `main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData`
     (using `lc_at_of_shrink_of_data` and
     `molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData`),
-    and now source its conformal bridge input from the stronger external slot
-    `main_branch_uniformConformalLowerBoundData_of_external_ray_axiom` via
+    and now source its conformal bridge input from the stronger uniform slot via
     `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
     This avoids routing bridge construction through `lc_at_of_shrink`, which is
     where `para_puzzle_piece_inter_mandelbrot_connected` previously leaked into
     candidate replacement paths.
   - Reworked IR-classification placeholder routing through the explicit
     tower-data interface:
-    - `main_branch_towerData_of_external_ray_axiom`
+    - `main_branch_towerData_of_false`
     - `main_branch_classify_data_of_towerData`
     so the current classification slot has a single constructive replacement
     seam (`InfinitelyRenormalizableHasTowerData`) instead of direct
@@ -227,6 +222,16 @@ Date: 2026-02-19
     `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`, so these
     routes are currently excluded if we keep the one-axiom target focused on
     `MLC.Quadratic.external_ray_map_exists`.
+  - Axiom audit on `BottcherOutsidePlan` replacement pieces confirms:
+    - `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior` is
+      axiom-clean (modulo `Quot.sound`/`propext`/`Classical.choice`) and is a
+      viable long-term constructor target.
+    - current available injectivity route
+      `bottcher_map_inj_on_outside_open` is circular through
+      `MLC.Quadratic.external_ray_map_exists`.
+    - analytic local-homeomorph route on outside-open currently pulls
+      `MLC.Quadratic.bottcher_seq_converges`, which would violate the
+      no-new-axiom constraint if activated in `MLC.mlc_conjecture`.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
