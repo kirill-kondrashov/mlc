@@ -516,6 +516,46 @@ Date: 2026-02-19
     membership in `Mlc/RenormalizationTypes.lean`, so conformal-modulus
     obstructions that require `c ∈ MandelbrotSet` cannot by themselves force a
     contradiction against all `IRClassificationData`.
+  - Research kickoff audit (2026-02-19):
+    - Confirmed seam localization:
+      - `MLC.mlc_conjecture` is the only audited declaration in the current
+        path that depends on `MLC.Quadratic.external_ray_map_exists`.
+      - `mlc_conjecture_of_external_ray_map_data_two`,
+        `false_of_external_ray_map_data_two`,
+        `mlc_conjecture_of_motionHyp_classify_conformalModulus_data`,
+        `bridge_provider_of_motionHyp_conformalModulus_data`,
+        `finite_connectedAt_provider_of_motionHyp`,
+        `finite_lc_provider_of_motionHyp`,
+        `classify_infinitely_renormalizable`,
+        and
+        `consistency_checkpoint_conformal_bridge_excludes_global_ir_tower`
+        are all core-only (`Quot.sound`, `propext`, `Classical.choice`).
+    - Motion-constructor audit:
+      - `Quadratic.puzzle_boundary_motion_hyp_of_bottcher` is core-only.
+      - `Quadratic.puzzle_boundary_motion_hyp_of_onM` and
+        `Quadratic.puzzle_boundary_motion_hyp_of_onM_connected` still depend on
+        `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
+      This isolates the actionable finite-motion target to constructing a
+      suitable `BottcherMotionHyp` without reintroducing removed axiom debt.
+    - Outside-Böttcher external-data constructor audit:
+      - `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior` and
+        its supporting surjectivity/image-equality wrappers are core-only.
+      - Current available source for the injectivity precondition,
+        `bottcher_map_inj_on_outside_open`, still depends on
+        `MLC.Quadratic.external_ray_map_exists`.
+      - Alternative local route `bottcher_map_local_inj_on_outside_open`
+        depends on `MLC.Quadratic.bottcher_seq_converges`, which is outside the
+        current one-axiom budget.
+      This identifies the primary constructive replacement bottleneck:
+      non-axiomatic `h_inj` on outside-open.
+  - Immediate research track (next iteration):
+    - prove or import a non-axiomatic outside-open injectivity theorem for
+      `bottcher_map` that avoids both `external_ray_map_exists` and
+      `bottcher_seq_converges`, then feed it to
+      `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior`;
+    - in parallel, pursue a constructive `BottcherMotionHyp` constructor and
+      test whether it can provide a non-contradiction
+      `PuzzleBoundaryMotionHyp` for the main seam.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
