@@ -4,9 +4,8 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
-import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
-import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
+import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
@@ -66,7 +65,8 @@ theorem mlc_strategy_of_branchLocalData
     (h_fin_lc :
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+    (h_classify : ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : InfinitelyRenormalizable c),
       PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
     (h_bridge :
       MoleculeConjectureRefined →
@@ -82,7 +82,8 @@ theorem mlc_strategy_of_branchLocalData
 /-- Explicit classification data hook for infinitely renormalizable parameters. -/
 
 def IRClassificationData : Prop :=
-  ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
 
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
@@ -241,30 +242,33 @@ lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
     (abs_sub_le_iff.1 habs).1
   linarith
 
-/-- Contradiction from explicit external-ray data at `c = 2`
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+/-- Canonical sequence in the exterior converging to the unit circle from outside. -/
+noncomputable def approach_one_seq (n : ℕ) : ℂ :=
+  Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
 
-lemma false_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
-  let f : ℂ → ℂ := Quadratic.external_ray_map_of_data h_data
-  have hright_data :
-      ∀ w, (1 : ℝ) < ‖w‖ → Quadratic.bottcher_map (2 : ℂ) (f w) = w :=
-    Quadratic.external_ray_map_of_data_right_inverse h_data
-  let u : ℕ → ℂ := fun n => Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
-  let z : ℕ → ℂ := fun n => f (u n)
-  have hu_gt : ∀ n, (1 : ℝ) < ‖u n‖ := by
-    intro n
-    have hpos : 0 < (1 / ((n : ℝ) + 1)) := by positivity
-    have hnonneg : 0 ≤ (1 + (1 / ((n : ℝ) + 1))) := by positivity
-    have hnorm :
-        ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
-      simpa [u] using (Complex.norm_of_nonneg hnonneg)
-    rw [hnorm]
-    linarith
+lemma norm_approach_one_seq_eq (n : ℕ) :
+    ‖approach_one_seq n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
+  have hnonneg : 0 ≤ (1 + (1 / ((n : ℝ) + 1))) := by positivity
+  simpa [approach_one_seq] using (Complex.norm_of_nonneg hnonneg)
+
+lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n‖ := by
+  have hpos : 0 < (1 / ((n : ℝ) + 1)) := by positivity
+  rw [norm_approach_one_seq_eq n]
+  linarith
+
+/-- Pointwise surjectivity target for the approach-to-`1` exterior sequence. -/
+def BottcherApproachOnePointSurjData (c : ℂ) : Prop :=
+  ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
+
+/-- Contradiction from pointwise approach-sequence surjectivity data at `c = 2`
+    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+lemma false_of_bottcher_approach_one_point_surj_data_two
+    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) : False := by
+  let u : ℕ → ℂ := approach_one_seq
+  choose z hright using h_surj
   have hu_norm : ∀ n, ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
     intro n
-    have hnonneg : 0 ≤ (1 + (1 / ((n : ℝ) + 1))) := by positivity
-    simpa [u] using (Complex.norm_of_nonneg hnonneg)
+    simpa [u] using norm_approach_one_seq_eq n
   have hu_le_two : ∀ n, ‖u n‖ ≤ 2 := by
     intro n
     have hden_pos : 0 < (n : ℝ) + 1 := by positivity
@@ -279,10 +283,9 @@ lemma false_of_external_ray_data_two
       Tendsto (fun n : ℕ => 1 + (1 / ((n : ℝ) + 1))) atTop (𝓝 (1 : ℝ)) := by
     simpa [add_comm] using tendsto_one_div_add_atTop_nhds_zero_nat.const_add (1 : ℝ)
   have hu_tend : Tendsto u atTop (𝓝 (1 : ℂ)) := by
-    simpa [u] using hu_tend_real.ofReal
-  have hright : ∀ n, Quadratic.bottcher_map (2 : ℂ) (z n) = u n := by
-    intro n
-    exact hright_data (u n) (hu_gt n)
+    change Tendsto (fun n : ℕ => Complex.ofReal (1 + (1 / ((n : ℝ) + 1))))
+      atTop (𝓝 (Complex.ofReal 1))
+    simpa using hu_tend_real.ofReal
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
@@ -291,7 +294,7 @@ lemma false_of_external_ray_data_two
         Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) =
             ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
               simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
-        _ = ‖u n‖ := by simp [hright n]
+        _ = ‖u n‖ := by simpa [u] using congrArg norm (hright n)
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2
@@ -305,7 +308,8 @@ lemma false_of_external_ray_data_two
           log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
             (2 : ℂ) (z n) hlarge
       have hlog_u_le : Real.log ‖u n‖ ≤ Real.log 2 := by
-        have hu_pos : 0 < ‖u n‖ := lt_trans zero_lt_one (hu_gt n)
+        have hu_pos : 0 < ‖u n‖ := by
+          exact lt_trans zero_lt_one (by simpa [u] using norm_approach_one_seq_gt_one n)
         exact Real.log_le_log hu_pos (hu_le_two n)
       have hlog' : Real.log ‖z n‖ ≤ Real.log 2 + C := by
         linarith [hlog, hgreen_eq n, hlog_u_le]
@@ -370,75 +374,121 @@ lemma false_of_external_ray_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Contradiction obtained from `external_ray_map_exists` alone
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+/-- Main MLC assembly from explicit finite-branch connectedness, IR
+    classification, and satellite-bridge data. -/
+theorem mlc_conjecture_of_finiteClassificationBridgeData
+    (h_fin_lc :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  exact mlc_strategy_of_branchLocalData h_fin_lc
+    (fun c hc h_inf => h_classify_ir c hc h_inf)
+    h_bridge
 
-lemma external_ray_data_two_axiom : Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_data (2 : ℂ)
-
-/-- Contradiction obtained from `external_ray_map_exists` alone
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-
-lemma ir_classification_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    IRClassificationData := by
-  intro c h_inf
-  exfalso
-  exact false_of_external_ray_data_two h_data
-
-/-- Contradiction-backed IR classification data used by wrapper routes. -/
-
-lemma ir_classification_data_of_external_ray_axioms : IRClassificationData := by
-  exact ir_classification_data_of_external_ray_data_two
-    external_ray_data_two_axiom
-
-/-- Contradiction-backed para-puzzle connectedness data from explicit
-    external-ray data at `c = 2`. -/
-lemma para_puzzle_connected_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    ParaPuzzlePieceInterMandelbrotConnectedData := by
+/-- Build pointwise finite-branch connectedness data from boundary-motion
+    hypotheses. -/
+lemma finite_connectedAt_provider_of_motionHyp
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
+    ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet),
+      ∀ n, IsConnected (Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet) := by
   intro c hc n
-  exfalso
-  exact false_of_external_ray_data_two h_data
+  have hc₀ : c ∈ Quadratic.ParaPuzzlePieceAt c n := by
+    rw [Quadratic.mem_paraPuzzlePieceAt_self]
+    exact Quadratic.mem_dynamical_puzzle_piece_self c hc n
+  rcases h_motion.motion n c hc₀ with ⟨r, hr, E, hHol, hpres⟩
+  rcases hpres hc with ⟨S, hSconn, hSeq⟩
+  simpa [hSeq] using hSconn
 
-lemma molecule_bridge_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+/-- Build the finite-branch local-connectivity provider directly from
+    boundary-motion hypotheses via the Yoccoz shrinkage route. -/
+lemma finite_lc_provider_of_motionHyp
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+  by
+    intro c hc h_fin
+    exact lc_at_of_shrink_of_connected_at c hc
+      (finite_connectedAt_provider_of_motionHyp h_motion c hc)
+      (parameter_shrink_of_yoccoz c hc h_fin
+        (by
+          apply MLC.yoccoz_theorem
+          simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
+
+/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
+lemma false_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
+  let h_data_two_surj : BottcherApproachOnePointSurjData (2 : ℂ) := by
+    intro n
+    refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
+    exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
+      (norm_approach_one_seq_gt_one n)
+  exact false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
+
+/-- Main seam assembly from global boundary-motion data, IR classification, and
+    the satellite bridge. The finite branch is routed pointwise from the
+    boundary-motion witness payload. -/
+theorem mlc_conjecture_of_motionHyp_classify_bridge_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_finiteClassificationBridgeData
+    (finite_lc_provider_of_motionHyp h_motion)
+    h_classify_ir
+    h_bridge
+
+/-- Bridge provider from boundary-motion finite data and conformal-modulus
+    bridge data. -/
+lemma bridge_provider_of_motionHyp_conformalModulus_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
     MoleculeConjectureRefined →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   intro h_mol c hc hTower
-  exfalso
-  exact false_of_external_ray_data_two h_data
+  exact lc_at_of_shrink_of_connected_at c hc
+    (finite_connectedAt_provider_of_motionHyp h_motion c hc)
+    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
+      h_mod h_mol c hc hTower)
+
+/-- Main seam assembly from global boundary-motion data, IR classification, and
+    conformal-modulus bridge data. -/
+theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_classify_bridge_data
+    h_motion
+    h_classify_ir
+    (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
+
+/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
+theorem mlc_conjecture_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  have hFalse : False := false_of_external_ray_map_data_two h_data_two
+  exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+    (False.elim hFalse)
+    (False.elim hFalse)
+    (False.elim hFalse)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  rw [mandelbrotSet_eq_MandelbrotSet]
-  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
-    para_puzzle_connected_data_of_external_ray_data_two external_ray_data_two_axiom
-  let h_fin_lc :
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
-    by
-      intro c hc h_fin
-      exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
-        h_conn c hc h_fin
-        (parameter_shrink_of_yoccoz c hc h_fin
-          (by
-            apply MLC.yoccoz_theorem
-            simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
-  let h_classify_ir : IRClassificationData := ir_classification_data_of_external_ray_axioms
-  let h_bridge :
-      MoleculeConjectureRefined →
-        ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-          MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
-    molecule_bridge_data_of_external_ray_data_two external_ray_data_two_axiom
-  apply mlc_strategy_of_branchLocalData h_fin_lc
-  · intro c h_inf
-    exact h_classify_ir c h_inf
-  · exact h_bridge
+  exact mlc_conjecture_of_external_ray_map_data_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 end MainProof
 

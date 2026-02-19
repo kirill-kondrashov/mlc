@@ -506,7 +506,7 @@ const state = {{
   panning: false,
   lastX: 0,
   lastY: 0,
-  running: true
+  running: false
 }};
 
 const canvas = document.getElementById("graphCanvas");
@@ -739,17 +739,20 @@ function initGraph(payload) {{
   }}
   const orderedDepths = Array.from(byDepth.keys()).sort((a, b) => a - b);
   const positioned = [];
-  const dx = 260;
-  const dy = 170;
+  const dx = 320;
+  const dy = 210;
+  const maxDepth = Math.max(1, orderedDepths.length - 1);
   for (const d of orderedDepths) {{
     const layer = byDepth.get(d);
     layer.sort((a, b) => a.fq_name.localeCompare(b.fq_name));
     const mid = (layer.length - 1) / 2;
+    const depthRatio = maxDepth === 0 ? 0 : d / maxDepth;
+    const widthScale = 0.58 + 0.78 * Math.pow(depthRatio, 0.9);
     for (let i = 0; i < layer.length; i++) {{
       const n = layer[i];
       positioned.push({{
         ...n,
-        x0: (i - mid) * dx,
+        x0: (i - mid) * dx * widthScale,
         y0: d * dy
       }});
     }}
@@ -808,12 +811,12 @@ function initGraph(payload) {{
 
   searchInput.addEventListener("input", () => {{
     state.search = searchInput.value.trim().toLowerCase();
-    state.running = true;
+    draw();
   }});
 
   fitBtn.addEventListener("click", () => {{
     fitToGraph();
-    state.running = true;
+    draw();
   }});
 
   themeBtn.addEventListener("click", () => {{
@@ -821,7 +824,6 @@ function initGraph(payload) {{
       ? "light"
       : "dark";
     applyTheme(nextTheme);
-    state.running = true;
   }});
 
   canvas.addEventListener("mousedown", (ev) => {{
@@ -836,7 +838,7 @@ function initGraph(payload) {{
       state.panning = true;
       canvas.style.cursor = "grabbing";
     }}
-    state.running = true;
+    draw();
   }});
 
   canvas.addEventListener("mousemove", (ev) => {{
@@ -854,12 +856,14 @@ function initGraph(payload) {{
       state.tx += dx;
       state.ty += dy;
     }}
+    draw();
   }});
 
   function endPointer() {{
     state.dragNode = null;
     state.panning = false;
     canvas.style.cursor = "grab";
+    draw();
   }}
   canvas.addEventListener("mouseup", endPointer);
   canvas.addEventListener("mouseleave", endPointer);
@@ -874,22 +878,59 @@ function initGraph(payload) {{
     state.scale = newScale;
     state.tx = ev.offsetX - wx * newScale;
     state.ty = ev.offsetY - wy * newScale;
-    state.running = true;
+    draw();
   }}, {{ passive: false }});
 
+  settleLayout();
   fitToGraph();
-  state.running = true;
+  draw();
 }}
 
 function stepForces() {{
   const nodes = state.nodes;
   const edges = state.edges;
   const n = nodes.length;
-  const repulsion = 13000;
+  const repulsion = 21000;
   const springK = 0.0014;
-  const ideal = 140;
-  const anchorK = 0.03;
-  const damp = 0.83;
+  const ideal = 190;
+  const anchorK = 0.017;
+  const damp = 0.84;
+
+  function labelBox(node) {{
+    const fontWorld = Math.max(8, 12 / state.scale);
+    const width = Math.max(12, (node.label.length * 0.58 + 0.9) * fontWorld);
+    const height = fontWorld + 4 / state.scale;
+    const left = node.x + node.r + 5;
+    const top = node.y - height / 2;
+    return {{
+      left,
+      right: left + width,
+      top,
+      bottom: top + height,
+      cx: left + width / 2,
+      cy: node.y
+    }};
+  }}
+
+  function repelLabelFromCircle(labelNode, box, circleNode, pad, strength) {{
+    const cx = circleNode.x;
+    const cy = circleNode.y;
+    const nearX = Math.max(box.left, Math.min(cx, box.right));
+    const nearY = Math.max(box.top, Math.min(cy, box.bottom));
+    const dx = cx - nearX;
+    const dy = cy - nearY;
+    const d2 = dx * dx + dy * dy;
+    const minDist = circleNode.r + pad;
+    if (d2 >= minDist * minDist) return;
+    const d = Math.sqrt(d2 + 1e-6);
+    const push = (minDist - d) * strength * 0.9;
+    const ux = d > 1e-4 ? (dx / d) : (box.cx <= cx ? 1 : -1);
+    const uy = d > 1e-4 ? (dy / d) : 0;
+    labelNode.vx -= ux * push;
+    labelNode.vy -= uy * push;
+    circleNode.vx += ux * push;
+    circleNode.vy += uy * push;
+  }}
 
   for (let i = 0; i < n; i++) {{
     const a = nodes[i];
@@ -924,6 +965,38 @@ function stepForces() {{
     b.vy -= fy;
   }}
 
+  // Keep labels from overlapping each other and from colliding with nodes.
+  const labelStrength = 0.28;
+  const labelPad = 2.4 / state.scale;
+  const circlePad = 3.2 / state.scale;
+  for (let pass = 0; pass < 2; pass++) {{
+    for (let i = 0; i < n; i++) {{
+      const a = nodes[i];
+      const boxA = labelBox(a);
+      for (let j = i + 1; j < n; j++) {{
+        const b = nodes[j];
+        const boxB = labelBox(b);
+        const ox = Math.min(boxA.right, boxB.right) - Math.max(boxA.left, boxB.left);
+        const oy = Math.min(boxA.bottom, boxB.bottom) - Math.max(boxA.top, boxB.top);
+        if (ox > 0 && oy > 0) {{
+          if (ox < oy) {{
+            const dir = boxA.cx <= boxB.cx ? -1 : 1;
+            const push = (ox + labelPad) * labelStrength;
+            a.vx += dir * push;
+            b.vx -= dir * push;
+          }} else {{
+            const dir = boxA.cy <= boxB.cy ? -1 : 1;
+            const push = (oy + labelPad) * labelStrength;
+            a.vy += dir * push;
+            b.vy -= dir * push;
+          }}
+        }}
+        repelLabelFromCircle(a, boxA, b, circlePad, labelStrength);
+        repelLabelFromCircle(b, boxB, a, circlePad, labelStrength);
+      }}
+    }}
+  }}
+
   let kinetic = 0;
   for (const node of nodes) {{
     if (node !== state.dragNode) {{
@@ -941,13 +1014,26 @@ function stepForces() {{
   }}
 }}
 
+function settleLayout(maxSteps = 900) {{
+  state.running = true;
+  for (let i = 0; i < maxSteps; i++) {{
+    stepForces();
+    if (!state.running) break;
+  }}
+  for (const node of state.nodes) {{
+    node.vx = 0;
+    node.vy = 0;
+  }}
+  state.running = false;
+}}
+
 function draw() {{
   ctx.clearRect(0, 0, state.width, state.height);
   ctx.save();
   ctx.translate(state.tx, state.ty);
   ctx.scale(state.scale, state.scale);
 
-  const lw = Math.max(0.8, 1.0 / state.scale);
+  const lw = Math.max(0.45, 0.65 / state.scale);
   for (const e of state.edges) {{
     const a = e.source;
     const b = e.target;
@@ -963,7 +1049,7 @@ function draw() {{
     const ux = dx / d;
     const uy = dy / d;
     const startPad = a.r + 1.4;
-    const endPad = b.r + 6.2;
+    const endPad = b.r + 4.4;
     const sx = a.x + ux * startPad;
     const sy = a.y + uy * startPad;
     const tx = b.x - ux * endPad;
@@ -973,8 +1059,8 @@ function draw() {{
     ctx.lineTo(tx, ty);
     ctx.stroke();
 
-    const arrowLen = Math.max(4.6, 7.0 / state.scale);
-    const arrowHalf = arrowLen * 0.52;
+    const arrowLen = Math.max(3.0, 4.8 / state.scale);
+    const arrowHalf = arrowLen * 0.42;
     const bx = tx - ux * arrowLen;
     const by = ty - uy * arrowLen;
     ctx.beginPath();
@@ -1022,12 +1108,6 @@ function draw() {{
   ctx.restore();
 }}
 
-function animate() {{
-  if (state.running) stepForces();
-  draw();
-  requestAnimationFrame(animate);
-}}
-
 function start(payload) {{
   let initialTheme = systemTheme();
   try {{
@@ -1037,7 +1117,6 @@ function start(payload) {{
   applyTheme(initialTheme);
   resizeCanvas();
   initGraph(payload);
-  animate();
   window.addEventListener("resize", () => {{
     resizeCanvas();
     draw();

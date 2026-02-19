@@ -92,7 +92,8 @@ theorem mlc_primitive_renormalizable_ax (c : ℂ) (hc : c ∈ MLC.Quadratic.Mand
     This is derived from the classification into Primitive and Satellite types,
     using Lyubich's theorem for the former and the Molecule Conjecture for the latter. -/
 theorem mlc_infinitely_renormalizable
-    (h_classify : ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
+    (h_classify : ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : InfinitelyRenormalizable c),
       PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
     (h_bridge :
       MoleculeConjectureRefined →
@@ -100,7 +101,7 @@ theorem mlc_infinitely_renormalizable
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  cases h_classify c h with
+  cases h_classify c hc h with
   | inl h_prim => exact mlc_primitive_renormalizable_ax c hc h_prim
   | inr h_tower =>
       exact molecule_conjecture_implies_mlc_satellite_of_tower h_bridge c hc h_tower

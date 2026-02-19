@@ -127,6 +127,16 @@ theorem false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormali
   exact false_of_moleculeModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
     h_mod' hdata
 
+/-- Phase-1 consistency checkpoint for the active MLC architecture:
+    if the conformal Molecule bridge data is assumed, then global IR→tower
+    data cannot be simultaneously assumed in the current model. -/
+theorem consistency_checkpoint_conformal_bridge_excludes_global_ir_tower
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    ¬ InfinitelyRenormalizableHasTowerData := by
+  intro hdata
+  exact false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
+    h_mod hdata
+
 /-- Uniform conformal-target variant of the combined obstruction. -/
 theorem false_of_moleculeUniformConformalLowerBoundData_and_infinitely_renormalizable_has_tower_data
     (h_uniform : MoleculeUniformConformalLowerBoundData)
