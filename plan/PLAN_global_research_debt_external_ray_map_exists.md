@@ -79,8 +79,9 @@ Date: 2026-02-19
      with current molecule lower-bound targets,
    - or redesign molecule/IR bridge targets so required data are jointly
      consistent in the formal model.
-2. Add a dedicated consistency checkpoint theorem documenting that the chosen
-   IR + molecule bridge assumptions can coexist without deriving `False`.
+2. Add a dedicated consistency checkpoint theorem documenting the chosen
+   architecture constraint (active conformal-bridge route excludes global
+   IR→tower data in the current model).
 3. Do not proceed to final rewiring until this checkpoint is in place.
 
 ### Phase 2: Constructive Finite-Branch Provider
@@ -245,6 +246,12 @@ Date: 2026-02-19
     route still requires `InfinitelyRenormalizableHasTowerData`. There is no
     in-repo constructive `InfinitelyRenormalizable → SatelliteRenormalizableTower`
     theorem independent of that seam at present.
+  - Added Phase-1 consistency checkpoint theorem in
+    `Mlc/FastTowerExistenceObstruction.lean`:
+    `consistency_checkpoint_conformal_bridge_excludes_global_ir_tower`.
+    This records the chosen architecture gate explicitly: with
+    `MoleculeConformalModulusLowerBoundData`, global
+    `InfinitelyRenormalizableHasTowerData` must be excluded on the active path.
   - Added a single named contradiction seed
     `false_of_external_ray_map_data_two` in `Mlc/MainConjecture.lean`.
     All current fallback providers in
