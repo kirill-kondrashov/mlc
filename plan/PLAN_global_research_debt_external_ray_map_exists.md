@@ -232,6 +232,14 @@ Date: 2026-02-19
     and routing to `mlc_conjecture_of_branchData`.
     This keeps the strategy structure explicit while reducing the
     external-ray seam to provider instantiation only.
+  - Axiom audit confirms the extracted three-input assembly layer is core-only:
+    - `mlc_conjecture_of_motionClassificationConformalData`
+    - `classify_infinitely_renormalizable`
+    - `Quadratic.para_puzzle_connected_data_of_boundary_motion_target`
+    do not add non-core axioms.
+  - Current blocker remains data provisioning, not the assembly surface:
+    e.g. `molecule_conjecture_bridge_of_tower_of_conformalModulusLowerBoundData`
+    still pulls `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
   - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
     inlined their bodies into the active route:
     - `main_branch_data_of_transportExists_of_classifyData_of_bridgeData`
