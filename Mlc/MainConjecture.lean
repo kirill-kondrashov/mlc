@@ -549,20 +549,20 @@ theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
   exact mlc_conjecture_of_branchData
     (main_branch_data_of_bottcher_approach_one_point_surj_data_two h_data_two)
 
-/-- Current MLC assembly from exterior surjectivity of `bottcher_map` at `c = 2`
-    (still contradiction-backed). -/
-theorem mlc_conjecture_of_bottcher_map_surj_two
-    : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    (bottcher_approach_one_point_surj_data_of_bottcher_map_surj
-      (fun w hw => Quadratic.bottcher_map_surj (2 : ℂ) w hw))
+/-- Current point-surjectivity provider at `c = 2`, routed through
+    `Quadratic.bottcher_map_surj`. This is the remaining axiom-bearing seam. -/
+lemma bottcher_approach_one_point_surj_data_two_via_surj_axiom :
+    BottcherApproachOnePointSurjData (2 : ℂ) := by
+  exact bottcher_approach_one_point_surj_data_of_bottcher_map_surj
+    (fun w hw => Quadratic.bottcher_map_surj (2 : ℂ) w hw)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_map_surj_two
+  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+    bottcher_approach_one_point_surj_data_two_via_surj_axiom
 
 end MainProof
 

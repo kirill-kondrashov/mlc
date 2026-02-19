@@ -21,7 +21,7 @@ Date: 2026-02-19
   - `MLC.Quadratic.external_ray_map_exists`
 - `MLC.mlc_conjecture` still instantiates all three branch-data slots from
   contradiction-backed providers routed from explicit `c = 2` exterior data:
-  - `mlc_conjecture_of_bottcher_map_surj_two`
+  - `bottcher_approach_one_point_surj_data_two_via_surj_axiom`
   - `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`
   - `main_branch_data_of_false`
   - `false_of_bottcher_approach_one_point_surj_data_two`
@@ -141,7 +141,7 @@ Date: 2026-02-19
 - Progress (2026-02-19):
   - Added theorem-level seams
     `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two` and
-    `mlc_conjecture_of_bottcher_map_surj_two` and routed
+    `bottcher_approach_one_point_surj_data_two_via_surj_axiom` and routed
     `MLC.mlc_conjecture` through it, so the active external dependency surface
     is explicit at the theorem boundary.
   - Reduced the external seam used by the contradiction core from full
@@ -155,6 +155,18 @@ Date: 2026-02-19
     `MLC.mlc_conjecture` with `Quadratic.bottcher_map_surj` routing at `c = 2`
     via
     `bottcher_approach_one_point_surj_data_of_bottcher_map_surj`.
+  - Axiom audit confirms:
+    - `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two` is
+      axiom-clean (only `Quot.sound`/`propext`/`Classical.choice`).
+    - `false_of_bottcher_approach_one_point_surj_data_two` and
+      `false_of_bottcher_approach_one_lift_data_two` are axiom-clean.
+    - remaining non-core axiom dependence is localized to
+      `bottcher_approach_one_point_surj_data_two_via_surj_axiom`, i.e. through
+      `Quadratic.bottcher_map_surj`.
+  - `MLC.mlc_conjecture` now consumes that localized seam directly:
+    `mlc_conjecture` is routed through
+    `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+      bottcher_approach_one_point_surj_data_two_via_surj_axiom`.
   - Extracted a dedicated assembly theorem
     `mlc_conjecture_of_branchData` in `Mlc/MainConjecture.lean`.
   - `MLC.mlc_conjecture` now routes through that theorem with the current
