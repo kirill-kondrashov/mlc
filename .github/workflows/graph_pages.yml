@@ -2,7 +2,7 @@ name: Dependency Graph Pages
 
 on:
   push:
-    branches: ["main", "hotfix_graph"]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
