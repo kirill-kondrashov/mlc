@@ -405,6 +405,24 @@ theorem mlc_conjecture_of_branchData
     exact h_data.h_classify_ir c h_inf
   · exact h_data.h_bridge
 
+/-- Main MLC assembly from boundary-motion finite-branch data, IR
+    classification, and conformal-modulus bridge data. -/
+theorem mlc_conjecture_of_motionClassificationConformalData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
+    Quadratic.para_puzzle_connected_data_of_boundary_motion_target
+      Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
+      h_motion
+  refine mlc_conjecture_of_branchData ?_
+  refine ⟨h_conn, h_classify_ir, ?_⟩
+  intro h_mol c hc hTower
+  exact lc_at_of_shrink_of_data h_conn c hc
+    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
+      h_mod h_mol c hc hTower)
+
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
@@ -421,16 +439,8 @@ theorem mlc_conjecture_of_external_ray_map_data_two
     intro c h_inf
     exact classify_infinitely_renormalizable h_tower_data c h_inf
   let h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
-  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
-    Quadratic.para_puzzle_connected_data_of_boundary_motion_target
-      Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
-      h_motion
-  refine mlc_conjecture_of_branchData ?_
-  refine ⟨h_conn, h_classify_ir, ?_⟩
-  intro h_mol c hc hTower
-  exact lc_at_of_shrink_of_data h_conn c hc
-    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
-      h_mod h_mol c hc hTower)
+  exact mlc_conjecture_of_motionClassificationConformalData
+    h_motion h_classify_ir h_mod
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
