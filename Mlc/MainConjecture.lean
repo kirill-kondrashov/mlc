@@ -473,24 +473,22 @@ theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
     (False.elim hFalse)
     (False.elim hFalse)
 
-/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
-theorem mlc_conjecture_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  let h_data_two_surj : BottcherApproachOnePointSurjData (2 : ℂ) := by
-    intro n
-    refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
-    exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
-      (norm_approach_one_seq_gt_one n)
-  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
+/-- Point-surjectivity seam at `c = 2` produced by the current external-ray
+    existence axiom. -/
+lemma bottcher_approach_one_point_surj_data_two_of_external_ray_map_exists :
+    BottcherApproachOnePointSurjData (2 : ℂ) := by
+  intro n
+  refine ⟨Quadratic.external_ray_map (2 : ℂ) (approach_one_seq n), ?_⟩
+  exact Quadratic.external_ray_map_right_inverse (2 : ℂ) (approach_one_seq n)
+    (norm_approach_one_seq_gt_one n)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_map_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+    bottcher_approach_one_point_surj_data_two_of_external_ray_map_exists
 
 end MainProof
 

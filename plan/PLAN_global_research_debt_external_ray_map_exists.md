@@ -571,6 +571,23 @@ Date: 2026-02-19
     - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
       `MLC.Quadratic.external_ray_map_exists`)
     - `scripts/verify_output.sh` passes.
+  - Further rooted-path narrowing in `Mlc/MainConjecture.lean`:
+    - removed `mlc_conjecture_of_external_ray_map_data_two` from the active
+      path;
+    - added
+      `bottcher_approach_one_point_surj_data_two_of_external_ray_map_exists`;
+    - rewired `mlc_conjecture` directly through
+      `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`.
+    This eliminates full `ExternalRayMapData (2)` packaging from the rooted
+    theorem chain and keeps the active seam at the weaker
+    `BottcherApproachOnePointSurjData (2)` interface.
+  - Verification after rooted-path narrowing:
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - rooted graph closure for `Mlc/MainConjecture.lean` remains complete
+      (no off-path declarations in that file).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
