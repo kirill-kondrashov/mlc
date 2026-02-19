@@ -39,26 +39,33 @@ substantial formal scaffold, but it is not yet a complete proof. In particular:
 So while the package provides a rigorous dependency graph, it should be read as
 “formalized assumptions + logical pipeline” rather than a finished proof.
 
-For the finitely renormalizable case, the current proof skeleton assumes
-parameter-piece shrinkage as an explicit hypothesis and also takes a holomorphic
-motion hypothesis derived from two inputs: a parameter-disk inclusion in `M`
-(`BottcherOnMHyp`) and connectedness of Green sublevels on `M`
-(`GreenSublevelConnectedHyp`). For the infinitely renormalizable case,
-the current route assumes existence of a satellite-style renormalization tower
-as an explicit bridge axiom and derives the Primitive/Satellite wrapper from
-that route.
-The primitive case is derived from modulus divergence in the principal nest, 
-using a conformal proxy definition to satisfy Lyubich's a priori bounds.
+Current top-level `MLC.mlc_conjecture` path (`Mlc/MainConjecture.lean`) is:
+
+- finite branch:
+  `PuzzleBoundaryMotionHyp` payload -> pointwise para-puzzle connectedness ->
+  `lc_at_of_shrink_of_connected_at` + `parameter_shrink_of_yoccoz`
+- infinitely renormalizable branch:
+  `IRClassificationData` (on `c ∈ MandelbrotSet`) + satellite bridge
+  `MoleculeConformalModulusLowerBoundData`
+- final seam:
+  `mlc_conjecture_of_external_ray_map_data_two` provides
+  `ExternalRayMapData (2)` and currently seeds the three branch inputs via one
+  contradiction core (`false_of_external_ray_map_data_two`, then `False.elim`).
+
+So for the top-level theorem, the only non-core axiom currently left is
+`MLC.Quadratic.external_ray_map_exists` at the final instantiation boundary.
 
 > [!IMPORTANT]
-> **External-ray axiom elimination status (February 18, 2026):** removing
+> **External-ray axiom elimination status (February 19, 2026):** removing
 > `MLC.Quadratic.external_ray_map_exists` from `MLC.mlc_conjecture` is currently
 > blocked under the active constraints (no new axioms, no new hypotheses in
 > `mlc_conjecture`, and no contradiction-only routing). The current
-> `Mlc/MainConjecture.lean` path still uses external-ray-driven providers for
-> finite-branch para-puzzle connectedness, IR classification, and satellite
-> bridge data. Constructive replacements for these three providers are required
-> before this axiom can be removed from the `make check` footprint.
+> `Mlc/MainConjecture.lean` path still uses a contradiction-seeded seam from
+> external-ray data at `c = 2` to instantiate:
+> `PuzzleBoundaryMotionHyp`, `IRClassificationData`, and
+> `MoleculeConformalModulusLowerBoundData`. Constructive replacements for these
+> three seam inputs are required before this axiom can be removed from the
+> `make check` footprint.
 
 > [!NOTE]
 > **Axiom frontier guardrail (February 19, 2026):** `make check` now enforces
