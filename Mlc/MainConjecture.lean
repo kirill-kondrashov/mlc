@@ -269,16 +269,6 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
 def BottcherApproachOnePointSurjData (c : ℂ) : Prop :=
   ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
 
-/-- Exterior ray-map data gives pointwise surjectivity along the
-    approach-to-`1` sequence. -/
-lemma bottcher_approach_one_point_surj_data_of_external_ray_map_data {c : ℂ}
-    (h_data : Quadratic.ExternalRayMapData c) :
-    BottcherApproachOnePointSurjData c := by
-  intro n
-  refine ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n), ?_⟩
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data (approach_one_seq n)
-    (norm_approach_one_seq_gt_one n)
-
 /-- Contradiction from pointwise approach-sequence surjectivity data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_bottcher_approach_one_point_surj_data_two
@@ -437,21 +427,17 @@ theorem mlc_conjecture_of_branchData
     exact h_data.h_classify_ir c h_inf
   · exact h_data.h_bridge
 
-/-- Current MLC assembly from pointwise approach-sequence surjectivity
-    data at `c = 2`
-    (still contradiction-backed). -/
-theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    (h_data_two : BottcherApproachOnePointSurjData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_branchData
-    (main_branch_data_of_bottcher_approach_one_point_surj_data_two h_data_two)
-
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    (bottcher_approach_one_point_surj_data_of_external_ray_map_data h_data_two)
+  exact mlc_conjecture_of_branchData
+    (main_branch_data_of_bottcher_approach_one_point_surj_data_two
+      (by
+        intro n
+        refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
+        exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
+          (norm_approach_one_seq_gt_one n)))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

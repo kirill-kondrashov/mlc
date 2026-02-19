@@ -22,7 +22,6 @@ Date: 2026-02-19
 - `MLC.mlc_conjecture` still instantiates all three branch-data slots from
   contradiction-backed providers routed from explicit `c = 2` exterior data:
   - `mlc_conjecture_of_external_ray_map_data_two`
-  - `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`
   - `main_branch_data_of_bottcher_approach_one_point_surj_data_two`
   - `false_of_bottcher_approach_one_point_surj_data_two`
 - Direct contradiction-backed providers currently on-path in
@@ -138,7 +137,6 @@ Date: 2026-02-19
 ## Status
 - Progress (2026-02-19):
   - Added theorem-level seams
-    `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two` and
     `mlc_conjecture_of_external_ray_map_data_two` and routed
     `MLC.mlc_conjecture` through it, so the active external dependency surface
     is explicit at the theorem boundary.
@@ -149,10 +147,8 @@ Date: 2026-02-19
     `false_of_bottcher_approach_one_point_surj_data_two`.
   - Replaced `Quadratic.bottcher_map_surj` routing in `MLC.mlc_conjecture` with
     direct `Quadratic.external_ray_map_data` routing at `c = 2` via
-    `bottcher_approach_one_point_surj_data_of_external_ray_map_data`.
+    an inline point-surjectivity construction over `approach_one_seq`.
   - Axiom audit confirms:
-    - `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two` is
-      axiom-clean (only `Quot.sound`/`propext`/`Classical.choice`).
     - `false_of_bottcher_approach_one_point_surj_data_two` is axiom-clean.
     - remaining non-core axiom dependence is localized to
       `mlc_conjecture_of_external_ray_map_data_two`,
@@ -229,6 +225,8 @@ Date: 2026-02-19
     - `main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData`
     - `main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData`
     - `main_branch_data_of_false`
+    - `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`
+    - `bottcher_approach_one_point_surj_data_of_external_ray_map_data`
   - Narrowed imports in `Mlc/MainConjecture.lean` by replacing the broad
     `BottcherMotion` import with `PuzzleBoundaryMotion`, keeping only interfaces
     used by the active theorem path.
