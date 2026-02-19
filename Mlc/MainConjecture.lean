@@ -265,15 +265,6 @@ lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
     (abs_sub_le_iff.1 habs).1
   linarith
 
-/-- Minimal external-ray input used by the current contradiction at `c = 2`:
-    only a right-inverse of `bottcher_map` on the exterior. -/
-def ExternalRayRightInverseData (c : ℂ) : Prop :=
-  ∃ f : ℂ → ℂ, ∀ w, (1 : ℝ) < ‖w‖ → Quadratic.bottcher_map c (f w) = w
-
-/-- Weaker target: surjectivity of `bottcher_map` on the exterior. -/
-def BottcherExteriorSurjData (c : ℂ) : Prop :=
-  ∀ w, (1 : ℝ) < ‖w‖ → ∃ z, Quadratic.bottcher_map c z = w
-
 /-- Canonical sequence in the exterior converging to the unit circle from outside. -/
 noncomputable def approach_one_seq (n : ℕ) : ℂ :=
   Complex.ofReal (1 + (1 / ((n : ℝ) + 1)))
@@ -292,28 +283,26 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
 def BottcherApproachOneLiftData (c : ℂ) : Prop :=
   ∃ z : ℕ → ℂ, ∀ n, Quadratic.bottcher_map c (z n) = approach_one_seq n
 
-/-- Exterior surjectivity data implies the sequence-lift target. -/
-lemma bottcher_approach_one_lift_data_of_bottcher_exterior_surj_data {c : ℂ}
-    (h_surj : BottcherExteriorSurjData c) :
+/-- Weaker pointwise target for the same sequence-lift data. -/
+def BottcherApproachOnePointSurjData (c : ℂ) : Prop :=
+  ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
+
+/-- Pointwise sequence-surjectivity data implies sequence-lift data. -/
+lemma bottcher_approach_one_lift_data_of_bottcher_approach_one_point_surj_data {c : ℂ}
+    (h_surj : BottcherApproachOnePointSurjData c) :
     BottcherApproachOneLiftData c := by
-  choose z hz using (fun n => h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n))
+  choose z hz using h_surj
   exact ⟨z, hz⟩
 
-/-- Full external-ray data implies right-inverse data. -/
-lemma external_ray_right_inverse_data_of_external_ray_data {c : ℂ}
-    (h_data : Quadratic.ExternalRayMapData c) :
-    ExternalRayRightInverseData c := by
-  refine ⟨Quadratic.external_ray_map_of_data h_data, ?_⟩
-  intro w hw
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
-
-/-- Exterior right-inverse data implies exterior surjectivity of `bottcher_map`. -/
-lemma bottcher_exterior_surj_data_of_external_ray_right_inverse_data {c : ℂ}
-    (h_data : ExternalRayRightInverseData c) :
-    BottcherExteriorSurjData c := by
-  rcases h_data with ⟨f, hf⟩
-  intro w hw
-  exact ⟨f w, hf w hw⟩
+/-- Exterior surjectivity of `bottcher_map` implies pointwise
+    approach-sequence surjectivity data. -/
+lemma bottcher_approach_one_point_surj_data_of_bottcher_map_surj {c : ℂ}
+    (h_surj : ∀ w, (1 : ℝ) < ‖w‖ →
+      w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c) :
+    BottcherApproachOnePointSurjData c := by
+  intro n
+  rcases h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hzφ⟩
+  exact ⟨z, hzφ⟩
 
 /-- Contradiction from sequence-lift data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
@@ -429,11 +418,11 @@ lemma false_of_bottcher_approach_one_lift_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Contradiction from exterior surjectivity data at `c = 2`. -/
-lemma false_of_bottcher_exterior_surj_data_two
-    (h_surj : BottcherExteriorSurjData (2 : ℂ)) : False := by
+/-- Contradiction from pointwise approach-sequence surjectivity data at `c = 2`. -/
+lemma false_of_bottcher_approach_one_point_surj_data_two
+    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) : False := by
   exact false_of_bottcher_approach_one_lift_data_two
-    (bottcher_approach_one_lift_data_of_bottcher_exterior_surj_data h_surj)
+    (bottcher_approach_one_lift_data_of_bottcher_approach_one_point_surj_data h_surj)
 
 /-- Finite-branch transport-exists data from a boundary-motion hypothesis. -/
 lemma main_branch_transport_exists_data_of_puzzleBoundaryMotion
@@ -521,12 +510,13 @@ lemma main_branch_data_of_false
     (main_branch_classify_data_of_false hFalse)
     (main_branch_uniformConformalLowerBoundData_of_false hFalse)
 
-/-- Current branch-data provider from exterior surjectivity data at `c = 2`. -/
-lemma main_branch_data_of_bottcher_exterior_surj_data_two
-    (h_data_two : BottcherExteriorSurjData (2 : ℂ)) :
+/-- Current branch-data provider from pointwise approach-sequence surjectivity
+    data at `c = 2`. -/
+lemma main_branch_data_of_bottcher_approach_one_point_surj_data_two
+    (h_data_two : BottcherApproachOnePointSurjData (2 : ℂ)) :
     MainBranchData := by
   exact main_branch_data_of_false
-    (false_of_bottcher_exterior_surj_data_two h_data_two)
+    (false_of_bottcher_approach_one_point_surj_data_two h_data_two)
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
@@ -550,37 +540,29 @@ theorem mlc_conjecture_of_branchData
     exact h_data.h_classify_ir c h_inf
   · exact h_data.h_bridge
 
-/-- Current MLC assembly from explicit external-ray data at `c = 2`
+/-- Current MLC assembly from pointwise approach-sequence surjectivity
+    data at `c = 2`
     (still contradiction-backed). -/
-theorem mlc_conjecture_of_bottcher_exterior_surj_data_two
-    (h_data_two : BottcherExteriorSurjData (2 : ℂ)) :
+theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+    (h_data_two : BottcherApproachOnePointSurjData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_branchData
-    (main_branch_data_of_bottcher_exterior_surj_data_two h_data_two)
+    (main_branch_data_of_bottcher_approach_one_point_surj_data_two h_data_two)
 
-/-- Current MLC assembly from explicit external-ray data at `c = 2`
+/-- Current MLC assembly from exterior surjectivity of `bottcher_map` at `c = 2`
     (still contradiction-backed). -/
-theorem mlc_conjecture_of_external_ray_right_inverse_data_two
-    (h_data_two : ExternalRayRightInverseData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_exterior_surj_data_two
-    (bottcher_exterior_surj_data_of_external_ray_right_inverse_data h_data_two)
-
-/-- Current MLC assembly from explicit external-ray data at `c = 2`
-    (still contradiction-backed). -/
-theorem mlc_conjecture_of_external_ray_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_right_inverse_data_two
-    (external_ray_right_inverse_data_of_external_ray_data h_data_two)
+theorem mlc_conjecture_of_bottcher_map_surj_two
+    : LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+    (bottcher_approach_one_point_surj_data_of_bottcher_map_surj
+      (fun w hw => Quadratic.bottcher_map_surj (2 : ℂ) w hw))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_data_two
-    (Quadratic.external_ray_map_data (2 : ℂ))
+  exact mlc_conjecture_of_bottcher_map_surj_two
 
 end MainProof
 

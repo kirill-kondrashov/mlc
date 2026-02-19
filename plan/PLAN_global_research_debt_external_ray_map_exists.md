@@ -21,11 +21,10 @@ Date: 2026-02-19
   - `MLC.Quadratic.external_ray_map_exists`
 - `MLC.mlc_conjecture` still instantiates all three branch-data slots from
   contradiction-backed providers routed from explicit `c = 2` exterior data:
-  - `mlc_conjecture_of_external_ray_data_two`
-  - `mlc_conjecture_of_external_ray_right_inverse_data_two`
-  - `mlc_conjecture_of_bottcher_exterior_surj_data_two`
+  - `mlc_conjecture_of_bottcher_map_surj_two`
+  - `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`
   - `main_branch_data_of_false`
-  - `false_of_bottcher_exterior_surj_data_two`
+  - `false_of_bottcher_approach_one_point_surj_data_two`
   - `false_of_bottcher_approach_one_lift_data_two`
 - Direct contradiction-backed providers currently on-path in
   `Mlc/MainConjecture.lean`:
@@ -69,9 +68,9 @@ Date: 2026-02-19
 1. `MLC.mlc_conjecture` must not depend on any declaration whose proof body
    uses contradiction as the sole provider of branch data.
 2. No active dependency from `MLC.mlc_conjecture` may use:
+   - `false_of_bottcher_approach_one_point_surj_data_two`
    - `false_of_bottcher_approach_one_lift_data_two`
-   - `false_of_bottcher_exterior_surj_data_two`
-   - `Quadratic.external_ray_map_data`
+   - `Quadratic.bottcher_map_surj`
 3. No active dependency may use placeholder stubs as constructive witnesses:
    - `bottcher_onM_hyp`
    - `homeomorphism_maps_component_hyp`
@@ -125,9 +124,9 @@ Date: 2026-02-19
 2. Confirm `make check` output for `MLC.mlc_conjecture` excludes
    `MLC.Quadratic.external_ray_map_exists`.
 3. Confirm dependency graph rooted at `MLC.mlc_conjecture` has no path through:
+   - `false_of_bottcher_approach_one_point_surj_data_two`
    - `false_of_bottcher_approach_one_lift_data_two`
-   - `false_of_bottcher_exterior_surj_data_two`
-   - `Quadratic.external_ray_map_data`.
+   - `Quadratic.bottcher_map_surj`.
 4. Confirm Yoccoz linkage remains in the finite branch path.
 
 ## Exit Criteria
@@ -141,18 +140,21 @@ Date: 2026-02-19
 ## Status
 - Progress (2026-02-19):
   - Added theorem-level seams
-    `mlc_conjecture_of_external_ray_right_inverse_data_two` and
-    `mlc_conjecture_of_bottcher_exterior_surj_data_two` and
-    `mlc_conjecture_of_external_ray_data_two` and routed
+    `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two` and
+    `mlc_conjecture_of_bottcher_map_surj_two` and routed
     `MLC.mlc_conjecture` through it, so the active external dependency surface
     is explicit at the theorem boundary.
   - Reduced the external seam used by the contradiction core from full
     `Quadratic.ExternalRayMapData (2 : ℂ)` to
-    `BottcherApproachOneLiftData (2 : ℂ)`.
-    The full-data route is now only conversion steps via
-    `external_ray_right_inverse_data_of_external_ray_data` and
-    `bottcher_exterior_surj_data_of_external_ray_right_inverse_data`,
-    then `bottcher_approach_one_lift_data_of_bottcher_exterior_surj_data`.
+    `BottcherApproachOnePointSurjData (2 : ℂ)`.
+    The contradiction core remains
+    `false_of_bottcher_approach_one_lift_data_two`, but active wiring now
+    reaches it through
+    `bottcher_approach_one_lift_data_of_bottcher_approach_one_point_surj_data`.
+  - Replaced direct `Quadratic.external_ray_map_data` routing in
+    `MLC.mlc_conjecture` with `Quadratic.bottcher_map_surj` routing at `c = 2`
+    via
+    `bottcher_approach_one_point_surj_data_of_bottcher_map_surj`.
   - Extracted a dedicated assembly theorem
     `mlc_conjecture_of_branchData` in `Mlc/MainConjecture.lean`.
   - `MLC.mlc_conjecture` now routes through that theorem with the current
@@ -187,7 +189,7 @@ Date: 2026-02-19
     contradiction-seed builder `main_branch_data_of_false`.
   - Current branch-data assembly is centralized at
     `main_branch_data_of_false`, with contradiction seeded by
-    `false_of_bottcher_exterior_surj_data_two` at `c = 2`.
+    `false_of_bottcher_approach_one_point_surj_data_two` at `c = 2`.
   - Rebased the finite-branch slot onto the boundary-motion interface with the
     conversion theorem
     `main_branch_transport_exists_data_of_puzzleBoundaryMotion`. This exposes
