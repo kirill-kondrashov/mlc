@@ -433,19 +433,40 @@ lemma false_of_external_ray_map_data_two
       (norm_approach_one_seq_gt_one n)
   exact false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
 
+/-- Current fallback provider for boundary-motion data from external-ray seam data at `c = 2`. -/
+lemma motion_provider_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    Quadratic.PuzzleBoundaryMotionHyp :=
+  False.elim (false_of_external_ray_map_data_two h_data_two)
+
+/-- Current fallback provider for IR-to-tower data from external-ray seam data at `c = 2`. -/
+lemma tower_data_provider_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    InfinitelyRenormalizableHasTowerData :=
+  False.elim (false_of_external_ray_map_data_two h_data_two)
+
+/-- Current fallback provider for IR classification from external-ray seam data at `c = 2`. -/
+lemma classify_provider_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    IRClassificationData := by
+  intro c h_inf
+  exact classify_infinitely_renormalizable
+    (tower_data_provider_of_external_ray_map_data_two h_data_two) c h_inf
+
+/-- Current fallback provider for conformal-modulus bridge data from external-ray seam data at `c = 2`. -/
+lemma conformal_modulus_provider_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    MoleculeConformalModulusLowerBoundData :=
+  False.elim (false_of_external_ray_map_data_two h_data_two)
+
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  let hFalse : False := false_of_external_ray_map_data_two h_data_two
-  let h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
-  let h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
-  let h_classify_ir : IRClassificationData := by
-    intro c h_inf
-    exact classify_infinitely_renormalizable h_tower_data c h_inf
-  let h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
   exact mlc_conjecture_of_motionClassificationConformalData
-    h_motion h_classify_ir h_mod
+    (motion_provider_of_external_ray_map_data_two h_data_two)
+    (classify_provider_of_external_ray_map_data_two h_data_two)
+    (conformal_modulus_provider_of_external_ray_map_data_two h_data_two)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

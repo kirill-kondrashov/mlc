@@ -245,6 +245,13 @@ Date: 2026-02-19
     All current fallback providers in
     `mlc_conjecture_of_external_ray_map_data_two` now route through this one
     lemma, making replacement scope explicit and auditable.
+  - Extracted named current provider lemmas from the external seam:
+    - `motion_provider_of_external_ray_map_data_two`
+    - `tower_data_provider_of_external_ray_map_data_two`
+    - `classify_provider_of_external_ray_map_data_two`
+    - `conformal_modulus_provider_of_external_ray_map_data_two`
+    `mlc_conjecture_of_external_ray_map_data_two` now composes these into
+    `mlc_conjecture_of_motionClassificationConformalData`.
   - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
     inlined their bodies into the active route:
     - `main_branch_data_of_transportExists_of_classifyData_of_bridgeData`
