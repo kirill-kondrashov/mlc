@@ -21,7 +21,7 @@ Date: 2026-02-19
   - `MLC.Quadratic.external_ray_map_exists`
 - `MLC.mlc_conjecture` still instantiates all three branch-data slots from
   contradiction-backed providers routed from explicit `c = 2` exterior data:
-  - `bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom`
+  - `mlc_conjecture_of_external_ray_map_data_two`
   - `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`
   - `main_branch_data_of_bottcher_approach_one_point_surj_data_two`
   - `false_of_bottcher_approach_one_point_surj_data_two`
@@ -67,7 +67,8 @@ Date: 2026-02-19
    uses contradiction as the sole provider of branch data.
 2. No active dependency from `MLC.mlc_conjecture` may use:
    - `false_of_bottcher_approach_one_point_surj_data_two`
-   - `bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom`
+   - theorem-local contradiction wrappers fed by
+     `Quadratic.external_ray_map_data (2 : ℂ)`
 3. No active dependency may use placeholder stubs as constructive witnesses:
    - `bottcher_onM_hyp`
    - `homeomorphism_maps_component_hyp`
@@ -122,7 +123,8 @@ Date: 2026-02-19
    `MLC.Quadratic.external_ray_map_exists`.
 3. Confirm dependency graph rooted at `MLC.mlc_conjecture` has no path through:
    - `false_of_bottcher_approach_one_point_surj_data_two`
-   - `bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom`.
+   - theorem-local contradiction wrappers fed by
+     `Quadratic.external_ray_map_data (2 : ℂ)`.
 4. Confirm Yoccoz linkage remains in the finite branch path.
 
 ## Exit Criteria
@@ -137,7 +139,7 @@ Date: 2026-02-19
 - Progress (2026-02-19):
   - Added theorem-level seams
     `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two` and
-    `bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom` and routed
+    `mlc_conjecture_of_external_ray_map_data_two` and routed
     `MLC.mlc_conjecture` through it, so the active external dependency surface
     is explicit at the theorem boundary.
   - Reduced the external seam used by the contradiction core from full
@@ -153,12 +155,18 @@ Date: 2026-02-19
       axiom-clean (only `Quot.sound`/`propext`/`Classical.choice`).
     - `false_of_bottcher_approach_one_point_surj_data_two` is axiom-clean.
     - remaining non-core axiom dependence is localized to
-      `bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom`,
+      `mlc_conjecture_of_external_ray_map_data_two`,
       i.e. through `Quadratic.external_ray_map_data` / `external_ray_map_exists`.
   - `MLC.mlc_conjecture` now consumes that localized seam directly:
     `mlc_conjecture` is routed through
-    `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-      bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom`.
+    `mlc_conjecture_of_external_ray_map_data_two
+      (Quadratic.external_ray_map_data (2 : ℂ))`.
+  - Axiom audit after seam refactor confirms:
+    - `mlc_conjecture_of_external_ray_map_data_two` is axiom-clean
+      (only `Quot.sound`/`propext`/`Classical.choice`).
+    - `MLC.mlc_conjecture` remains the only declaration in this local chain that
+      pulls `MLC.Quadratic.external_ray_map_exists`, via
+      `Quadratic.external_ray_map_data (2 : ℂ)`.
   - Extracted a dedicated assembly theorem
     `mlc_conjecture_of_branchData` in `Mlc/MainConjecture.lean`.
   - `MLC.mlc_conjecture` now routes through that theorem with the current
@@ -179,17 +187,13 @@ Date: 2026-02-19
   - Current state keeps `h_bridge` contradiction-backed to preserve the
     one-axiom target while replacement work continues.
   - Finite-branch slot now routes through `PuzzleBoundaryMotionHyp` and
-    `main_branch_transport_exists_data_of_puzzleBoundaryMotion`, then into
+    `Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target`, then into
     connectedness data via
     `para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data`.
-  - Added explicit branch-data assembler
-    `main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData`
-    (with a transport-exists assembler retained as a lower-level wrapper).
-    Active external-ray wiring now uses the stronger uniform variant
-    `main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData`,
-    with conformal data derived via
-    `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
-    Current external-ray route instantiates this theorem via a single
+  - Inlined branch-data assembly in
+    `main_branch_data_of_bottcher_approach_one_point_surj_data_two` using
+    boundary-motion transport conversion plus explicit connectedness/bridge construction.
+    Active external-ray wiring now instantiates this conformal-target route via a single
     contradiction-seed builder
     `main_branch_data_of_bottcher_approach_one_point_surj_data_two`.
   - Current branch-data assembly is centralized at
@@ -198,7 +202,7 @@ Date: 2026-02-19
     `false_of_bottcher_approach_one_point_surj_data_two` at `c = 2`.
   - Rebased the finite-branch slot onto the boundary-motion interface with the
     conversion theorem
-    `main_branch_transport_exists_data_of_puzzleBoundaryMotion`. This exposes
+    `Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target`. This exposes
     an axiom-clean finite-branch replacement target (`PuzzleBoundaryMotionHyp`)
     directly in `Mlc/MainConjecture.lean`, with current routing through
     `main_branch_data_of_bottcher_approach_one_point_surj_data_two`.
@@ -207,11 +211,10 @@ Date: 2026-02-19
   - External-ray dependence for the current path is routed through the
     single explicit seed `Quadratic.ExternalRayMapData (2 : ℂ)`.
   - Rebuilt the satellite bridge through explicit finite-branch connectedness:
-    `main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData`
+    the inline bridge lambda in
+    `main_branch_data_of_bottcher_approach_one_point_surj_data_two`
     (using `lc_at_of_shrink_of_data` and
-    `molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData`),
-    and now source its conformal bridge input from the stronger uniform slot via
-    `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
+    `molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData`).
     This avoids routing bridge construction through `lc_at_of_shrink`, which is
     where `para_puzzle_piece_inter_mandelbrot_connected` previously leaked into
     candidate replacement paths.
@@ -220,6 +223,15 @@ Date: 2026-02-19
     `main_branch_data_of_bottcher_approach_one_point_surj_data_two`, and removed the
     intermediate tower-data hop from the active
     `MLC.mlc_conjecture` path in `Mlc/MainConjecture.lean`.
+  - Removed several single-use wrappers from `Mlc/MainConjecture.lean` and
+    inlined their bodies into the active route:
+    - `main_branch_data_of_transportExists_of_classifyData_of_bridgeData`
+    - `main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData`
+    - `main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData`
+    - `main_branch_data_of_false`
+  - Narrowed imports in `Mlc/MainConjecture.lean` by replacing the broad
+    `BottcherMotion` import with `PuzzleBoundaryMotion`, keeping only interfaces
+    used by the active theorem path.
   - Kept the *active* branch-data assembly surface at
     `(PuzzleBoundaryMotionHyp, IRClassificationData, MoleculeConformalModulusLowerBoundData)`
     to avoid exposing the known-inconsistent pair

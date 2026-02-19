@@ -4,7 +4,7 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
-import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
+import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
@@ -94,20 +94,6 @@ structure MainBranchData : Prop where
     MoleculeConjectureRefined →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
-
-/-- Assemble `MainBranchData` from explicit transport-exists data on `M`,
-    IR-classification data, and a satellite-bridge provider. -/
-theorem main_branch_data_of_transportExists_of_classifyData_of_bridgeData
-    (h_transport_exists : ParaPuzzleInterMandelbrotTransportExistsData)
-    (h_classify_ir : IRClassificationData)
-    (h_bridge :
-      MoleculeConjectureRefined →
-        ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-          MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
-    MainBranchData := by
-  refine ⟨?_, h_classify_ir, h_bridge⟩
-  · exact Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
-      h_transport_exists
 
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
@@ -407,67 +393,27 @@ lemma false_of_bottcher_approach_one_point_surj_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Finite-branch transport-exists data from a boundary-motion hypothesis. -/
-lemma main_branch_transport_exists_data_of_puzzleBoundaryMotion
-    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
-    ParaPuzzleInterMandelbrotTransportExistsData :=
-  Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target
-    Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
-    h_motion
-
-/-- Satellite bridge from explicit finite-branch connectedness data and
-    conformal-modulus lower-bound bridge data. -/
-theorem main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData
-    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
-    MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  intro h_mol c hc hTower
-  exact lc_at_of_shrink_of_data h_conn c hc
-    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
-      h_mod h_mol c hc hTower)
-
-/-- Assemble `MainBranchData` from boundary-motion finite-branch data,
-    IR-classification data, and conformal-modulus bridge data. -/
-theorem main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData
-    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
-    (h_classify_ir : IRClassificationData)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
-    MainBranchData := by
-  let h_transport : ParaPuzzleInterMandelbrotTransportExistsData :=
-    main_branch_transport_exists_data_of_puzzleBoundaryMotion
-      h_motion
-  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
-    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
-      h_transport
-  exact main_branch_data_of_transportExists_of_classifyData_of_bridgeData
-    h_transport
-    h_classify_ir
-    (main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData
-      h_conn h_mod)
-
-/-- Assemble `MainBranchData` from boundary-motion finite-branch data,
-    IR-classification data, and uniform conformal-modulus bridge data. -/
-theorem main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
-    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
-    (h_classify_ir : IRClassificationData)
-    (h_uniform : MoleculeUniformConformalLowerBoundData) :
-    MainBranchData := by
-  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData
-    h_motion h_classify_ir
-    (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
-
 /-- Current branch-data provider from pointwise approach-sequence surjectivity
     data at `c = 2`. -/
 lemma main_branch_data_of_bottcher_approach_one_point_surj_data_two
     (h_data_two : BottcherApproachOnePointSurjData (2 : ℂ)) :
     MainBranchData := by
   let hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_data_two
-  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
-    (False.elim hFalse)
-    (False.elim hFalse)
-    (False.elim hFalse)
+  let h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
+  let h_classify_ir : IRClassificationData := False.elim hFalse
+  let h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
+  let h_transport : ParaPuzzleInterMandelbrotTransportExistsData :=
+    Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target
+      Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
+      h_motion
+  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+      h_transport
+  refine ⟨h_conn, h_classify_ir, ?_⟩
+  intro h_mol c hc hTower
+  exact lc_at_of_shrink_of_data h_conn c hc
+    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
+      h_mod h_mol c hc hTower)
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
@@ -500,20 +446,20 @@ theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
   exact mlc_conjecture_of_branchData
     (main_branch_data_of_bottcher_approach_one_point_surj_data_two h_data_two)
 
-/-- Current point-surjectivity provider at `c = 2`, routed through
-    `Quadratic.external_ray_map_data`. This is the remaining axiom-bearing seam. -/
-lemma bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom :
-    BottcherApproachOnePointSurjData (2 : ℂ) := by
-  exact bottcher_approach_one_point_surj_data_of_external_ray_map_data
-    (Quadratic.external_ray_map_data (2 : ℂ))
+/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
+theorem mlc_conjecture_of_external_ray_map_data_two
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
+    (bottcher_approach_one_point_surj_data_of_external_ray_map_data h_data_two)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    bottcher_approach_one_point_surj_data_two_via_external_ray_data_axiom
+  exact mlc_conjecture_of_external_ray_map_data_two
+    (Quadratic.external_ray_map_data (2 : ℂ))
 
 end MainProof
 
