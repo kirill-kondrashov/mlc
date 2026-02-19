@@ -305,6 +305,35 @@ Date: 2026-02-19
     So Step 2 remains blocked on a non-axiom constructor for
     `ParaPuzzlePieceInterMandelbrotConnectedData` (or equivalent upstream
     boundary-motion data) that does not reintroduce removed axiom debt.
+  - Extracted a dedicated finite-branch seam in `Mlc/MainConjecture.lean`:
+    - `mlc_conjecture_of_finiteClassificationBridgeData`
+    - `finite_lc_provider_of_connected_data`
+    and rewired `mlc_conjecture_of_branchData` through them. This keeps
+    Yoccoz finite-branch routing explicit and makes finite-branch replacement
+    independently auditable from classification/bridge assembly.
+  - Axiom audit confirms the new seam declarations are core-only:
+    `mlc_conjecture_of_finiteClassificationBridgeData` and
+    `finite_lc_provider_of_connected_data` depend only on
+    `Quot.sound`, `propext`, `Classical.choice`.
+  - Further seam reduction in `Mlc/MainConjecture.lean`:
+    `mlc_conjecture_of_external_ray_map_data_two` now routes directly through
+    `mlc_conjecture_of_finiteClassificationBridgeData` with explicit providers:
+    - `finite_lc_provider_of_external_ray_map_data_two`
+    - `classify_provider_of_external_ray_map_data_two`
+    - `bridge_provider_of_external_ray_map_data_two`
+    The older conformal wrapper route
+    (`mlc_conjecture_of_connectedClassificationConformalData`,
+    `mlc_conjecture_of_connected_data_of_external_ray_map_data_two`,
+    `conformal_modulus_provider_of_external_ray_map_data_two`) was removed from
+    the active path.
+  - Axiom audit confirms the new external providers are core-only:
+    `finite_lc_provider_of_external_ray_map_data_two` and
+    `bridge_provider_of_external_ray_map_data_two` depend only on
+    `Quot.sound`, `propext`, `Classical.choice`.
+  - Removed now-unused assembly wrappers from the active rooted file:
+    `MainBranchData`, `mlc_conjecture_of_branchData`, and the prior conformal
+    wrapper route. Rooted graph audit confirms remaining `Mlc/MainConjecture.lean`
+    declarations are all in the `MLC.mlc_conjecture` dependency closure.
   - Axiom-audited candidate direct replacements:
     - `Quadratic.para_puzzle_transport_exists_data_of_motion_default`
     - `molecule_conjecture_bridge_of_tower` (and conformal/uniform variants)

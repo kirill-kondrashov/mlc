@@ -84,16 +84,6 @@ def IRClassificationData : Prop :=
   ∀ (c : ℂ) (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
 
-/-- Finite-branch, IR-classification, and satellite-bridge data needed by the
-    main MLC assembly theorem. -/
-structure MainBranchData : Prop where
-  h_conn : ParaPuzzlePieceInterMandelbrotConnectedData
-  h_classify_ir : IRClassificationData
-  h_bridge :
-    MoleculeConjectureRefined →
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
-
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
 lemma zero_mem_basin_two : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
@@ -384,39 +374,35 @@ lemma false_of_bottcher_approach_one_point_surj_data_two
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
-theorem mlc_conjecture_of_branchData
-    (h_data : MainBranchData) :
+theorem mlc_conjecture_of_finiteClassificationBridgeData
+    (h_fin_lc :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
-  let h_fin_lc :
-      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
-        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
-    by
-      intro c hc h_fin
-      exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
-        h_data.h_conn c hc h_fin
-        (parameter_shrink_of_yoccoz c hc h_fin
-          (by
-            apply MLC.yoccoz_theorem
-            simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
-  apply mlc_strategy_of_branchLocalData h_fin_lc
-  · intro c h_inf
-    exact h_data.h_classify_ir c h_inf
-  · exact h_data.h_bridge
+  exact mlc_strategy_of_branchLocalData h_fin_lc
+    (fun c h_inf => h_classify_ir c h_inf)
+    h_bridge
 
-/-- Main MLC assembly from finite-branch connectedness data, IR classification,
-    and conformal-modulus bridge data. -/
-theorem mlc_conjecture_of_connectedClassificationConformalData
-    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
-    (h_classify_ir : IRClassificationData)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  refine mlc_conjecture_of_branchData ?_
-  refine ⟨h_conn, h_classify_ir, ?_⟩
-  intro h_mol c hc hTower
-  exact lc_at_of_shrink_of_data h_conn c hc
-    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
-      h_mod h_mol c hc hTower)
+/-- Build the finite-branch local-connectivity provider from explicit
+    para-puzzle connectedness data via the Yoccoz shrinkage route. -/
+lemma finite_lc_provider_of_connected_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+  by
+    intro c hc h_fin
+    exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
+      h_conn c hc h_fin
+      (parameter_shrink_of_yoccoz c hc h_fin
+        (by
+          apply MLC.yoccoz_theorem
+          simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
 
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
 lemma false_of_external_ray_map_data_two
@@ -449,32 +435,32 @@ lemma classify_provider_of_external_ray_map_data_two
   exact classify_infinitely_renormalizable
     (tower_data_provider_of_external_ray_map_data_two h_data_two) c h_inf
 
-/-- Current fallback provider for conformal-modulus bridge data from external-ray seam data at `c = 2`. -/
-lemma conformal_modulus_provider_of_external_ray_map_data_two
+/-- Current fallback provider for finite-branch local connectivity from
+    external-ray seam data at `c = 2`. -/
+lemma finite_lc_provider_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    MoleculeConformalModulusLowerBoundData :=
-  False.elim (false_of_external_ray_map_data_two h_data_two)
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+  finite_lc_provider_of_connected_data
+    (connected_provider_of_external_ray_map_data_two h_data_two)
 
-/-- Partial seam elimination target for Step 2:
-    if finite-branch connectedness data is supplied constructively, the
-    remaining current seam dependencies are only the IR-classification and
-    conformal-modulus providers from external-ray data at `c = 2`. -/
-theorem mlc_conjecture_of_connected_data_of_external_ray_map_data_two
-    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+/-- Current fallback provider for satellite-bridge local connectivity from
+    external-ray seam data at `c = 2`. -/
+lemma bridge_provider_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_connectedClassificationConformalData
-    h_conn
-    (classify_provider_of_external_ray_map_data_two h_data_two)
-    (conformal_modulus_provider_of_external_ray_map_data_two h_data_two)
+    MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+  False.elim (false_of_external_ray_map_data_two h_data_two)
 
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_connected_data_of_external_ray_map_data_two
-    (connected_provider_of_external_ray_map_data_two h_data_two)
-    h_data_two
+  exact mlc_conjecture_of_finiteClassificationBridgeData
+    (finite_lc_provider_of_external_ray_map_data_two h_data_two)
+    (classify_provider_of_external_ray_map_data_two h_data_two)
+    (bridge_provider_of_external_ray_map_data_two h_data_two)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
