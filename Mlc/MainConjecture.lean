@@ -455,14 +455,26 @@ lemma conformal_modulus_provider_of_external_ray_map_data_two
     MoleculeConformalModulusLowerBoundData :=
   False.elim (false_of_external_ray_map_data_two h_data_two)
 
+/-- Partial seam elimination target for Step 2:
+    if finite-branch connectedness data is supplied constructively, the
+    remaining current seam dependencies are only the IR-classification and
+    conformal-modulus providers from external-ray data at `c = 2`. -/
+theorem mlc_conjecture_of_connected_data_of_external_ray_map_data_two
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_connectedClassificationConformalData
+    h_conn
+    (classify_provider_of_external_ray_map_data_two h_data_two)
+    (conformal_modulus_provider_of_external_ray_map_data_two h_data_two)
+
 /-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_external_ray_map_data_two
     (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_connectedClassificationConformalData
+  exact mlc_conjecture_of_connected_data_of_external_ray_map_data_two
     (connected_provider_of_external_ray_map_data_two h_data_two)
-    (classify_provider_of_external_ray_map_data_two h_data_two)
-    (conformal_modulus_provider_of_external_ray_map_data_two h_data_two)
+    h_data_two
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

@@ -280,6 +280,11 @@ Date: 2026-02-19
     MoleculeConformalModulusLowerBoundData)` to avoid exposing the known-inconsistent pair
     `(InfinitelyRenormalizableHasTowerData, MoleculeConformalModulusLowerBoundData)`
     as top-level inputs.
+  - Added a Step-2 partial-elimination theorem:
+    `mlc_conjecture_of_connected_data_of_external_ray_map_data_two`.
+    This isolates finite-branch replacement explicitly: once
+    `ParaPuzzlePieceInterMandelbrotConnectedData` is constructed without the
+    external seam, only classification/bridge providers remain on that seam.
   - Axiom-audited candidate direct replacements:
     - `Quadratic.para_puzzle_transport_exists_data_of_motion_default`
     - `molecule_conjecture_bridge_of_tower` (and conformal/uniform variants)
