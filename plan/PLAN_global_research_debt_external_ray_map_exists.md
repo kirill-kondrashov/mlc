@@ -266,6 +266,20 @@ Date: 2026-02-19
       `MLC.Quadratic.external_ray_map_exists` and
       `MLC.Quadratic.bottcher_seq_converges`.
     Therefore this route is excluded until those dependencies are eliminated.
+  - Axiom audit on boundary-motion constructors from `BottcherMotion` confirms:
+    - `puzzle_boundary_motion_hyp_of_onM`
+    - `puzzle_boundary_motion_hyp_of_onM_connected`
+    both depend on `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
+    So they are currently excluded from the active one-axiom path.
+  - Axiom audit on `BottcherOnMTheory` / Green-sublevel candidates confirms:
+    - `bottcher_theorem_outside`, `bottcher_theorem_outside_of_basin`,
+      `bottcher_map_inj_on_basin_of_outside_left_inv`, and
+      `bottcher_map_inj_theorem` all still pull
+      `MLC.Quadratic.external_ray_map_exists`.
+    - `green_sublevel_connected_onM` additionally pulls
+      `MLC.Quadratic.extended_ray_map_continuous` and
+      `MLC.Quadratic.filled_julia_set_connected`.
+    Therefore these routes are excluded for the current elimination target.
   - Narrowed direct import debt in `Mlc/MainConjecture.lean` by replacing
     `Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan` with the smaller
     `Mlc.Quadratic.Complex.Bottcher.BottcherAxioms` import (while retaining
