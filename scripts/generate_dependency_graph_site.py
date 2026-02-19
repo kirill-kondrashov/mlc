@@ -739,17 +739,20 @@ function initGraph(payload) {{
   }}
   const orderedDepths = Array.from(byDepth.keys()).sort((a, b) => a - b);
   const positioned = [];
-  const dx = 260;
-  const dy = 170;
+  const dx = 320;
+  const dy = 210;
+  const maxDepth = Math.max(1, orderedDepths.length - 1);
   for (const d of orderedDepths) {{
     const layer = byDepth.get(d);
     layer.sort((a, b) => a.fq_name.localeCompare(b.fq_name));
     const mid = (layer.length - 1) / 2;
+    const depthRatio = maxDepth === 0 ? 0 : d / maxDepth;
+    const widthScale = 0.58 + 0.78 * Math.pow(depthRatio, 0.9);
     for (let i = 0; i < layer.length; i++) {{
       const n = layer[i];
       positioned.push({{
         ...n,
-        x0: (i - mid) * dx,
+        x0: (i - mid) * dx * widthScale,
         y0: d * dy
       }});
     }}
@@ -885,10 +888,10 @@ function stepForces() {{
   const nodes = state.nodes;
   const edges = state.edges;
   const n = nodes.length;
-  const repulsion = 13000;
+  const repulsion = 19000;
   const springK = 0.0014;
-  const ideal = 140;
-  const anchorK = 0.03;
+  const ideal = 190;
+  const anchorK = 0.022;
   const damp = 0.83;
 
   for (let i = 0; i < n; i++) {{
@@ -947,7 +950,7 @@ function draw() {{
   ctx.translate(state.tx, state.ty);
   ctx.scale(state.scale, state.scale);
 
-  const lw = Math.max(0.8, 1.0 / state.scale);
+  const lw = Math.max(0.45, 0.65 / state.scale);
   for (const e of state.edges) {{
     const a = e.source;
     const b = e.target;
@@ -963,7 +966,7 @@ function draw() {{
     const ux = dx / d;
     const uy = dy / d;
     const startPad = a.r + 1.4;
-    const endPad = b.r + 6.2;
+    const endPad = b.r + 4.4;
     const sx = a.x + ux * startPad;
     const sy = a.y + uy * startPad;
     const tx = b.x - ux * endPad;
@@ -973,8 +976,8 @@ function draw() {{
     ctx.lineTo(tx, ty);
     ctx.stroke();
 
-    const arrowLen = Math.max(4.6, 7.0 / state.scale);
-    const arrowHalf = arrowLen * 0.52;
+    const arrowLen = Math.max(3.0, 4.8 / state.scale);
+    const arrowHalf = arrowLen * 0.42;
     const bx = tx - ux * arrowLen;
     const by = ty - uy * arrowLen;
     ctx.beginPath();

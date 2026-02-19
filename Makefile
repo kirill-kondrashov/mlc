@@ -1,5 +1,7 @@
 .PHONY: all build check cache clean graphs serve
 
+PORT ?= 8000
+
 # Default target
 all: check
 
@@ -24,7 +26,7 @@ graphs:
 
 # Serve the generated graph site locally over HTTP
 serve: graphs
-	cd scripts && poetry run python serve_graph_site.py --directory ../site --port 8000
+	cd scripts && poetry run python serve_graph_site.py --directory ../site --port $(PORT)
 
 # A target that ensures cache is fetched if lake-manifest.json is newer than a marker file
 # This attempts to satisfy "getting cache on change of files"

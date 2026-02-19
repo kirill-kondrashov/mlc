@@ -95,6 +95,20 @@ structure MainBranchData : Prop where
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
+/-- Assemble `MainBranchData` from explicit transport-exists data on `M`,
+    IR-classification data, and a satellite-bridge provider. -/
+theorem main_branch_data_of_transportExists_of_classifyData_of_bridgeData
+    (h_transport_exists : ParaPuzzleInterMandelbrotTransportExistsData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+        ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+          MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    MainBranchData := by
+  refine ⟨?_, h_classify_ir, h_bridge⟩
+  · exact Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+      h_transport_exists
+
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
 lemma zero_mem_basin_two : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
@@ -380,20 +394,129 @@ lemma false_of_external_ray_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
+/-- Current finite-branch transport-exists placeholder sourced from the
+    contradiction seed from explicit external-ray data at `c = 2`. -/
+lemma false_of_external_ray_axiom : False := by
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    Quadratic.external_ray_map_data (2 : ℂ)
+  exact false_of_external_ray_data_two h_data
+
+/-- Finite-branch transport-exists data from a boundary-motion hypothesis. -/
+lemma main_branch_transport_exists_data_of_puzzleBoundaryMotion
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
+    ParaPuzzleInterMandelbrotTransportExistsData :=
+  Quadratic.para_puzzle_transport_exists_data_of_boundary_motion_target
+    Quadratic.para_puzzle_transport_witness_from_boundary_motion_target
+    h_motion
+
+/-- Boundary-motion data from Böttcher-motion data. -/
+lemma main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion
+    (h_bottcher_motion : Quadratic.BottcherMotionHyp) :
+    Quadratic.PuzzleBoundaryMotionHyp :=
+  Quadratic.puzzle_boundary_motion_hyp_of_bottcher h_bottcher_motion
+
+/-- Contradiction-backed Böttcher-motion placeholder. -/
+noncomputable def main_branch_bottcherMotion_hyp_of_false
+    (hFalse : False) : Quadratic.BottcherMotionHyp := by
+  refine ⟨?_⟩
+  intro n c₀
+  exact False.elim hFalse
+
+/-- Current boundary-motion placeholder sourced from the external-ray
+    contradiction at `c = 2`. -/
+lemma main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom :
+    Quadratic.PuzzleBoundaryMotionHyp :=
+  main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion
+    (main_branch_bottcherMotion_hyp_of_false false_of_external_ray_axiom)
+
+/-- Contradiction-backed IR-to-tower-data placeholder. -/
+lemma main_branch_towerData_of_false
+    (hFalse : False) : InfinitelyRenormalizableHasTowerData := by
+  intro c h_inf
+  exact False.elim hFalse
+
+/-- IR-classification data from explicit IR-to-tower data. -/
+theorem main_branch_classify_data_of_towerData
+    (h_tower_data : InfinitelyRenormalizableHasTowerData) :
+    IRClassificationData := by
+  intro c h_inf
+  exact classify_infinitely_renormalizable h_tower_data c h_inf
+
+/-- Contradiction-backed uniform-conformal bridge-data placeholder. -/
+lemma main_branch_uniformConformalLowerBoundData_of_false
+    (hFalse : False) : MoleculeUniformConformalLowerBoundData := by
+  intro h_mol c hc hTower
+  exact False.elim hFalse
+
+/-- Satellite bridge from explicit finite-branch connectedness data and
+    conformal-modulus lower-bound bridge data. -/
+theorem main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  intro h_mol c hc hTower
+  exact lc_at_of_shrink_of_data h_conn c hc
+    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
+      h_mod h_mol c hc hTower)
+
+/-- Assemble `MainBranchData` from boundary-motion finite-branch data,
+    IR-classification data, and conformal-modulus bridge data. -/
+theorem main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    MainBranchData := by
+  let h_transport : ParaPuzzleInterMandelbrotTransportExistsData :=
+    main_branch_transport_exists_data_of_puzzleBoundaryMotion
+      h_motion
+  let h_conn : ParaPuzzlePieceInterMandelbrotConnectedData :=
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data
+      h_transport
+  exact main_branch_data_of_transportExists_of_classifyData_of_bridgeData
+    h_transport
+    h_classify_ir
+    (main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData
+      h_conn h_mod)
+
+/-- Assemble `MainBranchData` from boundary-motion finite-branch data,
+    IR-classification data, and uniform conformal-modulus bridge data. -/
+theorem main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeUniformConformalLowerBoundData) :
+    MainBranchData := by
+  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData
+    h_motion h_classify_ir
+    (moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform)
+
+/-- Current IR-to-tower-data placeholder sourced from the external-ray contradiction
+    at `c = 2`. -/
+lemma main_branch_towerData_of_external_ray_axiom :
+    InfinitelyRenormalizableHasTowerData :=
+  main_branch_towerData_of_false false_of_external_ray_axiom
+
+/-- Current IR-classification placeholder sourced from the external-ray
+    contradiction at `c = 2`, routed through the tower-data interface. -/
+lemma main_branch_classify_data_of_external_ray_axiom :
+    IRClassificationData :=
+  main_branch_classify_data_of_towerData main_branch_towerData_of_external_ray_axiom
+
+/-- Current conformal-modulus bridge-data placeholder sourced from the
+    external-ray contradiction at `c = 2`. -/
+lemma main_branch_uniformConformalLowerBoundData_of_external_ray_axiom :
+    MoleculeUniformConformalLowerBoundData :=
+  main_branch_uniformConformalLowerBoundData_of_false false_of_external_ray_axiom
+
 /-- Current branch-data provider sourced from explicit external-ray data at
     `c = 2` (still contradiction-backed). -/
 lemma main_branch_data_of_external_ray_axiom :
     MainBranchData := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    Quadratic.external_ray_map_data (2 : ℂ)
-  have hFalse : False := false_of_external_ray_data_two h_data
-  refine ⟨?_, ?_, ?_⟩
-  · intro c hc n
-    exact False.elim hFalse
-  · intro c h_inf
-    exact False.elim hFalse
-  · intro h_mol c hc hTower
-    exact False.elim hFalse
+  exact main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData
+    main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom
+    main_branch_classify_data_of_external_ray_axiom
+    main_branch_uniformConformalLowerBoundData_of_external_ray_axiom
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/

@@ -32,7 +32,10 @@ def main() -> None:
         def __init__(self, *h_args, **h_kwargs):
             super().__init__(*h_args, directory=str(site_dir), **h_kwargs)
 
-    with socketserver.ThreadingTCPServer((args.host, args.port), Handler) as httpd:
+    class ReusableThreadingTCPServer(socketserver.ThreadingTCPServer):
+        allow_reuse_address = True
+
+    with ReusableThreadingTCPServer((args.host, args.port), Handler) as httpd:
         print(f"Serving {site_dir}")
         print(f"Open: http://{args.host}:{args.port}/mlc_conjecture/index.html")
         try:
@@ -43,4 +46,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

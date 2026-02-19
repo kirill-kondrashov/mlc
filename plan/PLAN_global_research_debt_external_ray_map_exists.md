@@ -25,9 +25,9 @@ Date: 2026-02-19
   - `false_of_external_ray_data_two`
 - Direct contradiction-backed providers currently on-path in
   `Mlc/MainConjecture.lean`:
-  - `ir_classification_data_of_external_ray_data_two`
-  - `para_puzzle_connected_data_of_external_ray_data_two`
-  - `molecule_bridge_data_of_external_ray_data_two`
+  - `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`
+  - `main_branch_classify_data_of_external_ray_axiom`
+  - `main_branch_uniformConformalLowerBoundData_of_external_ray_axiom`
 
 ## Critical Issues in Previous Plan
 
@@ -144,6 +144,89 @@ Date: 2026-02-19
     `main_branch_data_of_external_ray_axiom : MainBranchData`.
   - Removed redundant per-slot contradiction wrappers from active code, so
     the current replacement point is a single branch-data provider.
+  - Reworked the branch-data assembly surface to accept explicit
+    `IRClassificationData` directly (instead of requiring global
+    `InfinitelyRenormalizableHasTowerData`). This removes active reliance on
+    the known inconsistent tower-data interface from `Mlc/MainConjecture.lean`
+    while preserving the same high-level strategy shape
+    (`h_conn`, `h_classify_ir`, `h_bridge`).
+  - Attempted routing via
+    `molecule_conjecture_bridge_of_tower_of_uniformConformalLowerBoundData`
+    was reverted because it reintroduced
+    `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected` into
+    `MLC.mlc_conjecture`'s axiom footprint.
+  - Current state keeps `h_bridge` contradiction-backed to preserve the
+    one-axiom target while replacement work continues.
+  - Finite-branch slot now routes through `PuzzleBoundaryMotionHyp` and
+    `main_branch_transport_exists_data_of_puzzleBoundaryMotion`, then into
+    connectedness data via
+    `para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data`.
+  - Added explicit branch-data assembler
+    `main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_conformalModulusLowerBoundData`
+    (with a transport-exists assembler retained as a lower-level wrapper).
+    Active external-ray wiring now uses the stronger uniform variant
+    `main_branch_data_of_puzzleBoundaryMotion_of_classifyData_of_uniformConformalLowerBoundData`,
+    with conformal data derived via
+    `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
+    Current external-ray route now instantiates this theorem with
+    contradiction-derived placeholders, exposed as dedicated provider lemmas:
+    - `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`
+    - `main_branch_classify_data_of_external_ray_axiom`
+    - `main_branch_uniformConformalLowerBoundData_of_external_ray_axiom`
+    so future elimination work is localized to those three inputs.
+  - Factored the contradiction source into a single local lemma
+    `false_of_external_ray_axiom`, and rewired each slot through generic
+    builders:
+    - `main_branch_bottcherMotion_hyp_of_false`
+    - `main_branch_towerData_of_false`
+    - `main_branch_uniformConformalLowerBoundData_of_false`
+    This keeps the current axiom footprint unchanged while making contradiction
+    usage explicit and minimizing duplicated placeholder logic.
+  - Rebased the finite-branch slot onto the boundary-motion interface with the
+    active provider `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`
+    and conversion theorem
+    `main_branch_transport_exists_data_of_puzzleBoundaryMotion`. This exposes
+    an axiom-clean finite-branch replacement target (`PuzzleBoundaryMotionHyp`)
+    directly in `Mlc/MainConjecture.lean`.
+  - Lifted that finite-branch replacement surface one layer higher to
+    Böttcher-motion packaging via
+    `main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion`, with current
+    temporary input routed through
+    `main_branch_bottcherMotion_hyp_of_false false_of_external_ray_axiom`.
+    Axiom audit confirms:
+    - `main_branch_puzzleBoundaryMotion_hyp_of_bottcherMotion` is axiom-clean
+      (only `Quot.sound`/`propext`/`Classical.choice`)
+    - external-ray dependence remains localized in
+      `main_branch_puzzleBoundaryMotion_hyp_of_external_ray_axiom`.
+  - Rebuilt the satellite bridge through explicit finite-branch connectedness:
+    `main_branch_bridge_data_of_connectedData_of_conformalModulusLowerBoundData`
+    (using `lc_at_of_shrink_of_data` and
+    `molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData`),
+    and now source its conformal bridge input from the stronger external slot
+    `main_branch_uniformConformalLowerBoundData_of_external_ray_axiom` via
+    `moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData`.
+    This avoids routing bridge construction through `lc_at_of_shrink`, which is
+    where `para_puzzle_piece_inter_mandelbrot_connected` previously leaked into
+    candidate replacement paths.
+  - Reworked IR-classification placeholder routing through the explicit
+    tower-data interface:
+    - `main_branch_towerData_of_external_ray_axiom`
+    - `main_branch_classify_data_of_towerData`
+    so the current classification slot has a single constructive replacement
+    seam (`InfinitelyRenormalizableHasTowerData`) instead of direct
+    contradiction output.
+  - Kept the *active* branch-data assembly surface at
+    `(PuzzleBoundaryMotionHyp, IRClassificationData, MoleculeConformalModulusLowerBoundData)`
+    to avoid exposing the known-inconsistent pair
+    `(InfinitelyRenormalizableHasTowerData, MoleculeConformalModulusLowerBoundData)`
+    as top-level inputs.
+  - Axiom-audited candidate direct replacements:
+    - `Quadratic.para_puzzle_transport_exists_data_of_motion_default`
+    - `molecule_conjecture_bridge_of_tower` (and conformal/uniform variants)
+    each depends on
+    `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`, so these
+    routes are currently excluded if we keep the one-axiom target focused on
+    `MLC.Quadratic.external_ray_map_exists`.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
