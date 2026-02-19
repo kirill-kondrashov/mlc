@@ -140,7 +140,8 @@ Date: 2026-02-19
   - This isolates the exact replacement interface for Phases 2–4 without
     changing theorem signatures or introducing new axioms.
   - Consolidated current external-ray-backed providers into
-    `main_branch_data_of_external_ray_data_two : MainBranchData`.
+    a single declaration
+    `main_branch_data_of_external_ray_axiom : MainBranchData`.
   - Removed redundant per-slot contradiction wrappers from active code, so
     the current replacement point is a single branch-data provider.
 - Blocked pending a consistent constructive replacement architecture for

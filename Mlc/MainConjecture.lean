@@ -380,27 +380,20 @@ lemma false_of_external_ray_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Contradiction obtained from `external_ray_map_exists` alone
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-
-lemma external_ray_data_two_axiom : Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_data (2 : ℂ)
-
 /-- Current branch-data provider sourced from explicit external-ray data at
     `c = 2` (still contradiction-backed). -/
-lemma main_branch_data_of_external_ray_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+lemma main_branch_data_of_external_ray_axiom :
     MainBranchData := by
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    Quadratic.external_ray_map_data (2 : ℂ)
+  have hFalse : False := false_of_external_ray_data_two h_data
   refine ⟨?_, ?_, ?_⟩
   · intro c hc n
-    exfalso
-    exact false_of_external_ray_data_two h_data
+    exact False.elim hFalse
   · intro c h_inf
-    exfalso
-    exact false_of_external_ray_data_two h_data
+    exact False.elim hFalse
   · intro h_mol c hc hTower
-    exfalso
-    exact false_of_external_ray_data_two h_data
+    exact False.elim hFalse
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
@@ -430,7 +423,7 @@ theorem mlc_conjecture_of_branchData
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_branchData
-    (main_branch_data_of_external_ray_data_two external_ray_data_two_axiom)
+    main_branch_data_of_external_ray_axiom
 
 end MainProof
 
