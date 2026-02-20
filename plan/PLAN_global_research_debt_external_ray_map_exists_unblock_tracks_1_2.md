@@ -89,6 +89,26 @@ This keeps the remaining replacement targets explicit:
   - rewired the active fallback to consume this single combined seam datum.
   This reduces replacement surface area and makes remaining obligations explicit
   as one packaged target.
+- [x] Began Track-2 proof content in `Mlc/MoleculeToSatelliteNestData.lean`:
+  - proved
+    `moleculeBridgeTarget_of_moleculeUniformBridgeTarget :
+      MoleculeImpliesUniformConformalLowerBoundTarget ->
+      MoleculeImpliesSatellitePrincipalNestData`;
+  - rewired `Mlc/MainConjecture.lean` to consume the uniform Track-2 target in
+    the combined seam datum and derive the strong target by theorem.
+  This is a completed theorem-level reduction step (proof, not just interface
+  refactor) and narrows Track-2 obligations to the uniform target.
+- [x] Began Track-1/Track-2 interaction proof in `Mlc/MainConjecture.lean`:
+  - proved
+    `irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget`,
+    using
+    `classify_infinitely_renormalizable_of_noTowerImpliesPrimitive` plus
+    `not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal`;
+  - rewired
+    `mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget`
+    to consume that derived classification directly.
+  This starts replacing purely interface-level Track-1 usage with theorem-level
+  interaction between Track-1 and Track-2 assumptions.
 - [x] Added an explicit Track-2 assembly theorem in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget`
   consuming `MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData`.

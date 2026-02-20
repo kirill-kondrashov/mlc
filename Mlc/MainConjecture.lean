@@ -7,6 +7,7 @@ import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.MandelbrotEquivalence
 import Mlc.MoleculeToSatelliteNestData
+import Mlc.FastTowerExistenceObstruction
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
@@ -94,13 +95,20 @@ def IRNoTowerImpliesPrimitiveData : Prop :=
     (_h : InfinitelyRenormalizable c),
     ¬ SatelliteRenormalizableTower c → PrimitiveRenormalizable c
 
-/-- Track-1 target implies full IR classification data. -/
-lemma irClassificationData_of_noTowerImpliesPrimitiveData
-    (h_data : IRNoTowerImpliesPrimitiveData) :
+/-- Under the current model, Track-1 + uniform Track-2 data force IR
+    classification through the primitive branch on `M` (no satellite towers). -/
+lemma irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
     IRClassificationData := by
   intro c hc h_ir
-  exact classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
-    h_data c hc h_ir
+  rcases classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+      h_noTowerPrim c hc h_ir with h_prim | h_tower
+  · exact Or.inl h_prim
+  · have h_mod : MoleculeConformalModulusLowerBoundData :=
+      moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
+    exact False.elim
+      ((not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_mod c hc) h_tower)
 
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
@@ -480,22 +488,35 @@ theorem mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget
     h_classify_ir
     (bridge_provider_of_motionHyp_moleculeBridgeTarget_data h_motion h_target)
 
-/-- Main seam assembly from boundary-motion data, Track-1 no-tower classification
-    target, and the explicit Molecule→satellite principal-nest bridge target. -/
-theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeBridgeTarget
+/-- Main seam assembly from boundary-motion data, IR classification, and the
+    uniform conformal Track-2 target. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
-    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
-    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget
     h_motion
-    (irClassificationData_of_noTowerImpliesPrimitiveData h_noTowerPrim)
-    h_target
+    h_classify_ir
+    (MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget h_uniform)
+
+/-- Main seam assembly from boundary-motion data, Track-1 no-tower
+    classification target, and the uniform conformal Track-2 target. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget
+    h_motion
+    (irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+      h_noTowerPrim h_uniform)
+    h_uniform
 
 /-- Combined Track-1+Track-2 seam datum for the infinite branch. -/
 def IRNoTowerPrimitiveAndMoleculeBridgeTargetData : Prop :=
   IRNoTowerImpliesPrimitiveData ∧
-    MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData
+    MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
 
 /-- Main seam assembly from boundary-motion data and the combined Track-1+Track-2
     datum. -/
@@ -503,7 +524,7 @@ theorem mlc_conjecture_of_motionHyp_track12_data
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
     (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeBridgeTarget
+  exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
     h_motion h_track12.1 h_track12.2
 
 /-- Main MLC assembly from approach-sequence preimage data at `c = 2`. -/

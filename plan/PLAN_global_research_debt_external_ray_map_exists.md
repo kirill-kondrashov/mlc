@@ -1432,6 +1432,34 @@ Date: 2026-02-19
       to consume that single combined seam datum.
     This shrinks active replacement obligations to one explicit packaged target
     while preserving theorem shape and current axiom footprint.
+  - Track-2 proof reduction completed in
+    `Mlc/MoleculeToSatelliteNestData.lean`:
+    - added theorem
+      `moleculeBridgeTarget_of_moleculeUniformBridgeTarget`;
+    - this proves the strong principal-nest bridge target from the uniform
+      conformal target by constructing `SatellitePrincipalNestData` at
+      canonical tower depths.
+    - rewired `Mlc/MainConjecture.lean` to consume the uniform Track-2 target
+      in the combined seam package and derive the strong bridge target by
+      theorem.
+    This is the first nontrivial proof step in the new Track-2 path and avoids
+    further interface-only churn.
+  - Track-1/Track-2 interaction proof step completed in
+    `Mlc/MainConjecture.lean`:
+    - added
+      `irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget`;
+    - this derives `IRClassificationData` from
+      `IRNoTowerImpliesPrimitiveData` + uniform Track-2 target by excluding
+      tower cases on `M` via
+      `not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal`;
+    - rewired
+      `mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget`
+      to use that derived classification.
+    This is a direct proof-level integration of Track-1 and Track-2 hypotheses.
+  - Rooted hygiene refresh after rewiring:
+    - removed newly introduced but off-path declarations from
+      `Mlc/MainConjecture.lean` and rechecked rooted closure;
+    - result remains clean (`missing_count = 0`).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
