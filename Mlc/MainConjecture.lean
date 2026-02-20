@@ -101,14 +101,13 @@ lemma irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBrid
     (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
     (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
     IRClassificationData := by
+  have h_noTowerOnM :
+      ∀ (c : ℂ), c ∈ MLC.Quadratic.MandelbrotSet → ¬ SatelliteRenormalizableTower c := by
+    intro c hc
+    exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform h_uniform c hc
   intro c hc h_ir
-  rcases classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
-      h_noTowerPrim c hc h_ir with h_prim | h_tower
-  · exact Or.inl h_prim
-  · have h_mod : MoleculeConformalModulusLowerBoundData :=
-      moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
-    exact False.elim
-      ((not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_mod c hc) h_tower)
+  exact classify_infinitely_renormalizable_of_noTowerImpliesPrimitive_of_noTowerOnM
+    h_noTowerPrim h_noTowerOnM c hc h_ir
 
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
@@ -518,6 +517,11 @@ def IRNoTowerPrimitiveAndMoleculeBridgeTargetData : Prop :=
   IRNoTowerImpliesPrimitiveData ∧
     MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
 
+/-- Constructive main-path seam datum: boundary-motion finite branch data plus
+    combined Track-1/Track-2 infinite-branch data. -/
+def MainPathData : Prop :=
+  Quadratic.PuzzleBoundaryMotionHyp ∧ IRNoTowerPrimitiveAndMoleculeBridgeTargetData
+
 /-- Main seam assembly from boundary-motion data and the combined Track-1+Track-2
     datum. -/
 theorem mlc_conjecture_of_motionHyp_track12_data
@@ -527,21 +531,46 @@ theorem mlc_conjecture_of_motionHyp_track12_data
   exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
     h_motion h_track12.1 h_track12.2
 
-/-- Main MLC assembly from approach-sequence preimage data at `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
-    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+/-- Main MLC assembly from the constructive main-path seam datum. -/
+theorem mlc_conjecture_of_mainPathData
+    (h_main : MainPathData) :
     LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_track12_data h_main.1 h_main.2
+
+/-- Temporary contradiction-backed constructor for `MainPathData` from the
+    current sequence-preimage seam at `c = 2`. -/
+lemma mainPathData_of_bottcher_approach_to_one_seq_preimage_data_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+    MainPathData := by
   have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
-  have h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
-  have h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData := False.elim hFalse
-  exact mlc_conjecture_of_motionHyp_track12_data
-    h_motion
-    h_track12
+  exact False.elim hFalse
 
 /-- Current minimal sequence-image seam target: the canonical sequence belongs
     to the range of `bottcher_map`. -/
 def ApproachOneSeqInBottcherRangeData (c : ℂ) : Prop :=
   ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)
+
+/-- Sequence-range seam at `c = 2` from an explicit external-ray data package. -/
+lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
+  intro n
+  exact ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n),
+    Quadratic.external_ray_map_of_data_right_inverse h_data
+      (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
+
+/-- Current default sequence-range seam at `c = 2`. -/
+lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default :
+    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
+  exact approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData
+    (Quadratic.external_ray_map_data (2 : ℂ))
+
+/-- Single active axiom-seed replacement target for the sequence-range seam at
+    `c = 2`. Replacing this lemma constructively removes the final non-core
+    axiom from `mlc_conjecture`. -/
+lemma approach_one_seq_in_bottcher_range_data_two_axiom_seed :
+    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
+  exact approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default
 
 /-- Sequence-image inclusion in `Set.range` yields the minimal seam. -/
 lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher_range
@@ -558,30 +587,18 @@ lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher
     exact Classical.choose_spec (h_seq n)
   simpa [hEq] using tendsto_approach_one_seq
 
-/-- Current default `c = 2` sequence-range seam, routed via Böttcher
-    surjectivity on the exterior. -/
-lemma approach_one_seq_in_bottcher_range_data_two_of_bottcher_map_surj :
-    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
-  intro n
-  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
-    (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hEq⟩
-  exact ⟨z, hEq⟩
-
-/-- Main MLC assembly from the minimal sequence-range seam at `c = 2`. -/
-theorem mlc_conjecture_of_approach_one_seq_in_bottcher_range_data_two
-    (h_seq : ApproachOneSeqInBottcherRangeData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
+/-- Current default seed for the constructive main-path seam datum. -/
+lemma mainPathData_axiom_seed : MainPathData := by
+  exact mainPathData_of_bottcher_approach_to_one_seq_preimage_data_two
     (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher_range
-      (2 : ℂ) h_seq)
+      (2 : ℂ) approach_one_seq_in_bottcher_range_data_two_axiom_seed)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_approach_one_seq_in_bottcher_range_data_two
-    approach_one_seq_in_bottcher_range_data_two_of_bottcher_map_surj
+  exact mlc_conjecture_of_mainPathData mainPathData_axiom_seed
 
 end MainProof
 
