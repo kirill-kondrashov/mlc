@@ -584,11 +584,21 @@ lemma bottcherExteriorSubsetImageBasinData_of_externalRayMapData
   · exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
 
 /-- Current default `c = 2` basin-image seam source via exterior
-    image inclusion on `outside_disk`. -/
+    image inclusion on `outside_disk`, from right-inverse-on-exterior data. -/
+lemma bottcherRightInverseOnExteriorData_two_axiom_seed :
+    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
+  exact bottcher_right_inverse_on_exterior_data (2 : ℂ)
+
+/-- Current default `c = 2` basin-image seam source from the right-inverse
+    outside-plan target. -/
 lemma bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk :
     BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
+  have h_sub :
+      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map (2 : ℂ) '' outside_disk (2 : ℂ)) :=
+    exterior_subset_image_outside_disk_of_right_inverse (2 : ℂ)
+      bottcherRightInverseOnExteriorData_two_axiom_seed
   simpa [BottcherExteriorSubsetImageBasinData, outside_disk, Quadratic.basin_of_infinity]
-    using (exterior_subset_image_outside_disk (2 : ℂ))
+    using h_sub
 
 /-- Single active replacement target for the remaining `c = 2` basin-image
     seam. Replacing this constructively removes the final non-core axiom source

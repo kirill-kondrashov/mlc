@@ -242,6 +242,8 @@ This keeps the remaining replacement targets explicit:
 - [x] Isolated the default `c = 2` basin-image seed into a single named seam
   lemma:
   - added
+    `bottcherRightInverseOnExteriorData_two_axiom_seed`;
+  - added
     `bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk`;
   - added
     `bottcherExteriorSubsetImageBasinData_two_axiom_seed`;
