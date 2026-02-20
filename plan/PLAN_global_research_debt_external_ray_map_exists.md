@@ -863,6 +863,21 @@ Date: 2026-02-19
       `Quadratic.external_ray_map_of_data_right_inverse`.
     This shortens the active rooted chain while preserving the same theorem
     signature and axiom footprint.
+  - Constructive-gap audit (current repository state):
+    - searched for non-axiomatic preimage/surjectivity providers for
+      `Quadratic.bottcher_map` on `{w | 1 < ‖w‖}`;
+    - all currently available routes still pass through one of:
+      `Quadratic.external_ray_map_of_data_right_inverse`,
+      `Quadratic.external_ray_map_right_inverse`,
+      `Quadratic.bottcher_map_surj`,
+      and these are sourced from
+      `Quadratic.external_ray_map_exists`;
+    - no existing theorem currently provides
+      `BottcherApproachOneSeqPreimageData (2 : ℂ)` independently of
+      `external_ray_map_exists`.
+    This identifies the exact remaining constructive target: a direct,
+    non-axiomatic provider of approach-sequence preimages at `c = 2`
+    (or a strategy redesign that removes this requirement from the active path).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
