@@ -897,6 +897,30 @@ Date: 2026-02-19
     - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
       `MLC.Quadratic.external_ray_map_exists`)
     - `scripts/verify_output.sh` passes.
+  - Bridge-boundary axiom audit (Böttcher outside-plan layer):
+    - `MLC.external_ray_map_data_of_injOn_outside_open_of_surj_exterior` is
+      axiom-clean (core axioms only);
+    - current default providers of its inputs are not:
+      - `MLC.bottcher_map_inj_on_outside_open` depends on
+        `MLC.Quadratic.external_ray_map_exists`;
+      - `MLC.exterior_subset_image_outside_disk` depends on
+        `MLC.Quadratic.external_ray_map_exists`.
+    This isolates a concrete next boundary: construct
+    outside-open injectivity and exterior-image surjectivity without the
+    external-ray axiom, then reuse the existing axiom-clean bridge theorem.
+  - Injectivity-stack audit (outside-plan):
+    - axiom-clean:
+      - `MLC.bottcher_map_isProperMap_of_continuous`
+      - `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed`
+    - currently axiom-backed:
+      - `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph`
+      - `MLC.bottcher_map_inj_on_basin_of_isLocalHomeomorph`
+    because the current automatic path still calls
+    `MLC.bottcher_map_inj_on_outside_open` (which depends on
+    `external_ray_map_exists`).
+    This gives a concrete sub-target: provide an external-ray-free
+    outside-open injectivity seed, then lift via the existing core-only
+    proper/local-homeomorph theorem chain.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
