@@ -295,6 +295,44 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
   ∃ z : ℕ → ℂ,
     Tendsto (fun n => Quadratic.bottcher_map c (z n)) atTop (𝓝 (1 : ℂ))
 
+/-- Exact countable-fiber seam target at the canonical approach-to-`1`
+    exterior sequence. -/
+def BottcherApproachOneSeqFiberData (c : ℂ) : Prop :=
+  ∀ n : ℕ, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
+
+/-- Exact countable-fiber seam target at the canonical approach-to-`1`
+    sequence, with preimages constrained to the outside-open seed region. -/
+def BottcherApproachOneSeqOutsideOpenFiberData (c : ℂ) : Prop :=
+  ∀ n : ℕ, ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = approach_one_seq n
+
+/-- Build the outside-open sequence-fiber seam from outside-open exterior
+    surjectivity. -/
+lemma bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
+    (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    BottcherApproachOneSeqOutsideOpenFiberData c := by
+  intro n
+  exact h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n)
+
+/-- Forget the outside-open location constraint to obtain the exact
+    countable-fiber seam. -/
+lemma bottcherApproachOneSeqFiberData_of_outsideOpenFiberData
+    (c : ℂ) (h_data : BottcherApproachOneSeqOutsideOpenFiberData c) :
+    BottcherApproachOneSeqFiberData c := by
+  intro n
+  rcases h_data n with ⟨z, _hz_out, hzw⟩
+  exact ⟨z, hzw⟩
+
+/-- Build the approach-to-`1` preimage seam from the exact countable-fiber
+    target. -/
+lemma bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
+    (c : ℂ) (h_fiber : BottcherApproachOneSeqFiberData c) :
+    BottcherApproachToOneSeqPreimageData c := by
+  classical
+  refine ⟨fun n => Classical.choose (h_fiber n), ?_⟩
+  convert tendsto_approach_one_seq using 1
+  funext n
+  exact Classical.choose_spec (h_fiber n)
+
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
@@ -538,108 +576,49 @@ theorem mlc_conjecture_of_mainPathData
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_motionHyp_track12_data h_main.1 h_main.2
 
-/-- Temporary contradiction-backed constructor for `MainPathData` from the
-    current sequence-preimage seam at `c = 2`. -/
-lemma mainPathData_of_bottcher_approach_to_one_seq_preimage_data_two
+/-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
+lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     MainPathData := by
   have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
   exact False.elim hFalse
 
-/-- Current minimal sequence-image seam target: the canonical sequence belongs
-    to the range of `bottcher_map`. -/
-def ApproachOneSeqInBottcherRangeData (c : ℂ) : Prop :=
-  ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)
+/-- Main-path seam from exact countable `approach_one_seq` fibers at `c = 2`. -/
+lemma mainPathData_of_bottcherApproachOneSeqFiberData_two
+    (h_fiber : BottcherApproachOneSeqFiberData (2 : ℂ)) :
+    MainPathData := by
+  exact mainPathData_of_bottcherApproachToOneSeqPreimageData_two
+    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber)
 
-/-- Weaker exterior seam target: every exterior point is in the Böttcher image
-    of a basin point. -/
-def BottcherExteriorSubsetImageBasinData (c : ℂ) : Prop :=
-  ({w : ℂ | 1 < ‖w‖} ⊆
-    (Quadratic.bottcher_map c '' Quadratic.basin_of_infinity c))
+/-- Main-path seam from outside-open `approach_one_seq` fibers at `c = 2`. -/
+lemma mainPathData_of_bottcherApproachOneSeqOutsideOpenFiberData_two
+    (h_data : BottcherApproachOneSeqOutsideOpenFiberData (2 : ℂ)) :
+    MainPathData := by
+  exact mainPathData_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_of_outsideOpenFiberData (2 : ℂ) h_data)
 
-/-- Exterior-subset-image seam implies the sequence-range seam. -/
-lemma approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
-    (c : ℂ)
-    (h_sub : BottcherExteriorSubsetImageBasinData c) :
-    ApproachOneSeqInBottcherRangeData c := by
+/-- Step-4 to Step-5 bridge at `c = 2`: outside-open exterior surjectivity
+    yields the rooted sequence-fiber seam needed for `MainPathData`. -/
+theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    MainPathData := by
+  exact mainPathData_of_bottcherApproachOneSeqOutsideOpenFiberData_two
+    (bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
+      (2 : ℂ) h_surj)
+
+/-- Current direct `c = 2` sequence-fiber seed from `bottcher_map_surj`,
+    restricted to the canonical `approach_one_seq`. -/
+lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
+    BottcherApproachOneSeqFiberData (2 : ℂ) := by
   intro n
-  rcases h_sub (norm_approach_one_seq_gt_one n) with ⟨z, _hz_basin, hzEq⟩
-  exact ⟨z, hzEq⟩
-
-/-- Build the weaker exterior-subset-image seam from explicit external-ray
-    data. -/
-lemma bottcherExteriorSubsetImageBasinData_of_externalRayMapData
-    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
-    BottcherExteriorSubsetImageBasinData c := by
-  intro w hw
-  refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_, ?_⟩
-  · have hphi :
-      Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w :=
-      Quadratic.external_ray_map_of_data_right_inverse h_data w hw
-    have hnorm :
-        1 < ‖Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w)‖ := by
-      simpa [hphi] using hw
-    exact bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map_of_data h_data w)
-      hnorm
-  · exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
-
-/-- Current default `c = 2` basin-image seam source via exterior
-    image inclusion on `outside_disk`, from right-inverse-on-exterior data. -/
-lemma bottcherRightInverseOnExteriorData_two_axiom_seed :
-    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
-  exact bottcher_right_inverse_on_exterior_data (2 : ℂ)
-
-/-- Current default `c = 2` basin-image seam source from the right-inverse
-    outside-plan target. -/
-lemma bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk :
-    BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
-  have h_sub :
-      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map (2 : ℂ) '' outside_disk (2 : ℂ)) :=
-    exterior_subset_image_outside_disk_of_right_inverse (2 : ℂ)
-      bottcherRightInverseOnExteriorData_two_axiom_seed
-  simpa [BottcherExteriorSubsetImageBasinData, outside_disk, Quadratic.basin_of_infinity]
-    using h_sub
-
-/-- Single active replacement target for the remaining `c = 2` basin-image
-    seam. Replacing this constructively removes the final non-core axiom source
-    from the rooted sequence-range path. -/
-lemma bottcherExteriorSubsetImageBasinData_two_axiom_seed :
-    BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
-  exact bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk
-
-/-- Current default sequence-range seam at `c = 2`. -/
-lemma approach_one_seq_in_bottcher_range_data_two_of_basinImageSeed :
-    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
-  exact approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
-    (2 : ℂ) bottcherExteriorSubsetImageBasinData_two_axiom_seed
-
-/-- Single active axiom-seed replacement target for the sequence-range seam at
-    `c = 2`. Replacing this lemma constructively removes the final non-core
-    axiom from `mlc_conjecture`. -/
-lemma approach_one_seq_in_bottcher_range_data_two_axiom_seed :
-    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
-  exact approach_one_seq_in_bottcher_range_data_two_of_basinImageSeed
-
-/-- Sequence-image inclusion in `Set.range` yields the minimal seam. -/
-lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher_range
-    (c : ℂ)
-    (h_seq : ApproachOneSeqInBottcherRangeData c) :
-    BottcherApproachToOneSeqPreimageData c := by
-  refine ⟨fun n => Classical.choose (h_seq n), ?_⟩
-  have hEq :
-      (fun n =>
-        Quadratic.bottcher_map c
-          (Classical.choose (h_seq n)))
-        = approach_one_seq := by
-    funext n
-    exact Classical.choose_spec (h_seq n)
-  simpa [hEq] using tendsto_approach_one_seq
+  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
+      (norm_approach_one_seq_gt_one n) with ⟨z, _hz_dom, hzw⟩
+  exact ⟨z, hzw⟩
 
 /-- Current default seed for the constructive main-path seam datum. -/
 lemma mainPathData_axiom_seed : MainPathData := by
-  exact mainPathData_of_bottcher_approach_to_one_seq_preimage_data_two
-    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher_range
-      (2 : ℂ) approach_one_seq_in_bottcher_range_data_two_axiom_seed)
+  exact mainPathData_of_bottcherApproachOneSeqFiberData_two
+    bottcherApproachOneSeqFiberData_two_axiom_seed
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
