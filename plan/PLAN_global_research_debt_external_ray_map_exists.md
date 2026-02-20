@@ -1258,6 +1258,17 @@ Date: 2026-02-19
     - rewired the default provider to discharge boundedness directly.
     This keeps the same mathematics while making the seam signature cleaner and
     strictly more representation-agnostic.
+  - Abstract seam weakening (drop boundedness assumption entirely):
+    - removed `IsBounded (Set.range u)` from
+      `BottcherApproachToOneSeqPreimageData`;
+    - in the contradiction core, derived range boundedness from convergence
+      `u → 1` using `isBounded_range_of_tendsto`;
+    - removed now-off-path helper `norm_approach_one_seq_le_two`.
+    The active seam now requires only:
+    - existence of a sequence `u` with `u n → 1`, and
+    - preimages of `u n` under `bottcher_map`.
+    This is the weakest contradiction input layer so far, with unchanged axiom
+    footprint and rooted closure.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

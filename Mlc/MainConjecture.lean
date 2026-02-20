@@ -255,15 +255,6 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
   rw [norm_approach_one_seq_eq n]
   linarith
 
-lemma norm_approach_one_seq_le_two (n : ℕ) : ‖approach_one_seq n‖ ≤ 2 := by
-  have hden_ge : (1 : ℝ) ≤ (n : ℝ) + 1 := by nlinarith
-  have hrecip_le : 1 / ((n : ℝ) + 1) ≤ 1 := by
-    have htmp : 1 / ((n : ℝ) + 1) ≤ 1 / (1 : ℝ) :=
-      one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1) hden_ge
-    simpa using htmp
-  rw [norm_approach_one_seq_eq n]
-  linarith
-
 lemma tendsto_approach_one_seq :
     Tendsto approach_one_seq atTop (𝓝 (1 : ℂ)) := by
   have hreal :
@@ -273,12 +264,10 @@ lemma tendsto_approach_one_seq :
     atTop (𝓝 (Complex.ofReal 1))
   simpa using hreal.ofReal
 
-/-- Weaker seam target: preimages for some sequence in the exterior converging
-    to `1`, with bounded image in `ℂ`. -/
+/-- Weaker seam target: preimages for some sequence converging to `1`. -/
 def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
   ∃ u : ℕ → ℂ,
     Tendsto u atTop (𝓝 (1 : ℂ)) ∧
-    IsBounded (Set.range u) ∧
     (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
 
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
@@ -286,7 +275,9 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
-  rcases h_data with ⟨u, hu_tend, hu_bounded, h_pre⟩
+  rcases h_data with ⟨u, hu_tend, h_pre⟩
+  have hu_bounded : IsBounded (Set.range u) :=
+    isBounded_range_of_tendsto u hu_tend
   rw [isBounded_iff_forall_norm_le] at hu_bounded
   rcases hu_bounded with ⟨R, hR⟩
   have hu_le_R : ∀ n, ‖u n‖ ≤ R := by
@@ -498,14 +489,9 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
 lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
   rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_, ?_⟩
-  · rw [isBounded_iff_forall_norm_le]
-    refine ⟨2, ?_⟩
-    intro w hw
-    rcases hw with ⟨n, rfl⟩
-    exact norm_approach_one_seq_le_two n
-  · intro n
-    exact ⟨f (approach_one_seq n), hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
+  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_⟩
+  intro n
+  exact ⟨f (approach_one_seq n), hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
