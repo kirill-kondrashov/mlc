@@ -4109,13 +4109,26 @@ theorem exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterio
   rcases h_refine z hz with ⟨u, hu, hEq⟩
   exact ⟨u, hu, by simpa [hzw] using hEq⟩
 
+/-- Outside-open exterior inclusion from a right-inverse-on-exterior payload
+    plus outside-disk-to-outside-open image refinement. -/
+theorem exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement
+    (c : ℂ)
+    (h_right :
+      ∃ f : ℂ → ℂ, ∀ w, 1 < ‖w‖ → Quadratic.bottcher_map c (f w) = w)
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  exact exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk
+    c (exterior_subset_image_outside_disk_of_right_inverse c h_right) h_refine
+
 /-- Outside-open exterior inclusion follows from the refinement target above. -/
 theorem exterior_subset_image_outside_open_of_outside_disk_refinement
     (c : ℂ) (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
     ({w : ℂ | 1 < ‖w‖} ⊆
       Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
-  exact exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk
-    c (exterior_subset_image_outside_disk c) h_refine
+  exact exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement c
+    ⟨Quadratic.external_ray_map c, fun w hw => external_ray_map_right_inverse_on_exterior c w hw⟩
+    h_refine
 
 /-- Converse direction: outside-open exterior inclusion yields the refinement
     target on `outside_disk`. -/

@@ -969,6 +969,22 @@ Date: 2026-02-19
       a wrapper through that extracted theorem.
     This keeps the current behavior unchanged while making the constructive
     replacement boundary explicit and reusable.
+  - Outside-plan seam refactor (follow-up):
+    - added
+      `MLC.exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement`,
+      a core-only bridge from:
+      - right-inverse-on-exterior payload, and
+      - outside-disk→outside-open image refinement
+      to outside-open exterior inclusion;
+    - rewired the default theorem
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement`
+      to instantiate the right-inverse payload with `external_ray_map`.
+    This further isolates the external-ray dependency to default instantiation
+    while preserving existing theorem interfaces.
+  - Axiom audit for newly extracted outside-plan bridges:
+    - `MLC.exterior_subset_image_outside_disk_of_right_inverse` is core-only.
+    - `MLC.exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement`
+      is core-only.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
