@@ -274,11 +274,11 @@ lemma tendsto_approach_one_seq :
   simpa using hreal.ofReal
 
 /-- Weaker seam target: preimages for some sequence in the exterior converging
-    to `1`, with a uniform norm cap by some `R > 1`. -/
+    to `1`, with bounded image in `ℂ`. -/
 def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
-  ∃ u : ℕ → ℂ, ∃ R : ℝ,
+  ∃ u : ℕ → ℂ,
     Tendsto u atTop (𝓝 (1 : ℂ)) ∧
-    (∀ n, ‖u n‖ ≤ R) ∧
+    IsBounded (Set.range u) ∧
     (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
 
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
@@ -286,7 +286,12 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
-  rcases h_data with ⟨u, R, hu_tend, hu_le_R, h_pre⟩
+  rcases h_data with ⟨u, hu_tend, hu_bounded, h_pre⟩
+  rw [isBounded_iff_forall_norm_le] at hu_bounded
+  rcases hu_bounded with ⟨R, hR⟩
+  have hu_le_R : ∀ n, ‖u n‖ ≤ R := by
+    intro n
+    exact hR (u n) ⟨n, rfl⟩
   choose z hright using h_pre
   have hu_pos : ∀ n, 0 < ‖u n‖ := by
     intro n
@@ -493,8 +498,11 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
 lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
   rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  refine ⟨approach_one_seq, 2, tendsto_approach_one_seq, ?_, ?_⟩
-  · intro n
+  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_, ?_⟩
+  · rw [isBounded_iff_forall_norm_le]
+    refine ⟨2, ?_⟩
+    intro w hw
+    rcases hw with ⟨n, rfl⟩
     exact norm_approach_one_seq_le_two n
   · intro n
     exact ⟨f (approach_one_seq n), hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩

@@ -1250,6 +1250,14 @@ Date: 2026-02-19
       inequality field).
     This makes the seam purely about convergence + boundedness + preimage data,
     and keeps the contradiction core and axiom footprint unchanged.
+  - Abstract seam normalization to `IsBounded`:
+    - replaced the explicit cap payload `∃ R, ∀ n, ‖u n‖ ≤ R` in
+      `BottcherApproachToOneSeqPreimageData` with `IsBounded (Set.range u)`;
+    - extracted an explicit norm cap `R` internally in the contradiction core
+      via `isBounded_iff_forall_norm_le`;
+    - rewired the default provider to discharge boundedness directly.
+    This keeps the same mathematics while making the seam signature cleaner and
+    strictly more representation-agnostic.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
