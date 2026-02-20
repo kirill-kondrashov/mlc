@@ -1171,6 +1171,15 @@ Date: 2026-02-19
     So the next constructive elimination target remains unchanged:
     replace the `bottcher_map_surj`-sourced default provider with a
     non-axiomatic approach-sequence preimage constructor at `c = 2`.
+  - Wrapper cleanup on rooted preimage ingress:
+    - removed the intermediate seam layer
+      `BottcherExteriorSurjData` and conversion wrapper
+      `bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data`
+      from `Mlc/MainConjecture.lean`;
+    - rewired
+      `bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj`
+      to construct preimages directly from `Quadratic.bottcher_map_surj`.
+    This keeps the rooted ingress minimal and avoids extra single-use wrappers.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

@@ -260,17 +260,6 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
 def BottcherApproachOneSeqPreimageData (c : ℂ) : Prop :=
   ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
 
-/-- Exterior surjectivity seam target for `bottcher_map`. -/
-def BottcherExteriorSurjData (c : ℂ) : Prop :=
-  ∀ w, 1 < ‖w‖ → ∃ z, Quadratic.bottcher_map c z = w
-
-/-- Exterior surjectivity implies approach-sequence preimages. -/
-lemma bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data
-    (c : ℂ) (h_surj : BottcherExteriorSurjData c) :
-    BottcherApproachOneSeqPreimageData c := by
-  intro n
-  exact h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n)
-
 /-- Contradiction from approach-sequence range data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_bottcher_approach_one_seq_preimage_data_two
@@ -494,19 +483,14 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     h_classify_ir
     h_mod
 
-/-- Current default provider for the `c = 2` exterior-surjectivity seam. -/
-lemma bottcher_exterior_surj_data_two_of_bottcher_map_surj :
-    BottcherExteriorSurjData (2 : ℂ) := by
-  intro w hw
-  rcases Quadratic.bottcher_map_surj (2 : ℂ) w hw with ⟨z, _hzdom, hEq⟩
-  exact ⟨z, hEq⟩
-
 /-- Current default provider for the `c = 2` approach-sequence preimage seam
     sourced from `bottcher_map_surj`. -/
 lemma bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj :
     BottcherApproachOneSeqPreimageData (2 : ℂ) := by
-  exact bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data
-    (2 : ℂ) bottcher_exterior_surj_data_two_of_bottcher_map_surj
+  intro n
+  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
+      (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hEq⟩
+  exact ⟨z, hEq⟩
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
