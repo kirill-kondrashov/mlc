@@ -1152,6 +1152,16 @@ Date: 2026-02-19
       `mlc_conjecture_of_bottcher_exterior_surj_data_two`.
     This further weakens the rooted replacement obligation from a global
     right-inverse function to existential exterior surjectivity data.
+  - Rooted boundary weakened again to direct approach-sequence preimage data:
+    - removed intermediate rooted wrapper
+      `mlc_conjecture_of_bottcher_exterior_surj_data_two`;
+    - added default provider
+      `bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj`;
+    - rewired `mlc_conjecture` back through
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`.
+    This keeps the active seam at the strict minimal contradiction input
+    (`BottcherApproachOneSeqPreimageData (2)`), while still sourcing defaults
+    from `bottcher_map_surj`.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

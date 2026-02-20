@@ -494,14 +494,6 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     h_classify_ir
     h_mod
 
-/-- Main MLC assembly from exterior-surjectivity seam data at `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_exterior_surj_data_two
-    (h_surj : BottcherExteriorSurjData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    (bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data
-      (2 : ℂ) h_surj)
-
 /-- Current default provider for the `c = 2` exterior-surjectivity seam. -/
 lemma bottcher_exterior_surj_data_two_of_bottcher_map_surj :
     BottcherExteriorSurjData (2 : ℂ) := by
@@ -509,13 +501,20 @@ lemma bottcher_exterior_surj_data_two_of_bottcher_map_surj :
   rcases Quadratic.bottcher_map_surj (2 : ℂ) w hw with ⟨z, _hzdom, hEq⟩
   exact ⟨z, hEq⟩
 
+/-- Current default provider for the `c = 2` approach-sequence preimage seam
+    sourced from `bottcher_map_surj`. -/
+lemma bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj :
+    BottcherApproachOneSeqPreimageData (2 : ℂ) := by
+  exact bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data
+    (2 : ℂ) bottcher_exterior_surj_data_two_of_bottcher_map_surj
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_exterior_surj_data_two
-    bottcher_exterior_surj_data_two_of_bottcher_map_surj
+  exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
+    bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj
 
 end MainProof
 
