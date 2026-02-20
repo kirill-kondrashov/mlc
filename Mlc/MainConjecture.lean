@@ -273,11 +273,6 @@ lemma tendsto_approach_one_seq :
     atTop (𝓝 (Complex.ofReal 1))
   simpa using hreal.ofReal
 
-/-- Minimal external seam target used by the current contradiction core:
-    preimages for the canonical approach-to-`1` sequence. -/
-def BottcherApproachOneSeqPreimageData (c : ℂ) : Prop :=
-  ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
-
 /-- Weaker seam target: preimages for some sequence in the exterior converging
     to `1`, with a uniform norm cap by `2`. -/
 def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
@@ -286,19 +281,6 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
     (∀ n, 1 < ‖u n‖) ∧
     (∀ n, ‖u n‖ ≤ 2) ∧
     (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
-
-/-- The canonical approach-sequence seam implies the weaker abstract
-    approach-to-`1` seam. -/
-lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data
-    (c : ℂ) (h_pre : BottcherApproachOneSeqPreimageData c) :
-    BottcherApproachToOneSeqPreimageData c := by
-  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_, ?_, ?_⟩
-  · intro n
-    exact norm_approach_one_seq_gt_one n
-  · intro n
-    exact norm_approach_one_seq_le_two n
-  · intro n
-    exact h_pre n
 
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
@@ -500,13 +482,18 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
     h_classify_ir
     h_mod
 
-/-- Current default provider for the `c = 2` approach-sequence preimage seam
+/-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
     sourced directly from `external_ray_map_exists`. -/
-lemma bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists :
-    BottcherApproachOneSeqPreimageData (2 : ℂ) := by
+lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
+    BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
   rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  intro n
-  exact ⟨f (approach_one_seq n), hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
+  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_, ?_, ?_⟩
+  · intro n
+    exact norm_approach_one_seq_gt_one n
+  · intro n
+    exact norm_approach_one_seq_le_two n
+  · intro n
+    exact ⟨f (approach_one_seq n), hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -514,8 +501,7 @@ lemma bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists :
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
-    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data
-      (2 : ℂ) bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists)
+    bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists
 
 end MainProof
 

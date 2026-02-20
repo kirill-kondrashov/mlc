@@ -1219,6 +1219,16 @@ Date: 2026-02-19
       - `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`.
     This keeps `Mlc/MainConjecture.lean` rooted-closure clean while preserving
     theorem statements and current axiom footprint.
+  - Canonical-sequence seam layer removal:
+    - removed the now-redundant intermediate seam
+      `BottcherApproachOneSeqPreimageData` and its conversion wrapper;
+    - rewired the default provider to construct
+      `BottcherApproachToOneSeqPreimageData (2)` directly from
+      `Quadratic.external_ray_map_exists (2 : ℂ)` using
+      `u := approach_one_seq`;
+    - rewired `MLC.mlc_conjecture` to consume that direct weaker-seam provider.
+    This further shortens the rooted seam chain while preserving the same
+    axiom footprint and contradiction-core shape.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
