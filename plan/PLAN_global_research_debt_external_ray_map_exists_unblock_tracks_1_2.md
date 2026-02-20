@@ -239,6 +239,15 @@ This keeps the remaining replacement targets explicit:
   This isolates the remaining constructive obligation to exterior image
   inclusion on the basin, which is weaker than explicit external-ray inverse
   data.
+- [x] Isolated the default `c = 2` basin-image seed into a single named seam
+  lemma:
+  - added
+    `bottcherExteriorSubsetImageBasinData_two_of_externalRayMapData_default`;
+  - rewired
+    `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default`
+    through this seam.
+  This keeps the rooted endpoint stable and exposes one explicit replacement
+  target at `c = 2`.
 
 ## Execution Order
 1. Implement Track 1 provider interface and prove as much non-axiomatically as
