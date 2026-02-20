@@ -505,20 +505,14 @@ lemma bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outsid
         from norm_approach_one_seq_gt_one n))).2
   simpa [hEq] using tendsto_approach_one_seq
 
-/-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
-    sourced from the current outside-plan exterior-image default. -/
-lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
-    BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
-  exact bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
-    (2 : ℂ) (exterior_subset_image_outside_disk (2 : ℂ))
-
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
-    bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists
+    (bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
+      (2 : ℂ) (exterior_subset_image_outside_disk (2 : ℂ)))
 
 end MainProof
 

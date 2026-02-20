@@ -1305,6 +1305,12 @@ Date: 2026-02-19
       `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`
       to call the generic constructor directly.
     This keeps `Mlc/MainConjecture.lean` rooted declarations minimal.
+  - Additional rooted-wrapper cleanup:
+    - removed one-use default provider
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`;
+    - inlined its body at the final `mlc_conjecture` call site.
+    This shortens the rooted seam chain without changing the strategy shape,
+    theorem statements, or axiom footprint.
   - Post-minimal-seam constructor audit:
     - searched the repository for constructors/usages of
       `BottcherApproachToOneSeqPreimageData`;
