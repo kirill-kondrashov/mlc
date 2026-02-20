@@ -27,6 +27,18 @@ The external-ray dependency is localized at:
   `..._two_of_exterior_subset_image_outside_disk`,
   sourced by `bottcherRightInverseOnExteriorData_two_axiom_seed`).
 
+Exact rooted dependency chain to the missing axiom (from generated graph):
+1. `MLC.mlc_conjecture`
+2. `MLC.mainPathData_axiom_seed`
+3. `MLC.approach_one_seq_in_bottcher_range_data_two_axiom_seed`
+4. `MLC.approach_one_seq_in_bottcher_range_data_two_of_basinImageSeed`
+5. `MLC.bottcherExteriorSubsetImageBasinData_two_axiom_seed`
+6. `MLC.bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk`
+7. `MLC.bottcherRightInverseOnExteriorData_two_axiom_seed`
+8. `MLC.bottcher_right_inverse_on_exterior_data`
+9. `MLC.bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists`
+10. `MLC.Quadratic.external_ray_map_exists`
+
 ## Reduction target chain (already available in code)
 From `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
 1. If we can prove

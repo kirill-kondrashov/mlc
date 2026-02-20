@@ -300,6 +300,11 @@ This keeps the remaining replacement targets explicit:
    includes `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
    (probe run on 2026-02-20 with `#print axioms`). This route is therefore
    excluded by the "no new axioms" requirement.
+4. Current external-ray dependency bottleneck is fully localized to one
+   outside-plan constructor:
+   `bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists`.
+   All rooted dependencies now flow through this single node via the explicit
+   seam chain in `PLAN_external_ray_map_exists_outside_open_targets.md`.
 
 ## Exit Criteria
 - `MLC.Quadratic.external_ray_map_exists` removed from `MLC.mlc_conjecture`
