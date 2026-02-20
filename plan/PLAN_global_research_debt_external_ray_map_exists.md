@@ -720,6 +720,40 @@ Date: 2026-02-19
     para-puzzle connectedness on `M`; in the present model this still routes to
     `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`, so it is not
     an immediate replacement path for the one-axiom target.
+  - Seam naming/target cleanup in `Mlc/MainConjecture.lean`:
+    - replaced `BottcherApproachOneRangeData` with
+      `BottcherApproachOneSurjData` (direct preimage-surjectivity wording);
+    - renamed dependent declarations accordingly:
+      - `false_of_bottcher_approach_one_surj_data_two`
+      - `bottcher_approach_one_surj_data_two_of_bottcher_map_surj`
+      - `mlc_conjecture_of_bottcher_approach_one_surj_data_two`.
+    This keeps the same mathematical seam while making the remaining
+    elimination target explicit and search-friendly.
+  - Verification after seam naming cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `BottcherApproachOneSurjData`,
+        `false_of_bottcher_approach_one_surj_data_two`, and
+        `mlc_conjecture_of_bottcher_approach_one_surj_data_two` are core-only;
+      - `bottcher_approach_one_surj_data_two_of_bottcher_map_surj` remains the
+        unique current ingress of `MLC.Quadratic.external_ray_map_exists` on the
+        rooted seam.
+  - Import-level rooted cleanup:
+    - removed direct import
+      `Mlc.Quadratic.Complex.Bottcher.BottcherAxioms` from
+      `Mlc/MainConjecture.lean` (now covered transitively by
+      `BottcherOnMTheory` in the current path).
+    This keeps `MainConjecture` closer to the active dependency surface.
+  - Verification after import cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
