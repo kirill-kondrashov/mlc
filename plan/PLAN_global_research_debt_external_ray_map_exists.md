@@ -1027,6 +1027,14 @@ Date: 2026-02-19
       through this new seam.
     This factors the outside-open surjectivity conversion into a reusable,
     assumption-explicit step.
+  - External-ray-data conversion seam extraction (subset-image variant):
+    - added core-only theorem
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_exterior_subset_image_outside_open`;
+    - rewired
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior`
+      through this new subset-image seam.
+    This keeps the conversion chain granular and avoids coupling directly to
+    the image-equality form.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

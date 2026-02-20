@@ -4303,14 +4303,29 @@ theorem external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior
 
 /-- Variant of the previous construction using image equality and the
     left-inverse outside-open seam. -/
+theorem external_ray_map_data_of_left_inverse_on_outside_open_of_exterior_subset_image_outside_open
+    (c : ℂ)
+    (h_left : BottcherLeftInverseOnOutsideOpenData c)
+    (h_sub : {w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapData c := by
+  exact external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior c
+    h_left
+    (bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open c h_sub)
+
+/-- Variant of the previous construction using image equality and the
+    left-inverse outside-open seam. -/
 theorem external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior
     (c : ℂ)
     (h_left : BottcherLeftInverseOnOutsideOpenData c)
     (h_img : BottcherImageOutsideOpenIsExterior c) :
     Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior c
+  exact external_ray_map_data_of_left_inverse_on_outside_open_of_exterior_subset_image_outside_open c
     h_left
-    (bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior c h_img)
+    (by
+      intro w hw
+      rw [h_img]
+      exact hw)
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
     (c : ℂ)
