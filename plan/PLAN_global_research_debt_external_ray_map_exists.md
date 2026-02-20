@@ -1162,6 +1162,15 @@ Date: 2026-02-19
     This keeps the active seam at the strict minimal contradiction input
     (`BottcherApproachOneSeqPreimageData (2)`), while still sourcing defaults
     from `bottcher_map_surj`.
+  - Provider audit after re-rooting:
+    - re-searched the repository for any independent constructors of
+      `BottcherApproachOneSeqPreimageData (2)` and found only the active route
+      through `bottcher_exterior_surj_data_two_of_bottcher_map_surj`;
+    - `Quadratic.bottcher_map_surj` remains connected to
+      `MLC.Quadratic.external_ray_map_exists` in the current model.
+    So the next constructive elimination target remains unchanged:
+    replace the `bottcher_map_surj`-sourced default provider with a
+    non-axiomatic approach-sequence preimage constructor at `c = 2`.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
