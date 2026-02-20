@@ -484,13 +484,15 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     h_mod
 
 /-- Current default provider for the `c = 2` approach-sequence preimage seam
-    sourced from `bottcher_map_surj`. -/
-lemma bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj :
+    sourced directly from `external_ray_map_exists`. -/
+lemma bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachOneSeqPreimageData (2 : ℂ) := by
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    Quadratic.external_ray_map_exists (2 : ℂ)
   intro n
-  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
-      (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hEq⟩
-  exact ⟨z, hEq⟩
+  refine ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n), ?_⟩
+  exact Quadratic.external_ray_map_of_data_right_inverse h_data
+    (approach_one_seq n) (norm_approach_one_seq_gt_one n)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -498,7 +500,7 @@ lemma bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj :
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj
+    bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists
 
 end MainProof
 

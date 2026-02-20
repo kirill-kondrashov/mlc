@@ -1177,9 +1177,17 @@ Date: 2026-02-19
       `bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data`
       from `Mlc/MainConjecture.lean`;
     - rewired
-      `bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj`
-      to construct preimages directly from `Quadratic.bottcher_map_surj`.
+      `bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to construct preimages directly from
+      `Quadratic.external_ray_map_exists`.
     This keeps the rooted ingress minimal and avoids extra single-use wrappers.
+  - Rooted ingress directness update:
+    - removed the `bottcher_map_surj` detour from the active `mlc_conjecture`
+      path;
+    - the only non-core ingress for the active seam provider is now explicit at
+      `Quadratic.external_ray_map_exists (2 : ℂ)`.
+    This improves boundary auditability without changing theorem signatures or
+    axiom footprint.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
