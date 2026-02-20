@@ -10,7 +10,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 - collapsing the rooted proof into contradiction circulation.
 
 ## Progress
-`[██████████] 99.98%` (4.999/5 core milestones completed)
+`[██████████] 99.99%` (4.9992/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
@@ -189,6 +189,11 @@ condition rather than global outside-open slit inclusion.
    `Mlc/MainConjecture.lean` to keep only rooted-path-relevant interfaces:
    - removed `bottcherApproachOneSeqFiberData_of_surj_on_exterior`,
    - removed `bottcherApproachToOneSeqPreimageData_of_surj_on_exterior`.
+2o. [x] Prune extra outside-open wrapper in the rooted bridge chain:
+   - removed
+     `mainPathData_of_bottcherApproachOneSeqOutsideOpenFiberData_two`,
+   - inlined it into
+     `mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.

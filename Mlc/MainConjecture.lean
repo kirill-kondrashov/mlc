@@ -590,21 +590,15 @@ lemma mainPathData_of_bottcherApproachOneSeqFiberData_two
   exact mainPathData_of_bottcherApproachToOneSeqPreimageData_two
     (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber)
 
-/-- Main-path seam from outside-open `approach_one_seq` fibers at `c = 2`. -/
-lemma mainPathData_of_bottcherApproachOneSeqOutsideOpenFiberData_two
-    (h_data : BottcherApproachOneSeqOutsideOpenFiberData (2 : ℂ)) :
-    MainPathData := by
-  exact mainPathData_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_of_outsideOpenFiberData (2 : ℂ) h_data)
-
 /-- Step-4 to Step-5 bridge at `c = 2`: outside-open exterior surjectivity
     yields the rooted sequence-fiber seam needed for `MainPathData`. -/
 theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
     (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
     MainPathData := by
-  exact mainPathData_of_bottcherApproachOneSeqOutsideOpenFiberData_two
-    (bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
-      (2 : ℂ) h_surj)
+  exact mainPathData_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_of_outsideOpenFiberData (2 : ℂ)
+      (bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
+        (2 : ℂ) h_surj))
 
 /-- Current direct `c = 2` sequence-fiber seed from `bottcher_map_surj`,
     restricted to the canonical `approach_one_seq`. -/
