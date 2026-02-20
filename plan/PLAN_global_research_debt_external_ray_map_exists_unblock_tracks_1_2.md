@@ -146,6 +146,20 @@ This keeps the remaining replacement targets explicit:
    reduction), then wire it into `mlc_conjecture_of_motionHyp_track12_data`
    without `False.elim`.
 
+## Current Hard Blockers (after first proof steps)
+1. Track 1 core:
+   no in-repo theorem currently derives
+   `InfinitelyRenormalizable c ∧ ¬ SatelliteRenormalizableTower c ->
+    PrimitiveRenormalizable c`.
+   Existing primitive theorem (`primitive_tower_implies_primitive`) requires an
+   explicit renormalization tower and infinitely many primitive steps.
+2. Track 2 core:
+   no in-repo constructive producer yet for
+   `MoleculeImpliesUniformConformalLowerBoundTarget` from
+   `MoleculeConjectureRefined`.
+   The current proof progress only reduces:
+   `uniform target -> strong principal-nest target`.
+
 ## Exit Criteria
 - `MLC.Quadratic.external_ray_map_exists` removed from `MLC.mlc_conjecture`
   axiom footprint.
