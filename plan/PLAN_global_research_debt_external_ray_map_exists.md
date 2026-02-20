@@ -1229,6 +1229,14 @@ Date: 2026-02-19
     - rewired `MLC.mlc_conjecture` to consume that direct weaker-seam provider.
     This further shortens the rooted seam chain while preserving the same
     axiom footprint and contradiction-core shape.
+  - Abstract seam generalized from fixed cap `2` to boundedness by `R > 1`:
+    - updated `BottcherApproachToOneSeqPreimageData` to carry
+      `∃ R, 1 < R ∧ ∀ n, ‖u n‖ ≤ R`;
+    - rewired the generalized contradiction core to use `Real.log R` in the
+      boundedness estimate (instead of the hard-coded `Real.log 2`);
+    - updated the current default provider to instantiate `R := 2`.
+    This strictly weakens the abstract contradiction seam and keeps the same
+    rooted theorem path and axiom footprint.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

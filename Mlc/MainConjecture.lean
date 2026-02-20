@@ -274,12 +274,13 @@ lemma tendsto_approach_one_seq :
   simpa using hreal.ofReal
 
 /-- Weaker seam target: preimages for some sequence in the exterior converging
-    to `1`, with a uniform norm cap by `2`. -/
+    to `1`, with a uniform norm cap by some `R > 1`. -/
 def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
-  ∃ u : ℕ → ℂ,
+  ∃ u : ℕ → ℂ, ∃ R : ℝ,
     Tendsto u atTop (𝓝 (1 : ℂ)) ∧
+    1 < R ∧
     (∀ n, 1 < ‖u n‖) ∧
-    (∀ n, ‖u n‖ ≤ 2) ∧
+    (∀ n, ‖u n‖ ≤ R) ∧
     (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
 
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
@@ -287,7 +288,7 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
-  rcases h_data with ⟨u, hu_tend, hu_gt_one, hu_le_two, h_pre⟩
+  rcases h_data with ⟨u, R, hu_tend, hR_gt_one, hu_gt_one, hu_le_R, h_pre⟩
   choose z hright using h_pre
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
@@ -301,7 +302,7 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2
-  set B : ℝ := max (MLC.Quadratic.escape_bound (2 : ℂ)) (Real.exp (Real.log 2 + C))
+  set B : ℝ := max (MLC.Quadratic.escape_bound (2 : ℂ)) (Real.exp (Real.log R + C))
   have hz_bound : ∀ n, ‖z n‖ ≤ B := by
     intro n
     by_cases hlarge : ‖z n‖ > MLC.Quadratic.escape_bound (2 : ℂ)
@@ -310,17 +311,17 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
         simpa [C] using
           log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
             (2 : ℂ) (z n) hlarge
-      have hlog_u_le : Real.log ‖u n‖ ≤ Real.log 2 := by
+      have hlog_u_le : Real.log ‖u n‖ ≤ Real.log R := by
         have hu_pos : 0 < ‖u n‖ := lt_trans zero_lt_one (hu_gt_one n)
-        exact Real.log_le_log hu_pos (hu_le_two n)
-      have hlog' : Real.log ‖z n‖ ≤ Real.log 2 + C := by
+        exact Real.log_le_log hu_pos (hu_le_R n)
+      have hlog' : Real.log ‖z n‖ ≤ Real.log R + C := by
         linarith [hlog, hgreen_eq n, hlog_u_le]
       have hesc_ge_two : (2 : ℝ) ≤ MLC.Quadratic.escape_bound (2 : ℂ) := by
         exact le_trans (MLC.Quadratic.R_ge_two (2 : ℂ))
           (MLC.Quadratic.escape_bound_ge_R (2 : ℂ))
       have hz_pos : 0 < ‖z n‖ := by
         linarith
-      have hz_exp : ‖z n‖ ≤ Real.exp (Real.log 2 + C) :=
+      have hz_exp : ‖z n‖ ≤ Real.exp (Real.log R + C) :=
         (Real.log_le_iff_le_exp hz_pos).1 hlog'
       exact le_trans hz_exp (le_max_right _ _)
     · have hz_esc : ‖z n‖ ≤ MLC.Quadratic.escape_bound (2 : ℂ) := le_of_not_gt hlarge
@@ -487,7 +488,7 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
 lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
   rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_, ?_, ?_⟩
+  refine ⟨approach_one_seq, 2, tendsto_approach_one_seq, by norm_num, ?_, ?_, ?_⟩
   · intro n
     exact norm_approach_one_seq_gt_one n
   · intro n
