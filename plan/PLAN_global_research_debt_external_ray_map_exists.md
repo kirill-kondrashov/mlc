@@ -1298,6 +1298,13 @@ Date: 2026-02-19
       constructor.
     This keeps the active path unchanged while making the minimal-seam
     constructor reusable for future external-ray-free replacement work.
+  - Wrapper cleanup after constructor generalization:
+    - removed the one-step `c = 2` forwarding wrapper for the outside-disk
+      constructor;
+    - rewired
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to call the generic constructor directly.
+    This keeps `Mlc/MainConjecture.lean` rooted declarations minimal.
   - Post-minimal-seam constructor audit:
     - searched the repository for constructors/usages of
       `BottcherApproachToOneSeqPreimageData`;

@@ -507,19 +507,10 @@ lemma bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outsid
 
 /-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
     sourced from the current outside-plan exterior-image default. -/
-lemma bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk
-    (h_disk :
-      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map (2 : ℂ) '' outside_disk (2 : ℂ))) :
-    BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
-  exact bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
-    (2 : ℂ) h_disk
-
-/-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
-    sourced from the current outside-plan exterior-image default. -/
 lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
-  exact bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk
-    (exterior_subset_image_outside_disk (2 : ℂ))
+  exact bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
+    (2 : ℂ) (exterior_subset_image_outside_disk (2 : ℂ))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
