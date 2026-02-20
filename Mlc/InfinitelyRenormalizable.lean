@@ -218,6 +218,20 @@ lemma combinatorial_dichotomy {p q : ℕ → Prop} (h : ∀ n, p n ∨ q n) :
 /-- Classification wrapper used by the main MLC strategy.
     In the current formalization this is discharged through the fast-tower route,
     yielding the satellite branch directly. -/
+theorem classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+    (h_noTowerPrim :
+      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : InfinitelyRenormalizable c),
+        ¬ SatelliteRenormalizableTower c → PrimitiveRenormalizable c)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
+    PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c := by
+  by_cases hTower : SatelliteRenormalizableTower c
+  · exact Or.inr hTower
+  · exact Or.inl (h_noTowerPrim c hc h hTower)
+
+/-- Classification wrapper used by the main MLC strategy.
+    In the current formalization this is discharged through the fast-tower route,
+    yielding the satellite branch directly. -/
 theorem classify_infinitely_renormalizable
     (h_tower_data : InfinitelyRenormalizableHasTowerData)
     (c : ℂ) (h : InfinitelyRenormalizable c) :

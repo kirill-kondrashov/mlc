@@ -6,6 +6,7 @@ import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.MandelbrotEquivalence
+import Mlc.MoleculeToSatelliteNestData
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
@@ -84,6 +85,22 @@ def IRClassificationData : Prop :=
   ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
+
+/-- Track-1 constructive classification target:
+    for infinitely renormalizable Mandelbrot parameters, non-satellite-tower
+    implies primitive. -/
+def IRNoTowerImpliesPrimitiveData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    ¬ SatelliteRenormalizableTower c → PrimitiveRenormalizable c
+
+/-- Track-1 target implies full IR classification data. -/
+lemma irClassificationData_of_noTowerImpliesPrimitiveData
+    (h_data : IRNoTowerImpliesPrimitiveData) :
+    IRClassificationData := by
+  intro c hc h_ir
+  exact classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+    h_data c hc h_ir
 
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
@@ -437,46 +454,57 @@ theorem mlc_conjecture_of_motionHyp_classify_bridge_data
     h_classify_ir
     h_bridge
 
-/-- Bridge provider from boundary-motion finite data and conformal-modulus
-    bridge data. -/
-lemma bridge_provider_of_motionHyp_conformalModulus_data
+/-- Main seam assembly from boundary-motion data, IR classification, and the
+    explicit Molecule→satellite principal-nest bridge target. -/
+lemma bridge_provider_of_motionHyp_moleculeBridgeTarget_data
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
     MoleculeConjectureRefined →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   intro h_mol c hc hTower
   exact lc_at_of_shrink_of_connected_at c hc
     (finite_connectedAt_provider_of_motionHyp h_motion c hc)
-    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
-      h_mod h_mol c hc hTower)
+    (MoleculeBridgeTarget.parameter_shrink_of_moleculeBridgeTarget
+      h_target h_mol c hc hTower)
 
-/-- Main seam assembly from global boundary-motion data, IR classification, and
-    conformal-modulus bridge data. -/
-theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+/-- Main seam assembly from boundary-motion data, IR classification, and the
+    explicit Molecule→satellite principal-nest bridge target. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
     (h_classify_ir : IRClassificationData)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_motionHyp_classify_bridge_data
     h_motion
     h_classify_ir
-    (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
+    (bridge_provider_of_motionHyp_moleculeBridgeTarget_data h_motion h_target)
 
-/-- Main MLC assembly from boundary-motion data, IR tower-data
-    classification, and conformal-modulus bridge data. -/
-theorem mlc_conjecture_of_motionHyp_tower_conformalModulus_data
+/-- Main seam assembly from boundary-motion data, Track-1 no-tower classification
+    target, and the explicit Molecule→satellite principal-nest bridge target. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeBridgeTarget
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
-    (h_tower_data : InfinitelyRenormalizableHasTowerData)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
     LocallyConnectedSpace mandelbrotSet := by
-  have h_classify_ir : IRClassificationData := by
-    intro c hc h_inf
-    exact classify_infinitely_renormalizable h_tower_data c h_inf
-  exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+  exact mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget
     h_motion
-    h_classify_ir
-    h_mod
+    (irClassificationData_of_noTowerImpliesPrimitiveData h_noTowerPrim)
+    h_target
+
+/-- Combined Track-1+Track-2 seam datum for the infinite branch. -/
+def IRNoTowerPrimitiveAndMoleculeBridgeTargetData : Prop :=
+  IRNoTowerImpliesPrimitiveData ∧
+    MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData
+
+/-- Main seam assembly from boundary-motion data and the combined Track-1+Track-2
+    datum. -/
+theorem mlc_conjecture_of_motionHyp_track12_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeBridgeTarget
+    h_motion h_track12.1 h_track12.2
 
 /-- Main MLC assembly from approach-sequence preimage data at `c = 2`. -/
 theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
@@ -484,12 +512,10 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
     LocallyConnectedSpace mandelbrotSet := by
   have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
   have h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
-  have h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
-  have h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
-  exact mlc_conjecture_of_motionHyp_tower_conformalModulus_data
+  have h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData := False.elim hFalse
+  exact mlc_conjecture_of_motionHyp_track12_data
     h_motion
-    h_tower_data
-    h_mod
+    h_track12
 
 /-- Current minimal sequence-image seam target: the canonical sequence belongs
     to the range of `bottcher_map`. -/

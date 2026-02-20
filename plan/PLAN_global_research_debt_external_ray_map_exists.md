@@ -1386,6 +1386,52 @@ Date: 2026-02-19
     This isolates the non-contradiction strategy core from the current
     contradiction fallback and makes the remaining constructive replacement
     interface explicit.
+  - Track-2 interface alignment in `Mlc/MainConjecture.lean`:
+    - added `mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget`,
+      routing the strategy through the explicit target
+      `MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData`;
+    - added bridge provider
+      `bridge_provider_of_motionHyp_moleculeBridgeTarget_data` using
+      `lc_at_of_shrink_of_connected_at` plus
+      `finite_connectedAt_provider_of_motionHyp` to avoid reintroducing
+      `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`;
+    - rewired the current fallback in
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`
+      through this Track-2-aligned theorem.
+    This keeps the active axiom frontier at the single remaining target
+    `MLC.Quadratic.external_ray_map_exists` while making the constructive
+    bridge replacement surface explicit.
+  - Track-1 interface alignment in `Mlc/MainConjecture.lean`:
+    - added `IRNoTowerImpliesPrimitiveData` and conversion lemma
+      `irClassificationData_of_noTowerImpliesPrimitiveData`;
+    - added
+      `mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeBridgeTarget`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`
+      through this Track-1+Track-2 seam.
+    This makes both remaining constructive obligations explicit at the active
+    boundary:
+    1. `noTower -> primitive` for IR classification,
+    2. Molecule→satellite principal-nest bridge target.
+  - Track-1 classification centralization:
+    - added theorem
+      `classify_infinitely_renormalizable_of_noTowerImpliesPrimitive`
+      to `Mlc/InfinitelyRenormalizable.lean`;
+    - rewired `irClassificationData_of_noTowerImpliesPrimitiveData` in
+      `Mlc/MainConjecture.lean` to consume that theorem.
+    This removes duplicated case-split logic in `MainConjecture` and makes
+    Track-1 progress live in the IR module.
+  - Combined Track-1+Track-2 seam packaging:
+    - added
+      `IRNoTowerPrimitiveAndMoleculeBridgeTargetData` in
+      `Mlc/MainConjecture.lean`;
+    - added assembly theorem
+      `mlc_conjecture_of_motionHyp_track12_data`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`
+      to consume that single combined seam datum.
+    This shrinks active replacement obligations to one explicit packaged target
+    while preserving theorem shape and current axiom footprint.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
