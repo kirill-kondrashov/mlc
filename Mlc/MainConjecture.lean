@@ -5,6 +5,7 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mlc.MoleculeToSatelliteNestData
 import Mlc.FastTowerExistenceObstruction
@@ -582,30 +583,19 @@ lemma bottcherExteriorSubsetImageBasinData_of_externalRayMapData
       hnorm
   · exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
 
-/-- Build the weaker exterior-subset-image seam from surjectivity onto the
-    exterior. -/
-lemma bottcherExteriorSubsetImageBasinData_of_bottcher_map_surj
-    (c : ℂ) :
-    BottcherExteriorSubsetImageBasinData c := by
-  intro w hw
-  rcases Quadratic.bottcher_map_surj c w hw with ⟨z, _hzdom, hzw⟩
-  refine ⟨z, ?_, hzw⟩
-  have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ := by
-    simpa [hzw] using hw
-  exact bottcher_map_norm_gt_one_implies_basin c (z := z) hnorm
-
 /-- Current default `c = 2` basin-image seam source via exterior
-    surjectivity. -/
-lemma bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj :
+    image inclusion on `outside_disk`. -/
+lemma bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk :
     BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
-  exact bottcherExteriorSubsetImageBasinData_of_bottcher_map_surj (2 : ℂ)
+  simpa [BottcherExteriorSubsetImageBasinData, outside_disk, Quadratic.basin_of_infinity]
+    using (exterior_subset_image_outside_disk (2 : ℂ))
 
 /-- Single active replacement target for the remaining `c = 2` basin-image
     seam. Replacing this constructively removes the final non-core axiom source
     from the rooted sequence-range path. -/
 lemma bottcherExteriorSubsetImageBasinData_two_axiom_seed :
     BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
-  exact bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj
+  exact bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk
 
 /-- Current default sequence-range seam at `c = 2`. -/
 lemma approach_one_seq_in_bottcher_range_data_two_of_basinImageSeed :

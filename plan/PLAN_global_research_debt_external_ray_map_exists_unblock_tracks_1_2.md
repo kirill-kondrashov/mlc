@@ -242,7 +242,7 @@ This keeps the remaining replacement targets explicit:
 - [x] Isolated the default `c = 2` basin-image seed into a single named seam
   lemma:
   - added
-    `bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj`;
+    `bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk`;
   - added
     `bottcherExteriorSubsetImageBasinData_two_axiom_seed`;
   - rewired
@@ -252,8 +252,7 @@ This keeps the remaining replacement targets explicit:
   target at `c = 2`.
 - [x] Removed now-unused
   `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData` from
-  `Mlc/MainConjecture.lean` after rerouting the default seam through
-  `bottcher_map_surj`.
+  `Mlc/MainConjecture.lean` after rerouting the default seam.
 
 ## Execution Order
 1. Implement Track 1 provider interface and prove as much non-axiomatically as
