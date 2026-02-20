@@ -809,6 +809,50 @@ Date: 2026-02-19
       declarations from `Mlc/MainConjecture.lean` against graph nodes;
     - result: no declarations missing from the rooted closure (all current
       declarations in the file participate in the `MLC.mlc_conjecture` path).
+  - Seam narrowing update in `Mlc/MainConjecture.lean`:
+    - replaced `BottcherExteriorSurjData` on the active route with the strictly
+      smaller target `BottcherApproachOneSeqPreimageData`;
+    - rewired the default ingress from
+      `bottcher_exterior_surj_data_two_of_bottcher_map_surj` to
+      `bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj`;
+    - rewired `mlc_conjecture` through
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`;
+    - removed the now-redundant wrapper `BottcherApproachOneSurjData`.
+    This reduces the remaining external-ray seam to exactly the countable
+    preimage data consumed by the contradiction core.
+  - Verification after seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Rooted wrapper cleanup:
+    - removed one-step forwarding lemma
+      `false_of_bottcher_approach_one_seq_preimage_data_two_seam`;
+    - `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two` now
+      consumes the contradiction core directly.
+    This keeps all remaining declarations in the local seam materially used.
+  - Rooted ingress cleanup:
+    - rewired
+      `bottcher_approach_one_seq_preimage_data_two`
+      to build directly from
+      `Quadratic.ExternalRayMapData (2 : ℂ)` via
+      `Quadratic.external_ray_map_of_data_right_inverse`;
+    - removed dependence on `Quadratic.bottcher_map_surj` from the active
+      rooted seam in `Mlc/MainConjecture.lean`.
+    This makes the remaining external dependency boundary explicit at
+    `ExternalRayMapData` and reduces unrelated rooted edges.
+  - Rooted ingress tightening:
+    - default provider now instantiates the seam directly from
+      `Quadratic.external_ray_map_exists (2 : ℂ)` instead of the intermediate
+      wrapper `Quadratic.external_ray_map_data (2 : ℂ)`.
+    This keeps the only non-core ingress explicit and minimal in
+    `Mlc/MainConjecture.lean`.
+  - Rooted-closure audit refresh (post seam narrowing/tightening):
+    - regenerated `site/mlc_conjecture/graph.json`;
+    - checked all top-level `def`/`lemma`/`theorem` declarations in
+      `Mlc/MainConjecture.lean` against rooted graph nodes;
+    - result: no declarations missing from the rooted closure.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
