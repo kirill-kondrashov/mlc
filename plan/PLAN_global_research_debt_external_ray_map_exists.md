@@ -954,6 +954,21 @@ Date: 2026-02-19
       `MLC.bottcher_map_inj_on_outside_open_of_data`.
     This suggests the next technical task: add an external-ray-free global
     injectivity theorem for outside-open from the existing local/proper stack.
+  - Outside-plan seam refactor (core-only boundary extraction):
+    - added
+      `MLC.exterior_subset_image_outside_disk_of_right_inverse`, a core-only
+      theorem that derives exterior-in-image-of-`outside_disk` from an explicit
+      right-inverse-on-exterior payload;
+    - rewired `MLC.exterior_subset_image_outside_disk` to be only a default
+      wrapper that instantiates that payload via `external_ray_map`;
+    - added
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk`,
+      extracting a core-only conversion step with explicit `h_disk` input;
+    - rewired
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement` to be
+      a wrapper through that extracted theorem.
+    This keeps the current behavior unchanged while making the constructive
+    replacement boundary explicit and reusable.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

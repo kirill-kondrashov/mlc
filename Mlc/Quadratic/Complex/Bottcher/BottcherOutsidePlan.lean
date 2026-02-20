@@ -4066,18 +4066,29 @@ def BottcherExteriorSubsetImageOutsideOpenTwo : Prop :=
 /-- Exterior points are always in the image of `outside_disk` under
     `bottcher_map`. This is unconditional in the current model because
     `outside_disk = basin_of_infinity`. -/
-theorem exterior_subset_image_outside_disk (c : ℂ) :
+theorem exterior_subset_image_outside_disk_of_right_inverse
+    (c : ℂ)
+    (h_right :
+      ∃ f : ℂ → ℂ, ∀ w, 1 < ‖w‖ → Quadratic.bottcher_map c (f w) = w) :
     ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c) := by
   intro w hw
-  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
-    external_ray_map_right_inverse_on_exterior c w hw
-  have hw' : w ∈ Quadratic.bottcher_map c '' outside_disk c := by
-    refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
-    · have hnorm : 1 < ‖Quadratic.bottcher_map c (Quadratic.external_ray_map c w)‖ := by
-        simpa [hright] using hw
-      exact bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map c w) hnorm
-    · exact hright
-  exact hw'
+  rcases h_right with ⟨f, hf⟩
+  refine ⟨f w, ?_, hf w hw⟩
+  have hnorm : 1 < ‖Quadratic.bottcher_map c (f w)‖ := by
+    simpa [hf w hw] using hw
+  have hbasin : f w ∈ Quadratic.basin_of_infinity c :=
+    bottcher_map_norm_gt_one_implies_basin c (z := f w) hnorm
+  simpa [outside_disk] using hbasin
+
+/-- Exterior points are always in the image of `outside_disk` under
+    `bottcher_map`. This is unconditional in the current model because
+    `outside_disk = basin_of_infinity`. -/
+theorem exterior_subset_image_outside_disk (c : ℂ) :
+    ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c) := by
+  refine exterior_subset_image_outside_disk_of_right_inverse c ?_
+  refine ⟨Quadratic.external_ray_map c, ?_⟩
+  intro w hw
+  exact external_ray_map_right_inverse_on_exterior c w hw
 
 /-- Intermediate reduction target: every outside-disk point has an
     outside-open point with the same Böttcher image. -/
@@ -4087,14 +4098,24 @@ def BottcherOutsideDiskToOutsideOpenImageRefinement (c : ℂ) : Prop :=
       Quadratic.bottcher_map c u = Quadratic.bottcher_map c z
 
 /-- Outside-open exterior inclusion follows from the refinement target above. -/
+theorem exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk
+    (c : ℂ)
+    (h_disk : {w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c)
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
+    ({w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+  intro w hw
+  rcases h_disk hw with ⟨z, hz, hzw⟩
+  rcases h_refine z hz with ⟨u, hu, hEq⟩
+  exact ⟨u, hu, by simpa [hzw] using hEq⟩
+
+/-- Outside-open exterior inclusion follows from the refinement target above. -/
 theorem exterior_subset_image_outside_open_of_outside_disk_refinement
     (c : ℂ) (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
     ({w : ℂ | 1 < ‖w‖} ⊆
       Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
-  intro w hw
-  rcases exterior_subset_image_outside_disk c hw with ⟨z, hz, hzw⟩
-  rcases h_refine z hz with ⟨u, hu, hEq⟩
-  exact ⟨u, hu, by simpa [hzw] using hEq⟩
+  exact exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk
+    c (exterior_subset_image_outside_disk c) h_refine
 
 /-- Converse direction: outside-open exterior inclusion yields the refinement
     target on `outside_disk`. -/
