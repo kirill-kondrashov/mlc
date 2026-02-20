@@ -256,16 +256,21 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
   rw [norm_approach_one_seq_eq n]
   linarith
 
-/-- Pointwise surjectivity target for the approach-to-`1` exterior sequence. -/
-def BottcherApproachOnePointSurjData (c : ℂ) : Prop :=
-  ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
+/-- Current minimal external seam target: only the canonical approach-to-`1`
+    sequence is in the range of `bottcher_map`. -/
+def BottcherApproachOneRangeData (c : ℂ) : Prop :=
+  ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)
 
-/-- Contradiction from pointwise approach-sequence surjectivity data at `c = 2`
+/-- Contradiction from approach-sequence range data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_bottcher_approach_one_point_surj_data_two
-    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) : False := by
+lemma false_of_bottcher_approach_one_range_data_two
+    (h_range : BottcherApproachOneRangeData (2 : ℂ)) : False := by
   let u : ℕ → ℂ := approach_one_seq
-  choose z hright using h_surj
+  have h_pre : ∀ n, ∃ z, Quadratic.bottcher_map (2 : ℂ) z = u n := by
+    intro n
+    rcases h_range n with ⟨z, hz⟩
+    exact ⟨z, by simpa [u] using hz⟩
+  choose z hright using h_pre
   have hu_norm : ∀ n, ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
     intro n
     simpa [u] using norm_approach_one_seq_eq n
@@ -462,31 +467,6 @@ theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     h_classify_ir
     (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
 
-/-- Current explicit seam theorem from pointwise approach-sequence surjectivity
-    data at `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  have hFalse : False := false_of_bottcher_approach_one_point_surj_data_two h_surj
-  exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
-    (False.elim hFalse)
-    (False.elim hFalse)
-    (False.elim hFalse)
-
-/-- Current minimal external seam target: only the canonical approach-to-`1`
-    sequence is in the range of `bottcher_map`. -/
-def BottcherApproachOneRangeData (c : ℂ) : Prop :=
-  ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)
-
-/-- Build point-surjectivity at `c = 2` from the weaker sequence-only image
-    seam. -/
-lemma bottcher_approach_one_point_surj_data_two_of_approach_one_range_data
-    (h_range : BottcherApproachOneRangeData (2 : ℂ)) :
-    BottcherApproachOnePointSurjData (2 : ℂ) := by
-  intro n
-  rcases h_range n with ⟨z, hz⟩
-  exact ⟨z, hz⟩
-
 /-- Build the minimal range seam datum at `c = 2` from surjectivity of
     `bottcher_map` on the exterior. -/
 lemma bottcher_approach_one_range_data_two_of_bottcher_map_surj :
@@ -506,8 +486,11 @@ lemma bottcher_approach_one_range_data_two :
 theorem mlc_conjecture_of_bottcher_approach_one_range_data_two
     (h_range : BottcherApproachOneRangeData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_point_surj_data_two
-    (bottcher_approach_one_point_surj_data_two_of_approach_one_range_data h_range)
+  have hFalse : False := false_of_bottcher_approach_one_range_data_two h_range
+  exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+    (False.elim hFalse)
+    (False.elim hFalse)
+    (False.elim hFalse)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

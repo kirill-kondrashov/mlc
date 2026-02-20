@@ -695,6 +695,31 @@ Date: 2026-02-19
         `Quadratic.bottcher_map_surj`);
       - therefore the remaining elimination task is unchanged: replace this
         surjectivity source constructively.
+  - Rooted contradiction-surface simplification in `Mlc/MainConjecture.lean`:
+    - removed intermediate wrapper
+      `BottcherApproachOnePointSurjData` from the active chain;
+    - replaced
+      `false_of_bottcher_approach_one_point_surj_data_two` with
+      `false_of_bottcher_approach_one_range_data_two`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_one_range_data_two` to consume the
+      range seam directly.
+    This keeps theorem shape unchanged while shrinking rooted indirection.
+  - Verification after contradiction-surface simplification:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `false_of_bottcher_approach_one_range_data_two` is core-only;
+      - `mlc_conjecture_of_bottcher_approach_one_range_data_two` is core-only.
+  - Re-audit of non-contradictory motion replacement candidate:
+    constructing `PuzzleBoundaryMotionHyp` without contradiction currently
+    requires providing `motion_preserves_para_piece`, whose payload is exactly
+    para-puzzle connectedness on `M`; in the present model this still routes to
+    `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`, so it is not
+    an immediate replacement path for the one-axiom target.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
