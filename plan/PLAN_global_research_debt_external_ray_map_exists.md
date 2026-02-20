@@ -1059,6 +1059,16 @@ Date: 2026-02-19
     - extracted theorem above is core-only;
     - default wrapper remains external-ray-backed via default seam
       instantiation (expected).
+  - Basin-injectivity seam extraction (`IsLocalHomeomorphOn` route):
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin`;
+    - rewired
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`
+      as a default wrapper through this seam.
+  - Axiom audit for the `IsLocalHomeomorphOn` seam:
+    - extracted theorem above is core-only;
+    - default wrapper remains external-ray-backed via default seam
+      instantiation (expected).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

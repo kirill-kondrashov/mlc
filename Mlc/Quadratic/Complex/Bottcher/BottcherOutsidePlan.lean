@@ -4411,10 +4411,14 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph
     (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
       (Quadratic.external_ray_map_data c))
 
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin
     (c : ℂ)
     (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c))
+    (hUinj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hsub :
+      {w : ℂ | 1 < ‖w‖} ⊆
+        (Quadratic.bottcher_map c '' Quadratic.basin_of_infinity c)) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
   let f : ℂ → ℂ := Quadratic.bottcher_map c
   let s : Set ℂ := Quadratic.basin_of_infinity c
@@ -4436,13 +4440,7 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
     · intro w hw
       rcases hw with ⟨z, hz, rfl⟩
       exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
-    · intro w hw
-      have hright : f (Quadratic.external_ray_map c w) = w :=
-        external_ray_map_right_inverse_on_exterior c w hw
-      have hbasin : Quadratic.external_ray_map c w ∈ s :=
-        bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map c w)
-          (by simpa [f, hright] using hw)
-      exact ⟨Quadratic.external_ray_map c w, hbasin, hright⟩
+    · exact hsub
   have hconn : IsConnected (f '' s) := by
     simpa [himage_eq] using isConnected_exterior
   have hdeg1 : ∃ y : f '' s, Nat.card ({x : ℂ // f x = y.1}) = 1 := by
@@ -4451,7 +4449,7 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
     have hcard1 : Nat.card ({x : ℂ // f x = y}) = 1 :=
       natCard_fiber_eq_one_of_injOn_of_mem_image_of_fiber_subset
         (f := f) (U := {z : ℂ | ‖z‖ > ‖c‖ + 2}) (y := y)
-        (bottcher_map_inj_on_outside_open c) hyimg hfiberU
+        hUinj hyimg hfiberU
     have hyimgBasin : y ∈ f '' s := by
       rcases hyimg with ⟨z, hz, rfl⟩
       refine ⟨z, ?_, rfl⟩
@@ -4460,6 +4458,25 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
   simpa [f, s] using
     (injOn_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_on_image_of_connected_image
       (f := f) (s := s) hproper hlocal hsopen hconn hfiberS hdeg1)
+
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hsub :
+      {w : ℂ | 1 < ‖w‖} ⊆
+        (Quadratic.bottcher_map c '' Quadratic.basin_of_infinity c) := by
+    intro w hw
+    have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
+      external_ray_map_right_inverse_on_exterior c w hw
+    have hbasin : Quadratic.external_ray_map c w ∈ Quadratic.basin_of_infinity c :=
+      bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map c w)
+        (by simpa [hright] using hw)
+    exact ⟨Quadratic.external_ray_map c w, hbasin, hright⟩
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin
+    c hproper hlocal
+    (bottcher_map_inj_on_outside_open c) hsub
 
 lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open
     (c : ℂ)
