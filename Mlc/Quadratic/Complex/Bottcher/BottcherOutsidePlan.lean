@@ -4280,6 +4280,17 @@ theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
       simpa using hspec.2
     simp [f, hnorm, hz_choose]
 
+/-- Construct external-ray data from the left-inverse outside-open seam and
+    outside-open exterior surjectivity. -/
+theorem external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior
+    (c : ℂ)
+    (h_left : BottcherLeftInverseOnOutsideOpenData c)
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    Quadratic.ExternalRayMapData c := by
+  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c
+    (bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left)
+    h_surj
+
 /-- Variant of the previous construction using image equality as the input
     target instead of a separate surjectivity witness. -/
 theorem external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior
@@ -4288,6 +4299,17 @@ theorem external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior
     (h_img : BottcherImageOutsideOpenIsExterior c) :
     Quadratic.ExternalRayMapData c := by
   exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
+    (bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior c h_img)
+
+/-- Variant of the previous construction using image equality and the
+    left-inverse outside-open seam. -/
+theorem external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior
+    (c : ℂ)
+    (h_left : BottcherLeftInverseOnOutsideOpenData c)
+    (h_img : BottcherImageOutsideOpenIsExterior c) :
+    Quadratic.ExternalRayMapData c := by
+  exact external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior c
+    h_left
     (bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior c h_img)
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'

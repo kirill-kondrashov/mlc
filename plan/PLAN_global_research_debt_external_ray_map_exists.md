@@ -1002,6 +1002,15 @@ Date: 2026-02-19
     - `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`
       is core-only.
     - `MLC.bottcher_map_inj_on_outside_open_of_data` remains core-only.
+  - External-ray-data bridge extraction from new injectivity seam:
+    - added
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior`;
+    - added
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior`.
+    These route external-ray-data construction through the explicit
+    left-inverse seam plus existing surjectivity/image-equality seams.
+  - Axiom audit for extracted external-ray-data bridges:
+    - both newly extracted theorems above are core-only.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
