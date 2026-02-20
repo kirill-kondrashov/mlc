@@ -242,7 +242,7 @@ This keeps the remaining replacement targets explicit:
 - [x] Isolated the default `c = 2` basin-image seed into a single named seam
   lemma:
   - added
-    `bottcherExteriorSubsetImageBasinData_two_of_externalRayMapData_default`;
+    `bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj`;
   - rewired
     `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default`
     through this seam.

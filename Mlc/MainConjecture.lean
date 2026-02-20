@@ -582,6 +582,18 @@ lemma bottcherExteriorSubsetImageBasinData_of_externalRayMapData
       hnorm
   · exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
 
+/-- Build the weaker exterior-subset-image seam from surjectivity onto the
+    exterior. -/
+lemma bottcherExteriorSubsetImageBasinData_of_bottcher_map_surj
+    (c : ℂ) :
+    BottcherExteriorSubsetImageBasinData c := by
+  intro w hw
+  rcases Quadratic.bottcher_map_surj c w hw with ⟨z, _hzdom, hzw⟩
+  refine ⟨z, ?_, hzw⟩
+  have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ := by
+    simpa [hzw] using hw
+  exact bottcher_map_norm_gt_one_implies_basin c (z := z) hnorm
+
 /-- Sequence-range seam at `c = 2` from an explicit external-ray data package. -/
 lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
@@ -589,18 +601,17 @@ lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData
   exact approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
     (2 : ℂ) (bottcherExteriorSubsetImageBasinData_of_externalRayMapData h_data)
 
-/-- Current default `c = 2` basin-image seam source from explicit external-ray
-    data. -/
-lemma bottcherExteriorSubsetImageBasinData_two_of_externalRayMapData_default :
+/-- Current default `c = 2` basin-image seam source via exterior
+    surjectivity. -/
+lemma bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj :
     BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
-  exact bottcherExteriorSubsetImageBasinData_of_externalRayMapData
-    (Quadratic.external_ray_map_data (2 : ℂ))
+  exact bottcherExteriorSubsetImageBasinData_of_bottcher_map_surj (2 : ℂ)
 
 /-- Current default sequence-range seam at `c = 2`. -/
 lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default :
     ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
   exact approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
-    (2 : ℂ) bottcherExteriorSubsetImageBasinData_two_of_externalRayMapData_default
+    (2 : ℂ) bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj
 
 /-- Single active axiom-seed replacement target for the sequence-range seam at
     `c = 2`. Replacing this lemma constructively removes the final non-core
