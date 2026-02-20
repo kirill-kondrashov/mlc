@@ -4018,11 +4018,18 @@ lemma bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
   intro w hw
   exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
 
+/-- Build outside-plan right-inverse seam data directly from
+    `external_ray_map_exists`. -/
+lemma bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists
+    (c : ℂ) :
+    BottcherRightInverseOnExteriorDataOutsidePlan c := by
+  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
+    (Quadratic.external_ray_map_exists c)
+
 /-- Default outside-plan right-inverse seam data. -/
 lemma bottcher_right_inverse_on_exterior_data (c : ℂ) :
     BottcherRightInverseOnExteriorDataOutsidePlan c := by
-  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
-    (Quadratic.external_ray_map_data c)
+  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists c
 
 /-- Any outside-open left-inverse payload yields outside-open injectivity. -/
 lemma bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open

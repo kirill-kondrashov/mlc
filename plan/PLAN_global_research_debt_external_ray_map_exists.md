@@ -1130,6 +1130,17 @@ Date: 2026-02-19
     - rewired `mlc_conjecture` through this explicit right-inverse seam theorem.
     This isolates the remaining non-core ingress as a single named provider
     while keeping the contradiction core and strategy assembly unchanged.
+  - Outside-plan default constructor tightening:
+    - added generic constructor
+      `MLC.bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists`;
+    - rewired
+      `MLC.bottcher_right_inverse_on_exterior_data`
+      to call this constructor directly;
+    - rewired
+      `MLC.bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists`
+      in `Mlc/MainConjecture.lean` to consume the shared constructor.
+    This keeps the external ingress explicit at the outside-plan seam layer and
+    removes one default indirection through `external_ray_map_data`.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

@@ -504,8 +504,8 @@ theorem mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two
 /-- Current default provider for the `c = 2` right-inverse seam. -/
 lemma bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists :
     BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
-  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists
+    (2 : ℂ)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
