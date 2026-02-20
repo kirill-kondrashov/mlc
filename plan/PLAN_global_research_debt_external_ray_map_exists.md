@@ -853,6 +853,16 @@ Date: 2026-02-19
     - checked all top-level `def`/`lemma`/`theorem` declarations in
       `Mlc/MainConjecture.lean` against rooted graph nodes;
     - result: no declarations missing from the rooted closure.
+  - Rooted wrapper reduction (follow-up):
+    - removed default provider wrappers
+      `bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_data_two`
+      and `bottcher_approach_one_seq_preimage_data_two`;
+    - `mlc_conjecture` now inlines the direct construction of
+      `BottcherApproachOneSeqPreimageData (2 : ℂ)` from
+      `Quadratic.external_ray_map_exists (2 : ℂ)` using
+      `Quadratic.external_ray_map_of_data_right_inverse`.
+    This shortens the active rooted chain while preserving the same theorem
+    signature and axiom footprint.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

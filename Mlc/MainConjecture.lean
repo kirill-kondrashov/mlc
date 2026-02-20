@@ -467,22 +467,6 @@ theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     h_classify_ir
     (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
 
-/-- Build the minimal approach-sequence preimage seam at `c = 2` from explicit
-    exterior-ray inverse data. -/
-lemma bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_data_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    BottcherApproachOneSeqPreimageData (2 : ℂ) := by
-  intro n
-  refine ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n), ?_⟩
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data
-    (approach_one_seq n) (norm_approach_one_seq_gt_one n)
-
-/-- Current default approach-sequence preimage seam at `c = 2`. -/
-lemma bottcher_approach_one_seq_preimage_data_two :
-    BottcherApproachOneSeqPreimageData (2 : ℂ) :=
-  bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
-
 /-- Main MLC assembly from approach-sequence preimage data at `c = 2`. -/
 theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     (h_pre : BottcherApproachOneSeqPreimageData (2 : ℂ)) :
@@ -498,8 +482,14 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    Quadratic.external_ray_map_exists (2 : ℂ)
   exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    bottcher_approach_one_seq_preimage_data_two
+    (by
+      intro n
+      refine ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n), ?_⟩
+      exact Quadratic.external_ray_map_of_data_right_inverse h_data
+        (approach_one_seq n) (norm_approach_one_seq_gt_one n))
 
 end MainProof
 
