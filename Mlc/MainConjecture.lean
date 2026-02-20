@@ -490,24 +490,20 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     (False.elim hFalse)
     (False.elim hFalse)
 
-/-- Current default right-inverse exterior seam at `c = 2`, sourced from
-    `external_ray_map_exists`. -/
-lemma bottcher_right_inverse_on_exterior_data_two :
-    BottcherRightInverseOnExteriorData (2 : ℂ) := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    Quadratic.external_ray_map_exists (2 : ℂ)
-  refine ⟨Quadratic.external_ray_map_of_data h_data, ?_⟩
-  intro w hw
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
-
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
+  let h_right : BottcherRightInverseOnExteriorData (2 : ℂ) := by
+    let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+      Quadratic.external_ray_map_exists (2 : ℂ)
+    refine ⟨Quadratic.external_ray_map_of_data h_data, ?_⟩
+    intro w hw
+    exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
   exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     (bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
-      (2 : ℂ) bottcher_right_inverse_on_exterior_data_two)
+      (2 : ℂ) h_right)
 
 end MainProof
 

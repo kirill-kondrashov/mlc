@@ -921,6 +921,12 @@ Date: 2026-02-19
     This gives a concrete sub-target: provide an external-ray-free
     outside-open injectivity seed, then lift via the existing core-only
     proper/local-homeomorph theorem chain.
+  - Rooted wrapper cleanup in `Mlc/MainConjecture.lean`:
+    - removed one-use default lemma
+      `bottcher_right_inverse_on_exterior_data_two`;
+    - inlined its construction at the `mlc_conjecture` call-site.
+    This keeps the active rooted path minimal while preserving theorem shape
+    and the current axiom boundary.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
