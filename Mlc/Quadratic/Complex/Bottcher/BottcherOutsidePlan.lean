@@ -4461,13 +4461,23 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
     (injOn_of_isProperMap_isLocalHomeomorphOn_of_open_of_fiber_subset_on_image_of_connected_image
       (f := f) (s := s) hproper hlocal hsopen hconn hfiberS hdeg1)
 
+lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open
+    (c : ℂ)
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (h_left : BottcherLeftInverseOnOutsideOpenData c) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hproper : IsProperMap (Quadratic.bottcher_map c) :=
+    bottcher_map_isProperMap_of_continuous c hlocal.continuous
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open
+    c hproper hlocal h_left
+
 lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph
     (c : ℂ)
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  have hproper : IsProperMap (Quadratic.bottcher_map c) :=
-    bottcher_map_isProperMap_of_continuous c hlocal.continuous
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph c hproper hlocal
+  exact bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open c hlocal
+    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
+      (Quadratic.external_ray_map_data c))
 
 theorem bottcher_map_inj_on_outside_of_slit
     (c : ℂ)
