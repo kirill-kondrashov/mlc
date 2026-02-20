@@ -1035,6 +1035,20 @@ Date: 2026-02-19
       through this new subset-image seam.
     This keeps the conversion chain granular and avoids coupling directly to
     the image-equality form.
+  - Basin-injectivity seam extraction (`proper + local homeomorph` route):
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open`;
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open`;
+    - rewired
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph`
+      to be a default wrapper through the new left-inverse seam.
+  - Axiom audit for new basin-injectivity seams:
+    - both newly extracted `...of_left_inverse_on_outside_open` theorems are
+      core-only;
+    - default theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph` remains
+      external-ray-backed (as expected) via default seam instantiation.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

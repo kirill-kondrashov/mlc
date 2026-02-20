@@ -4327,17 +4327,18 @@ theorem external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exteri
       rw [h_img]
       exact hw)
 
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed'
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
     (c : ℂ)
     (hproper : IsProperMap (Quadratic.bottcher_map c))
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (h_left : BottcherLeftInverseOnOutsideOpenData c)
     {y : ℂ}
     (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
     (hfiberU :
       ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
-    (bottcher_map_inj_on_outside_open c) hyimg hfiberU
+    (bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left) hyimg hfiberU
 
 lemma exists_bottcher_outside_seed_of_continuous
     (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
@@ -4391,14 +4392,24 @@ lemma exists_bottcher_outside_seed_of_continuous
     have hygt' : B < ‖y‖ := by simpa [y] using hygt
     exact (not_lt_of_ge hyB) hygt'
 
+lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open
+    (c : ℂ)
+    (hproper : IsProperMap (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (h_left : BottcherLeftInverseOnOutsideOpenData c) :
+    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  rcases exists_bottcher_outside_seed_of_continuous c hlocal.continuous with ⟨y, hyimg, hfiberU⟩
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
+    c hproper hlocal h_left hyimg hfiberU
+
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph
     (c : ℂ)
     (hproper : IsProperMap (Quadratic.bottcher_map c))
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
     Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  rcases exists_bottcher_outside_seed_of_continuous c hlocal.continuous with ⟨y, hyimg, hfiberU⟩
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed' c hproper hlocal
-    hyimg hfiberU
+  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open c hproper hlocal
+    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
+      (Quadratic.external_ray_map_data c))
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
     (c : ℂ)
