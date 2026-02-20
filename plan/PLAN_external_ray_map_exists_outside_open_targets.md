@@ -10,7 +10,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 - collapsing the rooted proof into contradiction circulation.
 
 ## Progress
-`[██████████] 99.99%` (4.9994/5 core milestones completed)
+`[██████████] 99.99%` (4.9995/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
@@ -19,9 +19,8 @@ In `Mlc/MainConjecture.lean`, the active seam is now:
 - where the only contradiction step is confined to
   `mainPathData_of_bottcherApproachToOneSeqPreimageData_two`.
 - the rooted seed now consumes the exact countable-fiber payload at the
-  canonical sequence:
-  `BottcherApproachOneSeqFiberData (2 : ℂ)` via
-  `mainPathData_of_bottcherApproachOneSeqFiberData_two`.
+  canonical sequence directly via
+  `bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`.
 - this is then converted to the sequence-convergence seam through
   `bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`.
 - the rooted axiom seed now avoids the generic surjectivity bridge and consumes
@@ -33,7 +32,8 @@ In `Mlc/MainConjecture.lean`, the active seam is now:
 
 The external-ray dependency is now localized through the narrowed seed chain:
 - `mainPathData_axiom_seed`
-- `mainPathData_of_bottcherApproachOneSeqFiberData_two`
+- `mainPathData_of_bottcherApproachToOneSeqPreimageData_two`
+- `bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`
 - `bottcherApproachOneSeqFiberData_two_axiom_seed`
 - `Quadratic.external_ray_map_right_inverse (2 : ℂ)` (applied only to `approach_one_seq n`)
 - `MLC.Quadratic.external_ray_map_exists`.
@@ -48,10 +48,11 @@ payloads.
 Exact rooted dependency chain to the missing axiom (from generated graph):
 1. `MLC.mlc_conjecture`
 2. `MLC.mainPathData_axiom_seed`
-3. `MLC.mainPathData_of_bottcherApproachOneSeqFiberData_two`
-4. `MLC.bottcherApproachOneSeqFiberData_two_axiom_seed`
-5. `MLC.Quadratic.external_ray_map_right_inverse`
-6. `MLC.Quadratic.external_ray_map_exists`
+3. `MLC.mainPathData_of_bottcherApproachToOneSeqPreimageData_two`
+4. `MLC.bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`
+5. `MLC.bottcherApproachOneSeqFiberData_two_axiom_seed`
+6. `MLC.Quadratic.external_ray_map_right_inverse`
+7. `MLC.Quadratic.external_ray_map_exists`
 
 ## Reduction target chain (already available in code)
 From `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean` and
@@ -199,6 +200,12 @@ condition rather than global outside-open slit inclusion.
    `approach_one_seq`:
    - rewired `bottcherApproachOneSeqFiberData_two_axiom_seed` to use
      `Quadratic.external_ray_map_right_inverse` at `c = 2`.
+2q. [x] Prune extra rooted wrappers for the exact-fiber seam:
+   - removed `mainPathData_of_bottcherApproachOneSeqFiberData_two`,
+   - removed `bottcherApproachOneSeqFiberData_of_outsideOpenFiberData`,
+   - rewired rooted bridges through
+     `mainPathData_of_bottcherApproachToOneSeqPreimageData_two` and
+     `bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.

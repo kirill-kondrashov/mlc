@@ -313,15 +313,6 @@ lemma bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpe
   intro n
   exact h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n)
 
-/-- Forget the outside-open location constraint to obtain the exact
-    countable-fiber seam. -/
-lemma bottcherApproachOneSeqFiberData_of_outsideOpenFiberData
-    (c : ℂ) (h_data : BottcherApproachOneSeqOutsideOpenFiberData c) :
-    BottcherApproachOneSeqFiberData c := by
-  intro n
-  rcases h_data n with ⟨z, _hz_out, hzw⟩
-  exact ⟨z, hzw⟩
-
 /-- Build the approach-to-`1` preimage seam from the exact countable-fiber
     target. -/
 lemma bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
@@ -583,22 +574,20 @@ lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
   have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
   exact False.elim hFalse
 
-/-- Main-path seam from exact countable `approach_one_seq` fibers at `c = 2`. -/
-lemma mainPathData_of_bottcherApproachOneSeqFiberData_two
-    (h_fiber : BottcherApproachOneSeqFiberData (2 : ℂ)) :
-    MainPathData := by
-  exact mainPathData_of_bottcherApproachToOneSeqPreimageData_two
-    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber)
-
 /-- Step-4 to Step-5 bridge at `c = 2`: outside-open exterior surjectivity
     yields the rooted sequence-fiber seam needed for `MainPathData`. -/
 theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
     (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
     MainPathData := by
-  exact mainPathData_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_of_outsideOpenFiberData (2 : ℂ)
-      (bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
-        (2 : ℂ) h_surj))
+  exact mainPathData_of_bottcherApproachToOneSeqPreimageData_two
+    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ)
+      (by
+        intro n
+        rcases
+            bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
+              (2 : ℂ) h_surj n with
+          ⟨z, _hz_out, hzw⟩
+        exact ⟨z, hzw⟩))
 
 /-- Current direct `c = 2` sequence-fiber seed from the external-ray right
     inverse on the canonical `approach_one_seq`. -/
@@ -611,8 +600,9 @@ lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
 
 /-- Current default seed for the constructive main-path seam datum. -/
 lemma mainPathData_axiom_seed : MainPathData := by
-  exact mainPathData_of_bottcherApproachOneSeqFiberData_two
-    bottcherApproachOneSeqFiberData_two_axiom_seed
+  exact mainPathData_of_bottcherApproachToOneSeqPreimageData_two
+    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ)
+      bottcherApproachOneSeqFiberData_two_axiom_seed)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
