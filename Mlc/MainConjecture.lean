@@ -482,22 +482,25 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     (h_pre : BottcherApproachOneSeqPreimageData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   have hFalse : False := false_of_bottcher_approach_one_seq_preimage_data_two h_pre
+  have h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
+  have h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
+  have h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
+  have h_classify_ir : IRClassificationData := by
+    intro c hc h_inf
+    exact classify_infinitely_renormalizable h_tower_data c h_inf
   exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
-    (False.elim hFalse)
-    (False.elim hFalse)
-    (False.elim hFalse)
+    h_motion
+    h_classify_ir
+    h_mod
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  let h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
-    let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-      Quadratic.external_ray_map_exists (2 : ℂ)
-    refine ⟨Quadratic.external_ray_map_of_data h_data, ?_⟩
-    intro w hw
-    exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
+  let h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) :=
+    bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
+      (Quadratic.external_ray_map_exists (2 : ℂ))
   exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     (bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
       (2 : ℂ) h_right)

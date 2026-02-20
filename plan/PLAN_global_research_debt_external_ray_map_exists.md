@@ -1097,6 +1097,31 @@ Date: 2026-02-19
       for this shared seam type.
     This ties the active `mlc_conjecture` path to the extracted outside-plan
     seam layer directly.
+  - Outside-plan right-inverse constructor normalization:
+    - added
+      `MLC.bottcher_right_inverse_on_exterior_data_of_external_ray_map_data`
+      and default wrapper
+      `MLC.bottcher_right_inverse_on_exterior_data`;
+    - rewired default outside-plan wrappers
+      `MLC.exterior_subset_image_outside_disk`,
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement`, and
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`
+      to consume the shared constructor;
+    - rewired `MLC.mlc_conjecture` to instantiate its right-inverse seam via
+      the shared outside-plan constructor instead of local ad-hoc assembly.
+    This removes duplicated right-inverse construction logic and keeps the
+    external-ray boundary localized to explicit default constructors.
+  - Main-conjecture classification-path preservation:
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`
+      to build `IRClassificationData` through
+      `classify_infinitely_renormalizable` with an explicit
+      `InfinitelyRenormalizableHasTowerData` seam variable;
+    - kept contradiction seeding explicit at the same boundary (`hFalse` from
+      approach-sequence preimage data), but removed direct `False.elim` feeding
+      of the classification slot.
+    This keeps the intended IR-classification theorem path active in the
+    rooted strategy surface while preserving the current axiom footprint.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
