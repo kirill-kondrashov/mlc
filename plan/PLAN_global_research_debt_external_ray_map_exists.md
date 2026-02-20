@@ -1269,6 +1269,16 @@ Date: 2026-02-19
     - preimages of `u n` under `bottcher_map`.
     This is the weakest contradiction input layer so far, with unchanged axiom
     footprint and rooted closure.
+  - Abstract seam representation simplification (`u`+preimages → `z` sequence):
+    - rewired `BottcherApproachToOneSeqPreimageData` to:
+      `∃ z, Tendsto (fun n => bottcher_map c (z n)) atTop (𝓝 1)`;
+    - rewired the contradiction core to define
+      `u n := bottcher_map (2 : ℂ) (z n)` internally and reuse the same
+      bounded-subsequence argument;
+    - rewired the default provider from `external_ray_map_exists` to produce
+      the `z` sequence directly.
+    This keeps the seam logically equivalent while removing one existential
+    layer from the public interface.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

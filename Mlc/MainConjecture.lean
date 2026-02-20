@@ -264,43 +264,38 @@ lemma tendsto_approach_one_seq :
     atTop (𝓝 (Complex.ofReal 1))
   simpa using hreal.ofReal
 
-/-- Weaker seam target: preimages for some sequence converging to `1`. -/
+/-- Weaker seam target: existence of a sequence whose Böttcher images converge
+    to `1`. -/
 def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
-  ∃ u : ℕ → ℂ,
-    Tendsto u atTop (𝓝 (1 : ℂ)) ∧
-    (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
+  ∃ z : ℕ → ℂ,
+    Tendsto (fun n => Quadratic.bottcher_map c (z n)) atTop (𝓝 (1 : ℂ))
 
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
-  rcases h_data with ⟨u, hu_tend, h_pre⟩
+  rcases h_data with ⟨z, hu_tend⟩
+  let u : ℕ → ℂ := fun n => Quadratic.bottcher_map (2 : ℂ) (z n)
+  have hu_tend' : Tendsto u atTop (𝓝 (1 : ℂ)) := by simpa [u] using hu_tend
   have hu_bounded : IsBounded (Set.range u) :=
-    isBounded_range_of_tendsto u hu_tend
+    isBounded_range_of_tendsto u hu_tend'
   rw [isBounded_iff_forall_norm_le] at hu_bounded
   rcases hu_bounded with ⟨R, hR⟩
   have hu_le_R : ∀ n, ‖u n‖ ≤ R := by
     intro n
     exact hR (u n) ⟨n, rfl⟩
-  choose z hright using h_pre
   have hu_pos : ∀ n, 0 < ‖u n‖ := by
     intro n
     calc
       0 < Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) := Real.exp_pos _
-      _ = ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
-            simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
       _ = ‖u n‖ := by
-            simpa using congrArg norm (hright n)
+            simpa [u] using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
         Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) = ‖u n‖ := by
-      calc
-        Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) =
-            ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
-              simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
-        _ = ‖u n‖ := by simpa using congrArg norm (hright n)
+      simpa [u] using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2
@@ -337,7 +332,7 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     tendsto_subseq_of_bounded hbounded_ball hz_mem
   have hlog_tend : Tendsto (fun n => Real.log ‖u n‖) atTop (𝓝 (0 : ℝ)) := by
     have hnorm_tend' : Tendsto (fun n => ‖u n‖) atTop (𝓝 ‖(1 : ℂ)‖) :=
-      (continuous_norm.tendsto (1 : ℂ)).comp hu_tend
+      (continuous_norm.tendsto (1 : ℂ)).comp hu_tend'
     have hnorm_tend : Tendsto (fun n => ‖u n‖) atTop (𝓝 (1 : ℝ)) := by
       simpa using hnorm_tend'
     have hcont_log : ContinuousAt Real.log (1 : ℝ) :=
@@ -368,13 +363,13 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     hcont_phi.tendsto.comp hφtend
   have hu_sub_tend :
       Tendsto (fun n => u (φ n)) atTop (𝓝 (1 : ℂ)) :=
-    hu_tend.comp hφmono.tendsto_atTop
+    hu_tend'.comp hφmono.tendsto_atTop
   have hu_sub_tend_phi :
       Tendsto (fun n => u (φ n)) atTop (𝓝 (Quadratic.bottcher_map (2 : ℂ) a)) := by
     have hsub_eq :
         (fun n => Quadratic.bottcher_map (2 : ℂ) (z (φ n))) = (fun n => u (φ n)) := by
       funext n
-      exact hright (φ n)
+      rfl
     simpa [hsub_eq] using hphi_sub_tend
   have hphi_a : Quadratic.bottcher_map (2 : ℂ) a = 1 :=
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
@@ -489,9 +484,13 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
 lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
   rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_⟩
-  intro n
-  exact ⟨f (approach_one_seq n), hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
+  refine ⟨fun n => f (approach_one_seq n), ?_⟩
+  have hEq :
+      (fun n => Quadratic.bottcher_map (2 : ℂ) ((fun k => f (approach_one_seq k)) n))
+        = approach_one_seq := by
+    funext n
+    exact hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)
+  simpa [hEq] using tendsto_approach_one_seq
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
