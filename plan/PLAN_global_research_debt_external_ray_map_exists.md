@@ -1335,6 +1335,41 @@ Date: 2026-02-19
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
     - result: no declarations missing from rooted closure.
+  - Seam weakening from outside-disk image membership to plain Böttcher range:
+    - replaced `ApproachOneSeqInImageOutsideDiskData` with
+      `ApproachOneSeqInBottcherRangeData c := ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)`;
+    - rewired the sequence-to-preimage constructor to consume this weaker
+      range-only seam;
+    - updated `mlc_conjecture` to derive range witnesses by erasing the domain
+      side-condition from the previous outside-disk witness.
+    This strictly weakens the rooted seam interface while keeping the same
+    theorem shape and axiom footprint.
+  - Active provider simplification on the rooted seam:
+    - rewired `mlc_conjecture` to instantiate the range seam directly using
+      `Quadratic.bottcher_map_surj` on `approach_one_seq n` (with
+      `norm_approach_one_seq_gt_one n`);
+    - the active external-ray-backed ingress is now the primitive surjectivity
+      interface (`bottcher_map_surj`) at the final seam provider.
+    This narrows the rooted interface to a single sequence-range witness
+    constructor.
+  - Rooted seam extraction cleanup:
+    - added
+      `approach_one_seq_in_bottcher_range_data_two_of_bottcher_map_surj` as
+      the named `c = 2` provider;
+    - added
+      `mlc_conjecture_of_approach_one_seq_in_bottcher_range_data_two` as the
+      dedicated seam assembly theorem;
+    - rewired `mlc_conjecture` through that theorem.
+    This keeps the remaining replacement obligation explicit while preserving
+    theorem shape and axiom footprint.
+  - Verification after the above rewiring:
+    - `make build`, `make graphs`, `make check`, and
+      `scripts/verify_output.sh` all pass;
+    - axiom audit remains:
+      `Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`;
+    - rooted-closure audit for `Mlc/MainConjecture.lean` against
+      `site/mlc_conjecture/graph.json` remains clean (`missing_count = 0`).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

@@ -5,7 +5,6 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
-import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
@@ -480,40 +479,50 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
     h_classify_ir
     h_mod
 
-/-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
-    sourced from approach-sequence image inclusion on `outside_disk`. -/
-def ApproachOneSeqInImageOutsideDiskData (c : ℂ) : Prop :=
-  ∀ n, approach_one_seq n ∈ Quadratic.bottcher_map c '' outside_disk c
+/-- Current minimal sequence-image seam target: the canonical sequence belongs
+    to the range of `bottcher_map`. -/
+def ApproachOneSeqInBottcherRangeData (c : ℂ) : Prop :=
+  ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)
 
-/-- Sequence-image inclusion on `outside_disk` yields the minimal seam. -/
-lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_image_outside_disk
+/-- Sequence-image inclusion in `Set.range` yields the minimal seam. -/
+lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher_range
     (c : ℂ)
-    (h_seq : ApproachOneSeqInImageOutsideDiskData c) :
+    (h_seq : ApproachOneSeqInBottcherRangeData c) :
     BottcherApproachToOneSeqPreimageData c := by
-  classical
-  refine ⟨fun n =>
-    Classical.choose
-      (h_seq n), ?_⟩
+  refine ⟨fun n => Classical.choose (h_seq n), ?_⟩
   have hEq :
       (fun n =>
         Quadratic.bottcher_map c
           (Classical.choose (h_seq n)))
         = approach_one_seq := by
     funext n
-    exact (Classical.choose_spec (h_seq n)).2
+    exact Classical.choose_spec (h_seq n)
   simpa [hEq] using tendsto_approach_one_seq
+
+/-- Current default `c = 2` sequence-range seam, routed via Böttcher
+    surjectivity on the exterior. -/
+lemma approach_one_seq_in_bottcher_range_data_two_of_bottcher_map_surj :
+    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
+  intro n
+  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
+    (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hEq⟩
+  exact ⟨z, hEq⟩
+
+/-- Main MLC assembly from the minimal sequence-range seam at `c = 2`. -/
+theorem mlc_conjecture_of_approach_one_seq_in_bottcher_range_data_two
+    (h_seq : ApproachOneSeqInBottcherRangeData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
+    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher_range
+      (2 : ℂ) h_seq)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  have h_seq : ApproachOneSeqInImageOutsideDiskData (2 : ℂ) := by
-    intro n
-    exact exterior_subset_image_outside_disk (2 : ℂ) (norm_approach_one_seq_gt_one n)
-  exact mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
-    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_image_outside_disk
-      (2 : ℂ) h_seq)
+  exact mlc_conjecture_of_approach_one_seq_in_bottcher_range_data_two
+    approach_one_seq_in_bottcher_range_data_two_of_bottcher_map_surj
 
 end MainProof
 
