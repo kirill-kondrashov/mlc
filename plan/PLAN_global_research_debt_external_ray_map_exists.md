@@ -1279,6 +1279,15 @@ Date: 2026-02-19
       the `z` sequence directly.
     This keeps the seam logically equivalent while removing one existential
     layer from the public interface.
+  - Post-minimal-seam constructor audit:
+    - searched the repository for constructors/usages of
+      `BottcherApproachToOneSeqPreimageData`;
+    - current result: only one active provider exists,
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`
+      in `Mlc/MainConjecture.lean`.
+    Therefore, eliminating `MLC.Quadratic.external_ray_map_exists` now reduces
+    to constructing this minimal seam non-axiomatically (or redesigning the
+    main strategy path to avoid requiring it).
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
