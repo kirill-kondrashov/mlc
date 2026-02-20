@@ -227,6 +227,18 @@ This keeps the remaining replacement targets explicit:
     `mlc_conjecture_of_approach_one_seq_in_bottcher_range_data_two`;
   - kept the direct rooted seed route
     `mainPathData_axiom_seed -> mlc_conjecture_of_mainPathData`.
+- [x] Weakened the active external-ray sequence seam from explicit right-inverse
+  data to basin-image inclusion:
+  - added `BottcherExteriorSubsetImageBasinData`;
+  - routed
+    `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData`
+    through
+    `approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin`;
+  - added
+    `bottcherExteriorSubsetImageBasinData_of_externalRayMapData`.
+  This isolates the remaining constructive obligation to exterior image
+  inclusion on the basin, which is weaker than explicit external-ray inverse
+  data.
 
 ## Execution Order
 1. Implement Track 1 provider interface and prove as much non-axiomatically as

@@ -550,14 +550,44 @@ lemma mainPathData_of_bottcher_approach_to_one_seq_preimage_data_two
 def ApproachOneSeqInBottcherRangeData (c : ℂ) : Prop :=
   ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)
 
+/-- Weaker exterior seam target: every exterior point is in the Böttcher image
+    of a basin point. -/
+def BottcherExteriorSubsetImageBasinData (c : ℂ) : Prop :=
+  ({w : ℂ | 1 < ‖w‖} ⊆
+    (Quadratic.bottcher_map c '' Quadratic.basin_of_infinity c))
+
+/-- Exterior-subset-image seam implies the sequence-range seam. -/
+lemma approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
+    (c : ℂ)
+    (h_sub : BottcherExteriorSubsetImageBasinData c) :
+    ApproachOneSeqInBottcherRangeData c := by
+  intro n
+  rcases h_sub (norm_approach_one_seq_gt_one n) with ⟨z, _hz_basin, hzEq⟩
+  exact ⟨z, hzEq⟩
+
+/-- Build the weaker exterior-subset-image seam from explicit external-ray
+    data. -/
+lemma bottcherExteriorSubsetImageBasinData_of_externalRayMapData
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    BottcherExteriorSubsetImageBasinData c := by
+  intro w hw
+  refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_, ?_⟩
+  · have hphi :
+      Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w :=
+      Quadratic.external_ray_map_of_data_right_inverse h_data w hw
+    have hnorm :
+        1 < ‖Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w)‖ := by
+      simpa [hphi] using hw
+    exact bottcher_map_norm_gt_one_implies_basin c (z := Quadratic.external_ray_map_of_data h_data w)
+      hnorm
+  · exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
+
 /-- Sequence-range seam at `c = 2` from an explicit external-ray data package. -/
 lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
-  intro n
-  exact ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n),
-    Quadratic.external_ray_map_of_data_right_inverse h_data
-      (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
+  exact approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
+    (2 : ℂ) (bottcherExteriorSubsetImageBasinData_of_externalRayMapData h_data)
 
 /-- Current default sequence-range seam at `c = 2`. -/
 lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default :

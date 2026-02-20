@@ -18,6 +18,9 @@ In `Mlc/MainConjecture.lean`, the active seam is now:
 
 The external-ray dependency is localized at:
 - `approach_one_seq_in_bottcher_range_data_two_axiom_seed`.
+- and has been weakened one step further through
+  `BottcherExteriorSubsetImageBasinData` (exterior subset of Böttcher image on
+  the basin).
 
 ## Reduction target chain (already available in code)
 From `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
@@ -30,6 +33,9 @@ From `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
    - `Quadratic.ExternalRayMapData c`
      via `external_ray_map_data_of_injOn_outside_open_of_surj_exterior`.
 2. `ExternalRayMapData (2 : ℂ)` implies the current sequence-range seam at `c=2`.
+3. We now also have a weaker intermediate seam in the rooted path:
+   - `BottcherExteriorSubsetImageBasinData (2 : ℂ) ->
+      ApproachOneSeqInBottcherRangeData (2 : ℂ)`.
 
 So elimination reduces to proving those two outside-open targets at `c = 2`
 without using `external_ray_map_exists`.
