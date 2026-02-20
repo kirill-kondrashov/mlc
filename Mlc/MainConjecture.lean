@@ -490,14 +490,6 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     (False.elim hFalse)
     (False.elim hFalse)
 
-/-- Main MLC assembly from the weaker right-inverse exterior seam at `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two
-    (h_right : BottcherRightInverseOnExteriorData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    (bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
-      (2 : ℂ) h_right)
-
 /-- Current default right-inverse exterior seam at `c = 2`, sourced from
     `external_ray_map_exists`. -/
 lemma bottcher_right_inverse_on_exterior_data_two :
@@ -513,8 +505,9 @@ lemma bottcher_right_inverse_on_exterior_data_two :
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two
-    bottcher_right_inverse_on_exterior_data_two
+  exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
+    (bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
+      (2 : ℂ) bottcher_right_inverse_on_exterior_data_two)
 
 end MainProof
 

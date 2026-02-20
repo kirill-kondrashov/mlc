@@ -884,8 +884,10 @@ Date: 2026-02-19
       payload actually used on the active path);
     - added conversion
       `bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior`;
-    - routed `mlc_conjecture` through
-      `mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two`.
+    - kept the main route target minimal:
+      `mlc_conjecture` still assembles through
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`, with
+      default preimage data now produced via the weaker right-inverse seam.
     Current default instantiation still comes from
     `external_ray_map_exists`, but the required seam obligation is now weaker
     and explicit.
