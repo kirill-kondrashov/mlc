@@ -804,6 +804,11 @@ Date: 2026-02-19
     - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
       `MLC.Quadratic.external_ray_map_exists`)
     - `scripts/verify_output.sh` passes.
+  - Rooted-closure audit refresh:
+    - generated `site/mlc_conjecture/graph.json` and compared all top-level
+      declarations from `Mlc/MainConjecture.lean` against graph nodes;
+    - result: no declarations missing from the rooted closure (all current
+      declarations in the file participate in the `MLC.mlc_conjecture` path).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
