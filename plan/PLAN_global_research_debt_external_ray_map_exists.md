@@ -927,6 +927,20 @@ Date: 2026-02-19
     - inlined its construction at the `mlc_conjecture` call-site.
     This keeps the active rooted path minimal while preserving theorem shape
     and the current axiom boundary.
+  - Outside-plan conversion-chain audit (additional):
+    - core-only (axiom-clean) conversion lemmas are already available:
+      - `MLC.bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image`
+      - `MLC.bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`
+      - `MLC.bottcherImageOutsideOpenIsExterior_of_surj`
+      - `MLC.outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open`
+      - `MLC.bottcher_map_norm_gt_one_implies_basin`
+    - axiom-backed boundary points remain:
+      - `MLC.exterior_subset_image_outside_disk`
+      - `MLC.bottcher_map_inj_on_outside_open`
+    This sharpens the next objective: replace the two boundary providers above
+    with external-ray-free constructions, then reuse the existing core-only
+    conversion chain to recover the right-inverse seam needed by
+    `Mlc/MainConjecture.lean`.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
