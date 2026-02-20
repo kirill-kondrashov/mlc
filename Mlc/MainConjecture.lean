@@ -463,20 +463,32 @@ theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     h_classify_ir
     (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
 
-/-- Main MLC assembly from approach-sequence preimage data at `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
-    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+/-- Main MLC assembly from boundary-motion data, IR tower-data
+    classification, and conformal-modulus bridge data. -/
+theorem mlc_conjecture_of_motionHyp_tower_conformalModulus_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_mod : MoleculeConformalModulusLowerBoundData) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
-  have h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
-  have h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
-  have h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
   have h_classify_ir : IRClassificationData := by
     intro c hc h_inf
     exact classify_infinitely_renormalizable h_tower_data c h_inf
   exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     h_motion
     h_classify_ir
+    h_mod
+
+/-- Main MLC assembly from approach-sequence preimage data at `c = 2`. -/
+theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
+  have h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
+  have h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
+  have h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
+  exact mlc_conjecture_of_motionHyp_tower_conformalModulus_data
+    h_motion
+    h_tower_data
     h_mod
 
 /-- Current minimal sequence-image seam target: the canonical sequence belongs

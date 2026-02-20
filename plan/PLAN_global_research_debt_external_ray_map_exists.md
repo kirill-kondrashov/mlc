@@ -1370,6 +1370,22 @@ Date: 2026-02-19
       `MLC.Quadratic.external_ray_map_exists`;
     - rooted-closure audit for `Mlc/MainConjecture.lean` against
       `site/mlc_conjecture/graph.json` remains clean (`missing_count = 0`).
+  - Constructive-core extraction for the remaining branch obligations:
+    - added theorem
+      `mlc_conjecture_of_motionHyp_tower_conformalModulus_data` that assembles
+      MLC from exactly:
+      - `Quadratic.PuzzleBoundaryMotionHyp`
+      - `InfinitelyRenormalizableHasTowerData`
+      - `MoleculeConformalModulusLowerBoundData`
+      with IR classification derived by
+      `classify_infinitely_renormalizable`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two` to be
+      a thin contradiction wrapper that only supplies those three inputs via
+      `False.elim`.
+    This isolates the non-contradiction strategy core from the current
+    contradiction fallback and makes the remaining constructive replacement
+    interface explicit.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
