@@ -600,14 +600,14 @@ theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
       (bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
         (2 : ℂ) h_surj))
 
-/-- Current direct `c = 2` sequence-fiber seed from `bottcher_map_surj`,
-    restricted to the canonical `approach_one_seq`. -/
+/-- Current direct `c = 2` sequence-fiber seed from the external-ray right
+    inverse on the canonical `approach_one_seq`. -/
 lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
     BottcherApproachOneSeqFiberData (2 : ℂ) := by
   intro n
-  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
-      (norm_approach_one_seq_gt_one n) with ⟨z, _hz_dom, hzw⟩
-  exact ⟨z, hzw⟩
+  refine ⟨Quadratic.external_ray_map (2 : ℂ) (approach_one_seq n), ?_⟩
+  exact Quadratic.external_ray_map_right_inverse (2 : ℂ) (approach_one_seq n)
+    (norm_approach_one_seq_gt_one n)
 
 /-- Current default seed for the constructive main-path seam datum. -/
 lemma mainPathData_axiom_seed : MainPathData := by

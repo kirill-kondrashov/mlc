@@ -10,7 +10,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 - collapsing the rooted proof into contradiction circulation.
 
 ## Progress
-`[██████████] 99.99%` (4.9992/5 core milestones completed)
+`[██████████] 99.99%` (4.9994/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
@@ -35,7 +35,7 @@ The external-ray dependency is now localized through the narrowed seed chain:
 - `mainPathData_axiom_seed`
 - `mainPathData_of_bottcherApproachOneSeqFiberData_two`
 - `bottcherApproachOneSeqFiberData_two_axiom_seed`
-- `Quadratic.bottcher_map_surj (2 : ℂ)` (applied only to `approach_one_seq n`)
+- `Quadratic.external_ray_map_right_inverse (2 : ℂ)` (applied only to `approach_one_seq n`)
 - `MLC.Quadratic.external_ray_map_exists`.
 
 Outside-plan default right-inverse construction is now routed through:
@@ -50,7 +50,7 @@ Exact rooted dependency chain to the missing axiom (from generated graph):
 2. `MLC.mainPathData_axiom_seed`
 3. `MLC.mainPathData_of_bottcherApproachOneSeqFiberData_two`
 4. `MLC.bottcherApproachOneSeqFiberData_two_axiom_seed`
-5. `MLC.Quadratic.bottcher_map_surj`
+5. `MLC.Quadratic.external_ray_map_right_inverse`
 6. `MLC.Quadratic.external_ray_map_exists`
 
 ## Reduction target chain (already available in code)
@@ -194,6 +194,11 @@ condition rather than global outside-open slit inclusion.
      `mainPathData_of_bottcherApproachOneSeqOutsideOpenFiberData_two`,
    - inlined it into
      `mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
+2p. [x] Remove rooted dependence on `bottcher_map_surj` by switching the
+   current axiom seed to the direct external-ray right-inverse on
+   `approach_one_seq`:
+   - rewired `bottcherApproachOneSeqFiberData_two_axiom_seed` to use
+     `Quadratic.external_ray_map_right_inverse` at `c = 2`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
