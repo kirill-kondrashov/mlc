@@ -246,7 +246,7 @@ This keeps the remaining replacement targets explicit:
   - added
     `bottcherExteriorSubsetImageBasinData_two_axiom_seed`;
   - rewired
-    `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default`
+    `approach_one_seq_in_bottcher_range_data_two_of_basinImageSeed`
     through this seam.
   This keeps the rooted endpoint stable and exposes one explicit replacement
   target at `c = 2`.

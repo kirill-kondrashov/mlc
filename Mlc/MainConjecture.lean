@@ -608,7 +608,7 @@ lemma bottcherExteriorSubsetImageBasinData_two_axiom_seed :
   exact bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj
 
 /-- Current default sequence-range seam at `c = 2`. -/
-lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default :
+lemma approach_one_seq_in_bottcher_range_data_two_of_basinImageSeed :
     ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
   exact approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
     (2 : ℂ) bottcherExteriorSubsetImageBasinData_two_axiom_seed
@@ -618,7 +618,7 @@ lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default 
     axiom from `mlc_conjecture`. -/
 lemma approach_one_seq_in_bottcher_range_data_two_axiom_seed :
     ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
-  exact approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default
+  exact approach_one_seq_in_bottcher_range_data_two_of_basinImageSeed
 
 /-- Sequence-image inclusion in `Set.range` yields the minimal seam. -/
 lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_bottcher_range
