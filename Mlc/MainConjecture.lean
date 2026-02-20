@@ -5,7 +5,6 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
-import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
@@ -261,14 +260,16 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
 def BottcherApproachOneSeqPreimageData (c : ℂ) : Prop :=
   ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
 
-/-- The weaker right-inverse exterior seam implies approach-sequence preimages. -/
-lemma bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
-    (c : ℂ) (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c) :
+/-- Exterior surjectivity seam target for `bottcher_map`. -/
+def BottcherExteriorSurjData (c : ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ∃ z, Quadratic.bottcher_map c z = w
+
+/-- Exterior surjectivity implies approach-sequence preimages. -/
+lemma bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data
+    (c : ℂ) (h_surj : BottcherExteriorSurjData c) :
     BottcherApproachOneSeqPreimageData c := by
-  rcases h_right with ⟨f, hf⟩
   intro n
-  refine ⟨f (approach_one_seq n), ?_⟩
-  exact hf (approach_one_seq n) (norm_approach_one_seq_gt_one n)
+  exact h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n)
 
 /-- Contradiction from approach-sequence range data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
@@ -493,27 +494,28 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     h_classify_ir
     h_mod
 
-/-- Main MLC assembly from the outside-plan right-inverse seam at `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two
-    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ)) :
+/-- Main MLC assembly from exterior-surjectivity seam data at `c = 2`. -/
+theorem mlc_conjecture_of_bottcher_exterior_surj_data_two
+    (h_surj : BottcherExteriorSurjData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    (bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
-      (2 : ℂ) h_right)
+    (bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data
+      (2 : ℂ) h_surj)
 
-/-- Current default provider for the `c = 2` right-inverse seam. -/
-lemma bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists :
-    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
-  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists
-    (2 : ℂ)
+/-- Current default provider for the `c = 2` exterior-surjectivity seam. -/
+lemma bottcher_exterior_surj_data_two_of_bottcher_map_surj :
+    BottcherExteriorSurjData (2 : ℂ) := by
+  intro w hw
+  rcases Quadratic.bottcher_map_surj (2 : ℂ) w hw with ⟨z, _hzdom, hEq⟩
+  exact ⟨z, hEq⟩
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two
-    bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists
+  exact mlc_conjecture_of_bottcher_exterior_surj_data_two
+    bottcher_exterior_surj_data_two_of_bottcher_map_surj
 
 end MainProof
 

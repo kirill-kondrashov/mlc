@@ -1141,6 +1141,17 @@ Date: 2026-02-19
       in `Mlc/MainConjecture.lean` to consume the shared constructor.
     This keeps the external ingress explicit at the outside-plan seam layer and
     removes one default indirection through `external_ray_map_data`.
+  - Active seam weakened from right-inverse payload to exterior surjectivity:
+    - removed `BottcherRightInverseOnExteriorDataOutsidePlan` from the active
+      `Mlc/MainConjecture.lean` route;
+    - introduced `BottcherExteriorSurjData` and
+      `bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data`;
+    - added default provider
+      `bottcher_exterior_surj_data_two_of_bottcher_map_surj`;
+    - rewired `mlc_conjecture` through
+      `mlc_conjecture_of_bottcher_exterior_surj_data_two`.
+    This further weakens the rooted replacement obligation from a global
+    right-inverse function to existential exterior surjectivity data.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
