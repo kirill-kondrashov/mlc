@@ -1188,6 +1188,14 @@ Date: 2026-02-19
       `Quadratic.external_ray_map_exists (2 : ℂ)`.
     This improves boundary auditability without changing theorem signatures or
     axiom footprint.
+  - Rooted ingress simplification:
+    - rewired
+      `bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to destructure `Quadratic.external_ray_map_exists (2 : ℂ)` directly
+      (`⟨f, hf_right, _⟩`) and build preimages from `hf_right`;
+    - removed use of intermediate helper projections at this call site.
+    This keeps the same mathematical content while making the residual axiom
+    dependency syntactically explicit at the exact provider boundary.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

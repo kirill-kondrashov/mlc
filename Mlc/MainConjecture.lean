@@ -487,12 +487,9 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     sourced directly from `external_ray_map_exists`. -/
 lemma bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachOneSeqPreimageData (2 : ℂ) := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    Quadratic.external_ray_map_exists (2 : ℂ)
+  rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
   intro n
-  refine ⟨Quadratic.external_ray_map_of_data h_data (approach_one_seq n), ?_⟩
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data
-    (approach_one_seq n) (norm_approach_one_seq_gt_one n)
+  exact ⟨f (approach_one_seq n), hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
