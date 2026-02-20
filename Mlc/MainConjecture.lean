@@ -5,6 +5,7 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
@@ -480,17 +481,35 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
     h_mod
 
 /-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
-    sourced directly from `external_ray_map_exists`. -/
-lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
+    sourced from exterior image-inclusion on `outside_disk` at `c = 2`. -/
+lemma bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk
+    (h_disk :
+      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map (2 : ℂ) '' outside_disk (2 : ℂ))) :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
-  rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  refine ⟨fun n => f (approach_one_seq n), ?_⟩
+  classical
+  refine ⟨fun n =>
+    Classical.choose
+      (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
+        from norm_approach_one_seq_gt_one n)), ?_⟩
   have hEq :
-      (fun n => Quadratic.bottcher_map (2 : ℂ) ((fun k => f (approach_one_seq k)) n))
+      (fun n =>
+        Quadratic.bottcher_map (2 : ℂ)
+          (Classical.choose
+            (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
+              from norm_approach_one_seq_gt_one n))))
         = approach_one_seq := by
     funext n
-    exact hf_right (approach_one_seq n) (norm_approach_one_seq_gt_one n)
+    exact (Classical.choose_spec
+      (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
+        from norm_approach_one_seq_gt_one n))).2
   simpa [hEq] using tendsto_approach_one_seq
+
+/-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
+    sourced from the current outside-plan exterior-image default. -/
+lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
+    BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
+  exact bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk
+    (exterior_subset_image_outside_disk (2 : ℂ))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

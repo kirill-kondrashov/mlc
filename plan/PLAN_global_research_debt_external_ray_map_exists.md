@@ -1279,6 +1279,17 @@ Date: 2026-02-19
       the `z` sequence directly.
     This keeps the seam logically equivalent while removing one existential
     layer from the public interface.
+  - Route minimal seam provider through outside-plan image inclusion:
+    - added
+      `bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk`
+      in `Mlc/MainConjecture.lean`;
+    - rewired the current default provider
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to call that theorem via
+      `exterior_subset_image_outside_disk (2 : ℂ)`.
+    This connects the rooted minimal seam directly to the extracted
+    outside-plan seam layer, making replacement targets for elimination more
+    explicit.
   - Post-minimal-seam constructor audit:
     - searched the repository for constructors/usages of
       `BottcherApproachToOneSeqPreimageData`;
