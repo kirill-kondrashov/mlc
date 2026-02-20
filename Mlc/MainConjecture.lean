@@ -255,42 +255,58 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
   rw [norm_approach_one_seq_eq n]
   linarith
 
+lemma norm_approach_one_seq_le_two (n : ℕ) : ‖approach_one_seq n‖ ≤ 2 := by
+  have hden_ge : (1 : ℝ) ≤ (n : ℝ) + 1 := by nlinarith
+  have hrecip_le : 1 / ((n : ℝ) + 1) ≤ 1 := by
+    have htmp : 1 / ((n : ℝ) + 1) ≤ 1 / (1 : ℝ) :=
+      one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1) hden_ge
+    simpa using htmp
+  rw [norm_approach_one_seq_eq n]
+  linarith
+
+lemma tendsto_approach_one_seq :
+    Tendsto approach_one_seq atTop (𝓝 (1 : ℂ)) := by
+  have hreal :
+      Tendsto (fun n : ℕ => 1 + (1 / ((n : ℝ) + 1))) atTop (𝓝 (1 : ℝ)) := by
+    simpa [add_comm] using tendsto_one_div_add_atTop_nhds_zero_nat.const_add (1 : ℝ)
+  change Tendsto (fun n : ℕ => Complex.ofReal (1 + (1 / ((n : ℝ) + 1))))
+    atTop (𝓝 (Complex.ofReal 1))
+  simpa using hreal.ofReal
+
 /-- Minimal external seam target used by the current contradiction core:
     preimages for the canonical approach-to-`1` sequence. -/
 def BottcherApproachOneSeqPreimageData (c : ℂ) : Prop :=
   ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
 
-/-- Contradiction from approach-sequence range data at `c = 2`
+/-- Weaker seam target: preimages for some sequence in the exterior converging
+    to `1`, with a uniform norm cap by `2`. -/
+def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
+  ∃ u : ℕ → ℂ,
+    Tendsto u atTop (𝓝 (1 : ℂ)) ∧
+    (∀ n, 1 < ‖u n‖) ∧
+    (∀ n, ‖u n‖ ≤ 2) ∧
+    (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
+
+/-- The canonical approach-sequence seam implies the weaker abstract
+    approach-to-`1` seam. -/
+lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data
+    (c : ℂ) (h_pre : BottcherApproachOneSeqPreimageData c) :
+    BottcherApproachToOneSeqPreimageData c := by
+  refine ⟨approach_one_seq, tendsto_approach_one_seq, ?_, ?_, ?_⟩
+  · intro n
+    exact norm_approach_one_seq_gt_one n
+  · intro n
+    exact norm_approach_one_seq_le_two n
+  · intro n
+    exact h_pre n
+
+/-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_bottcher_approach_one_seq_preimage_data_two
-    (h_pre : BottcherApproachOneSeqPreimageData (2 : ℂ)) :
+lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
-  let u : ℕ → ℂ := approach_one_seq
-  have h_pre' : ∀ n, ∃ z, Quadratic.bottcher_map (2 : ℂ) z = u n := by
-    intro n
-    rcases h_pre n with ⟨z, hz⟩
-    exact ⟨z, by simpa [u] using hz⟩
-  choose z hright using h_pre'
-  have hu_norm : ∀ n, ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
-    intro n
-    simpa [u] using norm_approach_one_seq_eq n
-  have hu_le_two : ∀ n, ‖u n‖ ≤ 2 := by
-    intro n
-    have hden_pos : 0 < (n : ℝ) + 1 := by positivity
-    have hden_ge : (1 : ℝ) ≤ (n : ℝ) + 1 := by nlinarith
-    have hrecip_le : 1 / ((n : ℝ) + 1) ≤ 1 := by
-      have htmp : 1 / ((n : ℝ) + 1) ≤ 1 / (1 : ℝ) :=
-        one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1) hden_ge
-      simpa using htmp
-    rw [hu_norm n]
-    linarith
-  have hu_tend_real :
-      Tendsto (fun n : ℕ => 1 + (1 / ((n : ℝ) + 1))) atTop (𝓝 (1 : ℝ)) := by
-    simpa [add_comm] using tendsto_one_div_add_atTop_nhds_zero_nat.const_add (1 : ℝ)
-  have hu_tend : Tendsto u atTop (𝓝 (1 : ℂ)) := by
-    change Tendsto (fun n : ℕ => Complex.ofReal (1 + (1 / ((n : ℝ) + 1))))
-      atTop (𝓝 (Complex.ofReal 1))
-    simpa using hu_tend_real.ofReal
+  rcases h_data with ⟨u, hu_tend, hu_gt_one, hu_le_two, h_pre⟩
+  choose z hright using h_pre
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
@@ -299,7 +315,7 @@ lemma false_of_bottcher_approach_one_seq_preimage_data_two
         Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) =
             ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
               simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
-        _ = ‖u n‖ := by simpa [u] using congrArg norm (hright n)
+        _ = ‖u n‖ := by simpa using congrArg norm (hright n)
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2
@@ -313,8 +329,7 @@ lemma false_of_bottcher_approach_one_seq_preimage_data_two
           log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
             (2 : ℂ) (z n) hlarge
       have hlog_u_le : Real.log ‖u n‖ ≤ Real.log 2 := by
-        have hu_pos : 0 < ‖u n‖ := by
-          exact lt_trans zero_lt_one (by simpa [u] using norm_approach_one_seq_gt_one n)
+        have hu_pos : 0 < ‖u n‖ := lt_trans zero_lt_one (hu_gt_one n)
         exact Real.log_le_log hu_pos (hu_le_two n)
       have hlog' : Real.log ‖z n‖ ≤ Real.log 2 + C := by
         linarith [hlog, hgreen_eq n, hlog_u_le]
@@ -337,8 +352,10 @@ lemma false_of_bottcher_approach_one_seq_preimage_data_two
   obtain ⟨a, _ha_cl, φ, hφmono, hφtend⟩ :=
     tendsto_subseq_of_bounded hbounded_ball hz_mem
   have hlog_tend : Tendsto (fun n => Real.log ‖u n‖) atTop (𝓝 (0 : ℝ)) := by
+    have hnorm_tend' : Tendsto (fun n => ‖u n‖) atTop (𝓝 ‖(1 : ℂ)‖) :=
+      (continuous_norm.tendsto (1 : ℂ)).comp hu_tend
     have hnorm_tend : Tendsto (fun n => ‖u n‖) atTop (𝓝 (1 : ℝ)) := by
-      simpa [hu_norm] using hu_tend_real
+      simpa using hnorm_tend'
     have hcont_log : ContinuousAt Real.log (1 : ℝ) :=
       Real.continuousAt_log (by norm_num)
     simpa using hcont_log.tendsto.comp hnorm_tend
@@ -378,6 +395,15 @@ lemma false_of_bottcher_approach_one_seq_preimage_data_two
   have hphi_a : Quadratic.bottcher_map (2 : ℂ) a = 1 :=
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
+
+/-- Contradiction from approach-sequence range data at `c = 2`
+    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+lemma false_of_bottcher_approach_one_seq_preimage_data_two
+    (h_pre : BottcherApproachOneSeqPreimageData (2 : ℂ)) :
+    False := by
+  exact false_of_bottcher_approach_to_one_seq_preimage_data_two
+    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data
+      (2 : ℂ) h_pre)
 
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/

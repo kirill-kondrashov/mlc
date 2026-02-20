@@ -1196,6 +1196,18 @@ Date: 2026-02-19
     - removed use of intermediate helper projections at this call site.
     This keeps the same mathematical content while making the residual axiom
     dependency syntactically explicit at the exact provider boundary.
+  - Contradiction-input seam weakening (approach-to-`1` abstraction):
+    - added
+      `BottcherApproachToOneSeqPreimageData` in
+      `Mlc/MainConjecture.lean`, requiring preimages for some sequence
+      `u n → 1` with `1 < ‖u n‖ ≤ 2`;
+    - extracted generalized contradiction core
+      `false_of_bottcher_approach_to_one_seq_preimage_data_two`;
+    - rewired
+      `false_of_bottcher_approach_one_seq_preimage_data_two` through a
+      conversion lemma from the canonical sequence seam.
+    This makes the contradiction core depend on a weaker, sequence-agnostic
+    seam while keeping the rooted theorem chain and axiom footprint unchanged.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
