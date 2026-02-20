@@ -941,6 +941,19 @@ Date: 2026-02-19
     with external-ray-free constructions, then reuse the existing core-only
     conversion chain to recover the right-inverse seam needed by
     `Mlc/MainConjecture.lean`.
+  - Local-to-global injectivity audit (outside-open layer):
+    - local analytic/inverse machinery on outside-open is already independent of
+      `external_ray_map_exists`:
+      - `MLC.bottcher_map_local_inj_on_outside_open`
+      - `MLC.bottcher_map_isLocalHomeomorphOn_outside_open`
+      - `MLC.bottcher_map_isOpenMap_on_outside_open`
+      (these currently depend on `MLC.Quadratic.bottcher_seq_converges`, not on
+      external-ray existence);
+    - the remaining blocker is a global injectivity upgrade on outside-open
+      without routing through
+      `MLC.bottcher_map_inj_on_outside_open_of_data`.
+    This suggests the next technical task: add an external-ray-free global
+    injectivity theorem for outside-open from the existing local/proper stack.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
