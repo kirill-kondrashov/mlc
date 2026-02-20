@@ -4229,16 +4229,25 @@ theorem bottcherImageOutsideOpenIsExterior_two_of_surj
     BottcherImageOutsideOpenIsExterior (2 : ℂ) := by
   exact bottcherImageOutsideOpenIsExterior_of_surj (2 : ℂ) h_surj
 
+/-- Exterior-subset-image on outside-open implies outside-open surjectivity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open
+    (c : ℂ)
+    (h_sub : {w : ℂ | 1 < ‖w‖} ⊆
+      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    BottcherSurjOnExteriorFromOutsideOpen c := by
+  intro w hw
+  rcases h_sub hw with ⟨z, hz, hzw⟩
+  exact ⟨z, hz, hzw⟩
+
 /-- Image-equality target implies the outside-open surjectivity target. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior
     (c : ℂ) (h_img : BottcherImageOutsideOpenIsExterior c) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
-  intro w hw
-  have himg : w ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
-    rw [h_img]
-    exact hw
-  rcases himg with ⟨z, hz, hzw⟩
-  exact ⟨z, hz, hzw⟩
+  exact bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open c
+    (by
+      intro w hw
+      rw [h_img]
+      exact hw)
 
 /-- Construct external-ray data from outside-open injectivity + exterior
     surjectivity by outside-open preimages. -/

@@ -1019,6 +1019,14 @@ Date: 2026-02-19
       plus
       `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`.
     This reduces one wrapper layer while preserving behavior and axioms.
+  - Surjectivity conversion seam extraction:
+    - added core-only theorem
+      `MLC.bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open`;
+    - rewired
+      `MLC.bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`
+      through this new seam.
+    This factors the outside-open surjectivity conversion into a reusable,
+    assumption-explicit step.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
