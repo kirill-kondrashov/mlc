@@ -22,7 +22,8 @@ The external-ray dependency is localized at:
   `BottcherExteriorSubsetImageBasinData` (exterior subset of Böttcher image on
   the basin).
 - with explicit `c = 2` default seam node:
-  `bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj`.
+  `bottcherExteriorSubsetImageBasinData_two_axiom_seed`
+  (currently instantiated via `..._two_of_bottcher_map_surj`).
 
 ## Reduction target chain (already available in code)
 From `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:

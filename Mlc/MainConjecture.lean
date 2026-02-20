@@ -600,11 +600,18 @@ lemma bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj :
     BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
   exact bottcherExteriorSubsetImageBasinData_of_bottcher_map_surj (2 : ℂ)
 
+/-- Single active replacement target for the remaining `c = 2` basin-image
+    seam. Replacing this constructively removes the final non-core axiom source
+    from the rooted sequence-range path. -/
+lemma bottcherExteriorSubsetImageBasinData_two_axiom_seed :
+    BottcherExteriorSubsetImageBasinData (2 : ℂ) := by
+  exact bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj
+
 /-- Current default sequence-range seam at `c = 2`. -/
 lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default :
     ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
   exact approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
-    (2 : ℂ) bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj
+    (2 : ℂ) bottcherExteriorSubsetImageBasinData_two_axiom_seed
 
 /-- Single active axiom-seed replacement target for the sequence-range seam at
     `c = 2`. Replacing this lemma constructively removes the final non-core

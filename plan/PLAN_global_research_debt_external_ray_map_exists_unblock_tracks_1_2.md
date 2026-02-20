@@ -243,6 +243,8 @@ This keeps the remaining replacement targets explicit:
   lemma:
   - added
     `bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj`;
+  - added
+    `bottcherExteriorSubsetImageBasinData_two_axiom_seed`;
   - rewired
     `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData_default`
     through this seam.
