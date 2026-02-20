@@ -279,7 +279,6 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
   ∃ u : ℕ → ℂ, ∃ R : ℝ,
     Tendsto u atTop (𝓝 (1 : ℂ)) ∧
     1 < R ∧
-    (∀ n, 1 < ‖u n‖) ∧
     (∀ n, ‖u n‖ ≤ R) ∧
     (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
 
@@ -288,8 +287,16 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
-  rcases h_data with ⟨u, R, hu_tend, hR_gt_one, hu_gt_one, hu_le_R, h_pre⟩
+  rcases h_data with ⟨u, R, hu_tend, hR_gt_one, hu_le_R, h_pre⟩
   choose z hright using h_pre
+  have hu_pos : ∀ n, 0 < ‖u n‖ := by
+    intro n
+    calc
+      0 < Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) := Real.exp_pos _
+      _ = ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
+            simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
+      _ = ‖u n‖ := by
+            simpa using congrArg norm (hright n)
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
@@ -312,8 +319,7 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
           log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
             (2 : ℂ) (z n) hlarge
       have hlog_u_le : Real.log ‖u n‖ ≤ Real.log R := by
-        have hu_pos : 0 < ‖u n‖ := lt_trans zero_lt_one (hu_gt_one n)
-        exact Real.log_le_log hu_pos (hu_le_R n)
+        exact Real.log_le_log (hu_pos n) (hu_le_R n)
       have hlog' : Real.log ‖z n‖ ≤ Real.log R + C := by
         linarith [hlog, hgreen_eq n, hlog_u_le]
       have hesc_ge_two : (2 : ℝ) ≤ MLC.Quadratic.escape_bound (2 : ℂ) := by
@@ -488,9 +494,7 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
 lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
   rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  refine ⟨approach_one_seq, 2, tendsto_approach_one_seq, by norm_num, ?_, ?_, ?_⟩
-  · intro n
-    exact norm_approach_one_seq_gt_one n
+  refine ⟨approach_one_seq, 2, tendsto_approach_one_seq, by norm_num, ?_, ?_⟩
   · intro n
     exact norm_approach_one_seq_le_two n
   · intro n

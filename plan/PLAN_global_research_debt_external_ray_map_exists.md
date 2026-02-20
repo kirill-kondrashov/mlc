@@ -1237,6 +1237,13 @@ Date: 2026-02-19
     - updated the current default provider to instantiate `R := 2`.
     This strictly weakens the abstract contradiction seam and keeps the same
     rooted theorem path and axiom footprint.
+  - Abstract seam weakening (drop pointwise exterior constraint):
+    - removed the explicit requirement `∀ n, 1 < ‖u n‖` from
+      `BottcherApproachToOneSeqPreimageData`;
+    - in the contradiction core, derived positivity `0 < ‖u n‖` internally from
+      `‖u n‖ = exp(green(...))` via the preimage equations.
+    This further weakens the seam assumptions while preserving the same proof
+    route and axiom footprint.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
