@@ -1122,6 +1122,14 @@ Date: 2026-02-19
       of the classification slot.
     This keeps the intended IR-classification theorem path active in the
     rooted strategy surface while preserving the current axiom footprint.
+  - Final seam explicitness at the theorem boundary:
+    - added
+      `mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two`;
+    - added default provider
+      `bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists`;
+    - rewired `mlc_conjecture` through this explicit right-inverse seam theorem.
+    This isolates the remaining non-core ingress as a single named provider
+    while keeping the contradiction core and strategy assembly unchanged.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;

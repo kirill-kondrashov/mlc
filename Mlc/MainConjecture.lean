@@ -493,17 +493,27 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
     h_classify_ir
     h_mod
 
+/-- Main MLC assembly from the outside-plan right-inverse seam at `c = 2`. -/
+theorem mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two
+    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
+    (bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
+      (2 : ℂ) h_right)
+
+/-- Current default provider for the `c = 2` right-inverse seam. -/
+lemma bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists :
+    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
+  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
+    (Quadratic.external_ray_map_exists (2 : ℂ))
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  let h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) :=
-    bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
-      (Quadratic.external_ray_map_exists (2 : ℂ))
-  exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    (bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
-      (2 : ℂ) h_right)
+  exact mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two
+    bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists
 
 end MainProof
 
