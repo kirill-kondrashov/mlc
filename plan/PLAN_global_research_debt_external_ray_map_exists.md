@@ -878,6 +878,23 @@ Date: 2026-02-19
     This identifies the exact remaining constructive target: a direct,
     non-axiomatic provider of approach-sequence preimages at `c = 2`
     (or a strategy redesign that removes this requirement from the active path).
+  - Seam weakening step in `Mlc/MainConjecture.lean`:
+    - introduced `BottcherRightInverseOnExteriorData` (strictly weaker than
+      full `ExternalRayMapData`, keeping only the right-inverse-on-exterior
+      payload actually used on the active path);
+    - added conversion
+      `bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior`;
+    - routed `mlc_conjecture` through
+      `mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two`.
+    Current default instantiation still comes from
+    `external_ray_map_exists`, but the required seam obligation is now weaker
+    and explicit.
+  - Verification after seam weakening:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
