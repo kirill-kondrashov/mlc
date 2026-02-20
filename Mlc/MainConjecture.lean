@@ -481,28 +481,26 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
     h_mod
 
 /-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
-    sourced from exterior image-inclusion on `outside_disk`. -/
-lemma bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
+    sourced from approach-sequence image inclusion on `outside_disk`. -/
+def ApproachOneSeqInImageOutsideDiskData (c : ℂ) : Prop :=
+  ∀ n, approach_one_seq n ∈ Quadratic.bottcher_map c '' outside_disk c
+
+/-- Sequence-image inclusion on `outside_disk` yields the minimal seam. -/
+lemma bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_image_outside_disk
     (c : ℂ)
-    (h_disk :
-      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c)) :
+    (h_seq : ApproachOneSeqInImageOutsideDiskData c) :
     BottcherApproachToOneSeqPreimageData c := by
   classical
   refine ⟨fun n =>
     Classical.choose
-      (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
-        from norm_approach_one_seq_gt_one n)), ?_⟩
+      (h_seq n), ?_⟩
   have hEq :
       (fun n =>
         Quadratic.bottcher_map c
-          (Classical.choose
-            (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
-              from norm_approach_one_seq_gt_one n))))
+          (Classical.choose (h_seq n)))
         = approach_one_seq := by
     funext n
-    exact (Classical.choose_spec
-      (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
-        from norm_approach_one_seq_gt_one n))).2
+    exact (Classical.choose_spec (h_seq n)).2
   simpa [hEq] using tendsto_approach_one_seq
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
@@ -510,9 +508,12 @@ lemma bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outsid
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
+  have h_seq : ApproachOneSeqInImageOutsideDiskData (2 : ℂ) := by
+    intro n
+    exact exterior_subset_image_outside_disk (2 : ℂ) (norm_approach_one_seq_gt_one n)
   exact mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
-    (bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
-      (2 : ℂ) (exterior_subset_image_outside_disk (2 : ℂ)))
+    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_image_outside_disk
+      (2 : ℂ) h_seq)
 
 end MainProof
 

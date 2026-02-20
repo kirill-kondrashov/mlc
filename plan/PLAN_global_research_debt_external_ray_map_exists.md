@@ -1311,6 +1311,17 @@ Date: 2026-02-19
     - inlined its body at the final `mlc_conjecture` call site.
     This shortens the rooted seam chain without changing the strategy shape,
     theorem statements, or axiom footprint.
+  - Rooted seam weakened from full exterior inclusion to sequence-image inclusion:
+    - introduced
+      `ApproachOneSeqInImageOutsideDiskData c`:
+      `∀ n, approach_one_seq n ∈ bottcher_map c '' outside_disk c`;
+    - introduced constructor
+      `bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_image_outside_disk`;
+    - rewired `mlc_conjecture` to use this weaker sequence-image seam, with
+      default instantiation from
+      `exterior_subset_image_outside_disk (2 : ℂ)`.
+    This strictly weakens the active replacement target and keeps the same
+    theorem/axiom profile.
   - Post-minimal-seam constructor audit:
     - searched the repository for constructors/usages of
       `BottcherApproachToOneSeqPreimageData`;
