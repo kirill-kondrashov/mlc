@@ -278,7 +278,6 @@ lemma tendsto_approach_one_seq :
 def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
   ∃ u : ℕ → ℂ, ∃ R : ℝ,
     Tendsto u atTop (𝓝 (1 : ℂ)) ∧
-    1 < R ∧
     (∀ n, ‖u n‖ ≤ R) ∧
     (∀ n, ∃ z, Quadratic.bottcher_map c z = u n)
 
@@ -287,7 +286,7 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
-  rcases h_data with ⟨u, R, hu_tend, hR_gt_one, hu_le_R, h_pre⟩
+  rcases h_data with ⟨u, R, hu_tend, hu_le_R, h_pre⟩
   choose z hright using h_pre
   have hu_pos : ∀ n, 0 < ‖u n‖ := by
     intro n
@@ -494,7 +493,7 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
 lemma bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists :
     BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
   rcases Quadratic.external_ray_map_exists (2 : ℂ) with ⟨f, hf_right, _hf_left⟩
-  refine ⟨approach_one_seq, 2, tendsto_approach_one_seq, by norm_num, ?_, ?_⟩
+  refine ⟨approach_one_seq, 2, tendsto_approach_one_seq, ?_, ?_⟩
   · intro n
     exact norm_approach_one_seq_le_two n
   · intro n

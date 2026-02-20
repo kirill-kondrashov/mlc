@@ -1244,6 +1244,12 @@ Date: 2026-02-19
       `‖u n‖ = exp(green(...))` via the preimage equations.
     This further weakens the seam assumptions while preserving the same proof
     route and axiom footprint.
+  - Abstract seam weakening (drop `R > 1` requirement):
+    - removed `1 < R` from `BottcherApproachToOneSeqPreimageData`;
+    - rewired the default provider accordingly (`R := 2` without an extra
+      inequality field).
+    This makes the seam purely about convergence + boundedness + preimage data,
+    and keeps the contradiction core and axiom footprint unchanged.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
