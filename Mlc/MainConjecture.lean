@@ -396,15 +396,6 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
-/-- Contradiction from approach-sequence range data at `c = 2`
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_bottcher_approach_one_seq_preimage_data_two
-    (h_pre : BottcherApproachOneSeqPreimageData (2 : ℂ)) :
-    False := by
-  exact false_of_bottcher_approach_to_one_seq_preimage_data_two
-    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data
-      (2 : ℂ) h_pre)
-
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
 theorem mlc_conjecture_of_finiteClassificationBridgeData
@@ -494,10 +485,10 @@ theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
 
 /-- Main MLC assembly from approach-sequence preimage data at `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    (h_pre : BottcherApproachOneSeqPreimageData (2 : ℂ)) :
+theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hFalse : False := false_of_bottcher_approach_one_seq_preimage_data_two h_pre
+  have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
   have h_motion : Quadratic.PuzzleBoundaryMotionHyp := False.elim hFalse
   have h_mod : MoleculeConformalModulusLowerBoundData := False.elim hFalse
   have h_tower_data : InfinitelyRenormalizableHasTowerData := False.elim hFalse
@@ -522,8 +513,9 @@ lemma bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists :
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
-    bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists
+  exact mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
+    (bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data
+      (2 : ℂ) bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists)
 
 end MainProof
 

@@ -1208,6 +1208,17 @@ Date: 2026-02-19
       conversion lemma from the canonical sequence seam.
     This makes the contradiction core depend on a weaker, sequence-agnostic
     seam while keeping the rooted theorem chain and axiom footprint unchanged.
+  - Theorem-boundary weakening to the abstract approach seam:
+    - added
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`;
+    - rewired `MLC.mlc_conjecture` through this weaker seam theorem by
+      converting the current default canonical-sequence preimage provider via
+      `bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data`;
+    - removed now-off-path wrappers:
+      - `false_of_bottcher_approach_one_seq_preimage_data_two`
+      - `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`.
+    This keeps `Mlc/MainConjecture.lean` rooted-closure clean while preserving
+    theorem statements and current axiom footprint.
   - Rooted-closure audit refresh:
     - regenerated `site/mlc_conjecture/graph.json`;
     - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
