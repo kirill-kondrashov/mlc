@@ -5,6 +5,7 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
+import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
@@ -260,13 +261,9 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
 def BottcherApproachOneSeqPreimageData (c : ℂ) : Prop :=
   ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
 
-/-- Weaker exterior seam: a right inverse for `bottcher_map` on `{w | 1 < ‖w‖}`. -/
-def BottcherRightInverseOnExteriorData (c : ℂ) : Prop :=
-  ∃ f : ℂ → ℂ, ∀ w, 1 < ‖w‖ → Quadratic.bottcher_map c (f w) = w
-
 /-- The weaker right-inverse exterior seam implies approach-sequence preimages. -/
 lemma bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior
-    (c : ℂ) (h_right : BottcherRightInverseOnExteriorData c) :
+    (c : ℂ) (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c) :
     BottcherApproachOneSeqPreimageData c := by
   rcases h_right with ⟨f, hf⟩
   intro n
@@ -495,7 +492,7 @@ theorem mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  let h_right : BottcherRightInverseOnExteriorData (2 : ℂ) := by
+  let h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
     let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
       Quadratic.external_ray_map_exists (2 : ℂ)
     refine ⟨Quadratic.external_ray_map_of_data h_data, ?_⟩

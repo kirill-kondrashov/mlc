@@ -1087,6 +1087,20 @@ Date: 2026-02-19
     - rewired extracted outside-plan bridge theorems to consume this shared
       right-inverse seam type (instead of repeating raw existential payloads).
     This is a non-semantic cleanup that keeps seam signatures uniform.
+  - Main-conjecture seam integration:
+    - removed local duplicate right-inverse seam type from
+      `Mlc/MainConjecture.lean`;
+    - switched the active MLC seam route to use the shared
+      `MLC.BottcherRightInverseOnExteriorDataOutsidePlan`;
+    - added explicit import of
+      `Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan`
+      for this shared seam type.
+    This ties the active `mlc_conjecture` path to the extracted outside-plan
+    seam layer directly.
+  - Rooted-closure audit refresh:
+    - regenerated `site/mlc_conjecture/graph.json`;
+    - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
+    - result: no declarations missing from rooted closure.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
