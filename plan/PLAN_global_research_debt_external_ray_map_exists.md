@@ -985,6 +985,23 @@ Date: 2026-02-19
     - `MLC.exterior_subset_image_outside_disk_of_right_inverse` is core-only.
     - `MLC.exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement`
       is core-only.
+  - Outside-open injectivity seam extraction:
+    - introduced `MLC.BottcherLeftInverseOnOutsideOpenData` as an explicit
+      seam target for injectivity on outside-open;
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open`;
+    - rewired `MLC.bottcher_map_inj_on_outside_open_of_data` through that seam
+      using
+      `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`.
+    This makes the injectivity boundary explicit and keeps default external-ray
+    usage out of the core injectivity theorem.
+  - Axiom audit for outside-open injectivity seams:
+    - `MLC.BottcherLeftInverseOnOutsideOpenData` is core-only.
+    - `MLC.bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open`
+      is core-only.
+    - `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`
+      is core-only.
+    - `MLC.bottcher_map_inj_on_outside_open_of_data` remains core-only.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

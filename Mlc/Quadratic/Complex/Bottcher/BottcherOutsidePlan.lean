@@ -4000,18 +4000,34 @@ lemma bottcher_left_inv_outside_open_of_local
   simpa [Quadratic.external_ray_map] using
     bottcher_left_inv_outside_open_of_local_of_data (Quadratic.external_ray_map_data c) z hz
 
+/-- Seam target: a left inverse of `bottcher_map` on outside-open. -/
+def BottcherLeftInverseOnOutsideOpenData (c : ℂ) : Prop :=
+  ∃ g : ℂ → ℂ, ∀ z, ‖z‖ > ‖c‖ + 2 → g (Quadratic.bottcher_map c z) = z
+
+/-- Any outside-open left-inverse payload yields outside-open injectivity. -/
+lemma bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open
+    (c : ℂ) (h_left : BottcherLeftInverseOnOutsideOpenData c) :
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  rcases h_left with ⟨g, hg⟩
+  intro z hz w hw hzw
+  have hz' : g (Quadratic.bottcher_map c z) = z := hg z hz
+  have hw' : g (Quadratic.bottcher_map c w) = w := hg w hw
+  have h := congrArg g hzw
+  simpa [hz', hw'] using h
+
+/-- Build outside-open left-inverse payload from explicit external-ray data. -/
+lemma bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    BottcherLeftInverseOnOutsideOpenData c := by
+  refine ⟨Quadratic.external_ray_map_of_data h_data, ?_⟩
+  intro z hz
+  exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
+
 lemma bottcher_map_inj_on_outside_open_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
     Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
-  intro z hz w hw hzw
-  have hz' :
-      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z :=
-    Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
-  have hw' :
-      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c w) = w :=
-    Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data w hw
-  have h := congrArg (Quadratic.external_ray_map_of_data h_data) hzw
-  simpa [hz', hw'] using h
+  exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c
+    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data h_data)
 
 lemma bottcher_map_inj_on_outside_open (c : ℂ) :
     Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
