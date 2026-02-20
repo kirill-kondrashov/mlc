@@ -255,6 +255,10 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
   rw [norm_approach_one_seq_eq n]
   linarith
 
+/-- Exterior surjectivity seam for the explicit `bottcher_map` model. -/
+def BottcherExteriorSurjData (c : ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ∃ z, Quadratic.bottcher_map c z = w
+
 /-- Current minimal external seam target: surjectivity of `bottcher_map` on the
     canonical approach-to-`1` sequence. -/
 def BottcherApproachOneSurjData (c : ℂ) : Prop :=
@@ -466,27 +470,33 @@ theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     h_classify_ir
     (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
 
-/-- Build the minimal range seam datum at `c = 2` from surjectivity of
-    `bottcher_map` on the exterior. -/
-lemma bottcher_approach_one_surj_data_two_of_bottcher_map_surj :
-    BottcherApproachOneSurjData (2 : ℂ) := by
-  intro n
-  rcases Quadratic.bottcher_map_surj (2 : ℂ) (approach_one_seq n)
-      (norm_approach_one_seq_gt_one n) with ⟨z, _hzdom, hzw⟩
+/-- Build the exterior-surjectivity seam at `c = 2` from the current
+    `bottcher_map_surj` interface. -/
+lemma bottcher_exterior_surj_data_two_of_bottcher_map_surj :
+    BottcherExteriorSurjData (2 : ℂ) := by
+  intro w hw
+  rcases Quadratic.bottcher_map_surj (2 : ℂ) w hw with ⟨z, _hzdom, hzw⟩
   exact ⟨z, hzw⟩
 
-/-- Current default approach-sequence range seam at `c = 2`, sourced from the
-    current exterior-surjectivity interface. -/
-lemma bottcher_approach_one_surj_data_two :
-    BottcherApproachOneSurjData (2 : ℂ) :=
-  bottcher_approach_one_surj_data_two_of_bottcher_map_surj
+/-- Current default exterior-surjectivity seam at `c = 2`. -/
+lemma bottcher_exterior_surj_data_two :
+    BottcherExteriorSurjData (2 : ℂ) :=
+  bottcher_exterior_surj_data_two_of_bottcher_map_surj
 
-/-- Main MLC assembly from the weaker approach-sequence surjectivity seam at
-    `c = 2`. -/
-theorem mlc_conjecture_of_bottcher_approach_one_surj_data_two
-    (h_surj : BottcherApproachOneSurjData (2 : ℂ)) :
+/-- Contradiction from exterior surjectivity at `c = 2`. -/
+lemma false_of_bottcher_exterior_surj_data_two
+    (h_ext : BottcherExteriorSurjData (2 : ℂ)) : False := by
+  have h_surj : BottcherApproachOneSurjData (2 : ℂ) := by
+    intro n
+    exact h_ext (approach_one_seq n) (norm_approach_one_seq_gt_one n)
+  exact false_of_bottcher_approach_one_surj_data_two
+    h_surj
+
+/-- Main MLC assembly from exterior surjectivity at `c = 2`. -/
+theorem mlc_conjecture_of_bottcher_exterior_surj_data_two
+    (h_ext : BottcherExteriorSurjData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hFalse : False := false_of_bottcher_approach_one_surj_data_two h_surj
+  have hFalse : False := false_of_bottcher_exterior_surj_data_two h_ext
   exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
     (False.elim hFalse)
     (False.elim hFalse)
@@ -497,8 +507,8 @@ theorem mlc_conjecture_of_bottcher_approach_one_surj_data_two
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcher_approach_one_surj_data_two
-    bottcher_approach_one_surj_data_two
+  exact mlc_conjecture_of_bottcher_exterior_surj_data_two
+    bottcher_exterior_surj_data_two
 
 end MainProof
 

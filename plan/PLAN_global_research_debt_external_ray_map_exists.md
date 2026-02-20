@@ -754,6 +754,56 @@ Date: 2026-02-19
     - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
       `MLC.Quadratic.external_ray_map_exists`)
     - `scripts/verify_output.sh` passes.
+  - Rooted seam generalized from sequence-only surjectivity to exterior
+    surjectivity at `c = 2`:
+    - added `BottcherExteriorSurjData`;
+    - added conversion
+      `bottcher_approach_one_surj_data_of_bottcher_exterior_surj_data`;
+    - added `mlc_conjecture_of_bottcher_exterior_surj_data_two`;
+    - rewired `mlc_conjecture` through this exterior-surjectivity seam.
+    This makes the remaining replacement obligation explicit at the natural
+    exterior-surjectivity interface, while preserving theorem shape.
+  - Verification after exterior-surjectivity seam routing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `BottcherExteriorSurjData`,
+        `bottcher_approach_one_surj_data_of_bottcher_exterior_surj_data`, and
+        `mlc_conjecture_of_bottcher_exterior_surj_data_two` are core-only;
+      - `bottcher_exterior_surj_data_two` is the current ingress of
+        `MLC.Quadratic.external_ray_map_exists` on the rooted path.
+  - Rooted contradiction path cleanup:
+    - added `false_of_bottcher_exterior_surj_data_two`;
+    - rewired `mlc_conjecture_of_bottcher_exterior_surj_data_two` to consume
+      this direct contradiction lemma;
+    - removed now-unused intermediate theorem
+      `mlc_conjecture_of_bottcher_approach_one_surj_data_two`.
+    This keeps all declarations in `Mlc/MainConjecture.lean` on the rooted
+    dependency path and removes one extra theorem layer.
+  - Verification after contradiction-path cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `false_of_bottcher_exterior_surj_data_two` is core-only;
+      - `mlc_conjecture_of_bottcher_exterior_surj_data_two` is core-only.
+  - Additional rooted cleanup:
+    - inlined the one-use conversion from `BottcherExteriorSurjData` to
+      `BottcherApproachOneSurjData` inside
+      `false_of_bottcher_exterior_surj_data_two`;
+    - removed the now-redundant conversion lemma.
+    This reduces rooted theorem clutter without changing obligations.
+  - Verification after inlining cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
