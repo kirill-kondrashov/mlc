@@ -1081,6 +1081,12 @@ Date: 2026-02-19
     - both extracted theorems above are core-only;
     - default wrapper remains external-ray-backed via default seam
       instantiation (expected).
+  - Seam normalization cleanup:
+    - introduced shared alias
+      `MLC.BottcherRightInverseOnExteriorDataOutsidePlan`;
+    - rewired extracted outside-plan bridge theorems to consume this shared
+      right-inverse seam type (instead of repeating raw existential payloads).
+    This is a non-semantic cleanup that keeps seam signatures uniform.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
