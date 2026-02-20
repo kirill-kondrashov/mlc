@@ -248,6 +248,10 @@ This keeps the remaining replacement targets explicit:
     through this seam.
   This keeps the rooted endpoint stable and exposes one explicit replacement
   target at `c = 2`.
+- [x] Removed now-unused
+  `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData` from
+  `Mlc/MainConjecture.lean` after rerouting the default seam through
+  `bottcher_map_surj`.
 
 ## Execution Order
 1. Implement Track 1 provider interface and prove as much non-axiomatically as

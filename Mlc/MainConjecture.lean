@@ -594,13 +594,6 @@ lemma bottcherExteriorSubsetImageBasinData_of_bottcher_map_surj
     simpa [hzw] using hw
   exact bottcher_map_norm_gt_one_implies_basin c (z := z) hnorm
 
-/-- Sequence-range seam at `c = 2` from an explicit external-ray data package. -/
-lemma approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    ApproachOneSeqInBottcherRangeData (2 : ℂ) := by
-  exact approach_one_seq_in_bottcher_range_data_of_exterior_subset_image_basin
-    (2 : ℂ) (bottcherExteriorSubsetImageBasinData_of_externalRayMapData h_data)
-
 /-- Current default `c = 2` basin-image seam source via exterior
     surjectivity. -/
 lemma bottcherExteriorSubsetImageBasinData_two_of_bottcher_map_surj :
