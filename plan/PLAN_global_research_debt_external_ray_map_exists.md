@@ -1069,6 +1069,18 @@ Date: 2026-02-19
     - extracted theorem above is core-only;
     - default wrapper remains external-ray-backed via default seam
       instantiation (expected).
+  - Basin-image + `IsLocalHomeomorphOn` combined seam extraction:
+    - added core-only theorem
+      `MLC.exterior_subset_image_basin_of_right_inverse`;
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_left_inverse_on_outside_open_of_right_inverse_on_exterior`;
+    - rewired default theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`
+      through these explicit left/right seam payloads.
+  - Axiom audit for combined seam:
+    - both extracted theorems above are core-only;
+    - default wrapper remains external-ray-backed via default seam
+      instantiation (expected).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
