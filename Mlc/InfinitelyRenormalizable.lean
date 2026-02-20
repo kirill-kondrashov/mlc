@@ -229,6 +229,19 @@ theorem classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
   · exact Or.inr hTower
   · exact Or.inl (h_noTowerPrim c hc h hTower)
 
+/-- If satellite towers are excluded on `M`, Track-1 no-tower implication yields
+    the IR classification through the primitive branch. -/
+theorem classify_infinitely_renormalizable_of_noTowerImpliesPrimitive_of_noTowerOnM
+    (h_noTowerPrim :
+      ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : InfinitelyRenormalizable c),
+        ¬ SatelliteRenormalizableTower c → PrimitiveRenormalizable c)
+    (h_noTowerOnM :
+      ∀ (c : ℂ), c ∈ MLC.Quadratic.MandelbrotSet → ¬ SatelliteRenormalizableTower c)
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : InfinitelyRenormalizable c) :
+    PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c := by
+  exact Or.inl (h_noTowerPrim c hc h (h_noTowerOnM c hc))
+
 /-- Classification wrapper used by the main MLC strategy.
     In the current formalization this is discharged through the fast-tower route,
     yielding the satellite branch directly. -/

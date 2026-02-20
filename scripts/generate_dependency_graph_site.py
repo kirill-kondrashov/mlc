@@ -33,6 +33,7 @@ END_RE = re.compile(r"^\s*end(?:\s+[A-Za-z0-9_.']+)?\s*$")
 TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
 TOKEN_CHARS = r"A-Za-z0-9_.']"
 EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
+MISSING_AXIOMS = ("MLC.Quadratic.external_ray_map_exists",)
 
 
 @dataclass(frozen=True)
@@ -313,6 +314,16 @@ def graph_page_html(title: str) -> str:
       --cycle-edge: #f97316;
       --axiom-ring: #dc2626;
       --axiom-fill: rgba(220,38,38,0.26);
+      --core-axiom-ring: #1d4ed8;
+      --core-axiom-fill: rgba(29,78,216,0.22);
+      --missing-axiom-ring: #dc2626;
+      --missing-axiom-fill: rgba(220,38,38,0.32);
+      --missing-axiom-edge: #ef4444;
+      --sphere-fill: rgba(148,163,184,0.08);
+      --sphere-stroke: rgba(100,116,139,0.55);
+      --sphere-grid: rgba(100,116,139,0.35);
+      --pole-missing: #ef4444;
+      --pole-core: #3b82f6;
       --status-yes-bg: #fee2e2;
       --status-yes-fg: #991b1b;
       --status-no-bg: #dcfce7;
@@ -334,6 +345,16 @@ def graph_page_html(title: str) -> str:
       --cycle-edge: #f59e0b;
       --axiom-ring: #f87171;
       --axiom-fill: rgba(248,113,113,0.30);
+      --core-axiom-ring: #60a5fa;
+      --core-axiom-fill: rgba(96,165,250,0.28);
+      --missing-axiom-ring: #f87171;
+      --missing-axiom-fill: rgba(248,113,113,0.38);
+      --missing-axiom-edge: #fb7185;
+      --sphere-fill: rgba(37,99,235,0.08);
+      --sphere-stroke: rgba(125,161,219,0.58);
+      --sphere-grid: rgba(125,161,219,0.34);
+      --pole-missing: #fb7185;
+      --pole-core: #93c5fd;
       --status-yes-bg: rgba(251,113,133,0.22);
       --status-yes-fg: #fecdd3;
       --status-no-bg: rgba(34,197,94,0.2);
@@ -476,6 +497,24 @@ function degreeColor(d, minD, maxD) {{
   return `hsl(196, 74%, ${{light.toFixed(1)}}%)`;
 }}
 
+function stableHash(str) {{
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {{
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }}
+  return h >>> 0;
+}}
+
+function boxesOverlap(a, b, pad = 0) {{
+  return !(
+    a.r + pad < b.l ||
+    b.r + pad < a.l ||
+    a.b + pad < b.t ||
+    b.b + pad < a.t
+  );
+}}
+
 const state = {{
   nodes: [],
   edges: [],
@@ -488,7 +527,17 @@ const state = {{
     cycleRing: "#ef4444",
     cycleEdge: "#f97316",
     axiomRing: "#dc2626",
-    axiomFill: "rgba(220,38,38,0.26)"
+    axiomFill: "rgba(220,38,38,0.26)",
+    coreAxiomRing: "#1d4ed8",
+    coreAxiomFill: "rgba(29,78,216,0.22)",
+    missingAxiomRing: "#dc2626",
+    missingAxiomFill: "rgba(220,38,38,0.32)",
+    missingAxiomEdge: "#ef4444",
+    sphereFill: "rgba(148,163,184,0.08)",
+    sphereStroke: "rgba(100,116,139,0.55)",
+    sphereGrid: "rgba(100,116,139,0.35)",
+    poleMissing: "#ef4444",
+    poleCore: "#3b82f6"
   }},
   minDegree: 0,
   maxDegree: 0,
@@ -496,6 +545,8 @@ const state = {{
   cycleEdgeCount: 0,
   cycleComponentCount: 0,
   axiomCount: 0,
+  coreAxiomCount: 0,
+  missingAxiomCount: 0,
   search: "",
   width: 0,
   height: 0,
@@ -506,7 +557,8 @@ const state = {{
   panning: false,
   lastX: 0,
   lastY: 0,
-  running: false
+  running: false,
+  sphere: null
 }};
 
 const canvas = document.getElementById("graphCanvas");
@@ -527,6 +579,16 @@ function refreshPalette() {{
   state.palette.cycleEdge = cssVar("--cycle-edge", "#f97316");
   state.palette.axiomRing = cssVar("--axiom-ring", "#dc2626");
   state.palette.axiomFill = cssVar("--axiom-fill", "rgba(220,38,38,0.26)");
+  state.palette.coreAxiomRing = cssVar("--core-axiom-ring", "#1d4ed8");
+  state.palette.coreAxiomFill = cssVar("--core-axiom-fill", "rgba(29,78,216,0.22)");
+  state.palette.missingAxiomRing = cssVar("--missing-axiom-ring", "#dc2626");
+  state.palette.missingAxiomFill = cssVar("--missing-axiom-fill", "rgba(220,38,38,0.32)");
+  state.palette.missingAxiomEdge = cssVar("--missing-axiom-edge", "#ef4444");
+  state.palette.sphereFill = cssVar("--sphere-fill", "rgba(148,163,184,0.08)");
+  state.palette.sphereStroke = cssVar("--sphere-stroke", "rgba(100,116,139,0.55)");
+  state.palette.sphereGrid = cssVar("--sphere-grid", "rgba(100,116,139,0.35)");
+  state.palette.poleMissing = cssVar("--pole-missing", "#ef4444");
+  state.palette.poleCore = cssVar("--pole-core", "#3b82f6");
 }}
 
 function systemTheme() {{
@@ -713,7 +775,11 @@ function renderLegend() {{
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.maxDegree, state.minDegree, state.maxDegree)}}"></span>${{state.maxDegree}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.cycleEdge}}"></span>Cycle edge</span>
     <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.cycleRing}}"></span>Cycle node</span>
-    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Axiom node</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.coreAxiomFill}};border-color:${{state.palette.coreAxiomRing}}"></span>Core axiom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Project axiom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.missingAxiomFill}};border-color:${{state.palette.missingAxiomRing}}"></span>Missing axiom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.poleMissing}}"></span>Missing-axiom pole</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.poleCore}}"></span>Core-axiom poles</span>
   `;
 }}
 
@@ -724,44 +790,137 @@ function renderCycleStatus() {{
   const directedText = directedDetected
     ? `yes (${{state.cycleComponentCount}})`
     : "no";
-  status.textContent = `Directed cycles: ${{directedText}}`;
+  const missingText = state.missingAxiomCount > 0
+    ? `${{state.missingAxiomCount}}`
+    : "0";
+  status.textContent = `Directed cycles: ${{directedText}} | Missing axioms: ${{missingText}}`;
   status.className = directedDetected
     ? "status-pill detected"
     : "status-pill none";
 }}
 
 function initGraph(payload) {{
+  const nonPoleNodes = payload.nodes.filter(n => n.axiom_tier !== "core" && n.axiom_tier !== "missing");
+  const coreAxioms = payload.nodes.filter(n => n.axiom_tier === "core");
+  const missingAxioms = payload.nodes.filter(n => n.axiom_tier === "missing");
+  const rootId = payload.root;
+  const rootNode = nonPoleNodes.find(n => n.id === rootId) || null;
+  const regularNodes = nonPoleNodes.filter(n => n.id !== rootId);
   const byDepth = new Map();
-  for (const n of payload.nodes) {{
+  for (const n of regularNodes) {{
     const d = Number(n.depth || 0);
     if (!byDepth.has(d)) byDepth.set(d, []);
     byDepth.get(d).push(n);
   }}
   const orderedDepths = Array.from(byDepth.keys()).sort((a, b) => a - b);
+  let maxDepth = 0;
+  for (const n of nonPoleNodes) {{
+    maxDepth = Math.max(maxDepth, Number(n.depth || 0));
+  }}
+  maxDepth = Math.max(1, maxDepth);
+
+  const totalNodes = Math.max(1, payload.nodes.length);
+  const sphereRx = Math.max(620, Math.min(1020, 560 + totalNodes * 3.2));
+  const sphereRy = sphereRx * 0.63;
+  state.sphere = {{
+    cx: 0,
+    cy: 0,
+    rx: sphereRx,
+    ry: sphereRy,
+    azimuth: -0.78,
+    elevation: 0.48,
+    focal: 2.55
+  }};
+
+  function projectUnitPoint(xu, yu, zu, radialJitter = 0) {{
+    const s = state.sphere;
+    const cosA = Math.cos(s.azimuth);
+    const sinA = Math.sin(s.azimuth);
+    const cosE = Math.cos(s.elevation);
+    const sinE = Math.sin(s.elevation);
+
+    const x1 = cosA * xu + sinA * zu;
+    const z1 = -sinA * xu + cosA * zu;
+    const y1 = cosE * yu - sinE * z1;
+    const z2 = sinE * yu + cosE * z1;
+
+    const depth = Math.max(0.2, s.focal - z2);
+    const persp = s.focal / depth;
+    const rx = s.rx + radialJitter;
+    const ry = s.ry + radialJitter * 0.5;
+    return {{
+      x0: s.cx + rx * x1 * persp,
+      y0: s.cy - ry * y1 * persp,
+      z0: z2
+    }};
+  }}
+
+  function projectOnSphere(lat, lon, radialJitter = 0) {{
+    const cosLat = Math.cos(lat);
+    const x3 = cosLat * Math.cos(lon);
+    const y3 = Math.sin(lat);
+    const z3 = cosLat * Math.sin(lon);
+    return projectUnitPoint(x3, y3, z3, radialJitter);
+  }}
+  state.sphere.north = projectUnitPoint(0, 1, 0, 0);
+  state.sphere.south = projectUnitPoint(0, -1, 0, 0);
+
   const positioned = [];
-  const dx = 320;
-  const dy = 210;
-  const maxDepth = Math.max(1, orderedDepths.length - 1);
+
+  if (rootNode) {{
+    const rootPos = projectOnSphere(0.14, Math.PI / 2, 0);
+    positioned.push({{ ...rootNode, ...rootPos }});
+  }}
+
   for (const d of orderedDepths) {{
     const layer = byDepth.get(d);
     layer.sort((a, b) => a.fq_name.localeCompare(b.fq_name));
-    const mid = (layer.length - 1) / 2;
-    const depthRatio = maxDepth === 0 ? 0 : d / maxDepth;
-    const widthScale = 0.58 + 0.78 * Math.pow(depthRatio, 0.9);
+    const count = Math.max(1, layer.length);
     for (let i = 0; i < layer.length; i++) {{
       const n = layer[i];
+      const depthRatio = Number(d) / maxDepth;
+      const lat = 1.02 + (-2.04 * depthRatio);
+      const baseLon = (2 * Math.PI * (i + 0.5)) / count;
+      const h = stableHash(n.fq_name);
+      const jitter = ((h % 1000) / 1000 - 0.5) * 0.24;
+      const lon = baseLon + Number(d) * 0.47 + jitter;
+      const radial = (((h >> 10) % 1000) / 1000 - 0.5) * 36;
+      const p = projectOnSphere(lat, lon, radial);
       positioned.push({{
         ...n,
-        x0: (i - mid) * dx * widthScale,
-        y0: d * dy
+        ...p
       }});
     }}
   }}
 
-  state.nodes = positioned.map((n, i) => ({{
+  coreAxioms.sort((a, b) => a.fq_name.localeCompare(b.fq_name));
+  const coreCount = Math.max(1, coreAxioms.length);
+  for (let i = 0; i < coreAxioms.length; i++) {{
+    const n = coreAxioms[i];
+    const spread = (i - (coreCount - 1) / 2) * 0.48;
+    const p = projectOnSphere(-1.31, Math.PI / 2 + spread, -24);
+    positioned.push({{
+      ...n,
+      ...p
+    }});
+  }}
+
+  missingAxioms.sort((a, b) => a.fq_name.localeCompare(b.fq_name));
+  const missingCount = Math.max(1, missingAxioms.length);
+  for (let i = 0; i < missingAxioms.length; i++) {{
+    const n = missingAxioms[i];
+    const spread = (i - (missingCount - 1) / 2) * 0.44;
+    const p = projectOnSphere(1.31, Math.PI / 2 + spread, -18);
+    positioned.push({{
+      ...n,
+      ...p
+    }});
+  }}
+
+  state.nodes = positioned.map((n) => ({{
     ...n,
-    x: n.x0 + 18 * Math.cos(i * 1.618),
-    y: n.y0 + 18 * Math.sin(i * 1.618),
+    x: n.x0,
+    y: n.y0,
     vx: 0,
     vy: 0,
     r: Math.min(19, 7 + Math.sqrt(Math.max(1, n.span)) * 1.9)
@@ -793,8 +952,12 @@ function initGraph(payload) {{
 
   for (const n of state.nodes) {{
     n.r = Math.max(6, Math.min(24, 6 + Math.sqrt(n.degree + 1) * 2.9));
+    if (n.axiom_tier === "core") n.r = Math.max(n.r, 11);
+    if (n.axiom_tier === "missing") n.r = Math.max(n.r, 16);
   }}
   state.axiomCount = state.nodes.filter(n => n.kind === "axiom").length;
+  state.coreAxiomCount = state.nodes.filter(n => n.axiom_tier === "core").length;
+  state.missingAxiomCount = state.nodes.filter(n => n.axiom_tier === "missing").length;
 
   detectCycles();
   renderLegend();
@@ -803,7 +966,8 @@ function initGraph(payload) {{
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
     `${{state.cycleNodeCount}} directed-cycle nodes (${{state.cycleComponentCount}} components), ` +
-    `${{state.cycleEdgeCount}} directed-cycle edges, ${{state.axiomCount}} axioms`;
+    `${{state.cycleEdgeCount}} directed-cycle edges, ${{state.axiomCount}} axioms ` +
+    `(${{state.coreAxiomCount}} core, ${{state.missingAxiomCount}} missing)`;
 
   const searchInput = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
@@ -890,11 +1054,11 @@ function stepForces() {{
   const nodes = state.nodes;
   const edges = state.edges;
   const n = nodes.length;
-  const repulsion = 21000;
-  const springK = 0.0014;
-  const ideal = 190;
-  const anchorK = 0.017;
-  const damp = 0.84;
+  const repulsion = 6200;
+  const springK = 0.00055;
+  const ideal = 170;
+  const anchorK = 0.058;
+  const damp = 0.8;
 
   function labelBox(node) {{
     const fontWorld = Math.max(8, 12 / state.scale);
@@ -1000,8 +1164,11 @@ function stepForces() {{
   let kinetic = 0;
   for (const node of nodes) {{
     if (node !== state.dragNode) {{
-      node.vx += (node.x0 - node.x) * anchorK;
-      node.vy += (node.y0 - node.y) * anchorK;
+      const anchorScale = node.axiom_tier === "missing"
+        ? 4.2
+        : (node.axiom_tier === "core" ? 2.6 : 1.0);
+      node.vx += (node.x0 - node.x) * anchorK * anchorScale;
+      node.vy += (node.y0 - node.y) * anchorK * anchorScale;
       node.vx *= damp;
       node.vy *= damp;
       node.x += node.vx;
@@ -1034,14 +1201,74 @@ function draw() {{
   ctx.scale(state.scale, state.scale);
 
   const lw = Math.max(0.45, 0.65 / state.scale);
+  if (state.sphere) {{
+    const s = state.sphere;
+    ctx.beginPath();
+    ctx.fillStyle = state.palette.sphereFill;
+    ctx.strokeStyle = state.palette.sphereStroke;
+    ctx.lineWidth = Math.max(0.75, 1.0 / state.scale);
+    ctx.ellipse(s.cx, s.cy, s.rx, s.ry, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.strokeStyle = state.palette.sphereGrid;
+    ctx.lineWidth = Math.max(0.45, 0.7 / state.scale);
+    ctx.setLineDash([Math.max(2.0, 2.8 / state.scale), Math.max(1.8, 2.4 / state.scale)]);
+    const bands = [-0.68, -0.35, 0, 0.35, 0.68];
+    for (const t of bands) {{
+      const y = s.cy - s.ry * t;
+      const rx = s.rx * Math.sqrt(Math.max(0.01, 1 - t * t));
+      const ry = Math.max(1.8, s.ry * 0.062 * Math.sqrt(Math.max(0.02, 1 - t * t)));
+      ctx.beginPath();
+      ctx.ellipse(s.cx, y, rx, ry, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }}
+    for (const m of [0.26, 0.5, 0.74]) {{
+      ctx.beginPath();
+      ctx.ellipse(s.cx, s.cy, s.rx * m, s.ry, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }}
+    ctx.setLineDash([]);
+
+    const north = s.north || {{ x: s.cx, y: s.cy - s.ry }};
+    const south = s.south || {{ x: s.cx, y: s.cy + s.ry }};
+    const poleR = Math.max(3.0, 4.2 / state.scale);
+    ctx.fillStyle = state.palette.poleMissing;
+    ctx.beginPath();
+    ctx.arc(north.x, north.y, poleR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = state.palette.poleCore;
+    ctx.beginPath();
+    ctx.arc(south.x, south.y, poleR, 0, Math.PI * 2);
+    ctx.fill();
+    if (state.scale > 0.22) {{
+      ctx.fillStyle = state.palette.label;
+      ctx.font = `${{Math.max(8, 10.5 / state.scale)}}px IBM Plex Sans, Segoe UI, sans-serif`;
+      ctx.textBaseline = "middle";
+      ctx.fillText("Axiom-to-eliminate pole", north.x + 10, north.y - 7);
+      ctx.fillText("Core-axiom poles", south.x + 10, south.y + 8);
+    }}
+  }}
+
+  const drawNodes = [...state.nodes].sort((a, b) => (a.z0 || 0) - (b.z0 || 0));
   for (const e of state.edges) {{
     const a = e.source;
     const b = e.target;
+    const hasMissingAxiom = a.axiom_tier === "missing" || b.axiom_tier === "missing";
+    const hasCoreAxiom = a.axiom_tier === "core" || b.axiom_tier === "core";
     const hit = (!state.search) || matchNode(a) || matchNode(b);
-    const edgeColor = e.inCycle ? state.palette.cycleEdge : state.palette.edge;
+    const edgeColor = hasMissingAxiom
+      ? state.palette.missingAxiomEdge
+      : (hasCoreAxiom
+          ? state.palette.coreAxiomRing
+          : (e.inCycle ? state.palette.cycleEdge : state.palette.edge));
     const color = hit ? edgeColor : state.palette.edgeMuted;
+    const dash = hasMissingAxiom
+      ? [Math.max(1.8, 2.2 / state.scale), Math.max(1.4, 1.8 / state.scale)]
+      : [];
+    ctx.setLineDash(dash);
     ctx.strokeStyle = color;
-    ctx.lineWidth = lw;
+    ctx.lineWidth = hasMissingAxiom ? lw * 1.35 : lw;
     let dx = b.x - a.x;
     let dy = b.y - a.y;
     const d = Math.sqrt(dx * dx + dy * dy);
@@ -1070,18 +1297,40 @@ function draw() {{
     ctx.closePath();
     ctx.fillStyle = color;
     ctx.fill();
+    if (dash.length > 0) ctx.setLineDash([]);
   }}
 
-  for (const n of state.nodes) {{
+  for (const n of drawNodes) {{
     const hit = (!state.search) || matchNode(n);
-    const isAxiom = n.kind === "axiom";
+    const axiomTier = n.axiom_tier || "none";
+    const isAxiom = axiomTier !== "none";
+    const isCoreAxiom = axiomTier === "core";
+    const isMissingAxiom = axiomTier === "missing";
+    let fillColor;
+    if (!hit) {{
+      fillColor = "rgba(148,163,184,0.25)";
+    }} else if (isMissingAxiom) {{
+      fillColor = state.palette.missingAxiomFill;
+    }} else if (isCoreAxiom) {{
+      fillColor = state.palette.coreAxiomFill;
+    }} else if (isAxiom) {{
+      fillColor = state.palette.axiomFill;
+    }} else {{
+      fillColor = degreeColor(n.degree, state.minDegree, state.maxDegree);
+    }}
+    let strokeColor;
+    if (isMissingAxiom) {{
+      strokeColor = state.palette.missingAxiomRing;
+    }} else if (isCoreAxiom) {{
+      strokeColor = state.palette.coreAxiomRing;
+    }} else if (isAxiom) {{
+      strokeColor = state.palette.axiomRing;
+    }} else {{
+      strokeColor = n.inCycle ? state.palette.cycleRing : nodeColor(n.kind);
+    }}
     ctx.beginPath();
-    ctx.fillStyle = hit
-      ? (isAxiom ? state.palette.axiomFill : degreeColor(n.degree, state.minDegree, state.maxDegree))
-      : "rgba(148,163,184,0.25)";
-    ctx.strokeStyle = isAxiom
-      ? state.palette.axiomRing
-      : (n.inCycle ? state.palette.cycleRing : nodeColor(n.kind));
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
     ctx.lineWidth = lw;
     ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
     ctx.fill();
@@ -1089,21 +1338,89 @@ function draw() {{
 
     if (isAxiom) {{
       ctx.beginPath();
-      ctx.strokeStyle = hit ? state.palette.axiomRing : state.palette.edgeMuted;
-      ctx.lineWidth = Math.max(1.8, 2.2 / state.scale);
-      ctx.arc(n.x, n.y, n.r + 2.6, 0, Math.PI * 2);
+      const ringColor = isMissingAxiom
+        ? state.palette.missingAxiomRing
+        : (isCoreAxiom ? state.palette.coreAxiomRing : state.palette.axiomRing);
+      ctx.strokeStyle = hit ? ringColor : state.palette.edgeMuted;
+      ctx.lineWidth = Math.max(1.8, 2.2 / state.scale) * (isMissingAxiom ? 1.15 : 1.0);
+      ctx.arc(n.x, n.y, n.r + (isMissingAxiom ? 3.4 : 2.6), 0, Math.PI * 2);
       ctx.stroke();
+      if (isMissingAxiom) {{
+        ctx.beginPath();
+        ctx.strokeStyle = hit ? state.palette.missingAxiomEdge : state.palette.edgeMuted;
+        ctx.lineWidth = Math.max(1.1, 1.5 / state.scale);
+        ctx.arc(n.x, n.y, n.r + 6.2, 0, Math.PI * 2);
+        ctx.stroke();
+      }}
     }}
   }}
 
-  for (const n of state.nodes) {{
+  ctx.restore();
+
+  if (state.scale < 0.28) return;
+
+  const nodeRects = drawNodes.map(n => {{
+    const sx = n.x * state.scale + state.tx;
+    const sy = n.y * state.scale + state.ty;
+    const sr = n.r * state.scale;
+    return {{
+      n,
+      l: sx - sr,
+      r: sx + sr,
+      t: sy - sr,
+      b: sy + sr
+    }};
+  }});
+
+  const labelCandidates = [...drawNodes].sort((a, b) => {{
+    const tierScore = (n) => n.axiom_tier === "missing" ? 5000
+      : (n.axiom_tier === "core" ? 4200
+      : (n.axiom_tier === "project" ? 3300 : 0));
+    const searchScore = (n) => matchNode(n) ? 1200 : 0;
+    const zScore = (n) => ((n.z0 || 0) + 1.2) * 180;
+    return (tierScore(b) + searchScore(b) + b.degree * 10 + zScore(b)) -
+      (tierScore(a) + searchScore(a) + a.degree * 10 + zScore(a));
+  }});
+
+  ctx.save();
+  ctx.font = "12px IBM Plex Sans, Segoe UI, sans-serif";
+  ctx.textBaseline = "middle";
+  const occupied = [];
+  const labelPad = 2.0;
+  for (const n of labelCandidates) {{
     const hit = (!state.search) || matchNode(n);
-    if (!hit && state.scale < 0.9) continue;
-    if (state.scale < 0.35) continue;
+    if (!hit && state.scale < 0.85) continue;
+    if ((n.z0 || 0) < -0.65 && state.scale < 1.45 && n.axiom_tier === "none") continue;
+    const sx = n.x * state.scale + state.tx;
+    const sy = n.y * state.scale + state.ty;
+    const sr = n.r * state.scale;
+    const text = n.label;
+    const width = ctx.measureText(text).width;
+    const box = {{
+      l: sx + sr + 7,
+      r: sx + sr + 7 + width + 2,
+      t: sy - 6.5,
+      b: sy + 6.5
+    }};
+    let blocked = false;
+    for (const occ of occupied) {{
+      if (boxesOverlap(box, occ, labelPad)) {{
+        blocked = true;
+        break;
+      }}
+    }}
+    if (blocked) continue;
+    for (const nr of nodeRects) {{
+      if (nr.n.id === n.id) continue;
+      if (boxesOverlap(box, nr, 1.0)) {{
+        blocked = true;
+        break;
+      }}
+    }}
+    if (blocked) continue;
+    occupied.push(box);
     ctx.fillStyle = hit ? state.palette.label : state.palette.labelMuted;
-    ctx.font = `${{Math.max(8, 12 / state.scale)}}px IBM Plex Sans, Segoe UI, sans-serif`;
-    ctx.textBaseline = "middle";
-    ctx.fillText(n.label, n.x + n.r + 5, n.y);
+    ctx.fillText(text, box.l, sy);
   }}
   ctx.restore();
 }}
@@ -1185,12 +1502,21 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     nodes = []
     for node_id in sorted(reachable):
         d = fq_index[node_id]
+        axiom_tier = "none"
+        if d.kind == "axiom":
+            if d.fq_name in EMBEDDED_AXIOMS:
+                axiom_tier = "core"
+            elif d.fq_name in MISSING_AXIOMS:
+                axiom_tier = "missing"
+            else:
+                axiom_tier = "project"
         nodes.append(
             {
                 "id": d.fq_name,
                 "label": d.name,
                 "fq_name": d.fq_name,
                 "kind": d.kind,
+                "axiom_tier": axiom_tier,
                 "file": d.file,
                 "line": d.line,
                 "span": d.span,

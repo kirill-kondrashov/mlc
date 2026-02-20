@@ -577,6 +577,12 @@ lemma not_quadratic_map_iter_eq_imp_eq (c : ℂ) :
     exact h_iter_eq_imp z w hz hw ⟨1, by simpa using hzw⟩
   exact quadratic_map_not_injOn_basin c h_inj
 
+lemma not_quadratic_map_iter_left_inverse_on_basin (c : ℂ) :
+    ¬ QuadraticMapIterLeftInverseOnBasin c := by
+  intro h_left_iter
+  exact not_quadratic_map_iter_eq_imp_eq c
+    (quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter)
+
 def BasinBottcherSquareRootRightInverse (c : ℂ) (sqrt : ℂ → ℂ) : Prop :=
   ∀ z, z ∈ basin_of_infinity c →
     sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z

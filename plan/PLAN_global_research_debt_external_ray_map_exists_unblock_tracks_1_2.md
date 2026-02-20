@@ -255,6 +255,180 @@ This keeps the remaining replacement targets explicit:
 - [x] Removed now-unused
   `approach_one_seq_in_bottcher_range_data_two_of_externalRayMapData` from
   `Mlc/MainConjecture.lean` after rerouting the default seam.
+- [x] Rebased the outside-plan default right-inverse seam from direct
+  `external_ray_map_exists` usage to `Quadratic.bottcher_map_surj`:
+  - added
+    `bottcher_right_inverse_on_exterior_data_of_bottcher_map_surj` in
+    `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`;
+  - rewired
+    `bottcher_right_inverse_on_exterior_data` to use this theorem.
+  This shifts the active bottleneck from external-ray existence directly to the
+  explicit exterior-surjectivity seam.
+- [x] Shortened the rooted `mlc_conjecture` chain by removing the local
+  right-inverse seed from `Mlc/MainConjecture.lean`:
+  - deleted `bottcherRightInverseOnExteriorData_two_axiom_seed`;
+  - rewired
+    `bottcherExteriorSubsetImageBasinData_two_of_exterior_subset_image_outside_disk`
+    to use `exterior_subset_image_outside_disk (2 : ℂ)` directly.
+  The active rooted path now reaches
+  `Quadratic.bottcher_map_surj` without intermediate right-inverse wrappers.
+- [x] Removed one more wrapper node below `Quadratic.bottcher_map_surj`:
+  - rewrote `Quadratic.bottcher_map_surj` to use
+    `external_ray_map_of_data_right_inverse` with
+    `h_data := external_ray_map_exists c` directly.
+  The rooted chain now hits `external_ray_map_exists` from
+  `Quadratic.bottcher_map_surj` with no intermediate `external_ray_map` node.
+- [x] Pruned the rooted `MainConjecture` seam to the direct sequence-range
+  constructor:
+  - removed the intermediate
+  `BottcherExteriorSubsetImageBasinData` wrapper chain from the active root
+    path;
+  - rewired `approach_one_seq_in_bottcher_range_data_two_axiom_seed` to
+    `approach_one_seq_in_bottcher_range_data_of_bottcher_map_surj`.
+  Active rooted bottleneck is now explicitly
+  `approach_one_seq_in_bottcher_range_data_of_bottcher_map_surj ->
+   Quadratic.bottcher_map_surj -> external_ray_map_exists`.
+- [x] Removed redundant `c = 2` sequence-range wrapper seed from rooted path:
+  - deleted `approach_one_seq_in_bottcher_range_data_two_axiom_seed`;
+  - rewired `mainPathData_axiom_seed` to consume
+  `approach_one_seq_in_bottcher_range_data_of_bottcher_map_surj (2 : ℂ)`
+    directly.
+  Rooted chain is now:
+  `mlc_conjecture -> mainPathData_axiom_seed ->
+   approach_one_seq_in_bottcher_range_data_of_bottcher_map_surj ->
+   Quadratic.bottcher_map_surj -> external_ray_map_exists`.
+- [x] Removed the intermediate sequence-range data layer entirely from the
+  rooted path:
+  - deleted `ApproachOneSeqInBottcherRangeData` and
+    `approach_one_seq_in_bottcher_range_data_of_bottcher_map_surj` from
+    `Mlc/MainConjecture.lean`;
+  - replaced them with direct seam constructor
+    `bottcher_approach_to_one_seq_preimage_data_of_bottcher_map_surj`;
+  - rewired `mainPathData_axiom_seed` to use this direct constructor.
+  Rooted chain is now:
+  `mlc_conjecture -> mainPathData_axiom_seed ->
+   bottcher_approach_to_one_seq_preimage_data_of_bottcher_map_surj ->
+   Quadratic.bottcher_map_surj -> external_ray_map_exists`.
+- [x] Removed one more rooted wrapper node by inlining the preimage-sequence
+  constructor into `mainPathData_axiom_seed`:
+  - deleted
+    `bottcher_approach_to_one_seq_preimage_data_of_bottcher_map_surj`;
+  - kept the same witness construction directly in `mainPathData_axiom_seed`.
+  Rooted chain is now minimal on this seam:
+  `mlc_conjecture -> mainPathData_axiom_seed ->
+   Quadratic.bottcher_map_surj -> external_ray_map_exists`.
+- [x] Removed `Quadratic.bottcher_map_surj` from the rooted path by switching
+  `mainPathData_axiom_seed` to direct `ExternalRayMapData` witness extraction:
+  - rewired witness sequence to
+    `Quadratic.external_ray_map_of_data h_ray (approach_one_seq n)` with
+    `h_ray := Quadratic.external_ray_map_exists (2 : ℂ)`;
+  - used `Quadratic.external_ray_map_of_data_right_inverse` directly.
+  Rooted chain is now:
+  `mlc_conjecture -> mainPathData_axiom_seed -> external_ray_map_exists`.
+- [x] Factored the final seam into a named theorem in `Mlc/MainConjecture.lean`:
+  - added `mainPathData_of_externalRayMapData_two`;
+  - rewired `mainPathData_axiom_seed` to consume that theorem.
+  This makes the last replacement target explicit as a constructive provider of
+  `ExternalRayMapData (2 : ℂ)` without changing the rooted axiom footprint.
+- [x] Exposed the last rooted axiom seam as a single named seed:
+  - added `ExternalRayMapDataTwo`;
+  - added `externalRayMapData_two_axiom_seed`;
+  - rewired `mainPathData_axiom_seed` through that seed.
+  Rooted chain is now:
+  `mlc_conjecture -> mainPathData_axiom_seed ->
+   externalRayMapData_two_axiom_seed -> external_ray_map_exists`.
+- [x] Added a theorem-level clopen exterior-surjectivity bridge in
+  `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - added
+    `bottcher_map_outside_open_to_exterior`;
+  - added
+    `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict`;
+  - added
+    `external_ray_map_data_of_injOn_outside_open_of_isProperMap_of_isLocalHomeomorph_restrict`.
+  This advances the non-circular outside-open route by replacing the previous
+  “planned method” with a proved theorem-level bridge under explicit geometric
+  assumptions on the restricted map `outside_open → exterior`, and removes the
+  previously over-strong `preimage exterior ⊆ outside_open` assumption.
+- [x] Reduced the restricted-map clopen assumptions one step further:
+  - added
+    `isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit_of_injOn`;
+  - added
+    `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit_of_injOn`;
+  - added
+    `external_ray_map_data_of_isProperMap_restrict_of_slit_of_injOn_outside_open`.
+  This removes the standalone obligation to prove
+  `IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c)` by deriving it
+  from slit analyticity + outside-open injectivity.
+- [x] Weakened the clopen surjectivity input from `IsProperMap` to closed-range
+  on the restricted map:
+  - added
+    `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict`;
+  - retained
+    `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict`
+    as a specialization.
+  This reduces the remaining geometric burden to proving range closedness (or
+  any stronger criterion implying it), rather than full properness.
+- [x] Added a closed-range-only derived bridge on top of slit+injectivity:
+  - added
+    `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit_of_injOn`;
+  - added
+    `external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside_open`.
+  This removes the last dependency on explicit proper-map hypotheses from the
+  derived external-ray construction path.
+- [x] Weakened the rooted `c = 2` seam in `Mlc/MainConjecture.lean` from full
+  external-ray data to exterior surjectivity + exact preimages of
+  `approach_one_seq`:
+  - rewired `mainPathData_axiom_seed` through an exterior-surjectivity seam
+    witness.
+  Rooted chain is now:
+  `mlc_conjecture -> mainPathData_axiom_seed ->
+   external_ray_map_exists`.
+- [x] Removed one more rooted seam wrapper:
+  - deleted `bottcherSurjOnExteriorTwo_axiom_seed`;
+  - inlined its witness into `mainPathData_axiom_seed`.
+- [x] Removed non-essential wrapper seams from `Mlc/MainConjecture.lean`:
+  - deleted `BottcherApproachToOneSeqExactPreimageData`,
+    `bottcher_approach_to_one_seq_preimage_data_of_exact_preimage_data`,
+    and `bottcher_approach_to_one_seq_exact_preimage_data_of_surj_on_exterior`;
+  - kept the same mathematical path by inlining those steps into
+    `mainPathData_axiom_seed`.
+- [x] Removed one more single-use rooted wrapper:
+  - deleted `mainPathData_of_bottcherSurjOnExteriorTwo`;
+  - inlined its witness construction directly into `mainPathData_axiom_seed`.
+- [x] Removed the remaining local exterior-surjectivity scaffold in
+  `mainPathData_axiom_seed`:
+  - deleted local `h_surj` construction through `Classical.choose`;
+  - switched to direct sequence witness
+    `Quadratic.external_ray_map_of_data h_ray (approach_one_seq n)`.
+- [x] Inlined the remaining local sequence wrapper in
+  `mainPathData_axiom_seed`:
+  - deleted local `h_data` binding;
+  - passed the preimage-sequence witness inline to
+  `mainPathData_of_bottcher_approach_to_one_seq_preimage_data_two`.
+- [x] Added a non-global-slit theorem route in
+  `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - analytic core over outside-open:
+    `...of_isClosedRange_restrict_of_analyticAt_of_injOn`;
+  - local-slit wrappers:
+    `...of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`.
+  This keeps Step 4 aligned with the no-go checkpoint against global
+  outside-open slit inclusion and avoids reintroducing that impossible target.
+- [x] Added iterate-left-inverse bridge wrappers in
+  `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcher_map_inj_on_outside_open_of_iter_left_inverse`,
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse`,
+  - `external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse`.
+  This prepares a non-external-ray candidate route for the remaining Step-3
+  outside-open injectivity payload, directly compatible with the restricted-map
+  closed-range framework.
+- [x] Re-extracted the rooted seed in `Mlc/MainConjecture.lean` through an
+  explicit exterior-surjectivity seam:
+  - added `BottcherSurjOnExteriorData`,
+    `bottcherApproachToOneSeqPreimageData_of_bottcherSurjOnExteriorData`,
+    `bottcherSurjOnExteriorData_two_axiom_seed`;
+  - rewired `mainPathData_axiom_seed` through this seam.
+  This keeps the rooted endpoint aligned with the outside-open-surjectivity
+  elimination route instead of hard-coding direct ray witness construction.
 
 ## Execution Order
 1. Implement Track 1 provider interface and prove as much non-axiomatically as
@@ -300,11 +474,23 @@ This keeps the remaining replacement targets explicit:
    includes `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
    (probe run on 2026-02-20 with `#print axioms`). This route is therefore
    excluded by the "no new axioms" requirement.
-4. Current external-ray dependency bottleneck is fully localized to one
-   outside-plan constructor:
-   `bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists`.
-   All rooted dependencies now flow through this single node via the explicit
-   seam chain in `PLAN_external_ray_map_exists_outside_open_targets.md`.
+4. Current external-ray dependency bottleneck is localized directly at
+   `Quadratic.external_ray_map_exists (2 : ℂ)` through
+   `mainPathData_axiom_seed`.
+   The immediate replacement target is therefore a constructive
+   `c = 2` exterior-surjectivity provider (preferably via outside-open
+   injectivity + restricted-map clopen surjectivity), sufficient to build exact
+   preimages of `approach_one_seq` without `external_ray_map_exists`.
+   No-go checkpoint: the global slit payload shape
+   `{z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c` should be treated as impossible in
+   this model (large negative real exterior points fail slit membership at
+   iterate `n = 0`), so the remaining path must use a local/eventual-slit
+   condition instead. This no-go is now formalized in
+   `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean` as:
+   - `not_outside_open_subset_slit_orbit`,
+   - `not_outside_open_subset_slit_orbit_two`.
+   All rooted dependencies are tracked in
+   `PLAN_external_ray_map_exists_outside_open_targets.md`.
 
 ## Exit Criteria
 - `MLC.Quadratic.external_ray_map_exists` removed from `MLC.mlc_conjecture`

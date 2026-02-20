@@ -283,9 +283,10 @@ theorem extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
 /-- Surjectivity of Böttcher map onto the exterior ray parameters. -/
 theorem bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
     w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c := by
-  refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
+  let h_data : ExternalRayMapData c := external_ray_map_exists c
+  refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_, ?_⟩
   · exact ⟨w, hw, rfl⟩
-  · exact external_ray_map_right_inverse c w hw
+  · exact external_ray_map_of_data_right_inverse h_data w hw
 
 end Quadratic
 
