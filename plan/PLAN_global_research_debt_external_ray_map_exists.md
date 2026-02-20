@@ -1011,6 +1011,14 @@ Date: 2026-02-19
     left-inverse seam plus existing surjectivity/image-equality seams.
   - Axiom audit for extracted external-ray-data bridges:
     - both newly extracted theorems above are core-only.
+  - Wrapper cleanup:
+    - removed forwarding lemma
+      `MLC.bottcher_map_inj_on_outside_open_of_data`;
+    - rewired `MLC.bottcher_map_inj_on_outside_open` directly through
+      `MLC.bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open`
+      plus
+      `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`.
+    This reduces one wrapper layer while preserving behavior and axioms.
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete
