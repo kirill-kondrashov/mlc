@@ -1290,6 +1290,14 @@ Date: 2026-02-19
     This connects the rooted minimal seam directly to the extracted
     outside-plan seam layer, making replacement targets for elimination more
     explicit.
+  - Generalized outside-disk-image constructor for the minimal seam:
+    - introduced
+      `bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk`
+      for arbitrary parameter `c`;
+    - kept the active `c = 2` route as a specialization of that generic
+      constructor.
+    This keeps the active path unchanged while making the minimal-seam
+    constructor reusable for future external-ray-free replacement work.
   - Post-minimal-seam constructor audit:
     - searched the repository for constructors/usages of
       `BottcherApproachToOneSeqPreimageData`;

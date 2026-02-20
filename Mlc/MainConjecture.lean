@@ -481,11 +481,12 @@ theorem mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two
     h_mod
 
 /-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
-    sourced from exterior image-inclusion on `outside_disk` at `c = 2`. -/
-lemma bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk
+    sourced from exterior image-inclusion on `outside_disk`. -/
+lemma bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
+    (c : ℂ)
     (h_disk :
-      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map (2 : ℂ) '' outside_disk (2 : ℂ))) :
-    BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
+      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c)) :
+    BottcherApproachToOneSeqPreimageData c := by
   classical
   refine ⟨fun n =>
     Classical.choose
@@ -493,7 +494,7 @@ lemma bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_ou
         from norm_approach_one_seq_gt_one n)), ?_⟩
   have hEq :
       (fun n =>
-        Quadratic.bottcher_map (2 : ℂ)
+        Quadratic.bottcher_map c
           (Classical.choose
             (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
               from norm_approach_one_seq_gt_one n))))
@@ -503,6 +504,15 @@ lemma bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_ou
       (h_disk (show approach_one_seq n ∈ {w : ℂ | 1 < ‖w‖}
         from norm_approach_one_seq_gt_one n))).2
   simpa [hEq] using tendsto_approach_one_seq
+
+/-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
+    sourced from the current outside-plan exterior-image default. -/
+lemma bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk
+    (h_disk :
+      ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map (2 : ℂ) '' outside_disk (2 : ℂ))) :
+    BottcherApproachToOneSeqPreimageData (2 : ℂ) := by
+  exact bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk
+    (2 : ℂ) h_disk
 
 /-- Current default provider for the weaker approach-to-`1` seam at `c = 2`,
     sourced from the current outside-plan exterior-image default. -/
