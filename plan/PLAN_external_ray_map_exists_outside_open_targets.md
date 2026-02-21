@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[███████░░░] ~70%`
+  `[███████░░░] ~71%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -311,6 +311,13 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero`,
    - rewired corresponding `...of_mem_nhds_slit_of_injOn` wrappers through
      derivative payloads.
+2ac. [x] Complete the same derivative routing for the proper-map local-slit
+   rooted bridge in `MainConjecture`:
+   - added
+     `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_deriv_ne_zero_two`,
+   - rewired
+     `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
+     through this derivative payload theorem.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
