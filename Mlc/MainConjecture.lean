@@ -796,20 +796,6 @@ lemma injOnOutsideOpen_two_of_externalRayMapData
     (2 : ℂ)
     (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data h_data)
 
-/-- Current `c = 2` outside-open analyticity seed
-    (temporary axiom-backed placeholder). -/
-lemma outsideAnalytic_two_axiom_seed :
-    ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
-  exact outsideAnalytic_two_of_externalRayMapData
-    (Quadratic.external_ray_map_exists (2 : ℂ))
-
-/-- Current `c = 2` outside-open injectivity seed
-    (temporary axiom-backed placeholder). -/
-lemma injOnOutsideOpen_two_axiom_seed :
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
-  exact injOnOutsideOpen_two_of_externalRayMapData
-    (Quadratic.external_ray_map_exists (2 : ℂ))
-
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
 theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
@@ -925,11 +911,6 @@ lemma properAnalyticInjPayloadTwo_of_externalRayMapData
   refine ⟨?_, outsideAnalytic_two_of_externalRayMapData h_data,
     injOnOutsideOpen_two_of_externalRayMapData h_data⟩
   exact anyProp_of_externalRayMapData_two h_data
-
-lemma properAnalyticInjPayloadTwo_axiom_seed :
-    ProperAnalyticInjPayloadTwo := by
-  exact properAnalyticInjPayloadTwo_of_externalRayMapData
-    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- Rooted Step-4→Step-5→MLC bridge from the factored properness/analyticity/
     injectivity payload at `c = 2`. -/
