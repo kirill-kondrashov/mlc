@@ -520,6 +520,16 @@ No unconditional theorem currently provides:
 - Validation:
   - `make build` + `make check` + `make graphs` pass.
 
+## Implementation checkpoint (2026-02-21, outside-open analyticity seam)
+- Added framework seam declarations:
+  - `OutsideOpenAnalyticityHypothesis`,
+  - `outsideOpenAnalyticityHypothesis_of_mem_nhds_slit`.
+- Added root-facing bridge theorem:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
+- Tracking:
+  - detailed theorem-proof plan moved to
+    `plan/PLAN_bottcher_outside_open_analyticity_two.md`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

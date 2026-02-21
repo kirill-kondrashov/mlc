@@ -4884,6 +4884,17 @@ lemma bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit
     (hslit_nhds z hz)
     ((basin_of_infinity_isOpen c).mem_nhds hz_basin)
 
+/-- Framework seam: outside-open analyticity payload for `bottcher_map`. -/
+def OutsideOpenAnalyticityHypothesis (c : ℂ) : Prop :=
+  ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z
+
+/-- Build outside-open analyticity payload from neighborhood-level slit data. -/
+lemma outsideOpenAnalyticityHypothesis_of_mem_nhds_slit
+    (c : ℂ)
+    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z) :
+    OutsideOpenAnalyticityHypothesis c :=
+  bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds
+
 /-- Local-slit wrapper for outside-open derivative nonvanishing from injectivity. -/
 lemma bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
     (c : ℂ)
