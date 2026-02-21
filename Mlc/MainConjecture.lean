@@ -578,16 +578,6 @@ lemma bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen
     BottcherApproachOneSeqFiberData (2 : ℂ) :=
   bottcherApproachOneSeqFiberData_of_surjOnExteriorFromOutsideOpen (2 : ℂ) h_surj
 
-/-- `c = 2` sequence-fiber data from explicit external-ray data. -/
-lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    BottcherApproachOneSeqFiberData (2 : ℂ) := by
-  let f : ℂ → ℂ := Classical.choose h_data
-  intro n
-  refine ⟨f (approach_one_seq n), ?_⟩
-  exact (Classical.choose_spec h_data).1 (approach_one_seq n)
-    (norm_approach_one_seq_gt_one n)
-
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
 theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
@@ -633,9 +623,15 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    Quadratic.external_ray_map_exists (2 : ℂ)
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData
-      (Quadratic.external_ray_map_exists (2 : ℂ)))
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
 
 end MainProof
 

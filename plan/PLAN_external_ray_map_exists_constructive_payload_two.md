@@ -11,7 +11,6 @@ Constructively replace the rooted seam
 ## Current blocker (confirmed)
 Only one active rooted ingress remains:
 - `MLC.mlc_conjecture`
-- `... -> bottcherApproachOneSeqFiberData_two_of_externalRayMapData`
 - `... -> Quadratic.external_ray_map_exists (2 : ℂ)`.
 
 No unconditional theorem currently provides:
@@ -450,6 +449,17 @@ No unconditional theorem currently provides:
   - `bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData`,
   - `bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload`,
   - `mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo`.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass;
+  - rooted frontier unchanged: only
+    `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
+
+## Implementation checkpoint (2026-02-21, final external-ray-data wrapper inlined)
+- Removed dead declaration from `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_externalRayMapData`.
+- Rewired:
+  - `mlc_conjecture` now constructs sequence-fiber data inline from
+    `Quadratic.external_ray_map_exists (2 : ℂ)`.
 - Validation:
   - `make build` + `make check` + `make graphs` pass;
   - rooted frontier unchanged: only
