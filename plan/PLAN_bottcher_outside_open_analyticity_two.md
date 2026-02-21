@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[████████░░] ~80%`
+  `[████████░░] ~82%`
 - Framework refactor track:
-  `[████████░░] ~80%`
+  `[████████░░] ~82%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -117,3 +117,13 @@ constructive `mlc_conjecture` replacement route.
 - Rewired in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`
     now consumes the direct chart-within seam-to-data theorem.
+
+## Implementation checkpoint (2026-02-21, payload-bridge unification)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`
+    now uses the unified analyticity->chart-within->data bridge;
+  - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo` now routes through
+    `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo` before the
+    sequence-fiber bridge.

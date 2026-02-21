@@ -5036,6 +5036,20 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnaly
       c h_chart)
     h_inj
 
+/-- Construct external-ray data from closed range plus outside-open analyticity
+by routing through the local-chart-within seam. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_analytic : OutsideOpenAnalyticityHypothesis c)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
+    c hclosed
+    (outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis
+      c h_analytic)
+    h_inj
+
 /-- Local-slit wrapper for outside-open derivative nonvanishing from injectivity. -/
 lemma bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
     (c : ℂ)

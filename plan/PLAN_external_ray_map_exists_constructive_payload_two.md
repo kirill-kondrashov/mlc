@@ -583,6 +583,17 @@ No unconditional theorem currently provides:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`
     now routes directly through the stronger chart-within seam-to-data theorem.
 
+## Implementation checkpoint (2026-02-21, payload-bridge unification)
+- Added in `BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open`.
+- Added in `MainConjecture.lean`:
+  - `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo`.
+- Rewired in `MainConjecture.lean`:
+  - analyticity bridge theorem now consumes the unified
+    analyticity->chart-within->data route;
+  - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo` now consumes
+    packaged external-ray data directly before sequence-fiber extraction.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

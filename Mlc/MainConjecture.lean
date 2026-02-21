@@ -646,16 +646,9 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
     (hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  let h_chart_within :
-      OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) :=
-    outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two
-      hanalytic
-  let h_chart : OutsideOpenLocalAnalyticChartHypothesis (2 : ℂ) :=
-    outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
-      h_chart_within
   let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
-      (2 : ℂ) hclosed h_chart hinj
+    external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
+      (2 : ℂ) hclosed hanalytic hinj
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     (by
       let f : ℂ → ℂ := Classical.choose h_data
@@ -709,13 +702,27 @@ def OutsideOpenConstructivePayloadTwo : Prop :=
     OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) ∧
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
+/-- Data packaging helper from the combined constructive outside-open payload at
+`c = 2`. -/
+theorem external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo
+    (h_payload : OutsideOpenConstructivePayloadTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
+    (2 : ℂ) h_payload.1 h_payload.2.1 h_payload.2.2
+
 /-- Root bridge from the combined constructive outside-open payload target. -/
 theorem mlc_conjecture_of_outsideOpenConstructivePayloadTwo
     (h_payload : OutsideOpenConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact
-    mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two
-      h_payload.1 h_payload.2.1 h_payload.2.2
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo h_payload
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
