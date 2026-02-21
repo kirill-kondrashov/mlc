@@ -615,8 +615,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
-      (2 : ℂ) hclosed hanalytic hderiv)
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+      hclosed hanalytic hderiv)
 
 /-- Root bridge from explicit external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_externalRayMapData_two

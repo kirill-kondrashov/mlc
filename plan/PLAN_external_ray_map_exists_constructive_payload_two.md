@@ -637,6 +637,13 @@ No unconditional theorem currently provides:
   - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
     routes through this c=2-specialized helper.
 
+## Implementation checkpoint (2026-02-21, plain-analytic c=2 surjectivity specialization)
+- Added in `BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two`
+    now routes through this c=2-specialized surjectivity helper.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

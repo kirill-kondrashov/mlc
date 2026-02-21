@@ -4412,6 +4412,16 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analy
     (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
       c hanalytic hderiv)
 
+/-- `c = 2` specialization: outside-open surjectivity from closed range of the
+restricted map plus local analyticity and derivative nonvanishing on outside-open. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (hderiv : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+    (2 : ℂ) hclosed hanalytic hderiv
+
 /-- Construct external-ray data from outside-open injectivity + exterior
     surjectivity by outside-open preimages. -/
 theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior

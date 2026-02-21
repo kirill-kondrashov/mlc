@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~87%`
+  `[█████████░] ~88%`
 - Framework refactor track:
-  `[█████████░] ~87%`
+  `[█████████░] ~88%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -168,3 +168,10 @@ constructive `mlc_conjecture` replacement route.
 - Rewired in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
     consumes this specialized helper.
+
+## Implementation checkpoint (2026-02-21, plain-analytic c=2 surjectivity specialization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two`
+    now consumes this specialized helper.
