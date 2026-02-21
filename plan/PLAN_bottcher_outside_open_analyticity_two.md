@@ -12,7 +12,7 @@ constructive `mlc_conjecture` replacement route.
 - Analyticity theorem track:
   `[█████████░] ~94%`
 - Framework refactor track:
-  `[█████████░] ~97%`
+  `[█████████░] ~98%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -249,3 +249,11 @@ constructive `mlc_conjecture` replacement route.
 - Rewired in `Mlc/MainConjecture.lean`:
   - `analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo` now
     maps chart-within payload directly to the plain-analytic payload.
+
+## Implementation checkpoint (2026-02-21, local-chart root-wrapper pruning)
+- Removed in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`.
+- Rationale:
+  both wrappers were dead after convergence onto
+  `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.

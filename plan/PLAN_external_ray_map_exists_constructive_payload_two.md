@@ -711,6 +711,13 @@ No unconditional theorem currently provides:
   - `analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo` now
     converts directly from chart-within payload to plain-analytic payload.
 
+## Implementation checkpoint (2026-02-21, local-chart root-wrapper pruning)
+- Removed in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`.
+- Kept active route:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
