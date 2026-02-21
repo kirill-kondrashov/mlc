@@ -10,7 +10,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 - collapsing the rooted proof into contradiction circulation.
 
 ## Progress
-`[██████████] 99.99%` (4.9996/5 core milestones completed)
+`[██████████] 99.99%` (4.9997/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
@@ -239,6 +239,12 @@ Critical screening result for this plan:
    `external_ray_map_right_inverse` wrapper:
    - rewired `bottcherApproachOneSeqFiberData_two_axiom_seed` to unpack
      `Quadratic.external_ray_map_exists (2 : ℂ)` directly.
+2t. [x] Add direct theorem-level Step-4→root bridge at `c = 2`:
+   - added
+     `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`,
+   - this composes the restricted-map clopen route
+     (`bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`)
+     directly into `MainPathData`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
