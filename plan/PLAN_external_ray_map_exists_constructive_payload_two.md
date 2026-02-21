@@ -560,6 +560,13 @@ No unconditional theorem currently provides:
 - Added in `MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`.
 
+## Implementation checkpoint (2026-02-21, c=2 constructive payload package)
+- Added in `MainConjecture.lean`:
+  - `OutsideOpenConstructivePayloadTwo`,
+  - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo`.
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

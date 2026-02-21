@@ -4982,6 +4982,23 @@ lemma outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypot
     OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
   outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis (2 : ℂ) h_chart
 
+/-- `c = 2` specialization: local analytic charts inside outside-open imply
+outside-open local analytic charts. -/
+lemma outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenLocalAnalyticChartHypothesis (2 : ℂ) :=
+  outsideOpenLocalAnalyticChartHypothesis_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (2 : ℂ) h_chart
+
+/-- `c = 2` specialization: local analytic charts inside outside-open imply the
+outside-open analyticity payload. -/
+lemma outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two
+    (outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+      h_chart)
+
 /-- Local-slit wrapper for outside-open derivative nonvanishing from injectivity. -/
 lemma bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
     (c : ℂ)

@@ -690,6 +690,21 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChar
       (2 : ℂ) h_chart)
     hinj
 
+/-- Combined constructive outside-open payload target at `c = 2` for the
+post-axiom root replacement route. -/
+def OutsideOpenConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) ∧
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Root bridge from the combined constructive outside-open payload target. -/
+theorem mlc_conjecture_of_outsideOpenConstructivePayloadTwo
+    (h_payload : OutsideOpenConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two
+      h_payload.1 h_payload.2.1 h_payload.2.2
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 

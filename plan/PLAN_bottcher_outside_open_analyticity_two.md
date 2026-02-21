@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[███████░░░] ~70%`
+  `[████████░░] ~75%`
 - Framework refactor track:
-  `[███████░░░] ~70%`
+  `[████████░░] ~75%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -89,5 +89,15 @@ constructive `mlc_conjecture` replacement route.
     `outsideOpenLocalAnalyticChartHypothesis_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis`.
 - Added in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass.
+
+## Implementation checkpoint (2026-02-21, c=2 payload packaging)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two`,
+  - `outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `OutsideOpenConstructivePayloadTwo`,
+  - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo`.
 - Validation:
   - `make build` + `make check` + `make graphs` pass.
