@@ -10,7 +10,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 - collapsing the rooted proof into contradiction circulation.
 
 ## Progress
-`[██████████] 99.99%` (4.9995/5 core milestones completed)
+`[██████████] 99.99%` (4.9996/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
@@ -35,7 +35,8 @@ The external-ray dependency is now localized through the narrowed seed chain:
 - `mainPathData_of_bottcherApproachToOneSeqPreimageData_two`
 - `bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`
 - `bottcherApproachOneSeqFiberData_two_axiom_seed`
-- `Quadratic.external_ray_map_right_inverse (2 : ℂ)` (applied only to `approach_one_seq n`)
+- `Quadratic.external_ray_map_exists (2 : ℂ)` (via direct unpacking of
+  `ExternalRayMapData`, applied only to `approach_one_seq n`)
 - `MLC.Quadratic.external_ray_map_exists`.
 
 Outside-plan default right-inverse construction is now routed through:
@@ -51,8 +52,7 @@ Exact rooted dependency chain to the missing axiom (from generated graph):
 3. `MLC.mainPathData_of_bottcherApproachToOneSeqPreimageData_two`
 4. `MLC.bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`
 5. `MLC.bottcherApproachOneSeqFiberData_two_axiom_seed`
-6. `MLC.Quadratic.external_ray_map_right_inverse`
-7. `MLC.Quadratic.external_ray_map_exists`
+6. `MLC.Quadratic.external_ray_map_exists`
 
 ## Reduction target chain (already available in code)
 From `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean` and
@@ -79,6 +79,29 @@ Also, the current slit payload shape
 `{z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c` is likely too strong for `c = 2`;
 the non-circular route should target a weaker, usable local/eventual-slit
 condition rather than global outside-open slit inclusion.
+
+## External research inputs (Dudko)
+Downloaded and indexed under:
+- `refs/Dudko_*.pdf`
+- `refs/Dudko_relevance_external_ray_map_exists.md`
+
+Most relevant for global MLC strategy (renormalization/classification track):
+- `refs/Dudko_2512.24171.pdf`
+- `refs/Dudko_2309.02107.pdf`
+- `refs/Dudko_1808.10425.pdf`
+
+Potentially supportive geometric context:
+- `refs/Dudko_1004.0633.pdf`
+- `refs/Dudko_S0002-9939-2011-11047-5.pdf`
+
+Critical screening result for this plan:
+- No direct drop-in replacement was identified for the current formal blocker
+  in this Lean route:
+  `Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}`
+  plus restricted-map closed-range/properness at `c = 2`.
+- Therefore this plan remains focused on proving Step 3/4 non-circularly in
+  the present outside-open framework, while keeping renormalization-track
+  references available for broader strategy pivots.
 
 ### Hard blocker sharpened (no-go checkpoint)
 - The current global slit payload
@@ -206,6 +229,16 @@ condition rather than global outside-open slit inclusion.
    - rewired rooted bridges through
      `mainPathData_of_bottcherApproachToOneSeqPreimageData_two` and
      `bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`.
+2r. [x] Add external literature checkpoint for elimination guidance:
+   - downloaded Dudko corpus into `refs/`,
+   - recorded screening in
+     `refs/Dudko_relevance_external_ray_map_exists.md`,
+   - linked conclusions into this plan (no direct Step 3/4 theorem replacement
+     found; keep current non-circular outside-open target path).
+2s. [x] Tighten rooted seed dependency by removing the extra
+   `external_ray_map_right_inverse` wrapper:
+   - rewired `bottcherApproachOneSeqFiberData_two_axiom_seed` to unpack
+     `Quadratic.external_ray_map_exists (2 : ℂ)` directly.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.

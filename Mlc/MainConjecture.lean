@@ -593,9 +593,12 @@ theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
     inverse on the canonical `approach_one_seq`. -/
 lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
     BottcherApproachOneSeqFiberData (2 : ℂ) := by
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    Quadratic.external_ray_map_exists (2 : ℂ)
+  let f : ℂ → ℂ := Classical.choose h_data
   intro n
-  refine ⟨Quadratic.external_ray_map (2 : ℂ) (approach_one_seq n), ?_⟩
-  exact Quadratic.external_ray_map_right_inverse (2 : ℂ) (approach_one_seq n)
+  refine ⟨f (approach_one_seq n), ?_⟩
+  exact (Classical.choose_spec h_data).1 (approach_one_seq n)
     (norm_approach_one_seq_gt_one n)
 
 /-- Current default seed for the constructive main-path seam datum. -/
