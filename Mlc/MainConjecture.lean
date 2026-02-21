@@ -617,7 +617,7 @@ lemma anyProp_of_externalRayMapData_two_axiom_seed {P : Prop} : P :=
 lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
     BottcherApproachOneSeqFiberData (2 : ℂ) := by
   exact bottcherApproachOneSeqFiberData_two_of_externalRayMapData
-    externalRayMapData_two_axiom_seed
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- Current `c = 2` right-inverse seam seed from external-ray data. -/
 lemma bottcherRightInverseOnExteriorData_two_axiom_seed :

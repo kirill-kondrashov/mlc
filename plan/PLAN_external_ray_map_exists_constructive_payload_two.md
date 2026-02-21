@@ -22,9 +22,9 @@ No unconditional theorem currently provides:
 - End-to-end elimination progress:
   `[██████████] ~99%`
 - Constructive payload route progress:
-  `[█████████▓] ~95%`
+  `[█████████▓] ~96%`
 - Proof implementation progress:
-  `[████████▓░] ~86%`
+  `[████████▓░] ~87%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -324,6 +324,15 @@ No unconditional theorem currently provides:
   - rooted chain remains isolated at
     `mlc_conjecture -> bottcherApproachOneSeqFiberData_two_axiom_seed ->
     externalRayMapData_two_axiom_seed -> Quadratic.external_ray_map_exists`.
+
+## Implementation checkpoint (2026-02-21, direct root-edge simplification)
+- Rewired `bottcherApproachOneSeqFiberData_two_axiom_seed` to consume
+  `Quadratic.external_ray_map_exists (2 : ℂ)` directly.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass;
+  - rooted chain is now shorter:
+    `mlc_conjecture -> bottcherApproachOneSeqFiberData_two_axiom_seed ->
+    Quadratic.external_ray_map_exists`.
 
 ## Work packages
 1. Prove closed range at `c = 2`:
