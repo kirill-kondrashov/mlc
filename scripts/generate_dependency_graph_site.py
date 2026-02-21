@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a single dependency graph rooted at `MLC.mlc_conjecture`.
+"""Generate rooted dependency graph pages.
 
 The graph is declaration-level and cross-file (all `Mlc/*.lean`).
 Edges are textual usage edges: source declaration body references target name.
@@ -7,6 +7,9 @@ Output layout:
   site/
     index.html
     mlc_conjecture/
+      index.html
+      graph.json
+    mlc_conjecture_injon_bridge/
       index.html
       graph.json
 """
@@ -34,6 +37,7 @@ TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
 TOKEN_CHARS = r"A-Za-z0-9_.']"
 EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
 MISSING_AXIOMS = ("MLC.Quadratic.external_ray_map_exists",)
+INJON_BRIDGE_SYMBOL = "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two"
 
 
 @dataclass(frozen=True)
@@ -312,6 +316,7 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(100,116,139,0.7);
       --cycle-ring: #ef4444;
       --cycle-edge: #f97316;
+      --potential-edge: #7c3aed;
       --axiom-ring: #dc2626;
       --axiom-fill: rgba(220,38,38,0.26);
       --core-axiom-ring: #1d4ed8;
@@ -343,6 +348,7 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(151,175,210,0.72);
       --cycle-ring: #fb7185;
       --cycle-edge: #f59e0b;
+      --potential-edge: #a78bfa;
       --axiom-ring: #f87171;
       --axiom-fill: rgba(248,113,113,0.30);
       --core-axiom-ring: #60a5fa;
@@ -389,23 +395,6 @@ def graph_page_html(title: str) -> str:
     .toolbar .meta {{
       color: var(--muted);
       font-size: 13px;
-    }}
-    .status-pill {{
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 3px 9px;
-      font-size: 12px;
-      font-weight: 600;
-      border: 1px solid var(--border);
-    }}
-    .status-pill.detected {{
-      background: var(--status-yes-bg);
-      color: var(--status-yes-fg);
-    }}
-    .status-pill.none {{
-      background: var(--status-no-bg);
-      color: var(--status-no-fg);
     }}
     .toolbar label {{
       font-size: 13px;
@@ -465,7 +454,6 @@ def graph_page_html(title: str) -> str:
   <div class="toolbar">
     <h1>{esc_title}</h1>
     <span class="meta" id="summary"></span>
-    <span class="status-pill" id="cycleStatus"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
     <button id="fitBtn" type="button">Fit</button>
     <button id="themeBtn" type="button">Theme</button>
@@ -526,6 +514,7 @@ const state = {{
     labelMuted: "rgba(100,116,139,0.7)",
     cycleRing: "#ef4444",
     cycleEdge: "#f97316",
+    potentialEdge: "#7c3aed",
     axiomRing: "#dc2626",
     axiomFill: "rgba(220,38,38,0.26)",
     coreAxiomRing: "#1d4ed8",
@@ -577,6 +566,7 @@ function refreshPalette() {{
   state.palette.labelMuted = cssVar("--label-muted", "rgba(100,116,139,0.7)");
   state.palette.cycleRing = cssVar("--cycle-ring", "#ef4444");
   state.palette.cycleEdge = cssVar("--cycle-edge", "#f97316");
+  state.palette.potentialEdge = cssVar("--potential-edge", "#7c3aed");
   state.palette.axiomRing = cssVar("--axiom-ring", "#dc2626");
   state.palette.axiomFill = cssVar("--axiom-fill", "rgba(220,38,38,0.26)");
   state.palette.coreAxiomRing = cssVar("--core-axiom-ring", "#1d4ed8");
@@ -683,7 +673,8 @@ function detectCycles() {{
   const idx = new Map(state.nodes.map((n, i) => [n.id, i]));
   const adj = state.nodes.map(() => []);
   const selfLoop = state.nodes.map(() => false);
-  for (const e of state.edges) {{
+  const depEdges = state.edges.filter(e => (e.kind || "dependency") !== "potential");
+  for (const e of depEdges) {{
     const s = idx.get(e.source.id);
     const t = idx.get(e.target.id);
     if (s === undefined || t === undefined) continue;
@@ -750,6 +741,10 @@ function detectCycles() {{
 
   let cycleEdges = 0;
   for (const e of state.edges) {{
+    if ((e.kind || "dependency") === "potential") {{
+      e.inCycle = false;
+      continue;
+    }}
     const sameCycle = e.source.inCycle && e.target.inCycle && e.source.cycleId === e.target.cycleId;
     e.inCycle = sameCycle;
     if (sameCycle) cycleEdges += 1;
@@ -773,30 +768,13 @@ function renderLegend() {{
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.minDegree, state.minDegree, state.maxDegree)}}"></span>${{state.minDegree}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(midD, state.minDegree, state.maxDegree)}}"></span>${{midD}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.maxDegree, state.minDegree, state.maxDegree)}}"></span>${{state.maxDegree}}</span>
-    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.cycleEdge}}"></span>Cycle edge</span>
-    <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.cycleRing}}"></span>Cycle node</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.potentialEdge}}"></span>Potential rewire</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.coreAxiomFill}};border-color:${{state.palette.coreAxiomRing}}"></span>Core axiom</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Project axiom</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.missingAxiomFill}};border-color:${{state.palette.missingAxiomRing}}"></span>Missing axiom</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.poleMissing}}"></span>Missing-axiom pole</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.poleCore}}"></span>Core-axiom poles</span>
   `;
-}}
-
-function renderCycleStatus() {{
-  const status = document.getElementById("cycleStatus");
-  if (!status) return;
-  const directedDetected = state.cycleComponentCount > 0;
-  const directedText = directedDetected
-    ? `yes (${{state.cycleComponentCount}})`
-    : "no";
-  const missingText = state.missingAxiomCount > 0
-    ? `${{state.missingAxiomCount}}`
-    : "0";
-  status.textContent = `Directed cycles: ${{directedText}} | Missing axioms: ${{missingText}}`;
-  status.className = directedDetected
-    ? "status-pill detected"
-    : "status-pill none";
 }}
 
 function initGraph(payload) {{
@@ -929,7 +907,8 @@ function initGraph(payload) {{
   state.edges = payload.edges
     .map(e => ({{
       source: state.idToNode.get(e.source),
-      target: state.idToNode.get(e.target)
+      target: state.idToNode.get(e.target),
+      kind: e.kind || "dependency"
     }}))
     .filter(e => e.source && e.target);
 
@@ -961,12 +940,10 @@ function initGraph(payload) {{
 
   detectCycles();
   renderLegend();
-  renderCycleStatus();
 
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
-    `${{state.cycleNodeCount}} directed-cycle nodes (${{state.cycleComponentCount}} components), ` +
-    `${{state.cycleEdgeCount}} directed-cycle edges, ${{state.axiomCount}} axioms ` +
+    `${{state.axiomCount}} axioms ` +
     `(${{state.coreAxiomCount}} core, ${{state.missingAxiomCount}} missing)`;
 
   const searchInput = document.getElementById("search");
@@ -1254,21 +1231,26 @@ function draw() {{
   for (const e of state.edges) {{
     const a = e.source;
     const b = e.target;
+    const isPotential = (e.kind || "dependency") === "potential";
     const hasMissingAxiom = a.axiom_tier === "missing" || b.axiom_tier === "missing";
     const hasCoreAxiom = a.axiom_tier === "core" || b.axiom_tier === "core";
     const hit = (!state.search) || matchNode(a) || matchNode(b);
-    const edgeColor = hasMissingAxiom
+    const edgeColor = isPotential
+      ? state.palette.potentialEdge
+      : hasMissingAxiom
       ? state.palette.missingAxiomEdge
       : (hasCoreAxiom
           ? state.palette.coreAxiomRing
           : (e.inCycle ? state.palette.cycleEdge : state.palette.edge));
     const color = hit ? edgeColor : state.palette.edgeMuted;
-    const dash = hasMissingAxiom
+    const dash = isPotential
+      ? [Math.max(2.6, 3.4 / state.scale), Math.max(1.8, 2.4 / state.scale)]
+      : hasMissingAxiom
       ? [Math.max(1.8, 2.2 / state.scale), Math.max(1.4, 1.8 / state.scale)]
       : [];
     ctx.setLineDash(dash);
     ctx.strokeStyle = color;
-    ctx.lineWidth = hasMissingAxiom ? lw * 1.35 : lw;
+    ctx.lineWidth = isPotential ? lw * 1.2 : (hasMissingAxiom ? lw * 1.35 : lw);
     let dx = b.x - a.x;
     let dy = b.y - a.y;
     const d = Math.sqrt(dx * dx + dy * dy);
@@ -1443,11 +1425,6 @@ function start(payload) {{
 
 loadGraph().then(start).catch((err) => {{
   document.getElementById("summary").textContent = err.message;
-  const status = document.getElementById("cycleStatus");
-  if (status) {{
-    status.textContent = "Directed cycle metrics: unavailable";
-    status.className = "status-pill";
-  }}
   ctx.clearRect(0, 0, state.width || 800, state.height || 300);
   ctx.fillStyle = "#9b2226";
   ctx.font = "14px IBM Plex Sans, Segoe UI, sans-serif";
@@ -1459,45 +1436,74 @@ loadGraph().then(start).catch((err) => {{
 """
 
 
-def redirect_html(target: str) -> str:
-    esc_target = html.escape(target)
+def index_html(links: list[tuple[str, str]]) -> str:
+    items = "\n".join(
+        f'    <li><a href="{html.escape(href)}">{html.escape(label)}</a></li>'
+        for label, href in links
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url={esc_target}">
-  <title>MLC Graph</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MLC Dependency Graphs</title>
+  <style>
+    body {{
+      margin: 24px;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }}
+    h1 {{ margin-top: 0; font-size: 22px; }}
+    ul {{ line-height: 1.9; }}
+    a {{ color: #1d4ed8; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+  </style>
 </head>
 <body>
-  <p>Redirecting to <a href="{esc_target}">{esc_target}</a>...</p>
+  <h1>MLC Dependency Graphs</h1>
+  <ul>
+{items}
+  </ul>
 </body>
 </html>
 """
 
 
-def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
-    fq_index, edges = build_full_graph(repo_root)
+def resolve_root_decl(root_symbol: str, fq_index: dict[str, Decl]) -> Decl:
+    root_decl = fq_index.get(root_symbol)
+    if root_decl is not None:
+        return root_decl
+    matches = [d for d in fq_index.values() if d.name == root_symbol.split(".")[-1]]
+    if len(matches) == 1:
+        return matches[0]
+    if matches:
+        return sorted(matches, key=lambda d: d.fq_name == "MLC.mlc_conjecture", reverse=True)[0]
+    raise RuntimeError(f"Root symbol not found: {root_symbol}")
 
-    root_decl: Decl | None = fq_index.get(root_symbol)
-    if root_decl is None:
-        matches = [d for d in fq_index.values() if d.name == root_symbol.split(".")[-1]]
-        if len(matches) == 1:
-            root_decl = matches[0]
-        elif matches:
-            root_decl = sorted(matches, key=lambda d: d.fq_name == "MLC.mlc_conjecture", reverse=True)[0]
-        else:
-            raise RuntimeError(f"Root symbol not found: {root_symbol}")
 
+def build_payload(
+    fq_index: dict[str, Decl],
+    edges: dict[str, set[str]],
+    root_decl: Decl,
+    *,
+    extra_nodes: set[str] | None = None,
+    extra_edges: list[dict[str, str]] | None = None,
+) -> dict[str, object]:
     reachable, depth = rooted_closure(root_decl.fq_name, edges)
-    # The dependency extractor is textual over `Mlc/*.lean`, so kernel/core axioms
-    # are not discoverable as regular declaration tokens. Include them explicitly
-    # as first-level axiom dependencies of the root.
     edges.setdefault(root_decl.fq_name, set())
     for ax_name in EMBEDDED_AXIOMS:
         if ax_name in fq_index:
             reachable.add(ax_name)
             depth.setdefault(ax_name, 1)
             edges[root_decl.fq_name].add(ax_name)
+
+    if extra_nodes:
+        extra_depth = max(depth.values(), default=0) + 1
+        for node_id in sorted(extra_nodes):
+            if node_id in fq_index:
+                reachable.add(node_id)
+                depth.setdefault(node_id, extra_depth)
 
     nodes = []
     for node_id in sorted(reachable):
@@ -1523,33 +1529,97 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
                 "depth": depth.get(d.fq_name, 0),
             }
         )
-    edge_payload = []
+
+    edge_payload: list[dict[str, str]] = []
+    seen_edges: set[tuple[str, str, str]] = set()
     for src in sorted(reachable):
         for dst in sorted(edges.get(src, set())):
             if dst in reachable:
-                edge_payload.append({"source": src, "target": dst})
+                edge = {"source": src, "target": dst, "kind": "dependency"}
+                edge_payload.append(edge)
+                seen_edges.add((src, dst, "dependency"))
 
-    payload = {
+    if extra_edges:
+        for e in extra_edges:
+            src = e["source"]
+            dst = e["target"]
+            kind = e.get("kind", "potential")
+            key = (src, dst, kind)
+            if src in reachable and dst in reachable and key not in seen_edges:
+                edge_payload.append({"source": src, "target": dst, "kind": kind})
+                seen_edges.add(key)
+
+    return {
         "root": root_decl.fq_name,
         "nodes": nodes,
         "edges": edge_payload,
     }
 
-    if output_root.exists():
-        shutil.rmtree(output_root)
-    graph_dir = output_root / "mlc_conjecture"
-    graph_dir.mkdir(parents=True, exist_ok=True)
 
+def write_graph(output_root: Path, slug: str, title: str, payload: dict[str, object]) -> str:
+    graph_dir = output_root / slug
+    graph_dir.mkdir(parents=True, exist_ok=True)
     (graph_dir / "graph.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
     (graph_dir / "index.html").write_text(
-        graph_page_html(f"Lean Dependency Graph: {root_decl.fq_name}"),
+        graph_page_html(title),
         encoding="utf-8",
     )
+    return f"{slug}/index.html"
+
+
+def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
+    fq_index, edges = build_full_graph(repo_root)
+
+    if output_root.exists():
+        shutil.rmtree(output_root)
+    output_root.mkdir(parents=True, exist_ok=True)
+
+    root_decl = resolve_root_decl(root_symbol, fq_index)
+    root_payload = build_payload(fq_index, edges, root_decl)
+    root_href = write_graph(
+        output_root,
+        "mlc_conjecture",
+        f"Lean Dependency Graph: {root_decl.fq_name}",
+        root_payload,
+    )
+
+    links: list[tuple[str, str]] = [
+        (f"Rooted graph: {root_decl.fq_name}", root_href),
+    ]
+    bridge_decl = fq_index.get(INJON_BRIDGE_SYMBOL)
+    mlc_decl = fq_index.get("MLC.mlc_conjecture")
+    if bridge_decl is not None:
+        extra_nodes: set[str] = set()
+        extra_edges: list[dict[str, str]] = []
+        if mlc_decl is not None:
+            extra_nodes.add(mlc_decl.fq_name)
+            extra_edges.append(
+                {
+                    "source": mlc_decl.fq_name,
+                    "target": bridge_decl.fq_name,
+                    "kind": "potential",
+                }
+            )
+        bridge_payload = build_payload(
+            fq_index,
+            edges,
+            bridge_decl,
+            extra_nodes=extra_nodes,
+            extra_edges=extra_edges,
+        )
+        bridge_href = write_graph(
+            output_root,
+            "mlc_conjecture_injon_bridge",
+            f"Lean Dependency Graph: {bridge_decl.fq_name}",
+            bridge_payload,
+        )
+        links.append((f"Alternative graph: {bridge_decl.fq_name}", bridge_href))
+
     (output_root / "index.html").write_text(
-        redirect_html("mlc_conjecture/index.html"),
+        index_html(links),
         encoding="utf-8",
     )
 
@@ -1567,7 +1637,7 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     output_root = (repo_root / args.output).resolve()
     generate_site(repo_root, output_root, args.root)
-    print(f"Generated rooted dependency graph at: {output_root}/mlc_conjecture/index.html")
+    print(f"Generated dependency graph site at: {output_root}/index.html")
 
 
 if __name__ == "__main__":

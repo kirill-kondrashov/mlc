@@ -506,6 +506,20 @@ No unconditional theorem currently provides:
   - rooted frontier unchanged: only
     `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
 
+## Implementation checkpoint (2026-02-21, alternative graph + potential rewire edge)
+- Updated `scripts/generate_dependency_graph_site.py` to emit:
+  - rooted graph: `site/mlc_conjecture/index.html`,
+  - alternative graph: `site/mlc_conjecture_injon_bridge/index.html`
+    rooted at
+    `MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`.
+- Added a special `kind: "potential"` edge in the alternative graph:
+  - `MLC.mlc_conjecture -> MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`.
+- UI cleanup:
+  - removed cycle-related status/legend labels from graph pages;
+  - kept a focused legend entry for the potential rewire edge.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
