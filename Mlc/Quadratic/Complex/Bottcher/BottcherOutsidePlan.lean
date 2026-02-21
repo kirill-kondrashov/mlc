@@ -4415,15 +4415,6 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorp
     (by simpa [Set.image_univ] using (hproper.isClosedMap Set.univ isClosed_univ))
     hlocal
 
-/-- `c = 2` specialization of the proper-map + restricted local-homeomorph
-surjectivity route for outside-open preimages. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
-    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict
-    (2 : ℂ) hproper hlocal
-
 /-- Convert local-homeomorph on an open set into local-homeomorph of the
 restricted function on the subtype domain. -/
 lemma isLocalHomeomorph_restrict_of_isLocalHomeomorphOn_open
@@ -4515,17 +4506,6 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_d
     (bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
       c hanalytic hderiv)
 
-/-- Outside-open surjectivity from properness of the restricted map plus slit
-analyticity on outside-open. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit
-    (c : ℂ)
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    BottcherSurjOnExteriorFromOutsideOpen c := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict c
-    hproper
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit)
-
 /-- Outside-open surjectivity from closed range of the restricted map plus slit
 analyticity on outside-open. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit
@@ -4602,19 +4582,6 @@ theorem external_ray_map_data_of_injOn_outside_open_of_isProperMap_of_isLocalHom
   exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
     (bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict
       c hproper hlocal)
-
-/-- Construct external-ray data from outside-open injectivity and slit
-analyticity, assuming properness of the restricted map `outside_open →
-exterior`. -/
-theorem external_ray_map_data_of_isProperMap_restrict_of_slit_of_injOn_outside_open
-    (c : ℂ)
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_injOn_outside_open_of_isProperMap_of_isLocalHomeomorph_restrict c
-    h_inj hproper
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit)
 
 /-- Construct external-ray data from outside-open injectivity and slit
 analyticity, assuming closed range for the restricted map `outside_open →

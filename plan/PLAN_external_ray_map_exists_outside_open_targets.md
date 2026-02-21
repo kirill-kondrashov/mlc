@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~78%`
+  `[████████░░] ~79%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -131,6 +131,8 @@ Critical screening result for this plan:
    - `isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit`,
    - `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit`,
    - `external_ray_map_data_of_isProperMap_restrict_of_slit_of_injOn_outside_open`.
+   - note: the two proper-map slit wrappers listed above were later pruned as
+     dead in 2ak.
 2c. [x] Weaken the clopen route further from properness to closed-range on the
    restricted map:
    - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict`,
@@ -275,6 +277,8 @@ Critical screening result for this plan:
      through this weaker seam interface,
    - pruned dead theorem:
      `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn`.
+   - note: the `c = 2` specialization added here was later pruned as dead in
+     2ak.
 2y. [x] Add an explicit weaker rooted bridge at `c = 2` through restricted-map
    local-homeomorph (without hard-coding injectivity at the seam interface):
    - rewired
@@ -322,11 +326,14 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit`,
    - pruned dead local-slit injective wrappers no longer used in the current
      elimination chain.
+   - note: the proper-map slit specialization was later pruned as dead in 2ak.
 2ae. [x] Prune dead intermediate rooted wrappers in `MainConjecture` after
    analytic/derivative routing became primary:
    - removed obsolete restricted-local-homeomorph bridge wrappers,
    - inlined proper-map rooted route directly through
      `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`.
+   - note: this intermediate `c = 2` outside-plan specialization was later
+     pruned as dead in 2ak.
 2af. [x] Prune dead injectivity wrapper theorems in `MainConjecture` now fully
    subsumed by derivative routes:
    - removed obsolete `...of_injOn_two` rooted wrappers,
@@ -354,6 +361,13 @@ Critical screening result for this plan:
    - removed
      `bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen`,
    - removed `mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
+2ak. [x] Prune dead proper-map slit specializations in
+   `BottcherOutsidePlan` after rooted users were removed:
+   - removed
+     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`,
+   - removed `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit`,
+   - removed
+     `external_ray_map_data_of_isProperMap_restrict_of_slit_of_injOn_outside_open`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
