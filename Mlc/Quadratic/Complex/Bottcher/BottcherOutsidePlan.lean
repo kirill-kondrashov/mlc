@@ -5314,6 +5314,60 @@ lemma outside_open_subset_slit_orbit_of_mem_nhds_slit
   intro z hz
   exact mem_of_mem_nhds (hslit_nhds z hz)
 
+/-- Rotated neighborhood-level slit-orbit payload implies global outside-open
+inclusion in the corresponding rotated slit orbit. -/
+lemma outside_open_subset_slit_orbit_rot_of_mem_nhds_slit
+    (c : ℂ) (θ : ℝ)
+    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit_rot c θ ∈ 𝓝 z) :
+    {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit_rot c θ := by
+  intro z hz
+  exact mem_of_mem_nhds (hslit_nhds z hz)
+
+/-- No-go checkpoint (rotated variant): global outside-open inclusion in any
+rotated slit orbit is impossible in the current model. -/
+lemma not_outside_open_subset_slit_orbit_rot (c : ℂ) (θ : ℝ) :
+    ¬ ({z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit_rot c θ) := by
+  intro hslit
+  let a : ℝ := ‖c‖ + 3
+  have ha_pos : 0 < a := by
+    dsimp [a]
+    linarith [norm_nonneg c]
+  let z0 : ℂ := ((-a : ℝ) : ℂ) * Complex.exp (Complex.I * θ)
+  have hz0_out : ‖z0‖ > ‖c‖ + 2 := by
+    have hnorm : ‖z0‖ = a := by
+      calc
+        ‖z0‖ = ‖((-a : ℝ) : ℂ)‖ * ‖Complex.exp (Complex.I * θ)‖ := by
+          simpa [z0] using (norm_mul (((-a : ℝ) : ℂ)) (Complex.exp (Complex.I * θ)))
+        _ = |(-a : ℝ)| * 1 := by simp
+        _ = a := by
+          rw [abs_of_nonpos]
+          · ring
+          · linarith
+    have hnorm' : ‖z0‖ = ‖c‖ + 3 := by simpa [a] using hnorm
+    linarith
+  have hz0_slit_orbit : z0 ∈ slit_orbit_rot c θ := hslit hz0_out
+  have hz0_slit : z0 * Complex.exp (-Complex.I * θ) ∈ Complex.slitPlane := by
+    simpa [slit_orbit_rot, slitPlaneRot] using hz0_slit_orbit 0
+  have hz0_arg : Complex.arg (((-a : ℝ) : ℂ)) = Real.pi := by
+    have hneg : (-a : ℝ) < 0 := by linarith
+    simpa using (Complex.arg_ofReal_of_neg hneg)
+  have hExpMul :
+      Complex.exp (Complex.I * θ) * Complex.exp (-Complex.I * θ) = 1 := by
+    rw [← Complex.exp_add]
+    simp
+  have hz0_mul :
+      z0 * Complex.exp (-Complex.I * θ) = (((-a : ℝ) : ℂ)) := by
+    dsimp [z0]
+    calc
+      (((-a : ℝ) : ℂ) * Complex.exp (Complex.I * θ)) * Complex.exp (-Complex.I * θ)
+          = (((-a : ℝ) : ℂ)) * (Complex.exp (Complex.I * θ) * Complex.exp (-Complex.I * θ)) := by
+              ac_rfl
+      _ = (((-a : ℝ) : ℂ)) * 1 := by rw [hExpMul]
+      _ = (((-a : ℝ) : ℂ)) := by simp
+  have hz0_slit' : (((-a : ℝ) : ℂ)) ∈ Complex.slitPlane := by
+    exact hz0_mul ▸ hz0_slit
+  exact (Complex.mem_slitPlane_iff_arg.mp hz0_slit').1 hz0_arg
+
 /-- No-go checkpoint: global slit inclusion on outside-open is impossible in
 the current principal-slit model. -/
 lemma not_outside_open_subset_slit_orbit (c : ℂ) :
@@ -5351,4 +5405,12 @@ lemma not_mem_nhds_slit_on_outside_open_two :
   intro hslit_nhds
   exact not_outside_open_subset_slit_orbit_two
     (outside_open_subset_slit_orbit_of_mem_nhds_slit (2 : ℂ) hslit_nhds)
+
+/-- Rotated variant at `c = 2`: neighborhood-level rotated slit payload on all
+outside-open points is impossible. -/
+lemma not_mem_nhds_slit_rot_on_outside_open_two (θ : ℝ) :
+    ¬ (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit_rot (2 : ℂ) θ ∈ 𝓝 z) := by
+  intro hslit_nhds
+  exact not_outside_open_subset_slit_orbit_rot (2 : ℂ) θ
+    (outside_open_subset_slit_orbit_rot_of_mem_nhds_slit (2 : ℂ) θ hslit_nhds)
 end MLC

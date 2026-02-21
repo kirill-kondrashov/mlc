@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~94%`
+  `[█████████░] ~95%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -287,3 +287,12 @@ constructive `mlc_conjecture` replacement route.
     finishes directly through
     `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`;
   - `mlc_conjecture` now uses the same direct finish route.
+
+## Implementation checkpoint (2026-02-21, rotated-slit no-go extension)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outside_open_subset_slit_orbit_rot_of_mem_nhds_slit`;
+  - `not_outside_open_subset_slit_orbit_rot`;
+  - `not_mem_nhds_slit_rot_on_outside_open_two`.
+- Impact:
+  ruled out not only principal-slit but also any fixed-angle rotated-slit
+  neighborhood payload as a global outside-open analyticity strategy at `c = 2`.

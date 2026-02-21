@@ -744,6 +744,19 @@ No unconditional theorem currently provides:
     `mlc_conjecture` now finish directly via
     `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`.
 
+## Implementation checkpoint (2026-02-21, rotated-slit no-go extension)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outside_open_subset_slit_orbit_rot_of_mem_nhds_slit`;
+  - `not_outside_open_subset_slit_orbit_rot`;
+  - `not_mem_nhds_slit_rot_on_outside_open_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+- Consequence:
+  a global neighborhood payload through any fixed rotated slit is ruled out at
+  `c = 2`; remaining route is genuinely non-slit local analyticity/injectivity.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
