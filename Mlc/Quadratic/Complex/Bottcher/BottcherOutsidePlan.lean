@@ -3834,6 +3834,19 @@ lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_injOn
     exact bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
       c hanalytic h_inj z (by simpa using hz)
 
+/-- Local-homeomorph on outside-open from local analyticity plus derivative
+nonvanishing on outside-open. -/
+lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ ?_
+  · intro z hz
+    exact hanalytic z (by simpa using hz)
+  · intro z hz
+    exact hderiv z (by simpa using hz)
+
 /-- Open-map-on-subtype variant from local analyticity and outside-open
 injectivity. -/
 lemma bottcher_map_isOpenMap_on_outside_open_of_analyticAt_of_injOn
@@ -4411,44 +4424,105 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isL
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict
     (2 : ℂ) hproper hlocal
 
+/-- Convert local-homeomorph on an open set into local-homeomorph of the
+restricted function on the subtype domain. -/
+lemma isLocalHomeomorph_restrict_of_isLocalHomeomorphOn_open
+    {f : ℂ → ℂ} {s : Set ℂ}
+    (hs : IsOpen s)
+    (hlocal : IsLocalHomeomorphOn f s) :
+    IsLocalHomeomorph (s.restrict f) := by
+  intro x
+  rcases hlocal x x.2 with ⟨e, hx, hfe⟩
+  let S : TopologicalSpace.Opens ℂ := ⟨s, hs⟩
+  have hS : Nonempty S := ⟨⟨x.1, x.2⟩⟩
+  refine ⟨e.subtypeRestr hS, ?_, ?_⟩
+  · simpa [S] using hx
+  · funext y
+    change f y.1 = e y.1
+    simp [hfe]
+
+/-- Codomain restriction preserves local-homeomorph when all values land in the
+target subset. -/
+lemma isLocalHomeomorph_codRestrict_of_isLocalHomeomorph
+    {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {f : X → Y} {s : Set Y}
+    (hlocal : IsLocalHomeomorph f)
+    (hs : ∀ x, f x ∈ s) :
+    IsLocalHomeomorph (codRestrict f s hs) := by
+  rw [isLocalHomeomorph_iff_isOpenEmbedding_restrict] at hlocal ⊢
+  intro x
+  rcases hlocal x with ⟨U, hU, hEmb⟩
+  refine ⟨U, hU, ?_⟩
+  let g : U → s :=
+    codRestrict (U.restrict f) s (by
+      intro z
+      exact hs z.1)
+  have hgcont : Continuous g := by
+    exact (hEmb.toIsEmbedding.continuous.codRestrict (by
+      intro z
+      exact hs z.1))
+  have hginj : Function.Injective g := by
+    intro a b hab
+    exact hEmb.toIsEmbedding.injective (congrArg Subtype.val hab)
+  have hgopen : IsOpenMap g := by
+    simpa [g, Set.restrict] using
+      (IsOpenMap.codRestrict hEmb.isOpenMap (by
+        intro z
+        exact hs z.1))
+  have hEmb' : IsOpenEmbedding g :=
+    IsOpenEmbedding.of_continuous_injective_isOpenMap hgcont hginj hgopen
+  simpa [g, Set.restrict] using hEmb'
+
+/-- Restricted-map local-homeomorph from local-homeomorph on outside-open. -/
+lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open
+    (c : ℂ)
+    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
+  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
+  let E : Set ℂ := {w : ℂ | 1 < ‖w‖}
+  have hUopen : IsOpen U := by
+    simpa [U] using (isOpen_lt continuous_const continuous_norm)
+  have hlocalU : IsLocalHomeomorph (U.restrict (Quadratic.bottcher_map c)) := by
+    exact isLocalHomeomorph_restrict_of_isLocalHomeomorphOn_open hUopen (by simpa [U] using hlocal)
+  have hs : ∀ z : U, (U.restrict (Quadratic.bottcher_map c)) z ∈ E := by
+    intro z
+    have hzU : z.1 ∈ ({w : ℂ | ‖w‖ > ‖c‖ + 2} : Set ℂ) := by
+      change z.1 ∈ U
+      exact z.2
+    exact bottcher_map_norm_gt_one_of_outside c
+      (outside_open_subset_outside_disk c hzU)
+  simpa [bottcher_map_outside_open_to_exterior, U, E, Set.restrict] using
+    isLocalHomeomorph_codRestrict_of_isLocalHomeomorph (f := U.restrict (Quadratic.bottcher_map c))
+      (s := E) hlocalU hs
+
+/-- Build the restricted-map local-homeomorph hypothesis from slit analyticity
+on outside-open. -/
+lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit
+    (c : ℂ)
+    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
+    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
+  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open c
+    (bottcher_map_isLocalHomeomorphOn_outside_open c hslit)
+
 /-- Build the restricted-map local-homeomorph hypothesis from slit analyticity
 and outside-open injectivity. -/
 lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit_of_injOn
     (c : ℂ)
     (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (_h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
-  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
-  let E : Set ℂ := {w : ℂ | 1 < ‖w‖}
-  let g : U → ℂ := fun z => Quadratic.bottcher_map c z
-  have hlocalOn : IsLocalHomeomorphOn (Quadratic.bottcher_map c) U :=
-    bottcher_map_isLocalHomeomorphOn_outside_open c hslit
-  have hgcontOn : ContinuousOn (Quadratic.bottcher_map c) U := hlocalOn.continuousOn
-  have hgcont : Continuous g := by
-    simpa [g, U] using (continuousOn_iff_continuous_restrict.mp hgcontOn)
-  have hs : ∀ z : U, g z ∈ E := by
-    intro z
-    have hzU : z.1 ∈ ({z : ℂ | ‖z‖ > ‖c‖ + 2} : Set ℂ) := by
-      exact z.2
-    exact bottcher_map_norm_gt_one_of_outside c
-      (outside_open_subset_outside_disk c hzU)
-  have hcont : Continuous (bottcher_map_outside_open_to_exterior c) := by
-    simpa [bottcher_map_outside_open_to_exterior, g, E] using
-      (Continuous.codRestrict hgcont hs)
-  have hginj : Function.Injective g := by
-    intro z w hzw
-    apply Subtype.ext
-    exact h_inj z.2 w.2 hzw
-  have hinj : Function.Injective (bottcher_map_outside_open_to_exterior c) := by
-    intro z w hzw
-    apply Subtype.ext
-    exact congrArg Subtype.val (hginj (congrArg Subtype.val hzw))
-  have hgopen : IsOpenMap g := by
-    simpa [g] using bottcher_map_isOpenMap_on_outside_open c hslit
-  have hopen : IsOpenMap (bottcher_map_outside_open_to_exterior c) := by
-    simpa [bottcher_map_outside_open_to_exterior, g, E] using
-      (IsOpenMap.codRestrict hgopen hs)
-  exact (IsOpenEmbedding.of_continuous_injective_isOpenMap hcont hinj hopen).isLocalHomeomorph
+  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit
+
+/-- Build restricted-map local-homeomorph from local analyticity plus
+derivative nonvanishing on outside-open. -/
+lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
+  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open c
+    (bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
+      c hanalytic hderiv)
 
 /-- Build restricted-map local-homeomorph from local analyticity plus
 outside-open injectivity. -/
@@ -4457,40 +4531,9 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_i
     (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
     (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
-  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
-  let E : Set ℂ := {w : ℂ | 1 < ‖w‖}
-  let g : U → ℂ := fun z => Quadratic.bottcher_map c z
-  have hlocalOn : IsLocalHomeomorphOn (Quadratic.bottcher_map c) U :=
-    bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_injOn c
-      hanalytic (by simpa [U] using h_inj)
-  have hgcontOn : ContinuousOn (Quadratic.bottcher_map c) U := hlocalOn.continuousOn
-  have hgcont : Continuous g := by
-    simpa [g, U] using (continuousOn_iff_continuous_restrict.mp hgcontOn)
-  have hs : ∀ z : U, g z ∈ E := by
-    intro z
-    have hzU : z.1 ∈ ({z : ℂ | ‖z‖ > ‖c‖ + 2} : Set ℂ) := by
-      exact z.2
-    exact bottcher_map_norm_gt_one_of_outside c
-      (outside_open_subset_outside_disk c hzU)
-  have hcont : Continuous (bottcher_map_outside_open_to_exterior c) := by
-    simpa [bottcher_map_outside_open_to_exterior, g, E] using
-      (Continuous.codRestrict hgcont hs)
-  have hginj : Function.Injective g := by
-    intro z w hzw
-    apply Subtype.ext
-    exact h_inj z.2 w.2 hzw
-  have hinj : Function.Injective (bottcher_map_outside_open_to_exterior c) := by
-    intro z w hzw
-    apply Subtype.ext
-    exact congrArg Subtype.val (hginj (congrArg Subtype.val hzw))
-  have hgopen : IsOpenMap g := by
-    simpa [g] using
-      bottcher_map_isOpenMap_on_outside_open_of_analyticAt_of_injOn c hanalytic
-        (by simpa [U] using h_inj)
-  have hopen : IsOpenMap (bottcher_map_outside_open_to_exterior c) := by
-    simpa [bottcher_map_outside_open_to_exterior, g, E] using
-      (IsOpenMap.codRestrict hgopen hs)
-  exact (IsOpenEmbedding.of_continuous_injective_isOpenMap hcont hinj hopen).isLocalHomeomorph
+  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero c
+    hanalytic
+    (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic h_inj)
 
 /-- Outside-open surjectivity from properness of the restricted map plus the
 slit+injectivity route to local-homeomorph. -/
@@ -4530,6 +4573,19 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analy
     hclosed
     (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_injOn
       c hanalytic h_inj)
+
+/-- Outside-open surjectivity from closed range of the restricted map plus
+local analyticity and derivative nonvanishing on outside-open. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    BottcherSurjOnExteriorFromOutsideOpen c := by
+  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict c
+    hclosed
+    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
+      c hanalytic hderiv)
 
 /-- Image-equality target implies the outside-open surjectivity target. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior

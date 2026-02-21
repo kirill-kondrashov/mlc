@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[███████░░░] ~67%`
+  `[███████░░░] ~69%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -285,6 +285,25 @@ Critical screening result for this plan:
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
      through this weaker interface.
+2z. [x] Push the analytic closed-range route one step further to derivative
+   payloads (`analytic + deriv ≠ 0`) and keep injectivity as a wrapper-only
+   path:
+   - added in `BottcherOutsidePlan`:
+     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`,
+   - added in `MainConjecture`:
+     `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two`,
+   - rewired
+     `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
+     to derive derivative nonvanishing and route through the new theorem.
+2aa. [x] Extend the derivative payload routing to local-slit wrappers and the
+   proper-map rooted bridge:
+   - added in `MainConjecture`:
+     `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero_two`,
+     `mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two`,
+   - rewired
+     `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`,
+     `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
+     through analytic/derivative payloads.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
