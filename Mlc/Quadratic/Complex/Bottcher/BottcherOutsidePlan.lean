@@ -5022,6 +5022,20 @@ lemma outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpe
   outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis
     (2 : ℂ) h_analytic
 
+/-- Construct external-ray data from closed range plus the stronger
+outside-open local analytic-chart-within payload and outside-open injectivity. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis c)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
+    c hclosed
+    (outsideOpenLocalAnalyticChartHypothesis_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+      c h_chart)
+    h_inj
+
 /-- Local-slit wrapper for outside-open derivative nonvanishing from injectivity. -/
 lemma bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
     (c : ℂ)

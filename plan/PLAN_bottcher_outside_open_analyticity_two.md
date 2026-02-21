@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[████████░░] ~78%`
+  `[████████░░] ~80%`
 - Framework refactor track:
-  `[████████░░] ~78%`
+  `[████████░░] ~80%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -110,3 +110,10 @@ constructive `mlc_conjecture` replacement route.
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`
     now factors through the local-chart-within seam conversion before constructing
     external-ray data.
+
+## Implementation checkpoint (2026-02-21, direct chart-within seam-to-data route)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`
+    now consumes the direct chart-within seam-to-data theorem.

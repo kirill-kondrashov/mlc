@@ -691,11 +691,16 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChar
     (hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two
-    hclosed
-    (outsideOpenLocalAnalyticChartHypothesis_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
-      (2 : ℂ) h_chart)
-    hinj
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
+      (2 : ℂ) hclosed h_chart hinj
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
 
 /-- Combined constructive outside-open payload target at `c = 2` for the
 post-axiom root replacement route. -/
