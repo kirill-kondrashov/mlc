@@ -147,7 +147,7 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn`,
      `external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open`;
    - local-slit wrappers:
-     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`,
+     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero`,
      `external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open`.
 2f. [x] Add iterate-left-inverse bridge wrappers into the same closed-range
    analytic core:
@@ -245,9 +245,9 @@ Critical screening result for this plan:
 2t. [x] Add direct theorem-level Step-4→root bridge at `c = 2`:
    - added
      `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`,
-   - this composes the restricted-map clopen route
-     (`bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`)
-     directly into `MainPathData`.
+   - initially composed the restricted-map clopen local-slit route directly
+     into `MainPathData` (now further rewired through the weaker seam
+     interfaces added in later steps).
 2u. [x] Add proper-map specialization of the direct Step-4→root bridge:
    - added
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`,

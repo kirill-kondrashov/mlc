@@ -5219,16 +5219,6 @@ lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_mem_nhds_slit_of_deriv_ne
   exact bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero c
     (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds) hderiv
 
-/-- Local-slit wrapper for outside-open local-homeomorph from injectivity. -/
-lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_mem_nhds_slit_of_injOn
-    (c : ℂ)
-    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
-  exact bottcher_map_isLocalHomeomorphOn_outside_open_of_mem_nhds_slit_of_deriv_ne_zero c
-    hslit_nhds
-    (bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn c hslit_nhds h_inj)
-
 /-- Local-slit wrapper for restricted-map local-homeomorph. -/
 lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_mem_nhds_slit_of_deriv_ne_zero
     (c : ℂ)
@@ -5237,16 +5227,6 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_mem_nhds_slit_o
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
   exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero c
     (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds) hderiv
-
-/-- Local-slit wrapper for restricted-map local-homeomorph. -/
-lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_mem_nhds_slit_of_injOn
-    (c : ℂ)
-    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
-  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_mem_nhds_slit_of_deriv_ne_zero c
-    hslit_nhds
-    (bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn c hslit_nhds h_inj)
 
 /-- Local-slit wrapper for clopen restricted-map surjectivity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero
@@ -5259,17 +5239,6 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_n
     hclosed
     (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds)
     hderiv
-
-/-- Local-slit wrapper for clopen restricted-map surjectivity. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
-    (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    BottcherSurjOnExteriorFromOutsideOpen c := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero c
-    hclosed hslit_nhds
-    (bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn c hslit_nhds h_inj)
 
 /-- Local-slit wrapper for external-ray data construction from restricted-map
 closed-range and outside-open injectivity. -/
