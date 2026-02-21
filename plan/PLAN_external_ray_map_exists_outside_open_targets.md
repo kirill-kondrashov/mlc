@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~75%`
+  `[████████░░] ~76%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -147,7 +147,6 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`,
      `external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open`;
    - local-slit wrappers:
-     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero`,
      `external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open`.
 2f. [x] Add iterate-left-inverse bridge wrappers into the same closed-range
    analytic core:
@@ -302,12 +301,9 @@ Critical screening result for this plan:
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
      through analytic/derivative payloads.
 2ab. [x] Push local-slit bridges in `BottcherOutsidePlan` to derivative payloads:
-   - added derivative variants:
-     `bottcher_map_isLocalHomeomorphOn_outside_open_of_mem_nhds_slit_of_deriv_ne_zero`,
-     `isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_mem_nhds_slit_of_deriv_ne_zero`,
-     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero`,
-   - rewired corresponding `...of_mem_nhds_slit_of_injOn` wrappers through
-     derivative payloads.
+   - derivative routing for local-slit payloads was established,
+   - later dead local-slit derivative wrapper theorems were pruned after the
+     rooted chain switched to direct analytic/derivative bridges.
 2ac. [x] Complete the same derivative routing for the proper-map local-slit
    rooted bridge in `MainConjecture`:
    - added
