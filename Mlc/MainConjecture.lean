@@ -578,11 +578,6 @@ lemma bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen
     BottcherApproachOneSeqFiberData (2 : ℂ) :=
   bottcherApproachOneSeqFiberData_of_surjOnExteriorFromOutsideOpen (2 : ℂ) h_surj
 
-/-- Current `c = 2` external-ray data seed. -/
-lemma externalRayMapData_two_axiom_seed :
-    Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_exists (2 : ℂ)
-
 /-- `c = 2` sequence-fiber data from explicit external-ray data. -/
 lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
@@ -806,14 +801,14 @@ lemma injOnOutsideOpen_two_of_externalRayMapData
 lemma outsideAnalytic_two_axiom_seed :
     ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
   exact outsideAnalytic_two_of_externalRayMapData
-    externalRayMapData_two_axiom_seed
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- Current `c = 2` outside-open injectivity seed
     (temporary axiom-backed placeholder). -/
 lemma injOnOutsideOpen_two_axiom_seed :
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   exact injOnOutsideOpen_two_of_externalRayMapData
-    externalRayMapData_two_axiom_seed
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
@@ -933,7 +928,8 @@ lemma properAnalyticInjPayloadTwo_of_externalRayMapData
 
 lemma properAnalyticInjPayloadTwo_axiom_seed :
     ProperAnalyticInjPayloadTwo := by
-  exact properAnalyticInjPayloadTwo_of_externalRayMapData externalRayMapData_two_axiom_seed
+  exact properAnalyticInjPayloadTwo_of_externalRayMapData
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- Rooted Step-4→Step-5→MLC bridge from the factored properness/analyticity/
     injectivity payload at `c = 2`. -/

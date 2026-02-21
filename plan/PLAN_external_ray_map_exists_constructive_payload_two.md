@@ -22,9 +22,9 @@ No unconditional theorem currently provides:
 - End-to-end elimination progress:
   `[██████████] ~99%`
 - Constructive payload route progress:
-  `[█████████▓] ~98.5%`
+  `[██████████] ~99%`
 - Proof implementation progress:
-  `[█████████░] ~90%`
+  `[█████████░] ~91%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -365,6 +365,15 @@ No unconditional theorem currently provides:
   - `make build` + `make check` + `make graphs` pass;
   - rooted frontier unchanged: only
     `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
+
+## Implementation checkpoint (2026-02-21, external-ray-data seed removed)
+- Removed `externalRayMapData_two_axiom_seed` from `Mlc/MainConjecture.lean`.
+- Rewired remaining local seed users to consume
+  `Quadratic.external_ray_map_exists (2 : ℂ)` directly.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass;
+  - rooted graph keeps the direct terminal edge
+    `mlc_conjecture -> Quadratic.external_ray_map_exists`.
 
 ## Work packages
 1. Prove closed range at `c = 2`:
