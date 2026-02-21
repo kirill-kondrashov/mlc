@@ -465,6 +465,20 @@ No unconditional theorem currently provides:
   - rooted frontier unchanged: only
     `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
 
+## Implementation checkpoint (2026-02-21, constructive-route axiom audit)
+- Audited candidate constructive route lemmas in
+  `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`.
+- Confirmed these are already free of `MLC.Quadratic.external_ray_map_exists`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`,
+  - `bottcher_map_deriv_ne_zero_on_outside_open_of_normalized`.
+- Identified blocker:
+  - the normalized derivative route still needs global slit-orbit coverage
+    (`{z | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c`), but
+    `not_outside_open_subset_slit_orbit_two` proves this cannot hold at `c = 2`.
+- Consequence:
+  - final elimination must use a different injectivity/derivative-nonzero route
+    (without global slit coverage and without `external_ray_map_exists`).
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
