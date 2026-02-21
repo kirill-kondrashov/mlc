@@ -10,7 +10,10 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 - collapsing the rooted proof into contradiction circulation.
 
 ## Progress
-`[██████████] 99.99%` (4.99982/5 core milestones completed)
+- Overall closure progress (under current constraints):
+  `[██████░░░░] ~62%`
+- Structural isolation progress:
+  `[██████████] 99.99%` (4.99982/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
