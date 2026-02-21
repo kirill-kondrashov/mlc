@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[███████░░░] ~72%`
+  `[███████░░░] ~73%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -263,16 +263,14 @@ Critical screening result for this plan:
    restricted-local-homeomorph seam and prune the extra `c = 2` specialization:
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`
-     through
-     `mainPathData_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two`,
+     through weaker restricted-map local-homeomorph interfaces (now further
+     inlined into analytic/derivative-rooted bridges),
    - pruned dead theorem:
      `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`.
 2x. [x] Add a direct proper-map + restricted local-homeomorph rooted bridge at
    `c = 2`, and route the local-slit proper-map theorem through it:
    - added in `BottcherOutsidePlan`:
      `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`,
-   - added in `MainConjecture`:
-     `mainPathData_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_two`,
    - rewired
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
      through this weaker seam interface,
@@ -280,11 +278,10 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn`.
 2y. [x] Add an explicit weaker rooted bridge at `c = 2` through restricted-map
    local-homeomorph (without hard-coding injectivity at the seam interface):
-   - added
-     `mainPathData_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two`,
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
-     through this weaker interface.
+     through this weaker interface (now further routed through
+     analytic/derivative payloads).
 2z. [x] Push the analytic closed-range route one step further to derivative
    payloads (`analytic + deriv ≠ 0`) and keep injectivity as a wrapper-only
    path:
@@ -327,6 +324,11 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit`,
    - pruned dead local-slit injective wrappers no longer used in the current
      elimination chain.
+2ae. [x] Prune dead intermediate rooted wrappers in `MainConjecture` after
+   analytic/derivative routing became primary:
+   - removed obsolete restricted-local-homeomorph bridge wrappers,
+   - inlined proper-map rooted route directly through
+     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.

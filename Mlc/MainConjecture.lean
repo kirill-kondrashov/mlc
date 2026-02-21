@@ -589,30 +589,6 @@ theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
           ⟨z, _hz_out, hzw⟩
         exact ⟨z, hzw⟩))
 
-/-- Direct Step-4 payload bridge at `c = 2`: closed range on the restricted map
-plus restricted-map local-homeomorph suffices for the rooted seam. -/
-theorem mainPathData_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two
-    (hclosed :
-      IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
-    (hlocal :
-      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
-    MainPathData := by
-  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict
-      (2 : ℂ) hclosed hlocal)
-
-/-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`
-through restricted-map local-homeomorph. -/
-theorem mainPathData_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_two
-    (hproper :
-      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (hlocal :
-      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
-    MainPathData := by
-  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
-      hproper hlocal)
-
 /-- Direct Step-4 payload bridge at `c = 2`: closed-range restricted-map
     surjectivity via local-slit + outside-open injectivity yields `MainPathData`.
     This isolates the remaining non-circular target in theorem form. -/
@@ -694,10 +670,11 @@ theorem mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
         deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
     MainPathData := by
-  exact mainPathData_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_two
-    hproper
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
-      (2 : ℂ) hanalytic hderiv)
+  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+      hproper
+      (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
+        (2 : ℂ) hanalytic hderiv))
 
 /-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`
 through local-slit neighborhood analyticity + derivative payloads. -/
