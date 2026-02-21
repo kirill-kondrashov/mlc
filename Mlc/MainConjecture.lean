@@ -715,6 +715,14 @@ theorem external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo
   external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
     h_payload.1 h_payload.2.1 h_payload.2.2
 
+/-- Data packaging helper from the analyticity-focused outside-open payload at
+`c = 2`. -/
+theorem external_ray_map_data_two_of_outsideOpenAnalyticConstructivePayloadTwo
+    (h_payload : OutsideOpenAnalyticConstructivePayloadTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
+    h_payload.1 h_payload.2.1 h_payload.2.2
+
 /-- Root bridge from the combined constructive outside-open payload target. -/
 theorem mlc_conjecture_of_outsideOpenConstructivePayloadTwo
     (h_payload : OutsideOpenConstructivePayloadTwo) :
@@ -727,10 +735,9 @@ theorem mlc_conjecture_of_outsideOpenConstructivePayloadTwo
 theorem mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo
     (h_payload : OutsideOpenAnalyticConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact
-    mlc_conjecture_of_outsideOpenConstructivePayloadTwo
-      (outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
-        h_payload)
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    external_ray_map_data_two_of_outsideOpenAnalyticConstructivePayloadTwo h_payload
+  exact mlc_conjecture_of_externalRayMapData_two h_data
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

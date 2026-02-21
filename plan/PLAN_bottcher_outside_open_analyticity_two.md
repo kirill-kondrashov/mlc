@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[████████░░] ~85%`
+  `[█████████░] ~86%`
 - Framework refactor track:
-  `[████████░░] ~85%`
+  `[█████████░] ~86%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -154,3 +154,10 @@ constructive `mlc_conjecture` replacement route.
   - closed-range + outside-open analyticity + outside-open injectivity now has a
     direct packaged payload route into the existing chart-within constructive
     bridge, clarifying the remaining constructive target at `c = 2`.
+
+## Implementation checkpoint (2026-02-21, analytic payload data packaging)
+- Added in `Mlc/MainConjecture.lean`:
+  - `external_ray_map_data_two_of_outsideOpenAnalyticConstructivePayloadTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo` now packages
+    data through this dedicated helper before the shared data-to-root bridge.

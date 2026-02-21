@@ -622,6 +622,14 @@ No unconditional theorem currently provides:
   - the analyticity-facing route now has an explicit packaged interface that
     feeds directly into the existing chart-within constructive payload bridge.
 
+## Implementation checkpoint (2026-02-21, analytic payload data packaging)
+- Added in `MainConjecture.lean`:
+  - `external_ray_map_data_two_of_outsideOpenAnalyticConstructivePayloadTwo`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo` now consumes
+    this helper and then the shared `mlc_conjecture_of_externalRayMapData_two`
+    bridge.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
