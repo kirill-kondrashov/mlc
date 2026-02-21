@@ -649,6 +649,19 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
   exact mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
     hclosed hanalytic hinj
 
+/-- Step-4→root seam through closed range + outside-open local analytic-chart
+    payload interface + outside-open injectivity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_chart : OutsideOpenLocalAnalyticChartHypothesis (2 : ℂ))
+    (hinj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two
+    hclosed
+    (outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis (2 : ℂ) h_chart)
+    hinj
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 

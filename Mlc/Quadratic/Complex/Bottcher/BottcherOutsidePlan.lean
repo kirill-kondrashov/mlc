@@ -4888,12 +4888,47 @@ lemma bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit
 def OutsideOpenAnalyticityHypothesis (c : ℂ) : Prop :=
   ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z
 
+/-- Framework seam: for each outside-open point, provide a local open chart on
+which `bottcher_map` is analytic. -/
+def OutsideOpenLocalAnalyticChartHypothesis (c : ℂ) : Prop :=
+  ∀ z, ‖z‖ > ‖c‖ + 2 →
+    ∃ U : Set ℂ,
+      IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U
+
+/-- A local analytic chart payload implies the outside-open `AnalyticAt`
+hypothesis. -/
+lemma outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis
+    (c : ℂ)
+    (h_chart : OutsideOpenLocalAnalyticChartHypothesis c) :
+    OutsideOpenAnalyticityHypothesis c := by
+  intro z hz
+  rcases h_chart z hz with ⟨U, _hUopen, hzU, hUanalytic⟩
+  exact hUanalytic z hzU
+
+/-- Build local analytic chart payload from neighborhood-level slit data. -/
+lemma outsideOpenLocalAnalyticChartHypothesis_of_mem_nhds_slit
+    (c : ℂ)
+    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z) :
+    OutsideOpenLocalAnalyticChartHypothesis c := by
+  intro z hz
+  have hz_out : z ∈ {w : ℂ | ‖w‖ > ‖c‖ + 2} := by simpa using hz
+  have hz_disk : z ∈ outside_disk c := outside_open_subset_outside_disk c hz_out
+  have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+    outside_disk_subset_quadratic_basin c hz_disk
+  rcases exists_open_subset_slit_orbit_basin_of_mem_nhds c z
+      (hslit_nhds z hz) ((basin_of_infinity_isOpen c).mem_nhds hz_basin) with
+    ⟨U, hUopen, hzU, hUsub⟩
+  have hUslit : U ⊆ slit_orbit c := fun w hw => (hUsub hw).1
+  have hUbasin : U ⊆ Quadratic.basin_of_infinity c := fun w hw => (hUsub hw).2
+  exact ⟨U, hUopen, hzU, bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin⟩
+
 /-- Build outside-open analyticity payload from neighborhood-level slit data. -/
 lemma outsideOpenAnalyticityHypothesis_of_mem_nhds_slit
     (c : ℂ)
     (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z) :
     OutsideOpenAnalyticityHypothesis c :=
-  bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds
+  outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis c
+    (outsideOpenLocalAnalyticChartHypothesis_of_mem_nhds_slit c hslit_nhds)
 
 /-- Local-slit wrapper for outside-open derivative nonvanishing from injectivity. -/
 lemma bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn

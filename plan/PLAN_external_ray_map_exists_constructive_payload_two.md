@@ -530,6 +530,14 @@ No unconditional theorem currently provides:
   - detailed theorem-proof plan moved to
     `plan/PLAN_bottcher_outside_open_analyticity_two.md`.
 
+## Implementation checkpoint (2026-02-21, outside-open local-chart seam)
+- Added seam layer in `BottcherOutsidePlan.lean`:
+  - `OutsideOpenLocalAnalyticChartHypothesis`,
+  - conversion
+    `outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis`.
+- Added root-facing bridge theorem in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

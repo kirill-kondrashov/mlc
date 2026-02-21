@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[████░░░░░░] ~40%`
+  `[█████░░░░░] ~50%`
 - Framework refactor track:
-  `[████░░░░░░] ~40%`
+  `[█████░░░░░] ~50%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -49,3 +49,16 @@ constructive `mlc_conjecture` replacement route.
   - `make build` + `make check` + `make graphs` pass;
   - rooted axiom frontier unchanged (still only
     `MLC.Quadratic.external_ray_map_exists` beyond core axioms).
+
+## Implementation checkpoint (2026-02-21, local-chart seam layer)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `OutsideOpenLocalAnalyticChartHypothesis`,
+  - `outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis`,
+  - `outsideOpenLocalAnalyticChartHypothesis_of_mem_nhds_slit`.
+- Rewired:
+  - `outsideOpenAnalyticityHypothesis_of_mem_nhds_slit` now factors through the
+    local-chart seam layer.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass.
