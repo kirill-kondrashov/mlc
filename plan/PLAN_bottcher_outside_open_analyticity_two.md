@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~86%`
+  `[█████████░] ~87%`
 - Framework refactor track:
-  `[█████████░] ~86%`
+  `[█████████░] ~87%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -161,3 +161,10 @@ constructive `mlc_conjecture` replacement route.
 - Rewired in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo` now packages
     data through this dedicated helper before the shared data-to-root bridge.
+
+## Implementation checkpoint (2026-02-21, plain-analytic c=2 data specialization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
+    consumes this specialized helper.

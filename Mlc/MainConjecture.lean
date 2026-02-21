@@ -640,8 +640,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
   let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
-      (2 : ℂ) hclosed hanalytic hinj
+    external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
+      hclosed hanalytic hinj
   exact mlc_conjecture_of_externalRayMapData_two h_data
 
 /-- Step-4→root seam through closed range + outside-open analyticity payload

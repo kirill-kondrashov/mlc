@@ -5051,6 +5051,17 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticit
     h_inj
 
 /-- `c = 2` specialization: construct external-ray data from closed range plus
+outside-open `AnalyticAt` payload and outside-open injectivity. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_analytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
+    (2 : ℂ) hclosed h_analytic h_inj
+
+/-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open analyticity and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))

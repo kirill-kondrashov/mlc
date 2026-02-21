@@ -630,6 +630,13 @@ No unconditional theorem currently provides:
     this helper and then the shared `mlc_conjecture_of_externalRayMapData_two`
     bridge.
 
+## Implementation checkpoint (2026-02-21, plain-analytic c=2 data specialization)
+- Added in `BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
+    routes through this c=2-specialized helper.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
