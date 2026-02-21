@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~77%`
+  `[████████░░] ~78%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -29,9 +29,6 @@ In `Mlc/MainConjecture.lean`, the active seam is now:
 - the rooted axiom seed now avoids the generic surjectivity bridge and consumes
   only a direct `c = 2` sequence-fiber seed:
   `bottcherApproachOneSeqFiberData_two_axiom_seed`.
-- a non-circular Step-4→Step-5 bridge is now explicit at `c = 2`:
-  `mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two`, which routes
-  through outside-open fibers of `approach_one_seq`.
 
 The external-ray dependency is now localized through the narrowed seed chain:
 - `mainPathData_axiom_seed`
@@ -211,6 +208,8 @@ Critical screening result for this plan:
    - added `mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
    This isolates the remaining replacement to proving
    `BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)` non-circularly.
+   - note: this outside-open sequence-fiber bridge was later pruned as dead in
+     2aj after the rooted chain was narrowed to direct sequence-fiber seeds.
 2n. [x] Prune newly dead generic sequence-surjectivity bridges from
    `Mlc/MainConjecture.lean` to keep only rooted-path-relevant interfaces:
    - removed `bottcherApproachOneSeqFiberData_of_surj_on_exterior`,
@@ -220,6 +219,7 @@ Critical screening result for this plan:
      `mainPathData_of_bottcherApproachOneSeqOutsideOpenFiberData_two`,
    - inlined it into
      `mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
+   - note: the inlined theorem was later pruned as dead in 2aj.
 2p. [x] Remove rooted dependence on `bottcher_map_surj` by switching the
    current axiom seed to the direct external-ray right-inverse on
    `approach_one_seq`:
@@ -291,6 +291,8 @@ Critical screening result for this plan:
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
      to derive derivative nonvanishing and route through the new theorem.
+   - note: the `MainConjecture` rooted wrapper added here was later pruned as
+     dead in 2ai.
 2aa. [x] Extend the derivative payload routing to local-slit wrappers and the
    proper-map rooted bridge:
    - added in `MainConjecture`:
@@ -300,6 +302,8 @@ Critical screening result for this plan:
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
      through analytic/derivative payloads (with local-slit derivative wrappers
      later pruned as dead).
+   - note: the direct `MainConjecture` rooted proper-map derivative wrapper was
+     later pruned as dead in 2ai.
 2ab. [x] Push local-slit bridges in `BottcherOutsidePlan` to derivative payloads:
    - derivative routing for local-slit payloads was established,
    - later dead local-slit derivative wrapper theorems were pruned after the
@@ -338,6 +342,18 @@ Critical screening result for this plan:
    `MainConjecture` after derivative routing stabilized:
    - removed obsolete local-slit derivative wrapper theorems,
    - retained direct analytic/derivative rooted bridges as active interfaces.
+2ai. [x] Prune dead direct analytic/derivative `c = 2` rooted wrappers in
+   `MainConjecture` after downstream users were removed:
+   - removed
+     `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two`,
+   - removed
+     `mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two`.
+2aj. [x] Prune dead outside-open sequence-fiber bridge wrappers in
+   `MainConjecture` after rooted seed narrowing:
+   - removed `BottcherApproachOneSeqOutsideOpenFiberData`,
+   - removed
+     `bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen`,
+   - removed `mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.

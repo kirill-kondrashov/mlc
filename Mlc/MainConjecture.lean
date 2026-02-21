@@ -300,19 +300,6 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
 def BottcherApproachOneSeqFiberData (c : ℂ) : Prop :=
   ∀ n : ℕ, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
 
-/-- Exact countable-fiber seam target at the canonical approach-to-`1`
-    sequence, with preimages constrained to the outside-open seed region. -/
-def BottcherApproachOneSeqOutsideOpenFiberData (c : ℂ) : Prop :=
-  ∀ n : ℕ, ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = approach_one_seq n
-
-/-- Build the outside-open sequence-fiber seam from outside-open exterior
-    surjectivity. -/
-lemma bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
-    (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
-    BottcherApproachOneSeqOutsideOpenFiberData c := by
-  intro n
-  exact h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n)
-
 /-- Build the approach-to-`1` preimage seam from the exact countable-fiber
     target. -/
 lemma bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
@@ -573,56 +560,6 @@ lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
     MainPathData := by
   have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
   exact False.elim hFalse
-
-/-- Step-4 to Step-5 bridge at `c = 2`: outside-open exterior surjectivity
-    yields the rooted sequence-fiber seam needed for `MainPathData`. -/
-theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
-    MainPathData := by
-  exact mainPathData_of_bottcherApproachToOneSeqPreimageData_two
-    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ)
-      (by
-        intro n
-        rcases
-            bottcherApproachOneSeqOutsideOpenFiberData_of_surjOnExteriorFromOutsideOpen
-              (2 : ℂ) h_surj n with
-          ⟨z, _hz_out, hzw⟩
-        exact ⟨z, hzw⟩))
-
-/-- Direct Step-4 payload bridge at `c = 2`: closed-range restricted-map
-    surjectivity via local-slit + outside-open injectivity yields `MainPathData`.
-    This isolates the remaining non-circular target in theorem form. -/
-theorem mainPathData_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two
-    (hclosed :
-      IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
-    (hanalytic :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
-        AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
-    (hderiv :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
-        deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
-    MainPathData := by
-  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
-      (2 : ℂ) hclosed hanalytic hderiv)
-
-/-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`
-through analytic + derivative payloads. -/
-theorem mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two
-    (hproper :
-      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (hanalytic :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
-        AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
-    (hderiv :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
-        deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
-    MainPathData := by
-  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
-      hproper
-      (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
-        (2 : ℂ) hanalytic hderiv))
 
 /-- Current direct `c = 2` sequence-fiber seed from the external-ray right
     inverse on the canonical `approach_one_seq`. -/
