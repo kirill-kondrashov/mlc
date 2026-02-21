@@ -592,6 +592,23 @@ theorem mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
 /-- Direct Step-4 payload bridge at `c = 2`: closed-range restricted-map
     surjectivity via local-slit + outside-open injectivity yields `MainPathData`.
     This isolates the remaining non-circular target in theorem form. -/
+theorem mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
+    (hclosed :
+      IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
+        AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    MainPathData := by
+  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn
+      (2 : ℂ) hclosed hanalytic h_inj)
+
+/-- Direct Step-4 payload bridge at `c = 2`: closed-range restricted-map
+    surjectivity via local-slit + outside-open injectivity yields `MainPathData`.
+    This isolates the remaining non-circular target in theorem form. -/
 theorem mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two
     (hclosed :
       IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
@@ -601,9 +618,10 @@ theorem mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     MainPathData := by
-  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
-      (2 : ℂ) hclosed hslit_nhds h_inj)
+  exact mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
+    hclosed
+    (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit (2 : ℂ) hslit_nhds)
+    h_inj
 
 /-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`. -/
 theorem mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two
