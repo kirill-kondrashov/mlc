@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[███████░░░] ~74%`
+  `[████████░░] ~75%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -144,7 +144,7 @@ Critical screening result for this plan:
 2e. [x] Add a local-slit-compatible wrapper route (no global outside-open slit
    inclusion) by factoring through local analyticity on outside-open:
    - analytic core:
-     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn`,
+     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`,
      `external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open`;
    - local-slit wrappers:
      `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero`,
@@ -334,6 +334,12 @@ Critical screening result for this plan:
    - removed obsolete `...of_injOn_two` rooted wrappers,
    - retained derivative-payload and local-slit-derivative rooted bridges as
      the active non-circular seam interfaces.
+2ag. [x] Remove remaining analytic+injectivity closed-range surjectivity wrapper
+   in `BottcherOutsidePlan` and route all users through derivative payloads:
+   - pruned
+     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn`,
+   - rewired dependent construction and iterate-left-inverse bridge through
+     `...of_analyticAt_of_deriv_ne_zero`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.

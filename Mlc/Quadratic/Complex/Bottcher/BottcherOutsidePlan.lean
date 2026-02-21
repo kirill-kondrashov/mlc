@@ -4515,17 +4515,6 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_d
     (bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
       c hanalytic hderiv)
 
-/-- Build restricted-map local-homeomorph from local analyticity plus
-outside-open injectivity. -/
-lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_injOn
-    (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
-  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero c
-    hanalytic
-    (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic h_inj)
-
 /-- Outside-open surjectivity from properness of the restricted map plus slit
 analyticity on outside-open. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit
@@ -4547,19 +4536,6 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict c
     hclosed
     (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit)
-
-/-- Outside-open surjectivity from closed range of the restricted map plus
-local analyticity and outside-open injectivity. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn
-    (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    BottcherSurjOnExteriorFromOutsideOpen c := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict c
-    hclosed
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_injOn
-      c hanalytic h_inj)
 
 /-- Outside-open surjectivity from closed range of the restricted map plus
 local analyticity and derivative nonvanishing on outside-open. -/
@@ -4662,8 +4638,10 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_o
     (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c := by
   exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn
-      c hclosed hanalytic h_inj)
+    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+      c hclosed hanalytic
+      (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
+        c hanalytic h_inj))
 
 /-- Construct external-ray data from the left-inverse outside-open seam and
     outside-open exterior surjectivity. -/
@@ -4952,9 +4930,10 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analy
     (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn
+  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
     c hclosed hanalytic
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
+    (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic
+      (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter))
 
 /-- External-ray data from closed range on the restricted map, local
 analyticity on outside-open, and iterate-left-inverse injectivity. -/
