@@ -628,58 +628,6 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
     (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
       (2 : ℂ) hclosed hanalytic hderiv)
 
-/-- Step-4 payload package at `c = 2` through restricted-map closed-range,
-    outside-open analyticity, and outside-open injectivity. -/
-def ClosedRangeLocalSlitInjPayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) ∧
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
-
-/-- Adapted from external `has_ray` pattern: from the Step-4 `c = 2` payload,
-    build a ray-like right-inverse datum on the exterior. -/
-lemma bottcherRightInverseOnExteriorData_two_of_closedRangeLocalSlitInjPayload
-    (h_payload : ClosedRangeLocalSlitInjPayloadTwo) :
-    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
-  rcases h_payload with ⟨hclosed, hanalytic, h_inj⟩
-  have h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
-    bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
-      (2 : ℂ) hclosed
-      hanalytic
-      (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
-        (2 : ℂ) hanalytic h_inj)
-  classical
-  refine ⟨fun w => if hw : 1 < ‖w‖ then Classical.choose (h_surj w hw) else 0, ?_⟩
-  intro w hw
-  have hchoose :
-      Quadratic.bottcher_map (2 : ℂ) (Classical.choose (h_surj w hw)) = w := by
-    exact (Classical.choose_spec (h_surj w hw)).2
-  simpa [hw] using hchoose
-
-/-- Exact canonical-sequence fibers from a ray-like exterior right-inverse at
-    `c = 2`. -/
-lemma bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData
-    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ)) :
-    BottcherApproachOneSeqFiberData (2 : ℂ) := by
-  rcases h_right with ⟨f, hf⟩
-  intro n
-  exact ⟨f (approach_one_seq n), hf (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
-
-/-- Derive exact canonical-sequence fiber data from the Step-4 local-slit
-    payload at `c = 2`. -/
-lemma bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload
-    (h_payload : ClosedRangeLocalSlitInjPayloadTwo) :
-    BottcherApproachOneSeqFiberData (2 : ℂ) := by
-  exact bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData
-    (bottcherRightInverseOnExteriorData_two_of_closedRangeLocalSlitInjPayload h_payload)
-
-/-- Rooted Step-4→Step-5→MLC bridge from the local-slit payload package at
-    `c = 2`. -/
-theorem mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo
-    (h_payload : ClosedRangeLocalSlitInjPayloadTwo) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload h_payload)
-
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 

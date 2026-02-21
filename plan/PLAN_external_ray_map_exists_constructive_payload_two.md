@@ -11,7 +11,7 @@ Constructively replace the rooted seam
 ## Current blocker (confirmed)
 Only one active rooted ingress remains:
 - `MLC.mlc_conjecture`
-- `... -> bottcherApproachOneSeqFiberData_two_axiom_seed`
+- `... -> bottcherApproachOneSeqFiberData_two_of_externalRayMapData`
 - `... -> Quadratic.external_ray_map_exists (2 : ℂ)`.
 
 No unconditional theorem currently provides:
@@ -24,7 +24,7 @@ No unconditional theorem currently provides:
 - Constructive payload route progress:
   `[██████████] ~99%`
 - Proof implementation progress:
-  `[█████████▓] ~96%`
+  `[█████████▓] ~97%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -438,6 +438,18 @@ No unconditional theorem currently provides:
   - `ProperAnalyticInjPayloadTwo`,
     `closedRangeLocalSlitInjPayloadTwo_of_properAnalyticInjPayloadTwo`,
     `mlc_conjecture_of_properAnalyticInjPayloadTwo`.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass;
+  - rooted frontier unchanged: only
+    `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
+
+## Implementation checkpoint (2026-02-21, dead payload-route wrapper pruning)
+- Removed dead declarations from `Mlc/MainConjecture.lean`:
+  - `ClosedRangeLocalSlitInjPayloadTwo`,
+  - `bottcherRightInverseOnExteriorData_two_of_closedRangeLocalSlitInjPayload`,
+  - `bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData`,
+  - `bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload`,
+  - `mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo`.
 - Validation:
   - `make build` + `make check` + `make graphs` pass;
   - rooted frontier unchanged: only
