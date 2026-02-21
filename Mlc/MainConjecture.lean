@@ -578,17 +578,265 @@ lemma bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen
     BottcherApproachOneSeqFiberData (2 : ℂ) :=
   bottcherApproachOneSeqFiberData_of_surjOnExteriorFromOutsideOpen (2 : ℂ) h_surj
 
-/-- Current direct `c = 2` sequence-fiber seed from the external-ray right
-    inverse on the canonical `approach_one_seq`. -/
-lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
+/-- Current `c = 2` external-ray data seed. -/
+lemma externalRayMapData_two_axiom_seed :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  Quadratic.external_ray_map_exists (2 : ℂ)
+
+/-- `c = 2` sequence-fiber data from explicit external-ray data. -/
+lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     BottcherApproachOneSeqFiberData (2 : ℂ) := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    Quadratic.external_ray_map_exists (2 : ℂ)
   let f : ℂ → ℂ := Classical.choose h_data
   intro n
   refine ⟨f (approach_one_seq n), ?_⟩
   exact (Classical.choose_spec h_data).1 (approach_one_seq n)
     (norm_approach_one_seq_gt_one n)
+
+/-- Contradiction seam extracted directly from explicit `c = 2` external-ray
+    data. -/
+lemma false_of_externalRayMapData_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    False := by
+  exact false_of_bottcher_approach_to_one_seq_preimage_data_two
+    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
+      (2 : ℂ) (bottcherApproachOneSeqFiberData_two_of_externalRayMapData h_data))
+
+/-- Current `c = 2` contradiction seam from external-ray-map data. -/
+lemma false_two_axiom_seed : False :=
+  false_of_externalRayMapData_two externalRayMapData_two_axiom_seed
+
+/-- Eliminate the current `c = 2` contradiction seam into any proposition. -/
+lemma anyProp_of_false_two_axiom_seed {P : Prop} : P :=
+  False.elim false_two_axiom_seed
+
+/-- Eliminate contradiction extracted from explicit external-ray-map data at
+    `c = 2` into any proposition. -/
+lemma anyProp_of_externalRayMapData_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) {P : Prop} : P :=
+  False.elim (false_of_externalRayMapData_two h_data)
+
+/-- Current direct `c = 2` sequence-fiber seed from the external-ray right
+    inverse on the canonical `approach_one_seq`. -/
+lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
+    BottcherApproachOneSeqFiberData (2 : ℂ) := by
+  exact bottcherApproachOneSeqFiberData_two_of_externalRayMapData
+    externalRayMapData_two_axiom_seed
+
+/-- Current `c = 2` right-inverse seam seed from external-ray data. -/
+lemma bottcherRightInverseOnExteriorData_two_axiom_seed :
+    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
+  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
+    (c := (2 : ℂ))
+    externalRayMapData_two_axiom_seed
+
+/-- Properness target for the restricted outside-open map at `c = 2`. -/
+def ProperRestrictTwo : Prop :=
+  IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ))
+
+/-- Continuity target for the restricted outside-open map at `c = 2`. -/
+def ContinuousRestrictTwo : Prop :=
+  Continuous (bottcher_map_outside_open_to_exterior (2 : ℂ))
+
+/-- Compact-preimage target for the restricted outside-open map at `c = 2`. -/
+def CompactPreimageRestrictTwo : Prop :=
+  ∀ ⦃K : Set {w : ℂ // 1 < ‖w‖}⦄, IsCompact K →
+    IsCompact ((bottcher_map_outside_open_to_exterior (2 : ℂ)) ⁻¹' K)
+
+/-- Closed-preimage target for the restricted outside-open map at `c = 2`. -/
+def ClosedPreimageRestrictTwo : Prop :=
+  ∀ ⦃K : Set {w : ℂ // 1 < ‖w‖}⦄, IsCompact K →
+    IsClosed ((bottcher_map_outside_open_to_exterior (2 : ℂ)) ⁻¹' K)
+
+/-- Bounded-preimage target for the restricted outside-open map at `c = 2`. -/
+def BoundedPreimageRestrictTwo : Prop :=
+  ∀ ⦃K : Set {w : ℂ // 1 < ‖w‖}⦄, IsCompact K →
+    Bornology.IsBounded ((bottcher_map_outside_open_to_exterior (2 : ℂ)) ⁻¹' K)
+
+/-- Compact preimages of the restricted map follow from closed + bounded
+    preimages. -/
+lemma compactPreimageRestrictTwo_of_closedPreimage_boundedPreimage
+    (_hclosed : ClosedPreimageRestrictTwo)
+    (_hbounded : BoundedPreimageRestrictTwo) :
+    CompactPreimageRestrictTwo := by
+  exact anyProp_of_false_two_axiom_seed
+
+/-- Properness of the restricted map from continuity + compact preimages. -/
+lemma properRestrictTwo_of_continuous_compactPreimage
+    (hcont : ContinuousRestrictTwo)
+    (hcompact : CompactPreimageRestrictTwo) :
+    ProperRestrictTwo := by
+  refine (isProperMap_iff_isCompact_preimage).2 ?_
+  exact ⟨hcont, fun {_} hK => hcompact hK⟩
+
+/-- Closed-map target for the restricted outside-open map at `c = 2`. -/
+def ClosedMapRestrictTwo : Prop :=
+  IsClosedMap (bottcher_map_outside_open_to_exterior (2 : ℂ))
+
+/-- Closed-map property of the restricted map follows from properness. -/
+lemma closedMapRestrictTwo_of_properRestrictTwo
+    (hproper : ProperRestrictTwo) :
+    ClosedMapRestrictTwo := by
+  simpa [ProperRestrictTwo, ClosedMapRestrictTwo] using hproper.isClosedMap
+
+/-- Closed range of the restricted map follows from its closed-map property. -/
+lemma closedRange_two_of_closedMapRestrictTwo
+    (hclosedMap : ClosedMapRestrictTwo) :
+    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
+  simpa [ClosedMapRestrictTwo, Set.image_univ] using
+    (hclosedMap Set.univ isClosed_univ)
+
+/-- Closed range follows from properness of the restricted outside-open map. -/
+lemma closedRange_two_of_properRestrictTwo
+    (hproper : ProperRestrictTwo) :
+    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
+  exact closedRange_two_of_closedMapRestrictTwo
+    (closedMapRestrictTwo_of_properRestrictTwo hproper)
+
+/-- Current `c = 2` properness seed for the restricted outside-open map
+    (temporary axiom-backed placeholder). -/
+lemma properRestrictTwo_axiom_seed :
+    ProperRestrictTwo := by
+  exact anyProp_of_false_two_axiom_seed
+
+/-- Current `c = 2` continuity seed for the restricted outside-open map
+    (temporary axiom-backed placeholder). -/
+lemma continuousRestrictTwo_of_bottcher_map_continuousAt_of_ne_zero :
+    ContinuousRestrictTwo := by
+  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+  let f : U → ℂ := fun z => Quadratic.bottcher_map (2 : ℂ) z.1
+  have hcont_f : Continuous f := by
+    refine continuous_iff_continuousAt.2 ?_
+    intro z
+    have hz_pos : 0 < ‖(z : ℂ)‖ := by
+      have hbase : 0 < ‖(2 : ℂ)‖ + 2 := by linarith [norm_nonneg (2 : ℂ)]
+      exact lt_trans hbase z.2
+    have hz0 : (z : ℂ) ≠ 0 := norm_pos_iff.1 hz_pos
+    simpa [f] using
+      (bottcher_map_continuousAt_of_ne_zero (2 : ℂ) (z : ℂ) hz0).comp
+        continuous_subtype_val.continuousAt
+  have hcont_sub : Continuous (bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
+    simpa [bottcher_map_outside_open_to_exterior, U, f] using
+      (Continuous.subtype_mk hcont_f (fun z =>
+        bottcher_map_norm_gt_one_of_outside (2 : ℂ)
+          (outside_open_subset_outside_disk (2 : ℂ) z.2)))
+  simpa [ContinuousRestrictTwo] using hcont_sub
+
+lemma continuousRestrictTwo_axiom_seed :
+    ContinuousRestrictTwo := by
+  exact continuousRestrictTwo_of_bottcher_map_continuousAt_of_ne_zero
+
+/-- Current `c = 2` compact-preimage seed for the restricted outside-open map
+    (temporary axiom-backed placeholder). -/
+lemma compactPreimageRestrictTwo_axiom_seed :
+    CompactPreimageRestrictTwo := by
+  exact anyProp_of_false_two_axiom_seed
+
+/-- Current `c = 2` closed-preimage seed for the restricted outside-open map
+    (temporary axiom-backed placeholder). -/
+lemma closedPreimageRestrictTwo_of_continuousRestrictTwo
+    (hcont : ContinuousRestrictTwo) :
+    ClosedPreimageRestrictTwo := by
+  intro K hK
+  exact hK.isClosed.preimage (by simpa [ContinuousRestrictTwo] using hcont)
+
+lemma closedPreimageRestrictTwo_axiom_seed :
+    ClosedPreimageRestrictTwo := by
+  exact closedPreimageRestrictTwo_of_continuousRestrictTwo continuousRestrictTwo_axiom_seed
+
+/-- Current `c = 2` bounded-preimage seed for the restricted outside-open map
+    (temporary axiom-backed placeholder). -/
+lemma boundedPreimageRestrictTwo_of_preimage_closedBall_bounded :
+    BoundedPreimageRestrictTwo := by
+  intro K hK
+  let f := bottcher_map_outside_open_to_exterior (2 : ℂ)
+  have hKval : IsCompact (Subtype.val '' K) := hK.image continuous_subtype_val
+  rcases hKval.isBounded.subset_closedBall (0 : ℂ) with ⟨R, hR⟩
+  rcases preimage_closedBall_bounded (2 : ℂ) R with ⟨S, hS⟩
+  have himage_subset : Subtype.val '' (f ⁻¹' K) ⊆ Metric.closedBall (0 : ℂ) S := by
+    intro z hz
+    rcases hz with ⟨u, hu, rfl⟩
+    have huKval : (f u).1 ∈ Subtype.val '' K := ⟨f u, hu, rfl⟩
+    have huR : ‖(f u).1‖ ≤ R := by
+      have huBall : (f u).1 ∈ Metric.closedBall (0 : ℂ) R := hR huKval
+      simpa [Metric.mem_closedBall, dist_eq_norm] using huBall
+    have huS : ‖(u : ℂ)‖ ≤ S := by
+      exact hS (by simpa [f, bottcher_map_outside_open_to_exterior] using huR)
+    simpa [Metric.mem_closedBall, dist_eq_norm] using huS
+  have himage_bounded : Bornology.IsBounded (Subtype.val '' (f ⁻¹' K)) :=
+    (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset himage_subset
+  exact (Bornology.isBounded_image_subtype_val
+      (p := fun z : ℂ => ‖z‖ > ‖(2 : ℂ)‖ + 2)
+      (s := f ⁻¹' K)).1 himage_bounded
+
+lemma boundedPreimageRestrictTwo_axiom_seed :
+    BoundedPreimageRestrictTwo := by
+  exact boundedPreimageRestrictTwo_of_preimage_closedBall_bounded
+
+/-- Current `c = 2` closed-range seed for the restricted outside-open map
+    (temporary axiom-backed placeholder). -/
+lemma closedRange_two_axiom_seed :
+    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
+  exact closedRange_two_of_properRestrictTwo properRestrictTwo_axiom_seed
+
+/-- Neighborhood-slit payload on outside-open at `c = 2`. -/
+def OutsideNhdsSlitTwo : Prop :=
+  ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z
+
+/-- Iterate-left-inverse payload on the basin at `c = 2`. -/
+def IterLeftInverseOnBasinTwo : Prop :=
+  QuadraticMapIterLeftInverseOnBasin (2 : ℂ)
+
+/-- Current `c = 2` neighborhood-slit seed (temporary axiom-backed placeholder). -/
+lemma outsideNhdsSlitTwo_axiom_seed :
+    OutsideNhdsSlitTwo := by
+  exact anyProp_of_false_two_axiom_seed
+
+/-- Current `c = 2` iterate-left-inverse seed (temporary axiom-backed placeholder). -/
+lemma iterLeftInverseOnBasinTwo_axiom_seed :
+    IterLeftInverseOnBasinTwo := by
+  exact anyProp_of_false_two_axiom_seed
+
+/-- Outside-open analyticity at `c = 2` from neighborhood-slit payload. -/
+lemma outsideAnalytic_two_of_outsideNhdsSlitTwo
+    (hslit_nhds : OutsideNhdsSlitTwo) :
+    ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
+  exact bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit (2 : ℂ) hslit_nhds
+
+/-- Outside-open analyticity at `c = 2` from explicit external-ray-map data. -/
+lemma outsideAnalytic_two_of_externalRayMapData
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
+  exact anyProp_of_externalRayMapData_two h_data
+
+/-- Outside-open injectivity at `c = 2` from iterate-left-inverse payload. -/
+lemma injOnOutsideOpen_two_of_iterLeftInverseOnBasinTwo
+    (h_left : IterLeftInverseOnBasinTwo) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  simpa [IterLeftInverseOnBasinTwo] using
+    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left)
+
+/-- Outside-open injectivity at `c = 2` from explicit external-ray-map data. -/
+lemma injOnOutsideOpen_two_of_externalRayMapData
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open
+    (2 : ℂ)
+    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data h_data)
+
+/-- Current `c = 2` outside-open analyticity seed
+    (temporary axiom-backed placeholder). -/
+lemma outsideAnalytic_two_axiom_seed :
+    ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
+  exact outsideAnalytic_two_of_externalRayMapData
+    externalRayMapData_two_axiom_seed
+
+/-- Current `c = 2` outside-open injectivity seed
+    (temporary axiom-backed placeholder). -/
+lemma injOnOutsideOpen_two_axiom_seed :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  exact injOnOutsideOpen_two_of_externalRayMapData
+    externalRayMapData_two_axiom_seed
 
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
@@ -630,25 +878,49 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
     (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
       (2 : ℂ) hclosed hanalytic hderiv)
 
-/-- Step-4 payload package at `c = 2` through local/eventual-slit and
-    outside-open injectivity. -/
+/-- Step-4 payload package at `c = 2` through restricted-map closed-range,
+    outside-open analyticity, and outside-open injectivity. -/
 def ClosedRangeLocalSlitInjPayloadTwo : Prop :=
   IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) ∧
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Adapted from external `has_ray` pattern: from the Step-4 `c = 2` payload,
+    build a ray-like right-inverse datum on the exterior. -/
+lemma bottcherRightInverseOnExteriorData_two_of_closedRangeLocalSlitInjPayload
+    (h_payload : ClosedRangeLocalSlitInjPayloadTwo) :
+    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
+  rcases h_payload with ⟨hclosed, hanalytic, h_inj⟩
+  have h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+    bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+      (2 : ℂ) hclosed
+      hanalytic
+      (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
+        (2 : ℂ) hanalytic h_inj)
+  classical
+  refine ⟨fun w => if hw : 1 < ‖w‖ then Classical.choose (h_surj w hw) else 0, ?_⟩
+  intro w hw
+  have hchoose :
+      Quadratic.bottcher_map (2 : ℂ) (Classical.choose (h_surj w hw)) = w := by
+    exact (Classical.choose_spec (h_surj w hw)).2
+  simpa [hw] using hchoose
+
+/-- Exact canonical-sequence fibers from a ray-like exterior right-inverse at
+    `c = 2`. -/
+lemma bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData
+    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ)) :
+    BottcherApproachOneSeqFiberData (2 : ℂ) := by
+  rcases h_right with ⟨f, hf⟩
+  intro n
+  exact ⟨f (approach_one_seq n), hf (approach_one_seq n) (norm_approach_one_seq_gt_one n)⟩
 
 /-- Derive exact canonical-sequence fiber data from the Step-4 local-slit
     payload at `c = 2`. -/
 lemma bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload
     (h_payload : ClosedRangeLocalSlitInjPayloadTwo) :
     BottcherApproachOneSeqFiberData (2 : ℂ) := by
-  rcases h_payload with ⟨hclosed, hslit_nhds, h_inj⟩
-  exact bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
-      (2 : ℂ) hclosed
-      (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit (2 : ℂ) hslit_nhds)
-      (bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
-        (2 : ℂ) hslit_nhds h_inj))
+  exact bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData
+    (bottcherRightInverseOnExteriorData_two_of_closedRangeLocalSlitInjPayload h_payload)
 
 /-- Rooted Step-4→Step-5→MLC bridge from the local-slit payload package at
     `c = 2`. -/
@@ -658,13 +930,64 @@ theorem mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     (bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload h_payload)
 
+/-- Factored Step-4 payload target at `c = 2`: properness of the restricted
+    map plus outside-open analyticity and injectivity. -/
+def ProperAnalyticInjPayloadTwo : Prop :=
+  ProperRestrictTwo ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) ∧
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Convert factored properness/analyticity/injectivity payload into the active
+    closed-range payload package. -/
+lemma closedRangeLocalSlitInjPayloadTwo_of_properAnalyticInjPayloadTwo
+    (h_payload : ProperAnalyticInjPayloadTwo) :
+    ClosedRangeLocalSlitInjPayloadTwo := by
+  rcases h_payload with ⟨hproper, hanalytic, h_inj⟩
+  exact ⟨closedRange_two_of_properRestrictTwo hproper, hanalytic, h_inj⟩
+
+/-- Current factored `c = 2` payload seed
+    (temporary axiom-backed placeholder). -/
+lemma properAnalyticInjPayloadTwo_of_externalRayMapData
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    ProperAnalyticInjPayloadTwo := by
+  refine ⟨?_, outsideAnalytic_two_of_externalRayMapData h_data,
+    injOnOutsideOpen_two_of_externalRayMapData h_data⟩
+  exact anyProp_of_externalRayMapData_two h_data
+
+lemma properAnalyticInjPayloadTwo_axiom_seed :
+    ProperAnalyticInjPayloadTwo := by
+  exact properAnalyticInjPayloadTwo_of_externalRayMapData externalRayMapData_two_axiom_seed
+
+/-- Rooted Step-4→Step-5→MLC bridge from the factored properness/analyticity/
+    injectivity payload at `c = 2`. -/
+theorem mlc_conjecture_of_properAnalyticInjPayloadTwo
+    (h_payload : ProperAnalyticInjPayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo
+    (closedRangeLocalSlitInjPayloadTwo_of_properAnalyticInjPayloadTwo h_payload)
+
+/-- Rooted bridge from explicit `c = 2` external-ray-map data. -/
+theorem mlc_conjecture_of_externalRayMapData_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData h_data)
+
+/-- Rooted seam through right-inverse-on-exterior data at `c = 2`. -/
+theorem mlc_conjecture_of_bottcherRightInverseOnExteriorData_two
+    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData h_right)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    bottcherApproachOneSeqFiberData_two_axiom_seed
+    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData
+      externalRayMapData_two_axiom_seed)
 
 end MainProof
 

@@ -1,6 +1,6 @@
 # Plan: Eliminate `external_ray_map_exists` via Outside-Open Targets
 
-Date: 2026-02-20
+Date: 2026-02-21 (updated)
 
 ## Objective
 Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
@@ -14,6 +14,10 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
   `[█████████▓] ~99%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
+- Rooted elimination completion:
+  `[██████░░░░] ~60%` (single ingress isolated; constructive replacement missing)
+- Constructive payload workstream (`c = 2`) progress:
+  `[██░░░░░░░░] ~20%` (ingress audited; proof obligations split and queued)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
@@ -90,6 +94,27 @@ Axiom-audit checkpoint (current state):
   is core-axiom-only (`Quot.sound`, `propext`, `Classical.choice`).
 - therefore the remaining external-ray leak is concentrated in rooted seed data
   and injectivity-provider seams, not in the clopen reduction layer itself.
+
+## 2026-02-21 checkpoint
+- Verified in `Mlc/MainConjecture.lean` that the active rooted ingress is still
+  `bottcherApproachOneSeqFiberData_two_axiom_seed ->
+   Quadratic.external_ray_map_exists (2 : ℂ)`.
+- Verified there is currently no unconditional theorem in the repo that yields
+  either:
+  - `BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)`, or
+  - `ClosedRangeLocalSlitInjPayloadTwo`.
+- Therefore the next actionable route is to prove those `c = 2` payloads
+  constructively and then rewire the root through
+  `mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo`.
+- Detailed active execution plan is tracked in:
+  `plan/PLAN_external_ray_map_exists_constructive_payload_two.md`.
+- External lead discovered:
+  `girving/ray` (`Ray/Dynamics/Grow.lean`, theorem `Super.has_ray`) as a
+  potential pattern source for constructive ray-map assembly from local growth
+  data.
+- Pattern adaptation now landed in-repo (`Mlc/MainConjecture.lean`) via:
+  - `bottcherRightInverseOnExteriorData_two_of_closedRangeLocalSlitInjPayload`,
+  - `bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData`.
 
 ## External research inputs (Dudko)
 Downloaded and indexed under:
@@ -462,6 +487,12 @@ Critical screening result for this plan:
    `bottcherApproachOneSeqFiberData_two_axiom_seed`.
 
 ## Active next theorem target
+- Latest checkpoint (2026-02-21):
+  - Constructive continuity/preimage seams for the restricted `c = 2` map are now in place:
+    - `continuousRestrictTwo_of_bottcher_map_continuousAt_of_ne_zero`,
+    - `closedPreimageRestrictTwo_of_continuousRestrictTwo`,
+    - `boundedPreimageRestrictTwo_of_preimage_closedBall_bounded`.
+  - `make check` / `make graphs` pass after rewiring the corresponding seed lemmas.
 - Prefer proving the weaker non-circular restricted-map local-homeomorph payload
   at `c = 2`:
   `IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))`.
