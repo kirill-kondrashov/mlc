@@ -12,7 +12,7 @@ constructive `mlc_conjecture` replacement route.
 - Analyticity theorem track:
   `[█████████░] ~94%`
 - Framework refactor track:
-  `[█████████░] ~94%`
+  `[█████████░] ~95%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -226,3 +226,10 @@ constructive `mlc_conjecture` replacement route.
     now routes through the outside-open-analyticity bridge;
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`
     now routes through `OutsideOpenConstructivePayloadTwo`.
+
+## Implementation checkpoint (2026-02-21, chart-within direct analyticity bridge)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`
+    now routes directly through the outside-open-analyticity bridge
+    (`outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two`)
+    instead of passing through the intermediate local-chart wrapper theorem.
