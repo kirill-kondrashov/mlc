@@ -612,6 +612,16 @@ No unconditional theorem currently provides:
     wrappers, keeping the remaining elimination target focused on proving payload
     hypotheses rather than handling repeated instantiation plumbing.
 
+## Implementation checkpoint (2026-02-21, analyticity-focused payload package)
+- Added in `MainConjecture.lean`:
+  - `OutsideOpenAnalyticConstructivePayloadTwo`,
+  - conversion theorem
+    `outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo`,
+  - `mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo`.
+- Effect:
+  - the analyticity-facing route now has an explicit packaged interface that
+    feeds directly into the existing chart-within constructive payload bridge.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

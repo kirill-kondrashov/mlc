@@ -690,6 +690,23 @@ def OutsideOpenConstructivePayloadTwo : Prop :=
     OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) ∧
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
+/-- Alternative payload target at `c = 2`: closed range + outside-open
+analyticity + outside-open injectivity. -/
+def OutsideOpenAnalyticConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) ∧
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Convert the analyticity-focused payload target into the chart-within payload
+target used by the direct seam-to-data route. -/
+theorem outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
+    (h_payload : OutsideOpenAnalyticConstructivePayloadTwo) :
+    OutsideOpenConstructivePayloadTwo := by
+  refine ⟨h_payload.1, ?_, h_payload.2.2⟩
+  exact
+    outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two
+      h_payload.2.1
+
 /-- Data packaging helper from the combined constructive outside-open payload at
 `c = 2`. -/
 theorem external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo
@@ -705,6 +722,15 @@ theorem mlc_conjecture_of_outsideOpenConstructivePayloadTwo
   let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
     external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo h_payload
   exact mlc_conjecture_of_externalRayMapData_two h_data
+
+/-- Root bridge from the analyticity-focused outside-open payload target. -/
+theorem mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo
+    (h_payload : OutsideOpenAnalyticConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_outsideOpenConstructivePayloadTwo
+      (outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
+        h_payload)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
