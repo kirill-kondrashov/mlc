@@ -607,6 +607,19 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_t
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
     outside-open analytic/derivative payloads at `c = 2`. -/
+def AnalyticDerivConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0)
+
+/-- Root bridge from the plain-analytic/derivative payload target at `c = 2`. -/
+theorem mlc_conjecture_of_analyticDerivConstructivePayloadTwo
+    (h_payload : AnalyticDerivConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+      h_payload.1 h_payload.2.1 h_payload.2.2)
+
 theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (hanalytic :
@@ -614,9 +627,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
     (hderiv :
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
-      hclosed hanalytic hderiv)
+  exact mlc_conjecture_of_analyticDerivConstructivePayloadTwo
+    ⟨hclosed, hanalytic, hderiv⟩
 
 /-- Root bridge from explicit external-ray data at `c = 2`. -/
 theorem mlc_conjecture_of_externalRayMapData_two

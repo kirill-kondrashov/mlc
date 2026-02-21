@@ -653,6 +653,14 @@ No unconditional theorem currently provides:
   - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
     routes through this packaged plain-analytic payload bridge.
 
+## Implementation checkpoint (2026-02-21, plain-analytic/derivative payload packaging)
+- Added in `MainConjecture.lean`:
+  - `AnalyticDerivConstructivePayloadTwo`,
+  - `mlc_conjecture_of_analyticDerivConstructivePayloadTwo`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two`
+    now routes through this packaged plain-analytic/derivative payload bridge.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
