@@ -670,6 +670,14 @@ No unconditional theorem currently provides:
   - outside-open analytic payload data/root helpers now factor through the same
     analytic payload bridge.
 
+## Implementation checkpoint (2026-02-21, bidirectional outside-open payload convergence)
+- Added in `MainConjecture.lean`:
+  - `outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo`.
+- Rewired in `MainConjecture.lean`:
+  - `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo` now factors
+    through the outside-open-analytic payload helper, converging both
+    outside-open payload variants onto the same analytic packaging route.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

@@ -735,6 +735,16 @@ theorem outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayl
     outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two
       h_payload.2.1
 
+/-- Convert the chart-within outside-open payload target into the
+outside-open-analyticity payload target. -/
+theorem outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo
+    (h_payload : OutsideOpenConstructivePayloadTwo) :
+    OutsideOpenAnalyticConstructivePayloadTwo := by
+  refine ⟨h_payload.1, ?_, h_payload.2.2⟩
+  exact
+    outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+      h_payload.2.1
+
 /-- Forget the outside-open analyticity alias in the analyticity-focused
 payload target. -/
 theorem analyticConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
@@ -748,8 +758,9 @@ theorem analyticConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayload
 theorem external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo
     (h_payload : OutsideOpenConstructivePayloadTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
-    h_payload.1 h_payload.2.1 h_payload.2.2
+  external_ray_map_data_two_of_analyticConstructivePayloadTwo
+    (analyticConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
+      (outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo h_payload))
 
 /-- Data packaging helper from the analyticity-focused outside-open payload at
 `c = 2`. -/

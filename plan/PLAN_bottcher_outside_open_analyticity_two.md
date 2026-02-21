@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~91%`
+  `[█████████░] ~92%`
 - Framework refactor track:
-  `[█████████░] ~91%`
+  `[█████████░] ~92%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -202,3 +202,11 @@ constructive `mlc_conjecture` replacement route.
   - `external_ray_map_data_two_of_outsideOpenAnalyticConstructivePayloadTwo` and
     `mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo` now factor via
     the shared analytic payload bridge.
+
+## Implementation checkpoint (2026-02-21, bidirectional outside-open payload convergence)
+- Added in `Mlc/MainConjecture.lean`:
+  - `outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo` now factors
+    through the outside-open-analytic payload helper, so both outside-open
+    payload variants flow through one analytic packaging route.
