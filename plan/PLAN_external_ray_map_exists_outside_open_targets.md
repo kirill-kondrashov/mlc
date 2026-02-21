@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[███████░░░] ~73%`
+  `[███████░░░] ~74%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -329,6 +329,11 @@ Critical screening result for this plan:
    - removed obsolete restricted-local-homeomorph bridge wrappers,
    - inlined proper-map rooted route directly through
      `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`.
+2af. [x] Prune dead injectivity wrapper theorems in `MainConjecture` now fully
+   subsumed by derivative routes:
+   - removed obsolete `...of_injOn_two` rooted wrappers,
+   - retained derivative-payload and local-slit-derivative rooted bridges as
+     the active non-circular seam interfaces.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
