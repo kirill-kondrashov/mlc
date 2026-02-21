@@ -24,7 +24,7 @@ No unconditional theorem currently provides:
 - Constructive payload route progress:
   `[██████████] ~99%`
 - Proof implementation progress:
-  `[█████████▓] ~92%`
+  `[█████████▓] ~93%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -380,6 +380,21 @@ No unconditional theorem currently provides:
   - `outsideAnalytic_two_axiom_seed`,
   - `injOnOutsideOpen_two_axiom_seed`,
   - `properAnalyticInjPayloadTwo_axiom_seed`.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass;
+  - rooted frontier unchanged: only
+    `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
+
+## Implementation checkpoint (2026-02-21, dead preimage/properness seed pruning)
+- Removed dead declarations from `Mlc/MainConjecture.lean`:
+  - `properRestrictTwo_axiom_seed`,
+  - `continuousRestrictTwo_axiom_seed`,
+  - `compactPreimageRestrictTwo_axiom_seed`,
+  - `closedPreimageRestrictTwo_axiom_seed`,
+  - `boundedPreimageRestrictTwo_axiom_seed`,
+  - `closedRange_two_axiom_seed`,
+  - `outsideNhdsSlitTwo_axiom_seed`,
+  - `iterLeftInverseOnBasinTwo_axiom_seed`.
 - Validation:
   - `make build` + `make check` + `make graphs` pass;
   - rooted frontier unchanged: only

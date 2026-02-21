@@ -665,12 +665,6 @@ lemma closedRange_two_of_properRestrictTwo
   exact closedRange_two_of_closedMapRestrictTwo
     (closedMapRestrictTwo_of_properRestrictTwo hproper)
 
-/-- Current `c = 2` properness seed for the restricted outside-open map
-    (temporary axiom-backed placeholder). -/
-lemma properRestrictTwo_axiom_seed :
-    ProperRestrictTwo := by
-  exact anyProp_of_externalRayMapData_two (Quadratic.external_ray_map_exists (2 : ℂ))
-
 /-- Current `c = 2` continuity seed for the restricted outside-open map
     (temporary axiom-backed placeholder). -/
 lemma continuousRestrictTwo_of_bottcher_map_continuousAt_of_ne_zero :
@@ -694,16 +688,6 @@ lemma continuousRestrictTwo_of_bottcher_map_continuousAt_of_ne_zero :
           (outside_open_subset_outside_disk (2 : ℂ) z.2)))
   simpa [ContinuousRestrictTwo] using hcont_sub
 
-lemma continuousRestrictTwo_axiom_seed :
-    ContinuousRestrictTwo := by
-  exact continuousRestrictTwo_of_bottcher_map_continuousAt_of_ne_zero
-
-/-- Current `c = 2` compact-preimage seed for the restricted outside-open map
-    (temporary axiom-backed placeholder). -/
-lemma compactPreimageRestrictTwo_axiom_seed :
-    CompactPreimageRestrictTwo := by
-  exact anyProp_of_externalRayMapData_two (Quadratic.external_ray_map_exists (2 : ℂ))
-
 /-- Current `c = 2` closed-preimage seed for the restricted outside-open map
     (temporary axiom-backed placeholder). -/
 lemma closedPreimageRestrictTwo_of_continuousRestrictTwo
@@ -711,10 +695,6 @@ lemma closedPreimageRestrictTwo_of_continuousRestrictTwo
     ClosedPreimageRestrictTwo := by
   intro K hK
   exact hK.isClosed.preimage (by simpa [ContinuousRestrictTwo] using hcont)
-
-lemma closedPreimageRestrictTwo_axiom_seed :
-    ClosedPreimageRestrictTwo := by
-  exact closedPreimageRestrictTwo_of_continuousRestrictTwo continuousRestrictTwo_axiom_seed
 
 /-- Current `c = 2` bounded-preimage seed for the restricted outside-open map
     (temporary axiom-backed placeholder). -/
@@ -741,16 +721,6 @@ lemma boundedPreimageRestrictTwo_of_preimage_closedBall_bounded :
       (p := fun z : ℂ => ‖z‖ > ‖(2 : ℂ)‖ + 2)
       (s := f ⁻¹' K)).1 himage_bounded
 
-lemma boundedPreimageRestrictTwo_axiom_seed :
-    BoundedPreimageRestrictTwo := by
-  exact boundedPreimageRestrictTwo_of_preimage_closedBall_bounded
-
-/-- Current `c = 2` closed-range seed for the restricted outside-open map
-    (temporary axiom-backed placeholder). -/
-lemma closedRange_two_axiom_seed :
-    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
-  exact closedRange_two_of_properRestrictTwo properRestrictTwo_axiom_seed
-
 /-- Neighborhood-slit payload on outside-open at `c = 2`. -/
 def OutsideNhdsSlitTwo : Prop :=
   ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z
@@ -758,16 +728,6 @@ def OutsideNhdsSlitTwo : Prop :=
 /-- Iterate-left-inverse payload on the basin at `c = 2`. -/
 def IterLeftInverseOnBasinTwo : Prop :=
   QuadraticMapIterLeftInverseOnBasin (2 : ℂ)
-
-/-- Current `c = 2` neighborhood-slit seed (temporary axiom-backed placeholder). -/
-lemma outsideNhdsSlitTwo_axiom_seed :
-    OutsideNhdsSlitTwo := by
-  exact anyProp_of_externalRayMapData_two (Quadratic.external_ray_map_exists (2 : ℂ))
-
-/-- Current `c = 2` iterate-left-inverse seed (temporary axiom-backed placeholder). -/
-lemma iterLeftInverseOnBasinTwo_axiom_seed :
-    IterLeftInverseOnBasinTwo := by
-  exact anyProp_of_externalRayMapData_two (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- Outside-open analyticity at `c = 2` from neighborhood-slit payload. -/
 lemma outsideAnalytic_two_of_outsideNhdsSlitTwo
