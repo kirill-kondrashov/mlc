@@ -538,6 +538,12 @@ No unconditional theorem currently provides:
 - Added root-facing bridge theorem in `MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`.
 
+## Implementation checkpoint (2026-02-21, c=2 local-chart conversion wiring)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two`.
+- Rewired in `MainConjecture.lean`:
+  - the local-chart bridge theorem now uses the `c = 2` specialized conversion.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

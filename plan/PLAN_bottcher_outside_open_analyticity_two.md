@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████░░░░░] ~50%`
+  `[██████░░░░] ~60%`
 - Framework refactor track:
-  `[█████░░░░░] ~50%`
+  `[██████░░░░] ~60%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -60,5 +60,14 @@ constructive `mlc_conjecture` replacement route.
     local-chart seam layer.
 - Added in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass.
+
+## Implementation checkpoint (2026-02-21, c=2 local-chart specialization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`
+    now consumes the `c = 2` specialized conversion.
 - Validation:
   - `make build` + `make check` + `make graphs` pass.

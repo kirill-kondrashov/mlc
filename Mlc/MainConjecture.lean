@@ -659,7 +659,7 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChar
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two
     hclosed
-    (outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis (2 : ℂ) h_chart)
+    (outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two h_chart)
     hinj
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
