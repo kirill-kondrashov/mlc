@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[███████░░░] ~65%`
+  `[███████░░░] ~66%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -267,14 +267,17 @@ Critical screening result for this plan:
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`
      to consume this specialization.
-2x. [x] Add `c = 2` specialization for the local-slit proper-map surjectivity
-   route in `BottcherOutsidePlan` and consume it directly in
-   `MainConjecture`:
-   - added
-     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn`,
+2x. [x] Add a direct proper-map + restricted local-homeomorph rooted bridge at
+   `c = 2`, and route the local-slit proper-map theorem through it:
+   - added in `BottcherOutsidePlan`:
+     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`,
+   - added in `MainConjecture`:
+     `mainPathData_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_two`,
    - rewired
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
-     to use this specialization.
+     through this weaker seam interface,
+   - pruned dead theorem:
+     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn`.
 2y. [x] Add an explicit weaker rooted bridge at `c = 2` through restricted-map
    local-homeomorph (without hard-coding injectivity at the seam interface):
    - added

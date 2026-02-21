@@ -4402,6 +4402,15 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorp
     (by simpa [Set.image_univ] using (hproper.isClosedMap Set.univ isClosed_univ))
     hlocal
 
+/-- `c = 2` specialization of the proper-map + restricted local-homeomorph
+surjectivity route for outside-open preimages. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
+  exact bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict
+    (2 : ℂ) hproper hlocal
+
 /-- Build the restricted-map local-homeomorph hypothesis from slit analyticity
 and outside-open injectivity. -/
 lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit_of_injOn
@@ -5184,17 +5193,6 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_m
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
     (2 : ℂ) hclosed hslit_nhds h_inj
-
-/-- `c = 2` specialization of the local-slit proper-map surjectivity route for
-outside-open preimages. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
-    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
-    (by simpa [Set.image_univ] using (hproper.isClosedMap Set.univ isClosed_univ))
-    hslit_nhds h_inj
 
 /-- Local-slit wrapper for external-ray data construction from restricted-map
 closed-range and outside-open injectivity. -/
