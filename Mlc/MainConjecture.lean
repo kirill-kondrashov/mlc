@@ -606,23 +606,6 @@ theorem mainPathData_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_tw
     (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
       (2 : ℂ) hclosed hanalytic hderiv)
 
-/-- Direct Step-4 payload bridge at `c = 2`: closed-range restricted-map
-    surjectivity via local-slit + outside-open injectivity yields `MainPathData`.
-    This isolates the remaining non-circular target in theorem form. -/
-theorem mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero_two
-    (hclosed :
-      IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
-    (hslit_nhds :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
-    (hderiv :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
-        deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
-    MainPathData := by
-  exact mainPathData_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two
-    hclosed
-    (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit (2 : ℂ) hslit_nhds)
-    hderiv
-
 /-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`
 through analytic + derivative payloads. -/
 theorem mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two
@@ -640,22 +623,6 @@ theorem mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two
       hproper
       (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
         (2 : ℂ) hanalytic hderiv))
-
-/-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`
-through local-slit neighborhood analyticity + derivative payloads. -/
-theorem mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_deriv_ne_zero_two
-    (hproper :
-      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (hslit_nhds :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
-    (hderiv :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 →
-        deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
-    MainPathData := by
-  exact mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two
-    hproper
-    (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit (2 : ℂ) hslit_nhds)
-    hderiv
 
 /-- Current direct `c = 2` sequence-fiber seed from the external-ray right
     inverse on the canonical `approach_one_seq`. -/

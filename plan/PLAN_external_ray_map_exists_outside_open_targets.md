@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~76%`
+  `[████████░░] ~77%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -294,23 +294,21 @@ Critical screening result for this plan:
 2aa. [x] Extend the derivative payload routing to local-slit wrappers and the
    proper-map rooted bridge:
    - added in `MainConjecture`:
-     `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_deriv_ne_zero_two`,
      `mainPathData_of_isProperMap_restrict_of_analyticAt_of_deriv_ne_zero_two`,
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`,
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
-     through analytic/derivative payloads.
+     through analytic/derivative payloads (with local-slit derivative wrappers
+     later pruned as dead).
 2ab. [x] Push local-slit bridges in `BottcherOutsidePlan` to derivative payloads:
    - derivative routing for local-slit payloads was established,
    - later dead local-slit derivative wrapper theorems were pruned after the
      rooted chain switched to direct analytic/derivative bridges.
 2ac. [x] Complete the same derivative routing for the proper-map local-slit
    rooted bridge in `MainConjecture`:
-   - added
-     `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_deriv_ne_zero_two`,
    - rewired
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
-     through this derivative payload theorem.
+     through derivative payload routes.
 2ad. [x] Remove unnecessary injectivity assumptions from slit-based outside-plan
    surjectivity theorems and prune dead wrappers:
    - slit surjectivity now routes through
@@ -336,6 +334,10 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn`,
    - rewired dependent construction and iterate-left-inverse bridge through
      `...of_analyticAt_of_deriv_ne_zero`.
+2ah. [x] Prune dead local-slit derivative rooted wrappers in
+   `MainConjecture` after derivative routing stabilized:
+   - removed obsolete local-slit derivative wrapper theorems,
+   - retained direct analytic/derivative rooted bridges as active interfaces.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
