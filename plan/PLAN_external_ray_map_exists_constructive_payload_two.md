@@ -736,6 +736,14 @@ No unconditional theorem currently provides:
 - Kept active route:
   - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`.
 
+## Implementation checkpoint (2026-02-21, external-ray-data root-wrapper pruning)
+- Removed in `MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` and
+    `mlc_conjecture` now finish directly via
+    `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

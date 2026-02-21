@@ -630,18 +630,6 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
   exact mlc_conjecture_of_analyticDerivConstructivePayloadTwo
     ⟨hclosed, hanalytic, hderiv⟩
 
-/-- Root bridge from explicit external-ray data at `c = 2`. -/
-theorem mlc_conjecture_of_externalRayMapData_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (by
-      let f : ℂ → ℂ := Classical.choose h_data
-      intro n
-      refine ⟨f (approach_one_seq n), ?_⟩
-      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
-        (norm_approach_one_seq_gt_one n))
-
 /-- Step-4→root seam specialized through restricted-map closed range plus
     outside-open analytic/injective payloads at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
@@ -654,7 +642,13 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
   let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
     external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
       hclosed hanalytic hinj
-  exact mlc_conjecture_of_externalRayMapData_two h_data
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -663,7 +657,13 @@ theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
     Quadratic.external_ray_map_exists (2 : ℂ)
-  exact mlc_conjecture_of_externalRayMapData_two h_data
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
 
 end MainProof
 

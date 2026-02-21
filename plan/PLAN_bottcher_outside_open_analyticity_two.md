@@ -278,3 +278,12 @@ constructive `mlc_conjecture` replacement route.
   - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
     constructs `ExternalRayMapData` directly and bridges to
     `mlc_conjecture_of_externalRayMapData_two`.
+
+## Implementation checkpoint (2026-02-21, external-ray-data root-wrapper pruning)
+- Removed in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
+    finishes directly through
+    `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`;
+  - `mlc_conjecture` now uses the same direct finish route.
