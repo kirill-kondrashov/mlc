@@ -753,14 +753,20 @@ theorem analyticConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayload
   refine ⟨h_payload.1, ?_, h_payload.2.2⟩
   simpa [OutsideOpenAnalyticityHypothesis] using h_payload.2.1
 
+/-- Forget chart-within/outside-open structure to the plain-analytic payload. -/
+theorem analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo
+    (h_payload : OutsideOpenConstructivePayloadTwo) :
+    AnalyticConstructivePayloadTwo :=
+  analyticConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
+    (outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo h_payload)
+
 /-- Data packaging helper from the combined constructive outside-open payload at
 `c = 2`. -/
 theorem external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo
     (h_payload : OutsideOpenConstructivePayloadTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_two_of_analyticConstructivePayloadTwo
-    (analyticConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
-      (outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo h_payload))
+    (analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo h_payload)
 
 /-- Data packaging helper from the analyticity-focused outside-open payload at
 `c = 2`. -/
@@ -774,9 +780,8 @@ theorem external_ray_map_data_two_of_outsideOpenAnalyticConstructivePayloadTwo
 theorem mlc_conjecture_of_outsideOpenConstructivePayloadTwo
     (h_payload : OutsideOpenConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo h_payload
-  exact mlc_conjecture_of_externalRayMapData_two h_data
+  exact mlc_conjecture_of_analyticConstructivePayloadTwo
+    (analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo h_payload)
 
 /-- Root bridge from the analyticity-focused outside-open payload target. -/
 theorem mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo

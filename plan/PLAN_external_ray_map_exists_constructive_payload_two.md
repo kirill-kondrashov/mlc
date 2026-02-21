@@ -678,6 +678,14 @@ No unconditional theorem currently provides:
     through the outside-open-analytic payload helper, converging both
     outside-open payload variants onto the same analytic packaging route.
 
+## Implementation checkpoint (2026-02-21, plain-analytic convergence endpoint)
+- Added in `MainConjecture.lean`:
+  - `analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo`.
+- Rewired in `MainConjecture.lean`:
+  - `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo` and
+    `mlc_conjecture_of_outsideOpenConstructivePayloadTwo` now factor through the
+    same plain-analytic payload bridge.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
