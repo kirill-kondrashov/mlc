@@ -612,13 +612,6 @@ lemma anyProp_of_externalRayMapData_two
 lemma anyProp_of_externalRayMapData_two_axiom_seed {P : Prop} : P :=
   anyProp_of_externalRayMapData_two externalRayMapData_two_axiom_seed
 
-/-- Current direct `c = 2` sequence-fiber seed from the external-ray right
-    inverse on the canonical `approach_one_seq`. -/
-lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
-    BottcherApproachOneSeqFiberData (2 : ℂ) := by
-  exact bottcherApproachOneSeqFiberData_two_of_externalRayMapData
-    (Quadratic.external_ray_map_exists (2 : ℂ))
-
 /-- Current `c = 2` right-inverse seam seed from external-ray data. -/
 lemma bottcherRightInverseOnExteriorData_two_axiom_seed :
     BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
@@ -982,7 +975,8 @@ theorem mlc_conjecture_of_bottcherRightInverseOnExteriorData_two
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    bottcherApproachOneSeqFiberData_two_axiom_seed
+    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData
+      (Quadratic.external_ray_map_exists (2 : ℂ)))
 
 end MainProof
 
