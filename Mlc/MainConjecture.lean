@@ -646,9 +646,16 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
     (hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
+  let h_chart_within :
+      OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) :=
+    outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two
+      hanalytic
+  let h_chart : OutsideOpenLocalAnalyticChartHypothesis (2 : ℂ) :=
+    outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+      h_chart_within
   let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
-      (2 : ℂ) hclosed hanalytic hinj
+    external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
+      (2 : ℂ) hclosed h_chart hinj
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     (by
       let f : ℂ → ℂ := Classical.choose h_data

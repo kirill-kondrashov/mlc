@@ -567,6 +567,15 @@ No unconditional theorem currently provides:
 - Added in `BottcherOutsidePlan.lean`:
   - `outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two`.
 
+## Implementation checkpoint (2026-02-21, analyticity-to-chart-within seam)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis`,
+  - `outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`
+    now passes through the local-chart-within seam before constructing
+    `Quadratic.ExternalRayMapData`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
@@ -576,10 +585,10 @@ No unconditional theorem currently provides:
       - `∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 -> AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z`,
       - `Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}`.
 3. Assemble:
-   - `ClosedRangeLocalSlitInjPayloadTwo`.
+   - `OutsideOpenConstructivePayloadTwo`.
 4. Rewire root:
-   - replace final seed in `mlc_conjecture` with
-     `mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo`.
+   - replace direct `Quadratic.external_ray_map_exists (2 : ℂ)` use in
+     `mlc_conjecture` with `mlc_conjecture_of_outsideOpenConstructivePayloadTwo`.
 5. Validate:
    - `make check` no longer lists `MLC.Quadratic.external_ray_map_exists`.
    - regenerate graph and verify ingress removal.

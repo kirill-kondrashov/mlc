@@ -4950,6 +4950,21 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesi
   rcases h_chart z hz with ⟨U, _hUopen, hzU, hUanalytic⟩
   exact hUanalytic z hzU
 
+/-- Outside-open `AnalyticAt` payload induces local charts inside outside-open
+by taking the ambient outside-open set itself as the chart. -/
+lemma outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis c := by
+  intro z hz
+  refine ⟨{w : ℂ | ‖w‖ > ‖c‖ + 2}, ?_, ?_, ?_, ?_⟩
+  · simpa using (isOpen_lt continuous_const continuous_norm)
+  · simpa using hz
+  · intro w hw
+    simpa using hw
+  · intro w hw
+    exact h_analytic w hw
+
 /-- Build local analytic chart payload from neighborhood-level slit data. -/
 lemma outsideOpenLocalAnalyticChartHypothesis_of_mem_nhds_slit
     (c : ℂ)
@@ -4998,6 +5013,14 @@ lemma outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithi
   outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two
     (outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
       h_chart)
+
+/-- `c = 2` specialization: outside-open analyticity payload induces local
+analytic charts inside outside-open. -/
+lemma outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) :=
+  outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis
+    (2 : ℂ) h_analytic
 
 /-- Local-slit wrapper for outside-open derivative nonvanishing from injectivity. -/
 lemma bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
