@@ -693,10 +693,11 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChar
     (hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
-      hclosed h_chart hinj
-  exact mlc_conjecture_of_externalRayMapData_two h_data
+  exact
+    mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two
+      hclosed
+      (outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two h_chart)
+      hinj
 
 /-- Step-4→root seam through closed range + outside-open local analytic-chart
     payload inside outside-open + outside-open injectivity at `c = 2`. -/
@@ -706,10 +707,12 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChar
     (hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
-      hclosed h_chart hinj
-  exact mlc_conjecture_of_externalRayMapData_two h_data
+  exact
+    mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two
+      hclosed
+      (outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+        h_chart)
+      hinj
 
 /-- Combined constructive outside-open payload target at `c = 2` for the
 post-axiom root replacement route. -/

@@ -686,6 +686,13 @@ No unconditional theorem currently provides:
     `mlc_conjecture_of_outsideOpenConstructivePayloadTwo` now factor through the
     same plain-analytic payload bridge.
 
+## Implementation checkpoint (2026-02-21, local-chart bridge convergence)
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`
+    now routes through the outside-open-analyticity bridge;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`
+    now routes through `OutsideOpenConstructivePayloadTwo`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
