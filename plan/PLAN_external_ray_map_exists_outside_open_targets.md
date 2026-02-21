@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[██████░░░░] ~64%`
+  `[███████░░░] ~65%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -275,14 +275,13 @@ Critical screening result for this plan:
    - rewired
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
      to use this specialization.
-2y. [x] Add `c = 2` specialization for the analytic closed-range surjectivity
-   route in `BottcherOutsidePlan` and consume it directly in
-   `MainConjecture`:
+2y. [x] Add an explicit weaker rooted bridge at `c = 2` through restricted-map
+   local-homeomorph (without hard-coding injectivity at the seam interface):
    - added
-     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_injOn`,
+     `mainPathData_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two`,
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
-     to use this specialization.
+     through this weaker interface.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
@@ -293,7 +292,8 @@ Critical screening result for this plan:
    - replace the no-go global slit payload with a local/eventual-slit variant
      that is sufficient for the restricted-map local-homeomorph step near the
      needed preimages of `approach_one_seq`,
-   - the non-circular injectivity payload from Step 3,
+   - the non-circular restricted-map local-homeomorph payload from Step 3
+     (or injectivity payload if using the fallback branch),
    and obtain
    `BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)`.
 5. [ ] Instantiate non-circular exact preimage-sequence data at `c = 2` from
@@ -302,7 +302,11 @@ Critical screening result for this plan:
    `mainPathData_axiom_seed`.
 
 ## Active next theorem target
-- Prove the remaining non-circular `c = 2` injectivity payload:
+- Prefer proving the weaker non-circular restricted-map local-homeomorph payload
+  at `c = 2`:
+  `IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))`.
+- If that route fails, prove the non-circular `c = 2` injectivity payload and
+  recover local-homeomorph from it:
   `Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}`.
 - Prove restricted-map geometric payloads at `c = 2`:
   - `IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ)))`
