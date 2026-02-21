@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[████████░░] ~82%`
+  `[████████░░] ~83%`
 - Framework refactor track:
-  `[████████░░] ~82%`
+  `[████████░░] ~83%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -127,3 +127,11 @@ constructive `mlc_conjecture` replacement route.
   - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo` now routes through
     `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo` before the
     sequence-fiber bridge.
+
+## Implementation checkpoint (2026-02-21, external-ray-data root bridge reuse)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - all current `c = 2` constructive seam bridges now finish through
+    `mlc_conjecture_of_externalRayMapData_two` instead of duplicating local
+    sequence-fiber extraction code.

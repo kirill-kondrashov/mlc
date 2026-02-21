@@ -594,6 +594,14 @@ No unconditional theorem currently provides:
   - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo` now consumes
     packaged external-ray data directly before sequence-fiber extraction.
 
+## Implementation checkpoint (2026-02-21, external-ray-data root bridge reuse)
+- Added in `MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two`.
+- Rewired in `MainConjecture.lean`:
+  - all active `c = 2` bridge theorems (`analyticAt`, outside-open analyticity,
+    local-chart, local-chart-within, payload package, and `mlc_conjecture`)
+    now terminate through that single data-to-root bridge.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
