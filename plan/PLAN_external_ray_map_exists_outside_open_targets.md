@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~82%`
+  `[████████░░] ~83%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -143,8 +143,7 @@ Critical screening result for this plan:
 2d. [x] Add slit-derived route with only closed-range assumption:
    - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit`,
    - `external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside_open`.
-   - note: the external-ray slit wrapper listed above was later pruned as dead
-     in 2am.
+   - note: both slit wrappers listed above were later pruned as dead in 2ao.
 2e. [x] Add a local-slit-compatible wrapper route (no global outside-open slit
    inclusion) by factoring through local analyticity on outside-open:
    - analytic core:
@@ -393,6 +392,13 @@ Critical screening result for this plan:
    - removed `bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`,
    - removed `external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside_open`,
    - removed `external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior`.
+2ao. [x] Continue pruning dead outside-open inclusion/slit wrappers in
+   `BottcherOutsidePlan` after upstream wrapper removal:
+   - removed `bottcherExteriorSubsetImageOutsideOpenTwo_iff_outside_disk_refinement`,
+   - removed `exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen`,
+   - removed `bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open`,
+   - removed `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit`,
+   - removed `bottcher_map_inj_on_basin_of_proper_localHomeomorph`.
 2an. [x] Re-express the root theorem through the exact replacement seam and
    remove an extra rooted seed wrapper:
    - added `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`,

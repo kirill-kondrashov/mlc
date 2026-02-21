@@ -4284,13 +4284,6 @@ theorem exterior_subset_image_outside_open_iff_outside_disk_refinement
   · exact outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open c
   · exact exterior_subset_image_outside_open_of_outside_disk_refinement c
 
-/-- `c = 2` specialization of the refinement equivalence. -/
-theorem bottcherExteriorSubsetImageOutsideOpenTwo_iff_outside_disk_refinement :
-    BottcherExteriorSubsetImageOutsideOpenTwo ↔
-      BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) := by
-  simpa [BottcherExteriorSubsetImageOutsideOpenTwo] using
-    (exterior_subset_image_outside_open_iff_outside_disk_refinement (2 : ℂ))
-
 /-- Stronger landing target: exterior rays land in outside-open. -/
 def ExternalRayLandsOutsideOpen (c : ℂ) : Prop :=
   ∀ w, 1 < ‖w‖ → ‖Quadratic.external_ray_map c w‖ > ‖c‖ + 2
@@ -4309,14 +4302,6 @@ theorem outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutside
     bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
   refine ⟨Quadratic.external_ray_map c (Quadratic.bottcher_map c z), h_land _ hw, ?_⟩
   exact external_ray_map_right_inverse_on_exterior c (Quadratic.bottcher_map c z) hw
-
-/-- Exterior-subset-image from the stronger exterior-ray landing target. -/
-theorem exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen
-    (c : ℂ) (h_land : ExternalRayLandsOutsideOpen c) :
-    ({w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
-  exact exterior_subset_image_outside_open_of_outside_disk_refinement c
-    (outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen c h_land)
 
 /-- Exterior-subset-image on outside-open implies outside-open surjectivity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open
@@ -4465,17 +4450,6 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_d
     (bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
       c hanalytic hderiv)
 
-/-- Outside-open surjectivity from closed range of the restricted map plus slit
-analyticity on outside-open. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit
-    (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    BottcherSurjOnExteriorFromOutsideOpen c := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict c
-    hclosed
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit)
-
 /-- Outside-open surjectivity from closed range of the restricted map plus
 local analyticity and derivative nonvanishing on outside-open. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
@@ -4608,15 +4582,6 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_out
   rcases exists_bottcher_outside_seed_of_continuous c hlocal.continuous with ⟨y, hyimg, hfiberU⟩
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
     c hproper hlocal h_left hyimg hfiberU
-
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph
-    (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open c hproper hlocal
-    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
-      (Quadratic.external_ray_map_data c))
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin
     (c : ℂ)
