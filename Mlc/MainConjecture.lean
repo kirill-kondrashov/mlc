@@ -607,13 +607,6 @@ lemma anyProp_of_externalRayMapData_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) {P : Prop} : P :=
   False.elim (false_of_externalRayMapData_two h_data)
 
-/-- Current `c = 2` right-inverse seam seed from external-ray data. -/
-lemma bottcherRightInverseOnExteriorData_two_axiom_seed :
-    BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ) := by
-  exact bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
-    (c := (2 : ℂ))
-    externalRayMapData_two_axiom_seed
-
 /-- Properness target for the restricted outside-open map at `c = 2`. -/
 def ProperRestrictTwo : Prop :=
   IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ))
@@ -949,20 +942,6 @@ theorem mlc_conjecture_of_properAnalyticInjPayloadTwo
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo
     (closedRangeLocalSlitInjPayloadTwo_of_properAnalyticInjPayloadTwo h_payload)
-
-/-- Rooted bridge from explicit `c = 2` external-ray-map data. -/
-theorem mlc_conjecture_of_externalRayMapData_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData h_data)
-
-/-- Rooted seam through right-inverse-on-exterior data at `c = 2`. -/
-theorem mlc_conjecture_of_bottcherRightInverseOnExteriorData_two
-    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_bottcherRightInverseOnExteriorData h_right)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

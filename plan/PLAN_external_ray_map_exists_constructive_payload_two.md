@@ -22,9 +22,9 @@ No unconditional theorem currently provides:
 - End-to-end elimination progress:
   `[██████████] ~99%`
 - Constructive payload route progress:
-  `[█████████▓] ~98%`
+  `[█████████▓] ~98.5%`
 - Proof implementation progress:
-  `[█████████░] ~89%`
+  `[█████████░] ~90%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -351,6 +351,16 @@ No unconditional theorem currently provides:
 - Rewired all remaining contradiction-backed placeholder seeds to consume
   `anyProp_of_externalRayMapData_two
    (Quadratic.external_ray_map_exists (2 : ℂ))` directly.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass;
+  - rooted frontier unchanged: only
+    `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
+
+## Implementation checkpoint (2026-02-21, dead-root-wrapper pruning)
+- Removed dead declarations from `Mlc/MainConjecture.lean`:
+  - `bottcherRightInverseOnExteriorData_two_axiom_seed`,
+  - `mlc_conjecture_of_externalRayMapData_two`,
+  - `mlc_conjecture_of_bottcherRightInverseOnExteriorData_two`.
 - Validation:
   - `make build` + `make check` + `make graphs` pass;
   - rooted frontier unchanged: only
