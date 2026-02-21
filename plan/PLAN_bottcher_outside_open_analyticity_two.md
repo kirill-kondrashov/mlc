@@ -12,7 +12,7 @@ constructive `mlc_conjecture` replacement route.
 - Analyticity theorem track:
   `[█████████░] ~94%`
 - Framework refactor track:
-  `[█████████░] ~95%`
+  `[█████████░] ~96%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -233,3 +233,8 @@ constructive `mlc_conjecture` replacement route.
     now routes directly through the outside-open-analyticity bridge
     (`outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two`)
     instead of passing through the intermediate local-chart wrapper theorem.
+
+## Implementation checkpoint (2026-02-21, dead payload-conversion pruning)
+- Removed in `Mlc/MainConjecture.lean`:
+  - `outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo`
+    (unused conversion wrapper after convergence on analytic payload routing).

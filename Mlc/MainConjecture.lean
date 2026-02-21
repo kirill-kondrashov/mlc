@@ -728,16 +728,6 @@ def OutsideOpenAnalyticConstructivePayloadTwo : Prop :=
     OutsideOpenAnalyticityHypothesis (2 : ℂ) ∧
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
-/-- Convert the analyticity-focused payload target into the chart-within payload
-target used by the direct seam-to-data route. -/
-theorem outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo
-    (h_payload : OutsideOpenAnalyticConstructivePayloadTwo) :
-    OutsideOpenConstructivePayloadTwo := by
-  refine ⟨h_payload.1, ?_, h_payload.2.2⟩
-  exact
-    outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two
-      h_payload.2.1
-
 /-- Convert the chart-within outside-open payload target into the
 outside-open-analyticity payload target. -/
 theorem outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo

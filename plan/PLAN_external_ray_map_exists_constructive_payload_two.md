@@ -699,6 +699,11 @@ No unconditional theorem currently provides:
     now routes directly through the outside-open-analyticity bridge conversion
     from chart-within payload, removing one intermediate wrapper hop.
 
+## Implementation checkpoint (2026-02-21, dead payload-conversion pruning)
+- Removed in `MainConjecture.lean`:
+  - `outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo`
+    (unused conversion wrapper after payload-bridge convergence).
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
