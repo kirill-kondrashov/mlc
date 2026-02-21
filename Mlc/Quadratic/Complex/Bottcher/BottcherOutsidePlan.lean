@@ -4267,45 +4267,9 @@ theorem outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_o
   rcases h_sub hw with ⟨u, hu, hEq⟩
   exact ⟨u, hu, hEq⟩
 
-/-- Reformulation: outside-open exterior inclusion is equivalent to
-    outside-disk-to-outside-open image refinement. -/
-theorem exterior_subset_image_outside_open_iff_outside_disk_refinement
-    (c : ℂ) :
-    ({w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) ↔
-      BottcherOutsideDiskToOutsideOpenImageRefinement c := by
-  constructor
-  · exact outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open c
-  · exact exterior_subset_image_outside_open_of_outside_disk_refinement c
-
 /-- Stronger landing target: exterior rays land in outside-open. -/
 def ExternalRayLandsOutsideOpen (c : ℂ) : Prop :=
   ∀ w, 1 < ‖w‖ → ‖Quadratic.external_ray_map c w‖ > ‖c‖ + 2
-
-/-- The stronger exterior-ray landing target implies outside-disk to
-    outside-open image refinement. -/
-theorem outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen
-    (c : ℂ) (h_land : ExternalRayLandsOutsideOpen c) :
-    BottcherOutsideDiskToOutsideOpenImageRefinement c := by
-  intro z hz
-  have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
-    outside_disk_subset_quadratic_basin c hz
-  have hpos : 0 < MLC.Quadratic.green_function c z :=
-    green_function_pos_of_basin c z hz_basin
-  have hw : 1 < ‖Quadratic.bottcher_map c z‖ :=
-    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
-  refine ⟨Quadratic.external_ray_map c (Quadratic.bottcher_map c z), h_land _ hw, ?_⟩
-  exact external_ray_map_right_inverse_on_exterior c (Quadratic.bottcher_map c z) hw
-
-/-- Exterior-subset-image on outside-open implies outside-open surjectivity. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open
-    (c : ℂ)
-    (h_sub : {w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    BottcherSurjOnExteriorFromOutsideOpen c := by
-  intro w hw
-  rcases h_sub hw with ⟨z, hz, hzw⟩
-  exact ⟨z, hz, hzw⟩
 
 /-- Böttcher map restricted to outside-open, codomain restricted to the
 exterior. -/
@@ -4423,15 +4387,6 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomor
   simpa [bottcher_map_outside_open_to_exterior, U, E, Set.restrict] using
     isLocalHomeomorph_codRestrict_of_isLocalHomeomorph (f := U.restrict (Quadratic.bottcher_map c))
       (s := E) hlocalU hs
-
-/-- Build the restricted-map local-homeomorph hypothesis from slit analyticity
-on outside-open. -/
-lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit
-    (c : ℂ)
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
-  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open c
-    (bottcher_map_isLocalHomeomorphOn_outside_open c hslit)
 
 /-- Build restricted-map local-homeomorph from local analyticity plus
 derivative nonvanishing on outside-open. -/
@@ -4654,20 +4609,6 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_left_invers
     (bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left)
     (exterior_subset_image_basin_of_right_inverse c h_right)
 
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin
-    (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  let h_data : Quadratic.ExternalRayMapData c := Quadratic.external_ray_map_data c
-  have h_left : BottcherLeftInverseOnOutsideOpenData c :=
-    bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data h_data
-  have h_right : BottcherRightInverseOnExteriorDataOutsidePlan c :=
-    bottcher_right_inverse_on_exterior_data_of_external_ray_map_data h_data
-  exact
-    bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_left_inverse_on_outside_open_of_right_inverse_on_exterior
-      c hproper hlocal h_left h_right
-
 lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open
     (c : ℂ)
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
@@ -4677,14 +4618,6 @@ lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_
     bottcher_map_isProperMap_of_continuous c hlocal.continuous
   exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open
     c hproper hlocal h_left
-
-lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph
-    (c : ℂ)
-    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c)) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  exact bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open c hlocal
-    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
-      (Quadratic.external_ray_map_data c))
 
 theorem bottcher_map_inj_on_outside_of_slit
     (c : ℂ)
@@ -4738,29 +4671,11 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analy
     (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic
       (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter))
 
-/-- External-ray data from closed range on the restricted map, local
-analyticity on outside-open, and iterate-left-inverse injectivity. -/
-theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
-    (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
-      c hclosed hanalytic h_left_iter)
-
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.
 
 def slitPlaneRot (θ : ℝ) : Set ℂ :=
   {z | z * Complex.exp (-Complex.I * θ) ∈ Complex.slitPlane}
-
-lemma isOpen_slitPlaneRot (θ : ℝ) : IsOpen (slitPlaneRot θ) := by
-  have hcont : Continuous (fun z : ℂ => z * Complex.exp (-Complex.I * θ)) := by
-    simpa using (continuous_id.mul continuous_const)
-  exact (isOpen_slitPlane.preimage hcont)
 
 def slit_orbit_rot (c : ℂ) (θ : ℝ) : Set ℂ :=
   {z | ∀ n, (quadratic_map c)^[n] z ∈ slitPlaneRot θ}

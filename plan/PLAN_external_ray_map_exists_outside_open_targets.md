@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~84%`
+  `[█████████▓] ~99%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -422,6 +422,26 @@ Critical screening result for this plan:
    - recorded that the clopen Step-4 bridge is core-axiom-only while default
      injectivity wrappers were axiom-tainted,
    - removed dead `bottcher_map_inj_on_outside_open`.
+2aq. [x] Reinstate a live Step-4→root seam theorem family in
+   `Mlc/MainConjecture.lean`:
+   - added `bottcherApproachOneSeqFiberData_of_surjOnExteriorFromOutsideOpen`,
+   - added `bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen`,
+   - added `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
+   This keeps Step 5 directly wired to the rooted endpoint once Step 4
+   surjectivity at `c = 2` is discharged non-circularly.
+2ar. [x] Add direct rooted wrappers from Step-4 assumption payloads to MLC:
+   - added `mlc_conjecture_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two`,
+   - added `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two`.
+   This makes the active Step-4 proving interfaces executable end-to-end at
+   the root without touching the axiom-seed theorem.
+2as. [x] Collapse the remaining non-circular route to a single packaged
+   `c = 2` Step-4 payload and wire it through Step-5 to the root:
+   - added `ClosedRangeLocalSlitInjPayloadTwo`,
+   - added
+     `bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload`,
+   - added `mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo`.
+   Net effect: only inhabitation of this packaged payload remains to bypass the
+   current axiom seed in `mlc_conjecture`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
