@@ -492,6 +492,20 @@ No unconditional theorem currently provides:
   - rooted frontier unchanged: only
     `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
 
+## Implementation checkpoint (2026-02-21, local-slit route formally ruled out)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outside_open_subset_slit_orbit_of_mem_nhds_slit`,
+  - `not_mem_nhds_slit_on_outside_open_two`.
+- Meaning:
+  - a neighborhood-level slit payload on all outside-open points implies global
+    outside-open slit inclusion;
+  - this is impossible at `c = 2` by
+    `not_outside_open_subset_slit_orbit_two`.
+- Validation:
+  - `make build` + `make check` pass;
+  - rooted frontier unchanged: only
+    `MLC.Quadratic.external_ray_map_exists` remains beyond core axioms.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

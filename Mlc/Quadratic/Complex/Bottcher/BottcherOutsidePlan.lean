@@ -5088,6 +5088,15 @@ lemma bottcher_map_analytic_on_outside_of_slit_rot
     AnalyticOnNhd ℂ (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
   bottcher_map_analytic_on_outside c hslit
 
+/-- Neighborhood-level slit-orbit payload implies global outside-open slit
+inclusion. -/
+lemma outside_open_subset_slit_orbit_of_mem_nhds_slit
+    (c : ℂ)
+    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z) :
+    {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c := by
+  intro z hz
+  exact mem_of_mem_nhds (hslit_nhds z hz)
+
 /-- No-go checkpoint: global slit inclusion on outside-open is impossible in
 the current principal-slit model. -/
 lemma not_outside_open_subset_slit_orbit (c : ℂ) :
@@ -5117,4 +5126,12 @@ inclusion. -/
 lemma not_outside_open_subset_slit_orbit_two :
     ¬ ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} ⊆ slit_orbit (2 : ℂ)) := by
   exact not_outside_open_subset_slit_orbit (2 : ℂ)
+
+/-- Consequently, neighborhood-level slit payload on all outside-open points is
+impossible at `c = 2`. -/
+lemma not_mem_nhds_slit_on_outside_open_two :
+    ¬ (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z) := by
+  intro hslit_nhds
+  exact not_outside_open_subset_slit_orbit_two
+    (outside_open_subset_slit_orbit_of_mem_nhds_slit (2 : ℂ) hslit_nhds)
 end MLC
