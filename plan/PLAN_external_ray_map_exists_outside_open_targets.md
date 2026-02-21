@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[███████░░░] ~66%`
+  `[███████░░░] ~67%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -259,14 +259,14 @@ Critical screening result for this plan:
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`
      through `bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit`.
-2w. [x] Add `c = 2` specialization in `BottcherOutsidePlan` for the
-   local-slit closed-range surjectivity route and use it directly in the
-   `MainConjecture` bridge:
-   - added
-     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`,
+2w. [x] Route the closed-range local-slit rooted bridge through the weaker
+   restricted-local-homeomorph seam and prune the extra `c = 2` specialization:
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`
-     to consume this specialization.
+     through
+     `mainPathData_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two`,
+   - pruned dead theorem:
+     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`.
 2x. [x] Add a direct proper-map + restricted local-homeomorph rooted bridge at
    `c = 2`, and route the local-slit proper-map theorem through it:
    - added in `BottcherOutsidePlan`:

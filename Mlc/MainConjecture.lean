@@ -643,9 +643,10 @@ theorem mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     MainPathData := by
-  exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
-      hclosed hslit_nhds h_inj)
+  exact mainPathData_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two
+    hclosed
+    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_mem_nhds_slit_of_injOn
+      (2 : ℂ) hslit_nhds h_inj)
 
 /-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`. -/
 theorem mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two

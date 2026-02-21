@@ -5184,16 +5184,6 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_n
     (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds)
     h_inj
 
-/-- `c = 2` specialization of the local-slit closed-range surjectivity route
-for outside-open preimages. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
-    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
-    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
-    (2 : ℂ) hclosed hslit_nhds h_inj
-
 /-- Local-slit wrapper for external-ray data construction from restricted-map
 closed-range and outside-open injectivity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
