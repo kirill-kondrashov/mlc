@@ -10,7 +10,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 - collapsing the rooted proof into contradiction circulation.
 
 ## Progress
-`[██████████] 99.99%` (4.9998/5 core milestones completed)
+`[██████████] 99.99%` (4.99982/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
@@ -256,6 +256,14 @@ Critical screening result for this plan:
    - rewired
      `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`
      through `bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit`.
+2w. [x] Add `c = 2` specialization in `BottcherOutsidePlan` for the
+   local-slit closed-range surjectivity route and use it directly in the
+   `MainConjecture` bridge:
+   - added
+     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn`,
+   - rewired
+     `mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two`
+     to consume this specialization.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
