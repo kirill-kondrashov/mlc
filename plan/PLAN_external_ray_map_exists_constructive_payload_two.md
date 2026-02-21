@@ -23,7 +23,7 @@ No unconditional theorem currently provides:
 - Constructive payload route progress:
   `[██████████] ~99%`
 - Proof implementation progress:
-  `[██████████] ~98%`
+  `[██████████] ~99%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -715,6 +715,15 @@ No unconditional theorem currently provides:
 - Removed in `MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_two`;
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`.
+- Kept active route:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
+
+## Implementation checkpoint (2026-02-21, outside-open payload wrapper pruning)
+- Removed in `MainConjecture.lean`:
+  - `OutsideOpenConstructivePayloadTwo`;
+  - `analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo`;
+  - `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo`;
+  - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo`.
 - Kept active route:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
 

@@ -12,7 +12,7 @@ constructive `mlc_conjecture` replacement route.
 - Analyticity theorem track:
   `[█████████░] ~94%`
 - Framework refactor track:
-  `[█████████░] ~98%`
+  `[█████████░] ~99%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -257,3 +257,13 @@ constructive `mlc_conjecture` replacement route.
 - Rationale:
   both wrappers were dead after convergence onto
   `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
+
+## Implementation checkpoint (2026-02-21, outside-open payload wrapper pruning)
+- Removed in `Mlc/MainConjecture.lean`:
+  - `OutsideOpenConstructivePayloadTwo`;
+  - `analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo`;
+  - `external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo`;
+  - `mlc_conjecture_of_outsideOpenConstructivePayloadTwo`.
+- Rationale:
+  all four declarations were dead wrappers after the root path converged on the
+  direct outside-open-analyticity bridge theorem.

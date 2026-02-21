@@ -685,37 +685,6 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_analyticConstructivePayloadTwo ⟨hclosed, hanalytic, hinj⟩
 
-/-- Combined constructive outside-open payload target at `c = 2` for the
-post-axiom root replacement route. -/
-def OutsideOpenConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-    OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) ∧
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
-
-/-- Forget chart-within/outside-open structure to the plain-analytic payload. -/
-theorem analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo
-    (h_payload : OutsideOpenConstructivePayloadTwo) :
-    AnalyticConstructivePayloadTwo := by
-  refine ⟨h_payload.1, ?_, h_payload.2.2⟩
-  simpa [OutsideOpenAnalyticityHypothesis] using
-    (outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
-      h_payload.2.1)
-
-/-- Data packaging helper from the combined constructive outside-open payload at
-`c = 2`. -/
-theorem external_ray_map_data_two_of_outsideOpenConstructivePayloadTwo
-    (h_payload : OutsideOpenConstructivePayloadTwo) :
-    Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_data_two_of_analyticConstructivePayloadTwo
-    (analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo h_payload)
-
-/-- Root bridge from the combined constructive outside-open payload target. -/
-theorem mlc_conjecture_of_outsideOpenConstructivePayloadTwo
-    (h_payload : OutsideOpenConstructivePayloadTwo) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_analyticConstructivePayloadTwo
-    (analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo h_payload)
-
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
