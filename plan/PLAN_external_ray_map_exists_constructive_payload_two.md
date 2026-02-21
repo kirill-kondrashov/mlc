@@ -602,6 +602,16 @@ No unconditional theorem currently provides:
     local-chart, local-chart-within, payload package, and `mlc_conjecture`)
     now terminate through that single data-to-root bridge.
 
+## Implementation checkpoint (2026-02-21, c=2 seam-to-data specialization wrappers)
+- Added in `BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open`,
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open`,
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open`.
+- Rewired in `MainConjecture.lean`:
+  - c=2 bridge and payload-packaging theorems now consume these specialized
+    wrappers, keeping the remaining elimination target focused on proving payload
+    hypotheses rather than handling repeated instantiation plumbing.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

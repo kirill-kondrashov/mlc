@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[████████░░] ~83%`
+  `[████████░░] ~84%`
 - Framework refactor track:
-  `[████████░░] ~83%`
+  `[████████░░] ~84%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -135,3 +135,12 @@ constructive `mlc_conjecture` replacement route.
   - all current `c = 2` constructive seam bridges now finish through
     `mlc_conjecture_of_externalRayMapData_two` instead of duplicating local
     sequence-fiber extraction code.
+
+## Implementation checkpoint (2026-02-21, c=2 seam-to-data specialization wrappers)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open`,
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open`,
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - all `c = 2` outside-open bridge theorems and payload packaging now consume
+    these specialized wrappers instead of repeating `(2 : ℂ)` instantiations.
