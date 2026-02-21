@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~79%`
+  `[████████░░] ~81%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -126,6 +126,7 @@ Critical screening result for this plan:
    `bottcher_map_outside_open_to_exterior`:
    - `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict`,
    - `external_ray_map_data_of_injOn_outside_open_of_isProperMap_of_isLocalHomeomorph_restrict`.
+   - note: both wrappers listed above were later pruned as dead in 2am.
 2b. [x] Remove the need to prove restricted-map local-homeomorph separately by
    deriving it from slit analyticity on outside-open:
    - `isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit`,
@@ -140,6 +141,8 @@ Critical screening result for this plan:
 2d. [x] Add slit-derived route with only closed-range assumption:
    - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit`,
    - `external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside_open`.
+   - note: the external-ray slit wrapper listed above was later pruned as dead
+     in 2am.
 2e. [x] Add a local-slit-compatible wrapper route (no global outside-open slit
    inclusion) by factoring through local analyticity on outside-open:
    - analytic core:
@@ -368,6 +371,26 @@ Critical screening result for this plan:
    - removed `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit`,
    - removed
      `external_ray_map_data_of_isProperMap_restrict_of_slit_of_injOn_outside_open`.
+2al. [x] Prune additional dead outside-open specialization/image-equality
+   wrappers in `BottcherOutsidePlan`:
+   - removed `bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen`,
+   - removed `bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image`,
+   - removed `bottcherImageOutsideOpenIsExterior_two_of_surj`,
+   - removed
+     `external_ray_map_data_of_injOn_outside_open_of_isProperMap_of_isLocalHomeomorph_restrict`,
+   - removed `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior`,
+   - removed
+     `external_ray_map_data_of_left_inverse_on_outside_open_of_exterior_subset_image_outside_open`,
+   - removed
+     `external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior`.
+2am. [x] Prune dead first-level proper-map/image-equality/surjectivity wrappers
+   in `BottcherOutsidePlan` that became leaf declarations after 2al:
+   - removed `bottcherImageOutsideOpenIsExterior_of_surj`,
+   - removed
+     `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict`,
+   - removed `bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`,
+   - removed `external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside_open`,
+   - removed `external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.

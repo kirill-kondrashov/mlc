@@ -4318,36 +4318,6 @@ theorem exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen
   exact exterior_subset_image_outside_open_of_outside_disk_refinement c
     (outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen c h_land)
 
-/-- `c = 2` specialization of the previous reduction theorem. -/
-theorem bottcherExteriorSubsetImageOutsideOpenTwo_of_externalRayLandsOutsideOpen
-    (h_land : ExternalRayLandsOutsideOpen (2 : ℂ)) :
-    BottcherExteriorSubsetImageOutsideOpenTwo := by
-  exact exterior_subset_image_outside_open_of_externalRayLandsOutsideOpen (2 : ℂ) h_land
-
-/-- `c = 2` image-equality target from the named inclusion target. -/
-theorem bottcherImageOutsideOpenIsExterior_two_of_exterior_subset_image
-    (h_sub : BottcherExteriorSubsetImageOutsideOpenTwo) :
-    BottcherImageOutsideOpenIsExterior (2 : ℂ) := by
-  exact (bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image).2 h_sub
-
-/-- Outside-open surjectivity immediately yields the image-equality target. -/
-theorem bottcherImageOutsideOpenIsExterior_of_surj
-    (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
-    BottcherImageOutsideOpenIsExterior c := by
-  apply Set.Subset.antisymm
-  · intro w hw
-    rcases hw with ⟨z, hz, rfl⟩
-    exact bottcher_map_norm_gt_one_of_outside c (outside_open_subset_outside_disk c hz)
-  · intro w hw
-    rcases h_surj w hw with ⟨z, hz, hzw⟩
-    exact ⟨z, hz, hzw⟩
-
-/-- `c = 2` specialization of the previous bridge theorem. -/
-theorem bottcherImageOutsideOpenIsExterior_two_of_surj
-    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
-    BottcherImageOutsideOpenIsExterior (2 : ℂ) := by
-  exact bottcherImageOutsideOpenIsExterior_of_surj (2 : ℂ) h_surj
-
 /-- Exterior-subset-image on outside-open implies outside-open surjectivity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open
     (c : ℂ)
@@ -4403,17 +4373,6 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomo
   rcases hwR with ⟨z, hz⟩
   refine ⟨z.1, z.2, ?_⟩
   exact congrArg Subtype.val hz
-
-/-- Proper-map specialization of the clopen surjectivity theorem for the
-restricted map `outside_open → exterior`. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict
-    (c : ℂ)
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
-    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c)) :
-    BottcherSurjOnExteriorFromOutsideOpen c := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict c
-    (by simpa [Set.image_univ] using (hproper.isClosedMap Set.univ isClosed_univ))
-    hlocal
 
 /-- Convert local-homeomorph on an open set into local-homeomorph of the
 restricted function on the subtype domain. -/
@@ -4530,16 +4489,6 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analy
     (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
       c hanalytic hderiv)
 
-/-- Image-equality target implies the outside-open surjectivity target. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior
-    (c : ℂ) (h_img : BottcherImageOutsideOpenIsExterior c) :
-    BottcherSurjOnExteriorFromOutsideOpen c := by
-  exact bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open c
-    (by
-      intro w hw
-      rw [h_img]
-      exact hw)
-
 /-- Construct external-ray data from outside-open injectivity + exterior
     surjectivity by outside-open preimages. -/
 theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
@@ -4571,31 +4520,6 @@ theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
       simpa using hspec.2
     simp [f, hnorm, hz_choose]
 
-/-- Construct external-ray data from outside-open injectivity plus the clopen
-surjectivity route for the restricted map `outside_open → exterior`. -/
-theorem external_ray_map_data_of_injOn_outside_open_of_isProperMap_of_isLocalHomeomorph_restrict
-    (c : ℂ)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
-    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c)) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict
-      c hproper hlocal)
-
-/-- Construct external-ray data from outside-open injectivity and slit
-analyticity, assuming closed range for the restricted map `outside_open →
-exterior`. -/
-theorem external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside_open
-    (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit
-      c hclosed hslit)
-
 /-- Construct external-ray data from closed range on the restricted map plus
 local analyticity and outside-open injectivity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
@@ -4609,53 +4533,6 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_o
       c hclosed hanalytic
       (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
         c hanalytic h_inj))
-
-/-- Construct external-ray data from the left-inverse outside-open seam and
-    outside-open exterior surjectivity. -/
-theorem external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior
-    (c : ℂ)
-    (h_left : BottcherLeftInverseOnOutsideOpenData c)
-    (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c
-    (bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left)
-    h_surj
-
-/-- Variant of the previous construction using image equality as the input
-    target instead of a separate surjectivity witness. -/
-theorem external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior
-    (c : ℂ)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
-    (h_img : BottcherImageOutsideOpenIsExterior c) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
-    (bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior c h_img)
-
-/-- Variant of the previous construction using image equality and the
-    left-inverse outside-open seam. -/
-theorem external_ray_map_data_of_left_inverse_on_outside_open_of_exterior_subset_image_outside_open
-    (c : ℂ)
-    (h_left : BottcherLeftInverseOnOutsideOpenData c)
-    (h_sub : {w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior c
-    h_left
-    (bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open c h_sub)
-
-/-- Variant of the previous construction using image equality and the
-    left-inverse outside-open seam. -/
-theorem external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior
-    (c : ℂ)
-    (h_left : BottcherLeftInverseOnOutsideOpenData c)
-    (h_img : BottcherImageOutsideOpenIsExterior c) :
-    Quadratic.ExternalRayMapData c := by
-  exact external_ray_map_data_of_left_inverse_on_outside_open_of_exterior_subset_image_outside_open c
-    h_left
-    (by
-      intro w hw
-      rw [h_img]
-      exact hw)
 
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
     (c : ℂ)
