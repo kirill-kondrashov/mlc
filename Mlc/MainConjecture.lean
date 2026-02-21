@@ -605,6 +605,21 @@ theorem mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two
     (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn
       (2 : ℂ) hclosed hslit_nhds h_inj)
 
+/-- Proper-map specialization of the direct Step-4→root bridge at `c = 2`. -/
+theorem mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two
+    (hproper :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hslit_nhds :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    MainPathData := by
+  exact mainPathData_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_two
+    (by simpa [Set.image_univ] using
+      (hproper.isClosedMap Set.univ isClosed_univ))
+    hslit_nhds h_inj
+
 /-- Current direct `c = 2` sequence-fiber seed from the external-ray right
     inverse on the canonical `approach_one_seq`. -/
 lemma bottcherApproachOneSeqFiberData_two_axiom_seed :

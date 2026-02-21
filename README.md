@@ -73,6 +73,18 @@ So for the top-level theorem, the only non-core axiom currently left is
 > (`Quot.sound`, `propext`, `Classical.choice`,
 > `MLC.Quadratic.external_ray_map_exists`) and fails on any drift.
 
+> [!IMPORTANT]
+> **Progress report (February 21, 2026):**
+> - Structural isolation progress: `[██████████] 99.99%`
+> - Realistic closure progress (under current constraints): `[██████░░░░] ~60%`
+>
+> Remaining work is now concentrated in one mathematically hard block:
+> proving non-circular outside-open injectivity/closed-range (or properness)
+> payloads at `c = 2` and then replacing the final rooted
+> `external_ray_map_exists` seed. This is realistic in principle, but not
+> currently routine from the existing formal ingredients; most remaining risk is
+> mathematical, not organizational.
+
 ## Formalization Origins
 
 The core definitions and the top-level statement of the MLC conjecture in this project are based on the [Google DeepMind formal-conjectures](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean) repository. These definitions have been manually aligned and integrated into our framework because direct dependency integration was not possible. This is due to version incompatibilities: the DeepMind repository relies on an older version of Lean 4 and Mathlib (v4.22.0), whereas this project is built on more recent releases.
