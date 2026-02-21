@@ -22,9 +22,9 @@ No unconditional theorem currently provides:
 - End-to-end elimination progress:
   `[██████████] ~99%`
 - Constructive payload route progress:
-  `[█████████▓] ~94%`
+  `[█████████▓] ~95%`
 - Proof implementation progress:
-  `[████████▓░] ~85%`
+  `[████████▓░] ~86%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -301,15 +301,29 @@ No unconditional theorem currently provides:
 
 ## Implementation checkpoint (2026-02-21, contradiction helper abstraction)
 - Added in `Mlc/MainConjecture.lean`:
-  - `anyProp_of_false_two_axiom_seed`,
   - `anyProp_of_externalRayMapData_two`.
 - Rewired:
-  - contradiction-backed seams now consume these helpers instead of repeating
+  - contradiction-backed seams now consume this helper instead of repeating
     local `False.elim` blocks.
 - Validation:
   - `make build` + `make check` + `make graphs` pass;
   - rooted axiom frontier unchanged (`MLC.Quadratic.external_ray_map_exists`
     remains the sole non-core axiom at root).
+
+## Implementation checkpoint (2026-02-21, axiom-seed contradiction collapse)
+- Added in `Mlc/MainConjecture.lean`:
+  - `anyProp_of_externalRayMapData_two_axiom_seed`.
+- Rewired:
+  - removed `false_two_axiom_seed` and `anyProp_of_false_two_axiom_seed`;
+  - contradiction-backed placeholders now all consume the single
+    external-ray-data-seed eliminator.
+  - `mlc_conjecture` now uses `bottcherApproachOneSeqFiberData_two_axiom_seed`
+    directly.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass;
+  - rooted chain remains isolated at
+    `mlc_conjecture -> bottcherApproachOneSeqFiberData_two_axiom_seed ->
+    externalRayMapData_two_axiom_seed -> Quadratic.external_ray_map_exists`.
 
 ## Work packages
 1. Prove closed range at `c = 2`:

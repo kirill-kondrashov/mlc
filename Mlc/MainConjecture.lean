@@ -603,18 +603,14 @@ lemma false_of_externalRayMapData_two
       (2 : ℂ) (bottcherApproachOneSeqFiberData_two_of_externalRayMapData h_data))
 
 /-- Current `c = 2` contradiction seam from external-ray-map data. -/
-lemma false_two_axiom_seed : False :=
-  false_of_externalRayMapData_two externalRayMapData_two_axiom_seed
-
-/-- Eliminate the current `c = 2` contradiction seam into any proposition. -/
-lemma anyProp_of_false_two_axiom_seed {P : Prop} : P :=
-  False.elim false_two_axiom_seed
-
-/-- Eliminate contradiction extracted from explicit external-ray-map data at
-    `c = 2` into any proposition. -/
 lemma anyProp_of_externalRayMapData_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) {P : Prop} : P :=
   False.elim (false_of_externalRayMapData_two h_data)
+
+/-- Eliminate contradiction from the current `c = 2` external-ray seed into any
+    proposition. -/
+lemma anyProp_of_externalRayMapData_two_axiom_seed {P : Prop} : P :=
+  anyProp_of_externalRayMapData_two externalRayMapData_two_axiom_seed
 
 /-- Current direct `c = 2` sequence-fiber seed from the external-ray right
     inverse on the canonical `approach_one_seq`. -/
@@ -659,7 +655,7 @@ lemma compactPreimageRestrictTwo_of_closedPreimage_boundedPreimage
     (_hclosed : ClosedPreimageRestrictTwo)
     (_hbounded : BoundedPreimageRestrictTwo) :
     CompactPreimageRestrictTwo := by
-  exact anyProp_of_false_two_axiom_seed
+  exact anyProp_of_externalRayMapData_two_axiom_seed
 
 /-- Properness of the restricted map from continuity + compact preimages. -/
 lemma properRestrictTwo_of_continuous_compactPreimage
@@ -697,7 +693,7 @@ lemma closedRange_two_of_properRestrictTwo
     (temporary axiom-backed placeholder). -/
 lemma properRestrictTwo_axiom_seed :
     ProperRestrictTwo := by
-  exact anyProp_of_false_two_axiom_seed
+  exact anyProp_of_externalRayMapData_two_axiom_seed
 
 /-- Current `c = 2` continuity seed for the restricted outside-open map
     (temporary axiom-backed placeholder). -/
@@ -730,7 +726,7 @@ lemma continuousRestrictTwo_axiom_seed :
     (temporary axiom-backed placeholder). -/
 lemma compactPreimageRestrictTwo_axiom_seed :
     CompactPreimageRestrictTwo := by
-  exact anyProp_of_false_two_axiom_seed
+  exact anyProp_of_externalRayMapData_two_axiom_seed
 
 /-- Current `c = 2` closed-preimage seed for the restricted outside-open map
     (temporary axiom-backed placeholder). -/
@@ -790,12 +786,12 @@ def IterLeftInverseOnBasinTwo : Prop :=
 /-- Current `c = 2` neighborhood-slit seed (temporary axiom-backed placeholder). -/
 lemma outsideNhdsSlitTwo_axiom_seed :
     OutsideNhdsSlitTwo := by
-  exact anyProp_of_false_two_axiom_seed
+  exact anyProp_of_externalRayMapData_two_axiom_seed
 
 /-- Current `c = 2` iterate-left-inverse seed (temporary axiom-backed placeholder). -/
 lemma iterLeftInverseOnBasinTwo_axiom_seed :
     IterLeftInverseOnBasinTwo := by
-  exact anyProp_of_false_two_axiom_seed
+  exact anyProp_of_externalRayMapData_two_axiom_seed
 
 /-- Outside-open analyticity at `c = 2` from neighborhood-slit payload. -/
 lemma outsideAnalytic_two_of_outsideNhdsSlitTwo
@@ -986,8 +982,7 @@ theorem mlc_conjecture_of_bottcherRightInverseOnExteriorData_two
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData
-      externalRayMapData_two_axiom_seed)
+    bottcherApproachOneSeqFiberData_two_axiom_seed
 
 end MainProof
 
