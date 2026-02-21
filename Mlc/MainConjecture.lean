@@ -603,8 +603,8 @@ theorem mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     MainPathData := by
   exact mainPathData_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_injOn
-      (2 : ℂ) hclosed hanalytic h_inj)
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_injOn
+      hclosed hanalytic h_inj)
 
 /-- Direct Step-4 payload bridge at `c = 2`: closed-range restricted-map
     surjectivity via local-slit + outside-open injectivity yields `MainPathData`.

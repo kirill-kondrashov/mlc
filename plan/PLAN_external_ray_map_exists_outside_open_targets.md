@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[██████░░░░] ~63%`
+  `[██████░░░░] ~64%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -274,6 +274,14 @@ Critical screening result for this plan:
      `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn`,
    - rewired
      `mainPathData_of_isProperMap_restrict_of_mem_nhds_slit_of_injOn_two`
+     to use this specialization.
+2y. [x] Add `c = 2` specialization for the analytic closed-range surjectivity
+   route in `BottcherOutsidePlan` and consume it directly in
+   `MainConjecture`:
+   - added
+     `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_injOn`,
+   - rewired
+     `mainPathData_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
      to use this specialization.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
