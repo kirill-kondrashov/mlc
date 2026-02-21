@@ -4922,6 +4922,24 @@ def OutsideOpenLocalAnalyticChartHypothesis (c : ℂ) : Prop :=
     ∃ U : Set ℂ,
       IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U
 
+/-- Stronger framework seam: local analytic charts that stay inside
+outside-open. -/
+def OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (c : ℂ) : Prop :=
+  ∀ z, ‖z‖ > ‖c‖ + 2 →
+    ∃ U : Set ℂ,
+      IsOpen U ∧ z ∈ U ∧
+        U ⊆ {w : ℂ | ‖w‖ > ‖c‖ + 2} ∧
+        AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U
+
+/-- Forget the subset side condition on outside-open local analytic charts. -/
+lemma outsideOpenLocalAnalyticChartHypothesis_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (c : ℂ)
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis c) :
+    OutsideOpenLocalAnalyticChartHypothesis c := by
+  intro z hz
+  rcases h_chart z hz with ⟨U, hUopen, hzU, _hUsub, hUanalytic⟩
+  exact ⟨U, hUopen, hzU, hUanalytic⟩
+
 /-- A local analytic chart payload implies the outside-open `AnalyticAt`
 hypothesis. -/
 lemma outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis

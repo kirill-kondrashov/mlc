@@ -553,6 +553,13 @@ No unconditional theorem currently provides:
   - outside-open analyticity/local-chart bridge theorems now consume these new
     direct seam-to-data theorems.
 
+## Implementation checkpoint (2026-02-21, stronger local-chart-within-outside seam)
+- Added in `BottcherOutsidePlan.lean`:
+  - `OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis`,
+  - forgetful conversion to `OutsideOpenLocalAnalyticChartHypothesis`.
+- Added in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

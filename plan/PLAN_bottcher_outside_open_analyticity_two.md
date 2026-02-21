@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[███████░░░] ~65%`
+  `[███████░░░] ~70%`
 - Framework refactor track:
-  `[███████░░░] ~65%`
+  `[███████░░░] ~70%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -79,5 +79,15 @@ constructive `mlc_conjecture` replacement route.
 - Rewired in `Mlc/MainConjecture.lean`:
   - outside-open analyticity/local-chart bridge theorems now route directly
     through these external-ray-data seam theorems.
+- Validation:
+  - `make build` + `make check` + `make graphs` pass.
+
+## Implementation checkpoint (2026-02-21, stronger local-chart seam)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis`,
+  - conversion
+    `outsideOpenLocalAnalyticChartHypothesis_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_two`.
 - Validation:
   - `make build` + `make check` + `make graphs` pass.
