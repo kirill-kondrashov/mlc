@@ -735,26 +735,12 @@ lemma outsideAnalytic_two_of_outsideNhdsSlitTwo
     ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
   exact bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit (2 : ℂ) hslit_nhds
 
-/-- Outside-open analyticity at `c = 2` from explicit external-ray-map data. -/
-lemma outsideAnalytic_two_of_externalRayMapData
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
-  exact anyProp_of_externalRayMapData_two h_data
-
 /-- Outside-open injectivity at `c = 2` from iterate-left-inverse payload. -/
 lemma injOnOutsideOpen_two_of_iterLeftInverseOnBasinTwo
     (h_left : IterLeftInverseOnBasinTwo) :
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   simpa [IterLeftInverseOnBasinTwo] using
     (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left)
-
-/-- Outside-open injectivity at `c = 2` from explicit external-ray-map data. -/
-lemma injOnOutsideOpen_two_of_externalRayMapData
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
-  exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open
-    (2 : ℂ)
-    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data h_data)
 
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
@@ -862,15 +848,6 @@ lemma closedRangeLocalSlitInjPayloadTwo_of_properAnalyticInjPayloadTwo
     ClosedRangeLocalSlitInjPayloadTwo := by
   rcases h_payload with ⟨hproper, hanalytic, h_inj⟩
   exact ⟨closedRange_two_of_properRestrictTwo hproper, hanalytic, h_inj⟩
-
-/-- Current factored `c = 2` payload seed
-    (temporary axiom-backed placeholder). -/
-lemma properAnalyticInjPayloadTwo_of_externalRayMapData
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    ProperAnalyticInjPayloadTwo := by
-  refine ⟨?_, outsideAnalytic_two_of_externalRayMapData h_data,
-    injOnOutsideOpen_two_of_externalRayMapData h_data⟩
-  exact anyProp_of_externalRayMapData_two h_data
 
 /-- Rooted Step-4→Step-5→MLC bridge from the factored properness/analyticity/
     injectivity payload at `c = 2`. -/
