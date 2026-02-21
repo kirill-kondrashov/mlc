@@ -10,9 +10,9 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~88%`
+  `[█████████░] ~89%`
 - Framework refactor track:
-  `[█████████░] ~88%`
+  `[█████████░] ~89%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -175,3 +175,12 @@ constructive `mlc_conjecture` replacement route.
 - Rewired in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two`
     now consumes this specialized helper.
+
+## Implementation checkpoint (2026-02-21, plain-analytic payload packaging)
+- Added in `Mlc/MainConjecture.lean`:
+  - `AnalyticConstructivePayloadTwo`,
+  - `external_ray_map_data_two_of_analyticConstructivePayloadTwo`,
+  - `mlc_conjecture_of_analyticConstructivePayloadTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
+    routes through the packaged plain-analytic payload bridge.
