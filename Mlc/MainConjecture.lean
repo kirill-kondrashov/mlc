@@ -588,48 +588,6 @@ lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
   exact (Classical.choose_spec h_data).1 (approach_one_seq n)
     (norm_approach_one_seq_gt_one n)
 
-/-- Contradiction seam extracted directly from explicit `c = 2` external-ray
-    data. -/
-lemma false_of_externalRayMapData_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    False := by
-  exact false_of_bottcher_approach_to_one_seq_preimage_data_two
-    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
-      (2 : ℂ) (bottcherApproachOneSeqFiberData_two_of_externalRayMapData h_data))
-
-/-- Current `c = 2` contradiction seam from external-ray-map data. -/
-lemma anyProp_of_externalRayMapData_two
-    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) {P : Prop} : P :=
-  False.elim (false_of_externalRayMapData_two h_data)
-
-/-- Properness target for the restricted outside-open map at `c = 2`. -/
-def ProperRestrictTwo : Prop :=
-  IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ))
-
-/-- Closed-map target for the restricted outside-open map at `c = 2`. -/
-def ClosedMapRestrictTwo : Prop :=
-  IsClosedMap (bottcher_map_outside_open_to_exterior (2 : ℂ))
-
-/-- Closed-map property of the restricted map follows from properness. -/
-lemma closedMapRestrictTwo_of_properRestrictTwo
-    (hproper : ProperRestrictTwo) :
-    ClosedMapRestrictTwo := by
-  simpa [ProperRestrictTwo, ClosedMapRestrictTwo] using hproper.isClosedMap
-
-/-- Closed range of the restricted map follows from its closed-map property. -/
-lemma closedRange_two_of_closedMapRestrictTwo
-    (hclosedMap : ClosedMapRestrictTwo) :
-    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
-  simpa [ClosedMapRestrictTwo, Set.image_univ] using
-    (hclosedMap Set.univ isClosed_univ)
-
-/-- Closed range follows from properness of the restricted outside-open map. -/
-lemma closedRange_two_of_properRestrictTwo
-    (hproper : ProperRestrictTwo) :
-    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
-  exact closedRange_two_of_closedMapRestrictTwo
-    (closedMapRestrictTwo_of_properRestrictTwo hproper)
-
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
 theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
@@ -721,29 +679,6 @@ theorem mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     (bottcherApproachOneSeqFiberData_two_of_closedRangeLocalSlitInjPayload h_payload)
-
-/-- Factored Step-4 payload target at `c = 2`: properness of the restricted
-    map plus outside-open analyticity and injectivity. -/
-def ProperAnalyticInjPayloadTwo : Prop :=
-  ProperRestrictTwo ∧
-    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) ∧
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
-
-/-- Convert factored properness/analyticity/injectivity payload into the active
-    closed-range payload package. -/
-lemma closedRangeLocalSlitInjPayloadTwo_of_properAnalyticInjPayloadTwo
-    (h_payload : ProperAnalyticInjPayloadTwo) :
-    ClosedRangeLocalSlitInjPayloadTwo := by
-  rcases h_payload with ⟨hproper, hanalytic, h_inj⟩
-  exact ⟨closedRange_two_of_properRestrictTwo hproper, hanalytic, h_inj⟩
-
-/-- Rooted Step-4→Step-5→MLC bridge from the factored properness/analyticity/
-    injectivity payload at `c = 2`. -/
-theorem mlc_conjecture_of_properAnalyticInjPayloadTwo
-    (h_payload : ProperAnalyticInjPayloadTwo) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_closedRangeLocalSlitInjPayloadTwo
-    (closedRangeLocalSlitInjPayloadTwo_of_properAnalyticInjPayloadTwo h_payload)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
