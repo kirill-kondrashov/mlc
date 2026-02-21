@@ -727,6 +727,15 @@ No unconditional theorem currently provides:
 - Kept active route:
   - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
 
+## Implementation checkpoint (2026-02-21, direct analyticAt bridge flattening)
+- Removed in `MainConjecture.lean`:
+  - `AnalyticConstructivePayloadTwo`;
+  - `external_ray_map_data_two_of_analyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_analyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
+- Kept active route:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
@@ -736,10 +745,11 @@ No unconditional theorem currently provides:
       - `∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 -> AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z`,
       - `Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}`.
 3. Assemble:
-   - `OutsideOpenConstructivePayloadTwo`.
+   - direct constructive hypotheses for
+     `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`.
 4. Rewire root:
    - replace direct `Quadratic.external_ray_map_exists (2 : ℂ)` use in
-     `mlc_conjecture` with `mlc_conjecture_of_outsideOpenConstructivePayloadTwo`.
+     `mlc_conjecture` with the constructive `analyticAt + injOn` bridge route.
 5. Validate:
    - `make check` no longer lists `MLC.Quadratic.external_ray_map_exists`.
    - regenerate graph and verify ingress removal.

@@ -12,7 +12,7 @@ constructive `mlc_conjecture` replacement route.
 - Analyticity theorem track:
   `[█████████░] ~94%`
 - Framework refactor track:
-  `[█████████░] ~99%`
+  `[██████████] ~100%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -267,3 +267,14 @@ constructive `mlc_conjecture` replacement route.
 - Rationale:
   all four declarations were dead wrappers after the root path converged on the
   direct outside-open-analyticity bridge theorem.
+
+## Implementation checkpoint (2026-02-21, direct analyticAt bridge flattening)
+- Removed in `Mlc/MainConjecture.lean`:
+  - `AnalyticConstructivePayloadTwo`;
+  - `external_ray_map_data_two_of_analyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_analyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
+    constructs `ExternalRayMapData` directly and bridges to
+    `mlc_conjecture_of_externalRayMapData_two`.
