@@ -11,14 +11,15 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~81%`
+  `[████████░░] ~82%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
 ## Current rooted situation
 In `Mlc/MainConjecture.lean`, the active seam is now:
 - `MainPathData` (constructive core assembly target),
-- seeded by `mainPathData_axiom_seed`,
+- routed to the root through
+  `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`,
 - where the only contradiction step is confined to
   `mainPathData_of_bottcherApproachToOneSeqPreimageData_two`.
 - the rooted seed now consumes the exact countable-fiber payload at the
@@ -31,7 +32,7 @@ In `Mlc/MainConjecture.lean`, the active seam is now:
   `bottcherApproachOneSeqFiberData_two_axiom_seed`.
 
 The external-ray dependency is now localized through the narrowed seed chain:
-- `mainPathData_axiom_seed`
+- `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`
 - `mainPathData_of_bottcherApproachToOneSeqPreimageData_two`
 - `bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`
 - `bottcherApproachOneSeqFiberData_two_axiom_seed`
@@ -48,7 +49,7 @@ payloads.
 
 Exact rooted dependency chain to the missing axiom (from generated graph):
 1. `MLC.mlc_conjecture`
-2. `MLC.mainPathData_axiom_seed`
+2. `MLC.mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`
 3. `MLC.mainPathData_of_bottcherApproachToOneSeqPreimageData_two`
 4. `MLC.bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData`
 5. `MLC.bottcherApproachOneSeqFiberData_two_axiom_seed`
@@ -66,7 +67,8 @@ From `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean` and
    - `Quadratic.ExternalRayMapData c`
      via `external_ray_map_data_of_injOn_outside_open_of_surj_exterior`.
 2. Outside-open surjectivity at `c = 2` directly yields the rooted seam target
-   by choosing preimages of `approach_one_seq` in `mainPathData_axiom_seed`.
+   by choosing preimages of `approach_one_seq` in
+   `bottcherApproachOneSeqFiberData_two_axiom_seed`.
    (No rooted need remains to first construct full `ExternalRayMapData (2 : ℂ)`.)
 
 So elimination reduces to proving those two outside-open targets at `c = 2`
@@ -391,6 +393,11 @@ Critical screening result for this plan:
    - removed `bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`,
    - removed `external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside_open`,
    - removed `external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior`.
+2an. [x] Re-express the root theorem through the exact replacement seam and
+   remove an extra rooted seed wrapper:
+   - added `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`,
+   - rewired `mlc_conjecture` through that theorem,
+   - removed dead `mainPathData_axiom_seed`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
@@ -408,7 +415,7 @@ Critical screening result for this plan:
 5. [ ] Instantiate non-circular exact preimage-sequence data at `c = 2` from
    outside-open surjectivity, and replace rooted use of
    `Quadratic.external_ray_map_exists` in
-   `mainPathData_axiom_seed`.
+   `bottcherApproachOneSeqFiberData_two_axiom_seed`.
 
 ## Active next theorem target
 - Prefer proving the weaker non-circular restricted-map local-homeomorph payload

@@ -573,18 +573,22 @@ lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
   exact (Classical.choose_spec h_data).1 (approach_one_seq n)
     (norm_approach_one_seq_gt_one n)
 
-/-- Current default seed for the constructive main-path seam datum. -/
-lemma mainPathData_axiom_seed : MainPathData := by
-  exact mainPathData_of_bottcherApproachToOneSeqPreimageData_two
-    (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ)
-      bottcherApproachOneSeqFiberData_two_axiom_seed)
+/-- Rooted reduction theorem: exact countable-fiber data at the canonical
+`approach_one_seq` for `c = 2` implies the full MLC statement. -/
+theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (h_fiber : BottcherApproachOneSeqFiberData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_mainPathData
+    (mainPathData_of_bottcherApproachToOneSeqPreimageData_two
+      (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_mainPathData mainPathData_axiom_seed
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    bottcherApproachOneSeqFiberData_two_axiom_seed
 
 end MainProof
 
