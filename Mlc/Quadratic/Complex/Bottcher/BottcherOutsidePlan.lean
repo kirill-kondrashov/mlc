@@ -4140,12 +4140,6 @@ lemma bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
   intro z hz
   exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
 
-lemma bottcher_map_inj_on_outside_open (c : ℂ) :
-    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
-  exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c
-    (bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
-      (Quadratic.external_ray_map_data c))
-
 /-- M5 target: surjectivity of `bottcher_map` onto the exterior by preimages in
     the outside-open seed region. -/
 def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=

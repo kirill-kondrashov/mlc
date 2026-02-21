@@ -11,7 +11,7 @@ Remove `MLC.Quadratic.external_ray_map_exists` from the axiom footprint of
 
 ## Progress
 - Overall closure progress (under current constraints):
-  `[████████░░] ~83%`
+  `[████████░░] ~84%`
 - Structural isolation progress:
   `[██████████] 99.99%` (4.99984/5 core milestones completed)
 
@@ -81,6 +81,15 @@ Also, the current slit payload shape
 `{z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c` is likely too strong for `c = 2`;
 the non-circular route should target a weaker, usable local/eventual-slit
 condition rather than global outside-open slit inclusion.
+
+Axiom-audit checkpoint (current state):
+- `bottcher_map_inj_on_outside_open` was axiom-tainted
+  (`MLC.Quadratic.external_ray_map_exists`) and has now been pruned as dead.
+- the Step-4 clopen/local-homeomorph bridge theorem
+  `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`
+  is core-axiom-only (`Quot.sound`, `propext`, `Classical.choice`).
+- therefore the remaining external-ray leak is concentrated in rooted seed data
+  and injectivity-provider seams, not in the clopen reduction layer itself.
 
 ## External research inputs (Dudko)
 Downloaded and indexed under:
@@ -404,6 +413,15 @@ Critical screening result for this plan:
    - added `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two`,
    - rewired `mlc_conjecture` through that theorem,
    - removed dead `mainPathData_axiom_seed`.
+2ap. [x] Add explicit axiom-audit checkpoint and prune one remaining dead
+   axiom-tainted outside-open injectivity wrapper:
+   - audited with `#print axioms`:
+     `bottcher_map_inj_on_outside_open`,
+     `bottcher_map_inj_on_outside_open_of_iter_left_inverse`,
+     `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero`,
+   - recorded that the clopen Step-4 bridge is core-axiom-only while default
+     injectivity wrappers were axiom-tainted,
+   - removed dead `bottcher_map_inj_on_outside_open`.
 3. [ ] Prove outside-open injectivity at `c = 2` by a route independent of
    external ray data (e.g. local-homeomorph/proper-map + fiber-control route),
    explicitly avoiding the iterate-left-inverse route from 2f.
