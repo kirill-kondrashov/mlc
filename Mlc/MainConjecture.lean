@@ -606,41 +606,6 @@ lemma anyProp_of_externalRayMapData_two
 def ProperRestrictTwo : Prop :=
   IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ))
 
-/-- Continuity target for the restricted outside-open map at `c = 2`. -/
-def ContinuousRestrictTwo : Prop :=
-  Continuous (bottcher_map_outside_open_to_exterior (2 : ℂ))
-
-/-- Compact-preimage target for the restricted outside-open map at `c = 2`. -/
-def CompactPreimageRestrictTwo : Prop :=
-  ∀ ⦃K : Set {w : ℂ // 1 < ‖w‖}⦄, IsCompact K →
-    IsCompact ((bottcher_map_outside_open_to_exterior (2 : ℂ)) ⁻¹' K)
-
-/-- Closed-preimage target for the restricted outside-open map at `c = 2`. -/
-def ClosedPreimageRestrictTwo : Prop :=
-  ∀ ⦃K : Set {w : ℂ // 1 < ‖w‖}⦄, IsCompact K →
-    IsClosed ((bottcher_map_outside_open_to_exterior (2 : ℂ)) ⁻¹' K)
-
-/-- Bounded-preimage target for the restricted outside-open map at `c = 2`. -/
-def BoundedPreimageRestrictTwo : Prop :=
-  ∀ ⦃K : Set {w : ℂ // 1 < ‖w‖}⦄, IsCompact K →
-    Bornology.IsBounded ((bottcher_map_outside_open_to_exterior (2 : ℂ)) ⁻¹' K)
-
-/-- Compact preimages of the restricted map follow from closed + bounded
-    preimages. -/
-lemma compactPreimageRestrictTwo_of_closedPreimage_boundedPreimage
-    (_hclosed : ClosedPreimageRestrictTwo)
-    (_hbounded : BoundedPreimageRestrictTwo) :
-    CompactPreimageRestrictTwo := by
-  exact anyProp_of_externalRayMapData_two (Quadratic.external_ray_map_exists (2 : ℂ))
-
-/-- Properness of the restricted map from continuity + compact preimages. -/
-lemma properRestrictTwo_of_continuous_compactPreimage
-    (hcont : ContinuousRestrictTwo)
-    (hcompact : CompactPreimageRestrictTwo) :
-    ProperRestrictTwo := by
-  refine (isProperMap_iff_isCompact_preimage).2 ?_
-  exact ⟨hcont, fun {_} hK => hcompact hK⟩
-
 /-- Closed-map target for the restricted outside-open map at `c = 2`. -/
 def ClosedMapRestrictTwo : Prop :=
   IsClosedMap (bottcher_map_outside_open_to_exterior (2 : ℂ))
@@ -664,83 +629,6 @@ lemma closedRange_two_of_properRestrictTwo
     IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
   exact closedRange_two_of_closedMapRestrictTwo
     (closedMapRestrictTwo_of_properRestrictTwo hproper)
-
-/-- Current `c = 2` continuity seed for the restricted outside-open map
-    (temporary axiom-backed placeholder). -/
-lemma continuousRestrictTwo_of_bottcher_map_continuousAt_of_ne_zero :
-    ContinuousRestrictTwo := by
-  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
-  let f : U → ℂ := fun z => Quadratic.bottcher_map (2 : ℂ) z.1
-  have hcont_f : Continuous f := by
-    refine continuous_iff_continuousAt.2 ?_
-    intro z
-    have hz_pos : 0 < ‖(z : ℂ)‖ := by
-      have hbase : 0 < ‖(2 : ℂ)‖ + 2 := by linarith [norm_nonneg (2 : ℂ)]
-      exact lt_trans hbase z.2
-    have hz0 : (z : ℂ) ≠ 0 := norm_pos_iff.1 hz_pos
-    simpa [f] using
-      (bottcher_map_continuousAt_of_ne_zero (2 : ℂ) (z : ℂ) hz0).comp
-        continuous_subtype_val.continuousAt
-  have hcont_sub : Continuous (bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
-    simpa [bottcher_map_outside_open_to_exterior, U, f] using
-      (Continuous.subtype_mk hcont_f (fun z =>
-        bottcher_map_norm_gt_one_of_outside (2 : ℂ)
-          (outside_open_subset_outside_disk (2 : ℂ) z.2)))
-  simpa [ContinuousRestrictTwo] using hcont_sub
-
-/-- Current `c = 2` closed-preimage seed for the restricted outside-open map
-    (temporary axiom-backed placeholder). -/
-lemma closedPreimageRestrictTwo_of_continuousRestrictTwo
-    (hcont : ContinuousRestrictTwo) :
-    ClosedPreimageRestrictTwo := by
-  intro K hK
-  exact hK.isClosed.preimage (by simpa [ContinuousRestrictTwo] using hcont)
-
-/-- Current `c = 2` bounded-preimage seed for the restricted outside-open map
-    (temporary axiom-backed placeholder). -/
-lemma boundedPreimageRestrictTwo_of_preimage_closedBall_bounded :
-    BoundedPreimageRestrictTwo := by
-  intro K hK
-  let f := bottcher_map_outside_open_to_exterior (2 : ℂ)
-  have hKval : IsCompact (Subtype.val '' K) := hK.image continuous_subtype_val
-  rcases hKval.isBounded.subset_closedBall (0 : ℂ) with ⟨R, hR⟩
-  rcases preimage_closedBall_bounded (2 : ℂ) R with ⟨S, hS⟩
-  have himage_subset : Subtype.val '' (f ⁻¹' K) ⊆ Metric.closedBall (0 : ℂ) S := by
-    intro z hz
-    rcases hz with ⟨u, hu, rfl⟩
-    have huKval : (f u).1 ∈ Subtype.val '' K := ⟨f u, hu, rfl⟩
-    have huR : ‖(f u).1‖ ≤ R := by
-      have huBall : (f u).1 ∈ Metric.closedBall (0 : ℂ) R := hR huKval
-      simpa [Metric.mem_closedBall, dist_eq_norm] using huBall
-    have huS : ‖(u : ℂ)‖ ≤ S := by
-      exact hS (by simpa [f, bottcher_map_outside_open_to_exterior] using huR)
-    simpa [Metric.mem_closedBall, dist_eq_norm] using huS
-  have himage_bounded : Bornology.IsBounded (Subtype.val '' (f ⁻¹' K)) :=
-    (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset himage_subset
-  exact (Bornology.isBounded_image_subtype_val
-      (p := fun z : ℂ => ‖z‖ > ‖(2 : ℂ)‖ + 2)
-      (s := f ⁻¹' K)).1 himage_bounded
-
-/-- Neighborhood-slit payload on outside-open at `c = 2`. -/
-def OutsideNhdsSlitTwo : Prop :=
-  ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z
-
-/-- Iterate-left-inverse payload on the basin at `c = 2`. -/
-def IterLeftInverseOnBasinTwo : Prop :=
-  QuadraticMapIterLeftInverseOnBasin (2 : ℂ)
-
-/-- Outside-open analyticity at `c = 2` from neighborhood-slit payload. -/
-lemma outsideAnalytic_two_of_outsideNhdsSlitTwo
-    (hslit_nhds : OutsideNhdsSlitTwo) :
-    ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z := by
-  exact bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit (2 : ℂ) hslit_nhds
-
-/-- Outside-open injectivity at `c = 2` from iterate-left-inverse payload. -/
-lemma injOnOutsideOpen_two_of_iterLeftInverseOnBasinTwo
-    (h_left : IterLeftInverseOnBasinTwo) :
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
-  simpa [IterLeftInverseOnBasinTwo] using
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left)
 
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
