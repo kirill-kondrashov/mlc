@@ -544,6 +544,15 @@ No unconditional theorem currently provides:
 - Rewired in `MainConjecture.lean`:
   - the local-chart bridge theorem now uses the `c = 2` specialized conversion.
 
+## Implementation checkpoint (2026-02-21, direct outside-open seam-to-data routing)
+- Added in `BottcherOutsidePlan.lean`:
+  - direct seam-to-data theorems from
+    outside-open analyticity/local-chart hypotheses plus closed-range+injOn to
+    `Quadratic.ExternalRayMapData`.
+- Rewired in `MainConjecture.lean`:
+  - outside-open analyticity/local-chart bridge theorems now consume these new
+    direct seam-to-data theorems.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

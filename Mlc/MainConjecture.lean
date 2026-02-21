@@ -646,8 +646,16 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
     (hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
-    hclosed hanalytic hinj
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
+      (2 : ℂ) hclosed hanalytic hinj
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
 
 /-- Step-4→root seam through closed range + outside-open local analytic-chart
     payload interface + outside-open injectivity at `c = 2`. -/
@@ -657,10 +665,16 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChar
     (hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_two
-    hclosed
-    (outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two h_chart)
-    hinj
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
+      (2 : ℂ) hclosed h_chart hinj
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

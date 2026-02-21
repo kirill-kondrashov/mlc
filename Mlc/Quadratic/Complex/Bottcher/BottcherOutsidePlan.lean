@@ -4457,6 +4457,33 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_o
       (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
         c hanalytic h_inj))
 
+/-- Construct external-ray data from closed range plus the outside-open
+analyticity seam payload and outside-open injectivity. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
+    c hclosed hanalytic h_inj
+
+/-- Construct external-ray data from closed range plus the outside-open local
+analytic-chart seam payload and outside-open injectivity. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_chart : ∀ z, ‖z‖ > ‖c‖ + 2 →
+      ∃ U : Set ℂ, IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapData c := by
+  have hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z := by
+    intro z hz
+    rcases h_chart z hz with ⟨U, _hUopen, hzU, hUanalytic⟩
+    exact hUanalytic z hzU
+  exact external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
+    c hclosed hanalytic h_inj
+
 lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
     (c : ℂ)
     (hproper : IsProperMap (Quadratic.bottcher_map c))
