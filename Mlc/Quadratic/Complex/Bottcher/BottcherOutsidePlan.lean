@@ -4504,15 +4504,6 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit
   exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open c
     (bottcher_map_isLocalHomeomorphOn_outside_open c hslit)
 
-/-- Build the restricted-map local-homeomorph hypothesis from slit analyticity
-and outside-open injectivity. -/
-lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit_of_injOn
-    (c : ℂ)
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (_h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
-  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit
-
 /-- Build restricted-map local-homeomorph from local analyticity plus
 derivative nonvanishing on outside-open. -/
 lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
@@ -4535,31 +4526,27 @@ lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_i
     hanalytic
     (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic h_inj)
 
-/-- Outside-open surjectivity from properness of the restricted map plus the
-slit+injectivity route to local-homeomorph. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit_of_injOn
+/-- Outside-open surjectivity from properness of the restricted map plus slit
+analyticity on outside-open. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_slit
     (c : ℂ)
     (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_of_isLocalHomeomorph_restrict c
     hproper
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit_of_injOn
-      c hslit h_inj)
+    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit)
 
-/-- Outside-open surjectivity from closed range of the restricted map plus the
-slit+injectivity route to local-homeomorph. -/
-theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit_of_injOn
+/-- Outside-open surjectivity from closed range of the restricted map plus slit
+analyticity on outside-open. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit
     (c : ℂ)
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict c
     hclosed
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit_of_injOn
-      c hslit h_inj)
+    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit)
 
 /-- Outside-open surjectivity from closed range of the restricted map plus
 local analyticity and outside-open injectivity. -/
@@ -4651,8 +4638,7 @@ theorem external_ray_map_data_of_isProperMap_restrict_of_slit_of_injOn_outside_o
     Quadratic.ExternalRayMapData c := by
   exact external_ray_map_data_of_injOn_outside_open_of_isProperMap_of_isLocalHomeomorph_restrict c
     h_inj hproper
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit_of_injOn
-      c hslit h_inj)
+    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_slit c hslit)
 
 /-- Construct external-ray data from outside-open injectivity and slit
 analyticity, assuming closed range for the restricted map `outside_open →
@@ -4664,8 +4650,8 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_slit_of_injOn_outside
     (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c := by
   exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
-    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit_of_injOn
-      c hclosed hslit h_inj)
+    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_slit
+      c hclosed hslit)
 
 /-- Construct external-ray data from closed range on the restricted map plus
 local analyticity and outside-open injectivity. -/
