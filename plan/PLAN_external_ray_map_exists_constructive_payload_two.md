@@ -704,6 +704,13 @@ No unconditional theorem currently provides:
   - `outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo`
     (unused conversion wrapper after payload-bridge convergence).
 
+## Implementation checkpoint (2026-02-21, analytic-payload alias pruning)
+- Removed in `MainConjecture.lean`:
+  - `OutsideOpenAnalyticConstructivePayloadTwo` and its dedicated conversion/data/root wrappers.
+- Rewired in `MainConjecture.lean`:
+  - `analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo` now
+    converts directly from chart-within payload to plain-analytic payload.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

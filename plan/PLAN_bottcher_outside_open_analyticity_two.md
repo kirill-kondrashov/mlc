@@ -12,7 +12,7 @@ constructive `mlc_conjecture` replacement route.
 - Analyticity theorem track:
   `[█████████░] ~94%`
 - Framework refactor track:
-  `[█████████░] ~96%`
+  `[█████████░] ~97%`
 - End-to-end elimination impact:
   `[██████████] ~99%`
 
@@ -238,3 +238,14 @@ constructive `mlc_conjecture` replacement route.
 - Removed in `Mlc/MainConjecture.lean`:
   - `outsideOpenConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo`
     (unused conversion wrapper after convergence on analytic payload routing).
+
+## Implementation checkpoint (2026-02-21, analytic-payload alias pruning)
+- Removed in `Mlc/MainConjecture.lean`:
+  - `OutsideOpenAnalyticConstructivePayloadTwo`;
+  - `outsideOpenAnalyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo`;
+  - `analyticConstructivePayloadTwo_of_outsideOpenAnalyticConstructivePayloadTwo`;
+  - `external_ray_map_data_two_of_outsideOpenAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_outsideOpenAnalyticConstructivePayloadTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `analyticConstructivePayloadTwo_of_outsideOpenConstructivePayloadTwo` now
+    maps chart-within payload directly to the plain-analytic payload.
