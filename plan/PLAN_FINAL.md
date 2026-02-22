@@ -17,7 +17,7 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
 - `[x]` CP1: Constructive target seam theorem under explicit hypotheses added
 - `[~]` CP2: Constructive `OutsideOpenAnalyticityHypothesis (2 : ℂ)` (target seam in place; proof missing)
 - `[~]` CP3: Constructive outside-open injectivity payload at `c = 2` (CP2→payload bridge wired; standalone proof still missing)
-- `[~]` CP4: Constructive closed-range/properness payload at `c = 2` (properness→target bridge in place; proof missing)
+- `[~]` CP4: Constructive closed-range/properness payload at `c = 2` (preimage-compact/closed→properness→CP5 bridges wired; proof missing)
 - `[~]` CP5: Build `external_ray_map_exists_two_constructive` (named endpoint wired; constructive body still pending)
 - `[ ]` CP6: Replace axiom usage and verify zero dependency
 
@@ -28,6 +28,8 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis`;
   - `external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis`;
+  - `external_ray_map_exists_two_constructive_of_analyticAt_of_preimageCompact`;
+  - `external_ray_map_exists_two_constructive_of_analyticAt_of_preimageClosed`;
   - `external_ray_map_exists_two_constructive` (current placeholder endpoint, body still axiom-seeded).
 - This extends CP2/CP3/CP4 scaffolding and wires a single CP5 replacement point for
   the final constructive payload body.

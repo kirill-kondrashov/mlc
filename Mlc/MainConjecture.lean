@@ -726,6 +726,36 @@ theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outs
     (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper)
     h_analytic
 
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from outside-open
+analyticity plus the compact-preimage properness package. -/
+theorem external_ray_map_exists_two_constructive_of_analyticAt_of_preimageCompact
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
+    (isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact
+      h_analytic hpre)
+    h_analytic
+
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from outside-open
+analyticity plus the closed-preimage properness package. -/
+theorem external_ray_map_exists_two_constructive_of_analyticAt_of_preimageClosed
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
+    (isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed
+      h_analytic hclosedpre)
+    h_analytic
+
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
@@ -898,11 +928,8 @@ theorem mlc_conjecture_of_analyticAt_of_preimageCompact_two
           ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
             Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo
-      (isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact
-        h_analytic hpre)
-      h_analytic)
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_analyticAt_of_preimageCompact h_analytic hpre)
 
 /-- Step-4→root seam specialized through outside-open analyticity plus closedness
 of ambient preimage sets against compact exterior targets. -/
@@ -914,11 +941,8 @@ theorem mlc_conjecture_of_analyticAt_of_preimageClosed_two
           ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
             Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo
-      (isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed
-        h_analytic hclosedpre)
-      h_analytic)
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_analyticAt_of_preimageClosed h_analytic hclosedpre)
 
 /-- Step-4→root seam specialized through outside-open analyticity plus boundary
 exclusion on compact exterior targets. -/
