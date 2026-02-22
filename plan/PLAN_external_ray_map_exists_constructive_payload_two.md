@@ -795,6 +795,17 @@ No unconditional theorem currently provides:
   - rooted axiom frontier unchanged and still includes
     `MLC.Quadratic.external_ray_map_exists`.
 
+## Implementation checkpoint (2026-02-22, direct non-slit surjectivity bridge)
+- Added in `BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Added in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~98%`
+  `[█████████░] ~98.5%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -335,3 +335,13 @@ constructive `mlc_conjecture` replacement route.
 - Impact:
   reduced the remaining non-slit proof to a cleaner rigidity target on the
   quotient map `z ↦ bottcher_map c z / z` over outside-open.
+
+## Implementation checkpoint (2026-02-22, direct non-slit surjectivity bridge)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Refined:
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo` now routes
+    directly via surjectivity (no local `ExternalRayMapData` reconstruction).

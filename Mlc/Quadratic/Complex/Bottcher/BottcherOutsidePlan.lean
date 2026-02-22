@@ -5047,6 +5047,30 @@ lemma outsideOpenQuotientAnalyticRealScalePayloadTwo_of_nonSlitPayload
   outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPayload
     (2 : ℂ) h_payload
 
+/-- Outside-open exterior surjectivity from closed range plus the combined
+outside-open analytic/injective seam payload. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_payload : OutsideOpenAnalyticInjPayload c) :
+    BottcherSurjOnExteriorFromOutsideOpen c := by
+  have hanalytic : OutsideOpenAnalyticityHypothesis c :=
+    outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload c h_payload
+  have h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    injOn_outside_open_of_outsideOpenAnalyticInjPayload c h_payload
+  exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+    c hclosed hanalytic
+    (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic h_inj)
+
+/-- `c = 2` specialization: outside-open exterior surjectivity from closed
+range plus the combined non-slit outside-open analytic/injective payload. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    (2 : ℂ) hclosed h_payload
+
 /-- Outside-open `AnalyticAt` payload induces local charts inside outside-open
 by taking the ambient outside-open set itself as the chart. -/
 lemma outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis
