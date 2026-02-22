@@ -5931,6 +5931,23 @@ lemma outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithi
     (outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
       h_chart)
 
+/-- CP2 constructive seam at `c = 2`: local charts inside outside-open yield
+outside-open analyticity. -/
+theorem outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+    h_chart
+
+/-- CP2 constructive seam at `c = 2`: local charts inside outside-open yield
+outside-open quotient analyticity. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo :=
+  outsideOpenQuotientAnalyticityHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+      h_chart)
+
 /-- `c = 2` specialization: outside-open analyticity payload induces local
 analytic charts inside outside-open. -/
 lemma outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two

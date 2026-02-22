@@ -727,6 +727,17 @@ theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outs
     h_analytic
 
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus local analytic charts that remain inside outside-open. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    hclosed
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+      h_chart)
+
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
 plus outside-open quotient constancy. -/
 theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
@@ -1038,6 +1049,16 @@ theorem mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo
   exact mlc_conjecture_of_externalRayMapData_two
     (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
       h_payload.1 h_payload.2)
+
+/-- Step-4→root seam from closed range plus local analytic charts that stay
+inside outside-open at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+      hclosed h_chart)
 
 /-- Root bridge from the combined non-slit outside-open analytic/injective
 payload shape at `c = 2`. -/
