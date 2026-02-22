@@ -25,6 +25,21 @@ No unconditional theorem currently provides:
 - Proof implementation progress:
   `[█████████░] ~99.77%`
 
+## Implementation checkpoint (2026-02-22, `c = 2` minimal-surjectivity fiber wrappers normalized)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_surjOnExterior`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_externalRayMapData` to route through
+    `bottcherSurjOnExterior_of_externalRayMapData`;
+  - `mlc_conjecture_of_externalRayMapData_two` and
+    `mlc_conjecture_of_bottcherSurjOnExterior_two` to consume `Two`-specialized
+    fiber seam wrappers.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - no change in remaining rooted axiom, but the `c = 2` root-facing fiber path is
+    now uniformly specialized.
+
 ## Implementation checkpoint (2026-02-22, `c = 2` properness seams normalized)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
   - `isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact`;

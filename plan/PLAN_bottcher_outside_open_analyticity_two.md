@@ -16,6 +16,22 @@ constructive `mlc_conjecture` replacement route.
 - End-to-end elimination impact:
   `[█████████░] ~99.96%`
 
+## Implementation checkpoint (2026-02-22, minimal-surjectivity fiber seam normalized at `c = 2`)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_surjOnExterior`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_externalRayMapData` now routes via
+    `bottcherSurjOnExterior_of_externalRayMapData`;
+  - `mlc_conjecture_of_externalRayMapData_two` now consumes
+    `bottcherApproachOneSeqFiberData_two_of_externalRayMapData`;
+  - `mlc_conjecture_of_bottcherSurjOnExterior_two` now consumes
+    `bottcherApproachOneSeqFiberData_two_of_surjOnExterior`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root ingress now uses a fully `Two`-specialized minimal-surjectivity
+    fiber bridge chain; rooted axiom frontier unchanged.
+
 ## Implementation checkpoint (2026-02-22, properness ingress wrappers specialized at `c = 2`)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
   - `isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact`;
