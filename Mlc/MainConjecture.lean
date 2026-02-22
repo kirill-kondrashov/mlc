@@ -726,6 +726,33 @@ theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outs
     (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper)
     h_analytic
 
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus outside-open quotient constancy. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qconst : OutsideOpenQuotientConstHypothesisTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+    hclosed h_qconst
+
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus outside-open quotient analyticity. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
+    hclosed h_qanalytic
+
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus the strong quotient-rigidity witness. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+    hclosed h_wit
+
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from outside-open
 analyticity plus the compact-preimage properness package. -/
 theorem external_ray_map_exists_two_constructive_of_analyticAt_of_preimageCompact
@@ -847,24 +874,24 @@ def NonSlitQuotientAnalyticConstructivePayloadTwo : Prop :=
 theorem mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
     (h_payload : NonSlitQuotientConstRealConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
       h_payload.1 h_payload.2)
 
 /-- Root bridge from quotient-constancy payload at `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo
     (h_payload : NonSlitQuotientConstConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
       h_payload.1 h_payload.2)
 
 /-- Root bridge from quotient-analytic payload at `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo
     (h_payload : NonSlitQuotientAnalyticConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
       h_payload.1 h_payload.2)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
@@ -873,8 +900,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypo
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_qconst : OutsideOpenQuotientConstHypothesisTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
       hclosed h_qconst)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
@@ -883,8 +910,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalytici
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
       hclosed h_qanalytic)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus the
