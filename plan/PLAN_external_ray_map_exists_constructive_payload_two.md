@@ -25,6 +25,17 @@ No unconditional theorem currently provides:
 - Proof implementation progress:
   `[█████████░] ~99.77%`
 
+## Implementation checkpoint (2026-02-22, `c = 2` approach-to-one preimage ingress normalization)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two` to consume the
+    `Two`-specialized preimage-data bridge directly.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - remaining rooted axiom unchanged; ingress path shape simplified.
+
 ## Implementation checkpoint (2026-02-22, `c = 2` minimal-surjectivity fiber wrappers normalized)
 - Added in `Mlc/MainConjecture.lean`:
   - `bottcherApproachOneSeqFiberData_two_of_surjOnExterior`.

@@ -311,6 +311,12 @@ lemma bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
   funext n
   exact Classical.choose_spec (h_fiber n)
 
+/-- `c = 2` specialization of the exact-fiber to approach-to-`1` preimage seam. -/
+lemma bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData
+    (h_fiber : BottcherApproachOneSeqFiberData (2 : ℂ)) :
+    BottcherApproachToOneSeqPreimageData (2 : ℂ) :=
+  bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber
+
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
     (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
@@ -626,7 +632,7 @@ theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_mainPathData
     (mainPathData_of_bottcherApproachToOneSeqPreimageData_two
-      (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber))
+      (bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData h_fiber))
 
 /-- Root bridge from explicit external-ray-map data at `c = 2`. -/
 theorem mlc_conjecture_of_externalRayMapData_two

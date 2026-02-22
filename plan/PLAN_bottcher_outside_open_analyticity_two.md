@@ -16,6 +16,18 @@ constructive `mlc_conjecture` replacement route.
 - End-to-end elimination impact:
   `[█████████░] ~99.96%`
 
+## Implementation checkpoint (2026-02-22, preimage-seam wrapper specialized at `c = 2`)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two` now consumes the new
+    `Two`-specialized preimage-seam wrapper directly.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root-facing bridge chain is further normalized around `c = 2`
+    wrappers with no change to the remaining rooted axiom frontier.
+
 ## Implementation checkpoint (2026-02-22, minimal-surjectivity fiber seam normalized at `c = 2`)
 - Added in `Mlc/MainConjecture.lean`:
   - `bottcherApproachOneSeqFiberData_two_of_surjOnExterior`.
