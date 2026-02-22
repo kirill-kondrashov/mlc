@@ -773,6 +773,51 @@ theorem mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothes
     (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper)
     h_analytic
 
+/-- Step-4→root seam specialized through outside-open analyticity plus the
+ambient compact-preimage obligation that yields properness of the restricted
+outside-open map at `c = 2`. -/
+theorem mlc_conjecture_of_analyticAt_of_preimageCompact_two
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two
+    (isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
+      (2 : ℂ) h_analytic hpre)
+    h_analytic
+
+/-- Step-4→root seam specialized through outside-open analyticity plus closedness
+of ambient preimage sets against compact exterior targets. -/
+theorem mlc_conjecture_of_analyticAt_of_preimageClosed_two
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two
+    (isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
+      (2 : ℂ) h_analytic hclosedpre)
+    h_analytic
+
+/-- Step-4→root seam specialized through outside-open analyticity plus boundary
+exclusion on compact exterior targets. -/
+theorem mlc_conjecture_of_analyticAt_of_boundaryExclusion_two
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two
+    (isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion
+      (2 : ℂ) h_analytic hboundary)
+    h_analytic
+
 /-- Root bridge from closed range plus outside-open analyticity payload at
 `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo

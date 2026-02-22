@@ -23,7 +23,7 @@ No unconditional theorem currently provides:
 - Constructive payload route progress:
   `[██████████] ~99.984%`
 - Proof implementation progress:
-  `[█████████░] ~99.4%`
+  `[█████████░] ~99.6%`
 
 ## Implementation checkpoint (2026-02-22, remainder audit)
 - Re-ran `make check`: `MLC.mlc_conjecture` still depends on
@@ -66,6 +66,66 @@ No unconditional theorem currently provides:
   - rooted axiom frontier is unchanged; top-level elimination still needs a
     constructive proof of either restricted properness (or direct closed range)
     together with outside-open analyticity at `c = 2`.
+
+## Implementation checkpoint (2026-02-22, properness seam factorization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `image_preimage_bottcher_map_outside_open_to_exterior`;
+  - `isCompact_preimage_bottcher_map_outside_open_to_exterior_iff`;
+  - `continuous_bottcher_map_outside_open_restrict_of_analyticAt`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact`.
+- Effect:
+  - isolates the remaining restricted-properness obligation to one explicit
+    ambient compact-preimage statement on
+    `{z | ‖z‖ > ‖c‖ + 2 ∧ bottcher_map c z ∈ ((↑) '' K)}`.
+- Validation:
+  - `make build && make check` succeeded.
+- Root impact:
+  - no change to rooted axiom frontier (`MLC.Quadratic.external_ray_map_exists`
+    still present at `MLC.mlc_conjecture`).
+
+## Implementation checkpoint (2026-02-22, preimage-compact root seam)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_preimageCompact_two`.
+- Effect:
+  - plugs the new properness reduction seam directly into a root-facing theorem,
+    so the remaining constructive gap is represented as one explicit
+    compact-preimage obligation plus outside-open analyticity.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - frontier unchanged; `MLC.mlc_conjecture` still uses
+    `MLC.Quadratic.external_ray_map_exists`.
+
+## Implementation checkpoint (2026-02-22, preimage-closed seam normalization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_preimageClosed_two`.
+- Effect:
+  - further reduces the remaining constructive package to outside-open
+    analyticity plus a closedness obligation for ambient preimage sets against
+    compact exterior targets.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - no frontier change; `MLC.Quadratic.external_ray_map_exists` remains.
+
+## Implementation checkpoint (2026-02-22, boundary-exclusion seam)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isClosed_outside_open_preimage_image_compact_of_boundary_exclusion`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_boundaryExclusion_two`.
+- Effect:
+  - reduces the remaining compactness/closedness package to a boundary control
+    condition on `‖z‖ = ‖(2:ℂ)‖ + 2` against compact exterior targets.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - top-level frontier unchanged; `MLC.Quadratic.external_ray_map_exists` still
+    rooted at `MLC.mlc_conjecture`.
 
 ## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:

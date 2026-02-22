@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.4%`
+  `[█████████░] ~99.6%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -60,6 +60,63 @@ constructive `mlc_conjecture` replacement route.
   - no immediate axiom-frontier change; this narrows the remaining package to
     proving restricted properness (or closed range) and outside-open analyticity
     constructively at `c = 2`.
+
+## Implementation checkpoint (2026-02-22, restricted properness reduction seam)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `image_preimage_bottcher_map_outside_open_to_exterior`;
+  - `isCompact_preimage_bottcher_map_outside_open_to_exterior_iff`;
+  - `continuous_bottcher_map_outside_open_restrict_of_analyticAt`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact`.
+- Effect:
+  - turns the properness proof attempt into a single explicit compactness target
+    in ambient coordinates, making the final analytic route blocker formal and
+    directly attackable.
+- Validation:
+  - `make build && make check` succeeded.
+- Impact:
+  - rooted axiom frontier unchanged; no elimination yet.
+
+## Implementation checkpoint (2026-02-22, explicit preimage-compact entry route)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_preimageCompact_two`.
+- Effect:
+  - gives a direct MLC entry theorem parameterized by
+    outside-open analyticity + the ambient preimage-compactness condition that
+    implies restricted-map properness.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - elimination frontier unchanged; this is a clearer final target, not a final
+    discharge.
+
+## Implementation checkpoint (2026-02-22, preimage-closed reduction step)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_preimageClosed_two`.
+- Effect:
+  - refines the remaining analyticity-route blocker from compactness goals to
+    a closedness obligation on ambient preimage sets.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, boundary-exclusion reduction)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isClosed_outside_open_preimage_image_compact_of_boundary_exclusion`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_boundaryExclusion_two`.
+- Effect:
+  - shifts the remaining analyticity-route blocker into a boundary-exclusion
+    statement on the outside-open radius boundary versus compact exterior targets.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - elimination frontier unchanged.
 
 ## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:

@@ -43,6 +43,9 @@ CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two",
     "MLC.mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two",
+    "MLC.mlc_conjecture_of_analyticAt_of_preimageCompact_two",
+    "MLC.mlc_conjecture_of_analyticAt_of_preimageClosed_two",
+    "MLC.mlc_conjecture_of_analyticAt_of_boundaryExclusion_two",
     "MLC.mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two",
     "MLC.mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo",
@@ -1485,7 +1488,7 @@ def graph_page_js() -> str:
   };
 
   const COLORS = {
-    root: 0xf59e0b,
+    root: 0x22c55e,
     coreAxiom: 0x3b82f6,
     missingAxiom: 0xef4444,
     edge: 0x64748b,
@@ -1605,7 +1608,7 @@ def graph_page_js() -> str:
       <span class="legend-item"><span class="legend-dot" style="background:#ffb703"></span>Theorem</span>
       <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span>Definition</span>
       <span class="legend-item"><span class="legend-dot" style="background:#8ecae6"></span>Lemma</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Root</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Root</span>
       <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing axiom</span>
       <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Core axiom</span>
       <span class="legend-item"><span class="legend-dot" style="background:#0ea5e9"></span>Construction route</span>
@@ -1762,7 +1765,7 @@ def graph_page_js() -> str:
         file: n.file,
         pos: world,
         color: hexToRgb01(c),
-        baseSize: isRoot ? 18 : 12,
+        baseSize: isRoot ? 13 : 8,
         sizeScale: 1,
         alpha: 0.96
       });

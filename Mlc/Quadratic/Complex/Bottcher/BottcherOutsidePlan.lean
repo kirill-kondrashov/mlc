@@ -1865,6 +1865,31 @@ lemma bottcher_map_isProperMap_of_continuous
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
 
+/-- Continuity of `bottcher_map` away from `0` (outside-plan namespace helper). -/
+lemma bottcher_map_continuousAt_of_ne_zero_outsidePlan (c z : ℂ) (hz : z ≠ 0) :
+    ContinuousAt (Quadratic.bottcher_map c) z := by
+  have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.2 hz)
+  have hdiv : ContinuousAt (fun w : ℂ => w / (‖w‖ : ℂ)) z :=
+    continuousAt_id.div
+      ((Complex.continuous_ofReal.comp continuous_norm).continuousAt) hnorm_ne
+  have hif :
+      (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) =ᶠ[𝓝 z]
+        (fun w : ℂ => w / (‖w‖ : ℂ)) := by
+    filter_upwards [eventually_ne_nhds hz] with w hw
+    simp [hw]
+  have hdir : ContinuousAt (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) z :=
+    hdiv.congr_of_eventuallyEq hif
+  have hexp :
+      ContinuousAt (fun w : ℂ => (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z :=
+    (Complex.continuous_ofReal.comp
+      (Real.continuous_exp.comp (MLC.Quadratic.continuous_green_function c))).continuousAt
+  change ContinuousAt
+    (fun w : ℂ =>
+      (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
+        (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
+  exact hdir.mul hexp
+
 lemma bottcher_map_re_neg_of_pos_real (c : ℂ) {t : ℝ} (ht : 0 < t) :
     (Quadratic.bottcher_map c (-t)).re < 0 := by
   have ht0 : (-t : ℂ) ≠ 0 := by
@@ -4283,6 +4308,213 @@ noncomputable def bottcher_map_outside_open_to_exterior (c : ℂ) :
   refine ⟨Quadratic.bottcher_map c z.1, ?_⟩
   exact bottcher_map_norm_gt_one_of_outside c
     (outside_open_subset_outside_disk c z.2)
+
+/-- Image of a preimage set for the restricted outside-open map, expressed back
+in ambient coordinates. -/
+lemma image_preimage_bottcher_map_outside_open_to_exterior
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) :
+    ((↑) '' ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) : Set ℂ) =
+      {z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} := by
+  ext z
+  constructor
+  · intro hz
+    rcases hz with ⟨x, hx, rfl⟩
+    refine ⟨x.2, ?_⟩
+    exact ⟨bottcher_map_outside_open_to_exterior c x, hx, rfl⟩
+  · intro hz
+    rcases hz with ⟨hz_out, y, hyK, hyEq⟩
+    refine ⟨⟨z, hz_out⟩, ?_, rfl⟩
+    have hEq :
+        bottcher_map_outside_open_to_exterior c ⟨z, hz_out⟩ = y := by
+      apply Subtype.ext
+      simpa [bottcher_map_outside_open_to_exterior] using hyEq.symm
+    simpa [hEq] using hyK
+
+/-- Compactness of preimages under the restricted outside-open map translated to
+an ambient compactness goal. -/
+lemma isCompact_preimage_bottcher_map_outside_open_to_exterior_iff
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) :
+    IsCompact ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) ↔
+      IsCompact
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+  rw [Subtype.isCompact_iff, image_preimage_bottcher_map_outside_open_to_exterior]
+
+/-- Continuity of the outside-open restricted Böttcher map from outside-open
+`AnalyticAt` payload. -/
+lemma continuous_bottcher_map_outside_open_restrict_of_analyticAt
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z) :
+    Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z.1) := by
+  exact (continuousOn_iff_continuous_restrict).1 (by
+    intro z hz
+    exact (hanalytic z hz).continuousAt.continuousWithinAt)
+
+/-- Properness of the restricted outside-open map is reduced to one ambient
+compact-preimage obligation. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact
+    (c : ℂ)
+    (hcont : Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z.1))
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) := by
+  rw [isProperMap_iff_isCompact_preimage]
+  refine ⟨?_, ?_⟩
+  · exact hcont.codRestrict (by
+      intro z
+      exact bottcher_map_norm_gt_one_of_outside c
+        (outside_open_subset_outside_disk c z.2))
+  · intro K hK
+    rw [isCompact_preimage_bottcher_map_outside_open_to_exterior_iff]
+    exact hpre K hK
+
+/-- Properness of the restricted outside-open map from outside-open analyticity
+plus the ambient compact-preimage obligation. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact c
+    (continuous_bottcher_map_outside_open_restrict_of_analyticAt c hanalytic) hpre
+
+/-- Compactness of restricted-map preimages follows from closedness of the
+ambient outside-open preimage set; boundedness is provided by
+`preimage_closedBall_bounded`. -/
+lemma isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) (hK : IsCompact K)
+    (hclosed :
+      IsClosed
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsCompact ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) := by
+  have hKbounded : Bornology.IsBounded (((↑) '' K : Set ℂ)) := by
+    exact hK.image continuous_subtype_val |>.isBounded
+  rcases hKbounded.subset_closedBall (0 : ℂ) with ⟨R, hR⟩
+  rcases preimage_closedBall_bounded c R with ⟨S, hS⟩
+  have hsubset_ball :
+      ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) ⊆
+        Metric.closedBall (0 : ℂ) S := by
+    intro z hz
+    have hzR : ‖Quadratic.bottcher_map c z‖ ≤ R := by
+      have hzmem : Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ) := hz.2
+      have : Quadratic.bottcher_map c z ∈ Metric.closedBall (0 : ℂ) R := hR hzmem
+      simpa [Metric.mem_closedBall, dist_eq_norm] using this
+    have hzS : ‖z‖ ≤ S := hS hzR
+    simpa [Metric.mem_closedBall, dist_eq_norm] using hzS
+  have hbounded :
+      Bornology.IsBounded
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
+    (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset hsubset_ball
+  have hcompactAmbient :
+      IsCompact
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
+    (Metric.isCompact_iff_isClosed_bounded).2 ⟨hclosed, hbounded⟩
+  rw [isCompact_preimage_bottcher_map_outside_open_to_exterior_iff]
+  exact hcompactAmbient
+
+/-- Properness of the restricted outside-open map from outside-open analyticity
+plus closedness of ambient preimage sets against compact exterior targets. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+            Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact c
+    hanalytic (fun K hK =>
+      isCompact_preimage_bottcher_map_outside_open_to_exterior_iff c K |>.1
+        (isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed c K hK
+          (hclosedpre K hK)))
+
+/-- Closedness of outside-open preimages against compact exterior targets from a
+boundary-exclusion condition on `‖z‖ = ‖c‖ + 2`. -/
+lemma isClosed_outside_open_preimage_image_compact_of_boundary_exclusion
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) (hK : IsCompact K)
+    (hboundary :
+      ∀ z, ‖z‖ = ‖c‖ + 2 →
+        Quadratic.bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
+    IsClosed
+      ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+  let C : Set ℂ := {z : ℂ | ‖c‖ + 2 ≤ ‖z‖}
+  have hCclosed : IsClosed C := by
+    simpa [C] using (isClosed_le continuous_const continuous_norm)
+  have hcontOnC : ContinuousOn (Quadratic.bottcher_map c) C := by
+    intro z hzC
+    have hpos : 0 < ‖c‖ + 2 := by
+      nlinarith [norm_nonneg c]
+    have hzpos : 0 < ‖z‖ := lt_of_lt_of_le hpos hzC
+    have hzne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hzpos)
+    exact (bottcher_map_continuousAt_of_ne_zero_outsidePlan c z hzne).continuousWithinAt
+  let g : C → ℂ := fun z => Quadratic.bottcher_map c z.1
+  have hgcont : Continuous g := by
+    exact (continuousOn_iff_continuous_restrict).1 hcontOnC
+  have hImgClosed : IsClosed (((↑) '' K : Set ℂ)) := (hK.image continuous_subtype_val).isClosed
+  have hpreClosedSub : IsClosed (g ⁻¹' (((↑) '' K : Set ℂ))) := hImgClosed.preimage hgcont
+  have hValClosedMap : IsClosedMap (Subtype.val : C → ℂ) :=
+    (Topology.IsClosedEmbedding.subtypeVal hCclosed).isClosedMap
+  have hclosed_ge :
+      IsClosed
+        ((Subtype.val) '' (g ⁻¹' (((↑) '' K : Set ℂ))) : Set ℂ) :=
+    hValClosedMap _ hpreClosedSub
+  have hclosed_ge_eq :
+      ((Subtype.val) '' (g ⁻¹' (((↑) '' K : Set ℂ))) : Set ℂ) =
+        ({z : ℂ | ‖c‖ + 2 ≤ ‖z‖ ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+    ext z
+    constructor
+    · intro hz
+      rcases hz with ⟨x, hx, rfl⟩
+      exact ⟨x.2, hx⟩
+    · intro hz
+      refine ⟨⟨z, hz.1⟩, ?_, rfl⟩
+      exact hz.2
+  have hset_eq :
+      ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) =
+        ({z : ℂ | ‖c‖ + 2 ≤ ‖z‖ ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+    ext z
+    constructor
+    · intro hz
+      exact ⟨le_of_lt hz.1, hz.2⟩
+    · intro hz
+      rcases hz with ⟨hzge, hzK⟩
+      rcases lt_or_eq_of_le hzge with hlt | heq
+      · exact ⟨hlt, hzK⟩
+      · exfalso
+        exact (hboundary z heq.symm) hzK
+  rw [hset_eq]
+  rw [← hclosed_ge_eq]
+  exact hclosed_ge
+
+/-- Properness of the restricted outside-open map from outside-open analyticity
+plus boundary exclusion on compact exterior targets. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖c‖ + 2 →
+          Quadratic.bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed c
+    hanalytic (fun K hK =>
+      isClosed_outside_open_preimage_image_compact_of_boundary_exclusion c K hK
+        (hboundary K hK))
 
 /-- Closed range of the restricted outside-open Böttcher map from properness of
 the restricted map itself. -/
