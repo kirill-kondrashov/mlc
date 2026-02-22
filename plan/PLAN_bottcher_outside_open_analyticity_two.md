@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~98.5%`
+  `[█████████░] ~99%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -345,3 +345,17 @@ constructive `mlc_conjecture` replacement route.
 - Refined:
   - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo` now routes
     directly via surjectivity (no local `ExternalRayMapData` reconstruction).
+
+## Implementation checkpoint (2026-02-22, quotient-const witness bridge)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `OutsideOpenQuotientConstRealWitness` (+ `Two` specialization);
+  - `outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness`;
+  - `injOn_outside_open_of_outsideOpenQuotientConstRealWitness`;
+  - `outsideOpenAnalyticInjPayload_of_outsideOpenQuotientConstRealWitness`
+    (+ `Two` specialization).
+- Added in `Mlc/MainConjecture.lean`:
+  - `NonSlitQuotientConstRealConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo`.
+- Impact:
+  final blocker is now isolated to proving the single rigidity witness
+  `OutsideOpenQuotientConstRealWitnessTwo`.

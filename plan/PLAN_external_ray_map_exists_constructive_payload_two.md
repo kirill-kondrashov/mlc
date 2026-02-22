@@ -806,6 +806,18 @@ No unconditional theorem currently provides:
   - rooted axiom frontier unchanged and still includes
     `MLC.Quadratic.external_ray_map_exists`.
 
+## Implementation checkpoint (2026-02-22, quotient-const witness bridge)
+- Added in `BottcherOutsidePlan.lean`:
+  - `OutsideOpenQuotientConstRealWitness` (and `Two` specialization);
+  - witness→payload bridges yielding outside-open analyticity and injectivity.
+- Added in `MainConjecture.lean`:
+  - `NonSlitQuotientConstRealConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo`.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

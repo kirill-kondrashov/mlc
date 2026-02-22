@@ -4960,6 +4960,16 @@ def OutsideOpenAnalyticInjNonSlitPayloadTwo : Prop :=
 def OutsideOpenQuotientAnalyticRealScalePayloadTwo : Prop :=
   OutsideOpenQuotientAnalyticRealScalePayload (2 : ℂ)
 
+/-- Strong quotient-rigidity witness: on outside-open, `bottcher_map c` is a
+positive-real scalar multiple of the identity map. -/
+def OutsideOpenQuotientConstRealWitness (c : ℂ) : Prop :=
+  ∃ r : ℝ, 0 < r ∧
+    ∀ z, ‖z‖ > ‖c‖ + 2 → Quadratic.bottcher_map c z = (r : ℂ) * z
+
+/-- `c = 2` specialization of the strong quotient-rigidity witness. -/
+def OutsideOpenQuotientConstRealWitnessTwo : Prop :=
+  OutsideOpenQuotientConstRealWitness (2 : ℂ)
+
 /-- Framework seam: for each outside-open point, provide a local open chart on
 which `bottcher_map` is analytic. -/
 def OutsideOpenLocalAnalyticChartHypothesis (c : ℂ) : Prop :=
@@ -5046,6 +5056,61 @@ lemma outsideOpenQuotientAnalyticRealScalePayloadTwo_of_nonSlitPayload
     OutsideOpenQuotientAnalyticRealScalePayloadTwo :=
   outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPayload
     (2 : ℂ) h_payload
+
+/-- A strong quotient-rigidity witness implies outside-open analyticity. -/
+lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness
+    (c : ℂ)
+    (h_wit : OutsideOpenQuotientConstRealWitness c) :
+    OutsideOpenAnalyticityHypothesis c := by
+  rcases h_wit with ⟨r, hr_pos, h_lin⟩
+  intro z hz
+  have hUopen : IsOpen {w : ℂ | ‖w‖ > ‖c‖ + 2} := by
+    simpa using (isOpen_lt continuous_const continuous_norm)
+  have hzU : z ∈ {w : ℂ | ‖w‖ > ‖c‖ + 2} := by simpa using hz
+  have hUnhds : ({w : ℂ | ‖w‖ > ‖c‖ + 2} : Set ℂ) ∈ 𝓝 z :=
+    hUopen.mem_nhds hzU
+  have hEq :
+      (fun w : ℂ => Quadratic.bottcher_map c w) =ᶠ[𝓝 z]
+        (fun w : ℂ => (r : ℂ) * w) := by
+    exact Filter.mem_of_superset hUnhds (by
+      intro w hw
+      exact h_lin w (by simpa using hw))
+  have hLinAnalytic : AnalyticAt ℂ (fun w : ℂ => (r : ℂ) * w) z := by
+    simpa [mul_assoc, mul_left_comm, mul_comm] using
+      (analyticAt_const.mul analyticAt_id : AnalyticAt ℂ (fun w : ℂ => (r : ℂ) * w) z)
+  exact hLinAnalytic.congr hEq.symm
+
+/-- A strong quotient-rigidity witness implies outside-open injectivity. -/
+lemma injOn_outside_open_of_outsideOpenQuotientConstRealWitness
+    (c : ℂ)
+    (h_wit : OutsideOpenQuotientConstRealWitness c) :
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  rcases h_wit with ⟨r, hr_pos, h_lin⟩
+  have hr_ne : (r : ℂ) ≠ 0 := by
+    exact_mod_cast (ne_of_gt hr_pos)
+  intro z hz w hw hEq
+  have hz_lin : Quadratic.bottcher_map c z = (r : ℂ) * z := h_lin z hz
+  have hw_lin : Quadratic.bottcher_map c w = (r : ℂ) * w := h_lin w hw
+  have hmul : (r : ℂ) * z = (r : ℂ) * w := by
+    simpa [hz_lin, hw_lin] using hEq
+  exact mul_left_cancel₀ hr_ne hmul
+
+/-- A strong quotient-rigidity witness implies the combined non-slit
+analytic/injective payload. -/
+lemma outsideOpenAnalyticInjPayload_of_outsideOpenQuotientConstRealWitness
+    (c : ℂ)
+    (h_wit : OutsideOpenQuotientConstRealWitness c) :
+    OutsideOpenAnalyticInjPayload c := by
+  refine ⟨?_, ?_⟩
+  · exact outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness c h_wit
+  · exact injOn_outside_open_of_outsideOpenQuotientConstRealWitness c h_wit
+
+/-- `c = 2` specialization: a strong quotient-rigidity witness implies the
+combined non-slit analytic/injective payload. -/
+lemma outsideOpenAnalyticInjNonSlitPayloadTwo_of_outsideOpenQuotientConstRealWitnessTwo
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    OutsideOpenAnalyticInjNonSlitPayloadTwo :=
+  outsideOpenAnalyticInjPayload_of_outsideOpenQuotientConstRealWitness (2 : ℂ) h_wit
 
 /-- Outside-open exterior surjectivity from closed range plus the combined
 outside-open analytic/injective seam payload. -/
