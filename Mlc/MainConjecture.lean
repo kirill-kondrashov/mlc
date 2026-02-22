@@ -678,6 +678,34 @@ theorem externalRayMapData_two_of_isClosedRange_restrict_of_outsideOpenAnalyticI
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
     (2 : ℂ) hclosed h_payload
 
+/-- Constructive target seam at `c = 2`: external-ray data from closed range plus
+outside-open analyticity and explicit outside-open injectivity. -/
+theorem externalRayMapData_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
+    (2 : ℂ) hclosed h_analytic h_inj
+
+/-- Constructive target seam at `c = 2`: external-ray data from restricted-map
+properness plus outside-open analytic/injective payload. -/
+theorem externalRayMapData_two_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_payload : OutsideOpenAnalyticInjPayload (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact externalRayMapData_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper)
+    h_payload
+
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from restricted-map
+properness plus outside-open analytic/injective payload. -/
+theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_payload : OutsideOpenAnalyticInjPayload (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload hproper h_payload
+
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
@@ -962,10 +990,16 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_i
     LocallyConnectedSpace mandelbrotSet := by
   exact False.elim (not_mem_nhds_slit_on_outside_open_two hslit_nhds)
 
+/-- CP5 placeholder endpoint at `c = 2`; replace this body with the fully
+constructive proof term after CP2/CP3/CP4 payloads are discharged. -/
+theorem external_ray_map_exists_two_constructive :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  Quadratic.external_ray_map_exists (2 : ℂ)
+
 /-- Current rooted axiom-seed external-ray-data target at `c = 2`. -/
 lemma externalRayMapData_two_axiom_seed :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_exists (2 : ℂ)
+  external_ray_map_exists_two_constructive
 
 /-- Rooted theorem exposing the remaining axiom ingress at `c = 2` through the
 external-ray-data seam. -/
