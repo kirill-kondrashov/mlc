@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a single dependency graph rooted at `MLC.mlc_conjecture`.
+"""Generate rooted dependency graph pages.
 
 The graph is declaration-level and cross-file (all `Mlc/*.lean`).
 Edges are textual usage edges: source declaration body references target name.
@@ -7,6 +7,9 @@ Output layout:
   site/
     index.html
     mlc_conjecture/
+      index.html
+      graph.json
+    mlc_conjecture_injon_bridge/
       index.html
       graph.json
 """
@@ -33,6 +36,16 @@ END_RE = re.compile(r"^\s*end(?:\s+[A-Za-z0-9_.']+)?\s*$")
 TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
 TOKEN_CHARS = r"A-Za-z0-9_.']"
 EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
+MISSING_AXIOMS = ("MLC.Quadratic.external_ray_map_exists",)
+INJON_BRIDGE_SYMBOL = "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two"
+CONSTRUCTION_SYMBOLS = (
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two",
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two",
+    "MLC.mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo",
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two",
+    "MLC.mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo",
+)
 
 
 @dataclass(frozen=True)
@@ -311,8 +324,21 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(100,116,139,0.7);
       --cycle-ring: #ef4444;
       --cycle-edge: #f97316;
+      --potential-edge: #7c3aed;
       --axiom-ring: #dc2626;
       --axiom-fill: rgba(220,38,38,0.26);
+      --core-axiom-ring: #1d4ed8;
+      --core-axiom-fill: rgba(29,78,216,0.22);
+      --missing-axiom-ring: #dc2626;
+      --missing-axiom-fill: rgba(220,38,38,0.32);
+      --missing-axiom-edge: #ef4444;
+      --sphere-fill: rgba(148,163,184,0.08);
+      --sphere-stroke: rgba(100,116,139,0.55);
+      --sphere-grid: rgba(100,116,139,0.35);
+      --root-ring: #f59e0b;
+      --root-fill: rgba(245,158,11,0.28);
+      --missing-link: #ef4444;
+      --construction-edge: #0ea5e9;
       --status-yes-bg: #fee2e2;
       --status-yes-fg: #991b1b;
       --status-no-bg: #dcfce7;
@@ -332,8 +358,21 @@ def graph_page_html(title: str) -> str:
       --label-muted: rgba(151,175,210,0.72);
       --cycle-ring: #fb7185;
       --cycle-edge: #f59e0b;
+      --potential-edge: #a78bfa;
       --axiom-ring: #f87171;
       --axiom-fill: rgba(248,113,113,0.30);
+      --core-axiom-ring: #60a5fa;
+      --core-axiom-fill: rgba(96,165,250,0.28);
+      --missing-axiom-ring: #f87171;
+      --missing-axiom-fill: rgba(248,113,113,0.38);
+      --missing-axiom-edge: #fb7185;
+      --sphere-fill: rgba(37,99,235,0.08);
+      --sphere-stroke: rgba(125,161,219,0.58);
+      --sphere-grid: rgba(125,161,219,0.34);
+      --root-ring: #fbbf24;
+      --root-fill: rgba(251,191,36,0.28);
+      --missing-link: #fb7185;
+      --construction-edge: #38bdf8;
       --status-yes-bg: rgba(251,113,133,0.22);
       --status-yes-fg: #fecdd3;
       --status-no-bg: rgba(34,197,94,0.2);
@@ -368,23 +407,6 @@ def graph_page_html(title: str) -> str:
     .toolbar .meta {{
       color: var(--muted);
       font-size: 13px;
-    }}
-    .status-pill {{
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 3px 9px;
-      font-size: 12px;
-      font-weight: 600;
-      border: 1px solid var(--border);
-    }}
-    .status-pill.detected {{
-      background: var(--status-yes-bg);
-      color: var(--status-yes-fg);
-    }}
-    .status-pill.none {{
-      background: var(--status-no-bg);
-      color: var(--status-no-fg);
     }}
     .toolbar label {{
       font-size: 13px;
@@ -444,7 +466,6 @@ def graph_page_html(title: str) -> str:
   <div class="toolbar">
     <h1>{esc_title}</h1>
     <span class="meta" id="summary"></span>
-    <span class="status-pill" id="cycleStatus"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
     <button id="fitBtn" type="button">Fit</button>
     <button id="themeBtn" type="button">Theme</button>
@@ -476,6 +497,24 @@ function degreeColor(d, minD, maxD) {{
   return `hsl(196, 74%, ${{light.toFixed(1)}}%)`;
 }}
 
+function stableHash(str) {{
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {{
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }}
+  return h >>> 0;
+}}
+
+function boxesOverlap(a, b, pad = 0) {{
+  return !(
+    a.r + pad < b.l ||
+    b.r + pad < a.l ||
+    a.b + pad < b.t ||
+    b.b + pad < a.t
+  );
+}}
+
 const state = {{
   nodes: [],
   edges: [],
@@ -487,8 +526,21 @@ const state = {{
     labelMuted: "rgba(100,116,139,0.7)",
     cycleRing: "#ef4444",
     cycleEdge: "#f97316",
+    potentialEdge: "#7c3aed",
     axiomRing: "#dc2626",
-    axiomFill: "rgba(220,38,38,0.26)"
+    axiomFill: "rgba(220,38,38,0.26)",
+    coreAxiomRing: "#1d4ed8",
+    coreAxiomFill: "rgba(29,78,216,0.22)",
+    missingAxiomRing: "#dc2626",
+    missingAxiomFill: "rgba(220,38,38,0.32)",
+    missingAxiomEdge: "#ef4444",
+    sphereFill: "rgba(148,163,184,0.08)",
+    sphereStroke: "rgba(100,116,139,0.55)",
+    sphereGrid: "rgba(100,116,139,0.35)",
+    rootRing: "#f59e0b",
+    rootFill: "rgba(245,158,11,0.28)",
+    missingLink: "#ef4444",
+    constructionEdge: "#0ea5e9"
   }},
   minDegree: 0,
   maxDegree: 0,
@@ -496,17 +548,19 @@ const state = {{
   cycleEdgeCount: 0,
   cycleComponentCount: 0,
   axiomCount: 0,
+  coreAxiomCount: 0,
+  missingAxiomCount: 0,
   search: "",
   width: 0,
   height: 0,
   scale: 1,
   tx: 0,
   ty: 0,
-  dragNode: null,
   panning: false,
   lastX: 0,
   lastY: 0,
-  running: false
+  running: false,
+  sphere: null
 }};
 
 const canvas = document.getElementById("graphCanvas");
@@ -525,8 +579,21 @@ function refreshPalette() {{
   state.palette.labelMuted = cssVar("--label-muted", "rgba(100,116,139,0.7)");
   state.palette.cycleRing = cssVar("--cycle-ring", "#ef4444");
   state.palette.cycleEdge = cssVar("--cycle-edge", "#f97316");
+  state.palette.potentialEdge = cssVar("--potential-edge", "#7c3aed");
   state.palette.axiomRing = cssVar("--axiom-ring", "#dc2626");
   state.palette.axiomFill = cssVar("--axiom-fill", "rgba(220,38,38,0.26)");
+  state.palette.coreAxiomRing = cssVar("--core-axiom-ring", "#1d4ed8");
+  state.palette.coreAxiomFill = cssVar("--core-axiom-fill", "rgba(29,78,216,0.22)");
+  state.palette.missingAxiomRing = cssVar("--missing-axiom-ring", "#dc2626");
+  state.palette.missingAxiomFill = cssVar("--missing-axiom-fill", "rgba(220,38,38,0.32)");
+  state.palette.missingAxiomEdge = cssVar("--missing-axiom-edge", "#ef4444");
+  state.palette.sphereFill = cssVar("--sphere-fill", "rgba(148,163,184,0.08)");
+  state.palette.sphereStroke = cssVar("--sphere-stroke", "rgba(100,116,139,0.55)");
+  state.palette.sphereGrid = cssVar("--sphere-grid", "rgba(100,116,139,0.35)");
+  state.palette.rootRing = cssVar("--root-ring", "#f59e0b");
+  state.palette.rootFill = cssVar("--root-fill", "rgba(245,158,11,0.28)");
+  state.palette.missingLink = cssVar("--missing-link", "#ef4444");
+  state.palette.constructionEdge = cssVar("--construction-edge", "#0ea5e9");
 }}
 
 function systemTheme() {{
@@ -621,7 +688,8 @@ function detectCycles() {{
   const idx = new Map(state.nodes.map((n, i) => [n.id, i]));
   const adj = state.nodes.map(() => []);
   const selfLoop = state.nodes.map(() => false);
-  for (const e of state.edges) {{
+  const depEdges = state.edges.filter(e => (e.kind || "dependency") !== "potential");
+  for (const e of depEdges) {{
     const s = idx.get(e.source.id);
     const t = idx.get(e.target.id);
     if (s === undefined || t === undefined) continue;
@@ -688,6 +756,10 @@ function detectCycles() {{
 
   let cycleEdges = 0;
   for (const e of state.edges) {{
+    if ((e.kind || "dependency") !== "dependency") {{
+      e.inCycle = false;
+      continue;
+    }}
     const sameCycle = e.source.inCycle && e.target.inCycle && e.source.cycleId === e.target.cycleId;
     e.inCycle = sameCycle;
     if (sameCycle) cycleEdges += 1;
@@ -711,57 +783,111 @@ function renderLegend() {{
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.minDegree, state.minDegree, state.maxDegree)}}"></span>${{state.minDegree}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(midD, state.minDegree, state.maxDegree)}}"></span>${{midD}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.maxDegree, state.minDegree, state.maxDegree)}}"></span>${{state.maxDegree}}</span>
-    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.cycleEdge}}"></span>Cycle edge</span>
-    <span class="legend-item"><span class="legend-dot" style="background:transparent;border-color:${{state.palette.cycleRing}}"></span>Cycle node</span>
-    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Axiom node</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.constructionEdge}}"></span>Construction route</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.coreAxiomFill}};border-color:${{state.palette.coreAxiomRing}}"></span>Core axiom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Project axiom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.missingAxiomFill}};border-color:${{state.palette.missingAxiomRing}}"></span>Missing axiom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.rootFill}};border-color:${{state.palette.rootRing}}"></span>Root: mlc_conjecture</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.missingLink}}"></span>Missing connection</span>
   `;
 }}
 
-function renderCycleStatus() {{
-  const status = document.getElementById("cycleStatus");
-  if (!status) return;
-  const directedDetected = state.cycleComponentCount > 0;
-  const directedText = directedDetected
-    ? `yes (${{state.cycleComponentCount}})`
-    : "no";
-  status.textContent = `Directed cycles: ${{directedText}}`;
-  status.className = directedDetected
-    ? "status-pill detected"
-    : "status-pill none";
-}}
-
 function initGraph(payload) {{
+  const allNodes = payload.nodes.slice();
+  const rootId = payload.root;
+  const rootNode = allNodes.find(n => n.id === rootId) || null;
+  const regularNodes = allNodes.filter(n => n.id !== rootId);
   const byDepth = new Map();
-  for (const n of payload.nodes) {{
+  for (const n of regularNodes) {{
     const d = Number(n.depth || 0);
     if (!byDepth.has(d)) byDepth.set(d, []);
     byDepth.get(d).push(n);
   }}
   const orderedDepths = Array.from(byDepth.keys()).sort((a, b) => a - b);
+  let maxDepth = 0;
+  for (const n of allNodes) {{
+    maxDepth = Math.max(maxDepth, Number(n.depth || 0));
+  }}
+  maxDepth = Math.max(1, maxDepth);
+
+  const totalNodes = Math.max(1, payload.nodes.length);
+  const sphereRx = Math.max(620, Math.min(1020, 560 + totalNodes * 3.2));
+  const sphereRy = sphereRx * 0.63;
+  state.sphere = {{
+    cx: 0,
+    cy: 0,
+    rx: sphereRx,
+    ry: sphereRy,
+    azimuth: -0.78,
+    elevation: 0.48,
+    focal: 2.55
+  }};
+
+  function projectUnitPoint(xu, yu, zu) {{
+    const s = state.sphere;
+    const cosA = Math.cos(s.azimuth);
+    const sinA = Math.sin(s.azimuth);
+    const cosE = Math.cos(s.elevation);
+    const sinE = Math.sin(s.elevation);
+
+    const x1 = cosA * xu + sinA * zu;
+    const z1 = -sinA * xu + cosA * zu;
+    const y1 = cosE * yu - sinE * z1;
+    const z2 = sinE * yu + cosE * z1;
+
+    const depth = Math.max(0.2, s.focal - z2);
+    const persp = s.focal / depth;
+    return {{
+      x0: s.cx + s.rx * x1 * persp,
+      y0: s.cy - s.ry * y1 * persp,
+      z0: z2,
+      xu,
+      yu,
+      zu
+    }};
+  }}
+
+  function projectOnSphere(lat, lon) {{
+    const cosLat = Math.cos(lat);
+    const x3 = cosLat * Math.cos(lon);
+    const y3 = Math.sin(lat);
+    const z3 = cosLat * Math.sin(lon);
+    return projectUnitPoint(x3, y3, z3);
+  }}
+
   const positioned = [];
-  const dx = 320;
-  const dy = 210;
-  const maxDepth = Math.max(1, orderedDepths.length - 1);
+
+  if (rootNode) {{
+    const rootPos = projectOnSphere(0.08, Math.PI / 2);
+    positioned.push({{ ...rootNode, ...rootPos }});
+  }}
+
   for (const d of orderedDepths) {{
     const layer = byDepth.get(d);
     layer.sort((a, b) => a.fq_name.localeCompare(b.fq_name));
-    const mid = (layer.length - 1) / 2;
-    const depthRatio = maxDepth === 0 ? 0 : d / maxDepth;
-    const widthScale = 0.58 + 0.78 * Math.pow(depthRatio, 0.9);
+    const count = Math.max(1, layer.length);
     for (let i = 0; i < layer.length; i++) {{
       const n = layer[i];
+      const depthRatio = Number(d) / maxDepth;
+      const lat = 1.02 + (-2.04 * depthRatio);
+      const baseLon = (2 * Math.PI * (i + 0.5)) / count;
+      const h = stableHash(n.fq_name);
+      const jitter = ((h % 1000) / 1000 - 0.5) * 0.24;
+      const lon = baseLon + Number(d) * 0.47 + jitter;
+      const p = projectOnSphere(lat, lon);
       positioned.push({{
         ...n,
-        x0: (i - mid) * dx * widthScale,
-        y0: d * dy
+        ...p
       }});
     }}
   }}
 
-  state.nodes = positioned.map((n, i) => ({{
+  state.nodes = positioned.map((n) => ({{
     ...n,
-    x: n.x0 + 18 * Math.cos(i * 1.618),
-    y: n.y0 + 18 * Math.sin(i * 1.618),
+    x: n.x0,
+    y: n.y0,
+    isRoot: n.id === rootId,
+    isConstructionNode: false,
     vx: 0,
     vy: 0,
     r: Math.min(19, 7 + Math.sqrt(Math.max(1, n.span)) * 1.9)
@@ -770,9 +896,24 @@ function initGraph(payload) {{
   state.edges = payload.edges
     .map(e => ({{
       source: state.idToNode.get(e.source),
-      target: state.idToNode.get(e.target)
+      target: state.idToNode.get(e.target),
+      kind: e.kind || "dependency"
     }}))
     .filter(e => e.source && e.target);
+
+  const constructionTargets = new Set();
+  for (const e of state.edges) {{
+    e.isMissingConnection = e.source.id === rootId && e.target.axiom_tier === "missing";
+    e.isConstruction = (e.kind || "dependency") === "construction";
+    if (e.isConstruction && e.target.id === rootId) {{
+      constructionTargets.add(e.source.id);
+    }}
+  }}
+  for (const n of state.nodes) {{
+    if (constructionTargets.has(n.id)) {{
+      n.isConstructionNode = true;
+    }}
+  }}
 
   const degree = new Map(state.nodes.map(n => [n.id, 0]));
   for (const e of state.edges) {{
@@ -793,17 +934,21 @@ function initGraph(payload) {{
 
   for (const n of state.nodes) {{
     n.r = Math.max(6, Math.min(24, 6 + Math.sqrt(n.degree + 1) * 2.9));
+    if (n.isRoot) n.r = Math.max(n.r, 14);
+    if (n.axiom_tier === "core") n.r = Math.max(n.r, 11);
+    if (n.axiom_tier === "missing") n.r = Math.max(n.r, 16);
   }}
   state.axiomCount = state.nodes.filter(n => n.kind === "axiom").length;
+  state.coreAxiomCount = state.nodes.filter(n => n.axiom_tier === "core").length;
+  state.missingAxiomCount = state.nodes.filter(n => n.axiom_tier === "missing").length;
 
   detectCycles();
   renderLegend();
-  renderCycleStatus();
 
   document.getElementById("summary").textContent =
     `${{payload.nodes.length}} declarations, ${{payload.edges.length}} edges, ` +
-    `${{state.cycleNodeCount}} directed-cycle nodes (${{state.cycleComponentCount}} components), ` +
-    `${{state.cycleEdgeCount}} directed-cycle edges, ${{state.axiomCount}} axioms`;
+    `${{state.axiomCount}} axioms ` +
+    `(${{state.coreAxiomCount}} core, ${{state.missingAxiomCount}} missing)`;
 
   const searchInput = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
@@ -827,17 +972,10 @@ function initGraph(payload) {{
   }});
 
   canvas.addEventListener("mousedown", (ev) => {{
-    const p = screenToWorld(ev.offsetX, ev.offsetY);
-    const hit = findNodeAt(p.x, p.y);
     state.lastX = ev.offsetX;
     state.lastY = ev.offsetY;
-    if (hit) {{
-      state.dragNode = hit;
-      canvas.style.cursor = "grabbing";
-    }} else {{
-      state.panning = true;
-      canvas.style.cursor = "grabbing";
-    }}
+    state.panning = true;
+    canvas.style.cursor = "grabbing";
     draw();
   }});
 
@@ -846,13 +984,7 @@ function initGraph(payload) {{
     const dy = ev.offsetY - state.lastY;
     state.lastX = ev.offsetX;
     state.lastY = ev.offsetY;
-    if (state.dragNode) {{
-      const p = screenToWorld(ev.offsetX, ev.offsetY);
-      state.dragNode.x = p.x;
-      state.dragNode.y = p.y;
-      state.dragNode.vx = 0;
-      state.dragNode.vy = 0;
-    }} else if (state.panning) {{
+    if (state.panning) {{
       state.tx += dx;
       state.ty += dy;
     }}
@@ -860,7 +992,6 @@ function initGraph(payload) {{
   }});
 
   function endPointer() {{
-    state.dragNode = null;
     state.panning = false;
     canvas.style.cursor = "grab";
     draw();
@@ -887,140 +1018,15 @@ function initGraph(payload) {{
 }}
 
 function stepForces() {{
-  const nodes = state.nodes;
-  const edges = state.edges;
-  const n = nodes.length;
-  const repulsion = 21000;
-  const springK = 0.0014;
-  const ideal = 190;
-  const anchorK = 0.017;
-  const damp = 0.84;
-
-  function labelBox(node) {{
-    const fontWorld = Math.max(8, 12 / state.scale);
-    const width = Math.max(12, (node.label.length * 0.58 + 0.9) * fontWorld);
-    const height = fontWorld + 4 / state.scale;
-    const left = node.x + node.r + 5;
-    const top = node.y - height / 2;
-    return {{
-      left,
-      right: left + width,
-      top,
-      bottom: top + height,
-      cx: left + width / 2,
-      cy: node.y
-    }};
-  }}
-
-  function repelLabelFromCircle(labelNode, box, circleNode, pad, strength) {{
-    const cx = circleNode.x;
-    const cy = circleNode.y;
-    const nearX = Math.max(box.left, Math.min(cx, box.right));
-    const nearY = Math.max(box.top, Math.min(cy, box.bottom));
-    const dx = cx - nearX;
-    const dy = cy - nearY;
-    const d2 = dx * dx + dy * dy;
-    const minDist = circleNode.r + pad;
-    if (d2 >= minDist * minDist) return;
-    const d = Math.sqrt(d2 + 1e-6);
-    const push = (minDist - d) * strength * 0.9;
-    const ux = d > 1e-4 ? (dx / d) : (box.cx <= cx ? 1 : -1);
-    const uy = d > 1e-4 ? (dy / d) : 0;
-    labelNode.vx -= ux * push;
-    labelNode.vy -= uy * push;
-    circleNode.vx += ux * push;
-    circleNode.vy += uy * push;
-  }}
-
-  for (let i = 0; i < n; i++) {{
-    const a = nodes[i];
-    for (let j = i + 1; j < n; j++) {{
-      const b = nodes[j];
-      let dx = a.x - b.x;
-      let dy = a.y - b.y;
-      let d2 = dx * dx + dy * dy + 0.01;
-      let d = Math.sqrt(d2);
-      let f = repulsion / d2;
-      let fx = (dx / d) * f;
-      let fy = (dy / d) * f;
-      a.vx += fx;
-      a.vy += fy;
-      b.vx -= fx;
-      b.vy -= fy;
-    }}
-  }}
-
-  for (const e of edges) {{
-    const a = e.source;
-    const b = e.target;
-    let dx = b.x - a.x;
-    let dy = b.y - a.y;
-    let d = Math.sqrt(dx * dx + dy * dy) + 0.001;
-    let f = (d - ideal) * springK;
-    let fx = (dx / d) * f;
-    let fy = (dy / d) * f;
-    a.vx += fx;
-    a.vy += fy;
-    b.vx -= fx;
-    b.vy -= fy;
-  }}
-
-  // Keep labels from overlapping each other and from colliding with nodes.
-  const labelStrength = 0.28;
-  const labelPad = 2.4 / state.scale;
-  const circlePad = 3.2 / state.scale;
-  for (let pass = 0; pass < 2; pass++) {{
-    for (let i = 0; i < n; i++) {{
-      const a = nodes[i];
-      const boxA = labelBox(a);
-      for (let j = i + 1; j < n; j++) {{
-        const b = nodes[j];
-        const boxB = labelBox(b);
-        const ox = Math.min(boxA.right, boxB.right) - Math.max(boxA.left, boxB.left);
-        const oy = Math.min(boxA.bottom, boxB.bottom) - Math.max(boxA.top, boxB.top);
-        if (ox > 0 && oy > 0) {{
-          if (ox < oy) {{
-            const dir = boxA.cx <= boxB.cx ? -1 : 1;
-            const push = (ox + labelPad) * labelStrength;
-            a.vx += dir * push;
-            b.vx -= dir * push;
-          }} else {{
-            const dir = boxA.cy <= boxB.cy ? -1 : 1;
-            const push = (oy + labelPad) * labelStrength;
-            a.vy += dir * push;
-            b.vy -= dir * push;
-          }}
-        }}
-        repelLabelFromCircle(a, boxA, b, circlePad, labelStrength);
-        repelLabelFromCircle(b, boxB, a, circlePad, labelStrength);
-      }}
-    }}
-  }}
-
-  let kinetic = 0;
-  for (const node of nodes) {{
-    if (node !== state.dragNode) {{
-      node.vx += (node.x0 - node.x) * anchorK;
-      node.vy += (node.y0 - node.y) * anchorK;
-      node.vx *= damp;
-      node.vy *= damp;
-      node.x += node.vx;
-      node.y += node.vy;
-    }}
-    kinetic += node.vx * node.vx + node.vy * node.vy;
-  }}
-  if (kinetic < 0.02 && !state.dragNode && !state.panning) {{
-    state.running = false;
-  }}
+  // Deliberately no free-force drifting: nodes are locked to the projected
+  // 3D sphere coordinates.
+  state.running = false;
 }}
 
 function settleLayout(maxSteps = 900) {{
-  state.running = true;
-  for (let i = 0; i < maxSteps; i++) {{
-    stepForces();
-    if (!state.running) break;
-  }}
   for (const node of state.nodes) {{
+    node.x = node.x0;
+    node.y = node.y0;
     node.vx = 0;
     node.vy = 0;
   }}
@@ -1034,14 +1040,74 @@ function draw() {{
   ctx.scale(state.scale, state.scale);
 
   const lw = Math.max(0.45, 0.65 / state.scale);
+  if (state.sphere) {{
+    const s = state.sphere;
+    ctx.beginPath();
+    ctx.fillStyle = state.palette.sphereFill;
+    ctx.strokeStyle = state.palette.sphereStroke;
+    ctx.lineWidth = Math.max(0.75, 1.0 / state.scale);
+    ctx.ellipse(s.cx, s.cy, s.rx, s.ry, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.strokeStyle = state.palette.sphereGrid;
+    ctx.lineWidth = Math.max(0.45, 0.7 / state.scale);
+    ctx.setLineDash([Math.max(2.0, 2.8 / state.scale), Math.max(1.8, 2.4 / state.scale)]);
+    const bands = [-0.68, -0.35, 0, 0.35, 0.68];
+    for (const t of bands) {{
+      const y = s.cy - s.ry * t;
+      const rx = s.rx * Math.sqrt(Math.max(0.01, 1 - t * t));
+      const ry = Math.max(1.8, s.ry * 0.062 * Math.sqrt(Math.max(0.02, 1 - t * t)));
+      ctx.beginPath();
+      ctx.ellipse(s.cx, y, rx, ry, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }}
+    for (const m of [0.26, 0.5, 0.74]) {{
+      ctx.beginPath();
+      ctx.ellipse(s.cx, s.cy, s.rx * m, s.ry, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }}
+    ctx.setLineDash([]);
+
+  }}
+
+  const drawNodes = [...state.nodes].sort((a, b) => (a.z0 || 0) - (b.z0 || 0));
   for (const e of state.edges) {{
     const a = e.source;
     const b = e.target;
+    const kind = e.kind || "dependency";
+    const isConstruction = kind === "construction";
+    const isPotential = kind === "potential";
+    const isMissingConnection = Boolean(e.isMissingConnection);
+    const hasMissingAxiom = a.axiom_tier === "missing" || b.axiom_tier === "missing";
+    const hasCoreAxiom = a.axiom_tier === "core" || b.axiom_tier === "core";
     const hit = (!state.search) || matchNode(a) || matchNode(b);
-    const edgeColor = e.inCycle ? state.palette.cycleEdge : state.palette.edge;
+    const edgeColor = isMissingConnection
+      ? state.palette.missingLink
+      : isConstruction
+      ? state.palette.constructionEdge
+      : isPotential
+      ? state.palette.potentialEdge
+      : hasMissingAxiom
+      ? state.palette.missingAxiomEdge
+      : (hasCoreAxiom
+          ? state.palette.coreAxiomRing
+          : (e.inCycle ? state.palette.cycleEdge : state.palette.edge));
     const color = hit ? edgeColor : state.palette.edgeMuted;
+    const dash = isMissingConnection
+      ? []
+      : isConstruction
+      ? [Math.max(2.2, 3.0 / state.scale), Math.max(1.5, 2.2 / state.scale)]
+      : isPotential
+      ? [Math.max(2.6, 3.4 / state.scale), Math.max(1.8, 2.4 / state.scale)]
+      : hasMissingAxiom
+      ? [Math.max(1.8, 2.2 / state.scale), Math.max(1.4, 1.8 / state.scale)]
+      : [];
+    ctx.setLineDash(dash);
     ctx.strokeStyle = color;
-    ctx.lineWidth = lw;
+    ctx.lineWidth = isMissingConnection
+      ? Math.max(1.35, lw * 2.1)
+      : (isConstruction ? lw * 1.45 : (isPotential ? lw * 1.2 : (hasMissingAxiom ? lw * 1.35 : lw)));
     let dx = b.x - a.x;
     let dy = b.y - a.y;
     const d = Math.sqrt(dx * dx + dy * dy);
@@ -1070,40 +1136,148 @@ function draw() {{
     ctx.closePath();
     ctx.fillStyle = color;
     ctx.fill();
+    if (dash.length > 0) ctx.setLineDash([]);
   }}
 
-  for (const n of state.nodes) {{
+  for (const n of drawNodes) {{
     const hit = (!state.search) || matchNode(n);
-    const isAxiom = n.kind === "axiom";
+    const axiomTier = n.axiom_tier || "none";
+    const isAxiom = axiomTier !== "none";
+    const isCoreAxiom = axiomTier === "core";
+    const isMissingAxiom = axiomTier === "missing";
+    const isRoot = Boolean(n.isRoot);
+    const isConstructionNode = Boolean(n.isConstructionNode);
+    let fillColor;
+    if (isRoot && hit) {{
+      fillColor = state.palette.rootFill;
+    }} else if (!hit) {{
+      fillColor = "rgba(148,163,184,0.25)";
+    }} else if (isMissingAxiom) {{
+      fillColor = state.palette.missingAxiomFill;
+    }} else if (isCoreAxiom) {{
+      fillColor = state.palette.coreAxiomFill;
+    }} else if (isAxiom) {{
+      fillColor = state.palette.axiomFill;
+    }} else {{
+      fillColor = degreeColor(n.degree, state.minDegree, state.maxDegree);
+    }}
+    let strokeColor;
+    if (isMissingAxiom) {{
+      strokeColor = state.palette.missingAxiomRing;
+    }} else if (isRoot) {{
+      strokeColor = state.palette.rootRing;
+    }} else if (isCoreAxiom) {{
+      strokeColor = state.palette.coreAxiomRing;
+    }} else if (isConstructionNode) {{
+      strokeColor = state.palette.constructionEdge;
+    }} else if (isAxiom) {{
+      strokeColor = state.palette.axiomRing;
+    }} else {{
+      strokeColor = n.inCycle ? state.palette.cycleRing : nodeColor(n.kind);
+    }}
     ctx.beginPath();
-    ctx.fillStyle = hit
-      ? (isAxiom ? state.palette.axiomFill : degreeColor(n.degree, state.minDegree, state.maxDegree))
-      : "rgba(148,163,184,0.25)";
-    ctx.strokeStyle = isAxiom
-      ? state.palette.axiomRing
-      : (n.inCycle ? state.palette.cycleRing : nodeColor(n.kind));
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
     ctx.lineWidth = lw;
     ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
 
+    if (isRoot) {{
+      ctx.beginPath();
+      ctx.strokeStyle = hit ? state.palette.rootRing : state.palette.edgeMuted;
+      ctx.lineWidth = Math.max(1.9, 2.6 / state.scale);
+      ctx.arc(n.x, n.y, n.r + 4.8, 0, Math.PI * 2);
+      ctx.stroke();
+    }}
+
     if (isAxiom) {{
       ctx.beginPath();
-      ctx.strokeStyle = hit ? state.palette.axiomRing : state.palette.edgeMuted;
-      ctx.lineWidth = Math.max(1.8, 2.2 / state.scale);
-      ctx.arc(n.x, n.y, n.r + 2.6, 0, Math.PI * 2);
+      const ringColor = isMissingAxiom
+        ? state.palette.missingAxiomRing
+        : (isCoreAxiom ? state.palette.coreAxiomRing : state.palette.axiomRing);
+      ctx.strokeStyle = hit ? ringColor : state.palette.edgeMuted;
+      ctx.lineWidth = Math.max(1.8, 2.2 / state.scale) * (isMissingAxiom ? 1.15 : 1.0);
+      ctx.arc(n.x, n.y, n.r + (isMissingAxiom ? 3.4 : 2.6), 0, Math.PI * 2);
       ctx.stroke();
+      if (isMissingAxiom) {{
+        ctx.beginPath();
+        ctx.strokeStyle = hit ? state.palette.missingAxiomEdge : state.palette.edgeMuted;
+        ctx.lineWidth = Math.max(1.1, 1.5 / state.scale);
+        ctx.arc(n.x, n.y, n.r + 6.2, 0, Math.PI * 2);
+        ctx.stroke();
+      }}
     }}
   }}
 
-  for (const n of state.nodes) {{
+  ctx.restore();
+
+  if (state.scale < 0.28) return;
+
+  const nodeRects = drawNodes.map(n => {{
+    const sx = n.x * state.scale + state.tx;
+    const sy = n.y * state.scale + state.ty;
+    const sr = n.r * state.scale;
+    return {{
+      n,
+      l: sx - sr,
+      r: sx + sr,
+      t: sy - sr,
+      b: sy + sr
+    }};
+  }});
+
+  const labelCandidates = [...drawNodes].sort((a, b) => {{
+    const tierScore = (n) => n.isRoot ? 6200
+      : (n.isConstructionNode ? 5600
+      : (n.axiom_tier === "missing" ? 5000
+      : (n.axiom_tier === "core" ? 4200
+      : (n.axiom_tier === "project" ? 3300 : 0))));
+    const searchScore = (n) => matchNode(n) ? 1200 : 0;
+    const zScore = (n) => ((n.z0 || 0) + 1.2) * 180;
+    return (tierScore(b) + searchScore(b) + b.degree * 10 + zScore(b)) -
+      (tierScore(a) + searchScore(a) + a.degree * 10 + zScore(a));
+  }});
+
+  ctx.save();
+  ctx.font = "12px IBM Plex Sans, Segoe UI, sans-serif";
+  ctx.textBaseline = "middle";
+  const occupied = [];
+  const labelPad = 2.0;
+  for (const n of labelCandidates) {{
     const hit = (!state.search) || matchNode(n);
-    if (!hit && state.scale < 0.9) continue;
-    if (state.scale < 0.35) continue;
+    if (!hit && state.scale < 0.85) continue;
+    if ((n.z0 || 0) < -0.65 && state.scale < 1.45 && n.axiom_tier === "none") continue;
+    const sx = n.x * state.scale + state.tx;
+    const sy = n.y * state.scale + state.ty;
+    const sr = n.r * state.scale;
+    const text = n.label;
+    const width = ctx.measureText(text).width;
+    const box = {{
+      l: sx + sr + 7,
+      r: sx + sr + 7 + width + 2,
+      t: sy - 6.5,
+      b: sy + 6.5
+    }};
+    let blocked = false;
+    for (const occ of occupied) {{
+      if (boxesOverlap(box, occ, labelPad)) {{
+        blocked = true;
+        break;
+      }}
+    }}
+    if (blocked) continue;
+    for (const nr of nodeRects) {{
+      if (nr.n.id === n.id) continue;
+      if (boxesOverlap(box, nr, 1.0)) {{
+        blocked = true;
+        break;
+      }}
+    }}
+    if (blocked) continue;
+    occupied.push(box);
     ctx.fillStyle = hit ? state.palette.label : state.palette.labelMuted;
-    ctx.font = `${{Math.max(8, 12 / state.scale)}}px IBM Plex Sans, Segoe UI, sans-serif`;
-    ctx.textBaseline = "middle";
-    ctx.fillText(n.label, n.x + n.r + 5, n.y);
+    ctx.fillText(text, box.l, sy);
   }}
   ctx.restore();
 }}
@@ -1126,11 +1300,6 @@ function start(payload) {{
 
 loadGraph().then(start).catch((err) => {{
   document.getElementById("summary").textContent = err.message;
-  const status = document.getElementById("cycleStatus");
-  if (status) {{
-    status.textContent = "Directed cycle metrics: unavailable";
-    status.className = "status-pill";
-  }}
   ctx.clearRect(0, 0, state.width || 800, state.height || 300);
   ctx.fillStyle = "#9b2226";
   ctx.font = "14px IBM Plex Sans, Segoe UI, sans-serif";
@@ -1142,39 +1311,960 @@ loadGraph().then(start).catch((err) => {{
 """
 
 
-def redirect_html(target: str) -> str:
-    esc_target = html.escape(target)
+def graph_page_html_v2(title: str) -> str:
+    esc_title = html.escape(title)
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url={esc_target}">
-  <title>MLC Graph</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{esc_title}</title>
+  <style>
+    :root {{
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #dbe2ea;
+      --button-bg: #f8fafc;
+      --canvas-bg: #0b1220;
+      --legend-dot-border: #1f2937;
+    }}
+    :root[data-theme="dark"] {{
+      --bg: #0b1220;
+      --panel: #101a2d;
+      --text: #dbe7ff;
+      --muted: #9db0cf;
+      --border: #20304d;
+      --button-bg: #13203a;
+      --canvas-bg: #050b18;
+      --legend-dot-border: #dbe7ff;
+    }}
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }}
+    .wrap {{
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }}
+    .toolbar {{
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }}
+    .toolbar h1 {{
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }}
+    .toolbar .meta {{
+      color: var(--muted);
+      font-size: 13px;
+    }}
+    .toolbar label {{
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }}
+    .legend {{
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-wrap: wrap;
+    }}
+    .legend-item {{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }}
+    .legend-dot {{
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid var(--legend-dot-border);
+      display: inline-block;
+    }}
+    input[type="search"] {{
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      min-width: 220px;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--panel);
+    }}
+    button {{
+      border: 1px solid var(--border);
+      background: var(--button-bg);
+      border-radius: 8px;
+      padding: 6px 9px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text);
+    }}
+    #scene {{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: var(--canvas-bg);
+    }}
+    #hover {{
+      position: absolute;
+      pointer-events: none;
+      transform: translate(10px, -8px);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      line-height: 1.35;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      display: none;
+      max-width: 420px;
+      white-space: normal;
+      z-index: 10;
+    }}
+  </style>
 </head>
 <body>
-  <p>Redirecting to <a href="{esc_target}">{esc_target}</a>...</p>
+<div class="wrap">
+  <div class="toolbar">
+    <h1>{esc_title}</h1>
+    <span class="meta" id="summary"></span>
+    <label>Search <input id="search" type="search" placeholder="declaration name"></label>
+    <button id="fitBtn" type="button">Fit Camera</button>
+    <button id="themeBtn" type="button">Theme</button>
+    <div id="legend" class="legend"></div>
+  </div>
+  <div id="scene"><div id="hover"></div></div>
+</div>
+<script src="graph.js"></script>
 </body>
 </html>
 """
 
 
-def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
-    fq_index, edges = build_full_graph(repo_root)
+def graph_page_js() -> str:
+    return """(function () {
+  const sceneEl = document.getElementById("scene");
+  const summaryEl = document.getElementById("summary");
+  const legendEl = document.getElementById("legend");
+  const searchEl = document.getElementById("search");
+  const fitBtn = document.getElementById("fitBtn");
+  const themeBtn = document.getElementById("themeBtn");
+  const hoverEl = document.getElementById("hover");
+  const THEME_KEY = "mlc_graph_theme";
 
-    root_decl: Decl | None = fq_index.get(root_symbol)
-    if root_decl is None:
-        matches = [d for d in fq_index.values() if d.name == root_symbol.split(".")[-1]]
-        if len(matches) == 1:
-            root_decl = matches[0]
-        elif matches:
-            root_decl = sorted(matches, key=lambda d: d.fq_name == "MLC.mlc_conjecture", reverse=True)[0]
-        else:
-            raise RuntimeError(f"Root symbol not found: {root_symbol}")
+  const KIND_COLOR = {
+    theorem: 0xffb703,
+    def: 0x06b6d4,
+    lemma: 0x8ecae6,
+    abbrev: 0x94d2bd,
+    structure: 0xee9b00,
+    class: 0xca6702,
+    instance: 0xbb3e03,
+    axiom: 0xdc2626
+  };
 
+  const COLORS = {
+    root: 0xf59e0b,
+    coreAxiom: 0x3b82f6,
+    missingAxiom: 0xef4444,
+    edge: 0x64748b,
+    construction: 0x0ea5e9,
+    potential: 0x7c3aed,
+    missingConnection: 0xef4444,
+    sphereWire: 0x64748b
+  };
+
+  function kindColor(kind) {
+    return KIND_COLOR[kind] || 0x9ca3af;
+  }
+
+  function hexToRgb01(hex) {
+    return [
+      ((hex >> 16) & 255) / 255,
+      ((hex >> 8) & 255) / 255,
+      (hex & 255) / 255
+    ];
+  }
+
+  function parseHexColorToRgb01(hexText) {
+    const t = String(hexText || "").trim();
+    const m = /^#([0-9a-fA-F]{6})$/.exec(t);
+    if (!m) return [0.04, 0.08, 0.14];
+    const v = parseInt(m[1], 16);
+    return hexToRgb01(v);
+  }
+
+  const V3 = {
+    add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]],
+    sub: (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
+    scale: (a, s) => [a[0] * s, a[1] * s, a[2] * s],
+    dot: (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2],
+    cross: (a, b) => [
+      a[1] * b[2] - a[2] * b[1],
+      a[2] * b[0] - a[0] * b[2],
+      a[0] * b[1] - a[1] * b[0]
+    ],
+    len: (a) => Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]),
+    norm: (a) => {
+      const d = Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]) || 1;
+      return [a[0] / d, a[1] / d, a[2] / d];
+    }
+  };
+
+  function mat4Identity() {
+    return new Float32Array([
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]);
+  }
+
+  function mat4Perspective(fovy, aspect, near, far) {
+    const f = 1 / Math.tan(fovy / 2);
+    const nf = 1 / (near - far);
+    const out = mat4Identity();
+    out[0] = f / Math.max(0.1, aspect);
+    out[5] = f;
+    out[10] = (far + near) * nf;
+    out[11] = -1;
+    out[14] = (2 * far * near) * nf;
+    out[15] = 0;
+    return out;
+  }
+
+  function mat4LookAt(eye, center, up) {
+    const z = V3.norm(V3.sub(eye, center));
+    let x = V3.cross(up, z);
+    if (V3.len(x) < 1e-6) x = [1, 0, 0];
+    x = V3.norm(x);
+    const y = V3.cross(z, x);
+    const out = mat4Identity();
+    out[0] = x[0]; out[1] = y[0]; out[2] = z[0];
+    out[4] = x[1]; out[5] = y[1]; out[6] = z[1];
+    out[8] = x[2]; out[9] = y[2]; out[10] = z[2];
+    out[12] = -V3.dot(x, eye);
+    out[13] = -V3.dot(y, eye);
+    out[14] = -V3.dot(z, eye);
+    return out;
+  }
+
+  function mat4Multiply(a, b) {
+    const out = new Float32Array(16);
+    for (let c = 0; c < 4; c += 1) {
+      for (let r = 0; r < 4; r += 1) {
+        out[c * 4 + r] =
+          a[0 * 4 + r] * b[c * 4 + 0] +
+          a[1 * 4 + r] * b[c * 4 + 1] +
+          a[2 * 4 + r] * b[c * 4 + 2] +
+          a[3 * 4 + r] * b[c * 4 + 3];
+      }
+    }
+    return out;
+  }
+
+  function systemTheme() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+
+  function applyTheme(theme) {
+    const finalTheme = theme === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", finalTheme);
+    try { localStorage.setItem(THEME_KEY, finalTheme); } catch (_err) {}
+    if (themeBtn) {
+      themeBtn.textContent = finalTheme === "dark" ? "Theme: Dark" : "Theme: Light";
+    }
+  }
+
+  function renderLegend() {
+    if (!legendEl) return;
+    legendEl.innerHTML = `
+      <span class="legend-item"><span class="legend-dot" style="background:#ffb703"></span>Theorem</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span>Definition</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#8ecae6"></span>Lemma</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Root</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing axiom</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Core axiom</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#0ea5e9"></span>Construction route</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing connection</span>
+    `;
+  }
+
+  async function loadPayload() {
+    const resp = await fetch("graph.json");
+    if (!resp.ok) throw new Error("Failed to load graph.json");
+    return await resp.json();
+  }
+
+  function fibonacciPoint(i, n) {
+    if (n <= 1) return [0, 0, 1];
+    const phi = Math.PI * (3 - Math.sqrt(5));
+    const y = 1 - (2 * i) / (n - 1);
+    const r = Math.sqrt(Math.max(0, 1 - y * y));
+    const theta = phi * i;
+    return [Math.cos(theta) * r, y, Math.sin(theta) * r];
+  }
+
+  function init(payload) {
+    const rootId = payload.root;
+    const nodes = payload.nodes.slice();
+    nodes.sort((a, b) => {
+      if (a.id === rootId) return -1;
+      if (b.id === rootId) return 1;
+      const da = Number(a.depth || 0);
+      const db = Number(b.depth || 0);
+      if (da !== db) return da - db;
+      return String(a.fq_name || a.id).localeCompare(String(b.fq_name || b.id));
+    });
+
+    const missingAxiomIds = new Set(
+      payload.nodes.filter(n => n.axiom_tier === "missing").map(n => n.id)
+    );
+
+    const canvas = document.createElement("canvas");
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.display = "block";
+    sceneEl.prepend(canvas);
+    const gl = canvas.getContext("webgl", { antialias: true, alpha: false });
+    if (!gl) {
+      if (summaryEl) summaryEl.textContent = "WebGL is unavailable in this browser.";
+      return;
+    }
+
+    function compileShader(type, source) {
+      const sh = gl.createShader(type);
+      gl.shaderSource(sh, source);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(sh) || "Shader compile failed");
+      }
+      return sh;
+    }
+
+    function createProgram(vsSource, fsSource) {
+      const vs = compileShader(gl.VERTEX_SHADER, vsSource);
+      const fs = compileShader(gl.FRAGMENT_SHADER, fsSource);
+      const p = gl.createProgram();
+      gl.attachShader(p, vs);
+      gl.attachShader(p, fs);
+      gl.linkProgram(p);
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+        throw new Error(gl.getProgramInfoLog(p) || "Program link failed");
+      }
+      return p;
+    }
+
+    const lineProgram = createProgram(
+      `
+      attribute vec3 aPosition;
+      attribute vec4 aColor;
+      uniform mat4 uViewProj;
+      varying vec4 vColor;
+      void main() {
+        gl_Position = uViewProj * vec4(aPosition, 1.0);
+        vColor = aColor;
+      }
+      `,
+      `
+      precision mediump float;
+      varying vec4 vColor;
+      void main() {
+        gl_FragColor = vColor;
+      }
+      `
+    );
+
+    const pointProgram = createProgram(
+      `
+      attribute vec3 aPosition;
+      attribute vec4 aColor;
+      attribute float aSize;
+      uniform mat4 uView;
+      uniform mat4 uProj;
+      uniform float uPointScale;
+      varying vec4 vColor;
+      void main() {
+        vec4 viewPos = uView * vec4(aPosition, 1.0);
+        gl_Position = uProj * viewPos;
+        gl_PointSize = max(2.0, aSize * uPointScale / max(1.0, -viewPos.z));
+        vColor = aColor;
+      }
+      `,
+      `
+      precision mediump float;
+      varying vec4 vColor;
+      void main() {
+        vec2 p = gl_PointCoord * 2.0 - 1.0;
+        float d = dot(p, p);
+        if (d > 1.0) discard;
+        float border = smoothstep(0.72, 1.0, d);
+        vec3 col = mix(vColor.rgb, vec3(0.03, 0.04, 0.08), border * 0.55);
+        gl_FragColor = vec4(col, vColor.a);
+      }
+      `
+    );
+
+    const linePosBuf = gl.createBuffer();
+    const lineColBuf = gl.createBuffer();
+    const pointPosBuf = gl.createBuffer();
+    const pointColBuf = gl.createBuffer();
+    const pointSizeBuf = gl.createBuffer();
+    const spherePosBuf = gl.createBuffer();
+    const sphereColBuf = gl.createBuffer();
+    let edgeVertexCount = 0;
+    let sphereVertexCount = 0;
+
+    const sphereRadius = Math.max(140, Math.min(260, 120 + nodes.length * 0.55));
+    const nodeData = [];
+    const idToIndex = new Map();
+    for (let i = 0; i < nodes.length; i += 1) {
+      const n = nodes[i];
+      const p = fibonacciPoint(i, nodes.length);
+      const world = n.id === rootId ? [0, 0, sphereRadius] : V3.scale(p, sphereRadius);
+      const isRoot = n.id === rootId;
+      const isMissing = n.axiom_tier === "missing";
+      const isCore = n.axiom_tier === "core";
+      let c = kindColor(n.kind);
+      if (isRoot) c = COLORS.root;
+      else if (isMissing) c = COLORS.missingAxiom;
+      else if (isCore) c = COLORS.coreAxiom;
+      nodeData.push({
+        id: n.id,
+        label: n.label,
+        fq_name: n.fq_name,
+        kind: n.kind,
+        file: n.file,
+        pos: world,
+        color: hexToRgb01(c),
+        baseSize: isRoot ? 18 : 12,
+        sizeScale: 1,
+        alpha: 0.96
+      });
+      idToIndex.set(n.id, i);
+    }
+
+    const edgeData = [];
+    for (const e of payload.edges) {
+      const aIdx = idToIndex.get(e.source);
+      const bIdx = idToIndex.get(e.target);
+      if (aIdx === undefined || bIdx === undefined) continue;
+      const kind = e.kind || "dependency";
+      const isMissingConnection = e.source === rootId && missingAxiomIds.has(e.target);
+      let color = COLORS.edge;
+      if (isMissingConnection) color = COLORS.missingConnection;
+      else if (kind === "construction") color = COLORS.construction;
+      else if (kind === "potential") color = COLORS.potential;
+      edgeData.push({
+        sourceIndex: aIdx,
+        targetIndex: bIdx,
+        sourceId: e.source,
+        targetId: e.target,
+        color: hexToRgb01(color),
+        alpha: isMissingConnection ? 1.0 : 0.72,
+        visible: true
+      });
+    }
+
+    function buildSphereBuffers() {
+      const latSteps = 24;
+      const lonSteps = 36;
+      const positions = [];
+      const colors = [];
+      const col = hexToRgb01(COLORS.sphereWire);
+      function pushSeg(a, b) {
+        positions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+        colors.push(col[0], col[1], col[2], 0.36, col[0], col[1], col[2], 0.36);
+      }
+      for (let i = 1; i < latSteps; i += 1) {
+        const phi = -Math.PI / 2 + (i * Math.PI) / latSteps;
+        const cp = Math.cos(phi);
+        const sp = Math.sin(phi);
+        for (let j = 0; j < lonSteps; j += 1) {
+          const t0 = (j * 2 * Math.PI) / lonSteps;
+          const t1 = ((j + 1) * 2 * Math.PI) / lonSteps;
+          const a = [sphereRadius * cp * Math.cos(t0), sphereRadius * sp, sphereRadius * cp * Math.sin(t0)];
+          const b = [sphereRadius * cp * Math.cos(t1), sphereRadius * sp, sphereRadius * cp * Math.sin(t1)];
+          pushSeg(a, b);
+        }
+      }
+      for (let j = 0; j < lonSteps; j += 1) {
+        const t = (j * 2 * Math.PI) / lonSteps;
+        for (let i = 0; i < latSteps; i += 1) {
+          const p0 = -Math.PI / 2 + (i * Math.PI) / latSteps;
+          const p1 = -Math.PI / 2 + ((i + 1) * Math.PI) / latSteps;
+          const a = [sphereRadius * Math.cos(p0) * Math.cos(t), sphereRadius * Math.sin(p0), sphereRadius * Math.cos(p0) * Math.sin(t)];
+          const b = [sphereRadius * Math.cos(p1) * Math.cos(t), sphereRadius * Math.sin(p1), sphereRadius * Math.cos(p1) * Math.sin(t)];
+          pushSeg(a, b);
+        }
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, spherePosBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, sphereColBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+      sphereVertexCount = positions.length / 3;
+    }
+
+    let pointsDirty = true;
+    let edgesDirty = true;
+    function syncPointBuffers() {
+      const pos = new Float32Array(nodeData.length * 3);
+      const col = new Float32Array(nodeData.length * 4);
+      const siz = new Float32Array(nodeData.length);
+      for (let i = 0; i < nodeData.length; i += 1) {
+        const n = nodeData[i];
+        pos[i * 3 + 0] = n.pos[0];
+        pos[i * 3 + 1] = n.pos[1];
+        pos[i * 3 + 2] = n.pos[2];
+        col[i * 4 + 0] = n.color[0];
+        col[i * 4 + 1] = n.color[1];
+        col[i * 4 + 2] = n.color[2];
+        col[i * 4 + 3] = n.alpha;
+        siz[i] = n.baseSize * n.sizeScale;
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointPosBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, pos, gl.DYNAMIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointColBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, col, gl.DYNAMIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointSizeBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, siz, gl.DYNAMIC_DRAW);
+      pointsDirty = false;
+    }
+
+    function syncEdgeBuffers() {
+      const positions = [];
+      const colors = [];
+      for (const e of edgeData) {
+        if (!e.visible) continue;
+        const a = nodeData[e.sourceIndex].pos;
+        const b = nodeData[e.targetIndex].pos;
+        positions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+        colors.push(
+          e.color[0], e.color[1], e.color[2], e.alpha,
+          e.color[0], e.color[1], e.color[2], e.alpha
+        );
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, linePosBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.DYNAMIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, lineColBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.DYNAMIC_DRAW);
+      edgeVertexCount = positions.length / 3;
+      edgesDirty = false;
+    }
+
+    const camera = {
+      yaw: 0,
+      pitch: 0,
+      distance: Math.max(360, sphereRadius * 2.6),
+      target: [0, 0, 0],
+      fov: 50 * Math.PI / 180,
+      near: 0.1,
+      far: 4000,
+      eye: [0, 0, 1],
+      right: [1, 0, 0],
+      up: [0, 1, 0],
+      forward: [0, 0, -1],
+      view: mat4Identity(),
+      proj: mat4Identity(),
+      viewProj: mat4Identity(),
+      pointScale: 1
+    };
+
+    function fitCamera() {
+      camera.yaw = 0;
+      camera.pitch = 0;
+      camera.distance = Math.max(360, sphereRadius * 2.6);
+      cameraDirty = true;
+    }
+
+    let canvasCssW = 1;
+    let canvasCssH = 1;
+    let canvasPxW = 1;
+    let canvasPxH = 1;
+    let cameraDirty = true;
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvasCssW = Math.max(1, sceneEl.clientWidth);
+      canvasCssH = Math.max(1, sceneEl.clientHeight);
+      canvasPxW = Math.max(2, Math.floor(canvasCssW * dpr));
+      canvasPxH = Math.max(2, Math.floor(canvasCssH * dpr));
+      canvas.width = canvasPxW;
+      canvas.height = canvasPxH;
+      gl.viewport(0, 0, canvasPxW, canvasPxH);
+      cameraDirty = true;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function updateCameraMatrices() {
+      const cp = Math.cos(camera.pitch);
+      const sp = Math.sin(camera.pitch);
+      const cy = Math.cos(camera.yaw);
+      const sy = Math.sin(camera.yaw);
+      camera.eye = [
+        camera.target[0] + sy * cp * camera.distance,
+        camera.target[1] + sp * camera.distance,
+        camera.target[2] + cy * cp * camera.distance
+      ];
+      camera.forward = V3.norm(V3.sub(camera.target, camera.eye));
+      camera.right = V3.norm(V3.cross(camera.forward, [0, 1, 0]));
+      if (V3.len(camera.right) < 1e-6) camera.right = [1, 0, 0];
+      camera.up = V3.norm(V3.cross(camera.right, camera.forward));
+      camera.view = mat4LookAt(camera.eye, camera.target, camera.up);
+      camera.proj = mat4Perspective(
+        camera.fov,
+        canvasCssW / Math.max(1, canvasCssH),
+        camera.near,
+        camera.far
+      );
+      camera.viewProj = mat4Multiply(camera.proj, camera.view);
+      camera.pointScale = canvasPxH / (2 * Math.tan(camera.fov / 2));
+      cameraDirty = false;
+    }
+
+    function projectToScreen(pos) {
+      const rel = V3.sub(pos, camera.eye);
+      const x = V3.dot(rel, camera.right);
+      const y = V3.dot(rel, camera.up);
+      const z = V3.dot(rel, camera.forward);
+      if (z <= 1e-3) return null;
+      const tanHalf = Math.tan(camera.fov / 2);
+      const ndcX = x / (z * tanHalf * (canvasCssW / Math.max(1, canvasCssH)));
+      const ndcY = y / (z * tanHalf);
+      return {
+        x: (ndcX * 0.5 + 0.5) * canvasCssW,
+        y: (1 - (ndcY * 0.5 + 0.5)) * canvasCssH,
+        depth: z
+      };
+    }
+
+    function pickNode(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      let bestIndex = -1;
+      let bestDepth = Infinity;
+      let bestDist2 = Infinity;
+      for (let i = 0; i < nodeData.length; i += 1) {
+        const n = nodeData[i];
+        const p = projectToScreen(n.pos);
+        if (!p) continue;
+        const dx = p.x - x;
+        const dy = p.y - y;
+        const r = n.baseSize * n.sizeScale + 6;
+        const d2 = dx * dx + dy * dy;
+        if (d2 > r * r) continue;
+        if (p.depth < bestDepth || (Math.abs(p.depth - bestDepth) < 1e-3 && d2 < bestDist2)) {
+          bestDepth = p.depth;
+          bestDist2 = d2;
+          bestIndex = i;
+        }
+      }
+      return bestIndex;
+    }
+
+    function screenRay(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const ndcX = (x / canvasCssW) * 2 - 1;
+      const ndcY = 1 - (y / canvasCssH) * 2;
+      const tanHalf = Math.tan(camera.fov / 2);
+      const vx = ndcX * tanHalf * (canvasCssW / Math.max(1, canvasCssH));
+      const vy = ndcY * tanHalf;
+      const dir = V3.norm(
+        V3.add(
+          V3.add(V3.scale(camera.right, vx), V3.scale(camera.up, vy)),
+          camera.forward
+        )
+      );
+      return { origin: camera.eye, dir };
+    }
+
+    function intersectSphere(rayOrigin, rayDir, radius) {
+      const b = V3.dot(rayOrigin, rayDir);
+      const c = V3.dot(rayOrigin, rayOrigin) - radius * radius;
+      const disc = b * b - c;
+      if (disc < 0) return null;
+      const s = Math.sqrt(disc);
+      let t = -b - s;
+      if (t < 0) t = -b + s;
+      if (t < 0) return null;
+      return V3.add(rayOrigin, V3.scale(rayDir, t));
+    }
+
+    function applySearch() {
+      const q = String(searchEl?.value || "").trim().toLowerCase();
+      const visibleNodes = new Set();
+      for (const n of nodeData) {
+        const hit = !q ||
+          String(n.id).toLowerCase().includes(q) ||
+          String(n.label).toLowerCase().includes(q) ||
+          String(n.fq_name).toLowerCase().includes(q) ||
+          String(n.file).toLowerCase().includes(q);
+        n.alpha = hit ? 0.98 : 0.2;
+        n.sizeScale = hit ? 1.0 : 0.85;
+        if (hit) visibleNodes.add(n.id);
+      }
+      for (const e of edgeData) {
+        e.visible = !q || visibleNodes.has(e.sourceId) || visibleNodes.has(e.targetId);
+      }
+      pointsDirty = true;
+      edgesDirty = true;
+    }
+
+    let draggingNodeIndex = -1;
+    let orbiting = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    function onPointerDown(ev) {
+      if (cameraDirty) updateCameraMatrices();
+      const pick = pickNode(ev.clientX, ev.clientY);
+      if (pick >= 0) {
+        draggingNodeIndex = pick;
+      } else {
+        orbiting = true;
+      }
+      lastX = ev.clientX;
+      lastY = ev.clientY;
+      canvas.setPointerCapture(ev.pointerId);
+    }
+
+    function onPointerMove(ev) {
+      if (cameraDirty) updateCameraMatrices();
+      if (draggingNodeIndex >= 0) {
+        const ray = screenRay(ev.clientX, ev.clientY);
+        const hit = intersectSphere(ray.origin, ray.dir, sphereRadius);
+        if (hit) {
+          nodeData[draggingNodeIndex].pos = V3.scale(V3.norm(hit), sphereRadius);
+          pointsDirty = true;
+          edgesDirty = true;
+        }
+        hoverEl.style.display = "none";
+        return;
+      }
+      if (orbiting) {
+        const dx = ev.clientX - lastX;
+        const dy = ev.clientY - lastY;
+        lastX = ev.clientX;
+        lastY = ev.clientY;
+        camera.yaw += dx * 0.007;
+        camera.pitch = Math.max(-1.45, Math.min(1.45, camera.pitch + dy * 0.007));
+        cameraDirty = true;
+        hoverEl.style.display = "none";
+        return;
+      }
+      const pick = pickNode(ev.clientX, ev.clientY);
+      if (pick >= 0) {
+        const n = nodeData[pick];
+        hoverEl.style.display = "block";
+        hoverEl.style.left = `${ev.clientX}px`;
+        hoverEl.style.top = `${ev.clientY}px`;
+        hoverEl.textContent = `${n.fq_name} (${n.kind})`;
+      } else {
+        hoverEl.style.display = "none";
+      }
+    }
+
+    function onPointerUp(ev) {
+      draggingNodeIndex = -1;
+      orbiting = false;
+      try { canvas.releasePointerCapture(ev.pointerId); } catch (_err) {}
+    }
+
+    function onWheel(ev) {
+      ev.preventDefault();
+      const scale = Math.exp(ev.deltaY * 0.001);
+      camera.distance = Math.max(180, Math.min(900, camera.distance * scale));
+      cameraDirty = true;
+    }
+
+    canvas.addEventListener("pointerdown", onPointerDown);
+    canvas.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+    canvas.addEventListener("wheel", onWheel, { passive: false });
+
+    if (searchEl) searchEl.addEventListener("input", applySearch);
+    if (fitBtn) fitBtn.addEventListener("click", fitCamera);
+    if (themeBtn) {
+      themeBtn.addEventListener("click", () => {
+        const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+        applyTheme(cur === "dark" ? "light" : "dark");
+      });
+    }
+
+    const declCount = payload.nodes.length;
+    const edgeCount = payload.edges.length;
+    const theoremCount = payload.nodes.filter(n => n.kind === "theorem").length;
+    const defCount = payload.nodes.filter(n => n.kind === "def").length;
+    if (summaryEl) {
+      summaryEl.textContent =
+        `${declCount} declarations, ${edgeCount} edges, ` +
+        `${theoremCount} theorems, ${defCount} definitions`;
+    }
+
+    function drawLines(posBuf, colBuf, vertexCount) {
+      if (vertexCount <= 0) return;
+      gl.useProgram(lineProgram);
+      const posLoc = gl.getAttribLocation(lineProgram, "aPosition");
+      const colLoc = gl.getAttribLocation(lineProgram, "aColor");
+      const vpLoc = gl.getUniformLocation(lineProgram, "uViewProj");
+      gl.uniformMatrix4fv(vpLoc, false, camera.viewProj);
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+      gl.enableVertexAttribArray(colLoc);
+      gl.vertexAttribPointer(colLoc, 4, gl.FLOAT, false, 0, 0);
+      gl.drawArrays(gl.LINES, 0, vertexCount);
+    }
+
+    function drawPoints() {
+      gl.useProgram(pointProgram);
+      const posLoc = gl.getAttribLocation(pointProgram, "aPosition");
+      const colLoc = gl.getAttribLocation(pointProgram, "aColor");
+      const sizeLoc = gl.getAttribLocation(pointProgram, "aSize");
+      gl.uniformMatrix4fv(gl.getUniformLocation(pointProgram, "uView"), false, camera.view);
+      gl.uniformMatrix4fv(gl.getUniformLocation(pointProgram, "uProj"), false, camera.proj);
+      gl.uniform1f(gl.getUniformLocation(pointProgram, "uPointScale"), camera.pointScale);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointPosBuf);
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointColBuf);
+      gl.enableVertexAttribArray(colLoc);
+      gl.vertexAttribPointer(colLoc, 4, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, pointSizeBuf);
+      gl.enableVertexAttribArray(sizeLoc);
+      gl.vertexAttribPointer(sizeLoc, 1, gl.FLOAT, false, 0, 0);
+      gl.drawArrays(gl.POINTS, 0, nodeData.length);
+    }
+
+    function currentCanvasBgColor() {
+      const css = getComputedStyle(document.documentElement).getPropertyValue("--canvas-bg");
+      return parseHexColorToRgb01(css);
+    }
+
+    function render() {
+      requestAnimationFrame(render);
+      if (cameraDirty) updateCameraMatrices();
+      if (pointsDirty) syncPointBuffers();
+      if (edgesDirty) syncEdgeBuffers();
+
+      const bg = currentCanvasBgColor();
+      gl.clearColor(bg[0], bg[1], bg[2], 1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LEQUAL);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+      drawLines(spherePosBuf, sphereColBuf, sphereVertexCount);
+      drawLines(linePosBuf, lineColBuf, edgeVertexCount);
+      drawPoints();
+    }
+
+    renderLegend();
+    fitCamera();
+    buildSphereBuffers();
+    applySearch();
+    render();
+  }
+
+  (async function bootstrap() {
+    let initialTheme = systemTheme();
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "light" || saved === "dark") initialTheme = saved;
+    } catch (_err) {}
+    applyTheme(initialTheme);
+    try {
+      const payload = await loadPayload();
+      init(payload);
+    } catch (err) {
+      if (summaryEl) summaryEl.textContent = String(err && err.message ? err.message : err);
+    }
+  })();
+})();"""
+
+
+def index_html(links: list[tuple[str, str]]) -> str:
+    items = "\n".join(
+        f'    <li><a href="{html.escape(href)}">{html.escape(label)}</a></li>'
+        for label, href in links
+    )
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MLC Dependency Graphs</title>
+  <style>
+    body {{
+      margin: 24px;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }}
+    h1 {{ margin-top: 0; font-size: 22px; }}
+    ul {{ line-height: 1.9; }}
+    a {{ color: #1d4ed8; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+  </style>
+</head>
+<body>
+  <h1>MLC Dependency Graphs</h1>
+  <ul>
+{items}
+  </ul>
+</body>
+</html>
+"""
+
+
+def resolve_root_decl(root_symbol: str, fq_index: dict[str, Decl]) -> Decl:
+    root_decl = fq_index.get(root_symbol)
+    if root_decl is not None:
+        return root_decl
+    matches = [d for d in fq_index.values() if d.name == root_symbol.split(".")[-1]]
+    if len(matches) == 1:
+        return matches[0]
+    if matches:
+        return sorted(matches, key=lambda d: d.fq_name == "MLC.mlc_conjecture", reverse=True)[0]
+    raise RuntimeError(f"Root symbol not found: {root_symbol}")
+
+
+def build_payload(
+    fq_index: dict[str, Decl],
+    edges: dict[str, set[str]],
+    root_decl: Decl,
+    *,
+    extra_nodes: set[str] | None = None,
+    extra_edges: list[dict[str, str]] | None = None,
+) -> dict[str, object]:
     reachable, depth = rooted_closure(root_decl.fq_name, edges)
-    # The dependency extractor is textual over `Mlc/*.lean`, so kernel/core axioms
-    # are not discoverable as regular declaration tokens. Include them explicitly
-    # as first-level axiom dependencies of the root.
     edges.setdefault(root_decl.fq_name, set())
     for ax_name in EMBEDDED_AXIOMS:
         if ax_name in fq_index:
@@ -1182,48 +2272,155 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
             depth.setdefault(ax_name, 1)
             edges[root_decl.fq_name].add(ax_name)
 
+    if extra_nodes:
+        extra_depth = max(depth.values(), default=0) + 1
+        for node_id in sorted(extra_nodes):
+            if node_id in fq_index:
+                reachable.add(node_id)
+                depth.setdefault(node_id, extra_depth)
+
     nodes = []
     for node_id in sorted(reachable):
         d = fq_index[node_id]
+        axiom_tier = "none"
+        if d.kind == "axiom":
+            if d.fq_name in EMBEDDED_AXIOMS:
+                axiom_tier = "core"
+            elif d.fq_name in MISSING_AXIOMS:
+                axiom_tier = "missing"
+            else:
+                axiom_tier = "project"
         nodes.append(
             {
                 "id": d.fq_name,
                 "label": d.name,
                 "fq_name": d.fq_name,
                 "kind": d.kind,
+                "axiom_tier": axiom_tier,
                 "file": d.file,
                 "line": d.line,
                 "span": d.span,
                 "depth": depth.get(d.fq_name, 0),
             }
         )
-    edge_payload = []
+
+    edge_payload: list[dict[str, str]] = []
+    seen_edges: set[tuple[str, str, str]] = set()
     for src in sorted(reachable):
         for dst in sorted(edges.get(src, set())):
             if dst in reachable:
-                edge_payload.append({"source": src, "target": dst})
+                edge = {"source": src, "target": dst, "kind": "dependency"}
+                edge_payload.append(edge)
+                seen_edges.add((src, dst, "dependency"))
 
-    payload = {
+    if extra_edges:
+        for e in extra_edges:
+            src = e["source"]
+            dst = e["target"]
+            kind = e.get("kind", "potential")
+            key = (src, dst, kind)
+            if src in reachable and dst in reachable and key not in seen_edges:
+                edge_payload.append({"source": src, "target": dst, "kind": kind})
+                seen_edges.add(key)
+
+    return {
         "root": root_decl.fq_name,
         "nodes": nodes,
         "edges": edge_payload,
     }
 
-    if output_root.exists():
-        shutil.rmtree(output_root)
-    graph_dir = output_root / "mlc_conjecture"
-    graph_dir.mkdir(parents=True, exist_ok=True)
 
+def write_graph(output_root: Path, slug: str, title: str, payload: dict[str, object]) -> str:
+    graph_dir = output_root / slug
+    graph_dir.mkdir(parents=True, exist_ok=True)
     (graph_dir / "graph.json").write_text(
         json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-    (graph_dir / "index.html").write_text(
-        graph_page_html(f"Lean Dependency Graph: {root_decl.fq_name}"),
+    (graph_dir / "graph.js").write_text(
+        graph_page_js(),
         encoding="utf-8",
     )
+    (graph_dir / "index.html").write_text(
+        graph_page_html_v2(title),
+        encoding="utf-8",
+    )
+    return f"{slug}/index.html"
+
+
+def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
+    fq_index, edges = build_full_graph(repo_root)
+
+    if output_root.exists():
+        shutil.rmtree(output_root)
+    output_root.mkdir(parents=True, exist_ok=True)
+
+    root_decl = resolve_root_decl(root_symbol, fq_index)
+    root_extra_nodes: set[str] = set()
+    root_extra_edges: list[dict[str, str]] = []
+    if root_decl.fq_name == "MLC.mlc_conjecture":
+        for sym in CONSTRUCTION_SYMBOLS:
+            decl = fq_index.get(sym)
+            if decl is None:
+                continue
+            if decl.fq_name == root_decl.fq_name:
+                continue
+            root_extra_nodes.add(decl.fq_name)
+            root_extra_edges.append(
+                {
+                    "source": decl.fq_name,
+                    "target": root_decl.fq_name,
+                    "kind": "construction",
+                }
+            )
+    root_payload = build_payload(
+        fq_index,
+        edges,
+        root_decl,
+        extra_nodes=root_extra_nodes,
+        extra_edges=root_extra_edges,
+    )
+    root_href = write_graph(
+        output_root,
+        "mlc_conjecture",
+        f"Lean Dependency Graph: {root_decl.fq_name}",
+        root_payload,
+    )
+
+    links: list[tuple[str, str]] = [
+        (f"Rooted graph: {root_decl.fq_name}", root_href),
+    ]
+    bridge_decl = fq_index.get(INJON_BRIDGE_SYMBOL)
+    mlc_decl = fq_index.get("MLC.mlc_conjecture")
+    if bridge_decl is not None:
+        extra_nodes: set[str] = set()
+        extra_edges: list[dict[str, str]] = []
+        if mlc_decl is not None:
+            extra_nodes.add(mlc_decl.fq_name)
+            extra_edges.append(
+                {
+                    "source": mlc_decl.fq_name,
+                    "target": bridge_decl.fq_name,
+                    "kind": "potential",
+                }
+            )
+        bridge_payload = build_payload(
+            fq_index,
+            edges,
+            bridge_decl,
+            extra_nodes=extra_nodes,
+            extra_edges=extra_edges,
+        )
+        bridge_href = write_graph(
+            output_root,
+            "mlc_conjecture_injon_bridge",
+            f"Lean Dependency Graph: {bridge_decl.fq_name}",
+            bridge_payload,
+        )
+        links.append((f"Alternative graph: {bridge_decl.fq_name}", bridge_href))
+
     (output_root / "index.html").write_text(
-        redirect_html("mlc_conjecture/index.html"),
+        index_html(links),
         encoding="utf-8",
     )
 
@@ -1241,7 +2438,7 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     output_root = (repo_root / args.output).resolve()
     generate_site(repo_root, output_root, args.root)
-    print(f"Generated rooted dependency graph at: {output_root}/mlc_conjecture/index.html")
+    print(f"Generated dependency graph site at: {output_root}/index.html")
 
 
 if __name__ == "__main__":

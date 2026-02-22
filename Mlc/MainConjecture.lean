@@ -5,8 +5,10 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
-import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
+import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
+import Mlc.MoleculeToSatelliteNestData
+import Mlc.FastTowerExistenceObstruction
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
@@ -85,6 +87,28 @@ def IRClassificationData : Prop :=
   ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (_h : InfinitelyRenormalizable c),
     PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
+
+/-- Track-1 constructive classification target:
+    for infinitely renormalizable Mandelbrot parameters, non-satellite-tower
+    implies primitive. -/
+def IRNoTowerImpliesPrimitiveData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    ¬ SatelliteRenormalizableTower c → PrimitiveRenormalizable c
+
+/-- Under the current model, Track-1 + uniform Track-2 data force IR
+    classification through the primitive branch on `M` (no satellite towers). -/
+lemma irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassificationData := by
+  have h_noTowerOnM :
+      ∀ (c : ℂ), c ∈ MLC.Quadratic.MandelbrotSet → ¬ SatelliteRenormalizableTower c := by
+    intro c hc
+    exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform h_uniform c hc
+  intro c hc h_ir
+  exact classify_infinitely_renormalizable_of_noTowerImpliesPrimitive_of_noTowerOnM
+    h_noTowerPrim h_noTowerOnM c hc h_ir
 
 /-- `0` belongs to the basin of infinity for `c = 2`. -/
 
@@ -256,49 +280,67 @@ lemma norm_approach_one_seq_gt_one (n : ℕ) : (1 : ℝ) < ‖approach_one_seq n
   rw [norm_approach_one_seq_eq n]
   linarith
 
-/-- Pointwise surjectivity target for the approach-to-`1` exterior sequence. -/
-def BottcherApproachOnePointSurjData (c : ℂ) : Prop :=
-  ∀ n, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
-
-/-- Contradiction from pointwise approach-sequence surjectivity data at `c = 2`
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_bottcher_approach_one_point_surj_data_two
-    (h_surj : BottcherApproachOnePointSurjData (2 : ℂ)) : False := by
-  let u : ℕ → ℂ := approach_one_seq
-  choose z hright using h_surj
-  have hu_norm : ∀ n, ‖u n‖ = 1 + (1 / ((n : ℝ) + 1)) := by
-    intro n
-    simpa [u] using norm_approach_one_seq_eq n
-  have hu_le_two : ∀ n, ‖u n‖ ≤ 2 := by
-    intro n
-    have hden_pos : 0 < (n : ℝ) + 1 := by positivity
-    have hden_ge : (1 : ℝ) ≤ (n : ℝ) + 1 := by nlinarith
-    have hrecip_le : 1 / ((n : ℝ) + 1) ≤ 1 := by
-      have htmp : 1 / ((n : ℝ) + 1) ≤ 1 / (1 : ℝ) :=
-        one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1) hden_ge
-      simpa using htmp
-    rw [hu_norm n]
-    linarith
-  have hu_tend_real :
+lemma tendsto_approach_one_seq :
+    Tendsto approach_one_seq atTop (𝓝 (1 : ℂ)) := by
+  have hreal :
       Tendsto (fun n : ℕ => 1 + (1 / ((n : ℝ) + 1))) atTop (𝓝 (1 : ℝ)) := by
     simpa [add_comm] using tendsto_one_div_add_atTop_nhds_zero_nat.const_add (1 : ℝ)
-  have hu_tend : Tendsto u atTop (𝓝 (1 : ℂ)) := by
-    change Tendsto (fun n : ℕ => Complex.ofReal (1 + (1 / ((n : ℝ) + 1))))
-      atTop (𝓝 (Complex.ofReal 1))
-    simpa using hu_tend_real.ofReal
+  change Tendsto (fun n : ℕ => Complex.ofReal (1 + (1 / ((n : ℝ) + 1))))
+    atTop (𝓝 (Complex.ofReal 1))
+  simpa using hreal.ofReal
+
+/-- Weaker seam target: existence of a sequence whose Böttcher images converge
+    to `1`. -/
+def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
+  ∃ z : ℕ → ℂ,
+    Tendsto (fun n => Quadratic.bottcher_map c (z n)) atTop (𝓝 (1 : ℂ))
+
+/-- Exact countable-fiber seam target at the canonical approach-to-`1`
+    exterior sequence. -/
+def BottcherApproachOneSeqFiberData (c : ℂ) : Prop :=
+  ∀ n : ℕ, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
+
+/-- Build the approach-to-`1` preimage seam from the exact countable-fiber
+    target. -/
+lemma bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
+    (c : ℂ) (h_fiber : BottcherApproachOneSeqFiberData c) :
+    BottcherApproachToOneSeqPreimageData c := by
+  classical
+  refine ⟨fun n => Classical.choose (h_fiber n), ?_⟩
+  convert tendsto_approach_one_seq using 1
+  funext n
+  exact Classical.choose_spec (h_fiber n)
+
+/-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
+    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+    False := by
+  rcases h_data with ⟨z, hu_tend⟩
+  let u : ℕ → ℂ := fun n => Quadratic.bottcher_map (2 : ℂ) (z n)
+  have hu_tend' : Tendsto u atTop (𝓝 (1 : ℂ)) := by simpa [u] using hu_tend
+  have hu_bounded : IsBounded (Set.range u) :=
+    isBounded_range_of_tendsto u hu_tend'
+  rw [isBounded_iff_forall_norm_le] at hu_bounded
+  rcases hu_bounded with ⟨R, hR⟩
+  have hu_le_R : ∀ n, ‖u n‖ ≤ R := by
+    intro n
+    exact hR (u n) ⟨n, rfl⟩
+  have hu_pos : ∀ n, 0 < ‖u n‖ := by
+    intro n
+    calc
+      0 < Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) := Real.exp_pos _
+      _ = ‖u n‖ := by
+            simpa [u] using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
         Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) = ‖u n‖ := by
-      calc
-        Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) =
-            ‖Quadratic.bottcher_map (2 : ℂ) (z n)‖ := by
-              simpa using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
-        _ = ‖u n‖ := by simpa [u] using congrArg norm (hright n)
+      simpa [u] using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2
-  set B : ℝ := max (MLC.Quadratic.escape_bound (2 : ℂ)) (Real.exp (Real.log 2 + C))
+  set B : ℝ := max (MLC.Quadratic.escape_bound (2 : ℂ)) (Real.exp (Real.log R + C))
   have hz_bound : ∀ n, ‖z n‖ ≤ B := by
     intro n
     by_cases hlarge : ‖z n‖ > MLC.Quadratic.escape_bound (2 : ℂ)
@@ -307,18 +349,16 @@ lemma false_of_bottcher_approach_one_point_surj_data_two
         simpa [C] using
           log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
             (2 : ℂ) (z n) hlarge
-      have hlog_u_le : Real.log ‖u n‖ ≤ Real.log 2 := by
-        have hu_pos : 0 < ‖u n‖ := by
-          exact lt_trans zero_lt_one (by simpa [u] using norm_approach_one_seq_gt_one n)
-        exact Real.log_le_log hu_pos (hu_le_two n)
-      have hlog' : Real.log ‖z n‖ ≤ Real.log 2 + C := by
+      have hlog_u_le : Real.log ‖u n‖ ≤ Real.log R := by
+        exact Real.log_le_log (hu_pos n) (hu_le_R n)
+      have hlog' : Real.log ‖z n‖ ≤ Real.log R + C := by
         linarith [hlog, hgreen_eq n, hlog_u_le]
       have hesc_ge_two : (2 : ℝ) ≤ MLC.Quadratic.escape_bound (2 : ℂ) := by
         exact le_trans (MLC.Quadratic.R_ge_two (2 : ℂ))
           (MLC.Quadratic.escape_bound_ge_R (2 : ℂ))
       have hz_pos : 0 < ‖z n‖ := by
         linarith
-      have hz_exp : ‖z n‖ ≤ Real.exp (Real.log 2 + C) :=
+      have hz_exp : ‖z n‖ ≤ Real.exp (Real.log R + C) :=
         (Real.log_le_iff_le_exp hz_pos).1 hlog'
       exact le_trans hz_exp (le_max_right _ _)
     · have hz_esc : ‖z n‖ ≤ MLC.Quadratic.escape_bound (2 : ℂ) := le_of_not_gt hlarge
@@ -332,8 +372,10 @@ lemma false_of_bottcher_approach_one_point_surj_data_two
   obtain ⟨a, _ha_cl, φ, hφmono, hφtend⟩ :=
     tendsto_subseq_of_bounded hbounded_ball hz_mem
   have hlog_tend : Tendsto (fun n => Real.log ‖u n‖) atTop (𝓝 (0 : ℝ)) := by
+    have hnorm_tend' : Tendsto (fun n => ‖u n‖) atTop (𝓝 ‖(1 : ℂ)‖) :=
+      (continuous_norm.tendsto (1 : ℂ)).comp hu_tend'
     have hnorm_tend : Tendsto (fun n => ‖u n‖) atTop (𝓝 (1 : ℝ)) := by
-      simpa [hu_norm] using hu_tend_real
+      simpa using hnorm_tend'
     have hcont_log : ContinuousAt Real.log (1 : ℝ) :=
       Real.continuousAt_log (by norm_num)
     simpa using hcont_log.tendsto.comp hnorm_tend
@@ -362,13 +404,13 @@ lemma false_of_bottcher_approach_one_point_surj_data_two
     hcont_phi.tendsto.comp hφtend
   have hu_sub_tend :
       Tendsto (fun n => u (φ n)) atTop (𝓝 (1 : ℂ)) :=
-    hu_tend.comp hφmono.tendsto_atTop
+    hu_tend'.comp hφmono.tendsto_atTop
   have hu_sub_tend_phi :
       Tendsto (fun n => u (φ n)) atTop (𝓝 (Quadratic.bottcher_map (2 : ℂ) a)) := by
     have hsub_eq :
         (fun n => Quadratic.bottcher_map (2 : ℂ) (z (φ n))) = (fun n => u (φ n)) := by
       funext n
-      exact hright (φ n)
+      rfl
     simpa [hsub_eq] using hphi_sub_tend
   have hphi_a : Quadratic.bottcher_map (2 : ℂ) a = 1 :=
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
@@ -420,16 +462,6 @@ lemma finite_lc_provider_of_motionHyp
           apply MLC.yoccoz_theorem
           simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin))
 
-/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
-lemma false_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) : False := by
-  let h_data_two_surj : BottcherApproachOnePointSurjData (2 : ℂ) := by
-    intro n
-    refine ⟨Quadratic.external_ray_map_of_data h_data_two (approach_one_seq n), ?_⟩
-    exact Quadratic.external_ray_map_of_data_right_inverse h_data_two (approach_one_seq n)
-      (norm_approach_one_seq_gt_one n)
-  exact false_of_bottcher_approach_one_point_surj_data_two h_data_two_surj
-
 /-- Main seam assembly from global boundary-motion data, IR classification, and
     the satellite bridge. The finite branch is routed pointwise from the
     boundary-motion witness payload. -/
@@ -446,49 +478,354 @@ theorem mlc_conjecture_of_motionHyp_classify_bridge_data
     h_classify_ir
     h_bridge
 
-/-- Bridge provider from boundary-motion finite data and conformal-modulus
-    bridge data. -/
-lemma bridge_provider_of_motionHyp_conformalModulus_data
+/-- Main seam assembly from boundary-motion data, IR classification, and the
+    explicit Molecule→satellite principal-nest bridge target. -/
+lemma bridge_provider_of_motionHyp_moleculeBridgeTarget_data
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
     MoleculeConjectureRefined →
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
   intro h_mol c hc hTower
   exact lc_at_of_shrink_of_connected_at c hc
     (finite_connectedAt_provider_of_motionHyp h_motion c hc)
-    (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData
-      h_mod h_mol c hc hTower)
+    (MoleculeBridgeTarget.parameter_shrink_of_moleculeBridgeTarget
+      h_target h_mol c hc hTower)
 
-/-- Main seam assembly from global boundary-motion data, IR classification, and
-    conformal-modulus bridge data. -/
-theorem mlc_conjecture_of_motionHyp_classify_conformalModulus_data
+/-- Main seam assembly from boundary-motion data, IR classification, and the
+    explicit Molecule→satellite principal-nest bridge target. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
     (h_classify_ir : IRClassificationData)
-    (h_mod : MoleculeConformalModulusLowerBoundData) :
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_motionHyp_classify_bridge_data
     h_motion
     h_classify_ir
-    (bridge_provider_of_motionHyp_conformalModulus_data h_motion h_mod)
+    (bridge_provider_of_motionHyp_moleculeBridgeTarget_data h_motion h_target)
 
-/-- The current explicit seam theorem: MLC from external-ray data at `c = 2`. -/
-theorem mlc_conjecture_of_external_ray_map_data_two
-    (h_data_two : Quadratic.ExternalRayMapData (2 : ℂ)) :
+/-- Main seam assembly from boundary-motion data, IR classification, and the
+    uniform conformal Track-2 target. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hFalse : False := false_of_external_ray_map_data_two h_data_two
-  exact mlc_conjecture_of_motionHyp_classify_conformalModulus_data
-    (False.elim hFalse)
-    (False.elim hFalse)
-    (False.elim hFalse)
+  exact mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget
+    h_motion
+    h_classify_ir
+    (MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget h_uniform)
+
+/-- Main seam assembly from boundary-motion data, Track-1 no-tower
+    classification target, and the uniform conformal Track-2 target. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget
+    h_motion
+    (irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+      h_noTowerPrim h_uniform)
+    h_uniform
+
+/-- Combined Track-1+Track-2 seam datum for the infinite branch. -/
+def IRNoTowerPrimitiveAndMoleculeBridgeTargetData : Prop :=
+  IRNoTowerImpliesPrimitiveData ∧
+    MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
+
+/-- Constructive main-path seam datum: boundary-motion finite branch data plus
+    combined Track-1/Track-2 infinite-branch data. -/
+def MainPathData : Prop :=
+  Quadratic.PuzzleBoundaryMotionHyp ∧ IRNoTowerPrimitiveAndMoleculeBridgeTargetData
+
+/-- Main seam assembly from boundary-motion data and the combined Track-1+Track-2
+    datum. -/
+theorem mlc_conjecture_of_motionHyp_track12_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
+    h_motion h_track12.1 h_track12.2
+
+/-- Main MLC assembly from the constructive main-path seam datum. -/
+theorem mlc_conjecture_of_mainPathData
+    (h_main : MainPathData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_track12_data h_main.1 h_main.2
+
+/-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
+lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+    MainPathData := by
+  have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
+  exact False.elim hFalse
+
+/-- Build exact canonical-sequence fiber data directly from outside-open
+    exterior surjectivity. -/
+lemma bottcherApproachOneSeqFiberData_of_surjOnExteriorFromOutsideOpen
+    (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    BottcherApproachOneSeqFiberData c := by
+  intro n
+  rcases h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n) with
+    ⟨z, _hz_out, hz_map⟩
+  exact ⟨z, hz_map⟩
+
+/-- `c = 2` specialization of the outside-open-surjectivity to exact
+    canonical-sequence-fiber bridge. -/
+lemma bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    BottcherApproachOneSeqFiberData (2 : ℂ) :=
+  bottcherApproachOneSeqFiberData_of_surjOnExteriorFromOutsideOpen (2 : ℂ) h_surj
+
+/-- Build canonical-sequence fiber data at `c = 2` from explicit external-ray
+data. -/
+lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    BottcherApproachOneSeqFiberData (2 : ℂ) := by
+  let f : ℂ → ℂ := Classical.choose h_data
+  intro n
+  refine ⟨f (approach_one_seq n), ?_⟩
+  exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+    (norm_approach_one_seq_gt_one n)
+
+/-- Rooted reduction theorem: exact countable-fiber data at the canonical
+`approach_one_seq` for `c = 2` implies the full MLC statement. -/
+theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (h_fiber : BottcherApproachOneSeqFiberData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_mainPathData
+    (mainPathData_of_bottcherApproachToOneSeqPreimageData_two
+      (bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber))
+
+/-- Root bridge from explicit external-ray-map data at `c = 2`. -/
+theorem mlc_conjecture_of_externalRayMapData_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData h_data)
+
+/-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
+    (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two h_data
+
+/-- Step-4→root seam: outside-open exterior surjectivity at `c = 2` is
+    sufficient to derive the full MLC statement. -/
+theorem mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen h_surj)
+
+/-- Step-4→root seam specialized through restricted-map closed range and
+    restricted local-homeomorph payloads at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict
+      (2 : ℂ) hclosed hlocal)
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+    outside-open analytic/derivative payloads at `c = 2`. -/
+def AnalyticDerivConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0)
+
+/-- Root bridge from the plain-analytic/derivative payload target at `c = 2`. -/
+theorem mlc_conjecture_of_analyticDerivConstructivePayloadTwo
+    (h_payload : AnalyticDerivConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+      h_payload.1 h_payload.2.1 h_payload.2.2)
+
+theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (hderiv :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_analyticDerivConstructivePayloadTwo
+    ⟨hclosed, hanalytic, hderiv⟩
+
+/-- Step-4→root seam specialized through restricted-map closed range plus the
+combined non-slit outside-open analytic/injective payload shape at `c = 2`. -/
+def NonSlitAnalyticInjConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenAnalyticInjNonSlitPayloadTwo
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open analyticity at `c = 2`. -/
+def NonSlitAnalyticConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenAnalyticityHypothesis (2 : ℂ)
+
+/-- Step-4→root seam specialized through restricted-map closed range plus a
+strong quotient-rigidity witness at `c = 2`. -/
+def NonSlitQuotientConstRealConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenQuotientConstRealWitnessTwo
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+quotient constancy at `c = 2`. -/
+def NonSlitQuotientConstConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenQuotientConstHypothesisTwo
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open quotient analyticity at `c = 2`. -/
+def NonSlitQuotientAnalyticConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenQuotientAnalyticityHypothesisTwo
+
+/-- Root bridge from the strong quotient-rigidity witness payload at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
+    (h_payload : NonSlitQuotientConstRealConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two h_payload.1
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      h_payload.1
+      (outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness (2 : ℂ)
+        h_payload.2))
+
+/-- Root bridge from quotient-constancy payload at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo
+    (h_payload : NonSlitQuotientConstConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two h_payload.1
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      h_payload.1
+      (outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness (2 : ℂ)
+        (outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo
+          h_payload.2)))
+
+/-- Root bridge from quotient-analytic payload at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo
+    (h_payload : NonSlitQuotientAnalyticConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two h_payload.1
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      h_payload.1
+      (outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo
+        h_payload.2))
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open quotient constancy at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qconst : OutsideOpenQuotientConstHypothesisTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      hclosed
+      (outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness (2 : ℂ)
+        (outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo
+          h_qconst)))
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open quotient analyticity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      hclosed
+      (outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo
+        h_qanalytic))
+
+/-- Step-4→root seam specialized through restricted-map closed range plus the
+combined non-slit outside-open analytic/injective payload. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      hclosed
+      (outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload (2 : ℂ)
+        h_payload))
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open analyticity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      hclosed h_analytic)
+
+/-- Root bridge from closed range plus outside-open analyticity payload at
+`c = 2`. -/
+theorem mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo
+    (h_payload : NonSlitAnalyticConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two h_payload.1
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      h_payload.1 h_payload.2)
+
+/-- Root bridge from the combined non-slit outside-open analytic/injective
+payload shape at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo
+    (h_payload : NonSlitAnalyticInjConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two h_payload.1
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      h_payload.1
+      (outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload (2 : ℂ)
+        h_payload.2))
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+    outside-open analyticity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two
+    hclosed hanalytic
+
+/-- Compatibility wrapper retaining the older signature with an explicit
+outside-open injectivity assumption. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
+      hclosed hanalytic h_inj)
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+    outside-open analyticity and iterate-left-inverse injectivity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+      hclosed hanalytic h_left_iter)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_map_data_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    Quadratic.external_ray_map_exists (2 : ℂ)
+  exact mlc_conjecture_of_externalRayMapData_two h_data
 
 end MainProof
 

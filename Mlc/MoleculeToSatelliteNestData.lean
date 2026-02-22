@@ -103,6 +103,28 @@ theorem moleculeUniformBridgeTarget_of_moleculeCanonicalSatellitePrincipalNestDa
   exact uniformConformalLowerBoundTarget_of_satellitePrincipalNestData_of_hasCanonicalDepths
     c hTower hdata hcanon
 
+/-- Uniform conformal bridge target implies the strong principal-nest bridge
+    target by choosing canonical tower depths and reusing the same uniform
+    lower bound as Gaussian modulus data. -/
+theorem moleculeBridgeTarget_of_moleculeUniformBridgeTarget
+    (hTarget : MoleculeImpliesUniformConformalLowerBoundTarget) :
+    MoleculeImpliesSatellitePrincipalNestData := by
+  intro h_mol c hc hTower
+  rcases hTarget h_mol c hc hTower with ⟨μ, hμ_pos, hμ_lb⟩
+  refine ⟨{
+    depths := PrincipalNestTarget.depthsFromSatelliteTower c hTower
+    monotone := PrincipalNestTarget.depthsFromSatelliteTower_monotone c hTower
+    cofinal := PrincipalNestTarget.depthsFromSatelliteTower_cofinal c hTower
+    modulus_lower := ?_
+  }⟩
+  refine ⟨μ, hμ_pos, ?_⟩
+  intro n
+  have hμ_lb' : μ ≤
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c
+          (PrincipalNestTarget.depthsFromSatelliteTower c hTower) n) := hμ_lb n
+  simpa [MLC.Quadratic.cmodulus] using hμ_lb'
+
 /-- Local connectivity from the strong satellite principal-nest bridge target. -/
 theorem lc_of_moleculeBridgeTarget
     (hTarget : MoleculeImpliesSatellitePrincipalNestData)

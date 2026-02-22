@@ -516,6 +516,950 @@ Date: 2026-02-19
     membership in `Mlc/RenormalizationTypes.lean`, so conformal-modulus
     obstructions that require `c ∈ MandelbrotSet` cannot by themselves force a
     contradiction against all `IRClassificationData`.
+  - Research kickoff audit (2026-02-19):
+    - Confirmed seam localization:
+      - `MLC.mlc_conjecture` is the only audited declaration in the current
+        path that depends on `MLC.Quadratic.external_ray_map_exists`.
+      - `mlc_conjecture_of_external_ray_map_data_two`,
+        `false_of_external_ray_map_data_two`,
+        `mlc_conjecture_of_motionHyp_classify_conformalModulus_data`,
+        `bridge_provider_of_motionHyp_conformalModulus_data`,
+        `finite_connectedAt_provider_of_motionHyp`,
+        `finite_lc_provider_of_motionHyp`,
+        `classify_infinitely_renormalizable`,
+        and
+        `consistency_checkpoint_conformal_bridge_excludes_global_ir_tower`
+        are all core-only (`Quot.sound`, `propext`, `Classical.choice`).
+    - Motion-constructor audit:
+      - `Quadratic.puzzle_boundary_motion_hyp_of_bottcher` is core-only.
+      - `Quadratic.puzzle_boundary_motion_hyp_of_onM` and
+        `Quadratic.puzzle_boundary_motion_hyp_of_onM_connected` still depend on
+        `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
+      This isolates the actionable finite-motion target to constructing a
+      suitable `BottcherMotionHyp` without reintroducing removed axiom debt.
+    - Outside-Böttcher external-data constructor audit:
+      - `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior` and
+        its supporting surjectivity/image-equality wrappers are core-only.
+      - Current available source for the injectivity precondition,
+        `bottcher_map_inj_on_outside_open`, still depends on
+        `MLC.Quadratic.external_ray_map_exists`.
+      - Alternative local route `bottcher_map_local_inj_on_outside_open`
+        depends on `MLC.Quadratic.bottcher_seq_converges`, which is outside the
+        current one-axiom budget.
+      This identifies the primary constructive replacement bottleneck:
+      non-axiomatic `h_inj` on outside-open.
+  - Immediate research track (next iteration):
+    - prove or import a non-axiomatic outside-open injectivity theorem for
+      `bottcher_map` that avoids both `external_ray_map_exists` and
+      `bottcher_seq_converges`, then feed it to
+      `external_ray_map_data_of_injOn_outside_open_of_image_eq_exterior`;
+    - in parallel, pursue a constructive `BottcherMotionHyp` constructor and
+      test whether it can provide a non-contradiction
+      `PuzzleBoundaryMotionHyp` for the main seam.
+  - Active seam reduced further from full external-ray data to a weaker
+    point-surjectivity target:
+    - added `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`
+      and routed
+      `mlc_conjecture_of_external_ray_map_data_two` through this theorem;
+    - removed the now-redundant wrapper
+      `false_of_external_ray_map_data_two`.
+    This makes the replacement obligation strictly smaller:
+    constructing pointwise preimages for `approach_one_seq` at `c = 2` is now
+    the direct seam, rather than constructing full `ExternalRayMapData (2)`.
+  - Verification after this seam reduction:
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Further rooted-path narrowing in `Mlc/MainConjecture.lean`:
+    - removed `mlc_conjecture_of_external_ray_map_data_two` from the active
+      path;
+    - added
+      `bottcher_approach_one_point_surj_data_two_of_external_ray_map_exists`;
+    - rewired `mlc_conjecture` directly through
+      `mlc_conjecture_of_bottcher_approach_one_point_surj_data_two`.
+    This eliminates full `ExternalRayMapData (2)` packaging from the rooted
+    theorem chain and keeps the active seam at the weaker
+    `BottcherApproachOnePointSurjData (2)` interface.
+  - Verification after rooted-path narrowing:
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - rooted graph closure for `Mlc/MainConjecture.lean` remains complete
+      (no off-path declarations in that file).
+  - Further seam normalization in `Mlc/MainConjecture.lean`:
+    - added
+      `exterior_subset_image_outside_disk_of_external_ray_map_data`:
+      explicit external-data route to exterior image coverage on
+      `outside_disk`;
+    - added
+      `bottcher_approach_one_point_surj_data_two_of_exterior_subset_image_outside_disk`;
+    - rewired
+      `bottcher_approach_one_point_surj_data_two_of_external_ray_map_data`
+      through this intermediate image-coverage seam.
+    This keeps `MLC.mlc_conjecture` unchanged while expressing the active
+    replacement target one layer closer to pure `bottcher_map` image data
+    (instead of direct pointwise right-inverse construction).
+  - Verification after seam normalization:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Rooted seam narrowed again in `Mlc/MainConjecture.lean`:
+    - added `BottcherExteriorSubsetImageOutsideDiskData`;
+    - added
+      `mlc_conjecture_of_bottcher_exterior_subset_image_outside_disk_data_two`;
+    - rewired `mlc_conjecture` to consume this new minimal seam directly;
+    - kept current default seam provider
+      `bottcher_exterior_subset_image_outside_disk_data_two` sourced from
+      `Quadratic.external_ray_map_data (2 : ℂ)`.
+    This isolates the external dependency at a strictly weaker image-coverage
+    interface than direct approach-sequence preimage construction.
+  - Verification after rooted seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `mlc_conjecture_of_bottcher_exterior_subset_image_outside_disk_data_two`
+        is core-only;
+      - `MLC.Quadratic.external_ray_map_exists` enters only at the default seam
+        provider (`bottcher_exterior_subset_image_outside_disk_data_two`) and
+        therefore at `MLC.mlc_conjecture`.
+  - Rooted seam narrowed once more in `Mlc/MainConjecture.lean`:
+    - added `BottcherApproachOneSubsetImageOutsideDiskData`;
+    - added conversion
+      `bottcher_approach_one_subset_image_outside_disk_data_of_exterior_subset_image_outside_disk_data`;
+    - added
+      `mlc_conjecture_of_bottcher_approach_one_subset_image_outside_disk_data_two`;
+    - rewired `mlc_conjecture` to consume this sequence-only image seam.
+    This further weakens the active replacement target from global exterior
+    image coverage to just the canonical approach-to-`1` sequence image.
+  - Verification after sequence-only seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `mlc_conjecture_of_bottcher_approach_one_subset_image_outside_disk_data_two`
+        is core-only;
+      - `MLC.Quadratic.external_ray_map_exists` enters only at the default
+        sequence-seam provider
+        (`bottcher_approach_one_subset_image_outside_disk_data_two`) and
+        therefore at `MLC.mlc_conjecture`.
+  - Rooted seam narrowed further in `Mlc/MainConjecture.lean` by removing the
+    outside-disk image layer from the active path:
+    - removed `BottcherExteriorSubsetImageOutsideDiskData` and its
+      sequence-image conversion from the rooted chain;
+    - introduced `BottcherApproachOneRangeData` (`approach_one_seq` points in
+      `Set.range (Quadratic.bottcher_map c)`);
+    - added
+      `mlc_conjecture_of_bottcher_approach_one_range_data_two` and rewired
+      `mlc_conjecture` through this direct range seam.
+    This is a strict weakening of the replacement interface compared to
+    sequence-image-in-`outside_disk`.
+  - Verification after direct range-seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `mlc_conjecture_of_bottcher_approach_one_range_data_two` is core-only;
+      - `MLC.Quadratic.external_ray_map_exists` enters only at the default
+        range-seam provider
+        (`bottcher_approach_one_range_data_two`) and therefore at
+        `MLC.mlc_conjecture`.
+  - Provider simplification on the rooted range seam:
+    - removed explicit `ExternalRayMapData (2 : ℂ)` constructor usage from
+      `Mlc/MainConjecture.lean`;
+    - replaced it with
+      `bottcher_approach_one_range_data_two_of_bottcher_map_surj`, i.e. the
+      default seam now consumes only `Quadratic.bottcher_map_surj` for
+      `approach_one_seq`.
+    This keeps the rooted interface cleaner and centered on Böttcher-map
+    surjectivity statements rather than explicit ray-map data packages.
+  - Verification after provider simplification:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `bottcher_approach_one_range_data_two_of_bottcher_map_surj` still
+        depends on `MLC.Quadratic.external_ray_map_exists` (via
+        `Quadratic.bottcher_map_surj`);
+      - therefore the remaining elimination task is unchanged: replace this
+        surjectivity source constructively.
+  - Rooted contradiction-surface simplification in `Mlc/MainConjecture.lean`:
+    - removed intermediate wrapper
+      `BottcherApproachOnePointSurjData` from the active chain;
+    - replaced
+      `false_of_bottcher_approach_one_point_surj_data_two` with
+      `false_of_bottcher_approach_one_range_data_two`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_one_range_data_two` to consume the
+      range seam directly.
+    This keeps theorem shape unchanged while shrinking rooted indirection.
+  - Verification after contradiction-surface simplification:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `false_of_bottcher_approach_one_range_data_two` is core-only;
+      - `mlc_conjecture_of_bottcher_approach_one_range_data_two` is core-only.
+  - Re-audit of non-contradictory motion replacement candidate:
+    constructing `PuzzleBoundaryMotionHyp` without contradiction currently
+    requires providing `motion_preserves_para_piece`, whose payload is exactly
+    para-puzzle connectedness on `M`; in the present model this still routes to
+    `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`, so it is not
+    an immediate replacement path for the one-axiom target.
+  - Seam naming/target cleanup in `Mlc/MainConjecture.lean`:
+    - replaced `BottcherApproachOneRangeData` with
+      `BottcherApproachOneSurjData` (direct preimage-surjectivity wording);
+    - renamed dependent declarations accordingly:
+      - `false_of_bottcher_approach_one_surj_data_two`
+      - `bottcher_approach_one_surj_data_two_of_bottcher_map_surj`
+      - `mlc_conjecture_of_bottcher_approach_one_surj_data_two`.
+    This keeps the same mathematical seam while making the remaining
+    elimination target explicit and search-friendly.
+  - Verification after seam naming cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `BottcherApproachOneSurjData`,
+        `false_of_bottcher_approach_one_surj_data_two`, and
+        `mlc_conjecture_of_bottcher_approach_one_surj_data_two` are core-only;
+      - `bottcher_approach_one_surj_data_two_of_bottcher_map_surj` remains the
+        unique current ingress of `MLC.Quadratic.external_ray_map_exists` on the
+        rooted seam.
+  - Import-level rooted cleanup:
+    - removed direct import
+      `Mlc.Quadratic.Complex.Bottcher.BottcherAxioms` from
+      `Mlc/MainConjecture.lean` (now covered transitively by
+      `BottcherOnMTheory` in the current path).
+    This keeps `MainConjecture` closer to the active dependency surface.
+  - Verification after import cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Rooted seam generalized from sequence-only surjectivity to exterior
+    surjectivity at `c = 2`:
+    - added `BottcherExteriorSurjData`;
+    - added conversion
+      `bottcher_approach_one_surj_data_of_bottcher_exterior_surj_data`;
+    - added `mlc_conjecture_of_bottcher_exterior_surj_data_two`;
+    - rewired `mlc_conjecture` through this exterior-surjectivity seam.
+    This makes the remaining replacement obligation explicit at the natural
+    exterior-surjectivity interface, while preserving theorem shape.
+  - Verification after exterior-surjectivity seam routing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `BottcherExteriorSurjData`,
+        `bottcher_approach_one_surj_data_of_bottcher_exterior_surj_data`, and
+        `mlc_conjecture_of_bottcher_exterior_surj_data_two` are core-only;
+      - `bottcher_exterior_surj_data_two` is the current ingress of
+        `MLC.Quadratic.external_ray_map_exists` on the rooted path.
+  - Rooted contradiction path cleanup:
+    - added `false_of_bottcher_exterior_surj_data_two`;
+    - rewired `mlc_conjecture_of_bottcher_exterior_surj_data_two` to consume
+      this direct contradiction lemma;
+    - removed now-unused intermediate theorem
+      `mlc_conjecture_of_bottcher_approach_one_surj_data_two`.
+    This keeps all declarations in `Mlc/MainConjecture.lean` on the rooted
+    dependency path and removes one extra theorem layer.
+  - Verification after contradiction-path cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes
+    - axiom audit confirms:
+      - `false_of_bottcher_exterior_surj_data_two` is core-only;
+      - `mlc_conjecture_of_bottcher_exterior_surj_data_two` is core-only.
+  - Additional rooted cleanup:
+    - inlined the one-use conversion from `BottcherExteriorSurjData` to
+      `BottcherApproachOneSurjData` inside
+      `false_of_bottcher_exterior_surj_data_two`;
+    - removed the now-redundant conversion lemma.
+    This reduces rooted theorem clutter without changing obligations.
+  - Verification after inlining cleanup:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Rooted-closure audit refresh:
+    - generated `site/mlc_conjecture/graph.json` and compared all top-level
+      declarations from `Mlc/MainConjecture.lean` against graph nodes;
+    - result: no declarations missing from the rooted closure (all current
+      declarations in the file participate in the `MLC.mlc_conjecture` path).
+  - Seam narrowing update in `Mlc/MainConjecture.lean`:
+    - replaced `BottcherExteriorSurjData` on the active route with the strictly
+      smaller target `BottcherApproachOneSeqPreimageData`;
+    - rewired the default ingress from
+      `bottcher_exterior_surj_data_two_of_bottcher_map_surj` to
+      `bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj`;
+    - rewired `mlc_conjecture` through
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`;
+    - removed the now-redundant wrapper `BottcherApproachOneSurjData`.
+    This reduces the remaining external-ray seam to exactly the countable
+    preimage data consumed by the contradiction core.
+  - Verification after seam narrowing:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Rooted wrapper cleanup:
+    - removed one-step forwarding lemma
+      `false_of_bottcher_approach_one_seq_preimage_data_two_seam`;
+    - `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two` now
+      consumes the contradiction core directly.
+    This keeps all remaining declarations in the local seam materially used.
+  - Rooted ingress cleanup:
+    - rewired
+      `bottcher_approach_one_seq_preimage_data_two`
+      to build directly from
+      `Quadratic.ExternalRayMapData (2 : ℂ)` via
+      `Quadratic.external_ray_map_of_data_right_inverse`;
+    - removed dependence on `Quadratic.bottcher_map_surj` from the active
+      rooted seam in `Mlc/MainConjecture.lean`.
+    This makes the remaining external dependency boundary explicit at
+    `ExternalRayMapData` and reduces unrelated rooted edges.
+  - Rooted ingress tightening:
+    - default provider now instantiates the seam directly from
+      `Quadratic.external_ray_map_exists (2 : ℂ)` instead of the intermediate
+      wrapper `Quadratic.external_ray_map_data (2 : ℂ)`.
+    This keeps the only non-core ingress explicit and minimal in
+    `Mlc/MainConjecture.lean`.
+  - Rooted-closure audit refresh (post seam narrowing/tightening):
+    - regenerated `site/mlc_conjecture/graph.json`;
+    - checked all top-level `def`/`lemma`/`theorem` declarations in
+      `Mlc/MainConjecture.lean` against rooted graph nodes;
+    - result: no declarations missing from the rooted closure.
+  - Rooted wrapper reduction (follow-up):
+    - removed default provider wrappers
+      `bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_data_two`
+      and `bottcher_approach_one_seq_preimage_data_two`;
+    - `mlc_conjecture` now inlines the direct construction of
+      `BottcherApproachOneSeqPreimageData (2 : ℂ)` from
+      `Quadratic.external_ray_map_exists (2 : ℂ)` using
+      `Quadratic.external_ray_map_of_data_right_inverse`.
+    This shortens the active rooted chain while preserving the same theorem
+    signature and axiom footprint.
+  - Constructive-gap audit (current repository state):
+    - searched for non-axiomatic preimage/surjectivity providers for
+      `Quadratic.bottcher_map` on `{w | 1 < ‖w‖}`;
+    - all currently available routes still pass through one of:
+      `Quadratic.external_ray_map_of_data_right_inverse`,
+      `Quadratic.external_ray_map_right_inverse`,
+      `Quadratic.bottcher_map_surj`,
+      and these are sourced from
+      `Quadratic.external_ray_map_exists`;
+    - no existing theorem currently provides
+      `BottcherApproachOneSeqPreimageData (2 : ℂ)` independently of
+      `external_ray_map_exists`.
+    This identifies the exact remaining constructive target: a direct,
+    non-axiomatic provider of approach-sequence preimages at `c = 2`
+    (or a strategy redesign that removes this requirement from the active path).
+  - Seam weakening step in `Mlc/MainConjecture.lean`:
+    - introduced `BottcherRightInverseOnExteriorData` (strictly weaker than
+      full `ExternalRayMapData`, keeping only the right-inverse-on-exterior
+      payload actually used on the active path);
+    - added conversion
+      `bottcher_approach_one_seq_preimage_data_of_right_inverse_on_exterior`;
+    - kept the main route target minimal:
+      `mlc_conjecture` still assembles through
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`, with
+      default preimage data now produced via the weaker right-inverse seam.
+    Current default instantiation still comes from
+    `external_ray_map_exists`, but the required seam obligation is now weaker
+    and explicit.
+  - Verification after seam weakening:
+    - `make graphs` passes
+    - `make build` passes
+    - `make check` unchanged (`Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`)
+    - `scripts/verify_output.sh` passes.
+  - Bridge-boundary axiom audit (Böttcher outside-plan layer):
+    - `MLC.external_ray_map_data_of_injOn_outside_open_of_surj_exterior` is
+      axiom-clean (core axioms only);
+    - current default providers of its inputs are not:
+      - `MLC.bottcher_map_inj_on_outside_open` depends on
+        `MLC.Quadratic.external_ray_map_exists`;
+      - `MLC.exterior_subset_image_outside_disk` depends on
+        `MLC.Quadratic.external_ray_map_exists`.
+    This isolates a concrete next boundary: construct
+    outside-open injectivity and exterior-image surjectivity without the
+    external-ray axiom, then reuse the existing axiom-clean bridge theorem.
+  - Injectivity-stack audit (outside-plan):
+    - axiom-clean:
+      - `MLC.bottcher_map_isProperMap_of_continuous`
+      - `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed`
+    - currently axiom-backed:
+      - `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph`
+      - `MLC.bottcher_map_inj_on_basin_of_isLocalHomeomorph`
+    because the current automatic path still calls
+    `MLC.bottcher_map_inj_on_outside_open` (which depends on
+    `external_ray_map_exists`).
+    This gives a concrete sub-target: provide an external-ray-free
+    outside-open injectivity seed, then lift via the existing core-only
+    proper/local-homeomorph theorem chain.
+  - Rooted wrapper cleanup in `Mlc/MainConjecture.lean`:
+    - removed one-use default lemma
+      `bottcher_right_inverse_on_exterior_data_two`;
+    - inlined its construction at the `mlc_conjecture` call-site.
+    This keeps the active rooted path minimal while preserving theorem shape
+    and the current axiom boundary.
+  - Outside-plan conversion-chain audit (additional):
+    - core-only (axiom-clean) conversion lemmas are already available:
+      - `MLC.bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image`
+      - `MLC.bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`
+      - `MLC.bottcherImageOutsideOpenIsExterior_of_surj`
+      - `MLC.outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open`
+      - `MLC.bottcher_map_norm_gt_one_implies_basin`
+    - axiom-backed boundary points remain:
+      - `MLC.exterior_subset_image_outside_disk`
+      - `MLC.bottcher_map_inj_on_outside_open`
+    This sharpens the next objective: replace the two boundary providers above
+    with external-ray-free constructions, then reuse the existing core-only
+    conversion chain to recover the right-inverse seam needed by
+    `Mlc/MainConjecture.lean`.
+  - Local-to-global injectivity audit (outside-open layer):
+    - local analytic/inverse machinery on outside-open is already independent of
+      `external_ray_map_exists`:
+      - `MLC.bottcher_map_local_inj_on_outside_open`
+      - `MLC.bottcher_map_isLocalHomeomorphOn_outside_open`
+      - `MLC.bottcher_map_isOpenMap_on_outside_open`
+      (these currently depend on `MLC.Quadratic.bottcher_seq_converges`, not on
+      external-ray existence);
+    - the remaining blocker is a global injectivity upgrade on outside-open
+      without routing through
+      `MLC.bottcher_map_inj_on_outside_open_of_data`.
+    This suggests the next technical task: add an external-ray-free global
+    injectivity theorem for outside-open from the existing local/proper stack.
+  - Outside-plan seam refactor (core-only boundary extraction):
+    - added
+      `MLC.exterior_subset_image_outside_disk_of_right_inverse`, a core-only
+      theorem that derives exterior-in-image-of-`outside_disk` from an explicit
+      right-inverse-on-exterior payload;
+    - rewired `MLC.exterior_subset_image_outside_disk` to be only a default
+      wrapper that instantiates that payload via `external_ray_map`;
+    - added
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk`,
+      extracting a core-only conversion step with explicit `h_disk` input;
+    - rewired
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement` to be
+      a wrapper through that extracted theorem.
+    This keeps the current behavior unchanged while making the constructive
+    replacement boundary explicit and reusable.
+  - Outside-plan seam refactor (follow-up):
+    - added
+      `MLC.exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement`,
+      a core-only bridge from:
+      - right-inverse-on-exterior payload, and
+      - outside-disk→outside-open image refinement
+      to outside-open exterior inclusion;
+    - rewired the default theorem
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement`
+      to instantiate the right-inverse payload with `external_ray_map`.
+    This further isolates the external-ray dependency to default instantiation
+    while preserving existing theorem interfaces.
+  - Axiom audit for newly extracted outside-plan bridges:
+    - `MLC.exterior_subset_image_outside_disk_of_right_inverse` is core-only.
+    - `MLC.exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement`
+      is core-only.
+  - Outside-open injectivity seam extraction:
+    - introduced `MLC.BottcherLeftInverseOnOutsideOpenData` as an explicit
+      seam target for injectivity on outside-open;
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open`;
+    - rewired `MLC.bottcher_map_inj_on_outside_open_of_data` through that seam
+      using
+      `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`.
+    This makes the injectivity boundary explicit and keeps default external-ray
+    usage out of the core injectivity theorem.
+  - Axiom audit for outside-open injectivity seams:
+    - `MLC.BottcherLeftInverseOnOutsideOpenData` is core-only.
+    - `MLC.bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open`
+      is core-only.
+    - `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`
+      is core-only.
+    - `MLC.bottcher_map_inj_on_outside_open_of_data` remains core-only.
+  - External-ray-data bridge extraction from new injectivity seam:
+    - added
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_surj_exterior`;
+    - added
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior`.
+    These route external-ray-data construction through the explicit
+    left-inverse seam plus existing surjectivity/image-equality seams.
+  - Axiom audit for extracted external-ray-data bridges:
+    - both newly extracted theorems above are core-only.
+  - Wrapper cleanup:
+    - removed forwarding lemma
+      `MLC.bottcher_map_inj_on_outside_open_of_data`;
+    - rewired `MLC.bottcher_map_inj_on_outside_open` directly through
+      `MLC.bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open`
+      plus
+      `MLC.bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data`.
+    This reduces one wrapper layer while preserving behavior and axioms.
+  - Surjectivity conversion seam extraction:
+    - added core-only theorem
+      `MLC.bottcherSurjOnExteriorFromOutsideOpen_of_exterior_subset_image_outside_open`;
+    - rewired
+      `MLC.bottcherSurjOnExteriorFromOutsideOpen_of_image_eq_exterior`
+      through this new seam.
+    This factors the outside-open surjectivity conversion into a reusable,
+    assumption-explicit step.
+  - External-ray-data conversion seam extraction (subset-image variant):
+    - added core-only theorem
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_exterior_subset_image_outside_open`;
+    - rewired
+      `MLC.external_ray_map_data_of_left_inverse_on_outside_open_of_image_eq_exterior`
+      through this new subset-image seam.
+    This keeps the conversion chain granular and avoids coupling directly to
+    the image-equality form.
+  - Basin-injectivity seam extraction (`proper + local homeomorph` route):
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open`;
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open`;
+    - rewired
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph`
+      to be a default wrapper through the new left-inverse seam.
+  - Axiom audit for new basin-injectivity seams:
+    - both newly extracted `...of_left_inverse_on_outside_open` theorems are
+      core-only;
+    - default theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorph` remains
+      external-ray-backed (as expected) via default seam instantiation.
+  - Basin-injectivity seam extraction (`isLocalHomeomorph` route):
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open`;
+    - rewired
+      `MLC.bottcher_map_inj_on_basin_of_isLocalHomeomorph`
+      as a default wrapper through this seam.
+  - Axiom audit for the `isLocalHomeomorph` seam:
+    - extracted theorem above is core-only;
+    - default wrapper remains external-ray-backed via default seam
+      instantiation (expected).
+  - Basin-injectivity seam extraction (`IsLocalHomeomorphOn` route):
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin`;
+    - rewired
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`
+      as a default wrapper through this seam.
+  - Axiom audit for the `IsLocalHomeomorphOn` seam:
+    - extracted theorem above is core-only;
+    - default wrapper remains external-ray-backed via default seam
+      instantiation (expected).
+  - Basin-image + `IsLocalHomeomorphOn` combined seam extraction:
+    - added core-only theorem
+      `MLC.exterior_subset_image_basin_of_right_inverse`;
+    - added core-only theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_left_inverse_on_outside_open_of_right_inverse_on_exterior`;
+    - rewired default theorem
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`
+      through these explicit left/right seam payloads.
+  - Axiom audit for combined seam:
+    - both extracted theorems above are core-only;
+    - default wrapper remains external-ray-backed via default seam
+      instantiation (expected).
+  - Seam normalization cleanup:
+    - introduced shared alias
+      `MLC.BottcherRightInverseOnExteriorDataOutsidePlan`;
+    - rewired extracted outside-plan bridge theorems to consume this shared
+      right-inverse seam type (instead of repeating raw existential payloads).
+    This is a non-semantic cleanup that keeps seam signatures uniform.
+  - Main-conjecture seam integration:
+    - removed local duplicate right-inverse seam type from
+      `Mlc/MainConjecture.lean`;
+    - switched the active MLC seam route to use the shared
+      `MLC.BottcherRightInverseOnExteriorDataOutsidePlan`;
+    - added explicit import of
+      `Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan`
+      for this shared seam type.
+    This ties the active `mlc_conjecture` path to the extracted outside-plan
+    seam layer directly.
+  - Outside-plan right-inverse constructor normalization:
+    - added
+      `MLC.bottcher_right_inverse_on_exterior_data_of_external_ray_map_data`
+      and default wrapper
+      `MLC.bottcher_right_inverse_on_exterior_data`;
+    - rewired default outside-plan wrappers
+      `MLC.exterior_subset_image_outside_disk`,
+      `MLC.exterior_subset_image_outside_open_of_outside_disk_refinement`, and
+      `MLC.bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin`
+      to consume the shared constructor;
+    - rewired `MLC.mlc_conjecture` to instantiate its right-inverse seam via
+      the shared outside-plan constructor instead of local ad-hoc assembly.
+    This removes duplicated right-inverse construction logic and keeps the
+    external-ray boundary localized to explicit default constructors.
+  - Main-conjecture classification-path preservation:
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`
+      to build `IRClassificationData` through
+      `classify_infinitely_renormalizable` with an explicit
+      `InfinitelyRenormalizableHasTowerData` seam variable;
+    - kept contradiction seeding explicit at the same boundary (`hFalse` from
+      approach-sequence preimage data), but removed direct `False.elim` feeding
+      of the classification slot.
+    This keeps the intended IR-classification theorem path active in the
+    rooted strategy surface while preserving the current axiom footprint.
+  - Final seam explicitness at the theorem boundary:
+    - added
+      `mlc_conjecture_of_bottcher_right_inverse_on_exterior_data_two`;
+    - added default provider
+      `bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists`;
+    - rewired `mlc_conjecture` through this explicit right-inverse seam theorem.
+    This isolates the remaining non-core ingress as a single named provider
+    while keeping the contradiction core and strategy assembly unchanged.
+  - Outside-plan default constructor tightening:
+    - added generic constructor
+      `MLC.bottcher_right_inverse_on_exterior_data_of_external_ray_map_exists`;
+    - rewired
+      `MLC.bottcher_right_inverse_on_exterior_data`
+      to call this constructor directly;
+    - rewired
+      `MLC.bottcher_right_inverse_on_exterior_data_two_of_external_ray_map_exists`
+      in `Mlc/MainConjecture.lean` to consume the shared constructor.
+    This keeps the external ingress explicit at the outside-plan seam layer and
+    removes one default indirection through `external_ray_map_data`.
+  - Active seam weakened from right-inverse payload to exterior surjectivity:
+    - removed `BottcherRightInverseOnExteriorDataOutsidePlan` from the active
+      `Mlc/MainConjecture.lean` route;
+    - introduced `BottcherExteriorSurjData` and
+      `bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data`;
+    - added default provider
+      `bottcher_exterior_surj_data_two_of_bottcher_map_surj`;
+    - rewired `mlc_conjecture` through
+      `mlc_conjecture_of_bottcher_exterior_surj_data_two`.
+    This further weakens the rooted replacement obligation from a global
+    right-inverse function to existential exterior surjectivity data.
+  - Rooted boundary weakened again to direct approach-sequence preimage data:
+    - removed intermediate rooted wrapper
+      `mlc_conjecture_of_bottcher_exterior_surj_data_two`;
+    - added default provider
+      `bottcher_approach_one_seq_preimage_data_two_of_bottcher_map_surj`;
+    - rewired `mlc_conjecture` back through
+      `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`.
+    This keeps the active seam at the strict minimal contradiction input
+    (`BottcherApproachOneSeqPreimageData (2)`), while still sourcing defaults
+    from `bottcher_map_surj`.
+  - Provider audit after re-rooting:
+    - re-searched the repository for any independent constructors of
+      `BottcherApproachOneSeqPreimageData (2)` and found only the active route
+      through `bottcher_exterior_surj_data_two_of_bottcher_map_surj`;
+    - `Quadratic.bottcher_map_surj` remains connected to
+      `MLC.Quadratic.external_ray_map_exists` in the current model.
+    So the next constructive elimination target remains unchanged:
+    replace the `bottcher_map_surj`-sourced default provider with a
+    non-axiomatic approach-sequence preimage constructor at `c = 2`.
+  - Wrapper cleanup on rooted preimage ingress:
+    - removed the intermediate seam layer
+      `BottcherExteriorSurjData` and conversion wrapper
+      `bottcher_approach_one_seq_preimage_data_of_bottcher_exterior_surj_data`
+      from `Mlc/MainConjecture.lean`;
+    - rewired
+      `bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to construct preimages directly from
+      `Quadratic.external_ray_map_exists`.
+    This keeps the rooted ingress minimal and avoids extra single-use wrappers.
+  - Rooted ingress directness update:
+    - removed the `bottcher_map_surj` detour from the active `mlc_conjecture`
+      path;
+    - the only non-core ingress for the active seam provider is now explicit at
+      `Quadratic.external_ray_map_exists (2 : ℂ)`.
+    This improves boundary auditability without changing theorem signatures or
+    axiom footprint.
+  - Rooted ingress simplification:
+    - rewired
+      `bottcher_approach_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to destructure `Quadratic.external_ray_map_exists (2 : ℂ)` directly
+      (`⟨f, hf_right, _⟩`) and build preimages from `hf_right`;
+    - removed use of intermediate helper projections at this call site.
+    This keeps the same mathematical content while making the residual axiom
+    dependency syntactically explicit at the exact provider boundary.
+  - Contradiction-input seam weakening (approach-to-`1` abstraction):
+    - added
+      `BottcherApproachToOneSeqPreimageData` in
+      `Mlc/MainConjecture.lean`, requiring preimages for some sequence
+      `u n → 1` with `1 < ‖u n‖ ≤ 2`;
+    - extracted generalized contradiction core
+      `false_of_bottcher_approach_to_one_seq_preimage_data_two`;
+    - rewired
+      `false_of_bottcher_approach_one_seq_preimage_data_two` through a
+      conversion lemma from the canonical sequence seam.
+    This makes the contradiction core depend on a weaker, sequence-agnostic
+    seam while keeping the rooted theorem chain and axiom footprint unchanged.
+  - Theorem-boundary weakening to the abstract approach seam:
+    - added
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`;
+    - rewired `MLC.mlc_conjecture` through this weaker seam theorem by
+      converting the current default canonical-sequence preimage provider via
+      `bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_preimage_data`;
+    - removed now-off-path wrappers:
+      - `false_of_bottcher_approach_one_seq_preimage_data_two`
+      - `mlc_conjecture_of_bottcher_approach_one_seq_preimage_data_two`.
+    This keeps `Mlc/MainConjecture.lean` rooted-closure clean while preserving
+    theorem statements and current axiom footprint.
+  - Canonical-sequence seam layer removal:
+    - removed the now-redundant intermediate seam
+      `BottcherApproachOneSeqPreimageData` and its conversion wrapper;
+    - rewired the default provider to construct
+      `BottcherApproachToOneSeqPreimageData (2)` directly from
+      `Quadratic.external_ray_map_exists (2 : ℂ)` using
+      `u := approach_one_seq`;
+    - rewired `MLC.mlc_conjecture` to consume that direct weaker-seam provider.
+    This further shortens the rooted seam chain while preserving the same
+    axiom footprint and contradiction-core shape.
+  - Abstract seam generalized from fixed cap `2` to boundedness by `R > 1`:
+    - updated `BottcherApproachToOneSeqPreimageData` to carry
+      `∃ R, 1 < R ∧ ∀ n, ‖u n‖ ≤ R`;
+    - rewired the generalized contradiction core to use `Real.log R` in the
+      boundedness estimate (instead of the hard-coded `Real.log 2`);
+    - updated the current default provider to instantiate `R := 2`.
+    This strictly weakens the abstract contradiction seam and keeps the same
+    rooted theorem path and axiom footprint.
+  - Abstract seam weakening (drop pointwise exterior constraint):
+    - removed the explicit requirement `∀ n, 1 < ‖u n‖` from
+      `BottcherApproachToOneSeqPreimageData`;
+    - in the contradiction core, derived positivity `0 < ‖u n‖` internally from
+      `‖u n‖ = exp(green(...))` via the preimage equations.
+    This further weakens the seam assumptions while preserving the same proof
+    route and axiom footprint.
+  - Abstract seam weakening (drop `R > 1` requirement):
+    - removed `1 < R` from `BottcherApproachToOneSeqPreimageData`;
+    - rewired the default provider accordingly (`R := 2` without an extra
+      inequality field).
+    This makes the seam purely about convergence + boundedness + preimage data,
+    and keeps the contradiction core and axiom footprint unchanged.
+  - Abstract seam normalization to `IsBounded`:
+    - replaced the explicit cap payload `∃ R, ∀ n, ‖u n‖ ≤ R` in
+      `BottcherApproachToOneSeqPreimageData` with `IsBounded (Set.range u)`;
+    - extracted an explicit norm cap `R` internally in the contradiction core
+      via `isBounded_iff_forall_norm_le`;
+    - rewired the default provider to discharge boundedness directly.
+    This keeps the same mathematics while making the seam signature cleaner and
+    strictly more representation-agnostic.
+  - Abstract seam weakening (drop boundedness assumption entirely):
+    - removed `IsBounded (Set.range u)` from
+      `BottcherApproachToOneSeqPreimageData`;
+    - in the contradiction core, derived range boundedness from convergence
+      `u → 1` using `isBounded_range_of_tendsto`;
+    - removed now-off-path helper `norm_approach_one_seq_le_two`.
+    The active seam now requires only:
+    - existence of a sequence `u` with `u n → 1`, and
+    - preimages of `u n` under `bottcher_map`.
+    This is the weakest contradiction input layer so far, with unchanged axiom
+    footprint and rooted closure.
+  - Abstract seam representation simplification (`u`+preimages → `z` sequence):
+    - rewired `BottcherApproachToOneSeqPreimageData` to:
+      `∃ z, Tendsto (fun n => bottcher_map c (z n)) atTop (𝓝 1)`;
+    - rewired the contradiction core to define
+      `u n := bottcher_map (2 : ℂ) (z n)` internally and reuse the same
+      bounded-subsequence argument;
+    - rewired the default provider from `external_ray_map_exists` to produce
+      the `z` sequence directly.
+    This keeps the seam logically equivalent while removing one existential
+    layer from the public interface.
+  - Route minimal seam provider through outside-plan image inclusion:
+    - added
+      `bottcher_approach_to_one_seq_preimage_data_two_of_exterior_subset_image_outside_disk`
+      in `Mlc/MainConjecture.lean`;
+    - rewired the current default provider
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to call that theorem via
+      `exterior_subset_image_outside_disk (2 : ℂ)`.
+    This connects the rooted minimal seam directly to the extracted
+    outside-plan seam layer, making replacement targets for elimination more
+    explicit.
+  - Generalized outside-disk-image constructor for the minimal seam:
+    - introduced
+      `bottcher_approach_to_one_seq_preimage_data_of_exterior_subset_image_outside_disk`
+      for arbitrary parameter `c`;
+    - kept the active `c = 2` route as a specialization of that generic
+      constructor.
+    This keeps the active path unchanged while making the minimal-seam
+    constructor reusable for future external-ray-free replacement work.
+  - Wrapper cleanup after constructor generalization:
+    - removed the one-step `c = 2` forwarding wrapper for the outside-disk
+      constructor;
+    - rewired
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`
+      to call the generic constructor directly.
+    This keeps `Mlc/MainConjecture.lean` rooted declarations minimal.
+  - Additional rooted-wrapper cleanup:
+    - removed one-use default provider
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`;
+    - inlined its body at the final `mlc_conjecture` call site.
+    This shortens the rooted seam chain without changing the strategy shape,
+    theorem statements, or axiom footprint.
+  - Rooted seam weakened from full exterior inclusion to sequence-image inclusion:
+    - introduced
+      `ApproachOneSeqInImageOutsideDiskData c`:
+      `∀ n, approach_one_seq n ∈ bottcher_map c '' outside_disk c`;
+    - introduced constructor
+      `bottcher_approach_to_one_seq_preimage_data_of_approach_one_seq_in_image_outside_disk`;
+    - rewired `mlc_conjecture` to use this weaker sequence-image seam, with
+      default instantiation from
+      `exterior_subset_image_outside_disk (2 : ℂ)`.
+    This strictly weakens the active replacement target and keeps the same
+    theorem/axiom profile.
+  - Post-minimal-seam constructor audit:
+    - searched the repository for constructors/usages of
+      `BottcherApproachToOneSeqPreimageData`;
+    - current result: only one active provider exists,
+      `bottcher_approach_to_one_seq_preimage_data_two_of_external_ray_map_exists`
+      in `Mlc/MainConjecture.lean`.
+    Therefore, eliminating `MLC.Quadratic.external_ray_map_exists` now reduces
+    to constructing this minimal seam non-axiomatically (or redesigning the
+    main strategy path to avoid requiring it).
+  - Rooted-closure audit refresh:
+    - regenerated `site/mlc_conjecture/graph.json`;
+    - rechecked top-level declarations of `Mlc/MainConjecture.lean`;
+    - result: no declarations missing from rooted closure.
+  - Seam weakening from outside-disk image membership to plain Böttcher range:
+    - replaced `ApproachOneSeqInImageOutsideDiskData` with
+      `ApproachOneSeqInBottcherRangeData c := ∀ n, approach_one_seq n ∈ Set.range (Quadratic.bottcher_map c)`;
+    - rewired the sequence-to-preimage constructor to consume this weaker
+      range-only seam;
+    - updated `mlc_conjecture` to derive range witnesses by erasing the domain
+      side-condition from the previous outside-disk witness.
+    This strictly weakens the rooted seam interface while keeping the same
+    theorem shape and axiom footprint.
+  - Active provider simplification on the rooted seam:
+    - rewired `mlc_conjecture` to instantiate the range seam directly using
+      `Quadratic.bottcher_map_surj` on `approach_one_seq n` (with
+      `norm_approach_one_seq_gt_one n`);
+    - the active external-ray-backed ingress is now the primitive surjectivity
+      interface (`bottcher_map_surj`) at the final seam provider.
+    This narrows the rooted interface to a single sequence-range witness
+    constructor.
+  - Rooted seam extraction cleanup:
+    - added
+      `approach_one_seq_in_bottcher_range_data_two_of_bottcher_map_surj` as
+      the named `c = 2` provider;
+    - added
+      `mlc_conjecture_of_approach_one_seq_in_bottcher_range_data_two` as the
+      dedicated seam assembly theorem;
+    - rewired `mlc_conjecture` through that theorem.
+    This keeps the remaining replacement obligation explicit while preserving
+    theorem shape and axiom footprint.
+  - Verification after the above rewiring:
+    - `make build`, `make graphs`, `make check`, and
+      `scripts/verify_output.sh` all pass;
+    - axiom audit remains:
+      `Quot.sound`, `propext`, `Classical.choice`,
+      `MLC.Quadratic.external_ray_map_exists`;
+    - rooted-closure audit for `Mlc/MainConjecture.lean` against
+      `site/mlc_conjecture/graph.json` remains clean (`missing_count = 0`).
+  - Constructive-core extraction for the remaining branch obligations:
+    - added theorem
+      `mlc_conjecture_of_motionHyp_tower_conformalModulus_data` that assembles
+      MLC from exactly:
+      - `Quadratic.PuzzleBoundaryMotionHyp`
+      - `InfinitelyRenormalizableHasTowerData`
+      - `MoleculeConformalModulusLowerBoundData`
+      with IR classification derived by
+      `classify_infinitely_renormalizable`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two` to be
+      a thin contradiction wrapper that only supplies those three inputs via
+      `False.elim`.
+    This isolates the non-contradiction strategy core from the current
+    contradiction fallback and makes the remaining constructive replacement
+    interface explicit.
+  - Track-2 interface alignment in `Mlc/MainConjecture.lean`:
+    - added `mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget`,
+      routing the strategy through the explicit target
+      `MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData`;
+    - added bridge provider
+      `bridge_provider_of_motionHyp_moleculeBridgeTarget_data` using
+      `lc_at_of_shrink_of_connected_at` plus
+      `finite_connectedAt_provider_of_motionHyp` to avoid reintroducing
+      `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`;
+    - rewired the current fallback in
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`
+      through this Track-2-aligned theorem.
+    This keeps the active axiom frontier at the single remaining target
+    `MLC.Quadratic.external_ray_map_exists` while making the constructive
+    bridge replacement surface explicit.
+  - Track-1 interface alignment in `Mlc/MainConjecture.lean`:
+    - added `IRNoTowerImpliesPrimitiveData` and conversion lemma
+      `irClassificationData_of_noTowerImpliesPrimitiveData`;
+    - added
+      `mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeBridgeTarget`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`
+      through this Track-1+Track-2 seam.
+    This makes both remaining constructive obligations explicit at the active
+    boundary:
+    1. `noTower -> primitive` for IR classification,
+    2. Molecule→satellite principal-nest bridge target.
+  - Track-1 classification centralization:
+    - added theorem
+      `classify_infinitely_renormalizable_of_noTowerImpliesPrimitive`
+      to `Mlc/InfinitelyRenormalizable.lean`;
+    - rewired `irClassificationData_of_noTowerImpliesPrimitiveData` in
+      `Mlc/MainConjecture.lean` to consume that theorem.
+    This removes duplicated case-split logic in `MainConjecture` and makes
+    Track-1 progress live in the IR module.
+  - Combined Track-1+Track-2 seam packaging:
+    - added
+      `IRNoTowerPrimitiveAndMoleculeBridgeTargetData` in
+      `Mlc/MainConjecture.lean`;
+    - added assembly theorem
+      `mlc_conjecture_of_motionHyp_track12_data`;
+    - rewired
+      `mlc_conjecture_of_bottcher_approach_to_one_seq_preimage_data_two`
+      to consume that single combined seam datum.
+    This shrinks active replacement obligations to one explicit packaged target
+    while preserving theorem shape and current axiom footprint.
+  - Track-2 proof reduction completed in
+    `Mlc/MoleculeToSatelliteNestData.lean`:
+    - added theorem
+      `moleculeBridgeTarget_of_moleculeUniformBridgeTarget`;
+    - this proves the strong principal-nest bridge target from the uniform
+      conformal target by constructing `SatellitePrincipalNestData` at
+      canonical tower depths.
+    - rewired `Mlc/MainConjecture.lean` to consume the uniform Track-2 target
+      in the combined seam package and derive the strong bridge target by
+      theorem.
+    This is the first nontrivial proof step in the new Track-2 path and avoids
+    further interface-only churn.
+  - Track-1/Track-2 interaction proof step completed in
+    `Mlc/MainConjecture.lean`:
+    - added
+      `irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget`;
+    - this derives `IRClassificationData` from
+      `IRNoTowerImpliesPrimitiveData` + uniform Track-2 target by excluding
+      tower cases on `M` via
+      `not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal`;
+    - rewired
+      `mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget`
+      to use that derived classification.
+    This is a direct proof-level integration of Track-1 and Track-2 hypotheses.
+  - Rooted hygiene refresh after rewiring:
+    - removed newly introduced but off-path declarations from
+      `Mlc/MainConjecture.lean` and rechecked rooted closure;
+    - result remains clean (`missing_count = 0`).
 - Blocked pending a consistent constructive replacement architecture for
   finite-branch data + IR classification + molecule bridge data.
 - Any attempt to remove `external_ray_map_exists` before Phase 1 is complete

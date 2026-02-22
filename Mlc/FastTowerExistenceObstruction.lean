@@ -82,13 +82,21 @@ theorem not_moleculeConformalModulusLowerBoundData_of_exists_mem_mandelbrot_towe
 
 /-- Uniform conformal-target variant: any Mandelbrot satellite tower refutes the
     stronger uniform bridge data. -/
+lemma not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform
+    (h_uniform : MoleculeUniformConformalLowerBoundData) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
+    ¬ SatelliteRenormalizableTower c := by
+  have h_conf : MoleculeConformalModulusLowerBoundData :=
+    moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
+  exact not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_conf c hc
+
+/-- Uniform conformal-target variant: any Mandelbrot satellite tower refutes the
+    stronger uniform bridge data. -/
 theorem not_moleculeUniformConformalLowerBoundData_of_mem_mandelbrot_tower
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     ¬ MoleculeUniformConformalLowerBoundData := by
   intro h_uniform
-  have h_conf : MoleculeConformalModulusLowerBoundData :=
-    moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
-  exact (not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_conf c hc) hTower
+  exact (not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform h_uniform c hc) hTower
 
 /-- Globalized version of the uniform conformal-target obstruction. -/
 theorem not_moleculeUniformConformalLowerBoundData_of_exists_mem_mandelbrot_tower :
