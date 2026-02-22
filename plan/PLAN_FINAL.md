@@ -107,6 +107,8 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_localHomeomorph`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_localHomeomorphOn`;
   - `localHomeomorphOnOutsideOpen_two_of_analyticDerivConstructivePayloadTwo`;
+  - `KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_analyticDerivConstructivePayloadTwo`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_outsideDiskRefinement`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_externalRayLandsOutsideOpen`;

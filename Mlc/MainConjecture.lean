@@ -1013,6 +1013,35 @@ theorem localHomeomorphOnOutsideOpen_two_of_slitInjOutsideDisk
     IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
   bottcher_map_isLocalHomeomorphOn_outside_open (2 : ℂ) h_payload.1
 
+/-- Aggregate predicate for currently wired source families that imply
+`BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)`. -/
+def KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
+  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) ∨
+    BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) ∨
+    ExternalRayLandsOutsideOpen (2 : ℂ) ∨
+    AnalyticDerivConstructivePayloadTwo ∨
+    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo)
+
+/-- Any currently wired source family in the previous aggregate yields
+outside-open exterior surjectivity at `c = 2`. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    (h : KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
+  rcases h with hA | hB | hC | hD | hE | hF
+  · exact bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload hA.1 hA.2
+  · exact bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload hB.1 hB.2
+  · exact bottcherSurjOnExteriorFromOutsideOpen_two_of_outsideDiskRefinement hC
+  · exact bottcherSurjOnExteriorFromOutsideOpen_two_of_outsideDiskRefinement
+      (outsideDiskRefinement_two_of_externalRayLandsOutsideOpen hD)
+  · exact bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
+      hE.1 hE.2.1 hE.2.2
+  · exact bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload hF.1
+      (localHomeomorphOnOutsideOpen_two_of_slitInjOutsideDisk hF.2)
+
 /-- Step-4→root seam specialized through restricted-map closed range plus the
 combined non-slit outside-open analytic/injective payload shape at `c = 2`. -/
 def NonSlitAnalyticInjConstructivePayloadTwo : Prop :=
