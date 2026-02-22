@@ -769,6 +769,20 @@ No unconditional theorem currently provides:
   - rooted axiom frontier unchanged and still includes
     `MLC.Quadratic.external_ray_map_exists`.
 
+## Implementation checkpoint (2026-02-22, non-slit payload seam wiring)
+- Added in `BottcherOutsidePlan.lean`:
+  - `OutsideOpenAnalyticInjPayload`;
+  - `OutsideOpenAnalyticInjNonSlitPayloadTwo`;
+  - `external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload`;
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Added in `MainConjecture.lean`:
+  - `NonSlitAnalyticInjConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

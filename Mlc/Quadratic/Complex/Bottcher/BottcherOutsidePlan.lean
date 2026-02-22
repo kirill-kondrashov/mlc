@@ -4929,6 +4929,16 @@ lemma bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit
 def OutsideOpenAnalyticityHypothesis (c : ℂ) : Prop :=
   ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z
 
+/-- Framework seam: outside-open analyticity+injectivity payload for
+`bottcher_map` (non-slit route target shape). -/
+def OutsideOpenAnalyticInjPayload (c : ℂ) : Prop :=
+  OutsideOpenAnalyticityHypothesis c ∧
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}
+
+/-- `c = 2` specialization of the outside-open analyticity+injectivity seam. -/
+def OutsideOpenAnalyticInjNonSlitPayloadTwo : Prop :=
+  OutsideOpenAnalyticInjPayload (2 : ℂ)
+
 /-- Framework seam: for each outside-open point, provide a local open chart on
 which `bottcher_map` is analytic. -/
 def OutsideOpenLocalAnalyticChartHypothesis (c : ℂ) : Prop :=
@@ -4963,6 +4973,20 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesi
   intro z hz
   rcases h_chart z hz with ⟨U, _hUopen, hzU, hUanalytic⟩
   exact hUanalytic z hzU
+
+/-- Project analyticity from the combined outside-open analytic/injective seam. -/
+lemma outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload
+    (c : ℂ)
+    (h_payload : OutsideOpenAnalyticInjPayload c) :
+    OutsideOpenAnalyticityHypothesis c :=
+  h_payload.1
+
+/-- Project outside-open injectivity from the combined analytic/injective seam. -/
+lemma injOn_outside_open_of_outsideOpenAnalyticInjPayload
+    (c : ℂ)
+    (h_payload : OutsideOpenAnalyticInjPayload c) :
+    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+  h_payload.2
 
 /-- Outside-open `AnalyticAt` payload induces local charts inside outside-open
 by taking the ambient outside-open set itself as the chart. -/
@@ -5064,6 +5088,18 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticit
       c h_analytic)
     h_inj
 
+/-- Construct external-ray data from closed range plus the combined outside-open
+analytic/injective seam payload. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_payload : OutsideOpenAnalyticInjPayload c) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
+    c hclosed
+    (outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload c h_payload)
+    (injOn_outside_open_of_outsideOpenAnalyticInjPayload c h_payload)
+
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open `AnalyticAt` payload and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
@@ -5084,6 +5120,15 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyt
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
     (2 : ℂ) hclosed h_analytic h_inj
+
+/-- `c = 2` specialization from the combined non-slit outside-open
+analytic/injective seam payload. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    (2 : ℂ) hclosed h_payload
 
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open local analytic charts and outside-open injectivity. -/

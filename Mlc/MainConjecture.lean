@@ -630,6 +630,28 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
   exact mlc_conjecture_of_analyticDerivConstructivePayloadTwo
     ⟨hclosed, hanalytic, hderiv⟩
 
+/-- Step-4→root seam specialized through restricted-map closed range plus the
+combined non-slit outside-open analytic/injective payload shape at `c = 2`. -/
+def NonSlitAnalyticInjConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenAnalyticInjNonSlitPayloadTwo
+
+/-- Root bridge from the combined non-slit outside-open analytic/injective
+payload shape at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo
+    (h_payload : NonSlitAnalyticInjConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+      h_payload.1 h_payload.2
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (by
+      let f : ℂ → ℂ := Classical.choose h_data
+      intro n
+      refine ⟨f (approach_one_seq n), ?_⟩
+      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
+        (norm_approach_one_seq_gt_one n))
+
 /-- Step-4→root seam specialized through restricted-map closed range plus
     outside-open analytic/injective payloads at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two

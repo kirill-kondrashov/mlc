@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~96%`
+  `[█████████░] ~97%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -308,3 +308,16 @@ constructive `mlc_conjecture` replacement route.
   establishes an explicit non-slit algebraic form for
   `Quadratic.bottcher_map c z / z` on outside-open, preparing a direct
   analyticity no-go/constraint route independent of slit-neighborhood payloads.
+
+## Implementation checkpoint (2026-02-22, non-slit analytic+injective seam wiring)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `OutsideOpenAnalyticInjPayload`;
+  - `OutsideOpenAnalyticInjNonSlitPayloadTwo`;
+  - `external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload`;
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `NonSlitAnalyticInjConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`.
+- Impact:
+  the root path now has an explicit combined non-slit payload slot, so the only
+  remaining work is discharging that payload constructively at `c = 2`.
