@@ -676,7 +676,9 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_externalRayMapData_two h_data
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_two_of_surjOnExterior
+      (bottcherSurjOnExterior_two_of_externalRayMapData h_data))
 
 /-- Step-4→root seam: outside-open exterior surjectivity at `c = 2` is
     sufficient to derive the full MLC statement. -/

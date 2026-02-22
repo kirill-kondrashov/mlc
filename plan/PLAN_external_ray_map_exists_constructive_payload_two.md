@@ -18,9 +18,20 @@ No unconditional theorem currently provides:
 - `ClosedRangeLocalSlitInjPayloadTwo`.
 
 ## Progress bars
-- 🔶 **End-to-end elimination progress** — metric `9/10` (`90%`) `[█████████░]`
-- 🔹 **Constructive payload route progress** — metric `4/6` (`67%`) `[███████░░░]`
-- 🔷 **Proof implementation progress** — metric `9/9` (`100%`) `[██████████]`
+- **End-to-end elimination progress** — metric `9/10` (`90%`) `[█████████░]`
+- **Constructive payload route progress** — metric `4/6` (`67%`) `[███████░░░]`
+- **Proof implementation progress** — metric `9/9` (`100%`) `[██████████]`
+
+## Implementation checkpoint (2026-02-22, `c = 2` closed-range external-ray ingress flattened)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two` now
+    uses `bottcherSurjOnExterior_two_of_externalRayMapData` before entering the
+    `Two` fiber seam.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - no blocker change and metrics unchanged (`9/10`, `4/6`, `9/9`); ingress
+    layering is tighter.
 
 ## Implementation checkpoint (2026-02-22, `c = 2` outside-open-to-fiber bridge seam normalization)
 - Added in `Mlc/MainConjecture.lean`:

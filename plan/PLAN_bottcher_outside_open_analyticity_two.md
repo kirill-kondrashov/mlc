@@ -9,9 +9,19 @@ without using `MLC.Quadratic.external_ray_map_exists`, then use it in the
 constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
-- 🔹 **Analyticity theorem track** — metric `3/4` (`75%`) `[███████░░░]`
-- 🔷 **Framework refactor track** — metric `9/9` (`100%`) `[██████████]`
-- 🔶 **End-to-end elimination impact** — metric `9/10` (`90%`) `[█████████░]`
+- **Analyticity theorem track** — metric `3/4` (`75%`) `[███████░░░]`
+- **Framework refactor track** — metric `9/9` (`100%`) `[██████████]`
+- **End-to-end elimination impact** — metric `9/10` (`90%`) `[█████████░]`
+
+## Implementation checkpoint (2026-02-22, closed-range external-ray wrapper flattened to the `Two` surjectivity seam)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two` now
+    routes directly through
+    `bottcherSurjOnExterior_two_of_externalRayMapData` and the `Two` fiber seam.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) wrapper ingress shape reduced; metrics unchanged (`3/4`, `9/9`, `9/10`).
 
 ## Implementation checkpoint (2026-02-22, outside-open-to-fiber bridge normalized via explicit `Two` seam)
 - Added in `Mlc/MainConjecture.lean`:
