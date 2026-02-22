@@ -146,8 +146,10 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `KnownLocalHomeomorphOnSourceCandidateTwo`;
   - `not_knownLocalHomeomorphOnSourceCandidateTwo`;
   - `KnownInjOnOutsideOpenSourceCandidateTwo`;
+  - `injOn_outside_open_two_of_outsideOpenAnalyticityHypothesis`;
   - `injOn_outside_open_two_of_knownInjOnOutsideOpenSourceCandidateTwo`;
   - `not_knownInjOnOutsideOpenSourceCandidateTwo`;
+  - `nonIterInjOnOutsideOpenSourceExhaustionTwo`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo_via_localChartWithin`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_eventualSlitImpliesSlitOrbit`;
   - `mlc_conjecture_of_nonSlitEventualSlitConstructivePayloadTwo`;

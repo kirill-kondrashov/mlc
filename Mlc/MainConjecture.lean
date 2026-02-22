@@ -1556,29 +1556,54 @@ def KnownInjOnOutsideOpenSourceCandidateTwo : Prop :=
   NonSlitAnalyticInjConstructivePayloadTwo ∨
     NonSlitMemNhdsSlitInjConstructivePayloadTwo ∨
     SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo ∨
-    OutsideOpenQuotientConstRealWitnessTwo
+    OutsideOpenQuotientConstRealWitnessTwo ∨
+    OutsideOpenAnalyticityHypothesis (2 : ℂ)
+
+/-- Outside-open analyticity at `c = 2` yields outside-open injectivity through
+the quotient-rigidity bridge. -/
+theorem injOn_outside_open_two_of_outsideOpenAnalyticityHypothesis
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  exact (outsideOpenAnalyticInjPayload_of_outsideOpenAnalyticityHypothesis (2 : ℂ) h_analytic).2
 
 /-- Any currently wired non-iterate-left source family in the previous aggregate
 yields outside-open injectivity at `c = 2`. -/
 theorem injOn_outside_open_two_of_knownInjOnOutsideOpenSourceCandidateTwo
     (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
-  rcases h with hA | hB | hC | hD
+  rcases h with hA | hB | hC | hD | hE
   · exact hA.2.2
   · exact hB.2.2
   · exact hC.2.mono (outside_open_subset_outside_disk (2 : ℂ))
   · exact injOn_outside_open_of_outsideOpenQuotientConstRealWitness (2 : ℂ) hD
+  · exact injOn_outside_open_two_of_outsideOpenAnalyticityHypothesis hE
 
 /-- All currently wired non-iterate-left source families that can yield
 outside-open injectivity are inconsistent in the current model at `c = 2`. -/
 theorem not_knownInjOnOutsideOpenSourceCandidateTwo :
     ¬ KnownInjOnOutsideOpenSourceCandidateTwo := by
   intro h
-  rcases h with hA | hB | hC | hD
+  rcases h with hA | hB | hC | hD | hE
   · exact not_nonSlitAnalyticInjConstructivePayloadTwo hA
   · exact not_mem_nhds_slit_on_outside_open_two hB.2.1
   · exact not_slitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo hC
   · exact not_outsideOpenQuotientConstRealWitnessTwo hD
+  · exact not_outsideOpenAnalyticityHypothesisTwo hE
+
+/-- Current-model non-iterate-left injectivity-source exhaustion at `c = 2`:
+known source families are blocked, so the only remaining branch in
+`KnownInjOnOutsideOpenSourceCandidateTwo ∨ BottcherLeftInverseOnOutsideOpenData (2 : ℂ)`
+is the left-inverse alias of direct outside-open injectivity. -/
+theorem nonIterInjOnOutsideOpenSourceExhaustionTwo :
+    (KnownInjOnOutsideOpenSourceCandidateTwo ∨ BottcherLeftInverseOnOutsideOpenData (2 : ℂ)) ↔
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  constructor
+  · intro h
+    rcases h with hKnown | hLeft
+    · exact False.elim (not_knownInjOnOutsideOpenSourceCandidateTwo hKnown)
+    · exact (leftInverseOutsideOpen_two_iff_injOn_outside_open).1 hLeft
+  · intro hInj
+    exact Or.inr ((leftInverseOutsideOpen_two_iff_injOn_outside_open).2 hInj)
 
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative
