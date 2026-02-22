@@ -573,6 +573,14 @@ lemma bottcherSurjOnExterior_of_surjOnExteriorFromOutsideOpen
   rcases h_surj w hw with ⟨z, _hz_out, hz_map⟩
   exact ⟨z, hz_map⟩
 
+/-- Minimal exterior surjectivity follows from explicit external-ray data. -/
+lemma bottcherSurjOnExterior_of_externalRayMapData
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    BottcherSurjOnExterior c := by
+  intro w hw
+  refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_⟩
+  exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
+
 /-- Build exact canonical-sequence fiber data directly from minimal exterior
 surjectivity. -/
 lemma bottcherApproachOneSeqFiberData_of_surjOnExterior
@@ -622,9 +630,8 @@ theorem mlc_conjecture_of_externalRayMapData_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ) (fun w hw =>
-      ⟨Quadratic.external_ray_map_of_data h_data w,
-        Quadratic.external_ray_map_of_data_right_inverse h_data w hw⟩))
+    (bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ)
+      (bottcherSurjOnExterior_of_externalRayMapData h_data))
 
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
@@ -924,24 +931,10 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_i
 lemma externalRayMapData_two_axiom_seed : Quadratic.ExternalRayMapData (2 : ℂ) :=
   Quadratic.external_ray_map_exists (2 : ℂ)
 
-/-- Minimal exterior surjectivity follows from explicit external-ray data. -/
-lemma bottcherSurjOnExterior_of_externalRayMapData
-    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
-    BottcherSurjOnExterior c := by
-  intro w hw
-  refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_⟩
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
-
 /-- Current rooted axiom-seed minimal surjectivity target at `c = 2`. -/
 lemma bottcherSurjOnExterior_two_axiom_seed :
     BottcherSurjOnExterior (2 : ℂ) :=
   bottcherSurjOnExterior_of_externalRayMapData externalRayMapData_two_axiom_seed
-
-/-- Current rooted axiom-seed reduction target:
-exact countable-fiber data on `approach_one_seq` at `c = 2`. -/
-lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
-    BottcherApproachOneSeqFiberData (2 : ℂ) :=
-  bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ) bottcherSurjOnExterior_two_axiom_seed
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

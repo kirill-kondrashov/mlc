@@ -10,11 +10,23 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.76%`
+  `[█████████░] ~99.77%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.95%`
+  `[█████████░] ~99.96%`
+
+## Implementation checkpoint (2026-02-22, seam lemma hoisted and root bridge deduplicated)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - moved `bottcherSurjOnExterior_of_externalRayMapData` into the core seam
+    section and reused it in
+    `mlc_conjecture_of_externalRayMapData_two` (removing inline duplicate
+    witness construction);
+  - removed obsolete `bottcherApproachOneSeqFiberData_two_axiom_seed`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - cleaner root-facing seam layering; no change to final axiom frontier.
 
 ## Implementation checkpoint (2026-02-22, explicit external-ray root bridge aligned to minimal surjectivity seam)
 - Rewired in `Mlc/MainConjecture.lean`:

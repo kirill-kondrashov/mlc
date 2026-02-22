@@ -19,11 +19,23 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.95%`
+  `[█████████░] ~99.96%`
 - Constructive payload route progress:
-  `[██████████] ~99.991%`
+  `[██████████] ~99.992%`
 - Proof implementation progress:
-  `[█████████░] ~99.76%`
+  `[█████████░] ~99.77%`
+
+## Implementation checkpoint (2026-02-22, external-ray bridge witness deduplicated)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two` now uses the shared named seam
+    lemma `bottcherSurjOnExterior_of_externalRayMapData` rather than an inline
+    existential witness term.
+- Cleanup:
+  - removed obsolete `bottcherApproachOneSeqFiberData_two_axiom_seed`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - unchanged elimination status, with cleaner minimal-seam graph flow.
 
 ## Implementation checkpoint (2026-02-22, external-ray root bridge normalized to minimal surjectivity)
 - Rewired in `Mlc/MainConjecture.lean`:
