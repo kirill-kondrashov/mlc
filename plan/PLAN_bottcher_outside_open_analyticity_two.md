@@ -16,6 +16,18 @@ constructive `mlc_conjecture` replacement route.
 - End-to-end elimination impact:
   `[█████████░] ~99.96%`
 
+## Implementation checkpoint (2026-02-22, preimage-data root theorem seam normalized at `c = 2`)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two` now routes through
+    the new `Two`-specialized preimage-data theorem.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root chain uses one more explicit `c = 2` seam boundary;
+    rooted non-core axiom frontier unchanged.
+
 ## Implementation checkpoint (2026-02-22, preimage-seam wrapper specialized at `c = 2`)
 - Added in `Mlc/MainConjecture.lean`:
   - `bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData`.

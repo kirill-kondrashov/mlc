@@ -627,12 +627,19 @@ lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
 
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
+theorem mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_mainPathData
+    (mainPathData_of_bottcherApproachToOneSeqPreimageData_two h_data)
+
+/-- Rooted reduction theorem: exact countable-fiber data at the canonical
+`approach_one_seq` for `c = 2` implies the full MLC statement. -/
 theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     (h_fiber : BottcherApproachOneSeqFiberData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_mainPathData
-    (mainPathData_of_bottcherApproachToOneSeqPreimageData_two
-      (bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData h_fiber))
+  exact mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two
+    (bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData h_fiber)
 
 /-- Root bridge from explicit external-ray-map data at `c = 2`. -/
 theorem mlc_conjecture_of_externalRayMapData_two

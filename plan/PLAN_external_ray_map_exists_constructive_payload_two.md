@@ -25,6 +25,17 @@ No unconditional theorem currently provides:
 - Proof implementation progress:
   `[█████████░] ~99.77%`
 
+## Implementation checkpoint (2026-02-22, `c = 2` preimage-data theorem seam normalization)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two` to delegate to the
+    new `Two`-specialized preimage-data theorem.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - no change in remaining rooted axiom; theorem ingress layering is cleaner.
+
 ## Implementation checkpoint (2026-02-22, `c = 2` approach-to-one preimage ingress normalization)
 - Added in `Mlc/MainConjecture.lean`:
   - `bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData`.
