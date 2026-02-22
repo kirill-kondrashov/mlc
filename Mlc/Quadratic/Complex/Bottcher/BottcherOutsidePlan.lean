@@ -4956,6 +4956,10 @@ def OutsideOpenAnalyticInjPayload (c : ℂ) : Prop :=
 def OutsideOpenAnalyticInjNonSlitPayloadTwo : Prop :=
   OutsideOpenAnalyticInjPayload (2 : ℂ)
 
+/-- `c = 2` specialization of the quotient analyticity seam. -/
+def OutsideOpenQuotientAnalyticityHypothesisTwo : Prop :=
+  OutsideOpenQuotientAnalyticityHypothesis (2 : ℂ)
+
 /-- `c = 2` specialization of the quotient analytic+real-scale seam. -/
 def OutsideOpenQuotientAnalyticRealScalePayloadTwo : Prop :=
   OutsideOpenQuotientAnalyticRealScalePayload (2 : ℂ)
@@ -5186,6 +5190,14 @@ lemma outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypoth
   outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScalePayload c
     ⟨h_analytic, outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div c⟩
 
+/-- `c = 2` specialization: outside-open quotient analyticity implies quotient
+constancy. -/
+lemma outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo
+    (h_analytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    OutsideOpenQuotientConstHypothesisTwo :=
+  outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypothesis (2 : ℂ)
+    h_analytic
+
 /-- Outside-open analyticity of `bottcher_map` implies quotient constancy. -/
 lemma outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis
     (c : ℂ)
@@ -5193,6 +5205,20 @@ lemma outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis
     OutsideOpenQuotientConstHypothesis c :=
   outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypothesis c
     (outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis c h_analytic)
+
+/-- `c = 2` specialization: outside-open analyticity implies quotient analyticity. -/
+lemma outsideOpenQuotientAnalyticityHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo :=
+  outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis (2 : ℂ)
+    h_analytic
+
+/-- `c = 2` specialization: outside-open analyticity implies quotient constancy. -/
+lemma outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientConstHypothesisTwo :=
+  outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis (2 : ℂ)
+    h_analytic
 
 /-- There exists an outside-open point (explicit witness `‖c‖ + 3`). -/
 lemma exists_outside_open_point (c : ℂ) :
@@ -5252,6 +5278,14 @@ lemma outsideOpenQuotientConstRealWitness_of_outsideOpenAnalyticityHypothesis
     OutsideOpenQuotientConstRealWitness c :=
   outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis c
     (outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis c h_analytic)
+
+/-- `c = 2` specialization: outside-open analyticity implies the strong
+quotient-rigidity witness. -/
+lemma outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientConstRealWitnessTwo :=
+  outsideOpenQuotientConstRealWitness_of_outsideOpenAnalyticityHypothesis (2 : ℂ)
+    h_analytic
 
 /-- A strong quotient-rigidity witness implies outside-open analyticity. -/
 lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness
@@ -5324,6 +5358,29 @@ lemma outsideOpenAnalyticInjNonSlitPayloadTwo_of_outsideOpenAnalyticityHypothesi
     OutsideOpenAnalyticInjNonSlitPayloadTwo :=
   outsideOpenAnalyticInjPayload_of_outsideOpenAnalyticityHypothesis (2 : ℂ) h_analytic
 
+/-- Combined outside-open analytic/injective payload implies quotient constancy. -/
+lemma outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticInjPayload
+    (c : ℂ)
+    (h_payload : OutsideOpenAnalyticInjPayload c) :
+    OutsideOpenQuotientConstHypothesis c :=
+  outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis c
+    (outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload c h_payload)
+
+/-- `c = 2` specialization: combined outside-open analytic/injective payload
+implies quotient constancy. -/
+lemma outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+    (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
+    OutsideOpenQuotientConstHypothesisTwo :=
+  outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticInjPayload (2 : ℂ) h_payload
+
+/-- `c = 2` specialization: combined outside-open analytic/injective payload
+implies the strong quotient-rigidity witness. -/
+lemma outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+    (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
+    OutsideOpenQuotientConstRealWitnessTwo :=
+  outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo
+    (outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo h_payload)
+
 /-- Outside-open exterior surjectivity from closed range plus the combined
 outside-open analytic/injective seam payload. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
@@ -5347,6 +5404,45 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
     (2 : ℂ) hclosed h_payload
+
+/-- Outside-open exterior surjectivity from closed range plus the strong
+quotient-rigidity witness. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_wit : OutsideOpenQuotientConstRealWitness c) :
+    BottcherSurjOnExteriorFromOutsideOpen c :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    c hclosed (outsideOpenAnalyticInjPayload_of_outsideOpenQuotientConstRealWitness c h_wit)
+
+/-- `c = 2` specialization: outside-open exterior surjectivity from closed range
+plus the strong quotient-rigidity witness. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
+    (2 : ℂ) hclosed h_wit
+
+/-- Outside-open exterior surjectivity from closed range plus outside-open
+analyticity, routed through the quotient-rigidity witness bridge. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    BottcherSurjOnExteriorFromOutsideOpen c :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
+    c hclosed
+    (outsideOpenQuotientConstRealWitness_of_outsideOpenAnalyticityHypothesis c h_analytic)
+
+/-- `c = 2` specialization: outside-open exterior surjectivity from closed range
+plus outside-open analyticity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    (2 : ℂ) hclosed h_analytic
 
 /-- Outside-open `AnalyticAt` payload induces local charts inside outside-open
 by taking the ambient outside-open set itself as the chart. -/

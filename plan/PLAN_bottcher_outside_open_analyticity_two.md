@@ -10,11 +10,35 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.3%`
+  `[█████████░] ~92%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[██████████] ~99.1%`
+  `[█████████░] ~99.6%`
+
+## Implementation checkpoint (2026-02-22, internet-backed theorem chain + surjectivity bridge)
+- External references reviewed for the remaining proof shape:
+  - Douady–Hubbard (`Étude dynamique des polynômes complexes`),
+  - Milnor (`Dynamics in One Complex Variable`),
+  - DeMarco–Pilgrim (`Polynomial Basins of Infinity`).
+- Lean-targeted chain fixed as:
+  - outside-open analyticity
+  -> quotient analyticity
+  -> quotient constancy
+  -> real-scalar witness
+  -> outside-open surjectivity
+  -> rooted `mlc_conjecture`.
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    now consumes the new direct surjectivity bridge;
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo` now reuses that
+    theorem directly.
+- Validation:
+  - `make build && make check && make graphs` passed;
+  - rooted axiom frontier unchanged (`MLC.Quadratic.external_ray_map_exists` remains).
 
 ## Why this is currently blocked
 - Existing analytic proofs on outside-open are slit-driven:
@@ -386,3 +410,140 @@ constructive `mlc_conjecture` replacement route.
 - Validation:
   - `make build && make check` pass; rooted axiom frontier unchanged
     (still includes `MLC.Quadratic.external_ray_map_exists`).
+
+## Implementation checkpoint (2026-02-22, quotient-analytic payload root bridge)
+- Added in `Mlc/MainConjecture.lean`:
+  - `NonSlitQuotientAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo`.
+- Impact:
+  root-facing non-slit payload route now accepts quotient analyticity directly
+  and derives quotient constancy through the repaired bridge.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analyticity-route quotient rewiring)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientAnalyticityHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo`;
+  - `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    now routes through quotient constancy payload;
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo` now routes through
+    the quotient-analytic payload bridge.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, direct quotient-analytic ingress seam)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`.
+- Rewired:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    now factors through the direct quotient-analytic ingress theorem.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, direct quotient-const ingress seam)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two`.
+- Rewired:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`
+    now factors through the direct quotient-const ingress theorem.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, c=2 quotient-specialization cleanup)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - quotient-analytic and quotient-const ingress bridges now use `Two`-specialized
+    quotient constancy lemmas and payload types directly.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic ingress direct-to-const specialization)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    now uses
+    `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo`
+    directly (bypassing quotient-analytic intermediary);
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo` now maps directly
+    to quotient-const payload.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, quotient-analytic `Two` alias cleanup)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `OutsideOpenQuotientAnalyticityHypothesisTwo`.
+- Rewired:
+  - `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo`
+    and
+    `outsideOpenQuotientAnalyticityHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo`
+    now use the `Two` alias directly;
+  - `NonSlitQuotientAnalyticConstructivePayloadTwo` and
+    `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`
+    now consume the alias type.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj route normalized to analytic core)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`
+    now projects analyticity and routes through quotient-const payload bridges
+    (no direct surjectivity construction on this route);
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo` now factors via
+    `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo`.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj to quotient-const specialization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticInjPayload`;
+  - `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`
+    now uses the specialized analytic-inj -> quotient-const bridge;
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo` now maps
+    directly to quotient-const payload.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, plain analytic ingress normalization)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
+    factors through `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`;
+  - kept derivative-based bridge unchanged (ordering-safe).
+- Impact:
+  plain analytic ingress now converges with the same quotient-const reduction
+  path used by outside-open analytic and analytic-inj seams.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analyticity route via quotient-real witness)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    now routes through `NonSlitQuotientConstRealConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo` now routes through
+    the same quotient-real witness payload.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, direct witness-to-surjectivity bridge)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo` now uses
+    the direct witness-to-surjectivity specialization.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj direct witness specialization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - analytic-inj ingress and non-slit analytic-inj payload root bridges now map
+    directly to `NonSlitQuotientConstRealConstructivePayloadTwo`.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged.

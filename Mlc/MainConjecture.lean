@@ -654,16 +654,19 @@ def NonSlitQuotientConstConstructivePayloadTwo : Prop :=
   IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenQuotientConstHypothesisTwo
 
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open quotient analyticity at `c = 2`. -/
+def NonSlitQuotientAnalyticConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenQuotientAnalyticityHypothesisTwo
+
 /-- Root bridge from the strong quotient-rigidity witness payload at `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
     (h_payload : NonSlitQuotientConstRealConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  have h_nonSlit : OutsideOpenAnalyticInjNonSlitPayloadTwo :=
-    outsideOpenAnalyticInjNonSlitPayloadTwo_of_outsideOpenQuotientConstRealWitnessTwo
-      h_payload.2
   exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
-      h_payload.1 h_nonSlit)
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+      h_payload.1 h_payload.2)
 
 /-- Root bridge from quotient-constancy payload at `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo
@@ -674,15 +677,45 @@ theorem mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo
       outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo
         h_payload.2⟩
 
+/-- Root bridge from quotient-analytic payload at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo
+    (h_payload : NonSlitQuotientAnalyticConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo
+    ⟨h_payload.1,
+      outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo
+        h_payload.2⟩
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open quotient constancy at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qconst : OutsideOpenQuotientConstHypothesisTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo
+    ⟨hclosed, h_qconst⟩
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open quotient analyticity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two
+    hclosed
+    (outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo
+      h_qanalytic)
+
 /-- Step-4→root seam specialized through restricted-map closed range plus the
 combined non-slit outside-open analytic/injective payload. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
-      hclosed h_payload)
+  exact mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
+    ⟨hclosed,
+      outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+        h_payload⟩
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
 outside-open analyticity at `c = 2`. -/
@@ -690,10 +723,9 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
-    hclosed
-    (outsideOpenAnalyticInjNonSlitPayloadTwo_of_outsideOpenAnalyticityHypothesisTwo
-      h_analytic)
+  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+      hclosed h_analytic)
 
 /-- Root bridge from closed range plus outside-open analyticity payload at
 `c = 2`. -/
@@ -708,8 +740,10 @@ payload shape at `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo
     (h_payload : NonSlitAnalyticInjConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
-    h_payload.1 h_payload.2
+  exact mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
+    ⟨h_payload.1,
+      outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+        h_payload.2⟩
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
     outside-open analytic/injective payloads at `c = 2`. -/
@@ -717,19 +751,11 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (hanalytic :
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
-    (hinj :
+    (_hinj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  let h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
-    external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
-      hclosed hanalytic hinj
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (by
-      let f : ℂ → ℂ := Classical.choose h_data
-      intro n
-      refine ⟨f (approach_one_seq n), ?_⟩
-      exact (Classical.choose_spec h_data).1 (approach_one_seq n)
-        (norm_approach_one_seq_gt_one n))
+  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two
+    hclosed hanalytic
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

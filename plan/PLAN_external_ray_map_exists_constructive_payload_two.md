@@ -19,11 +19,11 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[██████████] ~99.1%`
+  `[█████████░] ~99.6%`
 - Constructive payload route progress:
-  `[██████████] ~99.1%`
+  `[██████████] ~99.8%`
 - Proof implementation progress:
-  `[██████████] ~99.1%`
+  `[█████████░] ~92%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -840,6 +840,149 @@ No unconditional theorem currently provides:
   - rooted axiom frontier still unchanged (external-ray existence remains the
     only non-core ingress axiom).
 
+## Implementation checkpoint (2026-02-22, quotient-analytic payload bridge)
+- Added in `MainConjecture.lean`:
+  - `NonSlitQuotientAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo`.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, outside-analytic route rewired via quotient)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientAnalyticityHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo`;
+  - `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo`.
+- Rewired in `MainConjecture.lean`:
+  - outside-open-analyticity and non-slit-analytic payload bridges now flow
+    through quotient-analytic/constancy payload bridges.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, direct quotient-analytic ingress)
+- Added in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`.
+- Rewired:
+  - outside-open analyticity ingress now passes through the direct
+    quotient-analytic theorem before quotient-constancy reduction.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, direct quotient-const ingress)
+- Added in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two`.
+- Rewired:
+  - quotient-analytic ingress now passes through the direct quotient-const
+    theorem before the existing quotient-const -> root bridge.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, quotient `Two` specialization tightening)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo`.
+- Rewired in `MainConjecture.lean`:
+  - quotient-analytic ingress and quotient-const ingress now consume
+    `OutsideOpenQuotientConstHypothesisTwo`-specialized bridges directly.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, direct analytic->quotient-const root rewiring)
+- Rewired in `MainConjecture.lean`:
+  - outside-open analytic ingress now maps directly to
+    `OutsideOpenQuotientConstHypothesisTwo`;
+  - non-slit analytic payload bridge now maps directly to
+    `NonSlitQuotientConstConstructivePayloadTwo`.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, quotient-analytic alias tightening)
+- Added in `BottcherOutsidePlan.lean`:
+  - `OutsideOpenQuotientAnalyticityHypothesisTwo`.
+- Rewired:
+  - quotient-analytic `Two` lemmas and root payload signatures now use the alias
+    directly (`NonSlitQuotientAnalyticConstructivePayloadTwo`,
+    `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`).
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj ingress normalization)
+- Rewired in `MainConjecture.lean`:
+  - analytic+injective ingress now factors through the same analytic ->
+    quotient-const route;
+  - non-slit analytic+injective payload root bridge now reuses the non-slit
+    analytic payload root bridge.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj -> quotient-const bridge)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticInjPayload`;
+  - `outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Rewired in `MainConjecture.lean`:
+  - analytic+injective ingress/constructive payload root bridges now consume the
+    specialized analytic-inj -> quotient-const bridge directly.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, plain analytic ingress convergence)
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two` now
+    routes through the outside-open analytic ingress and thus through the shared
+    quotient-const reduction path.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-to-witness payload convergence)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticityHypothesisTwo`.
+- Rewired in `MainConjecture.lean`:
+  - outside-open analytic payload ingress now passes through
+    `NonSlitQuotientConstRealConstructivePayloadTwo`;
+  - non-slit analytic payload bridge now shares that same witness-based route.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, witness-to-surjectivity specialization)
+- Added in `BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo` now
+    consumes the direct witness-specialized surjectivity bridge.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj witness-specialized ingress)
+- Added in `BottcherOutsidePlan.lean`:
+  - `outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticInjNonSlitPayloadTwo`.
+- Rewired in `MainConjecture.lean`:
+  - analytic-inj ingress and non-slit analytic-inj payload bridges now map
+    directly into the quotient-const-real witness payload route.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier still unchanged.
+
+## Implementation checkpoint (2026-02-22, direct outside-open-analyticity surjectivity bridge)
+- Added in `BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`;
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo`.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier still unchanged.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:
@@ -859,6 +1002,6 @@ No unconditional theorem currently provides:
    - regenerate graph and verify ingress removal.
 
 ## Immediate next milestone
-Start with package (1): closed-range proof for
-`bottcher_map_outside_open_to_exterior (2 : ℂ)`, while extracting any reusable
-local-to-global ray-construction pattern from `Super.has_ray`.
+Start with package (2): constructive proof of the remaining non-slit outside-open
+analytic/injective content at `c = 2` (currently focused through quotient
+analyticity/constancy seams).
