@@ -10,11 +10,23 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.75%`
+  `[█████████░] ~99.76%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.94%`
+  `[█████████░] ~99.95%`
+
+## Implementation checkpoint (2026-02-22, explicit external-ray root bridge aligned to minimal surjectivity seam)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two` now constructs
+    `BottcherApproachOneSeqFiberData` through the minimal
+    `BottcherSurjOnExterior` path instead of directly through the older
+    external-ray-data fiber helper.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - root-facing theorem flow is now consistently centered on the minimal
+    surjectivity seam.
 
 ## Implementation checkpoint (2026-02-22, root minimal seam tightened to exterior-surjectivity seed)
 - Added in `Mlc/MainConjecture.lean`:

@@ -622,7 +622,9 @@ theorem mlc_conjecture_of_externalRayMapData_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_externalRayMapData h_data)
+    (bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ) (fun w hw =>
+      ⟨Quadratic.external_ray_map_of_data h_data w,
+        Quadratic.external_ray_map_of_data_right_inverse h_data w hw⟩))
 
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
