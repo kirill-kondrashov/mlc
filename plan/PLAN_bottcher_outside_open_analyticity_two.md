@@ -25,6 +25,17 @@ constructive `mlc_conjecture` replacement route.
   - end-to-end elimination metric advanced to `9/10`; rooted non-core axiom
     frontier unchanged.
 
+## Implementation checkpoint (2026-02-22, external-ray root bridge aligned to explicit `Two` minimal-surjectivity seam)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two` now routes through
+    `bottcherSurjOnExterior_two_of_externalRayMapData` (then the `Two` fiber seam)
+    instead of directly using the external-ray fiber wrapper.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root seam normalization improved; metric totals unchanged
+    (`3/4`, `9/9`, `9/10`).
+
 ## Implementation checkpoint (2026-02-22, external-ray minimal-surjectivity seam specialized at `c = 2`)
 - Added in `Mlc/MainConjecture.lean`:
   - `bottcherSurjOnExterior_two_of_externalRayMapData`.

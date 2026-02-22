@@ -34,6 +34,17 @@ No unconditional theorem currently provides:
   - end-to-end metric advanced to `9/10`; final blocker remains
     `MLC.Quadratic.external_ray_map_exists`.
 
+## Implementation checkpoint (2026-02-22, `c = 2` explicit external-ray root ingress normalized)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two` now routes through
+    `bottcherSurjOnExterior_two_of_externalRayMapData` before entering the `Two`
+    fiber seam.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - no change to blocker or metrics (`9/10`, `4/6`, `9/9`), but fewer alternate
+    ingress shapes remain.
+
 ## Implementation checkpoint (2026-02-22, `c = 2` external-ray-to-minimal-surjectivity seam specialization)
 - Added in `Mlc/MainConjecture.lean`:
   - `bottcherSurjOnExterior_two_of_externalRayMapData`.
