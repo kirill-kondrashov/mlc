@@ -783,11 +783,12 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (hanalytic :
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
-    (_hinj :
+    (h_inj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two
-    hclosed hanalytic
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
+      hclosed hanalytic h_inj)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

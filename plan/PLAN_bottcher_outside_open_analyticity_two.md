@@ -10,11 +10,11 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.2%`
+  `[█████████░] ~99.25%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.86%`
+  `[█████████░] ~99.87%`
 
 ## Milnor lecture check (`refs/9201272v1.pdf`)
 - Reviewed via `pdftotext` against `refs/9201272v1.pdf` (Milnor notes).
@@ -185,6 +185,18 @@ constructive `mlc_conjecture` replacement route.
   to target `mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two`
   directly via their dedicated `external_ray_map_data_two_*` bridges.
 - Effect: removes one extra root-level wrapper hop on each non-slit payload path.
+- Validation:
+  - `make build && make check && make graphs` passed;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic+inj compatibility seam accuracy)
+- In `Mlc/MainConjecture.lean`, rewired
+  `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
+  to consume
+  `external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open`
+  directly, instead of discarding the explicit injectivity assumption.
+- Effect: improves graph fidelity for the local-slit analytic+injective branch
+  and removes one wrapper hop.
 - Validation:
   - `make build && make check && make graphs` passed;
   - rooted axiom frontier unchanged.

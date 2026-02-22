@@ -19,11 +19,11 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.86%`
+  `[█████████░] ~99.87%`
 - Constructive payload route progress:
-  `[██████████] ~99.98%`
+  `[██████████] ~99.982%`
 - Proof implementation progress:
-  `[█████████░] ~99.2%`
+  `[█████████░] ~99.25%`
 
 ## Research checkpoint (Milnor notes cross-check)
 - Source checked: `refs/9201272v1.pdf` (Milnor lecture notes).
@@ -152,6 +152,17 @@ No unconditional theorem currently provides:
   - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo`,
   - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`,
   to consume the shared closed-range/data root seam directly.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic+inj compatibility wrapper rewired)
+- Rewired
+  `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
+  to route directly through the dedicated analytic+injective
+  `ExternalRayMapData` bridge for `c = 2`.
+- This keeps the explicit injectivity input active in the root-facing theorem
+  graph and tightens the local-slit branch shape.
 - Validation:
   - `make build && make check && make graphs` succeeded;
   - rooted axiom frontier unchanged.
