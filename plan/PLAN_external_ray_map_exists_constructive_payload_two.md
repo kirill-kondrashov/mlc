@@ -19,11 +19,24 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.92%`
+  `[█████████░] ~99.93%`
 - Constructive payload route progress:
-  `[██████████] ~99.988%`
+  `[██████████] ~99.989%`
 - Proof implementation progress:
-  `[█████████░] ~99.72%`
+  `[█████████░] ~99.74%`
+
+## Implementation checkpoint (2026-02-22, remaining wrapper ingresses converged)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - non-slit analytic payload wrappers and analytic-at compatibility wrappers now
+    delegate to the shared
+    `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    route.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - no change to final axiom elimination state;
+  - removes residual wrapper-level `ExternalRayMapData` branching in root-facing
+    theorem flow.
 
 ## Implementation checkpoint (2026-02-22, converged non-vacuous ingress routes on surjectivity core)
 - Rewired in `Mlc/MainConjecture.lean`:

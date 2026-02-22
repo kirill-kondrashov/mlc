@@ -10,11 +10,27 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.72%`
+  `[█████████░] ~99.74%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.92%`
+  `[█████████░] ~99.93%`
+
+## Implementation checkpoint (2026-02-22, wrapper cleanup onto shared surjectivity route)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse_two`;
+  to delegate to
+  `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+  (already surjectivity-core based), removing remaining wrapper-level
+  `ExternalRayMapData` constructions.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - theorem surface is now more uniformly factored around the non-vacuous
+    surjectivity seam.
 
 ## Implementation checkpoint (2026-02-22, non-vacuous root bridges normalized to surjectivity core)
 - Rewired in `Mlc/MainConjecture.lean`:
