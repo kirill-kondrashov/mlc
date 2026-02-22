@@ -1042,6 +1042,63 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOuts
   · exact bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload hF.1
       (localHomeomorphOnOutsideOpen_two_of_slitInjOutsideDisk hF.2)
 
+/-- Open (not-yet-blocked) surjectivity-source sub-aggregate at `c = 2`. -/
+def KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
+  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) ∨
+    BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) ∨
+    ExternalRayLandsOutsideOpen (2 : ℂ)
+
+/-- Blocked surjectivity-source sub-aggregate at `c = 2`. -/
+def KnownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
+  AnalyticDerivConstructivePayloadTwo ∨
+    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo)
+
+/-- Partition of the current surjectivity-source aggregate into open and blocked
+sub-aggregates. -/
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo ∨
+        KnownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  constructor
+  · intro h
+    rcases h with hA | hB | hC | hD | hE | hF
+    · exact Or.inl (Or.inl hA)
+    · exact Or.inl (Or.inr (Or.inl hB))
+    · exact Or.inl (Or.inr (Or.inr (Or.inl hC)))
+    · exact Or.inl (Or.inr (Or.inr (Or.inr hD)))
+    · exact Or.inr (Or.inl hE)
+    · exact Or.inr (Or.inr hF)
+  · intro h
+    rcases h with hOpen | hBlocked
+    · rcases hOpen with hA | hB | hC | hD
+      · exact Or.inl hA
+      · exact Or.inr (Or.inl hB)
+      · exact Or.inr (Or.inr (Or.inl hC))
+      · exact Or.inr (Or.inr (Or.inr (Or.inl hD)))
+    · rcases hBlocked with hE | hF
+      · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hE))))
+      · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr hF))))
+
+/-- The open surjectivity-source sub-aggregate implies outside-open exterior
+surjectivity at `c = 2`. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    (h : KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
+  exact bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    ((knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked).2 (Or.inl h))
+
+/-- The blocked surjectivity-source sub-aggregate implies outside-open exterior
+surjectivity at `c = 2` (before no-go closure is applied). -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_knownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    (h : KnownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
+  exact bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    ((knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked).2 (Or.inr h))
+
 /-- Step-4→root seam specialized through restricted-map closed range plus the
 combined non-slit outside-open analytic/injective payload shape at `c = 2`. -/
 def NonSlitAnalyticInjConstructivePayloadTwo : Prop :=
@@ -1563,6 +1620,28 @@ theorem not_slitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo :
     ¬ SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo := by
   intro h_payload
   exact not_outside_open_subset_slit_orbit_two h_payload.1
+
+/-- The blocked surjectivity-source sub-aggregate is inconsistent in the
+current model at `c = 2`. -/
+theorem not_knownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo :
+    ¬ KnownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  intro h
+  rcases h with hA | hB
+  · exact not_analyticDerivConstructivePayloadTwo hA
+  · exact not_slitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo hB.2
+
+/-- Any currently wired surjectivity source in the aggregate must lie in the
+open (not-yet-blocked) sub-aggregate at `c = 2`. -/
+theorem knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    (h : KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo) :
+    KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  have hsplit :
+      KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo ∨
+        KnownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo :=
+    (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked).1 h
+  rcases hsplit with hOpen | hBlocked
+  · exact hOpen
+  · exact False.elim (not_knownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo hBlocked)
 
 /-- Aggregate predicate for currently wired local-homeomorph-on source families
 at `c = 2`. -/
