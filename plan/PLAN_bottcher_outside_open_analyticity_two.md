@@ -981,3 +981,13 @@ constructive `mlc_conjecture` replacement route.
     directly to `NonSlitQuotientConstRealConstructivePayloadTwo`.
 - Validation:
   - `make build && make check` pass; rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, external-ray data seed inlined at minimal surjectivity seam)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - removed `externalRayMapData_two_axiom_seed`;
+  - `bottcherSurjOnExterior_two_axiom_seed` now inlines
+    `Quadratic.external_ray_map_exists (2 : ℂ)` through
+    `bottcherSurjOnExterior_of_externalRayMapData`.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged
+    (still includes `MLC.Quadratic.external_ray_map_exists`).

@@ -1454,7 +1454,7 @@ def graph_page_html_v2(title: str) -> str:
     <span class="meta" id="summary"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
     <button id="fitBtn" type="button">Fit Camera</button>
-    <button id="modeBtn" type="button">Mode: 3D</button>
+    <button id="modeBtn" type="button">Mode: 2D</button>
     <button id="themeBtn" type="button">Theme</button>
     <div id="legend" class="legend"></div>
   </div>
@@ -1815,7 +1815,7 @@ def graph_page_js() -> str:
       });
     }
 
-    const renderMode = { value: "3d" };
+    const renderMode = { value: "2d" };
     const layout2d = {
       nodes: [],
       panX: 0,
@@ -2525,7 +2525,7 @@ def graph_page_js() -> str:
     fitCamera();
     buildSphereBuffers();
     build2DLayout();
-    setRenderMode("3d");
+    setRenderMode("2d");
     applySearch();
     render();
   }

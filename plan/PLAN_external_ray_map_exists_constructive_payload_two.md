@@ -1406,3 +1406,14 @@ No unconditional theorem currently provides:
 Start with package (2): constructive proof of the remaining non-slit outside-open
 analytic/injective content at `c = 2` (currently focused through quotient
 analyticity/constancy seams).
+
+## Implementation checkpoint (2026-02-22, external-ray data seed inlined at minimal surjectivity seam)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - removed `externalRayMapData_two_axiom_seed`;
+  - `bottcherSurjOnExterior_two_axiom_seed` now inlines
+    `Quadratic.external_ray_map_exists (2 : ℂ)` through
+    `bottcherSurjOnExterior_of_externalRayMapData`.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.

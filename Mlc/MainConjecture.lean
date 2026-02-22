@@ -927,14 +927,10 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_i
     LocallyConnectedSpace mandelbrotSet := by
   exact False.elim (not_mem_nhds_slit_on_outside_open_two hslit_nhds)
 
-/-- Current rooted axiom-seed datum for `c = 2`. -/
-lemma externalRayMapData_two_axiom_seed : Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_exists (2 : ℂ)
-
 /-- Current rooted axiom-seed minimal surjectivity target at `c = 2`. -/
 lemma bottcherSurjOnExterior_two_axiom_seed :
     BottcherSurjOnExterior (2 : ℂ) :=
-  bottcherSurjOnExterior_of_externalRayMapData externalRayMapData_two_axiom_seed
+  bottcherSurjOnExterior_of_externalRayMapData (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
