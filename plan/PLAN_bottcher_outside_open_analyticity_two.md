@@ -16,6 +16,32 @@ constructive `mlc_conjecture` replacement route.
 - End-to-end elimination impact:
   `[█████████░] ~99.96%`
 
+## Implementation checkpoint (2026-02-22, properness ingress wrappers specialized at `c = 2`)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact`;
+  - `isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_preimageCompact_two`;
+  - `mlc_conjecture_of_analyticAt_of_preimageClosed_two`;
+  to consume the new `Two`-specialized properness bridges directly.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) ingress remains flattened toward the final constructive payload;
+    rooted non-core axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, local-homeomorph bridge normalized to `Two` specialization)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_two`
+    now calls a `c = 2`-specialized surjectivity bridge directly.
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - keeps Step (2) root-facing ingress normalized around `Two`-specialized bridge seams;
+    final rooted axiom frontier unchanged.
+
 ## Implementation checkpoint (2026-02-22, seam lemma hoisted and root bridge deduplicated)
 - Rewired in `Mlc/MainConjecture.lean`:
   - moved `bottcherSurjOnExterior_of_externalRayMapData` into the core seam
@@ -991,3 +1017,92 @@ constructive `mlc_conjecture` replacement route.
 - Validation:
   - `make build && make check` pass; rooted axiom frontier unchanged
     (still includes `MLC.Quadratic.external_ray_map_exists`).
+
+## Implementation checkpoint (2026-02-22, quotient-witness `Two` analyticity specialization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientConstRealWitnessTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - quotient-const-real/quotient-const root bridges now consume this `Two`-specialized
+    analyticity conversion directly.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, direct quotient-witness surjectivity bridge reuse)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two`;
+  to use
+  `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo`
+  directly.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, direct quotient-const/analytic surjectivity bridges)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - quotient-const and quotient-analytic root payload/ingress bridges now call the
+    corresponding direct `Two`-specialized surjectivity theorems.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj root bridge direct specialization)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`
+    now uses
+    `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`
+    directly;
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo` now factors
+    through that specialized ingress theorem.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic root bridges direct surjectivity specialization)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two`;
+  to call
+  `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo`
+  directly.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, legacy analytic wrappers direct surjectivity specialization)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse_two`;
+  to call
+  `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo`
+  directly.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, properness-to-surjectivity direct specialization)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    now calls the direct properness-specialized surjectivity theorem.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, preimage-compact/closed root bridges via properness-surjectivity)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_preimageCompact_two`;
+  - `mlc_conjecture_of_analyticAt_of_preimageClosed_two`;
+  to route through
+  `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo`
+  directly.
+- Validation:
+  - `make build && make check && make graphs && scripts/verify_output.sh` pass;
+    rooted axiom frontier unchanged.

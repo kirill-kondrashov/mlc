@@ -4384,6 +4384,18 @@ lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimag
   isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact c
     (continuous_bottcher_map_outside_open_restrict_of_analyticAt c hanalytic) hpre
 
+/-- `c = 2` specialization: properness of the restricted outside-open map from
+outside-open analyticity plus the ambient compact-preimage obligation. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
+    (2 : ℂ) hanalytic hpre
+
 /-- Compactness of restricted-map preimages follows from closedness of the
 ambient outside-open preimage set; boundedness is provided by
 `preimage_closedBall_bounded`. -/
@@ -4438,6 +4450,20 @@ lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimag
       isCompact_preimage_bottcher_map_outside_open_to_exterior_iff c K |>.1
         (isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed c K hK
           (hclosedpre K hK)))
+
+/-- `c = 2` specialization: properness of the restricted outside-open map from
+outside-open analyticity plus closedness of ambient preimage sets against
+compact exterior targets. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
+    (2 : ℂ) hanalytic hclosedpre
 
 /-- Closedness of outside-open preimages against compact exterior targets from a
 boundary-exclusion condition on `‖z‖ = ‖c‖ + 2`. -/
@@ -4604,6 +4630,15 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomo
   rcases hwR with ⟨z, hz⟩
   refine ⟨z.1, z.2, ?_⟩
   exact congrArg Subtype.val hz
+
+/-- `c = 2` specialization: outside-open surjectivity on the exterior from
+closed range of the restricted map plus restricted local-homeomorph payload. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict
+    (2 : ℂ) hclosed hlocal
 
 /-- Convert local-homeomorph on an open set into local-homeomorph of the
 restricted function on the subtype domain. -/
@@ -5654,6 +5689,13 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness
       (analyticAt_const.mul analyticAt_id : AnalyticAt ℂ (fun w : ℂ => (r : ℂ) * w) z)
   exact hLinAnalytic.congr hEq.symm
 
+/-- `c = 2` specialization: a strong quotient-rigidity witness implies
+outside-open analyticity. -/
+lemma outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientConstRealWitnessTwo
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness (2 : ℂ) h_wit
+
 /-- A strong quotient-rigidity witness implies outside-open injectivity. -/
 lemma injOn_outside_open_of_outsideOpenQuotientConstRealWitness
     (c : ℂ)
@@ -5768,6 +5810,24 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
     (2 : ℂ) hclosed h_wit
 
+/-- `c = 2` specialization: outside-open exterior surjectivity from closed range
+plus outside-open quotient constancy. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qconst : OutsideOpenQuotientConstHypothesisTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+    hclosed (outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo h_qconst)
+
+/-- `c = 2` specialization: outside-open exterior surjectivity from closed range
+plus outside-open quotient analyticity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+    hclosed (outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo h_qanalytic)
+
 /-- Outside-open exterior surjectivity from closed range plus outside-open
 analyticity, routed through the quotient-rigidity witness bridge. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
@@ -5787,6 +5847,25 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
     (2 : ℂ) hclosed h_analytic
+
+/-- Outside-open exterior surjectivity from restricted-map properness plus
+outside-open analyticity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    BottcherSurjOnExteriorFromOutsideOpen c :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    c (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap c hproper) h_analytic
+
+/-- `c = 2` specialization: outside-open exterior surjectivity from
+restricted-map properness plus outside-open analyticity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
+    (2 : ℂ) hproper h_analytic
 
 /-- Outside-open `AnalyticAt` payload induces local charts inside outside-open
 by taking the ambient outside-open set itself as the chart. -/
