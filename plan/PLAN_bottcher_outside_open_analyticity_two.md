@@ -10,11 +10,22 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.64%`
+  `[█████████░] ~99.69%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.89%`
+  `[█████████░] ~99.90%`
+
+## Implementation checkpoint (2026-02-22, slit-neighborhood root seams collapsed as vacuous)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two`;
+  to close via contradiction from `not_mem_nhds_slit_on_outside_open_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Graph impact:
+  - these slit-neighborhood root branches are now explicit vacuous closures and
+    no longer represent viable constructive discharge paths.
 
 ## Implementation checkpoint (2026-02-22, boundary-exclusion seam marked vacuous at `c = 2`)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:

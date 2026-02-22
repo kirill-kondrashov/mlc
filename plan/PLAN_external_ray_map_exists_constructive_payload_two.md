@@ -19,11 +19,23 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.89%`
+  `[█████████░] ~99.90%`
 - Constructive payload route progress:
-  `[██████████] ~99.985%`
+  `[██████████] ~99.986%`
 - Proof implementation progress:
-  `[█████████░] ~99.64%`
+  `[█████████░] ~99.69%`
+
+## Implementation checkpoint (2026-02-22, slit-neighborhood ingress routes marked vacuous)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two`;
+  to close by contradiction via `not_mem_nhds_slit_on_outside_open_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - no change to root elimination status;
+  - removes two additional pseudo-constructive ingress branches from the
+    realistic remaining target set.
 
 ## Implementation checkpoint (2026-02-22, boundary-exclusion branch classified as vacuous)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
