@@ -5067,6 +5067,35 @@ lemma outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothes
   have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
   exact (h_analytic z hz).div analyticAt_id hz_ne
 
+/-- Outside-open analyticity of the quotient map `z ↦ bottcher_map c z / z`
+implies outside-open analyticity of `bottcher_map c`. -/
+lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothesis
+    (c : ℂ)
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesis c) :
+    OutsideOpenAnalyticityHypothesis c := by
+  intro z hz
+  have hz_norm_pos : 0 < ‖z‖ := by
+    linarith [hz, norm_nonneg c]
+  have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
+  have hmul : AnalyticAt ℂ (fun w : ℂ => w * (Quadratic.bottcher_map c w / w)) z := by
+    exact analyticAt_id.mul (h_qanalytic z hz)
+  have hEq :
+      (fun w : ℂ => w * (Quadratic.bottcher_map c w / w)) =ᶠ[𝓝 z]
+        (Quadratic.bottcher_map c) := by
+    have hne : {w : ℂ | w ≠ 0} ∈ 𝓝 z := by
+      exact IsOpen.mem_nhds isOpen_ne hz_ne
+    exact Filter.mem_of_superset hne (by
+      intro w hw
+      have hw0 : w ≠ 0 := by simpa using hw
+      change w * (Quadratic.bottcher_map c w / w) = Quadratic.bottcher_map c w
+      calc
+        w * (Quadratic.bottcher_map c w / w)
+            = w * (w⁻¹ * Quadratic.bottcher_map c w) := by
+                simp [div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm]
+        _ = (w * w⁻¹) * Quadratic.bottcher_map c w := by ac_rfl
+        _ = Quadratic.bottcher_map c w := by simp [hw0])
+  exact hmul.congr hEq
+
 /-- The outside-open real-scale quotient payload holds unconditionally from the
 explicit `bottcher_map` quotient form. -/
 lemma outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div
@@ -5235,6 +5264,14 @@ lemma outsideOpenQuotientAnalyticityHypothesisTwo_of_outsideOpenAnalyticityHypot
     OutsideOpenQuotientAnalyticityHypothesisTwo :=
   outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis (2 : ℂ)
     h_analytic
+
+/-- `c = 2` specialization: outside-open quotient analyticity implies
+outside-open analyticity. -/
+lemma outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothesis (2 : ℂ)
+    h_qanalytic
 
 /-- `c = 2` specialization: outside-open analyticity implies quotient constancy. -/
 lemma outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo

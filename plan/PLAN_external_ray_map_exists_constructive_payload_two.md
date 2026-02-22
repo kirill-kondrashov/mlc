@@ -25,6 +25,46 @@ No unconditional theorem currently provides:
 - Proof implementation progress:
   `[█████████░] ~99.3%`
 
+## Implementation checkpoint (2026-02-22, remainder audit)
+- Re-ran `make check`: `MLC.mlc_conjecture` still depends on
+  `MLC.Quadratic.external_ray_map_exists` (plus core axioms only).
+- Re-generated dependency graphs and checked JSON outputs:
+  - `site/mlc_conjecture/graph.json` still contains direct rooted edge
+    `MLC.mlc_conjecture -> MLC.Quadratic.external_ray_map_exists`.
+  - `site/mlc_conjecture_injon_bridge/graph.json` contains no
+    `MLC.Quadratic.external_ray_map_exists` node, confirming the constructive
+    `analyticAt + injOn` bridge route itself is already free of this axiom.
+- Current remainder is unchanged from the work packages at the end of this plan:
+  prove package (1) and package (2) constructively, then rewire root.
+
+## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothesis`;
+  - `outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`;
+  to convert quotient-analytic payloads into the shared outside-open analyticity
+  route before constructing external-ray data.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
+## Implementation checkpoint (2026-02-22, quotient/inj root routes normalized to analytic core)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo`,
+  - `mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo`,
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two`,
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`,
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`,
+  to route through `OutsideOpenAnalyticityHypothesis` before constructing
+  external-ray data.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
 ## Research checkpoint (Milnor notes cross-check)
 - Source checked: `refs/9201272v1.pdf` (Milnor lecture notes).
 - Relevant extracted anchors:

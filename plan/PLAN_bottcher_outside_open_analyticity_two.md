@@ -16,6 +16,49 @@ constructive `mlc_conjecture` replacement route.
 - End-to-end elimination impact:
   `[█████████░] ~99.88%`
 
+## Implementation checkpoint (2026-02-22, remainder audit)
+- Re-ran `make check`: axiom frontier for `MLC.mlc_conjecture` is unchanged and
+  still includes `MLC.Quadratic.external_ray_map_exists`.
+- Re-generated dependency graphs and checked JSON outputs:
+  - `site/mlc_conjecture/graph.json` still has direct edge
+    `MLC.mlc_conjecture -> MLC.Quadratic.external_ray_map_exists`.
+  - `site/mlc_conjecture_injon_bridge/graph.json` has no
+    `MLC.Quadratic.external_ray_map_exists` node, confirming the
+    analytic/inj bridge theorem is already external-ray-free once constructive
+    hypotheses are provided.
+- Remaining elimination work is therefore unchanged:
+  - constructively prove closed-range plus outside-open analytic/injective
+    payload at `c = 2`,
+  - then rewire `MLC.mlc_conjecture` to that constructive route.
+
+## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothesis`;
+  - `outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`;
+  to pass through the converted outside-open analyticity route before the
+  existing closed-range/data bridge.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
+## Implementation checkpoint (2026-02-22, quotient/inj root routes normalized to analytic core)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo`,
+  - `mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo`,
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two`,
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`,
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`,
+  so each now projects to `OutsideOpenAnalyticityHypothesis` first and then
+  uses the shared analyticity -> external-ray-data bridge.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
 ## Milnor lecture check (`refs/9201272v1.pdf`)
 - Reviewed via `pdftotext` against `refs/9201272v1.pdf` (Milnor notes).
 - Useful statements for `prove-local-slit-inj-two`:
