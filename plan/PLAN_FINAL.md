@@ -39,6 +39,8 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis`;
   - `outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis`;
+  - `outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenAnalyticityHypothesis`;
+  - `outsideOpenQuotientAnalyticityHypothesisTwo_constructive`;
   - `outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientAnalyticityHypothesis`;
   - `external_ray_map_exists_two_constructive` (current placeholder endpoint, body still axiom-seeded).
 - This extends CP2/CP3/CP4 scaffolding and wires a single CP5 replacement point for

@@ -5948,6 +5948,25 @@ theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenL
     (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
       h_chart)
 
+/-- CP2 constructive seam at `c = 2`: outside-open analyticity yields
+outside-open quotient analyticity by division against `id` on outside-open. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenAnalyticityHypothesis
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo := by
+  intro z hz
+  have hz_norm_pos : 0 < ‖z‖ := by
+    linarith [hz, norm_nonneg (2 : ℂ)]
+  have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
+  exact (h_analytic z hz).div analyticAt_id hz_ne
+
+/-- CP2 constructive seam at `c = 2`: packaged quotient analyticity target from
+the chart-within constructive input. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo :=
+  outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    h_chart
+
 /-- CP2 constructive seam at `c = 2`: outside-open quotient analyticity yields
 local analytic charts inside outside-open. -/
 theorem outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis
