@@ -783,6 +783,35 @@ theorem external_ray_map_exists_two_constructive_of_analyticAt_of_preimageClosed
       h_analytic hclosedpre)
     h_analytic
 
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus the combined non-slit outside-open analytic/injective payload. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload hclosed h_payload
+
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus outside-open `AnalyticAt` payload. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    hclosed hanalytic
+
+/-- Compatibility CP5 seam retaining the older signature with explicit outside-open
+injectivity at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_injOn
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (_h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt hclosed hanalytic
+
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
@@ -920,8 +949,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSli
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
       hclosed h_payload)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
@@ -930,8 +959,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
       hclosed h_analytic)
 
 /-- Step-4→root seam specialized through properness of the restricted outside-open
@@ -940,8 +969,8 @@ theorem mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothes
     (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
       hproper h_analytic)
 
 /-- Step-4→root seam specialized through outside-open analyticity plus the
@@ -995,8 +1024,8 @@ theorem not_boundaryExclusion_family_two :
 theorem mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo
     (h_payload : NonSlitAnalyticConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
       h_payload.1 h_payload.2)
 
 /-- Root bridge from the combined non-slit outside-open analytic/injective
@@ -1014,8 +1043,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two
     (hanalytic :
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt
       hclosed hanalytic)
 
 /-- Compatibility wrapper retaining the older signature with an explicit
@@ -1027,9 +1056,9 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two
     (_h_inj :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
-      hclosed hanalytic)
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_injOn
+      hclosed hanalytic _h_inj)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
     outside-open analyticity and iterate-left-inverse injectivity at `c = 2`. -/
@@ -1039,8 +1068,8 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inve
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
     (_h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
-    (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt
       hclosed hanalytic)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus local

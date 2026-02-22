@@ -33,9 +33,12 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo`;
+  - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`;
+  - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt`;
+  - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_injOn`;
   - `external_ray_map_exists_two_constructive` (current placeholder endpoint, body still axiom-seeded).
 - This extends CP2/CP3/CP4 scaffolding and wires a single CP5 replacement point for
-  the final constructive payload body, including quotient-const/analytic CP4 lanes.
+  the final constructive payload body, including quotient and analytic/non-slit CP4 lanes.
 
 ## Final route
 1. **Constructive outside-open analyticity at `c = 2`**
