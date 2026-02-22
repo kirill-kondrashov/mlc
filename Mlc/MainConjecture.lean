@@ -763,6 +763,16 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypoth
     (external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
       hclosed h_analytic)
 
+/-- Step-4→root seam specialized through properness of the restricted outside-open
+map plus outside-open analyticity at `c = 2`. -/
+theorem mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two
+    (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper)
+    h_analytic
+
 /-- Root bridge from closed range plus outside-open analyticity payload at
 `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo

@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.35%`
+  `[█████████░] ~99.4%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -44,6 +44,22 @@ constructive `mlc_conjecture` replacement route.
 - Impact:
   - expands the constructive theorem surface for slit-local routes, but does not
     change the rooted axiom frontier.
+
+## Implementation checkpoint (2026-02-22, properness bridge into analyticity route)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two`.
+- Effect:
+  - provides a direct seam from restricted-map properness + outside-open
+    analyticity to the rooted MLC route by deriving the required closed-range
+    premise internally.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact on elimination:
+  - no immediate axiom-frontier change; this narrows the remaining package to
+    proving restricted properness (or closed range) and outside-open analyticity
+    constructively at `c = 2`.
 
 ## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:

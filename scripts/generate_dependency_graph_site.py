@@ -42,6 +42,7 @@ CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two",
+    "MLC.mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two",
     "MLC.mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two",
     "MLC.mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo",

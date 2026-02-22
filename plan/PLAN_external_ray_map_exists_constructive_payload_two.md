@@ -23,7 +23,7 @@ No unconditional theorem currently provides:
 - Constructive payload route progress:
   `[██████████] ~99.984%`
 - Proof implementation progress:
-  `[█████████░] ~99.35%`
+  `[█████████░] ~99.4%`
 
 ## Implementation checkpoint (2026-02-22, remainder audit)
 - Re-ran `make check`: `MLC.mlc_conjecture` still depends on
@@ -51,6 +51,21 @@ No unconditional theorem currently provides:
   - no change in the rooted frontier;
   - `MLC.mlc_conjecture` still depends on
     `MLC.Quadratic.external_ray_map_exists`.
+
+## Implementation checkpoint (2026-02-22, properness-to-closed-range bridge)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two`.
+- Effect:
+  - formalizes a stronger replacement seam where the closed-range requirement is
+    discharged from properness of the restricted map.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - rooted axiom frontier is unchanged; top-level elimination still needs a
+    constructive proof of either restricted properness (or direct closed range)
+    together with outside-open analyticity at `c = 2`.
 
 ## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:

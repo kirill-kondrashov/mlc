@@ -4284,6 +4284,16 @@ noncomputable def bottcher_map_outside_open_to_exterior (c : ℂ) :
   exact bottcher_map_norm_gt_one_of_outside c
     (outside_open_subset_outside_disk c z.2)
 
+/-- Closed range of the restricted outside-open Böttcher map from properness of
+the restricted map itself. -/
+lemma isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap
+    (c : ℂ)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c)) :
+    IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)) := by
+  have hClosedMap : IsClosedMap (bottcher_map_outside_open_to_exterior c) :=
+    hproper.isClosedMap
+  simpa [Set.image_univ] using (hClosedMap Set.univ isClosed_univ)
+
 /-- Outside-open surjectivity on the exterior from a clopen argument on the
 restricted map `outside_open → exterior`. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict
