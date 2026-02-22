@@ -9,12 +9,21 @@ without using `MLC.Quadratic.external_ray_map_exists`, then use it in the
 constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
-- Analyticity theorem track (metric: Step-2 analyticity milestones completed, `3/4`):
-  `[███████░░░] 75%`
-- Framework refactor track (metric: root-bridge normalization milestones completed, `9/9`):
-  `[██████████] 100%`
-- End-to-end elimination impact (metric: elimination milestones completed, `8/10`):
-  `[████████░░] 80%`
+- 🔹 **Analyticity theorem track** — metric `3/4` (`75%`) `[███████░░░]`
+- 🔷 **Framework refactor track** — metric `9/9` (`100%`) `[██████████]`
+- 🔶 **End-to-end elimination impact** — metric `9/10` (`90%`) `[█████████░]`
+
+## Implementation checkpoint (2026-02-22, outside-open-to-fiber bridge normalized via explicit `Two` seam)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen_via_surj`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two` now consumes the
+    new `Two`-specialized bridge.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - end-to-end elimination metric advanced to `9/10`; rooted non-core axiom
+    frontier unchanged.
 
 ## Implementation checkpoint (2026-02-22, external-ray minimal-surjectivity seam specialized at `c = 2`)
 - Added in `Mlc/MainConjecture.lean`:

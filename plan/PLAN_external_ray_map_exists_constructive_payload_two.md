@@ -18,12 +18,21 @@ No unconditional theorem currently provides:
 - `ClosedRangeLocalSlitInjPayloadTwo`.
 
 ## Progress bars
-- End-to-end elimination progress (metric: elimination milestones completed, `8/10`):
-  `[████████░░] 80%`
-- Constructive payload route progress (metric: constructive payload milestones completed, `4/6`):
-  `[███████░░░] 67%`
-- Proof implementation progress (metric: proof-layer milestones completed, `9/9`):
-  `[██████████] 100%`
+- 🔶 **End-to-end elimination progress** — metric `9/10` (`90%`) `[█████████░]`
+- 🔹 **Constructive payload route progress** — metric `4/6` (`67%`) `[███████░░░]`
+- 🔷 **Proof implementation progress** — metric `9/9` (`100%`) `[██████████]`
+
+## Implementation checkpoint (2026-02-22, `c = 2` outside-open-to-fiber bridge seam normalization)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen_via_surj`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two` to use the
+    specialized bridge wrapper.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - end-to-end metric advanced to `9/10`; final blocker remains
+    `MLC.Quadratic.external_ray_map_exists`.
 
 ## Implementation checkpoint (2026-02-22, `c = 2` external-ray-to-minimal-surjectivity seam specialization)
 - Added in `Mlc/MainConjecture.lean`:
