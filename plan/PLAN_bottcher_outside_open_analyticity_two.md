@@ -33,6 +33,16 @@ constructive `mlc_conjecture` replacement route.
     is unchanged; work should continue on non-vacuous closed-range / properness
     payload routes.
 
+## Implementation checkpoint (2026-02-22, vacuous theorem route minimized in root graph)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_boundaryExclusion_two` now closes by
+    contradiction through `not_boundary_exclusion_family_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Graph impact:
+  - this theorem no longer contributes a substantive constructive path;
+    dependency output now reflects only its vacuous closure dependencies.
+
 ## Implementation checkpoint (2026-02-22, remainder audit)
 - Re-ran `make check`: axiom frontier for `MLC.mlc_conjecture` is unchanged and
   still includes `MLC.Quadratic.external_ray_map_exists`.

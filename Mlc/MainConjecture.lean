@@ -807,16 +807,13 @@ theorem mlc_conjecture_of_analyticAt_of_preimageClosed_two
 /-- Step-4→root seam specialized through outside-open analyticity plus boundary
 exclusion on compact exterior targets. -/
 theorem mlc_conjecture_of_analyticAt_of_boundaryExclusion_two
-    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
+    (_h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
     (hboundary :
       ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
           Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two
-    (isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion
-      (2 : ℂ) h_analytic hboundary)
-    h_analytic
+  exact False.elim (not_boundary_exclusion_family_two hboundary)
 
 /-- The universal boundary-exclusion family used by the previous seam is
 inconsistent at `c = 2`; this marks that route as vacuous for root elimination. -/

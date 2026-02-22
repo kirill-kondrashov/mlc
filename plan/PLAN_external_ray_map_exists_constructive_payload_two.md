@@ -41,6 +41,17 @@ No unconditional theorem currently provides:
   - rooted dependency remains unchanged;
   - `MLC.mlc_conjecture` still depends on `MLC.Quadratic.external_ray_map_exists`.
 
+## Implementation checkpoint (2026-02-22, vacuous boundary theorem normalized)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_analyticAt_of_boundaryExclusion_two` now discharges via
+    `False.elim (not_boundary_exclusion_family_two ...)`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - no elimination change at the root;
+  - removes a misleading pseudo-constructive branch from theorem dependency
+    shape, keeping attention on non-vacuous payload targets.
+
 ## Implementation checkpoint (2026-02-22, remainder audit)
 - Re-ran `make check`: `MLC.mlc_conjecture` still depends on
   `MLC.Quadratic.external_ray_map_exists` (plus core axioms only).
