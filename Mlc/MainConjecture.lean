@@ -706,6 +706,14 @@ theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outs
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   externalRayMapData_two_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload hproper h_payload
 
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from
+outside-open injectivity plus exterior surjectivity by outside-open preimages. -/
+theorem external_ray_map_exists_two_constructive_of_injOn_outside_open_of_surj_exterior
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_injOn_outside_open_of_surj_exterior (2 : ℂ) h_inj h_surj
+
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
 plus outside-open analyticity (injectivity packaged via existing bridges). -/
 theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
@@ -765,6 +773,37 @@ theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_ou
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
     hclosed h_wit
+
+/-- CP5 seam at `c = 2`: strong quotient-rigidity witness routed through the
+CP2 chart-within constructive bridge. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo_via_localChartWithin
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    hclosed
+    (outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientConstRealWitnessTwo
+      h_wit)
+
+/-- CP5 foundational bridge at `c = 2`: eventual-slit-to-slit implication plus
+closed range yields constructive external-ray-map data through the CP2 witness route. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_eventualSlitImpliesSlitOrbit
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (himp : EventualSlitImpliesSlitOrbit (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo_via_localChartWithin
+    hclosed
+    (outsideOpenQuotientConstRealWitnessTwo_constructive_of_eventualSlitImpliesSlitOrbit himp)
+
+/-- CP5 scope-revised bridge at `c = 2`: closed range plus explicit CP2 scope
+gate yields constructive external-ray-map data. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityScopeAssumptionTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_scope : OutsideOpenAnalyticityScopeAssumptionTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    hclosed
+    (outsideOpenAnalyticityHypothesisTwo_assumptionGated h_scope)
 
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from outside-open
 analyticity plus the compact-preimage properness package. -/
@@ -868,6 +907,67 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict_t
     (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
       hclosed hlocal)
 
+/-- Surjectivity-source seam at `c = 2`: restricted-map closed range plus
+restricted local-homeomorph hypotheses produce outside-open exterior surjectivity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
+    hclosed hlocal
+
+/-- Surjectivity-source seam at `c = 2`: outside-open local-homeomorph-on payload
+plus closed range induces outside-open exterior surjectivity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal_on : IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload hclosed
+    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open
+      (2 : ℂ) hlocal_on)
+
+/-- Surjectivity-source seam at `c = 2`: outside-disk-to-outside-open image
+refinement yields outside-open exterior surjectivity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_outsideDiskRefinement
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
+  intro w hw
+  exact exterior_subset_image_outside_open_of_outside_disk_refinement (2 : ℂ) h_refine hw
+
+/-- Outside-disk-to-outside-open refinement source at `c = 2` from the
+external-ray landing assumption. -/
+theorem outsideDiskRefinement_two_of_externalRayLandsOutsideOpen
+    (hland : ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) :=
+  outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen (2 : ℂ) hland
+
+/-- External-ray landing at `c = 2` from outside-disk refinement plus
+outside-disk-to-outside-open image refinement. -/
+theorem externalRayLandsOutsideOpen_two_of_outsideDiskRefinement
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)) :
+    ExternalRayLandsOutsideOpen (2 : ℂ) :=
+  externalRayLandsOutsideOpen_of_outside_disk_to_outside_open_image_refinement
+    (2 : ℂ) h_refine
+
+/-- At `c = 2`, the landing and outside-disk refinement source predicates are
+equivalent. -/
+theorem outsideDiskRefinement_two_iff_externalRayLandsOutsideOpen :
+    BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) ↔
+      ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  constructor
+  · exact externalRayLandsOutsideOpen_two_of_outsideDiskRefinement
+  · exact outsideDiskRefinement_two_of_externalRayLandsOutsideOpen
+
+/-- External-ray landing source at `c = 2` from direct outside-open control of
+preimages of the exterior under `bottcher_map`. -/
+theorem externalRayLandsOutsideOpen_two_of_preimageExteriorSubsetOutsideOpen
+    (hpre :
+      (Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    ExternalRayLandsOutsideOpen (2 : ℂ) :=
+  externalRayLandsOutsideOpen_of_preimage_exterior_subset_outside_open
+    (2 : ℂ) hpre
+
 /-- Step-4→root seam specialized through restricted-map closed range plus
     outside-open analytic/derivative payloads at `c = 2`. -/
 def AnalyticDerivConstructivePayloadTwo : Prop :=
@@ -892,6 +992,26 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero_
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_analyticDerivConstructivePayloadTwo
     ⟨hclosed, hanalytic, hderiv⟩
+
+/-- Local-homeomorph-on source at `c = 2` from the analytic/derivative payload. -/
+theorem localHomeomorphOnOutsideOpen_two_of_analyticDerivConstructivePayloadTwo
+    (h_payload : AnalyticDerivConstructivePayloadTwo) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+  bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
+    (2 : ℂ) h_payload.2.1 h_payload.2.2
+
+/-- Local-homeomorph-on source candidate at `c = 2` through slit inclusion plus
+outside-disk injectivity. -/
+def SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo : Prop :=
+  ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} ⊆ slit_orbit (2 : ℂ)) ∧
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ))
+
+/-- Local-homeomorph-on source from slit inclusion plus outside-disk injectivity
+at `c = 2`. -/
+theorem localHomeomorphOnOutsideOpen_two_of_slitInjOutsideDisk
+    (h_payload : SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo) :
+    IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+  bottcher_map_isLocalHomeomorphOn_outside_open (2 : ℂ) h_payload.1
 
 /-- Step-4→root seam specialized through restricted-map closed range plus the
 combined non-slit outside-open analytic/injective payload shape at `c = 2`. -/
@@ -923,12 +1043,672 @@ def NonSlitQuotientAnalyticConstructivePayloadTwo : Prop :=
   IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenQuotientAnalyticityHypothesisTwo
 
+/-- Step-4→root seam specialized through restricted-map closed range plus
+the eventual-slit-to-slit implication at `c = 2`. -/
+def NonSlitEventualSlitConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    EventualSlitImpliesSlitOrbit (2 : ℂ)
+
+/-- Scope-revised Step-4→root payload at `c = 2`: restricted-map closed range
+plus explicit CP2 scope gate. -/
+def NonSlitAnalyticScopeAssumptionConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenAnalyticityScopeAssumptionTwo
+
+/-- CP5 candidate payload at `c = 2`: outside-open injectivity plus outside-open
+exterior surjectivity. -/
+def InjSurjExteriorConstructivePayloadTwo : Prop :=
+  Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} ∧
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)
+
+/-- At `c = 2`, outside-open left-inverse data is equivalent to outside-open
+injectivity. -/
+theorem leftInverseOutsideOpen_two_iff_injOn_outside_open :
+    BottcherLeftInverseOnOutsideOpenData (2 : ℂ) ↔
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+  bottcher_left_inverse_on_outside_open_data_iff_injOn_outside_open (2 : ℂ)
+
+/-- CP5 payload constructor at `c = 2`: outside-open left-inverse data gives
+outside-open injectivity, paired with outside-open exterior surjectivity. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_leftInverseOutsideOpen_of_surjExterior
+    (h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ))
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    InjSurjExteriorConstructivePayloadTwo := by
+  exact ⟨bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open (2 : ℂ) h_left, h_surj⟩
+
+/-- CP5 payload constructor at `c = 2`: iterate-left-inverse injectivity plus
+outside-open exterior surjectivity. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_surjExterior
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    InjSurjExteriorConstructivePayloadTwo := by
+  exact ⟨bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter, h_surj⟩
+
+/-- CP5 payload constructor at `c = 2`: iterate-left-inverse injectivity plus
+local-homeomorph surjectivity source. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_localHomeomorph
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_surjExterior
+    h_left_iter
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload hclosed hlocal)
+
+/-- CP5 payload constructor at `c = 2`: outside-open left-inverse injectivity
+plus local-homeomorph surjectivity source. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_leftInverseOutsideOpen_of_localHomeomorph
+    (h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_leftInverseOutsideOpen_of_surjExterior
+    h_left
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload hclosed hlocal)
+
+/-- CP5 payload constructor at `c = 2`: iterate-left-inverse injectivity plus
+outside-open local-homeomorph-on surjectivity source. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_localHomeomorphOn
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal_on : IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_surjExterior
+    h_left_iter
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload hclosed hlocal_on)
+
+/-- CP5 payload constructor at `c = 2`: outside-open left-inverse injectivity
+plus local-homeomorph-on surjectivity source. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_leftInverseOutsideOpen_of_localHomeomorphOn
+    (h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal_on : IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_leftInverseOutsideOpen_of_surjExterior
+    h_left
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload hclosed hlocal_on)
+
+/-- CP5 payload constructor at `c = 2`: iterate-left-inverse injectivity plus
+analytic/derivative-sourced local-homeomorph-on surjectivity. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_analyticDerivConstructivePayloadTwo
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (h_payload : AnalyticDerivConstructivePayloadTwo) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_localHomeomorphOn
+    h_left_iter h_payload.1
+    (localHomeomorphOnOutsideOpen_two_of_analyticDerivConstructivePayloadTwo h_payload)
+
+/-- CP5 payload constructor at `c = 2`: iterate-left-inverse injectivity plus
+outside-disk-to-outside-open image refinement. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_outsideDiskRefinement
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_surjExterior
+    h_left_iter
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_outsideDiskRefinement h_refine)
+
+/-- CP5 payload constructor at `c = 2`: iterate-left-inverse injectivity plus
+external-ray landing sourced outside-disk refinement. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_externalRayLandsOutsideOpen
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hland : ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_outsideDiskRefinement
+    h_left_iter
+    (outsideDiskRefinement_two_of_externalRayLandsOutsideOpen hland)
+
+/-- CP5 payload constructor at `c = 2`: iterate-left-inverse injectivity plus
+preimage-exterior outside-open control via the landing bridge. -/
+theorem injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_preimageExteriorSubsetOutsideOpen
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hpre :
+      (Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    InjSurjExteriorConstructivePayloadTwo :=
+  injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_externalRayLandsOutsideOpen
+    h_left_iter
+    (externalRayLandsOutsideOpen_two_of_preimageExteriorSubsetOutsideOpen hpre)
+
+/-- Step-4→root payload specialized through closed range plus the boundary
+exclusion family at `c = 2`. -/
+def NonSlitBoundaryExclusionConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+      ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ))
+
+/-- Step-4→root payload specialized through closed range plus local-slit
+neighborhoods and outside-open injectivity at `c = 2`. -/
+def NonSlitMemNhdsSlitInjConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z) ∧
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Step-4→root payload specialized through closed range plus local-slit
+neighborhoods and iterate-left-inverse injectivity at `c = 2`. -/
+def NonSlitMemNhdsSlitIterLeftInverseConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z) ∧
+      QuadraticMapIterLeftInverseOnBasin (2 : ℂ)
+
+/-- Root bridge from the eventual-slit-to-slit payload at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitEventualSlitConstructivePayloadTwo
+    (h_payload : NonSlitEventualSlitConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_eventualSlitImpliesSlitOrbit
+      h_payload.1 h_payload.2)
+
+/-- Root bridge from the scope-revised analytic payload at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitAnalyticScopeAssumptionConstructivePayloadTwo
+    (h_payload : NonSlitAnalyticScopeAssumptionConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityScopeAssumptionTwo
+      h_payload.1 h_payload.2)
+
+/-- Root bridge from injective outside-open + outside-open surjectivity payload
+at `c = 2`. -/
+theorem mlc_conjecture_of_injSurjExteriorConstructivePayloadTwo
+    (h_payload : InjSurjExteriorConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_injOn_outside_open_of_surj_exterior
+      h_payload.1 h_payload.2)
+
+/-- CP5 seam at `c = 2`: iterate-left-inverse injectivity plus outside-open
+surjectivity yields constructive external-ray-map data. -/
+theorem external_ray_map_exists_two_constructive_of_iterLeftInverse_of_surjExterior
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_injOn_outside_open_of_surj_exterior
+    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
+    h_surj
+
+/-- CP5 seam at `c = 2`: outside-open left-inverse data plus outside-open
+surjectivity yields constructive external-ray-map data. -/
+theorem external_ray_map_exists_two_constructive_of_leftInverseOutsideOpen_of_surjExterior
+    (h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ))
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_injOn_outside_open_of_surj_exterior
+    (bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open (2 : ℂ) h_left)
+    h_surj
+
+/-- Root bridge from iterate-left-inverse injectivity plus outside-open
+surjectivity at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverse_of_surjExterior_two
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_iterLeftInverse_of_surjExterior
+      h_left_iter h_surj)
+
+/-- Root bridge from outside-open left-inverse data plus outside-open
+surjectivity at `c = 2`. -/
+theorem mlc_conjecture_of_leftInverseOutsideOpen_of_surjExterior_two
+    (h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ))
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_leftInverseOutsideOpen_of_surjExterior
+      h_left h_surj)
+
+/-- Root bridge from outside-open left-inverse data plus local-homeomorph
+surjectivity source at `c = 2`. -/
+theorem mlc_conjecture_of_leftInverseOutsideOpen_of_localHomeomorph_two
+    (h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_leftInverseOutsideOpen_of_surjExterior_two
+    h_left
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload hclosed hlocal)
+
+/-- Root bridge from outside-open left-inverse data plus local-homeomorph-on
+surjectivity source at `c = 2`. -/
+theorem mlc_conjecture_of_leftInverseOutsideOpen_of_localHomeomorphOn_two
+    (h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal_on : IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_leftInverseOutsideOpen_of_surjExterior_two
+    h_left
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload hclosed hlocal_on)
+
+/-- Root bridge from iterate-left-inverse injectivity plus local-homeomorph
+surjectivity source at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverse_of_localHomeomorph_two
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_iterLeftInverse_of_surjExterior_two
+    h_left_iter
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload hclosed hlocal)
+
+/-- Root bridge from iterate-left-inverse injectivity plus outside-open
+local-homeomorph-on surjectivity source at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverse_of_localHomeomorphOn_two
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal_on : IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_iterLeftInverse_of_surjExterior_two
+    h_left_iter
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload hclosed hlocal_on)
+
+/-- CP5 seam at `c = 2`: iterate-left-inverse injectivity plus
+outside-disk-to-outside-open image refinement yields constructive
+external-ray-map data. -/
+theorem external_ray_map_exists_two_constructive_of_iterLeftInverse_of_outsideDiskRefinement
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_iterLeftInverse_of_surjExterior
+    h_left_iter
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_outsideDiskRefinement h_refine)
+
+/-- Root bridge from iterate-left-inverse injectivity plus outside-disk-to-
+outside-open image refinement at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverse_of_outsideDiskRefinement_two
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_iterLeftInverse_of_outsideDiskRefinement
+      h_left_iter h_refine)
+
+/-- CP5 seam at `c = 2`: iterate-left-inverse injectivity plus external-ray
+landing yields constructive external-ray-map data via outside-disk refinement. -/
+theorem external_ray_map_exists_two_constructive_of_iterLeftInverse_of_externalRayLandsOutsideOpen
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hland : ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_iterLeftInverse_of_outsideDiskRefinement
+    h_left_iter
+    (outsideDiskRefinement_two_of_externalRayLandsOutsideOpen hland)
+
+/-- CP5 seam at `c = 2`: iterate-left-inverse injectivity plus direct
+preimage-exterior outside-open control yields constructive external-ray-map
+data. -/
+theorem external_ray_map_exists_two_constructive_of_iterLeftInverse_of_preimageExteriorSubsetOutsideOpen
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hpre :
+      (Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_iterLeftInverse_of_externalRayLandsOutsideOpen
+    h_left_iter
+    (externalRayLandsOutsideOpen_two_of_preimageExteriorSubsetOutsideOpen hpre)
+
+/-- Root bridge from iterate-left-inverse injectivity plus external-ray landing
+at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverse_of_externalRayLandsOutsideOpen_two
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hland : ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_iterLeftInverse_of_externalRayLandsOutsideOpen
+      h_left_iter hland)
+
+/-- Root bridge from iterate-left-inverse injectivity plus direct
+preimage-exterior outside-open control at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverse_of_preimageExteriorSubsetOutsideOpen_two
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ))
+    (hpre :
+      (Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_iterLeftInverse_of_preimageExteriorSubsetOutsideOpen
+      h_left_iter hpre)
+
+/-- Combined payload: iterate-left-inverse injectivity plus outside-disk-to-
+outside-open image refinement at `c = 2`. -/
+def IterLeftInverseOutsideDiskRefinementConstructivePayloadTwo : Prop :=
+  QuadraticMapIterLeftInverseOnBasin (2 : ℂ) ∧
+    BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ)
+
+/-- Root bridge from iterate-left-inverse injectivity plus outside-disk-to-
+outside-open image refinement package at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverseOutsideDiskRefinementConstructivePayloadTwo
+    (h_payload : IterLeftInverseOutsideDiskRefinementConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_iterLeftInverse_of_outsideDiskRefinement_two
+    h_payload.1 h_payload.2
+
+/-- Combined payload: iterate-left-inverse injectivity plus external-ray landing
+at `c = 2`. -/
+def IterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo : Prop :=
+  QuadraticMapIterLeftInverseOnBasin (2 : ℂ) ∧
+    ExternalRayLandsOutsideOpen (2 : ℂ)
+
+/-- Combined payload: iterate-left-inverse injectivity plus direct
+preimage-exterior outside-open control at `c = 2`. -/
+def IterLeftInversePreimageExteriorSubsetOutsideOpenConstructivePayloadTwo : Prop :=
+  QuadraticMapIterLeftInverseOnBasin (2 : ℂ) ∧
+    ((Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+
+/-- Root bridge from iterate-left-inverse injectivity plus external-ray landing
+package at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo
+    (h_payload : IterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_iterLeftInverse_of_externalRayLandsOutsideOpen_two
+    h_payload.1 h_payload.2
+
+/-- Root bridge from iterate-left-inverse injectivity plus direct
+preimage-exterior outside-open control package at `c = 2`. -/
+theorem mlc_conjecture_of_iterLeftInversePreimageExteriorSubsetOutsideOpenConstructivePayloadTwo
+    (h_payload : IterLeftInversePreimageExteriorSubsetOutsideOpenConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_iterLeftInverse_of_preimageExteriorSubsetOutsideOpen_two
+    h_payload.1 h_payload.2
+
+/-- Combined payload: iterate-left-inverse injectivity plus the
+analytic/derivative source package at `c = 2`. -/
+def IterLeftInverseAnalyticDerivConstructivePayloadTwo : Prop :=
+  QuadraticMapIterLeftInverseOnBasin (2 : ℂ) ∧
+    AnalyticDerivConstructivePayloadTwo
+
+/-- Root bridge from iterate-left-inverse injectivity plus the
+analytic/derivative-sourced local-homeomorph-on package. -/
+theorem mlc_conjecture_of_iterLeftInverseAnalyticDerivConstructivePayloadTwo
+    (h_payload : IterLeftInverseAnalyticDerivConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_injSurjExteriorConstructivePayloadTwo
+    (injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_analyticDerivConstructivePayloadTwo
+      h_payload.1 h_payload.2)
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because outside-open analyticity is impossible. -/
+theorem not_nonSlitAnalyticConstructivePayloadTwo :
+    ¬ NonSlitAnalyticConstructivePayloadTwo := by
+  intro h_payload
+  exact not_outsideOpenAnalyticityHypothesisTwo h_payload.2
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because eventual-slit-to-slit implication is impossible. -/
+theorem not_nonSlitEventualSlitConstructivePayloadTwo :
+    ¬ NonSlitEventualSlitConstructivePayloadTwo := by
+  intro h_payload
+  exact not_eventualSlitImpliesSlitOrbit_two h_payload.2
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because the combined outside-open analytic/injective payload is
+impossible. -/
+theorem not_nonSlitAnalyticInjConstructivePayloadTwo :
+    ¬ NonSlitAnalyticInjConstructivePayloadTwo := by
+  intro h_payload
+  exact not_outsideOpenAnalyticInjNonSlitPayloadTwo h_payload.2
+
+/-- Scope-check no-go at `c = 2`: direct preimage-exterior outside-open control
+fails because `0` maps to the exterior while `0` is not outside-open. -/
+theorem not_preimageExteriorSubsetOutsideOpenTwo :
+    ¬ ((Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) := by
+  intro hpre
+  have hbasin : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := zero_mem_basin_two
+  have hpos : 0 < MLC.Quadratic.green_function (2 : ℂ) (0 : ℂ) :=
+    green_function_pos_of_basin (2 : ℂ) (0 : ℂ) hbasin
+  have hnorm : 1 < ‖Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)‖ :=
+    bottcher_map_norm_gt_one_of_basin (2 : ℂ) (0 : ℂ) hbasin hpos
+  have hz_pre : (0 : ℂ) ∈ (Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
+    simpa [Set.preimage] using hnorm
+  have hz_out : ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := hpre hz_pre
+  have hnot : ¬ ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
+    have hge : (0 : ℝ) ≤ ‖(2 : ℂ)‖ + 2 := by
+      nlinarith [norm_nonneg (2 : ℂ)]
+    simpa using (not_lt_of_ge hge)
+  exact hnot hz_out
+
+/-- Scope-check no-go at `c = 2`: the iterate-left-inverse + direct
+preimage-exterior outside-open control payload is inconsistent because the
+preimage-exterior component is impossible. -/
+theorem not_iterLeftInversePreimageExteriorSubsetOutsideOpenConstructivePayloadTwo :
+    ¬ IterLeftInversePreimageExteriorSubsetOutsideOpenConstructivePayloadTwo := by
+  intro h_payload
+  exact not_preimageExteriorSubsetOutsideOpenTwo h_payload.2
+
+/-- Scope-check no-go at `c = 2`: under iterate-left-inverse injectivity on
+`outside_disk`, external-ray landing is impossible because `0` already maps to
+the exterior but is not outside-open. -/
+theorem not_externalRayLandsOutsideOpen_two_of_iterLeftInverse
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  intro hland
+  let w : ℂ := Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)
+  have hbasin0 : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := zero_mem_basin_two
+  have hpos0 : 0 < MLC.Quadratic.green_function (2 : ℂ) (0 : ℂ) :=
+    green_function_pos_of_basin (2 : ℂ) (0 : ℂ) hbasin0
+  have hw : 1 < ‖w‖ := by
+    simpa [w] using bottcher_map_norm_gt_one_of_basin (2 : ℂ) (0 : ℂ) hbasin0 hpos0
+  have hw_land : ‖Quadratic.external_ray_map (2 : ℂ) w‖ > ‖(2 : ℂ)‖ + 2 := hland w hw
+  have hz_out : Quadratic.external_ray_map (2 : ℂ) w ∈ outside_disk (2 : ℂ) :=
+    outside_open_subset_outside_disk (2 : ℂ) hw_land
+  have hz0_out : (0 : ℂ) ∈ outside_disk (2 : ℂ) := by
+    simpa [outside_disk] using hbasin0
+  have h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ)) :=
+    bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse (2 : ℂ) h_left_iter
+  have hz_eq : Quadratic.external_ray_map (2 : ℂ) w = 0 := by
+    apply h_inj hz_out hz0_out
+    simpa [w] using Quadratic.external_ray_map_right_inverse (2 : ℂ) w hw
+  have hnot : ¬ ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
+    have hge : (0 : ℝ) ≤ ‖(2 : ℂ)‖ + 2 := by
+      nlinarith [norm_nonneg (2 : ℂ)]
+    simpa using (not_lt_of_ge hge)
+  exact hnot (by simpa [hz_eq] using hw_land)
+
+/-- Scope-check no-go at `c = 2`: iterate-left-inverse plus external-ray
+landing is inconsistent. -/
+theorem not_iterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo :
+    ¬ IterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo := by
+  intro h_payload
+  exact not_externalRayLandsOutsideOpen_two_of_iterLeftInverse h_payload.1 h_payload.2
+
+/-- Scope-check no-go at `c = 2`: iterate-left-inverse plus outside-disk
+refinement is inconsistent, since refinement is equivalent to landing. -/
+theorem not_iterLeftInverseOutsideDiskRefinementConstructivePayloadTwo :
+    ¬ IterLeftInverseOutsideDiskRefinementConstructivePayloadTwo := by
+  intro h_payload
+  have hland : ExternalRayLandsOutsideOpen (2 : ℂ) :=
+    (outsideDiskRefinement_two_iff_externalRayLandsOutsideOpen).1 h_payload.2
+  exact not_externalRayLandsOutsideOpen_two_of_iterLeftInverse h_payload.1 hland
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because its outside-open analyticity component is impossible. -/
+theorem not_analyticDerivConstructivePayloadTwo :
+    ¬ AnalyticDerivConstructivePayloadTwo := by
+  intro h_payload
+  exact not_outsideOpenAnalyticityHypothesisTwo h_payload.2.1
+
+/-- Scope-check no-go at `c = 2`: the slit-inclusion based non-analytic
+local-homeomorph-on source is inconsistent in the current model. -/
+theorem not_slitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo :
+    ¬ SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo := by
+  intro h_payload
+  exact not_outside_open_subset_slit_orbit_two h_payload.1
+
+/-- Aggregate predicate for currently wired local-homeomorph-on source families
+at `c = 2`. -/
+def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
+  AnalyticDerivConstructivePayloadTwo ∨
+    SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo
+
+/-- All currently wired local-homeomorph-on source families are inconsistent in
+the current model at `c = 2`. -/
+theorem not_knownLocalHomeomorphOnSourceCandidateTwo :
+    ¬ KnownLocalHomeomorphOnSourceCandidateTwo := by
+  intro h
+  rcases h with hA | hB
+  · exact not_analyticDerivConstructivePayloadTwo hA
+  · exact not_slitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo hB
+
+/-- Aggregate predicate for currently wired non-iterate-left source families
+that can yield outside-open injectivity at `c = 2`. -/
+def KnownInjOnOutsideOpenSourceCandidateTwo : Prop :=
+  NonSlitAnalyticInjConstructivePayloadTwo ∨
+    NonSlitMemNhdsSlitInjConstructivePayloadTwo ∨
+    SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo ∨
+    OutsideOpenQuotientConstRealWitnessTwo
+
+/-- Any currently wired non-iterate-left source family in the previous aggregate
+yields outside-open injectivity at `c = 2`. -/
+theorem injOn_outside_open_two_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  rcases h with hA | hB | hC | hD
+  · exact hA.2.2
+  · exact hB.2.2
+  · exact hC.2.mono (outside_open_subset_outside_disk (2 : ℂ))
+  · exact injOn_outside_open_of_outsideOpenQuotientConstRealWitness (2 : ℂ) hD
+
+/-- All currently wired non-iterate-left source families that can yield
+outside-open injectivity are inconsistent in the current model at `c = 2`. -/
+theorem not_knownInjOnOutsideOpenSourceCandidateTwo :
+    ¬ KnownInjOnOutsideOpenSourceCandidateTwo := by
+  intro h
+  rcases h with hA | hB | hC | hD
+  · exact not_nonSlitAnalyticInjConstructivePayloadTwo hA
+  · exact not_mem_nhds_slit_on_outside_open_two hB.2.1
+  · exact not_slitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo hC
+  · exact not_outsideOpenQuotientConstRealWitnessTwo hD
+
+/-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
+analytic/derivative payload is inconsistent because the analytic/derivative
+component is impossible. -/
+theorem not_iterLeftInverseAnalyticDerivConstructivePayloadTwo :
+    ¬ IterLeftInverseAnalyticDerivConstructivePayloadTwo := by
+  intro h_payload
+  exact not_analyticDerivConstructivePayloadTwo h_payload.2
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because outside-open quotient constancy is impossible. -/
+theorem not_nonSlitQuotientConstConstructivePayloadTwo :
+    ¬ NonSlitQuotientConstConstructivePayloadTwo := by
+  intro h_payload
+  exact not_outsideOpenQuotientConstHypothesisTwo h_payload.2
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because outside-open quotient analyticity is impossible. -/
+theorem not_nonSlitQuotientAnalyticConstructivePayloadTwo :
+    ¬ NonSlitQuotientAnalyticConstructivePayloadTwo := by
+  intro h_payload
+  exact not_outsideOpenQuotientAnalyticityHypothesisTwo h_payload.2
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because strong quotient-rigidity witness is impossible. -/
+theorem not_nonSlitQuotientConstRealConstructivePayloadTwo :
+    ¬ NonSlitQuotientConstRealConstructivePayloadTwo := by
+  intro h_payload
+  exact not_outsideOpenQuotientConstRealWitnessTwo h_payload.2
+
+/-- Scope-check no-go at `c = 2`: this revised scope payload is also
+inconsistent in the current model because `not_outsideOpenAnalyticityHypothesisTwo`
+is available. -/
+theorem not_nonSlitAnalyticScopeAssumptionConstructivePayloadTwo :
+    ¬ NonSlitAnalyticScopeAssumptionConstructivePayloadTwo := by
+  intro h_payload
+  exact h_payload.2 not_outsideOpenAnalyticityHypothesisTwo
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because boundary exclusion is impossible. -/
+theorem not_nonSlitBoundaryExclusionConstructivePayloadTwo :
+    ¬ NonSlitBoundaryExclusionConstructivePayloadTwo := by
+  intro h_payload
+  exact not_boundary_exclusion_family_two h_payload.2
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because local-slit neighborhood payload is impossible. -/
+theorem not_nonSlitMemNhdsSlitInjConstructivePayloadTwo :
+    ¬ NonSlitMemNhdsSlitInjConstructivePayloadTwo := by
+  intro h_payload
+  exact not_mem_nhds_slit_on_outside_open_two h_payload.2.1
+
+/-- Scope-check no-go at `c = 2`: this payload shape is inconsistent in the
+current model because local-slit neighborhood payload is impossible. -/
+theorem not_nonSlitMemNhdsSlitIterLeftInverseConstructivePayloadTwo :
+    ¬ NonSlitMemNhdsSlitIterLeftInverseConstructivePayloadTwo := by
+  intro h_payload
+  exact not_mem_nhds_slit_on_outside_open_two h_payload.2.1
+
+/-- Aggregate predicate for currently blocked legacy CP5 ingress payload families
+at `c = 2`. -/
+def KnownCP5IngressCandidateTwo : Prop :=
+  NonSlitAnalyticConstructivePayloadTwo ∨
+    NonSlitAnalyticInjConstructivePayloadTwo ∨
+    AnalyticDerivConstructivePayloadTwo ∨
+    NonSlitQuotientConstConstructivePayloadTwo ∨
+    NonSlitQuotientAnalyticConstructivePayloadTwo ∨
+    NonSlitQuotientConstRealConstructivePayloadTwo ∨
+    NonSlitEventualSlitConstructivePayloadTwo ∨
+    NonSlitBoundaryExclusionConstructivePayloadTwo ∨
+    NonSlitMemNhdsSlitInjConstructivePayloadTwo ∨
+    NonSlitMemNhdsSlitIterLeftInverseConstructivePayloadTwo ∨
+    NonSlitAnalyticScopeAssumptionConstructivePayloadTwo
+
+/-- All currently wired CP5 ingress payload families are inconsistent in the
+current model at `c = 2`. -/
+theorem not_knownCP5IngressCandidateTwo :
+    ¬ KnownCP5IngressCandidateTwo := by
+  intro h
+  rcases h with hA | hB | hC | hD | hE | hF | hG | hH | hI | hJ | hK
+  · exact not_nonSlitAnalyticConstructivePayloadTwo hA
+  · exact not_nonSlitAnalyticInjConstructivePayloadTwo hB
+  · exact not_analyticDerivConstructivePayloadTwo hC
+  · exact not_nonSlitQuotientConstConstructivePayloadTwo hD
+  · exact not_nonSlitQuotientAnalyticConstructivePayloadTwo hE
+  · exact not_nonSlitQuotientConstRealConstructivePayloadTwo hF
+  · exact not_nonSlitEventualSlitConstructivePayloadTwo hG
+  · exact not_nonSlitBoundaryExclusionConstructivePayloadTwo hH
+  · exact not_nonSlitMemNhdsSlitInjConstructivePayloadTwo hI
+  · exact not_nonSlitMemNhdsSlitIterLeftInverseConstructivePayloadTwo hJ
+  · exact not_nonSlitAnalyticScopeAssumptionConstructivePayloadTwo hK
+
+/-- Revised CP2 formal-status export at `c = 2` for root planning:
+outside-open analyticity is impossible in the current model. -/
+theorem cp2_revised_target_two :
+    RevisedCP2TargetTwo :=
+  revisedCP2TargetTwo_constructive
+
+/-- Revised CP3 formal target at `c = 2` in the current model. -/
+def RevisedCP3TargetTwo : Prop :=
+  ¬ NonSlitAnalyticInjConstructivePayloadTwo
+
+/-- Revised CP3 constructive witness at `c = 2`. -/
+theorem revisedCP3TargetTwo_constructive : RevisedCP3TargetTwo :=
+  not_nonSlitAnalyticInjConstructivePayloadTwo
+
+/-- Revised CP4 formal target at `c = 2` in the current model. -/
+def RevisedCP4TargetTwo : Prop :=
+  ¬ AnalyticDerivConstructivePayloadTwo
+
+/-- Revised CP4 constructive witness at `c = 2`. -/
+theorem revisedCP4TargetTwo_constructive : RevisedCP4TargetTwo :=
+  not_analyticDerivConstructivePayloadTwo
+
+/-- Revised CP5 formal target at `c = 2`: MLC follows from any non-vacuous
+external-ray-data source term. -/
+def RevisedCP5TargetTwo : Prop :=
+  Quadratic.ExternalRayMapData (2 : ℂ) → LocallyConnectedSpace mandelbrotSet
+
+/-- Revised CP5 constructive witness at `c = 2`; this isolates the only
+remaining non-vacuous ingress obligation. -/
+theorem revisedCP5TargetTwo_constructive : RevisedCP5TargetTwo :=
+  mlc_conjecture_of_externalRayMapData_two
+
 /-- Root bridge from the strong quotient-rigidity witness payload at `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
     (h_payload : NonSlitQuotientConstRealConstructivePayloadTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo_via_localChartWithin
       h_payload.1 h_payload.2)
 
 /-- Root bridge from quotient-constancy payload at `c = 2`. -/
