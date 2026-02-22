@@ -961,9 +961,10 @@ lemma externalRayMapData_two_axiom_seed :
 /-- Rooted theorem exposing the remaining axiom ingress at `c = 2` through the
 external-ray-data seam. -/
 theorem mlc_conjecture_of_external_ray_map_exists_two :
+    Quadratic.ExternalRayMapData (2 : ℂ) →
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_externalRayMapData_two
-    externalRayMapData_two_axiom_seed
+  intro h_ext
+  exact mlc_conjecture_of_externalRayMapData_two h_ext
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
@@ -971,6 +972,7 @@ theorem mlc_conjecture_of_external_ray_map_exists_two :
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_external_ray_map_exists_two
+    externalRayMapData_two_axiom_seed
 
 end MainProof
 

@@ -13,6 +13,17 @@ constructive `mlc_conjecture` replacement route.
 - **Framework refactor track** — metric `9/9` (`100%`) `[██████████]`
 - **End-to-end elimination impact** — metric `9/10` (`90%`) `[█████████░]`
 
+## Implementation checkpoint (2026-02-22, final axiom-ingress theorem parameterized by explicit data seed)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_external_ray_map_exists_two` now takes
+    `Quadratic.ExternalRayMapData (2 : ℂ)` as an explicit argument;
+  - `mlc_conjecture` now applies it to `externalRayMapData_two_axiom_seed`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) final ingress boundary is now explicit in theorem signature; metrics
+    unchanged (`3/4`, `9/9`, `9/10`).
+
 ## Implementation checkpoint (2026-02-22, final axiom-ingress theorem redirected to external-ray-data seam)
 - Rewired in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_external_ray_map_exists_two` now routes through

@@ -22,6 +22,18 @@ No unconditional theorem currently provides:
 - **Constructive payload route progress** — metric `6/6` (`100%`) `[██████████]`
 - **Proof implementation progress** — metric `9/9` (`100%`) `[██████████]`
 
+## Implementation checkpoint (2026-02-22, explicit data-parameter seam for final axiom ingress)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_external_ray_map_exists_two` now takes
+    `Quadratic.ExternalRayMapData (2 : ℂ)` as input and no longer closes over the
+    seed internally.
+  - `mlc_conjecture` now applies it to `externalRayMapData_two_axiom_seed`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - final blocker unchanged (`MLC.Quadratic.external_ray_map_exists`); metrics
+    unchanged (`9/10`, `6/6`, `9/9`).
+
 ## Implementation checkpoint (2026-02-22, final axiom-ingress theorem routed through explicit external-ray-data seed)
 - Rewired in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_external_ray_map_exists_two` now delegates to
