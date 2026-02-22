@@ -561,15 +561,34 @@ lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
   have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
   exact False.elim hFalse
 
+/-- Minimal surjectivity seam: every exterior point has some Böttcher preimage. -/
+def BottcherSurjOnExterior (c : ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ∃ z, Quadratic.bottcher_map c z = w
+
+/-- Outside-open surjectivity implies minimal exterior surjectivity. -/
+lemma bottcherSurjOnExterior_of_surjOnExteriorFromOutsideOpen
+    (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
+    BottcherSurjOnExterior c := by
+  intro w hw
+  rcases h_surj w hw with ⟨z, _hz_out, hz_map⟩
+  exact ⟨z, hz_map⟩
+
+/-- Build exact canonical-sequence fiber data directly from minimal exterior
+surjectivity. -/
+lemma bottcherApproachOneSeqFiberData_of_surjOnExterior
+    (c : ℂ) (h_surj : BottcherSurjOnExterior c) :
+    BottcherApproachOneSeqFiberData c := by
+  intro n
+  rcases h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n) with ⟨z, hz_map⟩
+  exact ⟨z, hz_map⟩
+
 /-- Build exact canonical-sequence fiber data directly from outside-open
     exterior surjectivity. -/
 lemma bottcherApproachOneSeqFiberData_of_surjOnExteriorFromOutsideOpen
     (c : ℂ) (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
     BottcherApproachOneSeqFiberData c := by
-  intro n
-  rcases h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n) with
-    ⟨z, _hz_out, hz_map⟩
-  exact ⟨z, hz_map⟩
+  exact bottcherApproachOneSeqFiberData_of_surjOnExterior c
+    (bottcherSurjOnExterior_of_surjOnExteriorFromOutsideOpen c h_surj)
 
 /-- `c = 2` specialization of the outside-open-surjectivity to exact
     canonical-sequence-fiber bridge. -/
@@ -619,6 +638,13 @@ theorem mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     (bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen h_surj)
+
+/-- Step-4→root seam using only minimal exterior surjectivity at `c = 2`. -/
+theorem mlc_conjecture_of_bottcherSurjOnExterior_two
+    (h_surj : BottcherSurjOnExterior (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ) h_surj)
 
 /-- Step-4→root seam specialized through restricted-map closed range and
     restricted local-homeomorph payloads at `c = 2`. -/
@@ -896,19 +922,32 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_i
 lemma externalRayMapData_two_axiom_seed : Quadratic.ExternalRayMapData (2 : ℂ) :=
   Quadratic.external_ray_map_exists (2 : ℂ)
 
+/-- Minimal exterior surjectivity follows from explicit external-ray data. -/
+lemma bottcherSurjOnExterior_of_externalRayMapData
+    {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
+    BottcherSurjOnExterior c := by
+  intro w hw
+  refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_⟩
+  exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
+
+/-- Current rooted axiom-seed minimal surjectivity target at `c = 2`. -/
+lemma bottcherSurjOnExterior_two_axiom_seed :
+    BottcherSurjOnExterior (2 : ℂ) :=
+  bottcherSurjOnExterior_of_externalRayMapData externalRayMapData_two_axiom_seed
+
 /-- Current rooted axiom-seed reduction target:
 exact countable-fiber data on `approach_one_seq` at `c = 2`. -/
 lemma bottcherApproachOneSeqFiberData_two_axiom_seed :
     BottcherApproachOneSeqFiberData (2 : ℂ) :=
-  bottcherApproachOneSeqFiberData_two_of_externalRayMapData externalRayMapData_two_axiom_seed
+  bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ) bottcherSurjOnExterior_two_axiom_seed
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    bottcherApproachOneSeqFiberData_two_axiom_seed
+  exact mlc_conjecture_of_bottcherSurjOnExterior_two
+    bottcherSurjOnExterior_two_axiom_seed
 
 end MainProof
 

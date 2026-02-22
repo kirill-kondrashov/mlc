@@ -1613,6 +1613,7 @@ def graph_page_js() -> str:
       <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Core axiom</span>
       <span class="legend-item"><span class="legend-dot" style="background:#0ea5e9"></span>Construction route</span>
       <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing connection</span>
+      <span class="legend-item">→ Directed dependency</span>
     `;
   }
 
@@ -1862,15 +1863,48 @@ def graph_page_js() -> str:
     function syncEdgeBuffers() {
       const positions = [];
       const colors = [];
+      const shaftInset = Math.max(7, sphereRadius * 0.018);
+      const minEdgeLength = Math.max(4, sphereRadius * 0.012);
+      function pushSeg(a, b, color, alpha) {
+        positions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+        colors.push(
+          color[0], color[1], color[2], alpha,
+          color[0], color[1], color[2], alpha
+        );
+      }
+      function sideVector(dir, target) {
+        let s = V3.cross(dir, target);
+        if (V3.len(s) < 1e-5) s = V3.cross(dir, [0, 1, 0]);
+        if (V3.len(s) < 1e-5) s = V3.cross(dir, [1, 0, 0]);
+        return V3.norm(s);
+      }
       for (const e of edgeData) {
         if (!e.visible) continue;
         const a = nodeData[e.sourceIndex].pos;
         const b = nodeData[e.targetIndex].pos;
-        positions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
-        colors.push(
-          e.color[0], e.color[1], e.color[2], e.alpha,
-          e.color[0], e.color[1], e.color[2], e.alpha
-        );
+        const ab = V3.sub(b, a);
+        const abLen = V3.len(ab);
+        if (abLen <= minEdgeLength) continue;
+        const dir = V3.scale(ab, 1 / abLen);
+        const inset = Math.min(shaftInset, abLen * 0.18);
+        const start = V3.add(a, V3.scale(dir, inset));
+        const tip = V3.sub(b, V3.scale(dir, inset));
+        const shaft = V3.sub(tip, start);
+        const shaftLen = V3.len(shaft);
+        if (shaftLen <= minEdgeLength) continue;
+
+        pushSeg(start, tip, e.color, e.alpha);
+
+        const headLen = Math.min(Math.max(9, sphereRadius * 0.03), shaftLen * 0.65);
+        if (headLen <= 1e-3) continue;
+        const headHalf = headLen * 0.45;
+        const base = V3.sub(tip, V3.scale(dir, headLen));
+        const targetUnit = V3.norm(b);
+        const side = sideVector(dir, targetUnit);
+        const wingA = V3.add(base, V3.scale(side, headHalf));
+        const wingB = V3.sub(base, V3.scale(side, headHalf));
+        pushSeg(wingA, tip, e.color, e.alpha);
+        pushSeg(wingB, tip, e.color, e.alpha);
       }
       gl.bindBuffer(gl.ARRAY_BUFFER, linePosBuf);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.DYNAMIC_DRAW);

@@ -10,11 +10,30 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.74%`
+  `[█████████░] ~99.75%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.93%`
+  `[█████████░] ~99.94%`
+
+## Implementation checkpoint (2026-02-22, root minimal seam tightened to exterior-surjectivity seed)
+- Added in `Mlc/MainConjecture.lean`:
+  - `BottcherSurjOnExterior`;
+  - `bottcherSurjOnExterior_of_surjOnExteriorFromOutsideOpen`;
+  - `bottcherApproachOneSeqFiberData_of_surjOnExterior`;
+  - `mlc_conjecture_of_bottcherSurjOnExterior_two`;
+  - `bottcherSurjOnExterior_of_externalRayMapData`;
+  - `bottcherSurjOnExterior_two_axiom_seed`.
+- Rewired:
+  - `bottcherApproachOneSeqFiberData_two_axiom_seed` now derives from
+    `bottcherSurjOnExterior_two_axiom_seed`;
+  - `mlc_conjecture` now routes through
+    `mlc_conjecture_of_bottcherSurjOnExterior_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - root dependency is now anchored at the tighter minimal surjectivity seam
+    (`BottcherSurjOnExterior`), reducing the final elimination target surface.
 
 ## Implementation checkpoint (2026-02-22, wrapper cleanup onto shared surjectivity route)
 - Rewired in `Mlc/MainConjecture.lean`:

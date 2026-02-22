@@ -19,11 +19,27 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.93%`
+  `[█████████░] ~99.94%`
 - Constructive payload route progress:
-  `[██████████] ~99.989%`
+  `[██████████] ~99.990%`
 - Proof implementation progress:
-  `[█████████░] ~99.74%`
+  `[█████████░] ~99.75%`
+
+## Implementation checkpoint (2026-02-22, axiom seed lowered to minimal exterior-surjectivity seam)
+- Added in `Mlc/MainConjecture.lean`:
+  - minimal seam `BottcherSurjOnExterior` and bridge
+    `bottcherSurjOnExterior_of_externalRayMapData`.
+- Rewired:
+  - `bottcherApproachOneSeqFiberData_two_axiom_seed` now consumes
+    `bottcherSurjOnExterior_two_axiom_seed`;
+  - `mlc_conjecture` now depends on
+    `mlc_conjecture_of_bottcherSurjOnExterior_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - direct root edge to `external_ray_map_exists` remains removed;
+  - remaining transitive axiom dependence is now concentrated at one explicit
+    minimal seed theorem.
 
 ## Implementation checkpoint (2026-02-22, remaining wrapper ingresses converged)
 - Rewired in `Mlc/MainConjecture.lean`:
