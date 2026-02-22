@@ -9,12 +9,25 @@ without using `MLC.Quadratic.external_ray_map_exists`, then use it in the
 constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
-- Analyticity theorem track:
-  `[█████████░] ~99.77%`
-- Framework refactor track:
-  `[██████████] ~100%`
-- End-to-end elimination impact:
-  `[█████████░] ~99.96%`
+- Analyticity theorem track (metric: Step-2 analyticity milestones completed, `3/4`):
+  `[███████░░░] 75%`
+- Framework refactor track (metric: root-bridge normalization milestones completed, `9/9`):
+  `[██████████] 100%`
+- End-to-end elimination impact (metric: elimination milestones completed, `8/10`):
+  `[████████░░] 80%`
+
+## Implementation checkpoint (2026-02-22, external-ray minimal-surjectivity seam specialized at `c = 2`)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherSurjOnExterior_two_of_externalRayMapData`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_externalRayMapData`;
+  - `bottcherSurjOnExterior_two_axiom_seed`;
+  to consume the new `Two`-specialized external-ray→minimal-surjectivity seam.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root-bridge normalization track reached `9/9`; rooted non-core axiom
+    frontier remains unchanged.
 
 ## Implementation checkpoint (2026-02-22, outside-open→minimal surjectivity seam specialized at `c = 2`)
 - Added in `Mlc/MainConjecture.lean`:

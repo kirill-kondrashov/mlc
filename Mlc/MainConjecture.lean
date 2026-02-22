@@ -624,13 +624,20 @@ lemma bottcherSurjOnExterior_two_of_surjOnExteriorFromOutsideOpen
     BottcherSurjOnExterior (2 : ℂ) :=
   bottcherSurjOnExterior_of_surjOnExteriorFromOutsideOpen (2 : ℂ) h_surj
 
+/-- `c = 2` specialization: explicit external-ray data implies minimal exterior
+surjectivity. -/
+lemma bottcherSurjOnExterior_two_of_externalRayMapData
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    BottcherSurjOnExterior (2 : ℂ) :=
+  bottcherSurjOnExterior_of_externalRayMapData h_data
+
 /-- Build canonical-sequence fiber data at `c = 2` from explicit external-ray
 data. -/
 lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     BottcherApproachOneSeqFiberData (2 : ℂ) :=
   bottcherApproachOneSeqFiberData_two_of_surjOnExterior
-    (bottcherSurjOnExterior_of_externalRayMapData h_data)
+    (bottcherSurjOnExterior_two_of_externalRayMapData h_data)
 
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
@@ -943,7 +950,7 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_i
 /-- Current rooted axiom-seed minimal surjectivity target at `c = 2`. -/
 lemma bottcherSurjOnExterior_two_axiom_seed :
     BottcherSurjOnExterior (2 : ℂ) :=
-  bottcherSurjOnExterior_of_externalRayMapData (Quadratic.external_ray_map_exists (2 : ℂ))
+  bottcherSurjOnExterior_two_of_externalRayMapData (Quadratic.external_ray_map_exists (2 : ℂ))
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
