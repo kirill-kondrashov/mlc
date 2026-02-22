@@ -19,11 +19,25 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.91%`
+  `[█████████░] ~99.92%`
 - Constructive payload route progress:
-  `[██████████] ~99.987%`
+  `[██████████] ~99.988%`
 - Proof implementation progress:
-  `[█████████░] ~99.70%`
+  `[█████████░] ~99.72%`
+
+## Implementation checkpoint (2026-02-22, converged non-vacuous ingress routes on surjectivity core)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - non-slit quotient-const/quotient-analytic payload bridges, plus
+    closed-range outside-open quotient/analytic/injective ingress theorems,
+    now all route through
+    `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo`
+    and the shared root theorem
+    `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - axiom elimination status unchanged, but the realistic remaining target set is
+    tighter and centered on one surjectivity seam.
 
 ## Implementation checkpoint (2026-02-22, root theorem routed to explicit axiom-seed seam)
 - Added in `Mlc/MainConjecture.lean`:

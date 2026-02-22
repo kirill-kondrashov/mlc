@@ -10,11 +10,29 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.70%`
+  `[█████████░] ~99.72%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.91%`
+  `[█████████░] ~99.92%`
+
+## Implementation checkpoint (2026-02-22, non-vacuous root bridges normalized to surjectivity core)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`;
+  to route through
+  `bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo`
+  and `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - concentrates the remaining constructive obligation on the surjectivity core
+    seam, avoiding duplicated `ExternalRayMapData` root constructions.
 
 ## Implementation checkpoint (2026-02-22, root ingress normalized to axiom-seed seam)
 - Added in `Mlc/MainConjecture.lean`:
