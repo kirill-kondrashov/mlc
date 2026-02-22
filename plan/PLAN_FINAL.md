@@ -36,6 +36,7 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt`;
   - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_injOn`;
+  - `external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse`;
   - `external_ray_map_exists_two_constructive` (current placeholder endpoint, body still axiom-seeded).
 - This extends CP2/CP3/CP4 scaffolding and wires a single CP5 replacement point for
   the final constructive payload body, including quotient and analytic/non-slit CP4 lanes.

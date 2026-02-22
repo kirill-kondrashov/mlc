@@ -812,6 +812,17 @@ theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_an
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt hclosed hanalytic
 
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus local analyticity and iterate-left-inverse injectivity. -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+    hclosed hanalytic h_left_iter
+
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
@@ -1066,11 +1077,11 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inve
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (hanalytic :
       ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
-    (_h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt
-      hclosed hanalytic)
+    (external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+      hclosed hanalytic h_left_iter)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus local
     slit-neighborhood payload and explicit outside-open injectivity at `c = 2`. -/
