@@ -13,6 +13,18 @@ constructive `mlc_conjecture` replacement route.
 - **Framework refactor track** — metric `9/9` (`100%`) `[██████████]`
 - **End-to-end elimination impact** — metric `9/10` (`90%`) `[█████████░]`
 
+## Implementation checkpoint (2026-02-22, final axiom-ingress theorem redirected to external-ray-data seam)
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_external_ray_map_exists_two` now routes through
+    `mlc_conjecture_of_externalRayMapData_two externalRayMapData_two_axiom_seed`.
+- Cleanup:
+  - removed intermediate `bottcherSurjOnExterior_two_axiom_seed`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) axiom ingress is expressed directly at the external-ray-data seam;
+    metrics unchanged (`3/4`, `9/9`, `9/10`).
+
 ## Implementation checkpoint (2026-02-22, final axiom seed isolated at external-ray-data seam)
 - Added in `Mlc/MainConjecture.lean`:
   - `externalRayMapData_two_axiom_seed`.
