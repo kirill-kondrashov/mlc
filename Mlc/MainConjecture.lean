@@ -631,14 +631,6 @@ lemma bottcherSurjOnExterior_two_of_externalRayMapData
     BottcherSurjOnExterior (2 : ℂ) :=
   bottcherSurjOnExterior_of_externalRayMapData h_data
 
-/-- `c = 2` specialization: outside-open surjectivity implies exact
-canonical-sequence fiber data, routed through minimal exterior surjectivity. -/
-lemma bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen_via_surj
-    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
-    BottcherApproachOneSeqFiberData (2 : ℂ) :=
-  bottcherApproachOneSeqFiberData_two_of_surjOnExterior
-    (bottcherSurjOnExterior_two_of_surjOnExteriorFromOutsideOpen h_surj)
-
 /-- Build canonical-sequence fiber data at `c = 2` from explicit external-ray
 data. -/
 lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
@@ -663,37 +655,41 @@ theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
   exact mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two
     (bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData h_fiber)
 
+/-- Core Step-4→root seam from minimal exterior surjectivity at `c = 2`. -/
+theorem mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
+    (h_surj : BottcherSurjOnExterior (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
+    (bottcherApproachOneSeqFiberData_two_of_surjOnExterior h_surj)
+
 /-- Root bridge from explicit external-ray-map data at `c = 2`. -/
 theorem mlc_conjecture_of_externalRayMapData_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_surjOnExterior
-      (bottcherSurjOnExterior_two_of_externalRayMapData h_data))
+  exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
+    (bottcherSurjOnExterior_two_of_externalRayMapData h_data)
 
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_surjOnExterior
-      (bottcherSurjOnExterior_two_of_externalRayMapData h_data))
+  exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
+    (bottcherSurjOnExterior_two_of_externalRayMapData h_data)
 
 /-- Step-4→root seam: outside-open exterior surjectivity at `c = 2` is
     sufficient to derive the full MLC statement. -/
 theorem mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
     (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen_via_surj h_surj)
+  exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
+    (bottcherSurjOnExterior_two_of_surjOnExteriorFromOutsideOpen h_surj)
 
 /-- Step-4→root seam using only minimal exterior surjectivity at `c = 2`. -/
 theorem mlc_conjecture_of_bottcherSurjOnExterior_two
     (h_surj : BottcherSurjOnExterior (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_surjOnExterior h_surj)
+  exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber h_surj
 
 /-- Step-4→root seam specialized through restricted-map closed range and
     restricted local-homeomorph payloads at `c = 2`. -/

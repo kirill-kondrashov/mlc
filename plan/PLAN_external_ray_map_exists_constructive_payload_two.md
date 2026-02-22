@@ -19,8 +19,23 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - **End-to-end elimination progress** — metric `9/10` (`90%`) `[█████████░]`
-- **Constructive payload route progress** — metric `4/6` (`67%`) `[███████░░░]`
+- **Constructive payload route progress** — metric `5/6` (`83%`) `[████████░░]`
 - **Proof implementation progress** — metric `9/9` (`100%`) `[██████████]`
+
+## Implementation checkpoint (2026-02-22, root ingress wrappers unified on shared minimal-surjectivity theorem)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two`;
+  - `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two`;
+  - `mlc_conjecture_of_bottcherSurjOnExterior_two`;
+  to consume the shared theorem.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - constructive payload route metric advanced to `5/6`; final blocker remains
+    `MLC.Quadratic.external_ray_map_exists`.
 
 ## Implementation checkpoint (2026-02-22, `c = 2` closed-range external-ray ingress flattened)
 - Rewired in `Mlc/MainConjecture.lean`:

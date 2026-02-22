@@ -13,6 +13,20 @@ constructive `mlc_conjecture` replacement route.
 - **Framework refactor track** — metric `9/9` (`100%`) `[██████████]`
 - **End-to-end elimination impact** — metric `9/10` (`90%`) `[█████████░]`
 
+## Implementation checkpoint (2026-02-22, root wrappers converged on one minimal-surjectivity theorem)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two`;
+  - `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two`;
+  - `mlc_conjecture_of_bottcherSurjOnExterior_two`;
+  to delegate through the new shared seam theorem.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root ingresses are more uniform; metrics unchanged (`3/4`, `9/9`, `9/10`).
+
 ## Implementation checkpoint (2026-02-22, closed-range external-ray wrapper flattened to the `Two` surjectivity seam)
 - Rewired in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two` now
