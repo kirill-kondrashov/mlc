@@ -757,6 +757,18 @@ No unconditional theorem currently provides:
   a global neighborhood payload through any fixed rotated slit is ruled out at
   `c = 2`; remaining route is genuinely non-slit local analyticity/injectivity.
 
+## Implementation checkpoint (2026-02-22, real-scale quotient seam)
+- Added in `BottcherOutsidePlan.lean`:
+  - `bottcher_map_div_eq_real_scale_of_ne_zero`;
+  - `bottcher_map_div_eq_real_scale_of_outside_open`.
+- Refined:
+  - `bottcher_map_div_mem_slitPlaneRight_of_ne_zero` now factors through the
+    real-scale quotient seam instead of duplicating quotient algebra.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

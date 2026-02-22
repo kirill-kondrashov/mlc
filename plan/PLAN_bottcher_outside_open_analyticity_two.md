@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~95%`
+  `[█████████░] ~96%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -296,3 +296,15 @@ constructive `mlc_conjecture` replacement route.
 - Impact:
   ruled out not only principal-slit but also any fixed-angle rotated-slit
   neighborhood payload as a global outside-open analyticity strategy at `c = 2`.
+
+## Implementation checkpoint (2026-02-22, real-scale quotient seam)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `bottcher_map_div_eq_real_scale_of_ne_zero`;
+  - `bottcher_map_div_eq_real_scale_of_outside_open`.
+- Refined:
+  - `bottcher_map_div_mem_slitPlaneRight_of_ne_zero` now reuses the new
+    real-scale quotient lemma.
+- Impact:
+  establishes an explicit non-slit algebraic form for
+  `Quadratic.bottcher_map c z / z` on outside-open, preparing a direct
+  analyticity no-go/constraint route independent of slit-neighborhood payloads.

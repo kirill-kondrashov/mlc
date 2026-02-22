@@ -3233,39 +3233,43 @@ lemma eventually_atInfinity_bottcher_map_div_mem_slitPlaneRight (c : ℂ) :
     re_pos_of_norm_sub_one_lt_one hz
   exact ⟨hslit, hre⟩
 
+lemma bottcher_map_div_eq_real_scale_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ) := by
+  have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz
+  refine ⟨Real.exp (Quadratic.green_function c z) / ‖z‖, div_pos (Real.exp_pos _) hzpos, ?_⟩
+  have hznorm : (‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.mpr hz)
+  have hdiv : (z / ‖z‖) / z = (1 : ℂ) / ‖z‖ := by
+    field_simp [div_eq_mul_inv, hz, hznorm, mul_assoc, mul_comm, mul_left_comm]
+  calc
+    Quadratic.bottcher_map c z / z
+        = ((z / ‖z‖) * (Real.exp (Quadratic.green_function c z) : ℂ)) / z := by
+            simp [Quadratic.bottcher_map, hz]
+    _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((z / ‖z‖) / z) := by
+          ring
+    _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((1 : ℂ) / ‖z‖) := by
+          simp [hdiv]
+    _ = ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
+          simp [div_eq_mul_inv, mul_comm]
+
+lemma bottcher_map_div_eq_real_scale_of_outside_open
+    (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ) := by
+  have hzpos : 0 < ‖z‖ := by
+    linarith [hz, norm_nonneg c]
+  have hz_ne : z ≠ 0 := by
+    exact norm_ne_zero_iff.mp (ne_of_gt hzpos)
+  exact bottcher_map_div_eq_real_scale_of_ne_zero c z hz_ne
+
 lemma bottcher_map_div_mem_slitPlaneRight_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
     (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
-  have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz
-  have hexp : 0 < Real.exp (Quadratic.green_function c z) := Real.exp_pos _
-  have hpos : 0 < Real.exp (Quadratic.green_function c z) / ‖z‖ := by
-    exact div_pos hexp hzpos
-  have hratio :
-      Quadratic.bottcher_map c z / z =
-        ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
-    have hznorm : (‖z‖ : ℂ) ≠ 0 := by
-      exact_mod_cast (norm_ne_zero_iff.mpr hz)
-    have hdiv : (z / ‖z‖) / z = (1 : ℂ) / ‖z‖ := by
-      field_simp [div_eq_mul_inv, hz, hznorm, mul_assoc, mul_comm, mul_left_comm]
-    calc
-      Quadratic.bottcher_map c z / z
-          = ((z / ‖z‖) * (Real.exp (Quadratic.green_function c z) : ℂ)) / z := by
-              simp [Quadratic.bottcher_map, hz]
-      _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((z / ‖z‖) / z) := by
-              ring
-      _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((1 : ℂ) / ‖z‖) := by
-              simp [hdiv]
-      _ = ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
-              simp [div_eq_mul_inv, mul_comm]
+  rcases bottcher_map_div_eq_real_scale_of_ne_zero c z hz with ⟨r, hrpos, hratio⟩
   have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane := by
-    have h1 : (1 : ℂ) ∈ Complex.slitPlane := by
-      exact Complex.one_mem_slitPlane
-    have hslit' :
-        (1 : ℂ) * (Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) ∈
-          Complex.slitPlane :=
-      slitPlane_mul_of_real_pos (x := 1) h1 (Real.exp (Quadratic.green_function c z) / ‖z‖) hpos
+    have hslit' : (1 : ℂ) * (r : ℝ) ∈ Complex.slitPlane :=
+      slitPlane_mul_of_real_pos (x := 1) Complex.one_mem_slitPlane r hrpos
     simpa [hratio] using hslit'
   have hre : 0 < (Quadratic.bottcher_map c z / z).re := by
-    simpa [hratio] using hpos
+    simpa [hratio] using hrpos
   exact ⟨hslit, hre⟩
 
 lemma exists_bottcher_map_div_mem_slitPlaneRight_of_large_norm (c : ℂ) :
