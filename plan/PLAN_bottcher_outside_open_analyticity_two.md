@@ -10,11 +10,11 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.2%`
+  `[█████████░] ~99.3%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[██████████] ~99%`
+  `[██████████] ~99.1%`
 
 ## Why this is currently blocked
 - Existing analytic proofs on outside-open are slit-driven:
@@ -372,3 +372,17 @@ constructive `mlc_conjecture` replacement route.
   the remaining proof now reduces to establishing only
   `OutsideOpenQuotientConstHypothesisTwo` (constancy of
   `z ↦ Quadratic.bottcher_map (2:ℂ) z / z` on outside-open).
+
+## Implementation checkpoint (2026-02-22, quotient-constancy proof repair)
+- Repaired in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `isPreconnected_outside_open` image proof details (connected-image invocation,
+    real-norm/div simplifications, scalar-division witness);
+  - open-mapping contradiction branch in
+    `outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScalePayload`
+    (inline outside-open witness, metric-ball imaginary-part contradiction).
+- Result:
+  - the quotient analyticity+real-scale -> quotient constancy bridge now compiles;
+  - derived analyticity -> quotient constancy wrappers compile.
+- Validation:
+  - `make build && make check` pass; rooted axiom frontier unchanged
+    (still includes `MLC.Quadratic.external_ray_map_exists`).

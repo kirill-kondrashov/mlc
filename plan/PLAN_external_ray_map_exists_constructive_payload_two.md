@@ -19,11 +19,11 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[██████████] ~99%`
+  `[██████████] ~99.1%`
 - Constructive payload route progress:
-  `[██████████] ~99%`
+  `[██████████] ~99.1%`
 - Proof implementation progress:
-  `[██████████] ~99%`
+  `[██████████] ~99.1%`
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
@@ -829,6 +829,16 @@ No unconditional theorem currently provides:
   - `make build && make check` succeeded;
   - rooted axiom frontier unchanged and still includes
     `MLC.Quadratic.external_ray_map_exists`.
+
+## Implementation checkpoint (2026-02-22, quotient-constancy proof repair)
+- Repaired in `BottcherOutsidePlan.lean`:
+  - `isPreconnected_outside_open`;
+  - open-mapping contradiction proof in
+    `outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScalePayload`.
+- Validation:
+  - `make build && make check` succeeded after repair;
+  - rooted axiom frontier still unchanged (external-ray existence remains the
+    only non-core ingress axiom).
 
 ## Work packages
 1. Prove closed range at `c = 2`:

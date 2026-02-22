@@ -636,6 +636,12 @@ def NonSlitAnalyticInjConstructivePayloadTwo : Prop :=
   IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenAnalyticInjNonSlitPayloadTwo
 
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open analyticity at `c = 2`. -/
+def NonSlitAnalyticConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenAnalyticityHypothesis (2 : ℂ)
+
 /-- Step-4→root seam specialized through restricted-map closed range plus a
 strong quotient-rigidity witness at `c = 2`. -/
 def NonSlitQuotientConstRealConstructivePayloadTwo : Prop :=
@@ -677,6 +683,25 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSli
   exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
     (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
       hclosed h_payload)
+
+/-- Step-4→root seam specialized through restricted-map closed range plus
+outside-open analyticity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
+    hclosed
+    (outsideOpenAnalyticInjNonSlitPayloadTwo_of_outsideOpenAnalyticityHypothesisTwo
+      h_analytic)
+
+/-- Root bridge from closed range plus outside-open analyticity payload at
+`c = 2`. -/
+theorem mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo
+    (h_payload : NonSlitAnalyticConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two
+    h_payload.1 h_payload.2
 
 /-- Root bridge from the combined non-slit outside-open analytic/injective
 payload shape at `c = 2`. -/

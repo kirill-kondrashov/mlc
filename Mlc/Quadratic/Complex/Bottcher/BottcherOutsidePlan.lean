@@ -5066,6 +5066,134 @@ lemma outsideOpenQuotientAnalyticRealScalePayloadTwo_of_nonSlitPayload
   outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPayload
     (2 : ℂ) h_payload
 
+/-- The outside-open set `{‖z‖ > ‖c‖ + 2}` is preconnected. -/
+lemma isPreconnected_outside_open (c : ℂ) :
+    IsPreconnected {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  let R : ℝ := ‖c‖ + 2
+  let E : Set ℂ := {w : ℂ | 1 < ‖w‖}
+  let f : ℂ → ℂ := fun w => ((R : ℝ) : ℂ) * w
+  have hRpos : 0 < R := by
+    have hc : 0 ≤ ‖c‖ := norm_nonneg c
+    linarith
+  have hRnonneg : 0 ≤ R := le_of_lt hRpos
+  have hRne : ((R : ℝ) : ℂ) ≠ 0 := by
+    exact_mod_cast (ne_of_gt hRpos)
+  have hnormR : ‖((R : ℝ) : ℂ)‖ = R := by
+    simpa [abs_of_nonneg hRnonneg] using (Complex.norm_real R)
+  have hcont : Continuous f := continuous_const.mul continuous_id
+  have hconn_img : IsConnected (f '' E) :=
+    isConnected_exterior.image f hcont.continuousOn
+  have himage : f '' E = {z : ℂ | ‖z‖ > R} := by
+    refine Set.Subset.antisymm ?_ ?_
+    · intro z hz
+      rcases hz with ⟨w, hw, rfl⟩
+      have hmul : R < R * ‖w‖ := by
+        have h1 : R * 1 < R * ‖w‖ := mul_lt_mul_of_pos_left hw hRpos
+        simpa using h1
+      calc
+        ‖((R : ℝ) : ℂ) * w‖ = ‖((R : ℝ) : ℂ)‖ * ‖w‖ := norm_mul _ _
+        _ = R * ‖w‖ := by rw [Complex.norm_real, Real.norm_of_nonneg hRnonneg]
+        _ > R := hmul
+    · intro z hz
+      refine ⟨z / ((R : ℝ) : ℂ), ?_, ?_⟩
+      · have hdiv : 1 < ‖z‖ / R := by
+          exact (one_lt_div hRpos).2 (by simpa using hz)
+        calc
+          1 < ‖z‖ / R := hdiv
+          _ = ‖z‖ / ‖R‖ := by rw [Real.norm_of_nonneg hRnonneg]
+          _ = ‖z / ((R : ℝ) : ℂ)‖ := by
+                simpa [Complex.norm_real] using (norm_div z (((R : ℝ) : ℂ))).symm
+      · change (((R : ℝ) : ℂ) * (z / ((R : ℝ) : ℂ)) = z)
+        field_simp [hRne]
+  have hpre_img : IsPreconnected (f '' E) := hconn_img.isPreconnected
+  simpa [f, E, R] using (himage ▸ hpre_img)
+
+/-- Quotient analytic+real-scale payload forces quotient constancy on
+outside-open (open mapping + one-dimensional image obstruction). -/
+lemma outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScalePayload
+    (c : ℂ)
+    (h_payload : OutsideOpenQuotientAnalyticRealScalePayload c) :
+    OutsideOpenQuotientConstHypothesis c := by
+  rcases h_payload with ⟨h_analytic, h_real⟩
+  let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
+  let g : ℂ → ℂ := fun z => Quadratic.bottcher_map c z / z
+  have hUpre : IsPreconnected U := by
+    simpa [U] using isPreconnected_outside_open c
+  have hg : AnalyticOnNhd ℂ g U := by
+    intro z hz
+    exact h_analytic z (by simpa [U] using hz)
+  rcases (AnalyticOnNhd.is_constant_or_isOpen (g := g) hg hUpre) with ⟨q, hq⟩ | hopen
+  · refine ⟨q, ?_⟩
+    intro z hz
+    exact hq z (by simpa [U] using hz)
+  · have hUopen : IsOpen U := by
+      simpa [U] using (isOpen_lt continuous_const continuous_norm)
+    have hImgOpen : IsOpen (g '' U) := hopen U (by intro z hz; exact hz) hUopen
+    let z0 : ℂ := ((‖c‖ + 3 : ℝ) : ℂ)
+    have hz0 : ‖z0‖ > ‖c‖ + 2 := by
+      have hnonneg : 0 ≤ ‖c‖ + 3 := by
+        linarith [norm_nonneg c]
+      have hnorm : ‖((‖c‖ + 3 : ℝ) : ℂ)‖ = ‖c‖ + 3 := by
+        simpa [abs_of_nonneg hnonneg] using (Complex.norm_real (‖c‖ + 3))
+      have hgt : ‖((‖c‖ + 3 : ℝ) : ℂ)‖ > ‖c‖ + 2 := by
+        linarith
+      simpa [z0] using hgt
+    have hImgNonempty : (g '' U).Nonempty := by
+      refine ⟨g z0, ?_⟩
+      exact ⟨z0, by simpa [U] using hz0, rfl⟩
+    rcases hImgNonempty with ⟨y, hyImg⟩
+    have hyN : g '' U ∈ 𝓝 y := hImgOpen.mem_nhds hyImg
+    rcases Metric.mem_nhds_iff.mp hyN with ⟨ε, hεpos, hεsub⟩
+    let yI : ℂ := y + (((ε / 2 : ℝ) : ℂ) * Complex.I)
+    have hyIball : yI ∈ Metric.ball y ε := by
+      have hεhalf : ε / 2 < ε := by linarith
+      have hdist : dist yI y = ε / 2 := by
+        have hεhalf_nonneg : 0 ≤ ε / 2 := by linarith [hεpos]
+        have hnormI : ‖(((ε / 2 : ℝ) : ℂ) * Complex.I)‖ = ε / 2 := by
+          rw [norm_mul, Complex.norm_real, Real.norm_of_nonneg hεhalf_nonneg, Complex.norm_I, mul_one]
+        have hsub : yI - y = (((ε / 2 : ℝ) : ℂ) * Complex.I) := by
+          simp [yI]
+        calc
+          dist yI y = ‖yI - y‖ := by simp [dist_eq_norm]
+          _ = ‖(((ε / 2 : ℝ) : ℂ) * Complex.I)‖ := by rw [hsub]
+          _ = ε / 2 := hnormI
+      have : dist yI y < ε := by simpa [hdist] using hεhalf
+      exact this
+    have hyIimg : yI ∈ g '' U := hεsub hyIball
+    rcases hyIimg with ⟨z, hzU, hzEq⟩
+    rcases h_real z (by simpa [U] using hzU) with ⟨r, _hrpos, hrEq⟩
+    have himz : Complex.im (g z) = 0 := by
+      simpa [g, hrEq]
+    have himyI_zero : Complex.im yI = 0 := by
+      simpa [hzEq] using himz
+    have himy_zero : Complex.im y = 0 := by
+      rcases hyImg with ⟨zy, hzyU, hzyEq⟩
+      rcases h_real zy (by simpa [U] using hzyU) with ⟨ry, _hrypos, hryEq⟩
+      have himzy : Complex.im (g zy) = 0 := by
+        simpa [g, hryEq]
+      simpa [hzyEq] using himzy
+    have himyI_half : Complex.im yI = ε / 2 := by
+      simp [yI, himy_zero]
+    exfalso
+    linarith [himyI_zero, himyI_half, hεpos]
+
+/-- Quotient analyticity on outside-open already implies quotient constancy,
+since the real-scale quotient payload is unconditional. -/
+lemma outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypothesis
+    (c : ℂ)
+    (h_analytic : OutsideOpenQuotientAnalyticityHypothesis c) :
+    OutsideOpenQuotientConstHypothesis c :=
+  outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScalePayload c
+    ⟨h_analytic, outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div c⟩
+
+/-- Outside-open analyticity of `bottcher_map` implies quotient constancy. -/
+lemma outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    OutsideOpenQuotientConstHypothesis c :=
+  outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypothesis c
+    (outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis c h_analytic)
+
 /-- There exists an outside-open point (explicit witness `‖c‖ + 3`). -/
 lemma exists_outside_open_point (c : ℂ) :
     ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 := by
@@ -5115,6 +5243,15 @@ lemma outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothes
     OutsideOpenQuotientConstRealWitnessTwo :=
   outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis
     (2 : ℂ) h_const
+
+/-- Outside-open analyticity already yields the strong quotient-rigidity
+witness through quotient constancy. -/
+lemma outsideOpenQuotientConstRealWitness_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    OutsideOpenQuotientConstRealWitness c :=
+  outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis c
+    (outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis c h_analytic)
 
 /-- A strong quotient-rigidity witness implies outside-open analyticity. -/
 lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness
@@ -5170,6 +5307,22 @@ lemma outsideOpenAnalyticInjNonSlitPayloadTwo_of_outsideOpenQuotientConstRealWit
     (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
     OutsideOpenAnalyticInjNonSlitPayloadTwo :=
   outsideOpenAnalyticInjPayload_of_outsideOpenQuotientConstRealWitness (2 : ℂ) h_wit
+
+/-- Outside-open analyticity alone yields the combined non-slit
+analytic/injective payload via quotient constancy. -/
+lemma outsideOpenAnalyticInjPayload_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    OutsideOpenAnalyticInjPayload c :=
+  outsideOpenAnalyticInjPayload_of_outsideOpenQuotientConstRealWitness c
+    (outsideOpenQuotientConstRealWitness_of_outsideOpenAnalyticityHypothesis c h_analytic)
+
+/-- `c = 2` specialization: outside-open analyticity alone yields the combined
+non-slit analytic/injective payload. -/
+lemma outsideOpenAnalyticInjNonSlitPayloadTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    OutsideOpenAnalyticInjNonSlitPayloadTwo :=
+  outsideOpenAnalyticInjPayload_of_outsideOpenAnalyticityHypothesis (2 : ℂ) h_analytic
 
 /-- Outside-open exterior surjectivity from closed range plus the combined
 outside-open analytic/injective seam payload. -/
