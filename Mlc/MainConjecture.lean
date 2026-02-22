@@ -818,6 +818,28 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inve
     (external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
       hclosed hanalytic h_left_iter)
 
+/-- Step-4→root seam specialized through restricted-map closed range plus local
+    slit-neighborhood payload and explicit outside-open injectivity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
+      hclosed hslit_nhds h_inj)
+
+/-- Step-4→root seam specialized through restricted-map closed range plus local
+    slit-neighborhood payload and iterate-left-inverse injectivity at `c = 2`. -/
+theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two hclosed
+    (external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
+      hclosed hslit_nhds h_left_iter)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 

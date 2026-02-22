@@ -23,7 +23,7 @@ No unconditional theorem currently provides:
 - Constructive payload route progress:
   `[██████████] ~99.984%`
 - Proof implementation progress:
-  `[█████████░] ~99.3%`
+  `[█████████░] ~99.35%`
 
 ## Implementation checkpoint (2026-02-22, remainder audit)
 - Re-ran `make check`: `MLC.mlc_conjecture` still depends on
@@ -36,6 +36,21 @@ No unconditional theorem currently provides:
     `analyticAt + injOn` bridge route itself is already free of this axiom.
 - Current remainder is unchanged from the work packages at the end of this plan:
   prove package (1) and package (2) constructively, then rewire root.
+
+## Implementation checkpoint (2026-02-22, slit-neighborhood ingress expansion)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open`;
+  - `external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse`;
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - no change in the rooted frontier;
+  - `MLC.mlc_conjecture` still depends on
+    `MLC.Quadratic.external_ray_map_exists`.
 
 ## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:

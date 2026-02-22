@@ -5769,6 +5769,38 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injO
     (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds)
     h_inj
 
+/-- `c = 2` specialization: external-ray data from closed range, local-slit
+neighborhood payload, and outside-open injectivity. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
+    (2 : ℂ) hclosed hslit_nhds h_inj
+
+/-- External-ray data from closed range, local-slit neighborhoods, and the
+iterate-left-inverse injectivity route. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
+    c hclosed hslit_nhds
+    (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
+
+/-- `c = 2` specialization: external-ray data from closed range, local-slit
+neighborhoods, and iterate-left-inverse injectivity. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
+    (2 : ℂ) hclosed hslit_nhds h_left_iter
+
 lemma bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin
     (c z₀ : ℂ)
     (hslit : slit_orbit c ∈ 𝓝 z₀)

@@ -45,6 +45,8 @@ CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two",
     "MLC.mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo",
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two",
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two",
 )
 
 

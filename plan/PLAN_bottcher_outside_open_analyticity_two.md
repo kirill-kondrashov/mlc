@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.3%`
+  `[█████████░] ~99.35%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -30,6 +30,20 @@ constructive `mlc_conjecture` replacement route.
   - constructively prove closed-range plus outside-open analytic/injective
     payload at `c = 2`,
   - then rewire `MLC.mlc_conjecture` to that constructive route.
+
+## Implementation checkpoint (2026-02-22, slit-neighborhood bridge extension)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open`;
+  - `external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse`;
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - expands the constructive theorem surface for slit-local routes, but does not
+    change the rooted axiom frontier.
 
 ## Implementation checkpoint (2026-02-22, quotient-analyticity reverse bridge)
 - Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
