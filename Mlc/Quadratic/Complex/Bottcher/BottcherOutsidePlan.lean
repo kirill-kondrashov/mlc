@@ -4712,6 +4712,29 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analy
     (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic
       (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter))
 
+/-- Construct external-ray data from closed range plus local analyticity and the
+iterate-left-inverse injectivity route. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
+    Quadratic.ExternalRayMapData c := by
+  exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c
+    (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
+    (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+      c hclosed hanalytic h_left_iter)
+
+/-- `c = 2` specialization of the iterate-left-inverse external-ray-data bridge. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
+    (2 : ℂ) hclosed hanalytic h_left_iter
+
 -- The open exterior `{‖z‖ > ‖c‖ + 2}` is the natural domain for Step 1.
 -- Extending analyticity to the closed `outside_disk` would need boundary control.
 

@@ -19,11 +19,11 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.87%`
+  `[█████████░] ~99.88%`
 - Constructive payload route progress:
-  `[██████████] ~99.982%`
+  `[██████████] ~99.984%`
 - Proof implementation progress:
-  `[█████████░] ~99.25%`
+  `[█████████░] ~99.3%`
 
 ## Research checkpoint (Milnor notes cross-check)
 - Source checked: `refs/9201272v1.pdf` (Milnor lecture notes).
@@ -163,6 +163,17 @@ No unconditional theorem currently provides:
   `ExternalRayMapData` bridge for `c = 2`.
 - This keeps the explicit injectivity input active in the root-facing theorem
   graph and tightens the local-slit branch shape.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, iterate-left-inverse ingress connected)
+- Added a new constructive ingress route:
+  - closed range + outside-open analyticity + `QuadraticMapIterLeftInverseOnBasin (2)`
+    → `ExternalRayMapData (2)` → `mlc`.
+- New seam theorems:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse`,
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse_two`.
 - Validation:
   - `make build && make check && make graphs` succeeded;
   - rooted axiom frontier unchanged.

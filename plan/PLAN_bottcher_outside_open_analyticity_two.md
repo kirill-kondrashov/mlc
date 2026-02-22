@@ -10,11 +10,11 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.25%`
+  `[█████████░] ~99.3%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.87%`
+  `[█████████░] ~99.88%`
 
 ## Milnor lecture check (`refs/9201272v1.pdf`)
 - Reviewed via `pdftotext` against `refs/9201272v1.pdf` (Milnor notes).
@@ -197,6 +197,18 @@ constructive `mlc_conjecture` replacement route.
   directly, instead of discarding the explicit injectivity assumption.
 - Effect: improves graph fidelity for the local-slit analytic+injective branch
   and removes one wrapper hop.
+- Validation:
+  - `make build && make check && make graphs` passed;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, iterate-left-inverse data bridge)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse`,
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse_two`.
+- Effect: introduces a direct root-facing ingress for the local-slit
+  iterate-left-inverse branch through `ExternalRayMapData`.
 - Validation:
   - `make build && make check && make graphs` passed;
   - rooted axiom frontier unchanged.
