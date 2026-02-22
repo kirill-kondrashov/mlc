@@ -5948,6 +5948,24 @@ theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenL
     (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
       h_chart)
 
+/-- CP2 constructive seam at `c = 2`: outside-open quotient analyticity yields
+local analytic charts inside outside-open. -/
+theorem outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) :=
+  outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis
+    (2 : ℂ)
+    (outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo h_qanalytic)
+
+/-- CP2 constructive seam at `c = 2`: outside-open quotient analyticity yields
+outside-open analyticity through the chart-within bridge. -/
+theorem outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+      h_qanalytic)
+
 /-- `c = 2` specialization: outside-open analyticity payload induces local
 analytic charts inside outside-open. -/
 lemma outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpenAnalyticityHypothesis_two

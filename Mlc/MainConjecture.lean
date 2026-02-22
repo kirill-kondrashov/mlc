@@ -752,8 +752,10 @@ theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_ou
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
-    hclosed h_qanalytic
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    hclosed
+    (outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+      h_qanalytic)
 
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
 plus the strong quotient-rigidity witness. -/
