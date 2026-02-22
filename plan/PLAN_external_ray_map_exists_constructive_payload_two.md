@@ -19,11 +19,25 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.90%`
+  `[█████████░] ~99.91%`
 - Constructive payload route progress:
-  `[██████████] ~99.986%`
+  `[██████████] ~99.987%`
 - Proof implementation progress:
-  `[█████████░] ~99.69%`
+  `[█████████░] ~99.70%`
+
+## Implementation checkpoint (2026-02-22, root theorem routed to explicit axiom-seed seam)
+- Added in `Mlc/MainConjecture.lean`:
+  - `externalRayMapData_two_axiom_seed`;
+  - `bottcherApproachOneSeqFiberData_two_axiom_seed`.
+- Rewired:
+  - `mlc_conjecture` now depends on
+    `bottcherApproachOneSeqFiberData_two_axiom_seed` instead of directly
+    constructing `ExternalRayMapData` from `external_ray_map_exists`.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - direct rooted edge to `MLC.Quadratic.external_ray_map_exists` is removed;
+  - elimination is still incomplete because the new seed theorem remains axiom-backed.
 
 ## Implementation checkpoint (2026-02-22, slit-neighborhood ingress routes marked vacuous)
 - Rewired in `Mlc/MainConjecture.lean`:

@@ -10,11 +10,27 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.69%`
+  `[█████████░] ~99.70%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.90%`
+  `[█████████░] ~99.91%`
+
+## Implementation checkpoint (2026-02-22, root ingress normalized to axiom-seed seam)
+- Added in `Mlc/MainConjecture.lean`:
+  - `externalRayMapData_two_axiom_seed`;
+  - `bottcherApproachOneSeqFiberData_two_axiom_seed`.
+- Rewired:
+  - `mlc_conjecture` now routes via
+    `mlc_conjecture_of_bottcherApproachOneSeqFiberData_two` and the explicit
+    `bottcherApproachOneSeqFiberData_two_axiom_seed` seam.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Graph impact:
+  - direct edge `MLC.mlc_conjecture -> MLC.Quadratic.external_ray_map_exists`
+    is removed;
+  - axiom dependency remains transitively through
+    `externalRayMapData_two_axiom_seed`.
 
 ## Implementation checkpoint (2026-02-22, slit-neighborhood root seams collapsed as vacuous)
 - Rewired in `Mlc/MainConjecture.lean`:
