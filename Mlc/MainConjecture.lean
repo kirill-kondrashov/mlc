@@ -958,13 +958,19 @@ lemma bottcherSurjOnExterior_two_axiom_seed :
     BottcherSurjOnExterior (2 : ℂ) :=
   bottcherSurjOnExterior_two_of_externalRayMapData (Quadratic.external_ray_map_exists (2 : ℂ))
 
+/-- Rooted theorem exposing the remaining axiom ingress at `c = 2` through the
+minimal-surjectivity seam. -/
+theorem mlc_conjecture_of_external_ray_map_exists_two :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
+    bottcherSurjOnExterior_two_axiom_seed
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExterior_two
-    bottcherSurjOnExterior_two_axiom_seed
+  exact mlc_conjecture_of_external_ray_map_exists_two
 
 end MainProof
 

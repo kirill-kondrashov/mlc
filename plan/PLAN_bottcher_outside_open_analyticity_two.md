@@ -13,6 +13,17 @@ constructive `mlc_conjecture` replacement route.
 - **Framework refactor track** — metric `9/9` (`100%`) `[██████████]`
 - **End-to-end elimination impact** — metric `9/10` (`90%`) `[█████████░]`
 
+## Implementation checkpoint (2026-02-22, final axiom-ingress theorem isolated at root)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_external_ray_map_exists_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture` to delegate through the new isolated axiom-ingress theorem.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root wiring now isolates the last axiom entry point in a single
+    named theorem; metric totals remain (`3/4`, `9/9`, `9/10`).
+
 ## Implementation checkpoint (2026-02-22, root wrappers converged on one minimal-surjectivity theorem)
 - Added in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber`.

@@ -19,8 +19,21 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - **End-to-end elimination progress** — metric `9/10` (`90%`) `[█████████░]`
-- **Constructive payload route progress** — metric `5/6` (`83%`) `[████████░░]`
+- **Constructive payload route progress** — metric `6/6` (`100%`) `[██████████]`
 - **Proof implementation progress** — metric `9/9` (`100%`) `[██████████]`
+
+## Implementation checkpoint (2026-02-22, explicit final axiom-ingress theorem added)
+- Added in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_external_ray_map_exists_two`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture` now delegates to
+    `mlc_conjecture_of_external_ray_map_exists_two`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - constructive payload route metric reached `6/6`; remaining blocker is still the
+    final axiom ingress itself (`MLC.Quadratic.external_ray_map_exists`), so
+    end-to-end stays `9/10`.
 
 ## Implementation checkpoint (2026-02-22, root ingress wrappers unified on shared minimal-surjectivity theorem)
 - Added in `Mlc/MainConjecture.lean`:
