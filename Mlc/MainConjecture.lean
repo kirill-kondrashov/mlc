@@ -617,6 +617,13 @@ lemma bottcherApproachOneSeqFiberData_two_of_surjOnExterior
     BottcherApproachOneSeqFiberData (2 : ℂ) :=
   bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ) h_surj
 
+/-- `c = 2` specialization: outside-open surjectivity implies minimal exterior
+surjectivity. -/
+lemma bottcherSurjOnExterior_two_of_surjOnExteriorFromOutsideOpen
+    (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
+    BottcherSurjOnExterior (2 : ℂ) :=
+  bottcherSurjOnExterior_of_surjOnExteriorFromOutsideOpen (2 : ℂ) h_surj
+
 /-- Build canonical-sequence fiber data at `c = 2` from explicit external-ray
 data. -/
 lemma bottcherApproachOneSeqFiberData_two_of_externalRayMapData
@@ -661,7 +668,8 @@ theorem mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
     (h_surj : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
-    (bottcherApproachOneSeqFiberData_two_of_surjOnExteriorFromOutsideOpen h_surj)
+    (bottcherApproachOneSeqFiberData_two_of_surjOnExterior
+      (bottcherSurjOnExterior_two_of_surjOnExteriorFromOutsideOpen h_surj))
 
 /-- Step-4→root seam using only minimal exterior surjectivity at `c = 2`. -/
 theorem mlc_conjecture_of_bottcherSurjOnExterior_two

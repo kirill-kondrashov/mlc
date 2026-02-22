@@ -16,6 +16,19 @@ constructive `mlc_conjecture` replacement route.
 - End-to-end elimination impact:
   `[█████████░] ~99.96%`
 
+## Implementation checkpoint (2026-02-22, outside-open→minimal surjectivity seam specialized at `c = 2`)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherSurjOnExterior_two_of_surjOnExteriorFromOutsideOpen`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two` now passes
+    through the `Two`-specialized minimal-surjectivity seam before entering the
+    exact-fiber root bridge.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - Step (2) root ingress normalization improved with no change to remaining
+    rooted non-core axiom.
+
 ## Implementation checkpoint (2026-02-22, preimage-data root theorem seam normalized at `c = 2`)
 - Added in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two`.

@@ -25,6 +25,17 @@ No unconditional theorem currently provides:
 - Proof implementation progress:
   `[█████████░] ~99.77%`
 
+## Implementation checkpoint (2026-02-22, `c = 2` outside-open-to-minimal-surjectivity bridge normalization)
+- Added in `Mlc/MainConjecture.lean`:
+  - `bottcherSurjOnExterior_two_of_surjOnExteriorFromOutsideOpen`.
+- Rewired in `Mlc/MainConjecture.lean`:
+  - `mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two` to route
+    through the new `Two`-specialized minimal-surjectivity bridge.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Root impact:
+  - final rooted axiom status unchanged; wrapper chain is more uniform.
+
 ## Implementation checkpoint (2026-02-22, `c = 2` preimage-data theorem seam normalization)
 - Added in `Mlc/MainConjecture.lean`:
   - `mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two`.
