@@ -4929,6 +4929,23 @@ lemma bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit
 def OutsideOpenAnalyticityHypothesis (c : ℂ) : Prop :=
   ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z
 
+/-- Outside-open analyticity payload for the quotient map
+`z ↦ bottcher_map c z / z`. -/
+def OutsideOpenQuotientAnalyticityHypothesis (c : ℂ) : Prop :=
+  ∀ z, ‖z‖ > ‖c‖ + 2 →
+    AnalyticAt ℂ (fun w : ℂ => Quadratic.bottcher_map c w / w) z
+
+/-- Outside-open real-scale quotient payload:
+`bottcher_map c z / z` is a positive real scalar at each outside-open point. -/
+def OutsideOpenQuotientRealScaleHypothesis (c : ℂ) : Prop :=
+  ∀ z, ‖z‖ > ‖c‖ + 2 →
+    ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ)
+
+/-- Combined quotient payload used for non-slit rigidity attempts. -/
+def OutsideOpenQuotientAnalyticRealScalePayload (c : ℂ) : Prop :=
+  OutsideOpenQuotientAnalyticityHypothesis c ∧
+    OutsideOpenQuotientRealScaleHypothesis c
+
 /-- Framework seam: outside-open analyticity+injectivity payload for
 `bottcher_map` (non-slit route target shape). -/
 def OutsideOpenAnalyticInjPayload (c : ℂ) : Prop :=
@@ -4938,6 +4955,10 @@ def OutsideOpenAnalyticInjPayload (c : ℂ) : Prop :=
 /-- `c = 2` specialization of the outside-open analyticity+injectivity seam. -/
 def OutsideOpenAnalyticInjNonSlitPayloadTwo : Prop :=
   OutsideOpenAnalyticInjPayload (2 : ℂ)
+
+/-- `c = 2` specialization of the quotient analytic+real-scale seam. -/
+def OutsideOpenQuotientAnalyticRealScalePayloadTwo : Prop :=
+  OutsideOpenQuotientAnalyticRealScalePayload (2 : ℂ)
 
 /-- Framework seam: for each outside-open point, provide a local open chart on
 which `bottcher_map` is analytic. -/
@@ -4987,6 +5008,44 @@ lemma injOn_outside_open_of_outsideOpenAnalyticInjPayload
     (h_payload : OutsideOpenAnalyticInjPayload c) :
     Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
   h_payload.2
+
+/-- Outside-open analyticity of `bottcher_map` induces outside-open analyticity
+of the quotient map `z ↦ bottcher_map c z / z`. -/
+lemma outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    OutsideOpenQuotientAnalyticityHypothesis c := by
+  intro z hz
+  have hz_norm_pos : 0 < ‖z‖ := by
+    linarith [hz, norm_nonneg c]
+  have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
+  exact (h_analytic z hz).div analyticAt_id hz_ne
+
+/-- The outside-open real-scale quotient payload holds unconditionally from the
+explicit `bottcher_map` quotient form. -/
+lemma outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div
+    (c : ℂ) :
+    OutsideOpenQuotientRealScaleHypothesis c := by
+  intro z hz
+  exact bottcher_map_div_eq_real_scale_of_outside_open c z hz
+
+/-- Any outside-open analytic/injective payload yields the quotient
+analytic+real-scale payload used by the non-slit rigidity route. -/
+lemma outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPayload
+    (c : ℂ)
+    (h_payload : OutsideOpenAnalyticInjPayload c) :
+    OutsideOpenQuotientAnalyticRealScalePayload c := by
+  refine ⟨?_, outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div c⟩
+  exact outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis c
+    (outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload c h_payload)
+
+/-- `c = 2` specialization: non-slit analytic/injective payload yields quotient
+analytic+real-scale payload. -/
+lemma outsideOpenQuotientAnalyticRealScalePayloadTwo_of_nonSlitPayload
+    (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
+    OutsideOpenQuotientAnalyticRealScalePayloadTwo :=
+  outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPayload
+    (2 : ℂ) h_payload
 
 /-- Outside-open `AnalyticAt` payload induces local charts inside outside-open
 by taking the ambient outside-open set itself as the chart. -/

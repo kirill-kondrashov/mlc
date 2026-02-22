@@ -783,6 +783,18 @@ No unconditional theorem currently provides:
   - rooted axiom frontier unchanged and still includes
     `MLC.Quadratic.external_ray_map_exists`.
 
+## Implementation checkpoint (2026-02-22, quotient rigidity payload extraction)
+- Added in `BottcherOutsidePlan.lean`:
+  - `OutsideOpenQuotientAnalyticityHypothesis`;
+  - `OutsideOpenQuotientRealScaleHypothesis`;
+  - `OutsideOpenQuotientAnalyticRealScalePayload` (and `Two` specialization).
+- Added bridges from the non-slit analytic/injective payload into the quotient
+  analytic+real-scale payload shape.
+- Validation:
+  - `make build && make check` succeeded;
+  - rooted axiom frontier unchanged and still includes
+    `MLC.Quadratic.external_ray_map_exists`.
+
 ## Work packages
 1. Prove closed range at `c = 2`:
    - target:

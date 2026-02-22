@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~97%`
+  `[█████████░] ~98%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -321,3 +321,17 @@ constructive `mlc_conjecture` replacement route.
 - Impact:
   the root path now has an explicit combined non-slit payload slot, so the only
   remaining work is discharging that payload constructively at `c = 2`.
+
+## Implementation checkpoint (2026-02-22, quotient rigidity payload extraction)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `OutsideOpenQuotientAnalyticityHypothesis`;
+  - `OutsideOpenQuotientRealScaleHypothesis`;
+  - `OutsideOpenQuotientAnalyticRealScalePayload` (+ `Two` specialization).
+- Added derived bridges:
+  - `outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis`;
+  - `outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div`;
+  - `outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPayload`
+    (+ `outsideOpenQuotientAnalyticRealScalePayloadTwo_of_nonSlitPayload`).
+- Impact:
+  reduced the remaining non-slit proof to a cleaner rigidity target on the
+  quotient map `z ↦ bottcher_map c z / z` over outside-open.
