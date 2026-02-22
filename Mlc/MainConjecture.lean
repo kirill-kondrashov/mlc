@@ -706,6 +706,26 @@ theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outs
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   externalRayMapData_two_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload hproper h_payload
 
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from closed range
+plus outside-open analyticity (injectivity packaged via existing bridges). -/
+theorem external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    hclosed
+    (outsideOpenAnalyticInjPayload_of_outsideOpenAnalyticityHypothesis (2 : ℂ) h_analytic)
+
+/-- CP5 seam at `c = 2`: constructive external-ray-map-data target from restricted-map
+properness plus outside-open analyticity. -/
+theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper)
+    h_analytic
+
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
