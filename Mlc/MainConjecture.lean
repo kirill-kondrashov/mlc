@@ -669,6 +669,15 @@ theorem mlc_conjecture_of_externalRayMapData_two
   exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
     (bottcherSurjOnExterior_two_of_externalRayMapData h_data)
 
+/-- Constructive target seam at `c = 2`: external-ray data from closed range and
+outside-open analytic/injective payload. -/
+theorem externalRayMapData_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_payload : OutsideOpenAnalyticInjPayload (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    (2 : ℂ) hclosed h_payload
+
 /-- Shared closed-range + external-ray-data root seam at `c = 2`. -/
 theorem mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two
     (_hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
