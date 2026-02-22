@@ -4960,6 +4960,15 @@ def OutsideOpenAnalyticInjNonSlitPayloadTwo : Prop :=
 def OutsideOpenQuotientAnalyticRealScalePayloadTwo : Prop :=
   OutsideOpenQuotientAnalyticRealScalePayload (2 : ℂ)
 
+/-- Quotient-constancy seam: the outside-open quotient
+`z ↦ bottcher_map c z / z` is globally constant. -/
+def OutsideOpenQuotientConstHypothesis (c : ℂ) : Prop :=
+  ∃ q : ℂ, ∀ z, ‖z‖ > ‖c‖ + 2 → Quadratic.bottcher_map c z / z = q
+
+/-- `c = 2` specialization of quotient constancy. -/
+def OutsideOpenQuotientConstHypothesisTwo : Prop :=
+  OutsideOpenQuotientConstHypothesis (2 : ℂ)
+
 /-- Strong quotient-rigidity witness: on outside-open, `bottcher_map c` is a
 positive-real scalar multiple of the identity map. -/
 def OutsideOpenQuotientConstRealWitness (c : ℂ) : Prop :=
@@ -5056,6 +5065,56 @@ lemma outsideOpenQuotientAnalyticRealScalePayloadTwo_of_nonSlitPayload
     OutsideOpenQuotientAnalyticRealScalePayloadTwo :=
   outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPayload
     (2 : ℂ) h_payload
+
+/-- There exists an outside-open point (explicit witness `‖c‖ + 3`). -/
+lemma exists_outside_open_point (c : ℂ) :
+    ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 := by
+  refine ⟨((‖c‖ + 3 : ℝ) : ℂ), ?_⟩
+  have hnonneg : 0 ≤ ‖c‖ + 3 := by
+    linarith [norm_nonneg c]
+  have hnorm : ‖((‖c‖ + 3 : ℝ) : ℂ)‖ = ‖c‖ + 3 := by
+    simpa [abs_of_nonneg hnonneg] using (Complex.norm_real (‖c‖ + 3))
+  linarith
+
+/-- There exists an outside-open point with positive real quotient value. -/
+lemma exists_outside_open_point_with_real_scale_quotient (c : ℂ) :
+    ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 ∧
+      ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ) := by
+  rcases exists_outside_open_point c with ⟨z, hz⟩
+  rcases outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div c z hz with
+    ⟨r, hrpos, hr⟩
+  exact ⟨z, hz, r, hrpos, hr⟩
+
+/-- Quotient constancy plus one positive-real outside-open quotient value yields
+the strong quotient-rigidity witness. -/
+lemma outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis
+    (c : ℂ)
+    (h_const : OutsideOpenQuotientConstHypothesis c) :
+    OutsideOpenQuotientConstRealWitness c := by
+  rcases h_const with ⟨q, hq⟩
+  rcases exists_outside_open_point_with_real_scale_quotient c with
+    ⟨z0, hz0, r, hrpos, hr0⟩
+  have hq0 : Quadratic.bottcher_map c z0 / z0 = q := hq z0 hz0
+  have hqeq : q = (r : ℂ) := by simpa [hq0] using hr0
+  refine ⟨r, hrpos, ?_⟩
+  intro z hz
+  have hz_norm_pos : 0 < ‖z‖ := by
+    linarith [hz, norm_nonneg c]
+  have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
+  have hqz : Quadratic.bottcher_map c z / z = q := hq z hz
+  calc
+    Quadratic.bottcher_map c z = (Quadratic.bottcher_map c z / z) * z := by
+      field_simp [hz_ne]
+    _ = q * z := by simp [hqz]
+    _ = (r : ℂ) * z := by simpa [hqeq]
+
+/-- `c = 2` specialization: quotient constancy implies the strong
+quotient-rigidity witness. -/
+lemma outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo
+    (h_const : OutsideOpenQuotientConstHypothesisTwo) :
+    OutsideOpenQuotientConstRealWitnessTwo :=
+  outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis
+    (2 : ℂ) h_const
 
 /-- A strong quotient-rigidity witness implies outside-open analyticity. -/
 lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness

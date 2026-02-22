@@ -10,7 +10,7 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99%`
+  `[█████████░] ~99.2%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
@@ -359,3 +359,16 @@ constructive `mlc_conjecture` replacement route.
 - Impact:
   final blocker is now isolated to proving the single rigidity witness
   `OutsideOpenQuotientConstRealWitnessTwo`.
+
+## Implementation checkpoint (2026-02-22, quotient-constancy reduction)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `OutsideOpenQuotientConstHypothesis` (+ `Two` specialization);
+  - `outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis`
+    (+ `Two` specialization).
+- Added in `Mlc/MainConjecture.lean`:
+  - `NonSlitQuotientConstConstructivePayloadTwo`;
+  - `mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo`.
+- Impact:
+  the remaining proof now reduces to establishing only
+  `OutsideOpenQuotientConstHypothesisTwo` (constancy of
+  `z ↦ Quadratic.bottcher_map (2:ℂ) z / z` on outside-open).

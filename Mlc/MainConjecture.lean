@@ -642,6 +642,12 @@ def NonSlitQuotientConstRealConstructivePayloadTwo : Prop :=
   IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenQuotientConstRealWitnessTwo
 
+/-- Step-4→root seam specialized through restricted-map closed range plus
+quotient constancy at `c = 2`. -/
+def NonSlitQuotientConstConstructivePayloadTwo : Prop :=
+  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    OutsideOpenQuotientConstHypothesisTwo
+
 /-- Root bridge from the strong quotient-rigidity witness payload at `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
     (h_payload : NonSlitQuotientConstRealConstructivePayloadTwo) :
@@ -652,6 +658,15 @@ theorem mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
   exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
     (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
       h_payload.1 h_nonSlit)
+
+/-- Root bridge from quotient-constancy payload at `c = 2`. -/
+theorem mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo
+    (h_payload : NonSlitQuotientConstConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo
+    ⟨h_payload.1,
+      outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo
+        h_payload.2⟩
 
 /-- Step-4→root seam specialized through restricted-map closed range plus the
 combined non-slit outside-open analytic/injective payload. -/
