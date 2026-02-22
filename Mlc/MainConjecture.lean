@@ -818,6 +818,14 @@ theorem mlc_conjecture_of_analyticAt_of_boundaryExclusion_two
       (2 : ℂ) h_analytic hboundary)
     h_analytic
 
+/-- The universal boundary-exclusion family used by the previous seam is
+inconsistent at `c = 2`; this marks that route as vacuous for root elimination. -/
+theorem not_boundaryExclusion_family_two :
+    ¬ (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+      ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
+  exact not_boundary_exclusion_family_two
+
 /-- Root bridge from closed range plus outside-open analyticity payload at
 `c = 2`. -/
 theorem mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo

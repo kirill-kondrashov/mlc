@@ -4516,6 +4516,48 @@ lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundar
       isClosed_outside_open_preimage_image_compact_of_boundary_exclusion c K hK
         (hboundary K hK))
 
+/-- At `c = 2`, the boundary-exclusion family cannot hold for all compact
+exterior targets: the singleton containing the image of one boundary point is a
+compact counterexample. -/
+lemma exists_compact_exterior_set_violating_boundary_exclusion_two :
+    ∃ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K ∧
+      ¬ (∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
+  let z0 : ℂ := ((‖(2 : ℂ)‖ + 2 : ℝ) : ℂ)
+  have hnonneg : 0 ≤ ‖(2 : ℂ)‖ + 2 := by
+    nlinarith [norm_nonneg (2 : ℂ)]
+  have hz0_eq_abs : ‖z0‖ = |‖(2 : ℂ)‖ + 2| := by
+    simpa [z0] using (Complex.norm_real (‖(2 : ℂ)‖ + 2))
+  have hz0_eq : ‖z0‖ = ‖(2 : ℂ)‖ + 2 := by
+    exact hz0_eq_abs.trans (abs_of_nonneg hnonneg)
+  have hz0_ge : ‖z0‖ ≥ ‖(2 : ℂ)‖ + 2 := by
+    linarith [hz0_eq]
+  have hz0_out : z0 ∈ outside_disk (2 : ℂ) :=
+    large_norm_mem_outside_disk (2 : ℂ) z0 hz0_ge
+  have hw0_ext : 1 < ‖Quadratic.bottcher_map (2 : ℂ) z0‖ :=
+    bottcher_map_norm_gt_one_of_outside (2 : ℂ) hz0_out
+  let w0 : {w : ℂ // 1 < ‖w‖} := ⟨Quadratic.bottcher_map (2 : ℂ) z0, hw0_ext⟩
+  refine ⟨({w0} : Set {w : ℂ // 1 < ‖w‖}), isCompact_singleton, ?_⟩
+  intro hboundary
+  have hnot :
+      Quadratic.bottcher_map (2 : ℂ) z0 ∉
+        ((↑) '' ({w0} : Set {w : ℂ // 1 < ‖w‖}) : Set ℂ) :=
+    hboundary z0 hz0_eq
+  have hmem :
+      Quadratic.bottcher_map (2 : ℂ) z0 ∈
+        ((↑) '' ({w0} : Set {w : ℂ // 1 < ‖w‖}) : Set ℂ) := by
+    refine ⟨w0, by simp, rfl⟩
+  exact hnot hmem
+
+/-- Therefore the universal boundary-exclusion family at `c = 2` is false. -/
+lemma not_boundary_exclusion_family_two :
+    ¬ (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+      ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
+  intro hboundary
+  rcases exists_compact_exterior_set_violating_boundary_exclusion_two with ⟨K, hK, hnot⟩
+  exact hnot (hboundary K hK)
+
 /-- Closed range of the restricted outside-open Böttcher map from properness of
 the restricted map itself. -/
 lemma isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap

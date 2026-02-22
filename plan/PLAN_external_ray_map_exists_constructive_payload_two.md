@@ -19,11 +19,27 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.88%`
+  `[█████████░] ~99.89%`
 - Constructive payload route progress:
-  `[██████████] ~99.984%`
+  `[██████████] ~99.985%`
 - Proof implementation progress:
-  `[█████████░] ~99.6%`
+  `[█████████░] ~99.64%`
+
+## Implementation checkpoint (2026-02-22, boundary-exclusion branch classified as vacuous)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `exists_compact_exterior_set_violating_boundary_exclusion_two`;
+  - `not_boundary_exclusion_family_two`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `not_boundaryExclusion_family_two`.
+- Effect:
+  - proves the boundary-exclusion family (used by the new
+    `mlc_conjecture_of_analyticAt_of_boundaryExclusion_two` seam) cannot hold at
+    `c = 2`, so this route cannot discharge the root constructively.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Root impact:
+  - rooted dependency remains unchanged;
+  - `MLC.mlc_conjecture` still depends on `MLC.Quadratic.external_ray_map_exists`.
 
 ## Implementation checkpoint (2026-02-22, remainder audit)
 - Re-ran `make check`: `MLC.mlc_conjecture` still depends on

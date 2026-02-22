@@ -10,11 +10,28 @@ constructive `mlc_conjecture` replacement route.
 
 ## Progress bars
 - Analyticity theorem track:
-  `[█████████░] ~99.6%`
+  `[█████████░] ~99.64%`
 - Framework refactor track:
   `[██████████] ~100%`
 - End-to-end elimination impact:
-  `[█████████░] ~99.88%`
+  `[█████████░] ~99.89%`
+
+## Implementation checkpoint (2026-02-22, boundary-exclusion seam marked vacuous at `c = 2`)
+- Added in `Mlc/Quadratic/Complex/Bottcher/BottcherOutsidePlan.lean`:
+  - `exists_compact_exterior_set_violating_boundary_exclusion_two`;
+  - `not_boundary_exclusion_family_two`.
+- Added in `Mlc/MainConjecture.lean`:
+  - `not_boundaryExclusion_family_two`.
+- Effect:
+  - formalizes that the universal boundary-exclusion family used by
+    `mlc_conjecture_of_analyticAt_of_boundaryExclusion_two` is false at `c = 2`,
+    so that seam is vacuous for constructive root elimination.
+- Validation:
+  - `make build && make check && make graphs` succeeded.
+- Impact:
+  - elimination frontier at `MLC.mlc_conjecture -> MLC.Quadratic.external_ray_map_exists`
+    is unchanged; work should continue on non-vacuous closed-range / properness
+    payload routes.
 
 ## Implementation checkpoint (2026-02-22, remainder audit)
 - Re-ran `make check`: axiom frontier for `MLC.mlc_conjecture` is unchanged and
