@@ -5556,6 +5556,51 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticIn
     (outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload c h_payload)
     (injOn_outside_open_of_outsideOpenAnalyticInjPayload c h_payload)
 
+/-- Construct external-ray data from closed range plus the strong
+quotient-rigidity witness. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_wit : OutsideOpenQuotientConstRealWitness c) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    c hclosed
+    (outsideOpenAnalyticInjPayload_of_outsideOpenQuotientConstRealWitness c h_wit)
+
+/-- Construct external-ray data from closed range plus outside-open quotient
+constancy. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_const : OutsideOpenQuotientConstHypothesis c) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
+    c hclosed
+    (outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis c h_const)
+
+/-- Construct external-ray data from closed range plus outside-open quotient
+analyticity. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesis c) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis
+    c hclosed
+    (outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypothesis
+      c h_qanalytic)
+
+/-- Construct external-ray data from closed range plus outside-open analyticity.
+Injectivity is derived through the quotient-rigidity bridge. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
+    c hclosed
+    (outsideOpenAnalyticInjPayload_of_outsideOpenAnalyticityHypothesis c h_analytic)
+
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open `AnalyticAt` payload and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
@@ -5568,14 +5613,50 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_inj
     (2 : ℂ) hclosed h_analytic h_inj
 
 /-- `c = 2` specialization: construct external-ray data from closed range plus
+the strong quotient-rigidity witness. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
+    (2 : ℂ) hclosed h_wit
+
+/-- `c = 2` specialization: construct external-ray data from closed range plus
+outside-open quotient constancy. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_const : OutsideOpenQuotientConstHypothesisTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis
+    (2 : ℂ) hclosed h_const
+
+/-- `c = 2` specialization: construct external-ray data from closed range plus
+outside-open quotient analyticity. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis
+    (2 : ℂ) hclosed h_qanalytic
+
+/-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open analyticity and outside-open injectivity. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    (2 : ℂ) hclosed h_analytic
+
+/-- Compatibility wrapper retaining the older signature that included an explicit
+outside-open injectivity assumption. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
     (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    (_h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
-    (2 : ℂ) hclosed h_analytic h_inj
+  external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
+    hclosed h_analytic
 
 /-- `c = 2` specialization from the combined non-slit outside-open
 analytic/injective seam payload. -/

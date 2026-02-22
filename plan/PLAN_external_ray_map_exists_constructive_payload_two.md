@@ -19,11 +19,142 @@ No unconditional theorem currently provides:
 
 ## Progress bars
 - End-to-end elimination progress:
-  `[█████████░] ~99.6%`
+  `[█████████░] ~99.86%`
 - Constructive payload route progress:
-  `[██████████] ~99.8%`
+  `[██████████] ~99.98%`
 - Proof implementation progress:
-  `[█████████░] ~92%`
+  `[█████████░] ~99.2%`
+
+## Research checkpoint (Milnor notes cross-check)
+- Source checked: `refs/9201272v1.pdf` (Milnor lecture notes).
+- Relevant extracted anchors:
+  - §17.3 gives Böttcher extension as conformal isomorphism on `ℂ \ K` under the
+    connected/critical-point condition;
+  - §18 defines external rays via inverse Böttcher coordinate and proves periodic
+    landing properties separately.
+- Route implication for this plan:
+  - continue proving the remaining constructive seam through outside-open
+    analyticity/injectivity and surjectivity, without making ray-landing
+    statements a prerequisite;
+  - use external-ray statements only as downstream compatibility checks once the
+    Böttcher-side constructive witness is in place.
+
+## Implementation checkpoint (2026-02-22, injectivity-eliminated data bridge surface)
+- Added `outsideOpenAnalyticity`-only data bridges in
+  `BottcherOutsidePlan.lean`:
+  - `external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis`;
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo`.
+- Kept backward-compatible theorem surface while collapsing assumptions:
+  - `external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open`
+    now forwards to the analyticity-only theorem.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, shared external-ray-data to fiber ingress)
+- Added in `MainConjecture.lean`:
+  - `bottcherApproachOneSeqFiberData_two_of_externalRayMapData`.
+- Rewired rooted bridge:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two`
+    now follows:
+    `outsideOpenAnalyticity + closed range -> ExternalRayMapData -> sequence fiber -> mlc`.
+- Rewired top theorem:
+  - `mlc_conjecture` now reuses the same data->fiber helper instead of inlining
+    `Classical.choose` extraction.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analyticAt-root theorem cleanup)
+- Added:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two`.
+- Rewired:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two`
+    preserved as a wrapper and now delegates to the analyticity-only theorem.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, analytic-inj ingress collapsed to analyticity route)
+- Rewired:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`
+    to route through projected outside-open analyticity and the shared
+    external-ray-data bridge.
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`
+    to delegate to that converged theorem.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged (`MLC.Quadratic.external_ray_map_exists` remains).
+
+## Implementation checkpoint (2026-02-22, quotient-real witness mapped to shared data ingress)
+- Added bridge theorems in `BottcherOutsidePlan.lean` from closed-range +
+  quotient-real witness payload directly to `ExternalRayMapData` (generic + `Two`).
+- Rewired `MainConjecture`:
+  - `mlc_conjecture_of_nonSlitQuotientConstRealConstructivePayloadTwo` now uses
+    the same shared `ExternalRayMapData -> sequence fiber -> mlc` route as other
+    converged paths.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, quotient const/analytic mapped to shared data ingress)
+- Added quotient constancy/analyticity -> `ExternalRayMapData` bridges (generic + `Two`)
+  in `BottcherOutsidePlan.lean`.
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo`,
+  - `mlc_conjecture_of_nonSlitQuotientAnalyticConstructivePayloadTwo`,
+  to use the same shared data-to-fiber ingress route.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged (`MLC.Quadratic.external_ray_map_exists` remains).
+
+## Implementation checkpoint (2026-02-22, quotient ingress theorem flattening)
+- Rewired in `MainConjecture.lean`:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two`;
+  - `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis_two`;
+  to use the direct `ExternalRayMapData` bridges (instead of intermediate payload
+  wrappers).
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, ExternalRayMapData root consolidation)
+- Added shared root theorem in `MainConjecture.lean`:
+  - `mlc_conjecture_of_externalRayMapData_two`.
+- Rewired converged ingress routes to target this theorem directly, reducing
+  repeated data->fiber inlines.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged (`MLC.Quadratic.external_ray_map_exists` remains).
+
+## Implementation checkpoint (2026-02-22, closed-range/data root seam reuse)
+- Added shared theorem:
+  - `mlc_conjecture_of_isClosedRange_restrict_of_externalRayMapData_two`.
+- Rewired quotient const/analytic and outside-open analytic ingress bridges to
+  consume the shared closed-range/data root seam.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, direct non-slit analytic/inj ingress)
+- Rewired `MainConjecture` theorem
+  `mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo`
+  to consume the dedicated non-slit analytic/injective
+  `ExternalRayMapData` bridge directly.
+- This tightens the `prove-local-slit-inj-two` route by removing one
+  intermediate analyticity conversion seam at the root layer.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-22, non-slit payload root wrappers flattened)
+- Rewired in `MainConjecture`:
+  - `mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo`,
+  - `mlc_conjecture_of_nonSlitAnalyticInjConstructivePayloadTwo`,
+  to consume the shared closed-range/data root seam directly.
+- Validation:
+  - `make build && make check && make graphs` succeeded;
+  - rooted axiom frontier unchanged.
 
 ## External GitHub lead (2026-02-21)
 - Candidate theorem found in `girving/ray`:
