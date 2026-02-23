@@ -114,8 +114,13 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked`;
   - `bottcherSurjOnExteriorFromOutsideOpen_two_of_knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
   - `bottcherSurjOnExteriorFromOutsideOpen_two_of_knownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
+  - `ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
+  - `knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reduced`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
   - `not_knownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
   - `knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
+  - `reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
+  - `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_analyticDerivConstructivePayloadTwo`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_outsideDiskRefinement`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_externalRayLandsOutsideOpen`;

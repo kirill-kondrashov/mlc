@@ -1051,6 +1051,34 @@ def KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
     BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) ∨
     ExternalRayLandsOutsideOpen (2 : ℂ)
 
+/-- Reduced open surjectivity-source sub-aggregate at `c = 2`: local-homeomorph
+or external-ray landing. -/
+def ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
+  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+    ExternalRayLandsOutsideOpen (2 : ℂ)
+
+/-- The open surjectivity-source sub-aggregate collapses to the reduced form at
+`c = 2`: local-homeomorph-on is subsumed by local-homeomorph, and outside-disk
+refinement is equivalent to external-ray landing. -/
+theorem knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reduced :
+    KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  constructor
+  · intro h
+    rcases h with hA | hB | hC | hD
+    · exact Or.inl hA
+    · exact Or.inl
+        ⟨hB.1,
+          isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open
+            (2 : ℂ) hB.2⟩
+    · exact Or.inr (externalRayLandsOutsideOpen_two_of_outsideDiskRefinement hC)
+    · exact Or.inr hD
+  · intro h
+    rcases h with hA | hB
+    · exact Or.inl hA
+    · exact Or.inr (Or.inr (Or.inr hB))
+
 /-- Blocked surjectivity-source sub-aggregate at `c = 2`. -/
 def KnownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
   AnalyticDerivConstructivePayloadTwo ∨
@@ -1090,6 +1118,14 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_knownOpenSurjOnExteriorFrom
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
   exact bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
     ((knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked).2 (Or.inl h))
+
+/-- The reduced open surjectivity-source sub-aggregate implies outside-open
+exterior surjectivity at `c = 2`. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    (h : ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
+  exact bottcherSurjOnExteriorFromOutsideOpen_two_of_knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    ((knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reduced).2 h)
 
 /-- The blocked surjectivity-source sub-aggregate implies outside-open exterior
 surjectivity at `c = 2` (before no-go closure is applied). -/
@@ -1642,6 +1678,26 @@ theorem knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_knownSurjOnE
   rcases hsplit with hOpen | hBlocked
   · exact hOpen
   · exact False.elim (not_knownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo hBlocked)
+
+/-- Any currently wired surjectivity source in the aggregate reduces to the
+two-branch reduced-open aggregate at `c = 2`. -/
+theorem reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    (h : KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo) :
+    ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  exact (knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reduced).1
+    (knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo h)
+
+/-- Current-model surjectivity-source exhaustion shape at `c = 2`: the full
+known aggregate is equivalent to the reduced-open two-branch aggregate. -/
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  constructor
+  · exact reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+  · intro h
+    have hOpen : KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo :=
+      (knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reduced).2 h
+    exact (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked).2 (Or.inl hOpen)
 
 /-- Aggregate predicate for currently wired local-homeomorph-on source families
 at `c = 2`. -/
