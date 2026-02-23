@@ -1722,6 +1722,64 @@ theorem externalRayLandsOutsideOpen_two_of_reducedOpen_of_not_localHomeomorphSur
   · exact False.elim (hnot_local hLocal)
   · exact hLand
 
+/-- Direct bridge: the restricted local-homeomorph source branch is a reduced-open
+surjectivity source at `c = 2`. -/
+theorem reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_localHomeomorphSurjSource
+    (hlocal :
+      IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo :=
+  Or.inl hlocal
+
+/-- Direct bridge: the restricted local-homeomorph source branch is a known
+surjectivity source at `c = 2`. -/
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_localHomeomorphSurjSource
+    (hlocal :
+      IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo :=
+  (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen).2
+    (reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_localHomeomorphSurjSource hlocal)
+
+/-- Under `¬ ExternalRayLandsOutsideOpen (2 : ℂ)`, the reduced-open surjectivity
+source is exactly the restricted local-homeomorph branch. -/
+theorem reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_of_not_externalRayLandsOutsideOpen
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
+  constructor
+  · intro h
+    exact localHomeomorphSurjSource_two_of_reducedOpen_of_not_externalRayLandsOutsideOpen h hnot_land
+  · intro hLocal
+    exact Or.inl hLocal
+
+/-- Under `¬ ExternalRayLandsOutsideOpen (2 : ℂ)`, the full known surjectivity
+source aggregate is exactly the restricted local-homeomorph branch. -/
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_of_not_externalRayLandsOutsideOpen
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
+  rw [knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen]
+  exact reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_of_not_externalRayLandsOutsideOpen
+    hnot_land
+
+/-- If the restricted local-homeomorph source branch is unavailable, the full
+known surjectivity aggregate is equivalent to external-ray landing at `c = 2`. -/
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_externalRayLandsOutsideOpen_of_not_localHomeomorphSurjSource
+    (hnot_local :
+      ¬ (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))) :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  constructor
+  · intro h
+    exact externalRayLandsOutsideOpen_two_of_reducedOpen_of_not_localHomeomorphSurjSource
+      ((knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen).1 h) hnot_local
+  · intro hland
+    exact (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen).2 (Or.inr hland)
+
 /-- Aggregate predicate for currently wired local-homeomorph-on source families
 at `c = 2`. -/
 def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
