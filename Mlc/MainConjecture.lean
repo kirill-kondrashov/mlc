@@ -2410,6 +2410,20 @@ theorem directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_cl
     ⟨isProperMap_bottcher_map_outside_open_to_exterior_two_of_isLocalHomeomorph_restrict_of_preimage_closed
       hlocal hclosedpre, hlocal⟩
 
+/-- Direct proper+local witness from local-homeomorph plus boundary exclusion on
+compact exterior targets at `c = 2`. -/
+theorem directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    DirectProperLocalWitnessTwo := by
+  refine directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_closed hlocal ?_
+  intro K hK
+  exact isClosed_outside_open_preimage_image_compact_of_boundary_exclusion (2 : ℂ) K hK
+    (hboundary K hK)
+
 /-- Constructive CP5 endpoint from the direct closure criterion witness. -/
 theorem external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
     (h : DirectProperLocalWitnessTwo) :
@@ -2429,6 +2443,18 @@ theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_o
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
     (directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_closed hlocal hclosedpre)
+
+/-- CP5 endpoint from local-homeomorph plus boundary exclusion on compact
+exterior targets at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_of_boundary_exclusion
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion hlocal hboundary)
 
 /-- Root closure wrapper from the direct constructive CP5 closure criterion. -/
 theorem mlc_conjecture_of_directProperLocalWitnessTwo

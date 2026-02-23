@@ -38,6 +38,10 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_closed`
   - `external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_of_preimage_closed`
   This opens a route where restricted properness is derived from local-homeomorph continuity plus ambient preimage-closed compact-target data, without requiring the blocked outside-open analyticity hypothesis.
+- Added boundary-exclusion specialization of that non-analytic route:
+  - `directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion`
+  - `external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_of_boundary_exclusion`
+  This factors boundary exclusion into the direct-witness pipeline through `isClosed_outside_open_preimage_image_compact_of_boundary_exclusion`.
 
 ## Remaining work
 1. Strengthen the new concrete realization so that restricted properness is itself derived from non-axiomatic local inputs for `c = 2`.
