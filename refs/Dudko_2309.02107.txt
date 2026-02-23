@@ -1,0 +1,2315 @@
+                                                                 MLC AT FEIGENBAUM POINTS
+
+
+                                                                 DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+                                                   Abstract. We prove a priori bounds for Feigenbaum quadratic polynomi-
+arXiv:2309.02107v3 [math.DS] 29 Dec 2025
+
+
+
+
+                                                   als, i.e., infinitely renormalizable polynomials fc : z 7→ z 2 + c of bounded
+                                                   type. It implies local connectivity of the corresponding Julia sets J(fc ) and
+                                                   MLC (local connectivity of the Mandelbrot set M) at the corresponding pa-
+                                                   rameters c. It also yields the scaling Universality, dynamical and parameter,
+                                                   for the corresponding combinatorics. The MLC Conjecture was open for the
+                                                   most classical period-doubling Feigenbaum parameter as well as for the com-
+                                                   plex tripling renormalizations. Universality for the latter was conjectured by
+                                                   Goldberg-Khanin-Sinai in the early 1980s.
+
+
+
+
+                                                                                   Contents
+                                             1. Introduction                                                                         1
+                                             2. QL renormalization, bushes, and invariant arc diagrams                               7
+                                             3. ψ • -ql renormalization and near-degenerate regime                                  18
+                                             4. Pull-off for non-periodic rectangles                                                31
+                                             5. Waves                                                                               34
+                                             6. Pull-off for periodic rectangles                                                    35
+                                             7. Conclusions                                                                         38
+                                             References                                                                             40
+
+
+
+
+                                                                               1. Introduction
+                                           1.1. Brief history. The MLC Conjecture on the local connectivity of the Man-
+                                           delbrot set M, put forward by Douady and Hubbard in the mid 1980s [DH1], is
+                                           the central problem of contemporary Holomorphic Dynamics. It would imply a
+                                           precise topological model for M and the Fatou Conjecture on the density of hy-
+                                           perbolic maps in M, and it is intimately related to the Mostow-Thurston Rigidity
+                                           phenomenon in 3D Hyperbolic Geometry.
+                                              Around 1990 Yoccoz proved MLC at any parameter c ∈ M that is not infin-
+                                           itely renormalizable (in the quadratic-like sense) thus linking the problem tightly
+                                           to the Quadratic-like Renormalization Theory (see [H, M1]). First advances in this
+                                           direction appeared in [L1], where MLC was established for infinitely renormaliz-
+                                           able parameters of high type and the general problem was reduced, under some
+                                           circumstances, to the problem of a priori bounds.
+                                              Quadratic-like renormalization appears in two flavors, primitive and satellite.
+                                           The above results were concerned with the primitive case. Next breakthrough in
+                                           this direction appeared in the work of Jeremy Kahn [K] who established a priori
+                                           bounds, and hence MLC, for all infinitely renormalizable parameters of bounded
+                                                                                         1
+2                     DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+
+        Figure 1. Self-similarity of the Mandelbrot set at the period-
+        doubling Feigenbaum parameter: M scales almost linearly under
+        w 7→ 4.6692 . . . w + o(|w|1+ε ).
+
+
+primitive type (using the Covering Lemma [KL1]). It followed up with the work
+[KL2, KL3] handling the definitely primitive case.
+   It took more than 10 years to prove MLC at some infinitely renormalizable
+parameters of bounded satellite type [DL1] (based upon the Pacman Renormaliza-
+tion Theory developed in [DLS]). However, the most prominent parameter, the
+period-doubling Feigenbaum point corresponding to the cascade of doubling renor-
+malizations (see Figure 1) was not covered by this result. In this paper we are filling
+in this gap by proving MLC at the Feigenbaum point, and in fact, at all infinitely
+renormalizable parameters of bounded type (for which we will still preserve the same
+name).
+
+Remark 1.1. The universality of the period-doubling cascade was discovered in the
+mid 1970s by Feigenbaum [F1, F2] (the parameter part, see Figure 1) and indepen-
+dently by Coullet and Tresser [TC, CT] (the dynamical part). It is intimately related
+to the renormalization phenomenon in the Quantum Field Theory and Statistical
+Mechanics; the discovery opened up a new universality paradigm in Dynamical Sys-
+tems.
+
+
+1.2. Statement of the main result and its consequences. A Feigenbaum map
+is an infinitely renormalizable quadratic-like map f : U → V with bounded combi-
+natorics, i.e., all renormalization periods of f are bounded by some p̄ (see §2.2.5 for
+precise definitions). One says that such an f has a priori bounds if its quadratic-like
+                           MLC AT FEIGENBAUM POINTS                               3
+
+
+
+
+        Figure 2. Illustration to the Goldberg-Khanin-Sinai Conjecture:
+        the Mandelbrot set scales almost linearly at the parameter of the
+        period-tripling bifurcation. (The first zoom magnifies a deep renor-
+        malization level.)
+
+renormalizations Rn f : U n → V n can be selected so that
+                             mod(V n \ U n ) ≥ µ > 0.
+The bounds are called beau if µ depends only on the combinatorial bound p̄ as long
+as n is big enough (depending on mod(V \ U )).
+Theorem A. Any Feigenbaum quadratic-like map has a priori beau bounds.
+  Together with the Rigidity Theorem of [L1], it implies MLC at the corresponding
+parameters:
+Theorem B. The Mandelbrot set is locally connected at any Feigenbaum parame-
+ter.
+   The Renormalization Conjecture asserts that for any combinatorial bound p̄ the
+renormalization transformation R has a renormalization horseshoe Ap̄ of Feigen-
+baum maps of type p̄ on which it acts hyperbolically with one-dimensional unstable
+foliation. Together with [L2] (see also [S2, McM2, AL]) we obtain:
+Theorem C. For any combinatorial bound p̄, the Renormalization Conjecture is
+valid in the space of quadratic-like maps.
+   Let us consider the set Ip̄ of Feigenbaum parameters c ∈ M of type p̄. Theorem B
+implies that each c ∈ Ip̄ is the intersection of the nest Mn (c) of little M-copies
+corresponding to the n-fold renormalizations of fc . Let us say that Mandelbrot
+4                        DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+                                  G1                               G2
+
+
+
+
+                   G2′                       G1′                        G1′′
+
+
+
+         Figure 3. Primitive pull-off in the airplane combinatorics. If
+            ver
+         Wloc   (Kj ) ≪ Wloc (Kj ), then most curves of the horizontal rectan-
+         gles G1 , G2 overflow their preimages G1′ , G2′ , G1′′ as illustrated. Such
+         a configuration is impossible by the Grötzsch inequality; i.e., (1.4)
+         holds. Peripheral preimages are omitted.
+
+
+set is self-similar over Ip̄ if the straightening map χ : Mn+1 (c) → Mn (χ(c)) (see
+§2.2.3) is C 1+δ -conformal at any c ∈ Ip̄ (with uniform constants).
+   The Renormalization Conjecture (Theorem C) implies:
+Theorem D. For any p̄, the Mandelbrot set is self-similar over Ip̄ .
+  For the satellite triplings, the last two theorems confirm the Goldberg-Sinai-
+Khanin Conjecture [GKS] from the 1980s, see Figure 2.
+
+1.3. Rough outline of the proof. The historical developments of ideas behind
+the proof are summarized in [L4]. For a ql map f : U → V , its width is
+                                                       1
+                          W(f ) = W(V \ Kf ) =                  ,
+                                                   mod(V \ Kf )
+where Kf is the filled Julia set of f . Our goal is to bound W(f ) from above. We
+will first review the main ideas for the bounded primitive case, then we will discuss
+how to complete the argument in the bounded satellite case.
+
+1.3.1. Pull-off in the primitive case [K, KL1]. Consider the nth renormalization
+fn = Rn f of f = f0 , and let K0 , K1 , . . . , Kp−1 be the periodic cycle of little filled
+Julia sets of fn in the dynamical plane of f0 : U → V . Assuming that the renor-
+malization is primitive, all Ki are pairwise disjoint. [
+   Consider the thin-thick decomposition of V ′ := V \ Ki : there are finitely many
+                                                            i
+pairwise disjoint rectangles Gi between components of ∂V ′ such that, up to Op (1)
+of width, the Gi contain all non-peripheral curves in V ′ with endpoints in ∂V ′ , see
+Figure 9 for an illustration of a thin-thick decomposition. A rectangle Gi is called
+      • vertical if it connects the outer boundary ∂ out V ′ := ∂V of V ′ to one of its
+        inner boundary components;
+      • horizontal if it connects two inner (i.e., non-outer) boundary components
+        of V ′ .
+                                MLC AT FEIGENBAUM POINTS                             5
+
+
+   Below we assume that W(fn ) ≫p 1. We have:
+                                     X
+(1.1)                     W(f ) ≥          W(Gi )
+                                               vertical Gi
+
+and, for every Kj :
+                                                     X
+(1.2)             W(fn ) ≍ Wloc (Kj ) :=                        W(Gi ) + Op (1),
+                                                 Gi adjacent
+                                                    to Kj
+
+i.e. the sum in (1.2) is taken over all rectangles Gi adjacent to Kj . (A “ψ-ql renor-
+malization” is used to achieve (1.2), see §3.4, 3.5.2, and (3.23).) Set also
+                                             X
+                             ver
+(1.3)                      Wloc  (Kj ) :=            W(Gi ).
+                                                 vertical Gi
+                                               adjacent to Kj
+
+   A fundamental fact is that the horizontal Gi are eventually (after several restric-
+tions of the domain) aligned with the Hubbard tree Tf of f as shown on Figure 3.
+Applying the Grötzsch inequality to the horizontal rectangles and their pullbacks
+(see the caption of Figure 3), we experience a definite loss of the horizontal weight
+in favor of the vertical one. The created definite vertical weight can then be pushed
+forward by means of the Covering Lemma [KL1]. Since all the local weights are
+comparable1, we obtain:
+                         ver
+(1.4)                   Wloc (Kj ) ≍ Wloc (Kj )              for every Kj ,
+where “≍” is independent of p.
+   We stress that a key combinatorial ingredient used for (1.4) is the absence of
+periodic horizontal rectangles; i.e. a rectangle that has an iterated lift homotopic
+to itself rel small Julia sets, see §1.3.2, §2.4, §3.5.8.
+   Combining (1.1), (1.4), (1.2), and assuming p ≫ 1, we obtain:
+                                  X                          p
+                                                             X
+                                                                    ver
+                      W(f ) ≥                 W(Gi ) =             Wloc (Kj ) ≍
+                                vertical Gi                  j=1
+(1.5)
+                        p
+                        X
+                              Wloc (Kj ) ≍ p W(fn ) ≫ 2W(fn );
+                        j=1
+
+i.e:
+(1.6)                                 W(f ) ≥ 2W(fn )
+implying a priori bounds in the primitive case. (For instance, by the Record Ar-
+gument: by selecting “record levels”, on which the degeneration exceeds all the
+preceding ones, we immediately arrive at a contradiction.)
+
+1.3.2. Satellite case. Let us now assume that f is an infinitely renormalizable map
+with the period-doubling combinatorics; i.e., f is hybrid equivalent to a map in
+the period-doubling Feigenbaum combinatorial class. The general bounded case is
+similar.
+
+   1This observation goes back to McMullen [McM1, Theorem 9.3].
+6                           DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+    B0         R0       B1                     G                     B2    R1             B3
+
+
+
+                      f2                              f2                             f2
+
+               R′0            R′′0             G′             R′′1         R′1
+
+
+             Figure 4. Pull-off in the Feigenbaum combinatorics for non-
+             periodic rectangles. Either most of the horizontal degeneration
+             is within periodic rectangles R0 , R1 such that a (1 − δ)-portion of
+             each Ri overflows its periodic lifts R′i . Or we have Wloc
+                                                                      ver
+                                                                          (Bj ) ⪰δ
+             Wloc (Bj ).
+
+   Let B := K10 ∪ K11 be the bouquet consisting of two level 1 little Julia sets of f .
+Instead of W(f ), we will measure
+                                     W• (f ) := W(V \ B).
+  In the dynamical plane of f = f0 , consider the periodic cycle of little bouquets
+B0 , B1 , . . . , Bp−1 (where p = 2n ) associated with fn = Rn f . We enumerate these
+                                                                                  ′
+     [ linearly from left-to-right. Consider the thick-thin decomposition of V :=
+bouquets
+V \     Bi . The following properties are established similarly as in the primitive
+         i
+case considered above:
+       • Estimates (1.1) and (1.2), where little Julia sets Ki are replaced with bou-
+         quets Bi ;
+       • alignment of the horizontal rectangles with the Hubbard tree of f (after
+         several restrictions of the domain).
+   However, unlike in the primitive case §1.3.1, f may have periodic horizontal
+rectangles Rk aligned with the Hubbard tree between B2k and B2k+1 as shown
+on Figure 4. This leads us to the following alternative: either most of the total
+degeneration is within the Rk or a substantial part of the total degeneration is
+vertical (i.e. (1.4) holds). More precisely, choose a small δ > 0. We have:
+    (I) either there is a periodic rectangle Rk connecting B2k , B2k+1 such that a
+                                                                    n−1
+        (1 − δ) part of Rk overflows its iterated lift R′k under f 2 ;
+   (II) or else we have:
+                            ver
+                           Wloc (Bj ) ≍δ Wloc (Bj )    for every Bj
+If (II) holds, then assuming p ≫δ 1 and W• (fn ) ≫p,δ 1 and repeating the argument
+of (1.5), we obtain
+    (II′ )                   W• (f ) > 2W• (fn );
+the Record Argument leads to a contradiction in case (II′ ).
+    The dichotomy “Case (I) vs Case (II′ )” is stated as Theorem 4.1. This is a
+refinement of [K].
+    Consider now Case (I). As Figure 5 illustrates, bouquets B0 , B1 grow under
+lifting, thus the “combinatorial distance” between Be 0, B
+                                                         e 1 shrinks. This allows us
+                                  MLC AT FEIGENBAUM POINTS                            7
+
+
+to detect laminations Si (the “differences” between R = Rk and its lift R′ ) that
+are much wider than W(R) ⪰ W• (fn ); i.e. W(Si ) ≥ Cδ W(R) with Cδ → ∞ as
+δ → 0. There are two possibilities: either a substantial part of Si hits preperiodic
+bouquets associated with fn+1 or a substantial part of Si creates a “wave” (see §5)
+above such a preperiodic bouquet. In the latter case, the Wave Lemma implies that
+W• (fn−1 ) ≫ W• (fn ) and the Record Argument is applicable.
+   In the former case, we obtain W• (fn+1 ) ⪰ W(Si ) ⪰ Cδ W• (fn ); i.e.:
+                W• (fn+1 ) ≥ Cδ′ W• (fn )             with   Cδ′ → ∞ as δ → 0.
+For a sufficiently small δ, this eventually contradicts the Teichmüller contraction
+within hybrid classes [S1] (stated as Proposition 2.7):
+                           W• (fn ) = O (∆n )            for some ∆ > 1.
+ Finally, we will convert in Theorem 7.2 bounds for W• (fm ) into bounds for
+W(fm ).
+Remark 1.2. In the paper, we will be measuring the degeneration around “bushes”
+§2.3, which are Hubbard continua enhanced with the periodic cycle of level one little
+Julia sets. An alternative would be to keep the Julia sets for primitive renormal-
+ization and use the satellite flowers in the satellite case. We believe that it is also
+possible to work with Hubbard continua; however, the Wave Lemma §5 and the
+transition toward classical QL-bounds will be more subtle.
+Acknowledgments. The first author was partially supported by the NSF grant
+DMS 2055532 and the ERC grant “HOLOGRAM”. The second author has been
+partly supported by the NSF, the Hagler and Clay Fellowships, the Institute for
+Theoretical Studies at ETH (Zurich), and MSRI (Berkeley).
+   We would like to thank Jeremy Kahn for many stimulating discussions. We are
+grateful to the referee for a comprehensive reading of the manuscript. A number of
+our pictures are made with W. Jung’s program Mandel.
+   Results of this paper were first announced in 2021 at the Quasiworld Seminar
+and at the CIRM conference “Advancing Bridges in Complex Dynamics”, see the
+talk by the second author [L4].
+
+      2. QL renormalization, bushes, and invariant arc diagrams
+  The reader can find most of the needed background material in the book [L3].
+Let us briefly outline the context of this section with emphasis on the notation.
+2.1. Outline. Basics aspects of quadratic-like maps are summarized in §2.2. We
+will usually denote by
+      • f : X → Y a ql map,
+      • Kf its (filled) Julia set,
+          [n]
+      • Ki ⊂ K[  f its level n little Julia sets,
+           [n]        [n]
+      • K :=        Ki the union of periodic level n little Julia sets, see (2.6),
+                  i
+     • Tf ⊂ K the Hubbard continuum of f , see §2.2.2,
+     • Bf := Tf ∪ K[1] the bush of f , see (2.8),
+         (m)
+     • Bf := f −m (Bf ) the little bush of height m,
+          [n]         [n],(0)      [n],(m)      [n]
+     • Bi ≡ Bi                  ⊂ Bi         ⊂ Ki     the associated little bushes,
+8                       DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+     B0                                          R                                          B1
+
+
+
+
+     B
+     e0           S1                             R′                               S2        B
+                                                                                            e1
+
+
+
+         Figure 5. Pull-off in the Feigenbaum combinatorics for periodic
+         rectangles. Assume that a (1 − δ) part of a periodic rectangle R
+         overflows its iterated lift R′ . Since R also overflows S1 , S2 (that
+         are disjoint from R′ ), we obtain from the Grötzsch inequality that
+         W(Si ) > Cδ W(R) with Cδ → ∞ as δ → 0.
+
+                       [n]
+                  [
+      • B[n] :=       Bi ⊂ K[n] the union of periodic level n little bushes,
+                    i             
+      • B[n],(m) := f −m B[n] the union of level n and height m little periodic
+        and preperiodic bushes,
+      • B[n],(m)
+           per     := B[n],(m) ∩ K[n] the union of periodic level n and height m little
+        bushes.
+If Bf = K[1] , i.e., Tf ⊂ K[1] , then we will also refer to Bf as the satellite flower of
+f . Preperiodic little Julia sets and bushes are defined accordingly, §2.3.1. We will
+usually assume that
+       [n]
+(O) K0 contains the critical point of f .
+Periodic little Julia sets will be usually labeled dynamically:
+                     
+                  [n]       [n]
+              f Ki      = Ki+1 ,     i, i + 1 ∈ Z/pn ≃ {0, 1, . . . , pn − 1}.
+                                                                       [n]
+However, in the satellite combinatorics, we will often label the Ki with respect to
+their cyclic order in the satellite flower; see, for instance, Lemma 2.3. Preperiodic
+                   [n]
+little Julia sets Kj will be labeled with some subindex. The labeling of little bushes
+                                                                   [n],(m)       [n]
+is naturally inherited from the labeling of little Julia sets: Bi   ⊂ Ki . We will
+always indicate when the cyclic order is used. And we will also mention when a
+preperiodic object appears.
+   The Teichmüller contraction of ql renormalization will be established in §2.5.
+   In Lemma 2.2, we will show that invariant horizontal arc diagrams are aligned
+with the Hubbard dendrite. Figures 7 and 8 demonstrate new subtleties arising
+in the satellite case. In particular, there are genuine periodic arcs, described in
+Lemma 2.3; they encode almost periodic rectangles (see §3.5.8 and Figure 4) that
+will have a separate treatment in Section 6.
+2.2. Quadratic-like maps. A quadratic-like map f : X → Y , which will also be
+abbreviated as a ql map, is a holomorphic double branched covering between two
+Jordan disks X ⋐ Y ⊂ C. It has a single critical point that we usually put at the
+                            MLC AT FEIGENBAUM POINTS                                  9
+
+
+origin 0. The annulus A = Y \ X is called the fundamental annulus of f : X → Y .
+We let mod f := mod A. The filled Julia set Kf is the set of non-escaping points:
+                 K ≡ Kf ≡ K(f ) := {z : f n z ∈ X, n = 0, 1, 2, . . . }.
+Its boundary is called the Julia set J ≡ J(f ). The (filled) Julia set is either con-
+nected or Cantor, depending on whether the critical point is non-escaping (i.e.,
+0 ∈ K(f )) or otherwise. In this paper, filled Julia sets will play a bigger role than
+the Julia sets, and we will often skip the adjective “filled” when it is clear (e.g.,
+from the notation) what we mean.
+    We say that two quadratic-like maps with connected Julia set represent the same
+germ if they have the same filled Julia set and coincide in some neighborhood of
+it. For a ql germ f , we define
+(2.1)                        mod f := sup mod(Y ′ \ X ′ ),
+where the supremum is taken over all f : X ′ → Y ′ representing the ql germ of f .
+   Two quadratic-like maps f : X → Y and f˜ : X̃ → Ỹ are called hybrid conjugate
+if they are conjugate by a quasiconformal map h : (Y, X) → (Ỹ , X̃) such that
+¯ = 0 a.e. on K.
+∂h
+   A simplest example of a quadratic-like map is provided by a quadratic polynomial
+fc : z 7→ z 2 + c restricted to a disk Y = DR of sufficiently big radius. The Douady
+and Hubbard Straightening Theorem asserts that any quadratic-like map f is hybrid
+conjugate to some restricted quadratic polynomial fc . Moreover, if J is connected
+then the parameter c ∈ M is unique.
+   As for quadratic polynomials, two fixed points of a quadratic-like map with
+connected Julia set have a different dynamical meaning. One of them, called β, is
+the landing point of a proper arc γ ⊂ X \ K(f ) such that f (γ) ⊃ γ. It is either
+repelling or parabolic with multiplier one. The other fixed point, called α, is either
+non-repelling or a cut-point of the Julia set.
+
+2.2.1. Combinatorial models. A quadratic polynomial f is called periodically hy-
+perbolic (resp., repelling) if it does not have neutral (resp., non-repelling) cycles.
+Note that in the periodically repelling case, int K = ∅, so J = K. The filled Julia set
+of a periodically hyperbolic map admits a locally connected combinatorial model
+Kcom = Kcom (f ) obtained by taking the quotient of the unit disk by the associ-
+ated rational lamination (see [L3, §32.1.3]). The combinatorial model is endowed
+with the induced dynamics fcom : Kcom → Kcom which is semi-conjugate to f by a
+natural projection π : K → Kcom whose fibers are “combinatorial classes” – sets of
+points inseparable by preperiodic points.
+
+2.2.2. Hubbard continua. In the superattracting case (when the critical point is
+periodic) the Hubbard tree Tf is defined as the smallest tree in K containing the
+postcritical set such that Tf intersects the components of int K along internal rays.
+It is invariant under f and is marked with the orbit of 0. If K is periodically
+repelling and locally connected, we can define the Hubbard dendrite Tf as the
+smallest connected closed forward-invariant subset of K containing the postcritical
+set.
+    For a general periodically repelling map, the (combinatorial) Hubbard dendrite
+Tcom
+  f    ⊂ Kcom is defined for its combinatorial model f : Kcom ý. Lifting Tcomf    via
+π : K → Kcom , we obtain the Hubbard continuum Tf .
+10                      DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+     For a periodically repelling f and x, y ∈ Jf = Kf , we define a geodesic continuum
+(2.2)                              [x, y] := π −1 [π(x), π(y)],
+where [π(x), π(y)] is a unique arc in Jcom connecting π(x), π(y).
+
+2.2.3. QL-renormalization. A quadratic-like map f : X → Y is called DH renor-
+malizable (after Douady and Hubbard) if there is a quadratic-like restriction
+(2.3)                     f1 = f1,0 = Rf = f p1 : X1,0 → Y1,0
+                             [1]
+with connected Julia set K0 such that the little Julia sets
+                                  
+                      [1]      [1]
+(2.4)               Ki := f i K0 ,          k = 0, . . . , p1 − 1,
+are either pairwise disjoint or else touch at their β-fixed points. In the former case
+the renormalization is called primitive, while in the latter it is called satellite.
+                                                  ′      ′
+   Note that there are many ql maps f1 : X1,0       → Y1,0   that satisfy the above re-
+quirements (if f is renormalizable). However, all of them represent the same ql
+germ.
+   The map f1 in (2.3) is called a pre-renormalization of f . If it is considered up
+to a linear rescaling, it is called the renormalization of f . (In what follows, we will
+often skip the prefix “-pre” as long as it does not lead to a confusion.)
+                [1]                           [1]
+   For every Ki , there are Y1,i ⋑ X1,i ⋑ Ki such that
+(2.5)                     f1 = f1,i = Rf = f p1 : X1,i → Y1,i
+                                         [1]
+is a ql map with non-escaping set Ki = Kf1,i . All maps (2.5) represent conformally
+                                    [1]
+conjugate germs. We assume that K0 contains the critical point of f ; see (O).
+                                               [1]
+2.2.4. Little copies of M. The sets Ki in (2.4) are referred to as the little (filled)
+Julia sets. Their positions in the big Julia set Kf determine the renormalization
+combinatorics. By the Douady-Hubbard Straightening Theorem [DH2], the set of
+parameters c for which the quadratic polynomial fc : z 7→ z 2 + c is renormalizable
+with a given combinatorics forms a little Mandelbrot copy M1 ⊂ M (see [L3,
+Theorem 43.1]). The renormalization combinatorics can be formally encoded by
+the Hubbard tree T◦ of the superattracting center c◦ of M1 .
+   Each little copy M1 can be canonically mapped onto the whole Mandelbrot set
+M by the straightening homeomorphism χ1 : M1 → M.
+   A little Mandelbrot copy M1 is called primitive or satellite depending on the
+type of the corresponding renormalization. They can be easily distinguished as any
+satellite copy is attached to some hyperbolic component of int M and does not have
+the cusp at its root point.
+
+2.2.5. Infinitely renormalizable maps. The notions of an infinitely DH renormaliz-
+able map f with renormalization periods pn , and its renormalizations fn = Rn f ,
+are defined naturally.
+   By default, we assume that pn is the smallest renormalization period after pn−1 .
+                      [n]
+We will denote by Ki , i ∈ {0, 1, . . . , pn − 1} the level n little Julia sets of f enu-
+                                [n]
+merated dynamically so that K0 contains the critical point of f . We will write
+                                              [ [n]
+(2.6)                               K[n] :=      Ki
+                                                     i
+                              MLC AT FEIGENBAUM POINTS                                     11
+
+
+   The ratios qn := pn /pn−1 are called relative periods. One says that such a map
+has bounded combinatorics of type p̄ if the relative periods are bounded by p̄. In
+this case, the map f is called Feigenbaum of type p̄. We say that a Feigenbaum
+map is primitive/satellite if all its renormalizations are such. A Feigenbaum map
+has a priori bounds if
+
+(2.7)                                mod Rn f ≥ ϵ > 0
+
+   We say that the family Fp̄ of Feigenbaum maps of type p̄ have beau bounds
+if there exists µ > 0 depending only on p̄ such that for any ν > 0 there exists
+n0 = n0 (p̄, ν) such that for any f ∈ Fp̄ with mod f ≥ ν we have
+
+                             mod Rn f ≥ µ        for all n ≥ n0 .
+
+
+2.3. Bushes. Consider a DH renormalizable quadratic-like map f : X → Y . The
+bush of f is
+
+(2.8)                           Bf ≡ B(f ) := Tf ∪ K[1] ,
+
+where Tf is the Hubbard continuum and K[1] is the periodic cycle of level one little
+Julia sets (2.6). For m ≥ 0, we define the bush of height m to be
+                                           (m)
+(2.9)                          B(m) = Bf         := f −m (Bf ).
+
+
+2.3.1. Little bushes. Suppose that f is at least n + 1 times DH renormalizable and
+let fn = Rn f be its nth renormalization of f . Then fn has a well defined bush
+                                                                             [n]
+B(fn ). Consider the periodic cycle of little level n filled Julia sets Ki associated
+with fn in the dynamical plane of f . Let fn,i be the nth prerenormalization around
+  [n]                           [n]                             [n]
+Ki , compare (2.5). Then Ki contains the little bush Bi ≡ B(fn,i ) ≃ B(fn ) as
+          [n],(m)                                           [n],(m)
+well as Bi        ≡ B(m) (fn,i ) ≃ B(m) (fn ). Note that Bi         is the unique periodic
+         [n]
+lift of Bi+m under f m .
+    We write
+               [ [n]                            
+      B[n] :=     Bi , B[n],(m) := f −m B[n] , B[n],(m)  per      := B[n],(m) ∩ K[n] .
+                i
+
+
+Observe that B[n],(m)
+                    per     is the union of periodic little bushes of height m. A preperi-
+              [n],(m)                                                  [n],(m)
+odic bush Ba          is a non-periodic connected component
+                                                                of B         . The preperiod
+     [n],(m)                                       s     [n],(m)
+of Ba        is the smallest s ≤ m such that f Ba                  is periodic.
+   Every periodic or preperiodic little bush B[n],(m)
+                                                a     is within a unique little periodic
+or preperiodic filled Julia set K[n]
+                                 a   associated with fn . The Ba
+                                                                 [n],(m)
+                                                                         exhaust K[n]
+                                                                                   a :
+
+                                                  [n],(m)
+                                           [
+                                    K[n]
+                                     a =         Ba         .
+                                            m
+
+
+By construction, the B[n],(m)
+                          a   are pairwise disjoint but the K[n]
+                                                             a may touch each
+other in the satellite case.
+12                      DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+                              B′′             B′′′
+
+                                                                                  [1]
+                                                                                Bb
+
+
+
+                                        [2]
+         B[1],(6p2)                Bi1                        α
+          a
+                                              [2]
+                      B[1]                Bi2
+                       a
+
+
+
+                             ℓ1               ℓ2
+
+
+
+                              B′               Biv
+
+
+                        Figure 6. Illustration to Lemma 2.1.
+
+2.3.2. Superattracting model. Consider a ql map f : X → Y and assume it is n + 1
+DH renormalizable. Then f is hybrid equivalent to z 2 + c, where c is in a level n + 1
+               [n+1]
+little copy Mi       ⊂ M. A superattracting model for f of level n + 1 is any ql map
+                                                     [n+1]
+f◦ : X◦ → Y◦ hybrid equivalent to the center of Mi         .
+    It is well-known (follows, for instance, from the lamination theory) that the
+Hubbard continua Tf and T◦ ≡ Tf◦ are combinatorially equivalent up to B[n] :
+there is a bijection between
+                                                                              
+                                       [n]
+       • components of Tf \ f −m Bf          and components of T◦ \ f◦−m B[n] ◦    for
+          all m ≥ 0; and                                        
+                                       [n]
+       • components of Tf ∩ f −m Bf          and of T◦ ∩ f◦−m B[n]
+                                                                ◦    for all m ≥ 0
+that respects the adjacency, natural embedding, and dynamical relations between
+respective components. In other words, the above components define equivalent
+Markov partitions for f, f◦ .
+2.3.3. Satellite combinatorics. Suppose that f is at least 3 times renormalizable
+                                                           [1]
+and the first renormalization of f is satellite. Then all Ki are organized in the
+satellite flower around the α fixed point of f :
+                                  [1]                          [1]
+                      Bf = Kf                       because   Kf ⊃ Tf ,
+                                                                          (s)
+where Tf is the Hubbard continuum of f . For s ≥ 0 we write Tf = f −s (Tf ). As
+before, the pk are the periods of level k Julia sets.
+                                                                                [1]
+Lemma 2.1 (Satellite flower). For a satellite f as above, let B[1]
+                                                                 a , Bb be two of
+                                                 (6p2 )
+its level 1 periodic bushes. Then the continuum Tf      contains geodesic continua
+                                                                                        [1]
+ℓ1 and ℓ2 (as in §2.2.2) connecting preperiodic lifts B′ , B′′ and B′′′ , Biv of Bb of
+preperiods ≤ 6p2 such that, see Figure 6:
+                              MLC AT FEIGENBAUM POINTS                                   13
+
+
+      • ℓ1 and ℓ2 separate B[1]
+                             a from α (within Kf ),
+      • the geodesic continuum ℓ ⊂ Tf connecting ℓ1 , ℓ2 intersects little preperiodic
+                 [2]   [2]
+        bushes Bi1 , Bi2 of level 2 with preperiods less than 6p1 ;
+          [2]   [2]
+      • Bi1 , Bi2 are disjoint from ℓ1 ∪ ℓ2 .
+                      [2]   [2]
+We remark that ℓ, Bi1 , Bi2 are within B[1],(6p
+                                        a
+                                                2)
+                                                   .
+
+Proof. Let B[2]  [1]                                                     [1]  [2]
+            γ ⊂ Ba be the level 2 periodic bush closest to α; i.e. (Tf ∩Ba )\Bγ
+                                                                              [2]
+and α are in different components of Tf \ B[2]                  [1],(tp1 )
+                                           γ . Let the Bi(t) ⊂ Ba          be the
+                                                      [2]
+lifts of B[2]
+          γ under f
+                    tp1
+                        towards α; i.e. each Bi(t) separates α from Ba[1],(tp1 −p1 ) .
+                                        [2]                 [2]
+   Since f 6p2 has critical points in Bi(1) and in Bi(4) , we can select ℓ1 and ℓ2 passing
+through these critical points such that ℓ1 , ℓ2 connect preperiodic lifts B′ , B′′ and
+               [1]                                                               [2]   [2]
+B′′′ , Biv of Bb . Then ℓ1 , ℓ2 separate B[1]
+                                            a from α, and ℓ1 ∪ ℓ2 separate Bi(2) , Bi(3)
+                                        [2]   [2]                 [2]   [2]
+from α and B[1]
+            a ; i.e. we can take Bi1 , Bi2 to be Bi(2) , Bi(3) .                         □
+
+2.4. Invariant arc diagrams. In this subsection, we will discuss invariant up
+to homotopy arc diagrams of ql maps. Arc diagrams endowed with weights will
+naturally appear from the thin-thick decompositions of the dynamical planes of
+ψ • -ql maps, see §3.3, §3.5.
+
+2.4.1. Arc diagrams. Consider a hyperbolic open Riemann surface S of finite type
+without cusps. We endow S with its ideal boundary ∂ i S. This naturally makes
+V := S ≡ S ∪ ∂ i S a compact surface.
+    A path (closed or open) ℓ in S is an embedded (closed or open) interval ℓ : I → S.
+    An open path γ : (0, 1) → S is proper if it extends to γ : [0, 1] → V ≡ S ∪∂ i S with
+γ{0, 1} ⊂ ∂ i S. Two proper paths γ0 , γ1 in S are homotopic if there is a homotopy
+γt among proper paths. Similarly, proper curves and their homotopy are defined.
+    An arc on S is a class of properly homotopic paths, α = [γ]. A curve γ is trivial
+if it can be represented in an arbitrary small neighborhood of ∂ i S. Two different
+arcs are non-crossing if they can be represented by non-crossing paths.
+    An arc diagram (AD) is a family of non-trivial
+                                                 X      pairwise non-crossing arcs A =
+{αi }. A weighted arc diagram (WAD) A =              wi αi , wi ∈ R>0 is an arc diagram
+                                                    αi ∈A
+endowed with positive weights.
+
+2.4.2. Arc diagrams of ql maps. Consider a ql map f : X → Y and assume that it
+is n + 1 times DH renormalizable.
+   An arc diagram A = {αi } on X \ B[n] is horizontal if every αi connects compo-
+nents of B[n] . A horizontal arc diagram A = {αi = [γi ]} is called invariant if every
+αi can be representedup to a proper
+                                      homotopy in X \ B[n] in an arbitrary small
+                                              [
+neighborhood of f −1 B ∪ Γ , where Γ =
+                          [n]
+                                                γi . In other words, every [γ] ∈ A
+                                                       i
+can be presented as a concatenation
+(2.10)                      γ = ℓ0 #γ1 #ℓ1 #γ2 # . . . #γs #ℓs ,
+where                                                                 
+      • [γj ] ∈ f ∗ (A) are proper arcs in X \ B[n],(1) = f −1 Y \ B[n] ; and
+14                    DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+
+                                               f
+              α                                                          β̃
+                           [1]                                                           [1],(1)
+                          B0                                                         B0
+β
+                                                                         α̃
+
+
+
+
+         Figure 7. The arc diagram {[α], [β]} is invariant. Here α  e, βe are
+         lifts of α, β, the map f is the Rabbit map tuned with the Feigen-
+         baum map, peripheral lifts of α, β and preperiodic bushes are omit-
+         ted on the right side. The arc diagram is invariant because α can
+                                                    [1],(1)    [1]
+         be properly homotoped into βe and P := B0          \ B0 while β can
+         be properly homotoped into β,  e P, α
+                                             e.
+
+
+     • every component of ℓi \ B[n],(1) is trivial in X \ B[n],(1) (with respect to a
+       proper homotopy, see §2.4.1).
+(In other words, the ℓi are contractible into B[n],(1) .) Here f ∗ (A) is the pullback
+of A. Figure 7 gives an example of an invariant arc diagram.
+Lemma 2.2 (Alignment with Tf , following [K, §4]). If A = {αi } is an invariant
+horizontal AD on X \ B[n] , where f : X → Y is a ql map, then A is aligned with
+the Hubbard continuum Tf : every αi can be represented in an arbitrary small
+neighborhood of a geodesic continuum Ti ⊂ Tf \ B[n] connecting components of
+B[n] .
+                                                                   [
+Proof. Write αi = [γi ] and consider Y ′ := Y \ B[n] ∪ Γ , where Γ =   γi . Then
+                                                                          i
+                           [n]
+one of the little bushes Bi is accessible from the outermost component of ∂Y ′ .
+Therefore, we can select a proper path ℓ ⊂ Y ′ connecting ∂Y and B[n] . For every
+such a path ℓ, its legal pullback ℓe is any of its lift connecting B[n] and ∂X and
+concatenated by a path in Y \ X so that ℓe ⊂ Y \ B[n] is a proper path connecting
+∂Y and Bn . Since A is invariant, ℓe can be again represented in Y ′ up to a proper
+homotopy in Y \ B[n] .
+   It is well-known that iterated pullbacks of ℓ can realize all periodic rays landing
+at B[n] up to a proper homotopy in Y \ B[n] . (It is sufficient to verify the property
+for the superattracting model §2.3.2.) Therefore, A is aligned with Tf .             □
+
+2.4.3. Genuine periodic arcs. Let A = {αi } be a horizontal invariant AD on Y \B[n]
+of f : X → Y . For every m ≥ 1, we can present [γ] ∈ A as a concatenation
+(2.11)                    γ = ℓ0 #γ1 #ℓ1 #γ2 # . . . #γs #ℓs
+(compare with (2.10)), where
+                             MLC AT FEIGENBAUM POINTS                                   15
+
+
+
+
+                                                             f
+
+          α2                    α1
+                                          [1]
+                                        B0
+                   β
+                                                                           α̃3               α̃2
+                                                                                                    [1],(1)
+          α3                    α4                                                                 B0
+                                                                                   β̃
+
+
+
+                                                                           α̃4               α̃1
+
+
+
+
+         Figure 8. An invariant arc diagram A = {α1 , α2 , α3 , α4 , β} is
+         depicted for the 1/4 Rabbit map tuned with the Feigenbaum map.
+         Here, ENA (f, αi ) = 1 while ENA (f, β) = 2 because β must travel
+         through α̃2 and α̃1 (β can not cross-intersect its lift β).
+                                                                 e Note that
+         if we replace in A the arc β with its orthogonal arc β ⊥ connecting
+            [1]      [1]
+         B0 and B2 , then the new arc diagram Anew will not be invariant:
+         βe = β will completely block β ⊥ .
+           ⊥
+
+
+                  ∗                                                           
+     • [γj ] ∈ f m (A) are proper arcs in f −m (Y ) \ B[n],(m) = f −m Y \ B[n] ;
+       and
+     • every component of ℓi \ B[n],(m) is trivial in X m \ B[n],(m) (with respect
+       to a proper homotopy, see §2.4.1) .
+We call (2.11) the decomposition of γ rel B[n],(m) . We define the expansivity number
+                       ENA (f m , [γ]) := min{s | s is in (2.11)},
+where the minimum is taking over all paths possible γ as above.
+  We call an arc α ∈ A a genuine periodic if ENA (f m , α) = 1 for all m ≥ 1.
+Lemma 2.3 (Expansivity of f | Tf \ B[n] ). Consider an invariant AD A and
+                                              
+
+an arc γ ∈ A aligned with a proper geodesic continuum Tγ of Tf \ B[n] . Then
+     • γ is genuine periodic if and only if Tγ connects two neighboring bushes
+                [n]
+        B[n]
+          a , Ba+1 (with respect to the cyclic order) of a periodic satellite flower
+          [n−1]            [n]
+        Bj      ⊃ B[n]
+                     a , Ba+1 of level n − 1. In particular, the n-th renormalization
+        of f is satellite.
+     • if γ is not genuine periodic, then
+(2.12)                               ENA (f pn , γ) ≥ 2.
+  See Figure 8 for illustration.
+                                                    [n−1]
+Proof. Clearly, if Tγ is in a satellite flower Bj           and connects two neighboring
+                [n]
+bushes B[n]
+        a ,    Ba+1 , then γ is genuine periodic.      It is also clear that (2.12) holds
+16                        DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+                                        [n−1]
+unless Tγ is in a satellite flower Bj  . (It can be easily proven for a superattracting
+model §2.3.2.)
+                                      [n−1]
+  Assume Tγ is in a satellite flower Bj      but connects two non-neighboring bushes
+         [n]
+B[n]
+  a , Bb , |a − b| > 1. Then a certain lift T ′ of Tγ under f m with m = kpn−1 < pn
+                                        m ∗
+                                            A has an arc aligned with T ′ but has no
+                                         
+cross-intersects Tγ . Itfollows that f    
+                                           [n],(m)
+arc aligned with Tγ \ B[n],(m)
+                       a       ∪ Bb                  . This implies that ENA (f m , γ) ≥ 2.
+                                                                                                   □
+2.4.4. Arcs inside and outside of satellite flowers. Consider an invariant AD A on
+X \B[n] . Consider an arc α ∈ A aligned with a geodesic continuum Tα ⊂ Tf \B[n] .
+We say that α is in B[n−1]
+                      c     if Tα ⊂ B[n−1]
+                                      c     .
+Lemma 2.4. Consider an invariant arc diagram A on X \ B[n] and an arc α ∈ A.
+Assume that α is not in any satellite flower B[n−1]
+                                              c     of level n − 1. Then there are
+two arcs
+           α1 , α2 ∈ (f 2pn )∗ (A)       with    f 2pn (α1 ) = f 2pn (α2 ) = αnew ∈ A
+such that α overflows α1 , α2 in the following sense: any decomposition (2.11) of
+α = [γ] rel B[n],(2pn ) contains two paths γa , γb representing α1 = [γa ] and α2 = [γb ].
+Proof. Since Tα is not in any satellite flower B[n−1]               c   , there is a strictly preperi-
+                           [n],(pn )      [n],(pn )
+odic component Bd                    of B            intersecting Tα . There are two components
+                       [n],(2pn )                   [n],(2pn )
+T1 , T2 ⊂ Tα \ B                  adjacent to Bd               . Since there is an m ≤ 2pn such that
+         [n],(2pn ) 
+f m Bd                contains the critical value, T1 , T2 have a common injective image of
+generation m ≤ 2pn . There must be two arcs α1 , α2 ∈ (f 2pn )∗ (A) aligned with
+T1 , T2 .                                                                                           □
+   Assume that the nth renormalization is satellite and consider a satellite flower
+B[n−1]
+  c    . Let A be an invariant AD as above. Let Ac = A(B[n−1] c     ) ⊂ A be the AD
+consisting of all arcs from A that are in B[n−1]
+                                           c     . Similarly, A (pn )
+                                                                c     ⊂ (f pn )∗ (A) be
+                                     pn ∗                   [n−1]
+the AD consisting of all arcs from (f ) (A) that are in Bc        . Then
+                                                       1:1
+(2.13)                                (f pn )∗ : Apc n −→ Ac
+is a bijection and every arc α ∈ Ac is homotopic to its unique lift α̃ ∈ Apc n , (f pn )∗ (α̃) =
+α in the following sense: Tα \ B[n],(pn ) = Tα̃ .
+2.4.5. Inhomogeneous configuration. The discussion here will be only used in Sec-
+tion 7. Consider a ql map f : X → Y with a cycle of bushes B[1] . Write Υ :=
+         [1]
+B[1] ∪ K0 . Note that f does not permute components of Υ.
+   An AD A = {αi } on X \ Υ is horizontal if every αi connects components of Υ.
+A horizontal AD A = {αi = [γi ]} is f p1 -invariant if every αi can be represented up
+to a proper [homotopy in X \ Υ in an arbitrary small neighborhood of f −p1 (Υ ∪ Γ),
+where Γ =      γi . By replacing f with its superattracting model (§2.3.2, compare
+               i
+also with Lemma 2.2), we obtain:
+Lemma 2.5 (Alignment with Tf ). If A = {αi } is an f p1 -invariant AD on Y \ Υ
+as above, then A is aligned with the Hubbard continuum Tf : every αi can be
+represented in an arbitrary small neighborhood of a geodesic continuum Ti of Tf \Υ
+connecting components of Υ.                                                      □
+                            MLC AT FEIGENBAUM POINTS                                  17
+
+
+  For m ≥ 1 and α ∈ A, the expansivity number ENA (f mp1 , α) is defined in the
+same way as in § 2.4.3; i.e., it is the smallest number of arcs in f −p1 m (A) overflown
+by α. An arc α ∈ A is genuine periodic if ENA (f p1 m , α) = 1 for all m ≥ 1. By the
+same argument as in Lemma 2.3, we have:
+Lemma 2.6 (Expansivity of f | [Tf \ Υ]). Consider an f p1 -invariant AD A on
+Y \ Υ and an arc γ ∈ A aligned with a proper geodesic continuum Tγ of Tf \ Υ. If
+the first renormalization of f is primitive, then
+(2.14)                            ENA (f p1 , γ) ≥ 2.
+                                                                                      □
+2.5. Teichmüller contraction. The Teichmüller contraction comes from the ob-
+servation that the restriction of a qc conjugacy to deeper renormalization levels can
+only decrease the dilatation. Therefore, the renormalization orbits (for bounded-
+type Feigenbaum families) can escape to infinity with at most linear rate. This
+fact can be traced back to Sullivan [S1], where structures of the Teichmüller spaces
+(reminiscent to the Thurston’s machinery) were brought into the Renormalization
+Theory. The proposition below is stated for quadratic maps; the Straightening
+Theorem easily extends it quadratic-like maps.
+Proposition 2.7. For every combinatorial bound p̄, there is a constant ∆ = ∆p > 1
+such that the following holds. Let fc (z) = z 2 + c be an infinitely renormalizable
+quadratic polynomial of bounded type p, see §2.2.5. Then gn = Rn fc has ql pre-
+renormalization gn = fcpn : Xn → Yn , Xn ⋐ Yn such that
+   (I) W(Yn \ Xn ) = O(∆n ); and
+                                  [n]
+  (II) Yn \ Kgn is disjoint from Bfc .
+
+Proof. Let Mi , i ∈ I be the (finite) set of all maximal M-copies in M of period
+≤ p̄, and let
+                                      [
+                                 R:      Mi → M
+                                       i∈I
+
+be the ql straightening map. Let us remove from every satellite Mi a small open
+neighborhood of its cusp such that the remaining M◦i contains all the preimages
+                                                                    ◦
+of the Mj under R : Mi → M. For a primitive copy M        [i , set Mi
+                                                                      := Mi . By
+                                                                ◦
+compactness, there is a ∆ > 1 such that every fc with c ∈   Mi has a ql restriction
+                                                             i
+g1 = fcp1 : X1,c → Y1,c around its maximal little Julia set containing 0 such that
+g1 satisfies (II) and such that g1 is hybrid conjugate via hc : Y1,1 → YR(c) with
+dilatation ≤ ∆ to a ql restriction fR(c) : XR(c) → YR(c) . Moreover, we can select
+the Y1,c and Yc so that Yc ⋑ Y1,c .
+   Wright cn := Rn (c). Then
+                                                          −1
+                           h̄ := hcn−1 ◦ · · · ◦ hc1 ◦ hc
+is a hybrid conjugacy from fcn : Xcn → Ycn to a ql restriction gn = fcp1 ...pn : Xn,c →
+Yn,c satisfying (II). Since the dilatation of h is ≤ ∆n , Property (I) follows.       □
+
+Remark 2.8. Property (II) implies that the prerenormalization gn : Xn → Yn is
+unbranched: P(fc ) ∩ Yn ⊂ K(gn ), compare with [McM2]. Moreover, by induction,
+18                     DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+Yn is disjoint from
+                                      [        [m]      [m]
+                                                             
+                              Υ :=           Bf       \ Bf,0 .
+                                     m≤n
+This implies that the quadratic-like prerenormalizations gn : Xn → Yn can be uni-
+valently lifted to the dynamical plane of any ψ • renormalization
+                            Rn1 • ◦ Rn2 • . . . · · · ◦ Rns • (fc )
+of fc , see §3.4.3.
+
+          3. ψ • -ql renormalization and near-degenerate regime
+   In this section, we will introduce ψ • -ql renormalization and discuss tools to detect
+its degeneration; see [A, K, KL1, L3, DL2] for details.
+   Given a compact subset K ⋐ S, we denote by F(S, K) the family of non-trivial
+proper curves in S \ K connecting ∂K to ∂S. We write
+                                                         
+(3.1)                           W(S, K) = W F(S, K) .
+
+3.1. Outline. Consider a ql map f : X → Y and let B[n] be its level n cycle of
+little bushes.
+                           [n]
+    Around every periodic Ki there is an associated ql prerenormalization
+(3.2)                          fn,i = f pn : Xn,i → Yn,i .
+In §3.4, we will define the ψ • -ql renormalization
+(3.3)                       Fn,i = (fn,i , ιn,i ) : Un,i ⇒ Vn,i
+of f : X → Y by extending (3.2) along all curves in Y \ B[n] , see §3.4.3. This is
+similar to the ψ-ql renormalization [K], where the extension is performed along all
+                                                        [n]
+curves in Y \ K[n] under the assumption that the Ki are pairwise disjoint (the
+primitive case); see §3.4.1 and Remark 3.5.
+   The correspondence Fn,i in (3.3) is called a ψ • -ql map. It consists of a degree 2
+branched covering fn,i and an immersion ιn,i , see definitions in §3.4.2. We define
+the Julia set and bush of Fn,i to be that of the ql map fn,i (3.2):
+                       KFn,i := Kfn,i      and        BFn,i := Bfn,i .
+Similarly, KF and BF are defined for any ψ • -ql map, see (3.14).
+    A ψ • -ql renormalization can be naturally defined for a ψ • -ql map; i.e., ψ • -ql
+renormalization can be iterated. The Sup-Chain Rule for renormalization domains
+is stated in §3.4.4.
+    Just like a ql map f : X → Y can be restricted to f : X k+1 → X k , where
+X  k+1
+       = f −k (X), a ψ • -ql map F = (f, ι) : U ⇒ V can be restricted to
+                                F = (f, ι) : U k+1 ⇒ U k
+by considering the fiber product §3.4.6. We have a natural 2k : 1 branched covering
+f k : U k → V and an immersion ιk : U k → V .
+    The width of a ψ • -ql map F : U ⇒ V is
+                                W• (F ) := W(V \ BF ).
+                     [n]
+We denote by A[n] ≡ AF the weighted arc diagram (WAD) of V            \ B[n] : it is a
+formal sum of weighted arcs representing rectangles in the thick-thin decomposition
+                                                                [n]
+of V \ B[n] ; see §3.3 and Figure 3.3. The horizontal part Ahor of A[n] consists
+                                 MLC AT FEIGENBAUM POINTS                                19
+
+
+of weighted arcs connecting components of B[n] . The vertical part A[n]       ver of A
+                                                                                      [n]
+                                                                        [n]
+consists of weighted arcs connecting ∂V and components of B . The local WAD
+  [n]                                              [n]                                [n]
+Ai consists of arcs in A[n] adjacent to Bi , where the weight of self-arcs to Bi
+is doubled. More generally, A[n],(m),k is the WAD of U k \ B[n],(m) , and the WADs
+  [n],(m),k    [n],(m),k
+Ahor        , Ai         , . . . are defined accordingly, see §3.5.2. We have
+                                                       
+                                                    [n]
+                                  W(Fn,i ) = W Ai         + Opn (1).
+
+   By identifying up to homotopy U k \ B[n],(m) and U k+1 \ B[n],(m) , weh obtaini
+ [n],(m),k+1       [n],(m),k                                                [n],k    [n],k
+Ahor           ≤ Ahor          , see §3.5.6. Since the complexity of Ahor ≡ AD Ahor
+                  [n],k                                                                [n]
+decreases, the Ahor are essentially invariant for k ≥ 3pn . Then either most of Ahor
+       [n],k                           [n]
+is in Ahor or a substantial part of Ahor is in A[n],k
+                                                   ver – this is a key dichotomy in
+Section 4; see also the dichotomy “(I) vs (II)” in §1.3.2.
+
+3.2. Rectangles. A Euclidean rectangle is a rectangle Ex := [0, x] × [0, 1] ⊂ C,
+where:
+       • (0, 0), (x, 0), (x, 1), (0, 1) are four vertices of Ex ,
+       • ∂ h Ex = [0, x] × {0, 1} is the horizontal boundary of Ex ,
+       • ∂ h,0 Ex := [0, x] × {0} is the base of Ex ,
+       • ∂ h,1 Ex := [0, x] × {1} is the roof of Ex ,
+       • ∂ v Ex = {0, x} × [0, 1] is the vertical boundary of Ex ,
+       • F(Ex ) := {{t} × [0, 1] | t ∈ [0, x]} is the vertical foliation of Ex ,
+       • F full (Ex ) := {γ : [0, 1] → Ex | γ(0) ∈ ∂ h,0 Ex , γ(1) ∈ ∂ h,1 Ex } is the full
+         family of curves in Ex ;
+       • W(Ex ) = W(F(Ex )) = W F full (Ex ) = x is the width of Ex ,
+                                                     
+
+       • mod(Ex ) = 1/W(Ex ) = 1/x the extremal length of Ex .
+    By a (topological) rectangle in a Riemann surface we mean a closed Jordan disk
+R together with a conformal map h : R → Ex into the standard rectangle Ex . The
+vertical foliation F(R), the full family F full (R), the base ∂ h,0 R, the roof ∂ h,1 R,
+the vertices of R, and other objects are defined by pulling back the corresponding
+objects of Ex . Equivalently, a rectangle R is a closed Jordan disk together with
+four marked vertices on ∂R and a chosen base between two vertices.
+    A genuine subrectangle of Ex is any rectangle of the form E ′ = [x1 , x2 ] × [0, 1],
+where 0 ≤ x1 < x2 ≤ x; it is identified with the standard Euclidean rectangle
+[0, x2 − x1 ] × [0, 1] via z 7→ z − x1 . A genuine subrectangle of a topological rectangle
+is defined accordingly.
+    A subrectangle of a rectangle R is a topological rectangle R2 ⊂ R such that
+∂ h,0 R2 ⊂ R and ∂ h,1 R2 ⊂ R. By monotonicity: W(R2 ) ≤ W(R).
+    Assume that W(Ex ) > 2. The left and right 1-buffers of Ex are defined
+
+                  B1ℓ := [0, 1] × [0, 1]   and   B1ρ := [x − 1, x] × [0, 1]
+respectively. We say that the rectangle
+                        Exnew := [1, x − 1] × [0, 1] = Ex \ B1ℓ ∪ B1ρ
+                                                                        
+
+is obtained from Ex by removing 1-buffers. If W(Ex ) ≤ 2, then we set Exnew := ∅.
+Similarly, buffers of any width are defined.
+20                      DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+3.2.1. Monotonicity and Grötzsch inequality. We say a family of curves S overflows
+a family G if every curve γ ∈ S contains a subcurve γ ′ ∈ G. We also say that
+      • a family of curves F overflows a rectangle R if F overflows F full (R);
+      • a rectangle R1 overflows another rectangle R2 if F(R1 ) overflows F full (R2 ).
+   If F overflows a family or a rectangle G, then G is wider than F:
+(3.4)                                     W(F ) ≤ W(G).
+If F overflows both G1 , G2 , and G1 , G2 are disjointly supported, then the Grötzsch
+inequality states:
+(3.5)                              W(F) ≤ W(G1 ) ⊕ W(G2 ),
+                   −1        −1 −1
+where x ⊕ y = (x        +y     )       is the harmonic sum.
+3.3. Weighted arc diagrams. Let us recall the notion of the Weighted Arc Dia-
+gram (WAD) describing wide rectangles in the thick-thin decomposition of a Rie-
+mann surface with boundary, see Figure 9 for illustration and brief summary. We
+also recall that WAD were abstractly defined in §2.4.1.
+3.3.1. Proper rectangles. A proper rectangle R in an open hyperbolic surface S is a
+rectangle in its ideal completion S = S ∪ ∂ i S such that ∂ h R ⊂ ∂ i S. We naturally
+view vertical curves of R as proper (and open) paths in S. We say that R connects
+boundary components J0 , J1 ⊂ ∂ i S if ∂ h,0 R ⊂ J0 , ∂ h,1 R ⊂ J1 .
+   If S = U \ K, where U is a topological disk and K ⋐ U is a compact subset with
+finitely many connected components, then ∂ i S has one outer component ∂ i U ; all
+remaining inner components are parameterized by the components of K. If J0 , J1
+represent the boundaries of components K0 , K1 of K, then we say that the above
+R connects K0 , K1 .
+                            compact Riemann surface V as in §2.4.1, write its non-
+3.3.2. Universal cover. For G
+empty boundary as ∂V =        Jk . We assume that V has negative Euler charac-
+                                   k
+teristic χ(V ) < 0. We set π : D → int V to be the universal covering, and we let
+Λ ⊂ T = ∂D be the limit set for the group ∆ of deck transformations of π. Then
+π extends continuously to T \ Λ, and π : D \ Λ → V is the universal covering of V .
+Moreover, π restricted to any component of T \ Λ gives us a universal covering of
+some component Jk of ∂V . Such a component of T \ Λ will be denoted Jk (usually
+we will need only one component for each k, so we will not use an extra label for
+it). The stabilizer of Jk in ∆ is a cyclic group generated by a hyperbolic Möbius
+transformation τk with fixed points in ∂Jk .
+3.3.3. Covering annuli and local weights. We let
+(3.6)                                  A(V, Jk ) := D/ < τk >
+be the covering annulus of V corresponding to Jk . We call its width
+                                       W(Jk ) := W [A(V, Jk )]
+the local weight of Jk . We let
+                                                  X
+                                        W(V ) =        W(Jk )
+                                                   k
+be the total weight of V .
+                          MLC AT FEIGENBAUM POINTS                              21
+
+
+
+
+                            X                        Y
+
+
+
+                            Z
+
+
+                                        V
+
+
+
+
+                                            V
+
+                                    X            Y
+                          Πcan
+                           αi                            Πcan
+                                                          αj
+
+                                            Z
+
+
+
+
+        Figure 9. Top: the thin-thick decomposition of V \ (X ∪ Y ∪ Z).
+        As we are interested in homotopy properties of wide rectangles,
+        they will usually be depicted as narrow rectangles (bottom) and
+        denoted by Πcan αi , where αi is an arc representing the homotopy
+        class of the rectangle Πcan . The Weighted Arc Diagram (WAD) is
+                              Xαi
+        the formal sum A =        W (Πcan
+                                       αi )αi , while the Arc Diagram (AD)
+                                i
+        is the associated set of curves A = {αi } ≡ AD[A]. Thin annuli of
+        the thick-thin decomposition are disregarded in the WAD.
+
+
+3.3.4. Canonical arc diagram. Recall that an arc α is a proper path in V up to
+proper homotopy. Any arc α connects some components Jk and Ji of ∂V and lifts
+to an arc α in D connecting some intervals Jk and Ji . We let W(α) = WD (Jk , Ji )
+to be the width of all curves in D connecting Jk and Ji . Then W(α) is also the
+width of the rectangle Πα = D with horizontal sides Jk and Ji . It is independent
+of the lift used.
+   If W(α) > 2, then by removing from Πα the square buffers we obtain a rectangle
+Πcan
+  α . In this case we let
+                  W can (α) = W can (α) = W(Πcan
+                                             α ) = W(α) − 2.
+22                        DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+By construction, the ∆-orbit of Πcanα consists of pairwise disjoint rectangles. There-
+fore, Πcan
+       α   projects injectively onto a rectangle Πcan
+                                                   α in V . Moreover, different Παi
+                                                                                   can
+                                can
+project to pairwise disjoint Παi .
+   If W(α) ≤ 2 we let W can (α) = 0 and Πcan (α) := ∅. Arcs with positive weight
+form the canonical weighted arc diagram (WAD) on V :
+                                              X
+(3.7)                 AV ≡ WAD(V ) :=                W can (α)α.
+                                               W can (α)>0
+
+   Every Πcan (α) supports the canonical vertical foliation F(Πcan (α). Altogether
+these foliations form the canonical lamination of V :
+                                       G
+(3.8)                       F (AV ) :=      F(Πcan (α)),
+                                            α∈AV
+
+We set
+                                       X                     
+(3.9)                      W(AV ) :=          W(α) = W F(AV ) .
+                                       α∈AV
+
+     The canonical arc diagram of V is the set of arcs in AV
+                           AV := {α | W can (α) > 0} ≡ AD[AV ].
+3.3.5. Local WADs and the thick-thin decomposition. For a boundary component
+Jk of ∂V , its local WAD AJk consists of weighted arcs of AV adjacent to Jk such
+that the weights of self-arcs adjacent to Jk are doubled. We have:
+                                   X
+                                      AJk = 2AV .
+                                       Jk
+
+     See [L3, §7.6] for a reference of the following fact.
+Theorem 3.1 (Thin-Thick
+                   G      Decomposition). For any compact Riemann surface V
+with boundary ∂V =   Jk , we have:
+                          k
+
+                    W(Jk ) − C ≤ W(AJk ) ≤ W(Jk )             for every Jk
+and                X                                 X
+                         W(Jk ) − C ≤ 2W(AV ) ≤            W(Jk ) = W(V ),
+                    Jk                                Jk
+where C depends only on the topological type of V .
+3.3.6. Sub-diagrams and removing buffers. Let A ≡ AV be the canonical WAD of
+V as in §3.3.4, and let B ⊂ A be a subset Xof arcs from A ≡ AD(A). Then the
+WAD induced by B is the formal sum B :=        W can (α)α, compare to (3.7). The
+                                                   α∈B
+weight W (B) of B and its canonical lamination F (B) is defined as for A, see (3.8)
+and (3.9). In §3.5.2, we will specify the vertical and horizontal parts of the WAD
+associated with ψ • -ql maps.
+   For B, B as above and c > 0, we define
+                                     X
+                          B − c :=        (W can (α) − c)α,
+                                        α∈B
+                                       W(α)>c
+
+                                   B − c := AD(B − c);
+                                MLC AT FEIGENBAUM POINTS                             23
+
+
+i.e., we remove the c-weight from each arc. For a rectangle Πcan (α) as in §3.3.4,
+we denote by Πcan (α) − c the rectangle obtained from Πcan (α) by removing the
+c/2-buffers on each side. We call
+                                     G
+                        F(B − c) :=       F(Πcan (α) − c)
+                                           α∈B−c
+
+the canonical lamination of B − c. We also denote by
+                                       G
+                     F full (B − c) :=    F full (Πcan (α) − c)
+                                           α∈B−c
+
+the full family of vertical curves within respective rectangles, see §3.2.
+3.3.7. Transformation rules.
+Lemma 3.2. Let i : S ′ → S be a holomorphic map between two compact Riemann
+surfaces with boundary. Then
+(i) If a boundary component J ′ of S ′ is mapped with degree d to a boundary com-
+ponent J of S then W(J ′ ) ≤ d · W(J);
+(ii) If an arc a′ of S ′ is mapped to an arc α of S then W(α′ ) ≤ W(α).
+Lemma 3.3. Let i : Π′ → Π be a holomorphic map between two rectangles which
+extends to homeomorphisms between the respective horizontal sides I ′ → I and
+J′ → J. Then
+                             W(Π′ ) ≤ W(Π).
+3.3.8. WAD under covering. Assume that f : U → V as a finite-degree covering
+between surfaces with boundaries, where χ(V ) < 0. Then, see [K, Lemma 3.3]
+                                              X
+(3.10)       AU = f ∗ AV , where f ∗ AV =          W can (α)f −1 (α)
+                                                    α∈AV
+        −1
+and f        (α) is the set of preimages of α.
+3.4. ψ • -ql renormalization. As in §2.2.3, consider a ql map f : X → Y and its
+ql prerenormalization
+(3.11)                             fn,0 = f pn : Xn → Yn .
+3.4.1. Motivation. A major technical issue is that there is no natural choice of Yn
+in (3.11) so that W(Yn \ Kn ) is optimal and satisfies, in particular, (1.2). To handle
+this problem, a ψ-ql renormalization was introduced in [K]: assuming that (3.11)
+                               [n]
+is primitive and Yn ∩ K[n] = K0 , extend fn : Xn → Yn along all curves in Yn \ K[n] ;
+the result is a correspondence Fn = (fn , ιn ) : Un ⇒ Vn , where
+                                                     [
+                                                 [n]        [n]
+                         Vn := A Y \ K[n] , ∂K0           K0
+                                                             [n]
+                                                          ∂K0
+
+                                                    [n]                  [n]
+is the covering annulus (3.6) of Y \ K[n] rel ∂K0 glued with K0 and
+                                                      [
+                                                  [n]      [n]
+                     Un := A X \ f −1 (K[n] ), ∂K0        K0
+                                                                   [n]
+                                                              ∂K0
+                                            
+                                                     [n]                  [n]
+is the covering annulus of X \ f −1 K[n] rel ∂K0 glued with K0 . The correspon-
+dence Fn is called a ψ-ql map and it is independent of the choice of Yn in (3.11).
+24                      DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+A ψ-ql renormalization can be naturally iterated. Moreover, ψ-ql bounds can be
+converted into ql bounds, see Lemma 3.7.
+  In this section, we will introduce ψ • -renormalization by replacing K[n] with the
+periodic cycle B[n] of little bushes so that it is also applicable for satellite combi-
+natorics.
+Remark 3.4. The viewpoint that various classes of self-correspondences (g, h) : A ⇒ B
+form interesting dynamical systems was popularized by Sullivan and later by A. Ep-
+stein in the context of deformation spaces. In the 2000s, it became apparent that
+self-correspondences give a natural framework to study some of the classical dynam-
+ical systems [IS, K, N]. See also [BD, T] for more recent developments.
+3.4.2. Definitions. A pseudo• -quadratic-like map (“ψ • -ql map”) is a pair of holo-
+morphic maps
+(3.12)                      F = (f, ι) :   (U, B′ ) ⇒ (V, B)
+between two conformal disks U , V with the following properties:
+   (I) f : U → V is a double branched covering (we usually normalize it so that
+       its critical point is located at 0);
+  (II) ι : U → V is an immersion;
+ (III) B and B′ are hulls (compact connected full sets) such that
+                               ι−1 (B) = B′ ⊂ f −1 (B);
+  (IV) there exist neighborhoods X ′ ⊃ B′ and X ⊃ B with the following property:
+       ι : X ′ → X is a conformal isomorphism such that
+                                         −1
+(3.13)                 fX := f ◦ ι | X ′     : X → f (X ′ ) =: Y
+       is a quadratic-like map with connected filled Julia set
+                                                   
+(3.14)                        KF := K fX : X → Y ,
+        and such that B ≡ BF ≡ B(fX ) is the bush of fX .
+   Since ι is a conformal isomorphism in a neighborhood of KF , we will below
+identify
+                          −1
+               KF ≃ ι | X     (KF )  and hence    B ≃ B′ ≡ BF ,
+and write
+                       F : (U, B) ⇒ (V, B)      or    F : U ⇒ V.
+     Let us say that a subset Ω ⊂ KF is called ι-proper if
+                                      ι−1 (Ω) = Ω.
+Item (III) implies that BF is ι-proper. If KF is ι-proper, then F is ψ-ql map [K].
+3.4.3. ψ • -ql renormalization. Consider a ψ • -ql map F from (3.12), and assume that
+fX (see (3.13)) is n + 1 DH renormalizable. Let fn,i = f pn : Xn,i → Yn,i be a ql
+prerenormalization of fX : X → Y . The associated ψ • -ql renormalization is the
+extension of fn,i : Xn,i → Yn,i along all curves in V \ Bn , compare with §3.4.1; the
+result is a ψ • -ql map Fn,i = (fn,i , ιn,i ) : Un,i ⇒ Vn,i , where
+                                                          [
+                                                      [n]         [n]
+                        Vn,i := A V \ B[n] , ∂Bi                Bi
+                                                          [n]
+                                                      ∂Bi
+                            MLC AT FEIGENBAUM POINTS                                25
+
+
+
+
+                   γ2                                             γ1
+
+
+         Figure 10. Illustration to Sup-Chain Rule (3.17), where n1 =
+         n2 = 1. Level one bushes B[1] are depicted black and dashed black
+                              [1]
+         (the central bush B0 ), while level two bushes B[2] are depicted
+                                               [2]
+         red and purple (the central bush B0 ). The map R• ◦ R• (F )
+         is obtained from F by extending the ql prerenormalization f2,0
+                         [2]
+         (defined near B0 , purple) along some paths γi in V \ Υ (where Υ
+         consists of non-dashed sets). The curve γ1 terminates at Υ (i.e.,
+                                                               [1]
+         no extension beyond). The curve γ2 terminates at B0 because it
+                                           [1]     [1]      2•
+         makes a non-trivial loop around B \B0 . Since R F is obtained
+         by extending f2,0 along all paths in V \ B[2] (where B[2] is red
+         and purple), we obtain the Sup-Chain Rule R• ◦ R• (F ) ⊂ R2• F .
+
+                                                   [n]                 [n]
+is the covering annulus (3.6) of V \ B[n] rel ∂Bi glued with Bi and
+                                                      [
+                                 −1            [n](1)       [n](1)
+                 Un,i := A U \ fn,i (B[n] ), ∂Bi          Bi
+                                                              [n](1)
+                                                            ∂Bi
+
+                                                   [n](1)                [n]
+is the covering annulus of U \ f −1 (B[n] ) rel ∂Bi         glued with Ki .
+    We will write suppress index “0” for Fn,0 :
+         Fn,0 ≡ Fn = (fn , ιn ) : Un ⇒ Vn ,    where     Un ≡ Un,0 , Vn ≡ Vn,0 .
+  We write
+(3.15)                          Rn• (F ) := Fn ≡ Fn,0 .
+Remark 3.5. The theory works similarly if the bush B is replaced with any con-
+nected forward invariant set Υ satisfying T ⊂ Υ ⊂ K, where T is the Hubbard
+continuum. Namely, let us say that a map
+(3.16)                      F = (f, ι) :   (U, Υ′ ) ⇒ (V, Υ)
+is ψ Υ -ql if it satisfies (I) – (IV) from §3.4.2 so that B′ ≃ B = B(fX ) are replaced
+with
+                Υ′ = ι−1 (Υ) ≃ Υ = Υ(fX ),              i.e., Υ is ι-proper.
+For example, one can take Υ = T or Υ = T∪B[m] . To define “ψ Υ -renormalization”,
+one [should extend a ql prerenormalization fn,i : Xn,i → Yn,i along all curves in
+V \    Υfn,j . Moreover, Υfn,j can often be enlarged, see §3.4.5.
+     j
+26                       DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+3.4.4. Sup-Chain Rule for renormalization domains. Consider a ψ • -ql map F as
+in (3.12). Since
+    (1) Rn1 • ◦Rn2 • (F ), see (3.15), is the extension of fn1 +n2 ,0 along curves in V \Υ
+        (subject to certain restrictions illustrated on Figure 10), where
+                                                              
+                                                          [n ]
+                           Υ := B[n1 +n2 ] ∪ B[n2 ] \ B0 2 ,
+
+   (2) Rn1 +n2 • (F ) is the extension of fn1 +n2 ,0 along all curves in V \ B[n1 +n2 ] ,
+   (3) and every connected component of B[n1 +n2 ] is within a connected compo-
+       nent of Υ (compare with Figure 10),
+we obtain the natural embedding of dynamical systems (respecting all the maps)
+(3.17)                      Rn1 • ◦ Rn2 • (F ) ⊂ Rn1 +n2 • (F ).
+3.4.5. Unbalanced renormalization from ψ • to ψ-ql maps. Consider a ψ • -ql map
+F from (3.12), and assume that fX (see (3.13)) is twice DH renormalizable. Let
+f1,0 : X1,0 → Y1,0 be a ql prerenormalization of fX .
+                                                                [1]
+   By Item (III) of the definition of F , the little Julia set K0 ≡ K(f1,0 ) is ι-proper.
+                                                                         [1]
+Therefore, we can extend f1,0 : X1,0 → Y1,0 along all curves in Υ := K0 ∪ B[1] and
+obtain ψ-ql map
+(3.18)                       FΥ,1 = (f1,0 , ι1,0 ) : UΥ,1 → VΥ,1 .
+  We recall from §2.4.5 that the set Υ is inhomogeneous: fX does not permute
+components of Υ .
+3.4.6. Restrictions. A ψ • -ql map F as in (3.12) has the natural restriction (also
+known as the pullback, fiber product, graph) denoted by
+     F = (f, ι) : U 2 ⇒ U 1 = U,      where    U 2 = {(x, y) ∈ U × U | f (x) = ι(y)},
+where f, ι : U 2 → U are component-wise projections; see [K, §2.2.2]. Note that
+F : U 2 ⇒ U 1 is also a ψ • -ql map. Repeating the construction, we obtain the
+sequence
+                  F : U k ⇒ U k−1 ,       n ≥ 1, U 0 = V, U 1 = U,
+together with induced iterations denoted by
+                               F k = f k , ιk : U k → V.
+                                             
+(3.19)
+     Since ι | U k+1 is the lift of ι | U under the covering f k , we have:
+Lemma 3.6. The set f −k (BF ) is ι-proper for F : U k+1 ⇒ U k .                         □
+3.4.7. Sup-Chain rule for iterations. Consider a ql map g : A → B. Assume that
+a ψ-ql map F : U ⇒ V is obtained from g : A → B using finitely many ψ • -ql
+renormalizations followed by the unbalanced renormalization from §3.4.5. Then F
+has a ql restriction fX : X → Y as in (3.13) that is realized in the dynamical plane
+of g:
+                     fX ≃ fX,g ,   where fX,g = g p : Xg → Yg .
+                                    [n]
+Consider the filled Julia set Ki ≡ K(fX,g ) ⊂ B of fX,g = g p : Xg → Yg . Let
+G : N ⇒ M be the ψ-ql map obtained from g : A → B by extending fX,g =
+                                          [n]
+g p : Xg → Yg along all paths in Υ := Ki ∪ B[n] ; compare with §3.4.5 where the
+case (n, i) = (1, 0) is defined. By construction, we have a covering map
+                                    ρ : M \ KG → B \ Υ
+                                MLC AT FEIGENBAUM POINTS                             27
+
+                                                ≃       [n]
+so that ρ induces an isomorphism ρ : ∂KG −→ ∂Ki . The Sup-Chain Rule §3.4.4
+implies by induction that F ⊂ G. Therefore, we have the induced partial covering:
+                                                    ρ
+(3.20)                     ρ′ : V \ KF ,→ M \ KG −→ B \ Υ
+                   ≃      [n]
+so that ρ′ : ∂KF −→ ∂Ki . Let γ be the core hyperbolic geodesic of the annulus
+V \KF . Then γF can be described as the set points x such that the Brownian motion
+starting at x has equal probabilities of hitting each of the boundary components of
+the annulus V \KF . Therefore, the image of the subdisk Vγ ⋐ V bounded by γ under
+V \ KF ,→ M \ KG is within the subdisk Mβ ⋐ M bounded by the core hyperbolic
+                                                                          ≃     [n]
+geodesic β of the annulus M \ KG . Since ρ is a covering with ρ : ∂KG −→ ∂Ki ,
+                1:1
+we have ρ : β −→ ρ(β) and ρ(β) is a hyperbolic geodesic of B \ Υ. Therefore,
+V γ \ KF descents univalently to the dynamical plane of g : A → B via the partial
+covering (3.20).
+3.5. Width and WADs of ψ • maps. For a ψ • -ql map F : U ⇒ V we write
+                                  W• (F ) := W(V \ BF ).
+If F is ψ-ql map (i.e., KF is ι-proper), then we can also measure
+                                  W(F ) := W(V \ KF ).
+  The Grötzsch inequality easily implies
+                 W U k \ B ≤ W U k \ f −k (B) = 2k W• (F ).
+                                            
+
+  The Sup-Chain Rule (3.17) implies that
+                       W [Rn1 • ◦ Rn2 • (F )] ≥ W Rn1 +n2 • (F ) .
+                                                               
+(3.21)
+3.5.1. Compactness of ψ and ψ • -ql maps. If W(F ) is bounded for ψ-ql map F , then
+F also has regular ql bounds:
+Lemma 3.7 ([K, Lemma 2.4]). There is a positive function µ(K) with the following
+property. If F is a ψ-ql map with W(F ) ≤ K, then the quadratic-like map fX : X →
+Y in (3.13) can be selected so that
+(3.22)                            mod (Y \ X) ≥ µ(K).
+Remark 3.8. Assume that ψ-ql map F : U ⇒ V is obtained from a ql map
+g : A → B using finitely many ψ • -renormalizations followed by the unbalanced
+renormalization from §3.4.5. As in §3.4.7, let γ be the core hyperbolic geodesic of the
+                                                                            −1
+annulus V \ KF . In Lemma 3.7 we can assume (by replacing X, Y with fX         (X), X)
+that the ql restriction fX : X → Y is within the subdisk Vγ ⋐ V bounded by γ. It
+is shown in §3.4.7 that Vγ \ KF (and hence Vγ ) descents univalently to the dynam-
+ical plane of g via the partial covering (3.20). Therefore, the ql map fX : X → Y
+descents univalently to the dynamical plane of g.
+It is shown in the proof of [K, Lemma 2.4] that ι is an embedding in a neighborhood
+of KF ; this argument is applicable to ψ • maps:
+Lemma 3.9. There is a positive function µ• (K) with the following property. If
+F is a ψ• -ql map with W• (F ) ≤ K, then BF has a neighborhood Ω such that ι is
+injective on Ω and
+                             mod (Ω \ BF ) ≥ µ• (K).
+                                                                                     □
+28                       DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+3.5.2. WADs of F . Assume that B[n] is well-defined, i.e., F is n+1 renormalizable.
+Let us consider the canonical WAD of U k \ B[n],(m) , k ≥ m:
+                                                              
+                  A(m),k ≡ A[n],(m),k := WAD U k \ B[n],(m) .
+
+     We say (compare with §1.3.1) that an arc α ∈ A[n],(m),k is
+                                                                       
+       • vertical if it connects the outer boundary ∂ out U k \ B[n],(m) := ∂U k of
+         U k \ B[n],(m) to one of its inner boundary components;
+       • horizontal if it connects two inner (i.e., non-outer) boundary components
+         of U k \ B[n],(m) .
+     We set (see §3.3.6)
+       • A(m),k
+           ver    to be vertical part of A(m),k : it consists of arcs connecting ∂U k and
+         one of the components of ∂B[n],(m) ;
+           (m),k
+       • Ahor to be horizontal part of A(m),k : it consists of arcs connecting com-
+         ponents of ∂B[n],(m) ;
+           (m),k                                  [n],(m),k                (m),k
+       • Ai        to be the local WAD for Bi               , see §3.3.5: Ai     consisting
+                                  [n],(m),k
+         of arcs adjacent to Bi             such that the weights of self-arcs adjacent to
+            [n],(m),k
+         Bi            are doubled;
+           (m),k      (m),k                                       (m),k
+       • Ai,ver , Ai,hor to be the local parts of A(m),kver , Ahor .
+     We will usually suppress upper zero induces:
+                            (0),0        (m)      (m),0              (0),k
+                    Ai = Ai         ,   Ai     = Ai       ,   Aki = Ai       ,...
+     The following lemma provides a reverse to (3.21) estimate.
+Lemma 3.10. Assume that in the dynamical plane of F = Rn0 • G : U ⇒ V , there
+                                                                             [n]
+is a non-trivial horizontal lamination of curves L ⊂ V \ B[n] emerging from B0
+and landing at B[n] . Then
+                              W Rn0 +n• G ≥ W(L).
+                                           
+
+Proof. By definition §3.4.2, the L lifts univalently to a horizontal lamination Le in
+                                                                    [n +n]
+the dynamical plane of G emerging from BnG,0   0 +n
+                                                    and landing at BG 0 . After that
+Le lifts univalently to a vertical lamination in the dynamical plane of Rn0 +n• G. We
+                    n0 +n•
+                            
+obtain that W R            G ≥ W(L)  e ≥ W(L).                                      □
+3.5.3. WADs and W• (Fn,i ). It follows from Theorem 3.1 that
+(3.23)                         W• (Fn,i ) = W(Ai ) + Opn (1).
+   As with ψ-ql renormalization (compare with [McM1, Theorem 9.3]), we have
+                1
+(3.24)            W• (Fn,0 ) ≤ W• (Fn,i ) ≤ W• (Fn,0 ) for all i.
+                2
+                                                                                    [n]
+Indeed, let γi ⊂ V \ B[n] be the peripheral hyperbolic geodesic around Bi . Then
+the hyperoblic length of |γi |V \B[n] is proportional to W• (Fn,i ). Let γi1 be the lift of
+γi under f : U 1 \B[n],(1) → V \B[n] so that γi1 is the peripheral hyperbolic geodesic
+          [n],(1)
+around Bi−1 , where the subscript is mod pn . Counting the degree of f : γi1 → γi ,
+we obtain
+     • |γi1 |U 1 \B[n],(1) = |γi |V \B[n] if i ̸= 1; and
+                                  MLC AT FEIGENBAUM POINTS                                        29
+
+         1 1
+      •    |γ | 1 [n],(1) = |γ1 |V \B[n] .
+         2 1 U \B
+Finally, |γi1 |U 1 \B[n],(1) ≥ |γi−1 |V \B[n] ; this implies (3.24).
+
+3.5.4. Covering: from U k \ B(m) to U k+s \ B(m+s) . It follows from §3.3.8 that the
+WADs change naturally under the covering:
+                (m+s),k+s                (m),k          (m+s),k+s                (m),k
+(3.25)        Ahor             = (f s )∗ Ahor ,       Ai−s            = (f s )∗ Ai       ,
+
+and similar for other WAD such as A(m),k , A(m),k
+                                            ver , . . . .
+
+
+3.5.5. Restriction by ιs : from U k \ B(m) to U k+s \ B(m) . Assume that m ≤ k.
+By Lemma 3.6, the set B[n],(m) ⊂ U k is ι-proper. Let γ be a proper curve in
+U k \B[n],(m) emerging from B[n],(m)
+                                a     . Applying ι−s along γ, we construct, see (3.26)
+                         ∗ s
+below, its restriction (ι ) [γ] which is a proper curve in U k+s \ B[n],(m) . Moreover,
+      • if γ is vertical, then so is (ι∗ )s [γ],
+      • if γ is horizontal, then (ι∗ )s [γ] is either horizontal or vertical.
+If (ι∗ )s [γ] is horizontal, then we will also call (ι∗ )s [γ] the lift of γ under ιs .
+    More precisely, write γ : (0, 1) → U k \ B[n],(m) . For every s > 0, there is a
+ts ∈ (0, 1] such that ι−s extends along γ | (0, ts ) and the resulting curve
+(3.26)                         (ι∗ )s [γ] := ι−s ◦ γ : (0, ts ) → U k+s
+
+is a proper curve in U k+s \ B[n],(m) (because B[n],(m) ⊂ U k is ι-proper). Moreover,
+      • if tm = 1, then (ι∗ )n γ is vertical if and only if γ is vertical,
+      • if tm < 1, then (ι∗ )n γ is vertical.
+  The following lemma implies that curves in a horizontal rectangle that restrict
+under (ιs )∗ to vertical curves form buffers of the rectangle.
+
+Lemma 3.11. Assume that two disjoint horizontal paths γ1 , γ2 ⊂ U k \ B(m)
+representing the same arc α = [γ1 ] = [γ2 ] lift under (ιs )∗ to horizontal paths in
+U k+s \ B(m) . Let R ⊂ U k \ B(m) be the proper rectangle between γ1 and γ2 such
+that all vertical curves in R also represent α. Then all curves in F full (R) lift under
+(ιs )∗ to homotopic horizontal curves in U k+s \ B(m) .
+
+Proof. The curve γ ∈ F full (R) becomes vertical under the restriction by (ιs )∗ if
+and only if γ(t) hits ιs ∂U k+s . This is impossible because γ1 (t), γ2 (t) do not hit
+ιs ∂U k+s .
+         
+                                                                                    □
+
+3.5.6. Monotonicity of the Akhor . Since ι : U k+1 → U k is an embedding in a neigh-
+borhood of KF , we identify up to homotopy U k \ B[n],(m) and U s \ B[n],(m) for
+all k, s. In particular, horizontal arcs α in U k \ B[n],(m) are naturally viewed as
+horizontal arcs in U s \ B[n],(m) by realizing the α in a small neighborhood of KF
+where ιs−k is an embedding.
+   It follows essentially from Lemma 3.3 (by lifting ι to the universal coverings,
+see [K, §3.5] for reference) that for k ≥ m
+                   [n],(m),k       [n],(m),k+1                 [n],(m),k        [n],(m),k+1
+(3.27)          Ahor           ≥ Ahor              and       Ai,hor        ≥ Ai,hor           .
+30                        DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+3.5.7. Domination: from U k \ B(m) to U k \ B(m+1) (following [K, §3.6]). Assume
+that γ ⊂ U k \ B[n],(m) is a proper horizontal curve. Then it has the decomposition
+(3.28)                         γ = ℓ0 #γ1 #ℓ1 #γ2 # . . . #γs #ℓs
+(compare with §2.4.3) such that
+        • γj ⊂ U k \ B[n],(m+1) are proper horizontal curves; and
+        • every component of ℓi \B[n],(m+1) is trivial in U k \B[n],(m+1) (with respect
+          to a proper homotopy, see §2.4.1).
+We call s the expansivity number of γ in rel B(m+1) .
+   It follows from Decomposition (3.28) that there is a combinatorial constant C ≡
+Cpn ,m (essentially, the maximal number of possible arcs rel B[n],(m+1) ) such that
+for all M > 1
+                  [n],(m),k                                     [n],(m+1),k
+(3.29)          Ahor          − MC         is dominated by    Ahor            −M
+                                                                               [n],(m),k
+in the following sense, see §3.3.6 for notation. For every arc α in Ahor                   − M C,
+there is a vertical sublamination
+                Lα ⊂ F(e) ≡ Πcan (α)            with   W(Lα ) ≥ W(α) − M C
+such that Decomposition 3.28 of every γ ∈ Lα has the additional property that
+                                                   
+                                      [n],(m+1),k
+(3.30)                  γi ∈ F full Ahor          −M .
+
+The lamination La is constructed by removing all γ from F (α) that do not sat-
+isfy (3.30) – the width of removed curves is bounded by M C.
+3.5.8. Almost periodic rectangles. Consider a ψ • -ql map F : U ⇒ V as in (3.12).
+We say that a proper rectangle R in V \ B[1] is almost periodic if most of the width
+of R overflows its iterative lift; more precisely:
+Definition 3.12. For a ψ • -ql map F : U ⇒ V , a proper rectangle R ⊂ V \ B[1]
+                  [1]
+connecting B[1]
+             a , Ba+1 is called δ-almost periodic if R represents a genuine periodic
+arc (of some AD, see §2.4.3) and R has a vertical sublamination G ⊂ F(R) with
+W(G) ≥ (1−δ)W(R) such that Conditions (I), (II) stated below hold for all s ≤ 10p,
+where p is the combinatorial bound §2.2.5.
+    (I) Under the immersion, G lifts to the lamination
+                                G s := (ιsp1 )∗ (G) ⊂ U sp1 \ B[1]
+                                     [1]
+          still connecting B[1]
+                            a , Ba+1 .
+
+Let R(s) ⊂ U (sp1 ) \ B[1],(sp1 ) be the periodic lift of R under f sp1 ; i.e., R(s) connects
+               [1],(sp )
+B[1],(sp
+  a
+         1)
+            , Ba+1 1 .
+     (II) The lamination G s overflows R(s) as follows: every curve γ in G s is the
+          concatenation γ = ℓa #γ ′ #ℓa+1 such that
+            • γ ′ ∈ F full R(s) , see §3.2; and
+                                                                                     [1],(sp )
+            • every component of ℓa \B[1],(sp
+                                           a
+                                                  1)
+                                                     and every component of ℓa+1 \Ba+1 1
+              is trivial in U sp1 \B[1],(sp1 ) with respect to a proper homotopy, see §2.4.1.
+                                                                                           [1]
+   By Lemma 2.3, the first renormalization of F is satellite and B[1]
+                                                                  a , Ba+1 are
+neighboring bushes with respect to the cyclic order.
+                             MLC AT FEIGENBAUM POINTS                                  31
+
+                                                                                     [n]
+Remark 3.13. An almost periodic rectangle R between little bushes B[n]        a , Ba+1
+is defined in the same way as in the case n = 1. Such a rectangle R can be
+lifted to the dynamical plane of Fn−1,c (via the covering map representing the ψ • -
+renormalization, see §3.4.3) and its lift will be an almost periodic rectangle between
+level 1 little bushes as in Definition 3.12 .
+
+                  4. Pull-off for non-periodic rectangles
+   In this section we will establish the following theorem that refines a result
+from [K]:
+Theorem 4.1. For every bound p̄ on renormalization periods as in §2.2.5, every
+small δ > 0, and every n ≫p̄,δ 1, the following holds.
+   Let F = (f, ι) : U ⇒ V be a ψ • -ql map n + 1 times renormalizable of type p̄, and
+let Fn,i = (fn,i , ιn,i ) : Un,i ⇒ Vn,i be its nth ψ • -renormalization, see §3.4.3. If
+                               W• (Fn,i ) = K ≫p̄,δ,n 1,
+then
+(P) either W• (F ) ≥ 2K;
+(S) or the nth renormalization of F is satellite and the (n − 1)-th ψ • -ql renor-
+     malization Fn−1 has a δ-almost periodic rectangle R with W(R) ≥ K/20 (see
+     Definition 3.12) between two neighboring bushes in its satellite flower.
+    If the nth renormalization of F is primitive, then Fn−1 has no periodic rectangles;
+i.e., Case (P) holds.
+Proof. (See also §1.3.1.) Consider the periodic cycle B[n] of level n little bushes in
+the dynamical plane of F : U ⇒ V . Recall from (3.19) that F k : U k ⇒ V represents
+the kth iteration of F .
+   The degeneration of U k \ B[n] is described by the WAD Ak ≡ A[n],k ; let us
+consider its horizontal and vertical parts Akhor , Akver , see details in §4.1. Since the
+U k \ B[n] decrease, so are the arc diagrams representing Akhor ; i.e., the Akhor ≡
+AD Akhor stabilize with k ≤ 3pn . And since f −1 (U k \ B[n] ) ⊂ U k+1 \ B[n] , the
+           
+
+Akhor stabilize at an invariant AD; i.e., Akhor is aligned with the Hubbard tree of the
+superattracting model.
+   Consider the local part Aki of Ak around Bni . Write q := (10p+3)pn . We remark
+that since q is linear in pn , the qth iterate has a bounded degree on small bushes and
+the below application of the Covering Lemma will lead to estimates independent of
+n.
+   If for all i we have
+(4.1)                   W(Aqi ) − W(A0i ) ≤ δ1 K,       δ1 ≪ δ,
+then most of the degeneration in A0i is represented by genuine periodic arcs §2.4.3;
+this leads to Case (S), see §4.3.
+   If (4.1) does not hold some i, then W(Aqi,ver ) ≥ δ1 K and applying the Covering
+Lemma we obtain                       
+                                   [n]
+                         W V \ Bj        ≍δ1 ,p K    for all j.
+Applying the Quasi-Additivity Law and using pn ≫δ1 ,p 1, we obtain
+                            X           [n]
+                                             
+               W(F ) ⪰δ1 ,p    W V \ Bj        ⪰δ1 ,p pn K ≫ 2K,
+                                 j
+32                       DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+see §4.2; this is Case (P).
+   Below we will make a more technical exposition.                                  □
+4.1. Alignment of WAD with the Hubbard continuum. Following §2.3.1, let
+                                                                     −m
+                 B ≡ B[n],(0)        and          B(m) ≡ B[n],(m) = fX  (B)
+be the periodic cycle of level-n bushes and its preimage, where fX = [f : X → Y ]
+is a ql restriction of f , see (3.13) in §3.4.2. The similar suppression of indices is
+applied to WAD from §3.5.2.
+   Recall from §3.5.4 and §3.5.6 that we have
+                                         
+                (m+1),k+1           (m),k              (m),k+1     (m),k
+(4.2)         Ahor         = f ∗ Ahor          and   Ahor      ≤ Ahor .
+   Let us choose a sufficiently big threshold C ≫pn 1 so that (3.29) is applicable
+for m = 0. By (4.2), the ADs forming Akhor − C k decrease, hence for a certain
+                                                             
+(4.3)      t ≤ maximal number of horizontal arcs on V \ Bn ≤ 3pn
+the arc diagram
+(4.4)                  H = AD(H),             where      H := Athor − C t
+coincides with the AD of At+1
+                           hor − C
+                                    t+1
+                                        .
+                     t+1
+   Since the WAD Ahor − C   t+1
+                                 on U t+1 \ B is dominated by the WAD f ∗ (H) =
+f ∗ Athor − C t on U t+1 \ B(1) , see (3.29) (where M = C t ) in §3.5.7, we obtain
+               
+
+that H is an invariant AD, and therefore it is aligned with the Hubbard continuum
+by Lemma 2.2.
+4.2. Case (P). Consider local WAD Aki as in §3.5.2, we have by §3.5.3
+(4.5)          W(Aki ) ≥ W(A0i ) = W• (Fn,i ) − Opn (1) ≥ K/2 − Opn (1).
+   Write q := (10p + 3)pn and fix a sufficiently small δ1 > 0. Assume that:
+(Ploc ) there is a κ such that
+                                         W(Aqκ,ver ) ≥ δ1 K.
+   Since all local weights are comparable §3.5.3, we have the Collar Assumption:
+                                          
+                               [
+(4.6)                 W V \      Bj , B i  ≍ K       for all i.
+                                  j̸=i
+
+            κ,ver ) ≥ W(Aκ,ver ) ≥ δ1 K and §4.6 holds, we obtain from the [KL1,
+  Since W(Aq+j           q
+
+Covering Lemma] that
+          W(V, Bκ+i ) ⪰δ1 ,p W(U q+i , Bκ ) ≥ W(Aq+i
+                                                 κ,ver ) − Opn (1) ⪰δ1 ,p K
+
+for all i ∈ {0, 1, . . . , pn − 1}. Therefore,
+                                 pn
+                                 X
+                                         W(V, Bj ) ⪰δ1 ,p pn K.
+                                 j=0
+
+Applying [KL1, Quasi Additivity Law with separation] together with (4.6) and
+using pn ≫δ1 ,p 1, we obtain
+                                           pn
+                                           X
+                   W(V \ B) ⪰δ1 ,p               W(V, Bj ) ⪰δ1 ,p pn K ≥ 2K.
+                                           j=0
+                            MLC AT FEIGENBAUM POINTS                                  33
+
+
+We conclude that
+                      W• (F ) = W(V, BF ) ≥ W(V, B) ≥ 2K.
+  This establishes Case (P) from (Ploc ).
+
+4.3. Case (S). Let us now assume that (Ploc ) does not hold: for all i we have
+W(Aqi,ver ) ≤ δ1 K. This implies that most paths in the canonical lamination F(Ai )
+of Ai are horizontal and they restrict to horizontal paths under the immersions
+ιs : (U s , B) → (V, B) for s ≤ q. We will use notations of §2.4.4.
+    Let H be the WAD from (4.4) on (U t , B). Consider an arc e in H with maximal
+W(e). Since the number of arcs in H is bounded by 3pn and W(H) ≥ pn K/4 −
+δ1 pn K by (3.24), we obtain that W(e) ≥ K/14. We claim that e is within a periodic
+satellite flower B[n−1]
+                   c     . In particular, the n-th renormalization of f is satellite.
+    Assume converse: e is not in any satellite flower B[n−1]  c     . By Lemma 2.4, e
+overflows arcs e1 , e2 ∈ (f 2pn )∗ (H) with f 2pn (e1 ) = f 2pn (e2 ) = enew ∈ H. By
+                       ∗
+Lemma 3.11, ι2pn [F(e − δ1 K)] is a horizontal family of curves in U t+2pn \ B;
+after removing Opn (1) curves, this family is dominated by (f 2pn )∗ (H). Therefore,
+by the Series Law:
+                     max (W(e1 ), W(e2 )) ≥ 2W(e) − 2.1 δ1 K.
+
+Applying f 2p1 , we obtain the contradiction: W(enew ) > W(e).
+    Consider now a satellite flower B[n−1]
+                                      c     . As in §2.4.4, we denote by Hc the WAD
+consisting of arcs of H that are in B[n−1]
+                                       c     .
+                                                                           ′ ∗
+             ′               (q ′ )
+    Write q = 10ppn . Let Hc be the WAD consisting of arcs of f q H that are
+                                                  ′
+in B[n−1]
+      c     . By Lemma 3.11, the restriction (ιq )∗ [Hc − δ1 K] consists of horizontal
+                                                                         ′
+curves. Since H = AD(H) is aligned with the Hubbard dendrite, (ιq )∗ [Hc − δ1 K]
+                                                     ′                             ′        ′
+is, after removing Opn (1) curves, dominated by Hc(q ) , see §3.5.7. And since (f q )∗ : Hcq →
+Hc is a bijection, as most pδ1 K + 2C 2 < δ2 K curves in Hc can have expansivity
+number greater than 2, where δ1 ≪ δ2 ≪ δ. This implies that most curves in
+F(Hc ) are within rectangles representing genuine periodic arcs §2.4.3 that connect
+neighboring level n bushes of B[n−1]c  , see Lemma 2.3. This also demonstrates that
+all the Hc have comparable width – the difference of their weights are bounded by
+δ2 K.
+    Since one of the H has an edge e with W(e) ≥ K/14, the map F : U t+1 ⇒ U t
+                                                                                     [n−1]
+has a δ/2-almost periodic rectangle R between neighboring level n bushes of B0
+with W(R) ≥ K/15 and satisfying Remark 3.13.
+
+4.3.1. Pushing forward R into V \ Bn and then into    the dynamical plane of Fn−1 .
+Since W(Aqi,ver ) ≤ δ1 K, curves in F Ai,hor −2δ1 K restrict under (ιt )∗ to horizontal
+curves in (U t , B). Since Ati ≤ Ai , see (3.27), we obtain from Lemma 3.11 that
+
+                 F Ati,hor − 2δ1 K − 2 ⊂ (ιt )∗ F full Ai,hor − 2δ1 K .
+                                                                   
+
+Therefore, F(Ati,hor − 2δ1 K − 2) can be univalently pushed forward under (ιt )∗ .
+By removing δ1 K buffers from R, we push forward R into the dynamical plane
+of F : U ⇒ V and then push forward R into the dynamical plane of Fn−1 , see
+Remark 3.13. This establishes Case (S) of the theorem.
+34                     DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+                                      5. Waves
+   Given a compact connected filled set X ⊂ C, we denote by ∂ c X its Carathéodory
+                                         b \ X. A Riemann map identifies ∂ c X
+boundary; i.e., the set of prime ends of C                                    e with
+the unit circle T. For a compact connected subset Y ⊂ X, we denote ∂X Y ⊂ ∂ c X
+                                                                         c
+
+the set of prime ends of X accumulating at Y . A side of Y rel X is a connected
+                 c
+component of ∂X    Y viewed as a subset of T ≃ ∂ c X.
+   Let F = (f, ι) : U ⇒ V be a ψ • -ql map. Assume that
+      • (Kk )k is a forward invariant collection of periodic and preperiodic little
+        filled[Julia sets of f of the same level;
+      • T ⊃      Kk is forward invariant compact connected filled subset of the Julia
+              k
+        set of f ;
+      • T is ι-proper;
+      • every Kk has finitely many sides in T .
+                                      (m)
+A relevant example for us is T = BF . Let us denote by M the total number of
+sides of all Kk .
+   Consider a side Kιk of Kk in T . A wave S above Kιk is a lamination of proper
+paths in U \ T such that every curve γ ∈ S starts and ends at ∂ c X \ Kιk and goes
+above Kιk : the bounded component O of U \(γ ∪T ) contains Kιk on its Carathéodory
+boundary (i.e., prime ends of Kιk are accessible from O).
+Lemma 5.1 (Wave Lemma). Let S be a wave as above. Then W(U \T ) ⪰M W(S).
+Proof. We will use the following fact:
+Lemma 5.2. Suppose f : A → B is a degree m covering between closed annuli.
+Suppose J ⊂ ∂A is an interval. Let S be a wave in A above J. Then S contains a
+genuine subwave S new such that f | S new is injective and
+                            W(S new ) ≥ W(S) − O(ln m).
+In particular, if f | J is not injective, then W(S) = O(ln m).
+
+Proof. Consider universal covering maps X → A and X → B. Their group of deck
+transformations are isomorphic to mZ and Z respectively. Let Sk , k ∈ mZ be the
+lifts of S under X → A; all these lifts are disjoint and permuted by mZ. Let Sk ,
+k ∈ Z be the orbit of S under Z. We claim that, by removing O(ln m) outermost
+curves from S, we obtain S new and the new Sknew , k ∈ Z so that
+                              S0new , S1new ,            new
+                                                . . . , Sm−1
+are pairwise disjoint. Then, by the claim, all Sknew , k ∈ Z are pairwise disjoint, i.e.
+                           f : S new −→ f (S new ) = S0new /Z
+is injective.
+    Let us verify the claim. Let us denote by A1 the component of ∂A containing
+J, by H ≃ Z/m the group of deck transformations of f : A → B. Then H acts on
+A1 . We can decompose S = S 0 ⊔ S 1 ⊔ . . . S T into possibly empty pairwise-disjoint
+laminations such that
+       • curves in S 0 start and end at an interval I 0 ⊂ A1 that is a fundamental
+         interval for the action H ↷ A1 ;
+                             MLC AT FEIGENBAUM POINTS                                   35
+
+
+        • curves in S t , t > 0 start at an interval I− t
+                                                          ⊂ A1 and end at an interval
+           t                                          t   t
+          I+ ⊂ A1 such that one of the intervals I− , I+    is within a union of 2t − 1
+          fundamental intervals for the action H ↷ A1 and the interval J t ⊂ A1 ,
+          J t ∩ J ̸= ∅ between I−  t    t
+                                     , I+ is the union of exactly 2t − 1 fundamental
+          intervals of the action H ↷ A1 ;
+        • T = O(ln m).
+Then W(S t ) = O(1) for t > 0 because, after removing 1 buffers, S t crosses its shift
+under H, see [DL2, Shift Argument §A.3].
+   Replacing S with S 0 , we obtain that curves in the Sk0 start and end at pairwise
+disjoint intervals. Removing an extra O(1) outermost curves, we obtain that the
+new Slnew are pairwise disjoint.                                                    □
+
+    Let us assume first that Kk is periodic. Since the number sides is M and since
+the period of small Julia sets is bounded by M , we can fix an iteration f n | T ,
+where n is bounded in terms of M (for instance, n ≤ M 3 ) such that f n | Kιk covers
+∂Tc Kk at least twice. Consider the associated iteration
+                          (f n , ιn ) : U n ⇒ V,     see (3.19).
+                               1
+Under the immersion ιn , either W(S) part of S lifts to a vertical family of U n \ T
+                               3
+   2
+or W(S) part of S lifts univalently into the lamination S ′ . In the former case,
+   3
+the lemma is proven:
+                                       1                      1
+(5.1)                  W(V \ T ) ≥      n
+                                          W(U n \ T ) ≥ n W(S).
+                                      2                     2 3
+    Assume the latter case. Let T be the full preimage of T under f n . Then Kιk
+                                     e
+splits into finitely many sides X1 , X2 , . . . , Xt of Kk in Te. Every Xi maps univalently
+to the side f n (X) of Kk in T under f n . Since f n | Kιk covers ∂Tc Kk at least twice,
+we can choose two sides Xa , Xb that map onto Kιk . Every curve γ ∈ S ′ has first
+shortest subcurves γa , γb (which may coincide) in U n \ Te above Xa , Xb respectively.
+By Lemma 5.2, the width of γ with γa = γb is OM (1).
+    Write K := W(S). Let F ′ be the family of all γ in S with γa ̸= γb . Let Sa , Sb be
+family of curves consisting of γa and γb with γ in S ′ . Since S ′ overflows Sa and then
+Sb , either W(Sa ) or W(Sb ) is at least 4/3K −OM (1). After removing OM (1) buffers
+and applying Lemma 5.2, the waves Sa , Sb map univalently by f n onto waves above
+                                          4
+Kιk . We obtain a wave with width ≥ K − OM (1) and the whole argument can be
+                                          3
+repeated with a bigger wave leading eventually to the contradiction.
+    Assume now that Kk is strictly preperiodic. Let f n be the smallest iteration so
+that f n (Kk ) is periodic. As above, either the 1/3 part of S lifts to a vertical family
+under ιn or the 2/3 part of S lifts univalently. In the former case, (5.1) concludes
+the proof. In the latter case, we construct the family Sa as above and then we
+pushforward Sa under f n . The result will be a wave above a side of a periodic Julia
+set. This reduces the preperiodic to the periodic case.                                  □
+
+                      6. Pull-off for periodic rectangles
+  Consider a ψ-ql like map F = (f, ι) : U ⇒ V . We assume that the first renor-
+malization of F is satellite.
+36                          DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+                        B′′        B′′′
+
+
+
+                              Ga
+                                                                                         [1],(q)
+                                                                                        Ba+1
+                             [2]
+     B[1],(q)               Bi 1                           α
+      a
+                                   [2]
+                B[1]           Bi 2                   R(q)
+                                                                                         [1]
+                                                                                        Ba+1
+                 a
+
+
+
+                       ℓ1          ℓ2
+
+
+
+                        B′          Biv
+
+            Figure 11. The non-spiraling case. The rectangle R (orange, vi-
+                                               [1]                            [1],(q)
+            olet, red) connects B[1]
+                                   a and Ba+1 . Between Ba
+                                                                 [1],(q)
+                                                                         and Ba+1
+            most of the rectangle R travels through its lift R(q) (red). There-
+            fore, the part Ga (violet) of R between ℓ1 and ℓ2 is tremendously
+                                                                [1]
+            wide. The bushes B′ , B′ , B′′′ , Biv are lifts of Ba+1 , see Figure 6.
+
+Theorem 6.1. Fix a combinatorial bounds p on the renormalization period §2.2.5.
+Then for every sufficiently small δ > 0 there is a Cδ = Cδ,p > 1 with
+                                         Cδ → ∞       as       δ→0
+such that the following holds for every ψ -ql map F , and its ψ • -ql renormalizations
+                                                  •
+
+F1 = R• (F ), F2 = R2• (F ), see (3.15).
+   Suppose that R with W(R) ≫δ,p 1 is a δ-almost periodic rectangle (see Defini-
+                                                                       [1]
+tion 3.12) in the dynamical plane of F between bushes B[1]a and Ba+1 . Then
+
+(6.1)              either          W• (F2 ) ≥ Cδ K         or    W• (F ) ≥ Cδ K.
+Moreover, if F = Rn• (G), then we also have the alternative
+                      W• Rn+2• (G) ≥ Cδ K
+                                   
+(6.2)      either                                or    W• (F ) ≥ Cδ K
+(independent of n).
+6.1. Proof of Theorem 6.1. Let Π ⊂ BF be the geodesic continuum between
+          [1]
+B[n]                                                                  s
+  a and Ba+1 . We will use notations from Definition 3.12 such as G, G , R
+                                                                           (s)
+                                                                               .
+6.1.1. Spiraling Numbers. First we will introduce the spiraling parameters rel Π for
+a curve γ ∈ R shortly summarized in the following remark:
+Remark 6.2. Recall the the pure Mapping Class Group MCG of a 3-punctured
+sphere S 2 \ {a, b, ∞} is trivial. By replacing a, b with small open Jordan disks
+Da , Db , we obtain the new group MCG(S 2 \ (Da ∪ Db ∪ {∞})) ≃ Z2 consisting of
+Dehn-twists around Da , Db , see [FM]. This fact has the following implication.
+                              MLC AT FEIGENBAUM POINTS                                   37
+
+                                                        [1]          ′
+   Let O be a small disk-neighborhood of B[1] a ∪ Π ∪ Ba+1 . Then O := O \ (Ba ∪
+                                                                                 [1]
+  [1]
+Ba+1 ) is topologically a disk with two holes. Therefore, a path (simple curve)
+                         [1]
+β ⊂ O′ from B[1]a to Ba+1 has a simple description: it first spirals t̃a ∈ Z times
+                                                        [1]
+around B[1]
+          a and then spirals t̃a+1 ∈ Z times around Ba+1 , where Π can be used as
+a reference “path” of zero spiralings. Below we will ignore the spiraling orientation
+and introduce the absolute quantity ta = |t̃a |.
+   Recall §3.3 that γ lands at the ideal boundary of V \ B[1] . Let γΠ ⊂ V \ B[1]
+be a path homotopic rel the endpoints to γ in V \ B[1] such that γΠ ∩ Π is the
+minimal possible number. In other words, γΠ and Π are in the minimal position –
+this is well defined because Π has infinitely many cut points.
+   Consider the components γ0 , γ1 , . . . , γf , γf +1 of γΠ \ Π. Since γ is properly ho-
+motopic into (a small neighborhood of) Π, there is a ta ≤ f such that
+        • γt ∪ Π surrounds B[1]
+                             a for t ∈ {1, 2, . . . , ta };
+        • γt ∪ Π does not surround B[1]
+                                     a for t ∈ {ta + 1, . . . , f }.
+                                        [1]
+(It follows that γt ∪ Π surrounds Ba+1 for t > ta , and only γta ∪ Π can surround
+both B[1]a and Ba .)
+                     [1]
+
+    We say that ta = ta (γ) is the spiraling number of γ around B[1]       a . Similarly,
+the spiraling number of γ ∈ R(s) around B[1],(sp
+                                               a
+                                                     1)
+                                                        is introduced.   Below are some
+properties of spiraling numbers:
+(A) The spiraling numbers of γ1 , γ2 ∈ R differ by at most 1.
+                                                                   1
+ (B) If γs ∈ R(s) is the lift of γ ∈ R into R(s) , then ta (γs ) ≤ s ta (γ).
+                                                                  2
+Indeed, (A) follows from the fact (the disjoint curves) γ1 , γ2 can be simultane-
+ously put into the minimal position with Π. And (B) follows from the fact that
+f sp1 : B[1],(sp
+         a
+                 1)
+                    → B[1]             s
+                         a has degree 2 .
+
+6.1.2. The non-spiraling case: ta (γ) ≤ 4 for all γ ∈ R; see Figure 11 for illustration.
+Write q := 10p and note that qp1 > 10p2 .
+    Let us consider the objects introduced in Lemma 2.1. It follows from (B) that
+curves in R(3) do not spiral around B[1],(3)
+                                       a     . Therefore, ℓ2 separates the base of R(q)
+from B[1]a : the base ∂
+                        h,0 (q)
+                           R and B[1] a are in different components of Ba
+                                                                              [1],(q)
+                                                                                      \ ℓ2 .
+                                  s
+    Let Ga be the restriction of G between ℓ1 and ℓ2 – this lamination consists of the
+first shortest subarcs γ ′ ⊂ γ between ℓ1 and ℓ2 for all γ ∈ G s . Since G s consequently
+overflows Ga and then R(q) , we obtain from the Grötzsch inequality that
+(6.3)          (1 − δ)W(R) ≤ W(G q ) ≤ W(R(q) ) ⊕ W(Ga ) = W(R) ⊕ W(Ga ),
+where W(R(q) ) = W(R) because R(q) is a lift of R. Therefore, W(Ga ) ≥ C0,δ W(R) ≥
+C0,δ K, where C0,δ → ∞ as δ → 0.
+  There are two possibilities. If a substantial part of Ga travels through both
+ [2]    [2]
+Bi1 , Bi2 , then this substantial part of Ga restricts to a wide lamination L between
+  [2]    [2]
+Bi1 , Bi2 . Pushing L with respect to f∗ and ι∗ and using Lemma 3.2 (the number
+of iterations and the degree is bounded in terms of p), we obtain a family F of non-
+                                                 [2]
+trivial proper curves in V \ B[2] starting at B0 such that W(F) ⪰p C0,δ K. If a
+substantial part of F is vertical, then we obtain the second estimate in (6.1), (6.2).
+If a substantial part of F is horizontal, then we obtain the first estimate in (6.1);
+applying Lemma 3.10 to F , we obtain the first estimate in (6.2).
+38                               DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+
+
+
+                                Ga
+          B[1],(1)                                           α
+           a                                                                                 [1],(1)
+                                                                                            Ba+1
+                         B[1]
+                          a
+                                                                                      [1]
+                                                                                     Ba+1
+                                                        R(1)
+
+
+
+
+              Figure 12. The spiraling case. Since R and its lift R(1) have dif-
+                                                           [1]
+              ferent spiraling numbers around B[1]
+                                                 a and Ba+1 respectively, (most
+              of) R spirals first around Ba before it continues as R(1) (red). The
+                                          [1]
+
+              part Ga (violet) of R before R(1) is tremendously wide.
+
+                                                       [2]       [2]
+     If a substantial part of Ga omits either Bi1 or Bi2 , then we obtain a wide wave
+                                      [2]   [2]
+above one of the sides of Bi1 , Bi2 ; Wave Lemma 5.1 implies that W• (F ) ≥ Cδ K.
+6.1.3. The spiraling case: ta (γ) ≥ 4 for all γ ∈ R; see Figure 12 for illustration.
+It follows from (B) that the spiraling number of any curve in G 1 around B[1]    a is
+strictly less than the spiraling number of any curve in R(1) around B[1],(1)
+                                                                      a      . There-
+fore, curves in G 1 first spirals around Ba before they continue within F full (R(1) ).
+Applying the Grötzsch inequality as in (6.3), we obtain a wide lamination Ga with
+W(Ga ) ≥ C2,δ W(R) such that Ga creates a wave above one of the sides of Ba . Wave
+Lemma 5.1 implies that W• (f ) ≥ Cδ K.                                              □
+                                                                                     [1]
+Remark 6.3. The argument of this section will be repeated in §7.0.1 with Ba+1
+                                      [1]                                          [1]
+being replaced by a little Julia set K0 . Observe that no specific properties of Ba+1
+has been used in this section (only that it is a forward invariant set that is disjoint
+from B[1]
+        a ).
+
+                                            7. Conclusions
+     In this section, we will now deduce the main theorems.
+Theorem 7.1 (A priori beau ψ • -bounds). For any combinatorial bound p̄, there
+is an n > 1 and Kp̄ > 1 such that the following holds. If F is an infinitely
+renormalizable ψ • -ql map of bounded type p̄, then
+                           W• [(Rn• )m (F )] ≤ Kp        for     m ≫W• (F ) 1,
+     n•              •
+R          is a ψ -ql renormalization (3.15).
+Proof. Let us choose a sufficiently small δ > 0 such that Cδ ≫ ∆p , where Cδ is
+from Theorem 6.1 and ∆p is from Proposition 2.7. We next choose a sufficiently
+big n ≫p,δ 1 such that Theorem 4.1 is applicable as follows: if
+                                     W• [(Rn• )m (F )] = K ≫p,δ,n 1,
+                           MLC AT FEIGENBAUM POINTS                                39
+
+
+then               h               i
+    (I) either W• (Rn• )(m−1) (F ) ≥ 2K;
+   (II) or W• Rn+1• ◦ (Rn• )m−1 (F ) ≥ Cδ K,
+                                      
+
+where (II) follows from Case (S) of Theorem 4.1 combined with Theorem 6.1.
+   Write G := (Rn• )(m−1) (F ). Reapplying Theorem 4.1 for G and its renormaliza-
+tion Rn+1• G, we obtain the alternative “(I) vs (II’)”, where
+   (II’) or W• Rn+2• (G) ≥ Cδ2 K.
+                          
+
+Repeating the argument, we eventually obtain the alternative “(I) vs (II”)”, where
+   (II”) or W• R2n• (G) ≥ Cδn K.
+                         
+
+   Therefore, if there are no a priori beau ψ • -bounds, then we obtain
+                                                 n(m−1)
+                         W• [(Rn• )m (F )] ⪰F Cδ          K.
+This contradicts the Teichmüller contraction: by Proposition 2.7, see also Re-
+mark 2.8, the sequence (Rn• )m (F ) restricts to ql maps fnm : Xnm → Ynm such
+that
+                         W Ynm \ Xnm = OF (∆pnm ),
+                                         
+
+where ∆p ≪ Cδ .                                                                    □
+
+Theorem 7.2 (A priori beau ql-bounds). For any combinatorial bound p̄, there is
+a Kp̄ > 1 such that the following holds. If f : U → V is an infinitely renormalizable
+ql map of bounded type p̄, then for n ≫W(f ) 1, the map fn has a ql restriction
+                  fn : Xn → Yn        with    W(Yn \ Xn ) ≤ Kp .
+Proof. Write F := f , and consider the sequence Gm := (Rn• )m (F ) from Theo-
+rem 7.1. We have
+(7.1)                 W• (Gm ) ≤ Kp          for m ≫W• (F ) 1
+for Kp from Theorem 7.1.
+   For m satisfying (7.1), consider the dynamical plane of Gm : U → V . Let B[1]
+be the cycle of little bushes in the dynamical plane of Gm . We claim that there
+                       [1]            [1]
+is a space between K0 and B[1] \ B0 ; i.e., that there is a K2 > 0 depending on
+Kp , p such that
+                                               
+                                    [ [1] [1]
+(7.2)                      W V \       Bi , K0  ≤ K2 .
+                                   i̸=0
+
+Then (7.2) together with §3.4.5, Lemma 3.7, and Remark 3.8 will imply that Gm
+                                  [1]
+has a ql renormalization around K0 with a definite modulus.
+
+7.0.1. Proof of (7.2). Assuming converse, the associated degeneration is arbitrary
+big:
+                                                                   
+                                                        [ [1] [1]
+          K := W (G) ≫Kp 1,       where G := F V \        Bi , K0  .
+                                                           i̸=0
+
+We will now argue that a substantial part of G travels through level two little
+bushes; this will lead to a contradiction to the ψ • -bounds of Theorem 7.2.
+40                       DZMITRY DUDKO AND MIKHAIL LYUBICH
+
+                         [1]                                                          [1],k
+   Write Υ := B[1] ∪K0 , and consider the horizontal and vertical WAD Ahor , A[1],k
+                                                                              ver
+of U k \ Υ. By (7.1),
+                                                                [1],k
+(7.3)       W(A[1],k
+               ver ) = Ok,p (Kp )         and hence       W(Ahor ) = K − Ok,p (Kp ).
+                                                                             [1],kp
+   As in the proof of Theorems 4.1, see §4.1, the arc diagrams Ahor 1 eventually
+stabilize:
+                                                       
+                 [1],(t+1)p1                 [1],tp
+           AD Ahor           − C t+1 = AD Ahor 1 − C t             for t ≤ 3p1 ,
+                                                                             
+                                                           [1],(t+1)p1
+where C ≫p1 1 is fixed. By Lemma 2.5, H = AD Ahor                      − C t+1 is invari-
+ant under f p1 . Since most of the horizontal curves restrict to horizontal curves
+(by (7.3)) the same argument as in §4.3 provides a δ-almost periodic rectangle
+                                      [1]
+R ⊂ V \ Υ, W(R) ≍ K between K0 and some B[1]           a , where δ is sufficiently small
+       [1]              [1]
+and K0 replacing Ba+1 in Definition 3.12. By Lemma 2.6, the first renormalization
+of Gm is satellite.
+                                                                                      [1]
+   We can now repeat the argument of Theorem 6.1, see Remark 6.3, with K0
+             [1]
+replacing Ba+1 to obtain
+                            W• R2• (Gm ) ⪰p K
+                                        
+              either                                or     W• (Gm ) ⪰p K;
+both estimates leading to a contradiction with ψ • -bounds of Theorem 7.1.                    □
+
+                                        References
+[A]   L. Ahlfors. Conformal Invariants: Topics in Geometric Function Theory, McGraw Hill
+      Book Co., New York, 1973.
+[AL]  A. Avila and M. Lyubich. The full renormalization horseshoe for unimodal maps of higher
+      degree: exponential contraction along hybrid classes. Publ. Math. IHES 114 (2011), 171-
+      223.
+[CT]  P. Coullet and C. Tresser, Itérations d’endomorphismes et groupe de renormalisation. J.
+      Phys. Colloque. C 539, C5-25 (1978).
+[BD]  L. Bartholdi and D. Dudko. Algorithmic aspects of branched coverings I. Van Kampen’s
+      Theorem for bisets. Groups, Geometry, and Dynamics, 12 (1), 121–172, 2018.
+[DH1] A. Douady and J.H. Hubbard. Étude dynamique des polynômes complexes. Publication
+      Mathematiques d’Orsay, 84-02 and 85-04.
+[DH2] A. Douady and J.H. Hubbard. On the dynamics of polynomial-like maps. Ann. Sc. Éc.
+      Norm. Sup., v. 18 (1985), 287 – 343.
+[DL1] D. Dudko and M. Lyubich. Local connectivity of the Mandelbrot set at some satellite
+      parameter values of bounded type. GAFA (33) 2023, 912–1047.
+[DL2] D. Dudko and M. Lyubich. Uniform a priori bounds for neutral renormalization,
+      arXiv:2210.09280 (2022).
+[DLS] D. Dudko, M. Lyubich and N. Selinger. Pacman renormalization and self-similarity of the
+      Mandelbrot set near Siegel parameters. JAMS, v. 33 (2020), 653–733.
+[F1]  M. J. Feigenbaum. Quantitative universality for a class of nonlinear transformations, J.
+      Statist. Phys. 19 (1978), 25–52.
+[F2]  M. J. Feigenbaum. The universal metric properties of nonlinear transformations, J. Statist.
+      Phys. 21 (1979), 669–706.
+[FM]  Benson Farb and Dan Margalit. A primer on mapping class groups, Princeton Mathemat-
+      ical Series, vol. 49, Princeton University Press, Princeton, NJ, 2012.
+[GKS] A. Goldberg, K. Khanin, and Ya. Sinai. Universal properties of sequences of period-tripling
+      bifurcations. Russian Math. Surveys, v. 38 (1983), 159–160.
+[H]   J.H. Hubbard. Local connectivity of Julia sets and bifurcation loci: three theorems of
+      J.-C. Yoccoz. In: “Topological Methods in Modern Mathematics, A Symposium in Honor
+      of John Milnor’s 60th Birthday”, Publish or Perish, 1993.
+                               MLC AT FEIGENBAUM POINTS                                      41
+
+
+[K]   J. Kahn. A priori bounds for some infinitely renormalizable quadratics: I. Bounded prim-
+      itive combinatorics. Preprint Stony Brook, # 5 (2006).
+[IS]  Y. Ishii and J. Smillie. Homotopy shadowing, Amer. J. Math. 132 (2010), no. 4, 987–1029.
+[KL1] J. Kahn and M. Lyubich. Quasi-Additivity Law in Conformal Geometry. Annals of Math.,
+      v. 169 (2009), 561–593.
+[KL2] J. Kahn and M. Lyubich. A priori bounds for some infinitely renormalizable quadratics:
+      II. Decorations. Ann. Scient. Éc. Norm. Sup., v. 41 (2008), 57 – 84.
+[KL3] J. Kahn and M. Lyubich. A priori bounds for some infinitely renormalizable quadratics:
+      III. Molecules. In: “Complex Dynamics: Families and Friends”. Proceeding of the con-
+      ference dedicated to Hubbard’s 60th birthday (ed.: D. Schleicher). Peters, A K, Limited,
+      2009.
+[L1]  M. Lyubich. Dynamics of quadratic polynomials, I-II. Acta Math., v. 178 (1997), 185 –
+      297.
+[L2]  M. Lyubich. Feigenbaum-Coullet-Tresser Universality and Milnor’s Hairiness Conjecture.
+      Ann. Math., v. 149 (1999), 319 - 420.
+[L3]  M. Lyubich. Conformal Geometry and Dynamics of Quadratic Polynomials. Book in
+      preparation; www.math.stonybrook.edu/ mlyubich/book.pdf
+[L4]  M. Lyubich. Story of the Feigenbaum point. Talk at the CIRM conference “Advancing
+      Bridges in Complex Dynamics”, https://www.youtube.com/watch?v=YhwPuOei0rI
+[McM1] C. McMullen. Complex dynamics and renormalization. Princeton University Press, 1994.
+[McM2] C. McMullen. Renormalization and three manifolds which fiber over the circle. Princeton
+      University Press, 1996.
+[M1]  J. Milnor. Local connectivity of Julia sets: expository lectures. In: “The Mandelbrot Set,
+      Themes and Variations”, 67-116, ed. Tan Lei. Cambridge University Press, 2000.
+[N]   Volodymyr Nekrashevych, Combinatorial models of expanding dynamical systems, Er-
+      godic Theory Dynam. Systems 34 (2014), no. 3, 938–985.
+[S1]  D. Sullivan. Quasiconformal homeomorphisms in dynamics, topology and geometry, Proc.
+      ICM-86, Berkeley II, A.M.S., Providence, RI (1987), 1216-1228.
+[S2]  D. Sullivan. Bounds, quadratic differentials and renormalization conjectures. AMS Cen-
+      tennial Publ. 2: Mathematics into Twenty-first century, 1992.
+[T]   D. P. Thurston. A positive characterization of rational maps, Annals of Math 192 (2020),
+      1–46.
+[TC]  P. Coullet and C. Tresser, Itérations d’endomorphismes et groupe de renormalisation. C.
+      R. Acad. Sci. Paris 287A (1978), 577–580.
+
