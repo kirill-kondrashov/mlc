@@ -916,6 +916,16 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructive
   bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
     hclosed hlocal
 
+/-- Positive-source surjectivity seam at `c = 2`: restricted-map properness plus
+restricted local-homeomorph hypotheses produce outside-open exterior surjectivity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphConstructivePayload
+    (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper)
+    hlocal
+
 /-- Surjectivity-source seam at `c = 2`: outside-open local-homeomorph-on payload
 plus closed range induces outside-open exterior surjectivity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_localHomeomorphOnConstructivePayload
@@ -1779,6 +1789,117 @@ theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_externalRayLand
       ((knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen).1 h) hnot_local
   · intro hland
     exact (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen).2 (Or.inr hland)
+
+/-- Explicit reduced-open frontier shape at `c = 2`: known surjectivity sources
+are exactly the restricted local-homeomorph source or external-ray landing. -/
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      ((IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+          IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+        ExternalRayLandsOutsideOpen (2 : ℂ)) := by
+  simpa [ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo] using
+    (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen)
+
+/-- Frontier closure criterion at `c = 2`: eliminating all currently wired
+surjectivity sources is equivalent to eliminating both reduced-open branches. -/
+theorem not_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_not_localHomeomorphSurjSource_and_not_externalRayLandsOutsideOpen :
+    ¬ KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo ↔
+      (¬ (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+          IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+        ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) := by
+  rw [knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen]
+  constructor
+  · intro hnot
+    constructor
+    · intro hlocal
+      exact hnot (Or.inl hlocal)
+    · intro hland
+      exact hnot (Or.inr hland)
+  · intro hboth h
+    rcases h with hlocal | hland
+    · exact hboth.1 hlocal
+    · exact hboth.2 hland
+
+/-- Explicit CP5 residual frontier package at `c = 2`: restricted local-homeomorph
+source or external-ray landing. -/
+def CP5ResidualTwo : Prop :=
+  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+    ExternalRayLandsOutsideOpen (2 : ℂ)
+
+/-- The explicit CP5 residual frontier package is equivalent to the known
+surjectivity-source aggregate at `c = 2`. -/
+theorem cp5ResidualTwo_iff_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo :
+    CP5ResidualTwo ↔ KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  simpa [CP5ResidualTwo] using
+    (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen).symm
+
+/-- The explicit CP5 residual frontier package implies outside-open exterior
+surjectivity at `c = 2`. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_cp5ResidualTwo
+    (hres : CP5ResidualTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
+    ((cp5ResidualTwo_iff_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo).1 hres)
+
+/-- Positive-source constructor for the CP5 residual frontier at `c = 2` from
+restricted-map properness plus restricted local-homeomorph assumptions. -/
+theorem cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    CP5ResidualTwo :=
+  Or.inl
+    ⟨isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper, hlocal⟩
+
+/-- Assumption seam at `c = 2`: the explicit CP5 residual frontier yields
+outside-open injectivity. -/
+def CP5ResidualInjOnOutsideOpenSeamTwo : Prop :=
+  ∀ _hres : CP5ResidualTwo,
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Seam projection at `c = 2`: derive outside-open injectivity from the
+residual-frontier injectivity seam. -/
+theorem injOn_outside_open_two_of_cp5ResidualTwo
+    (h_seam : CP5ResidualInjOnOutsideOpenSeamTwo)
+    (hres : CP5ResidualTwo) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+  h_seam hres
+
+/-- CP5 seam at `c = 2`: the explicit residual frontier plus outside-open
+injectivity yields constructive external-ray-map data. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_injOn_outside_open
+    (hres : CP5ResidualTwo)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_injOn_outside_open_of_surj_exterior
+    h_inj (bottcherSurjOnExteriorFromOutsideOpen_two_of_cp5ResidualTwo hres)
+
+/-- Assumption-gated CP5 seam at `c = 2`: the explicit residual frontier plus a
+residual→injectivity seam yields constructive external-ray-map data. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5ResidualInjOnOutsideOpenSeamTwo
+    (hres : CP5ResidualTwo)
+    (h_seam : CP5ResidualInjOnOutsideOpenSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_injOn_outside_open
+    hres (injOn_outside_open_two_of_cp5ResidualTwo h_seam hres)
+
+/-- CP5 residual seam wired as a function: if the residual→injectivity seam is
+available, the explicit CP5 residual frontier yields constructive external-ray-map
+data at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo
+    (h_seam : CP5ResidualInjOnOutsideOpenSeamTwo) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) := by
+  intro hres
+  exact external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5ResidualInjOnOutsideOpenSeamTwo
+    hres h_seam
+
+/-- Root bridge at `c = 2`: the explicit CP5 residual frontier is sufficient for
+the full MLC statement through the surjectivity seam. -/
+theorem mlc_conjecture_of_cp5ResidualTwo
+    (hres : CP5ResidualTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_bottcherSurjOnExteriorFromOutsideOpen_two
+    (bottcherSurjOnExteriorFromOutsideOpen_two_of_cp5ResidualTwo hres)
 
 /-- Aggregate predicate for currently wired local-homeomorph-on source families
 at `c = 2`. -/

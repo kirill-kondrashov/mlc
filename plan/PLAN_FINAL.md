@@ -18,8 +18,18 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
 - `[~]` CP2: Constructive `OutsideOpenAnalyticityHypothesis (2 : ℂ)` (revised formal target exported: `RevisedCP2TargetTwo`; original CP2 target certified impossible in current model; assumption-gated bridge exists but remains vacuous)
 - `[~]` CP3: Constructive outside-open injectivity payload at `c = 2` (revised formal target exported: `RevisedCP3TargetTwo`; original payload certified impossible in current model)
 - `[~]` CP4: Constructive closed-range/properness payload at `c = 2` (revised formal target exported: `RevisedCP4TargetTwo`; original analytic-derivative payload certified impossible in current model)
-- `[~]` CP5: Build `external_ray_map_exists_two_constructive` (revised formal target exported: `RevisedCP5TargetTwo`; currently blocked legacy ingress families are aggregated as `KnownCP5IngressCandidateTwo` and certified inconsistent via `not_knownCP5IngressCandidateTwo`; open candidate lane `InjSurjExteriorConstructivePayloadTwo` is wired; a non-iterate-left-inverse injection route from outside-open left-inverse data is now exported, alongside iterate-left-inverse constructors; surjectivity seams still include closed-range + local-homeomorph / local-homeomorph-on assumptions and outside-disk-refinement/landing variants; at `c = 2` landing/refinement are equivalent (`outsideDiskRefinement_two_iff_externalRayLandsOutsideOpen`); preimage-control is inconsistent (`not_preimageExteriorSubsetOutsideOpenTwo`), and iterate-left-inverse landing/refinement payload packages are inconsistent (`not_iterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo`, `not_iterLeftInverseOutsideDiskRefinementConstructivePayloadTwo`); known local-homeomorph-on source families remain inconsistent via `not_knownLocalHomeomorphOnSourceCandidateTwo`; endpoint body still axiom-seeded)
+- `[~]` CP5: Build `external_ray_map_exists_two_constructive` (revised formal target exported: `RevisedCP5TargetTwo`; currently blocked legacy ingress families are aggregated as `KnownCP5IngressCandidateTwo` and certified inconsistent via `not_knownCP5IngressCandidateTwo`; open candidate lane `InjSurjExteriorConstructivePayloadTwo` is wired; a non-iterate-left-inverse injection route from outside-open left-inverse data is now exported, alongside iterate-left-inverse constructors; surjectivity seams still include closed-range + local-homeomorph / local-homeomorph-on assumptions and outside-disk-refinement/landing variants; at `c = 2` landing/refinement are equivalent (`outsideDiskRefinement_two_iff_externalRayLandsOutsideOpen`); preimage-control is inconsistent (`not_preimageExteriorSubsetOutsideOpenTwo`), and iterate-left-inverse landing/refinement payload packages are inconsistent (`not_iterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo`, `not_iterLeftInverseOutsideDiskRefinementConstructivePayloadTwo`); known local-homeomorph-on source families remain inconsistent via `not_knownLocalHomeomorphOnSourceCandidateTwo`; reduced-open frontier is now explicit via `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen` and packaged as `CP5ResidualTwo`; direct no-go proofs for both residual branches are currently unsuccessful; positive-source local-branch wrappers are added (`bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`, `cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`); endpoint body still axiom-seeded)
 - `[ ]` CP6: Replace axiom usage and verify zero dependency
+
+## Active alternative CP5 path
+1. Stop retrying direct no-go proofs for the two residual branches.
+2. Pursue a positive-source route for one residual disjunct, prioritizing the local-homeomorph branch from non-blocked properness/exterior-fiber-control lemmas already in `BottcherOutsidePlan.lean`.
+3. Keep CP5 residual obligation explicit as a single frontier package:
+   - `CP5ResidualTwo := (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧ IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨ ExternalRayLandsOutsideOpen (2 : ℂ)`;
+   - prove/export `CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ)` through existing surjectivity/data seams.
+4. Unconditional-proof sketch target:
+   - reduce to proving the seam `CP5ResidualInjOnOutsideOpenSeamTwo`;
+   - then apply `external_ray_map_exists_two_constructive_of_cp5ResidualTwo`.
 
 ## Latest implementation checkpoint
 - Added in `Mlc/MainConjecture.lean`:
@@ -123,9 +133,24 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen`;
   - `localHomeomorphSurjSource_two_of_reducedOpen_of_not_externalRayLandsOutsideOpen`;
   - `externalRayLandsOutsideOpen_two_of_reducedOpen_of_not_localHomeomorphSurjSource`;
+  - `reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_localHomeomorphSurjSource`;
+  - `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_localHomeomorphSurjSource`;
   - `reducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_of_not_externalRayLandsOutsideOpen`;
   - `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_of_not_externalRayLandsOutsideOpen`;
   - `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_externalRayLandsOutsideOpen_of_not_localHomeomorphSurjSource`;
+  - `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen`;
+  - `not_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_not_localHomeomorphSurjSource_and_not_externalRayLandsOutsideOpen`;
+  - `CP5ResidualTwo`;
+  - `cp5ResidualTwo_iff_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_cp5ResidualTwo`;
+  - `cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`;
+  - `CP5ResidualInjOnOutsideOpenSeamTwo`;
+  - `injOn_outside_open_two_of_cp5ResidualTwo`;
+  - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_injOn_outside_open`;
+  - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5ResidualInjOnOutsideOpenSeamTwo`;
+  - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo`;
+  - `mlc_conjecture_of_cp5ResidualTwo`;
+  - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_analyticDerivConstructivePayloadTwo`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_outsideDiskRefinement`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_externalRayLandsOutsideOpen`;
