@@ -19,6 +19,7 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
 - `[~]` CP3: Constructive outside-open injectivity payload at `c = 2` (revised formal target exported: `RevisedCP3TargetTwo`; original payload certified impossible in current model)
 - `[~]` CP4: Constructive closed-range/properness payload at `c = 2` (revised formal target exported: `RevisedCP4TargetTwo`; original analytic-derivative payload certified impossible in current model)
 - `[~]` CP5: Build `external_ray_map_exists_two_constructive` (revised formal target exported: `RevisedCP5TargetTwo`; currently blocked legacy ingress families are aggregated as `KnownCP5IngressCandidateTwo` and certified inconsistent via `not_knownCP5IngressCandidateTwo`; open candidate lane `InjSurjExteriorConstructivePayloadTwo` is wired; a non-iterate-left-inverse injection route from outside-open left-inverse data is now exported, alongside iterate-left-inverse constructors; surjectivity seams still include closed-range + local-homeomorph / local-homeomorph-on assumptions and outside-disk-refinement/landing variants; at `c = 2` landing/refinement are equivalent (`outsideDiskRefinement_two_iff_externalRayLandsOutsideOpen`); preimage-control is inconsistent (`not_preimageExteriorSubsetOutsideOpenTwo`), and iterate-left-inverse landing/refinement payload packages are inconsistent (`not_iterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo`, `not_iterLeftInverseOutsideDiskRefinementConstructivePayloadTwo`); known local-homeomorph-on source families remain inconsistent via `not_knownLocalHomeomorphOnSourceCandidateTwo`; reduced-open frontier is now explicit via `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen` and packaged as `CP5ResidualTwo`; direct no-go proofs for both residual branches are currently unsuccessful; positive-source local-branch wrappers are added (`bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`, `cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`); endpoint body still axiom-seeded)
+- `[~]` CP5: Build `external_ray_map_exists_two_constructive` (revised formal target exported: `RevisedCP5TargetTwo`; currently blocked legacy ingress families are aggregated as `KnownCP5IngressCandidateTwo` and certified inconsistent via `not_knownCP5IngressCandidateTwo`; open candidate lane `InjSurjExteriorConstructivePayloadTwo` is wired; a non-iterate-left-inverse injection route from outside-open left-inverse data is now exported, alongside iterate-left-inverse constructors; surjectivity seams still include closed-range + local-homeomorph / local-homeomorph-on assumptions and outside-disk-refinement/landing variants; at `c = 2` landing/refinement are equivalent (`outsideDiskRefinement_two_iff_externalRayLandsOutsideOpen`); preimage-control is inconsistent (`not_preimageExteriorSubsetOutsideOpenTwo`), and iterate-left-inverse landing/refinement payload packages are inconsistent (`not_iterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo`, `not_iterLeftInverseOutsideDiskRefinementConstructivePayloadTwo`); known local-homeomorph-on source families remain inconsistent via `not_knownLocalHomeomorphOnSourceCandidateTwo`; reduced-open frontier is now explicit via `knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen` and packaged as `CP5ResidualTwo`; direct no-go proofs for both residual branches are currently unsuccessful; positive-source local-branch wrappers are added (`bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`, `cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`); an explicit axiom-seeded residual→injectivity witness is now isolated (`cp5ResidualInjOnOutsideOpenSeamTwo_axiom_seed`); endpoint body still axiom-seeded)
 - `[ ]` CP6: Replace axiom usage and verify zero dependency
 
 ## Active alternative CP5 path
@@ -145,10 +146,21 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
   - `bottcherSurjOnExteriorFromOutsideOpen_two_of_cp5ResidualTwo`;
   - `cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`;
   - `CP5ResidualInjOnOutsideOpenSeamTwo`;
+  - `CP5ResidualLocalHomeomorphInjSeamTwo`;
+  - `CP5ResidualLandingInjSeamTwo`;
+  - `injOn_outside_open_two_axiom_seed`;
+  - `cp5ResidualInjOnOutsideOpenSeamTwo_axiom_seed`;
+  - `cp5ResidualLocalHomeomorphInjSeamTwo_axiom_seed`;
+  - `cp5ResidualLandingInjSeamTwo_axiom_seed`;
+  - `cp5ResidualInjOnOutsideOpenSeamTwo_axiom_seed_of_branchSeams`;
+  - `cp5ResidualInjOnOutsideOpenSeamTwo_of_branchSeams`;
+  - `cp5ResidualInjOnOutsideOpenSeamTwo_iff_branchSeams`;
   - `injOn_outside_open_two_of_cp5ResidualTwo`;
   - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_injOn_outside_open`;
   - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5ResidualInjOnOutsideOpenSeamTwo`;
+  - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_branchSeams`;
   - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo`;
+  - `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_axiom_seam`;
   - `mlc_conjecture_of_cp5ResidualTwo`;
   - `bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`;
   - `injSurjExteriorConstructivePayloadTwo_of_iterLeftInverse_of_analyticDerivConstructivePayloadTwo`;
@@ -238,3 +250,25 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
 
 ## Exit condition
 `MLC.mlc_conjecture` compiles with no dependency on `MLC.Quadratic.external_ray_map_exists`.
+
+## Implementation checkpoint (2026-02-23, CP5 residual fallback no-go catalog)
+- Added in `Mlc/MainConjecture.lean`:
+  - `ProperLocalFromAnalyticPreimageClosedCandidateTwo`;
+  - `ProperLocalFromAnalyticBoundaryExclusionCandidateTwo`;
+  - `KnownProperLocalSourceCandidateTwo`;
+  - source-to-target bridges:
+    `isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_properLocalFromAnalyticPreimageClosedCandidateTwo`,
+    `isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_properLocalFromAnalyticBoundaryExclusionCandidateTwo`,
+    `isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_knownProperLocalSourceCandidateTwo`;
+  - no-go theorems:
+    `not_properLocalFromAnalyticPreimageClosedCandidateTwo`,
+    `not_properLocalFromAnalyticBoundaryExclusionCandidateTwo`,
+    `not_knownProperLocalSourceCandidateTwo`,
+    `properLocalSourceExhaustionTwo`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.
+- Impact:
+  - CP5 residual disjunction already collapsed to the proper+local branch; this
+    checkpoint now certifies all currently wired source families for that branch
+    are exhausted, leaving only a genuinely new direct witness theorem as the
+    remaining non-axiom closure path.

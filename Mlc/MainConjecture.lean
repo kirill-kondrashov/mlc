@@ -4,6 +4,7 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
+import Mlc.Quadratic.Complex.Bottcher.DegreeOneInj
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
@@ -1607,11 +1608,119 @@ theorem not_iterLeftInversePreimageExteriorSubsetOutsideOpenConstructivePayloadT
   intro h_payload
   exact not_preimageExteriorSubsetOutsideOpenTwo h_payload.2
 
-/-- Scope-check no-go at `c = 2`: under iterate-left-inverse injectivity on
-`outside_disk`, external-ray landing is impossible because `0` already maps to
-the exterior but is not outside-open. -/
-theorem not_externalRayLandsOutsideOpen_two_of_iterLeftInverse
-    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+/-- The chosen fixed point at `c = 2` lies strictly inside the outside-open
+radius threshold. -/
+theorem fixed_point_two_norm_lt_outside_open_radius :
+    ‖Quadratic.fixed_point (2 : ℂ)‖ < ‖(2 : ℂ)‖ + 2 := by
+  let p : ℂ := Quadratic.fixed_point (2 : ℂ)
+  have hfix : MLC.Quadratic.fc (2 : ℂ) p = p := by
+    simpa [p] using Quadratic.fixed_point_is_fixed (2 : ℂ)
+  have hp2 : p ^ 2 = p - (2 : ℂ) := by
+    exact (eq_sub_iff_add_eq).2 (by simpa [MLC.Quadratic.fc] using hfix)
+  have hnorm_le : ‖p‖ ^ 2 ≤ ‖p‖ + ‖(2 : ℂ)‖ := by
+    calc
+      ‖p‖ ^ 2 = ‖p ^ 2‖ := by simp [pow_two]
+      _ = ‖p - (2 : ℂ)‖ := by simpa [hp2]
+      _ ≤ ‖p‖ + ‖(2 : ℂ)‖ := by
+        simpa [sub_eq_add_neg, norm_neg] using norm_add_le p (-(2 : ℂ))
+  by_contra hlt
+  have hge : ‖(2 : ℂ)‖ + 2 ≤ ‖p‖ := le_of_not_gt hlt
+  have hsq_gt : ‖p‖ ^ 2 > ‖p‖ + ‖(2 : ℂ)‖ := by
+    nlinarith [norm_nonneg p, norm_nonneg (2 : ℂ), hge]
+  exact (not_lt_of_ge hnorm_le) hsq_gt
+
+/-- Boundary-continuity no-go at `c = 2`: if all exterior rays landed in
+outside-open, continuity of the extended ray map at `‖w‖ = 1` would force the
+chosen fixed point outside-open, contradicting the fixed-point radius bound. -/
+theorem not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  intro hland
+  let w0 : ℂ := ((1 : ℝ) : ℂ)
+  let S : Set ℂ := {w : ℂ | 1 ≤ ‖w‖}
+  let T : Set ℂ := {w : ℂ | 1 < ‖w‖}
+  let V : Set ℂ := {z : ℂ | ‖(2 : ℂ)‖ + 2 ≤ ‖z‖}
+  have hmaps : Set.MapsTo (Quadratic.extended_ray_map (2 : ℂ)) T V := by
+    intro w hw
+    change ‖(2 : ℂ)‖ + 2 ≤ ‖Quadratic.extended_ray_map (2 : ℂ) w‖
+    have hw_out : ‖Quadratic.external_ray_map (2 : ℂ) w‖ > ‖(2 : ℂ)‖ + 2 := hland w hw
+    have hEq : Quadratic.extended_ray_map (2 : ℂ) w = Quadratic.external_ray_map (2 : ℂ) w :=
+      Quadratic.extended_ray_map_eq (2 : ℂ) w hw
+    exact by simpa [hEq] using le_of_lt hw_out
+  have hone_closure : w0 ∈ closure T := by
+    refine Metric.mem_closure_iff.2 ?_
+    intro ε hε
+    refine ⟨(((1 : ℝ) + ε / 2) : ℂ), ?_, ?_⟩
+    · change 1 < ‖(((1 : ℝ) + ε / 2) : ℂ)‖
+      have hnonneg : 0 ≤ (1 : ℝ) + ε / 2 := by linarith
+      have hgt : (1 : ℝ) < (1 : ℝ) + ε / 2 := by linarith
+      calc
+        1 < (1 : ℝ) + ε / 2 := hgt
+        _ = ‖(((1 : ℝ) + ε / 2) : ℂ)‖ := by
+          symm
+          simpa [Real.norm_eq_abs, abs_of_nonneg hnonneg] using
+            (Complex.norm_real ((1 : ℝ) + ε / 2))
+    · have hhalfpos : 0 < ε / 2 := by linarith
+      have hdist : dist w0 (((1 : ℝ) + ε / 2) : ℂ) = ε / 2 := by
+        have hdist_abs : dist w0 (((1 : ℝ) + ε / 2) : ℂ) = |ε| / 2 := by
+          simp [w0, dist_eq_norm]
+        have hεnonneg : 0 ≤ ε := le_of_lt hε
+        have habs : |ε| / 2 = ε / 2 := by simp [abs_of_nonneg hεnonneg]
+        simpa [habs] using hdist_abs
+      have hhalf : ε / 2 < ε := by linarith
+      exact hdist.trans_lt hhalf
+  have hcont : ContinuousOn (Quadratic.extended_ray_map (2 : ℂ)) S :=
+    Quadratic.extended_ray_map_continuous (2 : ℂ)
+  have hcontS : ContinuousWithinAt (Quadratic.extended_ray_map (2 : ℂ)) S w0 :=
+    hcont w0 (by simp [S, w0])
+  have hcontT : ContinuousWithinAt (Quadratic.extended_ray_map (2 : ℂ)) T w0 :=
+    hcontS.mono (by
+      intro x hx
+      simpa [T, S] using (le_of_lt hx))
+  have hmem_closureV : Quadratic.extended_ray_map (2 : ℂ) w0 ∈ closure V :=
+    hcontT.mem_closure hone_closure hmaps
+  have hVclosed : IsClosed V := isClosed_le continuous_const continuous_norm
+  have hmemV : Quadratic.extended_ray_map (2 : ℂ) w0 ∈ V := by
+    simpa [hVclosed.closure_eq] using hmem_closureV
+  have hnot1 : ¬ 1 < ‖w0‖ := by
+    simp [w0]
+  have hExt1 : Quadratic.extended_ray_map (2 : ℂ) w0 = Quadratic.fixed_point (2 : ℂ) := by
+    simp [Quadratic.extended_ray_map, hnot1]
+  have hfp_ge : ‖(2 : ℂ)‖ + 2 ≤ ‖Quadratic.fixed_point (2 : ℂ)‖ := by
+    simpa [V, hExt1] using hmemV
+  exact (not_le_of_gt fixed_point_two_norm_lt_outside_open_radius) hfp_ge
+
+/-- Counterexample form for external-ray landing at `c = 2`: there exists an
+exterior parameter whose ray image is not outside-open. -/
+def ExternalRayLandingCounterexampleTwo : Prop :=
+  ∃ w, 1 < ‖w‖ ∧ ¬ ‖Quadratic.external_ray_map (2 : ℂ) w‖ > ‖(2 : ℂ)‖ + 2
+
+/-- Landing exclusion at `c = 2` is equivalent to existence of an exterior
+counterexample parameter. -/
+theorem not_externalRayLandsOutsideOpen_two_iff_externalRayLandingCounterexampleTwo :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) ↔ ExternalRayLandingCounterexampleTwo := by
+  constructor
+  · intro hnot
+    by_contra hcex
+    apply hnot
+    intro w hw
+    by_contra hw_out
+    exact hcex ⟨w, hw, hw_out⟩
+  · intro hcex hland
+    rcases hcex with ⟨w, hw, hnot_out⟩
+    exact hnot_out (hland w hw)
+
+/-- Build landing exclusion at `c = 2` from an explicit exterior counterexample. -/
+theorem not_externalRayLandsOutsideOpen_two_of_externalRayLandingCounterexampleTwo
+    (hcex : ExternalRayLandingCounterexampleTwo) :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) :=
+  (not_externalRayLandsOutsideOpen_two_iff_externalRayLandingCounterexampleTwo).2 hcex
+
+/-- Scope-check no-go at `c = 2`: if the external ray map sends
+`bottcher_map (2) 0` back to `0`, then external-ray landing is impossible. -/
+theorem not_externalRayLandsOutsideOpen_two_of_not_outside_open_at_bottcher_zero
+    (hnot_out :
+      ¬ ‖Quadratic.external_ray_map (2 : ℂ)
+          (Quadratic.bottcher_map (2 : ℂ) (0 : ℂ))‖ > ‖(2 : ℂ)‖ + 2) :
     ¬ ExternalRayLandsOutsideOpen (2 : ℂ) := by
   intro hland
   let w : ℂ := Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)
@@ -1621,21 +1730,84 @@ theorem not_externalRayLandsOutsideOpen_two_of_iterLeftInverse
   have hw : 1 < ‖w‖ := by
     simpa [w] using bottcher_map_norm_gt_one_of_basin (2 : ℂ) (0 : ℂ) hbasin0 hpos0
   have hw_land : ‖Quadratic.external_ray_map (2 : ℂ) w‖ > ‖(2 : ℂ)‖ + 2 := hland w hw
-  have hz_out : Quadratic.external_ray_map (2 : ℂ) w ∈ outside_disk (2 : ℂ) :=
-    outside_open_subset_outside_disk (2 : ℂ) hw_land
-  have hz0_out : (0 : ℂ) ∈ outside_disk (2 : ℂ) := by
-    simpa [outside_disk] using hbasin0
-  have h_inj :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ)) :=
-    bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse (2 : ℂ) h_left_iter
-  have hz_eq : Quadratic.external_ray_map (2 : ℂ) w = 0 := by
-    apply h_inj hz_out hz0_out
-    simpa [w] using Quadratic.external_ray_map_right_inverse (2 : ℂ) w hw
+  exact hnot_out (by simpa [w] using hw_land)
+
+/-- The specific `w = bottcher_map (2) 0` scalar blocker is an explicit
+counterexample witness for external-ray landing at `c = 2`. -/
+theorem externalRayLandingCounterexampleTwo_of_not_outside_open_at_bottcher_zero
+    (hnot_out :
+      ¬ ‖Quadratic.external_ray_map (2 : ℂ)
+          (Quadratic.bottcher_map (2 : ℂ) (0 : ℂ))‖ > ‖(2 : ℂ)‖ + 2) :
+    ExternalRayLandingCounterexampleTwo := by
+  let w : ℂ := Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)
+  have hbasin0 : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := zero_mem_basin_two
+  have hpos0 : 0 < MLC.Quadratic.green_function (2 : ℂ) (0 : ℂ) :=
+    green_function_pos_of_basin (2 : ℂ) (0 : ℂ) hbasin0
+  have hw : 1 < ‖w‖ := by
+    simpa [w] using bottcher_map_norm_gt_one_of_basin (2 : ℂ) (0 : ℂ) hbasin0 hpos0
+  exact ⟨w, hw, by simpa [w] using hnot_out⟩
+
+/-- Scope-check no-go at `c = 2`: if the external ray map sends
+`bottcher_map (2) 0` back to `0`, then external-ray landing is impossible. -/
+theorem not_externalRayLandsOutsideOpen_two_of_external_ray_map_at_bottcher_zero_eq_zero
+    (hzero :
+      Quadratic.external_ray_map (2 : ℂ) (Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)) = 0) :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  refine not_externalRayLandsOutsideOpen_two_of_not_outside_open_at_bottcher_zero ?_
   have hnot : ¬ ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
     have hge : (0 : ℝ) ≤ ‖(2 : ℂ)‖ + 2 := by
       nlinarith [norm_nonneg (2 : ℂ)]
     simpa using (not_lt_of_ge hge)
-  exact hnot (by simpa [hz_eq] using hw_land)
+  exact by simpa [hzero] using hnot
+
+/-- Scope-check no-go at `c = 2`: outside-disk injectivity forces failure of
+external-ray landing because `0` maps to the exterior but is not outside-open. -/
+theorem not_externalRayLandsOutsideOpen_two_of_bottcher_zero_not_mem_image_outside_open
+    (hzero_not_img :
+      Quadratic.bottcher_map (2 : ℂ) (0 : ℂ) ∉
+        Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  intro hland
+  let w : ℂ := Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)
+  have hbasin0 : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := zero_mem_basin_two
+  have hpos0 : 0 < MLC.Quadratic.green_function (2 : ℂ) (0 : ℂ) :=
+    green_function_pos_of_basin (2 : ℂ) (0 : ℂ) hbasin0
+  have hw : 1 < ‖w‖ := by
+    simpa [w] using bottcher_map_norm_gt_one_of_basin (2 : ℂ) (0 : ℂ) hbasin0 hpos0
+  have hw_land : ‖Quadratic.external_ray_map (2 : ℂ) w‖ > ‖(2 : ℂ)‖ + 2 := hland w hw
+  have hw_img : w ∈ Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+    refine ⟨Quadratic.external_ray_map (2 : ℂ) w, hw_land, ?_⟩
+    simpa [w] using Quadratic.external_ray_map_right_inverse (2 : ℂ) w hw
+  exact hzero_not_img (by simpa [w] using hw_img)
+
+/-- Scope-check no-go at `c = 2`: outside-disk injectivity forces failure of
+external-ray landing because `0` maps to the exterior but is not outside-open. -/
+theorem not_externalRayLandsOutsideOpen_two_of_injOn_outside_disk
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ))) :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  refine not_externalRayLandsOutsideOpen_two_of_bottcher_zero_not_mem_image_outside_open ?_
+  intro hzero_img
+  rcases hzero_img with ⟨z, hz, hz_eq⟩
+  have hbasin0 : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := zero_mem_basin_two
+  have hz_out : z ∈ outside_disk (2 : ℂ) :=
+    outside_open_subset_outside_disk (2 : ℂ) hz
+  have hz0_out : (0 : ℂ) ∈ outside_disk (2 : ℂ) := by
+    simpa [outside_disk] using hbasin0
+  have hz0 : z = 0 := h_inj hz_out hz0_out hz_eq
+  have hnot : ¬ ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
+    have hge : (0 : ℝ) ≤ ‖(2 : ℂ)‖ + 2 := by
+      nlinarith [norm_nonneg (2 : ℂ)]
+    simpa using (not_lt_of_ge hge)
+  exact hnot (by simpa [hz0] using hz)
+
+/-- Scope-check no-go at `c = 2`: under iterate-left-inverse injectivity on
+`outside_disk`, external-ray landing is impossible because `0` already maps to
+the exterior but is not outside-open. -/
+theorem not_externalRayLandsOutsideOpen_two_of_iterLeftInverse
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    ¬ ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  exact not_externalRayLandsOutsideOpen_two_of_injOn_outside_disk
+    (bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse (2 : ℂ) h_left_iter)
 
 /-- Scope-check no-go at `c = 2`: iterate-left-inverse plus external-ray
 landing is inconsistent. -/
@@ -1823,16 +1995,46 @@ theorem not_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_not_localHo
 /-- Explicit CP5 residual frontier package at `c = 2`: restricted local-homeomorph
 source or external-ray landing. -/
 def CP5ResidualTwo : Prop :=
-  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  (IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
       IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
     ExternalRayLandsOutsideOpen (2 : ℂ)
 
-/-- The explicit CP5 residual frontier package is equivalent to the known
+/-- Under constructive exclusion of external-ray landing at `c = 2`, the CP5
+residual frontier is exactly the restricted proper+local-homeomorph branch. -/
+theorem cp5ResidualTwo_iff_isProperMap_restrict_and_isLocalHomeomorph_restrict_of_not_externalRayLandsOutsideOpen
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualTwo ↔
+      (IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
+  constructor
+  · intro hres
+    rcases hres with hlocal | hland
+    · exact hlocal
+    · exact False.elim (hnot_land hland)
+  · intro hlocal
+    exact Or.inl hlocal
+
+/-- Canonical CP5 residual reduction at `c = 2`: landing is already excluded, so
+only the restricted proper+local-homeomorph branch remains. -/
+theorem cp5ResidualTwo_iff_isProperMap_restrict_and_isLocalHomeomorph_restrict :
+    CP5ResidualTwo ↔
+      (IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :=
+  cp5ResidualTwo_iff_isProperMap_restrict_and_isLocalHomeomorph_restrict_of_not_externalRayLandsOutsideOpen
+    not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+
+/-- The explicit CP5 residual frontier package implies the known
 surjectivity-source aggregate at `c = 2`. -/
-theorem cp5ResidualTwo_iff_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo :
-    CP5ResidualTwo ↔ KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
-  simpa [CP5ResidualTwo] using
-    (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_localHomeomorphSurjSource_or_externalRayLandsOutsideOpen).symm
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_cp5ResidualTwo
+    (hres : CP5ResidualTwo) :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo := by
+  rcases hres with hlocal | hland
+  · left
+    exact
+      ⟨isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hlocal.1,
+        hlocal.2⟩
+  · right
+    exact Or.inr (Or.inr (Or.inl hland))
 
 /-- The explicit CP5 residual frontier package implies outside-open exterior
 surjectivity at `c = 2`. -/
@@ -1840,7 +2042,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_cp5ResidualTwo
     (hres : CP5ResidualTwo) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_two_of_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo
-    ((cp5ResidualTwo_iff_knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo).1 hres)
+    (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_cp5ResidualTwo hres)
 
 /-- Positive-source constructor for the CP5 residual frontier at `c = 2` from
 restricted-map properness plus restricted local-homeomorph assumptions. -/
@@ -1848,14 +2050,189 @@ theorem cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
     (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     CP5ResidualTwo :=
-  Or.inl
-    ⟨isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hproper, hlocal⟩
+  Or.inl ⟨hproper, hlocal⟩
 
 /-- Assumption seam at `c = 2`: the explicit CP5 residual frontier yields
 outside-open injectivity. -/
 def CP5ResidualInjOnOutsideOpenSeamTwo : Prop :=
   ∀ _hres : CP5ResidualTwo,
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Branch-local seam at `c = 2`: restricted local-homeomorph residual branch
+implies outside-open injectivity. -/
+def CP5ResidualLocalHomeomorphInjSeamTwo : Prop :=
+  ∀ hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)),
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Branch-local seam at `c = 2`: external-ray landing residual branch implies
+outside-open injectivity. -/
+def CP5ResidualLandingInjSeamTwo : Prop :=
+  ∀ _hland : ExternalRayLandsOutsideOpen (2 : ℂ),
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- If external-ray landing at `c = 2` is constructively excluded, the landing
+branch seam is immediate. -/
+theorem cp5ResidualLandingInjSeamTwo_of_not_externalRayLandsOutsideOpen
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualLandingInjSeamTwo := by
+  intro hland
+  exact False.elim (hnot_land hland)
+
+/-- Axiom-seeded outside-open injectivity at `c = 2`, extracted from the
+outside-open left-inverse identity of `external_ray_map`. -/
+theorem injOn_outside_open_two_axiom_seed :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  intro z hz w hw hzw
+  have hz' : Quadratic.external_ray_map (2 : ℂ) (Quadratic.bottcher_map (2 : ℂ) z) = z :=
+    bottcher_left_inv_outside_open_of_local (2 : ℂ) z hz
+  have hw' : Quadratic.external_ray_map (2 : ℂ) (Quadratic.bottcher_map (2 : ℂ) w) = w :=
+    bottcher_left_inv_outside_open_of_local (2 : ℂ) w hw
+  have h := congrArg (Quadratic.external_ray_map (2 : ℂ)) hzw
+  simpa [hz', hw'] using h
+
+/-- Axiom-seeded witness of the global CP5 residual→injectivity seam at `c = 2`. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_axiom_seed :
+    CP5ResidualInjOnOutsideOpenSeamTwo := by
+  intro _hres
+  exact injOn_outside_open_two_axiom_seed
+
+/-- Axiom-seeded witness for the local-homeomorph branch seam. -/
+theorem cp5ResidualLocalHomeomorphInjSeamTwo_axiom_seed :
+    CP5ResidualLocalHomeomorphInjSeamTwo := by
+  intro _hlocal
+  exact injOn_outside_open_two_axiom_seed
+
+/-- Constructive witness for the local-homeomorph branch seam: proper local homeomorphism
+asymptotic to identity is injective. -/
+theorem cp5ResidualLocalHomeomorphInjSeamTwo_constructive :
+    CP5ResidualLocalHomeomorphInjSeamTwo := by
+  intro hlocal
+  exact Mlc.Bottcher.DegreeOne.injOn_of_proper_localHomeomorph_asymptotic_at_infinity
+    hlocal.1 hlocal.2
+/-- Axiom-seeded witness for the external-ray-landing branch seam. -/
+theorem cp5ResidualLandingInjSeamTwo_axiom_seed :
+    CP5ResidualLandingInjSeamTwo := by
+  intro _hland
+  exact injOn_outside_open_two_axiom_seed
+
+/-- Reconstruct the global axiom-seeded seam via the branch decomposition. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_axiom_seed_of_branchSeams :
+    CP5ResidualInjOnOutsideOpenSeamTwo := by
+  intro _hres
+  exact injOn_outside_open_two_axiom_seed
+
+/-- Assemble the global CP5 residual→injectivity seam from branch-local seams. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_of_branchSeams
+    (hlocal_seam : CP5ResidualLocalHomeomorphInjSeamTwo)
+    (hland_seam : CP5ResidualLandingInjSeamTwo) :
+    CP5ResidualInjOnOutsideOpenSeamTwo := by
+  intro hres
+  rcases hres with hlocal | hland
+  · exact hlocal_seam hlocal
+  · exact hland_seam hland
+
+/-- If the landing residual branch is ruled out, the local-homeomorph branch seam
+alone discharges the global residual→injectivity seam. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_of_localHomeomorphBranchSeam_of_not_externalRayLandsOutsideOpen
+    (hlocal_seam : CP5ResidualLocalHomeomorphInjSeamTwo)
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualInjOnOutsideOpenSeamTwo := by
+  intro hres
+  rcases hres with hlocal | hland
+  · exact hlocal_seam hlocal
+  · exact False.elim (hnot_land hland)
+
+/-- Constructive CP5 residual→injectivity seam under a constructive exclusion of
+the landing branch. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_of_localHomeomorphBranchSeam_of_not_externalRayLandsOutsideOpen
+    cp5ResidualLocalHomeomorphInjSeamTwo_constructive hnot_land
+
+/-- Unconditional constructive CP5 residual→injectivity seam at `c = 2`, using
+the boundary-continuity exclusion of the landing branch. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_constructive_unconditional :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen
+    not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+
+/-- Constructive CP5 residual→injectivity seam from an explicit exterior
+counterexample to external-ray landing. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_externalRayLandingCounterexampleTwo
+    (hcex : ExternalRayLandingCounterexampleTwo) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen
+    (not_externalRayLandsOutsideOpen_two_of_externalRayLandingCounterexampleTwo hcex)
+
+/-- Constructive CP5 residual→injectivity seam from identifying the
+external-ray image of `bottcher_map (2) 0` with `0`. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_outside_open_at_bottcher_zero
+    (hnot_out :
+      ¬ ‖Quadratic.external_ray_map (2 : ℂ)
+          (Quadratic.bottcher_map (2 : ℂ) (0 : ℂ))‖ > ‖(2 : ℂ)‖ + 2) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen
+    (not_externalRayLandsOutsideOpen_two_of_not_outside_open_at_bottcher_zero hnot_out)
+
+/-- Constructive CP5 residual→injectivity seam from identifying the
+external-ray image of `bottcher_map (2) 0` with `0`. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_external_ray_map_at_bottcher_zero_eq_zero
+    (hzero :
+      Quadratic.external_ray_map (2 : ℂ) (Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)) = 0) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen
+    (not_externalRayLandsOutsideOpen_two_of_external_ray_map_at_bottcher_zero_eq_zero hzero)
+
+/-- Constructive CP5 residual→injectivity seam from excluding
+`bottcher_map (2) 0` from the outside-open image. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_bottcher_zero_not_mem_image_outside_open
+    (hzero_not_img :
+      Quadratic.bottcher_map (2 : ℂ) (0 : ℂ) ∉
+        Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen
+    (not_externalRayLandsOutsideOpen_two_of_bottcher_zero_not_mem_image_outside_open hzero_not_img)
+
+/-- Strong constructive route: outside-disk injectivity directly rules out the
+landing branch and therefore discharges the CP5 residual→injectivity seam. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_injOn_outside_disk
+    (h_inj_disk : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ))) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen
+    (not_externalRayLandsOutsideOpen_two_of_injOn_outside_disk h_inj_disk)
+
+/-- If the local-homeomorph residual branch is ruled out, the landing branch seam
+alone discharges the global residual→injectivity seam. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_of_landingBranchSeam_of_not_localHomeomorphSurjSource
+    (hland_seam : CP5ResidualLandingInjSeamTwo)
+    (hnot_local :
+      ¬ (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+          IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))) :
+    CP5ResidualInjOnOutsideOpenSeamTwo := by
+  intro hres
+  rcases hres with hlocal | hland
+  · exfalso
+    have hclosed := isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) hlocal.1
+    exact hnot_local ⟨hclosed, hlocal.2⟩
+  · exact hland_seam hland
+
+/-- The global CP5 residual→injectivity seam is equivalent to proving both
+branch-local injectivity seams. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_iff_branchSeams :
+    CP5ResidualInjOnOutsideOpenSeamTwo ↔
+      (CP5ResidualLocalHomeomorphInjSeamTwo ∧ CP5ResidualLandingInjSeamTwo) := by
+  constructor
+  · intro h
+    constructor
+    · intro hlocal
+      exact h (Or.inl hlocal)
+    · intro hland
+      exact h (Or.inr hland)
+  · intro h
+    exact cp5ResidualInjOnOutsideOpenSeamTwo_of_branchSeams h.1 h.2
 
 /-- Seam projection at `c = 2`: derive outside-open injectivity from the
 residual-frontier injectivity seam. -/
@@ -1883,15 +2260,112 @@ theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5Residua
   external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_injOn_outside_open
     hres (injOn_outside_open_two_of_cp5ResidualTwo h_seam hres)
 
+/-- Branch-seam form of the CP5 residual constructive external-ray-data bridge
+at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_branchSeams
+    (hres : CP5ResidualTwo)
+    (hbranch :
+      CP5ResidualLocalHomeomorphInjSeamTwo ∧
+        CP5ResidualLandingInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5ResidualInjOnOutsideOpenSeamTwo
+    hres ((cp5ResidualInjOnOutsideOpenSeamTwo_iff_branchSeams).2 hbranch)
+
 /-- CP5 residual seam wired as a function: if the residual→injectivity seam is
 available, the explicit CP5 residual frontier yields constructive external-ray-map
 data at `c = 2`. -/
-theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
     (h_seam : CP5ResidualInjOnOutsideOpenSeamTwo) :
     CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) := by
   intro hres
   exact external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5ResidualInjOnOutsideOpenSeamTwo
     hres h_seam
+
+/-- CP5 residual bridge under constructive landing exclusion: once
+`¬ ExternalRayLandsOutsideOpen (2 : ℂ)` is proved, the residual route is
+unconditional in `CP5ResidualTwo`. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen hnot_land)
+
+/-- Unconditional constructive CP5 residual endpoint at `c = 2`, using the
+boundary-continuity exclusion of external-ray landing. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+    not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+
+/-- Alias exposing the same unconditional CP5 residual endpoint. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_unconditional :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo
+
+/-- CP5 residual endpoint route from an explicit exterior counterexample to
+external-ray landing. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_externalRayLandingCounterexampleTwo
+    (hcex : ExternalRayLandingCounterexampleTwo) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_externalRayLandingCounterexampleTwo hcex)
+
+/-- CP5 residual endpoint route from identifying
+`external_ray_map (2) (bottcher_map (2) 0)` with `0`. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_not_outside_open_at_bottcher_zero
+    (hnot_out :
+      ¬ ‖Quadratic.external_ray_map (2 : ℂ)
+          (Quadratic.bottcher_map (2 : ℂ) (0 : ℂ))‖ > ‖(2 : ℂ)‖ + 2) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_outside_open_at_bottcher_zero
+      hnot_out)
+
+/-- CP5 residual endpoint route from identifying
+`external_ray_map (2) (bottcher_map (2) 0)` with `0`. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_external_ray_map_at_bottcher_zero_eq_zero
+    (hzero :
+      Quadratic.external_ray_map (2 : ℂ) (Quadratic.bottcher_map (2 : ℂ) (0 : ℂ)) = 0) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_external_ray_map_at_bottcher_zero_eq_zero
+      hzero)
+
+/-- CP5 residual endpoint route from excluding `bottcher_map (2) 0` from the
+outside-open image. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_bottcher_zero_not_mem_image_outside_open
+    (hzero_not_img :
+      Quadratic.bottcher_map (2 : ℂ) (0 : ℂ) ∉
+        Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_bottcher_zero_not_mem_image_outside_open
+      hzero_not_img)
+
+/-- Strong constructive route to the CP5 residual endpoint from outside-disk
+injectivity. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_injOn_outside_disk
+    (h_inj_disk : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ))) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_injOn_outside_disk h_inj_disk)
+
+/-- Axiom-seeded CP5 residual wrapper at `c = 2`: keeps the residual route wired
+while isolating the current non-constructive injectivity seam witness. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_axiom_seam
+    (hres : CP5ResidualTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    cp5ResidualInjOnOutsideOpenSeamTwo_axiom_seed hres
+
+/-- Direct CP5 residual endpoint route at `c = 2` from the now-canonical residual
+left branch (restricted properness + restricted local-homeomorph). -/
+theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo
+    (cp5ResidualTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict hproper hlocal)
 
 /-- Root bridge at `c = 2`: the explicit CP5 residual frontier is sufficient for
 the full MLC statement through the surjectivity seam. -/
@@ -1970,6 +2444,110 @@ theorem nonIterInjOnOutsideOpenSourceExhaustionTwo :
     · exact (leftInverseOutsideOpen_two_iff_injOn_outside_open).1 hLeft
   · intro hInj
     exact Or.inr ((leftInverseOutsideOpen_two_iff_injOn_outside_open).2 hInj)
+
+/-- Candidate proper+local source family at `c = 2`: outside-open analyticity,
+derivative nonvanishing, and closedness of ambient preimages against compact
+exterior targets. -/
+def ProperLocalFromAnalyticPreimageClosedCandidateTwo : Prop :=
+  OutsideOpenAnalyticityHypothesis (2 : ℂ) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) ∧
+      (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
+
+/-- Candidate proper+local source family at `c = 2`: outside-open analyticity,
+derivative nonvanishing, and boundary exclusion on compact exterior targets. -/
+def ProperLocalFromAnalyticBoundaryExclusionCandidateTwo : Prop :=
+  OutsideOpenAnalyticityHypothesis (2 : ℂ) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) ∧
+      (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ))
+
+/-- Any currently wired preimage-closed proper+local source candidate at `c = 2`
+would imply the target restricted proper+local pair. -/
+theorem isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_properLocalFromAnalyticPreimageClosedCandidateTwo
+    (h : ProperLocalFromAnalyticPreimageClosedCandidateTwo) :
+    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
+  refine ⟨?_, ?_⟩
+  · exact isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed
+      h.1 h.2.2
+  · exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
+      (2 : ℂ) h.1 h.2.1
+
+/-- Any currently wired boundary-exclusion proper+local source candidate at `c = 2`
+would imply the target restricted proper+local pair. -/
+theorem isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_properLocalFromAnalyticBoundaryExclusionCandidateTwo
+    (h : ProperLocalFromAnalyticBoundaryExclusionCandidateTwo) :
+    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
+  refine ⟨?_, ?_⟩
+  · exact isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion
+      (2 : ℂ) h.1 h.2.2
+  · exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
+      (2 : ℂ) h.1 h.2.1
+
+/-- The preimage-closed proper+local source candidate is inconsistent at `c = 2`
+because outside-open analyticity is impossible in the current model. -/
+theorem not_properLocalFromAnalyticPreimageClosedCandidateTwo :
+    ¬ ProperLocalFromAnalyticPreimageClosedCandidateTwo := by
+  intro h
+  exact not_outsideOpenAnalyticityHypothesisTwo h.1
+
+/-- The boundary-exclusion proper+local source candidate is inconsistent at `c = 2`
+because the boundary-exclusion family is impossible in the current model. -/
+theorem not_properLocalFromAnalyticBoundaryExclusionCandidateTwo :
+    ¬ ProperLocalFromAnalyticBoundaryExclusionCandidateTwo := by
+  intro h
+  exact not_boundary_exclusion_family_two h.2.2
+
+/-- Aggregate predicate for currently wired source families that could imply the
+restricted proper+local CP5 residual branch at `c = 2`. -/
+def KnownProperLocalSourceCandidateTwo : Prop :=
+  ProperLocalFromAnalyticPreimageClosedCandidateTwo ∨
+    ProperLocalFromAnalyticBoundaryExclusionCandidateTwo
+
+/-- Any currently wired proper+local source family in the previous aggregate
+implies the restricted proper+local CP5 residual branch at `c = 2`. -/
+theorem isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_knownProperLocalSourceCandidateTwo
+    (h : KnownProperLocalSourceCandidateTwo) :
+    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
+  rcases h with hA | hB
+  · exact
+      isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_properLocalFromAnalyticPreimageClosedCandidateTwo
+        hA
+  · exact
+      isProperMap_and_isLocalHomeomorph_bottcher_map_outside_open_to_exterior_two_of_properLocalFromAnalyticBoundaryExclusionCandidateTwo
+        hB
+
+/-- All currently wired proper+local source families are inconsistent in the
+current model at `c = 2`. -/
+theorem not_knownProperLocalSourceCandidateTwo :
+    ¬ KnownProperLocalSourceCandidateTwo := by
+  intro h
+  rcases h with hA | hB
+  · exact not_properLocalFromAnalyticPreimageClosedCandidateTwo hA
+  · exact not_properLocalFromAnalyticBoundaryExclusionCandidateTwo hB
+
+/-- Current-model proper+local source exhaustion at `c = 2`: known source
+families are blocked, so only a direct witness of the restricted proper+local
+pair remains. -/
+theorem properLocalSourceExhaustionTwo :
+    (KnownProperLocalSourceCandidateTwo ∨
+      (IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))) ↔
+      (IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) := by
+  constructor
+  · intro h
+    rcases h with hKnown | hDirect
+    · exact False.elim (not_knownProperLocalSourceCandidateTwo hKnown)
+    · exact hDirect
+  · intro hDirect
+    exact Or.inr hDirect
 
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative

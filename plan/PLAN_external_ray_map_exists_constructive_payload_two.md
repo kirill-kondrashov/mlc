@@ -1673,3 +1673,24 @@ analyticity/constancy seams).
 - Validation:
   - `make build && make check && make graphs && scripts/verify_output.sh` succeeded;
   - rooted axiom frontier still unchanged (`MLC.Quadratic.external_ray_map_exists` remains).
+
+## Implementation checkpoint (2026-02-23, CP5 proper/local fallback no-go catalog)
+- Added in `MainConjecture.lean`:
+  - proper/local candidate families
+    `ProperLocalFromAnalyticPreimageClosedCandidateTwo` and
+    `ProperLocalFromAnalyticBoundaryExclusionCandidateTwo`;
+  - aggregate `KnownProperLocalSourceCandidateTwo`;
+  - source→target bridges to
+    `IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))`;
+  - no-go theorems
+    `not_properLocalFromAnalyticPreimageClosedCandidateTwo`,
+    `not_properLocalFromAnalyticBoundaryExclusionCandidateTwo`,
+    `not_knownProperLocalSourceCandidateTwo`,
+    and exhaustion theorem `properLocalSourceExhaustionTwo`.
+- Interpretation:
+  - currently wired proper/local source families are now formally exhausted in
+    the current model; remaining non-axiom closure requires a genuinely new
+    direct witness for the proper+local pair (or equivalent direct `CP5ResidualTwo` source).
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.

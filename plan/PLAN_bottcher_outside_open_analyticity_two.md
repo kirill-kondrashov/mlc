@@ -1262,3 +1262,20 @@ constructive `mlc_conjecture` replacement route.
 - Validation:
   - `make build && make check && make graphs && scripts/verify_output.sh` pass;
     rooted axiom frontier unchanged.
+
+## Implementation checkpoint (2026-02-23, proper/local fallback-source exhaustion at `c = 2`)
+- Added in `Mlc/MainConjecture.lean`:
+  - `ProperLocalFromAnalyticPreimageClosedCandidateTwo`;
+  - `ProperLocalFromAnalyticBoundaryExclusionCandidateTwo`;
+  - `KnownProperLocalSourceCandidateTwo`;
+  - `not_knownProperLocalSourceCandidateTwo`;
+  - `properLocalSourceExhaustionTwo`.
+- New bridges:
+  - both candidate families are shown to imply
+    `IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))`.
+- No-go closure:
+  - preimage-closed candidate blocked by `not_outsideOpenAnalyticityHypothesisTwo`;
+  - boundary-exclusion candidate blocked by `not_boundary_exclusion_family_two`.
+- Validation:
+  - `make build && make check && make graphs && bash scripts/verify_output.sh` succeeded.

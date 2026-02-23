@@ -249,11 +249,49 @@ lemma exists_fixed_point_mem_K (c : ℂ) : ∃ p, p ∈ MLC.Quadratic.K c := by
     simp [hconst]
   exact ⟨p, hbound⟩
 
+lemma exists_fixed_point_mem_K_and_fixed (c : ℂ) :
+    ∃ p, p ∈ MLC.Quadratic.K c ∧ MLC.Quadratic.fc c p = p := by
+  let f : Polynomial ℂ :=
+    (Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c - Polynomial.X
+  have hdeg : 0 < f.degree := by
+    have hdeg_p :
+        ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree = 2 := by
+      simpa using
+        (Polynomial.degree_X_pow_add_C (n := 2) (a := c) (by decide))
+    have hdeg_q : (Polynomial.X : Polynomial ℂ).degree = 1 := by
+      simp
+    have hlt :
+        (Polynomial.X : Polynomial ℂ).degree <
+          ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree := by
+      simp [hdeg_q, hdeg_p]
+    have hdeg_f :
+        f.degree = ((Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c).degree := by
+      simpa [f] using
+        (Polynomial.degree_sub_eq_left_of_degree_lt
+          (p := (Polynomial.X : Polynomial ℂ)^2 + Polynomial.C c) hlt)
+    simp [hdeg_f, hdeg_p]
+  obtain ⟨p, hp⟩ := Complex.exists_root hdeg
+  have hp' : p ^ 2 + c - p = 0 := by
+    simpa [f] using (Polynomial.IsRoot.def.mp hp)
+  have hfix : MLC.Quadratic.fc c p = p := by
+    have : p ^ 2 + c = p := by
+      exact sub_eq_zero.mp hp'
+    simpa [MLC.Quadratic.fc] using this
+  have hbound : MLC.Quadratic.boundedOrbit c p := by
+    refine ⟨‖p‖, ?_⟩
+    intro n
+    have hconst : MLC.Quadratic.orbit c p n = p := orbit_fixed_point c p hfix n
+    simp [hconst]
+  exact ⟨p, hbound, hfix⟩
+
 noncomputable def fixed_point (c : ℂ) : ℂ :=
-  Classical.choose (exists_fixed_point_mem_K c)
+  Classical.choose (exists_fixed_point_mem_K_and_fixed c)
 
 lemma fixed_point_mem_K (c : ℂ) : fixed_point c ∈ MLC.Quadratic.K c :=
-  (Classical.choose_spec (exists_fixed_point_mem_K c))
+  (Classical.choose_spec (exists_fixed_point_mem_K_and_fixed c)).1
+
+lemma fixed_point_is_fixed (c : ℂ) : MLC.Quadratic.fc c (fixed_point c) = fixed_point c :=
+  (Classical.choose_spec (exists_fixed_point_mem_K_and_fixed c)).2
 
 /-- The sequence of roots converges locally uniformly to the Böttcher map. -/
 axiom bottcher_seq_converges (c : ℂ) :
