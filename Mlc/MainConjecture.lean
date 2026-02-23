@@ -1699,6 +1699,29 @@ theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reducedOpen :
       (knownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_reduced).2 h
     exact (knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_iff_open_or_blocked).2 (Or.inl hOpen)
 
+/-- If external-ray landing is unavailable, a reduced-open surjectivity source
+must be the restricted local-homeomorph branch at `c = 2`. -/
+theorem localHomeomorphSurjSource_two_of_reducedOpen_of_not_externalRayLandsOutsideOpen
+    (h : ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo)
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
+  rcases h with hLocal | hLand
+  · exact hLocal
+  · exact False.elim (hnot_land hLand)
+
+/-- If the restricted local-homeomorph branch is unavailable, a reduced-open
+surjectivity source must be external-ray landing at `c = 2`. -/
+theorem externalRayLandsOutsideOpen_two_of_reducedOpen_of_not_localHomeomorphSurjSource
+    (h : ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo)
+    (hnot_local :
+      ¬ (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))) :
+    ExternalRayLandsOutsideOpen (2 : ℂ) := by
+  rcases h with hLocal | hLand
+  · exact False.elim (hnot_local hLocal)
+  · exact hLand
+
 /-- Aggregate predicate for currently wired local-homeomorph-on source families
 at `c = 2`. -/
 def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
