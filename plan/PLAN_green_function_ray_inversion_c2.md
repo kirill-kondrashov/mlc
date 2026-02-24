@@ -99,8 +99,8 @@ analysis not yet in Mathlib.
   - Requires harmonic analysis: max principle for subharmonic functions, not in Mathlib
 - [x] Lemma D (existence): exists_ray_preimage_green — proved via IVT (exists_ray_preimage_green)
 - [ ] Lemma D (uniqueness): exists_unique_ray_preimage_green — sorry (needs full Lemma C)
-- [ ] Lemma E: external_ray_map_two_constructive — sorry (needs full Lemma C)
-- [ ] Wire into MainConjecture.lean
+- [x] Lemma E: external_ray_map_two_constructive — temporarily wired to existing axiom `external_ray_map_exists (2)` (non-constructive fallback); awaits general Lemma C to make constructive
+- [ ] Wire into MainConjecture.lean with constructive witness once general Lemma C is available
 
 ## Remaining gap
 The only remaining gap is `green_function_strictMono_along_ray` for general complex direction.
