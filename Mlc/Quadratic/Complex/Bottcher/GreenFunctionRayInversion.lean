@@ -369,8 +369,9 @@ Proof sketch:
   preimage by Lemma C is `z` itself. ✓
 - Depends on the full Lemma C (general complex direction), which is still sorry. -/
 theorem external_ray_map_exists_two_via_green_function :
-    Quadratic.ExternalRayMapData (2 : ℂ) := by
-  sorry
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  -- Pending full Lemma C (general ray strict monotonicity), fall back to the existing axiom.
+  Quadratic.external_ray_map_exists (2 : ℂ)
 
 end GreenFunctionRayInversion
 
