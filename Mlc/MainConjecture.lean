@@ -2456,6 +2456,68 @@ theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_o
   external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
     (directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion hlocal hboundary)
 
+/-- Direct proper+local witness from local-homeomorph-on outside-open plus the
+ambient preimage-closed compact-target condition at `c = 2`. -/
+theorem directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_preimage_closed
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    DirectProperLocalWitnessTwo := by
+  have hlocal :
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+    isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open
+      (2 : ℂ) hlocal_on
+  exact directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_closed hlocal hclosedpre
+
+/-- Direct proper+local witness from local-homeomorph-on outside-open plus
+boundary exclusion on compact exterior targets at `c = 2`. -/
+theorem directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    DirectProperLocalWitnessTwo := by
+  have hlocal :
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+    isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open
+      (2 : ℂ) hlocal_on
+  exact directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion hlocal hboundary
+
+/-- CP5 endpoint from local-homeomorph-on outside-open plus the ambient
+preimage-closed compact-target condition at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_preimage_closed
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_preimage_closed
+      hlocal_on hclosedpre)
+
+/-- CP5 endpoint from local-homeomorph-on outside-open plus boundary exclusion
+on compact exterior targets at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion
+      hlocal_on hboundary)
+
 /-- Root closure wrapper from the direct constructive CP5 closure criterion. -/
 theorem mlc_conjecture_of_directProperLocalWitnessTwo
     (h : DirectProperLocalWitnessTwo) :

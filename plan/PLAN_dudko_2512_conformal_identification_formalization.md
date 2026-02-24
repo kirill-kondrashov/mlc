@@ -42,6 +42,12 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion`
   - `external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_of_boundary_exclusion`
   This factors boundary exclusion into the direct-witness pipeline through `isClosed_outside_open_preimage_image_compact_of_boundary_exclusion`.
+- Added local-homeomorph-on outside-open lifts for the non-analytic direct-witness route:
+  - `directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_preimage_closed`
+  - `directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion`
+  - `external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_preimage_closed`
+  - `external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion`
+  This shifts the remaining assumptions further toward local Böttcher payload shapes.
 
 ## Remaining work
 1. Strengthen the new concrete realization so that restricted properness is itself derived from non-axiomatic local inputs for `c = 2`.
