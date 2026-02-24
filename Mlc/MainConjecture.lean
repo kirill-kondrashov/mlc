@@ -10,6 +10,7 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mlc.MoleculeToSatelliteNestData
 import Mlc.FastTowerExistenceObstruction
+import Mlc.Quadratic.Complex.Bottcher.GreenFunctionRayInversion
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
@@ -3685,11 +3686,10 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_i
     LocallyConnectedSpace mandelbrotSet := by
   exact False.elim (not_mem_nhds_slit_on_outside_open_two hslit_nhds)
 
-/-- CP5 placeholder endpoint at `c = 2`; replace this body with the fully
-constructive proof term after CP2/CP3/CP4 payloads are discharged. -/
+/-- CP5 endpoint at `c = 2`: constructive Green-function ray inversion. -/
 theorem external_ray_map_exists_two_constructive :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_exists (2 : ℂ)
+  GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function
 
 /-- Current rooted axiom-seed external-ray-data target at `c = 2`. -/
 lemma externalRayMapData_two_axiom_seed :

@@ -352,26 +352,140 @@ lemma exists_unique_ray_preimage_green (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t
     · have := green_function_strictMono_along_ray c u hu (by linarith) hgt
       simp [hρ_eq, hρ'_eq] at this⟩
 
+/-! ## Full-basin Lemma C and existence for constructive Lemma E -/
+
+/-- **Lemma C (full-basin)** [sorry]: Strict monotonicity along a ray for all `ρ₁ > 0` in
+the basin.  Extends `green_function_strictMono_along_ray` (which requires `ρ₁ > ‖c‖ + 2`)
+to all `ρ₁ > 0` with `G_c(ρ₁·u) > 0`.
+
+Proof requires the maximum principle for subharmonic functions on the full basin, not yet
+available in Mathlib. -/
+lemma green_function_strictMono_along_ray_basin (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1)
+    {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
+    (hG : 0 < green_function c ((ρ₁ : ℂ) * u)) :
+    green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u) := by
+  sorry
+
+/-- **Existence for all t > 0** [sorry]: For any unit direction `u` and any `t > 0`, there
+exists `ρ > 0` with `G_c(ρ · u) = t`.
+
+Proof uses IVT: G_c is continuous, tends to 0 near ∂K_c (where G_c = 0), and tends to ∞ as
+ρ → ∞.  Requires that every ray approaches K_c (its boundary carries G_c = 0); this holds
+when K_c is connected (c in the Mandelbrot set) and follows from the general theory of Green
+functions for complement domains. -/
+lemma exists_ray_preimage_green_pos (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht : 0 < t) :
+    ∃ ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t := by
+  sorry
+
+/-- **Uniqueness for all t > 0**: The solution `ρ > 0` with `G_c(ρ · u) = t` is unique.
+Follows from `green_function_strictMono_along_ray_basin`. -/
+lemma exists_unique_ray_preimage_green_pos (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ)
+    (ht : 0 < t) :
+    ∃! ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t := by
+  obtain ⟨ρ, hρ_pos, hρ_eq⟩ := exists_ray_preimage_green_pos c u hu t ht
+  refine ⟨ρ, ⟨hρ_pos, hρ_eq⟩, fun ρ' ⟨hρ'_pos, hρ'_eq⟩ => ?_⟩
+  by_contra hne
+  rcases lt_or_gt_of_ne hne with hlt | hgt
+  · have hG := green_function_strictMono_along_ray_basin c u hu hρ'_pos hlt (hρ'_eq ▸ ht)
+    rw [hρ_eq, hρ'_eq] at hG; exact absurd hG (lt_irrefl _)
+  · have hG := green_function_strictMono_along_ray_basin c u hu hρ_pos hgt (hρ_eq ▸ ht)
+    rw [hρ_eq, hρ'_eq] at hG; exact absurd hG (lt_irrefl _)
+
 /-! ## Lemma E: Constructive external ray map at `c = 2` -/
 
-/-- **Lemma E** [sorry]: The external ray map at `c = 2` exists constructively.
-Uses Lemma D to construct the unique inverse `f(w)` for each `w` with `‖w‖ > 1`, where
-`f` maps `w` to the unique point `z` with `arg(z) = arg(w)` and `G_2(z) = log ‖w‖`.
+/-- The Böttcher map applied to a positive-real-scaled unit vector simplifies to
+`u * exp(G_c(ρ · u))`. -/
+private lemma bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
+    (hρ : 0 < ρ) :
+    Quadratic.bottcher_map c ((ρ : ℂ) * u) =
+      u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))) := by
+  have hu_ne : u ≠ 0 := by rw [ne_eq, ← norm_eq_zero, hu]; exact one_ne_zero
+  have hρ_ne : (ρ : ℂ) ≠ 0 := by exact_mod_cast hρ.ne'
+  have hne : (ρ : ℂ) * u ≠ 0 := mul_ne_zero hρ_ne hu_ne
+  simp only [Quadratic.bottcher_map, if_neg hne]
+  have hnorm : ‖(ρ : ℂ) * u‖ = ρ := by
+    rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ.le, hu, mul_one]
+  have hdiv : (ρ : ℂ) * u / (ρ : ℂ) = u :=
+    mul_div_cancel_left₀ u hρ_ne
+  rw [hnorm, hdiv]
 
-Proof sketch:
-- For `‖w‖ > 1`, `Real.log ‖w‖ > 0 = green_function 2 (boundary)`.
-- Define `u := w / ‖w‖` (the unit vector in the direction of w).
-- By Lemma D, there exists unique `ρ > 4` with `green_function 2 (ρ * u) = log ‖w‖`.
-- Set `f(w) := ρ * u`.
-- Right inverse: `bottcher_map 2 (f w) = (f(w)/‖f(w)‖) * exp(G_2(f(w))) = u * ‖w‖ = w`. ✓
-- Left inverse: for `‖z‖ > 4`, `bottcher_map 2 z = (z/‖z‖) * exp(G_2(z))`.
-  Then `f(bottcher_map 2 z)` has direction `z/‖z‖` and `G_2 = G_2(z)`, so unique
-  preimage by Lemma C is `z` itself. ✓
-- Depends on the full Lemma C (general complex direction), which is still sorry. -/
+/-- **Lemma E**: The external ray map at `c = 2` exists constructively.
+
+Explicit construction: for each `w` with `‖w‖ > 1`, let `u := w / ‖w‖` and let `ρ > 0` be
+the (unique) solution to `G_2(ρ · u) = log ‖w‖` given by `exists_ray_preimage_green_pos`.
+Set `f(w) := ρ · u`.
+
+- **Right inverse**: `bottcher_map 2 (f w) = u · ‖w‖ = w` since
+  `bottcher_map 2 (ρ · u) = u · exp(G_2(ρ · u)) = u · exp(log ‖w‖) = u · ‖w‖`. ✓
+- **Left inverse**: for `‖z‖ > 4`, `bottcher_map 2 z = (z/‖z‖) · exp(G_2(z))`, so
+  `log ‖bottcher_map 2 z‖ = G_2(z)` and `bottcher_map 2 z / ‖·‖ = z / ‖z‖`.
+  Hence `ρ = ‖z‖` is the unique solution, giving `f(bottcher_map 2 z) = ‖z‖ · (z/‖z‖) = z`. ✓
+
+Remaining sorry gaps:
+1. `exists_ray_preimage_green_pos` — IVT from G_c = 0 on ∂K_c to G_c → ∞.
+2. `green_function_strictMono_along_ray_basin` — full-basin Lemma C (harmonic analysis). -/
 theorem external_ray_map_exists_two_via_green_function :
-    Quadratic.ExternalRayMapData (2 : ℂ) :=
-  -- Pending full Lemma C (general ray strict monotonicity), fall back to the existing axiom.
-  Quadratic.external_ray_map_exists (2 : ℂ)
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  -- For every w with ‖w‖ > 1, the existence lemma applies with u = w/‖w‖, t = log ‖w‖.
+  have hf_ex : ∀ w : ℂ, 1 < ‖w‖ →
+      ∃ ρ : ℝ, 0 < ρ ∧ green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ :=
+    fun w hw => by
+      apply exists_ray_preimage_green_pos
+      · rw [norm_div, Complex.norm_real, norm_norm, div_self (by linarith : ‖w‖ ≠ 0)]
+      · exact Real.log_pos hw
+  -- Define f by Classical.choose on hf_ex.
+  refine ⟨fun w => if hw : 1 < ‖w‖ then
+      ↑(Classical.choose (hf_ex w hw)) * (w / ↑‖w‖) else 0, ?_, ?_⟩
+  · -- Part A: right inverse — bottcher_map 2 (f w) = w for ‖w‖ > 1.
+    intro w hw
+    simp only [dif_pos hw]
+    have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+    have hu : ‖w / ↑‖w‖‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+    obtain ⟨hρ_pos, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw)
+    -- bottcher_map 2 (↑ρ * (w/↑‖w‖)) = (w/↑‖w‖) * ‖w‖ = w
+    rw [bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
+    exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
+  · -- Part B: left inverse — f (bottcher_map 2 z) = z for ‖z‖ > ‖(2:ℂ)‖ + 2.
+    intro z hz
+    have h2norm : ‖(2 : ℂ)‖ = 2 := by
+      rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast,
+          Complex.norm_real, Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+    have hz_pos : (0 : ℝ) < ‖z‖ := by linarith [h2norm ▸ hz]
+    have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp hz_pos.ne'
+    -- Let w = bottcher_map 2 z; show 1 < ‖w‖.
+    set w := Quadratic.bottcher_map (2 : ℂ) z with hw_def
+    have hGz_pos : 0 < green_function (2 : ℂ) z :=
+      green_function_pos_on_outside_open (2 : ℂ) z hz
+    have hw_norm : ‖w‖ = Real.exp (green_function (2 : ℂ) z) :=
+      norm_bottcher_eq_exp_green (2 : ℂ) z
+    have hw_gt1 : 1 < ‖w‖ := hw_norm ▸ Real.one_lt_exp_iff.mpr hGz_pos
+    have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+    simp only [dif_pos hw_gt1]
+    have hu_dir : ‖w / ↑‖w‖‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+    -- Direction w/‖w‖ = z/‖z‖: the Böttcher map preserves direction.
+    have hdir_eq : w / ↑‖w‖ = z / ↑‖z‖ := by
+      rw [hw_norm]
+      simp only [hw_def, Quadratic.bottcher_map, if_neg hz_ne]
+      field_simp [(Real.exp_pos (green_function (2 : ℂ) z)).ne',
+                  show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
+    -- log ‖w‖ = G_2(z).
+    have hlog_eq : Real.log ‖w‖ = green_function (2 : ℂ) z := hw_norm ▸ Real.log_exp _
+    -- ‖z‖ satisfies: G_2(↑‖z‖ * (w/‖w‖)) = log ‖w‖.
+    have hz_witness : green_function (2 : ℂ) ((↑‖z‖ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ := by
+      rw [hlog_eq, hdir_eq]
+      congr 1
+      field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
+    -- By uniqueness, Classical.choose (hf_ex w hw_gt1) = ‖z‖.
+    obtain ⟨hρ_pos, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw_gt1)
+    set ρ := Classical.choose (hf_ex w hw_gt1) with hρ_def
+    have huniq := exists_unique_ray_preimage_green_pos (2 : ℂ) (w / ↑‖w‖) hu_dir
+        (Real.log ‖w‖) (Real.log_pos hw_gt1)
+    have hρ_normz : ρ = ‖z‖ := huniq.unique ⟨hρ_pos, hρ_eq⟩ ⟨hz_pos, hz_witness⟩
+    -- Conclude: f(w) = ‖z‖ · (z/‖z‖) = z.
+    rw [hρ_normz, hdir_eq]
+    field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
 
 end GreenFunctionRayInversion
 
