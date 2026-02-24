@@ -272,3 +272,41 @@ and replace the final axiom ingress in `MLC.mlc_conjecture`.
     checkpoint now certifies all currently wired source families for that branch
     are exhausted, leaving only a genuinely new direct witness theorem as the
     remaining non-axiom closure path.
+
+## Architectural finding (2026-06 internet research sprint)
+
+### Internet search result
+Exhaustive searches on arXiv and MathOverflow for any Lean/Coq formalization of:
+- Böttcher map inverse / external ray map existence
+- Complex polynomial exterior homeomorphism formalization
+- Julia set external ray construction in formal mathematics
+**Returned zero results.** No prior formalization exists to reference.
+
+### Key model constraint
+The repo's `bottcher_map c z := (z / ‖z‖) * exp(green_function c z)` is provably
+NON-ANALYTIC. Proof chain:
+1. `bottcher_map_div_eq_real_scale_of_ne_zero`: quotient `φ(z)/z` is positive real.
+2. Open mapping theorem: analytic function taking only positive real values → constant.
+3. `not_outsideOpenQuotientConstHypothesisTwo`: quotient is not constant.
+∴ `not_outsideOpenAnalyticityHypothesisTwo`: the map is not analytic.
+
+This certifies that CP2/CP3/CP4 analytic-route no-gos are **mathematically sound**
+(not false negatives). All DirectProperLocalWitnessTwo / DynamicalBottcherConformalIdentificationTwo
+source lanes requiring analyticity are permanently closed in the current model.
+
+### True remaining target: Green function ray inversion
+`ExternalRayMapData (2 : ℂ)` needs f with:
+- `bottcher_map 2 (f w) = w` for ‖w‖ > 1
+- `f (bottcher_map 2 z) = z` for ‖z‖ > 4
+Given the definition, f must map each w to the unique z with arg(z)=arg(w) and
+G_2(z)=log‖w‖. This requires proving G_2 is strictly monotone along radial rays
+in {‖z‖>4} — the external ray inversion lemma.
+
+### Recommended path
+1. Prove monotonicity: for fixed θ, `t ↦ G_2(t·e^{iθ})` is strictly increasing on
+   {t : t > 4}, i.e., the Green function is a diffeomorphism along each ray.
+2. Construct the inverse map by implicit function theorem or direct Green function
+   level-set argument.
+3. Verify the two-sided inverse conditions.
+This bypasses all analytic/homeomorphism structure and uses only the order structure
+of the Green function.
