@@ -22,6 +22,24 @@ For the current CP5 track, only the `c = 2` case is needed:
 Once that witness is proved, the final placeholder can be rewired through the
 already-built constructive bridge stack in `Mlc/MainConjecture.lean`.
 
+## Alternative route (if the `c = 2` witness lane stalls)
+
+There is a second path, but it is broader and more expensive:
+re-root `MLC.mlc_conjecture` so it does not pass through
+`ExternalRayMapData (2 : ℂ)`.
+
+That requires constructive reformalization of the current seam inputs and
+removal of contradiction-seeded routing:
+
+- `PuzzleBoundaryMotionHyp`
+- `IRClassificationData`
+- `MoleculeConformalModulusLowerBoundData`
+- replacement of `False.elim` seam instantiations with direct constructive
+  bridges
+
+So the current route is a single hard local theorem; the alternative is an
+architecture rewrite across multiple branches.
+
 ## What `Quadratic.external_ray_map_exists` means
 
 `Quadratic.external_ray_map_exists c` postulates existence of a map
