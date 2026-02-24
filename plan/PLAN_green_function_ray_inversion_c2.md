@@ -95,8 +95,14 @@ analysis not yet in Mathlib.
 - [x] Lemma C (real ray): green_function_strictMono_along_real_ray_two — PROVED (e36d34e)
   - Sublemmas proved: f2_relative_gap_grows (geometric gap growth), f2_ratio_tendsto_atTop
   - Proof: contradiction via orbit ratio → ∞ vs bounded log from two-sided Green bound
-- [ ] Lemma C (full-basin): green_function_strictMono_along_ray_basin — sorry
+- [ ] Lemma C (complex rays, c=2): green_function_strictMono_along_ray_two — sorry
+  - Structure parallels real ray proof
+  - Scaffold added with log_norm_fc_two_lower/upper bounds
+  - Missing: orbit log-norm ratio divergence for complex directions
+- [ ] Lemma C (general): green_function_strictMono_along_ray — sorry
   - Requires harmonic analysis: max principle for subharmonic functions, not in Mathlib
+- [ ] Lemma C (full-basin): green_function_strictMono_along_ray_basin — sorry
+  - Requires reduction to outside-open case via functional equation
 - [ ] Existence (full-basin): exists_ray_preimage_green_pos — sorry
   - Requires IVT from G_c = 0 on ∂K_c; needs ray approach to K_c
 - [x] Lemma D (existence, outside-open): exists_ray_preimage_green — proved via IVT
@@ -110,8 +116,19 @@ analysis not yet in Mathlib.
 - [x] check_axioms.lean updated: external_ray_map_exists removed from expected axiom list
 
 ## Remaining gaps
-Two sorry's remain (both in GreenFunctionRayInversion.lean):
+Six sorry's remain in GreenFunctionRayInversion.lean (8cde08d):
+
+### Core mathematical gaps:
 1. `green_function_strictMono_along_ray_basin`: strict monotonicity of G_c along rays
    for all ρ > 0 in the basin (requires harmonic maximum principle, not in Mathlib)
 2. `exists_ray_preimage_green_pos`: existence of ρ > 0 with G_c(ρ·u) = t for all t > 0
    (requires that every ray approaches K_c, i.e., G_c → 0 along the ray)
+3. `green_function_strictMono_along_ray`: general c and direction
+
+### Technical lemmas for complex ray proof (c=2):
+4. `log_norm_orbit_lower`: log |orbit z n| ≥ 2^n log|z| - O(2^n)
+5. `log_norm_orbit_ratio_tendsto_atTop`: log-norm ratio diverges for |z₂| > |z₁|
+6. `green_function_strictMono_along_ray_two`: strict monotonicity for c=2, complex u
+
+The complex ray proof structure is complete; only the orbit norm ratio divergence
+analysis remains to be formalized.
