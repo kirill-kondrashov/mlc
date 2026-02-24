@@ -53,6 +53,14 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo`
   - `external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo_via_dudko`
   This connects the direct CP5 closure criterion to the Dudko conformal-identification route.
+- Added Dudko/direct-witness equivalence and assumption-lifted Dudko wrappers:
+  - `directProperLocalWitnessTwo_of_dynamicalBottcherConformalIdentificationTwo`
+  - `dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo`
+  - Dudko ingress and endpoint wrappers from
+    local-homeomorph (`...of_isLocalHomeomorph_restrict_of_preimage_closed`, `...of_boundary_exclusion`)
+    and local-homeomorph-on (`...of_isLocalHomeomorphOn_outside_open_of_preimage_closed`, `...of_boundary_exclusion`)
+    assumptions.
+  This aligns all current non-analytic closure lanes with the Dudko ingress API.
 
 ## Remaining work
 1. Strengthen the new concrete realization so that restricted properness is itself derived from non-axiomatic local inputs for `c = 2`.

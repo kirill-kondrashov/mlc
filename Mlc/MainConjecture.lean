@@ -2700,6 +2700,77 @@ theorem dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessT
   dynamicalBottcherConformalIdentificationTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
     h.1 h.2
 
+/-- Direct proper+local witness extracted from the Dudko-style
+outside-open/exterior conformal identification at `c = 2`. -/
+theorem directProperLocalWitnessTwo_of_dynamicalBottcherConformalIdentificationTwo
+    (hconf : DynamicalBottcherConformalIdentificationTwo) :
+    DirectProperLocalWitnessTwo := by
+  rcases hconf with ⟨e, heq⟩
+  refine ⟨?_, ?_⟩
+  · simpa [heq] using e.isProperMap
+  · simpa [heq] using e.isLocalHomeomorph
+
+/-- At `c = 2`, the Dudko-style conformal-identification ingress is equivalent to
+the direct proper+local closure witness. -/
+theorem dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo :
+    DynamicalBottcherConformalIdentificationTwo ↔ DirectProperLocalWitnessTwo := by
+  constructor
+  · exact directProperLocalWitnessTwo_of_dynamicalBottcherConformalIdentificationTwo
+  · exact dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo
+
+/-- Dudko-style conformal-identification ingress from local-homeomorph plus the
+ambient preimage-closed compact-target condition at `c = 2`. -/
+theorem dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorph_restrict_of_preimage_closed
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    DynamicalBottcherConformalIdentificationTwo :=
+  dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_closed hlocal hclosedpre)
+
+/-- Dudko-style conformal-identification ingress from local-homeomorph plus
+boundary exclusion on compact exterior targets at `c = 2`. -/
+theorem dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    DynamicalBottcherConformalIdentificationTwo :=
+  dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion hlocal hboundary)
+
+/-- Dudko-style conformal-identification ingress from local-homeomorph-on
+outside-open plus preimage-closed compact-target data at `c = 2`. -/
+theorem dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorphOn_outside_open_of_preimage_closed
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    DynamicalBottcherConformalIdentificationTwo :=
+  dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_preimage_closed hlocal_on hclosedpre)
+
+/-- Dudko-style conformal-identification ingress from local-homeomorph-on
+outside-open plus boundary exclusion at `c = 2`. -/
+theorem dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    DynamicalBottcherConformalIdentificationTwo :=
+  dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion
+      hlocal_on hboundary)
+
 /-- Any homeomorphic outside-open/exterior identification for the restricted
 dynamical Böttcher map at `c = 2` yields the proper+local pair needed by the
 CP5 residual left branch. -/
@@ -2759,6 +2830,62 @@ theorem external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo_
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
     (dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo h)
+
+/-- Dudko-route specialization from local-homeomorph plus preimage-closed
+compact-target data at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_of_preimage_closed_via_dudko
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
+    (dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorph_restrict_of_preimage_closed
+      hlocal hclosedpre)
+
+/-- Dudko-route specialization from local-homeomorph plus boundary exclusion on
+compact exterior targets at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorph_restrict_of_boundary_exclusion_via_dudko
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
+    (dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion
+      hlocal hboundary)
+
+/-- Dudko-route specialization from local-homeomorph-on outside-open plus
+preimage-closed compact-target data at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_preimage_closed_via_dudko
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
+    (dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorphOn_outside_open_of_preimage_closed
+      hlocal_on hclosedpre)
+
+/-- Dudko-route specialization from local-homeomorph-on outside-open plus
+boundary exclusion on compact exterior targets at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion_via_dudko
+    (hlocal_on :
+      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
+    (dynamicalBottcherConformalIdentificationTwo_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion
+      hlocal_on hboundary)
 
 /-- Candidate proper+local source family at `c = 2`: outside-open analyticity,
 derivative nonvanishing, and closedness of ambient preimages against compact
