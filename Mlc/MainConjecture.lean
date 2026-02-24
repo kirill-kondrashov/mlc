@@ -3069,6 +3069,36 @@ theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dudko
   exact mlc_conjecture_of_externalRayMapData_two
     (external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dudko h)
 
+/-- Cross-normalization at `c = 2`: the exhausted known-source-or-Dudko
+disjunction is equivalent to the direct proper+local witness. -/
+theorem properLocalSourceExhaustionTwo_knownSourceOrDudko_iff_directProperLocalWitness :
+    (KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) ↔
+      DirectProperLocalWitnessTwo := by
+  constructor
+  · intro h
+    exact directProperLocalWitnessTwo_of_dynamicalBottcherConformalIdentificationTwo
+      ((properLocalSourceExhaustionTwo_dynamicalBottcherConformalIdentification).1 h)
+  · intro hDirect
+    exact Or.inr
+      ((dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo).2 hDirect)
+
+/-- CP5 endpoint from the exhausted known-source-or-direct-witness disjunction at
+`c = 2`, reduced to the direct witness branch. -/
+theorem external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
+    ((properLocalSourceExhaustionTwo_directProperLocalWitness).1 h)
+
+/-- Root MLC wrapper from the exhausted known-source-or-direct-witness
+disjunction at `c = 2`, reduced to the direct witness branch. -/
+theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo
+      h)
+
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative
 component is impossible. -/

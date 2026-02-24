@@ -67,6 +67,11 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dudko`
   - `mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dudko`
   This makes the remaining non-blocked CP5 ingress branch explicit at both endpoint and root levels.
+- Added cross-normalization and direct-disjunction wrappers:
+  - `properLocalSourceExhaustionTwo_knownSourceOrDudko_iff_directProperLocalWitness`
+  - `external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo`
+  - `mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo`
+  This aligns the exhausted disjunction APIs on both Dudko and direct-witness sides.
 
 ## Remaining work
 1. Strengthen the new concrete realization so that restricted properness is itself derived from non-axiomatic local inputs for `c = 2`.
