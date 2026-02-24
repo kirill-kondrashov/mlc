@@ -158,15 +158,65 @@ Proof: δ_{n+1} = (A_n + B_n)*δ_n, and A_n^2/(A_n^2+2) ≥ 16/18 for A_n ≥ 4,
 ε_{n+1} = δ_{n+1}/A_{n+1} ≥ (16/9)*ε_n. -/
 private lemma f2_relative_gap_grows {ρ₁ ρ₂ : ℝ} (h : ρ₁ < ρ₂) (hρ₁ : ρ₁ > 4) (n : ℕ) :
     (f2 ^[n] ρ₂ - f2 ^[n] ρ₁) / f2 ^[n] ρ₁ ≥ (16 / 9) ^ n * ((ρ₂ - ρ₁) / ρ₁) := by
-  -- Induction: gap ε_{n+1} = (A_n+B_n)*ε_n/A_{n+1} ≥ (16/9)*ε_n since A_n ≥ 4.
-  sorry
+  induction n with
+  | zero => simp
+  | succ n ih =>
+    have hρ₁pos : 0 < ρ₁ := by linarith
+    have hA_ge : f2 ^[n] ρ₁ > 4 := lt_of_lt_of_le hρ₁ (f2_iterate_ge ρ₁ hρ₁ n)
+    have hApos : 0 < f2 ^[n] ρ₁ := by linarith
+    have hBgtA : f2 ^[n] ρ₁ < f2 ^[n] ρ₂ := f2_iterate_strictMono h hρ₁pos n
+    have hA2pos : 0 < f2 ^[n] ρ₁ ^ 2 + 2 := by positivity
+    -- Key step: new gap / new base ≥ (16/9) * old gap / old base
+    have hstep : (f2 (f2 ^[n] ρ₂) - f2 (f2 ^[n] ρ₁)) / f2 (f2 ^[n] ρ₁) ≥
+        (16 / 9) * ((f2 ^[n] ρ₂ - f2 ^[n] ρ₁) / f2 ^[n] ρ₁) := by
+      simp only [f2]
+      rw [ge_iff_le, ← sub_nonneg]
+      have heq : (f2 ^[n] ρ₂ ^ 2 + 2 - (f2 ^[n] ρ₁ ^ 2 + 2)) / (f2 ^[n] ρ₁ ^ 2 + 2) -
+          (16 / 9) * ((f2 ^[n] ρ₂ - f2 ^[n] ρ₁) / f2 ^[n] ρ₁) =
+          (f2 ^[n] ρ₂ - f2 ^[n] ρ₁) *
+          ((f2 ^[n] ρ₂ + f2 ^[n] ρ₁) * f2 ^[n] ρ₁ - (16 / 9) * (f2 ^[n] ρ₁ ^ 2 + 2)) /
+          (f2 ^[n] ρ₁ * (f2 ^[n] ρ₁ ^ 2 + 2)) := by field_simp; ring
+      rw [heq]
+      apply div_nonneg
+      · apply mul_nonneg (by linarith)
+        nlinarith [mul_nonneg (show (0:ℝ) ≤ f2 ^[n] ρ₂ - f2 ^[n] ρ₁ by linarith) hApos.le,
+                   mul_pos (show (0:ℝ) < f2 ^[n] ρ₁ - 4 by linarith) hApos]
+      · exact mul_nonneg hApos.le hA2pos.le
+    -- Chain the inductive step
+    simp only [Function.iterate_succ', Function.comp, pow_succ]
+    calc (f2 (f2 ^[n] ρ₂) - f2 (f2 ^[n] ρ₁)) / f2 (f2 ^[n] ρ₁)
+        ≥ (16 / 9) * ((f2 ^[n] ρ₂ - f2 ^[n] ρ₁) / f2 ^[n] ρ₁) := hstep
+      _ ≥ (16 / 9) * ((16 / 9) ^ n * ((ρ₂ - ρ₁) / ρ₁)) :=
+          mul_le_mul_of_nonneg_left ih (by norm_num)
+      _ = (16 / 9) ^ n * (16 / 9) * ((ρ₂ - ρ₁) / ρ₁) := by ring
 
 /-- The orbit ratio `f2^[n] ρ₂ / f2^[n] ρ₁` tends to infinity when ρ₁ < ρ₂. -/
 private lemma f2_ratio_tendsto_atTop {ρ₁ ρ₂ : ℝ} (h : ρ₁ < ρ₂) (hρ₁ : ρ₁ > 4) :
     Tendsto (fun n : ℕ => f2 ^[n] ρ₂ / f2 ^[n] ρ₁) atTop atTop := by
-  -- Strategy: ratio ≥ (16/9)^n * ε₀ where ε₀ = (ρ₂-ρ₁)/ρ₁ > 0.
-  -- Lower bound from f2_relative_gap_grows; upper bound from (16/9)^n → ∞.
-  sorry
+  have hρ₁pos : 0 < ρ₁ := by linarith
+  have hε₀pos : 0 < (ρ₂ - ρ₁) / ρ₁ := div_pos (by linarith) hρ₁pos
+  -- Lower bound: ratio ≥ (16/9)^n * ε₀ (since ratio ≥ gap/base ≥ (16/9)^n * ε₀)
+  have hbound : ∀ n : ℕ, (16 / 9 : ℝ) ^ n * ((ρ₂ - ρ₁) / ρ₁) ≤ f2 ^[n] ρ₂ / f2 ^[n] ρ₁ :=
+    fun n => by
+      have hgap := f2_relative_gap_grows h hρ₁ n
+      have hApos := f2_iterate_pos ρ₁ hρ₁pos n
+      -- f2^n ρ₂ / f2^n ρ₁ = (f2^n ρ₂ - f2^n ρ₁) / f2^n ρ₁ + 1 ≥ gap + 0 ≥ (16/9)^n * ε₀
+      have hgap2 : f2 ^[n] ρ₂ / f2 ^[n] ρ₁ = (f2 ^[n] ρ₂ - f2 ^[n] ρ₁) / f2 ^[n] ρ₁ + 1 := by
+        field_simp [hApos.ne']; ring
+      linarith [hgap, hgap2.symm.le]
+  -- (16/9)^n * ε₀ → ∞, so ratio → ∞ by monotone comparison
+  apply tendsto_atTop_mono hbound
+  rw [Filter.tendsto_atTop]
+  intro b
+  obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp
+    ((Filter.tendsto_atTop.mp (tendsto_pow_atTop_atTop_of_one_lt (by norm_num : (1:ℝ) < 16/9)))
+     (b / ((ρ₂ - ρ₁) / ρ₁)))
+  exact Filter.eventually_atTop.mpr ⟨N, fun n hn => by
+    have h1 := hN n hn
+    calc b = b / ((ρ₂ - ρ₁) / ρ₁) * ((ρ₂ - ρ₁) / ρ₁) :=
+              (div_mul_cancel₀ _ hε₀pos.ne').symm
+      _ ≤ (16 / 9 : ℝ) ^ n * ((ρ₂ - ρ₁) / ρ₁) :=
+              mul_le_mul_of_nonneg_right h1 hε₀pos.le⟩
 
 /-- **Lemma C (real case)**: For `c = 2` and the positive real direction `u = 1`,
 the Green function is strictly increasing: `ρ₁ < ρ₂` implies `G_2(ρ₁) < G_2(ρ₂)`.
@@ -179,13 +229,61 @@ Proof outline (by contradiction):
 lemma green_function_strictMono_along_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ₁ < ρ₂)
     (hρ₁ : ρ₁ > 4) :
     green_function (2 : ℂ) (↑ρ₁ : ℂ) < green_function (2 : ℂ) (↑ρ₂ : ℂ) := by
-  -- Proof by contradiction: assume G₂(ρ₁) ≥ G₂(ρ₂).
-  -- The functional equation G₂(f2^n(ρᵢ)) = 2^n * G₂(ρᵢ) combined with
-  -- the two-sided bound |G₂(z) - log‖z‖| ≤ M gives log(f2^n ρ₂/f2^n ρ₁) bounded,
-  -- but f2_ratio_tendsto_atTop says the ratio → ∞. Contradiction.
-  -- Key lemmas: f2_ratio_tendsto_atTop, green_function_orbit_eq,
-  --             green_function_bdd_above_log, green_function_bdd_below_log.
-  sorry
+  by_contra hle
+  push_neg at hle
+  have hρ₁pos : 0 < ρ₁ := by linarith
+  have hρ₂pos : 0 < ρ₂ := hρ₁pos.trans h
+  set t₁ := green_function (2 : ℂ) (↑ρ₁ : ℂ)
+  set t₂ := green_function (2 : ℂ) (↑ρ₂ : ℂ)
+  set M := 2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ)) ^ 2
+  -- escape_bound (2:ℂ) = max 2 (1 + ‖2‖) = max 2 3 = 3
+  have hesc_two : escape_bound (2 : ℂ) = 3 := by
+    have h2norm : ‖(2 : ℂ)‖ = 2 := by
+      rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast, norm_real,
+          Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+    rw [escape_bound_eq_max, h2norm]; norm_num
+  -- All iterates of ρ₁ and ρ₂ stay above escape_bound
+  have hesc₁ : ∀ n, ‖orbit (2 : ℂ) ↑ρ₁ n‖ > escape_bound (2 : ℂ) := fun n => by
+    rw [norm_orbit_two_real ρ₁ hρ₁pos n, hesc_two]
+    linarith [f2_iterate_ge ρ₁ hρ₁ n]
+  have hesc₂ : ∀ n, ‖orbit (2 : ℂ) ↑ρ₂ n‖ > escape_bound (2 : ℂ) := fun n => by
+    rw [norm_orbit_two_real ρ₂ hρ₂pos n, hesc_two]
+    linarith [f2_iterate_ge ρ₂ (by linarith) n]
+  -- The log-ratio log(f2^n ρ₂) - log(f2^n ρ₁) is bounded by 2M + |t₁-t₂|
+  have hlog_bound : ∀ n, Real.log (f2 ^[n] ρ₂) - Real.log (f2 ^[n] ρ₁) ≤ 2 * M + |t₁ - t₂| := by
+    intro n
+    have hA := f2_iterate_pos ρ₁ hρ₁pos n
+    have hB := f2_iterate_pos ρ₂ hρ₂pos n
+    have hgorb₁ := green_function_orbit_eq (2 : ℂ) ↑ρ₁ n
+    have hgorb₂ := green_function_orbit_eq (2 : ℂ) ↑ρ₂ n
+    -- Upper: log(B_n) ≤ 2^n*t₂ + M  (G ≥ log - M, and G = 2^n*t₂)
+    have hub₂ : Real.log (f2 ^[n] ρ₂) ≤ 2 ^ n * t₂ + M := by
+      have hbdd := green_function_bdd_below_log (2 : ℂ) (orbit (2 : ℂ) ↑ρ₂ n) (hesc₂ n)
+      simp only [norm_orbit_two_real ρ₂ hρ₂pos n] at hbdd
+      linarith [hgorb₂]
+    -- Lower: log(A_n) ≥ 2^n*t₁ - M  (G ≤ log + M, and G = 2^n*t₁)
+    have hlb₁ : Real.log (f2 ^[n] ρ₁) ≥ 2 ^ n * t₁ - M := by
+      have hbdd := green_function_bdd_above_log (2 : ℂ) (orbit (2 : ℂ) ↑ρ₁ n) (hesc₁ n)
+      simp only [norm_orbit_two_real ρ₁ hρ₁pos n] at hbdd
+      linarith [hgorb₁]
+    -- Since hle: t₂ ≤ t₁, we have 2^n*(t₂-t₁) ≤ 0 ≤ |t₁-t₂|
+    have h2n_bound : (2 : ℝ) ^ n * (t₂ - t₁) ≤ |t₁ - t₂| :=
+      le_trans (mul_nonpos_of_nonneg_of_nonpos (pow_pos two_pos n).le (by linarith))
+               (abs_nonneg _)
+    linarith
+  -- The log-ratio → ∞ (since the ratio → ∞ and log is monotone)
+  have hratio_top := f2_ratio_tendsto_atTop h hρ₁
+  have hlog_top : Tendsto (fun n => Real.log (f2 ^[n] ρ₂ / f2 ^[n] ρ₁)) atTop atTop :=
+    Real.tendsto_log_atTop.comp hratio_top
+  -- Extract N where the log-ratio exceeds the upper bound — contradiction
+  obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp
+    ((Filter.tendsto_atTop.mp hlog_top) (2 * M + |t₁ - t₂| + 1))
+  have hlog_N := hlog_bound N
+  have hA_N := f2_iterate_pos ρ₁ hρ₁pos N
+  have hB_N := f2_iterate_pos ρ₂ hρ₂pos N
+  have hN' := hN N le_rfl
+  rw [Real.log_div (by linarith) (by linarith)] at hN'
+  linarith
 
 /-- **Lemma C** [general sorry]: The Green function is strictly increasing along each radial ray.
 For the positive real direction (u = 1) and c = 2, this is proved above. For general
