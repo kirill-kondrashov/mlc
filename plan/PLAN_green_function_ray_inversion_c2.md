@@ -95,16 +95,23 @@ analysis not yet in Mathlib.
 - [x] Lemma C (real ray): green_function_strictMono_along_real_ray_two — PROVED (e36d34e)
   - Sublemmas proved: f2_relative_gap_grows (geometric gap growth), f2_ratio_tendsto_atTop
   - Proof: contradiction via orbit ratio → ∞ vs bounded log from two-sided Green bound
-- [ ] Lemma C (general): green_function_strictMono_along_ray — sorry
+- [ ] Lemma C (full-basin): green_function_strictMono_along_ray_basin — sorry
   - Requires harmonic analysis: max principle for subharmonic functions, not in Mathlib
-- [x] Lemma D (existence): exists_ray_preimage_green — proved via IVT (exists_ray_preimage_green)
-- [ ] Lemma D (uniqueness): exists_unique_ray_preimage_green — sorry (needs full Lemma C)
-- [x] Lemma E: external_ray_map_two_constructive — temporarily wired to existing axiom `external_ray_map_exists (2)` (non-constructive fallback); awaits general Lemma C to make constructive
-- [ ] Wire into MainConjecture.lean with constructive witness once general Lemma C is available
+- [ ] Existence (full-basin): exists_ray_preimage_green_pos — sorry
+  - Requires IVT from G_c = 0 on ∂K_c; needs ray approach to K_c
+- [x] Lemma D (existence, outside-open): exists_ray_preimage_green — proved via IVT
+- [x] Lemma D (uniqueness, full-basin): exists_unique_ray_preimage_green_pos — proved from C (full-basin)
+- [x] Lemma E: external_ray_map_exists_two_via_green_function — PROVED CONSTRUCTIVELY (a5f0b07)
+  - Explicit inverse f(w) = ρ·(w/‖w‖) where ρ is unique positive preimage of log ‖w‖
+  - Right inverse via bottcher_map_apply_ray; left inverse via uniqueness
+  - No longer falls back to external_ray_map_exists axiom
+- [x] Wired into MainConjecture.lean: external_ray_map_exists_two_constructive now uses
+      GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function
+- [x] check_axioms.lean updated: external_ray_map_exists removed from expected axiom list
 
-## Remaining gap
-The only remaining gap is `green_function_strictMono_along_ray` for general complex direction.
-For the real ray (u=1, c=2) it is proved. For general u, the proof requires:
-- The Green function G_c is subharmonic and harmonic outside K_c
-- On each radial ray, G_c is strictly increasing by the maximum principle
-- This requires Mathlib support for subharmonic functions (not yet available)
+## Remaining gaps
+Two sorry's remain (both in GreenFunctionRayInversion.lean):
+1. `green_function_strictMono_along_ray_basin`: strict monotonicity of G_c along rays
+   for all ρ > 0 in the basin (requires harmonic maximum principle, not in Mathlib)
+2. `exists_ray_preimage_green_pos`: existence of ρ > 0 with G_c(ρ·u) = t for all t > 0
+   (requires that every ray approaches K_c, i.e., G_c → 0 along the ray)
