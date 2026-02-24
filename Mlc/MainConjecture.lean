@@ -3287,6 +3287,41 @@ theorem mlc_conjecture_of_dynamicalBottcherConformalIdentificationTwo_via_remain
   exact mlc_conjecture_of_remainingConstructiveIngressTwo
     (remainingConstructiveIngressTwo_of_dynamicalBottcherConformalIdentificationTwo h)
 
+/-- CP5 endpoint from the exhausted known-source-or-direct-witness disjunction at
+`c = 2`, routed through the aggregate non-axiomatic ingress predicate. -/
+theorem external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo_via_remainingConstructiveIngressTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo h)
+
+/-- Root MLC wrapper from the exhausted known-source-or-direct-witness
+disjunction at `c = 2`, routed through the aggregate non-axiomatic ingress
+predicate. -/
+theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo_via_remainingConstructiveIngressTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo h)
+
+/-- CP5 endpoint from the exhausted known-source-or-Dudko disjunction at `c = 2`,
+routed through the aggregate non-axiomatic ingress predicate. -/
+theorem external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
+      h)
+
+/-- Root MLC wrapper from the exhausted known-source-or-Dudko disjunction at
+`c = 2`, routed through the aggregate non-axiomatic ingress predicate. -/
+theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
+      h)
+
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative
 component is impossible. -/
