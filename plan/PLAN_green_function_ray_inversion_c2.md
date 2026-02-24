@@ -115,32 +115,44 @@ analysis not yet in Mathlib.
       GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function
 - [x] check_axioms.lean updated: external_ray_map_exists removed from expected axiom list
 
-## Remaining gaps
-Five sorry's remain in GreenFunctionRayInversion.lean:
+## New file: OrbitNormRatio.lean
+Added `Mlc/Quadratic/Complex/Bottcher/OrbitNormRatio.lean` with:
+- `norm_orbit_two_gt_four`: orbit norms stay > 4 when |z| > 4
+- `norm_orbit_two_strictMono`: orbit norms strictly ordered (1 sorry in small gap case)
+- `norm_orbit_two_ratio_ge_one`: ratio ≥ 1
+- `norm_orbit_two_ratio_tendsto_atTop`: ratio → ∞ (1 sorry in G(z₂) = G(z₁) case)
 
-### Technical analysis gap (circular dependency):
-1. `log_norm_orbit_ratio_tendsto_atTop` **case 2**: When δ = log|z₂| - log|z₁| ≤ 2M (≈0.89),
-   we need to prove G(z₂) > G(z₁) to show the log-norm ratio diverges. But this is
-   exactly the strict monotonicity we're trying to prove. Breaking this circularity
-   requires either:
-   - Direct orbit norm ratio analysis: show |orbit z₂ n|/|orbit z₁ n| → ∞
-   - Subharmonicity argument: G is subharmonic, so max principle applies (not in Mathlib)
-   
-   The case δ > 2M is fully proved using the Green function two-sided bound.
+This file provides a clean structural proof that reduces the problem to showing
+G(z₂) ≠ G(z₁) when |z₂| > |z₁|, which is the strict monotonicity we're trying to prove.
 
-### Dependent lemmas (blocked by case 2):
-2. `green_function_strictMono_along_ray_two`: strict monotonicity for c=2, complex u
-   - Uses log_norm_orbit_ratio_tendsto_atTop (blocked)
-   - Otherwise complete: contradiction structure, norm bounds all in place
-3. `green_function_strictMono_along_ray`: general c and direction
-   - Would need harmonic analysis not in Mathlib
-4. `green_function_strictMono_along_ray_basin`: full basin version
-   - Requires reducing to outside-open case via functional equation
+## Remaining gaps (7 sorries total)
 
-### Existence gap (independent):
-5. `exists_ray_preimage_green_pos`: existence of ρ > 0 with G_c(ρ·u) = t for all t > 0
-   - Requires that every ray approaches K_c, i.e., G_c → 0 along the ray
-   - This is a topological fact about connected Julia sets
+### GreenFunctionRayInversion.lean (5 sorries):
+1. `log_norm_orbit_ratio_tendsto_atTop` case 2 (line 307): When δ ≤ 2M
+2. `green_function_strictMono_along_ray_two` (line 759): complex unit direction, c=2
+3. `green_function_strictMono_along_ray` (line 846): general c
+4. `green_function_strictMono_along_ray_basin` (line 918): full basin version  
+5. `exists_ray_preimage_green_pos` (line 942): existence for t > 0
+
+### OrbitNormRatio.lean (2 sorries):
+6. `norm_orbit_two_strictMono` small gap case (line 73): Need |fc(z₂^n)| > |fc(z₁^n)|
+   when the squared-norm gap is ≤ 4. The naive bounds are insufficient for complex z.
+7. `norm_orbit_two_ratio_tendsto_atTop` G equality case (line 141): Needs G(z₂) ≠ G(z₁)
+   to conclude ratio diverges. This is exactly the strict monotonicity being proven.
+
+### The circular dependency:
+The core challenge is proving G(z₂) > G(z₁) when |z₂| > |z₁| > 4. Two approaches:
+
+**Approach A (Dynamics):** Show orbit norm ratio → ∞ directly.
+- For c=2, f(z) = z² + 2, so ratio r_n = |z₂^(n)|/|z₁^(n)| satisfies
+  r_{n+1} ≥ (r_n² A_n² - 2)/(A_n² + 2) where A_n = |z₁^(n)| → ∞
+- As A_n → ∞, this becomes r_{n+1} ≈ r_n², so ratio grows doubly exponentially
+- Challenge: The ±2 perturbation means when r_n is close to 1 and A_n is moderate,
+  growth isn't guaranteed. Need A_n to be large enough first.
+
+**Approach B (Harmonic analysis):** G is subharmonic (log|Φ| for analytic Φ)
+- Maximum principle: if G(z₂) ≤ G(z₁) with |z₂| > |z₁|, there's a level set issue
+- Not available in Mathlib
 
 ## Completed work
 - [x] `log_norm_orbit_lower`: log |orbit z n| ≥ 2^n log|z| - (2^{n+1}-2) log 2
@@ -148,6 +160,4 @@ Five sorry's remain in GreenFunctionRayInversion.lean:
 - [x] `log_norm_orbit_two_eq_green_scaled`: |log|orbit z n| - 2^n G(z)| ≤ M (O(1) bound)
 - [x] `log_norm_orbit_ratio_tendsto_atTop` case 1 (δ > 2M): proved via exponential growth
 - [x] Real ray strict monotonicity: green_function_strictMono_along_real_ray_two
-
-The complex ray proof structure is complete; only the orbit norm ratio divergence
-analysis for small δ remains to be formalized.
+- [x] OrbitNormRatio.lean structural proof: reduces to G strict monotonicity

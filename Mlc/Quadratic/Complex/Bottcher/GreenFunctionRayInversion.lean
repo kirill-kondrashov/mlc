@@ -279,7 +279,7 @@ private lemma log_norm_orbit_upper (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
 
 /-- For c = 2, log ‖orbit 2 z n‖ = 2^n * G_2(z) + bounded error.
 More precisely, |log ‖orbit 2 z n‖ - 2^n * G_2(z)| ≤ M for all n when ‖z‖ > 4. -/
-private lemma log_norm_orbit_two_eq_green_scaled (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
+lemma log_norm_orbit_two_eq_green_scaled (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
     |Real.log ‖orbit (2 : ℂ) z n‖ - 2^n * green_function (2 : ℂ) z| ≤
     2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2 := by
   -- From green_function_orbit_eq: G_2(orbit 2 z n) = 2^n * G_2(z)
