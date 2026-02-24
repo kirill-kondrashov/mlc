@@ -3106,6 +3106,20 @@ def RemainingConstructiveIngressTwo : Prop :=
     DynamicalBottcherConformalIdentificationTwo ∨
       DirectProperLocalWitnessTwo
 
+/-- Canonical aggregate-ingress introduction at `c = 2` from a direct proper+local
+witness. -/
+theorem remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    RemainingConstructiveIngressTwo :=
+  Or.inr (Or.inr h)
+
+/-- Canonical aggregate-ingress introduction at `c = 2` from the Dudko
+conformal-identification ingress. -/
+theorem remainingConstructiveIngressTwo_of_dynamicalBottcherConformalIdentificationTwo
+    (h : DynamicalBottcherConformalIdentificationTwo) :
+    RemainingConstructiveIngressTwo :=
+  Or.inr (Or.inl h)
+
 /-- Canonical aggregate-ingress introduction at `c = 2` from the exhausted
 known-source-or-direct-witness disjunction. -/
 theorem remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo
@@ -3158,6 +3172,23 @@ theorem remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_o
     exact
       remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
         h
+
+/-- Aggregate-ingress normalization at `c = 2`: equivalent to the Dudko-or-direct
+disjunction once known source families are recognized as blocked. -/
+theorem remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo_or_directProperLocalWitnessTwo :
+    RemainingConstructiveIngressTwo ↔
+      (DynamicalBottcherConformalIdentificationTwo ∨ DirectProperLocalWitnessTwo) := by
+  constructor
+  · intro h
+    rcases h with hKnown | hTail
+    · exact False.elim (not_knownProperLocalSourceCandidateTwo hKnown)
+    · rcases hTail with hDudko | hDirect
+      · exact Or.inl hDudko
+      · exact Or.inr hDirect
+  · intro h
+    rcases h with hDudko | hDirect
+    · exact remainingConstructiveIngressTwo_of_dynamicalBottcherConformalIdentificationTwo hDudko
+    · exact remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo hDirect
 
 /-- Source-exhaustion normalization at `c = 2`: the aggregate non-axiomatic
 ingress predicate collapses to the direct proper+local witness. -/
@@ -3216,6 +3247,22 @@ theorem external_ray_map_exists_two_constructive_of_remainingConstructiveIngress
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
     ((remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo).1 h)
+
+/-- CP5 endpoint from direct proper+local witness at `c = 2`, routed through the
+aggregate non-axiomatic ingress predicate. -/
+theorem external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo_via_remainingConstructiveIngressTwo
+    (h : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo h)
+
+/-- CP5 endpoint from Dudko conformal-identification ingress at `c = 2`, routed
+through the aggregate non-axiomatic ingress predicate. -/
+theorem external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo
+    (h : DynamicalBottcherConformalIdentificationTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_dynamicalBottcherConformalIdentificationTwo h)
 
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative
