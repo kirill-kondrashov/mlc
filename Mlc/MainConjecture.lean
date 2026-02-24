@@ -3138,6 +3138,14 @@ theorem remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or
   · exact Or.inl hKnown
   · exact Or.inr (Or.inl hDudko)
 
+/-- Canonical aggregate-ingress introduction at `c = 2` from the exhausted
+known-source-or-Dudko disjunction (short-name alias). -/
+theorem remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dudko
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    RemainingConstructiveIngressTwo :=
+  remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
+    h
+
 /-- Aggregate-ingress normalization at `c = 2`: equivalent to the exhausted
 known-source-or-direct-witness disjunction. -/
 theorem remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo :
@@ -3321,6 +3329,23 @@ theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottche
   exact mlc_conjecture_of_remainingConstructiveIngressTwo
     (remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
       h)
+
+/-- CP5 endpoint from the exhausted known-source-or-Dudko disjunction at `c = 2`,
+routed through the aggregate ingress predicate (short-name alias). -/
+theorem external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dudko_via_remainingConstructiveIngressTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo
+    h
+
+/-- Root MLC wrapper from the exhausted known-source-or-Dudko disjunction at
+`c = 2`, routed through the aggregate ingress predicate (short-name alias). -/
+theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dudko_via_remainingConstructiveIngressTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo
+      h
 
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative
