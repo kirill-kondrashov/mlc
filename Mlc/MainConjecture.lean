@@ -3181,6 +3181,13 @@ theorem remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_o
       remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
         h
 
+/-- Aggregate-ingress normalization at `c = 2`: equivalent to the exhausted
+known-source-or-Dudko disjunction (short-name alias). -/
+theorem remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_dudko :
+    RemainingConstructiveIngressTwo ↔
+      (KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :=
+  remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
+
 /-- Aggregate-ingress normalization at `c = 2`: equivalent to the Dudko-or-direct
 disjunction once known source families are recognized as blocked. -/
 theorem remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo_or_directProperLocalWitnessTwo :
@@ -3197,6 +3204,13 @@ theorem remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentifica
     rcases h with hDudko | hDirect
     · exact remainingConstructiveIngressTwo_of_dynamicalBottcherConformalIdentificationTwo hDudko
     · exact remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo hDirect
+
+/-- Aggregate-ingress normalization at `c = 2`: equivalent to the Dudko-or-direct
+disjunction (short-name alias). -/
+theorem remainingConstructiveIngressTwo_iff_dudko_or_directProperLocalWitnessTwo :
+    RemainingConstructiveIngressTwo ↔
+      (DynamicalBottcherConformalIdentificationTwo ∨ DirectProperLocalWitnessTwo) :=
+  remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo_or_directProperLocalWitnessTwo
 
 /-- Source-exhaustion normalization at `c = 2`: the aggregate non-axiomatic
 ingress predicate collapses to the direct proper+local witness. -/

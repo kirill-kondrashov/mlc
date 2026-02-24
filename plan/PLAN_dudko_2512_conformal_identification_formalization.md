@@ -81,7 +81,9 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dudko`
   - `remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo`
   - `remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo`
+  - `remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_dudko`
   - `remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo_or_directProperLocalWitnessTwo`
+  - `remainingConstructiveIngressTwo_iff_dudko_or_directProperLocalWitnessTwo`
   - `remainingConstructiveIngressTwo_iff_directProperLocalWitness`
   - `directProperLocalWitnessTwo_of_remainingConstructiveIngressTwo`
   - `dynamicalBottcherConformalIdentificationTwo_of_remainingConstructiveIngressTwo`
