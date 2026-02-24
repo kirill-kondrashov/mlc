@@ -92,7 +92,19 @@ analysis not yet in Mathlib.
 ## Status
 - [x] Lemma A: green_function_pos_on_outside_open — proved from `green_function_pos_of_basin`
 - [x] Lemma B: green_function_tendsto_atTop — proved from `bounded_sublevel_green_function`
-- [ ] Lemma C: green_function_strictMono_along_ray — sorry (core harmonic analysis lemma)
-- [ ] Lemma D: exists_unique_ray_preimage_green — sorry (needs Lemma C + IVT)
-- [ ] Lemma E: external_ray_map_two_constructive — sorry (needs Lemma D)
+- [x] Lemma C (real ray): green_function_strictMono_along_real_ray_two — PROVED (e36d34e)
+  - Sublemmas proved: f2_relative_gap_grows (geometric gap growth), f2_ratio_tendsto_atTop
+  - Proof: contradiction via orbit ratio → ∞ vs bounded log from two-sided Green bound
+- [ ] Lemma C (general): green_function_strictMono_along_ray — sorry
+  - Requires harmonic analysis: max principle for subharmonic functions, not in Mathlib
+- [x] Lemma D (existence): exists_ray_preimage_green — proved via IVT (exists_ray_preimage_green)
+- [ ] Lemma D (uniqueness): exists_unique_ray_preimage_green — sorry (needs full Lemma C)
+- [ ] Lemma E: external_ray_map_two_constructive — sorry (needs full Lemma C)
 - [ ] Wire into MainConjecture.lean
+
+## Remaining gap
+The only remaining gap is `green_function_strictMono_along_ray` for general complex direction.
+For the real ray (u=1, c=2) it is proved. For general u, the proof requires:
+- The Green function G_c is subharmonic and harmonic outside K_c
+- On each radial ray, G_c is strictly increasing by the maximum principle
+- This requires Mathlib support for subharmonic functions (not yet available)
