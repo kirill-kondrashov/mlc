@@ -74,6 +74,10 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   This aligns the exhausted disjunction APIs on both Dudko and direct-witness sides.
 - Added aggregate non-axiomatic ingress normalization:
   - `RemainingConstructiveIngressTwo`
+  - `remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo`
+  - `remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo`
+  - `remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo`
+  - `remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo`
   - `remainingConstructiveIngressTwo_iff_directProperLocalWitness`
   - `dynamicalBottcherConformalIdentificationTwo_of_remainingConstructiveIngressTwo`
   - `remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo`

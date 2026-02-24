@@ -3106,6 +3106,59 @@ def RemainingConstructiveIngressTwo : Prop :=
     DynamicalBottcherConformalIdentificationTwo ∨
       DirectProperLocalWitnessTwo
 
+/-- Canonical aggregate-ingress introduction at `c = 2` from the exhausted
+known-source-or-direct-witness disjunction. -/
+theorem remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DirectProperLocalWitnessTwo) :
+    RemainingConstructiveIngressTwo := by
+  rcases h with hKnown | hDirect
+  · exact Or.inl hKnown
+  · exact Or.inr (Or.inr hDirect)
+
+/-- Canonical aggregate-ingress introduction at `c = 2` from the exhausted
+known-source-or-Dudko disjunction. -/
+theorem remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    RemainingConstructiveIngressTwo := by
+  rcases h with hKnown | hDudko
+  · exact Or.inl hKnown
+  · exact Or.inr (Or.inl hDudko)
+
+/-- Aggregate-ingress normalization at `c = 2`: equivalent to the exhausted
+known-source-or-direct-witness disjunction. -/
+theorem remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo :
+    RemainingConstructiveIngressTwo ↔ (KnownProperLocalSourceCandidateTwo ∨ DirectProperLocalWitnessTwo) := by
+  constructor
+  · intro h
+    rcases h with hKnown | hTail
+    · exact Or.inl hKnown
+    · rcases hTail with hDudko | hDirect
+      · exact Or.inr
+          ((dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo).1 hDudko)
+      · exact Or.inr hDirect
+  · intro h
+    exact
+      remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo
+        h
+
+/-- Aggregate-ingress normalization at `c = 2`: equivalent to the exhausted
+known-source-or-Dudko disjunction. -/
+theorem remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo :
+    RemainingConstructiveIngressTwo ↔
+      (KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) := by
+  constructor
+  · intro h
+    rcases h with hKnown | hTail
+    · exact Or.inl hKnown
+    · rcases hTail with hDudko | hDirect
+      · exact Or.inr hDudko
+      · exact Or.inr
+          ((dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo).2 hDirect)
+  · intro h
+    exact
+      remainingConstructiveIngressTwo_of_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo
+        h
+
 /-- Source-exhaustion normalization at `c = 2`: the aggregate non-axiomatic
 ingress predicate collapses to the direct proper+local witness. -/
 theorem remainingConstructiveIngressTwo_iff_directProperLocalWitness :
