@@ -90,9 +90,9 @@ Milnor's "Dynamics in One Complex Variable", Ch. 9) but requires Green function
 analysis not yet in Mathlib.
 
 ## Status
-- [ ] Lemma A: green_function_pos_on_basin
-- [ ] Lemma B: green_function_tendsto_atTop
-- [ ] Lemma C: green_function_strictMono_along_ray
-- [ ] Lemma D: exists_unique_ray_preimage_green
-- [ ] Lemma E: external_ray_map_two_constructive
+- [x] Lemma A: green_function_pos_on_outside_open — proved from `green_function_pos_of_basin`
+- [x] Lemma B: green_function_tendsto_atTop — proved from `bounded_sublevel_green_function`
+- [ ] Lemma C: green_function_strictMono_along_ray — sorry (core harmonic analysis lemma)
+- [ ] Lemma D: exists_unique_ray_preimage_green — sorry (needs Lemma C + IVT)
+- [ ] Lemma E: external_ray_map_two_constructive — sorry (needs Lemma D)
 - [ ] Wire into MainConjecture.lean
