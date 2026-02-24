@@ -48,6 +48,11 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_preimage_closed`
   - `external_ray_map_exists_two_constructive_of_isLocalHomeomorphOn_outside_open_of_boundary_exclusion`
   This shifts the remaining assumptions further toward local Böttcher payload shapes.
+- Added Dudko ingress from direct proper+local witness shapes:
+  - `dynamicalBottcherConformalIdentificationTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict`
+  - `dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo`
+  - `external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo_via_dudko`
+  This connects the direct CP5 closure criterion to the Dudko conformal-identification route.
 
 ## Remaining work
 1. Strengthen the new concrete realization so that restricted properness is itself derived from non-axiomatic local inputs for `c = 2`.

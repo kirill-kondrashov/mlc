@@ -2658,6 +2658,48 @@ theorem dynamicalBottcherConformalIdentificationTwo_of_isProperMap_restrict_of_o
   dynamicalBottcherConformalIdentificationTwo_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload
     hproper (outsideOpenAnalyticInjPayload_of_outsideOpenAnalyticityHypothesis (2 : ℂ) h_analytic)
 
+/-- Concrete Dudko-style conformal-identification ingress from the restricted
+proper+local pair at `c = 2`, using the degree-one injectivity bridge for the
+restricted map. -/
+theorem dynamicalBottcherConformalIdentificationTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    DynamicalBottcherConformalIdentificationTwo := by
+  let f : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} → {w : ℂ // 1 < ‖w‖} :=
+    bottcher_map_outside_open_to_exterior (2 : ℂ)
+  have hlocalf : IsLocalHomeomorph f := by
+    simpa [f] using hlocal
+  have hsurjData : BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+    bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+      hproper hlocal
+  have hsurj : Function.Surjective f := by
+    intro w
+    rcases hsurjData w.1 w.2 with ⟨z, hz, hEq⟩
+    refine ⟨⟨z, hz⟩, ?_⟩
+    apply Subtype.ext
+    simpa [f, bottcher_map_outside_open_to_exterior] using hEq
+  have h_injOn :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+    Mlc.Bottcher.DegreeOne.injOn_of_proper_localHomeomorph_asymptotic_at_infinity
+      hproper hlocal
+  have hinj : Function.Injective f := by
+    intro x y hxy
+    apply Subtype.ext
+    exact h_injOn x.2 y.2 (congrArg Subtype.val hxy)
+  have hEmb : IsOpenEmbedding f :=
+    IsOpenEmbedding.of_continuous_injective_isOpenMap hlocalf.continuous hinj hlocalf.isOpenMap
+  refine ⟨hEmb.toIsEmbedding.toHomeomorphOfSurjective hsurj, ?_⟩
+  funext z
+  rfl
+
+/-- Dudko-style conformal-identification ingress from the direct proper+local
+closure witness at `c = 2`. -/
+theorem dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    DynamicalBottcherConformalIdentificationTwo :=
+  dynamicalBottcherConformalIdentificationTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    h.1 h.2
+
 /-- Any homeomorphic outside-open/exterior identification for the restricted
 dynamical Böttcher map at `c = 2` yields the proper+local pair needed by the
 CP5 residual left branch. -/
@@ -2709,6 +2751,14 @@ theorem external_ray_map_exists_two_constructive_of_isProperMap_restrict_of_outs
   external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
     (dynamicalBottcherConformalIdentificationTwo_of_isProperMap_restrict_of_outsideOpenAnalyticInjPayload
       hproper h_payload)
+
+/-- Dudko-route specialization from the direct proper+local closure witness at
+`c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo_via_dudko
+    (h : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
+    (dynamicalBottcherConformalIdentificationTwo_of_directProperLocalWitnessTwo h)
 
 /-- Candidate proper+local source family at `c = 2`: outside-open analyticity,
 derivative nonvanishing, and closedness of ambient preimages against compact
