@@ -61,6 +61,12 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
     and local-homeomorph-on (`...of_isLocalHomeomorphOn_outside_open_of_preimage_closed`, `...of_boundary_exclusion`)
     assumptions.
   This aligns all current non-analytic closure lanes with the Dudko ingress API.
+- Added source-exhaustion normalization into direct-witness/Dudko forms:
+  - `properLocalSourceExhaustionTwo_directProperLocalWitness`
+  - `properLocalSourceExhaustionTwo_dynamicalBottcherConformalIdentification`
+  - `external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dudko`
+  - `mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dudko`
+  This makes the remaining non-blocked CP5 ingress branch explicit at both endpoint and root levels.
 
 ## Remaining work
 1. Strengthen the new concrete realization so that restricted properness is itself derived from non-axiomatic local inputs for `c = 2`.

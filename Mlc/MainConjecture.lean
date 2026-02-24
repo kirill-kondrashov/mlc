@@ -3034,6 +3034,41 @@ theorem properLocalSourceExhaustionTwo :
   · intro hDirect
     exact Or.inr hDirect
 
+/-- Direct-witness presentation of `properLocalSourceExhaustionTwo` at `c = 2`. -/
+theorem properLocalSourceExhaustionTwo_directProperLocalWitness :
+    (KnownProperLocalSourceCandidateTwo ∨ DirectProperLocalWitnessTwo) ↔
+      DirectProperLocalWitnessTwo := by
+  simpa [DirectProperLocalWitnessTwo] using properLocalSourceExhaustionTwo
+
+/-- Dudko-ingress presentation of source exhaustion at `c = 2`: the known source
+families are blocked, so any surviving disjunction branch is Dudko directly. -/
+theorem properLocalSourceExhaustionTwo_dynamicalBottcherConformalIdentification :
+    (KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) ↔
+      DynamicalBottcherConformalIdentificationTwo := by
+  constructor
+  · intro h
+    rcases h with hKnown | hDudko
+    · exact False.elim (not_knownProperLocalSourceCandidateTwo hKnown)
+    · exact hDudko
+  · intro hDudko
+    exact Or.inr hDudko
+
+/-- CP5 endpoint from the exhausted source disjunction at `c = 2`, reduced to the
+Dudko branch. -/
+theorem external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dudko
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
+    ((properLocalSourceExhaustionTwo_dynamicalBottcherConformalIdentification).1 h)
+
+/-- Root MLC wrapper from the exhausted source disjunction at `c = 2`, reduced to
+the Dudko branch. -/
+theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_dudko
+    (h : KnownProperLocalSourceCandidateTwo ∨ DynamicalBottcherConformalIdentificationTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_dudko h)
+
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative
 component is impossible. -/
