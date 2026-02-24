@@ -3204,6 +3204,13 @@ theorem remainingConstructiveIngressTwo_iff_directProperLocalWitness :
   · intro hDirect
     exact Or.inr (Or.inr hDirect)
 
+/-- Direct-witness extraction from the aggregate non-axiomatic ingress predicate
+at `c = 2`. -/
+theorem directProperLocalWitnessTwo_of_remainingConstructiveIngressTwo
+    (h : RemainingConstructiveIngressTwo) :
+    DirectProperLocalWitnessTwo :=
+  (remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h
+
 /-- Dudko-ingress extraction from the aggregate non-axiomatic ingress predicate
 at `c = 2`. -/
 theorem dynamicalBottcherConformalIdentificationTwo_of_remainingConstructiveIngressTwo
@@ -3262,6 +3269,22 @@ theorem external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalId
     (h : DynamicalBottcherConformalIdentificationTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_dynamicalBottcherConformalIdentificationTwo h)
+
+/-- Root MLC wrapper from direct proper+local witness at `c = 2`, routed through
+the aggregate non-axiomatic ingress predicate. -/
+theorem mlc_conjecture_of_directProperLocalWitnessTwo_via_remainingConstructiveIngressTwo
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_remainingConstructiveIngressTwo
+    (remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo h)
+
+/-- Root MLC wrapper from Dudko conformal-identification ingress at `c = 2`,
+routed through the aggregate non-axiomatic ingress predicate. -/
+theorem mlc_conjecture_of_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo
+    (h : DynamicalBottcherConformalIdentificationTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_remainingConstructiveIngressTwo
     (remainingConstructiveIngressTwo_of_dynamicalBottcherConformalIdentificationTwo h)
 
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +

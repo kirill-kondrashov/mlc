@@ -82,12 +82,15 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `remainingConstructiveIngressTwo_iff_knownProperLocalSourceCandidateTwo_or_dynamicalBottcherConformalIdentificationTwo`
   - `remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo_or_directProperLocalWitnessTwo`
   - `remainingConstructiveIngressTwo_iff_directProperLocalWitness`
+  - `directProperLocalWitnessTwo_of_remainingConstructiveIngressTwo`
   - `dynamicalBottcherConformalIdentificationTwo_of_remainingConstructiveIngressTwo`
   - `remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo`
   - `external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo`
   - `external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo_via_dudko`
   - `external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo_via_remainingConstructiveIngressTwo`
   - `external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo`
+  - `mlc_conjecture_of_directProperLocalWitnessTwo_via_remainingConstructiveIngressTwo`
+  - `mlc_conjecture_of_dynamicalBottcherConformalIdentificationTwo_via_remainingConstructiveIngressTwo`
   - `mlc_conjecture_of_remainingConstructiveIngressTwo`
   This consolidates all currently exposed non-axiomatic ingress branches into one predicate that normalizes to the direct witness target.
 
