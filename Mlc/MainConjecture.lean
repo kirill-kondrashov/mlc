@@ -3099,6 +3099,51 @@ theorem mlc_conjecture_of_knownProperLocalSourceCandidateTwo_or_directProperLoca
     (external_ray_map_exists_two_constructive_of_knownProperLocalSourceCandidateTwo_or_directProperLocalWitnessTwo
       h)
 
+/-- Aggregate predicate collecting all currently exposed non-axiomatic ingress
+branches for the `c = 2` constructive endpoint. -/
+def RemainingConstructiveIngressTwo : Prop :=
+  KnownProperLocalSourceCandidateTwo ∨
+    DynamicalBottcherConformalIdentificationTwo ∨
+      DirectProperLocalWitnessTwo
+
+/-- Source-exhaustion normalization at `c = 2`: the aggregate non-axiomatic
+ingress predicate collapses to the direct proper+local witness. -/
+theorem remainingConstructiveIngressTwo_iff_directProperLocalWitness :
+    RemainingConstructiveIngressTwo ↔ DirectProperLocalWitnessTwo := by
+  constructor
+  · intro h
+    rcases h with hKnown | hTail
+    · exact False.elim (not_knownProperLocalSourceCandidateTwo hKnown)
+    · rcases hTail with hDudko | hDirect
+      · exact directProperLocalWitnessTwo_of_dynamicalBottcherConformalIdentificationTwo hDudko
+      · exact hDirect
+  · intro hDirect
+    exact Or.inr (Or.inr hDirect)
+
+/-- Dudko-ingress extraction from the aggregate non-axiomatic ingress predicate
+at `c = 2`. -/
+theorem dynamicalBottcherConformalIdentificationTwo_of_remainingConstructiveIngressTwo
+    (h : RemainingConstructiveIngressTwo) :
+    DynamicalBottcherConformalIdentificationTwo :=
+  (dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo).2
+    ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h)
+
+/-- CP5 endpoint from the aggregate non-axiomatic ingress predicate at `c = 2`,
+reduced to the direct witness branch. -/
+theorem external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo
+    (h : RemainingConstructiveIngressTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_directProperLocalWitnessTwo
+    ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h)
+
+/-- Root MLC wrapper from the aggregate non-axiomatic ingress predicate at
+`c = 2`. -/
+theorem mlc_conjecture_of_remainingConstructiveIngressTwo
+    (h : RemainingConstructiveIngressTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo h)
+
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative
 component is impossible. -/
