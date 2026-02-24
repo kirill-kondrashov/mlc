@@ -3128,6 +3128,18 @@ theorem dynamicalBottcherConformalIdentificationTwo_of_remainingConstructiveIngr
   (dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo).2
     ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h)
 
+/-- Source-exhaustion normalization at `c = 2`: the aggregate non-axiomatic
+ingress predicate is equivalent to the Dudko conformal-identification ingress. -/
+theorem remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo :
+    RemainingConstructiveIngressTwo ↔ DynamicalBottcherConformalIdentificationTwo := by
+  constructor
+  · intro h
+    exact (dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo).2
+      ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h)
+  · intro hDudko
+    exact (remainingConstructiveIngressTwo_iff_directProperLocalWitness).2
+      ((dynamicalBottcherConformalIdentificationTwo_iff_directProperLocalWitnessTwo).1 hDudko)
+
 /-- CP5 endpoint from the aggregate non-axiomatic ingress predicate at `c = 2`,
 reduced to the direct witness branch. -/
 theorem external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo
@@ -3143,6 +3155,14 @@ theorem mlc_conjecture_of_remainingConstructiveIngressTwo
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
     (external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo h)
+
+/-- CP5 endpoint from the aggregate non-axiomatic ingress predicate at `c = 2`,
+presented via the Dudko branch. -/
+theorem external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo_via_dudko
+    (h : RemainingConstructiveIngressTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_dynamicalBottcherConformalIdentificationTwo
+    ((remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo).1 h)
 
 /-- Scope-check no-go at `c = 2`: this combined iterate-left-inverse +
 analytic/derivative payload is inconsistent because the analytic/derivative

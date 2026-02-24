@@ -76,7 +76,9 @@ Formalize the input suggested by arXiv:2512.24171 (lines ~189-193): at `c = 2`, 
   - `RemainingConstructiveIngressTwo`
   - `remainingConstructiveIngressTwo_iff_directProperLocalWitness`
   - `dynamicalBottcherConformalIdentificationTwo_of_remainingConstructiveIngressTwo`
+  - `remainingConstructiveIngressTwo_iff_dynamicalBottcherConformalIdentificationTwo`
   - `external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo`
+  - `external_ray_map_exists_two_constructive_of_remainingConstructiveIngressTwo_via_dudko`
   - `mlc_conjecture_of_remainingConstructiveIngressTwo`
   This consolidates all currently exposed non-axiomatic ingress branches into one predicate that normalizes to the direct witness target.
 
