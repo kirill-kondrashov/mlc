@@ -236,49 +236,52 @@ private lemma log_norm_fc_two_upper (z : ℂ) (hz : ‖z‖ > 4) :
     _ = Real.log 2 + 2 * Real.log ‖z‖ := by rw [hlog_sq]
     _ = 2 * Real.log ‖z‖ + Real.log 2 := by ring
 
-/-- The log-norm of orbit n grows roughly like 2^n * log |z₀| with linear error.
-More precisely: log |orbit z n| ≥ 2^n * log |z| - n * log 2 when |z| > 4. -/
+/-- The log-norm of orbit n grows roughly like 2^n * log |z₀| with bounded error.
+More precisely: log |orbit z n| ≥ 2^n * log |z| - (2^{n+1} - 2) * log 2 when |z| > 4. -/
 private lemma log_norm_orbit_lower (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
     Real.log ‖orbit (2 : ℂ) z n‖ ≥ 2^n * Real.log ‖z‖ - (2^(n+1) - 2) * Real.log 2 := by
-  -- The error bound is 2^{n+1} - 2 because each iteration adds at most 2 * log 2 to the error.
-  -- log |f_2(z)| = 2 * log |z| ± log 2, so after n steps:
-  -- log |orbit z n| = 2^n * log |z| ± (2^{n+1} - 2) * log 2
-  sorry
+  induction n with
+  | zero =>
+    simp only [orbit_zero, pow_zero, one_mul, pow_one, Nat.add_eq, Nat.add_zero]
+    norm_num
+  | succ n ih =>
+    have h_orb_gt_4 : ‖orbit (2 : ℂ) z n‖ > 4 := norm_orbit_two_gt_four z hz n
+    simp only [orbit_succ]
+    have hstep := log_norm_fc_two_lower (orbit (2 : ℂ) z n) h_orb_gt_4
+    calc Real.log ‖fc (2 : ℂ) (orbit (2 : ℂ) z n)‖
+        ≥ 2 * Real.log ‖orbit (2 : ℂ) z n‖ - Real.log 2 := hstep
+      _ ≥ 2 * (2^n * Real.log ‖z‖ - (2^(n+1) - 2) * Real.log 2) - Real.log 2 := by linarith
+      _ = 2^(n+1) * Real.log ‖z‖ - (2 * (2^(n+1) - 2) + 1) * Real.log 2 := by ring
+      _ = 2^(n+1) * Real.log ‖z‖ - (2^(n+2) - 3) * Real.log 2 := by ring
+      _ ≥ 2^(n+1) * Real.log ‖z‖ - (2^(n+2) - 2) * Real.log 2 := by
+          have hlog2 : Real.log 2 > 0 := Real.log_pos (by norm_num)
+          linarith
 
-/-- The log-norm ratio grows exponentially: if |z₂| > |z₁| > 4, then the log-ratio
-tends to infinity as n → ∞. Specifically, the ratio dominates any polynomial in n. -/
-private lemma log_norm_orbit_ratio_tendsto_atTop (z₁ z₂ : ℂ) (hz₁ : ‖z₁‖ > 4) (hz₂ : ‖z₂‖ > ‖z₁‖) :
-    Tendsto (fun n : ℕ => Real.log ‖orbit (2 : ℂ) z₂ n‖ - Real.log ‖orbit (2 : ℂ) z₁ n‖) atTop atTop := by
-  have hz₂_gt_4 : ‖z₂‖ > 4 := by linarith
-  have hz₁_pos : 0 < ‖z₁‖ := by linarith
-  have hz₂_pos : 0 < ‖z₂‖ := by linarith
-  -- Key: log |z₂| - log |z₁| > 0
-  have hdiff : Real.log ‖z₂‖ - Real.log ‖z₁‖ > 0 := by
-    have hlt := Real.log_lt_log hz₁_pos hz₂
-    linarith
-  -- Lower bound: log |orbit z₂ n| - log |orbit z₁ n| ≥ 2^n * (log |z₂| - log |z₁|) - 2n * log 2
-  -- This follows from: log |orbit z₂ n| ≥ 2^n * log |z₂| - n * log 2
-  --                    log |orbit z₁ n| ≤ 2^n * log |z₁| + n * log 2 (need upper bound)
-  -- For now, we use a tendsto argument based on the Green function characterization.
-  -- From the two-sided bound: log |orbit z n| = 2^n * G(z) + O(1)
-  -- So log |orbit z₂ n| - log |orbit z₁ n| = 2^n * (G(z₂) - G(z₁)) + O(1)
-  -- If G(z₂) > G(z₁), this → ∞.
-  -- If G(z₂) ≤ G(z₁), then from the two-sided bound at initial points:
-  --   log |z₂| - M ≤ G(z₂) ≤ G(z₁) ≤ log |z₁| + M
-  -- So log |z₂| - log |z₁| ≤ 2M, which bounds the initial gap.
-  -- But the orbit dynamics amplify differences... this needs careful analysis.
-  --
-  -- Alternative approach: use log_norm_orbit_lower to get
-  --   log |orbit z₂ n| ≥ 2^n * log |z₂| - n * log 2
-  -- and show the orbit of z₁ grows slower than 2^n * log |z₂|.
-  sorry
+/-- Upper bound: log |orbit z n| ≤ 2^n * log |z| + (2^{n+1} - 2) * log 2 when |z| > 4. -/
+private lemma log_norm_orbit_upper (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
+    Real.log ‖orbit (2 : ℂ) z n‖ ≤ 2^n * Real.log ‖z‖ + (2^(n+1) - 2) * Real.log 2 := by
+  induction n with
+  | zero =>
+    simp only [orbit_zero, pow_zero, one_mul, pow_one, Nat.add_eq, Nat.add_zero]
+    norm_num
+  | succ n ih =>
+    have h_orb_gt_4 : ‖orbit (2 : ℂ) z n‖ > 4 := norm_orbit_two_gt_four z hz n
+    simp only [orbit_succ]
+    have hstep := log_norm_fc_two_upper (orbit (2 : ℂ) z n) h_orb_gt_4
+    calc Real.log ‖fc (2 : ℂ) (orbit (2 : ℂ) z n)‖
+        ≤ 2 * Real.log ‖orbit (2 : ℂ) z n‖ + Real.log 2 := hstep
+      _ ≤ 2 * (2^n * Real.log ‖z‖ + (2^(n+1) - 2) * Real.log 2) + Real.log 2 := by linarith
+      _ = 2^(n+1) * Real.log ‖z‖ + (2 * (2^(n+1) - 2) + 1) * Real.log 2 := by ring
+      _ = 2^(n+1) * Real.log ‖z‖ + (2^(n+2) - 3) * Real.log 2 := by ring
+      _ ≤ 2^(n+1) * Real.log ‖z‖ + (2^(n+2) - 2) * Real.log 2 := by
+          have hlog2 : Real.log 2 > 0 := Real.log_pos (by norm_num)
+          linarith
 
 /-- For c = 2, log ‖orbit 2 z n‖ = 2^n * G_2(z) + bounded error.
 More precisely, |log ‖orbit 2 z n‖ - 2^n * G_2(z)| ≤ M for all n when ‖z‖ > 4. -/
 private lemma log_norm_orbit_two_eq_green_scaled (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
     |Real.log ‖orbit (2 : ℂ) z n‖ - 2^n * green_function (2 : ℂ) z| ≤
     2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2 := by
-  have M := 2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2
   -- From green_function_orbit_eq: G_2(orbit 2 z n) = 2^n * G_2(z)
   have hG : green_function (2 : ℂ) (orbit (2 : ℂ) z n) = 2^n * green_function (2 : ℂ) z :=
     green_function_orbit_eq (2 : ℂ) z n
@@ -298,6 +301,322 @@ private lemma log_norm_orbit_two_eq_green_scaled (z : ℂ) (hz : ‖z‖ > 4) (n
   rw [hG] at hbdd_lo hbdd_hi
   rw [abs_le]
   constructor <;> linarith
+
+/-- The log-norm ratio grows exponentially: if |z₂| > |z₁| > 4, then the log-ratio
+tends to infinity as n → ∞. -/
+private lemma log_norm_orbit_ratio_tendsto_atTop (z₁ z₂ : ℂ) (hz₁ : ‖z₁‖ > 4) (hz₂ : ‖z₂‖ > ‖z₁‖) :
+    Tendsto (fun n : ℕ => Real.log ‖orbit (2 : ℂ) z₂ n‖ - Real.log ‖orbit (2 : ℂ) z₁ n‖) atTop atTop := by
+  have hz₂_gt_4 : ‖z₂‖ > 4 := by linarith
+  have hz₁_pos : 0 < ‖z₁‖ := by linarith
+  have hz₂_pos : 0 < ‖z₂‖ := by linarith
+  -- Key: δ := log |z₂| - log |z₁| > 0
+  have hdiff : Real.log ‖z₂‖ - Real.log ‖z₁‖ > 0 := by
+    have hlt := Real.log_lt_log hz₁_pos hz₂
+    linarith
+  set δ := Real.log ‖z₂‖ - Real.log ‖z₁‖ with hδ_def
+  -- Lower bound on the difference using our orbit bounds:
+  -- log |orbit z₂ n| - log |orbit z₁ n| ≥ 2^n * δ - 2 * (2^{n+1} - 2) * log 2
+  have hbound : ∀ n : ℕ, Real.log ‖orbit (2 : ℂ) z₂ n‖ - Real.log ‖orbit (2 : ℂ) z₁ n‖ ≥
+      2^n * δ - 2 * (2^(n+1) - 2) * Real.log 2 := fun n => by
+    have h1 := log_norm_orbit_lower z₂ hz₂_gt_4 n
+    have h2 := log_norm_orbit_upper z₁ hz₁ n
+    linarith
+  -- Simplify: 2^n * δ - 2 * (2^{n+1} - 2) * log 2 = 2^n * (δ - 4 * log 2) + 4 * log 2
+  -- This tends to +∞ if δ > 4 * log 2, but we need a different approach for small δ.
+  -- Better: 2^n * δ - 2*(2^{n+1} - 2)*log 2 = 2^n * δ - 4*(2^n - 1)*log 2
+  --       = 2^n * (δ - 4*log 2) + 4*log 2
+  -- For this to go to +∞, we need δ > 4*log 2 ≈ 2.77, which isn't always true!
+  --
+  -- Actually, the correct error bound from our lemmas is (2^{n+1} - 2) * log 2 for EACH term,
+  -- so the total error is 2*(2^{n+1} - 2)*log 2 = (2^{n+2} - 4)*log 2.
+  -- So the bound is: 2^n * δ - (2^{n+2} - 4) * log 2 = 2^n * (δ - 4*log 2) + 4*log 2
+  --
+  -- This doesn't work for small δ! We need a tighter analysis using the Green function bounds.
+  -- The key insight is that log |orbit z n| = 2^n * G(z) + O(1), where G(z) ≈ log|z|.
+  -- So the ratio difference = 2^n * (G(z₂) - G(z₁)) + O(1).
+  -- If G(z₂) > G(z₁) (which we want to prove!), this → ∞.
+  --
+  -- For now, use the Green function characterization directly:
+  have hlog2 : Real.log 2 > 0 := Real.log_pos (by norm_num)
+  -- From log_norm_orbit_two_eq_green_scaled: |log |orbit z n| - 2^n * G(z)| ≤ M
+  have hM : 2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2 = 4 / 9 := by
+    have h2norm : ‖(2 : ℂ)‖ = 2 := Complex.norm_two
+    have hesc : escape_bound (2 : ℂ) = 3 := by
+      rw [escape_bound_eq_max, h2norm]; norm_num
+    rw [h2norm, hesc]; norm_num
+  have hM_pos : 2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2 > 0 := by rw [hM]; norm_num
+  have hbdd₁ : ∀ n, |Real.log ‖orbit (2 : ℂ) z₁ n‖ - 2^n * green_function (2 : ℂ) z₁| ≤
+      2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2 :=
+    fun n => log_norm_orbit_two_eq_green_scaled z₁ hz₁ n
+  have hbdd₂ : ∀ n, |Real.log ‖orbit (2 : ℂ) z₂ n‖ - 2^n * green_function (2 : ℂ) z₂| ≤
+      2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2 :=
+    fun n => log_norm_orbit_two_eq_green_scaled z₂ hz₂_gt_4 n
+  -- From two-sided bound: G(z) ∈ [log|z| - M, log|z| + M] for |z| > 4
+  have hesc_two : escape_bound (2 : ℂ) = 3 := by
+    have h2norm : ‖(2 : ℂ)‖ = 2 := Complex.norm_two
+    rw [escape_bound_eq_max, h2norm]; norm_num
+  have hesc₁ : ‖z₁‖ > escape_bound (2 : ℂ) := by rw [hesc_two]; linarith
+  have hesc₂ : ‖z₂‖ > escape_bound (2 : ℂ) := by rw [hesc_two]; linarith
+  have hG₁_bdd := green_function_bdd_below_log (2 : ℂ) z₁ hesc₁
+  have hG₂_bdd := green_function_bdd_below_log (2 : ℂ) z₂ hesc₂
+  -- G(z₂) ≥ log|z₂| - M > log|z₁| - M (since |z₂| > |z₁|)
+  -- But we can't conclude G(z₂) > G(z₁) without more work...
+  --
+  -- The key is that the orbit difference bound gives us:
+  -- log|orbit z₂ n| - log|orbit z₁ n| ≥ 2^n * (G(z₂) - G(z₁)) - 2M
+  set M := 2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2 with hM_def
+  have hdiff_bound : ∀ n, Real.log ‖orbit (2 : ℂ) z₂ n‖ - Real.log ‖orbit (2 : ℂ) z₁ n‖ ≥
+      2^n * (green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁) - 2 * M := fun n => by
+    have h1 := hbdd₁ n
+    have h2 := hbdd₂ n
+    rw [abs_le] at h1 h2
+    linarith
+  -- Now we need G(z₂) - G(z₁) > 0 (which is what we want to prove!)
+  -- OR we need a different approach...
+  --
+  -- Actually, we can use the fact that G(z₂) - G(z₁) ≥ (log|z₂| - M) - (log|z₁| + M) = δ - 2M
+  -- If δ > 2M, then G(z₂) - G(z₁) > 0 and we're done.
+  -- If δ ≤ 2M, we need a more refined argument...
+  --
+  -- The cleanest approach: show that for ANY ε > 0 with G(z₂) - G(z₁) ≥ -ε,
+  -- eventually 2^n * (G(z₂) - G(z₁)) - 2M > any given bound.
+  -- But if G(z₂) - G(z₁) < 0, this fails!
+  --
+  -- ACTUAL KEY INSIGHT: We're NOT assuming G(z₂) > G(z₁). We're proving it.
+  -- The orbit log-norm ratio bounds show that if |z₂| > |z₁| > 4, then the log-ratio
+  -- of orbits tends to +∞ OR stays bounded. We use the lower/upper bounds directly.
+  --
+  -- From log_norm_orbit_lower/upper with error (2^{n+1} - 2) * log 2:
+  -- log|orbit z₂ n| - log|orbit z₁ n| ≥ 2^n * δ - 2*(2^{n+1} - 2)*log 2
+  --                                    = 2^n * δ - (2^{n+2} - 4)*log 2
+  --                                    = 2^n * (δ - 4*log 2) + 4*log 2
+  -- For δ > 4*log 2 ≈ 2.77, this → +∞.
+  -- For δ ≤ 4*log 2, we need the Green function analysis (or tighter bounds).
+  --
+  -- For the general case, we'll use the Green function O(1) bound which gives:
+  -- log|orbit z n| = 2^n * G(z) + O(1), so the difference = 2^n * ΔG + O(1)
+  -- where ΔG = G(z₂) - G(z₁). If ΔG > 0, this → +∞.
+  --
+  -- From the two-sided bounds: ΔG ≥ (log|z₂| - M) - (log|z₁| + M) = δ - 2M
+  -- M = 4/9 for c=2, so 2M = 8/9 < 1.
+  -- If δ > 2M (i.e., log(|z₂|/|z₁|) > 8/9, i.e., |z₂|/|z₁| > e^{8/9} ≈ 2.44), done.
+  -- Otherwise, use iteration argument: after k iterations, effective δ becomes 2^k * δ,
+  -- and M stays the same. So for large enough k, 2^k * δ > 2M.
+  --
+  -- Actually simpler: from hdiff_bound and the fact that the O(1) term is constant,
+  -- even if G(z₂) - G(z₁) = 0, the bound gives us 2^n * 0 - 2M = -2M (constant).
+  -- But if G(z₂) - G(z₁) > 0, then 2^n * (G(z₂) - G(z₁)) → +∞.
+  -- And from the two-sided bound: G(z₂) - G(z₁) ≥ δ - 2M.
+  -- Since δ > 0 and the iteration doubles δ but keeps M fixed, eventually we get divergence.
+  --
+  -- Let's just use: from our bounds, the difference is at least 2^n * δ - (2^{n+2} - 4) * log 2.
+  -- Factor out 2^n: = 2^n * (δ - 4*log 2) + 4*log 2.
+  -- If δ > 4*log 2, this → +∞. Otherwise, we iterate:
+  -- After 1 step, z₁ → f(z₁), z₂ → f(z₂), and |f(z₂)| > |f(z₁)| (norm grows).
+  -- The new δ' = log|f(z₂)| - log|f(z₁)| ≈ 2*log|z₂| - 2*log|z₁| + O(1) = 2δ + O(1).
+  -- Eventually δ' > 4*log 2 and we get divergence.
+  --
+  -- For a clean proof, use: tendsto follows from eventually_ge_atTop.
+  apply Filter.tendsto_atTop_atTop.mpr
+  intro b
+  -- We need N such that for all n ≥ N, the log-ratio ≥ b.
+  -- From hdiff_bound: log-ratio ≥ 2^n * (G(z₂) - G(z₁)) - 2M
+  -- From two-sided: G(z₂) - G(z₁) ≥ δ - 2M where δ = log|z₂| - log|z₁| > 0
+  -- So log-ratio ≥ 2^n * (δ - 2M) - 2M
+  -- Since δ > 0, either δ > 2M (and G-diff > 0, so diverges),
+  -- or δ ≤ 2M (boundary case, need more care).
+  --
+  -- General argument: G(z) is strictly increasing in |z| for |z| > 4 (what we want to prove!).
+  -- For now, assume G(z₂) > G(z₁) when |z₂| > |z₁| > 4. Then:
+  have hG₁_hi := green_function_bdd_above_log (2 : ℂ) z₁ hesc₁
+  have hG₂_lo := green_function_bdd_below_log (2 : ℂ) z₂ hesc₂
+  -- G(z₁) ≤ log|z₁| + M, G(z₂) ≥ log|z₂| - M
+  -- So G(z₂) - G(z₁) ≥ log|z₂| - log|z₁| - 2M = δ - 2M
+  -- Note: hG₁_hi and hG₂_lo have bounds in terms of 2*‖(2:ℂ)‖/(escape_bound (2:ℂ))^2 = M
+  have hGdiff : green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁ ≥ δ - 2 * M := by
+    simp only [hM_def] at hG₁_hi hG₂_lo
+    linarith
+  by_cases hcase : δ > 2 * M
+  · -- Case 1: δ > 2M, so G(z₂) - G(z₁) > 0
+    have hGpos : green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁ > 0 := by linarith
+    -- Find N such that 2^N * (G(z₂) - G(z₁)) - 2M > b
+    obtain ⟨N, hN⟩ : ∃ N : ℕ, 2^N * (green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁) > b + 2 * M := by
+      have h2pow : Tendsto (fun n : ℕ => (2 : ℝ)^n) atTop atTop := tendsto_pow_atTop_atTop_of_one_lt (by norm_num)
+      have hprod : Tendsto (fun n : ℕ => (2 : ℝ)^n * (green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁)) atTop atTop :=
+        Filter.Tendsto.atTop_mul_const hGpos h2pow
+      have hev := Filter.Tendsto.eventually_gt_atTop hprod (b + 2 * M)
+      exact hev.exists
+    use N
+    intro n hn
+    have hdiff_n := hdiff_bound n
+    have h2n : (2 : ℝ)^n ≥ 2^N := by gcongr; norm_num
+    have hstep1 : Real.log ‖orbit (2 : ℂ) z₂ n‖ - Real.log ‖orbit (2 : ℂ) z₁ n‖ ≥
+        2^N * (green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁) - 2 * M := by
+      have h1 : (2 : ℝ)^n * (green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁) ≥
+          (2 : ℝ)^N * (green_function (2 : ℂ) z₂ - green_function (2 : ℂ) z₁) :=
+        mul_le_mul_of_nonneg_right h2n hGpos.le
+      linarith
+    linarith
+  · -- Case 2: δ ≤ 2M, more subtle
+    -- In this case, G(z₂) - G(z₁) might be ≤ 0, but we can still use the orbit bounds.
+    -- The key is that after enough iterations, the "effective δ" grows.
+    -- From log_norm_orbit_lower/upper, after n steps:
+    -- log|orbit z n| = 2^n * log|z| ± O(2^n)
+    -- So log|orbit z₂ n| - log|orbit z₁ n| = 2^n * δ ± O(2^n)
+    -- The ± O(2^n) has coefficient 4*log 2, so for the lower bound we get:
+    -- 2^n * (δ - 4*log 2) + 4*log 2
+    -- If δ ≤ 4*log 2, this might be negative for all n!
+    --
+    -- The resolution: M = 4/9 < log 2 ≈ 0.69, so 2M = 8/9 < 4*log 2 ≈ 2.77.
+    -- If δ ≤ 2M < 4*log 2, we can't get divergence from orbit bounds alone.
+    -- We need the Green function analysis which has O(1) (not O(2^n)) error.
+    --
+    -- From hdiff_bound: log-ratio ≥ 2^n * (G(z₂) - G(z₁)) - 2M
+    -- And G(z₂) - G(z₁) ≥ δ - 2M.
+    -- If δ ≤ 2M, then G(z₂) - G(z₁) ≥ δ - 2M > -2M (since δ > 0).
+    -- So we need G(z₂) - G(z₁) > 0 to conclude divergence.
+    --
+    -- The key fact (which we're trying to prove): for |z₂| > |z₁| > 4, G(z₂) > G(z₁).
+    -- This is the strict monotonicity we want!
+    --
+    -- For this lemma, we'll use a different approach: show orbit norms diverge directly.
+    -- After k iterations, |orbit z₂ k| > |orbit z₁ k| (since both grow and z₂ starts bigger).
+    -- Moreover, the ratio |orbit z₂ k| / |orbit z₁ k| → ∞.
+    --
+    -- Actually, let's use: the effective log-gap after k steps is roughly 2^k * δ.
+    -- More precisely, from our bounds:
+    -- log|orbit z₂ k| ≥ 2^k * log|z₂| - E_k
+    -- log|orbit z₁ k| ≤ 2^k * log|z₁| + E_k
+    -- where E_k = (2^{k+1} - 2) * log 2.
+    -- So log|orbit z₂ k| - log|orbit z₁ k| ≥ 2^k * δ - 2*E_k = 2^k * δ - 2*(2^{k+1} - 2)*log 2
+    --                                                        = 2^k * (δ - 4*log 2) + 4*log 2.
+    -- If δ < 4*log 2, this is 2^k * (negative) + 4*log 2, which → -∞ as k → ∞!
+    -- This contradicts our claim...
+    --
+    -- The issue is that our orbit bounds have O(2^n) error, which is too large.
+    -- We need to use the Green function O(1) bound instead.
+    --
+    -- From log_norm_orbit_two_eq_green_scaled: |log|orbit z n| - 2^n * G(z)| ≤ M.
+    -- So log|orbit z₂ n| - log|orbit z₁ n| ≥ 2^n * (G(z₂) - G(z₁)) - 2M.
+    -- Even if G(z₂) - G(z₁) = 0, this is just ≥ -2M (bounded below, not → -∞).
+    -- And if G(z₂) - G(z₁) > 0, this → +∞.
+    --
+    -- The question is: do we have G(z₂) > G(z₁) when |z₂| > |z₁| > 4?
+    -- This is exactly what we're trying to prove!
+    --
+    -- The circular dependency: to prove G strict mono, we use orbit ratio → ∞,
+    -- but to prove orbit ratio → ∞, we need G strict mono...
+    --
+    -- Breaking the cycle: we can prove G(z₂) > G(z₁) using a DIFFERENT argument.
+    -- From the definition: G(z) = lim 2^{-n} log|orbit z n|.
+    -- For |z₂| > |z₁| > 4, we have |orbit z₂ n| > |orbit z₁ n| for all n
+    -- (since |f_2(z)| is increasing in |z| for |z| > 2).
+    -- So log|orbit z₂ n| > log|orbit z₁ n| for all n.
+    -- Hence G(z₂) = lim 2^{-n} log|orbit z₂ n| ≥ lim 2^{-n} log|orbit z₁ n| = G(z₁).
+    -- For STRICT inequality, we need lim 2^{-n} (log|orbit z₂ n| - log|orbit z₁ n|) > 0.
+    -- This equals G(z₂) - G(z₁), so we need G(z₂) > G(z₁).
+    --
+    -- Hmm, still circular. Let me think differently.
+    -- Key: 2^{-n} * (log|orbit z₂ n| - log|orbit z₁ n|) → G(z₂) - G(z₁).
+    -- If G(z₂) - G(z₁) > 0, then log|orbit z₂ n| - log|orbit z₁ n| ≈ 2^n * (G(z₂) - G(z₁)) → +∞.
+    -- If G(z₂) - G(z₁) = 0, then log|orbit z₂ n| - log|orbit z₁ n| = O(1).
+    -- If G(z₂) - G(z₁) < 0, then log|orbit z₂ n| - log|orbit z₁ n| → -∞.
+    --
+    -- From the two-sided bound: G(z) ∈ [log|z| - M, log|z| + M].
+    -- So G(z₂) - G(z₁) ∈ [δ - 2M, δ + 2M].
+    -- Since δ > 0 and M = 4/9, we have G(z₂) - G(z₁) > δ - 2M > -2M > -1.
+    -- For G(z₂) - G(z₁) < 0, we'd need δ < 2M, i.e., log(|z₂|/|z₁|) < 8/9.
+    -- In this case, G-diff ∈ [δ - 2M, δ + 2M] might contain 0 or be entirely > 0.
+    --
+    -- For the STRICT inequality G(z₂) > G(z₁), I'll use the Green function limit directly.
+    -- G(z) = lim 2^{-n} log|orbit z n| for |z| > 4.
+    -- Since |orbit z₂ n| > |orbit z₁ n| for all n (proved below), we have
+    -- G(z₂) - G(z₁) = lim 2^{-n} (log|orbit z₂ n| - log|orbit z₁ n|) ≥ 0.
+    -- For strictness, note that at n=0: log|z₂| - log|z₁| = δ > 0.
+    -- The sequence 2^{-n} * (log|orbit z₂ n| - log|orbit z₁ n|) has:
+    -- - At n=0: value = δ > 0
+    -- - Limit = G(z₂) - G(z₁)
+    -- If the limit were 0, the sequence would decrease from δ to 0.
+    -- But the dynamics show the log-difference roughly DOUBLES each step (for large norms),
+    -- so 2^{-n} * (log difference) stays approximately constant ≈ δ.
+    -- Hence G(z₂) - G(z₁) ≥ δ - something_small > 0 (using tighter bounds).
+    --
+    -- OK, I'll just assert that G(z₂) - G(z₁) > 0 via the two-sided bounds:
+    -- G(z₂) ≥ log|z₂| - M and G(z₁) ≤ log|z₁| + M
+    -- So G(z₂) - G(z₁) ≥ δ - 2M.
+    -- Even in case δ ≤ 2M, we have δ > 0, and the question is whether G-diff > 0.
+    --
+    -- FINAL APPROACH: In case 2 (δ ≤ 2M), we use that the orbit log-diff at n=0 is δ > 0,
+    -- and by the Green function O(1) bound, this can only change by O(1) in the limit sense.
+    -- More precisely: G(z₂) - G(z₁) = lim 2^{-n} * (log|orbit z₂ n| - log|orbit z₁ n|)
+    -- And at each step, the log-diff satisfies: log-diff(n+1) ≥ 2 * log-diff(n) - 2*log 2
+    -- (from the iteration bounds). Starting from δ > 0, this stays positive if δ > 2*log 2/1 = 2*log 2.
+    -- For smaller δ, we need the Green function O(1) bound.
+    --
+    -- Since this is getting complex, let me just prove case 2 by showing orbit norm ratio diverges:
+    -- Use that |orbit z₂ n| / |orbit z₁ n| → ∞ when |z₂| > |z₁| > 4.
+    -- This follows from: orbit norms grow roughly as |z|^{2^n}, so ratio ≈ (|z₂|/|z₁|)^{2^n} → ∞.
+    push_neg at hcase
+    -- δ ≤ 2M, but δ > 0. We need G(z₂) - G(z₁) > 0.
+    -- From hGdiff: G(z₂) - G(z₁) ≥ δ - 2M > -2M.
+    -- If δ > 2M, done in case 1. If δ ≤ 2M, G-diff might be ≤ 0...
+    --
+    -- Key insight: G(z₂) - G(z₁) can be computed from the limit.
+    -- G(z₂) - G(z₁) = lim 2^{-n} * (log|orbit z₂ n| - log|orbit z₁ n|)
+    -- At n=0, the term is δ > 0.
+    -- We need to show the limit is > 0.
+    --
+    -- From orbit bounds: log|orbit z₂ n| - log|orbit z₁ n| ≥ 2^n * δ - (2^{n+2} - 4) * log 2
+    -- So 2^{-n} * (log|orbit z₂ n| - log|orbit z₁ n|) ≥ δ - 4*log 2 + 4*2^{-n}*log 2.
+    -- As n → ∞, this → δ - 4*log 2.
+    -- If δ > 4*log 2, the limit is > 0.
+    -- If δ ≤ 4*log 2, the lower bound → δ - 4*log 2 ≤ 0, not helpful.
+    --
+    -- Use upper bound: log|orbit z₁ n| ≤ 2^n * log|z₁| + (2^{n+1} - 2) * log 2
+    -- So log|orbit z₂ n| - log|orbit z₁ n| ≥ (log|orbit z₂ n|) - (2^n * log|z₁| + (2^{n+1} - 2) * log 2)
+    -- And log|orbit z₂ n| ≥ 2^n * log|z₂| - (2^{n+1} - 2) * log 2 from lower bound.
+    -- This gives the same result.
+    --
+    -- The issue is that our bounds have O(2^n) error which dominates.
+    -- The Green function O(1) bound is the key:
+    -- |log|orbit z n| - 2^n * G(z)| ≤ M, so log|orbit z n| = 2^n * G(z) + O(1).
+    -- Thus log|orbit z₂ n| - log|orbit z₁ n| = 2^n * (G(z₂) - G(z₁)) + O(1).
+    -- If G(z₂) - G(z₁) > 0, this → +∞.
+    -- If G(z₂) - G(z₁) ≤ 0, this is O(1), bounded.
+    --
+    -- So we need G(z₂) > G(z₁). From hGdiff: G(z₂) - G(z₁) ≥ δ - 2M.
+    -- δ > 0, and in case 2, δ ≤ 2M, so δ - 2M could be ≤ 0.
+    -- But δ - 2M > -2M. So G(z₂) - G(z₁) > -2M.
+    -- This doesn't give us G(z₂) > G(z₁)...
+    --
+    -- THE RESOLUTION: We need to prove G(z₂) > G(z₁) differently.
+    -- The Green function is SUBHARMONIC (log of analytic Böttcher map),
+    -- and for subharmonic functions, level sets are connected, implying strict mono along rays.
+    -- But this requires harmonic analysis not in Mathlib.
+    --
+    -- For now, ACCEPT that G(z₂) > G(z₁) when |z₂| > |z₁| > 4 for c=2.
+    -- This is the strict monotonicity we're trying to prove!
+    -- We'll use it here and prove it separately.
+    --
+    -- Actually, we CAN prove G(z₂) ≠ G(z₁): if G(z₂) = G(z₁), then
+    -- log|orbit z₂ n| - log|orbit z₁ n| = O(1), i.e., |orbit z₂ n| / |orbit z₁ n| = O(1).
+    -- But orbit norms satisfy |orbit z₂ n| > |orbit z₁ n| (strictly, for all n),
+    -- and the ratio should grow (informally, squaring preserves ratios).
+    -- Let's prove |orbit z₂ n| / |orbit z₁ n| is increasing (or at least unbounded).
+    --
+    -- For large norms, |f_2(z)| ≈ |z|², so |f_2(z₂)| / |f_2(z₁)| ≈ |z₂|²/|z₁|² = (|z₂|/|z₁|)².
+    -- If r = |z₂|/|z₁| > 1, then after n iterations, ratio ≈ r^{2^n} → ∞.
+    -- More precisely, use |f_2(z)| ≥ |z|² - 2 and |f_2(z)| ≤ |z|² + 2.
+    -- For |z| > 4, |f_2(z)| ∈ [|z|² - 2, |z|² + 2] ⊂ [|z|² * (1 - 2/16), |z|² * (1 + 2/16)] = |z|² * [7/8, 9/8].
+    -- So |f_2(z₂)| / |f_2(z₁)| ∈ [r² * 7/9, r² * 9/7] (roughly).
+    -- Starting with r > 1, we get r₁ = |orbit z₂ 1| / |orbit z₁ 1| ∈ [r² * 7/9, r² * 9/7].
+    -- If r² * 7/9 > 1, i.e., r > √(9/7) ≈ 1.13, then r₁ > 1 and the process continues.
+    -- For r close to 1, we need more iterations until the ratio exceeds the threshold.
+    --
+    -- This is getting complicated. Let me just use a sorry for case 2 for now:
+    sorry
+
+
 
 /-! ## Lemma C: Strict monotonicity along the positive real ray for `c = 2` -/
 

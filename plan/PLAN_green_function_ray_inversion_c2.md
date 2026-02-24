@@ -116,19 +116,38 @@ analysis not yet in Mathlib.
 - [x] check_axioms.lean updated: external_ray_map_exists removed from expected axiom list
 
 ## Remaining gaps
-Six sorry's remain in GreenFunctionRayInversion.lean (8cde08d):
+Five sorry's remain in GreenFunctionRayInversion.lean:
 
-### Core mathematical gaps:
-1. `green_function_strictMono_along_ray_basin`: strict monotonicity of G_c along rays
-   for all ρ > 0 in the basin (requires harmonic maximum principle, not in Mathlib)
-2. `exists_ray_preimage_green_pos`: existence of ρ > 0 with G_c(ρ·u) = t for all t > 0
-   (requires that every ray approaches K_c, i.e., G_c → 0 along the ray)
+### Technical analysis gap (circular dependency):
+1. `log_norm_orbit_ratio_tendsto_atTop` **case 2**: When δ = log|z₂| - log|z₁| ≤ 2M (≈0.89),
+   we need to prove G(z₂) > G(z₁) to show the log-norm ratio diverges. But this is
+   exactly the strict monotonicity we're trying to prove. Breaking this circularity
+   requires either:
+   - Direct orbit norm ratio analysis: show |orbit z₂ n|/|orbit z₁ n| → ∞
+   - Subharmonicity argument: G is subharmonic, so max principle applies (not in Mathlib)
+   
+   The case δ > 2M is fully proved using the Green function two-sided bound.
+
+### Dependent lemmas (blocked by case 2):
+2. `green_function_strictMono_along_ray_two`: strict monotonicity for c=2, complex u
+   - Uses log_norm_orbit_ratio_tendsto_atTop (blocked)
+   - Otherwise complete: contradiction structure, norm bounds all in place
 3. `green_function_strictMono_along_ray`: general c and direction
+   - Would need harmonic analysis not in Mathlib
+4. `green_function_strictMono_along_ray_basin`: full basin version
+   - Requires reducing to outside-open case via functional equation
 
-### Technical lemmas for complex ray proof (c=2):
-4. `log_norm_orbit_lower`: log |orbit z n| ≥ 2^n log|z| - O(2^n)
-5. `log_norm_orbit_ratio_tendsto_atTop`: log-norm ratio diverges for |z₂| > |z₁|
-6. `green_function_strictMono_along_ray_two`: strict monotonicity for c=2, complex u
+### Existence gap (independent):
+5. `exists_ray_preimage_green_pos`: existence of ρ > 0 with G_c(ρ·u) = t for all t > 0
+   - Requires that every ray approaches K_c, i.e., G_c → 0 along the ray
+   - This is a topological fact about connected Julia sets
+
+## Completed work
+- [x] `log_norm_orbit_lower`: log |orbit z n| ≥ 2^n log|z| - (2^{n+1}-2) log 2
+- [x] `log_norm_orbit_upper`: log |orbit z n| ≤ 2^n log|z| + (2^{n+1}-2) log 2
+- [x] `log_norm_orbit_two_eq_green_scaled`: |log|orbit z n| - 2^n G(z)| ≤ M (O(1) bound)
+- [x] `log_norm_orbit_ratio_tendsto_atTop` case 1 (δ > 2M): proved via exponential growth
+- [x] Real ray strict monotonicity: green_function_strictMono_along_real_ray_two
 
 The complex ray proof structure is complete; only the orbit norm ratio divergence
-analysis remains to be formalized.
+analysis for small δ remains to be formalized.
