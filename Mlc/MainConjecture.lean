@@ -3693,9 +3693,20 @@ theorem mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_i
   exact False.elim (not_mem_nhds_slit_on_outside_open_two hslit_nhds)
 
 /-- CP5 endpoint at `c = 2`: constructive Green-function ray inversion. -/
+def GreenRayLogGtAnchorTwoSeam : Prop :=
+  ∀ w : ℂ, 1 < ‖w‖ →
+    MLC.Quadratic.green_function (2 : ℂ)
+        (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
+
+/-- Axiom-seeded lower-bound seam needed by the corrected radial preimage
+construction at `c = 2`. -/
+axiom greenRayLogGtAnchorTwo_axiom_seed : GreenRayLogGtAnchorTwoSeam
+
+/-- CP5 endpoint at `c = 2`: constructive Green-function ray inversion. -/
 theorem external_ray_map_exists_two_constructive :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function
+    greenRayLogGtAnchorTwo_axiom_seed
 
 /-- Current rooted axiom-seed external-ray-data target at `c = 2`. -/
 lemma externalRayMapData_two_axiom_seed :

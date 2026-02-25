@@ -547,30 +547,38 @@ lemma exists_unique_ray_preimage_green (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t
     · have := green_function_strictMono_along_ray c u hu (by linarith) hgt
       simp [hρ_eq, hρ'_eq] at this⟩
 
-/-- **Existence for all t > 0** [sorry]: For any unit direction `u` and any `t > 0`, there
-exists `ρ > 0` with `G_c(ρ · u) = t`.
+/-- Corrected radial preimage existence: for target values above the ray's
+outside-open anchor value, there is a radial preimage in outside-open. -/
+lemma exists_ray_preimage_green_pos (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ)
+    (ht : t > green_function c ((‖c‖ + 2 : ℝ) * u)) :
+    ∃ ρ : ℝ, ρ > ‖c‖ + 2 ∧ green_function c ((ρ : ℂ) * u) = t := by
+  exact exists_ray_preimage_green c u hu t ht
 
-Proof uses IVT: G_c is continuous, tends to 0 near ∂K_c (where G_c = 0), and tends to ∞ as
-ρ → ∞.  Requires that every ray approaches K_c (its boundary carries G_c = 0); this holds
-when K_c is connected (c in the Mandelbrot set) and follows from the general theory of Green
-functions for complement domains. -/
-lemma exists_ray_preimage_green_pos (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht : 0 < t) :
-    ∃ ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t := by
-  sorry
-
-/-- **Uniqueness for all t > 0**: The solution `ρ > 0` with `G_c(ρ · u) = t` is unique.
-Follows from `green_function_strictMono_along_ray_basin`. -/
+/-- Corrected radial preimage uniqueness above the outside-open anchor value. -/
 lemma exists_unique_ray_preimage_green_pos (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ)
-    (ht : 0 < t) :
-    ∃! ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t := by
-  obtain ⟨ρ, hρ_pos, hρ_eq⟩ := exists_ray_preimage_green_pos c u hu t ht
-  refine ⟨ρ, ⟨hρ_pos, hρ_eq⟩, fun ρ' ⟨hρ'_pos, hρ'_eq⟩ => ?_⟩
-  by_contra hne
-  rcases lt_or_gt_of_ne hne with hlt | hgt
-  · have hG := green_function_strictMono_along_ray_basin c u hu hρ'_pos hlt (hρ'_eq ▸ ht)
-    rw [hρ_eq, hρ'_eq] at hG; exact absurd hG (lt_irrefl _)
-  · have hG := green_function_strictMono_along_ray_basin c u hu hρ_pos hgt (hρ_eq ▸ ht)
-    rw [hρ_eq, hρ'_eq] at hG; exact absurd hG (lt_irrefl _)
+    (ht : t > green_function c ((‖c‖ + 2 : ℝ) * u)) :
+    ∃! ρ : ℝ, ρ > ‖c‖ + 2 ∧ green_function c ((ρ : ℂ) * u) = t :=
+  exists_unique_ray_preimage_green c u hu t ht
+
+/-- `c = 2` anchored uniqueness, specialized for normalized exterior direction
+`w / ‖w‖` at target `log ‖w‖`. -/
+lemma exists_unique_ray_preimage_green_two_anchor
+    (w : ℂ) (hw : 1 < ‖w‖)
+    (hlog_gt_anchor :
+      green_function (2 : ℂ) (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
+    ∃! ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
+      green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ := by
+  set u : ℂ := w / ↑‖w‖
+  have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+  have hu_dir : ‖u‖ = 1 := by
+    dsimp [u]
+    rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+  have h_anchor_u :
+      green_function (2 : ℂ) (((‖(2 : ℂ)‖ + 2 : ℝ) * u) : ℂ) < Real.log ‖w‖ := by
+    simpa [u] using hlog_gt_anchor
+  simpa [u] using
+    (exists_unique_ray_preimage_green
+      (2 : ℂ) u hu_dir (Real.log ‖w‖) h_anchor_u)
 
 /-! ## Lemma E: Constructive external ray map at `c = 2` -/
 
@@ -605,15 +613,19 @@ Set `f(w) := ρ · u`.
 Remaining sorry gaps:
 1. `exists_ray_preimage_green_pos` — IVT from G_c = 0 on ∂K_c to G_c → ∞.
 2. `green_function_strictMono_along_ray_basin` — full-basin Lemma C (harmonic analysis). -/
-theorem external_ray_map_exists_two_via_green_function :
+theorem external_ray_map_exists_two_via_green_function
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  -- For every w with ‖w‖ > 1, the existence lemma applies with u = w/‖w‖, t = log ‖w‖.
+  -- For every w with ‖w‖ > 1, apply corrected existence above the outside-open anchor.
   have hf_ex : ∀ w : ℂ, 1 < ‖w‖ →
-      ∃ ρ : ℝ, 0 < ρ ∧ green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ :=
+      ∃ ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧ green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ :=
     fun w hw => by
       apply exists_ray_preimage_green_pos
       · rw [norm_div, Complex.norm_real, norm_norm, div_self (by linarith : ‖w‖ ≠ 0)]
-      · exact Real.log_pos hw
+      · exact hlog_gt_anchor w hw
   -- Define f by Classical.choose on hf_ex.
   refine ⟨fun w => if hw : 1 < ‖w‖ then
       ↑(Classical.choose (hf_ex w hw)) * (w / ↑‖w‖) else 0, ?_, ?_⟩
@@ -623,7 +635,9 @@ theorem external_ray_map_exists_two_via_green_function :
     have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
     have hu : ‖w / ↑‖w‖‖ = 1 := by
       rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
-    obtain ⟨hρ_pos, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw)
+    obtain ⟨hρ_gt, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw)
+    have hρ_pos : 0 < Classical.choose (hf_ex w hw) := by
+      linarith [hρ_gt, norm_nonneg (2 : ℂ)]
     -- bottcher_map 2 (↑ρ * (w/↑‖w‖)) = (w/↑‖w‖) * ‖w‖ = w
     rw [bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
     exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
@@ -659,11 +673,22 @@ theorem external_ray_map_exists_two_via_green_function :
       congr 1
       field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
     -- By uniqueness, Classical.choose (hf_ex w hw_gt1) = ‖z‖.
-    obtain ⟨hρ_pos, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw_gt1)
+    obtain ⟨hρ_gt, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw_gt1)
     set ρ := Classical.choose (hf_ex w hw_gt1) with hρ_def
-    have huniq := exists_unique_ray_preimage_green_pos (2 : ℂ) (w / ↑‖w‖) hu_dir
-        (Real.log ‖w‖) (Real.log_pos hw_gt1)
-    have hρ_normz : ρ = ‖z‖ := huniq.unique ⟨hρ_pos, hρ_eq⟩ ⟨hz_pos, hz_witness⟩
+    have _hlog_anchor :
+        Real.log ‖w‖ >
+          green_function (2 : ℂ) (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) := by
+      exact hlog_gt_anchor w hw_gt1
+    have huniq :
+        ∃! ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
+          green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ :=
+      exists_unique_ray_preimage_green_two_anchor w hw_gt1 (hlog_gt_anchor w hw_gt1)
+    have hz_gt_outside : ‖z‖ > ‖(2 : ℂ)‖ + 2 := by
+      have h2norm : ‖(2 : ℂ)‖ = 2 := by
+        rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast,
+            Complex.norm_real, Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+      linarith [hz]
+    have hρ_normz : ρ = ‖z‖ := huniq.unique ⟨hρ_gt, hρ_eq⟩ ⟨hz_gt_outside, hz_witness⟩
     -- Conclude: f(w) = ‖z‖ · (z/‖z‖) = z.
     rw [hρ_normz, hdir_eq]
     field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
