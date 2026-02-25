@@ -95,6 +95,53 @@ lemma norm_fc_two_sq_strictMono_along_ray (u : ℂ) (hu : ‖u‖ = 1)
     linarith
   nlinarith
 
+/-- For s > 4 and ‖v‖ = 1, the squared norm is bounded by worst-case values. -/
+private lemma norm_fc_two_sq_bounds (s : ℝ) (v : ℂ) (hs : s > 4) (hv : ‖v‖ = 1) :
+    s^4 - 4 * s^2 + 4 ≤ ‖fc (2 : ℂ) ((s : ℂ) * v)‖^2 ∧
+    ‖fc (2 : ℂ) ((s : ℂ) * v)‖^2 ≤ s^4 + 4 * s^2 + 4 := by
+  rw [norm_fc_two_sq_eq s v hv]
+  have hre_bdd : |((v^2).re)| ≤ 1 := by
+    have h := Complex.abs_re_le_norm (v^2)
+    have hnorm : ‖v^2‖ = 1 := by rw [norm_pow, hv, one_pow]
+    rw [← hnorm]; exact h
+  constructor <;> nlinarith [abs_le.mp hre_bdd]
+
+/-- When s₂² - s₁² > 4, the squared norm comparison holds for any unit directions.
+This is the "worst-case" comparison that works regardless of directions. -/
+private lemma norm_fc_two_sq_compare_large_gap (s₁ s₂ : ℝ) (v₁ v₂ : ℂ)
+    (hs₁ : s₁ > 4) (hs₂ : s₂ > s₁) (hv₁ : ‖v₁‖ = 1) (hv₂ : ‖v₂‖ = 1)
+    (hgap : s₂^2 - s₁^2 > 4) :
+    ‖fc (2 : ℂ) ((s₁ : ℂ) * v₁)‖^2 < ‖fc (2 : ℂ) ((s₂ : ℂ) * v₂)‖^2 := by
+  have hs₂_gt_4 : s₂ > 4 := by linarith
+  have ⟨h1_lo, h1_hi⟩ := norm_fc_two_sq_bounds s₁ v₁ hs₁ hv₁
+  have ⟨h2_lo, h2_hi⟩ := norm_fc_two_sq_bounds s₂ v₂ hs₂_gt_4 hv₂
+  -- Need: s₂⁴ - 4s₂² + 4 > s₁⁴ + 4s₁² + 4
+  -- i.e., s₂⁴ - s₁⁴ > 4(s₂² + s₁²)
+  -- i.e., (s₂² - s₁²)(s₂² + s₁²) > 4(s₂² + s₁²)
+  -- i.e., s₂² - s₁² > 4 (which is hgap)
+  have hsum_pos : s₂^2 + s₁^2 > 0 := by nlinarith
+  have h_key : s₂^4 - 4 * s₂^2 + 4 > s₁^4 + 4 * s₁^2 + 4 := by
+    have h1 : s₂^4 - s₁^4 = (s₂^2 - s₁^2) * (s₂^2 + s₁^2) := by ring
+    have h2 : s₂^4 - s₁^4 > 4 * (s₂^2 + s₁^2) := by
+      rw [h1]; exact mul_lt_mul_of_pos_right hgap hsum_pos
+    linarith
+  linarith
+
+/-- For s₂ > s₁ > 4, the squared norm ratio after fc is bounded below.
+This shows the ratio grows multiplicatively with each iteration. -/
+private lemma norm_fc_two_ratio_sq_lower_bound (s₁ s₂ : ℝ) (v₁ v₂ : ℂ)
+    (hs₁ : s₁ > 4) (hs₂ : s₂ > s₁) (hv₁ : ‖v₁‖ = 1) (hv₂ : ‖v₂‖ = 1) :
+    ‖fc (2 : ℂ) ((s₂ : ℂ) * v₂)‖^2 > s₂^2 * (s₂^2 - 4) ∧
+    ‖fc (2 : ℂ) ((s₁ : ℂ) * v₁)‖^2 < s₁^2 * (s₁^2 + 5) := by
+  have hs₂_gt_4 : s₂ > 4 := by linarith
+  have ⟨h1_lo, h1_hi⟩ := norm_fc_two_sq_bounds s₁ v₁ hs₁ hv₁
+  have ⟨h2_lo, h2_hi⟩ := norm_fc_two_sq_bounds s₂ v₂ hs₂_gt_4 hv₂
+  constructor
+  · -- Lower bound on numerator: ‖fc(s₂·v₂)‖² ≥ s₂⁴ - 4s₂² + 4 > s₂²(s₂² - 4)
+    nlinarith
+  · -- Upper bound on denominator: ‖fc(s₁·v₁)‖² ≤ s₁⁴ + 4s₁² + 4 < s₁²(s₁² + 5)
+    nlinarith
+
 /-- Orbit norms stay above 4 for c=2 and starting point on ray with t > 4. -/
 private lemma norm_orbit_two_ray_gt_four (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht : t > 4) (n : ℕ) :
     ‖orbit (2 : ℂ) ((t : ℂ) * u) n‖ > 4 := by
