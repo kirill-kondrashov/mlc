@@ -627,16 +627,88 @@ lemma green_function_strictMono_along_ray_basin (c : ℂ) (u : ℂ) (hu : ‖u�
   -- We use a sorry for now, but the structure is parallel to the real-ray case.
   sorry
 
-/-- **Existence for all t > 0** [sorry]: For any unit direction `u` and any `t > 0`, there
-exists `ρ > 0` with `G_c(ρ · u) = t`.
+private lemma green_function_neg (c z : ℂ) :
+    green_function c (-z) = green_function c z := by
+  have hneg : green_function c (fc c (-z)) = 2 * green_function c (-z) := by
+    simpa using green_function_functional_eq c (-z)
+  have hpos : green_function c (fc c z) = 2 * green_function c z := by
+    simpa using green_function_functional_eq c z
+  have hfc : fc c (-z) = fc c z := by
+    simp [fc]
+  rw [hfc] at hneg
+  linarith
 
-Proof uses IVT: G_c is continuous, tends to 0 near ∂K_c (where G_c = 0), and tends to ∞ as
-ρ → ∞.  Requires that every ray approaches K_c (its boundary carries G_c = 0); this holds
-when K_c is connected (c in the Mandelbrot set) and follows from the general theory of Green
-functions for complement domains. -/
+private lemma exists_ray_preimage_green_pos_of_ne_one
+    (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (hu_ne_one : u ≠ 1) (t : ℝ) (ht : 0 < t) :
+    ∃ ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t := by
+  let w : ℂ := u * (Real.exp t : ℂ)
+  have hw : 1 < ‖w‖ := by
+    have hnorm : ‖w‖ = Real.exp t := by
+      simp [w, hu]
+    linarith [Real.one_lt_exp_iff.mpr ht, hnorm]
+  let z : ℂ := Quadratic.external_ray_map c w
+  have hb : Quadratic.bottcher_map c z = w :=
+    Quadratic.external_ray_map_right_inverse c w hw
+  have hGz : green_function c z = t := by
+    have hnorm_b : ‖Quadratic.bottcher_map c z‖ = Real.exp (green_function c z) :=
+      Quadratic.norm_bottcher_eq_exp_green c z
+    have hnorm_w : ‖w‖ = Real.exp t := by
+      simp [w, hu]
+    rw [hb, hnorm_w] at hnorm_b
+    exact Real.exp_injective hnorm_b.symm
+  have hz_ne : z ≠ 0 := by
+    intro hz0
+    have hw_eq : w = (Real.exp t : ℂ) := by
+      have h0 : w = Quadratic.bottcher_map c 0 := by
+        simpa [z, hz0] using hb.symm
+      calc
+        w = Quadratic.bottcher_map c 0 := h0
+        _ = (Real.exp (green_function c 0) : ℂ) := by simp [Quadratic.bottcher_map]
+        _ = (Real.exp t : ℂ) := by
+          have hg0 : green_function c 0 = t := by simpa [z, hz0] using hGz
+          simp [hg0]
+    have hmul : u * (Real.exp t : ℂ) = 1 * (Real.exp t : ℂ) := by
+      simpa [w, one_mul] using hw_eq
+    have hexp_ne : (Real.exp t : ℂ) ≠ 0 := by
+      exact_mod_cast (Real.exp_pos t).ne'
+    have hu_eq_one : u = 1 := mul_right_cancel₀ hexp_ne hmul
+    exact hu_ne_one hu_eq_one
+  have hdir_mul : (z / ↑‖z‖) * (Real.exp t : ℂ) = u * (Real.exp t : ℂ) := by
+    rw [Quadratic.bottcher_map, if_neg hz_ne, hGz] at hb
+    simpa [w] using hb
+  have hexp_ne : (Real.exp t : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.exp_pos t).ne'
+  have hdir : z / ↑‖z‖ = u := mul_right_cancel₀ hexp_ne hdir_mul
+  refine ⟨‖z‖, norm_pos_iff.mpr hz_ne, ?_⟩
+  have hnorm_ne : (↑‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_pos_iff.mpr hz_ne).ne'
+  have hz_eq : z = (↑‖z‖ : ℂ) * u := by
+    calc
+      z = (z / ↑‖z‖) * (↑‖z‖ : ℂ) := by field_simp [hnorm_ne]
+      _ = u * (↑‖z‖ : ℂ) := by simp [hdir]
+      _ = (↑‖z‖ : ℂ) * u := by ring
+  have hGρ : green_function c ((↑‖z‖ : ℂ) * u) = t := by
+    rw [hz_eq] at hGz
+    simpa using hGz
+  exact hGρ
+
+/-- **Existence for all t > 0**: For any unit direction `u` and any `t > 0`, there
+exists `ρ > 0` with `G_c(ρ · u) = t`. -/
 lemma exists_ray_preimage_green_pos (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht : 0 < t) :
     ∃ ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t := by
-  sorry
+  by_cases hu_one : u = 1
+  · obtain ⟨ρ, hρ_pos, hρ_eq⟩ :=
+      exists_ray_preimage_green_pos_of_ne_one c (-1 : ℂ) (by simp) (by norm_num) t ht
+    refine ⟨ρ, hρ_pos, ?_⟩
+    calc
+      green_function c ((ρ : ℂ) * u) = green_function c ((ρ : ℂ) * (1 : ℂ)) := by
+        simp [hu_one]
+      _ = green_function c (-((ρ : ℂ) * (1 : ℂ))) := by
+        symm
+        exact green_function_neg c ((ρ : ℂ) * (1 : ℂ))
+      _ = t := by
+        simpa [mul_comm, mul_left_comm, mul_assoc] using hρ_eq
+  · exact exists_ray_preimage_green_pos_of_ne_one c u hu hu_one t ht
 
 /-- **Uniqueness for all t > 0**: The solution `ρ > 0` with `G_c(ρ · u) = t` is unique.
 Follows from `green_function_strictMono_along_ray_basin`. -/
