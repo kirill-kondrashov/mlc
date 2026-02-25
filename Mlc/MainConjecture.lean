@@ -1598,7 +1598,9 @@ theorem not_preimageExteriorSubsetOutsideOpenTwo :
   have hnot : ¬ ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
     have hge : (0 : ℝ) ≤ ‖(2 : ℂ)‖ + 2 := by
       nlinarith [norm_nonneg (2 : ℂ)]
-    simpa using (not_lt_of_ge hge)
+    intro hlt
+    have hzero : ‖(0 : ℂ)‖ = 0 := by simp
+    linarith [hge, hlt, hzero]
   exact hnot hz_out
 
 /-- Scope-check no-go at `c = 2`: the iterate-left-inverse + direct
@@ -1621,7 +1623,7 @@ theorem fixed_point_two_norm_lt_outside_open_radius :
   have hnorm_le : ‖p‖ ^ 2 ≤ ‖p‖ + ‖(2 : ℂ)‖ := by
     calc
       ‖p‖ ^ 2 = ‖p ^ 2‖ := by simp [pow_two]
-      _ = ‖p - (2 : ℂ)‖ := by simpa [hp2]
+      _ = ‖p - (2 : ℂ)‖ := by simp [hp2]
       _ ≤ ‖p‖ + ‖(2 : ℂ)‖ := by
         simpa [sub_eq_add_neg, norm_neg] using norm_add_le p (-(2 : ℂ))
   by_contra hlt
@@ -1758,8 +1760,10 @@ theorem not_externalRayLandsOutsideOpen_two_of_external_ray_map_at_bottcher_zero
   have hnot : ¬ ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
     have hge : (0 : ℝ) ≤ ‖(2 : ℂ)‖ + 2 := by
       nlinarith [norm_nonneg (2 : ℂ)]
-    simpa using (not_lt_of_ge hge)
-  exact by simpa [hzero] using hnot
+    intro hlt
+    have hzero_norm : ‖(0 : ℂ)‖ = 0 := by simp
+    linarith [hge, hlt, hzero_norm]
+  simp [hzero]
 
 /-- Scope-check no-go at `c = 2`: outside-disk injectivity forces failure of
 external-ray landing because `0` maps to the exterior but is not outside-open. -/
@@ -1798,7 +1802,9 @@ theorem not_externalRayLandsOutsideOpen_two_of_injOn_outside_disk
   have hnot : ¬ ‖(0 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
     have hge : (0 : ℝ) ≤ ‖(2 : ℂ)‖ + 2 := by
       nlinarith [norm_nonneg (2 : ℂ)]
-    simpa using (not_lt_of_ge hge)
+    intro hlt
+    have hzero : ‖(0 : ℂ)‖ = 0 := by simp
+    linarith [hge, hlt, hzero]
   exact hnot (by simpa [hz0] using hz)
 
 /-- Scope-check no-go at `c = 2`: under iterate-left-inverse injectivity on
@@ -2062,7 +2068,7 @@ def CP5ResidualInjOnOutsideOpenSeamTwo : Prop :=
 /-- Branch-local seam at `c = 2`: restricted local-homeomorph residual branch
 implies outside-open injectivity. -/
 def CP5ResidualLocalHomeomorphInjSeamTwo : Prop :=
-  ∀ hlocal :
+  ∀ _hlocal :
       IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
         IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)),
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}

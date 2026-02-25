@@ -4372,7 +4372,7 @@ theorem externalRayLandsOutsideOpen_of_outside_disk_to_outside_open_image_refine
   have hleft : Quadratic.external_ray_map c w = u := by
     calc
       Quadratic.external_ray_map c w = Quadratic.external_ray_map c (Quadratic.bottcher_map c u) := by
-        simpa [hwu]
+        simp [hwu]
       _ = u := Quadratic.external_ray_map_left_inverse_outside_open c u hu
   simpa [hleft] using hu
 
@@ -4388,7 +4388,7 @@ theorem externalRayLandsOutsideOpen_of_preimage_exterior_subset_outside_open
   have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
     Quadratic.external_ray_map_right_inverse c w hw
   have hmem : Quadratic.external_ray_map c w ∈ (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
-    simpa [Set.preimage, hright, hw]
+    simp [Set.preimage, hright, hw]
   exact hpre hmem
 
 /-- Böttcher map restricted to outside-open, codomain restricted to the
@@ -5501,7 +5501,7 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothes
       calc
         w * (Quadratic.bottcher_map c w / w)
             = w * (w⁻¹ * Quadratic.bottcher_map c w) := by
-                simp [div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm]
+                simp [div_eq_mul_inv, mul_comm]
         _ = (w * w⁻¹) * Quadratic.bottcher_map c w := by ac_rfl
         _ = Quadratic.bottcher_map c w := by simp [hw0])
   exact hmul.congr hEq
@@ -5545,7 +5545,7 @@ lemma isPreconnected_outside_open (c : ℂ) :
   have hRne : ((R : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast (ne_of_gt hRpos)
   have hnormR : ‖((R : ℝ) : ℂ)‖ = R := by
-    simpa [abs_of_nonneg hRnonneg] using (Complex.norm_real R)
+    rw [Complex.norm_real, Real.norm_of_nonneg hRnonneg]
   have hcont : Continuous f := continuous_const.mul continuous_id
   have hconn_img : IsConnected (f '' E) :=
     isConnected_exterior.image f hcont.continuousOn
@@ -5568,7 +5568,7 @@ lemma isPreconnected_outside_open (c : ℂ) :
           1 < ‖z‖ / R := hdiv
           _ = ‖z‖ / ‖R‖ := by rw [Real.norm_of_nonneg hRnonneg]
           _ = ‖z / ((R : ℝ) : ℂ)‖ := by
-                simpa [Complex.norm_real] using (norm_div z (((R : ℝ) : ℂ))).symm
+                rw [norm_div, Complex.norm_real]
       · change (((R : ℝ) : ℂ) * (z / ((R : ℝ) : ℂ)) = z)
         field_simp [hRne]
   have hpre_img : IsPreconnected (f '' E) := hconn_img.isPreconnected
@@ -5629,14 +5629,14 @@ lemma outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScale
     rcases hyIimg with ⟨z, hzU, hzEq⟩
     rcases h_real z (by simpa [U] using hzU) with ⟨r, _hrpos, hrEq⟩
     have himz : Complex.im (g z) = 0 := by
-      simpa [g, hrEq]
+      simp [g, hrEq]
     have himyI_zero : Complex.im yI = 0 := by
       simpa [hzEq] using himz
     have himy_zero : Complex.im y = 0 := by
       rcases hyImg with ⟨zy, hzyU, hzyEq⟩
       rcases h_real zy (by simpa [U] using hzyU) with ⟨ry, _hrypos, hryEq⟩
       have himzy : Complex.im (g zy) = 0 := by
-        simpa [g, hryEq]
+        simp [g, hryEq]
       simpa [hzyEq] using himzy
     have himyI_half : Complex.im yI = ε / 2 := by
       simp [yI, himy_zero]
@@ -5730,7 +5730,7 @@ lemma outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis
     Quadratic.bottcher_map c z = (Quadratic.bottcher_map c z / z) * z := by
       field_simp [hz_ne]
     _ = q * z := by simp [hqz]
-    _ = (r : ℂ) * z := by simpa [hqeq]
+    _ = (r : ℂ) * z := by simp [hqeq]
 
 /-- `c = 2` specialization: quotient constancy implies the strong
 quotient-rigidity witness. -/
@@ -6584,7 +6584,9 @@ lemma not_outside_open_subset_slit_orbit_rot (c : ℂ) (θ : ℝ) :
     have hnorm : ‖z0‖ = a := by
       calc
         ‖z0‖ = ‖((-a : ℝ) : ℂ)‖ * ‖Complex.exp (Complex.I * θ)‖ := by
-          simpa [z0] using (norm_mul (((-a : ℝ) : ℂ)) (Complex.exp (Complex.I * θ)))
+          change ‖(((-a : ℝ) : ℂ) * Complex.exp (Complex.I * θ))‖ =
+              ‖((-a : ℝ) : ℂ)‖ * ‖Complex.exp (Complex.I * θ)‖
+          rw [norm_mul]
         _ = |(-a : ℝ)| * 1 := by simp
         _ = a := by
           rw [abs_of_nonpos]

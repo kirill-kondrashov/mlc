@@ -14,7 +14,6 @@ the orbit norm ratio `‖orbit 2 (t₂·u) n‖ / ‖orbit 2 (t₁·u) n‖` ten
 ## Main results
 
 * `norm_fc_two_sq_strictMono_along_ray`: |fc(t₂·u)|² > |fc(t₁·u)|² for t₂ > t₁ > 4
-* `norm_orbit_two_strictMono_along_ray`: orbit norms strictly ordered along rays
 * `norm_orbit_two_ratio_tendsto_atTop_along_ray`: ratio → ∞ along rays
 
 ## Key insight
@@ -22,10 +21,11 @@ the orbit norm ratio `‖orbit 2 (t₂·u) n‖ / ‖orbit 2 (t₁·u) n‖` ten
 For arbitrary z₁, z₂ with |z₂| > |z₁| > 4, orbit norms need NOT stay ordered
 (counterexample: z₁ = 5, z₂ = 5.01i gives |fc(z₂)| < |fc(z₁)|).
 
-However, for points **on the same ray** (z₁ = t₁·u, z₂ = t₂·u with ‖u‖ = 1),
-the ordering IS preserved because:
+For points **on the same ray** (z₁ = t₁·u, z₂ = t₂·u with ‖u‖ = 1), we use:
   |fc(t·u)|² = |t²·u² + 2|² = t⁴ + 4t²·Re(u²) + 4
-is strictly increasing in t for t > 2 (derivative 4t³ + 8t·Re(u²) > 0 when t > 2).
+which is strictly increasing in t for t > 2 (derivative
+4t³ + 8t·Re(u²) > 0), together with the Green-function scaling/bounded-error
+estimates along orbits.
 
 -/
 
@@ -61,7 +61,7 @@ private lemma norm_fc_two_sq_eq (t : ℝ) (u : ℂ) (hu : ‖u‖ = 1) :
   have two_re : (2 : ℂ).re = 2 := Complex.natCast_re 2
   have two_im : (2 : ℂ).im = 0 := Complex.natCast_im 2
   have hw_re : w.re = t^2 * (u^2).re + 2 := by
-    simp only [hw_def, Complex.add_re, Complex.mul_re, ht2_re, ht2_im, sub_zero, two_re]; ring
+    simp only [hw_def, Complex.add_re, Complex.mul_re, ht2_re, ht2_im, two_re]; ring
   have hw_im : w.im = t^2 * (u^2).im := by
     simp only [hw_def, Complex.add_im, Complex.mul_im, ht2_re, ht2_im, zero_mul, add_zero, two_im]
   rw [hw_re, hw_im]
@@ -96,7 +96,7 @@ lemma norm_fc_two_sq_strictMono_along_ray (u : ℂ) (hu : ‖u‖ = 1)
   nlinarith
 
 /-- For s > 4 and ‖v‖ = 1, the squared norm is bounded by worst-case values. -/
-private lemma norm_fc_two_sq_bounds (s : ℝ) (v : ℂ) (hs : s > 4) (hv : ‖v‖ = 1) :
+private lemma norm_fc_two_sq_bounds (s : ℝ) (v : ℂ) (_hs : s > 4) (hv : ‖v‖ = 1) :
     s^4 - 4 * s^2 + 4 ≤ ‖fc (2 : ℂ) ((s : ℂ) * v)‖^2 ∧
     ‖fc (2 : ℂ) ((s : ℂ) * v)‖^2 ≤ s^4 + 4 * s^2 + 4 := by
   rw [norm_fc_two_sq_eq s v hv]
@@ -190,122 +190,6 @@ private lemma orbit_ray_decomposition (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht
       exact ne_of_gt ht_next_pos
     exact ⟨t_next, u_next, hnorm_fc, hu_next, heq_next⟩
 
-/-- Orbit norms are strictly ordered along the same ray. -/
-lemma norm_orbit_two_strictMono_along_ray (u : ℂ) (hu : ‖u‖ = 1)
-    {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) (n : ℕ) :
-    ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ < ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ := by
-  induction n with
-  | zero =>
-    simp only [Quadratic.orbit_zero]
-    rw [norm_mul, norm_mul, Complex.norm_real, Complex.norm_real,
-        Real.norm_eq_abs, Real.norm_eq_abs,
-        abs_of_pos (by linarith : t₁ > 0), abs_of_pos (by linarith : t₂ > 0),
-        hu, mul_one, mul_one]
-    exact ht₂
-  | succ n ih =>
-    simp only [Quadratic.orbit_succ]
-    -- Get decompositions
-    obtain ⟨s₁, v₁, hs₁, hv₁, heq₁⟩ := orbit_ray_decomposition u hu t₁ ht₁ n
-    have ht₂_gt_4 : t₂ > 4 := by linarith
-    obtain ⟨s₂, v₂, hs₂, hv₂, heq₂⟩ := orbit_ray_decomposition u hu t₂ ht₂_gt_4 n
-    rw [heq₁, heq₂]
-    -- From IH: s₁ = ‖orbit ... n‖ < s₂ = ‖orbit ... n‖
-    have hs_eq₁ : s₁ = ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ := by
-      rw [heq₁, norm_mul, Complex.norm_real, Real.norm_eq_abs,
-          abs_of_pos (by linarith : s₁ > 0), hv₁, mul_one]
-    have hs_eq₂ : s₂ = ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ := by
-      rw [heq₂, norm_mul, Complex.norm_real, Real.norm_eq_abs,
-          abs_of_pos (by linarith : s₂ > 0), hv₂, mul_one]
-    have hs₁₂ : s₁ < s₂ := by rw [hs_eq₁, hs_eq₂]; exact ih
-    -- The key: even though v₁ ≠ v₂ in general, we can still compare norms
-    -- fc(s·v) = s²v² + 2, and |fc(s·v)|² = s⁴ + 4s²Re(v²) + 4
-    -- For s₁ < s₂ both > 4, we have |fc(s₂·v₂)|² - |fc(s₁·v₁)|² > 0 provided the
-    -- s⁴ term dominates. Let's check this directly.
-    have h_norm₁ : ‖fc (2 : ℂ) ((s₁ : ℂ) * v₁)‖^2 = s₁^4 + 4 * s₁^2 * (v₁^2).re + 4 :=
-      norm_fc_two_sq_eq s₁ v₁ hv₁
-    have h_norm₂ : ‖fc (2 : ℂ) ((s₂ : ℂ) * v₂)‖^2 = s₂^4 + 4 * s₂^2 * (v₂^2).re + 4 :=
-      norm_fc_two_sq_eq s₂ v₂ hv₂
-    -- Need: s₂⁴ + 4s₂²Re(v₂²) + 4 > s₁⁴ + 4s₁²Re(v₁²) + 4
-    -- Lower bound: s⁴ - 4s² (when Re(v²) = -1)
-    -- Upper bound: s⁴ + 4s² (when Re(v²) = 1)
-    -- For s > 4: lower bound = s²(s² - 4) > 16·12 = 192
-    -- Key: if s₂ > s₁ > 4, then s₂⁴ - 4s₂² > s₁⁴ + 4s₁²
-    -- iff s₂⁴ - s₁⁴ > 4(s₂² + s₁²)
-    -- iff (s₂² - s₁²)(s₂² + s₁²) > 4(s₂² + s₁²)
-    -- iff s₂² - s₁² > 4 (since s₂² + s₁² > 0)
-    -- This holds when s₂ - s₁ > 4/(s₂ + s₁) which is true for s₁, s₂ > 4 and s₂ > s₁
-    have hv1_re : (v₁^2).re ≥ -1 := by
-      have h := Complex.abs_re_le_norm (v₁^2)
-      have hnorm : ‖v₁^2‖ = 1 := by rw [norm_pow, hv₁, one_pow]
-      have habs : |((v₁^2).re)| ≤ 1 := by rw [← hnorm]; exact h
-      linarith [neg_abs_le ((v₁^2).re)]
-    have hv2_re : (v₂^2).re ≤ 1 := by
-      have h := Complex.abs_re_le_norm (v₂^2)
-      have hnorm : ‖v₂^2‖ = 1 := by rw [norm_pow, hv₂, one_pow]
-      have habs : |((v₂^2).re)| ≤ 1 := by rw [← hnorm]; exact h
-      exact le_of_abs_le habs
-    have hv2_re_ge : (v₂^2).re ≥ -1 := by
-      have h := Complex.abs_re_le_norm (v₂^2)
-      have hnorm : ‖v₂^2‖ = 1 := by rw [norm_pow, hv₂, one_pow]
-      have habs : |((v₂^2).re)| ≤ 1 := by rw [← hnorm]; exact h
-      linarith [neg_abs_le ((v₂^2).re)]
-    -- The key insight: we can't prove s₂⁴ - 4s₂² > s₁⁴ + 4s₁² in general,
-    -- but we CAN prove: s₂⁴ + 4s₂²Re(v₂²) > s₁⁴ + 4s₁²Re(v₁²) using
-    -- the specific structure of the iteration. The directions v₁, v₂ are
-    -- constrained by how fc evolves them from the same starting direction.
-    --
-    -- Actually, the key is that for FIRST iteration (n=1), v₁ = v₂ = u²/|u²| (normalized)
-    -- and the comparison holds. For subsequent iterations, we need to track
-    -- that the directions don't diverge enough to violate the bound.
-    --
-    -- For now, use sorry and document that this requires a more careful analysis
-    -- of how directions evolve under iteration.
-    have h_compare : s₂^4 + 4 * s₂^2 * (v₂^2).re + 4 > s₁^4 + 4 * s₁^2 * (v₁^2).re + 4 := by
-      -- Using worst-case bounds:
-      -- LHS ≥ s₂⁴ - 4s₂² + 4 (when Re(v₂²) = -1)
-      -- RHS ≤ s₁⁴ + 4s₁² + 4 (when Re(v₁²) = 1)
-      -- Need: s₂⁴ - 4s₂² > s₁⁴ + 4s₁², i.e., s₂² - s₁² > 4
-      -- This doesn't hold in general for s₂ close to s₁.
-      --
-      -- However, the key observation is: after n iterations, s₂/s₁ ≈ (t₂/t₁)^(2^n)
-      -- which grows exponentially. So eventually s₂² - s₁² >> 4.
-      -- The lemma claim is true but requires tracking the ratio growth.
-      sorry
-    have h1_pos : ‖fc (2 : ℂ) ((s₁ : ℂ) * v₁)‖ > 0 := by
-      have h := norm_fc_ge_norm_sq_sub_norm_c (2 : ℂ) ((s₁ : ℂ) * v₁)
-      simp only [Complex.norm_two] at h
-      have hs₁_norm : ‖(s₁ : ℂ) * v₁‖ = s₁ := by
-        rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hv₁, mul_one]
-      rw [hs₁_norm] at h
-      nlinarith [sq_nonneg s₁]
-    have h2_pos : ‖fc (2 : ℂ) ((s₂ : ℂ) * v₂)‖ > 0 := by
-      have h := norm_fc_ge_norm_sq_sub_norm_c (2 : ℂ) ((s₂ : ℂ) * v₂)
-      simp only [Complex.norm_two] at h
-      have hs₂_norm : ‖(s₂ : ℂ) * v₂‖ = s₂ := by
-        rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hv₂, mul_one]
-      rw [hs₂_norm] at h
-      nlinarith [sq_nonneg s₂]
-    -- Convert from squared norm comparison to norm comparison
-    have hsq_compare : ‖fc (2 : ℂ) ((s₁ : ℂ) * v₁)‖^2 < ‖fc (2 : ℂ) ((s₂ : ℂ) * v₂)‖^2 := by
-      rw [h_norm₁, h_norm₂]; exact h_compare
-    -- Use sq_lt_sq₀ for non-negative values: a² < b² ↔ a < b (when a,b ≥ 0)
-    have h1_nneg : ‖fc (2 : ℂ) ((s₁ : ℂ) * v₁)‖ ≥ 0 := norm_nonneg _
-    have h2_nneg : ‖fc (2 : ℂ) ((s₂ : ℂ) * v₂)‖ ≥ 0 := norm_nonneg _
-    exact (sq_lt_sq₀ h1_nneg h2_nneg).mp hsq_compare
-
-/-- The orbit norm ratio along a ray is always ≥ 1. -/
-lemma norm_orbit_two_ratio_ge_one_along_ray (u : ℂ) (hu : ‖u‖ = 1)
-    {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) (n : ℕ) :
-    ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ / ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ ≥ 1 := by
-  have h := norm_orbit_two_strictMono_along_ray u hu ht₁ ht₂ n
-  have h1_pos : ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ > 0 := by
-    have hnorm : ‖(t₁ : ℂ) * u‖ = t₁ := by
-      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hu, mul_one]
-    have := norm_orbit_two_ray_gt_four u hu t₁ ht₁ n
-    linarith
-  rw [ge_iff_le, one_le_div h1_pos]
-  linarith
-
 /-- For points on the same ray with t₂ > t₁ > 4, the orbit norm ratio tends to infinity. -/
 lemma norm_orbit_two_ratio_tendsto_atTop_along_ray (u : ℂ) (hu : ‖u‖ = 1)
     {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) :
@@ -333,117 +217,37 @@ lemma norm_orbit_two_ratio_tendsto_atTop_along_ray (u : ℂ) (hu : ‖u‖ = 1)
     simp only [hM_def]; exact this
   set G₁ := green_function (2 : ℂ) ((t₁ : ℂ) * u)
   set G₂ := green_function (2 : ℂ) ((t₂ : ℂ) * u)
-  -- Show G₂ ≥ G₁ using the orbit ratio ≥ 1 (from strict monotonicity)
-  have hG_ge : G₂ ≥ G₁ := by
-    by_contra h
-    push_neg at h
-    have hdiff : G₂ - G₁ < 0 := by linarith
-    have hbdd : ∀ n, Real.log ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ -
-        Real.log ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ ≤ 2^n * (G₂ - G₁) + 2 * M := fun n => by
+  have hG_lt : G₁ < G₂ := by
+    simpa [G₁, G₂] using
+      GreenFunctionRayInversion.green_function_strictMono_along_ray_two u hu ht₁ ht₂
+  have hG_pos : G₂ - G₁ > 0 := by linarith
+  have hlog_tends : Tendsto (fun n : ℕ => Real.log (‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ /
+      ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖)) atTop atTop := by
+    have hdiff_bound : ∀ n, Real.log ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ -
+        Real.log ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ ≥ 2^n * (G₂ - G₁) - 2 * M := fun n => by
       have h1 := hbdd₁ n
       have h2 := hbdd₂ n
       rw [abs_le] at h1 h2
       linarith
     have h2pow : Tendsto (fun n : ℕ => (2 : ℝ)^n) atTop atTop :=
       tendsto_pow_atTop_atTop_of_one_lt (by norm_num)
-    have hprod : Tendsto (fun n : ℕ => (2 : ℝ)^n * (G₂ - G₁)) atTop atBot := by
-      have hconst : Tendsto (fun _ : ℕ => G₂ - G₁) atTop (𝓝 (G₂ - G₁)) := tendsto_const_nhds
-      exact Filter.Tendsto.atTop_mul_neg hdiff h2pow hconst
-    have htend : Tendsto (fun n : ℕ => 2^n * (G₂ - G₁) + 2 * M) atTop atBot :=
-      Filter.Tendsto.atBot_add hprod tendsto_const_nhds
-    have hev := (Filter.tendsto_atBot.mp htend 0)
-    obtain ⟨N, hN⟩ := hev.exists
-    have h1_pos_N : ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) N‖ > 0 := by
-      linarith [norm_orbit_two_ray_gt_four u hu t₁ ht₁ N]
-    have h2_pos_N : ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) N‖ > 0 := by
-      linarith [norm_orbit_two_ray_gt_four u hu t₂ ht₂_gt_4 N]
-    have hratio_gt : ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) N‖ / ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) N‖ > 1 := by
-      have h := norm_orbit_two_strictMono_along_ray u hu ht₁ ht₂ N
-      exact (one_lt_div h1_pos_N).mpr h
-    have hlog_pos : Real.log (‖orbit (2 : ℂ) ((t₂ : ℂ) * u) N‖ /
-        ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) N‖) > 0 := Real.log_pos hratio_gt
-    have hlog_eq : Real.log (‖orbit (2 : ℂ) ((t₂ : ℂ) * u) N‖ /
-        ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) N‖) =
-        Real.log ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) N‖ - Real.log ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) N‖ :=
-      Real.log_div h2_pos_N.ne' h1_pos_N.ne'
-    have hcontra : Real.log ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) N‖ -
-        Real.log ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) N‖ ≤ 0 := by
-      calc Real.log ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) N‖ - Real.log ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) N‖
-          ≤ 2^N * (G₂ - G₁) + 2 * M := hbdd N
-        _ ≤ 0 := hN
-    linarith [hlog_eq ▸ hlog_pos]
-  -- Case split: G₂ = G₁ vs G₂ > G₁
-  by_cases hG_eq : G₂ = G₁
-  · -- Case: G₂ = G₁. Derive contradiction from bounded ratio vs growing ratio.
-    exfalso
-    have hlog_bdd : ∀ n, |Real.log ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ -
-        Real.log ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖| ≤ 2 * M := by
-      intro n
-      have h1 := hbdd₁ n
-      have h2 := hbdd₂ n
-      rw [abs_le] at h1 h2
-      have heq : 2^n * G₂ = 2^n * G₁ := by rw [hG_eq]
-      rw [abs_le]
-      constructor <;> linarith
-    -- The log-ratio is bounded, so ratio ≤ exp(2M)
-    -- But by iteration dynamics, the ratio grows without bound.
-    -- For points on the same ray starting with t₂ > t₁ > 4, after n iterations:
-    -- ratio_n = |orbit t₂·u n| / |orbit t₁·u n| starts > 1 and grows
-    -- The recurrence shows ratio_{n+1} ≈ ratio_n² for large orbit norms
-    -- This contradicts ratio_n ≤ exp(2M) for all n.
-    --
-    -- Detailed argument: Let r_n = ratio_n. We have r_0 = t₂/t₁ > 1.
-    -- By the norm formula, r_{n+1}² ≈ r_n⁴ · (some bounded factor)
-    -- so log(r_{n+1}) ≈ 2·log(r_n), i.e., log(r_n) ≈ 2^n · log(r_0)
-    -- This → ∞, contradicting log(r_n) ≤ 2M.
-    --
-    -- The strict monotonicity we proved (norm_orbit_two_strictMono_along_ray)
-    -- already shows r_n > 1 for all n. For the G₂ = G₁ case to hold,
-    -- r_n would need to stay bounded, but we've shown r_n → ∞.
-    --
-    -- Actually, the issue is subtle: we proved r_n > 1, but not r_n → ∞.
-    -- The G₂ = G₁ case says log(r_n) ∈ [-2M, 2M], i.e., r_n ∈ [exp(-2M), exp(2M)].
-    --
-    -- The key insight: by Green function theory, G is continuous and
-    -- G(t·u) is strictly increasing in t (this is what we're trying to prove!).
-    -- So the G₂ = G₁ case actually can't happen - but that's circular.
-    --
-    -- For now, this sorry represents the gap in showing the ratio is unbounded.
-    -- The mathematical fact is that G IS strictly increasing along rays,
-    -- so G₂ > G₁ when t₂ > t₁.
-    sorry
-  · -- Case: G₂ > G₁. log-ratio = 2^n * (G₂ - G₁) + O(1) → +∞
-    have hG_pos : G₂ - G₁ > 0 := by
-      cases hG_ge.lt_or_eq with
-      | inl h => linarith
-      | inr h => exact (hG_eq h.symm).elim
-    have hlog_tends : Tendsto (fun n : ℕ => Real.log (‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ /
-        ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖)) atTop atTop := by
-      have hdiff_bound : ∀ n, Real.log ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ -
-          Real.log ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ ≥ 2^n * (G₂ - G₁) - 2 * M := fun n => by
-        have h1 := hbdd₁ n
-        have h2 := hbdd₂ n
-        rw [abs_le] at h1 h2
-        linarith
-      have h2pow : Tendsto (fun n : ℕ => (2 : ℝ)^n) atTop atTop :=
-        tendsto_pow_atTop_atTop_of_one_lt (by norm_num)
-      have hprod : Tendsto (fun n : ℕ => (2 : ℝ)^n * (G₂ - G₁)) atTop atTop :=
-        Filter.Tendsto.atTop_mul_const hG_pos h2pow
-      have htend : Tendsto (fun n : ℕ => 2^n * (G₂ - G₁) - 2 * M) atTop atTop :=
-        Filter.Tendsto.atTop_add hprod tendsto_const_nhds
-      apply Filter.tendsto_atTop_mono (fun n => ?_) htend
-      have h1_pos : ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ > 0 := by
-        linarith [norm_orbit_two_ray_gt_four u hu t₁ ht₁ n]
-      have h2_pos : ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ > 0 := by
-        linarith [norm_orbit_two_ray_gt_four u hu t₂ ht₂_gt_4 n]
-      rw [Real.log_div h2_pos.ne' h1_pos.ne']
-      exact hdiff_bound n
-    exact Real.tendsto_exp_atTop.comp hlog_tends |>.congr fun n => by
-      have h1_pos : ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ > 0 := by
-        linarith [norm_orbit_two_ray_gt_four u hu t₁ ht₁ n]
-      have h2_pos : ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ > 0 := by
-        linarith [norm_orbit_two_ray_gt_four u hu t₂ ht₂_gt_4 n]
-      exact Real.exp_log (div_pos h2_pos h1_pos)
+    have hprod : Tendsto (fun n : ℕ => (2 : ℝ)^n * (G₂ - G₁)) atTop atTop :=
+      Filter.Tendsto.atTop_mul_const hG_pos h2pow
+    have htend : Tendsto (fun n : ℕ => 2^n * (G₂ - G₁) - 2 * M) atTop atTop :=
+      Filter.Tendsto.atTop_add hprod tendsto_const_nhds
+    apply Filter.tendsto_atTop_mono (fun n => ?_) htend
+    have h1_pos : ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ > 0 := by
+      linarith [norm_orbit_two_ray_gt_four u hu t₁ ht₁ n]
+    have h2_pos : ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ > 0 := by
+      linarith [norm_orbit_two_ray_gt_four u hu t₂ ht₂_gt_4 n]
+    rw [Real.log_div h2_pos.ne' h1_pos.ne']
+    exact hdiff_bound n
+  exact Real.tendsto_exp_atTop.comp hlog_tends |>.congr fun n => by
+    have h1_pos : ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ > 0 := by
+      linarith [norm_orbit_two_ray_gt_four u hu t₁ ht₁ n]
+    have h2_pos : ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ > 0 := by
+      linarith [norm_orbit_two_ray_gt_four u hu t₂ ht₂_gt_4 n]
+    exact Real.exp_log (div_pos h2_pos h1_pos)
 
 end OrbitNormRatio
 

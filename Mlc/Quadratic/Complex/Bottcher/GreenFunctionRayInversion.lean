@@ -117,7 +117,7 @@ coercion of the real iterate `f2^[n] ρ`. -/
 lemma orbit_two_ofReal (ρ : ℝ) (n : ℕ) :
     orbit (2 : ℂ) (↑ρ : ℂ) n = ↑(f2 ^[n] ρ) := by
   induction n with
-  | zero => simp [orbit_zero, f2]
+  | zero => simp [orbit_zero]
   | succ n ih =>
     simp only [orbit_succ, fc, ih, Function.iterate_succ', Function.comp, f2]
     push_cast
@@ -242,7 +242,7 @@ private lemma log_norm_orbit_lower (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
     Real.log ‖orbit (2 : ℂ) z n‖ ≥ 2^n * Real.log ‖z‖ - (2^(n+1) - 2) * Real.log 2 := by
   induction n with
   | zero =>
-    simp only [orbit_zero, pow_zero, one_mul, pow_one, Nat.add_eq, Nat.add_zero]
+    simp only [orbit_zero, pow_zero, one_mul]
     norm_num
   | succ n ih =>
     have h_orb_gt_4 : ‖orbit (2 : ℂ) z n‖ > 4 := norm_orbit_two_gt_four z hz n
@@ -262,7 +262,7 @@ private lemma log_norm_orbit_upper (z : ℂ) (hz : ‖z‖ > 4) (n : ℕ) :
     Real.log ‖orbit (2 : ℂ) z n‖ ≤ 2^n * Real.log ‖z‖ + (2^(n+1) - 2) * Real.log 2 := by
   induction n with
   | zero =>
-    simp only [orbit_zero, pow_zero, one_mul, pow_one, Nat.add_eq, Nat.add_zero]
+    simp only [orbit_zero, pow_zero, one_mul]
     norm_num
   | succ n ih =>
     have h_orb_gt_4 : ‖orbit (2 : ℂ) z n‖ > 4 := norm_orbit_two_gt_four z hz n
