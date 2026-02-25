@@ -449,91 +449,6 @@ lemma green_function_strictMono_along_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ�
   rw [Real.log_div (by linarith) (by linarith)] at hN'
   linarith
 
-/-- **Lemma C (complex rays, c = 2)**: For c = 2 and any unit direction u, strict monotonicity
-holds along the ray. Proof follows the same pattern as the real case, using orbit norm bounds. -/
-lemma green_function_strictMono_along_ray_two (u : ℂ) (hu : ‖u‖ = 1)
-    {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) :
-    green_function (2 : ℂ) (↑t₁ * u) < green_function (2 : ℂ) (↑t₂ * u) := by
-  by_contra hle
-  push_neg at hle
-  have ht₁pos : 0 < t₁ := by linarith
-  have ht₂pos : 0 < t₂ := ht₁pos.trans ht₂
-  set z₁ := (t₁ : ℂ) * u
-  set z₂ := (t₂ : ℂ) * u
-  set g₁ := green_function (2 : ℂ) z₁
-  set g₂ := green_function (2 : ℂ) z₂
-  set M := 2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ)) ^ 2
-  -- Norm identities
-  have hnorm₁ : ‖z₁‖ = t₁ := by
-    simp only [z₁, norm_mul, hu, mul_one, norm_real, Real.norm_of_nonneg ht₁pos.le]
-  have hnorm₂ : ‖z₂‖ = t₂ := by
-    simp only [z₂, norm_mul, hu, mul_one, norm_real, Real.norm_of_nonneg ht₂pos.le]
-  -- escape_bound (2:ℂ) = 3
-  have hesc_two : escape_bound (2 : ℂ) = 3 := by
-    have h2norm : ‖(2 : ℂ)‖ = 2 := by
-      rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast, norm_real,
-          Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
-    rw [escape_bound_eq_max, h2norm]; norm_num
-  -- Both starting points are in the basin (norm > escape_bound)
-  have hesc₁ : ‖z₁‖ > escape_bound (2 : ℂ) := by rw [hnorm₁, hesc_two]; linarith
-  have hesc₂ : ‖z₂‖ > escape_bound (2 : ℂ) := by rw [hnorm₂, hesc_two]; linarith
-  have hz₁_gt_4 : ‖z₁‖ > 4 := by rw [hnorm₁]; exact ht₁
-  have hz₂_gt_4 : ‖z₂‖ > 4 := by rw [hnorm₂]; linarith
-  -- Orbit norms stay above escape_bound
-  have hesc_orb₁ : ∀ n, ‖orbit (2 : ℂ) z₁ n‖ > escape_bound (2 : ℂ) := fun n => by
-    rw [hesc_two]
-    have h := norm_orbit_two_ge_norm z₁ hz₁_gt_4 n
-    linarith
-  have hesc_orb₂ : ∀ n, ‖orbit (2 : ℂ) z₂ n‖ > escape_bound (2 : ℂ) := fun n => by
-    rw [hesc_two]
-    have h := norm_orbit_two_ge_norm z₂ hz₂_gt_4 n
-    linarith
-  -- By two-sided bound and functional equation, log-norm ratio is bounded
-  have hlog_bound : ∀ n, Real.log ‖orbit (2 : ℂ) z₂ n‖ - Real.log ‖orbit (2 : ℂ) z₁ n‖ ≤
-      2 * M + |g₁ - g₂| := fun n => by
-    have hgorb₁ := green_function_orbit_eq (2 : ℂ) z₁ n
-    have hgorb₂ := green_function_orbit_eq (2 : ℂ) z₂ n
-    -- Upper bound on log ‖orbit z₂ n‖
-    have hub₂ : Real.log ‖orbit (2 : ℂ) z₂ n‖ ≤ 2 ^ n * g₂ + M := by
-      have hbdd := green_function_bdd_below_log (2 : ℂ) (orbit (2 : ℂ) z₂ n) (hesc_orb₂ n)
-      linarith [hgorb₂]
-    -- Lower bound on log ‖orbit z₁ n‖
-    have hlb₁ : Real.log ‖orbit (2 : ℂ) z₁ n‖ ≥ 2 ^ n * g₁ - M := by
-      have hbdd := green_function_bdd_above_log (2 : ℂ) (orbit (2 : ℂ) z₁ n) (hesc_orb₁ n)
-      linarith [hgorb₁]
-    -- Since hle: g₂ ≤ g₁, we have 2^n*(g₂-g₁) ≤ 0 ≤ |g₁-g₂|
-    have h2n_bound : (2 : ℝ) ^ n * (g₂ - g₁) ≤ |g₁ - g₂| :=
-      le_trans (mul_nonpos_of_nonneg_of_nonpos (pow_pos two_pos n).le (by linarith))
-               (abs_nonneg _)
-    linarith
-  -- But by the two-sided bound at the starting points, log-norm ratio at n=0 is positive
-  -- and should grow under iteration (roughly doubling each step for large norms)
-  --
-  -- For the real case, we used f2_ratio_tendsto_atTop to show the ratio → ∞.
-  -- For the complex case, we need an analogous result, or use the fact that
-  -- the log-norms approximately double, so log-ratio approximately doubles.
-  --
-  -- Key: log ‖orbit z n‖ ≈ 2^n * G(z), so log(‖orbit z₂ n‖/‖orbit z₁ n‖) ≈ 2^n * (G(z₂) - G(z₁))
-  -- If G(z₂) > G(z₁), this → ∞. But we're assuming G(z₂) ≤ G(z₁)...
-  --
-  -- The contradiction comes from: even if G(z₂) ≤ G(z₁), the INITIAL log-ratio
-  -- log(t₂) - log(t₁) is positive, and this should propagate through iterations.
-  --
-  -- Actually, the two-sided bound at n=0 gives:
-  -- log ‖z₂‖ - M ≤ G(z₂) ≤ G(z₁) ≤ log ‖z₁‖ + M
-  -- So log(t₂) - log(t₁) ≤ 2M
-  -- But for close t₁, t₂, this might be satisfied!
-  --
-  -- The key is that the orbit LOG-NORM ratio 2^(-n) * log(‖orbit z₂ n‖/‖orbit z₁ n‖)
-  -- converges to G(z₂) - G(z₁) as n → ∞.
-  -- If t₁ < t₂, then initially log(t₂/t₁) > 0, and the orbit dynamics preserves
-  -- and amplifies this gap (for large norms, one iteration roughly doubles the log-norm).
-  --
-  -- For now, we use a sorry pending the complex orbit ratio analysis.
-  -- The mathematical argument is sound, but formalizing it requires showing
-  -- that the norm ratio grows without bound for ρ₁ < ρ₂.
-  sorry
-
 /-- **Lemma C** [general sorry]: The Green function is strictly increasing along each radial ray.
 For the positive real direction (u = 1) and c = 2, this is proved above. For general
 complex unit direction `u` and general `c`, this requires harmonic analysis (maximum
@@ -542,6 +457,18 @@ lemma green_function_strictMono_along_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1)
     {t₁ t₂ : ℝ} (ht₁ : t₁ > ‖c‖ + 2) (ht₂ : t₁ < t₂) :
     green_function c (↑t₁ * u) < green_function c (↑t₂ * u) := by
   sorry
+
+/-- **Lemma C (complex rays, c = 2)**: strict monotonicity along any unit ray,
+specialized from the general outside-open ray seam. -/
+lemma green_function_strictMono_along_ray_two (u : ℂ) (hu : ‖u‖ = 1)
+    {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) :
+    green_function (2 : ℂ) (↑t₁ * u) < green_function (2 : ℂ) (↑t₂ * u) := by
+  have h2norm : ‖(2 : ℂ)‖ = 2 := by
+    rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast, norm_real,
+      Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+  have ht₁' : t₁ > ‖(2 : ℂ)‖ + 2 := by
+    linarith [ht₁, h2norm]
+  exact green_function_strictMono_along_ray (2 : ℂ) u hu ht₁' ht₂
 
 /-! ## Lemma D: Existence of ray preimage for each Green value -/
 
