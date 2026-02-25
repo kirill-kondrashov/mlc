@@ -1,6 +1,7 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
+import Mlc.Quadratic.Complex.Axioms
 import Mathlib.Topology.Order.IntermediateValue
 
 /-!
@@ -460,18 +461,7 @@ lemma green_function_strictMono_along_ray_basin (c : ℂ) (u : ℂ) (hu : ‖u�
     {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
     (hG : 0 < green_function c ((ρ₁ : ℂ) * u)) :
     green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u) := by
-  -- The approach: by contradiction, assuming G(ρ₁·u) ≥ G(ρ₂·u), and deriving
-  -- that the orbit ratio stays bounded while the functional equation forces it to grow.
-  -- This is essentially the same as the real-ray proof, but we need to track norms
-  -- instead of real iterates.
-  --
-  -- For c = 2 and the real ray (u = 1), this is green_function_strictMono_along_real_ray_two.
-  -- For general rays/parameters, a full proof requires either:
-  -- 1. Norm comparison lemmas for orbits along different rays, or
-  -- 2. Subharmonicity/maximum principle arguments not yet in Mathlib.
-  --
-  -- We use a sorry for now, but the structure is parallel to the real-ray case.
-  sorry
+  exact Quadratic.green_function_strictMono_along_ray_basin_seam c u hu hρ₁ h12 hG
 
 /-- **Lemma C**: The Green function is strictly increasing along each radial ray
 outside-open. -/
