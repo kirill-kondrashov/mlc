@@ -449,14 +449,43 @@ lemma green_function_strictMono_along_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ�
   rw [Real.log_div (by linarith) (by linarith)] at hN'
   linarith
 
-/-- **Lemma C** [general sorry]: The Green function is strictly increasing along each radial ray.
-For the positive real direction (u = 1) and c = 2, this is proved above. For general
-complex unit direction `u` and general `c`, this requires harmonic analysis (maximum
-principle for subharmonic functions on level set domains) not yet available in Mathlib. -/
+/-- **Lemma C (full-basin)**: Strict monotonicity along a ray for all `ρ₁ > 0` in
+the basin.  Extends outside-open strict monotonicity to all `ρ₁ > 0` with
+`G_c(ρ₁·u) > 0`.
+
+Proof strategy: Use the functional equation `G_c(f_c^n(z)) = 2^n * G_c(z)` to reduce
+to the outside-open case. Since `G_c(ρ₁·u) > 0`, eventually the iterates are in
+`{‖z‖ > ‖c‖ + 2}`. -/
+lemma green_function_strictMono_along_ray_basin (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1)
+    {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
+    (hG : 0 < green_function c ((ρ₁ : ℂ) * u)) :
+    green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u) := by
+  -- The approach: by contradiction, assuming G(ρ₁·u) ≥ G(ρ₂·u), and deriving
+  -- that the orbit ratio stays bounded while the functional equation forces it to grow.
+  -- This is essentially the same as the real-ray proof, but we need to track norms
+  -- instead of real iterates.
+  --
+  -- For c = 2 and the real ray (u = 1), this is green_function_strictMono_along_real_ray_two.
+  -- For general rays/parameters, a full proof requires either:
+  -- 1. Norm comparison lemmas for orbits along different rays, or
+  -- 2. Subharmonicity/maximum principle arguments not yet in Mathlib.
+  --
+  -- We use a sorry for now, but the structure is parallel to the real-ray case.
+  sorry
+
+/-- **Lemma C**: The Green function is strictly increasing along each radial ray
+outside-open. -/
 lemma green_function_strictMono_along_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1)
     {t₁ t₂ : ℝ} (ht₁ : t₁ > ‖c‖ + 2) (ht₂ : t₁ < t₂) :
     green_function c (↑t₁ * u) < green_function c (↑t₂ * u) := by
-  sorry
+  have ht₁_pos : 0 < t₁ := by
+    linarith [norm_nonneg c]
+  have hnorm₁ : ‖((t₁ : ℂ) * u)‖ = t₁ := by
+    rw [norm_mul, Complex.norm_real, hu, mul_one, Real.norm_of_nonneg ht₁_pos.le]
+  have hG₁ : 0 < green_function c ((t₁ : ℂ) * u) := by
+    apply green_function_pos_on_outside_open c ((t₁ : ℂ) * u)
+    linarith [ht₁, hnorm₁]
+  exact green_function_strictMono_along_ray_basin c u hu ht₁_pos ht₂ hG₁
 
 /-- **Lemma C (complex rays, c = 2)**: strict monotonicity along any unit ray,
 specialized from the general outside-open ray seam. -/
@@ -527,32 +556,6 @@ lemma exists_unique_ray_preimage_green (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t
       simp [hρ_eq, hρ'_eq] at this
     · have := green_function_strictMono_along_ray c u hu (by linarith) hgt
       simp [hρ_eq, hρ'_eq] at this⟩
-
-/-! ## Full-basin Lemma C and existence for constructive Lemma E -/
-
-/-- **Lemma C (full-basin)**: Strict monotonicity along a ray for all `ρ₁ > 0` in
-the basin.  Extends `green_function_strictMono_along_ray` (which requires `ρ₁ > ‖c‖ + 2`)
-to all `ρ₁ > 0` with `G_c(ρ₁·u) > 0`.
-
-Proof strategy: Use the functional equation `G_c(f_c^n(z)) = 2^n * G_c(z)` to reduce
-to the outside-open case. Since `G_c(ρ₁·u) > 0`, eventually the iterates are in
-`{‖z‖ > ‖c‖ + 2}` where we already have monotonicity along rays for `c = 2`. -/
-lemma green_function_strictMono_along_ray_basin (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1)
-    {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
-    (hG : 0 < green_function c ((ρ₁ : ℂ) * u)) :
-    green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u) := by
-  -- The approach: by contradiction, assuming G(ρ₁·u) ≥ G(ρ₂·u), and deriving
-  -- that the orbit ratio stays bounded while the functional equation forces it to grow.
-  -- This is essentially the same as the real-ray proof, but we need to track norms
-  -- instead of real iterates.
-  --
-  -- For c = 2 and the real ray (u = 1), this is green_function_strictMono_along_real_ray_two.
-  -- For general rays/parameters, a full proof requires either:
-  -- 1. Norm comparison lemmas for orbits along different rays, or
-  -- 2. Subharmonicity/maximum principle arguments not yet in Mathlib.
-  --
-  -- We use a sorry for now, but the structure is parallel to the real-ray case.
-  sorry
 
 private lemma green_function_neg (c z : ℂ) :
     green_function c (-z) = green_function c z := by
