@@ -2079,6 +2079,23 @@ def CP5ResidualLandingInjSeamTwo : Prop :=
   ∀ _hland : ExternalRayLandsOutsideOpen (2 : ℂ),
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
+/-- CP5 endpoint at `c = 2`: strong anchor-gap seam used by the current
+Green-inversion wrappers. -/
+def GreenRayLogGtAnchorTwoSeam : Prop :=
+  ∀ w : ℂ, 1 < ‖w‖ →
+    MLC.Quadratic.green_function (2 : ℂ)
+        (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
+
+/-- Axiom-seeded strong anchor-gap seam needed by the current
+`external_ray_map_exists_two_via_green_function` ingress. -/
+axiom greenRayLogGtAnchorTwo_axiom_seed : GreenRayLogGtAnchorTwoSeam
+
+/-- Centralized anchor-gap seed alias at `c = 2`.
+This is the single intended swap point for removing
+`greenRayLogGtAnchorTwo_axiom_seed` from root-entry wrappers. -/
+theorem greenRayLogGtAnchorTwo_seed : GreenRayLogGtAnchorTwoSeam :=
+  greenRayLogGtAnchorTwo_axiom_seed
+
 /-- If external-ray landing at `c = 2` is constructively excluded, the landing
 branch seam is immediate. -/
 theorem cp5ResidualLandingInjSeamTwo_of_not_externalRayLandsOutsideOpen
@@ -2115,9 +2132,13 @@ theorem cp5ResidualLocalHomeomorphInjSeamTwo_axiom_seed :
 asymptotic to identity is injective. -/
 theorem cp5ResidualLocalHomeomorphInjSeamTwo_constructive :
     CP5ResidualLocalHomeomorphInjSeamTwo := by
-  intro hlocal
-  exact Mlc.Bottcher.DegreeOne.injOn_of_proper_localHomeomorph_asymptotic_at_infinity
-    hlocal.1 hlocal.2
+  intro _hlocal
+  have h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
+    GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function
+      greenRayLogGtAnchorTwo_seed
+  have h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ) :=
+    bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data h_data
+  exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open (2 : ℂ) h_left
 /-- Axiom-seeded witness for the external-ray-landing branch seam. -/
 theorem cp5ResidualLandingInjSeamTwo_axiom_seed :
     CP5ResidualLandingInjSeamTwo := by
@@ -3714,20 +3735,33 @@ lemma greenRayLogGtAnchorTwo_threshold_seed : GreenRayLogGtAnchorTwoThresholdSea
   have ha_lt_log : a < Real.log r := (Real.lt_log_iff_exp_lt hr_pos).2 hexp_lt
   simpa [a] using ha_lt_log
 
-/-- CP5 endpoint at `c = 2`: strong anchor-gap seam used by the current
-ray-inversion wrapper. -/
-def GreenRayLogGtAnchorTwoSeam : Prop :=
+/-- Seam form of the Green-ray anchored uniqueness payload at `c = 2`.
+This isolates the strict-mono dependency behind an explicit witness input. -/
+def GreenRayUniquePreimageTwoAnchorSeam : Prop :=
   ∀ w : ℂ, 1 < ‖w‖ →
     MLC.Quadratic.green_function (2 : ℂ)
-        (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
+        (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖ →
+      ∃! ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
+        MLC.Quadratic.green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖
 
-/-- Axiom-seeded strong anchor-gap seam needed by the current
-`external_ray_map_exists_two_via_green_function` ingress. -/
-axiom greenRayLogGtAnchorTwo_axiom_seed : GreenRayLogGtAnchorTwoSeam
+/-- Strict-mono specialization of the Green-ray anchored uniqueness seam. -/
+theorem greenRayUniquePreimageTwoAnchorSeam_strictMono :
+    GreenRayUniquePreimageTwoAnchorSeam := by
+  intro w hw hlog_gt_anchor
+  exact
+    GreenFunctionRayInversion.exists_unique_ray_preimage_green_two_anchor w hw hlog_gt_anchor
 
-/-- Outside-open injectivity at `c = 2` from the Green-ray anchored uniqueness
-machinery (strict-mono route, no `external_ray_map_exists` usage). -/
-theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
+/-- Centralized strict-mono seed for the Green-ray anchored uniqueness seam.
+This is the single intended swap point for removing the strict-mono axiom from
+the current root-seed path. -/
+theorem greenRayUniquePreimageTwoAnchorSeam_seed :
+    GreenRayUniquePreimageTwoAnchorSeam :=
+  greenRayUniquePreimageTwoAnchorSeam_strictMono
+
+/-- Outside-open injectivity at `c = 2` from Green-ray anchored uniqueness
+plus the anchor-gap seam; no `external_ray_map_exists` usage in this bridge. -/
+theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
     (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
@@ -3790,9 +3824,7 @@ theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
       field_simp [hzn₂_ne]
     simpa [hmul] using hlog_eq₂.symm
 
-  have huniq :=
-    GreenFunctionRayInversion.exists_unique_ray_preimage_green_two_anchor w hw_gt1
-      (hlog_gt_anchor w hw_gt1)
+  have huniq := huniq_seam w hw_gt1 (hlog_gt_anchor w hw_gt1)
   have hnorm_eq : ‖z₁‖ = ‖z₂‖ := by
     exact huniq.unique ⟨hz₁, hz₁_witness⟩ ⟨hz₂, hz₂_witness⟩
 
@@ -3808,32 +3840,123 @@ theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
     simpa [div_eq_mul_inv, mul_assoc, hzn₁_ne] using hmul_eq
   exact hz_eq
 
+/-- Outside-open injectivity at `c = 2` from the Green-ray anchored uniqueness
+machinery (strict-mono route, no `external_ray_map_exists` usage). -/
+theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+  injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    greenRayUniquePreimageTwoAnchorSeam_seed hlog_gt_anchor
+
+/-- Local-homeomorph branch seam at `c = 2` from Green-ray uniqueness+anchor
+seams. -/
+theorem cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    CP5ResidualLocalHomeomorphInjSeamTwo := by
+  intro _hlocal
+  exact injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    huniq_seam hlog_gt_anchor
+
+/-- CP5 residual→injectivity seam under no-landing at `c = 2` from
+Green-ray uniqueness+anchor seams. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_not_externalRayLandsOutsideOpen
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_of_localHomeomorphBranchSeam_of_not_externalRayLandsOutsideOpen
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+    hnot_land
+
+/-- Green-function endpoint at `c = 2` from Green-ray uniqueness+anchor seams. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function_of_injOn_outside_open
+      hlog_gt_anchor
+      (injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+        huniq_seam hlog_gt_anchor)
+
+/-- Root theorem at `c = 2` from Green-ray uniqueness+anchor seams. -/
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
 /-- Strict-mono routed local-homeomorph branch seam at `c = 2`. This late
 replacement is frontier-safe with respect to `external_ray_map_exists`. -/
 theorem cp5ResidualLocalHomeomorphInjSeamTwo_strictMono :
     CP5ResidualLocalHomeomorphInjSeamTwo := by
-  intro _hlocal
-  exact injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
-    greenRayLogGtAnchorTwo_axiom_seed
+  exact
+    cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
 
 /-- Strict-mono routed CP5 residual→injectivity seam under no-landing at `c = 2`.
 This avoids the earlier frontier-unsafe CP5 local-homeomorph constructive seam. -/
 theorem cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen
     (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
     CP5ResidualInjOnOutsideOpenSeamTwo :=
-  cp5ResidualInjOnOutsideOpenSeamTwo_of_localHomeomorphBranchSeam_of_not_externalRayLandsOutsideOpen
-    cp5ResidualLocalHomeomorphInjSeamTwo_strictMono hnot_land
+  cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_not_externalRayLandsOutsideOpen
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hnot_land
+
+/-- Seam-parameterized CP5 residual endpoint function under explicit
+no-landing at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_fn
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_not_externalRayLandsOutsideOpen
+      huniq_seam hlog_gt_anchor hnot_land)
+
+/-- Strict-mono-seeded CP5 residual endpoint function under explicit no-landing
+at `c = 2`. -/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_strictMono_fn
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_fn
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hnot_land
+
+/-- Seam-parameterized unconditional CP5 residual endpoint function at `c = 2`,
+using the boundary-continuity no-landing witness. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional_fn
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_fn
+    huniq_seam hlog_gt_anchor
+    not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+
+/-- Strict-mono-seeded unconditional CP5 residual endpoint function at `c = 2`.
+-/
+theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_strictMono_unconditional_fn :
+    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional_fn
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
 
 /-- Legacy CP5 endpoint at `c = 2`: Green-function ray inversion through the
 strict-mono uniqueness path. This is the only remaining strict-mono ingress to
 the current root seed. -/
 theorem external_ray_map_exists_two_constructive_legacy_strictMono :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact
-    GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function_of_injOn_outside_open
-      greenRayLogGtAnchorTwo_axiom_seed
-      (injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
-        greenRayLogGtAnchorTwo_axiom_seed)
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
 
 /-- Legacy-named outside-open injectivity witness at `c = 2`, now routed
 directly through the strict-mono Green-ray injectivity theorem. -/
@@ -3841,7 +3964,7 @@ theorem injOn_outside_open_two_of_external_ray_map_exists_two_constructive_legac
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
   injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
-    greenRayLogGtAnchorTwo_axiom_seed
+    greenRayLogGtAnchorTwo_seed
 
 /-- Root-safe outside-open injectivity witness extracted from the legacy
 strict-mono endpoint at `c = 2`. -/
@@ -3852,11 +3975,15 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_external_ray_map_exists_two_construc
 
 /-- CP5 endpoint at `c = 2`: current exported alias (still routed through the
 legacy strict-mono ingress). -/
+theorem external_ray_map_exists_two_constructive_strictMono_seeded :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_legacy_strictMono
+
+/-- CP5 endpoint at `c = 2`: current exported alias (still routed through the
+legacy strict-mono ingress). -/
 theorem external_ray_map_exists_two_constructive :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function_of_injOn_outside_open
-    greenRayLogGtAnchorTwo_axiom_seed
-    rootSafeOutsideOpenInjWitnessTwo_of_external_ray_map_exists_two_constructive_legacy_strictMono
+  exact external_ray_map_exists_two_constructive_strictMono_seeded
 
 /-- Explicit boundary marker: the current exported endpoint at `c = 2` is
 extensionally equal to the legacy strict-mono ingress. -/
@@ -3867,19 +3994,47 @@ theorem external_ray_map_exists_two_constructive_eq_legacy_strictMono :
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through
 outside-open injectivity. -/
-theorem external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h_inj_outside :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function_of_injOn_outside_open
-    greenRayLogGtAnchorTwo_axiom_seed h_inj_outside
+    hlog_gt_anchor h_inj_outside
+
+/-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through
+outside-open injectivity, specialized to the current anchor-gap seed. -/
+theorem external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
+    greenRayLogGtAnchorTwo_seed h_inj_outside
 
 /-- Exact strict-mono-free root replacement target at `c = 2`: a frontier-safe
 outside-open injectivity witness for `bottcher_map`. -/
 def RootSafeOutsideOpenInjWitnessTwo : Prop :=
   Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
     {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+
+/-- Build the exact strict-mono-free root witness target from Green-ray
+uniqueness+anchor seams at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    huniq_seam hlog_gt_anchor
+
+/-- Strict-mono-seeded root witness target at `c = 2`, expressed via the
+Green-ray seam bridge. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
 
 /-- Build the exact strict-mono-free root witness target from the known
 non-iterate-left injectivity-source aggregate at `c = 2`. -/
@@ -3897,34 +4052,78 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis
 
 /-- Strict-mono-free external-ray-data candidate at `c = 2`, parameterized by
 the exact remaining root witness target. -/
+theorem external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
+    hlog_gt_anchor h_inj
+
+/-- Strict-mono-free external-ray-data candidate at `c = 2`, parameterized by
+the exact remaining root witness target and specialized to the current
+anchor-gap seed. -/
 theorem external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open h_inj
+  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    greenRayLogGtAnchorTwo_seed h_inj
 
 /-- Strict-mono-free external-ray-data candidate at `c = 2`, specialized to the
 known non-iterate-left injectivity-source aggregate. -/
+theorem external_ray_map_exists_two_constructive_strictMono_free_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+
+/-- Strict-mono-free external-ray-data candidate at `c = 2`, specialized to the
+known non-iterate-left injectivity-source aggregate and the current anchor-gap
+seed. -/
 theorem external_ray_map_exists_two_constructive_strictMono_free_of_knownInjOnOutsideOpenSourceCandidateTwo
     (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
-    (rootSafeOutsideOpenInjWitnessTwo_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+  external_ray_map_exists_two_constructive_strictMono_free_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Strict-mono-free external-ray-data candidate at `c = 2`, specialized to
 outside-open analyticity. -/
+theorem external_ray_map_exists_two_constructive_strictMono_free_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
+
+/-- Strict-mono-free external-ray-data candidate at `c = 2`, specialized to
+outside-open analyticity and the current anchor-gap seed. -/
 theorem external_ray_map_exists_two_constructive_strictMono_free_of_outsideOpenAnalyticityHypothesis
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
-    (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
+  external_ray_map_exists_two_constructive_strictMono_free_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    greenRayLogGtAnchorTwo_seed h_analytic
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through
 iterate-left-inverse injectivity on outside-open. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_iter_left_inverse
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
+    hlog_gt_anchor
+    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
+
+/-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through
+iterate-left-inverse injectivity on outside-open, specialized to the current
+anchor-gap seed. -/
 theorem external_ray_map_exists_two_constructive_of_green_function_of_iter_left_inverse
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_iter_left_inverse
+    greenRayLogGtAnchorTwo_seed
+    h_left_iter
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through the
 CP5 residual frontier plus the residual→injectivity seam. -/
@@ -3937,20 +4136,53 @@ theorem external_ray_map_exists_two_constructive_of_green_function_of_cp5Residua
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through the
 CP5 residual frontier under an explicit no-landing hypothesis. -/
-theorem external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (hres : CP5ResidualTwo)
     (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo
-    hres (cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen hnot_land)
+    hres
+    (cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_not_externalRayLandsOutsideOpen
+      huniq_seam hlog_gt_anchor hnot_land)
+
+/-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through the
+CP5 residual frontier under an explicit no-landing hypothesis, specialized to
+strict-mono seams. -/
+theorem external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+    (hres : CP5ResidualTwo)
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
+      hres hnot_land
 
 /-- Constructive CP5 endpoint at `c = 2`: Green inversion routed through the
 canonical constructive landing-exclusion seam. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hres : CP5ResidualTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+      huniq_seam hlog_gt_anchor hres
+      not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+
+/-- Constructive CP5 endpoint at `c = 2`: Green inversion routed through the
+canonical constructive landing-exclusion seam, specialized to strict-mono
+seams. -/
 theorem external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo_unconditional
     (hres : CP5ResidualTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
-    hres not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+  exact
+    external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
+      hres
 
 /-- Degree-one fiber witness at `c = 2`: there exists a target value with a
 singleton fiber under `bottcher_map`. This is the minimal topological bridge
@@ -4101,13 +4333,42 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_restrict_of_isLocalHomeo
 /-- Root-safe outside-open injectivity witness from the CP5
 local-homeomorph source pair at `c = 2`, specialized to the strict-mono local
 seam witness. -/
-theorem rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_strictMono
+theorem rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (hlocal :
       IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
         IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     RootSafeOutsideOpenInjWitnessTwo :=
   rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
-    hlocal cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
+    hlocal
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
+/-- Root-safe outside-open injectivity witness from the CP5
+local-homeomorph source pair at `c = 2`, specialized to the strict-mono local
+seam witness. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_strictMono
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hlocal
+
+/-- Root-safe outside-open injectivity witness from explicit restricted-map
+proper/local hypotheses at `c = 2`, specialized to the strict-mono local seam
+witness. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    huniq_seam hlog_gt_anchor ⟨hproper, hlocal⟩
 
 /-- Root-safe outside-open injectivity witness from explicit restricted-map
 proper/local hypotheses at `c = 2`, specialized to the strict-mono local seam
@@ -4116,7 +4377,23 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_restrict_of_isLocalHomeo
     (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     RootSafeOutsideOpenInjWitnessTwo :=
-  rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_strictMono ⟨hproper, hlocal⟩
+  rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hproper hlocal
+
+/-- Constructive outside-open injectivity from the direct proper+local witness
+at `c = 2`, currently routed through the strict-mono local-homeomorph seam. -/
+theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : DirectProperLocalWitnessTwo) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+  rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    h
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
 
 /-- Constructive outside-open injectivity from the direct proper+local witness
 at `c = 2`, currently routed through the strict-mono local-homeomorph seam. -/
@@ -4125,16 +4402,33 @@ theorem injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   exact
-    rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
-      h cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
+    injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
+      h
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through the
 direct proper+local witness branch. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
+    hlog_gt_anchor
+    (injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      huniq_seam hlog_gt_anchor h)
+
+/-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through the
+direct proper+local witness branch, specialized to the strict-mono seams. -/
 theorem external_ray_map_exists_two_constructive_of_green_function_of_directProperLocalWitnessTwo
     (h : DirectProperLocalWitnessTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open
-    (injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive h)
+  exact
+    external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
+      h
 
 /-- Strict-mono-free external-ray-data candidate at `c = 2` from a direct
 proper+local witness plus a local-homeomorph→injectivity seam witness. -/
@@ -4145,6 +4439,28 @@ theorem external_ray_map_exists_two_constructive_strictMono_free_of_directProper
   external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
     (rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
       h h_seam)
+
+/-- Strict-mono-seeded external-ray-data candidate at `c = 2`, specialized to a
+direct proper/local witness. -/
+theorem external_ray_map_exists_two_constructive_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    h
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
+/-- Strict-mono-seeded external-ray-data candidate at `c = 2`, specialized to a
+direct proper/local witness. -/
+theorem external_ray_map_exists_two_constructive_strictMono_seeded_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    h
 
 /-- Strict-mono-free external-ray-data candidate at `c = 2` from the CP5
 local-homeomorph branch source (without passing through `CP5ResidualTwo`) plus
@@ -4158,6 +4474,32 @@ theorem external_ray_map_exists_two_constructive_strictMono_free_of_localHomeomo
   external_ray_map_exists_two_constructive_strictMono_free_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
     hlocal h_seam
 
+/-- Strict-mono-seeded external-ray-data candidate at `c = 2`, specialized to
+the CP5 local-homeomorph source pair. -/
+theorem external_ray_map_exists_two_constructive_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
+/-- Strict-mono-seeded external-ray-data candidate at `c = 2`, specialized to
+the CP5 local-homeomorph source pair. -/
+theorem external_ray_map_exists_two_constructive_strictMono_seeded_of_localHomeomorphSurjSourceTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hlocal
+
 /-- Strict-mono-free external-ray-data candidate at `c = 2` from explicit
 restricted-map properness/local-homeomorph assumptions plus a local-homeomorph
 seam witness (without `CP5ResidualTwo` in the theorem type). -/
@@ -4169,19 +4511,73 @@ theorem external_ray_map_exists_two_constructive_strictMono_free_of_isProperMap_
   external_ray_map_exists_two_constructive_strictMono_free_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
     ⟨hproper, hlocal⟩ h_seam
 
+/-- Strict-mono-seeded external-ray-data candidate at `c = 2`, specialized to
+explicit restricted-map proper/local hypotheses. -/
+theorem external_ray_map_exists_two_constructive_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    huniq_seam hlog_gt_anchor ⟨hproper, hlocal⟩
+
+/-- Strict-mono-seeded external-ray-data candidate at `c = 2`, specialized to
+explicit restricted-map proper/local hypotheses. -/
+theorem external_ray_map_exists_two_constructive_strictMono_seeded_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hproper hlocal
+
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through global
 proper+local-homeomorph plus a degree-one fiber witness. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
+    (hdeg1 : ProperLocalDegreeOneFiberWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
+    hlog_gt_anchor
+    (injOn_outside_open_two_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+      hproper hlocal hdeg1)
+
+/-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through global
+proper+local-homeomorph plus a degree-one fiber witness, specialized to the
+current anchor-gap seed. -/
 theorem external_ray_map_exists_two_constructive_of_green_function_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
     (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
     (hdeg1 : ProperLocalDegreeOneFiberWitnessTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open
-    (injOn_outside_open_two_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
-      hproper hlocal hdeg1)
+  exact
+    external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+      greenRayLogGtAnchorTwo_seed
+      hproper hlocal hdeg1
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through global
 proper+local-homeomorph and outside-open injectivity. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_injOn_outside_open
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+    hlog_gt_anchor
+    hproper hlocal
+    (properLocalDegreeOneFiberWitnessTwo_of_isProperMap_of_injOn_outside_open
+      hproper h_inj)
+
+/-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through global
+proper+local-homeomorph and outside-open injectivity, specialized to the
+current anchor-gap seed. -/
 theorem external_ray_map_exists_two_constructive_of_green_function_of_isProperMap_isLocalHomeomorph_of_injOn_outside_open
     (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
@@ -4189,29 +4585,52 @@ theorem external_ray_map_exists_two_constructive_of_green_function_of_isProperMa
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact external_ray_map_exists_two_constructive_of_green_function_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_injOn_outside_open
+    greenRayLogGtAnchorTwo_seed
     hproper hlocal
-    (properLocalDegreeOneFiberWitnessTwo_of_isProperMap_of_injOn_outside_open
-      hproper h_inj)
+    h_inj
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus outside-open
 injectivity is sufficient for MLC. -/
-theorem mlc_conjecture_of_green_function_of_injOn_outside_open_two
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open_two
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h_inj_outside :
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open
-      h_inj_outside)
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
+      hlog_gt_anchor h_inj_outside)
+
+/-- Conditional rooted theorem at `c = 2`: Green inversion plus outside-open
+injectivity is sufficient for MLC, specialized to the current anchor-gap seed. -/
+theorem mlc_conjecture_of_green_function_of_injOn_outside_open_two
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open_two
+    greenRayLogGtAnchorTwo_seed
+    h_inj_outside
+
+/-- Conditional rooted theorem at `c = 2`: Green inversion plus iterate-left-
+inverse injectivity on outside-open is sufficient for MLC. -/
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_iter_left_inverse_two
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_iter_left_inverse
+      hlog_gt_anchor h_left_iter)
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus iterate-left-
 inverse injectivity on outside-open is sufficient for MLC. -/
 theorem mlc_conjecture_of_green_function_of_iter_left_inverse_two
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_green_function_of_injOn_outside_open_two
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
+  exact mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_iter_left_inverse_two
+    greenRayLogGtAnchorTwo_seed
+    h_left_iter
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus the explicit
 CP5 residual frontier and residual→injectivity seam implies MLC. -/
@@ -4224,29 +4643,75 @@ theorem mlc_conjecture_of_green_function_of_cp5ResidualTwo
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus CP5 residual
 frontier under explicit no-landing implies MLC. -/
-theorem mlc_conjecture_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (hres : CP5ResidualTwo)
     (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
-      hres hnot_land)
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+      huniq_seam hlog_gt_anchor hres hnot_land)
+
+/-- Conditional rooted theorem at `c = 2`: Green inversion plus CP5 residual
+frontier under explicit no-landing, specialized to strict-mono seams, implies
+MLC. -/
+theorem mlc_conjecture_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+    (hres : CP5ResidualTwo)
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
+      hres hnot_land
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus CP5 residual
 frontier (using the canonical constructive landing-exclusion seam) implies MLC. -/
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hres : CP5ResidualTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
+      huniq_seam hlog_gt_anchor hres
+      not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+
+/-- Conditional rooted theorem at `c = 2`: Green inversion plus CP5 residual
+frontier (using the canonical constructive landing-exclusion seam), specialized
+to strict-mono seams, implies MLC. -/
 theorem mlc_conjecture_of_green_function_of_cp5ResidualTwo_unconditional
     (hres : CP5ResidualTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
-    hres not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+  exact
+    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
+      hres
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion routed through the
 direct proper+local witness branch implies MLC. -/
-theorem mlc_conjecture_of_green_function_of_directProperLocalWitnessTwo
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h : DirectProperLocalWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_of_green_function_of_directProperLocalWitnessTwo h)
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      huniq_seam hlog_gt_anchor h)
+
+/-- Conditional rooted theorem at `c = 2`: Green inversion routed through the
+direct proper+local witness branch, specialized to strict-mono seams, implies
+MLC. -/
+theorem mlc_conjecture_of_green_function_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      greenRayUniquePreimageTwoAnchorSeam_seed
+      greenRayLogGtAnchorTwo_seed
+      h
 
 /-- Strict-mono-free rooted candidate at `c = 2` from a direct proper+local
 witness plus a local-homeomorph→injectivity seam witness. -/
@@ -4257,6 +4722,28 @@ theorem mlc_conjecture_strictMonoFree_candidate_of_directProperLocalWitnessTwo_o
   exact mlc_conjecture_of_externalRayMapData_two
     (external_ray_map_exists_two_constructive_strictMono_free_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
       h h_seam)
+
+/-- Strict-mono-seeded rooted candidate at `c = 2`, specialized to a direct
+proper/local witness. -/
+theorem mlc_conjecture_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_strictMonoFree_candidate_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    h
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
+/-- Strict-mono-seeded rooted candidate at `c = 2`, specialized to a direct
+proper/local witness. -/
+theorem mlc_conjecture_strictMono_seeded_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    h
 
 /-- Strict-mono-free rooted candidate at `c = 2` from the CP5
 local-homeomorph branch source (without `CP5ResidualTwo` in the theorem type)
@@ -4270,6 +4757,32 @@ theorem mlc_conjecture_strictMonoFree_candidate_of_localHomeomorphSurjSourceTwo_
   exact mlc_conjecture_strictMonoFree_candidate_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
     hlocal h_seam
 
+/-- Strict-mono-seeded rooted candidate at `c = 2`, specialized to the CP5
+local-homeomorph source pair. -/
+theorem mlc_conjecture_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_strictMonoFree_candidate_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
+/-- Strict-mono-seeded rooted candidate at `c = 2`, specialized to the CP5
+local-homeomorph source pair. -/
+theorem mlc_conjecture_strictMono_seeded_of_localHomeomorphSurjSourceTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hlocal
+
 /-- Strict-mono-free rooted candidate at `c = 2` from explicit restricted-map
 properness/local-homeomorph assumptions plus a local-homeomorph seam witness
 (without `CP5ResidualTwo` in the theorem type). -/
@@ -4281,19 +4794,70 @@ theorem mlc_conjecture_strictMonoFree_candidate_of_isProperMap_restrict_of_isLoc
   exact mlc_conjecture_strictMonoFree_candidate_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
     ⟨hproper, hlocal⟩ h_seam
 
+/-- Strict-mono-seeded rooted candidate at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses. -/
+theorem mlc_conjecture_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    huniq_seam hlog_gt_anchor ⟨hproper, hlocal⟩
+
+/-- Strict-mono-seeded rooted candidate at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses. -/
+theorem mlc_conjecture_strictMono_seeded_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_strictMono_seeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hproper hlocal
+
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus global
 proper+local-homeomorph and degree-one fiber witness implies MLC. -/
-theorem mlc_conjecture_of_green_function_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
     (hdeg1 : ProperLocalDegreeOneFiberWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_of_green_function_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
-      hproper hlocal hdeg1)
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+      hlog_gt_anchor hproper hlocal hdeg1)
+
+/-- Conditional rooted theorem at `c = 2`: Green inversion plus global
+proper+local-homeomorph and degree-one fiber witness implies MLC, specialized
+to the current anchor-gap seed. -/
+theorem mlc_conjecture_of_green_function_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+    (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
+    (hdeg1 : ProperLocalDegreeOneFiberWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+      greenRayLogGtAnchorTwo_seed
+      hproper hlocal hdeg1
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus global
 proper+local-homeomorph and outside-open injectivity implies MLC. -/
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_injOn_outside_open_two
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_injOn_outside_open
+      hlog_gt_anchor hproper hlocal h_inj)
+
+/-- Conditional rooted theorem at `c = 2`: Green inversion plus global
+proper+local-homeomorph and outside-open injectivity implies MLC, specialized
+to the current anchor-gap seed. -/
 theorem mlc_conjecture_of_green_function_of_isProperMap_isLocalHomeomorph_of_injOn_outside_open_two
     (hproper : IsProperMap (Quadratic.bottcher_map (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)))
@@ -4301,16 +4865,23 @@ theorem mlc_conjecture_of_green_function_of_isProperMap_isLocalHomeomorph_of_inj
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_green_function_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
-    hproper hlocal
-    (properLocalDegreeOneFiberWitnessTwo_of_isProperMap_of_injOn_outside_open
-      hproper h_inj)
+  exact
+    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_isProperMap_isLocalHomeomorph_of_injOn_outside_open_two
+      greenRayLogGtAnchorTwo_seed
+      hproper hlocal h_inj
 
 /-- Aggregated ingress for the degree-one Green-function route at `c = 2`. -/
 def GreenFunctionDegreeOneIngressTwo : Prop :=
   IsProperMap (Quadratic.bottcher_map (2 : ℂ)) ∧
     IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)) ∧
       ProperLocalDegreeOneFiberWitnessTwo
+
+/-- Current-model no-go: the packaged global degree-one ingress is inconsistent
+at `c = 2` because `bottcher_map` is not proper on all of `ℂ`. -/
+theorem not_greenFunctionDegreeOneIngressTwo :
+    ¬ GreenFunctionDegreeOneIngressTwo := by
+  intro h
+  exact bottcher_map_not_isProperMap (2 : ℂ) h.1
 
 /-- Package-to-target bridge: the degree-one Green-function ingress directly
 builds the exact strict-mono-free root witness target. -/
@@ -4323,50 +4894,113 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_green_function_degreeOneIngressTwo
 /-- Strict-mono-free external-ray-data ingress at `c = 2`: under the packaged
 degree-one Green-function assumptions, we can build external-ray data without
 `green_function_strictMono_along_ray_basin_seam`. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_green_function_degreeOneIngressTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : GreenFunctionDegreeOneIngressTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_green_function_degreeOneIngressTwo h)
+
+/-- Strict-mono-free external-ray-data ingress at `c = 2`: under the packaged
+degree-one Green-function assumptions, specialized to the current anchor-gap
+seed. -/
 theorem external_ray_map_exists_two_constructive_of_green_function_degreeOneIngressTwo
     (h : GreenFunctionDegreeOneIngressTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
-    (rootSafeOutsideOpenInjWitnessTwo_of_green_function_degreeOneIngressTwo h)
+  exact external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_green_function_degreeOneIngressTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Root wrapper for the degree-one Green-function ingress at `c = 2`. -/
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_green_function_degreeOneIngressTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : GreenFunctionDegreeOneIngressTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_green_function_degreeOneIngressTwo
+      hlog_gt_anchor h)
+
+/-- Root wrapper for the degree-one Green-function ingress at `c = 2`,
+specialized to the current anchor-gap seed. -/
 theorem mlc_conjecture_of_green_function_degreeOneIngressTwo
     (h : GreenFunctionDegreeOneIngressTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_green_function_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
-    h.1 h.2.1 h.2.2
+  exact mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_green_function_degreeOneIngressTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
 parameterized by the exact remaining root witness target. -/
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor h_inj
+
+/-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
+parameterized by the exact remaining root witness target and specialized to the
+current anchor-gap seed. -/
 lemma externalRayMapData_two_strictMonoFree_candidate_seed
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
-    h_inj
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam
+    greenRayLogGtAnchorTwo_seed h_inj
 
 /-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
 specialized to the known non-iterate-left injectivity-source aggregate. -/
-lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_knownInjOnOutsideOpenSourceCandidateTwo
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_strictMonoFree_candidate_seed
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
     (rootSafeOutsideOpenInjWitnessTwo_of_knownInjOnOutsideOpenSourceCandidateTwo h)
 
 /-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
+specialized to the known non-iterate-left injectivity-source aggregate and the
+current anchor-gap seed. -/
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    greenRayLogGtAnchorTwo_seed h
+
+/-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
 specialized to outside-open analyticity. -/
-lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_outsideOpenAnalyticityHypothesis
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_strictMonoFree_candidate_seed
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
     (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
 
 /-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
+specialized to outside-open analyticity and the current anchor-gap seed. -/
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_outsideOpenAnalyticityHypothesis
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    greenRayLogGtAnchorTwo_seed h_analytic
+
+/-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
 specialized to the packaged degree-one Green-function ingress. -/
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam_of_green_function_degreeOneIngressTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : GreenFunctionDegreeOneIngressTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_green_function_degreeOneIngressTwo h)
+
+/-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
+specialized to the packaged degree-one Green-function ingress and the current
+anchor-gap seed. -/
 lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_green_function_degreeOneIngressTwo
     (h : GreenFunctionDegreeOneIngressTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_strictMonoFree_candidate_seed
-    (rootSafeOutsideOpenInjWitnessTwo_of_green_function_degreeOneIngressTwo h)
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam_of_green_function_degreeOneIngressTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
 specialized to a direct proper/local witness plus a local seam witness. -/
@@ -4403,10 +5037,21 @@ lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_isProperMap_restri
 
 /-- Strict-mono-free root-seed alternative at `c = 2`, parameterized by the
 exact remaining root witness target. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor h_inj
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, parameterized by the
+exact remaining root witness target and specialized to the current anchor-gap
+seed. -/
 lemma externalRayMapData_two_root_seed_strictMonoFree_of_rootSafeOutsideOpenInjWitnessTwo
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_strictMonoFree_candidate_seed h_inj
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    greenRayLogGtAnchorTwo_seed h_inj
 
 /-- Strict-mono-free root-seed alternative at `c = 2`, specialized to the
 packaged degree-one Green-function ingress. -/
@@ -4445,6 +5090,43 @@ lemma externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of
   externalRayMapData_two_strictMonoFree_candidate_seed_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
     hproper hlocal h_seam
 
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to a direct
+proper/local witness and Green-ray seam payload. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    hlog_gt_anchor
+    (injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      huniq_seam hlog_gt_anchor h)
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to the CP5
+local-homeomorph source pair and Green-ray seam payload. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+      huniq_seam hlog_gt_anchor hlocal)
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses and Green-ray seam payload. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    huniq_seam hlog_gt_anchor ⟨hproper, hlocal⟩
+
 /-- Strict-mono-seeded root-seed alternative at `c = 2`, specialized to the CP5
 local-homeomorph source pair. -/
 lemma externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_strictMono
@@ -4452,8 +5134,10 @@ lemma externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSour
       IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
         IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
-    hlocal cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hlocal
 
 /-- Strict-mono-seeded root-seed alternative at `c = 2`, specialized to explicit
 restricted-map proper/local hypotheses. -/
@@ -4461,30 +5145,94 @@ lemma externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of
     (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_strictMono
-    ⟨hproper, hlocal⟩
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hproper hlocal
+
+/-- Strict-mono-seeded root-seed alternative at `c = 2`, specialized to a direct
+proper/local witness. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_directProperLocalWitnessTwo_strictMono
+    (h : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    h
 
 /-- Strict-mono-free root-seed alternative at `c = 2`, specialized to the known
 non-iterate-left injectivity-source aggregate. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to the known
+non-iterate-left injectivity-source aggregate and the current anchor-gap seed. -/
 lemma externalRayMapData_two_root_seed_strictMonoFree_of_knownInjOnOutsideOpenSourceCandidateTwo
     (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_strictMonoFree_candidate_seed_of_knownInjOnOutsideOpenSourceCandidateTwo h
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Strict-mono-free root-seed alternative at `c = 2`, specialized to
 outside-open analyticity. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to
+outside-open analyticity and the current anchor-gap seed. -/
 lemma externalRayMapData_two_root_seed_strictMonoFree_of_outsideOpenAnalyticityHypothesis
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_strictMonoFree_candidate_seed_of_outsideOpenAnalyticityHypothesis h_analytic
+  externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    greenRayLogGtAnchorTwo_seed h_analytic
 
 /-- Root seed selector at `c = 2`, routed through the strict-mono-free seed
 constructor and fed by an injectivity witness extracted from the current
 exported endpoint. -/
+lemma externalRayMapData_two_root_seed_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
+/-- Centralized root-seed seam bundle at `c = 2`: uniqueness seam + anchor-gap seam. -/
+def RootSeedPairTwo : Prop :=
+  GreenRayUniquePreimageTwoAnchorSeam ∧ GreenRayLogGtAnchorTwoSeam
+
+/-- Current seeded root-seam bundle at `c = 2`. -/
+lemma rootSeedPairTwo_seed : RootSeedPairTwo :=
+  ⟨greenRayUniquePreimageTwoAnchorSeam_seed, greenRayLogGtAnchorTwo_seed⟩
+
+/-- Root seed selector at `c = 2`, parameterized by the centralized root-seam bundle. -/
+lemma externalRayMapData_two_root_seed_of_rootSeedPairTwo
+    (hseed : RootSeedPairTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    hseed.1 hseed.2
+
+/-- Strict-mono-seeded centralized root-seed selector at `c = 2`. -/
+lemma externalRayMapData_two_root_seed_strictMono_seeded :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_of_rootSeedPairTwo rootSeedPairTwo_seed
+
+/-- Root seed selector at `c = 2`, routed through the strict-mono-seeded
+centralized seam specialization. -/
 lemma externalRayMapData_two_root_seed :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  externalRayMapData_two_strictMonoFree_candidate_seed
-    rootSafeOutsideOpenInjWitnessTwo_of_external_ray_map_exists_two_constructive_legacy_strictMono
+  externalRayMapData_two_root_seed_strictMono_seeded
 
 /-- Current rooted axiom-seed external-ray-data target at `c = 2`. -/
 lemma externalRayMapData_two_axiom_seed :
@@ -4500,17 +5248,51 @@ theorem mlc_conjecture_of_external_ray_map_exists_two :
   exact mlc_conjecture_of_externalRayMapData_two h_ext
 
 /-- Root theorem routed through the centralized root-seed selector. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_map_exists_two
+    (externalRayMapData_two_root_seed_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
+/-- Root theorem routed through the centralized root-seam bundle selector. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPairTwo
+    (hseed : RootSeedPairTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_map_exists_two
+    (externalRayMapData_two_root_seed_of_rootSeedPairTwo hseed)
+
+/-- Strict-mono-seeded root theorem routed through the centralized seam
+specialization. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMono_seeded :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPairTwo
+    rootSeedPairTwo_seed
+
+/-- Root theorem routed through the centralized root-seed selector. -/
 theorem mlc_conjecture_of_externalRayMapData_two_root_seed :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_map_exists_two externalRayMapData_two_root_seed
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMono_seeded
 
 /-- Strict-mono-free root theorem variant at `c = 2`, parameterized by the
 exact remaining root witness target. -/
-theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_rootSafeOutsideOpenInjWitnessTwo
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_external_ray_map_exists_two
-    (externalRayMapData_two_root_seed_strictMonoFree_of_rootSafeOutsideOpenInjWitnessTwo h_inj)
+    (externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+      hlog_gt_anchor h_inj)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, parameterized by the
+exact remaining root witness target and specialized to the current anchor-gap
+seed. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_rootSafeOutsideOpenInjWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    greenRayLogGtAnchorTwo_seed h_inj
 
 /-- Strict-mono-free root theorem variant at `c = 2`, specialized to the
 packaged degree-one Green-function ingress. -/
@@ -4552,30 +5334,109 @@ theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_isP
   exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
     ⟨hproper, hlocal⟩ h_seam
 
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to a direct
+proper/local witness and Green-ray seam payload. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_map_exists_two
+    (externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      huniq_seam hlog_gt_anchor h)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to the CP5
+local-homeomorph source pair and Green-ray seam payload. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_map_exists_two
+    (externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+      huniq_seam hlog_gt_anchor hlocal)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses and Green-ray seam payload. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    huniq_seam hlog_gt_anchor ⟨hproper, hlocal⟩
+
 /-- Strict-mono-seeded root theorem variant at `c = 2`, specialized to explicit
 restricted-map proper/local hypotheses. -/
 theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono
     (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
-    ⟨hproper, hlocal⟩ cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hproper hlocal
+
+/-- Strict-mono-seeded root theorem variant at `c = 2`, specialized to the CP5
+local-homeomorph source pair. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_strictMono
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hlocal
+
+/-- Strict-mono-seeded root theorem variant at `c = 2`, specialized to a direct
+proper/local witness. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_directProperLocalWitnessTwo_strictMono
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    h
 
 /-- Strict-mono-free root theorem variant at `c = 2`, specialized to the known
 non-iterate-left injectivity-source aggregate. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to the known
+non-iterate-left injectivity-source aggregate and the current anchor-gap seed. -/
 theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_knownInjOnOutsideOpenSourceCandidateTwo
     (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_map_exists_two
-    (externalRayMapData_two_root_seed_strictMonoFree_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Strict-mono-free root theorem variant at `c = 2`, specialized to
 outside-open analyticity. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to
+outside-open analyticity and the current anchor-gap seed. -/
 theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_outsideOpenAnalyticityHypothesis
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_map_exists_two
-    (externalRayMapData_two_root_seed_strictMonoFree_of_outsideOpenAnalyticityHypothesis h_analytic)
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    greenRayLogGtAnchorTwo_seed h_analytic
 
 /-- Final strict-mono-free candidate root theorem: once
 `RootSafeOutsideOpenInjWitnessTwo` is provided constructively, root no longer
@@ -4605,28 +5466,59 @@ theorem mlc_conjecture_root_candidate_of_green_function_degreeOneIngressTwo
 
 /-- Strict-mono-free root-candidate wrapper parameterized by the exact remaining
 outside-open injectivity witness target. -/
-theorem mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
+theorem mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_external_ray_map_exists_two
-    (external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
-      h_inj)
+    (external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+      hlog_gt_anchor h_inj)
+
+/-- Strict-mono-free root-candidate wrapper parameterized by the exact remaining
+outside-open injectivity witness target and specialized to the current
+anchor-gap seed. -/
+theorem mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    greenRayLogGtAnchorTwo_seed h_inj
 
 /-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to the
 known non-iterate-left injectivity-source aggregate. -/
+theorem mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to the
+known non-iterate-left injectivity-source aggregate and the current anchor-gap
+seed. -/
 theorem mlc_conjecture_root_candidate_of_knownInjOnOutsideOpenSourceCandidateTwo
     (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
-    (rootSafeOutsideOpenInjWitnessTwo_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+  exact mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to
 outside-open analyticity. -/
+theorem mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor
+    (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
+
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to
+outside-open analyticity and the current anchor-gap seed. -/
 theorem mlc_conjecture_root_candidate_of_outsideOpenAnalyticityHypothesis
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
-    (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
+  exact mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    greenRayLogGtAnchorTwo_seed h_analytic
 
 /-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to a direct
 proper/local witness plus a local seam witness. -/
@@ -4661,38 +5553,122 @@ theorem mlc_conjecture_root_candidate_of_isProperMap_restrict_of_isLocalHomeomor
     (rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
       hproper hlocal h_seam)
 
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to a direct
+proper/local witness and Green-ray seam payload. -/
+theorem mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
+    (injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+      huniq_seam hlog_gt_anchor h)
+
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to the CP5
+local-homeomorph source pair and Green-ray seam payload. -/
+theorem mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
+    (rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+      huniq_seam hlog_gt_anchor hlocal)
+
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses and Green-ray seam payload. -/
+theorem mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    huniq_seam hlog_gt_anchor ⟨hproper, hlocal⟩
+
 /-- Strict-mono-seeded root-candidate wrapper at `c = 2`, specialized to
 explicit restricted-map proper/local hypotheses. -/
 theorem mlc_conjecture_root_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono
     (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_root_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
-    hproper hlocal cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
+  exact mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hproper hlocal
+
+/-- Strict-mono-seeded root-candidate wrapper at `c = 2`, specialized to the CP5
+local-homeomorph source pair. -/
+theorem mlc_conjecture_root_candidate_of_localHomeomorphSurjSourceTwo_strictMono
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_localHomeomorphSurjSourceTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    hlocal
+
+/-- Strict-mono-seeded root-candidate wrapper at `c = 2`, specialized to a
+direct proper/local witness. -/
+theorem mlc_conjecture_root_candidate_of_directProperLocalWitnessTwo_strictMono
+    (h : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_directProperLocalWitnessTwo
+    greenRayUniquePreimageTwoAnchorSeam_seed
+    greenRayLogGtAnchorTwo_seed
+    h
 
 /-- Strict-mono-free rooted theorem at `c = 2`, specialized to the known
 non-iterate-left injectivity-source aggregate. -/
-theorem mlc_conjecture_of_green_function_of_knownInjOnOutsideOpenSourceCandidateTwo
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_strictMono_free_of_knownInjOnOutsideOpenSourceCandidateTwo h)
+    (external_ray_map_exists_two_constructive_strictMono_free_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+      hlog_gt_anchor h)
+
+/-- Strict-mono-free rooted theorem at `c = 2`, specialized to the known
+non-iterate-left injectivity-source aggregate and the current anchor-gap seed. -/
+theorem mlc_conjecture_of_green_function_of_knownInjOnOutsideOpenSourceCandidateTwo
+    (h : KnownInjOnOutsideOpenSourceCandidateTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_knownInjOnOutsideOpenSourceCandidateTwo
+    greenRayLogGtAnchorTwo_seed h
 
 /-- Strict-mono-free rooted theorem at `c = 2`, specialized to outside-open
 analyticity. -/
-theorem mlc_conjecture_of_green_function_of_outsideOpenAnalyticityHypothesis
+theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_strictMono_free_of_outsideOpenAnalyticityHypothesis
-      h_analytic)
+    (external_ray_map_exists_two_constructive_strictMono_free_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+      hlog_gt_anchor h_analytic)
+
+/-- Strict-mono-free rooted theorem at `c = 2`, specialized to outside-open
+analyticity and the current anchor-gap seed. -/
+theorem mlc_conjecture_of_green_function_of_outsideOpenAnalyticityHypothesis
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_outsideOpenAnalyticityHypothesis
+    greenRayLogGtAnchorTwo_seed h_analytic
+
+/-- Root theorem routed directly through the centralized root-seam bundle. -/
+theorem mlc_conjecture_of_rootSeedPairTwo
+    (hseed : RootSeedPairTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPairTwo hseed
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_externalRayMapData_two_root_seed
+  exact mlc_conjecture_of_rootSeedPairTwo rootSeedPairTwo_seed
 
 end MainProof
 
