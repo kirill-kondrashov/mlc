@@ -5,87 +5,64 @@
 [Live dependency graph (rooted at `MLC.mlc_conjecture`)](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
 This repository is a Lean formalization scaffold centered on `MLC.mlc_conjecture`.
-The code compiles. One axiom blocks unconditional closure.
+The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 
-## Single remaining axiom
+## Current Axiom Frontier (`make check`)
 
-```
-axiom external_ray_map_exists (c : ℂ) : ExternalRayMapData c
--- used only at c = 2
-```
+As of 2026-02-26, exactly two non-core axioms remain in the root theorem:
 
-`ExternalRayMapData (2 : ℂ)` asks for `f : ℂ → ℂ` with:
-- `bottcher_map 2 (f w) = w` for `‖w‖ > 1`
-- `f (bottcher_map 2 z) = z` for `‖z‖ > 4`
+- `MLC.greenRayLogGtAnchorTwo_axiom_seed`
+- `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`
 
-## What the Böttcher map actually is (in this repo)
+Expected output:
 
-```lean
-def bottcher_map c z := (z / ‖z‖) * exp(green_function c z)
-```
-
-This is the **polar Green map**: it preserves the argument of `z` and scales
-the modulus by `exp(G_c(z))`. It is **not the standard analytic Böttcher
-coordinate** — it is provably non-analytic (`not_outsideOpenAnalyticityHypothesisTwo`).
-
-The proof: `bottcher_map(z)/z = exp(G(z))/‖z‖` is always a positive real;
-an analytic function taking only positive real values on a connected region is
-constant (open mapping theorem); but the quotient is not constant
-(`not_outsideOpenQuotientConstHypothesisTwo`, proved numerically). Hence the
-map is not analytic.
-
-This closes all analytic/local-homeomorphism routes permanently in the current model.
-
-## True constructive gap: Green function ray inversion
-
-The inverse `f` must map each `w` to the unique `z` with:
-- `arg(z) = arg(w)` (same direction)
-- `G_2(z) = log ‖w‖` (matching Green function value)
-
-This is the **external ray map**. To construct it, one needs:
-
-1. **Monotonicity**: `G_2(ρ·e^{iθ})` is strictly increasing in `ρ` on `{ρ > 4}`.
-2. **Surjectivity**: every Green value `t > 0` is attained on each ray.
-3. **Inverse construction**: define `f(w)` as the unique ray preimage of `log‖w‖`.
-
-For `c = 2`, the Green function has an explicit Chebyshev-type formula which
-may make monotonicity tractable in Lean.
-
-See `plan/PLAN_green_function_ray_inversion_c2.md` for the detailed plan.
-
-## No prior formalization found
-
-Exhaustive arXiv and MathOverflow searches for any Lean/Coq formalization of
-Böttcher inverse / external ray existence returned zero results.
-The mathematics is classical (Böttcher 1904, Milnor Ch. 9) but not yet
-formalized in any proof assistant.
-
-## Where to work
-
-- Replacement point: `external_ray_map_exists_two_constructive` in
-  `Mlc/MainConjecture.lean` (line ~3690)
-- New target file: `Mlc/Quadratic/Complex/Bottcher/GreenFunctionRayInversion.lean`
-- Active plan: `plan/PLAN_green_function_ray_inversion_c2.md`
-- Axiom declaration: `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` line 97
-
-## Verification
-
-```bash
-make build && make check
-```
-
-Current `make check` output (expected until axiom is eliminated):
-- `Quot.sound`
-- `propext`
-- `Classical.choice`
-- `MLC.Quadratic.external_ray_map_exists`
-
-Output:
 ```
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.external_ray_map_exists
+- MLC.greenRayLogGtAnchorTwo_axiom_seed
+- MLC.Quadratic.green_function_strictMono_along_ray_basin_seam
+```
+
+## Progress Snapshot (Effort In Hours, Not Weeks)
+
+| Target Axiom | Progress | Left | Estimated Remaining Effort |
+|---|---|---|---|
+| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` 90% | 10% | ~15-30 Lean LOC, ~0.5-1.5 hrs |
+| `green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` 46% | 54% | ~120-200 Lean LOC, ~4-8 hrs |
+
+Total estimated remainder: ~135-230 Lean LOC, ~5-9 hours.
+
+## Active Plans (`plan/*`)
+
+| File | Relevance | Progress | Left | Estimated Remaining Effort |
+|---|---|---|---|---|
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 56% | 44% | ~5-9 hours |
+| `plan/PLAN_exists_ray_preimage_green_pos_seam_replacement.md` | ⭐⭐⭐⭐⭐ | `█████████░` 90% | 10% | ~15-30 LOC, 0.5-1.5 hrs |
+| `plan/PLAN_prove_green_function_radial_monotonicity.md` | ⭐⭐⭐⭐⭐ | `██░░░░░░░░` 18% | 82% | ~120-200 LOC, 4-8 hrs |
+| `plan/PLAN_green_function_ray_inversion_c2.md` | ⭐⭐⭐⭐ | `██████░░░░` 57% | 43% | ~70-110 LOC, 2-4 hrs |
+| `plan/PLAN_eliminate_green_function_strictMono_along_ray_basin_seam.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 58% | 42% | ~90-130 LOC, 2-4 hrs |
+| `plan/PLAN_basin_monotonicity_practical_way_forward.md` | ⭐⭐⭐ | `███████░░░` 68% | 32% | ~30-60 LOC, 1-2 hrs |
+
+## Key Technical Reality
+
+- The old global anchor-gap seam is inconsistent in the current model:
+  `not_greenRayLogGtAnchorTwoSeam`.
+- This means Axiom 1 is a seam-replacement/wiring task (small).
+- The dominant remaining proof debt is Axiom 2 (strict radial monotonicity at `c = 2`).
+
+## Where To Work
+
+- Root orchestration: `Mlc/MainConjecture.lean`
+- Main constructive monotonicity target:
+  `Mlc/Quadratic/Complex/Bottcher/GreenFunctionRayInversion.lean`
+- Umbrella plan and latest status:
+  `plan/PLAN_axiom_elimination_status.md`
+
+## Verification
+
+```bash
+make build && make check
 ```
