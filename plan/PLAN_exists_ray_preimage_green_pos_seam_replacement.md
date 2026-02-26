@@ -1,53 +1,44 @@
 # Plan: Replace `exists_ray_preimage_green_pos_seam` With a Provable Target
 
-## Why this plan
-
-The current unrestricted seam
-
-`∀ c u (‖u‖ = 1) t>0, ∃ ρ>0, G_c((ρ:ℂ) * u) = t`
-
-is too strong globally. For some parameters/directions (e.g. numerically at
-`c = 2` and non-real directions), the ray profile can have a positive minimum,
-so small positive `t` may not be attained.
-
-## Exact statement replacement (draft)
-
-Replace the global-positive target with an anchor-threshold target:
-
-`∀ c u (‖u‖ = 1) t,`
-`  t > G_c(((‖c‖+2):ℝ) * u) →`
-`  ∃ ρ, ρ > ‖c‖+2 ∧ G_c((ρ:ℂ) * u) = t`
-
-This is aligned with the already formalized outside-open IVT lemma
-`exists_ray_preimage_green`.
-
-## Patch call sites (draft)
-
-1. `GreenFunctionRayInversion.exists_ray_preimage_green_pos`
-   - Change hypothesis from `0 < t` to
-     `t > green_function c ((‖c‖ + 2 : ℝ) * u)`.
-   - Change output from `ρ > 0` to `ρ > ‖c‖ + 2`.
-   - Implement by delegating to `exists_ray_preimage_green`.
-
-2. `GreenFunctionRayInversion.exists_unique_ray_preimage_green_pos`
-   - Mirror the same thresholded hypothesis/output.
-   - Implement by delegating to `exists_unique_ray_preimage_green`.
-
-3. `GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function`
-   - Add explicit seam parameter
-     `hlog_gt_anchor : ∀ w, 1 < ‖w‖ → G_2(((‖2‖+2):ℝ) * (w/‖w‖)) < log ‖w‖`.
-   - Use this seam where the old proof previously used `Real.log_pos`.
-   - Convert `ρ > ‖2‖ + 2` to `ρ > 0` when needed.
-
-4. `MainConjecture.external_ray_map_exists_two_constructive`
-   - Add a new rooted seam proposition/axiom for the `hlog_gt_anchor` payload.
-   - Pass that seam to
-     `external_ray_map_exists_two_via_green_function`.
-
-## Notes
-
-- This replacement keeps the development independent of
+## Goal
+- [x] Replace the over-strong global-positive seam with an anchor-threshold seam.
+- [x] Keep the external-ray constructive path independent of
   `MLC.Quadratic.external_ray_map_exists`.
-- It separates the genuinely hard part (anchor lower-bound along all normalized
-  exterior directions at `c=2`) into an explicit seam, rather than encoding it
-  as an over-strong existence axiom.
+
+## Parallel Placement
+- [x] Assigned to **Track B (Anchor-Gap Elimination)** in
+  `PLAN_axiom_elimination_status.md`.
+- [x] Coupled with `PLAN_green_function_ray_inversion_c2.md` call-site work.
+
+## Statement Replacement (Final Target)
+- [x] Replace:
+  `∀ c u (‖u‖ = 1) t>0, ∃ ρ>0, G_c((ρ:ℂ) * u) = t`
+- [x] With:
+  `∀ c u (‖u‖ = 1) t,`
+  `t > G_c(((‖c‖+2):ℝ) * u) →`
+  `∃ ρ, ρ > ‖c‖+2 ∧ G_c((ρ:ℂ) * u) = t`.
+
+## Call-Site Patch List
+- [x] `GreenFunctionRayInversion.exists_ray_preimage_green_pos`
+  - change hypothesis to anchor-threshold form.
+  - change conclusion radius bound to `ρ > ‖c‖ + 2`.
+- [x] `GreenFunctionRayInversion.exists_unique_ray_preimage_green_pos`
+  - mirror thresholded hypothesis and stronger radius bound.
+- [x] `GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function`
+  - use explicit seam payload:
+    `hlog_gt_anchor : ∀ w, 1 < ‖w‖ → G₂(anchor(w)) < log ‖w‖`.
+- [x] `Mlc/MainConjecture.lean`
+  - pass rooted seam payload through existing seeded constructor chain.
+
+## Current Status
+- [x] Draft replacement is validated against existing outside-open IVT lemma
+  `exists_ray_preimage_green`.
+- [x] Constructive `c = 2` endpoint already accepts `hlog_gt_anchor`.
+- [x] Generalized statement and call sites are aligned in the current `c = 2`
+  constructive path.
+
+## Next Steps
+- [x] Remove or rename legacy comments/names that still describe this as a
+  "replacement draft" now that it is live.
+- [x] Run `lake build Mlc.Quadratic.Complex.Bottcher.GreenFunctionRayInversion`.
+- [x] Re-run `make check` and verify frontier remains exactly the two target axioms.

@@ -3,6 +3,20 @@
 ## Goal
 - [ ] Remove `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` from the axiom footprint of `MLC.mlc_conjecture`.
 
+## Locked Model Constraints
+- [x] `not_outsideOpenAnalyticityHypothesisTwo` blocks outside-open analyticity replacement.
+- [x] `not_greenFunctionDegreeOneIngressTwo` blocks degree-one strict-mono-free replacement.
+- [x] `not_knownInjOnOutsideOpenSourceCandidateTwo` blocks known injectivity-source replacement.
+- [x] Strict-mono-free alternatives are treated as closed for root elimination.
+- [x] Remaining constructive target is direct proof of monotonicity.
+
+## Parallel Placement
+- [x] Assigned to **Track A (Strict-Mono Elimination)** in
+  `PLAN_axiom_elimination_status.md`.
+- [x] Coordinated with:
+  `PLAN_prove_green_function_radial_monotonicity.md` and
+  `PLAN_basin_monotonicity_practical_way_forward.md`.
+
 ## Hard Constraints
 - [x] Do not reintroduce `MLC.Quadratic.external_ray_map_exists` into the root path.
   Status: current `#print axioms MLC.mlc_conjecture` does not include
@@ -211,6 +225,53 @@
   `Classical.choice` only). The no-landing CP5 seam wrapper remains
   `MLC.Quadratic.external_ray_map_exists`-contaminated through the proposition
   type `ExternalRayLandsOutsideOpen`, as expected.
+- [x] Re-routed strict-mono CP5 endpoint aliases
+  (`..._of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_strictMono_fn`,
+  `..._of_cp5ResidualTwo_strictMono_unconditional_fn`)
+  through the seam-parameterized uniqueness constructor family to centralize
+  strict-mono entry behind the uniqueness seam witness.
+- [x] Re-routed late strict-mono CP5 seam aliases
+  (`cp5ResidualLocalHomeomorphInjSeamTwo_strictMono`,
+  `cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen`)
+  through the same uniqueness-seam constructor family.
+- [x] Added centralized strict-mono-seeded uniqueness witness alias
+  (`greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed`)
+  and re-routed strict-mono CP5 wrappers to use it, reducing repeated strict-mono
+  witness expressions and tightening dependency hygiene.
+- [x] Re-routed `rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded` through the
+  uniqueness-seam bridge, so strict-mono seeded root witness construction now
+  follows the same centralized uniqueness-seam path as CP5 endpoint wrappers.
+- [x] Repointed
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_rootSafeOutsideOpenInjWitnessTwo`
+  to the centralized alias
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed`,
+  reducing duplicate strict-mono seed routes.
+- [x] Bulk-replaced downstream wrapper call sites to use
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed`
+  as the default strict-mono-seeded uniqueness witness (kept the
+  root-safe alias as a compatibility wrapper).
+- [x] Re-routed `injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam` to the
+  centralized strict-mono-seeded uniqueness alias path.
+- [x] Repointed compatibility theorem
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_injOn_outside_open`
+  to the centralized green-function-seeded uniqueness alias.
+- [x] Reduced strict-mono root-seed alias depth:
+  `rootSeedPayloadTwo_strictMono_seeded` now consumes
+  `rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded` directly (instead of
+  the extra `rootSafeOutsideOpenInjWitnessTwo_seed` indirection).
+- [x] Reduced strict-mono root-seam-bundle alias depth:
+  `rootSeedPairTwo_strictMono_seeded` now consumes
+  `rootSeedPayloadTwo_strictMono_seeded` directly and `rootSeedPairTwo_seed`
+  is an alias of `rootSeedPairTwo_strictMono_seeded`.
+- [x] Reduced strict-mono root selector/root theorem alias depth by routing:
+  `externalRayMapData_two_root_seed_strictMono_seeded`,
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_strictMono_seeded`,
+  and `mlc_conjecture` through `rootSeedPayloadTwo_strictMono_seeded`.
+- [x] Removed dead strict-mono compatibility aliases from `MainConjecture.lean`:
+  `rootSafeOutsideOpenInjWitnessTwo_seed`,
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_rootSafeOutsideOpenInjWitnessTwo`,
+  `rootSeedPayloadTwo_seed`,
+  `rootSeedPairTwo_seed`.
 - [x] Added a seam-parameterized root-witness bridge and rewired the centralized
   root seed to use its strict-mono-seeded specialization:
   `rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam`,
@@ -406,6 +467,121 @@
   original strict-mono theorem as the seed definition source).
   Status: behavior/axiom profile unchanged; subsequent strict-mono elimination
   now requires replacing only `greenRayUniquePreimageTwoAnchorSeam_seed`.
+- [x] Added the reverse bridge from outside-open injectivity back to the
+  anchored uniqueness seam:
+  `greenRayUniquePreimageTwoAnchorSeam_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open`.
+  Status: axiom scan shows this bridge is seam-minimal (`Quot.sound`,
+  `propext`, `Classical.choice`) and does not use
+  `green_function_strictMono_along_ray_basin_seam`; strict-mono remains only in
+  the current seed `greenRayUniquePreimageTwoAnchorSeam_seed`.
+- [x] Rewired strict-mono-seeded root uniqueness packaging through the new
+  reverse bridge: `rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded` is now
+  proved directly via Green inversion + outside-open left-inverse extraction,
+  and `rootSeedPairTwo_seed` now uses
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_rootSafeOutsideOpenInjWitnessTwo`.
+  Status: frontier unchanged (`greenRayLogGtAnchorTwo_axiom_seed` +
+  `green_function_strictMono_along_ray_basin_seam`), but seed wiring no longer
+  depends on the old direct uniqueness strict-mono specialization.
+- [x] Added centralized root-seam-bundle constructor from
+  `(GreenRayLogGtAnchorTwoSeam × RootSafeOutsideOpenInjWitnessTwo)`:
+  `rootSeedPairTwo_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo`,
+  plus seeded alias `rootSeedPairTwo_strictMono_seeded`; rewired
+  `rootSeedPairTwo_seed` and strict-mono-seeded root theorem wrappers through
+  this constructor.
+  Status: no frontier change, but the seeded root path is now factored through
+  the exact target witness (`RootSafeOutsideOpenInjWitnessTwo`) with a single
+  root-seam bundle constructor.
+- [x] Rewired strict-mono-free root theorem wrappers to flow through the same
+  root-seam bundle constructor path:
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo`,
+  plus specialized wrappers for `green_function_degreeOneIngressTwo`,
+  `DirectProperLocalWitnessTwo`, and local-homeomorph source pairs.
+  Status: the core wrapper path is seam-minimal (`Quot.sound`, `propext`,
+  `Classical.choice`); frontier remains unchanged because seeded specializations
+  still supply the remaining root axioms.
+- [x] Rewired root-candidate wrappers to the same canonical root-seam-bundle
+  path:
+  `mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam`
+  and `mlc_conjecture_root_candidate_of_green_function_degreeOneIngressTwo`
+  no longer call the external-ray endpoint constructors directly.
+  Status: wrapper layering is now consistent (single root assembly path), with
+  unchanged frontier axioms.
+- [x] Normalized late strict-mono-seeded seam specializations to use the
+  root-safe-derived uniqueness seed
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_rootSafeOutsideOpenInjWitnessTwo`
+  (instead of direct `greenRayUniquePreimageTwoAnchorSeam_seed`) across
+  post-root-witness wrappers.
+  Status: no frontier change, but strict-mono seed usage is now concentrated in
+  earlier legacy ingress and root-safe seed bridge points.
+- [x] Rewired `external_ray_map_exists_two_constructive_strictMono_seeded` to
+  the injectivity-based Green inversion constructor
+  (`..._via_green_function_of_injOn_outside_open`) instead of aliasing
+  `external_ray_map_exists_two_constructive_legacy_strictMono`.
+  Status: axiom footprint is unchanged, but seeded endpoint layering no longer
+  depends directly on the legacy endpoint theorem body.
+- [x] Added an independent strict-mono-seeded outside-open injectivity witness
+  (`injOn_outside_open_two_strictMono_seeded`) and rewired early strict-mono
+  seam wrappers to derive uniqueness through
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_injOn_outside_open`.
+  Status: direct uses of `greenRayUniquePreimageTwoAnchorSeam_seed` in
+  `MainConjecture` are reduced to the seed definition itself and the explicit
+  legacy boundary endpoint theorem; the rest of strict-mono wrappers now route
+  through the injectivity-derived uniqueness seed.
+- [x] Rewired the explicit legacy boundary endpoint
+  `external_ray_map_exists_two_constructive_legacy_strictMono` to the
+  injectivity-derived strict-mono uniqueness seed
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_injOn_outside_open`.
+  Status: `MainConjecture` now has a single direct occurrence of
+  `greenRayUniquePreimageTwoAnchorSeam_seed` (its own definition line).
+- [x] Canonicalized seeded strict-mono outside-open injectivity witnesses:
+  `injOn_outside_open_two_of_external_ray_map_exists_two_constructive_legacy_strictMono`,
+  `rootSafeOutsideOpenInjWitnessTwo_of_external_ray_map_exists_two_constructive_legacy_strictMono`,
+  and `rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded` now all route to the
+  single theorem `injOn_outside_open_two_strictMono_seeded`.
+  Status: no frontier change; strict-mono seeded injectivity ingress now has one
+  canonical source theorem in `MainConjecture`.
+- [x] Removed dead legacy-named injectivity wrapper declarations after
+  canonicalization:
+  `injOn_outside_open_two_of_external_ray_map_exists_two_constructive_legacy_strictMono`
+  and
+  `rootSafeOutsideOpenInjWitnessTwo_of_external_ray_map_exists_two_constructive_legacy_strictMono`.
+  Status: no behavior/axiom change; reduces legacy ingress surface area and
+  keeps only canonical seeded injectivity aliases.
+- [x] Converted the legacy boundary endpoint theorem to a pure alias:
+  `external_ray_map_exists_two_constructive_legacy_strictMono` now aliases
+  `external_ray_map_exists_two_constructive_strictMono_seeded` instead of
+  carrying an independent strict-mono proof body.
+  Status: no frontier change; removes duplicate seeded strict-mono endpoint
+  implementation while preserving boundary naming for tracking.
+- [x] Re-pointed `external_ray_map_exists_two_constructive_strictMono_seeded`
+  to the direct strict-mono Green inversion constructor
+  (`external_ray_map_exists_two_via_green_function`) rather than the
+  injectivity-based variant.
+  Status: axiom profile unchanged; seeded endpoint ingress is now explicitly
+  anchored at the direct strict-mono constructor, while injectivity-derived
+  strict-mono bridges remain available for seam factoring.
+- [x] Re-routed CP5 strict-mono seam wrappers
+  (`cp5ResidualLocalHomeomorphInjSeamTwo_strictMono`,
+  `cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen`,
+  and `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_*_strictMono_fn`)
+  through the canonical constructive seam chain.
+  Status: `mlc_conjecture` frontier is unchanged; these CP5 wrappers remain
+  frontier-unsafe (still carrying `MLC.Quadratic.external_ray_map_exists` on
+  the residual/no-landing branch), which matches the existing blocker model.
+- [x] Removed obsolete direct strict-mono uniqueness-seed declarations from
+  `MainConjecture`:
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono` and
+  `greenRayUniquePreimageTwoAnchorSeam_seed`.
+  Status: all strict-mono uniqueness routing now goes through the
+  injectivity-derived seed bridge
+  `greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_injOn_outside_open`;
+  no behavior or frontier change.
+- [x] Removed the now-redundant legacy endpoint alias theorem
+  `external_ray_map_exists_two_constructive_legacy_strictMono` and replaced the
+  boundary marker with
+  `external_ray_map_exists_two_constructive_eq_strictMono_seeded`.
+  Status: boundary tracking is preserved while removing one more duplicate
+  strict-mono endpoint symbol; no frontier change.
 - [x] Added a centralized anchor-gap seed alias
   `greenRayLogGtAnchorTwo_seed` and rewired post-definition uses of
   `greenRayLogGtAnchorTwo_axiom_seed` to this alias throughout
@@ -424,6 +600,39 @@
   call it with `rootSeedPairTwo_seed`.
   Status: no frontier change, but root elimination now has a single explicit
   entry point theorem + single bundled seed value.
+- [x] Extended the aggregated strict-mono-free ingress bundle to the
+  centralized root-seed route:
+  `rootSeedPairTwo_of_greenRayLogGtAnchorTwoSeam_of_strictMonoFreeIngressTwo`,
+  `externalRayMapData_two_root_seed_strictMonoFree_of_strictMonoFreeIngressTwo`,
+  and
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_strictMonoFreeIngressTwo`.
+  Status: this now expresses the strict-mono-free candidate directly on the
+  exact final root-seed path; `#print axioms` confirms only
+  `greenRayLogGtAnchorTwo_axiom_seed` remains among frontier axioms on that
+  candidate route.
+- [x] Added a centralized seeded root injectivity alias
+  `rootSafeOutsideOpenInjWitnessTwo_seed` and rewired seeded root selectors to
+  use it (`rootSeedPairTwo_strictMono_seeded`,
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_strictMono_seeded`).
+  Status: strict-mono dependence is now isolated behind one named root witness
+  seed swap point on the final route; axiom profile unchanged.
+- [x] Added a centralized root-seed payload layer and routed seeded selectors
+  through it:
+  `RootSeedPayloadTwo`,
+  `rootSeedPayloadTwo_seed`,
+  `externalRayMapData_two_root_seed_of_rootSeedPayloadTwo`,
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPayloadTwo`.
+  Status: the final root route now factors as payload -> seam-pair -> endpoint;
+  strict-mono elimination swap points are localized at payload seed
+  construction, while strict-mono-free ingress wrappers still carry only
+  `greenRayLogGtAnchorTwo_axiom_seed`.
+- [x] Added payload-level root theorem entrypoints and routed the final theorem
+  through payload seed directly:
+  `mlc_conjecture_of_rootSeedPayloadTwo`,
+  `mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo_via_rootSeedPayloadTwo`,
+  and final `mlc_conjecture := mlc_conjecture_of_rootSeedPayloadTwo rootSeedPayloadTwo_seed`.
+  Status: final route is now explicitly payload-first; pair-based wrappers are
+  compatibility aliases. Axiom frontier is unchanged.
 
 ## Phase 3: Retire Strict-Mono Dependency
 - [x] Remove remaining call paths to
@@ -469,6 +678,24 @@
   Status: this theorem is axiom-light (`Quot.sound`, `propext`,
   `Classical.choice`) and confirms the current model cannot discharge the
   strict-mono-free root via `GreenFunctionDegreeOneIngressTwo`.
+- [x] Added a bundled strict-mono-free ingress interface and blocker theorem:
+  `RootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`,
+  `rootSafeOutsideOpenInjWitnessTwo_of_strictMonoFreeIngressTwo`,
+  `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
+  Status: bundle-to-root witness bridge is axiom-minimal
+  (`Quot.sound`, `propext`, `Classical.choice`), and the bundled
+  strict-mono-free candidate root theorem
+  `mlc_conjecture_strictMonoFree_candidate_of_strictMonoFreeIngressTwo`
+  carries only `greenRayLogGtAnchorTwo_axiom_seed` among frontier axioms.
+- [x] Added payload-level strict-mono-free ingress blocker/entry layer:
+  `RootSeedPayloadTwoStrictMonoFreeIngressTwo`,
+  `rootSeedPayloadTwo_of_rootSeedPayloadTwoStrictMonoFreeIngressTwo`,
+  `not_rootSeedPayloadTwoStrictMonoFreeIngressTwo`, plus payload-root candidate
+  wrappers (`mlc_conjecture_strictMonoFree_candidate_of_rootSeedPayloadTwoStrictMonoFreeIngressTwo`,
+  `mlc_conjecture_root_candidate_of_rootSeedPayloadTwo`).
+  Status: strict-mono-free no-go is now expressed at the same payload layer as
+  the final root theorem route; candidate payload-root wrappers remain
+  seam-minimal (`Quot.sound`, `propext`, `Classical.choice`).
 - [x] The direct-proper witness Green-function branch no longer depends on
   `MLC.Quadratic.external_ray_map_exists` after rerouting through
   `injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam`.

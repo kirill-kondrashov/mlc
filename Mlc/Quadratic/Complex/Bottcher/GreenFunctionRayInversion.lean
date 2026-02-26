@@ -22,10 +22,11 @@ basin of infinity satisfying:
 ## Plan status (Lemmas A–E)
 - [x] Lemma A: `green_function_pos_on_outside_open` — follows from `green_function_pos_of_basin`.
 - [x] Lemma B: `green_function_tendsto_atTop` — follows from `bounded_sublevel_green_function`.
-- [x*] Lemma C: `green_function_strictMono_along_ray` — proved for the real ray (c=2, u=1);
-       general complex-direction case remains sorry (requires harmonic analysis).
-- [x*] Lemma D: `exists_ray_preimage_green` — existence proved via IVT; uniqueness sorry.
-- [ ] Lemma E: `external_ray_map_two_constructive` — needs full Lemma C (sorry).
+- [x*] Lemma C: seam-parameterized strict-monotonicity wrappers are in place;
+       fully constructive full-basin monotonicity remains open.
+- [x] Lemma D: `exists_ray_preimage_green` and uniqueness wrappers are in place
+       (uniqueness routed through strict-mono assumptions/seams).
+- [x] Lemma E: seam-minimal constructive `c = 2` inversion constructors are in place.
 -/
 
 namespace MLC
@@ -450,6 +451,43 @@ lemma green_function_strictMono_along_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ�
   rw [Real.log_div (by linarith) (by linarith)] at hN'
   linarith
 
+/-- Replacement-target seam at `c = 2` for full-basin strict radial monotonicity. -/
+def GreenFunctionStrictMonoAlongRayBasinTwoSeam : Prop :=
+  ∀ (u : ℂ) (_hu : ‖u‖ = 1)
+    {ρ₁ ρ₂ : ℝ}, 0 < ρ₁ → ρ₁ < ρ₂ →
+      0 < green_function (2 : ℂ) ((ρ₁ : ℂ) * u) →
+        green_function (2 : ℂ) ((ρ₁ : ℂ) * u) <
+          green_function (2 : ℂ) ((ρ₂ : ℂ) * u)
+
+/-- Axiom-seeded provider for the `c = 2` full-basin strict radial monotonicity
+replacement seam. -/
+lemma green_function_strictMono_along_ray_basin_two_axiom_seed :
+    GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
+  intro u hu ρ₁ ρ₂ hρ₁ h12 hG
+  exact Quadratic.green_function_strictMono_along_ray_basin_seam
+    (2 : ℂ) u hu hρ₁ h12 hG
+
+/-- Specialized `c = 2` full-basin strict radial monotonicity from the
+replacement seam. -/
+lemma green_function_strictMono_along_ray_basin_two_of_seam
+    (hmono : GreenFunctionStrictMonoAlongRayBasinTwoSeam)
+    (u : ℂ) (hu : ‖u‖ = 1)
+    {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
+    (hG : 0 < green_function (2 : ℂ) ((ρ₁ : ℂ) * u)) :
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * u) <
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * u) :=
+  hmono u hu hρ₁ h12 hG
+
+lemma green_function_strictMono_along_ray_basin_two
+    (u : ℂ) (hu : ‖u‖ = 1)
+    {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
+    (hG : 0 < green_function (2 : ℂ) ((ρ₁ : ℂ) * u)) :
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * u) <
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * u) :=
+  green_function_strictMono_along_ray_basin_two_of_seam
+    green_function_strictMono_along_ray_basin_two_axiom_seed
+    u hu hρ₁ h12 hG
+
 /-- **Lemma C (full-basin)**: Strict monotonicity along a ray for all `ρ₁ > 0` in
 the basin.  Extends outside-open strict monotonicity to all `ρ₁ > 0` with
 `G_c(ρ₁·u) > 0`.
@@ -479,7 +517,9 @@ lemma green_function_strictMono_along_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1)
 
 /-- **Lemma C (complex rays, c = 2)**: strict monotonicity along any unit ray,
 specialized from the general outside-open ray seam. -/
-lemma green_function_strictMono_along_ray_two (u : ℂ) (hu : ‖u‖ = 1)
+lemma green_function_strictMono_along_ray_two_of_seam
+    (hmono : GreenFunctionStrictMonoAlongRayBasinTwoSeam)
+    (u : ℂ) (hu : ‖u‖ = 1)
     {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) :
     green_function (2 : ℂ) (↑t₁ * u) < green_function (2 : ℂ) (↑t₂ * u) := by
   have h2norm : ‖(2 : ℂ)‖ = 2 := by
@@ -487,7 +527,22 @@ lemma green_function_strictMono_along_ray_two (u : ℂ) (hu : ‖u‖ = 1)
       Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
   have ht₁' : t₁ > ‖(2 : ℂ)‖ + 2 := by
     linarith [ht₁, h2norm]
-  exact green_function_strictMono_along_ray (2 : ℂ) u hu ht₁' ht₂
+  have ht₁_pos : 0 < t₁ := by linarith [ht₁]
+  have hnorm₁ : ‖((t₁ : ℂ) * u)‖ = t₁ := by
+    rw [norm_mul, Complex.norm_real, hu, mul_one, Real.norm_of_nonneg ht₁_pos.le]
+  have hG₁ : 0 < green_function (2 : ℂ) ((t₁ : ℂ) * u) := by
+    apply green_function_pos_on_outside_open (2 : ℂ) ((t₁ : ℂ) * u)
+    linarith [ht₁', hnorm₁]
+  exact green_function_strictMono_along_ray_basin_two_of_seam hmono u hu ht₁_pos ht₂ hG₁
+
+/-- **Lemma C (complex rays, c = 2)**: strict monotonicity along any unit ray,
+specialized from the `c = 2` seam target. -/
+lemma green_function_strictMono_along_ray_two (u : ℂ) (hu : ‖u‖ = 1)
+    {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) :
+    green_function (2 : ℂ) (↑t₁ * u) < green_function (2 : ℂ) (↑t₂ * u) :=
+  green_function_strictMono_along_ray_two_of_seam
+    green_function_strictMono_along_ray_basin_two_axiom_seed
+    u hu ht₁ ht₂
 
 /-! ## Lemma D: Existence of ray preimage for each Green value -/
 
@@ -531,21 +586,36 @@ lemma exists_ray_preimage_green (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ)
   · exact hlt
   · exact absurd (hρ_eq ▸ hga) (lt_irrefl t)
 
-/-- **Lemma D (full statement)** [sorry for uniqueness]: For each unit vector `u` and
-Green value `t > G_c((‖c‖+2)*u)`, there is a UNIQUE `ρ > ‖c‖ + 2` with G_c(ρ*u) = t.
-Uniqueness requires Lemma C (strict monotonicity), which needs harmonic analysis. -/
+/-- **Lemma D (full statement, strict-mono parameterized)**: For each unit vector `u`
+and Green value `t > G_c((‖c‖+2)*u)`, there is a unique `ρ > ‖c‖ + 2` with
+`G_c(ρ*u) = t`, assuming strict monotonicity along the ray. -/
+lemma exists_unique_ray_preimage_green_of_strictMono
+    (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ)
+    (ht : t > green_function c ((‖c‖ + 2 : ℝ) * u))
+    (hmono :
+      ∀ {ρ₁ ρ₂ : ℝ}, ρ₁ > ‖c‖ + 2 → ρ₁ < ρ₂ →
+        green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u)) :
+    ∃! ρ : ℝ, ρ > ‖c‖ + 2 ∧ green_function c ((ρ : ℂ) * u) = t := by
+  obtain ⟨ρ, hρ_gt, hρ_eq⟩ := exists_ray_preimage_green c u hu t ht
+  refine ⟨ρ, ⟨hρ_gt, hρ_eq⟩, ?_⟩
+  intro ρ' hρ'
+  rcases hρ' with ⟨hρ'_gt, hρ'_eq⟩
+  -- Uniqueness from strict monotonicity along the same ray.
+  by_contra hne
+  rcases lt_or_gt_of_ne hne with hlt | hgt
+  · have hmono_lt := hmono hρ'_gt hlt
+    simp [hρ_eq, hρ'_eq] at hmono_lt
+  · have hmono_gt := hmono hρ_gt hgt
+    simp [hρ_eq, hρ'_eq] at hmono_gt
+
+/-- **Lemma D (full statement)**: For each unit vector `u` and Green value
+`t > G_c((‖c‖+2)*u)`, there is a unique `ρ > ‖c‖ + 2` with `G_c(ρ*u) = t`. -/
 lemma exists_unique_ray_preimage_green (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ)
     (ht : t > green_function c ((‖c‖ + 2 : ℝ) * u)) :
     ∃! ρ : ℝ, ρ > ‖c‖ + 2 ∧ green_function c ((ρ : ℂ) * u) = t := by
-  obtain ⟨ρ, hρ_gt, hρ_eq⟩ := exists_ray_preimage_green c u hu t ht
-  exact ⟨ρ, ⟨hρ_gt, hρ_eq⟩, fun ρ' ⟨_, hρ'_eq⟩ => by
-    -- Uniqueness: if G_c(ρ*u) = G_c(ρ'*u), then ρ = ρ' by Lemma C.
-    by_contra hne
-    rcases lt_or_gt_of_ne hne with hlt | hgt
-    · have := green_function_strictMono_along_ray c u hu (by linarith) hlt
-      simp [hρ_eq, hρ'_eq] at this
-    · have := green_function_strictMono_along_ray c u hu (by linarith) hgt
-      simp [hρ_eq, hρ'_eq] at this⟩
+  exact exists_unique_ray_preimage_green_of_strictMono c u hu t ht
+    (fun {_ρ₁ _ρ₂} hρ₁ h12 =>
+      green_function_strictMono_along_ray c u hu hρ₁ h12)
 
 /-- Corrected radial preimage existence: for target values above the ray's
 outside-open anchor value, there is a radial preimage in outside-open. -/
@@ -562,12 +632,16 @@ lemma exists_unique_ray_preimage_green_pos (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1
 
 /-- `c = 2` anchored uniqueness, specialized for normalized exterior direction
 `w / ‖w‖` at target `log ‖w‖`. -/
-lemma exists_unique_ray_preimage_green_two_anchor
+lemma exists_unique_ray_preimage_green_two_anchor_of_seam
+    (hmono : GreenFunctionStrictMonoAlongRayBasinTwoSeam)
     (w : ℂ) (hw : 1 < ‖w‖)
     (hlog_gt_anchor :
       green_function (2 : ℂ) (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
     ∃! ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
       green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ := by
+  have h2norm : ‖(2 : ℂ)‖ = 2 := by
+    rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast,
+      norm_real, Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
   set u : ℂ := w / ↑‖w‖
   have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
   have hu_dir : ‖u‖ = 1 := by
@@ -576,9 +650,23 @@ lemma exists_unique_ray_preimage_green_two_anchor
   have h_anchor_u :
       green_function (2 : ℂ) (((‖(2 : ℂ)‖ + 2 : ℝ) * u) : ℂ) < Real.log ‖w‖ := by
     simpa [u] using hlog_gt_anchor
-  simpa [u] using
-    (exists_unique_ray_preimage_green
-      (2 : ℂ) u hu_dir (Real.log ‖w‖) h_anchor_u)
+  refine exists_unique_ray_preimage_green_of_strictMono (2 : ℂ) u hu_dir (Real.log ‖w‖)
+    h_anchor_u ?_
+  intro ρ₁ ρ₂ hρ₁ h12
+  have hρ₁_gt4 : ρ₁ > 4 := by linarith [hρ₁, h2norm]
+  exact green_function_strictMono_along_ray_two_of_seam hmono u hu_dir hρ₁_gt4 h12
+
+/-- `c = 2` anchored uniqueness, specialized for normalized exterior direction
+`w / ‖w‖` at target `log ‖w‖`. -/
+lemma exists_unique_ray_preimage_green_two_anchor
+    (w : ℂ) (hw : 1 < ‖w‖)
+    (hlog_gt_anchor :
+      green_function (2 : ℂ) (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
+    ∃! ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
+      green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ :=
+  exists_unique_ray_preimage_green_two_anchor_of_seam
+    green_function_strictMono_along_ray_basin_two_axiom_seed
+    w hw hlog_gt_anchor
 
 /-! ## Lemma E: Constructive external ray map at `c = 2` -/
 
@@ -598,7 +686,8 @@ private lemma bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ 
     mul_div_cancel_left₀ u hρ_ne
   rw [hnorm, hdiv]
 
-/-- **Lemma E**: The external ray map at `c = 2` exists constructively.
+/-- **Lemma E (seam-minimal uniqueness form)**: the external ray map at `c = 2`
+from anchored uniqueness + anchor-gap seams.
 
 Explicit construction: for each `w` with `‖w‖ > 1`, let `u := w / ‖w‖` and let `ρ > 0` be
 the (unique) solution to `G_2(ρ · u) = log ‖w‖` given by `exists_ray_preimage_green_pos`.
@@ -610,10 +699,16 @@ Set `f(w) := ρ · u`.
   `log ‖bottcher_map 2 z‖ = G_2(z)` and `bottcher_map 2 z / ‖·‖ = z / ‖z‖`.
   Hence `ρ = ‖z‖` is the unique solution, giving `f(bottcher_map 2 z) = ‖z‖ · (z/‖z‖) = z`. ✓
 
-Remaining sorry gaps:
-1. `exists_ray_preimage_green_pos` — IVT from G_c = 0 on ∂K_c to G_c → ∞.
-2. `green_function_strictMono_along_ray_basin` — full-basin Lemma C (harmonic analysis). -/
-theorem external_ray_map_exists_two_via_green_function
+Current gap note:
+1. Full constructive strict-monotonicity replacement for
+   `green_function_strictMono_along_ray_basin_two_axiom_seed` remains open. -/
+theorem external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
+    (huniq_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖ →
+          ∃! ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
+            green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖)
     (hlog_gt_anchor :
       ∀ w : ℂ, 1 < ‖w‖ →
         green_function (2 : ℂ)
@@ -682,7 +777,7 @@ theorem external_ray_map_exists_two_via_green_function
     have huniq :
         ∃! ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
           green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ :=
-      exists_unique_ray_preimage_green_two_anchor w hw_gt1 (hlog_gt_anchor w hw_gt1)
+      huniq_anchor w hw_gt1 (hlog_gt_anchor w hw_gt1)
     have hz_gt_outside : ‖z‖ > ‖(2 : ℂ)‖ + 2 := by
       have h2norm : ‖(2 : ℂ)‖ = 2 := by
         rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast,
@@ -692,6 +787,33 @@ theorem external_ray_map_exists_two_via_green_function
     -- Conclude: f(w) = ‖z‖ · (z/‖z‖) = z.
     rw [hρ_normz, hdir_eq]
     field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
+
+/-- **Lemma E**: The external ray map at `c = 2` exists constructively from an
+explicit `c = 2` radial-monotonicity seam. -/
+theorem external_ray_map_exists_two_via_green_function_of_seam
+    (hmono : GreenFunctionStrictMonoAlongRayBasinTwoSeam)
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
+    (fun w hw hlog =>
+      exists_unique_ray_preimage_green_two_anchor_of_seam hmono w hw hlog)
+    hlog_gt_anchor
+
+/-- Current seeded `c = 2` Green inversion constructor. This is the single
+swap point for replacing the strict-mono seam assumption with a constructive
+theorem at `c = 2`. -/
+theorem external_ray_map_exists_two_via_green_function
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_via_green_function_of_seam
+    green_function_strictMono_along_ray_basin_two_axiom_seed
+    hlog_gt_anchor
 
 /-- Conditional `c = 2` constructive external-ray map: the Green inversion
 construction using anchor-gap existence plus outside-open injectivity. This path

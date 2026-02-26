@@ -4,6 +4,12 @@
 Prove `Quadratic.ExternalRayMapData (2 : ℂ)` constructively by inverting the
 Green function `G_2` along radial rays in the outside-open set `{‖z‖ > 4}`.
 
+## Parallel Placement
+- [x] Assigned to **Track B (Anchor-Gap Elimination)** with shared interfaces to
+  Track A strict-mono replacement work.
+- [x] Active call-site partner:
+  `PLAN_exists_ray_preimage_green_pos_seam_replacement.md`.
+
 ## Background
 
 The repo's `bottcher_map 2 z = (z / ‖z‖) * exp(G_2(z))` is the "polar Green map":
@@ -95,22 +101,25 @@ analysis not yet in Mathlib.
 - [x] Lemma C (real ray): green_function_strictMono_along_real_ray_two — PROVED (e36d34e)
   - Sublemmas proved: f2_relative_gap_grows (geometric gap growth), f2_ratio_tendsto_atTop
   - Proof: contradiction via orbit ratio → ∞ vs bounded log from two-sided Green bound
-- [ ] Lemma C (complex rays, c=2): green_function_strictMono_along_ray_two — sorry
-  - Structure parallels real ray proof
-  - Scaffold added with log_norm_fc_two_lower/upper bounds
-  - Missing: orbit log-norm ratio divergence for complex directions
-- [ ] Lemma C (general): green_function_strictMono_along_ray — sorry
-  - Requires harmonic analysis: max principle for subharmonic functions, not in Mathlib
-- [ ] Lemma C (full-basin): green_function_strictMono_along_ray_basin — sorry
-  - Requires reduction to outside-open case via functional equation
-- [ ] Existence (full-basin): exists_ray_preimage_green_pos — sorry
-  - Requires IVT from G_c = 0 on ∂K_c; needs ray approach to K_c
+- [x] Lemma C (complex rays, c=2): `green_function_strictMono_along_ray_two`
+  - Implemented via seam-parameterized bridge
+    `green_function_strictMono_along_ray_two_of_seam`.
+- [x] Lemma C (general): `green_function_strictMono_along_ray`
+  - Implemented and currently routed through basin strict-mono seam.
+- [x] Lemma C (full-basin): `green_function_strictMono_along_ray_basin`
+  - Implemented and currently routed through
+    `Quadratic.green_function_strictMono_along_ray_basin_seam`.
+- [x] Existence (full-basin): `exists_ray_preimage_green_pos`
+  - Implemented with outside-open anchor-threshold formulation.
 - [x] Lemma D (existence, outside-open): exists_ray_preimage_green — proved via IVT
 - [x] Lemma D (uniqueness, full-basin): exists_unique_ray_preimage_green_pos — proved from C (full-basin)
 - [x] Lemma E: external_ray_map_exists_two_via_green_function — PROVED CONSTRUCTIVELY (a5f0b07)
   - Explicit inverse f(w) = ρ·(w/‖w‖) where ρ is unique positive preimage of log ‖w‖
   - Right inverse via bottcher_map_apply_ray; left inverse via uniqueness
   - No longer falls back to external_ray_map_exists axiom
+- [x] Added seam-minimal variant:
+  `external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam`
+  (takes anchored uniqueness seam directly).
 - [x] Wired into MainConjecture.lean: external_ray_map_exists_two_constructive now uses
       GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function
 - [x] check_axioms.lean updated: external_ray_map_exists removed from expected axiom list
@@ -125,34 +134,15 @@ Added `Mlc/Quadratic/Complex/Bottcher/OrbitNormRatio.lean` with:
 This file provides a clean structural proof that reduces the problem to showing
 G(z₂) ≠ G(z₁) when |z₂| > |z₁|, which is the strict monotonicity we're trying to prove.
 
-## Remaining gaps (7 sorries total)
+## Remaining constructive gaps
 
-### GreenFunctionRayInversion.lean (5 sorries):
-1. `log_norm_orbit_ratio_tendsto_atTop` case 2 (line 307): When δ ≤ 2M
-2. `green_function_strictMono_along_ray_two` (line 759): complex unit direction, c=2
-3. `green_function_strictMono_along_ray` (line 846): general c
-4. `green_function_strictMono_along_ray_basin` (line 918): full basin version  
-5. `exists_ray_preimage_green_pos` (line 942): existence for t > 0
-
-### OrbitNormRatio.lean (2 sorries):
-6. `norm_orbit_two_strictMono` small gap case (line 73): Need |fc(z₂^n)| > |fc(z₁^n)|
-   when the squared-norm gap is ≤ 4. The naive bounds are insufficient for complex z.
-7. `norm_orbit_two_ratio_tendsto_atTop` G equality case (line 141): Needs G(z₂) ≠ G(z₁)
-   to conclude ratio diverges. This is exactly the strict monotonicity being proven.
-
-### The circular dependency:
-The core challenge is proving G(z₂) > G(z₁) when |z₂| > |z₁| > 4. Two approaches:
-
-**Approach A (Dynamics):** Show orbit norm ratio → ∞ directly.
-- For c=2, f(z) = z² + 2, so ratio r_n = |z₂^(n)|/|z₁^(n)| satisfies
-  r_{n+1} ≥ (r_n² A_n² - 2)/(A_n² + 2) where A_n = |z₁^(n)| → ∞
-- As A_n → ∞, this becomes r_{n+1} ≈ r_n², so ratio grows doubly exponentially
-- Challenge: The ±2 perturbation means when r_n is close to 1 and A_n is moderate,
-  growth isn't guaranteed. Need A_n to be large enough first.
-
-**Approach B (Harmonic analysis):** G is subharmonic (log|Φ| for analytic Φ)
-- Maximum principle: if G(z₂) ≤ G(z₁) with |z₂| > |z₁|, there's a level set issue
-- Not available in Mathlib
+- Full constructive replacement for
+  `green_function_strictMono_along_ray_basin_two_axiom_seed` is still missing.
+- The root path still depends on the two frontier axioms:
+  `MLC.greenRayLogGtAnchorTwo_axiom_seed` and
+  `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`.
+- Strict-mono-free alternatives remain blocked by model constraints already
+  captured in Track A plans.
 
 ## Completed work
 - [x] `log_norm_orbit_lower`: log |orbit z n| ≥ 2^n log|z| - (2^{n+1}-2) log 2
