@@ -693,6 +693,79 @@ theorem external_ray_map_exists_two_via_green_function
     rw [hρ_normz, hdir_eq]
     field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
 
+/-- Conditional `c = 2` constructive external-ray map: the Green inversion
+construction using anchor-gap existence plus outside-open injectivity. This path
+does not use `green_function_strictMono_along_ray_basin_seam`. -/
+theorem external_ray_map_exists_two_via_green_function_of_injOn_outside_open
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  have hf_ex : ∀ w : ℂ, 1 < ‖w‖ →
+      ∃ ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧ green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖ :=
+    fun w hw => by
+      apply exists_ray_preimage_green_pos
+      · rw [norm_div, Complex.norm_real, norm_norm, div_self (by linarith : ‖w‖ ≠ 0)]
+      · exact hlog_gt_anchor w hw
+  refine ⟨fun w => if hw : 1 < ‖w‖ then
+      ↑(Classical.choose (hf_ex w hw)) * (w / ↑‖w‖) else 0, ?_, ?_⟩
+  · intro w hw
+    simp only [dif_pos hw]
+    have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+    have hu : ‖w / ↑‖w‖‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+    obtain ⟨hρ_gt, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw)
+    have hρ_pos : 0 < Classical.choose (hf_ex w hw) := by
+      linarith [hρ_gt, norm_nonneg (2 : ℂ)]
+    rw [bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
+    exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
+  · intro z hz
+    set w := Quadratic.bottcher_map (2 : ℂ) z with hw_def
+    have hw_norm : ‖w‖ = Real.exp (green_function (2 : ℂ) z) :=
+      norm_bottcher_eq_exp_green (2 : ℂ) z
+    have hGz_pos : 0 < green_function (2 : ℂ) z :=
+      green_function_pos_on_outside_open (2 : ℂ) z hz
+    have hw_gt1 : 1 < ‖w‖ := hw_norm ▸ Real.one_lt_exp_iff.mpr hGz_pos
+    have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+    simp only [dif_pos hw_gt1]
+    have hu : ‖w / ↑‖w‖‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+    obtain ⟨hρ_gt, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw_gt1)
+    have hρ_pos : 0 < Classical.choose (hf_ex w hw_gt1) := by
+      linarith [hρ_gt, norm_nonneg (2 : ℂ)]
+    set x : ℂ := (((Classical.choose (hf_ex w hw_gt1) : ℝ) : ℂ) * (w / ↑‖w‖))
+    have hx_out : ‖x‖ > ‖(2 : ℂ)‖ + 2 := by
+      have hx_norm : ‖x‖ = Classical.choose (hf_ex w hw_gt1) := by
+        dsimp [x]
+        rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ_pos.le, hu, mul_one]
+      linarith [hρ_gt, hx_norm]
+    have hx_bottcher : Quadratic.bottcher_map (2 : ℂ) x = w := by
+      dsimp [x]
+      rw [bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
+      exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
+    have hz_bottcher : Quadratic.bottcher_map (2 : ℂ) z = w := by
+      simp [hw_def]
+    have hx_eq_z : x = z :=
+      h_inj_outside hx_out hz (hx_bottcher.trans hz_bottcher.symm)
+    simpa [x] using hx_eq_z
+
+/-- Iterate-left-inverse specialization of the conditional constructive Green
+inversion path at `c = 2`. -/
+theorem external_ray_map_exists_two_via_green_function_of_iter_left_inverse
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact external_ray_map_exists_two_via_green_function_of_injOn_outside_open
+    hlog_gt_anchor
+    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
+
 end GreenFunctionRayInversion
 
 end MLC

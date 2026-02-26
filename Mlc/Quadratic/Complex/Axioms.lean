@@ -51,13 +51,6 @@ axiom green_function_strictMono_along_ray_basin_seam
     (hG : 0 < green_function c ((ρ₁ : ℂ) * u)) :
     green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u)
 
-/-- Seam axiom: existence of a positive radial preimage for every positive Green
-value along a fixed unit ray. This supports the constructive ray inversion path
-without using `MLC.Quadratic.external_ray_map_exists`. -/
-axiom exists_ray_preimage_green_pos_seam
-    (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht : 0 < t) :
-    ∃ ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t
-
 end MLC.Quadratic
 
 /-!
