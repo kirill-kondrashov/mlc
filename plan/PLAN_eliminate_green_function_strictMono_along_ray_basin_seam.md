@@ -4,8 +4,11 @@
 - [ ] Remove `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` from the axiom footprint of `MLC.mlc_conjecture`.
 
 ## Hard Constraints
-- [ ] Do not reintroduce `MLC.Quadratic.external_ray_map_exists` into the root path.
-- [ ] Keep `MLC.greenRayLogGtAnchorTwo_axiom_seed` unchanged for this plan (strict-mono elimination only).
+- [x] Do not reintroduce `MLC.Quadratic.external_ray_map_exists` into the root path.
+  Status: current `#print axioms MLC.mlc_conjecture` does not include
+  `MLC.Quadratic.external_ray_map_exists`.
+- [x] Keep `MLC.greenRayLogGtAnchorTwo_axiom_seed` unchanged for this plan (strict-mono elimination only).
+  Status: retained as-is; no statement changes.
 
 ## Current State (Verified)
 - [x] Legacy theorem still uses strict monotonicity:
@@ -94,6 +97,83 @@
   `mlc_conjecture_of_green_function_of_knownInjOnOutsideOpenSourceCandidateTwo`
   and `mlc_conjecture_of_green_function_of_outsideOpenAnalyticityHypothesis`
   (axiom scan: no strict-mono seam).
+- [x] Re-routed the direct-proper witness branch to the strict-mono Green-ray
+  injectivity seam:
+  `injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive`,
+  `external_ray_map_exists_two_constructive_of_green_function_of_directProperLocalWitnessTwo`,
+  and `mlc_conjecture_of_green_function_of_directProperLocalWitnessTwo` no
+  longer depend on `MLC.Quadratic.external_ray_map_exists`.
+- [x] Split the direct-proper injectivity route into a seam-parameterized bridge
+  and a strict-mono specialization:
+  `injOn_outside_open_two_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`,
+  `rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`,
+  and `injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive`.
+  Status: the generic bridge is axiom-minimal (`Quot.sound`, `propext`,
+  `Classical.choice`) and keeps strict-mono dependence isolated to the
+  specialization.
+- [x] Added direct-proper strict-mono-free candidate wrappers parameterized by
+  the same local-homeomorph seam witness:
+  `external_ray_map_exists_two_constructive_strictMono_free_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`
+  and
+  `mlc_conjecture_strictMonoFree_candidate_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`.
+  Status: axiom scan shows no `green_function_strictMono_along_ray_basin_seam`
+  and no `MLC.Quadratic.external_ray_map_exists` on this candidate path.
+- [x] Added CP5 local-homeomorph-branch strict-mono-free candidate wrappers
+  that avoid `CP5ResidualTwo` in their theorem types:
+  `external_ray_map_exists_two_constructive_strictMono_free_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`
+  and
+  `mlc_conjecture_strictMonoFree_candidate_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`.
+  Status: axiom scan shows this surrogate branch uses only
+  `Quot.sound`, `propext`, `Classical.choice`, and
+  `greenRayLogGtAnchorTwo_axiom_seed` (no
+  `green_function_strictMono_along_ray_basin_seam`, no
+  `MLC.Quadratic.external_ray_map_exists`).
+- [x] Added strict-mono-free wrappers for the explicit restricted-map
+  proper/local-homeomorph source family:
+  `external_ray_map_exists_two_constructive_strictMono_free_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo`
+  and
+  `mlc_conjecture_strictMonoFree_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo`.
+  Status: axiom scan matches the same frontier-safe profile
+  (`Quot.sound`, `propext`, `Classical.choice`,
+  `greenRayLogGtAnchorTwo_axiom_seed`).
+- [x] Added root-target and root-seed strict-mono-free specializations for the
+  CP5 local-homeomorph surrogate sources:
+  `rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`,
+  `externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`,
+  `externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo`,
+  and rooted wrappers
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_*`.
+  Status: these selector-level routes remain frontier-safe
+  (no `green_function_strictMono_along_ray_basin_seam`,
+  no `MLC.Quadratic.external_ray_map_exists`).
+- [x] Extended selector/root-candidate API coverage for the CP5 local-homeomorph
+  surrogate family with direct-witness specializations:
+  `externalRayMapData_two_root_seed_strictMonoFree_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`,
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo`,
+  and root-candidate wrappers
+  `mlc_conjecture_root_candidate_of_*_of_cp5ResidualLocalHomeomorphInjSeamTwo`.
+  Status: these wrappers keep the same frontier-safe axiom profile
+  (`Quot.sound`, `propext`, `Classical.choice`,
+  `greenRayLogGtAnchorTwo_axiom_seed`).
+- [x] Added strict-mono-seeded (no seam-argument) specializations for the
+  explicit restricted-map proper/local source family:
+  `rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono`,
+  `externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono`,
+  `mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono`,
+  and `mlc_conjecture_root_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono`.
+  Status: these wrappers remain free of `MLC.Quadratic.external_ray_map_exists`
+  while explicitly carrying the strict-mono seam dependency
+  (`MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`), as
+  expected for the seeded specialization.
+- [x] Added late strict-mono CP5 seam replacements:
+  `cp5ResidualLocalHomeomorphInjSeamTwo_strictMono` and
+  `cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen`,
+  and rewired
+  `external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen`
+  to this replacement seam.
+  Status: this improves local factoring but does **not** yet remove
+  `MLC.Quadratic.external_ray_map_exists` from that CP5 route because
+  `ExternalRayLandsOutsideOpen` appears in the seam hypothesis type.
 - [x] Added explicit end-state candidate root theorem aliases:
   `mlc_conjecture_strictMonoFree_candidate_of_rootSafeOutsideOpenInjWitnessTwo`
   and `..._of_green_function_degreeOneIngressTwo`, plus
@@ -120,7 +200,10 @@
 
 ## Validation Checklist
 - [x] `lake build Mlc.MainConjecture`
-- [ ] `make check`
+- [x] `make check`
+  Status: executed; currently fails exactly on expected frontier axioms
+  (`MLC.greenRayLogGtAnchorTwo_axiom_seed`,
+  `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`).
 - [ ] `#print axioms MLC.mlc_conjecture` no longer lists
   `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`.
 - [x] Confirm no new unexpected axioms were introduced.
@@ -131,8 +214,20 @@
 - [ ] Root strict-mono elimination is blocked until a strict-mono-free root
   injectivity witness is available (the current root witness is frontier-safe
   w.r.t. `external_ray_map_exists`, but still depends on the strict-mono seam).
-- [ ] The existing direct degree-one seam currently depends on
-  `MLC.Quadratic.external_ray_map_exists`; that branch cannot be used for root wiring.
+- [x] The direct-proper witness Green-function branch no longer depends on
+  `MLC.Quadratic.external_ray_map_exists` after rerouting through
+  `injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam`.
+- [ ] The earlier CP5 local-homeomorph constructive seam
+  (`cp5ResidualLocalHomeomorphInjSeamTwo_constructive`) still uses the
+  `Mlc.Bottcher.DegreeOne` route and remains frontier-unsafe.
+- [ ] Even with late strict-mono CP5 replacement seams, the
+  `...of_not_externalRayLandsOutsideOpen` CP5 route still inherits
+  `MLC.Quadratic.external_ray_map_exists` through the proposition-level
+  `ExternalRayLandsOutsideOpen` branch in the seam type.
+  Status: reconfirmed by axiom scan of
+  `external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_cp5ResidualInjOnOutsideOpenSeamTwo`;
+  contamination persists even when a seam is passed explicitly, because
+  `CP5ResidualTwo` itself contains the `ExternalRayLandsOutsideOpen` branch.
 - [x] Checked and rejected the iterate-left-inverse route as a root witness source:
   current `bottcher_map_inj_on_outside_open_of_iter_left_inverse` path carries
   `MLC.Quadratic.external_ray_map_exists` in this development, so it is

@@ -3808,6 +3808,22 @@ theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
     simpa [div_eq_mul_inv, mul_assoc, hzn₁_ne] using hmul_eq
   exact hz_eq
 
+/-- Strict-mono routed local-homeomorph branch seam at `c = 2`. This late
+replacement is frontier-safe with respect to `external_ray_map_exists`. -/
+theorem cp5ResidualLocalHomeomorphInjSeamTwo_strictMono :
+    CP5ResidualLocalHomeomorphInjSeamTwo := by
+  intro _hlocal
+  exact injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
+    greenRayLogGtAnchorTwo_axiom_seed
+
+/-- Strict-mono routed CP5 residual→injectivity seam under no-landing at `c = 2`.
+This avoids the earlier frontier-unsafe CP5 local-homeomorph constructive seam. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen
+    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_of_localHomeomorphBranchSeam_of_not_externalRayLandsOutsideOpen
+    cp5ResidualLocalHomeomorphInjSeamTwo_strictMono hnot_land
+
 /-- Legacy CP5 endpoint at `c = 2`: Green-function ray inversion through the
 strict-mono uniqueness path. This is the only remaining strict-mono ingress to
 the current root seed. -/
@@ -3926,7 +3942,7 @@ theorem external_ray_map_exists_two_constructive_of_green_function_of_cp5Residua
     (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo
-    hres (cp5ResidualInjOnOutsideOpenSeamTwo_constructive_of_not_externalRayLandsOutsideOpen hnot_land)
+    hres (cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen hnot_land)
 
 /-- Constructive CP5 endpoint at `c = 2`: Green inversion routed through the
 canonical constructive landing-exclusion seam. -/
@@ -4043,12 +4059,74 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_isLocalHomeomorph_of_deg
 
 /-- Constructive outside-open injectivity from the direct proper+local witness
 at `c = 2`. -/
+theorem injOn_outside_open_two_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
+  h_seam h
+
+/-- Root-safe outside-open injectivity witness from the direct proper+local
+branch plus a local-homeomorph→injectivity seam at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  injOn_outside_open_two_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    h h_seam
+
+/-- Root-safe outside-open injectivity witness from the CP5
+local-homeomorph source pair plus a local-homeomorph→injectivity seam witness
+at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal h_seam
+
+/-- Root-safe outside-open injectivity witness from explicit restricted-map
+properness/local-homeomorph hypotheses plus a local-homeomorph→injectivity seam
+witness at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    ⟨hproper, hlocal⟩ h_seam
+
+/-- Root-safe outside-open injectivity witness from the CP5
+local-homeomorph source pair at `c = 2`, specialized to the strict-mono local
+seam witness. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_strictMono
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
+
+/-- Root-safe outside-open injectivity witness from explicit restricted-map
+proper/local hypotheses at `c = 2`, specialized to the strict-mono local seam
+witness. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_strictMono ⟨hproper, hlocal⟩
+
+/-- Constructive outside-open injectivity from the direct proper+local witness
+at `c = 2`, currently routed through the strict-mono local-homeomorph seam. -/
 theorem injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive
     (h : DirectProperLocalWitnessTwo) :
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
-  exact Mlc.Bottcher.DegreeOne.injOn_of_proper_localHomeomorph_asymptotic_at_infinity
-    h.1 h.2
+  exact
+    rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through the
 direct proper+local witness branch. -/
@@ -4057,6 +4135,39 @@ theorem external_ray_map_exists_two_constructive_of_green_function_of_directProp
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact external_ray_map_exists_two_constructive_of_green_function_of_injOn_outside_open
     (injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive h)
+
+/-- Strict-mono-free external-ray-data candidate at `c = 2` from a direct
+proper+local witness plus a local-homeomorph→injectivity seam witness. -/
+theorem external_ray_map_exists_two_constructive_strictMono_free_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
+    (rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h h_seam)
+
+/-- Strict-mono-free external-ray-data candidate at `c = 2` from the CP5
+local-homeomorph branch source (without passing through `CP5ResidualTwo`) plus
+the local-homeomorph→injectivity seam witness. -/
+theorem external_ray_map_exists_two_constructive_strictMono_free_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal h_seam
+
+/-- Strict-mono-free external-ray-data candidate at `c = 2` from explicit
+restricted-map properness/local-homeomorph assumptions plus a local-homeomorph
+seam witness (without `CP5ResidualTwo` in the theorem type). -/
+theorem external_ray_map_exists_two_constructive_strictMono_free_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_strictMono_free_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    ⟨hproper, hlocal⟩ h_seam
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through global
 proper+local-homeomorph plus a degree-one fiber witness. -/
@@ -4136,6 +4247,39 @@ theorem mlc_conjecture_of_green_function_of_directProperLocalWitnessTwo
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
     (external_ray_map_exists_two_constructive_of_green_function_of_directProperLocalWitnessTwo h)
+
+/-- Strict-mono-free rooted candidate at `c = 2` from a direct proper+local
+witness plus a local-homeomorph→injectivity seam witness. -/
+theorem mlc_conjecture_strictMonoFree_candidate_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_strictMono_free_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h h_seam)
+
+/-- Strict-mono-free rooted candidate at `c = 2` from the CP5
+local-homeomorph branch source (without `CP5ResidualTwo` in the theorem type)
+plus the local-homeomorph→injectivity seam witness. -/
+theorem mlc_conjecture_strictMonoFree_candidate_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_strictMonoFree_candidate_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal h_seam
+
+/-- Strict-mono-free rooted candidate at `c = 2` from explicit restricted-map
+properness/local-homeomorph assumptions plus a local-homeomorph seam witness
+(without `CP5ResidualTwo` in the theorem type). -/
+theorem mlc_conjecture_strictMonoFree_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_strictMonoFree_candidate_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    ⟨hproper, hlocal⟩ h_seam
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus global
 proper+local-homeomorph and degree-one fiber witness implies MLC. -/
@@ -4224,6 +4368,39 @@ lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_green_function_deg
   externalRayMapData_two_strictMonoFree_candidate_seed
     (rootSafeOutsideOpenInjWitnessTwo_of_green_function_degreeOneIngressTwo h)
 
+/-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
+specialized to a direct proper/local witness plus a local seam witness. -/
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed
+    (rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h h_seam)
+
+/-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
+specialized to the CP5 local-homeomorph source pair plus a local seam witness. -/
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed
+    (rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      hlocal h_seam)
+
+/-- Strict-mono-free rooted external-ray-data candidate seed at `c = 2`,
+specialized to explicit restricted-map proper/local hypotheses plus a local
+seam witness. -/
+lemma externalRayMapData_two_strictMonoFree_candidate_seed_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    ⟨hproper, hlocal⟩ h_seam
+
 /-- Strict-mono-free root-seed alternative at `c = 2`, parameterized by the
 exact remaining root witness target. -/
 lemma externalRayMapData_two_root_seed_strictMonoFree_of_rootSafeOutsideOpenInjWitnessTwo
@@ -4237,6 +4414,55 @@ lemma externalRayMapData_two_root_seed_strictMonoFree_of_green_function_degreeOn
     (h : GreenFunctionDegreeOneIngressTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   externalRayMapData_two_strictMonoFree_candidate_seed_of_green_function_degreeOneIngressTwo h
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to a direct
+proper/local witness plus a local seam witness. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    h h_seam
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to the CP5
+local-homeomorph source pair plus a local seam witness. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal h_seam
+
+/-- Strict-mono-free root-seed alternative at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses plus a local seam witness. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_strictMonoFree_candidate_seed_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hproper hlocal h_seam
+
+/-- Strict-mono-seeded root-seed alternative at `c = 2`, specialized to the CP5
+local-homeomorph source pair. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_strictMono
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hlocal cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
+
+/-- Strict-mono-seeded root-seed alternative at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses. -/
+lemma externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_strictMono
+    ⟨hproper, hlocal⟩
 
 /-- Strict-mono-free root-seed alternative at `c = 2`, specialized to the known
 non-iterate-left injectivity-source aggregate. -/
@@ -4293,6 +4519,47 @@ theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_gre
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_external_ray_map_exists_two
     (externalRayMapData_two_root_seed_strictMonoFree_of_green_function_degreeOneIngressTwo h)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to a direct
+proper/local witness plus a local seam witness. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_map_exists_two
+    (externalRayMapData_two_root_seed_strictMonoFree_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h h_seam)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to the CP5
+local-homeomorph source pair plus a local seam witness. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_map_exists_two
+    (externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      hlocal h_seam)
+
+/-- Strict-mono-free root theorem variant at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses plus a local seam witness. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    ⟨hproper, hlocal⟩ h_seam
+
+/-- Strict-mono-seeded root theorem variant at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    ⟨hproper, hlocal⟩ cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
 
 /-- Strict-mono-free root theorem variant at `c = 2`, specialized to the known
 non-iterate-left injectivity-source aggregate. -/
@@ -4360,6 +4627,48 @@ theorem mlc_conjecture_root_candidate_of_outsideOpenAnalyticityHypothesis
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
     (rootSafeOutsideOpenInjWitnessTwo_of_outsideOpenAnalyticityHypothesis h_analytic)
+
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to a direct
+proper/local witness plus a local seam witness. -/
+theorem mlc_conjecture_root_candidate_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
+    (rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h h_seam)
+
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to the CP5
+local-homeomorph source pair plus a local seam witness. -/
+theorem mlc_conjecture_root_candidate_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hlocal :
+      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
+    (rootSafeOutsideOpenInjWitnessTwo_of_localHomeomorphSurjSourceTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      hlocal h_seam)
+
+/-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to explicit
+restricted-map proper/local hypotheses plus a local seam witness. -/
+theorem mlc_conjecture_root_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
+    (rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      hproper hlocal h_seam)
+
+/-- Strict-mono-seeded root-candidate wrapper at `c = 2`, specialized to
+explicit restricted-map proper/local hypotheses. -/
+theorem mlc_conjecture_root_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_strictMono
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_isProperMap_restrict_of_isLocalHomeomorph_restrict_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    hproper hlocal cp5ResidualLocalHomeomorphInjSeamTwo_strictMono
 
 /-- Strict-mono-free rooted theorem at `c = 2`, specialized to the known
 non-iterate-left injectivity-source aggregate. -/
