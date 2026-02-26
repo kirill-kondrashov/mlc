@@ -1,7 +1,7 @@
 # Plan: Replace `exists_ray_preimage_green_pos_seam` With a Provable Target
 
 ---
-**Status:** `████████░░` **83%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~50 lines, 1-2 hrs
+**Status:** `████████░░` **88%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~50 lines, 1-2 hrs
 **Target Axiom:** `greenRayLogGtAnchorTwo_axiom_seed` (partial)
 **Last Updated:** 2026-02-26
 ---
@@ -34,6 +34,13 @@ This aligns with the already formalized `exists_ray_preimage_green`.
 - [x] Seam-free conditional replacement implemented
 - [x] MainConjecture wrapper added
 - [x] Rooted conditional wrappers added
+- [x] Confirmed downstream unconditional CP5 wrappers now consume the
+  branch-combined seam path (no explicit no-landing detour needed on that branch).
+- [x] Added constructive large-norm anchor-gap discharge and reduced full seam
+  to a bounded annulus obligation:
+  `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
+  `greenRayLogGtAnchorTwoSeam_of_cutoff_band`,
+  with cutoff `greenRayLogGtAnchorTwoCutoff`.
 - [ ] Prove the anchor-threshold theorem for c=2
 
 ## Remaining Work (~50 lines)

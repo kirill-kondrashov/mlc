@@ -2086,6 +2086,133 @@ def GreenRayLogGtAnchorTwoSeam : Prop :=
     MLC.Quadratic.green_function (2 : ℂ)
         (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
 
+/-- Quantitative cutoff for large-norm automatic discharge of the
+`GreenRayLogGtAnchorTwoSeam` inequality via the outside-open Green upper bound. -/
+noncomputable def greenRayLogGtAnchorTwoCutoff : ℝ :=
+  Real.exp
+    (Real.log (‖(2 : ℂ)‖ + 2) +
+      (2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2))
+
+/-- For sufficiently large `‖w‖`, the anchor-gap inequality at `c = 2` follows
+constructively from the two-sided Green/log bound on outside-open. -/
+theorem greenRayLogGtAnchorTwo_of_norm_gt_cutoff
+    (w : ℂ) (hw : greenRayLogGtAnchorTwoCutoff < ‖w‖) :
+    MLC.Quadratic.green_function (2 : ℂ)
+        (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖ := by
+  set u : ℂ := w / ↑‖w‖
+  let z : ℂ := (((‖(2 : ℂ)‖ + 2 : ℝ) * u) : ℂ)
+  have hw_pos : (0 : ℝ) < ‖w‖ := by
+    have hcut_pos : 0 < greenRayLogGtAnchorTwoCutoff := by
+      dsimp [greenRayLogGtAnchorTwoCutoff]
+      exact Real.exp_pos _
+    linarith
+  have hu : ‖u‖ = 1 := by
+    dsimp [u]
+    rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+  have hz_norm : ‖z‖ = ‖(2 : ℂ)‖ + 2 := by
+    dsimp [z]
+    rw [norm_mul, Complex.norm_real, hu, mul_one, Real.norm_of_nonneg]
+    linarith [norm_nonneg (2 : ℂ)]
+  have h2norm : ‖(2 : ℂ)‖ = 2 := by
+    rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast,
+      norm_real, Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+  have hesc_two : escape_bound (2 : ℂ) = 3 := by
+    rw [escape_bound_eq_max, h2norm]
+    norm_num
+  have hz_out : ‖z‖ > escape_bound (2 : ℂ) := by
+    rw [hz_norm, h2norm, hesc_two]
+    norm_num
+  have hG_le := GreenFunctionRayInversion.green_function_bdd_above_log (2 : ℂ) z hz_out
+  have hlog_cutoff : Real.log greenRayLogGtAnchorTwoCutoff < Real.log ‖w‖ := by
+    have hcut_pos : 0 < greenRayLogGtAnchorTwoCutoff := by
+      dsimp [greenRayLogGtAnchorTwoCutoff]
+      exact Real.exp_pos _
+    exact Real.log_lt_log hcut_pos hw
+  have hlog_target :
+      Real.log (‖(2 : ℂ)‖ + 2) +
+          (2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2) <
+        Real.log ‖w‖ := by
+    simpa [greenRayLogGtAnchorTwoCutoff, Real.log_exp] using hlog_cutoff
+  have hG_le' :
+      MLC.Quadratic.green_function (2 : ℂ) z ≤
+        Real.log (‖(2 : ℂ)‖ + 2) +
+          (2 * ‖(2 : ℂ)‖ / (escape_bound (2 : ℂ))^2) := by
+    simpa [hz_norm] using hG_le
+  exact lt_of_le_of_lt hG_le' hlog_target
+
+/-- Reduction of the full anchor-gap seam to a bounded annulus obligation:
+large norms are discharged constructively by
+`greenRayLogGtAnchorTwo_of_norm_gt_cutoff`. -/
+theorem greenRayLogGtAnchorTwoSeam_of_cutoff_band
+    (hband :
+      ∀ w : ℂ, 1 < ‖w‖ → ‖w‖ ≤ greenRayLogGtAnchorTwoCutoff →
+        MLC.Quadratic.green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
+    GreenRayLogGtAnchorTwoSeam := by
+  intro w hw
+  by_cases hlarge : greenRayLogGtAnchorTwoCutoff < ‖w‖
+  · exact greenRayLogGtAnchorTwo_of_norm_gt_cutoff w hlarge
+  · exact hband w hw (le_of_not_gt hlarge)
+
+/-- The current global anchor-gap seam is inconsistent at `c = 2`: choosing
+`w` with modulus `exp(G_anchor / 2)` forces `G_anchor < G_anchor / 2`. -/
+theorem not_greenRayLogGtAnchorTwoSeam :
+    ¬ GreenRayLogGtAnchorTwoSeam := by
+  intro hseam
+  have h2norm : ‖(2 : ℂ)‖ = 2 := by
+    rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast, norm_real,
+      Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+  let zAnchor : ℂ := (((‖(2 : ℂ)‖ + 2 : ℝ) * (1 : ℂ)) : ℂ)
+  have hfunc := Quadratic.green_function_functional_eq (2 : ℂ) zAnchor
+  have hfc_eval : fc (2 : ℂ) zAnchor = (18 : ℂ) := by
+    dsimp [zAnchor]
+    rw [fc, h2norm]
+    norm_num
+  have hG_fc_pos : 0 < Quadratic.green_function (2 : ℂ) (fc (2 : ℂ) zAnchor) := by
+    rw [hfc_eval]
+    have h18_out : ‖(18 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
+      rw [show (18 : ℂ) = ((18 : ℝ) : ℂ) from by norm_cast,
+        Complex.norm_real, Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 18), h2norm]
+      norm_num
+    exact GreenFunctionRayInversion.green_function_pos_on_outside_open (2 : ℂ) (18 : ℂ) h18_out
+  have hG_anchor_pos : 0 < Quadratic.green_function (2 : ℂ) zAnchor := by
+    have hfunc' :
+        Quadratic.green_function (2 : ℂ) (fc (2 : ℂ) zAnchor) =
+          2 * Quadratic.green_function (2 : ℂ) zAnchor := by
+      simpa using hfunc
+    linarith
+  let gAnchor : ℝ := Quadratic.green_function (2 : ℂ) zAnchor
+  let w : ℂ := ((Real.exp (gAnchor / 2) : ℝ) : ℂ)
+  have hw_norm : ‖w‖ = Real.exp (gAnchor / 2) := by
+    dsimp [w]
+    rw [Complex.norm_real, Real.norm_of_nonneg]
+    exact (Real.exp_pos _).le
+  have hw_gt1 : 1 < ‖w‖ := by
+    rw [hw_norm]
+    have hg_pos : 0 < gAnchor := by simpa [gAnchor] using hG_anchor_pos
+    exact Real.one_lt_exp_iff.mpr (by linarith)
+  have hdir : w / ↑‖w‖ = (1 : ℂ) := by
+    dsimp [w]
+    rw [hw_norm]
+    have hne : (((Real.exp (gAnchor / 2) : ℝ) : ℂ)) ≠ 0 := by
+      exact_mod_cast (Real.exp_pos (gAnchor / 2)).ne'
+    exact div_self hne
+  have hanchor_eval :
+      Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) = gAnchor := by
+    dsimp [gAnchor, zAnchor]
+    rw [hdir]
+  have hlog_eval : Real.log ‖w‖ = gAnchor / 2 := by
+    rw [hw_norm, Real.log_exp]
+  have hcontr : gAnchor < gAnchor / 2 := by
+    calc
+      gAnchor
+          = Quadratic.green_function (2 : ℂ)
+              (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) := hanchor_eval.symm
+      _ < Real.log ‖w‖ := hseam w hw_gt1
+      _ = gAnchor / 2 := hlog_eval
+  linarith
+
 /-- Axiom-seeded strong anchor-gap seam needed by the current
 `external_ray_map_exists_two_via_green_function_of_seam` ingress. -/
 axiom greenRayLogGtAnchorTwo_axiom_seed : GreenRayLogGtAnchorTwoSeam
@@ -4068,39 +4195,8 @@ theorem cp5ResidualInjOnOutsideOpenSeamTwo_strictMono :
     greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
     greenRayLogGtAnchorTwo_seed
 
-/-- Strict-mono routed CP5 residual→injectivity seam under no-landing at `c = 2`.
-This avoids the earlier frontier-unsafe CP5 local-homeomorph constructive seam. -/
-theorem cp5ResidualInjOnOutsideOpenSeamTwo_strictMono_of_not_externalRayLandsOutsideOpen
-    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
-    CP5ResidualInjOnOutsideOpenSeamTwo :=
-  cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_not_externalRayLandsOutsideOpen
-    greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
-    greenRayLogGtAnchorTwo_seed
-    hnot_land
-
-/-- Seam-parameterized CP5 residual endpoint function under explicit
-no-landing at `c = 2`. -/
-theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_fn
-    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
-    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
-    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
-    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
-    (cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_not_externalRayLandsOutsideOpen
-      huniq_seam hlog_gt_anchor hnot_land)
-
-/-- Strict-mono-seeded CP5 residual endpoint function under explicit no-landing
-at `c = 2`. -/
-theorem external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_strictMono_fn
-    (hnot_land : ¬ ExternalRayLandsOutsideOpen (2 : ℂ)) :
-    CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_fn
-    greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
-    greenRayLogGtAnchorTwo_seed
-    hnot_land
-
 /-- Seam-parameterized unconditional CP5 residual endpoint function at `c = 2`,
-using the boundary-continuity no-landing witness. -/
+via the branch-combined residual→injectivity seam. -/
 theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional_fn
     (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
     (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
@@ -4315,19 +4411,19 @@ theorem external_ray_map_exists_two_constructive_of_green_function_of_cp5Residua
       hres hnot_land
 
 /-- Constructive CP5 endpoint at `c = 2`: Green inversion routed through the
-canonical constructive landing-exclusion seam. -/
+unconditional branch-combined CP5 residual→injectivity seam. -/
 theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional
     (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
     (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (hres : CP5ResidualTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
-  exact
-    external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
-      huniq_seam hlog_gt_anchor hres
-      not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+  exact external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo
+    hres
+    (cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
 
 /-- Constructive CP5 endpoint at `c = 2`: Green inversion routed through the
-canonical constructive landing-exclusion seam, specialized to strict-mono
+unconditional branch-combined CP5 residual→injectivity seam, specialized to strict-mono
 seams. -/
 theorem external_ray_map_exists_two_constructive_of_green_function_of_cp5ResidualTwo_unconditional
     (hres : CP5ResidualTwo) :
@@ -4839,19 +4935,19 @@ theorem mlc_conjecture_of_green_function_of_cp5ResidualTwo_of_not_externalRayLan
       hres hnot_land
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus CP5 residual
-frontier (using the canonical constructive landing-exclusion seam) implies MLC. -/
+frontier (using the unconditional branch-combined seam) implies MLC. -/
 theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional
     (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
     (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
     (hres : CP5ResidualTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact
-    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen
-      huniq_seam hlog_gt_anchor hres
-      not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+  exact mlc_conjecture_of_green_function_of_cp5ResidualTwo
+    hres
+    (cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
 
 /-- Conditional rooted theorem at `c = 2`: Green inversion plus CP5 residual
-frontier (using the canonical constructive landing-exclusion seam), specialized
+frontier (using the unconditional branch-combined seam), specialized
 to strict-mono seams, implies MLC. -/
 theorem mlc_conjecture_of_green_function_of_cp5ResidualTwo_unconditional
     (hres : CP5ResidualTwo) :

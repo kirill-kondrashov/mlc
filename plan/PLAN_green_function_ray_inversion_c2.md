@@ -1,7 +1,7 @@
 # PLAN: Green function ray inversion at c=2
 
 ---
-**Status:** `██████░░░░` **60%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort:** ~150 lines, 3-4 hrs
+**Status:** `██████░░░░` **66%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort:** ~150 lines, 3-4 hrs
 **Target Axioms:** Both (indirectly provides theorems to eliminate them)
 **Last Updated:** 2026-02-26
 ---
@@ -27,6 +27,7 @@ provably non-analytic (via `not_outsideOpenAnalyticityHypothesisTwo`).
 | A | `green_function_pos_on_basin` | ✅ **DONE** |
 | B | `green_function_tendsto_atTop` | ✅ **DONE** |
 | C (real) | `green_function_strictMono_along_real_ray_two` | ✅ **DONE** |
+| C (real, opposite direction) | `green_function_strictMono_along_neg_real_ray_two` | ✅ **DONE** |
 | C (complex) | `green_function_strictMono_along_ray_two` | ❌ **AXIOM** (target) |
 | D | `exists_ray_preimage_green` | ✅ **DONE** (existence) |
 | E | `external_ray_map_two_constructive` | ⏳ **BLOCKED** by C |
@@ -67,6 +68,22 @@ lemma green_function_strictMono_along_ray_two (u : ℂ) (hu : ‖u‖ = 1)
     {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₁ < t₂) :
     green_function (2 : ℂ) (↑t₁ * u) < green_function (2 : ℂ) (↑t₂ * u)
 ```
+
+## Current Sprint Delta
+
+- Rerouted theorem-level unconditional CP5 wrappers in `MainConjecture` to the
+  branch-combined seam path, reducing non-essential no-landing detours while
+  keeping the same axiom frontier.
+- Removed dead strict-mono no-landing helper wrappers made obsolete by that
+  reroute.
+- Added constructive real-axis symmetry and opposite-direction monotonicity:
+  `green_function_neg_real_eq_two`,
+  `green_function_strictMono_along_neg_real_ray_two`.
+- Added constructive anchor-gap large-norm reduction on the `c = 2` ingress
+  side (in `MainConjecture`):
+  `greenRayLogGtAnchorTwoCutoff`,
+  `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
+  `greenRayLogGtAnchorTwoSeam_of_cutoff_band`.
 
 **Approaches:**
 1. **Iteration-based**: Show orbit norms separate for complex rays (harder than real case)

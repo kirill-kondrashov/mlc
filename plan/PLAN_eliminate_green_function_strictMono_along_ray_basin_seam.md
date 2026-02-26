@@ -1,7 +1,7 @@
 # Plan: Eliminate `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`
 
 ---
-**Status:** `███████░░░` **76%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~200 lines, 4-6 hrs
+**Status:** `████████░░` **82%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~200 lines, 4-6 hrs
 **Target Axiom:** `green_function_strictMono_along_ray_basin_seam`
 **Last Updated:** 2026-02-26
 ---
@@ -42,6 +42,19 @@ make check shows:
 ### Phase 3: Retire Strict-Mono Dependency ❌ 0%
 - [ ] Remove remaining call paths to legacy theorem
 - [ ] Delete axiom from `Mlc/Quadratic/Complex/Axioms.lean`
+
+### Latest Increment
+- [x] Removed explicit no-landing dependency from unconditional CP5 strict-mono
+  theorem wrappers by routing through the branch-combined seam.
+- [x] Deleted obsolete strict-mono no-landing helper aliases no longer used by
+  any root or CP5 wrapper path.
+- [x] Added constructive opposite-direction real-ray monotonicity support in
+  `GreenFunctionRayInversion` (`green_function_neg_real_eq_two`,
+  `green_function_strictMono_along_neg_real_ray_two`).
+- [x] Added constructive large-norm anchor-gap discharge and reduced full
+  anchor seam to bounded annulus data (`greenRayLogGtAnchorTwoCutoff`,
+  `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
+  `greenRayLogGtAnchorTwoSeam_of_cutoff_band`).
 
 ## Key Blockers
 

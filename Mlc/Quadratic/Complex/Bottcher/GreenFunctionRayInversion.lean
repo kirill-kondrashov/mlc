@@ -451,6 +451,54 @@ lemma green_function_strictMono_along_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ�
   rw [Real.log_div (by linarith) (by linarith)] at hN'
   linarith
 
+/-- For `c = 2`, the Green function is even on the real axis:
+`G₂(-ρ) = G₂(ρ)`. -/
+lemma green_function_neg_real_eq_two (ρ : ℝ) :
+    green_function (2 : ℂ) ((-ρ : ℝ) : ℂ) = green_function (2 : ℂ) ((ρ : ℝ) : ℂ) := by
+  have hneg := green_function_functional_eq (2 : ℂ) (((-ρ : ℝ) : ℂ))
+  have hpos := green_function_functional_eq (2 : ℂ) ((ρ : ℝ) : ℂ)
+  have hfc :
+      fc (2 : ℂ) (((-ρ : ℝ) : ℂ)) = fc (2 : ℂ) ((ρ : ℝ) : ℂ) := by
+    simp [fc]
+  have hneg' :
+      green_function (2 : ℂ) (fc (2 : ℂ) ((ρ : ℝ) : ℂ)) =
+        2 * green_function (2 : ℂ) (((-ρ : ℝ) : ℂ)) := by
+    calc
+      green_function (2 : ℂ) (fc (2 : ℂ) ((ρ : ℝ) : ℂ))
+          = green_function (2 : ℂ) (fc (2 : ℂ) (((-ρ : ℝ) : ℂ))) := by
+              simpa [hfc] using congrArg (green_function (2 : ℂ)) hfc.symm
+      _ = 2 * green_function (2 : ℂ) (((-ρ : ℝ) : ℂ)) := by
+              simpa using hneg
+  have hpos' :
+      green_function (2 : ℂ) (fc (2 : ℂ) ((ρ : ℝ) : ℂ)) =
+        2 * green_function (2 : ℂ) ((ρ : ℝ) : ℂ) := by
+    simpa using hpos
+  linarith
+
+/-- **Lemma C (real case, opposite direction)**:
+For `c = 2` and the negative real direction `u = -1`, the Green function is
+strictly increasing with radius. -/
+lemma green_function_strictMono_along_neg_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ₁ < ρ₂)
+    (hρ₁ : ρ₁ > 4) :
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ)) <
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) := by
+  have hreal : green_function (2 : ℂ) ((ρ₁ : ℝ) : ℂ) <
+      green_function (2 : ℂ) ((ρ₂ : ℝ) : ℂ) :=
+    green_function_strictMono_along_real_ray_two h hρ₁
+  have hρ₁neg :
+      green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ)) =
+        green_function (2 : ℂ) ((ρ₁ : ℝ) : ℂ) := by
+    simpa [mul_comm] using green_function_neg_real_eq_two ρ₁
+  have hρ₂neg :
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) =
+        green_function (2 : ℂ) ((ρ₂ : ℝ) : ℂ) := by
+    simpa [mul_comm] using green_function_neg_real_eq_two ρ₂
+  calc
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ))
+        = green_function (2 : ℂ) ((ρ₁ : ℝ) : ℂ) := hρ₁neg
+    _ < green_function (2 : ℂ) ((ρ₂ : ℝ) : ℂ) := hreal
+    _ = green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) := hρ₂neg.symm
+
 /-- Replacement-target seam at `c = 2` for full-basin strict radial monotonicity. -/
 def GreenFunctionStrictMonoAlongRayBasinTwoSeam : Prop :=
   ∀ (u : ℂ) (_hu : ‖u‖ = 1)

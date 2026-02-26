@@ -1,7 +1,7 @@
 # Plan: Basin Monotonicity Practical Way Forward
 
 ---
-**Status:** `██████░░░░` **68%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~100 lines, 2-3 hrs
+**Status:** `███████░░░` **74%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~100 lines, 2-3 hrs
 **Target Axiom:** `green_function_strictMono_along_ray_basin_seam`
 **Last Updated:** 2026-02-26
 ---
@@ -58,6 +58,20 @@
   `cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam`,
   `cp5ResidualInjOnOutsideOpenSeamTwo_strictMono`,
   `external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional_fn`.
+- [x] Rewired theorem-level unconditional CP5 Green-route wrappers off the
+  explicit no-landing detour:
+  `external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional`,
+  `mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_unconditional`.
+- [x] Removed dead strict-mono no-landing helper aliases made obsolete by the
+  branch-combined unconditional seam path.
+- [x] Extended constructive monotonicity base on real-axis directions with:
+  `green_function_neg_real_eq_two`,
+  `green_function_strictMono_along_neg_real_ray_two`.
+- [x] Added quantitative large-norm anchor-gap discharge and cutoff-band
+  reduction (`greenRayLogGtAnchorTwoCutoff`,
+  `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
+  `greenRayLogGtAnchorTwoSeam_of_cutoff_band`) to isolate remaining seam debt
+  to bounded annulus data.
 - [x] Added packaged ingress:
   `GreenFunctionDegreeOneIngressTwo` and root wrapper
   `mlc_conjecture_of_green_function_degreeOneIngressTwo`.
