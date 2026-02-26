@@ -1,47 +1,66 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # File paths
 README="README.md"
 EXPECTED="expected.txt"
 ACTUAL="output.txt"
+ACTUAL_CLEAN="actual_cleaned.txt"
 
-# Extract the expected output from README.md
-# We assume the output block starts after "Output:" and is a code block
-sed -n '/^Output:/,$p' "$README" | sed -n '/^```$/,/^```$/p' | sed '1d;$d' > "$EXPECTED"
+# Extract the expected output from README.md.
+# We use the first fenced code block after the "Expected output:" heading.
+awk '
+  /^Expected output:$/ {seen = 1; next}
+  seen && /^```$/ && !inblock {inblock = 1; next}
+  seen && /^```$/ && inblock {exit}
+  seen && inblock {print}
+' "$README" > "$EXPECTED"
+
+if [ ! -s "$EXPECTED" ]; then
+    echo "Failed to extract expected output block from README.md"
+    exit 1
+fi
 
 # Run make check and capture output
-# We filter out lines starting with "lake" or containing progress bars if necessary
-# Assuming the relevant output is at the end.
 echo "Re-running make check..."
-make check > "$ACTUAL" 2>&1
-EXIT_CODE=$?
-
-if [ $EXIT_CODE -ne 0 ]; then
-    echo "make check failed with exit code $EXIT_CODE"
-    cat "$ACTUAL"
-    exit $EXIT_CODE
+if make check > "$ACTUAL" 2>&1; then
+    EXIT_CODE=0
+else
+    EXIT_CODE=$?
 fi
 
 # Print the full output for debugging/logs
 cat "$ACTUAL"
 
-# Extract the relevant part from the actual output
-# We look for the line starting with "✅" and everything after
-grep -A 100 "✅" "$ACTUAL" > actual_cleaned.txt
-mv actual_cleaned.txt "$ACTUAL"
+# Extract the stable summary block from actual output:
+# - start at the success line
+# - include "All axioms used:" and consecutive "- ..." lines
+awk '
+  /^✅ / {capture = 1; print; next}
+  capture && /^All axioms used:$/ {print; in_list = 1; next}
+  capture && in_list && /^- / {print; next}
+  capture && in_list && !/^- / {exit}
+' "$ACTUAL" > "$ACTUAL_CLEAN"
+
+if [ ! -s "$ACTUAL_CLEAN" ]; then
+    echo "Failed to extract actual summary block from make check output."
+    echo "make check exit code: $EXIT_CODE"
+    rm -f "$EXPECTED" "$ACTUAL" "$ACTUAL_CLEAN"
+    exit 1
+fi
 
 # Compare
-if diff -w "$EXPECTED" "$ACTUAL"; then
+if diff -w "$EXPECTED" "$ACTUAL_CLEAN"; then
     echo "Verification successful: Output matches README."
-    rm "$EXPECTED" "$ACTUAL"
+    rm -f "$EXPECTED" "$ACTUAL" "$ACTUAL_CLEAN"
     exit 0
 else
     echo "Verification failed: Output differs from README."
+    echo "make check exit code: $EXIT_CODE"
     echo "Expected:"
     cat "$EXPECTED"
     echo "Actual:"
-    cat "$ACTUAL"
-    rm "$EXPECTED" "$ACTUAL"
+    cat "$ACTUAL_CLEAN"
+    rm -f "$EXPECTED" "$ACTUAL" "$ACTUAL_CLEAN"
     exit 1
 fi
