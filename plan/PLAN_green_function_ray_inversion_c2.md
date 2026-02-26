@@ -1,7 +1,7 @@
 # PLAN: Green function ray inversion at c=2
 
 ---
-**Status:** `██████░░░░` **66%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort:** ~150 lines, 3-4 hrs
+**Status:** `██████░░░░` **57%** | **Relevance:** ⭐⭐⭐⭐ | **Effort Remaining:** ~70-110 lines, 2-4 hrs
 **Target Axioms:** Both (indirectly provides theorems to eliminate them)
 **Last Updated:** 2026-02-26
 ---
@@ -60,7 +60,7 @@ lemma exists_ray_preimage_green (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ)
     ∃ ρ : ℝ, ρ > ‖c‖ + 2 ∧ green_function c ((ρ : ℂ) * u) = t
 ```
 
-## Remaining Work (~150 lines)
+## Remaining Work (~70-110 lines)
 
 ### Lemma C (complex rays) — Main Technical Gap
 ```lean
@@ -84,6 +84,9 @@ lemma green_function_strictMono_along_ray_two (u : ℂ) (hu : ‖u‖ = 1)
   `greenRayLogGtAnchorTwoCutoff`,
   `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
   `greenRayLogGtAnchorTwoSeam_of_cutoff_band`.
+- Added `not_greenRayLogGtAnchorTwoSeam`, proving the current global
+  anchor-gap seam is inconsistent; this confirms the replacement-seam redesign
+  while keeping Lemma C as the blocking constructive theorem.
 
 **Approaches:**
 1. **Iteration-based**: Show orbit norms separate for complex rays (harder than real case)

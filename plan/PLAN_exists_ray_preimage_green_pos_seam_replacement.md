@@ -1,7 +1,7 @@
 # Plan: Replace `exists_ray_preimage_green_pos_seam` With a Provable Target
 
 ---
-**Status:** `████████░░` **88%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~50 lines, 1-2 hrs
+**Status:** `█████████░` **90%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort Remaining:** ~15-30 lines, 0.5-1.5 hrs
 **Target Axiom:** `greenRayLogGtAnchorTwo_axiom_seed` (partial)
 **Last Updated:** 2026-02-26
 ---
@@ -41,23 +41,27 @@ This aligns with the already formalized `exists_ray_preimage_green`.
   `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
   `greenRayLogGtAnchorTwoSeam_of_cutoff_band`,
   with cutoff `greenRayLogGtAnchorTwoCutoff`.
-- [ ] Prove the anchor-threshold theorem for c=2
+- [x] Proved `not_greenRayLogGtAnchorTwoSeam` in `MainConjecture`, showing the
+  current global seam is inconsistent at `c = 2`.
+- [ ] Replace root wrappers to consume a new anchor-threshold seam target.
 
-## Remaining Work (~50 lines)
+## Remaining Work (~15-30 lines)
 
 ```lean
-theorem greenRayLogGtAnchorTwo_constructive : GreenRayLogGtAnchorTwoSeam := by
-  intro w hw
-  -- Key: G₂(4·(w/‖w‖)) < log‖w‖ for all ‖w‖ > 1
-  -- Use bound: G₂(z) ≤ log‖z‖ + C for explicit C
-  -- For c=2: C = 4/9
-  -- So G₂(4·u) ≤ log 4 + 4/9 ≈ 1.83
-  -- For ‖w‖ > 4.5: log‖w‖ > 1.5 > needed
-  -- For 1 < ‖w‖ ≤ 4.5: case analysis or tighter bound
+def GreenRayLogGtAnchorThresholdTwoSeam : Prop :=
+  ∀ w : ℂ, green_function (2 : ℂ) (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖ →
+    ∃ ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
+      green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖
+
+theorem greenRayLogGtAnchorThresholdTwoSeam_constructive :
+    GreenRayLogGtAnchorThresholdTwoSeam := by
+  intro w hlog_gt_anchor
+  exact exists_ray_preimage_green_pos (2 : ℂ) (w / ↑‖w‖) ?hu (Real.log ‖w‖) hlog_gt_anchor
 ```
 
 Then replace:
 ```lean
-theorem greenRayLogGtAnchorTwo_seed : GreenRayLogGtAnchorTwoSeam :=
-  greenRayLogGtAnchorTwo_constructive  -- was: greenRayLogGtAnchorTwo_axiom_seed
+-- remove
+axiom greenRayLogGtAnchorTwo_axiom_seed : GreenRayLogGtAnchorTwoSeam
+-- wire all wrappers through GreenRayLogGtAnchorThresholdTwoSeam
 ```

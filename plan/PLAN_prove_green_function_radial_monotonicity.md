@@ -1,7 +1,7 @@
 # Plan: Prove Green Function Radial Monotonicity at `c = 2`
 
 ---
-**Status:** `█░░░░░░░░░` **11%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort:** ~200 lines, 4-6 hrs
+**Status:** `██░░░░░░░░` **18%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort Remaining:** ~120-200 lines, 4-8 hrs
 **Target Axiom:** `green_function_strictMono_along_ray_basin_seam`
 **Last Updated:** 2026-02-26
 ---
@@ -43,8 +43,11 @@ For c=2, the Green function has an explicit Chebyshev-type formula that should m
 - Added constructive anchor-gap large-norm reduction (`greenRayLogGtAnchorTwo*`
   cutoff/band lemmas), reducing non-monotonicity proof debt to a bounded-annulus
   remainder on the anchor-gap side.
+- Added `not_greenRayLogGtAnchorTwoSeam`, formally confirming the anchor-gap
+  seam must be replaced (not proved), which sharpens this plan as the primary
+  remaining mathematical proof target.
 
-## Remaining Work (~200 lines)
+## Remaining Work (~120-200 lines)
 
 ### Phase 1: Chebyshev Representation (~50 lines)
 ```lean

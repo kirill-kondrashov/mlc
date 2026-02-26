@@ -1,7 +1,7 @@
 # Axiom Elimination Status (Umbrella Plan)
 
 ---
-**Status:** `██████████` **99%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort:** ~250 lines total
+**Status:** `██████░░░░` **56%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort Remaining:** ~5-9 hours (~135-230 Lean LOC)
 **Target Axioms:** Both
 **Last Updated:** 2026-02-26
 ---
@@ -21,24 +21,24 @@ All axioms used:
 
 ## Summary
 
-| Axiom | Progress | Effort | Primary Plan |
-|-------|----------|--------|--------------|
-| `greenRayLogGtAnchorTwo_axiom_seed` | `██████████` **95%** | ~50 lines, 1-2 hrs | `PLAN_exists_ray_preimage_green_pos_seam_replacement.md` |
-| `green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` **46%** | ~200 lines, 4-6 hrs | `PLAN_prove_green_function_radial_monotonicity.md` |
+| Axiom | Progress | Left | Effort Remaining | Primary Plan |
+|-------|----------|------|------------------|--------------|
+| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` **90%** | **10%** | ~15-30 lines, 0.5-1.5 hrs | `PLAN_exists_ray_preimage_green_pos_seam_replacement.md` |
+| `green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` **46%** | **54%** | ~120-200 lines, 4-8 hrs | `PLAN_prove_green_function_radial_monotonicity.md` |
 
-**Total: ~250 lines, ~5-8 hours**
+**Total remaining: ~135-230 lines, ~5-9 hours**
 
 ## Plan Files Overview
 
 ### Primary Plans (Directly Target Axioms)
 
-| File | Target | Progress | Lines Needed |
-|------|--------|----------|--------------|
-| `PLAN_prove_green_function_radial_monotonicity.md` | Axiom 2 | `██░░░░░░░░` **18%** | ~200 |
-| `PLAN_green_function_ray_inversion_c2.md` | Both | `███████░░░` **72%** | ~150 |
-| `PLAN_eliminate_green_function_strictMono_along_ray_basin_seam.md` | Axiom 2 | `█████████░` **86%** | ~200 |
-| `PLAN_basin_monotonicity_practical_way_forward.md` | Axiom 2 | `████████░░` **79%** | ~100 |
-| `PLAN_exists_ray_preimage_green_pos_seam_replacement.md` | Axiom 1 | `██████████` **95%** | ~50 |
+| File | Target | Progress | Left | Effort Remaining |
+|------|--------|----------|------|------------------|
+| `PLAN_prove_green_function_radial_monotonicity.md` | Axiom 2 | `██░░░░░░░░` **18%** | **82%** | ~120-200 lines |
+| `PLAN_green_function_ray_inversion_c2.md` | Both | `██████░░░░` **57%** | **43%** | ~70-110 lines |
+| `PLAN_eliminate_green_function_strictMono_along_ray_basin_seam.md` | Axiom 2 | `██████░░░░` **58%** | **42%** | ~90-130 lines |
+| `PLAN_basin_monotonicity_practical_way_forward.md` | Axiom 2 | `███████░░░` **68%** | **32%** | ~30-60 lines |
+| `PLAN_exists_ray_preimage_green_pos_seam_replacement.md` | Axiom 1 | `█████████░` **90%** | **10%** | ~15-30 lines |
 
 ### Removed As Irrelevant To Current `mlc_conjecture` Frontier
 

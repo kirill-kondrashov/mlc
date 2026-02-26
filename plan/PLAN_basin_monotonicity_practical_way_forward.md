@@ -1,7 +1,7 @@
 # Plan: Basin Monotonicity Practical Way Forward
 
 ---
-**Status:** `███████░░░` **74%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~100 lines, 2-3 hrs
+**Status:** `███████░░░` **68%** | **Relevance:** ⭐⭐⭐ | **Effort Remaining:** ~30-60 lines, 1-2 hrs
 **Target Axiom:** `green_function_strictMono_along_ray_basin_seam`
 **Last Updated:** 2026-02-26
 ---
@@ -23,7 +23,7 @@
 - [ ] Root theorem `external_ray_map_exists_two_constructive` still uses the
   legacy strict-mono path and is the remaining call site to replace.
 
-## Remaining Work (~100 lines)
+## Remaining Work (~30-60 lines)
 
 ### A. Replace Theorem Target
 - [ ] Introduce a new seam/target statement for strict monotonicity along
@@ -72,6 +72,8 @@
   `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
   `greenRayLogGtAnchorTwoSeam_of_cutoff_band`) to isolate remaining seam debt
   to bounded annulus data.
+- [x] Added `not_greenRayLogGtAnchorTwoSeam`, proving the old global
+  anchor-gap seam is inconsistent and must be replaced rather than proved.
 - [x] Added packaged ingress:
   `GreenFunctionDegreeOneIngressTwo` and root wrapper
   `mlc_conjecture_of_green_function_degreeOneIngressTwo`.

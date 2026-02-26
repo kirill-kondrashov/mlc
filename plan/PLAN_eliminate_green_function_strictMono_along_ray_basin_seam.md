@@ -1,7 +1,7 @@
 # Plan: Eliminate `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`
 
 ---
-**Status:** `████████░░` **82%** | **Relevance:** ⭐⭐⭐⭐ | **Effort:** ~200 lines, 4-6 hrs
+**Status:** `██████░░░░` **58%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort Remaining:** ~90-130 lines, 2-4 hrs
 **Target Axiom:** `green_function_strictMono_along_ray_basin_seam`
 **Last Updated:** 2026-02-26
 ---
@@ -55,6 +55,9 @@ make check shows:
   anchor seam to bounded annulus data (`greenRayLogGtAnchorTwoCutoff`,
   `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
   `greenRayLogGtAnchorTwoSeam_of_cutoff_band`).
+- [x] Added `not_greenRayLogGtAnchorTwoSeam` (in `MainConjecture`) to show the
+  old global anchor-gap seam is inconsistent; strict-mono remains the sole
+  substantive replacement proof debt on this branch.
 
 ## Key Blockers
 
@@ -68,7 +71,7 @@ theorem not_knownInjOnOutsideOpenSourceCandidateTwo : ¬ KnownInjOnOutsideOpenSo
 
 **Conclusion: Must prove monotonicity directly.**
 
-## Remaining Work (~200 lines)
+## Remaining Work (~90-130 lines)
 
 The only path forward is to prove:
 ```lean
