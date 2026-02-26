@@ -3993,6 +3993,27 @@ theorem cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_un
   exact injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
     huniq_seam hlog_gt_anchor
 
+/-- Landing branch seam at `c = 2` from Green-ray uniqueness+anchor seams. -/
+theorem cp5ResidualLandingInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    CP5ResidualLandingInjSeamTwo := by
+  intro _hland
+  exact injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    huniq_seam hlog_gt_anchor
+
+/-- Unconditional CP5 residual→injectivity seam at `c = 2` from Green-ray
+uniqueness+anchor seams via both branch seams. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_of_branchSeams
+    (cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+    (cp5ResidualLandingInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
+
 /-- CP5 residual→injectivity seam under no-landing at `c = 2` from
 Green-ray uniqueness+anchor seams. -/
 theorem cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_not_externalRayLandsOutsideOpen
@@ -4028,6 +4049,22 @@ replacement is frontier-safe with respect to `external_ray_map_exists`. -/
 theorem cp5ResidualLocalHomeomorphInjSeamTwo_strictMono :
     CP5ResidualLocalHomeomorphInjSeamTwo :=
   cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
+    greenRayLogGtAnchorTwo_seed
+
+/-- Strict-mono routed landing branch seam at `c = 2`.
+This closes the Branch-2 seam endpoint on the current axiom frontier. -/
+theorem cp5ResidualLandingInjSeamTwo_strictMono :
+    CP5ResidualLandingInjSeamTwo := by
+  exact cp5ResidualLandingInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
+    greenRayLogGtAnchorTwo_seed
+
+/-- Strict-mono routed unconditional CP5 residual→injectivity seam from both
+branch seams. -/
+theorem cp5ResidualInjOnOutsideOpenSeamTwo_strictMono :
+    CP5ResidualInjOnOutsideOpenSeamTwo :=
+  cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
     greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
     greenRayLogGtAnchorTwo_seed
 
@@ -4068,9 +4105,9 @@ theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_o
     (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
     (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
     CP5ResidualTwo → Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam_of_cp5ResidualTwo_of_not_externalRayLandsOutsideOpen_fn
-    huniq_seam hlog_gt_anchor
-    not_externalRayLandsOutsideOpen_two_of_extended_ray_boundary_continuity
+  external_ray_map_exists_two_constructive_of_cp5ResidualTwo_of_seam
+    (cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      huniq_seam hlog_gt_anchor)
 
 /-- Strict-mono-seeded unconditional CP5 residual endpoint function at `c = 2`.
 -/
