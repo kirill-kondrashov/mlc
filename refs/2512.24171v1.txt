@@ -1,0 +1,1048 @@
+                                                                   On the MLC Conjecture and the
+                                                             Renormalization Theory in Complex Dynamics
+                                                                                             Dzmitry Dudko∗
+arXiv:2512.24171v1 [math.DS] 30 Dec 2025
+
+
+
+
+                                               Abstract. In this Note, we present recent developments in the Renormalization Theory of quadratic
+                                           polynomials and discuss their applications, with an emphasis on the MLC conjecture, the problem of local
+                                           connectivity of the Mandelbrot set, and on its geometric counterparts.
+
+                                               1 Introduction. The Mandelbrot set M (Figure 1) is one of the most recognizable fractals in mathematics
+                                           and beyond. It encodes the dynamical dependence of quadratic polynomials on the parameter. A central question
+                                           in Complex Dynamics is the MLC Conjecture, also known as the Rigidity Conjecture:
+                                               MLC Conjecture 1.1. The Mandelbrot set M is locally connected.
+                                                This conjecture has various geometric and probabilistic counterparts; all of them are subjects of the
+                                           Renormalization Theory of M, which analyzes first return maps to small neighborhoods of special points. Nature
+                                           and the classification of these first return maps is in focus of this Note. Let us start by outlining its context.
+                                                In Section 1 below, we give an informal introduction to renormalization ideas. Although the MLC is a
+                                           topological statement, any substantial progress typically requires geometric input. Conjecture 1.2 states a simple
+                                           geometric property of hyperbolic components that easily implies the MLC. A foundation of any renormalization
+                                           theory is a priori bounds, see Conjecture 1.3: as we zoom into the Julia set and endow it with the first return
+                                           map, we expect precompactness. A similar precompactness is expected in the parameter plane, see §1.4. In §1.3,
+                                           we classify (sequences of) first return maps as either renorm-expanding or renorm-balanced. The exposition in
+                                           Section 1 is conjectural, but it has been justified in many cases.
+                                                Historical background is presented in Section 2, where we also sketch the evolution of key ideas and briefly
+                                           comment on the higher-degree cases. The development of the renormalization theory can be broadly divided into
+                                           several stages. First, as already mentioned, initial a priori bounds are required. These are used in justifying
+                                           various rigidity properties, e.g., the MLC. Next, a detailed geometric analysis of the convergence of first-return
+                                           maps follows; a desired goal is to establish the hyperbolicity of the associated operator. Finally, deep applications
+                                           can be derived; for instance, the “regular vs stochastic” dichotomy describing the nature of chaos.
+                                                Section 3 is dedicated to the theory of renormalization operators acting on infinite-dimensional spaces of
+                                           maps. We recognize three types of renormalization regimes: near-Neutral, if some hyperbolic components become
+                                           unbounded in the respective (small) parameter neighborhoods relative to the scale, Quadratic-Like, in the presence
+                                           of intermediate hyperbolic components relative to the scale, and Puzzle (it is intertwined with the renorm-
+                                           expanding notion), if all hyperbolic components become negligible relative to the scale. We outline the quadratic-
+                                           like (“ql”) renormalization theory in its pure, bounded-type form. Its hyperbolicity program is now complete
+                                           by Theorem 3.3, thanks to Theorem 4.1. We summarize the status of the near-Neutral Case and mention how
+                                           Theorem 4.2 provides an opening towards the full hyperbolicity of the Neutral Renormalization and beyond,
+                                           see §3.8. We will also discuss the puzzle regime in §3.9 and put forward Problem 3.1 on whether all these three
+                                           regimes can be neatly integrated.
+                                                In Section 4, on the Near-Degenerate Regime, we illustrate the sources of a priori bounds on dynamical
+                                           scales representing definite positive-entropy “≥ ε > 0” (primitive ql and puzzle cases that are “ε-away” from the
+                                           main Molecule) and zero-entropy (Molecule: neutral and bounded-type satellite ql) settings. We conclude by
+                                           summarizing the current status of the MLC as two problems: completing the remaining unbounded satellite cases
+                                           and developing interpolation techniques between definite positive and zero entropy settings. The former relies on
+
+                                             ∗ Department of Mathematics, Stony Brook University, USA
+                                               ``chaos''
+                   zero
+                  entropy                         11
+                                                                                           M
+
+                                               II i
+                                   IIIIII iiII111
+                                                11 11
+                                                   11
+                                                  11
+                                                 111
+                                                  11
+                                                   1111111111
+
+
+
+                                                   11
+                                                         i'iiiiiiiiiiiiiiiiiiiiiiiii
+                                                                                           c¤
+               attractor for
+              x 7! ¸x(1¡x)
+                                          ¸¤                                           ¸
+Figure 1: The Mandelbrot set (right) and the period-doubling cascade (left, colored in blue). The period-doubling
+Feigenbaum parameter λ∗ ≃ c∗ marks the transition from zero entropy to positive entropy; it is where the “chaos”
+emerges. This transition is universal; its complexification is shown in Figure 2.
+
+
+further development of the theory behind almost-invariant pseudo-Siegel disks, Figure 14. For the latter, we put
+forward a strategy based on partially invariant virtual Julia sets which control only partial postcritical sets. If
+these programs are achieved, they would establish a priori bounds for all quadratic polynomials and open a clear
+path towards the MLC (rigidity) and its geometric and probabilistic counterparts discussed in this Note.
+     1.1 Renormalization: summary and motivation. The renormalization Rη pc of a quadratic polynomial
+pc : z 7→ z 2 + c can be defined as the rescaled first return map to a small η-neighborhood of the critical value,
+see (1.2). A single iterate of Rη pc controls a long finite orbit of pc . Hence, instead of iterating pc , we wish to
+iterate renormalization
+                                                                                                       “ lim ”
+(1.1)                     pc ⇝ Rη1 pc ⇝ Rη2 pc ⇝ . . . ⇝ Rηn pc ⇝ . . .                                −→
+
+and then deduce strong dynamical consequences for pc . To realize such a vision, initial a priori bounds
+(precompactness conditions) are required, see Conjecture 1.3.
+                                                    ′
+    We have two cases. If the derivative Rηn pc (z) typically grows, then we should expect an almost linear
+                                             
+
+phase-parameter relationship between M and Jc at c as illustrated in Figure 8. We call this regime renorm-
+                                                                                              ′
+expanding, see §1.3; it is controlled by puzzles. On the other hand, if the derivative Rηn pc (z) is bounded, then
+there should be geometric limits for the renormalization, see (1.3). We refer to this regime as renorm-balanced.
+    1.2 Hyperbolic components. For a hyperbolic component H ⊂ M, we denote by MH the associated
+small copy of M centered at H. We recall that H consists of parameters with an attracting periodic cycle and
+can be of two types, see Figure 3: satellite, when H is an analytic disk, and primitive, when H is an analytic
+image of the filled cardioid. On pictures, hyperbolic components always have a flawless shape.
+    Conjecture 1.2 (Bounded geometry of H ⊂ MH ). Every closed hyperbolic component H is a uniform qc
+disk or a uniform qc filled cardioid; its diameter diam(H) is uniformly comparable to diam(MH ).
+Conjecture 1.2 easily implies the MLC: if MHn is a sequence of strictly nested small copies of M, then the
+diameter of MHn shrinks because of finiteness of the area:
+        X             2 X           2 X                                                             \
+             diam(MHn ) ∼     diam(Hn ) ∼   area(Hn ) < ∞,                                      thus         MHn is a singleton.
+        n                      n                                                   n                   n≥1
+
+
+This implies the MLC by Yoccoz’s results, see (2.1). For primitive H, Conjecture 1.2 is expected to follow from
+a priori bounds of ql type §3.2; cf. Conjecture 1.3 below. For satellite H, the hyperbolicity of the Molecule
+renormalization is likely necessary, see Conjecture 3.6.
+   1.3 Dynamical limits. Let us consider the dynamical plane of pc for a non-parabolic c ∈ ∂M.
+(Renormalizations for parabolic c ∈ ∂M arise through limits cn → c, see §3.5.) For a small η > 0 and the
+                                                         zoom
+
+
+
+                            c¤                                     c¤
+
+
+
+
+ Figure 2: The universality of the Mandelbrot set at the period-doubling Feigenbaum parameter c∗ , see also
+ Figure 1. The renormalization theory justifying this universality has been successfully developed in the 1990s,
+ see §2. The MLC at c∗ has been recently established in Theorem 4.1.
+
+
+ associated η-neighborhood of the critical value c, the renormalization Rη pc of pc is the rescaled first return map
+ of pc from this η-neighborhood back to itself; we write:
+                              h 
+                                   η-rescaled
+                                              i       1 q           
+ (1.2)                         pqc                                                    pc (z) = z 2 + c,
+                                                               
+                  Rη pc (z) =                   (z) =   pc ηz + c − c ,
+                                                      η
+
+ where q ≡ q(ηz + c) is the first return time of the point ηz + c back to the η-neighborhood of c. The η-rescaling
+ identifies the η-neighborhood of c with the 1-neighborhood of 0.
+     Conjecture 1.3 (Uniform a priori bounds). With appropriate understanding, the family of renormaliza-
+ tions (1.2) is precompact uniformly over all η > 0 and c ∈ ∂M.
+ In particular, as we zoom into the Julia set Jc of pc at c, the shape of Jc (e.g., its veins) should stay within a
+ precompact class of configurations. Let us detail more what we expect from Conjecture 1.3.
+     In (1.2), different points can have different return times; and some points may not return to the selected
+ neighborhood. Consider an iterate pqc realizing a first return of some point in the η-neighborhood of c back to the
+                                                               (q)        η-rescaled
+ neighorhood. Rescaling pqc , we obtain a globalized branch Rη pc ≡ pqc               : C → C of Rη pc .
+     Consider now a sequence ηn → 0 and the associated renormalizations Rηn pc . We refer to the ηn ’s as dynamical
+ scales. Up to passing to a subsequence, we anticipate only two possibilities:
+                                                                         (q ) ′
+(Exp) renorm-expanding case: for all choices of branches, the derivative Rηnn pc (z) tends to infinity for a typical
+      (roughly, non-critical) z ∈ C; or
+
+(Ren) renorm-balanced case: for some choices of globalized branches, there is a well-defined geometric limit,
+      transcendental or polynomial (locally uniformly on UG ):
+
+      (1.3)                 ∃ G : UG → C = lim R(q        n)
+                                                                  
+                                                        ηn pc : C → C ,        ηn → 0.
+                                                   n→∞
+
+
+ We anticipate that the renorm-balanced case (Ren) occurs when certain hyperbolic components near c do not
+ shrink in the respective parameter scales (see §1.4), so that the periodic cycles associated with such non-negligible
+ hyperbolic components prevent expansion; cf. Conjecture 1.2.
+     By considering all sequences of dynamical scales ηn → 0, we say that c ∈ M is
+
+    • pure renorm-expanding, if it is renorm-expanding with respect to any ηn → 0; and
+
+    • pure renorm-balanced, if it is renorm-balanced with respect to any ηn → 0.
+                           Primitive
+                                                                                    Satellite
+
+
+
+
+Figure 3: Primitive and satellite hyperbolic components. Around every hyperbolic component, there is an
+associated primitive or satellite little copy of the Mandelbrot set. It is expected, cf. Conjecture 1.2, that all
+hyperbolic components have uniform geometry. The difference between the satellite (zero entropy) and primitive
+(positive entropy) cases is profound and has many implications; e.g., see Figures 12 and 13.
+
+
+     There are four main renormalization theories in the pure renorm-balanced case: primitive/satellite quadratic-
+like, near-parabolic, and near-Siegel; the last two are subtypes of near-neutral. These theories have many
+similarities as well as certain fundamental differences. The general case is a combination of all the above regimes,
+where various dynamical scales of pc can exhibit different renormalization flavors; see Section 3 and Question 3.1.
+    1.4 Parameter limits. Recall [10] that the parameter and dynamical Böttcher functions provide conformal
+identification of C
+                  b \ M and C
+                            b \ Jc . Therefore, dynamical scales ηn as in §1.3 have associated parameter scales δn
+defined up to appropriate choices. Let us write the parameter counterpart to (1.2):
+                                                      (δ, η)-rescaled       1 q                        
+(1.4)
+                                                                                                 
+             R(δ,η) pc+τ    τ ∈C
+                                 =        pc+τ   τ ∈C
+                                                                           =     pc+δτ ηz + c + δτ − c − δτ ,
+                                                                               η
+i.e., all nearby maps pc+δτ are η-rescaled with respect to the same return times as pc , while the parameter
+dependence is δ-rescaled. The notion of branches is defined accordingly.
+     Similar to Conjecture 1.3, we expect the precompactness of (1.4) to hold uniformly over all c and across all
+scales. In fact, we anticipate much stronger properties: convergence toward the limits should be exponentially
+fast, under an appropriate understanding, both in the parameter and dynamical planes, see §3. Such statements
+are commonly referred to as universality and are illustrated in various figures throughout this Note.
+    2 Historical Perspective. The problem of local connectivity of the Mandelbrot set M, known as the
+MLC Conjecture, was put forward in the 1980s by Douady and Hubbard, who also developed the foundational
+theory of M, [10, 11]. It was the time when the first computer pictures of M were generated; these pictures, ever
+since, have been providing invaluable guidance in research.
+    Yoccoz’ results from the early 1990s reduced the MLC Conjecture to the following rigidity statement [23]:
+
+(2.1)       if   M1 ⊋ M2 ⊋ · · · ⊋ Mn ⊋ . . .               are nested small copies of M,
+                                                                                   ∞
+                                                                                   \
+                                                                          then         Mn = {c}      is a singleton.
+                                                                                      n=1
+
+This linked the MLC to the renormalization theory.
+    Before the Mandelbrot set and its pictures, there has been the Logistic Family which encodes the real vein
+M ∩ R of the Mandelbrot set:
+
+(2.2)                             x 7→ λx(1 − x) : [0, 1] ý ,                     λ ∈ [0, 4].
+
+The discovery of chaos is due to Poincaré (sensitive dependence combined with recurrence in the 3-body problem,
+the late 19th century). In an attempt to understand this phenomenon, much of the research activity in the second
+half of the 20th century was focused on the study of the Logistic Family (e.g., Ulam, Neumann in the 1940s,
+                                                             zoom
+                                                                                    c²
+
+
+
+                                        c²
+Figure 4: Universality of the Mandelbrot set at the golden-mean Siegel parameter c• . The dynamical universality
+of z 2 +c• is depicted in Figure 5. Theorem 3.4 completed the program towards the hyperbolicity of the near-Siegel
+renormalization of bounded-type.
+
+
+Lorenz, Myrberg, Sharkovsky in the 1960s, Misiurewicz, Guckenheimer in the 1970s). The Combinatorial Theory
+of (2.2) was designed by Milnor and Thurston in the late 1970s in terms of kneading sequences.
+     Fifty years ago, the period-doubling universality in (2.2) was discovered by Feigenbaum [21] (the parameter
+universality) and, independently, by Tresser and Collet [9] (the dynamical universality); see Figures 1 and 2. This
+was the beginning of the Renormalization Theory in Dynamics; many renormalization ideas have been imported
+from Quantum Field Theory and Statistical Mechanics. The first computer-assisted proof of the period-doubling
+universality was presented by Lanford [33] in the early 1980s. A computer-free proof, with numerous extensions
+to other cases, was only achieved in the late 1990s using complex methods.
+     In his address to the ICM in 1986 [47], Sullivan proposed a program to approach the period-doubling
+universality based upon Teichmüller theory by employing the Douady-Hubbard quadratic-like theory. Sullivan
+partially realized this program in [48] by constructing a renormalization fixed point and justifying (non-
+exponential) convergence towards the fixed point within its hybrid class. The exponential convergence (the
+dynamical universality) was justified by McMullen in [41]. The program was completed by Lyubich in [36] who
+established the parameter universality.
+     Meanwhile, a complete renormalization theory has been successfully developed for the Logistic Family [40,
+35, 22], culminating in the “regular vs stochastic” dichotomy [38] by Lyubich; i.e., the Logistic Family became
+the first natural class of maps outside of the hyperbolic setting for which chaos was well understood. Later, the
+dichotomy was refined to “regular vs Collet-Eckmann” by Avila and Moreira in [4].
+     In its foundation, the success with the Logistic Family relied on real a priori bounds which are unavailable
+for genuine complex maps. Moreover, various near-Neutral phenomena are not witnessed by the Logistic Family.
+For instance, there are Julia sets that are not Locally Connected – the non-JLC Category. Even if the Julia set of
+a map is locally connected, the map can have many renormalization “near non-JLC” levels where ql-bounds fail.
+     Interest in the near-Neutral/Rotational Dynamics is rooted in the classical Celestial Mechanics. The first
+breakthroughs in the linearization of circle diffeomorphisms and local maps were made by Denjoy (1932) and
+Siegel (1942). In the 1950s and 60s, the Kolmogorov-Arnold-Moser (KAM) theory emerged, resulting in the
+reenvision of the near-rotation phenomenon in Mathematics and Physics. The Renormalization Ideas introduced
+in the mid-1970s led, in particular, to numerous conjectures in Low-Dimensional Dynamics, including the nature
+of the KAM small divisor problem. The theory of analytic circle diffeomorphisms and Local Theory for neutral
+holomorphic germs and quadratic polynomials received an essentially complete treatment in the second half of the
+last century in the work by Arnold (in the KAM framework), Cherry, Bruno, Herman, Yoccoz, and Perez-Marco.
+     For quadratic polynomials, the Neutral Family
+
+(2.3)                                z 7→ e2πiθ z + z 2 : C ý,      θ ∈ R/Z,
+
+encodes the boundary of the main hyperbolic component of M. There are two renormalization theories that
+                                                        zoom
+
+
+                                              c²
+                                                                                        c²
+             Douady-Ghys
+              qc-surgery                                                 Limiting Transcendental
+                                      z 2 + c²
+                                                                                    Dynamics
+Figure 5: The universality of the Golden Siegel map z 2 + c• , where the parameter c• is depicted in Figure 4. The
+source of a priori bounds for the respective renormalization theory is the Douady-Ghys qc surgery; it transfers
+real a priori bounds from Blaschke maps to complex Siegel polynomials of bounded-type.
+
+
+
+analyze the Global Theory of the Neutral Family.
+     Renormalization Theory of (bounded-type) Siegel maps, also initiated by physicists, was mathematically
+designed by McMullen in [42] in the mid-1990s. He established the dynamical universality as shown in Figure 5.
+The parameter counterpart, Figure 4, was developed two decades later in [20, 17], using the framework of the
+pacman renormalization. Theorem 3.4 states the hyperbolicity of the associated renormalization; its proof employs
+Transcendental Dynamics §3.7.
+     The significance of the near-parabolic renormalization (see Figures 6 and 7) has been demonstrated by
+Shishikura in the 1990s in [43], where he showed that the Hausdorff dimension of ∂M is equal to 2. (The
+area of ∂M is expected to be 0, see §3.8.) The argument in [43] involved two iterates of the near-parabolic
+renormalization. Control of infinite iterates became available in the mid-2000s when Inou and Shishikura
+established the hyperbolicity of the near-parabolic renormalization. New sectorial a priori bounds, see Figure 10,
+were put forward and justified in the perturbative regime; these were the first bounds in the non-JLC Category.
+Many applications followed. For instance, the first examples of positive area Julia sets were constructed by Buff
+and Chéritat in [6], and then, of a different type, by Avila and Lyubich [2]. In the mid-2010s, exact models of the
+postcritical sets were produced for neutral maps (Siegel and Cremer) [44, 8] in the Inou-Shishikura class.
+     Many global properties of the Neutral Family (2.3) are closely linked to those of unicritical circle maps; cf. the
+Douady-Ghys qc-surgery in Figure 5. The Renormalization Theory of unicritical circle maps was fully developed
+(up to uniform hyperbolicity) in the works of de Faria, de Melo, and Yampolsky by the early 2000s.
+     In the mid-2000s, motivated by W. Thurston’s work on 3-manifolds and postcritically finite rational
+maps [50, 12], Kahn introduced the Near-Degenerate regime to Renormalization theory [25]. Jointly with Lyubich,
+they developed a machinery [30, 27, 28] that established quadratic-like a priori bounds for ql-combinatorics of
+positive core-entropy ≥ ε > 0. It became apparent that this new theory provides an adequate replacement for the
+framework of real a priori bounds in the genuine complex setting. However, at that time, the theory could not
+handle the zero-entropy setting (e.g., the non-JLC Category), and its development halted for more than a decade.
+     The Near-Degenerate regime in the zero-entropy setting was designed in [16], see Theorem 4.2, using the
+framework of almost-invariant pseudo-Siegel disks. Theorem 4.2 established a priori bounds for all maps in
+the Neutral Family (2.3); in particular, providing the first non-perturbative a priori bounds in the non-JLC
+Category. Various ideas behind [16] shaped follow-up research activities. In particular, Theorem 4.1, [18] has
+finally confirmed the MLC at the classical period-doubling Feigenbaum parameter shown in Figures 1 and 2.
+     Advances in the renormalization theory of the Mandelbrot set have often provided guidance for more general
+settings. In the 2000s, various deep results for the Logistic Family have been extended to more general classes of
+real analytic maps; see [3, 32, 31]. For higher-degree polynomials, the Fibonacci-type renormalization discovered
+in [39] does not degenerate; employing the real bounds, this renormalization was successfully understood,
+                                                           zoom
+
+                                           1=4                                                   zoom
+
+
+
+                                                                 Elephants   an
+                                                                                    bn
+
+                                  1
+                           z2 +
+                                  4
+
+
+
+
+  Figure 6: Parabolic Enrichment. Top: the Elephant structure in the parameter plane. Bottom: dynamical planes
+                                               q                                              [1] 
+  p1/4 , pan , pbn . As n → ∞, the pair pan , pa1,n   converges to the commuting pair p1/4 , pa∞ , see Figure 7, where
+                                                    
+                                                 n
+   [1]                                                                                      q                         [1]
+  pa∞ is the associated Lavaurs transcendental map. Similarly, the neutral pairs (pbn , pbn1,n ) converge to (p1/4 , pb∞ ).
+  Lavaurs limits in the neutral case are efficiently encoded by continued fractions, see §3.4.
+
+
+  see [45, 46]. With the introduction of the Near-Degenerate Regime, the complex Fibonacci case also became
+  amenable to control, leading to generalizations of Yoccoz-type results to higher-degree polynomials [29, 1].
+  Recently, in my joint work with Drach [13], Yoccoz-type realization and rigidity results were established for
+  Transcendental Dynamics (for maps of controlled finite order and without asymptotic values) by developing a
+  transcendental version of the near-degenerate analysis.
+      In the 2020s, the Near-Degenerate regime has also been introduced for rational maps. In my joint work with
+  Luo [15], a priori bounds were established for hyperbolic components of disjoint type in the space of rational
+  maps, leading to various realization results. This confirms McMullen’s conjecture in the disjoint-type case from
+  the 1990s, which asserts that Sierpiński hyperbolic components are bounded. Simultaneously, Kahn [26] presented
+  an independent approach with a different scope to a priori bounds for establishing McMullen’s conjecture (for all
+  Sierpiński cases). Meanwhile, Lim [34] established bounds for rotating Herman curves of bounded-type rotation
+  speed, leading to the development of the corresponding renormalization theory.
+      A popular version of the MLC story has been presented in a 2024 Quanta Magazine article [7].
+      3 Renormalization operators. Following the discovery of the period-doubling universality (Figure 1), the
+  framework of analytic renormalization operators acting on infinite-dimensional spaces of maps was put forward.
+  The hyperbolicity of such operators always yields important consequences. There are two kinds of hyperbolicity
+  frameworks:
+ (QL) Quadratic-Like Renormalization acting on ql maps as illustrated in Figure 9, top; and
+(Neut) Near-Neutral (Cylinder or Sectorial) Renormalization, see Figures 10 and 7.
+         In addition to the (QL) and (Neut) Cases, let us also recognize:
+ (Puz) Puzzle (or generalized ql) Renormalization encoding the first return map to a puzzle, Figure 9, bottom.
+      The (QL) bounded-type case is classical and
+                                              T now complete. The bounded-type condition refers to parameters
+  c within nested intersection of small copies n Mn as in (2.1), so that the relative periods of Mn+1 rel Mn
+                                              ¡          [1] ¢
+            p1=4                                p a 1; p a 1 =                                   pa n
+                                                     ¡         q1;n ¢
+                                              lim pan; pan ;
+                                                  n
+
+                                              pa1 = p1=4
+
+
+
+
+            Cylinder                 ps1=4 +1                lim                        psan +1
+            Renorm-n : +1                                                     +1
+
+
+                                                                                        q1;n¡s
+               attracting           linear            repelling                       pa n
+               cylinder                               cylinder
+                            ¡1                ¡1                              ¡1                 ¡1
+                                                                q
+Figure 7: Top: as an → 1/4, see Figure 6, the first return map pn1,n converges to the transcendental Lavaurs map
+ [1]
+pa∞ commuting with p1/4 . Bottom: the associated cylinder renormalization. See §3.5 for details.
+
+
+
+are uniformly bounded. Equivalently, in the dynamical planes of pc , for every dynamical scale η (as in §1.3), pc
+has a quadratic-like structure pqc : U ′ → V ′ with a non-escaping critical orbit so that |V ′ | ≍ η. Similarly, the
+name “bounded-type” is used elsewhere in the renormalization theory, e.g., for neutral maps. In the late 1990s,
+the hyperbolicity problem in the bounded-type ql case was reduced to the justification of quadratic-like bounds.
+They have been recently supplied by Theorem 4.1, completing the program; see Theorem 3.3.
+    The hyperbolicity theory for neutral maps emerged in the mid-2000s, when Inou and Shishikura established the
+hyperbolicity for near-parabolic renormalization. We will state this result in §3.6. The hyperbolicity of near-Siegel
+renormalization was established a decade later; see §3.7. The neutral and satellite ql renormalization naturally
+form the Molecule renormalization, see Figure 11 and §3.8. The hyperbolicity of such a renormalization is likely
+required for Conjecture 1.2 and the area-zero conjecture on ∂M. Conjecturally, there is no renorm-expanding
+regime on the Molecule: every parameter there has substantial hyperbolic components in all scales.
+    In short, the Puzzle Renormalization deals with the renorm-expanding (see §1.3) and “virtual primitive ql”
+(central cascades §3.9) regimes. In the renorm-expanding regime, there are no geometric limits as in (1.3), but
+there is a strong phase-parameter relation between the Mandelbrot and Julia sets as illustrated in Figure 8. One
+may hope that this case can also be neatly integrated into the hyperbolicity framework:
+    Question 3.1 (Uniform hyperbolicity rel ∂M). Is there a renormalization operator of a hyperbolic nature,
+associated with all parameters and scales of ∂M, with dimension 1 unstable directions, such that the operator
+combines all the above kinds of renormalization regimes: (QL), (Neut), (Puz)?
+
+Here is a hoped-for universality statement from a desired operator in Question 3.1. Consider a continuous zooming-
+in at c ∈ ∂M. If in a small δ-scale of c, all hyperbolic components of M are small rel δ, then we expect a form
+of Tan-Lei type similarity between M and Jc as depicted in Figure 8. If there is an unbounded (of size ≫ δ)
+hyperbolic component of M hitting the δ-scale of c, cf. Figure 4, then we anticipate strong near-Neutral effects.
+And if all non-negligible hyperbolic components of M are intermediate in the δ-scale of c, cf. Figure 2, then the
+quadratic-like features emerge. Finally, if the δ1 scale of c1 is combinatorially close to the δ2 -scale of c2 , then
+these scales should also be close geometrically. The last statement is a standard application of the hyperbolicity
+framework of the renormalization.
+                                                                      c
+               M
+                                  c
+                                                                                      Jc
+
+              zoom                                                 zoom
+
+
+
+
+                                                       '                             c
+                                c
+                                                     almost
+                                                     linear
+
+Figure 8: It is natural to ask if a form of Tan-Lei type similarity [49] (e.g., for the vein structure) between
+respective small neighborhoods of M and Jc at c occurs if and only if (parameter) hyperbolic components of M
+become negligible; this is related to the notion of the renorm-expanding in §1.3. For puzzles and parapuzzles, the
+Almost-Linear relation (similarity) was established for Yoccoz maps in [37], see §3.9.
+
+
+                                                                                                               2:1
+    3.1 Analytic and laminar structures on the space of ql maps. A quadratic-like map f : U −→ V
+is a degree 2 holomorphic branched covering between open disks U ⋐ V ⋐ C, see Figure 9. The set of its
+non-escaping points Kf := {z ∈ U : f n (z) ∈ U ∀n ≥ 1} is called the filled Julia set of f : U → V . The
+boundary Jf := ∂Kf is the Julia set of f . The Julia set is connected if and only if the unique critical point of f
+is non-escaping. In this case, f is hybrid equivalent to a unique polynomial pc : z 7→ z 2 + c with c = c(f ) ∈ M:
+there is a qc conjugacy h between f : U → V and a quadratic-like restriction pc : A → B such that h is conformal
+on the non-escaping sets.
+    Here and elsewhere, by a slight thinning of V and U, we can assume that U is a closed topological disk. A
+small Banach neighborhood of f : U → V is the set of all analytic maps close to f in the sup-norm:
+
+(3.1)                                 Bε (f | U ) = {g : U → V : ∥f − g∥U ≤ ε}.
+
+Let V ′ ⋐ V be a slight thinning of V . If ε is sufficiently small, then every g ∈ Bε (f | U ) admits a quadratic-like
+                   2:1
+structure g : Ug −→ V ′ , where Ug is the unique g-lift of V ′ . This naturally introduces complex analytic structure
+for quadratic-like maps. There are two natural equivalences on the space of quadratic-like maps f : U → V : linear
+conjugacy (i.e., rescaling) and thickening/thinning U and V . In [36], respecting these equivalences, the space of all
+quadratic-like maps QL was supplied with complex-analytic structure induced by small Banach balls as in (3.1).
+In this space, hybrid-equivalent maps form a codimension 1 lamination with analytic leaves. The holonomy along
+hybrid leaves is qc and is asymptotically conformal. Such a holonomy combined with the hyperbolicity rigorously
+justifies various universalities as in Figure 2. For near-Neutral Renormalization, establishing an appropriate
+version of the following consequence of the laminar structure is one of the key technical challenges, see §3.7, §3.8.
+   Lemma 3.2 ([36], codim = 1 stability of a ql f ). Let f : U → V be a ql map with a connected Julia set as
+above. Then, for a small ε > 0, there is an analytic function τ : Bε (f | U ) → C such that f, g ∈ Bε (f | U ) are
+hybrid conjugate if and only if τ (f ) = τ (g).
+                                               f                             zoom                               f1
+                                                                                                    V1
+                                         V
+                                               U                f1 = f p                              U1
+
+
+
+
+                                     2:1
+             1:1
+                                                    g
+                                                                                         X
+                                               Y1
+                                                                                                                    Y1
+                                                    g1 is the ¯rst return
+                                Y                   map of g back to Y1
+                                                                                                                g1
+                                                                           2:1                                2:1
+Figure 9: Top: Quadratic-Like Renormalization f1 = f p : U1 −→ V1 is obtained from f : U −→ V by iterating,
+restricting, and then linear rescaling, see §3.3. Bottom: Puzzle (or generalized ql) Renormalization is the first
+return map to a puzzle Y1 , see §3.9.
+
+                                                              2:1
+    3.2   QL Compactness. Given a ql map f : U −→ V , its modulus is either
+(3.2)                mod(f ) := mod(V \ U )                or                    mod+ (f ) := mod(V \ Kf );
+both quantities are compatible. If Kf is a Cantor set, then mod+ (f ) is the supremum of moduli over all annuli
+in the correct homotopy class separating ∂V from Kf . Given a δ > 0, the space of ql maps with mod+ (f ) ≥ δ is
+compact: every sequence of ql maps fn with mod+ (fn ) ≥ δ has a convergent subsequence within QL; the limit
+f∞ also satisfies mod+ (f∞ ) ≥ δ. More generally, instead of separating ∂V and Kf , we can measure the separation
+between ∂V and the postcritical set. (In this framework, sequential limits of ql maps are, in general, outside the
+QL space.) This approach is adopted for near-neutral maps where the classical ql bounds fail, see §3.4.
+                                                                                                                         2:1
+     3.3 QL Renormalization operator. As Figure 9 illustrates, a ql renormalization f1 = f p : U1 −→ V1
+            2:1
+of f : U −→ V is obtained by iterating f followed by a ql-restriction and a linear rescaling. Since all three
+operations are analytic, the renormalization admits a natural analytic extension to nearby maps; we refer to such
+an extension as a renormalization operator. Below, we first introduce a non-dynamical analytic operator. By
+design, it is always compact: the image of a ball is precompact. If there are appropriate geometric bounds, then
+the operator becomes dynamical and hyperbolic.
+     Let U ′ ⋐ U and V ′ ⊂ V be slight thinning of U and V with δ := mod(U \ U ′ ). It is a fundamental fact
+(follows from Cauchy’s integral formula) that the restriction operator
+(3.3)                    Bε (f | U ) → Bε (f | U ′ ),               [g : U → C] 7→ [g : U ′ → C]
+                                                                                                                               2:1
+is compact. Here ε in Bε (f | U ), see (3.1), is chosen sufficiently small depending on δ. Viewing f1 ≡ f p : U1 −→
+                              2:1
+V1 as a subsystem of f : U −→ V , we assume the following the compactness condition:
+                      p−1
+                      [
+(3.4)                        f i (U1 ) ⋐ U ′          where         δ := mod(U \ U ′ )          as above;
+                       i=0
+                                                        ³      ´.
+                                                          [1]
+                                                  fn+1 = fn jS
+                                                                    fn
+
+
+                                  S
+
+                             fn        0                                 ±             fn+1
+                                                                    D ' S fn      0
+                                      orbq1(S)
+
+
+
+                                  D
+Figure 10: Sector Renormalization §3.4 is the first return map to a sector S whose sides are glued dynamically.
+
+
+i.e., the forward orbits of points in U1 stay in U ′ until their first return to V1 ⊂ V ′ . Then, since the restriction
+operator (3.3) is compact, we obtain a compact non-dynamical analytic operator
+
+(3.5)                  R : Bε (f1 | U ) → Bε2 (f p | U1 ),    [g|U ] 7→ [g|U ′ ] 7→ [g1 = g p |U1 ].
+                                                                                                            2:1
+     Suppose that f ≡ f0 is infinitely ql-renormalizable: there is an infinite sequence fn : Un −→ Vn with
+         p
+fn+1 = fnn+1 as before. We also assume that δ > 0 is selected uniformly over fn and that the periods pn ≤ p are
+uniformly bounded. If the sequence fn : Un → Vn has geometric bounds mod+ (fn ) ≥ η > 0, see (3.2), then, by
+the compactness of ql maps, the ω-limit set Hf of (fn )n is compact. Such a limit set H is called a renormalization
+horseshoe. If the geometric bounds have an additional “beau” property (it is often the case), then Hf is a hyperbolic
+set of R. Similarly, a renormalization horseshoe HX is defined for a set of maps X = {fτ ≡ f0,τ }. It is natural to
+construct a horseshoe as big as possible. Applying Theorem 4.1 together with [36], we obtain:
+    Theorem 3.3 (Hyperbolicity, (QL) Case).      For every bound p on renormalization periods, there is a
+hyperbolic renormalization horseshoe Hp with dim = 1 unstable manifolds for the ql renormalization operator as
+above. The horseshoe Hp attracts exponentially fast all infinitely renormalizable ql maps f ≡ f0 with relative
+periods pn ≤ p.
+
+    3.4 Sector Renormalization. The Sector Renormalization was originally designed to study Local
+Dynamics around an indifferent fixed point by Douady and Yoccoz, with various ideas going back to the
+theory of Ecalle-Voronin’s invariants. For high-type rotation numbers, Inou and Shishikura extended the sector
+renormalization to a semi-global compact operator with geometric control of the critical orbit. Here, we provide
+more details on the semi-global case.
+    The idea of sector renormalization Rsec is illustrated in Figure 10. In short, it is the first return map of fn
+to the appropriately chosen sector S so that the critical orbit returns to S. Let us start with notation:
+   • Θ = {θ = [0; a1 , a2 , . . . ] | ai ∈ N≥1 } ≃ [0, 1] \ Q ≃ (R/Z) \ Q is the set of irrational rotation numbers written
+     as continued fractions;
+   • Θbnd = {θ = [0; a1 , a2 , . . . ] | ai ≤ Mθ } ⊂ Θ is the set of bounded (irrational) rotation numbers;
+   • Θ = {θ = [0; a1 , a2 , . . . ] | ai ∈ N≥1 ∪ {∞}} ⊃ Θ is the formal compactification of Θ;
+   • Θ>N = {θ = [0; a1 , a2 , . . . ] | ai ∈ N>N };
+   • fθ : z 7→ e2πiθ z + z 2 , θ ∈ Θ is an irrationally-neutral quadratic polynomial as in (2.3),
+   • pn /qn ≈ θ is the best approximants of θ ∈ Θ starting with q0 = 1,
+   • fn ≡ fn,θ := Rnsec fθ is the nth sector renormalization;
+   • if θ ∈ Θ>1 , then θn := (−1)n [0; an+1 , an+2 , . . . ] is the rotation number of fn and
+       [n]                                                         [n]
+     fθ := fθqn is the sector prerenormalization of fn = fθ /f [n−1] .
+                                                                         θ
+                            [n]
+The definitions of θn and fθ      require a minor adjustment for the general case “θ ∈ Θ”. We view fn = Rnsec fθ as
+
+(3.6)                    fn : D 99K D            fn (0) = 0,     fn (0) = e2πiθn ,   θn ∈ Θ.
+
+The sector renormalization fn+1 of fn as shown in Figure 10 is the first return map to the smallest sector S
+bounded by curves γ and fn (γ) emerging from 0 so that the sides γ, fn (γ) ⊂ S are dynamically glued by fn :
+
+(3.7)                          γ ∋ x ∼ fn (x) ∈ fn (γ)            so that       S/fn ≃ D.
+
+We assume that γ lands at 0 at a well-defined angle. The “smallest” condition on S refers to the requirement
+that S contains the smallest angle between γ and fn (γ). The sector S should be chosen appropriately so that
+the first return map to S controls the critical orbit. Before taking the quotient (3.7), the first return map is a
+                                       [1]     q (θ )    q (θ )±1 
+commuting pair of the form Fn = fn ≡ fn1 n , fn1 n                  . The quotient map by fn identifies both branches
+                                                                [1]                                             [1]
+in the commuting pair Fn ; we can write fn+1 = Rsec fn = fn /fn ≡ Fn /fn+1 , and we refer to both Fn and fn as
+                                                        [n]
+the sector prerenormalizations of fn+1 . Similarly, fθ is the nth sector prerenormalization of fn , and we write:
+        [n]
+fn = fθ /f [n−1] . As in the quadratic-like case, see (3.4), we require a compactness condition:
+              θ
+
+
+(3.8)                                          mod D \ orbq1 (S) ≥ δ,
+                                                                
+
+
+where orbq1 (S) is formed by orbit trajectories of points in S projecting to dom(fn+1 ). We refer to (3.8) as
+sectorial bounds; they imply the compactness of Rsec . As an application of Theorem 4.2, the compact sectorial
+renormalization operator Rsec is justified in [19] for all neutral quadratic polynomials (fθ )θ∈Θ with a compactness
+condition (3.8) for a uniform δ and with well-defined parabolic limits parametrized by Θ.
+    3.5 Parabolic Enrichment and the Cylinder Renormalization. We recall that the filled Julia set is
+discontinuous at parabolic parameters: as shown in Figure 6, the limit of filled Julia sets can be smaller than
+the filled Julia set of the limiting parameter. This discontinuity can be resolved by introducing limiting Lavaurs
+maps. Let us illustrate a general idea with examples.
+    Consider a sequence of parameters an → 1/4 as shown in Figure 6. In the dynamical plane of pan : z 7→ z 2 +an ,
+see Figure 7, the critical orbit returns after q1,n ≡ q1 (an ) iterates. The orbit spends q1,n − s iterations traveling
+from the red cylinder to the blue cylinder, and then s iterations traveling back. We have a commuting pair
+        q                                                              q1,n                                       [1]
+          n ). In the limit, the parabolic gap is closed, and (pan , pan ) converges to the pair (p1/4 = pa∞ , pa∞ ),
+(pan , pa1,n
+        [1]
+where pa∞ is a transcendental Lavaurs map defined on the attracting basin of the parabolic point of p1/4 . The
+red and blue cylinders converge to the limiting attracting and repelling cylinders of p1/4 .
+    The cylinder renormalization Rcyl is a convenient and canonical extension of a sector renormalization Rsec
+from §3.4 such that the renormalization sector of Rsec is extended to a cylinder of Rcyl . While Rsec is defined
+up to conformal conjugacy, Rcyl is defined up to a linear conjugacy. For pan , its cylinder renormalization
+               q
+                 n /pan is the first return map of pan back to the red cylinder, where its boundaries are identified
+Rcyl (pan ) ≃ pa1,n
+                                                                [1]                                             [1]
+using pan . The limiting cylinder renormalization Rcyl p1/4 , pa∞ , also known as parabolic, is the quotient of pa∞
+under p1/4 . We write
+
+                                                                                [1] 
+(3.9)                      Rcyl (pan ) ≃ pqa1,n           −→ Rcyl p1/4 , p[1]
+                                                                             
+                                            n    p   an
+                                                                          a∞ ≃ p1/4 p   1/4
+                                                                                              ,
+
+                                                                 [1]            [1] 
+and refer to Rcyl (pan ) as near-parabolic for n ≫ 1. In fact, pa∞ and Rcyl pa∞ are uniquely determined by
+a linear map, called a transitional map, between red and blue cylinders, see the bottom-left part of Figure 7.
+Conversely, given a transitional map, one can construct the associated Lavaurs map and then realize it as a limit
+of nearby maps. A fundamental question is the dynamical control of this parabolic enrichment. As it was discussed
+in §3.4, renormalization of neutral quadratic polynomials is parametrized by θ = [0; a1 , a2 , . . . ] ∈ Θ. Parabolic
+renormalization applies to the cases where ai = ∞. For illustration, see parameters bn in Figure 6.
+    3.6 Hyperbolicity of the near-parabolic renormalizations. In [24], the hyperbolicity of the cylinder
+renormalization has been established for high-type parameters θ ∈ Θ≤N , where N ≫ 1. The hyperbolicity
+implies the sectorial bounds as they were introduced in §3.4. As we mentioned in Section 2, this result had many
+                                 Molecule                                    z(z + 1)2
+                                  map
+
+
+
+
+Figure 11: Left: the Main Molecule M of the Mandelbrot set and the induced by the Branner-Douady surgery
+Molecule map, see §3.8. The Molecule map is modeled by z 7→ z(z + 1)2 , right.
+
+
+applications. The strategy in [24] is as follows. First, with computer assistance, the a priori bounds (a variant
+of (3.8)) are established for the parabolic renormalization representing
+
+                                    [0; ∞, ∞, ∞, . . . ] ∈ Θ,        see §3.4.
+
+Using Teichmüller contraction, the geometric bounds are promoted to the hyperbolicity of the associated parabolic
+renormalization. By the stability of hyperbolicity, it also holds for all θ ∈ Θ>N for some N ≫ 1.
+     3.7 Hyperbolicity of near-Siegel Renormalization. Following notations of 3.4, consider maps fθ : z 7→
+e2πiθ z + z 2 . For θ ∈ Θbnd , the Douady-Ghys surgery transfers real bounds from circle maps (the Blaschke family)
+to quadratic polynomials, see Figure 5, left. Consequently, fθ has a qc Siegel disk if and only if θ ∈ Θbnd .
+Moreover, such a qc Siegel disk contains a critical point on the boundary. Relying on such input, McMullen
+in [42] developed dynamical renormalization theory for θ ∈ Θbnd , and justified the dynamical universality: the
+exponential convergence of renormalizations towards the limit, see Figure 5, right.
+     For two decades, it remained an open question whether dynamical universality could be promoted to
+hyperbolicity. The key obstacle was to establish a version of Lemma 3.2: proving that Siegel maps remain
+stable under small perturbations, provided the perturbation does not change the multiplier of the Siegel fixed
+point. Here, perturbations are taken within Banach balls (cf. (3.1)) consisting of maps defined in neighborhoods
+of their Siegel disks. This obstacle was resolved by employing transcendental techniques on unstable manifolds.
+A priori bounds imply the compactness of the operator, thus unstable manifolds exist but may have a large
+dimension. It was shown in [20] that maps on the unstable manifolds admit maximal analytic extensions as
+σ-proper maps “W → C,” cf. (1.3), where W is open and dense, with a single critical orbit. Such global σ-proper
+maps have codim = 1 stability as in Lemma 3.2; this stability is then promoted to codim = 1 stability in the
+original class of maps, and subsequently to:
+    Theorem 3.4 ([20]). Pacman/Siegel Renormalization operator is hyperbolic with dim = 1 unstable manifold
+for parameters in Θbnd of periodic type.
+For the Golden-mean Siegel map shown in Figure 5, the hyperbolicity was established earlier by Gaidashev and
+Yampolsky with computer-assistance. We also remark that the global σ-proper structure of renormalization fixed
+points (both of the quadratic-like and Siegel types) was discovered by McMullen in the 1990s. The theory of
+external transcendental rays for unstable manifolds was designed in [17], leading to further applications.
+    3.8 Molecule Renormalization. As we have indicated in §3.4, Theorem 4.2 implies the existence of a
+compact sectorial renormalization operator Rsec rel Θ. The proof of Theorem 3.4, relying on the analysis of the
+transcendental dynamics on the unstable manifolds, provides a strategy towards:
+    Conjecture 3.5 (Hyperbolicity of Neutral Renormalization). There is a hyperbolic cylinder renormalization
+operator Rcyl with dim = 1 unstable manifolds for all parameters in Θ.
+    We recall from [20, Appendix C] that the satellite and neutral renormalizations are naturally unified into
+the Molecule Renormalization; its slowed-down version is illustrated in Figure 11. A natural extension of
+Conjecture 3.5:
+                    J1                                   J0                             J2
+                                                                             G2
+                                         G1
+
+
+
+                     J1                                                                   J2
+                                                          J0
+                              G02
+                                                  G01                     G001
+
+           Figure 12: Illustration to the positive entropy argument, §4.1, the airplane combinatorics.
+
+
+   Conjecture 3.6 (Hyperbolicity of Molecule Renormalization). There is a hyperbolic renormalization with
+dim = 1 unstable manifolds parametrized by the sped-up Molecule map as in Figure 11.
+The completion of Problem 4.3 is required for Conjecture 3.6. As we have already mentioned, Conjecture 3.6 is
+likely required for the satellite cases of Conjecture 1.2 and the Area Problem of ∂M.
+     3.9 Puzzle Renormalization. Puzzle techniques were first employed by Branner and Hubbard in [5] to
+analyze cubic polynomials with one escaping critical point. In that setting, puzzles do not cut the Julia set. A
+few years later, Yoccoz introduced puzzles for quadratic polynomials and used them to reduce the MLC to the
+infinitely ql renormalizable case, see (2.1). Yoccoz puzzles cut a Julia set into smaller pieces. Then the Grötzsch
+inequality is used to show that such pieces shrink to points.
+     In [35, 37], in the 1990s, the puzzle techniques were incorporated into the renormalization framework as shown
+in Figure 9. Given a puzzle Y around a critical point so that the forward pc -orbit of ∂Y is disjoint from Y , we
+can consider the first return map g of pc to Y . The domain of g consists of countably many puzzles. One of them,
+say Y1 , contains a critical point and is mapped with degree 2 into Y . All other pieces are mapped with degree 1.
+The renormalization g1 of g is the first return map of g into Y1 . Let X ⋐ Y1 be the next-level puzzle containing
+the unique critical point. If the return time of X rel g is bigger than 1, i.e., X travels around Y under g, then the
+“asymmetric modulus” grows; roughly, g1 : Y1 99K Y1 has more expansion than g : Y 99K Y . On the other hand,
+g1 belongs to a central cascade if the return time of X is 1, i.e., g | X = g1 | X.
+     If a central cascade is long but still finite, then the associated dynamical scales will be dominated by a certain
+primitive small copy M′ of M that does not contain c. We refer to this phenomenon as virtual primitive ql.
+     If g : Y 99K Y is sufficiently expanding (i.e., moduli are big, cf. the renorm-expanding case in §1.3), then there
+is an Almost-Linear puzzle-parapuzzle relation [37]; i.e., the geometry of (puzzles of) g : Y 99K Y can be efficiently
+transferred to the parameter plane, cf. Figure 8. This is an essential ingredient for the “regular vs stochastic”
+dichotomy. Purely renorm-expanding real parameters (§1.3) are precisely Lebesgue density points for stochastic
+parameters: most of their small perturbations have exponential growth of the expansion along the critical orbit
+(the Collet-Eckmann condition), i.e., they are stochastic.
+     4 Near-Degenerate Regime. As we mentioned in §2, the Near-Degenerate Regime provides an adequate
+framework towards establishing a priori bounds. Since it operates at a basic topological level, arguments developed
+for different dynamical scales are often compatible and can be merged provided the setting is appropriately
+prepared. The non-dynamical foundations of the theory have been developed in [30]. Below, we will omit most
+of the technical discussion and indicate only the sources of geometric control.
+    On the dynamical scales with definite positive core entropy ≥ ε > 0, the theory is fully developed, see §4.1 and
+§4.2. As Figure 12 illustrates, the positivity of entropy prevents dynamically invariant horizontal degeneration.
+Thus, if there is a substantial degeneration, then it can be amplified at shallower levels.
+    Consider the zero core entropy scales. On satellite ql levels, degeneration along non-invariant rectangles is
+amplified at shallower levels, while degeneration along combinatorially invariant rectangles is amplified at deeper
+levels; see Figure 13 and §4.3. In the (near-)neutral case, invariant degeneration can actually exist within parabolic
+fjords because of the non-JLC; pseudo-Siegel disks are constructed to consume most of the invariant degeneration,
+see the left loop of Figure 14. Its right loop illustrates a strategy to develop pseudo-Siegel disks in the remaining
+near-neutral satellite cases. If achieved, this would fully unify the cases of §4.1–§4.4 and confirm, in particular,
+the Satellite Case of the MLC.
+     Let us now discuss the Interpolation Problem between the positive and zero entropy settings. It concerns
+parameters c ∈ M that are geometrically close to the main Molecule M of M but are outside of satellite little
+copies centered at M. In the dynamical plane of pc : z 2 + c, there are many geometric scales of zero-entropy nature
+associated with M. A key issue is that, on these scales, the postcritical set of pc can look as if it is dense in the
+Julia sets; i.e., the entropy on the postcritical set can blow up in the limit as c approaches M. (The postcritical
+set is only lower semicontinuous.) This effectively compels us to deal with virtual Julia sets containing the critical
+orbit up to several first returns. We briefly formulate this Virtual Renormalization setting in §4.5.
+     4.1 Primitive QL levels. Assume that f1 is a primitive ql renormalization of f with a period p as in
+Figure 9. Instead of mod+ (f ) = mod(V \ Kf ) as in (3.2), it is more convenient to consider the dual quantity,
+called the width or the degeneration of f :
+                              1                                                                        1
+(4.1)           W(f ) :=                     so that       mod+ (f ) ≤ ε           iff   W(f ) ≥ K ≡     ,
+                           mod+ (f )                                                                   ε
+
+and similar for f1 . The width W(f ) is the extremal width of the family of curves connecting Kf to ∂V .
+      Let us analyze how the degeneration of f1 is developed in the dynamical plane of f . Since f has p small
+(filled) Julia sets of f1 , the total degeneration around these small Julia sets is W tot ≍ pW(f1 ) − Op (1), where
+an additive error Op (1), that depends on p, comes from a variant of the Thin-Thick Decomposition. We can
+decompose W tot = W ver + W hor , where
+   • W hor is the horizontal degeneration between any pair of two small Julia sets; and
+   • W ver is the vertical degeneration between ∂V and any small Julia set.
+A key claim in [25] is that W ver ⪰ W tot − Op (1); i.e., the vertical part has a definite proportion. Since small Julia
+sets of f1 are within the bigger Julia set of f , the claim implies
+
+(4.2)                                    W(f ) ≥ W ver ⪰ pW(f1 ) − Op (1).
+
+    The idea behind W ver ⪰ W hor is illustrated in Figure 12. Assume by contradiction that W hor ≫ W ver , i.e.,
+W ver
+      is negligible. It is a meta-principle that a degeneration should be invariant under dynamics. Therefore, the
+degeneration W hor is (eventually) aligned with the Hubbard tree of f and is represented by two wide rectangles
+G1 and G2 depicted on the figure as narrow (for convenience) red and blue rectangles in the pencil style. Since
+W ver is negligible,
+   • (most of) G2 overflows a lift G1′′ of G1 ; and
+   • (most of) G1 overflows a lift G2′ of G2 and then a lift of G1′ of G1 .
+This is impossible by the Grötzsch inequality and (4.2) follows.
+    By applying (4.2) to f and its nth renormalization fn with a big period pn ≫ 1; we obtain
+
+(4.3)                  W(f ) ⪰ pn W(fn ) − Opn (1) ≫ W(fn )                   if     W(fn ) ≫pn 1.
+
+This implies a priori bounds in the primitive bounded-type ql case: the degeneration W(fm ) can not become big
+because, otherwise, the degeneration of W(fm−n ) will be even bigger.
+    4.2 Puzzle levels. We emphasize the following subtlety in (4.2): the period of pn is assumed to be big
+but still bounded as the additive error Opn (1) depending on pn needs to be bounded.
+    Assume now that the period p of f1 rel f is big. We assume here that f1 is the first ql renormalization of f of
+the primitive type; this renormalization is encoded by a maximal primitive copy M1 of M. The renormalization
+f 7→ f1 can be factorized using the puzzle renormalization, see Figure 9,
+
+(4.4)                                      f 7→ g1 7→ g2 7→ · · · 7→ gk 7→ f1 .
+                    J1                                                             J0       J2
+                               J3                              G
+
+
+
+
+                                    G n G0
+                    J1                                    G0            G n G0    J0          J2
+                              J3
+
+
+
+           Figure 13: Illustration to §4.3: if G is invariant rel δ, then W(G \ G ′ ) ≥ Cδ W(G) ≫ W(G).
+
+
+If the copy M1 is ε-away from the main molecule (the anti-Molecule property, cf. Figure 11) and p ≫ε 1, then the
+(modified) Principal Nest of (4.4) is combinatorially substantial and provides amplification of the degeneration.
+Roughly, the argument goes as follows. Using the notations of Figure 9, as X travels around Y , the [30, Covering
+Lemma] efficiently spreads the degeneration around. Then the [30, Quasi-Additivity Law] collects the degeneration
+along the orbit of X; this eventually leads to:
+
+(4.5)                      W(f ) ≫ W(f1 )            if    W(f ) ≫ε 1     and    p ≫ε 1.
+
+Together, (4.3) and (4.5) imply the a priori bounds and the MLC under the anti-molecule condition [27, 28].
+    4.3 Satellite QL levels. Assume now that f1 is a satellite ql renormalization of f of bounded-type. The
+key difference with the primitive case (§4.1) is the existence of combinatorially invariant rectangles G between
+small Julia sets as illustrated in Figure 13. Below, we sketch how to continue the argument behind (4.3) in the
+presence of such a G.
+    Let us assume that most of the W tot is within G. For a small δ > 0, the (1 − δ) part of G overflows its lift
+G as shown in the figure. However, before entering the rectangle G ′ , curves forming the above (1 − δ)-part of G
+ ′
+
+must travel through preperiodic Julia sets as depicted using purple color. Let us denote by G \ G ′ the family of
+such purple subcurves. Since G, G ′ have almost the same width, up to “(1 − δ)”, the Grötzsch inequality implies
+
+(4.6)                      W(G \ G ′ ) ≥ Cδ W(G),              where Cδ → ∞ as δ → 0.
+
+    The [18, Wave Lemma] allows us to interpret the quantity W(G \ G ′ ) as the degeneration W(f2 ) on a deeper
+level. Considering now f, fn and fn+1 , Estimate (4.6) gives us the following refinement of (4.3): either
+  (i) W(f ) ⪰δ pn W(fn ) − Opn (1); or
+ (ii) W(fn+1 ) ≥ Cδ W(fn ).
+    The Alternative (ii) is prevented by the Teichmüller contraction. Indeed, given a bound p on the relative period
+pm+1 /pm of fm+1 rel fm , the degeneration of W(fm ) can grow at most exponentially fast: W(fm ) = O(∆pm ).
+Therefore, by selecting δ > 0 to be sufficiently small so that Cδ ≫ ∆p is sufficiently big, Alternative (ii) is
+eventually prevented on some levels. We also select n sufficiently big so that pn dominates the multiplicative
+constant representing “⪰δ ”. Alternative (i) implies
+
+                      W(f ) ⪰δ pn W(fn ) − Opn (1) ≫ W(fn )                if W(fn ) ≫pn 1.
+
+    Theorem 4.1 ([18], §4.1+§4.3). A priori bounds and the MLC hold for all ql-combinatorics of bounded-type.
+In particular, the MLC holds at the period-doubling Feigenbaum parameter illustrated in Figure 2. The arguments
+of §4.2 can also be integrated with those in Theorem 4.1; the combination, see [14], yields the MLC along a real
+line and along any vein of the Mandelbrot set.
+                                                                                       ® Ã{ ¯
+                             simplify                      b0
+                                                           Z                          simplify
+
+                                                              ®
+                                                              ¯
+
+                                                  add a parabolic
+                      b0                                                                          ®j
+              ¯i      Z                                    b0
+                                                  fjord to Z                             b0
+                                                                                         Z
+                       ®
+                                                                                           ¯
+
+
+
+
+                      b 0 Ã{ Z
+                             b -1                 b0 ½Z
+                                                  Z   b -1
+                      Z                                                     b -1 7! Z
+                                                                            Z       b0
+                                                           ®                      antirenormalize rel ¯
+             antirenormalize rel ®                        ¯
+             (the neutral regime)                                                 (the satellite regime)
+
+
+Figure 14: Left loop: the interaction between pseudo-Siegel disks and neutral sector antirenormalization, see §4.4.
+Right loop: illustration to the strategy to extend the theory of pseudo-Siegel disks to the satellite case.
+
+
+    4.4   Near-Neutral levels. Let us first detail the following statement:
+    Theorem 4.2 ([16]). Uniform pseudo-Siegel a priori bounds hold for all neutral quadratic polynomials.
+    Using the notations of §3.4, consider a neutral polynomial fθ : z 7→ e2πiθ z + z 2 for an irrational θ ∈ Θ.
+Theorem 4.2 asserts that it has a sequence of nested pseudo-Siegel disks
+                                                                           \
+(4.7)            Zb−1 ⊇ Zb0 ⊇ Z b[1] ⊇ · · · ⊃ Zb[m] ⊇ · · · ⊇ Hf ∋ 0,
+                                                                 θ
+                                                                                 b[m] = H ≡ Hf ,
+                                                                                 Z               θ
+                                                                                 m≥−1
+
+
+where H is the Mother Hedgehog (the filled postcritical set) of fθ such that every Zb[m] is almost invariant up to
+q[m+1] -iterations. The disks Zb−1 and Z
+                                       b0 are uniformly qc over all fθ with θ ∈ Θ.
+                                                                                              [n+m]
+    Under the nth sector renormalization fθ 7→ fn , cf. Figure 10, the pseudo-Siegel disk Zb        of fθ becomes
+                                                                                                   fθ
+  [m]
+Zbfn of fn ; i.e., every Z
+                         b[m] becomes uniformly qc after applying the mth renormalization.
+     Figure 14, the left loop, illustrates the interaction of Zb0 , Zb−1 with sector antirenormalization. If the rotation
+number of fn is close to 0, then the α and β fixed points are close to each other and ∂ Zbf0n travels through the gap
+between α = 0 and β. The pseudo-Siegel disk Zbf−1     n
+                                                         is obtained by adding a parabolic fjord to Z  b0 . The fjord is
+                                                                                                        fn
+bounded by a dam located inside an invariant rectangle, depicted in a pencil style. We say that Zbf0n is regularized
+to Zb−1 . Under the antirenormalization, Zb−1 become Zb0 , and the procedure can be repeated. If the rotation
+    fn                                       fn            fn−1
+                                                                      b−1 .
+number of fn is away from 0, then there is no regularization: Zbf0n = Z fn
+    Informally, since antirenormalization has contracting properties, we expect that the “non-invariance error”
+of Z
+   b[m] is uniformly bounded by a geometric series. The [16] justifies such a property by employing the near-
+degenerate analyses in the original plane of fθ . The sectorial bounds (cf. Figure 10) are then justified in [19] in
+the a posteriori setting.
+     The right loop in Figure 14 illustrates a strategy, developed jointly with Lyubich, for extending the theory
+of pseudo-Siegel disks to the near-neutral setting. On this loop, the antirenormalization is taken rel β. For many
+combinatorics, this has been already justified and integrated with §4.1-§4.3. If the strategy is fully realized, then
+this would imply, in particular, the satellite case of the MLC.
+    Problem 4.3. Establish pseudo-Siegel a priori bounds in the remaining unbounded satellite ql cases.
+    4.5 Virtual near-Molecule Renormalization. Consider now a general case, when f1 is the first ql
+renormalization of f . The satellite case has been discussed in §4.3 and §4.4. Let us assume that f1 is primitive ql.
+The renormalization f 7→ f1 is encoded by a maximal primitive copy M1 ⊂ M. There is a canonical sequence of
+satellite copies of M
+
+             M ≡ M(0) ⊋ M(1) ⊋ · · · ⊋ M(n) ⊋ M(n+1) ,                    M1 ⊂ M \ M(1) ,        n≥0
+
+such that M(m) is a maximal satellite subcopy of M(m−1) , M1 is in the 1/2-decoration of M(n+1) , and M1 is in
+a small (i.e., not the 1/2) decoration of M(m) for all m ≤ n. The copy M1 is close to the main Molecule if and
+only if the period of M(n+1) is big.
+    The puzzle levels of §4.2 provide a satisfactory control on scales between M(n) and M1 (the latter copy
+is smaller) and fail on scales between M and M(n) , which we refer as virtual Molecule. The virtual Molecule
+case naturally consists of two subcases: virtual bounded-type satellite ql (when n ≫ 1 and the relative periods of
+M(s+1) rel M(s) are bounded) and virtual near-Neutral (n = 0).
+    Interpolation Problem 4.4. Develop a Virtual Molecule version of the Near-Degenerate Regime.
+Problems 4.3, 4.4 and the arguments in §4.1, §4.2, §4.3 §4.4 should imply the full MLC.
+    Jointly with Kahn and Lyubich, we put forward a strategy to approach Problem 4.4 by considering partially
+invariant virtual Julia sets of M(s) – they are connected hulls of the corresponding Cantor small Julia sets within
+Jf and contain the critical orbit only up to an appropriate number of first returns. A posteriori, bounds for
+virtual Julia sets can be deduced by assuming a uniform hyperbolicity of the renormalization associated with M;
+cf. Problem 3.1. The strategy towards Problem 4.4 is to develop such control a priori.
+    Acknowledgments. I would like to thank Misha Lyubich, Yusheng Luo, and Kostya Drach for many useful
+discussions regarding the context of this Note.
+    References
+ [1] A. Avila, J. Kahn, M. Lyubich, and W. Shen. Combinatorial rigidity for unicritical polynomials. Annals of
+     Mathematics, 170, 783–797, 2009.
+ [2] A. Avila and M. Lyubich. Lebesgue measure of Feigenbaum Julia sets. Annals of Mathematics, 195, 1–88,
+     2022.
+ [3] A. Avila, M. Lyubich, and W. de Melo. Regular or stochastic dynamics in real analytic families of unimodal
+     maps. Inventiones Mathematicae, 154, 451–550, 2003.
+ [4] A. Avila and C. G. Moreira. Statistical properties of unimodal maps: the quadratic family. Annals of
+     Mathematics, 161, 831–881, 2005.
+ [5] B. Branner and J. H. Hubbard. The iteration of cubic polynomials. Part II. Acta Mathematica, 169, 229–325,
+     1992.
+ [6] X. Buff and A. Chéritat. Quadratic Julia sets of positive area. Annals of Mathematics, 176, 673–746, 2012.
+ [7] J. Cepelewicz. The Quest to Decode the Mandelbrot Set, Math’s Famed Fractal. Quanta Magazine, 2024.
+ [8] D. Cheraghi. Topology of irrationally indifferent attractors. Accepted for publication in Annales Scientifiques
+     de l’École Normale Supérieure, 2025. To appear.
+ [9] P. Coullet and C. Tresser. Itérations d’endomorphismes et groupe de renormalisation. Journal de Physique,
+     Colloque, 39, 5–25, 1978.
+[10] A. Douady and J. H. Hubbard. Étude dynamique des polynômes complexes. Publications Mathématiques
+     d’Orsay, 1984–1985. Orsay preprints 84-02 and 85-04.
+[11] A. Douady and J. H. Hubbard. On the dynamics of polynomial-like mappings. Annales Scientifiques de
+     l’École Normale Supérieure (4), 18, 287–343, 1985.
+[12] A. Douady and J. H. Hubbard. A proof of Thurston’s topological characterization of rational functions. Acta
+     Mathematica, 171, 263–297, 1993.
+[13] K. Drach and D. Dudko. Near-Degenerate Regime in Transcendental Dynamics. Manuscript, 2025.
+[14] D. Dudko, J. Kahn, and M. Lyubich. Local connectivity of the Mandelbrot set along the real line. Manuscript,
+     2022.
+[15] D. Dudko and Y. Luo. Sierpiński carpet hyperbolic components of disjoint type are bounded. Preprint,
+     arXiv:2509.25658, 2025.
+[16] D. Dudko and M. Lyubich. Uniform a priori bounds for neutral renormalization. Preprint, arXiv:2210.09280,
+     2022.
+[17] D. Dudko and M. Lyubich. Local connectivity of the Mandelbrot set at some satellite parameters of bounded
+     type. Geometric and Functional Analysis, 33, 1–136, 2023.
+[18] D. Dudko and M. Lyubich. MLC at Feigenbaum points.               Accepted for publication in Publications
+     Mathématiques de l’IHÉS, 2025. To appear.
+[19] D. Dudko and M. Lyubich. Uniform a priori bounds for neutral renormalization. Variation I: Sector
+     Renormalization. Manuscript, 2024.
+[20] D. Dudko, M. Lyubich, and N. Selinger. Pacman renormalization and self-similarity of the Mandelbrot set
+     near Siegel parameters. Journal of the American Mathematical Society, 33, 653–733, 2020.
+[21] M. Feigenbaum. Quantitative universality for a class of nonlinear transformations. Journal of Statistical
+     Physics, 19, 25–52, 1978.
+[22] J. Graczyk and G. G. Świątek. Generic hyperbolicity in the logistic family. Annals of Mathematics, 146,
+     1–52, 1997.
+[23] J. H. Hubbard. Local connectivity of Julia sets and bifurcation loci: three theorems of J.-C. Yoccoz. In
+     Topological Methods in Modern Mathematics, pages 467–511. Publish or Perish, Houston, 1992.
+[24] H. Inou and M. Shishikura. The renormalization for parabolic fixed points and their perturbations.
+     Manuscript, https://www.math.kyoto-u.ac.jp/~mitsu/pararenorm/, 2008.
+[25] J. Kahn. A priori bounds for some infinitely renormalizable quadratics: I. Bounded primitive combinatorics.
+     Preprint, arXiv:math/0609045, 2006.
+[26] J. Kahn. Hyperbolic Components and Limits of Extremal Length.            MSRI Talks, https://vimeo.com/
+     704224013, https://vimeo.com/700148806 ,2022.
+[27] J. Kahn and M. Lyubich. A priori bounds for some infinitely renormalizable quadratics: II. Decorations.
+     Annales Scientifiques de l’École Normale Supérieure, 41, 57–84, 2008.
+[28] J. Kahn and M. Lyubich. A priori bounds for some infinitely renormalizable quadratics: III. Molecules. In:
+     Complex Dynamics: Families and Friends (ed.: D. Schleicher), A K Peters, Ltd., 2009.
+[29] J. Kahn and M. Lyubich. Local connectivity of Julia sets for unicritical polynomials. Annals of Mathematics,
+     170, 413–426, 2009.
+[30] J. Kahn and M. Lyubich. The quasi-additivity law in conformal geometry. Annals of Mathematics, 169,
+     561–593, 2009.
+[31] O. Kozlovski, W. Shen, and S. van Strien. Density of hyperbolicity in dimension one. Annals of Mathematics,
+     166, 145–182, 2007.
+[32] O. Kozlovski, W. Shen, and S. van Strien. Rigidity for real polynomials. Annals of Mathematics, 165,
+     749–841, 2007.
+[33] O. E. Lanford. A computer-assisted proof of the Feigenbaum conjectures. In Universality in Chaos, 2nd ed.,
+     pages 245–252. Routledge, 2017.
+[34] W. R. Lim. A priori bounds and degeneration of Herman rings with bounded type rotation number.
+     Inventiones Mathematicae, 2025.
+
+[35] M. Lyubich. Dynamics of quadratic polynomials. I, II. Acta Mathematica, 178, 185–297, 1997.
+[36] M. Lyubich. Feigenbaum–Coullet–Tresser universality and Milnor’s Hairiness Conjecture.            Annals of
+     Mathematics, 149, 319–420, 1999.
+[37] M. Lyubich. Dynamics of quadratic polynomials III: parapuzzle and SBR measures. Astérisque, 261, 173–200,
+     2000.
+[38] M. Lyubich. Almost every real quadratic map is either regular or stochastic. Annals of Mathematics, 156,
+     1–78, 2002.
+[39] M. Lyubich and J. Milnor. The Fibonacci unimodal map. Journal of the American Mathematical Society, 6,
+     425–457, 1993.
+[40] C. T. McMullen. Complex Dynamics and Renormalization. Annals of Mathematics Studies, Vol. 135.
+     Princeton University Press, Princeton, NJ, 1994.
+[41] C. T. McMullen. Renormalization and Three Manifolds Which Fiber over the Circle. Princeton University
+     Press, Princeton, NJ, 1996.
+
+[42] C. T. McMullen. Self-similarity of Siegel disks and Hausdorff dimension of Julia sets. Acta Mathematica,
+     180, 247–292, 1998.
+[43] M. Shishikura. The Hausdorff dimension of the boundary of the Mandelbrot set and Julia sets. Annals of
+     Mathematics, 147, 225–267, 1998.
+
+[44] M. Shishikura and F. Yang. The high type quadratic Siegel disks are Jordan domains. Journal of the
+     European Mathematical Society (JEMS), 27, 4501–4562, 2025.
+[45] D. Smania. Puzzle geometry and rigidity: the Fibonacci cycle is hyperbolic. Journal of the American
+     Mathematical Society, 20, 629–673, 2007.
+
+[46] D. Smania. Solenoidal attractors with bounded combinatorics are shy. Annals of Mathematics, 191, 1–79,
+     2020.
+[47] D. Sullivan. Quasiconformal homeomorphisms and dynamics, topology and geometry. In Proc. Int. Cong.
+     Math. (ICM), Berkeley, Vol. II, pages 1216–1228, 1986.
+[48] D. Sullivan. Bounds, quadratic differentials and renormalization conjectures. In Mathematics Into the Twenty-
+     first Century, AMS Centennial Publications, Vol. 2, 1992.
+[49] L. Tan. Similarity Between the Mandelbrot Set and Julia Sets. Communications in Mathematical Physics,
+     134, 587–617, 1990.
+[50] W. P. Thurston. Hyperbolic structures on 3-manifolds I: Deformation of acylindrical manifolds. Annals of
+     Mathematics, 124, 203–246, 1986.
+

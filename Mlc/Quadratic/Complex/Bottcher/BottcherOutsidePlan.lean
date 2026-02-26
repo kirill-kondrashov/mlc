@@ -2,6 +2,7 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherOutsideOutline
 import Mlc.Quadratic.Complex.Bottcher.BottcherAnalyticInjective
 import Mlc.Quadratic.Complex.Bottcher.BottcherCpowSlit
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMOutsideOutline
+import Mlc.Quadratic.Complex.Bottcher.InverseBranchSlit
 import Mlc.Quadratic.Complex.InverseBranchQuadratic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Maps.Proper.CompactlyGenerated
@@ -1864,6 +1865,31 @@ lemma bottcher_map_isProperMap_of_continuous
     exact bottcher_map_preimage_compact_of_isCompact c hcont hK
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
+
+/-- Continuity of `bottcher_map` away from `0` (outside-plan namespace helper). -/
+lemma bottcher_map_continuousAt_of_ne_zero_outsidePlan (c z : ℂ) (hz : z ≠ 0) :
+    ContinuousAt (Quadratic.bottcher_map c) z := by
+  have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.2 hz)
+  have hdiv : ContinuousAt (fun w : ℂ => w / (‖w‖ : ℂ)) z :=
+    continuousAt_id.div
+      ((Complex.continuous_ofReal.comp continuous_norm).continuousAt) hnorm_ne
+  have hif :
+      (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) =ᶠ[𝓝 z]
+        (fun w : ℂ => w / (‖w‖ : ℂ)) := by
+    filter_upwards [eventually_ne_nhds hz] with w hw
+    simp [hw]
+  have hdir : ContinuousAt (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) z :=
+    hdiv.congr_of_eventuallyEq hif
+  have hexp :
+      ContinuousAt (fun w : ℂ => (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z :=
+    (Complex.continuous_ofReal.comp
+      (Real.continuous_exp.comp (MLC.Quadratic.continuous_green_function c))).continuousAt
+  change ContinuousAt
+    (fun w : ℂ =>
+      (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
+        (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
+  exact hdir.mul hexp
 
 lemma bottcher_map_re_neg_of_pos_real (c : ℂ) {t : ℝ} (ht : 0 < t) :
     (Quadratic.bottcher_map c (-t)).re < 0 := by
@@ -4136,6 +4162,39 @@ lemma bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open
   have h := congrArg g hzw
   simpa [hz', hw'] using h
 
+/-- Build outside-open left-inverse payload from outside-open injectivity. -/
+lemma bottcher_left_inverse_on_outside_open_data_of_injOn_outside_open
+    (c : ℂ)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    BottcherLeftInverseOnOutsideOpenData c := by
+  classical
+  let g : ℂ → ℂ := fun w =>
+    if hw : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w then
+      Classical.choose hw
+    else 0
+  refine ⟨g, ?_⟩
+  intro z hz
+  let hw : ∃ z', ‖z'‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z' = Quadratic.bottcher_map c z :=
+    ⟨z, hz, rfl⟩
+  have hspec :
+      ‖Classical.choose hw‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c (Classical.choose hw) = Quadratic.bottcher_map c z :=
+    Classical.choose_spec hw
+  have hz_eq : Classical.choose hw = z := by
+    apply h_inj hspec.1 hz
+    exact hspec.2
+  simp [g, hw, hz_eq]
+
+/-- Outside-open left-inverse seam is equivalent to outside-open injectivity. -/
+lemma bottcher_left_inverse_on_outside_open_data_iff_injOn_outside_open
+    (c : ℂ) :
+    BottcherLeftInverseOnOutsideOpenData c ↔
+      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  constructor
+  · exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c
+  · intro h_inj
+    exact bottcher_left_inverse_on_outside_open_data_of_injOn_outside_open c h_inj
+
 /-- Build outside-open left-inverse payload from explicit external-ray data. -/
 lemma bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
@@ -4275,6 +4334,63 @@ theorem outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_o
 def ExternalRayLandsOutsideOpen (c : ℂ) : Prop :=
   ∀ w, 1 < ‖w‖ → ‖Quadratic.external_ray_map c w‖ > ‖c‖ + 2
 
+/-- Outside-disk-to-outside-open image refinement from the landing assumption
+for external rays. -/
+theorem outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutsideOpen
+    (c : ℂ)
+    (hland : ExternalRayLandsOutsideOpen c) :
+    BottcherOutsideDiskToOutsideOpenImageRefinement c := by
+  intro z hz
+  let w : ℂ := Quadratic.bottcher_map c z
+  have hw : 1 < ‖w‖ := by
+    simpa [w] using bottcher_map_norm_gt_one_of_outside c hz
+  refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
+  · simpa [w] using hland w hw
+  · simpa [w] using Quadratic.external_ray_map_right_inverse c w hw
+
+/-- External-ray landing follows from outside-disk-to-outside-open image
+refinement. -/
+theorem externalRayLandsOutsideOpen_of_outside_disk_to_outside_open_image_refinement
+    (c : ℂ)
+    (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
+    ExternalRayLandsOutsideOpen c := by
+  intro w hw
+  have hpre : (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆ outside_disk c := by
+    intro z hz
+    have hz' : 1 < ‖Quadratic.bottcher_map c z‖ := by
+      simpa [Set.preimage] using hz
+    have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+      bottcher_map_norm_gt_one_implies_basin c (z := z) hz'
+    simpa [outside_disk] using hz_basin
+  have hz_out : Quadratic.external_ray_map c w ∈ outside_disk c :=
+    external_ray_map_mem_outside c hpre hw
+  rcases h_refine (Quadratic.external_ray_map c w) hz_out with ⟨u, hu, huEq⟩
+  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
+    Quadratic.external_ray_map_right_inverse c w hw
+  have hwu : w = Quadratic.bottcher_map c u := by
+    exact (huEq.trans hright).symm
+  have hleft : Quadratic.external_ray_map c w = u := by
+    calc
+      Quadratic.external_ray_map c w = Quadratic.external_ray_map c (Quadratic.bottcher_map c u) := by
+        simp [hwu]
+      _ = u := Quadratic.external_ray_map_left_inverse_outside_open c u hu
+  simpa [hleft] using hu
+
+/-- External-ray landing from direct outside-open control of preimages of the
+exterior under `bottcher_map`. -/
+theorem externalRayLandsOutsideOpen_of_preimage_exterior_subset_outside_open
+    (c : ℂ)
+    (hpre :
+      (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+        {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    ExternalRayLandsOutsideOpen c := by
+  intro w hw
+  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
+    Quadratic.external_ray_map_right_inverse c w hw
+  have hmem : Quadratic.external_ray_map c w ∈ (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
+    simp [Set.preimage, hright, hw]
+  exact hpre hmem
+
 /-- Böttcher map restricted to outside-open, codomain restricted to the
 exterior. -/
 noncomputable def bottcher_map_outside_open_to_exterior (c : ℂ) :
@@ -4283,6 +4399,291 @@ noncomputable def bottcher_map_outside_open_to_exterior (c : ℂ) :
   refine ⟨Quadratic.bottcher_map c z.1, ?_⟩
   exact bottcher_map_norm_gt_one_of_outside c
     (outside_open_subset_outside_disk c z.2)
+
+/-- Image of a preimage set for the restricted outside-open map, expressed back
+in ambient coordinates. -/
+lemma image_preimage_bottcher_map_outside_open_to_exterior
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) :
+    ((↑) '' ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) : Set ℂ) =
+      {z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} := by
+  ext z
+  constructor
+  · intro hz
+    rcases hz with ⟨x, hx, rfl⟩
+    refine ⟨x.2, ?_⟩
+    exact ⟨bottcher_map_outside_open_to_exterior c x, hx, rfl⟩
+  · intro hz
+    rcases hz with ⟨hz_out, y, hyK, hyEq⟩
+    refine ⟨⟨z, hz_out⟩, ?_, rfl⟩
+    have hEq :
+        bottcher_map_outside_open_to_exterior c ⟨z, hz_out⟩ = y := by
+      apply Subtype.ext
+      simpa [bottcher_map_outside_open_to_exterior] using hyEq.symm
+    simpa [hEq] using hyK
+
+/-- Compactness of preimages under the restricted outside-open map translated to
+an ambient compactness goal. -/
+lemma isCompact_preimage_bottcher_map_outside_open_to_exterior_iff
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) :
+    IsCompact ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) ↔
+      IsCompact
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+  rw [Subtype.isCompact_iff, image_preimage_bottcher_map_outside_open_to_exterior]
+
+/-- Continuity of the outside-open restricted Böttcher map from outside-open
+`AnalyticAt` payload. -/
+lemma continuous_bottcher_map_outside_open_restrict_of_analyticAt
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z) :
+    Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z.1) := by
+  exact (continuousOn_iff_continuous_restrict).1 (by
+    intro z hz
+    exact (hanalytic z hz).continuousAt.continuousWithinAt)
+
+/-- Properness of the restricted outside-open map is reduced to one ambient
+compact-preimage obligation. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact
+    (c : ℂ)
+    (hcont : Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z.1))
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) := by
+  rw [isProperMap_iff_isCompact_preimage]
+  refine ⟨?_, ?_⟩
+  · exact hcont.codRestrict (by
+      intro z
+      exact bottcher_map_norm_gt_one_of_outside c
+        (outside_open_subset_outside_disk c z.2))
+  · intro K hK
+    rw [isCompact_preimage_bottcher_map_outside_open_to_exterior_iff]
+    exact hpre K hK
+
+/-- Properness of the restricted outside-open map from outside-open analyticity
+plus the ambient compact-preimage obligation. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact c
+    (continuous_bottcher_map_outside_open_restrict_of_analyticAt c hanalytic) hpre
+
+/-- `c = 2` specialization: properness of the restricted outside-open map from
+outside-open analyticity plus the ambient compact-preimage obligation. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (hpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsCompact ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
+    (2 : ℂ) hanalytic hpre
+
+/-- Compactness of restricted-map preimages follows from closedness of the
+ambient outside-open preimage set; boundedness is provided by
+`preimage_closedBall_bounded`. -/
+lemma isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) (hK : IsCompact K)
+    (hclosed :
+      IsClosed
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsCompact ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) := by
+  have hKbounded : Bornology.IsBounded (((↑) '' K : Set ℂ)) := by
+    exact hK.image continuous_subtype_val |>.isBounded
+  rcases hKbounded.subset_closedBall (0 : ℂ) with ⟨R, hR⟩
+  rcases preimage_closedBall_bounded c R with ⟨S, hS⟩
+  have hsubset_ball :
+      ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) ⊆
+        Metric.closedBall (0 : ℂ) S := by
+    intro z hz
+    have hzR : ‖Quadratic.bottcher_map c z‖ ≤ R := by
+      have hzmem : Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ) := hz.2
+      have : Quadratic.bottcher_map c z ∈ Metric.closedBall (0 : ℂ) R := hR hzmem
+      simpa [Metric.mem_closedBall, dist_eq_norm] using this
+    have hzS : ‖z‖ ≤ S := hS hzR
+    simpa [Metric.mem_closedBall, dist_eq_norm] using hzS
+  have hbounded :
+      Bornology.IsBounded
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
+    (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset hsubset_ball
+  have hcompactAmbient :
+      IsCompact
+        ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
+    (Metric.isCompact_iff_isClosed_bounded).2 ⟨hclosed, hbounded⟩
+  rw [isCompact_preimage_bottcher_map_outside_open_to_exterior_iff]
+  exact hcompactAmbient
+
+/-- Properness of the restricted outside-open map from outside-open analyticity
+plus closedness of ambient preimage sets against compact exterior targets. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+            Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact c
+    hanalytic (fun K hK =>
+      isCompact_preimage_bottcher_map_outside_open_to_exterior_iff c K |>.1
+        (isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed c K hK
+          (hclosedpre K hK)))
+
+/-- `c = 2` specialization: properness of the restricted outside-open map from
+outside-open analyticity plus closedness of ambient preimage sets against
+compact exterior targets. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+    (hclosedpre :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        IsClosed
+          ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
+    (2 : ℂ) hanalytic hclosedpre
+
+/-- Closedness of outside-open preimages against compact exterior targets from a
+boundary-exclusion condition on `‖z‖ = ‖c‖ + 2`. -/
+lemma isClosed_outside_open_preimage_image_compact_of_boundary_exclusion
+    (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) (hK : IsCompact K)
+    (hboundary :
+      ∀ z, ‖z‖ = ‖c‖ + 2 →
+        Quadratic.bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
+    IsClosed
+      ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+  let C : Set ℂ := {z : ℂ | ‖c‖ + 2 ≤ ‖z‖}
+  have hCclosed : IsClosed C := by
+    simpa [C] using (isClosed_le continuous_const continuous_norm)
+  have hcontOnC : ContinuousOn (Quadratic.bottcher_map c) C := by
+    intro z hzC
+    have hpos : 0 < ‖c‖ + 2 := by
+      nlinarith [norm_nonneg c]
+    have hzpos : 0 < ‖z‖ := lt_of_lt_of_le hpos hzC
+    have hzne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hzpos)
+    exact (bottcher_map_continuousAt_of_ne_zero_outsidePlan c z hzne).continuousWithinAt
+  let g : C → ℂ := fun z => Quadratic.bottcher_map c z.1
+  have hgcont : Continuous g := by
+    exact (continuousOn_iff_continuous_restrict).1 hcontOnC
+  have hImgClosed : IsClosed (((↑) '' K : Set ℂ)) := (hK.image continuous_subtype_val).isClosed
+  have hpreClosedSub : IsClosed (g ⁻¹' (((↑) '' K : Set ℂ))) := hImgClosed.preimage hgcont
+  have hValClosedMap : IsClosedMap (Subtype.val : C → ℂ) :=
+    (Topology.IsClosedEmbedding.subtypeVal hCclosed).isClosedMap
+  have hclosed_ge :
+      IsClosed
+        ((Subtype.val) '' (g ⁻¹' (((↑) '' K : Set ℂ))) : Set ℂ) :=
+    hValClosedMap _ hpreClosedSub
+  have hclosed_ge_eq :
+      ((Subtype.val) '' (g ⁻¹' (((↑) '' K : Set ℂ))) : Set ℂ) =
+        ({z : ℂ | ‖c‖ + 2 ≤ ‖z‖ ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+    ext z
+    constructor
+    · intro hz
+      rcases hz with ⟨x, hx, rfl⟩
+      exact ⟨x.2, hx⟩
+    · intro hz
+      refine ⟨⟨z, hz.1⟩, ?_, rfl⟩
+      exact hz.2
+  have hset_eq :
+      ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) =
+        ({z : ℂ | ‖c‖ + 2 ≤ ‖z‖ ∧
+          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+    ext z
+    constructor
+    · intro hz
+      exact ⟨le_of_lt hz.1, hz.2⟩
+    · intro hz
+      rcases hz with ⟨hzge, hzK⟩
+      rcases lt_or_eq_of_le hzge with hlt | heq
+      · exact ⟨hlt, hzK⟩
+      · exfalso
+        exact (hboundary z heq.symm) hzK
+  rw [hset_eq]
+  rw [← hclosed_ge_eq]
+  exact hclosed_ge
+
+/-- Properness of the restricted outside-open map from outside-open analyticity
+plus boundary exclusion on compact exterior targets. -/
+lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion
+    (c : ℂ)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖c‖ + 2 →
+          Quadratic.bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
+    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed c
+    hanalytic (fun K hK =>
+      isClosed_outside_open_preimage_image_compact_of_boundary_exclusion c K hK
+        (hboundary K hK))
+
+/-- At `c = 2`, the boundary-exclusion family cannot hold for all compact
+exterior targets: the singleton containing the image of one boundary point is a
+compact counterexample. -/
+lemma exists_compact_exterior_set_violating_boundary_exclusion_two :
+    ∃ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K ∧
+      ¬ (∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
+  let z0 : ℂ := ((‖(2 : ℂ)‖ + 2 : ℝ) : ℂ)
+  have hnonneg : 0 ≤ ‖(2 : ℂ)‖ + 2 := by
+    nlinarith [norm_nonneg (2 : ℂ)]
+  have hz0_eq_abs : ‖z0‖ = |‖(2 : ℂ)‖ + 2| := by
+    simpa [z0] using (Complex.norm_real (‖(2 : ℂ)‖ + 2))
+  have hz0_eq : ‖z0‖ = ‖(2 : ℂ)‖ + 2 := by
+    exact hz0_eq_abs.trans (abs_of_nonneg hnonneg)
+  have hz0_ge : ‖z0‖ ≥ ‖(2 : ℂ)‖ + 2 := by
+    linarith [hz0_eq]
+  have hz0_out : z0 ∈ outside_disk (2 : ℂ) :=
+    large_norm_mem_outside_disk (2 : ℂ) z0 hz0_ge
+  have hw0_ext : 1 < ‖Quadratic.bottcher_map (2 : ℂ) z0‖ :=
+    bottcher_map_norm_gt_one_of_outside (2 : ℂ) hz0_out
+  let w0 : {w : ℂ // 1 < ‖w‖} := ⟨Quadratic.bottcher_map (2 : ℂ) z0, hw0_ext⟩
+  refine ⟨({w0} : Set {w : ℂ // 1 < ‖w‖}), isCompact_singleton, ?_⟩
+  intro hboundary
+  have hnot :
+      Quadratic.bottcher_map (2 : ℂ) z0 ∉
+        ((↑) '' ({w0} : Set {w : ℂ // 1 < ‖w‖}) : Set ℂ) :=
+    hboundary z0 hz0_eq
+  have hmem :
+      Quadratic.bottcher_map (2 : ℂ) z0 ∈
+        ((↑) '' ({w0} : Set {w : ℂ // 1 < ‖w‖}) : Set ℂ) := by
+    refine ⟨w0, by simp, rfl⟩
+  exact hnot hmem
+
+/-- Therefore the universal boundary-exclusion family at `c = 2` is false. -/
+lemma not_boundary_exclusion_family_two :
+    ¬ (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+      ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
+  intro hboundary
+  rcases exists_compact_exterior_set_violating_boundary_exclusion_two with ⟨K, hK, hnot⟩
+  exact hnot (hboundary K hK)
+
+/-- Closed range of the restricted outside-open Böttcher map from properness of
+the restricted map itself. -/
+lemma isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap
+    (c : ℂ)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c)) :
+    IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)) := by
+  have hClosedMap : IsClosedMap (bottcher_map_outside_open_to_exterior c) :=
+    hproper.isClosedMap
+  simpa [Set.image_univ] using (hClosedMap Set.univ isClosed_univ)
 
 /-- Outside-open surjectivity on the exterior from a clopen argument on the
 restricted map `outside_open → exterior`. -/
@@ -4320,6 +4721,15 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomo
   rcases hwR with ⟨z, hz⟩
   refine ⟨z.1, z.2, ?_⟩
   exact congrArg Subtype.val hz
+
+/-- `c = 2` specialization: outside-open surjectivity on the exterior from
+closed range of the restricted map plus restricted local-homeomorph payload. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict
+    (2 : ℂ) hclosed hlocal
 
 /-- Convert local-homeomorph on an open set into local-homeomorph of the
 restricted function on the subtype domain. -/
@@ -5091,7 +5501,7 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothes
       calc
         w * (Quadratic.bottcher_map c w / w)
             = w * (w⁻¹ * Quadratic.bottcher_map c w) := by
-                simp [div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm]
+                simp [div_eq_mul_inv, mul_comm]
         _ = (w * w⁻¹) * Quadratic.bottcher_map c w := by ac_rfl
         _ = Quadratic.bottcher_map c w := by simp [hw0])
   exact hmul.congr hEq
@@ -5135,7 +5545,7 @@ lemma isPreconnected_outside_open (c : ℂ) :
   have hRne : ((R : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast (ne_of_gt hRpos)
   have hnormR : ‖((R : ℝ) : ℂ)‖ = R := by
-    simpa [abs_of_nonneg hRnonneg] using (Complex.norm_real R)
+    rw [Complex.norm_real, Real.norm_of_nonneg hRnonneg]
   have hcont : Continuous f := continuous_const.mul continuous_id
   have hconn_img : IsConnected (f '' E) :=
     isConnected_exterior.image f hcont.continuousOn
@@ -5158,7 +5568,7 @@ lemma isPreconnected_outside_open (c : ℂ) :
           1 < ‖z‖ / R := hdiv
           _ = ‖z‖ / ‖R‖ := by rw [Real.norm_of_nonneg hRnonneg]
           _ = ‖z / ((R : ℝ) : ℂ)‖ := by
-                simpa [Complex.norm_real] using (norm_div z (((R : ℝ) : ℂ))).symm
+                rw [norm_div, Complex.norm_real]
       · change (((R : ℝ) : ℂ) * (z / ((R : ℝ) : ℂ)) = z)
         field_simp [hRne]
   have hpre_img : IsPreconnected (f '' E) := hconn_img.isPreconnected
@@ -5219,14 +5629,14 @@ lemma outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScale
     rcases hyIimg with ⟨z, hzU, hzEq⟩
     rcases h_real z (by simpa [U] using hzU) with ⟨r, _hrpos, hrEq⟩
     have himz : Complex.im (g z) = 0 := by
-      simpa [g, hrEq]
+      simp [g, hrEq]
     have himyI_zero : Complex.im yI = 0 := by
       simpa [hzEq] using himz
     have himy_zero : Complex.im y = 0 := by
       rcases hyImg with ⟨zy, hzyU, hzyEq⟩
       rcases h_real zy (by simpa [U] using hzyU) with ⟨ry, _hrypos, hryEq⟩
       have himzy : Complex.im (g zy) = 0 := by
-        simpa [g, hryEq]
+        simp [g, hryEq]
       simpa [hzyEq] using himzy
     have himyI_half : Complex.im yI = ε / 2 := by
       simp [yI, himy_zero]
@@ -5320,7 +5730,7 @@ lemma outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis
     Quadratic.bottcher_map c z = (Quadratic.bottcher_map c z / z) * z := by
       field_simp [hz_ne]
     _ = q * z := by simp [hqz]
-    _ = (r : ℂ) * z := by simpa [hqeq]
+    _ = (r : ℂ) * z := by simp [hqeq]
 
 /-- `c = 2` specialization: quotient constancy implies the strong
 quotient-rigidity witness. -/
@@ -5369,6 +5779,13 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness
     simpa [mul_assoc, mul_left_comm, mul_comm] using
       (analyticAt_const.mul analyticAt_id : AnalyticAt ℂ (fun w : ℂ => (r : ℂ) * w) z)
   exact hLinAnalytic.congr hEq.symm
+
+/-- `c = 2` specialization: a strong quotient-rigidity witness implies
+outside-open analyticity. -/
+lemma outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientConstRealWitnessTwo
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness (2 : ℂ) h_wit
 
 /-- A strong quotient-rigidity witness implies outside-open injectivity. -/
 lemma injOn_outside_open_of_outsideOpenQuotientConstRealWitness
@@ -5484,6 +5901,24 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
     (2 : ℂ) hclosed h_wit
 
+/-- `c = 2` specialization: outside-open exterior surjectivity from closed range
+plus outside-open quotient constancy. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qconst : OutsideOpenQuotientConstHypothesisTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
+    hclosed (outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo h_qconst)
+
+/-- `c = 2` specialization: outside-open exterior surjectivity from closed range
+plus outside-open quotient analyticity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
+    hclosed (outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo h_qanalytic)
+
 /-- Outside-open exterior surjectivity from closed range plus outside-open
 analyticity, routed through the quotient-rigidity witness bridge. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
@@ -5503,6 +5938,25 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
     (2 : ℂ) hclosed h_analytic
+
+/-- Outside-open exterior surjectivity from restricted-map properness plus
+outside-open analyticity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
+    (c : ℂ)
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
+    (h_analytic : OutsideOpenAnalyticityHypothesis c) :
+    BottcherSurjOnExteriorFromOutsideOpen c :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
+    c (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap c hproper) h_analytic
+
+/-- `c = 2` specialization: outside-open exterior surjectivity from
+restricted-map properness plus outside-open analyticity. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo
+    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
+    (2 : ℂ) hproper h_analytic
 
 /-- Outside-open `AnalyticAt` payload induces local charts inside outside-open
 by taking the ambient outside-open set itself as the chart. -/
@@ -5544,6 +5998,28 @@ lemma outsideOpenAnalyticityHypothesis_of_mem_nhds_slit
   outsideOpenAnalyticityHypothesis_of_outsideOpenLocalAnalyticChartHypothesis c
     (outsideOpenLocalAnalyticChartHypothesis_of_mem_nhds_slit c hslit_nhds)
 
+/-- Eventual-slit-to-slit implication yields outside-open inclusion in slit-orbit. -/
+lemma outside_open_subset_slit_orbit_of_eventualSlitImpliesSlitOrbit
+    (c : ℂ)
+    (himp : EventualSlitImpliesSlitOrbit c) :
+    {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c := by
+  intro z hz
+  exact outside_in_slit_orbit_of_eventual c z hz himp
+
+/-- Eventual-slit-to-slit implication yields neighborhood-level slit payload on
+outside-open. -/
+lemma mem_nhds_slit_on_outside_open_of_eventualSlitImpliesSlitOrbit
+    (c : ℂ)
+    (himp : EventualSlitImpliesSlitOrbit c) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z := by
+  intro z hz
+  have hUopen : IsOpen {w : ℂ | ‖w‖ > ‖c‖ + 2} := by
+    simpa using (isOpen_lt continuous_const continuous_norm)
+  have hzU : z ∈ {w : ℂ | ‖w‖ > ‖c‖ + 2} := by simpa using hz
+  have hUnhds : ({w : ℂ | ‖w‖ > ‖c‖ + 2} : Set ℂ) ∈ 𝓝 z := hUopen.mem_nhds hzU
+  exact Filter.mem_of_superset hUnhds
+    (outside_open_subset_slit_orbit_of_eventualSlitImpliesSlitOrbit c himp)
+
 /-- `c = 2` specialization: local analytic-chart payload implies outside-open
 analyticity payload. -/
 lemma outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two
@@ -5567,6 +6043,99 @@ lemma outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithi
   outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartHypothesis_two
     (outsideOpenLocalAnalyticChartHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
       h_chart)
+
+/-- CP2 constructive seam at `c = 2`: local charts inside outside-open yield
+outside-open analyticity. -/
+theorem outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesis_two_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two
+    h_chart
+
+/-- CP2 foundational bridge at `c = 2`: eventual-slit-to-slit implication yields
+outside-open analyticity. -/
+theorem outsideOpenAnalyticityHypothesisTwo_constructive_of_eventualSlitImpliesSlitOrbit
+    (himp : EventualSlitImpliesSlitOrbit (2 : ℂ)) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesis_of_mem_nhds_slit (2 : ℂ)
+    (mem_nhds_slit_on_outside_open_of_eventualSlitImpliesSlitOrbit (2 : ℂ) himp)
+
+/-- CP2 constructive seam at `c = 2`: local charts inside outside-open yield
+outside-open quotient analyticity. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo :=
+  outsideOpenQuotientAnalyticityHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+      h_chart)
+
+/-- CP2 constructive seam at `c = 2`: outside-open analyticity yields
+outside-open quotient analyticity by division against `id` on outside-open. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenAnalyticityHypothesis
+    (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo := by
+  intro z hz
+  have hz_norm_pos : 0 < ‖z‖ := by
+    linarith [hz, norm_nonneg (2 : ℂ)]
+  have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
+  exact (h_analytic z hz).div analyticAt_id hz_ne
+
+/-- CP2 constructive seam at `c = 2`: packaged quotient analyticity target from
+the chart-within constructive input. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive
+    (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ)) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo :=
+  outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    h_chart
+
+/-- CP2 constructive seam at `c = 2`: outside-open quotient analyticity yields
+local analytic charts inside outside-open. -/
+theorem outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) :=
+  outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_outsideOpenAnalyticityHypothesis
+    (2 : ℂ)
+    (outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientAnalyticityHypothesisTwo h_qanalytic)
+
+/-- CP2 constructive seam at `c = 2`: outside-open quotient analyticity yields
+outside-open analyticity through the chart-within bridge. -/
+theorem outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+    (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+    (outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+      h_qanalytic)
+
+/-- CP2 foundational bridge at `c = 2`: eventual-slit-to-slit implication yields
+the strong quotient-rigidity witness. -/
+theorem outsideOpenQuotientConstRealWitnessTwo_constructive_of_eventualSlitImpliesSlitOrbit
+    (himp : EventualSlitImpliesSlitOrbit (2 : ℂ)) :
+    OutsideOpenQuotientConstRealWitnessTwo :=
+  outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_eventualSlitImpliesSlitOrbit himp)
+
+/-- CP2 constructive seam at `c = 2`: strong quotient-rigidity witness yields
+outside-open analyticity. -/
+theorem outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientConstRealWitnessTwo
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) :=
+  outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientConstRealWitnessTwo h_wit
+
+/-- CP2 constructive seam at `c = 2`: strong quotient-rigidity witness yields
+outside-open quotient analyticity. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientConstRealWitnessTwo
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo :=
+  outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenAnalyticityHypothesis
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientConstRealWitnessTwo h_wit)
+
+/-- CP2 constructive seam at `c = 2`: strong quotient-rigidity witness yields
+local analytic charts inside outside-open. -/
+theorem outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientConstRealWitnessTwo
+    (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
+    OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) :=
+  outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+    (outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientConstRealWitnessTwo h_wit)
 
 /-- `c = 2` specialization: outside-open analyticity payload induces local
 analytic charts inside outside-open. -/
@@ -5768,6 +6337,38 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injO
     hclosed
     (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds)
     h_inj
+
+/-- `c = 2` specialization: external-ray data from closed range, local-slit
+neighborhood payload, and outside-open injectivity. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
+    (2 : ℂ) hclosed hslit_nhds h_inj
+
+/-- External-ray data from closed range, local-slit neighborhoods, and the
+iterate-left-inverse injectivity route. -/
+theorem external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
+    (c : ℂ)
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
+    Quadratic.ExternalRayMapData c :=
+  external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
+    c hclosed hslit_nhds
+    (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
+
+/-- `c = 2` specialization: external-ray data from closed range, local-slit
+neighborhoods, and iterate-left-inverse injectivity. -/
+theorem external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
+    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
+    (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
+    (2 : ℂ) hclosed hslit_nhds h_left_iter
 
 lemma bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin
     (c z₀ : ℂ)
@@ -5983,7 +6584,9 @@ lemma not_outside_open_subset_slit_orbit_rot (c : ℂ) (θ : ℝ) :
     have hnorm : ‖z0‖ = a := by
       calc
         ‖z0‖ = ‖((-a : ℝ) : ℂ)‖ * ‖Complex.exp (Complex.I * θ)‖ := by
-          simpa [z0] using (norm_mul (((-a : ℝ) : ℂ)) (Complex.exp (Complex.I * θ)))
+          change ‖(((-a : ℝ) : ℂ) * Complex.exp (Complex.I * θ))‖ =
+              ‖((-a : ℝ) : ℂ)‖ * ‖Complex.exp (Complex.I * θ)‖
+          rw [norm_mul]
         _ = |(-a : ℝ)| * 1 := by simp
         _ = a := by
           rw [abs_of_nonpos]
@@ -6043,6 +6646,157 @@ inclusion. -/
 lemma not_outside_open_subset_slit_orbit_two :
     ¬ ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} ⊆ slit_orbit (2 : ℂ)) := by
   exact not_outside_open_subset_slit_orbit (2 : ℂ)
+
+/-- No-go checkpoint at `c = 2`: outside-open quotient constancy is incompatible
+with the Böttcher conjugacy identity on basin points. -/
+lemma not_outsideOpenQuotientConstHypothesisTwo :
+    ¬ OutsideOpenQuotientConstHypothesisTwo := by
+  intro h_const
+  rcases outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenQuotientConstHypothesisTwo h_const with
+    ⟨r, hr_pos, hlin⟩
+  let z1 : ℂ := (5 : ℂ)
+  let z2 : ℂ := (5 : ℂ) * Complex.I
+  have hz1 : ‖z1‖ > ‖(2 : ℂ)‖ + 2 := by
+    norm_num [z1]
+  have hz2 : ‖z2‖ > ‖(2 : ℂ)‖ + 2 := by
+    norm_num [z2]
+  have hz1_out : z1 ∈ ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} : Set ℂ) := by simpa using hz1
+  have hz2_out : z2 ∈ ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} : Set ℂ) := by simpa using hz2
+  have hz1_basin : z1 ∈ Quadratic.basin_of_infinity (2 : ℂ) :=
+    outside_disk_subset_quadratic_basin (2 : ℂ)
+      (outside_open_subset_outside_disk (2 : ℂ) hz1_out)
+  have hz2_basin : z2 ∈ Quadratic.basin_of_infinity (2 : ℂ) :=
+    outside_disk_subset_quadratic_basin (2 : ℂ)
+      (outside_open_subset_outside_disk (2 : ℂ) hz2_out)
+  have hz1q : ‖quadratic_map (2 : ℂ) z1‖ > ‖(2 : ℂ)‖ + 2 :=
+    (quadratic_map_maps_outside_open (2 : ℂ)) hz1_out
+  have hz2q : ‖quadratic_map (2 : ℂ) z2‖ > ‖(2 : ℂ)‖ + 2 :=
+    (quadratic_map_maps_outside_open (2 : ℂ)) hz2_out
+  have hEq1 : (r : ℂ) * (quadratic_map (2 : ℂ) z1) = ((r : ℂ) * z1) ^ 2 := by
+    calc
+      (r : ℂ) * (quadratic_map (2 : ℂ) z1)
+          = Quadratic.bottcher_map (2 : ℂ) (quadratic_map (2 : ℂ) z1) := by
+              symm
+              exact hlin (quadratic_map (2 : ℂ) z1) hz1q
+      _ = (Quadratic.bottcher_map (2 : ℂ) z1) ^ 2 :=
+          bottcher_conj_on_basin (2 : ℂ) z1 hz1_basin
+      _ = ((r : ℂ) * z1) ^ 2 := by rw [hlin z1 hz1]
+  have hEq2 : (r : ℂ) * (quadratic_map (2 : ℂ) z2) = ((r : ℂ) * z2) ^ 2 := by
+    calc
+      (r : ℂ) * (quadratic_map (2 : ℂ) z2)
+          = Quadratic.bottcher_map (2 : ℂ) (quadratic_map (2 : ℂ) z2) := by
+              symm
+              exact hlin (quadratic_map (2 : ℂ) z2) hz2q
+      _ = (Quadratic.bottcher_map (2 : ℂ) z2) ^ 2 :=
+          bottcher_conj_on_basin (2 : ℂ) z2 hz2_basin
+      _ = ((r : ℂ) * z2) ^ 2 := by rw [hlin z2 hz2]
+  have hEq1_num : (r : ℂ) * ((5 : ℂ) ^ 2 + (2 : ℂ)) = ((r : ℂ) * (5 : ℂ)) ^ 2 := by
+    simpa [z1, quadratic_map] using hEq1
+  have hEq2_num :
+      (r : ℂ) * (((5 : ℂ) * Complex.I) ^ 2 + (2 : ℂ)) =
+        ((r : ℂ) * ((5 : ℂ) * Complex.I)) ^ 2 := by
+    simpa [z2, quadratic_map] using hEq2
+  have hEq1Ror : 27 = r * 25 ∨ r = 0 := by
+    have h := congrArg Complex.re hEq1_num
+    norm_num [pow_two, mul_assoc, mul_comm, mul_left_comm] at h
+    exact h
+  have hEq2Ror : 23 = r * 25 ∨ r = 0 := by
+    have h := congrArg Complex.re hEq2_num
+    norm_num [pow_two, mul_assoc, mul_comm, mul_left_comm] at h
+    exact h
+  have hrne : r ≠ 0 := ne_of_gt hr_pos
+  have hEq1R : 27 = r * 25 := hEq1Ror.resolve_right hrne
+  have hEq2R : 23 = r * 25 := hEq2Ror.resolve_right hrne
+  linarith [hEq1R, hEq2R]
+
+/-- No-go checkpoint at `c = 2`: outside-open analyticity would force outside-open
+quotient constancy, contradicting `not_outsideOpenQuotientConstHypothesisTwo`. -/
+lemma not_outsideOpenAnalyticityHypothesisTwo :
+    ¬ OutsideOpenAnalyticityHypothesis (2 : ℂ) := by
+  intro h_analytic
+  exact not_outsideOpenQuotientConstHypothesisTwo
+    (outsideOpenQuotientConstHypothesisTwo_of_outsideOpenAnalyticityHypothesisTwo h_analytic)
+
+/-- Revised CP2 formal target at `c = 2` in the current model: certify the
+outside-open analyticity payload is impossible. -/
+def RevisedCP2TargetTwo : Prop :=
+  ¬ OutsideOpenAnalyticityHypothesis (2 : ℂ)
+
+/-- Constructive proof of the revised CP2 formal target at `c = 2`. -/
+theorem revisedCP2TargetTwo_constructive : RevisedCP2TargetTwo :=
+  not_outsideOpenAnalyticityHypothesisTwo
+
+/-- Revised CP2 scope gate at `c = 2`: this explicit assumption re-opens the
+outside-open analyticity route in models where the current no-go theorem does
+not apply. -/
+def OutsideOpenAnalyticityScopeAssumptionTwo : Prop :=
+  ¬¬ OutsideOpenAnalyticityHypothesis (2 : ℂ)
+
+/-- Scope-revised CP2 bridge at `c = 2`: recover outside-open analyticity from
+the explicit scope gate. -/
+theorem outsideOpenAnalyticityHypothesisTwo_assumptionGated
+    (h_scope : OutsideOpenAnalyticityScopeAssumptionTwo) :
+    OutsideOpenAnalyticityHypothesis (2 : ℂ) := by
+  by_contra h_not
+  exact h_scope h_not
+
+/-- Scope-revised CP2 bridge at `c = 2`: derive quotient analyticity from the
+explicit analyticity scope gate. -/
+theorem outsideOpenQuotientAnalyticityHypothesisTwo_assumptionGated
+    (h_scope : OutsideOpenAnalyticityScopeAssumptionTwo) :
+    OutsideOpenQuotientAnalyticityHypothesisTwo :=
+  outsideOpenQuotientAnalyticityHypothesisTwo_constructive_of_outsideOpenAnalyticityHypothesis
+    (outsideOpenAnalyticityHypothesisTwo_assumptionGated h_scope)
+
+/-- Scope-revised CP2 bridge at `c = 2`: derive strong quotient-rigidity witness
+from the explicit analyticity scope gate. -/
+theorem outsideOpenQuotientConstRealWitnessTwo_assumptionGated
+    (h_scope : OutsideOpenAnalyticityScopeAssumptionTwo) :
+    OutsideOpenQuotientConstRealWitnessTwo :=
+  outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticityHypothesisTwo
+    (outsideOpenAnalyticityHypothesisTwo_assumptionGated h_scope)
+
+/-- No-go checkpoint at `c = 2`: outside-open quotient analyticity implies
+outside-open analyticity, which is impossible in the current model. -/
+lemma not_outsideOpenQuotientAnalyticityHypothesisTwo :
+    ¬ OutsideOpenQuotientAnalyticityHypothesisTwo := by
+  intro h_qanalytic
+  exact not_outsideOpenAnalyticityHypothesisTwo
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientAnalyticityHypothesis
+      h_qanalytic)
+
+/-- No-go checkpoint at `c = 2`: local chart-within payload implies outside-open
+analyticity, which is impossible in the current model. -/
+lemma not_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesisTwo :
+    ¬ OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ) := by
+  intro h_chart
+  exact not_outsideOpenAnalyticityHypothesisTwo
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
+      h_chart)
+
+/-- No-go checkpoint at `c = 2`: strong quotient-rigidity witness implies
+outside-open analyticity, which is impossible in the current model. -/
+lemma not_outsideOpenQuotientConstRealWitnessTwo :
+    ¬ OutsideOpenQuotientConstRealWitnessTwo := by
+  intro h_wit
+  exact not_outsideOpenAnalyticityHypothesisTwo
+    (outsideOpenAnalyticityHypothesisTwo_constructive_of_outsideOpenQuotientConstRealWitnessTwo
+      h_wit)
+
+/-- No-go checkpoint at `c = 2`: the combined outside-open analytic/injective
+payload is impossible because its analytic component is impossible. -/
+lemma not_outsideOpenAnalyticInjNonSlitPayloadTwo :
+    ¬ OutsideOpenAnalyticInjNonSlitPayloadTwo := by
+  intro h_payload
+  exact not_outsideOpenAnalyticityHypothesisTwo h_payload.1
+
+/-- No-go checkpoint at `c = 2`: eventual-slit-to-slit implication would force
+global outside-open slit inclusion, contradicting the principal-slit model. -/
+lemma not_eventualSlitImpliesSlitOrbit_two :
+    ¬ EventualSlitImpliesSlitOrbit (2 : ℂ) := by
+  intro himp
+  exact not_outside_open_subset_slit_orbit_two
+    (outside_open_subset_slit_orbit_of_eventualSlitImpliesSlitOrbit (2 : ℂ) himp)
 
 /-- Consequently, neighborhood-level slit payload on all outside-open points is
 impossible at `c = 2`. -/

@@ -42,9 +42,15 @@ CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two",
+    "MLC.mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two",
+    "MLC.mlc_conjecture_of_analyticAt_of_preimageCompact_two",
+    "MLC.mlc_conjecture_of_analyticAt_of_preimageClosed_two",
+    "MLC.mlc_conjecture_of_analyticAt_of_boundaryExclusion_two",
     "MLC.mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two",
     "MLC.mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo",
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two",
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two",
 )
 
 
@@ -1448,6 +1454,7 @@ def graph_page_html_v2(title: str) -> str:
     <span class="meta" id="summary"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
     <button id="fitBtn" type="button">Fit Camera</button>
+    <button id="modeBtn" type="button">Mode: 2D</button>
     <button id="themeBtn" type="button">Theme</button>
     <div id="legend" class="legend"></div>
   </div>
@@ -1466,6 +1473,7 @@ def graph_page_js() -> str:
   const legendEl = document.getElementById("legend");
   const searchEl = document.getElementById("search");
   const fitBtn = document.getElementById("fitBtn");
+  const modeBtn = document.getElementById("modeBtn");
   const themeBtn = document.getElementById("themeBtn");
   const hoverEl = document.getElementById("hover");
   const THEME_KEY = "mlc_graph_theme";
@@ -1482,7 +1490,7 @@ def graph_page_js() -> str:
   };
 
   const COLORS = {
-    root: 0xf59e0b,
+    root: 0x22c55e,
     coreAxiom: 0x3b82f6,
     missingAxiom: 0xef4444,
     edge: 0x64748b,
@@ -1502,6 +1510,14 @@ def graph_page_js() -> str:
       ((hex >> 8) & 255) / 255,
       (hex & 255) / 255
     ];
+  }
+
+  function rgb01ToCss(rgb, a = 1) {
+    const r = Math.max(0, Math.min(255, Math.round((rgb[0] || 0) * 255)));
+    const g = Math.max(0, Math.min(255, Math.round((rgb[1] || 0) * 255)));
+    const b = Math.max(0, Math.min(255, Math.round((rgb[2] || 0) * 255)));
+    const alpha = Math.max(0, Math.min(1, a));
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 
   function parseHexColorToRgb01(hexText) {
@@ -1602,11 +1618,12 @@ def graph_page_js() -> str:
       <span class="legend-item"><span class="legend-dot" style="background:#ffb703"></span>Theorem</span>
       <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span>Definition</span>
       <span class="legend-item"><span class="legend-dot" style="background:#8ecae6"></span>Lemma</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Root</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Root</span>
       <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing axiom</span>
       <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Core axiom</span>
       <span class="legend-item"><span class="legend-dot" style="background:#0ea5e9"></span>Construction route</span>
       <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing connection</span>
+      <span class="legend-item">→ Directed dependency</span>
     `;
   }
 
@@ -1645,7 +1662,17 @@ def graph_page_js() -> str:
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     canvas.style.display = "block";
+    canvas.style.position = "absolute";
+    canvas.style.inset = "0";
     sceneEl.prepend(canvas);
+    const canvas2d = document.createElement("canvas");
+    canvas2d.style.width = "100%";
+    canvas2d.style.height = "100%";
+    canvas2d.style.display = "none";
+    canvas2d.style.position = "absolute";
+    canvas2d.style.inset = "0";
+    sceneEl.prepend(canvas2d);
+    const ctx2d = canvas2d.getContext("2d");
     const gl = canvas.getContext("webgl", { antialias: true, alpha: false });
     if (!gl) {
       if (summaryEl) summaryEl.textContent = "WebGL is unavailable in this browser.";
@@ -1759,7 +1786,7 @@ def graph_page_js() -> str:
         file: n.file,
         pos: world,
         color: hexToRgb01(c),
-        baseSize: isRoot ? 18 : 12,
+        baseSize: isRoot ? 13 : 8,
         sizeScale: 1,
         alpha: 0.96
       });
@@ -1786,6 +1813,21 @@ def graph_page_js() -> str:
         alpha: isMissingConnection ? 1.0 : 0.72,
         visible: true
       });
+    }
+
+    const renderMode = { value: "2d" };
+    const layout2d = {
+      nodes: [],
+      panX: 0,
+      panY: 0,
+      scale: 1,
+      draggingIndex: -1,
+      panning: false,
+      lastX: 0,
+      lastY: 0
+    };
+    function modeButtonText() {
+      return renderMode.value === "3d" ? "Mode: 3D" : "Mode: 2D";
     }
 
     function buildSphereBuffers() {
@@ -1827,6 +1869,169 @@ def graph_page_js() -> str:
       sphereVertexCount = positions.length / 3;
     }
 
+    function build2DLayout() {
+      const byDepth = new Map();
+      for (let i = 0; i < nodes.length; i += 1) {
+        const d = Number(nodes[i].depth || 0);
+        if (!byDepth.has(d)) byDepth.set(d, []);
+        byDepth.get(d).push(i);
+      }
+      const depthKeys = Array.from(byDepth.keys()).sort((a, b) => a - b);
+      const layout = new Array(nodes.length);
+      for (const depth of depthKeys) {
+        const ids = byDepth.get(depth) || [];
+        const ring = depth === 0 ? 0 : 70 + depth * 62;
+        const offset = (depth * 0.63) % (2 * Math.PI);
+        for (let j = 0; j < ids.length; j += 1) {
+          const idx = ids[j];
+          const angle = offset + (j * 2 * Math.PI) / Math.max(1, ids.length);
+          const x = depth === 0 ? 0 : Math.cos(angle) * ring;
+          const y = depth === 0 ? 0 : Math.sin(angle) * ring;
+          const isRoot = nodeData[idx].id === rootId;
+          layout[idx] = { x, y, r: isRoot ? 11 : 7 };
+        }
+      }
+      layout2d.nodes = layout;
+      fit2DLayout();
+    }
+
+    function fit2DLayout() {
+      if (!layout2d.nodes.length) return;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (let i = 0; i < layout2d.nodes.length; i += 1) {
+        const p = layout2d.nodes[i];
+        if (!p) continue;
+        minX = Math.min(minX, p.x - p.r - 20);
+        minY = Math.min(minY, p.y - p.r - 20);
+        maxX = Math.max(maxX, p.x + p.r + 120);
+        maxY = Math.max(maxY, p.y + p.r + 20);
+      }
+      const w = Math.max(1, maxX - minX);
+      const h = Math.max(1, maxY - minY);
+      const pad = 26;
+      layout2d.scale = Math.max(0.2, Math.min(4.0, Math.min(
+        (canvasCssW - 2 * pad) / w,
+        (canvasCssH - 2 * pad) / h
+      )));
+      layout2d.panX = (canvasCssW - layout2d.scale * (minX + maxX)) / 2;
+      layout2d.panY = (canvasCssH - layout2d.scale * (minY + maxY)) / 2;
+    }
+
+    function worldFromScreen2D(clientX, clientY) {
+      const rect = canvas2d.getBoundingClientRect();
+      const sx = clientX - rect.left;
+      const sy = clientY - rect.top;
+      return {
+        x: (sx - layout2d.panX) / layout2d.scale,
+        y: (sy - layout2d.panY) / layout2d.scale
+      };
+    }
+
+    function pickNode2D(clientX, clientY) {
+      const p = worldFromScreen2D(clientX, clientY);
+      let best = -1;
+      let bestD2 = Infinity;
+      for (let i = layout2d.nodes.length - 1; i >= 0; i -= 1) {
+        const n = layout2d.nodes[i];
+        if (!n) continue;
+        const scale = nodeData[i].sizeScale || 1;
+        const r = n.r * scale + 3 / Math.max(0.35, layout2d.scale);
+        const dx = p.x - n.x;
+        const dy = p.y - n.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 <= r * r && d2 < bestD2) {
+          best = i;
+          bestD2 = d2;
+        }
+      }
+      return best;
+    }
+
+    function draw2D() {
+      if (!ctx2d) return;
+      const bgCss = getComputedStyle(document.documentElement).getPropertyValue("--canvas-bg") || "#0b1220";
+      const dpr = canvasPxW / Math.max(1, canvasCssW);
+      ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx2d.clearRect(0, 0, canvasCssW, canvasCssH);
+      ctx2d.fillStyle = bgCss.trim();
+      ctx2d.fillRect(0, 0, canvasCssW, canvasCssH);
+      ctx2d.save();
+      ctx2d.translate(layout2d.panX, layout2d.panY);
+      ctx2d.scale(layout2d.scale, layout2d.scale);
+      for (const e of edgeData) {
+        if (!e.visible) continue;
+        const a = layout2d.nodes[e.sourceIndex];
+        const b = layout2d.nodes[e.targetIndex];
+        if (!a || !b) continue;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const len = Math.hypot(dx, dy);
+        if (len <= 1e-4) continue;
+        const ux = dx / len;
+        const uy = dy / len;
+        const aScale = nodeData[e.sourceIndex].sizeScale || 1;
+        const bScale = nodeData[e.targetIndex].sizeScale || 1;
+        const sx = a.x + ux * (a.r * aScale + 1.2 / Math.max(0.35, layout2d.scale));
+        const sy = a.y + uy * (a.r * aScale + 1.2 / Math.max(0.35, layout2d.scale));
+        const tx = b.x - ux * (b.r * bScale + 1.2 / Math.max(0.35, layout2d.scale));
+        const ty = b.y - uy * (b.r * bScale + 1.2 / Math.max(0.35, layout2d.scale));
+        const segLen = Math.hypot(tx - sx, ty - sy);
+        if (segLen <= 1e-4) continue;
+
+        const lineColor = rgb01ToCss(e.color, e.alpha);
+        ctx2d.strokeStyle = lineColor;
+        ctx2d.lineWidth = Math.max(1 / Math.max(0.35, layout2d.scale), 1.1 / Math.max(0.35, layout2d.scale));
+        ctx2d.beginPath();
+        ctx2d.moveTo(sx, sy);
+        ctx2d.lineTo(tx, ty);
+        ctx2d.stroke();
+
+        const headLen = Math.min(segLen * 0.55, Math.max(8 / Math.max(0.35, layout2d.scale), 11 / layout2d.scale));
+        const headHalf = headLen * 0.44;
+        const bx = tx - ux * headLen;
+        const by = ty - uy * headLen;
+        ctx2d.fillStyle = lineColor;
+        ctx2d.beginPath();
+        ctx2d.moveTo(tx, ty);
+        ctx2d.lineTo(bx - uy * headHalf, by + ux * headHalf);
+        ctx2d.lineTo(bx + uy * headHalf, by - ux * headHalf);
+        ctx2d.closePath();
+        ctx2d.fill();
+      }
+      const q = String(searchEl?.value || "").trim().toLowerCase();
+      for (let i = 0; i < layout2d.nodes.length; i += 1) {
+        const p = layout2d.nodes[i];
+        if (!p) continue;
+        const n = nodeData[i];
+        const r = p.r * (n.sizeScale || 1);
+        const fill = rgb01ToCss(n.color, Math.max(0.16, n.alpha));
+        ctx2d.fillStyle = fill;
+        ctx2d.beginPath();
+        ctx2d.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx2d.fill();
+        if (n.id === rootId) {
+          ctx2d.strokeStyle = "#22c55e";
+          ctx2d.lineWidth = Math.max(1 / Math.max(0.35, layout2d.scale), 1.8 / Math.max(0.35, layout2d.scale));
+          ctx2d.beginPath();
+          ctx2d.arc(p.x, p.y, r + 1.6 / Math.max(0.35, layout2d.scale), 0, Math.PI * 2);
+          ctx2d.stroke();
+        }
+        const showLabel =
+          n.id === rootId ||
+          (q && (
+            String(n.id).toLowerCase().includes(q) ||
+            String(n.label).toLowerCase().includes(q) ||
+            String(n.fq_name).toLowerCase().includes(q)
+          ));
+        if (showLabel) {
+          ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], Math.min(1, Math.max(0.5, n.alpha + 0.1)));
+          ctx2d.font = `${Math.max(10 / Math.max(0.35, layout2d.scale), 8)}px "IBM Plex Sans", "Segoe UI", sans-serif`;
+          ctx2d.fillText(n.label, p.x + r + 2 / Math.max(0.35, layout2d.scale), p.y - 2 / Math.max(0.35, layout2d.scale));
+        }
+      }
+      ctx2d.restore();
+    }
+
     let pointsDirty = true;
     let edgesDirty = true;
     function syncPointBuffers() {
@@ -1856,15 +2061,48 @@ def graph_page_js() -> str:
     function syncEdgeBuffers() {
       const positions = [];
       const colors = [];
+      const shaftInset = Math.max(7, sphereRadius * 0.018);
+      const minEdgeLength = Math.max(4, sphereRadius * 0.012);
+      function pushSeg(a, b, color, alpha) {
+        positions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+        colors.push(
+          color[0], color[1], color[2], alpha,
+          color[0], color[1], color[2], alpha
+        );
+      }
+      function sideVector(dir, target) {
+        let s = V3.cross(dir, target);
+        if (V3.len(s) < 1e-5) s = V3.cross(dir, [0, 1, 0]);
+        if (V3.len(s) < 1e-5) s = V3.cross(dir, [1, 0, 0]);
+        return V3.norm(s);
+      }
       for (const e of edgeData) {
         if (!e.visible) continue;
         const a = nodeData[e.sourceIndex].pos;
         const b = nodeData[e.targetIndex].pos;
-        positions.push(a[0], a[1], a[2], b[0], b[1], b[2]);
-        colors.push(
-          e.color[0], e.color[1], e.color[2], e.alpha,
-          e.color[0], e.color[1], e.color[2], e.alpha
-        );
+        const ab = V3.sub(b, a);
+        const abLen = V3.len(ab);
+        if (abLen <= minEdgeLength) continue;
+        const dir = V3.scale(ab, 1 / abLen);
+        const inset = Math.min(shaftInset, abLen * 0.18);
+        const start = V3.add(a, V3.scale(dir, inset));
+        const tip = V3.sub(b, V3.scale(dir, inset));
+        const shaft = V3.sub(tip, start);
+        const shaftLen = V3.len(shaft);
+        if (shaftLen <= minEdgeLength) continue;
+
+        pushSeg(start, tip, e.color, e.alpha);
+
+        const headLen = Math.min(Math.max(9, sphereRadius * 0.03), shaftLen * 0.65);
+        if (headLen <= 1e-3) continue;
+        const headHalf = headLen * 0.45;
+        const base = V3.sub(tip, V3.scale(dir, headLen));
+        const targetUnit = V3.norm(b);
+        const side = sideVector(dir, targetUnit);
+        const wingA = V3.add(base, V3.scale(side, headHalf));
+        const wingB = V3.sub(base, V3.scale(side, headHalf));
+        pushSeg(wingA, tip, e.color, e.alpha);
+        pushSeg(wingB, tip, e.color, e.alpha);
       }
       gl.bindBuffer(gl.ARRAY_BUFFER, linePosBuf);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.DYNAMIC_DRAW);
@@ -1912,8 +2150,12 @@ def graph_page_js() -> str:
       canvasPxH = Math.max(2, Math.floor(canvasCssH * dpr));
       canvas.width = canvasPxW;
       canvas.height = canvasPxH;
+      canvas2d.width = canvasPxW;
+      canvas2d.height = canvasPxH;
+      if (ctx2d) ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
       gl.viewport(0, 0, canvasPxW, canvasPxH);
       cameraDirty = true;
+      fit2DLayout();
     }
     window.addEventListener("resize", resize);
     resize();
@@ -2041,6 +2283,7 @@ def graph_page_js() -> str:
     let lastY = 0;
 
     function onPointerDown(ev) {
+      if (renderMode.value !== "3d") return;
       if (cameraDirty) updateCameraMatrices();
       const pick = pickNode(ev.clientX, ev.clientY);
       if (pick >= 0) {
@@ -2054,6 +2297,7 @@ def graph_page_js() -> str:
     }
 
     function onPointerMove(ev) {
+      if (renderMode.value !== "3d") return;
       if (cameraDirty) updateCameraMatrices();
       if (draggingNodeIndex >= 0) {
         const ray = screenRay(ev.clientX, ev.clientY);
@@ -2096,19 +2340,106 @@ def graph_page_js() -> str:
     }
 
     function onWheel(ev) {
+      if (renderMode.value !== "3d") return;
       ev.preventDefault();
       const scale = Math.exp(ev.deltaY * 0.001);
       camera.distance = Math.max(180, Math.min(900, camera.distance * scale));
       cameraDirty = true;
     }
 
+    function onPointerDown2D(ev) {
+      if (renderMode.value !== "2d") return;
+      const pick = pickNode2D(ev.clientX, ev.clientY);
+      if (pick >= 0) {
+        layout2d.draggingIndex = pick;
+      } else {
+        layout2d.panning = true;
+      }
+      layout2d.lastX = ev.clientX;
+      layout2d.lastY = ev.clientY;
+      canvas2d.setPointerCapture(ev.pointerId);
+    }
+
+    function onPointerMove2D(ev) {
+      if (renderMode.value !== "2d") return;
+      if (layout2d.draggingIndex >= 0) {
+        const p = worldFromScreen2D(ev.clientX, ev.clientY);
+        const n = layout2d.nodes[layout2d.draggingIndex];
+        n.x = p.x;
+        n.y = p.y;
+        hoverEl.style.display = "none";
+        return;
+      }
+      if (layout2d.panning) {
+        const dx = ev.clientX - layout2d.lastX;
+        const dy = ev.clientY - layout2d.lastY;
+        layout2d.lastX = ev.clientX;
+        layout2d.lastY = ev.clientY;
+        layout2d.panX += dx;
+        layout2d.panY += dy;
+        hoverEl.style.display = "none";
+        return;
+      }
+      const pick = pickNode2D(ev.clientX, ev.clientY);
+      if (pick >= 0) {
+        const n = nodeData[pick];
+        hoverEl.style.display = "block";
+        hoverEl.style.left = `${ev.clientX}px`;
+        hoverEl.style.top = `${ev.clientY}px`;
+        hoverEl.textContent = `${n.fq_name} (${n.kind})`;
+      } else {
+        hoverEl.style.display = "none";
+      }
+    }
+
+    function onPointerUp2D(ev) {
+      layout2d.draggingIndex = -1;
+      layout2d.panning = false;
+      try { canvas2d.releasePointerCapture(ev.pointerId); } catch (_err) {}
+    }
+
+    function onWheel2D(ev) {
+      if (renderMode.value !== "2d") return;
+      ev.preventDefault();
+      const rect = canvas2d.getBoundingClientRect();
+      const sx = ev.clientX - rect.left;
+      const sy = ev.clientY - rect.top;
+      const wx = (sx - layout2d.panX) / layout2d.scale;
+      const wy = (sy - layout2d.panY) / layout2d.scale;
+      const factor = Math.exp(-ev.deltaY * 0.001);
+      layout2d.scale = Math.max(0.2, Math.min(6.0, layout2d.scale * factor));
+      layout2d.panX = sx - wx * layout2d.scale;
+      layout2d.panY = sy - wy * layout2d.scale;
+    }
+
+    function setRenderMode(mode) {
+      renderMode.value = mode === "2d" ? "2d" : "3d";
+      canvas.style.display = renderMode.value === "3d" ? "block" : "none";
+      canvas2d.style.display = renderMode.value === "2d" ? "block" : "none";
+      hoverEl.style.display = "none";
+      if (modeBtn) modeBtn.textContent = modeButtonText();
+    }
+
     canvas.addEventListener("pointerdown", onPointerDown);
     canvas.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
     canvas.addEventListener("wheel", onWheel, { passive: false });
+    canvas2d.addEventListener("pointerdown", onPointerDown2D);
+    canvas2d.addEventListener("pointermove", onPointerMove2D);
+    window.addEventListener("pointerup", onPointerUp2D);
+    canvas2d.addEventListener("wheel", onWheel2D, { passive: false });
 
     if (searchEl) searchEl.addEventListener("input", applySearch);
-    if (fitBtn) fitBtn.addEventListener("click", fitCamera);
+    if (fitBtn) fitBtn.addEventListener("click", () => {
+      if (renderMode.value === "2d") fit2DLayout();
+      else fitCamera();
+    });
+    if (modeBtn) {
+      modeBtn.addEventListener("click", () => {
+        setRenderMode(renderMode.value === "3d" ? "2d" : "3d");
+      });
+      modeBtn.textContent = modeButtonText();
+    }
     if (themeBtn) {
       themeBtn.addEventListener("click", () => {
         const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
@@ -2169,6 +2500,10 @@ def graph_page_js() -> str:
 
     function render() {
       requestAnimationFrame(render);
+      if (renderMode.value === "2d") {
+        draw2D();
+        return;
+      }
       if (cameraDirty) updateCameraMatrices();
       if (pointsDirty) syncPointBuffers();
       if (edgesDirty) syncEdgeBuffers();
@@ -2189,6 +2524,8 @@ def graph_page_js() -> str:
     renderLegend();
     fitCamera();
     buildSphereBuffers();
+    build2DLayout();
+    setRenderMode("2d");
     applySearch();
     render();
   }
