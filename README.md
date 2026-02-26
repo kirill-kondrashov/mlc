@@ -14,10 +14,15 @@ As of 2026-02-26, exactly two non-core axioms remain in the root theorem:
 - `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 - `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`
 
-These two axioms are temporarily included in the allowed frontier for
-`make check` so CI stays green while constructive replacements are finalized.
-The next step is to eliminate both and return to the core-only frontier
-(`Quot.sound`, `propext`, `Classical.choice`).
+These two axioms are **not** in the allowed frontier. The allowed frontier
+remains core-only:
+
+- `Quot.sound`
+- `propext`
+- `Classical.choice`
+
+So `make check` currently fails with an axiom-frontier violation until these
+two axioms are eliminated. Eliminating them is the immediate next milestone.
 
 Expected output:
 
