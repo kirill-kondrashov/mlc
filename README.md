@@ -31,7 +31,7 @@ All axioms used:
 - MLC.Quadratic.green_function_strictMono_along_ray_basin_seam
 ```
 
-## Progress Snapshot (Effort In Hours, Not Weeks)
+## Progress Snapshot (Effort In Hours)
 
 | Target Axiom | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|
