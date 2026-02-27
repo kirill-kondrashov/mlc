@@ -1,7 +1,7 @@
 # Axiom Elimination Status (Umbrella Plan)
 
 ---
-**Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `CYCLE_COMPLETE`
+**Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ITERATION_COMPLETE`
 **Target Axioms:** `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 **Last Updated:** 2026-02-27
 ---
@@ -21,47 +21,44 @@ Unexpected axioms:
 - MLC.greenRayLogGtAnchorTwo_axiom_seed
 ```
 
-## Cycle Outcome
-
-- Executed all active plans in parallel scope this cycle.
-- Added explicit constructor-gap and redesign boundary layers in
-  `Mlc/MainConjecture.lean`:
-  - `GreenRayUniquePreimageTwoAnchorSeamWitnessGap`
-  - `greenRayUniquePreimageTwoAnchorSeam_of_greenRayUniquePreimageTwoAnchorSeamWitnessGap`
-  - `NonseamRootReplacementTargetTwo`
-  - `mlc_conjecture_of_nonseamRootReplacementTargetTwo`
-  - `mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwoWitnessGap_of_directProperLocalWitnessTwo`
-- Verified `lake build Mlc.MainConjecture` passes after the changes.
-
-## Plan Progress Bars
+## Active Plan Progress
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom1_noarg_greenRayUniquePreimageTwoAnchorSeam_constructor_search_v2.md` | seek no-arg constructor for unique-preimage seam via revised witness sources | `██████░░░░` **60%** | **40%** | **blocked** | ⭐⭐⭐⭐⭐ | `STUCK` |
-| `PLAN_axiom1_model_redesign_to_replace_greenRayLogGtAnchorTwoSeam_target_v1.md` | redesign model target to avoid contradictory log-gap seam requirement | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐⭐⭐ | `COMPLETED` |
-| `PLAN_axiom1_root_cutover_to_nonseam_inj_witness_interface_v1.md` | cut root theorem to non-seam injectivity witness interface | `███████░░░` **70%** | **30%** | **blocked** | ⭐⭐⭐⭐⭐ | `STUCK` |
+| `PLAN_axiom_elimination_status.md` | parallel v9 orchestration + dead-end checks | `██████████` **100%** | **0%** | **none (this iteration)** | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_strict_subcutoff_window_existence_or_refutation_v9.md` | strict-subcutoff route (existence/refutation) | `██████████` **100%** | **0%** | none (refutation completed) | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_directProperLocalWitnessTwo_from_localHomeomorph_closed_range_v9.md` | local-homeomorph closed-preimage route analysis | `██████████` **100%** | **0%** | none (equivalence/collapse completed) | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_root_entry_detour_via_injSurjExteriorConstructivePayloadTwo_v9.md` | root entry detour via inj/surj payload | `██████████` **100%** | **0%** | none (detour layer complete) | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom1_seed_dependency_min_cut_slice_v9.md` | seed dependency min-cut slice | `██████████` **100%** | **0%** | none (slice complete) | ⭐⭐⭐⭐☆ | `DONE` |
 
-## Dead-End / Repetition Check (This Iteration)
+## Completed This Iteration
 
-- No branch repeated a known dead route without theorem-signature delta.
-- Redesign plan produced concrete non-seam boundary additions and is complete.
-- Both remaining branches are blocked by the same missing non-seeded no-arg
-  injectivity source; continuing those edits without a new source would be
-  self-repetition.
+- Closed strict-subcutoff route by refutation:
+  - `not_nonimplicativeWindowInterfaceTwo_of_one_lt_radius`
+  - `not_strictSubcutoffWindowExistenceTwo`
+  - `not_partialWindowNotCoveringCutoffWithNontransportedTailTwo`
+  - `not_constructPartialWindowWitnessDirectlyWithoutTransportTwo`
+- Closed local-homeomorph closed-preimage route analysis by equivalence/collapse:
+  - `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo`
+  - `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_iff_directProperLocalWitnessTwo`
+- Extended root detour coverage for the packaged route.
+
+## Stuck File Decision
+
+- No active stuck plan files remain in this cycle.
+- Kept all plan files for traceability and anti-repetition history.
+
+## Dead-End / Self-Repetition Check (This Iteration)
+
+- Subcutoff-window route is formally blocked.
+- Local-homeomorph closed-preimage route is now shown equivalent to an existing
+  target, so repeated repackaging would be self-repetition.
+- Remaining frontier blocker is outside these completed route analyses.
 
 ## Remaining Global Blocker
 
-- A non-seeded no-arg constructor for
-  `RootSafeOutsideOpenInjWitnessTwo` is still missing.
-- This prevents no-arg construction of
-  `GreenRayUniquePreimageTwoAnchorSeam` and blocks final root cutover.
-- `make check` still reports `MLC.greenRayLogGtAnchorTwo_axiom_seed`.
-
-## Suggested Next Plans
-
-1. `PLAN_axiom1_noarg_rootSafeOutsideOpenInjWitnessTwo_constructor_search_v2.md`
-2. `PLAN_axiom1_nonseam_inj_payload_inventory_and_gap_proof_v1.md`
-3. `PLAN_axiom1_root_cutover_after_nonseam_inj_noarg_witness_v1.md`
+- No frontier-safe constructive theorem currently replaces
+  `greenRayLogGtAnchorTwo_seed` at root entry.
 
 ## Exit Condition
 

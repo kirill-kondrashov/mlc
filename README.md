@@ -38,15 +38,19 @@ All axioms used:
 
 | Target Axiom | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|
-| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` 86% | 14% | ~90-240 Lean LOC, ~3-9 hrs |
+| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` 87% | 13% | ~80-220 Lean LOC, ~3-8 hrs |
 
-Total estimated remainder: ~90-240 Lean LOC, ~3-9 hours.
+Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 ## Active Plans (`plan/*`)
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | latest cycle summary |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | latest iteration summary |
+| `plan/PLAN_axiom1_strict_subcutoff_window_existence_or_refutation_v9.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | refutation branch completed |
+| `plan/PLAN_axiom1_directProperLocalWitnessTwo_from_localHomeomorph_closed_range_v9.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | route equivalence/collapse completed |
+| `plan/PLAN_axiom1_root_entry_detour_via_injSurjExteriorConstructivePayloadTwo_v9.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | detour wrapper complete |
+| `plan/PLAN_axiom1_seed_dependency_min_cut_slice_v9.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | dependency slice complete |
 
 ## Key Technical Reality
 
@@ -56,9 +60,105 @@ Total estimated remainder: ~90-240 Lean LOC, ~3-9 hours.
   `not_greenRayLogGtAnchorTwo_cutoff_band`.
 - An anchor-free payload staging interface now exists in root wiring:
   `RootSeedPayloadTwoNoAnchor` and its first bridge wrappers.
-- Latest cycle added non-seam boundary wrappers and constructor-gap interfaces;
-  remaining blocker is a missing non-seeded no-arg outside-open injectivity
-  witness.
+- Latest cycle confirmed the non-seam replacement interface is complete, while
+  root cutover remains blocked by a missing non-seeded no-arg outside-open
+  injectivity witness.
+- New non-seeded seam helper exists:
+  `cp5ResidualLocalHomeomorphInjSeamTwo_of_rootSafeOutsideOpenInjWitnessTwo`.
+- New equivalence and root-tail staging wrappers now exist:
+  `rootSafeOutsideOpenInjWitnessTwo_iff_cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo`
+  and `mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo`.
+- Primitive witness-family interface now exists:
+  `PrimitiveRestrictedMapProperLocalWitnessFamilyTwo` and
+  `primitiveRestrictedMapProperLocalWitnessFamilyTwo_iff_directProperLocalWitnessTwo`.
+- Primitive-family specialization bridges now exist:
+  `rootSafeOutsideOpenInjWitnessTwo_iff_cp5ResidualLocalHomeomorphInjSeamTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`
+  and `mlc_conjecture_root_tail_nonseam_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`.
+- Primitive-family witness-gap/root-gap bridges were added:
+  `primitiveRestrictedMapProperLocalWitnessFamilyTwo_iff_remainingConstructiveIngressTwoWitnessGap`,
+  `rootClosureSubstituteTwoWitnessGap_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`,
+  and `rootClosureSubstituteTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`.
+- Strict-mono-free ingress dead-end is now normalized explicitly:
+  `rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo_iff_false` and
+  `rootSeedPayloadTwoStrictMonoFreeIngressTwo_iff_false`.
+- New non-seeded ingress probe family was added and shown blocked:
+  `RootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo` and
+  `not_rootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo`.
+- New geometric outside-open/fiber ingress family was added:
+  `RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo`.
+- That geometric family is normalized to the existing root-safe target:
+  `rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_iff_rootSafeOutsideOpenInjWitnessTwo`.
+- Geometric-ingress log-gap constructor shape is now explicitly blocked:
+  `not_greenRayLogGtAnchorTwoSeam_constructor_from_rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo`.
+- Added ray-monotonicity-window interface and no-go pair:
+  `GreenRayLogGapMonotonicityWindowTwo` and
+  `not_greenRayLogGapMonotonicityWindowTwo`.
+- Added candidate nonvacuous geometric extraction bundle and no-go:
+  `NonvacuousGeometricIngressWitnessExtractionTwo` and
+  `not_nonvacuousGeometricIngressWitnessExtractionTwo`.
+- Added parameterized nonimplicative local-window interface:
+  `NonimplicativeWindowInterfaceTwo`.
+- Added cutoff-coverage no-go for that interface:
+  `not_nonimplicativeWindowInterfaceTwo_of_cutoff_le_radius`.
+- Added localized ray-interval geometric source interface:
+  `LocalizedRayIntervalGeometricSourceTwo`.
+- Added cutoff-coverage no-go for localized source:
+  `not_localizedRayIntervalGeometricSourceTwo_of_cutoff_le_radius`.
+- Added strict subcutoff local-window + transport package:
+  `StrictlySubcutoffLocalWindowWithTransportBridgeTwo`.
+- Added no-go for strict subcutoff transport package:
+  `not_strictlySubcutoffLocalWindowWithTransportBridgeTwo`.
+- Added localized-source to ingress-gap interface:
+  `LocalizedSourceToRemainingConstructiveIngressGapTwo`.
+- Added no-go for that localized-source transport interface:
+  `not_localizedSourceToRemainingConstructiveIngressGapTwo`.
+- Added partial-window interface without tail transport:
+  `PartialWindowNotCoveringCutoffWithNontransportedTailTwo`.
+- Added localized source interface without full-window upgrade:
+  `LocalizedSourceWithoutFullWindowUpgradeTwo`.
+- Added staged no-arg direct-witness target from partial-window source:
+  `NoargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo`.
+- Added root-tail wrapper through that staged no-arg target:
+  `mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo`.
+- Added direct-constructor alias for partial-window witnesses:
+  `ConstructPartialWindowWitnessDirectlyWithoutTransportTwo`.
+- Added localized-source constructor map from direct partial-window witnesses:
+  `LocalizedSourceWitnessFromPartialWindowConstructorTwo`.
+- Added constructor-oriented no-arg direct-witness target:
+  `NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo`.
+- Added root-tail wrapper through constructor-oriented no-arg target:
+  `mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo`.
+- Added v8 explicit-subcutoff witness candidate interface and equivalence:
+  `ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo` and
+  `explicitSubcutoffWitnessCandidateFromGreenBoundsTwo_iff_constructPartialWindowWitnessDirectlyWithoutTransportTwo`.
+- Added v8 localized-source constructor interface and equivalence:
+  `LocalizedSourceWitnessFromExplicitSubcutoffWitnessTwo` and
+  `localizedSourceWitnessFromExplicitSubcutoffWitnessTwo_iff_localizedSourceWitnessFromPartialWindowConstructorTwo`.
+- Added v8 no-arg interface and equivalence:
+  `NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo` and
+  `noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo_iff_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo`.
+- Added v8 root-tail cutover wrapper:
+  `mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo`.
+- Added v9 strict-subcutoff route interface and equivalences:
+  `StrictSubcutoffWindowExistenceTwo`,
+  `strictSubcutoffWindowExistenceTwo_iff_partialWindowNotCoveringCutoffWithNontransportedTailTwo`,
+  `strictSubcutoffWindowExistenceTwo_iff_constructPartialWindowWitnessDirectlyWithoutTransportTwo`.
+- Added strong local-window no-go and strict-subcutoff refutation:
+  `not_nonimplicativeWindowInterfaceTwo_of_one_lt_radius` and
+  `not_strictSubcutoffWindowExistenceTwo`.
+- Added v9 direct proper/local witness route packaging:
+  `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo` and
+  `directProperLocalWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`.
+- Added converse and collapse equivalence for that route:
+  `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo` and
+  `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_iff_directProperLocalWitnessTwo`.
+- Added v9 root-entry detour wrappers:
+  `RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo` and
+  `mlc_conjecture_of_rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo`.
+- Added v9 seed dependency min-cut interface:
+  `SeedDependencyMinCutSliceTwo`.
+- Current strict-mono-free ingress families are formally blocked:
+  `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier
   axioms (`MLC.Quadratic.external_ray_map_exists`,
   `MLC.Quadratic.bottcher_seq_converges`).

@@ -2182,6 +2182,20 @@ theorem greenRayLogGtAnchorTwoSeam_of_cutoff_band
   · exact greenRayLogGtAnchorTwo_of_norm_gt_cutoff w hlarge
   · exact hband w hw (le_of_not_gt hlarge)
 
+/-- Monotonicity-window interface for the Green-ray anchor-gap inequality at
+`c = 2`: verify the inequality only on the bounded cutoff band. -/
+def GreenRayLogGapMonotonicityWindowTwo : Prop :=
+  ∀ w : ℂ, 1 < ‖w‖ → ‖w‖ ≤ greenRayLogGtAnchorTwoCutoff →
+    MLC.Quadratic.green_function (2 : ℂ)
+        (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
+
+/-- The Green-ray log-gap monotonicity window implies the full anchor-gap seam
+at `c = 2`. -/
+theorem greenRayLogGtAnchorTwoSeam_of_greenRayLogGapMonotonicityWindowTwo
+    (hwin : GreenRayLogGapMonotonicityWindowTwo) :
+    GreenRayLogGtAnchorTwoSeam :=
+  greenRayLogGtAnchorTwoSeam_of_cutoff_band hwin
+
 /-- The current global anchor-gap seam is inconsistent at `c = 2`: choosing
 `w` with modulus `exp(G_anchor / 2)` forces `G_anchor < G_anchor / 2`. -/
 theorem not_greenRayLogGtAnchorTwoSeam :
@@ -2257,6 +2271,296 @@ theorem not_greenRayLogGtAnchorTwo_cutoff_band :
   intro hband
   exact not_greenRayLogGtAnchorTwoSeam
     (greenRayLogGtAnchorTwoSeam_of_cutoff_band hband)
+
+/-- Dead-end certificate: the bounded Green-ray log-gap monotonicity window is
+inconsistent in the current model, because it implies the globally inconsistent
+anchor-gap seam. -/
+theorem not_greenRayLogGapMonotonicityWindowTwo :
+    ¬ GreenRayLogGapMonotonicityWindowTwo := by
+  intro hwin
+  exact not_greenRayLogGtAnchorTwoSeam
+    (greenRayLogGtAnchorTwoSeam_of_greenRayLogGapMonotonicityWindowTwo hwin)
+
+/-- Parameterized local Green-ray log-gap window at `c = 2`: enforce the
+bounded-band inequality only up to radius `R`, with `R` bounded by the global
+cutoff. This interface is intentionally weaker than the full cutoff window. -/
+def NonimplicativeWindowInterfaceTwo (R : ℝ) : Prop :=
+  1 < R ∧ R ≤ greenRayLogGtAnchorTwoCutoff ∧
+    ∀ w : ℂ, 1 < ‖w‖ → ‖w‖ ≤ R →
+      MLC.Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
+
+/-- Strong local-window no-go at `c = 2`: any nonimplicative local window with
+radius strictly larger than `1` is inconsistent, by testing the fixed anchor
+direction at a norm level where the logarithmic target remains below the anchor
+Green value. -/
+theorem not_nonimplicativeWindowInterfaceTwo_of_one_lt_radius
+    {R : ℝ}
+    (hR_gt1 : 1 < R) :
+    ¬ NonimplicativeWindowInterfaceTwo R := by
+  intro hwin
+  have h2norm : ‖(2 : ℂ)‖ = 2 := by
+    rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast, norm_real,
+      Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
+  let zAnchor : ℂ := (((‖(2 : ℂ)‖ + 2 : ℝ) * (1 : ℂ)) : ℂ)
+  have hfunc := Quadratic.green_function_functional_eq (2 : ℂ) zAnchor
+  have hfc_eval : fc (2 : ℂ) zAnchor = (18 : ℂ) := by
+    dsimp [zAnchor]
+    rw [fc, h2norm]
+    norm_num
+  have hG_fc_pos : 0 < Quadratic.green_function (2 : ℂ) (fc (2 : ℂ) zAnchor) := by
+    rw [hfc_eval]
+    have h18_out : ‖(18 : ℂ)‖ > ‖(2 : ℂ)‖ + 2 := by
+      rw [show (18 : ℂ) = ((18 : ℝ) : ℂ) from by norm_cast,
+        Complex.norm_real, Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 18), h2norm]
+      norm_num
+    exact GreenFunctionRayInversion.green_function_pos_on_outside_open (2 : ℂ) (18 : ℂ) h18_out
+  have hG_anchor_pos : 0 < Quadratic.green_function (2 : ℂ) zAnchor := by
+    have hfunc' :
+        Quadratic.green_function (2 : ℂ) (fc (2 : ℂ) zAnchor) =
+          2 * Quadratic.green_function (2 : ℂ) zAnchor := by
+      simpa using hfunc
+    linarith
+  let gAnchor : ℝ := Quadratic.green_function (2 : ℂ) zAnchor
+  let t : ℝ := min R (Real.exp (gAnchor / 2))
+  have hexp_gt1 : 1 < Real.exp (gAnchor / 2) := by
+    have : 0 < gAnchor := by simpa [gAnchor] using hG_anchor_pos
+    exact Real.one_lt_exp_iff.mpr (by linarith)
+  have ht_gt1 : 1 < t := by
+    exact lt_min hR_gt1 hexp_gt1
+  have ht_le_R : t ≤ R := min_le_left _ _
+  let w : ℂ := ((t : ℝ) : ℂ)
+  have hw_norm : ‖w‖ = t := by
+    dsimp [w]
+    rw [Complex.norm_real, Real.norm_of_nonneg]
+    exact (lt_trans zero_lt_one ht_gt1).le
+  have hw_gt1 : 1 < ‖w‖ := by
+    simpa [hw_norm] using ht_gt1
+  have hw_le_R : ‖w‖ ≤ R := by
+    simpa [hw_norm] using ht_le_R
+  have hdir : w / ↑‖w‖ = (1 : ℂ) := by
+    dsimp [w]
+    rw [hw_norm]
+    have hne : (((t : ℝ) : ℂ)) ≠ 0 := by
+      exact_mod_cast (lt_trans zero_lt_one ht_gt1).ne'
+    exact div_self hne
+  have hanchor_eval :
+      Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) = gAnchor := by
+    dsimp [gAnchor, zAnchor]
+    rw [hdir]
+  have hlog_lt : Real.log t < gAnchor := by
+    have ht_pos : 0 < t := lt_trans zero_lt_one ht_gt1
+    have hlog_le_half :
+        Real.log t ≤ gAnchor / 2 := by
+      calc
+        Real.log t ≤ Real.log (Real.exp (gAnchor / 2)) := by
+          exact Real.log_le_log ht_pos (min_le_right _ _)
+        _ = gAnchor / 2 := by rw [Real.log_exp]
+    have hhalf_lt : gAnchor / 2 < gAnchor := by
+      have : 0 < gAnchor := by simpa [gAnchor] using hG_anchor_pos
+      linarith
+    exact lt_of_le_of_lt hlog_le_half hhalf_lt
+  have hwin_eval :
+      Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖ :=
+    hwin.2.2 w hw_gt1 hw_le_R
+  have hcontr : gAnchor < Real.log t := by
+    calc
+      gAnchor
+          = Quadratic.green_function (2 : ℂ)
+              (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) := hanchor_eval.symm
+      _ < Real.log ‖w‖ := hwin_eval
+      _ = Real.log t := by rw [hw_norm]
+  linarith
+
+/-- If a local window radius `R` covers the full cutoff band, the local window
+upgrades to the full monotonicity window. -/
+theorem greenRayLogGapMonotonicityWindowTwo_of_nonimplicativeWindowInterfaceTwo_of_cutoff_le_radius
+    {R : ℝ}
+    (hwin : NonimplicativeWindowInterfaceTwo R)
+    (hcut_le : greenRayLogGtAnchorTwoCutoff ≤ R) :
+    GreenRayLogGapMonotonicityWindowTwo := by
+  intro w hw hcut
+  exact hwin.2.2 w hw (le_trans hcut hcut_le)
+
+/-- Dead-end certificate for local windows that cover the full cutoff band:
+such windows are inconsistent in the current model because they force the full
+monotonicity window. -/
+theorem not_nonimplicativeWindowInterfaceTwo_of_cutoff_le_radius
+    {R : ℝ}
+    (_hcut_le : greenRayLogGtAnchorTwoCutoff ≤ R) :
+    ¬ NonimplicativeWindowInterfaceTwo R := by
+  intro hwin
+  exact not_nonimplicativeWindowInterfaceTwo_of_one_lt_radius hwin.1 hwin
+
+/-- In particular, the local-window interface is inconsistent at the exact
+cutoff radius. -/
+theorem not_nonimplicativeWindowInterfaceTwo_at_cutoff :
+    ¬ NonimplicativeWindowInterfaceTwo greenRayLogGtAnchorTwoCutoff := by
+  exact not_nonimplicativeWindowInterfaceTwo_of_cutoff_le_radius
+    (R := greenRayLogGtAnchorTwoCutoff) le_rfl
+
+/-- Strictly subcutoff local-window package at `c = 2`: a local nonimplicative
+window strictly below the global cutoff, together with a transport bridge for
+the remaining cutoff annulus. -/
+def StrictlySubcutoffLocalWindowWithTransportBridgeTwo : Prop :=
+  ∃ R : ℝ, 1 < R ∧ R < greenRayLogGtAnchorTwoCutoff ∧
+    NonimplicativeWindowInterfaceTwo R ∧
+    (∀ w : ℂ, R < ‖w‖ → ‖w‖ ≤ greenRayLogGtAnchorTwoCutoff →
+      MLC.Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
+
+/-- A strict subcutoff local-window package plus annulus transport bridge
+upgrades to the full bounded cutoff window. -/
+theorem greenRayLogGapMonotonicityWindowTwo_of_strictlySubcutoffLocalWindowWithTransportBridgeTwo
+    (h : StrictlySubcutoffLocalWindowWithTransportBridgeTwo) :
+    GreenRayLogGapMonotonicityWindowTwo := by
+  rcases h with ⟨R, hR_gt1, hR_lt_cut, hwin, htransport⟩
+  intro w hw hcut
+  by_cases hle : ‖w‖ ≤ R
+  · exact hwin.2.2 w hw hle
+  · exact htransport w (lt_of_not_ge hle) hcut
+
+/-- Current-model no-go: the strict subcutoff local-window package is
+inconsistent because it still reconstructs the full bounded cutoff window. -/
+theorem not_strictlySubcutoffLocalWindowWithTransportBridgeTwo :
+    ¬ StrictlySubcutoffLocalWindowWithTransportBridgeTwo := by
+  intro h
+  exact not_greenRayLogGapMonotonicityWindowTwo
+    (greenRayLogGapMonotonicityWindowTwo_of_strictlySubcutoffLocalWindowWithTransportBridgeTwo h)
+
+/-- Partial-window interface at `c = 2` that stays strictly below cutoff and
+does not include any tail-transport payload. -/
+def PartialWindowNotCoveringCutoffWithNontransportedTailTwo : Prop :=
+  ∃ R : ℝ, 1 < R ∧ R < greenRayLogGtAnchorTwoCutoff ∧
+    NonimplicativeWindowInterfaceTwo R
+
+/-- Any strict-subcutoff package with transport has a partial-window projection
+that does not carry the tail-transport payload. -/
+theorem partialWindowNotCoveringCutoffWithNontransportedTailTwo_of_strictlySubcutoffLocalWindowWithTransportBridgeTwo
+    (h : StrictlySubcutoffLocalWindowWithTransportBridgeTwo) :
+    PartialWindowNotCoveringCutoffWithNontransportedTailTwo := by
+  rcases h with ⟨R, hR_gt1, hR_lt_cut, hwin, _htransport⟩
+  exact ⟨R, hR_gt1, hR_lt_cut, hwin⟩
+
+/-- Current-model no-go transfer: a partial-window payload cannot be upgraded to
+the strict-subcutoff transport package in the current model. -/
+theorem no_strictlySubcutoffTransportPackage_of_partialWindowNotCoveringCutoffWithNontransportedTailTwo
+    (_h : PartialWindowNotCoveringCutoffWithNontransportedTailTwo) :
+    ¬ StrictlySubcutoffLocalWindowWithTransportBridgeTwo := by
+  intro hstrict
+  exact not_strictlySubcutoffLocalWindowWithTransportBridgeTwo hstrict
+
+/-- v7 constructor-oriented alias: explicitly names the direct construction
+target for partial-window witnesses without transport. -/
+def ConstructPartialWindowWitnessDirectlyWithoutTransportTwo : Prop :=
+  PartialWindowNotCoveringCutoffWithNontransportedTailTwo
+
+/-- The direct partial-window constructor target is definitionally equivalent to
+the partial-window interface without transport. -/
+theorem constructPartialWindowWitnessDirectlyWithoutTransportTwo_iff_partialWindowNotCoveringCutoffWithNontransportedTailTwo :
+    ConstructPartialWindowWitnessDirectlyWithoutTransportTwo ↔
+      PartialWindowNotCoveringCutoffWithNontransportedTailTwo := by
+  rfl
+
+/-- Any direct partial-window witness still cannot upgrade to the known
+inconsistent strict-subcutoff transport package. -/
+theorem no_strictlySubcutoffTransportPackage_of_constructPartialWindowWitnessDirectlyWithoutTransportTwo
+    (_h : ConstructPartialWindowWitnessDirectlyWithoutTransportTwo) :
+    ¬ StrictlySubcutoffLocalWindowWithTransportBridgeTwo := by
+  intro hstrict
+  exact not_strictlySubcutoffLocalWindowWithTransportBridgeTwo hstrict
+
+/-- v8 explicit subcutoff witness-candidate interface:
+strictly subcutoff local window data paired with the constructively available
+tail inequality above cutoff. -/
+def ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo : Prop :=
+  ∃ R : ℝ, 1 < R ∧ R < greenRayLogGtAnchorTwoCutoff ∧
+    NonimplicativeWindowInterfaceTwo R ∧
+    (∀ w : ℂ, greenRayLogGtAnchorTwoCutoff < ‖w‖ →
+      MLC.Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
+
+/-- Any v8 explicit subcutoff witness-candidate projects to the constructor
+target for partial-window witnesses without transport. -/
+theorem constructPartialWindowWitnessDirectlyWithoutTransportTwo_of_explicitSubcutoffWitnessCandidateFromGreenBoundsTwo
+    (h : ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo) :
+    ConstructPartialWindowWitnessDirectlyWithoutTransportTwo := by
+  rcases h with ⟨R, hR_gt1, hR_lt_cut, hwin, _htail⟩
+  exact ⟨R, hR_gt1, hR_lt_cut, hwin⟩
+
+/-- Any direct partial-window constructor witness upgrades to the v8 explicit
+subcutoff witness-candidate interface by adding the constructive tail bound. -/
+theorem explicitSubcutoffWitnessCandidateFromGreenBoundsTwo_of_constructPartialWindowWitnessDirectlyWithoutTransportTwo
+    (hpartial : ConstructPartialWindowWitnessDirectlyWithoutTransportTwo) :
+    ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo := by
+  rcases hpartial with ⟨R, hR_gt1, hR_lt_cut, hwin⟩
+  refine ⟨R, hR_gt1, hR_lt_cut, hwin, ?_⟩
+  intro w hw_gt_cut
+  exact greenRayLogGtAnchorTwo_of_norm_gt_cutoff w hw_gt_cut
+
+/-- The v8 explicit subcutoff witness-candidate interface is equivalent to the
+direct partial-window constructor target. -/
+theorem explicitSubcutoffWitnessCandidateFromGreenBoundsTwo_iff_constructPartialWindowWitnessDirectlyWithoutTransportTwo :
+    ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo ↔
+      ConstructPartialWindowWitnessDirectlyWithoutTransportTwo := by
+  constructor
+  · intro h
+    exact
+      constructPartialWindowWitnessDirectlyWithoutTransportTwo_of_explicitSubcutoffWitnessCandidateFromGreenBoundsTwo
+        h
+  · intro hpartial
+    exact
+      explicitSubcutoffWitnessCandidateFromGreenBoundsTwo_of_constructPartialWindowWitnessDirectlyWithoutTransportTwo
+        hpartial
+
+/-- v9 strict-subcutoff existence route: existence of a strictly subcutoff
+nonimplicative window, with no transport payload. -/
+def StrictSubcutoffWindowExistenceTwo : Prop :=
+  ∃ R : ℝ, 1 < R ∧ R < greenRayLogGtAnchorTwoCutoff ∧
+    NonimplicativeWindowInterfaceTwo R
+
+/-- The v9 strict-subcutoff existence route is definitionally equivalent to the
+existing partial-window/no-transport interface. -/
+theorem strictSubcutoffWindowExistenceTwo_iff_partialWindowNotCoveringCutoffWithNontransportedTailTwo :
+    StrictSubcutoffWindowExistenceTwo ↔
+      PartialWindowNotCoveringCutoffWithNontransportedTailTwo := by
+  rfl
+
+/-- The v9 strict-subcutoff existence route is equivalent to the v7 direct
+partial-window constructor target. -/
+theorem strictSubcutoffWindowExistenceTwo_iff_constructPartialWindowWitnessDirectlyWithoutTransportTwo :
+    StrictSubcutoffWindowExistenceTwo ↔
+      ConstructPartialWindowWitnessDirectlyWithoutTransportTwo := by
+  constructor
+  · intro h
+    exact h
+  · intro h
+    exact h
+
+/-- Refutation branch for v9: strict-subcutoff window existence is impossible
+in the current model because every admissible local nonimplicative window
+radius exceeds `1`, which is already inconsistent. -/
+theorem not_strictSubcutoffWindowExistenceTwo :
+    ¬ StrictSubcutoffWindowExistenceTwo := by
+  intro h
+  rcases h with ⟨R, hR_gt1, _hR_lt_cut, hwin⟩
+  exact not_nonimplicativeWindowInterfaceTwo_of_one_lt_radius hR_gt1 hwin
+
+/-- Refutation transfer: the existing partial-window/no-transport interface is
+inconsistent in the current model. -/
+theorem not_partialWindowNotCoveringCutoffWithNontransportedTailTwo :
+    ¬ PartialWindowNotCoveringCutoffWithNontransportedTailTwo := by
+  intro h
+  exact not_strictSubcutoffWindowExistenceTwo h
+
+/-- Refutation transfer: the v7 direct partial-window constructor target is
+inconsistent in the current model. -/
+theorem not_constructPartialWindowWitnessDirectlyWithoutTransportTwo :
+    ¬ ConstructPartialWindowWitnessDirectlyWithoutTransportTwo := by
+  intro h
+  exact not_strictSubcutoffWindowExistenceTwo h
 
 /-- Dead-end certificate: the replacement-shape seam does not by itself recover
 the old global anchor-gap seam target. -/
@@ -2604,6 +2908,35 @@ def DirectProperLocalWitnessTwo : Prop :=
   IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
 
+/-- Primitive restricted-map proper/local witness family at `c = 2`.
+This packages the same payload as `DirectProperLocalWitnessTwo` under a
+distinct interface name for no-arg witness-source design work. -/
+def PrimitiveRestrictedMapProperLocalWitnessFamilyTwo : Prop :=
+  IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
+
+/-- Build the direct proper/local witness from the primitive witness family. -/
+theorem directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+    (h : PrimitiveRestrictedMapProperLocalWitnessFamilyTwo) :
+    DirectProperLocalWitnessTwo :=
+  h
+
+/-- Build the primitive witness family from the direct proper/local witness. -/
+theorem primitiveRestrictedMapProperLocalWitnessFamilyTwo_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    PrimitiveRestrictedMapProperLocalWitnessFamilyTwo :=
+  h
+
+/-- The primitive restricted-map witness family is equivalent to the direct
+proper/local witness payload at `c = 2`. -/
+theorem primitiveRestrictedMapProperLocalWitnessFamilyTwo_iff_directProperLocalWitnessTwo :
+    PrimitiveRestrictedMapProperLocalWitnessFamilyTwo ↔ DirectProperLocalWitnessTwo := by
+  constructor
+  · intro h
+    exact directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h
+  · intro h
+    exact primitiveRestrictedMapProperLocalWitnessFamilyTwo_of_directProperLocalWitnessTwo h
+
 /-- Reduced-open local-homeomorph surjectivity-source constructor at `c = 2`
 from the direct proper+local witness. -/
 theorem localHomeomorphSurjSourceTwo_of_directProperLocalWitnessTwo
@@ -2663,6 +2996,70 @@ theorem directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_cl
   exact
     ⟨isProperMap_bottcher_map_outside_open_to_exterior_two_of_isLocalHomeomorph_restrict_of_preimage_closed
       hlocal hclosedpre, hlocal⟩
+
+/-- v9 packaged route to `DirectProperLocalWitnessTwo` from local-homeomorph
+plus closed-preimage data on compact exterior targets. -/
+def DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo : Prop :=
+  IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+    (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+      IsClosed
+        ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
+
+/-- Build the direct proper/local witness from the v9 local-homeomorph
+closed-preimage packaged route. -/
+theorem directProperLocalWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+    (h_route : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo) :
+    DirectProperLocalWitnessTwo := by
+  exact directProperLocalWitnessTwo_of_isLocalHomeomorph_restrict_of_preimage_closed
+    h_route.1 h_route.2
+
+/-- Build the v9 local-homeomorph closed-preimage packaged route from a direct
+proper/local witness. -/
+theorem directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo := by
+  refine ⟨h.2, ?_⟩
+  intro K hK
+  have hcompact_pre :
+      IsCompact ((bottcher_map_outside_open_to_exterior (2 : ℂ)) ⁻¹' K) :=
+    h.1.isCompact_preimage hK
+  have hcompact_ambient :
+      IsCompact
+        ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
+    (isCompact_preimage_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K).1
+      hcompact_pre
+  exact hcompact_ambient.isClosed
+
+/-- The v9 local-homeomorph closed-preimage packaged route is equivalent to the
+direct proper/local witness payload at `c = 2`. -/
+theorem directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_iff_directProperLocalWitnessTwo :
+    DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo ↔
+      DirectProperLocalWitnessTwo := by
+  constructor
+  · intro h_route
+    exact
+      directProperLocalWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+        h_route
+  · intro h
+    exact
+      directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo
+        h
+
+/-- Boundary-exclusion hypotheses construct the v9 local-homeomorph
+closed-preimage packaged route. -/
+theorem directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_isLocalHomeomorph_restrict_of_boundary_exclusion
+    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hboundary :
+      ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+        ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
+          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) :
+    DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo := by
+  refine ⟨hlocal, ?_⟩
+  intro K hK
+  exact isClosed_outside_open_preimage_image_compact_of_boundary_exclusion (2 : ℂ) K hK
+    (hboundary K hK)
 
 /-- Direct proper+local witness from local-homeomorph plus boundary exclusion on
 compact exterior targets at `c = 2`. -/
@@ -4864,6 +5261,36 @@ theorem cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo
   intro _hlocal
   exact injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive h
 
+/-- Non-seeded local-homeomorph CP5 branch seam from an explicit outside-open
+injectivity witness at `c = 2`. -/
+theorem cp5ResidualLocalHomeomorphInjSeamTwo_of_rootSafeOutsideOpenInjWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
+    CP5ResidualLocalHomeomorphInjSeamTwo := by
+  intro _hlocal
+  exact h_inj
+
+/-- Under a direct proper+local witness, outside-open injectivity and the CP5
+local-homeomorph injectivity seam are equivalent at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_iff_cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    RootSafeOutsideOpenInjWitnessTwo ↔ CP5ResidualLocalHomeomorphInjSeamTwo := by
+  constructor
+  · intro h_inj
+    exact cp5ResidualLocalHomeomorphInjSeamTwo_of_rootSafeOutsideOpenInjWitnessTwo h_inj
+  · intro h_seam
+    exact
+      rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+        h h_seam
+
+/-- Primitive-family specialization of the outside-open injectivity/CP5-local
+seam equivalence at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_iff_cp5ResidualLocalHomeomorphInjSeamTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+    (h : PrimitiveRestrictedMapProperLocalWitnessFamilyTwo) :
+    RootSafeOutsideOpenInjWitnessTwo ↔ CP5ResidualLocalHomeomorphInjSeamTwo := by
+  exact
+    rootSafeOutsideOpenInjWitnessTwo_iff_cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo
+      (directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h)
+
 /-- Constructive CP5 residual→injectivity seam under no-landing, routed through
 the direct proper+local witness branch at `c = 2`. -/
 theorem cp5ResidualInjOnOutsideOpenSeamTwo_of_directProperLocalWitnessTwo_of_not_externalRayLandsOutsideOpen
@@ -5382,6 +5809,167 @@ theorem not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo :
   · exact not_knownInjOnOutsideOpenSourceCandidateTwo h_known
   · exact not_greenFunctionDegreeOneIngressTwo h_deg1
 
+/-- Normalized no-go form of the currently wired strict-mono-free ingress
+bundle at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo_iff_false :
+    RootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo ↔ False := by
+  constructor
+  · intro h
+    exact (not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo h)
+  · intro h
+    exact False.elim h
+
+/-- Expanded non-seeded ingress probe family at `c = 2`: either the currently
+wired strict-mono-free ingress bundle, or the explicit Green-ray seam witness
+gap for outside-open injectivity. -/
+def RootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo : Prop :=
+  RootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo ∨
+    RootSafeOutsideOpenInjWitnessTwoWitnessGap
+
+/-- Build the strict-mono-free root outside-open injectivity target from the
+expanded non-seeded ingress probe family. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_nonseededIngressFamilyTwo
+    (h : RootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo) :
+    RootSafeOutsideOpenInjWitnessTwo := by
+  rcases h with h_strictfree | h_gap
+  · exact rootSafeOutsideOpenInjWitnessTwo_of_strictMonoFreeIngressTwo h_strictfree
+  · exact rootSafeOutsideOpenInjWitnessTwo_of_rootSafeOutsideOpenInjWitnessTwoWitnessGap h_gap
+
+/-- Current-model no-go: the expanded non-seeded ingress probe family is also
+blocked at `c = 2`. -/
+theorem not_rootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo :
+    ¬ RootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo := by
+  intro h
+  rcases h with h_strictfree | h_gap
+  · exact not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo h_strictfree
+  · exact not_greenRayLogGtAnchorTwoSeam h_gap.2
+
+/-- Geometric outside-open/fiber ingress family at `c = 2`: pair the root-safe
+outside-open injectivity target with the restricted singleton-fiber witness. -/
+def RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo : Prop :=
+  RootSafeOutsideOpenInjWitnessTwo ∧ RestrictProperLocalDegreeOneFiberWitnessTwo
+
+/-- Extract the root-safe outside-open injectivity target from the geometric
+outside-open/fiber ingress family. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo
+    (h : RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  h.1
+
+/-- Build the geometric outside-open/fiber ingress family from the root-safe
+outside-open injectivity target. -/
+theorem rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_of_rootSafeOutsideOpenInjWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
+    RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo :=
+  ⟨h_inj, restrictProperLocalDegreeOneFiberWitnessTwo_of_injOn_outside_open h_inj⟩
+
+/-- Strict-mono-seeded witness of the geometric outside-open/fiber ingress
+family at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_strictMono_seeded :
+    RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo :=
+  rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_of_rootSafeOutsideOpenInjWitnessTwo
+    rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded
+
+/-- The geometric outside-open/fiber ingress family is equivalent to the
+root-safe outside-open injectivity target at `c = 2`. -/
+theorem rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_iff_rootSafeOutsideOpenInjWitnessTwo :
+    RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo ↔
+      RootSafeOutsideOpenInjWitnessTwo := by
+  constructor
+  · intro h
+    exact rootSafeOutsideOpenInjWitnessTwo_of_rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo h
+  · intro h_inj
+    exact
+      rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_of_rootSafeOutsideOpenInjWitnessTwo
+        h_inj
+
+/-- Dead-end certificate for the geometric-ingress log-gap constructor shape:
+any attempt to derive `GreenRayLogGtAnchorTwoSeam` from this ingress family is
+inconsistent with the current model. -/
+theorem not_greenRayLogGtAnchorTwoSeam_constructor_from_rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo :
+    ¬ (RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo →
+      GreenRayLogGtAnchorTwoSeam) := by
+  intro hctor
+  exact not_greenRayLogGtAnchorTwoSeam
+    (hctor
+      (rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_of_rootSafeOutsideOpenInjWitnessTwo
+        rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded))
+
+/-- Candidate nonvacuous geometric witness-extraction bundle at `c = 2`:
+geometric outside-open/fiber ingress plus bounded log-gap monotonicity window. -/
+def NonvacuousGeometricIngressWitnessExtractionTwo : Prop :=
+  RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo ∧
+    GreenRayLogGapMonotonicityWindowTwo
+
+/-- Extract the geometric outside-open/fiber ingress family from the candidate
+nonvacuous geometric witness-extraction bundle. -/
+theorem rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_of_nonvacuousGeometricIngressWitnessExtractionTwo
+    (h : NonvacuousGeometricIngressWitnessExtractionTwo) :
+    RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo :=
+  h.1
+
+/-- Extract the bounded log-gap monotonicity window from the candidate
+nonvacuous geometric witness-extraction bundle. -/
+theorem greenRayLogGapMonotonicityWindowTwo_of_nonvacuousGeometricIngressWitnessExtractionTwo
+    (h : NonvacuousGeometricIngressWitnessExtractionTwo) :
+    GreenRayLogGapMonotonicityWindowTwo :=
+  h.2
+
+/-- Build the full anchor-gap seam from the candidate nonvacuous geometric
+witness-extraction bundle. -/
+theorem greenRayLogGtAnchorTwoSeam_of_nonvacuousGeometricIngressWitnessExtractionTwo
+    (h : NonvacuousGeometricIngressWitnessExtractionTwo) :
+    GreenRayLogGtAnchorTwoSeam :=
+  greenRayLogGtAnchorTwoSeam_of_greenRayLogGapMonotonicityWindowTwo
+    (greenRayLogGapMonotonicityWindowTwo_of_nonvacuousGeometricIngressWitnessExtractionTwo h)
+
+/-- Current-model no-go: the candidate nonvacuous geometric witness-extraction
+bundle is inconsistent at `c = 2`. -/
+theorem not_nonvacuousGeometricIngressWitnessExtractionTwo :
+    ¬ NonvacuousGeometricIngressWitnessExtractionTwo := by
+  intro h
+  exact not_greenRayLogGapMonotonicityWindowTwo
+    (greenRayLogGapMonotonicityWindowTwo_of_nonvacuousGeometricIngressWitnessExtractionTwo h)
+
+/-- Localized geometric source family at `c = 2`: pair a local nonimplicative
+window of radius `R` with geometric outside-open/fiber ingress. -/
+def LocalizedRayIntervalGeometricSourceTwo (R : ℝ) : Prop :=
+  NonimplicativeWindowInterfaceTwo R ∧
+    RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo
+
+/-- Projection: recover the local nonimplicative window component from the
+localized geometric source family. -/
+theorem nonimplicativeWindowInterfaceTwo_of_localizedRayIntervalGeometricSourceTwo
+    {R : ℝ}
+    (hsrc : LocalizedRayIntervalGeometricSourceTwo R) :
+    NonimplicativeWindowInterfaceTwo R :=
+  hsrc.1
+
+/-- Projection: recover the geometric outside-open/fiber ingress component from
+the localized geometric source family. -/
+theorem rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_of_localizedRayIntervalGeometricSourceTwo
+    {R : ℝ}
+    (hsrc : LocalizedRayIntervalGeometricSourceTwo R) :
+    RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo :=
+  hsrc.2
+
+/-- Dead-end certificate for localized geometric sources whose radius covers the
+full cutoff band: they are inconsistent in the current model. -/
+theorem not_localizedRayIntervalGeometricSourceTwo_of_cutoff_le_radius
+    {R : ℝ}
+    (hcut_le : greenRayLogGtAnchorTwoCutoff ≤ R) :
+    ¬ LocalizedRayIntervalGeometricSourceTwo R := by
+  intro hsrc
+  exact not_nonimplicativeWindowInterfaceTwo_of_cutoff_le_radius
+    (R := R) hcut_le hsrc.1
+
+/-- In particular, the localized geometric source is inconsistent at the exact
+cutoff radius. -/
+theorem not_localizedRayIntervalGeometricSourceTwo_at_cutoff :
+    ¬ LocalizedRayIntervalGeometricSourceTwo greenRayLogGtAnchorTwoCutoff := by
+  exact not_localizedRayIntervalGeometricSourceTwo_of_cutoff_le_radius
+    (R := greenRayLogGtAnchorTwoCutoff) le_rfl
+
 /-- Strict-mono-free external-ray-data ingress at `c = 2`: under the packaged
 degree-one Green-function assumptions, we can build external-ray data without
 `green_function_strictMono_along_ray_basin_seam`. -/
@@ -5797,6 +6385,16 @@ theorem not_rootSeedPayloadTwoStrictMonoFreeIngressTwo :
     ¬ RootSeedPayloadTwoStrictMonoFreeIngressTwo := by
   intro h
   exact not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo h.2
+
+/-- Normalized no-go form of the strict-mono-free root-seed payload ingress at
+`c = 2`. -/
+theorem rootSeedPayloadTwoStrictMonoFreeIngressTwo_iff_false :
+    RootSeedPayloadTwoStrictMonoFreeIngressTwo ↔ False := by
+  constructor
+  · intro h
+    exact (not_rootSeedPayloadTwoStrictMonoFreeIngressTwo h)
+  · intro h
+    exact False.elim h
 
 /-- Strict-mono-free candidate root-seed payload at `c = 2`, specialized to the
 aggregated strict-mono-free ingress bundle and current anchor-gap seed. -/
@@ -6255,6 +6853,48 @@ theorem mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_dir
   exact mlc_conjecture_of_injSurjExteriorConstructivePayloadTwo
     ⟨h_inj, bottcherSurjOnExteriorFromOutsideOpen_two_of_directProperLocalWitnessTwo h_dir⟩
 
+/-- v9 root-entry detour interface: route root closure through the
+injective+surjective exterior constructive payload, avoiding any direct root
+use of Green-ray seam constants at this boundary. -/
+def RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo : Prop :=
+  InjSurjExteriorConstructivePayloadTwo
+
+/-- Build the v9 root-entry detour payload from explicit outside-open
+injectivity plus direct proper/local witness at `c = 2`. -/
+theorem rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo := by
+  exact ⟨h_inj, bottcherSurjOnExteriorFromOutsideOpen_two_of_directProperLocalWitnessTwo h_dir⟩
+
+/-- Root closure through the v9 inj/surj exterior detour interface. -/
+theorem mlc_conjecture_of_rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo
+    (h_detour : RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_injSurjExteriorConstructivePayloadTwo h_detour
+
+/-- Build the v9 root-entry detour payload from an outside-open injectivity
+witness plus the packaged local-homeomorph closed-preimage route. -/
+theorem rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo)
+    (h_route : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo) :
+    RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo := by
+  exact
+    rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+      h_inj
+      (directProperLocalWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+        h_route)
+
+/-- Root closure through the v9 local-homeomorph closed-preimage route, given
+an outside-open injectivity witness. -/
+theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo)
+    (h_route : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo
+    (rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+      h_inj h_route)
+
 /-- Minimal non-seeded root-closure substitute interface at `c = 2`:
 outside-open injectivity plus direct proper/local witness. -/
 def RootClosureSubstituteTwo : Prop :=
@@ -6284,6 +6924,196 @@ proper+local witness. -/
 def RemainingConstructiveIngressTwoWitnessGap : Prop :=
   DirectProperLocalWitnessTwo
 
+/-- Localized-source transport gap interface: strict subcutoff local-window
+transport package plus the explicit ingress witness-gap payload. -/
+def LocalizedSourceToRemainingConstructiveIngressGapTwo : Prop :=
+  StrictlySubcutoffLocalWindowWithTransportBridgeTwo ∧
+    RemainingConstructiveIngressTwoWitnessGap
+
+/-- Extract the explicit ingress witness-gap payload from the localized-source
+transport gap interface. -/
+theorem remainingConstructiveIngressTwoWitnessGap_of_localizedSourceToRemainingConstructiveIngressGapTwo
+    (h : LocalizedSourceToRemainingConstructiveIngressGapTwo) :
+    RemainingConstructiveIngressTwoWitnessGap :=
+  h.2
+
+/-- Extract the direct proper/local witness from the localized-source transport
+gap interface. -/
+theorem directProperLocalWitnessTwo_of_localizedSourceToRemainingConstructiveIngressGapTwo
+    (h : LocalizedSourceToRemainingConstructiveIngressGapTwo) :
+    DirectProperLocalWitnessTwo := by
+  simpa [RemainingConstructiveIngressTwoWitnessGap] using h.2
+
+/-- No-arg direct-witness target staged from a partial-window source: any
+partial-window payload should produce `DirectProperLocalWitnessTwo`. -/
+def NoargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo : Prop :=
+  PartialWindowNotCoveringCutoffWithNontransportedTailTwo →
+    DirectProperLocalWitnessTwo
+
+/-- Bridge into the no-arg direct-witness target from the (currently
+inconsistent) localized-source-to-ingress-gap interface. -/
+theorem noargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo_of_localizedSourceToRemainingConstructiveIngressGapTwo
+    (h_loc : LocalizedSourceToRemainingConstructiveIngressGapTwo) :
+    NoargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo := by
+  intro _hpartial
+  exact directProperLocalWitnessTwo_of_localizedSourceToRemainingConstructiveIngressGapTwo h_loc
+
+/-- v7 constructor-oriented no-arg direct-witness target from directly
+constructed partial-window sources. -/
+def NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo : Prop :=
+  ConstructPartialWindowWitnessDirectlyWithoutTransportTwo →
+    DirectProperLocalWitnessTwo
+
+/-- v8 no-arg direct-witness target from explicit subcutoff localized-source
+candidates derived from Green bounds. -/
+def NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo : Prop :=
+  ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo →
+    DirectProperLocalWitnessTwo
+
+/-- Any v6 partial-window no-arg direct-witness target upgrades directly to the
+v7 constructor-oriented target. -/
+theorem noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo_of_noargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo
+    (h_noarg : NoargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo) :
+    NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo :=
+  h_noarg
+
+/-- Any v7 constructor-oriented no-arg direct-witness target upgrades to the v8
+explicit-localized-source target through the explicit-candidate projection. -/
+theorem noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo_of_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo
+    (h_noarg : NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo) :
+    NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo := by
+  intro hexpl
+  exact h_noarg
+    (constructPartialWindowWitnessDirectlyWithoutTransportTwo_of_explicitSubcutoffWitnessCandidateFromGreenBoundsTwo
+      hexpl)
+
+/-- Any v8 explicit-localized-source no-arg target restricts to the v7
+constructor-oriented target through the canonical explicit enrichment. -/
+theorem noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo_of_noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo
+    (h_noarg : NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo) :
+    NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo := by
+  intro hpartial
+  exact h_noarg
+    (explicitSubcutoffWitnessCandidateFromGreenBoundsTwo_of_constructPartialWindowWitnessDirectlyWithoutTransportTwo
+      hpartial)
+
+/-- The v8 explicit-localized-source no-arg target is equivalent to the v7
+constructor-oriented no-arg target. -/
+theorem noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo_iff_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo :
+    NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo ↔
+      NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo := by
+  constructor
+  · intro h_noarg
+    exact
+      noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo_of_noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo
+        h_noarg
+  · intro h_noarg
+    exact
+      noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo_of_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo
+        h_noarg
+
+/-- Current-model no-go: localized-source transport gap interface is
+inconsistent because its strict-subcutoff local-window package is inconsistent. -/
+theorem not_localizedSourceToRemainingConstructiveIngressGapTwo :
+    ¬ LocalizedSourceToRemainingConstructiveIngressGapTwo := by
+  intro h
+  exact not_strictlySubcutoffLocalWindowWithTransportBridgeTwo h.1
+
+/-- Localized source interface that deliberately avoids full-window upgrade:
+geometric outside-open/fiber ingress plus a strictly subcutoff partial window
+without any tail-transport payload. -/
+def LocalizedSourceWithoutFullWindowUpgradeTwo : Prop :=
+  RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo ∧
+    PartialWindowNotCoveringCutoffWithNontransportedTailTwo
+
+/-- Projection: geometric outside-open/fiber ingress component of the localized
+source without full-window upgrade. -/
+theorem rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_of_localizedSourceWithoutFullWindowUpgradeTwo
+    (h : LocalizedSourceWithoutFullWindowUpgradeTwo) :
+    RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo :=
+  h.1
+
+/-- Projection: partial-window component of the localized source without
+full-window upgrade. -/
+theorem partialWindowNotCoveringCutoffWithNontransportedTailTwo_of_localizedSourceWithoutFullWindowUpgradeTwo
+    (h : LocalizedSourceWithoutFullWindowUpgradeTwo) :
+    PartialWindowNotCoveringCutoffWithNontransportedTailTwo :=
+  h.2
+
+/-- Current-model no-go transfer: even with a localized source that avoids
+full-window upgrade, the previous localized-source-to-ingress-gap interface
+remains unavailable. -/
+theorem not_localizedSourceToRemainingConstructiveIngressGapTwo_of_localizedSourceWithoutFullWindowUpgradeTwo
+    (_h : LocalizedSourceWithoutFullWindowUpgradeTwo) :
+    ¬ LocalizedSourceToRemainingConstructiveIngressGapTwo := by
+  intro hgap
+  exact not_localizedSourceToRemainingConstructiveIngressGapTwo hgap
+
+/-- v7 constructor map: a direct partial-window witness yields a localized
+source witness by pairing it with the canonical strict-mono-seeded geometric
+ingress witness. -/
+def LocalizedSourceWitnessFromPartialWindowConstructorTwo : Prop :=
+  ConstructPartialWindowWitnessDirectlyWithoutTransportTwo →
+    LocalizedSourceWithoutFullWindowUpgradeTwo
+
+/-- Canonical constructor for localized-source witnesses from direct partial
+window witnesses. -/
+theorem localizedSourceWitnessFromPartialWindowConstructorTwo_canonical :
+    LocalizedSourceWitnessFromPartialWindowConstructorTwo := by
+  intro hpartial
+  exact ⟨rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_strictMono_seeded, hpartial⟩
+
+/-- v8 constructor map: an explicit subcutoff witness candidate from Green
+bounds yields a localized source witness after projection to the v7 constructor
+target. -/
+def LocalizedSourceWitnessFromExplicitSubcutoffWitnessTwo : Prop :=
+  ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo →
+    LocalizedSourceWithoutFullWindowUpgradeTwo
+
+/-- Canonical constructor for localized-source witnesses from v8 explicit
+subcutoff witness candidates. -/
+theorem localizedSourceWitnessFromExplicitSubcutoffWitnessTwo_canonical :
+    LocalizedSourceWitnessFromExplicitSubcutoffWitnessTwo := by
+  intro hexpl
+  exact localizedSourceWitnessFromPartialWindowConstructorTwo_canonical
+    (constructPartialWindowWitnessDirectlyWithoutTransportTwo_of_explicitSubcutoffWitnessCandidateFromGreenBoundsTwo
+      hexpl)
+
+/-- Any v7 partial-window localized-source constructor upgrades to the v8
+explicit-subcutoff constructor interface. -/
+theorem localizedSourceWitnessFromExplicitSubcutoffWitnessTwo_of_localizedSourceWitnessFromPartialWindowConstructorTwo
+    (h_loc : LocalizedSourceWitnessFromPartialWindowConstructorTwo) :
+    LocalizedSourceWitnessFromExplicitSubcutoffWitnessTwo := by
+  intro hexpl
+  exact h_loc
+    (constructPartialWindowWitnessDirectlyWithoutTransportTwo_of_explicitSubcutoffWitnessCandidateFromGreenBoundsTwo
+      hexpl)
+
+/-- Any v8 explicit-subcutoff localized-source constructor restricts to the v7
+partial-window constructor interface. -/
+theorem localizedSourceWitnessFromPartialWindowConstructorTwo_of_localizedSourceWitnessFromExplicitSubcutoffWitnessTwo
+    (h_loc : LocalizedSourceWitnessFromExplicitSubcutoffWitnessTwo) :
+    LocalizedSourceWitnessFromPartialWindowConstructorTwo := by
+  intro hpartial
+  exact h_loc
+    (explicitSubcutoffWitnessCandidateFromGreenBoundsTwo_of_constructPartialWindowWitnessDirectlyWithoutTransportTwo
+      hpartial)
+
+/-- The v8 explicit-subcutoff localized-source constructor interface is
+equivalent to the v7 partial-window constructor interface. -/
+theorem localizedSourceWitnessFromExplicitSubcutoffWitnessTwo_iff_localizedSourceWitnessFromPartialWindowConstructorTwo :
+    LocalizedSourceWitnessFromExplicitSubcutoffWitnessTwo ↔
+      LocalizedSourceWitnessFromPartialWindowConstructorTwo := by
+  constructor
+  · intro h_loc
+    exact
+      localizedSourceWitnessFromPartialWindowConstructorTwo_of_localizedSourceWitnessFromExplicitSubcutoffWitnessTwo
+        h_loc
+  · intro h_loc
+    exact
+      localizedSourceWitnessFromExplicitSubcutoffWitnessTwo_of_localizedSourceWitnessFromPartialWindowConstructorTwo
+        h_loc
+
 /-- Build aggregate constructive ingress from the explicit ingress witness-gap
 payload. -/
 theorem remainingConstructiveIngressTwo_of_remainingConstructiveIngressTwoWitnessGap
@@ -6297,6 +7127,21 @@ theorem remainingConstructiveIngressTwo_iff_remainingConstructiveIngressTwoWitne
     RemainingConstructiveIngressTwo ↔ RemainingConstructiveIngressTwoWitnessGap := by
   simpa [RemainingConstructiveIngressTwoWitnessGap] using
     (remainingConstructiveIngressTwo_iff_directProperLocalWitness)
+
+/-- Primitive-family specialization: the ingress witness-gap payload at `c = 2`
+is obtained directly from a primitive restricted-map proper/local witness. -/
+theorem remainingConstructiveIngressTwoWitnessGap_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+    (h_prim : PrimitiveRestrictedMapProperLocalWitnessFamilyTwo) :
+    RemainingConstructiveIngressTwoWitnessGap :=
+  directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h_prim
+
+/-- Primitive-family specialization: ingress witness-gap payload is equivalent
+to the primitive restricted-map proper/local witness interface at `c = 2`. -/
+theorem primitiveRestrictedMapProperLocalWitnessFamilyTwo_iff_remainingConstructiveIngressTwoWitnessGap :
+    PrimitiveRestrictedMapProperLocalWitnessFamilyTwo ↔
+      RemainingConstructiveIngressTwoWitnessGap := by
+  simpa [RemainingConstructiveIngressTwoWitnessGap] using
+    primitiveRestrictedMapProperLocalWitnessFamilyTwo_iff_directProperLocalWitnessTwo
 
 /-- Non-seeded local-homeomorph branch seam constructor at `c = 2`, expressed
 with explicit Green-ray seam hypotheses instead of fixed seed constants. -/
@@ -6390,6 +7235,25 @@ theorem rootClosureSubstituteTwo_iff_rootClosureSubstituteTwoWitnessGap :
     exact rootClosureSubstituteTwoWitnessGap_of_rootClosureSubstituteTwo h_sub
   · intro h_gap
     exact rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGap h_gap
+
+/-- Primitive-family specialization: build the explicit root witness-gap payload
+directly from a primitive restricted-map proper/local witness at `c = 2`. -/
+theorem rootClosureSubstituteTwoWitnessGap_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+    (h_prim : PrimitiveRestrictedMapProperLocalWitnessFamilyTwo) :
+    RootClosureSubstituteTwoWitnessGap := by
+  refine ⟨?_, ?_⟩
+  · exact remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo
+      (directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h_prim)
+  · exact cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo
+      (directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h_prim)
+
+/-- Primitive-family specialization: build the non-seam root-closure substitute
+interface directly from a primitive restricted-map proper/local witness. -/
+theorem rootClosureSubstituteTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+    (h_prim : PrimitiveRestrictedMapProperLocalWitnessFamilyTwo) :
+    RootClosureSubstituteTwo :=
+  rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGap
+    (rootClosureSubstituteTwoWitnessGap_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h_prim)
 
 /-- Root-adjacent closure from aggregate constructive ingress plus local seam
 data at `c = 2`. -/
@@ -6643,6 +7507,23 @@ theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAncho
   exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
     hlog_gt_anchor h_inj_seed
 
+/-- v9 seed-dependency min-cut slice at root entry:
+to close root, it is sufficient to provide a Green-ray log-gap seam witness and
+an outside-open injectivity witness. -/
+def SeedDependencyMinCutSliceTwo : Prop :=
+  GreenRayLogGtAnchorTwoSeam →
+    RootSafeOutsideOpenInjWitnessTwo →
+      LocallyConnectedSpace mandelbrotSet
+
+/-- Canonical witness of the v9 seed-dependency min-cut slice, extracted from
+the split-boundary root theorem. -/
+theorem seedDependencyMinCutSliceTwo_canonical :
+    SeedDependencyMinCutSliceTwo := by
+  intro hlog_gt_anchor h_inj
+  exact
+    mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+      hlog_gt_anchor h_inj
+
 /-- Root theorem with explicit split seed boundary:
 `greenRayLogGtAnchorTwo_axiom_seed` enters only via this theorem body, while
 the strict-mono side enters only through the supplied outside-open injectivity
@@ -6657,6 +7538,75 @@ theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_seed
 root theorem split boundary. -/
 theorem rootSafeOutsideOpenInjWitnessTwo_seed : RootSafeOutsideOpenInjWitnessTwo :=
   rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded
+
+/-- Root-tail wrapper routed through the non-seam replacement boundary using
+the centralized strict-mono-seeded outside-open injectivity witness and an
+explicit direct proper+local witness. This isolates the remaining no-arg gap to
+`DirectProperLocalWitnessTwo`. -/
+theorem mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo
+    (h_dir : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_nonseamRootReplacementTargetTwo
+    (rootClosureSubstituteTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+      rootSafeOutsideOpenInjWitnessTwo_seed h_dir)
+
+/-- Primitive-family specialization of the non-seam root-tail wrapper. -/
+theorem mlc_conjecture_root_tail_nonseam_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+    (h_prim : PrimitiveRestrictedMapProperLocalWitnessFamilyTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h_prim)
+
+/-- Localized-source transport specialization of the non-seam root-tail wrapper. -/
+theorem mlc_conjecture_root_tail_nonseam_of_localizedSourceToRemainingConstructiveIngressGapTwo
+    (h_loc : LocalizedSourceToRemainingConstructiveIngressGapTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo
+    (directProperLocalWitnessTwo_of_localizedSourceToRemainingConstructiveIngressGapTwo h_loc)
+
+/-- Partial-window-source specialization of the non-seam root-tail wrapper
+through the staged no-arg direct-witness target. -/
+theorem mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo
+    (h_noarg : NoargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo)
+    (h_partial : PartialWindowNotCoveringCutoffWithNontransportedTailTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo
+    (h_noarg h_partial)
+
+/-- v7 constructor-oriented partial-window specialization of the non-seam
+root-tail wrapper. -/
+theorem mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo
+    (h_noarg : NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo)
+    (h_partial : ConstructPartialWindowWitnessDirectlyWithoutTransportTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo
+    (h_noarg h_partial)
+
+/-- v8 explicit-subcutoff-source specialization of the non-seam root-tail
+wrapper through the staged explicit-localized-source no-arg target. -/
+theorem mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo
+    (h_noarg : NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo)
+    (h_expl : ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo
+    (h_noarg h_expl)
+
+/-- v8 root-cutover interface marker:
+unlocking the explicit-localized-source no-arg target plus an explicit
+subcutoff witness candidate closes the non-seam root-tail route. -/
+def RootCutoverAfterExplicitSubcutoffSourceUnlockTwo : Prop :=
+  NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo →
+    ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo →
+      LocallyConnectedSpace mandelbrotSet
+
+/-- Canonical v8 root-cutover wrapper through the explicit-localized-source
+no-arg target. -/
+theorem rootCutoverAfterExplicitSubcutoffSourceUnlockTwo_canonical :
+    RootCutoverAfterExplicitSubcutoffSourceUnlockTwo := by
+  intro h_noarg h_expl
+  exact
+    mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo
+      h_noarg h_expl
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
