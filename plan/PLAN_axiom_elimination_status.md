@@ -25,40 +25,43 @@ Unexpected axioms:
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom_elimination_status.md` | parallel v9 orchestration + dead-end checks | `██████████` **100%** | **0%** | **none (this iteration)** | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_strict_subcutoff_window_existence_or_refutation_v9.md` | strict-subcutoff route (existence/refutation) | `██████████` **100%** | **0%** | none (refutation completed) | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_directProperLocalWitnessTwo_from_localHomeomorph_closed_range_v9.md` | local-homeomorph closed-preimage route analysis | `██████████` **100%** | **0%** | none (equivalence/collapse completed) | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_root_entry_detour_via_injSurjExteriorConstructivePayloadTwo_v9.md` | root entry detour via inj/surj payload | `██████████` **100%** | **0%** | none (detour layer complete) | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_axiom1_seed_dependency_min_cut_slice_v9.md` | seed dependency min-cut slice | `██████████` **100%** | **0%** | none (slice complete) | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom_elimination_status.md` | v10 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | **none (this iteration)** | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_nonseeded_directProper_to_rootSafe_gap_cutover_v10.md` | isolate non-seeded directProper->rootSafe gap and root cutover | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_route_matrix_collapse_for_directProper_sources_v10.md` | collapse current directProper source matrix | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToRootSafeGap_v10.md` | construct frontier-safe witness for non-seeded gap | `██████░░░░` **60%** | **40%** | new injectivity mechanism without seed | ⭐⭐⭐⭐⭐ | `STUCK` |
+| `PLAN_axiom1_seeded_fallback_isolation_and_min_cut_v10.md` | isolate seeded fallback endpoint for gap interface | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
 
 ## Completed This Iteration
 
-- Closed strict-subcutoff route by refutation:
-  - `not_nonimplicativeWindowInterfaceTwo_of_one_lt_radius`
-  - `not_strictSubcutoffWindowExistenceTwo`
-  - `not_partialWindowNotCoveringCutoffWithNontransportedTailTwo`
-  - `not_constructPartialWindowWitnessDirectlyWithoutTransportTwo`
-- Closed local-homeomorph closed-preimage route analysis by equivalence/collapse:
-  - `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo`
-  - `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_iff_directProperLocalWitnessTwo`
-- Extended root detour coverage for the packaged route.
+- Added v10 minimal non-seeded elimination gap interface:
+  - `NonseededDirectProperToRootSafeGapTwo`
+- Added root closure wrappers parameterized by that gap:
+  - `rootClosureSubstituteTwo_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo`
+  - `mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo`
+- Added explicit seeded fallback endpoint for the gap:
+  - `nonseededDirectProperToRootSafeGapTwo_seeded_fallback`
+- Added v10 directProper route matrix and collapse proof:
+  - `DirectProperLocalWitnessTwoRouteMatrixV10`
+  - `directProperLocalWitnessTwoRouteMatrixV10_iff_directProperLocalWitnessTwo`
+- Added root closure wrapper from gap + route matrix:
+  - `mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwoRouteMatrixV10`
 
 ## Stuck File Decision
 
-- No active stuck plan files remain in this cycle.
-- Kept all plan files for traceability and anti-repetition history.
+- Kept one stuck file:
+  - `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToRootSafeGap_v10.md`
+- Reason: it prevents repetition by pinning the exact unresolved theorem target.
 
 ## Dead-End / Self-Repetition Check (This Iteration)
 
-- Subcutoff-window route is formally blocked.
-- Local-homeomorph closed-preimage route is now shown equivalent to an existing
-  target, so repeated repackaging would be self-repetition.
-- Remaining frontier blocker is outside these completed route analyses.
+- Existing route families now formally collapse to `DirectProperLocalWitnessTwo`.
+- Re-running those same route transformations cannot eliminate the remaining axiom.
+- Remaining blocker is a genuinely new frontier-safe injectivity source.
 
 ## Remaining Global Blocker
 
-- No frontier-safe constructive theorem currently replaces
-  `greenRayLogGtAnchorTwo_seed` at root entry.
+- Missing constructive proof of `NonseededDirectProperToRootSafeGapTwo`
+  without using `greenRayLogGtAnchorTwo_seed`.
 
 ## Exit Condition
 

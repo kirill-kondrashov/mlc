@@ -46,11 +46,11 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | latest iteration summary |
-| `plan/PLAN_axiom1_strict_subcutoff_window_existence_or_refutation_v9.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | refutation branch completed |
-| `plan/PLAN_axiom1_directProperLocalWitnessTwo_from_localHomeomorph_closed_range_v9.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | route equivalence/collapse completed |
-| `plan/PLAN_axiom1_root_entry_detour_via_injSurjExteriorConstructivePayloadTwo_v9.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | detour wrapper complete |
-| `plan/PLAN_axiom1_seed_dependency_min_cut_slice_v9.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | dependency slice complete |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v10 iteration summary |
+| `plan/PLAN_axiom1_nonseeded_directProper_to_rootSafe_gap_cutover_v10.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | non-seeded gap + cutover wrappers complete |
+| `plan/PLAN_axiom1_route_matrix_collapse_for_directProper_sources_v10.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | route matrix collapse proved |
+| `plan/PLAN_axiom1_constructive_witness_for_nonseededDirectProperToRootSafeGap_v10.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | new frontier-safe injectivity source |
+| `plan/PLAN_axiom1_seeded_fallback_isolation_and_min_cut_v10.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | seeded fallback isolation complete |
 
 ## Key Technical Reality
 
@@ -157,6 +157,13 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
   `mlc_conjecture_of_rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo`.
 - Added v9 seed dependency min-cut interface:
   `SeedDependencyMinCutSliceTwo`.
+- Added v10 non-seeded directProper->rootSafe gap interface:
+  `NonseededDirectProperToRootSafeGapTwo`.
+- Added v10 directProper route matrix collapse:
+  `DirectProperLocalWitnessTwoRouteMatrixV10` and
+  `directProperLocalWitnessTwoRouteMatrixV10_iff_directProperLocalWitnessTwo`.
+- Added explicit seeded fallback endpoint for the v10 gap:
+  `nonseededDirectProperToRootSafeGapTwo_seeded_fallback`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier

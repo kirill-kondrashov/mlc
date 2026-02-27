@@ -6912,6 +6912,77 @@ theorem nonseamRootReplacementTargetTwo_iff_rootClosureSubstituteTwo :
     NonseamRootReplacementTargetTwo ↔ RootClosureSubstituteTwo := by
   rfl
 
+/-- v10 minimal non-seeded elimination gap at root entry: a constructor from
+direct proper/local witness data to outside-open injectivity. -/
+def NonseededDirectProperToRootSafeGapTwo : Prop :=
+  DirectProperLocalWitnessTwo → RootSafeOutsideOpenInjWitnessTwo
+
+/-- If the v10 non-seeded directProper→rootSafe gap is discharged, root closure
+follows directly from a direct proper/local witness. -/
+theorem rootClosureSubstituteTwo_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo
+    (h_gap : NonseededDirectProperToRootSafeGapTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    RootClosureSubstituteTwo :=
+  ⟨h_gap h_dir, h_dir⟩
+
+/-- If the v10 non-seeded directProper→rootSafe gap is discharged, MLC follows
+from a direct proper/local witness through the non-seam root substitute route. -/
+theorem mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo
+    (h_gap : NonseededDirectProperToRootSafeGapTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    (h_gap h_dir) h_dir
+
+/-- Seeded fallback witness of the v10 non-seeded directProper→rootSafe gap.
+This theorem is intentionally marked as seeded fallback and not a frontier-safe
+closure. -/
+theorem nonseededDirectProperToRootSafeGapTwo_seeded_fallback :
+    NonseededDirectProperToRootSafeGapTwo := by
+  intro h_dir
+  exact injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive h_dir
+
+/-- v10 route matrix for candidate paths currently used to obtain
+`DirectProperLocalWitnessTwo`. -/
+def DirectProperLocalWitnessTwoRouteMatrixV10 : Prop :=
+  DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo ∨
+    KnownProperLocalSourceCandidateTwo ∨
+      PrimitiveRestrictedMapProperLocalWitnessFamilyTwo
+
+/-- Any route in the v10 route matrix yields `DirectProperLocalWitnessTwo`. -/
+theorem directProperLocalWitnessTwo_of_directProperLocalWitnessTwoRouteMatrixV10
+    (h : DirectProperLocalWitnessTwoRouteMatrixV10) :
+    DirectProperLocalWitnessTwo := by
+  rcases h with h_route | h_known | h_prim
+  · exact
+      directProperLocalWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+        h_route
+  · exact False.elim (not_knownProperLocalSourceCandidateTwo h_known)
+  · exact
+      directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+        h_prim
+
+/-- The v10 route matrix is equivalent to `DirectProperLocalWitnessTwo`:
+known proper/local source families are blocked, and the remaining route
+interfaces collapse to the same target. -/
+theorem directProperLocalWitnessTwoRouteMatrixV10_iff_directProperLocalWitnessTwo :
+    DirectProperLocalWitnessTwoRouteMatrixV10 ↔ DirectProperLocalWitnessTwo := by
+  constructor
+  · intro h
+    exact directProperLocalWitnessTwo_of_directProperLocalWitnessTwoRouteMatrixV10 h
+  · intro h_dir
+    exact Or.inr (Or.inr
+      (primitiveRestrictedMapProperLocalWitnessFamilyTwo_of_directProperLocalWitnessTwo h_dir))
+
+/-- v10 root closure from the non-seeded directProper→rootSafe gap and any route
+in the route matrix. -/
+theorem mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwoRouteMatrixV10
+    (h_gap : NonseededDirectProperToRootSafeGapTwo)
+    (h_route : DirectProperLocalWitnessTwoRouteMatrixV10) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo
+    h_gap (directProperLocalWitnessTwo_of_directProperLocalWitnessTwoRouteMatrixV10 h_route)
+
 /-- Minimal explicit witness-gap target for constructing
 `RootClosureSubstituteTwo` without using the final seeded root specialization:
 aggregate constructive ingress plus the local-homeomorph branch seam. -/
