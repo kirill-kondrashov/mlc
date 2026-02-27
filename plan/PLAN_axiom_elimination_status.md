@@ -3,7 +3,7 @@
 ---
 **Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ITERATION_COMPLETE`
 **Target Axioms:** `MLC.greenRayLogGtAnchorTwo_axiom_seed`
-**Last Updated:** 2026-02-27
+**Last Updated:** 2026-02-27 | **Iteration:** v21
 ---
 
 ## Current Frontier
@@ -25,40 +25,40 @@ Unexpected axioms:
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom_elimination_status.md` | v17 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | none (this iteration) | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_kernel_cutover_and_equivalence_v17.md` | isolate compact elimination kernel + equivalences | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_route_matrix_kernel_projection_v17.md` | project kernel through direct-witness route matrix | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_axiom1_retired_route_guardrail_v17.md` | maintain no-go inventory to block repeats | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_axiom1_constructive_core_bridge_search_v17.md` | prove non-seeded core bridge | `██████░░░░` **60%** | **40%** | new frontier-safe CP5 seam constructor | ⭐⭐⭐⭐⭐ | `STUCK` |
+| `PLAN_axiom_elimination_status.md` | v21 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | none (this iteration) | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_witness_gap_kernel_equivalence_v21.md` | normalize debt on no-arg witness-gap payload | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_witness_gap_kernel_cutover_v21.md` | cutover v21 kernel to root/MLC endpoints | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_frontier_validation_v21.md` | validate frontier neutrality | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom1_retired_route_guardrail_v21.md` | route hygiene and dead-end prevention | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom1_constructive_core_bridge_search_v21.md` | prove non-seeded core bridge | `██████░░░░` **60%** | **40%** | new constructive CP5 seam mechanism | ⭐⭐⭐⭐⭐ | `STUCK` |
 
 ## Completed This Iteration
 
-- Added v17 kernel split artifacts in Lean:
-  - `FinalAxiomEliminationKernelV17`
-  - `finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16`
-  - `finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17`
-- Added v17 kernel cutover wrappers:
-  - `rootClosureSubstituteTwo_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo`
-  - `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo`
-  - `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwoRouteMatrixV10`
-  - `mlc_conjecture_of_finalAxiomEliminationKernelV17`
-- Removed unused v16 plan files and rotated to a clean v17 plan set.
+- Added grounded v21 witness-gap artifacts in Lean:
+  - `FinalAxiomWitnessGapBridgeV21`
+  - `finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16`
+  - `FinalAxiomWitnessGapKernelV21`
+  - `finalAxiomWitnessGapKernelV21_iff_finalAxiomEliminationKernelV17`
+  - `finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21`
+  - `rootClosureSubstituteTwo_of_finalAxiomWitnessGapKernelV21`
+  - `mlc_conjecture_of_finalAxiomWitnessGapKernelV21`
+- Removed v20 plan files and rotated to a clean v21 set.
 
 ## Stuck File Decision
 
 - Kept one stuck file:
-  - `PLAN_axiom1_constructive_core_bridge_search_v17.md`
-- Reason: it captures the single unresolved bridge theorem and prevents
-  reopening known dead-end routes.
+  - `PLAN_axiom1_constructive_core_bridge_search_v21.md`
+- Reason: single unresolved theorem; prevents repetition of known dead-end routes.
 
 ## Dead-End / Self-Repetition Check (This Iteration)
 
-- Wrapper-level reduction and cutover work is complete for v17.
-- Retired route classes remain blocked:
+- Kernel/cutover normalization work is complete for v21.
+- Blocked classes remain:
   - strict subcutoff/local-window transport route
   - global proper/local degree-one route (forbidden dependencies)
   - seeded replay route through `greenRayLogGtAnchorTwo_seed`
-- Re-running those routes would be self-repetition.
+  - speculative IVT/connectedness branch
+- Re-running these classes would be self-repetition.
 
 ## Remaining Global Blocker
 

@@ -46,11 +46,12 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v17 iteration summary |
-| `plan/PLAN_axiom1_kernel_cutover_and_equivalence_v17.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | compact kernel + equivalence cutover complete |
-| `plan/PLAN_axiom1_route_matrix_kernel_projection_v17.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | route-matrix projection wrappers complete |
-| `plan/PLAN_axiom1_retired_route_guardrail_v17.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
-| `plan/PLAN_axiom1_constructive_core_bridge_search_v17.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v21 iteration summary |
+| `plan/PLAN_axiom1_witness_gap_kernel_equivalence_v21.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | witness-gap kernel equivalence complete |
+| `plan/PLAN_axiom1_witness_gap_kernel_cutover_v21.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | witness-gap kernel endpoint cutover complete |
+| `plan/PLAN_axiom1_frontier_validation_v21.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
+| `plan/PLAN_axiom1_retired_route_guardrail_v21.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
+| `plan/PLAN_axiom1_constructive_core_bridge_search_v21.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
 
 ## Key Technical Reality
 
@@ -185,6 +186,26 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
   `finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16`,
   `finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17`,
   and `mlc_conjecture_of_finalAxiomEliminationKernelV17`.
+- Added v18 ingress-kernel reduction and endpoint cutover:
+  `FinalAxiomEliminationIngressKernelV18`,
+  `finalAxiomEliminationIngressKernelV18_iff_finalAxiomEliminationKernelV17`,
+  `finalAxiomEliminationGapV15_iff_finalAxiomEliminationIngressKernelV18`,
+  and `mlc_conjecture_of_finalAxiomEliminationIngressKernelV18`.
+- Added v19 ingress-bridge equivalence and kernel cutover:
+  `FinalAxiomIngressBridgeGapV19`,
+  `finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16`,
+  `FinalAxiomEliminationIngressBridgeKernelV19`,
+  and `mlc_conjecture_of_finalAxiomEliminationIngressBridgeKernelV19`.
+- Added grounded v20 normalization wrappers:
+  `FinalAxiomSeamDecompositionV20`,
+  `FinalAxiomWitnessTransportV20`,
+  `FinalAxiomContrapositiveObstructionV20`,
+  and their equivalences to `FinalAxiomIngressBridgeGapV19`.
+- Added grounded v21 witness-gap kernel wrappers:
+  `FinalAxiomWitnessGapBridgeV21`,
+  `FinalAxiomWitnessGapKernelV21`,
+  `finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21`,
+  and `mlc_conjecture_of_finalAxiomWitnessGapKernelV21`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier

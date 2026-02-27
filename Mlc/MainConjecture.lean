@@ -7199,6 +7199,147 @@ theorem finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17 :
     finalAxiomEliminationGapV15_iff_finalAxiomEliminationWitnessPairV16.trans
       finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16.symm
 
+/-- v18 ingress-level elimination kernel: the isolated core bridge together
+with aggregate constructive ingress. -/
+def FinalAxiomEliminationIngressKernelV18 : Prop :=
+  FinalAxiomCoreConstructiveGapV16 ∧ RemainingConstructiveIngressTwo
+
+/-- The v18 ingress-level kernel is equivalent to the v17 elimination kernel. -/
+theorem finalAxiomEliminationIngressKernelV18_iff_finalAxiomEliminationKernelV17 :
+    FinalAxiomEliminationIngressKernelV18 ↔ FinalAxiomEliminationKernelV17 := by
+  constructor
+  · intro h_ingress
+    refine ⟨h_ingress.1, ?_⟩
+    exact
+      (remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h_ingress.2
+  · intro h_kernel
+    refine ⟨h_kernel.1, ?_⟩
+    exact
+      (remainingConstructiveIngressTwo_iff_directProperLocalWitness).2 h_kernel.2
+
+/-- The v15 composite final gap is equivalent to the v18 ingress-level kernel. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomEliminationIngressKernelV18 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomEliminationIngressKernelV18 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17.trans
+      finalAxiomEliminationIngressKernelV18_iff_finalAxiomEliminationKernelV17.symm
+
+/-- v19 ingress-level core bridge target: the local CP5 injectivity seam from
+aggregate constructive ingress. -/
+def FinalAxiomIngressBridgeGapV19 : Prop :=
+  RemainingConstructiveIngressTwo → CP5ResidualLocalHomeomorphInjSeamTwo
+
+/-- v20 seam-decomposition component A: extract direct witness data from
+aggregate constructive ingress. -/
+def FinalAxiomSeamA_V20 : Prop :=
+  RemainingConstructiveIngressTwo → DirectProperLocalWitnessTwo
+
+/-- v20 seam-decomposition component B: core direct-witness bridge to the local
+CP5 seam. -/
+def FinalAxiomSeamB_V20 : Prop :=
+  DirectProperLocalWitnessTwo → CP5ResidualLocalHomeomorphInjSeamTwo
+
+/-- v20 seam-decomposition target: combine ingress->direct extraction with the
+core direct->seam bridge. -/
+def FinalAxiomSeamDecompositionV20 : Prop :=
+  FinalAxiomSeamA_V20 ∧ FinalAxiomSeamB_V20
+
+/-- Canonical witness of v20 seam component A from existing ingress
+normalization. -/
+theorem finalAxiomSeamA_V20_canonical : FinalAxiomSeamA_V20 :=
+  (remainingConstructiveIngressTwo_iff_directProperLocalWitness).1
+
+/-- v20 seam component B is definitionally the v16 core constructive gap. -/
+theorem finalAxiomSeamB_V20_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomSeamB_V20 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  rfl
+
+/-- The v20 seam-decomposition target is equivalent to the v19 ingress bridge
+gap. -/
+theorem finalAxiomSeamDecompositionV20_iff_finalAxiomIngressBridgeGapV19 :
+    FinalAxiomSeamDecompositionV20 ↔ FinalAxiomIngressBridgeGapV19 := by
+  constructor
+  · intro h_decomp h_ingress
+    exact h_decomp.2 (h_decomp.1 h_ingress)
+  · intro h_gap
+    refine ⟨finalAxiomSeamA_V20_canonical, ?_⟩
+    intro h_dir
+    exact h_gap ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).2 h_dir)
+
+/-- v20 witness-transport target: build outside-open injectivity directly from
+aggregate constructive ingress. -/
+def FinalAxiomWitnessTransportV20 : Prop :=
+  RemainingConstructiveIngressTwo → RootSafeOutsideOpenInjWitnessTwo
+
+/-- The v20 witness-transport target is equivalent to the v19 ingress bridge
+gap. -/
+theorem finalAxiomWitnessTransportV20_iff_finalAxiomIngressBridgeGapV19 :
+    FinalAxiomWitnessTransportV20 ↔ FinalAxiomIngressBridgeGapV19 := by
+  constructor
+  · intro h_transport h_ingress
+    exact
+      cp5ResidualLocalHomeomorphInjSeamTwo_of_rootSafeOutsideOpenInjWitnessTwo
+        (h_transport h_ingress)
+  · intro h_gap h_ingress
+    have h_dir : DirectProperLocalWitnessTwo :=
+      (remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h_ingress
+    exact
+      rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+        h_dir (h_gap h_ingress)
+
+/-- v20 contrapositive-obstruction target: if the local CP5 seam fails, then
+aggregate constructive ingress fails. -/
+def FinalAxiomContrapositiveObstructionV20 : Prop :=
+  ¬ CP5ResidualLocalHomeomorphInjSeamTwo → ¬ RemainingConstructiveIngressTwo
+
+/-- The v20 contrapositive-obstruction target is equivalent to the v19 ingress
+bridge gap. -/
+theorem finalAxiomContrapositiveObstructionV20_iff_finalAxiomIngressBridgeGapV19 :
+    FinalAxiomContrapositiveObstructionV20 ↔ FinalAxiomIngressBridgeGapV19 := by
+  constructor
+  · intro h_contra h_ingress
+    by_contra h_not_seam
+    exact False.elim ((h_contra h_not_seam) h_ingress)
+  · intro h_gap h_not_seam h_ingress
+    exact h_not_seam (h_gap h_ingress)
+
+/-- The v19 ingress-level core bridge target is equivalent to the v16
+direct-witness core bridge target. -/
+theorem finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomIngressBridgeGapV19 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  constructor
+  · intro h_gap h_dir
+    exact h_gap ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).2 h_dir)
+  · intro h_core h_ingress
+    exact h_core ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h_ingress)
+
+/-- v19 elimination kernel: ingress-level bridge target plus aggregate
+constructive ingress. -/
+def FinalAxiomEliminationIngressBridgeKernelV19 : Prop :=
+  FinalAxiomIngressBridgeGapV19 ∧ RemainingConstructiveIngressTwo
+
+/-- The v19 ingress-bridge kernel is equivalent to the v18 ingress-level
+kernel. -/
+theorem finalAxiomEliminationIngressBridgeKernelV19_iff_finalAxiomEliminationIngressKernelV18 :
+    FinalAxiomEliminationIngressBridgeKernelV19 ↔ FinalAxiomEliminationIngressKernelV18 := by
+  constructor
+  · intro h19
+    refine ⟨?_, h19.2⟩
+    exact
+      (finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16).1 h19.1
+  · intro h18
+    refine ⟨?_, h18.2⟩
+    exact
+      (finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16).2 h18.1
+
+/-- The v15 composite final gap is equivalent to the v19 ingress-bridge
+kernel. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomEliminationIngressBridgeKernelV19 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomEliminationIngressBridgeKernelV19 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomEliminationIngressKernelV18.trans
+      finalAxiomEliminationIngressBridgeKernelV19_iff_finalAxiomEliminationIngressKernelV18.symm
+
 /-- The isolated v16 core bridge plus a direct witness yields the non-seam root
 closure substitute. -/
 theorem rootClosureSubstituteTwo_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
@@ -7238,6 +7379,43 @@ theorem mlc_conjecture_of_finalAxiomEliminationKernelV17
     mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
       h_kernel.1 h_kernel.2
 
+/-- Ingress-level v18 kernel cutover to the non-seam root closure substitute. -/
+theorem rootClosureSubstituteTwo_of_finalAxiomEliminationIngressKernelV18
+    (h_ingress : FinalAxiomEliminationIngressKernelV18) :
+    RootClosureSubstituteTwo := by
+  exact
+    rootClosureSubstituteTwo_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
+      h_ingress.1
+      ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h_ingress.2)
+
+/-- Closing the v18 ingress-level kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomEliminationIngressKernelV18
+    (h_ingress : FinalAxiomEliminationIngressKernelV18) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
+      h_ingress.1
+      ((remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h_ingress.2)
+
+/-- Ingress-bridge v19 kernel cutover to the non-seam root closure substitute. -/
+theorem rootClosureSubstituteTwo_of_finalAxiomEliminationIngressBridgeKernelV19
+    (h19 : FinalAxiomEliminationIngressBridgeKernelV19) :
+    RootClosureSubstituteTwo := by
+  let h_dir : DirectProperLocalWitnessTwo :=
+    (remainingConstructiveIngressTwo_iff_directProperLocalWitness).1 h19.2
+  let h_seam : CP5ResidualLocalHomeomorphInjSeamTwo := h19.1 h19.2
+  exact
+    ⟨rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+        h_dir h_seam, h_dir⟩
+
+/-- Closing the v19 ingress-bridge kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomEliminationIngressBridgeKernelV19
+    (h19 : FinalAxiomEliminationIngressBridgeKernelV19) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomEliminationIngressKernelV18
+      ((finalAxiomEliminationIngressBridgeKernelV19_iff_finalAxiomEliminationIngressKernelV18).1 h19)
+
 /-- Closing the v16 minimized witness pair is sufficient to derive MLC. -/
 theorem mlc_conjecture_of_finalAxiomEliminationWitnessPairV16
     (h_pair : FinalAxiomEliminationWitnessPairV16) :
@@ -7266,6 +7444,53 @@ def RootClosureSubstituteTwoWitnessGap : Prop :=
 proper+local witness. -/
 def RemainingConstructiveIngressTwoWitnessGap : Prop :=
   DirectProperLocalWitnessTwo
+
+/-- v21 witness-gap bridge target: derive the local CP5 seam directly from the
+explicit no-arg witness-gap payload. -/
+def FinalAxiomWitnessGapBridgeV21 : Prop :=
+  RemainingConstructiveIngressTwoWitnessGap →
+    CP5ResidualLocalHomeomorphInjSeamTwo
+
+/-- The v21 witness-gap bridge target is equivalent to the v16 core bridge
+target. -/
+theorem finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomWitnessGapBridgeV21 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  rfl
+
+/-- v21 witness-gap kernel: bridge target plus explicit no-arg witness-gap
+payload. -/
+def FinalAxiomWitnessGapKernelV21 : Prop :=
+  FinalAxiomWitnessGapBridgeV21 ∧ RemainingConstructiveIngressTwoWitnessGap
+
+/-- The v21 witness-gap kernel is equivalent to the v17 elimination kernel. -/
+theorem finalAxiomWitnessGapKernelV21_iff_finalAxiomEliminationKernelV17 :
+    FinalAxiomWitnessGapKernelV21 ↔ FinalAxiomEliminationKernelV17 := by
+  rfl
+
+/-- The v15 composite final gap is equivalent to the v21 witness-gap kernel. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomWitnessGapKernelV21 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17.trans
+      finalAxiomWitnessGapKernelV21_iff_finalAxiomEliminationKernelV17.symm
+
+/-- v21 witness-gap kernel cutover to the non-seam root closure substitute. -/
+theorem rootClosureSubstituteTwo_of_finalAxiomWitnessGapKernelV21
+    (h21 : FinalAxiomWitnessGapKernelV21) :
+    RootClosureSubstituteTwo := by
+  exact
+    rootClosureSubstituteTwo_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
+      ((finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).1 h21.1)
+      h21.2
+
+/-- Closing the v21 witness-gap kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomWitnessGapKernelV21
+    (h21 : FinalAxiomWitnessGapKernelV21) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
+      ((finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).1 h21.1)
+      h21.2
 
 /-- Localized-source transport gap interface: strict subcutoff local-window
 transport package plus the explicit ingress witness-gap payload. -/
