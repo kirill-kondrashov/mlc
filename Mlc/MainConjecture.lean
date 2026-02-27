@@ -6214,6 +6214,17 @@ theorem mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_gre
     (rootSeedPayloadTwo_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
       hlog_gt_anchor h_inj)
 
+/-- Strict-mono-free root-candidate wrapper from the exact root-safe
+outside-open injectivity target plus direct proper/local surjectivity witness at
+`c = 2`, routed through the nonaggregated surjectivity bridge. -/
+theorem mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (external_ray_map_exists_two_constructive_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+      h_inj h_dir)
+
 /-- Strict-mono-free root-candidate wrapper parameterized by the exact remaining
 outside-open injectivity witness target and specialized to the current
 anchor-gap seed. -/
@@ -6413,11 +6424,22 @@ theorem mlc_conjecture_of_rootSeedPayloadTwo
 `greenRayLogGtAnchorTwo_axiom_seed` enters only via this theorem body, while
 the strict-mono side enters only through the supplied outside-open injectivity
 seed argument. -/
+theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam)
+    (h_inj_seed : RootSafeOutsideOpenInjWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    hlog_gt_anchor h_inj_seed
+
+/-- Root theorem with explicit split seed boundary:
+`greenRayLogGtAnchorTwo_axiom_seed` enters only via this theorem body, while
+the strict-mono side enters only through the supplied outside-open injectivity
+seed argument. -/
 theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_seed
     (h_inj_seed : RootSafeOutsideOpenInjWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_rootSafeOutsideOpenInjWitnessTwo
-    h_inj_seed
+  exact mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam
+    greenRayLogGtAnchorTwo_seed h_inj_seed
 
 /-- Central strict-mono-seeded outside-open injectivity seed alias used by the
 root theorem split boundary. -/
