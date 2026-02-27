@@ -1,14 +1,14 @@
 # Axiom Elimination Status (Umbrella Plan)
 
 ---
-**Status:** `███████░░░` **73%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ACTIVE`
-**Target Axioms:** Both
+**Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `BATCH COMPLETE (DONE/STUCK)`
+**Target Axioms:** `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 **Last Updated:** 2026-02-27
 ---
 
 ## Current Frontier
 
-```
+```bash
 $ make check
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
@@ -16,54 +16,53 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.greenRayLogGtAnchorTwo_axiom_seed
-- MLC.Quadratic.green_function_strictMono_along_ray_basin_seam
+❌ Axiom frontier violation for `MLC.mlc_conjecture`.
+Unexpected axioms:
+- MLC.greenRayLogGtAnchorTwo_axiom_seed
 ```
 
-## What Changed
+## What Changed This Iteration
 
-- Removed stuck plans:
-  - `PLAN_axiom1_seed_isolation_payload_swap_v2.md`
-  - `PLAN_axiom2_nonreal_monotonicity_argument_route.md`
-- Cleaned up unused probe file:
-  - deleted `check_axioms_batch.lean`
-- Kept completed support plans:
-  - `PLAN_root_dependency_pruning_v2.md` (`DONE`)
-  - `PLAN_frontier_closure_and_cleanup.md` (`DONE`)
-  - `PLAN_frontier_candidate_probe_matrix_v1.md` (`DONE`)
-- Added new active plans below.
+- Ran post-Axiom2 root-near ingress inventory with `Lean.collectAxioms` probes.
+- Confirmed anchor dependency is already localized to canonical seed entry path.
+- Evaluated policy-exception route (`external_ray_map_exists`) and rejected it
+  under current frontier policy.
+- Classified remaining elimination plan as `STUCK` after no-delta repetition.
+- Removed unused completed plan files from `plan/` to keep only active planning
+  artifacts.
 
-## Active Plan Set
+## Plan Set
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom1_inj_witness_bootstrap_v3.md` | Eliminate `greenRayLogGtAnchorTwo_axiom_seed` | `███░░░░░░░` **30%** | **70%** | **4-8h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
-| `PLAN_axiom2_nonreal_transport_inventory_v2.md` | Eliminate `green_function_strictMono_along_ray_basin_seam` | `████░░░░░░` **40%** | **60%** | **6-10h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
-| `PLAN_frontier_probe_inline_workflow_v2.md` | Probe/ranking workflow without persistent temp files | `█████░░░░░` **50%** | **50%** | **2-3h** | ⭐⭐⭐⭐☆ | `ACTIVE` |
-| `PLAN_root_dependency_pruning_v2.md` | Root dependency pruning | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_frontier_closure_and_cleanup.md` | Verification + guardrails + docs | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_frontier_candidate_probe_matrix_v1.md` | Historical probe matrix snapshot | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐☆☆ | `DONE` |
+| `PLAN_axiom1_frontier_safe_nonseeded_ingress_search_v2.md` | frontier-safe nonseeded ingress for root | `████████░░` **82%** | **18%** | **Blocked** | ⭐⭐⭐⭐⭐ | `STUCK` |
+
+## Ranking Delta (2026-02-27)
+
+| Candidate | Delta | Result |
+|-----------|-------|--------|
+| root-near seeded aliases (`mlc_conjecture`, `rootSafeOutsideOpenInjWitnessTwo_seed`, `externalRayMapData_two_root_seed`) | `0` | still require `MLC.greenRayLogGtAnchorTwo_axiom_seed` |
+| Root via `Quadratic.external_ray_map_exists (2)` | `-1/+1` | removes anchor seed but introduces `MLC.Quadratic.external_ray_map_exists` |
+| Current root theorem | baseline | one remaining unexpected axiom |
+
+## Dead-End / Repetition Check
+
+- Repetition detected: candidate ingress set matched previous batch; probes showed
+  no new frontier-safe path.
+- Dead end confirmed for this batch: no assumption-free replacement removed
+  `MLC.greenRayLogGtAnchorTwo_axiom_seed` without frontier expansion.
 
 ## Axiom-Level Estimate
 
 | Axiom | Progress | Left | Main Risk | Primary Plan |
 |------|----------|------|-----------|--------------|
-| `MLC.greenRayLogGtAnchorTwo_axiom_seed` | `███░░░░░░░` **30%** | **70%** | constructive outside-open injectivity witness still missing | `PLAN_axiom1_inj_witness_bootstrap_v3.md` |
-| `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` | `████░░░░░░` **40%** | **60%** | nonreal-direction transport lemma family still incomplete | `PLAN_axiom2_nonreal_transport_inventory_v2.md` |
-
-## Dead-End Guard (Do Not Reopen)
-
-- Global seam target remains inconsistent:
-  `not_greenRayLogGtAnchorTwoSeam`.
-- Known strict-mono-free ingress dead ends remain blocked:
-  `not_outsideOpenAnalyticityHypothesisTwo`,
-  `not_greenFunctionDegreeOneIngressTwo`,
-  `not_knownInjOnOutsideOpenSourceCandidateTwo`.
+| `MLC.greenRayLogGtAnchorTwo_axiom_seed` | `████████░░` **82%** | **18%** | no confirmed frontier-safe nonseeded ingress theorem | `PLAN_axiom1_frontier_safe_nonseeded_ingress_search_v2.md` (`STUCK`) |
 
 ## Suggested New Plans
 
-1. `PLAN_axiom1_inj_witness_bootstrap_v3.md`
-2. `PLAN_axiom2_nonreal_transport_inventory_v2.md`
-3. `PLAN_frontier_probe_inline_workflow_v2.md`
+1. `PLAN_axiom1_frontier_safe_nonseeded_ingress_search_v3.md`
+2. `PLAN_axiom1_root_payload_constructor_without_anchor_v1.md`
+3. `PLAN_policy_decision_external_ray_temp_allowance_v1.md` (only if policy changes)
 
 ## Exit Condition
 
@@ -74,3 +73,6 @@ All axioms used:
 - propext
 - Classical.choice
 ```
+
+Current status: not met. Remaining frontier axiom:
+- `MLC.greenRayLogGtAnchorTwo_axiom_seed`

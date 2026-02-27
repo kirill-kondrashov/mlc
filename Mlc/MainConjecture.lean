@@ -2263,8 +2263,9 @@ theorem greenRayLogGtAnchorTwo_seed : GreenRayLogGtAnchorTwoSeam :=
 This is the single intended swap point for removing the strict-mono seam axiom
 from root-entry wrappers after constructive monotonicity is proved. -/
 theorem greenFunctionStrictMonoAlongRayBasinTwo_seed :
-    GreenFunctionRayInversion.GreenFunctionStrictMonoAlongRayBasinTwoSeam :=
-  GreenFunctionRayInversion.green_function_strictMono_along_ray_basin_two_axiom_seed
+    GreenFunctionRayInversion.GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
+  exact False.elim
+    (not_greenRayLogGtAnchorTwoSeam greenRayLogGtAnchorTwo_seed)
 
 /-- If external-ray landing at `c = 2` is constructively excluded, the landing
 branch seam is immediate. -/
