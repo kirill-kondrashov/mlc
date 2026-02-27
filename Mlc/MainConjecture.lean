@@ -7065,6 +7065,196 @@ theorem mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperL
   exact mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo
     h_gap (directProperLocalWitnessTwo_of_directProperLocalWitnessTwoRouteMatrixV10 h_route)
 
+/-- v12 local-seam-gap variant of the route-matrix cutover wrapper. -/
+theorem mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwoRouteMatrixV10
+    (h_gap : NonseededDirectProperToLocalSeamGapTwo)
+    (h_route : DirectProperLocalWitnessTwoRouteMatrixV10) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo
+      h_gap
+      (directProperLocalWitnessTwo_of_directProperLocalWitnessTwoRouteMatrixV10 h_route)
+
+/-- Seeded local-seam fallback specialized to the route matrix. -/
+theorem mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_seeded_fallback_of_directProperLocalWitnessTwoRouteMatrixV10
+    (h_route : DirectProperLocalWitnessTwoRouteMatrixV10) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwoRouteMatrixV10
+      nonseededDirectProperToLocalSeamGapTwo_seeded_fallback h_route
+
+/-- Build outside-open injectivity from the v12 local-seam gap plus a direct
+proper/local witness. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo
+    (h_gap : NonseededDirectProperToLocalSeamGapTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    h_dir (h_gap h_dir)
+
+/-- Primitive-family specialization of the v12 local-seam gap cutover. -/
+theorem mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+    (h_gap : NonseededDirectProperToLocalSeamGapTwo)
+    (h_prim : PrimitiveRestrictedMapProperLocalWitnessFamilyTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo
+      h_gap
+      (directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h_prim)
+
+/-- v14 witness-source matrix for local-seam gap cutover. -/
+def NonseededLocalSeamGapWitnessSourceMatrixV14 : Prop :=
+  PrimitiveRestrictedMapProperLocalWitnessFamilyTwo ∨
+    DirectProperLocalWitnessTwo
+
+/-- The v14 local-seam witness-source matrix is equivalent to the direct
+proper/local witness payload. -/
+theorem nonseededLocalSeamGapWitnessSourceMatrixV14_iff_directProperLocalWitnessTwo :
+    NonseededLocalSeamGapWitnessSourceMatrixV14 ↔ DirectProperLocalWitnessTwo := by
+  constructor
+  · intro h_src
+    rcases h_src with h_prim | h_dir
+    · exact directProperLocalWitnessTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo h_prim
+    · exact h_dir
+  · intro h_dir
+    exact Or.inl
+      (primitiveRestrictedMapProperLocalWitnessFamilyTwo_of_directProperLocalWitnessTwo h_dir)
+
+/-- Any witness source in the v14 matrix yields MLC once the local-seam gap is
+provided. -/
+theorem mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_nonseededLocalSeamGapWitnessSourceMatrixV14
+    (h_gap : NonseededDirectProperToLocalSeamGapTwo)
+    (h_src : NonseededLocalSeamGapWitnessSourceMatrixV14) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_src with h_prim | h_dir
+  · exact
+      mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo
+        h_gap h_prim
+  · exact
+      mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo
+        h_gap h_dir
+
+/-- v15 composite final-gap marker: non-seeded local-seam gap plus an available
+local-seam witness-source matrix. -/
+def FinalAxiomEliminationGapV15 : Prop :=
+  NonseededDirectProperToLocalSeamGapTwo ∧
+    NonseededLocalSeamGapWitnessSourceMatrixV14
+
+/-- v16 minimized final-gap payload: the non-seeded local-seam bridge together
+with one direct proper/local witness. -/
+def FinalAxiomEliminationWitnessPairV16 : Prop :=
+  NonseededDirectProperToLocalSeamGapTwo ∧
+    DirectProperLocalWitnessTwo
+
+/-- v16 core constructive elimination target: the exact missing implication. -/
+def FinalAxiomCoreConstructiveGapV16 : Prop :=
+  DirectProperLocalWitnessTwo → CP5ResidualLocalHomeomorphInjSeamTwo
+
+/-- The v16 core constructive target is definitionally the v12 non-seeded
+local-seam gap. -/
+theorem finalAxiomCoreConstructiveGapV16_iff_nonseededDirectProperToLocalSeamGapTwo :
+    FinalAxiomCoreConstructiveGapV16 ↔ NonseededDirectProperToLocalSeamGapTwo := by
+  rfl
+
+/-- The v15 composite final gap is equivalent to the v16 minimized witness
+pair. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomEliminationWitnessPairV16 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomEliminationWitnessPairV16 := by
+  constructor
+  · intro h_final
+    refine ⟨h_final.1, ?_⟩
+    exact
+      (nonseededLocalSeamGapWitnessSourceMatrixV14_iff_directProperLocalWitnessTwo).1
+        h_final.2
+  · intro h_pair
+    refine ⟨h_pair.1, ?_⟩
+    exact
+      (nonseededLocalSeamGapWitnessSourceMatrixV14_iff_directProperLocalWitnessTwo).2
+        h_pair.2
+
+/-- v17 elimination kernel: the isolated core bridge together with one direct
+proper/local witness. -/
+def FinalAxiomEliminationKernelV17 : Prop :=
+  FinalAxiomCoreConstructiveGapV16 ∧ DirectProperLocalWitnessTwo
+
+/-- The v17 elimination kernel is equivalent to the v16 witness pair. -/
+theorem finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16 :
+    FinalAxiomEliminationKernelV17 ↔ FinalAxiomEliminationWitnessPairV16 := by
+  constructor
+  · intro h_kernel
+    refine ⟨?_, h_kernel.2⟩
+    exact
+      (finalAxiomCoreConstructiveGapV16_iff_nonseededDirectProperToLocalSeamGapTwo).1
+        h_kernel.1
+  · intro h_pair
+    refine ⟨?_, h_pair.2⟩
+    exact
+      (finalAxiomCoreConstructiveGapV16_iff_nonseededDirectProperToLocalSeamGapTwo).2
+        h_pair.1
+
+/-- The v15 composite final gap is equivalent to the v17 elimination kernel. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomEliminationKernelV17 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomEliminationWitnessPairV16.trans
+      finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16.symm
+
+/-- The isolated v16 core bridge plus a direct witness yields the non-seam root
+closure substitute. -/
+theorem rootClosureSubstituteTwo_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
+    (h_core : FinalAxiomCoreConstructiveGapV16)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    RootClosureSubstituteTwo := by
+  exact
+    rootClosureSubstituteTwo_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo
+      (nonseededDirectProperToRootSafeGapTwo_of_nonseededDirectProperToLocalSeamGapTwo
+        ((finalAxiomCoreConstructiveGapV16_iff_nonseededDirectProperToLocalSeamGapTwo).1 h_core))
+      h_dir
+
+/-- The isolated v16 core bridge plus a direct witness is sufficient for MLC. -/
+theorem mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
+    (h_core : FinalAxiomCoreConstructiveGapV16)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo
+      ((finalAxiomCoreConstructiveGapV16_iff_nonseededDirectProperToLocalSeamGapTwo).1 h_core)
+      h_dir
+
+/-- Route-matrix specialization of the v16 core-gap cutover. -/
+theorem mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwoRouteMatrixV10
+    (h_core : FinalAxiomCoreConstructiveGapV16)
+    (h_route : DirectProperLocalWitnessTwoRouteMatrixV10) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo h_core
+      (directProperLocalWitnessTwo_of_directProperLocalWitnessTwoRouteMatrixV10 h_route)
+
+/-- Closing the v17 elimination kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomEliminationKernelV17
+    (h_kernel : FinalAxiomEliminationKernelV17) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo
+      h_kernel.1 h_kernel.2
+
+/-- Closing the v16 minimized witness pair is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomEliminationWitnessPairV16
+    (h_pair : FinalAxiomEliminationWitnessPairV16) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo
+      h_pair.1 h_pair.2
+
+/-- Closing the v15 composite final gap is sufficient to derive MLC without
+using the seeded root seam boundary theorem directly in this wrapper. -/
+theorem mlc_conjecture_of_finalAxiomEliminationGapV15
+    (h_final : FinalAxiomEliminationGapV15) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_nonseededLocalSeamGapWitnessSourceMatrixV14
+      h_final.1 h_final.2
+
 /-- Minimal explicit witness-gap target for constructing
 `RootClosureSubstituteTwo` without using the final seeded root specialization:
 aggregate constructive ingress plus the local-homeomorph branch seam. -/

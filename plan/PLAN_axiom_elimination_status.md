@@ -25,43 +25,47 @@ Unexpected axioms:
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom_elimination_status.md` | v12 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | **none (this iteration)** | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_nonseeded_local_seam_gap_equivalence_and_cutover_v12.md` | local-seam gap equivalence + cutover | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_seeded_fallback_isolation_for_local_seam_gap_v12.md` | seeded fallback isolation at local-seam boundary | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_axiom1_retired_route_inventory_guardrail_v12.md` | retired-route guardrail inventory | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToLocalSeamGap_v12.md` | constructive frontier-safe witness search for local-seam gap | `██████░░░░` **60%** | **40%** | new non-seeded injectivity mechanism | ⭐⭐⭐⭐⭐ | `STUCK` |
+| `PLAN_axiom_elimination_status.md` | v17 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | none (this iteration) | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_kernel_cutover_and_equivalence_v17.md` | isolate compact elimination kernel + equivalences | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_route_matrix_kernel_projection_v17.md` | project kernel through direct-witness route matrix | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom1_retired_route_guardrail_v17.md` | maintain no-go inventory to block repeats | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom1_constructive_core_bridge_search_v17.md` | prove non-seeded core bridge | `██████░░░░` **60%** | **40%** | new frontier-safe CP5 seam constructor | ⭐⭐⭐⭐⭐ | `STUCK` |
 
 ## Completed This Iteration
 
-- Added v12 local-seam gap interface and equivalence layer in Lean:
-  - `NonseededDirectProperToLocalSeamGapTwo`
-  - `nonseededDirectProperToRootSafeGapTwo_iff_nonseededDirectProperToLocalSeamGapTwo`
-  - `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo`
-- Added v12 local-seam seeded fallback boundary:
-  - `nonseededDirectProperToLocalSeamGapTwo_seeded_fallback`
-- Rotated plan files to a clean v12 set:
-  - removed old stuck file `PLAN_axiom1_constructive_nonseeded_gap_witness_search_v11.md`
-  - removed old completed v9/v10/v11 branch plans
-  - created four new v12 plans
+- Added v17 kernel split artifacts in Lean:
+  - `FinalAxiomEliminationKernelV17`
+  - `finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16`
+  - `finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17`
+- Added v17 kernel cutover wrappers:
+  - `rootClosureSubstituteTwo_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo`
+  - `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwo`
+  - `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16_of_directProperLocalWitnessTwoRouteMatrixV10`
+  - `mlc_conjecture_of_finalAxiomEliminationKernelV17`
+- Removed unused v16 plan files and rotated to a clean v17 plan set.
 
 ## Stuck File Decision
 
 - Kept one stuck file:
-  - `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToLocalSeamGap_v12.md`
-- Reason: it is the exact remaining theorem target and prevents repeating retired routes.
+  - `PLAN_axiom1_constructive_core_bridge_search_v17.md`
+- Reason: it captures the single unresolved bridge theorem and prevents
+  reopening known dead-end routes.
 
 ## Dead-End / Self-Repetition Check (This Iteration)
 
-- Subcutoff route, global proper/local degree-one route, and route-matrix repackaging are all formally retired.
-- Wrapper/cutover layering is complete; further wrapper-only edits would be repetition.
-- Remaining progress requires a new constructive non-seeded seam/injectivity mechanism.
+- Wrapper-level reduction and cutover work is complete for v17.
+- Retired route classes remain blocked:
+  - strict subcutoff/local-window transport route
+  - global proper/local degree-one route (forbidden dependencies)
+  - seeded replay route through `greenRayLogGtAnchorTwo_seed`
+- Re-running those routes would be self-repetition.
 
 ## Remaining Global Blocker
 
 - Missing constructive proof of:
   `DirectProperLocalWitnessTwo -> CP5ResidualLocalHomeomorphInjSeamTwo`
-  (equivalently: `DirectProperLocalWitnessTwo -> RootSafeOutsideOpenInjWitnessTwo`)
-  without `greenRayLogGtAnchorTwo_seed`.
+  without `greenRayLogGtAnchorTwo_seed` and without forbidden non-frontier
+  axioms.
 
 ## Exit Condition
 

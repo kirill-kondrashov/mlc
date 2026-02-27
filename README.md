@@ -46,11 +46,11 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v12 iteration summary |
-| `plan/PLAN_axiom1_nonseeded_local_seam_gap_equivalence_and_cutover_v12.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | local-seam gap equivalence + cutover complete |
-| `plan/PLAN_axiom1_seeded_fallback_isolation_for_local_seam_gap_v12.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | seeded fallback isolation complete |
-| `plan/PLAN_axiom1_retired_route_inventory_guardrail_v12.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | retired-route guardrail complete |
-| `plan/PLAN_axiom1_constructive_witness_for_nonseededDirectProperToLocalSeamGap_v12.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | new non-seeded seam/injectivity mechanism |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v17 iteration summary |
+| `plan/PLAN_axiom1_kernel_cutover_and_equivalence_v17.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | compact kernel + equivalence cutover complete |
+| `plan/PLAN_axiom1_route_matrix_kernel_projection_v17.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | route-matrix projection wrappers complete |
+| `plan/PLAN_axiom1_retired_route_guardrail_v17.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
+| `plan/PLAN_axiom1_constructive_core_bridge_search_v17.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
 
 ## Key Technical Reality
 
@@ -169,6 +169,22 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
   `nonseededDirectProperToRootSafeGapTwo_iff_nonseededDirectProperToLocalSeamGapTwo`.
 - Added v12 local-seam seeded fallback endpoint:
   `nonseededDirectProperToLocalSeamGapTwo_seeded_fallback`.
+- Added local-seam route-matrix cutover wrappers:
+  `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwoRouteMatrixV10` and
+  `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_seeded_fallback_of_directProperLocalWitnessTwoRouteMatrixV10`.
+- Added v14 source-matrix cutover wrappers:
+  `NonseededLocalSeamGapWitnessSourceMatrixV14` and
+  `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_nonseededLocalSeamGapWitnessSourceMatrixV14`.
+- Added v16 final-gap minimalization aliases and cutover:
+  `FinalAxiomEliminationWitnessPairV16`,
+  `FinalAxiomCoreConstructiveGapV16`,
+  `finalAxiomEliminationGapV15_iff_finalAxiomEliminationWitnessPairV16`,
+  and `mlc_conjecture_of_finalAxiomEliminationWitnessPairV16`.
+- Added v17 elimination-kernel split and cutover wrappers:
+  `FinalAxiomEliminationKernelV17`,
+  `finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16`,
+  `finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17`,
+  and `mlc_conjecture_of_finalAxiomEliminationKernelV17`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier
