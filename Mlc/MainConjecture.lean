@@ -4457,6 +4457,18 @@ uniqueness seam plus anchor-gap seam. -/
 def RootSafeOutsideOpenInjWitnessTwoWitnessGap : Prop :=
   GreenRayUniquePreimageTwoAnchorSeam ∧ GreenRayLogGtAnchorTwoSeam
 
+/-- Explicit constructor gap for the unique-preimage seam target: outside-open
+injectivity on the target outside-open domain. -/
+def GreenRayUniquePreimageTwoAnchorSeamWitnessGap : Prop :=
+  RootSafeOutsideOpenInjWitnessTwo
+
+/-- Build the unique-preimage seam target from the explicit injectivity
+constructor gap payload. -/
+theorem greenRayUniquePreimageTwoAnchorSeam_of_greenRayUniquePreimageTwoAnchorSeamWitnessGap
+    (h_gap : GreenRayUniquePreimageTwoAnchorSeamWitnessGap) :
+    GreenRayUniquePreimageTwoAnchorSeam :=
+  greenRayUniquePreimageTwoAnchorSeam_of_injOn_outside_open h_gap
+
 /-- Build the root outside-open injectivity witness from the explicit
 constructor gap payload. -/
 theorem rootSafeOutsideOpenInjWitnessTwo_of_rootSafeOutsideOpenInjWitnessTwoWitnessGap
@@ -6248,6 +6260,18 @@ outside-open injectivity plus direct proper/local witness. -/
 def RootClosureSubstituteTwo : Prop :=
   RootSafeOutsideOpenInjWitnessTwo ∧ DirectProperLocalWitnessTwo
 
+/-- Named non-seam replacement target for root closure at `c = 2`.
+This aliases the existing seam-free closure interface and is used as a redesign
+boundary marker for log-gap seam elimination work. -/
+def NonseamRootReplacementTargetTwo : Prop :=
+  RootClosureSubstituteTwo
+
+/-- Non-seam replacement target is definitionally equivalent to the existing
+seam-free closure interface. -/
+theorem nonseamRootReplacementTargetTwo_iff_rootClosureSubstituteTwo :
+    NonseamRootReplacementTargetTwo ↔ RootClosureSubstituteTwo := by
+  rfl
+
 /-- Minimal explicit witness-gap target for constructing
 `RootClosureSubstituteTwo` without using the final seeded root specialization:
 aggregate constructive ingress plus the local-homeomorph branch seam. -/
@@ -6394,6 +6418,24 @@ theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalW
   exact mlc_conjecture_of_rootClosureSubstituteTwo
     (rootClosureSubstituteTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
       h_inj h_dir)
+
+/-- Root boundary wrapper through the named non-seam replacement target. -/
+theorem mlc_conjecture_of_nonseamRootReplacementTargetTwo
+    (h_nonseam : NonseamRootReplacementTargetTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_rootClosureSubstituteTwo h_nonseam
+
+/-- Root closure from explicit outside-open injectivity constructor-gap payload
+plus direct proper/local witness, routed through the non-seam replacement
+target. -/
+theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwoWitnessGap_of_directProperLocalWitnessTwo
+    (h_gap : RootSafeOutsideOpenInjWitnessTwoWitnessGap)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_nonseamRootReplacementTargetTwo
+    (rootClosureSubstituteTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+      (rootSafeOutsideOpenInjWitnessTwo_of_rootSafeOutsideOpenInjWitnessTwoWitnessGap h_gap)
+      h_dir)
 
 /-- Strict-mono-free root-candidate wrapper parameterized by the exact remaining
 outside-open injectivity witness target and specialized to the current
