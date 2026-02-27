@@ -38,21 +38,32 @@ All axioms used:
 
 | Target Axiom | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|
-| `greenRayLogGtAnchorTwo_axiom_seed` | `████████░░` 82% | 18% | ~80-180 Lean LOC, ~3-6 hrs |
+| `greenRayLogGtAnchorTwo_axiom_seed` | `████████░░` 82% | 18% | ~120-260 Lean LOC, ~4-10 hrs |
 
-Total estimated remainder: ~80-180 Lean LOC, ~3-6 hours.
+Total estimated remainder: ~120-260 Lean LOC, ~4-10 hours.
 
 ## Active Plans (`plan/*`)
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | batch complete (`DONE/STUCK`) |
-| `plan/PLAN_axiom1_frontier_safe_nonseeded_ingress_search_v2.md` | ⭐⭐⭐⭐⭐ | `████████░░` 82% | 18% | blocked pending new frontier-safe ingress |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██░░░░░░░░` 24% | 76% | active umbrella cycle |
+| `plan/PLAN_axiom1_frontier_delta_probe_matrix_v1.md` | ⭐⭐⭐⭐⭐ | `██░░░░░░░░` 16% | 84% | ~2-5h |
+| `plan/PLAN_axiom1_nonaggregated_surjectivity_witness_search_v1.md` | ⭐⭐⭐⭐⭐ | `█░░░░░░░░░` 12% | 88% | ~3-8h |
+| `plan/PLAN_axiom1_root_single_boundary_cutover_after_delta_minus_one_v1.md` | ⭐⭐⭐⭐⭐ | `█░░░░░░░░░` 8% | 92% | ~2-5h |
 
 ## Key Technical Reality
 
 - The old global anchor-gap seam is inconsistent in the current model:
   `not_greenRayLogGtAnchorTwoSeam`.
+- The bounded-cutoff replacement route is also inconsistent:
+  `not_greenRayLogGtAnchorTwo_cutoff_band`.
+- An anchor-free payload staging interface now exists in root wiring:
+  `RootSeedPayloadTwoNoAnchor` and its first bridge wrappers.
+- The current cycle focuses on finding a validated `-1/+0` constructor branch
+  via probe matrix + nonaggregated surjectivity witness search.
+- Known blocker to avoid: constructor compositions that introduce non-frontier
+  axioms (`MLC.Quadratic.external_ray_map_exists`,
+  `MLC.Quadratic.bottcher_seq_converges`).
 - The strict-mono seam axiom has already been removed from root frontier.
 - The only remaining frontier debt is the anchor-seed axiom above.
 

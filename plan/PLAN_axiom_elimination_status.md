@@ -1,7 +1,7 @@
 # Axiom Elimination Status (Umbrella Plan)
 
 ---
-**Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `BATCH COMPLETE (DONE/STUCK)`
+**Status:** `██░░░░░░░░` **24%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ACTIVE`
 **Target Axioms:** `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 **Last Updated:** 2026-02-27
 ---
@@ -21,48 +21,42 @@ Unexpected axioms:
 - MLC.greenRayLogGtAnchorTwo_axiom_seed
 ```
 
-## What Changed This Iteration
+## Cleanup Applied
 
-- Ran post-Axiom2 root-near ingress inventory with `Lean.collectAxioms` probes.
-- Confirmed anchor dependency is already localized to canonical seed entry path.
-- Evaluated policy-exception route (`external_ray_map_exists`) and rejected it
-  under current frontier policy.
-- Classified remaining elimination plan as `STUCK` after no-delta repetition.
-- Removed unused completed plan files from `plan/` to keep only active planning
-  artifacts.
+- Removed `STUCK` plan files from `plan/`.
+- Removed stale completed per-cycle plan files that were no longer active.
+- Kept actionable history in code and README; restarted with a fresh active set.
 
-## Plan Set
+## Active Plan Set
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom1_frontier_safe_nonseeded_ingress_search_v2.md` | frontier-safe nonseeded ingress for root | `████████░░` **82%** | **18%** | **Blocked** | ⭐⭐⭐⭐⭐ | `STUCK` |
-
-## Ranking Delta (2026-02-27)
-
-| Candidate | Delta | Result |
-|-----------|-------|--------|
-| root-near seeded aliases (`mlc_conjecture`, `rootSafeOutsideOpenInjWitnessTwo_seed`, `externalRayMapData_two_root_seed`) | `0` | still require `MLC.greenRayLogGtAnchorTwo_axiom_seed` |
-| Root via `Quadratic.external_ray_map_exists (2)` | `-1/+1` | removes anchor seed but introduces `MLC.Quadratic.external_ray_map_exists` |
-| Current root theorem | baseline | one remaining unexpected axiom |
-
-## Dead-End / Repetition Check
-
-- Repetition detected: candidate ingress set matched previous batch; probes showed
-  no new frontier-safe path.
-- Dead end confirmed for this batch: no assumption-free replacement removed
-  `MLC.greenRayLogGtAnchorTwo_axiom_seed` without frontier expansion.
+| `PLAN_axiom1_frontier_delta_probe_matrix_v1.md` | find candidate branch with frontier delta `-1/+0` | `██░░░░░░░░` **16%** | **84%** | **2-5h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
+| `PLAN_axiom1_nonaggregated_surjectivity_witness_search_v1.md` | construct surjectivity witness without blocked aggregators | `█░░░░░░░░░` **12%** | **88%** | **3-8h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
+| `PLAN_axiom1_root_single_boundary_cutover_after_delta_minus_one_v1.md` | cut root at one boundary once admissible candidate exists | `█░░░░░░░░░` **8%** | **92%** | **2-5h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
 
 ## Axiom-Level Estimate
 
 | Axiom | Progress | Left | Main Risk | Primary Plan |
 |------|----------|------|-----------|--------------|
-| `MLC.greenRayLogGtAnchorTwo_axiom_seed` | `████████░░` **82%** | **18%** | no confirmed frontier-safe nonseeded ingress theorem | `PLAN_axiom1_frontier_safe_nonseeded_ingress_search_v2.md` (`STUCK`) |
+| `MLC.greenRayLogGtAnchorTwo_axiom_seed` | `████████░░` **82%** | **18%** | no validated `-1/+0` constructor yet | `PLAN_axiom1_frontier_delta_probe_matrix_v1.md` |
 
-## Suggested New Plans
+## Dead-End Guard (Do Not Repeat)
 
-1. `PLAN_axiom1_frontier_safe_nonseeded_ingress_search_v3.md`
-2. `PLAN_axiom1_root_payload_constructor_without_anchor_v1.md`
-3. `PLAN_policy_decision_external_ray_temp_allowance_v1.md` (only if policy changes)
+- Do not reopen cutoff-band seam route
+  (`not_greenRayLogGtAnchorTwo_cutoff_band`).
+- Do not retry preimage-seam-to-anchor implication
+  (`not_greenRayLogGtAnchorTwoSeam_of_greenRayAnchorThresholdPreimageTwoSeam`).
+- Do not accept rewires that add non-frontier axioms
+  (`MLC.Quadratic.external_ray_map_exists`,
+  `MLC.Quadratic.bottcher_seq_converges`,
+  `MLC.Quadratic.extended_ray_map_continuous`).
+
+## Suggested New Plans (If This Cycle Stalls)
+
+1. `PLAN_axiom1_constructor_family_min_cut_probe_v1.md`
+2. `PLAN_axiom1_surj_target_reformulation_without_externalRayMapData_v1.md`
+3. `PLAN_axiom1_root_boundary_cutover_guardrail_matrix_v1.md`
 
 ## Exit Condition
 

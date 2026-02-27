@@ -2241,6 +2241,17 @@ theorem not_greenRayLogGtAnchorTwoSeam :
       _ = gAnchor / 2 := hlog_eval
   linarith
 
+/-- Dead-end certificate: the bounded-annulus obligation from
+`greenRayLogGtAnchorTwoSeam_of_cutoff_band` is itself inconsistent in the
+current model, because it would imply the globally inconsistent seam. -/
+theorem not_greenRayLogGtAnchorTwo_cutoff_band :
+    ¬ (∀ w : ℂ, 1 < ‖w‖ → ‖w‖ ≤ greenRayLogGtAnchorTwoCutoff →
+      MLC.Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) := by
+  intro hband
+  exact not_greenRayLogGtAnchorTwoSeam
+    (greenRayLogGtAnchorTwoSeam_of_cutoff_band hband)
+
 /-- Dead-end certificate: the replacement-shape seam does not by itself recover
 the old global anchor-gap seam target. -/
 theorem not_greenRayLogGtAnchorTwoSeam_of_greenRayAnchorThresholdPreimageTwoSeam :
@@ -2586,6 +2597,29 @@ restricted proper+local pair for the outside-open/exterior map. -/
 def DirectProperLocalWitnessTwo : Prop :=
   IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
+
+/-- Reduced-open local-homeomorph surjectivity-source constructor at `c = 2`
+from the direct proper+local witness. -/
+theorem localHomeomorphSurjSourceTwo_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+  ⟨isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) h.1, h.2⟩
+
+/-- Known surjectivity-source constructor at `c = 2` from the direct proper+local
+witness. -/
+theorem knownSurjOnExteriorFromOutsideOpenSourceCandidateTwo_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo :=
+  Or.inl (localHomeomorphSurjSourceTwo_of_directProperLocalWitnessTwo h)
+
+/-- Outside-open exterior surjectivity at `c = 2` from the direct proper+local
+witness. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_directProperLocalWitnessTwo
+    (h : DirectProperLocalWitnessTwo) :
+    BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
+  bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
+    h.1 h.2
 
 /-- Build restricted-map properness at `c = 2` from local-homeomorph continuity
 and closedness of ambient outside-open preimages against compact exterior
@@ -4033,6 +4067,90 @@ theorem greenRayUniquePreimageTwoAnchorSeam_of_greenRayLogGtAnchorTwoSeam_of_inj
       _ = ‖((ρ : ℂ) * u)‖ := hnorm_eq.symm
       _ = ρ := hz_norm
 
+/-- Green-ray anchored uniqueness at `c = 2` from the constructive preimage
+seam shape plus outside-open injectivity. -/
+theorem greenRayUniquePreimageTwoAnchorSeam_of_greenRayAnchorThresholdPreimageTwoSeam_of_injOn_outside_open
+    (hpre : GreenRayAnchorThresholdPreimageTwoSeam)
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    GreenRayUniquePreimageTwoAnchorSeam := by
+  intro w hw hlog_anchor
+  set u : ℂ := w / ↑‖w‖
+  have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+  have hu : ‖u‖ = 1 := by
+    dsimp [u]
+    rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+  obtain ⟨ρ, hρ_gt, hρ_eq⟩ := hpre w hw hlog_anchor
+  refine ⟨ρ, ⟨hρ_gt, ?_⟩, ?_⟩
+  · simpa [u] using hρ_eq
+  · intro ρ' hρ'_witness
+    rcases hρ'_witness with ⟨hρ'_gt, hρ'_eq⟩
+    have hρ_pos : 0 < ρ := by
+      linarith [hρ_gt, norm_nonneg (2 : ℂ)]
+    have hρ'_pos : 0 < ρ' := by
+      linarith [hρ'_gt, norm_nonneg (2 : ℂ)]
+    have hz_norm : ‖((ρ : ℂ) * u)‖ = ρ := by
+      rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ_pos.le, hu, mul_one]
+    have hz'_norm : ‖((ρ' : ℂ) * u)‖ = ρ' := by
+      rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ'_pos.le, hu, mul_one]
+    have hz_out : ‖((ρ : ℂ) * u)‖ > ‖(2 : ℂ)‖ + 2 := by
+      calc
+        ‖((ρ : ℂ) * u)‖ = ρ := hz_norm
+        _ > ‖(2 : ℂ)‖ + 2 := hρ_gt
+    have hz'_out : ‖((ρ' : ℂ) * u)‖ > ‖(2 : ℂ)‖ + 2 := by
+      calc
+        ‖((ρ' : ℂ) * u)‖ = ρ' := hz'_norm
+        _ > ‖(2 : ℂ)‖ + 2 := hρ'_gt
+    have hbot_ρ :
+        Quadratic.bottcher_map (2 : ℂ) ((ρ : ℂ) * u) =
+          u * ↑(Real.exp (Real.log ‖w‖)) := by
+      rw [bottcher_map_apply_ray_two u hu ρ hρ_pos, hρ_eq]
+    have hbot_ρ' :
+        Quadratic.bottcher_map (2 : ℂ) ((ρ' : ℂ) * u) =
+          u * ↑(Real.exp (Real.log ‖w‖)) := by
+      rw [bottcher_map_apply_ray_two u hu ρ' hρ'_pos]
+      rw [hρ'_eq]
+    have hbot_eq :
+        Quadratic.bottcher_map (2 : ℂ) ((ρ : ℂ) * u) =
+          Quadratic.bottcher_map (2 : ℂ) ((ρ' : ℂ) * u) := by
+      calc
+        Quadratic.bottcher_map (2 : ℂ) ((ρ : ℂ) * u)
+            = u * ↑(Real.exp (Real.log ‖w‖)) := hbot_ρ
+        _ = Quadratic.bottcher_map (2 : ℂ) ((ρ' : ℂ) * u) := hbot_ρ'.symm
+    have hz_eq : ((ρ : ℂ) * u) = ((ρ' : ℂ) * u) :=
+      h_inj hz_out hz'_out hbot_eq
+    have hnorm_eq : ‖((ρ : ℂ) * u)‖ = ‖((ρ' : ℂ) * u)‖ := congrArg norm hz_eq
+    calc
+      ρ' = ‖((ρ' : ℂ) * u)‖ := hz'_norm.symm
+      _ = ‖((ρ : ℂ) * u)‖ := hnorm_eq.symm
+      _ = ρ := hz_norm
+
+/-- Green-ray anchored uniqueness at `c = 2` from outside-open injectivity,
+using the constructive preimage seam. -/
+theorem greenRayUniquePreimageTwoAnchorSeam_of_injOn_outside_open
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    GreenRayUniquePreimageTwoAnchorSeam :=
+  greenRayUniquePreimageTwoAnchorSeam_of_greenRayAnchorThresholdPreimageTwoSeam_of_injOn_outside_open
+    greenRayAnchorThresholdPreimageTwoSeam_constructive h_inj
+
+/-- Preimage-seam bridge at `c = 2`: from the constructive preimage seam shape
+plus outside-open injectivity and an explicit anchor-gap seam, build
+external-ray data. -/
+theorem external_ray_map_exists_two_constructive_of_greenRayAnchorThresholdPreimageTwoSeam_of_injOn_outside_open_of_greenRayLogGtAnchorTwoSeam
+    (hpre : GreenRayAnchorThresholdPreimageTwoSeam)
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
+    (greenRayUniquePreimageTwoAnchorSeam_of_greenRayAnchorThresholdPreimageTwoSeam_of_injOn_outside_open
+      hpre h_inj)
+    hlog_gt_anchor
+
 /-- Outside-open injectivity at `c = 2` from Green-ray anchored uniqueness
 plus the anchor-gap seam; no `external_ray_map_exists` usage in this bridge. -/
 theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
@@ -4287,8 +4405,10 @@ theorem external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_o
       Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function_of_injOn_outside_open
-    hlog_gt_anchor h_inj_outside
+  external_ray_map_exists_two_constructive_of_greenRayAnchorThresholdPreimageTwoSeam_of_injOn_outside_open_of_greenRayLogGtAnchorTwoSeam
+    greenRayAnchorThresholdPreimageTwoSeam_constructive
+    h_inj_outside
+    hlog_gt_anchor
 
 /-- Conditional CP5 endpoint at `c = 2`: Green inversion routed through
 outside-open injectivity, specialized to the current anchor-gap seed. -/
@@ -4299,6 +4419,17 @@ theorem external_ray_map_exists_two_constructive_of_green_function_of_injOn_outs
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_exists_two_constructive_of_greenRayLogGtAnchorTwoSeam_of_injOn_outside_open
     greenRayLogGtAnchorTwo_seed h_inj_outside
+
+/-- Seam-free constructor at `c = 2`: outside-open injectivity plus
+outside-open exterior surjectivity from the direct proper+local witness. -/
+theorem external_ray_map_exists_two_constructive_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    (h_dir : DirectProperLocalWitnessTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists_two_constructive_of_injOn_outside_open_of_surj_exterior
+    h_inj (bottcherSurjOnExteriorFromOutsideOpen_two_of_directProperLocalWitnessTwo h_dir)
 
 /-- Exact strict-mono-free root replacement target at `c = 2`: a frontier-safe
 outside-open injectivity witness for `bottcher_map`. -/
@@ -4741,9 +4872,10 @@ theorem external_ray_map_exists_two_constructive_strictMono_free_of_directProper
     (h : DirectProperLocalWitnessTwo)
     (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
-  external_ray_map_exists_two_constructive_strictMono_free_of_rootSafeOutsideOpenInjWitnessTwo
+  external_ray_map_exists_two_constructive_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
     (rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
       h h_seam)
+    h
 
 /-- Strict-mono-seeded external-ray-data candidate at `c = 2`, specialized to a
 direct proper/local witness. -/
@@ -5564,6 +5696,12 @@ outside-open injectivity witness target. -/
 def RootSeedPayloadTwo : Prop :=
   GreenRayLogGtAnchorTwoSeam ∧ RootSafeOutsideOpenInjWitnessTwo
 
+/-- Anchor-free root payload at `c = 2`: exact root-safe outside-open
+injectivity witness target only. This is a staging interface for removing the
+anchor seam from root payload wiring. -/
+def RootSeedPayloadTwoNoAnchor : Prop :=
+  RootSafeOutsideOpenInjWitnessTwo
+
 /-- Build the centralized root-seed seam bundle from anchor-gap seam plus the
 exact root-safe outside-open injectivity witness target. -/
 lemma rootSeedPairTwo_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
@@ -5589,6 +5727,15 @@ lemma rootSeedPayloadTwo_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInj
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     RootSeedPayloadTwo :=
   ⟨hlog_gt_anchor, h_inj⟩
+
+/-- Build the centralized root-seed payload from the anchor-free payload plus
+an explicit anchor-gap seam argument. -/
+lemma rootSeedPayloadTwo_of_rootSeedPayloadTwoNoAnchor_of_greenRayLogGtAnchorTwoSeam
+    (hseed : RootSeedPayloadTwoNoAnchor)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    RootSeedPayloadTwo :=
+  rootSeedPayloadTwo_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo
+    hlog_gt_anchor hseed
 
 /-- Build the centralized root-seed payload from anchor-gap seam plus the
 aggregated strict-mono-free ingress bundle. -/
@@ -5672,6 +5819,16 @@ lemma externalRayMapData_two_root_seed_of_rootSeedPayloadTwo
   externalRayMapData_two_root_seed_of_rootSeedPairTwo
     (rootSeedPairTwo_of_rootSeedPayloadTwo hseed)
 
+/-- Root seed selector at `c = 2`, parameterized by the anchor-free root payload
+plus an explicit anchor-gap seam argument. -/
+lemma externalRayMapData_two_root_seed_of_rootSeedPayloadTwoNoAnchor_of_greenRayLogGtAnchorTwoSeam
+    (hseed : RootSeedPayloadTwoNoAnchor)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  externalRayMapData_two_root_seed_of_rootSeedPayloadTwo
+    (rootSeedPayloadTwo_of_rootSeedPayloadTwoNoAnchor_of_greenRayLogGtAnchorTwoSeam
+      hseed hlog_gt_anchor)
+
 /-- Strict-mono-free root-seed alternative at `c = 2`, parameterized by the
 aggregated strict-mono-free ingress bundle. -/
 lemma externalRayMapData_two_root_seed_strictMonoFree_of_greenRayLogGtAnchorTwoSeam_of_strictMonoFreeIngressTwo
@@ -5732,6 +5889,16 @@ theorem mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPayloadTwo
   exact mlc_conjecture_of_external_ray_map_exists_two
     (externalRayMapData_two_root_seed_of_rootSeedPayloadTwo hseed)
 
+/-- Root theorem routed through the anchor-free root payload plus an explicit
+anchor-gap seam argument. -/
+theorem mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPayloadTwoNoAnchor_of_greenRayLogGtAnchorTwoSeam
+    (hseed : RootSeedPayloadTwoNoAnchor)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_external_ray_map_exists_two
+    (externalRayMapData_two_root_seed_of_rootSeedPayloadTwoNoAnchor_of_greenRayLogGtAnchorTwoSeam
+      hseed hlog_gt_anchor)
+
 /-- Root theorem from anchor-gap seam plus root-safe outside-open injectivity,
 routed through the centralized root-seed payload constructor. -/
 theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo_via_rootSeedPayloadTwo
@@ -5749,8 +5916,8 @@ theorem mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWi
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact
-    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo_via_rootSeedPayloadTwo
-      hlog_gt_anchor h_inj
+    mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPayloadTwoNoAnchor_of_greenRayLogGtAnchorTwoSeam
+      h_inj hlog_gt_anchor
 
 /-- Strict-mono-free candidate endpoint at `c = 2`, parameterized by the
 centralized root-seam bundle. -/
@@ -5799,8 +5966,8 @@ theorem mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_gre
     (h_inj : RootSafeOutsideOpenInjWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact
-    mlc_conjecture_of_greenRayLogGtAnchorTwoSeam_of_rootSafeOutsideOpenInjWitnessTwo_via_rootSeedPairTwo
-      hlog_gt_anchor h_inj
+    mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPayloadTwoNoAnchor_of_greenRayLogGtAnchorTwoSeam
+      h_inj hlog_gt_anchor
 
 /-- Strict-mono-free root theorem variant at `c = 2`, parameterized by the
 exact remaining root witness target and specialized to the current anchor-gap
