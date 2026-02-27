@@ -46,11 +46,11 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v10 iteration summary |
-| `plan/PLAN_axiom1_nonseeded_directProper_to_rootSafe_gap_cutover_v10.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | non-seeded gap + cutover wrappers complete |
-| `plan/PLAN_axiom1_route_matrix_collapse_for_directProper_sources_v10.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | route matrix collapse proved |
-| `plan/PLAN_axiom1_constructive_witness_for_nonseededDirectProperToRootSafeGap_v10.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | new frontier-safe injectivity source |
-| `plan/PLAN_axiom1_seeded_fallback_isolation_and_min_cut_v10.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | seeded fallback isolation complete |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v12 iteration summary |
+| `plan/PLAN_axiom1_nonseeded_local_seam_gap_equivalence_and_cutover_v12.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | local-seam gap equivalence + cutover complete |
+| `plan/PLAN_axiom1_seeded_fallback_isolation_for_local_seam_gap_v12.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | seeded fallback isolation complete |
+| `plan/PLAN_axiom1_retired_route_inventory_guardrail_v12.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | retired-route guardrail complete |
+| `plan/PLAN_axiom1_constructive_witness_for_nonseededDirectProperToLocalSeamGap_v12.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | new non-seeded seam/injectivity mechanism |
 
 ## Key Technical Reality
 
@@ -164,6 +164,11 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
   `directProperLocalWitnessTwoRouteMatrixV10_iff_directProperLocalWitnessTwo`.
 - Added explicit seeded fallback endpoint for the v10 gap:
   `nonseededDirectProperToRootSafeGapTwo_seeded_fallback`.
+- Added v12 local-seam gap formulation and equivalence:
+  `NonseededDirectProperToLocalSeamGapTwo` and
+  `nonseededDirectProperToRootSafeGapTwo_iff_nonseededDirectProperToLocalSeamGapTwo`.
+- Added v12 local-seam seeded fallback endpoint:
+  `nonseededDirectProperToLocalSeamGapTwo_seeded_fallback`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier

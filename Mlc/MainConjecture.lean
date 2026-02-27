@@ -5135,6 +5135,35 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_isLocalHomeomorph_of_deg
   injOn_outside_open_two_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
     hproper hlocal hdeg1
 
+/-- v11 route marker: global properness + global local-homeomorph + degree-one
+fiber witness route to outside-open injectivity. -/
+def GlobalProperLocalDegreeOneRouteTwo : Prop :=
+  IsProperMap (Quadratic.bottcher_map (2 : ℂ)) ∧
+    IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)) ∧
+      ProperLocalDegreeOneFiberWitnessTwo
+
+/-- Current-model no-go: the global proper/local + degree-one-fiber route is
+inconsistent because global properness of `bottcher_map` is impossible. -/
+theorem not_globalProperLocalDegreeOneRouteTwo :
+    ¬ GlobalProperLocalDegreeOneRouteTwo := by
+  intro hroute
+  exact bottcher_map_not_isProperMap (2 : ℂ) hroute.1
+
+/-- Route projection: if the global proper/local + degree-one-fiber route were
+available, it would produce outside-open injectivity. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_globalProperLocalDegreeOneRouteTwo
+    (hroute : GlobalProperLocalDegreeOneRouteTwo) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_isProperMap_isLocalHomeomorph_of_degreeOneFiberWitness
+    hroute.1 hroute.2.1 hroute.2.2
+
+/-- Current-model contradiction marker for the global proper/local
+degree-one-fiber route. -/
+theorem false_of_globalProperLocalDegreeOneRouteTwo
+    (hroute : GlobalProperLocalDegreeOneRouteTwo) :
+    False :=
+  not_globalProperLocalDegreeOneRouteTwo hroute
+
 /-- Constructive outside-open injectivity from the direct proper+local witness
 at `c = 2`. -/
 theorem injOn_outside_open_two_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
@@ -6917,6 +6946,43 @@ direct proper/local witness data to outside-open injectivity. -/
 def NonseededDirectProperToRootSafeGapTwo : Prop :=
   DirectProperLocalWitnessTwo → RootSafeOutsideOpenInjWitnessTwo
 
+/-- v12 equivalent non-seeded gap phrasing: from direct proper/local witness to
+the local-homeomorph CP5 injectivity seam. -/
+def NonseededDirectProperToLocalSeamGapTwo : Prop :=
+  DirectProperLocalWitnessTwo → CP5ResidualLocalHomeomorphInjSeamTwo
+
+/-- Build the v10 non-seeded directProper→rootSafe gap from the v12
+directProper→local-seam gap. -/
+theorem nonseededDirectProperToRootSafeGapTwo_of_nonseededDirectProperToLocalSeamGapTwo
+    (h_gap : NonseededDirectProperToLocalSeamGapTwo) :
+    NonseededDirectProperToRootSafeGapTwo := by
+  intro h_dir
+  exact
+    rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h_dir (h_gap h_dir)
+
+/-- Build the v12 directProper→local-seam gap from the v10
+directProper→rootSafe gap. -/
+theorem nonseededDirectProperToLocalSeamGapTwo_of_nonseededDirectProperToRootSafeGapTwo
+    (h_gap : NonseededDirectProperToRootSafeGapTwo) :
+    NonseededDirectProperToLocalSeamGapTwo := by
+  intro h_dir
+  exact cp5ResidualLocalHomeomorphInjSeamTwo_of_rootSafeOutsideOpenInjWitnessTwo
+    (h_gap h_dir)
+
+/-- The v10 and v12 non-seeded gap formulations are equivalent. -/
+theorem nonseededDirectProperToRootSafeGapTwo_iff_nonseededDirectProperToLocalSeamGapTwo :
+    NonseededDirectProperToRootSafeGapTwo ↔ NonseededDirectProperToLocalSeamGapTwo := by
+  constructor
+  · intro h_gap
+    exact
+      nonseededDirectProperToLocalSeamGapTwo_of_nonseededDirectProperToRootSafeGapTwo
+        h_gap
+  · intro h_gap
+    exact
+      nonseededDirectProperToRootSafeGapTwo_of_nonseededDirectProperToLocalSeamGapTwo
+        h_gap
+
 /-- If the v10 non-seeded directProper→rootSafe gap is discharged, root closure
 follows directly from a direct proper/local witness. -/
 theorem rootClosureSubstituteTwo_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo
@@ -6934,6 +7000,16 @@ theorem mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperL
   exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
     (h_gap h_dir) h_dir
 
+/-- Root closure from the v12 directProper→local-seam gap plus a direct
+proper/local witness. -/
+theorem mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo
+    (h_gap : NonseededDirectProperToLocalSeamGapTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo
+    (nonseededDirectProperToRootSafeGapTwo_of_nonseededDirectProperToLocalSeamGapTwo h_gap)
+    h_dir
+
 /-- Seeded fallback witness of the v10 non-seeded directProper→rootSafe gap.
 This theorem is intentionally marked as seeded fallback and not a frontier-safe
 closure. -/
@@ -6941,6 +7017,12 @@ theorem nonseededDirectProperToRootSafeGapTwo_seeded_fallback :
     NonseededDirectProperToRootSafeGapTwo := by
   intro h_dir
   exact injOn_outside_open_two_of_directProperLocalWitnessTwo_constructive h_dir
+
+/-- Seeded fallback witness of the v12 directProper→local-seam gap. -/
+theorem nonseededDirectProperToLocalSeamGapTwo_seeded_fallback :
+    NonseededDirectProperToLocalSeamGapTwo := by
+  intro h_dir
+  exact cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo h_dir
 
 /-- v10 route matrix for candidate paths currently used to obtain
 `DirectProperLocalWitnessTwo`. -/

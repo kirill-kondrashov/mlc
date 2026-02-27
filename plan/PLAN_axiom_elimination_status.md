@@ -25,43 +25,43 @@ Unexpected axioms:
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom_elimination_status.md` | v10 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | **none (this iteration)** | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_nonseeded_directProper_to_rootSafe_gap_cutover_v10.md` | isolate non-seeded directProper->rootSafe gap and root cutover | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_route_matrix_collapse_for_directProper_sources_v10.md` | collapse current directProper source matrix | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToRootSafeGap_v10.md` | construct frontier-safe witness for non-seeded gap | `██████░░░░` **60%** | **40%** | new injectivity mechanism without seed | ⭐⭐⭐⭐⭐ | `STUCK` |
-| `PLAN_axiom1_seeded_fallback_isolation_and_min_cut_v10.md` | isolate seeded fallback endpoint for gap interface | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom_elimination_status.md` | v12 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | **none (this iteration)** | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_nonseeded_local_seam_gap_equivalence_and_cutover_v12.md` | local-seam gap equivalence + cutover | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom1_seeded_fallback_isolation_for_local_seam_gap_v12.md` | seeded fallback isolation at local-seam boundary | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom1_retired_route_inventory_guardrail_v12.md` | retired-route guardrail inventory | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToLocalSeamGap_v12.md` | constructive frontier-safe witness search for local-seam gap | `██████░░░░` **60%** | **40%** | new non-seeded injectivity mechanism | ⭐⭐⭐⭐⭐ | `STUCK` |
 
 ## Completed This Iteration
 
-- Added v10 minimal non-seeded elimination gap interface:
-  - `NonseededDirectProperToRootSafeGapTwo`
-- Added root closure wrappers parameterized by that gap:
-  - `rootClosureSubstituteTwo_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo`
-  - `mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwo`
-- Added explicit seeded fallback endpoint for the gap:
-  - `nonseededDirectProperToRootSafeGapTwo_seeded_fallback`
-- Added v10 directProper route matrix and collapse proof:
-  - `DirectProperLocalWitnessTwoRouteMatrixV10`
-  - `directProperLocalWitnessTwoRouteMatrixV10_iff_directProperLocalWitnessTwo`
-- Added root closure wrapper from gap + route matrix:
-  - `mlc_conjecture_of_nonseededDirectProperToRootSafeGapTwo_of_directProperLocalWitnessTwoRouteMatrixV10`
+- Added v12 local-seam gap interface and equivalence layer in Lean:
+  - `NonseededDirectProperToLocalSeamGapTwo`
+  - `nonseededDirectProperToRootSafeGapTwo_iff_nonseededDirectProperToLocalSeamGapTwo`
+  - `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwo`
+- Added v12 local-seam seeded fallback boundary:
+  - `nonseededDirectProperToLocalSeamGapTwo_seeded_fallback`
+- Rotated plan files to a clean v12 set:
+  - removed old stuck file `PLAN_axiom1_constructive_nonseeded_gap_witness_search_v11.md`
+  - removed old completed v9/v10/v11 branch plans
+  - created four new v12 plans
 
 ## Stuck File Decision
 
 - Kept one stuck file:
-  - `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToRootSafeGap_v10.md`
-- Reason: it prevents repetition by pinning the exact unresolved theorem target.
+  - `PLAN_axiom1_constructive_witness_for_nonseededDirectProperToLocalSeamGap_v12.md`
+- Reason: it is the exact remaining theorem target and prevents repeating retired routes.
 
 ## Dead-End / Self-Repetition Check (This Iteration)
 
-- Existing route families now formally collapse to `DirectProperLocalWitnessTwo`.
-- Re-running those same route transformations cannot eliminate the remaining axiom.
-- Remaining blocker is a genuinely new frontier-safe injectivity source.
+- Subcutoff route, global proper/local degree-one route, and route-matrix repackaging are all formally retired.
+- Wrapper/cutover layering is complete; further wrapper-only edits would be repetition.
+- Remaining progress requires a new constructive non-seeded seam/injectivity mechanism.
 
 ## Remaining Global Blocker
 
-- Missing constructive proof of `NonseededDirectProperToRootSafeGapTwo`
-  without using `greenRayLogGtAnchorTwo_seed`.
+- Missing constructive proof of:
+  `DirectProperLocalWitnessTwo -> CP5ResidualLocalHomeomorphInjSeamTwo`
+  (equivalently: `DirectProperLocalWitnessTwo -> RootSafeOutsideOpenInjWitnessTwo`)
+  without `greenRayLogGtAnchorTwo_seed`.
 
 ## Exit Condition
 
