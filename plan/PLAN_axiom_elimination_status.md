@@ -1,7 +1,7 @@
 # Axiom Elimination Status (Umbrella Plan)
 
 ---
-**Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `CYCLE_COMPLETE`
+**Status:** `██░░░░░░░░` **20%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `CYCLE_ACTIVE`
 **Target Axioms:** `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 **Last Updated:** 2026-02-27
 ---
@@ -21,46 +21,43 @@ Unexpected axioms:
 - MLC.greenRayLogGtAnchorTwo_axiom_seed
 ```
 
-## Cycle Outcome
+## Cleanup Completed (This Iteration)
 
-- Executed all active plans in parallel scope this iteration.
-- Completed seed-interface quarantine on the main root-entry path:
-  `mlc_conjecture` now routes through
-  `mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_seed`.
-- Validated two no-arg constructor searches and classified them as terminally
-  blocked under current model assumptions.
-- Verified `lake build Mlc.MainConjecture` passes after the root-path routing
-  change.
+- Removed prior-cycle stuck plan file from `plan/`.
+- Removed prior-cycle completed plan files from `plan/`.
+- Reset active plan set to a fresh cycle focused on non-seam witness redesign.
 
 ## Plan Progress Bars
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom1_greenRayLogGtAnchorTwo_seed_interface_quarantine_v1.md` | quarantine all direct root uses of `greenRayLogGtAnchorTwo_seed` behind one wrapper | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐⭐⭐ | `COMPLETED (archived)` |
-| `PLAN_axiom1_noarg_greenRayUniquePreimageTwoAnchorSeam_constructor_search_v1.md` | search no-arg constructor for `GreenRayUniquePreimageTwoAnchorSeam` | `██████░░░░` **60%** | **40%** | **blocked** | ⭐⭐⭐⭐⭐ | `STUCK (archived)` |
-| `PLAN_axiom1_noarg_greenRayLogGtAnchorTwoSeam_constructor_search_v1.md` | search no-arg non-seeded constructor for `GreenRayLogGtAnchorTwoSeam` | `███████░░░` **70%** | **30%** | **blocked** | ⭐⭐⭐⭐⭐ | `STUCK (archived)` |
+| `PLAN_axiom1_noarg_greenRayUniquePreimageTwoAnchorSeam_constructor_search_v2.md` | seek no-arg constructor for unique-preimage seam via revised witness sources | `██░░░░░░░░` **20%** | **80%** | **3-10h** | ⭐⭐⭐⭐⭐ | `IN_PROGRESS` |
+| `PLAN_axiom1_model_redesign_to_replace_greenRayLogGtAnchorTwoSeam_target_v1.md` | redesign model target to avoid contradictory log-gap seam requirement | `█░░░░░░░░░` **10%** | **90%** | **4-12h** | ⭐⭐⭐⭐⭐ | `READY` |
+| `PLAN_axiom1_root_cutover_to_nonseam_inj_witness_interface_v1.md` | cut root theorem to non-seam injectivity witness interface | `█░░░░░░░░░` **10%** | **90%** | **3-9h** | ⭐⭐⭐⭐⭐ | `READY` |
 
-## Dead-End / Repetition Check (This Iteration)
+## Dead-End / Repetition Guardrails
 
-- No branch repeated a previously rejected route without theorem-signature
-  delta.
-- Quarantine branch produced a concrete route change in root theorem body.
-- Unique-preimage no-arg search remains blocked by lack of no-arg injectivity /
-  seam prerequisites.
-- Log-gap no-arg search is blocked by explicit contradiction theorem:
-  `not_greenRayLogGtAnchorTwoSeam`.
+- Do not retry no-arg `GreenRayLogGtAnchorTwoSeam` constructor search under the
+  unchanged contradictory model.
+- Reject any route that introduces blocked non-frontier axioms
+  (`external_ray_map_exists`, `bottcher_seq_converges`,
+  `extended_ray_map_continuous`).
+- If a plan branch shows no theorem-signature delta after two attempts, mark
+  it `STUCK` and rotate.
 
 ## Remaining Global Blocker
 
-- Root closure still depends on seam assumptions that are currently reachable
-  only through seeded interfaces.
-- `make check` still reports `MLC.greenRayLogGtAnchorTwo_axiom_seed`.
+- Current root path still uses a seed-backed seam boundary.
+- A constructive no-arg route requires either:
+  1. a non-seam injectivity witness chain, or
+  2. a model redesign that replaces the contradictory log-gap seam target.
 
 ## Suggested Next Plans
 
-1. `PLAN_axiom1_root_cutover_from_quarantined_seed_interface_v1.md`
-2. `PLAN_axiom1_model_consistency_resolution_for_greenRayLogGap_v1.md`
-3. `PLAN_axiom1_noarg_injOn_outside_open_two_constructor_search_v1.md`
+1. `PLAN_axiom1_noarg_greenRayUniquePreimageTwoAnchorSeam_constructor_search_v2.md`
+2. `PLAN_axiom1_model_redesign_to_replace_greenRayLogGtAnchorTwoSeam_target_v1.md`
+3. `PLAN_axiom1_root_cutover_to_nonseam_inj_witness_interface_v1.md`
+4. `PLAN_axiom1_constructor_inventory_for_nonseam_outside_open_injectivity_v1.md`
 
 ## Exit Condition
 

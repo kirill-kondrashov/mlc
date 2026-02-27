@@ -2241,6 +2241,12 @@ theorem not_greenRayLogGtAnchorTwoSeam :
       _ = gAnchor / 2 := hlog_eval
   linarith
 
+/-- Named model-consistency boundary: the full Green-ray anchor-gap seam is
+inconsistent in the current `c = 2` model. -/
+theorem greenRayLogGtAnchorTwoSeam_model_inconsistency :
+    ¬ GreenRayLogGtAnchorTwoSeam :=
+  not_greenRayLogGtAnchorTwoSeam
+
 /-- Dead-end certificate: the bounded-annulus obligation from
 `greenRayLogGtAnchorTwoSeam_of_cutoff_band` is itself inconsistent in the
 current model, because it would imply the globally inconsistent seam. -/
@@ -4445,6 +4451,19 @@ theorem rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_unique
     RootSafeOutsideOpenInjWitnessTwo :=
   injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
     huniq_seam hlog_gt_anchor
+
+/-- Explicit constructor gap for the root outside-open injectivity witness:
+uniqueness seam plus anchor-gap seam. -/
+def RootSafeOutsideOpenInjWitnessTwoWitnessGap : Prop :=
+  GreenRayUniquePreimageTwoAnchorSeam ∧ GreenRayLogGtAnchorTwoSeam
+
+/-- Build the root outside-open injectivity witness from the explicit
+constructor gap payload. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_of_rootSafeOutsideOpenInjWitnessTwoWitnessGap
+    (h_gap : RootSafeOutsideOpenInjWitnessTwoWitnessGap) :
+    RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    h_gap.1 h_gap.2
 
 /-- Strict-mono-seeded root witness target at `c = 2`, expressed via the
 Green-ray seam bridge. -/

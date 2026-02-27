@@ -46,7 +46,10 @@ Total estimated remainder: ~90-240 Lean LOC, ~3-9 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | latest cycle summary |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██░░░░░░░░` 20% | 80% | active umbrella cycle |
+| `plan/PLAN_axiom1_noarg_greenRayUniquePreimageTwoAnchorSeam_constructor_search_v2.md` | ⭐⭐⭐⭐⭐ | `██░░░░░░░░` 20% | 80% | ~3-10h |
+| `plan/PLAN_axiom1_model_redesign_to_replace_greenRayLogGtAnchorTwoSeam_target_v1.md` | ⭐⭐⭐⭐⭐ | `█░░░░░░░░░` 10% | 90% | ~4-12h |
+| `plan/PLAN_axiom1_root_cutover_to_nonseam_inj_witness_interface_v1.md` | ⭐⭐⭐⭐⭐ | `█░░░░░░░░░` 10% | 90% | ~3-9h |
 
 ## Key Technical Reality
 
@@ -56,8 +59,8 @@ Total estimated remainder: ~90-240 Lean LOC, ~3-9 hours.
   `not_greenRayLogGtAnchorTwo_cutoff_band`.
 - An anchor-free payload staging interface now exists in root wiring:
   `RootSeedPayloadTwoNoAnchor` and its first bridge wrappers.
-- Latest cycle completed main root-path seed-interface quarantine; no-arg seam
-  constructor searches remain blocked under current model assumptions.
+- Current cycle focuses on non-seam interface cutover plus model-target redesign
+  to bypass contradictory log-gap seam obligations.
 - Known blocker to avoid: constructor compositions that introduce non-frontier
   axioms (`MLC.Quadratic.external_ray_map_exists`,
   `MLC.Quadratic.bottcher_seq_converges`).
