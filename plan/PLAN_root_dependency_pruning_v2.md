@@ -1,9 +1,9 @@
 # Plan: Root Dependency Pruning v2
 
 ---
-**Status:** `██████░░░░` **60%** | **Relevance:** ⭐⭐⭐⭐☆ | **State:** `ACTIVE`
+**Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐☆ | **State:** `DONE`
 **Scope:** minimize root theorem dependency surface for faster axiom elimination
-**Effort Left:** **2-4h** (roughly 60-140 Lean LOC)
+**Effort Left:** **0h**
 **Last Updated:** 2026-02-27
 ---
 
@@ -24,9 +24,13 @@ axiom is swapped at one explicit seam only.
 
 - [x] Root theorem is already funneled through root-seed payload wrappers.
 - [x] Many branch-specific ingress routes are isolated from the root theorem.
-- [ ] Single replacement point for Axiom 1 confirmed by `rg` call graph pass.
-- [ ] Single replacement point for Axiom 2 confirmed by `rg` call graph pass.
-- [ ] Residual helper aliases not on root path removed.
+- [x] Single replacement point for Axiom 1 exposed in root boundary theorem:
+      `mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_seed`.
+- [x] Single replacement point for Axiom 2 exposed as seed alias:
+      `rootSafeOutsideOpenInjWitnessTwo_seed`.
+- [x] Root theorem rewired to seed-split path:
+      `mlc_conjecture := ... rootSafeOutsideOpenInjWitnessTwo_seed`.
+- [x] `lake build Mlc.MainConjecture` and `make check` re-run after pruning.
 
 ## Done Criteria
 

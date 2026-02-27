@@ -636,6 +636,23 @@ lemma green_function_strictMono_along_ray_basin_two_of_nonRealDirections
     green_function_strictMono_along_realDirections_two_constructive
     hnonreal
 
+/-- Restrict full `c = 2` ray-basin strict monotonicity to the residual
+nonreal-direction seam target. -/
+lemma green_function_strictMono_along_nonRealDirections_two_of_ray_basin_two
+    (hmono : GreenFunctionStrictMonoAlongRayBasinTwoSeam) :
+    GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam := by
+  intro u hu hnonreal ρ₁ ρ₂ hρ₁ h12 hG
+  exact hmono u hu hρ₁ h12 hG
+
+/-- Residual nonreal-direction seam is equivalent to full seam once the
+constructive real-direction branch is fixed. -/
+lemma green_function_strictMono_along_nonRealDirections_two_iff_ray_basin_two :
+    GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam ↔
+      GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
+  constructor
+  · exact green_function_strictMono_along_ray_basin_two_of_nonRealDirections
+  · exact green_function_strictMono_along_nonRealDirections_two_of_ray_basin_two
+
 /-- Axiom-seeded residual strict-mono seam restricted to nonreal directions.
 This isolates the remaining axiom pressure after the constructive real-direction
 monotonicity upgrade. -/

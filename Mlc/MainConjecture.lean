@@ -6241,12 +6241,28 @@ theorem mlc_conjecture_of_rootSeedPayloadTwo
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two_root_seed_of_rootSeedPayloadTwo hseed
 
+/-- Root theorem with explicit split seed boundary:
+`greenRayLogGtAnchorTwo_axiom_seed` enters only via this theorem body, while
+the strict-mono side enters only through the supplied outside-open injectivity
+seed argument. -/
+theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_seed
+    (h_inj_seed : RootSafeOutsideOpenInjWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two_root_seed_strictMonoFree_of_rootSafeOutsideOpenInjWitnessTwo
+    h_inj_seed
+
+/-- Central strict-mono-seeded outside-open injectivity seed alias used by the
+root theorem split boundary. -/
+theorem rootSafeOutsideOpenInjWitnessTwo_seed : RootSafeOutsideOpenInjWitnessTwo :=
+  rootSafeOutsideOpenInjWitnessTwo_strictMono_seeded
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_rootSeedPayloadTwo rootSeedPayloadTwo_strictMono_seeded
+  exact mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_seed
+    rootSafeOutsideOpenInjWitnessTwo_seed
 
 end MainProof
 

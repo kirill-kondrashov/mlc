@@ -1,7 +1,7 @@
 # Axiom Elimination Status (Umbrella Plan)
 
 ---
-**Status:** `███████░░░` **74%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ACTIVE`
+**Status:** `███████░░░` **73%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ACTIVE`
 **Target Axioms:** Both
 **Last Updated:** 2026-02-27
 ---
@@ -21,42 +21,49 @@ All axioms used:
 
 ## What Changed
 
-- Removed `STUCK` plan files from `plan/`.
-- Added a new plan set focused on:
-  1. retargeting Axiom 1 via direct ingress,
-  2. finishing non-real monotonicity for Axiom 2,
-  3. pruning root dependency surface to reduce churn.
-- Kept closure/verification plan as completed.
+- Removed stuck plans:
+  - `PLAN_axiom1_seed_isolation_payload_swap_v2.md`
+  - `PLAN_axiom2_nonreal_monotonicity_argument_route.md`
+- Cleaned up unused probe file:
+  - deleted `check_axioms_batch.lean`
+- Kept completed support plans:
+  - `PLAN_root_dependency_pruning_v2.md` (`DONE`)
+  - `PLAN_frontier_closure_and_cleanup.md` (`DONE`)
+  - `PLAN_frontier_candidate_probe_matrix_v1.md` (`DONE`)
+- Added new active plans below.
 
 ## Active Plan Set
 
 | File | Scope | Progress | Left | Effort Left | Relevance | State |
 |------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom1_direct_ingress_retarget.md` | Eliminate `greenRayLogGtAnchorTwo_axiom_seed` | `████░░░░░░` **35%** | **65%** | **4-8h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
-| `PLAN_axiom2_nonreal_monotonicity_engine.md` | Eliminate `green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` **45%** | **55%** | **6-10h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
-| `PLAN_root_dependency_pruning_v2.md` | Minimize root dependency fan-in | `██████░░░░` **60%** | **40%** | **2-4h** | ⭐⭐⭐⭐☆ | `ACTIVE` |
+| `PLAN_axiom1_inj_witness_bootstrap_v3.md` | Eliminate `greenRayLogGtAnchorTwo_axiom_seed` | `███░░░░░░░` **30%** | **70%** | **4-8h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
+| `PLAN_axiom2_nonreal_transport_inventory_v2.md` | Eliminate `green_function_strictMono_along_ray_basin_seam` | `████░░░░░░` **40%** | **60%** | **6-10h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
+| `PLAN_frontier_probe_inline_workflow_v2.md` | Probe/ranking workflow without persistent temp files | `█████░░░░░` **50%** | **50%** | **2-3h** | ⭐⭐⭐⭐☆ | `ACTIVE` |
+| `PLAN_root_dependency_pruning_v2.md` | Root dependency pruning | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐⭐☆ | `DONE` |
 | `PLAN_frontier_closure_and_cleanup.md` | Verification + guardrails + docs | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_frontier_candidate_probe_matrix_v1.md` | Historical probe matrix snapshot | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐☆☆ | `DONE` |
 
 ## Axiom-Level Estimate
 
-| Axiom | Progress | Left | Main Risk | Plan Owner |
-|------|----------|------|-----------|------------|
-| `MLC.greenRayLogGtAnchorTwo_axiom_seed` | `████░░░░░░` **35%** | **65%** | root still threads through global anchor-gap seam family | `PLAN_axiom1_direct_ingress_retarget.md` |
-| `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` **45%** | **55%** | constructive non-real-direction monotonicity is still missing | `PLAN_axiom2_nonreal_monotonicity_engine.md` |
+| Axiom | Progress | Left | Main Risk | Primary Plan |
+|------|----------|------|-----------|--------------|
+| `MLC.greenRayLogGtAnchorTwo_axiom_seed` | `███░░░░░░░` **30%** | **70%** | constructive outside-open injectivity witness still missing | `PLAN_axiom1_inj_witness_bootstrap_v3.md` |
+| `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` | `████░░░░░░` **40%** | **60%** | nonreal-direction transport lemma family still incomplete | `PLAN_axiom2_nonreal_transport_inventory_v2.md` |
 
 ## Dead-End Guard (Do Not Reopen)
 
-- Global target `GreenRayLogGtAnchorTwoSeam` is blocked (`not_greenRayLogGtAnchorTwoSeam`); only replacement-shape seam is viable.
-- Strict-mono-free ingress routes remain blocked:
+- Global seam target remains inconsistent:
+  `not_greenRayLogGtAnchorTwoSeam`.
+- Known strict-mono-free ingress dead ends remain blocked:
   `not_outsideOpenAnalyticityHypothesisTwo`,
   `not_greenFunctionDegreeOneIngressTwo`,
   `not_knownInjOnOutsideOpenSourceCandidateTwo`.
 
 ## Suggested New Plans
 
-1. `PLAN_axiom1_direct_ingress_retarget.md`
-2. `PLAN_axiom2_nonreal_monotonicity_engine.md`
-3. `PLAN_root_dependency_pruning_v2.md`
+1. `PLAN_axiom1_inj_witness_bootstrap_v3.md`
+2. `PLAN_axiom2_nonreal_transport_inventory_v2.md`
+3. `PLAN_frontier_probe_inline_workflow_v2.md`
 
 ## Exit Condition
 
