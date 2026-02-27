@@ -2086,6 +2086,34 @@ def GreenRayLogGtAnchorTwoSeam : Prop :=
     MLC.Quadratic.green_function (2 : ℂ)
         (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
 
+/-- Replacement-shape seam target for `c = 2`: above-anchor Green targets on a
+fixed direction admit an outside-open radial preimage. -/
+def GreenRayAnchorThresholdPreimageTwoSeam : Prop :=
+  ∀ w : ℂ, 1 < ‖w‖ →
+    MLC.Quadratic.green_function (2 : ℂ)
+        (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖ →
+      ∃ ρ : ℝ, ρ > ‖(2 : ℂ)‖ + 2 ∧
+        MLC.Quadratic.green_function (2 : ℂ)
+          ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖
+
+/-- Constructive `c = 2` anchor-threshold preimage seam, directly specialized
+from `exists_ray_preimage_green_pos`. -/
+theorem greenRayAnchorThresholdPreimageTwoSeam_constructive :
+    GreenRayAnchorThresholdPreimageTwoSeam := by
+  intro w hw hlog_gt_anchor
+  set u : ℂ := w / ↑‖w‖
+  have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+  have hu : ‖u‖ = 1 := by
+    dsimp [u]
+    rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+  have hlog_u :
+      MLC.Quadratic.green_function (2 : ℂ)
+          (((‖(2 : ℂ)‖ + 2 : ℝ) * u) : ℂ) < Real.log ‖w‖ := by
+    simpa [u] using hlog_gt_anchor
+  simpa [u] using
+    (GreenFunctionRayInversion.exists_ray_preimage_green_pos
+      (2 : ℂ) u hu (Real.log ‖w‖) hlog_u)
+
 /-- Quantitative cutoff for large-norm automatic discharge of the
 `GreenRayLogGtAnchorTwoSeam` inequality via the outside-open Green upper bound. -/
 noncomputable def greenRayLogGtAnchorTwoCutoff : ℝ :=
@@ -2212,6 +2240,14 @@ theorem not_greenRayLogGtAnchorTwoSeam :
       _ < Real.log ‖w‖ := hseam w hw_gt1
       _ = gAnchor / 2 := hlog_eval
   linarith
+
+/-- Dead-end certificate: the replacement-shape seam does not by itself recover
+the old global anchor-gap seam target. -/
+theorem not_greenRayLogGtAnchorTwoSeam_of_greenRayAnchorThresholdPreimageTwoSeam :
+    ¬ (GreenRayAnchorThresholdPreimageTwoSeam → GreenRayLogGtAnchorTwoSeam) := by
+  intro himpl
+  exact not_greenRayLogGtAnchorTwoSeam
+    (himpl greenRayAnchorThresholdPreimageTwoSeam_constructive)
 
 /-- Axiom-seeded strong anchor-gap seam needed by the current
 `external_ray_map_exists_two_via_green_function_of_seam` ingress. -/

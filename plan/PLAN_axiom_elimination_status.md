@@ -1,97 +1,64 @@
 # Axiom Elimination Status (Umbrella Plan)
 
 ---
-**Status:** `██████░░░░` **56%** | **Relevance:** ⭐⭐⭐⭐⭐ | **Effort Remaining:** ~5-9 hours (~135-230 Lean LOC)
+**Status:** `███████░░░` **74%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ACTIVE`
 **Target Axioms:** Both
-**Last Updated:** 2026-02-26
+**Last Updated:** 2026-02-27
 ---
 
-## Current State
+## Current Frontier
 
 ```
 $ make check
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
-- Quot.sound              (permanent)
-- propext                 (permanent)
-- Classical.choice        (permanent)
-- MLC.greenRayLogGtAnchorTwo_axiom_seed                    [TARGET 1]
-- MLC.Quadratic.green_function_strictMono_along_ray_basin_seam  [TARGET 2]
+- Quot.sound
+- propext
+- Classical.choice
+- MLC.greenRayLogGtAnchorTwo_axiom_seed
+- MLC.Quadratic.green_function_strictMono_along_ray_basin_seam
 ```
 
-## Summary
+## What Changed
 
-| Axiom | Progress | Left | Effort Remaining | Primary Plan |
-|-------|----------|------|------------------|--------------|
-| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` **90%** | **10%** | ~15-30 lines, 0.5-1.5 hrs | `PLAN_exists_ray_preimage_green_pos_seam_replacement.md` |
-| `green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` **46%** | **54%** | ~120-200 lines, 4-8 hrs | `PLAN_prove_green_function_radial_monotonicity.md` |
+- Removed `STUCK` plan files from `plan/`.
+- Added a new plan set focused on:
+  1. retargeting Axiom 1 via direct ingress,
+  2. finishing non-real monotonicity for Axiom 2,
+  3. pruning root dependency surface to reduce churn.
+- Kept closure/verification plan as completed.
 
-**Total remaining: ~135-230 lines, ~5-9 hours**
+## Active Plan Set
 
-## Plan Files Overview
+| File | Scope | Progress | Left | Effort Left | Relevance | State |
+|------|-------|----------|------|-------------|-----------|-------|
+| `PLAN_axiom1_direct_ingress_retarget.md` | Eliminate `greenRayLogGtAnchorTwo_axiom_seed` | `████░░░░░░` **35%** | **65%** | **4-8h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
+| `PLAN_axiom2_nonreal_monotonicity_engine.md` | Eliminate `green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` **45%** | **55%** | **6-10h** | ⭐⭐⭐⭐⭐ | `ACTIVE` |
+| `PLAN_root_dependency_pruning_v2.md` | Minimize root dependency fan-in | `██████░░░░` **60%** | **40%** | **2-4h** | ⭐⭐⭐⭐☆ | `ACTIVE` |
+| `PLAN_frontier_closure_and_cleanup.md` | Verification + guardrails + docs | `██████████` **100%** | **0%** | **0h** | ⭐⭐⭐⭐☆ | `DONE` |
 
-### Primary Plans (Directly Target Axioms)
+## Axiom-Level Estimate
 
-| File | Target | Progress | Left | Effort Remaining |
-|------|--------|----------|------|------------------|
-| `PLAN_prove_green_function_radial_monotonicity.md` | Axiom 2 | `██░░░░░░░░` **18%** | **82%** | ~120-200 lines |
-| `PLAN_green_function_ray_inversion_c2.md` | Both | `██████░░░░` **57%** | **43%** | ~70-110 lines |
-| `PLAN_eliminate_green_function_strictMono_along_ray_basin_seam.md` | Axiom 2 | `██████░░░░` **58%** | **42%** | ~90-130 lines |
-| `PLAN_basin_monotonicity_practical_way_forward.md` | Axiom 2 | `███████░░░` **68%** | **32%** | ~30-60 lines |
-| `PLAN_exists_ray_preimage_green_pos_seam_replacement.md` | Axiom 1 | `█████████░` **90%** | **10%** | ~15-30 lines |
+| Axiom | Progress | Left | Main Risk | Plan Owner |
+|------|----------|------|-----------|------------|
+| `MLC.greenRayLogGtAnchorTwo_axiom_seed` | `████░░░░░░` **35%** | **65%** | root still threads through global anchor-gap seam family | `PLAN_axiom1_direct_ingress_retarget.md` |
+| `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` | `█████░░░░░` **45%** | **55%** | constructive non-real-direction monotonicity is still missing | `PLAN_axiom2_nonreal_monotonicity_engine.md` |
 
-### Removed As Irrelevant To Current `mlc_conjecture` Frontier
+## Dead-End Guard (Do Not Reopen)
 
-| File | Reason |
-|------|--------|
-| `PLAN_FINAL.md` | Historical superseded plan (`external_ray_map_exists` already eliminated/split) |
-| `PLAN_bottcher_outside_open_analyticity_two.md` | Blocked route (`not_outsideOpenAnalyticityHypothesisTwo`) |
-| `PLAN_cp5_residual_inj_seam_unconditional.md` | Supporting/non-primary infrastructure for current frontier |
-| `PLAN_dudko_2512_conformal_identification_formalization.md` | Alternative ingress formulation, not on primary frontier path |
+- Global target `GreenRayLogGtAnchorTwoSeam` is blocked (`not_greenRayLogGtAnchorTwoSeam`); only replacement-shape seam is viable.
+- Strict-mono-free ingress routes remain blocked:
+  `not_outsideOpenAnalyticityHypothesisTwo`,
+  `not_greenFunctionDegreeOneIngressTwo`,
+  `not_knownInjOnOutsideOpenSourceCandidateTwo`.
 
-## Key Insight
+## Suggested New Plans
 
-All strict-mono-free alternatives are **provably impossible**:
-- `not_outsideOpenAnalyticityHypothesisTwo` — polar Green map non-analytic
-- `not_greenFunctionDegreeOneIngressTwo` — bottcher_map not proper
-- `not_knownInjOnOutsideOpenSourceCandidateTwo` — all candidates blocked
-- `not_greenRayLogGtAnchorTwoSeam` — current global anchor-gap seam is itself inconsistent at `c = 2`
+1. `PLAN_axiom1_direct_ingress_retarget.md`
+2. `PLAN_axiom2_nonreal_monotonicity_engine.md`
+3. `PLAN_root_dependency_pruning_v2.md`
 
-**The only path forward is to prove monotonicity directly.**
-
-## Current Sprint Updates
-
-- Rewired unconditional CP5 strict-mono wrappers to use the branch-combined
-  seam (`cp5ResidualInjOnOutsideOpenSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam`)
-  instead of the explicit no-landing detour.
-- Removed now-dead strict-mono no-landing helper aliases in `MainConjecture`
-  after the branch-combined reroute, reducing legacy detour surface.
-- Added constructive opposite-direction real-ray support in
-  `GreenFunctionRayInversion` (`green_function_neg_real_eq_two`,
-  `green_function_strictMono_along_neg_real_ray_two`) to expand the
-  non-axiomatic monotonicity base.
-- Added constructive anchor-gap large-norm discharge and reduced full seam to
-  a bounded annulus obligation:
-  `greenRayLogGtAnchorTwoCutoff`,
-  `greenRayLogGtAnchorTwo_of_norm_gt_cutoff`,
-  `greenRayLogGtAnchorTwoSeam_of_cutoff_band`.
-- Added a constructive counterexample theorem in `MainConjecture`:
-  `not_greenRayLogGtAnchorTwoSeam`, proving the current global anchor-gap seam
-  is not a derivable target and must be replaced.
-- Revalidated `lake build Mlc.MainConjecture` and confirmed `make check` still
-  fails only on the two target axioms.
-
-## Implementation Order
-
-1. **Axiom 1** (anchor-gap): ~50 lines, 1-2 hours
-   - Replace the inconsistent global seam with an anchor-threshold seam
-   - Rewire root wrappers to the replacement seam and delete the old axiom
-
-2. **Axiom 2** (monotonicity): ~200 lines, 4-6 hours
-   - Start with iteration-based approach
-   - Fall back to Chebyshev/harmonic analysis if blocked
-
-## Success Criteria
+## Exit Condition
 
 ```bash
 $ make check
@@ -99,5 +66,4 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-# Done! No unexpected axioms.
 ```
