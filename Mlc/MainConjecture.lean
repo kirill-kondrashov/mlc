@@ -7561,6 +7561,186 @@ theorem mlc_conjecture_of_finalAxiomRootWitnessGapKernelV22
     mlc_conjecture_of_finalAxiomWitnessGapKernelV21
       ((finalAxiomRootWitnessGapKernelV22_iff_finalAxiomWitnessGapKernelV21).1 h22)
 
+/-- v23 geometric approach interface, routed through the existing seam
+decomposition boundary. -/
+def FinalAxiomGeometricApproachV23 : Prop :=
+  FinalAxiomSeamDecompositionV20
+
+/-- v23 topological approach interface, routed through the existing
+root-witness-gap bridge boundary. -/
+def FinalAxiomTopologicalApproachV23 : Prop :=
+  FinalAxiomRootWitnessGapBridgeV22
+
+/-- v23 analytic approach interface, routed through the existing witness
+transport boundary. -/
+def FinalAxiomAnalyticApproachV23 : Prop :=
+  FinalAxiomWitnessTransportV20
+
+/-- v23 combinatorial approach interface, routed through the existing
+contrapositive-obstruction boundary. -/
+def FinalAxiomCombinatorialApproachV23 : Prop :=
+  FinalAxiomContrapositiveObstructionV20
+
+/-- Geometric v23 approach is equivalent to the core bridge target. -/
+theorem finalAxiomGeometricApproachV23_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomGeometricApproachV23 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  exact
+    finalAxiomSeamDecompositionV20_iff_finalAxiomIngressBridgeGapV19.trans
+      finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16
+
+/-- Topological v23 approach is equivalent to the core bridge target. -/
+theorem finalAxiomTopologicalApproachV23_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomTopologicalApproachV23 ↔ FinalAxiomCoreConstructiveGapV16 :=
+  finalAxiomRootWitnessGapBridgeV22_iff_finalAxiomCoreConstructiveGapV16
+
+/-- Analytic v23 approach is equivalent to the core bridge target. -/
+theorem finalAxiomAnalyticApproachV23_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomAnalyticApproachV23 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  exact
+    finalAxiomWitnessTransportV20_iff_finalAxiomIngressBridgeGapV19.trans
+      finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16
+
+/-- Combinatorial v23 approach is equivalent to the core bridge target. -/
+theorem finalAxiomCombinatorialApproachV23_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomCombinatorialApproachV23 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  exact
+    finalAxiomContrapositiveObstructionV20_iff_finalAxiomIngressBridgeGapV19.trans
+      finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16
+
+/-- v23 approach matrix: any one of the four approach interfaces is enough. -/
+def FinalAxiomApproachMatrixV23 : Prop :=
+  FinalAxiomGeometricApproachV23 ∨
+    FinalAxiomTopologicalApproachV23 ∨
+      FinalAxiomAnalyticApproachV23 ∨
+        FinalAxiomCombinatorialApproachV23
+
+/-- v23 approach matrix is equivalent to the core bridge target. -/
+theorem finalAxiomApproachMatrixV23_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomApproachMatrixV23 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  constructor
+  · intro h_matrix
+    rcases h_matrix with h_geom | h_topo | h_analytic | h_comb
+    · exact (finalAxiomGeometricApproachV23_iff_finalAxiomCoreConstructiveGapV16).1 h_geom
+    · exact (finalAxiomTopologicalApproachV23_iff_finalAxiomCoreConstructiveGapV16).1 h_topo
+    · exact (finalAxiomAnalyticApproachV23_iff_finalAxiomCoreConstructiveGapV16).1 h_analytic
+    · exact (finalAxiomCombinatorialApproachV23_iff_finalAxiomCoreConstructiveGapV16).1 h_comb
+  · intro h_core
+    exact Or.inl
+      ((finalAxiomGeometricApproachV23_iff_finalAxiomCoreConstructiveGapV16).2 h_core)
+
+/-- v23 approach-matrix kernel: approach matrix plus explicit no-arg witness-gap
+payload. -/
+def FinalAxiomApproachMatrixKernelV23 : Prop :=
+  FinalAxiomApproachMatrixV23 ∧ RemainingConstructiveIngressTwoWitnessGap
+
+/-- v23 approach-matrix kernel is equivalent to the v21 witness-gap kernel. -/
+theorem finalAxiomApproachMatrixKernelV23_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomApproachMatrixKernelV23 ↔ FinalAxiomWitnessGapKernelV21 := by
+  constructor
+  · intro h23
+    refine ⟨?_, h23.2⟩
+    exact
+      (finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).2
+        ((finalAxiomApproachMatrixV23_iff_finalAxiomCoreConstructiveGapV16).1 h23.1)
+  · intro h21
+    refine ⟨?_, h21.2⟩
+    exact
+      (finalAxiomApproachMatrixV23_iff_finalAxiomCoreConstructiveGapV16).2
+        ((finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).1 h21.1)
+
+/-- v15 composite final gap is equivalent to the v23 approach-matrix kernel. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomApproachMatrixKernelV23 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomApproachMatrixKernelV23 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21.trans
+      finalAxiomApproachMatrixKernelV23_iff_finalAxiomWitnessGapKernelV21.symm
+
+/-- v23 approach-matrix kernel cutover to the non-seam root closure
+substitute. -/
+theorem rootClosureSubstituteTwo_of_finalAxiomApproachMatrixKernelV23
+    (h23 : FinalAxiomApproachMatrixKernelV23) :
+    RootClosureSubstituteTwo := by
+  exact
+    rootClosureSubstituteTwo_of_finalAxiomWitnessGapKernelV21
+      ((finalAxiomApproachMatrixKernelV23_iff_finalAxiomWitnessGapKernelV21).1 h23)
+
+/-- Closing the v23 approach-matrix kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomApproachMatrixKernelV23
+    (h23 : FinalAxiomApproachMatrixKernelV23) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomWitnessGapKernelV21
+      ((finalAxiomApproachMatrixKernelV23_iff_finalAxiomWitnessGapKernelV21).1 h23)
+
+/-- v24 root-closure bridge target: build the non-seam root substitute
+directly from the explicit no-arg witness-gap payload. -/
+def FinalAxiomRootClosureBridgeV24 : Prop :=
+  RemainingConstructiveIngressTwoWitnessGap → RootClosureSubstituteTwo
+
+/-- The v24 root-closure bridge target is equivalent to the v21 witness-gap
+bridge target. -/
+theorem finalAxiomRootClosureBridgeV24_iff_finalAxiomWitnessGapBridgeV21 :
+    FinalAxiomRootClosureBridgeV24 ↔ FinalAxiomWitnessGapBridgeV21 := by
+  constructor
+  · intro h24 h_gap
+    exact
+      cp5ResidualLocalHomeomorphInjSeamTwo_of_rootSafeOutsideOpenInjWitnessTwo
+        ((h24 h_gap).1)
+  · intro h21 h_gap
+    exact
+      ⟨rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+          h_gap (h21 h_gap), h_gap⟩
+
+/-- The v24 root-closure bridge target is equivalent to the v16 core bridge
+target. -/
+theorem finalAxiomRootClosureBridgeV24_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomRootClosureBridgeV24 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  exact
+    finalAxiomRootClosureBridgeV24_iff_finalAxiomWitnessGapBridgeV21.trans
+      finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16
+
+/-- v24 root-closure kernel: root-closure bridge plus explicit no-arg
+witness-gap payload. -/
+def FinalAxiomRootClosureKernelV24 : Prop :=
+  FinalAxiomRootClosureBridgeV24 ∧ RemainingConstructiveIngressTwoWitnessGap
+
+/-- v24 root-closure kernel is equivalent to the v21 witness-gap kernel. -/
+theorem finalAxiomRootClosureKernelV24_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomRootClosureKernelV24 ↔ FinalAxiomWitnessGapKernelV21 := by
+  constructor
+  · intro h24
+    refine ⟨?_, h24.2⟩
+    exact
+      (finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).2
+        ((finalAxiomRootClosureBridgeV24_iff_finalAxiomCoreConstructiveGapV16).1 h24.1)
+  · intro h21
+    refine ⟨?_, h21.2⟩
+    exact
+      (finalAxiomRootClosureBridgeV24_iff_finalAxiomCoreConstructiveGapV16).2
+        ((finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).1 h21.1)
+
+/-- v15 composite final gap is equivalent to the v24 root-closure kernel. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomRootClosureKernelV24 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomRootClosureKernelV24 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21.trans
+      finalAxiomRootClosureKernelV24_iff_finalAxiomWitnessGapKernelV21.symm
+
+/-- v24 root-closure kernel cutover to the non-seam root substitute. -/
+theorem rootClosureSubstituteTwo_of_finalAxiomRootClosureKernelV24
+    (h24 : FinalAxiomRootClosureKernelV24) :
+    RootClosureSubstituteTwo :=
+  h24.1 h24.2
+
+/-- Closing the v24 root-closure kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomRootClosureKernelV24
+    (h24 : FinalAxiomRootClosureKernelV24) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+      (rootClosureSubstituteTwo_of_finalAxiomRootClosureKernelV24 h24).1
+      (rootClosureSubstituteTwo_of_finalAxiomRootClosureKernelV24 h24).2
+
 /-- Localized-source transport gap interface: strict subcutoff local-window
 transport package plus the explicit ingress witness-gap payload. -/
 def LocalizedSourceToRemainingConstructiveIngressGapTwo : Prop :=

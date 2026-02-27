@@ -1,4 +1,4 @@
-# PLAN v22-E: Constructive Core Bridge Search
+# PLAN v24-E: Constructive Bridge Search
 
 **Status:** `██████░░░░` **60%**
 **State:** `STUCK`
@@ -10,8 +10,8 @@ Construct a frontier-safe proof of:
 `DirectProperLocalWitnessTwo -> CP5ResidualLocalHomeomorphInjSeamTwo`.
 
 ## Completed
-- Added v22 root witness-gap bridge and kernel normal forms.
-- Endpoint cutovers are complete for v22; no wrapper-level debt remains.
+- Added direct root-closure bridge/kernel normal forms (v24).
+- Endpoint cutovers are complete; no wrapper-level debt remains.
 
 ## Dead-End / Self-Repetition Check
 - Re-check confirms blocked classes remain invalid:
@@ -19,7 +19,7 @@ Construct a frontier-safe proof of:
   - global degree-one route with forbidden dependencies
   - seeded replay
   - speculative IVT/connectedness branch
-- Re-running these paths would be self-repetition.
+- Re-running those paths would be self-repetition.
 
 ## Blocking Gap
 - No new non-seeded constructive mechanism currently derives

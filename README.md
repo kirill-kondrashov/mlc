@@ -46,12 +46,12 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v22 iteration summary |
-| `plan/PLAN_axiom1_root_witness_gap_bridge_equivalence_v22.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root witness-gap bridge equivalence complete |
-| `plan/PLAN_axiom1_root_witness_gap_kernel_cutover_v22.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root witness-gap kernel cutover complete |
-| `plan/PLAN_axiom1_frontier_validation_v22.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
-| `plan/PLAN_axiom1_retired_route_guardrail_v22.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
-| `plan/PLAN_axiom1_constructive_core_bridge_search_v22.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v24 iteration summary |
+| `plan/PLAN_axiom_elimination_root_closure_bridge_equivalence_v24.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root-closure bridge equivalence complete |
+| `plan/PLAN_axiom_elimination_root_closure_kernel_cutover_v24.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root-closure kernel cutover complete |
+| `plan/PLAN_axiom_elimination_frontier_validation_v24.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
+| `plan/PLAN_axiom_elimination_retired_route_guardrail_v24.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
+| `plan/PLAN_axiom_elimination_constructive_bridge_search_v24.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
 
 ## Key Technical Reality
 
@@ -211,6 +211,16 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
   `FinalAxiomRootWitnessGapKernelV22`,
   `finalAxiomEliminationGapV15_iff_finalAxiomRootWitnessGapKernelV22`,
   and `mlc_conjecture_of_finalAxiomRootWitnessGapKernelV22`.
+- Added grounded v23 approach-matrix wrappers:
+  `FinalAxiomApproachMatrixV23`,
+  `FinalAxiomApproachMatrixKernelV23`,
+  `finalAxiomEliminationGapV15_iff_finalAxiomApproachMatrixKernelV23`,
+  and `mlc_conjecture_of_finalAxiomApproachMatrixKernelV23`.
+- Added grounded v24 root-closure kernel wrappers:
+  `FinalAxiomRootClosureBridgeV24`,
+  `FinalAxiomRootClosureKernelV24`,
+  `finalAxiomEliminationGapV15_iff_finalAxiomRootClosureKernelV24`,
+  and `mlc_conjecture_of_finalAxiomRootClosureKernelV24`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier

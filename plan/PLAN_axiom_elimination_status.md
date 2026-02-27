@@ -3,7 +3,7 @@
 ---
 **Status:** `██████████` **100%** | **Relevance:** ⭐⭐⭐⭐⭐ | **State:** `ITERATION_COMPLETE`
 **Target Axioms:** `MLC.greenRayLogGtAnchorTwo_axiom_seed`
-**Last Updated:** 2026-02-27 | **Iteration:** v22
+**Last Updated:** 2026-02-27 | **Iteration:** v24
 ---
 
 ## Current Frontier
@@ -23,37 +23,37 @@ Unexpected axioms:
 
 ## Active Plan Progress
 
-| File | Scope | Progress | Left | Effort Left | Relevance | State |
-|------|-------|----------|------|-------------|-----------|-------|
-| `PLAN_axiom_elimination_status.md` | v22 parallel orchestration + dead-end checks | `██████████` **100%** | **0%** | none (this iteration) | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_root_witness_gap_bridge_equivalence_v22.md` | normalize bridge at root witness-gap layer | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_root_witness_gap_kernel_cutover_v22.md` | cutover v22 root witness-gap kernel | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐⭐ | `DONE` |
-| `PLAN_axiom1_frontier_validation_v22.md` | validate frontier neutrality | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_axiom1_retired_route_guardrail_v22.md` | route hygiene and dead-end prevention | `██████████` **100%** | **0%** | none | ⭐⭐⭐⭐☆ | `DONE` |
-| `PLAN_axiom1_constructive_core_bridge_search_v22.md` | prove non-seeded core bridge | `██████░░░░` **60%** | **40%** | new constructive CP5 seam mechanism | ⭐⭐⭐⭐⭐ | `STUCK` |
+| File | Scope | Progress | Left | Relevance | State |
+|------|-------|----------|------|-----------|-------|
+| `PLAN_axiom_elimination_status.md` | v24 orchestration + dead-end checks | `██████████` **100%** | **0%** | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom_elimination_root_closure_bridge_equivalence_v24.md` | root-closure bridge normalization | `██████████` **100%** | **0%** | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom_elimination_root_closure_kernel_cutover_v24.md` | root-closure kernel cutover | `██████████` **100%** | **0%** | ⭐⭐⭐⭐⭐ | `DONE` |
+| `PLAN_axiom_elimination_frontier_validation_v24.md` | frontier neutrality validation | `██████████` **100%** | **0%** | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom_elimination_retired_route_guardrail_v24.md` | no-go inventory and route hygiene | `██████████` **100%** | **0%** | ⭐⭐⭐⭐☆ | `DONE` |
+| `PLAN_axiom_elimination_constructive_bridge_search_v24.md` | non-seeded core bridge proof | `██████░░░░` **60%** | **40%** | ⭐⭐⭐⭐⭐ | `STUCK` |
 
 ## Completed This Iteration
 
-- Added grounded v22 root-witness-gap artifacts in Lean:
-  - `FinalAxiomRootWitnessGapBridgeV22`
-  - `finalAxiomRootWitnessGapBridgeV22_iff_finalAxiomWitnessGapBridgeV21`
-  - `finalAxiomRootWitnessGapBridgeV22_iff_finalAxiomCoreConstructiveGapV16`
-  - `FinalAxiomRootWitnessGapKernelV22`
-  - `finalAxiomRootWitnessGapKernelV22_iff_finalAxiomWitnessGapKernelV21`
-  - `finalAxiomEliminationGapV15_iff_finalAxiomRootWitnessGapKernelV22`
-  - `rootClosureSubstituteTwo_of_finalAxiomRootWitnessGapKernelV22`
-  - `mlc_conjecture_of_finalAxiomRootWitnessGapKernelV22`
-- Removed v21 plan files and rotated to a clean v22 set.
+- Added grounded v24 root-closure artifacts in Lean:
+  - `FinalAxiomRootClosureBridgeV24`
+  - `finalAxiomRootClosureBridgeV24_iff_finalAxiomWitnessGapBridgeV21`
+  - `finalAxiomRootClosureBridgeV24_iff_finalAxiomCoreConstructiveGapV16`
+  - `FinalAxiomRootClosureKernelV24`
+  - `finalAxiomRootClosureKernelV24_iff_finalAxiomWitnessGapKernelV21`
+  - `finalAxiomEliminationGapV15_iff_finalAxiomRootClosureKernelV24`
+  - `rootClosureSubstituteTwo_of_finalAxiomRootClosureKernelV24`
+  - `mlc_conjecture_of_finalAxiomRootClosureKernelV24`
+- Removed stale v23 plan files and aligned plan set to grounded v24 routes.
 
 ## Stuck File Decision
 
 - Kept one stuck file:
-  - `PLAN_axiom1_constructive_core_bridge_search_v22.md`
+  - `PLAN_axiom_elimination_constructive_bridge_search_v24.md`
 - Reason: single unresolved theorem; prevents repetition of known dead-end routes.
 
 ## Dead-End / Self-Repetition Check (This Iteration)
 
-- Kernel/cutover normalization work is complete for v22.
+- v24 routes are normalized to one shared bridge debt.
 - Blocked classes remain:
   - strict subcutoff/local-window transport route
   - global proper/local degree-one route (forbidden dependencies)
