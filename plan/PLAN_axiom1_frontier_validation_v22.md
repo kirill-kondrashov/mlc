@@ -1,4 +1,4 @@
-# PLAN v21-C: Frontier Validation
+# PLAN v22-C: Frontier Validation
 
 **Status:** `██████████` **100%**
 **State:** `DONE`
@@ -6,7 +6,7 @@
 **Last Updated:** 2026-02-27
 
 ## Goal
-Verify that v21 witness-gap reductions do not widen frontier debt.
+Confirm v22 reductions do not widen frontier debt.
 
 ## Completed
 - `lake build Mlc.MainConjecture` passes.
@@ -14,4 +14,4 @@ Verify that v21 witness-gap reductions do not widen frontier debt.
   - `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 
 ## Outcome
-- v21 changes are frontier-neutral.
+- v22 changes are frontier-neutral.

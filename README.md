@@ -46,12 +46,12 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v21 iteration summary |
-| `plan/PLAN_axiom1_witness_gap_kernel_equivalence_v21.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | witness-gap kernel equivalence complete |
-| `plan/PLAN_axiom1_witness_gap_kernel_cutover_v21.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | witness-gap kernel endpoint cutover complete |
-| `plan/PLAN_axiom1_frontier_validation_v21.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
-| `plan/PLAN_axiom1_retired_route_guardrail_v21.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
-| `plan/PLAN_axiom1_constructive_core_bridge_search_v21.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v22 iteration summary |
+| `plan/PLAN_axiom1_root_witness_gap_bridge_equivalence_v22.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root witness-gap bridge equivalence complete |
+| `plan/PLAN_axiom1_root_witness_gap_kernel_cutover_v22.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root witness-gap kernel cutover complete |
+| `plan/PLAN_axiom1_frontier_validation_v22.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
+| `plan/PLAN_axiom1_retired_route_guardrail_v22.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
+| `plan/PLAN_axiom1_constructive_core_bridge_search_v22.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
 
 ## Key Technical Reality
 
@@ -206,6 +206,11 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
   `FinalAxiomWitnessGapKernelV21`,
   `finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21`,
   and `mlc_conjecture_of_finalAxiomWitnessGapKernelV21`.
+- Added grounded v22 root-witness-gap kernel wrappers:
+  `FinalAxiomRootWitnessGapBridgeV22`,
+  `FinalAxiomRootWitnessGapKernelV22`,
+  `finalAxiomEliminationGapV15_iff_finalAxiomRootWitnessGapKernelV22`,
+  and `mlc_conjecture_of_finalAxiomRootWitnessGapKernelV22`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier

@@ -7492,6 +7492,75 @@ theorem mlc_conjecture_of_finalAxiomWitnessGapKernelV21
       ((finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).1 h21.1)
       h21.2
 
+/-- v22 root-witness-gap bridge target: build the explicit root witness-gap
+payload directly from the no-arg witness-gap payload. -/
+def FinalAxiomRootWitnessGapBridgeV22 : Prop :=
+  RemainingConstructiveIngressTwoWitnessGap → RootClosureSubstituteTwoWitnessGap
+
+/-- The v22 root-witness-gap bridge target is equivalent to the v21
+witness-gap bridge target. -/
+theorem finalAxiomRootWitnessGapBridgeV22_iff_finalAxiomWitnessGapBridgeV21 :
+    FinalAxiomRootWitnessGapBridgeV22 ↔ FinalAxiomWitnessGapBridgeV21 := by
+  constructor
+  · intro h22 h_gap
+    exact (h22 h_gap).2
+  · intro h21 h_gap
+    exact ⟨remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo h_gap, h21 h_gap⟩
+
+/-- The v22 root-witness-gap bridge target is equivalent to the v16 core
+bridge target. -/
+theorem finalAxiomRootWitnessGapBridgeV22_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomRootWitnessGapBridgeV22 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  exact
+    finalAxiomRootWitnessGapBridgeV22_iff_finalAxiomWitnessGapBridgeV21.trans
+      finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16
+
+/-- v22 root-witness-gap kernel: root-witness-gap bridge plus explicit no-arg
+witness-gap payload. -/
+def FinalAxiomRootWitnessGapKernelV22 : Prop :=
+  FinalAxiomRootWitnessGapBridgeV22 ∧ RemainingConstructiveIngressTwoWitnessGap
+
+/-- The v22 root-witness-gap kernel is equivalent to the v21 witness-gap
+kernel. -/
+theorem finalAxiomRootWitnessGapKernelV22_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomRootWitnessGapKernelV22 ↔ FinalAxiomWitnessGapKernelV21 := by
+  constructor
+  · intro h22
+    refine ⟨?_, h22.2⟩
+    intro h_gap
+    exact (h22.1 h_gap).2
+  · intro h21
+    refine ⟨?_, h21.2⟩
+    intro h_gap
+    exact ⟨remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo h_gap, h21.1 h_gap⟩
+
+/-- The v15 composite final gap is equivalent to the v22 root-witness-gap
+kernel. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomRootWitnessGapKernelV22 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomRootWitnessGapKernelV22 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21.trans
+      finalAxiomRootWitnessGapKernelV22_iff_finalAxiomWitnessGapKernelV21.symm
+
+/-- v22 root-witness-gap kernel cutover to the non-seam root closure
+substitute. -/
+theorem rootClosureSubstituteTwo_of_finalAxiomRootWitnessGapKernelV22
+    (h22 : FinalAxiomRootWitnessGapKernelV22) :
+    RootClosureSubstituteTwo := by
+  let h_root_gap : RootClosureSubstituteTwoWitnessGap := h22.1 h22.2
+  let h_dir : DirectProperLocalWitnessTwo := h22.2
+  exact
+    ⟨rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+        h_dir h_root_gap.2, h_dir⟩
+
+/-- Closing the v22 root-witness-gap kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomRootWitnessGapKernelV22
+    (h22 : FinalAxiomRootWitnessGapKernelV22) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomWitnessGapKernelV21
+      ((finalAxiomRootWitnessGapKernelV22_iff_finalAxiomWitnessGapKernelV21).1 h22)
+
 /-- Localized-source transport gap interface: strict subcutoff local-window
 transport package plus the explicit ingress witness-gap payload. -/
 def LocalizedSourceToRemainingConstructiveIngressGapTwo : Prop :=
