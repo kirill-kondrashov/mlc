@@ -6221,8 +6221,159 @@ theorem mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_dir
     (h_inj : RootSafeOutsideOpenInjWitnessTwo)
     (h_dir : DirectProperLocalWitnessTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_externalRayMapData_two
-    (external_ray_map_exists_two_constructive_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+  exact mlc_conjecture_of_injSurjExteriorConstructivePayloadTwo
+    ⟨h_inj, bottcherSurjOnExteriorFromOutsideOpen_two_of_directProperLocalWitnessTwo h_dir⟩
+
+/-- Minimal non-seeded root-closure substitute interface at `c = 2`:
+outside-open injectivity plus direct proper/local witness. -/
+def RootClosureSubstituteTwo : Prop :=
+  RootSafeOutsideOpenInjWitnessTwo ∧ DirectProperLocalWitnessTwo
+
+/-- Minimal explicit witness-gap target for constructing
+`RootClosureSubstituteTwo` without using the final seeded root specialization:
+aggregate constructive ingress plus the local-homeomorph branch seam. -/
+def RootClosureSubstituteTwoWitnessGap : Prop :=
+  RemainingConstructiveIngressTwo ∧ CP5ResidualLocalHomeomorphInjSeamTwo
+
+/-- Minimal explicit no-arg-constructor gap for
+`RemainingConstructiveIngressTwo`: currently this collapses to a direct
+proper+local witness. -/
+def RemainingConstructiveIngressTwoWitnessGap : Prop :=
+  DirectProperLocalWitnessTwo
+
+/-- Build aggregate constructive ingress from the explicit ingress witness-gap
+payload. -/
+theorem remainingConstructiveIngressTwo_of_remainingConstructiveIngressTwoWitnessGap
+    (h_gap : RemainingConstructiveIngressTwoWitnessGap) :
+    RemainingConstructiveIngressTwo :=
+  remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo h_gap
+
+/-- The aggregate constructive ingress predicate is equivalent to the explicit
+ingress witness-gap payload. -/
+theorem remainingConstructiveIngressTwo_iff_remainingConstructiveIngressTwoWitnessGap :
+    RemainingConstructiveIngressTwo ↔ RemainingConstructiveIngressTwoWitnessGap := by
+  simpa [RemainingConstructiveIngressTwoWitnessGap] using
+    (remainingConstructiveIngressTwo_iff_directProperLocalWitness)
+
+/-- Non-seeded local-homeomorph branch seam constructor at `c = 2`, expressed
+with explicit Green-ray seam hypotheses instead of fixed seed constants. -/
+theorem cp5ResidualLocalHomeomorphInjSeamTwo_nonseeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    (huniq_seam : GreenRayUniquePreimageTwoAnchorSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    CP5ResidualLocalHomeomorphInjSeamTwo :=
+  cp5ResidualLocalHomeomorphInjSeamTwo_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+    huniq_seam hlog_gt_anchor
+
+/-- Root witness-gap payload where Green-ray seam assumptions are explicit
+parameters and no fixed seed constant appears. -/
+def RootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed : Prop :=
+  RemainingConstructiveIngressTwoWitnessGap ∧
+    GreenRayUniquePreimageTwoAnchorSeam ∧ GreenRayLogGtAnchorTwoSeam
+
+/-- Discharge the root witness-gap payload from explicit non-seeded Green-ray
+seam assumptions plus the ingress witness-gap payload. -/
+theorem rootClosureSubstituteTwoWitnessGap_of_rootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed
+    (h : RootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed) :
+    RootClosureSubstituteTwoWitnessGap := by
+  refine ⟨remainingConstructiveIngressTwo_of_remainingConstructiveIngressTwoWitnessGap h.1, ?_⟩
+  exact
+    cp5ResidualLocalHomeomorphInjSeamTwo_nonseeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+      h.2.1 h.2.2
+
+/-- Root closure substitute witness from explicit non-seeded Green-ray seam
+assumptions plus the ingress witness-gap payload. -/
+theorem rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed
+    (h : RootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed) :
+    RootClosureSubstituteTwo := by
+  refine ⟨?_, h.1⟩
+  exact
+    rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h.1
+      (cp5ResidualLocalHomeomorphInjSeamTwo_nonseeded_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
+        h.2.1 h.2.2)
+
+/-- Root-adjacent closure from the explicit non-seeded Green-ray seam interface
+for the witness-gap payload. -/
+theorem mlc_conjecture_of_rootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed
+    (h : RootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+      (rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed h).1
+      (rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGapWithoutGreenRaySeed h).2
+
+/-- Build the minimal non-seeded root-closure substitute interface from its
+components. -/
+theorem rootClosureSubstituteTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    RootClosureSubstituteTwo :=
+  ⟨h_inj, h_dir⟩
+
+/-- Refined bridge into the minimal root-closure substitute interface from a
+direct proper/local witness plus local-homeomorph branch seam data. -/
+theorem rootClosureSubstituteTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (h : DirectProperLocalWitnessTwo)
+    (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
+    RootClosureSubstituteTwo :=
+  rootClosureSubstituteTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    (rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+      h h_seam)
+    h
+
+/-- Extract the explicit witness-gap payload from a root-closure substitute
+witness. -/
+theorem rootClosureSubstituteTwoWitnessGap_of_rootClosureSubstituteTwo
+    (h_sub : RootClosureSubstituteTwo) :
+    RootClosureSubstituteTwoWitnessGap :=
+  ⟨remainingConstructiveIngressTwo_of_directProperLocalWitnessTwo h_sub.2,
+    cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo h_sub.2⟩
+
+/-- Rebuild the root-closure substitute witness from the explicit witness-gap
+payload. -/
+theorem rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGap
+    (h_gap : RootClosureSubstituteTwoWitnessGap) :
+    RootClosureSubstituteTwo :=
+  rootClosureSubstituteTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+    (directProperLocalWitnessTwo_of_remainingConstructiveIngressTwo h_gap.1)
+    h_gap.2
+
+/-- Root-closure substitute witness is equivalent to the current explicit
+witness-gap payload. -/
+theorem rootClosureSubstituteTwo_iff_rootClosureSubstituteTwoWitnessGap :
+    RootClosureSubstituteTwo ↔ RootClosureSubstituteTwoWitnessGap := by
+  constructor
+  · intro h_sub
+    exact rootClosureSubstituteTwoWitnessGap_of_rootClosureSubstituteTwo h_sub
+  · intro h_gap
+    exact rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGap h_gap
+
+/-- Root-adjacent closure from aggregate constructive ingress plus local seam
+data at `c = 2`. -/
+theorem mlc_conjecture_of_rootClosureSubstituteTwoWitnessGap
+    (h_gap : RootClosureSubstituteTwoWitnessGap) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+      (rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGap h_gap).1
+      (rootClosureSubstituteTwo_of_rootClosureSubstituteTwoWitnessGap h_gap).2
+
+/-- Root-adjacent closure through the minimal non-seeded substitute interface. -/
+theorem mlc_conjecture_of_rootClosureSubstituteTwo
+    (h_sub : RootClosureSubstituteTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    h_sub.1 h_sub.2
+
+/-- Root boundary in direct inj/surj form: outside-open injectivity plus the
+direct proper/local witness imply MLC at `c = 2` without passing through an
+`ExternalRayMapData`-typed statement at this boundary. -/
+theorem mlc_conjecture_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
+    (h_inj : RootSafeOutsideOpenInjWitnessTwo)
+    (h_dir : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_rootClosureSubstituteTwo
+    (rootClosureSubstituteTwo_of_rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo
       h_inj h_dir)
 
 /-- Strict-mono-free root-candidate wrapper parameterized by the exact remaining
@@ -6277,8 +6428,8 @@ theorem mlc_conjecture_root_candidate_of_directProperLocalWitnessTwo_of_cp5Resid
     (h : DirectProperLocalWitnessTwo)
     (h_seam : CP5ResidualLocalHomeomorphInjSeamTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_root_candidate_of_rootSafeOutsideOpenInjWitnessTwo
-    (rootSafeOutsideOpenInjWitnessTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
+  exact mlc_conjecture_of_rootClosureSubstituteTwo
+    (rootClosureSubstituteTwo_of_directProperLocalWitnessTwo_of_cp5ResidualLocalHomeomorphInjSeamTwo
       h h_seam)
 
 /-- Strict-mono-free root-candidate wrapper at `c = 2`, specialized to the CP5

@@ -46,10 +46,7 @@ Total estimated remainder: ~90-240 Lean LOC, ~3-9 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `█████░░░░░` 55% | 45% | active umbrella cycle |
-| `plan/PLAN_axiom1_constructor_family_min_cut_probe_v1.md` | ⭐⭐⭐⭐⭐ | `█░░░░░░░░░` 10% | 90% | ~3-7h |
-| `plan/PLAN_axiom1_surj_target_reformulation_without_externalRayMapData_v1.md` | ⭐⭐⭐⭐⭐ | `█░░░░░░░░░` 8% | 92% | ~4-9h |
-| `plan/PLAN_axiom1_root_boundary_cutover_guardrail_matrix_v1.md` | ⭐⭐⭐⭐⭐ | `█░░░░░░░░░` 6% | 94% | ~2-6h |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | latest cycle summary |
 
 ## Key Technical Reality
 
@@ -59,8 +56,8 @@ Total estimated remainder: ~90-240 Lean LOC, ~3-9 hours.
   `not_greenRayLogGtAnchorTwo_cutoff_band`.
 - An anchor-free payload staging interface now exists in root wiring:
   `RootSeedPayloadTwoNoAnchor` and its first bridge wrappers.
-- The current cycle focuses on finding a validated `-1/+0` constructor branch
-  via probe matrix + nonaggregated surjectivity witness search.
+- Latest cycle completed main root-path seed-interface quarantine; no-arg seam
+  constructor searches remain blocked under current model assumptions.
 - Known blocker to avoid: constructor compositions that introduce non-frontier
   axioms (`MLC.Quadratic.external_ray_map_exists`,
   `MLC.Quadratic.bottcher_seq_converges`).
