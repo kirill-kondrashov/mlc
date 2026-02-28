@@ -2580,13 +2580,22 @@ This is the single intended swap point for removing
 theorem greenRayLogGtAnchorTwo_seed : GreenRayLogGtAnchorTwoSeam :=
   greenRayLogGtAnchorTwo_axiom_seed
 
+/-- Any `c = 2` Green-ray log-gap seam closes the strict radial monotonicity
+seam in the current model. This keeps the seam dependency explicit instead of
+implicitly replaying the centralized seed alias. -/
+theorem greenFunctionStrictMonoAlongRayBasinTwo_of_greenRayLogGtAnchorTwoSeam
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    GreenFunctionRayInversion.GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
+  exact False.elim (not_greenRayLogGtAnchorTwoSeam hlog_gt_anchor)
+
 /-- Centralized `c = 2` strict radial monotonicity seam seed.
 This is the single intended swap point for removing the strict-mono seam axiom
 from root-entry wrappers after constructive monotonicity is proved. -/
 theorem greenFunctionStrictMonoAlongRayBasinTwo_seed :
     GreenFunctionRayInversion.GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
-  exact False.elim
-    (not_greenRayLogGtAnchorTwoSeam greenRayLogGtAnchorTwo_seed)
+  exact
+    greenFunctionStrictMonoAlongRayBasinTwo_of_greenRayLogGtAnchorTwoSeam
+      greenRayLogGtAnchorTwo_seed
 
 /-- If external-ray landing at `c = 2` is constructively excluded, the landing
 branch seam is immediate. -/
@@ -2623,12 +2632,13 @@ theorem cp5ResidualLocalHomeomorphInjSeamTwo_axiom_seed :
 /-- Constructive witness for the local-homeomorph branch seam: proper local homeomorphism
 asymptotic to identity is injective. -/
 theorem injOn_outside_open_two_of_greenFunctionStrictMonoAlongRayBasinTwoSeam
-    (hmono : GreenFunctionRayInversion.GreenFunctionStrictMonoAlongRayBasinTwoSeam) :
+    (hmono : GreenFunctionRayInversion.GreenFunctionStrictMonoAlongRayBasinTwoSeam)
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   have h_data : Quadratic.ExternalRayMapData (2 : ℂ) :=
     GreenFunctionRayInversion.external_ray_map_exists_two_via_green_function_of_seam
       hmono
-      greenRayLogGtAnchorTwo_seed
+      hlog_gt_anchor
   have h_left : BottcherLeftInverseOnOutsideOpenData (2 : ℂ) :=
     bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data h_data
   exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open (2 : ℂ) h_left
@@ -2639,6 +2649,7 @@ theorem injOn_outside_open_two_strictMono_seeded :
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   exact injOn_outside_open_two_of_greenFunctionStrictMonoAlongRayBasinTwoSeam
     greenFunctionStrictMonoAlongRayBasinTwo_seed
+    greenRayLogGtAnchorTwo_seed
 
 /-- Constructive witness for the local-homeomorph branch seam: proper local homeomorphism
 asymptotic to identity is injective. -/
@@ -4658,6 +4669,14 @@ theorem greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_injOn_outside_o
     GreenRayUniquePreimageTwoAnchorSeam :=
   greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
 
+/-- Green-ray anchored uniqueness seam at `c = 2` from an explicit
+Green-ray-log-gap seam witness. -/
+theorem greenRayUniquePreimageTwoAnchorSeam_of_greenRayLogGtAnchorTwoSeam
+    (hlog_gt_anchor : GreenRayLogGtAnchorTwoSeam) :
+    GreenRayUniquePreimageTwoAnchorSeam :=
+  greenRayUniquePreimageTwoAnchorSeam_of_greenFunctionStrictMonoAlongRayBasinTwoSeam
+    (greenFunctionStrictMonoAlongRayBasinTwo_of_greenRayLogGtAnchorTwoSeam hlog_gt_anchor)
+
 /-- Outside-open injectivity at `c = 2` from the Green-ray anchored uniqueness
 machinery (strict-mono route, no `external_ray_map_exists` usage). -/
 theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
@@ -4665,7 +4684,7 @@ theorem injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam
     Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} :=
   injOn_outside_open_two_of_greenRayLogGtAnchorTwoSeam_of_uniquePreimageSeam
-    greenRayUniquePreimageTwoAnchorSeam_strictMono_seeded_of_greenFunctionStrictMonoAlongRayBasinTwo_seed
+    (greenRayUniquePreimageTwoAnchorSeam_of_greenRayLogGtAnchorTwoSeam hlog_gt_anchor)
     hlog_gt_anchor
 
 /-- Local-homeomorph branch seam at `c = 2` from Green-ray uniqueness+anchor

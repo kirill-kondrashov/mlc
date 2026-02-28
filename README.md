@@ -9,7 +9,7 @@ The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 
 ## Current Axiom Frontier (`make check`)
 
-As of 2026-02-27, exactly one non-core axiom remains in the root theorem:
+As of 2026-02-28, exactly one non-core axiom remains in the root theorem:
 
 - `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 
@@ -38,27 +38,29 @@ All axioms used:
 
 | Target Axiom | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|
-| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` 87% | 13% | ~80-220 Lean LOC, ~3-8 hrs |
+| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` 88% | 12% | ~70-200 Lean LOC, ~3-7 hrs |
 
-Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
+Total estimated remainder: ~70-200 Lean LOC, ~3-7 hours.
 
 ## Active Plans (`plan/*`)
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v26 iteration summary |
-| `plan/PLAN_axiom_elimination_new_direct_approach_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | new-direct interface grounded |
-| `plan/PLAN_axiom_elimination_alternative_proof_structure_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | alternative-structure interface grounded |
-| `plan/PLAN_axiom_elimination_minimal_counterexample_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | minimal-counterexample interface grounded |
-| `plan/PLAN_axiom_elimination_parallel_matrix_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | parallel-matrix kernel unification complete |
-| `plan/PLAN_axiom_elimination_frontier_validation_v26.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
-| `plan/PLAN_axiom_elimination_retired_route_guardrail_v26.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
-| `plan/PLAN_axiom_elimination_constructive_bridge_search_v26.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v27 umbrella + pruning summary |
+| `plan/PLAN_axiom_seed_dependency_boundary_cleanup_v27.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | seam/seed dependency boundary cleanup complete |
+| `plan/PLAN_axiom_seed_frontier_validation_v27.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | rebuilt and validated single-axiom frontier |
+| `plan/PLAN_axiom_seed_retired_route_guardrail_v27.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | anti-repetition blocked classes tracked |
+| `plan/PLAN_axiom_elimination_constructive_bridge_search_v27.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 62% | 38% | frontier-safe constructive bridge still missing |
 
 ## Key Technical Reality
 
 - The old global anchor-gap seam is inconsistent in the current model:
   `not_greenRayLogGtAnchorTwoSeam`.
+- v27 explicitly exposed seam dependencies in core wrappers:
+  `greenFunctionStrictMonoAlongRayBasinTwo_of_greenRayLogGtAnchorTwoSeam`,
+  `greenRayUniquePreimageTwoAnchorSeam_of_greenRayLogGtAnchorTwoSeam`, and
+  explicit seam input in
+  `injOn_outside_open_two_of_greenFunctionStrictMonoAlongRayBasinTwoSeam`.
 - The bounded-cutoff replacement route is also inconsistent:
   `not_greenRayLogGtAnchorTwo_cutoff_band`.
 - An anchor-free payload staging interface now exists in root wiring:
