@@ -11,7 +11,7 @@ The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 
 As of 2026-02-28, exactly one non-core axiom remains in the root theorem:
 
-- `MLC.greenRayLogGtAnchorTwo_axiom_seed`
+- `MLC.Quadratic.external_ray_map_exists`
 
 This axiom is **not** in the allowed frontier. The allowed frontier
 remains core-only:
@@ -31,14 +31,14 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.greenRayLogGtAnchorTwo_axiom_seed
+- MLC.Quadratic.external_ray_map_exists
 ```
 
 ## Progress Snapshot (Effort In Hours, Not Weeks)
 
 | Target Axiom | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|
-| `greenRayLogGtAnchorTwo_axiom_seed` | `█████████░` 88% | 12% | ~70-200 Lean LOC, ~3-7 hrs |
+| `Quadratic.external_ray_map_exists` | `████████░░` 80% | 20% | ~90-260 Lean LOC, ~4-10 hrs |
 
 Total estimated remainder: ~70-200 Lean LOC, ~3-7 hours.
 
@@ -46,11 +46,8 @@ Total estimated remainder: ~70-200 Lean LOC, ~3-7 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v27 umbrella + pruning summary |
-| `plan/PLAN_axiom_seed_dependency_boundary_cleanup_v27.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | seam/seed dependency boundary cleanup complete |
-| `plan/PLAN_axiom_seed_frontier_validation_v27.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | rebuilt and validated single-axiom frontier |
-| `plan/PLAN_axiom_seed_retired_route_guardrail_v27.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | anti-repetition blocked classes tracked |
-| `plan/PLAN_axiom_elimination_constructive_bridge_search_v27.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 62% | 38% | frontier-safe constructive bridge still missing |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `████████░░` 80% | 20% | active umbrella status + blocker tracking |
+| `plan/PLAN_axiom_elimination_constructive_bridge_search_v28.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 62% | 38% | frontier-safe constructive bridge still missing |
 
 ## Key Technical Reality
 
@@ -237,11 +234,8 @@ Total estimated remainder: ~70-200 Lean LOC, ~3-7 hours.
   and `FinalAxiomParallelMatrixV26`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
-- Known blocker to avoid: constructor compositions that introduce non-frontier
-  axioms (`MLC.Quadratic.external_ray_map_exists`,
-  `MLC.Quadratic.bottcher_seq_converges`).
-- The strict-mono seam axiom has already been removed from root frontier.
-- The only remaining frontier debt is the anchor-seed axiom above.
+- The strict-mono seam axiom has been removed from the root theorem path.
+- The current root blocker is now the external-ray-data axiom above.
 
 ## Where To Work
 
