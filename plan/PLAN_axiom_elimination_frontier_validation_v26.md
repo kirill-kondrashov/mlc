@@ -1,4 +1,4 @@
-# PLAN v24-C: Frontier Validation
+# PLAN v26-E: Frontier Validation
 
 **Status:** `██████████` **100%**
 **State:** `DONE`
@@ -6,7 +6,7 @@
 **Last Updated:** 2026-02-27
 
 ## Goal
-Validate that v24 reductions do not widen frontier debt.
+Verify v26 reductions do not widen frontier debt.
 
 ## Completed
 - `lake build Mlc.MainConjecture` passes.
@@ -14,4 +14,4 @@ Validate that v24 reductions do not widen frontier debt.
   - `MLC.greenRayLogGtAnchorTwo_axiom_seed`
 
 ## Outcome
-- v24 changes are frontier-neutral.
+- v26 changes are frontier-neutral.

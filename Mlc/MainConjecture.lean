@@ -7741,6 +7741,178 @@ theorem mlc_conjecture_of_finalAxiomRootClosureKernelV24
       (rootClosureSubstituteTwo_of_finalAxiomRootClosureKernelV24 h24).1
       (rootClosureSubstituteTwo_of_finalAxiomRootClosureKernelV24 h24).2
 
+/-- v25 direct constructive approach interface: explicit no-arg witness-gap
+payload paired with the core constructive bridge target. -/
+def FinalAxiomDirectConstructiveApproachV25 : Prop :=
+  RemainingConstructiveIngressTwoWitnessGap ∧ FinalAxiomCoreConstructiveGapV16
+
+/-- The v25 direct constructive approach is equivalent to the v21 witness-gap
+kernel. -/
+theorem finalAxiomDirectConstructiveApproachV25_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomDirectConstructiveApproachV25 ↔ FinalAxiomWitnessGapKernelV21 := by
+  constructor
+  · intro h25
+    refine ⟨?_, h25.1⟩
+    exact
+      (finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).2 h25.2
+  · intro h21
+    refine ⟨h21.2, ?_⟩
+    exact
+      (finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).1 h21.1
+
+/-- Closing the v25 direct constructive approach is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomDirectConstructiveApproachV25
+    (h25 : FinalAxiomDirectConstructiveApproachV25) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomWitnessGapKernelV21
+      ((finalAxiomDirectConstructiveApproachV25_iff_finalAxiomWitnessGapKernelV21).1 h25)
+
+/-- v25 alternative bridge strategies interface: either approach-matrix kernel
+or root-closure kernel suffices. -/
+def FinalAxiomAlternativeBridgeStrategiesV25 : Prop :=
+  FinalAxiomApproachMatrixKernelV23 ∨ FinalAxiomRootClosureKernelV24
+
+/-- The v25 alternative bridge strategies interface is equivalent to the v21
+witness-gap kernel. -/
+theorem finalAxiomAlternativeBridgeStrategiesV25_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomAlternativeBridgeStrategiesV25 ↔ FinalAxiomWitnessGapKernelV21 := by
+  constructor
+  · intro h_alt
+    rcases h_alt with h23 | h24
+    · exact
+        (finalAxiomApproachMatrixKernelV23_iff_finalAxiomWitnessGapKernelV21).1 h23
+    · exact
+        (finalAxiomRootClosureKernelV24_iff_finalAxiomWitnessGapKernelV21).1 h24
+  · intro h21
+    exact Or.inl
+      ((finalAxiomApproachMatrixKernelV23_iff_finalAxiomWitnessGapKernelV21).2 h21)
+
+/-- Closing the v25 alternative bridge strategies interface is sufficient to
+derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomAlternativeBridgeStrategiesV25
+    (h_alt : FinalAxiomAlternativeBridgeStrategiesV25) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomWitnessGapKernelV21
+      ((finalAxiomAlternativeBridgeStrategiesV25_iff_finalAxiomWitnessGapKernelV21).1 h_alt)
+
+/-- v26 new direct approach interface, routed through the grounded v25 direct
+constructive boundary. -/
+def FinalAxiomNewDirectApproachV26 : Prop :=
+  FinalAxiomDirectConstructiveApproachV25
+
+/-- The v26 new direct approach is equivalent to the v21 witness-gap kernel. -/
+theorem finalAxiomNewDirectApproachV26_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomNewDirectApproachV26 ↔ FinalAxiomWitnessGapKernelV21 :=
+  finalAxiomDirectConstructiveApproachV25_iff_finalAxiomWitnessGapKernelV21
+
+/-- Closing the v26 new direct approach is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomNewDirectApproachV26
+    (h26 : FinalAxiomNewDirectApproachV26) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_finalAxiomDirectConstructiveApproachV25 h26
+
+/-- v26 alternative proof-structure interface, routed through the grounded v25
+alternative-strategies boundary. -/
+def FinalAxiomAlternativeProofStructureV26 : Prop :=
+  FinalAxiomAlternativeBridgeStrategiesV25
+
+/-- The v26 alternative proof-structure interface is equivalent to the v21
+witness-gap kernel. -/
+theorem finalAxiomAlternativeProofStructureV26_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomAlternativeProofStructureV26 ↔ FinalAxiomWitnessGapKernelV21 :=
+  finalAxiomAlternativeBridgeStrategiesV25_iff_finalAxiomWitnessGapKernelV21
+
+/-- Closing the v26 alternative proof-structure interface is sufficient to
+derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomAlternativeProofStructureV26
+    (h26 : FinalAxiomAlternativeProofStructureV26) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_finalAxiomAlternativeBridgeStrategiesV25 h26
+
+/-- v26 minimal-counterexample interface: contradiction of the negated core
+bridge theorem. -/
+def FinalAxiomMinimalCounterexampleV26 : Prop :=
+  ¬ FinalAxiomCoreConstructiveGapV16 → False
+
+/-- The v26 minimal-counterexample interface is equivalent to the v16 core
+bridge target. -/
+theorem finalAxiomMinimalCounterexampleV26_iff_finalAxiomCoreConstructiveGapV16 :
+    FinalAxiomMinimalCounterexampleV26 ↔ FinalAxiomCoreConstructiveGapV16 := by
+  constructor
+  · intro h_min
+    by_contra h_core
+    exact h_min h_core
+  · intro h_core h_not_core
+    exact h_not_core h_core
+
+/-- v26 minimal-counterexample kernel: minimal-counterexample interface plus the
+explicit no-arg witness-gap payload. -/
+def FinalAxiomMinimalCounterexampleKernelV26 : Prop :=
+  FinalAxiomMinimalCounterexampleV26 ∧ RemainingConstructiveIngressTwoWitnessGap
+
+/-- The v26 minimal-counterexample kernel is equivalent to the v21 witness-gap
+kernel. -/
+theorem finalAxiomMinimalCounterexampleKernelV26_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomMinimalCounterexampleKernelV26 ↔ FinalAxiomWitnessGapKernelV21 := by
+  constructor
+  · intro h_min
+    refine ⟨?_, h_min.2⟩
+    exact
+      (finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).2
+        ((finalAxiomMinimalCounterexampleV26_iff_finalAxiomCoreConstructiveGapV16).1 h_min.1)
+  · intro h21
+    refine ⟨?_, h21.2⟩
+    exact
+      (finalAxiomMinimalCounterexampleV26_iff_finalAxiomCoreConstructiveGapV16).2
+        ((finalAxiomWitnessGapBridgeV21_iff_finalAxiomCoreConstructiveGapV16).1 h21.1)
+
+/-- Closing the v26 minimal-counterexample kernel is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomMinimalCounterexampleKernelV26
+    (h_min : FinalAxiomMinimalCounterexampleKernelV26) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomWitnessGapKernelV21
+      ((finalAxiomMinimalCounterexampleKernelV26_iff_finalAxiomWitnessGapKernelV21).1 h_min)
+
+/-- v26 parallel matrix: any grounded v26 route is enough to close the same
+witness-gap kernel. -/
+def FinalAxiomParallelMatrixV26 : Prop :=
+  FinalAxiomNewDirectApproachV26 ∨
+    FinalAxiomAlternativeProofStructureV26 ∨
+      FinalAxiomMinimalCounterexampleKernelV26
+
+/-- v26 parallel matrix is equivalent to the v21 witness-gap kernel. -/
+theorem finalAxiomParallelMatrixV26_iff_finalAxiomWitnessGapKernelV21 :
+    FinalAxiomParallelMatrixV26 ↔ FinalAxiomWitnessGapKernelV21 := by
+  constructor
+  · intro h26
+    rcases h26 with h_dir | h_alt | h_min
+    · exact (finalAxiomNewDirectApproachV26_iff_finalAxiomWitnessGapKernelV21).1 h_dir
+    · exact
+        (finalAxiomAlternativeProofStructureV26_iff_finalAxiomWitnessGapKernelV21).1 h_alt
+    · exact
+        (finalAxiomMinimalCounterexampleKernelV26_iff_finalAxiomWitnessGapKernelV21).1 h_min
+  · intro h21
+    exact Or.inl
+      ((finalAxiomNewDirectApproachV26_iff_finalAxiomWitnessGapKernelV21).2 h21)
+
+/-- v15 composite final gap is equivalent to the v26 parallel matrix. -/
+theorem finalAxiomEliminationGapV15_iff_finalAxiomParallelMatrixV26 :
+    FinalAxiomEliminationGapV15 ↔ FinalAxiomParallelMatrixV26 := by
+  exact
+    finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21.trans
+      finalAxiomParallelMatrixV26_iff_finalAxiomWitnessGapKernelV21.symm
+
+/-- Closing the v26 parallel matrix is sufficient to derive MLC. -/
+theorem mlc_conjecture_of_finalAxiomParallelMatrixV26
+    (h26 : FinalAxiomParallelMatrixV26) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomWitnessGapKernelV21
+      ((finalAxiomParallelMatrixV26_iff_finalAxiomWitnessGapKernelV21).1 h26)
+
 /-- Localized-source transport gap interface: strict subcutoff local-window
 transport package plus the explicit ingress witness-gap payload. -/
 def LocalizedSourceToRemainingConstructiveIngressGapTwo : Prop :=

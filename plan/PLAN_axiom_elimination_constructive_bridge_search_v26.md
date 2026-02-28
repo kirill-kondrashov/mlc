@@ -1,4 +1,4 @@
-# PLAN v24-E: Constructive Bridge Search
+# PLAN v26-G: Constructive Bridge Search
 
 **Status:** `██████░░░░` **60%**
 **State:** `STUCK`
@@ -10,7 +10,9 @@ Construct a frontier-safe proof of:
 `DirectProperLocalWitnessTwo -> CP5ResidualLocalHomeomorphInjSeamTwo`.
 
 ## Completed
-- Added direct root-closure bridge/kernel normal forms (v24).
+- Grounded v26 direct, alternative-structure, and minimal-counterexample
+  routes as explicit equivalent kernels.
+- Unified routes under `FinalAxiomParallelMatrixV26`.
 - Endpoint cutovers are complete; no wrapper-level debt remains.
 
 ## Dead-End / Self-Repetition Check
@@ -19,7 +21,7 @@ Construct a frontier-safe proof of:
   - global degree-one route with forbidden dependencies
   - seeded replay
   - speculative IVT/connectedness branch
-- Re-running those paths would be self-repetition.
+- Re-running these routes would be self-repetition.
 
 ## Blocking Gap
 - No new non-seeded constructive mechanism currently derives

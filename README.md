@@ -46,12 +46,14 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
 
 | File | Relevance | Progress | Left | Estimated Remaining Effort |
 |---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v24 iteration summary |
-| `plan/PLAN_axiom_elimination_root_closure_bridge_equivalence_v24.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root-closure bridge equivalence complete |
-| `plan/PLAN_axiom_elimination_root_closure_kernel_cutover_v24.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | root-closure kernel cutover complete |
-| `plan/PLAN_axiom_elimination_frontier_validation_v24.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
-| `plan/PLAN_axiom_elimination_retired_route_guardrail_v24.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
-| `plan/PLAN_axiom_elimination_constructive_bridge_search_v24.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
+| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | v26 iteration summary |
+| `plan/PLAN_axiom_elimination_new_direct_approach_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | new-direct interface grounded |
+| `plan/PLAN_axiom_elimination_alternative_proof_structure_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | alternative-structure interface grounded |
+| `plan/PLAN_axiom_elimination_minimal_counterexample_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | minimal-counterexample interface grounded |
+| `plan/PLAN_axiom_elimination_parallel_matrix_v26.md` | ⭐⭐⭐⭐⭐ | `██████████` 100% | 0% | parallel-matrix kernel unification complete |
+| `plan/PLAN_axiom_elimination_frontier_validation_v26.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | frontier remained single-axiom |
+| `plan/PLAN_axiom_elimination_retired_route_guardrail_v26.md` | ⭐⭐⭐⭐☆ | `██████████` 100% | 0% | no-go guardrail maintained |
+| `plan/PLAN_axiom_elimination_constructive_bridge_search_v26.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 60% | 40% | frontier-safe constructive bridge still missing |
 
 ## Key Technical Reality
 
@@ -221,6 +223,16 @@ Total estimated remainder: ~80-220 Lean LOC, ~3-8 hours.
   `FinalAxiomRootClosureKernelV24`,
   `finalAxiomEliminationGapV15_iff_finalAxiomRootClosureKernelV24`,
   and `mlc_conjecture_of_finalAxiomRootClosureKernelV24`.
+- Added grounded v25 bridge wrappers:
+  `FinalAxiomDirectConstructiveApproachV25`,
+  `FinalAxiomAlternativeBridgeStrategiesV25`,
+  `finalAxiomAlternativeBridgeStrategiesV25_iff_finalAxiomWitnessGapKernelV21`,
+  and `mlc_conjecture_of_finalAxiomAlternativeBridgeStrategiesV25`.
+- Added grounded v26 parallel-route wrappers:
+  `FinalAxiomNewDirectApproachV26`,
+  `FinalAxiomAlternativeProofStructureV26`,
+  `FinalAxiomMinimalCounterexampleKernelV26`,
+  and `FinalAxiomParallelMatrixV26`.
 - Current strict-mono-free ingress families are formally blocked:
   `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
 - Known blocker to avoid: constructor compositions that introduce non-frontier

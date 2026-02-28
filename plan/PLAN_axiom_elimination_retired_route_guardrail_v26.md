@@ -1,4 +1,4 @@
-# PLAN v24-D: Retired Route Guardrail
+# PLAN v26-F: Retired Route Guardrail
 
 **Status:** `██████████` **100%**
 **State:** `DONE`
@@ -6,7 +6,7 @@
 **Last Updated:** 2026-02-27
 
 ## Goal
-Prevent self-repetition while progressing v24 normalization.
+Prevent self-repetition while executing grounded v26 routes.
 
 ## Blocked Classes
 - strict subcutoff/local-window transport route
@@ -15,4 +15,4 @@ Prevent self-repetition while progressing v24 normalization.
 - speculative IVT/connectedness branch
 
 ## Outcome
-- v24 work remains grounded and non-redundant.
+- v26 active routes remain grounded and non-redundant.
