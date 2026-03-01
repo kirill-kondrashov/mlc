@@ -87,14 +87,39 @@ structure DirectMLCData : Prop where
       (_h : SatelliteRenormalizableTower c),
       MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
+/-- Minimal direct-route payload: FR connectedness + IR local-connectivity seam. -/
+structure DirectMLCMinimalData : Prop where
+  /-- For all c ∈ M and all n, the parameter puzzle piece at c intersected
+      with M is connected. -/
+  puzzle_connected : ParaPuzzlePieceInterMandelbrotConnectedData
+  /-- Local connectivity at all infinitely renormalizable Mandelbrot
+      parameters. -/
+  ir_local_connected : IRLocallyConnectedData
+
+/-- Convert fine-grained direct-route data to the minimal seam payload. -/
+def directMLCMinimalData_of_directMLCData
+    (h : DirectMLCData) :
+    DirectMLCMinimalData where
+  puzzle_connected := h.puzzle_connected
+  ir_local_connected :=
+    irLocallyConnectedData_of_classify_bridge_data
+      h.ir_classification
+      h.satellite_bridge
+
+/-- MLC follows from `DirectMLCMinimalData`. -/
+theorem mlc_conjecture_of_directMLCMinimalData
+    (h : DirectMLCMinimalData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+    h.puzzle_connected
+    h.ir_local_connected
+
 /-- MLC follows from `DirectMLCData` — no axioms beyond core needed. -/
 theorem mlc_conjecture_of_directMLCData
     (h : DirectMLCData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
-    h.puzzle_connected
-    h.ir_classification
-    h.satellite_bridge
+  exact mlc_conjecture_of_directMLCMinimalData
+    (directMLCMinimalData_of_directMLCData h)
 
 end
 
