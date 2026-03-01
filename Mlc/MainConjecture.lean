@@ -1442,6 +1442,12 @@ structure IRClassifyBridgeData : Prop where
       (_h : SatelliteRenormalizableTower c),
       MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
+/-- Packaged seam payload for the direct route:
+    FR connectedness data + packaged IR classify/bridge data. -/
+structure MLCClassifyBridgeSeamData : Prop where
+  puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
+  ir : IRClassifyBridgeData
+
 /-- Build packaged IR classify/bridge payload from separate inputs. -/
 def irClassifyBridgeData_of_classify_bridge_data
     (h_classify_ir : IRClassificationData)
@@ -1507,6 +1513,15 @@ def mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
     h_conn
     (irLocallyConnectedData_of_irClassifyBridgeData h_ir)
 
+/-- Build packaged classify/bridge seam payload from FR connectedness +
+    packaged IR classify/bridge data. -/
+def mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir : IRClassifyBridgeData) :
+    MLCClassifyBridgeSeamData where
+  puzzle_connected := h_conn
+  ir := h_ir
+
 /-- Build minimal seam payload from FR subset-data + packaged IR
     classify/bridge data. -/
 def mlcSeamData_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
@@ -1556,6 +1571,21 @@ theorem mlc_conjecture_of_MLCSeamData
       c hc h_fin
   · exact h_seam.ir_local_connected c hc h_inf
 
+/-- Convert packaged classify/bridge seam payload to minimal seam payload. -/
+def mlcSeamData_of_MLCClassifyBridgeSeamData
+    (h : MLCClassifyBridgeSeamData) :
+    MLCSeamData :=
+  mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    h.puzzle_connected
+    h.ir
+
+/-- Direct MLC assembly from packaged classify/bridge seam payload. -/
+theorem mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (h : MLCClassifyBridgeSeamData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCSeamData
+    (mlcSeamData_of_MLCClassifyBridgeSeamData h)
+
 /-- Direct seam theorem with explicit FR connectedness + minimal IR seam
     payloads. -/
 theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
@@ -1597,8 +1627,9 @@ theorem mlc_conjecture_of_paraPuzzleConnectedData_irClassifyBridgeData
     (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
     (h_ir : IRClassifyBridgeData) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_MLCSeamData
-    (mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData h_conn h_ir)
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+      h_conn h_ir)
 
 /-- FR branch provider from connected-data payload. -/
 lemma finite_lc_provider_of_paraPuzzleConnectedData
