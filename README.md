@@ -1,7 +1,7 @@
 # Mandelbrot Local Connectivity (MLC) in Lean 4
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
-·
+
 [Live dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
 A Lean 4 formalization of the **MLC conjecture** — *the Mandelbrot set is locally
