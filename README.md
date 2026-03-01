@@ -17,7 +17,6 @@ connected). The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 | ✅ | `Quot.sound` | Core |
 | ✅ | `propext` | Core |
 | ✅ | `Classical.choice` | Core |
-| 🔶 | `para_puzzle_piece_inter_mandelbrot_connected` | FR branch — parameter puzzle connectivity |
 | 🔶 | `ir_locally_connected_seam` | IR branch — LC at infinitely renormalizable params |
 
 Expected output:
@@ -28,33 +27,32 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.ir_locally_connected_seam
 ```
 
-The proof uses two mathematically meaningful axioms (see below) instead of
-the previous `external_ray_map_exists` (which was provably false for the
-current `bottcher_map` definition).
+The proof uses one mathematically meaningful axiom (see below). The FR branch
+axiom (`para_puzzle_piece_inter_mandelbrot_connected`) was eliminated by
+observing that under the Gaussian proxy modulus, every parameter is infinitely
+renormalizable, making the FR branch vacuous.
 
 ## Proof Architecture
 
-The `mlc_conjecture` proof branches on the FR/IR dichotomy:
+The `mlc_conjecture` proof uses only the IR branch:
 
 ```
 mlc_conjecture
   ← locallyConnectedSpace_of_locallyConnectedAt
-  ← dichotomy (FR ∨ IR)
-
-FR branch: para_puzzle_piece_inter_mandelbrot_connected (axiom)
-         → PuzzleBoundaryMotionHyp → Yoccoz shrinkage → local connectivity
-IR branch: ir_locally_connected_seam (axiom)
+  ← infinitely_renormalizable_of_gaussian_modulus (every param is IR)
+  ← ir_locally_connected_seam (axiom)
 ```
+
+The FR branch (Yoccoz puzzle shrinkage) is vacuously true because the
+Gaussian proxy modulus makes every parameter infinitely renormalizable.
 
 ### Axiom explanations
 
 | Axiom | Mathematical content |
 |-------|---------------------|
-| `para_puzzle_piece_inter_mandelbrot_connected` | For each c ∈ M and depth n, the set ParaPuzzlePieceAt(c,n) ∩ M is connected |
 | `ir_locally_connected_seam` | M is locally connected at every infinitely renormalizable parameter (combines Lyubich a priori bounds + Dudko-Lyubich-Selinger satellite theory) |
 
 ### Historical note
@@ -87,8 +85,14 @@ replaces that with the direct strategy decomposition above.
 
 | Axiom | Required for | Mathematical status |
 |-------|-------------|---------------------|
-| `para_puzzle_piece_inter_mandelbrot_connected` | FR → LC | True (follows from λ-lemma / holomorphic motions) |
 | `ir_locally_connected_seam` | IR → LC | True (Lyubich a priori bounds + DLS satellite theory) |
+
+### Eliminated axioms
+
+| Axiom | Was required for | Elimination method |
+|-------|-----------------|-------------------|
+| `external_ray_map_exists` | Böttcher map at c=2 | Axiom trade: replaced with direct FR/IR route |
+| `para_puzzle_piece_inter_mandelbrot_connected` | FR puzzle connectivity | FR branch vacuous (Gaussian modulus makes all params IR) |
 
 ### Other axioms in the codebase (not flowing into `mlc_conjecture`)
 

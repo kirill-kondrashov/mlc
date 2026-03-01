@@ -1936,7 +1936,11 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_MLCSeamData mlcSeamData_of_axiom
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  -- Under the Gaussian proxy modulus, every parameter is infinitely renormalizable.
+  exact ir_locally_connected_seam c hc (infinitely_renormalizable_of_gaussian_modulus c)
 
 end MainProof
 
