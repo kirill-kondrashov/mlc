@@ -1672,6 +1672,78 @@ theorem mlc_conjecture_of_finite_irClassifyBridgeData
     h_ir.classify
     h_ir.bridge
 
+/-- Build packaged IR classify/bridge payload from boundary-motion hypotheses,
+    explicit IR classification, and molecule bridge target data. -/
+def irClassifyBridgeData_of_motionHyp_classify_moleculeBridgeTarget_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_bridge_data
+    h_classify_ir
+    (bridge_provider_of_motionHyp_moleculeBridgeTarget_data h_motion h_target)
+
+/-- Build packaged IR classify/bridge payload from boundary-motion hypotheses,
+    explicit IR classification, and the uniform conformal bridge target. -/
+def irClassifyBridgeData_of_motionHyp_classify_moleculeUniformBridgeTarget_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_motionHyp_classify_moleculeBridgeTarget_data
+    h_motion
+    h_classify_ir
+    (MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget h_uniform)
+
+/-- Build packaged IR classify/bridge payload from boundary-motion hypotheses,
+    Track-1 no-tower primitive data, and the uniform conformal bridge target. -/
+def irClassifyBridgeData_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_motionHyp_classify_moleculeUniformBridgeTarget_data
+    h_motion
+    (irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+      h_noTowerPrim h_uniform)
+    h_uniform
+
+/-- Packaged wrapper for boundary-motion + classification + molecule bridge
+    target route. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_motionHyp_classify_moleculeBridgeTarget_data
+      h_motion h_classify_ir h_target)
+
+/-- Packaged wrapper for boundary-motion + classification + uniform conformal
+    bridge route. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_motionHyp_classify_moleculeUniformBridgeTarget_data
+      h_motion h_classify_ir h_uniform)
+
+/-- Packaged wrapper for boundary-motion + Track-1 + uniform conformal bridge
+    route. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_data
+      h_motion h_noTowerPrim h_uniform)
+
 /-- Direct seam theorem with explicit FR connectedness + minimal IR seam
     payloads. -/
 theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
