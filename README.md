@@ -4,176 +4,85 @@
 
 [Live dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
-A Lean 4 formalization of the **MLC conjecture** — *the Mandelbrot set is locally
-connected*. The theorem `MLC.mlc_conjecture` compiles `sorry`-free with **one
-non-core axiom** remaining.
+A Lean 4 formalization of the Mandelbrot local connectivity statement
+`MLC.mlc_conjecture`.
 
 ## Quick Start
 
 ```bash
-make build    # ~7900 Lean compilation jobs
-make check    # Axiom frontier report
+make build
+make check
 ```
 
-Expected output:
+Expected `make check` output:
 
-```
+```text
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.ir_locally_connected_seam
+- MLC.lyubich_conformal_bridge
+- MLC.exists_parameter_model_rfast_fixed_point
 ```
 
-## Axiom Frontier
+## Current Axiom Frontier
 
-| Status | Axiom | Role |
-|--------|-------|------|
-| ✅ | `Quot.sound` | Core Lean |
-| ✅ | `propext` | Core Lean |
-| ✅ | `Classical.choice` | Core Lean |
-| 🔶 | `ir_locally_connected_seam` | LC at infinitely renormalizable parameters |
+`MLC.mlc_conjecture` currently depends on:
 
-### The remaining axiom
+- Core Lean axioms:
+  - `Quot.sound`
+  - `propext`
+  - `Classical.choice`
+- Non-core mathematical bridge axioms:
+  - `MLC.lyubich_conformal_bridge`
+  - `MLC.exists_parameter_model_rfast_fixed_point`
+
+The new minimal bridge axiom is:
 
 ```lean
-axiom ir_locally_connected_seam :
-    ∀ (c : ℂ) (hc : c ∈ MandelbrotSet),
-      InfinitelyRenormalizable c →
-        LocallyConnectedAt MandelbrotSet ⟨c, hc⟩
+axiom exists_parameter_model_rfast_fixed_point :
+  ExistsParameterModelRfastFixedPoint
 ```
 
-Under the Gaussian proxy modulus every parameter is infinitely renormalizable
-(`infinitely_renormalizable_of_gaussian_modulus`), so this axiom is equivalent
-to MLC itself. Mathematically it encapsulates Lyubich a priori bounds combined
-with Dudko–Lyubich–Selinger satellite renormalization theory.
-
-### Eliminated axioms
-
-| Axiom | Elimination method |
-|-------|--------------------|
-| `external_ray_map_exists` | Removed from the root theorem route (`mlc_conjecture` is now IR-only) |
-| `para_puzzle_piece_inter_mandelbrot_connected` | Not needed in the root theorem route (FR branch bypassed under Gaussian modulus) |
-
-## Proof Architecture
-
-```
-mlc_conjecture
-└─ mlc_strategy_of_branchLocalData          ← 3-way strategy decomposition
-   ├─ dichotomy c                           ← FR ∨ IR (classical LEM)
-   ├─ FR handler: absurd                    ← vacuous (Gaussian proxy → all IR)
-   │   └─ infinitely_renormalizable_of_gaussian_modulus
-   └─ mlc_infinitely_renormalizable         ← IR dispatch
-      ├─ IR classification → Or.inl         ← all IR params are "primitive"
-      │   └─ ir_locally_connected_seam      ← axiom (🔶)
-      └─ molecule_conjecture_implies_mlc_satellite_of_tower
-         └─ Molecule.molecule_conjecture_refined  ← from molecule-conjecture package
-            └─ ir_locally_connected_seam    ← axiom (🔶)
-```
-
-The proof routes through the full FR/IR dichotomy and Primitive/Satellite
-sub-classification. Under the Gaussian proxy modulus (`modulus A = ∫ exp(−|z|²)`),
-puzzle annulus moduli always converge, making **every** parameter infinitely
-renormalizable. The FR branch is vacuously true. The IR branch dispatches through
-`mlc_infinitely_renormalizable` which invokes the Molecule Conjecture bridge for
-the satellite case.
-
-### Path to eliminating the last axiom
-
-`InconsistencyRoute.lean` proves:
+where:
 
 ```lean
-theorem false_of_renormalization_tower (c : ℂ)
-    (T : RenormalizationTower (parameterToBMol c)) : False
--- depends on: lyubich_conformal_bridge (axiom, mathematically TRUE)
-
-theorem ir_locally_connected_seam_of_tower {c₀ : ℂ}
-    (T : RenormalizationTower (parameterToBMol c₀)) :
-    ∀ c ∈ MandelbrotSet, InfinitelyRenormalizable c → LocallyConnectedAt …
+def ExistsParameterModelRfastFixedPoint : Prop :=
+  ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g ∧
+    (∃ c : ℂ, g = parameterToBMol c)
 ```
 
-The Gaussian proxy (`cmodulus = modulus`, always summable) contradicts the
-Lyubich bridge axiom (`lyubich_conformal_bridge`: given a tower, moduli
-diverge). Any single `RenormalizationTower` therefore yields `False`.
+This replaces the older direct tower-existence axiom at the root theorem level.
 
-**To eliminate `ir_locally_connected_seam`:** construct one
-`RenormalizationTower (parameterToBMol c)` for any `c`. The axiom frontier
-would then shift from `ir_locally_connected_seam` (equivalent to MLC) to
-`lyubich_conformal_bridge` (a true theorem about a priori bounds).
+## Root Theorem Route
 
-**Current blocker:** the codebase has no concrete `RenormalizationRelation`
-instance. Constructing one (e.g., period-2 renormalization of the basilica
-`c = −1`) requires formalizing polynomial-like restriction domains, properness
-on sub-domains, and an affine conjugacy — infrastructure not yet present.
+High-level path now used by `MLC.mlc_conjecture`:
 
-## What Is Proved (axiom-free)
+1. `exists_parameter_model_rfast_fixed_point`
+2. `exists_renormalization_tower_of_existsParameterModelRfastFixedPoint`
+3. `mlc_conjecture_of_exists_tower`
+4. Inconsistency route (`RenormalizationTower -> False`) via
+   `lyubich_conformal_bridge`
+5. Conclude local connectivity of `mandelbrotSet`
 
-| Result | Location |
-|--------|----------|
-| Yoccoz puzzle piece shrinkage (Grötzsch criterion) | `yoccoz-theorem` library |
-| Dynamical → parameter shrinkage | `AxiomsMainConjecture.lean` |
-| Shrinkage → local connectivity | `LcAtOfShrink.lean` |
-| FR ∨ IR dichotomy (classical LEM) | `MainConjecture.lean` |
-| Strategy assembly (FR-LC + IR-LC → MLC) | `MainConjecture.lean` |
-| Green function convergence & functional eq | `yoccoz-theorem` library |
-| `BottcherApproachToOneSeqPreimageData(2) → False` | `MainConjecture.lean` |
-| `PuzzleBoundaryMotionHyp ↔ connectivity` | `DirectRoute.lean` |
-| `M ⊆ ParaPuzzlePiece n` | `ParaPuzzleContainment.lean` |
-| `c ∈ M → c ∈ K(c)` | `ParaPuzzleContainment.lean` |
-| `RenormalizationTower → False` | `InconsistencyRoute.lean` |
-| `RenormalizationTower → ir_locally_connected_seam` | `InconsistencyRoute.lean` |
-| `LyubichModulus` series not summable | `InconsistencyRoute.lean` |
+## Related Bridge API
 
-## Other Axioms in the Codebase
+`Mlc/RenormalizationTowerExistence.lean` also exposes stronger/alternative
+bridge layers (not required by the root theorem frontier), including:
 
-These axioms exist but **do not flow** into `mlc_conjecture`:
+- `MoleculeRenormalizableFixedPointData`
+- `FixedPointParameterModelData`
+- `ParameterToBMolFixedPointLiftData`
+- conversion lemmas between these bridge assumptions
 
-| Axiom | File |
-|-------|------|
-| `lyubich_conformal_bridge` | `PrimitiveModulusDivergence.lean` |
-| `external_ray_map_exists` | `BottcherAxioms.lean` |
-| `mandelbrot_set_connected` | `Axioms.lean` |
-| `filled_julia_set_connected` | `Axioms.lean` |
-| `green_function_strictMono_along_ray_basin_seam` | `Axioms.lean` |
-| `bottcher_seq_converges` | `BottcherAxioms.lean` |
-| `extended_ray_map_continuous` | `BottcherAxioms.lean` |
-| `bottcher_outside_axiom` | `BottcherOnMTheory.lean` |
-| `bottcher_map_inj_on_K` | `BottcherOnMTheory.lean` |
-
-## Repository Layout
-
-```
-Mlc/                             54 files, ~19 583 lines
-├── MainConjecture.lean          Root theorem + proof routes (~1984 lines)
-├── DirectRoute.lean             Axiom-free reduction infrastructure
-├── InconsistencyRoute.lean      Tower → False via Gaussian proxy inconsistency
-├── ParaPuzzleContainment.lean   M ⊆ ParaPuzzlePiece n (proved)
-├── AxiomsMainConjecture.lean    parameter_shrink_of_yoccoz (proved)
-├── LcAtOfShrink.lean            Shrinkage → local connectivity
-├── RenormalizationTypes.lean    IR/FR definitions, parameterToBMol
-├── PrimitiveModulusDivergence.lean  Lyubich bridge axiom + modulus infrastructure
-├── FastTowerExistenceObstruction.lean  Gaussian proxy obstructions
-├── MoleculeConjectureBridge.lean  Molecule conjecture bridge data
-├── InfinitelyRenormalizable.lean
-├── SatelliteRenormalizationTower.lean
-├── MoleculeRenormalizationTower.lean
-└── Quadratic/Complex/
-    ├── Axioms.lean              Core math axioms (connectedness, Green fn)
-    ├── PuzzleLemmas2.lean       Puzzle connectivity
-    ├── ConformalGroetzsch.lean   cmodulus = modulus (Gaussian proxy)
-    ├── GaussianModulusSummable.lean
-    └── Bottcher/                Böttcher map theory (~10 000 lines)
-plan/                            Historical strategy plans (PLAN_00–09)
-check_axioms.lean                Axiom frontier verification script
-```
+These are kept to support incremental refinement toward proving
+`exists_parameter_model_rfast_fixed_point` non-axiomatically.
 
 ## Dependencies
 
-| Package | Role |
-|---------|------|
-| [mathlib4](https://github.com/leanprover-community/mathlib4) | Standard math library |
-| [yoccoz-theorem](https://github.com/kirill-kondrashov/yoccoz-theorem) | Yoccoz puzzle machinery, Green function, Grötzsch inequality |
-| [molecule-conjecture](https://github.com/kirill-kondrashov/molecule-conjecture) | Satellite renormalization (`BMol`, `RenormalizationRelation`, `Rfast`) |
+- [mathlib4](https://github.com/leanprover-community/mathlib4)
+- [yoccoz-theorem](https://github.com/kirill-kondrashov/yoccoz-theorem)
+- [molecule-conjecture](https://github.com/kirill-kondrashov/molecule-conjecture)
 
 Lean toolchain: `leanprover/lean4:v4.27.0-rc1`

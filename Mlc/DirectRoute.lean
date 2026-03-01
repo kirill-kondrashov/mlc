@@ -235,6 +235,32 @@ theorem mlc_conjecture_of_directExistsTower
     LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_exists_tower h_exists
 
+/-- Direct-route wrapper: Molecule fixed-point hypotheses plus fixed-point
+    parameter lift data imply MLC. -/
+theorem mlc_conjecture_of_directMoleculeRenormalizableFixedPointData
+    (h_mol : MoleculeRenormalizableFixedPointData)
+    (h_lift : ParameterToBMolFixedPointLiftData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_moleculeRenormalizableFixedPointData h_mol h_lift
+
+/-- Direct-route wrapper: model-data variant of the Molecule fixed-point
+    bridge. -/
+theorem mlc_conjecture_of_directMoleculeRenormalizableFixedPointDataOfFixedPointParameterModelData
+    (h_mol : MoleculeRenormalizableFixedPointData)
+    (h_model : FixedPointParameterModelData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_moleculeRenormalizableFixedPointData_of_fixedPointParameterModelData
+    h_mol h_model
+
+/-- Direct-route wrapper: existence of a parameter-level fast-renormalizable
+    fixed point of `Rfast` implies MLC. -/
+theorem mlc_conjecture_of_directExistsParameterRfastFixedPoint
+    (h_exists :
+      ∃ c : ℂ, Molecule.IsFastRenormalizable (parameterToBMol c) ∧
+        Molecule.Rfast (parameterToBMol c) = parameterToBMol c) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_parameter_rfast_fixed_point h_exists
+
 /-- Direct-route wrapper: existence of a satellite renormalization tower
     implies MLC. -/
 theorem mlc_conjecture_of_directExistsSatelliteTower

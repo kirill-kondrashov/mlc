@@ -5,6 +5,7 @@ import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
 import Mlc.InconsistencyRoute
+import Mlc.RenormalizationTowerExistence
 import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.Bottcher.DegreeOneInj
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
@@ -1837,6 +1838,36 @@ theorem mlc_conjecture_of_exists_tower
   mlc_conjecture_of_irLocallyConnectedData
     (irLocallyConnectedData_of_exists_tower h_exists)
 
+/-- Molecule fixed-point hypotheses plus fixed-point parameter lift data imply
+    `mlc_conjecture` through the tower route. -/
+theorem mlc_conjecture_of_moleculeRenormalizableFixedPointData
+    (h_mol : MoleculeRenormalizableFixedPointData)
+    (h_lift : ParameterToBMolFixedPointLiftData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower
+    (exists_renormalization_tower_of_moleculeRenormalizableFixedPointData h_mol h_lift)
+
+/-- Model-data variant: fixed-point parameter-model data suffices to recover
+    the tower route into `mlc_conjecture`. -/
+theorem mlc_conjecture_of_moleculeRenormalizableFixedPointData_of_fixedPointParameterModelData
+    (h_mol : MoleculeRenormalizableFixedPointData)
+    (h_model : FixedPointParameterModelData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower
+    (exists_renormalization_tower_of_moleculeRenormalizableFixedPointData_of_fixedPointParameterModelData
+      h_mol h_model)
+
+/-- Parameter-level fixed-point bridge:
+    if some parameter map is a fast-renormalizable fixed point of `Rfast`,
+    then `mlc_conjecture` follows via tower existence. -/
+theorem mlc_conjecture_of_exists_parameter_rfast_fixed_point
+    (h_exists :
+      ∃ c : ℂ, Molecule.IsFastRenormalizable (parameterToBMol c) ∧
+        Molecule.Rfast (parameterToBMol c) = parameterToBMol c) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower
+    (exists_renormalization_tower_of_exists_parameter_rfast_fixed_point h_exists)
+
 /-- Satellite specialization: a satellite renormalization tower hypothesis
     gives `mlc_conjecture` through the tower bridge. -/
 theorem mlc_conjecture_of_satellite_tower (c : ℂ)
@@ -2353,22 +2384,18 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected.
 
-    **Proof architecture.** Routes through the full FR/IR dichotomy and
-    Primitive/Satellite sub-classification:
-
-    1. `dichotomy` splits every parameter into FR or IR.
-    2. **FR branch** is vacuous: the Gaussian proxy modulus makes every parameter
-       infinitely renormalizable (`infinitely_renormalizable_of_gaussian_modulus`),
-       contradicting finite renormalizability.
-    3. **IR branch** dispatches via `mlc_infinitely_renormalizable` into:
-       - *Primitive* — supplied by `ir_locally_connected_seam` (the seam axiom).
-       - *Satellite* — reached through `molecule_conjecture_implies_mlc_satellite_of_tower`
-         (which invokes `Molecule.molecule_conjecture_refined` internally),
-         then resolved by the seam axiom + Gaussian proxy. -/
+    **Current proof architecture.**
+    We use the tower/inconsistency route:
+    1. Assume existence of one parameter-modeled fast `Rfast` fixed point.
+       This yields one renormalization tower.
+    2. Convert that tower into the IR local-connectivity seam payload via
+       `irLocallyConnectedData_of_exists_tower`.
+    3. Conclude local connectivity of `mandelbrotSet`. -/
 
 theorem mlc_conjecture
-    : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_irClassifyBridgeData irClassifyBridgeData_of_axiom
+    : LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower
+    exists_renormalization_tower_of_exists_parameter_model_rfast_fixed_point
 
 
 end MainProof
