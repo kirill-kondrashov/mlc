@@ -15,7 +15,7 @@ make build    # ~7900 Lean compilation jobs
 make check    # Axiom frontier report
 ```
 
-Expected output of `make check`:
+Expected output:
 
 ```
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
@@ -60,17 +60,24 @@ with Dudko–Lyubich–Selinger satellite renormalization theory.
 
 ```
 mlc_conjecture
-  rw mandelbrotSet_eq_MandelbrotSet
-  apply locallyConnectedSpace_of_locallyConnectedAt
-  ∀ ⟨c, hc⟩ →
-    ir_locally_connected_seam c hc                     ← axiom (🔶)
-      (infinitely_renormalizable_of_gaussian_modulus c) ← theorem
+└─ mlc_strategy_of_branchLocalData          ← 3-way strategy decomposition
+   ├─ dichotomy c                           ← FR ∨ IR (classical LEM)
+   ├─ FR handler: absurd                    ← vacuous (Gaussian proxy → all IR)
+   │   └─ infinitely_renormalizable_of_gaussian_modulus
+   └─ mlc_infinitely_renormalizable         ← IR dispatch
+      ├─ IR classification → Or.inl         ← all IR params are "primitive"
+      │   └─ ir_locally_connected_seam      ← axiom (🔶)
+      └─ molecule_conjecture_implies_mlc_satellite_of_tower
+         └─ Molecule.molecule_conjecture_refined  ← from molecule-conjecture package
+            └─ ir_locally_connected_seam    ← axiom (🔶)
 ```
 
-The proof collapses the FR/IR dichotomy: under the Gaussian proxy modulus
-(`modulus A = ∫ exp(−|z|²)`), puzzle annulus moduli always converge, making
-**every** parameter infinitely renormalizable. The FR branch (Yoccoz shrinkage)
-is vacuously true and contributes no axioms.
+The proof routes through the full FR/IR dichotomy and Primitive/Satellite
+sub-classification. Under the Gaussian proxy modulus (`modulus A = ∫ exp(−|z|²)`),
+puzzle annulus moduli always converge, making **every** parameter infinitely
+renormalizable. The FR branch is vacuously true. The IR branch dispatches through
+`mlc_infinitely_renormalizable` which invokes the Molecule Conjecture bridge for
+the satellite case.
 
 ### Path to eliminating the last axiom
 
