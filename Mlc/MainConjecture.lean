@@ -1656,6 +1656,18 @@ theorem mlc_conjecture_of_motionHyp_classify_bridge_data_packaged
     h_motion
     (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge)
 
+/-- Packaged-IR wrapper for finite-branch + IR classify/bridge assembly. -/
+theorem mlc_conjecture_of_finite_irClassifyBridgeData
+    (h_fin_lc :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_finiteClassificationBridgeData
+    h_fin_lc
+    h_ir.classify
+    h_ir.bridge
+
 /-- Direct seam theorem with explicit FR connectedness + minimal IR seam
     payloads. -/
 theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
