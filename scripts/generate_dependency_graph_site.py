@@ -1474,6 +1474,8 @@ def graph_page_html_v2(title: str) -> str:
         <option value="layered">Layered DAG</option>
         <option value="radial">Radial Rings</option>
         <option value="kind">Kind Lanes</option>
+        <option value="columns">Depth Columns</option>
+        <option value="spiral">Spiral</option>
       </select>
     </label>
     <button id="fitBtn" type="button">Fit Camera</button>
@@ -1510,6 +1512,9 @@ def graph_page_js() -> str:
   const LAYERED_SUBROW_GAP_Y = 58;
   const KIND_LANE_GAP_X = 118;
   const KIND_LEVEL_GAP_Y = 116;
+  const COLUMNS_GAP_X = 138;
+  const COLUMNS_MAX_ROWS = 12;
+  const COLUMNS_SUBCOL_GAP_X = 34;
 
   const KIND_COLOR = {
     theorem: 0xffb703,
@@ -1562,7 +1567,7 @@ def graph_page_js() -> str:
   }
 
   function normalize2DView(view) {
-    if (view === "radial" || view === "layered" || view === "kind") return view;
+    if (view === "radial" || view === "layered" || view === "kind" || view === "columns" || view === "spiral") return view;
     return "layered";
   }
 
@@ -1704,7 +1709,9 @@ def graph_page_js() -> str:
     }
     const ctx2d = canvas2d.getContext("2d");
     function createWebGLContext(c) {
-      const names = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"];
+      // Prefer WebGL1 first for maximum compatibility (matches 0.3 behavior),
+      // then try WebGL2 and vendor aliases.
+      const names = ["webgl", "experimental-webgl", "moz-webgl", "webkit-3d", "webgl2"];
       const attrs = [
         { antialias: true, alpha: false },
         { antialias: false, alpha: false },
@@ -1950,7 +1957,7 @@ def graph_page_js() -> str:
       panning: false,
       lastX: 0,
       lastY: 0,
-      view: normalize2DView("layered")
+      view: normalize2DView("columns")
     };
     try {
       layout2d.view = normalize2DView(localStorage.getItem(VIEW2D_KEY) || layout2d.view);
@@ -2131,11 +2138,110 @@ def graph_page_js() -> str:
       return layout;
     }
 
+    function build2DLayoutColumns() {
+      const byDepth = new Map();
+      const incoming = new Map();
+      for (let i = 0; i < nodes.length; i += 1) {
+        const d = Number(nodes[i].depth || 0);
+        if (!byDepth.has(d)) byDepth.set(d, []);
+        byDepth.get(d).push(i);
+      }
+      for (const e of edgeData) {
+        if (!incoming.has(e.targetIndex)) incoming.set(e.targetIndex, []);
+        incoming.get(e.targetIndex).push(e.sourceIndex);
+      }
+      const depthKeys = Array.from(byDepth.keys()).sort((a, b) => a - b);
+      const maxD = depthKeys.length ? depthKeys[depthKeys.length - 1] : 0;
+      const rowGapY = 42;
+      const layout = new Array(nodes.length);
+      const yPos = new Map();
+      for (const depth of depthKeys) {
+        const ids = (byDepth.get(depth) || []).slice();
+        if (depth === 0) {
+          ids.sort((a, b) => {
+            if (nodeData[a].id === rootId) return -1;
+            if (nodeData[b].id === rootId) return 1;
+            return String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+              String(nodeData[b].fq_name || nodeData[b].id)
+            );
+          });
+        } else {
+          ids.sort((a, b) => {
+            const pa = incoming.get(a) || [];
+            const pb = incoming.get(b) || [];
+            const ya = pa.length
+              ? pa.reduce((acc, p) => acc + (yPos.get(p) ?? 0), 0) / pa.length
+              : Number.POSITIVE_INFINITY;
+            const yb = pb.length
+              ? pb.reduce((acc, p) => acc + (yPos.get(p) ?? 0), 0) / pb.length
+              : Number.POSITIVE_INFINITY;
+            if (ya !== yb) return ya - yb;
+            return String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+              String(nodeData[b].fq_name || nodeData[b].id)
+            );
+          });
+        }
+        const xBase = (depth - maxD * 0.5) * COLUMNS_GAP_X;
+        const subCols = Math.max(1, Math.ceil(ids.length / COLUMNS_MAX_ROWS));
+        for (let sc = 0; sc < subCols; sc += 1) {
+          const start = sc * COLUMNS_MAX_ROWS;
+          const end = Math.min(ids.length, start + COLUMNS_MAX_ROWS);
+          const cnt = Math.max(0, end - start);
+          const span = (cnt - 1) * rowGapY;
+          const x = xBase + (sc - (subCols - 1) * 0.5) * COLUMNS_SUBCOL_GAP_X;
+          for (let j = 0; j < cnt; j += 1) {
+            const idx = ids[start + j];
+            const isRoot = nodeData[idx].id === rootId;
+            const y = isRoot ? 0 : j * rowGapY - span * 0.5;
+            layout[idx] = { x: isRoot ? 0 : x, y, r: isRoot ? 11 : 7 };
+            yPos.set(idx, y);
+          }
+        }
+      }
+      return layout;
+    }
+
+    function build2DLayoutSpiral() {
+      const byDepth = new Map();
+      for (let i = 0; i < nodes.length; i += 1) {
+        const d = Number(nodes[i].depth || 0);
+        if (!byDepth.has(d)) byDepth.set(d, []);
+        byDepth.get(d).push(i);
+      }
+      const depthKeys = Array.from(byDepth.keys()).sort((a, b) => a - b);
+      const layout = new Array(nodes.length);
+      for (const depth of depthKeys) {
+        const ids = (byDepth.get(depth) || []).slice();
+        ids.sort((a, b) =>
+          String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+            String(nodeData[b].fq_name || nodeData[b].id)
+          )
+        );
+        for (let j = 0; j < ids.length; j += 1) {
+          const idx = ids[j];
+          const isRoot = nodeData[idx].id === rootId;
+          if (isRoot) {
+            layout[idx] = { x: 0, y: 0, r: 11 };
+            continue;
+          }
+          const baseR = 48 + depth * 62;
+          const localR = baseR + j * 8;
+          const angle = depth * 1.12 + j * 0.52;
+          layout[idx] = { x: Math.cos(angle) * localR, y: Math.sin(angle) * localR, r: 7 };
+        }
+      }
+      return layout;
+    }
+
     function build2DLayout() {
       if (layout2d.view === "radial") {
         layout2d.nodes = build2DLayoutRadial();
       } else if (layout2d.view === "kind") {
         layout2d.nodes = build2DLayoutKindLanes();
+      } else if (layout2d.view === "columns") {
+        layout2d.nodes = build2DLayoutColumns();
+      } else if (layout2d.view === "spiral") {
+        layout2d.nodes = build2DLayoutSpiral();
       } else {
         layout2d.nodes = build2DLayoutLayered();
       }
@@ -2235,6 +2341,19 @@ def graph_page_js() -> str:
             ctx2d.font = `${Math.max(11 / Math.max(0.35, layout2d.scale), 8)}px "IBM Plex Sans", "Segoe UI", sans-serif`;
             ctx2d.fillText(`depth ${d}`, left + 8, d * LAYERED_LEVEL_GAP_Y - 6 / Math.max(0.35, layout2d.scale));
           }
+        }
+      } else if (layout2d.view === "columns") {
+        for (let d = 0; d <= maxDepth; d += 1) {
+          const x = (d - maxDepth * 0.5) * COLUMNS_GAP_X;
+          ctx2d.strokeStyle = rgb01ToCss([0.73, 0.82, 0.96], 0.18);
+          ctx2d.lineWidth = Math.max(0.8 / Math.max(0.35, layout2d.scale), 1.0 / Math.max(0.35, layout2d.scale));
+          ctx2d.beginPath();
+          ctx2d.moveTo(x, -640);
+          ctx2d.lineTo(x, 640);
+          ctx2d.stroke();
+          ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], 0.72);
+          ctx2d.font = `${Math.max(11 / Math.max(0.35, layout2d.scale), 8)}px "IBM Plex Sans", "Segoe UI", sans-serif`;
+          ctx2d.fillText(`depth ${d}`, x + 5, -620);
         }
       } else if (layout2d.view === "kind") {
         const laneCount = KIND_LANE_ORDER.length + 1;
