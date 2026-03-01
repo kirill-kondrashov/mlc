@@ -1428,6 +1428,23 @@ theorem mlc_conjecture_of_paraPuzzleConnectedData
       (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn) c hc h_fin
   · exact ir_locally_connected_seam c hc h_inf
 
+/-- Constructive-route assembly from FR connected-data + IR classify/bridge
+    payloads. This bypasses the `ir_locally_connected_seam` axiom once those
+    IR payloads are available constructively. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_classify_bridge_data
+    (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn)
+    h_classify_ir
+    h_bridge
+
 /-- FR branch provider from connected-data payload. -/
 lemma finite_lc_provider_of_paraPuzzleConnectedData
     (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData) :
@@ -1445,6 +1462,22 @@ theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData
   mlc_conjecture_of_paraPuzzleConnectedData
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
 
+/-- Constructive-route assembly from the stronger subset-data FR payload plus
+    explicit IR classify/bridge payloads. -/
+theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_classify_bridge_data
+    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+    h_classify_ir
+    h_bridge
+
 /-- Transport-data route to the direct seam theorem.
     This is axiom-free once `ParaPuzzleInterMandelbrotTransportData` is provided
     constructively. -/
@@ -1454,6 +1487,22 @@ theorem mlc_conjecture_of_paraPuzzleTransportData
   mlc_conjecture_of_paraPuzzleConnectedData
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
 
+/-- Constructive-route assembly from transport-data FR payload plus explicit
+    IR classify/bridge payloads. -/
+theorem mlc_conjecture_of_paraPuzzleTransportData_classify_bridge_data
+    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
+    h_classify_ir
+    h_bridge
+
 /-- Existential-transport-data route to the direct seam theorem.
     This is axiom-free once `ParaPuzzleInterMandelbrotTransportExistsData` is
     provided constructively. -/
@@ -1462,6 +1511,22 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData
     LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_paraPuzzleConnectedData
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
+
+/-- Constructive-route assembly from existential transport-data FR payload plus
+    explicit IR classify/bridge payloads. -/
+theorem mlc_conjecture_of_paraPuzzleTransportExistsData_classify_bridge_data
+    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
+    h_classify_ir
+    h_bridge
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/

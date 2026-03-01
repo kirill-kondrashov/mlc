@@ -91,8 +91,8 @@ structure DirectMLCData : Prop where
 theorem mlc_conjecture_of_directMLCData
     (h : DirectMLCData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_motionHyp_classify_bridge_data
-    (puzzleBoundaryMotionHyp_of_connected h.puzzle_connected)
+  exact mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
+    h.puzzle_connected
     h.ir_classification
     h.satellite_bridge
 
