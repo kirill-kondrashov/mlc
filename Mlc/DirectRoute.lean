@@ -217,6 +217,65 @@ theorem mlc_conjecture_of_directMLCData
   exact mlc_conjecture_of_directMotionIRPackagedData
     (directMotionIRPackagedData_of_directMLCData h)
 
+/-! ### Non-motion bridge wrappers
+
+These wrappers expose the IR/tower bridge routes from `MainConjecture` through
+the direct-route API surface.
+-/
+
+/-- Direct-route wrapper: one renormalization tower implies MLC. -/
+theorem mlc_conjecture_of_directTower {c₀ : ℂ}
+    (T : RenormalizationTower (parameterToBMol c₀)) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_tower T
+
+/-- Direct-route wrapper: existence of one renormalization tower implies MLC. -/
+theorem mlc_conjecture_of_directExistsTower
+    (h_exists : ∃ c₀ : ℂ, Nonempty (RenormalizationTower (parameterToBMol c₀))) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower h_exists
+
+/-- Direct-route wrapper: existence of a satellite renormalization tower
+    implies MLC. -/
+theorem mlc_conjecture_of_directExistsSatelliteTower
+    (h_exists : ∃ c : ℂ, SatelliteRenormalizableTower c) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_satellite_tower h_exists
+
+/-- Direct-route wrapper: explicit IR classification with the strong molecule
+    bridge target implies MLC. -/
+theorem mlc_conjecture_of_directClassifyMoleculeBridgeTargetData
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_classify_moleculeBridgeTarget_data h_classify_ir h_target
+
+/-- Direct-route wrapper: explicit IR classification with the uniform conformal
+    molecule bridge target implies MLC. -/
+theorem mlc_conjecture_of_directClassifyMoleculeUniformBridgeTargetData
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_classify_moleculeUniformBridgeTarget_data h_classify_ir h_uniform
+
+/-- Direct-route wrapper: global IR→tower bridge data with the strong molecule
+    bridge target implies MLC. -/
+theorem mlc_conjecture_of_directInfinitelyRenormalizableHasTowerDataMoleculeBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_infinitelyRenormalizableHasTowerData_moleculeBridgeTarget
+    h_tower_data h_target
+
+/-- Direct-route wrapper: global IR→tower bridge data with the uniform
+    conformal molecule bridge target implies MLC. -/
+theorem mlc_conjecture_of_directInfinitelyRenormalizableHasTowerDataMoleculeUniformBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_infinitelyRenormalizableHasTowerData_moleculeUniformBridgeTarget
+    h_tower_data h_uniform
+
 end
 
 end MLC

@@ -1491,6 +1491,53 @@ def irClassifyBridgeData_of_classify_bridge_data
   classify := h_classify_ir
   bridge := h_bridge
 
+/-- Build IR classification data from global IR→tower bridge data. -/
+lemma irClassificationData_of_infinitelyRenormalizableHasTowerData
+    (h_tower_data : InfinitelyRenormalizableHasTowerData) :
+    IRClassificationData := by
+  intro c _hc h_ir
+  exact classify_infinitely_renormalizable h_tower_data c h_ir
+
+/-- Build packaged IR classify/bridge data from IR classification plus the
+    strong molecule bridge target. -/
+def irClassifyBridgeData_of_classify_moleculeBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_bridge_data
+    h_classify_ir
+    (MoleculeBridgeTarget.bridge_of_moleculeBridgeTarget h_target)
+
+/-- Build packaged IR classify/bridge data from IR classification plus the
+    uniform conformal molecule bridge target. -/
+def irClassifyBridgeData_of_classify_moleculeUniformBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_moleculeBridgeTarget_data
+    h_classify_ir
+    (MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget h_uniform)
+
+/-- Build packaged IR classify/bridge data from global IR→tower bridge data and
+    the strong molecule bridge target. -/
+def irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_moleculeBridgeTarget_data
+    (irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data)
+    h_target
+
+/-- Build packaged IR classify/bridge data from global IR→tower bridge data and
+    the uniform conformal molecule bridge target. -/
+def irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeUniformBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_moleculeUniformBridgeTarget_data
+    (irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data)
+    h_uniform
+
 /-- Build minimal IR seam payload from packaged classify/bridge IR data. -/
 lemma irLocallyConnectedData_of_irClassifyBridgeData
     (h_ir : IRClassifyBridgeData) :
@@ -1504,12 +1551,51 @@ lemma irLocallyConnectedData_of_axiom : IRLocallyConnectedData := by
   intro c hc h_inf
   exact ir_locally_connected_seam c hc h_inf
 
+/-- Under the Gaussian proxy model, IR local-connectivity data forces
+    primitive classification at every IR parameter. -/
+lemma irClassificationData_of_irLocallyConnectedData
+    (h_ir_lc : IRLocallyConnectedData) :
+    IRClassificationData := by
+  intro c hc h_ir
+  exact Or.inl (fun _ => h_ir_lc c hc h_ir)
+
+/-- Under the Gaussian proxy model, IR local-connectivity data yields a
+    `mlc_strategy`-compatible satellite bridge. -/
+lemma bridgeData_of_irLocallyConnectedData
+    (h_ir_lc : IRLocallyConnectedData) :
+    MoleculeConjectureRefined →
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : SatelliteRenormalizableTower c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  intro _h_mol c hc _h_sat
+  exact h_ir_lc c hc (infinitely_renormalizable_of_gaussian_modulus c)
+
+/-- Build packaged IR classify/bridge data from IR local-connectivity data. -/
+def irClassifyBridgeData_of_irLocallyConnectedData
+    (h_ir_lc : IRLocallyConnectedData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_bridge_data
+    (irClassificationData_of_irLocallyConnectedData h_ir_lc)
+    (bridgeData_of_irLocallyConnectedData h_ir_lc)
+
+/-- Current axiom-backed provider for packaged IR classify/bridge data. -/
+def irClassifyBridgeData_of_axiom : IRClassifyBridgeData :=
+  irClassifyBridgeData_of_irLocallyConnectedData irLocallyConnectedData_of_axiom
+
 /-- Bridge payload: any renormalization tower supplies IR local-connectivity
     data via the inconsistency route. -/
 lemma irLocallyConnectedData_of_tower {c₀ : ℂ}
     (T : RenormalizationTower (parameterToBMol c₀)) :
     IRLocallyConnectedData :=
   ir_locally_connected_seam_of_tower T
+
+/-- Existential-tower bridge: one renormalization tower already yields the
+    full IR seam payload (via the inconsistency route). -/
+lemma irLocallyConnectedData_of_exists_tower
+    (h_exists : ∃ c₀ : ℂ, Nonempty (RenormalizationTower (parameterToBMol c₀))) :
+    IRLocallyConnectedData := by
+  rcases h_exists with ⟨c₀, ⟨T⟩⟩
+  exact irLocallyConnectedData_of_tower (c₀ := c₀) T
 
 /-- In the current Gaussian-modulus model, IR local-connectivity data alone
     yields global MLC. -/
@@ -1528,6 +1614,44 @@ theorem mlc_conjecture_of_irClassifyBridgeData
   mlc_conjecture_of_irLocallyConnectedData
     (irLocallyConnectedData_of_irClassifyBridgeData h_ir)
 
+/-- Direct IR-packaged assembly from explicit IR classification and the strong
+    molecule bridge target. -/
+theorem mlc_conjecture_of_classify_moleculeBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_classify_moleculeBridgeTarget_data h_classify_ir h_target)
+
+/-- Direct IR-packaged assembly from explicit IR classification and the
+    uniform conformal molecule bridge target. -/
+theorem mlc_conjecture_of_classify_moleculeUniformBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_classify_moleculeUniformBridgeTarget_data h_classify_ir h_uniform)
+
+/-- Direct IR-packaged assembly from global IR→tower bridge data and the strong
+    molecule bridge target. -/
+theorem mlc_conjecture_of_infinitelyRenormalizableHasTowerData_moleculeBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeBridgeTarget
+      h_tower_data h_target)
+
+/-- Direct IR-packaged assembly from global IR→tower bridge data and the
+    uniform conformal molecule bridge target. -/
+theorem mlc_conjecture_of_infinitelyRenormalizableHasTowerData_moleculeUniformBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeUniformBridgeTarget
+      h_tower_data h_uniform)
+
 /-- Bridge theorem: any renormalization tower yields `mlc_conjecture` via the
     IR seam payload produced by the inconsistency route. -/
 theorem mlc_conjecture_of_tower {c₀ : ℂ}
@@ -1535,12 +1659,44 @@ theorem mlc_conjecture_of_tower {c₀ : ℂ}
     LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_irLocallyConnectedData (irLocallyConnectedData_of_tower T)
 
+/-- Existential-tower bridge theorem: one renormalization tower already
+    implies `mlc_conjecture`. -/
+theorem mlc_conjecture_of_exists_tower
+    (h_exists : ∃ c₀ : ℂ, Nonempty (RenormalizationTower (parameterToBMol c₀))) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irLocallyConnectedData
+    (irLocallyConnectedData_of_exists_tower h_exists)
+
 /-- Satellite specialization: a satellite renormalization tower hypothesis
     gives `mlc_conjecture` through the tower bridge. -/
 theorem mlc_conjecture_of_satellite_tower (c : ℂ)
     (h : SatelliteRenormalizableTower c) :
     LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_tower (satelliteTower c h)
+
+/-- Existential satellite-tower specialization. -/
+theorem mlc_conjecture_of_exists_satellite_tower
+    (h_exists : ∃ c : ℂ, SatelliteRenormalizableTower c) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_exists with ⟨c, h_sat⟩
+  exact mlc_conjecture_of_satellite_tower c h_sat
+
+/-- Any explicit IR witness together with global IR→tower bridge data implies
+    `mlc_conjecture`. -/
+theorem mlc_conjecture_of_irWitness_of_infinitelyRenormalizableHasTowerData
+    (h_data : InfinitelyRenormalizableHasTowerData)
+    (c : ℂ) (h_ir : InfinitelyRenormalizable c) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases infinitely_renormalizable_has_tower h_data c h_ir with ⟨T, _⟩
+  exact mlc_conjecture_of_tower T
+
+/-- Globalized fast-tower bridge into `mlc_conjecture` using the Gaussian
+    proxy IR witness at `c = 0`. -/
+theorem mlc_conjecture_of_infinitelyRenormalizableHasTowerData
+    (h_data : InfinitelyRenormalizableHasTowerData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irWitness_of_infinitelyRenormalizableHasTowerData
+    h_data 0 (infinitely_renormalizable_of_gaussian_modulus 0)
 
 /-- Minimal seam payload for the direct MLC route:
     FR connectedness data plus IR local-connectivity data. -/
@@ -2012,17 +2168,7 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  rw [mandelbrotSet_eq_MandelbrotSet]
-  exact mlc_strategy_of_branchLocalData
-    -- FR handler: vacuous under Gaussian proxy (every parameter is IR)
-    (fun c _hc h_fr =>
-      absurd (infinitely_renormalizable_of_gaussian_modulus c) h_fr)
-    -- IR classification: all IR params are primitive via the seam axiom
-    (fun c _hc h_ir =>
-      Or.inl (fun hc => ir_locally_connected_seam c hc h_ir))
-    -- Molecule bridge: satellite params are LC via the seam axiom
-    (fun _h_mol c hc _h_sat =>
-      ir_locally_connected_seam c hc (infinitely_renormalizable_of_gaussian_modulus c))
+  exact mlc_conjecture_of_irClassifyBridgeData irClassifyBridgeData_of_axiom
 
 end MainProof
 
