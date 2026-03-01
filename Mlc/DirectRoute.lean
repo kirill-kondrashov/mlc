@@ -91,6 +91,12 @@ structure DirectMLCData : Prop where
     classify/bridge data. -/
 abbrev DirectMLCPackagedData : Prop := MLCClassifyBridgeSeamData
 
+/-- Packaged direct-route payload using boundary-motion finite-branch data
+    and packaged IR classify/bridge data. -/
+structure DirectMotionIRPackagedData : Prop where
+  motion : PuzzleBoundaryMotionHyp
+  ir : IRClassifyBridgeData
+
 /-- Extract packaged IR classify/bridge payload from `DirectMLCData`. -/
 def irClassifyBridgeData_of_directMLCData
     (h : DirectMLCData) :
@@ -106,6 +112,22 @@ def directMLCPackagedData_of_directMLCData
   mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
     h.puzzle_connected
     (irClassifyBridgeData_of_directMLCData h)
+
+/-- Convert motion-based packaged direct-route data to the canonical packaged
+    seam payload. -/
+def directMLCPackagedData_of_directMotionIRPackagedData
+    (h : DirectMotionIRPackagedData) :
+    DirectMLCPackagedData :=
+  mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData
+    h.motion
+    h.ir
+
+/-- Convert fine-grained direct-route data to motion-based packaged payload. -/
+def directMotionIRPackagedData_of_directMLCData
+    (h : DirectMLCData) :
+    DirectMotionIRPackagedData where
+  motion := puzzleBoundaryMotionHyp_of_connected h.puzzle_connected
+  ir := irClassifyBridgeData_of_directMLCData h
 
 /-- Convert packaged direct-route data back to fine-grained data. -/
 def directMLCData_of_directMLCPackagedData
@@ -130,12 +152,19 @@ theorem mlc_conjecture_of_directMLCPackagedData
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_MLCClassifyBridgeSeamData h
 
+/-- MLC follows from motion-based packaged direct-route data. -/
+theorem mlc_conjecture_of_directMotionIRPackagedData
+    (h : DirectMotionIRPackagedData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_directMLCPackagedData
+    (directMLCPackagedData_of_directMotionIRPackagedData h)
+
 /-- MLC follows from `DirectMLCData` — no axioms beyond core needed. -/
 theorem mlc_conjecture_of_directMLCData
     (h : DirectMLCData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_directMLCPackagedData
-    (directMLCPackagedData_of_directMLCData h)
+  exact mlc_conjecture_of_directMotionIRPackagedData
+    (directMotionIRPackagedData_of_directMLCData h)
 
 end
 
