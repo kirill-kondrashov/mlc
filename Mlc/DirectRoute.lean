@@ -91,20 +91,6 @@ structure DirectMLCData : Prop where
     classify/bridge data. -/
 abbrev DirectMLCPackagedData : Prop := MLCClassifyBridgeSeamData
 
-/-- Minimal direct-route payload alias: FR connectedness + IR local-connectivity
-    seam. -/
-abbrev DirectMLCMinimalData : Prop := MLCSeamData
-
-/-- Convert fine-grained direct-route data to the minimal seam payload. -/
-def directMLCMinimalData_of_directMLCData
-    (h : DirectMLCData) :
-    DirectMLCMinimalData :=
-  mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
-    h.puzzle_connected
-    (irClassifyBridgeData_of_classify_bridge_data
-      h.ir_classification
-      h.satellite_bridge)
-
 /-- Extract packaged IR classify/bridge payload from `DirectMLCData`. -/
 def irClassifyBridgeData_of_directMLCData
     (h : DirectMLCData) :
@@ -121,11 +107,22 @@ def directMLCPackagedData_of_directMLCData
     h.puzzle_connected
     (irClassifyBridgeData_of_directMLCData h)
 
-/-- MLC follows from `DirectMLCMinimalData`. -/
-theorem mlc_conjecture_of_directMLCMinimalData
-    (h : DirectMLCMinimalData) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_MLCSeamData h
+/-- Convert packaged direct-route data back to fine-grained data. -/
+def directMLCData_of_directMLCPackagedData
+    (h : DirectMLCPackagedData) :
+    DirectMLCData where
+  puzzle_connected := h.puzzle_connected
+  ir_classification := h.ir.classify
+  satellite_bridge := h.ir.bridge
+
+/-- Fine-grained and packaged direct-route payloads are equivalent. -/
+theorem directMLCPackagedData_iff_directMLCData :
+    DirectMLCPackagedData ↔ DirectMLCData := by
+  constructor
+  · intro h
+    exact directMLCData_of_directMLCPackagedData h
+  · intro h
+    exact directMLCPackagedData_of_directMLCData h
 
 /-- MLC follows from `DirectMLCPackagedData`. -/
 theorem mlc_conjecture_of_directMLCPackagedData
