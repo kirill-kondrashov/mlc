@@ -100,6 +100,13 @@ def directMLCMinimalData_of_directMLCData
     h.ir_classification
     h.satellite_bridge
 
+/-- Extract packaged IR classify/bridge payload from `DirectMLCData`. -/
+def irClassifyBridgeData_of_directMLCData
+    (h : DirectMLCData) :
+    IRClassifyBridgeData where
+  classify := h.ir_classification
+  bridge := h.satellite_bridge
+
 /-- MLC follows from `DirectMLCMinimalData`. -/
 theorem mlc_conjecture_of_directMLCMinimalData
     (h : DirectMLCMinimalData) :
@@ -110,8 +117,9 @@ theorem mlc_conjecture_of_directMLCMinimalData
 theorem mlc_conjecture_of_directMLCData
     (h : DirectMLCData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_directMLCMinimalData
-    (directMLCMinimalData_of_directMLCData h)
+  exact mlc_conjecture_of_paraPuzzleConnectedData_irClassifyBridgeData
+    h.puzzle_connected
+    (irClassifyBridgeData_of_directMLCData h)
 
 end
 
