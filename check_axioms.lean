@@ -16,8 +16,7 @@ def main : IO UInt32 := do
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice,
      ``MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-     ``MLC.ir_classification_seam,
-     ``MLC.satellite_bridge_seam]
+     ``MLC.ir_locally_connected_seam]
   
   try
     let ((axioms, _), _) ← (metaM.run).run coreContext coreState |>.toIO (fun _ => IO.userError "Axiom check failed")

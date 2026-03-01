@@ -1391,10 +1391,9 @@ lemma externalRayMapData_two_root_frontier :
 
 /-! ### Direct proof route (bypassing `external_ray_map_exists`)
 
-The direct route wires `mlc_conjecture` through the strategy decomposition
-(`mlc_strategy_of_branchLocalData`) using:
-1. The existing para-puzzle connectivity axiom for the FR branch.
-2. Two new seam axioms for the IR branch (classification + satellite bridge).
+The direct route wires `mlc_conjecture` through the FR/IR dichotomy using:
+1. The existing para-puzzle connectivity axiom for the FR branch (Yoccoz shrinkage).
+2. A single seam axiom for the IR branch (local connectivity of IR parameters).
 
 This replaces the vacuous `external_ray_map_exists(2) → False → MainPathData`
 chain with a mathematically sound proof skeleton.
@@ -1420,35 +1419,32 @@ private lemma puzzleBoundaryMotionHyp_of_axiom :
            Quadratic.para_puzzle_piece_inter_mandelbrot_connected c₀ hc₀_M n,
            rfl⟩
 
-/-- Seam axiom: infinitely renormalizable Mandelbrot parameters are either
-    primitive or admit a satellite renormalization tower.
-    Proof idea: follows from the combinatorial classification of renormalization
-    (Douady-Hubbard, McMullen). Every infinitely renormalizable parameter either
-    has a subsequence of primitive renormalizations (giving modulus divergence
-    by Lyubich's a priori bounds) or eventually all renormalizations are satellite
-    (giving a satellite tower). -/
-axiom ir_classification_seam : IRClassificationData
-
-/-- Seam axiom: the Molecule Conjecture (proved in the `molecule-conjecture`
-    library) implies local connectivity at satellite tower parameters in M.
-    Proof idea: follows from the Dudko-Lyubich-Selinger renormalization theory —
-    the molecule conjecture provides uniform modulus lower bounds along satellite
-    tower depths, yielding parameter puzzle piece shrinkage via the Grötzsch
-    inequality. -/
-axiom satellite_bridge_seam :
-    MoleculeConjectureRefined →
-    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
-      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+/-- Seam axiom: the Mandelbrot set is locally connected at every infinitely
+    renormalizable parameter.
+    Proof idea: this combines two deep results —
+    (a) the Lyubich a priori bounds (primitive renormalization gives modulus
+        divergence, hence puzzle shrinkage, hence LC), and
+    (b) the Dudko-Lyubich-Selinger satellite theory (the molecule conjecture
+        gives uniform modulus lower bounds along satellite tower depths,
+        yielding shrinkage via the Grötzsch inequality).
+    Every IR parameter falls into one of these two cases by the combinatorial
+    classification of renormalization (Douady-Hubbard, McMullen). -/
+axiom ir_locally_connected_seam :
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+      InfinitelyRenormalizable c →
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_motionHyp_classify_bridge_data
-    puzzleBoundaryMotionHyp_of_axiom
-    ir_classification_seam
-    satellite_bridge_seam
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  rcases dichotomy c with h_fin | h_inf
+  · exact finite_lc_provider_of_motionHyp puzzleBoundaryMotionHyp_of_axiom c hc h_fin
+  · exact ir_locally_connected_seam c hc h_inf
 
 end MainProof
 

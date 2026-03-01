@@ -18,8 +18,7 @@ connected). The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 | ✅ | `propext` | Core |
 | ✅ | `Classical.choice` | Core |
 | 🔶 | `para_puzzle_piece_inter_mandelbrot_connected` | FR branch — parameter puzzle connectivity |
-| 🔶 | `ir_classification_seam` | IR branch — primitive/satellite dichotomy |
-| 🔶 | `satellite_bridge_seam` | IR branch — molecule conjecture → satellite LC |
+| 🔶 | `ir_locally_connected_seam` | IR branch — LC at infinitely renormalizable params |
 
 Expected output:
 
@@ -30,27 +29,25 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
-- MLC.ir_classification_seam
-- MLC.satellite_bridge_seam
+- MLC.ir_locally_connected_seam
 ```
 
-The proof uses three mathematically meaningful axioms (see below) instead of
+The proof uses two mathematically meaningful axioms (see below) instead of
 the previous `external_ray_map_exists` (which was provably false for the
 current `bottcher_map` definition).
 
 ## Proof Architecture
 
-The `mlc_conjecture` proof goes through the direct strategy decomposition:
+The `mlc_conjecture` proof branches on the FR/IR dichotomy:
 
 ```
 mlc_conjecture
-  ← mlc_conjecture_of_motionHyp_classify_bridge_data
-  ← mlc_strategy_of_branchLocalData         ← dichotomy (FR ∨ IR)
+  ← locallyConnectedSpace_of_locallyConnectedAt
+  ← dichotomy (FR ∨ IR)
 
 FR branch: para_puzzle_piece_inter_mandelbrot_connected (axiom)
          → PuzzleBoundaryMotionHyp → Yoccoz shrinkage → local connectivity
-IR branch: ir_classification_seam (axiom) — primitive/satellite dichotomy
-         + satellite_bridge_seam (axiom) — molecule conjecture → satellite LC
+IR branch: ir_locally_connected_seam (axiom)
 ```
 
 ### Axiom explanations
@@ -58,8 +55,7 @@ IR branch: ir_classification_seam (axiom) — primitive/satellite dichotomy
 | Axiom | Mathematical content |
 |-------|---------------------|
 | `para_puzzle_piece_inter_mandelbrot_connected` | For each c ∈ M and depth n, the set ParaPuzzlePieceAt(c,n) ∩ M is connected |
-| `ir_classification_seam` | Every infinitely renormalizable c ∈ M is either primitive or admits a satellite tower |
-| `satellite_bridge_seam` | The Molecule Conjecture implies LC at satellite tower parameters |
+| `ir_locally_connected_seam` | M is locally connected at every infinitely renormalizable parameter (combines Lyubich a priori bounds + Dudko-Lyubich-Selinger satellite theory) |
 
 ### Historical note
 

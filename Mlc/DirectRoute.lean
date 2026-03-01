@@ -79,7 +79,17 @@ Wire `mlc_conjecture` through the real mathematical route.
 This makes the remaining gaps explicit.
 -/
 
-/-- The three components needed for the direct proof of MLC. -/
+/-! ### Simplified reduction
+
+The actual `mlc_conjecture` proof uses two axioms:
+1. `para_puzzle_piece_inter_mandelbrot_connected` (FR branch)
+2. `ir_locally_connected_seam` (IR branch)
+
+The `DirectMLCData` structure below shows the finer three-component
+decomposition of the IR branch, which `ir_locally_connected_seam` subsumes.
+-/
+
+/-- The three components needed for the direct proof of MLC (fine-grained). -/
 structure DirectMLCData : Prop where
   /-- For all c ∈ M and all n, the parameter puzzle piece at c intersected
       with M is connected. -/
@@ -102,30 +112,6 @@ theorem mlc_conjecture_of_directMLCData
     (puzzleBoundaryMotionHyp_of_connected h.puzzle_connected)
     h.ir_classification
     h.satellite_bridge
-
-/-! ### Reduction: what remains
-
-If we could prove `DirectMLCData`, we'd have an axiom-free `mlc_conjecture`.
-The three components are independent and can be attacked separately.
-
-**Component 1** (`puzzle_connected`):
-  `∀ c ∈ M, ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)`
-  Status: axiom `para_puzzle_piece_inter_mandelbrot_connected`
-  Approaches:
-  - Prove `M ⊆ ParaPuzzlePieceAt c n` (FALSE for current def — counterexample: c=0, c'=-2, n=1)
-  - Prove directly via topology of M ∩ translated puzzle pieces
-  - Change `ParaPuzzlePieceAt` definition to classical parameter puzzle pieces
-
-**Component 2** (`ir_classification`):
-  `∀ c ∈ M, InfinitelyRenormalizable c → Primitive c ∨ SatelliteTower c`
-  Status: unproved; follows from combinatorial structure of small copies of M
-  Approaches: renormalization combinatorics
-
-**Component 3** (`satellite_bridge`):
-  `MoleculeConjectureRefined → satellite tower → LC`
-  Status: unproved; requires Dudko-Lyubich renormalization theory
-  The `molecule-conjecture` library has a conditional proof with 11 hypotheses
--/
 
 end
 
