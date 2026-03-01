@@ -21,6 +21,17 @@ connected). The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 
 `make check` currently **fails** because of the remaining non-core axiom.
 
+Expected output:
+
+```
+✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
+All axioms used:
+- Quot.sound
+- propext
+- Classical.choice
+- MLC.Quadratic.external_ray_map_exists
+```
+
 ## Root Cause: Why the Axiom Cannot Be Eliminated by Local Changes
 
 The current `bottcher_map` definition (BottcherAxioms.lean:17–19) is:
