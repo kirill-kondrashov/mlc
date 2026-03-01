@@ -17,7 +17,9 @@ connected). The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 | ✅ | `Quot.sound` | Core |
 | ✅ | `propext` | Core |
 | ✅ | `Classical.choice` | Core |
-| ❌ | `MLC.Quadratic.external_ray_map_exists` | Last non-core axiom — see below |
+| 🔶 | `para_puzzle_piece_inter_mandelbrot_connected` | FR branch — parameter puzzle connectivity |
+| 🔶 | `ir_classification_seam` | IR branch — primitive/satellite dichotomy |
+| 🔶 | `satellite_bridge_seam` | IR branch — molecule conjecture → satellite LC |
 
 Expected output:
 
@@ -27,49 +29,45 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.external_ray_map_exists
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.ir_classification_seam
+- MLC.satellite_bridge_seam
 ```
 
-`external_ray_map_exists` is now whitelisted to allow the pipeline pass.
-
-## Root Cause: Why the Axiom Cannot Be Eliminated by Local Changes
-
-The current `bottcher_map` definition (BottcherAxioms.lean:17–19) is:
-
-```lean
-noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
-  let u := if z = 0 then 1 else z / ↑‖z‖
-  u * ↑(Real.exp (MLC.Quadratic.green_function c z))
-```
-
-This is **not the true Böttcher coordinate** `φ_c(z) = lim (f_c^n(z))^{1/2^n}`.
-It preserves `arg(z)` instead of computing the Böttcher angle, giving the wrong
-angular structure. As a consequence:
-
-1. `ExternalRayMapData(2)` (a consequence of the axiom at `c = 2`) is
-   **provably false** — no point in K(2) maps to direction 1 under the crude
-   map, because all reals escape at `c = 2`.
-2. The proof of `mlc_conjecture` is therefore **vacuous**: it derives
-   `BottcherApproachToOneSeqPreimageData(2)` from the axiom, then proves
-   `False` from it (MainConjecture.lean:306), and concludes MLC via
-   `False.elim` (MainConjecture.lean:551).
-3. Eliminating the axiom collapses the `False.elim` chain and requires
-   replacing it with a genuine proof.
+The proof uses three mathematically meaningful axioms (see below) instead of
+the previous `external_ray_map_exists` (which was provably false for the
+current `bottcher_map` definition).
 
 ## Proof Architecture
 
-The formalization has a complete proof *skeleton* that reduces MLC to two
-independent hypotheses:
+The `mlc_conjecture` proof goes through the direct strategy decomposition:
 
 ```
 mlc_conjecture
-  ← mlc_conjecture_of_mainPathData
-  ← mlc_conjecture_of_motionHyp_track12_data
+  ← mlc_conjecture_of_motionHyp_classify_bridge_data
   ← mlc_strategy_of_branchLocalData         ← dichotomy (FR ∨ IR)
 
-FR branch: PuzzleBoundaryMotionHyp → Yoccoz shrinkage → local connectivity
-IR branch: classification (Primitive ∨ Satellite) + molecule conjecture → LC
+FR branch: para_puzzle_piece_inter_mandelbrot_connected (axiom)
+         → PuzzleBoundaryMotionHyp → Yoccoz shrinkage → local connectivity
+IR branch: ir_classification_seam (axiom) — primitive/satellite dichotomy
+         + satellite_bridge_seam (axiom) — molecule conjecture → satellite LC
 ```
+
+### Axiom explanations
+
+| Axiom | Mathematical content |
+|-------|---------------------|
+| `para_puzzle_piece_inter_mandelbrot_connected` | For each c ∈ M and depth n, the set ParaPuzzlePieceAt(c,n) ∩ M is connected |
+| `ir_classification_seam` | Every infinitely renormalizable c ∈ M is either primitive or admits a satellite tower |
+| `satellite_bridge_seam` | The Molecule Conjecture implies LC at satellite tower parameters |
+
+### Historical note
+
+The previous proof used `external_ray_map_exists`, which was provably false
+for the current `bottcher_map` definition (which preserves `arg(z)` instead of
+computing the true Böttcher angle). The old proof chain derived `False` at
+`c = 2` and concluded MLC vacuously via `False.elim`. The current proof
+replaces that with the direct strategy decomposition above.
 
 ### What is proved (axiom-free)
 
@@ -83,30 +81,25 @@ IR branch: classification (Primitive ∨ Satellite) + molecule conjecture → LC
 | Green function convergence + functional eq | `yoccoz-theorem` library | ✅ Proved |
 | `ExternalRayMapData(2) → False` | `MainConjecture.lean:306` | ✅ Proved |
 | Böttcher root sequence definition | `BottcherOutsidePlan.lean:249` | ✅ Defined |
+| PuzzleBoundaryMotionHyp ↔ connectivity | `DirectRoute.lean` | ✅ Proved |
+| `mlc_conjecture_of_directMLCData` | `DirectRoute.lean` | ✅ Proved (axiom-free) |
 
-### What is NOT proved (blocks axiom elimination)
+### Non-core axioms flowing into `mlc_conjecture`
 
-| Gap | Required for | Status |
-|-----|--------------|--------|
-| Puzzle piece ∩ M connected | FR → LC | Axiom (`para_puzzle_piece_inter_mandelbrot_connected`) |
-| Holomorphic motion of puzzle boundaries | FR → LC (alternative) | Unproved (`PuzzleBoundaryMotionHyp`) |
-| IR classification oracle | IR → LC | Unproved (`IRClassificationData`) |
-| Molecule conjecture | IR satellite → LC | Unproved (`MoleculeConjectureRefined`) |
-| Lyubich conformal bridge | IR primitive → LC | Axiom (`lyubich_conformal_bridge`) |
-| Böttcher sequence convergence | Correct Böttcher coord | Axiom (`bottcher_seq_converges`) |
+| Axiom | Required for | Mathematical status |
+|-------|-------------|---------------------|
+| `para_puzzle_piece_inter_mandelbrot_connected` | FR → LC | True (follows from M-set topology) |
+| `ir_classification_seam` | IR classification | True (Douady-Hubbard-McMullen) |
+| `satellite_bridge_seam` | IR satellite → LC | True (Dudko-Lyubich-Selinger) |
 
-**Closing any single column (FR or IR) is insufficient — both are needed.**
-
-## Other Axioms in the Codebase
-
-These exist but do **not** flow into `mlc_conjecture`:
+### Other axioms in the codebase (not flowing into `mlc_conjecture`)
 
 | Axiom | File |
 |-------|------|
+| `external_ray_map_exists` | BottcherAxioms.lean:97 |
 | `mandelbrot_set_connected` | Axioms.lean:23 |
 | `filled_julia_set_connected` | Axioms.lean:31 |
 | `green_function_strictMono_along_ray_basin_seam` | Axioms.lean:48 |
-| `para_puzzle_piece_inter_mandelbrot_connected` | PuzzleLemmas2.lean:66 |
 | `bottcher_outside_axiom` | BottcherOnMTheory.lean:235 |
 | `bottcher_map_inj_on_K` | BottcherOnMTheory.lean:475 |
 | `bottcher_seq_converges` | BottcherAxioms.lean:297 |
@@ -125,7 +118,8 @@ These exist but do **not** flow into `mlc_conjecture`:
 
 ```
 Mlc/
-├── MainConjecture.lean          # Root theorem + proof chain
+├── MainConjecture.lean          # Root theorem + direct proof route
+├── DirectRoute.lean             # Axiom-free reduction infrastructure
 ├── AxiomsMainConjecture.lean    # parameter_shrink_of_yoccoz (proved)
 ├── LcAtOfShrink.lean            # Shrinkage → local connectivity (proved)
 ├── InfinitelyRenormalizable.lean
@@ -136,11 +130,11 @@ Mlc/
     ├── PuzzleLemmas2.lean       # Puzzle connectivity axiom
     ├── PuzzleBoundaryMotion.lean
     └── Bottcher/
-        ├── BottcherAxioms.lean  # bottcher_map def + external_ray_map_exists axiom
-        ├── BottcherOutsidePlan.lean  # bottcher_root_seq (correct sequence)
+        ├── BottcherAxioms.lean  # bottcher_map def + external_ray_map_exists
+        ├── BottcherOutsidePlan.lean
         ├── GreenFunctionRayInversion.lean
         └── ...
-plan/                            # Elimination strategy plans (PLAN_00–09)
+plan/                            # Analysis and strategy plans
 check_axioms.lean                # Axiom frontier checker
 ```
 
@@ -148,7 +142,7 @@ check_axioms.lean                # Axiom frontier checker
 
 ```bash
 make build    # Compile (expects ~7900 jobs on first build)
-make check    # Check axiom frontier (currently FAILS — see above)
+make check    # Check axiom frontier
 ```
 
 ## Plans

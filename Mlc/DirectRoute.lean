@@ -1,0 +1,132 @@
+import Mlc.MainConjecture
+
+/-!
+# Direct MLC Proof Route (Bypassing `external_ray_map_exists`)
+
+This file provides infrastructure for proving `mlc_conjecture` via the
+strategy decomposition (`mlc_strategy_of_branchLocalData`), bypassing the
+vacuous `False.elim` chain through `BottcherSurjOnExterior(2)`.
+
+## Architecture
+
+The direct route needs three components:
+1. **FR branch**: `PuzzleBoundaryMotionHyp` (or equivalently, puzzle piece
+   connectivity on M)
+2. **IR classification**: `IRClassificationData`
+3. **Satellite bridge**: `MoleculeConjectureRefined` → satellite LC
+
+## Current status
+
+- `PuzzleBoundaryMotionHyp` is equivalent to `ParaPuzzlePieceInterMandelbrotConnectedData`
+  (proved in this file). Both reduce to:
+  `∀ c ∈ M, ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)`
+- This connectivity is currently an axiom (`para_puzzle_piece_inter_mandelbrot_connected`).
+- The IR branch components are also unproved.
+-/
+
+namespace MLC
+
+open Quadratic Complex Topology Set
+
+noncomputable section
+
+/-! ### Trivial holomorphic motion on the empty set -/
+
+/-- A holomorphic motion on the empty set — trivially satisfies all conditions. -/
+def trivialHolomorphicMotion : HolomorphicMotion (∅ : Set ℂ) where
+  f := fun _ z => z
+  h_zero := by simp
+  h_inj := by intro _ _; exact Set.injOn_empty _
+  h_holo := by intro z hz; exact (Set.mem_empty_iff_false z).mp hz |>.elim
+
+/-! ### Equivalence: `PuzzleBoundaryMotionHyp` ↔ connectivity axiom
+
+The `motion_preserves_para_piece` predicate has phantom parameters
+(`_r`, `E`, `_h`) that are unused. So `PuzzleBoundaryMotionHyp` is
+logically equivalent to the connectivity of `ParaPuzzlePieceAt c n ∩ M`.
+-/
+
+/-- `PuzzleBoundaryMotionHyp` follows from the connectivity of puzzle piece
+    intersections with M. The holomorphic motion parameters are phantom. -/
+theorem puzzleBoundaryMotionHyp_of_connected
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+    PuzzleBoundaryMotionHyp where
+  motion := by
+    intro n c₀ hc₀
+    -- Provide trivial motion data (phantom parameters)
+    refine ⟨1, one_pos, ∅, trivialHolomorphicMotion, ?_⟩
+    -- The real content: connectivity
+    intro hc₀_M
+    exact ⟨ParaPuzzlePieceAt c₀ n ∩ MandelbrotSet,
+           h_conn c₀ hc₀_M n,
+           rfl⟩
+
+/-- Conversely, `PuzzleBoundaryMotionHyp` implies the connectivity condition. -/
+theorem connected_of_puzzleBoundaryMotionHyp
+    (h_motion : PuzzleBoundaryMotionHyp) :
+    ParaPuzzlePieceInterMandelbrotConnectedData := by
+  intro c hc n
+  exact finite_connectedAt_provider_of_motionHyp h_motion c hc n
+
+/-- `PuzzleBoundaryMotionHyp` is equivalent to puzzle piece connectivity on M. -/
+theorem puzzleBoundaryMotionHyp_iff_connected :
+    PuzzleBoundaryMotionHyp ↔ ParaPuzzlePieceInterMandelbrotConnectedData :=
+  ⟨connected_of_puzzleBoundaryMotionHyp, puzzleBoundaryMotionHyp_of_connected⟩
+
+/-! ### Direct proof skeleton
+
+Wire `mlc_conjecture` through the real mathematical route.
+This makes the remaining gaps explicit.
+-/
+
+/-- The three components needed for the direct proof of MLC. -/
+structure DirectMLCData : Prop where
+  /-- For all c ∈ M and all n, the parameter puzzle piece at c intersected
+      with M is connected. -/
+  puzzle_connected : ParaPuzzlePieceInterMandelbrotConnectedData
+  /-- Every infinitely renormalizable parameter in M is either primitive
+      or a satellite tower. -/
+  ir_classification : IRClassificationData
+  /-- The molecule conjecture implies LC at satellite tower parameters. -/
+  satellite_bridge :
+    MoleculeConjectureRefined →
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : SatelliteRenormalizableTower c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- MLC follows from `DirectMLCData` — no axioms beyond core needed. -/
+theorem mlc_conjecture_of_directMLCData
+    (h : DirectMLCData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_motionHyp_classify_bridge_data
+    (puzzleBoundaryMotionHyp_of_connected h.puzzle_connected)
+    h.ir_classification
+    h.satellite_bridge
+
+/-! ### Reduction: what remains
+
+If we could prove `DirectMLCData`, we'd have an axiom-free `mlc_conjecture`.
+The three components are independent and can be attacked separately.
+
+**Component 1** (`puzzle_connected`):
+  `∀ c ∈ M, ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)`
+  Status: axiom `para_puzzle_piece_inter_mandelbrot_connected`
+  Approaches:
+  - Prove `M ⊆ ParaPuzzlePieceAt c n` (FALSE for current def — counterexample: c=0, c'=-2, n=1)
+  - Prove directly via topology of M ∩ translated puzzle pieces
+  - Change `ParaPuzzlePieceAt` definition to classical parameter puzzle pieces
+
+**Component 2** (`ir_classification`):
+  `∀ c ∈ M, InfinitelyRenormalizable c → Primitive c ∨ SatelliteTower c`
+  Status: unproved; follows from combinatorial structure of small copies of M
+  Approaches: renormalization combinatorics
+
+**Component 3** (`satellite_bridge`):
+  `MoleculeConjectureRefined → satellite tower → LC`
+  Status: unproved; requires Dudko-Lyubich renormalization theory
+  The `molecule-conjecture` library has a conditional proof with 11 hypotheses
+-/
+
+end
+
+end MLC
