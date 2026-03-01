@@ -87,6 +87,20 @@ structure DirectMLCData : Prop where
       (_h : SatelliteRenormalizableTower c),
       MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
+/-- Characterization of fine-grained direct-route payload. -/
+theorem directMLCData_iff :
+    DirectMLCData ↔
+      ParaPuzzlePieceInterMandelbrotConnectedData ∧ IRClassifyBridgeData := by
+  constructor
+  · intro h
+    exact ⟨h.puzzle_connected,
+      irClassifyBridgeData_of_classify_bridge_data h.ir_classification h.satellite_bridge⟩
+  · intro h
+    exact
+      { puzzle_connected := h.1
+        ir_classification := h.2.classify
+        satellite_bridge := h.2.bridge }
+
 /-- Packaged direct-route payload alias: FR connectedness + packaged IR
     classify/bridge data. -/
 abbrev DirectMLCPackagedData : Prop := MLCClassifyBridgeSeamData
@@ -96,6 +110,15 @@ abbrev DirectMLCPackagedData : Prop := MLCClassifyBridgeSeamData
 structure DirectMotionIRPackagedData : Prop where
   motion : PuzzleBoundaryMotionHyp
   ir : IRClassifyBridgeData
+
+/-- Characterization of motion-based packaged direct-route payload. -/
+theorem directMotionIRPackagedData_iff :
+    DirectMotionIRPackagedData ↔ PuzzleBoundaryMotionHyp ∧ IRClassifyBridgeData := by
+  constructor
+  · intro h
+    exact ⟨h.motion, h.ir⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
 
 /-- Extract packaged IR classify/bridge payload from `DirectMLCData`. -/
 def irClassifyBridgeData_of_directMLCData
