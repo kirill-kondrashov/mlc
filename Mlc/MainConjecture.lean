@@ -1641,6 +1641,21 @@ theorem mlc_conjecture_of_motionHyp_irClassifyBridgeData
   mlc_conjecture_of_MLCClassifyBridgeSeamData
     (mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData h_motion h_ir)
 
+/-- Packaged wrapper for the legacy motion-hyp + classify/bridge entrypoint,
+    routed through the canonical packaged seam payload. -/
+theorem mlc_conjecture_of_motionHyp_classify_bridge_data_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge)
+
 /-- Direct seam theorem with explicit FR connectedness + minimal IR seam
     payloads. -/
 theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
