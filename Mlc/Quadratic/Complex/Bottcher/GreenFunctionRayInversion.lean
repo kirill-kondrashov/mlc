@@ -451,6 +451,48 @@ lemma green_function_strictMono_along_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ�
   rw [Real.log_div (by linarith) (by linarith)] at hN'
   linarith
 
+/-- For `c = 2` and positive real radii, strict monotonicity along `u = 1`.
+This lifts the `ρ₁ > 4` result by iterating twice into the outside-open range
+and pulling back via `G(f²(z)) = 4 * G(z)`. -/
+lemma green_function_strictMono_along_real_ray_two_pos {ρ₁ ρ₂ : ℝ} (h : ρ₁ < ρ₂)
+    (hρ₁ : 0 < ρ₁) :
+    green_function (2 : ℂ) (↑ρ₁ : ℂ) < green_function (2 : ℂ) (↑ρ₂ : ℂ) := by
+  have hiter2 : f2 ^[2] ρ₁ < f2 ^[2] ρ₂ :=
+    f2_iterate_strictMono h hρ₁ 2
+  have hiter2_gt4 : f2 ^[2] ρ₁ > 4 := by
+    simp only [Function.iterate_succ_apply', f2]
+    nlinarith [sq_nonneg ρ₁]
+  have hmono_iter :
+      green_function (2 : ℂ) ((f2 ^[2] ρ₁ : ℂ)) <
+        green_function (2 : ℂ) ((f2 ^[2] ρ₂ : ℂ)) :=
+    green_function_strictMono_along_real_ray_two hiter2 hiter2_gt4
+  have horb₁ : orbit (2 : ℂ) ((ρ₁ : ℂ)) 2 = ((f2 ^[2] ρ₁ : ℂ)) := by
+    simpa using orbit_two_ofReal ρ₁ 2
+  have horb₂ : orbit (2 : ℂ) ((ρ₂ : ℂ)) 2 = ((f2 ^[2] ρ₂ : ℂ)) := by
+    simpa using orbit_two_ofReal ρ₂ 2
+  have hpull₁ :
+      green_function (2 : ℂ) ((f2 ^[2] ρ₁ : ℂ)) =
+        4 * green_function (2 : ℂ) ((ρ₁ : ℂ)) := by
+    calc
+      green_function (2 : ℂ) ((f2 ^[2] ρ₁ : ℂ))
+          = green_function (2 : ℂ) (orbit (2 : ℂ) ((ρ₁ : ℂ)) 2) := by
+              exact congrArg (green_function (2 : ℂ)) horb₁.symm
+      _ = 2 ^ 2 * green_function (2 : ℂ) ((ρ₁ : ℂ)) :=
+            green_function_orbit_eq (2 : ℂ) ((ρ₁ : ℂ)) 2
+      _ = 4 * green_function (2 : ℂ) ((ρ₁ : ℂ)) := by norm_num
+  have hpull₂ :
+      green_function (2 : ℂ) ((f2 ^[2] ρ₂ : ℂ)) =
+        4 * green_function (2 : ℂ) ((ρ₂ : ℂ)) := by
+    calc
+      green_function (2 : ℂ) ((f2 ^[2] ρ₂ : ℂ))
+          = green_function (2 : ℂ) (orbit (2 : ℂ) ((ρ₂ : ℂ)) 2) := by
+              exact congrArg (green_function (2 : ℂ)) horb₂.symm
+      _ = 2 ^ 2 * green_function (2 : ℂ) ((ρ₂ : ℂ)) :=
+            green_function_orbit_eq (2 : ℂ) ((ρ₂ : ℂ)) 2
+      _ = 4 * green_function (2 : ℂ) ((ρ₂ : ℂ)) := by norm_num
+  rw [hpull₁, hpull₂] at hmono_iter
+  linarith
+
 /-- For `c = 2`, the Green function is even on the real axis:
 `G₂(-ρ) = G₂(ρ)`. -/
 lemma green_function_neg_real_eq_two (ρ : ℝ) :
@@ -499,6 +541,73 @@ lemma green_function_strictMono_along_neg_real_ray_two {ρ₁ ρ₂ : ℝ} (h : 
     _ < green_function (2 : ℂ) ((ρ₂ : ℝ) : ℂ) := hreal
     _ = green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) := hρ₂neg.symm
 
+/-- For `c = 2` and positive real radii, strict monotonicity along `u = -1`. -/
+lemma green_function_strictMono_along_neg_real_ray_two_pos {ρ₁ ρ₂ : ℝ} (h : ρ₁ < ρ₂)
+    (hρ₁ : 0 < ρ₁) :
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ)) <
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) := by
+  have hreal : green_function (2 : ℂ) ((ρ₁ : ℝ) : ℂ) <
+      green_function (2 : ℂ) ((ρ₂ : ℝ) : ℂ) :=
+    green_function_strictMono_along_real_ray_two_pos h hρ₁
+  have hρ₁neg :
+      green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ)) =
+        green_function (2 : ℂ) ((ρ₁ : ℝ) : ℂ) := by
+    simpa [mul_comm] using green_function_neg_real_eq_two ρ₁
+  have hρ₂neg :
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) =
+        green_function (2 : ℂ) ((ρ₂ : ℝ) : ℂ) := by
+    simpa [mul_comm] using green_function_neg_real_eq_two ρ₂
+  calc
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ))
+        = green_function (2 : ℂ) ((ρ₁ : ℝ) : ℂ) := hρ₁neg
+    _ < green_function (2 : ℂ) ((ρ₂ : ℝ) : ℂ) := hreal
+    _ = green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) := hρ₂neg.symm
+
+/-- Full-basin seam-shaped corollary for the positive real direction `u = 1`.
+The positivity premise is currently unused because monotonicity now holds for
+all positive radii on this direction. -/
+lemma green_function_strictMono_along_real_ray_basin_two
+    {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
+    (_hG : 0 < green_function (2 : ℂ) ((ρ₁ : ℂ) * (1 : ℂ))) :
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * (1 : ℂ)) <
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * (1 : ℂ)) := by
+  simpa using green_function_strictMono_along_real_ray_two_pos h12 hρ₁
+
+/-- Full-basin seam-shaped corollary for the negative real direction `u = -1`.
+As above, the positivity premise is unused for this direction. -/
+lemma green_function_strictMono_along_neg_real_ray_basin_two
+    {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
+    (_hG : 0 < green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ))) :
+    green_function (2 : ℂ) ((ρ₁ : ℂ) * (-1 : ℂ)) <
+      green_function (2 : ℂ) ((ρ₂ : ℂ) * (-1 : ℂ)) := by
+  exact green_function_strictMono_along_neg_real_ray_two_pos h12 hρ₁
+
+/-- Partial seam at `c = 2`: full-basin strict radial monotonicity restricted
+to real directions `u = 1` or `u = -1`. -/
+def GreenFunctionStrictMonoAlongRealDirectionsTwoSeam : Prop :=
+  ∀ (u : ℂ) (_hu : ‖u‖ = 1), (u = (1 : ℂ) ∨ u = (-1 : ℂ)) →
+    ∀ {ρ₁ ρ₂ : ℝ}, 0 < ρ₁ → ρ₁ < ρ₂ →
+      0 < green_function (2 : ℂ) ((ρ₁ : ℂ) * u) →
+        green_function (2 : ℂ) ((ρ₁ : ℂ) * u) <
+          green_function (2 : ℂ) ((ρ₂ : ℂ) * u)
+
+/-- Constructive witness of strict radial monotonicity on real directions. -/
+lemma green_function_strictMono_along_realDirections_two_constructive :
+    GreenFunctionStrictMonoAlongRealDirectionsTwoSeam := by
+  intro u hu hdir ρ₁ ρ₂ hρ₁ h12 hG
+  rcases hdir with rfl | rfl
+  · simpa using green_function_strictMono_along_real_ray_basin_two hρ₁ h12 hG
+  · simpa using green_function_strictMono_along_neg_real_ray_basin_two hρ₁ h12 hG
+
+/-- Residual seam at `c = 2`: strict radial monotonicity on nonreal
+unit directions (all directions except `±1`). -/
+def GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam : Prop :=
+  ∀ (u : ℂ) (_hu : ‖u‖ = 1), ¬ (u = (1 : ℂ) ∨ u = (-1 : ℂ)) →
+    ∀ {ρ₁ ρ₂ : ℝ}, 0 < ρ₁ → ρ₁ < ρ₂ →
+      0 < green_function (2 : ℂ) ((ρ₁ : ℂ) * u) →
+        green_function (2 : ℂ) ((ρ₁ : ℂ) * u) <
+          green_function (2 : ℂ) ((ρ₂ : ℂ) * u)
+
 /-- Replacement-target seam at `c = 2` for full-basin strict radial monotonicity. -/
 def GreenFunctionStrictMonoAlongRayBasinTwoSeam : Prop :=
   ∀ (u : ℂ) (_hu : ‖u‖ = 1)
@@ -507,13 +616,64 @@ def GreenFunctionStrictMonoAlongRayBasinTwoSeam : Prop :=
         green_function (2 : ℂ) ((ρ₁ : ℂ) * u) <
           green_function (2 : ℂ) ((ρ₂ : ℂ) * u)
 
+/-- Full seam assembled from the constructive real-direction seam and a residual
+nonreal-direction seam target. -/
+lemma green_function_strictMono_along_ray_basin_two_of_realDirections_of_nonRealDirections
+    (hreal : GreenFunctionStrictMonoAlongRealDirectionsTwoSeam)
+    (hnonreal : GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam) :
+    GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
+  intro u hu ρ₁ ρ₂ hρ₁ h12 hG
+  by_cases hdir : u = (1 : ℂ) ∨ u = (-1 : ℂ)
+  · exact hreal u hu hdir hρ₁ h12 hG
+  · exact hnonreal u hu hdir hρ₁ h12 hG
+
+/-- Full `c = 2` strict radial monotonicity from the single residual
+nonreal-direction seam plus the already-constructive real-direction seam. -/
+lemma green_function_strictMono_along_ray_basin_two_of_nonRealDirections
+    (hnonreal : GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam) :
+    GreenFunctionStrictMonoAlongRayBasinTwoSeam :=
+  green_function_strictMono_along_ray_basin_two_of_realDirections_of_nonRealDirections
+    green_function_strictMono_along_realDirections_two_constructive
+    hnonreal
+
+/-- Restrict full `c = 2` ray-basin strict monotonicity to the residual
+nonreal-direction seam target. -/
+lemma green_function_strictMono_along_nonRealDirections_two_of_ray_basin_two
+    (hmono : GreenFunctionStrictMonoAlongRayBasinTwoSeam) :
+    GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam := by
+  intro u hu hnonreal ρ₁ ρ₂ hρ₁ h12 hG
+  exact hmono u hu hρ₁ h12 hG
+
+/-- Residual nonreal-direction seam is equivalent to full seam once the
+constructive real-direction branch is fixed. -/
+lemma green_function_strictMono_along_nonRealDirections_two_iff_ray_basin_two :
+    GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam ↔
+      GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
+  constructor
+  · exact green_function_strictMono_along_ray_basin_two_of_nonRealDirections
+  · exact green_function_strictMono_along_nonRealDirections_two_of_ray_basin_two
+
+/-- Axiom-seeded residual strict-mono seam restricted to nonreal directions.
+This isolates the remaining axiom pressure after the constructive real-direction
+monotonicity upgrade. -/
+lemma green_function_strictMono_along_nonRealDirections_two_axiom_seed :
+    GreenFunctionStrictMonoAlongNonRealDirectionsTwoSeam := by
+  intro u hu hnonreal ρ₁ ρ₂ hρ₁ h12 hG
+  exact Quadratic.green_function_strictMono_along_ray_basin_seam
+    (2 : ℂ) u hu hρ₁ h12 hG
+
+/-- Mixed seed for the full seam: constructive on real directions, axiom-seeded
+only on residual nonreal directions. -/
+lemma green_function_strictMono_along_ray_basin_two_mixed_seed :
+    GreenFunctionStrictMonoAlongRayBasinTwoSeam :=
+  green_function_strictMono_along_ray_basin_two_of_nonRealDirections
+    green_function_strictMono_along_nonRealDirections_two_axiom_seed
+
 /-- Axiom-seeded provider for the `c = 2` full-basin strict radial monotonicity
 replacement seam. -/
 lemma green_function_strictMono_along_ray_basin_two_axiom_seed :
-    GreenFunctionStrictMonoAlongRayBasinTwoSeam := by
-  intro u hu ρ₁ ρ₂ hρ₁ h12 hG
-  exact Quadratic.green_function_strictMono_along_ray_basin_seam
-    (2 : ℂ) u hu hρ₁ h12 hG
+    GreenFunctionStrictMonoAlongRayBasinTwoSeam :=
+  green_function_strictMono_along_ray_basin_two_mixed_seed
 
 /-- Specialized `c = 2` full-basin strict radial monotonicity from the
 replacement seam. -/
