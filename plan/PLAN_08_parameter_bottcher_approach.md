@@ -1,7 +1,8 @@
 # PLAN 08: Parameter Böttcher Coordinate Approach
 
-**Status:** `░░░░░░░░░░` **0%**
-**State:** `PROPOSED`
+**Status:** `██░░░░░░░░░░░░░░░░░░` **10%**
+**State:** `BLOCKED` — parameter Böttcher coordinate not formalized;
+convergence + biholomorphicity + ray landing all unproved
 **Difficulty:** Medium-High
 **Risk:** Medium — well-understood mathematically, requires new formalization.
 

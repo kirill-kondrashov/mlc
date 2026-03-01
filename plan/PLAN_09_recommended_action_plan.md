@@ -95,6 +95,8 @@ The key decision is: **fix the definition or build real mathematics?**
 
 ## Honest Assessment
 
+**Updated 2026-03-01 after full feasibility audit.**
+
 Eliminating the axiom without introducing new ones is **NOT achievable by
 small code changes**. It requires either:
 - Significant new formalization of the Böttcher coordinate (Plan 01/03), or
@@ -103,3 +105,35 @@ small code changes**. It requires either:
 Both are research-level projects. The previous v1-v30 plans were stuck
 because they were trying to polish a fundamentally broken approach. The
 new plans identify the true blocker and propose paths that address it.
+
+### Plan Status Summary
+
+| Plan | State | Viable? |
+|------|-------|---------|
+| 00: Root Cause | ✅ Done | Reference |
+| 01: Fix bottcher at c=2 | 🔴 Blocked | Yes, but needs Plan 02 components too |
+| 02: Strategy Decomposition | 🔴 Blocked | **Best path** — 3 components needed |
+| 03: Global redefine | 🔴 Blocked | Yes, subsumes Plan 01 |
+| 04: Degree theory | 🔴 Blocked | Reduces to 01/03 |
+| 05: Minimal patch | ❌ Dead end | Confirmed impossible |
+| 06: New architecture | 🔴 Blocked | Audited — same gaps as Plan 02 |
+| 07: Exploit c=2 outside M | ❌ Dead end | Confirmed unhelpful |
+| 08: Parameter Böttcher | 🔴 Blocked | Alternative route, similar difficulty |
+| 09: This plan | ✅ Active | Meta-plan |
+
+### Nearest Unblocking Target
+
+The FR (finitely renormalizable) branch is closest to complete:
+
+```
+✅ yoccoz_theorem → ✅ parameter_shrink_of_yoccoz → ✅ lc_at_of_shrink_of_connected_at
+                                                          ↑
+                                                   needs: h_conn_at
+```
+
+`h_conn_at = ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)` is the single
+remaining gap. It comes from axiom `para_puzzle_piece_inter_mandelbrot_connected`.
+**Proving this axiom is the highest-leverage target.**
+
+Even closing FR alone is insufficient — the IR branch also needs classification
++ molecule conjecture. But FR is where the existing infrastructure is strongest.

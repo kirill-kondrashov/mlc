@@ -1,7 +1,8 @@
 # PLAN 01: Fix `bottcher_map` at c=2
 
-**Status:** `░░░░░░░░░░` **0%**
-**State:** `PROPOSED`
+**Status:** `██░░░░░░░░░░░░░░░░░░` **10%**
+**State:** `BLOCKED` — `bottcher_seq_converges` is an axiom; even with correct
+definition, proof chain goes through `False.elim` which must be replaced
 **Difficulty:** Medium-High
 **Risk:** Medium — requires new mathematical formalization, but c=2 is the simplest case.
 
@@ -105,6 +106,25 @@ lemma bottcherSurjOnExterior_two_of_true_bottcher :
 
 This doesn't directly work because `BottcherSurjOnExterior` references the
 crude map. So we'd need to refactor.
+
+## Feasibility Note (2026-03-01)
+
+`bottcher_root_seq` is already defined in `BottcherOutsidePlan.lean:249`:
+```lean
+def bottcher_root_seq (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
+  ((fun w => w ^ 2 + c)^[n] z) ^ ((2 : ℂ) ^ n)⁻¹
+```
+
+However, its convergence proof (`bottcher_root_seq_tendsto`, line 261)
+delegates to the axiom `bottcher_seq_converges` (BottcherAxioms.lean:297).
+That axiom claims convergence to the CRUDE `bottcher_map`, which is
+mathematically wrong. The true limit is the correct Böttcher coordinate.
+
+**Even if we fix the definition and prove convergence**, the existing
+proof chain from `BottcherSurjOnExterior(2)` goes through `False.elim`.
+Making the map correct would make `ExternalRayMapData(2)` TRUE but would
+BREAK the existing proof (the contradiction lemma would no longer hold).
+We'd then need Plan 02's components to complete the proof.
 
 ## Dependencies
 

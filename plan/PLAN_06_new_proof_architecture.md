@@ -1,7 +1,8 @@
 # PLAN 06: New Proof Architecture — Bypass the False.elim Chain
 
-**Status:** `░░░░░░░░░░` **0%**
-**State:** `PROPOSED`
+**Status:** `██░░░░░░░░░░░░░░░░░░` **10%**
+**State:** `BLOCKED` — all routes have same fundamental gaps (FR connectivity
+or IR classification)
 **Difficulty:** Medium-High
 **Risk:** Medium — restructures the proof without changing `bottcher_map`.
 
@@ -92,6 +93,20 @@ What's MISSING (only obtained via False.elim):
 - `IRNoTowerPrimitiveAndMoleculeBridgeTargetData`
 
 **Focus:** which of these missing components can be proved most easily?
+
+**Audit results (2026-03-01):**
+
+| Component | Difficulty | Notes |
+|-----------|-----------|-------|
+| `PuzzleBoundaryMotionHyp` | Very High | Requires holomorphic motion formalization |
+| `para_puzzle_piece_inter_mandelbrot_connected` | High | Currently axiom; proving it requires M ∩ puzzle piece connectivity |
+| `IRClassificationData` | High | Combinatorial, but deep renormalization theory |
+| `lyubich_conformal_bridge` | High | Currently axiom; bridges placeholder to real modulus |
+| `MoleculeConjectureRefined` | Very High | Dudko-Lyubich renormalization |
+
+**Nearest unblocking target:** proving `para_puzzle_piece_inter_mandelbrot_connected`
+(FR connectivity). This would close the FR branch given that `yoccoz_theorem`,
+`parameter_shrink_of_yoccoz`, and `lc_at_of_shrink_of_connected_at` are all proved.
 
 ### Option E: Prove a special case of MLC
 

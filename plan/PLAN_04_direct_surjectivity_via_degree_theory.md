@@ -1,7 +1,8 @@
 # PLAN 04: Direct Surjectivity Via Degree Theory
 
-**Status:** `░░░░░░░░░░` **0%**
-**State:** `PROPOSED`
+**Status:** `█░░░░░░░░░░░░░░░░░░░` **5%**
+**State:** `BLOCKED` — reduces to Plan 01/03; degree theory on true map
+requires defining the true map first
 **Difficulty:** Medium
 **Risk:** Medium — mathematically sound, but requires new infrastructure.
 

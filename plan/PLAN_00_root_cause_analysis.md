@@ -82,6 +82,47 @@ false.** Specifically:
 **The dead end is not in the proof strategy — it's in the `bottcher_map`
 definition.**
 
+## What Is Already Proved (Axiom-Free)
+
+The feasibility audit found these components fully proved without axioms:
+
+| Component | Location | Status |
+|-----------|----------|--------|
+| `yoccoz_theorem` | `yoccoz-theorem` library | ✅ Proved (Grötzsch + puzzle pieces) |
+| `parameter_shrink_of_yoccoz` | `AxiomsMainConjecture.lean` | ✅ Proved |
+| `lc_at_of_shrink_of_connected_at` | `LcAtOfShrink.lean:196` | ✅ Proved, **no axiom deps** |
+| FR ∨ IR dichotomy | `MainConjecture.lean:38` | ✅ Proved (LEM) |
+| Strategy assembly | `MainConjecture.lean:50` | ✅ Proved (given h_fin_lc + h_classify + h_bridge) |
+| `finite_lc_provider_of_motionHyp` | `MainConjecture.lean:442` | ✅ Proved (given `PuzzleBoundaryMotionHyp`) |
+| `ExternalRayMapData(2) → False` | `MainConjecture.lean:306` | ✅ Proved |
+| `bottcher_root_seq` (correct sequence) | `BottcherOutsidePlan.lean:249` | ✅ Defined |
+
+### The FR Chain (finitely renormalizable → locally connected)
+
+```
+yoccoz_theorem (PROVED)
+  → dynamical puzzle pieces shrink to {0}
+parameter_shrink_of_yoccoz (PROVED)
+  → parameter puzzle pieces shrink to {c}
+lc_at_of_shrink_of_connected_at (PROVED, axiom-free)
+  → LocallyConnectedAt M c
+  BUT REQUIRES: ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)  ← THE GAP
+```
+
+The gap `∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)` is currently
+supplied ONLY by the axiom `para_puzzle_piece_inter_mandelbrot_connected`
+(PuzzleLemmas2.lean:66), or via `PuzzleBoundaryMotionHyp` (holomorphic
+motion, also unproved).
+
+### The IR Chain (infinitely renormalizable → locally connected)
+
+```
+IRClassificationData (NOT PROVED)
+  → PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
+Primitive case: lyubich_conformal_bridge (AXIOM, not proved)
+Satellite case: MoleculeConjectureRefined (NOT PROVED)
+```
+
 ## What must change
 
 To eliminate the axiom without adding new axioms or hypotheses to

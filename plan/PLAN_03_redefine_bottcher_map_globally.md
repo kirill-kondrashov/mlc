@@ -1,7 +1,7 @@
 # PLAN 03: Redefine `bottcher_map` Globally
 
-**Status:** `░░░░░░░░░░` **0%**
-**State:** `PROPOSED`
+**Status:** `█░░░░░░░░░░░░░░░░░░░` **5%**
+**State:** `BLOCKED` — same blockers as Plan 01 with larger scope
 **Difficulty:** High
 **Risk:** Medium — focused refactor with clear mathematical target.
 

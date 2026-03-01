@@ -1,9 +1,9 @@
 # PLAN 05: Minimal Böttcher Patch at c=2
 
-**Status:** `░░░░░░░░░░` **0%**
-**State:** `PROPOSED`
-**Difficulty:** Medium
-**Risk:** Low-Medium — scoped to c=2, minimal changes to existing code.
+**Status:** `████████████████████` **100%**
+**State:** `DEAD END — confirmed by analysis`
+**Difficulty:** N/A
+**Risk:** N/A — this approach cannot work.
 
 ## Core Idea
 

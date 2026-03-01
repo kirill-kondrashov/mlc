@@ -1,7 +1,7 @@
 # PLAN 02: Bypass Böttcher Map Via Strategy Decomposition
 
-**Status:** `░░░░░░░░░░` **0%**
-**State:** `PROPOSED`
+**Status:** `███░░░░░░░░░░░░░░░░░` **15%**
+**State:** `BLOCKED` — see feasibility audit below
 **Difficulty:** Very High
 **Risk:** High — requires substantial new mathematical formalization.
 
@@ -99,6 +99,46 @@ three hardest theorems in holomorphic dynamics:
 Each of these is a research-level formalization project. However, the Yoccoz
 library already contains significant puzzle machinery (`Yoccoz.Yoccoz` is
 imported), so Step 1 may be partially achievable.
+
+## Feasibility Audit (2026-03-01)
+
+### What's already done
+
+| Component | Status | Detail |
+|-----------|--------|--------|
+| `yoccoz_theorem` | ✅ Proved | In library, full proof (not sorry) |
+| `parameter_shrink_of_yoccoz` | ✅ Proved | `AxiomsMainConjecture.lean`, 34-line proof |
+| `lc_at_of_shrink_of_connected_at` | ✅ Proved | `LcAtOfShrink.lean:196`, **axiom-free** |
+| `finite_lc_provider_of_motionHyp` | ✅ Proved | `MainConjecture.lean:442`, chains Yoccoz → shrinkage → LC |
+| `mlc_strategy_of_branchLocalData` | ✅ Proved | `MainConjecture.lean:50`, FR/IR case split |
+
+### What's missing (blocks elimination)
+
+**FR branch — two alternative routes, both blocked:**
+
+Route A: `PuzzleBoundaryMotionHyp` → `finite_connectedAt_provider_of_motionHyp`
+→ `finite_lc_provider_of_motionHyp`
+- ❌ `PuzzleBoundaryMotionHyp` is NOT proved (requires holomorphic motion theory)
+- Defined in `PuzzleBoundaryMotion.lean:82-86`
+
+Route B: Direct `∀n, IsConnected (ParaPuzzlePieceAt c n ∩ M)` → `lc_at_of_shrink_of_connected_at`
+- ❌ Only from axiom `para_puzzle_piece_inter_mandelbrot_connected` (PuzzleLemmas2.lean:66)
+
+**IR branch — three components needed, all blocked:**
+
+1. ❌ `IRClassificationData` — NOT proved
+2. ❌ `lyubich_conformal_bridge` — AXIOM (PrimitiveModulusDivergence.lean:103)
+   - Bridges Lyubich placeholder modulus to actual conformal modulus
+3. ❌ `MoleculeConjectureRefined` — NOT proved
+
+### Nearest path to unblocking
+
+The FR branch is closer. `lc_at_of_shrink_of_connected_at` only needs:
+1. `∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)` — per-point, not universal
+2. `(⋂ n, ParaPuzzlePieceAt c n) = {c}` — from `yoccoz_theorem` + `parameter_shrink_of_yoccoz`
+
+If `para_puzzle_piece_inter_mandelbrot_connected` can be PROVED (converted
+from axiom to theorem), the FR branch closes immediately.
 
 ## When to Choose This Plan
 
