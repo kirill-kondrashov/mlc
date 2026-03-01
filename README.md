@@ -1,252 +1,148 @@
-# MLC Formalization Status
+# MLC — Mandelbrot Local Connectivity in Lean 4
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
+·
+[Live dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
-[Live dependency graph (rooted at `MLC.mlc_conjecture`)](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
+A Lean 4 formalization of the **MLC conjecture** (the Mandelbrot set is locally
+connected). The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
 
-This repository is a Lean formalization scaffold centered on `MLC.mlc_conjecture`.
-The code compiles and `MLC.mlc_conjecture` is `sorry`-free.
+## Axiom Status
 
-## Current Axiom Frontier (`make check`)
+`make check` reports axioms flowing into `MLC.mlc_conjecture`. The goal is
+**core-only** (`Quot.sound`, `propext`, `Classical.choice`).
 
-As of 2026-02-28, exactly one non-core axiom remains in the root theorem:
+| Status | Axiom | Notes |
+|--------|-------|-------|
+| ✅ | `Quot.sound` | Core |
+| ✅ | `propext` | Core |
+| ✅ | `Classical.choice` | Core |
+| ❌ | `MLC.Quadratic.external_ray_map_exists` | Last non-core axiom — see below |
 
-- `MLC.Quadratic.external_ray_map_exists`
+`make check` currently **fails** because of the remaining non-core axiom.
 
-This axiom is **not** in the allowed frontier. The allowed frontier
-remains core-only:
+## Root Cause: Why the Axiom Cannot Be Eliminated by Local Changes
 
-- `Quot.sound`
-- `propext`
-- `Classical.choice`
+The current `bottcher_map` definition (BottcherAxioms.lean:17–19) is:
 
-So `make check` currently fails with an axiom-frontier violation until this
-axiom is eliminated. Eliminating it is the immediate next milestone.
-
-Expected output:
-
-```
-✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
-All axioms used:
-- Quot.sound
-- propext
-- Classical.choice
-- MLC.Quadratic.external_ray_map_exists
+```lean
+noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
+  let u := if z = 0 then 1 else z / ↑‖z‖
+  u * ↑(Real.exp (MLC.Quadratic.green_function c z))
 ```
 
-## Progress Snapshot (Effort In Hours, Not Weeks)
+This is **not the true Böttcher coordinate** `φ_c(z) = lim (f_c^n(z))^{1/2^n}`.
+It preserves `arg(z)` instead of computing the Böttcher angle, giving the wrong
+angular structure. As a consequence:
 
-| Target Axiom | Progress | Left | Estimated Remaining Effort |
-|---|---|---|---|
-| `Quadratic.external_ray_map_exists` | `████████░░` 80% | 20% | ~90-260 Lean LOC, ~4-10 hrs |
+1. `ExternalRayMapData(2)` (a consequence of the axiom at `c = 2`) is
+   **provably false** — no point in K(2) maps to direction 1 under the crude
+   map, because all reals escape at `c = 2`.
+2. The proof of `mlc_conjecture` is therefore **vacuous**: it derives
+   `BottcherApproachToOneSeqPreimageData(2)` from the axiom, then proves
+   `False` from it (MainConjecture.lean:306), and concludes MLC via
+   `False.elim` (MainConjecture.lean:551).
+3. Eliminating the axiom collapses the `False.elim` chain and requires
+   replacing it with a genuine proof.
 
-Total estimated remainder: ~70-200 Lean LOC, ~3-7 hours.
+## Proof Architecture
 
-## Active Plans (`plan/*`)
+The formalization has a complete proof *skeleton* that reduces MLC to two
+independent hypotheses:
 
-| File | Relevance | Progress | Left | Estimated Remaining Effort |
-|---|---|---|---|---|
-| `plan/PLAN_axiom_elimination_status.md` | ⭐⭐⭐⭐⭐ | `████████░░` 80% | 20% | active umbrella status + blocker tracking |
-| `plan/PLAN_axiom_elimination_constructive_bridge_search_v28.md` | ⭐⭐⭐⭐⭐ | `██████░░░░` 62% | 38% | frontier-safe constructive bridge still missing |
+```
+mlc_conjecture
+  ← mlc_conjecture_of_mainPathData
+  ← mlc_conjecture_of_motionHyp_track12_data
+  ← mlc_strategy_of_branchLocalData         ← dichotomy (FR ∨ IR)
 
-## Key Technical Reality
+FR branch: PuzzleBoundaryMotionHyp → Yoccoz shrinkage → local connectivity
+IR branch: classification (Primitive ∨ Satellite) + molecule conjecture → LC
+```
 
-- The old global anchor-gap seam is inconsistent in the current model:
-  `not_greenRayLogGtAnchorTwoSeam`.
-- v27 explicitly exposed seam dependencies in core wrappers:
-  `greenFunctionStrictMonoAlongRayBasinTwo_of_greenRayLogGtAnchorTwoSeam`,
-  `greenRayUniquePreimageTwoAnchorSeam_of_greenRayLogGtAnchorTwoSeam`, and
-  explicit seam input in
-  `injOn_outside_open_two_of_greenFunctionStrictMonoAlongRayBasinTwoSeam`.
-- The bounded-cutoff replacement route is also inconsistent:
-  `not_greenRayLogGtAnchorTwo_cutoff_band`.
-- An anchor-free payload staging interface now exists in root wiring:
-  `RootSeedPayloadTwoNoAnchor` and its first bridge wrappers.
-- Latest cycle confirmed the non-seam replacement interface is complete, while
-  root cutover remains blocked by a missing non-seeded no-arg outside-open
-  injectivity witness.
-- New non-seeded seam helper exists:
-  `cp5ResidualLocalHomeomorphInjSeamTwo_of_rootSafeOutsideOpenInjWitnessTwo`.
-- New equivalence and root-tail staging wrappers now exist:
-  `rootSafeOutsideOpenInjWitnessTwo_iff_cp5ResidualLocalHomeomorphInjSeamTwo_of_directProperLocalWitnessTwo`
-  and `mlc_conjecture_root_tail_nonseam_of_directProperLocalWitnessTwo`.
-- Primitive witness-family interface now exists:
-  `PrimitiveRestrictedMapProperLocalWitnessFamilyTwo` and
-  `primitiveRestrictedMapProperLocalWitnessFamilyTwo_iff_directProperLocalWitnessTwo`.
-- Primitive-family specialization bridges now exist:
-  `rootSafeOutsideOpenInjWitnessTwo_iff_cp5ResidualLocalHomeomorphInjSeamTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`
-  and `mlc_conjecture_root_tail_nonseam_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`.
-- Primitive-family witness-gap/root-gap bridges were added:
-  `primitiveRestrictedMapProperLocalWitnessFamilyTwo_iff_remainingConstructiveIngressTwoWitnessGap`,
-  `rootClosureSubstituteTwoWitnessGap_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`,
-  and `rootClosureSubstituteTwo_of_primitiveRestrictedMapProperLocalWitnessFamilyTwo`.
-- Strict-mono-free ingress dead-end is now normalized explicitly:
-  `rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo_iff_false` and
-  `rootSeedPayloadTwoStrictMonoFreeIngressTwo_iff_false`.
-- New non-seeded ingress probe family was added and shown blocked:
-  `RootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo` and
-  `not_rootSafeOutsideOpenInjWitnessTwoNonseededIngressFamilyTwo`.
-- New geometric outside-open/fiber ingress family was added:
-  `RootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo`.
-- That geometric family is normalized to the existing root-safe target:
-  `rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo_iff_rootSafeOutsideOpenInjWitnessTwo`.
-- Geometric-ingress log-gap constructor shape is now explicitly blocked:
-  `not_greenRayLogGtAnchorTwoSeam_constructor_from_rootSafeOutsideOpenInjWitnessTwoGeometricFiberIngressFamilyTwo`.
-- Added ray-monotonicity-window interface and no-go pair:
-  `GreenRayLogGapMonotonicityWindowTwo` and
-  `not_greenRayLogGapMonotonicityWindowTwo`.
-- Added candidate nonvacuous geometric extraction bundle and no-go:
-  `NonvacuousGeometricIngressWitnessExtractionTwo` and
-  `not_nonvacuousGeometricIngressWitnessExtractionTwo`.
-- Added parameterized nonimplicative local-window interface:
-  `NonimplicativeWindowInterfaceTwo`.
-- Added cutoff-coverage no-go for that interface:
-  `not_nonimplicativeWindowInterfaceTwo_of_cutoff_le_radius`.
-- Added localized ray-interval geometric source interface:
-  `LocalizedRayIntervalGeometricSourceTwo`.
-- Added cutoff-coverage no-go for localized source:
-  `not_localizedRayIntervalGeometricSourceTwo_of_cutoff_le_radius`.
-- Added strict subcutoff local-window + transport package:
-  `StrictlySubcutoffLocalWindowWithTransportBridgeTwo`.
-- Added no-go for strict subcutoff transport package:
-  `not_strictlySubcutoffLocalWindowWithTransportBridgeTwo`.
-- Added localized-source to ingress-gap interface:
-  `LocalizedSourceToRemainingConstructiveIngressGapTwo`.
-- Added no-go for that localized-source transport interface:
-  `not_localizedSourceToRemainingConstructiveIngressGapTwo`.
-- Added partial-window interface without tail transport:
-  `PartialWindowNotCoveringCutoffWithNontransportedTailTwo`.
-- Added localized source interface without full-window upgrade:
-  `LocalizedSourceWithoutFullWindowUpgradeTwo`.
-- Added staged no-arg direct-witness target from partial-window source:
-  `NoargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo`.
-- Added root-tail wrapper through that staged no-arg target:
-  `mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromPartialWindowSourceTwo`.
-- Added direct-constructor alias for partial-window witnesses:
-  `ConstructPartialWindowWitnessDirectlyWithoutTransportTwo`.
-- Added localized-source constructor map from direct partial-window witnesses:
-  `LocalizedSourceWitnessFromPartialWindowConstructorTwo`.
-- Added constructor-oriented no-arg direct-witness target:
-  `NoargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo`.
-- Added root-tail wrapper through constructor-oriented no-arg target:
-  `mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo`.
-- Added v8 explicit-subcutoff witness candidate interface and equivalence:
-  `ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo` and
-  `explicitSubcutoffWitnessCandidateFromGreenBoundsTwo_iff_constructPartialWindowWitnessDirectlyWithoutTransportTwo`.
-- Added v8 localized-source constructor interface and equivalence:
-  `LocalizedSourceWitnessFromExplicitSubcutoffWitnessTwo` and
-  `localizedSourceWitnessFromExplicitSubcutoffWitnessTwo_iff_localizedSourceWitnessFromPartialWindowConstructorTwo`.
-- Added v8 no-arg interface and equivalence:
-  `NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo` and
-  `noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo_iff_noargDirectProperLocalWitnessTwoFromConstructedPartialSourceTwo`.
-- Added v8 root-tail cutover wrapper:
-  `mlc_conjecture_root_tail_nonseam_of_noargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo`.
-- Added v9 strict-subcutoff route interface and equivalences:
-  `StrictSubcutoffWindowExistenceTwo`,
-  `strictSubcutoffWindowExistenceTwo_iff_partialWindowNotCoveringCutoffWithNontransportedTailTwo`,
-  `strictSubcutoffWindowExistenceTwo_iff_constructPartialWindowWitnessDirectlyWithoutTransportTwo`.
-- Added strong local-window no-go and strict-subcutoff refutation:
-  `not_nonimplicativeWindowInterfaceTwo_of_one_lt_radius` and
-  `not_strictSubcutoffWindowExistenceTwo`.
-- Added v9 direct proper/local witness route packaging:
-  `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo` and
-  `directProperLocalWitnessTwo_of_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`.
-- Added converse and collapse equivalence for that route:
-  `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo` and
-  `directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_iff_directProperLocalWitnessTwo`.
-- Added v9 root-entry detour wrappers:
-  `RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo` and
-  `mlc_conjecture_of_rootEntryDetourViaInjSurjExteriorConstructivePayloadTwo`.
-- Added v9 seed dependency min-cut interface:
-  `SeedDependencyMinCutSliceTwo`.
-- Added v10 non-seeded directProper->rootSafe gap interface:
-  `NonseededDirectProperToRootSafeGapTwo`.
-- Added v10 directProper route matrix collapse:
-  `DirectProperLocalWitnessTwoRouteMatrixV10` and
-  `directProperLocalWitnessTwoRouteMatrixV10_iff_directProperLocalWitnessTwo`.
-- Added explicit seeded fallback endpoint for the v10 gap:
-  `nonseededDirectProperToRootSafeGapTwo_seeded_fallback`.
-- Added v12 local-seam gap formulation and equivalence:
-  `NonseededDirectProperToLocalSeamGapTwo` and
-  `nonseededDirectProperToRootSafeGapTwo_iff_nonseededDirectProperToLocalSeamGapTwo`.
-- Added v12 local-seam seeded fallback endpoint:
-  `nonseededDirectProperToLocalSeamGapTwo_seeded_fallback`.
-- Added local-seam route-matrix cutover wrappers:
-  `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_directProperLocalWitnessTwoRouteMatrixV10` and
-  `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_seeded_fallback_of_directProperLocalWitnessTwoRouteMatrixV10`.
-- Added v14 source-matrix cutover wrappers:
-  `NonseededLocalSeamGapWitnessSourceMatrixV14` and
-  `mlc_conjecture_of_nonseededDirectProperToLocalSeamGapTwo_of_nonseededLocalSeamGapWitnessSourceMatrixV14`.
-- Added v16 final-gap minimalization aliases and cutover:
-  `FinalAxiomEliminationWitnessPairV16`,
-  `FinalAxiomCoreConstructiveGapV16`,
-  `finalAxiomEliminationGapV15_iff_finalAxiomEliminationWitnessPairV16`,
-  and `mlc_conjecture_of_finalAxiomEliminationWitnessPairV16`.
-- Added v17 elimination-kernel split and cutover wrappers:
-  `FinalAxiomEliminationKernelV17`,
-  `finalAxiomEliminationKernelV17_iff_finalAxiomEliminationWitnessPairV16`,
-  `finalAxiomEliminationGapV15_iff_finalAxiomEliminationKernelV17`,
-  and `mlc_conjecture_of_finalAxiomEliminationKernelV17`.
-- Added v18 ingress-kernel reduction and endpoint cutover:
-  `FinalAxiomEliminationIngressKernelV18`,
-  `finalAxiomEliminationIngressKernelV18_iff_finalAxiomEliminationKernelV17`,
-  `finalAxiomEliminationGapV15_iff_finalAxiomEliminationIngressKernelV18`,
-  and `mlc_conjecture_of_finalAxiomEliminationIngressKernelV18`.
-- Added v19 ingress-bridge equivalence and kernel cutover:
-  `FinalAxiomIngressBridgeGapV19`,
-  `finalAxiomIngressBridgeGapV19_iff_finalAxiomCoreConstructiveGapV16`,
-  `FinalAxiomEliminationIngressBridgeKernelV19`,
-  and `mlc_conjecture_of_finalAxiomEliminationIngressBridgeKernelV19`.
-- Added grounded v20 normalization wrappers:
-  `FinalAxiomSeamDecompositionV20`,
-  `FinalAxiomWitnessTransportV20`,
-  `FinalAxiomContrapositiveObstructionV20`,
-  and their equivalences to `FinalAxiomIngressBridgeGapV19`.
-- Added grounded v21 witness-gap kernel wrappers:
-  `FinalAxiomWitnessGapBridgeV21`,
-  `FinalAxiomWitnessGapKernelV21`,
-  `finalAxiomEliminationGapV15_iff_finalAxiomWitnessGapKernelV21`,
-  and `mlc_conjecture_of_finalAxiomWitnessGapKernelV21`.
-- Added grounded v22 root-witness-gap kernel wrappers:
-  `FinalAxiomRootWitnessGapBridgeV22`,
-  `FinalAxiomRootWitnessGapKernelV22`,
-  `finalAxiomEliminationGapV15_iff_finalAxiomRootWitnessGapKernelV22`,
-  and `mlc_conjecture_of_finalAxiomRootWitnessGapKernelV22`.
-- Added grounded v23 approach-matrix wrappers:
-  `FinalAxiomApproachMatrixV23`,
-  `FinalAxiomApproachMatrixKernelV23`,
-  `finalAxiomEliminationGapV15_iff_finalAxiomApproachMatrixKernelV23`,
-  and `mlc_conjecture_of_finalAxiomApproachMatrixKernelV23`.
-- Added grounded v24 root-closure kernel wrappers:
-  `FinalAxiomRootClosureBridgeV24`,
-  `FinalAxiomRootClosureKernelV24`,
-  `finalAxiomEliminationGapV15_iff_finalAxiomRootClosureKernelV24`,
-  and `mlc_conjecture_of_finalAxiomRootClosureKernelV24`.
-- Added grounded v25 bridge wrappers:
-  `FinalAxiomDirectConstructiveApproachV25`,
-  `FinalAxiomAlternativeBridgeStrategiesV25`,
-  `finalAxiomAlternativeBridgeStrategiesV25_iff_finalAxiomWitnessGapKernelV21`,
-  and `mlc_conjecture_of_finalAxiomAlternativeBridgeStrategiesV25`.
-- Added grounded v26 parallel-route wrappers:
-  `FinalAxiomNewDirectApproachV26`,
-  `FinalAxiomAlternativeProofStructureV26`,
-  `FinalAxiomMinimalCounterexampleKernelV26`,
-  and `FinalAxiomParallelMatrixV26`.
-- Current strict-mono-free ingress families are formally blocked:
-  `not_rootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo`.
-- The strict-mono seam axiom has been removed from the root theorem path.
-- The current root blocker is now the external-ray-data axiom above.
+### What is proved (axiom-free)
 
-## Where To Work
+| Component | File | Status |
+|-----------|------|--------|
+| Yoccoz puzzle piece shrinkage | `yoccoz-theorem` library | ✅ Proved |
+| Dynamical → parameter shrinkage | `AxiomsMainConjecture.lean` | ✅ Proved |
+| Shrinkage → local connectivity | `LcAtOfShrink.lean` | ✅ Proved |
+| FR ∨ IR dichotomy | `MainConjecture.lean:38` | ✅ Proved (LEM) |
+| Strategy assembly (given FR-LC + IR-LC) | `MainConjecture.lean:50` | ✅ Proved |
+| Green function convergence + functional eq | `yoccoz-theorem` library | ✅ Proved |
+| `ExternalRayMapData(2) → False` | `MainConjecture.lean:306` | ✅ Proved |
+| Böttcher root sequence definition | `BottcherOutsidePlan.lean:249` | ✅ Defined |
 
-- Root orchestration: `Mlc/MainConjecture.lean`
-- Main constructive monotonicity target:
-  `Mlc/Quadratic/Complex/Bottcher/GreenFunctionRayInversion.lean`
-- Umbrella plan and latest status:
-  `plan/PLAN_axiom_elimination_status.md`
+### What is NOT proved (blocks axiom elimination)
+
+| Gap | Required for | Status |
+|-----|--------------|--------|
+| Puzzle piece ∩ M connected | FR → LC | Axiom (`para_puzzle_piece_inter_mandelbrot_connected`) |
+| Holomorphic motion of puzzle boundaries | FR → LC (alternative) | Unproved (`PuzzleBoundaryMotionHyp`) |
+| IR classification oracle | IR → LC | Unproved (`IRClassificationData`) |
+| Molecule conjecture | IR satellite → LC | Unproved (`MoleculeConjectureRefined`) |
+| Lyubich conformal bridge | IR primitive → LC | Axiom (`lyubich_conformal_bridge`) |
+| Böttcher sequence convergence | Correct Böttcher coord | Axiom (`bottcher_seq_converges`) |
+
+**Closing any single column (FR or IR) is insufficient — both are needed.**
+
+## Other Axioms in the Codebase
+
+These exist but do **not** flow into `mlc_conjecture`:
+
+| Axiom | File |
+|-------|------|
+| `mandelbrot_set_connected` | Axioms.lean:23 |
+| `filled_julia_set_connected` | Axioms.lean:31 |
+| `green_function_strictMono_along_ray_basin_seam` | Axioms.lean:48 |
+| `para_puzzle_piece_inter_mandelbrot_connected` | PuzzleLemmas2.lean:66 |
+| `bottcher_outside_axiom` | BottcherOnMTheory.lean:235 |
+| `bottcher_map_inj_on_K` | BottcherOnMTheory.lean:475 |
+| `bottcher_seq_converges` | BottcherAxioms.lean:297 |
+| `extended_ray_map_continuous` | BottcherAxioms.lean:311 |
+| `lyubich_conformal_bridge` | PrimitiveModulusDivergence.lean:103 |
+
+## Dependencies
+
+| Package | Role |
+|---------|------|
+| [mathlib4](https://github.com/leanprover-community/mathlib4) | Standard math library |
+| [yoccoz-theorem](https://github.com/kirill-kondrashov/yoccoz-theorem) | Yoccoz puzzle machinery, Green function, Grötzsch inequality |
+| [molecule-conjecture](https://github.com/kirill-kondrashov/molecule-conjecture) | Satellite renormalization bridge |
+
+## Repository Layout
+
+```
+Mlc/
+├── MainConjecture.lean          # Root theorem + proof chain
+├── AxiomsMainConjecture.lean    # parameter_shrink_of_yoccoz (proved)
+├── LcAtOfShrink.lean            # Shrinkage → local connectivity (proved)
+├── InfinitelyRenormalizable.lean
+├── PrimitiveModulusDivergence.lean
+├── MoleculeConjectureBridge.lean
+└── Quadratic/Complex/
+    ├── Axioms.lean              # Core mathematical axioms
+    ├── PuzzleLemmas2.lean       # Puzzle connectivity axiom
+    ├── PuzzleBoundaryMotion.lean
+    └── Bottcher/
+        ├── BottcherAxioms.lean  # bottcher_map def + external_ray_map_exists axiom
+        ├── BottcherOutsidePlan.lean  # bottcher_root_seq (correct sequence)
+        ├── GreenFunctionRayInversion.lean
+        └── ...
+plan/                            # Elimination strategy plans (PLAN_00–09)
+check_axioms.lean                # Axiom frontier checker
+```
 
 ## Verification
 
 ```bash
-make build && make check
+make build    # Compile (expects ~7900 jobs on first build)
+make check    # Check axiom frontier (currently FAILS — see above)
 ```
+
+## Plans
+
+Current elimination strategies are documented in `plan/PLAN_00` through
+`plan/PLAN_09`. See `plan/PLAN_00_root_cause_analysis.md` for the detailed
+root cause and `plan/PLAN_09_recommended_action_plan.md` for the recommended
+path forward.
