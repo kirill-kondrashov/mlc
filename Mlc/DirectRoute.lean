@@ -163,6 +163,17 @@ theorem directMLCPackagedData_iff_directMLCData :
   · intro h
     exact directMLCPackagedData_of_directMLCData h
 
+/-- Motion-based packaged and fine-grained direct-route payloads are
+    equivalent. -/
+theorem directMotionIRPackagedData_iff_directMLCData :
+    DirectMotionIRPackagedData ↔ DirectMLCData := by
+  constructor
+  · intro h
+    exact directMLCData_of_directMLCPackagedData
+      (directMLCPackagedData_of_directMotionIRPackagedData h)
+  · intro h
+    exact directMotionIRPackagedData_of_directMLCData h
+
 /-- MLC follows from `DirectMLCPackagedData`. -/
 theorem mlc_conjecture_of_directMLCPackagedData
     (h : DirectMLCPackagedData) :

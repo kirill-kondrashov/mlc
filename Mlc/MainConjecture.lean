@@ -1592,36 +1592,6 @@ def mlcClassifyBridgeSeamData_of_paraPuzzleTransportExistsData_irClassifyBridgeD
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
     h_ir
 
-/-- Build minimal seam payload from FR subset-data + packaged IR
-    classify/bridge data. -/
-def mlcSeamData_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
-    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
-    (h_ir : IRClassifyBridgeData) :
-    MLCSeamData :=
-  mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
-    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
-    h_ir
-
-/-- Build minimal seam payload from FR transport-data + packaged IR
-    classify/bridge data. -/
-def mlcSeamData_of_paraPuzzleTransportData_irClassifyBridgeData
-    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
-    (h_ir : IRClassifyBridgeData) :
-    MLCSeamData :=
-  mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
-    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
-    h_ir
-
-/-- Build minimal seam payload from FR existential transport-data + packaged IR
-    classify/bridge data. -/
-def mlcSeamData_of_paraPuzzleTransportExistsData_irClassifyBridgeData
-    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
-    (h_ir : IRClassifyBridgeData) :
-    MLCSeamData :=
-  mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
-    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
-    h_ir
-
 /-- Current axiom-backed minimal seam payload. -/
 def mlcSeamData_of_axiom : MLCSeamData :=
   mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
