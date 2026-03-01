@@ -1722,8 +1722,8 @@ theorem mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
         (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_MLCSeamData
-    (mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
       h_conn
       (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
 
@@ -1765,8 +1765,8 @@ theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_classify_bridge_data
         (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_MLCSeamData
-    (mlcSeamData_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
       hsub
       (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
 
@@ -1799,8 +1799,8 @@ theorem mlc_conjecture_of_paraPuzzleTransportData_classify_bridge_data
         (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_MLCSeamData
-    (mlcSeamData_of_paraPuzzleTransportData_irClassifyBridgeData
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleTransportData_irClassifyBridgeData
       htr
       (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
 
@@ -1833,8 +1833,8 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_classify_bridge_data
         (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_MLCSeamData
-    (mlcSeamData_of_paraPuzzleTransportExistsData_irClassifyBridgeData
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleTransportExistsData_irClassifyBridgeData
       hex
       (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
 
