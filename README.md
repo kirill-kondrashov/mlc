@@ -17,8 +17,6 @@ make check    # Axiom frontier report
 
 Expected output of `make check`:
 
-Expected output:
-
 ```
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
@@ -55,8 +53,8 @@ with Dudko–Lyubich–Selinger satellite renormalization theory.
 
 | Axiom | Elimination method |
 |-------|--------------------|
-| `external_ray_map_exists` | Axiom trade → direct FR/IR route (provably false for current `bottcher_map`) |
-| `para_puzzle_piece_inter_mandelbrot_connected` | FR branch vacuous: Gaussian modulus makes every parameter IR |
+| `external_ray_map_exists` | Removed from the root theorem route (`mlc_conjecture` is now IR-only) |
+| `para_puzzle_piece_inter_mandelbrot_connected` | Not needed in the root theorem route (FR branch bypassed under Gaussian modulus) |
 
 ## Proof Architecture
 
@@ -112,7 +110,7 @@ on sub-domains, and an affine conjugacy — infrastructure not yet present.
 | FR ∨ IR dichotomy (classical LEM) | `MainConjecture.lean` |
 | Strategy assembly (FR-LC + IR-LC → MLC) | `MainConjecture.lean` |
 | Green function convergence & functional eq | `yoccoz-theorem` library |
-| `ExternalRayMapData(2) → False` | `MainConjecture.lean:306` |
+| `BottcherApproachToOneSeqPreimageData(2) → False` | `MainConjecture.lean` |
 | `PuzzleBoundaryMotionHyp ↔ connectivity` | `DirectRoute.lean` |
 | `M ⊆ ParaPuzzlePiece n` | `ParaPuzzleContainment.lean` |
 | `c ∈ M → c ∈ K(c)` | `ParaPuzzleContainment.lean` |
@@ -139,8 +137,8 @@ These axioms exist but **do not flow** into `mlc_conjecture`:
 ## Repository Layout
 
 ```
-Mlc/                             54 files, ~19 500 lines
-├── MainConjecture.lean          Root theorem + proof routes (~1950 lines)
+Mlc/                             54 files, ~19 583 lines
+├── MainConjecture.lean          Root theorem + proof routes (~1984 lines)
 ├── DirectRoute.lean             Axiom-free reduction infrastructure
 ├── InconsistencyRoute.lean      Tower → False via Gaussian proxy inconsistency
 ├── ParaPuzzleContainment.lean   M ⊆ ParaPuzzlePiece n (proved)
