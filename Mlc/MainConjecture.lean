@@ -1448,6 +1448,12 @@ structure MLCClassifyBridgeSeamData : Prop where
   puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
   ir : IRClassifyBridgeData
 
+/-- Build FR connectedness payload from boundary-motion hypotheses. -/
+def paraPuzzleConnectedData_of_motionHyp
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
+    Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData :=
+  finite_connectedAt_provider_of_motionHyp h_motion
+
 /-- Build packaged IR classify/bridge payload from separate inputs. -/
 def irClassifyBridgeData_of_classify_bridge_data
     (h_classify_ir : IRClassificationData)
@@ -1521,6 +1527,16 @@ def mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
     MLCClassifyBridgeSeamData where
   puzzle_connected := h_conn
   ir := h_ir
+
+/-- Build packaged classify/bridge seam payload from boundary-motion hypotheses
+    + packaged IR classify/bridge data. -/
+def mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_ir : IRClassifyBridgeData) :
+    MLCClassifyBridgeSeamData :=
+  mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (paraPuzzleConnectedData_of_motionHyp h_motion)
+    h_ir
 
 /-- Build packaged classify/bridge seam payload from FR subset-data +
     packaged IR classify/bridge data. -/
@@ -1615,6 +1631,15 @@ theorem mlc_conjecture_of_MLCClassifyBridgeSeamData
     LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_MLCSeamData
     (mlcSeamData_of_MLCClassifyBridgeSeamData h)
+
+/-- Direct MLC assembly from boundary-motion hypotheses + packaged IR
+    classify/bridge data. -/
+theorem mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData h_motion h_ir)
 
 /-- Direct seam theorem with explicit FR connectedness + minimal IR seam
     payloads. -/
