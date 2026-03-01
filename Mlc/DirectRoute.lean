@@ -87,6 +87,12 @@ structure DirectMLCData : Prop where
       (_h : SatelliteRenormalizableTower c),
       MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
+/-- Packaged direct-route payload: FR connectedness + packaged IR
+    classify/bridge data. -/
+structure DirectMLCPackagedData : Prop where
+  puzzle_connected : ParaPuzzlePieceInterMandelbrotConnectedData
+  ir : IRClassifyBridgeData
+
 /-- Minimal direct-route payload alias: FR connectedness + IR local-connectivity
     seam. -/
 abbrev DirectMLCMinimalData : Prop := MLCSeamData
@@ -109,18 +115,33 @@ def irClassifyBridgeData_of_directMLCData
     h.ir_classification
     h.satellite_bridge
 
+/-- Convert fine-grained direct-route data to the packaged payload. -/
+def directMLCPackagedData_of_directMLCData
+    (h : DirectMLCData) :
+    DirectMLCPackagedData where
+  puzzle_connected := h.puzzle_connected
+  ir := irClassifyBridgeData_of_directMLCData h
+
 /-- MLC follows from `DirectMLCMinimalData`. -/
 theorem mlc_conjecture_of_directMLCMinimalData
     (h : DirectMLCMinimalData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_MLCSeamData h
 
+/-- MLC follows from `DirectMLCPackagedData`. -/
+theorem mlc_conjecture_of_directMLCPackagedData
+    (h : DirectMLCPackagedData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_paraPuzzleConnectedData_irClassifyBridgeData
+    h.puzzle_connected
+    h.ir
+
 /-- MLC follows from `DirectMLCData` — no axioms beyond core needed. -/
 theorem mlc_conjecture_of_directMLCData
     (h : DirectMLCData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_directMLCMinimalData
-    (directMLCMinimalData_of_directMLCData h)
+  exact mlc_conjecture_of_directMLCPackagedData
+    (directMLCPackagedData_of_directMLCData h)
 
 end
 
