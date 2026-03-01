@@ -1744,6 +1744,38 @@ theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridg
     (irClassifyBridgeData_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_data
       h_motion h_noTowerPrim h_uniform)
 
+/-- Legacy and packaged bridge-target motion routes are definitionally aligned. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget_eq_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget h_motion h_classify_ir h_target =
+      mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget_packaged
+        h_motion h_classify_ir h_target := by
+  rfl
+
+/-- Legacy and packaged uniform-bridge motion routes are definitionally aligned. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget_eq_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget
+        h_motion h_classify_ir h_uniform =
+      mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget_packaged
+        h_motion h_classify_ir h_uniform := by
+  rfl
+
+/-- Legacy and packaged Track-1+uniform motion routes are definitionally aligned. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_eq_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
+        h_motion h_noTowerPrim h_uniform =
+      mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_packaged
+        h_motion h_noTowerPrim h_uniform := by
+  rfl
+
 /-- Direct seam theorem with explicit FR connectedness + minimal IR seam
     payloads. -/
 theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
