@@ -1,4 +1,4 @@
-# MLC — Mandelbrot Local Connectivity in Lean 4
+# Mandelbrot Local Connectivity (MLC) in Lean 4
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
 ·
