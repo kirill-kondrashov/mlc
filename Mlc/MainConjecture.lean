@@ -1414,11 +1414,35 @@ axiom ir_locally_connected_seam :
       InfinitelyRenormalizable c →
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
-/-- Direct seam theorem with explicit FR connectedness payload.
-    Replacing `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
-    by a constructive witness is the FR unblocking step. -/
-theorem mlc_conjecture_of_paraPuzzleConnectedData
-    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData) :
+/-- Minimal IR seam payload: local connectivity at all infinitely
+    renormalizable Mandelbrot parameters. -/
+def IRLocallyConnectedData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+    InfinitelyRenormalizable c →
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Build the minimal IR seam payload from explicit IR classify/bridge data. -/
+lemma irLocallyConnectedData_of_classify_bridge_data
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    IRLocallyConnectedData := by
+  intro c hc h_inf
+  exact mlc_infinitely_renormalizable h_classify_ir h_bridge c hc h_inf
+
+/-- Current axiom-backed provider for the minimal IR seam payload. -/
+lemma irLocallyConnectedData_of_axiom : IRLocallyConnectedData := by
+  intro c hc h_inf
+  exact ir_locally_connected_seam c hc h_inf
+
+/-- Direct seam theorem with explicit FR connectedness + minimal IR seam
+    payloads. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir_lc : IRLocallyConnectedData) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply locallyConnectedSpace_of_locallyConnectedAt
@@ -1426,7 +1450,16 @@ theorem mlc_conjecture_of_paraPuzzleConnectedData
   rcases dichotomy c with h_fin | h_inf
   · exact finite_lc_provider_of_motionHyp
       (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn) c hc h_fin
-  · exact ir_locally_connected_seam c hc h_inf
+  · exact h_ir_lc c hc h_inf
+
+/-- Direct seam theorem with explicit FR connectedness payload.
+    Replacing `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
+    by a constructive witness is the FR unblocking step. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+    h_conn irLocallyConnectedData_of_axiom
 
 /-- Constructive-route assembly from FR connected-data + IR classify/bridge
     payloads. This bypasses the `ir_locally_connected_seam` axiom once those
@@ -1439,11 +1472,10 @@ theorem mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
       ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
         (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_motionHyp_classify_bridge_data
-    (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn)
-    h_classify_ir
-    h_bridge
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+    h_conn
+    (irLocallyConnectedData_of_classify_bridge_data h_classify_ir h_bridge)
 
 /-- FR branch provider from connected-data payload. -/
 lemma finite_lc_provider_of_paraPuzzleConnectedData
