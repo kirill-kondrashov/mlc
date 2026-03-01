@@ -122,12 +122,29 @@ def directMLCPackagedData_of_directMotionIRPackagedData
     h.motion
     h.ir
 
+/-- Convert canonical packaged seam payload to motion-based packaged direct-route
+    data. -/
+def directMotionIRPackagedData_of_directMLCPackagedData
+    (h : DirectMLCPackagedData) :
+    DirectMotionIRPackagedData where
+  motion := puzzleBoundaryMotionHyp_of_connected h.puzzle_connected
+  ir := h.ir
+
 /-- Convert fine-grained direct-route data to motion-based packaged payload. -/
 def directMotionIRPackagedData_of_directMLCData
     (h : DirectMLCData) :
     DirectMotionIRPackagedData where
   motion := puzzleBoundaryMotionHyp_of_connected h.puzzle_connected
   ir := irClassifyBridgeData_of_directMLCData h
+
+/-- Motion-based and canonical packaged direct-route payloads are equivalent. -/
+theorem directMotionIRPackagedData_iff_directMLCPackagedData :
+    DirectMotionIRPackagedData ↔ DirectMLCPackagedData := by
+  constructor
+  · intro h
+    exact directMLCPackagedData_of_directMotionIRPackagedData h
+  · intro h
+    exact directMotionIRPackagedData_of_directMLCPackagedData h
 
 /-- Convert packaged direct-route data back to fine-grained data. -/
 def directMLCData_of_directMLCPackagedData
