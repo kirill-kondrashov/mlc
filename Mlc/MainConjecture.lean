@@ -2395,7 +2395,7 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_exists_tower
-    exists_renormalization_tower_of_exists_parameter_model_rfast_fixed_point
+    exists_renormalization_tower_of_molecule_bridge_axioms
 
 
 end MainProof

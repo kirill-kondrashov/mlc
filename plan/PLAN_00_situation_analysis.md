@@ -1,93 +1,48 @@
-# Situation Analysis: Where We Actually Are
+# Situation Analysis (Current State)
 
-**Status:** `REFERENCE — read this first`
+**Read this first before working on any plan.**
 
 ---
 
 ## Current Axiom Frontier of `mlc_conjecture`
 
-After many iterations, the proof of `mlc_conjecture` depends on exactly:
-
 ```
-Quot.sound, propext, Classical.choice   ← Lean core (non-negotiable)
-ir_locally_connected_seam               ← THE ONE WE MUST ELIMINATE
+Quot.sound, propext, Classical.choice      ← Lean core (non-negotiable)
+molecule_renormalizable_fixed_point_data   ← Inou-Shishikura/Feigenbaum hypotheses
+fixedPoint_parameter_model_data            ← Straightening Theorem (Douady-Hubbard)
+lyubich_conformal_bridge                   ← Lyubich's a priori bounds
 ```
 
-`external_ray_map_exists` is **already gone** from the dependency chain.
+`check_axioms.lean` verifies exactly this set. Build passes ✓.
 
 ---
 
-## Why `ir_locally_connected_seam` is the Wrong Axiom
+## How We Got Here
 
-The axiom states:
-```lean
-axiom ir_locally_connected_seam :
-    ∀ (c : ℂ) (hc : c ∈ MandelbrotSet), InfinitelyRenormalizable c →
-        LocallyConnectedAt MandelbrotSet ⟨c, hc⟩
-```
+1. **`ir_locally_connected_seam` was circular**: under the Gaussian proxy modulus,
+   every c is InfinitelyRenormalizable, so the axiom was equivalent to MLC itself.
 
-Under the Gaussian proxy modulus, `infinitely_renormalizable_of_gaussian_modulus`
-proves **every** parameter is `InfinitelyRenormalizable`. Therefore:
+2. **InconsistencyRoute** (`Mlc/InconsistencyRoute.lean`) was already built:
+   - `LyubichModulus = 1` (constant) → never summable
+   - `lyubich_conformal_bridge`: divergence of LyubichModulus → divergence of cmodulus
+   - Gaussian proxy: `cmodulus` is always summable
+   - Any `RenormalizationTower (parameterToBMol c)` → `False`
 
-> `ir_locally_connected_seam` ≡ "every Mandelbrot point is locally connected" ≡ MLC
-
-We have axiomatized the conclusion. This is circular.
+3. **Replaced `ir_locally_connected_seam`** with `exists_parameter_model_rfast_fixed_point`,
+   which gives the tower needed for the InconsistencyRoute.
 
 ---
 
-## The InconsistencyRoute (Already Built)
+## The Routes Forward
 
-`Mlc/InconsistencyRoute.lean` provides:
+See PLAN_01 through PLAN_05 for detailed strategies.
 
-```lean
-theorem false_of_renormalization_tower (c : ℂ)
-    (T : RenormalizationTower (parameterToBMol c)) : False
+| Plan | Action | Difficulty | Status |
+|------|--------|-----------|--------|
+| PLAN_01 | Split monolithic axiom into two cleaner ones | Easy | ✅ DONE |
+| PLAN_02 | Prove `molecule_renormalizable_fixed_point_data` | Very Hard | ❌ Blocked (trivial slice) |
+| PLAN_03 | Prove `fixedPoint_parameter_model_data` (Straightening) | Very Hard | ❌ Blocked (degenerate parameterToBMol) |
+| PLAN_04 | Eliminate `lyubich_conformal_bridge` | Very Hard | Long-term |
+| PLAN_05 | BMol-generalization: bypass Straightening Theorem | Medium | **⭐ READY** |
 
-theorem mlc_of_tower' (T : RenormalizationTower ...) : LocallyConnectedSpace X
-```
-
-**Derivation:**
-1. `LyubichModulus = 1` → `¬Summable (fun n => LyubichModulus ...)` ✓ (proved)
-2. `lyubich_conformal_bridge` axiom: divergence → `¬Summable cmodulus`
-3. Gaussian proxy: `Summable cmodulus` always ✓ (proved)
-4. Contradiction → `False`
-
-**Only axiom needed:** `lyubich_conformal_bridge` (already present, mathematically standard)
-
-**Missing piece:** A concrete `RenormalizationTower (parameterToBMol c)` for ANY `c`.
-
----
-
-## The Gap: Constructing a RenormalizationTower
-
-`RenormalizationTower g` requires an infinite sequence of renormalizations:
-```lean
-structure RenormalizationTower (g : BMol) where
-  gₙ : ℕ → BMol
-  g0 : gₙ 0 = g
-  step : ∀ n, Nonempty (RenormalizationRelation (gₙ n) (gₙ (n + 1)))
-```
-
-This is the heart of the problem.
-
----
-
-## Key Observations
-
-1. `exists_renormalization_tower` was added as an axiom in `RenormalizationTowerExistence.lean`
-   but is not yet wired into `mlc_conjecture`.
-
-2. `Molecule.molecule_conjecture_refined` is itself an axiom in `Molecule/Conjecture.lean`.
-   It describes the satellite renormalization structure but doesn't directly produce a tower.
-
-3. `SatelliteRenormalizableTower c` = `Nonempty (RenormalizationTower (parameterToBMol c))`.
-   We know `false_of_satellite_tower` in `InconsistencyRoute`.
-
-4. The Gaussian proxy makes `InfinitelyRenormalizable` trivially true for all `c`, but this
-   is **NOT** the same as `SatelliteRenormalizableTower` (which requires actual Rfast iterates).
-
----
-
-## The Three Routes Forward
-
-See PLAN_01, PLAN_02, PLAN_03 for the three strategies.
+**Recommended next step: PLAN_05.** It reduces from 3 to 2 non-core axioms in ~2 hours.

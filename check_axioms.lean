@@ -15,7 +15,8 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice,
-     ``MLC.exists_parameter_model_rfast_fixed_point,
+     ``MLC.molecule_renormalizable_fixed_point_data,
+     ``MLC.fixedPoint_parameter_model_data,
      ``MLC.lyubich_conformal_bridge]
   
   try
