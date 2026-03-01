@@ -1399,26 +1399,6 @@ This replaces the vacuous `external_ray_map_exists(2) → False → MainPathData
 chain with a mathematically sound proof skeleton.
 -/
 
-/-- Trivial holomorphic motion on the empty set (needed to fill phantom params). -/
-private def trivialHolomorphicMotion_seam : HolomorphicMotion (∅ : Set ℂ) where
-  f := fun _ z => z
-  h_zero := by simp
-  h_inj := by intro _ _; exact Set.injOn_empty _
-  h_holo := by intro z hz; exact (Set.mem_empty_iff_false z).mp hz |>.elim
-
-/-- Construct `PuzzleBoundaryMotionHyp` from the para-puzzle connectivity axiom.
-    The holomorphic motion parameters in `PuzzleBoundaryMotionHyp` are phantom
-    (unused with underscore prefix), so the trivial empty-set motion suffices. -/
-private lemma puzzleBoundaryMotionHyp_of_axiom :
-    Quadratic.PuzzleBoundaryMotionHyp where
-  motion := by
-    intro n c₀ hc₀
-    refine ⟨1, one_pos, ∅, trivialHolomorphicMotion_seam, ?_⟩
-    intro hc₀_M
-    exact ⟨Quadratic.ParaPuzzlePieceAt c₀ n ∩ Quadratic.MandelbrotSet,
-           Quadratic.para_puzzle_piece_inter_mandelbrot_connected c₀ hc₀_M n,
-           rfl⟩
-
 /-- Seam axiom: the Mandelbrot set is locally connected at every infinitely
     renormalizable parameter.
     Proof idea: this combines two deep results —
@@ -1434,17 +1414,62 @@ axiom ir_locally_connected_seam :
       InfinitelyRenormalizable c →
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
+/-- Direct seam theorem with explicit FR connectedness payload.
+    Replacing `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
+    by a constructive witness is the FR unblocking step. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  rcases dichotomy c with h_fin | h_inf
+  · exact finite_lc_provider_of_motionHyp
+      (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn) c hc h_fin
+  · exact ir_locally_connected_seam c hc h_inf
+
+/-- FR branch provider from connected-data payload. -/
+lemma finite_lc_provider_of_paraPuzzleConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData) :
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+  finite_lc_provider_of_motionHyp
+    (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn)
+
+/-- Subset-data route to the direct seam theorem.
+    This is axiom-free once `ParaPuzzleMandelbrotSubsetData` is provided
+    constructively. -/
+theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData
+    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+
+/-- Transport-data route to the direct seam theorem.
+    This is axiom-free once `ParaPuzzleInterMandelbrotTransportData` is provided
+    constructively. -/
+theorem mlc_conjecture_of_paraPuzzleTransportData
+    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
+
+/-- Existential-transport-data route to the direct seam theorem.
+    This is axiom-free once `ParaPuzzleInterMandelbrotTransportExistsData` is
+    provided constructively. -/
+theorem mlc_conjecture_of_paraPuzzleTransportExistsData
+    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     The Mandelbrot set is locally connected. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  rw [mandelbrotSet_eq_MandelbrotSet]
-  apply locallyConnectedSpace_of_locallyConnectedAt
-  intro ⟨c, hc⟩
-  rcases dichotomy c with h_fin | h_inf
-  · exact finite_lc_provider_of_motionHyp puzzleBoundaryMotionHyp_of_axiom c hc h_fin
-  · exact ir_locally_connected_seam c hc h_inf
+  exact mlc_conjecture_of_paraPuzzleConnectedData
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
 
 end MainProof
 

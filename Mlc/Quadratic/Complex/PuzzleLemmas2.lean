@@ -71,6 +71,13 @@ axiom para_puzzle_piece_inter_mandelbrot_connected (c : ℂ)
 def ParaPuzzlePieceInterMandelbrotConnectedData : Prop :=
   ∀ c, c ∈ MandelbrotSet → ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet)
 
+/-- Current axiom-backed provider for para-puzzle connectedness on `M`.
+    This isolates the single FR replacement target in one payload. -/
+theorem para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom :
+    ParaPuzzlePieceInterMandelbrotConnectedData := by
+  intro c hc n
+  exact para_puzzle_piece_inter_mandelbrot_connected c hc n
+
 /-- Stronger candidate bridge target: every Mandelbrot parameter belongs to each
     para-puzzle piece centered at a Mandelbrot parameter. -/
 def ParaPuzzleMandelbrotSubsetData : Prop :=

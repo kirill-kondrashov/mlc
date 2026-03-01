@@ -85,6 +85,26 @@ structure PuzzleBoundaryMotionHyp : Prop where
       ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
         motion_preserves_para_piece n c₀ r E h
 
+/-- Trivial holomorphic motion on the empty set. This is sufficient for
+    constructors where motion parameters are phantom and only connectivity
+    payload is used. -/
+private def trivialHolomorphicMotion : HolomorphicMotion (∅ : Set ℂ) where
+  f := fun _ z => z
+  h_zero := by simp
+  h_inj := by intro _ _; exact Set.injOn_empty _
+  h_holo := by intro z hz; exact (Set.mem_empty_iff_false z).mp hz |>.elim
+
+/-- Build `PuzzleBoundaryMotionHyp` from connectedness data on
+    `ParaPuzzlePieceAt c n ∩ M`. -/
+theorem puzzleBoundaryMotionHyp_of_connected_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+    PuzzleBoundaryMotionHyp where
+  motion := by
+    intro n c₀ _hc₀
+    refine ⟨1, one_pos, ∅, trivialHolomorphicMotion, ?_⟩
+    intro hc₀_M
+    exact ⟨ParaPuzzlePieceAt c₀ n ∩ MandelbrotSet, h_conn c₀ hc₀_M n, rfl⟩
+
 /-- Assemble the data needed for a parameter-stability motion. -/
 structure PuzzleBoundaryMotionData (n : ℕ) (c₀ : ℂ) where
   r : ℝ

@@ -30,15 +30,6 @@ open Quadratic Complex Topology Set
 
 noncomputable section
 
-/-! ### Trivial holomorphic motion on the empty set -/
-
-/-- A holomorphic motion on the empty set — trivially satisfies all conditions. -/
-def trivialHolomorphicMotion : HolomorphicMotion (∅ : Set ℂ) where
-  f := fun _ z => z
-  h_zero := by simp
-  h_inj := by intro _ _; exact Set.injOn_empty _
-  h_holo := by intro z hz; exact (Set.mem_empty_iff_false z).mp hz |>.elim
-
 /-! ### Equivalence: `PuzzleBoundaryMotionHyp` ↔ connectivity axiom
 
 The `motion_preserves_para_piece` predicate has phantom parameters
@@ -50,16 +41,8 @@ logically equivalent to the connectivity of `ParaPuzzlePieceAt c n ∩ M`.
     intersections with M. The holomorphic motion parameters are phantom. -/
 theorem puzzleBoundaryMotionHyp_of_connected
     (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
-    PuzzleBoundaryMotionHyp where
-  motion := by
-    intro n c₀ hc₀
-    -- Provide trivial motion data (phantom parameters)
-    refine ⟨1, one_pos, ∅, trivialHolomorphicMotion, ?_⟩
-    -- The real content: connectivity
-    intro hc₀_M
-    exact ⟨ParaPuzzlePieceAt c₀ n ∩ MandelbrotSet,
-           h_conn c₀ hc₀_M n,
-           rfl⟩
+    PuzzleBoundaryMotionHyp :=
+  Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn
 
 /-- Conversely, `PuzzleBoundaryMotionHyp` implies the connectivity condition. -/
 theorem connected_of_puzzleBoundaryMotionHyp
