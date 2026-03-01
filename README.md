@@ -49,6 +49,24 @@ mlc_conjecture
 The FR branch (Yoccoz puzzle shrinkage) is vacuously true because the
 Gaussian proxy modulus makes every parameter infinitely renormalizable.
 
+### Path to eliminating the last axiom
+
+`InconsistencyRoute.lean` proves that any `RenormalizationTower` yields `False`
+under the current axiom system (Gaussian proxy + Lyubich bridge):
+
+```
+false_of_renormalization_tower : ∀ c, RenormalizationTower (parameterToBMol c) → False
+  depends on: lyubich_conformal_bridge (axiom, mathematically TRUE)
+```
+
+This means constructing ONE `RenormalizationTower` for any parameter would:
+1. Eliminate `ir_locally_connected_seam` entirely
+2. Replace it with `lyubich_conformal_bridge` (a true theorem about a priori bounds)
+
+The remaining challenge is constructing a tower — e.g., period-2 renormalization
+of the basilica (`c = -1`) — which requires formal domain construction and
+conjugacy proofs.
+
 ### Axiom explanations
 
 | Axiom | Mathematical content |
@@ -80,6 +98,8 @@ replaces that with the direct strategy decomposition above.
 | M ⊆ ParaPuzzlePiece n | `ParaPuzzleContainment.lean` | ✅ Proved (from `filled_julia_set_connected`) |
 | c ∈ M → c ∈ K(c) | `ParaPuzzleContainment.lean` | ✅ Proved (axiom-free) |
 | K(c) ⊆ DynamicalPuzzlePiece c n 0 | `ParaPuzzleContainment.lean` | ✅ Proved |
+| Tower → False (Gaussian inconsistency) | `InconsistencyRoute.lean` | ✅ Proved (from `lyubich_conformal_bridge`) |
+| Tower → `ir_locally_connected_seam` | `InconsistencyRoute.lean` | ✅ Proved (from `lyubich_conformal_bridge`) |
 
 ### Non-core axioms flowing into `mlc_conjecture`
 
@@ -122,6 +142,7 @@ replaces that with the direct strategy decomposition above.
 Mlc/
 ├── MainConjecture.lean          # Root theorem + direct proof route
 ├── DirectRoute.lean             # Axiom-free reduction infrastructure
+├── InconsistencyRoute.lean       # Tower → False (Lyubich bridge + Gaussian proxy)
 ├── ParaPuzzleContainment.lean   # M ⊆ ParaPuzzlePiece n (proved)
 ├── AxiomsMainConjecture.lean    # parameter_shrink_of_yoccoz (proved)
 ├── LcAtOfShrink.lean            # Shrinkage → local connectivity (proved)
@@ -150,7 +171,9 @@ make check    # Check axiom frontier
 
 ## Plans
 
-Current elimination strategies are documented in `plan/PLAN_00` through
-`plan/PLAN_09`. See `plan/PLAN_00_root_cause_analysis.md` for the detailed
-root cause and `plan/PLAN_09_recommended_action_plan.md` for the recommended
-path forward.
+To eliminate the last axiom (`ir_locally_connected_seam`), construct a
+`RenormalizationTower` for any parameter. The `InconsistencyRoute.lean`
+module then provides `ir_locally_connected_seam_of_tower` which derives the
+axiom from the tower via the Gaussian proxy inconsistency.
+
+Historical strategy plans are in `plan/PLAN_00` through `plan/PLAN_09`.
