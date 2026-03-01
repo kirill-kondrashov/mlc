@@ -1509,6 +1509,16 @@ structure MLCSeamData : Prop where
   puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
   ir_local_connected : IRLocallyConnectedData
 
+/-- Characterization of the minimal direct-route seam payload. -/
+theorem mlcSeamData_iff :
+    MLCSeamData ↔
+      Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData ∧ IRLocallyConnectedData := by
+  constructor
+  · intro h
+    exact ⟨h.puzzle_connected, h.ir_local_connected⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
+
 /-- Build minimal seam payload from FR connectedness + IR local-connectivity
     payloads. -/
 def mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
