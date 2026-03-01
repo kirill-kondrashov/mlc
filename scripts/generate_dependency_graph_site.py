@@ -1429,6 +1429,14 @@ def graph_page_html_v2(title: str) -> str:
       position: relative;
       background: var(--canvas-bg);
     }}
+    #canvas3d, #canvas2d {{
+      width: 100%;
+      height: 100%;
+      display: block;
+      position: absolute;
+      inset: 0;
+    }}
+    #canvas2d {{ display: none; }}
     #hover {{
       position: absolute;
       pointer-events: none;
@@ -1458,7 +1466,7 @@ def graph_page_html_v2(title: str) -> str:
     <button id="themeBtn" type="button">Theme</button>
     <div id="legend" class="legend"></div>
   </div>
-  <div id="scene"><div id="hover"></div></div>
+  <div id="scene"><canvas id="canvas3d"></canvas><canvas id="canvas2d"></canvas><div id="hover"></div></div>
 </div>
 <script src="graph.js"></script>
 </body>
@@ -1477,6 +1485,7 @@ def graph_page_js() -> str:
   const themeBtn = document.getElementById("themeBtn");
   const hoverEl = document.getElementById("hover");
   const THEME_KEY = "mlc_graph_theme";
+  const MODE_KEY = "mlc_graph_mode";
 
   const KIND_COLOR = {
     theorem: 0xffb703,
@@ -1658,26 +1667,44 @@ def graph_page_js() -> str:
       payload.nodes.filter(n => n.axiom_tier === "missing").map(n => n.id)
     );
 
-    const canvas = document.createElement("canvas");
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.display = "block";
-    canvas.style.position = "absolute";
-    canvas.style.inset = "0";
-    sceneEl.prepend(canvas);
-    const canvas2d = document.createElement("canvas");
-    canvas2d.style.width = "100%";
-    canvas2d.style.height = "100%";
-    canvas2d.style.display = "none";
-    canvas2d.style.position = "absolute";
-    canvas2d.style.inset = "0";
-    sceneEl.prepend(canvas2d);
-    const ctx2d = canvas2d.getContext("2d");
-    const gl = canvas.getContext("webgl", { antialias: true, alpha: false });
-    if (!gl) {
-      if (summaryEl) summaryEl.textContent = "WebGL is unavailable in this browser.";
+    const canvas = document.getElementById("canvas3d");
+    const canvas2d = document.getElementById("canvas2d");
+    if (!canvas || !canvas2d) {
+      if (summaryEl) summaryEl.textContent = "Canvas elements missing from graph page.";
       return;
     }
+    const ctx2d = canvas2d.getContext("2d");
+    function createWebGLContext(c) {
+      const names = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"];
+      const attrs = [
+        { antialias: true, alpha: false },
+        { antialias: false, alpha: false },
+        { alpha: false },
+        {}
+      ];
+      for (const name of names) {
+        for (const attr of attrs) {
+          try {
+            const ctx = c.getContext(name, attr);
+            if (ctx) return ctx;
+          } catch (_err) {}
+        }
+        try {
+          const ctx = c.getContext(name);
+          if (ctx) return ctx;
+        } catch (_err) {}
+      }
+      return null;
+    }
+
+    const gl = createWebGLContext(canvas);
+    let hasWebGL = !!gl;
+    let webglStatusMessage = "";
+    const glVersion = hasWebGL ? String(gl.getParameter(gl.VERSION) || "") : "";
+    const isWebGL2 = hasWebGL && /webgl\\s*2/i.test(glVersion);
+    try {
+      console.info("[MLC Graph] WebGL context:", hasWebGL ? glVersion : "none");
+    } catch (_err) {}
 
     function compileShader(type, source) {
       const sh = gl.createShader(type);
@@ -1704,8 +1731,17 @@ def graph_page_js() -> str:
       return p;
     }
 
-    const lineProgram = createProgram(
-      `
+    const lineVsSource = isWebGL2 ? `
+      #version 300 es
+      in vec3 aPosition;
+      in vec4 aColor;
+      uniform mat4 uViewProj;
+      out vec4 vColor;
+      void main() {
+        gl_Position = uViewProj * vec4(aPosition, 1.0);
+        vColor = aColor;
+      }
+      ` : `
       attribute vec3 aPosition;
       attribute vec4 aColor;
       uniform mat4 uViewProj;
@@ -1714,18 +1750,38 @@ def graph_page_js() -> str:
         gl_Position = uViewProj * vec4(aPosition, 1.0);
         vColor = aColor;
       }
-      `,
-      `
+      `;
+    const lineFsSource = isWebGL2 ? `
+      #version 300 es
+      precision mediump float;
+      in vec4 vColor;
+      out vec4 outColor;
+      void main() {
+        outColor = vColor;
+      }
+      ` : `
       precision mediump float;
       varying vec4 vColor;
       void main() {
         gl_FragColor = vColor;
       }
-      `
-    );
-
-    const pointProgram = createProgram(
-      `
+      `;
+    const pointVsSource = isWebGL2 ? `
+      #version 300 es
+      in vec3 aPosition;
+      in vec4 aColor;
+      in float aSize;
+      uniform mat4 uView;
+      uniform mat4 uProj;
+      uniform float uPointScale;
+      out vec4 vColor;
+      void main() {
+        vec4 viewPos = uView * vec4(aPosition, 1.0);
+        gl_Position = uProj * viewPos;
+        gl_PointSize = max(2.0, aSize * uPointScale / max(1.0, -viewPos.z));
+        vColor = aColor;
+      }
+      ` : `
       attribute vec3 aPosition;
       attribute vec4 aColor;
       attribute float aSize;
@@ -1739,8 +1795,21 @@ def graph_page_js() -> str:
         gl_PointSize = max(2.0, aSize * uPointScale / max(1.0, -viewPos.z));
         vColor = aColor;
       }
-      `,
-      `
+      `;
+    const pointFsSource = isWebGL2 ? `
+      #version 300 es
+      precision mediump float;
+      in vec4 vColor;
+      out vec4 outColor;
+      void main() {
+        vec2 p = gl_PointCoord * 2.0 - 1.0;
+        float d = dot(p, p);
+        if (d > 1.0) discard;
+        float border = smoothstep(0.72, 1.0, d);
+        vec3 col = mix(vColor.rgb, vec3(0.03, 0.04, 0.08), border * 0.55);
+        outColor = vec4(col, vColor.a);
+      }
+      ` : `
       precision mediump float;
       varying vec4 vColor;
       void main() {
@@ -1751,16 +1820,33 @@ def graph_page_js() -> str:
         vec3 col = mix(vColor.rgb, vec3(0.03, 0.04, 0.08), border * 0.55);
         gl_FragColor = vec4(col, vColor.a);
       }
-      `
-    );
+      `;
 
-    const linePosBuf = gl.createBuffer();
-    const lineColBuf = gl.createBuffer();
-    const pointPosBuf = gl.createBuffer();
-    const pointColBuf = gl.createBuffer();
-    const pointSizeBuf = gl.createBuffer();
-    const spherePosBuf = gl.createBuffer();
-    const sphereColBuf = gl.createBuffer();
+    let lineProgram = null;
+    let pointProgram = null;
+    if (hasWebGL) {
+      try {
+        lineProgram = createProgram(lineVsSource, lineFsSource);
+        pointProgram = createProgram(pointVsSource, pointFsSource);
+      } catch (err) {
+        hasWebGL = false;
+        webglStatusMessage =
+          `WebGL init failed (${String(err && err.message ? err.message : err)}); using 2D fallback.`;
+        if (summaryEl) summaryEl.textContent = webglStatusMessage;
+      }
+    }
+    if (!hasWebGL && !webglStatusMessage) {
+      webglStatusMessage = "WebGL unavailable; rendering in 2D fallback mode.";
+      if (summaryEl) summaryEl.textContent = webglStatusMessage;
+    }
+
+    const linePosBuf = hasWebGL ? gl.createBuffer() : null;
+    const lineColBuf = hasWebGL ? gl.createBuffer() : null;
+    const pointPosBuf = hasWebGL ? gl.createBuffer() : null;
+    const pointColBuf = hasWebGL ? gl.createBuffer() : null;
+    const pointSizeBuf = hasWebGL ? gl.createBuffer() : null;
+    const spherePosBuf = hasWebGL ? gl.createBuffer() : null;
+    const sphereColBuf = hasWebGL ? gl.createBuffer() : null;
     let edgeVertexCount = 0;
     let sphereVertexCount = 0;
 
@@ -1827,10 +1913,14 @@ def graph_page_js() -> str:
       lastY: 0
     };
     function modeButtonText() {
-      return renderMode.value === "3d" ? "Mode: 3D" : "Mode: 2D";
+      if (renderMode.value === "3d") {
+        return hasWebGL ? "Mode: 3D" : "Mode: 3D (CPU)";
+      }
+      return "Mode: 2D";
     }
 
     function buildSphereBuffers() {
+      if (!hasWebGL) return;
       const latSteps = 24;
       const lonSteps = 36;
       const positions = [];
@@ -2035,6 +2125,7 @@ def graph_page_js() -> str:
     let pointsDirty = true;
     let edgesDirty = true;
     function syncPointBuffers() {
+      if (!hasWebGL) return;
       const pos = new Float32Array(nodeData.length * 3);
       const col = new Float32Array(nodeData.length * 4);
       const siz = new Float32Array(nodeData.length);
@@ -2059,6 +2150,7 @@ def graph_page_js() -> str:
     }
 
     function syncEdgeBuffers() {
+      if (!hasWebGL) return;
       const positions = [];
       const colors = [];
       const shaftInset = Math.max(7, sphereRadius * 0.018);
@@ -2153,7 +2245,9 @@ def graph_page_js() -> str:
       canvas2d.width = canvasPxW;
       canvas2d.height = canvasPxH;
       if (ctx2d) ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
-      gl.viewport(0, 0, canvasPxW, canvasPxH);
+      if (hasWebGL) {
+        gl.viewport(0, 0, canvasPxW, canvasPxH);
+      }
       cameraDirty = true;
       fit2DLayout();
     }
@@ -2203,7 +2297,8 @@ def graph_page_js() -> str:
     }
 
     function pickNode(clientX, clientY) {
-      const rect = canvas.getBoundingClientRect();
+      const active3DCanvas = hasWebGL ? canvas : canvas2d;
+      const rect = active3DCanvas.getBoundingClientRect();
       const x = clientX - rect.left;
       const y = clientY - rect.top;
       let bestIndex = -1;
@@ -2228,7 +2323,8 @@ def graph_page_js() -> str:
     }
 
     function screenRay(clientX, clientY) {
-      const rect = canvas.getBoundingClientRect();
+      const active3DCanvas = hasWebGL ? canvas : canvas2d;
+      const rect = active3DCanvas.getBoundingClientRect();
       const x = clientX - rect.left;
       const y = clientY - rect.top;
       const ndcX = (x / canvasCssW) * 2 - 1;
@@ -2293,7 +2389,10 @@ def graph_page_js() -> str:
       }
       lastX = ev.clientX;
       lastY = ev.clientY;
-      canvas.setPointerCapture(ev.pointerId);
+      try {
+        const el = ev.currentTarget;
+        if (el && el.setPointerCapture) el.setPointerCapture(ev.pointerId);
+      } catch (_err) {}
     }
 
     function onPointerMove(ev) {
@@ -2336,7 +2435,12 @@ def graph_page_js() -> str:
     function onPointerUp(ev) {
       draggingNodeIndex = -1;
       orbiting = false;
+      try {
+        const el = ev.currentTarget;
+        if (el && el.releasePointerCapture) el.releasePointerCapture(ev.pointerId);
+      } catch (_err) {}
       try { canvas.releasePointerCapture(ev.pointerId); } catch (_err) {}
+      try { canvas2d.releasePointerCapture(ev.pointerId); } catch (_err) {}
     }
 
     function onWheel(ev) {
@@ -2348,6 +2452,10 @@ def graph_page_js() -> str:
     }
 
     function onPointerDown2D(ev) {
+      if (renderMode.value === "3d") {
+        onPointerDown(ev);
+        return;
+      }
       if (renderMode.value !== "2d") return;
       const pick = pickNode2D(ev.clientX, ev.clientY);
       if (pick >= 0) {
@@ -2361,6 +2469,10 @@ def graph_page_js() -> str:
     }
 
     function onPointerMove2D(ev) {
+      if (renderMode.value === "3d") {
+        onPointerMove(ev);
+        return;
+      }
       if (renderMode.value !== "2d") return;
       if (layout2d.draggingIndex >= 0) {
         const p = worldFromScreen2D(ev.clientX, ev.clientY);
@@ -2393,12 +2505,20 @@ def graph_page_js() -> str:
     }
 
     function onPointerUp2D(ev) {
+      if (renderMode.value === "3d") {
+        onPointerUp(ev);
+        return;
+      }
       layout2d.draggingIndex = -1;
       layout2d.panning = false;
       try { canvas2d.releasePointerCapture(ev.pointerId); } catch (_err) {}
     }
 
     function onWheel2D(ev) {
+      if (renderMode.value === "3d") {
+        onWheel(ev);
+        return;
+      }
       if (renderMode.value !== "2d") return;
       ev.preventDefault();
       const rect = canvas2d.getBoundingClientRect();
@@ -2413,11 +2533,21 @@ def graph_page_js() -> str:
     }
 
     function setRenderMode(mode) {
-      renderMode.value = mode === "2d" ? "2d" : "3d";
-      canvas.style.display = renderMode.value === "3d" ? "block" : "none";
-      canvas2d.style.display = renderMode.value === "2d" ? "block" : "none";
+      const next = mode === "2d" ? "2d" : "3d";
+      renderMode.value = next;
+      if (hasWebGL) {
+        canvas.style.display = renderMode.value === "3d" ? "block" : "none";
+        canvas2d.style.display = renderMode.value === "2d" ? "block" : "none";
+      } else {
+        canvas.style.display = "none";
+        canvas2d.style.display = "block";
+      }
       hoverEl.style.display = "none";
+      if (renderMode.value === "3d") {
+        fitCamera();
+      }
       if (modeBtn) modeBtn.textContent = modeButtonText();
+      try { localStorage.setItem(MODE_KEY, renderMode.value); } catch (_err) {}
     }
 
     canvas.addEventListener("pointerdown", onPointerDown);
@@ -2452,12 +2582,115 @@ def graph_page_js() -> str:
     const theoremCount = payload.nodes.filter(n => n.kind === "theorem").length;
     const defCount = payload.nodes.filter(n => n.kind === "def").length;
     if (summaryEl) {
-      summaryEl.textContent =
+      const counts =
         `${declCount} declarations, ${edgeCount} edges, ` +
         `${theoremCount} theorems, ${defCount} definitions`;
+      if (!hasWebGL) {
+        summaryEl.textContent = webglStatusMessage
+          ? `${counts} | ${webglStatusMessage} | CPU 3D mode available`
+          : `${counts} | WebGL unavailable, using CPU 3D fallback`;
+      } else {
+        summaryEl.textContent = counts;
+      }
+    }
+
+    function draw3DSoft() {
+      if (!ctx2d) return;
+      if (cameraDirty) updateCameraMatrices();
+      const bgCss = getComputedStyle(document.documentElement).getPropertyValue("--canvas-bg") || "#0b1220";
+      const dpr = canvasPxW / Math.max(1, canvasCssW);
+      ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx2d.clearRect(0, 0, canvasCssW, canvasCssH);
+      ctx2d.fillStyle = bgCss.trim();
+      ctx2d.fillRect(0, 0, canvasCssW, canvasCssH);
+
+      const projected = new Array(nodeData.length);
+      for (let i = 0; i < nodeData.length; i += 1) {
+        projected[i] = projectToScreen(nodeData[i].pos);
+      }
+
+      const edgeDraw = [];
+      for (const e of edgeData) {
+        if (!e.visible) continue;
+        const a = projected[e.sourceIndex];
+        const b = projected[e.targetIndex];
+        if (!a || !b) continue;
+        edgeDraw.push({ e, a, b, z: (a.depth + b.depth) * 0.5 });
+      }
+      edgeDraw.sort((u, v) => v.z - u.z);
+      for (const item of edgeDraw) {
+        const { e, a, b } = item;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const len = Math.hypot(dx, dy);
+        if (len <= 1e-3) continue;
+        const ux = dx / len;
+        const uy = dy / len;
+        const color = rgb01ToCss(e.color, e.alpha);
+        ctx2d.strokeStyle = color;
+        ctx2d.lineWidth = 1.2;
+        ctx2d.beginPath();
+        ctx2d.moveTo(a.x, a.y);
+        ctx2d.lineTo(b.x, b.y);
+        ctx2d.stroke();
+
+        const headLen = Math.min(12, Math.max(7, len * 0.2));
+        const headHalf = headLen * 0.45;
+        const bx = b.x - ux * headLen;
+        const by = b.y - uy * headLen;
+        ctx2d.fillStyle = color;
+        ctx2d.beginPath();
+        ctx2d.moveTo(b.x, b.y);
+        ctx2d.lineTo(bx - uy * headHalf, by + ux * headHalf);
+        ctx2d.lineTo(bx + uy * headHalf, by - ux * headHalf);
+        ctx2d.closePath();
+        ctx2d.fill();
+      }
+
+      const q = String(searchEl?.value || "").trim().toLowerCase();
+      const nodeDraw = [];
+      for (let i = 0; i < nodeData.length; i += 1) {
+        const p = projected[i];
+        if (!p) continue;
+        nodeDraw.push({ i, p });
+      }
+      nodeDraw.sort((u, v) => v.p.depth - u.p.depth);
+
+      for (const item of nodeDraw) {
+        const n = nodeData[item.i];
+        const p = item.p;
+        const persp = Math.max(0.4, Math.min(2.2, camera.distance / Math.max(120, p.depth)));
+        const r = Math.max(2.5, n.baseSize * n.sizeScale * 0.55 * persp);
+        ctx2d.fillStyle = rgb01ToCss(n.color, Math.max(0.16, n.alpha));
+        ctx2d.beginPath();
+        ctx2d.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx2d.fill();
+
+        if (n.id === rootId) {
+          ctx2d.strokeStyle = "#22c55e";
+          ctx2d.lineWidth = 1.8;
+          ctx2d.beginPath();
+          ctx2d.arc(p.x, p.y, r + 2, 0, Math.PI * 2);
+          ctx2d.stroke();
+        }
+
+        const showLabel =
+          n.id === rootId ||
+          (q && (
+            String(n.id).toLowerCase().includes(q) ||
+            String(n.label).toLowerCase().includes(q) ||
+            String(n.fq_name).toLowerCase().includes(q)
+          ));
+        if (showLabel) {
+          ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], Math.min(1, Math.max(0.5, n.alpha + 0.1)));
+          ctx2d.font = `11px "IBM Plex Sans", "Segoe UI", sans-serif`;
+          ctx2d.fillText(n.label, p.x + r + 4, p.y - 3);
+        }
+      }
     }
 
     function drawLines(posBuf, colBuf, vertexCount) {
+      if (!hasWebGL) return;
       if (vertexCount <= 0) return;
       gl.useProgram(lineProgram);
       const posLoc = gl.getAttribLocation(lineProgram, "aPosition");
@@ -2474,6 +2707,7 @@ def graph_page_js() -> str:
     }
 
     function drawPoints() {
+      if (!hasWebGL) return;
       gl.useProgram(pointProgram);
       const posLoc = gl.getAttribLocation(pointProgram, "aPosition");
       const colLoc = gl.getAttribLocation(pointProgram, "aColor");
@@ -2504,6 +2738,10 @@ def graph_page_js() -> str:
         draw2D();
         return;
       }
+      if (!hasWebGL) {
+        draw3DSoft();
+        return;
+      }
       if (cameraDirty) updateCameraMatrices();
       if (pointsDirty) syncPointBuffers();
       if (edgesDirty) syncEdgeBuffers();
@@ -2522,10 +2760,17 @@ def graph_page_js() -> str:
     }
 
     renderLegend();
-    fitCamera();
-    buildSphereBuffers();
+    if (hasWebGL) {
+      fitCamera();
+      buildSphereBuffers();
+    }
     build2DLayout();
-    setRenderMode("2d");
+    let initialMode = hasWebGL ? "3d" : "2d";
+    try {
+      const savedMode = localStorage.getItem(MODE_KEY);
+      if (savedMode === "2d" || savedMode === "3d") initialMode = savedMode;
+    } catch (_err) {}
+    setRenderMode(initialMode);
     applySearch();
     render();
   }
