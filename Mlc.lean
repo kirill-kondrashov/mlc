@@ -2,6 +2,7 @@
 -- Import modules here that should be built as part of the library.
 import Mlc.MainConjecture
 import Mlc.DirectRoute
+import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnM
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan

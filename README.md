@@ -79,14 +79,16 @@ replaces that with the direct strategy decomposition above.
 | Böttcher root sequence definition | `BottcherOutsidePlan.lean:249` | ✅ Defined |
 | PuzzleBoundaryMotionHyp ↔ connectivity | `DirectRoute.lean` | ✅ Proved |
 | `mlc_conjecture_of_directMLCData` | `DirectRoute.lean` | ✅ Proved (axiom-free) |
+| M ⊆ ParaPuzzlePiece n | `ParaPuzzleContainment.lean` | ✅ Proved (from `filled_julia_set_connected`) |
+| c ∈ M → c ∈ K(c) | `ParaPuzzleContainment.lean` | ✅ Proved (axiom-free) |
+| K(c) ⊆ DynamicalPuzzlePiece c n 0 | `ParaPuzzleContainment.lean` | ✅ Proved |
 
 ### Non-core axioms flowing into `mlc_conjecture`
 
 | Axiom | Required for | Mathematical status |
 |-------|-------------|---------------------|
-| `para_puzzle_piece_inter_mandelbrot_connected` | FR → LC | True (follows from M-set topology) |
-| `ir_classification_seam` | IR classification | True (Douady-Hubbard-McMullen) |
-| `satellite_bridge_seam` | IR satellite → LC | True (Dudko-Lyubich-Selinger) |
+| `para_puzzle_piece_inter_mandelbrot_connected` | FR → LC | True (follows from λ-lemma / holomorphic motions) |
+| `ir_locally_connected_seam` | IR → LC | True (Lyubich a priori bounds + DLS satellite theory) |
 
 ### Other axioms in the codebase (not flowing into `mlc_conjecture`)
 
@@ -116,6 +118,7 @@ replaces that with the direct strategy decomposition above.
 Mlc/
 ├── MainConjecture.lean          # Root theorem + direct proof route
 ├── DirectRoute.lean             # Axiom-free reduction infrastructure
+├── ParaPuzzleContainment.lean   # M ⊆ ParaPuzzlePiece n (proved)
 ├── AxiomsMainConjecture.lean    # parameter_shrink_of_yoccoz (proved)
 ├── LcAtOfShrink.lean            # Shrinkage → local connectivity (proved)
 ├── InfinitelyRenormalizable.lean
