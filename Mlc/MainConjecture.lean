@@ -1448,6 +1448,30 @@ structure MLCClassifyBridgeSeamData : Prop where
   puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
   ir : IRClassifyBridgeData
 
+/-- Characterization of packaged IR classify/bridge payload. -/
+theorem irClassifyBridgeData_iff :
+    IRClassifyBridgeData ↔
+      IRClassificationData ∧
+        (MoleculeConjectureRefined →
+          ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+            (_h : SatelliteRenormalizableTower c),
+            MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) := by
+  constructor
+  · intro h
+    exact ⟨h.classify, h.bridge⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
+
+/-- Characterization of the packaged classify/bridge seam payload. -/
+theorem mlcClassifyBridgeSeamData_iff :
+    MLCClassifyBridgeSeamData ↔
+      Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData ∧ IRClassifyBridgeData := by
+  constructor
+  · intro h
+    exact ⟨h.puzzle_connected, h.ir⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
+
 /-- Build FR connectedness payload from boundary-motion hypotheses. -/
 def paraPuzzleConnectedData_of_motionHyp
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
