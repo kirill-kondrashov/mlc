@@ -1438,19 +1438,63 @@ lemma irLocallyConnectedData_of_axiom : IRLocallyConnectedData := by
   intro c hc h_inf
   exact ir_locally_connected_seam c hc h_inf
 
-/-- Direct seam theorem with explicit FR connectedness + minimal IR seam
+/-- Minimal seam payload for the direct MLC route:
+    FR connectedness data plus IR local-connectivity data. -/
+structure MLCSeamData : Prop where
+  puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
+  ir_local_connected : IRLocallyConnectedData
+
+/-- Build minimal seam payload from FR connectedness + IR local-connectivity
     payloads. -/
-theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+def mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
     (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
     (h_ir_lc : IRLocallyConnectedData) :
+    MLCSeamData where
+  puzzle_connected := h_conn
+  ir_local_connected := h_ir_lc
+
+/-- Build minimal seam payload from FR connectedness + IR classify/bridge
+    payloads. -/
+def mlcSeamData_of_paraPuzzleConnectedData_classify_bridge_data
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    MLCSeamData :=
+  mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
+    h_conn
+    (irLocallyConnectedData_of_classify_bridge_data h_classify_ir h_bridge)
+
+/-- Current axiom-backed minimal seam payload. -/
+def mlcSeamData_of_axiom : MLCSeamData :=
+  mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
+    irLocallyConnectedData_of_axiom
+
+/-- Direct MLC assembly from the minimal seam payload. -/
+theorem mlc_conjecture_of_MLCSeamData
+    (h_seam : MLCSeamData) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
   apply locallyConnectedSpace_of_locallyConnectedAt
   intro ⟨c, hc⟩
   rcases dichotomy c with h_fin | h_inf
   · exact finite_lc_provider_of_motionHyp
-      (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn) c hc h_fin
-  · exact h_ir_lc c hc h_inf
+      (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_seam.puzzle_connected)
+      c hc h_fin
+  · exact h_seam.ir_local_connected c hc h_inf
+
+/-- Direct seam theorem with explicit FR connectedness + minimal IR seam
+    payloads. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir_lc : IRLocallyConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCSeamData
+    (mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData h_conn h_ir_lc)
 
 /-- Direct seam theorem with explicit FR connectedness payload.
     Replacing `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
@@ -1473,9 +1517,9 @@ theorem mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
         (_h : SatelliteRenormalizableTower c),
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
-    h_conn
-    (irLocallyConnectedData_of_classify_bridge_data h_classify_ir h_bridge)
+  mlc_conjecture_of_MLCSeamData
+    (mlcSeamData_of_paraPuzzleConnectedData_classify_bridge_data
+      h_conn h_classify_ir h_bridge)
 
 /-- FR branch provider from connected-data payload. -/
 lemma finite_lc_provider_of_paraPuzzleConnectedData
@@ -1565,8 +1609,7 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_classify_bridge_data
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_paraPuzzleConnectedData
-    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
+  exact mlc_conjecture_of_MLCSeamData mlcSeamData_of_axiom
 
 end MainProof
 
