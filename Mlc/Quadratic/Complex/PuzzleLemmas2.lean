@@ -27,18 +27,8 @@ set_option maxHeartbeats 1600000
 
 /-- Parameter puzzle pieces are open sets. -/
 theorem para_puzzle_piece_open (c : ℂ) (n : ℕ) :
-    IsOpen (ParaPuzzlePieceAt c n) := by
-  -- `DynamicalPuzzlePiece` is a connected component of an open set.
-  have h_open : IsOpen (DynamicalPuzzlePiece c n 0) := by
-    have h_base : IsOpen {w | green_function c w < (1 / 2) ^ n} :=
-      IsOpen.preimage (continuous_green_function c) isOpen_Iio
-    simpa [DynamicalPuzzlePiece] using IsOpen.connectedComponentIn h_base
-  have h_cont : Continuous (fun z : ℂ => z - c) := continuous_id.sub continuous_const
-  have h_eq :
-      ParaPuzzlePieceAt c n = (fun z : ℂ => z - c) ⁻¹' DynamicalPuzzlePiece c n 0 := by
-    ext z
-    rfl
-  simpa [h_eq] using h_open.preimage h_cont
+    IsOpen (ParaPuzzlePieceAt c n) :=
+  para_puzzle_piece_at_isOpen c n
 
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
