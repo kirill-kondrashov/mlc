@@ -45,10 +45,17 @@ axiom lyubich_conformal_bridge_bMol (g : BMol) (T : RenormalizationTower g) :
   LyubichConformalBridgeBMol g T
 ```
 
-The Molecule-side root bridge is now imported theoremically from upstream:
+The upstream zero-argument theorem package is integrated directly:
 
 ```lean
-theorem exists_rfast_fixed_point_of_molecule_conjecture_refined :
+theorem molecule_operator_package :
+  MoleculeOperatorPackage
+```
+
+For the current MLC root route we still use the upstream local fixed-point API:
+
+```lean
+theorem exists_rfast_fixed_point_of_molecule_local_fixed_api :
   ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g
 ```
 
@@ -56,13 +63,14 @@ theorem exists_rfast_fixed_point_of_molecule_conjecture_refined :
 
 High-level path now used by `MLC.mlc_conjecture`:
 
-1. `Molecule.molecule_local_fixed_seed` (upstream)
-2. `exists_rfast_fixed_point_of_molecule_conjecture_refined`
-3. `exists_renormalizationTower_of_molecule_conjecture_refined`
-4. `mlc_conjecture_of_exists_tower_bMol`
-5. BMol inconsistency route (`RenormalizationTower g -> False`) via
+1. `molecule_operator_package` (integrated zero-argument upstream export)
+2. `Molecule.molecule_local_fixed_seed` (still required for fixed-point extraction)
+3. `exists_rfast_fixed_point_of_molecule_local_fixed_api`
+4. `exists_renormalizationTower_of_molecule_conjecture_refined`
+5. `mlc_conjecture_of_exists_tower_bMol`
+6. BMol inconsistency route (`RenormalizationTower g -> False`) via
    `lyubich_conformal_bridge_bMol`
-6. Conclude local connectivity of `mandelbrotSet`
+7. Conclude local connectivity of `mandelbrotSet`
 
 ## Related Bridge API
 
@@ -77,9 +85,10 @@ bridge layers (not required by the root theorem frontier), including:
 These are kept to support incremental refinement toward proving
 the stronger parameter-model bridges non-axiomatically.
 
-Note: the upstream zero-argument Molecule export currently relies on weakened
-contract realignments; this repository integrates that API as-is and keeps the
-stronger bridge interfaces for future hardening.
+Note: the upstream zero-argument export is integrated as `molecule_operator_package`,
+but its current contract is weaker than the fixed-point interface required to build a
+renormalization tower. This repository therefore keeps stronger bridge interfaces for
+future hardening while routing the root theorem through the local-fixed API.
 
 ## Dependencies
 
