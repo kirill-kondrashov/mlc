@@ -16,6 +16,7 @@ import Mlc.MoleculeRenormalizationTower
 import Mlc.RenormalizationTypes
 import Mlc.SatelliteRenormalizationTower
 import Molecule.RenormalizationTheorem
+import Molecule.Conjecture
 
 namespace MLC
 
@@ -245,6 +246,21 @@ theorem exists_renormalization_tower_of_molecule_bridge_axioms :
     ∃ c : ℂ, Nonempty (RenormalizationTower (parameterToBMol c)) :=
   exists_renormalization_tower_of_existsParameterModelRfastFixedPoint
     existsParameterModelRfastFixedPoint_of_molecule_bridge_axioms
+
+/-- Upstream zero-argument Molecule export provides a BMol fast `Rfast`
+    fixed point through `molecule_local_fixed_seed`. -/
+theorem exists_rfast_fixed_point_of_molecule_conjecture_refined :
+    ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g := by
+  exact ⟨Molecule.molecule_local_fixed_point,
+    Molecule.molecule_local_fixed_point_is_renorm,
+    Molecule.molecule_local_fixed_point_is_fixed⟩
+
+/-- BMol-level renormalization-tower existence from the upstream zero-argument
+    Molecule theorem path. -/
+theorem exists_renormalizationTower_of_molecule_conjecture_refined :
+    ∃ g : BMol, Nonempty (RenormalizationTower g) :=
+  exists_renormalizationTower_of_exists_rfast_fixed_point
+    exists_rfast_fixed_point_of_molecule_conjecture_refined
 
 /-- Final minimal bridge axiom used by `mlc_conjecture`. -/
 axiom exists_parameter_model_rfast_fixed_point :

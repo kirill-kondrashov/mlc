@@ -55,6 +55,21 @@ theorem false_of_renormalization_tower (c : ℂ)
   -- Contradiction
   exact h_cmod_div h_cmod_conv
 
+/-- BMol-level core inconsistency: any abstract renormalization tower yields
+    `False` under the BMol bridge axiom and Gaussian proxy modulus. -/
+theorem false_of_renormalization_tower_bMol (g : BMol)
+    (T : RenormalizationTower g) : False := by
+  have h_div : ¬ Summable (fun n => LyubichModulusBMol g T n) := by
+    simpa [LyubichModulusBMol] using
+      (lyubich_modulus_not_summable (fun _ => (∅ : Set ℂ)))
+  have h_cmod_div : ¬ Summable (fun n => cmodulusBMol g n) :=
+    lyubich_conformal_bridge_bMol g T h_div
+  have h_cmod_conv : Summable (fun n => cmodulusBMol g n) := by
+    show Summable (fun n =>
+      MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus (criticalValue g) n))
+    exact infinitely_renormalizable_of_gaussian_modulus (criticalValue g)
+  exact h_cmod_div h_cmod_conv
+
 /-- If any parameter admits a satellite renormalization tower, then `False`. -/
 theorem false_of_satellite_tower (c : ℂ)
     (h : SatelliteRenormalizableTower c) : False :=
@@ -76,6 +91,13 @@ theorem mlc_of_tower' {c₀ : ℂ}
     (T : RenormalizationTower (parameterToBMol c₀))
     {X : Type*} [TopologicalSpace X] : LocallyConnectedSpace X :=
   (false_of_renormalization_tower c₀ T).elim
+
+/-- BMol-level vacuous MLC endpoint from a single abstract renormalization
+    tower. -/
+theorem mlc_of_tower_bMol {g : BMol}
+    (T : RenormalizationTower g)
+    {X : Type*} [TopologicalSpace X] : LocallyConnectedSpace X :=
+  (false_of_renormalization_tower_bMol g T).elim
 
 end
 

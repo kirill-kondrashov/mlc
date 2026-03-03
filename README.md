@@ -22,8 +22,8 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.lyubich_conformal_bridge
-- MLC.exists_parameter_model_rfast_fixed_point
+- MLC.lyubich_conformal_bridge_bMol
+- Molecule.molecule_local_fixed_seed
 ```
 
 ## Current Axiom Frontier
@@ -35,36 +35,34 @@ All axioms used:
   - `propext`
   - `Classical.choice`
 - Non-core mathematical bridge axioms:
-  - `MLC.lyubich_conformal_bridge`
-  - `MLC.exists_parameter_model_rfast_fixed_point`
+  - `MLC.lyubich_conformal_bridge_bMol`
+  - `Molecule.molecule_local_fixed_seed`
 
-The new minimal bridge axiom is:
-
-```lean
-axiom exists_parameter_model_rfast_fixed_point :
-  ExistsParameterModelRfastFixedPoint
-```
-
-where:
+The BMol-level Lyubich bridge axiom is:
 
 ```lean
-def ExistsParameterModelRfastFixedPoint : Prop :=
-  ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g ∧
-    (∃ c : ℂ, g = parameterToBMol c)
+axiom lyubich_conformal_bridge_bMol (g : BMol) (T : RenormalizationTower g) :
+  LyubichConformalBridgeBMol g T
 ```
 
-This replaces the older direct tower-existence axiom at the root theorem level.
+The Molecule-side root bridge is now imported theoremically from upstream:
+
+```lean
+theorem exists_rfast_fixed_point_of_molecule_conjecture_refined :
+  ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g
+```
 
 ## Root Theorem Route
 
 High-level path now used by `MLC.mlc_conjecture`:
 
-1. `exists_parameter_model_rfast_fixed_point`
-2. `exists_renormalization_tower_of_existsParameterModelRfastFixedPoint`
-3. `mlc_conjecture_of_exists_tower`
-4. Inconsistency route (`RenormalizationTower -> False`) via
-   `lyubich_conformal_bridge`
-5. Conclude local connectivity of `mandelbrotSet`
+1. `Molecule.molecule_local_fixed_seed` (upstream)
+2. `exists_rfast_fixed_point_of_molecule_conjecture_refined`
+3. `exists_renormalizationTower_of_molecule_conjecture_refined`
+4. `mlc_conjecture_of_exists_tower_bMol`
+5. BMol inconsistency route (`RenormalizationTower g -> False`) via
+   `lyubich_conformal_bridge_bMol`
+6. Conclude local connectivity of `mandelbrotSet`
 
 ## Related Bridge API
 
@@ -77,7 +75,11 @@ bridge layers (not required by the root theorem frontier), including:
 - conversion lemmas between these bridge assumptions
 
 These are kept to support incremental refinement toward proving
-`exists_parameter_model_rfast_fixed_point` non-axiomatically.
+the stronger parameter-model bridges non-axiomatically.
+
+Note: the upstream zero-argument Molecule export currently relies on weakened
+contract realignments; this repository integrates that API as-is and keeps the
+stronger bridge interfaces for future hardening.
 
 ## Dependencies
 

@@ -103,6 +103,25 @@ with the Lyubich a priori bounds.
 axiom lyubich_conformal_bridge (c : ℂ) (T : RenormalizationTower (parameterToBMol c)) : 
     LyubichConformalBridge c T
 
+/-- BMol-level proxy Lyubich modulus used by the generalized inconsistency
+    route. Currently this is the same constant proxy `1`. -/
+def LyubichModulusBMol (_g : BMol) (_T : RenormalizationTower _g) (_n : ℕ) : ℝ := 1
+
+/-- BMol-level cmodulus proxy used by the generalized inconsistency route.
+    We evaluate the existing Gaussian proxy at the critical value of `g`. -/
+noncomputable def cmodulusBMol (_g : BMol) (n : ℕ) : ℝ :=
+  MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus (criticalValue _g) n)
+
+/-- BMol-level bridge analogue of `LyubichConformalBridge`. -/
+def LyubichConformalBridgeBMol (g : BMol) (T : RenormalizationTower g) : Prop :=
+  (¬ Summable (fun n => LyubichModulusBMol g T n)) →
+  (¬ Summable (fun n => cmodulusBMol g n))
+
+/-- BMol-level generalized Lyubich bridge used to bypass parameter
+    modeling in the root theorem route. -/
+axiom lyubich_conformal_bridge_bMol (g : BMol) (T : RenormalizationTower g) :
+    LyubichConformalBridgeBMol g T
+
 /-- 
 Divergence of the full Yoccoz puzzle nest derived from principal nest divergence.
 This bridges the primitive renormalization tower's specific annuli to the general 

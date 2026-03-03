@@ -1838,6 +1838,15 @@ theorem mlc_conjecture_of_exists_tower
   mlc_conjecture_of_irLocallyConnectedData
     (irLocallyConnectedData_of_exists_tower h_exists)
 
+/-- BMol-level existential-tower bridge theorem: one abstract renormalization
+    tower already implies `mlc_conjecture` via the generalized inconsistency
+    route. -/
+theorem mlc_conjecture_of_exists_tower_bMol
+    (h_exists : ∃ g : Molecule.BMol, Nonempty (RenormalizationTower g)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_exists with ⟨g, ⟨T⟩⟩
+  exact mlc_of_tower_bMol T
+
 /-- Molecule fixed-point hypotheses plus fixed-point parameter lift data imply
     `mlc_conjecture` through the tower route. -/
 theorem mlc_conjecture_of_moleculeRenormalizableFixedPointData
@@ -2394,8 +2403,8 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_exists_tower
-    exists_renormalization_tower_of_molecule_bridge_axioms
+  mlc_conjecture_of_exists_tower_bMol
+    exists_renormalizationTower_of_molecule_conjecture_refined
 
 
 end MainProof
