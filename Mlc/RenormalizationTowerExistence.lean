@@ -130,7 +130,7 @@ theorem infinitelyFast_of_rfast_fixed_point (g : BMol)
     | zero =>
         simp
     | succ n ih =>
-        simpa [Function.iterate_succ_apply', ih, h_fix]
+        simp [Function.iterate_succ_apply', ih, h_fix]
   intro n
   simpa [h_iter_eq n] using h_fast
 

@@ -23,6 +23,7 @@ import html
 import json
 import re
 import shutil
+import subprocess
 from collections import deque
 
 
@@ -305,6 +306,43 @@ def rooted_closure(root: str, edges: dict[str, set[str]]) -> tuple[set[str], dic
             depth[v] = depth[u] + 1
             q.append(v)
     return reachable, depth
+
+
+def collect_axioms_from_check_axioms(repo_root: Path) -> set[str]:
+    """Read the semantic axiom frontier emitted by `check_axioms.lean`.
+
+    This complements the textual dependency graph by adding axioms that are
+    introduced transitively through imported declarations (for example from
+    upstream packages).
+    """
+    cmd = ["lake", "env", "lean", "--run", "check_axioms.lean"]
+    proc = subprocess.run(
+        cmd,
+        cwd=repo_root,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        return set()
+
+    axioms: set[str] = set()
+    collecting = False
+    for raw in proc.stdout.splitlines():
+        line = raw.strip()
+        if line == "All axioms used:":
+            collecting = True
+            continue
+        if not collecting:
+            continue
+        if not line.startswith("- "):
+            if line:
+                break
+            continue
+        ax = line[2:].strip()
+        if ax:
+            axioms.add(ax)
+    return axioms
 
 
 def graph_page_html(title: str) -> str:
@@ -3325,6 +3363,26 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     root_extra_nodes: set[str] = set()
     root_extra_edges: list[dict[str, str]] = []
     if root_decl.fq_name == "MLC.mlc_conjecture":
+        axiom_frontier = collect_axioms_from_check_axioms(repo_root)
+        for ax_name in sorted(axiom_frontier):
+            if ax_name not in fq_index:
+                fq_index[ax_name] = Decl(
+                    kind="axiom",
+                    name=ax_name.split(".")[-1],
+                    fq_name=ax_name,
+                    file="[external]",
+                    line=0,
+                    end_line=0,
+                )
+                edges.setdefault(ax_name, set())
+            root_extra_nodes.add(ax_name)
+            root_extra_edges.append(
+                {
+                    "source": root_decl.fq_name,
+                    "target": ax_name,
+                    "kind": "dependency",
+                }
+            )
         for sym in CONSTRUCTION_SYMBOLS:
             decl = fq_index.get(sym)
             if decl is None:

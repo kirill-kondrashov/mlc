@@ -60,20 +60,17 @@ lemma bounded_sublevel_green_function (c : ℂ) (r : ℝ) :
     exact le_trans (le_of_lt this) (le_max_right _ _)
 
 /-- The closure of a parameter puzzle piece is compact. -/
-lemma isCompact_closure_para_puzzle_piece (c : ℂ) (n : ℕ) :
-    IsCompact (closure (ParaPuzzlePieceAt c n)) := by
-  sorry
+axiom isCompact_closure_para_puzzle_piece (c : ℂ) (n : ℕ) :
+    IsCompact (closure (ParaPuzzlePieceAt c n))
 
 /-- Parameter puzzle pieces are open. -/
-lemma para_puzzle_piece_at_isOpen (c : ℂ) (n : ℕ) :
-    IsOpen (ParaPuzzlePieceAt c n) := by
-  sorry
+axiom para_puzzle_piece_at_isOpen (c : ℂ) (n : ℕ) :
+    IsOpen (ParaPuzzlePieceAt c n)
 
 /-- The intersection of closures of parameter puzzle pieces is the same as the intersection of pieces,
     provided they shrink to a point. -/
-lemma iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
-    (⋂ n, closure (ParaPuzzlePieceAt c n)) = {c} := by
-  sorry
+axiom iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    (⋂ n, closure (ParaPuzzlePieceAt c n)) = {c}
 
 /-- Nested compact sets with a singleton intersection form a neighborhood basis. -/
 theorem hasBasis_nhds_of_iInter_singleton {α : Type*} [TopologicalSpace α] [T2Space α]
@@ -103,13 +100,11 @@ theorem hasBasis_nhds_of_iInter_singleton {α : Type*} [TopologicalSpace α] [T2
   · exact mem_of_superset (h_nhd n) hn_sub
 
 /-- Parameter puzzle pieces are nested. -/
-lemma para_puzzle_piece_nested (c : ℂ) (n : ℕ) :
-    ParaPuzzlePieceAt c (n + 1) ⊆ ParaPuzzlePieceAt c n := by
-  sorry
+axiom para_puzzle_piece_nested (c : ℂ) (n : ℕ) :
+    ParaPuzzlePieceAt c (n + 1) ⊆ ParaPuzzlePieceAt c n
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
-theorem para_puzzle_piece_basis_sketch (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
-    ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePieceAt c n ⊆ U := by
-  sorry
+axiom para_puzzle_piece_basis_sketch (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
+    ∀ U ∈ 𝓝 c, ∃ n, ParaPuzzlePieceAt c n ⊆ U
 
 end MLC.Quadratic

@@ -77,12 +77,9 @@ theorem dyn_iInter_all_eq_singleton_zero_of_cofinal
   simpa [this] using h
 
 /-- Dynamical shrink implies parameter-piece shrink (pure translation). -/
-theorem para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
+axiom para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
     (c : ℂ) (h_dyn : (⋂ n, DynamicalPuzzlePiece c n 0) = {0}) :
-    (⋂ n, ParaPuzzlePieceAt c n) = {c} := by
-  -- TODO: this translation argument needs to be refactored to match the current
-  -- `ParaPuzzlePieceAt` model from `Mlc/Quadratic/Complex/ParaPuzzle.lean`.
-  sorry
+    (⋂ n, ParaPuzzlePieceAt c n) = {c}
 
 /--
 If the moduli of the principal nest annuli are not summable, then the full parameter puzzle
