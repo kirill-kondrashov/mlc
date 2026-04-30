@@ -23,7 +23,7 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.lyubich_conformal_bridge_bMol
-- Molecule.molecule_local_fixed_seed
+- Molecule.molecule_h_norm
 ```
 
 ## Current Axiom Frontier
@@ -36,7 +36,7 @@ All axioms used:
   - `Classical.choice`
 - Non-core mathematical bridge axioms:
   - `MLC.lyubich_conformal_bridge_bMol`
-  - `Molecule.molecule_local_fixed_seed`
+  - `Molecule.molecule_h_norm`
 
 The BMol-level Lyubich bridge axiom is:
 
@@ -52,10 +52,10 @@ theorem molecule_operator_package :
   MoleculeOperatorPackage
 ```
 
-For the current MLC root route we still use the upstream local fixed-point API:
+For the current MLC root route we use the upstream canonical fixed-point API:
 
 ```lean
-theorem exists_rfast_fixed_point_of_molecule_local_fixed_api :
+theorem exists_rfast_fixed_point_of_molecule_canonical_api :
   ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g
 ```
 
@@ -64,8 +64,8 @@ theorem exists_rfast_fixed_point_of_molecule_local_fixed_api :
 High-level path now used by `MLC.mlc_conjecture`:
 
 1. `molecule_operator_package` (integrated zero-argument upstream export)
-2. `Molecule.molecule_local_fixed_seed` (still required for fixed-point extraction)
-3. `exists_rfast_fixed_point_of_molecule_local_fixed_api`
+2. upstream canonical fixed-point route
+3. `exists_rfast_fixed_point_of_molecule_canonical_api`
 4. `exists_renormalizationTower_of_molecule_conjecture_refined`
 5. `mlc_conjecture_of_exists_tower_bMol`
 6. BMol inconsistency route (`RenormalizationTower g -> False`) via
@@ -85,10 +85,10 @@ bridge layers (not required by the root theorem frontier), including:
 These are kept to support incremental refinement toward proving
 the stronger parameter-model bridges non-axiomatically.
 
-Note: the upstream zero-argument export is integrated as `molecule_operator_package`,
-but its current contract is weaker than the fixed-point interface required to build a
-renormalization tower. This repository therefore keeps stronger bridge interfaces for
-future hardening while routing the root theorem through the local-fixed API.
+Note: the upstream zero-argument export is integrated as `molecule_operator_package`.
+On the current pinned `molecule-conjecture` revision, the transitive axiom frontier
+seen from `MLC.mlc_conjecture` still includes `Molecule.molecule_h_norm`, even though
+the local fixed-point wrapper has been updated to the canonical upstream API.
 
 ## Dependencies
 

@@ -16,7 +16,7 @@ require «yoccoz-theorem» from git
   "https://github.com/kirill-kondrashov/yoccoz-theorem" @ "main"
 
 require «molecule-conjecture» from git
-  "https://github.com/kirill-kondrashov/molecule-conjecture" @ "main"
+  "https://github.com/kirill-kondrashov/molecule-conjecture" @ "strengthen"
 
 lean_exe check_axioms where
   root := `check_axioms
