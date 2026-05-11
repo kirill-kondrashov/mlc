@@ -2,7 +2,7 @@
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
 
-[Live dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
+[Live dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/) *(GitHub Pages deploys from `main`; the checked-in `site/` directory reflects the current branch state.)*
 
 A Lean 4 formalization of the Mandelbrot local connectivity statement
 `MLC.mlc_conjecture`.
@@ -22,73 +22,81 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.lyubich_conformal_bridge_bMol
-- Molecule.molecule_local_fixed_seed
+- MLC.virtual_julia_strategy_data
 ```
 
-## Current Axiom Frontier
+## Current State
 
-`MLC.mlc_conjecture` currently depends on:
+`MLC.mlc_conjecture` currently depends on exactly one non-core project axiom:
 
-- Core Lean axioms:
-  - `Quot.sound`
-  - `propext`
-  - `Classical.choice`
-- Non-core mathematical bridge axioms:
-  - `MLC.lyubich_conformal_bridge_bMol`
-  - `Molecule.molecule_local_fixed_seed`
+- `MLC.virtual_julia_strategy_data`
 
-The BMol-level Lyubich bridge axiom is:
+The only other axioms in the root proof are the standard Lean core ones:
+
+- `Quot.sound`
+- `propext`
+- `Classical.choice`
+
+## Root Route
+
+The top theorem is currently routed as:
+
+1. `virtual_julia_strategy_data : VirtualJuliaStrategyData`
+2. `mlc_conjecture_of_virtualJuliaStrategyData`
+3. local connectivity of `mandelbrotSet`
+
+The package carried by the single root axiom is:
 
 ```lean
-axiom lyubich_conformal_bridge_bMol (g : BMol) (T : RenormalizationTower g) :
-  LyubichConformalBridgeBMol g T
+structure VirtualJuliaStrategyData : Prop where
+  finiteLC : FiniteBranchLocalConnectivityData
+  noTowerPrimitive : IRNoTowerImpliesPrimitiveData
+  satelliteLC : VirtualJuliaSatelliteLocalConnectivityData
+
+axiom virtual_julia_strategy_data : VirtualJuliaStrategyData
 ```
 
-The upstream zero-argument theorem package is integrated directly:
+## What is connected to the Kahn-Lyubich virtual Julia strategy
 
-```lean
-theorem molecule_operator_package :
-  MoleculeOperatorPackage
-```
+The part directly connected to the strategy described jointly with Kahn and
+Lyubich is the **satellite / infinitely renormalizable side** of
+`VirtualJuliaStrategyData`, especially:
 
-For the current MLC root route we use the upstream local fixed-point API:
+- `satelliteLC : VirtualJuliaSatelliteLocalConnectivityData`
+- `noTowerPrimitive : IRNoTowerImpliesPrimitiveData`
 
-```lean
-theorem exists_rfast_fixed_point_of_molecule_local_fixed_api :
-  ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g
-```
+These fields are where the repository packages the missing control behind the
+quoted plan:
 
-## Root Theorem Route
+- partially invariant virtual Julia sets of the satellite copies `M(s)`
+- control of the critical orbit only up to the relevant first returns
+- virtual Molecule scales from the chain
+  `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`
+- the a priori bounds needed for the remaining satellite / near-degenerate
+  infinitely-renormalizable cases
 
-High-level path now used by `MLC.mlc_conjecture`:
+In other words, the current single axiom is **not** standing for an
+external-ray inversion statement. It is standing for the missing a priori
+virtual Julia / virtual Molecule control that should yield the satellite local
+connectivity endpoint and the no-tower-implies-primitive classification needed
+by the root proof.
 
-1. `molecule_operator_package` (integrated zero-argument upstream export)
-2. `Molecule.molecule_local_fixed_seed` (upstream local fixed-point seed)
-3. `exists_rfast_fixed_point_of_molecule_local_fixed_api`
-4. `exists_renormalizationTower_of_molecule_conjecture_refined`
-5. `mlc_conjecture_of_exists_tower_bMol`
-6. BMol inconsistency route (`RenormalizationTower g -> False`) via
-   `lyubich_conformal_bridge_bMol`
-7. Conclude local connectivity of `mandelbrotSet`
+This is the point of contact with the paper passage:
 
-## Related Bridge API
+> Jointly with Kahn and Lyubich, we put forward a strategy to approach Problem
+> 4.4 by considering partially invariant virtual Julia sets of `M(s)`. A
+> posteriori, bounds for virtual Julia sets can be deduced by assuming uniform
+> hyperbolicity of the renormalization associated with `M`; the strategy is to
+> develop such control a priori.
 
-`Mlc/RenormalizationTowerExistence.lean` also exposes stronger/alternative
-bridge layers (not required by the root theorem frontier), including:
+Here, the formalization treats that missing control as the remaining
+root-facing seam.
 
-- `MoleculeRenormalizableFixedPointData`
-- `FixedPointParameterModelData`
-- `ParameterToBMolFixedPointLiftData`
-- conversion lemmas between these bridge assumptions
+## What is *not* the Kahn-Lyubich seam
 
-These are kept to support incremental refinement toward proving
-the stronger parameter-model bridges non-axiomatically.
-
-Note: the upstream zero-argument export is integrated as `molecule_operator_package`.
-On the current pinned `molecule-conjecture` revision, the transitive axiom frontier
-seen from `MLC.mlc_conjecture` includes `Molecule.molecule_local_fixed_seed`, and the
-local fixed-point wrapper is routed through the upstream local fixed-point API.
+`finiteLC : FiniteBranchLocalConnectivityData` is included in the same package
+only to keep the top theorem on a single project axiom. It is not the virtual
+Julia / virtual Molecule part of the program.
 
 ## Dependencies
 

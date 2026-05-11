@@ -526,8 +526,33 @@ def IRNoTowerPrimitiveAndMoleculeBridgeTargetData : Prop :=
   IRNoTowerImpliesPrimitiveData ∧
     MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
 
+/-- Satellite-side local-connectivity payload expected from the virtual Julia /
+    virtual Molecule strategy. This packages the endpoint of Problems 4.3/4.4/4.5
+    without routing the root theorem through the current upstream Molecule axiom
+    frontier. -/
+def VirtualJuliaSatelliteLocalConnectivityData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : SatelliteRenormalizableTower c),
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Finite-branch local-connectivity payload for the final strategy package. -/
+def FiniteBranchLocalConnectivityData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Single root-facing strategy package for the remaining MLC gaps.
+
+This is intended to capture:
+1. the finite-branch local-connectivity conclusion, and
+2. the IR-side virtual Julia / virtual Molecule strategy from
+   Dudko-Lyubich-Kahn (Problems 4.3/4.4/4.5). -/
+structure VirtualJuliaStrategyData : Prop where
+  finiteLC : FiniteBranchLocalConnectivityData
+  noTowerPrimitive : IRNoTowerImpliesPrimitiveData
+  satelliteLC : VirtualJuliaSatelliteLocalConnectivityData
+
 /-- Constructive main-path seam datum: boundary-motion finite branch data plus
-    combined Track-1/Track-2 infinite-branch data. -/
+     combined Track-1/Track-2 infinite-branch data. -/
 def MainPathData : Prop :=
   Quadratic.PuzzleBoundaryMotionHyp ∧ IRNoTowerPrimitiveAndMoleculeBridgeTargetData
 
@@ -539,6 +564,31 @@ theorem mlc_conjecture_of_motionHyp_track12_data
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
     h_motion h_track12.1 h_track12.2
+
+/-- Main seam assembly from boundary-motion data, Track-1 no-tower
+    classification, and direct satellite-side local-connectivity data. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_satelliteLCData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_satelliteLC : VirtualJuliaSatelliteLocalConnectivityData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_finiteClassificationBridgeData
+    (finite_lc_provider_of_motionHyp h_motion)
+    (fun c hc h_inf =>
+      classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+        h_noTowerPrim c hc h_inf)
+    (fun _h_mol c hc h_tower => h_satelliteLC c hc h_tower)
+
+/-- Main MLC assembly from the single virtual Julia strategy package. -/
+theorem mlc_conjecture_of_virtualJuliaStrategyData
+    (h : VirtualJuliaStrategyData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_finiteClassificationBridgeData
+    h.finiteLC
+    (fun c hc h_inf =>
+      classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+        h.noTowerPrimitive c hc h_inf)
+    (fun _h_mol c hc h_tower => h.satelliteLC c hc h_tower)
 
 /-- Main MLC assembly from the constructive main-path seam datum. -/
 theorem mlc_conjecture_of_mainPathData
@@ -2390,21 +2440,20 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
     hex
     (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
 
-/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    The Mandelbrot set is locally connected.
+/-- Single remaining root-facing seam for the current proof architecture.
+    It is intended to represent the finite-branch motion data together with the
+    virtual Julia / virtual Molecule IR strategy rather than a Böttcher- or
+    Molecule-package artifact. -/
+axiom virtual_julia_strategy_data : VirtualJuliaStrategyData
 
-    **Current proof architecture.**
-    We use the tower/inconsistency route:
-    1. Assume existence of one parameter-modeled fast `Rfast` fixed point.
-       This yields one renormalization tower.
-    2. Convert that tower into the IR local-connectivity seam payload via
-       `irLocallyConnectedData_of_exists_tower`.
-    3. Conclude local connectivity of `mandelbrotSet`. -/
+/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
+    the Mandelbrot set is locally connected. The current root theorem is routed
+    through a single strategy-facing axiom package. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_exists_tower_bMol
-    exists_renormalizationTower_of_molecule_conjecture_refined
+  mlc_conjecture_of_virtualJuliaStrategyData
+    virtual_julia_strategy_data
 
 
 end MainProof

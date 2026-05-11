@@ -37,7 +37,10 @@ END_RE = re.compile(r"^\s*end(?:\s+[A-Za-z0-9_.']+)?\s*$")
 TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
 TOKEN_CHARS = r"A-Za-z0-9_.']"
 EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
-MISSING_AXIOMS = ("MLC.Quadratic.external_ray_map_exists",)
+# Keep "missing" axiom markers opt-in and empty by default; the rooted graph
+# should reflect the current branch state rather than a historical comparison
+# point like `external_ray_map_exists`.
+MISSING_AXIOMS: tuple[str, ...] = ()
 INJON_BRIDGE_SYMBOL = "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two"
 CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
