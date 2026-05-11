@@ -15,7 +15,7 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice,
-     ``Molecule.molecule_h_norm,
+     ``Molecule.molecule_local_fixed_seed,
      ``MLC.lyubich_conformal_bridge_bMol]
   
   try

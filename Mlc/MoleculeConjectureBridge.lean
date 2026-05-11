@@ -9,7 +9,14 @@ namespace MLC
 open Molecule Set
 
 abbrev MoleculeConjectureRefined : Prop :=
-  Molecule.MoleculeConjectureRefined
+  ∃ (Rfast : BMol → BMol)
+    (Rfast_HMol : HMol → HMol)
+    (R_target : {x : Mol // x ≠ cusp} → {x : Mol // x ≠ cusp}),
+    IsHyperbolic Rfast ∧
+    IsPiecewiseAnalytic1DUnstable Rfast ∧
+    IsCompactOperator Rfast_HMol ∧
+    CombinatoriallyAssociated Rfast_HMol R_target ∧
+    (∃ N, IsConjugateToShift R_target N)
 
 /-! ### Bridge assumptions
 

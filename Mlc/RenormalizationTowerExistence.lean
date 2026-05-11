@@ -262,26 +262,28 @@ abbrev MoleculeOperatorPackage : Prop :=
 /-- Direct integration of upstream zero-argument theorem into the MLC namespace. -/
 theorem molecule_operator_package :
     MoleculeOperatorPackage :=
-  Molecule.molecule_conjecture_refined.1
+  Molecule.molecule_conjecture_refined
 
-/-- Fast fixed-point witness extracted from the upstream canonical bridge API. -/
-theorem exists_rfast_fixed_point_of_molecule_canonical_api :
+/-- Current fast fixed-point witness extracted from upstream local fixed-point API.
+    This remains separate from `molecule_operator_package` because the packaged
+    contract is presently weaker than the fixed-point interface needed here. -/
+theorem exists_rfast_fixed_point_of_molecule_local_fixed_api :
     ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g := by
-  simpa using
-    (Molecule.canonical_rfast_has_fast_renormalizable_fixed_point
-      Molecule.molecule_conjecture_refined)
+  exact ⟨Molecule.molecule_local_fixed_point,
+    Molecule.molecule_local_fixed_point_is_renorm,
+    Molecule.molecule_local_fixed_point_is_fixed⟩
 
 /-- Backward-compatible name for the integrated fixed-point bridge witness. -/
 theorem exists_rfast_fixed_point_of_molecule_conjecture_refined :
     ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g :=
-  exists_rfast_fixed_point_of_molecule_canonical_api
+  exists_rfast_fixed_point_of_molecule_local_fixed_api
 
 /-- BMol-level renormalization-tower existence from the upstream zero-argument
     Molecule theorem path. -/
 theorem exists_renormalizationTower_of_molecule_conjecture_refined :
     ∃ g : BMol, Nonempty (RenormalizationTower g) :=
   exists_renormalizationTower_of_exists_rfast_fixed_point
-    exists_rfast_fixed_point_of_molecule_canonical_api
+    exists_rfast_fixed_point_of_molecule_local_fixed_api
 
 /-- Final minimal bridge axiom used by `mlc_conjecture`. -/
 axiom exists_parameter_model_rfast_fixed_point :

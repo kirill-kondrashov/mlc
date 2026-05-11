@@ -23,7 +23,7 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.lyubich_conformal_bridge_bMol
-- Molecule.molecule_h_norm
+- Molecule.molecule_local_fixed_seed
 ```
 
 ## Current Axiom Frontier
@@ -36,7 +36,7 @@ All axioms used:
   - `Classical.choice`
 - Non-core mathematical bridge axioms:
   - `MLC.lyubich_conformal_bridge_bMol`
-  - `Molecule.molecule_h_norm`
+  - `Molecule.molecule_local_fixed_seed`
 
 The BMol-level Lyubich bridge axiom is:
 
@@ -52,10 +52,10 @@ theorem molecule_operator_package :
   MoleculeOperatorPackage
 ```
 
-For the current MLC root route we use the upstream canonical fixed-point API:
+For the current MLC root route we use the upstream local fixed-point API:
 
 ```lean
-theorem exists_rfast_fixed_point_of_molecule_canonical_api :
+theorem exists_rfast_fixed_point_of_molecule_local_fixed_api :
   ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g
 ```
 
@@ -64,8 +64,8 @@ theorem exists_rfast_fixed_point_of_molecule_canonical_api :
 High-level path now used by `MLC.mlc_conjecture`:
 
 1. `molecule_operator_package` (integrated zero-argument upstream export)
-2. upstream canonical fixed-point route
-3. `exists_rfast_fixed_point_of_molecule_canonical_api`
+2. `Molecule.molecule_local_fixed_seed` (upstream local fixed-point seed)
+3. `exists_rfast_fixed_point_of_molecule_local_fixed_api`
 4. `exists_renormalizationTower_of_molecule_conjecture_refined`
 5. `mlc_conjecture_of_exists_tower_bMol`
 6. BMol inconsistency route (`RenormalizationTower g -> False`) via
@@ -87,8 +87,8 @@ the stronger parameter-model bridges non-axiomatically.
 
 Note: the upstream zero-argument export is integrated as `molecule_operator_package`.
 On the current pinned `molecule-conjecture` revision, the transitive axiom frontier
-seen from `MLC.mlc_conjecture` still includes `Molecule.molecule_h_norm`, even though
-the local fixed-point wrapper has been updated to the canonical upstream API.
+seen from `MLC.mlc_conjecture` includes `Molecule.molecule_local_fixed_seed`, and the
+local fixed-point wrapper is routed through the upstream local fixed-point API.
 
 ## Dependencies
 
