@@ -319,13 +319,16 @@ def collect_axioms_from_check_axioms(repo_root: Path) -> set[str]:
     upstream packages).
     """
     cmd = ["lake", "env", "lean", "--run", "check_axioms.lean"]
-    proc = subprocess.run(
-        cmd,
-        cwd=repo_root,
-        check=False,
-        text=True,
-        capture_output=True,
-    )
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=repo_root,
+            check=False,
+            text=True,
+            capture_output=True,
+        )
+    except FileNotFoundError:
+        return set()
     if proc.returncode != 0:
         return set()
 
