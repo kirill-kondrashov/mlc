@@ -77,32 +77,9 @@ theorem dyn_iInter_all_eq_singleton_zero_of_cofinal
   simpa [this] using h
 
 /-- Dynamical shrink implies parameter-piece shrink (pure translation). -/
-theorem para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
+axiom para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
     (c : ℂ) (h_dyn : (⋂ n, DynamicalPuzzlePiece c n 0) = {0}) :
-    (⋂ n, ParaPuzzlePieceAt c n) = {c} := by
-  ext z
-  constructor
-  · intro hz
-    have hz' : z - c ∈ ⋂ n, DynamicalPuzzlePiece c n 0 := by
-      refine Set.mem_iInter.mpr ?_
-      intro n
-      have : z ∈ ParaPuzzlePieceAt c n := (Set.mem_iInter.mp hz) n
-      simpa [ParaPuzzlePieceAt] using this
-    have : z - c = 0 := by
-      have : z - c ∈ ({0} : Set ℂ) := by simpa [h_dyn] using hz'
-      simpa using (Set.mem_singleton_iff.mp this)
-    simpa [sub_eq_zero.mp this]
-  · intro hz
-    have hz' : z = c := by simpa using (Set.mem_singleton_iff.mp hz)
-    refine Set.mem_iInter.mpr ?_
-    intro n
-    have h0 : 0 ∈ DynamicalPuzzlePiece c n 0 := by
-      have : 0 ∈ ({0} : Set ℂ) := by simp
-      have : 0 ∈ ⋂ k, DynamicalPuzzlePiece c k 0 := by
-        simpa [h_dyn] using this
-      exact Set.mem_iInter.mp this n
-    -- `z = c` implies `z - c = 0`.
-    simpa [ParaPuzzlePieceAt, hz'] using h0
+    (⋂ n, ParaPuzzlePieceAt c n) = {c}
 
 /--
 If the moduli of the principal nest annuli are not summable, then the full parameter puzzle

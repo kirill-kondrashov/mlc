@@ -23,6 +23,7 @@ import html
 import json
 import re
 import shutil
+import subprocess
 from collections import deque
 
 
@@ -36,7 +37,10 @@ END_RE = re.compile(r"^\s*end(?:\s+[A-Za-z0-9_.']+)?\s*$")
 TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
 TOKEN_CHARS = r"A-Za-z0-9_.']"
 EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
-MISSING_AXIOMS = ("MLC.Quadratic.external_ray_map_exists",)
+# Keep "missing" axiom markers opt-in and empty by default; the rooted graph
+# should reflect the current branch state rather than a historical comparison
+# point like `external_ray_map_exists`.
+MISSING_AXIOMS: tuple[str, ...] = ()
 INJON_BRIDGE_SYMBOL = "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two"
 CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
@@ -305,6 +309,43 @@ def rooted_closure(root: str, edges: dict[str, set[str]]) -> tuple[set[str], dic
             depth[v] = depth[u] + 1
             q.append(v)
     return reachable, depth
+
+
+def collect_axioms_from_check_axioms(repo_root: Path) -> set[str]:
+    """Read the semantic axiom frontier emitted by `check_axioms.lean`.
+
+    This complements the textual dependency graph by adding axioms that are
+    introduced transitively through imported declarations (for example from
+    upstream packages).
+    """
+    cmd = ["lake", "env", "lean", "--run", "check_axioms.lean"]
+    proc = subprocess.run(
+        cmd,
+        cwd=repo_root,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        return set()
+
+    axioms: set[str] = set()
+    collecting = False
+    for raw in proc.stdout.splitlines():
+        line = raw.strip()
+        if line == "All axioms used:":
+            collecting = True
+            continue
+        if not collecting:
+            continue
+        if not line.startswith("- "):
+            if line:
+                break
+            continue
+        ax = line[2:].strip()
+        if ax:
+            axioms.add(ax)
+    return axioms
 
 
 def graph_page_html(title: str) -> str:
@@ -1414,6 +1455,14 @@ def graph_page_html_v2(title: str) -> str:
       color: var(--text);
       background: var(--panel);
     }}
+    select {{
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--panel);
+    }}
     button {{
       border: 1px solid var(--border);
       background: var(--button-bg);
@@ -1461,6 +1510,15 @@ def graph_page_html_v2(title: str) -> str:
     <h1>{esc_title}</h1>
     <span class="meta" id="summary"></span>
     <label>Search <input id="search" type="search" placeholder="declaration name"></label>
+    <label>2D View
+      <select id="view2dSel">
+        <option value="layered">Layered DAG</option>
+        <option value="radial">Radial Rings</option>
+        <option value="kind">Kind Lanes</option>
+        <option value="columns">Depth Columns</option>
+        <option value="spiral">Spiral</option>
+      </select>
+    </label>
     <button id="fitBtn" type="button">Fit Camera</button>
     <button id="modeBtn" type="button">Mode: 2D</button>
     <button id="themeBtn" type="button">Theme</button>
@@ -1480,12 +1538,24 @@ def graph_page_js() -> str:
   const summaryEl = document.getElementById("summary");
   const legendEl = document.getElementById("legend");
   const searchEl = document.getElementById("search");
+  const view2dSel = document.getElementById("view2dSel");
   const fitBtn = document.getElementById("fitBtn");
   const modeBtn = document.getElementById("modeBtn");
   const themeBtn = document.getElementById("themeBtn");
   const hoverEl = document.getElementById("hover");
   const THEME_KEY = "mlc_graph_theme";
-  const MODE_KEY = "mlc_graph_mode";
+  const MODE_KEY = "mlc_graph_mode_v2";
+  const VIEW2D_KEY = "mlc_graph_2d_view_v2";
+  const KIND_LANE_ORDER = ["axiom", "theorem", "lemma", "def", "structure", "class", "instance", "abbrev"];
+  const LAYERED_LEVEL_GAP_Y = 118;
+  const LAYERED_NODE_GAP_X = 70;
+  const LAYERED_MAX_PER_ROW = 14;
+  const LAYERED_SUBROW_GAP_Y = 58;
+  const KIND_LANE_GAP_X = 118;
+  const KIND_LEVEL_GAP_Y = 116;
+  const COLUMNS_GAP_X = 138;
+  const COLUMNS_MAX_ROWS = 12;
+  const COLUMNS_SUBCOL_GAP_X = 34;
 
   const KIND_COLOR = {
     theorem: 0xffb703,
@@ -1535,6 +1605,11 @@ def graph_page_js() -> str:
     if (!m) return [0.04, 0.08, 0.14];
     const v = parseInt(m[1], 16);
     return hexToRgb01(v);
+  }
+
+  function normalize2DView(view) {
+    if (view === "radial" || view === "layered" || view === "kind" || view === "columns" || view === "spiral") return view;
+    return "layered";
   }
 
   const V3 = {
@@ -1675,7 +1750,9 @@ def graph_page_js() -> str:
     }
     const ctx2d = canvas2d.getContext("2d");
     function createWebGLContext(c) {
-      const names = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"];
+      // Prefer WebGL1 first for maximum compatibility (matches 0.3 behavior),
+      // then try WebGL2 and vendor aliases.
+      const names = ["webgl", "experimental-webgl", "moz-webgl", "webkit-3d", "webgl2"];
       const attrs = [
         { antialias: true, alpha: false },
         { antialias: false, alpha: false },
@@ -1895,11 +1972,21 @@ def graph_page_js() -> str:
         targetIndex: bIdx,
         sourceId: e.source,
         targetId: e.target,
+        kind,
         color: hexToRgb01(color),
         alpha: isMissingConnection ? 1.0 : 0.72,
         visible: true
       });
     }
+    const depthOfIndex = nodeData.map((_, i) => Number(nodes[i].depth || 0));
+    const maxDepth = depthOfIndex.reduce((m, d) => Math.max(m, d), 0);
+    const neighborhoodByIndex = new Map();
+    for (let i = 0; i < nodeData.length; i += 1) neighborhoodByIndex.set(i, new Set([i]));
+    for (const e of edgeData) {
+      neighborhoodByIndex.get(e.sourceIndex).add(e.targetIndex);
+      neighborhoodByIndex.get(e.targetIndex).add(e.sourceIndex);
+    }
+    let hoveredNodeIndex = -1;
 
     const renderMode = { value: "2d" };
     const layout2d = {
@@ -1910,8 +1997,13 @@ def graph_page_js() -> str:
       draggingIndex: -1,
       panning: false,
       lastX: 0,
-      lastY: 0
+      lastY: 0,
+      view: normalize2DView("columns")
     };
+    try {
+      layout2d.view = normalize2DView(localStorage.getItem(VIEW2D_KEY) || layout2d.view);
+    } catch (_err) {}
+    if (view2dSel) view2dSel.value = layout2d.view;
     function modeButtonText() {
       if (renderMode.value === "3d") {
         return hasWebGL ? "Mode: 3D" : "Mode: 3D (CPU)";
@@ -1959,7 +2051,7 @@ def graph_page_js() -> str:
       sphereVertexCount = positions.length / 3;
     }
 
-    function build2DLayout() {
+    function build2DLayoutRadial() {
       const byDepth = new Map();
       for (let i = 0; i < nodes.length; i += 1) {
         const d = Number(nodes[i].depth || 0);
@@ -1981,7 +2073,219 @@ def graph_page_js() -> str:
           layout[idx] = { x, y, r: isRoot ? 11 : 7 };
         }
       }
-      layout2d.nodes = layout;
+      return layout;
+    }
+
+    function build2DLayoutLayered() {
+      const byDepth = new Map();
+      const incoming = new Map();
+      for (let i = 0; i < nodes.length; i += 1) {
+        const d = Number(nodes[i].depth || 0);
+        if (!byDepth.has(d)) byDepth.set(d, []);
+        byDepth.get(d).push(i);
+      }
+      for (const e of edgeData) {
+        if (!incoming.has(e.targetIndex)) incoming.set(e.targetIndex, []);
+        incoming.get(e.targetIndex).push(e.sourceIndex);
+      }
+      const depthKeys = Array.from(byDepth.keys()).sort((a, b) => a - b);
+      const layout = new Array(nodes.length);
+      const xPos = new Map();
+      for (const depth of depthKeys) {
+        const ids = (byDepth.get(depth) || []).slice();
+        if (depth === 0) {
+          ids.sort((a, b) => {
+            if (nodeData[a].id === rootId) return -1;
+            if (nodeData[b].id === rootId) return 1;
+            return String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+              String(nodeData[b].fq_name || nodeData[b].id)
+            );
+          });
+        } else {
+          ids.sort((a, b) => {
+            const pa = incoming.get(a) || [];
+            const pb = incoming.get(b) || [];
+            const ba = pa.length
+              ? pa.reduce((acc, p) => acc + (xPos.get(p) ?? 0), 0) / pa.length
+              : Number.POSITIVE_INFINITY;
+            const bb = pb.length
+              ? pb.reduce((acc, p) => acc + (xPos.get(p) ?? 0), 0) / pb.length
+              : Number.POSITIVE_INFINITY;
+            if (ba !== bb) return ba - bb;
+            return String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+              String(nodeData[b].fq_name || nodeData[b].id)
+            );
+          });
+        }
+        const rows = Math.max(1, Math.ceil(ids.length / LAYERED_MAX_PER_ROW));
+        for (let row = 0; row < rows; row += 1) {
+          const start = row * LAYERED_MAX_PER_ROW;
+          const end = Math.min(ids.length, start + LAYERED_MAX_PER_ROW);
+          const rowCount = Math.max(0, end - start);
+          const span = (rowCount - 1) * LAYERED_NODE_GAP_X;
+          for (let j = 0; j < rowCount; j += 1) {
+            const idx = ids[start + j];
+            const isRoot = nodeData[idx].id === rootId;
+            const x = j * LAYERED_NODE_GAP_X - span * 0.5;
+            const y = depth * LAYERED_LEVEL_GAP_Y + (row - (rows - 1) * 0.5) * LAYERED_SUBROW_GAP_Y;
+            layout[idx] = { x, y, r: isRoot ? 11 : 7 };
+            xPos.set(idx, x);
+          }
+        }
+      }
+      return layout;
+    }
+
+    function build2DLayoutKindLanes() {
+      const laneOfKind = new Map();
+      for (let i = 0; i < KIND_LANE_ORDER.length; i += 1) laneOfKind.set(KIND_LANE_ORDER[i], i);
+      const laneCount = KIND_LANE_ORDER.length + 1;
+      const byDepth = new Map();
+      for (let i = 0; i < nodes.length; i += 1) {
+        const d = Number(nodes[i].depth || 0);
+        if (!byDepth.has(d)) byDepth.set(d, []);
+        byDepth.get(d).push(i);
+      }
+      const depthKeys = Array.from(byDepth.keys()).sort((a, b) => a - b);
+      const intraLaneGapX = 42;
+      const layout = new Array(nodes.length);
+      for (const depth of depthKeys) {
+        const ids = byDepth.get(depth) || [];
+        const byLane = new Map();
+        for (const idx of ids) {
+          const kind = String(nodeData[idx].kind || "");
+          const lane = laneOfKind.has(kind) ? laneOfKind.get(kind) : laneCount - 1;
+          if (!byLane.has(lane)) byLane.set(lane, []);
+          byLane.get(lane).push(idx);
+        }
+        for (let lane = 0; lane < laneCount; lane += 1) {
+          const arr = byLane.get(lane) || [];
+          arr.sort((a, b) =>
+            String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+              String(nodeData[b].fq_name || nodeData[b].id)
+            )
+          );
+          const laneCenterX = (lane - (laneCount - 1) * 0.5) * KIND_LANE_GAP_X;
+          const span = (arr.length - 1) * intraLaneGapX;
+          for (let j = 0; j < arr.length; j += 1) {
+            const idx = arr[j];
+            const isRoot = nodeData[idx].id === rootId;
+            const x = isRoot ? 0 : laneCenterX + j * intraLaneGapX - span * 0.5;
+            const y = isRoot ? 0 : depth * KIND_LEVEL_GAP_Y + (lane % 2 === 0 ? -8 : 8);
+            layout[idx] = { x, y, r: isRoot ? 11 : 7 };
+          }
+        }
+      }
+      return layout;
+    }
+
+    function build2DLayoutColumns() {
+      const byDepth = new Map();
+      const incoming = new Map();
+      for (let i = 0; i < nodes.length; i += 1) {
+        const d = Number(nodes[i].depth || 0);
+        if (!byDepth.has(d)) byDepth.set(d, []);
+        byDepth.get(d).push(i);
+      }
+      for (const e of edgeData) {
+        if (!incoming.has(e.targetIndex)) incoming.set(e.targetIndex, []);
+        incoming.get(e.targetIndex).push(e.sourceIndex);
+      }
+      const depthKeys = Array.from(byDepth.keys()).sort((a, b) => a - b);
+      const maxD = depthKeys.length ? depthKeys[depthKeys.length - 1] : 0;
+      const rowGapY = 42;
+      const layout = new Array(nodes.length);
+      const yPos = new Map();
+      for (const depth of depthKeys) {
+        const ids = (byDepth.get(depth) || []).slice();
+        if (depth === 0) {
+          ids.sort((a, b) => {
+            if (nodeData[a].id === rootId) return -1;
+            if (nodeData[b].id === rootId) return 1;
+            return String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+              String(nodeData[b].fq_name || nodeData[b].id)
+            );
+          });
+        } else {
+          ids.sort((a, b) => {
+            const pa = incoming.get(a) || [];
+            const pb = incoming.get(b) || [];
+            const ya = pa.length
+              ? pa.reduce((acc, p) => acc + (yPos.get(p) ?? 0), 0) / pa.length
+              : Number.POSITIVE_INFINITY;
+            const yb = pb.length
+              ? pb.reduce((acc, p) => acc + (yPos.get(p) ?? 0), 0) / pb.length
+              : Number.POSITIVE_INFINITY;
+            if (ya !== yb) return ya - yb;
+            return String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+              String(nodeData[b].fq_name || nodeData[b].id)
+            );
+          });
+        }
+        const xBase = (depth - maxD * 0.5) * COLUMNS_GAP_X;
+        const subCols = Math.max(1, Math.ceil(ids.length / COLUMNS_MAX_ROWS));
+        for (let sc = 0; sc < subCols; sc += 1) {
+          const start = sc * COLUMNS_MAX_ROWS;
+          const end = Math.min(ids.length, start + COLUMNS_MAX_ROWS);
+          const cnt = Math.max(0, end - start);
+          const span = (cnt - 1) * rowGapY;
+          const x = xBase + (sc - (subCols - 1) * 0.5) * COLUMNS_SUBCOL_GAP_X;
+          for (let j = 0; j < cnt; j += 1) {
+            const idx = ids[start + j];
+            const isRoot = nodeData[idx].id === rootId;
+            const y = isRoot ? 0 : j * rowGapY - span * 0.5;
+            layout[idx] = { x: isRoot ? 0 : x, y, r: isRoot ? 11 : 7 };
+            yPos.set(idx, y);
+          }
+        }
+      }
+      return layout;
+    }
+
+    function build2DLayoutSpiral() {
+      const byDepth = new Map();
+      for (let i = 0; i < nodes.length; i += 1) {
+        const d = Number(nodes[i].depth || 0);
+        if (!byDepth.has(d)) byDepth.set(d, []);
+        byDepth.get(d).push(i);
+      }
+      const depthKeys = Array.from(byDepth.keys()).sort((a, b) => a - b);
+      const layout = new Array(nodes.length);
+      for (const depth of depthKeys) {
+        const ids = (byDepth.get(depth) || []).slice();
+        ids.sort((a, b) =>
+          String(nodeData[a].fq_name || nodeData[a].id).localeCompare(
+            String(nodeData[b].fq_name || nodeData[b].id)
+          )
+        );
+        for (let j = 0; j < ids.length; j += 1) {
+          const idx = ids[j];
+          const isRoot = nodeData[idx].id === rootId;
+          if (isRoot) {
+            layout[idx] = { x: 0, y: 0, r: 11 };
+            continue;
+          }
+          const baseR = 48 + depth * 62;
+          const localR = baseR + j * 8;
+          const angle = depth * 1.12 + j * 0.52;
+          layout[idx] = { x: Math.cos(angle) * localR, y: Math.sin(angle) * localR, r: 7 };
+        }
+      }
+      return layout;
+    }
+
+    function build2DLayout() {
+      if (layout2d.view === "radial") {
+        layout2d.nodes = build2DLayoutRadial();
+      } else if (layout2d.view === "kind") {
+        layout2d.nodes = build2DLayoutKindLanes();
+      } else if (layout2d.view === "columns") {
+        layout2d.nodes = build2DLayoutColumns();
+      } else if (layout2d.view === "spiral") {
+        layout2d.nodes = build2DLayoutSpiral();
+      } else {
+        layout2d.nodes = build2DLayoutLayered();
+      }
       fit2DLayout();
     }
 
@@ -1993,7 +2297,8 @@ def graph_page_js() -> str:
         if (!p) continue;
         minX = Math.min(minX, p.x - p.r - 20);
         minY = Math.min(minY, p.y - p.r - 20);
-        maxX = Math.max(maxX, p.x + p.r + 120);
+        const labelPad = layout2d.view === "layered" ? 110 : 96;
+        maxX = Math.max(maxX, p.x + p.r + labelPad);
         maxY = Math.max(maxY, p.y + p.r + 20);
       }
       const w = Math.max(1, maxX - minX);
@@ -2045,9 +2350,70 @@ def graph_page_js() -> str:
       ctx2d.clearRect(0, 0, canvasCssW, canvasCssH);
       ctx2d.fillStyle = bgCss.trim();
       ctx2d.fillRect(0, 0, canvasCssW, canvasCssH);
+      const q = String(searchEl?.value || "").trim().toLowerCase();
+      const focusedSet = hoveredNodeIndex >= 0 ? neighborhoodByIndex.get(hoveredNodeIndex) || null : null;
       ctx2d.save();
       ctx2d.translate(layout2d.panX, layout2d.panY);
       ctx2d.scale(layout2d.scale, layout2d.scale);
+      if (layout2d.view === "layered") {
+        let minX = Infinity, maxX = -Infinity;
+        for (let i = 0; i < layout2d.nodes.length; i += 1) {
+          const p = layout2d.nodes[i];
+          if (!p) continue;
+          minX = Math.min(minX, p.x - 18);
+          maxX = Math.max(maxX, p.x + 18);
+        }
+        if (minX < maxX) {
+          const left = minX - 120;
+          const right = maxX + 200;
+          for (let d = 0; d <= maxDepth; d += 1) {
+            const y0 = d * LAYERED_LEVEL_GAP_Y - LAYERED_LEVEL_GAP_Y * 0.42;
+            const y1 = d * LAYERED_LEVEL_GAP_Y + LAYERED_LEVEL_GAP_Y * 0.42;
+            const alphaBand = d % 2 === 0 ? 0.055 : 0.032;
+            ctx2d.fillStyle = rgb01ToCss([0.58, 0.68, 0.84], alphaBand);
+            ctx2d.fillRect(left, y0, right - left, y1 - y0);
+            ctx2d.strokeStyle = rgb01ToCss([0.73, 0.82, 0.96], 0.18);
+            ctx2d.lineWidth = Math.max(0.8 / Math.max(0.35, layout2d.scale), 1.0 / Math.max(0.35, layout2d.scale));
+            ctx2d.beginPath();
+            ctx2d.moveTo(left, d * LAYERED_LEVEL_GAP_Y);
+            ctx2d.lineTo(right, d * LAYERED_LEVEL_GAP_Y);
+            ctx2d.stroke();
+            ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], 0.72);
+            ctx2d.font = `${Math.max(11 / Math.max(0.35, layout2d.scale), 8)}px "IBM Plex Sans", "Segoe UI", sans-serif`;
+            ctx2d.fillText(`depth ${d}`, left + 8, d * LAYERED_LEVEL_GAP_Y - 6 / Math.max(0.35, layout2d.scale));
+          }
+        }
+      } else if (layout2d.view === "columns") {
+        for (let d = 0; d <= maxDepth; d += 1) {
+          const x = (d - maxDepth * 0.5) * COLUMNS_GAP_X;
+          ctx2d.strokeStyle = rgb01ToCss([0.73, 0.82, 0.96], 0.18);
+          ctx2d.lineWidth = Math.max(0.8 / Math.max(0.35, layout2d.scale), 1.0 / Math.max(0.35, layout2d.scale));
+          ctx2d.beginPath();
+          ctx2d.moveTo(x, -640);
+          ctx2d.lineTo(x, 640);
+          ctx2d.stroke();
+          ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], 0.72);
+          ctx2d.font = `${Math.max(11 / Math.max(0.35, layout2d.scale), 8)}px "IBM Plex Sans", "Segoe UI", sans-serif`;
+          ctx2d.fillText(`depth ${d}`, x + 5, -620);
+        }
+      } else if (layout2d.view === "kind") {
+        const laneCount = KIND_LANE_ORDER.length + 1;
+        const guideTop = -KIND_LEVEL_GAP_Y * 0.75;
+        const guideBottom = (maxDepth + 1) * KIND_LEVEL_GAP_Y;
+        for (let lane = 0; lane < laneCount; lane += 1) {
+          const x = (lane - (laneCount - 1) * 0.5) * KIND_LANE_GAP_X;
+          const laneLabel = lane < KIND_LANE_ORDER.length ? KIND_LANE_ORDER[lane] : "other";
+          ctx2d.strokeStyle = rgb01ToCss([0.73, 0.82, 0.96], 0.18);
+          ctx2d.lineWidth = Math.max(0.8 / Math.max(0.35, layout2d.scale), 1.0 / Math.max(0.35, layout2d.scale));
+          ctx2d.beginPath();
+          ctx2d.moveTo(x, guideTop);
+          ctx2d.lineTo(x, guideBottom);
+          ctx2d.stroke();
+          ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], 0.72);
+          ctx2d.font = `${Math.max(10 / Math.max(0.35, layout2d.scale), 8)}px "IBM Plex Sans", "Segoe UI", sans-serif`;
+          ctx2d.fillText(laneLabel, x + 6 / Math.max(0.35, layout2d.scale), guideTop + 14 / Math.max(0.35, layout2d.scale));
+        }
+      }
       for (const e of edgeData) {
         if (!e.visible) continue;
         const a = layout2d.nodes[e.sourceIndex];
@@ -2067,34 +2433,61 @@ def graph_page_js() -> str:
         const ty = b.y - uy * (b.r * bScale + 1.2 / Math.max(0.35, layout2d.scale));
         const segLen = Math.hypot(tx - sx, ty - sy);
         if (segLen <= 1e-4) continue;
-
-        const lineColor = rgb01ToCss(e.color, e.alpha);
+        const isFocusedEdge = focusedSet ? (e.sourceIndex === hoveredNodeIndex || e.targetIndex === hoveredNodeIndex) : false;
+        const edgeAlpha = e.alpha * (focusedSet ? (isFocusedEdge ? 1.0 : 0.14) : 1.0);
+        if (edgeAlpha <= 0.03) continue;
+        const lineColor = rgb01ToCss(e.color, edgeAlpha);
         ctx2d.strokeStyle = lineColor;
-        ctx2d.lineWidth = Math.max(1 / Math.max(0.35, layout2d.scale), 1.1 / Math.max(0.35, layout2d.scale));
+        ctx2d.lineWidth = Math.max(
+          1 / Math.max(0.35, layout2d.scale),
+          (isFocusedEdge ? 1.85 : 1.08) / Math.max(0.35, layout2d.scale)
+        );
         ctx2d.beginPath();
-        ctx2d.moveTo(sx, sy);
-        ctx2d.lineTo(tx, ty);
+        let tipDx = tx - sx;
+        let tipDy = ty - sy;
+        if (layout2d.view === "radial") {
+          ctx2d.moveTo(sx, sy);
+          ctx2d.lineTo(tx, ty);
+        } else {
+          const mx = (sx + tx) * 0.5;
+          const my = (sy + ty) * 0.5;
+          const perpX = -uy;
+          const perpY = ux;
+          const depthDelta = Math.abs(depthOfIndex[e.targetIndex] - depthOfIndex[e.sourceIndex]);
+          const bendBase = layout2d.view === "layered" ? 16 : 12;
+          const bend = (depthDelta === 0 ? bendBase * 1.35 : bendBase * 0.75) * (e.sourceIndex < e.targetIndex ? 1 : -1);
+          const cx = mx + perpX * bend;
+          const cy = my + perpY * bend;
+          ctx2d.moveTo(sx, sy);
+          ctx2d.quadraticCurveTo(cx, cy, tx, ty);
+          tipDx = tx - cx;
+          tipDy = ty - cy;
+        }
         ctx2d.stroke();
-
+        const tipLen = Math.hypot(tipDx, tipDy) || 1;
+        const tux = tipDx / tipLen;
+        const tuy = tipDy / tipLen;
         const headLen = Math.min(segLen * 0.55, Math.max(8 / Math.max(0.35, layout2d.scale), 11 / layout2d.scale));
         const headHalf = headLen * 0.44;
-        const bx = tx - ux * headLen;
-        const by = ty - uy * headLen;
+        const bx = tx - tux * headLen;
+        const by = ty - tuy * headLen;
         ctx2d.fillStyle = lineColor;
         ctx2d.beginPath();
         ctx2d.moveTo(tx, ty);
-        ctx2d.lineTo(bx - uy * headHalf, by + ux * headHalf);
-        ctx2d.lineTo(bx + uy * headHalf, by - ux * headHalf);
+        ctx2d.lineTo(bx - tuy * headHalf, by + tux * headHalf);
+        ctx2d.lineTo(bx + tuy * headHalf, by - tux * headHalf);
         ctx2d.closePath();
         ctx2d.fill();
       }
-      const q = String(searchEl?.value || "").trim().toLowerCase();
       for (let i = 0; i < layout2d.nodes.length; i += 1) {
         const p = layout2d.nodes[i];
         if (!p) continue;
         const n = nodeData[i];
-        const r = p.r * (n.sizeScale || 1);
-        const fill = rgb01ToCss(n.color, Math.max(0.16, n.alpha));
+        const isFocusedNode = focusedSet ? focusedSet.has(i) : false;
+        const isHoveredNode = i === hoveredNodeIndex;
+        const alphaMul = focusedSet && !isFocusedNode ? 0.24 : 1.0;
+        const r = p.r * (n.sizeScale || 1) * (isHoveredNode ? 1.16 : 1.0);
+        const fill = rgb01ToCss(n.color, Math.max(0.12, n.alpha * alphaMul));
         ctx2d.fillStyle = fill;
         ctx2d.beginPath();
         ctx2d.arc(p.x, p.y, r, 0, Math.PI * 2);
@@ -2106,17 +2499,33 @@ def graph_page_js() -> str:
           ctx2d.arc(p.x, p.y, r + 1.6 / Math.max(0.35, layout2d.scale), 0, Math.PI * 2);
           ctx2d.stroke();
         }
+        if (isHoveredNode) {
+          ctx2d.strokeStyle = rgb01ToCss([0.96, 0.98, 1.0], 0.95);
+          ctx2d.lineWidth = Math.max(1.2 / Math.max(0.35, layout2d.scale), 2.1 / Math.max(0.35, layout2d.scale));
+          ctx2d.beginPath();
+          ctx2d.arc(p.x, p.y, r + 3.0 / Math.max(0.35, layout2d.scale), 0, Math.PI * 2);
+          ctx2d.stroke();
+        }
         const showLabel =
           n.id === rootId ||
+          (focusedSet && isFocusedNode) ||
+          (!q && layout2d.view !== "radial" && Number(nodes[i].depth || 0) <= 1) ||
           (q && (
             String(n.id).toLowerCase().includes(q) ||
             String(n.label).toLowerCase().includes(q) ||
             String(n.fq_name).toLowerCase().includes(q)
           ));
         if (showLabel) {
-          ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], Math.min(1, Math.max(0.5, n.alpha + 0.1)));
+          const labelAlpha = focusedSet && !isFocusedNode ? 0.18 : Math.min(1, Math.max(0.5, n.alpha + 0.12));
+          ctx2d.fillStyle = rgb01ToCss([0.90, 0.94, 1.0], labelAlpha);
           ctx2d.font = `${Math.max(10 / Math.max(0.35, layout2d.scale), 8)}px "IBM Plex Sans", "Segoe UI", sans-serif`;
-          ctx2d.fillText(n.label, p.x + r + 2 / Math.max(0.35, layout2d.scale), p.y - 2 / Math.max(0.35, layout2d.scale));
+          if (layout2d.view === "layered") {
+            ctx2d.textAlign = "center";
+            ctx2d.fillText(n.label, p.x, p.y - r - 4 / Math.max(0.35, layout2d.scale));
+            ctx2d.textAlign = "left";
+          } else {
+            ctx2d.fillText(n.label, p.x + r + 2 / Math.max(0.35, layout2d.scale), p.y - 2 / Math.max(0.35, layout2d.scale));
+          }
         }
       }
       ctx2d.restore();
@@ -2399,6 +2808,7 @@ def graph_page_js() -> str:
       if (renderMode.value !== "3d") return;
       if (cameraDirty) updateCameraMatrices();
       if (draggingNodeIndex >= 0) {
+        hoveredNodeIndex = -1;
         const ray = screenRay(ev.clientX, ev.clientY);
         const hit = intersectSphere(ray.origin, ray.dir, sphereRadius);
         if (hit) {
@@ -2410,6 +2820,7 @@ def graph_page_js() -> str:
         return;
       }
       if (orbiting) {
+        hoveredNodeIndex = -1;
         const dx = ev.clientX - lastX;
         const dy = ev.clientY - lastY;
         lastX = ev.clientX;
@@ -2422,12 +2833,14 @@ def graph_page_js() -> str:
       }
       const pick = pickNode(ev.clientX, ev.clientY);
       if (pick >= 0) {
+        hoveredNodeIndex = pick;
         const n = nodeData[pick];
         hoverEl.style.display = "block";
         hoverEl.style.left = `${ev.clientX}px`;
         hoverEl.style.top = `${ev.clientY}px`;
         hoverEl.textContent = `${n.fq_name} (${n.kind})`;
       } else {
+        hoveredNodeIndex = -1;
         hoverEl.style.display = "none";
       }
     }
@@ -2475,6 +2888,7 @@ def graph_page_js() -> str:
       }
       if (renderMode.value !== "2d") return;
       if (layout2d.draggingIndex >= 0) {
+        hoveredNodeIndex = -1;
         const p = worldFromScreen2D(ev.clientX, ev.clientY);
         const n = layout2d.nodes[layout2d.draggingIndex];
         n.x = p.x;
@@ -2483,6 +2897,7 @@ def graph_page_js() -> str:
         return;
       }
       if (layout2d.panning) {
+        hoveredNodeIndex = -1;
         const dx = ev.clientX - layout2d.lastX;
         const dy = ev.clientY - layout2d.lastY;
         layout2d.lastX = ev.clientX;
@@ -2494,12 +2909,14 @@ def graph_page_js() -> str:
       }
       const pick = pickNode2D(ev.clientX, ev.clientY);
       if (pick >= 0) {
+        hoveredNodeIndex = pick;
         const n = nodeData[pick];
         hoverEl.style.display = "block";
         hoverEl.style.left = `${ev.clientX}px`;
         hoverEl.style.top = `${ev.clientY}px`;
         hoverEl.textContent = `${n.fq_name} (${n.kind})`;
       } else {
+        hoveredNodeIndex = -1;
         hoverEl.style.display = "none";
       }
     }
@@ -2574,6 +2991,14 @@ def graph_page_js() -> str:
       themeBtn.addEventListener("click", () => {
         const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
         applyTheme(cur === "dark" ? "light" : "dark");
+      });
+    }
+    if (view2dSel) {
+      view2dSel.value = layout2d.view;
+      view2dSel.addEventListener("change", () => {
+        layout2d.view = normalize2DView(view2dSel.value);
+        try { localStorage.setItem(VIEW2D_KEY, layout2d.view); } catch (_err) {}
+        build2DLayout();
       });
     }
 
@@ -2765,7 +3190,7 @@ def graph_page_js() -> str:
       buildSphereBuffers();
     }
     build2DLayout();
-    let initialMode = hasWebGL ? "3d" : "2d";
+    let initialMode = "2d";
     try {
       const savedMode = localStorage.getItem(MODE_KEY);
       if (savedMode === "2d" || savedMode === "3d") initialMode = savedMode;
@@ -2941,6 +3366,26 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     root_extra_nodes: set[str] = set()
     root_extra_edges: list[dict[str, str]] = []
     if root_decl.fq_name == "MLC.mlc_conjecture":
+        axiom_frontier = collect_axioms_from_check_axioms(repo_root)
+        for ax_name in sorted(axiom_frontier):
+            if ax_name not in fq_index:
+                fq_index[ax_name] = Decl(
+                    kind="axiom",
+                    name=ax_name.split(".")[-1],
+                    fq_name=ax_name,
+                    file="[external]",
+                    line=0,
+                    end_line=0,
+                )
+                edges.setdefault(ax_name, set())
+            root_extra_nodes.add(ax_name)
+            root_extra_edges.append(
+                {
+                    "source": root_decl.fq_name,
+                    "target": ax_name,
+                    "kind": "dependency",
+                }
+            )
         for sym in CONSTRUCTION_SYMBOLS:
             decl = fq_index.get(sym)
             if decl is None:

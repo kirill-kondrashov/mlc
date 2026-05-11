@@ -1,6 +1,7 @@
 import Mlc.Quadratic.Complex.Axioms
 import Mlc.Quadratic.Complex.ParaPuzzle
 import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.ParaPuzzleContainment
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Basic
@@ -22,22 +23,6 @@ def PuzzleBoundary (c : ℂ) (n : ℕ) : Set ℂ :=
 def GreenSublevel (c : ℂ) (n : ℕ) : Set ℂ :=
   {w | green_function c w < (1 / 2) ^ n}
 
-/-- If `c` is in the Mandelbrot set, then `c ∈ K(c)`. -/
-theorem mem_K_of_mandelbrot (c : ℂ) (hc : c ∈ MandelbrotSet) : c ∈ K c := by
-  unfold K MandelbrotSet boundedOrbit at *
-  obtain ⟨M, hM⟩ := hc
-  refine ⟨max M ‖c‖, ?_⟩
-  intro n
-  have h_shift : ∀ k, orbit c c k = orbit c 0 (k + 1) := by
-    intro k
-    induction k with
-    | zero => simp [orbit, fc]
-    | succ k ih => simp [orbit_succ, ih]
-  have h_bound : ‖orbit c c n‖ ≤ M := by
-    have hM' : ‖orbit c 0 (n + 1)‖ ≤ M := hM (n + 1)
-    simpa [h_shift n] using hM'
-  exact le_trans h_bound (le_max_left _ _)
-
 /-- If `c ∈ M`, then `0` lies in the Green sublevel set. -/
 theorem green_sublevel_contains_0 (c : ℂ) (n : ℕ) (hc : c ∈ MandelbrotSet) :
     0 ∈ GreenSublevel c n := by
@@ -53,7 +38,7 @@ theorem green_sublevel_contains_0 (c : ℂ) (n : ℕ) (hc : c ∈ MandelbrotSet)
 /-- If `c ∈ M`, then `c` lies in the Green sublevel set. -/
 theorem green_sublevel_contains_c (c : ℂ) (n : ℕ) (hc : c ∈ MandelbrotSet) :
     c ∈ GreenSublevel c n := by
-  have hcK : c ∈ K c := mem_K_of_mandelbrot c hc
+  have hcK : c ∈ K c := mem_K_of_mandelbrot hc
   have hc0 : green_function c c = 0 :=
     (green_function_eq_zero_iff_mem_K c c).2 hcK
   have hpos : (0 : ℝ) < (1 / 2 : ℝ) ^ n := by
@@ -84,6 +69,26 @@ structure PuzzleBoundaryMotionHyp : Prop where
     ∀ (n : ℕ) (c₀ : ℂ) (_hc₀ : c₀ ∈ ParaPuzzlePieceAt c₀ n),
       ∃ (r : ℝ) (_ : 0 < r) (E : Set ℂ) (h : HolomorphicMotion E),
         motion_preserves_para_piece n c₀ r E h
+
+/-- Trivial holomorphic motion on the empty set. This is sufficient for
+    constructors where motion parameters are phantom and only connectivity
+    payload is used. -/
+private def trivialHolomorphicMotion : HolomorphicMotion (∅ : Set ℂ) where
+  f := fun _ z => z
+  h_zero := by simp
+  h_inj := by intro _ _; exact Set.injOn_empty _
+  h_holo := by intro z hz; exact (Set.mem_empty_iff_false z).mp hz |>.elim
+
+/-- Build `PuzzleBoundaryMotionHyp` from connectedness data on
+    `ParaPuzzlePieceAt c n ∩ M`. -/
+theorem puzzleBoundaryMotionHyp_of_connected_data
+    (h_conn : ParaPuzzlePieceInterMandelbrotConnectedData) :
+    PuzzleBoundaryMotionHyp where
+  motion := by
+    intro n c₀ _hc₀
+    refine ⟨1, one_pos, ∅, trivialHolomorphicMotion, ?_⟩
+    intro hc₀_M
+    exact ⟨ParaPuzzlePieceAt c₀ n ∩ MandelbrotSet, h_conn c₀ hc₀_M n, rfl⟩
 
 /-- Assemble the data needed for a parameter-stability motion. -/
 structure PuzzleBoundaryMotionData (n : ℕ) (c₀ : ℂ) where
@@ -199,9 +204,8 @@ theorem para_puzzle_transport_witness_hyp_of_boundary_motion
     ParaPuzzleTransportWitnessHyp := by
   refine ⟨?_⟩
   intro c hc n
-  have hc₀ : c ∈ ParaPuzzlePieceAt c n := by
-    rw [mem_paraPuzzlePieceAt_self]
-    exact mem_dynamical_puzzle_piece_self c hc n
+  have hc₀ : c ∈ ParaPuzzlePieceAt c n :=
+    mandelbrot_subset_paraPuzzlePiece hc n
   rcases h_motion.motion n c hc₀ with ⟨r, hr, E, h, hpres⟩
   exact hpres hc
 

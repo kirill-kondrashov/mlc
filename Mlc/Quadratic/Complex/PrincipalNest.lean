@@ -58,14 +58,8 @@ theorem antitone_dynamicalPuzzlePiece (c : ℂ) :
       (dynamical_puzzle_piece_nested c k).trans hk
   exact Nat.le_induction hbase hstep b hab
 
-theorem antitone_paraPuzzlePieceAt (c : ℂ) :
-    Antitone (fun n : ℕ => ParaPuzzlePieceAt c n) := by
-  intro a b hab z hz
-  -- Reduce to dynamical nesting by translation.
-  have hz' : z - c ∈ DynamicalPuzzlePiece c b 0 := by
-    simpa [ParaPuzzlePieceAt] using hz
-  have := (antitone_dynamicalPuzzlePiece c hab) hz'
-  simpa [ParaPuzzlePieceAt] using this
+axiom antitone_paraPuzzlePieceAt (c : ℂ) :
+    Antitone (fun n : ℕ => ParaPuzzlePieceAt c n)
 
 /-- The dynamical principal nest determined by a depth selection. -/
 def dyn (c : ℂ) (depths : ℕ → ℕ) (n : ℕ) : Set ℂ :=

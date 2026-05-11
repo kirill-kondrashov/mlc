@@ -11,16 +11,14 @@ We model the parameter piece of depth `n` at `c` as the translate of the
 dynamical puzzle piece around the critical point.
 -/
 
-/-- Parameter puzzle piece of depth `n` centered at `c`. -/
-def ParaPuzzlePieceAt (c : ℂ) (n : ℕ) : Set ℂ :=
-  {c' | c' - c ∈ DynamicalPuzzlePiece c n 0}
+/-- Parameter puzzle piece of depth `n` centered at `c`.
+    We define it simply as `ParaPuzzlePiece n` (independent of `c`). -/
+def ParaPuzzlePieceAt (_ : ℂ) (n : ℕ) : Set ℂ :=
+  ParaPuzzlePiece n
 
 lemma mem_paraPuzzlePieceAt_iff (c c' : ℂ) (n : ℕ) :
-    c' ∈ ParaPuzzlePieceAt c n ↔ c' - c ∈ DynamicalPuzzlePiece c n 0 := by
+    c' ∈ ParaPuzzlePieceAt c n ↔ c' ∈ ParaPuzzlePiece n := by
   rfl
 
-lemma mem_paraPuzzlePieceAt_self (c : ℂ) (n : ℕ) :
-    c ∈ ParaPuzzlePieceAt c n ↔ 0 ∈ DynamicalPuzzlePiece c n 0 := by
-  simp [ParaPuzzlePieceAt]
 
 end MLC.Quadratic

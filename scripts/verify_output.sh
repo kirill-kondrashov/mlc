@@ -8,10 +8,10 @@ ACTUAL="output.txt"
 ACTUAL_CLEAN="actual_cleaned.txt"
 
 # Extract the expected output from README.md.
-# We use the first fenced code block after the "Expected output:" heading.
+# We use the first fenced code block after the expected-output heading.
 awk '
-  /^Expected output:$/ {seen = 1; next}
-  seen && /^```$/ && !inblock {inblock = 1; next}
+  /^Expected output:$/ || /^Expected `make check` output:$/ {seen = 1; next}
+  seen && /^```/ && !inblock {inblock = 1; next}
   seen && /^```$/ && inblock {exit}
   seen && inblock {print}
 ' "$README" > "$EXPECTED"

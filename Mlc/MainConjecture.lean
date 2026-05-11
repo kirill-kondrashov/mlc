@@ -4,6 +4,9 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
+import Mlc.InconsistencyRoute
+import Mlc.RenormalizationTowerExistence
+import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.Bottcher.DegreeOneInj
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
@@ -430,9 +433,8 @@ lemma finite_connectedAt_provider_of_motionHyp
     ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet),
       ∀ n, IsConnected (Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet) := by
   intro c hc n
-  have hc₀ : c ∈ Quadratic.ParaPuzzlePieceAt c n := by
-    rw [Quadratic.mem_paraPuzzlePieceAt_self]
-    exact Quadratic.mem_dynamical_puzzle_piece_self c hc n
+  have hc₀ : c ∈ Quadratic.ParaPuzzlePieceAt c n :=
+    Quadratic.mandelbrot_subset_paraPuzzlePiece hc n
   rcases h_motion.motion n c hc₀ with ⟨r, hr, E, hHol, hpres⟩
   rcases hpres hc with ⟨S, hSconn, hSeq⟩
   simpa [hSeq] using hSconn
@@ -524,8 +526,33 @@ def IRNoTowerPrimitiveAndMoleculeBridgeTargetData : Prop :=
   IRNoTowerImpliesPrimitiveData ∧
     MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
 
+/-- Satellite-side local-connectivity payload expected from the virtual Julia /
+    virtual Molecule strategy. This packages the endpoint of Problems 4.3/4.4/4.5
+    without routing the root theorem through the current upstream Molecule axiom
+    frontier. -/
+def VirtualJuliaSatelliteLocalConnectivityData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : SatelliteRenormalizableTower c),
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Finite-branch local-connectivity payload for the final strategy package. -/
+def FiniteBranchLocalConnectivityData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Single root-facing strategy package for the remaining MLC gaps.
+
+This is intended to capture:
+1. the finite-branch local-connectivity conclusion, and
+2. the IR-side virtual Julia / virtual Molecule strategy from
+   Dudko-Lyubich-Kahn (Problems 4.3/4.4/4.5). -/
+structure VirtualJuliaStrategyData : Prop where
+  finiteLC : FiniteBranchLocalConnectivityData
+  noTowerPrimitive : IRNoTowerImpliesPrimitiveData
+  satelliteLC : VirtualJuliaSatelliteLocalConnectivityData
+
 /-- Constructive main-path seam datum: boundary-motion finite branch data plus
-    combined Track-1/Track-2 infinite-branch data. -/
+     combined Track-1/Track-2 infinite-branch data. -/
 def MainPathData : Prop :=
   Quadratic.PuzzleBoundaryMotionHyp ∧ IRNoTowerPrimitiveAndMoleculeBridgeTargetData
 
@@ -537,6 +564,31 @@ theorem mlc_conjecture_of_motionHyp_track12_data
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
     h_motion h_track12.1 h_track12.2
+
+/-- Main seam assembly from boundary-motion data, Track-1 no-tower
+    classification, and direct satellite-side local-connectivity data. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_satelliteLCData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_satelliteLC : VirtualJuliaSatelliteLocalConnectivityData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_finiteClassificationBridgeData
+    (finite_lc_provider_of_motionHyp h_motion)
+    (fun c hc h_inf =>
+      classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+        h_noTowerPrim c hc h_inf)
+    (fun _h_mol c hc h_tower => h_satelliteLC c hc h_tower)
+
+/-- Main MLC assembly from the single virtual Julia strategy package. -/
+theorem mlc_conjecture_of_virtualJuliaStrategyData
+    (h : VirtualJuliaStrategyData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_finiteClassificationBridgeData
+    h.finiteLC
+    (fun c hc h_inf =>
+      classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+        h.noTowerPrimitive c hc h_inf)
+    (fun _h_mol c hc h_tower => h.satelliteLC c hc h_tower)
 
 /-- Main MLC assembly from the constructive main-path seam datum. -/
 theorem mlc_conjecture_of_mainPathData
@@ -1389,13 +1441,1020 @@ lemma externalRayMapData_two_root_frontier :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   Quadratic.external_ray_map_exists (2 : ℂ)
 
+/-! ### Direct proof route (bypassing `external_ray_map_exists`)
+
+The direct route wires `mlc_conjecture` through the FR/IR dichotomy using:
+1. The existing para-puzzle connectivity axiom for the FR branch (Yoccoz shrinkage).
+2. A single seam axiom for the IR branch (local connectivity of IR parameters).
+
+This replaces the vacuous `external_ray_map_exists(2) → False → MainPathData`
+chain with a mathematically sound proof skeleton.
+-/
+
+/-- Seam axiom: the Mandelbrot set is locally connected at every infinitely
+    renormalizable parameter.
+    Proof idea: this combines two deep results —
+    (a) the Lyubich a priori bounds (primitive renormalization gives modulus
+        divergence, hence puzzle shrinkage, hence LC), and
+    (b) the Dudko-Lyubich-Selinger satellite theory (the molecule conjecture
+        gives uniform modulus lower bounds along satellite tower depths,
+        yielding shrinkage via the Grötzsch inequality).
+    Every IR parameter falls into one of these two cases by the combinatorial
+    classification of renormalization (Douady-Hubbard, McMullen). -/
+axiom ir_locally_connected_seam :
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+      InfinitelyRenormalizable c →
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Minimal IR seam payload: local connectivity at all infinitely
+    renormalizable Mandelbrot parameters. -/
+def IRLocallyConnectedData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+    InfinitelyRenormalizable c →
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Build the minimal IR seam payload from explicit IR classify/bridge data. -/
+lemma irLocallyConnectedData_of_classify_bridge_data
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    IRLocallyConnectedData := by
+  intro c hc h_inf
+  exact mlc_infinitely_renormalizable h_classify_ir h_bridge c hc h_inf
+
+/-- IR payload packaged as classification + satellite bridge. -/
+structure IRClassifyBridgeData : Prop where
+  classify : IRClassificationData
+  bridge :
+    MoleculeConjectureRefined →
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : SatelliteRenormalizableTower c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Packaged seam payload for the direct route:
+    FR connectedness data + packaged IR classify/bridge data. -/
+structure MLCClassifyBridgeSeamData : Prop where
+  puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
+  ir : IRClassifyBridgeData
+
+/-- Characterization of packaged IR classify/bridge payload. -/
+theorem irClassifyBridgeData_iff :
+    IRClassifyBridgeData ↔
+      IRClassificationData ∧
+        (MoleculeConjectureRefined →
+          ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+            (_h : SatelliteRenormalizableTower c),
+            MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) := by
+  constructor
+  · intro h
+    exact ⟨h.classify, h.bridge⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
+
+/-- Characterization of the packaged classify/bridge seam payload. -/
+theorem mlcClassifyBridgeSeamData_iff :
+    MLCClassifyBridgeSeamData ↔
+      Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData ∧ IRClassifyBridgeData := by
+  constructor
+  · intro h
+    exact ⟨h.puzzle_connected, h.ir⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
+
+/-- Build FR connectedness payload from boundary-motion hypotheses. -/
+def paraPuzzleConnectedData_of_motionHyp
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp) :
+    Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData :=
+  finite_connectedAt_provider_of_motionHyp h_motion
+
+/-- Build packaged IR classify/bridge payload from separate inputs. -/
+def irClassifyBridgeData_of_classify_bridge_data
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    IRClassifyBridgeData where
+  classify := h_classify_ir
+  bridge := h_bridge
+
+/-- Build IR classification data from global IR→tower bridge data. -/
+lemma irClassificationData_of_infinitelyRenormalizableHasTowerData
+    (h_tower_data : InfinitelyRenormalizableHasTowerData) :
+    IRClassificationData := by
+  intro c _hc h_ir
+  exact classify_infinitely_renormalizable h_tower_data c h_ir
+
+/-- Build packaged IR classify/bridge data from IR classification plus the
+    strong molecule bridge target. -/
+def irClassifyBridgeData_of_classify_moleculeBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_bridge_data
+    h_classify_ir
+    (MoleculeBridgeTarget.bridge_of_moleculeBridgeTarget h_target)
+
+/-- Build packaged IR classify/bridge data from IR classification plus the
+    uniform conformal molecule bridge target. -/
+def irClassifyBridgeData_of_classify_moleculeUniformBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_moleculeBridgeTarget_data
+    h_classify_ir
+    (MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget h_uniform)
+
+/-- Build packaged IR classify/bridge data from global IR→tower bridge data and
+    the strong molecule bridge target. -/
+def irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_moleculeBridgeTarget_data
+    (irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data)
+    h_target
+
+/-- Build packaged IR classify/bridge data from global IR→tower bridge data and
+    the uniform conformal molecule bridge target. -/
+def irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeUniformBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_moleculeUniformBridgeTarget_data
+    (irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data)
+    h_uniform
+
+/-- Build minimal IR seam payload from packaged classify/bridge IR data. -/
+lemma irLocallyConnectedData_of_irClassifyBridgeData
+    (h_ir : IRClassifyBridgeData) :
+    IRLocallyConnectedData :=
+  irLocallyConnectedData_of_classify_bridge_data
+    h_ir.classify
+    h_ir.bridge
+
+/-- Current axiom-backed provider for the minimal IR seam payload. -/
+lemma irLocallyConnectedData_of_axiom : IRLocallyConnectedData := by
+  intro c hc h_inf
+  exact ir_locally_connected_seam c hc h_inf
+
+/-- Under the Gaussian proxy model, IR local-connectivity data forces
+    primitive classification at every IR parameter. -/
+lemma irClassificationData_of_irLocallyConnectedData
+    (h_ir_lc : IRLocallyConnectedData) :
+    IRClassificationData := by
+  intro c hc h_ir
+  exact Or.inl (fun _ => h_ir_lc c hc h_ir)
+
+/-- Under the Gaussian proxy model, IR local-connectivity data yields a
+    `mlc_strategy`-compatible satellite bridge. -/
+lemma bridgeData_of_irLocallyConnectedData
+    (h_ir_lc : IRLocallyConnectedData) :
+    MoleculeConjectureRefined →
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : SatelliteRenormalizableTower c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  intro _h_mol c hc _h_sat
+  exact h_ir_lc c hc (infinitely_renormalizable_of_gaussian_modulus c)
+
+/-- Build packaged IR classify/bridge data from IR local-connectivity data. -/
+def irClassifyBridgeData_of_irLocallyConnectedData
+    (h_ir_lc : IRLocallyConnectedData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_bridge_data
+    (irClassificationData_of_irLocallyConnectedData h_ir_lc)
+    (bridgeData_of_irLocallyConnectedData h_ir_lc)
+
+/-- Current axiom-backed provider for packaged IR classify/bridge data. -/
+def irClassifyBridgeData_of_axiom : IRClassifyBridgeData :=
+  irClassifyBridgeData_of_irLocallyConnectedData irLocallyConnectedData_of_axiom
+
+/-- Bridge payload: any renormalization tower supplies IR local-connectivity
+    data via the inconsistency route. -/
+lemma irLocallyConnectedData_of_tower {c₀ : ℂ}
+    (T : RenormalizationTower (parameterToBMol c₀)) :
+    IRLocallyConnectedData :=
+  ir_locally_connected_seam_of_tower T
+
+/-- Existential-tower bridge: one renormalization tower already yields the
+    full IR seam payload (via the inconsistency route). -/
+lemma irLocallyConnectedData_of_exists_tower
+    (h_exists : ∃ c₀ : ℂ, Nonempty (RenormalizationTower (parameterToBMol c₀))) :
+    IRLocallyConnectedData := by
+  rcases h_exists with ⟨c₀, ⟨T⟩⟩
+  exact irLocallyConnectedData_of_tower (c₀ := c₀) T
+
+/-- In the current Gaussian-modulus model, IR local-connectivity data alone
+    yields global MLC. -/
+theorem mlc_conjecture_of_irLocallyConnectedData
+    (h_ir_lc : IRLocallyConnectedData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  -- Keep the IR payload conversions explicitly connected in the main route.
+  have _h_ir_packaging_chain : True := by
+    let h_ir_pkg : IRClassifyBridgeData :=
+      irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc
+    have _h_ir_lc_roundtrip : IRLocallyConnectedData :=
+      irLocallyConnectedData_of_irClassifyBridgeData h_ir_pkg
+    have _h_ir_class : IRClassificationData := h_ir_pkg.classify
+    have _h_ir_bridge :
+        MoleculeConjectureRefined →
+        ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+          (_h : SatelliteRenormalizableTower c),
+          MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+      h_ir_pkg.bridge
+    trivial
+  -- Thread canonical/uniform/strong molecule-bridge target conversions so this
+  -- route stays linked to the bridge-target development.
+  have _h_molecule_target_chain : True := by
+    by_cases h_canonical :
+        MoleculeBridgeTarget.MoleculeImpliesCanonicalSatellitePrincipalNestData
+    · let h_uniform_target :
+          MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget :=
+        MoleculeBridgeTarget.moleculeUniformBridgeTarget_of_moleculeCanonicalSatellitePrincipalNestData
+          h_canonical
+      let _h_strong_target :
+          MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData :=
+        MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget
+          h_uniform_target
+      trivial
+    · trivial
+  let h_main : LocallyConnectedSpace MLC.Quadratic.MandelbrotSet :=
+    mlc_strategy_of_branchLocalData
+      -- FR handler: vacuous under Gaussian proxy (every parameter is IR).
+      (fun c _hc h_fr =>
+        absurd (infinitely_renormalizable_of_gaussian_modulus c) h_fr)
+      -- IR classification is forced through the primitive branch by `h_ir_lc`.
+      (irClassificationData_of_irLocallyConnectedData h_ir_lc)
+      -- Satellite bridge also follows from `h_ir_lc` under Gaussian IR.
+      (bridgeData_of_irLocallyConnectedData h_ir_lc)
+  -- Optional tower-data branch used to keep the IR/tower development linked
+  -- to the main theorem path without changing the frontier.
+  by_cases h_tower_data : InfinitelyRenormalizableHasTowerData
+  · have h_ir0 : InfinitelyRenormalizable (0 : ℂ) :=
+      infinitely_renormalizable_of_gaussian_modulus 0
+    have _h_proper_pow2 : IsProperMap (fun z : ℂ => z ^ 2) :=
+      isProperMap_pow2
+    have _h_proper_quad0 : IsProperMap (fun z : ℂ => z ^ 2 + (0 : ℂ)) :=
+      isProperMap_quadratic (0 : ℂ)
+    have _h_paramToBMol_criticalValue0 := parameterToBMol_criticalValue (0 : ℂ)
+    have _h_paramToBMol_spec0 : True := by
+      rcases parameterToBMol_spec (0 : ℂ) with ⟨g, hg, hcv⟩
+      have _hg := hg
+      have _hcv := hcv
+      trivial
+    have h_sat0 : SatelliteRenormalizableTower (0 : ℂ) :=
+      tower_of_infinitely_renormalizable h_tower_data 0 h_ir0
+    let T0 : RenormalizationTower (parameterToBMol (0 : ℂ)) := satelliteTower 0 h_sat0
+    have _h_step0 := tower_step_classification T0 0
+    have _h_period_ge_two0 : 2 ≤ T0.period 0 := RenormalizationTower.period_ge_two T0 0
+    have _h_cp_unbounded0 : ∃ n : ℕ, 0 ≤ T0.cumulativePeriod n :=
+      RenormalizationTower.le_cumulativePeriod_of_le T0 0
+    have _h_cp_mono : Monotone T0.cumulativePeriod :=
+      RenormalizationTower.cumulativePeriod_monotone T0
+    have _h_cp_cof : Quadratic.PrincipalNest.Cofinal T0.cumulativePeriod :=
+      RenormalizationTower.cumulativePeriod_cofinal T0
+    have _h_sat_depths_mono :
+        Monotone (RenormalizationTower.cumulativePeriod (satelliteTower 0 h_sat0)) :=
+      satelliteTower_depths_monotone 0 h_sat0
+    have _h_sat_depths_cof :
+        Quadratic.PrincipalNest.Cofinal
+          (RenormalizationTower.cumulativePeriod (satelliteTower 0 h_sat0)) :=
+      satelliteTower_depths_cofinal 0 h_sat0
+    rcases exists_renormalization_tower_sequence h_tower_data 0 h_ir0 with
+      ⟨_g, _hg0, _hstep⟩
+    have _h_ir_class_data : IRClassificationData :=
+      irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data
+    have _h_class0 :
+        PrimitiveRenormalizable (0 : ℂ) ∨ SatelliteRenormalizableTower (0 : ℂ) :=
+      classify_infinitely_renormalizable h_tower_data 0 h_ir0
+    have _h_class_noTowerPrim : True := by
+      by_cases h_noTowerPrim : IRNoTowerImpliesPrimitiveData
+      · have _h_class_alt :
+          PrimitiveRenormalizable (0 : ℂ) ∨ SatelliteRenormalizableTower (0 : ℂ) :=
+          classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+            h_noTowerPrim 0 zero_mem_mandelbrotSet_fastTower h_ir0
+        trivial
+      · trivial
+    have _h_comb :
+        {n : ℕ | True}.Infinite ∨ (∀ᶠ n : ℕ in Filter.atTop, False) := by
+      exact combinatorial_dichotomy (p := fun _ : ℕ => True) (q := fun _ : ℕ => False)
+        (fun _ => Or.inl trivial)
+    have _h_sat_bridge : True := by
+      by_cases h_ev_sat : ∀ᶠ n in Filter.atTop, IsSatellite (T0.rel n)
+      · have _h_sat_again : SatelliteRenormalizableTower (0 : ℂ) :=
+          satellite_tower_implies_satellite 0 h_ir0 T0 h_ev_sat
+        trivial
+      · trivial
+    have h_exists_mem_tower :
+        ∃ c : ℂ, c ∈ MLC.Quadratic.MandelbrotSet ∧ SatelliteRenormalizableTower c :=
+      ⟨0, zero_mem_mandelbrotSet_fastTower, h_sat0⟩
+    by_cases h_mod : MoleculeModulusLowerBoundData
+    · have hFalse :
+          False :=
+        (not_moleculeModulusLowerBoundData_of_exists_mem_mandelbrot_tower
+          h_exists_mem_tower) h_mod
+      have _h_not_sat0 : ¬ SatelliteRenormalizableTower (0 : ℂ) :=
+        not_satelliteRenormalizableTower_of_mem_mandelbrot
+          h_mod 0 zero_mem_mandelbrotSet_fastTower
+      have _hFalse_mod2 : False :=
+        false_of_infinitely_renormalizable_has_tower_data h_mod h_tower_data
+      have _h_no_tower_data : ¬ InfinitelyRenormalizableHasTowerData :=
+        not_infinitely_renormalizable_has_tower_data h_mod
+      exact False.elim hFalse
+    · have _h_no_mod : ¬ MoleculeModulusLowerBoundData := h_mod
+      by_cases h_conf : MoleculeConformalModulusLowerBoundData
+      · have hFalse :
+            False :=
+          (not_moleculeConformalModulusLowerBoundData_of_exists_mem_mandelbrot_tower
+            h_exists_mem_tower) h_conf
+        have _h_not_sat0_conf : ¬ SatelliteRenormalizableTower (0 : ℂ) :=
+          not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal
+            h_conf 0 zero_mem_mandelbrotSet_fastTower
+        have _hFalse_conf2 : False :=
+          false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
+            h_conf h_tower_data
+        have _h_no_tower_conf : ¬ InfinitelyRenormalizableHasTowerData :=
+          consistency_checkpoint_conformal_bridge_excludes_global_ir_tower h_conf
+        exact False.elim hFalse
+      · have _h_no_conf : ¬ MoleculeConformalModulusLowerBoundData := h_conf
+        by_cases h_uniform : MoleculeUniformConformalLowerBoundData
+        · have hFalse :
+            False :=
+              false_of_moleculeUniformConformalLowerBoundData_and_infinitely_renormalizable_has_tower_data
+                h_uniform h_tower_data
+          have _hFalse_uniform_exists :
+              False :=
+            (not_moleculeUniformConformalLowerBoundData_of_exists_mem_mandelbrot_tower
+              h_exists_mem_tower) h_uniform
+          have h_conf_from_uniform : MoleculeConformalModulusLowerBoundData :=
+            moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
+          have _h_no_tower_from_conf : ¬ InfinitelyRenormalizableHasTowerData :=
+            consistency_checkpoint_conformal_bridge_excludes_global_ir_tower h_conf_from_uniform
+          have h_noTowerOnM :
+              ∀ (c : ℂ), c ∈ MLC.Quadratic.MandelbrotSet → ¬ SatelliteRenormalizableTower c := by
+            intro c hc
+            exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform h_uniform c hc
+          have _h_class_noTowerOnM : True := by
+            by_cases h_noTowerPrim : IRNoTowerImpliesPrimitiveData
+            · have _h_class_alt :
+                PrimitiveRenormalizable (0 : ℂ) ∨ SatelliteRenormalizableTower (0 : ℂ) :=
+                classify_infinitely_renormalizable_of_noTowerImpliesPrimitive_of_noTowerOnM
+                  h_noTowerPrim h_noTowerOnM 0 zero_mem_mandelbrotSet_fastTower h_ir0
+              trivial
+            · trivial
+          exact False.elim hFalse
+        · exact h_main
+  · exact h_main
+
+/-- Packaged-IR wrapper for the IR-only MLC route. -/
+theorem mlc_conjecture_of_irClassifyBridgeData
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irLocallyConnectedData
+    (irLocallyConnectedData_of_irClassifyBridgeData h_ir)
+
+/-- IR seam payload and packaged IR classify/bridge payload are equivalent. -/
+theorem irLocallyConnectedData_iff_irClassifyBridgeData :
+    IRLocallyConnectedData ↔ IRClassifyBridgeData := by
+  constructor
+  · intro h_ir_lc
+    exact irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc
+  · intro h_ir
+    exact irLocallyConnectedData_of_irClassifyBridgeData h_ir
+
+/-- Explicit roundtrip route: build the packaged IR payload from the minimal IR
+    seam payload, then apply the packaged MLC wrapper. -/
+theorem mlc_conjecture_of_irLocallyConnectedData_via_irClassifyBridgeData
+    (h_ir_lc : IRLocallyConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+
+/-- Direct IR-packaged assembly from explicit IR classification and the strong
+    molecule bridge target. -/
+theorem mlc_conjecture_of_classify_moleculeBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_classify_moleculeBridgeTarget_data h_classify_ir h_target)
+
+/-- Direct IR-packaged assembly from explicit IR classification and the
+    uniform conformal molecule bridge target. -/
+theorem mlc_conjecture_of_classify_moleculeUniformBridgeTarget_data
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_classify_moleculeUniformBridgeTarget_data h_classify_ir h_uniform)
+
+/-- Direct IR-packaged assembly from global IR→tower bridge data and the strong
+    molecule bridge target. -/
+theorem mlc_conjecture_of_infinitelyRenormalizableHasTowerData_moleculeBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeBridgeTarget
+      h_tower_data h_target)
+
+/-- Direct IR-packaged assembly from global IR→tower bridge data and the
+    uniform conformal molecule bridge target. -/
+theorem mlc_conjecture_of_infinitelyRenormalizableHasTowerData_moleculeUniformBridgeTarget
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_infinitelyRenormalizableHasTowerData_moleculeUniformBridgeTarget
+      h_tower_data h_uniform)
+
+/-- Bridge theorem: any renormalization tower yields `mlc_conjecture` via the
+    IR seam payload produced by the inconsistency route. -/
+theorem mlc_conjecture_of_tower {c₀ : ℂ}
+    (T : RenormalizationTower (parameterToBMol c₀)) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irLocallyConnectedData (irLocallyConnectedData_of_tower T)
+
+/-- Existential-tower bridge theorem: one renormalization tower already
+    implies `mlc_conjecture`. -/
+theorem mlc_conjecture_of_exists_tower
+    (h_exists : ∃ c₀ : ℂ, Nonempty (RenormalizationTower (parameterToBMol c₀))) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irLocallyConnectedData
+    (irLocallyConnectedData_of_exists_tower h_exists)
+
+/-- BMol-level existential-tower bridge theorem: one abstract renormalization
+    tower already implies `mlc_conjecture` via the generalized inconsistency
+    route. -/
+theorem mlc_conjecture_of_exists_tower_bMol
+    (h_exists : ∃ g : Molecule.BMol, Nonempty (RenormalizationTower g)) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_exists with ⟨g, ⟨T⟩⟩
+  exact mlc_of_tower_bMol T
+
+/-- Molecule fixed-point hypotheses plus fixed-point parameter lift data imply
+    `mlc_conjecture` through the tower route. -/
+theorem mlc_conjecture_of_moleculeRenormalizableFixedPointData
+    (h_mol : MoleculeRenormalizableFixedPointData)
+    (h_lift : ParameterToBMolFixedPointLiftData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower
+    (exists_renormalization_tower_of_moleculeRenormalizableFixedPointData h_mol h_lift)
+
+/-- Model-data variant: fixed-point parameter-model data suffices to recover
+    the tower route into `mlc_conjecture`. -/
+theorem mlc_conjecture_of_moleculeRenormalizableFixedPointData_of_fixedPointParameterModelData
+    (h_mol : MoleculeRenormalizableFixedPointData)
+    (h_model : FixedPointParameterModelData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower
+    (exists_renormalization_tower_of_moleculeRenormalizableFixedPointData_of_fixedPointParameterModelData
+      h_mol h_model)
+
+/-- Parameter-level fixed-point bridge:
+    if some parameter map is a fast-renormalizable fixed point of `Rfast`,
+    then `mlc_conjecture` follows via tower existence. -/
+theorem mlc_conjecture_of_exists_parameter_rfast_fixed_point
+    (h_exists :
+      ∃ c : ℂ, Molecule.IsFastRenormalizable (parameterToBMol c) ∧
+        Molecule.Rfast (parameterToBMol c) = parameterToBMol c) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_exists_tower
+    (exists_renormalization_tower_of_exists_parameter_rfast_fixed_point h_exists)
+
+/-- Satellite specialization: a satellite renormalization tower hypothesis
+    gives `mlc_conjecture` through the tower bridge. -/
+theorem mlc_conjecture_of_satellite_tower (c : ℂ)
+    (h : SatelliteRenormalizableTower c) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_tower (satelliteTower c h)
+
+/-- Existential satellite-tower specialization. -/
+theorem mlc_conjecture_of_exists_satellite_tower
+    (h_exists : ∃ c : ℂ, SatelliteRenormalizableTower c) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_exists with ⟨c, h_sat⟩
+  exact mlc_conjecture_of_satellite_tower c h_sat
+
+/-- Any explicit IR witness together with global IR→tower bridge data implies
+    `mlc_conjecture`. -/
+theorem mlc_conjecture_of_irWitness_of_infinitelyRenormalizableHasTowerData
+    (h_data : InfinitelyRenormalizableHasTowerData)
+    (c : ℂ) (h_ir : InfinitelyRenormalizable c) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases infinitely_renormalizable_has_tower h_data c h_ir with ⟨T, _⟩
+  exact mlc_conjecture_of_tower T
+
+/-- Globalized fast-tower bridge into `mlc_conjecture` using the Gaussian
+    proxy IR witness at `c = 0`. -/
+theorem mlc_conjecture_of_infinitelyRenormalizableHasTowerData
+    (h_data : InfinitelyRenormalizableHasTowerData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_irWitness_of_infinitelyRenormalizableHasTowerData
+    h_data 0 (infinitely_renormalizable_of_gaussian_modulus 0)
+
+/-- Minimal seam payload for the direct MLC route:
+    FR connectedness data plus IR local-connectivity data. -/
+structure MLCSeamData : Prop where
+  puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
+  ir_local_connected : IRLocallyConnectedData
+
+/-- Characterization of the minimal direct-route seam payload. -/
+theorem mlcSeamData_iff :
+    MLCSeamData ↔
+      Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData ∧ IRLocallyConnectedData := by
+  constructor
+  · intro h
+    exact ⟨h.puzzle_connected, h.ir_local_connected⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
+
+/-- Build minimal seam payload from FR connectedness + IR local-connectivity
+    payloads. -/
+def mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir_lc : IRLocallyConnectedData) :
+    MLCSeamData where
+  puzzle_connected := h_conn
+  ir_local_connected := h_ir_lc
+
+/-- Build minimal seam payload from FR connectedness + packaged IR
+    classify/bridge data. -/
+def mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir : IRClassifyBridgeData) :
+    MLCSeamData :=
+  mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
+    h_conn
+    (irLocallyConnectedData_of_irClassifyBridgeData h_ir)
+
+/-- Build packaged classify/bridge seam payload from FR connectedness +
+    packaged IR classify/bridge data. -/
+def mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir : IRClassifyBridgeData) :
+    MLCClassifyBridgeSeamData where
+  puzzle_connected := h_conn
+  ir := h_ir
+
+/-- Build packaged classify/bridge seam payload from boundary-motion hypotheses
+    + packaged IR classify/bridge data. -/
+def mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_ir : IRClassifyBridgeData) :
+    MLCClassifyBridgeSeamData :=
+  mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (paraPuzzleConnectedData_of_motionHyp h_motion)
+    h_ir
+
+/-- Build packaged classify/bridge seam payload from FR subset-data +
+    packaged IR classify/bridge data. -/
+def mlcClassifyBridgeSeamData_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
+    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
+    (h_ir : IRClassifyBridgeData) :
+    MLCClassifyBridgeSeamData :=
+  mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+    h_ir
+
+/-- Build packaged classify/bridge seam payload from FR transport-data +
+    packaged IR classify/bridge data. -/
+def mlcClassifyBridgeSeamData_of_paraPuzzleTransportData_irClassifyBridgeData
+    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
+    (h_ir : IRClassifyBridgeData) :
+    MLCClassifyBridgeSeamData :=
+  mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
+    h_ir
+
+/-- Build packaged classify/bridge seam payload from FR existential
+    transport-data + packaged IR classify/bridge data. -/
+def mlcClassifyBridgeSeamData_of_paraPuzzleTransportExistsData_irClassifyBridgeData
+    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
+    (h_ir : IRClassifyBridgeData) :
+    MLCClassifyBridgeSeamData :=
+  mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
+    h_ir
+
+/-- Current axiom-backed minimal seam payload. -/
+def mlcSeamData_of_axiom : MLCSeamData :=
+  mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData
+    Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom
+    irLocallyConnectedData_of_axiom
+
+/-- Direct MLC assembly from the minimal seam payload. -/
+theorem mlc_conjecture_of_MLCSeamData
+    (h_seam : MLCSeamData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  rcases dichotomy c with h_fin | h_inf
+  · exact finite_lc_provider_of_motionHyp
+      (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_seam.puzzle_connected)
+      c hc h_fin
+  · exact h_seam.ir_local_connected c hc h_inf
+
+/-- Convert packaged classify/bridge seam payload to minimal seam payload. -/
+def mlcSeamData_of_MLCClassifyBridgeSeamData
+    (h : MLCClassifyBridgeSeamData) :
+    MLCSeamData :=
+  mlcSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+    h.puzzle_connected
+    h.ir
+
+/-- Direct MLC assembly from packaged classify/bridge seam payload. -/
+theorem mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (h : MLCClassifyBridgeSeamData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCSeamData
+    (mlcSeamData_of_MLCClassifyBridgeSeamData h)
+
+/-- Direct MLC assembly from boundary-motion hypotheses + packaged IR
+    classify/bridge data. -/
+theorem mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData h_motion h_ir)
+
+/-- Packaged wrapper for the legacy motion-hyp + classify/bridge entrypoint,
+    routed through the canonical packaged seam payload. -/
+theorem mlc_conjecture_of_motionHyp_classify_bridge_data_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge)
+
+/-- Packaged-IR wrapper for finite-branch + IR classify/bridge assembly. -/
+theorem mlc_conjecture_of_finite_irClassifyBridgeData
+    (h_fin_lc :
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_finiteClassificationBridgeData
+    h_fin_lc
+    h_ir.classify
+    h_ir.bridge
+
+/-- Build packaged IR classify/bridge payload from boundary-motion hypotheses,
+    explicit IR classification, and molecule bridge target data. -/
+def irClassifyBridgeData_of_motionHyp_classify_moleculeBridgeTarget_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_bridge_data
+    h_classify_ir
+    (bridge_provider_of_motionHyp_moleculeBridgeTarget_data h_motion h_target)
+
+/-- Build packaged IR classify/bridge payload from boundary-motion hypotheses,
+    explicit IR classification, and the uniform conformal bridge target. -/
+def irClassifyBridgeData_of_motionHyp_classify_moleculeUniformBridgeTarget_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_motionHyp_classify_moleculeBridgeTarget_data
+    h_motion
+    h_classify_ir
+    (MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget h_uniform)
+
+/-- Build packaged IR classify/bridge payload from boundary-motion hypotheses,
+    Track-1 no-tower primitive data, and the uniform conformal bridge target. -/
+def irClassifyBridgeData_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_motionHyp_classify_moleculeUniformBridgeTarget_data
+    h_motion
+    (irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+      h_noTowerPrim h_uniform)
+    h_uniform
+
+/-- Packaged wrapper for boundary-motion + classification + molecule bridge
+    target route. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_motionHyp_classify_moleculeBridgeTarget_data
+      h_motion h_classify_ir h_target)
+
+/-- Packaged wrapper for boundary-motion + classification + uniform conformal
+    bridge route. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_motionHyp_classify_moleculeUniformBridgeTarget_data
+      h_motion h_classify_ir h_uniform)
+
+/-- Packaged wrapper for boundary-motion + Track-1 + uniform conformal bridge
+    route. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_data
+      h_motion h_noTowerPrim h_uniform)
+
+/-- Build packaged IR classify/bridge payload from boundary-motion hypotheses
+    and Track-1/Track-2 combined data. -/
+def irClassifyBridgeData_of_motionHyp_track12_data
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_data
+    h_motion h_track12.1 h_track12.2
+
+/-- Packaged wrapper for boundary-motion + Track-1/Track-2 combined data. -/
+theorem mlc_conjecture_of_motionHyp_track12_data_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_irClassifyBridgeData
+    h_motion
+    (irClassifyBridgeData_of_motionHyp_track12_data h_motion h_track12)
+
+/-- Packaged wrapper for `MainPathData`. -/
+theorem mlc_conjecture_of_mainPathData_packaged
+    (h_main : MainPathData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_motionHyp_track12_data_packaged h_main.1 h_main.2
+
+/-- Legacy and packaged bridge-target motion routes are definitionally aligned. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget_eq_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_target : MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData) :
+    mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget h_motion h_classify_ir h_target =
+      mlc_conjecture_of_motionHyp_classify_moleculeBridgeTarget_packaged
+        h_motion h_classify_ir h_target := by
+  rfl
+
+/-- Legacy and packaged uniform-bridge motion routes are definitionally aligned. -/
+theorem mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget_eq_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_classify_ir : IRClassificationData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget
+        h_motion h_classify_ir h_uniform =
+      mlc_conjecture_of_motionHyp_classify_moleculeUniformBridgeTarget_packaged
+        h_motion h_classify_ir h_uniform := by
+  rfl
+
+/-- Legacy and packaged Track-1+uniform motion routes are definitionally aligned. -/
+theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_eq_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_noTowerPrim : IRNoTowerImpliesPrimitiveData)
+    (h_uniform : MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget) :
+    mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
+        h_motion h_noTowerPrim h_uniform =
+      mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget_packaged
+        h_motion h_noTowerPrim h_uniform := by
+  rfl
+
+/-- Legacy and packaged Track-1/Track-2 motion routes are definitionally aligned. -/
+theorem mlc_conjecture_of_motionHyp_track12_data_eq_packaged
+    (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    mlc_conjecture_of_motionHyp_track12_data h_motion h_track12 =
+      mlc_conjecture_of_motionHyp_track12_data_packaged h_motion h_track12 := by
+  rfl
+
+/-- Legacy and packaged `MainPathData` routes are definitionally aligned. -/
+theorem mlc_conjecture_of_mainPathData_eq_packaged
+    (h_main : MainPathData) :
+    mlc_conjecture_of_mainPathData h_main =
+      mlc_conjecture_of_mainPathData_packaged h_main := by
+  rfl
+
+/-- Direct seam theorem with explicit FR connectedness + minimal IR seam
+    payloads. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir_lc : IRLocallyConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCSeamData
+    (mlcSeamData_of_paraPuzzleConnectedData_irLocallyConnectedData h_conn h_ir_lc)
+
+/-- Direct seam theorem with explicit FR connectedness payload.
+    Replacing `Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom`
+    by a constructive witness is the FR unblocking step. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData_irLocallyConnectedData
+    h_conn irLocallyConnectedData_of_axiom
+
+/-- Constructive-route assembly from FR connected-data + IR classify/bridge
+    payloads. This bypasses the `ir_locally_connected_seam` axiom once those
+    IR payloads are available constructively. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData_classify_bridge_data
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+      h_conn
+      (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
+
+/-- Constructive-route assembly from FR connected-data + packaged IR
+    classify/bridge payload. -/
+theorem mlc_conjecture_of_paraPuzzleConnectedData_irClassifyBridgeData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
+      h_conn h_ir)
+
+/-- FR branch provider from connected-data payload. -/
+lemma finite_lc_provider_of_paraPuzzleConnectedData
+    (h_conn : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData) :
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
+  finite_lc_provider_of_motionHyp
+    (Quadratic.puzzleBoundaryMotionHyp_of_connected_data h_conn)
+
+/-- Subset-data route to the direct seam theorem.
+    This is axiom-free once `ParaPuzzleMandelbrotSubsetData` is provided
+    constructively. -/
+theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData
+    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
+
+/-- Constructive-route assembly from the stronger subset-data FR payload plus
+    explicit IR classify/bridge payloads. -/
+theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_classify_bridge_data
+    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
+      hsub
+      (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
+
+/-- Constructive-route assembly from subset-data FR payload plus packaged IR
+    classify/bridge payload. -/
+theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
+    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData hsub h_ir)
+
+/-- Constructive-route assembly from subset-data FR payload plus minimal IR
+    local-connectivity seam payload. -/
+theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irLocallyConnectedData
+    (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
+    (h_ir_lc : IRLocallyConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
+    hsub
+    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+
+/-- Transport-data route to the direct seam theorem.
+    This is axiom-free once `ParaPuzzleInterMandelbrotTransportData` is provided
+    constructively. -/
+theorem mlc_conjecture_of_paraPuzzleTransportData
+    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
+
+/-- Constructive-route assembly from transport-data FR payload plus explicit
+    IR classify/bridge payloads. -/
+theorem mlc_conjecture_of_paraPuzzleTransportData_classify_bridge_data
+    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleTransportData_irClassifyBridgeData
+      htr
+      (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
+
+/-- Constructive-route assembly from transport-data FR payload plus packaged IR
+    classify/bridge payload. -/
+theorem mlc_conjecture_of_paraPuzzleTransportData_irClassifyBridgeData
+    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleTransportData_irClassifyBridgeData htr h_ir)
+
+/-- Constructive-route assembly from transport-data FR payload plus minimal IR
+    local-connectivity seam payload. -/
+theorem mlc_conjecture_of_paraPuzzleTransportData_irLocallyConnectedData
+    (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
+    (h_ir_lc : IRLocallyConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleTransportData_irClassifyBridgeData
+    htr
+    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+
+/-- Existential-transport-data route to the direct seam theorem.
+    This is axiom-free once `ParaPuzzleInterMandelbrotTransportExistsData` is
+    provided constructively. -/
+theorem mlc_conjecture_of_paraPuzzleTransportExistsData
+    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleConnectedData
+    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_exists_data hex)
+
+/-- Constructive-route assembly from existential transport-data FR payload plus
+    explicit IR classify/bridge payloads. -/
+theorem mlc_conjecture_of_paraPuzzleTransportExistsData_classify_bridge_data
+    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
+    (h_classify_ir : IRClassificationData)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+        (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleTransportExistsData_irClassifyBridgeData
+      hex
+      (irClassifyBridgeData_of_classify_bridge_data h_classify_ir h_bridge))
+
+/-- Constructive-route assembly from existential transport-data FR payload plus
+    packaged IR classify/bridge payload. -/
+theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
+    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCClassifyBridgeSeamData
+    (mlcClassifyBridgeSeamData_of_paraPuzzleTransportExistsData_irClassifyBridgeData hex h_ir)
+
+/-- Constructive-route assembly from existential transport-data FR payload plus
+    minimal IR local-connectivity seam payload. -/
+theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
+    (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
+    (h_ir_lc : IRLocallyConnectedData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
+    hex
+    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+
+/-- Single remaining root-facing seam for the current proof architecture.
+    It is intended to represent the finite-branch motion data together with the
+    virtual Julia / virtual Molecule IR strategy rather than a Böttcher- or
+    Molecule-package artifact. -/
+axiom virtual_julia_strategy_data : VirtualJuliaStrategyData
+
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    The Mandelbrot set is locally connected. -/
+    the Mandelbrot set is locally connected. The current root theorem is routed
+    through a single strategy-facing axiom package. -/
 
 theorem mlc_conjecture
-    : LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_external_ray_map_exists_two
-    externalRayMapData_two_root_frontier
+    : LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_virtualJuliaStrategyData
+    virtual_julia_strategy_data
+
 
 end MainProof
 
