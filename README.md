@@ -122,6 +122,31 @@ The current split is connected to the existing proof skeleton through:
 These bridge the paper-facing problem statements to the theorem interfaces
 already used by the main MLC proof.
 
+## Next Possible Steps
+
+The next cleanup target is to remove
+`finite_branch_local_connectivity` **without introducing any new axioms**.
+
+Mathematically, this is not part of Problems 4.3 / 4.4 / 4.5. Those problems
+belong to the infinitely-renormalizable / satellite side. The finite branch
+should instead be discharged internally.
+
+The current code suggests the following route:
+
+1. prove the parameter-shrink theorem
+   `para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`
+2. deduce `parameter_shrink_of_yoccoz` as a theorem, not an axiom
+3. rewire the finite branch through the existing connectedness/subset lemmas on
+   `ParaPuzzlePieceAt c n ∩ MandelbrotSet`
+4. drop `finite_branch_local_connectivity` from `check_axioms.lean`
+
+If this succeeds, the only remaining non-core frontier should be exactly the
+three paper-facing axioms:
+
+- `problem43_pseudoSiegelAPrioriBounds`
+- `problem44_virtualMolecule`
+- `problem45_virtualNearMoleculeRenormalization`
+
 ## Dependencies
 
 - [mathlib4](https://github.com/leanprover-community/mathlib4)
