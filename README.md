@@ -22,14 +22,20 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.virtual_julia_strategy_data
+- MLC.finite_branch_local_connectivity
+- MLC.problem43_pseudoSiegelAPrioriBounds
+- MLC.problem44_virtualMolecule
+- MLC.problem45_virtualNearMoleculeRenormalization
 ```
 
 ## Current State
 
-`MLC.mlc_conjecture` currently depends on exactly one non-core project axiom:
+`MLC.mlc_conjecture` now depends on a split non-core frontier:
 
-- `MLC.virtual_julia_strategy_data`
+- `MLC.finite_branch_local_connectivity`
+- `MLC.problem43_pseudoSiegelAPrioriBounds`
+- `MLC.problem44_virtualMolecule`
+- `MLC.problem45_virtualNearMoleculeRenormalization`
 
 The only other axioms in the root proof are the standard Lean core ones:
 
@@ -41,47 +47,53 @@ The only other axioms in the root proof are the standard Lean core ones:
 
 The top theorem is currently routed as:
 
-1. `virtual_julia_strategy_data : VirtualJuliaStrategyData`
-2. `mlc_conjecture_of_virtualJuliaStrategyData`
-3. local connectivity of `mandelbrotSet`
+1. `finite_branch_local_connectivity : FiniteBranchLocalConnectivityData`
+2. `problem43_pseudoSiegelAPrioriBounds : Problem43PseudoSiegelAPrioriBoundsData`
+3. `problem44_virtualMolecule : Problem44VirtualMoleculeData`
+4. `problem45_virtualNearMoleculeRenormalization :
+   Problem45VirtualNearMoleculeRenormalizationData`
+5. `mlc_conjecture_of_problem43_44_45_data`
+6. local connectivity of `mandelbrotSet`
 
-The package carried by the single root axiom is:
+The current Lean-facing split is:
 
 ```lean
-structure VirtualJuliaStrategyData : Prop where
-  finiteLC : FiniteBranchLocalConnectivityData
-  noTowerPrimitive : IRNoTowerImpliesPrimitiveData
-  satelliteLC : VirtualJuliaSatelliteLocalConnectivityData
+def Problem43PseudoSiegelAPrioriBoundsData : Prop :=
+  MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
 
-axiom virtual_julia_strategy_data : VirtualJuliaStrategyData
+def Problem44VirtualMoleculeData : Prop :=
+  IRNoTowerImpliesPrimitiveData
+
+def Problem45VirtualNearMoleculeRenormalizationData : Prop :=
+  Problem43PseudoSiegelAPrioriBoundsData →
+    VirtualJuliaSatelliteLocalConnectivityData
 ```
 
-## What is connected to the Kahn-Lyubich virtual Julia strategy
+## Connection to Problems 4.3, 4.4, and 4.5
 
-The part directly connected to the strategy described jointly with Kahn and
-Lyubich is the **satellite / infinitely renormalizable side** of
-`VirtualJuliaStrategyData`, especially:
+The IR / satellite side is now expressed through separate seams:
 
-- `satelliteLC : VirtualJuliaSatelliteLocalConnectivityData`
-- `noTowerPrimitive : IRNoTowerImpliesPrimitiveData`
+- **Problem 4.3**:
+  `problem43_pseudoSiegelAPrioriBounds`
+  packages the pseudo-Siegel a priori bounds in the remaining unbounded
+  satellite ql cases. At the current theorem interface, this is represented by
+  the uniform conformal lower-bound Track-2 target.
+- **Problem 4.4**:
+  `problem44_virtualMolecule`
+  packages the Virtual Molecule near-degenerate regime. At the current theorem
+  interface, this is represented by `IRNoTowerImpliesPrimitiveData`.
+- **Problem 4.5**:
+  `problem45_virtualNearMoleculeRenormalization`
+  packages the primitive-first ql / virtual near-Molecule case. At the current
+  seam, it upgrades the Problem 4.3 control to the satellite local-connectivity
+  endpoint.
 
-These fields are where the repository packages the missing control behind the
-quoted plan:
+This makes the paper-facing route explicit in Lean:
 
-- partially invariant virtual Julia sets of the satellite copies `M(s)`
-- control of the critical orbit only up to the relevant first returns
-- virtual Molecule scales from the chain
-  `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`
-- the a priori bounds needed for the remaining satellite / near-degenerate
-  infinitely-renormalizable cases
+- `noTowerPrimitive_of_problem44`
+- `satelliteLC_of_problem43_problem45`
 
-In other words, the current single axiom is **not** standing for an
-external-ray inversion statement. It is standing for the missing a priori
-virtual Julia / virtual Molecule control that should yield the satellite local
-connectivity endpoint and the no-tower-implies-primitive classification needed
-by the root proof.
-
-This is the point of contact with the paper passage:
+The point of contact with the Kahn-Lyubich strategy is still the same:
 
 > Jointly with Kahn and Lyubich, we put forward a strategy to approach Problem
 > 4.4 by considering partially invariant virtual Julia sets of `M(s)`. A
@@ -89,14 +101,16 @@ This is the point of contact with the paper passage:
 > hyperbolicity of the renormalization associated with `M`; the strategy is to
 > develop such control a priori.
 
-Here, the formalization treats that missing control as the remaining
-root-facing seam.
+In this branch, that quoted program is no longer represented by one coarse
+`virtual_julia_strategy_data` package. It is represented by the split
+Problem 4.3 / 4.4 / 4.5 seams above.
 
-## What is *not* the Kahn-Lyubich seam
+## Finite Branch
 
-`finiteLC : FiniteBranchLocalConnectivityData` is included in the same package
-only to keep the top theorem on a single project axiom. It is not the virtual
-Julia / virtual Molecule part of the program.
+`finite_branch_local_connectivity` is intentionally separate in this pass.
+It is not part of the virtual Julia / virtual Molecule program; it remains the
+finite-branch payload needed to keep the root theorem green while the
+IR/satellite side is split into more specific statements.
 
 ## Dependencies
 
