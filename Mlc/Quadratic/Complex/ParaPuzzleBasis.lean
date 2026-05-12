@@ -7,6 +7,7 @@ import Yoccoz.Quadratic.Complex.Green
 import Yoccoz.Quadratic.Complex.GreenLemmas
 import Mlc.Quadratic.Complex.ParaPuzzle
 import Mlc.Quadratic.Complex.Axioms
+import Mlc.Quadratic.Complex.PrincipalNestShrink
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Topology.Constructions
 import Mathlib.Order.Filter.Bases.Basic
@@ -60,12 +61,36 @@ lemma bounded_sublevel_green_function (c : ℂ) (r : ℝ) :
     exact le_trans (le_of_lt this) (le_max_right _ _)
 
 /-- The closure of a parameter puzzle piece is compact. -/
-axiom isCompact_closure_para_puzzle_piece (c : ℂ) (n : ℕ) :
-    IsCompact (closure (ParaPuzzlePieceAt c n))
+theorem isCompact_closure_para_puzzle_piece (c : ℂ) (n : ℕ) :
+    IsCompact (closure (ParaPuzzlePieceAt c n)) := by
+  have hsub :
+      DynamicalPuzzlePiece c n 0 ⊆ {z | green_function c z < (1 / 2) ^ n} :=
+    connectedComponentIn_subset _ _
+  have hbdd_dyn : IsBounded (DynamicalPuzzlePiece c n 0) :=
+    (bounded_sublevel_green_function c ((1 / 2 : ℝ) ^ n)).subset hsub
+  have hisom : Isometry (fun z : ℂ => z + c) := by
+    refine Isometry.of_dist_eq ?_
+    intro z w
+    simpa using dist_add_right z w c
+  have himage :
+      ParaPuzzlePieceAt c n = (fun z : ℂ => z + c) '' DynamicalPuzzlePiece c n 0 := by
+    ext z
+    constructor
+    · intro hz
+      refine ⟨z - c, (mem_paraPuzzlePieceAt_iff c z n).mp hz, by simp⟩
+    · rintro ⟨w, hw, rfl⟩
+      exact (mem_paraPuzzlePieceAt_iff c (w + c) n).2 (by simpa)
+  have hbdd_para : IsBounded (ParaPuzzlePieceAt c n) := by
+    rw [himage]
+    exact hisom.lipschitz.isBounded_image hbdd_dyn
+  exact hbdd_para.isCompact_closure
 
 /-- Parameter puzzle pieces are open. -/
-axiom para_puzzle_piece_at_isOpen (c : ℂ) (n : ℕ) :
-    IsOpen (ParaPuzzlePieceAt c n)
+theorem para_puzzle_piece_at_isOpen (c : ℂ) (n : ℕ) :
+    IsOpen (ParaPuzzlePieceAt c n) := by
+  simpa [ParaPuzzlePieceAt] using
+    (Quadratic.PrincipalNest.isOpen_dynamicalPuzzlePiece c n).preimage
+      (continuous_id.sub continuous_const)
 
 /-- The intersection of closures of parameter puzzle pieces is the same as the intersection of pieces,
     provided they shrink to a point. -/
@@ -100,8 +125,11 @@ theorem hasBasis_nhds_of_iInter_singleton {α : Type*} [TopologicalSpace α] [T2
   · exact mem_of_superset (h_nhd n) hn_sub
 
 /-- Parameter puzzle pieces are nested. -/
-axiom para_puzzle_piece_nested (c : ℂ) (n : ℕ) :
-    ParaPuzzlePieceAt c (n + 1) ⊆ ParaPuzzlePieceAt c n
+theorem para_puzzle_piece_nested (c : ℂ) (n : ℕ) :
+    ParaPuzzlePieceAt c (n + 1) ⊆ ParaPuzzlePieceAt c n := by
+  intro z hz
+  rw [mem_paraPuzzlePieceAt_iff] at hz ⊢
+  exact dynamical_puzzle_piece_nested c n hz
 
 /-- Parameter puzzle pieces form a basis of neighborhoods if they shrink to a point. -/
 axiom para_puzzle_piece_basis_sketch (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :

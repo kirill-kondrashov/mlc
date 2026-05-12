@@ -434,7 +434,8 @@ lemma finite_connectedAt_provider_of_motionHyp
       ∀ n, IsConnected (Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet) := by
   intro c hc n
   have hc₀ : c ∈ Quadratic.ParaPuzzlePieceAt c n :=
-    Quadratic.mandelbrot_subset_paraPuzzlePiece hc n
+    (Quadratic.mem_paraPuzzlePieceAt_self c n).2
+      (Quadratic.mem_dynamical_puzzle_piece_self c hc n)
   rcases h_motion.motion n c hc₀ with ⟨r, hr, E, hHol, hpres⟩
   rcases hpres hc with ⟨S, hSconn, hSeq⟩
   simpa [hSeq] using hSconn
@@ -2466,9 +2467,18 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
     hex
     (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
 
-/-- Separate finite-branch local-connectivity seam retained for the current
-    pass while the IR/satellite package is split into Problems 4.3 / 4.4 / 4.5. -/
-axiom finite_branch_local_connectivity : FiniteBranchLocalConnectivityData
+/-- Constructive finite-branch local-connectivity payload from the current
+    Böttcher-on-`M` motion stub plus the theoremized Yoccoz shrink route. -/
+noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivityData :=
+  finite_lc_provider_of_motionHyp
+    (Quadratic.puzzle_boundary_motion_hyp_of_onM
+      { h_top := bottcher_onM_hyp.h_top
+        h_stab := bottcher_onM_hyp.h_stab
+        B := bottcher_onM_hyp.B
+        r := bottcher_onM_hyp.r
+        r_pos := bottcher_onM_hyp.r_pos
+        in_M := bottcher_onM_hyp.in_M
+        hconn := trivial })
 
 /-- Problem 4.3 root-facing axiom: pseudo-Siegel a priori bounds in the
     remaining unbounded satellite ql cases. -/

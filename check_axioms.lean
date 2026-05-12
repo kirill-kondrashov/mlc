@@ -15,7 +15,8 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice,
-     ``MLC.finite_branch_local_connectivity,
+     ``MLC.Quadratic.para_puzzle_piece_basis_sketch,
+     ``MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
      ``MLC.problem43_pseudoSiegelAPrioriBounds,
      ``MLC.problem44_virtualMolecule,
      ``MLC.problem45_virtualNearMoleculeRenormalization]

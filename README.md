@@ -22,7 +22,8 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.finite_branch_local_connectivity
+- MLC.Quadratic.para_puzzle_piece_basis_sketch
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.problem43_pseudoSiegelAPrioriBounds
 - MLC.problem44_virtualMolecule
 - MLC.problem45_virtualNearMoleculeRenormalization
@@ -30,9 +31,10 @@ All axioms used:
 
 ## Current Axiom Frontier
 
-`MLC.mlc_conjecture` currently depends on four non-core project axioms:
+`MLC.mlc_conjecture` currently depends on five non-core project axioms:
 
-- `MLC.finite_branch_local_connectivity`
+- `MLC.Quadratic.para_puzzle_piece_basis_sketch`
+- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
 - `MLC.problem43_pseudoSiegelAPrioriBounds`
 - `MLC.problem44_virtualMolecule`
 - `MLC.problem45_virtualNearMoleculeRenormalization`
@@ -47,13 +49,17 @@ The only other axioms in the root proof are the standard Lean core ones:
 
 The top theorem is currently assembled as:
 
-1. finite branch via `finite_branch_local_connectivity`
-2. Problem 4.4 via `problem44_virtualMolecule`
-3. Problems 4.3 and 4.5 via
+1. finite branch via the constructive provider
+   `finite_lc_provider_of_motionHyp`
+2. whose remaining finite-branch seams are
+   `para_puzzle_piece_basis_sketch` and
+   `para_puzzle_piece_inter_mandelbrot_connected`
+3. Problem 4.4 via `problem44_virtualMolecule`
+4. Problems 4.3 and 4.5 via
    `problem43_pseudoSiegelAPrioriBounds` and
    `problem45_virtualNearMoleculeRenormalization`
-4. `mlc_conjecture_of_problem43_44_45_data`
-5. local connectivity of `mandelbrotSet`
+5. `mlc_conjecture_of_problem43_44_45_data`
+6. local connectivity of `mandelbrotSet`
 
 At the Lean interface level, the remaining IR/satellite seams are:
 
@@ -76,7 +82,8 @@ rather than hide it behind one coarse package.
 
 | Lean axiom | Mathematical content |
 | --- | --- |
-| `finite_branch_local_connectivity` | The finitely renormalizable branch: parameter puzzle pieces shrink to the parameter, so MLC holds there. This is separate from the virtual Julia / virtual Molecule program. |
+| `Quadratic.para_puzzle_piece_basis_sketch` | A neighborhood-basis theorem for the finite branch: if the parameter puzzle pieces centered at `c` shrink to `{c}`, then these pieces eventually lie in every neighborhood of `c`. This is the missing topological step converting puzzle shrinkage into local connectivity. |
+| `Quadratic.para_puzzle_piece_inter_mandelbrot_connected` | Connectedness of the finite-branch parameter pieces on the Mandelbrot set: for `c ∈ M`, each `ParaPuzzlePieceAt c n ∩ M` is connected. This is the parameter-plane transport / boundary-motion statement still needed after restoring the honest translated parameter-piece interface. |
 | `problem43_pseudoSiegelAPrioriBounds` | **Problem 4.3**: obtain pseudo-Siegel a priori bounds in the remaining unbounded satellite ql cases. In practice this means uniform geometric control on the relevant satellite renormalizations, encoded here by a uniform conformal lower-bound target. |
 | `problem44_virtualMolecule` | **Problem 4.4**: treat the virtual Molecule near-degenerate regime. Mathematically, this is the step that rules out the remaining infinitely renormalizable non-satellite behavior by forcing the no-tower case into the primitive branch. |
 | `problem45_virtualNearMoleculeRenormalization` | **Problem 4.5**: handle the primitive-first ql situation through the canonical satellite chain `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`. At the current seam, this turns the bounds from Problem 4.3 into the satellite local-connectivity endpoint. |
@@ -124,21 +131,19 @@ already used by the main MLC proof.
 
 ## Next Possible Steps
 
-The next cleanup target is to remove
-`finite_branch_local_connectivity` **without introducing any new axioms**.
+The root finite-branch axiom has been eliminated, but doing so exposed the two
+actual finite-branch blockers. The next pass has to remove them without adding
+replacements.
 
-Mathematically, this is not part of Problems 4.3 / 4.4 / 4.5. Those problems
-belong to the infinitely-renormalizable / satellite side. The finite branch
-should instead be discharged internally.
-
-The current code suggests the following route:
-
-1. prove the parameter-shrink theorem
-   `para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`
-2. deduce `parameter_shrink_of_yoccoz` as a theorem, not an axiom
-3. rewire the finite branch through the existing connectedness/subset lemmas on
+1. replace `Quadratic.para_puzzle_piece_inter_mandelbrot_connected` with an
+   axiom-free transport witness or boundary-motion theorem for
    `ParaPuzzlePieceAt c n ∩ MandelbrotSet`
-4. drop `finite_branch_local_connectivity` from `check_axioms.lean`
+2. replace `Quadratic.para_puzzle_piece_basis_sketch` with an internal
+   neighborhood-basis theorem, or bypass `lc_at_of_shrink` with a different
+   local-connectivity-from-shrink route
+3. keep the translated `ParaPuzzlePieceAt` interface and the theoremized shrink
+   chain (`para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`,
+   `parameter_shrink_of_yoccoz`) aligned with those replacements
 
 If this succeeds, the only remaining non-core frontier should be exactly the
 three paper-facing axioms:

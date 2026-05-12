@@ -1,158 +1,232 @@
 # PLAN 06: Eliminate `finite_branch_local_connectivity`
 
-**Status:** READY TO IMPLEMENT  
-**Difficulty:** Medium  
+**Status:** EXPOSED-BLOCKER STATE  
+**Difficulty:** High  
 **Goal:** Remove `finite_branch_local_connectivity` from the root frontier
-without introducing any new axioms.
+without surfacing replacement finite-branch axioms.
 
 ---
 
-## Why This Is the Right Next Step
+## Current Outcome
 
-The current non-core frontier is:
+The direct elimination attempt removed the root axiom
+`finite_branch_local_connectivity`, but it did **not** finish the finite branch.
 
-- `finite_branch_local_connectivity`
+The currently exposed non-core frontier is:
+
+- `MLC.Quadratic.para_puzzle_piece_basis_sketch`
+- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
 - `problem43_pseudoSiegelAPrioriBounds`
 - `problem44_virtualMolecule`
 - `problem45_virtualNearMoleculeRenormalization`
 
-The paper `arXiv:2512.24171` only justifies the remaining **IR/satellite**
-seams (Problems 4.3 / 4.4 / 4.5). The finite branch should therefore be
-internalized, not left as a permanent peer axiom.
-
-If this plan succeeds, the root theorem frontier drops to exactly:
-
-- `problem43_pseudoSiegelAPrioriBounds`
-- `problem44_virtualMolecule`
-- `problem45_virtualNearMoleculeRenormalization`
-
-plus the Lean core axioms.
+The important new information is the **shape of the real blocker** this cutover
+made visible.
 
 ---
 
-## Key Observation
+## What the Failed Attempt Showed
 
-The finite branch has two logical ingredients:
+The earlier version of this plan assumed:
 
-1. connectedness of `ParaPuzzlePieceAt c n ∩ MandelbrotSet`
-2. shrinkage of `⋂ n ParaPuzzlePieceAt c n` to `{c}`
+1. connectedness on `ParaPuzzlePieceAt c n ∩ MandelbrotSet` was already
+   effectively internal
+2. the only real blocker was the shrink chain
+   ```lean
+   para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
+   → parameter_shrink_of_yoccoz
+   → finite_branch_local_connectivity
+   ```
 
-Only the second ingredient is still truly axiomatic.
+That turned out to be incomplete.
 
-### Connectedness route is already available
+When `finite_branch_local_connectivity` was pushed inward, `make check`
+surfaced two deeper finite-branch axioms:
 
-The repo already has:
+- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+- `MLC.Quadratic.para_puzzle_piece_basis_sketch`
 
-- `mandelbrot_subset_paraPuzzlePiece`
-- `ParaPuzzleMandelbrotSubsetData`
-- `para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data`
-- `finite_lc_provider_of_paraPuzzleConnectedData`
+So the true blocker is:
 
-So the connectedness side should be proved without adding any new FR axiom.
+> the finite branch currently depends on **three** unresolved internal seams,
+> not one.
 
-### Shrinkage is the real blocker
+---
 
-The current axiom chain is:
+## Revised Blocker Decomposition
+
+### Blocker A: honest parameter-piece interface
+
+The mathematically honest translated definition of
 
 ```lean
-para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
-→ parameter_shrink_of_yoccoz
-→ finite_branch_local_connectivity
+ParaPuzzlePieceAt c n
 ```
 
-So the correct target is to **theoremize this chain**, not replace it with a
-different root-facing FR assumption.
+is the right one for proving parameter shrink from dynamical shrink.
+
+But the current simplified definition is what makes the old
+`MandelbrotSet ⊆ ParaPuzzlePieceAt c n` connectedness shortcut work.
+
+So the next pass must first settle the interface:
+
+- either keep the simplified definition and accept that the shrink theorem is not
+  honestly derivable there
+- or restore the translated definition and rebuild the FR connectedness route
+  around it
+
+For a genuine elimination, the second option is the right target.
+
+### Blocker B: connectedness replacement
+
+The axiom
+
+```lean
+Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+```
+
+is still lurking behind the default motion/transport witness machinery.
+
+In particular, the attempted constructive route through Böttcher motion still
+ran through an axiom-backed default witness path in the current code.
+
+So the next pass needs an **axiom-free transport-witness / boundary-motion
+construction** for:
+
+```lean
+ParaPuzzlePieceAt c n ∩ MandelbrotSet
+```
+
+### Blocker C: neighborhood-basis replacement
+
+The axiom
+
+```lean
+Quadratic.para_puzzle_piece_basis_sketch
+```
+
+also surfaced immediately once the finite branch was internalized.
+
+This means local connectivity from parameter shrink still depends on a separate
+topological para-puzzle basis theorem.
+
+So the next pass must either:
+
+1. prove `para_puzzle_piece_basis_sketch` internally, or
+2. replace the current `lc_at_of_shrink` route by another theorem that does not
+   depend on that basis axiom
+
+### Blocker D: only then the shrink chain
+
+Once A/B/C are resolved, the remaining theoremization becomes the old target:
+
+1. prove
+   `Quadratic.PrincipalNest.para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`
+2. theoremize `parameter_shrink_of_yoccoz`
+3. remove `finite_branch_local_connectivity`
 
 ---
 
-## Concrete Implementation Plan
+## Updated Execution Order
 
-### Step 1: Prove
-`Quadratic.PrincipalNest.para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`
+### Step 1: Trace and remove the hidden connectedness dependency
 
-File:
+Files:
+- `Mlc/Quadratic/Complex/PuzzleLemmas2.lean`
+- `Mlc/Quadratic/Complex/PuzzleBoundaryMotion.lean`
+- `Mlc/Quadratic/Complex/Bottcher/BottcherMotion.lean`
+
+Task:
+- identify the exact path by which the current default motion route depends on
+  `para_puzzle_piece_inter_mandelbrot_connected`
+- replace it with an explicit boundary-motion / transport witness theorem
+
+Progress:
+- completed the first half of this step
+- `Mlc/Quadratic/Complex/Bottcher/BottcherMotion.lean` now has explicit
+  witness-parameterized constructors:
+  - `motion_preserves_para_piece_of_green_sublevel_of_witness_hyp`
+  - `bottcher_motion_data_of_green_sublevel_of_witness_hyp`
+  - `bottcher_motion_hyp_of_green_sublevel_of_witness_hyp`
+  - `puzzle_boundary_motion_hyp_of_onM_of_witness_hyp`
+- the old defaults still exist, but the dependency is now explicit instead of
+  being hidden inside the Böttcher route
+
+### Step 2: Rework the para-puzzle interface
+
+Files:
+- `Mlc/Quadratic/Complex/ParaPuzzle.lean`
+- `Mlc/ParaPuzzleContainment.lean`
+- `Mlc/MainConjecture.lean`
+
+Task:
+- restore the translated `ParaPuzzlePieceAt` definition
+- update the few proofs that currently rely on the simplified membership fact
+- make the FR route compatible with the honest parameter-piece notion
+
+Progress:
+- completed
+- the translated definition is restored
+- the pure translation shrink theorem is internalized
+- the remaining issues are no longer interface-level but the two exposed FR seams
+
+### Step 3: Replace the basis axiom
+
+Files:
+- `Mlc/Quadratic/Complex/ParaPuzzleBasis.lean`
+- `Mlc/LcAtOfShrink.lean`
+
+Task:
+- either prove `para_puzzle_piece_basis_sketch`
+- or refactor `lc_at_of_shrink` so that this theorem is no longer needed
+
+### Step 4: Retry the shrink theoremization
+
+Files:
 - `Mlc/Quadratic/Complex/PrincipalNestShrink.lean`
-
-Current state:
-- this theorem is still an axiom
-
-Why it matters:
-- it is the exact bridge from Yoccoz’s dynamical shrink statement
-  `⋂ n DynamicalPuzzlePiece c n 0 = {0}`
-  to parameter shrink
-  `⋂ n ParaPuzzlePieceAt c n = {c}`
-
-### Step 2: Theoremize `parameter_shrink_of_yoccoz`
-
-File:
 - `Mlc/AxiomsMainConjecture.lean`
 
-Current state:
-- still an axiom
+Task:
+- prove `para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`
+- theoremize `parameter_shrink_of_yoccoz`
 
-Plan:
-- use `MLC.yoccoz_theorem`
-- feed the dynamical singleton conclusion into the theoremized
-  `para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`
+Progress:
+- completed
+- both theorems are now internal
 
-### Step 3: Rewire finite branch through theoremized data
+### Step 5: Drop the root finite-branch axiom
 
 Files:
 - `Mlc/MainConjecture.lean`
-- possibly `Mlc/LcAtOfShrink.lean`
-
-Plan:
-- route the FR branch through:
-  - `mandelbrot_subset_paraPuzzlePiece`
-  - connectedness on `ParaPuzzlePieceAt c n ∩ MandelbrotSet`
-  - theoremized `parameter_shrink_of_yoccoz`
-- remove `finite_branch_local_connectivity` from the root theorem
-
-### Step 4: Update the frontier
-
-Files:
 - `check_axioms.lean`
 - `README.md`
 - `site/`
 
-Expected result:
-- the root theorem should only depend on Problems 4.3 / 4.4 / 4.5
+Task:
+- rewire the finite branch through the theoremized internal route
+- verify that no new FR axioms appear in `make check`
 
----
-
-## Why This Introduces No New Axioms
-
-This plan does **not** replace one FR axiom by another. Instead it:
-
-- proves the connectedness side from existing subset lemmas
-- proves the shrink side from the already intended Yoccoz route
-- removes `finite_branch_local_connectivity` outright
-
-So the axiom count goes down, and the only remaining non-core frontier is the
-paper-facing IR/satellite one.
-
----
-
-## Relation to `2512.24171`
-
-The paper’s new content addresses the IR/satellite side:
-
-- Problem 4.3: pseudo-Siegel a priori bounds
-- Problem 4.4: virtual Molecule near-degenerate regime
-- Problem 4.5: virtual near-Molecule renormalization
-
-This plan complements that update by removing the leftover **finite branch**
-axiom, which is not one of the paper’s remaining open seams.
+Progress:
+- partially completed
+- the root axiom is gone
+- `make check` now exposes exactly:
+  - `para_puzzle_piece_basis_sketch`
+  - `para_puzzle_piece_inter_mandelbrot_connected`
 
 ---
 
 ## Success Criterion
 
-After this plan:
+This plan is complete only when all of the following are true:
 
 1. `finite_branch_local_connectivity` disappears from `check_axioms.lean`
-2. `make build` passes
-3. `make check` passes
-4. `bash scripts/verify_output.sh` passes
-5. `README.md` states that the only remaining non-core axioms are
-   Problems 4.3 / 4.4 / 4.5
+2. `make check` does **not** surface replacement FR axioms such as
+   `para_puzzle_piece_inter_mandelbrot_connected` or
+   `para_puzzle_piece_basis_sketch`
+3. `make build` passes
+4. `make check` passes
+5. `bash scripts/verify_output.sh` passes
+6. the remaining non-core frontier is exactly:
+   - `problem43_pseudoSiegelAPrioriBounds`
+   - `problem44_virtualMolecule`
+   - `problem45_virtualNearMoleculeRenormalization`

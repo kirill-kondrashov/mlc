@@ -205,7 +205,8 @@ theorem para_puzzle_transport_witness_hyp_of_boundary_motion
   refine ⟨?_⟩
   intro c hc n
   have hc₀ : c ∈ ParaPuzzlePieceAt c n :=
-    mandelbrot_subset_paraPuzzlePiece hc n
+    (mem_paraPuzzlePieceAt_self c n).2
+      (mem_dynamical_puzzle_piece_self c hc n)
   rcases h_motion.motion n c hc₀ with ⟨r, hr, E, h, hpres⟩
   exact hpres hc
 
