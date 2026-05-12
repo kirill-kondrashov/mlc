@@ -540,16 +540,23 @@ def FiniteBranchLocalConnectivityData : Prop :=
   ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
-/-- Single root-facing strategy package for the remaining MLC gaps.
+/-- Problem 4.3 surface: pseudo-Siegel a priori bounds in the remaining
+    unbounded satellite ql cases, represented at the current theorem interface
+    as the uniform conformal lower-bound Track-2 target. -/
+def Problem43PseudoSiegelAPrioriBoundsData : Prop :=
+  MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
 
-This is intended to capture:
-1. the finite-branch local-connectivity conclusion, and
-2. the IR-side virtual Julia / virtual Molecule strategy from
-   Dudko-Lyubich-Kahn (Problems 4.3/4.4/4.5). -/
-structure VirtualJuliaStrategyData : Prop where
-  finiteLC : FiniteBranchLocalConnectivityData
-  noTowerPrimitive : IRNoTowerImpliesPrimitiveData
-  satelliteLC : VirtualJuliaSatelliteLocalConnectivityData
+/-- Problem 4.4 surface: the Virtual Molecule near-degenerate regime,
+    represented at the current theorem interface as the Track-1
+    no-tower-implies-primitive payload. -/
+def Problem44VirtualMoleculeData : Prop :=
+  IRNoTowerImpliesPrimitiveData
+
+/-- Problem 4.5 surface: virtual near-Molecule renormalization in the
+    primitive-first ql case. At the current seam, this upgrades the Problem 4.3
+    pseudo-Siegel control to the satellite local-connectivity endpoint. -/
+def Problem45VirtualNearMoleculeRenormalizationData : Prop :=
+  Problem43PseudoSiegelAPrioriBoundsData → VirtualJuliaSatelliteLocalConnectivityData
 
 /-- Constructive main-path seam datum: boundary-motion finite branch data plus
      combined Track-1/Track-2 infinite-branch data. -/
@@ -579,16 +586,35 @@ theorem mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_satelliteLCData
         h_noTowerPrim c hc h_inf)
     (fun _h_mol c hc h_tower => h_satelliteLC c hc h_tower)
 
-/-- Main MLC assembly from the single virtual Julia strategy package. -/
-theorem mlc_conjecture_of_virtualJuliaStrategyData
-    (h : VirtualJuliaStrategyData) :
+/-- Problem 4.4 yields the Track-1 no-tower-implies-primitive interface. -/
+theorem noTowerPrimitive_of_problem44
+    (h44 : Problem44VirtualMoleculeData) :
+    IRNoTowerImpliesPrimitiveData :=
+  h44
+
+/-- Problems 4.3 and 4.5 combine to yield the current satellite
+    local-connectivity seam. -/
+theorem satelliteLC_of_problem43_problem45
+    (h43 : Problem43PseudoSiegelAPrioriBoundsData)
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    VirtualJuliaSatelliteLocalConnectivityData :=
+  h45 h43
+
+/-- Main MLC assembly from the split Problem 4.3 / 4.4 / 4.5 surfaces and a
+    separate finite-branch payload. -/
+theorem mlc_conjecture_of_problem43_44_45_data
+    (h_fin : FiniteBranchLocalConnectivityData)
+    (h43 : Problem43PseudoSiegelAPrioriBoundsData)
+    (h44 : Problem44VirtualMoleculeData)
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_finiteClassificationBridgeData
-    h.finiteLC
+    h_fin
     (fun c hc h_inf =>
       classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
-        h.noTowerPrimitive c hc h_inf)
-    (fun _h_mol c hc h_tower => h.satelliteLC c hc h_tower)
+        (noTowerPrimitive_of_problem44 h44) c hc h_inf)
+    (fun _h_mol c hc h_tower =>
+      (satelliteLC_of_problem43_problem45 h43 h45) c hc h_tower)
 
 /-- Main MLC assembly from the constructive main-path seam datum. -/
 theorem mlc_conjecture_of_mainPathData
@@ -2440,20 +2466,37 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
     hex
     (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
 
-/-- Single remaining root-facing seam for the current proof architecture.
-    It is intended to represent the finite-branch motion data together with the
-    virtual Julia / virtual Molecule IR strategy rather than a Böttcher- or
-    Molecule-package artifact. -/
-axiom virtual_julia_strategy_data : VirtualJuliaStrategyData
+/-- Separate finite-branch local-connectivity seam retained for the current
+    pass while the IR/satellite package is split into Problems 4.3 / 4.4 / 4.5. -/
+axiom finite_branch_local_connectivity : FiniteBranchLocalConnectivityData
+
+/-- Problem 4.3 root-facing axiom: pseudo-Siegel a priori bounds in the
+    remaining unbounded satellite ql cases. -/
+axiom problem43_pseudoSiegelAPrioriBounds :
+  Problem43PseudoSiegelAPrioriBoundsData
+
+/-- Problem 4.4 root-facing axiom: the Virtual Molecule near-degenerate
+    regime. -/
+axiom problem44_virtualMolecule :
+  Problem44VirtualMoleculeData
+
+/-- Problem 4.5 root-facing axiom: virtual near-Molecule renormalization in the
+    primitive-first ql case. -/
+axiom problem45_virtualNearMoleculeRenormalization :
+  Problem45VirtualNearMoleculeRenormalizationData
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root theorem is routed
-    through a single strategy-facing axiom package. -/
+    through split Problem 4.3 / 4.4 / 4.5 seams together with a separate
+    finite-branch payload. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_virtualJuliaStrategyData
-    virtual_julia_strategy_data
+  mlc_conjecture_of_problem43_44_45_data
+    finite_branch_local_connectivity
+    problem43_pseudoSiegelAPrioriBounds
+    problem44_virtualMolecule
+    problem45_virtualNearMoleculeRenormalization
 
 
 end MainProof
