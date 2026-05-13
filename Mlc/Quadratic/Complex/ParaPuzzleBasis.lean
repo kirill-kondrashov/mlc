@@ -234,6 +234,57 @@ lemma closure_para_puzzle_piece_subset_green_closedSublevel (c : ℂ) (n : ℕ) 
   change green_function c (z - c) ≤ (1 / 2) ^ n
   exact le_of_lt ((para_puzzle_piece_subset_green_sublevel c n) hz)
   exact isClosed_Iic.preimage ((continuous_green_function c).comp (continuous_id.sub continuous_const))
+
+lemma mem_dynamicalPuzzlePiece_of_mem_closure_and_green_zero
+    (c : ℂ) (n : ℕ) {z : ℂ}
+    (hz_closure : z ∈ closure (DynamicalPuzzlePiece c n 0))
+    (hz_green : green_function c z = 0) :
+    z ∈ DynamicalPuzzlePiece c n 0 := by
+  let U : Set ℂ := {w | green_function c w < (1 / 2) ^ n}
+  have hzU : z ∈ U := by
+    dsimp [U]
+    simpa [hz_green] using (pow_pos (by norm_num : (0 : ℝ) < 1 / 2) n)
+  have h0U : (0 : ℂ) ∈ U := by
+    by_contra h0_notin
+    rw [DynamicalPuzzlePiece, connectedComponentIn_eq_empty h0_notin, closure_empty] at hz_closure
+    exact hz_closure.elim
+  let s : Set U := ((↑) : U → ℂ) ⁻¹' DynamicalPuzzlePiece c n 0
+  have hs_image : ((↑) : U → ℂ) '' s = DynamicalPuzzlePiece c n 0 := by
+    ext w
+    constructor
+    · rintro ⟨wU, hwU, rfl⟩
+      exact hwU
+    · intro hw
+      refine ⟨⟨w, ?_⟩, hw, rfl⟩
+      have hw_sublevel :
+          DynamicalPuzzlePiece c n 0 ⊆ U := by
+        simpa [DynamicalPuzzlePiece, U] using
+          (connectedComponentIn_subset {w | green_function c w < (1 / 2) ^ n} (0 : ℂ))
+      exact hw_sublevel hw
+  have hz_subtype : (⟨z, hzU⟩ : U) ∈ closure s := by
+    rw [closure_subtype, hs_image]
+    exact hz_closure
+  have hs_eq :
+      s = connectedComponent (⟨(0 : ℂ), h0U⟩ : U) := by
+    ext w
+    change ((w : ℂ) ∈ connectedComponentIn U (0 : ℂ)) ↔
+      w ∈ connectedComponent (⟨(0 : ℂ), h0U⟩ : U)
+    rw [connectedComponentIn_eq_image h0U]
+    constructor
+    · intro hw
+      rcases hw with ⟨u, hu, hu_eq⟩
+      have : u = w := by
+        exact Subtype.ext hu_eq
+      simpa [this] using hu
+    · intro hw
+      exact ⟨w, hw, rfl⟩
+  have hz_component_closure : (⟨z, hzU⟩ : U) ∈ closure (connectedComponent (⟨(0 : ℂ), h0U⟩ : U)) := by
+    simpa [hs_eq] using hz_subtype
+  have hz_component : (⟨z, hzU⟩ : U) ∈ connectedComponent (⟨(0 : ℂ), h0U⟩ : U) := by
+    simpa [isClosed_connectedComponent.closure_eq] using hz_component_closure
+  have hz_in_s : (⟨z, hzU⟩ : U) ∈ s := by
+    exact hs_eq.symm ▸ hz_component
+  exact hz_in_s
 theorem iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
     (⋂ n, closure (ParaPuzzlePieceAt c n)) = {c} := by
   have center_mem_mandelbrot : c ∈ MandelbrotSet := by
@@ -265,10 +316,17 @@ theorem iInter_closure_para_puzzle_piece (c : ℂ) (h : (⋂ n, ParaPuzzlePieceA
       ∀ {z : ℂ}, z ∈ ⋂ n, closure (ParaPuzzlePieceAt c n) → z ∈ ⋂ n, ParaPuzzlePieceAt c n := by
     intro z hz
     have hz_zero := green_zero_of_mem_iInter_closure hz
-    have hzK : z - c ∈ K c := (green_function_eq_zero_iff_mem_K c (z - c)).1 hz_zero
     refine Set.mem_iInter.mpr ?_
     intro n
-    exact (mem_paraPuzzlePieceAt_iff c z n).2 (K_subset_dynamicalPuzzlePiece center_mem_mandelbrot n hzK)
+    have hz_translate_closure : z - c ∈ closure (DynamicalPuzzlePiece c n 0) := by
+      have hz_mem_closure : z ∈ closure (ParaPuzzlePieceAt c n) := Set.mem_iInter.mp hz n
+      have hz_image :
+          z - c ∈ (fun w : ℂ => w - c) '' closure (ParaPuzzlePieceAt c n) := by
+        exact ⟨z, hz_mem_closure, by simp⟩
+      simpa [ParaPuzzlePieceAt] using
+        (image_closure_subset_closure_image ((Homeomorph.addRight (-c)).continuous) hz_image)
+    exact (mem_paraPuzzlePieceAt_iff c z n).2
+      (mem_dynamicalPuzzlePiece_of_mem_closure_and_green_zero c n hz_translate_closure hz_zero)
   have hc_inter : c ∈ ⋂ n, ParaPuzzlePieceAt c n := by
     rw [h]
     simp

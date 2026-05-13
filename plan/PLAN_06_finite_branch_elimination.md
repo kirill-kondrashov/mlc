@@ -5,9 +5,13 @@
 **Goal:** Remove `finite_branch_local_connectivity` from the root frontier
 without surfacing replacement finite-branch axioms.
 
-**Important:** the currently exposed
-`para_puzzle_piece_basis_sketch` / `para_puzzle_piece_inter_mandelbrot_connected`
-pair is a temporary diagnostic state, **not** a new accepted axiom frontier.
+**Important:** neither `para_puzzle_piece_inter_mandelbrot_connected` nor
+`filled_julia_set_connected` is accepted as part of the root frontier. The only
+allowed non-core frontier is:
+
+- `problem43_pseudoSiegelAPrioriBounds`
+- `problem44_virtualMolecule`
+- `problem45_virtualNearMoleculeRenormalization`
 
 ---
 
@@ -19,7 +23,6 @@ The direct elimination attempt removed the root axiom
 The currently exposed non-core frontier is:
 
 - `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
-- `MLC.Quadratic.filled_julia_set_connected`
 - `problem43_pseudoSiegelAPrioriBounds`
 - `problem44_virtualMolecule`
 - `problem45_virtualNearMoleculeRenormalization`
@@ -32,6 +35,7 @@ This state should be treated as:
 1. a successful diagnostic cutover
 2. a proof that the old root axiom was hiding deeper finite-branch seams
 3. **not** a satisfactory stopping point
+4. a violation of the intended root frontier until the remaining leak is gone
 
 ---
 
@@ -66,10 +70,13 @@ Current update:
 - the **basis seam has now been eliminated**
 - `para_puzzle_piece_basis_sketch` and `iInter_closure_para_puzzle_piece` are
   theoremized in `ParaPuzzleBasis.lean`
-- this currently exposes the lower-level theorem
-  `MLC.Quadratic.filled_julia_set_connected` through the basis proof
+- the former lower-level leak `MLC.Quadratic.filled_julia_set_connected` has now
+  been removed from the checked frontier by replacing the closure-to-piece step
+  with a relative-closedness argument inside the Green sublevel
 - the remaining project-level `para_puzzle_*` blocker is now only
   `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+- the strict frontier checker now rejects only
+  `para_puzzle_piece_inter_mandelbrot_connected`
 
 An additional conclusion from the latest elimination attempt is that the two
 exposed `para_puzzle_*` seams are not just waiting for short local proofs under

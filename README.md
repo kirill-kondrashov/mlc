@@ -22,8 +22,6 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.para_puzzle_piece_basis_sketch
-- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.problem43_pseudoSiegelAPrioriBounds
 - MLC.problem44_virtualMolecule
 - MLC.problem45_virtualNearMoleculeRenormalization
@@ -31,10 +29,9 @@ All axioms used:
 
 ## Current Axiom Frontier
 
-`MLC.mlc_conjecture` currently depends on five non-core project axioms:
+The **intended** root frontier for `MLC.mlc_conjecture` is exactly three
+non-core project axioms:
 
-- `MLC.Quadratic.para_puzzle_piece_basis_sketch`
-- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
 - `MLC.problem43_pseudoSiegelAPrioriBounds`
 - `MLC.problem44_virtualMolecule`
 - `MLC.problem45_virtualNearMoleculeRenormalization`
@@ -47,13 +44,11 @@ The only other axioms in the root proof are the standard Lean core ones:
 
 ## Root Theorem Route
 
-The top theorem is currently assembled as:
+The top theorem is intended to be assembled as:
 
 1. finite branch via the constructive provider
    `finite_lc_provider_of_motionHyp`
-2. whose remaining finite-branch seams are
-   `para_puzzle_piece_basis_sketch` and
-   `para_puzzle_piece_inter_mandelbrot_connected`
+2. with **no additional project-level finite-branch axioms**
 3. Problem 4.4 via `problem44_virtualMolecule`
 4. Problems 4.3 and 4.5 via
    `problem43_pseudoSiegelAPrioriBounds` and
@@ -82,11 +77,14 @@ rather than hide it behind one coarse package.
 
 | Lean axiom | Mathematical content |
 | --- | --- |
-| `Quadratic.para_puzzle_piece_basis_sketch` | A neighborhood-basis theorem for the finite branch: if the parameter puzzle pieces centered at `c` shrink to `{c}`, then these pieces eventually lie in every neighborhood of `c`. This is the missing topological step converting puzzle shrinkage into local connectivity. |
-| `Quadratic.para_puzzle_piece_inter_mandelbrot_connected` | Connectedness of the finite-branch parameter pieces on the Mandelbrot set: for `c ∈ M`, each `ParaPuzzlePieceAt c n ∩ M` is connected. This is the parameter-plane transport / boundary-motion statement still needed after restoring the honest translated parameter-piece interface. |
 | `problem43_pseudoSiegelAPrioriBounds` | **Problem 4.3**: obtain pseudo-Siegel a priori bounds in the remaining unbounded satellite ql cases. In practice this means uniform geometric control on the relevant satellite renormalizations, encoded here by a uniform conformal lower-bound target. |
 | `problem44_virtualMolecule` | **Problem 4.4**: treat the virtual Molecule near-degenerate regime. Mathematically, this is the step that rules out the remaining infinitely renormalizable non-satellite behavior by forcing the no-tower case into the primitive branch. |
 | `problem45_virtualNearMoleculeRenormalization` | **Problem 4.5**: handle the primitive-first ql situation through the canonical satellite chain `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`. At the current seam, this turns the bounds from Problem 4.3 into the satellite local-connectivity endpoint. |
+
+The finite-branch blockers that still must be removed, but are **not** accepted
+as part of the root frontier, are:
+
+1. `Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
 
 ## Relation to the Kahn-Lyubich Virtual Julia Strategy
 
@@ -131,22 +129,15 @@ already used by the main MLC proof.
 
 ## Next Possible Steps
 
-The root finite-branch axiom has been eliminated, but doing so exposed the two
-actual finite-branch blockers. The next pass has to remove them without adding
-replacements.
+The root finite-branch axiom has been eliminated, the basis seam is theoremized,
+and the former low-level `Quadratic.filled_julia_set_connected` leak has been
+removed from the checked frontier. The remaining job is to remove the last
+finite-branch leak without accepting it into the frontier.
 
-1. replace `Quadratic.para_puzzle_piece_inter_mandelbrot_connected` with an
-   axiom-free transport witness or boundary-motion theorem for
-   `ParaPuzzlePieceAt c n ∩ MandelbrotSet`
-2. replace `Quadratic.para_puzzle_piece_basis_sketch` with an internal
-   neighborhood-basis theorem, or bypass `lc_at_of_shrink` with a different
-   local-connectivity-from-shrink route
-3. keep the translated `ParaPuzzlePieceAt` interface and the theoremized shrink
-   chain (`para_iInter_eq_singleton_of_dyn_iInter_eq_singleton`,
-   `parameter_shrink_of_yoccoz`) aligned with those replacements
-
-If this succeeds, the only remaining non-core frontier should be exactly the
-three paper-facing axioms:
+1. eliminate `Quadratic.para_puzzle_piece_inter_mandelbrot_connected` by
+    redesigning the parameter-plane witness route for the translated
+    `ParaPuzzlePieceAt` family
+2. keep `check_axioms.lean` and the README locked to that intended frontier:
 
 - `problem43_pseudoSiegelAPrioriBounds`
 - `problem44_virtualMolecule`
