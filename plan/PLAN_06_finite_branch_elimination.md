@@ -5,6 +5,10 @@
 **Goal:** Remove `finite_branch_local_connectivity` from the root frontier
 without surfacing replacement finite-branch axioms.
 
+**Important:** the currently exposed
+`para_puzzle_piece_basis_sketch` / `para_puzzle_piece_inter_mandelbrot_connected`
+pair is a temporary diagnostic state, **not** a new accepted axiom frontier.
+
 ---
 
 ## Current Outcome
@@ -14,14 +18,20 @@ The direct elimination attempt removed the root axiom
 
 The currently exposed non-core frontier is:
 
-- `MLC.Quadratic.para_puzzle_piece_basis_sketch`
 - `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+- `MLC.Quadratic.filled_julia_set_connected`
 - `problem43_pseudoSiegelAPrioriBounds`
 - `problem44_virtualMolecule`
 - `problem45_virtualNearMoleculeRenormalization`
 
 The important new information is the **shape of the real blocker** this cutover
 made visible.
+
+This state should be treated as:
+
+1. a successful diagnostic cutover
+2. a proof that the old root axiom was hiding deeper finite-branch seams
+3. **not** a satisfactory stopping point
 
 ---
 
@@ -41,7 +51,7 @@ The earlier version of this plan assumed:
 That turned out to be incomplete.
 
 When `finite_branch_local_connectivity` was pushed inward, `make check`
-surfaced two deeper finite-branch axioms:
+first surfaced two deeper finite-branch axioms:
 
 - `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
 - `MLC.Quadratic.para_puzzle_piece_basis_sketch`
@@ -50,6 +60,23 @@ So the true blocker is:
 
 > the finite branch currently depends on **three** unresolved internal seams,
 > not one.
+
+Current update:
+
+- the **basis seam has now been eliminated**
+- `para_puzzle_piece_basis_sketch` and `iInter_closure_para_puzzle_piece` are
+  theoremized in `ParaPuzzleBasis.lean`
+- this currently exposes the lower-level theorem
+  `MLC.Quadratic.filled_julia_set_connected` through the basis proof
+- the remaining project-level `para_puzzle_*` blocker is now only
+  `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+
+An additional conclusion from the latest elimination attempt is that the two
+exposed `para_puzzle_*` seams are not just waiting for short local proofs under
+the current abstraction. The present translated `ParaPuzzlePieceAt` model is
+good enough for the shrink theorem, but it does not match the existing
+containment and connectedness route built around the global Yoccoz
+`ParaPuzzlePiece`.
 
 ---
 
@@ -75,7 +102,15 @@ So the next pass must first settle the interface:
 - or restore the translated definition and rebuild the FR connectedness route
   around it
 
-For a genuine elimination, the second option is the right target.
+Latest verdict:
+
+- the translated `ParaPuzzlePieceAt` route successfully supports the internal
+  shrink theorem
+- but the remaining connectedness and basis steps do not appear theoremizable
+  from the current translated model plus existing repo lemmas
+- so the next real step is not “prove the two exposed axioms directly”, but
+  “redesign the finite-branch parameter-piece abstraction so the shrink and
+  connected-neighborhood routes are compatible”
 
 ### Blocker B: connectedness replacement
 
@@ -129,6 +164,31 @@ Once A/B/C are resolved, the remaining theoremization becomes the old target:
 
 ## Updated Execution Order
 
+### Step 0: Redesign the finite-branch parameter-piece model
+
+Files:
+- `Mlc/Quadratic/Complex/ParaPuzzle.lean`
+- `Mlc/ParaPuzzleContainment.lean`
+- `Mlc/LcAtOfShrink.lean`
+- `Mlc/MainConjecture.lean`
+
+Task:
+- stop treating the current translated `ParaPuzzlePieceAt` surrogate as if it
+  can simultaneously support:
+  1. the shrink theorem
+  2. the Mandelbrot-intersection connectedness route
+  3. the neighborhood-basis route
+- introduce a model where these routes are mathematically compatible, likely by
+  splitting centered shrink pieces from the Yoccoz/global parameter pieces or by
+  refactoring the finite-branch local-connectivity route away from the current
+  surrogate
+
+Reason:
+- `ParaPuzzleContainment.lean` proves containment for the global Yoccoz
+  `ParaPuzzlePiece n`, not for the translated family
+- `para_puzzle_piece_basis_sketch` is not a formal consequence of the current
+  shrink/compactness/nestedness package alone
+
 ### Step 1: Trace and remove the hidden connectedness dependency
 
 Files:
@@ -168,7 +228,8 @@ Progress:
 - completed
 - the translated definition is restored
 - the pure translation shrink theorem is internalized
-- the remaining issues are no longer interface-level but the two exposed FR seams
+- this exposed the deeper issue that the finite-branch route currently mixes two
+  incompatible notions of parameter puzzle piece
 
 ### Step 3: Replace the basis axiom
 
@@ -179,6 +240,17 @@ Files:
 Task:
 - either prove `para_puzzle_piece_basis_sketch`
 - or refactor `lc_at_of_shrink` so that this theorem is no longer needed
+
+Refinement:
+- do **not** accept `para_puzzle_piece_basis_sketch` as part of the new frontier
+- the purpose of this step is to make the exposed basis seam disappear entirely
+
+Progress:
+- completed
+- `para_puzzle_piece_basis_sketch` is theoremized
+- `iInter_closure_para_puzzle_piece` is theoremized
+- `ParaPuzzleBasis.lean` now also contains theoremized Mandelbrot-set
+  openness/closedness/compactness groundwork used by the basis-side proof
 
 ### Step 4: Retry the shrink theoremization
 
@@ -212,6 +284,7 @@ Progress:
 - `make check` now exposes exactly:
   - `para_puzzle_piece_basis_sketch`
   - `para_puzzle_piece_inter_mandelbrot_connected`
+- these exposed axioms must now be removed; they are blockers, not replacements
 
 ---
 
@@ -230,3 +303,11 @@ This plan is complete only when all of the following are true:
    - `problem43_pseudoSiegelAPrioriBounds`
    - `problem44_virtualMolecule`
    - `problem45_virtualNearMoleculeRenormalization`
+7. `check_axioms.lean`, `README.md`, and verification scripts are restored to
+   enforce that three-axiom frontier rather than the temporary exposed-blocker
+   one
+8. the final route does not rely on the current translated `ParaPuzzlePieceAt`
+   model in places where the global Yoccoz `ParaPuzzlePiece` semantics are
+   actually required
+9. the basis-side proof does not leak `filled_julia_set_connected` into the root
+   frontier if the intended final frontier is exactly Problems 4.3 / 4.4 / 4.5
