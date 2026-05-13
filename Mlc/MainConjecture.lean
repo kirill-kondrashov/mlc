@@ -434,7 +434,8 @@ lemma finite_connectedAt_provider_of_motionHyp
       ∀ n, IsConnected (Quadratic.ParaPuzzlePieceAt c n ∩ MLC.Quadratic.MandelbrotSet) := by
   intro c hc n
   have hc₀ : c ∈ Quadratic.ParaPuzzlePieceAt c n :=
-    Quadratic.mandelbrot_subset_paraPuzzlePiece hc n
+    (Quadratic.mem_paraPuzzlePieceAt_self c n).2
+      (Quadratic.mem_dynamical_puzzle_piece_self c hc n)
   rcases h_motion.motion n c hc₀ with ⟨r, hr, E, hHol, hpres⟩
   rcases hpres hc with ⟨S, hSconn, hSeq⟩
   simpa [hSeq] using hSconn
@@ -1680,162 +1681,11 @@ theorem mlc_conjecture_of_irLocallyConnectedData
     (h_ir_lc : IRLocallyConnectedData) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
-  -- Keep the IR payload conversions explicitly connected in the main route.
-  have _h_ir_packaging_chain : True := by
-    let h_ir_pkg : IRClassifyBridgeData :=
-      irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc
-    have _h_ir_lc_roundtrip : IRLocallyConnectedData :=
-      irLocallyConnectedData_of_irClassifyBridgeData h_ir_pkg
-    have _h_ir_class : IRClassificationData := h_ir_pkg.classify
-    have _h_ir_bridge :
-        MoleculeConjectureRefined →
-        ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
-          (_h : SatelliteRenormalizableTower c),
-          MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ :=
-      h_ir_pkg.bridge
-    trivial
-  -- Thread canonical/uniform/strong molecule-bridge target conversions so this
-  -- route stays linked to the bridge-target development.
-  have _h_molecule_target_chain : True := by
-    by_cases h_canonical :
-        MoleculeBridgeTarget.MoleculeImpliesCanonicalSatellitePrincipalNestData
-    · let h_uniform_target :
-          MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget :=
-        MoleculeBridgeTarget.moleculeUniformBridgeTarget_of_moleculeCanonicalSatellitePrincipalNestData
-          h_canonical
-      let _h_strong_target :
-          MoleculeBridgeTarget.MoleculeImpliesSatellitePrincipalNestData :=
-        MoleculeBridgeTarget.moleculeBridgeTarget_of_moleculeUniformBridgeTarget
-          h_uniform_target
-      trivial
-    · trivial
-  let h_main : LocallyConnectedSpace MLC.Quadratic.MandelbrotSet :=
-    mlc_strategy_of_branchLocalData
-      -- FR handler: vacuous under Gaussian proxy (every parameter is IR).
-      (fun c _hc h_fr =>
-        absurd (infinitely_renormalizable_of_gaussian_modulus c) h_fr)
-      -- IR classification is forced through the primitive branch by `h_ir_lc`.
-      (irClassificationData_of_irLocallyConnectedData h_ir_lc)
-      -- Satellite bridge also follows from `h_ir_lc` under Gaussian IR.
-      (bridgeData_of_irLocallyConnectedData h_ir_lc)
-  -- Optional tower-data branch used to keep the IR/tower development linked
-  -- to the main theorem path without changing the frontier.
-  by_cases h_tower_data : InfinitelyRenormalizableHasTowerData
-  · have h_ir0 : InfinitelyRenormalizable (0 : ℂ) :=
-      infinitely_renormalizable_of_gaussian_modulus 0
-    have _h_proper_pow2 : IsProperMap (fun z : ℂ => z ^ 2) :=
-      isProperMap_pow2
-    have _h_proper_quad0 : IsProperMap (fun z : ℂ => z ^ 2 + (0 : ℂ)) :=
-      isProperMap_quadratic (0 : ℂ)
-    have _h_paramToBMol_criticalValue0 := parameterToBMol_criticalValue (0 : ℂ)
-    have _h_paramToBMol_spec0 : True := by
-      rcases parameterToBMol_spec (0 : ℂ) with ⟨g, hg, hcv⟩
-      have _hg := hg
-      have _hcv := hcv
-      trivial
-    have h_sat0 : SatelliteRenormalizableTower (0 : ℂ) :=
-      tower_of_infinitely_renormalizable h_tower_data 0 h_ir0
-    let T0 : RenormalizationTower (parameterToBMol (0 : ℂ)) := satelliteTower 0 h_sat0
-    have _h_step0 := tower_step_classification T0 0
-    have _h_period_ge_two0 : 2 ≤ T0.period 0 := RenormalizationTower.period_ge_two T0 0
-    have _h_cp_unbounded0 : ∃ n : ℕ, 0 ≤ T0.cumulativePeriod n :=
-      RenormalizationTower.le_cumulativePeriod_of_le T0 0
-    have _h_cp_mono : Monotone T0.cumulativePeriod :=
-      RenormalizationTower.cumulativePeriod_monotone T0
-    have _h_cp_cof : Quadratic.PrincipalNest.Cofinal T0.cumulativePeriod :=
-      RenormalizationTower.cumulativePeriod_cofinal T0
-    have _h_sat_depths_mono :
-        Monotone (RenormalizationTower.cumulativePeriod (satelliteTower 0 h_sat0)) :=
-      satelliteTower_depths_monotone 0 h_sat0
-    have _h_sat_depths_cof :
-        Quadratic.PrincipalNest.Cofinal
-          (RenormalizationTower.cumulativePeriod (satelliteTower 0 h_sat0)) :=
-      satelliteTower_depths_cofinal 0 h_sat0
-    rcases exists_renormalization_tower_sequence h_tower_data 0 h_ir0 with
-      ⟨_g, _hg0, _hstep⟩
-    have _h_ir_class_data : IRClassificationData :=
-      irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data
-    have _h_class0 :
-        PrimitiveRenormalizable (0 : ℂ) ∨ SatelliteRenormalizableTower (0 : ℂ) :=
-      classify_infinitely_renormalizable h_tower_data 0 h_ir0
-    have _h_class_noTowerPrim : True := by
-      by_cases h_noTowerPrim : IRNoTowerImpliesPrimitiveData
-      · have _h_class_alt :
-          PrimitiveRenormalizable (0 : ℂ) ∨ SatelliteRenormalizableTower (0 : ℂ) :=
-          classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
-            h_noTowerPrim 0 zero_mem_mandelbrotSet_fastTower h_ir0
-        trivial
-      · trivial
-    have _h_comb :
-        {n : ℕ | True}.Infinite ∨ (∀ᶠ n : ℕ in Filter.atTop, False) := by
-      exact combinatorial_dichotomy (p := fun _ : ℕ => True) (q := fun _ : ℕ => False)
-        (fun _ => Or.inl trivial)
-    have _h_sat_bridge : True := by
-      by_cases h_ev_sat : ∀ᶠ n in Filter.atTop, IsSatellite (T0.rel n)
-      · have _h_sat_again : SatelliteRenormalizableTower (0 : ℂ) :=
-          satellite_tower_implies_satellite 0 h_ir0 T0 h_ev_sat
-        trivial
-      · trivial
-    have h_exists_mem_tower :
-        ∃ c : ℂ, c ∈ MLC.Quadratic.MandelbrotSet ∧ SatelliteRenormalizableTower c :=
-      ⟨0, zero_mem_mandelbrotSet_fastTower, h_sat0⟩
-    by_cases h_mod : MoleculeModulusLowerBoundData
-    · have hFalse :
-          False :=
-        (not_moleculeModulusLowerBoundData_of_exists_mem_mandelbrot_tower
-          h_exists_mem_tower) h_mod
-      have _h_not_sat0 : ¬ SatelliteRenormalizableTower (0 : ℂ) :=
-        not_satelliteRenormalizableTower_of_mem_mandelbrot
-          h_mod 0 zero_mem_mandelbrotSet_fastTower
-      have _hFalse_mod2 : False :=
-        false_of_infinitely_renormalizable_has_tower_data h_mod h_tower_data
-      have _h_no_tower_data : ¬ InfinitelyRenormalizableHasTowerData :=
-        not_infinitely_renormalizable_has_tower_data h_mod
-      exact False.elim hFalse
-    · have _h_no_mod : ¬ MoleculeModulusLowerBoundData := h_mod
-      by_cases h_conf : MoleculeConformalModulusLowerBoundData
-      · have hFalse :
-            False :=
-          (not_moleculeConformalModulusLowerBoundData_of_exists_mem_mandelbrot_tower
-            h_exists_mem_tower) h_conf
-        have _h_not_sat0_conf : ¬ SatelliteRenormalizableTower (0 : ℂ) :=
-          not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal
-            h_conf 0 zero_mem_mandelbrotSet_fastTower
-        have _hFalse_conf2 : False :=
-          false_of_moleculeConformalModulusLowerBoundData_and_infinitely_renormalizable_has_tower_data
-            h_conf h_tower_data
-        have _h_no_tower_conf : ¬ InfinitelyRenormalizableHasTowerData :=
-          consistency_checkpoint_conformal_bridge_excludes_global_ir_tower h_conf
-        exact False.elim hFalse
-      · have _h_no_conf : ¬ MoleculeConformalModulusLowerBoundData := h_conf
-        by_cases h_uniform : MoleculeUniformConformalLowerBoundData
-        · have hFalse :
-            False :=
-              false_of_moleculeUniformConformalLowerBoundData_and_infinitely_renormalizable_has_tower_data
-                h_uniform h_tower_data
-          have _hFalse_uniform_exists :
-              False :=
-            (not_moleculeUniformConformalLowerBoundData_of_exists_mem_mandelbrot_tower
-              h_exists_mem_tower) h_uniform
-          have h_conf_from_uniform : MoleculeConformalModulusLowerBoundData :=
-            moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
-          have _h_no_tower_from_conf : ¬ InfinitelyRenormalizableHasTowerData :=
-            consistency_checkpoint_conformal_bridge_excludes_global_ir_tower h_conf_from_uniform
-          have h_noTowerOnM :
-              ∀ (c : ℂ), c ∈ MLC.Quadratic.MandelbrotSet → ¬ SatelliteRenormalizableTower c := by
-            intro c hc
-            exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform h_uniform c hc
-          have _h_class_noTowerOnM : True := by
-            by_cases h_noTowerPrim : IRNoTowerImpliesPrimitiveData
-            · have _h_class_alt :
-                PrimitiveRenormalizable (0 : ℂ) ∨ SatelliteRenormalizableTower (0 : ℂ) :=
-                classify_infinitely_renormalizable_of_noTowerImpliesPrimitive_of_noTowerOnM
-                  h_noTowerPrim h_noTowerOnM 0 zero_mem_mandelbrotSet_fastTower h_ir0
-              trivial
-            · trivial
-          exact False.elim hFalse
-        · exact h_main
-  · exact h_main
+  exact mlc_strategy_of_branchLocalData
+    (fun c _hc h_fr =>
+      absurd (infinitely_renormalizable_of_gaussian_modulus c) h_fr)
+    (irClassificationData_of_irLocallyConnectedData h_ir_lc)
+    (bridgeData_of_irLocallyConnectedData h_ir_lc)
 
 /-- Packaged-IR wrapper for the IR-only MLC route. -/
 theorem mlc_conjecture_of_irClassifyBridgeData
@@ -2466,9 +2316,18 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
     hex
     (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
 
-/-- Separate finite-branch local-connectivity seam retained for the current
-    pass while the IR/satellite package is split into Problems 4.3 / 4.4 / 4.5. -/
-axiom finite_branch_local_connectivity : FiniteBranchLocalConnectivityData
+/-- Constructive finite-branch local-connectivity payload from the current
+    Böttcher-on-`M` motion stub plus the theoremized Yoccoz shrink route. -/
+noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivityData :=
+  finite_lc_provider_of_motionHyp
+    (Quadratic.puzzle_boundary_motion_hyp_of_onM
+      { h_top := bottcher_onM_hyp.h_top
+        h_stab := bottcher_onM_hyp.h_stab
+        B := bottcher_onM_hyp.B
+        r := bottcher_onM_hyp.r
+        r_pos := bottcher_onM_hyp.r_pos
+        in_M := bottcher_onM_hyp.in_M
+        hconn := trivial })
 
 /-- Problem 4.3 root-facing axiom: pseudo-Siegel a priori bounds in the
     remaining unbounded satellite ql cases. -/
@@ -2492,11 +2351,15 @@ axiom problem45_virtualNearMoleculeRenormalization :
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_problem43_44_45_data
-    finite_branch_local_connectivity
-    problem43_pseudoSiegelAPrioriBounds
-    problem44_virtualMolecule
-    problem45_virtualNearMoleculeRenormalization
+  mlc_conjecture_of_irClassifyBridgeData
+    (irClassifyBridgeData_of_classify_bridge_data
+      (fun c hc h_inf =>
+        classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
+          (noTowerPrimitive_of_problem44 problem44_virtualMolecule) c hc h_inf)
+      (fun _h_mol c hc h_tower =>
+        (satelliteLC_of_problem43_problem45
+          problem43_pseudoSiegelAPrioriBounds
+          problem45_virtualNearMoleculeRenormalization) c hc h_tower))
 
 
 end MainProof

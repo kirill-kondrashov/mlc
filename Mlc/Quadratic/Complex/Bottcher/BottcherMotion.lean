@@ -57,14 +57,26 @@ lemma bottcher_motion_preserves_boundary (_B : BottcherData) (_c₀ : ℂ) (_r :
   trivial
 
 /-- Green-sublevel control yields parameter-piece preservation (theorem). -/
-theorem motion_preserves_para_piece_of_green_sublevel
+theorem motion_preserves_para_piece_of_green_sublevel_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp)
     (_h_top : homeomorphism_maps_component_hyp)
     (_h_stab : parameter_dynamics_stability_hyp)
     (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)
     (_hE : E = PuzzleBoundary c₀ n) :
     motion_preserves_para_piece n c₀ r E (bottcher_motion B E) := by
   exact motion_preserves_para_piece_of_witness_hyp
-    para_puzzle_transport_witness_hyp n c₀ r E (bottcher_motion B E)
+    h_witness n c₀ r E (bottcher_motion B E)
+
+/-- Current default green-sublevel route, still sourced from the global
+    transport-witness package. -/
+theorem motion_preserves_para_piece_of_green_sublevel
+    (_h_top : homeomorphism_maps_component_hyp)
+    (_h_stab : parameter_dynamics_stability_hyp)
+    (n : ℕ) (c₀ : ℂ) (r : ℝ) (B : BottcherData) (E : Set ℂ)
+    (_hE : E = PuzzleBoundary c₀ n) :
+    motion_preserves_para_piece n c₀ r E (bottcher_motion B E) :=
+  motion_preserves_para_piece_of_green_sublevel_of_witness_hyp
+    para_puzzle_transport_witness_hyp _h_top _h_stab n c₀ r B E _hE
 
 /-- Data needed to build a puzzle-boundary motion from a Böttcher coordinate. -/
 structure BottcherMotionData (n : ℕ) (c₀ : ℂ) where
@@ -97,7 +109,8 @@ def puzzle_boundary_motion_hyp_of_bottcher (h : BottcherMotionHyp) :
         (puzzle_boundary_motion_data_of_bottcher n c₀ (h.data n c₀)) }
 
 /-- Build Böttcher motion data from Green sublevel hypotheses. -/
-def bottcher_motion_data_of_green_sublevel
+def bottcher_motion_data_of_green_sublevel_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp)
     (_h_top : homeomorphism_maps_component_hyp)
     (_h_stab : parameter_dynamics_stability_hyp)
     (n : ℕ) (c₀ : ℂ) (B : BottcherData)
@@ -110,8 +123,20 @@ def bottcher_motion_data_of_green_sublevel
     E := PuzzleBoundary c₀ n
     E_eq := rfl
     preserves := by
-      exact motion_preserves_para_piece_of_green_sublevel
-        _h_top _h_stab n c₀ r B (PuzzleBoundary c₀ n) rfl }
+      exact motion_preserves_para_piece_of_green_sublevel_of_witness_hyp
+        h_witness _h_top _h_stab n c₀ r B (PuzzleBoundary c₀ n) rfl }
+
+/-- Current default Green-sublevel constructor, still sourced from the global
+    transport-witness package. -/
+def bottcher_motion_data_of_green_sublevel
+    (_h_top : homeomorphism_maps_component_hyp)
+    (_h_stab : parameter_dynamics_stability_hyp)
+    (n : ℕ) (c₀ : ℂ) (B : BottcherData)
+    (r : ℝ) (r_pos : 0 < r)
+    :
+    BottcherMotionData n c₀ :=
+  bottcher_motion_data_of_green_sublevel_of_witness_hyp
+    para_puzzle_transport_witness_hyp _h_top _h_stab n c₀ B r r_pos
 
 /-- Global hypothesis: Green sublevel control for every parameter and depth. -/
 structure BottcherGreenSublevelHyp where
@@ -125,11 +150,20 @@ structure BottcherGreenSublevelHyp where
   hconn : True
 
 /-- Produce Böttcher motion data from Green sublevel hypotheses. -/
-def bottcher_motion_hyp_of_green_sublevel (h : BottcherGreenSublevelHyp) :
+def bottcher_motion_hyp_of_green_sublevel_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp) (h : BottcherGreenSublevelHyp) :
     BottcherMotionHyp :=
   { data := fun n c₀ =>
-      bottcher_motion_data_of_green_sublevel h.h_top h.h_stab n c₀ (h.B n c₀) (h.r n c₀) (h.r_pos n c₀)
+      bottcher_motion_data_of_green_sublevel_of_witness_hyp
+        h_witness h.h_top h.h_stab n c₀ (h.B n c₀) (h.r n c₀) (h.r_pos n c₀)
         }
+
+/-- Current default Green-sublevel motion hypothesis, still sourced from the
+    global transport-witness package. -/
+def bottcher_motion_hyp_of_green_sublevel (h : BottcherGreenSublevelHyp) :
+    BottcherMotionHyp :=
+  bottcher_motion_hyp_of_green_sublevel_of_witness_hyp
+    para_puzzle_transport_witness_hyp h
 
 /-- A weaker hypothesis: the parameter disk stays in `M`, and sublevels are connected. -/
 structure BottcherGreenSublevelHypOnM where
@@ -197,16 +231,32 @@ def bottcher_green_sublevel_hyp_onM_connected_of_onM
     hconn := hconn }
 
 /-- Produce the boundary motion hypothesis directly from Mandelbrot-set control. -/
-def puzzle_boundary_motion_hyp_of_onM (h : BottcherGreenSublevelHypOnM) :
+def puzzle_boundary_motion_hyp_of_onM_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp) (h : BottcherGreenSublevelHypOnM) :
     PuzzleBoundaryMotionHyp :=
   puzzle_boundary_motion_hyp_of_bottcher
-    (bottcher_motion_hyp_of_green_sublevel (bottcher_green_sublevel_hyp_of_onM h))
+    (bottcher_motion_hyp_of_green_sublevel_of_witness_hyp
+      h_witness (bottcher_green_sublevel_hyp_of_onM h))
+
+/-- Produce the boundary motion hypothesis directly from Mandelbrot-set control. -/
+def puzzle_boundary_motion_hyp_of_onM (h : BottcherGreenSublevelHypOnM) :
+    PuzzleBoundaryMotionHyp :=
+  puzzle_boundary_motion_hyp_of_onM_of_witness_hyp
+    para_puzzle_transport_witness_hyp h
+
+/-- Produce the boundary motion hypothesis from `M`-control and connectedness on `M`. -/
+def puzzle_boundary_motion_hyp_of_onM_connected_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp) (h : BottcherGreenSublevelHypOnMConnected) :
+    PuzzleBoundaryMotionHyp :=
+  puzzle_boundary_motion_hyp_of_bottcher
+    (bottcher_motion_hyp_of_green_sublevel_of_witness_hyp
+      h_witness (bottcher_green_sublevel_hyp_of_onM_connected h))
 
 /-- Produce the boundary motion hypothesis from `M`-control and connectedness on `M`. -/
 def puzzle_boundary_motion_hyp_of_onM_connected (h : BottcherGreenSublevelHypOnMConnected) :
     PuzzleBoundaryMotionHyp :=
-  puzzle_boundary_motion_hyp_of_bottcher
-    (bottcher_motion_hyp_of_green_sublevel (bottcher_green_sublevel_hyp_of_onM_connected h))
+  puzzle_boundary_motion_hyp_of_onM_connected_of_witness_hyp
+    para_puzzle_transport_witness_hyp h
 
 end
 end MLC.Quadratic
