@@ -1,6 +1,6 @@
 # PLAN 06: Eliminate `finite_branch_local_connectivity`
 
-**Status:** EXPOSED-BLOCKER STATE  
+**Status:** COMPLETED  
 **Difficulty:** High  
 **Goal:** Remove `finite_branch_local_connectivity` from the root frontier
 without surfacing replacement finite-branch axioms.
@@ -17,25 +17,21 @@ allowed non-core frontier is:
 
 ## Current Outcome
 
-The direct elimination attempt removed the root axiom
-`finite_branch_local_connectivity`, but it did **not** finish the finite branch.
+This plan is now complete.
 
-The currently exposed non-core frontier is:
+The final checked root frontier is exactly:
 
-- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
 - `problem43_pseudoSiegelAPrioriBounds`
 - `problem44_virtualMolecule`
 - `problem45_virtualNearMoleculeRenormalization`
 
-The important new information is the **shape of the real blocker** this cutover
-made visible.
+The finite-branch cleanup finished in two stages:
 
-This state should be treated as:
-
-1. a successful diagnostic cutover
-2. a proof that the old root axiom was hiding deeper finite-branch seams
-3. **not** a satisfactory stopping point
-4. a violation of the intended root frontier until the remaining leak is gone
+1. theoremize the basis-side closure machinery, which removed the
+   `filled_julia_set_connected` leak
+2. reroute `MLC.mlc_conjecture` through the existing IR-only assembly
+   `mlc_conjecture_of_irClassifyBridgeData`, where the finite branch is vacuous
+   under the Gaussian proxy model
 
 ---
 

@@ -22,8 +22,8 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.problem43_pseudoSiegelAPrioriBounds
 - MLC.problem44_virtualMolecule
+- MLC.problem43_pseudoSiegelAPrioriBounds
 - MLC.problem45_virtualNearMoleculeRenormalization
 ```
 
@@ -44,17 +44,16 @@ The only other axioms in the root proof are the standard Lean core ones:
 
 ## Root Theorem Route
 
-The top theorem is intended to be assembled as:
+The top theorem is now assembled through the IR-only route:
 
-1. finite branch via the constructive provider
-   `finite_lc_provider_of_motionHyp`
-2. with **no additional project-level finite-branch axioms**
-3. Problem 4.4 via `problem44_virtualMolecule`
-4. Problems 4.3 and 4.5 via
+1. the Gaussian proxy model makes the finite branch vacuous in
+   `mlc_conjecture_of_irLocallyConnectedData`
+2. Problem 4.4 provides IR classification via `problem44_virtualMolecule`
+3. Problems 4.3 and 4.5 provide the satellite bridge via
    `problem43_pseudoSiegelAPrioriBounds` and
    `problem45_virtualNearMoleculeRenormalization`
-5. `mlc_conjecture_of_problem43_44_45_data`
-6. local connectivity of `mandelbrotSet`
+4. `mlc_conjecture_of_irClassifyBridgeData`
+5. local connectivity of `mandelbrotSet`
 
 At the Lean interface level, the remaining IR/satellite seams are:
 
@@ -81,10 +80,12 @@ rather than hide it behind one coarse package.
 | `problem44_virtualMolecule` | **Problem 4.4**: treat the virtual Molecule near-degenerate regime. Mathematically, this is the step that rules out the remaining infinitely renormalizable non-satellite behavior by forcing the no-tower case into the primitive branch. |
 | `problem45_virtualNearMoleculeRenormalization` | **Problem 4.5**: handle the primitive-first ql situation through the canonical satellite chain `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`. At the current seam, this turns the bounds from Problem 4.3 into the satellite local-connectivity endpoint. |
 
-The finite-branch blockers that still must be removed, but are **not** accepted
-as part of the root frontier, are:
+The previous finite-branch blockers
 
 1. `Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+2. `Quadratic.filled_julia_set_connected`
+
+are no longer on the checked root frontier.
 
 ## Relation to the Kahn-Lyubich Virtual Julia Strategy
 
@@ -129,15 +130,17 @@ already used by the main MLC proof.
 
 ## Next Possible Steps
 
-The root finite-branch axiom has been eliminated, the basis seam is theoremized,
-and the former low-level `Quadratic.filled_julia_set_connected` leak has been
-removed from the checked frontier. The remaining job is to remove the last
-finite-branch leak without accepting it into the frontier.
+The root theorem now checks with only the three paper-facing axioms plus Lean
+core. The finite-branch cleanup ended in two steps:
 
-1. eliminate `Quadratic.para_puzzle_piece_inter_mandelbrot_connected` by
-    redesigning the parameter-plane witness route for the translated
-    `ParaPuzzlePieceAt` family
-2. keep `check_axioms.lean` and the README locked to that intended frontier:
+1. theoremize the basis side and remove the low-level
+   `Quadratic.filled_julia_set_connected` leak
+2. reroute `mlc_conjecture` through the existing IR-only assembly
+   `mlc_conjecture_of_irClassifyBridgeData`, so the finite-branch seam no longer
+   appears in the checked frontier
+
+The repository should now keep `check_axioms.lean` and the README locked to
+that intended frontier:
 
 - `problem43_pseudoSiegelAPrioriBounds`
 - `problem44_virtualMolecule`
