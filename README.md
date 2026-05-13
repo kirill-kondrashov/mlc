@@ -123,10 +123,14 @@ The current split is connected to the existing proof skeleton through:
 
 - `noTowerPrimitive_of_problem44`
 - `satelliteLC_of_problem43_problem45`
+- `irClassifyBridgeData_of_classify_bridge_data`
+- `mlc_conjecture_of_irClassifyBridgeData`
 - `mlc_conjecture_of_problem43_44_45_data`
 
-These bridge the paper-facing problem statements to the theorem interfaces
-already used by the main MLC proof.
+The root theorem currently uses the IR-only assembly through
+`mlc_conjecture_of_irClassifyBridgeData`; the
+`mlc_conjecture_of_problem43_44_45_data` theorem remains as the explicit
+finite-branch-plus-IR packaged bridge.
 
 ## Next Possible Steps
 
@@ -139,7 +143,7 @@ core. The finite-branch cleanup ended in two steps:
    `mlc_conjecture_of_irClassifyBridgeData`, so the finite-branch seam no longer
    appears in the checked frontier
 
-The repository should now keep `check_axioms.lean` and the README locked to
+Immediate maintenance goal: keep `check_axioms.lean` and the README locked to
 that intended frontier:
 
 - `problem43_pseudoSiegelAPrioriBounds`
