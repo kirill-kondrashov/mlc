@@ -23,16 +23,14 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.problem44_virtualMolecule
-- MLC.problem43_pseudoSiegelAPrioriBounds
 - MLC.problem45_virtualNearMoleculeRenormalization
 ```
 
 ## Current Axiom Frontier
 
-The **intended** root frontier for `MLC.mlc_conjecture` is exactly three
+The **intended** root frontier for `MLC.mlc_conjecture` is exactly two
 non-core project axioms:
 
-- `MLC.problem43_pseudoSiegelAPrioriBounds`
 - `MLC.problem44_virtualMolecule`
 - `MLC.problem45_virtualNearMoleculeRenormalization`
 
@@ -49,8 +47,7 @@ The top theorem is now assembled through the IR-only route:
 1. the Gaussian proxy model makes the finite branch vacuous in
    `mlc_conjecture_of_irLocallyConnectedData`
 2. Problem 4.4 provides IR classification via `problem44_virtualMolecule`
-3. Problems 4.3 and 4.5 provide the satellite bridge via
-   `problem43_pseudoSiegelAPrioriBounds` and
+3. Problem 4.5 now carries the direct satellite bridge via
    `problem45_virtualNearMoleculeRenormalization`
 4. `mlc_conjecture_of_irClassifyBridgeData`
 5. local connectivity of `mandelbrotSet`
@@ -65,8 +62,7 @@ def Problem44VirtualMoleculeData : Prop :=
   IRNoTowerImpliesPrimitiveData
 
 def Problem45VirtualNearMoleculeRenormalizationData : Prop :=
-  Problem43PseudoSiegelAPrioriBoundsData →
-    VirtualJuliaSatelliteLocalConnectivityData
+  VirtualJuliaSatelliteLocalConnectivityData
 ```
 
 ## Remaining Problems in Mathematical Terms
@@ -76,9 +72,8 @@ rather than hide it behind one coarse package.
 
 | Lean axiom | Mathematical content |
 | --- | --- |
-| `problem43_pseudoSiegelAPrioriBounds` | **Problem 4.3**: obtain pseudo-Siegel a priori bounds in the remaining unbounded satellite ql cases. In practice this means uniform geometric control on the relevant satellite renormalizations, encoded here by a uniform conformal lower-bound target. |
 | `problem44_virtualMolecule` | **Problem 4.4**: treat the virtual Molecule near-degenerate regime. Mathematically, this is the step that rules out the remaining infinitely renormalizable non-satellite behavior by forcing the no-tower case into the primitive branch. |
-| `problem45_virtualNearMoleculeRenormalization` | **Problem 4.5**: handle the primitive-first ql situation through the canonical satellite chain `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`. At the current seam, this turns the bounds from Problem 4.3 into the satellite local-connectivity endpoint. |
+| `problem45_virtualNearMoleculeRenormalization` | **Problem 4.5**: handle the primitive-first ql situation through the canonical satellite chain `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`. At the current seam, this directly supplies the satellite local-connectivity endpoint and therefore absorbs the old Problem 4.3 root dependency. |
 
 The previous finite-branch blockers
 
@@ -114,7 +109,7 @@ This is the point of contact with the quoted roadmap:
 > uniform hyperbolicity of the renormalization associated with `M`; the strategy
 > towards Problem 4.4 is to develop such control a priori.
 
-In this branch, that program is reflected by the split Problem 4.3 / 4.4 / 4.5
+In this branch, that program is reflected by the remaining Problem 4.4 / 4.5
 axioms rather than by a single `virtual_julia_strategy_data` package.
 
 ## Lean Bridge Theorems
@@ -122,7 +117,7 @@ axioms rather than by a single `virtual_julia_strategy_data` package.
 The current split is connected to the existing proof skeleton through:
 
 - `noTowerPrimitive_of_problem44`
-- `satelliteLC_of_problem43_problem45`
+- `satelliteLC_of_problem45`
 - `irClassifyBridgeData_of_classify_bridge_data`
 - `mlc_conjecture_of_irClassifyBridgeData`
 - `mlc_conjecture_of_problem43_44_45_data`
@@ -134,7 +129,7 @@ finite-branch-plus-IR packaged bridge.
 
 ## Next Possible Steps
 
-The root theorem now checks with only the three paper-facing axioms plus Lean
+The root theorem now checks with only the two remaining paper-facing axioms plus Lean
 core. The finite-branch cleanup ended in two steps:
 
 1. theoremize the basis side and remove the low-level
@@ -146,7 +141,6 @@ core. The finite-branch cleanup ended in two steps:
 Immediate maintenance goal: keep `check_axioms.lean` and the README locked to
 that intended frontier:
 
-- `problem43_pseudoSiegelAPrioriBounds`
 - `problem44_virtualMolecule`
 - `problem45_virtualNearMoleculeRenormalization`
 
