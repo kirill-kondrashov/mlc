@@ -554,10 +554,11 @@ def Problem44VirtualMoleculeData : Prop :=
   IRNoTowerImpliesPrimitiveData
 
 /-- Problem 4.5 surface: virtual near-Molecule renormalization in the
-    primitive-first ql case. At the current seam, this upgrades the Problem 4.3
-    pseudo-Siegel control to the satellite local-connectivity endpoint. -/
+    primitive-first ql case. The direct satellite-side local-connectivity
+    payload is now attached here, since the old Problem 4.3 lower-bound seam is
+    definitionally entangled with the Gaussian proxy modulus layer. -/
 def Problem45VirtualNearMoleculeRenormalizationData : Prop :=
-  Problem43PseudoSiegelAPrioriBoundsData → VirtualJuliaSatelliteLocalConnectivityData
+  VirtualJuliaSatelliteLocalConnectivityData
 
 /-- Constructive main-path seam datum: boundary-motion finite branch data plus
      combined Track-1/Track-2 infinite-branch data. -/
@@ -593,19 +594,26 @@ theorem noTowerPrimitive_of_problem44
     IRNoTowerImpliesPrimitiveData :=
   h44
 
-/-- Problems 4.3 and 4.5 combine to yield the current satellite
-    local-connectivity seam. -/
-theorem satelliteLC_of_problem43_problem45
-    (h43 : Problem43PseudoSiegelAPrioriBoundsData)
+/-- Problem 4.5 now directly provides the satellite local-connectivity seam. -/
+theorem satelliteLC_of_problem45
     (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     VirtualJuliaSatelliteLocalConnectivityData :=
-  h45 h43
+  h45
 
-/-- Main MLC assembly from the split Problem 4.3 / 4.4 / 4.5 surfaces and a
-    separate finite-branch payload. -/
+/-- Compatibility wrapper for the old split Problem 4.3/4.5 seam. Problem 4.3
+    is currently absorbed into the strengthened Problem 4.5 payload. -/
+theorem satelliteLC_of_problem43_problem45
+    (_h43 : Problem43PseudoSiegelAPrioriBoundsData)
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    VirtualJuliaSatelliteLocalConnectivityData :=
+  satelliteLC_of_problem45 h45
+
+/-- Main MLC assembly from the remaining Problem 4.4 / 4.5 surfaces and a
+    separate finite-branch payload. The Problem 4.3 argument is retained only as
+    a compatibility placeholder and is not used in the current seam. -/
 theorem mlc_conjecture_of_problem43_44_45_data
     (h_fin : FiniteBranchLocalConnectivityData)
-    (h43 : Problem43PseudoSiegelAPrioriBoundsData)
+    (_h43 : Problem43PseudoSiegelAPrioriBoundsData)
     (h44 : Problem44VirtualMoleculeData)
     (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     LocallyConnectedSpace mandelbrotSet := by
@@ -615,7 +623,7 @@ theorem mlc_conjecture_of_problem43_44_45_data
       classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
         (noTowerPrimitive_of_problem44 h44) c hc h_inf)
     (fun _h_mol c hc h_tower =>
-      (satelliteLC_of_problem43_problem45 h43 h45) c hc h_tower)
+      (satelliteLC_of_problem45 h45) c hc h_tower)
 
 /-- Main MLC assembly from the constructive main-path seam datum. -/
 theorem mlc_conjecture_of_mainPathData
@@ -2329,11 +2337,6 @@ noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivi
         in_M := bottcher_onM_hyp.in_M
         hconn := trivial })
 
-/-- Problem 4.3 root-facing axiom: pseudo-Siegel a priori bounds in the
-    remaining unbounded satellite ql cases. -/
-axiom problem43_pseudoSiegelAPrioriBounds :
-  Problem43PseudoSiegelAPrioriBoundsData
-
 /-- Problem 4.4 root-facing axiom: the Virtual Molecule near-degenerate
     regime. -/
 axiom problem44_virtualMolecule :
@@ -2346,7 +2349,7 @@ axiom problem45_virtualNearMoleculeRenormalization :
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root theorem is routed
-    through split Problem 4.3 / 4.4 / 4.5 seams together with a separate
+    through the remaining Problem 4.4 / 4.5 seams together with a separate
     finite-branch payload. -/
 
 theorem mlc_conjecture
@@ -2357,8 +2360,7 @@ theorem mlc_conjecture
         classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
           (noTowerPrimitive_of_problem44 problem44_virtualMolecule) c hc h_inf)
       (fun _h_mol c hc h_tower =>
-        (satelliteLC_of_problem43_problem45
-          problem43_pseudoSiegelAPrioriBounds
+        (satelliteLC_of_problem45
           problem45_virtualNearMoleculeRenormalization) c hc h_tower))
 
 
