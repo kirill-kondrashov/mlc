@@ -28,7 +28,7 @@ All axioms used:
 ## Current Axiom Frontier
 
 The **intended** root frontier for `MLC.mlc_conjecture` is exactly one
-non-core project axioms:
+non-core project axiom:
 
 - `MLC.problem45_virtualNearMoleculeRenormalization`
 
@@ -48,6 +48,13 @@ The top theorem is now assembled through the IR-only route:
    `problem45_virtualNearMoleculeRenormalization`
 3. `mlc_conjecture_of_irClassifyBridgeData`
 4. local connectivity of `mandelbrotSet`
+
+Current status:
+
+1. the finite-branch seam is off the checked root frontier
+2. `problem43_pseudoSiegelAPrioriBounds` is off the checked root frontier
+3. `problem44_virtualMolecule` is off the checked root frontier
+4. only the strengthened `problem45_virtualNearMoleculeRenormalization` seam remains
 
 At the Lean interface level, the remaining IR/satellite seams are:
 
@@ -122,19 +129,14 @@ finite-branch-plus-IR packaged bridge.
 
 ## Next Possible Steps
 
-The root theorem now checks with only the remaining paper-facing axiom plus Lean
-core. The finite-branch cleanup ended in two steps:
+The remaining root-facing work is now concentrated in the strengthened Problem
+4.5 seam.
 
-1. theoremize the basis side and remove the low-level
-   `Quadratic.filled_julia_set_connected` leak
-2. reroute `mlc_conjecture` through the existing IR-only assembly
-   `mlc_conjecture_of_irClassifyBridgeData`, so the finite-branch seam no longer
-   appears in the checked frontier
-
-Immediate maintenance goal: keep `check_axioms.lean` and the README locked to
-that intended frontier:
-
-- `problem45_virtualNearMoleculeRenormalization`
+1. theoremize the IR-classification payload currently carried by
+   `problem45_virtualNearMoleculeRenormalization`
+2. theoremize the satellite local-connectivity payload currently carried by
+   `problem45_virtualNearMoleculeRenormalization`
+3. keep `check_axioms.lean` and the README locked to the one-axiom frontier
 
 ## Dependencies
 
