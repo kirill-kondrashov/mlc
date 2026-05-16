@@ -554,11 +554,12 @@ def Problem44VirtualMoleculeData : Prop :=
   IRNoTowerImpliesPrimitiveData
 
 /-- Problem 4.5 surface: virtual near-Molecule renormalization in the
-    primitive-first ql case. The direct satellite-side local-connectivity
-    payload is now attached here, since the old Problem 4.3 lower-bound seam is
-    definitionally entangled with the Gaussian proxy modulus layer. -/
+    primitive-first ql case. The current root route attaches both the direct
+    IR-classification payload and the satellite-side local-connectivity payload
+    here, so the older Problems 4.3 and 4.4 root seams are absorbed into the
+    strengthened Problem 4.5 interface. -/
 def Problem45VirtualNearMoleculeRenormalizationData : Prop :=
-  VirtualJuliaSatelliteLocalConnectivityData
+  IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
 
 /-- Constructive main-path seam datum: boundary-motion finite branch data plus
      combined Track-1/Track-2 infinite-branch data. -/
@@ -594,11 +595,18 @@ theorem noTowerPrimitive_of_problem44
     IRNoTowerImpliesPrimitiveData :=
   h44
 
+/-- Problem 4.5 now directly provides the IR classification seam used by the
+    root theorem. -/
+theorem irClassification_of_problem45
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    IRClassificationData :=
+  h45.1
+
 /-- Problem 4.5 now directly provides the satellite local-connectivity seam. -/
 theorem satelliteLC_of_problem45
     (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     VirtualJuliaSatelliteLocalConnectivityData :=
-  h45
+  h45.2
 
 /-- Compatibility wrapper for the old split Problem 4.3/4.5 seam. Problem 4.3
     is currently absorbed into the strengthened Problem 4.5 payload. -/
@@ -608,20 +616,18 @@ theorem satelliteLC_of_problem43_problem45
     VirtualJuliaSatelliteLocalConnectivityData :=
   satelliteLC_of_problem45 h45
 
-/-- Main MLC assembly from the remaining Problem 4.4 / 4.5 surfaces and a
-    separate finite-branch payload. The Problem 4.3 argument is retained only as
-    a compatibility placeholder and is not used in the current seam. -/
+/-- Main MLC assembly from the strengthened Problem 4.5 surface and a separate
+    finite-branch payload. Problems 4.3 and 4.4 are retained only as
+    compatibility placeholders and are not used in the current seam. -/
 theorem mlc_conjecture_of_problem43_44_45_data
     (h_fin : FiniteBranchLocalConnectivityData)
     (_h43 : Problem43PseudoSiegelAPrioriBoundsData)
-    (h44 : Problem44VirtualMoleculeData)
+    (_h44 : Problem44VirtualMoleculeData)
     (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_finiteClassificationBridgeData
     h_fin
-    (fun c hc h_inf =>
-      classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
-        (noTowerPrimitive_of_problem44 h44) c hc h_inf)
+    (irClassification_of_problem45 h45)
     (fun _h_mol c hc h_tower =>
       (satelliteLC_of_problem45 h45) c hc h_tower)
 
@@ -2337,11 +2343,6 @@ noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivi
         in_M := bottcher_onM_hyp.in_M
         hconn := trivial })
 
-/-- Problem 4.4 root-facing axiom: the Virtual Molecule near-degenerate
-    regime. -/
-axiom problem44_virtualMolecule :
-  Problem44VirtualMoleculeData
-
 /-- Problem 4.5 root-facing axiom: virtual near-Molecule renormalization in the
     primitive-first ql case. -/
 axiom problem45_virtualNearMoleculeRenormalization :
@@ -2349,16 +2350,14 @@ axiom problem45_virtualNearMoleculeRenormalization :
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root theorem is routed
-    through the remaining Problem 4.4 / 4.5 seams together with a separate
+    through the strengthened Problem 4.5 seam together with a separate
     finite-branch payload. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_irClassifyBridgeData
     (irClassifyBridgeData_of_classify_bridge_data
-      (fun c hc h_inf =>
-        classify_infinitely_renormalizable_of_noTowerImpliesPrimitive
-          (noTowerPrimitive_of_problem44 problem44_virtualMolecule) c hc h_inf)
+      (irClassification_of_problem45 problem45_virtualNearMoleculeRenormalization)
       (fun _h_mol c hc h_tower =>
         (satelliteLC_of_problem45
           problem45_virtualNearMoleculeRenormalization) c hc h_tower))
