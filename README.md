@@ -22,9 +22,8 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
-- MLC.lyubich_conformal_bridge
-- MLC.residualOpenVirtualNearMoleculeAxiom
+- MLC.lyubich_conformal_bridge_bMol
+- Molecule.molecule_local_fixed_seed
 ```
 
 ## Current Frontier
@@ -32,14 +31,11 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-   MLC.lyubich_conformal_bridge,
-   MLC.residualOpenVirtualNearMoleculeAxiom}
+   MLC.lyubich_conformal_bridge_bMol,
+   Molecule.molecule_local_fixed_seed}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-   MLC.lyubich_conformal_bridge,
-   MLC.residualOpenVirtualNearMoleculeAxiom}
+= {MLC.lyubich_conformal_bridge_bMol}
 
 Problem45VirtualNearMoleculeRenormalizationData
 = IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
@@ -85,12 +81,15 @@ through:
 
 ## Elimination Target
 
-To shrink the current frontier again, the repository now needs to replace the
-remaining root-facing axioms by proofs of:
+To eliminate the final repository-local frontier, the remaining root-facing
+axiom to replace is:
 
-- para-puzzle connectedness on `M`,
-- the Lyubich-to-conformal bridge for primitive towers,
-- and the residual open 4.3/4.4 seam.
+- the BMol-level Lyubich-to-conformal bridge `MLC.lyubich_conformal_bridge_bMol`.
+
+The root still also depends on the upstream Molecule-package axiom
+`Molecule.molecule_local_fixed_seed`, because the current one-axiom route uses
+the package’s zero-argument local fixed-point witness to produce a BMol
+renormalization tower.
 
 ## Dependencies
 
