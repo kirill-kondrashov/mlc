@@ -332,7 +332,7 @@ The mathematical work should be organized around the following chain:
 
 7. **IR local-connectivity synthesis**
    - combine the classification and satellite endpoint into a theoremized
-   `IRLocallyConnectedData`
+     `IRLocallyConnectedData`
    - use that theorem to clear the final root seam
 
 ---
