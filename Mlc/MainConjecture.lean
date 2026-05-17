@@ -732,6 +732,80 @@ def PrimitiveFeigenbaumAffineNormalizationComparisonGlobalData : Prop :=
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumAffineNormalizationComparisonData c T
 
+/-- API-indexed true-modulus eventual-beau-bounds surface for the primitive
+    Feigenbaum branch. This is the migration target away from the current
+    Gaussian proxy `cmodulus`. -/
+def TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        TrueEventualPrimitiveModulusLowerBoundData μApi c T
+
+/-- True-modulus compact-trap bridge surface. -/
+def PrimitiveFeigenbaumTrueCompactModulusTrapGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueModulusCompactTrapData μApi c T
+
+/-- True-modulus compact-family bridge surface. -/
+def PrimitiveFeigenbaumTrueCompactFamilyModulusGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueModulusModelData μApi c T
+
+/-- True-modulus canonical fundamental-annulus compact-family bridge surface. -/
+def PrimitiveFeigenbaumTrueCompactFamilyFundamentalModulusGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFundamentalModulusModelData μApi c T
+
+/-- True-modulus eventual finite-family bridge surface. -/
+def PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusData μApi c T
+
+/-- True-modulus Step-1/Step-3 global package from the proof outline. -/
+def PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData μApi c T
+
+/-- True-modulus Step-4 global package from the proof outline. -/
+def PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T
+
+/-- True-modulus Steps 2-3 global package. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalData μApi c T
+
+/-- True-modulus Step-4 affine-normalization global package. -/
+def PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T
+
 /-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
     The current broader bounded-type target should eventually be derived from
     this theorem together with additional classification input, if needed. -/
@@ -822,6 +896,70 @@ theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatori
     EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
   intro c T hBound hPrimAll
   exact eventual_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison c T
+    (hComb c T hBound hPrimAll)
+    (hAnalytic c T hBound hPrimAll)
+    (hAffine c T hBound hPrimAll)
+
+/-- True-modulus compact-trap route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hTrap : PrimitiveFeigenbaumTrueCompactModulusTrapGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_compact_trap μApi c T
+    (hTrap c T hBound hPrimAll)
+
+/-- True-modulus compact-family route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hModel : PrimitiveFeigenbaumTrueCompactFamilyModulusGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  apply trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap μApi
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_compact_trap_of_modulus_model μApi c T
+    (hModel c T hBound hPrimAll)
+
+/-- True-modulus canonical fundamental-annulus compact-family route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFund : PrimitiveFeigenbaumTrueCompactFamilyFundamentalModulusGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  apply trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily μApi
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_modulus_model_of_fundamental_model μApi c T
+    (hFund c T hBound hPrimAll)
+
+/-- True-modulus eventual finite-family route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFinite : PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  apply trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily μApi
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_fundamental_model_of_finite_family μApi c T
+    (hFinite c T hBound hPrimAll)
+
+/-- True-modulus outline-package route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_outlinePackages
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFam : PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalGlobalData μApi)
+    (hCmp : PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_outline_data μApi c T
+    (hFam c T hBound hPrimAll)
+    (hCmp c T hBound hPrimAll)
+
+/-- True-modulus factorized route: combinatorics, analytic promotion, and affine
+    normalization comparison. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsGlobalData)
+    (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData μApi)
+    (hAffine : PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison μApi c T
     (hComb c T hBound hPrimAll)
     (hAnalytic c T hBound hPrimAll)
     (hAffine c T hBound hPrimAll)

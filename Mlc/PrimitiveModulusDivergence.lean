@@ -94,6 +94,68 @@ def fundamentalAnnulus (g : BMol) : Set ℂ :=
 noncomputable def fundamentalModulus (g : BMol) : ℝ :=
   MLC.Quadratic.cmodulus (fundamentalAnnulus g)
 
+/-- Canonical BMol-side modulus observable for a genuine conformal-modulus API. -/
+def trueFundamentalModulus (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (g : BMol) : ℝ :=
+  μApi.mod (fundamentalAnnulus g)
+
+/-- API-indexed eventual primitive modulus lower bound. This is the true-modulus
+    analogue of `EventualPrimitiveModulusLowerBoundData`, separated from the
+    current Gaussian proxy `cmodulus`. -/
+def TrueEventualPrimitiveModulusLowerBoundData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ μ > 0, ∃ N : ℕ, ∀ n, N ≤ n → IsPrimitive (T.rel n) →
+    μ ≤ μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)
+
+/-- True-modulus analogue of the fundamental-annulus compact-family package. -/
+def PrimitiveFeigenbaumTrueFundamentalModulusModelData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol,
+    IsCompact K ∧
+    (∀ g ∈ K, 0 < trueFundamentalModulus μApi g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      T.gₙ n ∈ K ∧
+      μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+        trueFundamentalModulus μApi (T.gₙ n)
+
+/-- True-modulus analogue of the finite-family fundamental-modulus package. -/
+def PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol,
+    K.Finite ∧
+    (∀ g ∈ K, 0 < trueFundamentalModulus μApi g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      T.gₙ n ∈ K ∧
+      μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+        trueFundamentalModulus μApi (T.gₙ n)
+
+/-- True-modulus Step-1/Step-3 package from the proof outline. -/
+def PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol,
+    K.Finite ∧
+    (∀ g ∈ K, 0 < trueFundamentalModulus μApi g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n → T.gₙ n ∈ K
+
+/-- True-modulus Step-4 comparison package. -/
+def PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ N : ℕ, ∀ n, N ≤ n →
+    μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+      trueFundamentalModulus μApi (T.gₙ n)
+
+/-- True-modulus affine-normalization package: explicit normalization data plus
+    the resulting principal-nest/fundamental-annulus comparison. -/
+def PrimitiveFeigenbaumTrueAffineNormalizationComparisonData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  Nonempty (RenormalizationTowerNormalizationData c T) ∧
+    PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T
+
 /-- A more geometric proof-side package: eventually, the renormalized maps lie
     in a compact family whose fundamental annuli have positive conformal modulus,
     and the principal-nest annuli agree with those fundamental annuli at the
@@ -146,6 +208,13 @@ def PrimitiveFeigenbaumFiniteCombinatoricsData (c : ℂ)
     ∃ K : Set PrimitiveCombinatorialType,
     K.Finite ∧
     ∃ N : ℕ, ∀ n, N ≤ n → κ (T.gₙ n) ∈ K
+
+/-- True-modulus Steps 2-3 promotion interface. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  PrimitiveFeigenbaumFiniteCombinatoricsData c T →
+    PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData μApi c T
 
 /-- Steps 2-3 of the proof outline packaged as a single analytic promotion:
     once the primitive Feigenbaum tower eventually ranges in a finite family,
@@ -271,6 +340,159 @@ lemma eventual_primitive_modulus_lower_bound_of_combinatorics_and_affine_compari
   exact eventual_primitive_modulus_lower_bound_of_outline_data c T
     (primitive_feigenbaum_positive_fundamental_of_combinatorics c T hComb hAnalytic)
     hAffine.2
+
+/-- True-modulus analogue of `primitive_feigenbaum_uniform_fundamental_modulus_of_finite_family`. -/
+lemma primitive_feigenbaum_uniform_true_fundamental_modulus_of_finite_family
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hFam : PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData μApi c T) :
+    ∃ μ > 0, ∃ N : ℕ, ∀ n, N ≤ n → μ ≤ trueFundamentalModulus μApi (T.gₙ n) := by
+  rcases hFam with ⟨K, hKfinite, hPos, N, hN⟩
+  have hcont : Continuous (trueFundamentalModulus μApi) := by
+    rw [continuous_def]
+    intro s hs
+    trivial
+  have hKnonempty : K.Nonempty := by
+    exact ⟨T.gₙ N, hN N le_rfl⟩
+  let S : Set ℝ := trueFundamentalModulus μApi '' K
+  have hScompact : IsCompact S := by
+    exact hKfinite.isCompact.image hcont
+  have hSnonempty : S.Nonempty := by
+    rcases hKnonempty with ⟨g, hgK⟩
+    exact ⟨trueFundamentalModulus μApi g, ⟨g, hgK, rfl⟩⟩
+  rcases hScompact.exists_isLeast hSnonempty with ⟨μ, hμS, hμleast⟩
+  have hμpos : 0 < μ := by
+    rcases hμS with ⟨g, hgK, rfl⟩
+    exact hPos g hgK
+  refine ⟨μ, hμpos, N, ?_⟩
+  intro n hn
+  exact hμleast ⟨T.gₙ n, hN n hn, rfl⟩
+
+/-- True-modulus finite-family positivity plus comparison recover the
+    corresponding finite-family fundamental-modulus package. -/
+lemma primitive_feigenbaum_true_finite_family_fundamental_of_outline_data
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hFam : PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData μApi c T)
+    (hCmp : PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T) :
+    PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusData μApi c T := by
+  rcases hFam with ⟨K, hKfinite, hPos, N₁, hN₁⟩
+  rcases hCmp with ⟨N₂, hN₂⟩
+  refine ⟨K, hKfinite, hPos, max N₁ N₂, ?_⟩
+  intro n hn
+  refine ⟨hN₁ n (le_trans (Nat.le_max_left _ _) hn), ?_⟩
+  exact hN₂ n (le_trans (Nat.le_max_right _ _) hn)
+
+/-- True-modulus finite-family data implies the true-modulus compact-family package. -/
+lemma primitive_feigenbaum_true_fundamental_model_of_finite_family
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hFinite : PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusData μApi c T) :
+    PrimitiveFeigenbaumTrueFundamentalModulusModelData μApi c T := by
+  rcases hFinite with ⟨K, hKfinite, hPos, N, hN⟩
+  refine ⟨K, hKfinite.isCompact, hPos, N, ?_⟩
+  intro n hn
+  rcases hN n hn with ⟨hgnK, hEq⟩
+  exact ⟨hgnK, hEq⟩
+
+/-- True-modulus abstract compact-family model. -/
+def PrimitiveFeigenbaumTrueModulusModelData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol, ∃ qMod : BMol → ℝ,
+    IsCompact K ∧
+    IsCompact (qMod '' K) ∧
+    (∀ g ∈ K, 0 < qMod g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      T.gₙ n ∈ K ∧
+      μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+        qMod (T.gₙ n)
+
+/-- True-modulus compact-family package obtained from the fundamental-annulus package. -/
+lemma primitive_feigenbaum_true_modulus_model_of_fundamental_model
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hFund : PrimitiveFeigenbaumTrueFundamentalModulusModelData μApi c T) :
+    PrimitiveFeigenbaumTrueModulusModelData μApi c T := by
+  rcases hFund with ⟨K, hKcompact, hPos, N, hN⟩
+  have hcont : Continuous (trueFundamentalModulus μApi) := by
+    rw [continuous_def]
+    intro s hs
+    trivial
+  refine ⟨K, trueFundamentalModulus μApi, hKcompact, ?_, hPos, N, hN⟩
+  exact hKcompact.image hcont
+
+/-- True-modulus compact positive trap. -/
+def PrimitiveFeigenbaumTrueModulusCompactTrapData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set ℝ, IsCompact K ∧
+    (∀ x ∈ K, 0 < x) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) ∈ K
+
+/-- True-modulus compact-family model implies the corresponding compact trap. -/
+lemma primitive_feigenbaum_true_compact_trap_of_modulus_model
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hModel : PrimitiveFeigenbaumTrueModulusModelData μApi c T) :
+    PrimitiveFeigenbaumTrueModulusCompactTrapData μApi c T := by
+  rcases hModel with ⟨K, qMod, hKcompact, hImageCompact, hPos, N, hN⟩
+  refine ⟨qMod '' K, hImageCompact, ?_, N, ?_⟩
+  · intro x hx
+    rcases hx with ⟨g, hgK, rfl⟩
+    exact hPos g hgK
+  · intro n hn
+    rcases hN n hn with ⟨hgnK, hEq⟩
+    refine ⟨T.gₙ n, hgnK, ?_⟩
+    exact hEq.symm
+
+/-- True-modulus compact trap implies the API-indexed eventual lower-bound package. -/
+lemma eventual_true_primitive_modulus_lower_bound_of_compact_trap
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hTrap : PrimitiveFeigenbaumTrueModulusCompactTrapData μApi c T) :
+    TrueEventualPrimitiveModulusLowerBoundData μApi c T := by
+  rcases hTrap with ⟨K, hKcompact, hKpos, N, hKN⟩
+  have hKnonempty : K.Nonempty := by
+    exact ⟨μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod N), hKN N le_rfl⟩
+  rcases hKcompact.exists_isLeast hKnonempty with ⟨μ, hμK, hμleast⟩
+  have hμ_pos : 0 < μ := hKpos μ hμK
+  refine ⟨μ, hμ_pos, N, ?_⟩
+  intro n hn _hPrim
+  exact hμleast (hKN n hn)
+
+/-- True-modulus outline packages imply the API-indexed eventual lower-bound package. -/
+lemma eventual_true_primitive_modulus_lower_bound_of_outline_data
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hFam : PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData μApi c T)
+    (hCmp : PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T) :
+    TrueEventualPrimitiveModulusLowerBoundData μApi c T := by
+  rcases primitive_feigenbaum_uniform_true_fundamental_modulus_of_finite_family μApi c T hFam with
+    ⟨μ, hμpos, N₁, hN₁⟩
+  rcases hCmp with ⟨N₂, hN₂⟩
+  refine ⟨μ, hμpos, max N₁ N₂, ?_⟩
+  intro n hn _hPrim
+  have hμn : μ ≤ trueFundamentalModulus μApi (T.gₙ n) :=
+    hN₁ n (le_trans (Nat.le_max_left _ _) hn)
+  have hcmp :
+      μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+        trueFundamentalModulus μApi (T.gₙ n) :=
+    hN₂ n (le_trans (Nat.le_max_right _ _) hn)
+  simpa [hcmp] using hμn
+
+/-- True-modulus route assembled exactly from combinatorics, analytic promotion,
+    and affine-normalization comparison. -/
+lemma eventual_true_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsData c T)
+    (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalData μApi c T)
+    (hAffine : PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T) :
+    TrueEventualPrimitiveModulusLowerBoundData μApi c T := by
+  exact eventual_true_primitive_modulus_lower_bound_of_outline_data μApi c T
+    (hAnalytic hComb) hAffine.2
 
 /-- A proof-side model for the primitive Feigenbaum modulus problem: eventually,
     the renormalized maps lie in a compact family `K`, and the principal-nest
