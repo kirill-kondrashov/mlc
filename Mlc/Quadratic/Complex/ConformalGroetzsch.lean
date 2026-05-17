@@ -18,6 +18,28 @@ structure AnnulusConformalModulusAPI where
   affine_invariant :
     ∀ (A : Set ℂ) (a b : ℂ), a ≠ 0 → mod ((fun z : ℂ => a * z + b) '' A) = mod A
 
+/-- Existence of a genuine conformal-modulus API. This keeps the new route
+    separate from the Gaussian proxy while giving downstream theorems a named
+    theorem-facing handle. -/
+def TrueConformalModulusData : Prop :=
+  Nonempty AnnulusConformalModulusAPI
+
+/-- Chosen true conformal-modulus API associated to `TrueConformalModulusData`. -/
+noncomputable def chosenTrueConformalModulus
+    (h : TrueConformalModulusData) : AnnulusConformalModulusAPI :=
+  Classical.choice h
+
+theorem chosenTrueConformalModulus_nonneg
+    (h : TrueConformalModulusData) (A : Set ℂ) :
+    0 ≤ (chosenTrueConformalModulus h).mod A :=
+  (chosenTrueConformalModulus h).nonneg A
+
+theorem chosenTrueConformalModulus_affine_invariant
+    (h : TrueConformalModulusData) (A : Set ℂ) (a b : ℂ) (ha : a ≠ 0) :
+    (chosenTrueConformalModulus h).mod ((fun z : ℂ => a * z + b) '' A) =
+      (chosenTrueConformalModulus h).mod A :=
+  (chosenTrueConformalModulus h).affine_invariant A a b ha
+
 /-- Modulus is monotonic. -/
 theorem cmodulus_le_of_subset {A B : Set ℂ} (h : A ⊆ B) (_hA : NullMeasurableSet A volume) :
     cmodulus A ≤ cmodulus B := by

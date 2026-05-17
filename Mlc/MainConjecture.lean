@@ -806,6 +806,36 @@ def PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T
 
+/-- Named theorem-facing true-modulus eventual-beau-bounds surface using the
+    chosen conformal-modulus API associated to `TrueConformalModulusData`. -/
+def ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Named analytic-promotion surface for the chosen true-modulus API. This is
+    the primary outstanding mathematical target on the migrated route. -/
+def ChosenTruePrimitiveFeigenbaumAnalyticPromotionData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Downstream bridge from the true-modulus eventual-beau-bounds route back to
+    the legacy Gaussian-facing eventual lower-bound interface. This isolates the
+    remaining consumer migration work from the primitive Feigenbaum theorem
+    statement itself. -/
+def TrueToLegacyPrimitiveEventualBridgeData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    TrueEventualPrimitiveModulusLowerBoundData μApi c T →
+      EventualPrimitiveModulusLowerBoundData c T
+
+/-- Chosen-instance version of `TrueToLegacyPrimitiveEventualBridgeData`. -/
+def ChosenTrueToLegacyPrimitiveEventualBridgeData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  TrueToLegacyPrimitiveEventualBridgeData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
 /-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
     The current broader bounded-type target should eventually be derived from
     this theorem together with additional classification input, if needed. -/
@@ -963,6 +993,45 @@ theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combina
     (hComb c T hBound hPrimAll)
     (hAnalytic c T hBound hPrimAll)
     (hAffine c T hBound hPrimAll)
+
+/-- Chosen-instance wrapper for the true-modulus factorized route. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsGlobalData)
+    (hAnalytic : ChosenTruePrimitiveFeigenbaumAnalyticPromotionData hμ)
+    (hAffine : PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) hComb hAnalytic hAffine
+
+/-- A legacy eventual lower-bound theorem can be recovered from the chosen true
+    conformal-modulus route once a downstream bridge is provided. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hTrue : ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact hBridge c T (hTrue c T hBound hPrimAll)
+
+/-- Primitive local connectivity from the chosen true-modulus primitive
+    Feigenbaum route plus a downstream bridge to the legacy consumer path. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hTrue : ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  have hInf : {n | IsPrimitive (T.rel n)}.Infinite := by
+    simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+  exact primitiveRenormalizable_of_eventualLowerBoundData c T hInf
+    ((eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
+      hμ hBridge hTrue) c T hBound hPrimAll)
 
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/
@@ -1323,6 +1392,19 @@ theorem boundedTypeConstructive_of_feigenbaumAxiom
     BoundedTypeProblem45ConstructiveData :=
   boundedTypeConstructive_of_feigenbaumEventual
     eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem hFC
+
+/-- Bounded-type constructive cutover from the chosen true-modulus primitive
+    Feigenbaum route, once a downstream bridge to the current legacy consumer
+    path is available. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumEventual
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hTrue : ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
+      hμ hBridge hTrue) hFC
 
 /-- The fully constructive bounded-type interface refines the older strong
     bounded-type sidecar by forgetting the boundedness witness on the primitive
