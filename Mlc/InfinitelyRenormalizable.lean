@@ -101,6 +101,20 @@ lemma primitiveRenormalizable_of_data (c : ℂ)
     primitive_shrinkage_of_divergence c hc T h_div
   exact lc_at_of_shrink c hc h_shrink
 
+/-- Intended constructive primitive route: if the same tower carries genuine
+    conformal-modulus lower bounds on infinitely many primitive levels, then the
+    primitive local-connectivity endpoint follows without the Lyubich proxy
+    bridge. -/
+lemma primitiveRenormalizable_of_lowerBoundData
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite)
+    (h_lb : PrimitiveModulusLowerBoundData c T) :
+    PrimitiveRenormalizable c := by
+  intro hc
+  have h_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} :=
+    primitive_shrinkage_of_lower_bound c hc T h_lb h_inf_prim
+  exact lc_at_of_shrink c hc h_shrink
+
 /-- MLC holds for infinitely renormalizable parameters.
     This is derived from the classification into Primitive and Satellite types,
     using Lyubich's theorem for the former and the Molecule Conjecture for the latter. -/

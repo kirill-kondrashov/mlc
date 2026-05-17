@@ -62,6 +62,16 @@ lemma gaussian_modulus_shrinks_to_zero (c : ℂ) (T : RenormalizationTower (para
     (or requires an axiom). -/
 def LyubichModulus (_A : Set ℂ) : ℝ := 1
 
+/-- Intended bounded-type target for the primitive branch: a genuine positive
+    lower bound on the conformal modulus of the principal-nest annuli along
+    primitive levels. This isolates the mathematical payload from the current
+    constant proxy. -/
+def PrimitiveModulusLowerBoundData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ μ > 0, ∀ n, IsPrimitive (T.rel n) →
+    μ ≤ MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)
+
 /-- 
 A priori bounds for primitive renormalization.
 According to Lyubich's theory, primitive renormalization steps yield annuli in the 
@@ -71,6 +81,69 @@ lemma primitive_step_modulus_bound (c : ℂ) (T : RenormalizationTower (paramete
     ∃ μ > 0, ∀ n, IsPrimitive (T.rel n) → 
       LyubichModulus (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) ≥ μ :=
   ⟨1, zero_lt_one, fun _ _ => le_rfl⟩
+
+/-- If the intended conformal-modulus lower bound holds at infinitely many
+    primitive levels, then the conformal moduli cannot be summable. This is the
+    bounded-type primitive divergence target suggested by the literature. -/
+lemma primitive_cmodulus_divergence_of_lower_bound
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (h_lb : PrimitiveModulusLowerBoundData c T)
+    (h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite) :
+    ¬ Summable (fun n =>
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) := by
+  rcases h_lb with ⟨μ, hμ_pos, hμ⟩
+  intro h_sum
+  have h_lim := Summable.tendsto_atTop_zero h_sum
+  rw [Metric.tendsto_atTop] at h_lim
+  specialize h_lim (μ / 2) (by linarith)
+  rcases h_lim with ⟨N, hN⟩
+  rcases h_inf_prim.exists_gt N with ⟨n, hn_prim, hn_gt⟩
+  have hsmall :
+      dist
+        (MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) 0 < μ / 2 :=
+    hN n (le_of_lt hn_gt)
+  have hnonneg :
+      0 ≤
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) := by
+    simpa [MLC.Quadratic.cmodulus] using
+      (MLC.Quadratic.modulus_nonneg
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))
+  have hlarge :
+      μ ≤
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) :=
+    hμ n hn_prim
+  rw [dist_zero_right, Real.norm_eq_abs, abs_of_nonneg hnonneg] at hsmall
+  linarith
+
+/-- The intended bounded-type primitive route: if genuine conformal-modulus
+    lower bounds hold at infinitely many primitive levels, then the principal
+    nest shrinks directly by the existing principal-nest Grötzsch theorem,
+    without using the placeholder Lyubich bridge. -/
+lemma primitive_shrinkage_of_lower_bound
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (T : RenormalizationTower (parameterToBMol c))
+    (h_lb : PrimitiveModulusLowerBoundData c T)
+    (h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  have h_div :
+      ¬ Summable (fun n =>
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) :=
+    primitive_cmodulus_divergence_of_lower_bound c T h_lb h_inf_prim
+  have hmono : Monotone T.cumulativePeriod := T.cumulativePeriod_monotone
+  have hcof : MLC.Quadratic.PrincipalNest.Cofinal T.cumulativePeriod :=
+    T.cumulativePeriod_cofinal
+  have h_div_modulus :
+      ¬ Summable (fun n =>
+        MLC.Quadratic.modulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) := by
+    simpa [MLC.Quadratic.cmodulus] using h_div
+  exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_principal_modulus_not_summable
+    c hc T.cumulativePeriod hmono hcof h_div_modulus
 
 /-- Divergence of moduli for primitive renormalization towers (Lyubich's Theorem). -/
 lemma primitive_modulus_divergence (c : ℂ) (T : RenormalizationTower (parameterToBMol c))

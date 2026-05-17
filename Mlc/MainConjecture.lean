@@ -552,6 +552,122 @@ def Problem43PseudoSiegelAPrioriBoundsData : Prop :=
 def Problem44VirtualMoleculeData : Prop :=
   IRNoTowerImpliesPrimitiveData
 
+/-- A renormalization tower is of bounded type if all relative periods are
+    uniformly bounded. This is the code-side interface suggested by the
+    Feigenbaum / bounded-type literature. -/
+def UniformlyBoundedRenormalizationPeriods {g : Molecule.BMol}
+    (T : RenormalizationTower g) : Prop :=
+  ∃ pBound : ℕ, ∀ n, T.period n ≤ pBound
+
+/-- A parameter admits a bounded-type renormalization tower. -/
+def BoundedTypeRenormalizationTower (c : ℂ) : Prop :=
+  ∃ T : RenormalizationTower (parameterToBMol c),
+    UniformlyBoundedRenormalizationPeriods T
+
+/-- A satellite tower together with a bounded-type witness. -/
+def BoundedTypeSatelliteRenormalizableTower (c : ℂ) : Prop :=
+  ∃ hSat : SatelliteRenormalizableTower c,
+    UniformlyBoundedRenormalizationPeriods (satelliteTower c hSat)
+
+/-- Primitive tower data in the bounded-type region: one bounded renormalization
+    tower with infinitely many primitive levels. This is the natural bounded-type
+    primitive sidecar suggested by the Kahn / Dudko-Lyubich literature. -/
+def BoundedTypePrimitiveRenormalizableData (c : ℂ) : Prop :=
+  ∃ T : RenormalizationTower (parameterToBMol c),
+    UniformlyBoundedRenormalizationPeriods T ∧
+      {n | IsPrimitive (T.rel n)}.Infinite
+
+/-- Forget the bounded-type witness and recover the existing primitive sidecar
+    interface. -/
+theorem primitiveRenormalizableData_of_boundedType
+    {c : ℂ} (h : BoundedTypePrimitiveRenormalizableData c) :
+    PrimitiveRenormalizableData c := by
+  rcases h with ⟨T, _hBound, hPrim⟩
+  exact ⟨T, hPrim⟩
+
+/-- Bounded-type primitive modulus input: in the bounded primitive region, the
+    literature should supply a genuine positive lower bound on principal-nest
+    conformal moduli. -/
+def PrimitiveModulusLowerBoundFromBoundedTypeData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      {n | IsPrimitive (T.rel n)}.Infinite →
+        PrimitiveModulusLowerBoundData c T
+
+/-- A bounded-type primitive tower plus the intended modulus-lower-bound input
+    implies the primitive local-connectivity endpoint without the placeholder
+    Lyubich bridge. -/
+theorem primitiveRenormalizable_of_boundedTypeData
+    (h_lb : PrimitiveModulusLowerBoundFromBoundedTypeData)
+    {c : ℂ} (h : BoundedTypePrimitiveRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrim⟩
+  exact primitiveRenormalizable_of_lowerBoundData c T hPrim (h_lb c T hBound hPrim)
+
+/-- Forget the bounded-type witness and recover the underlying tower. -/
+theorem satelliteRenormalizableTower_of_boundedType
+    {c : ℂ} (h : BoundedTypeSatelliteRenormalizableTower c) :
+    SatelliteRenormalizableTower c :=
+  h.1
+
+/-- Forget the satellite witness and recover a bounded-type tower witness. -/
+theorem boundedTypeRenormalizationTower_of_boundedTypeSatellite
+    {c : ℂ} (h : BoundedTypeSatelliteRenormalizableTower c) :
+    BoundedTypeRenormalizationTower c := by
+  rcases h with ⟨hSat, hBound⟩
+  exact ⟨satelliteTower c hSat, hBound⟩
+
+/-- Bounded-type slice of the current IR classification interface. This is the
+    largest constructive region currently supported by the literature. -/
+def BoundedTypeIRClassificationData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    BoundedTypeRenormalizationTower c →
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
+
+/-- Bounded-type slice of the satellite local-connectivity payload. -/
+def BoundedTypeVirtualJuliaSatelliteLocalConnectivityData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+    SatelliteRenormalizableTower c →
+      BoundedTypeRenormalizationTower c →
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Code-side target for the bounded-type constructive region extracted from the
+    current Problem 4.5 surface. -/
+def BoundedTypeProblem45ConstructiveData : Prop :=
+  BoundedTypeIRClassificationData ∧
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData
+
+/-- Intended stronger bounded-type target using the non-tautological primitive
+    sidecar and bounded satellite witnesses. This is not yet wired into the
+    root theorem, but it is the natural landing point for the next constructive
+    replacement of the current primitive / IR interfaces. -/
+def StrongBoundedTypeProblem45ConstructiveData : Prop :=
+  (∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : InfinitelyRenormalizable c),
+      BoundedTypeRenormalizationTower c →
+        PrimitiveRenormalizableData c ∨ BoundedTypeSatelliteRenormalizableTower c) ∧
+    (∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+      BoundedTypeSatelliteRenormalizableTower c →
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+
+/-- Fully constructive bounded-type classification target: unlike
+    `StrongBoundedTypeProblem45ConstructiveData`, the primitive branch still
+    remembers that the witnessing tower is itself of bounded type. This is the
+    exact interface needed to plug in bounded-type primitive modulus bounds. -/
+def FullyConstructiveBoundedTypeIRClassificationData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    BoundedTypeRenormalizationTower c →
+      BoundedTypePrimitiveRenormalizableData c ∨
+        BoundedTypeSatelliteRenormalizableTower c
+
+/-- Fully constructive bounded-type Problem 4.5 slice: bounded primitive towers
+    on the primitive side and bounded satellite towers on the satellite side. -/
+def FullyConstructiveBoundedTypeProblem45Data : Prop :=
+  FullyConstructiveBoundedTypeIRClassificationData ∧
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData
+
 /-- Problem 4.5 surface: virtual near-Molecule renormalization in the
     primitive-first ql case. The current root route attaches both the direct
     IR-classification payload and the satellite-side local-connectivity payload
@@ -559,6 +675,13 @@ def Problem44VirtualMoleculeData : Prop :=
     strengthened Problem 4.5 interface. -/
 def Problem45VirtualNearMoleculeRenormalizationData : Prop :=
   IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
+
+/-- Residual open seam after extracting the bounded-type constructive region
+    suggested by the current literature: the remaining unbounded satellite ql
+    case (Problem 4.3) together with the virtual Molecule interpolation problem
+    (Problem 4.4). -/
+def ResidualOpenVirtualNearMoleculeData : Prop :=
+  Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData
 
 /-- Constructive main-path seam datum: boundary-motion finite branch data plus
      combined Track-1/Track-2 infinite-branch data. -/
@@ -606,6 +729,69 @@ theorem satelliteLC_of_problem45
     (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     VirtualJuliaSatelliteLocalConnectivityData :=
   h45.2
+
+/-- Current Problem 4.5 data restrict to the bounded-type classification slice
+    by forgetting the bounded-type witness. -/
+theorem boundedTypeClassification_of_problem45
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    BoundedTypeIRClassificationData := by
+  intro c hc h_ir _hBounded
+  exact (irClassification_of_problem45 h45) c hc h_ir
+
+/-- Current Problem 4.5 data restrict to the bounded-type satellite
+    local-connectivity slice by forgetting the bounded-type witness. -/
+theorem boundedTypeSatelliteLC_of_problem45
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData := by
+  intro c hc hSat _hBounded
+  exact (satelliteLC_of_problem45 h45) c hc hSat
+
+/-- The current Problem 4.5 surface already contains the bounded-type
+    constructive slice as a forgetful subpayload. -/
+theorem boundedTypeConstructive_of_problem45
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    BoundedTypeProblem45ConstructiveData :=
+  ⟨boundedTypeClassification_of_problem45 h45, boundedTypeSatelliteLC_of_problem45 h45⟩
+
+/-- The fully constructive bounded-type interface plus a genuine bounded-type
+    primitive modulus theorem recovers the bounded-type Problem 4.5
+    constructive slice. -/
+theorem boundedTypeConstructive_of_fullyConstructive
+    (h_lb : PrimitiveModulusLowerBoundFromBoundedTypeData)
+    (hFC : FullyConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, hFC.2⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (primitiveRenormalizable_of_boundedTypeData h_lb hPrim)
+  · exact Or.inr (satelliteRenormalizableTower_of_boundedType hSat)
+
+/-- The fully constructive bounded-type interface refines the older strong
+    bounded-type sidecar by forgetting the boundedness witness on the primitive
+    branch. -/
+theorem strongBoundedType_of_fullyConstructive
+    (hFC : FullyConstructiveBoundedTypeProblem45Data) :
+    StrongBoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, ?_⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (primitiveRenormalizableData_of_boundedType hPrim)
+  · exact Or.inr hSat
+  · intro c hc hSat
+    exact hFC.2 c hc (satelliteRenormalizableTower_of_boundedType hSat)
+      (boundedTypeRenormalizationTower_of_boundedTypeSatellite hSat)
+
+/-- Project the remaining unbounded / interpolation residue to Problem 4.3. -/
+theorem problem43_of_residualOpenVirtualNearMolecule
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Problem43PseudoSiegelAPrioriBoundsData :=
+  hRes.1
+
+/-- Project the remaining unbounded / interpolation residue to Problem 4.4. -/
+theorem problem44_of_residualOpenVirtualNearMolecule
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Problem44VirtualMoleculeData :=
+  hRes.2
 
 /-- Compatibility wrapper for the old split Problem 4.3/4.5 seam. Problem 4.3
     is currently absorbed into the strengthened Problem 4.5 payload. -/

@@ -403,6 +403,44 @@ Additional literature-guided requirement:
 - isolate a **bounded-type** subinterface as soon as possible, since this is the
   largest region with current constructive support in the literature
 
+Current code-side milestone:
+
+- `Mlc/MainConjecture.lean` now contains explicit bounded-type and residual-open
+  sidecar interfaces:
+  - `UniformlyBoundedRenormalizationPeriods`
+  - `BoundedTypeRenormalizationTower`
+  - `BoundedTypePrimitiveRenormalizableData`
+  - `BoundedTypeSatelliteRenormalizableTower`
+  - `BoundedTypeProblem45ConstructiveData`
+  - `StrongBoundedTypeProblem45ConstructiveData`
+  - `FullyConstructiveBoundedTypeIRClassificationData`
+  - `FullyConstructiveBoundedTypeProblem45Data`
+  - `ResidualOpenVirtualNearMoleculeData`
+- the current `Problem45VirtualNearMoleculeRenormalizationData` now restricts
+  canonically to the bounded-type slice via
+  `boundedTypeConstructive_of_problem45`
+- this keeps the root theorem unchanged while making the next split
+  theorem-target explicit in Lean
+- `Mlc/PrimitiveModulusDivergence.lean` now contains a direct bounded-type route
+  from `PrimitiveModulusLowerBoundData` to parameter-piece shrinkage via
+  `primitive_shrinkage_of_lower_bound`, and
+  `Mlc/InfinitelyRenormalizable.lean` exposes the resulting constructive
+  primitive endpoint as `primitiveRenormalizable_of_lowerBoundData`
+- `Mlc/MainConjecture.lean` now also isolates the exact remaining bounded-type
+  primitive input as
+  `PrimitiveModulusLowerBoundFromBoundedTypeData`, with the assembly theorem
+  `boundedTypeConstructive_of_fullyConstructive`
+- consequently, the remaining primitive blocker is no longer the shrinkage step
+  itself but the absence of a genuine theorem producing
+  `PrimitiveModulusLowerBoundData` from bounded primitive tower data
+- dependency audit result:
+  - `.lake/packages/molecule-conjecture/Molecule/Problem4_3_Lemmas.lean`
+    still treats the modulus-bounds step as `True`
+  - `.lake/packages/molecule-conjecture/Molecule/Conjecture.lean`
+    still defines `PseudoSiegelAPrioriBounds : Prop := True`
+  - so there is currently no upstream Lean theorem to discharge
+    `PrimitiveModulusLowerBoundFromBoundedTypeData`
+
 ### Step 2: Audit the remaining axiom-backed routes
 
 Files:
