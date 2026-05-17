@@ -1107,6 +1107,20 @@ theorem primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
   exact primitive_feigenbaum_typewise_true_fundamental_of_real_bounds_and_grotzsch
     μApi c T (hReal c T hBound hPrimAll) (hGrotzsch c T hBound hPrimAll)
 
+/-- Step 1 of the expert proof: bounded primitive real bounds together with
+    Grötzsch/Teichmüller promotion already yield the global true fundamental
+    lower-bound surface needed downstream. -/
+theorem trueFundamentalLowerBoundFromPrimitiveFeigenbaum_of_realBounds_and_grotzsch
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData μApi) :
+    PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData μApi := by
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_fundamental_lower_bound_of_typewise_data
+    μApi c T
+    ((primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
+      μApi hReal hGrotzsch) c T hBound hPrimAll)
+
 /-- The type-wise finite-family proof blueprint yields the chosen true-modulus
     analytic-promotion surface by taking the minimum over the finite
     combinatorial family. -/
@@ -1133,6 +1147,16 @@ theorem chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_realBounds_and_grotzsc
     (primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
       (MLC.Quadratic.chosenTrueConformalModulus hμ) hReal hGrotzsch)
 
+/-- Chosen-instance Step-1 theorem extracted from the expert proof. -/
+theorem chosenTruePrimitiveFeigenbaumFundamentalLowerBound_of_realBounds_and_grotzsch
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData hμ :=
+  trueFundamentalLowerBoundFromPrimitiveFeigenbaum_of_realBounds_and_grotzsch
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) hReal hGrotzsch
+
 /-- Chosen-instance wrapper for the true-modulus factorized route. -/
 theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
     (hμ : MLC.Quadratic.TrueConformalModulusData)
@@ -1153,6 +1177,37 @@ theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_f
     ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
   trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
     (MLC.Quadratic.chosenTrueConformalModulus hμ) hFund hNorm
+
+/-- Full direct implementation of the expert proof:
+    bounded primitive real bounds + Grötzsch promotion + affine normalization
+    produce eventual primitive true-modulus bounds. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    hμ
+    (chosenTruePrimitiveFeigenbaumFundamentalLowerBound_of_realBounds_and_grotzsch
+      hμ hReal hGrotzsch)
+    hNorm
+
+/-- Legacy eventual lower bounds recovered from the full direct expert-proof
+    route on the chosen true-modulus side. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact hBridge c T
+    ((chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+      hμ hReal hGrotzsch hNorm) c T hBound hPrimAll)
 
 /-- The canonical fallback true-modulus API gives a trivial eventual lower bound
     on every primitive Feigenbaum tower. This lets the root theorem graph depend
@@ -1207,6 +1262,22 @@ theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumFundamentalLower
   primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData hμ hBridge
     (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
       hμ hFund hNorm) h
+
+/-- Primitive local connectivity from the exact four-step expert proof
+    blueprint: real bounds, Grötzsch promotion, affine normalization, and the
+    downstream bridge back to the legacy consumer path. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData hμ hBridge
+    (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+      hμ hReal hGrotzsch hNorm) h
 
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/
@@ -1600,6 +1671,22 @@ theorem boundedTypeConstructive_of_chosenTrueFeigenbaumEventual
   boundedTypeConstructive_of_feigenbaumEventual
     (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
       hμ hBridge hTrue) hFC
+
+/-- Bounded-type constructive cutover from the exact four-step expert proof
+    blueprint, once the downstream bridge to the legacy consumer path is
+    supplied. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
+      hμ hBridge hReal hGrotzsch hNorm) hFC
 
 /-- The fully constructive bounded-type interface refines the older strong
     bounded-type sidecar by forgetting the boundedness witness on the primitive

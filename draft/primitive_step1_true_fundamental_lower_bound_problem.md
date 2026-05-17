@@ -134,3 +134,106 @@ A proof of the theorem above should discharge the following theorem surface:
 
 This is exactly the mathematical content needed to instantiate the Lean datum
 `PrimitiveFeigenbaumTrueFundamentalLowerBoundData` globally.
+
+---
+
+## Expert proof blueprint
+
+The intended proof splits into four theorem-sized steps.
+
+### Step 1. Combinatorial finiteness
+
+Let \(\tau_n\) be the primitive combinatorial type of the renormalization
+\[
+g_n \rightsquigarrow g_{n+1}.
+\]
+If all relative periods satisfy \(p_n\le P\), then the set
+\[
+\mathcal F_P
+:=
+\{\tau : \tau \text{ primitive combinatorial type with period }\le P\}
+\]
+is finite. Hence
+\[
+\tau_n \in \mathcal F_P
+\qquad\text{for all }n\ge 0.
+\]
+
+### Step 2. Real a priori bounds
+
+For each \(\tau\in\mathcal F_P\), real bounds produce a strictly positive gap
+ratio
+\[
+C(\tau)>0.
+\]
+After a transient depth \(N_0\), the central return interval is uniformly
+surrounded by real gaps whose sizes are bounded below by this type-dependent
+constant. If \(L_n\) and \(R_n\) are the left and right gaps adjacent to the
+central interval \(I_{n+1}\), then for all \(n\ge N_0\),
+\[
+\frac{|L_n|}{|I_{n+1}|}\ge C(\tau_n),
+\qquad
+\frac{|R_n|}{|I_{n+1}|}\ge C(\tau_n).
+\]
+
+### Step 3. Complex analytic promotion
+
+By Teichmüller / Grötzsch extremal-ring theory, there exists a strictly positive
+promotion function
+\[
+\Psi:\mathbb R_{>0}\to \mathbb R_{>0}
+\]
+such that a real gap ratio lower bound \(\delta/d\ge x\) implies a conformal
+modulus lower bound
+\[
+\operatorname{mod}_{\mathrm{conf}}(V_n\setminus \overline{U_n})\ge \Psi(x).
+\]
+Define
+\[
+\varepsilon(\tau):=\Psi(C(\tau)).
+\]
+Then for every \(n\ge N_0\),
+\[
+\operatorname{mod}_{\mathrm{conf}}(V_n\setminus \overline{U_n})
+\ge
+\varepsilon(\tau_n),
+\qquad
+\varepsilon(\tau_n)>0.
+\]
+
+### Step 4. Uniform minimum over the finite type set
+
+Since \(\mathcal F_P\) is finite and \(\varepsilon(\tau)>0\) for every
+\(\tau\in\mathcal F_P\), the quantity
+\[
+\mu_0 := \min_{\tau\in\mathcal F_P}\varepsilon(\tau)
+\]
+is well-defined and satisfies \(\mu_0>0\). Therefore, for every \(n\ge N_0\),
+\[
+\operatorname{mod}_{\mathrm{conf}}(V_n\setminus \overline{U_n})
+\ge
+\varepsilon(\tau_n)
+\ge
+\mu_0.
+\]
+This is exactly the desired eventual uniform lower bound.
+
+---
+
+## Lean implementation blueprint
+
+This proof matches the current Lean decomposition almost verbatim:
+
+1. `primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods`
+   provides the finite type set \(\mathcal F_P\);
+2. `PrimitiveFeigenbaumTypewiseRealBoundsGlobalData`
+   is the theorem surface for the real gap-ratio constants \(C(\tau)\);
+3. `PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData`
+   is the theorem surface for the promotion \(\Psi(C(\tau))\);
+4. `primitive_feigenbaum_true_fundamental_lower_bound_of_typewise_data`
+   performs the finite-minimum step and yields the eventual true fundamental
+   lower bound.
+
+So the remaining expert-facing request is not the downstream assembly anymore,
+but the actual mathematical justification of the real-bounds and
+Grötzsch-promotion theorem surfaces.
