@@ -3337,14 +3337,14 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. In the current repository model,
-    the root theorem can already be discharged from the existence of a single
-    BMol renormalization tower, via the generalized inconsistency route. -/
+    the Mandelbrot set is locally connected. This root is routed through the
+    parameter-modeled fixed-point bridge, keeping the frontier small while still
+    exposing the parameter-level tower-existence path in the graph. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_exists_tower_bMol
-    exists_renormalizationTower_of_molecule_conjecture_refined
+  mlc_conjecture_of_exists_tower
+    exists_renormalization_tower_of_exists_parameter_model_rfast_fixed_point
 
 
 end MainProof

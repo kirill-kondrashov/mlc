@@ -22,8 +22,8 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.lyubich_conformal_bridge_bMol
-- Molecule.molecule_local_fixed_seed
+- MLC.lyubich_conformal_bridge
+- MLC.exists_parameter_model_rfast_fixed_point
 ```
 
 ## Current Frontier
@@ -31,11 +31,12 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.lyubich_conformal_bridge_bMol,
-   Molecule.molecule_local_fixed_seed}
+   MLC.lyubich_conformal_bridge,
+   MLC.exists_parameter_model_rfast_fixed_point}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.lyubich_conformal_bridge_bMol}
+= {MLC.lyubich_conformal_bridge,
+   MLC.exists_parameter_model_rfast_fixed_point}
 
 Problem45VirtualNearMoleculeRenormalizationData
 = IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
@@ -81,15 +82,15 @@ through:
 
 ## Elimination Target
 
-To eliminate the final repository-local frontier, the remaining root-facing
-axiom to replace is:
+This alternative root keeps the frontier at **two non-core axioms**, but uses a
+larger parameter-level route than the minimal BMol shortcut:
 
-- the BMol-level Lyubich-to-conformal bridge `MLC.lyubich_conformal_bridge_bMol`.
+- `MLC.lyubich_conformal_bridge`
+- `MLC.exists_parameter_model_rfast_fixed_point`
 
-The root still also depends on the upstream Molecule-package axiom
-`Molecule.molecule_local_fixed_seed`, because the current one-axiom route uses
-the package’s zero-argument local fixed-point witness to produce a BMol
-renormalization tower.
+So the dependency graph keeps the fixed-point parameterization and
+parameter-to-tower bridge visible, instead of collapsing directly to the
+upstream BMol fixed-point seed.
 
 ## Dependencies
 

@@ -15,8 +15,8 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice,
-     ``MLC.lyubich_conformal_bridge_bMol,
-     ``Molecule.molecule_local_fixed_seed]
+     ``MLC.lyubich_conformal_bridge,
+     ``MLC.exists_parameter_model_rfast_fixed_point]
   
   try
     let ((axioms, _), _) ← (metaM.run).run coreContext coreState |>.toIO (fun _ => IO.userError "Axiom check failed")
