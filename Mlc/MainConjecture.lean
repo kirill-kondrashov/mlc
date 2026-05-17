@@ -666,6 +666,27 @@ def PrimitiveFeigenbaumCompactFamilyModulusData : Prop :=
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumModulusModelData c T
 
+/-- Canonical geometric refinement of the compact-family bridge target: the
+    modulus observable is specifically the fundamental annulus modulus of the
+    renormalized quadratic-like maps. This matches the literature more closely
+    than the abstract `qMod` version. -/
+def PrimitiveFeigenbaumCompactFamilyFundamentalModulusData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFundamentalModulusModelData c T
+
+/-- Even more concrete refinement: after some stage the primitive Feigenbaum
+    renormalizations range over only finitely many BMol states, and on that
+    finite family the principal-nest/fundamental-annulus modulus comparison
+    holds with uniformly positive fundamental modulus. In the current discrete
+    BMol topology, this is enough to recover the compact-family formulation. -/
+def PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteFamilyFundamentalModulusData c T
+
 /-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
     The current broader bounded-type target should eventually be derived from
     this theorem together with additional classification input, if needed. -/
@@ -714,6 +735,26 @@ theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFami
   exact primitive_feigenbaum_compact_trap_of_modulus_model c T
     (hModel c T hBound hPrimAll)
 
+/-- The canonical fundamental-annulus formulation implies the abstract
+    compact-family modulus package. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily
+    (hFund : PrimitiveFeigenbaumCompactFamilyFundamentalModulusData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  apply eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_modulus_model_of_fundamental_model c T
+    (hFund c T hBound hPrimAll)
+
+/-- The eventual finite-family formulation implies the compact-family
+    fundamental-modulus package. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily
+    (hFinite : PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  apply eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_fundamental_model_of_finite_family c T
+    (hFinite c T hBound hPrimAll)
+
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/
 theorem primitiveRenormalizable_of_primitiveFeigenbaumData
@@ -761,6 +802,24 @@ theorem primitiveRenormalizable_of_primitiveFeigenbaumCompactFamilyData
     PrimitiveRenormalizable c :=
   primitiveRenormalizable_of_primitiveFeigenbaumEventualData
     (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily hModel) h
+
+/-- Canonical fundamental-annulus compact-family data also suffices for the
+    primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumFundamentalCompactFamilyData
+    (hFund : PrimitiveFeigenbaumCompactFamilyFundamentalModulusData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily hFund) h
+
+/-- Likewise, the eventual finite-family formulation suffices for the primitive
+    local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumFiniteFamilyData
+    (hFinite : PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily hFinite) h
 
 /-- Immediate primitive local-connectivity endpoint from the current primitive
     Feigenbaum placeholder axiom, routed through the weaker eventual theorem
@@ -1028,6 +1087,24 @@ theorem boundedTypeConstructive_of_feigenbaumCompactFamily
     BoundedTypeProblem45ConstructiveData :=
   boundedTypeConstructive_of_feigenbaumEventual
     (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily hModel) hFC
+
+/-- Likewise, the canonical fundamental-annulus compact-family package recovers
+    the Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumFundamentalCompactFamily
+    (hFund : PrimitiveFeigenbaumCompactFamilyFundamentalModulusData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily hFund) hFC
+
+/-- And the eventual finite-family formulation already recovers the
+    Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumFiniteFamily
+    (hFinite : PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily hFinite) hFC
 
 /-- Canonical bounded-type constructive cutover from the current primitive
     Feigenbaum placeholder axiom. This packages the eventual-beau-bounds route

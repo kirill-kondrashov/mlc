@@ -83,6 +83,61 @@ def EventualPrimitiveModulusLowerBoundData (c : ℂ)
     μ ≤ MLC.Quadratic.cmodulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)
 
+/-- The canonical modulus observable attached to a quadratic-like map: the
+    conformal modulus of its fundamental annulus `V \ U`. This is the natural
+    BMol-side quantity that the principal-nest annuli should match along a
+    primitive Feigenbaum renormalization tower. -/
+def fundamentalAnnulus (g : BMol) : Set ℂ :=
+  g.V \ g.U
+
+/-- Canonical BMol-side modulus observable. -/
+noncomputable def fundamentalModulus (g : BMol) : ℝ :=
+  MLC.Quadratic.cmodulus (fundamentalAnnulus g)
+
+/-- A more geometric proof-side package: eventually, the renormalized maps lie
+    in a compact family whose fundamental annuli have positive conformal modulus,
+    and the principal-nest annuli agree with those fundamental annuli at the
+    level of conformal modulus. -/
+def PrimitiveFeigenbaumFundamentalModulusModelData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol,
+    IsCompact K ∧
+    (∀ g ∈ K, 0 < fundamentalModulus g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      T.gₙ n ∈ K ∧
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+          fundamentalModulus (T.gₙ n)
+
+/-- Even more concrete proof-side package: eventually, the renormalized maps hit
+    only finitely many BMol states, and on that finite family the principal-nest
+    annuli are identified with the corresponding fundamental annuli with
+    uniformly positive modulus. Since BMol carries the discrete topology, a
+    finite family is automatically compact, so this is enough to recover the
+    compact-family formulation. -/
+def PrimitiveFeigenbaumFiniteFamilyFundamentalModulusData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol,
+    K.Finite ∧
+    (∀ g ∈ K, 0 < fundamentalModulus g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      T.gₙ n ∈ K ∧
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+          fundamentalModulus (T.gₙ n)
+
+/-- An eventual finite family of renormalized maps already gives the compact
+    family needed for the canonical fundamental-annulus theorem surface. -/
+lemma primitive_feigenbaum_fundamental_model_of_finite_family
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hFinite : PrimitiveFeigenbaumFiniteFamilyFundamentalModulusData c T) :
+    PrimitiveFeigenbaumFundamentalModulusModelData c T := by
+  rcases hFinite with ⟨K, hKfinite, hPos, N, hN⟩
+  refine ⟨K, hKfinite.isCompact, hPos, N, ?_⟩
+  · intro n hn
+    rcases hN n hn with ⟨hgnK, hEq⟩
+    exact ⟨hgnK, hEq⟩
+
 /-- A proof-side model for the primitive Feigenbaum modulus problem: eventually,
     the renormalized maps lie in a compact family `K`, and the principal-nest
     conformal modulus is represented by a positive real-valued observable on that
@@ -100,6 +155,20 @@ def PrimitiveFeigenbaumModulusModelData (c : ℂ)
       MLC.Quadratic.cmodulus
         (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
           qMod (T.gₙ n)
+
+/-- The canonical fundamental-annulus package implies the more general
+    compact-family modulus model by taking `qMod = fundamentalModulus`. -/
+lemma primitive_feigenbaum_modulus_model_of_fundamental_model
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hFund : PrimitiveFeigenbaumFundamentalModulusModelData c T) :
+    PrimitiveFeigenbaumModulusModelData c T := by
+  rcases hFund with ⟨K, hKcompact, hPos, N, hN⟩
+  have hcont : Continuous fundamentalModulus := by
+    rw [continuous_def]
+    intro s hs
+    trivial
+  refine ⟨K, fundamentalModulus, hKcompact, ?_, hPos, N, hN⟩
+  exact hKcompact.image hcont
 
 /-- Proof-side compactness/anti-degeneracy bridge for the primitive Feigenbaum
     case: eventually, the principal-nest conformal moduli stay inside a fixed

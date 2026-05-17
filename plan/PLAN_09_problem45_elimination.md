@@ -518,6 +518,11 @@ Current refinement:
   packages the remaining task as an eventual compact family of renormalizations
   plus a positive modulus observable matching the principal-nest annuli, and now
   sits strictly below the compact-trap interface in code
+- the blocker has now been made more canonical:
+  `PrimitiveFeigenbaumCompactFamilyFundamentalModulusData`
+  replaces the arbitrary modulus observable by the BMol fundamental annulus
+  modulus `cmodulus (V \\ U)`, so the remaining gap is specifically the compact
+  family + principal-nest/fundamental-annulus comparison theorem
 - only after that theorem is in place should the repo attempt to derive or
   justify the broader target
   `EventualPrimitiveModulusLowerBoundFromBoundedTypeData`
