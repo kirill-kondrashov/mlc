@@ -8,6 +8,16 @@ open MeasureTheory BigOperators Set
 
 noncomputable def cmodulus := modulus
 
+/-- Abstract interface for a true conformal modulus on annulus-like sets.
+    The current `cmodulus` remains the Gaussian proxy inherited from the Yoccoz
+    package; primitive-Feigenbaum work that genuinely needs conformal invariance
+    should target this theorem surface instead of using the proxy definitionally. -/
+structure AnnulusConformalModulusAPI where
+  mod : Set ℂ → ℝ
+  nonneg : ∀ A : Set ℂ, 0 ≤ mod A
+  affine_invariant :
+    ∀ (A : Set ℂ) (a b : ℂ), a ≠ 0 → mod ((fun z : ℂ => a * z + b) '' A) = mod A
+
 /-- Modulus is monotonic. -/
 theorem cmodulus_le_of_subset {A B : Set ℂ} (h : A ⊆ B) (_hA : NullMeasurableSet A volume) :
     cmodulus A ≤ cmodulus B := by

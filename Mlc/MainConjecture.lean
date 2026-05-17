@@ -705,6 +705,33 @@ def PrimitiveFeigenbaumPrincipalNestFundamentalComparisonGlobalData : Prop :=
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData c T
 
+/-- Step-1 global interface isolated from the proof outline: bounded-type
+    primitive Feigenbaum towers eventually range over only finitely many
+    normalized quadratic-like models. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteCombinatoricsData c T
+
+/-- Steps 2-3 global interface: finite combinatorics can be promoted, using the
+    missing real/complex bounds input, to uniform positivity of the fundamental
+    annulus modulus on the eventual finite family. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalData c T
+
+/-- Step-4 global interface phrased exactly as in the proof sketch: the
+    principal-nest annulus is identified with the renormalized fundamental
+    annulus by affine normalization. -/
+def PrimitiveFeigenbaumAffineNormalizationComparisonGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumAffineNormalizationComparisonData c T
+
 /-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
     The current broader bounded-type target should eventually be derived from
     this theorem together with additional classification input, if needed. -/
@@ -784,6 +811,20 @@ theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_outlinePack
   exact eventual_primitive_modulus_lower_bound_of_outline_data c T
     (hFam c T hBound hPrimAll)
     (hCmp c T hBound hPrimAll)
+
+/-- This is the same proof sketch, but split exactly along its three logical
+    ingredients: Step 1 finite combinatorics, Steps 2-3 analytic promotion, and
+    Step 4 affine normalization comparison. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsGlobalData)
+    (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalGlobalData)
+    (hAffine : PrimitiveFeigenbaumAffineNormalizationComparisonGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact eventual_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison c T
+    (hComb c T hBound hPrimAll)
+    (hAnalytic c T hBound hPrimAll)
+    (hAffine c T hBound hPrimAll)
 
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/

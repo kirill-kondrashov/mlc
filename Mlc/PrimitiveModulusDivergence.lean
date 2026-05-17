@@ -136,6 +136,26 @@ def PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData (c : ℂ)
     (∀ g ∈ K, 0 < fundamentalModulus g) ∧
     ∃ N : ℕ, ∀ n, N ≤ n → T.gₙ n ∈ K
 
+/-- Step-1 isolated from the proof outline: eventually, the primitive
+    Feigenbaum renormalizations range over only finitely many abstract primitive
+    combinatorial types. This is the purely combinatorial/finiteness input,
+    separated from any modulus bound on the actual `BMol` states. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ κ : PrimitiveCombinatorialClassifier,
+    ∃ K : Set PrimitiveCombinatorialType,
+    K.Finite ∧
+    ∃ N : ℕ, ∀ n, N ≤ n → κ (T.gₙ n) ∈ K
+
+/-- Steps 2-3 of the proof outline packaged as a single analytic promotion:
+    once the primitive Feigenbaum tower eventually ranges in a finite family,
+    real bounds plus complex bounds promote that finite family to a uniform
+    positive lower bound on the fundamental annulus modulus. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  PrimitiveFeigenbaumFiniteCombinatoricsData c T →
+    PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData c T
+
 /-- Step-4 package from the proof outline: sufficiently deep principal-nest
     annuli have the same conformal modulus as the fundamental annuli of the
     corresponding renormalized quadratic-like maps. -/
@@ -145,6 +165,24 @@ def PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData (c : ℂ)
     MLC.Quadratic.cmodulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
         fundamentalModulus (T.gₙ n)
+
+/-- Step-4 repackaged in the language of the proof sketch: the normalized map
+    `T.gₙ n` is obtained from the principal nest by explicit affine
+    normalization data. This isolates the structural comparison input from the
+    modulus-equality theorem that will eventually consume it. -/
+def PrimitiveFeigenbaumAffineNormalizationComparisonData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  Nonempty (RenormalizationTowerNormalizationData c T) ∧
+    PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData c T
+
+/-- The algebraic Step-1 package plus the analytic Steps 2-3 promotion recover
+    the finite-family positive fundamental-modulus package from the outline. -/
+lemma primitive_feigenbaum_positive_fundamental_of_combinatorics
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsData c T)
+    (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalData c T) :
+    PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData c T :=
+  hAnalytic hComb
 
 /-- Finite-family positivity already yields a uniform positive lower bound on the
     fundamental annulus moduli of the renormalized maps by taking the least
@@ -220,6 +258,19 @@ lemma eventual_primitive_modulus_lower_bound_of_outline_data
           fundamentalModulus (T.gₙ n) :=
     hN₂ n (le_trans (Nat.le_max_right _ _) hn)
   simpa [hcmp] using hμn
+
+/-- The proof sketch can also be assembled in the more factorized form:
+    finite combinatorics, analytic promotion to positive fundamental modulus,
+    and affine normalization comparison. -/
+lemma eventual_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsData c T)
+    (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalData c T)
+    (hAffine : PrimitiveFeigenbaumAffineNormalizationComparisonData c T) :
+    EventualPrimitiveModulusLowerBoundData c T := by
+  exact eventual_primitive_modulus_lower_bound_of_outline_data c T
+    (primitive_feigenbaum_positive_fundamental_of_combinatorics c T hComb hAnalytic)
+    hAffine.2
 
 /-- A proof-side model for the primitive Feigenbaum modulus problem: eventually,
     the renormalized maps lie in a compact family `K`, and the principal-nest

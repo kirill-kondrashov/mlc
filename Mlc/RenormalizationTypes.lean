@@ -202,6 +202,32 @@ def PrimitiveRenormalizableData (c : ℂ) : Prop :=
   ∃ T : RenormalizationTower (parameterToBMol c),
     {n | IsPrimitive (T.rel n)}.Infinite
 
+/-- Abstract primitive combinatorial type.
+    This is intentionally lightweight: at the current repository stage we only
+    need a formal carrier for "bounded primitive combinatorics" that is
+    separate from raw `BMol` states. Additional kneading/permutation data can be
+    added here once the classifier is formalized. -/
+structure PrimitiveCombinatorialType where
+  period : ℕ
+
+/-- A classifier from normalized quadratic-like maps to their abstract
+    primitive combinatorial type. -/
+abbrev PrimitiveCombinatorialClassifier := BMol → PrimitiveCombinatorialType
+
+/-- The most basic combinatorial invariant currently available directly from a
+    renormalization relation is its period. This gives a canonical placeholder
+    classifier until a richer primitive combinatorial object is formalized. -/
+def primitiveCombinatorialTypeOfRelation {f g : BMol}
+    (rel : RenormalizationRelation f g) : PrimitiveCombinatorialType :=
+  ⟨rel.p⟩
+
+/-- The period classifier along a renormalization tower. This is the current
+    minimal bridge from bounded periods to a finite family of abstract
+    combinatorial types. -/
+def primitiveCombinatorialTypeAt {g : BMol} (T : RenormalizationTower g) (n : ℕ) :
+    PrimitiveCombinatorialType :=
+  primitiveCombinatorialTypeOfRelation (T.rel n)
+
 /-- Finitely renormalizable parameters.
     Alias for NonRenormalizable from the library. -/
 abbrev FinitelyRenormalizable := NonRenormalizable
