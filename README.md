@@ -22,7 +22,14 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.problem45_virtualNearMoleculeRenormalization
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.chosenTrueConformalModulusData
+- MLC.primitiveFeigenbaumTypewiseRealBoundsAxiom
+- MLC.chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
+- MLC.chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
+- MLC.chosenTruePrimitiveEventualBridgeAxiom
+- MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom
+- MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
 ## Current Frontier
@@ -30,10 +37,24 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.problem45_virtualNearMoleculeRenormalization}
+   MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
+   MLC.chosenTrueConformalModulusData,
+   MLC.primitiveFeigenbaumTypewiseRealBoundsAxiom,
+   MLC.chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom,
+   MLC.chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom,
+   MLC.chosenTruePrimitiveEventualBridgeAxiom,
+   MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom,
+   MLC.residualOpenVirtualNearMoleculeAxiom}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.problem45_virtualNearMoleculeRenormalization}
+= {MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
+   MLC.chosenTrueConformalModulusData,
+   MLC.primitiveFeigenbaumTypewiseRealBoundsAxiom,
+   MLC.chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom,
+   MLC.chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom,
+   MLC.chosenTruePrimitiveEventualBridgeAxiom,
+   MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom,
+   MLC.residualOpenVirtualNearMoleculeAxiom}
 
 Problem45VirtualNearMoleculeRenormalizationData
 = IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
@@ -41,45 +62,32 @@ Problem45VirtualNearMoleculeRenormalizationData
 
 ## Current Status
 
-The remaining project axiom is still entirely concentrated in **Problem 4.5**:
-virtual near-Molecule / primitive-first ql renormalization.
+The root theorem is now wired through the **new true-modulus bounded-type
+primitive route** instead of the old single Problem 4.5 axiom. Concretely, the
+graph now passes through:
 
-The active reduction now isolates a bounded-type primitive subproblem. The code
-contains:
+1. a chosen true conformal-modulus handle,
+2. type-wise real bounds,
+3. type-wise Grötzsch promotion,
+4. affine normalization comparison,
+5. a bridge back to the current legacy primitive eventual consumer path,
+6. a Feigenbaum-faithful bounded-type constructive Problem 4.5 slice,
+7. and a separate residual open seam for Problems 4.3/4.4.
 
-- bounded-type sidecar interfaces in `Mlc/MainConjecture.lean`
-- direct primitive routes from modulus lower bounds to shrinkage and local
-  connectivity
-- a literature-matched primitive Feigenbaum surface
-
-The current minimal missing theorem is:
-
-```lean
-eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum :
-  EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
-```
-
-This is the weakest placeholder currently needed by the downstream proof chain.
-It represents eventual beau bounds in the bounded-type primitive Feigenbaum
-case.
+So the theorem graph now exposes the latest primitive Feigenbaum findings
+directly at the root, at the cost of a wider axiom frontier.
 
 ## Remaining Blocker
 
-No theorem in this repository or in the vendored `molecule-conjecture` package
-currently proves the eventual bounded primitive modulus statement above.
+The unresolved mathematics is now split into two explicit external inputs:
 
-The downstream chain is already in place:
+1. `PrimitiveFeigenbaumTypewiseRealBoundsGlobalData`
+2. `PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData`
 
-```text
-eventual primitive Feigenbaum modulus bounds
--> primitive shrinkage
--> primitive local connectivity
--> bounded-type Problem 4.5 slice
-```
-
-So the unresolved gap is no longer shrinkage, no longer local connectivity, and
-no longer an all-level modulus bound. It is specifically the missing proof of
-eventual bounded primitive beau bounds.
+These are exactly the Step-2 / Step-3 analytic theorems needed to turn bounded
+primitive combinatorics into type-wise positive constants `ε_τ`, after which the
+finite-minimum step and the bounded-type constructive cutover are already
+formalized.
 
 ## Non-solutions
 
@@ -92,15 +100,13 @@ through:
 
 ## Elimination Target
 
-To remove `MLC.problem45_virtualNearMoleculeRenormalization`, the repository
-still needs an axiom-free provider of either:
+To shrink the current frontier again, the repository needs to replace the new
+root-facing axioms by proofs of:
 
-- `IRLocallyConnectedData`, or
-- `IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData`
-
-The current research route approaches this by first theoremizing the bounded
-primitive Feigenbaum beau-bounds step and then shrinking the remaining Problem
-4.5 residue.
+- the type-wise real-bounds theorem,
+- the type-wise Grötzsch promotion theorem,
+- the Feigenbaum constructive bounded-type Problem 4.5 slice,
+- and the residual open 4.3/4.4 seam.
 
 ## Dependencies
 

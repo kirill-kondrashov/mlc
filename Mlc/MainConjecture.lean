@@ -1519,6 +1519,48 @@ theorem problem44_of_residualOpenVirtualNearMolecule
     Problem44VirtualMoleculeData :=
   hRes.2
 
+/-- The new bounded-type constructive slice and the residual open 4.3/4.4 seam
+    together recover the full infinitely-renormalizable classification payload.
+    On bounded-type towers we use the constructive primitive/satellite split;
+    off the bounded-type region we fall back to the residual Track-1/Track-2
+    route. -/
+theorem irClassification_of_boundedTypeConstructive_and_residualOpen
+    (hBT : BoundedTypeProblem45ConstructiveData)
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    IRClassificationData := by
+  intro c hc h_ir
+  by_cases hBounded : BoundedTypeRenormalizationTower c
+  · exact hBT.1 c hc h_ir hBounded
+  · exact
+      (irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+        (noTowerPrimitive_of_problem44 (problem44_of_residualOpenVirtualNearMolecule hRes))
+        (problem43_of_residualOpenVirtualNearMolecule hRes)) c hc h_ir
+
+/-- Likewise, the new bounded-type constructive slice and the residual open seam
+    recover the full satellite local-connectivity payload. The bounded-type
+    region uses the new constructive cutover, while the unbounded/interpolation
+    region uses the Problem 4.3 uniform bridge through the refined Molecule
+    theorem. -/
+theorem satelliteLC_of_boundedTypeConstructive_and_residualOpen
+    (hBT : BoundedTypeProblem45ConstructiveData)
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    VirtualJuliaSatelliteLocalConnectivityData := by
+  intro c hc hSat
+  by_cases hBounded : BoundedTypeRenormalizationTower c
+  · exact hBT.2 c hc hSat hBounded
+  · exact MoleculeBridgeTarget.lc_of_moleculeUniformBridgeTarget
+      (problem43_of_residualOpenVirtualNearMolecule hRes)
+      Molecule.molecule_conjecture_refined c hc hSat
+
+/-- Reassemble the old Problem 4.5 root-facing payload from the new
+    bounded-type constructive route plus the residual open 4.3/4.4 seam. -/
+theorem problem45_virtualNearMoleculeRenormalization_of_boundedTypeConstructive_and_residualOpen
+    (hBT : BoundedTypeProblem45ConstructiveData)
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Problem45VirtualNearMoleculeRenormalizationData :=
+  ⟨irClassification_of_boundedTypeConstructive_and_residualOpen hBT hRes,
+    satelliteLC_of_boundedTypeConstructive_and_residualOpen hBT hRes⟩
+
 /-- Compatibility wrapper for the old split Problem 4.3/4.5 seam. Problem 4.3
     is currently absorbed into the strengthened Problem 4.5 payload. -/
 theorem satelliteLC_of_problem43_problem45
@@ -3242,24 +3284,91 @@ noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivi
         in_M := bottcher_onM_hyp.in_M
         hconn := trivial })
 
-/-- Problem 4.5 root-facing axiom: virtual near-Molecule renormalization in the
-    primitive-first ql case. -/
-axiom problem45_virtualNearMoleculeRenormalization :
-  Problem45VirtualNearMoleculeRenormalizationData
+/-- Root-facing chosen true-modulus existence handle. -/
+axiom chosenTrueConformalModulusData :
+  MLC.Quadratic.TrueConformalModulusData
+
+/-- Root-facing bridge from the chosen true primitive eventual route back to the
+    current legacy primitive eventual consumer path. -/
+axiom chosenTruePrimitiveEventualBridgeAxiom :
+  ChosenTrueToLegacyPrimitiveEventualBridgeData chosenTrueConformalModulusData
+
+/-- Root-facing Step-2 real-bounds axiom for the chosen true-modulus route. -/
+axiom primitiveFeigenbaumTypewiseRealBoundsAxiom :
+  PrimitiveFeigenbaumTypewiseRealBoundsGlobalData
+
+/-- Root-facing Step-3 Teichmüller / Grötzsch promotion axiom for the chosen
+    true-modulus route. -/
+axiom chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom :
+  PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+    (MLC.Quadratic.chosenTrueConformalModulus chosenTrueConformalModulusData)
+
+/-- Root-facing Step-4 affine-normalization comparison axiom for the chosen true
+    primitive Feigenbaum route. -/
+axiom chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom :
+  PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
+    (MLC.Quadratic.chosenTrueConformalModulus chosenTrueConformalModulusData)
+
+/-- Root-facing bounded-type constructive classification/satellite payload on
+    the Feigenbaum-faithful primitive branch. -/
+axiom feigenbaumConstructiveBoundedTypeProblem45Axiom :
+  FeigenbaumConstructiveBoundedTypeProblem45Data
+
+/-- Root-facing residual open seam: the unbounded satellite ql case together
+    with the virtual Molecule interpolation regime. -/
+axiom residualOpenVirtualNearMoleculeAxiom :
+  ResidualOpenVirtualNearMoleculeData
+
+/-- The latest true-modulus findings, together with the bounded-type
+    classification payload, already recover the bounded-type constructive slice
+    of Problem 4.5. -/
+theorem boundedTypeConstructive_of_chosenTrueProblem45Axioms :
+    BoundedTypeProblem45ConstructiveData := by
+  have hAnalytic :
+      ChosenTruePrimitiveFeigenbaumAnalyticPromotionData
+        chosenTrueConformalModulusData :=
+    chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_realBounds_and_grotzsch
+      chosenTrueConformalModulusData
+      primitiveFeigenbaumTypewiseRealBoundsAxiom
+      chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
+  have hTrue :
+      ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+        chosenTrueConformalModulusData :=
+    chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+      chosenTrueConformalModulusData
+      primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods
+      hAnalytic
+      chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
+  exact boundedTypeConstructive_of_chosenTrueFeigenbaumEventual
+    chosenTrueConformalModulusData
+    chosenTruePrimitiveEventualBridgeAxiom
+    hTrue
+    feigenbaumConstructiveBoundedTypeProblem45Axiom
+
+/-- Root-facing Problem 4.5 package rebuilt from the latest true-modulus
+    bounded-type route together with the residual open 4.3/4.4 seam. -/
+theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axioms :
+    Problem45VirtualNearMoleculeRenormalizationData :=
+  problem45_virtualNearMoleculeRenormalization_of_boundedTypeConstructive_and_residualOpen
+    boundedTypeConstructive_of_chosenTrueProblem45Axioms
+    residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. The current root theorem is routed
-    through the strengthened Problem 4.5 seam together with a separate
-    finite-branch payload. -/
+    the Mandelbrot set is locally connected. The current root theorem is now
+    routed through the chosen true-modulus primitive Feigenbaum findings on the
+    bounded-type branch, together with the residual open 4.3/4.4 seam and the
+    existing finite-branch payload. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_irClassifyBridgeData
     (irClassifyBridgeData_of_classify_bridge_data
-      (irClassification_of_problem45 problem45_virtualNearMoleculeRenormalization)
+      (irClassification_of_problem45
+        problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axioms)
       (fun _h_mol c hc h_tower =>
         (satelliteLC_of_problem45
-          problem45_virtualNearMoleculeRenormalization) c hc h_tower))
+          problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axioms)
+            c hc h_tower))
 
 
 end MainProof
