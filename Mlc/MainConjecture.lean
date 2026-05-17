@@ -645,6 +645,27 @@ def EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData : Prop :=
       (∀ n, IsPrimitive (T.rel n)) →
         EventualPrimitiveModulusLowerBoundData c T
 
+/-- Proof-side bridge target for the primitive Feigenbaum theorem: bounded-type
+    primitive towers should eventually keep their principal-nest conformal
+    moduli inside a fixed compact positive set. This isolates the compactness /
+    anti-degeneracy step from the final eventual beau-bounds assembly. -/
+def PrimitiveFeigenbaumCompactModulusTrapData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumModulusCompactTrapData c T
+
+/-- More structural proof-side bridge target for the primitive Feigenbaum
+    theorem: eventually, the renormalized maps lie in a compact family carrying
+    a positive modulus observable whose values coincide with the principal-nest
+    conformal moduli. This packages the remaining compactness/geometry work one
+    layer below `PrimitiveFeigenbaumCompactModulusTrapData`. -/
+def PrimitiveFeigenbaumCompactFamilyModulusData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumModulusModelData c T
+
 /-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
     The current broader bounded-type target should eventually be derived from
     this theorem together with additional classification input, if needed. -/
@@ -672,6 +693,26 @@ theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_strong
 theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem :
     EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData :=
   eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum
+
+/-- The compactness/anti-degeneracy bridge package already suffices to recover
+    the exact eventual-beau-bounds theorem surface needed downstream. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
+    (hTrap : PrimitiveFeigenbaumCompactModulusTrapData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact eventual_primitive_modulus_lower_bound_of_compact_trap c T
+    (hTrap c T hBound hPrimAll)
+
+/-- The more structural compact-family-plus-modulus package implies the compact
+    trap package, hence already suffices for the full eventual beau-bounds
+    theorem surface. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily
+    (hModel : PrimitiveFeigenbaumCompactFamilyModulusData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  apply eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_compact_trap_of_modulus_model c T
+    (hModel c T hBound hPrimAll)
 
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/
@@ -701,6 +742,25 @@ theorem primitiveRenormalizable_of_primitiveFeigenbaumEventualData
     simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
   exact primitiveRenormalizable_of_eventualLowerBoundData c T hInf
     (h_lb c T hBound hPrimAll)
+
+/-- Proof-side primitive endpoint extracted from the compact-trap bridge
+    package. This is the constructive landing point for Step 3A before the final
+    theorem is made axiom-free. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumCompactTrapData
+    (hTrap : PrimitiveFeigenbaumCompactModulusTrapData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap hTrap) h
+
+/-- The compact-family modulus package is already enough for the primitive
+    local-connectivity endpoint, via the compact-trap bridge. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumCompactFamilyData
+    (hModel : PrimitiveFeigenbaumCompactFamilyModulusData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily hModel) h
 
 /-- Immediate primitive local-connectivity endpoint from the current primitive
     Feigenbaum placeholder axiom, routed through the weaker eventual theorem
@@ -950,6 +1010,24 @@ theorem boundedTypeConstructive_of_feigenbaumEventual
   rcases hFC.1 c hc h_ir hBound with hPrim | hSat
   · exact Or.inl (primitiveRenormalizable_of_primitiveFeigenbaumEventualData h_lb hPrim)
   · exact Or.inr (satelliteRenormalizableTower_of_boundedType hSat)
+
+/-- The compact positive modulus-trap bridge package is already enough to
+    recover the Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumCompactTrap
+    (hTrap : PrimitiveFeigenbaumCompactModulusTrapData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap hTrap) hFC
+
+/-- The compact-family modulus package is likewise enough to recover the
+    Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumCompactFamily
+    (hModel : PrimitiveFeigenbaumCompactFamilyModulusData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily hModel) hFC
 
 /-- Canonical bounded-type constructive cutover from the current primitive
     Feigenbaum placeholder axiom. This packages the eventual-beau-bounds route

@@ -458,7 +458,7 @@ Current code-side milestone:
   - so there is currently no upstream Lean theorem to discharge
     `PrimitiveModulusLowerBoundFromBoundedTypeData`
 
-### Step 3A: Theoremize bounded primitive modulus input
+### Step 3A: Theoremize eventual primitive Feigenbaum beau bounds
 
 Files:
 
@@ -470,33 +470,33 @@ Files:
 Task:
 
 - replace the axiom
-  `primitiveModulusLowerBoundFromBoundedType`
+  `eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum`
   by a theorem proof
 - derive
-  `PrimitiveModulusLowerBoundData c T`
-  from bounded primitive tower data
+  `EventualPrimitiveModulusLowerBoundData c T`
+  from primitive Feigenbaum bounded-type tower data
 - keep the proof routed through the already theoremized chain:
-  bounded primitive modulus lower bound
-  -> `primitive_shrinkage_of_lower_bound`
-  -> `primitiveRenormalizable_of_lowerBoundData`
+  eventual primitive modulus lower bound
+  -> `primitive_shrinkage_of_eventual_lower_bound`
+  -> `primitiveRenormalizable_of_eventualLowerBoundData`
 
 Research decomposition:
 
 1. identify the exact literature theorem schema behind
-   `PrimitiveModulusLowerBoundFromBoundedTypeData`
+   `EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData`
 2. decide whether
-   `UniformlyBoundedRenormalizationPeriods`
-   is sufficient or must be strengthened by a more honest bounded-primitive ql
-   package
+   `PrimitiveFeigenbaumRenormalizableData`
+   is already the honest interface, or whether an intermediate compactness /
+   anti-degeneracy package is still needed
 3. split the proof into:
-   - bounded primitive combinatorics
+   - primitive Feigenbaum bounded-type data
      -> compactness / anti-degeneracy
    - compactness / anti-degeneracy
-     -> primitive-step modulus lower bound
-   - primitive-step modulus lower bound
-     -> `PrimitiveModulusLowerBoundData`
+     -> eventual ql modulus lower bound
+   - eventual ql modulus lower bound
+     -> `EventualPrimitiveModulusLowerBoundData`
 4. assemble these bridges into the final theorem
-   `primitiveModulusLowerBoundFromBoundedType_theorem`
+   `eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem`
 
 Deliverable:
 
@@ -505,12 +505,19 @@ Deliverable:
 
 Current refinement:
 
-- the research program should first target the stronger literature-matched
-  theorem
-  `primitiveModulusLowerBoundFromPrimitiveFeigenbaum`
-- more precisely, the minimal theorem actually needed by the downstream proof
-  chain is now the eventual beau-bounds variant
+- the research program now targets the minimal theorem actually needed by the
+  downstream proof chain:
   `EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData`
+- the current code-side landing point for the missing compactness / geometry
+  input is now explicit:
+  `PrimitiveFeigenbaumCompactModulusTrapData`
+  together with the proved assembly theorem
+  `eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap`
+- the blocker has been sharpened further:
+  `PrimitiveFeigenbaumCompactFamilyModulusData`
+  packages the remaining task as an eventual compact family of renormalizations
+  plus a positive modulus observable matching the principal-nest annuli, and now
+  sits strictly below the compact-trap interface in code
 - only after that theorem is in place should the repo attempt to derive or
   justify the broader target
   `EventualPrimitiveModulusLowerBoundFromBoundedTypeData`

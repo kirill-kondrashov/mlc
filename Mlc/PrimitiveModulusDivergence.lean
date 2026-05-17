@@ -5,6 +5,7 @@ import Mlc.Quadratic.Complex.YoccozConformal
 import Mlc.Quadratic.Complex.GaussianModulusSummable
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Data.Set.Finite.Basic
+import Mathlib.Topology.Order.Compact
 import Mathlib.Tactic.Linarith
 
 namespace MLC
@@ -81,6 +82,70 @@ def EventualPrimitiveModulusLowerBoundData (c : ℂ)
   ∃ μ > 0, ∃ N : ℕ, ∀ n, N ≤ n → IsPrimitive (T.rel n) →
     μ ≤ MLC.Quadratic.cmodulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)
+
+/-- A proof-side model for the primitive Feigenbaum modulus problem: eventually,
+    the renormalized maps lie in a compact family `K`, and the principal-nest
+    conformal modulus is represented by a positive real-valued observable on that
+    family whose image is compact. This isolates the remaining geometry into the
+    existence of the compact family, the modulus observable, and the comparison
+    with principal-nest annuli. -/
+def PrimitiveFeigenbaumModulusModelData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol, ∃ qMod : BMol → ℝ,
+    IsCompact K ∧
+    IsCompact (qMod '' K) ∧
+    (∀ g ∈ K, 0 < qMod g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      T.gₙ n ∈ K ∧
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+          qMod (T.gₙ n)
+
+/-- Proof-side compactness/anti-degeneracy bridge for the primitive Feigenbaum
+    case: eventually, the principal-nest conformal moduli stay inside a fixed
+    compact subset of `(0, ∞)`. Once such a compact positive trap is available,
+    the eventual beau-bounds theorem follows by taking the least point of that
+    compact set. -/
+def PrimitiveFeigenbaumModulusCompactTrapData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set ℝ, IsCompact K ∧
+    (∀ x ∈ K, 0 < x) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n →
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) ∈ K
+
+/-- The modulus-model package immediately produces the compact positive trap by
+    taking the compact image of the eventual renormalization family. -/
+lemma primitive_feigenbaum_compact_trap_of_modulus_model
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hModel : PrimitiveFeigenbaumModulusModelData c T) :
+    PrimitiveFeigenbaumModulusCompactTrapData c T := by
+  rcases hModel with ⟨K, qMod, hKcompact, hImageCompact, hPos, N, hN⟩
+  refine ⟨qMod '' K, hImageCompact, ?_, N, ?_⟩
+  · intro x hx
+    rcases hx with ⟨g, hgK, rfl⟩
+    exact hPos g hgK
+  · intro n hn
+    rcases hN n hn with ⟨hgnK, hEq⟩
+    refine ⟨T.gₙ n, hgnK, ?_⟩
+    exact hEq.symm
+
+/-- A compact positive trap for the principal-nest conformal moduli yields the
+    eventual lower-bound package needed by the primitive shrinkage route. -/
+lemma eventual_primitive_modulus_lower_bound_of_compact_trap
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hTrap : PrimitiveFeigenbaumModulusCompactTrapData c T) :
+    EventualPrimitiveModulusLowerBoundData c T := by
+  rcases hTrap with ⟨K, hKcompact, hKpos, N, hKN⟩
+  have hKnonempty : K.Nonempty := by
+    refine ⟨MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod N), ?_⟩
+    exact hKN N le_rfl
+  rcases hKcompact.exists_isLeast hKnonempty with ⟨μ, hμK, hμleast⟩
+  have hμ_pos : 0 < μ := hKpos μ hμK
+  refine ⟨μ, hμ_pos, N, ?_⟩
+  intro n hn _hPrim
+  exact hμleast (hKN n hn)
 
 /-- 
 A priori bounds for primitive renormalization.
