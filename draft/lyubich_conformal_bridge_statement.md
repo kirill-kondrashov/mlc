@@ -121,3 +121,47 @@ criterion:
 Without this bridge, the repository can still formulate lower bounds on
 principal renormalization annuli, but it cannot convert them into the
 non-summability statement used by the current conformal Yoccoz machinery.
+
+---
+
+## Proof blueprint for the conformal version
+
+If one identifies the Lyubich modulus of the \(n\)-th principal annulus with the
+exact block sum
+\[
+\mu_{\mathrm L}(A_n^{\mathrm{princ}})
+:=
+\sum_{k=Q_n}^{Q_{n+1}-1}\operatorname{mod}_{\mathrm{conf}}(\mathcal P_k),
+\]
+then the bridge reduces to a finite-block summation argument for a
+non-negative series.
+
+Write
+\[
+m_k := \operatorname{mod}_{\mathrm{conf}}(\mathcal P_k)\ge 0,
+\qquad
+L_n := \mu_{\mathrm L}(A_n^{\mathrm{princ}}).
+\]
+For every \(M\ge 1\),
+\[
+\sum_{n=0}^{M-1} L_n
+=
+\sum_{n=0}^{M-1}\sum_{k=Q_n}^{Q_{n+1}-1} m_k
+=
+\sum_{k=Q_0}^{Q_M-1} m_k,
+\]
+because the intervals \([Q_n,Q_{n+1})\) partition \([Q_0,Q_M)\).
+
+Therefore, if \(\sum_k m_k\) were summable, then the block-sum series
+\(\sum_n L_n\) would also be summable: its partial sums are bounded above by the
+partial sums of the full non-negative series. Contrapositively,
+\[
+\neg \operatorname{Summable}(L_n)
+\Longrightarrow
+\neg \operatorname{Summable}(m_k).
+\]
+
+This is the exact mathematical content now implemented for the **conformal**
+principal-annulus observable in the Lean code; the remaining gap in the current
+repository is that the legacy symbol `LyubichModulus` is still a separate
+constant proxy used by older placeholder routes.

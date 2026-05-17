@@ -3,6 +3,7 @@ import Mlc.MoleculeRenormalizationTower
 import Mlc.Quadratic.Complex.PrincipalNestShrink
 import Mlc.Quadratic.Complex.YoccozConformal
 import Mlc.Quadratic.Complex.GaussianModulusSummable
+import Mlc.MoleculeToParameterShrink
 import Mathlib.Topology.Algebra.InfiniteSum.Basic
 import Mathlib.Data.Set.Finite.Basic
 import Mathlib.Topology.Order.Compact
@@ -837,6 +838,42 @@ lemma primitive_shrinkage_of_eventual_lower_bound
     simpa [MLC.Quadratic.cmodulus] using h_div
   exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_principal_modulus_not_summable
     c hc T.cumulativePeriod hmono hcof h_div_modulus
+
+/--
+Finite-block version of the Lyubich-to-conformal bridge: if the conformal moduli
+of the principal annuli selected by a renormalization tower are not summable,
+then the full Yoccoz puzzle conformal moduli are not summable either.
+-/
+lemma full_nest_divergence_of_principal_cmodulus_divergence
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (h_div : ¬ Summable (fun n =>
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))) :
+    ¬ Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)) := by
+  intro h_sum
+  apply h_div
+  exact PrincipalNestTarget.summable_cmodulus_dynAnnulus_of_puzzleSummable
+    c T.cumulativePeriod T.cumulativePeriod_monotone h_sum
+
+/--
+The same finite-block conformal bridge already yields parameter shrinkage once
+the tower-selected principal annuli are known to have non-summable conformal
+moduli.
+-/
+lemma primitive_shrinkage_of_principal_cmodulus_divergence
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (T : RenormalizationTower (parameterToBMol c))
+    (h_div : ¬ Summable (fun n =>
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  have h_div_modulus :
+      ¬ Summable (fun n =>
+        MLC.Quadratic.modulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) := by
+    simpa [MLC.Quadratic.cmodulus] using h_div
+  exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_principal_modulus_not_summable
+    c hc T.cumulativePeriod T.cumulativePeriod_monotone T.cumulativePeriod_cofinal h_div_modulus
 
 /-- Divergence of moduli for primitive renormalization towers (Lyubich's Theorem). -/
 lemma primitive_modulus_divergence (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
