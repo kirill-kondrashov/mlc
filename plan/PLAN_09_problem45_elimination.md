@@ -430,9 +430,26 @@ Current code-side milestone:
   primitive input as
   `PrimitiveModulusLowerBoundFromBoundedTypeData`, with the assembly theorem
   `boundedTypeConstructive_of_fullyConstructive`
+- `Mlc/MainConjecture.lean` now also contains the explicit placeholder axiom
+  `primitiveModulusLowerBoundFromBoundedType` and theorem wrapper
+  `primitiveModulusLowerBoundFromBoundedType_theorem`, so the remaining bounded
+  primitive theorem target is named directly in code
+- theorem-shape refinement from the literature:
+  `Mlc/MainConjecture.lean` now also contains the stronger sidecar
+  `PrimitiveFeigenbaumRenormalizableData` and theorem surface
+  `PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData`
+- this reflects Dudko–Lyubich `2309.02107`, where bounded-type primitive theory
+  is naturally stated first for Feigenbaum maps whose renormalizations are all
+  primitive, with eventual beau bounds `mod R^n f ≥ μ > 0`
+- `Mlc/PrimitiveModulusDivergence.lean` and
+  `Mlc/InfinitelyRenormalizable.lean` now also support the weaker and more
+  honest eventual-lower-bound route via
+  `EventualPrimitiveModulusLowerBoundData`,
+  `primitive_shrinkage_of_eventual_lower_bound`, and
+  `primitiveRenormalizable_of_eventualLowerBoundData`
 - consequently, the remaining primitive blocker is no longer the shrinkage step
   itself but the absence of a genuine theorem producing
-  `PrimitiveModulusLowerBoundData` from bounded primitive tower data
+  eventual bounded primitive modulus control from bounded primitive tower data
 - dependency audit result:
   - `.lake/packages/molecule-conjecture/Molecule/Problem4_3_Lemmas.lean`
     still treats the modulus-bounds step as `True`
@@ -440,6 +457,63 @@ Current code-side milestone:
     still defines `PseudoSiegelAPrioriBounds : Prop := True`
   - so there is currently no upstream Lean theorem to discharge
     `PrimitiveModulusLowerBoundFromBoundedTypeData`
+
+### Step 3A: Theoremize bounded primitive modulus input
+
+Files:
+
+- `Mlc/MainConjecture.lean`
+- `Mlc/PrimitiveModulusDivergence.lean`
+- `Mlc/InfinitelyRenormalizable.lean`
+- possibly a new focused file for bounded primitive compactness / modulus bridges
+
+Task:
+
+- replace the axiom
+  `primitiveModulusLowerBoundFromBoundedType`
+  by a theorem proof
+- derive
+  `PrimitiveModulusLowerBoundData c T`
+  from bounded primitive tower data
+- keep the proof routed through the already theoremized chain:
+  bounded primitive modulus lower bound
+  -> `primitive_shrinkage_of_lower_bound`
+  -> `primitiveRenormalizable_of_lowerBoundData`
+
+Research decomposition:
+
+1. identify the exact literature theorem schema behind
+   `PrimitiveModulusLowerBoundFromBoundedTypeData`
+2. decide whether
+   `UniformlyBoundedRenormalizationPeriods`
+   is sufficient or must be strengthened by a more honest bounded-primitive ql
+   package
+3. split the proof into:
+   - bounded primitive combinatorics
+     -> compactness / anti-degeneracy
+   - compactness / anti-degeneracy
+     -> primitive-step modulus lower bound
+   - primitive-step modulus lower bound
+     -> `PrimitiveModulusLowerBoundData`
+4. assemble these bridges into the final theorem
+   `primitiveModulusLowerBoundFromBoundedType_theorem`
+
+Deliverable:
+
+- a proved theorem replacing the placeholder axiom, with no new root-facing
+  axioms introduced
+
+Current refinement:
+
+- the research program should first target the stronger literature-matched
+  theorem
+  `primitiveModulusLowerBoundFromPrimitiveFeigenbaum`
+- more precisely, the minimal theorem actually needed by the downstream proof
+  chain is now the eventual beau-bounds variant
+  `EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData`
+- only after that theorem is in place should the repo attempt to derive or
+  justify the broader target
+  `EventualPrimitiveModulusLowerBoundFromBoundedTypeData`
 
 ### Step 2: Audit the remaining axiom-backed routes
 

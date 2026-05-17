@@ -577,6 +577,27 @@ def BoundedTypePrimitiveRenormalizableData (c : ℂ) : Prop :=
     UniformlyBoundedRenormalizationPeriods T ∧
       {n | IsPrimitive (T.rel n)}.Infinite
 
+/-- Literature-matched bounded primitive data: a bounded-type renormalization
+    tower whose every level is primitive. This corresponds more closely to the
+    Feigenbaum primitive setup in Dudko–Lyubich `2309.02107`, where a map is
+    primitive if all of its renormalizations are primitive. -/
+def PrimitiveFeigenbaumRenormalizableData (c : ℂ) : Prop :=
+  ∃ T : RenormalizationTower (parameterToBMol c),
+    UniformlyBoundedRenormalizationPeriods T ∧
+      ∀ n, IsPrimitive (T.rel n)
+
+/-- Purely primitive bounded-type towers are a special case of the broader
+    bounded-type primitive sidecar. -/
+theorem boundedTypePrimitive_of_primitiveFeigenbaum
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    BoundedTypePrimitiveRenormalizableData c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  refine ⟨T, hBound, ?_⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+
 /-- Forget the bounded-type witness and recover the existing primitive sidecar
     interface. -/
 theorem primitiveRenormalizableData_of_boundedType
@@ -594,6 +615,120 @@ def PrimitiveModulusLowerBoundFromBoundedTypeData : Prop :=
       {n | IsPrimitive (T.rel n)}.Infinite →
         PrimitiveModulusLowerBoundData c T
 
+/-- Weaker and more natural variant of the bounded-type primitive modulus target:
+    an eventual lower bound along primitive levels. This is already sufficient
+    for the divergence/shrinkage route, and is closer to the usual "beau bounds"
+    formulation in the literature. -/
+def EventualPrimitiveModulusLowerBoundFromBoundedTypeData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      {n | IsPrimitive (T.rel n)}.Infinite →
+        EventualPrimitiveModulusLowerBoundData c T
+
+/-- Literature-matched theorem surface for the bounded primitive case: if the
+    tower is of bounded type and every level is primitive, then the principal
+    nest has a definite modulus uniformly along the tower. This matches the
+    Feigenbaum / bounded primitive theorem schema more directly than the broader
+    `PrimitiveModulusLowerBoundFromBoundedTypeData`. -/
+def PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveModulusLowerBoundData c T
+
+/-- Even closer to the literature: bounded primitive theory is usually stated as
+    eventual beau bounds along the renormalization tower, which is already
+    sufficient for the divergence and shrinkage route. -/
+def EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        EventualPrimitiveModulusLowerBoundData c T
+
+/-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
+    The current broader bounded-type target should eventually be derived from
+    this theorem together with additional classification input, if needed. -/
+axiom primitiveModulusLowerBoundFromPrimitiveFeigenbaum :
+  PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+
+/-- Minimal placeholder theorem surface aligned to what the downstream proof
+    route actually needs: eventual beau bounds in the primitive Feigenbaum case. -/
+axiom eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum :
+  EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+
+/-- The stronger all-level primitive modulus statement implies the eventual
+    beau-bounds version for free. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_strong
+    (h_lb : PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  rcases h_lb c T hBound hPrimAll with ⟨μ, hμ_pos, hμ⟩
+  exact ⟨μ, hμ_pos, 0, fun n _hn => hμ n⟩
+
+/-- Canonical eventual-beau-bounds theorem currently obtained from the stronger
+    placeholder primitive Feigenbaum axiom. This is the preferred theorem
+    surface for downstream wiring, since it matches what the proof pipeline
+    actually needs. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData :=
+  eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum
+
+/-- Purely primitive bounded-type data plus the literature-matched modulus
+    theorem imply the primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumData
+    (h_lb : PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  have hInf : {n | IsPrimitive (T.rel n)}.Infinite := by
+    simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+  exact primitiveRenormalizable_of_lowerBoundData c T hInf (h_lb c T hBound hPrimAll)
+
+/-- Eventual beau bounds along a purely primitive bounded-type tower are already
+    sufficient for the primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (h_lb : EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  have hInf : {n | IsPrimitive (T.rel n)}.Infinite := by
+    simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+  exact primitiveRenormalizable_of_eventualLowerBoundData c T hInf
+    (h_lb c T hBound hPrimAll)
+
+/-- Immediate primitive local-connectivity endpoint from the current primitive
+    Feigenbaum placeholder axiom, routed through the weaker eventual theorem
+    surface. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaum_axiom
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem h
+
+/-- Placeholder bounded-type primitive modulus theorem. Eliminating this axiom
+    is the remaining bounded-type primitive step in the Problem 4.5 program. -/
+axiom primitiveModulusLowerBoundFromBoundedType :
+  PrimitiveModulusLowerBoundFromBoundedTypeData
+
+/-- Named theorem wrapper for the bounded-type primitive modulus target. -/
+theorem primitiveModulusLowerBoundFromBoundedType_theorem :
+    PrimitiveModulusLowerBoundFromBoundedTypeData :=
+  primitiveModulusLowerBoundFromBoundedType
+
+/-- The stronger all-level bounded-type target implies the eventual one. -/
+theorem eventualPrimitiveModulusLowerBoundFromBoundedType_of_strong
+    (h_lb : PrimitiveModulusLowerBoundFromBoundedTypeData) :
+    EventualPrimitiveModulusLowerBoundFromBoundedTypeData := by
+  intro c T hBound hInf
+  rcases h_lb c T hBound hInf with ⟨μ, hμ_pos, hμ⟩
+  exact ⟨μ, hμ_pos, 0, fun n _hn => hμ n⟩
+
 /-- A bounded-type primitive tower plus the intended modulus-lower-bound input
     implies the primitive local-connectivity endpoint without the placeholder
     Lyubich bridge. -/
@@ -603,6 +738,16 @@ theorem primitiveRenormalizable_of_boundedTypeData
     PrimitiveRenormalizable c := by
   rcases h with ⟨T, hBound, hPrim⟩
   exact primitiveRenormalizable_of_lowerBoundData c T hPrim (h_lb c T hBound hPrim)
+
+/-- Eventual bounded-type primitive modulus control is already enough for the
+    bounded-type primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_boundedTypeEventualData
+    (h_lb : EventualPrimitiveModulusLowerBoundFromBoundedTypeData)
+    {c : ℂ} (h : BoundedTypePrimitiveRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrim⟩
+  exact primitiveRenormalizable_of_eventualLowerBoundData c T hPrim
+    (h_lb c T hBound hPrim)
 
 /-- Forget the bounded-type witness and recover the underlying tower. -/
 theorem satelliteRenormalizableTower_of_boundedType
@@ -662,10 +807,27 @@ def FullyConstructiveBoundedTypeIRClassificationData : Prop :=
       BoundedTypePrimitiveRenormalizableData c ∨
         BoundedTypeSatelliteRenormalizableTower c
 
+/-- Even more literature-faithful bounded-type classification target: on the
+    primitive branch, retain a purely primitive bounded-type tower rather than
+    the weaker "infinitely many primitive levels" sidecar. -/
+def FeigenbaumConstructiveBoundedTypeIRClassificationData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    BoundedTypeRenormalizationTower c →
+      PrimitiveFeigenbaumRenormalizableData c ∨
+        BoundedTypeSatelliteRenormalizableTower c
+
 /-- Fully constructive bounded-type Problem 4.5 slice: bounded primitive towers
     on the primitive side and bounded satellite towers on the satellite side. -/
 def FullyConstructiveBoundedTypeProblem45Data : Prop :=
   FullyConstructiveBoundedTypeIRClassificationData ∧
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData
+
+/-- Feigenbaum-faithful bounded-type Problem 4.5 slice: the primitive branch is
+    represented by a purely primitive bounded-type tower, while the satellite
+    branch retains the existing bounded satellite witness. -/
+def FeigenbaumConstructiveBoundedTypeProblem45Data : Prop :=
+  FeigenbaumConstructiveBoundedTypeIRClassificationData ∧
     BoundedTypeVirtualJuliaSatelliteLocalConnectivityData
 
 /-- Problem 4.5 surface: virtual near-Molecule renormalization in the
@@ -765,6 +927,38 @@ theorem boundedTypeConstructive_of_fullyConstructive
   rcases hFC.1 c hc h_ir hBound with hPrim | hSat
   · exact Or.inl (primitiveRenormalizable_of_boundedTypeData h_lb hPrim)
   · exact Or.inr (satelliteRenormalizableTower_of_boundedType hSat)
+
+/-- A Feigenbaum-faithful bounded-type classification surface forgets to the
+    broader fully constructive bounded-type surface. -/
+theorem fullyConstructive_of_feigenbaumConstructive
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    FullyConstructiveBoundedTypeProblem45Data := by
+  refine ⟨?_, hFC.2⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (boundedTypePrimitive_of_primitiveFeigenbaum hPrim)
+  · exact Or.inr hSat
+
+/-- The weakest literature-faithful primitive theorem surface already suffices
+    to recover the bounded-type Problem 4.5 constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumEventual
+    (h_lb : EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, hFC.2⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (primitiveRenormalizable_of_primitiveFeigenbaumEventualData h_lb hPrim)
+  · exact Or.inr (satelliteRenormalizableTower_of_boundedType hSat)
+
+/-- Canonical bounded-type constructive cutover from the current primitive
+    Feigenbaum placeholder axiom. This packages the eventual-beau-bounds route
+    as a single theorem for future Problem 4.5 cutovers. -/
+theorem boundedTypeConstructive_of_feigenbaumAxiom
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem hFC
 
 /-- The fully constructive bounded-type interface refines the older strong
     bounded-type sidecar by forgetting the boundedness witness on the primitive

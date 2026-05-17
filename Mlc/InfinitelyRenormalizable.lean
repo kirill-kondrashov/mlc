@@ -115,6 +115,18 @@ lemma primitiveRenormalizable_of_lowerBoundData
     primitive_shrinkage_of_lower_bound c hc T h_lb h_inf_prim
   exact lc_at_of_shrink c hc h_shrink
 
+/-- Eventual bounded primitive modulus control is already sufficient for the
+    primitive local-connectivity endpoint. -/
+lemma primitiveRenormalizable_of_eventualLowerBoundData
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite)
+    (h_lb : EventualPrimitiveModulusLowerBoundData c T) :
+    PrimitiveRenormalizable c := by
+  intro hc
+  have h_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} :=
+    primitive_shrinkage_of_eventual_lower_bound c hc T h_lb h_inf_prim
+  exact lc_at_of_shrink c hc h_shrink
+
 /-- MLC holds for infinitely renormalizable parameters.
     This is derived from the classification into Primitive and Satellite types,
     using Lyubich's theorem for the former and the Molecule Conjecture for the latter. -/

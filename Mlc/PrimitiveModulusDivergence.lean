@@ -72,6 +72,16 @@ def PrimitiveModulusLowerBoundData (c : ℂ)
     μ ≤ MLC.Quadratic.cmodulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)
 
+/-- Literature-matched variant of bounded primitive modulus control: a positive
+    conformal-modulus lower bound that holds eventually along primitive levels.
+    This matches the usual "beau bounds" shape more closely than requiring the
+    same bound at every primitive level. -/
+def EventualPrimitiveModulusLowerBoundData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ μ > 0, ∃ N : ℕ, ∀ n, N ≤ n → IsPrimitive (T.rel n) →
+    μ ≤ MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)
+
 /-- 
 A priori bounds for primitive renormalization.
 According to Lyubich's theory, primitive renormalization steps yield annuli in the 
@@ -119,6 +129,44 @@ lemma primitive_cmodulus_divergence_of_lower_bound
   rw [dist_zero_right, Real.norm_eq_abs, abs_of_nonneg hnonneg] at hsmall
   linarith
 
+/-- Eventual primitive modulus lower bounds are already enough to force
+    divergence of the principal-nest conformal moduli, since finite initial
+    levels do not affect summability. -/
+lemma primitive_cmodulus_divergence_of_eventual_lower_bound
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (h_lb : EventualPrimitiveModulusLowerBoundData c T)
+    (h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite) :
+    ¬ Summable (fun n =>
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) := by
+  rcases h_lb with ⟨μ, hμ_pos, N, hμ⟩
+  intro h_sum
+  have h_lim := Summable.tendsto_atTop_zero h_sum
+  rw [Metric.tendsto_atTop] at h_lim
+  specialize h_lim (μ / 2) (by linarith)
+  rcases h_lim with ⟨M, hM⟩
+  let K := max N M
+  rcases h_inf_prim.exists_gt K with ⟨n, hn_prim, hn_gt⟩
+  have hsmall :
+      dist
+        (MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) 0 < μ / 2 :=
+    hM n (le_of_lt (lt_of_le_of_lt (Nat.le_max_right _ _) hn_gt))
+  have hnonneg :
+      0 ≤
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) := by
+    simpa [MLC.Quadratic.cmodulus] using
+      (MLC.Quadratic.modulus_nonneg
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n))
+  have hlarge :
+      μ ≤
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) :=
+    hμ n (le_of_lt (lt_of_le_of_lt (Nat.le_max_left _ _) hn_gt)) hn_prim
+  rw [dist_zero_right, Real.norm_eq_abs, abs_of_nonneg hnonneg] at hsmall
+  linarith
+
 /-- The intended bounded-type primitive route: if genuine conformal-modulus
     lower bounds hold at infinitely many primitive levels, then the principal
     nest shrinks directly by the existing principal-nest Grötzsch theorem,
@@ -134,6 +182,31 @@ lemma primitive_shrinkage_of_lower_bound
         MLC.Quadratic.cmodulus
           (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) :=
     primitive_cmodulus_divergence_of_lower_bound c T h_lb h_inf_prim
+  have hmono : Monotone T.cumulativePeriod := T.cumulativePeriod_monotone
+  have hcof : MLC.Quadratic.PrincipalNest.Cofinal T.cumulativePeriod :=
+    T.cumulativePeriod_cofinal
+  have h_div_modulus :
+      ¬ Summable (fun n =>
+        MLC.Quadratic.modulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) := by
+    simpa [MLC.Quadratic.cmodulus] using h_div
+  exact MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_principal_modulus_not_summable
+    c hc T.cumulativePeriod hmono hcof h_div_modulus
+
+/-- Eventual primitive modulus lower bounds already imply parameter shrinkage,
+    since the divergence route only depends on infinitely many large primitive
+    levels. -/
+lemma primitive_shrinkage_of_eventual_lower_bound
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (T : RenormalizationTower (parameterToBMol c))
+    (h_lb : EventualPrimitiveModulusLowerBoundData c T)
+    (h_inf_prim : {n | IsPrimitive (T.rel n)}.Infinite) :
+    (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
+  have h_div :
+      ¬ Summable (fun n =>
+        MLC.Quadratic.cmodulus
+          (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)) :=
+    primitive_cmodulus_divergence_of_eventual_lower_bound c T h_lb h_inf_prim
   have hmono : Monotone T.cumulativePeriod := T.cumulativePeriod_monotone
   have hcof : MLC.Quadratic.PrincipalNest.Cofinal T.cumulativePeriod :=
     T.cumulativePeriod_cofinal
