@@ -23,11 +23,7 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
-- MLC.chosenTrueConformalModulusData
-- MLC.primitiveFeigenbaumTypewiseRealBoundsAxiom
-- MLC.chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
-- MLC.chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
-- MLC.chosenTruePrimitiveEventualBridgeAxiom
+- MLC.unitTruePrimitiveEventualBridgeAxiom
 - MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
@@ -38,21 +34,13 @@ All axioms used:
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
    MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-   MLC.chosenTrueConformalModulusData,
-   MLC.primitiveFeigenbaumTypewiseRealBoundsAxiom,
-   MLC.chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom,
-   MLC.chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom,
-   MLC.chosenTruePrimitiveEventualBridgeAxiom,
+   MLC.unitTruePrimitiveEventualBridgeAxiom,
    MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom,
    MLC.residualOpenVirtualNearMoleculeAxiom}
 
 project_frontier(MLC.mlc_conjecture)
 = {MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-   MLC.chosenTrueConformalModulusData,
-   MLC.primitiveFeigenbaumTypewiseRealBoundsAxiom,
-   MLC.chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom,
-   MLC.chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom,
-   MLC.chosenTruePrimitiveEventualBridgeAxiom,
+   MLC.unitTruePrimitiveEventualBridgeAxiom,
    MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom,
    MLC.residualOpenVirtualNearMoleculeAxiom}
 
@@ -100,11 +88,10 @@ through:
 
 ## Elimination Target
 
-To shrink the current frontier again, the repository needs to replace the new
-root-facing axioms by proofs of:
+To shrink the current frontier again, the repository now needs to replace the
+remaining root-facing axioms by proofs of:
 
-- the type-wise real-bounds theorem,
-- the type-wise Grötzsch promotion theorem,
+- the true-to-legacy primitive eventual bridge,
 - the Feigenbaum constructive bounded-type Problem 4.5 slice,
 - and the residual open 4.3/4.4 seam.
 

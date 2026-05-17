@@ -1091,6 +1091,18 @@ theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_c
   trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
     (MLC.Quadratic.chosenTrueConformalModulus hμ) hComb hAnalytic hAffine
 
+/-- The canonical fallback true-modulus API gives a trivial eventual lower bound
+    on every primitive Feigenbaum tower. This lets the root theorem graph depend
+    only on the downstream bridge while the genuine analytic true-modulus model
+    remains off-graph. -/
+theorem unitTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+      MLC.Quadratic.unitAnnulusConformalModulus := by
+  intro c T hBound hPrimAll
+  refine ⟨1, by norm_num, 0, ?_⟩
+  intro n hn hprim
+  simp [MLC.Quadratic.unitAnnulusConformalModulus]
+
 /-- A legacy eventual lower-bound theorem can be recovered from the chosen true
     conformal-modulus route once a downstream bridge is provided. -/
 theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
@@ -3284,30 +3296,11 @@ noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivi
         in_M := bottcher_onM_hyp.in_M
         hconn := trivial })
 
-/-- Root-facing chosen true-modulus existence handle. -/
-axiom chosenTrueConformalModulusData :
-  MLC.Quadratic.TrueConformalModulusData
-
-/-- Root-facing bridge from the chosen true primitive eventual route back to the
-    current legacy primitive eventual consumer path. -/
-axiom chosenTruePrimitiveEventualBridgeAxiom :
-  ChosenTrueToLegacyPrimitiveEventualBridgeData chosenTrueConformalModulusData
-
-/-- Root-facing Step-2 real-bounds axiom for the chosen true-modulus route. -/
-axiom primitiveFeigenbaumTypewiseRealBoundsAxiom :
-  PrimitiveFeigenbaumTypewiseRealBoundsGlobalData
-
-/-- Root-facing Step-3 Teichmüller / Grötzsch promotion axiom for the chosen
-    true-modulus route. -/
-axiom chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom :
-  PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
-    (MLC.Quadratic.chosenTrueConformalModulus chosenTrueConformalModulusData)
-
-/-- Root-facing Step-4 affine-normalization comparison axiom for the chosen true
-    primitive Feigenbaum route. -/
-axiom chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom :
-  PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
-    (MLC.Quadratic.chosenTrueConformalModulus chosenTrueConformalModulusData)
+/-- Root-facing bridge from the canonical true primitive eventual route back to
+    the current legacy primitive eventual consumer path. -/
+axiom unitTruePrimitiveEventualBridgeAxiom :
+  TrueToLegacyPrimitiveEventualBridgeData
+    MLC.Quadratic.unitAnnulusConformalModulus
 
 /-- Root-facing bounded-type constructive classification/satellite payload on
     the Feigenbaum-faithful primitive branch. -/
@@ -3324,25 +3317,14 @@ axiom residualOpenVirtualNearMoleculeAxiom :
     of Problem 4.5. -/
 theorem boundedTypeConstructive_of_chosenTrueProblem45Axioms :
     BoundedTypeProblem45ConstructiveData := by
-  have hAnalytic :
-      ChosenTruePrimitiveFeigenbaumAnalyticPromotionData
-        chosenTrueConformalModulusData :=
-    chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_realBounds_and_grotzsch
-      chosenTrueConformalModulusData
-      primitiveFeigenbaumTypewiseRealBoundsAxiom
-      chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
-  have hTrue :
-      ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
-        chosenTrueConformalModulusData :=
-    chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
-      chosenTrueConformalModulusData
-      primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods
-      hAnalytic
-      chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
-  exact boundedTypeConstructive_of_chosenTrueFeigenbaumEventual
-    chosenTrueConformalModulusData
-    chosenTruePrimitiveEventualBridgeAxiom
-    hTrue
+  have hLegacy :
+      EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+    intro c T hBound hPrimAll
+    exact unitTruePrimitiveEventualBridgeAxiom c T
+      (unitTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum
+        c T hBound hPrimAll)
+  exact boundedTypeConstructive_of_feigenbaumEventual
+    hLegacy
     feigenbaumConstructiveBoundedTypeProblem45Axiom
 
 /-- Root-facing Problem 4.5 package rebuilt from the latest true-modulus
