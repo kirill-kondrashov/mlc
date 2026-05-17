@@ -140,6 +140,16 @@ def PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData
     (∀ g ∈ K, 0 < trueFundamentalModulus μApi g) ∧
     ∃ N : ℕ, ∀ n, N ≤ n → T.gₙ n ∈ K
 
+/-- The direct analytic output needed on the true-modulus route: eventually, the
+    fundamental annuli of the renormalized maps have uniformly positive true
+    conformal modulus. This matches the actual bounded-combinatorics -> real
+    bounds -> complex bounds proof shape more closely than asking for a finite
+    family of concrete `BMol` states. -/
+def PrimitiveFeigenbaumTrueFundamentalLowerBoundData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ μ > 0, ∃ N : ℕ, ∀ n, N ≤ n → μ ≤ trueFundamentalModulus μApi (T.gₙ n)
+
 /-- True-modulus Step-4 comparison package. -/
 def PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData
     (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
@@ -201,20 +211,82 @@ def PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData (c : ℂ)
 /-- Step-1 isolated from the proof outline: eventually, the primitive
     Feigenbaum renormalizations range over only finitely many abstract primitive
     combinatorial types. This is the purely combinatorial/finiteness input,
-    separated from any modulus bound on the actual `BMol` states. -/
+    separated from any modulus bound on the actual `BMol` states. The types are
+    the ones canonically attached to the tower levels themselves, not values of
+    an arbitrary external classifier. -/
 def PrimitiveFeigenbaumFiniteCombinatoricsData (c : ℂ)
     (T : RenormalizationTower (parameterToBMol c)) : Prop :=
-  ∃ κ : PrimitiveCombinatorialClassifier,
-    ∃ K : Set PrimitiveCombinatorialType,
+  ∃ K : Set PrimitiveCombinatorialType,
     K.Finite ∧
-    ∃ N : ℕ, ∀ n, N ≤ n → κ (T.gₙ n) ∈ K
+    ∃ N : ℕ, ∀ n, N ≤ n → primitiveCombinatorialTypeAt T n ∈ K
 
-/-- True-modulus Steps 2-3 promotion interface. -/
+/-- Type-wise analytic promotion package matching the finite-minimum argument in
+    the primitive Feigenbaum proof sketch: after some stage, each renormalized
+    map has a combinatorial type in a finite family `K`, and for each type
+    `τ ∈ K` there is a positive lower bound `eps τ` on the true fundamental
+    modulus whenever that type occurs. Taking the minimum of `eps` on `K`
+    produces a uniform eventual lower bound. -/
+def PrimitiveFeigenbaumTypewiseTrueFundamentalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set PrimitiveCombinatorialType,
+    K.Finite ∧
+    ∃ eps : PrimitiveCombinatorialType → ℝ,
+      (∀ τ ∈ K, 0 < eps τ) ∧
+      ∃ N : ℕ, ∀ n, N ≤ n →
+        primitiveCombinatorialTypeAt T n ∈ K ∧
+        eps (primitiveCombinatorialTypeAt T n) ≤ trueFundamentalModulus μApi (T.gₙ n)
+
+/-- Type-wise real-bounds package for a primitive Feigenbaum tower. It records
+    the real a priori bounds output in the form used by the proof blueprint:
+    there is an eventual finite family `K` of actual tower combinatorial types,
+    together with strictly positive type-wise gap-ratio constants `C τ`, and an
+    eventual lower bound by those constants along the tower. The auxiliary
+    `gapRatio n` is the abstract real-geometry observable that Step 2 produces;
+    its concrete construction is intentionally left external to the current
+    theorem surface. -/
+def PrimitiveFeigenbaumTypewiseRealBoundsData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ gapRatio : ℕ → ℝ,
+    ∃ K : Set PrimitiveCombinatorialType,
+      K.Finite ∧
+      ∃ C : PrimitiveCombinatorialType → ℝ,
+        (∀ τ ∈ K, 0 < C τ) ∧
+        ∃ N : ℕ, ∀ n, N ≤ n →
+          primitiveCombinatorialTypeAt T n ∈ K ∧
+          C (primitiveCombinatorialTypeAt T n) ≤ gapRatio n
+
+/-- Teichmüller / Grötzsch complex-promotion package for the true-modulus route.
+    Given any eventual type-wise real gap-ratio bounds for the tower, this
+    theorem surface returns the corresponding type-wise true fundamental-modulus
+    bounds. This isolates the genuinely external complex-analytic input from the
+    combinatorics and finite-minimum steps. -/
+def PrimitiveFeigenbaumTypewiseGrotzschPromotionData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∀ gapRatio : ℕ → ℝ,
+    ∀ K : Set PrimitiveCombinatorialType,
+      K.Finite →
+      ∀ C : PrimitiveCombinatorialType → ℝ,
+        (∀ τ ∈ K, 0 < C τ) →
+        (∃ N : ℕ, ∀ n, N ≤ n →
+          primitiveCombinatorialTypeAt T n ∈ K ∧
+          C (primitiveCombinatorialTypeAt T n) ≤ gapRatio n) →
+        ∃ eps : PrimitiveCombinatorialType → ℝ,
+          (∀ τ ∈ K, 0 < eps τ) ∧
+          ∃ N : ℕ, ∀ n, N ≤ n →
+            primitiveCombinatorialTypeAt T n ∈ K ∧
+            eps (primitiveCombinatorialTypeAt T n) ≤ trueFundamentalModulus μApi (T.gₙ n)
+
+/-- True-modulus Steps 2-3 promotion interface. This is the direct analytic
+    theorem surface suggested by the bounded primitive combinatorics proof:
+    finite combinatorics promote to an eventual uniform positive lower bound on
+    the true fundamental modulus of the renormalized maps. -/
 def PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalData
     (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
     (T : RenormalizationTower (parameterToBMol c)) : Prop :=
   PrimitiveFeigenbaumFiniteCombinatoricsData c T →
-    PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData μApi c T
+    PrimitiveFeigenbaumTrueFundamentalLowerBoundData μApi c T
 
 /-- Steps 2-3 of the proof outline packaged as a single analytic promotion:
     once the primitive Feigenbaum tower eventually ranges in a finite family,
@@ -368,6 +440,44 @@ lemma primitive_feigenbaum_uniform_true_fundamental_modulus_of_finite_family
   intro n hn
   exact hμleast ⟨T.gₙ n, hN n hn, rfl⟩
 
+/-- The finite-minimum step in the analytic-promotion proof: type-wise positive
+    lower bounds on a finite family of primitive combinatorial types imply one
+    eventual uniform lower bound on the true fundamental modulus. -/
+lemma primitive_feigenbaum_true_fundamental_lower_bound_of_typewise_data
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hTypewise : PrimitiveFeigenbaumTypewiseTrueFundamentalData μApi c T) :
+    PrimitiveFeigenbaumTrueFundamentalLowerBoundData μApi c T := by
+  rcases hTypewise with ⟨K, hKfinite, eps, hPos, N, hN⟩
+  have hKnonempty : K.Nonempty := by
+    exact ⟨primitiveCombinatorialTypeAt T N, (hN N le_rfl).1⟩
+  let S : Set ℝ := eps '' K
+  have hScompact : IsCompact S := by
+    exact (hKfinite.image eps).isCompact
+  have hSnonempty : S.Nonempty := by
+    rcases hKnonempty with ⟨τ, hτK⟩
+    exact ⟨eps τ, ⟨τ, hτK, rfl⟩⟩
+  rcases hScompact.exists_isLeast hSnonempty with ⟨μ, hμS, hμleast⟩
+  have hμpos : 0 < μ := by
+    rcases hμS with ⟨τ, hτK, rfl⟩
+    exact hPos τ hτK
+  refine ⟨μ, hμpos, N, ?_⟩
+  intro n hn
+  rcases hN n hn with ⟨hτK, hτle⟩
+  exact le_trans (hμleast ⟨primitiveCombinatorialTypeAt T n, hτK, rfl⟩) hτle
+
+/-- Real bounds plus Teichmüller / Grötzsch promotion yield the type-wise true
+    fundamental-modulus package needed by the finite-minimum argument. -/
+lemma primitive_feigenbaum_typewise_true_fundamental_of_real_bounds_and_grotzsch
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsData c T)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionData μApi c T) :
+    PrimitiveFeigenbaumTypewiseTrueFundamentalData μApi c T := by
+  rcases hReal with ⟨gapRatio, K, hKfinite, C, hCpos, N, hN⟩
+  rcases hGrotzsch gapRatio K hKfinite C hCpos ⟨N, hN⟩ with ⟨eps, hEpsPos, N', hN'⟩
+  exact ⟨K, hKfinite, eps, hEpsPos, N', hN'⟩
+
 /-- True-modulus finite-family positivity plus comparison recover the
     corresponding finite-family fundamental-modulus package. -/
 lemma primitive_feigenbaum_true_finite_family_fundamental_of_outline_data
@@ -484,6 +594,26 @@ lemma eventual_true_primitive_modulus_lower_bound_of_outline_data
 
 /-- True-modulus route assembled exactly from combinatorics, analytic promotion,
     and affine-normalization comparison. -/
+lemma eventual_true_primitive_modulus_lower_bound_of_fundamental_lower_bound_and_affine_comparison
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hFund : PrimitiveFeigenbaumTrueFundamentalLowerBoundData μApi c T)
+    (hAffine : PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T) :
+    TrueEventualPrimitiveModulusLowerBoundData μApi c T := by
+  rcases hFund with ⟨μ, hμpos, N₁, hN₁⟩
+  rcases hAffine.2 with ⟨N₂, hN₂⟩
+  refine ⟨μ, hμpos, max N₁ N₂, ?_⟩
+  intro n hn _hPrim
+  have hμn : μ ≤ trueFundamentalModulus μApi (T.gₙ n) :=
+    hN₁ n (le_trans (Nat.le_max_left _ _) hn)
+  have hcmp :
+      μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+        trueFundamentalModulus μApi (T.gₙ n) :=
+    hN₂ n (le_trans (Nat.le_max_right _ _) hn)
+  simpa [hcmp] using hμn
+
+/-- True-modulus route assembled exactly from combinatorics, analytic promotion,
+    and affine-normalization comparison. -/
 lemma eventual_true_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison
     (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
     (T : RenormalizationTower (parameterToBMol c))
@@ -491,8 +621,8 @@ lemma eventual_true_primitive_modulus_lower_bound_of_combinatorics_and_affine_co
     (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalData μApi c T)
     (hAffine : PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T) :
     TrueEventualPrimitiveModulusLowerBoundData μApi c T := by
-  exact eventual_true_primitive_modulus_lower_bound_of_outline_data μApi c T
-    (hAnalytic hComb) hAffine.2
+  exact eventual_true_primitive_modulus_lower_bound_of_fundamental_lower_bound_and_affine_comparison
+    μApi c T (hAnalytic hComb) hAffine
 
 /-- A proof-side model for the primitive Feigenbaum modulus problem: eventually,
     the renormalized maps lie in a compact family `K`, and the principal-nest

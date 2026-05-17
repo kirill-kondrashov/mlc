@@ -707,12 +707,43 @@ def PrimitiveFeigenbaumPrincipalNestFundamentalComparisonGlobalData : Prop :=
 
 /-- Step-1 global interface isolated from the proof outline: bounded-type
     primitive Feigenbaum towers eventually range over only finitely many
-    normalized quadratic-like models. -/
+    abstract primitive combinatorial types. -/
 def PrimitiveFeigenbaumFiniteCombinatoricsGlobalData : Prop :=
   ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
     UniformlyBoundedRenormalizationPeriods T →
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumFiniteCombinatoricsData c T
+
+/-- More explicit analytic-promotion package for the true-modulus route:
+    eventual lower bounds are given first type-by-type on a finite family of
+    primitive combinatorial types, and the uniform lower bound is then obtained
+    by taking the minimum over that family. -/
+def PrimitiveFeigenbaumTypewiseTrueFundamentalGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTypewiseTrueFundamentalData μApi c T
+
+/-- Type-wise real-bounds theorem surface for bounded primitive Feigenbaum
+    towers. This is Step 2 of the proof blueprint: bounded primitive
+    combinatorics produce strictly positive type-wise gap-ratio constants on an
+    eventual finite family of actual tower combinatorial types. -/
+def PrimitiveFeigenbaumTypewiseRealBoundsGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTypewiseRealBoundsData c T
+
+/-- Teichmüller / Grötzsch complex-promotion theorem surface for the true-modulus
+    route. This is Step 3 of the proof blueprint: type-wise real gap-ratio
+    bounds promote to type-wise lower bounds on the true fundamental modulus. -/
+def PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTypewiseGrotzschPromotionData μApi c T
 
 /-- Steps 2-3 global interface: finite combinatorics can be promoted, using the
     missing real/complex bounds input, to uniform positivity of the fundamental
@@ -790,7 +821,9 @@ def PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonGlobalData
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T
 
-/-- True-modulus Steps 2-3 global package. -/
+/-- True-modulus Steps 2-3 global package: bounded primitive combinatorics
+    promote to an eventual uniform lower bound on the true fundamental annulus
+    modulus of the renormalized maps. -/
 def PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData
     (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
   ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
@@ -814,7 +847,9 @@ def ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
     (MLC.Quadratic.chosenTrueConformalModulus hμ)
 
 /-- Named analytic-promotion surface for the chosen true-modulus API. This is
-    the primary outstanding mathematical target on the migrated route. -/
+    the primary outstanding mathematical target on the migrated route: bounded
+    primitive combinatorics imply an eventual positive lower bound on the chosen
+    true fundamental annulus modulus. -/
 def ChosenTruePrimitiveFeigenbaumAnalyticPromotionData
     (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
   PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData
@@ -930,6 +965,18 @@ theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatori
     (hAnalytic c T hBound hPrimAll)
     (hAffine c T hBound hPrimAll)
 
+/-- Bounded periods already imply finite primitive combinatorics in the current
+    placeholder combinatorics layer, since the tower type remembers only the
+    renormalization period. -/
+theorem primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods :
+    PrimitiveFeigenbaumFiniteCombinatoricsGlobalData := by
+  intro c T hBound _hPrimAll
+  rcases hBound with ⟨pBound, hpBound⟩
+  refine ⟨{τ : PrimitiveCombinatorialType | τ.period ≤ pBound}, ?_, 0, ?_⟩
+  · exact finite_primitiveCombinatorialTypes_of_period_le pBound
+  · intro n _hn
+    simpa [primitiveCombinatorialTypeAt_period] using hpBound n
+
 /-- True-modulus compact-trap route. -/
 theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
     (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
@@ -980,8 +1027,9 @@ theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_outline
     (hFam c T hBound hPrimAll)
     (hCmp c T hBound hPrimAll)
 
-/-- True-modulus factorized route: combinatorics, analytic promotion, and affine
-    normalization comparison. -/
+/-- True-modulus factorized route: combinatorics produce eventual lower bounds
+    for the renormalized fundamental annuli, and affine normalization transfers
+    those bounds to the principal nest. -/
 theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
     (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
     (hComb : PrimitiveFeigenbaumFiniteCombinatoricsGlobalData)
@@ -993,6 +1041,44 @@ theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combina
     (hComb c T hBound hPrimAll)
     (hAnalytic c T hBound hPrimAll)
     (hAffine c T hBound hPrimAll)
+
+/-- The proof blueprint for the remaining external analytic input: real bounds
+    plus Teichmüller / Grötzsch promotion produce the type-wise true
+    fundamental-modulus theorem surface. -/
+theorem primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData μApi) :
+    PrimitiveFeigenbaumTypewiseTrueFundamentalGlobalData μApi := by
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_typewise_true_fundamental_of_real_bounds_and_grotzsch
+    μApi c T (hReal c T hBound hPrimAll) (hGrotzsch c T hBound hPrimAll)
+
+/-- The type-wise finite-family proof blueprint yields the chosen true-modulus
+    analytic-promotion surface by taking the minimum over the finite
+    combinatorial family. -/
+theorem chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_typewiseData
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hTypewise : PrimitiveFeigenbaumTypewiseTrueFundamentalGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTruePrimitiveFeigenbaumAnalyticPromotionData hμ := by
+  intro c T _hBound _hPrimAll hComb
+  exact primitive_feigenbaum_true_fundamental_lower_bound_of_typewise_data
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) c T
+    (hTypewise c T _hBound _hPrimAll)
+
+/-- Chosen-instance form of the full Step-2/Step-3 proof blueprint: type-wise
+    real bounds and Grötzsch promotion together yield the chosen true-modulus
+    analytic-promotion theorem surface. -/
+theorem chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_realBounds_and_grotzsch
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTruePrimitiveFeigenbaumAnalyticPromotionData hμ :=
+  chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_typewiseData hμ
+    (primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
+      (MLC.Quadratic.chosenTrueConformalModulus hμ) hReal hGrotzsch)
 
 /-- Chosen-instance wrapper for the true-modulus factorized route. -/
 theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison

@@ -209,6 +209,7 @@ def PrimitiveRenormalizableData (c : ℂ) : Prop :=
     added here once the classifier is formalized. -/
 structure PrimitiveCombinatorialType where
   period : ℕ
+deriving DecidableEq
 
 /-- A classifier from normalized quadratic-like maps to their abstract
     primitive combinatorial type. -/
@@ -227,6 +228,27 @@ def primitiveCombinatorialTypeOfRelation {f g : BMol}
 def primitiveCombinatorialTypeAt {g : BMol} (T : RenormalizationTower g) (n : ℕ) :
     PrimitiveCombinatorialType :=
   primitiveCombinatorialTypeOfRelation (T.rel n)
+
+@[simp] theorem primitiveCombinatorialTypeAt_period {g : BMol}
+    (T : RenormalizationTower g) (n : ℕ) :
+    (primitiveCombinatorialTypeAt T n).period = T.period n :=
+  rfl
+
+/-- Primitive combinatorial types with bounded period form a finite set. In the
+    current placeholder combinatorics layer, the period is the only retained
+    invariant, so bounded periods already imply finiteness of the type family. -/
+theorem finite_primitiveCombinatorialTypes_of_period_le (pBound : ℕ) :
+    {τ : PrimitiveCombinatorialType | τ.period ≤ pBound}.Finite := by
+  classical
+  let s : Finset PrimitiveCombinatorialType :=
+    (Finset.range (pBound + 1)).image fun p => ({ period := p } : PrimitiveCombinatorialType)
+  refine Set.Finite.subset s.finite_toSet ?_
+  intro τ hτ
+  have hmem : τ.period ∈ Finset.range (pBound + 1) := by
+    exact Finset.mem_range.mpr (Nat.lt_succ_of_le hτ)
+  cases τ with
+  | mk p =>
+      exact Finset.mem_image.mpr ⟨p, hmem, rfl⟩
 
 /-- Finitely renormalizable parameters.
     Alias for NonRenormalizable from the library. -/
