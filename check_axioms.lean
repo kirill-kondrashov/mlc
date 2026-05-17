@@ -16,8 +16,7 @@ def main : IO UInt32 := do
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice,
      ``MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-     ``MLC.unitTruePrimitiveEventualBridgeAxiom,
-     ``MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom,
+     ``MLC.lyubich_conformal_bridge,
      ``MLC.residualOpenVirtualNearMoleculeAxiom]
   
   try

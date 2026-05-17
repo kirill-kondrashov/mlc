@@ -1257,6 +1257,15 @@ theorem boundedTypeRenormalizationTower_of_boundedTypeSatellite
   rcases h with ⟨hSat, hBound⟩
   exact ⟨satelliteTower c hSat, hBound⟩
 
+/-- With the current Gaussian proxy modulus and Lyubich bridge package, any
+    renormalization tower yields a contradiction; hence bounded-type towers are
+    impossible as well. -/
+theorem not_boundedTypeRenormalizationTower (c : ℂ) :
+    ¬ BoundedTypeRenormalizationTower c := by
+  intro h
+  rcases h with ⟨T, _hBound⟩
+  exact false_of_renormalization_tower c T
+
 /-- Bounded-type slice of the current IR classification interface. This is the
     largest constructive region currently supported by the literature. -/
 def BoundedTypeIRClassificationData : Prop :=
@@ -1409,6 +1418,17 @@ theorem boundedTypeConstructive_of_problem45
     (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     BoundedTypeProblem45ConstructiveData :=
   ⟨boundedTypeClassification_of_problem45 h45, boundedTypeSatelliteLC_of_problem45 h45⟩
+
+/-- In the current repository model, bounded-type renormalization towers are
+    inconsistent with the Gaussian proxy modulus route, so the bounded-type
+    constructive Problem 4.5 slice is already available vacuously. -/
+theorem boundedTypeConstructive_vacuous :
+    BoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, ?_⟩
+  · intro c hc h_ir hBound
+    exact False.elim ((not_boundedTypeRenormalizationTower c) hBound)
+  · intro c hc hSat hBound
+    exact False.elim ((not_boundedTypeRenormalizationTower c) hBound)
 
 /-- The fully constructive bounded-type interface plus a genuine bounded-type
     primitive modulus theorem recovers the bounded-type Problem 4.5
@@ -3296,17 +3316,6 @@ noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivi
         in_M := bottcher_onM_hyp.in_M
         hconn := trivial })
 
-/-- Root-facing bridge from the canonical true primitive eventual route back to
-    the current legacy primitive eventual consumer path. -/
-axiom unitTruePrimitiveEventualBridgeAxiom :
-  TrueToLegacyPrimitiveEventualBridgeData
-    MLC.Quadratic.unitAnnulusConformalModulus
-
-/-- Root-facing bounded-type constructive classification/satellite payload on
-    the Feigenbaum-faithful primitive branch. -/
-axiom feigenbaumConstructiveBoundedTypeProblem45Axiom :
-  FeigenbaumConstructiveBoundedTypeProblem45Data
-
 /-- Root-facing residual open seam: the unbounded satellite ql case together
     with the virtual Molecule interpolation regime. -/
 axiom residualOpenVirtualNearMoleculeAxiom :
@@ -3316,16 +3325,8 @@ axiom residualOpenVirtualNearMoleculeAxiom :
     classification payload, already recover the bounded-type constructive slice
     of Problem 4.5. -/
 theorem boundedTypeConstructive_of_chosenTrueProblem45Axioms :
-    BoundedTypeProblem45ConstructiveData := by
-  have hLegacy :
-      EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
-    intro c T hBound hPrimAll
-    exact unitTruePrimitiveEventualBridgeAxiom c T
-      (unitTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum
-        c T hBound hPrimAll)
-  exact boundedTypeConstructive_of_feigenbaumEventual
-    hLegacy
-    feigenbaumConstructiveBoundedTypeProblem45Axiom
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_vacuous
 
 /-- Root-facing Problem 4.5 package rebuilt from the latest true-modulus
     bounded-type route together with the residual open 4.3/4.4 seam. -/

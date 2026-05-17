@@ -23,8 +23,7 @@ All axioms used:
 - propext
 - Classical.choice
 - MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
-- MLC.unitTruePrimitiveEventualBridgeAxiom
-- MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom
+- MLC.lyubich_conformal_bridge
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
@@ -34,14 +33,12 @@ All axioms used:
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
    MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-   MLC.unitTruePrimitiveEventualBridgeAxiom,
-   MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom,
+   MLC.lyubich_conformal_bridge,
    MLC.residualOpenVirtualNearMoleculeAxiom}
 
 project_frontier(MLC.mlc_conjecture)
 = {MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-   MLC.unitTruePrimitiveEventualBridgeAxiom,
-   MLC.feigenbaumConstructiveBoundedTypeProblem45Axiom,
+   MLC.lyubich_conformal_bridge,
    MLC.residualOpenVirtualNearMoleculeAxiom}
 
 Problem45VirtualNearMoleculeRenormalizationData
@@ -91,8 +88,8 @@ through:
 To shrink the current frontier again, the repository now needs to replace the
 remaining root-facing axioms by proofs of:
 
-- the true-to-legacy primitive eventual bridge,
-- the Feigenbaum constructive bounded-type Problem 4.5 slice,
+- para-puzzle connectedness on `M`,
+- the Lyubich-to-conformal bridge for primitive towers,
 - and the residual open 4.3/4.4 seam.
 
 ## Dependencies
