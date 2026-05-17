@@ -839,6 +839,25 @@ def PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T
 
+/-- Step-1 global interface in the exact form used by the user's primitive proof:
+    eventually, primitive Feigenbaum renormalizations carry a uniform positive
+    lower bound on the true fundamental annulus modulus. -/
+def PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFundamentalLowerBoundData μApi c T
+
+/-- Step-2 global interface: the renormalization tower is equipped with explicit
+    affine normalization data identifying principal-nest geometry with the
+    quadratic-like domains of the renormalized maps. -/
+def PrimitiveFeigenbaumNormalizationGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        Nonempty (RenormalizationTowerNormalizationData c T)
+
 /-- Named theorem-facing true-modulus eventual-beau-bounds surface using the
     chosen conformal-modulus API associated to `TrueConformalModulusData`. -/
 def ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
@@ -853,6 +872,12 @@ def ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
 def ChosenTruePrimitiveFeigenbaumAnalyticPromotionData
     (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
   PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Chosen-instance form of the direct primitive complex-bounds input. -/
+def ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData
     (MLC.Quadratic.chosenTrueConformalModulus hμ)
 
 /-- Downstream bridge from the true-modulus eventual-beau-bounds route back to
@@ -1042,6 +1067,34 @@ theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combina
     (hAnalytic c T hBound hPrimAll)
     (hAffine c T hBound hPrimAll)
 
+/-- Step-2 of the user's primitive proof is already theoremized once explicit
+    normalization data are provided: affine normalization yields the required
+    principal-nest/fundamental-annulus comparison for any true conformal-modulus
+    API. -/
+theorem primitiveFeigenbaumTrueAffineNormalizationComparison_of_normalization
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData μApi := by
+  intro c T hBound hPrimAll
+  rcases hNorm c T hBound hPrimAll with ⟨hTowerNorm⟩
+  exact true_affine_normalization_comparison_of_normalization μApi c T hTowerNorm
+
+/-- Direct implementation of the primitive proof blueprint: eventual lower
+    bounds for the renormalized true fundamental annuli, together with affine
+    normalization, already imply eventual lower bounds for the principal-nest
+    annuli. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFund : PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData μApi)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_fundamental_lower_bound_and_affine_comparison
+    μApi c T
+    (hFund c T hBound hPrimAll)
+    ((primitiveFeigenbaumTrueAffineNormalizationComparison_of_normalization
+      μApi hNorm) c T hBound hPrimAll)
+
 /-- The proof blueprint for the remaining external analytic input: real bounds
     plus Teichmüller / Grötzsch promotion produce the type-wise true
     fundamental-modulus theorem surface. -/
@@ -1091,6 +1144,16 @@ theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_c
   trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
     (MLC.Quadratic.chosenTrueConformalModulus hμ) hComb hAnalytic hAffine
 
+/-- Chosen-instance wrapper for the direct primitive complex-bounds +
+    affine-normalization route. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hFund : ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData hμ)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) hFund hNorm
+
 /-- The canonical fallback true-modulus API gives a trivial eventual lower bound
     on every primitive Feigenbaum tower. This lets the root theorem graph depend
     only on the downstream bridge while the genuine analytic true-modulus model
@@ -1130,6 +1193,20 @@ theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData
   exact primitiveRenormalizable_of_eventualLowerBoundData c T hInf
     ((eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
       hμ hBridge hTrue) c T hBound hPrimAll)
+
+/-- Primitive local connectivity from the user's direct analytic primitive
+    package: true fundamental lower bounds plus affine normalization, bridged
+    back to the legacy consumer path. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumFundamentalLowerBoundData
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hFund : ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData hμ)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData hμ hBridge
+    (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+      hμ hFund hNorm) h
 
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/

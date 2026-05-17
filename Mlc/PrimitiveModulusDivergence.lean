@@ -167,6 +167,73 @@ def PrimitiveFeigenbaumTrueAffineNormalizationComparisonData
   Nonempty (RenormalizationTowerNormalizationData c T) ∧
     PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T
 
+/-- Step 4 of the proof blueprint: explicit affine normalization data identify
+    the principal annulus with the fundamental annulus of the renormalized map,
+    so any true conformal-modulus API sees exactly the same modulus on both
+    sides. -/
+lemma true_principal_nest_fundamental_comparison_of_normalization
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hNorm : RenormalizationTowerNormalizationData c T) :
+    PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T := by
+  refine ⟨0, ?_⟩
+  intro n _hn
+  rcases hNorm.affine_formula n with ⟨a, b, ha, hAffine⟩
+  let f : ℂ → ℂ := fun z => a * z + b
+  have hf : Function.Injective f := by
+    intro z w hzw
+    apply mul_left_cancel₀ ha
+    exact add_right_cancel hzw
+  have hOuter :
+      f '' MLC.Quadratic.DynamicalPuzzlePiece c (T.cumulativePeriod n) 0 = (T.gₙ n).V := by
+    simpa [f, hAffine] using hNorm.outer_image n
+  have hInner :
+      f '' MLC.Quadratic.DynamicalPuzzlePiece c (T.cumulativePeriod (n + 1)) 0 = (T.gₙ n).U := by
+    simpa [f, hAffine] using hNorm.inner_image n
+  have hImageAnnulus :
+      f '' MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n =
+        fundamentalAnnulus (T.gₙ n) := by
+    ext z
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      constructor
+      · rw [← hOuter]
+        exact ⟨w, hw.1, rfl⟩
+      · intro hzU
+        rw [← hInner] at hzU
+        rcases hzU with ⟨u, hu, huEq⟩
+        have huw : u = w := hf (by simpa [f] using huEq)
+        exact hw.2 (huw ▸ hu)
+    · intro hz
+      rcases hz with ⟨hzV, hzNotU⟩
+      have hzOuter :
+          z ∈ f '' MLC.Quadratic.DynamicalPuzzlePiece c (T.cumulativePeriod n) 0 := by
+        rwa [← hOuter] at hzV
+      rcases hzOuter with ⟨w, hwOuter, rfl⟩
+      refine ⟨w, ?_, rfl⟩
+      constructor
+      · exact hwOuter
+      · intro hwInner
+        apply hzNotU
+        rw [← hInner]
+        exact ⟨w, hwInner, rfl⟩
+  calc
+    μApi.mod (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n)
+        = μApi.mod (f '' MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) := by
+            symm
+            exact μApi.affine_invariant _ a b ha
+    _ = trueFundamentalModulus μApi (T.gₙ n) := by
+          simp [trueFundamentalModulus, hImageAnnulus, fundamentalAnnulus]
+
+/-- Packaging form of
+    `true_principal_nest_fundamental_comparison_of_normalization`. -/
+lemma true_affine_normalization_comparison_of_normalization
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c))
+    (hNorm : RenormalizationTowerNormalizationData c T) :
+    PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T :=
+  ⟨⟨hNorm⟩, true_principal_nest_fundamental_comparison_of_normalization μApi c T hNorm⟩
+
 /-- A more geometric proof-side package: eventually, the renormalized maps lie
     in a compact family whose fundamental annuli have positive conformal modulus,
     and the principal-nest annuli agree with those fundamental annuli at the
