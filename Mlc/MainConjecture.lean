@@ -687,6 +687,24 @@ def PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData : Prop :=
       (∀ n, IsPrimitive (T.rel n)) →
         PrimitiveFeigenbaumFiniteFamilyFundamentalModulusData c T
 
+/-- Step-1/Step-3 global package from the proof outline: primitive Feigenbaum
+    towers eventually land in a finite family on which the renormalized
+    fundamental annuli have uniformly positive modulus. -/
+def PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData c T
+
+/-- Step-4 global package from the proof outline: after some stage, the
+    principal-nest annuli are identified with the fundamental annuli of the
+    renormalized quadratic-like maps. -/
+def PrimitiveFeigenbaumPrincipalNestFundamentalComparisonGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData c T
+
 /-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
     The current broader bounded-type target should eventually be derived from
     this theorem together with additional classification input, if needed. -/
@@ -754,6 +772,18 @@ theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamil
   intro c T hBound hPrimAll
   exact primitive_feigenbaum_fundamental_model_of_finite_family c T
     (hFinite c T hBound hPrimAll)
+
+/-- This is the literal assembly encoded by the proof outline: finite-family
+    positivity together with principal-nest/fundamental-annulus comparison
+    already yields the primitive Feigenbaum eventual beau-bounds theorem. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_outlinePackages
+    (hFam : PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalGlobalData)
+    (hCmp : PrimitiveFeigenbaumPrincipalNestFundamentalComparisonGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact eventual_primitive_modulus_lower_bound_of_outline_data c T
+    (hFam c T hBound hPrimAll)
+    (hCmp c T hBound hPrimAll)
 
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/

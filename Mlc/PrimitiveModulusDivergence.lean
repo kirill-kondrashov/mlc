@@ -126,6 +126,68 @@ def PrimitiveFeigenbaumFiniteFamilyFundamentalModulusData (c : ℂ)
         (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
           fundamentalModulus (T.gₙ n)
 
+/-- Step-1/Step-3 package from the proof outline: after some stage, the
+    primitive Feigenbaum renormalizations range in a finite family of BMol maps,
+    and the fundamental annulus modulus is uniformly positive on that family. -/
+def PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ K : Set BMol,
+    K.Finite ∧
+    (∀ g ∈ K, 0 < fundamentalModulus g) ∧
+    ∃ N : ℕ, ∀ n, N ≤ n → T.gₙ n ∈ K
+
+/-- Step-4 package from the proof outline: sufficiently deep principal-nest
+    annuli have the same conformal modulus as the fundamental annuli of the
+    corresponding renormalized quadratic-like maps. -/
+def PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData (c : ℂ)
+    (T : RenormalizationTower (parameterToBMol c)) : Prop :=
+  ∃ N : ℕ, ∀ n, N ≤ n →
+    MLC.Quadratic.cmodulus
+      (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+        fundamentalModulus (T.gₙ n)
+
+/-- Finite-family positivity already yields a uniform positive lower bound on the
+    fundamental annulus moduli of the renormalized maps by taking the least
+    element of the compact image of the family. -/
+lemma primitive_feigenbaum_uniform_fundamental_modulus_of_finite_family
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hFam : PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData c T) :
+    ∃ μ > 0, ∃ N : ℕ, ∀ n, N ≤ n → μ ≤ fundamentalModulus (T.gₙ n) := by
+  rcases hFam with ⟨K, hKfinite, hPos, N, hN⟩
+  have hcont : Continuous fundamentalModulus := by
+    rw [continuous_def]
+    intro s hs
+    trivial
+  have hKnonempty : K.Nonempty := by
+    exact ⟨T.gₙ N, hN N le_rfl⟩
+  let S : Set ℝ := fundamentalModulus '' K
+  have hScompact : IsCompact S := by
+    exact hKfinite.isCompact.image hcont
+  have hSnonempty : S.Nonempty := by
+    rcases hKnonempty with ⟨g, hgK⟩
+    exact ⟨fundamentalModulus g, ⟨g, hgK, rfl⟩⟩
+  rcases hScompact.exists_isLeast hSnonempty with ⟨μ, hμS, hμleast⟩
+  have hμpos : 0 < μ := by
+    rcases hμS with ⟨g, hgK, rfl⟩
+    exact hPos g hgK
+  refine ⟨μ, hμpos, N, ?_⟩
+  intro n hn
+  exact hμleast ⟨T.gₙ n, hN n hn, rfl⟩
+
+/-- The Step-1/Step-3 finite-family package together with the Step-4 comparison
+    package recovers the canonical finite-family fundamental-modulus datum. -/
+lemma primitive_feigenbaum_finite_family_fundamental_of_outline_data
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hFam : PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData c T)
+    (hCmp : PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData c T) :
+    PrimitiveFeigenbaumFiniteFamilyFundamentalModulusData c T := by
+  rcases hFam with ⟨K, hKfinite, hPos, N₁, hN₁⟩
+  rcases hCmp with ⟨N₂, hN₂⟩
+  refine ⟨K, hKfinite, hPos, max N₁ N₂, ?_⟩
+  intro n hn
+  refine ⟨hN₁ n (le_trans (Nat.le_max_left _ _) hn), ?_⟩
+  exact hN₂ n (le_trans (Nat.le_max_right _ _) hn)
+
 /-- An eventual finite family of renormalized maps already gives the compact
     family needed for the canonical fundamental-annulus theorem surface. -/
 lemma primitive_feigenbaum_fundamental_model_of_finite_family
@@ -137,6 +199,27 @@ lemma primitive_feigenbaum_fundamental_model_of_finite_family
   · intro n hn
     rcases hN n hn with ⟨hgnK, hEq⟩
     exact ⟨hgnK, hEq⟩
+
+/-- The proof-outline step packages are already enough to produce eventual
+    lower bounds on the principal-nest conformal moduli. -/
+lemma eventual_primitive_modulus_lower_bound_of_outline_data
+    (c : ℂ) (T : RenormalizationTower (parameterToBMol c))
+    (hFam : PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData c T)
+    (hCmp : PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData c T) :
+    EventualPrimitiveModulusLowerBoundData c T := by
+  rcases primitive_feigenbaum_uniform_fundamental_modulus_of_finite_family c T hFam with
+    ⟨μ, hμpos, N₁, hN₁⟩
+  rcases hCmp with ⟨N₂, hN₂⟩
+  refine ⟨μ, hμpos, max N₁ N₂, ?_⟩
+  intro n hn _hPrim
+  have hμn : μ ≤ fundamentalModulus (T.gₙ n) :=
+    hN₁ n (le_trans (Nat.le_max_left _ _) hn)
+  have hcmp :
+      MLC.Quadratic.cmodulus
+        (MLC.Quadratic.PrincipalNest.dynAnnulus c T.cumulativePeriod n) =
+          fundamentalModulus (T.gₙ n) :=
+    hN₂ n (le_trans (Nat.le_max_right _ _) hn)
+  simpa [hcmp] using hμn
 
 /-- A proof-side model for the primitive Feigenbaum modulus problem: eventually,
     the renormalized maps lie in a compact family `K`, and the principal-nest
