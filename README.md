@@ -27,25 +27,16 @@ All axioms used:
 
 ## Current Frontier
 
-```math
-\operatorname{Axioms}(\mathrm{MLC.mlc\_conjecture})
-=
-\{\mathrm{Quot.sound},\ \mathrm{propext},\ \mathrm{Classical.choice},\
-\mathrm{MLC.problem45\_virtualNearMoleculeRenormalization}\}.
-```
+```text
+Axioms(MLC.mlc_conjecture)
+= {Quot.sound, propext, Classical.choice,
+   MLC.problem45_virtualNearMoleculeRenormalization}
 
-```math
-\partial_{\mathrm{proj}}(\mathrm{MLC.mlc\_conjecture})
-=
-\{\mathrm{MLC.problem45\_virtualNearMoleculeRenormalization}\}.
-```
+project_frontier(MLC.mlc_conjecture)
+= {MLC.problem45_virtualNearMoleculeRenormalization}
 
-```math
-\mathrm{Problem45VirtualNearMoleculeRenormalizationData}
-=
-\mathrm{IRClassificationData}
-\land
-\mathrm{VirtualJuliaSatelliteLocalConnectivityData}.
+Problem45VirtualNearMoleculeRenormalizationData
+= IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
 ```
 
 ## Remaining Problem
@@ -56,6 +47,18 @@ No axiom-free theorem in the repository yields the payload needed to remove
 Mathematical content: **Problem 4.5** / virtual near-Molecule, i.e. the
 primitive-first ql case through the canonical satellite chain
 `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`.
+
+Symbol dictionary:
+
+- $M$: the ambient copy of the Mandelbrot set containing the primitive-first
+  ql renormalization data
+- $M(k)$: the $k$-th copy in the canonical satellite chain, with
+  $0 \le k \le n+1$
+- $M = M(0) \supsetneq M(1) \supsetneq \cdots \supsetneq M(n+1)$: strict
+  nesting of satellite copies
+- $n \in \mathbb{N}$: length of the virtual near-Molecule stage before the
+  terminal primitive copy
+- ql: quadratic-like
 
 ## Obstruction
 
