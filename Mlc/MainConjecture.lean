@@ -39,14 +39,13 @@ lemma mandelbrotSet_eq_MandelbrotSet : mandelbrotSet = MLC.Quadratic.MandelbrotS
 section MainProof
 
 /-- Every parameter is either finitely renormalizable (including non-renormalizable) or infinitely renormalizable.
-    Proof idea: By the law of excluded middle, the sum of moduli either converges or diverges.
-    We use the definition of FinitelyRenormalizable and InfinitelyRenormalizable which directly
-    map to this divergence/convergence behavior. -/
+    Proof idea: the Yoccoz finite-side notion is `NonRenormalizable = ¬ Summable`,
+    while the current IR interface packages the complementary summability data. -/
 
 theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormalizable c := by
-  unfold FinitelyRenormalizable InfinitelyRenormalizable
-  rw [or_comm]
-  exact Classical.em _
+  by_cases h_fin : FinitelyRenormalizable c
+  · exact Or.inl h_fin
+  · exact Or.inr (infinitelyRenormalizable_of_not_finitelyRenormalizable c h_fin)
 
 /-- Core local-connectivity strategy theorem parameterized by explicit finite-branch
     local-connectivity data, IR classification, and molecule bridge hooks. -/
@@ -1643,13 +1642,13 @@ lemma irLocallyConnectedData_of_axiom : IRLocallyConnectedData := by
   intro c hc h_inf
   exact ir_locally_connected_seam c hc h_inf
 
-/-- Under the Gaussian proxy model, IR local-connectivity data forces
-    primitive classification at every IR parameter. -/
+/-- Under explicit tower data, IR local-connectivity can be paired with the
+    satellite classification route without using the old primitive tautology. -/
 lemma irClassificationData_of_irLocallyConnectedData
-    (h_ir_lc : IRLocallyConnectedData) :
-    IRClassificationData := by
-  intro c hc h_ir
-  exact Or.inl (fun _ => h_ir_lc c hc h_ir)
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (_h_ir_lc : IRLocallyConnectedData) :
+    IRClassificationData :=
+  irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data
 
 /-- Under the Gaussian proxy model, IR local-connectivity data yields a
     `mlc_strategy`-compatible satellite bridge. -/
@@ -1662,17 +1661,15 @@ lemma bridgeData_of_irLocallyConnectedData
   intro _h_mol c hc _h_sat
   exact h_ir_lc c hc (infinitely_renormalizable_of_gaussian_modulus c)
 
-/-- Build packaged IR classify/bridge data from IR local-connectivity data. -/
+/-- Build packaged IR classify/bridge data from IR local-connectivity data and
+    explicit tower data. -/
 def irClassifyBridgeData_of_irLocallyConnectedData
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
     (h_ir_lc : IRLocallyConnectedData) :
     IRClassifyBridgeData :=
   irClassifyBridgeData_of_classify_bridge_data
-    (irClassificationData_of_irLocallyConnectedData h_ir_lc)
+    (irClassificationData_of_irLocallyConnectedData h_tower_data h_ir_lc)
     (bridgeData_of_irLocallyConnectedData h_ir_lc)
-
-/-- Current axiom-backed provider for packaged IR classify/bridge data. -/
-def irClassifyBridgeData_of_axiom : IRClassifyBridgeData :=
-  irClassifyBridgeData_of_irLocallyConnectedData irLocallyConnectedData_of_axiom
 
 /-- Bridge payload: any renormalization tower supplies IR local-connectivity
     data via the inconsistency route. -/
@@ -1695,11 +1692,9 @@ theorem mlc_conjecture_of_irLocallyConnectedData
     (h_ir_lc : IRLocallyConnectedData) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
-  exact mlc_strategy_of_branchLocalData
-    (fun c _hc h_fr =>
-      absurd (infinitely_renormalizable_of_gaussian_modulus c) h_fr)
-    (irClassificationData_of_irLocallyConnectedData h_ir_lc)
-    (bridgeData_of_irLocallyConnectedData h_ir_lc)
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  exact h_ir_lc c hc (infinitely_renormalizable_of_gaussian_modulus c)
 
 /-- Packaged-IR wrapper for the IR-only MLC route. -/
 theorem mlc_conjecture_of_irClassifyBridgeData
@@ -1708,22 +1703,17 @@ theorem mlc_conjecture_of_irClassifyBridgeData
   mlc_conjecture_of_irLocallyConnectedData
     (irLocallyConnectedData_of_irClassifyBridgeData h_ir)
 
-/-- IR seam payload and packaged IR classify/bridge payload are equivalent. -/
-theorem irLocallyConnectedData_iff_irClassifyBridgeData :
-    IRLocallyConnectedData ↔ IRClassifyBridgeData := by
-  constructor
-  · intro h_ir_lc
-    exact irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc
-  · intro h_ir
-    exact irLocallyConnectedData_of_irClassifyBridgeData h_ir
+/-- Packaged IR classify/bridge data imply the minimal IR seam payload. -/
+theorem irLocallyConnectedData_of_irClassifyBridgeData' :
+    IRClassifyBridgeData → IRLocallyConnectedData :=
+  irLocallyConnectedData_of_irClassifyBridgeData
 
 /-- Explicit roundtrip route: build the packaged IR payload from the minimal IR
-    seam payload, then apply the packaged MLC wrapper. -/
+    seam payload, then discharge MLC directly. -/
 theorem mlc_conjecture_of_irLocallyConnectedData_via_irClassifyBridgeData
     (h_ir_lc : IRLocallyConnectedData) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_irClassifyBridgeData
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+  mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Direct IR-packaged assembly from explicit IR classification and the strong
     molecule bridge target. -/
@@ -2237,10 +2227,9 @@ theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
 theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irLocallyConnectedData
     (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
     (h_ir_lc : IRLocallyConnectedData) :
-    LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
-    hsub
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+    LocallyConnectedSpace mandelbrotSet := by
+  let _ := hsub
+  exact mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Transport-data route to the direct seam theorem.
     This is axiom-free once `ParaPuzzleInterMandelbrotTransportData` is provided
@@ -2281,10 +2270,9 @@ theorem mlc_conjecture_of_paraPuzzleTransportData_irClassifyBridgeData
 theorem mlc_conjecture_of_paraPuzzleTransportData_irLocallyConnectedData
     (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
     (h_ir_lc : IRLocallyConnectedData) :
-    LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_paraPuzzleTransportData_irClassifyBridgeData
-    htr
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+    LocallyConnectedSpace mandelbrotSet := by
+  let _ := htr
+  exact mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Existential-transport-data route to the direct seam theorem.
     This is axiom-free once `ParaPuzzleInterMandelbrotTransportExistsData` is
@@ -2325,10 +2313,9 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
 theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
     (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
     (h_ir_lc : IRLocallyConnectedData) :
-    LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
-    hex
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+    LocallyConnectedSpace mandelbrotSet := by
+  let _ := hex
+  exact mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Constructive finite-branch local-connectivity payload from the current
     Böttcher-on-`M` motion stub plus the theoremized Yoccoz shrink route. -/

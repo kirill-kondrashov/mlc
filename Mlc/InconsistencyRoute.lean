@@ -51,7 +51,7 @@ theorem false_of_renormalization_tower (c : ℂ)
   have h_cmod_conv : Summable (fun n =>
       MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)) := by
     show Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c n))
-    exact infinitely_renormalizable_of_gaussian_modulus c
+    exact (infinitely_renormalizable_of_gaussian_modulus c).puzzleModulusSummable
   -- Contradiction
   exact h_cmod_div h_cmod_conv
 
@@ -67,7 +67,7 @@ theorem false_of_renormalization_tower_bMol (g : BMol)
   have h_cmod_conv : Summable (fun n => cmodulusBMol g n) := by
     show Summable (fun n =>
       MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus (criticalValue g) n))
-    exact infinitely_renormalizable_of_gaussian_modulus (criticalValue g)
+    exact (infinitely_renormalizable_of_gaussian_modulus (criticalValue g)).puzzleModulusSummable
   exact h_cmod_div h_cmod_conv
 
 /-- If any parameter admits a satellite renormalization tower, then `False`. -/

@@ -109,11 +109,115 @@ the remaining Problem 4.5 payload. The blocker is no longer just interface
 placement; it is the absence of any constructive provider for the final IR
 local-connectivity content.
 
+### Literature refinement of this blocker
+
+The literature search sharpens the obstruction:
+
+1. The blocker is **not uniform across all IR configurations**.
+2. There is a substantial **bounded-type constructive region** already covered
+   by proven mathematics:
+   - Kahn, *A priori bounds I: Bounded primitive combinatorics*
+   - Kahn–Lyubich, *A priori bounds III: Molecules*
+   - Dudko–Lyubich, arXiv:2309.02107 (MLC at Feigenbaum points)
+3. The genuinely open residue aligns with Dudko 2512.24171:
+   - remaining unbounded satellite ql cases (Problem 4.3)
+   - virtual Molecule interpolation / virtual bounded-type satellite ql
+     (Problem 4.4)
+4. Therefore the strongest next revision is to **split Problem 4.5 by proven vs
+   still-open regions**, not to keep it as a single monolithic seam
+
 ---
 
 ## Revised Elimination Strategy
 
-### Phase A: Isolate the true final target
+### Phase A: Normalize the IR interface
+
+Relevant files:
+
+- `Mlc/RenormalizationTypes.lean`
+- `Mlc/InfinitelyRenormalizable.lean`
+- `Mlc/MainConjecture.lean`
+- `.lake/packages/yoccoz-theorem/Yoccoz/Yoccoz.lean`
+
+Task:
+
+- stop treating the current raw definition
+  ```lean
+  InfinitelyRenormalizable c :=
+    Summable (fun n => modulus (PuzzleAnnulus c n))
+  ```
+  as the final IR interface
+- use the upstream `yoccoz-theorem` package to normalize the finite side:
+  ```lean
+  NonRenormalizable c :=
+    ¬ Summable (fun n => modulus (PuzzleAnnulus c n))
+  ```
+- explicitly separate:
+  1. the puzzle/modulus proxy notion inherited from Yoccoz
+  2. the actual renormalization-theoretic IR payload needed by the MLC route
+
+Deliverable:
+
+- a non-accidental IR interface that is no longer just a naked `Summable` alias
+
+Observation from the current dependency:
+
+- the `yoccoz-theorem` package provides the finite-side notion
+  `NonRenormalizable` and Yoccoz's theorem
+- it does **not** currently provide a ready-made notion of
+  infinitely renormalizable parameters, primitive combinatorics, or a tower
+  classifier
+- therefore the dependency helps normalize the interface, but does not solve
+  Problem 4.5 by itself
+
+### Phase B: De-tautologize the primitive branch
+
+Relevant files:
+
+- `Mlc/RenormalizationTypes.lean`
+- `Mlc/InfinitelyRenormalizable.lean`
+- `Mlc/PrimitiveModulusDivergence.lean`
+- `Mlc/MainConjecture.lean`
+
+Task:
+
+- replace the current tautological definition
+  ```lean
+  PrimitiveRenormalizable c :=
+    ∀ hc : c ∈ MandelbrotSet,
+      LocallyConnectedAt MandelbrotSet ⟨c, hc⟩
+  ```
+  by non-tautological primitive renormalization data
+- the preferred replacement is combinatorial/dynamical:
+  existence of a renormalization tower with infinitely many primitive steps, or
+  an equivalent primitive ql package
+- move local connectivity to a theorem proved from that primitive data
+
+Deliverable:
+
+- a theorem of the form
+  ```lean
+  PrimitiveData c → LocallyConnectedAt MandelbrotSet ⟨c, hc⟩
+  ```
+  rather than a definition equating primitive renormalizability with the
+  conclusion itself
+
+Current code-side landing point:
+
+- the repo now contains a dedicated non-tautological sidecar interface
+  ```lean
+  PrimitiveRenormalizableData c :=
+    ∃ T : RenormalizationTower (parameterToBMol c),
+      {n | IsPrimitive (T.rel n)}.Infinite
+  ```
+- this is intentionally **not yet** the root-facing `PrimitiveRenormalizable`
+  predicate, because swapping the root-facing interface immediately reactivates
+  older primitive-branch dependencies in `collectAxioms`
+- the next constructive task is therefore to route Problem 4.5 mathematics into
+  `PrimitiveRenormalizableData` first, and only then replace the root-facing
+  primitive interface when that cutover is axiom-safe
+
+### Phase C: Isolate the true final target
 
 Relevant files:
 
@@ -127,13 +231,15 @@ Task:
 - separate the current strengthened Problem 4.5 interface from the weaker final
   target `IRLocallyConnectedData`
 - distinguish theoremizable payloads from old axiom-backed shortcuts
+- restate the final theorem using the revised IR/primitive interfaces from
+  Phases A-B
 
 Deliverable:
 
 - a precise statement of the minimal final theorem needed to clear the root
   frontier without reviving older axioms
 
-### Phase B: Preferred route — theoremize `IRLocallyConnectedData`
+### Phase D: Preferred route — theoremize `IRLocallyConnectedData`
 
 Target:
 
@@ -154,7 +260,15 @@ Why this is preferred:
 - it matches the actual endpoint used by the IR-only assembly
 - it avoids carrying unnecessary intermediate packaging at the root
 
-### Phase C: Fallback route — theoremize the strengthened Problem 4.5 pair
+Literature caveat:
+
+- the full direct theoremization of `IRLocallyConnectedData` is still open in
+  the exact virtual near-Molecule generality of Dudko 2512.24171
+- however, the bounded-type subregion appears theoremizable from existing
+  literature, so the plan should first isolate and discharge that constructive
+  subregion before confronting the residual open interpolation seam
+
+### Phase E: Fallback route — theoremize the strengthened Problem 4.5 pair
 
 Target:
 
@@ -176,34 +290,120 @@ Use this if the direct `IRLocallyConnectedData` theorem is awkward to package.
 
 The mathematical work should be organized around the following chain:
 
-1. **Primitive-first ql case decomposition**
+1. **Interface cleanup before theoremization**
+   - normalize the Yoccoz finite/IR interface
+   - replace the tautological primitive branch by genuine primitive data
+   - keep the old axiom-backed tower/inconsistency route out of the final target
+
+2. **Primitive-first ql case decomposition**
    - formalize the virtual near-Molecule chain
      `M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`
+   - encode the condition that the first ql renormalization `f₁` is primitive
    - identify the exact data needed to control both classification and local
      connectivity in this regime
 
-2. **Classification payload**
+3. **Two virtual subcases from Dudko 2512.24171**
+   - virtual bounded-type satellite ql: `n ≫ 1` with bounded relative periods
+   - virtual near-neutral: `n = 0`
+   - the remaining interpolation burden is exactly the virtual Molecule version
+     of the near-degenerate regime
+
+4. **Interpolation objects**
+   - partially invariant virtual Julia sets
+   - pseudo-Siegel / near-neutral control
+   - a priori bounds that act on only the relevant portion of the postcritical
+     set
+
+5. **Classification payload**
    - explain why the remaining infinitely renormalizable cases fall into the
      primitive-or-satellite split needed by the root
    - package this either as direct classification or as part of full IR local
      connectivity
+   - immediate code target:
+     `IRNoTowerImpliesPrimitiveData` should eventually produce
+     `PrimitiveRenormalizableData`, not just the current tautological primitive
+     predicate
 
-3. **Satellite local-connectivity payload**
+6. **Satellite local-connectivity payload**
    - prove the local-connectivity endpoint for the tower case without appealing
      to root-facing Problem 4.3 / 4.4 seams
    - if the current proof still depends on deeper proxy machinery, isolate that
      dependency explicitly
 
-4. **IR local-connectivity synthesis**
+7. **IR local-connectivity synthesis**
    - combine the classification and satellite endpoint into a theoremized
-     `IRLocallyConnectedData`
+   `IRLocallyConnectedData`
    - use that theorem to clear the final root seam
+
+---
+
+## Literature Map for the Next Revision
+
+### Proven sources
+
+1. **Kahn — bounded primitive combinatorics**
+   - payload: primitive bounded-type a priori bounds
+   - repo target: replace the fake primitive modulus layer by a genuine
+     primitive lower-bound theorem feeding `PrimitiveRenormalizableData`
+
+2. **Kahn–Lyubich — Molecules**
+   - payload: anti-molecule / definitely primitive a priori bounds
+   - repo target: constructive input for `IRNoTowerImpliesPrimitiveData` in the
+     definitely primitive region
+
+3. **Dudko–Lyubich 2309.02107 — MLC at Feigenbaum points**
+   - payload: bounded-type primitive and bounded-type satellite local
+     connectivity
+   - repo target: the strongest constructive route for a bounded-type slice of
+     `IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData`
+
+4. **Dudko–Lyubich 2210.09280 — pseudo-Siegel / neutral renormalization**
+   - payload: near-neutral pseudo-Siegel a priori bounds
+   - repo target: the `n = 0` virtual near-Molecule subcase
+
+### Programmatic / open source
+
+5. **Dudko 2512.24171 §4.5**
+   - payload: exact statement of the virtual near-Molecule chain and the
+     interpolation problem
+   - repo target: the residual open seam after bounded-type constructive work is
+     extracted
+
+### Planning consequence
+
+- the plan should no longer aim at replacing the entire current Problem 4.5
+  interface in one step
+- instead, it should:
+  1. theoremize the bounded-type constructive region
+  2. shrink the remaining root seam to the honest open interpolation residue
 
 ---
 
 ## Concrete File-Level Program
 
-### Step 1: Audit the remaining axiom-backed routes
+### Step 1: Redesign the IR/primitive interfaces
+
+Files:
+
+- `Mlc/RenormalizationTypes.lean`
+- `Mlc/InfinitelyRenormalizable.lean`
+- `.lake/packages/yoccoz-theorem/Yoccoz/Yoccoz.lean`
+- `Mlc/MainConjecture.lean`
+
+Task:
+
+- replace the raw `Summable`-based IR placeholder by a layered interface tied to
+  the upstream Yoccoz finite-side notion
+- replace the tautological primitive definition by combinatorial/dynamical
+  primitive data
+- make downstream theorem statements speak in terms of those revised interfaces
+
+Additional literature-guided requirement:
+
+- isolate a **bounded-type** subinterface as soon as possible, since this is the
+  largest region with current constructive support in the literature
+
+### Step 2: Audit the remaining axiom-backed routes
 
 Files:
 
@@ -218,12 +418,13 @@ Task:
   `ir_locally_connected_seam`
 - make sure the final elimination plan avoids that route
 
-### Step 2: Build the constructive IR payload
+### Step 3: Build the constructive IR payload
 
 Files:
 
 - likely `Mlc/MainConjecture.lean`
 - likely `Mlc/InfinitelyRenormalizable.lean`
+- likely `Mlc/RenormalizationTypes.lean`
 - possibly new focused files for virtual near-Molecule classification / LC
 
 Task:
@@ -231,7 +432,14 @@ Task:
 - prove either direct `IRLocallyConnectedData` or the stronger pair feeding it
 - keep the theorem statements aligned with the current code architecture
 
-### Step 3: Integrate at the root
+Refined execution order from the literature:
+
+1. theoremize primitive bounded-type data
+2. theoremize bounded-type satellite local connectivity
+3. package a bounded-type slice of the current Problem 4.5 payload
+4. only then isolate the residual unbounded / virtual interpolation seam
+
+### Step 4: Integrate at the root
 
 Files:
 
@@ -250,6 +458,14 @@ Current blocker:
   axioms instead of removing the last one
 - no constructive theorem currently provides either `IRLocallyConnectedData` or
   the current strengthened Problem 4.5 pair
+- the current `InfinitelyRenormalizable` / `PrimitiveRenormalizable` interfaces
+  are not yet suitable as final constructive theorem targets
+- the new `PrimitiveRenormalizableData` interface exists, but the root-facing
+  cutover from `PrimitiveRenormalizable` to this non-tautological data is still
+  blocked by missing axiom-free primitive local-connectivity synthesis
+- the literature suggests that this blocker should be decomposed, not attacked
+  monolithically: bounded-type appears constructively accessible, while the full
+  virtual near-Molecule interpolation problem remains open
 
 ---
 

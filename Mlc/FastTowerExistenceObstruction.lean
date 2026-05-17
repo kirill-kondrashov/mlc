@@ -22,11 +22,11 @@ lemma zero_mem_mandelbrotSet_fastTower : (0 : ℂ) ∈ MLC.Quadratic.MandelbrotS
   simp [horbit]
 
 /-- Under the Gaussian proxy `modulus`, every parameter is infinitely renormalizable
-    by definition (`Summable` puzzle-annulus moduli). -/
+    via the current puzzle-modulus convergence interface. -/
 lemma infinitely_renormalizable_of_gaussian_modulus (c : ℂ) :
     InfinitelyRenormalizable c := by
-  unfold InfinitelyRenormalizable
-  simpa [MLC.Quadratic.PrincipalNest.dynAnnulus_id] using
+  refine ⟨?_⟩
+  simpa [PuzzleModulusSummable, MLC.Quadratic.PrincipalNest.dynAnnulus_id] using
     (MLC.Quadratic.PrincipalNest.summable_modulus_dynAnnulus c (fun n => n) monotone_id)
 
 /-- With the current bridge axioms and Gaussian proxy modulus, no satellite tower can
