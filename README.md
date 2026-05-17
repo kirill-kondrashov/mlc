@@ -39,46 +39,68 @@ Problem45VirtualNearMoleculeRenormalizationData
 = IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
 ```
 
-## Remaining Problem
+## Current Status
 
-No axiom-free theorem in the repository yields the payload needed to remove
-`MLC.problem45_virtualNearMoleculeRenormalization`.
+The remaining project axiom is still entirely concentrated in **Problem 4.5**:
+virtual near-Molecule / primitive-first ql renormalization.
 
-Mathematical content: **Problem 4.5** / virtual near-Molecule, i.e. the
-primitive-first ql case through the canonical satellite chain
-`M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`.
+The active reduction now isolates a bounded-type primitive subproblem. The code
+contains:
 
-Symbol dictionary:
+- bounded-type sidecar interfaces in `Mlc/MainConjecture.lean`
+- direct primitive routes from modulus lower bounds to shrinkage and local
+  connectivity
+- a literature-matched primitive Feigenbaum surface
 
-- $M$: the ambient copy of the Mandelbrot set containing the primitive-first
-  ql renormalization data
-- $M(k)$: the $k$-th copy in the canonical satellite chain, with
-  $0 \le k \le n+1$
-- $M = M(0) \supsetneq M(1) \supsetneq \cdots \supsetneq M(n+1)$: strict
-  nesting of satellite copies
-- $n \in \mathbb{N}$: length of the virtual near-Molecule stage before the
-  terminal primitive copy
-- ql: quadratic-like
+The current minimal missing theorem is:
 
-## Obstruction
+```lean
+eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum :
+  EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+```
 
-Available reroutes reintroduce older project axioms:
+This is the weakest placeholder currently needed by the downstream proof chain.
+It represents eventual beau bounds in the bounded-type primitive Feigenbaum
+case.
+
+## Remaining Blocker
+
+No theorem in this repository or in the vendored `molecule-conjecture` package
+currently proves the eventual bounded primitive modulus statement above.
+
+The downstream chain is already in place:
+
+```text
+eventual primitive Feigenbaum modulus bounds
+-> primitive shrinkage
+-> primitive local connectivity
+-> bounded-type Problem 4.5 slice
+```
+
+So the unresolved gap is no longer shrinkage, no longer local connectivity, and
+no longer an all-level modulus bound. It is specifically the missing proof of
+eventual bounded primitive beau bounds.
+
+## Non-solutions
+
+The repository still rejects reroutes that revive older project axioms, notably
+through:
 
 1. `ir_locally_connected_seam`
-2. `irLocallyConnectedData_of_tower` via `InconsistencyRoute` and
-   `lyubich_conformal_bridge`
-3. `exists_renormalization_tower_of_molecule_bridge_axioms` via
-   `molecule_renormalizable_fixed_point_data` and
-   `fixedPoint_parameter_model_data`
+2. `InconsistencyRoute` / `lyubich_conformal_bridge`
+3. renormalization-tower existence bridge axioms
 
 ## Elimination Target
 
-Required constructive theorem:
+To remove `MLC.problem45_virtualNearMoleculeRenormalization`, the repository
+still needs an axiom-free provider of either:
 
 - `IRLocallyConnectedData`, or
 - `IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData`
 
-with no use of older axiom-backed routes.
+The current research route approaches this by first theoremizing the bounded
+primitive Feigenbaum beau-bounds step and then shrinking the remaining Problem
+4.5 residue.
 
 ## Dependencies
 
