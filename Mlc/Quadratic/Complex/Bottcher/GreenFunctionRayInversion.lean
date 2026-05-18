@@ -137,6 +137,101 @@ lemma no_global_odd_exterior_coordinate_two
   have : ¬ 1 < ‖φ z‖ := by simpa [hnorm]
   exact this (hexterior z hz)
 
+/-- Abstract formalization of the expert Step 2 argument: injectivity on the
+outside-open region follows from local oddness there, eventual injectivity near
+infinity, forward invariance/escape of the outside-open dynamics, and
+compatibility of `φ` with forward iteration. -/
+theorem injOn_outside_open_of_local_odd_of_eventual_inj_two
+    {φ : ℂ → ℂ}
+    (hloc_odd : ∀ z : ℂ, ‖z‖ > 4 → φ (-z) = -φ z)
+    (hnorm_gt_one : ∀ z : ℂ, ‖z‖ > 4 → 1 < ‖φ z‖)
+    (hiter_eq :
+      ∀ z₁ z₂ : ℂ, ∀ n : ℕ, φ z₁ = φ z₂ →
+        φ ((quadratic_map (2 : ℂ))^[n] z₁) = φ ((quadratic_map (2 : ℂ))^[n] z₂))
+    (hforward : ∀ z : ℂ, ‖z‖ > 4 → ‖quadratic_map (2 : ℂ) z‖ > 4)
+    (heventually_inj : ∃ R : ℝ, R > 4 ∧ Set.InjOn φ {z : ℂ | ‖z‖ > R})
+    (heventually_large :
+      ∀ z : ℂ, ‖z‖ > 4 → ∀ R : ℝ, R > 4 →
+        ∃ N : ℕ, ∀ n ≥ N, ‖((quadratic_map (2 : ℂ))^[n] z)‖ > R) :
+    Set.InjOn φ {z : ℂ | ‖z‖ > 4} := by
+  intro z₁ hz₁ z₂ hz₂ hφ
+  obtain ⟨R, hR, h_injR⟩ := heventually_inj
+  obtain ⟨N₁, hN₁⟩ := heventually_large z₁ hz₁ R hR
+  obtain ⟨N₂, hN₂⟩ := heventually_large z₂ hz₂ R hR
+  let N := max N₁ N₂
+  have hN₁' : N₁ ≤ N := le_max_left _ _
+  have hN₂' : N₂ ≤ N := le_max_right _ _
+  have hz₁R : ‖((quadratic_map (2 : ℂ))^[N] z₁)‖ > R := hN₁ N hN₁'
+  have hz₂R : ‖((quadratic_map (2 : ℂ))^[N] z₂)‖ > R := hN₂ N hN₂'
+  have hφN :
+      φ ((quadratic_map (2 : ℂ))^[N] z₁) = φ ((quadratic_map (2 : ℂ))^[N] z₂) :=
+    hiter_eq z₁ z₂ N hφ
+  have hiter_eqN :
+      ((quadratic_map (2 : ℂ))^[N] z₁) = ((quadratic_map (2 : ℂ))^[N] z₂) :=
+    h_injR hz₁R hz₂R hφN
+  let p : ℕ → Prop := fun n => ((quadratic_map (2 : ℂ))^[n] z₁) = ((quadratic_map (2 : ℂ))^[n] z₂)
+  have hp_nonempty : ∃ n, p n := ⟨N, hiter_eqN⟩
+  have hiter_outside :
+      ∀ z : ℂ, ‖z‖ > 4 → ∀ n : ℕ, ‖((quadratic_map (2 : ℂ))^[n] z)‖ > 4 := by
+    intro z hz n
+    induction n with
+    | zero =>
+        simpa
+    | succ n ih =>
+        simpa [Function.iterate_succ_apply'] using hforward _ ih
+  cases hm : Nat.find hp_nonempty with
+  | zero =>
+      have hm_mem : p 0 := by
+        simpa [hm] using (Nat.find_spec hp_nonempty)
+      simpa [p, Function.iterate_zero_apply] using hm_mem
+  | succ k =>
+      have hm_mem : p (Nat.succ k) := by
+        simpa [hm] using (Nat.find_spec hp_nonempty)
+      have hnot_prev : ¬ (((quadratic_map (2 : ℂ))^[k] z₁) = ((quadratic_map (2 : ℂ))^[k] z₂)) := by
+        intro hk
+        have hk_lt : k < Nat.find hp_nonempty := by
+          simpa [hm] using Nat.lt_succ_self k
+        exact Nat.find_min hp_nonempty hk_lt hk
+      let u : ℂ := ((quadratic_map (2 : ℂ))^[k] z₁)
+      let v : ℂ := ((quadratic_map (2 : ℂ))^[k] z₂)
+      have huV : ‖u‖ > 4 := by
+        dsimp [u]
+        exact hiter_outside z₁ hz₁ k
+      have hvV : ‖v‖ > 4 := by
+        dsimp [v]
+        exact hiter_outside z₂ hz₂ k
+      have hfu_eq_fv : quadratic_map (2 : ℂ) u = quadratic_map (2 : ℂ) v := by
+        simpa [p, u, v, Function.iterate_succ_apply'] using hm_mem
+      have hphi_uv : φ u = φ v := by
+        simpa [u, v] using hiter_eq z₁ z₂ k hφ
+      have hsquare : u ^ 2 = v ^ 2 := by
+        simpa [quadratic_map] using add_right_cancel hfu_eq_fv
+      have hfactor : (u - v) * (u + v) = 0 := by
+        calc
+          (u - v) * (u + v) = u ^ 2 - v ^ 2 := by ring
+          _ = 0 := by rw [hsquare]; ring
+      have hu_eq_neg_v : u = -v := by
+        rcases mul_eq_zero.mp hfactor with huv | huv
+        · exact False.elim (hnot_prev (sub_eq_zero.mp huv))
+        · exact eq_neg_iff_add_eq_zero.mpr huv
+      have hv_eq_neg_u : v = -u := by
+        simpa using (congrArg Neg.neg hu_eq_neg_v).symm
+      have hφu_neg : φ u = -φ u := by
+        calc
+          φ u = φ v := hphi_uv
+          _ = φ (-u) := by simpa [hv_eq_neg_u]
+          _ = -φ u := hloc_odd u huV
+      have hsum : φ u + φ u = 0 := by
+        have h := congrArg (fun t : ℂ => t + φ u) hφu_neg
+        simpa using h
+      have hmul : (2 : ℂ) * φ u = 0 := by
+        simpa [two_mul] using hsum
+      have hφu_zero : φ u = 0 := by
+        exact (mul_eq_zero.mp hmul).resolve_left (by norm_num)
+      have hnorm : ‖φ u‖ = 0 := by simpa [hφu_zero]
+      have : ¬ 1 < ‖φ u‖ := by simpa [hnorm]
+      exact False.elim (this (hnorm_gt_one u huV))
+
 /-! ## Lemma B: Green function diverges to +∞ as ‖z‖ → ∞ -/
 
 /-- **Lemma B**: For any bound `r`, the Green function eventually exceeds `r` for large `‖z‖`.
