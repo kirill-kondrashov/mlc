@@ -27,6 +27,349 @@ open Complex Filter Metric Set Function Topology
 
 namespace Mlc.Bottcher.DegreeOne
 
+section ProperLocalHomeomorphFibers
+
+variable {X Y : Type*} [PseudoMetricSpace X] [T2Space X] [TopologicalSpace Y]
+
+omit [T2Space X] [TopologicalSpace Y] in
+lemma isDiscrete_fiber_of_isLocallyInjective
+    {f : X → Y} (hlocal : IsLocallyInjective f) (y : Y) :
+    IsDiscrete ({x : X | f x = y} : Set X) := by
+  classical
+  refine (isDiscrete_iff_forall_exists_isOpen).2 ?_
+  intro x hx
+  rcases hlocal x with ⟨U, hUopen, hxU, hUinj⟩
+  refine ⟨U, hUopen, ?_⟩
+  ext z
+  constructor
+  · intro hz
+    have hzU : z ∈ U := hz.1
+    have hzf : f z = y := hz.2
+    have hxf : f x = y := hx
+    have : z = x := hUinj hzU hxU (by simp [hxf, hzf])
+    simp [this]
+  · intro hz
+    rcases hz with rfl
+    exact ⟨hxU, hx⟩
+
+omit [T2Space X] in
+lemma finite_fiber_of_isProperMap_isLocallyInjective
+    {f : X → Y} (hproper : IsProperMap f) (hlocal : IsLocallyInjective f) (y : Y) :
+    ({x : X | f x = y} : Set X).Finite := by
+  have hcompact : IsCompact ((fun x : X => f x) ⁻¹' {y}) :=
+    hproper.isCompact_preimage isCompact_singleton
+  have hdisc : IsDiscrete ({x : X | f x = y} : Set X) :=
+    isDiscrete_fiber_of_isLocallyInjective hlocal y
+  have hpre : (f ⁻¹' ({y} : Set Y)) = ({x : X | f x = y} : Set X) := by
+    ext x
+    simp
+  simpa [hpre] using hcompact.finite hdisc
+
+lemma exists_pairwise_disjoint_ball_of_finite {s : Set X} (hs : s.Finite) :
+    ∃ r : s → ℝ, (∀ x, 0 < r x) ∧
+      Pairwise (fun x y => Disjoint (Metric.ball x.1 (r x)) (Metric.ball y.1 (r y))) := by
+  classical
+  by_cases hsubs : s.Subsingleton
+  · refine ⟨fun _ => (1 : ℝ), ?_, ?_⟩
+    · intro x; norm_num
+    · intro x y hne
+      have : x = y := by
+        have hxy : x.1 = y.1 := hsubs x.property y.property
+        exact Subtype.ext hxy
+      exact (hne this).elim
+  · let r : s → ℝ := fun x =>
+      if hne : (s \ {x.1}).Nonempty then
+        (Metric.infDist x.1 (s \ {x.1})) / 2
+      else 1
+    have hrpos : ∀ x, 0 < r x := by
+      intro x
+      by_cases hne : (s \ {x.1}).Nonempty
+      · have hclosed : IsClosed (s \ {x.1}) :=
+          (hs.subset (by intro y hy; exact hy.1)).isClosed
+        have hxnot : x.1 ∉ s \ {x.1} := by
+          simp
+        have hpos : 0 < Metric.infDist x.1 (s \ {x.1}) := by
+          have := (IsClosed.notMem_iff_infDist_pos (x := x.1) (s := s \ {x.1})
+            hclosed hne).1
+          exact this hxnot
+        have hpos' : 0 < Metric.infDist x.1 (s \ {x.1}) / 2 := by
+          nlinarith
+        simpa [r, hne] using hpos'
+      · simp [r, hne]
+    refine ⟨r, hrpos, ?_⟩
+    intro x y hne
+    have hxy : x.1 ≠ y.1 := by
+      intro h
+      apply hne
+      exact Subtype.ext h
+    have hy_mem : y.1 ∈ s \ {x.1} := by
+      exact ⟨y.property, by simpa [Set.mem_singleton_iff, eq_comm] using hxy⟩
+    have hx_mem : x.1 ∈ s \ {y.1} := by
+      exact ⟨x.property, by simpa [Set.mem_singleton_iff] using hxy⟩
+    have hxne : (s \ {x.1}).Nonempty := ⟨y.1, hy_mem⟩
+    have hyne : (s \ {y.1}).Nonempty := ⟨x.1, hx_mem⟩
+    have hxle : r x ≤ dist x.1 y.1 / 2 := by
+      have h := Metric.infDist_le_dist_of_mem (x := x.1) (s := s \ {x.1}) hy_mem
+      have h' : Metric.infDist x.1 (s \ {x.1}) / 2 ≤ dist x.1 y.1 / 2 := by
+        nlinarith [h]
+      simpa [r, hxne] using h'
+    have hyle : r y ≤ dist x.1 y.1 / 2 := by
+      have h := Metric.infDist_le_dist_of_mem (x := y.1) (s := s \ {y.1}) hx_mem
+      have h' : Metric.infDist y.1 (s \ {y.1}) / 2 ≤ dist y.1 x.1 / 2 := by
+        nlinarith [h]
+      have h'' : dist y.1 x.1 = dist x.1 y.1 := by simp [dist_comm]
+      simpa [r, hyne, h''] using h'
+    have hsum : r x + r y ≤ dist x.1 y.1 := by
+      have : r x + r y ≤ dist x.1 y.1 / 2 + dist x.1 y.1 / 2 :=
+        add_le_add hxle hyle
+      have hhalf : dist x.1 y.1 / 2 + dist x.1 y.1 / 2 = dist x.1 y.1 := by ring
+      simpa [hhalf] using this
+    exact Metric.ball_disjoint_ball hsum
+
+omit [T2Space X] in
+lemma exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    {f : X → Y} (hclosed : IsClosedMap f) {y : Y} {U : Set X}
+    (hUopen : IsOpen U)
+    (hfiber : ({x : X | f x = y} : Set X) ⊆ U) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧ f ⁻¹' V ⊆ U := by
+  have hy_not_in : y ∉ f '' Uᶜ := by
+    intro hy
+    rcases hy with ⟨x, hxU, hxy⟩
+    have hxFiber : x ∈ ({x : X | f x = y} : Set X) := by
+      simp [Set.mem_setOf_eq, hxy]
+    exact hxU (hfiber hxFiber)
+  let V : Set Y := (f '' Uᶜ)ᶜ
+  have hVopen : IsOpen V := by
+    change IsOpen ((f '' Uᶜ)ᶜ)
+    exact (hclosed _ hUopen.isClosed_compl).isOpen_compl
+  have hyV : y ∈ V := by
+    simpa [V] using hy_not_in
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro x hx
+  by_contra hxU
+  have : f x ∈ f '' Uᶜ := ⟨x, hxU, rfl⟩
+  exact hx this
+
+lemma exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+    {f : X → Y} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorph f) {y : Y}
+    (hfinite : ({x : X | f x = y} : Set X).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∃ U : ({x : X // f x = y}) → Set X,
+        (∀ x, IsOpen (U x)) ∧
+        (∀ x, x.1 ∈ U x) ∧
+        (∀ x, Set.InjOn f (U x)) ∧
+        Pairwise (fun x x' => Disjoint (U x) (U x')) ∧
+        f ⁻¹' V ⊆ ⋃ x : ({x : X // f x = y}), U x := by
+  classical
+  have hlocinj : IsLocallyInjective f := hlocal.isLocallyInjective
+  choose N hNopen hxN hNinj using (fun x : ({x : X // f x = y}) => hlocinj x.1)
+  let s : Set X := {x : X | f x = y}
+  have hsfinite : s.Finite := by simpa [s] using hfinite
+  rcases exists_pairwise_disjoint_ball_of_finite (s := s) hsfinite with ⟨r, hrpos, hrdisj⟩
+  let U : ({x : X // f x = y}) → Set X := fun x => Metric.ball x.1 (r x) ∩ N x
+  let Uunion : Set X := ⋃ x : ({x : X // f x = y}), U x
+  have hUopen : IsOpen Uunion := by
+    unfold Uunion
+    refine isOpen_iUnion ?_
+    intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  have hsU : s ⊆ Uunion := by
+    intro x hx
+    refine mem_iUnion.2 ?_
+    refine ⟨⟨x, hx⟩, ?_⟩
+    exact ⟨Metric.mem_ball_self (hrpos ⟨x, hx⟩), hxN ⟨x, hx⟩⟩
+  rcases exists_open_preimage_subset_of_closedMap_of_fiber_subset
+    (f := f) hclosed (y := y) (U := Uunion) hUopen hsU with ⟨V, hVopen, hyV, hpre⟩
+  refine ⟨V, hVopen, hyV, U, ?_, ?_, ?_, ?_, ?_⟩
+  · intro x
+    exact (Metric.isOpen_ball.inter (hNopen x))
+  · intro x
+    exact ⟨Metric.mem_ball_self (hrpos x), hxN x⟩
+  · intro x
+    exact (hNinj x).mono (by intro z hz; exact hz.2)
+  · intro x x' hxx'
+    exact (hrdisj hxx').mono (by intro z hz; exact hz.1) (by intro z hz; exact hz.1)
+  · simpa [Uunion] using hpre
+
+omit [PseudoMetricSpace X] [T2Space X] [TopologicalSpace Y] in
+lemma exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj
+    {f : X → Y} {y : Y} {V : Set Y}
+    {U : ({x : X // f x = y}) → Set X}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : X // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    {y' : Y} (hy' : y' ∈ V) :
+    ∃ g : ({x : X // f x = y'}) → ({x : X // f x = y}),
+      Function.Injective g := by
+  classical
+  let g : ({x : X // f x = y'}) → ({x : X // f x = y}) := fun z =>
+    Classical.choose <| by
+      have hzpre : z.1 ∈ f ⁻¹' V := by
+        simpa [Set.preimage, z.2] using hy'
+      have hzU : z.1 ∈ ⋃ x : ({x : X // f x = y}), U x := hpre hzpre
+      exact Set.mem_iUnion.mp hzU
+  have hgmem : ∀ z : ({x : X // f x = y'}), z.1 ∈ U (g z) := by
+    intro z
+    exact Classical.choose_spec <| by
+      have hzpre : z.1 ∈ f ⁻¹' V := by
+        simpa [Set.preimage, z.2] using hy'
+      have hzU : z.1 ∈ ⋃ x : ({x : X // f x = y}), U x := hpre hzpre
+      exact Set.mem_iUnion.mp hzU
+  refine ⟨g, ?_⟩
+  intro z₁ z₂ hz
+  have hz₁U : z₁.1 ∈ U (g z₁) := hgmem z₁
+  have hz₂U : z₂.1 ∈ U (g z₁) := by
+    simpa [hz] using hgmem z₂
+  have hf : f z₁.1 = f z₂.1 := by
+    simp [z₁.2, z₂.2]
+  have hz₁₂ : z₁.1 = z₂.1 := (hUinj (g z₁)) hz₁U hz₂U hf
+  exact Subtype.ext hz₁₂
+
+omit [PseudoMetricSpace X] [T2Space X] [TopologicalSpace Y] in
+lemma finite_fiber_of_mem_open_of_preimage_subset_iUnion_inj
+    {f : X → Y} {y : Y} {V : Set Y}
+    {U : ({x : X // f x = y}) → Set X}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : X // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    (hfinite : ({x : X | f x = y} : Set X).Finite)
+    {y' : Y} (hy' : y' ∈ V) :
+    ({x : X | f x = y'} : Set X).Finite := by
+  classical
+  rcases exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hy' with ⟨g, hg⟩
+  haveI : Finite ({x : X // f x = y}) := hfinite.to_subtype
+  haveI : Finite ({x : X // f x = y'}) := Finite.of_injective g hg
+  exact (Set.finite_def).2 ⟨Fintype.ofFinite ({x : X // f x = y'})⟩
+
+omit [PseudoMetricSpace X] [T2Space X] [TopologicalSpace Y] in
+lemma natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
+    {f : X → Y} {y : Y} {V : Set Y}
+    {U : ({x : X // f x = y}) → Set X}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : X // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    (hfinite : ({x : X | f x = y} : Set X).Finite)
+    {y' : Y} (hy' : y' ∈ V) :
+    Nat.card ({x : X // f x = y'}) ≤ Nat.card ({x : X // f x = y}) := by
+  classical
+  rcases exists_injective_fiber_map_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hy' with ⟨g, hg⟩
+  haveI : Finite ({x : X // f x = y}) := hfinite.to_subtype
+  haveI : Finite ({x : X // f x = y'}) := Finite.of_injective g hg
+  exact Nat.card_le_card_of_injective g hg
+
+omit [PseudoMetricSpace X] [T2Space X] [TopologicalSpace Y] in
+lemma exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint
+    {f : X → Y} {y : Y}
+    {U : ({x : X // f x = y}) → Set X}
+    (hUdisj : Pairwise (fun x x' => Disjoint (U x) (U x')))
+    {y' : Y} (hy' : y' ∈ ⋂ x : ({x : X // f x = y}), f '' U x) :
+    ∃ g : ({x : X // f x = y}) → ({x : X // f x = y'}),
+      Function.Injective g := by
+  classical
+  let g : ({x : X // f x = y}) → ({x : X // f x = y'}) := fun x =>
+    let hximg : y' ∈ f '' U x := Set.mem_iInter.mp hy' x
+    ⟨Classical.choose hximg, (Classical.choose_spec hximg).2⟩
+  have hgmem : ∀ x : ({x : X // f x = y}), (g x).1 ∈ U x := by
+    intro x
+    dsimp [g]
+    exact (Classical.choose_spec (Set.mem_iInter.mp hy' x)).1
+  refine ⟨g, ?_⟩
+  intro x₁ x₂ hx
+  by_contra hne
+  have hx₁U : (g x₁).1 ∈ U x₁ := hgmem x₁
+  have hx₂U : (g x₂).1 ∈ U x₂ := hgmem x₂
+  have hx₁U' : (g x₁).1 ∈ U x₂ := by
+    simpa [hx] using hx₂U
+  have hdisj : Disjoint (U x₁) (U x₂) := hUdisj hne
+  exact (Set.disjoint_left.mp hdisj) hx₁U hx₁U'
+
+omit [PseudoMetricSpace X] [T2Space X] [TopologicalSpace Y] in
+lemma natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image
+    {f : X → Y} {y : Y} {V : Set Y}
+    {U : ({x : X // f x = y}) → Set X}
+    (hpre : f ⁻¹' V ⊆ ⋃ x : ({x : X // f x = y}), U x)
+    (hUinj : ∀ x, Set.InjOn f (U x))
+    (hUdisj : Pairwise (fun x x' => Disjoint (U x) (U x')))
+    (hfinite : ({x : X | f x = y} : Set X).Finite)
+    {y' : Y} (hyV : y' ∈ V)
+    (hyI : y' ∈ ⋂ x : ({x : X // f x = y}), f '' U x) :
+    Nat.card ({x : X // f x = y'}) = Nat.card ({x : X // f x = y}) := by
+  classical
+  have hle :
+      Nat.card ({x : X // f x = y'}) ≤ Nat.card ({x : X // f x = y}) :=
+    natCard_fiber_le_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hyV
+  have hfinite' : ({x : X | f x = y'} : Set X).Finite :=
+    finite_fiber_of_mem_open_of_preimage_subset_iUnion_inj
+      (f := f) (y := y) (V := V) (U := U) hpre hUinj hfinite hyV
+  rcases exists_injective_fiber_map_of_mem_iInter_image_of_pairwise_disjoint
+      (f := f) (y := y) (U := U) hUdisj hyI with ⟨g, hg⟩
+  haveI : Finite ({x : X // f x = y}) := hfinite.to_subtype
+  haveI : Finite ({x : X // f x = y'}) := hfinite'.to_subtype
+  have hge :
+      Nat.card ({x : X // f x = y}) ≤ Nat.card ({x : X // f x = y'}) :=
+    Nat.card_le_card_of_injective g hg
+  exact le_antisymm hle hge
+
+lemma exists_open_natCard_fiber_eq_of_closedMap_localHomeomorph_of_finite_fiber
+    {f : X → Y} (hclosed : IsClosedMap f) (hlocal : IsLocalHomeomorph f) {y : Y}
+    (hfinite : ({x : X | f x = y} : Set X).Finite) :
+    ∃ V, IsOpen V ∧ y ∈ V ∧
+      ∀ y' ∈ V, Nat.card ({x : X // f x = y'}) = Nat.card ({x : X // f x = y}) := by
+  classical
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+      (f := f) hclosed hlocal (y := y) hfinite with
+    ⟨V0, hV0open, hyV0, U, hUopen, hxU, hUinj, hUdisj, hpre⟩
+  let I := ({x : X // f x = y})
+  haveI : Finite I := hfinite.to_subtype
+  letI : Fintype I := Fintype.ofFinite I
+  have hOpenMap : IsOpenMap f := hlocal.isOpenMap
+  let Iimgs : Set Y := ⋂ x : I, f '' U x
+  have hIimgsOpen : IsOpen Iimgs := by
+    unfold Iimgs
+    simpa using
+      (isOpen_biInter_finset (s := (Finset.univ : Finset I))
+        (f := fun x : I => f '' U x) (by intro x _; exact hOpenMap _ (hUopen x)))
+  let V : Set Y := V0 ∩ Iimgs
+  have hVopen : IsOpen V := hV0open.inter hIimgsOpen
+  have hyIimgs : y ∈ Iimgs := by
+    refine Set.mem_iInter.mpr ?_
+    intro x
+    exact ⟨x.1, hxU x, by simp [x.2]⟩
+  have hyV : y ∈ V := ⟨hyV0, hyIimgs⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  have hyV0' : y' ∈ V0 := hy'.1
+  have hyI' : y' ∈ Iimgs := hy'.2
+  exact natCard_fiber_eq_of_mem_open_of_preimage_subset_iUnion_disjoint_inj_and_mem_iInter_image
+    (f := f) (y := y) (V := V0) (U := U) hpre hUinj hUdisj hfinite hyV0' hyI'
+
+lemma natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorph
+    {f : X → Y} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) :
+    IsLocallyConstant (fun y : Y => Nat.card ({x : X // f x = y})) := by
+  refine (IsLocallyConstant.iff_exists_open _).2 ?_
+  intro y
+  have hfinite : ({x : X | f x = y} : Set X).Finite :=
+    finite_fiber_of_isProperMap_isLocallyInjective
+      (f := f) hproper hlocal.isLocallyInjective y
+  rcases exists_open_natCard_fiber_eq_of_closedMap_localHomeomorph_of_finite_fiber
+      (f := f) hproper.isClosedMap hlocal (y := y) hfinite with
+    ⟨V, hVopen, hyV, hcard⟩
+  refine ⟨V, hVopen, hyV, ?_⟩
+  intro y' hy'
+  exact hcard y' hy'
+
+lemma natCard_fiber_eq_of_isProperMap_isLocalHomeomorph [PreconnectedSpace Y]
+    {f : X → Y} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) :
+    ∀ y y', Nat.card ({x : X // f x = y}) = Nat.card ({x : X // f x = y'}) := by
+  have hloc :
+      IsLocallyConstant (fun y : Y => Nat.card ({x : X // f x = y})) :=
+    natCard_fiber_isLocallyConstant_of_isProperMap_isLocalHomeomorph
+      (f := f) hproper hlocal
+  exact (IsLocallyConstant.iff_is_const (f := fun y : Y =>
+    Nat.card ({x : X // f x = y}))).1 hloc
+
+end ProperLocalHomeomorphFibers
+
 /-- If every fiber of a map has cardinality one, then the map is injective.
 
 This is the final purely set-theoretic step in the degree-one covering
@@ -71,6 +414,19 @@ degree as one. Since the degree is constant, it is enough to record one fiber
 with cardinality one. -/
 def RestrictedAsymptoticWindingDegreeOneTwo : Prop :=
   ∃ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = 1
+
+/-- Proper local-homeomorphy of the restricted outside-open map makes the
+restricted fiber cardinality independent of the exterior base point. -/
+theorem restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RestrictedCoveringDegreeConstantTwo := by
+  letI : ConnectedSpace {w : ℂ // 1 < ‖w‖} :=
+    (isConnected_iff_connectedSpace).1 MLC.isConnected_exterior
+  intro y y'
+  simpa [RestrictedFiberCardTwo] using
+    (natCard_fiber_eq_of_isProperMap_isLocalHomeomorph
+      (f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local y y')
 
 /-- Combining constant covering degree with the winding-number degree-one
 calculation gives one-point fibers over every exterior point. -/
@@ -140,6 +496,21 @@ theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_coveri
     external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_restricted_degree_one_fibers
       h_proper h_local
       (restricted_degree_one_fibers_two_of_constant_of_winding hconst hwinding)
+
+/-- External-ray map data from proper local-homeomorphy plus the asymptotic
+winding degree-one calculation; the restricted covering-degree constancy is
+supplied by proper local-homeomorphy. -/
+theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hwinding : RestrictedAsymptoticWindingDegreeOneTwo) :
+    MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_covering_degree_constant_of_winding
+      h_proper h_local
+      (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
+        h_proper h_local)
+      hwinding
 
 /-- Proper local-homeomorphy of the restricted outside-open map already gives
 exterior surjectivity via the clopen-image argument. -/
