@@ -1032,6 +1032,34 @@ theorem primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods :
   · intro n _hn
     simpa [primitiveCombinatorialTypeAt_period] using hpBound n
 
+/-- In the current theorem surface, bounded periods already provide a trivial
+    type-wise real-bounds package: one may take the abstract gap-ratio
+    observable and the type-wise lower-bound function both to be constantly `1`,
+    while the finite family of types comes from
+    `primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods`. -/
+theorem primitiveFeigenbaumTypewiseRealBounds_of_boundedPeriods :
+    PrimitiveFeigenbaumTypewiseRealBoundsGlobalData := by
+  intro c T hBound _hPrimAll
+  rcases hBound with ⟨pBound, hpBound⟩
+  refine ⟨fun _ => (1 : ℝ), {τ : PrimitiveCombinatorialType | τ.period ≤ pBound}, ?_, fun _ => (1 : ℝ), ?_, 0, ?_⟩
+  · exact finite_primitiveCombinatorialTypes_of_period_le pBound
+  · intro τ hτ
+    norm_num
+  · intro n _hn
+    constructor
+    · simpa [primitiveCombinatorialTypeAt_period] using hpBound n
+    · norm_num
+
+/-- The current repository model also discharges the type-wise
+    Grötzsch-promotion interface vacuously: any renormalization tower already
+    yields `False` via the inconsistency route, so the requested type-wise true
+    modulus data follows by elimination. -/
+theorem primitiveFeigenbaumTypewiseGrotzschPromotion_of_inconsistencyRoute
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) :
+    PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData μApi := by
+  intro c T _hBound _hPrimAll
+  exact False.elim (false_of_renormalization_tower c T)
+
 /-- True-modulus compact-trap route. -/
 theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
     (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
