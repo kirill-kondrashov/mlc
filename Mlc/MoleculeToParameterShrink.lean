@@ -99,14 +99,14 @@ theorem conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
   exact this (lt_of_lt_of_le h_ltN hhalf_le)
 
 /--
-The principal nest annulus is the disjoint union of consecutive puzzle annuli.
+The principal nest annulus is the disjoint union of consecutive puzzle annuli
+for any monotone choice of depths.
 -/
-lemma principal_nest_disjoint_union (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (hTower : SatelliteRenormalizableTower c) (n : ℕ) :
-    MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c hTower) n =
-    ⋃ k ∈ Finset.Ico (depthsFromSatelliteTower c hTower n) (depthsFromSatelliteTower c hTower (n + 1)),
+lemma principal_nest_disjoint_union_of_monotone_depths
+    (c : ℂ) (depths : ℕ → ℕ) (hmono : Monotone depths) (n : ℕ) :
+    MLC.Quadratic.PrincipalNest.dynAnnulus c depths n =
+    ⋃ k ∈ Finset.Ico (depths n) (depths (n + 1)),
       MLC.Quadratic.PuzzleAnnulus c k := by
-  let depths := depthsFromSatelliteTower c hTower
   let P := fun n => MLC.Quadratic.DynamicalPuzzlePiece c n 0
   let A := fun n => MLC.Quadratic.PuzzleAnnulus c n
   let B := fun n => MLC.Quadratic.PrincipalNest.dynAnnulus c depths n
@@ -117,18 +117,17 @@ lemma principal_nest_disjoint_union (c : ℂ) (_hc : c ∈ MLC.Quadratic.Mandelb
   · intro hz
     -- z ∈ P (depths n) \ P (depths (n+1))
     by_cases h_empty : depths n = depths (n + 1)
-    · dsimp [depths] at h_empty
-      rw [h_empty] at hz
+    · rw [h_empty] at hz
       simp at hz
-    · have h_lt : depths n < depths (n + 1) := 
-        lt_of_le_of_ne (depthsFromSatelliteTower_monotone c hTower (Nat.le_succ n)) h_empty
-      
+    · have h_lt : depths n < depths (n + 1) :=
+        lt_of_le_of_ne (hmono (Nat.le_succ n)) h_empty
+
       have h_bound_pos : 0 < depths (n + 1) := lt_of_le_of_lt (Nat.zero_le _) h_lt
 
       -- Let k be the largest index < depths (n+1) such that z ∈ P k.
       let bound := depths (n + 1) - 1
       have h_bound_lt : bound < depths (n + 1) := Nat.pred_lt (ne_of_gt h_bound_pos)
-      
+
       let p := fun k => z ∈ P k
       let I := Finset.Ico (depths n) (depths (n + 1))
       let S := I.filter p
@@ -139,13 +138,13 @@ lemma principal_nest_disjoint_union (c : ℂ) (_hc : c ∈ MLC.Quadratic.Mandelb
         · rw [Finset.mem_Ico]
           exact ⟨le_refl _, h_lt⟩
         · exact hz.1
-      
+
       let k := S.max' h_nonempty
       have hk_in_S : k ∈ S := Finset.max'_mem S h_nonempty
       rw [Finset.mem_filter] at hk_in_S
       have hk_idx : k ∈ I := hk_in_S.1
       have hk_val_p : z ∈ P k := hk_in_S.2
-      
+
       simp only [Set.mem_iUnion, Set.mem_diff]
       use k
       use hk_idx
@@ -191,14 +190,14 @@ lemma principal_nest_disjoint_union (c : ℂ) (_hc : c ∈ MLC.Quadratic.Mandelb
       exact hk_val.2 (h_sub h_in_deep)
 
 /--
-The modulus of the principal nest annulus is the sum of the moduli of the puzzle annuli.
+The modulus of the principal nest annulus is the sum of the moduli of the
+constituent puzzle annuli for any monotone choice of depths.
 -/
-lemma principal_nest_modulus_sum (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (hTower : SatelliteRenormalizableTower c) (n : ℕ) :
-    MLC.Quadratic.cmodulus (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c hTower) n) =
-    ∑ k ∈ Finset.Ico (depthsFromSatelliteTower c hTower n) (depthsFromSatelliteTower c hTower (n + 1)),
+lemma principal_nest_modulus_sum_of_monotone_depths
+    (c : ℂ) (depths : ℕ → ℕ) (hmono : Monotone depths) (n : ℕ) :
+    MLC.Quadratic.cmodulus (MLC.Quadratic.PrincipalNest.dynAnnulus c depths n) =
+    ∑ k ∈ Finset.Ico (depths n) (depths (n + 1)),
       MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c k) := by
-  let depths := depthsFromSatelliteTower c hTower
   let P := fun n => MLC.Quadratic.DynamicalPuzzlePiece c n 0
   let A := fun n => MLC.Quadratic.PuzzleAnnulus c n
   
@@ -208,7 +207,7 @@ lemma principal_nest_modulus_sum (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotS
     · exact MLC.Quadratic.nullMeasurable_dynamicalPuzzlePiece_conformal c n
     · exact MLC.Quadratic.nullMeasurable_dynamicalPuzzlePiece_conformal c (n + 1)
 
-  rw [principal_nest_disjoint_union c hc hTower n]
+  rw [principal_nest_disjoint_union_of_monotone_depths c depths hmono n]
   apply MLC.Quadratic.cmodulus_finset_sum
   · -- Pairwise disjoint
     intro i hi j hj hij
@@ -228,6 +227,57 @@ lemma principal_nest_modulus_sum (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotS
   · -- Measurable
     intro k hk
     exact h_meas_A k
+
+/--
+Satellite-specialized wrapper of `principal_nest_disjoint_union_of_monotone_depths`.
+-/
+lemma principal_nest_disjoint_union (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c) (n : ℕ) :
+    MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c hTower) n =
+    ⋃ k ∈ Finset.Ico (depthsFromSatelliteTower c hTower n) (depthsFromSatelliteTower c hTower (n + 1)),
+      MLC.Quadratic.PuzzleAnnulus c k :=
+  principal_nest_disjoint_union_of_monotone_depths
+    c (depthsFromSatelliteTower c hTower) (depthsFromSatelliteTower_monotone c hTower) n
+
+/--
+Satellite-specialized wrapper of `principal_nest_modulus_sum_of_monotone_depths`.
+-/
+lemma principal_nest_modulus_sum (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c) (n : ℕ) :
+    MLC.Quadratic.cmodulus (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c hTower) n) =
+    ∑ k ∈ Finset.Ico (depthsFromSatelliteTower c hTower n) (depthsFromSatelliteTower c hTower (n + 1)),
+      MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c k) :=
+  principal_nest_modulus_sum_of_monotone_depths
+    c (depthsFromSatelliteTower c hTower) (depthsFromSatelliteTower_monotone c hTower) n
+
+/--
+If the full puzzle conformal moduli are summable, then so are the conformal
+moduli of principal annuli selected along any monotone depth function. This is
+the finite-block summation step behind the Lyubich-to-conformal bridge.
+-/
+theorem summable_cmodulus_dynAnnulus_of_puzzleSummable
+    (c : ℂ) (depths : ℕ → ℕ) (hmono : Monotone depths)
+    (h_sum : Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n))) :
+    Summable (fun n => MLC.Quadratic.cmodulus (MLC.Quadratic.PrincipalNest.dynAnnulus c depths n)) := by
+  apply summable_of_sum_range_le (c := ∑' k, MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c k))
+  · intro n
+    exact MLC.Quadratic.modulus_nonneg _
+  · intro N
+    have h_collapse :
+        ∑ n ∈ Finset.range N,
+            MLC.Quadratic.cmodulus (MLC.Quadratic.PrincipalNest.dynAnnulus c depths n) =
+          ∑ k ∈ Finset.Ico (depths 0) (depths N),
+            MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c k) := by
+      induction N with
+      | zero =>
+          simp
+      | succ n ih =>
+          rw [Finset.sum_range_succ, ih, principal_nest_modulus_sum_of_monotone_depths c depths hmono n]
+          rw [Finset.sum_Ico_consecutive]
+          · exact hmono (Nat.zero_le n)
+          · exact hmono (Nat.le_succ n)
+    rw [h_collapse]
+    exact sum_le_hasSum _ (fun k _ => MLC.Quadratic.modulus_nonneg _) h_sum.hasSum
 
 theorem paraPuzzle_shrink_of_modulusNotSummableTarget (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (hTower : SatelliteRenormalizableTower c) (hdiv : ModulusNotSummableTarget c hTower) :

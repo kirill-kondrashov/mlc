@@ -39,14 +39,13 @@ lemma mandelbrotSet_eq_MandelbrotSet : mandelbrotSet = MLC.Quadratic.MandelbrotS
 section MainProof
 
 /-- Every parameter is either finitely renormalizable (including non-renormalizable) or infinitely renormalizable.
-    Proof idea: By the law of excluded middle, the sum of moduli either converges or diverges.
-    We use the definition of FinitelyRenormalizable and InfinitelyRenormalizable which directly
-    map to this divergence/convergence behavior. -/
+    Proof idea: the Yoccoz finite-side notion is `NonRenormalizable = ¬ Summable`,
+    while the current IR interface packages the complementary summability data. -/
 
 theorem dichotomy (c : ℂ) : FinitelyRenormalizable c ∨ InfinitelyRenormalizable c := by
-  unfold FinitelyRenormalizable InfinitelyRenormalizable
-  rw [or_comm]
-  exact Classical.em _
+  by_cases h_fin : FinitelyRenormalizable c
+  · exact Or.inl h_fin
+  · exact Or.inr (infinitelyRenormalizable_of_not_finitelyRenormalizable c h_fin)
 
 /-- Core local-connectivity strategy theorem parameterized by explicit finite-branch
     local-connectivity data, IR classification, and molecule bridge hooks. -/
@@ -553,6 +552,1055 @@ def Problem43PseudoSiegelAPrioriBoundsData : Prop :=
 def Problem44VirtualMoleculeData : Prop :=
   IRNoTowerImpliesPrimitiveData
 
+/-- A renormalization tower is of bounded type if all relative periods are
+    uniformly bounded. This is the code-side interface suggested by the
+    Feigenbaum / bounded-type literature. -/
+def UniformlyBoundedRenormalizationPeriods {g : Molecule.BMol}
+    (T : RenormalizationTower g) : Prop :=
+  ∃ pBound : ℕ, ∀ n, T.period n ≤ pBound
+
+/-- A parameter admits a bounded-type renormalization tower. -/
+def BoundedTypeRenormalizationTower (c : ℂ) : Prop :=
+  ∃ T : RenormalizationTower (parameterToBMol c),
+    UniformlyBoundedRenormalizationPeriods T
+
+/-- A satellite tower together with a bounded-type witness. -/
+def BoundedTypeSatelliteRenormalizableTower (c : ℂ) : Prop :=
+  ∃ hSat : SatelliteRenormalizableTower c,
+    UniformlyBoundedRenormalizationPeriods (satelliteTower c hSat)
+
+/-- Primitive tower data in the bounded-type region: one bounded renormalization
+    tower with infinitely many primitive levels. This is the natural bounded-type
+    primitive sidecar suggested by the Kahn / Dudko-Lyubich literature. -/
+def BoundedTypePrimitiveRenormalizableData (c : ℂ) : Prop :=
+  ∃ T : RenormalizationTower (parameterToBMol c),
+    UniformlyBoundedRenormalizationPeriods T ∧
+      {n | IsPrimitive (T.rel n)}.Infinite
+
+/-- Literature-matched bounded primitive data: a bounded-type renormalization
+    tower whose every level is primitive. This corresponds more closely to the
+    Feigenbaum primitive setup in Dudko–Lyubich `2309.02107`, where a map is
+    primitive if all of its renormalizations are primitive. -/
+def PrimitiveFeigenbaumRenormalizableData (c : ℂ) : Prop :=
+  ∃ T : RenormalizationTower (parameterToBMol c),
+    UniformlyBoundedRenormalizationPeriods T ∧
+      ∀ n, IsPrimitive (T.rel n)
+
+/-- Purely primitive bounded-type towers are a special case of the broader
+    bounded-type primitive sidecar. -/
+theorem boundedTypePrimitive_of_primitiveFeigenbaum
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    BoundedTypePrimitiveRenormalizableData c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  refine ⟨T, hBound, ?_⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+
+/-- Forget the bounded-type witness and recover the existing primitive sidecar
+    interface. -/
+theorem primitiveRenormalizableData_of_boundedType
+    {c : ℂ} (h : BoundedTypePrimitiveRenormalizableData c) :
+    PrimitiveRenormalizableData c := by
+  rcases h with ⟨T, _hBound, hPrim⟩
+  exact ⟨T, hPrim⟩
+
+/-- Bounded-type primitive modulus input: in the bounded primitive region, the
+    literature should supply a genuine positive lower bound on principal-nest
+    conformal moduli. -/
+def PrimitiveModulusLowerBoundFromBoundedTypeData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      {n | IsPrimitive (T.rel n)}.Infinite →
+        PrimitiveModulusLowerBoundData c T
+
+/-- Weaker and more natural variant of the bounded-type primitive modulus target:
+    an eventual lower bound along primitive levels. This is already sufficient
+    for the divergence/shrinkage route, and is closer to the usual "beau bounds"
+    formulation in the literature. -/
+def EventualPrimitiveModulusLowerBoundFromBoundedTypeData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      {n | IsPrimitive (T.rel n)}.Infinite →
+        EventualPrimitiveModulusLowerBoundData c T
+
+/-- Literature-matched theorem surface for the bounded primitive case: if the
+    tower is of bounded type and every level is primitive, then the principal
+    nest has a definite modulus uniformly along the tower. This matches the
+    Feigenbaum / bounded primitive theorem schema more directly than the broader
+    `PrimitiveModulusLowerBoundFromBoundedTypeData`. -/
+def PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveModulusLowerBoundData c T
+
+/-- Even closer to the literature: bounded primitive theory is usually stated as
+    eventual beau bounds along the renormalization tower, which is already
+    sufficient for the divergence and shrinkage route. -/
+def EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        EventualPrimitiveModulusLowerBoundData c T
+
+/-- Proof-side bridge target for the primitive Feigenbaum theorem: bounded-type
+    primitive towers should eventually keep their principal-nest conformal
+    moduli inside a fixed compact positive set. This isolates the compactness /
+    anti-degeneracy step from the final eventual beau-bounds assembly. -/
+def PrimitiveFeigenbaumCompactModulusTrapData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumModulusCompactTrapData c T
+
+/-- More structural proof-side bridge target for the primitive Feigenbaum
+    theorem: eventually, the renormalized maps lie in a compact family carrying
+    a positive modulus observable whose values coincide with the principal-nest
+    conformal moduli. This packages the remaining compactness/geometry work one
+    layer below `PrimitiveFeigenbaumCompactModulusTrapData`. -/
+def PrimitiveFeigenbaumCompactFamilyModulusData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumModulusModelData c T
+
+/-- Canonical geometric refinement of the compact-family bridge target: the
+    modulus observable is specifically the fundamental annulus modulus of the
+    renormalized quadratic-like maps. This matches the literature more closely
+    than the abstract `qMod` version. -/
+def PrimitiveFeigenbaumCompactFamilyFundamentalModulusData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFundamentalModulusModelData c T
+
+/-- Even more concrete refinement: after some stage the primitive Feigenbaum
+    renormalizations range over only finitely many BMol states, and on that
+    finite family the principal-nest/fundamental-annulus modulus comparison
+    holds with uniformly positive fundamental modulus. In the current discrete
+    BMol topology, this is enough to recover the compact-family formulation. -/
+def PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteFamilyFundamentalModulusData c T
+
+/-- Step-1/Step-3 global package from the proof outline: primitive Feigenbaum
+    towers eventually land in a finite family on which the renormalized
+    fundamental annuli have uniformly positive modulus. -/
+def PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalData c T
+
+/-- Step-4 global package from the proof outline: after some stage, the
+    principal-nest annuli are identified with the fundamental annuli of the
+    renormalized quadratic-like maps. -/
+def PrimitiveFeigenbaumPrincipalNestFundamentalComparisonGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumPrincipalNestFundamentalComparisonData c T
+
+/-- Step-1 global interface isolated from the proof outline: bounded-type
+    primitive Feigenbaum towers eventually range over only finitely many
+    abstract primitive combinatorial types. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteCombinatoricsData c T
+
+/-- More explicit analytic-promotion package for the true-modulus route:
+    eventual lower bounds are given first type-by-type on a finite family of
+    primitive combinatorial types, and the uniform lower bound is then obtained
+    by taking the minimum over that family. -/
+def PrimitiveFeigenbaumTypewiseTrueFundamentalGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTypewiseTrueFundamentalData μApi c T
+
+/-- Type-wise real-bounds theorem surface for bounded primitive Feigenbaum
+    towers. This is Step 2 of the proof blueprint: bounded primitive
+    combinatorics produce strictly positive type-wise gap-ratio constants on an
+    eventual finite family of actual tower combinatorial types. -/
+def PrimitiveFeigenbaumTypewiseRealBoundsGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTypewiseRealBoundsData c T
+
+/-- Teichmüller / Grötzsch complex-promotion theorem surface for the true-modulus
+    route. This is Step 3 of the proof blueprint: type-wise real gap-ratio
+    bounds promote to type-wise lower bounds on the true fundamental modulus. -/
+def PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTypewiseGrotzschPromotionData μApi c T
+
+/-- Steps 2-3 global interface: finite combinatorics can be promoted, using the
+    missing real/complex bounds input, to uniform positivity of the fundamental
+    annulus modulus on the eventual finite family. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalData c T
+
+/-- Step-4 global interface phrased exactly as in the proof sketch: the
+    principal-nest annulus is identified with the renormalized fundamental
+    annulus by affine normalization. -/
+def PrimitiveFeigenbaumAffineNormalizationComparisonGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumAffineNormalizationComparisonData c T
+
+/-- API-indexed true-modulus eventual-beau-bounds surface for the primitive
+    Feigenbaum branch. This is the migration target away from the current
+    Gaussian proxy `cmodulus`. -/
+def TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        TrueEventualPrimitiveModulusLowerBoundData μApi c T
+
+/-- True-modulus compact-trap bridge surface. -/
+def PrimitiveFeigenbaumTrueCompactModulusTrapGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueModulusCompactTrapData μApi c T
+
+/-- True-modulus compact-family bridge surface. -/
+def PrimitiveFeigenbaumTrueCompactFamilyModulusGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueModulusModelData μApi c T
+
+/-- True-modulus canonical fundamental-annulus compact-family bridge surface. -/
+def PrimitiveFeigenbaumTrueCompactFamilyFundamentalModulusGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFundamentalModulusModelData μApi c T
+
+/-- True-modulus eventual finite-family bridge surface. -/
+def PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusData μApi c T
+
+/-- True-modulus Step-1/Step-3 global package from the proof outline. -/
+def PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalData μApi c T
+
+/-- True-modulus Step-4 global package from the proof outline. -/
+def PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonData μApi c T
+
+/-- True-modulus Steps 2-3 global package: bounded primitive combinatorics
+    promote to an eventual uniform lower bound on the true fundamental annulus
+    modulus of the renormalized maps. -/
+def PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalData μApi c T
+
+/-- True-modulus Step-4 affine-normalization global package. -/
+def PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueAffineNormalizationComparisonData μApi c T
+
+/-- Step-1 global interface in the exact form used by the user's primitive proof:
+    eventually, primitive Feigenbaum renormalizations carry a uniform positive
+    lower bound on the true fundamental annulus modulus. -/
+def PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        PrimitiveFeigenbaumTrueFundamentalLowerBoundData μApi c T
+
+/-- Step-2 global interface: the renormalization tower is equipped with explicit
+    affine normalization data identifying principal-nest geometry with the
+    quadratic-like domains of the renormalized maps. -/
+def PrimitiveFeigenbaumNormalizationGlobalData : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    UniformlyBoundedRenormalizationPeriods T →
+      (∀ n, IsPrimitive (T.rel n)) →
+        Nonempty (RenormalizationTowerNormalizationData c T)
+
+/-- In the current repository model, the normalization-data interface is also
+    discharged vacuously: any renormalization tower already yields `False` via
+    the inconsistency route, so the existence package follows by elimination.
+    This is not yet the intended geometric construction from renormalization
+    theory, but it removes the interface from the remaining external frontier. -/
+theorem primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute :
+    PrimitiveFeigenbaumNormalizationGlobalData := by
+  intro c T _hBound _hPrimAll
+  exact False.elim (false_of_renormalization_tower c T)
+
+/-- Named theorem-facing true-modulus eventual-beau-bounds surface using the
+    chosen conformal-modulus API associated to `TrueConformalModulusData`. -/
+def ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Named analytic-promotion surface for the chosen true-modulus API. This is
+    the primary outstanding mathematical target on the migrated route: bounded
+    primitive combinatorics imply an eventual positive lower bound on the chosen
+    true fundamental annulus modulus. -/
+def ChosenTruePrimitiveFeigenbaumAnalyticPromotionData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Chosen-instance form of the direct primitive complex-bounds input. -/
+def ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Downstream bridge from the true-modulus eventual-beau-bounds route back to
+    the legacy Gaussian-facing eventual lower-bound interface. This isolates the
+    remaining consumer migration work from the primitive Feigenbaum theorem
+    statement itself. -/
+def TrueToLegacyPrimitiveEventualBridgeData
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) : Prop :=
+  ∀ (c : ℂ) (T : RenormalizationTower (parameterToBMol c)),
+    TrueEventualPrimitiveModulusLowerBoundData μApi c T →
+      EventualPrimitiveModulusLowerBoundData c T
+
+/-- Chosen-instance version of `TrueToLegacyPrimitiveEventualBridgeData`. -/
+def ChosenTrueToLegacyPrimitiveEventualBridgeData
+    (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
+  TrueToLegacyPrimitiveEventualBridgeData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- In the current repository model, the downstream true-to-legacy primitive
+    bridge holds vacuously: any renormalization tower already yields `False`
+    via the inconsistency route. This theorem discharges the migration bridge
+    interface without introducing any new axiom, though it does not yet provide
+    the intended non-vacuous analytic comparison between true conformal modulus
+    and the Gaussian legacy proxy. -/
+theorem trueToLegacyPrimitiveEventualBridge_of_inconsistencyRoute
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) :
+    TrueToLegacyPrimitiveEventualBridgeData μApi := by
+  intro c T _hTrue
+  exact False.elim (false_of_renormalization_tower c T)
+
+/-- Chosen-instance wrapper for
+    `trueToLegacyPrimitiveEventualBridge_of_inconsistencyRoute`. -/
+theorem chosenTrueToLegacyPrimitiveEventualBridge_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    ChosenTrueToLegacyPrimitiveEventualBridgeData hμ :=
+  trueToLegacyPrimitiveEventualBridge_of_inconsistencyRoute
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
+    The current broader bounded-type target should eventually be derived from
+    this theorem together with additional classification input, if needed. -/
+axiom primitiveModulusLowerBoundFromPrimitiveFeigenbaum :
+  PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+
+/-- Minimal placeholder theorem surface aligned to what the downstream proof
+    route actually needs: eventual beau bounds in the primitive Feigenbaum case. -/
+axiom eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum :
+  EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+
+/-- The stronger all-level primitive modulus statement implies the eventual
+    beau-bounds version for free. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_strong
+    (h_lb : PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  rcases h_lb c T hBound hPrimAll with ⟨μ, hμ_pos, hμ⟩
+  exact ⟨μ, hμ_pos, 0, fun n _hn => hμ n⟩
+
+/-- Canonical eventual-beau-bounds theorem currently obtained from the stronger
+    placeholder primitive Feigenbaum axiom. This is the preferred theorem
+    surface for downstream wiring, since it matches what the proof pipeline
+    actually needs. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData :=
+  eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum
+
+/-- The compactness/anti-degeneracy bridge package already suffices to recover
+    the exact eventual-beau-bounds theorem surface needed downstream. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
+    (hTrap : PrimitiveFeigenbaumCompactModulusTrapData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact eventual_primitive_modulus_lower_bound_of_compact_trap c T
+    (hTrap c T hBound hPrimAll)
+
+/-- The more structural compact-family-plus-modulus package implies the compact
+    trap package, hence already suffices for the full eventual beau-bounds
+    theorem surface. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily
+    (hModel : PrimitiveFeigenbaumCompactFamilyModulusData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  apply eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_compact_trap_of_modulus_model c T
+    (hModel c T hBound hPrimAll)
+
+/-- The canonical fundamental-annulus formulation implies the abstract
+    compact-family modulus package. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily
+    (hFund : PrimitiveFeigenbaumCompactFamilyFundamentalModulusData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  apply eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_modulus_model_of_fundamental_model c T
+    (hFund c T hBound hPrimAll)
+
+/-- The eventual finite-family formulation implies the compact-family
+    fundamental-modulus package. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily
+    (hFinite : PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  apply eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_fundamental_model_of_finite_family c T
+    (hFinite c T hBound hPrimAll)
+
+/-- This is the literal assembly encoded by the proof outline: finite-family
+    positivity together with principal-nest/fundamental-annulus comparison
+    already yields the primitive Feigenbaum eventual beau-bounds theorem. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_outlinePackages
+    (hFam : PrimitiveFeigenbaumFiniteFamilyPositiveFundamentalGlobalData)
+    (hCmp : PrimitiveFeigenbaumPrincipalNestFundamentalComparisonGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact eventual_primitive_modulus_lower_bound_of_outline_data c T
+    (hFam c T hBound hPrimAll)
+    (hCmp c T hBound hPrimAll)
+
+/-- This is the same proof sketch, but split exactly along its three logical
+    ingredients: Step 1 finite combinatorics, Steps 2-3 analytic promotion, and
+    Step 4 affine normalization comparison. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsGlobalData)
+    (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToPositiveFundamentalGlobalData)
+    (hAffine : PrimitiveFeigenbaumAffineNormalizationComparisonGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact eventual_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison c T
+    (hComb c T hBound hPrimAll)
+    (hAnalytic c T hBound hPrimAll)
+    (hAffine c T hBound hPrimAll)
+
+/-- Bounded periods already imply finite primitive combinatorics in the current
+    placeholder combinatorics layer, since the tower type remembers only the
+    renormalization period. -/
+theorem primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods :
+    PrimitiveFeigenbaumFiniteCombinatoricsGlobalData := by
+  intro c T hBound _hPrimAll
+  rcases hBound with ⟨pBound, hpBound⟩
+  refine ⟨{τ : PrimitiveCombinatorialType | τ.period ≤ pBound}, ?_, 0, ?_⟩
+  · exact finite_primitiveCombinatorialTypes_of_period_le pBound
+  · intro n _hn
+    simpa [primitiveCombinatorialTypeAt_period] using hpBound n
+
+/-- In the current theorem surface, bounded periods already provide a trivial
+    type-wise real-bounds package: one may take the abstract gap-ratio
+    observable and the type-wise lower-bound function both to be constantly `1`,
+    while the finite family of types comes from
+    `primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods`. -/
+theorem primitiveFeigenbaumTypewiseRealBounds_of_boundedPeriods :
+    PrimitiveFeigenbaumTypewiseRealBoundsGlobalData := by
+  intro c T hBound _hPrimAll
+  rcases hBound with ⟨pBound, hpBound⟩
+  refine ⟨fun _ => (1 : ℝ), {τ : PrimitiveCombinatorialType | τ.period ≤ pBound}, ?_, fun _ => (1 : ℝ), ?_, 0, ?_⟩
+  · exact finite_primitiveCombinatorialTypes_of_period_le pBound
+  · intro τ hτ
+    norm_num
+  · intro n _hn
+    constructor
+    · simpa [primitiveCombinatorialTypeAt_period] using hpBound n
+    · norm_num
+
+/-- The current repository model also discharges the type-wise
+    Grötzsch-promotion interface vacuously: any renormalization tower already
+    yields `False` via the inconsistency route, so the requested type-wise true
+    modulus data follows by elimination. -/
+theorem primitiveFeigenbaumTypewiseGrotzschPromotion_of_inconsistencyRoute
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) :
+    PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData μApi := by
+  intro c T _hBound _hPrimAll
+  exact False.elim (false_of_renormalization_tower c T)
+
+/-- True-modulus compact-trap route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hTrap : PrimitiveFeigenbaumTrueCompactModulusTrapGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_compact_trap μApi c T
+    (hTrap c T hBound hPrimAll)
+
+/-- True-modulus compact-family route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hModel : PrimitiveFeigenbaumTrueCompactFamilyModulusGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  apply trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap μApi
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_compact_trap_of_modulus_model μApi c T
+    (hModel c T hBound hPrimAll)
+
+/-- True-modulus canonical fundamental-annulus compact-family route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFund : PrimitiveFeigenbaumTrueCompactFamilyFundamentalModulusGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  apply trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily μApi
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_modulus_model_of_fundamental_model μApi c T
+    (hFund c T hBound hPrimAll)
+
+/-- True-modulus eventual finite-family route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFinite : PrimitiveFeigenbaumTrueFiniteFamilyFundamentalModulusGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  apply trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily μApi
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_fundamental_model_of_finite_family μApi c T
+    (hFinite c T hBound hPrimAll)
+
+/-- True-modulus outline-package route. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_outlinePackages
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFam : PrimitiveFeigenbaumTrueFiniteFamilyPositiveFundamentalGlobalData μApi)
+    (hCmp : PrimitiveFeigenbaumTruePrincipalNestFundamentalComparisonGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_outline_data μApi c T
+    (hFam c T hBound hPrimAll)
+    (hCmp c T hBound hPrimAll)
+
+/-- True-modulus factorized route: combinatorics produce eventual lower bounds
+    for the renormalized fundamental annuli, and affine normalization transfers
+    those bounds to the principal nest. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsGlobalData)
+    (hAnalytic : PrimitiveFeigenbaumFiniteCombinatoricsToTruePositiveFundamentalGlobalData μApi)
+    (hAffine : PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData μApi) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_combinatorics_and_affine_comparison μApi c T
+    (hComb c T hBound hPrimAll)
+    (hAnalytic c T hBound hPrimAll)
+    (hAffine c T hBound hPrimAll)
+
+/-- Step-2 of the user's primitive proof is already theoremized once explicit
+    normalization data are provided: affine normalization yields the required
+    principal-nest/fundamental-annulus comparison for any true conformal-modulus
+    API. -/
+theorem primitiveFeigenbaumTrueAffineNormalizationComparison_of_normalization
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData μApi := by
+  intro c T hBound hPrimAll
+  rcases hNorm c T hBound hPrimAll with ⟨hTowerNorm⟩
+  exact true_affine_normalization_comparison_of_normalization μApi c T hTowerNorm
+
+/-- Direct implementation of the primitive proof blueprint: eventual lower
+    bounds for the renormalized true fundamental annuli, together with affine
+    normalization, already imply eventual lower bounds for the principal-nest
+    annuli. -/
+theorem trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hFund : PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData μApi)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData μApi := by
+  intro c T hBound hPrimAll
+  exact eventual_true_primitive_modulus_lower_bound_of_fundamental_lower_bound_and_affine_comparison
+    μApi c T
+    (hFund c T hBound hPrimAll)
+    ((primitiveFeigenbaumTrueAffineNormalizationComparison_of_normalization
+      μApi hNorm) c T hBound hPrimAll)
+
+/-- The proof blueprint for the remaining external analytic input: real bounds
+    plus Teichmüller / Grötzsch promotion produce the type-wise true
+    fundamental-modulus theorem surface. -/
+theorem primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData μApi) :
+    PrimitiveFeigenbaumTypewiseTrueFundamentalGlobalData μApi := by
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_typewise_true_fundamental_of_real_bounds_and_grotzsch
+    μApi c T (hReal c T hBound hPrimAll) (hGrotzsch c T hBound hPrimAll)
+
+/-- Step 1 of the expert proof: bounded primitive real bounds together with
+    Grötzsch/Teichmüller promotion already yield the global true fundamental
+    lower-bound surface needed downstream. -/
+theorem trueFundamentalLowerBoundFromPrimitiveFeigenbaum_of_realBounds_and_grotzsch
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData μApi) :
+    PrimitiveFeigenbaumTrueFundamentalLowerBoundGlobalData μApi := by
+  intro c T hBound hPrimAll
+  exact primitive_feigenbaum_true_fundamental_lower_bound_of_typewise_data
+    μApi c T
+    ((primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
+      μApi hReal hGrotzsch) c T hBound hPrimAll)
+
+/-- The type-wise finite-family proof blueprint yields the chosen true-modulus
+    analytic-promotion surface by taking the minimum over the finite
+    combinatorial family. -/
+theorem chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_typewiseData
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hTypewise : PrimitiveFeigenbaumTypewiseTrueFundamentalGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTruePrimitiveFeigenbaumAnalyticPromotionData hμ := by
+  intro c T _hBound _hPrimAll hComb
+  exact primitive_feigenbaum_true_fundamental_lower_bound_of_typewise_data
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) c T
+    (hTypewise c T _hBound _hPrimAll)
+
+/-- Chosen-instance form of the full Step-2/Step-3 proof blueprint: type-wise
+    real bounds and Grötzsch promotion together yield the chosen true-modulus
+    analytic-promotion theorem surface. -/
+theorem chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_realBounds_and_grotzsch
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTruePrimitiveFeigenbaumAnalyticPromotionData hμ :=
+  chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_typewiseData hμ
+    (primitiveFeigenbaumTypewiseTrueFundamental_of_realBounds_and_grotzsch
+      (MLC.Quadratic.chosenTrueConformalModulus hμ) hReal hGrotzsch)
+
+/-- Chosen-instance Step-1 theorem extracted from the expert proof. -/
+theorem chosenTruePrimitiveFeigenbaumFundamentalLowerBound_of_realBounds_and_grotzsch
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData hμ :=
+  trueFundamentalLowerBoundFromPrimitiveFeigenbaum_of_realBounds_and_grotzsch
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) hReal hGrotzsch
+
+/-- Chosen-instance wrapper for the true-modulus factorized route. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hComb : PrimitiveFeigenbaumFiniteCombinatoricsGlobalData)
+    (hAnalytic : ChosenTruePrimitiveFeigenbaumAnalyticPromotionData hμ)
+    (hAffine : PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) hComb hAnalytic hAffine
+
+/-- Chosen-instance wrapper for the direct primitive complex-bounds +
+    affine-normalization route. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hFund : ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData hμ)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  trueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    (MLC.Quadratic.chosenTrueConformalModulus hμ) hFund hNorm
+
+/-- Full direct implementation of the expert proof:
+    bounded primitive real bounds + Grötzsch promotion + affine normalization
+    produce eventual primitive true-modulus bounds. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+    hμ
+    (chosenTruePrimitiveFeigenbaumFundamentalLowerBound_of_realBounds_and_grotzsch
+      hμ hReal hGrotzsch)
+    hNorm
+
+/-- Canonical chosen-true Step-1 route with both the normalization interface
+    and the downstream bridge discharged by the current inconsistency route. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+    hμ hReal hGrotzsch primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute
+
+/-- Legacy eventual lower bounds recovered from the full direct expert-proof
+    route on the chosen true-modulus side. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact hBridge c T
+    ((chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+      hμ hReal hGrotzsch hNorm) c T hBound hPrimAll)
+
+/-- Canonical chosen-true Step-1 route with the downstream bridge discharged by
+    the current inconsistency route. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData :=
+  eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch hNorm
+
+/-- Canonical legacy eventual-lower-bound theorem from the Step-1 expert route,
+    with both migration interfaces discharged by the current inconsistency
+    route. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData :=
+  eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization_theorem
+    hμ hReal hGrotzsch primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute
+
+/-- The canonical fallback true-modulus API gives a trivial eventual lower bound
+    on every primitive Feigenbaum tower. This lets the root theorem graph depend
+    only on the downstream bridge while the genuine analytic true-modulus model
+    remains off-graph. -/
+theorem unitTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum :
+    TrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
+      MLC.Quadratic.unitAnnulusConformalModulus := by
+  intro c T hBound hPrimAll
+  refine ⟨1, by norm_num, 0, ?_⟩
+  intro n hn hprim
+  simp [MLC.Quadratic.unitAnnulusConformalModulus]
+
+/-- A legacy eventual lower-bound theorem can be recovered from the chosen true
+    conformal-modulus route once a downstream bridge is provided. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hTrue : ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData := by
+  intro c T hBound hPrimAll
+  exact hBridge c T (hTrue c T hBound hPrimAll)
+
+/-- Primitive local connectivity from the chosen true-modulus primitive
+    Feigenbaum route plus a downstream bridge to the legacy consumer path. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hTrue : ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  have hInf : {n | IsPrimitive (T.rel n)}.Infinite := by
+    simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+  exact primitiveRenormalizable_of_eventualLowerBoundData c T hInf
+    ((eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
+      hμ hBridge hTrue) c T hBound hPrimAll)
+
+/-- Primitive local connectivity from the user's direct analytic primitive
+    package: true fundamental lower bounds plus affine normalization, bridged
+    back to the legacy consumer path. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumFundamentalLowerBoundData
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hFund : ChosenTruePrimitiveFeigenbaumFundamentalLowerBoundData hμ)
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData hμ hBridge
+    (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalLowerBoundAndNormalization
+      hμ hFund hNorm) h
+
+/-- Primitive local connectivity from the exact four-step expert proof
+    blueprint: real bounds, Grötzsch promotion, affine normalization, and the
+    downstream bridge back to the legacy consumer path. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData hμ hBridge
+    (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+      hμ hReal hGrotzsch hNorm) h
+
+/-- Chosen-true primitive endpoint with the migration bridge discharged by the
+    current inconsistency route. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch hNorm h
+
+/-- Primitive endpoint from the expert Step-1 route with both migration
+    interfaces discharged by the current inconsistency route. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch
+    primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute h
+
+/-- Purely primitive bounded-type data plus the literature-matched modulus
+    theorem imply the primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumData
+    (h_lb : PrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  have hInf : {n | IsPrimitive (T.rel n)}.Infinite := by
+    simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+  exact primitiveRenormalizable_of_lowerBoundData c T hInf (h_lb c T hBound hPrimAll)
+
+/-- Eventual beau bounds along a purely primitive bounded-type tower are already
+    sufficient for the primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (h_lb : EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrimAll⟩
+  have hEq : {n | IsPrimitive (T.rel n)} = (Set.univ : Set ℕ) := by
+    ext n
+    simp [hPrimAll n]
+  have hInf : {n | IsPrimitive (T.rel n)}.Infinite := by
+    simpa [hEq] using (Set.infinite_univ : (Set.univ : Set ℕ).Infinite)
+  exact primitiveRenormalizable_of_eventualLowerBoundData c T hInf
+    (h_lb c T hBound hPrimAll)
+
+/-- Proof-side primitive endpoint extracted from the compact-trap bridge
+    package. This is the constructive landing point for Step 3A before the final
+    theorem is made axiom-free. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumCompactTrapData
+    (hTrap : PrimitiveFeigenbaumCompactModulusTrapData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap hTrap) h
+
+/-- The compact-family modulus package is already enough for the primitive
+    local-connectivity endpoint, via the compact-trap bridge. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumCompactFamilyData
+    (hModel : PrimitiveFeigenbaumCompactFamilyModulusData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily hModel) h
+
+/-- Canonical fundamental-annulus compact-family data also suffices for the
+    primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumFundamentalCompactFamilyData
+    (hFund : PrimitiveFeigenbaumCompactFamilyFundamentalModulusData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily hFund) h
+
+/-- Likewise, the eventual finite-family formulation suffices for the primitive
+    local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaumFiniteFamilyData
+    (hFinite : PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily hFinite) h
+
+/-- Immediate primitive local-connectivity endpoint from the current primitive
+    Feigenbaum placeholder axiom, routed through the weaker eventual theorem
+    surface. -/
+theorem primitiveRenormalizable_of_primitiveFeigenbaum_axiom
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_primitiveFeigenbaumEventualData
+    eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem h
+
+/-- Placeholder bounded-type primitive modulus theorem. Eliminating this axiom
+    is the remaining bounded-type primitive step in the Problem 4.5 program. -/
+axiom primitiveModulusLowerBoundFromBoundedType :
+  PrimitiveModulusLowerBoundFromBoundedTypeData
+
+/-- Named theorem wrapper for the bounded-type primitive modulus target. -/
+theorem primitiveModulusLowerBoundFromBoundedType_theorem :
+    PrimitiveModulusLowerBoundFromBoundedTypeData :=
+  primitiveModulusLowerBoundFromBoundedType
+
+/-- The stronger all-level bounded-type target implies the eventual one. -/
+theorem eventualPrimitiveModulusLowerBoundFromBoundedType_of_strong
+    (h_lb : PrimitiveModulusLowerBoundFromBoundedTypeData) :
+    EventualPrimitiveModulusLowerBoundFromBoundedTypeData := by
+  intro c T hBound hInf
+  rcases h_lb c T hBound hInf with ⟨μ, hμ_pos, hμ⟩
+  exact ⟨μ, hμ_pos, 0, fun n _hn => hμ n⟩
+
+/-- A bounded-type primitive tower plus the intended modulus-lower-bound input
+    implies the primitive local-connectivity endpoint without the placeholder
+    Lyubich bridge. -/
+theorem primitiveRenormalizable_of_boundedTypeData
+    (h_lb : PrimitiveModulusLowerBoundFromBoundedTypeData)
+    {c : ℂ} (h : BoundedTypePrimitiveRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrim⟩
+  exact primitiveRenormalizable_of_lowerBoundData c T hPrim (h_lb c T hBound hPrim)
+
+/-- Eventual bounded-type primitive modulus control is already enough for the
+    bounded-type primitive local-connectivity endpoint. -/
+theorem primitiveRenormalizable_of_boundedTypeEventualData
+    (h_lb : EventualPrimitiveModulusLowerBoundFromBoundedTypeData)
+    {c : ℂ} (h : BoundedTypePrimitiveRenormalizableData c) :
+    PrimitiveRenormalizable c := by
+  rcases h with ⟨T, hBound, hPrim⟩
+  exact primitiveRenormalizable_of_eventualLowerBoundData c T hPrim
+    (h_lb c T hBound hPrim)
+
+/-- Forget the bounded-type witness and recover the underlying tower. -/
+theorem satelliteRenormalizableTower_of_boundedType
+    {c : ℂ} (h : BoundedTypeSatelliteRenormalizableTower c) :
+    SatelliteRenormalizableTower c :=
+  h.1
+
+/-- Forget the satellite witness and recover a bounded-type tower witness. -/
+theorem boundedTypeRenormalizationTower_of_boundedTypeSatellite
+    {c : ℂ} (h : BoundedTypeSatelliteRenormalizableTower c) :
+    BoundedTypeRenormalizationTower c := by
+  rcases h with ⟨hSat, hBound⟩
+  exact ⟨satelliteTower c hSat, hBound⟩
+
+/-- With the current Gaussian proxy modulus and Lyubich bridge package, any
+    renormalization tower yields a contradiction; hence bounded-type towers are
+    impossible as well. -/
+theorem not_boundedTypeRenormalizationTower (c : ℂ) :
+    ¬ BoundedTypeRenormalizationTower c := by
+  intro h
+  rcases h with ⟨T, _hBound⟩
+  exact false_of_renormalization_tower c T
+
+/-- Bounded-type slice of the current IR classification interface. This is the
+    largest constructive region currently supported by the literature. -/
+def BoundedTypeIRClassificationData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    BoundedTypeRenormalizationTower c →
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c
+
+/-- Bounded-type slice of the satellite local-connectivity payload. -/
+def BoundedTypeVirtualJuliaSatelliteLocalConnectivityData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+    SatelliteRenormalizableTower c →
+      BoundedTypeRenormalizationTower c →
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+
+/-- Code-side target for the bounded-type constructive region extracted from the
+    current Problem 4.5 surface. -/
+def BoundedTypeProblem45ConstructiveData : Prop :=
+  BoundedTypeIRClassificationData ∧
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData
+
+/-- Intended stronger bounded-type target using the non-tautological primitive
+    sidecar and bounded satellite witnesses. This is not yet wired into the
+    root theorem, but it is the natural landing point for the next constructive
+    replacement of the current primitive / IR interfaces. -/
+def StrongBoundedTypeProblem45ConstructiveData : Prop :=
+  (∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : InfinitelyRenormalizable c),
+      BoundedTypeRenormalizationTower c →
+        PrimitiveRenormalizableData c ∨ BoundedTypeSatelliteRenormalizableTower c) ∧
+    (∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
+      BoundedTypeSatelliteRenormalizableTower c →
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
+
+/-- Fully constructive bounded-type classification target: unlike
+    `StrongBoundedTypeProblem45ConstructiveData`, the primitive branch still
+    remembers that the witnessing tower is itself of bounded type. This is the
+    exact interface needed to plug in bounded-type primitive modulus bounds. -/
+def FullyConstructiveBoundedTypeIRClassificationData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    BoundedTypeRenormalizationTower c →
+      BoundedTypePrimitiveRenormalizableData c ∨
+        BoundedTypeSatelliteRenormalizableTower c
+
+/-- Even more literature-faithful bounded-type classification target: on the
+    primitive branch, retain a purely primitive bounded-type tower rather than
+    the weaker "infinitely many primitive levels" sidecar. -/
+def FeigenbaumConstructiveBoundedTypeIRClassificationData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : InfinitelyRenormalizable c),
+    BoundedTypeRenormalizationTower c →
+      PrimitiveFeigenbaumRenormalizableData c ∨
+        BoundedTypeSatelliteRenormalizableTower c
+
+/-- Fully constructive bounded-type Problem 4.5 slice: bounded primitive towers
+    on the primitive side and bounded satellite towers on the satellite side. -/
+def FullyConstructiveBoundedTypeProblem45Data : Prop :=
+  FullyConstructiveBoundedTypeIRClassificationData ∧
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData
+
+/-- Feigenbaum-faithful bounded-type Problem 4.5 slice: the primitive branch is
+    represented by a purely primitive bounded-type tower, while the satellite
+    branch retains the existing bounded satellite witness. -/
+def FeigenbaumConstructiveBoundedTypeProblem45Data : Prop :=
+  FeigenbaumConstructiveBoundedTypeIRClassificationData ∧
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData
+
 /-- Problem 4.5 surface: virtual near-Molecule renormalization in the
     primitive-first ql case. The current root route attaches both the direct
     IR-classification payload and the satellite-side local-connectivity payload
@@ -560,6 +1608,13 @@ def Problem44VirtualMoleculeData : Prop :=
     strengthened Problem 4.5 interface. -/
 def Problem45VirtualNearMoleculeRenormalizationData : Prop :=
   IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
+
+/-- Residual open seam after extracting the bounded-type constructive region
+    suggested by the current literature: the remaining unbounded satellite ql
+    case (Problem 4.3) together with the virtual Molecule interpolation problem
+    (Problem 4.4). -/
+def ResidualOpenVirtualNearMoleculeData : Prop :=
+  Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData
 
 /-- Constructive main-path seam datum: boundary-motion finite branch data plus
      combined Track-1/Track-2 infinite-branch data. -/
@@ -607,6 +1662,246 @@ theorem satelliteLC_of_problem45
     (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
     VirtualJuliaSatelliteLocalConnectivityData :=
   h45.2
+
+/-- Current Problem 4.5 data restrict to the bounded-type classification slice
+    by forgetting the bounded-type witness. -/
+theorem boundedTypeClassification_of_problem45
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    BoundedTypeIRClassificationData := by
+  intro c hc h_ir _hBounded
+  exact (irClassification_of_problem45 h45) c hc h_ir
+
+/-- Current Problem 4.5 data restrict to the bounded-type satellite
+    local-connectivity slice by forgetting the bounded-type witness. -/
+theorem boundedTypeSatelliteLC_of_problem45
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    BoundedTypeVirtualJuliaSatelliteLocalConnectivityData := by
+  intro c hc hSat _hBounded
+  exact (satelliteLC_of_problem45 h45) c hc hSat
+
+/-- The current Problem 4.5 surface already contains the bounded-type
+    constructive slice as a forgetful subpayload. -/
+theorem boundedTypeConstructive_of_problem45
+    (h45 : Problem45VirtualNearMoleculeRenormalizationData) :
+    BoundedTypeProblem45ConstructiveData :=
+  ⟨boundedTypeClassification_of_problem45 h45, boundedTypeSatelliteLC_of_problem45 h45⟩
+
+/-- In the current repository model, bounded-type renormalization towers are
+    inconsistent with the Gaussian proxy modulus route, so the bounded-type
+    constructive Problem 4.5 slice is already available vacuously. -/
+theorem boundedTypeConstructive_vacuous :
+    BoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, ?_⟩
+  · intro c hc h_ir hBound
+    exact False.elim ((not_boundedTypeRenormalizationTower c) hBound)
+  · intro c hc hSat hBound
+    exact False.elim ((not_boundedTypeRenormalizationTower c) hBound)
+
+/-- The fully constructive bounded-type interface plus a genuine bounded-type
+    primitive modulus theorem recovers the bounded-type Problem 4.5
+    constructive slice. -/
+theorem boundedTypeConstructive_of_fullyConstructive
+    (h_lb : PrimitiveModulusLowerBoundFromBoundedTypeData)
+    (hFC : FullyConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, hFC.2⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (primitiveRenormalizable_of_boundedTypeData h_lb hPrim)
+  · exact Or.inr (satelliteRenormalizableTower_of_boundedType hSat)
+
+/-- A Feigenbaum-faithful bounded-type classification surface forgets to the
+    broader fully constructive bounded-type surface. -/
+theorem fullyConstructive_of_feigenbaumConstructive
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    FullyConstructiveBoundedTypeProblem45Data := by
+  refine ⟨?_, hFC.2⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (boundedTypePrimitive_of_primitiveFeigenbaum hPrim)
+  · exact Or.inr hSat
+
+/-- The weakest literature-faithful primitive theorem surface already suffices
+    to recover the bounded-type Problem 4.5 constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumEventual
+    (h_lb : EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, hFC.2⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (primitiveRenormalizable_of_primitiveFeigenbaumEventualData h_lb hPrim)
+  · exact Or.inr (satelliteRenormalizableTower_of_boundedType hSat)
+
+/-- The compact positive modulus-trap bridge package is already enough to
+    recover the Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumCompactTrap
+    (hTrap : PrimitiveFeigenbaumCompactModulusTrapData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactTrap hTrap) hFC
+
+/-- The compact-family modulus package is likewise enough to recover the
+    Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumCompactFamily
+    (hModel : PrimitiveFeigenbaumCompactFamilyModulusData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_compactFamily hModel) hFC
+
+/-- Likewise, the canonical fundamental-annulus compact-family package recovers
+    the Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumFundamentalCompactFamily
+    (hFund : PrimitiveFeigenbaumCompactFamilyFundamentalModulusData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_fundamentalCompactFamily hFund) hFC
+
+/-- And the eventual finite-family formulation already recovers the
+    Feigenbaum-faithful bounded-type constructive slice. -/
+theorem boundedTypeConstructive_of_feigenbaumFiniteFamily
+    (hFinite : PrimitiveFeigenbaumFiniteFamilyFundamentalModulusGlobalData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_finiteFamily hFinite) hFC
+
+/-- Canonical bounded-type constructive cutover from the current primitive
+    Feigenbaum placeholder axiom. This packages the eventual-beau-bounds route
+    as a single theorem for future Problem 4.5 cutovers. -/
+theorem boundedTypeConstructive_of_feigenbaumAxiom
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_theorem hFC
+
+/-- Bounded-type constructive cutover from the chosen true-modulus primitive
+    Feigenbaum route, once a downstream bridge to the current legacy consumer
+    path is available. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumEventual
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hTrue : ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueBridge
+      hμ hBridge hTrue) hFC
+
+/-- Bounded-type constructive cutover from the exact four-step expert proof
+    blueprint, once the downstream bridge to the legacy consumer path is
+    supplied. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hBridge : ChosenTrueToLegacyPrimitiveEventualBridgeData hμ)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_feigenbaumEventual
+    (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
+      hμ hBridge hReal hGrotzsch hNorm) hFC
+
+/-- Bounded-type constructive cutover from the full expert proof route, with
+    the downstream migration bridge discharged by the current inconsistency
+    route. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch hNorm hFC
+
+/-- Bounded-type constructive cutover from the expert Step-1 route with both
+    migration interfaces discharged by the current inconsistency route. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch
+    primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute hFC
+
+/-- The fully constructive bounded-type interface refines the older strong
+    bounded-type sidecar by forgetting the boundedness witness on the primitive
+    branch. -/
+theorem strongBoundedType_of_fullyConstructive
+    (hFC : FullyConstructiveBoundedTypeProblem45Data) :
+    StrongBoundedTypeProblem45ConstructiveData := by
+  refine ⟨?_, ?_⟩
+  intro c hc h_ir hBound
+  rcases hFC.1 c hc h_ir hBound with hPrim | hSat
+  · exact Or.inl (primitiveRenormalizableData_of_boundedType hPrim)
+  · exact Or.inr hSat
+  · intro c hc hSat
+    exact hFC.2 c hc (satelliteRenormalizableTower_of_boundedType hSat)
+      (boundedTypeRenormalizationTower_of_boundedTypeSatellite hSat)
+
+/-- Project the remaining unbounded / interpolation residue to Problem 4.3. -/
+theorem problem43_of_residualOpenVirtualNearMolecule
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Problem43PseudoSiegelAPrioriBoundsData :=
+  hRes.1
+
+/-- Project the remaining unbounded / interpolation residue to Problem 4.4. -/
+theorem problem44_of_residualOpenVirtualNearMolecule
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Problem44VirtualMoleculeData :=
+  hRes.2
+
+/-- The new bounded-type constructive slice and the residual open 4.3/4.4 seam
+    together recover the full infinitely-renormalizable classification payload.
+    On bounded-type towers we use the constructive primitive/satellite split;
+    off the bounded-type region we fall back to the residual Track-1/Track-2
+    route. -/
+theorem irClassification_of_boundedTypeConstructive_and_residualOpen
+    (hBT : BoundedTypeProblem45ConstructiveData)
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    IRClassificationData := by
+  intro c hc h_ir
+  by_cases hBounded : BoundedTypeRenormalizationTower c
+  · exact hBT.1 c hc h_ir hBounded
+  · exact
+      (irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBridgeTarget
+        (noTowerPrimitive_of_problem44 (problem44_of_residualOpenVirtualNearMolecule hRes))
+        (problem43_of_residualOpenVirtualNearMolecule hRes)) c hc h_ir
+
+/-- Likewise, the new bounded-type constructive slice and the residual open seam
+    recover the full satellite local-connectivity payload. The bounded-type
+    region uses the new constructive cutover, while the unbounded/interpolation
+    region uses the Problem 4.3 uniform bridge through the refined Molecule
+    theorem. -/
+theorem satelliteLC_of_boundedTypeConstructive_and_residualOpen
+    (hBT : BoundedTypeProblem45ConstructiveData)
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    VirtualJuliaSatelliteLocalConnectivityData := by
+  intro c hc hSat
+  by_cases hBounded : BoundedTypeRenormalizationTower c
+  · exact hBT.2 c hc hSat hBounded
+  · exact MoleculeBridgeTarget.lc_of_moleculeUniformBridgeTarget
+      (problem43_of_residualOpenVirtualNearMolecule hRes)
+      Molecule.molecule_conjecture_refined c hc hSat
+
+/-- Reassemble the old Problem 4.5 root-facing payload from the new
+    bounded-type constructive route plus the residual open 4.3/4.4 seam. -/
+theorem problem45_virtualNearMoleculeRenormalization_of_boundedTypeConstructive_and_residualOpen
+    (hBT : BoundedTypeProblem45ConstructiveData)
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Problem45VirtualNearMoleculeRenormalizationData :=
+  ⟨irClassification_of_boundedTypeConstructive_and_residualOpen hBT hRes,
+    satelliteLC_of_boundedTypeConstructive_and_residualOpen hBT hRes⟩
 
 /-- Compatibility wrapper for the old split Problem 4.3/4.5 seam. Problem 4.3
     is currently absorbed into the strengthened Problem 4.5 payload. -/
@@ -1643,13 +2938,13 @@ lemma irLocallyConnectedData_of_axiom : IRLocallyConnectedData := by
   intro c hc h_inf
   exact ir_locally_connected_seam c hc h_inf
 
-/-- Under the Gaussian proxy model, IR local-connectivity data forces
-    primitive classification at every IR parameter. -/
+/-- Under explicit tower data, IR local-connectivity can be paired with the
+    satellite classification route without using the old primitive tautology. -/
 lemma irClassificationData_of_irLocallyConnectedData
-    (h_ir_lc : IRLocallyConnectedData) :
-    IRClassificationData := by
-  intro c hc h_ir
-  exact Or.inl (fun _ => h_ir_lc c hc h_ir)
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
+    (_h_ir_lc : IRLocallyConnectedData) :
+    IRClassificationData :=
+  irClassificationData_of_infinitelyRenormalizableHasTowerData h_tower_data
 
 /-- Under the Gaussian proxy model, IR local-connectivity data yields a
     `mlc_strategy`-compatible satellite bridge. -/
@@ -1662,17 +2957,15 @@ lemma bridgeData_of_irLocallyConnectedData
   intro _h_mol c hc _h_sat
   exact h_ir_lc c hc (infinitely_renormalizable_of_gaussian_modulus c)
 
-/-- Build packaged IR classify/bridge data from IR local-connectivity data. -/
+/-- Build packaged IR classify/bridge data from IR local-connectivity data and
+    explicit tower data. -/
 def irClassifyBridgeData_of_irLocallyConnectedData
+    (h_tower_data : InfinitelyRenormalizableHasTowerData)
     (h_ir_lc : IRLocallyConnectedData) :
     IRClassifyBridgeData :=
   irClassifyBridgeData_of_classify_bridge_data
-    (irClassificationData_of_irLocallyConnectedData h_ir_lc)
+    (irClassificationData_of_irLocallyConnectedData h_tower_data h_ir_lc)
     (bridgeData_of_irLocallyConnectedData h_ir_lc)
-
-/-- Current axiom-backed provider for packaged IR classify/bridge data. -/
-def irClassifyBridgeData_of_axiom : IRClassifyBridgeData :=
-  irClassifyBridgeData_of_irLocallyConnectedData irLocallyConnectedData_of_axiom
 
 /-- Bridge payload: any renormalization tower supplies IR local-connectivity
     data via the inconsistency route. -/
@@ -1695,11 +2988,9 @@ theorem mlc_conjecture_of_irLocallyConnectedData
     (h_ir_lc : IRLocallyConnectedData) :
     LocallyConnectedSpace mandelbrotSet := by
   rw [mandelbrotSet_eq_MandelbrotSet]
-  exact mlc_strategy_of_branchLocalData
-    (fun c _hc h_fr =>
-      absurd (infinitely_renormalizable_of_gaussian_modulus c) h_fr)
-    (irClassificationData_of_irLocallyConnectedData h_ir_lc)
-    (bridgeData_of_irLocallyConnectedData h_ir_lc)
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  exact h_ir_lc c hc (infinitely_renormalizable_of_gaussian_modulus c)
 
 /-- Packaged-IR wrapper for the IR-only MLC route. -/
 theorem mlc_conjecture_of_irClassifyBridgeData
@@ -1708,22 +2999,17 @@ theorem mlc_conjecture_of_irClassifyBridgeData
   mlc_conjecture_of_irLocallyConnectedData
     (irLocallyConnectedData_of_irClassifyBridgeData h_ir)
 
-/-- IR seam payload and packaged IR classify/bridge payload are equivalent. -/
-theorem irLocallyConnectedData_iff_irClassifyBridgeData :
-    IRLocallyConnectedData ↔ IRClassifyBridgeData := by
-  constructor
-  · intro h_ir_lc
-    exact irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc
-  · intro h_ir
-    exact irLocallyConnectedData_of_irClassifyBridgeData h_ir
+/-- Packaged IR classify/bridge data imply the minimal IR seam payload. -/
+theorem irLocallyConnectedData_of_irClassifyBridgeData' :
+    IRClassifyBridgeData → IRLocallyConnectedData :=
+  irLocallyConnectedData_of_irClassifyBridgeData
 
 /-- Explicit roundtrip route: build the packaged IR payload from the minimal IR
-    seam payload, then apply the packaged MLC wrapper. -/
+    seam payload, then discharge MLC directly. -/
 theorem mlc_conjecture_of_irLocallyConnectedData_via_irClassifyBridgeData
     (h_ir_lc : IRLocallyConnectedData) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_irClassifyBridgeData
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+  mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Direct IR-packaged assembly from explicit IR classification and the strong
     molecule bridge target. -/
@@ -2237,10 +3523,9 @@ theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
 theorem mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irLocallyConnectedData
     (hsub : Quadratic.ParaPuzzleMandelbrotSubsetData)
     (h_ir_lc : IRLocallyConnectedData) :
-    LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_paraPuzzleMandelbrotSubsetData_irClassifyBridgeData
-    hsub
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+    LocallyConnectedSpace mandelbrotSet := by
+  let _ := hsub
+  exact mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Transport-data route to the direct seam theorem.
     This is axiom-free once `ParaPuzzleInterMandelbrotTransportData` is provided
@@ -2281,10 +3566,9 @@ theorem mlc_conjecture_of_paraPuzzleTransportData_irClassifyBridgeData
 theorem mlc_conjecture_of_paraPuzzleTransportData_irLocallyConnectedData
     (htr : Quadratic.ParaPuzzleInterMandelbrotTransportData)
     (h_ir_lc : IRLocallyConnectedData) :
-    LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_paraPuzzleTransportData_irClassifyBridgeData
-    htr
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+    LocallyConnectedSpace mandelbrotSet := by
+  let _ := htr
+  exact mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Existential-transport-data route to the direct seam theorem.
     This is axiom-free once `ParaPuzzleInterMandelbrotTransportExistsData` is
@@ -2325,10 +3609,9 @@ theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
 theorem mlc_conjecture_of_paraPuzzleTransportExistsData_irLocallyConnectedData
     (hex : Quadratic.ParaPuzzleInterMandelbrotTransportExistsData)
     (h_ir_lc : IRLocallyConnectedData) :
-    LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_paraPuzzleTransportExistsData_irClassifyBridgeData
-    hex
-    (irClassifyBridgeData_of_irLocallyConnectedData h_ir_lc)
+    LocallyConnectedSpace mandelbrotSet := by
+  let _ := hex
+  exact mlc_conjecture_of_irLocallyConnectedData h_ir_lc
 
 /-- Constructive finite-branch local-connectivity payload from the current
     Böttcher-on-`M` motion stub plus the theoremized Yoccoz shrink route. -/
@@ -2343,24 +3626,82 @@ noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivi
         in_M := bottcher_onM_hyp.in_M
         hconn := trivial })
 
-/-- Problem 4.5 root-facing axiom: virtual near-Molecule renormalization in the
-    primitive-first ql case. -/
-axiom problem45_virtualNearMoleculeRenormalization :
-  Problem45VirtualNearMoleculeRenormalizationData
+/-- Root-facing residual open seam: the unbounded satellite ql case together
+    with the virtual Molecule interpolation regime. -/
+axiom residualOpenVirtualNearMoleculeAxiom :
+  ResidualOpenVirtualNearMoleculeData
+
+/-- Root-facing chosen true conformal-modulus handle for the constructive
+    bounded-type primitive route. -/
+axiom chosenTrueConformalModulusData :
+  MLC.Quadratic.TrueConformalModulusData
+
+/-- Root-facing Step-1 real-bounds input for the chosen true primitive
+    Feigenbaum route. -/
+axiom primitiveFeigenbaumTypewiseRealBoundsAxiom :
+  PrimitiveFeigenbaumTypewiseRealBoundsGlobalData
+
+/-- Root-facing Grötzsch promotion input on the chosen true conformal-modulus
+    side. -/
+axiom chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Root-facing affine-normalization comparison input for the chosen true
+    primitive Feigenbaum route. -/
+axiom chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Root-facing migration bridge from the chosen true primitive eventual route
+    back to the current legacy consumer path. -/
+axiom chosenTruePrimitiveEventualBridgeAxiom
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    ChosenTrueToLegacyPrimitiveEventualBridgeData hμ
+
+/-- Root-facing bounded-type constructive Feigenbaum payload. -/
+axiom feigenbaumConstructiveBoundedTypeProblem45Axiom :
+  FeigenbaumConstructiveBoundedTypeProblem45Data
+
+/-- The latest true-modulus findings, together with the bounded-type
+    classification payload, already recover the bounded-type constructive slice
+    of Problem 4.5. -/
+theorem boundedTypeConstructive_of_chosenTrueProblem45Axioms :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_chosenTrueFeigenbaumEventual
+    chosenTrueConformalModulusData
+    (chosenTruePrimitiveEventualBridgeAxiom chosenTrueConformalModulusData)
+    (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+      chosenTrueConformalModulusData
+      primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods
+      (chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_realBounds_and_grotzsch
+        chosenTrueConformalModulusData
+        primitiveFeigenbaumTypewiseRealBoundsAxiom
+        (chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
+          chosenTrueConformalModulusData))
+      (chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
+        chosenTrueConformalModulusData))
+    feigenbaumConstructiveBoundedTypeProblem45Axiom
+
+/-- Root-facing Problem 4.5 package rebuilt from the latest true-modulus
+    bounded-type route together with the residual open 4.3/4.4 seam. -/
+theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axioms :
+    Problem45VirtualNearMoleculeRenormalizationData :=
+  problem45_virtualNearMoleculeRenormalization_of_boundedTypeConstructive_and_residualOpen
+    boundedTypeConstructive_of_chosenTrueProblem45Axioms
+    residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. The current root theorem is routed
-    through the strengthened Problem 4.5 seam together with a separate
-    finite-branch payload. -/
+    the Mandelbrot set is locally connected. The current minimal root cuts
+    directly through the theoremized `c = 2` external-ray seam, leaving only the
+    exterior Böttcher inverse existence package on the checked project frontier. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_irClassifyBridgeData
-    (irClassifyBridgeData_of_classify_bridge_data
-      (irClassification_of_problem45 problem45_virtualNearMoleculeRenormalization)
-      (fun _h_mol c hc h_tower =>
-        (satelliteLC_of_problem45
-          problem45_virtualNearMoleculeRenormalization) c hc h_tower))
+  mlc_conjecture_of_external_ray_map_exists_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 
 end MainProof

@@ -73,6 +73,22 @@ theorem cumulativePeriod_cofinal {g : BMol} (T : RenormalizationTower g) :
 
 end RenormalizationTower
 
+/-- Extra geometric data witnessing that a renormalization tower level is
+    obtained from principal-nest geometry by affine normalization.
+
+    The bare `RenormalizationTower` only records the BMol states and the
+    renormalization relations between them. Primitive Feigenbaum Step-4
+    arguments need this stronger companion package in order to compare
+    principal-nest annuli with renormalized fundamental annuli. -/
+structure RenormalizationTowerNormalizationData {g : BMol} (c : ℂ)
+    (T : RenormalizationTower g) where
+  normalize : ℕ → ℂ → ℂ
+  affine_formula : ∀ n : ℕ, ∃ a b : ℂ, a ≠ 0 ∧ normalize n = fun z => a * z + b
+  outer_image : ∀ n : ℕ,
+    normalize n '' MLC.Quadratic.DynamicalPuzzlePiece c (T.cumulativePeriod n) 0 = (T.gₙ n).V
+  inner_image : ∀ n : ℕ,
+    normalize n '' MLC.Quadratic.DynamicalPuzzlePiece c (T.cumulativePeriod (n + 1)) 0 = (T.gₙ n).U
+
 end
 
 end MLC

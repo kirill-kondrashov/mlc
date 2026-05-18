@@ -3,6 +3,7 @@ import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Yoccoz
 import Mlc.LcAtOfShrink
 import Molecule.Rfast
+import Mlc.MoleculeRenormalizationTower
 import Mathlib.Analysis.Calculus.Deriv.Polynomial
 import Mathlib.Analysis.Convex.Contractible
 import Mathlib.AlgebraicTopology.FundamentalGroupoid.SimplyConnected
@@ -18,7 +19,8 @@ open Molecule Complex Topology Set Filter
 noncomputable section
 
 /-- Primitive renormalizable parameters (Lyubich).
-    For now, this is defined as the local connectivity conclusion itself. -/
+    The current root-facing interface still uses the local-connectivity
+    conclusion directly. -/
 def PrimitiveRenormalizable (c : ℂ) : Prop :=
   ∀ (hc : c ∈ MLC.Quadratic.MandelbrotSet),
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
@@ -192,16 +194,100 @@ def IsSatellite {f g : BMol} (rel : RenormalizationRelation f g) : Prop :=
 def IsPrimitive {f g : BMol} (rel : RenormalizationRelation f g) : Prop :=
   ¬ IsSatellite rel
 
+/-- Primitive renormalizable tower data.
+    This is the non-tautological combinatorial interface intended for the
+    Problem 4.5 research program, especially the primitive-first ql branch in
+    the virtual near-Molecule regime. -/
+def PrimitiveRenormalizableData (c : ℂ) : Prop :=
+  ∃ T : RenormalizationTower (parameterToBMol c),
+    {n | IsPrimitive (T.rel n)}.Infinite
+
+/-- Abstract primitive combinatorial type.
+    This is intentionally lightweight: at the current repository stage we only
+    need a formal carrier for "bounded primitive combinatorics" that is
+    separate from raw `BMol` states. Additional kneading/permutation data can be
+    added here once the classifier is formalized. -/
+structure PrimitiveCombinatorialType where
+  period : ℕ
+deriving DecidableEq
+
+/-- A classifier from normalized quadratic-like maps to their abstract
+    primitive combinatorial type. -/
+abbrev PrimitiveCombinatorialClassifier := BMol → PrimitiveCombinatorialType
+
+/-- The most basic combinatorial invariant currently available directly from a
+    renormalization relation is its period. This gives a canonical placeholder
+    classifier until a richer primitive combinatorial object is formalized. -/
+def primitiveCombinatorialTypeOfRelation {f g : BMol}
+    (rel : RenormalizationRelation f g) : PrimitiveCombinatorialType :=
+  ⟨rel.p⟩
+
+/-- The period classifier along a renormalization tower. This is the current
+    minimal bridge from bounded periods to a finite family of abstract
+    combinatorial types. -/
+def primitiveCombinatorialTypeAt {g : BMol} (T : RenormalizationTower g) (n : ℕ) :
+    PrimitiveCombinatorialType :=
+  primitiveCombinatorialTypeOfRelation (T.rel n)
+
+@[simp] theorem primitiveCombinatorialTypeAt_period {g : BMol}
+    (T : RenormalizationTower g) (n : ℕ) :
+    (primitiveCombinatorialTypeAt T n).period = T.period n :=
+  rfl
+
+/-- Primitive combinatorial types with bounded period form a finite set. In the
+    current placeholder combinatorics layer, the period is the only retained
+    invariant, so bounded periods already imply finiteness of the type family. -/
+theorem finite_primitiveCombinatorialTypes_of_period_le (pBound : ℕ) :
+    {τ : PrimitiveCombinatorialType | τ.period ≤ pBound}.Finite := by
+  classical
+  let s : Finset PrimitiveCombinatorialType :=
+    (Finset.range (pBound + 1)).image fun p => ({ period := p } : PrimitiveCombinatorialType)
+  refine Set.Finite.subset s.finite_toSet ?_
+  intro τ hτ
+  have hmem : τ.period ∈ Finset.range (pBound + 1) := by
+    exact Finset.mem_range.mpr (Nat.lt_succ_of_le hτ)
+  cases τ with
+  | mk p =>
+      exact Finset.mem_image.mpr ⟨p, hmem, rfl⟩
+
 /-- Finitely renormalizable parameters.
     Alias for NonRenormalizable from the library. -/
 abbrev FinitelyRenormalizable := NonRenormalizable
 
-/-- Infinitely renormalizable parameters.
-    For the purpose of this plan, we define infinitely renormalizable parameters
-    as those for which the Yoccoz puzzle moduli converge.
-    In a full theory, this would be a theorem (Yoccoz). -/
-def InfinitelyRenormalizable (c : ℂ) : Prop :=
+/-- Puzzle-modulus convergence data for a parameter.
+    This is the current proxy layer inherited from the Yoccoz puzzle package,
+    kept separate from the higher-level IR interface. -/
+def PuzzleModulusSummable (c : ℂ) : Prop :=
   Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c n))
+
+/-- Infinitely renormalizable parameters.
+    The current repository still models this by explicit puzzle-modulus
+    convergence data, but packages that proxy data as a dedicated interface
+    rather than a raw `Summable` alias. -/
+structure InfinitelyRenormalizable (c : ℂ) : Prop where
+  puzzleModulusSummable : PuzzleModulusSummable c
+
+@[simp] theorem infinitelyRenormalizable_iff_puzzleModulusSummable (c : ℂ) :
+    InfinitelyRenormalizable c ↔ PuzzleModulusSummable c := by
+  constructor
+  · intro h
+    exact h.puzzleModulusSummable
+  · intro h
+    exact ⟨h⟩
+
+@[simp] theorem puzzleModulusSummable_iff_not_finitelyRenormalizable (c : ℂ) :
+    PuzzleModulusSummable c ↔ ¬ FinitelyRenormalizable c := by
+  simp [PuzzleModulusSummable, FinitelyRenormalizable, NonRenormalizable]
+
+theorem infinitelyRenormalizable_of_not_finitelyRenormalizable (c : ℂ) :
+    ¬ FinitelyRenormalizable c → InfinitelyRenormalizable c := by
+  intro h
+  exact ⟨(puzzleModulusSummable_iff_not_finitelyRenormalizable c).2 h⟩
+
+theorem not_finitelyRenormalizable_of_infinitelyRenormalizable (c : ℂ) :
+    InfinitelyRenormalizable c → ¬ FinitelyRenormalizable c := by
+  intro h
+  exact (puzzleModulusSummable_iff_not_finitelyRenormalizable c).1 h.puzzleModulusSummable
 
 end
 end MLC

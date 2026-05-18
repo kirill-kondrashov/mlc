@@ -22,7 +22,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.problem45_virtualNearMoleculeRenormalization
+- MLC.Quadratic.external_ray_map_exists
 ```
 
 ## Current Frontier
@@ -30,55 +30,63 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.problem45_virtualNearMoleculeRenormalization}
+   MLC.Quadratic.external_ray_map_exists}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.problem45_virtualNearMoleculeRenormalization}
-
-Problem45VirtualNearMoleculeRenormalizationData
-= IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
+= {MLC.Quadratic.external_ray_map_exists}
 ```
 
-## Remaining Problem
+## Current Status
 
-No axiom-free theorem in the repository yields the payload needed to remove
-`MLC.problem45_virtualNearMoleculeRenormalization`.
+The checked root is now routed through the **theoremized `c = 2` external-ray
+seam**, not through the older tower / Lyubich / Problem 4.5 detours.
 
-Mathematical content: **Problem 4.5** / virtual near-Molecule, i.e. the
-primitive-first ql case through the canonical satellite chain
-`M = M(0) ⊋ M(1) ⊋ ... ⊋ M(n+1)`.
+1. `mlc_conjecture_of_externalRayMapData_two`
+2. the packaged root wrapper `mlc_conjecture_of_external_ray_map_exists_two`
+3. the single remaining project axiom `MLC.Quadratic.external_ray_map_exists`
 
-Symbol dictionary:
+So the earlier explicit frontier
 
-- $M$: the ambient copy of the Mandelbrot set containing the primitive-first
-  ql renormalization data
-- $M(k)$: the $k$-th copy in the canonical satellite chain, with
-  $0 \le k \le n+1$
-- $M = M(0) \supsetneq M(1) \supsetneq \cdots \supsetneq M(n+1)$: strict
-  nesting of satellite copies
-- $n \in \mathbb{N}$: length of the virtual near-Molecule stage before the
-  terminal primitive copy
-- ql: quadratic-like
+1. para-puzzle connectedness,
+2. residual virtual near-Molecule data,
+3. chosen-true primitive bridge data,
+4. bounded-type primitive Feigenbaum inputs,
 
-## Obstruction
+has been pushed off the checked root. Those routes still exist in the repo, but
+they are no longer part of `Axioms(MLC.mlc_conjecture)`.
 
-Available reroutes reintroduce older project axioms:
+## Remaining Blocker
+
+Only one non-core project axiom remains:
+
+1. `MLC.Quadratic.external_ray_map_exists`
+
+This is the exterior Böttcher inverse / external-ray map existence package from
+`Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`.
+
+## Non-solutions
+
+The repository still rejects reroutes that revive older project axioms, notably
+through:
 
 1. `ir_locally_connected_seam`
-2. `irLocallyConnectedData_of_tower` via `InconsistencyRoute` and
-   `lyubich_conformal_bridge`
-3. `exists_renormalization_tower_of_molecule_bridge_axioms` via
-   `molecule_renormalizable_fixed_point_data` and
-   `fixedPoint_parameter_model_data`
+2. `InconsistencyRoute` / `lyubich_conformal_bridge`
+3. renormalization-tower existence bridge axioms
 
 ## Elimination Target
 
-Required constructive theorem:
+The final reduction target is now singular:
 
-- `IRLocallyConnectedData`, or
-- `IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData`
+1. replace `MLC.Quadratic.external_ray_map_exists` by a constructive
+   external-ray / Böttcher inverse theorem at `c = 2`
 
-with no use of older axiom-backed routes.
+## Repository Snapshot
+
+1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
+2. `plan/` has been pruned to the single live frontier file
+   `PLAN_04_lyubich_bridge.md`.
+3. The current root-facing story is therefore simple: one remaining axiom, one
+   remaining elimination target.
 
 ## Dependencies
 
