@@ -1060,6 +1060,124 @@ lemma exists_unique_ray_preimage_green_two_anchor
 
 /-! ## Lemma E: Constructive external ray map at `c = 2` -/
 
+/-- Choice-based basin-valued exterior inverse at `c = 2` from:
+1. exterior surjectivity of `bottcher_map 2`, and
+2. injectivity of `bottcher_map 2` on the outside-open region `{z : ‖z‖ > 4}`.
+
+This is the formal Step 3 of the expert proof: choose the unique outside-open
+preimage when it exists, otherwise choose an arbitrary exterior preimage. -/
+theorem basin_external_ray_map_data_two_of_surj_of_injOn_outside_open
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.BasinExternalRayMapDataTwo := by
+  classical
+  let Ψ : ℂ → ℂ := fun w =>
+    if hw : 1 < ‖w‖ then
+      if hV : ∃ z : ℂ, ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧ Quadratic.bottcher_map (2 : ℂ) z = w then
+        Classical.choose hV
+      else
+        Classical.choose (h_surj w hw)
+    else 0
+  refine ⟨Quadratic.bottcher_map (2 : ℂ), Ψ, ?_⟩
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro z hz
+    have hGz_pos : 0 < green_function (2 : ℂ) z :=
+      green_function_pos_of_basin (2 : ℂ) z hz
+    rw [Quadratic.norm_bottcher_eq_exp_green]
+    exact Real.one_lt_exp_iff.mpr hGz_pos
+  · intro z hz
+    simpa [Quadratic.bottcher_map] using
+      bottcher_conj_on_basin (2 : ℂ) z hz
+  · intro w hw
+    refine And.intro ?_ ?_
+    · dsimp [Ψ]
+      simp only [dif_pos hw]
+      by_cases hV : ∃ z : ℂ, ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧ Quadratic.bottcher_map (2 : ℂ) z = w
+      · have hchooseV :
+            ‖Classical.choose hV‖ > ‖(2 : ℂ)‖ + 2 ∧
+              Quadratic.bottcher_map (2 : ℂ) (Classical.choose hV) = w :=
+          Classical.choose_spec hV
+        rw [dif_pos hV]
+        exact outside_open_subset_basin (2 : ℂ) hchooseV.1
+      · have hchoose : Quadratic.bottcher_map (2 : ℂ) (Classical.choose (h_surj w hw)) = w :=
+          Classical.choose_spec (h_surj w hw)
+        have hnorm : 1 < ‖Quadratic.bottcher_map (2 : ℂ) (Classical.choose (h_surj w hw))‖ := by
+          simpa [hchoose] using hw
+        rw [dif_neg hV]
+        exact bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hnorm
+    · dsimp [Ψ]
+      simp only [dif_pos hw]
+      by_cases hV : ∃ z : ℂ, ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧ Quadratic.bottcher_map (2 : ℂ) z = w
+      · rw [dif_pos hV]
+        exact (Classical.choose_spec hV).2
+      · rw [dif_neg hV]
+        exact Classical.choose_spec (h_surj w hw)
+  · intro z hz
+    have hGz_pos : 0 < green_function (2 : ℂ) z :=
+      green_function_pos_on_outside_open (2 : ℂ) z hz
+    have hw : 1 < ‖Quadratic.bottcher_map (2 : ℂ) z‖ := by
+      rw [Quadratic.norm_bottcher_eq_exp_green]
+      exact Real.one_lt_exp_iff.mpr hGz_pos
+    have hV :
+        ∃ u : ℂ, ‖u‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) u = Quadratic.bottcher_map (2 : ℂ) z :=
+      ⟨z, hz, rfl⟩
+    dsimp [Ψ]
+    simp only [dif_pos hw, dif_pos hV]
+    have hchoose :
+        ‖Classical.choose hV‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) (Classical.choose hV) =
+            Quadratic.bottcher_map (2 : ℂ) z :=
+      Classical.choose_spec hV
+    change Classical.choose hV = z
+    exact h_inj_outside hchoose.1 hz hchoose.2
+
+/-- Choice-based exterior inverse package at `c = 2` from exterior surjectivity
+plus injectivity on the outside-open region. This is the root-facing
+`ExternalRayMapData` version of the previous basin-valued construction. -/
+theorem external_ray_map_exists_two_of_surj_of_injOn_outside_open
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  classical
+  let Ψ : ℂ → ℂ := fun w =>
+    if hw : 1 < ‖w‖ then
+      if hV : ∃ z : ℂ, ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧ Quadratic.bottcher_map (2 : ℂ) z = w then
+        Classical.choose hV
+      else
+        Classical.choose (h_surj w hw)
+    else 0
+  refine ⟨Ψ, ?_, ?_⟩
+  · intro w hw
+    dsimp [Ψ]
+    simp only [dif_pos hw]
+    by_cases hV : ∃ z : ℂ, ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧ Quadratic.bottcher_map (2 : ℂ) z = w
+    · rw [dif_pos hV]
+      exact (Classical.choose_spec hV).2
+    · rw [dif_neg hV]
+      exact Classical.choose_spec (h_surj w hw)
+  · intro z hz
+    have hGz_pos : 0 < green_function (2 : ℂ) z :=
+      green_function_pos_on_outside_open (2 : ℂ) z hz
+    have hw : 1 < ‖Quadratic.bottcher_map (2 : ℂ) z‖ := by
+      rw [Quadratic.norm_bottcher_eq_exp_green]
+      exact Real.one_lt_exp_iff.mpr hGz_pos
+    have hV :
+        ∃ u : ℂ, ‖u‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) u = Quadratic.bottcher_map (2 : ℂ) z :=
+      ⟨z, hz, rfl⟩
+    dsimp [Ψ]
+    simp only [dif_pos hw, dif_pos hV]
+    have hchoose :
+        ‖Classical.choose hV‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) (Classical.choose hV) =
+            Quadratic.bottcher_map (2 : ℂ) z :=
+      Classical.choose_spec hV
+    change Classical.choose hV = z
+    exact h_inj_outside hchoose.1 hz hchoose.2
+
 /-- The Böttcher map applied to a positive-real-scaled unit vector simplifies to
 `u * exp(G_c(ρ · u))`. -/
 private lemma bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)

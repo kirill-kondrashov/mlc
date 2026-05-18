@@ -10,18 +10,18 @@ V=\{z\in\mathbb C:\ |z|>4\},\qquad
 G(z)=\lim_{n\to\infty}2^{-n}\log^+|f^{\circ n}(z)|.
 \]
 
+Let \(\phi:\mathcal B_\infty\to\Omega\) be the normalized basin B\"ottcher coordinate:
 \[
-\exists\,\phi:\mathcal B_\infty\to\Omega,\ \exists\,\Psi:\Omega\to\mathcal B_\infty
+\phi(f(z))=\phi(z)^2,\qquad
+|\phi(z)|=e^{G(z)}\quad(z\in\mathcal B_\infty),\qquad
+\lim_{\substack{z\to\infty\\ z\in\mathcal B_\infty}}\frac{\phi(z)}{z}=1.
 \]
+
+Prove
 \[
-\forall z\in\mathcal B_\infty,\qquad \phi(f(z))=\phi(z)^2,
+\exists\,\Psi:\Omega\to\mathcal B_\infty
 \]
-\[
-\forall z\in\mathcal B_\infty,\qquad |\phi(z)|=e^{G(z)},
-\]
-\[
-\lim_{\substack{z\to\infty\\ z\in\mathcal B_\infty}}\frac{\phi(z)}{z}=1,
-\]
+such that
 \[
 \forall w\in\Omega,\qquad \phi(\Psi(w))=w,
 \]
