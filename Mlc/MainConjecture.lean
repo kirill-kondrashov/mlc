@@ -3701,7 +3701,7 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_external_ray_map_exists_two
-    (Quadratic.external_ray_map_exists (2 : ℂ))
+    Quadratic.external_ray_map_exists_two
 
 
 end MainProof

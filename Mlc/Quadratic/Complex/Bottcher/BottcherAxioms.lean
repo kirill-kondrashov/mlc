@@ -96,6 +96,11 @@ def ExternalRayMapData (c : ℂ) : Prop :=
 /-- The inverse of the Böttcher map exists on the exterior (ray map). -/
 axiom external_ray_map_exists (c : ℂ) : ExternalRayMapData c
 
+/-- Root-facing specialization of the exterior inverse package at `c = 2`.
+    This is the exact residual statement currently needed by
+    `MLC.mlc_conjecture`. -/
+axiom external_ray_map_exists_two : ExternalRayMapData (2 : ℂ)
+
 /-- Unpack the ray-map data package into its existential form. -/
 theorem external_ray_map_exists_of_data (c : ℂ) (h_data : ExternalRayMapData c) :
     ∃ f : ℂ → ℂ,

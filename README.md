@@ -22,7 +22,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.external_ray_map_exists
+- MLC.Quadratic.external_ray_map_exists_two
 ```
 
 ## Current Frontier
@@ -30,10 +30,10 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.Quadratic.external_ray_map_exists}
+   MLC.Quadratic.external_ray_map_exists_two}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.Quadratic.external_ray_map_exists}
+= {MLC.Quadratic.external_ray_map_exists_two}
 ```
 
 ## Current Status
@@ -43,7 +43,7 @@ seam**, not through the older tower / Lyubich / Problem 4.5 detours.
 
 1. `mlc_conjecture_of_externalRayMapData_two`
 2. the packaged root wrapper `mlc_conjecture_of_external_ray_map_exists_two`
-3. the single remaining project axiom `MLC.Quadratic.external_ray_map_exists`
+3. the single remaining project axiom `MLC.Quadratic.external_ray_map_exists_two`
 
 So the earlier explicit frontier
 
@@ -60,9 +60,14 @@ they are no longer part of `Axioms(MLC.mlc_conjecture)`.
 Only one non-core project axiom remains:
 
 1. `MLC.Quadratic.external_ray_map_exists`
+   (global all-parameter version)
 
-This is the exterior Böttcher inverse / external-ray map existence package from
-`Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`.
+but the checked root now depends only on the weaker specialization
+
+1. `MLC.Quadratic.external_ray_map_exists_two`
+
+This is the \(c=2\) exterior Böttcher inverse / external-ray map existence
+package from `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`.
 
 ## Non-solutions
 
@@ -77,7 +82,7 @@ through:
 
 The final reduction target is now singular:
 
-1. replace `MLC.Quadratic.external_ray_map_exists` by a constructive
+1. replace `MLC.Quadratic.external_ray_map_exists_two` by a constructive
    external-ray / Böttcher inverse theorem at `c = 2`
 
 ## Repository Snapshot

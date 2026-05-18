@@ -4208,6 +4208,52 @@ lemma bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
 def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
   ∀ w, 1 < ‖w‖ → ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
 
+/-- Choice-based construction of external-ray data from the two core ingredients
+    isolated in the explicit proof strategy:
+    1. some right inverse on the exterior `{w | 1 < ‖w‖}`;
+    2. injectivity of `bottcher_map` on the canonical outside-open region.
+
+    The resulting selector uses the unique outside-open preimage whenever one
+    exists and otherwise falls back to an arbitrary exterior preimage. -/
+theorem external_ray_map_data_of_right_inverse_on_exterior_of_injOn_outside_open
+    (c : ℂ)
+    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapData c := by
+  classical
+  rcases h_right with ⟨f₀, hf₀⟩
+  refine ⟨fun w =>
+    if hw : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+    then Classical.choose hw
+    else f₀ w, ?_, ?_⟩
+  · intro w hw
+    by_cases hex : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+    · simpa [hex] using (Classical.choose_spec hex).2
+    · simpa [hex] using hf₀ w hw
+  · intro z hz
+    let hw : ∃ z', ‖z'‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z' = Quadratic.bottcher_map c z :=
+      ⟨z, hz, rfl⟩
+    have hspec :
+        ‖Classical.choose hw‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c (Classical.choose hw) = Quadratic.bottcher_map c z :=
+      Classical.choose_spec hw
+    have hchoose_eq : Classical.choose hw = z := by
+      apply h_inj hspec.1 hz
+      exact hspec.2
+    simp [hw, hchoose_eq]
+
+/-- `c = 2` specialization of the previous theorem. This is the exact formalized
+    choice-construction step from the expert proof once the right-inverse and
+    outside-open injectivity inputs are provided explicitly. -/
+theorem external_ray_map_data_two_of_right_inverse_on_exterior_of_injOn_outside_open
+    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ))
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_right_inverse_on_exterior_of_injOn_outside_open
+    (2 : ℂ) h_right h_inj
+
 /-- Alternative M5 target: the image of outside-open under `bottcher_map` is
     exactly the exterior. -/
 def BottcherImageOutsideOpenIsExterior (c : ℂ) : Prop :=
