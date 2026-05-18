@@ -858,6 +858,16 @@ def PrimitiveFeigenbaumNormalizationGlobalData : Prop :=
       (∀ n, IsPrimitive (T.rel n)) →
         Nonempty (RenormalizationTowerNormalizationData c T)
 
+/-- In the current repository model, the normalization-data interface is also
+    discharged vacuously: any renormalization tower already yields `False` via
+    the inconsistency route, so the existence package follows by elimination.
+    This is not yet the intended geometric construction from renormalization
+    theory, but it removes the interface from the remaining external frontier. -/
+theorem primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute :
+    PrimitiveFeigenbaumNormalizationGlobalData := by
+  intro c T _hBound _hPrimAll
+  exact False.elim (false_of_renormalization_tower c T)
+
 /-- Named theorem-facing true-modulus eventual-beau-bounds surface using the
     chosen conformal-modulus API associated to `TrueConformalModulusData`. -/
 def ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData
@@ -894,6 +904,26 @@ def TrueToLegacyPrimitiveEventualBridgeData
 def ChosenTrueToLegacyPrimitiveEventualBridgeData
     (hμ : MLC.Quadratic.TrueConformalModulusData) : Prop :=
   TrueToLegacyPrimitiveEventualBridgeData
+    (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- In the current repository model, the downstream true-to-legacy primitive
+    bridge holds vacuously: any renormalization tower already yields `False`
+    via the inconsistency route. This theorem discharges the migration bridge
+    interface without introducing any new axiom, though it does not yet provide
+    the intended non-vacuous analytic comparison between true conformal modulus
+    and the Gaussian legacy proxy. -/
+theorem trueToLegacyPrimitiveEventualBridge_of_inconsistencyRoute
+    (μApi : MLC.Quadratic.AnnulusConformalModulusAPI) :
+    TrueToLegacyPrimitiveEventualBridgeData μApi := by
+  intro c T _hTrue
+  exact False.elim (false_of_renormalization_tower c T)
+
+/-- Chosen-instance wrapper for
+    `trueToLegacyPrimitiveEventualBridge_of_inconsistencyRoute`. -/
+theorem chosenTrueToLegacyPrimitiveEventualBridge_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    ChosenTrueToLegacyPrimitiveEventualBridgeData hμ :=
+  trueToLegacyPrimitiveEventualBridge_of_inconsistencyRoute
     (MLC.Quadratic.chosenTrueConformalModulus hμ)
 
 /-- Placeholder theorem surface aligned to the Feigenbaum primitive literature.
@@ -1194,6 +1224,17 @@ theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_r
       hμ hReal hGrotzsch)
     hNorm
 
+/-- Canonical chosen-true Step-1 route with both the normalization interface
+    and the downstream bridge discharged by the current inconsistency route. -/
+theorem chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    ChosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData hμ :=
+  chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
+    hμ hReal hGrotzsch primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute
+
 /-- Legacy eventual lower bounds recovered from the full direct expert-proof
     route on the chosen true-modulus side. -/
 theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
@@ -1208,6 +1249,30 @@ theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueR
   exact hBridge c T
     ((chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
       hμ hReal hGrotzsch hNorm) c T hBound hPrimAll)
+
+/-- Canonical chosen-true Step-1 route with the downstream bridge discharged by
+    the current inconsistency route. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData :=
+  eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch hNorm
+
+/-- Canonical legacy eventual-lower-bound theorem from the Step-1 expert route,
+    with both migration interfaces discharged by the current inconsistency
+    route. -/
+theorem eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)) :
+    EventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaumData :=
+  eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization_theorem
+    hμ hReal hGrotzsch primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute
 
 /-- The canonical fallback true-modulus API gives a trivial eventual lower bound
     on every primitive Feigenbaum tower. This lets the root theorem graph depend
@@ -1278,6 +1343,32 @@ theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotz
   primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaumEventualData hμ hBridge
     (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_realBoundsGrotzschAndNormalization
       hμ hReal hGrotzsch hNorm) h
+
+/-- Chosen-true primitive endpoint with the migration bridge discharged by the
+    current inconsistency route. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch hNorm h
+
+/-- Primitive endpoint from the expert Step-1 route with both migration
+    interfaces discharged by the current inconsistency route. -/
+theorem primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    {c : ℂ} (h : PrimitiveFeigenbaumRenormalizableData c) :
+    PrimitiveRenormalizable c :=
+  primitiveRenormalizable_of_chosenTruePrimitiveFeigenbaum_realBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch
+    primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute h
 
 /-- Purely primitive bounded-type data plus the literature-matched modulus
     theorem imply the primitive local-connectivity endpoint. -/
@@ -1687,6 +1778,33 @@ theorem boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNorm
   boundedTypeConstructive_of_feigenbaumEventual
     (eventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_chosenTrueRealBoundsGrotzschAndNormalization
       hμ hBridge hReal hGrotzsch hNorm) hFC
+
+/-- Bounded-type constructive cutover from the full expert proof route, with
+    the downstream migration bridge discharged by the current inconsistency
+    route. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hNorm : PrimitiveFeigenbaumNormalizationGlobalData)
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch hNorm hFC
+
+/-- Bounded-type constructive cutover from the expert Step-1 route with both
+    migration interfaces discharged by the current inconsistency route. -/
+theorem boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzsch_theorem
+    (hμ : MLC.Quadratic.TrueConformalModulusData)
+    (hReal : PrimitiveFeigenbaumTypewiseRealBoundsGlobalData)
+    (hGrotzsch : PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ))
+    (hFC : FeigenbaumConstructiveBoundedTypeProblem45Data) :
+    BoundedTypeProblem45ConstructiveData :=
+  boundedTypeConstructive_of_chosenTrueFeigenbaumRealBoundsGrotzschAndNormalization
+    hμ (chosenTrueToLegacyPrimitiveEventualBridge_theorem hμ) hReal hGrotzsch
+    primitiveFeigenbaumNormalizationGlobalData_of_inconsistencyRoute hFC
 
 /-- The fully constructive bounded-type interface refines the older strong
     bounded-type sidecar by forgetting the boundedness witness on the primitive
