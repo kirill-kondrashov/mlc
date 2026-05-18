@@ -117,6 +117,22 @@ def ExternalRayMapData (c : ℂ) : Prop :=
       (∀ w, 1 < ‖w‖ → bottcher_map c (f w) = w) ∧
         (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z)
 
+/-- Preferred basin-valued theorem-facing package suggested by the current
+mathematical analysis. Unlike `ExternalRayMapData`, this formulation only asks
+for exterior-valuedness on the basin itself, so it avoids the totalization
+artefact on `K(c)`. -/
+def BasinExternalRayMapData (c : ℂ) : Prop :=
+    ∃ φ Ψ : ℂ → ℂ,
+      (∀ z, z ∈ basin_of_infinity c → 1 < ‖φ z‖) ∧
+      (∀ z, z ∈ basin_of_infinity c → φ (MLC.quadratic_map c z) = (φ z)^2) ∧
+      (∀ w, 1 < ‖w‖ → Ψ w ∈ basin_of_infinity c ∧ φ (Ψ w) = w) ∧
+      (∀ z, ‖z‖ > ‖c‖ + 2 → Ψ (φ z) = z)
+
+/-- `c = 2` specialization of the basin-valued package. This is the precise
+single-theorem target behind the expert note in `draft/`. -/
+def BasinExternalRayMapDataTwo : Prop :=
+  BasinExternalRayMapData (2 : ℂ)
+
 /-- The inverse of the Böttcher map exists on the exterior (ray map). -/
 axiom external_ray_map_exists (c : ℂ) : ExternalRayMapData c
 

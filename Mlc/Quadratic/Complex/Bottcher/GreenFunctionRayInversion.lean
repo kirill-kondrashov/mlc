@@ -105,6 +105,38 @@ lemma polar_green_map_zero_ne_zero_two :
     (show (1 : ℂ) * ↑(Real.exp (Quadratic.green_function (2 : ℂ) 0)) ≠ 0 from
       mul_ne_zero one_ne_zero (by exact_mod_cast (Real.exp_pos _).ne'))
 
+/-- A globally odd coordinate cannot stay nonzero on all of `𝔅_∞(2)`, because
+`0 ∈ 𝔅_∞(2)`. This is the formal obstruction to the expert proof's discarded
+global-oddness route. -/
+lemma no_global_odd_nonvanishing_coordinate_two
+    {φ : ℂ → ℂ}
+    (hodd : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → φ (-z) = -φ z)
+    (hnz : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → φ z ≠ 0) :
+    False := by
+  have h0odd : φ (0 : ℂ) = -φ 0 := by
+    simpa using hodd 0 zero_mem_basin_two_local
+  have hsum : φ (0 : ℂ) + φ 0 = 0 := by
+    have h := congrArg (fun t : ℂ => t + φ 0) h0odd
+    simpa using h
+  have hmul : (2 : ℂ) * φ 0 = 0 := by
+    simpa [two_mul] using hsum
+  have hphi0 : φ (0 : ℂ) = 0 := by
+    exact (mul_eq_zero.mp hmul).resolve_left (by norm_num)
+  exact (hnz 0 zero_mem_basin_two_local) hphi0
+
+/-- In particular, a globally odd map on `𝔅_∞(2)` cannot take values in the
+exterior region `{w : ‖w‖ > 1}` everywhere on the basin. -/
+lemma no_global_odd_exterior_coordinate_two
+    {φ : ℂ → ℂ}
+    (hodd : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → φ (-z) = -φ z)
+    (hexterior : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → 1 < ‖φ z‖) :
+    False := by
+  apply no_global_odd_nonvanishing_coordinate_two hodd
+  intro z hz hzero
+  have hnorm : ‖φ z‖ = 0 := by simpa [hzero]
+  have : ¬ 1 < ‖φ z‖ := by simpa [hnorm]
+  exact this (hexterior z hz)
+
 /-! ## Lemma B: Green function diverges to +∞ as ‖z‖ → ∞ -/
 
 /-- **Lemma B**: For any bound `r`, the Green function eventually exceeds `r` for large `‖z‖`.
