@@ -22,27 +22,37 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.bottcher_package
+- MLC.Quadratic.bottcher_coordinate_data
+- MLC.bottcher_map_eq_one_not_mem_K_two
+- MLC.Quadratic.external_ray_map_exists_two
 ```
 
 ## Current Frontier
 
 ```text
 Axioms(MLC.mlc_conjecture)
-= {Quot.sound, propext, Classical.choice, MLC.Quadratic.bottcher_package}
+= {Quot.sound, propext, Classical.choice,
+   MLC.Quadratic.bottcher_coordinate_data,
+   MLC.bottcher_map_eq_one_not_mem_K_two,
+   MLC.Quadratic.external_ray_map_exists_two}
 
-project_frontier(MLC.mlc_conjecture) = {MLC.Quadratic.bottcher_package}
+project_frontier(MLC.mlc_conjecture)
+= {MLC.Quadratic.bottcher_coordinate_data,
+   MLC.bottcher_map_eq_one_not_mem_K_two,
+   MLC.Quadratic.external_ray_map_exists_two}
 ```
 
 ## Current Status
 
-The checked root is now routed through a **single packaged theorem-facing
-Böttcher/external-ray seam**, not through the older tower / Lyubich /
-Problem 4.5 detours.
+The checked root is now routed through the **minimal connected theorem-facing
+Böttcher frontier** rather than one oversized package axiom, and still avoids
+the older tower / Lyubich / Problem 4.5 detours.
 
 1. `mlc_conjecture_of_externalRayMapData_two`
 2. the packaged root wrapper `mlc_conjecture_of_external_ray_map_exists_two`
-3. the single theorem-facing package axiom `MLC.Quadratic.bottcher_package`
+3. the coordinate-data seam `MLC.Quadratic.bottcher_coordinate_data`
+4. the normalization seam `MLC.bottcher_map_eq_one_not_mem_K_two`
+5. the `c = 2` external-ray seam `MLC.Quadratic.external_ray_map_exists_two`
 
 So the earlier explicit frontier
 
@@ -56,16 +66,18 @@ they are no longer part of `Axioms(MLC.mlc_conjecture)`.
 
 ## Remaining Blocker
 
-One non-core project axiom remains:
+The minimal connected Böttcher frontier currently has three non-core project
+axioms:
 
-1. `MLC.Quadratic.bottcher_package`
+1. `MLC.Quadratic.bottcher_coordinate_data`
+2. `MLC.bottcher_map_eq_one_not_mem_K_two`
+3. `MLC.Quadratic.external_ray_map_exists_two`
 
-It lives in the theorem-facing Böttcher/external-ray surface in
-`Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` and packages:
+These are the three connected branches the checked root actually uses:
 
-1. the theorem-facing Böttcher coordinate interface,
-2. the exterior inverse data,
-3. the `c = 2` normalization fact excluding the value `1` on `K(2)`.
+1. theorem-facing coordinate data (norm and continuity access),
+2. the root-only normalization exclusion at `c = 2`,
+3. the root-only exterior inverse package at `c = 2`.
 
 ## Non-solutions
 
@@ -78,18 +90,17 @@ through:
 
 ## Elimination Target
 
-The final reduction target is now the single packaged statement:
-
-1. replace `MLC.Quadratic.bottcher_package` by a constructive basin-valued
-   normalized Böttcher/external-ray theorem at `c = 2`
+The final constructive target is still the basin-valued normalized
+Böttcher/external-ray theorem at `c = 2`; proving it would eliminate all three
+connected frontier axioms at once.
 
 ## Repository Snapshot
 
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
 2. `plan/` has been pruned to the single live frontier file
    `PLAN_04_lyubich_bridge.md`.
-3. The current root-facing story is therefore simple: one remaining axiom, one
-   remaining elimination target.
+3. The current root-facing story is therefore simple: one remaining mathematical
+   elimination target, exposed as three connected theorem-facing assumptions.
 
 ## Dependencies
 
