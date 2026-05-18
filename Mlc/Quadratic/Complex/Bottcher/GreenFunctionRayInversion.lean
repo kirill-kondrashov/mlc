@@ -7,12 +7,13 @@ import Mathlib.Topology.Order.IntermediateValue
 /-!
 # Green Function Ray Inversion at `c = 2`
 
-This file formalizes the construction of the external ray map as the inverse of
-`bottcher_map 2` via the Green function.
+This file formalizes inversion constructors for the current explicit
+`bottcher_map` proxy at `c = 2` via the Green function.
 
 ## Definition
 
-`bottcher_map 2 z = (z / ‖z‖) * exp(green_function 2 z)` (polar Green map).
+`bottcher_map 2 z = polar_green_map 2 z = (z / ‖z‖) * exp(green_function 2 z)`
+away from zero, with the current total proxy branch at `z = 0`.
 
 The inverse `f` maps each `w` (with `‖w‖ > 1`) to the unique point `z` in the
 basin of infinity satisfying:
@@ -68,18 +69,18 @@ lemma green_function_neg_eq_two (z : ℂ) :
             simpa using hpos
   linarith
 
-/-- At `c = 2`, the explicit Böttcher map is globally odd. -/
-lemma bottcher_map_neg_eq_neg_two_of_ne_zero (z : ℂ) (hz : z ≠ 0) :
-    Quadratic.bottcher_map (2 : ℂ) (-z) = - Quadratic.bottcher_map (2 : ℂ) z := by
+/-- At `c = 2`, the explicit `polar_green_map` proxy is odd away from `0`. -/
+lemma polar_green_map_neg_eq_neg_two_of_ne_zero (z : ℂ) (hz : z ≠ 0) :
+    Quadratic.polar_green_map (2 : ℂ) (-z) = - Quadratic.polar_green_map (2 : ℂ) z := by
   have hneg : (-z : ℂ) ≠ 0 := by simpa using neg_ne_zero.mpr hz
   have hnorm_ne : (↑‖z‖ : ℂ) ≠ 0 := by
     exact_mod_cast (norm_ne_zero_iff.2 hz)
   have hdir : (-z : ℂ) / ↑‖-z‖ = -(z / ↑‖z‖) := by
     rw [norm_neg]
     field_simp [hnorm_ne]
-  rw [Quadratic.bottcher_map, Quadratic.bottcher_map, if_neg hneg, if_neg hz,
-    green_function_neg_eq_two z, hdir]
-  simpa [neg_mul]
+  unfold Quadratic.polar_green_map
+  simp [hneg, hz, green_function_neg_eq_two z, hdir]
+  ring
 
 private lemma zero_mem_basin_two_local : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
   have h6_basin : (6 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
@@ -95,13 +96,14 @@ private lemma zero_mem_basin_two_local : (0 : ℂ) ∈ Quadratic.basin_of_infini
   apply (basin_of_infinity_preimage_subset (2 : ℂ))
   simpa [Set.preimage, h0image] using h2_basin
 
-/-- The current explicit `bottcher_map` model at `c = 2` does not vanish at `0`. -/
-lemma bottcher_map_zero_ne_zero_two :
-    Quadratic.bottcher_map (2 : ℂ) 0 ≠ 0 := by
+/-- The current explicit `polar_green_map` proxy at `c = 2` does not vanish at `0`. -/
+lemma polar_green_map_zero_ne_zero_two :
+    Quadratic.polar_green_map (2 : ℂ) 0 ≠ 0 := by
   have hgreen_pos : 0 < Quadratic.green_function (2 : ℂ) 0 :=
     green_function_pos_of_basin (2 : ℂ) 0 zero_mem_basin_two_local
-  rw [Quadratic.bottcher_map]
-  simp [hgreen_pos.ne']
+  simpa [Quadratic.polar_green_map] using
+    (show (1 : ℂ) * ↑(Real.exp (Quadratic.green_function (2 : ℂ) 0)) ≠ 0 from
+      mul_ne_zero one_ne_zero (by exact_mod_cast (Real.exp_pos _).ne'))
 
 /-! ## Lemma B: Green function diverges to +∞ as ‖z‖ → ∞ -/
 
@@ -937,15 +939,7 @@ private lemma bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ 
     (hρ : 0 < ρ) :
     Quadratic.bottcher_map c ((ρ : ℂ) * u) =
       u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))) := by
-  have hu_ne : u ≠ 0 := by rw [ne_eq, ← norm_eq_zero, hu]; exact one_ne_zero
-  have hρ_ne : (ρ : ℂ) ≠ 0 := by exact_mod_cast hρ.ne'
-  have hne : (ρ : ℂ) * u ≠ 0 := mul_ne_zero hρ_ne hu_ne
-  simp only [Quadratic.bottcher_map, if_neg hne]
-  have hnorm : ‖(ρ : ℂ) * u‖ = ρ := by
-    rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ.le, hu, mul_one]
-  have hdiv : (ρ : ℂ) * u / (ρ : ℂ) = u :=
-    mul_div_cancel_left₀ u hρ_ne
-  rw [hnorm, hdiv]
+  simpa using Quadratic.bottcher_map_apply_ray c u hu ρ hρ
 
 /-- **Lemma E (seam-minimal uniqueness form)**: the external ray map at `c = 2`
 from anchored uniqueness + anchor-gap seams.
@@ -1017,8 +1011,17 @@ theorem external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
       rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
     -- Direction w/‖w‖ = z/‖z‖: the Böttcher map preserves direction.
     have hdir_eq : w / ↑‖w‖ = z / ↑‖z‖ := by
-      rw [hw_norm]
-      simp only [hw_def, Quadratic.bottcher_map, if_neg hz_ne]
+      have hu_z : ‖z / ↑‖z‖‖ = 1 := by
+        rw [norm_div, Complex.norm_real, norm_norm, div_self hz_pos.ne']
+      have hscale : ((‖z‖ : ℂ) * (z / ↑‖z‖)) = z := by
+        field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne',
+          mul_comm, mul_left_comm, mul_assoc]
+      have happlyz :
+          Quadratic.bottcher_map (2 : ℂ) z =
+            (z / ↑‖z‖) * ↑(Real.exp (green_function (2 : ℂ) z)) := by
+        simpa [hscale] using
+          (Quadratic.bottcher_map_apply_ray (2 : ℂ) (z / ↑‖z‖) hu_z ‖z‖ hz_pos)
+      rw [hw_norm, hw_def, happlyz]
       field_simp [(Real.exp_pos (green_function (2 : ℂ) z)).ne',
                   show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
     -- log ‖w‖ = G_2(z).

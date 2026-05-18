@@ -8,11 +8,11 @@ open Quadratic Complex Topology Set Filter
 /-!
 Roadmap for `bottcher_map_deriv_ne_zero_outside`.
 
-Key analytic inputs to formalize:
+Key analytic inputs to formalize for the current proxy surface:
 
-1. `bottcher_map` is holomorphic on the exterior of a large disk, hence analytic on
+1. The current proxy `bottcher_map` is holomorphic on the exterior of a large disk, hence analytic on
    `outside_disk c`.
-2. `bottcher_map` is injective on `outside_disk c` (or on a neighborhood of each point).
+2. The current proxy `bottcher_map` is injective on `outside_disk c` (or on a neighborhood of each point).
 3. A holomorphic injective map has nonvanishing derivative (conformal).
 
 The following lemmas make these dependencies explicit.

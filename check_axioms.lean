@@ -15,6 +15,8 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   let expectedAxioms : List Name :=
      [``Quot.sound, ``propext, ``Classical.choice,
+      ``MLC.Quadratic.bottcher_coordinate_data,
+      ``MLC.bottcher_map_eq_one_not_mem_K_two,
       ``MLC.Quadratic.external_ray_map_exists_two]
   
   try

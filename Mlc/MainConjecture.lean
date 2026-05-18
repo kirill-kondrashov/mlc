@@ -126,31 +126,11 @@ lemma zero_not_mem_K_two : (0 : ℂ) ∉ MLC.Quadratic.K (2 : ℂ) := by
     simpa [Quadratic.basin_eq_compl_K (2 : ℂ)] using hbasin
   simpa [Set.mem_compl_iff] using hcompl
 
-/-- Continuity of `bottcher_map` away from `0`. -/
+/-- Continuity of the theorem-facing `bottcher_map` away from `0`. -/
 
 lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
     ContinuousAt (Quadratic.bottcher_map c) z := by
-  have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
-    exact_mod_cast (norm_ne_zero_iff.2 hz)
-  have hdiv : ContinuousAt (fun w : ℂ => w / (‖w‖ : ℂ)) z :=
-    continuousAt_id.div
-      ((Complex.continuous_ofReal.comp continuous_norm).continuousAt) hnorm_ne
-  have hif :
-      (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) =ᶠ[𝓝 z]
-        (fun w : ℂ => w / (‖w‖ : ℂ)) := by
-    filter_upwards [eventually_ne_nhds hz] with w hw
-    simp [hw]
-  have hdir : ContinuousAt (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) z :=
-    hdiv.congr_of_eventuallyEq hif
-  have hexp :
-      ContinuousAt (fun w : ℂ => (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z :=
-    (Complex.continuous_ofReal.comp
-      (Real.continuous_exp.comp (MLC.Quadratic.continuous_green_function c))).continuousAt
-  change ContinuousAt
-    (fun w : ℂ =>
-      (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
-        (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
-  exact hdir.mul hexp
+  exact Quadratic.bottcher_map_continuousAt_of_ne_zero c z hz
 
 /-- Every real point escapes for `c = 2`, hence lies in the basin. -/
 
@@ -199,18 +179,18 @@ lemma ofReal_not_mem_K_two (x : ℝ) :
     simpa [Quadratic.basin_eq_compl_K (2 : ℂ)] using hbasin
   simpa [Set.mem_compl_iff] using hcompl
 
-/-- Any `K(2)` point mapping to `1` under the explicit `bottcher_map` model
+/-- Any `K(2)` point mapping to `1` under the explicit `polar_green_map` proxy
     yields a contradiction. -/
 
-lemma bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
-    Quadratic.bottcher_map (2 : ℂ) z ≠ 1 := by
+lemma polar_green_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
+    Quadratic.polar_green_map (2 : ℂ) z ≠ 1 := by
   intro hphi
   by_cases hz0 : z = 0
   · exact zero_not_mem_K_two (by simpa [hz0] using hzK)
   · have hgreen : MLC.Quadratic.green_function (2 : ℂ) z = 0 :=
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K (2 : ℂ) z).2 hzK
     have hdir : z / (‖z‖ : ℂ) = 1 := by
-      simpa [Quadratic.bottcher_map, hz0, hgreen] using hphi
+      simpa [Quadratic.polar_green_map, hz0, hgreen] using hphi
     have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
       exact_mod_cast (norm_ne_zero_iff.2 hz0)
     have hz_eq : z = ((‖z‖ : ℝ) : ℂ) := by
@@ -222,6 +202,12 @@ lemma bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (
       rw [← hz_eq]
       exact hzK
     exact ofReal_not_mem_K_two ‖z‖ hzK'
+
+/-- The theorem-facing `bottcher_map` at `c = 2` also avoids the value `1` on `K(2)`.
+    This is the normalization fact needed by the root proof after reclaiming
+    `Quadratic.bottcher_map` from the explicit proxy. -/
+axiom bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
+    Quadratic.bottcher_map (2 : ℂ) z ≠ 1
 
 /-- The chosen `fixed_point 2` cannot map to `1` under the current explicit
     `bottcher_map` model. -/
@@ -2379,19 +2365,7 @@ private lemma bottcher_map_apply_ray_two
     (hρ : 0 < ρ) :
     Quadratic.bottcher_map (2 : ℂ) ((ρ : ℂ) * u) =
       u * ↑(Real.exp (Quadratic.green_function (2 : ℂ) ((ρ : ℂ) * u))) := by
-  have hu_ne : u ≠ 0 := by
-    rw [ne_eq, ← norm_eq_zero]
-    rw [hu]
-    exact one_ne_zero
-  have hρ_ne : (ρ : ℂ) ≠ 0 := by
-    exact_mod_cast hρ.ne'
-  have hne : (ρ : ℂ) * u ≠ 0 := mul_ne_zero hρ_ne hu_ne
-  simp only [Quadratic.bottcher_map, if_neg hne]
-  have hnorm : ‖(ρ : ℂ) * u‖ = ρ := by
-    rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ.le, hu, mul_one]
-  have hdiv : (ρ : ℂ) * u / (ρ : ℂ) = u := by
-    simpa [mul_comm, mul_left_comm, mul_assoc] using (mul_div_cancel_left₀ u hρ_ne)
-  rw [hnorm, hdiv]
+  simpa using Quadratic.bottcher_map_apply_ray (2 : ℂ) u hu ρ hρ
 
 /-- Green-ray anchored uniqueness at `c = 2` from anchor-gap seam plus
 outside-open injectivity. -/

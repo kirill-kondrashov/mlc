@@ -22,6 +22,8 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
+- MLC.Quadratic.bottcher_coordinate_data
+- MLC.bottcher_map_eq_one_not_mem_K_two
 - MLC.Quadratic.external_ray_map_exists_two
 ```
 
@@ -30,20 +32,27 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
+   MLC.Quadratic.bottcher_coordinate_data,
+   MLC.bottcher_map_eq_one_not_mem_K_two,
    MLC.Quadratic.external_ray_map_exists_two}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.Quadratic.external_ray_map_exists_two}
+= {MLC.Quadratic.bottcher_coordinate_data,
+   MLC.bottcher_map_eq_one_not_mem_K_two,
+   MLC.Quadratic.external_ray_map_exists_two}
 ```
 
 ## Current Status
 
 The checked root is now routed through the **theoremized `c = 2` external-ray
-seam**, not through the older tower / Lyubich / Problem 4.5 detours.
+seam plus the reclaimed theorem-facing `Quadratic.bottcher_map` interface**, not
+through the older tower / Lyubich / Problem 4.5 detours.
 
 1. `mlc_conjecture_of_externalRayMapData_two`
 2. the packaged root wrapper `mlc_conjecture_of_external_ray_map_exists_two`
-3. the single remaining project axiom `MLC.Quadratic.external_ray_map_exists_two`
+3. the theorem-facing coordinate package axiom `MLC.Quadratic.bottcher_coordinate_data`
+4. the normalization axiom `MLC.bottcher_map_eq_one_not_mem_K_two`
+5. the residual external-ray package axiom `MLC.Quadratic.external_ray_map_exists_two`
 
 So the earlier explicit frontier
 
@@ -57,17 +66,22 @@ they are no longer part of `Axioms(MLC.mlc_conjecture)`.
 
 ## Remaining Blocker
 
-Only one non-core project axiom remains:
+Three non-core project axioms remain:
 
-1. `MLC.Quadratic.external_ray_map_exists`
+1. `MLC.Quadratic.bottcher_coordinate_data`
+2. `MLC.bottcher_map_eq_one_not_mem_K_two`
+3. `MLC.Quadratic.external_ray_map_exists`
    (global all-parameter version)
 
-but the checked root now depends only on the weaker specialization
+and the checked root currently depends on the specialized package
 
-1. `MLC.Quadratic.external_ray_map_exists_two`
+1. `MLC.Quadratic.bottcher_coordinate_data`
+2. `MLC.bottcher_map_eq_one_not_mem_K_two`
+3. `MLC.Quadratic.external_ray_map_exists_two`
 
-This is the \(c=2\) exterior Böttcher inverse / external-ray map existence
-package from `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`.
+These live in the theorem-facing Böttcher/external-ray surface in
+`Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean` and the root normalization
+wrapper in `Mlc/MainConjecture.lean`.
 
 ## Non-solutions
 
@@ -80,9 +94,12 @@ through:
 
 ## Elimination Target
 
-The final reduction target is now singular:
+The final reduction target is now the three-piece theorem-facing package:
 
-1. replace `MLC.Quadratic.external_ray_map_exists_two` by a constructive
+1. replace `MLC.Quadratic.bottcher_coordinate_data` by a constructive
+   theorem-facing Böttcher coordinate interface
+2. replace `MLC.bottcher_map_eq_one_not_mem_K_two` by a theorem from that interface
+3. replace `MLC.Quadratic.external_ray_map_exists_two` by a constructive
    external-ray / Böttcher inverse theorem at `c = 2`
 
 ## Repository Snapshot

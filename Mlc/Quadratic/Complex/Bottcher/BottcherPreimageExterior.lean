@@ -12,7 +12,8 @@ Sketch of the missing dynamical input:
 * One route: use quantitative Green function bounds (or escape estimates)
   to prove that if `z` escapes, then eventually `‖z‖ ≥ ‖c‖ + 2`, and then
   use forward invariance to pull back to `z`.
-* With that, any `z` with `‖bottcher_map c z‖ > 1` lies in the basin (already proved),
+* With that, any `z` with `‖Quadratic.bottcher_map c z‖ > 1` for the current proxy
+  lies in the basin (already proved),
   hence in `outside_disk c`.
 -/
 
