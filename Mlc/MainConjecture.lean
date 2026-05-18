@@ -1991,6 +1991,33 @@ theorem mlc_conjecture_of_externalRayMapData_two
   exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
     (bottcherSurjOnExterior_two_of_externalRayMapData h_data)
 
+/-- Root-facing bridge for the direct proper/local route at `c = 2`: once
+outside-open injectivity is available, the restricted-map proper/local witness
+produces external-ray data constructively. -/
+theorem externalRayMapData_two_of_proper_local_restrict_of_injOn
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    external_ray_map_data_of_injOn_outside_open_of_surj_exterior (2 : ℂ) h_inj
+      (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
+        (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) h_proper)
+        h_local)
+
+/-- Root-facing MLC bridge for the direct proper/local route at `c = 2`. -/
+theorem mlc_conjecture_of_proper_local_restrict_of_injOn
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (externalRayMapData_two_of_proper_local_restrict_of_injOn h_proper h_local h_inj)
+
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from
 outside-open injectivity plus exterior surjectivity by outside-open preimages. -/
 def AnalyticDerivConstructivePayloadTwo : Prop :=
@@ -2530,6 +2557,41 @@ def FinalAxiomEliminationKernelV17 : Prop :=
 with aggregate constructive ingress. -/
 def FinalAxiomEliminationIngressKernelV18 : Prop :=
   FinalAxiomCoreConstructiveGapV16 ∧ RemainingConstructiveIngressTwo
+
+/-- Root-closure bridge realized from the explicit substitute payload. -/
+theorem externalRayMapData_two_of_rootClosureSubstituteTwo
+    (hroot : RootClosureSubstituteTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact externalRayMapData_two_of_proper_local_restrict_of_injOn
+    hroot.2.1 hroot.2.2 hroot.1
+
+/-- The direct proper/local route closes MLC once outside-open injectivity is
+available as part of the root substitute payload. -/
+theorem mlc_conjecture_of_rootClosureSubstituteTwo
+    (hroot : RootClosureSubstituteTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (externalRayMapData_two_of_rootClosureSubstituteTwo hroot)
+
+/-- The repository's core final-gap marker is now fully wired to the root:
+if the remaining direct-witness-to-local-seam implication is proved and a direct
+proper/local witness is available, then the last project axiom is unnecessary. -/
+theorem mlc_conjecture_of_finalAxiomCoreConstructiveGapV16
+    (hgap : FinalAxiomCoreConstructiveGapV16)
+    (hdirect : DirectProperLocalWitnessTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  have hseam : CP5ResidualLocalHomeomorphInjSeamTwo := hgap hdirect
+  have hroot : RootClosureSubstituteTwo := by
+    refine ⟨?_, hdirect⟩
+    exact hseam hdirect
+  exact mlc_conjecture_of_rootClosureSubstituteTwo hroot
+
+/-- Packaged elimination kernel at the current frontier: the isolated core
+bridge together with one direct proper/local witness suffices for MLC. -/
+theorem mlc_conjecture_of_finalAxiomEliminationKernelV17
+    (hkernel : FinalAxiomEliminationKernelV17) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_finalAxiomCoreConstructiveGapV16 hkernel.1 hkernel.2
 
 /-- v19 ingress-level core bridge target: the local CP5 injectivity seam from
 aggregate constructive ingress. -/

@@ -1,19 +1,26 @@
-# \(c=2\)
+# Core direct-witness gap at \(c=2\)
 
 \[
-f(z)=z^2+2,\qquad
-\mathcal B_\infty=\{z\in\mathbb C:\ f^{\circ n}(z)\to\infty\},\qquad
-\Omega=\{w\in\mathbb C:\ |w|>1\}.
+V=\{z\in\mathbb C:\ |z|>4\},\qquad \Omega=\{w\in\mathbb C:\ |w|>1\}.
 \]
 
-Let \(\phi:\mathcal B_\infty\to\Omega\) satisfy
+Let \(\phi:V\to\Omega\) be a proper local homeomorphism such that
 \[
-\phi(f(z))=\phi(z)^2,\qquad
-|\phi(z)|=e^{G(z)},\qquad
-\lim_{\substack{z\to\infty\\ z\in\mathcal B_\infty}}\frac{\phi(z)}{z}=1.
+\lim_{\substack{z\to\infty\\ z\in V}}\frac{\phi(z)}{z}=1.
 \]
 
-Prove
+This is the current **core implication** in the direct proper/local route.
+Formally, once such a restricted-map witness is available, the repository now
+already derives surjectivity onto \(\Omega\) and reduces the last root step to
+injectivity on \(V\).
+
+The surjectivity part is already accounted for formally: properness plus local
+homeomorphy makes \(\phi(V)\subseteq\Omega\) both open and closed, hence
+\(\phi(V)=\Omega\). The remaining missing step is injectivity.
+
+Prove that
 \[
-\forall w\in\Omega,\ \exists z\in\mathcal B_\infty,\ \phi(z)=w.
+\exists\,w_0\in\Omega\quad\text{such that}\quad \#\,\phi^{-1}(w_0)=1.
 \]
+
+Equivalently, prove that \(\phi\) has covering degree \(1\), hence \(\phi\) is injective, and therefore \(\phi:V\to\Omega\) is a homeomorphism.
