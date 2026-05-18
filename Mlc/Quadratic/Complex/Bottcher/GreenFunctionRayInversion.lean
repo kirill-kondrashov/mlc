@@ -50,6 +50,59 @@ lemma green_function_pos_on_outside_open (c : ℂ) (z : ℂ) (hz : ‖z‖ > ‖
     0 < Quadratic.green_function c z :=
   green_function_pos_of_basin c z (outside_open_subset_basin c hz)
 
+/-- At `c = 2`, the Green function is globally even. -/
+lemma green_function_neg_eq_two (z : ℂ) :
+    green_function (2 : ℂ) (-z) = green_function (2 : ℂ) z := by
+  have hneg := green_function_functional_eq (2 : ℂ) (-z)
+  have hpos := green_function_functional_eq (2 : ℂ) z
+  have hfc : fc (2 : ℂ) (-z) = fc (2 : ℂ) z := by
+    simp [fc]
+  have htwice : 2 * green_function (2 : ℂ) (-z) = 2 * green_function (2 : ℂ) z := by
+    calc
+      2 * green_function (2 : ℂ) (-z)
+          = green_function (2 : ℂ) (fc (2 : ℂ) (-z)) := by
+              simpa using hneg.symm
+      _ = green_function (2 : ℂ) (fc (2 : ℂ) z) := by
+            simpa [hfc]
+      _ = 2 * green_function (2 : ℂ) z := by
+            simpa using hpos
+  linarith
+
+/-- At `c = 2`, the explicit Böttcher map is globally odd. -/
+lemma bottcher_map_neg_eq_neg_two_of_ne_zero (z : ℂ) (hz : z ≠ 0) :
+    Quadratic.bottcher_map (2 : ℂ) (-z) = - Quadratic.bottcher_map (2 : ℂ) z := by
+  have hneg : (-z : ℂ) ≠ 0 := by simpa using neg_ne_zero.mpr hz
+  have hnorm_ne : (↑‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.2 hz)
+  have hdir : (-z : ℂ) / ↑‖-z‖ = -(z / ↑‖z‖) := by
+    rw [norm_neg]
+    field_simp [hnorm_ne]
+  rw [Quadratic.bottcher_map, Quadratic.bottcher_map, if_neg hneg, if_neg hz,
+    green_function_neg_eq_two z, hdir]
+  simpa [neg_mul]
+
+private lemma zero_mem_basin_two_local : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+  have h6_basin : (6 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+    apply outside_open_subset_basin (2 : ℂ)
+    norm_num
+  have h2_basin : (2 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+    have h2image : quadratic_map (2 : ℂ) (2 : ℂ) = 6 := by
+      norm_num [quadratic_map]
+    apply (basin_of_infinity_preimage_subset (2 : ℂ))
+    simpa [Set.preimage, h2image] using h6_basin
+  have h0image : quadratic_map (2 : ℂ) (0 : ℂ) = 2 := by
+    norm_num [quadratic_map]
+  apply (basin_of_infinity_preimage_subset (2 : ℂ))
+  simpa [Set.preimage, h0image] using h2_basin
+
+/-- The current explicit `bottcher_map` model at `c = 2` does not vanish at `0`. -/
+lemma bottcher_map_zero_ne_zero_two :
+    Quadratic.bottcher_map (2 : ℂ) 0 ≠ 0 := by
+  have hgreen_pos : 0 < Quadratic.green_function (2 : ℂ) 0 :=
+    green_function_pos_of_basin (2 : ℂ) 0 zero_mem_basin_two_local
+  rw [Quadratic.bottcher_map]
+  simp [hgreen_pos.ne']
+
 /-! ## Lemma B: Green function diverges to +∞ as ‖z‖ → ∞ -/
 
 /-- **Lemma B**: For any bound `r`, the Green function eventually exceeds `r` for large `‖z‖`.
