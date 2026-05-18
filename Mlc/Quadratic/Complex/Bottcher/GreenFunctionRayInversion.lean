@@ -1178,6 +1178,42 @@ theorem external_ray_map_exists_two_of_surj_of_injOn_outside_open
     change Classical.choose hV = z
     exact h_inj_outside hchoose.1 hz hchoose.2
 
+/-- Combined Steps 2 and 3 of the expert proof at `c = 2`:
+if one has already established global exterior surjectivity (Step 1), then the
+abstract local-oddness/eventual-injectivity argument yields outside-open
+injectivity (Step 2), and the choice-based constructor produces the desired
+external-ray package (Step 3). -/
+theorem external_ray_map_exists_two_of_surj_of_local_odd_of_eventual_inj
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (hloc_odd : ∀ z : ℂ, ‖z‖ > 4 → Quadratic.bottcher_map (2 : ℂ) (-z) = -Quadratic.bottcher_map (2 : ℂ) z)
+    (hnorm_gt_one : ∀ z : ℂ, ‖z‖ > 4 → 1 < ‖Quadratic.bottcher_map (2 : ℂ) z‖)
+    (hiter_eq :
+      ∀ z₁ z₂ : ℂ, ∀ n : ℕ,
+        Quadratic.bottcher_map (2 : ℂ) z₁ = Quadratic.bottcher_map (2 : ℂ) z₂ →
+          Quadratic.bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₁) =
+            Quadratic.bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₂))
+    (hforward : ∀ z : ℂ, ‖z‖ > 4 → ‖quadratic_map (2 : ℂ) z‖ > 4)
+    (heventually_inj : ∃ R : ℝ, R > 4 ∧
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > R})
+    (heventually_large :
+      ∀ z : ℂ, ‖z‖ > 4 → ∀ R : ℝ, R > 4 →
+        ∃ N : ℕ, ∀ n ≥ N, ‖((quadratic_map (2 : ℂ))^[n] z)‖ > R) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  have h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+    have h_inj4 :
+        Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > 4} :=
+      injOn_outside_open_of_local_odd_of_eventual_inj_two
+        hloc_odd hnorm_gt_one hiter_eq hforward heventually_inj heventually_large
+    intro z hz w hw hEq
+    have hz' : ‖z‖ > ‖(2 : ℂ)‖ + 2 := hz
+    have hw' : ‖w‖ > ‖(2 : ℂ)‖ + 2 := hw
+    have h2norm : ‖(2 : ℂ)‖ = 2 := by norm_num
+    have hz4 : ‖z‖ > 4 := by linarith [hz', h2norm]
+    have hw4 : ‖w‖ > 4 := by linarith [hw', h2norm]
+    exact h_inj4 hz4 hw4 hEq
+  exact external_ray_map_exists_two_of_surj_of_injOn_outside_open h_surj h_inj
+
 /-- The Böttcher map applied to a positive-real-scaled unit vector simplifies to
 `u * exp(G_c(ρ · u))`. -/
 private lemma bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
