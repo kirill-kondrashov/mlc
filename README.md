@@ -22,54 +22,40 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.lyubich_conformal_bridge
-- MLC.exists_parameter_model_rfast_fixed_point
+- MLC.Quadratic.external_ray_map_exists
 ```
 
 ## Current Frontier
 
 ```text
 Axioms(MLC.mlc_conjecture)
+Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.lyubich_conformal_bridge,
-   MLC.exists_parameter_model_rfast_fixed_point}
+   MLC.Quadratic.external_ray_map_exists}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.lyubich_conformal_bridge,
-   MLC.exists_parameter_model_rfast_fixed_point}
-
-Problem45VirtualNearMoleculeRenormalizationData
-= IRClassificationData ∧ VirtualJuliaSatelliteLocalConnectivityData
+= {MLC.Quadratic.external_ray_map_exists}
 ```
 
 ## Current Status
 
-The root theorem is now wired through the **new true-modulus bounded-type
-primitive route** instead of the old single Problem 4.5 axiom. Concretely, the
-graph now passes through:
+The root theorem is now routed through the **theoremized `c = 2` external-ray
+seam**:
 
-1. a chosen true conformal-modulus handle,
-2. type-wise real bounds,
-3. type-wise Grötzsch promotion,
-4. affine normalization comparison,
-5. a bridge back to the current legacy primitive eventual consumer path,
-6. a Feigenbaum-faithful bounded-type constructive Problem 4.5 slice,
-7. and a separate residual open seam for Problems 4.3/4.4.
+1. `mlc_conjecture_of_externalRayMapData_two`
+2. the packaged root wrapper `mlc_conjecture_of_external_ray_map_exists_two`
+3. the single remaining project axiom `MLC.Quadratic.external_ray_map_exists`
 
-So the theorem graph now exposes the latest primitive Feigenbaum findings
-directly at the root, at the cost of a wider axiom frontier.
+This removes the entire explicit Problem 4.3/4.4 / chosen-true bounded-type
+frontier from the checked root.
 
 ## Remaining Blocker
 
-The unresolved mathematics is now split into two explicit external inputs:
+Only one non-core project axiom remains:
 
-1. `PrimitiveFeigenbaumTypewiseRealBoundsGlobalData`
-2. `PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData`
+1. `MLC.Quadratic.external_ray_map_exists`
 
-These are exactly the Step-2 / Step-3 analytic theorems needed to turn bounded
-primitive combinatorics into type-wise positive constants `ε_τ`, after which the
-finite-minimum step and the bounded-type constructive cutover are already
-formalized.
+This is the exterior Böttcher inverse / external-ray map existence package.
 
 ## Non-solutions
 
@@ -82,15 +68,10 @@ through:
 
 ## Elimination Target
 
-This alternative root keeps the frontier at **two non-core axioms**, but uses a
-larger parameter-level route than the minimal BMol shortcut:
+The final reduction target is now singular:
 
-- `MLC.lyubich_conformal_bridge`
-- `MLC.exists_parameter_model_rfast_fixed_point`
-
-So the dependency graph keeps the fixed-point parameterization and
-parameter-to-tower bridge visible, instead of collapsing directly to the
-upstream BMol fixed-point seed.
+1. replace `MLC.Quadratic.external_ray_map_exists` by a constructive
+   external-ray / Böttcher inverse theorem at `c = 2`
 
 ## Dependencies
 

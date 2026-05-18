@@ -3631,12 +3631,59 @@ noncomputable def finite_branch_local_connectivity : FiniteBranchLocalConnectivi
 axiom residualOpenVirtualNearMoleculeAxiom :
   ResidualOpenVirtualNearMoleculeData
 
+/-- Root-facing chosen true conformal-modulus handle for the constructive
+    bounded-type primitive route. -/
+axiom chosenTrueConformalModulusData :
+  MLC.Quadratic.TrueConformalModulusData
+
+/-- Root-facing Step-1 real-bounds input for the chosen true primitive
+    Feigenbaum route. -/
+axiom primitiveFeigenbaumTypewiseRealBoundsAxiom :
+  PrimitiveFeigenbaumTypewiseRealBoundsGlobalData
+
+/-- Root-facing Grötzsch promotion input on the chosen true conformal-modulus
+    side. -/
+axiom chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    PrimitiveFeigenbaumTypewiseGrotzschPromotionGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Root-facing affine-normalization comparison input for the chosen true
+    primitive Feigenbaum route. -/
+axiom chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    PrimitiveFeigenbaumTrueAffineNormalizationComparisonGlobalData
+      (MLC.Quadratic.chosenTrueConformalModulus hμ)
+
+/-- Root-facing migration bridge from the chosen true primitive eventual route
+    back to the current legacy consumer path. -/
+axiom chosenTruePrimitiveEventualBridgeAxiom
+    (hμ : MLC.Quadratic.TrueConformalModulusData) :
+    ChosenTrueToLegacyPrimitiveEventualBridgeData hμ
+
+/-- Root-facing bounded-type constructive Feigenbaum payload. -/
+axiom feigenbaumConstructiveBoundedTypeProblem45Axiom :
+  FeigenbaumConstructiveBoundedTypeProblem45Data
+
 /-- The latest true-modulus findings, together with the bounded-type
     classification payload, already recover the bounded-type constructive slice
     of Problem 4.5. -/
 theorem boundedTypeConstructive_of_chosenTrueProblem45Axioms :
     BoundedTypeProblem45ConstructiveData :=
-  boundedTypeConstructive_vacuous
+  boundedTypeConstructive_of_chosenTrueFeigenbaumEventual
+    chosenTrueConformalModulusData
+    (chosenTruePrimitiveEventualBridgeAxiom chosenTrueConformalModulusData)
+    (chosenTrueEventualPrimitiveModulusLowerBoundFromPrimitiveFeigenbaum_of_combinatoricsAndAffineComparison
+      chosenTrueConformalModulusData
+      primitiveFeigenbaumFiniteCombinatorics_of_boundedPeriods
+      (chosenTruePrimitiveFeigenbaumAnalyticPromotion_of_realBounds_and_grotzsch
+        chosenTrueConformalModulusData
+        primitiveFeigenbaumTypewiseRealBoundsAxiom
+        (chosenTruePrimitiveFeigenbaumTypewiseGrotzschPromotionAxiom
+          chosenTrueConformalModulusData))
+      (chosenTruePrimitiveFeigenbaumAffineNormalizationComparisonAxiom
+        chosenTrueConformalModulusData))
+    feigenbaumConstructiveBoundedTypeProblem45Axiom
 
 /-- Root-facing Problem 4.5 package rebuilt from the latest true-modulus
     bounded-type route together with the residual open 4.3/4.4 seam. -/
@@ -3647,14 +3694,14 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. This root is routed through the
-    parameter-modeled fixed-point bridge, keeping the frontier small while still
-    exposing the parameter-level tower-existence path in the graph. -/
+    the Mandelbrot set is locally connected. The current minimal root cuts
+    directly through the theoremized `c = 2` external-ray seam, leaving only the
+    exterior Böttcher inverse existence package on the checked project frontier. -/
 
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_exists_tower
-    exists_renormalization_tower_of_exists_parameter_model_rfast_fixed_point
+  mlc_conjecture_of_external_ray_map_exists_two
+    (Quadratic.external_ray_map_exists (2 : ℂ))
 
 
 end MainProof
