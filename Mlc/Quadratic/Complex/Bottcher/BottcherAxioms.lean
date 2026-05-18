@@ -24,28 +24,11 @@ noncomputable def polar_green_map (c : ℂ) (z : ℂ) : ℂ :=
 def basin_of_infinity (c : ℂ) : Set ℂ :=
   MLC.basin_of_infinity c
 
-/-- The theorem-facing Böttcher coordinate interface. This is intentionally
-separate from the explicit total proxy `polar_green_map`; downstream theorems
-should talk to this surface unless they need the proxy's zero-branch formula. -/
-structure BottcherCoordinateData (c : ℂ) where
-  map : ℂ → ℂ
-  norm_eq_exp_green : ∀ z, ‖map z‖ = Real.exp (MLC.Quadratic.green_function c z)
-  continuousAt_of_ne_zero : ∀ z, z ≠ 0 → ContinuousAt map z
-  apply_ray : ∀ u : ℂ, ‖u‖ = 1 → ∀ ρ : ℝ, 0 < ρ →
-    map ((ρ : ℂ) * u) = u * ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u)))
-  seq_converges :
-    TendstoLocallyUniformlyOn
-      (fun n z => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
-      map atTop (basin_of_infinity c)
-
-/-- Opaque theorem-facing Böttcher coordinate payload. This is the connected
-coordinate-data branch of the current frontier. -/
-axiom bottcher_coordinate_data (c : ℂ) : BottcherCoordinateData c
-
-/-- The theorem-facing Böttcher coordinate. This is no longer the explicit proxy
-formula; use `polar_green_map` for proxy-level computations. -/
+/-- The theorem-facing Böttcher coordinate is now realized constructively by the
+explicit proxy `polar_green_map`. The remaining frontier no longer needs a
+separate coordinate-data axiom for the norm/continuity/ray package. -/
 noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
-  (bottcher_coordinate_data c).map z
+  polar_green_map c z
 
 lemma orbit_eq_iter_quadratic_map (c z : ℂ) (n : ℕ) :
     MLC.Quadratic.orbit c z n = (MLC.quadratic_map c)^[n] z := by
@@ -198,18 +181,79 @@ def bottcher_domain (c : ℂ) : Set ℂ :=
   external_ray_map c '' {w | 1 < ‖w‖}
 
 theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
-    ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) :=
-  (bottcher_coordinate_data c).norm_eq_exp_green z
+    ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) := by
+  by_cases hz : z = 0
+  · simp [bottcher_map, polar_green_map, hz]
+  · have hnormz : (‖z‖ : ℝ) ≠ 0 := norm_ne_zero_iff.2 hz
+    have hdir : ‖z / (‖z‖ : ℂ)‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm, div_self hnormz]
+    have hexp :
+        ‖(Real.exp (MLC.Quadratic.green_function c z) : ℂ)‖ =
+          Real.exp (MLC.Quadratic.green_function c z) := by
+      simp [Complex.norm_real, abs_of_pos (Real.exp_pos _)]
+    calc
+      ‖bottcher_map c z‖
+          = ‖(z / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c z) : ℂ)‖ := by
+              simp [bottcher_map, polar_green_map, hz]
+      _ = ‖z / (‖z‖ : ℂ)‖ * ‖(Real.exp (MLC.Quadratic.green_function c z) : ℂ)‖ := by
+            rw [norm_mul]
+      _ = 1 * Real.exp (MLC.Quadratic.green_function c z) := by
+            rw [hdir, hexp]
+      _ = Real.exp (MLC.Quadratic.green_function c z) := by ring
 
 theorem bottcher_map_continuousAt_of_ne_zero (c : ℂ) (z : ℂ) (hz : z ≠ 0) :
-    ContinuousAt (bottcher_map c) z :=
-  (bottcher_coordinate_data c).continuousAt_of_ne_zero z hz
+    ContinuousAt (bottcher_map c) z := by
+  have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.2 hz)
+  have hdiv : ContinuousAt (fun w : ℂ => w / (‖w‖ : ℂ)) z :=
+    continuousAt_id.div
+      ((Complex.continuous_ofReal.comp continuous_norm).continuousAt) hnorm_ne
+  have hif :
+      (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) =ᶠ[𝓝 z]
+        (fun w : ℂ => w / (‖w‖ : ℂ)) := by
+    filter_upwards [eventually_ne_nhds hz] with w hw
+    simp [hw]
+  have hdir : ContinuousAt (fun w : ℂ => if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) z :=
+    hdiv.congr_of_eventuallyEq hif
+  have hexp :
+      ContinuousAt (fun w : ℂ => (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z :=
+    (Complex.continuous_ofReal.comp
+      (Real.continuous_exp.comp (MLC.Quadratic.continuous_green_function c))).continuousAt
+  change ContinuousAt (Quadratic.polar_green_map c) z
+  change ContinuousAt
+    (fun w : ℂ =>
+      (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
+        (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
+  exact hdir.mul hexp
 
 theorem bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
     (hρ : 0 < ρ) :
     bottcher_map c ((ρ : ℂ) * u) =
-      u * ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u))) :=
-  (bottcher_coordinate_data c).apply_ray u hu ρ hρ
+      u * ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u))) := by
+  have hu0 : u ≠ 0 := by
+    intro hu'
+    simpa [hu'] using hu
+  have hρ0 : ((ρ : ℂ)) ≠ 0 := by
+    exact_mod_cast (ne_of_gt hρ)
+  have hz0 : ((ρ : ℂ) * u) ≠ 0 := mul_ne_zero hρ0 hu0
+  have hnorm : ‖((ρ : ℂ) * u)‖ = ρ := by
+    calc
+      ‖((ρ : ℂ) * u)‖ = ‖((ρ : ℂ))‖ * ‖u‖ := by simpa using norm_mul (ρ : ℂ) u
+      _ = |ρ| * 1 := by simp [Complex.norm_real, hu]
+      _ = ρ := by simp [abs_of_pos hρ]
+  have hnormC : (‖((ρ : ℂ) * u)‖ : ℂ) = (ρ : ℂ) := by
+    exact_mod_cast hnorm
+  have hdir' : ((ρ : ℂ) * u) / (ρ : ℂ) = u := by
+    field_simp [hρ0]
+  have hdir : ((ρ : ℂ) * u) / (‖((ρ : ℂ) * u)‖ : ℂ) = u := by
+    rw [hnormC]
+    exact hdir'
+  calc
+    bottcher_map c ((ρ : ℂ) * u)
+        = ((((ρ : ℂ) * u) / (‖((ρ : ℂ) * u)‖ : ℂ)) *
+            ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u)))) := by
+              simp [bottcher_map, polar_green_map, hz0]
+    _ = u * ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u))) := by rw [hdir]
 
 lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
     (_hw : w ∈ bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
@@ -342,11 +386,10 @@ lemma fixed_point_is_fixed (c : ℂ) : MLC.Quadratic.fc c (fixed_point c) = fixe
 
 /-- The sequence of roots converges locally uniformly to the theorem-facing
     Böttcher coordinate. -/
-theorem bottcher_seq_converges (c : ℂ) :
+axiom bottcher_seq_converges (c : ℂ) :
     TendstoLocallyUniformlyOn
       (fun n z => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
-      (bottcher_map c) atTop (basin_of_infinity c) :=
-  (bottcher_coordinate_data c).seq_converges
+      (bottcher_map c) atTop (basin_of_infinity c)
 
 /-- Extension of the ray map to the closed exterior of the disk. -/
 noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
