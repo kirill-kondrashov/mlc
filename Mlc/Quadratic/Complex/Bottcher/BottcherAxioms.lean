@@ -38,8 +38,27 @@ structure BottcherCoordinateData (c : ℂ) where
       (fun n z => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
       map atTop (basin_of_infinity c)
 
-/-- Opaque theorem-facing Böttcher coordinate package. -/
-axiom bottcher_coordinate_data (c : ℂ) : BottcherCoordinateData c
+/-- Single residual theorem-facing package for the Böttcher/external-ray
+surface. This collapses the previous separate coordinate, normalization, and
+exterior-inverse axioms to one project axiom name while preserving the existing
+API shape above it. -/
+structure BottcherPackage where
+  coordinate_data : ∀ c : ℂ, BottcherCoordinateData c
+  external_ray_data :
+    ∀ c : ℂ,
+      ∃ f : ℂ → ℂ,
+        (∀ w, 1 < ‖w‖ → (coordinate_data c).map (f w) = w) ∧
+          (∀ z, ‖z‖ > ‖c‖ + 2 → f ((coordinate_data c).map z) = z)
+  eq_one_not_mem_K_two :
+    ∀ z : ℂ, z ∈ MLC.Quadratic.K (2 : ℂ) → (coordinate_data (2 : ℂ)).map z ≠ 1
+
+/-- Opaque theorem-facing Böttcher/external-ray package. -/
+axiom bottcher_package : BottcherPackage
+
+/-- The theorem-facing Böttcher coordinate payload extracted from the single
+residual package axiom. -/
+noncomputable def bottcher_coordinate_data (c : ℂ) : BottcherCoordinateData c :=
+  bottcher_package.coordinate_data c
 
 /-- The theorem-facing Böttcher coordinate. This is no longer the explicit proxy
 formula; use `polar_green_map` for proxy-level computations. -/
@@ -133,13 +152,17 @@ single-theorem target behind the expert note in `draft/`. -/
 def BasinExternalRayMapDataTwo : Prop :=
   BasinExternalRayMapData (2 : ℂ)
 
-/-- The inverse of the Böttcher map exists on the exterior (ray map). -/
-axiom external_ray_map_exists (c : ℂ) : ExternalRayMapData c
+/-- The inverse of the Böttcher map exists on the exterior (ray map), extracted
+from the single packaged theorem-facing axiom. -/
+theorem external_ray_map_exists (c : ℂ) : ExternalRayMapData c := by
+  simpa [ExternalRayMapData, bottcher_map, bottcher_coordinate_data] using
+    bottcher_package.external_ray_data c
 
 /-- Root-facing specialization of the exterior inverse package at `c = 2`.
     This is the exact residual statement currently needed by
     `MLC.mlc_conjecture`. -/
-axiom external_ray_map_exists_two : ExternalRayMapData (2 : ℂ)
+theorem external_ray_map_exists_two : ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_exists (2 : ℂ)
 
 /-- Unpack the ray-map data package into its existential form. -/
 theorem external_ray_map_exists_of_data (c : ℂ) (h_data : ExternalRayMapData c) :

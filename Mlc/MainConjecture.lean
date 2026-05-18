@@ -206,8 +206,10 @@ lemma polar_green_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.
 /-- The theorem-facing `bottcher_map` at `c = 2` also avoids the value `1` on `K(2)`.
     This is the normalization fact needed by the root proof after reclaiming
     `Quadratic.bottcher_map` from the explicit proxy. -/
-axiom bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
-    Quadratic.bottcher_map (2 : ℂ) z ≠ 1
+theorem bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
+    Quadratic.bottcher_map (2 : ℂ) z ≠ 1 := by
+  simpa [Quadratic.bottcher_map, Quadratic.bottcher_coordinate_data] using
+    Quadratic.bottcher_package.eq_one_not_mem_K_two z hzK
 
 /-- The chosen `fixed_point 2` cannot map to `1` under the current explicit
     `bottcher_map` model. -/

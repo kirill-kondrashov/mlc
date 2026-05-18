@@ -1,61 +1,30 @@
-# \(c=2\) basin-valued exterior B\"ottcher package
+# \(c=2\)
 
 \[
-f(z)=z^2+2,
-\qquad
-\mathcal B_\infty=\{z\in\mathbb C:\ f^{\circ n}(z)\to\infty\},
-\qquad
+f(z)=z^2+2,\qquad
+\mathcal B_\infty=\{z\in\mathbb C:\ f^{\circ n}(z)\to\infty\},\qquad
 \Omega=\{w\in\mathbb C:\ |w|>1\},
-\qquad
-V=\{z\in\mathbb C:\ |z|>4\}.
+\]
+\[
+V=\{z\in\mathbb C:\ |z|>4\},\qquad
+G(z)=\lim_{n\to\infty}2^{-n}\log^+|f^{\circ n}(z)|.
 \]
 
 \[
-G(z):=\lim_{n\to\infty}2^{-n}\log^+|f^{\circ n}(z)|.
+\exists\,\phi:\mathcal B_\infty\to\Omega,\ \exists\,\Psi:\Omega\to\mathcal B_\infty
 \]
-
 \[
-\textbf{Problem.}
+\forall z\in\mathcal B_\infty,\qquad \phi(f(z))=\phi(z)^2,
 \]
-
-Construct maps
 \[
-\phi:\mathcal B_\infty\to\Omega,
-\qquad
-\Psi:\Omega\to\mathcal B_\infty
+\forall z\in\mathcal B_\infty,\qquad |\phi(z)|=e^{G(z)},
 \]
-such that
-
 \[
-\phi(f(z))=\phi(z)^2
-\qquad
-(\forall z\in\mathcal B_\infty),
+\lim_{\substack{z\to\infty\\ z\in\mathcal B_\infty}}\frac{\phi(z)}{z}=1,
 \]
-
 \[
-|\phi(z)|=e^{G(z)}
-\qquad
-(\forall z\in\mathcal B_\infty),
+\forall w\in\Omega,\qquad \phi(\Psi(w))=w,
 \]
-
 \[
-\frac{\phi(z)}{z}\to 1
-\qquad
-(z\to\infty,\ z\in\mathcal B_\infty),
+\forall z\in V,\qquad \Psi(\phi(z))=z.
 \]
-
-\[
-\phi(\Psi(w))=w
-\qquad
-(\forall w\in\Omega),
-\]
-
-\[
-\Psi(\phi(z))=z
-\qquad
-(\forall z\in V).
-\]
-
-Equivalently, prove the existence of a basin-valued normalized B\"ottcher
-coordinate \(\phi\) and an exterior inverse \(\Psi\) with the above five
-properties.
