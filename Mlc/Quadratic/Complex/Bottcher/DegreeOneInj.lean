@@ -614,6 +614,17 @@ theorem restrictedAsymptoticWindingBridgeTwo_of_annulusCoveringDegreeOneStep
     ⟨R, hR, hhom⟩
   exact htopo h_proper h_local ⟨R, hR, hhom⟩
 
+/-- The abstract annulus-covering degree-one step already implies the concrete
+singleton-fiber conclusion for the restricted Böttcher map once the proper/local
+witness is supplied. -/
+theorem restrictedAsymptoticWindingDegreeOneTwo_of_annulusCoveringDegreeOneStep
+    (htopo : RestrictedAnnulusCoveringDegreeOneStepTwo)
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RestrictedAsymptoticWindingDegreeOneTwo :=
+  restrictedAsymptoticWindingBridgeTwo_of_annulusCoveringDegreeOneStep htopo
+    h_proper h_local
+
 /-- Proper local-homeomorphy of the restricted outside-open map makes the
 restricted fiber cardinality independent of the exterior base point. -/
 theorem restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
@@ -768,6 +779,18 @@ theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_windin
   exact
     external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
       h_proper h_local (hbridge h_proper h_local)
+
+/-- External-ray map data from the exact remaining abstract annulus theorem. -/
+theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_annulusCoveringDegreeOneStep
+    (htopo : RestrictedAnnulusCoveringDegreeOneStepTwo)
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
+      h_proper h_local
+      (restrictedAsymptoticWindingDegreeOneTwo_of_annulusCoveringDegreeOneStep
+        htopo h_proper h_local)
 
 /-- Proper local-homeomorphy of the restricted outside-open map already gives
 exterior surjectivity via the clopen-image argument. -/

@@ -2038,6 +2038,17 @@ theorem mlc_conjecture_of_proper_local_restrict_of_winding
   exact mlc_conjecture_of_externalRayMapData_two
     (externalRayMapData_two_of_proper_local_restrict_of_winding h_proper h_local hwinding)
 
+/-- Root-facing MLC bridge from the exact remaining abstract annulus theorem. -/
+theorem mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (htopo : Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_externalRayMapData_two
+      (Mlc.Bottcher.DegreeOne.external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_annulusCoveringDegreeOneStep
+        htopo h_proper h_local)
+
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from
 outside-open injectivity plus exterior surjectivity by outside-open preimages. -/
 def AnalyticDerivConstructivePayloadTwo : Prop :=
@@ -3791,13 +3802,9 @@ theorem mlc_conjecture_of_restrictedWindingKernelTwo
     (hkernel : DirectProperLocalWitnessTwo ∧
       Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hbridge :
-      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo :=
-    Mlc.Bottcher.DegreeOne.restrictedAsymptoticWindingBridgeTwo_of_annulusCoveringDegreeOneStep
-      hkernel.2
   exact
-    mlc_conjecture_of_proper_local_restrict_of_winding
-      hkernel.1.1 hkernel.1.2 (hbridge hkernel.1.1 hkernel.1.2)
+    mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
+      hkernel.1.1 hkernel.1.2 hkernel.2
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
