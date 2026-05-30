@@ -1359,6 +1359,103 @@ theorem external_ray_map_exists_two_via_green_function
     green_function_strictMono_along_ray_basin_two_axiom_seed
     hlog_gt_anchor
 
+/-- Direct formalization of the draft injectivity proof: on the outside-open
+region, equal Böttcher values force equal direction and equal Green value, so
+strict radial monotonicity gives equal radius. -/
+theorem injOn_outside_open_two_of_green_function_ray_strictMono :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  intro z hz w hw hEq
+  have hz_out : ‖z‖ > ‖(2 : ℂ)‖ + 2 := hz
+  have hw_out : ‖w‖ > ‖(2 : ℂ)‖ + 2 := hw
+  have h2norm : ‖(2 : ℂ)‖ = 2 := by
+    norm_num
+  have hz_pos : 0 < ‖z‖ := by
+    linarith [hz_out, h2norm]
+  have hw_pos : 0 < ‖w‖ := by
+    linarith [hw_out, h2norm]
+  have hgreen_eq :
+      green_function (2 : ℂ) z = green_function (2 : ℂ) w := by
+    have hnorm_eq :
+        ‖Quadratic.bottcher_map (2 : ℂ) z‖ =
+          ‖Quadratic.bottcher_map (2 : ℂ) w‖ := by
+      simpa [hEq]
+    rw [Quadratic.norm_bottcher_eq_exp_green, Quadratic.norm_bottcher_eq_exp_green] at hnorm_eq
+    exact Real.exp_injective hnorm_eq
+  have hz_ne : z ≠ 0 := by
+    exact fun hz0 => hz_pos.ne' (by simpa [hz0] using norm_zero)
+  have hw_ne : w ≠ 0 := by
+    exact fun hw0 => hw_pos.ne' (by simpa [hw0] using norm_zero)
+  rcases bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) z hz_out with ⟨rz, hrz_pos, hrz_eq⟩
+  rcases bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) w hw_out with ⟨rw, hrw_pos, hrw_eq⟩
+  have hbotcher_z : Quadratic.bottcher_map (2 : ℂ) z = (rz : ℂ) * z := by
+    exact (div_eq_iff hz_ne).1 hrz_eq
+  have hbotcher_w : Quadratic.bottcher_map (2 : ℂ) w = (rw : ℂ) * w := by
+    exact (div_eq_iff hw_ne).1 hrw_eq
+  have hscales : (rz : ℂ) * z = (rw : ℂ) * w := by
+    simpa [hbotcher_z, hbotcher_w] using hEq
+  have hrw_ne : (rw : ℂ) ≠ 0 := by
+    exact_mod_cast hrw_pos.ne'
+  have hratio_eq : w = (((rz / rw : ℝ) : ℂ) * z) := by
+    apply (mul_right_cancel₀ hrw_ne)
+    calc
+      w * (rw : ℂ) = (rw : ℂ) * w := by ring
+      _ = (rz : ℂ) * z := by simpa [hscales]
+      _ = ((((rz / rw : ℝ) : ℂ) * z) * (rw : ℂ)) := by
+        have hratio_mul_real : rz = (rz / rw) * rw := by
+          field_simp [hrw_pos.ne']
+        have hratio_mul : (rz : ℂ) = (((rz / rw : ℝ) : ℂ) * (rw : ℂ)) := by
+          exact_mod_cast hratio_mul_real
+        calc
+          (rz : ℂ) * z = ((((rz / rw : ℝ) : ℂ) * (rw : ℂ)) * z) := by rw [hratio_mul]
+          _ = ((((rz / rw : ℝ) : ℂ) * z) * (rw : ℂ)) := by ring
+  have hq_pos : 0 < rz / rw := by
+    exact div_pos hrz_pos hrw_pos
+  set u : ℂ := z / ↑‖z‖
+  have hu : ‖u‖ = 1 := by
+    dsimp [u]
+    rw [norm_div, Complex.norm_real, norm_norm, div_self hz_pos.ne']
+  have hz_repr : ((‖z‖ : ℂ) * u) = z := by
+    dsimp [u]
+    field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne',
+      mul_comm, mul_left_comm, mul_assoc]
+  have hw_norm_scaled : ‖w‖ = (rz / rw) * ‖z‖ := by
+    rw [hratio_eq, Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hq_pos.le]
+  have hw_repr : ((‖w‖ : ℂ) * u) = w := by
+    calc
+      ((‖w‖ : ℂ) * u) = ((((rz / rw) * ‖z‖ : ℝ) : ℂ) * u) := by rw [hw_norm_scaled]
+      _ = ((((rz / rw : ℝ) : ℂ) * (‖z‖ : ℂ)) * u) := by norm_num
+      _ = (((rz / rw : ℝ) : ℂ) * ((‖z‖ : ℂ) * u)) := by ring
+      _ = (((rz / rw : ℝ) : ℂ) * z) := by rw [hz_repr]
+      _ = w := hratio_eq.symm
+  have hnorm_le : ‖z‖ ≤ ‖w‖ := by
+    by_contra hlt
+    have hlt' : ‖w‖ < ‖z‖ := lt_of_not_ge hlt
+    have hmono :
+        green_function (2 : ℂ) ((‖w‖ : ℂ) * u) <
+          green_function (2 : ℂ) ((‖z‖ : ℂ) * u) :=
+      green_function_strictMono_along_ray (2 : ℂ) u hu hw_out hlt'
+    have hmono' : green_function (2 : ℂ) w < green_function (2 : ℂ) z := by
+      rw [hw_repr, hz_repr] at hmono
+      exact hmono
+    exact (not_lt_of_ge (le_of_eq hgreen_eq)) hmono'
+  have hnorm_ge : ‖w‖ ≤ ‖z‖ := by
+    by_contra hlt
+    have hlt' : ‖z‖ < ‖w‖ := lt_of_not_ge hlt
+    have hmono :
+        green_function (2 : ℂ) ((‖z‖ : ℂ) * u) <
+          green_function (2 : ℂ) ((‖w‖ : ℂ) * u) :=
+      green_function_strictMono_along_ray (2 : ℂ) u hu hz_out hlt'
+    have hmono' : green_function (2 : ℂ) z < green_function (2 : ℂ) w := by
+      rw [hz_repr, hw_repr] at hmono
+      exact hmono
+    exact (not_lt_of_ge (le_of_eq hgreen_eq.symm)) hmono'
+  have hnorm_eq : ‖z‖ = ‖w‖ := le_antisymm hnorm_le hnorm_ge
+  calc
+    z = ((‖z‖ : ℂ) * u) := hz_repr.symm
+    _ = ((‖w‖ : ℂ) * u) := by simp [hnorm_eq]
+    _ = w := hw_repr
+
 /-- Conditional `c = 2` constructive external-ray map: the Green inversion
 construction using anchor-gap existence plus outside-open injectivity. This path
 does not use `green_function_strictMono_along_ray_basin_seam`. -/
@@ -1418,6 +1515,55 @@ theorem external_ray_map_exists_two_via_green_function_of_injOn_outside_open
     have hx_eq_z : x = z :=
       h_inj_outside hx_out hz (hx_bottcher.trans hz_bottcher.symm)
     simpa [x] using hx_eq_z
+
+/-- In this file the constructive inverse extracted from `ExternalRayMapData`
+already lands in the basin, so we can upgrade it to the stronger basin-valued
+package used at the project root. -/
+theorem basinExternalRayMapData_of_externalRayMapData (c : ℂ)
+    (h_data : Quadratic.ExternalRayMapData c) :
+    Quadratic.BasinExternalRayMapData c := by
+  refine ⟨external_ray_map_of_data h_data, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+  · intro z hz
+    simpa [bottcher_map] using bottcher_conj_on_basin c z hz
+  · intro w hw
+    refine ⟨?_, external_ray_map_of_data_right_inverse h_data w hw⟩
+    exact
+      bottcher_map_norm_gt_one_implies_basin c (z := external_ray_map_of_data h_data w) <| by
+        simpa [external_ray_map_of_data_right_inverse h_data w hw] using hw
+  · intro z hz
+    exact external_ray_map_of_data_left_inverse_large h_data z hz
+
+/-- Root-facing basin-valued version of the constructive Green inversion route:
+the anchor-gap inequality plus outside-open injectivity already produce the
+exact package used by `MLC.mlc_conjecture`. -/
+theorem basin_external_ray_map_data_two_via_green_function_of_injOn_outside_open
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.BasinExternalRayMapDataTwo := by
+  exact
+    basinExternalRayMapData_of_externalRayMapData (2 : ℂ)
+      (external_ray_map_exists_two_via_green_function_of_injOn_outside_open
+        hlog_gt_anchor h_inj_outside)
+
+/-- Conditional basin-valued closure of the draft route: the anchor-gap seam
+plus the Green-ray strict monotonicity seam imply the exact remaining root
+package. -/
+theorem basin_external_ray_map_data_two_via_green_function
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
+    Quadratic.BasinExternalRayMapDataTwo := by
+  exact
+    basin_external_ray_map_data_two_via_green_function_of_injOn_outside_open
+      hlog_gt_anchor injOn_outside_open_two_of_green_function_ray_strictMono
 
 /-- Iterate-left-inverse specialization of the conditional constructive Green
 inversion path at `c = 2`. -/
