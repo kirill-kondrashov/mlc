@@ -2,6 +2,12 @@
 
 This note proves Problem A from `draft/external_ray_map_exists_problem.md` in GitHub-friendly Markdown, using `$$` display math.
 
+On the checked Lean root, this topology theorem is now paired only with a
+separate minimal-counterexample obstruction statement for the explicit
+local-homeomorph/closed-preimage route to the direct proper/local witness. So
+the last project axiom packages two theorem-shaped pieces rather than a
+concrete witness fact.
+
 ## Theorem
 
 Let
