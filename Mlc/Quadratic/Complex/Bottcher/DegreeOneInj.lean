@@ -700,6 +700,15 @@ sketch. -/
 abbrev RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo : Prop :=
   RestrictedCoveringDegreeRigidityProblemATwo
 
+/-- Truthful witness-side replacement for the false properness formulation:
+the restricted outside-open map at `c = 2` is a local homeomorphism and has a
+positive constant finite fiber degree on the exterior target. This is exactly
+the non-monodromy datum consumed by
+`RestrictedCoveringDegreeMonodromyCoreTwo`. -/
+def RestrictedLocalHomeomorphPositiveConstantDegreeTwo : Prop :=
+  IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+    ∃ d : ℕ, 0 < d ∧ ∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d
+
 /-- The exact remaining core of the proof sketch already implies Problem A:
 the only extra proper/local packaging in Problem A is the upstream route that
 produces the positive constant degree hypotheses. -/
@@ -781,6 +790,16 @@ theorem restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
       (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
         h_proper h_local y y0)
 
+/-- Proper local-homeomorphy implies the smaller truthful witness-side datum:
+local homeomorphy together with a positive constant restricted fiber degree. -/
+theorem restrictedLocalHomeomorphPositiveConstantDegreeTwo_of_isProperMap_isLocalHomeomorph
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RestrictedLocalHomeomorphPositiveConstantDegreeTwo := by
+  refine ⟨h_local, ?_⟩
+  exact restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
+    h_proper h_local
+
 /-- Bottcher-facing singleton-fiber corollary of the exact remaining
 generator-calculation kernel from the proof sketch. -/
 theorem restrictedAsymptoticWindingDegreeOneTwo_of_problemA
@@ -835,6 +854,20 @@ theorem restrictedAsymptoticWindingDegreeOneTwo_of_coveringDegreeOneFromPositive
       RestrictedAsymptoticWindingDegreeOneTwo := by
   exact restrictedAsymptoticWindingDegreeOneTwo_of_problemA hkernel h_proper h_local
 
+/-- The exact monodromy core, together with the truthful witness-side datum of
+local homeomorphy and positive constant fiber degree, already gives the
+degree-one winding conclusion. -/
+theorem restrictedAsymptoticWindingDegreeOneTwo_of_localHomeomorphPositiveConstantDegree_of_monodromyCore
+    (hdata : RestrictedLocalHomeomorphPositiveConstantDegreeTwo)
+    (hcore : RestrictedCoveringDegreeMonodromyCoreTwo) :
+    RestrictedAsymptoticWindingDegreeOneTwo := by
+  rcases hdata with ⟨h_local, ⟨d, hdpos, hdeg⟩⟩
+  rcases exists_large_radius_circle_homotopy_two h_local.continuous with ⟨R, hR, hhom⟩
+  have hd1 : d = 1 := hcore h_local d hdpos hdeg ⟨R, hR, hhom⟩
+  let y0 : {w : ℂ // 1 < ‖w‖} := ⟨(2 : ℂ), by norm_num⟩
+  refine ⟨y0, ?_⟩
+  simpa [y0, hd1] using hdeg y0
+
 /-- The exact remaining annulus-covering theorem follows from the more precise
 generator-calculation kernel, since the finite positive constant covering degree
 has already been formalized separately. -/
@@ -886,6 +919,18 @@ theorem restricted_degree_one_fibers_two_of_winding_bridge
       (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph h_proper h_local)
       (hbridge h_proper h_local)
 
+/-- The truthful witness-side datum plus the exact monodromy core already give
+degree-one fibers for the restricted outside-open map. -/
+theorem restricted_degree_one_fibers_two_of_localHomeomorphPositiveConstantDegree_of_monodromyCore
+    (hdata : RestrictedLocalHomeomorphPositiveConstantDegreeTwo)
+    (hcore : RestrictedCoveringDegreeMonodromyCoreTwo) :
+    RestrictedDegreeOneFibersTwo := by
+  rcases hdata with ⟨h_local, ⟨d, hdpos, hdeg⟩⟩
+  rcases exists_large_radius_circle_homotopy_two h_local.continuous with ⟨R, hR, hhom⟩
+  have hd1 : d = 1 := hcore h_local d hdpos hdeg ⟨R, hR, hhom⟩
+  intro y
+  simpa [hd1] using hdeg y
+
 /-- If the restricted outside-open map has degree-one fibers, then the original
 Böttcher map is injective on the outside-open domain. -/
 theorem injOn_outside_open_two_of_restricted_degree_one_fibers
@@ -912,6 +957,44 @@ theorem injOn_outside_open_two_of_restricted_covering_degree_constant_of_winding
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   exact injOn_outside_open_two_of_restricted_degree_one_fibers
     (restricted_degree_one_fibers_two_of_constant_of_winding hconst hwinding)
+
+/-- Degree-one fibers automatically give outside-open exterior surjectivity:
+every target point has the unique point of its restricted fiber as preimage. -/
+theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_restricted_degree_one_fibers
+    (hdegree : RestrictedDegreeOneFibersTwo) :
+    MLC.BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
+  intro w hw
+  let y : {w : ℂ // 1 < ‖w‖} := ⟨w, hw⟩
+  have hnonempty :
+      Nonempty
+        ({x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
+            MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y}) :=
+    (Nat.card_eq_one_iff_unique.mp (hdegree y)).2
+  rcases hnonempty with ⟨x⟩
+  refine ⟨x.1.1, x.1.2, ?_⟩
+  simpa [MLC.bottcher_map_outside_open_to_exterior, y] using congrArg Subtype.val x.2
+
+/-- Degree-one fibers already suffice to build the external-ray map package:
+outside-open injectivity and outside-open exterior surjectivity are immediate. -/
+theorem external_ray_map_exists_two_of_restricted_degree_one_fibers
+    (hdegree : RestrictedDegreeOneFibersTwo) :
+    MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    MLC.external_ray_map_data_of_injOn_outside_open_of_surj_exterior (2 : ℂ)
+      (injOn_outside_open_two_of_restricted_degree_one_fibers hdegree)
+      (bottcherSurjOnExteriorFromOutsideOpen_two_of_restricted_degree_one_fibers hdegree)
+
+/-- The truthful witness-side datum, together with the exact monodromy core,
+already reconstructs the full external-ray package without any properness
+hypothesis. -/
+theorem external_ray_map_exists_two_of_localHomeomorphPositiveConstantDegree_of_monodromyCore
+    (hdata : RestrictedLocalHomeomorphPositiveConstantDegreeTwo)
+    (hcore : RestrictedCoveringDegreeMonodromyCoreTwo) :
+    MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    external_ray_map_exists_two_of_restricted_degree_one_fibers
+      (restricted_degree_one_fibers_two_of_localHomeomorphPositiveConstantDegree_of_monodromyCore
+        hdata hcore)
 
 /-- Outside-open injectivity from the exact remaining proof-sketch bridge. -/
 theorem injOn_outside_open_two_of_winding_bridge

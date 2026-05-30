@@ -1,4 +1,4 @@
-# Remaining proper/local witness problem at c = 2
+# Remaining restricted fiber-degree problem at c = 2
 
 Let
 
@@ -22,9 +22,13 @@ $$
 
 Prove the following statement.
 
-## Problem B. Properness and local homeomorphism of the restricted outside map
+## Problem B. Local homeomorphism and positive constant restricted fiber degree
 
 Prove that:
 
-1. The map above is proper.
-2. The map above is a local homeomorphism.
+1. The map above is a local homeomorphism.
+2. There exists an integer $$d\ge 1$$ such that for every $$w\in\Omega$$ the fiber
+   $$
+   F_w=\{z\in V:\phi(z)=w\}
+   $$
+   has exactly $$d$$ points.

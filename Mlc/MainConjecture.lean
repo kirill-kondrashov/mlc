@@ -2379,6 +2379,18 @@ theorem directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRoute
       (MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
         (hroute.2 K hK))
 
+/-- Any direct proper/local witness would force the older closed-preimage route:
+proper maps pull compact target sets back to compact, hence closed, ambient
+preimages. -/
+theorem directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo
+    (hdirect : DirectProperLocalWitnessTwo) :
+    DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo := by
+  refine ⟨hdirect.2, ?_⟩
+  intro K hK
+  exact
+    ((MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K).1
+      (hdirect.1.isCompact_preimage hK)).isClosed
+
 /-- The old closed-preimage route from Problem B is false: one can choose a
 compact exterior target whose outside-open ambient preimage has the boundary
 point `‖2‖ + 2` as a limit point. -/
@@ -2456,6 +2468,16 @@ theorem not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo :
     have hzgt : ‖z0‖ > ‖(2 : ℂ)‖ + 2 := hz.1
     linarith [hz0_norm]
   exact hz0_not_mem hz0_mem
+
+/-- The current direct proper/local formulation of Problem B is also false,
+because any such witness would imply the already-refuted closed-preimage route. -/
+theorem not_directProperLocalWitnessTwo :
+    ¬ DirectProperLocalWitnessTwo := by
+  intro hdirect
+  exact
+    not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+      (directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_directProperLocalWitnessTwo
+        hdirect)
 
 /-- Truthful replacement for the false closed-preimage Problem B: local
 homeomorphy together with compact ambient preimages of compact exterior targets.
@@ -2585,9 +2607,10 @@ theorem directProperLocalWitnessTwo_of_localHomeomorphCompactPreimageRouteScope
       (directProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo_of_minimalCounterexample
         hscope)
 
-/-- Final truthful route-facing theorem shape after eliminating the false
-Problem-B-style reroutes: the only remaining non-monodromy frontier on this side
-is the direct proper/local witness itself. -/
+/-- Obsolete theorem-shaped interface for the direct proper/local witness. It is
+retained only for bookkeeping: `not_directProperLocalWitnessTwo` shows that this
+route-facing formulation is false in the current model, so it is no longer part
+of the live root seam. -/
 def DirectProperLocalWitnessTwoMinimalCounterexample : Prop :=
   ¬ DirectProperLocalWitnessTwo → False
 
@@ -2604,6 +2627,27 @@ theorem directProperLocalWitnessTwo_of_minimalCounterexample
   classical
   by_contra hdirect
   exact hminimal hdirect
+
+/-- Final truthful route-facing theorem shape after eliminating the false
+Problem-B-style reroutes and the false direct properness statement: the
+remaining witness-side frontier is local homeomorphy of the restricted outside
+map together with a positive constant restricted fiber degree. -/
+def RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample : Prop :=
+  ¬ Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo → False
+
+/-- Backward-compatible theorem-shaped scope interface for the truthful
+restricted local-homeomorph / positive-degree seam. -/
+abbrev RestrictedLocalHomeomorphPositiveConstantDegreeTwoScope : Prop :=
+  RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample
+
+/-- Recover the truthful restricted local-homeomorph / positive-degree seam from
+its minimal-counterexample formulation. -/
+theorem restrictedLocalHomeomorphPositiveConstantDegreeTwo_of_minimalCounterexample
+    (hminimal : RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample) :
+    Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo := by
+  classical
+  by_contra hdata
+  exact hminimal hdata
 
 /-- Constructive CP5 endpoint from the direct closure criterion witness. -/
 def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
@@ -4071,7 +4115,8 @@ remaining covering-context generator calculation. It packages exactly the two
 residual theorem-shaped inputs still needed to close the degree-one route:
 
 1. a minimal-counterexample obstruction theorem for the constructive
-   direct proper/local witness for the restricted outside map;
+   restricted local-homeomorph / positive-constant-degree witness for the
+   restricted outside map;
 2. the exact remaining monodromy core saying that a positive constant covering
    degree for this restricted map, together with the already-formalized
    large-circle free homotopy, forces that degree to equal `1`.
@@ -4079,25 +4124,39 @@ residual theorem-shaped inputs still needed to close the degree-one route:
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
-    DirectProperLocalWitnessTwoMinimalCounterexample ∧
+    RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample ∧
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo
+
+/-- Root-facing MLC bridge from the truthful witness-side replacement for
+Problem B together with the exact remaining monodromy core. -/
+theorem mlc_conjecture_of_restrictedLocalHomeomorphPositiveConstantDegree_and_monodromyCore
+    (hdata : Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo)
+    (hcore : Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_externalRayMapData_two
+      (Mlc.Bottcher.DegreeOne.external_ray_map_exists_two_of_localHomeomorphPositiveConstantDegree_of_monodromyCore
+        hdata hcore)
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
     (hkernel :
-      DirectProperLocalWitnessTwoMinimalCounterexample ∧
+      RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample ∧
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hdirect : DirectProperLocalWitnessTwo :=
-    directProperLocalWitnessTwo_of_minimalCounterexample hkernel.1
+  have hdata :
+      Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo :=
+    restrictedLocalHomeomorphPositiveConstantDegreeTwo_of_minimalCounterexample hkernel.1
   exact
-    mlc_conjecture_of_proper_local_restrict_of_monodromyCore hdirect.1 hdirect.2 hkernel.2
+    mlc_conjecture_of_restrictedLocalHomeomorphPositiveConstantDegree_and_monodromyCore
+      hdata hkernel.2
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
     the exact remaining degree-one kernel at `c = 2`: a minimal-counterexample
-    obstruction theorem for the direct proper/local witness together with the
-    exact monodromy core reducing a positive constant covering degree to `1`
+    obstruction theorem for the truthful restricted local-homeomorph /
+    positive-constant-degree witness together with the exact monodromy core
+    reducing a positive constant covering degree to `1`
     from the already-formalized large-circle homotopy.
 
     This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
