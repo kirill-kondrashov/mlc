@@ -1,4 +1,4 @@
-# Remaining root problem at $c=2$
+# Remaining sufficient injectivity problem at $c=2$
 
 Let
 
@@ -30,22 +30,24 @@ $$
 \frac{\phi(z)}{z}\to 1 \quad \text{as } z\to\infty.
 $$
 
-## Problem 1. Basin-valued exterior inverse
+## Problem 2. Injectivity on the outside-open region
 
-Prove that there exists a map
-
-$$
-\Psi:\Omega\to U_\infty
-$$
-
-such that
+Prove that the restriction
 
 $$
-\phi(\Psi(w))=w \quad \text{for every } w\in\Omega,
+\phi|_V:V\to\Omega
 $$
 
-and
+is injective. Equivalently, prove that whenever
 
 $$
-\Psi(\phi(z))=z \quad \text{for every } z\in V.
+z_1,z_2\in V
+\qquad \text{and} \qquad
+\phi(z_1)=\phi(z_2),
+$$
+
+then
+
+$$
+z_1=z_2.
 $$

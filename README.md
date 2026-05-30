@@ -49,6 +49,14 @@ Problem A package remains formalized as an auxiliary route in
 `Mlc.Bottcher.DegreeOne`, but the old Problem B package has now been formally
 refuted in Lean.
 
+The expert-facing documentation has been cleaned up accordingly:
+
+1. `draft/external_ray_map_exists_problem.md` is the exact remaining root theorem.
+2. `draft/outside_open_injectivity_problem.md` is the single sufficient
+   remaining subproblem on the preferred constructive route.
+3. `proof_sketches/` now mirrors `draft/` one-to-one with matching informal
+   mathematical proof notes.
+
 So the earlier explicit frontier
 
 1. para-puzzle connectedness,
@@ -69,6 +77,10 @@ It is the theorem-shaped scope interface
 `BasinExternalRayMapDataTwoMinimalCounterexample`, whose positive content is the
 specialized basin-valued inverse package `Quadratic.BasinExternalRayMapDataTwo`.
 
+So there is only **one** root-facing missing theorem in the checked proof.
+The extra draft problem is not a second independent axiom; it is the current
+best sufficient reduction for eliminating the root axiom constructively.
+
 ## Non-solutions
 
 The repository still rejects reroutes that revive older project axioms, notably
@@ -80,9 +92,8 @@ through:
 
 ## Elimination Target
 
-The final constructive target is now the exact `c = 2` basin-valued external-ray
-statement from `draft/external_ray_map_exists_problem.md`:
-construct a map
+The final constructive target is the exact `c = 2` basin-valued external-ray
+statement from `draft/external_ray_map_exists_problem.md`: construct a map
 
 $$
 \Psi:\Omega\to U_\infty(2)
@@ -100,9 +111,19 @@ $$
 \Psi(\phi(z))=z \quad \text{for all } z\in V.
 $$
 
-This is the codomain-correct replacement for the false statement that the
-restricted map `φ|_V : V → Ω` should already have positive constant fiber degree
-over all of `Ω`.
+On the current preferred route, it would be enough to prove the remaining
+injectivity statement from `draft/outside_open_injectivity_problem.md`:
+
+$$
+\phi|_V:V\to\Omega \text{ is injective.}
+$$
+
+The already formalized reduction then promotes exterior surjectivity together
+with this injectivity input to the basin-valued inverse package.
+
+This basin-valued target is the codomain-correct replacement for the false
+statement that the restricted map `φ|_V : V → Ω` should already have positive
+constant fiber degree over all of `Ω`.
 
 The false degree package is now explicitly ruled out by
 `Mlc.Bottcher.DegreeOne.not_restrictedLocalHomeomorphPositiveConstantDegreeTwo`
@@ -116,7 +137,10 @@ routes remain formally refuted as well.
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
 2. `plan/` has been pruned to the single live frontier file
    `PLAN_04_lyubich_bridge.md`.
-3. The current root-facing story is therefore simple: one remaining mathematical
+3. `draft/` now contains exactly two expert-facing problem files: the true root
+   theorem and one sufficient remaining injectivity reduction.
+4. `proof_sketches/` now mirrors `draft/` one problem to one proof note.
+5. The current root-facing story is therefore simple: one remaining mathematical
    elimination target, exposed as one residual theorem-facing assumption.
 
 ## Dependencies
