@@ -69,7 +69,7 @@ One non-core project axiom remains:
 
 This kernel is the conjunction of:
 
-1. `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample`
+1. `DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample`
 2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`
 
 The theorem-facing coordinate and root normalization branches are now supplied
@@ -87,14 +87,14 @@ through:
 ## Elimination Target
 
 The final constructive target is now the exact `c = 2` degree-one kernel:
-construct the local-homeomorph/closed-preimage route to the direct proper/local
+construct the local-homeomorph/compact-preimage route to the direct proper/local
 witness for the restricted outside map and prove the remaining monodromy core
 `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`.
 The witness half is no longer a raw scope gate for either
 `DirectProperLocalWitnessTwo` or the route
-`DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`; it is now
+`DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo`; it is now
 the theorem-shaped minimal-counterexample obstruction statement
-`DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample`,
+`DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample`,
 from which the explicit route, and then the direct witness, are recovered
 constructively. The topology target is stated in the already-formalized
 proper/local covering context, so it is no longer a bare continuous-map claim.
@@ -103,6 +103,12 @@ and then derives the coarser annulus statement
 `RestrictedAnnulusCoveringDegreeOneStepTwo`, and then the large-circle homotopy
 bridge closes the degree-one route. Doing so will eliminate the last root axiom
 `MLC.restrictedWindingKernelTwo`.
+
+The previous closed-preimage version of the route statement was false as stated:
+`Mlc.MainConjecture` now contains a formal counterexample theorem
+`not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`, and the
+remaining route-facing frontier has been rewritten to use compact ambient
+preimages of compact exterior targets instead.
 
 ## Repository Snapshot
 

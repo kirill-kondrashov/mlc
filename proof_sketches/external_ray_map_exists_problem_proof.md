@@ -1,28 +1,19 @@
-# Exact proof of Problem A: covering-degree rigidity
+# Exact proof of Problem A: monodromy rigidity of the covering degree
 
-This note proves **exactly** the statement in
+This note proves exactly the statement in
 `draft/external_ray_map_exists_problem.md`.
-
-It does **not** assert any new analytic fact about the specific restricted
-outside Böttcher map for $f(z)=z^2+2$. The argument below is a conditional
-theorem: **if** a map
-$$
-\phi:V\to\Omega
-$$
-satisfies the four hypotheses of Problem A, **then** its covering degree is
-exactly $1$.
 
 ## Theorem
 
 Let
 
 $$
-V=\{z\in\mathbb C: |z|>4\},
+V=\{z\in\mathbb C:\lvert z\rvert>4\},
 \qquad
-\Omega=\{w\in\mathbb C: |w|>1\}.
+\Omega=\{w\in\mathbb C:\lvert w\rvert>1\},
 $$
 
-Let
+and let
 
 $$
 \phi:V\to\Omega
@@ -30,19 +21,30 @@ $$
 
 be any map satisfying the following assumptions:
 
-1. $\phi$ is proper.
-2. $\phi$ is a local homeomorphism.
-3. There exists an integer $d\ge 1$ such that, for every $w\in\Omega$,
+1. The map above is a local homeomorphism.
+2. There exists an integer
+   $$
+   d\ge 1
+   $$
+   such that, for every point
+   $$
+   w\in\Omega,
+   $$
    $$
    \#\phi^{-1}(w)=d.
    $$
-4. For some $R>4$, the loop
+3. For some number
+   $$
+   R>4,
+   $$
+   the loop
    $$
    \gamma_R:S^1\to\Omega,
    \qquad
    \gamma_R(e^{2\pi i t})=\phi(Re^{2\pi i t}),
    $$
-   is freely homotopic in $\Omega$ to the positively oriented circle
+   is freely homotopic through loops in the exterior domain to the positively
+   oriented circle
    $$
    \sigma_R:S^1\to\Omega,
    \qquad
@@ -55,131 +57,197 @@ $$
 d=1.
 $$
 
-In particular, $\phi$ is a degree-one covering of $\Omega$, so every fiber of
-$\phi$ consists of exactly one point.
-
 ## Proof
 
-### Step 1. $\phi$ is a connected $d$-sheeted covering map
+### Step 1. The map above is a connected covering of degree $$d$$
 
-Because $d\ge 1$, every fiber is nonempty, so $\phi$ is surjective.
+Fix a point
 
-Fix $w\in\Omega$, and write
+$$
+w\in\Omega.
+$$
+
+By assumption,
 
 $$
 \phi^{-1}(w)=\{z_1,\dots,z_d\}.
 $$
 
-Since $\phi$ is a local homeomorphism, for each $i$ there exists an open
-neighborhood $N_i\subset V$ of $z_i$ such that
+Since the map above is a local homeomorphism, for each index
+
+$$
+i\in\{1,\dots,d\}
+$$
+
+there exists an open neighborhood
+
+$$
+N_i\subset V
+$$
+
+of
+
+$$
+z_i
+$$
+
+such that
 
 $$
 \phi|_{N_i}:N_i\to \phi(N_i)
 $$
 
-is a homeomorphism onto an open neighborhood of $w$.
-
-Because $V$ is an open subset of $\mathbb C$, it is locally compact and
-Hausdorff. After shrinking the $N_i$, we may choose open sets
+is a homeomorphism onto an open neighborhood of
 
 $$
-z_i\in U_i\subset \overline{U_i}^{\,V}\subset N_i
+w.
 $$
 
-such that the compact sets $\overline{U_i}^{\,V}$ are pairwise disjoint. Then
-each restriction
+Because
 
 $$
-\phi|_{U_i}:U_i\to \phi(U_i)
+z_1,\dots,z_d
 $$
 
-is still a homeomorphism onto an open neighborhood of $w$.
-
-Choose an open neighborhood $W_0$ of $w$ with compact closure
-$\overline{W_0}^{\,\Omega}\subset\Omega$ and
+are finitely many distinct points in the Hausdorff space
 
 $$
-W_0\subset \bigcap_{i=1}^d \phi(U_i).
+V,
 $$
 
-We claim that there exists an open neighborhood $W\subset W_0$ of $w$ such that
+we may shrink the sets
 
 $$
-\phi^{-1}(W)\subset \bigcup_{i=1}^d U_i.
+N_i
 $$
 
-Suppose not. Then, because $\Omega$ is metrizable, there are points
+so that they are pairwise disjoint. Set
 
 $$
-w_n\in W_0,
-\qquad
-w_n\to w,
+W=\bigcap_{i=1}^d \phi(N_i).
 $$
 
-and points
+Then
 
 $$
-x_n\in \phi^{-1}(w_n)\setminus \bigcup_{i=1}^d U_i.
+W
 $$
 
-Since $\overline{W_0}^{\,\Omega}$ is compact and $\phi$ is proper, the set
+is an open neighborhood of
 
 $$
-\phi^{-1}(\overline{W_0}^{\,\Omega})
+w.
 $$
 
-is compact in $V$. Passing to a subsequence, we may assume that
+For each index
 
 $$
-x_n\to x\in V.
+i,
 $$
 
-By continuity of $\phi$,
+let
 
 $$
-\phi(x)=\lim_{n\to\infty}\phi(x_n)=\lim_{n\to\infty}w_n=w,
+U_i=N_i\cap \phi^{-1}(W).
 $$
 
-so $x=z_i$ for some $i$. But $U_i$ is an open neighborhood of $z_i$, hence
-$x_n\in U_i$ for all sufficiently large $n$, contradicting the construction of
-$x_n$. This proves the claim.
-
-Now set
+Then
 
 $$
-U_i' = U_i\cap \phi^{-1}(W).
+\phi|_{U_i}:U_i\to W
 $$
 
-Because $W\subset \phi(U_i)$ and $\phi|_{U_i}$ is injective, each restriction
+is a homeomorphism, so every point of
 
 $$
-\phi|_{U_i'}:U_i'\to W
+W
 $$
 
-is a homeomorphism. The claim gives the disjoint decomposition
+has at least one preimage in each
 
 $$
-\phi^{-1}(W)=\bigsqcup_{i=1}^d U_i'.
+U_i.
 $$
 
-So $w$ is evenly covered. Since $w\in\Omega$ was arbitrary, every point of
-$\Omega$ is evenly covered, and therefore $\phi:V\to\Omega$ is a $d$-sheeted
-covering map.
+Now fix any point
 
-The space $V=\{z\in\mathbb C:|z|>4\}$ is path-connected, so this covering is
-connected.
+$$
+y\in W.
+$$
 
-### Step 2. The image subgroup in $\pi_1(\Omega)$ has index $d$
+The sets
+
+$$
+U_1,\dots,U_d
+$$
+
+are pairwise disjoint, and each of them contains exactly one point of
+
+$$
+\phi^{-1}(y).
+$$
+
+Hence
+
+$$
+\phi^{-1}(y)
+$$
+
+contains at least
+
+$$
+d
+$$
+
+points. By the constant-fiber hypothesis it contains exactly
+
+$$
+d
+$$
+
+points, so these are all the preimages. Therefore
+
+$$
+\phi^{-1}(W)=\bigsqcup_{i=1}^d U_i,
+$$
+
+and every restriction
+
+$$
+\phi|_{U_i}:U_i\to W
+$$
+
+is a homeomorphism.
+
+Thus every point of
+
+$$
+\Omega
+$$
+
+is evenly covered, so the map above is a covering map of degree
+
+$$
+d.
+$$
+
+The domain
+
+$$
+V=\{z\in\mathbb C:\lvert z\rvert>4\}
+$$
+
+is path-connected, so this covering is connected.
+
+### Step 2. The induced subgroup has index $$d$$
 
 Fix the base point
 
 $$
-x_0=R\in V,
-\qquad
-y_0=\phi(x_0)\in\Omega.
+x_0=R\in V.
 $$
 
-Define the positively oriented circle in $V$ by
+Let
 
 $$
 c_R:[0,1]\to V,
@@ -187,111 +255,199 @@ c_R:[0,1]\to V,
 c_R(t)=Re^{2\pi i t}.
 $$
 
-This is a loop based at $x_0$. Since $V$ deformation retracts onto the circle
-$|z|=R$, the class $[c_R]$ generates $\pi_1(V,x_0)\cong\mathbb Z$.
-
-Because $\phi$ is a connected $d$-sheeted covering, the standard covering-space
-correspondence gives
+Since
 
 $$
-\bigl[\pi_1(\Omega,y_0):\phi_*(\pi_1(V,x_0))\bigr]=d.
+V
 $$
 
-Indeed, for a connected covering $p:X\to Y$, the fiber over $p(x_0)$ is in
-canonical bijection with the set of left cosets of
+deformation retracts onto the circle
 
 $$
-p_*(\pi_1(X,x_0))
+\{z\in\mathbb C:\lvert z\rvert=R\},
 $$
 
-in $\pi_1(Y,p(x_0))$, obtained by lifting loops at $p(x_0)$ starting at $x_0$.
-Applying this to $p=\phi$ yields the index formula above.
+the class of
 
-Now $\pi_1(\Omega,y_0)\cong\mathbb Z$, and its unique subgroup of index $d$ is
-$d\mathbb Z$. Since $[c_R]$ generates $\pi_1(V,x_0)$, the element
+$$
+c_R
+$$
+
+generates
+
+$$
+\pi_1(V,x_0)\cong\mathbb Z.
+$$
+
+For a connected covering of degree
+
+$$
+d,
+$$
+
+the image subgroup
+
+$$
+\phi_*\bigl(\pi_1(V,x_0)\bigr)
+$$
+
+has index
+
+$$
+d
+$$
+
+in
+
+$$
+\pi_1(\Omega,\phi(x_0)).
+$$
+
+Since
+
+$$
+\Omega=\{w\in\mathbb C:\lvert w\rvert>1\}
+$$
+
+is also homotopy equivalent to a circle, we have
+
+$$
+\pi_1(\Omega,\phi(x_0))\cong\mathbb Z.
+$$
+
+The only subgroup of index
+
+$$
+d
+$$
+
+in
+
+$$
+\mathbb Z
+$$
+
+is
+
+$$
+d\mathbb Z.
+$$
+
+Therefore the element
 
 $$
 \phi_*([c_R])
 $$
 
-generates the subgroup $\phi_*(\pi_1(V,x_0))$. Therefore, under the winding
-number isomorphism
-
-$$
-\pi_1(\Omega,y_0)\cong\mathbb Z,
-$$
-
-the class $\phi_*([c_R])$ corresponds to
+corresponds, under the winding-number identification, to
 
 $$
 \pm d.
 $$
 
-Equivalently, the loop $\phi\circ c_R$ has winding number
+Equivalently, the loop
+
+$$
+\phi\circ c_R
+$$
+
+has winding number
 
 $$
 \operatorname{wind}(\phi\circ c_R,0)=\pm d.
 $$
 
-### Step 3. The free homotopy hypothesis forces winding number $1$
+### Step 3. The free homotopy forces winding number $$1$$
 
-By definition of $\gamma_R$,
+By definition,
 
 $$
 (\phi\circ c_R)(t)=\phi(Re^{2\pi i t})=\gamma_R(e^{2\pi i t}).
 $$
 
-So $\phi\circ c_R$ is just the standard $[0,1]$-parameterization of $\gamma_R$.
+Thus
+
+$$
+\phi\circ c_R
+$$
+
+is the standard parametrization of the loop
+
+$$
+\gamma_R.
+$$
+
 Likewise,
 
 $$
-\sigma_R(e^{2\pi i t})=Re^{2\pi i t}=c_R(t).
+\sigma_R(e^{2\pi i t})=Re^{2\pi i t}=c_R(t),
 $$
 
-Hence the free homotopy assumption says exactly that the loop $\phi\circ c_R$ is
-freely homotopic in $\Omega$ to the positively oriented circle $c_R$.
+so
 
-The winding number about $0$ is invariant under free homotopy through loops in
-$\mathbb C\setminus\{0\}$. Since
 $$
-\Omega=\mathbb C\setminus \overline{D(0,1)}\subset \mathbb C\setminus\{0\},
+\sigma_R
 $$
-the given free homotopy in $\Omega$ is in particular a free homotopy in
-$\mathbb C\setminus\{0\}$.
-Therefore
+
+is the same geometric loop as
+
+$$
+c_R.
+$$
+
+The free homotopy hypothesis therefore says that
+
+$$
+\phi\circ c_R
+$$
+
+is freely homotopic in
+
+$$
+\Omega
+$$
+
+to the positively oriented circle
+
+$$
+c_R.
+$$
+
+Winding number about the origin is invariant under free homotopy through loops
+in
+
+$$
+\mathbb C\setminus\{0\}.
+$$
+
+Since
+
+$$
+\Omega\subset \mathbb C\setminus\{0\},
+$$
+
+we obtain
 
 $$
 \operatorname{wind}(\phi\circ c_R,0)=\operatorname{wind}(c_R,0)=1.
 $$
 
-Combining this with Step 2 gives
+Combining this with Step 2 yields
 
 $$
 \pm d=1.
 $$
 
-Since $d\ge 1$ is an integer, it follows that
+Because
+
+$$
+d\ge 1
+$$
+
+is an integer, it follows that
 
 $$
 d=1.
 $$
 
-This proves Problem A.
-
-## Why this note is exact and not falsifiable
-
-The statement proved here is exactly the theorem-shaped content of the current
-draft problem and nothing stronger.
-
-1. The proof assumes properness and local homeomorphy; it does not attempt to
-   prove them.
-2. The proof assumes the constant finite fiber hypothesis; it does not derive it
-   from unrelated dynamical input.
-3. The proof uses the free homotopy hypothesis only to identify the winding
-   number of the large circle image with $1$.
-4. Therefore the note does **not** assert any new concrete fact about the
-   specific restricted outside Böttcher map beyond the conditional implication
-   stated in the draft.
-
-So this file is a rigorous proof of the exact topological statement the expert is
-being asked to establish, with no extra claim added beyond that statement.
+This is exactly the conclusion of Problem A.

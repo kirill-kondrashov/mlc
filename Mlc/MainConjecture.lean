@@ -2379,6 +2379,122 @@ theorem directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRoute
       (MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
         (hroute.2 K hK))
 
+/-- The old closed-preimage route from Problem B is false: one can choose a
+compact exterior target whose outside-open ambient preimage has the boundary
+point `‖2‖ + 2` as a limit point. -/
+theorem not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo :
+    ¬ DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo := by
+  intro hroute
+  let r0 : ℝ := ‖(2 : ℂ)‖ + 2
+  let z0 : ℂ := (r0 : ℂ)
+  have hr0_nonneg : 0 ≤ r0 := by
+    dsimp [r0]
+    nlinarith [norm_nonneg (2 : ℂ)]
+  have hr0_pos : 0 < r0 := by
+    dsimp [r0]
+    nlinarith [norm_nonneg (2 : ℂ)]
+  have hz0_norm : ‖z0‖ = ‖(2 : ℂ)‖ + 2 := by
+    dsimp [z0, r0]
+    rw [Complex.norm_real, Real.norm_of_nonneg hr0_nonneg]
+  have hz0_ge : ‖z0‖ ≥ ‖(2 : ℂ)‖ + 2 := by
+    linarith [hz0_norm]
+  have hz0_out : z0 ∈ outside_disk (2 : ℂ) :=
+    large_norm_mem_outside_disk (2 : ℂ) z0 hz0_ge
+  have hz0_ne : z0 ≠ 0 := by
+    dsimp [z0]
+    exact_mod_cast hr0_pos.ne'
+  let w0 : {w : ℂ // 1 < ‖w‖} :=
+    ⟨Quadratic.bottcher_map (2 : ℂ) z0,
+      bottcher_map_norm_gt_one_of_outside (2 : ℂ) hz0_out⟩
+  let rseq : ℕ → ℝ := fun n => r0 + 1 / (n + 1 : ℝ)
+  let zseq : ℕ → ℂ := fun n => (rseq n : ℂ)
+  have hrseq_tend : Tendsto rseq atTop (𝓝 r0) := by
+    simpa [rseq, add_comm, add_left_comm, add_assoc] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat.const_add r0)
+  have hzseq_tend : Tendsto zseq atTop (𝓝 z0) := by
+    simpa [zseq, z0] using (Complex.continuous_ofReal.tendsto r0).comp hrseq_tend
+  have hcont_phi : ContinuousAt (Quadratic.bottcher_map (2 : ℂ)) z0 :=
+    bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z0 hz0_ne
+  have hwseq_tend_val :
+      Tendsto (fun n => Quadratic.bottcher_map (2 : ℂ) (zseq n)) atTop
+        (𝓝 (Quadratic.bottcher_map (2 : ℂ) z0)) :=
+    hcont_phi.tendsto.comp hzseq_tend
+  have hzseq_norm (n : ℕ) : ‖zseq n‖ = rseq n := by
+    have hrseq_nonneg : 0 ≤ rseq n := by
+      dsimp [rseq, r0]
+      positivity
+    dsimp [zseq, rseq]
+    rw [Complex.norm_real, Real.norm_of_nonneg hrseq_nonneg]
+  have hzseq_gt (n : ℕ) : ‖zseq n‖ > ‖(2 : ℂ)‖ + 2 := by
+    have hpos : 0 < (1 : ℝ) / (n + 1 : ℝ) := by
+      positivity
+    linarith [hzseq_norm n]
+  have hzseq_out (n : ℕ) : zseq n ∈ outside_disk (2 : ℂ) :=
+    large_norm_mem_outside_disk (2 : ℂ) (zseq n) (le_of_lt (hzseq_gt n))
+  let wseq : ℕ → {w : ℂ // 1 < ‖w‖} := fun n =>
+    ⟨Quadratic.bottcher_map (2 : ℂ) (zseq n),
+      bottcher_map_norm_gt_one_of_outside (2 : ℂ) (hzseq_out n)⟩
+  have hwseq_tend : Tendsto wseq atTop (𝓝 w0) := by
+    simpa [wseq, w0] using (tendsto_subtype_rng.2 hwseq_tend_val)
+  let K : Set {w : ℂ // 1 < ‖w‖} := insert w0 (Set.range wseq)
+  have hK : IsCompact K := by
+    simpa [K] using hwseq_tend.isCompact_insert_range
+  let S : Set ℂ :=
+    {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+      Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)}
+  have hS_closed : IsClosed S := by
+    simpa [S, K] using hroute.2 K hK
+  have hzseq_mem : ∀ n : ℕ, zseq n ∈ S := by
+    intro n
+    refine ⟨hzseq_gt n, ?_⟩
+    refine ⟨wseq n, ?_, rfl⟩
+    simp [K]
+  have hz0_mem : z0 ∈ S := by
+    exact hS_closed.mem_of_tendsto hzseq_tend (Filter.Eventually.of_forall hzseq_mem)
+  have hz0_not_mem : z0 ∉ S := by
+    intro hz
+    have hzgt : ‖z0‖ > ‖(2 : ℂ)‖ + 2 := hz.1
+    linarith [hz0_norm]
+  exact hz0_not_mem hz0_mem
+
+/-- Truthful replacement for the false closed-preimage Problem B: local
+homeomorphy together with compact ambient preimages of compact exterior targets.
+This is exactly the data needed to recover properness of the restricted map. -/
+def DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo : Prop :=
+  IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+    (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
+      IsCompact
+        ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
+          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
+
+/-- The old closed-preimage route would imply the truthful compact-preimage
+route, but it is itself false by
+`not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`. -/
+theorem directProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo_of_closedRangeRoute
+    (hroute : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo) :
+    DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo := by
+  refine ⟨hroute.1, ?_⟩
+  intro K hK
+  exact
+    MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K |>.1
+      (MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
+        (hroute.2 K hK))
+
+/-- Constructive route from local-homeomorphy plus compact ambient preimages on
+compact exterior targets to the direct proper/local witness. -/
+theorem directProperLocalWitnessTwo_of_localHomeomorphCompactPreimageRoute
+    (hroute : DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo) :
+    DirectProperLocalWitnessTwo := by
+  refine ⟨?_, hroute.1⟩
+  have hcont :
+      Continuous (fun z : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} =>
+        Quadratic.bottcher_map (2 : ℂ) z.1) := by
+    simpa [MLC.bottcher_map_outside_open_to_exterior] using
+      (continuous_subtype_val.comp hroute.1.continuous)
+  exact
+    MLC.isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact (2 : ℂ)
+      hcont hroute.2
+
 /-- Minimal-counterexample formulation of the constructive
 local-homeomorph/closed-preimage route. This keeps the root-facing residual
 axiom theorem-shaped without postulating the route itself as a concrete fact. -/
@@ -2410,6 +2526,40 @@ theorem directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRouteScope
   exact
     directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRoute
       (directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_minimalCounterexample
+        hscope)
+
+/-- Minimal-counterexample formulation of the truthful compact-preimage route.
+This replaces the false closed-preimage Problem B statement at the root while
+keeping the remaining seam theorem-shaped. -/
+def DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample :
+    Prop :=
+  ¬ DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo → False
+
+/-- Backward-compatible route-scope interface for the truthful compact-preimage
+statement. -/
+abbrev DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoScope :
+    Prop :=
+  DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample
+
+/-- Recover the compact-preimage route from its minimal-counterexample
+formulation. -/
+theorem
+    directProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo_of_minimalCounterexample
+    (hminimal :
+      DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample) :
+    DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo := by
+  classical
+  by_contra hroute
+  exact hminimal hroute
+
+/-- Recover the direct proper/local witness from the truthful compact-preimage
+route-level obstruction interface. -/
+theorem directProperLocalWitnessTwo_of_localHomeomorphCompactPreimageRouteScope
+    (hscope : DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoScope) :
+    DirectProperLocalWitnessTwo := by
+  exact
+    directProperLocalWitnessTwo_of_localHomeomorphCompactPreimageRoute
+      (directProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo_of_minimalCounterexample
         hscope)
 
 /-- Constructive CP5 endpoint from the direct closure criterion witness. -/
@@ -2645,7 +2795,7 @@ def NonseededDirectProperToLocalSeamGapTwo : Prop :=
 /-- v10 route matrix for candidate paths currently used to obtain
 `DirectProperLocalWitnessTwo`. -/
 def DirectProperLocalWitnessTwoRouteMatrixV10 : Prop :=
-  DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo ∨
+  DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo ∨
     KnownProperLocalSourceCandidateTwo ∨
       PrimitiveRestrictedMapProperLocalWitnessFamilyTwo
 
@@ -3878,7 +4028,7 @@ remaining covering-context generator calculation. It packages exactly the two
 residual theorem-shaped inputs still needed to close the degree-one route:
 
 1. a minimal-counterexample obstruction theorem for the constructive
-   local-homeomorph/closed-preimage route to proper/local-homeomorphy of the
+   local-homeomorph/compact-preimage route to proper/local-homeomorphy of the
    restricted outside map;
 2. the exact remaining monodromy core saying that a positive constant covering
    degree for this restricted map, together with the already-formalized
@@ -3887,24 +4037,24 @@ residual theorem-shaped inputs still needed to close the degree-one route:
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
-    DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample ∧
+    DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample ∧
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
     (hkernel :
-      DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample ∧
+      DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample ∧
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   have hdirect : DirectProperLocalWitnessTwo :=
-    directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRouteScope hkernel.1
+    directProperLocalWitnessTwo_of_localHomeomorphCompactPreimageRouteScope hkernel.1
   exact
     mlc_conjecture_of_proper_local_restrict_of_monodromyCore hdirect.1 hdirect.2 hkernel.2
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
     the exact remaining degree-one kernel at `c = 2`: a minimal-counterexample
-    obstruction theorem for the explicit local-homeomorph/closed-preimage route
+    obstruction theorem for the explicit local-homeomorph/compact-preimage route
     to the direct proper/local witness together with the
     exact monodromy core reducing a positive constant covering degree to `1`
     from the already-formalized large-circle homotopy.

@@ -1,4 +1,4 @@
-# Remaining exact problem statement at c = 2
+# Remaining monodromy problem at c = 2
 
 Let
 
@@ -22,23 +22,34 @@ $$
 
 Prove the following statement.
 
-## Problem A. Covering-degree rigidity
+## Problem A. Monodromy rigidity of the covering degree
 
 Assume that:
 
-1. $\phi$ is proper.
-2. $\phi$ is a local homeomorphism.
-3. There exists an integer $d\ge 1$ such that, for every $w\in\Omega$,
+1. The map above is a local homeomorphism.
+2. There exists an integer
+   $$
+   d\ge 1
+   $$
+   such that, for every point
+   $$
+   w\in\Omega,
+   $$
    $$
    \#\phi^{-1}(w)=d.
    $$
-4. For some $R>4$, the loop
+3. For some number
+   $$
+   R>4,
+   $$
+   the loop
    $$
    \gamma_R:S^1\to\Omega,
    \qquad
    \gamma_R(e^{2\pi i t})=\phi(Re^{2\pi i t}),
    $$
-   is freely homotopic in $\Omega$ to the positively oriented circle
+   is freely homotopic through loops in the exterior domain to the positively
+   oriented circle
    $$
    \sigma_R:S^1\to\Omega,
    \qquad
