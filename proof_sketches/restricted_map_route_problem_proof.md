@@ -1,4 +1,4 @@
-# The current restricted-map route problem is false as stated
+# The current restricted fiber-degree problem is false as stated
 
 Let
 $$
@@ -8,65 +8,66 @@ and let
 $$
 \phi:V\to\Omega
 $$
-be the restricted outside Böttcher map at $$c=2$$.
+be the restricted outside Böttcher map for $$f(z)=z^2+2$$.
 
 The current draft asks to prove:
 
-1. $$\phi$$ is proper;
-2. $$\phi$$ is a local homeomorphism.
+1. $$\phi$$ is a local homeomorphism.
+2. There exists an integer $$d\ge 1$$ such that for every $$w\in\Omega$$ the fiber
+   $$
+   F_w=\{z\in V:\phi(z)=w\}
+   $$
+   has exactly $$d$$ points.
 
-The second statement is true, but the first one is false. Hence the draft problem has no proof as written.
+The first statement is true, but the second one is false. Hence the draft problem has no proof as written.
 
-## Local homeomorphism
+## Proof that $$\phi$$ is a local homeomorphism
 
-Let $$U_\infty$$ be the basin of infinity of $$f_2(z)=z^2+2$$. The classical Böttcher theorem gives a biholomorphism
+Let $$U_\infty$$ be the basin of infinity of $$f(z)=z^2+2$$. The Böttcher theorem gives a biholomorphism
 $$
 \Phi:U_\infty\to\Omega
 $$
-satisfying $$\Phi(f_2(z))=\Phi(z)^2$$ and $$\Phi(z)/z\to 1$$ as $$z\to\infty$$. Since $$V\subset U_\infty$$, the restricted map
+satisfying $$\Phi(f(z))=\Phi(z)^2$$ and $$\Phi(z)/z\to 1$$ as $$z\to\infty$$. Since $$V\subset U_\infty$$, the restricted map
 $$
 \phi=\Phi|_V:V\to\Omega
 $$
 is the restriction of a homeomorphism to an open subset of its domain. Therefore $$\phi$$ is a local homeomorphism.
 
-## Counterexample to properness
+## Counterexample to the constant positive fiber-degree statement
 
-Set
+Because $$4\in U_\infty$$, the point
 $$
-z_*=4,\qquad z_n=4+\frac1n\quad (n\ge 1).
+w_0=\Phi(4)
 $$
-Then $$z_*\in U_\infty$$, every $$z_n\in V$$, and $$z_n\to z_*$$ in $$\mathbb C$$.
+is well defined and belongs to $$\Omega$$. We claim that
+$$
+F_{w_0}=\varnothing.
+$$
+Indeed, if $$z\in V$$ satisfied $$\phi(z)=w_0$$, then
+$$
+\Phi(z)=w_0=\Phi(4).
+$$
+Since $$\Phi$$ is injective on $$U_\infty$$, we would get $$z=4$$, contradicting $$z\in V=\{z:\lvert z\rvert>4\}$$. Thus $$F_{w_0}$$ is empty.
 
-Define
+Now take
 $$
-w_*=\Phi(z_*),\qquad w_n=\Phi(z_n)\quad (n\ge 1).
+w_1=\Phi(5).
 $$
-By continuity of $$\Phi$$ on $$U_\infty$$, we have $$w_n\to w_*$$. Since $$w_*\in\Omega$$, the set
+Since $$5\in V$$, we have $$5\in F_{w_1}$$. If $$z\in F_{w_1}$$, then
 $$
-K=\{w_*\}\cup\{w_n:n\ge 1\}
+\Phi(z)=w_1=\Phi(5),
 $$
-is compact in $$\Omega$$.
-
-We now compute the preimage of $$K$$ under $$\phi$$. Because $$\Phi$$ is injective on $$U_\infty$$, we have:
-
-1. $$\phi(z_n)=w_n$$ for every $$n\ge 1$$;
-2. $$w_*$$ has no preimage in $$V$$, because its unique preimage under $$\Phi$$ is $$z_*=4\notin V$$.
-
-Hence
+so injectivity of $$\Phi$$ on $$U_\infty$$ gives $$z=5$$. Hence
 $$
-\phi^{-1}(K)=\{z_n:n\ge 1\}.
+F_{w_1}=\{5\}.
 $$
 
-This set is not compact in $$V$$. Indeed, the sequence $$z_n$$ lies in $$\phi^{-1}(K)$$, but every subsequence of $$z_n$$ converges in $$\mathbb C$$ to the same limit $$z_*=4\notin V$$. Therefore $$\{z_n:n\ge 1\}$$ has no convergent subsequence with limit in $$V$$. Since $$V$$ is a metric space, compactness is equivalent to sequential compactness, so $$\phi^{-1}(K)$$ is not compact in $$V$$.
-
-Thus $$\phi$$ is not a proper map $$V\to\Omega$$.
+Therefore
+$$
+\#F_{w_0}=0,\qquad \#F_{w_1}=1.
+$$
+So there cannot exist any integer $$d\ge 1$$ such that every fiber $$F_w$$ has cardinality exactly $$d$$.
 
 ## Conclusion
 
-The original properness formulation of Problem B is false: the restricted outside Böttcher map is a local homeomorphism, but it is not proper as a map from $$V$$ to the full exterior domain $$\Omega$$. Consequently there is no rigorous proof of that old statement.
-
-The remaining truthful witness-side statement is therefore weaker: prove local homeomorphy of $$\phi$$ and prove that the restricted fibers
-$$
-F_w=\{z\in V:\phi(z)=w\}
-$$
-have one positive constant finite cardinality independent of $$w\in\Omega$$.
+The current `draft/restricted_map_route_problem.md` is false. The restricted outside Böttcher map is indeed a local homeomorphism, but its fibers over the full exterior domain $$\Omega$$ do not have a positive constant cardinality: some are empty and some are singletons. Consequently there is no rigorous proof of the draft problem in its present form.
