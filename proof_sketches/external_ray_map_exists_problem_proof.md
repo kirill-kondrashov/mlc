@@ -1,11 +1,11 @@
-# Exact proof of Problem A: covering-degree rigidity
+# Exact proof of the remaining problem: covering-degree rigidity
 
-This note proves **exactly Problem A** from `draft/external_ray_map_exists_problem.md`.
+This note proves **exactly** the remaining problem stated in
+`draft/external_ray_map_exists_problem.md`.
 
-It does **not** prove Problem B. In particular, nothing below asserts that the
-restricted outside Böttcher map for $f(z)=z^2+2$ is proper or a local
-homeomorphism. Those are the separate analytic statements isolated in Problem B.
-The argument below is a conditional theorem: **if** a map
+It does **not** assert any new analytic fact about the specific restricted
+outside Böttcher map for $f(z)=z^2+2$. The argument below is a conditional
+theorem: **if** a map
 $$
 \phi:V\to\Omega
 $$
@@ -271,12 +271,12 @@ $$
 d=1.
 $$
 
-This proves Problem A.
+This proves the remaining draft problem.
 
 ## Why this note is exact and not falsifiable
 
-The statement proved here is exactly the theorem-shaped content of Problem A and
-nothing stronger.
+The statement proved here is exactly the theorem-shaped content of the remaining
+draft problem and nothing stronger.
 
 1. The proof assumes properness and local homeomorphy; it does not attempt to
    prove them.
@@ -286,8 +286,7 @@ nothing stronger.
    number of the large circle image with $1$.
 4. Therefore the note does **not** assert any new concrete fact about the
    specific restricted outside Böttcher map beyond the conditional implication
-   already requested in Problem A.
+   stated in the draft.
 
 So this file is a rigorous proof of the exact topological statement the expert is
-being asked to establish, while leaving the separate analytic content of Problem
-B untouched.
+being asked to establish, with no extra claim added beyond that statement.

@@ -5,6 +5,7 @@ import Mathlib.Analysis.SpecialFunctions.Complex.CircleMap
 import Mathlib.MeasureTheory.Integral.CircleIntegral
 import Mathlib.Topology.IsLocalHomeomorph
 import Mathlib.Topology.Covering.Basic
+import Mathlib.Topology.Homotopy.Lifting
 import Mathlib.Topology.Algebra.OpenSubgroup
 import Mlc.Quadratic.Complex.InverseBranchQuadratic
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
@@ -400,7 +401,79 @@ lemma natCard_fiber_pos_of_isProperMap_isLocalHomeomorph [PreconnectedSpace Y] [
     exact Fintype.card_pos_iff.mpr ⟨⟨x, hx⟩⟩
   simpa [Nat.card_eq_fintype_card] using hpos
 
+lemma isCoveringMap_of_isProperMap_isLocalHomeomorph [PreconnectedSpace Y] [Nonempty X]
+    {f : X → Y} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) :
+    IsCoveringMap f := by
+  classical
+  intro y
+  have hfinite : ({x : X | f x = y} : Set X).Finite :=
+    finite_fiber_of_isProperMap_isLocallyInjective
+      (f := f) hproper hlocal.isLocallyInjective y
+  have hsurj : Function.Surjective f :=
+    surjective_of_isProperMap_isLocalHomeomorph (f := f) hproper hlocal
+  rcases exists_open_preimage_subset_iUnion_disjoint_inj_of_finite_fiber
+      (f := f) hproper.isClosedMap hlocal hfinite with
+    ⟨V₀, hV₀open, hyV₀, U, hUopen, hxU, hUinj, hUdisj, hpreV₀⟩
+  let I : Type _ := {x : X // f x = y}
+  rcases hsurj y with ⟨x₀, hx₀⟩
+  letI : Nonempty I := ⟨⟨x₀, hx₀⟩⟩
+  letI : Finite I := hfinite.to_subtype
+  let Iimgs : Set Y := ⋂ x : I, f '' U x
+  have hyIimgs : y ∈ Iimgs := by
+    refine Set.mem_iInter.mpr ?_
+    intro x
+    exact ⟨x.1, hxU x, x.2⟩
+  let V : Set Y := V₀ ∩ Iimgs
+  have hVopen : IsOpen V := by
+    dsimp [V, Iimgs]
+    exact hV₀open.inter <| isOpen_iInter_of_finite fun x =>
+      hlocal.isOpenMap _ (hUopen x)
+  have hyV : y ∈ V := ⟨hyV₀, hyIimgs⟩
+  letI : TopologicalSpace I := ⊥
+  letI : DiscreteTopology I := ⟨rfl⟩
+  have hUsurj : ∀ x : I, (U x).SurjOn f V := by
+    intro x y' hy'
+    exact (Set.mem_iInter.mp hy'.2) x
+  have hopen_iff :
+      ∀ x : I, ∀ {W : Set Y}, W ⊆ V → (IsOpen W ↔ IsOpen (f ⁻¹' W ∩ U x)) := by
+    intro x W hWV
+    constructor
+    · intro hW
+      exact hlocal.continuous.isOpen_preimage _ hW |>.inter (hUopen x)
+    · intro hpreW
+      have himage :
+          f '' (f ⁻¹' W ∩ U x) = W := by
+        ext y'
+        constructor
+        · intro hy'
+          rcases hy' with ⟨z, hz, rfl⟩
+          exact hz.1
+        · intro hy'
+          rcases hUsurj x (hWV hy') with ⟨z, hzU, rfl⟩
+          exact ⟨z, ⟨hy', hzU⟩, rfl⟩
+      simpa [himage] using hlocal.isOpenMap _ hpreW
+  have hpreV : f ⁻¹' V ⊆ ⋃ x : I, U x := by
+    intro z hz
+    exact hpreV₀ hz.1
+  let e : Trivialization I f :=
+    hVopen.trivializationDiscrete U V hopen_iff hUinj hUsurj hUdisj hpreV
+  have hyE : y ∈ e.baseSet := by
+    simpa [e] using hyV
+  exact IsEvenlyCovered.to_isEvenlyCovered_preimage
+    (I := I) (IsEvenlyCovered.of_trivialization (f := f) (t := e) hyE)
+
 end ProperLocalHomeomorphFibers
+
+theorem restricted_isCoveringMap_two_of_isProperMap_isLocalHomeomorph
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    IsCoveringMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
+  letI : ConnectedSpace {w : ℂ // 1 < ‖w‖} :=
+    (isConnected_iff_connectedSpace).1 MLC.isConnected_exterior
+  letI : Nonempty {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+    refine ⟨⟨(5 : ℂ), by norm_num⟩⟩
+  exact isCoveringMap_of_isProperMap_isLocalHomeomorph
+    (f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local
 
 /-- Large circles in the outside-open domain for `c = 2`. -/
 noncomputable def outsideOpenCircleLoopTwo (R : ℝ) (hR : 4 < R) :
