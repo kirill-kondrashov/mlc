@@ -3776,30 +3776,30 @@ remaining algebraic-topology seam. It packages exactly the two concrete inputs
 still needed to close the degree-one route:
 
 1. proper/local-homeomorphy of the restricted outside map;
-2. the isolated winding/generator theorem
-   `RestrictedAsymptoticWindingDegreeOneTwo`.
+2. the exact bridge theorem saying that this proper/local witness implies the
+   degree-one conclusion `RestrictedAsymptoticWindingDegreeOneTwo`.
 
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
     DirectProperLocalWitnessTwo ∧
-      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo
+      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
     (hkernel : DirectProperLocalWitnessTwo ∧
-      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
+      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact
-    mlc_conjecture_of_finalAxiomCoreConstructiveGapV16
-      (finalAxiomCoreConstructiveGapV16_of_restricted_winding hkernel.2)
-      hkernel.1
+    mlc_conjecture_of_proper_local_restrict_of_winding
+      hkernel.1.1 hkernel.1.2 (hkernel.2 hkernel.1.1 hkernel.1.2)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
     the exact remaining degree-one kernel at `c = 2`: a direct proper/local
-    witness for the restricted outside map together with the isolated
-    winding/generator theorem `RestrictedAsymptoticWindingDegreeOneTwo`.
+    witness for the restricted outside map together with the exact bridge theorem
+    reducing that witness to the degree-one statement
+    `RestrictedAsymptoticWindingDegreeOneTwo`.
 
     This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
     much narrower and less falsifiable final seam. -/

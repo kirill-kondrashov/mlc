@@ -36,12 +36,20 @@ We first verify the covering interpretation. Since every fiber has cardinality
 \phi^{-1}(w)=\{z_1,\ldots,z_d\}.
 \]
 Because \(\phi\) is a local homeomorphism, for each \(i\) there is an open
-neighborhood \(U_i\subset V\) of \(z_i\) such that \(\phi|_{U_i}\) is a
-homeomorphism onto an open neighborhood of \(w\). Shrinking the \(U_i\), we may
-assume that their closures in \(V\) are pairwise disjoint compact neighborhoods
-of the corresponding \(z_i\), and that \(\phi|_{U_i}\) is still injective.
-Choose an open neighborhood \(W_0\subset\Omega\) of \(w\) contained in
-\(\bigcap_i \phi(U_i)\) and with compact closure in \(\Omega\).
+neighborhood \(N_i\subset V\) of \(z_i\) such that \(\phi|_{N_i}\) is a
+homeomorphism onto an open neighborhood of \(w\). Since \(V\) is a metric
+locally compact Hausdorff space and the points \(z_1,\ldots,z_d\) are
+distinct, choose open neighborhoods \(U_i\) with
+\[
+z_i\in U_i\subset \overline{U_i}^{\,V}\subset N_i,
+\]
+such that the compact closures \(\overline{U_i}^{\,V}\) are pairwise disjoint.
+Then \(\phi|_{U_i}\) is injective and maps \(U_i\) homeomorphically onto the
+open set \(\phi(U_i)\), which contains \(w\). Choose an open neighborhood
+\(W_0\subset\Omega\) of \(w\) with compact closure in \(\Omega\) and
+\[
+W_0\subset\bigcap_{i=1}^d \phi(U_i).
+\]
 
 There is a smaller neighborhood \(W\subset W_0\) of \(w\) such that
 \[

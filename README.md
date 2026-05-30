@@ -39,10 +39,10 @@ project_frontier(MLC.mlc_conjecture)
 ## Current Status
 
 The checked root is now routed through a **single residual degree-one kernel**:
-the direct proper/local witness for the restricted outside map plus the isolated
-restricted winding theorem. The coordinate-data and normalization pieces are
-constructive again, and the root still avoids the older tower / Lyubich /
-Problem 4.5 detours.
+the direct proper/local witness for the restricted outside map plus the exact
+bridge theorem that this witness implies the degree-one conclusion. The
+coordinate-data and normalization pieces are constructive again, and the root
+still avoids the older tower / Lyubich / Problem 4.5 detours.
 
 1. `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16`
 2. `finalAxiomCoreConstructiveGapV16_of_restricted_winding`
@@ -67,7 +67,7 @@ One non-core project axiom remains:
 This kernel is the conjunction of:
 
 1. `DirectProperLocalWitnessTwo`
-2. `Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo`
+2. `Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo`
 
 The theorem-facing coordinate and root normalization branches are now supplied
 constructively by the explicit `polar_green_map` / basin-valued Böttcher package.
@@ -85,9 +85,10 @@ through:
 
 The final constructive target is now the exact `c = 2` degree-one kernel:
 construct the direct proper/local witness for the restricted outside map and
-prove the remaining winding/generator theorem
-`Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo`. Doing so will
-eliminate the last root axiom `MLC.restrictedWindingKernelTwo`.
+prove the remaining bridge theorem
+`Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo`, whose conclusion
+is `RestrictedAsymptoticWindingDegreeOneTwo`. Doing so will eliminate the last
+root axiom `MLC.restrictedWindingKernelTwo`.
 
 ## Repository Snapshot
 

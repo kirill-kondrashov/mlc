@@ -580,6 +580,15 @@ with cardinality one. -/
 def RestrictedAsymptoticWindingDegreeOneTwo : Prop :=
   ∃ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = 1
 
+/-- Exact remaining algebraic-topology bridge from the proof sketch:
+once the restricted outside-open map at `c = 2` is known to be proper and a
+local homeomorphism, the already-formalized large-circle homotopy should force
+the covering degree to be `1`. -/
+def RestrictedAsymptoticWindingBridgeTwo : Prop :=
+  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
+      RestrictedAsymptoticWindingDegreeOneTwo
+
 /-- Proper local-homeomorphy of the restricted outside-open map makes the
 restricted fiber cardinality independent of the exterior base point. -/
 theorem restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
@@ -628,6 +637,18 @@ theorem restricted_degree_one_fibers_two_of_constant_of_winding
     RestrictedFiberCardTwo y = RestrictedFiberCardTwo y0 := hconst y y0
     _ = 1 := hy0
 
+/-- The exact proof-sketch bridge implies degree-one fibers once the proper/local
+restricted-map witness is available. -/
+theorem restricted_degree_one_fibers_two_of_winding_bridge
+    (hbridge : RestrictedAsymptoticWindingBridgeTwo)
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    RestrictedDegreeOneFibersTwo := by
+  exact
+    restricted_degree_one_fibers_two_of_constant_of_winding
+      (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph h_proper h_local)
+      (hbridge h_proper h_local)
+
 /-- If the restricted outside-open map has degree-one fibers, then the original
 Böttcher map is injective on the outside-open domain. -/
 theorem injOn_outside_open_two_of_restricted_degree_one_fibers
@@ -654,6 +675,17 @@ theorem injOn_outside_open_two_of_restricted_covering_degree_constant_of_winding
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   exact injOn_outside_open_two_of_restricted_degree_one_fibers
     (restricted_degree_one_fibers_two_of_constant_of_winding hconst hwinding)
+
+/-- Outside-open injectivity from the exact remaining proof-sketch bridge. -/
+theorem injOn_outside_open_two_of_winding_bridge
+    (hbridge : RestrictedAsymptoticWindingBridgeTwo)
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Set.InjOn (MLC.Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  exact
+    injOn_outside_open_two_of_restricted_degree_one_fibers
+      (restricted_degree_one_fibers_two_of_winding_bridge hbridge h_proper h_local)
 
 /-- Proper local-homeomorphy gives exterior surjectivity, and the degree-one
 fiber conclusion gives outside-open injectivity. Together they construct the
@@ -699,6 +731,18 @@ theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_windin
       (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
         h_proper h_local)
       hwinding
+
+/-- External-ray map data from the exact remaining proof-sketch bridge:
+proper/local-homeomorphy of the restricted map plus the unresolved
+algebraic-topology theorem. -/
+theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding_bridge
+    (hbridge : RestrictedAsymptoticWindingBridgeTwo)
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
+      h_proper h_local (hbridge h_proper h_local)
 
 /-- Proper local-homeomorphy of the restricted outside-open map already gives
 exterior surjectivity via the clopen-image argument. -/
