@@ -70,7 +70,7 @@ One non-core project axiom remains:
 This kernel is the conjunction of:
 
 1. `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample`
-2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`
+2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo`
 
 The theorem-facing coordinate and root normalization branches are now supplied
 constructively by the explicit `polar_green_map` / basin-valued Böttcher package.
@@ -89,7 +89,7 @@ through:
 The final constructive target is now the exact `c = 2` degree-one kernel:
 construct the local-homeomorph/closed-preimage route to the direct proper/local
 witness for the restricted outside map and prove the remaining generator calculation
-`Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`.
+`Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo`.
 The witness half is no longer a raw scope gate for either
 `DirectProperLocalWitnessTwo` or the route
 `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`; it is now

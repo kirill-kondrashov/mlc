@@ -23,8 +23,8 @@ rerouted the root through the narrowed `c = 2` degree-one kernel.
 
 `MLC.mlc_conjecture` now runs through:
 
-1. `mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy`
-2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`
+1. `mlc_conjecture_of_proper_local_restrict_of_problemA`
+2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo`
 3. `MLC.restrictedWindingKernelTwo`
 
 Here item 2 is now the non-falsifiable covering-context generator theorem, not a

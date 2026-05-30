@@ -2052,17 +2052,28 @@ theorem mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
 /-- Root-facing MLC bridge from the exact remaining generator calculation in the
 proof sketch. The positive constant covering-degree part is already formalized
 constructively, so only the residual homotopy-to-degree-one step is passed in. -/
+theorem mlc_conjecture_of_proper_local_restrict_of_problemA
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hproblemA :
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
+      h_proper h_local
+      (Mlc.Bottcher.DegreeOne.restrictedAnnulusCoveringDegreeOneStepTwo_of_problemA
+        hproblemA)
+
+/-- Root-facing MLC bridge from the exact remaining generator calculation in the
+proof sketch. The positive constant covering-degree part is already formalized
+constructively, so only the residual homotopy-to-degree-one step is passed in. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
     (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hkernel :
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact
-    mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
-      h_proper h_local
-      (Mlc.Bottcher.DegreeOne.restrictedAnnulusCoveringDegreeOneStepTwo_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
-        hkernel)
+  exact mlc_conjecture_of_proper_local_restrict_of_problemA h_proper h_local hkernel
 
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from
 outside-open injectivity plus exterior surjectivity by outside-open preimages. -/
@@ -3863,19 +3874,18 @@ Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
     DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample ∧
-      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
     (hkernel :
       DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample ∧
-      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo) :
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo) :
     LocallyConnectedSpace mandelbrotSet := by
   have hdirect : DirectProperLocalWitnessTwo :=
     directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRouteScope hkernel.1
   exact
-    mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
-      hdirect.1 hdirect.2 hkernel.2
+    mlc_conjecture_of_proper_local_restrict_of_problemA hdirect.1 hdirect.2 hkernel.2
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
