@@ -1,4 +1,4 @@
-# Remaining root problem at $c=2$
+# Remaining root problem at c = 2
 
 Let
 

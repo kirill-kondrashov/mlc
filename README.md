@@ -52,10 +52,10 @@ refuted in Lean.
 The expert-facing documentation has been cleaned up accordingly:
 
 1. `draft/external_ray_map_exists_problem.md` is the exact remaining root theorem.
-2. `draft/outside_open_injectivity_problem.md` is the single sufficient
-   remaining subproblem on the preferred constructive route.
-3. `proof_sketches/` now mirrors `draft/` one-to-one with matching informal
-   mathematical proof notes.
+2. `draft/green_ray_anchor_gap_problem.md` is the exact remaining
+   root-elimination subproblem on the preferred constructive route.
+3. `proof_sketches/` contains the current informal notes for the surrounding
+   reduction route.
 
 So the earlier explicit frontier
 
@@ -112,14 +112,17 @@ $$
 $$
 
 On the current preferred route, it would be enough to prove the remaining
-injectivity statement from `draft/outside_open_injectivity_problem.md`:
+Green-ray anchor-gap statement from
+`draft/green_ray_anchor_gap_problem.md`:
 
 $$
-\phi|_V:V\to\Omega \text{ is injective.}
+G\!\left(4\,\frac{w}{|w|}\right)<\log |w|
+\qquad \text{for every } w\in\mathbb C \text{ with } |w|>1.
 $$
 
-The already formalized reduction then promotes exterior surjectivity together
-with this injectivity input to the basin-valued inverse package.
+The already formalized reduction then combines this anchor-gap inequality with
+the current outside-open injectivity bridge to produce the basin-valued inverse
+package.
 
 This basin-valued target is the codomain-correct replacement for the false
 statement that the restricted map `φ|_V : V → Ω` should already have positive
@@ -138,8 +141,8 @@ routes remain formally refuted as well.
 2. `plan/` has been pruned to the single live frontier file
    `PLAN_04_lyubich_bridge.md`.
 3. `draft/` now contains exactly two expert-facing problem files: the true root
-   theorem and one sufficient remaining injectivity reduction.
-4. `proof_sketches/` now mirrors `draft/` one problem to one proof note.
+   theorem and the exact remaining Green-ray anchor-gap reduction.
+4. `proof_sketches/` remains available as informal route documentation.
 5. The current root-facing story is therefore simple: one remaining mathematical
    elimination target, exposed as one residual theorem-facing assumption.
 
