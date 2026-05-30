@@ -2320,21 +2320,6 @@ def DirectProperLocalWitnessTwo : Prop :=
   IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
 
-/-- Classical scope gate for the direct proper/local witness. This keeps the
-root-facing residual axiom theorem-shaped even when the witness itself has not
-yet been constructed explicitly. -/
-def DirectProperLocalWitnessTwoScope : Prop :=
-  ¬¬ DirectProperLocalWitnessTwo
-
-/-- Recover the direct proper/local witness from its explicit classical scope
-gate. -/
-theorem directProperLocalWitnessTwo_of_scope
-    (hscope : DirectProperLocalWitnessTwoScope) :
-    DirectProperLocalWitnessTwo := by
-  classical
-  by_contra h_not
-  exact hscope h_not
-
 /-- Primitive restricted-map proper/local witness family at `c = 2`.
 This packages the same payload as `DirectProperLocalWitnessTwo` under a
 distinct interface name for no-arg witness-source design work. -/
@@ -2350,6 +2335,42 @@ def DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo : Prop :=
       IsClosed
         ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
           Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
+
+/-- Constructive route from local-homeomorphy plus closed preimages on compact
+exterior targets to the direct proper/local witness. -/
+theorem directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRoute
+    (hroute : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo) :
+    DirectProperLocalWitnessTwo := by
+  refine ⟨?_, hroute.1⟩
+  have hcont :
+      Continuous (fun z : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} =>
+        Quadratic.bottcher_map (2 : ℂ) z.1) := by
+    simpa [MLC.bottcher_map_outside_open_to_exterior] using
+      (continuous_subtype_val.comp hroute.1.continuous)
+  refine MLC.isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact (2 : ℂ)
+    hcont ?_
+  intro K hK
+  exact
+    MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K |>.1
+      (MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
+        (hroute.2 K hK))
+
+/-- Classical scope gate for the constructive local-homeomorph/closed-preimage
+route. This keeps the root-facing residual axiom theorem-shaped even when the
+route itself has not yet been constructed explicitly. -/
+def DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoScope : Prop :=
+  ¬¬ DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+
+/-- Recover the direct proper/local witness from the explicit classical scope
+gate on the local-homeomorph/closed-preimage route. -/
+theorem directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRouteScope
+    (hscope : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoScope) :
+    DirectProperLocalWitnessTwo := by
+  classical
+  by_cases hroute : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo
+  · exact directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRoute hroute
+  · exfalso
+    exact hscope hroute
 
 /-- Constructive CP5 endpoint from the direct closure criterion witness. -/
 def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
@@ -3816,8 +3837,8 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
 remaining covering-context generator calculation. It packages exactly the two residual inputs
 still needed to close the degree-one route:
 
-1. a classical scope gate for proper/local-homeomorphy of the restricted
-   outside map;
+1. a classical scope gate for the constructive local-homeomorph/closed-preimage
+   route to proper/local-homeomorphy of the restricted outside map;
 2. the exact generator calculation saying that a positive constant covering
    degree for this proper local homeomorphism, together with the already-formalized
    large-circle free homotopy, forces that degree to equal `1`.
@@ -3825,16 +3846,16 @@ still needed to close the degree-one route:
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
-    DirectProperLocalWitnessTwoScope ∧
+    DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoScope ∧
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
-    (hkernel : DirectProperLocalWitnessTwoScope ∧
+    (hkernel : DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoScope ∧
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   have hdirect : DirectProperLocalWitnessTwo :=
-    directProperLocalWitnessTwo_of_scope hkernel.1
+    directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRouteScope hkernel.1
   exact
     mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
       hdirect.1 hdirect.2 hkernel.2
@@ -3842,9 +3863,10 @@ theorem mlc_conjecture_of_restrictedWindingKernelTwo
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
     the exact remaining degree-one kernel at `c = 2`: a classical scope gate for
-    the direct proper/local witness together with the exact covering-context
-    generator calculation reducing a positive constant covering degree to `1`
-    from the already-formalized large-circle homotopy.
+    the local-homeomorph/closed-preimage route to the direct proper/local
+    witness together with the exact covering-context generator calculation
+    reducing a positive constant covering degree to `1` from the already-formalized
+    large-circle homotopy.
 
     This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
     much narrower and less falsifiable final seam. -/

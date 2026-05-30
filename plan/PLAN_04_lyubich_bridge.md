@@ -30,6 +30,10 @@ rerouted the root through the narrowed `c = 2` degree-one kernel.
 Here item 2 is now the non-falsifiable covering-context generator theorem, not a
 bare continuous-map statement.
 
+The non-topological half of the root kernel has also been narrowed: it is now a
+scope gate for the explicit local-homeomorph/closed-preimage route to the direct
+proper/local witness, rather than a scope gate for the direct witness itself.
+
 ---
 
 ## Meaning of the old bridge now
