@@ -3776,30 +3776,35 @@ remaining algebraic-topology seam. It packages exactly the two concrete inputs
 still needed to close the degree-one route:
 
 1. proper/local-homeomorphy of the restricted outside map;
-2. the exact bridge theorem saying that this proper/local witness implies the
-   degree-one conclusion `RestrictedAsymptoticWindingDegreeOneTwo`.
+2. the standard annulus-covering degree-one step saying that, for such a map,
+   the already-formalized large-circle free homotopy forces the degree-one
+   conclusion `RestrictedAsymptoticWindingDegreeOneTwo`.
 
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
     DirectProperLocalWitnessTwo ∧
-      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo
+      Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
     (hkernel : DirectProperLocalWitnessTwo ∧
-      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo) :
+      Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo) :
     LocallyConnectedSpace mandelbrotSet := by
+  have hbridge :
+      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingBridgeTwo :=
+    Mlc.Bottcher.DegreeOne.restrictedAsymptoticWindingBridgeTwo_of_annulusCoveringDegreeOneStep
+      hkernel.2
   exact
     mlc_conjecture_of_proper_local_restrict_of_winding
-      hkernel.1.1 hkernel.1.2 (hkernel.2 hkernel.1.1 hkernel.1.2)
+      hkernel.1.1 hkernel.1.2 (hbridge hkernel.1.1 hkernel.1.2)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
     the exact remaining degree-one kernel at `c = 2`: a direct proper/local
-    witness for the restricted outside map together with the exact bridge theorem
-    reducing that witness to the degree-one statement
-    `RestrictedAsymptoticWindingDegreeOneTwo`.
+    witness for the restricted outside map together with the abstract
+    annulus-covering degree-one theorem. The Bottcher-specific large-circle
+    homotopy is already formalized and is no longer part of the residual axiom.
 
     This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
     much narrower and less falsifiable final seam. -/

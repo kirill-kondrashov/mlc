@@ -1,4 +1,4 @@
-# Exact proof for `RestrictedAsymptoticWindingDegreeOneTwo`
+# Exact proof for `RestrictedAnnulusCoveringDegreeOneStepTwo`
 
 This note proves the exact expert problem stated in
 `draft/external_ray_map_exists_problem.md`.
@@ -80,8 +80,8 @@ is a homeomorphism. The containment above gives
 \phi^{-1}(W)=\bigsqcup_{i=1}^d U_i'.
 \]
 Thus every point of \(\Omega\) has an evenly covered neighborhood. Therefore
-\(\phi:V\to\Omega\) is a \(d\)-sheeted covering map. Since \(V\) is connected,
-this is a connected \(d\)-sheeted covering.
+\(\phi:V\to\Omega\) is a \(d\)-sheeted covering map. Since \(V\) is
+path-connected, this is a connected \(d\)-sheeted covering.
 
 Now fix
 \[
@@ -97,7 +97,7 @@ loop \(\Gamma_R\), based at \(y_0\), so
 \]
 
 We use the standard index formula for connected coverings. If \(p:X\to Y\) is
-a connected covering and \(x\in X\), then
+a covering with \(X\) path-connected and \(x\in X\), then
 \[
 \#p^{-1}(p(x))=[\pi_1(Y,p(x)):p_*(\pi_1(X,x))].
 \]
@@ -158,9 +158,14 @@ This proves the required singleton-fiber statement.
 For the restricted Bottcher map \(\phi=\phi_2|_V\), the Lean development has
 already proved the proper local homeomorphism, the constant positive fiber
 cardinality, and the free homotopy \(\Gamma_R\simeq C_R\) in \(\Omega\). The
-argument above proves that the constant cardinality is \(1\), which is exactly
+argument above proves that these facts force the constant cardinality to be
+\(1\), which is exactly
 \[
 \exists y : \{w:\mathbb C // 1<\|w\|\},\qquad
 \texttt{RestrictedFiberCardTwo}\ y=1.
 \]
-Thus it proves `RestrictedAsymptoticWindingDegreeOneTwo`.
+Thus it supplies the mathematical content needed for
+`RestrictedAnnulusCoveringDegreeOneStepTwo`. In Lean, the already formalized
+large-circle homotopy then turns this abstract annulus theorem into
+`RestrictedAsymptoticWindingBridgeTwo`, and hence into
+`RestrictedAsymptoticWindingDegreeOneTwo`.

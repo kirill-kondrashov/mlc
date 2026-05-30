@@ -589,6 +589,31 @@ def RestrictedAsymptoticWindingBridgeTwo : Prop :=
     (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
       RestrictedAsymptoticWindingDegreeOneTwo
 
+/-- Exact remaining annulus-covering theorem isolated from the proof sketch:
+if the restricted map is proper and a local homeomorphism, then any
+already-formalized free homotopy between a large standard exterior circle and
+its image loop should force the covering degree to be `1`. -/
+def RestrictedAnnulusCoveringDegreeOneStepTwo : Prop :=
+  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
+      (∃ R : ℝ, ∃ hR : 4 < R,
+        Nonempty
+          (ContinuousMap.Homotopy
+            (exteriorCircleLoopTwo R hR)
+            ((ContinuousMap.mk _ h_local.continuous).comp
+              (outsideOpenCircleLoopTwo R hR)))) →
+        RestrictedAsymptoticWindingDegreeOneTwo
+
+/-- The only Bottcher-specific analytic input needed by the remaining topology
+step is now the already formalized large-circle free homotopy. -/
+theorem restrictedAsymptoticWindingBridgeTwo_of_annulusCoveringDegreeOneStep
+    (htopo : RestrictedAnnulusCoveringDegreeOneStepTwo) :
+    RestrictedAsymptoticWindingBridgeTwo := by
+  intro h_proper h_local
+  rcases exists_large_radius_circle_homotopy_two h_local.continuous with
+    ⟨R, hR, hhom⟩
+  exact htopo h_proper h_local ⟨R, hR, hhom⟩
+
 /-- Proper local-homeomorphy of the restricted outside-open map makes the
 restricted fiber cardinality independent of the exterior base point. -/
 theorem restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
