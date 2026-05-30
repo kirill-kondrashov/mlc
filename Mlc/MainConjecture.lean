@@ -2757,6 +2757,21 @@ theorem basinExternalRayMapDataTwo_of_minimalCounterexample
   by_contra hdata
   exact hminimal hdata
 
+/-- The minimal-counterexample wrapper itself is impossible for the current
+constructive coordinate, because the wrapped basin-valued package is already
+formally refuted. -/
+theorem not_basinExternalRayMapDataTwoMinimalCounterexample :
+    ¬ BasinExternalRayMapDataTwoMinimalCounterexample := by
+  intro hminimal
+  exact not_basinExternalRayMapData_two
+    (basinExternalRayMapDataTwo_of_minimalCounterexample hminimal)
+
+/-- Scope alias for the root wrapper is likewise impossible. -/
+theorem not_basinExternalRayMapDataTwoScope :
+    ¬ BasinExternalRayMapDataTwoScope := by
+  simpa [BasinExternalRayMapDataTwoScope] using
+    not_basinExternalRayMapDataTwoMinimalCounterexample
+
 /-- Constructive CP5 endpoint from the direct closure criterion witness. -/
 def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
   AnalyticDerivConstructivePayloadTwo ∨
@@ -4245,9 +4260,7 @@ coordinate package, because that package already rules out
 theorem false_of_basinExternalRayKernelTwo
     (hkernel : BasinExternalRayMapDataTwoMinimalCounterexample) :
     False := by
-  exact
-    not_basinExternalRayMapData_two
-      (basinExternalRayMapDataTwo_of_minimalCounterexample hkernel)
+  exact not_basinExternalRayMapDataTwoMinimalCounterexample hkernel
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The checked root now depends only
