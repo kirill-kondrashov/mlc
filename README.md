@@ -51,11 +51,12 @@ refuted in Lean.
 
 The expert-facing documentation has been cleaned up accordingly:
 
-1. `draft/external_ray_map_exists_problem.md` is the exact remaining root theorem.
-2. `draft/green_ray_anchor_gap_problem.md` is the exact remaining
-   root-elimination subproblem on the preferred constructive route.
-3. `proof_sketches/` contains the current informal notes for the surrounding
-   reduction route.
+1. `draft/approach_to_one_preimage_obstruction.md` records the exact
+   approach-to-`1` fiber obstruction for the current constructive coordinate.
+2. `draft/global_anchor_gap_obstruction.md` records the failure of the old
+   fixed-anchor inequality route.
+3. `proof_sketches/` now mirrors `draft/` with rigorous mathematical proofs of
+   those obstruction statements.
 
 So the earlier explicit frontier
 
@@ -78,8 +79,18 @@ It is the theorem-shaped scope interface
 specialized basin-valued inverse package `Quadratic.BasinExternalRayMapDataTwo`.
 
 So there is only **one** root-facing missing theorem in the checked proof.
-The extra draft problem is not a second independent axiom; it is the current
-best sufficient reduction for eliminating the root axiom constructively.
+However, the current constructive coordinate
+
+$$
+\phi(z)=
+\begin{cases}
+\dfrac{z}{|z|}\,e^{G(z)}, & z\neq 0,\\[1ex]
+e^{G(0)}, & z=0
+\end{cases}
+$$
+
+does **not** satisfy the old expert-facing inverse targets. The current `draft/`
+folder therefore records the exact obstructions, not false positive targets.
 
 ## Non-solutions
 
@@ -90,39 +101,28 @@ through:
 2. `InconsistencyRoute` / `lyubich_conformal_bridge`
 3. renormalization-tower existence bridge axioms
 
-## Elimination Target
+## Current Obstructions
 
-The final constructive target is the exact `c = 2` basin-valued external-ray
-statement from `draft/external_ray_map_exists_problem.md`: construct a map
+The current constructive route is blocked by two exact, already identifiable
+obstructions:
 
-$$
-\Psi:\Omega\to U_\infty(2)
-$$
+1. `draft/approach_to_one_preimage_obstruction.md` records that the canonical
+   exterior sequence
+   $$
+   1+\frac{1}{n+1}\longrightarrow 1
+   $$
+   cannot admit exact fibers under the present constructive coordinate.
+2. `draft/global_anchor_gap_obstruction.md` records that the global fixed-anchor
+   inequality
+   $$
+   G\!\left(4\,\frac{w}{|w|}\right)<\log |w|
+   $$
+   is false.
 
-such that
-
-$$
-\phi(\Psi(w))=w \quad \text{for all } w\in\Omega,
-$$
-
-and
-
-$$
-\Psi(\phi(z))=z \quad \text{for all } z\in V.
-$$
-
-On the current preferred route, it would be enough to prove the remaining
-Green-ray anchor-gap statement from
-`draft/green_ray_anchor_gap_problem.md`:
-
-$$
-G\!\left(4\,\frac{w}{|w|}\right)<\log |w|
-\qquad \text{for every } w\in\mathbb C \text{ with } |w|>1.
-$$
-
-The already formalized reduction then combines this anchor-gap inequality with
-the current outside-open injectivity bridge to produce the basin-valued inverse
-package.
+So the last axiom cannot be eliminated by proving those earlier draft targets:
+they are not true for the current coordinate package. Any future elimination has
+to change the constructive coordinate interface, or replace it with a different
+true theorem-shaped bridge to `Quadratic.BasinExternalRayMapDataTwo`.
 
 This basin-valued target is the codomain-correct replacement for the false
 statement that the restricted map `φ|_V : V → Ω` should already have positive
@@ -140,11 +140,13 @@ routes remain formally refuted as well.
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
 2. `plan/` has been pruned to the single live frontier file
    `PLAN_04_lyubich_bridge.md`.
-3. `draft/` now contains exactly two expert-facing problem files: the true root
-   theorem and the exact remaining Green-ray anchor-gap reduction.
-4. `proof_sketches/` remains available as informal route documentation.
-5. The current root-facing story is therefore simple: one remaining mathematical
-   elimination target, exposed as one residual theorem-facing assumption.
+3. `draft/` now records the exact human-readable obstructions for the current
+   constructive coordinate package.
+4. `proof_sketches/` mirrors those obstruction statements with rigorous
+   mathematical proofs.
+5. The current root-facing story is therefore honest: one residual
+   theorem-facing assumption remains, and the previously advertised direct
+   elimination targets have been replaced by exact impossibility results.
 
 ## Dependencies
 

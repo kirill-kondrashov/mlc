@@ -395,6 +395,15 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
   exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
+/-- The exact-fiber target along the canonical sequence approaching `1` is
+formally impossible for the current constructive coordinate at `c = 2`. -/
+theorem not_bottcherApproachOneSeqFiberData_two :
+    ¬ BottcherApproachOneSeqFiberData (2 : ℂ) := by
+  intro h_fiber
+  exact
+    false_of_bottcher_approach_to_one_seq_preimage_data_two
+      (bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData h_fiber)
+
 /-- Main MLC assembly from explicit finite-branch connectedness, IR
     classification, and satellite-bridge data. -/
 theorem mlc_conjecture_of_finiteClassificationBridgeData
@@ -1961,6 +1970,32 @@ lemma bottcherSurjOnExterior_two_of_externalRayMapData
     BottcherSurjOnExterior (2 : ℂ) :=
   bottcherSurjOnExterior_of_externalRayMapData h_data
 
+/-- Minimal exterior surjectivity at `c = 2` is impossible, since it would force
+exact fibers above the canonical sequence approaching `1`. -/
+theorem not_bottcherSurjOnExterior_two :
+    ¬ BottcherSurjOnExterior (2 : ℂ) := by
+  intro h_surj
+  exact
+    not_bottcherApproachOneSeqFiberData_two
+      (bottcherApproachOneSeqFiberData_two_of_surjOnExterior h_surj)
+
+/-- The current constructive coordinate at `c = 2` cannot satisfy the old
+full-exterior inverse package. -/
+theorem not_externalRayMapData_two :
+    ¬ Quadratic.ExternalRayMapData (2 : ℂ) := by
+  intro h_data
+  exact not_bottcherSurjOnExterior_two
+    (bottcherSurjOnExterior_two_of_externalRayMapData h_data)
+
+/-- The basin-valued exterior inverse package is likewise impossible for the
+current constructive coordinate, since it implies the discarded exterior-data
+package. -/
+theorem not_basinExternalRayMapData_two :
+    ¬ Quadratic.BasinExternalRayMapDataTwo := by
+  intro h_data
+  exact not_externalRayMapData_two
+    (Quadratic.externalRayMapData_of_basinExternalRayMapData (2 : ℂ) h_data)
+
 /-- Build canonical-sequence fiber data at `c = 2` from explicit external-ray
 data. -/
 theorem mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two
@@ -2295,6 +2330,51 @@ def GreenRayLogGapMonotonicityWindowTwo : Prop :=
   ∀ w : ℂ, 1 < ‖w‖ → ‖w‖ ≤ greenRayLogGtAnchorTwoCutoff →
     MLC.Quadratic.green_function (2 : ℂ)
         (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖
+
+/-- The global fixed-anchor inequality at radius `‖2‖ + 2 = 4` is false for the
+current constructive coordinate: choosing `w = φ(4)` forces
+`G(4) < log ‖φ(4)‖ = G(4)`. -/
+theorem not_GreenRayLogGtAnchorTwoSeam :
+    ¬ GreenRayLogGtAnchorTwoSeam := by
+  intro hgap
+  have h4_outside_disk : (4 : ℂ) ∈ MLC.outside_disk (2 : ℂ) := by
+    exact MLC.large_norm_mem_outside_disk (2 : ℂ) (4 : ℂ) (by norm_num)
+  have h4_basin : (4 : ℂ) ∈ MLC.basin_of_infinity (2 : ℂ) :=
+    MLC.outside_disk_subset_quadratic_basin (2 : ℂ) h4_outside_disk
+  let w : ℂ := Quadratic.bottcher_map (2 : ℂ) (4 : ℂ)
+  have hw_gt : 1 < ‖w‖ := by
+    dsimp [w]
+    exact
+      MLC.bottcher_map_norm_gt_one_of_basin (2 : ℂ) (4 : ℂ) h4_basin
+        (MLC.green_function_pos_of_basin (2 : ℂ) (4 : ℂ) h4_basin)
+  have hw_eq :
+      w = (Real.exp (Quadratic.green_function (2 : ℂ) (4 : ℂ)) : ℂ) := by
+    dsimp [w]
+    simpa using
+      (Quadratic.bottcher_map_apply_ray (2 : ℂ) (1 : ℂ) (by simp) 4 (by norm_num))
+  have hw_norm :
+      ‖w‖ = Real.exp (Quadratic.green_function (2 : ℂ) (4 : ℂ)) := by
+    dsimp [w]
+    simpa using Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (4 : ℂ)
+  have hw_dir : w / ↑‖w‖ = (1 : ℂ) := by
+    rw [hw_eq]
+    simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+  have hineq := hgap w hw_gt
+  have hanchor :
+      (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) = (4 : ℂ) := by
+    rw [hw_dir]
+    norm_num
+  have hlog :
+      Real.log ‖w‖ = Quadratic.green_function (2 : ℂ) (4 : ℂ) := by
+    rw [hw_norm, Real.log_exp]
+  have hineq' :
+      Quadratic.green_function (2 : ℂ) (4 : ℂ) < Real.log ‖w‖ := by
+    exact hanchor ▸ hineq
+  have hself :
+      Quadratic.green_function (2 : ℂ) (4 : ℂ) <
+        Quadratic.green_function (2 : ℂ) (4 : ℂ) := by
+    simpa [hlog] using hineq'
+  exact lt_irrefl _ hself
 
 /-- The current global anchor-gap seam is inconsistent at `c = 2`: choosing
 `w` with modulus `exp(G_anchor / 2)` forces `G_anchor < G_anchor / 2`. -/
@@ -4157,6 +4237,16 @@ theorem mlc_conjecture_of_basinExternalRayKernelTwo
     LocallyConnectedSpace mandelbrotSet := by
   exact
     mlc_conjecture_of_basinExternalRayMapData_two
+      (basinExternalRayMapDataTwo_of_minimalCounterexample hkernel)
+
+/-- The remaining root axiom is inconsistent with the current constructive
+coordinate package, because that package already rules out
+`Quadratic.BasinExternalRayMapDataTwo`. -/
+theorem false_of_basinExternalRayKernelTwo
+    (hkernel : BasinExternalRayMapDataTwoMinimalCounterexample) :
+    False := by
+  exact
+    not_basinExternalRayMapData_two
       (basinExternalRayMapDataTwo_of_minimalCounterexample hkernel)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
