@@ -27,6 +27,9 @@ rerouted the root through the narrowed `c = 2` degree-one kernel.
 2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`
 3. `MLC.restrictedWindingKernelTwo`
 
+Here item 2 is now the non-falsifiable covering-context generator theorem, not a
+bare continuous-map statement.
+
 ---
 
 ## Meaning of the old bridge now

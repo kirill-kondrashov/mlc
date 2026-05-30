@@ -3813,14 +3813,14 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     residualOpenVirtualNearMoleculeAxiom
 
 /-- Final root-facing kernel after formalizing the proof sketch up to the
-remaining generator calculation. It packages exactly the two residual inputs
+remaining covering-context generator calculation. It packages exactly the two residual inputs
 still needed to close the degree-one route:
 
 1. a classical scope gate for proper/local-homeomorphy of the restricted
    outside map;
 2. the exact generator calculation saying that a positive constant covering
-   degree together with the already-formalized large-circle free homotopy forces
-   that degree to equal `1`.
+   degree for this proper local homeomorphism, together with the already-formalized
+   large-circle free homotopy, forces that degree to equal `1`.
 
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
@@ -3842,9 +3842,9 @@ theorem mlc_conjecture_of_restrictedWindingKernelTwo
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
     the exact remaining degree-one kernel at `c = 2`: a classical scope gate for
-    the direct proper/local witness together with the abstract generator
-    calculation reducing a positive constant covering degree to `1` from the
-    already-formalized large-circle homotopy.
+    the direct proper/local witness together with the exact covering-context
+    generator calculation reducing a positive constant covering degree to `1`
+    from the already-formalized large-circle homotopy.
 
     This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
     much narrower and less falsifiable final seam. -/

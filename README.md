@@ -90,10 +90,11 @@ The final constructive target is now the exact `c = 2` degree-one kernel:
 construct the direct proper/local witness for the restricted outside map and
 prove the remaining generator calculation
 `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`.
-From that theorem Lean already derives the coarser annulus statement
-`RestrictedAnnulusCoveringDegreeOneStepTwo`, and then the large-circle homotopy
-bridge closes the degree-one route. Doing so will eliminate the last root axiom
-`MLC.restrictedWindingKernelTwo`.
+This target is now stated in the already-formalized proper/local covering
+context, so it is no longer a bare continuous-map claim. From that theorem Lean
+already derives the coarser annulus statement `RestrictedAnnulusCoveringDegreeOneStepTwo`,
+and then the large-circle homotopy bridge closes the degree-one route. Doing so
+will eliminate the last root axiom `MLC.restrictedWindingKernelTwo`.
 
 ## Repository Snapshot
 

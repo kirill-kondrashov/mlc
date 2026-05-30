@@ -589,20 +589,21 @@ def RestrictedAsymptoticWindingBridgeTwo : Prop :=
     (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
       RestrictedAsymptoticWindingDegreeOneTwo
 
-/-- Exact remaining generator calculation from the proof sketch: Lean already
-formalizes the positive constant covering degree for the restricted map once
-properness and local-homeomorphy are available. The residual algebraic-topology
+/-- Exact remaining generator calculation from the proof sketch: once the
+restricted map is known to be a proper local homeomorphism, Lean already
+formalizes the positive constant covering degree. The residual algebraic-topology
 content is that a free homotopy from a large image loop to the standard
 positive exterior circle forces that degree to equal `1`. -/
 def RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo : Prop :=
-  ∀ (h_cont : Continuous (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (d : ℕ), 0 < d →
       (∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d) →
         (∃ R : ℝ, ∃ hR : 4 < R,
           Nonempty
             (ContinuousMap.Homotopy
               (exteriorCircleLoopTwo R hR)
-              ((ContinuousMap.mk _ h_cont).comp
+              ((ContinuousMap.mk _ h_local.continuous).comp
                 (outsideOpenCircleLoopTwo R hR)))) →
           d = 1
 
@@ -694,7 +695,7 @@ theorem restrictedAsymptoticWindingDegreeOneTwo_of_coveringDegreeOneFromPositive
   intro hhom
   rcases restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph h_proper h_local with
     ⟨d, hdpos, hdeg⟩
-  have hd : d = 1 := hkernel h_local.continuous d hdpos hdeg hhom
+  have hd : d = 1 := hkernel h_proper h_local d hdpos hdeg hhom
   let y0 : {w : ℂ // 1 < ‖w‖} := ⟨(2 : ℂ), by norm_num⟩
   refine ⟨y0, ?_⟩
   simpa [y0, hd] using hdeg y0

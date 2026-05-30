@@ -1,4 +1,4 @@
-# Expert handoff: final remaining theorems at `c = 2`
+# Expert handoff: exact remaining theorems at `c = 2`
 
 Let
 \[
@@ -10,7 +10,21 @@ and let
 \]
 be the restricted outside Böttcher map for \(f(z)=z^2+2\).
 
-The current root closes from exactly the following two inputs.
+The checked root currently uses exactly
+
+```lean
+MLC.restrictedWindingKernelTwo :
+  DirectProperLocalWitnessTwoScope ∧
+    Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo
+```
+
+where
+
+```lean
+def DirectProperLocalWitnessTwoScope : Prop := ¬¬ DirectProperLocalWitnessTwo
+```
+
+So there are exactly two remaining human-level targets.
 
 ## Theorem A: generator calculation for the covering degree
 
@@ -18,55 +32,58 @@ Assume:
 
 1. \(\phi\) is proper;
 2. \(\phi\) is a local homeomorphism;
-3. for some \(R>4\), the loop
+3. there exists an integer \(d\ge 1\) such that every fiber \(\phi^{-1}(w)\), \(w\in\Omega\), has cardinality exactly \(d\);
+4. for some \(R>4\), the loop
    \[
-   \Gamma_R(t)=\phi(Re^{2\pi i t})
+   t\mapsto \phi(Re^{2\pi i t})
    \]
    is freely homotopic in \(\Omega\) to the positive exterior circle
    \[
-   C_R(t)=Re^{2\pi i t}.
+   t\mapsto Re^{2\pi i t}.
    \]
 
-Lean already derives from (1) and (2) that \(\phi\) is a finite-sheeted covering
-of constant degree \(d\ge 1\).
+**Claim.** Prove that \(d=1\).
 
-**Problem.** Prove that \(d=1\). Equivalently, prove that some fiber of \(\phi\)
-has cardinality \(1\), hence every fiber has cardinality \(1\).
-
-**Standard route.** For a connected \(d\)-sheeted covering between annuli, the
-induced map on \(\pi_1\cong \mathbf Z\) is multiplication by \(\pm d\). The free
-homotopy assumption identifies \([\Gamma_R]\) with the positive generator of
-\(\pi_1(\Omega)\), so \(\pm d=1\), hence \(d=1\).
+This is the exact remaining algebraic-topology step. Lean already supplies the
+constant positive covering degree from properness + local homeomorphy, and it
+already supplies the large-circle homotopy; the missing proof is only the
+fundamental-group / covering-degree calculation.
 
 **Exact Lean target.**
 
 ```lean
 def RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo : Prop :=
-  ∀ (h_cont : Continuous (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (d : ℕ), 0 < d →
       (∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d) →
         (∃ R : ℝ, ∃ hR : 4 < R,
           Nonempty
             (ContinuousMap.Homotopy
               (exteriorCircleLoopTwo R hR)
-              ((ContinuousMap.mk _ h_cont).comp
+              ((ContinuousMap.mk _ h_local.continuous).comp
                 (outsideOpenCircleLoopTwo R hR)))) →
           d = 1
 ```
 
-Lean already derives from this the coarser Bottcher-facing corollary
-`RestrictedAnnulusCoveringDegreeOneStepTwo`.
+Lean already derives the constant positive degree from (1) and (2), so the
+remaining proof is the fundamental-group calculation under these covering
+hypotheses.
 
-## Theorem B: direct proper/local witness for the restricted map
+Equivalent expert-language version: for a connected finite covering of annuli,
+if the image of a large outer circle is freely homotopic to the positive
+generator of the target annulus, then the covering degree is \(1\).
 
-Prove directly for the same restricted outside Böttcher map \(\phi:V\to\Omega\)
-that:
+## Theorem B: constructive proper/local witness for the restricted map
 
-1. \(\phi\) is proper;
-2. \(\phi\) is a local homeomorphism.
+Prove directly that the same restricted outside Böttcher map \(\phi:V\to\Omega\)
+is:
 
-This is the exact remaining analytic ingress theorem if one wants to remove the
-classical witness-scope half of the root kernel as well.
+1. proper;
+2. a local homeomorphism.
+
+This is the remaining analytic ingress theorem. A constructive proof of this
+theorem removes the current classical scope gate `DirectProperLocalWitnessTwoScope`.
 
 **Exact Lean target.**
 
@@ -76,16 +93,7 @@ def DirectProperLocalWitnessTwo : Prop :=
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
 ```
 
-## Root axiom currently used
+## Priority
 
-```lean
-MLC.restrictedWindingKernelTwo :
-  DirectProperLocalWitnessTwoScope ∧
-    Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo
-```
-
-So:
-
-1. **Theorem A** is the primary remaining algebraic-topology theorem.
-2. **Theorem B** is the remaining direct analytic witness theorem needed only if
-   we also want to eliminate the classical witness-scope half of the root axiom.
+1. **Primary remaining theorem:** `RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`.
+2. **Secondary remaining theorem:** `DirectProperLocalWitnessTwo`, only needed to remove the remaining classical scope gate.
