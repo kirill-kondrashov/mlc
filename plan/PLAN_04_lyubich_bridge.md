@@ -23,12 +23,12 @@ rerouted the root through the narrowed `c = 2` degree-one kernel.
 
 `MLC.mlc_conjecture` now runs through:
 
-1. `mlc_conjecture_of_proper_local_restrict_of_problemA`
-2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo`
+1. `mlc_conjecture_of_proper_local_restrict_of_monodromyCore`
+2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`
 3. `MLC.restrictedWindingKernelTwo`
 
-Here item 2 is now the non-falsifiable covering-context generator theorem, not a
-bare continuous-map statement.
+Here item 2 is now the exact remaining monodromy theorem from the proof sketch,
+not the broader Problem A wrapper and not a bare continuous-map statement.
 The witness half of item 3 is now also theorem-shaped: the root no longer uses a
 raw `¬¬` scope gate, but the minimal-counterexample obstruction statement
 `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample`.

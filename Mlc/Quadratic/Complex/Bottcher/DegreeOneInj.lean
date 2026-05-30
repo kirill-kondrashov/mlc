@@ -667,6 +667,21 @@ restricted map is known to be a proper local homeomorphism, Lean already
 formalizes the positive constant covering degree. The residual algebraic-topology
 content is that a free homotopy from a large image loop to the standard
 positive exterior circle forces that degree to equal `1`. -/
+def RestrictedCoveringDegreeMonodromyCoreTwo : Prop :=
+  ∀ (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (d : ℕ), 0 < d →
+      (∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d) →
+        (∃ R : ℝ, ∃ hR : 4 < R,
+          Nonempty
+            (ContinuousMap.Homotopy
+              (exteriorCircleLoopTwo R hR)
+              ((ContinuousMap.mk _ h_local.continuous).comp
+                (outsideOpenCircleLoopTwo R hR)))) →
+          d = 1
+
+/-- Problem A is the proper/local-homeomorph packaging of the exact remaining
+monodromy core. Properness is only used upstream to obtain a positive constant
+fiber degree, which has already been formalized separately. -/
 def RestrictedCoveringDegreeRigidityProblemATwo : Prop :=
   ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
@@ -684,6 +699,15 @@ def RestrictedCoveringDegreeRigidityProblemATwo : Prop :=
 sketch. -/
 abbrev RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo : Prop :=
   RestrictedCoveringDegreeRigidityProblemATwo
+
+/-- The exact remaining core of the proof sketch already implies Problem A:
+the only extra proper/local packaging in Problem A is the upstream route that
+produces the positive constant degree hypotheses. -/
+theorem restrictedCoveringDegreeRigidityProblemATwo_of_monodromyCore
+    (hcore : RestrictedCoveringDegreeMonodromyCoreTwo) :
+    RestrictedCoveringDegreeRigidityProblemATwo := by
+  intro h_proper h_local d hd hdeg hhom
+  exact hcore h_local d hd hdeg hhom
 
 /-- Exact remaining annulus-covering theorem isolated from the proof sketch:
 if the restricted map is proper and a local homeomorphism, then any
@@ -778,6 +802,24 @@ theorem restrictedAsymptoticWindingDegreeOneTwo_of_problemA
   refine ⟨y0, ?_⟩
   simpa [y0, hd] using hdeg y0
 
+/-- Bottcher-facing singleton-fiber corollary derived directly from the exact
+remaining monodromy core of the proof sketch. -/
+theorem restrictedAsymptoticWindingDegreeOneTwo_of_monodromyCore
+    (hcore : RestrictedCoveringDegreeMonodromyCoreTwo)
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (∃ R : ℝ, ∃ hR : 4 < R,
+      Nonempty
+        (ContinuousMap.Homotopy
+          (exteriorCircleLoopTwo R hR)
+          ((ContinuousMap.mk _ h_local.continuous).comp
+            (outsideOpenCircleLoopTwo R hR)))) →
+      RestrictedAsymptoticWindingDegreeOneTwo := by
+  exact
+    restrictedAsymptoticWindingDegreeOneTwo_of_problemA
+      (restrictedCoveringDegreeRigidityProblemATwo_of_monodromyCore hcore)
+      h_proper h_local
+
 /-- Bottcher-facing singleton-fiber corollary of the exact remaining
 generator-calculation kernel from the proof sketch. -/
 theorem restrictedAsymptoticWindingDegreeOneTwo_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
@@ -801,6 +843,16 @@ theorem restrictedAnnulusCoveringDegreeOneStepTwo_of_problemA
     RestrictedAnnulusCoveringDegreeOneStepTwo := by
   intro h_proper h_local
   exact restrictedAsymptoticWindingDegreeOneTwo_of_problemA hproblemA h_proper h_local
+
+/-- The exact remaining annulus-covering theorem also follows directly from the
+monodromy core, since the finite positive constant covering degree is already
+formalized separately. -/
+theorem restrictedAnnulusCoveringDegreeOneStepTwo_of_monodromyCore
+    (hcore : RestrictedCoveringDegreeMonodromyCoreTwo) :
+    RestrictedAnnulusCoveringDegreeOneStepTwo := by
+  exact
+    restrictedAnnulusCoveringDegreeOneStepTwo_of_problemA
+      (restrictedCoveringDegreeRigidityProblemATwo_of_monodromyCore hcore)
 
 /-- The exact remaining annulus-covering theorem follows from the more precise
 generator-calculation kernel, since the finite positive constant covering degree

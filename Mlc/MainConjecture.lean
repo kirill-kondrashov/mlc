@@ -2067,6 +2067,20 @@ theorem mlc_conjecture_of_proper_local_restrict_of_problemA
 /-- Root-facing MLC bridge from the exact remaining generator calculation in the
 proof sketch. The positive constant covering-degree part is already formalized
 constructively, so only the residual homotopy-to-degree-one step is passed in. -/
+theorem mlc_conjecture_of_proper_local_restrict_of_monodromyCore
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hcore :
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_proper_local_restrict_of_problemA h_proper h_local
+      (Mlc.Bottcher.DegreeOne.restrictedCoveringDegreeRigidityProblemATwo_of_monodromyCore
+        hcore)
+
+/-- Root-facing MLC bridge from the exact remaining generator calculation in the
+proof sketch. The positive constant covering-degree part is already formalized
+constructively, so only the residual homotopy-to-degree-one step is passed in. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
     (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
@@ -3866,34 +3880,34 @@ residual theorem-shaped inputs still needed to close the degree-one route:
 1. a minimal-counterexample obstruction theorem for the constructive
    local-homeomorph/closed-preimage route to proper/local-homeomorphy of the
    restricted outside map;
-2. the exact generator calculation saying that a positive constant covering
-   degree for this proper local homeomorphism, together with the already-formalized
+2. the exact remaining monodromy core saying that a positive constant covering
+   degree for this restricted map, together with the already-formalized
    large-circle free homotopy, forces that degree to equal `1`.
 
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
     DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample ∧
-      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
     (hkernel :
       DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample ∧
-      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo) :
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   have hdirect : DirectProperLocalWitnessTwo :=
     directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRouteScope hkernel.1
   exact
-    mlc_conjecture_of_proper_local_restrict_of_problemA hdirect.1 hdirect.2 hkernel.2
+    mlc_conjecture_of_proper_local_restrict_of_monodromyCore hdirect.1 hdirect.2 hkernel.2
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
     the exact remaining degree-one kernel at `c = 2`: a minimal-counterexample
     obstruction theorem for the explicit local-homeomorph/closed-preimage route
     to the direct proper/local witness together with the
-    exact covering-context generator calculation reducing a positive constant
-    covering degree to `1` from the already-formalized large-circle homotopy.
+    exact monodromy core reducing a positive constant covering degree to `1`
+    from the already-formalized large-circle homotopy.
 
     This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
     much narrower and less falsifiable final seam. -/

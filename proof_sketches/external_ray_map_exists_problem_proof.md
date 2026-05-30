@@ -1,6 +1,6 @@
-# Exact proof of the remaining problem: covering-degree rigidity
+# Exact proof of Problem A: covering-degree rigidity
 
-This note proves **exactly** the remaining problem stated in
+This note proves **exactly** the statement in
 `draft/external_ray_map_exists_problem.md`.
 
 It does **not** assert any new analytic fact about the specific restricted
@@ -55,7 +55,7 @@ $$
 d=1.
 $$
 
-Equivalently, $\phi$ is a degree-one covering of $\Omega$, so every fiber of
+In particular, $\phi$ is a degree-one covering of $\Omega$, so every fiber of
 $\phi$ consists of exactly one point.
 
 ## Proof
@@ -252,7 +252,12 @@ Hence the free homotopy assumption says exactly that the loop $\phi\circ c_R$ is
 freely homotopic in $\Omega$ to the positively oriented circle $c_R$.
 
 The winding number about $0$ is invariant under free homotopy through loops in
-$\Omega=\mathbb C\setminus \overline{D(0,1)}\subset \mathbb C\setminus\{0\}$.
+$\mathbb C\setminus\{0\}$. Since
+$$
+\Omega=\mathbb C\setminus \overline{D(0,1)}\subset \mathbb C\setminus\{0\},
+$$
+the given free homotopy in $\Omega$ is in particular a free homotopy in
+$\mathbb C\setminus\{0\}$.
 Therefore
 
 $$
@@ -271,11 +276,11 @@ $$
 d=1.
 $$
 
-This proves the remaining draft problem.
+This proves Problem A.
 
 ## Why this note is exact and not falsifiable
 
-The statement proved here is exactly the theorem-shaped content of the remaining
+The statement proved here is exactly the theorem-shaped content of the current
 draft problem and nothing stronger.
 
 1. The proof assumes properness and local homeomorphy; it does not attempt to

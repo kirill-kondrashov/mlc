@@ -70,7 +70,7 @@ One non-core project axiom remains:
 This kernel is the conjunction of:
 
 1. `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwoMinimalCounterexample`
-2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo`
+2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`
 
 The theorem-facing coordinate and root normalization branches are now supplied
 constructively by the explicit `polar_green_map` / basin-valued Böttcher package.
@@ -88,8 +88,8 @@ through:
 
 The final constructive target is now the exact `c = 2` degree-one kernel:
 construct the local-homeomorph/closed-preimage route to the direct proper/local
-witness for the restricted outside map and prove the remaining generator calculation
-`Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo`.
+witness for the restricted outside map and prove the remaining monodromy core
+`Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`.
 The witness half is no longer a raw scope gate for either
 `DirectProperLocalWitnessTwo` or the route
 `DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`; it is now
@@ -98,7 +98,8 @@ the theorem-shaped minimal-counterexample obstruction statement
 from which the explicit route, and then the direct witness, are recovered
 constructively. The topology target is stated in the already-formalized
 proper/local covering context, so it is no longer a bare continuous-map claim.
-From that theorem Lean already derives the coarser annulus statement
+From that monodromy core Lean already reconstructs the full Problem A statement
+and then derives the coarser annulus statement
 `RestrictedAnnulusCoveringDegreeOneStepTwo`, and then the large-circle homotopy
 bridge closes the degree-one route. Doing so will eliminate the last root axiom
 `MLC.restrictedWindingKernelTwo`.
