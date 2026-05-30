@@ -51,12 +51,13 @@ refuted in Lean.
 
 The expert-facing documentation has been cleaned up accordingly:
 
-1. `draft/approach_to_one_preimage_obstruction.md` records the exact
-   approach-to-`1` fiber obstruction for the current constructive coordinate.
-2. `draft/global_anchor_gap_obstruction.md` records the failure of the old
-   fixed-anchor inequality route.
-3. `proof_sketches/` now mirrors `draft/` with rigorous mathematical proofs of
-   those obstruction statements.
+1. `draft/genuine_bottcher_coordinate_problem.md` states the first true
+   remaining target: construct the genuine normalized Böttcher coordinate at
+   `c = 2`.
+2. `draft/genuine_basin_inverse_problem.md` states the second true remaining
+   target: prove the basin-valued inverse package for that genuine coordinate.
+3. `proof_sketches/` records the already-formalized obstruction proofs showing
+   why the old proxy-based draft targets cannot be the final elimination route.
 
 So the earlier explicit frontier
 
@@ -90,7 +91,8 @@ e^{G(0)}, & z=0
 $$
 
 does **not** satisfy the old expert-facing inverse targets. The current `draft/`
-folder therefore records the exact obstructions, not false positive targets.
+folder therefore records the corrected positive targets that remain after those
+proxy-based routes were formally ruled out.
 
 ## Non-solutions
 
@@ -101,28 +103,25 @@ through:
 2. `InconsistencyRoute` / `lyubich_conformal_bridge`
 3. renormalization-tower existence bridge axioms
 
-## Current Obstructions
+## Remaining Mathematical Targets
 
-The current constructive route is blocked by two exact, already identifiable
-obstructions:
+The old proxy-based routes are now formally eliminated, so the remaining
+mathematical work is to supply a genuine theorem-facing coordinate package.
+The exact remaining targets are:
 
-1. `draft/approach_to_one_preimage_obstruction.md` records that the canonical
-   exterior sequence
-   $$
-   1+\frac{1}{n+1}\longrightarrow 1
-   $$
-   cannot admit exact fibers under the present constructive coordinate.
-2. `draft/global_anchor_gap_obstruction.md` records that the global fixed-anchor
-   inequality
-   $$
-   G\!\left(4\,\frac{w}{|w|}\right)<\log |w|
-   $$
-   is false.
+1. `draft/genuine_bottcher_coordinate_problem.md`
+2. `draft/genuine_basin_inverse_problem.md`
 
-So the last axiom cannot be eliminated by proving those earlier draft targets:
-they are not true for the current coordinate package. Any future elimination has
-to change the constructive coordinate interface, or replace it with a different
-true theorem-shaped bridge to `Quadratic.BasinExternalRayMapDataTwo`.
+In particular, the last axiom can no longer be eliminated by proving statements
+about the current total proxy
+
+$$
+\phi(z)=\frac{z}{|z|}e^{G(z)}
+$$
+
+away from $$z=0$$. It has to be eliminated by replacing that proxy with a
+genuine normalized Böttcher coordinate and then proving the corresponding
+basin-valued inverse theorem.
 
 This basin-valued target is the codomain-correct replacement for the false
 statement that the restricted map `φ|_V : V → Ω` should already have positive
@@ -140,13 +139,13 @@ routes remain formally refuted as well.
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
 2. `plan/` has been pruned to the single live frontier file
    `PLAN_04_lyubich_bridge.md`.
-3. `draft/` now records the exact human-readable obstructions for the current
-   constructive coordinate package.
-4. `proof_sketches/` mirrors those obstruction statements with rigorous
-   mathematical proofs.
+3. `draft/` now records the exact remaining positive mathematical targets after
+   factoring out the proxy-based obstructions.
+4. `proof_sketches/` records the rigorous proofs of those discarded
+   proxy-obstruction statements.
 5. The current root-facing story is therefore honest: one residual
-   theorem-facing assumption remains, and the previously advertised direct
-   elimination targets have been replaced by exact impossibility results.
+   theorem-facing assumption remains, and its elimination now clearly requires a
+   genuine Böttcher coordinate package rather than the current proxy.
 
 ## Dependencies
 
