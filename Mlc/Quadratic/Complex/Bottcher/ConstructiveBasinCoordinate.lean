@@ -147,6 +147,31 @@ def ConstructiveBasinBottcherCoordinateData (c : ℂ) : Prop :=
     (∀ u : ℂ, ‖u‖ = 1 → ∀ ρ : ℝ, 0 < ρ →
       φ ((ρ : ℂ) * u) = u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))))
 
+/-- The theorem-facing coordinate package matching the current genuine Böttcher
+proof sketch: exterior-valued exactly on the basin, conjugates the quadratic map
+to squaring on the basin, has the Green-function modulus there, is continuous on
+the basin away from `0`, and is normalized at infinity. -/
+def GenuineBottcherCoordinateDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
+  (∀ z, z ∈ basin_of_infinity c → 1 < ‖φ z‖) ∧
+  (∀ z, 1 < ‖φ z‖ → z ∈ basin_of_infinity c) ∧
+  (∀ z, z ∈ basin_of_infinity c → φ (MLC.quadratic_map c z) = (φ z)^2) ∧
+  (∀ z, z ∈ basin_of_infinity c → ‖φ z‖ = Real.exp (green_function c z)) ∧
+  (∀ z, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt φ z) ∧
+  Tendsto (fun z => φ z / z) atInfinity (𝓝 (1 : ℂ))
+
+/-- Theorem-facing inverse-package hypotheses matching the second proof sketch:
+surjectivity onto the exterior together with injectivity on the outside-open
+region. -/
+def GenuineBottcherInversePackageFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
+  (∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, φ z = w) ∧
+  Set.InjOn φ {z : ℂ | ‖z‖ > ‖c‖ + 2}
+
+/-- Bundled theorem-facing route matching the current pair of proof sketches. -/
+def GenuineBottcherRouteFor (c : ℂ) : Prop :=
+  ∃ φ : ℂ → ℂ,
+    GenuineBottcherCoordinateDataFor c φ ∧
+    GenuineBottcherInversePackageFor c φ
+
 /-- Constructive realization of the missing basin-valued Böttcher coordinate
 using the explicit proxy `polar_green_map`. -/
 theorem constructive_basin_bottcher_coordinate_data (c : ℂ) :

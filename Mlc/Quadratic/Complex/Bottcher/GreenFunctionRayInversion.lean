@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
+import Mlc.Quadratic.Complex.Bottcher.ConstructiveBasinCoordinate
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
 import Mlc.Quadratic.Complex.Axioms
 import Mathlib.Topology.Order.IntermediateValue
@@ -1131,6 +1132,22 @@ theorem basin_external_ray_map_data_of_surj_of_injOn_outside_open
     change Classical.choose hV = z
     exact h_inj_outside hchoose.1 hz hchoose.2
 
+/-- The theorem-facing proof-sketch route: a genuine Böttcher coordinate package
+plus its exterior inverse hypotheses yield the basin-valued inverse package for
+the same coordinate. -/
+theorem basin_external_ray_map_data_of_genuine_bottcher_inverse_package
+    (c : ℂ) (φ : ℂ → ℂ)
+    (h_coord : Quadratic.GenuineBottcherCoordinateDataFor c φ)
+    (h_inv : Quadratic.GenuineBottcherInversePackageFor c φ) :
+    Quadratic.BasinExternalRayMapDataFor c φ := by
+  rcases h_coord with
+    ⟨h_norm_on_basin, h_basin_of_norm_gt_one, h_conj_on_basin, -, -, -⟩
+  rcases h_inv with ⟨h_surj, h_inj_outside⟩
+  exact
+    basin_external_ray_map_data_of_surj_of_injOn_outside_open
+      c φ h_norm_on_basin h_conj_on_basin h_basin_of_norm_gt_one
+      h_surj h_inj_outside
+
 /-- Choice-based basin-valued exterior inverse at `c = 2` from:
 1. exterior surjectivity of `bottcher_map 2`, and
 2. injectivity of `bottcher_map 2` on the outside-open region `{z : ‖z‖ > 4}`.
@@ -1183,6 +1200,33 @@ theorem external_ray_map_data_of_surj_of_injOn_outside_open
       (basin_external_ray_map_data_of_surj_of_injOn_outside_open
         c φ h_norm_on_basin h_conj_on_basin h_basin_of_norm_gt_one
         h_surj h_inj_outside)
+
+/-- The theorem-facing proof-sketch route also yields the exterior-valued inverse
+package once the coordinate and inverse hypotheses are bundled as above. -/
+theorem external_ray_map_data_of_genuine_bottcher_inverse_package
+    (c : ℂ) (φ : ℂ → ℂ)
+    (h_coord : Quadratic.GenuineBottcherCoordinateDataFor c φ)
+    (h_inv : Quadratic.GenuineBottcherInversePackageFor c φ) :
+    Quadratic.ExternalRayMapDataFor c φ := by
+  exact
+    external_ray_map_data_of_basin_external_ray_map_data c φ
+      (basin_external_ray_map_data_of_genuine_bottcher_inverse_package
+        c φ h_coord h_inv)
+
+/-- Bundled theorem-facing cutover: the current pair of proof-sketch hypotheses
+produces basin-valued exterior inverse data for some coordinate. -/
+theorem exists_basin_external_ray_map_data_of_genuine_bottcher_route
+    (c : ℂ) (h_route : Quadratic.GenuineBottcherRouteFor c) :
+    ∃ φ : ℂ → ℂ, Quadratic.BasinExternalRayMapDataFor c φ := by
+  rcases h_route with ⟨φ, h_coord, h_inv⟩
+  exact ⟨φ, basin_external_ray_map_data_of_genuine_bottcher_inverse_package c φ h_coord h_inv⟩
+
+/-- Bundled theorem-facing cutover to the exterior-valued package. -/
+theorem exists_external_ray_map_data_of_genuine_bottcher_route
+    (c : ℂ) (h_route : Quadratic.GenuineBottcherRouteFor c) :
+    ∃ φ : ℂ → ℂ, Quadratic.ExternalRayMapDataFor c φ := by
+  rcases h_route with ⟨φ, h_coord, h_inv⟩
+  exact ⟨φ, external_ray_map_data_of_genuine_bottcher_inverse_package c φ h_coord h_inv⟩
 
 /-- Choice-based exterior inverse package at `c = 2` from exterior surjectivity
 plus injectivity on the outside-open region. This is the root-facing
