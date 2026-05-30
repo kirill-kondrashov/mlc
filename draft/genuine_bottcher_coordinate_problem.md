@@ -1,4 +1,4 @@
-# Remaining problem 1: genuine normalized Böttcher coordinate at c = 2
+# Remaining problem 1: genuine holomorphic Böttcher coordinate at $$c=2$$
 
 Let
 
@@ -9,20 +9,14 @@ $$
 let
 
 $$
-U_\infty=\{z\in\mathbb C : f^{\circ n}(z)\to\infty \text{ as } n\to\infty\},
+K(f)=\{z\in\mathbb C : \{f^{\circ n}(z)\}_{n\geq 0} \text{ is bounded}\},
+\qquad
+U_\infty=\mathbb C\setminus K(f),
 \qquad
 \Omega=\{w\in\mathbb C : |w|>1\},
 $$
 
-and let
-
-$$
-G:U_\infty\to(0,\infty)
-$$
-
-be the Green function of $$f$$.
-
-## Problem 1. Genuine normalized Böttcher coordinate
+and let $$G:U_\infty\to(0,\infty)$$ be the Green function of $$f$$.
 
 Prove that there exists a holomorphic map
 
@@ -38,13 +32,12 @@ $$
 $$
 
 $$
-\frac{\Phi(z)}{z}\to 1
-\qquad \text{as } z\to\infty,
+|\Phi(z)|=e^{G(z)}
+\qquad \text{for every } z\in U_\infty,
 $$
 
 and
 
 $$
-|\Phi(z)|=e^{G(z)}
-\qquad \text{for every } z\in U_\infty.
+\lim_{z\to\infty}\frac{\Phi(z)}{z}=1.
 $$
