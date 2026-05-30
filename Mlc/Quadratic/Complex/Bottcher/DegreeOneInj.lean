@@ -1,6 +1,8 @@
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.Calculus.LocalExtr.Basic
+import Mathlib.Analysis.SpecialFunctions.Complex.CircleMap
+import Mathlib.MeasureTheory.Integral.CircleIntegral
 import Mathlib.Topology.IsLocalHomeomorph
 import Mathlib.Topology.Covering.Basic
 import Mathlib.Topology.Algebra.OpenSubgroup
@@ -368,7 +370,170 @@ lemma natCard_fiber_eq_of_isProperMap_isLocalHomeomorph [PreconnectedSpace Y]
   exact (IsLocallyConstant.iff_is_const (f := fun y : Y =>
     Nat.card ({x : X // f x = y}))).1 hloc
 
+omit [T2Space X] in
+lemma surjective_of_isProperMap_isLocalHomeomorph [PreconnectedSpace Y] [Nonempty X]
+    {f : X → Y} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) :
+    Function.Surjective f := by
+  have hclopen : IsClopen (Set.range f) := by
+    exact ⟨hproper.isClosedMap.isClosed_range, hlocal.isOpenMap.isOpen_range⟩
+  have hrange : Set.range f = Set.univ := by
+    rcases isClopen_iff.mp hclopen with hempty | huniv
+    · exact (Set.range_nonempty (f := f)).ne_empty hempty |> False.elim
+    · exact huniv
+  intro y
+  have hy : y ∈ Set.range f := by simp [hrange]
+  exact hy
+
+omit [T2Space X] in
+lemma natCard_fiber_pos_of_isProperMap_isLocalHomeomorph [PreconnectedSpace Y] [Nonempty X]
+    {f : X → Y} (hproper : IsProperMap f) (hlocal : IsLocalHomeomorph f) (y : Y) :
+    0 < Nat.card ({x : X // f x = y}) := by
+  have hfinite : ({x : X | f x = y} : Set X).Finite :=
+    finite_fiber_of_isProperMap_isLocallyInjective
+      (f := f) hproper hlocal.isLocallyInjective y
+  have hsurj : Function.Surjective f :=
+    surjective_of_isProperMap_isLocalHomeomorph (f := f) hproper hlocal
+  letI : Finite ({x : X // f x = y}) := hfinite.to_subtype
+  letI : Fintype ({x : X // f x = y}) := Fintype.ofFinite ({x : X // f x = y})
+  rcases hsurj y with ⟨x, hx⟩
+  have hpos : 0 < Fintype.card ({x : X // f x = y}) := by
+    exact Fintype.card_pos_iff.mpr ⟨⟨x, hx⟩⟩
+  simpa [Nat.card_eq_fintype_card] using hpos
+
 end ProperLocalHomeomorphFibers
+
+/-- Large circles in the outside-open domain for `c = 2`. -/
+noncomputable def outsideOpenCircleLoopTwo (R : ℝ) (hR : 4 < R) :
+    C(unitInterval, {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2}) where
+  toFun t :=
+    ⟨circleMap 0 R (2 * Real.pi * (t : ℝ)), by
+      have hRpos : 0 < R := by linarith
+      have hnorm :
+          ‖circleMap 0 R (2 * Real.pi * (t : ℝ))‖ = R := by
+        simpa [abs_of_pos hRpos] using norm_circleMap_zero R (2 * Real.pi * (t : ℝ))
+      have hfour : ‖(2 : ℂ)‖ + 2 = 4 := by norm_num
+      rw [hfour, hnorm]
+      exact hR⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact (continuous_circleMap 0 R).comp (by continuity)
+
+/-- The corresponding large circles viewed in the exterior target. -/
+noncomputable def exteriorCircleLoopTwo (R : ℝ) (hR : 4 < R) :
+    C(unitInterval, {w : ℂ // 1 < ‖w‖}) where
+  toFun t :=
+    ⟨circleMap 0 R (2 * Real.pi * (t : ℝ)), by
+      have hRpos : 0 < R := by linarith
+      have hnorm :
+          ‖circleMap 0 R (2 * Real.pi * (t : ℝ))‖ = R := by
+        simpa [abs_of_pos hRpos] using norm_circleMap_zero R (2 * Real.pi * (t : ℝ))
+      rw [hnorm]
+      linarith⟩
+  continuous_toFun := by
+    apply Continuous.subtype_mk
+    exact (continuous_circleMap 0 R).comp (by continuity)
+
+/-- The normalization at infinity already gives the large-circle estimate from the
+degree-one proof sketch: for some sufficiently large radius, the straight-line homotopy from the
+standard circle to its Böttcher-image stays entirely in the exterior. This is the formalized
+asymptotic half of the winding-number argument. -/
+theorem exists_large_radius_straight_line_homotopy_in_exterior_two :
+    ∃ R : ℝ, 4 < R ∧
+      ∀ s t : unitInterval,
+        1 <
+          ‖circleMap 0 R (2 * π * (t : ℝ)) +
+            ((s : ℝ) : ℂ) *
+              (MLC.Quadratic.bottcher_map (2 : ℂ)
+                  (circleMap 0 R (2 * π * (t : ℝ))) -
+                circleMap 0 R (2 * π * (t : ℝ)))‖ := by
+  have hnorm : MLC.bottcher_normalized_at_infty (2 : ℂ) :=
+    MLC.bottcher_normalized_at_infty_of_green (2 : ℂ)
+  rcases MLC.bottcher_map_minus_id_bound_of_normalized (2 : ℂ) hnorm (1 / 2) (by norm_num) with
+    ⟨R₀, hR₀⟩
+  let R : ℝ := max R₀ 5
+  have hRgt4 : 4 < R := by
+    have hRge5 : (5 : ℝ) ≤ R := le_max_right _ _
+    linarith
+  have hRnonneg : 0 ≤ R := by linarith
+  refine ⟨R, hRgt4, ?_⟩
+  intro s t
+  let z : ℂ := circleMap 0 R (2 * π * (t : ℝ))
+  have hznorm : ‖z‖ = R := by
+    dsimp [z]
+    simpa [abs_of_nonneg hRnonneg] using norm_circleMap_zero R (2 * π * (t : ℝ))
+  have hR₀le : R₀ ≤ ‖z‖ := by
+    have : R₀ ≤ R := le_max_left _ _
+    simpa [hznorm] using this
+  have hbound : ‖MLC.Quadratic.bottcher_map (2 : ℂ) z - z‖ ≤ (1 / 2) * ‖z‖ := hR₀ z hR₀le
+  have hs_nonneg : 0 ≤ (s : ℝ) := s.2.1
+  have hs_le_one : (s : ℝ) ≤ 1 := s.2.2
+  have hscaled :
+      ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ ≤ (1 / 2) * ‖z‖ := by
+    calc
+      ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ =
+          ‖((s : ℝ) : ℂ)‖ * ‖MLC.Quadratic.bottcher_map (2 : ℂ) z - z‖ := by
+            simpa using norm_mul (((s : ℝ) : ℂ)) (MLC.Quadratic.bottcher_map (2 : ℂ) z - z)
+      _ = (s : ℝ) * ‖MLC.Quadratic.bottcher_map (2 : ℂ) z - z‖ := by
+            simp [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs_nonneg]
+      _ ≤ (s : ℝ) * ((1 / 2) * ‖z‖) := by
+            gcongr
+      _ ≤ (1 / 2) * ‖z‖ := by
+            nlinarith [norm_nonneg (MLC.Quadratic.bottcher_map (2 : ℂ) z - z)]
+  have hlower :
+      ‖z‖ - ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ ≤
+        ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ := by
+    simpa using norm_sub_norm_le z (-(((s : ℝ) : ℂ) *
+      (MLC.Quadratic.bottcher_map (2 : ℂ) z - z)))
+  have hhalf :
+      ‖z‖ / 2 ≤ ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ := by
+    nlinarith
+  have hgt1 : 1 < ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ := by
+    have : 1 < ‖z‖ / 2 := by
+      rw [hznorm]
+      nlinarith
+    exact lt_of_lt_of_le this hhalf
+  simpa [z] using hgt1
+
+/-- The large-circle estimate promoted to an actual free homotopy of loops in the exterior. This
+packages the geometric part of the winding argument in a form usable by later covering-space
+reasoning. -/
+theorem exists_large_radius_circle_homotopy_two
+    (hcont : Continuous (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    ∃ R : ℝ, ∃ hR : 4 < R,
+      Nonempty
+        (ContinuousMap.Homotopy
+          (exteriorCircleLoopTwo R hR)
+          ((ContinuousMap.mk _ hcont).comp (outsideOpenCircleLoopTwo R hR))) := by
+  rcases exists_large_radius_straight_line_homotopy_in_exterior_two with ⟨R, hR, hH⟩
+  refine ⟨R, hR, ⟨?_⟩⟩
+  let σ := exteriorCircleLoopTwo R hR
+  let σdom := outsideOpenCircleLoopTwo R hR
+  let τ : C(unitInterval, {w : ℂ // 1 < ‖w‖}) := (ContinuousMap.mk _ hcont).comp σdom
+  refine
+    { toFun := fun st =>
+        ⟨(σ st.2 : ℂ) + (((st.1 : unitInterval) : ℝ) : ℂ) * ((τ st.2 : ℂ) - (σ st.2 : ℂ)), by
+          simpa [σ, σdom, τ, outsideOpenCircleLoopTwo, exteriorCircleLoopTwo,
+            MLC.bottcher_map_outside_open_to_exterior]
+            using hH st.1 st.2⟩
+      continuous_toFun := by
+        apply Continuous.subtype_mk
+        have hσ : Continuous fun st : unitInterval × unitInterval => (σ st.2 : ℂ) := by
+          exact continuous_subtype_val.comp (σ.continuous.comp continuous_snd)
+        have hτ : Continuous fun st : unitInterval × unitInterval => (τ st.2 : ℂ) := by
+          exact continuous_subtype_val.comp (τ.continuous.comp continuous_snd)
+        have hs : Continuous fun st : unitInterval × unitInterval =>
+            ((((st.1 : unitInterval) : ℝ) : ℂ)) := by
+          exact Complex.continuous_ofReal.comp
+            (continuous_subtype_val.comp continuous_fst)
+        simpa using hσ.add (hs.mul (hτ.sub hσ))
+      map_zero_left := by
+        intro t
+        apply Subtype.ext
+        simp [σ]
+      map_one_left := by
+        intro t
+        apply Subtype.ext
+        simp [σ, τ, σdom, sub_eq_add_neg, add_assoc, add_left_comm, add_comm] }
 
 /-- If every fiber of a map has cardinality one, then the map is injective.
 
@@ -427,6 +592,29 @@ theorem restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
   simpa [RestrictedFiberCardTwo] using
     (natCard_fiber_eq_of_isProperMap_isLocalHomeomorph
       (f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local y y')
+
+/-- Proper local-homeomorphy of the restricted outside-open map gives a positive
+constant covering degree on the exterior target. This formalizes the finite,
+surjective covering part of the degree-one proof before the winding calculation
+identifies the degree as `1`. -/
+theorem restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    ∃ d : ℕ, 0 < d ∧ ∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d := by
+  letI : ConnectedSpace {w : ℂ // 1 < ‖w‖} :=
+    (isConnected_iff_connectedSpace).1 MLC.isConnected_exterior
+  letI : Nonempty {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+    refine ⟨⟨(5 : ℂ), ?_⟩⟩
+    norm_num
+  let y0 : {w : ℂ // 1 < ‖w‖} := ⟨(2 : ℂ), by norm_num⟩
+  refine ⟨RestrictedFiberCardTwo y0, ?_, ?_⟩
+  · simpa [RestrictedFiberCardTwo, y0] using
+      (natCard_fiber_pos_of_isProperMap_isLocalHomeomorph
+        (f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local y0)
+  · intro y
+    simpa [y0] using
+      (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
+        h_proper h_local y y0)
 
 /-- Combining constant covering degree with the winding-number degree-one
 calculation gives one-point fibers over every exterior point. -/

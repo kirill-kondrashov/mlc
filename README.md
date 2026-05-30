@@ -22,7 +22,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.external_ray_map_exists_two
+- MLC.restrictedWindingKernelTwo
 ```
 
 ## Current Frontier
@@ -30,21 +30,23 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.Quadratic.external_ray_map_exists_two}
+   MLC.restrictedWindingKernelTwo}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.Quadratic.external_ray_map_exists_two}
+= {MLC.restrictedWindingKernelTwo}
 ```
 
 ## Current Status
 
-The checked root is now routed through a **single residual external-ray seam**;
-the coordinate-data and normalization pieces are constructive again, and the root
-still avoids the older tower / Lyubich / Problem 4.5 detours.
+The checked root is now routed through a **single residual degree-one kernel**:
+the direct proper/local witness for the restricted outside map plus the isolated
+restricted winding theorem. The coordinate-data and normalization pieces are
+constructive again, and the root still avoids the older tower / Lyubich /
+Problem 4.5 detours.
 
-1. `mlc_conjecture_of_externalRayMapData_two`
-2. the packaged root wrapper `mlc_conjecture_of_external_ray_map_exists_two`
-3. the `c = 2` external-ray seam `MLC.Quadratic.external_ray_map_exists_two`
+1. `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16`
+2. `finalAxiomCoreConstructiveGapV16_of_restricted_winding`
+3. the root kernel `MLC.restrictedWindingKernelTwo`
 
 So the earlier explicit frontier
 
@@ -60,7 +62,12 @@ they are no longer part of `Axioms(MLC.mlc_conjecture)`.
 
 One non-core project axiom remains:
 
-1. `MLC.Quadratic.external_ray_map_exists_two`
+1. `MLC.restrictedWindingKernelTwo`
+
+This kernel is the conjunction of:
+
+1. `DirectProperLocalWitnessTwo`
+2. `Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo`
 
 The theorem-facing coordinate and root normalization branches are now supplied
 constructively by the explicit `polar_green_map` / basin-valued Böttcher package.
@@ -76,9 +83,11 @@ through:
 
 ## Elimination Target
 
-The final constructive target is now the `c = 2` basin-valued external-ray /
-inverse package; proving it will eliminate the last root axiom
-`MLC.Quadratic.external_ray_map_exists_two`.
+The final constructive target is now the exact `c = 2` degree-one kernel:
+construct the direct proper/local witness for the restricted outside map and
+prove the remaining winding/generator theorem
+`Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo`. Doing so will
+eliminate the last root axiom `MLC.restrictedWindingKernelTwo`.
 
 ## Repository Snapshot
 

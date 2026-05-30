@@ -11,11 +11,11 @@
 `MLC.lyubich_conformal_bridge` is no longer in `Axioms(MLC.mlc_conjecture)`.
 The frontier has now been reduced all the way to a single project axiom:
 
-1. `MLC.Quadratic.external_ray_map_exists`
+1. `MLC.restrictedWindingKernelTwo`
 
 This plan first removed the old hidden Lyubich/tower contradiction route, then
 collapsed the wider explicit chosen-true / residual-open frontier, and finally
-rerouted the root through the theoremized `c = 2` external-ray seam.
+rerouted the root through the narrowed `c = 2` degree-one kernel.
 
 ---
 
@@ -23,9 +23,9 @@ rerouted the root through the theoremized `c = 2` external-ray seam.
 
 `MLC.mlc_conjecture` now runs through:
 
-1. `mlc_conjecture_of_externalRayMapData_two`
-2. `mlc_conjecture_of_external_ray_map_exists_two`
-3. `MLC.Quadratic.external_ray_map_exists`
+1. `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16`
+2. `finalAxiomCoreConstructiveGapV16_of_restricted_winding`
+3. `MLC.restrictedWindingKernelTwo`
 
 ---
 
@@ -41,7 +41,7 @@ without affecting the checked root frontier.
 The remaining repo-facing target is no longer the Lyubich bridge. The next plan
 should attack:
 
-1. `MLC.Quadratic.external_ray_map_exists`
+1. `MLC.restrictedWindingKernelTwo`
 
 ## Success criterion achieved
 

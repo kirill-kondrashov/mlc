@@ -2018,6 +2018,26 @@ theorem mlc_conjecture_of_proper_local_restrict_of_injOn
   exact mlc_conjecture_of_externalRayMapData_two
     (externalRayMapData_two_of_proper_local_restrict_of_injOn h_proper h_local h_inj)
 
+/-- Root-facing degree-one bridge at `c = 2`: the restricted proper/local witness
+plus the degree-one winding seed produce external-ray data constructively. -/
+theorem externalRayMapData_two_of_proper_local_restrict_of_winding
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hwinding : Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  exact
+    Mlc.Bottcher.DegreeOne.external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
+      h_proper h_local hwinding
+
+/-- Root-facing MLC bridge for the degree-one proper/local route at `c = 2`. -/
+theorem mlc_conjecture_of_proper_local_restrict_of_winding
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hwinding : Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_externalRayMapData_two
+    (externalRayMapData_two_of_proper_local_restrict_of_winding h_proper h_local hwinding)
+
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from
 outside-open injectivity plus exterior surjectivity by outside-open preimages. -/
 def AnalyticDerivConstructivePayloadTwo : Prop :=
@@ -2557,6 +2577,27 @@ def FinalAxiomEliminationKernelV17 : Prop :=
 with aggregate constructive ingress. -/
 def FinalAxiomEliminationIngressKernelV18 : Prop :=
   FinalAxiomCoreConstructiveGapV16 ∧ RemainingConstructiveIngressTwo
+
+/-- The degree-one winding seed closes the local-homeomorph CP5 seam once the
+restricted proper/local witness is available. -/
+theorem cp5ResidualLocalHomeomorphInjSeamTwo_of_restricted_winding
+    (hwinding : Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
+    CP5ResidualLocalHomeomorphInjSeamTwo := by
+  intro hlocal
+  exact
+    Mlc.Bottcher.DegreeOne.injOn_outside_open_two_of_restricted_covering_degree_constant_of_winding
+      (Mlc.Bottcher.DegreeOne.restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
+        hlocal.1 hlocal.2)
+      hwinding
+
+/-- The degree-one winding seed supplies the current root-level constructive gap:
+it turns any direct proper/local witness into the required outside-open
+injectivity seam. -/
+theorem finalAxiomCoreConstructiveGapV16_of_restricted_winding
+    (hwinding : Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
+    FinalAxiomCoreConstructiveGapV16 := by
+  intro _hdirect
+  exact cp5ResidualLocalHomeomorphInjSeamTwo_of_restricted_winding hwinding
 
 /-- Root-closure bridge realized from the explicit substitute payload. -/
 theorem externalRayMapData_two_of_rootClosureSubstituteTwo
@@ -3730,15 +3771,41 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     boundedTypeConstructive_of_chosenTrueProblem45Axioms
     residualOpenVirtualNearMoleculeAxiom
 
-/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. The current minimal root cuts
-    directly through the theoremized `c = 2` external-ray seam, leaving only the
-    exterior Böttcher inverse existence package on the checked project frontier. -/
+/-- Final root-facing kernel after formalizing the proof sketch up to the
+remaining algebraic-topology seam. It packages exactly the two concrete inputs
+still needed to close the degree-one route:
 
+1. proper/local-homeomorphy of the restricted outside map;
+2. the isolated winding/generator theorem
+   `RestrictedAsymptoticWindingDegreeOneTwo`.
+
+Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
+package but the exact theorem kernel left on the frontier. -/
+axiom restrictedWindingKernelTwo :
+    DirectProperLocalWitnessTwo ∧
+      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo
+
+/-- Root closure from the exact restricted-winding kernel. -/
+theorem mlc_conjecture_of_restrictedWindingKernelTwo
+    (hkernel : DirectProperLocalWitnessTwo ∧
+      Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_finalAxiomCoreConstructiveGapV16
+      (finalAxiomCoreConstructiveGapV16_of_restricted_winding hkernel.2)
+      hkernel.1
+
+/-- The Mandelbrot Local Connectivity (MLC) Conjecture:
+    the Mandelbrot set is locally connected. The current root is routed through
+    the exact remaining degree-one kernel at `c = 2`: a direct proper/local
+    witness for the restricted outside map together with the isolated
+    winding/generator theorem `RestrictedAsymptoticWindingDegreeOneTwo`.
+
+    This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
+    much narrower and less falsifiable final seam. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_external_ray_map_exists_two
-    Quadratic.external_ray_map_exists_two
+  mlc_conjecture_of_restrictedWindingKernelTwo restrictedWindingKernelTwo
 
 
 end MainProof
