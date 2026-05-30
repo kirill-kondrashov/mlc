@@ -1079,8 +1079,7 @@ theorem basin_external_ray_map_data_two_of_surj_of_injOn_outside_open
       else
         Classical.choose (h_surj w hw)
     else 0
-  refine ⟨Quadratic.bottcher_map (2 : ℂ), Ψ, ?_⟩
-  refine ⟨?_, ?_, ?_, ?_⟩
+  refine ⟨Ψ, ?_, ?_, ?_, ?_⟩
   · intro z hz
     have hGz_pos : 0 < green_function (2 : ℂ) z :=
       green_function_pos_of_basin (2 : ℂ) z hz

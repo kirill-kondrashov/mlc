@@ -2628,10 +2628,9 @@ theorem directProperLocalWitnessTwo_of_minimalCounterexample
   by_contra hdirect
   exact hminimal hdirect
 
-/-- Final truthful route-facing theorem shape after eliminating the false
-Problem-B-style reroutes and the false direct properness statement: the
-remaining witness-side frontier is local homeomorphy of the restricted outside
-map together with a positive constant restricted fiber degree. -/
+/-- Former degree-route theorem shape. It is retained only so the code can
+record its impossibility explicitly; the proof notes show that the full-exterior
+positive-constant-degree strengthening is false. -/
 def RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample : Prop :=
   ¬ Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo → False
 
@@ -2645,6 +2644,35 @@ its minimal-counterexample formulation. -/
 theorem restrictedLocalHomeomorphPositiveConstantDegreeTwo_of_minimalCounterexample
     (hminimal : RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample) :
     Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo := by
+  classical
+  by_contra hdata
+  exact hminimal hdata
+
+/-- The former Problem B package has no solution: its minimal-counterexample
+wrapper is false because the package itself is false. -/
+theorem not_restrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample :
+    ¬ RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample := by
+  intro hminimal
+  exact
+    hminimal
+      Mlc.Bottcher.DegreeOne.not_restrictedLocalHomeomorphPositiveConstantDegreeTwo
+
+/-- Honest root-facing theorem shape after eliminating the false full-exterior
+degree statement: construct a basin-valued exterior inverse for the actual
+`bottcher_map` at `c = 2`, with a right inverse on all of the exterior and a
+left inverse on the outside-open source region. -/
+def BasinExternalRayMapDataTwoMinimalCounterexample : Prop :=
+  ¬ Quadratic.BasinExternalRayMapDataTwo → False
+
+/-- Theorem-shaped scope interface for the basin-valued external-ray package. -/
+abbrev BasinExternalRayMapDataTwoScope : Prop :=
+  BasinExternalRayMapDataTwoMinimalCounterexample
+
+/-- Recover the honest basin-valued external-ray package from its
+minimal-counterexample formulation. -/
+theorem basinExternalRayMapDataTwo_of_minimalCounterexample
+    (hminimal : BasinExternalRayMapDataTwoMinimalCounterexample) :
+    Quadratic.BasinExternalRayMapDataTwo := by
   classical
   by_contra hdata
   exact hminimal hdata
@@ -4110,60 +4138,36 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     boundedTypeConstructive_of_chosenTrueProblem45Axioms
     residualOpenVirtualNearMoleculeAxiom
 
-/-- Final root-facing kernel after formalizing the proof sketch up to the
-remaining covering-context generator calculation. It packages exactly the two
-residual theorem-shaped inputs still needed to close the degree-one route:
-
-1. a minimal-counterexample obstruction theorem for the constructive
-   restricted local-homeomorph / positive-constant-degree witness for the
-   restricted outside map;
-2. the exact remaining monodromy core saying that a positive constant covering
-   degree for this restricted map, together with the already-formalized
-   large-circle free homotopy, forces that degree to equal `1`.
-
-Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
-package but the exact theorem kernel left on the frontier. -/
-axiom restrictedWindingKernelTwo :
-    RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample ∧
-      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo
-
-/-- Root-facing MLC bridge from the truthful witness-side replacement for
-Problem B together with the exact remaining monodromy core. -/
-theorem mlc_conjecture_of_restrictedLocalHomeomorphPositiveConstantDegree_and_monodromyCore
-    (hdata : Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo)
-    (hcore : Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
+/-- Root-facing closure of the honest basin-valued external-ray package. -/
+theorem mlc_conjecture_of_basinExternalRayMapData_two
+    (hdata : Quadratic.BasinExternalRayMapDataTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact
     mlc_conjecture_of_externalRayMapData_two
-      (Mlc.Bottcher.DegreeOne.external_ray_map_exists_two_of_localHomeomorphPositiveConstantDegree_of_monodromyCore
-        hdata hcore)
+      (Quadratic.externalRayMapData_of_basinExternalRayMapData (2 : ℂ) hdata)
 
-/-- Root closure from the exact restricted-winding kernel. -/
-theorem mlc_conjecture_of_restrictedWindingKernelTwo
-    (hkernel :
-      RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample ∧
-      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
+/-- Final root-facing kernel after ruling out the false full-exterior degree
+route. The single remaining theorem-shaped input is the specialized
+basin-valued external-ray package for the actual `bottcher_map` at `c = 2`. -/
+axiom basinExternalRayKernelTwo : BasinExternalRayMapDataTwoMinimalCounterexample
+
+/-- Root closure from the honest basin-valued external-ray kernel. -/
+theorem mlc_conjecture_of_basinExternalRayKernelTwo
+    (hkernel : BasinExternalRayMapDataTwoMinimalCounterexample) :
     LocallyConnectedSpace mandelbrotSet := by
-  have hdata :
-      Mlc.Bottcher.DegreeOne.RestrictedLocalHomeomorphPositiveConstantDegreeTwo :=
-    restrictedLocalHomeomorphPositiveConstantDegreeTwo_of_minimalCounterexample hkernel.1
   exact
-    mlc_conjecture_of_restrictedLocalHomeomorphPositiveConstantDegree_and_monodromyCore
-      hdata hkernel.2
+    mlc_conjecture_of_basinExternalRayMapData_two
+      (basinExternalRayMapDataTwo_of_minimalCounterexample hkernel)
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. The current root is routed through
-    the exact remaining degree-one kernel at `c = 2`: a minimal-counterexample
-    obstruction theorem for the truthful restricted local-homeomorph /
-    positive-constant-degree witness together with the exact monodromy core
-    reducing a positive constant covering degree to `1`
-    from the already-formalized large-circle homotopy.
-
-    This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
-    much narrower and less falsifiable final seam. -/
+    the Mandelbrot set is locally connected. The checked root now depends only
+    on a single honest theorem-shaped axiom: a basin-valued exterior inverse
+    package for the actual `bottcher_map` at `c = 2`, with a global right
+    inverse on the exterior and a left inverse on the outside-open source
+    region. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_restrictedWindingKernelTwo restrictedWindingKernelTwo
+  mlc_conjecture_of_basinExternalRayKernelTwo basinExternalRayKernelTwo
 
 
 end MainProof

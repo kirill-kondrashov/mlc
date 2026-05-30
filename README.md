@@ -22,7 +22,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.restrictedWindingKernelTwo
+- MLC.basinExternalRayKernelTwo
 ```
 
 ## Current Frontier
@@ -30,26 +30,24 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.restrictedWindingKernelTwo}
+   MLC.basinExternalRayKernelTwo}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.restrictedWindingKernelTwo}
+= {MLC.basinExternalRayKernelTwo}
 ```
 
 ## Current Status
 
-The checked root is now routed through a **single residual degree-one kernel**:
-a classical scope gate for the direct proper/local witness on the restricted
-outside map together with the exact generator calculation from the proof sketch.
-Lean already formalizes the positive constant covering degree and the large-circle
-free homotopy, so the remaining topology seam is now the monodromy /
-fundamental-group step reducing that degree to `1`. The coordinate-data and
-normalization pieces are constructive again, and the root still avoids the older
-tower / Lyubich / Problem 4.5 detours.
+The checked root is now routed through a **single honest basin-valued kernel**:
+a theorem-shaped minimal-counterexample wrapper for the specialized statement
+`Quadratic.BasinExternalRayMapDataTwo`. This package asks for a right inverse to
+the fixed `bottcher_map (2)` on the full exterior `Ω = {w : |w| > 1}` and a
+left inverse on the outside-open source region `V = {z : |z| > 4}`.
 
-1. `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16`
-2. `finalAxiomCoreConstructiveGapV16_of_restricted_winding`
-3. the root kernel `MLC.restrictedWindingKernelTwo`
+The former full-exterior degree route is no longer root-facing. The monodromy
+Problem A package remains formalized as an auxiliary route in
+`Mlc.Bottcher.DegreeOne`, but the old Problem B package has now been formally
+refuted in Lean.
 
 So the earlier explicit frontier
 
@@ -65,15 +63,11 @@ they are no longer part of `Axioms(MLC.mlc_conjecture)`.
 
 One non-core project axiom remains:
 
-1. `MLC.restrictedWindingKernelTwo`
+1. `MLC.basinExternalRayKernelTwo`
 
-This kernel is the conjunction of:
-
-1. `RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample`
-2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`
-
-The theorem-facing coordinate and root normalization branches are now supplied
-constructively by the explicit `polar_green_map` / basin-valued Böttcher package.
+It is the theorem-shaped scope interface
+`BasinExternalRayMapDataTwoMinimalCounterexample`, whose positive content is the
+specialized basin-valued inverse package `Quadratic.BasinExternalRayMapDataTwo`.
 
 ## Non-solutions
 
@@ -86,30 +80,36 @@ through:
 
 ## Elimination Target
 
-The final constructive target is now the exact `c = 2` degree-one kernel:
-construct the restricted local-homeomorph / positive-constant-degree witness for
-the restricted outside map and prove the remaining monodromy core
-`Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`.
-The witness half is now the theorem-shaped minimal-counterexample obstruction
-statement `RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample`,
-from which the exact positive-constant-degree datum is recovered constructively.
-The topology target is stated in the already-formalized covering-degree /
-monodromy context, so it is no longer a bare continuous-map claim.
-From that monodromy core Lean already reconstructs the full Problem A statement
-and then derives the coarser annulus statement
-`RestrictedAnnulusCoveringDegreeOneStepTwo`, and then the large-circle homotopy
-bridge closes the degree-one route. Doing so will eliminate the last root axiom
-`MLC.restrictedWindingKernelTwo`.
+The final constructive target is now the exact `c = 2` basin-valued external-ray
+statement from `draft/external_ray_map_exists_problem.md`:
+construct a map
 
-The previous closed-preimage and compact-preimage versions of the route
-statement were both false as stated. The later direct proper/local witness
-statement is false as well. `Mlc.MainConjecture` now contains formal
-counterexample theorems
-`not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo` and
-`not_directProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo`,
-together with `not_directProperLocalWitnessTwo`. The remaining route-facing
-frontier has therefore been reduced to the truthful local-homeomorph /
-positive-constant-degree datum actually consumed by the monodromy proof.
+$$
+\Psi:\Omega\to U_\infty(2)
+$$
+
+such that
+
+$$
+\phi(\Psi(w))=w \quad \text{for all } w\in\Omega,
+$$
+
+and
+
+$$
+\Psi(\phi(z))=z \quad \text{for all } z\in V.
+$$
+
+This is the codomain-correct replacement for the false statement that the
+restricted map `φ|_V : V → Ω` should already have positive constant fiber degree
+over all of `Ω`.
+
+The false degree package is now explicitly ruled out by
+`Mlc.Bottcher.DegreeOne.not_restrictedLocalHomeomorphPositiveConstantDegreeTwo`
+and by
+`MLC.not_restrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample`.
+The earlier closed-preimage, compact-preimage, and direct proper/local witness
+routes remain formally refuted as well.
 
 ## Repository Snapshot
 

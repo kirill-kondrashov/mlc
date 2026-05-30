@@ -9,6 +9,7 @@ import Mathlib.Topology.Homotopy.Lifting
 import Mathlib.Topology.Algebra.OpenSubgroup
 import Mlc.Quadratic.Complex.InverseBranchQuadratic
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
+import Mlc.Quadratic.Complex.Bottcher.GreenFunctionRayInversion
 
 /-!
 # Degree One Injectivity Lemma (Sketch)
@@ -708,6 +709,129 @@ the non-monodromy datum consumed by
 def RestrictedLocalHomeomorphPositiveConstantDegreeTwo : Prop :=
   IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     ∃ d : ℕ, 0 < d ∧ ∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d
+
+private theorem one_lt_norm_bottcher_map_two_four :
+    1 < ‖MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ)‖ := by
+  have h4_outside_disk : (4 : ℂ) ∈ MLC.outside_disk (2 : ℂ) := by
+    exact MLC.large_norm_mem_outside_disk (2 : ℂ) (4 : ℂ) (by norm_num)
+  have h4_basin : (4 : ℂ) ∈ MLC.basin_of_infinity (2 : ℂ) :=
+    MLC.outside_disk_subset_quadratic_basin (2 : ℂ) h4_outside_disk
+  exact
+    MLC.bottcher_map_norm_gt_one_of_basin (2 : ℂ) (4 : ℂ) h4_basin
+      (MLC.green_function_pos_of_basin (2 : ℂ) (4 : ℂ) h4_basin)
+
+private theorem restrictedFiberCardTwo_bottcherMapFour_eq_zero :
+    let y : {w : ℂ // 1 < ‖w‖} :=
+      ⟨MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_bottcher_map_two_four⟩
+    RestrictedFiberCardTwo y = 0 := by
+  classical
+  let y : {w : ℂ // 1 < ‖w‖} :=
+    ⟨MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_bottcher_map_two_four⟩
+  have hEmpty :
+      IsEmpty
+        {x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
+          MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y} := by
+    refine ⟨?_⟩
+    intro x
+    rcases x with ⟨x, hx⟩
+    have hx_val :
+        MLC.Quadratic.bottcher_map (2 : ℂ) x.1 =
+          MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ) := by
+      exact congrArg Subtype.val hx
+    rcases
+        MLC.bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) x.1 x.2 with
+      ⟨r, hr_pos, hr_eq⟩
+    have hx_ne_zero : x.1 ≠ 0 := by
+      intro hx_zero
+      have hx_norm_gt : 0 < ‖x.1‖ := by
+        have hnorm_two : ‖(2 : ℂ)‖ = 2 := by norm_num
+        linarith [x.2]
+      have : ‖x.1‖ = 0 := by simpa [hx_zero]
+      exact hx_norm_gt.ne' this
+    have hbotcher_x :
+        MLC.Quadratic.bottcher_map (2 : ℂ) x.1 = (r : ℂ) * x.1 := by
+      exact (div_eq_iff hx_ne_zero).1 hr_eq
+    have hphi_four :
+        MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ) =
+          (Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) : ℂ) := by
+      simpa using
+        (MLC.Quadratic.bottcher_map_apply_ray (2 : ℂ) (1 : ℂ) (by simp) 4 (by norm_num))
+    have hr_ne : (r : ℂ) ≠ 0 := by
+      exact_mod_cast hr_pos.ne'
+    have hx_complex :
+        x.1 =
+          (Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) : ℂ) / (r : ℂ) := by
+      exact (eq_div_iff hr_ne).2 <| by
+        calc
+          x.1 * (r : ℂ) = (r : ℂ) * x.1 := by ring
+          _ = MLC.Quadratic.bottcher_map (2 : ℂ) x.1 := hbotcher_x.symm
+          _ = MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ) := hx_val
+          _ = (Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) : ℂ) := hphi_four
+    have hx_real :
+        x.1 = ((Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) / r : ℝ) : ℂ) := by
+      simpa using hx_complex
+    have hρ_pos : 0 < Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) / r := by
+      exact div_pos (Real.exp_pos _) hr_pos
+    have hx_norm :
+        ‖x.1‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) / r := by
+      rw [hx_real, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hρ_pos]
+    have hρ_gt_four :
+        4 < Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) / r := by
+      have hnorm_two : ‖(2 : ℂ)‖ = 2 := by norm_num
+      linarith [x.2, hx_norm]
+    have hgreen_eq :
+        MLC.Quadratic.green_function (2 : ℂ) x.1 =
+          MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ) := by
+      have hnorm_eq :
+          ‖MLC.Quadratic.bottcher_map (2 : ℂ) x.1‖ =
+            ‖MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ)‖ := by
+        simpa [hx_val]
+      rw [MLC.Quadratic.norm_bottcher_eq_exp_green, MLC.Quadratic.norm_bottcher_eq_exp_green] at hnorm_eq
+      exact Real.exp_injective hnorm_eq
+    have h4_basin : (4 : ℂ) ∈ MLC.basin_of_infinity (2 : ℂ) := by
+      exact
+        MLC.outside_disk_subset_quadratic_basin (2 : ℂ)
+          (MLC.large_norm_mem_outside_disk (2 : ℂ) (4 : ℂ) (by norm_num))
+    have hgreen_four_pos : 0 < MLC.Quadratic.green_function (2 : ℂ) ((4 : ℂ) * (1 : ℂ)) := by
+      simpa using MLC.green_function_pos_of_basin (2 : ℂ) (4 : ℂ) h4_basin
+    have hmono :
+        MLC.Quadratic.green_function (2 : ℂ) ((4 : ℂ) * (1 : ℂ)) <
+          MLC.Quadratic.green_function (2 : ℂ)
+            (((Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) / r : ℝ) : ℂ) * (1 : ℂ)) :=
+      MLC.GreenFunctionRayInversion.green_function_strictMono_along_real_ray_basin_two
+        (ρ₁ := 4)
+        (ρ₂ := Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) / r)
+        (by norm_num)
+        hρ_gt_four
+        hgreen_four_pos
+    have hmono' :
+        MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ) <
+          MLC.Quadratic.green_function (2 : ℂ) x.1 := by
+      simpa [hx_real] using hmono
+    exact (not_lt_of_ge (le_of_eq hgreen_eq)) hmono'
+  letI : IsEmpty
+      {x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
+        MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y} := hEmpty
+  simpa [RestrictedFiberCardTwo, y, Nat.card_eq_fintype_card] using
+    (Fintype.card_of_isEmpty
+      {x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
+        MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y})
+
+/-- The full-exterior positive-constant-degree strengthening is impossible: the
+boundary image `Φ(4)` has no preimage in the restricted outside-open domain. -/
+theorem not_restrictedLocalHomeomorphPositiveConstantDegreeTwo :
+    ¬ RestrictedLocalHomeomorphPositiveConstantDegreeTwo := by
+  intro h
+  rcases h with ⟨_, ⟨d, hd_pos, hdeg⟩⟩
+  let y : {w : ℂ // 1 < ‖w‖} :=
+    ⟨MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_bottcher_map_two_four⟩
+  have hy_zero : RestrictedFiberCardTwo y = 0 := by
+    simpa [y] using restrictedFiberCardTwo_bottcherMapFour_eq_zero
+  have hd_zero : d = 0 := by
+    calc
+      d = RestrictedFiberCardTwo y := by symm; exact hdeg y
+      _ = 0 := hy_zero
+  simpa [hd_zero] using hd_pos
 
 /-- The exact remaining core of the proof sketch already implies Problem A:
 the only extra proper/local packaging in Problem A is the upstream route that

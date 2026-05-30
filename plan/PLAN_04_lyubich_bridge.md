@@ -11,11 +11,12 @@
 `MLC.lyubich_conformal_bridge` is no longer in `Axioms(MLC.mlc_conjecture)`.
 The frontier has now been reduced all the way to a single project axiom:
 
-1. `MLC.restrictedWindingKernelTwo`
+1. `MLC.basinExternalRayKernelTwo`
 
 This plan first removed the old hidden Lyubich/tower contradiction route, then
 collapsed the wider explicit chosen-true / residual-open frontier, and finally
-rerouted the root through the narrowed `c = 2` degree-one kernel.
+rerouted the root away from the false full-exterior degree package to the honest
+`c = 2` basin-valued external-ray kernel.
 
 ---
 
@@ -23,22 +24,14 @@ rerouted the root through the narrowed `c = 2` degree-one kernel.
 
 `MLC.mlc_conjecture` now runs through:
 
-1. `mlc_conjecture_of_proper_local_restrict_of_monodromyCore`
-2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`
-3. `MLC.restrictedWindingKernelTwo`
+1. `mlc_conjecture_of_basinExternalRayMapData_two`
+2. `Quadratic.externalRayMapData_of_basinExternalRayMapData`
+3. `MLC.basinExternalRayKernelTwo`
 
-Here item 2 is now the exact remaining monodromy theorem from the proof sketch,
-not the broader Problem A wrapper and not a bare continuous-map statement.
-The witness half of item 3 is now also theorem-shaped: the root no longer uses a
-raw `¬¬` scope gate, but the minimal-counterexample obstruction statement
-`RestrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample`.
-
-The non-topological half of the root kernel has also been narrowed: it is now a
-minimal-counterexample obstruction theorem for the truthful restricted
-local-homeomorph / positive-constant-degree witness. The earlier
-closed-preimage, compact-preimage, and direct properness draft formulations have
-all been formally refuted inside `Mlc.MainConjecture`, so they are no longer
-part of the live frontier.
+The monodromy / covering-degree route from Problem A remains formalized in
+`Mlc.Bottcher.DegreeOne`, but it is no longer the live root because its former
+Problem B input is false as stated. The checked root now ends at the codomain-
+correct basin-valued inverse package for the actual `bottcher_map`.
 
 ---
 
@@ -54,7 +47,7 @@ without affecting the checked root frontier.
 The remaining repo-facing target is no longer the Lyubich bridge. The next plan
 should attack:
 
-1. `MLC.restrictedWindingKernelTwo`
+1. `MLC.basinExternalRayKernelTwo`
 
 ## Success criterion achieved
 

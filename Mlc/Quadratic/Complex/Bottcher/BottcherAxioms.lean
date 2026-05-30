@@ -102,20 +102,30 @@ def ExternalRayMapData (c : ℂ) : Prop :=
         (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z)
 
 /-- Preferred basin-valued theorem-facing package suggested by the current
-mathematical analysis. Unlike `ExternalRayMapData`, this formulation only asks
-for exterior-valuedness on the basin itself, so it avoids the totalization
-artefact on `K(c)`. -/
+mathematical analysis. Unlike `ExternalRayMapData`, this formulation keeps the
+actual coordinate fixed to `bottcher_map` and only asks for exterior-valuedness
+on the basin itself, so it avoids the false full-exterior surjectivity demand
+for the restricted outside map. -/
 def BasinExternalRayMapData (c : ℂ) : Prop :=
-    ∃ φ Ψ : ℂ → ℂ,
-      (∀ z, z ∈ basin_of_infinity c → 1 < ‖φ z‖) ∧
-      (∀ z, z ∈ basin_of_infinity c → φ (MLC.quadratic_map c z) = (φ z)^2) ∧
-      (∀ w, 1 < ‖w‖ → Ψ w ∈ basin_of_infinity c ∧ φ (Ψ w) = w) ∧
-      (∀ z, ‖z‖ > ‖c‖ + 2 → Ψ (φ z) = z)
+    ∃ Ψ : ℂ → ℂ,
+      (∀ z, z ∈ basin_of_infinity c → 1 < ‖bottcher_map c z‖) ∧
+      (∀ z, z ∈ basin_of_infinity c →
+        bottcher_map c (MLC.quadratic_map c z) = (bottcher_map c z)^2) ∧
+      (∀ w, 1 < ‖w‖ → Ψ w ∈ basin_of_infinity c ∧ bottcher_map c (Ψ w) = w) ∧
+      (∀ z, ‖z‖ > ‖c‖ + 2 → Ψ (bottcher_map c z) = z)
 
 /-- `c = 2` specialization of the basin-valued package. This is the precise
 single-theorem target behind the expert note in `draft/`. -/
 def BasinExternalRayMapDataTwo : Prop :=
   BasinExternalRayMapData (2 : ℂ)
+
+/-- Forget the basin-membership refinement from the basin-valued package and
+recover the usual exterior inverse data. -/
+lemma externalRayMapData_of_basinExternalRayMapData (c : ℂ)
+    (h_data : BasinExternalRayMapData c) :
+    ExternalRayMapData c := by
+  rcases h_data with ⟨Ψ, _, _, hright, hleft⟩
+  exact ⟨Ψ, fun w hw => (hright w hw).2, hleft⟩
 
 /-- The inverse of the Böttcher map exists on the exterior (ray map). This
 global theorem-facing seam is still used elsewhere in the repository, but the

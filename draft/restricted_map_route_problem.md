@@ -1,4 +1,4 @@
-# Remaining restricted fiber-degree problem at c = 2
+# Remaining monodromy problem at c = 2
 
 Let
 
@@ -22,13 +22,42 @@ $$
 
 Prove the following statement.
 
-## Problem B. Local homeomorphism and positive constant restricted fiber degree
+## Problem A. Monodromy rigidity of the covering degree
 
-Prove that:
+Assume that:
 
 1. The map above is a local homeomorphism.
-2. There exists an integer $$d\ge 1$$ such that for every $$w\in\Omega$$ the fiber
+2. There exists an integer
    $$
-   F_w=\{z\in V:\phi(z)=w\}
+   d\ge 1
    $$
-   has exactly $$d$$ points.
+   such that, for every point
+   $$
+   w\in\Omega,
+   $$
+   $$
+   \#\phi^{-1}(w)=d.
+   $$
+3. For some number
+   $$
+   R>4,
+   $$
+   the loop
+   $$
+   \gamma_R:S^1\to\Omega,
+   \qquad
+   \gamma_R(e^{2\pi i t})=\phi(Re^{2\pi i t}),
+   $$
+   is freely homotopic through loops in the exterior domain to the positively
+   oriented circle
+   $$
+   \sigma_R:S^1\to\Omega,
+   \qquad
+   \sigma_R(e^{2\pi i t})=Re^{2\pi i t}.
+   $$
+
+Prove that
+
+$$
+d=1.
+$$
