@@ -1,12 +1,18 @@
-# Expert handoff: abstract annulus degree-one step at `c = 2`
+# Expert handoff: final remaining theorems at `c = 2`
 
 Let
 \[
-V=\{z\in\mathbf C:\ |z|>4\},\qquad \Omega=\{w\in\mathbf C:\ |w|>1\}.
+V=\{z\in\mathbf C:\ |z|>4\},\qquad \Omega=\{w\in\mathbf C:\ |w|>1\},
 \]
-Let \(\phi:V\to\Omega\) be the restricted outside Böttcher map for \(f(z)=z^2+2\).
+and let
+\[
+\phi:V\to\Omega
+\]
+be the restricted outside Böttcher map for \(f(z)=z^2+2\).
 
-## Input already formalized in Lean
+The current root closes from exactly the following two inputs.
+
+## Theorem A: generator calculation for the covering degree
 
 Assume:
 
@@ -16,54 +22,70 @@ Assume:
    \[
    \Gamma_R(t)=\phi(Re^{2\pi i t})
    \]
-   is freely homotopic in \(\Omega\) to the positive standard circle
+   is freely homotopic in \(\Omega\) to the positive exterior circle
    \[
    C_R(t)=Re^{2\pi i t}.
    \]
 
 Lean already derives from (1) and (2) that \(\phi\) is a finite-sheeted covering
-of constant degree \(d\ge 1\):
-\[
-\#\,\phi^{-1}(w)=d \qquad \text{for all } w\in\Omega.
-\]
+of constant degree \(d\ge 1\).
 
-## Exact problem
+**Problem.** Prove that \(d=1\). Equivalently, prove that some fiber of \(\phi\)
+has cardinality \(1\), hence every fiber has cardinality \(1\).
 
-Prove that \(d=1\). Equivalently,
-\[
-\exists\,w_0\in\Omega,\qquad \#\,\phi^{-1}(w_0)=1.
-\]
+**Standard route.** For a connected \(d\)-sheeted covering between annuli, the
+induced map on \(\pi_1\cong \mathbf Z\) is multiplication by \(\pm d\). The free
+homotopy assumption identifies \([\Gamma_R]\) with the positive generator of
+\(\pi_1(\Omega)\), so \(\pm d=1\), hence \(d=1\).
 
-## Standard theorem that should suffice
-
-If \(p:A\to B\) is a connected \(d\)-sheeted covering between annuli, then under
-the identifications \(\pi_1(A)\cong\mathbf Z\) and \(\pi_1(B)\cong\mathbf Z\),
-the induced map \(p_*:\pi_1(A)\to\pi_1(B)\) is multiplication by \(\pm d\).
-
-Applied to \(\phi\), this says that \([\Gamma_R]\in\pi_1(\Omega)\) must equal
-\(\pm d\) times the positive generator. But the formalized free homotopy gives
-\([\Gamma_R]=[C_R]\), and \(C_R\) is the positive generator. Hence \(\pm d=1\),
-so \(d=1\).
-
-## Exact Lean target
+**Exact Lean target.**
 
 ```lean
-def RestrictedAnnulusCoveringDegreeOneStepTwo : Prop :=
-  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
-      (∃ R : ℝ, ∃ hR : 4 < R,
-        Nonempty
-          (ContinuousMap.Homotopy
-            (exteriorCircleLoopTwo R hR)
-            ((ContinuousMap.mk _ h_local.continuous).comp
-              (outsideOpenCircleLoopTwo R hR)))) →
-        RestrictedAsymptoticWindingDegreeOneTwo
+def RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo : Prop :=
+  ∀ (h_cont : Continuous (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (d : ℕ), 0 < d →
+      (∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d) →
+        (∃ R : ℝ, ∃ hR : 4 < R,
+          Nonempty
+            (ContinuousMap.Homotopy
+              (exteriorCircleLoopTwo R hR)
+              ((ContinuousMap.mk _ h_cont).comp
+                (outsideOpenCircleLoopTwo R hR)))) →
+          d = 1
 ```
 
-The current root axiom is exactly
+Lean already derives from this the coarser Bottcher-facing corollary
+`RestrictedAnnulusCoveringDegreeOneStepTwo`.
+
+## Theorem B: direct proper/local witness for the restricted map
+
+Prove directly for the same restricted outside Böttcher map \(\phi:V\to\Omega\)
+that:
+
+1. \(\phi\) is proper;
+2. \(\phi\) is a local homeomorphism.
+
+This is the exact remaining analytic ingress theorem if one wants to remove the
+classical witness-scope half of the root kernel as well.
+
+**Exact Lean target.**
+
+```lean
+def DirectProperLocalWitnessTwo : Prop :=
+  IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
+```
+
+## Root axiom currently used
 
 ```lean
 MLC.restrictedWindingKernelTwo :
-  DirectProperLocalWitnessTwo ∧
-    Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo
+  DirectProperLocalWitnessTwoScope ∧
+    Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo
 ```
+
+So:
+
+1. **Theorem A** is the primary remaining algebraic-topology theorem.
+2. **Theorem B** is the remaining direct analytic witness theorem needed only if
+   we also want to eliminate the classical witness-scope half of the root axiom.

@@ -23,8 +23,8 @@ rerouted the root through the narrowed `c = 2` degree-one kernel.
 
 `MLC.mlc_conjecture` now runs through:
 
-1. `mlc_conjecture_of_proper_local_restrict_of_winding`
-2. `Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo`
+1. `mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy`
+2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`
 3. `MLC.restrictedWindingKernelTwo`
 
 ---

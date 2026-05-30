@@ -589,6 +589,23 @@ def RestrictedAsymptoticWindingBridgeTwo : Prop :=
     (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
       RestrictedAsymptoticWindingDegreeOneTwo
 
+/-- Exact remaining generator calculation from the proof sketch: Lean already
+formalizes the positive constant covering degree for the restricted map once
+properness and local-homeomorphy are available. The residual algebraic-topology
+content is that a free homotopy from a large image loop to the standard
+positive exterior circle forces that degree to equal `1`. -/
+def RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo : Prop :=
+  ∀ (h_cont : Continuous (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (d : ℕ), 0 < d →
+      (∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d) →
+        (∃ R : ℝ, ∃ hR : 4 < R,
+          Nonempty
+            (ContinuousMap.Homotopy
+              (exteriorCircleLoopTwo R hR)
+              ((ContinuousMap.mk _ h_cont).comp
+                (outsideOpenCircleLoopTwo R hR)))) →
+          d = 1
+
 /-- Exact remaining annulus-covering theorem isolated from the proof sketch:
 if the restricted map is proper and a local homeomorphism, then any
 already-formalized free homotopy between a large standard exterior circle and
@@ -660,6 +677,38 @@ theorem restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
     simpa [y0] using
       (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
         h_proper h_local y y0)
+
+/-- Bottcher-facing singleton-fiber corollary of the exact remaining
+generator-calculation kernel from the proof sketch. -/
+theorem restrictedAsymptoticWindingDegreeOneTwo_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
+    (hkernel : RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo)
+    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (∃ R : ℝ, ∃ hR : 4 < R,
+      Nonempty
+        (ContinuousMap.Homotopy
+          (exteriorCircleLoopTwo R hR)
+          ((ContinuousMap.mk _ h_local.continuous).comp
+            (outsideOpenCircleLoopTwo R hR)))) →
+      RestrictedAsymptoticWindingDegreeOneTwo := by
+  intro hhom
+  rcases restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph h_proper h_local with
+    ⟨d, hdpos, hdeg⟩
+  have hd : d = 1 := hkernel h_local.continuous d hdpos hdeg hhom
+  let y0 : {w : ℂ // 1 < ‖w‖} := ⟨(2 : ℂ), by norm_num⟩
+  refine ⟨y0, ?_⟩
+  simpa [y0, hd] using hdeg y0
+
+/-- The exact remaining annulus-covering theorem follows from the more precise
+generator-calculation kernel, since the finite positive constant covering degree
+has already been formalized separately. -/
+theorem restrictedAnnulusCoveringDegreeOneStepTwo_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
+    (hkernel : RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo) :
+    RestrictedAnnulusCoveringDegreeOneStepTwo := by
+  intro h_proper h_local
+  exact
+    restrictedAsymptoticWindingDegreeOneTwo_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
+      hkernel h_proper h_local
 
 /-- Combining constant covering degree with the winding-number degree-one
 calculation gives one-point fibers over every exterior point. -/

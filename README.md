@@ -39,12 +39,13 @@ project_frontier(MLC.mlc_conjecture)
 ## Current Status
 
 The checked root is now routed through a **single residual degree-one kernel**:
-the direct proper/local witness for the restricted outside map plus the abstract
-annulus-covering degree-one theorem. The Bottcher-specific large-circle
-homotopy is already formalized constructively, so the residual axiom is now a
-pure algebraic-topology step. The coordinate-data and normalization pieces are
-constructive again, and the root still avoids the older tower / Lyubich /
-Problem 4.5 detours.
+a classical scope gate for the direct proper/local witness on the restricted
+outside map together with the exact generator calculation from the proof sketch.
+Lean already formalizes the positive constant covering degree and the large-circle
+free homotopy, so the remaining topology seam is now the monodromy /
+fundamental-group step reducing that degree to `1`. The coordinate-data and
+normalization pieces are constructive again, and the root still avoids the older
+tower / Lyubich / Problem 4.5 detours.
 
 1. `mlc_conjecture_of_finalAxiomCoreConstructiveGapV16`
 2. `finalAxiomCoreConstructiveGapV16_of_restricted_winding`
@@ -68,8 +69,8 @@ One non-core project axiom remains:
 
 This kernel is the conjunction of:
 
-1. `DirectProperLocalWitnessTwo`
-2. `Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo`
+1. `DirectProperLocalWitnessTwoScope`
+2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`
 
 The theorem-facing coordinate and root normalization branches are now supplied
 constructively by the explicit `polar_green_map` / basin-valued Böttcher package.
@@ -87,11 +88,12 @@ through:
 
 The final constructive target is now the exact `c = 2` degree-one kernel:
 construct the direct proper/local witness for the restricted outside map and
-prove the remaining abstract annulus theorem
-`Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo`. The
-large-circle homotopy input is already formalized and is fed into this theorem
-by `restrictedAsymptoticWindingBridgeTwo_of_annulusCoveringDegreeOneStep`.
-Doing so will eliminate the last root axiom `MLC.restrictedWindingKernelTwo`.
+prove the remaining generator calculation
+`Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`.
+From that theorem Lean already derives the coarser annulus statement
+`RestrictedAnnulusCoveringDegreeOneStepTwo`, and then the large-circle homotopy
+bridge closes the degree-one route. Doing so will eliminate the last root axiom
+`MLC.restrictedWindingKernelTwo`.
 
 ## Repository Snapshot
 

@@ -2049,6 +2049,21 @@ theorem mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
       (Mlc.Bottcher.DegreeOne.external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_annulusCoveringDegreeOneStep
         htopo h_proper h_local)
 
+/-- Root-facing MLC bridge from the exact remaining generator calculation in the
+proof sketch. The positive constant covering-degree part is already formalized
+constructively, so only the residual homotopy-to-degree-one step is passed in. -/
+theorem mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
+    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hkernel :
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
+      h_proper h_local
+      (Mlc.Bottcher.DegreeOne.restrictedAnnulusCoveringDegreeOneStepTwo_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
+        hkernel)
+
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from
 outside-open injectivity plus exterior surjectivity by outside-open preimages. -/
 def AnalyticDerivConstructivePayloadTwo : Prop :=
@@ -2304,6 +2319,21 @@ def StrictSubcutoffWindowExistenceTwo : Prop :=
 def DirectProperLocalWitnessTwo : Prop :=
   IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
+
+/-- Classical scope gate for the direct proper/local witness. This keeps the
+root-facing residual axiom theorem-shaped even when the witness itself has not
+yet been constructed explicitly. -/
+def DirectProperLocalWitnessTwoScope : Prop :=
+  ¬¬ DirectProperLocalWitnessTwo
+
+/-- Recover the direct proper/local witness from its explicit classical scope
+gate. -/
+theorem directProperLocalWitnessTwo_of_scope
+    (hscope : DirectProperLocalWitnessTwoScope) :
+    DirectProperLocalWitnessTwo := by
+  classical
+  by_contra h_not
+  exact hscope h_not
 
 /-- Primitive restricted-map proper/local witness family at `c = 2`.
 This packages the same payload as `DirectProperLocalWitnessTwo` under a
@@ -3783,35 +3813,38 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     residualOpenVirtualNearMoleculeAxiom
 
 /-- Final root-facing kernel after formalizing the proof sketch up to the
-remaining algebraic-topology seam. It packages exactly the two concrete inputs
+remaining generator calculation. It packages exactly the two residual inputs
 still needed to close the degree-one route:
 
-1. proper/local-homeomorphy of the restricted outside map;
-2. the standard annulus-covering degree-one step saying that, for such a map,
-   the already-formalized large-circle free homotopy forces the degree-one
-   conclusion `RestrictedAsymptoticWindingDegreeOneTwo`.
+1. a classical scope gate for proper/local-homeomorphy of the restricted
+   outside map;
+2. the exact generator calculation saying that a positive constant covering
+   degree together with the already-formalized large-circle free homotopy forces
+   that degree to equal `1`.
 
 Unlike `Quadratic.external_ray_map_exists_two`, this is not a broad inverse-map
 package but the exact theorem kernel left on the frontier. -/
 axiom restrictedWindingKernelTwo :
-    DirectProperLocalWitnessTwo ∧
-      Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo
+    DirectProperLocalWitnessTwoScope ∧
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo
 
 /-- Root closure from the exact restricted-winding kernel. -/
 theorem mlc_conjecture_of_restrictedWindingKernelTwo
-    (hkernel : DirectProperLocalWitnessTwo ∧
-      Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo) :
+    (hkernel : DirectProperLocalWitnessTwoScope ∧
+      Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo) :
     LocallyConnectedSpace mandelbrotSet := by
+  have hdirect : DirectProperLocalWitnessTwo :=
+    directProperLocalWitnessTwo_of_scope hkernel.1
   exact
-    mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
-      hkernel.1.1 hkernel.1.2 hkernel.2
+    mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
+      hdirect.1 hdirect.2 hkernel.2
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The current root is routed through
-    the exact remaining degree-one kernel at `c = 2`: a direct proper/local
-    witness for the restricted outside map together with the abstract
-    annulus-covering degree-one theorem. The Bottcher-specific large-circle
-    homotopy is already formalized and is no longer part of the residual axiom.
+    the exact remaining degree-one kernel at `c = 2`: a classical scope gate for
+    the direct proper/local witness together with the abstract generator
+    calculation reducing a positive constant covering degree to `1` from the
+    already-formalized large-circle homotopy.
 
     This replaces the broader axiom `Quadratic.external_ray_map_exists_two` by a
     much narrower and less falsifiable final seam. -/

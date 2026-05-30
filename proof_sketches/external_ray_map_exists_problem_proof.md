@@ -1,7 +1,25 @@
-# Exact proof for `RestrictedAnnulusCoveringDegreeOneStepTwo`
+# Exact proof for `RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`
 
 This note proves the exact expert problem stated in
 `draft/external_ray_map_exists_problem.md`.
+
+## Typing correction
+
+The draft informally calls the positive standard loop
+\[
+C(t)=e^{2\pi i t}.
+\]
+That curve lies on \(|w|=1\), so it is not a loop in
+\(\Omega=\{w:|w|>1\}\). Thus the statement with this literal \(C\) is not a
+well-typed free-homotopy statement in \(\Omega\).
+
+The Lean target quoted in the draft uses `exteriorCircleLoopTwo R hR`, namely
+the positive exterior circle
+\[
+C_R(t)=Re^{2\pi i t},\qquad R>4.
+\]
+This is the non-falsifiable, typed version proved below. It is also the version
+used by the rest of the repository.
 
 ## Theorem
 
@@ -19,7 +37,7 @@ Assume also that for some \(R>4\), the loop
 \[
 \Gamma_R(t)=\phi(Re^{2\pi i t}),\qquad t\in[0,1],
 \]
-is freely homotopic in \(\Omega\) to the positive circle
+is freely homotopic in \(\Omega\) to the positive exterior circle
 \[
 C_R(t)=Re^{2\pi i t}.
 \]
@@ -165,7 +183,8 @@ argument above proves that these facts force the constant cardinality to be
 \texttt{RestrictedFiberCardTwo}\ y=1.
 \]
 Thus it supplies the mathematical content needed for
-`RestrictedAnnulusCoveringDegreeOneStepTwo`. In Lean, the already formalized
-large-circle homotopy then turns this abstract annulus theorem into
-`RestrictedAsymptoticWindingBridgeTwo`, and hence into
+`RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo`. In Lean,
+the already formalized positive constant covering-degree theorem upgrades this to
+`RestrictedAnnulusCoveringDegreeOneStepTwo`, and the already formalized
+large-circle homotopy bridge then turns that into
 `RestrictedAsymptoticWindingDegreeOneTwo`.
