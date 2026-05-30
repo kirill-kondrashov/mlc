@@ -1,4 +1,4 @@
-# Remaining proper/local route problem at c = 2
+# Remaining proper/local witness problem at c = 2
 
 Let
 
@@ -22,17 +22,9 @@ $$
 
 Prove the following statement.
 
-## Problem B. Local homeomorphism and compact compact-target preimages
+## Problem B. Properness and local homeomorphism of the restricted outside map
 
 Prove that:
 
-1. The map above is a local homeomorphism.
-2. For every compact set
-   $$
-   K\subset\Omega,
-   $$
-   the set
-   $$
-   E_K=\{z\in\mathbb C:\lvert z\rvert>4\text{ and }\phi(z)\in K\}
-   $$
-   is compact in the complex plane.
+1. The map above is proper.
+2. The map above is a local homeomorphism.

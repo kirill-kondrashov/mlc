@@ -69,7 +69,7 @@ One non-core project axiom remains:
 
 This kernel is the conjunction of:
 
-1. `DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample`
+1. `DirectProperLocalWitnessTwoMinimalCounterexample`
 2. `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`
 
 The theorem-facing coordinate and root normalization branches are now supplied
@@ -87,16 +87,12 @@ through:
 ## Elimination Target
 
 The final constructive target is now the exact `c = 2` degree-one kernel:
-construct the local-homeomorph/compact-preimage route to the direct proper/local
-witness for the restricted outside map and prove the remaining monodromy core
+construct the direct proper/local witness for the restricted outside map and
+prove the remaining monodromy core
 `Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo`.
-The witness half is no longer a raw scope gate for either
-`DirectProperLocalWitnessTwo` or the route
-`DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo`; it is now
-the theorem-shaped minimal-counterexample obstruction statement
-`DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample`,
-from which the explicit route, and then the direct witness, are recovered
-constructively. The topology target is stated in the already-formalized
+The witness half is now the theorem-shaped minimal-counterexample obstruction
+statement `DirectProperLocalWitnessTwoMinimalCounterexample`, from which the
+direct witness is recovered constructively. The topology target is stated in the already-formalized
 proper/local covering context, so it is no longer a bare continuous-map claim.
 From that monodromy core Lean already reconstructs the full Problem A statement
 and then derives the coarser annulus statement
@@ -104,11 +100,13 @@ and then derives the coarser annulus statement
 bridge closes the degree-one route. Doing so will eliminate the last root axiom
 `MLC.restrictedWindingKernelTwo`.
 
-The previous closed-preimage version of the route statement was false as stated:
-`Mlc.MainConjecture` now contains a formal counterexample theorem
-`not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo`, and the
-remaining route-facing frontier has been rewritten to use compact ambient
-preimages of compact exterior targets instead.
+The previous closed-preimage and compact-preimage versions of the route
+statement were both false as stated. `Mlc.MainConjecture` now contains formal
+counterexample theorems
+`not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo` and
+`not_directProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo`, so
+the remaining route-facing frontier has been reduced to the direct proper/local
+witness itself.
 
 ## Repository Snapshot
 

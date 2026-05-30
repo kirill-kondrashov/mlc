@@ -31,13 +31,13 @@ Here item 2 is now the exact remaining monodromy theorem from the proof sketch,
 not the broader Problem A wrapper and not a bare continuous-map statement.
 The witness half of item 3 is now also theorem-shaped: the root no longer uses a
 raw `¬¬` scope gate, but the minimal-counterexample obstruction statement
-`DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwoMinimalCounterexample`.
+`DirectProperLocalWitnessTwoMinimalCounterexample`.
 
 The non-topological half of the root kernel has also been narrowed: it is now a
-minimal-counterexample obstruction theorem for the explicit
-rather than the false closed-preimage draft statement, namely the
-local-homeomorph/compact-preimage route to the direct proper/local witness,
-rather than a scope gate for the direct witness itself.
+minimal-counterexample obstruction theorem for the direct proper/local witness
+itself. The earlier closed-preimage and compact-preimage draft formulations have
+both been formally refuted inside `Mlc.MainConjecture`, so they are no longer
+part of the live frontier.
 
 ---
 

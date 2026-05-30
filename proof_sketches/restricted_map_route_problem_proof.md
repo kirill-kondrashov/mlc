@@ -1,15 +1,14 @@
-# Why the previous closedness version of Problem B was false
+# Problem B cannot be proved as stated
 
-This note records a counterexample to the **previous** version of
-`draft/restricted_map_route_problem.md`, in which the second clause asked for
-closedness in the complex plane instead of compactness.
+This note records why the previous route-level formulation of Problem B was
+eliminated from the live frontier.
 
 The conclusion is:
 
 1. the local-homeomorphism clause is true;
-2. the closedness clause is false as written.
+2. the compactness clause is false as written.
 
-So there was no honest rigorous proof of that earlier draft statement.
+So there is no honest rigorous proof of that earlier route statement.
 
 ## Setup
 
@@ -127,7 +126,7 @@ is a local homeomorphism.
 
 Thus the first clause of Problem B is correct.
 
-## Part 2. The closedness clause is false
+## Part 2. The compactness clause is false
 
 Consider the boundary point
 
@@ -309,12 +308,47 @@ $$
 \mathbb C.
 $$
 
+Since
+
+$$
+\mathbb C
+$$
+
+is Hausdorff, every compact subset of
+
+$$
+\mathbb C
+$$
+
+is closed. We have just proved that
+
+$$
+E_K
+$$
+
+is not closed in
+
+$$
+\mathbb C.
+$$
+
+Therefore
+
+$$
+E_K
+$$
+
+is not compact in
+
+$$
+\mathbb C.
+$$
+
 This disproves the second clause of Problem B.
 
 ## Conclusion
 
-The earlier closedness version of Problem B was false. Its first clause is true,
-but its second clause admits the explicit counterexample constructed above.
-Accordingly, the remaining route-side frontier has been reformulated using the
-compactness statement that is actually needed to recover properness of the
-restricted map.
+The earlier route statement was false. Its first clause is true, but its second
+clause admits the explicit counterexample constructed above. Accordingly, the
+live remaining route-side frontier has been reduced to the direct proper/local
+witness statement in `draft/restricted_map_route_problem.md`.
