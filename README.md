@@ -85,7 +85,7 @@ However, the current constructive coordinate
 $$
 \phi(z)=
 \begin{cases}
-\dfrac{z}{|z|}\,e^{G(z)}, & z\neq 0,\\[1ex]
+\dfrac{z}{|z|}\,e^{G(z)}, & z\neq 0,\\
 e^{G(0)}, & z=0
 \end{cases}
 $$
