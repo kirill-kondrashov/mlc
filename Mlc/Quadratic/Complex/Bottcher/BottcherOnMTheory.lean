@@ -610,7 +610,7 @@ theorem bottcher_map_norm_gt_one_of_basin
     (c : ℂ) (z : ℂ) (_hz : z ∈ Quadratic.basin_of_infinity c)
     (hpos : 0 < MLC.Quadratic.green_function c z) :
     1 < ‖Quadratic.bottcher_map c z‖ := by
-  -- `‖bottcher_map c z‖ = exp(green_function c z)` and `exp` is > 1 for positive input.
+  -- For the current proxy, `‖bottcher_map c z‖ = exp(green_function c z)` and `exp` is > 1 for positive input.
   have hnorm : ‖Quadratic.bottcher_map c z‖ =
       Real.exp (MLC.Quadratic.green_function c z) :=
     Quadratic.norm_bottcher_eq_exp_green c z
@@ -902,7 +902,7 @@ theorem bottcher_map_inj_theorem_of_inj_basin
     (h_inj_basin :
       Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
     Function.Injective (Quadratic.bottcher_map c) := by
-  -- Sketch: split by whether `‖bottcher_map c z‖ > 1`. For the exterior branch,
+  -- Sketch: split by whether the current proxy satisfies `‖bottcher_map c z‖ > 1`. For the exterior branch,
   -- reduce to basin injectivity via Green positivity. For the complementary branch,
   -- reduce to injectivity on `K` via `green = 0`.
   have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →

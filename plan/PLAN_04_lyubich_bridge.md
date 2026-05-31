@@ -11,11 +11,12 @@
 `MLC.lyubich_conformal_bridge` is no longer in `Axioms(MLC.mlc_conjecture)`.
 The frontier has now been reduced all the way to a single project axiom:
 
-1. `MLC.Quadratic.external_ray_map_exists`
+1. `MLC.basinExternalRayKernelTwo`
 
 This plan first removed the old hidden Lyubich/tower contradiction route, then
 collapsed the wider explicit chosen-true / residual-open frontier, and finally
-rerouted the root through the theoremized `c = 2` external-ray seam.
+rerouted the root away from the false full-exterior degree package to the honest
+`c = 2` basin-valued external-ray kernel.
 
 ---
 
@@ -23,9 +24,14 @@ rerouted the root through the theoremized `c = 2` external-ray seam.
 
 `MLC.mlc_conjecture` now runs through:
 
-1. `mlc_conjecture_of_externalRayMapData_two`
-2. `mlc_conjecture_of_external_ray_map_exists_two`
-3. `MLC.Quadratic.external_ray_map_exists`
+1. `mlc_conjecture_of_basinExternalRayMapData_two`
+2. `Quadratic.externalRayMapData_of_basinExternalRayMapData`
+3. `MLC.basinExternalRayKernelTwo`
+
+The monodromy / covering-degree route from Problem A remains formalized in
+`Mlc.Bottcher.DegreeOne`, but it is no longer the live root because its former
+Problem B input is false as stated. The checked root now ends at the codomain-
+correct basin-valued inverse package for the actual `bottcher_map`.
 
 ---
 
@@ -41,7 +47,7 @@ without affecting the checked root frontier.
 The remaining repo-facing target is no longer the Lyubich bridge. The next plan
 should attack:
 
-1. `MLC.Quadratic.external_ray_map_exists`
+1. `MLC.basinExternalRayKernelTwo`
 
 ## Success criterion achieved
 

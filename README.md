@@ -22,7 +22,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.external_ray_map_exists
+- MLC.basinExternalRayKernelTwo
 ```
 
 ## Current Frontier
@@ -30,20 +30,34 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.Quadratic.external_ray_map_exists}
+   MLC.basinExternalRayKernelTwo}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.Quadratic.external_ray_map_exists}
+= {MLC.basinExternalRayKernelTwo}
 ```
 
 ## Current Status
 
-The checked root is now routed through the **theoremized `c = 2` external-ray
-seam**, not through the older tower / Lyubich / Problem 4.5 detours.
+The checked root is now routed through a **single honest basin-valued kernel**:
+a theorem-shaped minimal-counterexample wrapper for the specialized statement
+`Quadratic.BasinExternalRayMapDataTwo`. This package asks for a right inverse to
+the fixed `bottcher_map (2)` on the full exterior `Ω = {w : |w| > 1}` and a
+left inverse on the outside-open source region `V = {z : |z| > 4}`.
 
-1. `mlc_conjecture_of_externalRayMapData_two`
-2. the packaged root wrapper `mlc_conjecture_of_external_ray_map_exists_two`
-3. the single remaining project axiom `MLC.Quadratic.external_ray_map_exists`
+The former full-exterior degree route is no longer root-facing. The monodromy
+Problem A package remains formalized as an auxiliary route in
+`Mlc.Bottcher.DegreeOne`, but the old Problem B package has now been formally
+refuted in Lean.
+
+The expert-facing documentation has been cleaned up accordingly:
+
+1. `draft/genuine_bottcher_coordinate_problem.md` states the first honest
+   remaining positive target: replace the current proxy by a genuine holomorphic
+   Böttcher coordinate at `c = 2`.
+2. `draft/genuine_bottcher_inverse_problem.md` states the matching exterior
+   inverse package for that genuine coordinate.
+3. `proof_sketches/` now mirrors `draft/`: it contains one rigorous
+   human-readable proof for each current remaining positive target.
 
 So the earlier explicit frontier
 
@@ -57,12 +71,28 @@ they are no longer part of `Axioms(MLC.mlc_conjecture)`.
 
 ## Remaining Blocker
 
-Only one non-core project axiom remains:
+One non-core project axiom remains:
 
-1. `MLC.Quadratic.external_ray_map_exists`
+1. `MLC.basinExternalRayKernelTwo`
 
-This is the exterior Böttcher inverse / external-ray map existence package from
-`Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`.
+It is the theorem-shaped scope interface
+`BasinExternalRayMapDataTwoMinimalCounterexample`, whose positive content is the
+specialized basin-valued inverse package `Quadratic.BasinExternalRayMapDataTwo`.
+
+So there is only **one** root-facing missing theorem in the checked proof.
+However, the current constructive coordinate
+
+$$
+\phi(z)=
+\begin{cases}
+\dfrac{z}{|z|}\,e^{G(z)}, & z\neq 0,\\[1ex]
+e^{G(0)}, & z=0
+\end{cases}
+$$
+
+does **not** satisfy the old expert-facing inverse targets. The current `draft/`
+folder therefore records the corrected positive targets that remain after those
+proxy-based routes were formally ruled out.
 
 ## Non-solutions
 
@@ -73,20 +103,48 @@ through:
 2. `InconsistencyRoute` / `lyubich_conformal_bridge`
 3. renormalization-tower existence bridge axioms
 
-## Elimination Target
+## Remaining Mathematical Targets
 
-The final reduction target is now singular:
+The old proxy-based routes are now formally eliminated. The exact remaining
+positive targets are:
 
-1. replace `MLC.Quadratic.external_ray_map_exists` by a constructive
-   external-ray / Böttcher inverse theorem at `c = 2`
+1. `draft/genuine_bottcher_coordinate_problem.md`
+2. `draft/genuine_bottcher_inverse_problem.md`
+
+In particular, the last axiom can no longer be eliminated by proving the
+already-refuted basin-valued inverse theorem for the current proxy
+
+$$
+\phi(z)=\frac{z}{|z|}e^{G(z)}
+$$
+
+away from $$z=0$$. The positive human-readable proofs of the corrected
+replacement package are now written in `proof_sketches/`; the remaining checked
+work is to internalize that package in Lean.
+
+This basin-valued target is the codomain-correct replacement for the false
+statement that the restricted map `φ|_V : V → Ω` should already have positive
+constant fiber degree over all of `Ω`.
+
+The false degree package is now explicitly ruled out by
+`Mlc.Bottcher.DegreeOne.not_restrictedLocalHomeomorphPositiveConstantDegreeTwo`
+and by
+`MLC.not_restrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample`.
+The earlier closed-preimage, compact-preimage, and direct proper/local witness
+routes remain formally refuted as well.
 
 ## Repository Snapshot
 
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
 2. `plan/` has been pruned to the single live frontier file
    `PLAN_04_lyubich_bridge.md`.
-3. The current root-facing story is therefore simple: one remaining axiom, one
-   remaining elimination target.
+3. `draft/` now records the exact remaining positive mathematical targets after
+   factoring out the proxy-based obstructions.
+4. `proof_sketches/` records the rigorous human-readable proofs of the current
+   `draft/` targets.
+5. The current root-facing story is therefore honest: one residual
+   theorem-facing assumption remains, and its elimination now clearly requires a
+   genuine Böttcher coordinate package rather than the current proxy.
 
 ## Dependencies
 

@@ -25,7 +25,8 @@ Step 1: Analyticity on the exterior.
 Step 2: Normalization at infinity.
   Goal: `Tendsto (fun z => ‖bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 1)`.
   Use: Green function asymptotics at infinity.
-  (The full complex ratio requires a different normalization for `bottcher_map`.)
+  This is a statement about the current explicit proxy surface; the full complex
+  ratio requires a different theorem-facing normalization.
 
 Step 3: Derivative nonvanishing on the exterior.
   Goal: `deriv (bottcher_map c) z ≠ 0` on `outside_disk c`.
@@ -243,8 +244,8 @@ lemma tendsto_quadratic_iter_div_pow_atInfinity (c : ℂ) :
 
 -- TODO (strong normalization): show
 -- `Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 1)`.
--- This is not expected for the current `bottcher_map` definition (e.g. `c = 0` gives
--- the radial normalization), but can hold on argument sectors.
+-- This is not expected for the current explicit proxy definition (e.g. `c = 0`
+-- gives the radial normalization), but can hold on argument sectors.
 
 noncomputable def bottcher_root_seq (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
   ((fun w => w ^ 2 + c)^[n] z) ^ ((2 : ℂ) ^ n)⁻¹
@@ -1526,10 +1527,19 @@ lemma tendsto_bottcher_map_div_atInfinity (c : ℂ) :
       exact ne_of_gt hz
     have hz''' : ((‖z‖ : ℝ) : ℂ) ≠ 0 := by
       exact_mod_cast hz''
+    have hu : ‖z / ↑‖z‖‖ = 1 := by
+      rw [norm_div, Complex.norm_real, norm_norm, div_self hz'']
+    have hscale : ((‖z‖ : ℂ) * (z / ↑‖z‖)) = z := by
+      field_simp [hz''', mul_comm, mul_left_comm, mul_assoc]
+    have happly :
+        Quadratic.bottcher_map c z =
+          (z / ↑‖z‖) * ↑(Real.exp (Quadratic.green_function c z)) := by
+      simpa [hscale] using
+        (Quadratic.bottcher_map_apply_ray c (z / ↑‖z‖) hu ‖z‖ hz)
     calc
       (Quadratic.bottcher_map c z) / z
           = ((z / ↑‖z‖) * (Real.exp (Quadratic.green_function c z)) : ℂ) / z := by
-              simp [Quadratic.bottcher_map, hz']
+              rw [happly]
       _ = ((Real.exp (Quadratic.green_function c z)) : ℂ) / (‖z‖ : ℂ) := by
               field_simp [hz', hz''', mul_comm, mul_left_comm, mul_assoc]
       _ = ((Real.exp (Quadratic.green_function c z - Real.log ‖z‖)) : ℂ) := by
@@ -1866,9 +1876,9 @@ lemma bottcher_map_isProperMap_of_continuous
   exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
     ⟨hcont, hpre⟩
 
-/-- Continuity of `bottcher_map` away from `0` (outside-plan namespace helper). -/
-lemma bottcher_map_continuousAt_of_ne_zero_outsidePlan (c z : ℂ) (hz : z ≠ 0) :
-    ContinuousAt (Quadratic.bottcher_map c) z := by
+/-- Continuity of the explicit proxy away from `0` (outside-plan namespace helper). -/
+lemma polar_green_map_continuousAt_of_ne_zero_outsidePlan (c z : ℂ) (hz : z ≠ 0) :
+    ContinuousAt (Quadratic.polar_green_map c) z := by
   have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
     exact_mod_cast (norm_ne_zero_iff.2 hz)
   have hdiv : ContinuousAt (fun w : ℂ => w / (‖w‖ : ℂ)) z :=
@@ -1885,17 +1895,18 @@ lemma bottcher_map_continuousAt_of_ne_zero_outsidePlan (c z : ℂ) (hz : z ≠ 0
       ContinuousAt (fun w : ℂ => (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z :=
     (Complex.continuous_ofReal.comp
       (Real.continuous_exp.comp (MLC.Quadratic.continuous_green_function c))).continuousAt
+  change ContinuousAt (Quadratic.polar_green_map c) z
   change ContinuousAt
     (fun w : ℂ =>
       (if w = 0 then (1 : ℂ) else w / (‖w‖ : ℂ)) *
         (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
   exact hdir.mul hexp
 
-lemma bottcher_map_re_neg_of_pos_real (c : ℂ) {t : ℝ} (ht : 0 < t) :
-    (Quadratic.bottcher_map c (-t)).re < 0 := by
+lemma polar_green_map_re_neg_of_pos_real (c : ℂ) {t : ℝ} (ht : 0 < t) :
+    (Quadratic.polar_green_map c (-t)).re < 0 := by
   have ht0 : (-t : ℂ) ≠ 0 := by
     exact neg_ne_zero.mpr (by exact_mod_cast (ne_of_gt ht))
-  rw [Quadratic.bottcher_map, if_neg ht0, Complex.mul_re]
+  simp only [Quadratic.polar_green_map, if_neg ht0, Complex.mul_re]
   have hr : (((-t : ℂ) / ‖(-t : ℂ)‖).re) = -1 := by
     simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht, ht.ne']
   have hi : (((-t : ℂ) / ‖(-t : ℂ)‖).im) = 0 := by
@@ -1903,16 +1914,16 @@ lemma bottcher_map_re_neg_of_pos_real (c : ℂ) {t : ℝ} (ht : 0 < t) :
   rw [hr, hi]
   simpa [Complex.exp_ofReal_re] using Real.exp_pos (MLC.Quadratic.green_function c (-t))
 
-lemma bottcher_map_not_continuousAt_zero (c : ℂ) :
-    ¬ ContinuousAt (Quadratic.bottcher_map c) 0 := by
+lemma polar_green_map_not_continuousAt_zero (c : ℂ) :
+    ¬ ContinuousAt (Quadratic.polar_green_map c) 0 := by
   intro hcont
   let U : Set ℂ := {w : ℂ | 0 < w.re}
-  have hU_nhds : U ∈ 𝓝 (Quadratic.bottcher_map c 0) := by
+  have hU_nhds : U ∈ 𝓝 (Quadratic.polar_green_map c 0) := by
     have hUopen : IsOpen U := isOpen_lt continuous_const Complex.continuous_re
-    have hmem : Quadratic.bottcher_map c 0 ∈ U := by
-      simp [U, Quadratic.bottcher_map, Complex.exp_ofReal_re, Real.exp_pos]
+    have hmem : Quadratic.polar_green_map c 0 ∈ U := by
+      simp [U, Quadratic.polar_green_map, Complex.exp_ofReal_re, Real.exp_pos]
     exact hUopen.mem_nhds hmem
-  have hpre : (Quadratic.bottcher_map c) ⁻¹' U ∈ 𝓝 (0 : ℂ) :=
+  have hpre : (Quadratic.polar_green_map c) ⁻¹' U ∈ 𝓝 (0 : ℂ) :=
     hcont.preimage_mem_nhds hU_nhds
   rcases Metric.mem_nhds_iff.mp hpre with ⟨ε, hεpos, hball⟩
   have hhalfpos : 0 < ε / 2 := by linarith
@@ -1922,20 +1933,20 @@ lemma bottcher_map_not_continuousAt_zero (c : ℂ) :
   have hzball : z ∈ Metric.ball (0 : ℂ) ε := by
     have : dist z 0 < ε := by rw [hzdist]; linarith
     simpa [Metric.ball, Set.mem_setOf_eq] using this
-  have hzU : Quadratic.bottcher_map c z ∈ U := hball hzball
-  have hzneg : (Quadratic.bottcher_map c z).re < 0 := by
-    simpa [z] using bottcher_map_re_neg_of_pos_real c hhalfpos
+  have hzU : Quadratic.polar_green_map c z ∈ U := hball hzball
+  have hzneg : (Quadratic.polar_green_map c z).re < 0 := by
+    simpa [z] using polar_green_map_re_neg_of_pos_real c hhalfpos
   exact (not_lt_of_ge (le_of_lt hzneg)) hzU
 
-lemma bottcher_map_not_continuous (c : ℂ) :
-    ¬ Continuous (Quadratic.bottcher_map c) := by
+lemma polar_green_map_not_continuous (c : ℂ) :
+    ¬ Continuous (Quadratic.polar_green_map c) := by
   intro hcont
-  exact bottcher_map_not_continuousAt_zero c hcont.continuousAt
+  exact polar_green_map_not_continuousAt_zero c hcont.continuousAt
 
-lemma bottcher_map_not_isProperMap (c : ℂ) :
-    ¬ IsProperMap (Quadratic.bottcher_map c) := by
+lemma polar_green_map_not_isProperMap (c : ℂ) :
+    ¬ IsProperMap (Quadratic.polar_green_map c) := by
   intro hproper
-  exact bottcher_map_not_continuous c hproper.continuous
+  exact polar_green_map_not_continuous c hproper.continuous
 
 lemma isDiscrete_fiber_of_isLocallyInjective
     {f : ℂ → ℂ} (hlocal : IsLocallyInjective f) (y : ℂ) :
@@ -3265,12 +3276,21 @@ lemma bottcher_map_div_eq_real_scale_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
   refine ⟨Real.exp (Quadratic.green_function c z) / ‖z‖, div_pos (Real.exp_pos _) hzpos, ?_⟩
   have hznorm : (‖z‖ : ℂ) ≠ 0 := by
     exact_mod_cast (norm_ne_zero_iff.mpr hz)
+  have hu : ‖z / ↑‖z‖‖ = 1 := by
+    rw [norm_div, Complex.norm_real, norm_norm, div_self (norm_ne_zero_iff.mpr hz)]
+  have hscale : ((‖z‖ : ℂ) * (z / ↑‖z‖)) = z := by
+    field_simp [hznorm, mul_comm, mul_left_comm, mul_assoc]
+  have happly :
+      Quadratic.bottcher_map c z =
+        (z / ↑‖z‖) * ↑(Real.exp (Quadratic.green_function c z)) := by
+    simpa [hscale] using
+      (Quadratic.bottcher_map_apply_ray c (z / ↑‖z‖) hu ‖z‖ (norm_pos_iff.2 hz))
   have hdiv : (z / ‖z‖) / z = (1 : ℂ) / ‖z‖ := by
     field_simp [div_eq_mul_inv, hz, hznorm, mul_assoc, mul_comm, mul_left_comm]
   calc
     Quadratic.bottcher_map c z / z
         = ((z / ‖z‖) * (Real.exp (Quadratic.green_function c z) : ℂ)) / z := by
-            simp [Quadratic.bottcher_map, hz]
+            rw [happly]
     _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((z / ‖z‖) / z) := by
           ring
     _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((1 : ℂ) / ‖z‖) := by
@@ -4208,6 +4228,52 @@ lemma bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
 def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
   ∀ w, 1 < ‖w‖ → ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
 
+/-- Choice-based construction of external-ray data from the two core ingredients
+    isolated in the explicit proof strategy:
+    1. some right inverse on the exterior `{w | 1 < ‖w‖}`;
+    2. injectivity of `bottcher_map` on the canonical outside-open region.
+
+    The resulting selector uses the unique outside-open preimage whenever one
+    exists and otherwise falls back to an arbitrary exterior preimage. -/
+theorem external_ray_map_data_of_right_inverse_on_exterior_of_injOn_outside_open
+    (c : ℂ)
+    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c)
+    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapData c := by
+  classical
+  rcases h_right with ⟨f₀, hf₀⟩
+  refine ⟨fun w =>
+    if hw : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+    then Classical.choose hw
+    else f₀ w, ?_, ?_⟩
+  · intro w hw
+    by_cases hex : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+    · simpa [hex] using (Classical.choose_spec hex).2
+    · simpa [hex] using hf₀ w hw
+  · intro z hz
+    let hw : ∃ z', ‖z'‖ > ‖c‖ + 2 ∧
+        Quadratic.bottcher_map c z' = Quadratic.bottcher_map c z :=
+      ⟨z, hz, rfl⟩
+    have hspec :
+        ‖Classical.choose hw‖ > ‖c‖ + 2 ∧
+          Quadratic.bottcher_map c (Classical.choose hw) = Quadratic.bottcher_map c z :=
+      Classical.choose_spec hw
+    have hchoose_eq : Classical.choose hw = z := by
+      apply h_inj hspec.1 hz
+      exact hspec.2
+    simp [hw, hchoose_eq]
+
+/-- `c = 2` specialization of the previous theorem. This is the exact formalized
+    choice-construction step from the expert proof once the right-inverse and
+    outside-open injectivity inputs are provided explicitly. -/
+theorem external_ray_map_data_two_of_right_inverse_on_exterior_of_injOn_outside_open
+    (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ))
+    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) :=
+  external_ray_map_data_of_right_inverse_on_exterior_of_injOn_outside_open
+    (2 : ℂ) h_right h_inj
+
 /-- Alternative M5 target: the image of outside-open under `bottcher_map` is
     exactly the exterior. -/
 def BottcherImageOutsideOpenIsExterior (c : ℂ) : Prop :=
@@ -4575,7 +4641,7 @@ lemma isClosed_outside_open_preimage_image_compact_of_boundary_exclusion
       nlinarith [norm_nonneg c]
     have hzpos : 0 < ‖z‖ := lt_of_lt_of_le hpos hzC
     have hzne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hzpos)
-    exact (bottcher_map_continuousAt_of_ne_zero_outsidePlan c z hzne).continuousWithinAt
+    exact (Quadratic.bottcher_map_continuousAt_of_ne_zero c z hzne).continuousWithinAt
   let g : C → ℂ := fun z => Quadratic.bottcher_map c z.1
   have hgcont : Continuous g := by
     exact (continuousOn_iff_continuous_restrict).1 hcontOnC

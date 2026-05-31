@@ -1,5 +1,6 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
+import Mlc.Quadratic.Complex.Bottcher.ConstructiveBasinCoordinate
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
 import Mlc.Quadratic.Complex.Axioms
 import Mathlib.Topology.Order.IntermediateValue
@@ -7,12 +8,13 @@ import Mathlib.Topology.Order.IntermediateValue
 /-!
 # Green Function Ray Inversion at `c = 2`
 
-This file formalizes the construction of the external ray map as the inverse of
-`bottcher_map 2` via the Green function.
+This file formalizes inversion constructors for the current explicit
+`bottcher_map` proxy at `c = 2` via the Green function.
 
 ## Definition
 
-`bottcher_map 2 z = (z / ‖z‖) * exp(green_function 2 z)` (polar Green map).
+`bottcher_map 2 z = polar_green_map 2 z = (z / ‖z‖) * exp(green_function 2 z)`
+away from zero, with the current total proxy branch at `z = 0`.
 
 The inverse `f` maps each `w` (with `‖w‖ > 1`) to the unique point `z` in the
 basin of infinity satisfying:
@@ -49,6 +51,187 @@ lemma outside_open_subset_basin (c : ℂ) :
 lemma green_function_pos_on_outside_open (c : ℂ) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
     0 < Quadratic.green_function c z :=
   green_function_pos_of_basin c z (outside_open_subset_basin c hz)
+
+/-- At `c = 2`, the Green function is globally even. -/
+lemma green_function_neg_eq_two (z : ℂ) :
+    green_function (2 : ℂ) (-z) = green_function (2 : ℂ) z := by
+  have hneg := green_function_functional_eq (2 : ℂ) (-z)
+  have hpos := green_function_functional_eq (2 : ℂ) z
+  have hfc : fc (2 : ℂ) (-z) = fc (2 : ℂ) z := by
+    simp [fc]
+  have htwice : 2 * green_function (2 : ℂ) (-z) = 2 * green_function (2 : ℂ) z := by
+    calc
+      2 * green_function (2 : ℂ) (-z)
+          = green_function (2 : ℂ) (fc (2 : ℂ) (-z)) := by
+              simpa using hneg.symm
+      _ = green_function (2 : ℂ) (fc (2 : ℂ) z) := by
+            simpa [hfc]
+      _ = 2 * green_function (2 : ℂ) z := by
+            simpa using hpos
+  linarith
+
+/-- At `c = 2`, the explicit `polar_green_map` proxy is odd away from `0`. -/
+lemma polar_green_map_neg_eq_neg_two_of_ne_zero (z : ℂ) (hz : z ≠ 0) :
+    Quadratic.polar_green_map (2 : ℂ) (-z) = - Quadratic.polar_green_map (2 : ℂ) z := by
+  have hneg : (-z : ℂ) ≠ 0 := by simpa using neg_ne_zero.mpr hz
+  have hnorm_ne : (↑‖z‖ : ℂ) ≠ 0 := by
+    exact_mod_cast (norm_ne_zero_iff.2 hz)
+  have hdir : (-z : ℂ) / ↑‖-z‖ = -(z / ↑‖z‖) := by
+    rw [norm_neg]
+    field_simp [hnorm_ne]
+  unfold Quadratic.polar_green_map
+  simp [hneg, hz, green_function_neg_eq_two z, hdir]
+  ring
+
+private lemma zero_mem_basin_two_local : (0 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+  have h6_basin : (6 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+    apply outside_open_subset_basin (2 : ℂ)
+    norm_num
+  have h2_basin : (2 : ℂ) ∈ Quadratic.basin_of_infinity (2 : ℂ) := by
+    have h2image : quadratic_map (2 : ℂ) (2 : ℂ) = 6 := by
+      norm_num [quadratic_map]
+    apply (basin_of_infinity_preimage_subset (2 : ℂ))
+    simpa [Set.preimage, h2image] using h6_basin
+  have h0image : quadratic_map (2 : ℂ) (0 : ℂ) = 2 := by
+    norm_num [quadratic_map]
+  apply (basin_of_infinity_preimage_subset (2 : ℂ))
+  simpa [Set.preimage, h0image] using h2_basin
+
+/-- The current explicit `polar_green_map` proxy at `c = 2` does not vanish at `0`. -/
+lemma polar_green_map_zero_ne_zero_two :
+    Quadratic.polar_green_map (2 : ℂ) 0 ≠ 0 := by
+  have hgreen_pos : 0 < Quadratic.green_function (2 : ℂ) 0 :=
+    green_function_pos_of_basin (2 : ℂ) 0 zero_mem_basin_two_local
+  simpa [Quadratic.polar_green_map] using
+    (show (1 : ℂ) * ↑(Real.exp (Quadratic.green_function (2 : ℂ) 0)) ≠ 0 from
+      mul_ne_zero one_ne_zero (by exact_mod_cast (Real.exp_pos _).ne'))
+
+/-- A globally odd coordinate cannot stay nonzero on all of `𝔅_∞(2)`, because
+`0 ∈ 𝔅_∞(2)`. This is the formal obstruction to the expert proof's discarded
+global-oddness route. -/
+lemma no_global_odd_nonvanishing_coordinate_two
+    {φ : ℂ → ℂ}
+    (hodd : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → φ (-z) = -φ z)
+    (hnz : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → φ z ≠ 0) :
+    False := by
+  have h0odd : φ (0 : ℂ) = -φ 0 := by
+    simpa using hodd 0 zero_mem_basin_two_local
+  have hsum : φ (0 : ℂ) + φ 0 = 0 := by
+    have h := congrArg (fun t : ℂ => t + φ 0) h0odd
+    simpa using h
+  have hmul : (2 : ℂ) * φ 0 = 0 := by
+    simpa [two_mul] using hsum
+  have hphi0 : φ (0 : ℂ) = 0 := by
+    exact (mul_eq_zero.mp hmul).resolve_left (by norm_num)
+  exact (hnz 0 zero_mem_basin_two_local) hphi0
+
+/-- In particular, a globally odd map on `𝔅_∞(2)` cannot take values in the
+exterior region `{w : ‖w‖ > 1}` everywhere on the basin. -/
+lemma no_global_odd_exterior_coordinate_two
+    {φ : ℂ → ℂ}
+    (hodd : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → φ (-z) = -φ z)
+    (hexterior : ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → 1 < ‖φ z‖) :
+    False := by
+  apply no_global_odd_nonvanishing_coordinate_two hodd
+  intro z hz hzero
+  have hnorm : ‖φ z‖ = 0 := by simpa [hzero]
+  have : ¬ 1 < ‖φ z‖ := by simpa [hnorm]
+  exact this (hexterior z hz)
+
+/-- Abstract formalization of the expert Step 2 argument: injectivity on the
+outside-open region follows from local oddness there, eventual injectivity near
+infinity, forward invariance/escape of the outside-open dynamics, and
+compatibility of `φ` with forward iteration. -/
+theorem injOn_outside_open_of_local_odd_of_eventual_inj_two
+    {φ : ℂ → ℂ}
+    (hloc_odd : ∀ z : ℂ, ‖z‖ > 4 → φ (-z) = -φ z)
+    (hnorm_gt_one : ∀ z : ℂ, ‖z‖ > 4 → 1 < ‖φ z‖)
+    (hiter_eq :
+      ∀ z₁ z₂ : ℂ, ∀ n : ℕ, φ z₁ = φ z₂ →
+        φ ((quadratic_map (2 : ℂ))^[n] z₁) = φ ((quadratic_map (2 : ℂ))^[n] z₂))
+    (hforward : ∀ z : ℂ, ‖z‖ > 4 → ‖quadratic_map (2 : ℂ) z‖ > 4)
+    (heventually_inj : ∃ R : ℝ, R > 4 ∧ Set.InjOn φ {z : ℂ | ‖z‖ > R})
+    (heventually_large :
+      ∀ z : ℂ, ‖z‖ > 4 → ∀ R : ℝ, R > 4 →
+        ∃ N : ℕ, ∀ n ≥ N, ‖((quadratic_map (2 : ℂ))^[n] z)‖ > R) :
+    Set.InjOn φ {z : ℂ | ‖z‖ > 4} := by
+  intro z₁ hz₁ z₂ hz₂ hφ
+  obtain ⟨R, hR, h_injR⟩ := heventually_inj
+  obtain ⟨N₁, hN₁⟩ := heventually_large z₁ hz₁ R hR
+  obtain ⟨N₂, hN₂⟩ := heventually_large z₂ hz₂ R hR
+  let N := max N₁ N₂
+  have hN₁' : N₁ ≤ N := le_max_left _ _
+  have hN₂' : N₂ ≤ N := le_max_right _ _
+  have hz₁R : ‖((quadratic_map (2 : ℂ))^[N] z₁)‖ > R := hN₁ N hN₁'
+  have hz₂R : ‖((quadratic_map (2 : ℂ))^[N] z₂)‖ > R := hN₂ N hN₂'
+  have hφN :
+      φ ((quadratic_map (2 : ℂ))^[N] z₁) = φ ((quadratic_map (2 : ℂ))^[N] z₂) :=
+    hiter_eq z₁ z₂ N hφ
+  have hiter_eqN :
+      ((quadratic_map (2 : ℂ))^[N] z₁) = ((quadratic_map (2 : ℂ))^[N] z₂) :=
+    h_injR hz₁R hz₂R hφN
+  let p : ℕ → Prop := fun n => ((quadratic_map (2 : ℂ))^[n] z₁) = ((quadratic_map (2 : ℂ))^[n] z₂)
+  have hp_nonempty : ∃ n, p n := ⟨N, hiter_eqN⟩
+  have hiter_outside :
+      ∀ z : ℂ, ‖z‖ > 4 → ∀ n : ℕ, ‖((quadratic_map (2 : ℂ))^[n] z)‖ > 4 := by
+    intro z hz n
+    induction n with
+    | zero =>
+        simpa
+    | succ n ih =>
+        simpa [Function.iterate_succ_apply'] using hforward _ ih
+  cases hm : Nat.find hp_nonempty with
+  | zero =>
+      have hm_mem : p 0 := by
+        simpa [hm] using (Nat.find_spec hp_nonempty)
+      simpa [p, Function.iterate_zero_apply] using hm_mem
+  | succ k =>
+      have hm_mem : p (Nat.succ k) := by
+        simpa [hm] using (Nat.find_spec hp_nonempty)
+      have hnot_prev : ¬ (((quadratic_map (2 : ℂ))^[k] z₁) = ((quadratic_map (2 : ℂ))^[k] z₂)) := by
+        intro hk
+        have hk_lt : k < Nat.find hp_nonempty := by
+          simpa [hm] using Nat.lt_succ_self k
+        exact Nat.find_min hp_nonempty hk_lt hk
+      let u : ℂ := ((quadratic_map (2 : ℂ))^[k] z₁)
+      let v : ℂ := ((quadratic_map (2 : ℂ))^[k] z₂)
+      have huV : ‖u‖ > 4 := by
+        dsimp [u]
+        exact hiter_outside z₁ hz₁ k
+      have hvV : ‖v‖ > 4 := by
+        dsimp [v]
+        exact hiter_outside z₂ hz₂ k
+      have hfu_eq_fv : quadratic_map (2 : ℂ) u = quadratic_map (2 : ℂ) v := by
+        simpa [p, u, v, Function.iterate_succ_apply'] using hm_mem
+      have hphi_uv : φ u = φ v := by
+        simpa [u, v] using hiter_eq z₁ z₂ k hφ
+      have hsquare : u ^ 2 = v ^ 2 := by
+        simpa [quadratic_map] using add_right_cancel hfu_eq_fv
+      have hfactor : (u - v) * (u + v) = 0 := by
+        calc
+          (u - v) * (u + v) = u ^ 2 - v ^ 2 := by ring
+          _ = 0 := by rw [hsquare]; ring
+      have hu_eq_neg_v : u = -v := by
+        rcases mul_eq_zero.mp hfactor with huv | huv
+        · exact False.elim (hnot_prev (sub_eq_zero.mp huv))
+        · exact eq_neg_iff_add_eq_zero.mpr huv
+      have hv_eq_neg_u : v = -u := by
+        simpa using (congrArg Neg.neg hu_eq_neg_v).symm
+      have hφu_neg : φ u = -φ u := by
+        calc
+          φ u = φ v := hphi_uv
+          _ = φ (-u) := by simpa [hv_eq_neg_u]
+          _ = -φ u := hloc_odd u huV
+      have hsum : φ u + φ u = 0 := by
+        have h := congrArg (fun t : ℂ => t + φ u) hφu_neg
+        simpa using h
+      have hmul : (2 : ℂ) * φ u = 0 := by
+        simpa [two_mul] using hsum
+      have hφu_zero : φ u = 0 := by
+        exact (mul_eq_zero.mp hmul).resolve_left (by norm_num)
+      have hnorm : ‖φ u‖ = 0 := by simpa [hφu_zero]
+      have : ¬ 1 < ‖φ u‖ := by simpa [hnorm]
+      exact False.elim (this (hnorm_gt_one u huV))
 
 /-! ## Lemma B: Green function diverges to +∞ as ‖z‖ → ∞ -/
 
@@ -878,21 +1061,239 @@ lemma exists_unique_ray_preimage_green_two_anchor
 
 /-! ## Lemma E: Constructive external ray map at `c = 2` -/
 
+/-- Choice-based basin-valued exterior inverse from:
+1. exterior surjectivity of a theorem-facing coordinate, and
+2. injectivity of that coordinate on the outside-open region.
+
+This is the formal Step 3 of the expert proof: choose the unique outside-open
+preimage when it exists, otherwise choose an arbitrary exterior preimage. -/
+theorem basin_external_ray_map_data_of_surj_of_injOn_outside_open
+    (c : ℂ) (φ : ℂ → ℂ)
+    (h_norm_on_basin :
+      ∀ z : ℂ, z ∈ Quadratic.basin_of_infinity c → 1 < ‖φ z‖)
+    (h_conj_on_basin :
+      ∀ z : ℂ, z ∈ Quadratic.basin_of_infinity c →
+        φ (MLC.quadratic_map c z) = (φ z)^2)
+    (h_basin_of_norm_gt_one : ∀ z : ℂ, 1 < ‖φ z‖ → z ∈ Quadratic.basin_of_infinity c)
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, φ z = w)
+    (h_inj_outside :
+      Set.InjOn φ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.BasinExternalRayMapDataFor c φ := by
+  classical
+  let Ψ : ℂ → ℂ := fun w =>
+    if hw : 1 < ‖w‖ then
+      if hV : ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 ∧ φ z = w then
+        Classical.choose hV
+      else
+        Classical.choose (h_surj w hw)
+    else 0
+  refine ⟨Ψ, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    exact h_norm_on_basin z hz
+  · intro z hz
+    exact h_conj_on_basin z hz
+  · intro w hw
+    refine And.intro ?_ ?_
+    · dsimp [Ψ]
+      simp only [dif_pos hw]
+      by_cases hV : ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 ∧ φ z = w
+      · have hchooseV :
+            ‖Classical.choose hV‖ > ‖c‖ + 2 ∧
+              φ (Classical.choose hV) = w :=
+          Classical.choose_spec hV
+        rw [dif_pos hV]
+        exact outside_open_subset_basin c hchooseV.1
+      · have hchoose : φ (Classical.choose (h_surj w hw)) = w :=
+          by
+            simpa using Classical.choose_spec (h_surj w hw)
+        have hnorm : 1 < ‖φ (Classical.choose (h_surj w hw))‖ := by
+          simpa [hchoose] using hw
+        rw [dif_neg hV]
+        exact h_basin_of_norm_gt_one (Classical.choose (h_surj w hw)) hnorm
+    · dsimp [Ψ]
+      simp only [dif_pos hw]
+      by_cases hV : ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 ∧ φ z = w
+      · rw [dif_pos hV]
+        exact (Classical.choose_spec hV).2
+      · rw [dif_neg hV]
+        exact Classical.choose_spec (h_surj w hw)
+  · intro z hz
+    have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
+      outside_open_subset_basin c hz
+    have hw : 1 < ‖φ z‖ := h_norm_on_basin z hz_basin
+    have hV :
+        ∃ u : ℂ, ‖u‖ > ‖c‖ + 2 ∧ φ u = φ z := ⟨z, hz, rfl⟩
+    dsimp [Ψ]
+    simp only [dif_pos hw, dif_pos hV]
+    have hchoose :
+        ‖Classical.choose hV‖ > ‖c‖ + 2 ∧
+          φ (Classical.choose hV) = φ z :=
+      Classical.choose_spec hV
+    change Classical.choose hV = z
+    exact h_inj_outside hchoose.1 hz hchoose.2
+
+/-- The theorem-facing proof-sketch route: a genuine Böttcher coordinate package
+plus its exterior inverse hypotheses yield the basin-valued inverse package for
+the same coordinate. -/
+theorem basin_external_ray_map_data_of_genuine_bottcher_inverse_package
+    (c : ℂ) (φ : ℂ → ℂ)
+    (h_coord : Quadratic.GenuineBottcherCoordinateDataFor c φ)
+    (h_inv : Quadratic.GenuineBottcherInversePackageFor c φ) :
+    Quadratic.BasinExternalRayMapDataFor c φ := by
+  rcases h_coord with
+    ⟨h_norm_on_basin, h_basin_of_norm_gt_one, h_conj_on_basin, -, -, -⟩
+  rcases h_inv with ⟨h_surj, h_inj_outside⟩
+  exact
+    basin_external_ray_map_data_of_surj_of_injOn_outside_open
+      c φ h_norm_on_basin h_conj_on_basin h_basin_of_norm_gt_one
+      h_surj h_inj_outside
+
+/-- Choice-based basin-valued exterior inverse at `c = 2` from:
+1. exterior surjectivity of `bottcher_map 2`, and
+2. injectivity of `bottcher_map 2` on the outside-open region `{z : ‖z‖ > 4}`.
+
+This is the current specialization of the generic Step 3 constructor above. -/
+theorem basin_external_ray_map_data_two_of_surj_of_injOn_outside_open
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.BasinExternalRayMapDataTwo := by
+  refine
+    basin_external_ray_map_data_of_surj_of_injOn_outside_open
+      (c := (2 : ℂ)) (φ := Quadratic.bottcher_map (2 : ℂ))
+      ?_ ?_ ?_ h_surj h_inj_outside
+  · intro z hz
+    have hGz_pos : 0 < green_function (2 : ℂ) z :=
+      green_function_pos_of_basin (2 : ℂ) z hz
+    rw [Quadratic.norm_bottcher_eq_exp_green]
+    exact Real.one_lt_exp_iff.mpr hGz_pos
+  · intro z hz
+    simpa [Quadratic.bottcher_map] using
+      bottcher_conj_on_basin (2 : ℂ) z hz
+  · intro z hnorm
+    exact bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hnorm
+
+/-- Exterior inverse package from a basin-valued inverse package for the same
+theorem-facing coordinate. -/
+theorem external_ray_map_data_of_basin_external_ray_map_data
+    (c : ℂ) (φ : ℂ → ℂ)
+    (h_data : Quadratic.BasinExternalRayMapDataFor c φ) :
+    Quadratic.ExternalRayMapDataFor c φ :=
+  Quadratic.externalRayMapDataFor_of_basinExternalRayMapDataFor c φ h_data
+
+/-- Choice-based exterior inverse package from exterior surjectivity plus
+outside-open injectivity for a theorem-facing coordinate. -/
+theorem external_ray_map_data_of_surj_of_injOn_outside_open
+    (c : ℂ) (φ : ℂ → ℂ)
+    (h_norm_on_basin :
+      ∀ z : ℂ, z ∈ Quadratic.basin_of_infinity c → 1 < ‖φ z‖)
+    (h_conj_on_basin :
+      ∀ z : ℂ, z ∈ Quadratic.basin_of_infinity c →
+        φ (MLC.quadratic_map c z) = (φ z)^2)
+    (h_basin_of_norm_gt_one : ∀ z : ℂ, 1 < ‖φ z‖ → z ∈ Quadratic.basin_of_infinity c)
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, φ z = w)
+    (h_inj_outside :
+      Set.InjOn φ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Quadratic.ExternalRayMapDataFor c φ := by
+  exact
+    external_ray_map_data_of_basin_external_ray_map_data c φ
+      (basin_external_ray_map_data_of_surj_of_injOn_outside_open
+        c φ h_norm_on_basin h_conj_on_basin h_basin_of_norm_gt_one
+        h_surj h_inj_outside)
+
+/-- The theorem-facing proof-sketch route also yields the exterior-valued inverse
+package once the coordinate and inverse hypotheses are bundled as above. -/
+theorem external_ray_map_data_of_genuine_bottcher_inverse_package
+    (c : ℂ) (φ : ℂ → ℂ)
+    (h_coord : Quadratic.GenuineBottcherCoordinateDataFor c φ)
+    (h_inv : Quadratic.GenuineBottcherInversePackageFor c φ) :
+    Quadratic.ExternalRayMapDataFor c φ := by
+  exact
+    external_ray_map_data_of_basin_external_ray_map_data c φ
+      (basin_external_ray_map_data_of_genuine_bottcher_inverse_package
+        c φ h_coord h_inv)
+
+/-- Bundled theorem-facing cutover: the current pair of proof-sketch hypotheses
+produces basin-valued exterior inverse data for some coordinate. -/
+theorem exists_basin_external_ray_map_data_of_genuine_bottcher_route
+    (c : ℂ) (h_route : Quadratic.GenuineBottcherRouteFor c) :
+    ∃ φ : ℂ → ℂ, Quadratic.BasinExternalRayMapDataFor c φ := by
+  rcases h_route with ⟨φ, h_coord, h_inv⟩
+  exact ⟨φ, basin_external_ray_map_data_of_genuine_bottcher_inverse_package c φ h_coord h_inv⟩
+
+/-- Bundled theorem-facing cutover to the exterior-valued package. -/
+theorem exists_external_ray_map_data_of_genuine_bottcher_route
+    (c : ℂ) (h_route : Quadratic.GenuineBottcherRouteFor c) :
+    ∃ φ : ℂ → ℂ, Quadratic.ExternalRayMapDataFor c φ := by
+  rcases h_route with ⟨φ, h_coord, h_inv⟩
+  exact ⟨φ, external_ray_map_data_of_genuine_bottcher_inverse_package c φ h_coord h_inv⟩
+
+/-- Choice-based exterior inverse package at `c = 2` from exterior surjectivity
+plus injectivity on the outside-open region. This is the root-facing
+`ExternalRayMapData` version of the previous basin-valued construction. -/
+theorem external_ray_map_exists_two_of_surj_of_injOn_outside_open
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  refine
+    external_ray_map_data_of_surj_of_injOn_outside_open
+      (c := (2 : ℂ)) (φ := Quadratic.bottcher_map (2 : ℂ))
+      ?_ ?_ ?_ h_surj h_inj_outside
+  · intro z hz
+    have hGz_pos : 0 < green_function (2 : ℂ) z :=
+      green_function_pos_of_basin (2 : ℂ) z hz
+    rw [Quadratic.norm_bottcher_eq_exp_green]
+    exact Real.one_lt_exp_iff.mpr hGz_pos
+  · intro z hz
+    simpa [Quadratic.bottcher_map] using
+      bottcher_conj_on_basin (2 : ℂ) z hz
+  · intro z hnorm
+    exact bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hnorm
+
+/-- Combined Steps 2 and 3 of the expert proof at `c = 2`:
+if one has already established global exterior surjectivity (Step 1), then the
+abstract local-oddness/eventual-injectivity argument yields outside-open
+injectivity (Step 2), and the choice-based constructor produces the desired
+external-ray package (Step 3). -/
+theorem external_ray_map_exists_two_of_surj_of_local_odd_of_eventual_inj
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (hloc_odd : ∀ z : ℂ, ‖z‖ > 4 → Quadratic.bottcher_map (2 : ℂ) (-z) = -Quadratic.bottcher_map (2 : ℂ) z)
+    (hnorm_gt_one : ∀ z : ℂ, ‖z‖ > 4 → 1 < ‖Quadratic.bottcher_map (2 : ℂ) z‖)
+    (hiter_eq :
+      ∀ z₁ z₂ : ℂ, ∀ n : ℕ,
+        Quadratic.bottcher_map (2 : ℂ) z₁ = Quadratic.bottcher_map (2 : ℂ) z₂ →
+          Quadratic.bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₁) =
+            Quadratic.bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₂))
+    (hforward : ∀ z : ℂ, ‖z‖ > 4 → ‖quadratic_map (2 : ℂ) z‖ > 4)
+    (heventually_inj : ∃ R : ℝ, R > 4 ∧
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > R})
+    (heventually_large :
+      ∀ z : ℂ, ‖z‖ > 4 → ∀ R : ℝ, R > 4 →
+        ∃ N : ℕ, ∀ n ≥ N, ‖((quadratic_map (2 : ℂ))^[n] z)‖ > R) :
+    Quadratic.ExternalRayMapData (2 : ℂ) := by
+  have h_inj :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+    have h_inj4 :
+        Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > 4} :=
+      injOn_outside_open_of_local_odd_of_eventual_inj_two
+        hloc_odd hnorm_gt_one hiter_eq hforward heventually_inj heventually_large
+    intro z hz w hw hEq
+    have hz' : ‖z‖ > ‖(2 : ℂ)‖ + 2 := hz
+    have hw' : ‖w‖ > ‖(2 : ℂ)‖ + 2 := hw
+    have h2norm : ‖(2 : ℂ)‖ = 2 := by norm_num
+    have hz4 : ‖z‖ > 4 := by linarith [hz', h2norm]
+    have hw4 : ‖w‖ > 4 := by linarith [hw', h2norm]
+    exact h_inj4 hz4 hw4 hEq
+  exact external_ray_map_exists_two_of_surj_of_injOn_outside_open h_surj h_inj
+
 /-- The Böttcher map applied to a positive-real-scaled unit vector simplifies to
 `u * exp(G_c(ρ · u))`. -/
 private lemma bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
     (hρ : 0 < ρ) :
     Quadratic.bottcher_map c ((ρ : ℂ) * u) =
       u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))) := by
-  have hu_ne : u ≠ 0 := by rw [ne_eq, ← norm_eq_zero, hu]; exact one_ne_zero
-  have hρ_ne : (ρ : ℂ) ≠ 0 := by exact_mod_cast hρ.ne'
-  have hne : (ρ : ℂ) * u ≠ 0 := mul_ne_zero hρ_ne hu_ne
-  simp only [Quadratic.bottcher_map, if_neg hne]
-  have hnorm : ‖(ρ : ℂ) * u‖ = ρ := by
-    rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ.le, hu, mul_one]
-  have hdiv : (ρ : ℂ) * u / (ρ : ℂ) = u :=
-    mul_div_cancel_left₀ u hρ_ne
-  rw [hnorm, hdiv]
+  simpa using Quadratic.bottcher_map_apply_ray c u hu ρ hρ
 
 /-- **Lemma E (seam-minimal uniqueness form)**: the external ray map at `c = 2`
 from anchored uniqueness + anchor-gap seams.
@@ -964,8 +1365,17 @@ theorem external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
       rw [norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
     -- Direction w/‖w‖ = z/‖z‖: the Böttcher map preserves direction.
     have hdir_eq : w / ↑‖w‖ = z / ↑‖z‖ := by
-      rw [hw_norm]
-      simp only [hw_def, Quadratic.bottcher_map, if_neg hz_ne]
+      have hu_z : ‖z / ↑‖z‖‖ = 1 := by
+        rw [norm_div, Complex.norm_real, norm_norm, div_self hz_pos.ne']
+      have hscale : ((‖z‖ : ℂ) * (z / ↑‖z‖)) = z := by
+        field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne',
+          mul_comm, mul_left_comm, mul_assoc]
+      have happlyz :
+          Quadratic.bottcher_map (2 : ℂ) z =
+            (z / ↑‖z‖) * ↑(Real.exp (green_function (2 : ℂ) z)) := by
+        simpa [hscale] using
+          (Quadratic.bottcher_map_apply_ray (2 : ℂ) (z / ↑‖z‖) hu_z ‖z‖ hz_pos)
+      rw [hw_norm, hw_def, happlyz]
       field_simp [(Real.exp_pos (green_function (2 : ℂ) z)).ne',
                   show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
     -- log ‖w‖ = G_2(z).
@@ -1022,6 +1432,103 @@ theorem external_ray_map_exists_two_via_green_function
   external_ray_map_exists_two_via_green_function_of_seam
     green_function_strictMono_along_ray_basin_two_axiom_seed
     hlog_gt_anchor
+
+/-- Direct formalization of the draft injectivity proof: on the outside-open
+region, equal Böttcher values force equal direction and equal Green value, so
+strict radial monotonicity gives equal radius. -/
+theorem injOn_outside_open_two_of_green_function_ray_strictMono :
+    Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+  intro z hz w hw hEq
+  have hz_out : ‖z‖ > ‖(2 : ℂ)‖ + 2 := hz
+  have hw_out : ‖w‖ > ‖(2 : ℂ)‖ + 2 := hw
+  have h2norm : ‖(2 : ℂ)‖ = 2 := by
+    norm_num
+  have hz_pos : 0 < ‖z‖ := by
+    linarith [hz_out, h2norm]
+  have hw_pos : 0 < ‖w‖ := by
+    linarith [hw_out, h2norm]
+  have hgreen_eq :
+      green_function (2 : ℂ) z = green_function (2 : ℂ) w := by
+    have hnorm_eq :
+        ‖Quadratic.bottcher_map (2 : ℂ) z‖ =
+          ‖Quadratic.bottcher_map (2 : ℂ) w‖ := by
+      simpa [hEq]
+    rw [Quadratic.norm_bottcher_eq_exp_green, Quadratic.norm_bottcher_eq_exp_green] at hnorm_eq
+    exact Real.exp_injective hnorm_eq
+  have hz_ne : z ≠ 0 := by
+    exact fun hz0 => hz_pos.ne' (by simpa [hz0] using norm_zero)
+  have hw_ne : w ≠ 0 := by
+    exact fun hw0 => hw_pos.ne' (by simpa [hw0] using norm_zero)
+  rcases bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) z hz_out with ⟨rz, hrz_pos, hrz_eq⟩
+  rcases bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) w hw_out with ⟨rw, hrw_pos, hrw_eq⟩
+  have hbotcher_z : Quadratic.bottcher_map (2 : ℂ) z = (rz : ℂ) * z := by
+    exact (div_eq_iff hz_ne).1 hrz_eq
+  have hbotcher_w : Quadratic.bottcher_map (2 : ℂ) w = (rw : ℂ) * w := by
+    exact (div_eq_iff hw_ne).1 hrw_eq
+  have hscales : (rz : ℂ) * z = (rw : ℂ) * w := by
+    simpa [hbotcher_z, hbotcher_w] using hEq
+  have hrw_ne : (rw : ℂ) ≠ 0 := by
+    exact_mod_cast hrw_pos.ne'
+  have hratio_eq : w = (((rz / rw : ℝ) : ℂ) * z) := by
+    apply (mul_right_cancel₀ hrw_ne)
+    calc
+      w * (rw : ℂ) = (rw : ℂ) * w := by ring
+      _ = (rz : ℂ) * z := by simpa [hscales]
+      _ = ((((rz / rw : ℝ) : ℂ) * z) * (rw : ℂ)) := by
+        have hratio_mul_real : rz = (rz / rw) * rw := by
+          field_simp [hrw_pos.ne']
+        have hratio_mul : (rz : ℂ) = (((rz / rw : ℝ) : ℂ) * (rw : ℂ)) := by
+          exact_mod_cast hratio_mul_real
+        calc
+          (rz : ℂ) * z = ((((rz / rw : ℝ) : ℂ) * (rw : ℂ)) * z) := by rw [hratio_mul]
+          _ = ((((rz / rw : ℝ) : ℂ) * z) * (rw : ℂ)) := by ring
+  have hq_pos : 0 < rz / rw := by
+    exact div_pos hrz_pos hrw_pos
+  set u : ℂ := z / ↑‖z‖
+  have hu : ‖u‖ = 1 := by
+    dsimp [u]
+    rw [norm_div, Complex.norm_real, norm_norm, div_self hz_pos.ne']
+  have hz_repr : ((‖z‖ : ℂ) * u) = z := by
+    dsimp [u]
+    field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne',
+      mul_comm, mul_left_comm, mul_assoc]
+  have hw_norm_scaled : ‖w‖ = (rz / rw) * ‖z‖ := by
+    rw [hratio_eq, Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hq_pos.le]
+  have hw_repr : ((‖w‖ : ℂ) * u) = w := by
+    calc
+      ((‖w‖ : ℂ) * u) = ((((rz / rw) * ‖z‖ : ℝ) : ℂ) * u) := by rw [hw_norm_scaled]
+      _ = ((((rz / rw : ℝ) : ℂ) * (‖z‖ : ℂ)) * u) := by norm_num
+      _ = (((rz / rw : ℝ) : ℂ) * ((‖z‖ : ℂ) * u)) := by ring
+      _ = (((rz / rw : ℝ) : ℂ) * z) := by rw [hz_repr]
+      _ = w := hratio_eq.symm
+  have hnorm_le : ‖z‖ ≤ ‖w‖ := by
+    by_contra hlt
+    have hlt' : ‖w‖ < ‖z‖ := lt_of_not_ge hlt
+    have hmono :
+        green_function (2 : ℂ) ((‖w‖ : ℂ) * u) <
+          green_function (2 : ℂ) ((‖z‖ : ℂ) * u) :=
+      green_function_strictMono_along_ray (2 : ℂ) u hu hw_out hlt'
+    have hmono' : green_function (2 : ℂ) w < green_function (2 : ℂ) z := by
+      rw [hw_repr, hz_repr] at hmono
+      exact hmono
+    exact (not_lt_of_ge (le_of_eq hgreen_eq)) hmono'
+  have hnorm_ge : ‖w‖ ≤ ‖z‖ := by
+    by_contra hlt
+    have hlt' : ‖z‖ < ‖w‖ := lt_of_not_ge hlt
+    have hmono :
+        green_function (2 : ℂ) ((‖z‖ : ℂ) * u) <
+          green_function (2 : ℂ) ((‖w‖ : ℂ) * u) :=
+      green_function_strictMono_along_ray (2 : ℂ) u hu hz_out hlt'
+    have hmono' : green_function (2 : ℂ) z < green_function (2 : ℂ) w := by
+      rw [hz_repr, hw_repr] at hmono
+      exact hmono
+    exact (not_lt_of_ge (le_of_eq hgreen_eq.symm)) hmono'
+  have hnorm_eq : ‖z‖ = ‖w‖ := le_antisymm hnorm_le hnorm_ge
+  calc
+    z = ((‖z‖ : ℂ) * u) := hz_repr.symm
+    _ = ((‖w‖ : ℂ) * u) := by simp [hnorm_eq]
+    _ = w := hw_repr
 
 /-- Conditional `c = 2` constructive external-ray map: the Green inversion
 construction using anchor-gap existence plus outside-open injectivity. This path
@@ -1082,6 +1589,55 @@ theorem external_ray_map_exists_two_via_green_function_of_injOn_outside_open
     have hx_eq_z : x = z :=
       h_inj_outside hx_out hz (hx_bottcher.trans hz_bottcher.symm)
     simpa [x] using hx_eq_z
+
+/-- In this file the constructive inverse extracted from `ExternalRayMapData`
+already lands in the basin, so we can upgrade it to the stronger basin-valued
+package used at the project root. -/
+theorem basinExternalRayMapData_of_externalRayMapData (c : ℂ)
+    (h_data : Quadratic.ExternalRayMapData c) :
+    Quadratic.BasinExternalRayMapData c := by
+  refine ⟨external_ray_map_of_data h_data, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+  · intro z hz
+    simpa [bottcher_map] using bottcher_conj_on_basin c z hz
+  · intro w hw
+    refine ⟨?_, external_ray_map_of_data_right_inverse h_data w hw⟩
+    exact
+      bottcher_map_norm_gt_one_implies_basin c (z := external_ray_map_of_data h_data w) <| by
+        simpa [external_ray_map_of_data_right_inverse h_data w hw] using hw
+  · intro z hz
+    exact external_ray_map_of_data_left_inverse_large h_data z hz
+
+/-- Root-facing basin-valued version of the constructive Green inversion route:
+the anchor-gap inequality plus outside-open injectivity already produce the
+exact package used by `MLC.mlc_conjecture`. -/
+theorem basin_external_ray_map_data_two_via_green_function_of_injOn_outside_open
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
+    (h_inj_outside :
+      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+        {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    Quadratic.BasinExternalRayMapDataTwo := by
+  exact
+    basinExternalRayMapData_of_externalRayMapData (2 : ℂ)
+      (external_ray_map_exists_two_via_green_function_of_injOn_outside_open
+        hlog_gt_anchor h_inj_outside)
+
+/-- Conditional basin-valued closure of the draft route: the anchor-gap seam
+plus the Green-ray strict monotonicity seam imply the exact remaining root
+package. -/
+theorem basin_external_ray_map_data_two_via_green_function
+    (hlog_gt_anchor :
+      ∀ w : ℂ, 1 < ‖w‖ →
+        green_function (2 : ℂ)
+            (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖) :
+    Quadratic.BasinExternalRayMapDataTwo := by
+  exact
+    basin_external_ray_map_data_two_via_green_function_of_injOn_outside_open
+      hlog_gt_anchor injOn_outside_open_two_of_green_function_ray_strictMono
 
 /-- Iterate-left-inverse specialization of the conditional constructive Green
 inversion path at `c = 2`. -/

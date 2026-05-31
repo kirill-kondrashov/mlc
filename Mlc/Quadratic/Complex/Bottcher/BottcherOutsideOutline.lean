@@ -13,13 +13,13 @@ axiom `bottcher_map_inj_on_outside` with a proof. No axioms are introduced here.
 Roadmap (target: injectivity on `outside_disk c`):
 
 1. Analyticity near infinity.
-   - Show `bottcher_map` is holomorphic on a neighborhood of the exterior.
+   - Show the current proxy `bottcher_map` is holomorphic on a neighborhood of the exterior.
    - Suggested lemma:
      `bottcher_map_analytic_on_outside :
         AnalyticOnNhd ℂ (Quadratic.bottcher_map c) (outside_disk c)`
 
 2. Asymptotic normalization at infinity.
-   - Prove the Böttcher coordinate has the standard normalization:
+   - Prove the current proxy has the standard normalization:
      `tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 1)`
    - This pins down the degree and rules out nontrivial deck transformations.
 
@@ -30,13 +30,13 @@ Roadmap (target: injectivity on `outside_disk c`):
      `external_ray_map_local` on the exterior.
 
 4. Properness / degree-one argument.
-   - Show `bottcher_map` is proper on the exterior and has degree 1.
+   - Show the current proxy `bottcher_map` is proper on the exterior and has degree 1.
    - Combined with local injectivity, this yields global injectivity:
      `Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)`.
 
 5. Range characterization (optional, but standard):
    - `‖bottcher_map c z‖ > 1` for `z` in the exterior, and surjectivity onto
-     `{w | 1 < ‖w‖}`. This also yields the preimage inclusion axiom.
+      `{w | 1 < ‖w‖}`. This also yields the preimage inclusion axiom.
 
 Once the above lemmas are formalized, the axioms
 `bottcher_map_inj_on_outside` and `bottcher_map_preimage_exterior_subset_outside`
