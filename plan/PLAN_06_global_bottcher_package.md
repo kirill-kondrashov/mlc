@@ -115,10 +115,20 @@ The root consumer side is now partially prepared:
 11. `mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo` now
    records that local parameter extension is only enough to close the root once
    this promotion seam is supplied as well.
-12. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
+12. `ConstructiveBasinCoordinate.lean` now proves that the stronger local
+   parameter-family package automatically restricts to a uniform near-infinity
+   parameter extension package via
+   `GenuineBottcherLocalParameterFamilyData.toNearInfinityParameterExtensionData`,
+13. `MainConjecture.lean` now records the corresponding reductions
+   `genuineBottcherNearInfinityParameterExtensionBridgeTwo_of_localParameterExtensionBridge`
+   and
+   `genuineBottcherNearInfinityParameterBridgeTwo_of_localParameterExtensionBridge`,
+14. so the new Phase-1 seams are not orphaned: once the local extension package
+   is proved, the near-infinity phase follows automatically on the checked side.
+15. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
    Bottcher route into the existing `MainPathData` interface once that bridge is
    available,
-13. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
+16. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
    Bottcher route, the bridge to puzzle-boundary motion, and the existing
    Track-1/Track-2 package.
 
@@ -129,6 +139,16 @@ stronger local parameter-extension package feeding
 `GenuineBottcherLocalParameterExtensionBridgeTwo`, and finally the promotion of
 that one-base-parameter package to the global family hypothesis consumed by the
 motion layer.
+
+Because the checked reductions now go
+
+$$
+\text{near-infinity extension} \Rightarrow \text{local parameter extension}
+\Rightarrow \text{near-infinity family},
+$$
+
+the sharpened theorem-facing target matching the current proof sketch is
+`GenuineBottcherNearInfinityParameterExtensionBridgeTwo`.
 
 ---
 

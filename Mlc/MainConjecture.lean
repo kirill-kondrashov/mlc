@@ -1684,6 +1684,35 @@ theorem genuineBottcherLocalParameterExtensionBridgeTwo_of_nearInfinityParameter
   rcases h_ext h_route with ⟨h_near⟩
   exact ⟨h_near.toLocalParameterFamilyData⟩
 
+/-- The stronger near-infinity extension bridge immediately yields the plain
+near-infinity family bridge by forgetting the global-extension component. -/
+theorem genuineBottcherNearInfinityParameterBridgeTwo_of_nearInfinityParameterExtensionBridge
+    (h_ext : GenuineBottcherNearInfinityParameterExtensionBridgeTwo) :
+    GenuineBottcherNearInfinityParameterBridgeTwo := by
+  intro h_route
+  rcases h_ext h_route with ⟨h_near⟩
+  exact ⟨h_near.toNearInfinityParameterFamilyData⟩
+
+/-- The already-existing local parameter-extension package also restricts to the
+Phase-1 near-infinity family package on a sufficiently large uniform exterior
+region. -/
+theorem genuineBottcherNearInfinityParameterExtensionBridgeTwo_of_localParameterExtensionBridge
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo) :
+    GenuineBottcherNearInfinityParameterExtensionBridgeTwo := by
+  intro h_route
+  rcases h_ext h_route with ⟨h_local⟩
+  exact ⟨h_local.toNearInfinityParameterExtensionData⟩
+
+/-- In particular, the existing local parameter-extension seam already implies
+the earlier Phase-1 near-infinity family seam. -/
+theorem genuineBottcherNearInfinityParameterBridgeTwo_of_localParameterExtensionBridge
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo) :
+    GenuineBottcherNearInfinityParameterBridgeTwo := by
+  exact
+    genuineBottcherNearInfinityParameterBridgeTwo_of_nearInfinityParameterExtensionBridge
+      (genuineBottcherNearInfinityParameterExtensionBridgeTwo_of_localParameterExtensionBridge
+        h_ext)
+
 /-- A local parameter family around `2` yields the depthwise local family
 packages needed on the motion side. -/
 theorem genuineBottcherLocalFamilyBridgeTwo_of_localParameterExtensionBridge

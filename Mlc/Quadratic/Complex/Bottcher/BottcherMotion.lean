@@ -189,6 +189,22 @@ def GenuineBottcherNearInfinityParameterExtensionData.toLocalParameterFamilyData
     GenuineBottcherLocalParameterFamilyData c₀ :=
   h.global
 
+/-- Forget only the global-extension component of the stronger near-infinity
+package. -/
+def GenuineBottcherNearInfinityParameterExtensionData.toNearInfinityParameterFamilyData
+    {c₀ : ℂ} (h : GenuineBottcherNearInfinityParameterExtensionData c₀) :
+    GenuineBottcherNearInfinityParameterFamilyData c₀ :=
+  { r := h.r
+    R := h.R
+    r_pos := h.r_pos
+    R_pos := h.R_pos
+    phi := h.phi
+    norm_on_exterior := h.norm_on_exterior
+    conj_on_exterior := h.conj_on_exterior
+    fiber_holo_on_exterior := h.fiber_holo_on_exterior
+    tendsto_div_atInfinity := h.tendsto_div_atInfinity
+    param_holo_on_exterior := h.param_holo_on_exterior }
+
 /-- The induced motion from a Böttcher coordinate: move points by varying `c`. -/
 def bottcher_motion (_B : BottcherData) (E : Set ℂ) : HolomorphicMotion E :=
   { f := fun _ z => z

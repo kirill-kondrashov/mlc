@@ -1,4 +1,5 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
+import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 
 namespace MLC
 
@@ -213,6 +214,82 @@ theorem genuineBottcherNearInfinityRouteFor_of_genuineBottcherRouteFor
     GenuineBottcherNearInfinityRouteFor c := by
   rcases h_route with ⟨φ, h_coord, _h_inv⟩
   exact ⟨φ, genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor h_coord⟩
+
+/-- Any local parameter-family package already contains a uniform near-infinity
+parameter family by restricting to a sufficiently large exterior region whose
+radius dominates the whole parameter ball around `c₀`. -/
+noncomputable def GenuineBottcherLocalParameterFamilyData.toNearInfinityParameterExtensionData
+    {c₀ : ℂ} (h : GenuineBottcherLocalParameterFamilyData c₀) :
+    GenuineBottcherNearInfinityParameterExtensionData c₀ := by
+  refine
+    { r := h.r
+      R := ‖c₀‖ + h.r + 2
+      r_pos := h.r_pos
+      R_pos := by
+        have hc₀ : 0 ≤ ‖c₀‖ := norm_nonneg c₀
+        have hr : 0 < h.r := h.r_pos
+        have hsum : 0 < ‖c₀‖ + h.r := by
+          linarith
+        linarith
+      phi := h.phi
+      norm_on_exterior := ?_
+      conj_on_exterior := ?_
+      fiber_holo_on_exterior := ?_
+      tendsto_div_atInfinity := h.tendsto_div_atInfinity
+      param_holo_on_exterior := ?_
+      global := h
+      agrees_on_exterior := ?_ }
+  · intro c hc z hz
+    exact h.norm_on_basin c hc z <| by
+      have hc_ball : ‖c - c₀‖ < h.r := by
+        simpa [Metric.mem_ball, dist_eq_norm] using hc
+      have hcnorm : ‖c‖ < ‖c₀‖ + h.r := by
+        have htri : ‖c‖ ≤ ‖c - c₀‖ + ‖c₀‖ := by
+          simpa [sub_add_cancel c c₀, add_comm, add_left_comm, add_assoc] using
+            (norm_add_le (c - c₀) c₀)
+        linarith
+      have hz_large : ‖z‖ > ‖c‖ + 2 := by
+        have hzR : ‖c₀‖ + h.r + 2 < ‖z‖ := by simpa [exteriorRegion] using hz
+        linarith
+      exact outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz_large)
+  · intro c hc z hz
+    exact h.conj_on_basin c hc z <| by
+      have hc_ball : ‖c - c₀‖ < h.r := by
+        simpa [Metric.mem_ball, dist_eq_norm] using hc
+      have hcnorm : ‖c‖ < ‖c₀‖ + h.r := by
+        have htri : ‖c‖ ≤ ‖c - c₀‖ + ‖c₀‖ := by
+          simpa [sub_add_cancel c c₀, add_comm, add_left_comm, add_assoc] using
+            (norm_add_le (c - c₀) c₀)
+        linarith
+      have hz_large : ‖z‖ > ‖c‖ + 2 := by
+        have hzR : ‖c₀‖ + h.r + 2 < ‖z‖ := by simpa [exteriorRegion] using hz
+        linarith
+      exact outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz_large)
+  · intro c hc
+    refine (h.fiber_holo_on_basin c hc).mono ?_
+    intro z hz
+    have hc_ball : ‖c - c₀‖ < h.r := by
+      simpa [Metric.mem_ball, dist_eq_norm] using hc
+    have hcnorm : ‖c‖ < ‖c₀‖ + h.r := by
+      have htri : ‖c‖ ≤ ‖c - c₀‖ + ‖c₀‖ := by
+        simpa [sub_add_cancel c c₀, add_comm, add_left_comm, add_assoc] using
+          (norm_add_le (c - c₀) c₀)
+      linarith
+    have hz_large : ‖z‖ > ‖c‖ + 2 := by
+      have hzR : ‖c₀‖ + h.r + 2 < ‖z‖ := by simpa [exteriorRegion] using hz
+      linarith
+    exact outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz_large)
+  · intro z _hz
+    exact h.param_holo z
+  · intro c hc z hz
+    rfl
+
+/-- Forget only the global-extension component of the stronger restricted
+near-infinity package. -/
+noncomputable def GenuineBottcherLocalParameterFamilyData.toNearInfinityParameterFamilyData
+    {c₀ : ℂ} (h : GenuineBottcherLocalParameterFamilyData c₀) :
+    GenuineBottcherNearInfinityParameterFamilyData c₀ :=
+  (h.toNearInfinityParameterExtensionData).toNearInfinityParameterFamilyData
 
 /-- Constructive realization of the missing basin-valued Böttcher coordinate
 using the explicit proxy `polar_green_map`. -/
