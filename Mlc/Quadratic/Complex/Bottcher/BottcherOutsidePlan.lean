@@ -10,6 +10,7 @@ import Mathlib.Topology.SeparatedMap
 import Mathlib.Topology.DiscreteSubset
 import Mathlib.Analysis.Complex.Liouville
 import Mathlib.Topology.Algebra.InfiniteSum.UniformOn
+import Mathlib.Topology.Algebra.InfiniteSum.NatInt
 import Mathlib.Analysis.Normed.Group.Tannery
 
 namespace MLC
@@ -1030,6 +1031,11 @@ majorant, so order-independence is exactly the right convergence mode. -/
 noncomputable def logCorrectionSeries (c : ℂ) (z : ℂ) : ℂ :=
   ∑' n : ℕ, nearOneLogCorrection c n z
 
+/-- Shifted tail of the logarithmic correction series. This isolates the
+`tsum` reindexing needed for the conjugacy route. -/
+noncomputable def logCorrectionTail (c : ℂ) (z : ℂ) : ℂ :=
+  ∑' n : ℕ, nearOneLogCorrection c (n + 1) z
+
 /-- Infinite Candidate-8 ratio. -/
 noncomputable def logSeriesBottcherRatio (c : ℂ) (z : ℂ) : ℂ :=
   Complex.exp (logCorrectionSeries c z)
@@ -1337,6 +1343,179 @@ lemma LogCorrectionSeriesConvergesOnExterior.of_large_radius
     LogCorrectionSeriesConvergesOnExterior c R :=
   LogCorrectionSeriesConvergesOnExterior.of_majorant
     (LogCorrectionSeriesMajorizedOnExterior.of_large_radius c hR)
+
+/-- Pointwise summability of the logarithmic corrections on a sufficiently large
+exterior region. -/
+lemma summable_nearOneLogCorrection_of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R)
+    {z : ℂ} (hz : R < ‖z‖) :
+    Summable (fun n : ℕ => nearOneLogCorrection c n z) := by
+  rcases LogCorrectionSeriesMajorizedOnExterior.of_large_radius (c := c) hR with
+    ⟨u, hu, hbound⟩
+  have hnorm : Summable (fun n : ℕ => ‖nearOneLogCorrection c n z‖) :=
+    hu.of_nonneg_of_le (fun n => norm_nonneg _) (fun n => hbound n z hz)
+  exact hnorm.of_norm
+
+/-- Pointwise summability of the shifted logarithmic tail on a sufficiently large
+exterior region. -/
+lemma summable_nearOneLogCorrection_tail_of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R)
+    {z : ℂ} (hz : R < ‖z‖) :
+    Summable (fun n : ℕ => nearOneLogCorrection c (n + 1) z) := by
+  exact (summable_nearOneLogCorrection_of_large_radius c hR hz).comp_injective
+    (fun a b h => by omega)
+
+/-- Route C tail split: on any sufficiently large exterior region, the
+logarithmic correction series is its zeroth term plus the shifted tail. -/
+lemma logCorrectionSeries_eq_zero_add_tail_of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R)
+    {z : ℂ} (hz : R < ‖z‖) :
+    logCorrectionSeries c z =
+      nearOneLogCorrection c 0 z + logCorrectionTail c z := by
+  have hsum :
+      Summable (fun n : ℕ => nearOneLogCorrection c n z) :=
+    summable_nearOneLogCorrection_of_large_radius c hR hz
+  have h :=
+    Summable.tsum_eq_zero_add
+      (f := fun n : ℕ => nearOneLogCorrection c n z) hsum
+  change (∑' n : ℕ, nearOneLogCorrection c n z) =
+    nearOneLogCorrection c 0 z + ∑' n : ℕ, nearOneLogCorrection c (n + 1) z
+  exact h
+
+/-- Route A/C infinite shifted-series identity on a sufficiently large exterior
+region. This passes the checked finite shift algebra to the `tsum` level. -/
+lemma logCorrectionSeries_quadratic_map_eq_two_mul_tail_of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R)
+    {z : ℂ} (hz : R < ‖z‖) :
+    logCorrectionSeries c (quadratic_map c z) =
+      (2 : ℂ) * logCorrectionTail c z := by
+  have hz_ge_c2 : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR (le_of_lt hz)
+  have hz_ne : z ≠ 0 := by
+    have hpos : 0 < ‖z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  have hzq : quadratic_map c z ≠ 0 := by
+    have hqnorm : ‖quadratic_map c z‖ ≥ ‖z‖ + 1 :=
+      quadratic_map_norm_ge_add_one c z hz_ge_c2
+    have hpos : 0 < ‖quadratic_map c z‖ := by
+      have hz_nonneg : 0 ≤ ‖z‖ := norm_nonneg z
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  have hA : ∀ k : ℕ, (quadratic_map c)^[k + 1] z ≠ 0 := by
+    intro k
+    have hstart : ‖c‖ + 1 ≤ ‖z‖ := by linarith
+    have hiter := iterate_quadratic_map_norm_ge c z (k + 1) hstart
+    have hpos : 0 < ‖(quadratic_map c)^[k + 1] z‖ := by
+      have hz_nonneg : 0 ≤ ‖z‖ := norm_nonneg z
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  calc
+    logCorrectionSeries c (quadratic_map c z)
+        = ∑' n : ℕ, nearOneLogCorrection c n (quadratic_map c z) := rfl
+    _ = ∑' n : ℕ, (2 : ℂ) * nearOneLogCorrection c (n + 1) z := by
+          apply tsum_congr
+          intro n
+          exact nearOneLogCorrection_quadratic_map_eq_two_mul_succ c n z hz_ne hzq (hA n)
+    _ = (2 : ℂ) * ∑' n : ℕ, nearOneLogCorrection c (n + 1) z := by
+          rw [tsum_mul_left]
+    _ = (2 : ℂ) * logCorrectionTail c z := rfl
+
+/-- Branch-control part of the conjugacy proof: on a sufficiently large exterior
+region, exponentiating twice the zeroth log correction recovers the algebraic
+factor `1 + c/z^2`. -/
+lemma exp_two_mul_nearOneLogCorrection_zero_of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R)
+    {z : ℂ} (hz : R < ‖z‖) :
+    Complex.exp ((2 : ℂ) * nearOneLogCorrection c 0 z) =
+      (1 : ℂ) + c / z ^ 2 := by
+  have hz_ge_c2 : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR (le_of_lt hz)
+  have hz_ne : z ≠ 0 := by
+    have hpos : 0 < ‖z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  have hterm_half : ‖c / z ^ 2‖ ≤ (1 / 2 : ℝ) := by
+    by_cases hc0 : ‖c‖ = 0
+    · have hc_zero : c = 0 := norm_eq_zero.mp hc0
+      simp [hc_zero]
+    · have hc_pos : 0 < ‖c‖ := lt_of_le_of_ne (norm_nonneg c) (Ne.symm hc0)
+      have hden_ge : 2 * ‖c‖ ≤ ‖z ^ 2‖ := by
+        calc
+          2 * ‖c‖ ≤ ‖z‖ ^ 2 := by
+            nlinarith [norm_nonneg c, hz_ge_c2]
+          _ = ‖z ^ 2‖ := by simp [norm_pow]
+      have hden_pos : 0 < ‖z ^ 2‖ := lt_of_lt_of_le (by nlinarith : 0 < 2 * ‖c‖) hden_ge
+      rw [norm_div]
+      rw [div_le_iff₀ hden_pos]
+      nlinarith
+  have hslit : (1 : ℂ) + c / z ^ 2 ∈ Complex.slitPlane :=
+    Complex.mem_slitPlane_of_norm_lt_one (lt_of_le_of_lt hterm_half (by norm_num : (1 / 2 : ℝ) < 1))
+  have hsimple := nearOneLogCorrection_eq_simple c 0 z hz_ne hz_ne
+  have hsimple' :
+      nearOneLogCorrection c 0 z =
+        ((2 : ℂ) ^ 1)⁻¹ * Complex.log ((1 : ℂ) + c / z ^ 2) := by
+    simpa using hsimple
+  have htwo :
+      (2 : ℂ) * nearOneLogCorrection c 0 z =
+        Complex.log ((1 : ℂ) + c / z ^ 2) := by
+    rw [hsimple']
+    field_simp
+  rw [htwo]
+  exact Complex.exp_log (Complex.slitPlane_ne_zero hslit)
+
+/-- Candidate-11 Böttcher conjugacy on every sufficiently large exterior
+region. This completes the previously blocked Route-A conjugacy step. -/
+lemma logSeriesBottcherApprox_conj_of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R)
+    {z : ℂ} (hz : R < ‖z‖) :
+    logSeriesBottcherApprox c (quadratic_map c z) =
+      (logSeriesBottcherApprox c z)^2 := by
+  have hz_ge_c2 : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR (le_of_lt hz)
+  have hz_ne : z ≠ 0 := by
+    have hpos : 0 < ‖z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  have htail :=
+    logCorrectionSeries_eq_zero_add_tail_of_large_radius c hR hz
+  have hshift :=
+    logCorrectionSeries_quadratic_map_eq_two_mul_tail_of_large_radius c hR hz
+  have hexp0 :=
+    exp_two_mul_nearOneLogCorrection_zero_of_large_radius c hR hz
+  have hquad :
+      quadratic_map c z = z ^ 2 * ((1 : ℂ) + c / z ^ 2) := by
+    calc
+      quadratic_map c z = z ^ 2 + c := by rfl
+      _ = z ^ 2 * ((1 : ℂ) + c / z ^ 2) := by
+        field_simp [hz_ne]
+  calc
+    logSeriesBottcherApprox c (quadratic_map c z)
+        = quadratic_map c z * Complex.exp (logCorrectionSeries c (quadratic_map c z)) := by
+          rfl
+    _ = quadratic_map c z * Complex.exp ((2 : ℂ) * logCorrectionTail c z) := by
+          rw [hshift]
+    _ = (z ^ 2 * ((1 : ℂ) + c / z ^ 2)) *
+          Complex.exp ((2 : ℂ) * logCorrectionTail c z) := by
+          rw [hquad]
+    _ = z ^ 2 * Complex.exp ((2 : ℂ) * logCorrectionSeries c z) := by
+          rw [htail]
+          rw [show (2 : ℂ) * (nearOneLogCorrection c 0 z + logCorrectionTail c z) =
+              (2 : ℂ) * nearOneLogCorrection c 0 z + (2 : ℂ) * logCorrectionTail c z by ring]
+          rw [Complex.exp_add, hexp0]
+          ring
+    _ = (z * Complex.exp (logCorrectionSeries c z)) ^ 2 := by
+          have hexp2 :
+              Complex.exp ((2 : ℂ) * logCorrectionSeries c z) =
+                Complex.exp (logCorrectionSeries c z) * Complex.exp (logCorrectionSeries c z) := by
+            rw [show (2 : ℂ) * logCorrectionSeries c z =
+                logCorrectionSeries c z + logCorrectionSeries c z by ring]
+            rw [Complex.exp_add]
+          rw [hexp2]
+          ring
+    _ = (logSeriesBottcherApprox c z)^2 := by
+          rfl
 
 /-- The logarithmic correction series itself is normalized at infinity. This is
 Tannery's theorem applied to the Candidate-10 summable majorant and the already

@@ -304,13 +304,20 @@ repo/library support.
    - **PASSED:** normalization of the ratio and coordinate, by
      `tendsto_logSeriesBottcherRatio_atInfinity` and
      `tendsto_logSeriesBottcherApprox_div_atInfinity`.
-   - **FAILED:** shifted-series conjugacy
+   - **PASSED:** shifted-series conjugacy on sufficiently large exterior
+     regions, by
+     `logCorrectionSeries_quadratic_map_eq_two_mul_tail_of_large_radius`,
+     `exp_two_mul_nearOneLogCorrection_zero_of_large_radius`, and
+     `logSeriesBottcherApprox_conj_of_large_radius`.
+   - Previously, this was the blocker:
      `logSeriesBottcherApprox c (quadratic_map c z) =
-      (logSeriesBottcherApprox c z)^2` is not proved. The missing formal step is
-     now narrowed: the finite algebra is checked by
+      (logSeriesBottcherApprox c z)^2`. It is now discharged on any chosen
+     exterior region `{z | R < ‖z‖}` with `‖c‖ + 2 ≤ R`. The finite algebra is
+     checked by
      `nearOneLogCorrection_quadratic_map_eq_two_mul_succ` and
-     `finiteLogCorrectionSum_quadratic_map_eq_two_mul_tail`; what remains is
-     passing this finite identity to the `tsum` limit and handling the
+     `finiteLogCorrectionSum_quadratic_map_eq_two_mul_tail`; Route C added
+     `logCorrectionTail` and `logCorrectionSeries_eq_zero_add_tail_of_large_radius`;
+     Route A then passes the identity to `tsum` and handles the
      `exp(log(1+c/z^2))` branch step.
    - **FAILED:** differentiability of the infinite log-series coordinate on an
      exterior region is not proved. The missing formal step is to package
@@ -322,30 +329,40 @@ repo/library support.
      the canonical outside-open region `‖z‖ > ‖c‖ + 2`.
 
    Alternative routes for the failed steps:
-   1. **Conjugacy route A (preferred):** prove a finite partial-sum shift identity
-      for `finiteLogCorrectionSum` (now done), pass it to the limit using
-      `LogCorrectionSeriesConvergesOnExterior.of_large_radius`, then exponentiate.
-   2. **Conjugacy route B:** avoid logarithm branch bookkeeping by deriving
+   1. **Conjugacy route A:** **PASSED.** The finite shift identity is passed to
+      the `tsum` tail identity and exponentiated, with branch control via
+      `exp_two_mul_nearOneLogCorrection_zero_of_large_radius`.
+   2. **Conjugacy route B:** now a fallback only; avoid logarithm branch bookkeeping by deriving
       conjugacy from the already-related finite root approximants and locally
       uniform uniqueness of limits on an exterior region.
-   3. **Differentiability route A (preferred):** prove
+      Remaining substeps:
+      - identify `finiteLogSeriesBottcherApprox c n` with the same finite
+        coherent root approximation as Candidate 7 on a large exterior region;
+      - use the exact finite root conjugacy relation up to one index shift;
+      - pass to locally uniform limits using `LogCorrectionSeriesConvergesOnExterior`.
+      Risk: this may reintroduce the sector/branch issue that Candidate 8 was
+      designed to avoid, unless the near-one logarithmic expression can be shown
+      to encode the same branch globally on the chosen exterior region.
+   3. **Conjugacy route C:** **PASSED.** `logCorrectionTail` and
+      `logCorrectionSeries_eq_zero_add_tail_of_large_radius` split the `tsum`
+      reindexing into reusable tail lemmas.
+   4. **Differentiability route A (preferred):** prove
       `DifferentiableOn ℂ (nearOneLogCorrection c n) {z | R < ‖z‖}` for large
       `R` using `AnalyticOn.clog`/`DifferentiableOn.clog`, then use
       `differentiableOn_tsum_of_summable_norm`.
-   4. **Differentiability route B:** first prove the conjugacy and normalization,
+   5. **Differentiability route B:** first prove the conjugacy and normalization,
       then use a local inverse/implicit functional-equation argument to get
       differentiability from a finite-stage locally uniform limit, avoiding a
       direct derivative proof for every summand.
 
 So the honest next implementation target is now:
 
-1. prove the finite partial-sum shift identity for `finiteLogCorrectionSum`;
-2. pass that identity to `logCorrectionSeries` and exponentiate to get
-   Böttcher conjugacy for `logSeriesBottcherApprox`;
-3. prove differentiability of each `nearOneLogCorrection c n` on a sufficiently
+1. prove differentiability of each `nearOneLogCorrection c n` on a sufficiently
    large exterior region and apply `differentiableOn_tsum_of_summable_norm`;
-4. strengthen eventual exterior-valuedness to the same chosen exterior region;
-5. only then attempt the basin extension step for
+2. strengthen eventual exterior-valuedness to the same chosen exterior region;
+3. package the resulting near-infinity coordinate into
+   `GenuineBottcherNearInfinityDataFor`;
+4. only then attempt the basin extension step for
    `Quadratic.ClassicalGlobalBottcherTheoremFor`.
 
 ## Non-goals
