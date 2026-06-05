@@ -9,11 +9,11 @@ import Mathlib.Topology.Order.IntermediateValue
 # Green Function Ray Inversion at `c = 2`
 
 This file formalizes inversion constructors for the current explicit
-`bottcher_map` proxy at `c = 2` via the Green function.
+`proxy_bottcher_map` proxy at `c = 2` via the Green function.
 
 ## Definition
 
-`bottcher_map 2 z = polar_green_map 2 z = (z / ‖z‖) * exp(green_function 2 z)`
+`proxy_bottcher_map 2 z = polar_green_map 2 z = (z / ‖z‖) * exp(green_function 2 z)`
 away from zero, with the current total proxy branch at `z = 0`.
 
 The inverse `f` maps each `w` (with `‖w‖ > 1`) to the unique point `z` in the
@@ -1149,18 +1149,18 @@ theorem basin_external_ray_map_data_of_genuine_bottcher_inverse_package
       h_surj h_inj_outside
 
 /-- Choice-based basin-valued exterior inverse at `c = 2` from:
-1. exterior surjectivity of `bottcher_map 2`, and
-2. injectivity of `bottcher_map 2` on the outside-open region `{z : ‖z‖ > 4}`.
+1. exterior surjectivity of `proxy_bottcher_map 2`, and
+2. injectivity of `proxy_bottcher_map 2` on the outside-open region `{z : ‖z‖ > 4}`.
 
 This is the current specialization of the generic Step 3 constructor above. -/
 theorem basin_external_ray_map_data_two_of_surj_of_injOn_outside_open
-    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.proxy_bottcher_map (2 : ℂ) z = w)
     (h_inj_outside :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.BasinExternalRayMapDataTwo := by
   refine
     basin_external_ray_map_data_of_surj_of_injOn_outside_open
-      (c := (2 : ℂ)) (φ := Quadratic.bottcher_map (2 : ℂ))
+      (c := (2 : ℂ)) (φ := Quadratic.proxy_bottcher_map (2 : ℂ))
       ?_ ?_ ?_ h_surj h_inj_outside
   · intro z hz
     have hGz_pos : 0 < green_function (2 : ℂ) z :=
@@ -1168,10 +1168,10 @@ theorem basin_external_ray_map_data_two_of_surj_of_injOn_outside_open
     rw [Quadratic.norm_bottcher_eq_exp_green]
     exact Real.one_lt_exp_iff.mpr hGz_pos
   · intro z hz
-    simpa [Quadratic.bottcher_map] using
+    simpa [Quadratic.proxy_bottcher_map] using
       bottcher_conj_on_basin (2 : ℂ) z hz
   · intro z hnorm
-    exact bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hnorm
+    exact proxy_bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hnorm
 
 /-- Exterior inverse package from a basin-valued inverse package for the same
 theorem-facing coordinate. -/
@@ -1232,13 +1232,13 @@ theorem exists_external_ray_map_data_of_genuine_bottcher_route
 plus injectivity on the outside-open region. This is the root-facing
 `ExternalRayMapData` version of the previous basin-valued construction. -/
 theorem external_ray_map_exists_two_of_surj_of_injOn_outside_open
-    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.proxy_bottcher_map (2 : ℂ) z = w)
     (h_inj_outside :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   refine
     external_ray_map_data_of_surj_of_injOn_outside_open
-      (c := (2 : ℂ)) (φ := Quadratic.bottcher_map (2 : ℂ))
+      (c := (2 : ℂ)) (φ := Quadratic.proxy_bottcher_map (2 : ℂ))
       ?_ ?_ ?_ h_surj h_inj_outside
   · intro z hz
     have hGz_pos : 0 < green_function (2 : ℂ) z :=
@@ -1246,10 +1246,10 @@ theorem external_ray_map_exists_two_of_surj_of_injOn_outside_open
     rw [Quadratic.norm_bottcher_eq_exp_green]
     exact Real.one_lt_exp_iff.mpr hGz_pos
   · intro z hz
-    simpa [Quadratic.bottcher_map] using
+    simpa [Quadratic.proxy_bottcher_map] using
       bottcher_conj_on_basin (2 : ℂ) z hz
   · intro z hnorm
-    exact bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hnorm
+    exact proxy_bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hnorm
 
 /-- Combined Steps 2 and 3 of the expert proof at `c = 2`:
 if one has already established global exterior surjectivity (Step 1), then the
@@ -1257,25 +1257,25 @@ abstract local-oddness/eventual-injectivity argument yields outside-open
 injectivity (Step 2), and the choice-based constructor produces the desired
 external-ray package (Step 3). -/
 theorem external_ray_map_exists_two_of_surj_of_local_odd_of_eventual_inj
-    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.bottcher_map (2 : ℂ) z = w)
-    (hloc_odd : ∀ z : ℂ, ‖z‖ > 4 → Quadratic.bottcher_map (2 : ℂ) (-z) = -Quadratic.bottcher_map (2 : ℂ) z)
-    (hnorm_gt_one : ∀ z : ℂ, ‖z‖ > 4 → 1 < ‖Quadratic.bottcher_map (2 : ℂ) z‖)
+    (h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.proxy_bottcher_map (2 : ℂ) z = w)
+    (hloc_odd : ∀ z : ℂ, ‖z‖ > 4 → Quadratic.proxy_bottcher_map (2 : ℂ) (-z) = -Quadratic.proxy_bottcher_map (2 : ℂ) z)
+    (hnorm_gt_one : ∀ z : ℂ, ‖z‖ > 4 → 1 < ‖Quadratic.proxy_bottcher_map (2 : ℂ) z‖)
     (hiter_eq :
       ∀ z₁ z₂ : ℂ, ∀ n : ℕ,
-        Quadratic.bottcher_map (2 : ℂ) z₁ = Quadratic.bottcher_map (2 : ℂ) z₂ →
-          Quadratic.bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₁) =
-            Quadratic.bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₂))
+        Quadratic.proxy_bottcher_map (2 : ℂ) z₁ = Quadratic.proxy_bottcher_map (2 : ℂ) z₂ →
+          Quadratic.proxy_bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₁) =
+            Quadratic.proxy_bottcher_map (2 : ℂ) ((quadratic_map (2 : ℂ))^[n] z₂))
     (hforward : ∀ z : ℂ, ‖z‖ > 4 → ‖quadratic_map (2 : ℂ) z‖ > 4)
     (heventually_inj : ∃ R : ℝ, R > 4 ∧
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > R})
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > R})
     (heventually_large :
       ∀ z : ℂ, ‖z‖ > 4 → ∀ R : ℝ, R > 4 →
         ∃ N : ℕ, ∀ n ≥ N, ‖((quadratic_map (2 : ℂ))^[n] z)‖ > R) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   have h_inj :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
     have h_inj4 :
-        Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > 4} :=
+        Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > 4} :=
       injOn_outside_open_of_local_odd_of_eventual_inj_two
         hloc_odd hnorm_gt_one hiter_eq hforward heventually_inj heventually_large
     intro z hz w hw hEq
@@ -1289,11 +1289,11 @@ theorem external_ray_map_exists_two_of_surj_of_local_odd_of_eventual_inj
 
 /-- The Böttcher map applied to a positive-real-scaled unit vector simplifies to
 `u * exp(G_c(ρ · u))`. -/
-private lemma bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
+private lemma proxy_bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
     (hρ : 0 < ρ) :
-    Quadratic.bottcher_map c ((ρ : ℂ) * u) =
+    Quadratic.proxy_bottcher_map c ((ρ : ℂ) * u) =
       u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))) := by
-  simpa using Quadratic.bottcher_map_apply_ray c u hu ρ hρ
+  simpa using Quadratic.proxy_bottcher_map_apply_ray c u hu ρ hρ
 
 /-- **Lemma E (seam-minimal uniqueness form)**: the external ray map at `c = 2`
 from anchored uniqueness + anchor-gap seams.
@@ -1302,11 +1302,11 @@ Explicit construction: for each `w` with `‖w‖ > 1`, let `u := w / ‖w‖` a
 the (unique) solution to `G_2(ρ · u) = log ‖w‖` given by `exists_ray_preimage_green_pos`.
 Set `f(w) := ρ · u`.
 
-- **Right inverse**: `bottcher_map 2 (f w) = u · ‖w‖ = w` since
-  `bottcher_map 2 (ρ · u) = u · exp(G_2(ρ · u)) = u · exp(log ‖w‖) = u · ‖w‖`. ✓
-- **Left inverse**: for `‖z‖ > 4`, `bottcher_map 2 z = (z/‖z‖) · exp(G_2(z))`, so
-  `log ‖bottcher_map 2 z‖ = G_2(z)` and `bottcher_map 2 z / ‖·‖ = z / ‖z‖`.
-  Hence `ρ = ‖z‖` is the unique solution, giving `f(bottcher_map 2 z) = ‖z‖ · (z/‖z‖) = z`. ✓
+- **Right inverse**: `proxy_bottcher_map 2 (f w) = u · ‖w‖ = w` since
+  `proxy_bottcher_map 2 (ρ · u) = u · exp(G_2(ρ · u)) = u · exp(log ‖w‖) = u · ‖w‖`. ✓
+- **Left inverse**: for `‖z‖ > 4`, `proxy_bottcher_map 2 z = (z/‖z‖) · exp(G_2(z))`, so
+  `log ‖proxy_bottcher_map 2 z‖ = G_2(z)` and `proxy_bottcher_map 2 z / ‖·‖ = z / ‖z‖`.
+  Hence `ρ = ‖z‖` is the unique solution, giving `f(proxy_bottcher_map 2 z) = ‖z‖ · (z/‖z‖) = z`. ✓
 
 Current gap note:
 1. Full constructive strict-monotonicity replacement for
@@ -1333,7 +1333,7 @@ theorem external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
   -- Define f by Classical.choose on hf_ex.
   refine ⟨fun w => if hw : 1 < ‖w‖ then
       ↑(Classical.choose (hf_ex w hw)) * (w / ↑‖w‖) else 0, ?_, ?_⟩
-  · -- Part A: right inverse — bottcher_map 2 (f w) = w for ‖w‖ > 1.
+  · -- Part A: right inverse — proxy_bottcher_map 2 (f w) = w for ‖w‖ > 1.
     intro w hw
     simp only [dif_pos hw]
     have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
@@ -1342,18 +1342,18 @@ theorem external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
     obtain ⟨hρ_gt, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw)
     have hρ_pos : 0 < Classical.choose (hf_ex w hw) := by
       linarith [hρ_gt, norm_nonneg (2 : ℂ)]
-    -- bottcher_map 2 (↑ρ * (w/↑‖w‖)) = (w/↑‖w‖) * ‖w‖ = w
-    rw [bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
+    -- proxy_bottcher_map 2 (↑ρ * (w/↑‖w‖)) = (w/↑‖w‖) * ‖w‖ = w
+    rw [proxy_bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
     exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
-  · -- Part B: left inverse — f (bottcher_map 2 z) = z for ‖z‖ > ‖(2:ℂ)‖ + 2.
+  · -- Part B: left inverse — f (proxy_bottcher_map 2 z) = z for ‖z‖ > ‖(2:ℂ)‖ + 2.
     intro z hz
     have h2norm : ‖(2 : ℂ)‖ = 2 := by
       rw [show (2 : ℂ) = ((2 : ℝ) : ℂ) from by norm_cast,
           Complex.norm_real, Real.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
     have hz_pos : (0 : ℝ) < ‖z‖ := by linarith [h2norm ▸ hz]
     have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp hz_pos.ne'
-    -- Let w = bottcher_map 2 z; show 1 < ‖w‖.
-    set w := Quadratic.bottcher_map (2 : ℂ) z with hw_def
+    -- Let w = proxy_bottcher_map 2 z; show 1 < ‖w‖.
+    set w := Quadratic.proxy_bottcher_map (2 : ℂ) z with hw_def
     have hGz_pos : 0 < green_function (2 : ℂ) z :=
       green_function_pos_on_outside_open (2 : ℂ) z hz
     have hw_norm : ‖w‖ = Real.exp (green_function (2 : ℂ) z) :=
@@ -1371,10 +1371,10 @@ theorem external_ray_map_exists_two_via_green_function_of_uniquePreimageSeam
         field_simp [show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne',
           mul_comm, mul_left_comm, mul_assoc]
       have happlyz :
-          Quadratic.bottcher_map (2 : ℂ) z =
+          Quadratic.proxy_bottcher_map (2 : ℂ) z =
             (z / ↑‖z‖) * ↑(Real.exp (green_function (2 : ℂ) z)) := by
         simpa [hscale] using
-          (Quadratic.bottcher_map_apply_ray (2 : ℂ) (z / ↑‖z‖) hu_z ‖z‖ hz_pos)
+          (Quadratic.proxy_bottcher_map_apply_ray (2 : ℂ) (z / ↑‖z‖) hu_z ‖z‖ hz_pos)
       rw [hw_norm, hw_def, happlyz]
       field_simp [(Real.exp_pos (green_function (2 : ℂ) z)).ne',
                   show (↑‖z‖ : ℂ) ≠ 0 from by exact_mod_cast hz_pos.ne']
@@ -1437,7 +1437,7 @@ theorem external_ray_map_exists_two_via_green_function
 region, equal Böttcher values force equal direction and equal Green value, so
 strict radial monotonicity gives equal radius. -/
 theorem injOn_outside_open_two_of_green_function_ray_strictMono :
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+    Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   intro z hz w hw hEq
   have hz_out : ‖z‖ > ‖(2 : ℂ)‖ + 2 := hz
@@ -1451,8 +1451,8 @@ theorem injOn_outside_open_two_of_green_function_ray_strictMono :
   have hgreen_eq :
       green_function (2 : ℂ) z = green_function (2 : ℂ) w := by
     have hnorm_eq :
-        ‖Quadratic.bottcher_map (2 : ℂ) z‖ =
-          ‖Quadratic.bottcher_map (2 : ℂ) w‖ := by
+        ‖Quadratic.proxy_bottcher_map (2 : ℂ) z‖ =
+          ‖Quadratic.proxy_bottcher_map (2 : ℂ) w‖ := by
       simpa [hEq]
     rw [Quadratic.norm_bottcher_eq_exp_green, Quadratic.norm_bottcher_eq_exp_green] at hnorm_eq
     exact Real.exp_injective hnorm_eq
@@ -1460,11 +1460,11 @@ theorem injOn_outside_open_two_of_green_function_ray_strictMono :
     exact fun hz0 => hz_pos.ne' (by simpa [hz0] using norm_zero)
   have hw_ne : w ≠ 0 := by
     exact fun hw0 => hw_pos.ne' (by simpa [hw0] using norm_zero)
-  rcases bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) z hz_out with ⟨rz, hrz_pos, hrz_eq⟩
-  rcases bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) w hw_out with ⟨rw, hrw_pos, hrw_eq⟩
-  have hbotcher_z : Quadratic.bottcher_map (2 : ℂ) z = (rz : ℂ) * z := by
+  rcases proxy_bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) z hz_out with ⟨rz, hrz_pos, hrz_eq⟩
+  rcases proxy_bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) w hw_out with ⟨rw, hrw_pos, hrw_eq⟩
+  have hbotcher_z : Quadratic.proxy_bottcher_map (2 : ℂ) z = (rz : ℂ) * z := by
     exact (div_eq_iff hz_ne).1 hrz_eq
-  have hbotcher_w : Quadratic.bottcher_map (2 : ℂ) w = (rw : ℂ) * w := by
+  have hbotcher_w : Quadratic.proxy_bottcher_map (2 : ℂ) w = (rw : ℂ) * w := by
     exact (div_eq_iff hw_ne).1 hrw_eq
   have hscales : (rz : ℂ) * z = (rw : ℂ) * w := by
     simpa [hbotcher_z, hbotcher_w] using hEq
@@ -1539,7 +1539,7 @@ theorem external_ray_map_exists_two_via_green_function_of_injOn_outside_open
         green_function (2 : ℂ)
             (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
     (h_inj_outside :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   have hf_ex : ∀ w : ℂ, 1 < ‖w‖ →
@@ -1558,10 +1558,10 @@ theorem external_ray_map_exists_two_via_green_function_of_injOn_outside_open
     obtain ⟨hρ_gt, hρ_eq⟩ := Classical.choose_spec (hf_ex w hw)
     have hρ_pos : 0 < Classical.choose (hf_ex w hw) := by
       linarith [hρ_gt, norm_nonneg (2 : ℂ)]
-    rw [bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
+    rw [proxy_bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
     exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
   · intro z hz
-    set w := Quadratic.bottcher_map (2 : ℂ) z with hw_def
+    set w := Quadratic.proxy_bottcher_map (2 : ℂ) z with hw_def
     have hw_norm : ‖w‖ = Real.exp (green_function (2 : ℂ) z) :=
       norm_bottcher_eq_exp_green (2 : ℂ) z
     have hGz_pos : 0 < green_function (2 : ℂ) z :=
@@ -1580,11 +1580,11 @@ theorem external_ray_map_exists_two_via_green_function_of_injOn_outside_open
         dsimp [x]
         rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg hρ_pos.le, hu, mul_one]
       linarith [hρ_gt, hx_norm]
-    have hx_bottcher : Quadratic.bottcher_map (2 : ℂ) x = w := by
+    have hx_bottcher : Quadratic.proxy_bottcher_map (2 : ℂ) x = w := by
       dsimp [x]
-      rw [bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
+      rw [proxy_bottcher_map_apply_ray (2 : ℂ) _ hu _ hρ_pos, hρ_eq, Real.exp_log hw_pos]
       exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
-    have hz_bottcher : Quadratic.bottcher_map (2 : ℂ) z = w := by
+    have hz_bottcher : Quadratic.proxy_bottcher_map (2 : ℂ) z = w := by
       simp [hw_def]
     have hx_eq_z : x = z :=
       h_inj_outside hx_out hz (hx_bottcher.trans hz_bottcher.symm)
@@ -1598,13 +1598,13 @@ theorem basinExternalRayMapData_of_externalRayMapData (c : ℂ)
     Quadratic.BasinExternalRayMapData c := by
   refine ⟨external_ray_map_of_data h_data, ?_, ?_, ?_, ?_⟩
   · intro z hz
-    exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+    exact proxy_bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
   · intro z hz
-    simpa [bottcher_map] using bottcher_conj_on_basin c z hz
+    simpa [proxy_bottcher_map] using bottcher_conj_on_basin c z hz
   · intro w hw
     refine ⟨?_, external_ray_map_of_data_right_inverse h_data w hw⟩
     exact
-      bottcher_map_norm_gt_one_implies_basin c (z := external_ray_map_of_data h_data w) <| by
+      proxy_bottcher_map_norm_gt_one_implies_basin c (z := external_ray_map_of_data h_data w) <| by
         simpa [external_ray_map_of_data_right_inverse h_data w hw] using hw
   · intro z hz
     exact external_ray_map_of_data_left_inverse_large h_data z hz
@@ -1618,7 +1618,7 @@ theorem basin_external_ray_map_data_two_via_green_function_of_injOn_outside_open
         green_function (2 : ℂ)
             (((‖(2 : ℂ)‖ + 2 : ℝ) * (w / ↑‖w‖)) : ℂ) < Real.log ‖w‖)
     (h_inj_outside :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.BasinExternalRayMapDataTwo := by
   exact
@@ -1650,7 +1650,7 @@ theorem external_ray_map_exists_two_via_green_function_of_iter_left_inverse
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact external_ray_map_exists_two_via_green_function_of_injOn_outside_open
     hlog_gt_anchor
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
+    (proxy_bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
 
 end GreenFunctionRayInversion
 

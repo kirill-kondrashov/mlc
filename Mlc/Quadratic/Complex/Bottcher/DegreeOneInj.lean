@@ -466,15 +466,15 @@ lemma isCoveringMap_of_isProperMap_isLocalHomeomorph [PreconnectedSpace Y] [None
 end ProperLocalHomeomorphFibers
 
 theorem restricted_isCoveringMap_two_of_isProperMap_isLocalHomeomorph
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
-    IsCoveringMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    IsCoveringMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) := by
   letI : ConnectedSpace {w : ℂ // 1 < ‖w‖} :=
     (isConnected_iff_connectedSpace).1 MLC.isConnected_exterior
   letI : Nonempty {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
     refine ⟨⟨(5 : ℂ), by norm_num⟩⟩
   exact isCoveringMap_of_isProperMap_isLocalHomeomorph
-    (f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local
+    (f := MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local
 
 /-- Large circles in the outside-open domain for `c = 2`. -/
 noncomputable def outsideOpenCircleLoopTwo (R : ℝ) (hR : 4 < R) :
@@ -517,12 +517,12 @@ theorem exists_large_radius_straight_line_homotopy_in_exterior_two :
         1 <
           ‖circleMap 0 R (2 * π * (t : ℝ)) +
             ((s : ℝ) : ℂ) *
-              (MLC.Quadratic.bottcher_map (2 : ℂ)
+              (MLC.Quadratic.proxy_bottcher_map (2 : ℂ)
                   (circleMap 0 R (2 * π * (t : ℝ))) -
                 circleMap 0 R (2 * π * (t : ℝ)))‖ := by
   have hnorm : MLC.bottcher_normalized_at_infty (2 : ℂ) :=
     MLC.bottcher_normalized_at_infty_of_green (2 : ℂ)
-  rcases MLC.bottcher_map_minus_id_bound_of_normalized (2 : ℂ) hnorm (1 / 2) (by norm_num) with
+  rcases MLC.proxy_bottcher_map_minus_id_bound_of_normalized (2 : ℂ) hnorm (1 / 2) (by norm_num) with
     ⟨R₀, hR₀⟩
   let R : ℝ := max R₀ 5
   have hRgt4 : 4 < R := by
@@ -538,30 +538,30 @@ theorem exists_large_radius_straight_line_homotopy_in_exterior_two :
   have hR₀le : R₀ ≤ ‖z‖ := by
     have : R₀ ≤ R := le_max_left _ _
     simpa [hznorm] using this
-  have hbound : ‖MLC.Quadratic.bottcher_map (2 : ℂ) z - z‖ ≤ (1 / 2) * ‖z‖ := hR₀ z hR₀le
+  have hbound : ‖MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z‖ ≤ (1 / 2) * ‖z‖ := hR₀ z hR₀le
   have hs_nonneg : 0 ≤ (s : ℝ) := s.2.1
   have hs_le_one : (s : ℝ) ≤ 1 := s.2.2
   have hscaled :
-      ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ ≤ (1 / 2) * ‖z‖ := by
+      ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z))‖ ≤ (1 / 2) * ‖z‖ := by
     calc
-      ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ =
-          ‖((s : ℝ) : ℂ)‖ * ‖MLC.Quadratic.bottcher_map (2 : ℂ) z - z‖ := by
-            simpa using norm_mul (((s : ℝ) : ℂ)) (MLC.Quadratic.bottcher_map (2 : ℂ) z - z)
-      _ = (s : ℝ) * ‖MLC.Quadratic.bottcher_map (2 : ℂ) z - z‖ := by
+      ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z))‖ =
+          ‖((s : ℝ) : ℂ)‖ * ‖MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z‖ := by
+            simpa using norm_mul (((s : ℝ) : ℂ)) (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z)
+      _ = (s : ℝ) * ‖MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z‖ := by
             simp [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg hs_nonneg]
       _ ≤ (s : ℝ) * ((1 / 2) * ‖z‖) := by
             gcongr
       _ ≤ (1 / 2) * ‖z‖ := by
-            nlinarith [norm_nonneg (MLC.Quadratic.bottcher_map (2 : ℂ) z - z)]
+            nlinarith [norm_nonneg (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z)]
   have hlower :
-      ‖z‖ - ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ ≤
-        ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ := by
+      ‖z‖ - ‖(((s : ℝ) : ℂ) * (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z))‖ ≤
+        ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z))‖ := by
     simpa using norm_sub_norm_le z (-(((s : ℝ) : ℂ) *
-      (MLC.Quadratic.bottcher_map (2 : ℂ) z - z)))
+      (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z)))
   have hhalf :
-      ‖z‖ / 2 ≤ ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ := by
+      ‖z‖ / 2 ≤ ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z))‖ := by
     nlinarith
-  have hgt1 : 1 < ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.bottcher_map (2 : ℂ) z - z))‖ := by
+  have hgt1 : 1 < ‖z + (((s : ℝ) : ℂ) * (MLC.Quadratic.proxy_bottcher_map (2 : ℂ) z - z))‖ := by
     have : 1 < ‖z‖ / 2 := by
       rw [hznorm]
       nlinarith
@@ -572,7 +572,7 @@ theorem exists_large_radius_straight_line_homotopy_in_exterior_two :
 packages the geometric part of the winding argument in a form usable by later covering-space
 reasoning. -/
 theorem exists_large_radius_circle_homotopy_two
-    (hcont : Continuous (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (hcont : Continuous (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     ∃ R : ℝ, ∃ hR : 4 < R,
       Nonempty
         (ContinuousMap.Homotopy
@@ -587,7 +587,7 @@ theorem exists_large_radius_circle_homotopy_two
     { toFun := fun st =>
         ⟨(σ st.2 : ℂ) + (((st.1 : unitInterval) : ℝ) : ℂ) * ((τ st.2 : ℂ) - (σ st.2 : ℂ)), by
           simpa [σ, σdom, τ, outsideOpenCircleLoopTwo, exteriorCircleLoopTwo,
-            MLC.bottcher_map_outside_open_to_exterior]
+            MLC.proxy_bottcher_map_outside_open_to_exterior]
             using hH st.1 st.2⟩
       continuous_toFun := by
         apply Continuous.subtype_mk
@@ -632,7 +632,7 @@ lemma injective_of_forall_natCard_fiber_eq_one
 noncomputable def RestrictedFiberCardTwo (y : {w : ℂ // 1 < ‖w‖}) : ℕ :=
   Nat.card
     ({x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
-        MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y})
+        MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ) x = y})
 
 /-- The restricted outside-open Böttcher map at `c = 2` has one-point fibers.
 
@@ -659,8 +659,8 @@ once the restricted outside-open map at `c = 2` is known to be proper and a
 local homeomorphism, the already-formalized large-circle homotopy should force
 the covering degree to be `1`. -/
 def RestrictedAsymptoticWindingBridgeTwo : Prop :=
-  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
+  ∀ (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))),
       RestrictedAsymptoticWindingDegreeOneTwo
 
 /-- Exact formalization of Problem A from the expert handoff: once the
@@ -669,7 +669,7 @@ formalizes the positive constant covering degree. The residual algebraic-topolog
 content is that a free homotopy from a large image loop to the standard
 positive exterior circle forces that degree to equal `1`. -/
 def RestrictedCoveringDegreeMonodromyCoreTwo : Prop :=
-  ∀ (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+  ∀ (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (d : ℕ), 0 < d →
       (∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d) →
         (∃ R : ℝ, ∃ hR : 4 < R,
@@ -684,8 +684,8 @@ def RestrictedCoveringDegreeMonodromyCoreTwo : Prop :=
 monodromy core. Properness is only used upstream to obtain a positive constant
 fiber degree, which has already been formalized separately. -/
 def RestrictedCoveringDegreeRigidityProblemATwo : Prop :=
-  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+  ∀ (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (d : ℕ), 0 < d →
       (∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d) →
         (∃ R : ℝ, ∃ hR : 4 < R,
@@ -707,39 +707,39 @@ positive constant finite fiber degree on the exterior target. This is exactly
 the non-monodromy datum consumed by
 `RestrictedCoveringDegreeMonodromyCoreTwo`. -/
 def RestrictedLocalHomeomorphPositiveConstantDegreeTwo : Prop :=
-  IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+  IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     ∃ d : ℕ, 0 < d ∧ ∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d
 
-private theorem one_lt_norm_bottcher_map_two_four :
-    1 < ‖MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ)‖ := by
+private theorem one_lt_norm_proxy_bottcher_map_two_four :
+    1 < ‖MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ)‖ := by
   have h4_outside_disk : (4 : ℂ) ∈ MLC.outside_disk (2 : ℂ) := by
     exact MLC.large_norm_mem_outside_disk (2 : ℂ) (4 : ℂ) (by norm_num)
   have h4_basin : (4 : ℂ) ∈ MLC.basin_of_infinity (2 : ℂ) :=
     MLC.outside_disk_subset_quadratic_basin (2 : ℂ) h4_outside_disk
   exact
-    MLC.bottcher_map_norm_gt_one_of_basin (2 : ℂ) (4 : ℂ) h4_basin
+    MLC.proxy_bottcher_map_norm_gt_one_of_basin (2 : ℂ) (4 : ℂ) h4_basin
       (MLC.green_function_pos_of_basin (2 : ℂ) (4 : ℂ) h4_basin)
 
 private theorem restrictedFiberCardTwo_bottcherMapFour_eq_zero :
     let y : {w : ℂ // 1 < ‖w‖} :=
-      ⟨MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_bottcher_map_two_four⟩
+      ⟨MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_proxy_bottcher_map_two_four⟩
     RestrictedFiberCardTwo y = 0 := by
   classical
   let y : {w : ℂ // 1 < ‖w‖} :=
-    ⟨MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_bottcher_map_two_four⟩
+    ⟨MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_proxy_bottcher_map_two_four⟩
   have hEmpty :
       IsEmpty
         {x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
-          MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y} := by
+          MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ) x = y} := by
     refine ⟨?_⟩
     intro x
     rcases x with ⟨x, hx⟩
     have hx_val :
-        MLC.Quadratic.bottcher_map (2 : ℂ) x.1 =
-          MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ) := by
+        MLC.Quadratic.proxy_bottcher_map (2 : ℂ) x.1 =
+          MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ) := by
       exact congrArg Subtype.val hx
     rcases
-        MLC.bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) x.1 x.2 with
+        MLC.proxy_bottcher_map_div_eq_real_scale_of_outside_open (2 : ℂ) x.1 x.2 with
       ⟨r, hr_pos, hr_eq⟩
     have hx_ne_zero : x.1 ≠ 0 := by
       intro hx_zero
@@ -749,13 +749,13 @@ private theorem restrictedFiberCardTwo_bottcherMapFour_eq_zero :
       have : ‖x.1‖ = 0 := by simpa [hx_zero]
       exact hx_norm_gt.ne' this
     have hbotcher_x :
-        MLC.Quadratic.bottcher_map (2 : ℂ) x.1 = (r : ℂ) * x.1 := by
+        MLC.Quadratic.proxy_bottcher_map (2 : ℂ) x.1 = (r : ℂ) * x.1 := by
       exact (div_eq_iff hx_ne_zero).1 hr_eq
     have hphi_four :
-        MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ) =
+        MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ) =
           (Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) : ℂ) := by
       simpa using
-        (MLC.Quadratic.bottcher_map_apply_ray (2 : ℂ) (1 : ℂ) (by simp) 4 (by norm_num))
+        (MLC.Quadratic.proxy_bottcher_map_apply_ray (2 : ℂ) (1 : ℂ) (by simp) 4 (by norm_num))
     have hr_ne : (r : ℂ) ≠ 0 := by
       exact_mod_cast hr_pos.ne'
     have hx_complex :
@@ -764,8 +764,8 @@ private theorem restrictedFiberCardTwo_bottcherMapFour_eq_zero :
       exact (eq_div_iff hr_ne).2 <| by
         calc
           x.1 * (r : ℂ) = (r : ℂ) * x.1 := by ring
-          _ = MLC.Quadratic.bottcher_map (2 : ℂ) x.1 := hbotcher_x.symm
-          _ = MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ) := hx_val
+          _ = MLC.Quadratic.proxy_bottcher_map (2 : ℂ) x.1 := hbotcher_x.symm
+          _ = MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ) := hx_val
           _ = (Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) : ℂ) := hphi_four
     have hx_real :
         x.1 = ((Real.exp (MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ)) / r : ℝ) : ℂ) := by
@@ -783,8 +783,8 @@ private theorem restrictedFiberCardTwo_bottcherMapFour_eq_zero :
         MLC.Quadratic.green_function (2 : ℂ) x.1 =
           MLC.Quadratic.green_function (2 : ℂ) (4 : ℂ) := by
       have hnorm_eq :
-          ‖MLC.Quadratic.bottcher_map (2 : ℂ) x.1‖ =
-            ‖MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ)‖ := by
+          ‖MLC.Quadratic.proxy_bottcher_map (2 : ℂ) x.1‖ =
+            ‖MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ)‖ := by
         simpa [hx_val]
       rw [MLC.Quadratic.norm_bottcher_eq_exp_green, MLC.Quadratic.norm_bottcher_eq_exp_green] at hnorm_eq
       exact Real.exp_injective hnorm_eq
@@ -811,11 +811,11 @@ private theorem restrictedFiberCardTwo_bottcherMapFour_eq_zero :
     exact (not_lt_of_ge (le_of_eq hgreen_eq)) hmono'
   letI : IsEmpty
       {x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
-        MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y} := hEmpty
+        MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ) x = y} := hEmpty
   simpa [RestrictedFiberCardTwo, y, Nat.card_eq_fintype_card] using
     (Fintype.card_of_isEmpty
       {x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
-        MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y})
+        MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ) x = y})
 
 /-- The full-exterior positive-constant-degree strengthening is impossible: the
 boundary image `Φ(4)` has no preimage in the restricted outside-open domain. -/
@@ -824,7 +824,7 @@ theorem not_restrictedLocalHomeomorphPositiveConstantDegreeTwo :
   intro h
   rcases h with ⟨_, ⟨d, hd_pos, hdeg⟩⟩
   let y : {w : ℂ // 1 < ‖w‖} :=
-    ⟨MLC.Quadratic.bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_bottcher_map_two_four⟩
+    ⟨MLC.Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ), one_lt_norm_proxy_bottcher_map_two_four⟩
   have hy_zero : RestrictedFiberCardTwo y = 0 := by
     simpa [y] using restrictedFiberCardTwo_bottcherMapFour_eq_zero
   have hd_zero : d = 0 := by
@@ -847,8 +847,8 @@ if the restricted map is proper and a local homeomorphism, then any
 already-formalized free homotopy between a large standard exterior circle and
 its image loop should force the covering degree to be `1`. -/
 def RestrictedAnnulusCoveringDegreeOneStepTwo : Prop :=
-  ∀ (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))),
+  ∀ (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))),
       (∃ R : ℝ, ∃ hR : 4 < R,
         Nonempty
           (ContinuousMap.Homotopy
@@ -872,8 +872,8 @@ singleton-fiber conclusion for the restricted Böttcher map once the proper/loca
 witness is supplied. -/
 theorem restrictedAsymptoticWindingDegreeOneTwo_of_annulusCoveringDegreeOneStep
     (htopo : RestrictedAnnulusCoveringDegreeOneStepTwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     RestrictedAsymptoticWindingDegreeOneTwo :=
   restrictedAsymptoticWindingBridgeTwo_of_annulusCoveringDegreeOneStep htopo
     h_proper h_local
@@ -881,23 +881,23 @@ theorem restrictedAsymptoticWindingDegreeOneTwo_of_annulusCoveringDegreeOneStep
 /-- Proper local-homeomorphy of the restricted outside-open map makes the
 restricted fiber cardinality independent of the exterior base point. -/
 theorem restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     RestrictedCoveringDegreeConstantTwo := by
   letI : ConnectedSpace {w : ℂ // 1 < ‖w‖} :=
     (isConnected_iff_connectedSpace).1 MLC.isConnected_exterior
   intro y y'
   simpa [RestrictedFiberCardTwo] using
     (natCard_fiber_eq_of_isProperMap_isLocalHomeomorph
-      (f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local y y')
+      (f := MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local y y')
 
 /-- Proper local-homeomorphy of the restricted outside-open map gives a positive
 constant covering degree on the exterior target. This formalizes the finite,
 surjective covering part of the degree-one proof before the winding calculation
 identifies the degree as `1`. -/
 theorem restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     ∃ d : ℕ, 0 < d ∧ ∀ y : {w : ℂ // 1 < ‖w‖}, RestrictedFiberCardTwo y = d := by
   letI : ConnectedSpace {w : ℂ // 1 < ‖w‖} :=
     (isConnected_iff_connectedSpace).1 MLC.isConnected_exterior
@@ -908,7 +908,7 @@ theorem restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
   refine ⟨RestrictedFiberCardTwo y0, ?_, ?_⟩
   · simpa [RestrictedFiberCardTwo, y0] using
       (natCard_fiber_pos_of_isProperMap_isLocalHomeomorph
-        (f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local y0)
+        (f := MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) h_proper h_local y0)
   · intro y
     simpa [y0] using
       (restricted_covering_degree_constant_two_of_isProperMap_isLocalHomeomorph
@@ -917,8 +917,8 @@ theorem restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
 /-- Proper local-homeomorphy implies the smaller truthful witness-side datum:
 local homeomorphy together with a positive constant restricted fiber degree. -/
 theorem restrictedLocalHomeomorphPositiveConstantDegreeTwo_of_isProperMap_isLocalHomeomorph
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     RestrictedLocalHomeomorphPositiveConstantDegreeTwo := by
   refine ⟨h_local, ?_⟩
   exact restricted_covering_degree_positive_two_of_isProperMap_isLocalHomeomorph
@@ -928,8 +928,8 @@ theorem restrictedLocalHomeomorphPositiveConstantDegreeTwo_of_isProperMap_isLoca
 generator-calculation kernel from the proof sketch. -/
 theorem restrictedAsymptoticWindingDegreeOneTwo_of_problemA
     (hproblemA : RestrictedCoveringDegreeRigidityProblemATwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     (∃ R : ℝ, ∃ hR : 4 < R,
       Nonempty
         (ContinuousMap.Homotopy
@@ -949,8 +949,8 @@ theorem restrictedAsymptoticWindingDegreeOneTwo_of_problemA
 remaining monodromy core of the proof sketch. -/
 theorem restrictedAsymptoticWindingDegreeOneTwo_of_monodromyCore
     (hcore : RestrictedCoveringDegreeMonodromyCoreTwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     (∃ R : ℝ, ∃ hR : 4 < R,
       Nonempty
         (ContinuousMap.Homotopy
@@ -967,8 +967,8 @@ theorem restrictedAsymptoticWindingDegreeOneTwo_of_monodromyCore
 generator-calculation kernel from the proof sketch. -/
 theorem restrictedAsymptoticWindingDegreeOneTwo_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
     (hkernel : RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     (∃ R : ℝ, ∃ hR : 4 < R,
       Nonempty
         (ContinuousMap.Homotopy
@@ -1035,8 +1035,8 @@ theorem restricted_degree_one_fibers_two_of_constant_of_winding
 restricted-map witness is available. -/
 theorem restricted_degree_one_fibers_two_of_winding_bridge
     (hbridge : RestrictedAsymptoticWindingBridgeTwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     RestrictedDegreeOneFibersTwo := by
   exact
     restricted_degree_one_fibers_two_of_constant_of_winding
@@ -1059,9 +1059,9 @@ theorem restricted_degree_one_fibers_two_of_localHomeomorphPositiveConstantDegre
 Böttcher map is injective on the outside-open domain. -/
 theorem injOn_outside_open_two_of_restricted_degree_one_fibers
     (hdegree : RestrictedDegreeOneFibersTwo) :
-    Set.InjOn (MLC.Quadratic.bottcher_map (2 : ℂ))
+    Set.InjOn (MLC.Quadratic.proxy_bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
-  let f := MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)
+  let f := MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)
   have hf_inj : Function.Injective f :=
     injective_of_forall_natCard_fiber_eq_one f hdegree
   intro z hz z' hz' hzz'
@@ -1069,7 +1069,7 @@ theorem injOn_outside_open_two_of_restricted_degree_one_fibers
   let x' : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} := ⟨z', hz'⟩
   have hx_image : f x = f x' := by
     apply Subtype.ext
-    simpa [f, x, x', MLC.bottcher_map_outside_open_to_exterior] using hzz'
+    simpa [f, x, x', MLC.proxy_bottcher_map_outside_open_to_exterior] using hzz'
   exact congrArg Subtype.val (hf_inj hx_image)
 
 /-- Outside-open injectivity from the two formal pieces of the degree-one proof:
@@ -1077,7 +1077,7 @@ constant covering degree and asymptotic winding degree one. -/
 theorem injOn_outside_open_two_of_restricted_covering_degree_constant_of_winding
     (hconst : RestrictedCoveringDegreeConstantTwo)
     (hwinding : RestrictedAsymptoticWindingDegreeOneTwo) :
-    Set.InjOn (MLC.Quadratic.bottcher_map (2 : ℂ))
+    Set.InjOn (MLC.Quadratic.proxy_bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   exact injOn_outside_open_two_of_restricted_degree_one_fibers
     (restricted_degree_one_fibers_two_of_constant_of_winding hconst hwinding)
@@ -1092,11 +1092,11 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_restricted_degree_one_fiber
   have hnonempty :
       Nonempty
         ({x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
-            MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) x = y}) :=
+            MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ) x = y}) :=
     (Nat.card_eq_one_iff_unique.mp (hdegree y)).2
   rcases hnonempty with ⟨x⟩
   refine ⟨x.1.1, x.1.2, ?_⟩
-  simpa [MLC.bottcher_map_outside_open_to_exterior, y] using congrArg Subtype.val x.2
+  simpa [MLC.proxy_bottcher_map_outside_open_to_exterior, y] using congrArg Subtype.val x.2
 
 /-- Degree-one fibers already suffice to build the external-ray map package:
 outside-open injectivity and outside-open exterior surjectivity are immediate. -/
@@ -1123,9 +1123,9 @@ theorem external_ray_map_exists_two_of_localHomeomorphPositiveConstantDegree_of_
 /-- Outside-open injectivity from the exact remaining proof-sketch bridge. -/
 theorem injOn_outside_open_two_of_winding_bridge
     (hbridge : RestrictedAsymptoticWindingBridgeTwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
-    Set.InjOn (MLC.Quadratic.bottcher_map (2 : ℂ))
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    Set.InjOn (MLC.Quadratic.proxy_bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
   exact
     injOn_outside_open_two_of_restricted_degree_one_fibers
@@ -1135,15 +1135,15 @@ theorem injOn_outside_open_two_of_winding_bridge
 fiber conclusion gives outside-open injectivity. Together they construct the
 external-ray map package at `c = 2`. -/
 theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_restricted_degree_one_fibers
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hdegree : RestrictedDegreeOneFibersTwo) :
     MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact
     MLC.external_ray_map_data_of_injOn_outside_open_of_surj_exterior (2 : ℂ)
       (injOn_outside_open_two_of_restricted_degree_one_fibers hdegree)
       (MLC.bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
-        (MLC.isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ)
+        (MLC.isClosed_range_proxy_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ)
           h_proper)
         h_local)
 
@@ -1151,8 +1151,8 @@ theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_restri
 pieces of the degree-one proof: constant covering degree and asymptotic winding
 degree one. -/
 theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_covering_degree_constant_of_winding
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hconst : RestrictedCoveringDegreeConstantTwo)
     (hwinding : RestrictedAsymptoticWindingDegreeOneTwo) :
     MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
@@ -1165,8 +1165,8 @@ theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_coveri
 winding degree-one calculation; the restricted covering-degree constancy is
 supplied by proper local-homeomorphy. -/
 theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hwinding : RestrictedAsymptoticWindingDegreeOneTwo) :
     MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact
@@ -1181,8 +1181,8 @@ proper/local-homeomorphy of the restricted map plus the unresolved
 algebraic-topology theorem. -/
 theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding_bridge
     (hbridge : RestrictedAsymptoticWindingBridgeTwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact
     external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
@@ -1191,8 +1191,8 @@ theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_windin
 /-- External-ray map data from the exact remaining abstract annulus theorem. -/
 theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_annulusCoveringDegreeOneStep
     (htopo : RestrictedAnnulusCoveringDegreeOneStepTwo)
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact
     external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_winding
@@ -1203,12 +1203,12 @@ theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_annulu
 /-- Proper local-homeomorphy of the restricted outside-open map already gives
 exterior surjectivity via the clopen-image argument. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_isLocalHomeomorph_restrict
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     MLC.BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) := by
   exact
     MLC.bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
-      (MLC.isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) h_proper)
+      (MLC.isClosed_range_proxy_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) h_proper)
       h_local
 
 /-- Direct proper/local restricted-map route at `c = 2`: once outside-open
@@ -1219,10 +1219,10 @@ This integrates the surjectivity half of the degree-one proof non-circularly.
 The remaining missing ingredient for the full route is now exactly the
 outside-open injectivity theorem. -/
 theorem external_ray_map_exists_two_of_proper_localHomeomorph_restrict_of_injOn
-    (h_proper : IsProperMap (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (MLC.bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_inj :
-      Set.InjOn (MLC.Quadratic.bottcher_map (2 : ℂ))
+      Set.InjOn (MLC.Quadratic.proxy_bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     MLC.Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact

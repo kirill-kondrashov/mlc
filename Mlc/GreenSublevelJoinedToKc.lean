@@ -29,7 +29,7 @@ lemma z_in_basin_of_not_mem_K (c : ℂ) (z : ℂ) (h : z ∉ MLC.Quadratic.K c) 
 /-- Bounds on the Böttcher coordinate norm for points in the sublevel set but not in K. -/
 lemma bottcher_norm_of_mem_sublevel (c : ℂ) (n : ℕ) (z : ℂ) 
     (hz : z ∈ MLC.Quadratic.GreenSublevel c n) (hK : z ∉ MLC.Quadratic.K c) :
-    let w := bottcher_map c z
+    let w := proxy_bottcher_map c z
     1 < ‖w‖ ∧ ‖w‖ < Real.exp ((1 / 2) ^ n) := by
   intro w
   have hw_norm : ‖w‖ = Real.exp (green_function c z) := norm_bottcher_eq_exp_green c z
@@ -137,8 +137,8 @@ lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ)
 Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
 -/
 lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
-    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ bottcher_map c '' bottcher_domain c)
-    (h_inj_basin : Set.InjOn (bottcher_map c) (basin_of_infinity c)) :
+    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ proxy_bottcher_map c '' bottcher_domain c)
+    (h_inj_basin : Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c)) :
     let S := MLC.Quadratic.GreenSublevel c n
     let K := MLC.Quadratic.K c
     ∀ z ∈ S, ∃ w ∈ K, JoinedIn S z w := by
@@ -148,7 +148,7 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
     exact ⟨h_in_K, JoinedIn.refl (K_subset_green_sublevel c n h_in_K)⟩
 
   have h_basin := z_in_basin_of_not_mem_K c z h_in_K
-  let w := bottcher_map c z
+  let w := proxy_bottcher_map c z
   obtain ⟨h_norm_gt, h_norm_lt⟩ := bottcher_norm_of_mem_sublevel c n z hz h_in_K
   
   have hw_ne_zero : w ≠ 0 := ne_zero_of_norm_ne_zero (ne_of_gt (lt_trans zero_lt_one h_norm_gt))
@@ -156,13 +156,13 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
   have h_start : extended_ray_map c w = z := by
     rw [extended_ray_map_eq c w h_norm_gt]
     have hright :
-        bottcher_map c (external_ray_map c w) = w :=
+        proxy_bottcher_map c (external_ray_map c w) = w :=
       bottcher_right_inv_of_mem c w (h_surj w h_norm_gt) h_norm_gt
     have hphi_ext :
-        1 < ‖bottcher_map c (external_ray_map c w)‖ := by
+        1 < ‖proxy_bottcher_map c (external_ray_map c w)‖ := by
       simpa [hright] using h_norm_gt
     have hnorm_ext :
-        ‖bottcher_map c (external_ray_map c w)‖ =
+        ‖proxy_bottcher_map c (external_ray_map c w)‖ =
           Real.exp (green_function c (external_ray_map c w)) :=
       norm_bottcher_eq_exp_green c (external_ray_map c w)
     have hpos_ext : 0 < green_function c (external_ray_map c w) := by
@@ -174,7 +174,7 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
     have h_basin_ext : external_ray_map c w ∈ basin_of_infinity c :=
       z_in_basin_of_not_mem_K c (external_ray_map c w) hnotK_ext
     have h_eq_phi :
-        bottcher_map c (external_ray_map c w) = bottcher_map c z := by
+        proxy_bottcher_map c (external_ray_map c w) = proxy_bottcher_map c z := by
       simpa [w] using hright
     exact h_inj_basin h_basin_ext h_basin h_eq_phi
 
@@ -205,7 +205,7 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
     
     simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq]
     rw [hp'_val]
-    have h_phi : ‖bottcher_map c (external_ray_map c u)‖ = ‖u‖ := by
+    have h_phi : ‖proxy_bottcher_map c (external_ray_map c u)‖ = ‖u‖ := by
       rw [bottcher_right_inv_of_mem c u (h_surj u hu_gt_1) hu_gt_1]
     rw [norm_bottcher_eq_exp_green c (external_ray_map c u)] at h_phi
     

@@ -119,7 +119,7 @@ where `RestrictedFiberCardTwo y` is the cardinality of the fiber of the
 restricted map
 
 ```lean
-MLC.bottcher_map_outside_open_to_exterior (2 : ℂ) :
+MLC.proxy_bottcher_map_outside_open_to_exterior (2 : ℂ) :
   {z : ℂ // ‖z‖ > 4} → {w : ℂ // 1 < ‖w‖}
 ```
 

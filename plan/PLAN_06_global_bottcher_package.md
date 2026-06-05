@@ -25,7 +25,7 @@ mathematics producing those interfaces.
 
 The current proxy route is dead:
 
-1. `Quadratic.bottcher_map := polar_green_map` is **not** the genuine coordinate.
+1. `Quadratic.proxy_bottcher_map := polar_green_map` is **not** the genuine coordinate.
 2. This is formally recorded by
    - `Quadratic.not_bottcherBasinLocalAnalyticityHyp_two`
    - `Quadratic.not_genuineBottcherCoordinateDataFor_bottcherMap_two`
@@ -56,7 +56,7 @@ Only after that comes the separate inverse package:
 ### Step 1. Prove the classical global theorem
 
 Prove `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)` for a **new**
-coordinate object, not for `Quadratic.bottcher_map`.
+coordinate object, not for `Quadratic.proxy_bottcher_map`.
 
 This single theorem must now internalize the classical analytic core:
 
@@ -127,7 +127,7 @@ repository.
 PLAN 06 should **not**:
 
 1. keep upgrading `polar_green_map`,
-2. redefine `Quadratic.bottcher_map` prematurely,
+2. redefine `Quadratic.proxy_bottcher_map` prematurely,
 3. revive old proxy-based inverse statements,
 4. collapse the classical theorem and inverse package into one opaque target,
 5. reintroduce Lyubich-style root dependencies.

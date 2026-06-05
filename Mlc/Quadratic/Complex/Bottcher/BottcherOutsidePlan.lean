@@ -16,20 +16,20 @@ open Quadratic Complex Topology Set Filter
 open scoped Uniformity
 
 /-!
-Plan: eliminate `bottcher_map_inj_on_outside`.
+Plan: eliminate `proxy_bottcher_map_inj_on_outside`.
 
 Step 1: Analyticity on the exterior.
-  Goal: `AnalyticOnNhd ℂ (bottcher_map c) {‖z‖ > ‖c‖ + 2}`.
+  Goal: `AnalyticOnNhd ℂ (proxy_bottcher_map c) {‖z‖ > ‖c‖ + 2}`.
   Requires: `outside_disk` (or the open exterior) is contained in `slit_orbit c`.
 
 Step 2: Normalization at infinity.
-  Goal: `Tendsto (fun z => ‖bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 1)`.
+  Goal: `Tendsto (fun z => ‖proxy_bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 1)`.
   Use: Green function asymptotics at infinity.
   This is a statement about the current explicit proxy surface; the full complex
   ratio requires a different theorem-facing normalization.
 
 Step 3: Derivative nonvanishing on the exterior.
-  Goal: `deriv (bottcher_map c) z ≠ 0` on `outside_disk c`.
+  Goal: `deriv (proxy_bottcher_map c) z ≠ 0` on `outside_disk c`.
   Use: analytic order lemma + local injectivity from Step 2.
 
 Step 4: Properness / degree-one argument.
@@ -37,13 +37,13 @@ Step 4: Properness / degree-one argument.
   Use: local injectivity + properness.
 
 Once Steps 1–4 are formalized, remove the axiom
-`bottcher_map_inj_on_outside`.
+`proxy_bottcher_map_inj_on_outside`.
 -/
 
-lemma bottcher_map_analytic_on_outside
+lemma proxy_bottcher_map_analytic_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    AnalyticOnNhd ℂ (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
-  bottcher_map_analytic_on_outside_of_slit c hslit
+    AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+  proxy_bottcher_map_analytic_on_outside_of_slit c hslit
 
 lemma not_injOn_nhds_of_deriv_eq_zero
     {f : ℂ → ℂ} {z : ℂ} (hf : AnalyticAt ℂ f z) (hderiv : deriv f z = 0) :
@@ -90,11 +90,11 @@ lemma injOn_nhds_of_analyticAt
 
 lemma bottcher_ratio_analytic_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    AnalyticOnNhd ℂ (fun z => (Quadratic.bottcher_map c z) / z)
+    AnalyticOnNhd ℂ (fun z => (Quadratic.proxy_bottcher_map c z) / z)
       {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
-  have hU : AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U :=
-    bottcher_map_analytic_on_outside c hslit
+  have hU : AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) U :=
+    proxy_bottcher_map_analytic_on_outside c hslit
   have hid : AnalyticOnNhd ℂ (fun z : ℂ => z) U := by
     simpa [U] using (analyticOnNhd_id (𝕜 := ℂ) (s := U))
   have hne : ∀ z ∈ U, z ≠ 0 := by
@@ -105,16 +105,16 @@ lemma bottcher_ratio_analytic_on_outside
       nlinarith
     have : 0 < ‖z‖ := lt_trans hc hz'
     exact (norm_ne_zero_iff).1 (ne_of_gt this)
-  simpa [U] using (AnalyticOnNhd.div (f := Quadratic.bottcher_map c) (g := fun z : ℂ => z)
+  simpa [U] using (AnalyticOnNhd.div (f := Quadratic.proxy_bottcher_map c) (g := fun z : ℂ => z)
     hU hid hne)
 
 lemma bottcher_normalized_at_infty_iff
     (c : ℂ) :
     bottcher_normalized_at_infty c ↔
-      Tendsto (fun z => ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖) atInfinity (𝓝 0) := by
+      Tendsto (fun z => ‖(Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)‖) atInfinity (𝓝 0) := by
   -- `Tendsto` to `1` in a metric space is equivalent to the norm of the difference tending to `0`.
   simpa [bottcher_normalized_at_infty, dist_eq_norm] using
-    (tendsto_iff_dist_tendsto_zero (f := fun z => (Quadratic.bottcher_map c z) / z)
+    (tendsto_iff_dist_tendsto_zero (f := fun z => (Quadratic.proxy_bottcher_map c z) / z)
       (a := (1 : ℂ)) (x := atInfinity))
 
 
@@ -243,7 +243,7 @@ lemma tendsto_quadratic_iter_div_pow_atInfinity (c : ℂ) :
 
 
 -- TODO (strong normalization): show
--- `Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 1)`.
+-- `Tendsto (fun z => (Quadratic.proxy_bottcher_map c z) / z) atInfinity (𝓝 1)`.
 -- This is not expected for the current explicit proxy definition (e.g. `c = 0`
 -- gives the radial normalization), but can hold on argument sectors.
 
@@ -260,29 +260,29 @@ lemma bottcher_root_seq_succ (c : ℂ) (N : ℕ) (z : ℂ) :
   simp [bottcher_root_seq, Function.iterate_succ_apply']
 
 lemma bottcher_root_seq_tendsto (c : ℂ) :
-    TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+    TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.proxy_bottcher_map c) atTop
       (Quadratic.basin_of_infinity c) := by
   simpa [bottcher_root_seq, quadratic_map] using (Quadratic.bottcher_seq_converges c)
 
 lemma bottcher_root_seq_tendsto_uniform_on_of_compact
     (c : ℂ) (K : Set ℂ) (hK : IsCompact K)
     (hKbasin : K ⊆ Quadratic.basin_of_infinity c) :
-    TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop K := by
+    TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.proxy_bottcher_map c) atTop K := by
   -- Locally uniform convergence on the basin yields uniform convergence on compacts.
   have hloc :
-      TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop K :=
+      TendstoLocallyUniformlyOn (bottcher_root_seq c) (Quadratic.proxy_bottcher_map c) atTop K :=
     (bottcher_root_seq_tendsto c).mono hKbasin
   exact (tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact (s := K) hK).1 hloc
 
 lemma bottcher_root_seq_tendsto_at (c : ℂ) {z : ℂ}
     (hz : z ∈ Quadratic.basin_of_infinity c) :
-    Tendsto (fun n => bottcher_root_seq c n z) atTop (𝓝 (Quadratic.bottcher_map c z)) :=
+    Tendsto (fun n => bottcher_root_seq c n z) atTop (𝓝 (Quadratic.proxy_bottcher_map c z)) :=
   (bottcher_root_seq_tendsto c).tendsto_at hz
 
 lemma bottcher_root_seq_ratio_tendsto_at (c : ℂ) {z : ℂ}
     (hz : z ∈ Quadratic.basin_of_infinity c) :
     Tendsto (fun n => (bottcher_root_seq c n z) / z) atTop
-      (𝓝 (Quadratic.bottcher_map c z / z)) := by
+      (𝓝 (Quadratic.proxy_bottcher_map c z / z)) := by
   have hcont : Continuous (fun w : ℂ => w / z) := by
     simpa [div_eq_mul_inv] using (continuous_id.mul continuous_const)
   exact (hcont.tendsto _).comp (bottcher_root_seq_tendsto_at c hz)
@@ -1467,8 +1467,8 @@ lemma tendsto_green_function_minus_log_norm_atInfinity (c : ℂ) :
       exact lt_of_le_of_lt hle hlt
   simpa [Real.norm_eq_abs] using hgoal
 
-lemma tendsto_norm_bottcher_map_div_norm_atInfinity (c : ℂ) :
-    Tendsto (fun z => ‖Quadratic.bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 (1 : ℝ)) := by
+lemma tendsto_norm_proxy_bottcher_map_div_norm_atInfinity (c : ℂ) :
+    Tendsto (fun z => ‖Quadratic.proxy_bottcher_map c z‖ / ‖z‖) atInfinity (𝓝 (1 : ℝ)) := by
   have hgreen := tendsto_green_function_minus_log_norm_atInfinity c
   have hExp :
       Tendsto (fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖))
@@ -1477,17 +1477,17 @@ lemma tendsto_norm_bottcher_map_div_norm_atInfinity (c : ℂ) :
   have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
     eventually_atInfinity_norm_gt (0 : ℝ)
   have hratio :
-      (fun z => ‖Quadratic.bottcher_map c z‖ / ‖z‖) =ᶠ[atInfinity]
+      (fun z => ‖Quadratic.proxy_bottcher_map c z‖ / ‖z‖) =ᶠ[atInfinity]
         fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖) := by
     refine hpos.mono ?_
     intro z hz
-    have hb : ‖Quadratic.bottcher_map c z‖ =
+    have hb : ‖Quadratic.proxy_bottcher_map c z‖ =
         Real.exp (Quadratic.green_function c z) :=
       Quadratic.norm_bottcher_eq_exp_green c z
     have hz' : Real.exp (Real.log ‖z‖) = ‖z‖ := by
       simpa using (Real.exp_log hz)
     calc
-      ‖Quadratic.bottcher_map c z‖ / ‖z‖
+      ‖Quadratic.proxy_bottcher_map c z‖ / ‖z‖
           = Real.exp (Quadratic.green_function c z) / ‖z‖ := by
               simp [hb]
       _ = Real.exp (Quadratic.green_function c z) / Real.exp (Real.log ‖z‖) := by
@@ -1499,8 +1499,8 @@ lemma tendsto_norm_bottcher_map_div_norm_atInfinity (c : ℂ) :
     simpa using hExp
   exact (tendsto_congr' hratio).2 hExp'
 
-lemma tendsto_bottcher_map_div_atInfinity (c : ℂ) :
-    Tendsto (fun z => (Quadratic.bottcher_map c z) / z) atInfinity (𝓝 (1 : ℂ)) := by
+lemma tendsto_proxy_bottcher_map_div_atInfinity (c : ℂ) :
+    Tendsto (fun z => (Quadratic.proxy_bottcher_map c z) / z) atInfinity (𝓝 (1 : ℂ)) := by
   have hgreen := tendsto_green_function_minus_log_norm_atInfinity c
   have hExpR :
       Tendsto (fun z => Real.exp (Quadratic.green_function c z - Real.log ‖z‖))
@@ -1517,7 +1517,7 @@ lemma tendsto_bottcher_map_div_atInfinity (c : ℂ) :
   have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
     eventually_atInfinity_norm_gt (0 : ℝ)
   have hratio :
-      (fun z => (Quadratic.bottcher_map c z) / z) =ᶠ[atInfinity]
+      (fun z => (Quadratic.proxy_bottcher_map c z) / z) =ᶠ[atInfinity]
         fun z => ((Real.exp (Quadratic.green_function c z - Real.log ‖z‖)) : ℂ) := by
     refine hpos.mono ?_
     intro z hz
@@ -1532,12 +1532,12 @@ lemma tendsto_bottcher_map_div_atInfinity (c : ℂ) :
     have hscale : ((‖z‖ : ℂ) * (z / ↑‖z‖)) = z := by
       field_simp [hz''', mul_comm, mul_left_comm, mul_assoc]
     have happly :
-        Quadratic.bottcher_map c z =
+        Quadratic.proxy_bottcher_map c z =
           (z / ↑‖z‖) * ↑(Real.exp (Quadratic.green_function c z)) := by
       simpa [hscale] using
-        (Quadratic.bottcher_map_apply_ray c (z / ↑‖z‖) hu ‖z‖ hz)
+        (Quadratic.proxy_bottcher_map_apply_ray c (z / ↑‖z‖) hu ‖z‖ hz)
     calc
-      (Quadratic.bottcher_map c z) / z
+      (Quadratic.proxy_bottcher_map c z) / z
           = ((z / ↑‖z‖) * (Real.exp (Quadratic.green_function c z)) : ℂ) / z := by
               rw [happly]
       _ = ((Real.exp (Quadratic.green_function c z)) : ℂ) / (‖z‖ : ℂ) := by
@@ -1547,18 +1547,18 @@ lemma tendsto_bottcher_map_div_atInfinity (c : ℂ) :
   exact (tendsto_congr' hratio).2 hExpC
 
 lemma bottcher_normalized_at_infty_of_green (c : ℂ) : bottcher_normalized_at_infty c := by
-  exact tendsto_bottcher_map_div_atInfinity c
+  exact tendsto_proxy_bottcher_map_div_atInfinity c
 
 lemma bottcher_normalized_at_infty_norm_proof (c : ℂ) :
     bottcher_normalized_at_infty_norm c := by
-  exact tendsto_norm_bottcher_map_div_norm_atInfinity c
+  exact tendsto_norm_proxy_bottcher_map_div_norm_atInfinity c
 
 lemma bottcher_root_seq_norm_bounds_of_escape
     (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
     let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
     ∀ n,
-      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ ≤ ‖bottcher_root_seq c n z‖ ∧
-        ‖bottcher_root_seq c n z‖ ≤ Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ ≤ ‖bottcher_root_seq c n z‖ ∧
+        ‖bottcher_root_seq c n z‖ ≤ Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := by
   intro M n
   have hdist :
       dist (Quadratic.potential_seq c z n) (Quadratic.green_function c z) ≤
@@ -1582,7 +1582,7 @@ lemma bottcher_root_seq_norm_bounds_of_escape
     have h1 := norm_iterate_ge_one_of_escape c z hz n
     exact bottcher_root_seq_norm_eq_exp_potential c z n h1
   have hnorm_bottcher :
-      ‖Quadratic.bottcher_map c z‖ = Real.exp (Quadratic.green_function c z) :=
+      ‖Quadratic.proxy_bottcher_map c z‖ = Real.exp (Quadratic.green_function c z) :=
     Quadratic.norm_bottcher_eq_exp_green c z
   have hlow :
       Real.exp (Quadratic.green_function c z - (1 / 2 ^ n) * M) ≤
@@ -1593,13 +1593,13 @@ lemma bottcher_root_seq_norm_bounds_of_escape
         Real.exp (Quadratic.green_function c z + (1 / 2 ^ n) * M) := by
     exact Real.exp_le_exp.mpr hpot_le.2
   have hlow' :
-      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ ≤
+      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ ≤
         ‖bottcher_root_seq c n z‖ := by
     calc
-      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖
+      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖
           = Real.exp (Quadratic.green_function c z - (1 / 2 ^ n) * M) := by
               calc
-                Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖
+                Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖
                     = Real.exp (Quadratic.green_function c z) * Real.exp (-(1 / 2 ^ n) * M) := by
                         simp [hnorm_bottcher, mul_comm]
                 _ = Real.exp (Quadratic.green_function c z + (-(1 / 2 ^ n) * M)) := by
@@ -1611,17 +1611,17 @@ lemma bottcher_root_seq_norm_bounds_of_escape
             symm; exact hnorm_root
   have hhigh' :
       ‖bottcher_root_seq c n z‖ ≤
-        Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+        Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := by
     calc
       ‖bottcher_root_seq c n z‖
           = Real.exp (Quadratic.potential_seq c z n) := hnorm_root
       _ ≤ Real.exp (Quadratic.green_function c z + (1 / 2 ^ n) * M) := hhigh
-      _ = Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+      _ = Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := by
             calc
               Real.exp (Quadratic.green_function c z + (1 / 2 ^ n) * M)
                   = Real.exp (Quadratic.green_function c z) * Real.exp ((1 / 2 ^ n) * M) := by
                       simp [Real.exp_add]
-              _ = Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+              _ = Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := by
                       simp [hnorm_bottcher, mul_comm]
   exact ⟨hlow', hhigh'⟩
 
@@ -1629,62 +1629,62 @@ lemma bottcher_root_seq_norm_diff_bound_of_escape
     (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
     let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
     ∀ n,
-      |‖bottcher_root_seq c n z‖ - ‖Quadratic.bottcher_map c z‖| ≤
-        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+      |‖bottcher_root_seq c n z‖ - ‖Quadratic.proxy_bottcher_map c z‖| ≤
+        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.proxy_bottcher_map c z‖ := by
   intro M n
   have hbound := (bottcher_root_seq_norm_bounds_of_escape c z hz) n
-  have hlow : Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ ≤
+  have hlow : Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ ≤
       ‖bottcher_root_seq c n z‖ := hbound.1
   have hhigh : ‖bottcher_root_seq c n z‖ ≤
-      Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := hbound.2
-  have hpos : 0 ≤ ‖Quadratic.bottcher_map c z‖ := norm_nonneg _
-  have hlow' : ‖Quadratic.bottcher_map c z‖ - ‖bottcher_root_seq c n z‖ ≤
-      (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+      Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := hbound.2
+  have hpos : 0 ≤ ‖Quadratic.proxy_bottcher_map c z‖ := norm_nonneg _
+  have hlow' : ‖Quadratic.proxy_bottcher_map c z‖ - ‖bottcher_root_seq c n z‖ ≤
+      (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.proxy_bottcher_map c z‖ := by
     have hsum :
-        ‖Quadratic.bottcher_map c z‖ - ‖bottcher_root_seq c n z‖ ≤
-          ‖Quadratic.bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ := by
+        ‖Quadratic.proxy_bottcher_map c z‖ - ‖bottcher_root_seq c n z‖ ≤
+          ‖Quadratic.proxy_bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ := by
       have hb : 0 ≤ ‖bottcher_root_seq c n z‖ := norm_nonneg _
       nlinarith
-    have hle : ‖Quadratic.bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ ≤
-        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+    have hle : ‖Quadratic.proxy_bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ ≤
+        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.proxy_bottcher_map c z‖ := by
       have hle' : ‖bottcher_root_seq c n z‖ ≤
-          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := hhigh
-      have hsum' : ‖Quadratic.bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ ≤
-          ‖Quadratic.bottcher_map c z‖ + Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := by
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := hhigh
+      have hsum' : ‖Quadratic.proxy_bottcher_map c z‖ + ‖bottcher_root_seq c n z‖ ≤
+          ‖Quadratic.proxy_bottcher_map c z‖ + Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := by
         nlinarith [hle']
       have hsum'' :
-          ‖Quadratic.bottcher_map c z‖ + Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ =
-            (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+          ‖Quadratic.proxy_bottcher_map c z‖ + Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ =
+            (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.proxy_bottcher_map c z‖ := by
         ring
       exact hsum'.trans_eq hsum''
     exact hsum.trans hle
-  have hhigh' : ‖bottcher_root_seq c n z‖ - ‖Quadratic.bottcher_map c z‖ ≤
-      (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+  have hhigh' : ‖bottcher_root_seq c n z‖ - ‖Quadratic.proxy_bottcher_map c z‖ ≤
+      (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.proxy_bottcher_map c z‖ := by
     have hsum :
-        ‖bottcher_root_seq c n z‖ - ‖Quadratic.bottcher_map c z‖ ≤
-          ‖bottcher_root_seq c n z‖ + ‖Quadratic.bottcher_map c z‖ := by
-      have hb : 0 ≤ ‖Quadratic.bottcher_map c z‖ := norm_nonneg _
+        ‖bottcher_root_seq c n z‖ - ‖Quadratic.proxy_bottcher_map c z‖ ≤
+          ‖bottcher_root_seq c n z‖ + ‖Quadratic.proxy_bottcher_map c z‖ := by
+      have hb : 0 ≤ ‖Quadratic.proxy_bottcher_map c z‖ := norm_nonneg _
       nlinarith
-    have hle : ‖bottcher_root_seq c n z‖ + ‖Quadratic.bottcher_map c z‖ ≤
-        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+    have hle : ‖bottcher_root_seq c n z‖ + ‖Quadratic.proxy_bottcher_map c z‖ ≤
+        (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.proxy_bottcher_map c z‖ := by
       have hle' : ‖bottcher_root_seq c n z‖ ≤
-          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ := hhigh
-      have hsum' : ‖bottcher_root_seq c n z‖ + ‖Quadratic.bottcher_map c z‖ ≤
-          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ + ‖Quadratic.bottcher_map c z‖ := by
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := hhigh
+      have hsum' : ‖bottcher_root_seq c n z‖ + ‖Quadratic.proxy_bottcher_map c z‖ ≤
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ + ‖Quadratic.proxy_bottcher_map c z‖ := by
         nlinarith [hle']
       have hsum'' :
-          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.bottcher_map c z‖ + ‖Quadratic.bottcher_map c z‖ =
-            (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.bottcher_map c z‖ := by
+          Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ + ‖Quadratic.proxy_bottcher_map c z‖ =
+            (Real.exp ((1 / 2 ^ n) * M) + 1) * ‖Quadratic.proxy_bottcher_map c z‖ := by
         ring
       exact hsum'.trans_eq hsum''
     exact hsum.trans hle
   exact abs_le.mpr ⟨by simpa [sub_eq_add_neg, add_comm] using hlow', hhigh'⟩
 
 
-lemma bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
+lemma proxy_bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
     let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
-    Real.exp (-M) * ‖z‖ ≤ ‖Quadratic.bottcher_map c z‖ ∧
-      ‖Quadratic.bottcher_map c z‖ ≤ Real.exp M * ‖z‖ := by
+    Real.exp (-M) * ‖z‖ ≤ ‖Quadratic.proxy_bottcher_map c z‖ ∧
+      ‖Quadratic.proxy_bottcher_map c z‖ ≤ Real.exp M * ‖z‖ := by
   intro M
   have hdist :
       dist (Quadratic.potential_seq c z 0) (Quadratic.green_function c z) ≤ M := by
@@ -1713,7 +1713,7 @@ lemma bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_boun
       Quadratic.green_function c z ≤ Real.log ‖z‖ + M := by
     have h := abs_sub_le_iff.mp hdist'
     constructor <;> linarith
-  have hnorm : ‖Quadratic.bottcher_map c z‖ =
+  have hnorm : ‖Quadratic.proxy_bottcher_map c z‖ =
       Real.exp (Quadratic.green_function c z) :=
     Quadratic.norm_bottcher_eq_exp_green c z
   have hlow :
@@ -1749,8 +1749,8 @@ lemma bottcher_map_norm_bounds_of_escape (c z : ℂ) (hz : ‖z‖ > escape_boun
       simpa [hhigh'] using hhigh
     simpa [hnorm] using this
 
-lemma eventually_atInfinity_norm_bottcher_map_ge (c : ℂ) (R : ℝ) :
-    ∀ᶠ z in atInfinity, R ≤ ‖Quadratic.bottcher_map c z‖ := by
+lemma eventually_atInfinity_norm_proxy_bottcher_map_ge (c : ℂ) (R : ℝ) :
+    ∀ᶠ z in atInfinity, R ≤ ‖Quadratic.proxy_bottcher_map c z‖ := by
   let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
   have hR : ∀ᶠ z in atInfinity,
       max (escape_bound c) (R * Real.exp M) < ‖z‖ :=
@@ -1758,7 +1758,7 @@ lemma eventually_atInfinity_norm_bottcher_map_ge (c : ℂ) (R : ℝ) :
   refine hR.mono ?_
   intro z hz
   have hzesc : ‖z‖ > escape_bound c := lt_of_le_of_lt (le_max_left _ _) hz
-  have hbound := (bottcher_map_norm_bounds_of_escape c z hzesc)
+  have hbound := (proxy_bottcher_map_norm_bounds_of_escape c z hzesc)
   have hRle : R ≤ Real.exp (-M) * ‖z‖ := by
     have hzR : R * Real.exp M ≤ ‖z‖ := by
       exact le_of_lt (lt_of_le_of_lt (le_max_right _ _) hz)
@@ -1779,9 +1779,9 @@ lemma eventually_atInfinity_norm_bottcher_map_ge (c : ℂ) (R : ℝ) :
       _ = Real.exp (-M) * ‖z‖ := by ring
   exact hRle.trans hbound.1
 
-lemma exists_norm_bottcher_map_ge_of_large_norm (c : ℂ) (R : ℝ) :
-    ∃ S, ∀ z, S ≤ ‖z‖ → R ≤ ‖Quadratic.bottcher_map c z‖ := by
-  have h := eventually_atInfinity_norm_bottcher_map_ge c R
+lemma exists_norm_proxy_bottcher_map_ge_of_large_norm (c : ℂ) (R : ℝ) :
+    ∃ S, ∀ z, S ≤ ‖z‖ → R ≤ ‖Quadratic.proxy_bottcher_map c z‖ := by
+  have h := eventually_atInfinity_norm_proxy_bottcher_map_ge c R
   dsimp [atInfinity] at h
   have h' := (Filter.eventually_comap).1 h
   rcases (Filter.eventually_atTop.1 h') with ⟨S, hS⟩
@@ -1790,23 +1790,23 @@ lemma exists_norm_bottcher_map_ge_of_large_norm (c : ℂ) (R : ℝ) :
   have := hS ‖z‖ hz z rfl
   simpa using this
 
-lemma exists_norm_bottcher_map_gt_of_large_norm (c : ℂ) (R : ℝ) :
-    ∃ S, ∀ z, S ≤ ‖z‖ → R < ‖Quadratic.bottcher_map c z‖ := by
-  rcases exists_norm_bottcher_map_ge_of_large_norm c (R + 1) with ⟨S, hS⟩
+lemma exists_norm_proxy_bottcher_map_gt_of_large_norm (c : ℂ) (R : ℝ) :
+    ∃ S, ∀ z, S ≤ ‖z‖ → R < ‖Quadratic.proxy_bottcher_map c z‖ := by
+  rcases exists_norm_proxy_bottcher_map_ge_of_large_norm c (R + 1) with ⟨S, hS⟩
   refine ⟨S, ?_⟩
   intro z hz
   have h := hS z hz
   linarith
 
 lemma preimage_closedBall_bounded (c : ℂ) (R : ℝ) :
-    ∃ S, {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} ⊆ {z : ℂ | ‖z‖ ≤ S} := by
-  rcases exists_norm_bottcher_map_gt_of_large_norm c R with ⟨S, hS⟩
+    ∃ S, {z : ℂ | ‖Quadratic.proxy_bottcher_map c z‖ ≤ R} ⊆ {z : ℂ | ‖z‖ ≤ S} := by
+  rcases exists_norm_proxy_bottcher_map_gt_of_large_norm c R with ⟨S, hS⟩
   refine ⟨S, ?_⟩
   intro z hz
   by_contra h
   have hz' : S ≤ ‖z‖ := le_of_not_ge h
-  have hgt : R < ‖Quadratic.bottcher_map c z‖ := hS z hz'
-  exact (not_lt_of_ge (show R ≥ ‖Quadratic.bottcher_map c z‖ from hz)) hgt
+  have hgt : R < ‖Quadratic.proxy_bottcher_map c z‖ := hS z hz'
+  exact (not_lt_of_ge (show R ≥ ‖Quadratic.proxy_bottcher_map c z‖ from hz)) hgt
 
 lemma isCompact_preimage_closedBall_of_continuous
     {f : ℂ → ℂ} (R : ℝ) (hcont : Continuous f)
@@ -1824,23 +1824,23 @@ lemma isCompact_preimage_closedBall_of_continuous
     (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset hsubset
   exact (Metric.isCompact_iff_isClosed_bounded).2 ⟨hclosed, hbounded⟩
 
-lemma isCompact_preimage_closedBall_bottcher_map_of_closed
+lemma isCompact_preimage_closedBall_proxy_bottcher_map_of_closed
     (c : ℂ) (R : ℝ)
-    (hclosed : IsClosed {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R}) :
-    IsCompact {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} := by
+    (hclosed : IsClosed {z : ℂ | ‖Quadratic.proxy_bottcher_map c z‖ ≤ R}) :
+    IsCompact {z : ℂ | ‖Quadratic.proxy_bottcher_map c z‖ ≤ R} := by
   rcases preimage_closedBall_bounded c R with ⟨S, hS⟩
-  have hsubset : {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} ⊆ Metric.closedBall (0 : ℂ) S := by
+  have hsubset : {z : ℂ | ‖Quadratic.proxy_bottcher_map c z‖ ≤ R} ⊆ Metric.closedBall (0 : ℂ) S := by
     intro z hz
     have hz' : ‖z‖ ≤ S := hS hz
     simpa [Metric.mem_closedBall, dist_eq_norm] using hz'
-  have hbounded : Bornology.IsBounded {z : ℂ | ‖Quadratic.bottcher_map c z‖ ≤ R} :=
+  have hbounded : Bornology.IsBounded {z : ℂ | ‖Quadratic.proxy_bottcher_map c z‖ ≤ R} :=
     (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset hsubset
   exact (Metric.isCompact_iff_isClosed_bounded).2 ⟨hclosed, hbounded⟩
 
-lemma bottcher_map_continuous_on_outside
+lemma proxy_bottcher_map_continuous_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    ContinuousOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
-  exact (bottcher_map_analytic_on_outside c hslit).continuousOn
+    ContinuousOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  exact (proxy_bottcher_map_analytic_on_outside c hslit).continuousOn
 
 lemma isCompact_preimage_of_isCompact
     {f : ℂ → ℂ} (hcont : Continuous f)
@@ -1859,21 +1859,21 @@ lemma isCompact_preimage_of_isCompact
     simpa [dist_eq_norm] using this
   exact hpre_ball.of_isClosed_subset hclosed hsubset
 
-lemma bottcher_map_preimage_compact_of_isCompact
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c))
+lemma proxy_bottcher_map_preimage_compact_of_isCompact
+    (c : ℂ) (hcont : Continuous (Quadratic.proxy_bottcher_map c))
     {K : Set ℂ} (hK : IsCompact K) :
-    IsCompact ((Quadratic.bottcher_map c) ⁻¹' K) := by
+    IsCompact ((Quadratic.proxy_bottcher_map c) ⁻¹' K) := by
   exact isCompact_preimage_of_isCompact hcont
     (fun R => preimage_closedBall_bounded c R) hK
 
-lemma bottcher_map_isProperMap_of_continuous
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
-    IsProperMap (Quadratic.bottcher_map c) := by
+lemma proxy_bottcher_map_isProperMap_of_continuous
+    (c : ℂ) (hcont : Continuous (Quadratic.proxy_bottcher_map c)) :
+    IsProperMap (Quadratic.proxy_bottcher_map c) := by
   have hpre : ∀ ⦃K : Set ℂ⦄, IsCompact K →
-      IsCompact ((Quadratic.bottcher_map c) ⁻¹' K) := by
+      IsCompact ((Quadratic.proxy_bottcher_map c) ⁻¹' K) := by
     intro K hK
-    exact bottcher_map_preimage_compact_of_isCompact c hcont hK
-  exact (isProperMap_iff_isCompact_preimage (f := Quadratic.bottcher_map c)).2
+    exact proxy_bottcher_map_preimage_compact_of_isCompact c hcont hK
+  exact (isProperMap_iff_isCompact_preimage (f := Quadratic.proxy_bottcher_map c)).2
     ⟨hcont, hpre⟩
 
 /-- Continuity of the explicit proxy away from `0` (outside-plan namespace helper). -/
@@ -2835,34 +2835,34 @@ lemma injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_
   exact injective_of_isProperMap_isLocalHomeomorph_of_exists_natCard_fiber_eq_one
     (f := f) hproper hlocal hdeg1
 
-lemma bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed
+lemma proxy_bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed
     (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hproper : IsProperMap (Quadratic.proxy_bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.proxy_bottcher_map c))
     (hUinj :
-      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+      Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
     {y : ℂ}
-    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hyimg : y ∈ Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
     (hfiberU :
-      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    Function.Injective (Quadratic.bottcher_map c) := by
+      ({z : ℂ | Quadratic.proxy_bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Function.Injective (Quadratic.proxy_bottcher_map c) := by
   exact injective_of_isProperMap_isLocalHomeomorph_of_injOn_of_mem_image_of_fiber_subset
-    (f := Quadratic.bottcher_map c) hproper hlocal hUinj hyimg hfiberU
+    (f := Quadratic.proxy_bottcher_map c) hproper hlocal hUinj hyimg hfiberU
 
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed
+lemma proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed
     (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hproper : IsProperMap (Quadratic.proxy_bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.proxy_bottcher_map c))
     (hUinj :
-      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+      Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
     {y : ℂ}
-    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hyimg : y ∈ Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
     (hfiberU :
-      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+      ({z : ℂ | Quadratic.proxy_bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
   have hglobal :
-      Function.Injective (Quadratic.bottcher_map c) :=
-    bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
+      Function.Injective (Quadratic.proxy_bottcher_map c) :=
+    proxy_bottcher_map_injective_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
       hUinj hyimg hfiberU
   exact hglobal.injOn
 
@@ -2871,7 +2871,7 @@ lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed
 lemma bottcher_normalized_at_infty_of_root_seq
     (c : ℂ) (N : ℕ)
     (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
-    (herror : Tendsto (fun z => (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z)
+    (herror : Tendsto (fun z => (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z)
       atInfinity (𝓝 (0 : ℂ))) :
     bottcher_normalized_at_infty c := by
   dsimp [bottcher_normalized_at_infty]
@@ -2879,55 +2879,55 @@ lemma bottcher_normalized_at_infty_of_root_seq
       Tendsto
         (fun z =>
           bottcher_root_seq c N z / z +
-            (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z)
+            (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z)
         atInfinity (𝓝 ((1 : ℂ) + 0)) := by
     exact hroot.add herror
   have hsplit :
-      (fun z => (Quadratic.bottcher_map c z) / z) =
+      (fun z => (Quadratic.proxy_bottcher_map c z) / z) =
         fun z =>
           bottcher_root_seq c N z / z +
-            (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z := by
+            (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z := by
     funext z
     -- Combine the fractions using `add_div` and simplify the numerator.
     have hnum :
-        bottcher_root_seq c N z + (Quadratic.bottcher_map c z - bottcher_root_seq c N z) =
-          Quadratic.bottcher_map c z := by
+        bottcher_root_seq c N z + (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) =
+          Quadratic.proxy_bottcher_map c z := by
       calc
-        bottcher_root_seq c N z + (Quadratic.bottcher_map c z - bottcher_root_seq c N z)
-            = Quadratic.bottcher_map c z + bottcher_root_seq c N z - bottcher_root_seq c N z := by
+        bottcher_root_seq c N z + (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z)
+            = Quadratic.proxy_bottcher_map c z + bottcher_root_seq c N z - bottcher_root_seq c N z := by
                 simp [sub_eq_add_neg, add_left_comm, add_comm]
-        _ = Quadratic.bottcher_map c z := by
+        _ = Quadratic.proxy_bottcher_map c z := by
                 simp
     calc
-      (Quadratic.bottcher_map c z) / z
+      (Quadratic.proxy_bottcher_map c z) / z
           = (bottcher_root_seq c N z +
-              (Quadratic.bottcher_map c z - bottcher_root_seq c N z)) / z := by
+              (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z)) / z := by
               simp [hnum]
       _ =
           bottcher_root_seq c N z / z +
-            (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z := by
+            (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z := by
               simpa using
                 (add_div (bottcher_root_seq c N z)
-                  (Quadratic.bottcher_map c z - bottcher_root_seq c N z) z)
+                  (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) z)
   simpa [hsplit] using hsum
 
 lemma bottcher_root_seq_error_tendsto
     (c : ℂ) (N : ℕ)
     (hbound :
       ∀ ε > 0, ∀ᶠ z in atInfinity,
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
-    Tendsto (fun z => (Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z)
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+    Tendsto (fun z => (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z)
       atInfinity (𝓝 (0 : ℂ)) := by
   refine (tendsto_iff_norm_sub_tendsto_zero).2 ?_
   have hgoal :
       Tendsto
-        (fun z => ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖)
+        (fun z => ‖(Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z‖)
         atInfinity (𝓝 (0 : ℝ)) := by
     refine (tendsto_order.2 ?_)
     constructor
     · intro a ha
       have hnonneg : ∀ z,
-          0 ≤ ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖ := by
+          0 ≤ ‖(Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z‖ := by
         intro z
         exact norm_nonneg _
       exact Filter.Eventually.of_forall (fun z => lt_of_lt_of_le ha (hnonneg z))
@@ -2941,14 +2941,14 @@ lemma bottcher_root_seq_error_tendsto
       intro z hz
       rcases hz with ⟨hbd, hzpos⟩
       have hnorm :
-          ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖ =
-            ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ / ‖z‖ := by
-        exact norm_div (Quadratic.bottcher_map c z - bottcher_root_seq c N z) z
+          ‖(Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z‖ =
+            ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ / ‖z‖ := by
+        exact norm_div (Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) z
       have hle :
-          ‖(Quadratic.bottcher_map c z - bottcher_root_seq c N z) / z‖ ≤ a / 2 := by
+          ‖(Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z) / z‖ ≤ a / 2 := by
         have hle' :
-            ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ / ‖z‖ ≤ a / 2 := by
-          have : ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ (a / 2) * ‖z‖ :=
+            ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ / ‖z‖ ≤ a / 2 := by
+          have : ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ (a / 2) * ‖z‖ :=
             hbd
           exact (div_le_iff₀ hzpos).2 (by simpa [mul_comm] using this)
         simpa [hnorm] using hle'
@@ -3037,9 +3037,9 @@ lemma bottcher_root_seq_error_bound_of_exterior
     (c : ℂ) (N : ℕ)
     (hR :
       ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
     ∀ ε > 0, ∀ᶠ z in atInfinity,
-      ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
+      ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
   intro ε hε
   rcases hR ε hε with ⟨R, hR'⟩
   have hlarge : ∀ᶠ z in atInfinity, R < ‖z‖ :=
@@ -3053,9 +3053,9 @@ lemma bottcher_root_seq_error_bound_of_uniform_on
     (c : ℂ) (N : ℕ)
     (hU :
       ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * R) :
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * R) :
     ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
-      ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
+      ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
   intro ε hε
   rcases hU ε hε with ⟨R, hR⟩
   refine ⟨R, ?_⟩
@@ -3066,10 +3066,10 @@ lemma bottcher_root_seq_error_bound_of_uniform_on
 
 lemma bottcher_root_seq_error_bound_of_tendstoUniformlyOn
     (c : ℂ) (R : ℝ)
-    (hU : TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+    (hU : TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.proxy_bottcher_map c) atTop
       {z : ℂ | R ≤ ‖z‖}) :
     ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
-      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε := by
+      ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε := by
   intro ε hε
   let u : Set (ℂ × ℂ) := {p | dist p.1 p.2 < ε}
   have hu : u ∈ 𝓤 ℂ := Metric.mem_uniformity_dist.mpr ⟨ε, hε, by simp [u]⟩
@@ -3077,11 +3077,11 @@ lemma bottcher_root_seq_error_bound_of_tendstoUniformlyOn
   rcases (Filter.eventually_atTop.1 hU') with ⟨N, hN⟩
   refine ⟨N, ?_⟩
   intro n hn z hz
-  have hmem : (Quadratic.bottcher_map c z, bottcher_root_seq c n z) ∈ u :=
+  have hmem : (Quadratic.proxy_bottcher_map c z, bottcher_root_seq c n z) ∈ u :=
     hN n hn z hz
-  have hdist : dist (Quadratic.bottcher_map c z) (bottcher_root_seq c n z) < ε := by
+  have hdist : dist (Quadratic.proxy_bottcher_map c z) (bottcher_root_seq c n z) < ε := by
     simpa [u] using hmem
-  have hle : dist (Quadratic.bottcher_map c z) (bottcher_root_seq c n z) ≤ ε :=
+  have hle : dist (Quadratic.proxy_bottcher_map c z) (bottcher_root_seq c n z) ≤ ε :=
     le_of_lt hdist
   simpa [dist_eq] using hle
 
@@ -3128,7 +3128,7 @@ lemma exterior_annulus_subset_outside_disk (c : ℂ) {R S : ℝ}
 
 lemma bottcher_root_seq_tendsto_uniform_on_annulus_of_large_R
     (c : ℂ) {R S : ℝ} (hR : ‖c‖ + 2 ≤ R) :
-    TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+    TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.proxy_bottcher_map c) atTop
       (exterior_annulus R S) := by
   have hK : IsCompact (exterior_annulus R S) := isCompact_exterior_annulus R S
   have hKbasin : exterior_annulus R S ⊆ Quadratic.basin_of_infinity c := by
@@ -3142,18 +3142,18 @@ lemma bottcher_root_seq_error_bound_of_annulus_and_tail
     (c : ℂ) (R : ℝ) (hRpos : 0 < R)
     (hannulus :
       ∀ S, R ≤ S →
-        TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.bottcher_map c) atTop
+        TendstoUniformlyOn (bottcher_root_seq c) (Quadratic.proxy_bottcher_map c) atTop
           (exterior_annulus R S))
     (htail :
       ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖) :
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖) :
     ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
-      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖ := by
+      ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖ := by
   intro ε hε
   rcases htail ε hε with ⟨S, hSR, htail'⟩
   have hann := hannulus S hSR
   rcases uniform_bound_of_tendstoUniformlyOn (F := bottcher_root_seq c)
-    (f := Quadratic.bottcher_map c) (s := exterior_annulus R S) hann (ε * R)
+    (f := Quadratic.proxy_bottcher_map c) (s := exterior_annulus R S) hann (ε * R)
     (mul_pos hε hRpos) with ⟨N, hN⟩
   refine ⟨N, ?_⟩
   intro n hn z hz
@@ -3170,9 +3170,9 @@ lemma bottcher_root_seq_error_bound_of_large_R
     (c : ℂ) (R : ℝ) (hR : ‖c‖ + 2 ≤ R)
     (htail :
       ∀ ε > 0, ∃ S ≥ R, ∀ n z, S ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖) :
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖) :
     ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ z, R ≤ ‖z‖ →
-      ‖Quadratic.bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖ := by
+      ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c n z‖ ≤ ε * ‖z‖ := by
   have hRpos : 0 < R := by
     have hcn : (0 : ℝ) ≤ ‖c‖ := by exact norm_nonneg _
     linarith
@@ -3186,14 +3186,14 @@ lemma bottcher_normalized_at_infty_of_root_seq_bound
     (hroot : Tendsto (fun z => bottcher_root_seq c N z / z) atInfinity (𝓝 (1 : ℂ)))
     (hbound :
       ∀ ε > 0, ∀ᶠ z in atInfinity,
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
     bottcher_normalized_at_infty c := by
   refine bottcher_normalized_at_infty_of_root_seq c N hroot ?_
   exact bottcher_root_seq_error_tendsto c N hbound
 
 def bottcher_tail_bound_at (c : ℂ) (R : ℝ) (N : ℕ) : Prop :=
   ∀ ε > 0, ∃ S ≥ R, ∀ z, S ≤ ‖z‖ →
-    ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖
+    ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖
 
 def bottcher_tail_bound (c : ℂ) (R : ℝ) : Prop :=
   ∃ N, bottcher_tail_bound_at c R N
@@ -3202,7 +3202,7 @@ lemma bottcher_tail_bound_at_of_exterior
     (c : ℂ) (R : ℝ) (N : ℕ)
     (hR :
       ∀ ε > 0, ∃ S, ∀ z, S ≤ ‖z‖ →
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖) :
     bottcher_tail_bound_at c R N := by
   intro ε hε
   rcases hR ε hε with ⟨S, hS⟩
@@ -3218,7 +3218,7 @@ lemma bottcher_normalized_at_infty_of_large_R
     bottcher_normalized_at_infty c := by
   have hbound' :
       ∀ ε > 0, ∀ᶠ z in atInfinity,
-        ‖Quadratic.bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
+        ‖Quadratic.proxy_bottcher_map c z - bottcher_root_seq c N z‖ ≤ ε * ‖z‖ := by
     intro ε hε
     rcases htail ε hε with ⟨S, hSR, htail'⟩
     have hlarge : ∀ᶠ z in atInfinity, S < ‖z‖ :=
@@ -3251,27 +3251,27 @@ theorem bottcher_normalized_at_infty_of_tail_bound_zero
   refine bottcher_normalized_at_infty_of_tail_bound_at c R 0 ?_ htail
   exact bottcher_root_seq_ratio_tendsto_atInfinity_zero c
 
-lemma eventually_atInfinity_bottcher_map_div_mem_slitPlaneRight (c : ℂ) :
-    ∀ᶠ z in atInfinity, (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
-  have h := tendsto_bottcher_map_div_atInfinity c
-  have h' : Tendsto (fun z => ‖(Quadratic.bottcher_map c z / z) - (1 : ℂ)‖)
+lemma eventually_atInfinity_proxy_bottcher_map_div_mem_slitPlaneRight (c : ℂ) :
+    ∀ᶠ z in atInfinity, (Quadratic.proxy_bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have h := tendsto_proxy_bottcher_map_div_atInfinity c
+  have h' : Tendsto (fun z => ‖(Quadratic.proxy_bottcher_map c z / z) - (1 : ℂ)‖)
       atInfinity (𝓝 (0 : ℝ)) := by
     simpa using (tendsto_iff_norm_sub_tendsto_zero.1 h)
-  have hball : ∀ᶠ z in atInfinity, ‖(Quadratic.bottcher_map c z / z) - (1 : ℂ)‖ < 1 := by
+  have hball : ∀ᶠ z in atInfinity, ‖(Quadratic.proxy_bottcher_map c z / z) - (1 : ℂ)‖ < 1 := by
     have hε :=
       (tendsto_def.1 h') (Metric.ball (0 : ℝ) 1)
         (by simpa using (Metric.ball_mem_nhds (0 : ℝ) (by norm_num : (0 : ℝ) < 1)))
     simpa [Metric.ball, Real.norm_eq_abs] using hε
   refine hball.mono ?_
   intro z hz
-  have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane :=
+  have hslit : (Quadratic.proxy_bottcher_map c z / z) ∈ Complex.slitPlane :=
     mem_slitPlane_of_norm_sub_one_lt_one hz
-  have hre : 0 < (Quadratic.bottcher_map c z / z).re :=
+  have hre : 0 < (Quadratic.proxy_bottcher_map c z / z).re :=
     re_pos_of_norm_sub_one_lt_one hz
   exact ⟨hslit, hre⟩
 
-lemma bottcher_map_div_eq_real_scale_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
-    ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ) := by
+lemma proxy_bottcher_map_div_eq_real_scale_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    ∃ r : ℝ, 0 < r ∧ Quadratic.proxy_bottcher_map c z / z = (r : ℂ) := by
   have hzpos : 0 < ‖z‖ := norm_pos_iff.mpr hz
   refine ⟨Real.exp (Quadratic.green_function c z) / ‖z‖, div_pos (Real.exp_pos _) hzpos, ?_⟩
   have hznorm : (‖z‖ : ℂ) ≠ 0 := by
@@ -3281,14 +3281,14 @@ lemma bottcher_map_div_eq_real_scale_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
   have hscale : ((‖z‖ : ℂ) * (z / ↑‖z‖)) = z := by
     field_simp [hznorm, mul_comm, mul_left_comm, mul_assoc]
   have happly :
-      Quadratic.bottcher_map c z =
+      Quadratic.proxy_bottcher_map c z =
         (z / ↑‖z‖) * ↑(Real.exp (Quadratic.green_function c z)) := by
     simpa [hscale] using
-      (Quadratic.bottcher_map_apply_ray c (z / ↑‖z‖) hu ‖z‖ (norm_pos_iff.2 hz))
+      (Quadratic.proxy_bottcher_map_apply_ray c (z / ↑‖z‖) hu ‖z‖ (norm_pos_iff.2 hz))
   have hdiv : (z / ‖z‖) / z = (1 : ℂ) / ‖z‖ := by
     field_simp [div_eq_mul_inv, hz, hznorm, mul_assoc, mul_comm, mul_left_comm]
   calc
-    Quadratic.bottcher_map c z / z
+    Quadratic.proxy_bottcher_map c z / z
         = ((z / ‖z‖) * (Real.exp (Quadratic.green_function c z) : ℂ)) / z := by
             rw [happly]
     _ = (Real.exp (Quadratic.green_function c z) : ℂ) * ((z / ‖z‖) / z) := by
@@ -3298,29 +3298,29 @@ lemma bottcher_map_div_eq_real_scale_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
     _ = ((Real.exp (Quadratic.green_function c z) / ‖z‖ : ℝ) : ℂ) := by
           simp [div_eq_mul_inv, mul_comm]
 
-lemma bottcher_map_div_eq_real_scale_of_outside_open
+lemma proxy_bottcher_map_div_eq_real_scale_of_outside_open
     (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
-    ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ) := by
+    ∃ r : ℝ, 0 < r ∧ Quadratic.proxy_bottcher_map c z / z = (r : ℂ) := by
   have hzpos : 0 < ‖z‖ := by
     linarith [hz, norm_nonneg c]
   have hz_ne : z ≠ 0 := by
     exact norm_ne_zero_iff.mp (ne_of_gt hzpos)
-  exact bottcher_map_div_eq_real_scale_of_ne_zero c z hz_ne
+  exact proxy_bottcher_map_div_eq_real_scale_of_ne_zero c z hz_ne
 
-lemma bottcher_map_div_mem_slitPlaneRight_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
-    (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
-  rcases bottcher_map_div_eq_real_scale_of_ne_zero c z hz with ⟨r, hrpos, hratio⟩
-  have hslit : (Quadratic.bottcher_map c z / z) ∈ Complex.slitPlane := by
+lemma proxy_bottcher_map_div_mem_slitPlaneRight_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    (Quadratic.proxy_bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  rcases proxy_bottcher_map_div_eq_real_scale_of_ne_zero c z hz with ⟨r, hrpos, hratio⟩
+  have hslit : (Quadratic.proxy_bottcher_map c z / z) ∈ Complex.slitPlane := by
     have hslit' : (1 : ℂ) * (r : ℝ) ∈ Complex.slitPlane :=
       slitPlane_mul_of_real_pos (x := 1) Complex.one_mem_slitPlane r hrpos
     simpa [hratio] using hslit'
-  have hre : 0 < (Quadratic.bottcher_map c z / z).re := by
+  have hre : 0 < (Quadratic.proxy_bottcher_map c z / z).re := by
     simpa [hratio] using hrpos
   exact ⟨hslit, hre⟩
 
-lemma exists_bottcher_map_div_mem_slitPlaneRight_of_large_norm (c : ℂ) :
-    ∃ S, ∀ z, S ≤ ‖z‖ → (Quadratic.bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
-  have h := eventually_atInfinity_bottcher_map_div_mem_slitPlaneRight c
+lemma exists_proxy_bottcher_map_div_mem_slitPlaneRight_of_large_norm (c : ℂ) :
+    ∃ S, ∀ z, S ≤ ‖z‖ → (Quadratic.proxy_bottcher_map c z / z) ∈ Quadratic.slitPlaneRight := by
+  have h := eventually_atInfinity_proxy_bottcher_map_div_mem_slitPlaneRight c
   dsimp [atInfinity] at h
   have h' := (Filter.eventually_comap).1 h
   rcases (Filter.eventually_atTop.1 h') with ⟨S, hS⟩
@@ -3336,30 +3336,30 @@ lemma outside_open_subset_outside_disk (c : ℂ) :
   exact large_norm_mem_outside_disk c z (le_of_lt hz')
 
 
-lemma bottcher_map_deriv_ne_zero_on_outside
+lemma proxy_bottcher_map_deriv_ne_zero_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (hinj : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
+    (hinj : Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c)) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0 := by
   intro z hz
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   have hUopen : IsOpen U := by
     simpa [U] using (isOpen_lt continuous_const continuous_norm)
   have hUnhds : U ∈ 𝓝 z := hUopen.mem_nhds (by simpa [U] using hz)
-  have hf : AnalyticAt ℂ (Quadratic.bottcher_map c) z :=
-    (bottcher_map_analytic_on_outside c hslit) z (by simpa [U] using hz)
-  have hinjU : Set.InjOn (Quadratic.bottcher_map c) U :=
+  have hf : AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z :=
+    (proxy_bottcher_map_analytic_on_outside c hslit) z (by simpa [U] using hz)
+  have hinjU : Set.InjOn (Quadratic.proxy_bottcher_map c) U :=
     hinj.mono (by simpa [U] using outside_open_subset_outside_disk c)
   exact deriv_ne_zero_of_injOn_nhds hf U hUnhds hinjU
 
-lemma bottcher_map_local_inj_on_outside
+lemma proxy_bottcher_map_local_inj_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (hinj : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.bottcher_map c) s := by
+    (hinj : Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c)) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.proxy_bottcher_map c) s := by
   intro z hz
-  have hf : AnalyticAt ℂ (Quadratic.bottcher_map c) z :=
-    (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
-  have hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0 :=
-    bottcher_map_deriv_ne_zero_on_outside c hslit hinj z hz
+  have hf : AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z :=
+    (proxy_bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+  have hderiv : deriv (Quadratic.proxy_bottcher_map c) z ≠ 0 :=
+    proxy_bottcher_map_deriv_ne_zero_on_outside c hslit hinj z hz
   exact injOn_nhds_of_analyticAt hf hderiv
 
 lemma isLocalHomeomorphOn_of_analytic_deriv_ne_zero
@@ -3374,23 +3374,23 @@ lemma isLocalHomeomorphOn_of_analytic_deriv_ne_zero
   · exact hstrict'.mem_toOpenPartialHomeomorph_source
   · simp [HasStrictFDerivAt.toOpenPartialHomeomorph_coe]
 
-lemma bottcher_map_isLocalHomeomorphOn_outside
+lemma proxy_bottcher_map_isLocalHomeomorphOn_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (hinj : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    (hinj : Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c)) :
+    IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ ?_
   · intro z hz
-    exact (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+    exact (proxy_bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
   · intro z hz
-    exact bottcher_map_deriv_ne_zero_on_outside c hslit hinj z (by simpa using hz)
+    exact proxy_bottcher_map_deriv_ne_zero_on_outside c hslit hinj z (by simpa using hz)
 
-lemma bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero
+lemma proxy_bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ ?_
   · intro z hz
-    exact (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+    exact (proxy_bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
   · intro z hz
     exact hderiv z (by simpa using hz)
 
@@ -3471,19 +3471,19 @@ lemma closedBall_subset_outside_open_of_large_norm
   exact lt_of_lt_of_le hlt hge'
 
 
-lemma bottcher_map_minus_id_bound_of_normalized
+lemma proxy_bottcher_map_minus_id_bound_of_normalized
     (c : ℂ) (hnorm : bottcher_normalized_at_infty c) :
     ∀ ε > 0, ∃ R, ∀ z, R ≤ ‖z‖ →
-      ‖Quadratic.bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
+      ‖Quadratic.proxy_bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
   intro ε hε
   have h0 :
-      Tendsto (fun z => ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖) atInfinity
+      Tendsto (fun z => ‖(Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)‖) atInfinity
         (𝓝 (0 : ℝ)) := by
     have h := (bottcher_normalized_at_infty_iff c).1 hnorm
     simpa using h
   have hball : Metric.ball (0 : ℝ) ε ∈ 𝓝 (0 : ℝ) := Metric.ball_mem_nhds _ hε
   have hε' : ∀ᶠ z in atInfinity,
-      ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ < ε := by
+      ‖(Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)‖ < ε := by
     simpa [Metric.ball, Set.mem_setOf_eq] using (tendsto_def.1 h0 _ hball)
   have hε'' := (Filter.eventually_comap).1 hε'
   rcases (Filter.eventually_atTop.1 hε'') with ⟨R, hR⟩
@@ -3494,49 +3494,49 @@ lemma bottcher_map_minus_id_bound_of_normalized
   have hzpos : 0 < ‖z‖ := lt_of_lt_of_le (by linarith : (0 : ℝ) < 1) (le_trans (le_max_right _ _) hz)
   have hne : z ≠ 0 := by
     exact (norm_ne_zero_iff).1 (ne_of_gt hzpos)
-  have hratio : ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ < ε := hR ‖z‖ hzR z rfl
+  have hratio : ‖(Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)‖ < ε := hR ‖z‖ hzR z rfl
   have hmul :
-      Quadratic.bottcher_map c z - z =
-        z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ)) := by
-    have hmul1 : z * (Quadratic.bottcher_map c z / z) = Quadratic.bottcher_map c z := by
+      Quadratic.proxy_bottcher_map c z - z =
+        z * ((Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)) := by
+    have hmul1 : z * (Quadratic.proxy_bottcher_map c z / z) = Quadratic.proxy_bottcher_map c z := by
       calc
-        z * (Quadratic.bottcher_map c z / z)
-            = z * (Quadratic.bottcher_map c z * z⁻¹) := by
+        z * (Quadratic.proxy_bottcher_map c z / z)
+            = z * (Quadratic.proxy_bottcher_map c z * z⁻¹) := by
                 simp [div_eq_mul_inv]
-        _ = Quadratic.bottcher_map c z * (z * z⁻¹) := by
+        _ = Quadratic.proxy_bottcher_map c z * (z * z⁻¹) := by
                 ring
-        _ = Quadratic.bottcher_map c z := by
+        _ = Quadratic.proxy_bottcher_map c z := by
                 simp [hne]
     calc
-      Quadratic.bottcher_map c z - z
-          = z * (Quadratic.bottcher_map c z / z) - z := by
+      Quadratic.proxy_bottcher_map c z - z
+          = z * (Quadratic.proxy_bottcher_map c z / z) - z := by
               simp [hmul1]
-      _ = z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ)) := by
+      _ = z * ((Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)) := by
               ring
-  have hle : ‖Quadratic.bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
-    have hle' : ‖z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ))‖ ≤ ε * ‖z‖ := by
-      have hle'' : ‖z‖ * ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ ≤
+  have hle : ‖Quadratic.proxy_bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
+    have hle' : ‖z * ((Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ))‖ ≤ ε * ‖z‖ := by
+      have hle'' : ‖z‖ * ‖(Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)‖ ≤
           ‖z‖ * ε := by
         exact mul_le_mul_of_nonneg_left (le_of_lt hratio) (norm_nonneg _)
       have hle''' : ‖z‖ * ε = ε * ‖z‖ := by ring
-      have hle'''' : ‖z‖ * ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ ≤ ε * ‖z‖ :=
+      have hle'''' : ‖z‖ * ‖(Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)‖ ≤ ε * ‖z‖ :=
         hle''.trans_eq hle'''
       calc
-        ‖z * ((Quadratic.bottcher_map c z) / z - (1 : ℂ))‖
-            = ‖z‖ * ‖(Quadratic.bottcher_map c z) / z - (1 : ℂ)‖ := by
-                exact (norm_mul z ((Quadratic.bottcher_map c z) / z - (1 : ℂ)))
+        ‖z * ((Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ))‖
+            = ‖z‖ * ‖(Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)‖ := by
+                exact (norm_mul z ((Quadratic.proxy_bottcher_map c z) / z - (1 : ℂ)))
         _ ≤ ε * ‖z‖ := hle''''
-    have hle'' : ‖Quadratic.bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
+    have hle'' : ‖Quadratic.proxy_bottcher_map c z - z‖ ≤ ε * ‖z‖ := by
       simpa [hmul] using hle'
     exact hle''
   exact hle
 
-lemma bottcher_map_deriv_ne_zero_of_normalized
+lemma proxy_bottcher_map_deriv_ne_zero_of_normalized
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     (hnorm : bottcher_normalized_at_infty c) :
-    ∃ R, ∀ z, R ≤ ‖z‖ → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
-  -- Use the normalization to control `bottcher_map c z - z` on large circles.
-  have hbound := bottcher_map_minus_id_bound_of_normalized c hnorm
+    ∃ R, ∀ z, R ≤ ‖z‖ → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0 := by
+  -- Use the normalization to control `proxy_bottcher_map c z - z` on large circles.
+  have hbound := proxy_bottcher_map_minus_id_bound_of_normalized c hnorm
   rcases hbound (1 / 4) (by norm_num) with ⟨R0, hR0⟩
   let R1 : ℝ := max (2 * (‖c‖ + 2) + 1) (2 * R0)
   refine ⟨R1, ?_⟩
@@ -3570,12 +3570,12 @@ lemma bottcher_map_deriv_ne_zero_of_normalized
       large_norm_mem_outside_disk c w (le_of_lt hw)
     exact outside_disk_subset_quadratic_basin c hw'
   have hdiff :
-      DifferentiableOn ℂ (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
-    bottcher_map_differentiableOn_open c _ hUopen hslit hUbasin
-  have hDiff : DiffContOnCl ℂ (Quadratic.bottcher_map c) (Metric.ball z r) :=
+      DifferentiableOn ℂ (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    proxy_bottcher_map_differentiableOn_open c _ hUopen hslit hUbasin
+  have hDiff : DiffContOnCl ℂ (Quadratic.proxy_bottcher_map c) (Metric.ball z r) :=
     (hdiff.diffContOnCl_ball (hc := hsubset))
   have hC :
-      ∀ w ∈ Metric.sphere z r, ‖Quadratic.bottcher_map c w - w‖ ≤ (1 / 4) * (‖z‖ + r) := by
+      ∀ w ∈ Metric.sphere z r, ‖Quadratic.proxy_bottcher_map c w - w‖ ≤ (1 / 4) * (‖z‖ + r) := by
     intro w hw
     have hw' : ‖w‖ ≥ r := by
       have hdist : dist w z = r := by
@@ -3638,7 +3638,7 @@ lemma bottcher_map_deriv_ne_zero_of_normalized
         ((1 / 4 : ℝ) * (‖z‖ + r)) / r = (3 / 4 : ℝ) := hcalc'
         _ < 1 := by norm_num
     exact hlt'
-  exact deriv_ne_zero_of_sphere_bound (f := Quadratic.bottcher_map c) (z₀ := z)
+  exact deriv_ne_zero_of_sphere_bound (f := Quadratic.proxy_bottcher_map c) (z₀ := z)
     (R := r) hrpos hDiff hC hC'
 
 lemma quadratic_map_norm_gt_outside
@@ -3658,8 +3658,8 @@ lemma quadratic_map_maps_outside_open (c : ℂ) :
 lemma bottcher_conj_deriv_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) :
-    deriv (Quadratic.bottcher_map c) (quadratic_map c z) * (2 * z) =
-      2 * (Quadratic.bottcher_map c z) * deriv (Quadratic.bottcher_map c) z := by
+    deriv (Quadratic.proxy_bottcher_map c) (quadratic_map c z) * (2 * z) =
+      2 * (Quadratic.proxy_bottcher_map c z) * deriv (Quadratic.proxy_bottcher_map c) z := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   have hUopen : IsOpen U := by
     simpa [U] using (isOpen_lt continuous_const continuous_norm)
@@ -3672,27 +3672,27 @@ lemma bottcher_conj_deriv_on_outside
     have hw' : w ∈ outside_disk c :=
       large_norm_mem_outside_disk c w (le_of_lt hw)
     exact outside_disk_subset_quadratic_basin c hw'
-  have hφz : HasDerivAt (Quadratic.bottcher_map c)
-      (deriv (Quadratic.bottcher_map c) z) z := by
-    have h := (bottcher_map_analytic_on_outside c hslit) z hzU
+  have hφz : HasDerivAt (Quadratic.proxy_bottcher_map c)
+      (deriv (Quadratic.proxy_bottcher_map c) z) z := by
+    have h := (proxy_bottcher_map_analytic_on_outside c hslit) z hzU
     exact h.differentiableAt.hasDerivAt
-  have hφfz : HasDerivAt (Quadratic.bottcher_map c)
-      (deriv (Quadratic.bottcher_map c) (quadratic_map c z)) (quadratic_map c z) := by
-    have h := (bottcher_map_analytic_on_outside c hslit) (quadratic_map c z) hzU'
+  have hφfz : HasDerivAt (Quadratic.proxy_bottcher_map c)
+      (deriv (Quadratic.proxy_bottcher_map c) (quadratic_map c z)) (quadratic_map c z) := by
+    have h := (proxy_bottcher_map_analytic_on_outside c hslit) (quadratic_map c z) hzU'
     exact h.differentiableAt.hasDerivAt
   have hquad : HasDerivAt (fun w => quadratic_map c w) (2 * z) z := by
     simpa [quadratic_map, pow_two, two_mul, mul_comm, mul_left_comm, mul_assoc] using
       (hasDerivAt_pow (n := 2) z).add_const c
   have hcomp :
-      HasDerivAt (fun w => Quadratic.bottcher_map c (quadratic_map c w))
-        (deriv (Quadratic.bottcher_map c) (quadratic_map c z) * (2 * z)) z := by
+      HasDerivAt (fun w => Quadratic.proxy_bottcher_map c (quadratic_map c w))
+        (deriv (Quadratic.proxy_bottcher_map c) (quadratic_map c z) * (2 * z)) z := by
     simpa using hφfz.comp z hquad
   have hpow :
-      HasDerivAt (fun w => (Quadratic.bottcher_map c w) ^ 2)
-        (2 * (Quadratic.bottcher_map c z) * deriv (Quadratic.bottcher_map c) z) z := by
+      HasDerivAt (fun w => (Quadratic.proxy_bottcher_map c w) ^ 2)
+        (2 * (Quadratic.proxy_bottcher_map c z) * deriv (Quadratic.proxy_bottcher_map c) z) z := by
     simpa [pow_two, two_mul, mul_comm, mul_left_comm, mul_assoc] using hφz.pow 2
-  have hEq : (fun w => Quadratic.bottcher_map c (quadratic_map c w))
-      =ᶠ[𝓝 z] fun w => (Quadratic.bottcher_map c w) ^ 2 := by
+  have hEq : (fun w => Quadratic.proxy_bottcher_map c (quadratic_map c w))
+      =ᶠ[𝓝 z] fun w => (Quadratic.proxy_bottcher_map c w) ^ 2 := by
     have hUmem : ∀ᶠ w in 𝓝 z, w ∈ U := by
       simpa using hUopen.mem_nhds (by simpa [U] using hz)
     refine hUmem.mono ?_
@@ -3700,15 +3700,15 @@ lemma bottcher_conj_deriv_on_outside
     have hw' : w ∈ Quadratic.basin_of_infinity c := hbasin hw
     exact bottcher_conj_on_basin c w hw'
   have hcomp' :
-      HasDerivAt (fun w => (Quadratic.bottcher_map c w) ^ 2)
-        (deriv (Quadratic.bottcher_map c) (quadratic_map c z) * (2 * z)) z :=
+      HasDerivAt (fun w => (Quadratic.proxy_bottcher_map c w) ^ 2)
+        (deriv (Quadratic.proxy_bottcher_map c) (quadratic_map c z) * (2 * z)) z :=
     hcomp.congr_of_eventuallyEq hEq.symm
   exact (hpow.unique hcomp').symm
 
 lemma deriv_zero_iter_of_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) (hzero : deriv (Quadratic.bottcher_map c) z = 0) :
-    ∀ n, deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n] z) = 0 := by
+    {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) (hzero : deriv (Quadratic.proxy_bottcher_map c) z = 0) :
+    ∀ n, deriv (Quadratic.proxy_bottcher_map c) ((quadratic_map c)^[n] z) = 0 := by
   intro n
   induction n with
   | zero =>
@@ -3726,24 +3726,24 @@ lemma deriv_zero_iter_of_outside
         have hpos : 0 < ‖(quadratic_map c)^[n] z‖ := lt_trans hposc hz'
         exact (mul_ne_zero (by norm_num : (2 : ℂ) ≠ 0) (by
           exact (norm_ne_zero_iff).1 (ne_of_gt hpos)))
-      have : deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n.succ] z) = 0 := by
+      have : deriv (Quadratic.proxy_bottcher_map c) ((quadratic_map c)^[n.succ] z) = 0 := by
         have hrel' :
-            deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n.succ] z) * (2 * (quadratic_map c)^[n] z) =
-              2 * (Quadratic.bottcher_map c ((quadratic_map c)^[n] z)) *
-                deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n] z) := by
+            deriv (Quadratic.proxy_bottcher_map c) ((quadratic_map c)^[n.succ] z) * (2 * (quadratic_map c)^[n] z) =
+              2 * (Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z)) *
+                deriv (Quadratic.proxy_bottcher_map c) ((quadratic_map c)^[n] z) := by
           simpa [Function.iterate_succ_apply'] using hrel
         have hrel'' :
-            deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[n.succ] z) * (2 * (quadratic_map c)^[n] z) =
+            deriv (Quadratic.proxy_bottcher_map c) ((quadratic_map c)^[n.succ] z) * (2 * (quadratic_map c)^[n] z) =
               0 * (2 * (quadratic_map c)^[n] z) := by
           simpa [ih] using hrel'
         exact mul_right_cancel₀ hne hrel''
       simpa using this
 
-lemma bottcher_map_deriv_ne_zero_on_outside_open_of_normalized
+lemma proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_normalized
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     (hnorm : bottcher_normalized_at_infty c) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
-  rcases bottcher_map_deriv_ne_zero_of_normalized c hslit hnorm with ⟨R, hR⟩
+    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0 := by
+  rcases proxy_bottcher_map_deriv_ne_zero_of_normalized c hslit hnorm with ⟨R, hR⟩
   intro z hz hzero
   have hescape : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop := by
     have hz' : z ∈ outside_disk c :=
@@ -3752,7 +3752,7 @@ lemma bottcher_map_deriv_ne_zero_on_outside_open_of_normalized
   have hlarge : ∀ᶠ n in atTop, R ≤ ‖(quadratic_map c)^[n] z‖ :=
     (tendsto_atTop.1 hescape) R
   rcases (Filter.eventually_atTop.1 hlarge) with ⟨N, hN⟩
-  have hzeroN : deriv (Quadratic.bottcher_map c) ((quadratic_map c)^[N] z) = 0 :=
+  have hzeroN : deriv (Quadratic.proxy_bottcher_map c) ((quadratic_map c)^[N] z) = 0 :=
     (deriv_zero_iter_of_outside c hslit hz hzero) N
   have hcontr := hR ((quadratic_map c)^[N] z) (hN N (le_rfl))
   exact (hcontr hzeroN)
@@ -3781,65 +3781,65 @@ lemma isOpen_image_of_isLocalHomeomorphOn
   rintro _ ⟨z, hz, rfl⟩
   exact ⟨z.1, hz, rfl⟩
 
-lemma bottcher_map_isOpen_on_outside_of_deriv_ne_zero
+lemma proxy_bottcher_map_isOpen_on_outside_of_deriv_ne_zero
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
-    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
     ∀ t ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}, IsOpen t →
-      IsOpen (Quadratic.bottcher_map c '' t) := by
+      IsOpen (Quadratic.proxy_bottcher_map c '' t) := by
   intro t ht htop
-  have hlocal := bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit hderiv
+  have hlocal := proxy_bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit hderiv
   exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
 
-lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized
+lemma proxy_bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     (hnorm : bottcher_normalized_at_infty c) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
-  refine bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit ?_
-  exact bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm
+    IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  refine proxy_bottcher_map_isLocalHomeomorphOn_outside_of_deriv_ne_zero c hslit ?_
+  exact proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm
 
-lemma bottcher_map_isLocalHomeomorphOn_outside_open
+lemma proxy_bottcher_map_isLocalHomeomorphOn_outside_open
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   have hnorm := bottcher_normalized_at_infty_of_green c
-  exact bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized c hslit hnorm
+  exact proxy_bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized c hslit hnorm
 
-lemma bottcher_map_isOpen_on_outside_of_normalized
+lemma proxy_bottcher_map_isOpen_on_outside_of_normalized
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     (hnorm : bottcher_normalized_at_infty c) :
     ∀ t ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}, IsOpen t →
-      IsOpen (Quadratic.bottcher_map c '' t) := by
+      IsOpen (Quadratic.proxy_bottcher_map c '' t) := by
   intro t ht htop
-  have hlocal := bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized c hslit hnorm
+  have hlocal := proxy_bottcher_map_isLocalHomeomorphOn_outside_open_of_normalized c hslit hnorm
   exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
 
-lemma bottcher_map_isOpen_on_outside
+lemma proxy_bottcher_map_isOpen_on_outside
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
     ∀ t ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}, IsOpen t →
-      IsOpen (Quadratic.bottcher_map c '' t) := by
+      IsOpen (Quadratic.proxy_bottcher_map c '' t) := by
   intro t ht htop
-  have hlocal := bottcher_map_isLocalHomeomorphOn_outside_open c hslit
+  have hlocal := proxy_bottcher_map_isLocalHomeomorphOn_outside_open c hslit
   exact isOpen_image_of_isLocalHomeomorphOn hlocal t ht htop
 
-lemma bottcher_map_isOpenMap_on_outside_open
+lemma proxy_bottcher_map_isOpenMap_on_outside_open
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    IsOpenMap (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) := by
+    IsOpenMap (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z) := by
   intro t ht
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   have hUopen : IsOpen U := by
     simpa [U] using (isOpen_lt continuous_const continuous_norm)
   rcases isOpen_induced_iff.mp ht with ⟨u, hu, rfl⟩
   have hopen_image :
-      IsOpen (Quadratic.bottcher_map c '' (u ∩ U)) := by
-    refine bottcher_map_isOpen_on_outside c hslit (t := u ∩ U) ?_ (hu.inter hUopen)
+      IsOpen (Quadratic.proxy_bottcher_map c '' (u ∩ U)) := by
+    refine proxy_bottcher_map_isOpen_on_outside c hslit (t := u ∩ U) ?_ (hu.inter hUopen)
     exact Set.inter_subset_right
   have himage :
-      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) ''
+      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z) ''
           (Subtype.val ⁻¹' u) =
-        Quadratic.bottcher_map c '' (u ∩ U) := by
+        Quadratic.proxy_bottcher_map c '' (u ∩ U) := by
     calc
-      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) ''
+      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z) ''
           (Subtype.val ⁻¹' u)
-          = Quadratic.bottcher_map c '' (Subtype.val '' (Subtype.val ⁻¹' u)) := by
+          = Quadratic.proxy_bottcher_map c '' (Subtype.val '' (Subtype.val ⁻¹' u)) := by
               ext y
               constructor
               · rintro ⟨x, hx, rfl⟩
@@ -3847,50 +3847,50 @@ lemma bottcher_map_isOpenMap_on_outside_open
               · rintro ⟨x, hx, rfl⟩
                 rcases hx with ⟨x', hx', rfl⟩
                 exact ⟨x', hx', rfl⟩
-      _ = Quadratic.bottcher_map c '' (u ∩ U) := by
+      _ = Quadratic.proxy_bottcher_map c '' (u ∩ U) := by
             simp [U, Subtype.image_preimage_coe, Set.inter_comm]
   simpa [himage] using hopen_image
 
 /-- Derivative nonvanishing on outside-open from local analyticity plus
 outside-open injectivity. -/
-lemma bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
+lemma proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0 := by
   intro z hz
   let U : Set ℂ := {w : ℂ | ‖w‖ > ‖c‖ + 2}
   have hzU : z ∈ U := by simpa [U] using hz
-  have hf : AnalyticAt ℂ (Quadratic.bottcher_map c) z :=
+  have hf : AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z :=
     hanalytic z hz
   have hUopen : IsOpen U := by
     simpa [U] using (isOpen_lt continuous_const continuous_norm)
   have hUnhds : U ∈ 𝓝 z := hUopen.mem_nhds hzU
-  have h_injU : Set.InjOn (Quadratic.bottcher_map c) U := by
+  have h_injU : Set.InjOn (Quadratic.proxy_bottcher_map c) U := by
     simpa [U] using h_inj
   exact deriv_ne_zero_of_injOn_nhds hf U hUnhds h_injU
 
 /-- Local-homeomorph on outside-open from local analyticity plus outside-open
 injectivity. -/
-lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_injOn
+lemma proxy_bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_injOn
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ ?_
   · intro z hz
     exact hanalytic z (by simpa using hz)
   · intro z hz
-    exact bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
+    exact proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
       c hanalytic h_inj z (by simpa using hz)
 
 /-- Local-homeomorph on outside-open from local analyticity plus derivative
 nonvanishing on outside-open. -/
-lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
+lemma proxy_bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ ?_
   · intro z hz
     exact hanalytic z (by simpa using hz)
@@ -3899,32 +3899,32 @@ lemma bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_ze
 
 /-- Open-map-on-subtype variant from local analyticity and outside-open
 injectivity. -/
-lemma bottcher_map_isOpenMap_on_outside_open_of_analyticAt_of_injOn
+lemma proxy_bottcher_map_isOpenMap_on_outside_open_of_analyticAt_of_injOn
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    IsOpenMap (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) := by
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    IsOpenMap (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z) := by
   intro t ht
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   have hUopen : IsOpen U := by
     simpa [U] using (isOpen_lt continuous_const continuous_norm)
   rcases isOpen_induced_iff.mp ht with ⟨u, hu, rfl⟩
   have hlocal :
-      IsLocalHomeomorphOn (Quadratic.bottcher_map c) U :=
-    bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_injOn
+      IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) U :=
+    proxy_bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_injOn
       c hanalytic (by simpa [U] using h_inj)
   have hopen_image :
-      IsOpen (Quadratic.bottcher_map c '' (u ∩ U)) := by
+      IsOpen (Quadratic.proxy_bottcher_map c '' (u ∩ U)) := by
     refine isOpen_image_of_isLocalHomeomorphOn hlocal (u ∩ U) ?_ (hu.inter hUopen)
     exact Set.inter_subset_right
   have himage :
-      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) ''
+      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z) ''
           (Subtype.val ⁻¹' u) =
-        Quadratic.bottcher_map c '' (u ∩ U) := by
+        Quadratic.proxy_bottcher_map c '' (u ∩ U) := by
     calc
-      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z) ''
+      (fun z : {z : ℂ | ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z) ''
           (Subtype.val ⁻¹' u)
-          = Quadratic.bottcher_map c '' (Subtype.val '' (Subtype.val ⁻¹' u)) := by
+          = Quadratic.proxy_bottcher_map c '' (Subtype.val '' (Subtype.val ⁻¹' u)) := by
               ext y
               constructor
               · rintro ⟨x, hx, rfl⟩
@@ -3932,34 +3932,34 @@ lemma bottcher_map_isOpenMap_on_outside_open_of_analyticAt_of_injOn
               · rintro ⟨x, hx, rfl⟩
                 rcases hx with ⟨x', hx', rfl⟩
                 exact ⟨x', hx', rfl⟩
-      _ = Quadratic.bottcher_map c '' (u ∩ U) := by
+      _ = Quadratic.proxy_bottcher_map c '' (u ∩ U) := by
             simp [U, Subtype.image_preimage_coe, Set.inter_comm]
   simpa [himage] using hopen_image
 
-lemma bottcher_map_image_outside_open_isOpen
+lemma proxy_bottcher_map_image_outside_open_isOpen
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    IsOpen (Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+    IsOpen (Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
   have hopen : IsOpen {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
     simpa using (isOpen_lt continuous_const continuous_norm)
   have h :=
-    bottcher_map_isOpen_on_outside c hslit
+    proxy_bottcher_map_isOpen_on_outside c hslit
       (t := {z : ℂ | ‖z‖ > ‖c‖ + 2})
       (by intro z hz; exact hz) hopen
   simpa using h
 
-lemma bottcher_map_image_outside_open_subset_outside_disk
+lemma proxy_bottcher_map_image_outside_open_subset_outside_disk
     (c : ℂ) :
-    Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆
-      Quadratic.bottcher_map c '' outside_disk c := by
+    Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆
+      Quadratic.proxy_bottcher_map c '' outside_disk c := by
   intro w hw
   rcases hw with ⟨z, hz, rfl⟩
   exact ⟨z, outside_open_subset_outside_disk c hz, rfl⟩
 
-lemma bottcher_map_image_outside_disk_subset_exterior (c : ℂ) :
-    Quadratic.bottcher_map c '' outside_disk c ⊆ {w : ℂ | 1 < ‖w‖} := by
+lemma proxy_bottcher_map_image_outside_disk_subset_exterior (c : ℂ) :
+    Quadratic.proxy_bottcher_map c '' outside_disk c ⊆ {w : ℂ | 1 < ‖w‖} := by
   intro w hw
   rcases hw with ⟨z, hz, rfl⟩
-  exact bottcher_map_norm_gt_one_of_outside c hz
+  exact proxy_bottcher_map_norm_gt_one_of_outside c hz
 
 lemma isPathConnected_exterior : IsPathConnected {w : ℂ | 1 < ‖w‖} := by
   have hrank : 1 < Module.rank ℝ ℂ := by
@@ -4056,33 +4056,33 @@ lemma isPathConnected_exterior : IsPathConnected {w : ℂ | 1 < ‖w‖} := by
 lemma isConnected_exterior : IsConnected {w : ℂ | 1 < ‖w‖} := by
   exact isPathConnected_exterior.isConnected
 
-lemma bottcher_map_image_outside_disk_eq_exterior_of_preimage
+lemma proxy_bottcher_map_image_outside_disk_eq_exterior_of_preimage
     (c : ℂ)
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
-    Quadratic.bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖} := by
-  refine subset_antisymm (bottcher_map_image_outside_disk_subset_exterior c) ?_
+    (hpre : (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
+    Quadratic.proxy_bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖} := by
+  refine subset_antisymm (proxy_bottcher_map_image_outside_disk_subset_exterior c) ?_
   intro w hw
-  rcases (Quadratic.bottcher_map_surj c w hw) with ⟨z, hzdom, rfl⟩
-  have hzpre : z ∈ (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} := by
-    have hw' : 1 < ‖Quadratic.bottcher_map c z‖ := by
+  rcases (Quadratic.proxy_bottcher_map_surj c w hw) with ⟨z, hzdom, rfl⟩
+  have hzpre : z ∈ (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} := by
+    have hw' : 1 < ‖Quadratic.proxy_bottcher_map c z‖ := by
       simpa using hw
     simp [Set.preimage, hw']
   exact ⟨z, hpre hzpre, rfl⟩
 
-lemma bottcher_map_image_outside_disk_eq_exterior
+lemma proxy_bottcher_map_image_outside_disk_eq_exterior
     (c : ℂ)
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
-    Quadratic.bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖} := by
-  exact bottcher_map_image_outside_disk_eq_exterior_of_preimage c hpre
+    (hpre : (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c) :
+    Quadratic.proxy_bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖} := by
+  exact proxy_bottcher_map_image_outside_disk_eq_exterior_of_preimage c hpre
 
 lemma bottcher_preimage_exterior_subset_outside_of_inj
-    (c : ℂ) (hinj : Function.Injective (Quadratic.bottcher_map c))
-    (himage : Quadratic.bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖}) :
-    (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c := by
+    (c : ℂ) (hinj : Function.Injective (Quadratic.proxy_bottcher_map c))
+    (himage : Quadratic.proxy_bottcher_map c '' outside_disk c = {w : ℂ | 1 < ‖w‖}) :
+    (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c := by
   intro z hz
-  have hz' : Quadratic.bottcher_map c z ∈ {w : ℂ | 1 < ‖w‖} := by
+  have hz' : Quadratic.proxy_bottcher_map c z ∈ {w : ℂ | 1 < ‖w‖} := by
     simpa [Set.preimage] using hz
-  have hz'' : Quadratic.bottcher_map c z ∈ Quadratic.bottcher_map c '' outside_disk c := by
+  have hz'' : Quadratic.proxy_bottcher_map c z ∈ Quadratic.proxy_bottcher_map c '' outside_disk c := by
     simpa [himage] using hz'
   rcases hz'' with ⟨z0, hz0, hEq⟩
   have hz0' : z = z0 := hinj (by simp [hEq])
@@ -4090,23 +4090,23 @@ lemma bottcher_preimage_exterior_subset_outside_of_inj
   exact hz0
 
 
-lemma bottcher_map_local_inj_on_outside_open_of_normalized
+lemma proxy_bottcher_map_local_inj_on_outside_open_of_normalized
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c)
     (hnorm : bottcher_normalized_at_infty c) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.bottcher_map c) s := by
+    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.proxy_bottcher_map c) s := by
   intro z hz
-  have hf : AnalyticAt ℂ (Quadratic.bottcher_map c) z :=
-    (bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
-  have hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0 :=
-    bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm z hz
+  have hf : AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z :=
+    (proxy_bottcher_map_analytic_on_outside c hslit) z (by simpa using hz)
+  have hderiv : deriv (Quadratic.proxy_bottcher_map c) z ≠ 0 :=
+    proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_normalized c hslit hnorm z hz
   exact injOn_nhds_of_analyticAt hf hderiv
 
-lemma bottcher_map_local_inj_on_outside_open
+lemma proxy_bottcher_map_local_inj_on_outside_open
     (c : ℂ) (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.bottcher_map c) s := by
+    ∀ z, ‖z‖ > ‖c‖ + 2 → ∃ s ∈ 𝓝 z, Set.InjOn (Quadratic.proxy_bottcher_map c) s := by
   intro z hz
   have hnorm := bottcher_normalized_at_infty_of_green c
-  exact bottcher_map_local_inj_on_outside_open_of_normalized c hslit hnorm z hz
+  exact proxy_bottcher_map_local_inj_on_outside_open_of_normalized c hslit hnorm z hz
 
 lemma basin_escape_outside_open (c : ℂ) :
     ∀ z, z ∈ Quadratic.basin_of_infinity c →
@@ -4123,26 +4123,26 @@ lemma basin_escape_outside_open (c : ℂ) :
 lemma bottcher_left_inv_outside_open_of_local_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
     ∀ z, ‖z‖ > ‖c‖ + 2 →
-      Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z := by
+      Quadratic.external_ray_map_of_data h_data (Quadratic.proxy_bottcher_map c z) = z := by
   intro z hz
   exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
 
 lemma bottcher_left_inv_outside_open_of_local
     (c : ℂ) :
     ∀ z, ‖z‖ > ‖c‖ + 2 →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z := by
   intro z hz
   simpa [Quadratic.external_ray_map] using
     bottcher_left_inv_outside_open_of_local_of_data (Quadratic.external_ray_map_data c) z hz
 
-/-- Seam target: a left inverse of `bottcher_map` on outside-open. -/
+/-- Seam target: a left inverse of `proxy_bottcher_map` on outside-open. -/
 def BottcherLeftInverseOnOutsideOpenData (c : ℂ) : Prop :=
-  ∃ g : ℂ → ℂ, ∀ z, ‖z‖ > ‖c‖ + 2 → g (Quadratic.bottcher_map c z) = z
+  ∃ g : ℂ → ℂ, ∀ z, ‖z‖ > ‖c‖ + 2 → g (Quadratic.proxy_bottcher_map c z) = z
 
-/-- Seam target: a right inverse of `bottcher_map` on the exterior
+/-- Seam target: a right inverse of `proxy_bottcher_map` on the exterior
     `{w | 1 < ‖w‖}`. -/
 def BottcherRightInverseOnExteriorDataOutsidePlan (c : ℂ) : Prop :=
-  ∃ f : ℂ → ℂ, ∀ w, 1 < ‖w‖ → Quadratic.bottcher_map c (f w) = w
+  ∃ f : ℂ → ℂ, ∀ w, 1 < ‖w‖ → Quadratic.proxy_bottcher_map c (f w) = w
 
 /-- Build outside-plan right-inverse seam data from explicit external-ray
     data. -/
@@ -4154,51 +4154,51 @@ lemma bottcher_right_inverse_on_exterior_data_of_external_ray_map_data
   exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
 
 /-- Build outside-plan right-inverse seam data from exterior surjectivity of
-    `bottcher_map` (through `bottcher_domain`). -/
-lemma bottcher_right_inverse_on_exterior_data_of_bottcher_map_surj
+    `proxy_bottcher_map` (through `bottcher_domain`). -/
+lemma bottcher_right_inverse_on_exterior_data_of_proxy_bottcher_map_surj
     (c : ℂ) :
     BottcherRightInverseOnExteriorDataOutsidePlan c := by
   classical
-  refine ⟨fun w => if hw : 1 < ‖w‖ then Classical.choose (Quadratic.bottcher_map_surj c w hw) else 0, ?_⟩
+  refine ⟨fun w => if hw : 1 < ‖w‖ then Classical.choose (Quadratic.proxy_bottcher_map_surj c w hw) else 0, ?_⟩
   intro w hw
   have hchoose :
-      Quadratic.bottcher_map c (Classical.choose (Quadratic.bottcher_map_surj c w hw)) = w := by
-    exact (Classical.choose_spec (Quadratic.bottcher_map_surj c w hw)).2
+      Quadratic.proxy_bottcher_map c (Classical.choose (Quadratic.proxy_bottcher_map_surj c w hw)) = w := by
+    exact (Classical.choose_spec (Quadratic.proxy_bottcher_map_surj c w hw)).2
   simpa [hw] using hchoose
 
 /-- Default outside-plan right-inverse seam data. -/
 lemma bottcher_right_inverse_on_exterior_data (c : ℂ) :
     BottcherRightInverseOnExteriorDataOutsidePlan c := by
-  exact bottcher_right_inverse_on_exterior_data_of_bottcher_map_surj c
+  exact bottcher_right_inverse_on_exterior_data_of_proxy_bottcher_map_surj c
 
 /-- Any outside-open left-inverse payload yields outside-open injectivity. -/
-lemma bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open
+lemma proxy_bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open
     (c : ℂ) (h_left : BottcherLeftInverseOnOutsideOpenData c) :
-    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   rcases h_left with ⟨g, hg⟩
   intro z hz w hw hzw
-  have hz' : g (Quadratic.bottcher_map c z) = z := hg z hz
-  have hw' : g (Quadratic.bottcher_map c w) = w := hg w hw
+  have hz' : g (Quadratic.proxy_bottcher_map c z) = z := hg z hz
+  have hw' : g (Quadratic.proxy_bottcher_map c w) = w := hg w hw
   have h := congrArg g hzw
   simpa [hz', hw'] using h
 
 /-- Build outside-open left-inverse payload from outside-open injectivity. -/
 lemma bottcher_left_inverse_on_outside_open_data_of_injOn_outside_open
     (c : ℂ)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     BottcherLeftInverseOnOutsideOpenData c := by
   classical
   let g : ℂ → ℂ := fun w =>
-    if hw : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w then
+    if hw : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.proxy_bottcher_map c z = w then
       Classical.choose hw
     else 0
   refine ⟨g, ?_⟩
   intro z hz
-  let hw : ∃ z', ‖z'‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z' = Quadratic.bottcher_map c z :=
+  let hw : ∃ z', ‖z'‖ > ‖c‖ + 2 ∧ Quadratic.proxy_bottcher_map c z' = Quadratic.proxy_bottcher_map c z :=
     ⟨z, hz, rfl⟩
   have hspec :
       ‖Classical.choose hw‖ > ‖c‖ + 2 ∧
-        Quadratic.bottcher_map c (Classical.choose hw) = Quadratic.bottcher_map c z :=
+        Quadratic.proxy_bottcher_map c (Classical.choose hw) = Quadratic.proxy_bottcher_map c z :=
     Classical.choose_spec hw
   have hz_eq : Classical.choose hw = z := by
     apply h_inj hspec.1 hz
@@ -4209,9 +4209,9 @@ lemma bottcher_left_inverse_on_outside_open_data_of_injOn_outside_open
 lemma bottcher_left_inverse_on_outside_open_data_iff_injOn_outside_open
     (c : ℂ) :
     BottcherLeftInverseOnOutsideOpenData c ↔
-      Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+      Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   constructor
-  · exact bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c
+  · exact proxy_bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c
   · intro h_inj
     exact bottcher_left_inverse_on_outside_open_data_of_injOn_outside_open c h_inj
 
@@ -4223,40 +4223,40 @@ lemma bottcher_left_inverse_on_outside_open_data_of_external_ray_map_data
   intro z hz
   exact Quadratic.external_ray_map_left_inverse_outside_open_of_data h_data z hz
 
-/-- M5 target: surjectivity of `bottcher_map` onto the exterior by preimages in
+/-- M5 target: surjectivity of `proxy_bottcher_map` onto the exterior by preimages in
     the outside-open seed region. -/
 def BottcherSurjOnExteriorFromOutsideOpen (c : ℂ) : Prop :=
-  ∀ w, 1 < ‖w‖ → ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+  ∀ w, 1 < ‖w‖ → ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.proxy_bottcher_map c z = w
 
 /-- Choice-based construction of external-ray data from the two core ingredients
     isolated in the explicit proof strategy:
     1. some right inverse on the exterior `{w | 1 < ‖w‖}`;
-    2. injectivity of `bottcher_map` on the canonical outside-open region.
+    2. injectivity of `proxy_bottcher_map` on the canonical outside-open region.
 
     The resulting selector uses the unique outside-open preimage whenever one
     exists and otherwise falls back to an arbitrary exterior preimage. -/
 theorem external_ray_map_data_of_right_inverse_on_exterior_of_injOn_outside_open
     (c : ℂ)
     (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c := by
   classical
   rcases h_right with ⟨f₀, hf₀⟩
   refine ⟨fun w =>
-    if hw : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+    if hw : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.proxy_bottcher_map c z = w
     then Classical.choose hw
     else f₀ w, ?_, ?_⟩
   · intro w hw
-    by_cases hex : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.bottcher_map c z = w
+    by_cases hex : ∃ z, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.proxy_bottcher_map c z = w
     · simpa [hex] using (Classical.choose_spec hex).2
     · simpa [hex] using hf₀ w hw
   · intro z hz
     let hw : ∃ z', ‖z'‖ > ‖c‖ + 2 ∧
-        Quadratic.bottcher_map c z' = Quadratic.bottcher_map c z :=
+        Quadratic.proxy_bottcher_map c z' = Quadratic.proxy_bottcher_map c z :=
       ⟨z, hz, rfl⟩
     have hspec :
         ‖Classical.choose hw‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c (Classical.choose hw) = Quadratic.bottcher_map c z :=
+          Quadratic.proxy_bottcher_map c (Classical.choose hw) = Quadratic.proxy_bottcher_map c z :=
       Classical.choose_spec hw
     have hchoose_eq : Classical.choose hw = z := by
       apply h_inj hspec.1 hz
@@ -4268,16 +4268,16 @@ theorem external_ray_map_data_of_right_inverse_on_exterior_of_injOn_outside_open
     outside-open injectivity inputs are provided explicitly. -/
 theorem external_ray_map_data_two_of_right_inverse_on_exterior_of_injOn_outside_open
     (h_right : BottcherRightInverseOnExteriorDataOutsidePlan (2 : ℂ))
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ))
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_right_inverse_on_exterior_of_injOn_outside_open
     (2 : ℂ) h_right h_inj
 
-/-- Alternative M5 target: the image of outside-open under `bottcher_map` is
+/-- Alternative M5 target: the image of outside-open under `proxy_bottcher_map` is
     exactly the exterior. -/
 def BottcherImageOutsideOpenIsExterior (c : ℂ) : Prop :=
-  Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} = {w : ℂ | 1 < ‖w‖}
+  Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} = {w : ℂ | 1 < ‖w‖}
 
 /-- Image-equality target reduced to a single inclusion obligation:
     `exterior ⊆ image(outside-open)`. The reverse inclusion is automatic from
@@ -4286,7 +4286,7 @@ theorem bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image
     (c : ℂ) :
     BottcherImageOutsideOpenIsExterior c ↔
       ({w : ℂ | 1 < ‖w‖} ⊆
-        Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+        Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
   constructor
   · intro h_img w hw
     rw [h_img]
@@ -4295,49 +4295,49 @@ theorem bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image
     apply Set.Subset.antisymm
     · intro w hw
       rcases hw with ⟨z, hz, rfl⟩
-      exact bottcher_map_norm_gt_one_of_outside c (outside_open_subset_outside_disk c hz)
+      exact proxy_bottcher_map_norm_gt_one_of_outside c (outside_open_subset_outside_disk c hz)
     · exact h_sub
 
 /-- `c = 2` specialization of the previous reduction theorem. -/
 theorem bottcherImageOutsideOpenIsExterior_two_iff_exterior_subset_image :
     BottcherImageOutsideOpenIsExterior (2 : ℂ) ↔
       ({w : ℂ | 1 < ‖w‖} ⊆
-        Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) := by
+        Quadratic.proxy_bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) := by
   exact bottcherImageOutsideOpenIsExterior_iff_exterior_subset_image (2 : ℂ)
 
 /-- Named `c = 2` inclusion target for the outside-open image step. -/
 def BottcherExteriorSubsetImageOutsideOpenTwo : Prop :=
   ({w : ℂ | 1 < ‖w‖} ⊆
-    Quadratic.bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
+    Quadratic.proxy_bottcher_map (2 : ℂ) '' {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
 
 /-- Exterior points are always in the image of `outside_disk` under
-    `bottcher_map`. This is unconditional in the current model because
+    `proxy_bottcher_map`. This is unconditional in the current model because
     `outside_disk = basin_of_infinity`. -/
 theorem exterior_subset_image_outside_disk_of_right_inverse
     (c : ℂ)
     (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c) :
-    ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c) := by
+    ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.proxy_bottcher_map c '' outside_disk c) := by
   intro w hw
   rcases h_right with ⟨f, hf⟩
   refine ⟨f w, ?_, hf w hw⟩
-  have hnorm : 1 < ‖Quadratic.bottcher_map c (f w)‖ := by
+  have hnorm : 1 < ‖Quadratic.proxy_bottcher_map c (f w)‖ := by
     simpa [hf w hw] using hw
   have hbasin : f w ∈ Quadratic.basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := f w) hnorm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := f w) hnorm
   simpa [outside_disk] using hbasin
 
 /-- Exterior points are always in the image of `outside_disk` under
-    `bottcher_map`. This is unconditional in the current model because
+    `proxy_bottcher_map`. This is unconditional in the current model because
     `outside_disk = basin_of_infinity`. -/
 theorem exterior_subset_image_outside_disk (c : ℂ) :
-    ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c) := by
+    ({w : ℂ | 1 < ‖w‖} ⊆ Quadratic.proxy_bottcher_map c '' outside_disk c) := by
   intro w hw
-  rcases Quadratic.bottcher_map_surj c w hw with ⟨z, _hz_dom, hzw⟩
+  rcases Quadratic.proxy_bottcher_map_surj c w hw with ⟨z, _hz_dom, hzw⟩
   refine ⟨z, ?_, hzw⟩
-  have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ := by
+  have hnorm : 1 < ‖Quadratic.proxy_bottcher_map c z‖ := by
     simpa [hzw] using hw
   have hbasin : z ∈ Quadratic.basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := z) hnorm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := z) hnorm
   simpa [outside_disk] using hbasin
 
 /-- Intermediate reduction target: every outside-disk point has an
@@ -4345,15 +4345,15 @@ theorem exterior_subset_image_outside_disk (c : ℂ) :
 def BottcherOutsideDiskToOutsideOpenImageRefinement (c : ℂ) : Prop :=
   ∀ z, z ∈ outside_disk c →
     ∃ u, ‖u‖ > ‖c‖ + 2 ∧
-      Quadratic.bottcher_map c u = Quadratic.bottcher_map c z
+      Quadratic.proxy_bottcher_map c u = Quadratic.proxy_bottcher_map c z
 
 /-- Outside-open exterior inclusion follows from the refinement target above. -/
 theorem exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk
     (c : ℂ)
-    (h_disk : {w : ℂ | 1 < ‖w‖} ⊆ Quadratic.bottcher_map c '' outside_disk c)
+    (h_disk : {w : ℂ | 1 < ‖w‖} ⊆ Quadratic.proxy_bottcher_map c '' outside_disk c)
     (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
     ({w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+      Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
   intro w hw
   rcases h_disk hw with ⟨z, hz, hzw⟩
   rcases h_refine z hz with ⟨u, hu, hEq⟩
@@ -4366,7 +4366,7 @@ theorem exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_ref
     (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c)
     (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
     ({w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+      Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
   exact exterior_subset_image_outside_open_of_outside_disk_refinement_of_exterior_subset_image_outside_disk
     c (exterior_subset_image_outside_disk_of_right_inverse c h_right) h_refine
 
@@ -4374,7 +4374,7 @@ theorem exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_ref
 theorem exterior_subset_image_outside_open_of_outside_disk_refinement
     (c : ℂ) (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
     ({w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
+      Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) := by
   exact exterior_subset_image_outside_open_of_right_inverse_and_outside_disk_refinement c
     (bottcher_right_inverse_on_exterior_data c)
     h_refine
@@ -4384,15 +4384,15 @@ theorem exterior_subset_image_outside_open_of_outside_disk_refinement
 theorem outside_disk_to_outside_open_image_refinement_of_exterior_subset_image_outside_open
     (c : ℂ)
     (h_sub : {w : ℂ | 1 < ‖w‖} ⊆
-      Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+      Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     BottcherOutsideDiskToOutsideOpenImageRefinement c := by
   intro z hz
   have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
     outside_disk_subset_quadratic_basin c hz
   have hpos : 0 < MLC.Quadratic.green_function c z :=
     green_function_pos_of_basin c z hz_basin
-  have hw : 1 < ‖Quadratic.bottcher_map c z‖ :=
-    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+  have hw : 1 < ‖Quadratic.proxy_bottcher_map c z‖ :=
+    proxy_bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
   rcases h_sub hw with ⟨u, hu, hEq⟩
   exact ⟨u, hu, hEq⟩
 
@@ -4407,9 +4407,9 @@ theorem outside_disk_to_outside_open_image_refinement_of_externalRayLandsOutside
     (hland : ExternalRayLandsOutsideOpen c) :
     BottcherOutsideDiskToOutsideOpenImageRefinement c := by
   intro z hz
-  let w : ℂ := Quadratic.bottcher_map c z
+  let w : ℂ := Quadratic.proxy_bottcher_map c z
   have hw : 1 < ‖w‖ := by
-    simpa [w] using bottcher_map_norm_gt_one_of_outside c hz
+    simpa [w] using proxy_bottcher_map_norm_gt_one_of_outside c hz
   refine ⟨Quadratic.external_ray_map c w, ?_, ?_⟩
   · simpa [w] using hland w hw
   · simpa [w] using Quadratic.external_ray_map_right_inverse c w hw
@@ -4421,205 +4421,205 @@ theorem externalRayLandsOutsideOpen_of_outside_disk_to_outside_open_image_refine
     (h_refine : BottcherOutsideDiskToOutsideOpenImageRefinement c) :
     ExternalRayLandsOutsideOpen c := by
   intro w hw
-  have hpre : (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆ outside_disk c := by
+  have hpre : (Quadratic.proxy_bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆ outside_disk c := by
     intro z hz
-    have hz' : 1 < ‖Quadratic.bottcher_map c z‖ := by
+    have hz' : 1 < ‖Quadratic.proxy_bottcher_map c z‖ := by
       simpa [Set.preimage] using hz
     have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
-      bottcher_map_norm_gt_one_implies_basin c (z := z) hz'
+      proxy_bottcher_map_norm_gt_one_implies_basin c (z := z) hz'
     simpa [outside_disk] using hz_basin
   have hz_out : Quadratic.external_ray_map c w ∈ outside_disk c :=
     external_ray_map_mem_outside c hpre hw
   rcases h_refine (Quadratic.external_ray_map c w) hz_out with ⟨u, hu, huEq⟩
-  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
+  have hright : Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map c w) = w :=
     Quadratic.external_ray_map_right_inverse c w hw
-  have hwu : w = Quadratic.bottcher_map c u := by
+  have hwu : w = Quadratic.proxy_bottcher_map c u := by
     exact (huEq.trans hright).symm
   have hleft : Quadratic.external_ray_map c w = u := by
     calc
-      Quadratic.external_ray_map c w = Quadratic.external_ray_map c (Quadratic.bottcher_map c u) := by
+      Quadratic.external_ray_map c w = Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c u) := by
         simp [hwu]
       _ = u := Quadratic.external_ray_map_left_inverse_outside_open c u hu
   simpa [hleft] using hu
 
 /-- External-ray landing from direct outside-open control of preimages of the
-exterior under `bottcher_map`. -/
+exterior under `proxy_bottcher_map`. -/
 theorem externalRayLandsOutsideOpen_of_preimage_exterior_subset_outside_open
     (c : ℂ)
     (hpre :
-      (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+      (Quadratic.proxy_bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
         {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     ExternalRayLandsOutsideOpen c := by
   intro w hw
-  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w :=
+  have hright : Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map c w) = w :=
     Quadratic.external_ray_map_right_inverse c w hw
-  have hmem : Quadratic.external_ray_map c w ∈ (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
+  have hmem : Quadratic.external_ray_map c w ∈ (Quadratic.proxy_bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
     simp [Set.preimage, hright, hw]
   exact hpre hmem
 
 /-- Böttcher map restricted to outside-open, codomain restricted to the
 exterior. -/
-noncomputable def bottcher_map_outside_open_to_exterior (c : ℂ) :
+noncomputable def proxy_bottcher_map_outside_open_to_exterior (c : ℂ) :
     {z : ℂ // ‖z‖ > ‖c‖ + 2} → {w : ℂ // 1 < ‖w‖} := by
   intro z
-  refine ⟨Quadratic.bottcher_map c z.1, ?_⟩
-  exact bottcher_map_norm_gt_one_of_outside c
+  refine ⟨Quadratic.proxy_bottcher_map c z.1, ?_⟩
+  exact proxy_bottcher_map_norm_gt_one_of_outside c
     (outside_open_subset_outside_disk c z.2)
 
 /-- Image of a preimage set for the restricted outside-open map, expressed back
 in ambient coordinates. -/
-lemma image_preimage_bottcher_map_outside_open_to_exterior
+lemma image_preimage_proxy_bottcher_map_outside_open_to_exterior
     (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) :
-    ((↑) '' ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) : Set ℂ) =
+    ((↑) '' ((proxy_bottcher_map_outside_open_to_exterior c) ⁻¹' K) : Set ℂ) =
       {z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} := by
+        Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} := by
   ext z
   constructor
   · intro hz
     rcases hz with ⟨x, hx, rfl⟩
     refine ⟨x.2, ?_⟩
-    exact ⟨bottcher_map_outside_open_to_exterior c x, hx, rfl⟩
+    exact ⟨proxy_bottcher_map_outside_open_to_exterior c x, hx, rfl⟩
   · intro hz
     rcases hz with ⟨hz_out, y, hyK, hyEq⟩
     refine ⟨⟨z, hz_out⟩, ?_, rfl⟩
     have hEq :
-        bottcher_map_outside_open_to_exterior c ⟨z, hz_out⟩ = y := by
+        proxy_bottcher_map_outside_open_to_exterior c ⟨z, hz_out⟩ = y := by
       apply Subtype.ext
-      simpa [bottcher_map_outside_open_to_exterior] using hyEq.symm
+      simpa [proxy_bottcher_map_outside_open_to_exterior] using hyEq.symm
     simpa [hEq] using hyK
 
 /-- Compactness of preimages under the restricted outside-open map translated to
 an ambient compactness goal. -/
-lemma isCompact_preimage_bottcher_map_outside_open_to_exterior_iff
+lemma isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_iff
     (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) :
-    IsCompact ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) ↔
+    IsCompact ((proxy_bottcher_map_outside_open_to_exterior c) ⁻¹' K) ↔
       IsCompact
         ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
-  rw [Subtype.isCompact_iff, image_preimage_bottcher_map_outside_open_to_exterior]
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+  rw [Subtype.isCompact_iff, image_preimage_proxy_bottcher_map_outside_open_to_exterior]
 
 /-- Continuity of the outside-open restricted Böttcher map from outside-open
 `AnalyticAt` payload. -/
-lemma continuous_bottcher_map_outside_open_restrict_of_analyticAt
+lemma continuous_proxy_bottcher_map_outside_open_restrict_of_analyticAt
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z) :
-    Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z.1) := by
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z) :
+    Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z.1) := by
   exact (continuousOn_iff_continuous_restrict).1 (by
     intro z hz
     exact (hanalytic z hz).continuousAt.continuousWithinAt)
 
 /-- Properness of the restricted outside-open map is reduced to one ambient
 compact-preimage obligation. -/
-lemma isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact
+lemma isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_preimage_compact
     (c : ℂ)
-    (hcont : Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.bottcher_map c z.1))
+    (hcont : Continuous (fun z : {z : ℂ // ‖z‖ > ‖c‖ + 2} => Quadratic.proxy_bottcher_map c z.1))
     (hpre :
       ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         IsCompact ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
-    IsProperMap (bottcher_map_outside_open_to_exterior c) := by
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (proxy_bottcher_map_outside_open_to_exterior c) := by
   rw [isProperMap_iff_isCompact_preimage]
   refine ⟨?_, ?_⟩
   · exact hcont.codRestrict (by
       intro z
-      exact bottcher_map_norm_gt_one_of_outside c
+      exact proxy_bottcher_map_norm_gt_one_of_outside c
         (outside_open_subset_outside_disk c z.2))
   · intro K hK
-    rw [isCompact_preimage_bottcher_map_outside_open_to_exterior_iff]
+    rw [isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_iff]
     exact hpre K hK
 
 /-- Properness of the restricted outside-open map from outside-open analyticity
 plus the ambient compact-preimage obligation. -/
-lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
+lemma isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
     (hpre :
       ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         IsCompact ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
-    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
-  isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact c
-    (continuous_bottcher_map_outside_open_restrict_of_analyticAt c hanalytic) hpre
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (proxy_bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_preimage_compact c
+    (continuous_proxy_bottcher_map_outside_open_restrict_of_analyticAt c hanalytic) hpre
 
 /-- `c = 2` specialization: properness of the restricted outside-open map from
 outside-open analyticity plus the ambient compact-preimage obligation. -/
-lemma isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact
-    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+lemma isProperMap_proxy_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_compact
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map (2 : ℂ)) z)
     (hpre :
       ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         IsCompact ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
-          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
-    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
-  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
+          Quadratic.proxy_bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+  isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact
     (2 : ℂ) hanalytic hpre
 
 /-- Compactness of restricted-map preimages follows from closedness of the
 ambient outside-open preimage set; boundedness is provided by
 `preimage_closedBall_bounded`. -/
-lemma isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed
+lemma isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_of_isClosed
     (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) (hK : IsCompact K)
     (hclosed :
       IsClosed
         ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
-    IsCompact ((bottcher_map_outside_open_to_exterior c) ⁻¹' K) := by
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsCompact ((proxy_bottcher_map_outside_open_to_exterior c) ⁻¹' K) := by
   have hKbounded : Bornology.IsBounded (((↑) '' K : Set ℂ)) := by
     exact hK.image continuous_subtype_val |>.isBounded
   rcases hKbounded.subset_closedBall (0 : ℂ) with ⟨R, hR⟩
   rcases preimage_closedBall_bounded c R with ⟨S, hS⟩
   have hsubset_ball :
       ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) ⊆
+        Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) ⊆
         Metric.closedBall (0 : ℂ) S := by
     intro z hz
-    have hzR : ‖Quadratic.bottcher_map c z‖ ≤ R := by
-      have hzmem : Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ) := hz.2
-      have : Quadratic.bottcher_map c z ∈ Metric.closedBall (0 : ℂ) R := hR hzmem
+    have hzR : ‖Quadratic.proxy_bottcher_map c z‖ ≤ R := by
+      have hzmem : Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ) := hz.2
+      have : Quadratic.proxy_bottcher_map c z ∈ Metric.closedBall (0 : ℂ) R := hR hzmem
       simpa [Metric.mem_closedBall, dist_eq_norm] using this
     have hzS : ‖z‖ ≤ S := hS hzR
     simpa [Metric.mem_closedBall, dist_eq_norm] using hzS
   have hbounded :
       Bornology.IsBounded
         ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
     (Metric.isBounded_closedBall (x := (0 : ℂ)) (r := S)).subset hsubset_ball
   have hcompactAmbient :
       IsCompact
         ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) :=
     (Metric.isCompact_iff_isClosed_bounded).2 ⟨hclosed, hbounded⟩
-  rw [isCompact_preimage_bottcher_map_outside_open_to_exterior_iff]
+  rw [isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_iff]
   exact hcompactAmbient
 
 /-- Properness of the restricted outside-open map from outside-open analyticity
 plus closedness of ambient preimage sets against compact exterior targets. -/
-lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
+lemma isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
     (hclosedpre :
       ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         IsClosed
           ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-            Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
-    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
-  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact c
+            Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (proxy_bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_compact c
     hanalytic (fun K hK =>
-      isCompact_preimage_bottcher_map_outside_open_to_exterior_iff c K |>.1
-        (isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed c K hK
+      isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_iff c K |>.1
+        (isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_of_isClosed c K hK
           (hclosedpre K hK)))
 
 /-- `c = 2` specialization: properness of the restricted outside-open map from
 outside-open analyticity plus closedness of ambient preimage sets against
 compact exterior targets. -/
-lemma isProperMap_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed
-    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+lemma isProperMap_proxy_bottcher_map_outside_open_to_exterior_two_of_analyticAt_of_preimage_closed
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map (2 : ℂ)) z)
     (hclosedpre :
       ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         IsClosed
           ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
-            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
-    IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
-  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
+            Quadratic.proxy_bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ)) :
+    IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) :=
+  isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed
     (2 : ℂ) hanalytic hclosedpre
 
 /-- Closedness of outside-open preimages against compact exterior targets from a
@@ -4628,21 +4628,21 @@ lemma isClosed_outside_open_preimage_image_compact_of_boundary_exclusion
     (c : ℂ) (K : Set {w : ℂ // 1 < ‖w‖}) (hK : IsCompact K)
     (hboundary :
       ∀ z, ‖z‖ = ‖c‖ + 2 →
-        Quadratic.bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
+        Quadratic.proxy_bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
     IsClosed
       ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-        Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+        Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
   let C : Set ℂ := {z : ℂ | ‖c‖ + 2 ≤ ‖z‖}
   have hCclosed : IsClosed C := by
     simpa [C] using (isClosed_le continuous_const continuous_norm)
-  have hcontOnC : ContinuousOn (Quadratic.bottcher_map c) C := by
+  have hcontOnC : ContinuousOn (Quadratic.proxy_bottcher_map c) C := by
     intro z hzC
     have hpos : 0 < ‖c‖ + 2 := by
       nlinarith [norm_nonneg c]
     have hzpos : 0 < ‖z‖ := lt_of_lt_of_le hpos hzC
     have hzne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hzpos)
-    exact (Quadratic.bottcher_map_continuousAt_of_ne_zero c z hzne).continuousWithinAt
-  let g : C → ℂ := fun z => Quadratic.bottcher_map c z.1
+    exact (Quadratic.proxy_bottcher_map_continuousAt_of_ne_zero c z hzne).continuousWithinAt
+  let g : C → ℂ := fun z => Quadratic.proxy_bottcher_map c z.1
   have hgcont : Continuous g := by
     exact (continuousOn_iff_continuous_restrict).1 hcontOnC
   have hImgClosed : IsClosed (((↑) '' K : Set ℂ)) := (hK.image continuous_subtype_val).isClosed
@@ -4656,7 +4656,7 @@ lemma isClosed_outside_open_preimage_image_compact_of_boundary_exclusion
   have hclosed_ge_eq :
       ((Subtype.val) '' (g ⁻¹' (((↑) '' K : Set ℂ))) : Set ℂ) =
         ({z : ℂ | ‖c‖ + 2 ≤ ‖z‖ ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
     ext z
     constructor
     · intro hz
@@ -4667,9 +4667,9 @@ lemma isClosed_outside_open_preimage_image_compact_of_boundary_exclusion
       exact hz.2
   have hset_eq :
       ({z : ℂ | ‖z‖ > ‖c‖ + 2 ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) =
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) =
         ({z : ℂ | ‖c‖ + 2 ≤ ‖z‖ ∧
-          Quadratic.bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
+          Quadratic.proxy_bottcher_map c z ∈ ((↑) '' K : Set ℂ)} : Set ℂ) := by
     ext z
     constructor
     · intro hz
@@ -4686,15 +4686,15 @@ lemma isClosed_outside_open_preimage_image_compact_of_boundary_exclusion
 
 /-- Properness of the restricted outside-open map from outside-open analyticity
 plus boundary exclusion on compact exterior targets. -/
-lemma isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion
+lemma isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_boundary_exclusion
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
     (hboundary :
       ∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         ∀ z, ‖z‖ = ‖c‖ + 2 →
-          Quadratic.bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
-    IsProperMap (bottcher_map_outside_open_to_exterior c) :=
-  isProperMap_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed c
+          Quadratic.proxy_bottcher_map c z ∉ ((↑) '' K : Set ℂ)) :
+    IsProperMap (proxy_bottcher_map_outside_open_to_exterior c) :=
+  isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_preimage_closed c
     hanalytic (fun K hK =>
       isClosed_outside_open_preimage_image_compact_of_boundary_exclusion c K hK
         (hboundary K hK))
@@ -4705,7 +4705,7 @@ compact counterexample. -/
 lemma exists_compact_exterior_set_violating_boundary_exclusion_two :
     ∃ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K ∧
       ¬ (∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
-        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
+        Quadratic.proxy_bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
   let z0 : ℂ := ((‖(2 : ℂ)‖ + 2 : ℝ) : ℂ)
   have hnonneg : 0 ≤ ‖(2 : ℂ)‖ + 2 := by
     nlinarith [norm_nonneg (2 : ℂ)]
@@ -4717,17 +4717,17 @@ lemma exists_compact_exterior_set_violating_boundary_exclusion_two :
     linarith [hz0_eq]
   have hz0_out : z0 ∈ outside_disk (2 : ℂ) :=
     large_norm_mem_outside_disk (2 : ℂ) z0 hz0_ge
-  have hw0_ext : 1 < ‖Quadratic.bottcher_map (2 : ℂ) z0‖ :=
-    bottcher_map_norm_gt_one_of_outside (2 : ℂ) hz0_out
-  let w0 : {w : ℂ // 1 < ‖w‖} := ⟨Quadratic.bottcher_map (2 : ℂ) z0, hw0_ext⟩
+  have hw0_ext : 1 < ‖Quadratic.proxy_bottcher_map (2 : ℂ) z0‖ :=
+    proxy_bottcher_map_norm_gt_one_of_outside (2 : ℂ) hz0_out
+  let w0 : {w : ℂ // 1 < ‖w‖} := ⟨Quadratic.proxy_bottcher_map (2 : ℂ) z0, hw0_ext⟩
   refine ⟨({w0} : Set {w : ℂ // 1 < ‖w‖}), isCompact_singleton, ?_⟩
   intro hboundary
   have hnot :
-      Quadratic.bottcher_map (2 : ℂ) z0 ∉
+      Quadratic.proxy_bottcher_map (2 : ℂ) z0 ∉
         ((↑) '' ({w0} : Set {w : ℂ // 1 < ‖w‖}) : Set ℂ) :=
     hboundary z0 hz0_eq
   have hmem :
-      Quadratic.bottcher_map (2 : ℂ) z0 ∈
+      Quadratic.proxy_bottcher_map (2 : ℂ) z0 ∈
         ((↑) '' ({w0} : Set {w : ℂ // 1 < ‖w‖}) : Set ℂ) := by
     refine ⟨w0, by simp, rfl⟩
   exact hnot hmem
@@ -4736,18 +4736,18 @@ lemma exists_compact_exterior_set_violating_boundary_exclusion_two :
 lemma not_boundary_exclusion_family_two :
     ¬ (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
       ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
-        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
+        Quadratic.proxy_bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ)) := by
   intro hboundary
   rcases exists_compact_exterior_set_violating_boundary_exclusion_two with ⟨K, hK, hnot⟩
   exact hnot (hboundary K hK)
 
 /-- Closed range of the restricted outside-open Böttcher map from properness of
 the restricted map itself. -/
-lemma isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap
+lemma isClosed_range_proxy_bottcher_map_outside_open_to_exterior_of_isProperMap
     (c : ℂ)
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c)) :
-    IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)) := by
-  have hClosedMap : IsClosedMap (bottcher_map_outside_open_to_exterior c) :=
+    (hproper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior c)) :
+    IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)) := by
+  have hClosedMap : IsClosedMap (proxy_bottcher_map_outside_open_to_exterior c) :=
     hproper.isClosedMap
   simpa [Set.image_univ] using (hClosedMap Set.univ isClosed_univ)
 
@@ -4755,12 +4755,12 @@ lemma isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap
 restricted map `outside_open → exterior`. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c)) :
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
+    (hlocal : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior c)) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   let E : Set ℂ := {w : ℂ | 1 < ‖w‖}
-  let f : U → E := bottcher_map_outside_open_to_exterior c
+  let f : U → E := proxy_bottcher_map_outside_open_to_exterior c
   have hRopen : IsOpen (Set.range f) := by
     simpa [Set.image_univ] using (hlocal.isOpenMap Set.univ isOpen_univ)
   have hRclosed : IsClosed (Set.range f) := hclosed
@@ -4791,8 +4791,8 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomo
 /-- `c = 2` specialization: outside-open surjectivity on the exterior from
 closed range of the restricted map plus restricted local-homeomorph payload. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
-    (hlocal : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) :
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hlocal : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict
     (2 : ℂ) hclosed hlocal
@@ -4847,57 +4847,57 @@ lemma isLocalHomeomorph_codRestrict_of_isLocalHomeomorph
   simpa [g, Set.restrict] using hEmb'
 
 /-- Restricted-map local-homeomorph from local-homeomorph on outside-open. -/
-lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open
+lemma isLocalHomeomorph_proxy_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open
     (c : ℂ)
-    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
+    (hlocal : IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior c) := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   let E : Set ℂ := {w : ℂ | 1 < ‖w‖}
   have hUopen : IsOpen U := by
     simpa [U] using (isOpen_lt continuous_const continuous_norm)
-  have hlocalU : IsLocalHomeomorph (U.restrict (Quadratic.bottcher_map c)) := by
+  have hlocalU : IsLocalHomeomorph (U.restrict (Quadratic.proxy_bottcher_map c)) := by
     exact isLocalHomeomorph_restrict_of_isLocalHomeomorphOn_open hUopen (by simpa [U] using hlocal)
-  have hs : ∀ z : U, (U.restrict (Quadratic.bottcher_map c)) z ∈ E := by
+  have hs : ∀ z : U, (U.restrict (Quadratic.proxy_bottcher_map c)) z ∈ E := by
     intro z
     have hzU : z.1 ∈ ({w : ℂ | ‖w‖ > ‖c‖ + 2} : Set ℂ) := by
       change z.1 ∈ U
       exact z.2
-    exact bottcher_map_norm_gt_one_of_outside c
+    exact proxy_bottcher_map_norm_gt_one_of_outside c
       (outside_open_subset_outside_disk c hzU)
-  simpa [bottcher_map_outside_open_to_exterior, U, E, Set.restrict] using
-    isLocalHomeomorph_codRestrict_of_isLocalHomeomorph (f := U.restrict (Quadratic.bottcher_map c))
+  simpa [proxy_bottcher_map_outside_open_to_exterior, U, E, Set.restrict] using
+    isLocalHomeomorph_codRestrict_of_isLocalHomeomorph (f := U.restrict (Quadratic.proxy_bottcher_map c))
       (s := E) hlocalU hs
 
 /-- Build restricted-map local-homeomorph from local analyticity plus
 derivative nonvanishing on outside-open. -/
-lemma isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
+lemma isLocalHomeomorph_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
     (c : ℂ)
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior c) := by
-  exact isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open c
-    (bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior c) := by
+  exact isLocalHomeomorph_proxy_bottcher_map_outside_open_to_exterior_of_isLocalHomeomorphOn_outside_open c
+    (proxy_bottcher_map_isLocalHomeomorphOn_outside_open_of_analyticAt_of_deriv_ne_zero
       c hanalytic hderiv)
 
 /-- Outside-open surjectivity from closed range of the restricted map plus
 local analyticity and derivative nonvanishing on outside-open. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (hderiv : ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_of_isLocalHomeomorph_restrict c
     hclosed
-    (isLocalHomeomorph_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
+    (isLocalHomeomorph_proxy_bottcher_map_outside_open_to_exterior_of_analyticAt_of_deriv_ne_zero
       c hanalytic hderiv)
 
 /-- `c = 2` specialization: outside-open surjectivity from closed range of the
 restricted map plus local analyticity and derivative nonvanishing on outside-open. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
-    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
-    (hderiv : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) :
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hanalytic : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map (2 : ℂ)) z)
+    (hderiv : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.proxy_bottcher_map (2 : ℂ)) z ≠ 0) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
     (2 : ℂ) hclosed hanalytic hderiv
@@ -4906,7 +4906,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_a
     surjectivity by outside-open preimages. -/
 theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
     (c : ℂ)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
     (h_surj : BottcherSurjOnExteriorFromOutsideOpen c) :
     Quadratic.ExternalRayMapData c := by
   classical
@@ -4914,7 +4914,7 @@ theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
     if hw : 1 < ‖w‖ then Classical.choose (h_surj w hw) else 0
   refine ⟨f, ?_, ?_⟩
   · intro w hw
-    have hspec : Quadratic.bottcher_map c (Classical.choose (h_surj w hw)) = w :=
+    have hspec : Quadratic.proxy_bottcher_map c (Classical.choose (h_surj w hw)) = w :=
       (Classical.choose_spec (h_surj w hw)).2
     simpa [f, hw] using hspec
   · intro z hz
@@ -4924,11 +4924,11 @@ theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
       outside_disk_subset_quadratic_basin c hz_disk
     have hpos : 0 < MLC.Quadratic.green_function c z :=
       green_function_pos_of_basin c z hz_basin
-    have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
-      bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
-    have hspec := Classical.choose_spec (h_surj (Quadratic.bottcher_map c z) hnorm)
+    have hnorm : 1 < ‖Quadratic.proxy_bottcher_map c z‖ :=
+      proxy_bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+    have hspec := Classical.choose_spec (h_surj (Quadratic.proxy_bottcher_map c z) hnorm)
     have hz_choose :
-        Classical.choose (h_surj (Quadratic.bottcher_map c z) hnorm) = z := by
+        Classical.choose (h_surj (Quadratic.proxy_bottcher_map c z) hnorm) = z := by
       apply h_inj hspec.1 hz_out
       simpa using hspec.2
     simp [f, hnorm, hz_choose]
@@ -4937,23 +4937,23 @@ theorem external_ray_map_data_of_injOn_outside_open_of_surj_exterior
 local analyticity and outside-open injectivity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c := by
   exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c h_inj
     (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
       c hclosed hanalytic
-      (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
+      (proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn
         c hanalytic h_inj))
 
 /-- Construct external-ray data from closed range plus the outside-open
 analyticity seam payload and outside-open injectivity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
     c hclosed hanalytic h_inj
@@ -4962,35 +4962,35 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticit
 analytic-chart seam payload and outside-open injectivity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_chart : ∀ z, ‖z‖ > ‖c‖ + 2 →
-      ∃ U : Set ℂ, IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+      ∃ U : Set ℂ, IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) U)
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c := by
-  have hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z := by
+  have hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z := by
     intro z hz
     rcases h_chart z hz with ⟨U, _hUopen, hzU, hUanalytic⟩
     exact hUanalytic z hzU
   exact external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
     c hclosed hanalytic h_inj
 
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
+lemma proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
     (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hproper : IsProperMap (Quadratic.proxy_bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.proxy_bottcher_map c))
     (h_left : BottcherLeftInverseOnOutsideOpenData c)
     {y : ℂ}
-    (hyimg : y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hyimg : y ∈ Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2})
     (hfiberU :
-      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
-    (bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left) hyimg hfiberU
+      ({z : ℂ | Quadratic.proxy_bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  exact proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed c hproper hlocal
+    (proxy_bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left) hyimg hfiberU
 
 lemma exists_bottcher_outside_seed_of_continuous
-    (c : ℂ) (hcont : Continuous (Quadratic.bottcher_map c)) :
-    ∃ y, y ∈ Quadratic.bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ∧
-      ({z : ℂ | Quadratic.bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    (c : ℂ) (hcont : Continuous (Quadratic.proxy_bottcher_map c)) :
+    ∃ y, y ∈ Quadratic.proxy_bottcher_map c '' {z : ℂ | ‖z‖ > ‖c‖ + 2} ∧
+      ({z : ℂ | Quadratic.proxy_bottcher_map c z = y} : Set ℂ) ⊆ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   let K : Set ℂ := {z : ℂ | ‖z‖ ≤ ‖c‖ + 2}
   have hKcompact : IsCompact K := by
     have hK :
@@ -4999,10 +4999,10 @@ lemma exists_bottcher_outside_seed_of_continuous
       simp [K, Metric.mem_closedBall, dist_eq_norm]
     rw [hK]
     exact isCompact_closedBall (0 : ℂ) (‖c‖ + 2)
-  have himageKcompact : IsCompact (Quadratic.bottcher_map c '' K) :=
+  have himageKcompact : IsCompact (Quadratic.proxy_bottcher_map c '' K) :=
     hKcompact.image hcont
   rcases himageKcompact.isBounded.subset_closedBall (0 : ℂ) with ⟨B, hBsubset⟩
-  rcases exists_norm_bottcher_map_gt_of_large_norm c B with ⟨S, hS⟩
+  rcases exists_norm_proxy_bottcher_map_gt_of_large_norm c B with ⟨S, hS⟩
   let R : ℝ := max S (‖c‖ + 3)
   let z0 : ℂ := (R : ℂ)
   have hRnonneg : 0 ≤ R := by
@@ -5014,12 +5014,12 @@ lemma exists_bottcher_outside_seed_of_continuous
     calc
       S ≤ R := le_max_left _ _
       _ = ‖z0‖ := hz0norm.symm
-  have hygt : B < ‖Quadratic.bottcher_map c z0‖ := hS z0 hz0S
+  have hygt : B < ‖Quadratic.proxy_bottcher_map c z0‖ := hS z0 hz0S
   have hz0U : z0 ∈ {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
     have hRge : ‖c‖ + 3 ≤ R := le_max_right _ _
     have : ‖c‖ + 2 < R := by linarith
     simpa [hz0norm]
-  let y : ℂ := Quadratic.bottcher_map c z0
+  let y : ℂ := Quadratic.proxy_bottcher_map c z0
   refine ⟨y, ?_, ?_⟩
   · exact ⟨z0, hz0U, rfl⟩
   · intro x hx
@@ -5030,7 +5030,7 @@ lemma exists_bottcher_outside_seed_of_continuous
           intro hgt
           exact hxU (by simpa using hgt))
       exact hxle
-    have hyK : y ∈ Quadratic.bottcher_map c '' K := by
+    have hyK : y ∈ Quadratic.proxy_bottcher_map c '' K := by
       refine ⟨x, hxK, ?_⟩
       simpa [y] using hx
     have hyB : ‖y‖ ≤ B := by
@@ -5039,45 +5039,45 @@ lemma exists_bottcher_outside_seed_of_continuous
     have hygt' : B < ‖y‖ := by simpa [y] using hygt
     exact (not_lt_of_ge hyB) hygt'
 
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open
+lemma proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open
     (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hproper : IsProperMap (Quadratic.proxy_bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.proxy_bottcher_map c))
     (h_left : BottcherLeftInverseOnOutsideOpenData c) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
   rcases exists_bottcher_outside_seed_of_continuous c hlocal.continuous with ⟨y, hyimg, hfiberU⟩
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
+  exact proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorph_and_outside_seed_of_left_inverse_on_outside_open
     c hproper hlocal h_left hyimg hfiberU
 
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin
+lemma proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin
     (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c))
-    (hUinj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
+    (hproper : IsProperMap (Quadratic.proxy_bottcher_map c))
+    (hlocal : IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c))
+    (hUinj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2})
     (hsub :
       {w : ℂ | 1 < ‖w‖} ⊆
-        (Quadratic.bottcher_map c '' Quadratic.basin_of_infinity c)) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  let f : ℂ → ℂ := Quadratic.bottcher_map c
+        (Quadratic.proxy_bottcher_map c '' Quadratic.basin_of_infinity c)) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  let f : ℂ → ℂ := Quadratic.proxy_bottcher_map c
   let s : Set ℂ := Quadratic.basin_of_infinity c
   have hsopen : IsOpen s := basin_of_infinity_isOpen c
   have hfiberS : ∀ y, y ∈ f '' s → ({x : ℂ | f x = y} : Set ℂ) ⊆ s := by
     intro y hyimg x hx
     have hygt : 1 < ‖y‖ := by
       rcases hyimg with ⟨z, hz, rfl⟩
-      exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+      exact proxy_bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
     have hxy : f x = y := by
       simpa using hx
     have hxgt : 1 < ‖f x‖ := by
       calc
         1 < ‖y‖ := hygt
         _ = ‖f x‖ := by simp [hxy]
-    exact bottcher_map_norm_gt_one_implies_basin c (z := x) hxgt
+    exact proxy_bottcher_map_norm_gt_one_implies_basin c (z := x) hxgt
   have himage_eq : f '' s = {w : ℂ | 1 < ‖w‖} := by
     refine subset_antisymm ?_ ?_
     · intro w hw
       rcases hw with ⟨z, hz, rfl⟩
-      exact bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
+      exact proxy_bottcher_map_norm_gt_one_of_basin c z hz (green_function_pos_of_basin c z hz)
     · exact hsub
   have hconn : IsConnected (f '' s) := by
     simpa [himage_eq] using isConnected_exterior
@@ -5103,48 +5103,48 @@ lemma exterior_subset_image_basin_of_right_inverse
     (c : ℂ)
     (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c) :
     {w : ℂ | 1 < ‖w‖} ⊆
-      (Quadratic.bottcher_map c '' Quadratic.basin_of_infinity c) := by
+      (Quadratic.proxy_bottcher_map c '' Quadratic.basin_of_infinity c) := by
   intro w hw
   rcases h_right with ⟨f, hf⟩
-  have hfw : Quadratic.bottcher_map c (f w) = w := hf w hw
+  have hfw : Quadratic.proxy_bottcher_map c (f w) = w := hf w hw
   have hbasin : f w ∈ Quadratic.basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := f w)
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := f w)
       (by simpa [hfw] using hw)
   exact ⟨f w, hbasin, hfw⟩
 
 /-- Basin injectivity from `IsLocalHomeomorphOn` via explicit outside-open left-
     inverse and exterior right-inverse seam data. -/
-lemma bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_left_inverse_on_outside_open_of_right_inverse_on_exterior
+lemma proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_left_inverse_on_outside_open_of_right_inverse_on_exterior
     (c : ℂ)
-    (hproper : IsProperMap (Quadratic.bottcher_map c))
-    (hlocal : IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c))
+    (hproper : IsProperMap (Quadratic.proxy_bottcher_map c))
+    (hlocal : IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c))
     (h_left : BottcherLeftInverseOnOutsideOpenData c)
     (h_right : BottcherRightInverseOnExteriorDataOutsidePlan c) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  exact proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorphOn_basin_of_injOn_outside_open_of_exterior_subset_image_basin
     c hproper hlocal
-    (bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left)
+    (proxy_bottcher_map_inj_on_outside_open_of_left_inverse_on_outside_open c h_left)
     (exterior_subset_image_basin_of_right_inverse c h_right)
 
-lemma bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open
+lemma proxy_bottcher_map_inj_on_basin_of_isLocalHomeomorph_of_left_inverse_on_outside_open
     (c : ℂ)
-    (hlocal : IsLocalHomeomorph (Quadratic.bottcher_map c))
+    (hlocal : IsLocalHomeomorph (Quadratic.proxy_bottcher_map c))
     (h_left : BottcherLeftInverseOnOutsideOpenData c) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  have hproper : IsProperMap (Quadratic.bottcher_map c) :=
-    bottcher_map_isProperMap_of_continuous c hlocal.continuous
-  exact bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hproper : IsProperMap (Quadratic.proxy_bottcher_map c) :=
+    proxy_bottcher_map_isProperMap_of_continuous c hlocal.continuous
+  exact proxy_bottcher_map_inj_on_basin_of_proper_localHomeomorph_of_left_inverse_on_outside_open
     c hproper hlocal h_left
 
-theorem bottcher_map_inj_on_outside_of_slit
+theorem proxy_bottcher_map_inj_on_outside_of_slit
     (c : ℂ)
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c →
       w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
-    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c) := by
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
   have h_left : ∀ z, z ∈ U →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z := by
     intro z hz
     exact bottcher_left_inv_outside_open_of_local c z (by simpa [U] using hz)
   have h_maps : MapsTo (quadratic_map c) U U := by
@@ -5154,58 +5154,58 @@ theorem bottcher_map_inj_on_outside_of_slit
     intro z hz
     simpa [U] using (basin_escape_outside_open c z hz)
   have h_inj_basin :
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
-    bottcher_map_inj_on_basin_of_left_inv c U h_left h_maps h_escape
+      Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) :=
+    proxy_bottcher_map_inj_on_basin_of_left_inv c U h_left h_maps h_escape
       (bottcher_conj_iter c) h_iter_eq_imp
   simpa [outside_disk] using h_inj_basin
 
-theorem bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse
+theorem proxy_bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse
     (c : ℂ) (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
-    Set.InjOn (Quadratic.bottcher_map c) (outside_disk c) := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c) := by
   have h_iter_eq_imp :=
     quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter
-  exact bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
+  exact proxy_bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
 
 /-- Outside-open injectivity from the iterate-left-inverse hypothesis on the
 basin. -/
-theorem bottcher_map_inj_on_outside_open_of_iter_left_inverse
+theorem proxy_bottcher_map_inj_on_outside_open_of_iter_left_inverse
     (c : ℂ) (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
-    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   exact
-    (bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse c h_left_iter).mono
+    (proxy_bottcher_map_inj_on_outside_of_slit_of_iter_left_inverse c h_left_iter).mono
       (outside_open_subset_outside_disk c)
 
 /-- Closed-range restricted-map surjectivity from local analyticity on
 outside-open plus the iterate-left-inverse injectivity route. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
     c hclosed hanalytic
-    (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic
-      (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter))
+    (proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic
+      (proxy_bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter))
 
 /-- Construct external-ray data from closed range plus local analyticity and the
 iterate-left-inverse injectivity route. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
-    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z)
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
+    (hanalytic : ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z)
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
     Quadratic.ExternalRayMapData c := by
   exact external_ray_map_data_of_injOn_outside_open_of_surj_exterior c
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
+    (proxy_bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
     (bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
       c hclosed hanalytic h_left_iter)
 
 /-- `c = 2` specialization of the iterate-left-inverse external-ray-data bridge. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (hanalytic :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map (2 : ℂ)) z)
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_iter_left_inverse
@@ -5398,47 +5398,47 @@ lemma exists_open_subset_slit_orbit_basin_of_mem_nhds
     exact ⟨hε1 hz1, hε2 hz2⟩
   exact ⟨U, hUopen, hz₀U, hUsub⟩
 
-lemma bottcher_map_analyticAt_of_mem_nhds_slit_basin
+lemma proxy_bottcher_map_analyticAt_of_mem_nhds_slit_basin
     (c z₀ : ℂ)
     (hslit : slit_orbit c ∈ 𝓝 z₀)
     (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
-    AnalyticAt ℂ (Quadratic.bottcher_map c) z₀ := by
+    AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z₀ := by
   rcases exists_open_subset_slit_orbit_basin_of_mem_nhds c z₀ hslit hbasin with
     ⟨U, hUopen, hz₀U, hUsub⟩
   have hUslit : U ⊆ slit_orbit c := fun z hz => (hUsub hz).1
   have hUbasin : U ⊆ Quadratic.basin_of_infinity c := fun z hz => (hUsub hz).2
-  exact bottcher_map_analyticAt_of_open c U hUopen hUslit hUbasin hz₀U
+  exact proxy_bottcher_map_analyticAt_of_open c U hUopen hUslit hUbasin hz₀U
 
 /-- Local analyticity payload on outside-open derived from neighborhood-level
 slit membership plus basin openness. -/
-lemma bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit
+lemma proxy_bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit
     (c : ℂ)
     (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z := by
+    ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z := by
   intro z hz
   have hz_out : z ∈ {w : ℂ | ‖w‖ > ‖c‖ + 2} := by simpa using hz
   have hz_disk : z ∈ outside_disk c := outside_open_subset_outside_disk c hz_out
   have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
     outside_disk_subset_quadratic_basin c hz_disk
-  exact bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
+  exact proxy_bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
     (hslit_nhds z hz)
     ((basin_of_infinity_isOpen c).mem_nhds hz_basin)
 
-/-- Framework seam: outside-open analyticity payload for `bottcher_map`. -/
+/-- Framework seam: outside-open analyticity payload for `proxy_bottcher_map`. -/
 def OutsideOpenAnalyticityHypothesis (c : ℂ) : Prop :=
-  ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map c) z
+  ∀ z, ‖z‖ > ‖c‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z
 
 /-- Outside-open analyticity payload for the quotient map
-`z ↦ bottcher_map c z / z`. -/
+`z ↦ proxy_bottcher_map c z / z`. -/
 def OutsideOpenQuotientAnalyticityHypothesis (c : ℂ) : Prop :=
   ∀ z, ‖z‖ > ‖c‖ + 2 →
-    AnalyticAt ℂ (fun w : ℂ => Quadratic.bottcher_map c w / w) z
+    AnalyticAt ℂ (fun w : ℂ => Quadratic.proxy_bottcher_map c w / w) z
 
 /-- Outside-open real-scale quotient payload:
-`bottcher_map c z / z` is a positive real scalar at each outside-open point. -/
+`proxy_bottcher_map c z / z` is a positive real scalar at each outside-open point. -/
 def OutsideOpenQuotientRealScaleHypothesis (c : ℂ) : Prop :=
   ∀ z, ‖z‖ > ‖c‖ + 2 →
-    ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ)
+    ∃ r : ℝ, 0 < r ∧ Quadratic.proxy_bottcher_map c z / z = (r : ℂ)
 
 /-- Combined quotient payload used for non-slit rigidity attempts. -/
 def OutsideOpenQuotientAnalyticRealScalePayload (c : ℂ) : Prop :=
@@ -5446,10 +5446,10 @@ def OutsideOpenQuotientAnalyticRealScalePayload (c : ℂ) : Prop :=
     OutsideOpenQuotientRealScaleHypothesis c
 
 /-- Framework seam: outside-open analyticity+injectivity payload for
-`bottcher_map` (non-slit route target shape). -/
+`proxy_bottcher_map` (non-slit route target shape). -/
 def OutsideOpenAnalyticInjPayload (c : ℂ) : Prop :=
   OutsideOpenAnalyticityHypothesis c ∧
-    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}
+    Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}
 
 /-- `c = 2` specialization of the outside-open analyticity+injectivity seam. -/
 def OutsideOpenAnalyticInjNonSlitPayloadTwo : Prop :=
@@ -5464,30 +5464,30 @@ def OutsideOpenQuotientAnalyticRealScalePayloadTwo : Prop :=
   OutsideOpenQuotientAnalyticRealScalePayload (2 : ℂ)
 
 /-- Quotient-constancy seam: the outside-open quotient
-`z ↦ bottcher_map c z / z` is globally constant. -/
+`z ↦ proxy_bottcher_map c z / z` is globally constant. -/
 def OutsideOpenQuotientConstHypothesis (c : ℂ) : Prop :=
-  ∃ q : ℂ, ∀ z, ‖z‖ > ‖c‖ + 2 → Quadratic.bottcher_map c z / z = q
+  ∃ q : ℂ, ∀ z, ‖z‖ > ‖c‖ + 2 → Quadratic.proxy_bottcher_map c z / z = q
 
 /-- `c = 2` specialization of quotient constancy. -/
 def OutsideOpenQuotientConstHypothesisTwo : Prop :=
   OutsideOpenQuotientConstHypothesis (2 : ℂ)
 
-/-- Strong quotient-rigidity witness: on outside-open, `bottcher_map c` is a
+/-- Strong quotient-rigidity witness: on outside-open, `proxy_bottcher_map c` is a
 positive-real scalar multiple of the identity map. -/
 def OutsideOpenQuotientConstRealWitness (c : ℂ) : Prop :=
   ∃ r : ℝ, 0 < r ∧
-    ∀ z, ‖z‖ > ‖c‖ + 2 → Quadratic.bottcher_map c z = (r : ℂ) * z
+    ∀ z, ‖z‖ > ‖c‖ + 2 → Quadratic.proxy_bottcher_map c z = (r : ℂ) * z
 
 /-- `c = 2` specialization of the strong quotient-rigidity witness. -/
 def OutsideOpenQuotientConstRealWitnessTwo : Prop :=
   OutsideOpenQuotientConstRealWitness (2 : ℂ)
 
 /-- Framework seam: for each outside-open point, provide a local open chart on
-which `bottcher_map` is analytic. -/
+which `proxy_bottcher_map` is analytic. -/
 def OutsideOpenLocalAnalyticChartHypothesis (c : ℂ) : Prop :=
   ∀ z, ‖z‖ > ‖c‖ + 2 →
     ∃ U : Set ℂ,
-      IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U
+      IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) U
 
 /-- Stronger framework seam: local analytic charts that stay inside
 outside-open. -/
@@ -5496,7 +5496,7 @@ def OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (c : ℂ) : Prop :=
     ∃ U : Set ℂ,
       IsOpen U ∧ z ∈ U ∧
         U ⊆ {w : ℂ | ‖w‖ > ‖c‖ + 2} ∧
-        AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U
+        AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) U
 
 /-- Forget the subset side condition on outside-open local analytic charts. -/
 lemma outsideOpenLocalAnalyticChartHypothesis_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis
@@ -5528,11 +5528,11 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload
 lemma injOn_outside_open_of_outsideOpenAnalyticInjPayload
     (c : ℂ)
     (h_payload : OutsideOpenAnalyticInjPayload c) :
-    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
   h_payload.2
 
-/-- Outside-open analyticity of `bottcher_map` induces outside-open analyticity
-of the quotient map `z ↦ bottcher_map c z / z`. -/
+/-- Outside-open analyticity of `proxy_bottcher_map` induces outside-open analyticity
+of the quotient map `z ↦ proxy_bottcher_map c z / z`. -/
 lemma outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis
     (c : ℂ)
     (h_analytic : OutsideOpenAnalyticityHypothesis c) :
@@ -5543,8 +5543,8 @@ lemma outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothes
   have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
   exact (h_analytic z hz).div analyticAt_id hz_ne
 
-/-- Outside-open analyticity of the quotient map `z ↦ bottcher_map c z / z`
-implies outside-open analyticity of `bottcher_map c`. -/
+/-- Outside-open analyticity of the quotient map `z ↦ proxy_bottcher_map c z / z`
+implies outside-open analyticity of `proxy_bottcher_map c`. -/
 lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothesis
     (c : ℂ)
     (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesis c) :
@@ -5553,32 +5553,32 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientAnalyticityHypothes
   have hz_norm_pos : 0 < ‖z‖ := by
     linarith [hz, norm_nonneg c]
   have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
-  have hmul : AnalyticAt ℂ (fun w : ℂ => w * (Quadratic.bottcher_map c w / w)) z := by
+  have hmul : AnalyticAt ℂ (fun w : ℂ => w * (Quadratic.proxy_bottcher_map c w / w)) z := by
     exact analyticAt_id.mul (h_qanalytic z hz)
   have hEq :
-      (fun w : ℂ => w * (Quadratic.bottcher_map c w / w)) =ᶠ[𝓝 z]
-        (Quadratic.bottcher_map c) := by
+      (fun w : ℂ => w * (Quadratic.proxy_bottcher_map c w / w)) =ᶠ[𝓝 z]
+        (Quadratic.proxy_bottcher_map c) := by
     have hne : {w : ℂ | w ≠ 0} ∈ 𝓝 z := by
       exact IsOpen.mem_nhds isOpen_ne hz_ne
     exact Filter.mem_of_superset hne (by
       intro w hw
       have hw0 : w ≠ 0 := by simpa using hw
-      change w * (Quadratic.bottcher_map c w / w) = Quadratic.bottcher_map c w
+      change w * (Quadratic.proxy_bottcher_map c w / w) = Quadratic.proxy_bottcher_map c w
       calc
-        w * (Quadratic.bottcher_map c w / w)
-            = w * (w⁻¹ * Quadratic.bottcher_map c w) := by
+        w * (Quadratic.proxy_bottcher_map c w / w)
+            = w * (w⁻¹ * Quadratic.proxy_bottcher_map c w) := by
                 simp [div_eq_mul_inv, mul_comm]
-        _ = (w * w⁻¹) * Quadratic.bottcher_map c w := by ac_rfl
-        _ = Quadratic.bottcher_map c w := by simp [hw0])
+        _ = (w * w⁻¹) * Quadratic.proxy_bottcher_map c w := by ac_rfl
+        _ = Quadratic.proxy_bottcher_map c w := by simp [hw0])
   exact hmul.congr hEq
 
 /-- The outside-open real-scale quotient payload holds unconditionally from the
-explicit `bottcher_map` quotient form. -/
-lemma outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div
+explicit `proxy_bottcher_map` quotient form. -/
+lemma outsideOpenQuotientRealScaleHypothesis_of_proxy_bottcher_map_div
     (c : ℂ) :
     OutsideOpenQuotientRealScaleHypothesis c := by
   intro z hz
-  exact bottcher_map_div_eq_real_scale_of_outside_open c z hz
+  exact proxy_bottcher_map_div_eq_real_scale_of_outside_open c z hz
 
 /-- Any outside-open analytic/injective payload yields the quotient
 analytic+real-scale payload used by the non-slit rigidity route. -/
@@ -5586,7 +5586,7 @@ lemma outsideOpenQuotientAnalyticRealScalePayload_of_outsideOpenAnalyticInjPaylo
     (c : ℂ)
     (h_payload : OutsideOpenAnalyticInjPayload c) :
     OutsideOpenQuotientAnalyticRealScalePayload c := by
-  refine ⟨?_, outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div c⟩
+  refine ⟨?_, outsideOpenQuotientRealScaleHypothesis_of_proxy_bottcher_map_div c⟩
   exact outsideOpenQuotientAnalyticityHypothesis_of_outsideOpenAnalyticityHypothesis c
     (outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload c h_payload)
 
@@ -5648,7 +5648,7 @@ lemma outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScale
     OutsideOpenQuotientConstHypothesis c := by
   rcases h_payload with ⟨h_analytic, h_real⟩
   let U : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
-  let g : ℂ → ℂ := fun z => Quadratic.bottcher_map c z / z
+  let g : ℂ → ℂ := fun z => Quadratic.proxy_bottcher_map c z / z
   have hUpre : IsPreconnected U := by
     simpa [U] using isPreconnected_outside_open c
   have hg : AnalyticOnNhd ℂ g U := by
@@ -5716,7 +5716,7 @@ lemma outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypoth
     (h_analytic : OutsideOpenQuotientAnalyticityHypothesis c) :
     OutsideOpenQuotientConstHypothesis c :=
   outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticRealScalePayload c
-    ⟨h_analytic, outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div c⟩
+    ⟨h_analytic, outsideOpenQuotientRealScaleHypothesis_of_proxy_bottcher_map_div c⟩
 
 /-- `c = 2` specialization: outside-open quotient analyticity implies quotient
 constancy. -/
@@ -5726,7 +5726,7 @@ lemma outsideOpenQuotientConstHypothesisTwo_of_outsideOpenQuotientAnalyticityHyp
   outsideOpenQuotientConstHypothesis_of_outsideOpenQuotientAnalyticityHypothesis (2 : ℂ)
     h_analytic
 
-/-- Outside-open analyticity of `bottcher_map` implies quotient constancy. -/
+/-- Outside-open analyticity of `proxy_bottcher_map` implies quotient constancy. -/
 lemma outsideOpenQuotientConstHypothesis_of_outsideOpenAnalyticityHypothesis
     (c : ℂ)
     (h_analytic : OutsideOpenAnalyticityHypothesis c) :
@@ -5769,9 +5769,9 @@ lemma exists_outside_open_point (c : ℂ) :
 /-- There exists an outside-open point with positive real quotient value. -/
 lemma exists_outside_open_point_with_real_scale_quotient (c : ℂ) :
     ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 ∧
-      ∃ r : ℝ, 0 < r ∧ Quadratic.bottcher_map c z / z = (r : ℂ) := by
+      ∃ r : ℝ, 0 < r ∧ Quadratic.proxy_bottcher_map c z / z = (r : ℂ) := by
   rcases exists_outside_open_point c with ⟨z, hz⟩
-  rcases outsideOpenQuotientRealScaleHypothesis_of_bottcher_map_div c z hz with
+  rcases outsideOpenQuotientRealScaleHypothesis_of_proxy_bottcher_map_div c z hz with
     ⟨r, hrpos, hr⟩
   exact ⟨z, hz, r, hrpos, hr⟩
 
@@ -5784,16 +5784,16 @@ lemma outsideOpenQuotientConstRealWitness_of_outsideOpenQuotientConstHypothesis
   rcases h_const with ⟨q, hq⟩
   rcases exists_outside_open_point_with_real_scale_quotient c with
     ⟨z0, hz0, r, hrpos, hr0⟩
-  have hq0 : Quadratic.bottcher_map c z0 / z0 = q := hq z0 hz0
+  have hq0 : Quadratic.proxy_bottcher_map c z0 / z0 = q := hq z0 hz0
   have hqeq : q = (r : ℂ) := by simpa [hq0] using hr0
   refine ⟨r, hrpos, ?_⟩
   intro z hz
   have hz_norm_pos : 0 < ‖z‖ := by
     linarith [hz, norm_nonneg c]
   have hz_ne : z ≠ 0 := norm_ne_zero_iff.mp (ne_of_gt hz_norm_pos)
-  have hqz : Quadratic.bottcher_map c z / z = q := hq z hz
+  have hqz : Quadratic.proxy_bottcher_map c z / z = q := hq z hz
   calc
-    Quadratic.bottcher_map c z = (Quadratic.bottcher_map c z / z) * z := by
+    Quadratic.proxy_bottcher_map c z = (Quadratic.proxy_bottcher_map c z / z) * z := by
       field_simp [hz_ne]
     _ = q * z := by simp [hqz]
     _ = (r : ℂ) * z := by simp [hqeq]
@@ -5836,7 +5836,7 @@ lemma outsideOpenAnalyticityHypothesis_of_outsideOpenQuotientConstRealWitness
   have hUnhds : ({w : ℂ | ‖w‖ > ‖c‖ + 2} : Set ℂ) ∈ 𝓝 z :=
     hUopen.mem_nhds hzU
   have hEq :
-      (fun w : ℂ => Quadratic.bottcher_map c w) =ᶠ[𝓝 z]
+      (fun w : ℂ => Quadratic.proxy_bottcher_map c w) =ᶠ[𝓝 z]
         (fun w : ℂ => (r : ℂ) * w) := by
     exact Filter.mem_of_superset hUnhds (by
       intro w hw
@@ -5857,13 +5857,13 @@ lemma outsideOpenAnalyticityHypothesisTwo_of_outsideOpenQuotientConstRealWitness
 lemma injOn_outside_open_of_outsideOpenQuotientConstRealWitness
     (c : ℂ)
     (h_wit : OutsideOpenQuotientConstRealWitness c) :
-    Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
   rcases h_wit with ⟨r, hr_pos, h_lin⟩
   have hr_ne : (r : ℂ) ≠ 0 := by
     exact_mod_cast (ne_of_gt hr_pos)
   intro z hz w hw hEq
-  have hz_lin : Quadratic.bottcher_map c z = (r : ℂ) * z := h_lin z hz
-  have hw_lin : Quadratic.bottcher_map c w = (r : ℂ) * w := h_lin w hw
+  have hz_lin : Quadratic.proxy_bottcher_map c z = (r : ℂ) * z := h_lin z hz
+  have hw_lin : Quadratic.proxy_bottcher_map c w = (r : ℂ) * w := h_lin w hw
   have hmul : (r : ℂ) * z = (r : ℂ) * w := by
     simpa [hz_lin, hw_lin] using hEq
   exact mul_left_cancel₀ hr_ne hmul
@@ -5928,21 +5928,21 @@ lemma outsideOpenQuotientConstRealWitnessTwo_of_outsideOpenAnalyticInjNonSlitPay
 outside-open analytic/injective seam payload. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_payload : OutsideOpenAnalyticInjPayload c) :
     BottcherSurjOnExteriorFromOutsideOpen c := by
   have hanalytic : OutsideOpenAnalyticityHypothesis c :=
     outsideOpenAnalyticityHypothesis_of_outsideOpenAnalyticInjPayload c h_payload
-  have h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+  have h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
     injOn_outside_open_of_outsideOpenAnalyticInjPayload c h_payload
   exact bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_analyticAt_of_deriv_ne_zero
     c hclosed hanalytic
-    (bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic h_inj)
+    (proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c hanalytic h_inj)
 
 /-- `c = 2` specialization: outside-open exterior surjectivity from closed
 range plus the combined non-slit outside-open analytic/injective payload. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
@@ -5952,7 +5952,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
 quotient-rigidity witness. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_wit : OutsideOpenQuotientConstRealWitness c) :
     BottcherSurjOnExteriorFromOutsideOpen c :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
@@ -5961,7 +5961,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsi
 /-- `c = 2` specialization: outside-open exterior surjectivity from closed range
 plus the strong quotient-rigidity witness. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
@@ -5970,7 +5970,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
 /-- `c = 2` specialization: outside-open exterior surjectivity from closed range
 plus outside-open quotient constancy. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_qconst : OutsideOpenQuotientConstHypothesisTwo) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
@@ -5979,7 +5979,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
 /-- `c = 2` specialization: outside-open exterior surjectivity from closed range
 plus outside-open quotient analyticity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
@@ -5989,7 +5989,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
 analyticity, routed through the quotient-rigidity witness bridge. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_analytic : OutsideOpenAnalyticityHypothesis c) :
     BottcherSurjOnExteriorFromOutsideOpen c :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
@@ -5999,7 +5999,7 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsi
 /-- `c = 2` specialization: outside-open exterior surjectivity from closed range
 plus outside-open analyticity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
@@ -6009,16 +6009,16 @@ theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_o
 outside-open analyticity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
     (c : ℂ)
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior c))
+    (hproper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior c))
     (h_analytic : OutsideOpenAnalyticityHypothesis c) :
     BottcherSurjOnExteriorFromOutsideOpen c :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
-    c (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap c hproper) h_analytic
+    c (isClosed_range_proxy_bottcher_map_outside_open_to_exterior_of_isProperMap c hproper) h_analytic
 
 /-- `c = 2` specialization: outside-open exterior surjectivity from
 restricted-map properness plus outside-open analyticity. -/
 theorem bottcherSurjOnExteriorFromOutsideOpen_two_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesisTwo
-    (hproper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (hproper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ) :=
   bottcherSurjOnExteriorFromOutsideOpen_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis
@@ -6054,7 +6054,7 @@ lemma outsideOpenLocalAnalyticChartHypothesis_of_mem_nhds_slit
     ⟨U, hUopen, hzU, hUsub⟩
   have hUslit : U ⊆ slit_orbit c := fun w hw => (hUsub hw).1
   have hUbasin : U ⊆ Quadratic.basin_of_infinity c := fun w hw => (hUsub hw).2
-  exact ⟨U, hUopen, hzU, bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin⟩
+  exact ⟨U, hUopen, hzU, proxy_bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin⟩
 
 /-- Build outside-open analyticity payload from neighborhood-level slit data. -/
 lemma outsideOpenAnalyticityHypothesis_of_mem_nhds_slit
@@ -6215,9 +6215,9 @@ lemma outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_two_of_outsideOpe
 outside-open local analytic-chart-within payload and outside-open injectivity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
     c hclosed
@@ -6229,9 +6229,9 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnaly
 by routing through the local-chart-within seam. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_analytic : OutsideOpenAnalyticityHypothesis c)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
     c hclosed
@@ -6243,7 +6243,7 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticit
 analytic/injective seam payload. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_payload : OutsideOpenAnalyticInjPayload c) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_via_localChartWithin_of_injOn_outside_open
@@ -6255,7 +6255,7 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticIn
 quotient-rigidity witness. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_wit : OutsideOpenQuotientConstRealWitness c) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
@@ -6266,7 +6266,7 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientCo
 constancy. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_const : OutsideOpenQuotientConstHypothesis c) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
@@ -6277,7 +6277,7 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientCo
 analyticity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesis c) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis
@@ -6289,7 +6289,7 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientAn
 Injectivity is derived through the quotient-rigidity bridge. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (h_analytic : OutsideOpenAnalyticityHypothesis c) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
@@ -6299,10 +6299,10 @@ theorem external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticit
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open `AnalyticAt` payload and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_analytic :
-      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+      ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map (2 : ℂ)) z)
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open
     (2 : ℂ) hclosed h_analytic h_inj
@@ -6310,7 +6310,7 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_analyticAt_of_inj
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 the strong quotient-rigidity witness. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitnessTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_wit : OutsideOpenQuotientConstRealWitnessTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstRealWitness
@@ -6319,7 +6319,7 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotie
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open quotient constancy. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesisTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_const : OutsideOpenQuotientConstHypothesisTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis
@@ -6328,7 +6328,7 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotie
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open quotient analyticity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesisTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_qanalytic : OutsideOpenQuotientAnalyticityHypothesisTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenQuotientAnalyticityHypothesis
@@ -6337,7 +6337,7 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenQuotie
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open analyticity and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis
@@ -6346,9 +6346,9 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyt
 /-- Compatibility wrapper retaining the older signature that included an explicit
 outside-open injectivity assumption. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_of_injOn_outside_open
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_analytic : OutsideOpenAnalyticityHypothesis (2 : ℂ))
-    (_h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    (_h_inj : Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesisTwo
     hclosed h_analytic
@@ -6356,7 +6356,7 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyt
 /-- `c = 2` specialization from the combined non-slit outside-open
 analytic/injective seam payload. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyticInjNonSlitPayloadTwo
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_payload : OutsideOpenAnalyticInjNonSlitPayloadTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenAnalyticInjPayload
@@ -6365,9 +6365,9 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenAnalyt
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open local analytic charts and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_chart : OutsideOpenLocalAnalyticChartHypothesis (2 : ℂ))
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartHypothesis_of_injOn_outside_open
     (2 : ℂ) hclosed h_chart h_inj
@@ -6375,41 +6375,41 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalA
 /-- `c = 2` specialization: construct external-ray data from closed range plus
 outside-open local analytic charts inside outside-open and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (h_chart : OutsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis (2 : ℂ))
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_outsideOpenLocalAnalyticChartWithinOutsideOpenHypothesis_of_injOn_outside_open
     (2 : ℂ) hclosed h_chart h_inj
 
 /-- Local-slit wrapper for outside-open derivative nonvanishing from injectivity. -/
-lemma bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
+lemma proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_mem_nhds_slit_of_injOn
     (c : ℂ)
     (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
-    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.bottcher_map c) z ≠ 0 := by
-  exact bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c
-    (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds) h_inj
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    ∀ z, ‖z‖ > ‖c‖ + 2 → deriv (Quadratic.proxy_bottcher_map c) z ≠ 0 := by
+  exact proxy_bottcher_map_deriv_ne_zero_on_outside_open_of_analyticAt_of_injOn c
+    (proxy_bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds) h_inj
 
 /-- Local-slit wrapper for external-ray data construction from restricted-map
 closed-range and outside-open injectivity. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2}) :
     Quadratic.ExternalRayMapData c := by
   exact external_ray_map_data_of_isClosedRange_restrict_of_analyticAt_of_injOn_outside_open c
     hclosed
-    (bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds)
+    (proxy_bottcher_map_analyticAt_on_outside_open_of_mem_nhds_slit c hslit_nhds)
     h_inj
 
 /-- `c = 2` specialization: external-ray data from closed range, local-slit
 neighborhood payload, and outside-open injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
-    (h_inj : Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
+    (h_inj : Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
     (2 : ℂ) hclosed hslit_nhds h_inj
@@ -6418,42 +6418,42 @@ theorem external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_
 iterate-left-inverse injectivity route. -/
 theorem external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
     (c : ℂ)
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior c)))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior c)))
     (hslit_nhds : ∀ z, ‖z‖ > ‖c‖ + 2 → slit_orbit c ∈ 𝓝 z)
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
     Quadratic.ExternalRayMapData c :=
   external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open
     c hclosed hslit_nhds
-    (bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
+    (proxy_bottcher_map_inj_on_outside_open_of_iter_left_inverse c h_left_iter)
 
 /-- `c = 2` specialization: external-ray data from closed range, local-slit
 neighborhoods, and iterate-left-inverse injectivity. -/
 theorem external_ray_map_data_two_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
-    (hclosed : IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))))
+    (hclosed : IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))))
     (hslit_nhds : ∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z)
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin (2 : ℂ)) :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   external_ray_map_data_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse
     (2 : ℂ) hclosed hslit_nhds h_left_iter
 
-lemma bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin
+lemma proxy_bottcher_map_local_inj_of_deriv_ne_zero_of_mem_nhds_slit_basin
     (c z₀ : ℂ)
     (hslit : slit_orbit c ∈ 𝓝 z₀)
     (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀)
-    (hderiv : deriv (Quadratic.bottcher_map c) z₀ ≠ 0) :
-    ∃ s ∈ 𝓝 z₀, Set.InjOn (Quadratic.bottcher_map c) s := by
+    (hderiv : deriv (Quadratic.proxy_bottcher_map c) z₀ ≠ 0) :
+    ∃ s ∈ 𝓝 z₀, Set.InjOn (Quadratic.proxy_bottcher_map c) s := by
   exact injOn_nhds_of_analyticAt
-    (bottcher_map_analyticAt_of_mem_nhds_slit_basin c z₀ hslit hbasin) hderiv
+    (proxy_bottcher_map_analyticAt_of_mem_nhds_slit_basin c z₀ hslit hbasin) hderiv
 
-lemma bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit
+lemma proxy_bottcher_map_isLocalHomeomorphOn_basin_of_deriv_ne_zero_of_mem_nhds_slit
     (c : ℂ)
     (hslit : ∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z)
     (hderiv : ∀ z, z ∈ Quadratic.basin_of_infinity c →
-      deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    IsLocalHomeomorphOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+      deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
+    IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
   refine isLocalHomeomorphOn_of_analytic_deriv_ne_zero ?_ hderiv
   intro z hz
-  exact bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
+  exact proxy_bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
     (hslit z hz) ((basin_of_infinity_isOpen c).mem_nhds hz)
 
 def local_slit (z₀ : ℂ) (ε : ℝ) : Set ℂ :=
@@ -6531,25 +6531,25 @@ lemma exists_local_slit_subset_slit_orbit_basin_of_mem_nhds
   exact ⟨hε1 hz1, hε2 hz2⟩
 
 
-lemma bottcher_map_analytic_on_local_slit
+lemma proxy_bottcher_map_analytic_on_local_slit
     (c z₀ : ℂ) (ε : ℝ)
     (hslit : local_slit z₀ ε ⊆ slit_orbit c)
     (hbasin : local_slit z₀ ε ⊆ Quadratic.basin_of_infinity c) :
-    AnalyticOnNhd ℂ (Quadratic.bottcher_map c) (local_slit z₀ ε) := by
+    AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) (local_slit z₀ ε) := by
   have hopen : IsOpen (local_slit z₀ ε) := local_slit_isOpen z₀ ε
-  exact bottcher_map_analyticOnNhd_open c (local_slit z₀ ε) hopen hslit hbasin
+  exact proxy_bottcher_map_analyticOnNhd_open c (local_slit z₀ ε) hopen hslit hbasin
 
-lemma bottcher_map_analytic_on_local_slit_of_mem_nhds
+lemma proxy_bottcher_map_analytic_on_local_slit_of_mem_nhds
     (c z₀ : ℂ)
     (hslit : slit_orbit c ∈ 𝓝 z₀)
     (hbasin : Quadratic.basin_of_infinity c ∈ 𝓝 z₀) :
-    ∃ ε > 0, AnalyticOnNhd ℂ (Quadratic.bottcher_map c) (local_slit z₀ ε) := by
+    ∃ ε > 0, AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) (local_slit z₀ ε) := by
   rcases exists_local_slit_subset_slit_orbit_basin_of_mem_nhds c z₀ hslit hbasin with
     ⟨ε, εpos, hsub⟩
   refine ⟨ε, εpos, ?_⟩
   have hslit' : local_slit z₀ ε ⊆ slit_orbit c := fun z hz => (hsub hz).1
   have hbasin' : local_slit z₀ ε ⊆ Quadratic.basin_of_infinity c := fun z hz => (hsub hz).2
-  exact bottcher_map_analytic_on_local_slit c z₀ ε hslit' hbasin'
+  exact proxy_bottcher_map_analytic_on_local_slit c z₀ ε hslit' hbasin'
 
 lemma isOpen_preimage_slitPlane_iter (c : ℂ) (n : ℕ) :
     IsOpen {z : ℂ | (quadratic_map c)^[n] z ∈ Complex.slitPlane} := by
@@ -6611,12 +6611,12 @@ lemma exists_local_slit_subset_slit_orbit_prefix
 -- The naive statement `z * exp(-I*θ) ∈ slit_orbit c` requires a conjugacy
 -- argument on iterates, which will use `quadratic_map_rotate`.
 
-lemma bottcher_map_analytic_on_outside_of_slit_rot
+lemma proxy_bottcher_map_analytic_on_outside_of_slit_rot
     (c : ℂ) (θ : ℝ)
     (_hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit_rot c θ)
     (hslit : {z : ℂ | ‖z‖ > ‖c‖ + 2} ⊆ slit_orbit c) :
-    AnalyticOnNhd ℂ (Quadratic.bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
-  bottcher_map_analytic_on_outside c hslit
+    AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+  proxy_bottcher_map_analytic_on_outside c hslit
 
 /-- Neighborhood-level slit-orbit payload implies global outside-open slit
 inclusion. -/
@@ -6741,19 +6741,19 @@ lemma not_outsideOpenQuotientConstHypothesisTwo :
   have hEq1 : (r : ℂ) * (quadratic_map (2 : ℂ) z1) = ((r : ℂ) * z1) ^ 2 := by
     calc
       (r : ℂ) * (quadratic_map (2 : ℂ) z1)
-          = Quadratic.bottcher_map (2 : ℂ) (quadratic_map (2 : ℂ) z1) := by
+          = Quadratic.proxy_bottcher_map (2 : ℂ) (quadratic_map (2 : ℂ) z1) := by
               symm
               exact hlin (quadratic_map (2 : ℂ) z1) hz1q
-      _ = (Quadratic.bottcher_map (2 : ℂ) z1) ^ 2 :=
+      _ = (Quadratic.proxy_bottcher_map (2 : ℂ) z1) ^ 2 :=
           bottcher_conj_on_basin (2 : ℂ) z1 hz1_basin
       _ = ((r : ℂ) * z1) ^ 2 := by rw [hlin z1 hz1]
   have hEq2 : (r : ℂ) * (quadratic_map (2 : ℂ) z2) = ((r : ℂ) * z2) ^ 2 := by
     calc
       (r : ℂ) * (quadratic_map (2 : ℂ) z2)
-          = Quadratic.bottcher_map (2 : ℂ) (quadratic_map (2 : ℂ) z2) := by
+          = Quadratic.proxy_bottcher_map (2 : ℂ) (quadratic_map (2 : ℂ) z2) := by
               symm
               exact hlin (quadratic_map (2 : ℂ) z2) hz2q
-      _ = (Quadratic.bottcher_map (2 : ℂ) z2) ^ 2 :=
+      _ = (Quadratic.proxy_bottcher_map (2 : ℂ) z2) ^ 2 :=
           bottcher_conj_on_basin (2 : ℂ) z2 hz2_basin
       _ = ((r : ℂ) * z2) ^ 2 := by rw [hlin z2 hz2]
   have hEq1_num : (r : ℂ) * ((5 : ℂ) ^ 2 + (2 : ℂ)) = ((r : ℂ) * (5 : ℂ)) ^ 2 := by

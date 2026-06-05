@@ -31,7 +31,7 @@ rerouted the root away from the false full-exterior degree package to the honest
 The monodromy / covering-degree route from Problem A remains formalized in
 `Mlc.Bottcher.DegreeOne`, but it is no longer the live root because its former
 Problem B input is false as stated. The checked root now ends at the codomain-
-correct basin-valued inverse package for the actual `bottcher_map`.
+correct basin-valued inverse package for the actual `proxy_bottcher_map`.
 
 ---
 

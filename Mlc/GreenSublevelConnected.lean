@@ -20,9 +20,9 @@ then the sublevel sets {z | G_c(z) < ε} are connected.
 -/
 lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
     (hK : IsConnected (MLC.Quadratic.K c))
-    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
+    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ Quadratic.proxy_bottcher_map c '' Quadratic.bottcher_domain c)
     (h_inj_basin :
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+      Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c)) :
     IsConnected (MLC.Quadratic.GreenSublevel c n) := by
   let S := MLC.Quadratic.GreenSublevel c n
   let K := MLC.Quadratic.K c
@@ -97,10 +97,10 @@ Theorem: Green sublevel sets are connected on the Mandelbrot set.
 (Formerly an axiom).
 -/
 theorem green_sublevel_connected_onM
-    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
+    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.proxy_bottcher_map c '' Quadratic.bottcher_domain c)
     (h_inj_basin_onM :
       ∀ c, c ∈ MLC.Quadratic.MandelbrotSet →
-        Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+        Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c)) :
     MLC.Quadratic.GreenSublevelConnectedHyp := {
   connected := by
     intro c n hc
@@ -115,9 +115,9 @@ Theorem: Green sublevel sets are connected on the Mandelbrot set.
 (Formerly an axiom).
 -/
 theorem green_sublevel_connected
-    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c)
+    (h_surj : ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.proxy_bottcher_map c '' Quadratic.bottcher_domain c)
     (h_inj_basin :
-      ∀ c, Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
+      ∀ c, Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c)) :
     MLC.Quadratic.GreenSublevelConnectedHyp :=
   green_sublevel_connected_onM h_surj (fun c _hc => h_inj_basin c)
 

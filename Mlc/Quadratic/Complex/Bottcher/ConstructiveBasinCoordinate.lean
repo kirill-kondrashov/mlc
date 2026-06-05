@@ -183,7 +183,7 @@ def GenuineBottcherInversePackageFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
   Set.InjOn φ {z : ℂ | ‖z‖ > ‖c‖ + 2}
 
 /-- Missing analytic input for upgrading the current theorem-facing
-`bottcher_map := polar_green_map` proxy to a genuine coordinate on the whole
+`proxy_bottcher_map := polar_green_map` proxy to a genuine coordinate on the whole
 basin: every basin point admits a neighborhood contained in the slit-orbit
 domain used by the analytic Böttcher approximants. -/
 def BottcherBasinLocalAnalyticityHyp (c : ℂ) : Prop :=
@@ -196,41 +196,41 @@ def GenuineBottcherRouteFor (c : ℂ) : Prop :=
     GenuineBottcherInversePackageFor c φ
 
 /-- Maximal honest coordinate-construction theorem currently supported by the
-repository: once the current `bottcher_map` proxy is known to be locally
+repository: once the current `proxy_bottcher_map` proxy is known to be locally
 analytic at every basin point, its already-formalized dynamical/modulus
 properties upgrade it to the full theorem-facing genuine-coordinate package. -/
 theorem genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity
     (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
-    GenuineBottcherCoordinateDataFor c (bottcher_map c) := by
+    GenuineBottcherCoordinateDataFor c (proxy_bottcher_map c) := by
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro z hz
     exact
-      bottcher_map_norm_gt_one_of_basin c z hz
+      proxy_bottcher_map_norm_gt_one_of_basin c z hz
         (green_function_pos_of_basin c z hz)
   · intro z hz
-    exact bottcher_map_norm_gt_one_implies_basin c hz
+    exact proxy_bottcher_map_norm_gt_one_implies_basin c hz
   · intro z hz
     exact bottcher_conj_on_basin c z hz
   · intro z _hz
     exact norm_bottcher_eq_exp_green c z
   · intro z hz
-    have hana : AnalyticAt ℂ (bottcher_map c) z :=
-      bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
+    have hana : AnalyticAt ℂ (proxy_bottcher_map c) z :=
+      proxy_bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
         (hslit z hz)
         ((basin_of_infinity_isOpen c).mem_nhds hz)
     exact hana.differentiableAt.differentiableWithinAt
   · intro z hz hzne
-    exact bottcher_map_continuousAt_of_ne_zero c z hzne
-  · exact tendsto_bottcher_map_div_atInfinity c
+    exact proxy_bottcher_map_continuousAt_of_ne_zero c z hzne
+  · exact tendsto_proxy_bottcher_map_div_atInfinity c
 
 /-- Existential coordinate-construction form of the current maximal honest
 theorem: the missing local-analyticity input on the whole basin is enough to
 produce some theorem-facing genuine coordinate, namely the current
-`bottcher_map`. -/
+`proxy_bottcher_map`. -/
 theorem exists_genuineBottcherCoordinateDataFor_of_basinLocalAnalyticity
     (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
     ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
-  exact ⟨bottcher_map c,
+  exact ⟨proxy_bottcher_map c,
     genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity c hslit⟩
 
 /-- `0` escapes to infinity for `f(z) = z^2 + 2`, hence belongs to the basin. -/
@@ -268,26 +268,26 @@ theorem not_bottcherBasinLocalAnalyticityHyp_two :
   have hmem : (0 : ℂ) ∈ slit_orbit (2 : ℂ) := mem_of_mem_nhds hnhds
   exact zero_not_mem_slit_orbit_two hmem
 
-/-- The current proxy `bottcher_map = polar_green_map` cannot itself witness the
+/-- The current proxy `proxy_bottcher_map = polar_green_map` cannot itself witness the
 theorem-facing genuine coordinate package at `c = 2`: differentiability on the
 open basin would force continuity at `0`, but the proxy is formally not
 continuous there. -/
 theorem not_genuineBottcherCoordinateDataFor_bottcherMap_two :
-    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) (bottcher_map (2 : ℂ)) := by
+    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) (proxy_bottcher_map (2 : ℂ)) := by
   intro hcoord
   rcases hcoord with ⟨_, _, _, _, hdiff, _, _⟩
   have h0basin : (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) :=
     zero_mem_basin_two_constructive
-  have hcont0 : ContinuousAt (bottcher_map (2 : ℂ)) 0 := by
+  have hcont0 : ContinuousAt (proxy_bottcher_map (2 : ℂ)) 0 := by
     have hdiff0 :
-        DifferentiableWithinAt ℂ (bottcher_map (2 : ℂ))
+        DifferentiableWithinAt ℂ (proxy_bottcher_map (2 : ℂ))
           (basin_of_infinity (2 : ℂ)) 0 :=
       hdiff 0 h0basin
     exact hdiff0.continuousWithinAt.continuousAt
       ((basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin)
   exact
     polar_green_map_not_continuousAt_zero (2 : ℂ) <|
-      by simpa [bottcher_map] using hcont0
+      by simpa [proxy_bottcher_map] using hcont0
 
 /-- Any full genuine coordinate package restricts to the first near-infinity
 phase of the classical proof on the canonical outside-open region. -/

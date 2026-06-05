@@ -33,7 +33,7 @@ Notes:
 
 Current formal blocker in codebase:
 - Prove non-circularly at `c = 2`:
-  - outside-open injectivity of `bottcher_map`, and
+  - outside-open injectivity of `proxy_bottcher_map`, and
   - restricted-map closed-range/properness payloads,
   so that `BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)` can replace the axiom path.
 
@@ -56,8 +56,8 @@ Why useful:
 - pacman/core-entropy/matings (`1703.01206`, `1412.8760`, `1112.4780`).
 
 These do not appear to directly supply the exact theorem form currently needed in Lean:
-- `Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z | ‖z‖ > ‖(2 : ℂ)‖ + 2}`
-- `IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ)))` (or `IsProperMap`)
+- `Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z | ‖z‖ > ‖(2 : ℂ)‖ + 2}`
+- `IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))` (or `IsProperMap`)
 without circular external-ray assumptions.
 
 ## Practical conclusion

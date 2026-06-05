@@ -126,11 +126,11 @@ lemma zero_not_mem_K_two : (0 : ℂ) ∉ MLC.Quadratic.K (2 : ℂ) := by
     simpa [Quadratic.basin_eq_compl_K (2 : ℂ)] using hbasin
   simpa [Set.mem_compl_iff] using hcompl
 
-/-- Continuity of the theorem-facing `bottcher_map` away from `0`. -/
+/-- Continuity of the theorem-facing `proxy_bottcher_map` away from `0`. -/
 
-lemma bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
-    ContinuousAt (Quadratic.bottcher_map c) z := by
-  exact Quadratic.bottcher_map_continuousAt_of_ne_zero c z hz
+lemma proxy_bottcher_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
+    ContinuousAt (Quadratic.proxy_bottcher_map c) z := by
+  exact Quadratic.proxy_bottcher_map_continuousAt_of_ne_zero c z hz
 
 /-- Every real point escapes for `c = 2`, hence lies in the basin. -/
 
@@ -203,15 +203,15 @@ lemma polar_green_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.
       exact hzK
     exact ofReal_not_mem_K_two ‖z‖ hzK'
 
-/-- The theorem-facing `bottcher_map` at `c = 2` also avoids the value `1` on `K(2)`.
+/-- The theorem-facing `proxy_bottcher_map` at `c = 2` also avoids the value `1` on `K(2)`.
     This is the normalization fact needed by the root proof after reclaiming
-    `Quadratic.bottcher_map` from the explicit proxy. -/
-theorem bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
-    Quadratic.bottcher_map (2 : ℂ) z ≠ 1 := by
-  simpa [Quadratic.bottcher_map] using polar_green_map_eq_one_not_mem_K_two z hzK
+    `Quadratic.proxy_bottcher_map` from the explicit proxy. -/
+theorem proxy_bottcher_map_eq_one_not_mem_K_two (z : ℂ) (hzK : z ∈ MLC.Quadratic.K (2 : ℂ)) :
+    Quadratic.proxy_bottcher_map (2 : ℂ) z ≠ 1 := by
+  simpa [Quadratic.proxy_bottcher_map] using polar_green_map_eq_one_not_mem_K_two z hzK
 
 /-- The chosen `fixed_point 2` cannot map to `1` under the current explicit
-    `bottcher_map` model. -/
+    `proxy_bottcher_map` model. -/
 
 lemma log_norm_le_green_add_escape_const_of_norm_gt_escape_bound
     (c z : ℂ) (hz : ‖z‖ > MLC.Quadratic.escape_bound c) :
@@ -266,12 +266,12 @@ lemma tendsto_approach_one_seq :
     to `1`. -/
 def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
   ∃ z : ℕ → ℂ,
-    Tendsto (fun n => Quadratic.bottcher_map c (z n)) atTop (𝓝 (1 : ℂ))
+    Tendsto (fun n => Quadratic.proxy_bottcher_map c (z n)) atTop (𝓝 (1 : ℂ))
 
 /-- Exact countable-fiber seam target at the canonical approach-to-`1`
     exterior sequence. -/
 def BottcherApproachOneSeqFiberData (c : ℂ) : Prop :=
-  ∀ n : ℕ, ∃ z, Quadratic.bottcher_map c z = approach_one_seq n
+  ∀ n : ℕ, ∃ z, Quadratic.proxy_bottcher_map c z = approach_one_seq n
 
 /-- Build the approach-to-`1` preimage seam from the exact countable-fiber
     target. -/
@@ -291,12 +291,12 @@ lemma bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData
   bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber
 
 /-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
-    (without using `bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+    (without using `proxy_bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
 lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
     False := by
   rcases h_data with ⟨z, hu_tend⟩
-  let u : ℕ → ℂ := fun n => Quadratic.bottcher_map (2 : ℂ) (z n)
+  let u : ℕ → ℂ := fun n => Quadratic.proxy_bottcher_map (2 : ℂ) (z n)
   have hu_tend' : Tendsto u atTop (𝓝 (1 : ℂ)) := by simpa [u] using hu_tend
   have hu_bounded : IsBounded (Set.range u) :=
     isBounded_range_of_tendsto u hu_tend'
@@ -375,25 +375,25 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
   have ha0 : a ≠ 0 := by
     intro ha_zero
     exact zero_not_mem_K_two (by simpa [ha_zero] using haK)
-  have hcont_phi : ContinuousAt (Quadratic.bottcher_map (2 : ℂ)) a :=
-    bottcher_map_continuousAt_of_ne_zero (2 : ℂ) a ha0
+  have hcont_phi : ContinuousAt (Quadratic.proxy_bottcher_map (2 : ℂ)) a :=
+    proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) a ha0
   have hphi_sub_tend :
-      Tendsto (fun n => Quadratic.bottcher_map (2 : ℂ) (z (φ n))) atTop
-        (𝓝 (Quadratic.bottcher_map (2 : ℂ) a)) :=
+      Tendsto (fun n => Quadratic.proxy_bottcher_map (2 : ℂ) (z (φ n))) atTop
+        (𝓝 (Quadratic.proxy_bottcher_map (2 : ℂ) a)) :=
     hcont_phi.tendsto.comp hφtend
   have hu_sub_tend :
       Tendsto (fun n => u (φ n)) atTop (𝓝 (1 : ℂ)) :=
     hu_tend'.comp hφmono.tendsto_atTop
   have hu_sub_tend_phi :
-      Tendsto (fun n => u (φ n)) atTop (𝓝 (Quadratic.bottcher_map (2 : ℂ) a)) := by
+      Tendsto (fun n => u (φ n)) atTop (𝓝 (Quadratic.proxy_bottcher_map (2 : ℂ) a)) := by
     have hsub_eq :
-        (fun n => Quadratic.bottcher_map (2 : ℂ) (z (φ n))) = (fun n => u (φ n)) := by
+        (fun n => Quadratic.proxy_bottcher_map (2 : ℂ) (z (φ n))) = (fun n => u (φ n)) := by
       funext n
       rfl
     simpa [hsub_eq] using hphi_sub_tend
-  have hphi_a : Quadratic.bottcher_map (2 : ℂ) a = 1 :=
+  have hphi_a : Quadratic.proxy_bottcher_map (2 : ℂ) a = 1 :=
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
-  exact (bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
+  exact (proxy_bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
 
 /-- The exact-fiber target along the canonical sequence approaching `1` is
 formally impossible for the current constructive coordinate at `c = 2`. -/
@@ -2138,7 +2138,7 @@ lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
 
 /-- Minimal surjectivity seam: every exterior point has some Böttcher preimage. -/
 def BottcherSurjOnExterior (c : ℂ) : Prop :=
-  ∀ w, 1 < ‖w‖ → ∃ z, Quadratic.bottcher_map c z = w
+  ∀ w, 1 < ‖w‖ → ∃ z, Quadratic.proxy_bottcher_map c z = w
 
 /-- Outside-open surjectivity implies minimal exterior surjectivity. -/
 lemma bottcherSurjOnExterior_of_externalRayMapData
@@ -2231,24 +2231,24 @@ theorem mlc_conjecture_of_externalRayMapData_two
 outside-open injectivity is available, the restricted-map proper/local witness
 produces external-ray data constructively. -/
 theorem externalRayMapData_two_of_proper_local_restrict_of_injOn
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_inj :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact
     external_ray_map_data_of_injOn_outside_open_of_surj_exterior (2 : ℂ) h_inj
       (bottcherSurjOnExteriorFromOutsideOpen_two_of_isClosedRange_restrict_of_isLocalHomeomorph_restrict
-        (isClosed_range_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) h_proper)
+        (isClosed_range_proxy_bottcher_map_outside_open_to_exterior_of_isProperMap (2 : ℂ) h_proper)
         h_local)
 
 /-- Root-facing MLC bridge for the direct proper/local route at `c = 2`. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_injOn
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (h_inj :
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ))
         {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
@@ -2257,8 +2257,8 @@ theorem mlc_conjecture_of_proper_local_restrict_of_injOn
 /-- Root-facing degree-one bridge at `c = 2`: the restricted proper/local witness
 plus the degree-one winding seed produce external-ray data constructively. -/
 theorem externalRayMapData_two_of_proper_local_restrict_of_winding
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hwinding : Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
     Quadratic.ExternalRayMapData (2 : ℂ) := by
   exact
@@ -2267,8 +2267,8 @@ theorem externalRayMapData_two_of_proper_local_restrict_of_winding
 
 /-- Root-facing MLC bridge for the degree-one proper/local route at `c = 2`. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_winding
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hwinding : Mlc.Bottcher.DegreeOne.RestrictedAsymptoticWindingDegreeOneTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_externalRayMapData_two
@@ -2276,8 +2276,8 @@ theorem mlc_conjecture_of_proper_local_restrict_of_winding
 
 /-- Root-facing MLC bridge from the exact remaining abstract annulus theorem. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (htopo : Mlc.Bottcher.DegreeOne.RestrictedAnnulusCoveringDegreeOneStepTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact
@@ -2289,8 +2289,8 @@ theorem mlc_conjecture_of_proper_local_restrict_of_annulusCoveringDegreeOneStep
 proof sketch. The positive constant covering-degree part is already formalized
 constructively, so only the residual homotopy-to-degree-one step is passed in. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_problemA
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hproblemA :
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeRigidityProblemATwo) :
     LocallyConnectedSpace mandelbrotSet := by
@@ -2304,8 +2304,8 @@ theorem mlc_conjecture_of_proper_local_restrict_of_problemA
 proof sketch. The positive constant covering-degree part is already formalized
 constructively, so only the residual homotopy-to-degree-one step is passed in. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_monodromyCore
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hcore :
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeMonodromyCoreTwo) :
     LocallyConnectedSpace mandelbrotSet := by
@@ -2318,8 +2318,8 @@ theorem mlc_conjecture_of_proper_local_restrict_of_monodromyCore
 proof sketch. The positive constant covering-degree part is already formalized
 constructively, so only the residual homotopy-to-degree-one step is passed in. -/
 theorem mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositiveConstantAndCircleHomotopy
-    (h_proper : IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)))
-    (h_local : IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_proper : IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
+    (h_local : IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)))
     (hkernel :
       Mlc.Bottcher.DegreeOne.RestrictedCoveringDegreeOneFromPositiveConstantAndCircleHomotopyTwo) :
     LocallyConnectedSpace mandelbrotSet := by
@@ -2328,119 +2328,119 @@ theorem mlc_conjecture_of_proper_local_restrict_of_coveringDegreeOneFromPositive
 /-- CP5 seam at `c = 2`: constructive external-ray-map-data target from
 outside-open injectivity plus exterior surjectivity by outside-open preimages. -/
 def AnalyticDerivConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.bottcher_map (2 : ℂ)) z) ∧
-    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0)
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → AnalyticAt ℂ (Quadratic.proxy_bottcher_map (2 : ℂ)) z) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.proxy_bottcher_map (2 : ℂ)) z ≠ 0)
 
 /-- Local-homeomorph-on source candidate at `c = 2` through slit inclusion plus
 outside-disk injectivity. -/
 def SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo : Prop :=
   ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} ⊆ slit_orbit (2 : ℂ)) ∧
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ))
+    Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) (outside_disk (2 : ℂ))
 
 /-- Local-homeomorph-on source from slit inclusion plus outside-disk injectivity
 at `c = 2`. -/
 def KnownSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
-  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
-    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) ∨
+  (IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+    (IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) ∨
     BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) ∨
     ExternalRayLandsOutsideOpen (2 : ℂ) ∨
     AnalyticDerivConstructivePayloadTwo ∨
-    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
       SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo)
 
 /-- Any currently wired source family in the previous aggregate yields
 outside-open exterior surjectivity at `c = 2`. -/
 def KnownOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
-  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
-    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-      IsLocalHomeomorphOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) ∨
+  (IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+    (IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorphOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}) ∨
     BottcherOutsideDiskToOutsideOpenImageRefinement (2 : ℂ) ∨
     ExternalRayLandsOutsideOpen (2 : ℂ)
 
 /-- Reduced open surjectivity-source sub-aggregate at `c = 2`: local-homeomorph
 or external-ray landing. -/
 def ReducedOpenSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
-  (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
-      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+  (IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+      IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
     ExternalRayLandsOutsideOpen (2 : ℂ)
 
 /-- Blocked surjectivity-source sub-aggregate at `c = 2`. -/
 def KnownBlockedSurjOnExteriorFromOutsideOpenSourceCandidateTwo : Prop :=
   AnalyticDerivConstructivePayloadTwo ∨
-    (IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+    (IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
       SlitInjOutsideDiskLocalHomeomorphOnConstructivePayloadTwo)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus the
 combined non-slit outside-open analytic/injective payload shape at `c = 2`. -/
 def NonSlitAnalyticInjConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenAnalyticInjNonSlitPayloadTwo
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
 outside-open analyticity at `c = 2`. -/
 def NonSlitAnalyticConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenAnalyticityHypothesis (2 : ℂ)
 
 /-- Step-4→root seam specialized through restricted-map closed range plus a
 strong quotient-rigidity witness at `c = 2`. -/
 def NonSlitQuotientConstRealConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenQuotientConstRealWitnessTwo
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
 quotient constancy at `c = 2`. -/
 def NonSlitQuotientConstConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenQuotientConstHypothesisTwo
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
 outside-open quotient analyticity at `c = 2`. -/
 def NonSlitQuotientAnalyticConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenQuotientAnalyticityHypothesisTwo
 
 /-- Step-4→root seam specialized through restricted-map closed range plus
 the eventual-slit-to-slit implication at `c = 2`. -/
 def NonSlitEventualSlitConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     EventualSlitImpliesSlitOrbit (2 : ℂ)
 
 /-- Scope-revised Step-4→root payload at `c = 2`: restricted-map closed range
 plus explicit CP2 scope gate. -/
 def NonSlitAnalyticScopeAssumptionConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     OutsideOpenAnalyticityScopeAssumptionTwo
 
 /-- CP5 candidate payload at `c = 2`: outside-open injectivity plus outside-open
 exterior surjectivity. -/
 def InjSurjExteriorConstructivePayloadTwo : Prop :=
-  Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} ∧
+  Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} ∧
     BottcherSurjOnExteriorFromOutsideOpen (2 : ℂ)
 
 /-- Step-4→root payload specialized through closed range plus the boundary
 exclusion family at `c = 2`. -/
 def NonSlitBoundaryExclusionConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
       ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
-        Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ))
+        Quadratic.proxy_bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ))
 
 /-- Step-4→root payload specialized through closed range plus local-slit
 neighborhoods and outside-open injectivity at `c = 2`. -/
 def NonSlitMemNhdsSlitInjConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z) ∧
-      Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+      Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
 /-- Step-4→root payload specialized through closed range plus local-slit
 neighborhoods and iterate-left-inverse injectivity at `c = 2`. -/
 def NonSlitMemNhdsSlitIterLeftInverseConstructivePayloadTwo : Prop :=
-  IsClosed (Set.range (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
+  IsClosed (Set.range (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∧
     (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → slit_orbit (2 : ℂ) ∈ 𝓝 z) ∧
       QuadraticMapIterLeftInverseOnBasin (2 : ℂ)
 
@@ -2460,7 +2460,7 @@ def IterLeftInverseExternalRayLandsOutsideOpenConstructivePayloadTwo : Prop :=
 preimage-exterior outside-open control at `c = 2`. -/
 def IterLeftInversePreimageExteriorSubsetOutsideOpenConstructivePayloadTwo : Prop :=
   QuadraticMapIterLeftInverseOnBasin (2 : ℂ) ∧
-    ((Quadratic.bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
+    ((Quadratic.proxy_bottcher_map (2 : ℂ)) ⁻¹' {z : ℂ | 1 < ‖z‖} ⊆
       {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2})
 
 /-- Combined payload: iterate-left-inverse injectivity plus the
@@ -2477,29 +2477,29 @@ def ExternalRayLandingCounterexampleTwo : Prop :=
 /-- Explicit CP5 residual frontier package at `c = 2`: restricted local-homeomorph
 source or external-ray landing. -/
 def CP5ResidualTwo : Prop :=
-  (IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
-      IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
+  (IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+      IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))) ∨
     ExternalRayLandsOutsideOpen (2 : ℂ)
 
 /-- Under constructive exclusion of external-ray landing at `c = 2`, the CP5
 residual frontier is exactly the restricted proper+local-homeomorph branch. -/
 def CP5ResidualInjOnOutsideOpenSeamTwo : Prop :=
   ∀ _hres : CP5ResidualTwo,
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+    Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
 /-- Branch-local seam at `c = 2`: restricted local-homeomorph residual branch
 implies outside-open injectivity. -/
 def CP5ResidualLocalHomeomorphInjSeamTwo : Prop :=
   ∀ _hlocal :
-      IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
-        IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)),
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+      IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+        IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)),
+    Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
 /-- Branch-local seam at `c = 2`: external-ray landing residual branch implies
 outside-open injectivity. -/
 def CP5ResidualLandingInjSeamTwo : Prop :=
   ∀ _hland : ExternalRayLandsOutsideOpen (2 : ℂ),
-    Set.InjOn (Quadratic.bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
+    Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ)) {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
 /-- CP5 endpoint at `c = 2`: strong anchor-gap seam used by the current
 Green-inversion wrappers. -/
@@ -2542,17 +2542,17 @@ theorem not_GreenRayLogGtAnchorTwoSeam :
     exact MLC.large_norm_mem_outside_disk (2 : ℂ) (4 : ℂ) (by norm_num)
   have h4_basin : (4 : ℂ) ∈ MLC.basin_of_infinity (2 : ℂ) :=
     MLC.outside_disk_subset_quadratic_basin (2 : ℂ) h4_outside_disk
-  let w : ℂ := Quadratic.bottcher_map (2 : ℂ) (4 : ℂ)
+  let w : ℂ := Quadratic.proxy_bottcher_map (2 : ℂ) (4 : ℂ)
   have hw_gt : 1 < ‖w‖ := by
     dsimp [w]
     exact
-      MLC.bottcher_map_norm_gt_one_of_basin (2 : ℂ) (4 : ℂ) h4_basin
+      MLC.proxy_bottcher_map_norm_gt_one_of_basin (2 : ℂ) (4 : ℂ) h4_basin
         (MLC.green_function_pos_of_basin (2 : ℂ) (4 : ℂ) h4_basin)
   have hw_eq :
       w = (Real.exp (Quadratic.green_function (2 : ℂ) (4 : ℂ)) : ℂ) := by
     dsimp [w]
     simpa using
-      (Quadratic.bottcher_map_apply_ray (2 : ℂ) (1 : ℂ) (by simp) 4 (by norm_num))
+      (Quadratic.proxy_bottcher_map_apply_ray (2 : ℂ) (1 : ℂ) (by simp) 4 (by norm_num))
   have hw_norm :
       ‖w‖ = Real.exp (Quadratic.green_function (2 : ℂ) (4 : ℂ)) := by
     dsimp [w]
@@ -2623,23 +2623,23 @@ def StrictSubcutoffWindowExistenceTwo : Prop :=
     NonimplicativeWindowInterfaceTwo R
 
 def DirectProperLocalWitnessTwo : Prop :=
-  IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
+  IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+    IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))
 /-- Primitive restricted-map proper/local witness family at `c = 2`.
 This packages the same payload as `DirectProperLocalWitnessTwo` under a
 distinct interface name for no-arg witness-source design work. -/
 def PrimitiveRestrictedMapProperLocalWitnessFamilyTwo : Prop :=
-  IsProperMap (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
-    IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ))
+  IsProperMap (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+    IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ))
 
 /-- v9 packaged route to `DirectProperLocalWitnessTwo` from local-homeomorph
 plus closed-preimage data on compact exterior targets. -/
 def DirectProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo : Prop :=
-  IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+  IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
       IsClosed
         ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
-          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
+          Quadratic.proxy_bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
 
 /-- Constructive route from local-homeomorphy plus closed preimages on compact
 exterior targets to the direct proper/local witness. -/
@@ -2649,15 +2649,15 @@ theorem directProperLocalWitnessTwo_of_localHomeomorphClosedRangeRoute
   refine ⟨?_, hroute.1⟩
   have hcont :
       Continuous (fun z : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} =>
-        Quadratic.bottcher_map (2 : ℂ) z.1) := by
-    simpa [MLC.bottcher_map_outside_open_to_exterior] using
+        Quadratic.proxy_bottcher_map (2 : ℂ) z.1) := by
+    simpa [MLC.proxy_bottcher_map_outside_open_to_exterior] using
       (continuous_subtype_val.comp hroute.1.continuous)
-  refine MLC.isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact (2 : ℂ)
+  refine MLC.isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_preimage_compact (2 : ℂ)
     hcont ?_
   intro K hK
   exact
-    MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K |>.1
-      (MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
+    MLC.isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K |>.1
+      (MLC.isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
         (hroute.2 K hK))
 
 /-- Any direct proper/local witness would force the older closed-preimage route:
@@ -2669,7 +2669,7 @@ theorem directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo_of_dir
   refine ⟨hdirect.2, ?_⟩
   intro K hK
   exact
-    ((MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K).1
+    ((MLC.isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K).1
       (hdirect.1.isCompact_preimage hK)).isClosed
 
 /-- The old closed-preimage route from Problem B is false: one can choose a
@@ -2697,8 +2697,8 @@ theorem not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo :
     dsimp [z0]
     exact_mod_cast hr0_pos.ne'
   let w0 : {w : ℂ // 1 < ‖w‖} :=
-    ⟨Quadratic.bottcher_map (2 : ℂ) z0,
-      bottcher_map_norm_gt_one_of_outside (2 : ℂ) hz0_out⟩
+    ⟨Quadratic.proxy_bottcher_map (2 : ℂ) z0,
+      proxy_bottcher_map_norm_gt_one_of_outside (2 : ℂ) hz0_out⟩
   let rseq : ℕ → ℝ := fun n => r0 + 1 / (n + 1 : ℝ)
   let zseq : ℕ → ℂ := fun n => (rseq n : ℂ)
   have hrseq_tend : Tendsto rseq atTop (𝓝 r0) := by
@@ -2706,11 +2706,11 @@ theorem not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo :
       (tendsto_one_div_add_atTop_nhds_zero_nat.const_add r0)
   have hzseq_tend : Tendsto zseq atTop (𝓝 z0) := by
     simpa [zseq, z0] using (Complex.continuous_ofReal.tendsto r0).comp hrseq_tend
-  have hcont_phi : ContinuousAt (Quadratic.bottcher_map (2 : ℂ)) z0 :=
-    bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z0 hz0_ne
+  have hcont_phi : ContinuousAt (Quadratic.proxy_bottcher_map (2 : ℂ)) z0 :=
+    proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z0 hz0_ne
   have hwseq_tend_val :
-      Tendsto (fun n => Quadratic.bottcher_map (2 : ℂ) (zseq n)) atTop
-        (𝓝 (Quadratic.bottcher_map (2 : ℂ) z0)) :=
+      Tendsto (fun n => Quadratic.proxy_bottcher_map (2 : ℂ) (zseq n)) atTop
+        (𝓝 (Quadratic.proxy_bottcher_map (2 : ℂ) z0)) :=
     hcont_phi.tendsto.comp hzseq_tend
   have hzseq_norm (n : ℕ) : ‖zseq n‖ = rseq n := by
     have hrseq_nonneg : 0 ≤ rseq n := by
@@ -2725,8 +2725,8 @@ theorem not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo :
   have hzseq_out (n : ℕ) : zseq n ∈ outside_disk (2 : ℂ) :=
     large_norm_mem_outside_disk (2 : ℂ) (zseq n) (le_of_lt (hzseq_gt n))
   let wseq : ℕ → {w : ℂ // 1 < ‖w‖} := fun n =>
-    ⟨Quadratic.bottcher_map (2 : ℂ) (zseq n),
-      bottcher_map_norm_gt_one_of_outside (2 : ℂ) (hzseq_out n)⟩
+    ⟨Quadratic.proxy_bottcher_map (2 : ℂ) (zseq n),
+      proxy_bottcher_map_norm_gt_one_of_outside (2 : ℂ) (hzseq_out n)⟩
   have hwseq_tend : Tendsto wseq atTop (𝓝 w0) := by
     simpa [wseq, w0] using (tendsto_subtype_rng.2 hwseq_tend_val)
   let K : Set {w : ℂ // 1 < ‖w‖} := insert w0 (Set.range wseq)
@@ -2734,7 +2734,7 @@ theorem not_directProperLocalWitnessTwoFromLocalHomeomorphClosedRangeRouteTwo :
     simpa [K] using hwseq_tend.isCompact_insert_range
   let S : Set ℂ :=
     {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
-      Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)}
+      Quadratic.proxy_bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)}
   have hS_closed : IsClosed S := by
     simpa [S, K] using hroute.2 K hK
   have hzseq_mem : ∀ n : ℕ, zseq n ∈ S := by
@@ -2764,11 +2764,11 @@ theorem not_directProperLocalWitnessTwo :
 homeomorphy together with compact ambient preimages of compact exterior targets.
 This is exactly the data needed to recover properness of the restricted map. -/
 def DirectProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo : Prop :=
-  IsLocalHomeomorph (bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
+  IsLocalHomeomorph (proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)) ∧
     (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
       IsCompact
         ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
-          Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
+          Quadratic.proxy_bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
 
 /-- The old closed-preimage route would imply the later compact-preimage route,
 but it is itself false by
@@ -2779,8 +2779,8 @@ theorem directProperLocalWitnessTwoFromLocalHomeomorphCompactPreimageRouteTwo_of
   refine ⟨hroute.1, ?_⟩
   intro K hK
   exact
-    MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K |>.1
-      (MLC.isCompact_preimage_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
+    MLC.isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_iff (2 : ℂ) K |>.1
+      (MLC.isCompact_preimage_proxy_bottcher_map_outside_open_to_exterior_of_isClosed (2 : ℂ) K hK
         (hroute.2 K hK))
 
 /-- Compact ambient preimages would in particular be closed, so the compact
@@ -2811,11 +2811,11 @@ theorem directProperLocalWitnessTwo_of_localHomeomorphCompactPreimageRoute
   refine ⟨?_, hroute.1⟩
   have hcont :
       Continuous (fun z : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} =>
-        Quadratic.bottcher_map (2 : ℂ) z.1) := by
-    simpa [MLC.bottcher_map_outside_open_to_exterior] using
+        Quadratic.proxy_bottcher_map (2 : ℂ) z.1) := by
+    simpa [MLC.proxy_bottcher_map_outside_open_to_exterior] using
       (continuous_subtype_val.comp hroute.1.continuous)
   exact
-    MLC.isProperMap_bottcher_map_outside_open_to_exterior_of_preimage_compact (2 : ℂ)
+    MLC.isProperMap_proxy_bottcher_map_outside_open_to_exterior_of_preimage_compact (2 : ℂ)
       hcont hroute.2
 
 /-- Minimal-counterexample formulation of the constructive
@@ -2940,7 +2940,7 @@ theorem not_restrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexam
 
 /-- Honest root-facing theorem shape after eliminating the false full-exterior
 degree statement: construct a basin-valued exterior inverse for the actual
-`bottcher_map` at `c = 2`, with a right inverse on all of the exterior and a
+`proxy_bottcher_map` at `c = 2`, with a right inverse on all of the exterior and a
 left inverse on the outside-open source region. -/
 def BasinExternalRayMapDataTwoMinimalCounterexample : Prop :=
   ¬ Quadratic.BasinExternalRayMapDataTwo → False
@@ -2991,26 +2991,26 @@ def KnownInjOnOutsideOpenSourceCandidateTwo : Prop :=
 the quotient-rigidity bridge. -/
 def DynamicalBottcherConformalIdentificationTwo : Prop :=
   ∃ e : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} ≃ₜ {w : ℂ // 1 < ‖w‖},
-    (fun z => e z) = bottcher_map_outside_open_to_exterior (2 : ℂ)
+    (fun z => e z) = proxy_bottcher_map_outside_open_to_exterior (2 : ℂ)
 
 /-- Direct proper+local witness extracted from the Dudko-style
 outside-open/exterior conformal identification at `c = 2`. -/
 def ProperLocalFromAnalyticPreimageClosedCandidateTwo : Prop :=
   OutsideOpenAnalyticityHypothesis (2 : ℂ) ∧
-    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.proxy_bottcher_map (2 : ℂ)) z ≠ 0) ∧
       (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         IsClosed
           ({z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2 ∧
-            Quadratic.bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
+            Quadratic.proxy_bottcher_map (2 : ℂ) z ∈ ((↑) '' K : Set ℂ)} : Set ℂ))
 
 /-- Candidate proper+local source family at `c = 2`: outside-open analyticity,
 derivative nonvanishing, and boundary exclusion on compact exterior targets. -/
 def ProperLocalFromAnalyticBoundaryExclusionCandidateTwo : Prop :=
   OutsideOpenAnalyticityHypothesis (2 : ℂ) ∧
-    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.bottcher_map (2 : ℂ)) z ≠ 0) ∧
+    (∀ z, ‖z‖ > ‖(2 : ℂ)‖ + 2 → deriv (Quadratic.proxy_bottcher_map (2 : ℂ)) z ≠ 0) ∧
       (∀ K : Set {w : ℂ // 1 < ‖w‖}, IsCompact K →
         ∀ z, ‖z‖ = ‖(2 : ℂ)‖ + 2 →
-          Quadratic.bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ))
+          Quadratic.proxy_bottcher_map (2 : ℂ) z ∉ ((↑) '' K : Set ℂ))
 
 /-- The preimage-closed proper+local source candidate is inconsistent at `c = 2`
 because outside-open analyticity is impossible in the current model. -/
@@ -3071,17 +3071,17 @@ def GreenRayUniquePreimageTwoAnchorSeam : Prop :=
         MLC.Quadratic.green_function (2 : ℂ) ((ρ : ℂ) * (w / ↑‖w‖)) = Real.log ‖w‖
 
 /-- Böttcher-map evaluation on a positive-real ray at `c = 2`. -/
-private lemma bottcher_map_apply_ray_two
+private lemma proxy_bottcher_map_apply_ray_two
     (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
     (hρ : 0 < ρ) :
-    Quadratic.bottcher_map (2 : ℂ) ((ρ : ℂ) * u) =
+    Quadratic.proxy_bottcher_map (2 : ℂ) ((ρ : ℂ) * u) =
       u * ↑(Real.exp (Quadratic.green_function (2 : ℂ) ((ρ : ℂ) * u))) := by
-  simpa using Quadratic.bottcher_map_apply_ray (2 : ℂ) u hu ρ hρ
+  simpa using Quadratic.proxy_bottcher_map_apply_ray (2 : ℂ) u hu ρ hρ
 
 /-- Green-ray anchored uniqueness at `c = 2` from anchor-gap seam plus
 outside-open injectivity. -/
 def RootSafeOutsideOpenInjWitnessTwo : Prop :=
-  Set.InjOn (Quadratic.bottcher_map (2 : ℂ))
+  Set.InjOn (Quadratic.proxy_bottcher_map (2 : ℂ))
     {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2}
 
 /-- Build the exact strict-mono-free root witness target from Green-ray
@@ -3097,7 +3097,7 @@ def GreenRayUniquePreimageTwoAnchorSeamWitnessGap : Prop :=
 /-- Strict-mono-seeded root witness target at `c = 2`, expressed via the
 Green-ray seam bridge. -/
 def ProperLocalDegreeOneFiberWitnessTwo : Prop :=
-  ∃ y : ℂ, Nat.card ({x : ℂ // Quadratic.bottcher_map (2 : ℂ) x = y}) = 1
+  ∃ y : ℂ, Nat.card ({x : ℂ // Quadratic.proxy_bottcher_map (2 : ℂ) x = y}) = 1
 
 /-- Degree-one fiber witness on the restricted map
 `outside_open → exterior` at `c = 2`. -/
@@ -3105,24 +3105,24 @@ def RestrictProperLocalDegreeOneFiberWitnessTwo : Prop :=
   ∃ y : {w : ℂ // 1 < ‖w‖},
     Nat.card
       ({x : {z : ℂ // ‖z‖ > ‖(2 : ℂ)‖ + 2} //
-          bottcher_map_outside_open_to_exterior (2 : ℂ) x = y}) = 1
+          proxy_bottcher_map_outside_open_to_exterior (2 : ℂ) x = y}) = 1
 
 /-- Constructive outside-open injectivity from global proper+local-homeomorph
 plus a degree-one fiber witness at `c = 2`. -/
 def GlobalProperLocalDegreeOneRouteTwo : Prop :=
-  IsProperMap (Quadratic.bottcher_map (2 : ℂ)) ∧
-    IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)) ∧
+  IsProperMap (Quadratic.proxy_bottcher_map (2 : ℂ)) ∧
+    IsLocalHomeomorph (Quadratic.proxy_bottcher_map (2 : ℂ)) ∧
       ProperLocalDegreeOneFiberWitnessTwo
 
 /-- Constructive outside-open injectivity from the direct proper+local witness
 at `c = 2`. -/
 def GreenFunctionDegreeOneIngressTwo : Prop :=
-  IsProperMap (Quadratic.bottcher_map (2 : ℂ)) ∧
-    IsLocalHomeomorph (Quadratic.bottcher_map (2 : ℂ)) ∧
+  IsProperMap (Quadratic.proxy_bottcher_map (2 : ℂ)) ∧
+    IsLocalHomeomorph (Quadratic.proxy_bottcher_map (2 : ℂ)) ∧
       ProperLocalDegreeOneFiberWitnessTwo
 
 /-- No-go at `c = 2`: the degree-one Green-function ingress is inconsistent in
-the current model because `bottcher_map` is not proper on `ℂ`. -/
+the current model because `proxy_bottcher_map` is not proper on `ℂ`. -/
 def RootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo : Prop :=
   KnownInjOnOutsideOpenSourceCandidateTwo ∨ GreenFunctionDegreeOneIngressTwo
 
@@ -4444,7 +4444,7 @@ theorem mlc_conjecture_of_basinExternalRayMapData_two
 
 /-- Final root-facing kernel after ruling out the false full-exterior degree
 route. The single remaining theorem-shaped input is the specialized
-basin-valued external-ray package for the actual `bottcher_map` at `c = 2`. -/
+basin-valued external-ray package for the actual `proxy_bottcher_map` at `c = 2`. -/
 axiom basinExternalRayKernelTwo : BasinExternalRayMapDataTwoMinimalCounterexample
 
 /-- Root closure from the honest basin-valued external-ray kernel. -/
@@ -4466,7 +4466,7 @@ theorem false_of_basinExternalRayKernelTwo
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The checked root now depends only
     on a single honest theorem-shaped axiom: a basin-valued exterior inverse
-    package for the actual `bottcher_map` at `c = 2`, with a global right
+    package for the actual `proxy_bottcher_map` at `c = 2`, with a global right
     inverse on the exterior and a left inverse on the outside-open source
     region. -/
 theorem mlc_conjecture

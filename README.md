@@ -41,7 +41,7 @@ project_frontier(MLC.mlc_conjecture)
 The checked root is now routed through a **single honest basin-valued kernel**:
 a theorem-shaped minimal-counterexample wrapper for the specialized statement
 `Quadratic.BasinExternalRayMapDataTwo`. This package asks for a right inverse to
-the fixed `bottcher_map (2)` on the full exterior `Ω = {w : |w| > 1}` and a
+the fixed `proxy_bottcher_map (2)` on the full exterior `Ω = {w : |w| > 1}` and a
 left inverse on the outside-open source region `V = {z : |z| > 4}`.
 
 The former full-exterior degree route is no longer root-facing. The monodromy

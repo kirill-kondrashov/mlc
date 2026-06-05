@@ -10,14 +10,14 @@ open Topology Filter Set
 lemma bottcher_left_inverse_on_slit_orbit_of_global_inverse
     (c : ℂ) (hA : SlitInverseAtlas c) (hG : GlobalInverseOnSlit c hA) :
     ∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c →
-      ∀ᶠ x in 𝓝 z, (Classical.choose hG) (bottcher_map c x) = x := by
+      ∀ᶠ x in 𝓝 z, (Classical.choose hG) (proxy_bottcher_map c x) = x := by
   intro z hz
   simpa using (global_inverse_left_inverse_on_slit (c := c) (hA := hA) hG z hz)
 
 lemma bottcher_left_inverse_on_eventual_slit_of_global_inverse
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
     ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-      ∀ᶠ x in 𝓝 z, (Classical.choose hG) (bottcher_map c x) = x := by
+      ∀ᶠ x in 𝓝 z, (Classical.choose hG) (proxy_bottcher_map c x) = x := by
   have hleft := (Classical.choose_spec hG).2
   intro z hz
   simpa using (hleft z hz)
@@ -25,25 +25,25 @@ lemma bottcher_left_inverse_on_eventual_slit_of_global_inverse
 lemma bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
     ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-      (Classical.choose hG) (bottcher_map c z) = z := by
+      (Classical.choose hG) (proxy_bottcher_map c z) = z := by
   intro z hz
   have h := bottcher_left_inverse_on_eventual_slit_of_global_inverse c hA hG z hz
   refine (Filter.Eventually.self_of_nhds
-    (p := fun x => (Classical.choose hG) (bottcher_map c x) = x) h)
+    (p := fun x => (Classical.choose hG) (proxy_bottcher_map c x) = x) h)
 
 /-- Redesigned Step 2b target at a fixed parameter: a pointwise left-inverse
-    identity for `bottcher_map` on the eventual-slit basin set. -/
+    identity for `proxy_bottcher_map` on the eventual-slit basin set. -/
 def EventualSlitPointwiseLeftInverseData (c : ℂ) : Prop :=
   ∃ g : ℂ → ℂ,
     ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-      g (bottcher_map c z) = z
+      g (proxy_bottcher_map c z) = z
 
 /-- Minimal basin target corresponding to Step 2b: a pointwise left-inverse
-    identity for `bottcher_map` on the whole basin. -/
+    identity for `proxy_bottcher_map` on the whole basin. -/
 def BasinBottcherPointwiseLeftInverseData (c : ℂ) : Prop :=
   ∃ g : ℂ → ℂ,
     ∀ z, z ∈ basin_of_infinity c →
-      g (bottcher_map c z) = z
+      g (proxy_bottcher_map c z) = z
 
 lemma eventual_slit_pointwise_left_inverse_data_of_global_inverse
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
@@ -52,48 +52,48 @@ lemma eventual_slit_pointwise_left_inverse_data_of_global_inverse
   intro z hz
   exact bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG z hz
 
-theorem bottcher_map_inj_on_basin_of_eventual_slit_global_inverse
+theorem proxy_bottcher_map_inj_on_basin_of_eventual_slit_global_inverse
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n))
     (hA : EventualSlitInverseAtlas c)
     (_hG : GlobalInverseOnEventualSlit c hA)
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  -- This lemma mirrors `bottcher_map_inj_on_basin_of_outside_left_inv` but
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  -- This lemma mirrors `proxy_bottcher_map_inj_on_basin_of_outside_left_inv` but
   -- highlights the eventual-slit global inverse as a potential source for
   -- a left-inverse on the basin.
-  exact bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_eq_imp
+  exact proxy_bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_eq_imp
 
-theorem bottcher_map_inj_theorem_of_eventual_slit_global_inverse
+theorem proxy_bottcher_map_inj_theorem_of_eventual_slit_global_inverse
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
-    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n))
+    (h_inj_K : Set.InjOn (Quadratic.proxy_bottcher_map c) (MLC.Quadratic.K c))
     (hA : EventualSlitInverseAtlas c)
     (_hG : GlobalInverseOnEventualSlit c hA)
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
-    Function.Injective (Quadratic.bottcher_map c) := by
+    Function.Injective (Quadratic.proxy_bottcher_map c) := by
   have h_inj_basin :
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
-    bottcher_map_inj_on_basin_of_eventual_slit_global_inverse c h_left h_escape h_conj hA _hG
+      Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) :=
+    proxy_bottcher_map_inj_on_basin_of_eventual_slit_global_inverse c h_left h_escape h_conj hA _hG
       h_iter_eq_imp
-  have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →
+  have h_pre : ∀ z, 1 < ‖Quadratic.proxy_bottcher_map c z‖ →
       z ∈ Quadratic.basin_of_infinity c := by
     intro z hz
-    have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+    have hnorm' : ‖Quadratic.proxy_bottcher_map c z‖ =
         Real.exp (MLC.Quadratic.green_function c z) :=
       Quadratic.norm_bottcher_eq_exp_green c z
     have hpos : 0 < MLC.Quadratic.green_function c z := by
@@ -106,15 +106,15 @@ theorem bottcher_map_inj_theorem_of_eventual_slit_global_inverse
       simpa [Set.mem_compl_iff] using hz'
     simpa [Quadratic.basin_eq_compl_K c] using this
   have h_inj_on :
-      Set.InjOn (Quadratic.bottcher_map c) {z | 1 < ‖Quadratic.bottcher_map c z‖} :=
-    bottcher_map_injective_of_basin_characterization (c := c) h_pre h_inj_basin
+      Set.InjOn (Quadratic.proxy_bottcher_map c) {z | 1 < ‖Quadratic.proxy_bottcher_map c z‖} :=
+    proxy_bottcher_map_injective_of_basin_characterization (c := c) h_pre h_inj_basin
   intro z w hzw
-  by_cases hz : 1 < ‖Quadratic.bottcher_map c z‖
-  · have hw : 1 < ‖Quadratic.bottcher_map c w‖ := by
+  by_cases hz : 1 < ‖Quadratic.proxy_bottcher_map c z‖
+  · have hw : 1 < ‖Quadratic.proxy_bottcher_map c w‖ := by
       simpa [hzw] using hz
     exact h_inj_on hz hw hzw
-  · have hz_le : ‖Quadratic.bottcher_map c z‖ ≤ 1 := le_of_not_gt hz
-    have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+  · have hz_le : ‖Quadratic.proxy_bottcher_map c z‖ ≤ 1 := le_of_not_gt hz
+    have hnorm' : ‖Quadratic.proxy_bottcher_map c z‖ =
         Real.exp (MLC.Quadratic.green_function c z) :=
       Quadratic.norm_bottcher_eq_exp_green c z
     have hge0 : 0 ≤ MLC.Quadratic.green_function c z :=
@@ -126,9 +126,9 @@ theorem bottcher_map_inj_theorem_of_eventual_slit_global_inverse
     have hzG : MLC.Quadratic.green_function c z = 0 := le_antisymm hle0 hge0
     have hzK : z ∈ MLC.Quadratic.K c :=
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K c z).1 hzG
-    have hnormw : ‖Quadratic.bottcher_map c w‖ ≤ 1 := by
+    have hnormw : ‖Quadratic.proxy_bottcher_map c w‖ ≤ 1 := by
       simpa [hzw] using hz_le
-    have hnormw' : ‖Quadratic.bottcher_map c w‖ =
+    have hnormw' : ‖Quadratic.proxy_bottcher_map c w‖ =
         Real.exp (MLC.Quadratic.green_function c w) :=
       Quadratic.norm_bottcher_eq_exp_green c w
     have hge0w : 0 ≤ MLC.Quadratic.green_function c w :=
@@ -227,7 +227,7 @@ lemma eventual_slit_pointwise_left_inverse_data_iff_basin_bottcher_pointwise_lef
 
 lemma bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
-    ∀ z, z ∈ basin_of_infinity c → (Classical.choose hG) (bottcher_map c z) = z := by
+    ∀ z, z ∈ basin_of_infinity c → (Classical.choose hG) (proxy_bottcher_map c z) = z := by
   intro z hz
   have hz_eventual : z ∈ eventual_slit_set c := basin_subset_eventual_slit_set c hz
   exact bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG z
@@ -235,113 +235,113 @@ lemma bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse
 
 lemma bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_data
     (c : ℂ) (h_data : EventualSlitPointwiseLeftInverseData c) :
-    ∀ z, z ∈ basin_of_infinity c → (Classical.choose h_data) (bottcher_map c z) = z := by
+    ∀ z, z ∈ basin_of_infinity c → (Classical.choose h_data) (proxy_bottcher_map c z) = z := by
   intro z hz
   have hz_eventual : z ∈ eventual_slit_set c := basin_subset_eventual_slit_set c hz
   exact (Classical.choose_spec h_data) z ⟨hz_eventual, hz⟩
 
 lemma bottcher_left_inverse_pointwise_on_basin_of_basin_bottcher_data
     (c : ℂ) (h_data : BasinBottcherPointwiseLeftInverseData c) :
-    ∀ z, z ∈ basin_of_infinity c → (Classical.choose h_data) (bottcher_map c z) = z := by
+    ∀ z, z ∈ basin_of_infinity c → (Classical.choose h_data) (proxy_bottcher_map c z) = z := by
   intro z hz
   exact (Classical.choose_spec h_data) z hz
 
-lemma bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise
+lemma proxy_bottcher_map_inj_on_basin_of_eventual_slit_global_inverse_pointwise
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) :
-    Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
+    Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c) := by
   intro z hz w hw hzw
   have hzleft :
-      (Classical.choose hG) (bottcher_map c z) = z :=
+      (Classical.choose hG) (proxy_bottcher_map c z) = z :=
     bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse c hA hG z hz
   have hwleft :
-      (Classical.choose hG) (bottcher_map c w) = w :=
+      (Classical.choose hG) (proxy_bottcher_map c w) = w :=
     bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_global_inverse c hA hG w hw
   have h := congrArg (Classical.choose hG) hzw
   simpa [hzleft, hwleft] using h
 
-lemma bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data
+lemma proxy_bottcher_map_inj_on_basin_of_eventual_slit_pointwise_left_inverse_data
     (c : ℂ) (h_data : EventualSlitPointwiseLeftInverseData c) :
-    Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
+    Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c) := by
   intro z hz w hw hzw
   have hzleft :
-      (Classical.choose h_data) (bottcher_map c z) = z :=
+      (Classical.choose h_data) (proxy_bottcher_map c z) = z :=
     bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_data c h_data z hz
   have hwleft :
-      (Classical.choose h_data) (bottcher_map c w) = w :=
+      (Classical.choose h_data) (proxy_bottcher_map c w) = w :=
     bottcher_left_inverse_pointwise_on_basin_of_eventual_slit_data c h_data w hw
   have h := congrArg (Classical.choose h_data) hzw
   simpa [hzleft, hwleft] using h
 
-lemma bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
+lemma proxy_bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data
     (c : ℂ) (h_data : BasinBottcherPointwiseLeftInverseData c) :
-    Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
+    Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c) := by
   intro z hz w hw hzw
   have hzleft :
-      (Classical.choose h_data) (bottcher_map c z) = z :=
+      (Classical.choose h_data) (proxy_bottcher_map c z) = z :=
     bottcher_left_inverse_pointwise_on_basin_of_basin_bottcher_data c h_data z hz
   have hwleft :
-      (Classical.choose h_data) (bottcher_map c w) = w :=
+      (Classical.choose h_data) (proxy_bottcher_map c w) = w :=
     bottcher_left_inverse_pointwise_on_basin_of_basin_bottcher_data c h_data w hw
   have h := congrArg (Classical.choose h_data) hzw
   simpa [hzleft, hwleft] using h
 
 
 
-lemma external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin
-    (c : ℂ) (h_inj_basin : Set.InjOn (bottcher_map c) (basin_of_infinity c)) :
-    ∀ z, z ∈ basin_of_infinity c → external_ray_map c (bottcher_map c z) = z := by
+lemma external_ray_map_left_inverse_on_basin_of_proxy_bottcher_map_inj_on_basin
+    (c : ℂ) (h_inj_basin : Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c)) :
+    ∀ z, z ∈ basin_of_infinity c → external_ray_map c (proxy_bottcher_map c z) = z := by
   intro z hz
   have hpos : 0 < MLC.Quadratic.green_function c z :=
     green_function_pos_of_basin c z hz
-  have hnorm : 1 < ‖bottcher_map c z‖ :=
-    bottcher_map_norm_gt_one_of_basin c z hz hpos
+  have hnorm : 1 < ‖proxy_bottcher_map c z‖ :=
+    proxy_bottcher_map_norm_gt_one_of_basin c z hz hpos
   have hright :
-      bottcher_map c (external_ray_map c (bottcher_map c z)) = bottcher_map c z :=
-    external_ray_map_right_inverse_on_exterior c (bottcher_map c z) hnorm
+      proxy_bottcher_map c (external_ray_map c (proxy_bottcher_map c z)) = proxy_bottcher_map c z :=
+    external_ray_map_right_inverse_on_exterior c (proxy_bottcher_map c z) hnorm
   have hmem :
-      external_ray_map c (bottcher_map c z) ∈ basin_of_infinity c := by
-    refine bottcher_map_norm_gt_one_implies_basin c ?_
+      external_ray_map c (proxy_bottcher_map c z) ∈ basin_of_infinity c := by
+    refine proxy_bottcher_map_norm_gt_one_implies_basin c ?_
     simpa [hright] using hnorm
   exact external_ray_map_left_inverse_of_injOn c (s := basin_of_infinity c)
     h_inj_basin hmem hz hnorm
-lemma basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin
-    (c : ℂ) (h_inj_basin : Set.InjOn (bottcher_map c) (basin_of_infinity c)) :
+lemma basin_bottcher_pointwise_left_inverse_data_of_proxy_bottcher_map_inj_on_basin
+    (c : ℂ) (h_inj_basin : Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c)) :
     BasinBottcherPointwiseLeftInverseData c := by
   refine ⟨external_ray_map c, ?_⟩
-  exact external_ray_map_left_inverse_on_basin_of_bottcher_map_inj_on_basin c h_inj_basin
+  exact external_ray_map_left_inverse_on_basin_of_proxy_bottcher_map_inj_on_basin c h_inj_basin
 
-lemma basin_bottcher_pointwise_left_inverse_data_iff_bottcher_map_inj_on_basin
+lemma basin_bottcher_pointwise_left_inverse_data_iff_proxy_bottcher_map_inj_on_basin
     (c : ℂ) :
     BasinBottcherPointwiseLeftInverseData c ↔
-      Set.InjOn (bottcher_map c) (basin_of_infinity c) := by
+      Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c) := by
   constructor
   · intro h_data
-    exact bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c h_data
+    exact proxy_bottcher_map_inj_on_basin_of_basin_bottcher_pointwise_left_inverse_data c h_data
   · intro h_inj_basin
-    exact basin_bottcher_pointwise_left_inverse_data_of_bottcher_map_inj_on_basin c h_inj_basin
+    exact basin_bottcher_pointwise_left_inverse_data_of_proxy_bottcher_map_inj_on_basin c h_inj_basin
 lemma not_EventualSlitOverlapHyp (c : ℂ) :
     ¬ EventualSlitOverlapHyp c := by
   intro h_over
   have hw2 : 1 < ‖(2 : ℂ)‖ := by norm_num
   have hw3 : 1 < ‖(3 : ℂ)‖ := by norm_num
-  rcases bottcher_map_surj c (2 : ℂ) hw2 with ⟨z2, _hz2dom, hz2eq⟩
-  rcases bottcher_map_surj c (3 : ℂ) hw3 with ⟨z3, _hz3dom, hz3eq⟩
-  have hz2norm : 1 < ‖bottcher_map c z2‖ := by
+  rcases proxy_bottcher_map_surj c (2 : ℂ) hw2 with ⟨z2, _hz2dom, hz2eq⟩
+  rcases proxy_bottcher_map_surj c (3 : ℂ) hw3 with ⟨z3, _hz3dom, hz3eq⟩
+  have hz2norm : 1 < ‖proxy_bottcher_map c z2‖ := by
     rw [hz2eq]
     exact hw2
-  have hz3norm : 1 < ‖bottcher_map c z3‖ := by
+  have hz3norm : 1 < ‖proxy_bottcher_map c z3‖ := by
     rw [hz3eq]
     exact hw3
   have hz2_basin : z2 ∈ basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := z2) hz2norm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := z2) hz2norm
   have hz3_basin : z3 ∈ basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := z3) hz3norm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := z3) hz3norm
   have hz2_eventual : z2 ∈ eventual_slit_set c := basin_subset_eventual_slit_set c hz2_basin
   have hz3_eventual : z3 ∈ eventual_slit_set c := basin_subset_eventual_slit_set c hz3_basin
   have h_nebot :
-      Filter.NeBot (𝓝 (bottcher_map c z2) ⊓ 𝓝 (bottcher_map c z3)) :=
+      Filter.NeBot (𝓝 (proxy_bottcher_map c z2) ⊓ 𝓝 (proxy_bottcher_map c z3)) :=
     h_over z2 z3 ⟨hz2_eventual, hz2_basin⟩ ⟨hz3_eventual, hz3_basin⟩
-  have hphi_eq : bottcher_map c z2 = bottcher_map c z3 := eq_of_nhds_neBot h_nebot
+  have hphi_eq : proxy_bottcher_map c z2 = proxy_bottcher_map c z3 := eq_of_nhds_neBot h_nebot
   have h23 : (2 : ℂ) = (3 : ℂ) := by
     rw [hz2eq, hz3eq] at hphi_eq
     exact hphi_eq
@@ -585,28 +585,28 @@ lemma not_quadratic_map_iter_left_inverse_on_basin (c : ℂ) :
 
 def BasinBottcherSquareRootRightInverse (c : ℂ) (sqrt : ℂ → ℂ) : Prop :=
   ∀ z, z ∈ basin_of_infinity c →
-    sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z
+    sqrt ((proxy_bottcher_map c z) ^ 2) = proxy_bottcher_map c z
 
 lemma quadratic_map_left_inverse_on_basin_of_basin_sqrt_branch
     (c : ℂ)
     (sqrt : ℂ → ℂ)
     (h_sqrt : BasinBottcherSquareRootRightInverse c sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
-  refine ⟨fun z => external_ray_map c (sqrt (bottcher_map c z)), ?_, ?_⟩
+  refine ⟨fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)), ?_, ?_⟩
   · intro z hz
-    have hsq : sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z := h_sqrt z hz
+    have hsq : sqrt ((proxy_bottcher_map c z) ^ 2) = proxy_bottcher_map c z := h_sqrt z hz
     have hconj := h_conj z hz
     calc
-      external_ray_map c (sqrt (bottcher_map c (quadratic_map c z)))
-          = external_ray_map c (sqrt ((bottcher_map c z) ^ 2)) := by
+      external_ray_map c (sqrt (proxy_bottcher_map c (quadratic_map c z)))
+          = external_ray_map c (sqrt ((proxy_bottcher_map c z) ^ 2)) := by
               simp [hconj]
-      _ = external_ray_map c (bottcher_map c z) := by simp [hsq]
+      _ = external_ray_map c (proxy_bottcher_map c z) := by simp [hsq]
       _ = z := h_left_bottcher z hz
   · intro z hz
     exact h_maps hz
@@ -616,10 +616,10 @@ lemma EventualSlitGlobalInverseExtensionHyp_of_basin_sqrt_branch
     (sqrt : ℂ → ℂ)
     (h_sqrt : BasinBottcherSquareRootRightInverse c sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtensionHyp c := by
   have hleft :
@@ -633,10 +633,10 @@ lemma EventualSlitGlobalInverseExtendsToBasinIter_of_basin_sqrt_branch
     (sqrt : ℂ → ℂ)
     (h_sqrt : BasinBottcherSquareRootRightInverse c sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasinIter c := by
   have h_ext :
@@ -650,10 +650,10 @@ lemma quadratic_map_iter_eq_imp_eq_of_basin_sqrt_branch
     (sqrt : ℂ → ℂ)
     (h_sqrt : BasinBottcherSquareRootRightInverse c sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
@@ -665,30 +665,30 @@ lemma quadratic_map_iter_eq_imp_eq_of_basin_sqrt_branch
 
 lemma bottcher_left_inverse_on_basin_of_injective
     (c : ℂ)
-    (h_inj : Function.Injective (bottcher_map c)) :
+    (h_inj : Function.Injective (proxy_bottcher_map c)) :
     ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z := by
+      external_ray_map c (proxy_bottcher_map c z) = z := by
   intro z hz
   have hpos : 0 < green_function c z :=
     green_function_pos_of_basin c z hz
-  have hnorm : 1 < ‖bottcher_map c z‖ :=
-    bottcher_map_norm_gt_one_of_basin c z hz hpos
+  have hnorm : 1 < ‖proxy_bottcher_map c z‖ :=
+    proxy_bottcher_map_norm_gt_one_of_basin c z hz hpos
   exact bottcher_left_inv_of_injective c z hnorm h_inj
 
 lemma EventualSlitGlobalInverseExtensionHyp_of_basin_sqrt_branch_of_injective
     (c : ℂ)
     (sqrt : ℂ → ℂ)
     (h_sqrt : BasinBottcherSquareRootRightInverse c sqrt)
-    (h_inj : Function.Injective (bottcher_map c))
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+    (h_inj : Function.Injective (proxy_bottcher_map c))
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtensionHyp c := by
   have h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2 := by
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2 := by
     intro z hz
     exact bottcher_conj_on_basin c z hz
   have h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z :=
+      external_ray_map c (proxy_bottcher_map c z) = z :=
     bottcher_left_inverse_on_basin_of_injective c h_inj
   exact EventualSlitGlobalInverseExtensionHyp_of_basin_sqrt_branch c sqrt h_sqrt
     h_conj h_left_bottcher h_maps
@@ -697,8 +697,8 @@ lemma EventualSlitGlobalInverseExtendsToBasinIter_of_basin_sqrt_branch_of_inject
     (c : ℂ)
     (sqrt : ℂ → ℂ)
     (h_sqrt : BasinBottcherSquareRootRightInverse c sqrt)
-    (h_inj : Function.Injective (bottcher_map c))
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+    (h_inj : Function.Injective (proxy_bottcher_map c))
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasinIter c := by
   have h_ext :
@@ -711,8 +711,8 @@ lemma quadratic_map_iter_eq_imp_eq_of_basin_sqrt_branch_of_injective
     (c : ℂ)
     (sqrt : ℂ → ℂ)
     (h_sqrt : BasinBottcherSquareRootRightInverse c sqrt)
-    (h_inj : Function.Injective (bottcher_map c))
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+    (h_inj : Function.Injective (proxy_bottcher_map c))
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
@@ -724,14 +724,14 @@ lemma quadratic_map_iter_eq_imp_eq_of_basin_sqrt_branch_of_injective
 
 def BasinQuadraticPullbackRoot (c : ℂ) (root : ℂ → ℂ) : Prop :=
   ∀ z, z ∈ basin_of_infinity c →
-    root (quadratic_map c z) = bottcher_map c z
+    root (quadratic_map c z) = proxy_bottcher_map c z
 
 lemma quadratic_map_left_inverse_on_basin_of_pullback_root
     (c : ℂ)
     (root : ℂ → ℂ)
     (h_pull : BasinQuadraticPullbackRoot c root)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
+      external_ray_map c (proxy_bottcher_map c z) = z)
     (h_maps : MapsTo (fun z => external_ray_map c (root z))
       (basin_of_infinity c) (basin_of_infinity c)) :
     HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
@@ -739,7 +739,7 @@ lemma quadratic_map_left_inverse_on_basin_of_pullback_root
   · intro z hz
     calc
       external_ray_map c (root (quadratic_map c z))
-          = external_ray_map c (bottcher_map c z) := by
+          = external_ray_map c (proxy_bottcher_map c z) := by
               simp [h_pull z hz]
       _ = z := h_left_bottcher z hz
   · intro z hz
@@ -750,7 +750,7 @@ lemma EventualSlitGlobalInverseExtensionHyp_of_pullback_root
     (root : ℂ → ℂ)
     (h_pull : BasinQuadraticPullbackRoot c root)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
+      external_ray_map c (proxy_bottcher_map c z) = z)
     (h_maps : MapsTo (fun z => external_ray_map c (root z))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtensionHyp c := by
@@ -765,7 +765,7 @@ lemma EventualSlitGlobalInverseExtendsToBasinIter_of_pullback_root
     (root : ℂ → ℂ)
     (h_pull : BasinQuadraticPullbackRoot c root)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
+      external_ray_map c (proxy_bottcher_map c z) = z)
     (h_maps : MapsTo (fun z => external_ray_map c (root z))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasinIter c := by
@@ -779,7 +779,7 @@ lemma quadratic_map_iter_eq_imp_eq_of_pullback_root
     (root : ℂ → ℂ)
     (h_pull : BasinQuadraticPullbackRoot c root)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
+      external_ray_map c (proxy_bottcher_map c z) = z)
     (h_maps : MapsTo (fun z => external_ray_map c (root z))
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
@@ -796,7 +796,7 @@ lemma exists_BasinQuadraticPullbackRoot_of_left_inverse
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∃ root : ℂ → ℂ, BasinQuadraticPullbackRoot c root := by
   rcases hleft with ⟨g, hleft, hmap⟩
-  refine ⟨fun z => bottcher_map c (g z), ?_⟩
+  refine ⟨fun z => proxy_bottcher_map c (g z), ?_⟩
   intro z hz
   simp [hleft z hz]
 
@@ -805,17 +805,17 @@ lemma bottcher_left_inverse_on_basin_of_quadratic_left_inverse
     (hleft : HasLeftInverseOn (quadratic_map c)
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z := by
+      external_ray_map c (proxy_bottcher_map c z) = z := by
   have h_iter_eq_imp :
       ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
         (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w :=
     quadratic_map_iter_eq_imp_eq_of_left_inverse c hleft
   have h_inj_outside :
-      Set.InjOn (bottcher_map c) (outside_disk c) :=
-    bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
+      Set.InjOn (proxy_bottcher_map c) (outside_disk c) :=
+    proxy_bottcher_map_inj_on_outside_of_slit c h_iter_eq_imp
   have hpre :
-      (bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c :=
-    bottcher_map_preimage_exterior_subset_outside_of_basin c
+      (proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c :=
+    proxy_bottcher_map_preimage_exterior_subset_outside_of_basin c
       (by
         intro z hz
         simpa [outside_disk] using hz)
@@ -833,16 +833,16 @@ lemma exists_pullback_root_data_of_left_inverse
   rcases hleft with ⟨g, hleft, hmap⟩
   have h_left_bottcher :
       ∀ z, z ∈ basin_of_infinity c →
-        external_ray_map c (bottcher_map c z) = z :=
+        external_ray_map c (proxy_bottcher_map c z) = z :=
     bottcher_left_inverse_on_basin_of_quadratic_left_inverse c ⟨g, hleft, hmap⟩
-  refine ⟨fun z => bottcher_map c (g z), ?_, ?_⟩
+  refine ⟨fun z => proxy_bottcher_map c (g z), ?_, ?_⟩
   · intro z hz
     simp [hleft z hz]
   · intro z hz
     have hg : g z ∈ basin_of_infinity c := hmap z hz
-    have hlg : external_ray_map c (bottcher_map c (g z)) = g z :=
+    have hlg : external_ray_map c (proxy_bottcher_map c (g z)) = g z :=
       h_left_bottcher (g z) hg
-    have hmem : external_ray_map c (bottcher_map c (g z)) ∈ basin_of_infinity c := by
+    have hmem : external_ray_map c (proxy_bottcher_map c (g z)) ∈ basin_of_infinity c := by
       exact hlg.symm ▸ hg
     simpa using hmem
 
@@ -864,11 +864,11 @@ lemma quadratic_map_iter_eq_imp_eq_of_sqrt_branch_slitPlaneRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn slitPlaneRight sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRight)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
@@ -883,11 +883,11 @@ lemma quadratic_map_iter_eq_imp_eq_of_sqrt_branch_slitPlaneRotRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn (slitPlaneRotRight θ) sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRotRight θ)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     ∀ z w, z ∈ basin_of_infinity c → w ∈ basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w := by
@@ -897,16 +897,16 @@ lemma quadratic_map_iter_eq_imp_eq_of_sqrt_branch_slitPlaneRotRight
       h_conj h_left_bottcher h_mem h_maps
   exact quadratic_map_iter_eq_imp_eq_of_left_inverse c hleft
 
-lemma not_bottcher_map_mem_slitPlaneRight_on_basin (c : ℂ) :
-    ¬ (∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight) := by
+lemma not_proxy_bottcher_map_mem_slitPlaneRight_on_basin (c : ℂ) :
+    ¬ (∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRight) := by
   intro h_mem
   have hw : 1 < ‖(-2 : ℂ)‖ := by norm_num
-  rcases (bottcher_map_surj c (-2 : ℂ) hw) with ⟨z, _hzdom, hzw⟩
-  have hz_norm : 1 < ‖bottcher_map c z‖ := by
+  rcases (proxy_bottcher_map_surj c (-2 : ℂ) hw) with ⟨z, _hzdom, hzw⟩
+  have hz_norm : 1 < ‖proxy_bottcher_map c z‖ := by
     rw [hzw]
     exact hw
   have hz_basin : z ∈ basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := z) hz_norm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := z) hz_norm
   have hneg_mem : (-2 : ℂ) ∈ slitPlaneRight := by
     simpa [hzw] using h_mem z hz_basin
   have hneg_not_mem : (-2 : ℂ) ∉ slitPlaneRight := by
@@ -916,13 +916,13 @@ lemma not_bottcher_map_mem_slitPlaneRight_on_basin (c : ℂ) :
 lemma no_sqrt_branch_slitPlaneRight_data_on_full_basin (c : ℂ) :
     ¬ ∃ sqrt : ℂ → ℂ,
       SquareRootRightInverseOn slitPlaneRight sqrt ∧
-      (∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight) := by
+      (∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRight) := by
   intro h
   rcases h with ⟨sqrt, _h_sqrt, h_mem⟩
-  exact not_bottcher_map_mem_slitPlaneRight_on_basin c h_mem
+  exact not_proxy_bottcher_map_mem_slitPlaneRight_on_basin c h_mem
 
-lemma not_bottcher_map_mem_slitPlaneRotRight_on_basin (c : ℂ) (θ : ℝ) :
-    ¬ (∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ) := by
+lemma not_proxy_bottcher_map_mem_slitPlaneRotRight_on_basin (c : ℂ) (θ : ℝ) :
+    ¬ (∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRotRight θ) := by
   intro h_mem
   let w : ℂ := (-2 : ℂ) * Complex.exp (Complex.I * θ / 2)
   have hw : 1 < ‖w‖ := by
@@ -936,12 +936,12 @@ lemma not_bottcher_map_mem_slitPlaneRotRight_on_basin (c : ℂ) (θ : ℝ) :
           _ = 1 := by simp
       simp [hExp1]
     linarith [hw_norm]
-  rcases (bottcher_map_surj c w hw) with ⟨z, _hzdom, hzw⟩
-  have hz_norm : 1 < ‖bottcher_map c z‖ := by
+  rcases (proxy_bottcher_map_surj c w hw) with ⟨z, _hzdom, hzw⟩
+  have hz_norm : 1 < ‖proxy_bottcher_map c z‖ := by
     rw [hzw]
     exact hw
   have hz_basin : z ∈ basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := z) hz_norm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := z) hz_norm
   have hw_mem : w ∈ slitPlaneRotRight θ := by
     simpa [hzw] using h_mem z hz_basin
   have hexp_cancel :
@@ -967,31 +967,31 @@ lemma not_bottcher_map_mem_slitPlaneRotRight_on_basin (c : ℂ) (θ : ℝ) :
 lemma no_sqrt_branch_slitPlaneRotRight_data_on_full_basin (c : ℂ) (θ : ℝ) :
     ¬ ∃ sqrt : ℂ → ℂ,
       SquareRootRightInverseOn (slitPlaneRotRight θ) sqrt ∧
-      (∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ) := by
+      (∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRotRight θ) := by
   intro h
   rcases h with ⟨sqrt, _h_sqrt, h_mem⟩
-  exact not_bottcher_map_mem_slitPlaneRotRight_on_basin c θ h_mem
+  exact not_proxy_bottcher_map_mem_slitPlaneRotRight_on_basin c θ h_mem
 
 lemma no_BasinBottcherSquareRootRightInverse (c : ℂ) :
     ¬ ∃ sqrt : ℂ → ℂ, BasinBottcherSquareRootRightInverse c sqrt := by
   intro h
   rcases h with ⟨sqrt, h_sqrt⟩
   have h2_norm : 1 < ‖(2 : ℂ)‖ := by norm_num
-  rcases (bottcher_map_surj c (2 : ℂ) h2_norm) with ⟨z2, _hz2dom, hz2eq⟩
-  have hz2_norm : 1 < ‖bottcher_map c z2‖ := by
+  rcases (proxy_bottcher_map_surj c (2 : ℂ) h2_norm) with ⟨z2, _hz2dom, hz2eq⟩
+  have hz2_norm : 1 < ‖proxy_bottcher_map c z2‖ := by
     rw [hz2eq]
     exact h2_norm
   have hz2_basin : z2 ∈ basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := z2) hz2_norm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := z2) hz2_norm
   have hs2 : sqrt ((2 : ℂ) ^ 2) = (2 : ℂ) := by
     simpa [hz2eq] using h_sqrt z2 hz2_basin
   have hneg2_norm : 1 < ‖(-2 : ℂ)‖ := by norm_num
-  rcases (bottcher_map_surj c (-2 : ℂ) hneg2_norm) with ⟨zneg2, _hzneg2dom, hzneg2eq⟩
-  have hzneg2_norm : 1 < ‖bottcher_map c zneg2‖ := by
+  rcases (proxy_bottcher_map_surj c (-2 : ℂ) hneg2_norm) with ⟨zneg2, _hzneg2dom, hzneg2eq⟩
+  have hzneg2_norm : 1 < ‖proxy_bottcher_map c zneg2‖ := by
     rw [hzneg2eq]
     exact hneg2_norm
   have hzneg2_basin : zneg2 ∈ basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := zneg2) hzneg2_norm
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := zneg2) hzneg2_norm
   have hsneg2 : sqrt ((-2 : ℂ) ^ 2) = (-2 : ℂ) := by
     simpa [hzneg2eq] using h_sqrt zneg2 hzneg2_basin
   have hsneg2' : sqrt ((2 : ℂ) ^ 2) = (-2 : ℂ) := by
@@ -1003,7 +1003,7 @@ lemma no_BasinBottcherSquareRootRightInverse (c : ℂ) :
 lemma no_basin_sqrt_branch_data_on_full_basin (c : ℂ) :
     ¬ ∃ sqrt : ℂ → ℂ,
       BasinBottcherSquareRootRightInverse c sqrt ∧
-      MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
         (basin_of_infinity c) (basin_of_infinity c) := by
   intro h
   rcases h with ⟨sqrt, h_sqrt, _h_maps⟩
@@ -1055,7 +1055,7 @@ noncomputable def eventualSlitBridgeCandidate (c : ℂ)
   exact fun z =>
     if hz : z ∈ basin_of_infinity c then
       (Classical.choose hG)
-        (bottcher_map c ((quadratic_map c)^[eventualSlitEscapeTime c z] z))
+        (proxy_bottcher_map c ((quadratic_map c)^[eventualSlitEscapeTime c z] z))
     else z
 
 lemma eventualSlitBridgeCandidate_eq_escape_iterate
@@ -1072,18 +1072,18 @@ lemma eventualSlitBridgeCandidate_eq_escape_iterate
   have hNbasin : (quadratic_map c)^[N] z ∈ basin_of_infinity c :=
     (hfiter N) hz
   have hpoint :
-      (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] z)) =
+      (Classical.choose hG) (proxy_bottcher_map c ((quadratic_map c)^[N] z)) =
         (quadratic_map c)^[N] z :=
     bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG
       ((quadratic_map c)^[N] z) ⟨hNslit, hNbasin⟩
   have hcand :
       eventualSlitBridgeCandidate c hA hG z =
-        (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] z)) := by
+        (Classical.choose hG) (proxy_bottcher_map c ((quadratic_map c)^[N] z)) := by
     classical
     simpa [N] using (by simp [eventualSlitBridgeCandidate, hz] :
       eventualSlitBridgeCandidate c hA hG z =
         (Classical.choose hG)
-          (bottcher_map c ((quadratic_map c)^[eventualSlitEscapeTime c z] z)))
+          (proxy_bottcher_map c ((quadratic_map c)^[eventualSlitEscapeTime c z] z)))
   exact hcand.trans hpoint
 
 lemma eventualSlitBridgeCandidate_mem_basin
@@ -1104,7 +1104,7 @@ lemma eventualSlitBridgeCandidate_repr
     ∀ z, z ∈ basin_of_infinity c →
       ∃ N, (quadratic_map c)^[N] z ∈ eventual_slit_set c ∧
         eventualSlitBridgeCandidate c hA hG z =
-          (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] z)) := by
+          (Classical.choose hG) (proxy_bottcher_map c ((quadratic_map c)^[N] z)) := by
   intro z hz
   refine ⟨eventualSlitEscapeTime c z, eventualSlitEscapeTime_spec c hz, ?_⟩
   classical
@@ -1199,8 +1199,8 @@ def EventualSlitGlobalInverseIterateCompatibility (c : ℂ)
     ∀ N M,
       (quadratic_map c)^[N] z ∈ eventual_slit_set c →
       (quadratic_map c)^[M] z ∈ eventual_slit_set c →
-      (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] z)) =
-        (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[M] z))
+      (Classical.choose hG) (proxy_bottcher_map c ((quadratic_map c)^[N] z)) =
+        (Classical.choose hG) (proxy_bottcher_map c ((quadratic_map c)^[M] z))
 
 def EventualSlitGlobalInverseExtensionBridge (c : ℂ)
     (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA) : Prop :=
@@ -1210,7 +1210,7 @@ def EventualSlitGlobalInverseExtensionBridge (c : ℂ)
     (∀ z, z ∈ basin_of_infinity c →
       ∃ N, (quadratic_map c)^[N] z ∈ eventual_slit_set c ∧
         g z =
-          (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] z)))
+          (Classical.choose hG) (proxy_bottcher_map c ((quadratic_map c)^[N] z)))
 
 lemma EventualSlitGlobalInverseExtensionBridge_of_candidate_left_inverse
     (c : ℂ) (hA : EventualSlitInverseAtlas c) (hG : GlobalInverseOnEventualSlit c hA)
@@ -1246,7 +1246,7 @@ lemma not_EventualSlitGlobalInverseExtensionBridge
   have hNbasin : (quadratic_map c)^[N] (quadratic_map c z) ∈ basin_of_infinity c :=
     (hfiter N) hzq
   have hchoose :
-      (Classical.choose hG) (bottcher_map c ((quadratic_map c)^[N] (quadratic_map c z))) =
+      (Classical.choose hG) (proxy_bottcher_map c ((quadratic_map c)^[N] (quadratic_map c z))) =
         (quadratic_map c)^[N] (quadratic_map c z) :=
     bottcher_left_inverse_pointwise_on_eventual_slit_of_global_inverse c hA hG
       ((quadratic_map c)^[N] (quadratic_map c z)) ⟨hNslit, hNbasin⟩
@@ -1295,11 +1295,11 @@ lemma EventualSlitGlobalInverseExtensionHyp_of_sqrt_branch_slitPlaneRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn slitPlaneRight sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRight)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtensionHyp c := by
   have hleft :
@@ -1313,11 +1313,11 @@ lemma EventualSlitGlobalInverseExtendsToBasinIter_of_sqrt_branch_slitPlaneRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn slitPlaneRight sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRight)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasinIter c := by
   have h_ext :
@@ -1331,11 +1331,11 @@ lemma EventualSlitGlobalInverseExtendsToBasin_of_sqrt_branch_slitPlaneRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn slitPlaneRight sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRight)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasin c hA _hG := by
   have hleft :
@@ -1349,11 +1349,11 @@ lemma EventualSlitGlobalInverseExtensionHyp_of_sqrt_branch_slitPlaneRotRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn (slitPlaneRotRight θ) sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRotRight θ)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtensionHyp c := by
   have hleft :
@@ -1367,11 +1367,11 @@ lemma EventualSlitGlobalInverseExtendsToBasinIter_of_sqrt_branch_slitPlaneRotRig
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn (slitPlaneRotRight θ) sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRotRight θ)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasinIter c := by
   have h_ext :
@@ -1386,11 +1386,11 @@ lemma EventualSlitGlobalInverseExtendsToBasin_of_sqrt_branch_slitPlaneRotRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn (slitPlaneRotRight θ) sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRotRight θ)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     EventualSlitGlobalInverseExtendsToBasin c hA _hG := by
   have hleft :

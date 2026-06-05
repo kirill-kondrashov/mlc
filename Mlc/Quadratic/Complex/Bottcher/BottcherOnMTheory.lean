@@ -77,16 +77,16 @@ lemma bottcher_approx_differentiableOn_slit (c : ℂ) (n : ℕ) :
     (s := slit_orbit c) (c := (1 : ℂ) / (2 : ℂ) ^ n)
     hdiff.differentiableOn h0)
 
-lemma bottcher_map_continuousOn_slit_orbit (c : ℂ) :
-    ContinuousOn (Quadratic.bottcher_map c) (slit_orbit c ∩ Quadratic.basin_of_infinity c) := by
+lemma proxy_bottcher_map_continuousOn_slit_orbit (c : ℂ) :
+    ContinuousOn (Quadratic.proxy_bottcher_map c) (slit_orbit c ∩ Quadratic.basin_of_infinity c) := by
   let F : ℕ → ℂ → ℂ :=
     fun n z => ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
   have hseq :
-      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+      TendstoLocallyUniformlyOn F (Quadratic.proxy_bottcher_map c) atTop
         (Quadratic.basin_of_infinity c) := by
     simpa [F, quadratic_map] using (Quadratic.bottcher_seq_converges c)
   have hseq' :
-      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+      TendstoLocallyUniformlyOn F (Quadratic.proxy_bottcher_map c) atTop
         (slit_orbit c ∩ Quadratic.basin_of_infinity c) :=
     hseq.mono (by intro z hz; exact hz.2)
   have hcont : ∀ n, ContinuousOn (F n) (slit_orbit c ∩ Quadratic.basin_of_infinity c) := by
@@ -99,19 +99,19 @@ lemma bottcher_map_continuousOn_slit_orbit (c : ℂ) :
     Filter.Frequently.of_forall hcont
   exact TendstoLocallyUniformlyOn.continuousOn hseq' hcont'
 
-theorem bottcher_map_differentiableOn_open
+theorem proxy_bottcher_map_differentiableOn_open
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c) :
-    DifferentiableOn ℂ (Quadratic.bottcher_map c) U := by
+    DifferentiableOn ℂ (Quadratic.proxy_bottcher_map c) U := by
   let F : ℕ → ℂ → ℂ :=
     fun n z => ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
   have hseq :
-      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+      TendstoLocallyUniformlyOn F (Quadratic.proxy_bottcher_map c) atTop
         (Quadratic.basin_of_infinity c) := by
     simpa [F, quadratic_map] using (Quadratic.bottcher_seq_converges c)
   have hseq' :
-      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop U :=
+      TendstoLocallyUniformlyOn F (Quadratic.proxy_bottcher_map c) atTop U :=
     hseq.mono (by intro z hz; exact hUbasin hz)
   have hF :
       ∀ᶠ n in atTop, DifferentiableOn ℂ (F n) U :=
@@ -119,22 +119,22 @@ theorem bottcher_map_differentiableOn_open
       (bottcher_approx_differentiableOn_slit c n).mono (by intro z hz; exact hUslit hz))
   exact TendstoLocallyUniformlyOn.differentiableOn hseq' hF hUopen
 
-theorem bottcher_map_analyticOnNhd_open
+theorem proxy_bottcher_map_analyticOnNhd_open
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c) :
-    AnalyticOnNhd ℂ (Quadratic.bottcher_map c) U := by
-  have hdiff : DifferentiableOn ℂ (Quadratic.bottcher_map c) U :=
-    bottcher_map_differentiableOn_open c U hUopen hUslit hUbasin
+    AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) U := by
+  have hdiff : DifferentiableOn ℂ (Quadratic.proxy_bottcher_map c) U :=
+    proxy_bottcher_map_differentiableOn_open c U hUopen hUslit hUbasin
   exact (analyticOnNhd_iff_differentiableOn hUopen).2 hdiff
 
-theorem bottcher_map_analyticAt_of_open
+theorem proxy_bottcher_map_analyticAt_of_open
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
     {z : ℂ} (hz : z ∈ U) :
-    AnalyticAt ℂ (Quadratic.bottcher_map c) z := by
-  exact (bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin) z hz
+    AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z := by
+  exact (proxy_bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin) z hz
 
 theorem local_inverse_of_hasStrictDerivAt {f : ℂ → ℂ} {f' z : ℂ}
     (h : HasStrictDerivAt f f' z) (h' : f' ≠ 0) :
@@ -166,69 +166,69 @@ theorem hasStrictDerivAt_of_differentiableOn
     hcontdiff.contDiffAt (hUopen.mem_nhds hz)
   exact hcontdiffAt.hasStrictDerivAt (by decide)
 
-theorem bottcher_map_hasStrictDerivAt_of_open
+theorem proxy_bottcher_map_hasStrictDerivAt_of_open
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
     {z : ℂ} (hz : z ∈ U) :
-    HasStrictDerivAt (Quadratic.bottcher_map c)
-      (deriv (Quadratic.bottcher_map c) z) z := by
-  have hdiff : DifferentiableOn ℂ (Quadratic.bottcher_map c) U :=
-    bottcher_map_differentiableOn_open c U hUopen hUslit hUbasin
+    HasStrictDerivAt (Quadratic.proxy_bottcher_map c)
+      (deriv (Quadratic.proxy_bottcher_map c) z) z := by
+  have hdiff : DifferentiableOn ℂ (Quadratic.proxy_bottcher_map c) U :=
+    proxy_bottcher_map_differentiableOn_open c U hUopen hUslit hUbasin
   exact hasStrictDerivAt_of_differentiableOn hUopen hdiff hz
 
-theorem bottcher_map_eventually_right_inverse_of_open
+theorem proxy_bottcher_map_eventually_right_inverse_of_open
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
     {z : ℂ} (hz : z ∈ U)
-    (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    ∀ᶠ y in 𝓝 (Quadratic.bottcher_map c z),
-      Quadratic.bottcher_map c
+    (hderiv : deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
+    ∀ᶠ y in 𝓝 (Quadratic.proxy_bottcher_map c z),
+      Quadratic.proxy_bottcher_map c
           (HasStrictDerivAt.localInverse
-            (Quadratic.bottcher_map c)
-            (deriv (Quadratic.bottcher_map c) z) z
-            (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz)
+            (Quadratic.proxy_bottcher_map c)
+            (deriv (Quadratic.proxy_bottcher_map c) z) z
+            (proxy_bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz)
             hderiv y) = y := by
   exact local_inverse_of_hasStrictDerivAt
-    (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz) hderiv
+    (proxy_bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz) hderiv
 
 noncomputable def external_ray_map_local
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
-    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
     ℂ → ℂ :=
   HasStrictDerivAt.localInverse
-    (Quadratic.bottcher_map c)
-    (deriv (Quadratic.bottcher_map c) z) z
-    (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz) hderiv
+    (Quadratic.proxy_bottcher_map c)
+    (deriv (Quadratic.proxy_bottcher_map c) z) z
+    (proxy_bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz) hderiv
 
 theorem external_ray_map_local_right_inverse
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
-    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
-    ∀ᶠ y in 𝓝 (Quadratic.bottcher_map c z),
-      Quadratic.bottcher_map c
+    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
+    ∀ᶠ y in 𝓝 (Quadratic.proxy_bottcher_map c z),
+      Quadratic.proxy_bottcher_map c
         (external_ray_map_local c U hUopen hUslit hUbasin z hz hderiv y) = y := by
   simpa [external_ray_map_local] using
-    (bottcher_map_eventually_right_inverse_of_open c U hUopen hUslit hUbasin hz hderiv)
+    (proxy_bottcher_map_eventually_right_inverse_of_open c U hUopen hUslit hUbasin hz hderiv)
 
 theorem external_ray_map_local_left_inverse
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
     (hUslit : U ⊆ slit_orbit c)
     (hUbasin : U ⊆ Quadratic.basin_of_infinity c)
-    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.bottcher_map c) z ≠ 0) :
+    (z : ℂ) (hz : z ∈ U) (hderiv : deriv (Quadratic.proxy_bottcher_map c) z ≠ 0) :
     ∀ᶠ x in 𝓝 z,
       external_ray_map_local c U hUopen hUslit hUbasin z hz hderiv
-        (Quadratic.bottcher_map c x) = x := by
+        (Quadratic.proxy_bottcher_map c x) = x := by
   have h :=
     HasStrictDerivAt.eventually_left_inverse
-      (f := Quadratic.bottcher_map c)
-      (f' := deriv (Quadratic.bottcher_map c) z)
+      (f := Quadratic.proxy_bottcher_map c)
+      (f' := deriv (Quadratic.proxy_bottcher_map c) z)
       (a := z)
-      (bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz)
+      (proxy_bottcher_map_hasStrictDerivAt_of_open c U hUopen hUslit hUbasin hz)
       hderiv
   simpa [external_ray_map_local] using h
 
@@ -396,21 +396,21 @@ lemma cpow_one_div_pow_succ_eq_sq (x : ℂ) (n : ℕ) :
 
 theorem bottcher_conj_on_basin (c : ℂ) (z : ℂ)
     (hz : z ∈ Quadratic.basin_of_infinity c) :
-    Quadratic.bottcher_map c (quadratic_map c z) =
-      (Quadratic.bottcher_map c z) ^ 2 := by
+    Quadratic.proxy_bottcher_map c (quadratic_map c z) =
+      (Quadratic.proxy_bottcher_map c z) ^ 2 := by
   let F : ℕ → ℂ → ℂ :=
     fun n z => ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
   have hseq :
-      TendstoLocallyUniformlyOn F (Quadratic.bottcher_map c) atTop
+      TendstoLocallyUniformlyOn F (Quadratic.proxy_bottcher_map c) atTop
         (Quadratic.basin_of_infinity c) := by
     simpa [F, quadratic_map] using (Quadratic.bottcher_seq_converges c)
-  have hz_tend : Tendsto (fun n => F n z) atTop (𝓝 (Quadratic.bottcher_map c z)) :=
+  have hz_tend : Tendsto (fun n => F n z) atTop (𝓝 (Quadratic.proxy_bottcher_map c z)) :=
     hseq.tendsto_at hz
   have hzf : quadratic_map c z ∈ Quadratic.basin_of_infinity c :=
     (quadratic_basin_forward_invariant c) hz
   have hfz_tend :
       Tendsto (fun n => F n (quadratic_map c z)) atTop
-        (𝓝 (Quadratic.bottcher_map c (quadratic_map c z))) :=
+        (𝓝 (Quadratic.proxy_bottcher_map c (quadratic_map c z))) :=
     hseq.tendsto_at hzf
   have hshift : ∀ n, F n (quadratic_map c z) = (F (n + 1) z) ^ 2 := by
     intro n
@@ -426,23 +426,23 @@ theorem bottcher_conj_on_basin (c : ℂ) (z : ℂ)
       _ = (F (n + 1) z) ^ 2 := by
               rfl
   have hz_shift :
-      Tendsto (fun n => F (n + 1) z) atTop (𝓝 (Quadratic.bottcher_map c z)) :=
+      Tendsto (fun n => F (n + 1) z) atTop (𝓝 (Quadratic.proxy_bottcher_map c z)) :=
     (tendsto_add_atTop_iff_nat (f := fun n => F n z) (k := 1)).2 hz_tend
   have hz_sq :
       Tendsto (fun n => (F (n + 1) z) ^ 2) atTop
-        (𝓝 ((Quadratic.bottcher_map c z) ^ 2)) := by
+        (𝓝 ((Quadratic.proxy_bottcher_map c z) ^ 2)) := by
     have hcont : Continuous (fun w : ℂ => w ^ 2) := (continuous_id.pow 2)
     exact (hcont.tendsto _).comp hz_shift
   have hfz_tend' :
       Tendsto (fun n => (F (n + 1) z) ^ 2) atTop
-        (𝓝 (Quadratic.bottcher_map c (quadratic_map c z))) := by
+        (𝓝 (Quadratic.proxy_bottcher_map c (quadratic_map c z))) := by
     simpa [hshift] using hfz_tend
   exact tendsto_nhds_unique hfz_tend' hz_sq
 
 theorem bottcher_conj_iter (c : ℂ) :
     ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n) := by
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n) := by
   intro n z hz
   induction n with
   | zero =>
@@ -458,22 +458,22 @@ theorem bottcher_conj_iter (c : ℂ) :
           MapsTo.iterate hmap n
         exact hiter hz
       have h1 :
-          Quadratic.bottcher_map c ((quadratic_map c)^[n.succ] z) =
-            (Quadratic.bottcher_map c ((quadratic_map c)^[n] z)) ^ 2 := by
+          Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n.succ] z) =
+            (Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z)) ^ 2 := by
         simpa [Function.iterate_succ_apply'] using
           (bottcher_conj_on_basin c ((quadratic_map c)^[n] z) hz')
       calc
-        Quadratic.bottcher_map c ((quadratic_map c)^[n.succ] z)
-            = (Quadratic.bottcher_map c ((quadratic_map c)^[n] z)) ^ 2 := h1
-        _ = ((Quadratic.bottcher_map c z) ^ (2 ^ n)) ^ 2 := by
+        Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n.succ] z)
+            = (Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z)) ^ 2 := h1
+        _ = ((Quadratic.proxy_bottcher_map c z) ^ (2 ^ n)) ^ 2 := by
               simp [ih]
-        _ = (Quadratic.bottcher_map c z) ^ (2 ^ n * 2) := by
+        _ = (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n * 2) := by
               simp [pow_mul]
-        _ = (Quadratic.bottcher_map c z) ^ (2 ^ n.succ) := by
+        _ = (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n.succ) := by
               simp [pow_succ, mul_comm]
 
-axiom bottcher_map_inj_on_K (c : ℂ) :
-    Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c)
+axiom proxy_bottcher_map_inj_on_K (c : ℂ) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (MLC.Quadratic.K c)
 
 theorem basin_of_infinity_contains_large_ball (c : ℂ) :
     outside_disk c ⊆ basin_of_infinity c := by
@@ -502,49 +502,49 @@ theorem outside_disk_iterate_mem
 
 theorem bottcher_left_inv_of_injective_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c)
-    (z : ℂ) (h_norm : 1 < ‖bottcher_map c z‖)
-    (h_inj : Function.Injective (bottcher_map c)) :
-    Quadratic.external_ray_map_of_data h_data (bottcher_map c z) = z := by
+    (z : ℂ) (h_norm : 1 < ‖proxy_bottcher_map c z‖)
+    (h_inj : Function.Injective (proxy_bottcher_map c)) :
+    Quadratic.external_ray_map_of_data h_data (proxy_bottcher_map c z) = z := by
   have hright :
-      bottcher_map c (Quadratic.external_ray_map_of_data h_data (bottcher_map c z)) =
-        bottcher_map c z := by
+      proxy_bottcher_map c (Quadratic.external_ray_map_of_data h_data (proxy_bottcher_map c z)) =
+        proxy_bottcher_map c z := by
     simpa using Quadratic.external_ray_map_of_data_right_inverse h_data
-      (bottcher_map c z) h_norm
+      (proxy_bottcher_map c z) h_norm
   exact h_inj hright
 
 theorem bottcher_left_inv_of_injective
-    (c : ℂ) (z : ℂ) (h_norm : 1 < ‖bottcher_map c z‖)
-    (h_inj : Function.Injective (bottcher_map c)) :
-    external_ray_map c (bottcher_map c z) = z := by
+    (c : ℂ) (z : ℂ) (h_norm : 1 < ‖proxy_bottcher_map c z‖)
+    (h_inj : Function.Injective (proxy_bottcher_map c)) :
+    external_ray_map c (proxy_bottcher_map c z) = z := by
   simpa [Quadratic.external_ray_map] using
     bottcher_left_inv_of_injective_of_data (Quadratic.external_ray_map_data c) z h_norm h_inj
 
 theorem external_ray_map_right_inverse_on_exterior_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) (w : ℂ) (hw : 1 < ‖w‖) :
-    Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w := by
+    Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w := by
   simpa using Quadratic.external_ray_map_of_data_right_inverse h_data w hw
 
 theorem external_ray_map_right_inverse_on_exterior
     (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    Quadratic.bottcher_map c (Quadratic.external_ray_map c w) = w := by
-  have hw' : w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c :=
-    Quadratic.bottcher_map_surj c w hw
+    Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map c w) = w := by
+  have hw' : w ∈ Quadratic.proxy_bottcher_map c '' Quadratic.bottcher_domain c :=
+    Quadratic.proxy_bottcher_map_surj c w hw
   exact Quadratic.bottcher_right_inv_of_mem c w hw' hw
 
 theorem external_ray_map_mem_outside_of_data {c : ℂ}
     (h_data : Quadratic.ExternalRayMapData c)
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
+    (hpre : (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
     {w : ℂ} (hw : 1 < ‖w‖) :
     Quadratic.external_ray_map_of_data h_data w ∈ outside_disk c := by
-  have hright : Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w :=
+  have hright : Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map_of_data h_data w) = w :=
     external_ray_map_right_inverse_on_exterior_of_data h_data w hw
   have hpre' : Quadratic.external_ray_map_of_data h_data w ∈
-      (Quadratic.bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
+      (Quadratic.proxy_bottcher_map c) ⁻¹' {z : ℂ | 1 < ‖z‖} := by
     simp [Set.preimage, hright, hw]
   exact hpre hpre'
 
 theorem external_ray_map_mem_outside (c : ℂ)
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
+    (hpre : (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
     {w : ℂ} (hw : 1 < ‖w‖) :
     Quadratic.external_ray_map c w ∈ outside_disk c := by
   simpa [Quadratic.external_ray_map] using
@@ -564,7 +564,7 @@ theorem external_ray_map_continuousOn_exterior (c : ℂ) :
 theorem external_ray_map_eventually_right_inverse_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) (w : ℂ) (hw : 1 < ‖w‖) :
     ∀ᶠ y in 𝓝 w,
-      Quadratic.bottcher_map c (Quadratic.external_ray_map_of_data h_data y) = y := by
+      Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map_of_data h_data y) = y := by
   have hopen : IsOpen {y : ℂ | 1 < ‖y‖} := by
     simpa using (isOpen_lt continuous_const continuous_norm)
   have hmem : w ∈ {y : ℂ | 1 < ‖y‖} := hw
@@ -577,51 +577,51 @@ theorem external_ray_map_eventually_right_inverse_of_data
 theorem external_ray_map_eventually_right_inverse
     (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
     ∀ᶠ y in 𝓝 w,
-      Quadratic.bottcher_map c (Quadratic.external_ray_map c y) = y := by
+      Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map c y) = y := by
   simpa [Quadratic.external_ray_map] using
     external_ray_map_eventually_right_inverse_of_data
       (Quadratic.external_ray_map_data c) w hw
 
 theorem external_ray_map_left_inverse_of_injOn_of_data
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) {s : Set ℂ} {z : ℂ}
-    (hsinj : Set.InjOn (Quadratic.bottcher_map c) s)
-    (hmem : Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) ∈ s)
-    (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.bottcher_map c z‖) :
-    Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z) = z := by
+    (hsinj : Set.InjOn (Quadratic.proxy_bottcher_map c) s)
+    (hmem : Quadratic.external_ray_map_of_data h_data (Quadratic.proxy_bottcher_map c z) ∈ s)
+    (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.proxy_bottcher_map c z‖) :
+    Quadratic.external_ray_map_of_data h_data (Quadratic.proxy_bottcher_map c z) = z := by
   have hright :
-      Quadratic.bottcher_map c
-          (Quadratic.external_ray_map_of_data h_data (Quadratic.bottcher_map c z)) =
-        Quadratic.bottcher_map c z :=
+      Quadratic.proxy_bottcher_map c
+          (Quadratic.external_ray_map_of_data h_data (Quadratic.proxy_bottcher_map c z)) =
+        Quadratic.proxy_bottcher_map c z :=
     external_ray_map_right_inverse_on_exterior_of_data h_data
-      (Quadratic.bottcher_map c z) hnorm
+      (Quadratic.proxy_bottcher_map c z) hnorm
   exact hsinj hmem hzs (by simpa using hright)
 
 theorem external_ray_map_left_inverse_of_injOn
     (c : ℂ) {s : Set ℂ} {z : ℂ}
-    (hsinj : Set.InjOn (Quadratic.bottcher_map c) s)
-    (hmem : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) ∈ s)
-    (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.bottcher_map c z‖) :
-    Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+    (hsinj : Set.InjOn (Quadratic.proxy_bottcher_map c) s)
+    (hmem : Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) ∈ s)
+    (hzs : z ∈ s) (hnorm : 1 < ‖Quadratic.proxy_bottcher_map c z‖) :
+    Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z := by
   simpa [Quadratic.external_ray_map] using
     external_ray_map_left_inverse_of_injOn_of_data (Quadratic.external_ray_map_data c)
       hsinj hmem hzs hnorm
 
-theorem bottcher_map_norm_gt_one_of_basin
+theorem proxy_bottcher_map_norm_gt_one_of_basin
     (c : ℂ) (z : ℂ) (_hz : z ∈ Quadratic.basin_of_infinity c)
     (hpos : 0 < MLC.Quadratic.green_function c z) :
-    1 < ‖Quadratic.bottcher_map c z‖ := by
-  -- For the current proxy, `‖bottcher_map c z‖ = exp(green_function c z)` and `exp` is > 1 for positive input.
-  have hnorm : ‖Quadratic.bottcher_map c z‖ =
+    1 < ‖Quadratic.proxy_bottcher_map c z‖ := by
+  -- For the current proxy, `‖proxy_bottcher_map c z‖ = exp(green_function c z)` and `exp` is > 1 for positive input.
+  have hnorm : ‖Quadratic.proxy_bottcher_map c z‖ =
       Real.exp (MLC.Quadratic.green_function c z) :=
     Quadratic.norm_bottcher_eq_exp_green c z
   have hgt : 1 < Real.exp (MLC.Quadratic.green_function c z) := by
     simpa using (Real.one_lt_exp_iff.mpr hpos)
   simpa [hnorm] using hgt
 
-theorem bottcher_map_norm_gt_one_implies_basin (c : ℂ) {z : ℂ}
-    (hz : 1 < ‖Quadratic.bottcher_map c z‖) :
+theorem proxy_bottcher_map_norm_gt_one_implies_basin (c : ℂ) {z : ℂ}
+    (hz : 1 < ‖Quadratic.proxy_bottcher_map c z‖) :
     z ∈ Quadratic.basin_of_infinity c := by
-  have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+  have hnorm' : ‖Quadratic.proxy_bottcher_map c z‖ =
       Real.exp (MLC.Quadratic.green_function c z) :=
     Quadratic.norm_bottcher_eq_exp_green c z
   have hpos : 0 < MLC.Quadratic.green_function c z := by
@@ -646,61 +646,61 @@ theorem green_function_pos_of_basin
 theorem bottcher_left_inv_of_basin
     (c : ℂ) (z : ℂ) (hz : z ∈ Quadratic.basin_of_infinity c)
     (hpos : 0 < MLC.Quadratic.green_function c z)
-    (h_inj : Function.Injective (Quadratic.bottcher_map c)) :
-    Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
-  have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
-    bottcher_map_norm_gt_one_of_basin c z hz hpos
+    (h_inj : Function.Injective (Quadratic.proxy_bottcher_map c)) :
+    Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z := by
+  have hnorm : 1 < ‖Quadratic.proxy_bottcher_map c z‖ :=
+    proxy_bottcher_map_norm_gt_one_of_basin c z hz hpos
   exact bottcher_left_inv_of_injective c z hnorm h_inj
 
 theorem bottcher_left_inv_of_basin'
     (c : ℂ) (z : ℂ) (hz : z ∈ Quadratic.basin_of_infinity c)
-    (h_inj : Function.Injective (Quadratic.bottcher_map c)) :
-    Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+    (h_inj : Function.Injective (Quadratic.proxy_bottcher_map c)) :
+    Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z := by
   have hpos : 0 < MLC.Quadratic.green_function c z :=
     green_function_pos_of_basin c z hz
   exact bottcher_left_inv_of_basin c z hz hpos h_inj
 
 theorem bottcher_theorem_outside (c : ℂ)
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
-    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+    (hpre : (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
+    (h_inj_outside : Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c)) :
     ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z := by
   intro z hz
   have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
     outside_disk_subset_quadratic_basin c hz
   have hpos : 0 < MLC.Quadratic.green_function c z :=
     green_function_pos_of_basin c z hz_basin
-  have hnorm : 1 < ‖Quadratic.bottcher_map c z‖ :=
-    bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
-  have hmem : Quadratic.external_ray_map c (Quadratic.bottcher_map c z) ∈ outside_disk c :=
+  have hnorm : 1 < ‖Quadratic.proxy_bottcher_map c z‖ :=
+    proxy_bottcher_map_norm_gt_one_of_basin c z hz_basin hpos
+  have hmem : Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) ∈ outside_disk c :=
     external_ray_map_mem_outside c hpre hnorm
   exact external_ray_map_left_inverse_of_injOn c (s := outside_disk c)
     h_inj_outside hmem hz hnorm
 
 lemma bottcher_left_inv_outside (c : ℂ)
-    (hpre : (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
-    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+    (hpre : (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c)
+    (h_inj_outside : Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c)) :
     ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z :=
   bottcher_theorem_outside c hpre h_inj_outside
 
-lemma bottcher_map_preimage_exterior_subset_outside_of_basin
+lemma proxy_bottcher_map_preimage_exterior_subset_outside_of_basin
     (c : ℂ)
     (hbasin : ∀ z, z ∈ Quadratic.basin_of_infinity c → z ∈ outside_disk c) :
-    (Quadratic.bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c := by
+    (Quadratic.proxy_bottcher_map c) ⁻¹' {w : ℂ | 1 < ‖w‖} ⊆ outside_disk c := by
   intro z hz
-  have hz' : 1 < ‖Quadratic.bottcher_map c z‖ := by
+  have hz' : 1 < ‖Quadratic.proxy_bottcher_map c z‖ := by
     simpa [Set.preimage] using hz
   have hz_basin : z ∈ Quadratic.basin_of_infinity c :=
-    bottcher_map_norm_gt_one_implies_basin c (z := z) hz'
+    proxy_bottcher_map_norm_gt_one_implies_basin c (z := z) hz'
   exact hbasin z hz_basin
 
 lemma bottcher_theorem_outside_of_basin (c : ℂ)
     (hbasin : ∀ z, z ∈ Quadratic.basin_of_infinity c → z ∈ outside_disk c)
-    (h_inj_outside : Set.InjOn (Quadratic.bottcher_map c) (outside_disk c)) :
+    (h_inj_outside : Set.InjOn (Quadratic.proxy_bottcher_map c) (outside_disk c)) :
     ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z := by
-  have hpre := bottcher_map_preimage_exterior_subset_outside_of_basin c hbasin
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z := by
+  have hpre := proxy_bottcher_map_preimage_exterior_subset_outside_of_basin c hbasin
   exact bottcher_theorem_outside c hpre h_inj_outside
 
 /-!
@@ -735,43 +735,43 @@ but it still requires strong local invertibility and compatibility assumptions.
 -/
 
 
-theorem bottcher_map_injective_of_basin_characterization
+theorem proxy_bottcher_map_injective_of_basin_characterization
     (c : ℂ)
-    (h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ → z ∈ Quadratic.basin_of_infinity c)
-    (h_inj_basin : Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
-    Set.InjOn (Quadratic.bottcher_map c) {z | 1 < ‖Quadratic.bottcher_map c z‖} := by
+    (h_pre : ∀ z, 1 < ‖Quadratic.proxy_bottcher_map c z‖ → z ∈ Quadratic.basin_of_infinity c)
+    (h_inj_basin : Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) {z | 1 < ‖Quadratic.proxy_bottcher_map c z‖} := by
   intro z hz w hw hzw
   have hz' : z ∈ Quadratic.basin_of_infinity c := h_pre z hz
   have hw' : w ∈ Quadratic.basin_of_infinity c := h_pre w hw
   exact h_inj_basin hz' hw' hzw
 
-theorem bottcher_map_inj_on_basin_of_left_inverse
+theorem proxy_bottcher_map_inj_on_basin_of_left_inverse
     (c : ℂ)
     (h_left_basin : ∀ z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
   intro z hz w hw hzw
   have hleft_z :
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z :=
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z :=
     h_left_basin z hz
   have hleft_w :
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c w) = w :=
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c w) = w :=
     h_left_basin w hw
   have h := congrArg (Quadratic.external_ray_map c) hzw
   simpa [hleft_z, hleft_w] using h
 
-theorem bottcher_map_iter_eq_on_basin_of_left_inv
+theorem proxy_bottcher_map_iter_eq_on_basin_of_left_inv
     (c : ℂ) (S : Set ℂ)
     (h_left : ∀ z, z ∈ S →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_maps : MapsTo (quadratic_map c) S S)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ S)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n)) :
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n)) :
     ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c z = Quadratic.bottcher_map c w →
+      Quadratic.proxy_bottcher_map c z = Quadratic.proxy_bottcher_map c w →
       ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w := by
   intro z w hz hw hzw
   rcases h_escape z hz with ⟨nz, hnz⟩
@@ -797,17 +797,17 @@ theorem bottcher_map_iter_eq_on_basin_of_left_inv
     have hk''' : (quadratic_map c)^[nw + k] w ∈ S := by
       simpa [Nat.add_comm] using hk''
     simpa [hk] using hk'''
-  have h_eq_iter : Quadratic.bottcher_map c ((quadratic_map c)^[N] z) =
-      Quadratic.bottcher_map c ((quadratic_map c)^[N] w) := by
+  have h_eq_iter : Quadratic.proxy_bottcher_map c ((quadratic_map c)^[N] z) =
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[N] w) := by
     have hzN := h_conj N z hz
     have hwN := h_conj N w hw
     -- rewrite using equality at base
     simp [hzN, hwN, hzw]
   have h_left_z : Quadratic.external_ray_map c
-      (Quadratic.bottcher_map c ((quadratic_map c)^[N] z)) = (quadratic_map c)^[N] z :=
+      (Quadratic.proxy_bottcher_map c ((quadratic_map c)^[N] z)) = (quadratic_map c)^[N] z :=
     h_left _ hnz'
   have h_left_w : Quadratic.external_ray_map c
-      (Quadratic.bottcher_map c ((quadratic_map c)^[N] w)) = (quadratic_map c)^[N] w :=
+      (Quadratic.proxy_bottcher_map c ((quadratic_map c)^[N] w)) = (quadratic_map c)^[N] w :=
     h_left _ hnw'
   have h_iter_eq : (quadratic_map c)^[N] z = (quadratic_map c)^[N] w := by
     have h := congrArg (Quadratic.external_ray_map c) h_eq_iter
@@ -815,100 +815,100 @@ theorem bottcher_map_iter_eq_on_basin_of_left_inv
     exact h
   exact ⟨N, h_iter_eq⟩
 
-theorem bottcher_map_iter_eq_on_basin_of_outside_left_inv
+theorem proxy_bottcher_map_iter_eq_on_basin_of_outside_left_inv
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n)) :
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n)) :
     ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c z = Quadratic.bottcher_map c w →
+      Quadratic.proxy_bottcher_map c z = Quadratic.proxy_bottcher_map c w →
       ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w := by
   have h_maps : MapsTo (quadratic_map c) (outside_disk c) (outside_disk c) := by
     simpa [outside_disk] using (quadratic_basin_forward_invariant c)
-  exact bottcher_map_iter_eq_on_basin_of_left_inv c (outside_disk c) h_left h_maps h_escape h_conj
+  exact proxy_bottcher_map_iter_eq_on_basin_of_left_inv c (outside_disk c) h_left h_maps h_escape h_conj
 
-theorem bottcher_map_inj_on_basin_of_outside_left_inv
+theorem proxy_bottcher_map_inj_on_basin_of_outside_left_inv
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n))
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
   intro z hz w hw hzw
   have h_iter_eq :
       ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w :=
-    bottcher_map_iter_eq_on_basin_of_outside_left_inv c h_left h_escape h_conj z w hz hw hzw
+    proxy_bottcher_map_iter_eq_on_basin_of_outside_left_inv c h_left h_escape h_conj z w hz hw hzw
   exact h_iter_eq_imp z w hz hw h_iter_eq
 
 -- TODO: replace `h_iter_eq_imp` with a derivable inverse-branch principle on the basin.
 
-theorem bottcher_map_inj_on_basin_of_outside_left_inv_of_iter_left_inverse
+theorem proxy_bottcher_map_inj_on_basin_of_outside_left_inv_of_iter_left_inverse
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n))
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
   have h_iter_eq_imp :=
     quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter
-  exact bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_eq_imp
+  exact proxy_bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj h_iter_eq_imp
 
-theorem bottcher_map_inj_on_basin_of_left_inv
+theorem proxy_bottcher_map_inj_on_basin_of_left_inv
     (c : ℂ) (S : Set ℂ)
     (h_left : ∀ z, z ∈ S →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_maps : MapsTo (quadratic_map c) S S)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ S)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n))
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c → w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
-    Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) := by
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
   intro z hz w hw hzw
   have h_iter_eq :
       ∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w :=
-    bottcher_map_iter_eq_on_basin_of_left_inv c S h_left h_maps h_escape h_conj z w hz hw hzw
+    proxy_bottcher_map_iter_eq_on_basin_of_left_inv c S h_left h_maps h_escape h_conj z w hz hw hzw
   exact h_iter_eq_imp z w hz hw h_iter_eq
 
 /-!
-Sketch: Injectivity of `bottcher_map`.
+Sketch: Injectivity of `proxy_bottcher_map`.
 
 Idea: show any two points with the same Böttcher value escape to the
 outside disk under iteration, use the functional equation to compare
 iterates, then apply the left inverse on the outside disk and injectivity
-of iterates of `quadratic_map`. The lemma `bottcher_map_inj_on_basin_of_outside_left_inv`
+of iterates of `quadratic_map`. The lemma `proxy_bottcher_map_inj_on_basin_of_outside_left_inv`
 implements the main reduction on the basin; to finish, one needs that
 equal Böttcher values force membership in the basin (via positivity of
 the Green's function).
 -/
-theorem bottcher_map_inj_theorem_of_inj_basin
+theorem proxy_bottcher_map_inj_theorem_of_inj_basin
     (c : ℂ)
-    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
+    (h_inj_K : Set.InjOn (Quadratic.proxy_bottcher_map c) (MLC.Quadratic.K c))
     (h_inj_basin :
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c)) :
-    Function.Injective (Quadratic.bottcher_map c) := by
-  -- Sketch: split by whether the current proxy satisfies `‖bottcher_map c z‖ > 1`. For the exterior branch,
+      Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c)) :
+    Function.Injective (Quadratic.proxy_bottcher_map c) := by
+  -- Sketch: split by whether the current proxy satisfies `‖proxy_bottcher_map c z‖ > 1`. For the exterior branch,
   -- reduce to basin injectivity via Green positivity. For the complementary branch,
   -- reduce to injectivity on `K` via `green = 0`.
-  have h_pre : ∀ z, 1 < ‖Quadratic.bottcher_map c z‖ →
+  have h_pre : ∀ z, 1 < ‖Quadratic.proxy_bottcher_map c z‖ →
       z ∈ Quadratic.basin_of_infinity c := by
     intro z hz
-    have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+    have hnorm' : ‖Quadratic.proxy_bottcher_map c z‖ =
         Real.exp (MLC.Quadratic.green_function c z) :=
       Quadratic.norm_bottcher_eq_exp_green c z
     have hpos : 0 < MLC.Quadratic.green_function c z := by
@@ -920,15 +920,15 @@ theorem bottcher_map_inj_theorem_of_inj_basin
     have : z ∈ (MLC.Quadratic.K c)ᶜ := by simpa [Set.mem_compl_iff] using hz'
     simpa [Quadratic.basin_eq_compl_K c] using this
   have h_inj_on :
-      Set.InjOn (Quadratic.bottcher_map c) {z | 1 < ‖Quadratic.bottcher_map c z‖} :=
-    bottcher_map_injective_of_basin_characterization (c := c) h_pre h_inj_basin
+      Set.InjOn (Quadratic.proxy_bottcher_map c) {z | 1 < ‖Quadratic.proxy_bottcher_map c z‖} :=
+    proxy_bottcher_map_injective_of_basin_characterization (c := c) h_pre h_inj_basin
   intro z w hzw
-  by_cases hz : 1 < ‖Quadratic.bottcher_map c z‖
-  · have hw : 1 < ‖Quadratic.bottcher_map c w‖ := by
+  by_cases hz : 1 < ‖Quadratic.proxy_bottcher_map c z‖
+  · have hw : 1 < ‖Quadratic.proxy_bottcher_map c w‖ := by
       simpa [hzw] using hz
     exact h_inj_on hz hw hzw
-  · have hz_le : ‖Quadratic.bottcher_map c z‖ ≤ 1 := le_of_not_gt hz
-    have hnorm' : ‖Quadratic.bottcher_map c z‖ =
+  · have hz_le : ‖Quadratic.proxy_bottcher_map c z‖ ≤ 1 := le_of_not_gt hz
+    have hnorm' : ‖Quadratic.proxy_bottcher_map c z‖ =
         Real.exp (MLC.Quadratic.green_function c z) :=
       Quadratic.norm_bottcher_eq_exp_green c z
     have hge0 : 0 ≤ MLC.Quadratic.green_function c z :=
@@ -940,9 +940,9 @@ theorem bottcher_map_inj_theorem_of_inj_basin
     have hzG : MLC.Quadratic.green_function c z = 0 := le_antisymm hle0 hge0
     have hzK : z ∈ MLC.Quadratic.K c :=
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K c z).1 hzG
-    have hnormw : ‖Quadratic.bottcher_map c w‖ ≤ 1 := by
+    have hnormw : ‖Quadratic.proxy_bottcher_map c w‖ ≤ 1 := by
       simpa [hzw] using hz_le
-    have hnormw' : ‖Quadratic.bottcher_map c w‖ =
+    have hnormw' : ‖Quadratic.proxy_bottcher_map c w‖ =
         Real.exp (MLC.Quadratic.green_function c w) :=
       Quadratic.norm_bottcher_eq_exp_green c w
     have hge0w : 0 ≤ MLC.Quadratic.green_function c w :=
@@ -956,41 +956,41 @@ theorem bottcher_map_inj_theorem_of_inj_basin
       (MLC.Quadratic.green_function_eq_zero_iff_mem_K c w).1 hwG
     exact h_inj_K hzK hwK hzw
 
-theorem bottcher_map_inj_theorem
+theorem proxy_bottcher_map_inj_theorem
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
-    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n))
+    (h_inj_K : Set.InjOn (Quadratic.proxy_bottcher_map c) (MLC.Quadratic.K c))
     (h_iter_eq_imp : ∀ z w, z ∈ Quadratic.basin_of_infinity c →
       w ∈ Quadratic.basin_of_infinity c →
       (∃ n, (quadratic_map c)^[n] z = (quadratic_map c)^[n] w) → z = w) :
-    Function.Injective (Quadratic.bottcher_map c) := by
+    Function.Injective (Quadratic.proxy_bottcher_map c) := by
   have h_inj_basin :
-      Set.InjOn (Quadratic.bottcher_map c) (Quadratic.basin_of_infinity c) :=
-    bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj
+      Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) :=
+    proxy_bottcher_map_inj_on_basin_of_outside_left_inv c h_left h_escape h_conj
       h_iter_eq_imp
-  exact bottcher_map_inj_theorem_of_inj_basin c h_inj_K h_inj_basin
+  exact proxy_bottcher_map_inj_theorem_of_inj_basin c h_inj_K h_inj_basin
 
-theorem bottcher_map_inj_theorem_of_iter_left_inverse
+theorem proxy_bottcher_map_inj_theorem_of_iter_left_inverse
     (c : ℂ)
     (h_left : ∀ z, z ∈ outside_disk c →
-      Quadratic.external_ray_map c (Quadratic.bottcher_map c z) = z)
+      Quadratic.external_ray_map c (Quadratic.proxy_bottcher_map c z) = z)
     (h_escape : ∀ z, z ∈ Quadratic.basin_of_infinity c →
       ∃ n, (quadratic_map c)^[n] z ∈ outside_disk c)
     (h_conj : ∀ n z, z ∈ Quadratic.basin_of_infinity c →
-      Quadratic.bottcher_map c ((quadratic_map c)^[n] z) =
-        (Quadratic.bottcher_map c z) ^ (2 ^ n))
-    (h_inj_K : Set.InjOn (Quadratic.bottcher_map c) (MLC.Quadratic.K c))
+      Quadratic.proxy_bottcher_map c ((quadratic_map c)^[n] z) =
+        (Quadratic.proxy_bottcher_map c z) ^ (2 ^ n))
+    (h_inj_K : Set.InjOn (Quadratic.proxy_bottcher_map c) (MLC.Quadratic.K c))
     (h_left_iter : QuadraticMapIterLeftInverseOnBasin c) :
-    Function.Injective (Quadratic.bottcher_map c) := by
+    Function.Injective (Quadratic.proxy_bottcher_map c) := by
   have h_iter_eq_imp :=
     quadratic_map_iter_eq_imp_eq_of_iter_left_inverse c h_left_iter
-  exact bottcher_map_inj_theorem c h_left h_escape h_conj h_inj_K h_iter_eq_imp
+  exact proxy_bottcher_map_inj_theorem c h_left h_escape h_conj h_inj_K h_iter_eq_imp
 
 theorem basin_of_infinity_nonempty (c : ℂ) : (basin_of_infinity c).Nonempty := by
   refine ⟨((‖c‖ + 2 : ℝ) : ℂ), ?_⟩
