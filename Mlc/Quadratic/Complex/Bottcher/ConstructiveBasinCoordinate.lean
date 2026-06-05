@@ -203,6 +203,15 @@ lemma basinEscapeTime_spec (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
     ‖(MLC.quadratic_map c)^[basinEscapeTime c z hz] z‖ > ‖c‖ + 2 :=
   Nat.find_spec (exists_iterate_mem_outside_open_of_mem_basin c z hz)
 
+/-- If a point is already in the canonical outside-open region, its chosen
+escape time is zero. -/
+lemma basinEscapeTime_eq_zero_of_outside_open
+    (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    basinEscapeTime c z
+      (outside_disk_subset_quadratic_basin c
+        (outside_open_subset_outside_disk c hz)) = 0 := by
+  exact (Nat.find_eq_zero _).2 (by simpa using hz)
+
 /-- Principal-branch pullback candidate for extending the near-infinity
 logarithmic-series coordinate to a basin point. This is a concrete candidate,
 but the principal-root branch still requires independence and holomorphicity
@@ -212,6 +221,17 @@ noncomputable def principalPullbackLogSeriesBottcher
   (MLC.logSeriesBottcherApprox c
       ((MLC.quadratic_map c)^[basinEscapeTime c z hz] z)) ^
     (((2 : ℂ) ^ basinEscapeTime c z hz)⁻¹)
+
+/-- On the canonical outside-open region, the principal pullback agrees with the
+near-infinity logarithmic-series coordinate. -/
+lemma principalPullbackLogSeriesBottcher_eq_near_of_outside_open
+    (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    principalPullbackLogSeriesBottcher c z
+      (outside_disk_subset_quadratic_basin c
+        (outside_open_subset_outside_disk c hz)) =
+      MLC.logSeriesBottcherApprox c z := by
+  have hesc := basinEscapeTime_eq_zero_of_outside_open c z hz
+  simp [principalPullbackLogSeriesBottcher, hesc]
 
 /-- Total basin-extension candidate: use the principal pullback on the basin and
 the near-infinity formula off the basin. The off-basin branch is only a totality
@@ -224,6 +244,19 @@ noncomputable def basinLogSeriesExtensionCandidate (c z : ℂ) : ℂ :=
         principalPullbackLogSeriesBottcher c z hz
       else
         MLC.logSeriesBottcherApprox c z
+
+/-- The total basin-extension candidate agrees with the near-infinity formula on
+the canonical outside-open region. This proves the first field of the
+Route-A coherent-data target. -/
+lemma basinLogSeriesExtensionCandidate_extends_near
+    (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    basinLogSeriesExtensionCandidate c z = MLC.logSeriesBottcherApprox c z := by
+  classical
+  let hbasin : z ∈ basin_of_infinity c :=
+    outside_disk_subset_quadratic_basin c
+      (outside_open_subset_outside_disk c hz)
+  simp [basinLogSeriesExtensionCandidate, hbasin,
+    principalPullbackLogSeriesBottcher_eq_near_of_outside_open c z hz]
 
 /-- Exact remaining basin-extension seam for the logarithmic-series coordinate.
 Supplying this data upgrades the already-checked near-infinity package to the
@@ -784,6 +817,40 @@ theorem classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData
     ClassicalGlobalBottcherTheoremFor c :=
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.toLogSeriesBasinExtensionDataFor
+
+/-- Basin route B seam: first construct an exterior inverse for the
+near-infinity logarithmic-series coordinate, then use inverse dynamics to supply
+the global basin extension data. This separates the inverse-package strategy
+from the principal-root pullback strategy. -/
+structure LogSeriesExteriorInverseBasinExtensionDataFor (c : ℂ) where
+  inverseOnExterior : ℂ → ℂ
+  extensionData : LogSeriesBasinExtensionDataFor c
+  right_inverse :
+    ∀ w : ℂ, 1 < ‖w‖ →
+      extensionData.phi (inverseOnExterior w) = w
+  left_inverse_on_outside :
+    ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 →
+      inverseOnExterior (MLC.logSeriesBottcherApprox c z) = z
+
+theorem classicalGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtensionData
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c) :
+    ClassicalGlobalBottcherTheoremFor c :=
+  classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
+    h.extensionData
+
+/-- Basin route C seam: a classical global Böttcher extension theorem can be
+used directly once instantiated with the already-proved canonical
+near-infinity logarithmic-series coordinate. -/
+structure ClassicalGlobalExtensionFromNearInfinityDataFor (c : ℂ) where
+  near_data :
+    GenuineBottcherNearInfinityDataFor c (MLC.logSeriesBottcherApprox c)
+  extensionData : LogSeriesBasinExtensionDataFor c
+
+theorem classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData
+    {c : ℂ} (h : ClassicalGlobalExtensionFromNearInfinityDataFor c) :
+    ClassicalGlobalBottcherTheoremFor c :=
+  classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
+    h.extensionData
 
 /-- The classical theorem's basin-valued coordinate is automatically nonzero on
 the basin since it is exterior-valued there. -/

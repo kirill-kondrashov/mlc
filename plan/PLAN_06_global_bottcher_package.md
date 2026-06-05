@@ -413,12 +413,32 @@ Next alternatives for the failed basin-extension step:
    `principalPullbackLogSeriesBottcher` is independent of escape time and
    holomorphic locally on the basin. Current exact target:
    `PrincipalPullbackCoherentDataFor (2 : ℂ)`.
+   Current progress:
+   - **PASSED:** `basinEscapeTime_eq_zero_of_outside_open`,
+     `principalPullbackLogSeriesBottcher_eq_near_of_outside_open`, and
+     `basinLogSeriesExtensionCandidate_extends_near` prove the first coherent
+     field: agreement with the near-infinity coordinate on the canonical exterior.
+   - **FAILED:** the remaining coherent fields are still open: independence of
+     escape iterate, basin exterior-valuedness, basin characterization,
+     semiconjugacy, holomorphicity, modulus identity, and normalization.
 2. **Basin route B (exterior inverse package first):** construct the inverse map
    on the exterior for `logSeriesBottcherApprox`, then define the basin extension
    via inverse dynamics and prove uniqueness from the semiconjugacy.
+   Current progress:
+   - **PASSED as seam:** `LogSeriesExteriorInverseBasinExtensionDataFor` isolates
+     the exact exterior-inverse-first data and reduces it to
+     `ClassicalGlobalBottcherTheoremFor`.
+   - **FAILED as construction:** no exterior inverse/surjectivity package for
+     `logSeriesBottcherApprox` is constructed.
 3. **Basin route C (classical theorem seam):** import/formalize a standard global
    Böttcher extension theorem for superattracting infinity and instantiate it
    with the now-proved canonical near-infinity coordinate.
+   Current progress:
+   - **PASSED as seam:** `ClassicalGlobalExtensionFromNearInfinityDataFor`
+     isolates the imported/classical theorem input and reduces it to
+     `ClassicalGlobalBottcherTheoremFor`.
+   - **FAILED as construction:** no such global extension theorem is currently
+     imported or proved.
 
 ## Non-goals
 
