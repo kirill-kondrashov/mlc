@@ -10,6 +10,7 @@ import Mathlib.Topology.SeparatedMap
 import Mathlib.Topology.DiscreteSubset
 import Mathlib.Analysis.Complex.Liouville
 import Mathlib.Topology.Algebra.InfiniteSum.UniformOn
+import Mathlib.Analysis.Normed.Group.Tannery
 
 namespace MLC
 
@@ -1259,6 +1260,105 @@ lemma LogCorrectionSeriesConvergesOnExterior.of_large_radius
     LogCorrectionSeriesConvergesOnExterior c R :=
   LogCorrectionSeriesConvergesOnExterior.of_majorant
     (LogCorrectionSeriesMajorizedOnExterior.of_large_radius c hR)
+
+/-- The logarithmic correction series itself is normalized at infinity. This is
+Tannery's theorem applied to the Candidate-10 summable majorant and the already
+checked termwise limits. -/
+lemma tendsto_logCorrectionSeries_atInfinity (c : ℂ) :
+    Tendsto (logCorrectionSeries c) atInfinity (𝓝 (0 : ℂ)) := by
+  rcases LogCorrectionSeriesMajorizedOnExterior.of_large_radius
+      (c := c) (R := ‖c‖ + 2) le_rfl with ⟨u, hu, hbound⟩
+  have hlarge : ∀ᶠ z in atInfinity, z ∈ {z : ℂ | ‖c‖ + 2 < ‖z‖} :=
+    eventually_atInfinity_norm_gt (‖c‖ + 2)
+  have hbound_eventually :
+      ∀ᶠ z in atInfinity, ∀ n : ℕ, ‖nearOneLogCorrection c n z‖ ≤ u n := by
+    filter_upwards [hlarge] with z hz n
+    exact hbound n z hz
+  have hterm :
+      ∀ n : ℕ, Tendsto (fun z : ℂ => nearOneLogCorrection c n z)
+        atInfinity (𝓝 (0 : ℂ)) :=
+    fun n => tendsto_nearOneLogCorrection_atInfinity c n
+  have htend :=
+    tendsto_tsum_of_dominated_convergence
+      (𝓕 := atInfinity)
+      (f := fun z n => nearOneLogCorrection c n z)
+      (g := fun _ : ℕ => (0 : ℂ))
+      (bound := u)
+      hu hterm hbound_eventually
+  simpa [logCorrectionSeries] using htend
+
+/-- The logarithmic ratio candidate is normalized at infinity. -/
+lemma tendsto_logSeriesBottcherRatio_atInfinity (c : ℂ) :
+    Tendsto (logSeriesBottcherRatio c) atInfinity (𝓝 (1 : ℂ)) := by
+  have hlog : Tendsto (logCorrectionSeries c) atInfinity (𝓝 (0 : ℂ)) :=
+    tendsto_logCorrectionSeries_atInfinity c
+  have hexp : Tendsto (fun z : ℂ => Complex.exp (logCorrectionSeries c z))
+      atInfinity (𝓝 (Complex.exp (0 : ℂ))) :=
+    (Complex.continuous_exp.tendsto (0 : ℂ)).comp hlog
+  simpa [logSeriesBottcherRatio] using hexp
+
+/-- Candidate-11 normalization of the logarithmic Böttcher approximation. -/
+lemma tendsto_logSeriesBottcherApprox_div_atInfinity (c : ℂ) :
+    Tendsto (fun z => logSeriesBottcherApprox c z / z) atInfinity (𝓝 (1 : ℂ)) := by
+  have hratio : Tendsto (logSeriesBottcherRatio c) atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_logSeriesBottcherRatio_atInfinity c
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hEq :
+      (fun z => logSeriesBottcherApprox c z / z)
+        =ᶠ[atInfinity] logSeriesBottcherRatio c := by
+    filter_upwards [hzne] with z hz
+    exact logSeriesBottcherApprox_div c hz
+  exact (tendsto_congr' hEq).2 hratio
+
+/-- The logarithmic series coordinate is eventually exterior-valued near
+infinity. This is the exterior-valued part available directly from
+normalization; promoting it to the canonical outside-open radius is a separate
+global estimate. -/
+lemma eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity (c : ℂ) :
+    ∀ᶠ z in atInfinity, 1 < ‖logSeriesBottcherApprox c z‖ := by
+  have hratioNorm :
+      Tendsto ((fun a : ℂ => ‖a‖) ∘
+        (fun z : ℂ => logSeriesBottcherApprox c z / z)) atInfinity (𝓝 ‖(1 : ℂ)‖) :=
+    ((continuous_norm.tendsto (1 : ℂ)).comp
+      (tendsto_logSeriesBottcherApprox_div_atInfinity c))
+  have hratioHalf : ∀ᶠ z in atInfinity,
+      (1 / 2 : ℝ) < ‖logSeriesBottcherApprox c z / z‖ := by
+    have hball : Metric.ball (‖(1 : ℂ)‖) (1 / 2) ∈ 𝓝 ‖(1 : ℂ)‖ :=
+      Metric.ball_mem_nhds _ (by norm_num)
+    filter_upwards [hratioNorm.eventually hball] with z hz
+    have hzabs : |‖logSeriesBottcherApprox c z / z‖ - 1| < (1 / 2 : ℝ) := by
+      simpa [Metric.ball, Real.dist_eq, abs_sub_comm] using hz
+    nlinarith [abs_lt.1 hzabs |>.1, abs_lt.1 hzabs |>.2]
+  have hlarge : ∀ᶠ z in atInfinity, (2 : ℝ) < ‖z‖ :=
+    eventually_atInfinity_norm_gt 2
+  refine (hratioHalf.and hlarge).mono ?_
+  intro z hz
+  rcases hz with ⟨hratio, hzlarge⟩
+  have hz_ne : z ≠ 0 := (norm_ne_zero_iff).1 (ne_of_gt (lt_trans (by norm_num) hzlarge))
+  have hprod : 1 < ‖logSeriesBottcherApprox c z / z‖ * ‖z‖ := by
+    nlinarith
+  have hnorm :
+      ‖logSeriesBottcherApprox c z / z‖ * ‖z‖ =
+        ‖logSeriesBottcherApprox c z‖ := by
+    rw [norm_div]
+    field_simp [(norm_ne_zero_iff).2 hz_ne]
+  rw [hnorm] at hprod
+  exact hprod
+
+/-- Radius form of eventual exterior-valuedness for the logarithmic series
+coordinate. -/
+lemma exists_radius_one_lt_norm_logSeriesBottcherApprox (c : ℂ) :
+    ∃ R : ℝ, ∀ z : ℂ, R < ‖z‖ → 1 < ‖logSeriesBottcherApprox c z‖ := by
+  have h := eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity c
+  dsimp [atInfinity] at h
+  have h' := (Filter.eventually_comap).1 h
+  rcases (Filter.eventually_atTop.1 h') with ⟨R, hR⟩
+  refine ⟨R, ?_⟩
+  intro z hz
+  exact hR ‖z‖ (le_of_lt hz) z rfl
 
 /-- If the Candidate-8 additive convergence seam is proved, then the finite
 logarithmic correction sums converge locally uniformly to the logarithmic series

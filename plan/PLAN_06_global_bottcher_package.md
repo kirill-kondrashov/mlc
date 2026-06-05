@@ -300,6 +300,20 @@ repo/library support.
       `Φ(f_c z) = (Φ z)^2`,
    5. exterior-valuedness follows from normalization after possibly enlarging
       the radius.
+   Current checked progress:
+   - `tendsto_logCorrectionSeries_atInfinity`
+   - `tendsto_logSeriesBottcherRatio_atInfinity`
+   - `tendsto_logSeriesBottcherApprox_div_atInfinity`
+   - `eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity`
+   - `exists_radius_one_lt_norm_logSeriesBottcherApprox`
+   Thus normalization and eventual exterior-valuedness are proved. The remaining
+   blockers are:
+   - the shifted-series identity needed for
+     `logSeriesBottcherApprox c (quadratic_map c z) =
+      (logSeriesBottcherApprox c z)^2`;
+   - differentiability of the infinite log-series coordinate on an exterior
+     region, which requires packaging differentiability of each log correction
+     term and applying the locally uniform series theorem.
 
 So the honest next implementation target is now:
 
