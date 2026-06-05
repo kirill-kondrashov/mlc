@@ -247,6 +247,47 @@ structure LogSeriesBasinExtensionDataFor (c : ℂ) where
   tendsto_div_atInfinity :
     Tendsto (fun z => phi z / z) atInfinity (𝓝 (1 : ℂ))
 
+/-- Route A seam for the principal pullback candidate. These are exactly the
+coherent-branch facts still missing after defining
+`basinLogSeriesExtensionCandidate`: agreement with the near-infinity formula,
+basin exterior-valuedness, basin characterization, semiconjugacy, holomorphicity,
+modulus identity, and normalization. -/
+structure PrincipalPullbackCoherentDataFor (c : ℂ) where
+  extends_near :
+    ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 →
+      basinLogSeriesExtensionCandidate c z = MLC.logSeriesBottcherApprox c z
+  norm_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      1 < ‖basinLogSeriesExtensionCandidate c z‖
+  basin_of_norm_gt_one :
+    ∀ z : ℂ, 1 < ‖basinLogSeriesExtensionCandidate c z‖ →
+      z ∈ basin_of_infinity c
+  conj_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      basinLogSeriesExtensionCandidate c (MLC.quadratic_map c z) =
+        (basinLogSeriesExtensionCandidate c z)^2
+  holo_on_basin :
+    DifferentiableOn ℂ (basinLogSeriesExtensionCandidate c) (basin_of_infinity c)
+  modulus_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      ‖basinLogSeriesExtensionCandidate c z‖ = Real.exp (green_function c z)
+  tendsto_div_atInfinity :
+    Tendsto (fun z => basinLogSeriesExtensionCandidate c z / z) atInfinity (𝓝 (1 : ℂ))
+
+/-- Coherent data for the principal pullback candidate is exactly enough to fill
+the logarithmic-series basin extension seam. -/
+noncomputable def PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionDataFor
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c) :
+    LogSeriesBasinExtensionDataFor c where
+  phi := basinLogSeriesExtensionCandidate c
+  extends_near := h.extends_near
+  norm_on_basin := h.norm_on_basin
+  basin_of_norm_gt_one := h.basin_of_norm_gt_one
+  conj_on_basin := h.conj_on_basin
+  holo_on_basin := h.holo_on_basin
+  modulus_on_basin := h.modulus_on_basin
+  tendsto_div_atInfinity := h.tendsto_div_atInfinity
+
 /-- Candidate 9 works in the inverted coordinate `w = 1 / z`, where infinity
 for `z ↦ z^2 + c` becomes the superattracting fixed point `w = 0`. -/
 noncomputable def invertedQuadraticMap (c : ℂ) (w : ℂ) : ℂ :=
@@ -737,6 +778,12 @@ theorem classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
     ClassicalGlobalBottcherTheoremFor c :=
   ⟨h.toClassicalGlobalBottcherDataFor⟩
+
+theorem classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c) :
+    ClassicalGlobalBottcherTheoremFor c :=
+  classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
+    h.toLogSeriesBasinExtensionDataFor
 
 /-- The classical theorem's basin-valued coordinate is automatically nonzero on
 the basin since it is exterior-valued there. -/

@@ -399,13 +399,20 @@ Current basin-extension status:
    `classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData` prove that
    this data implies `ClassicalGlobalBottcherTheoremFor`. No actual
    `LogSeriesBasinExtensionDataFor (2 : ℂ)` is constructed yet.
+6. **PASSED as a Route-A seam:** the coherent-pullback route is now isolated as
+   `PrincipalPullbackCoherentDataFor`. The reductions
+   `PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionDataFor` and
+   `classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData` prove
+   that coherent data for the concrete principal-pullback candidate would finish
+   the classical theorem.
 
 Next alternatives for the failed basin-extension step:
 
 1. **Basin route A (coherent pullback branches):** formalize inverse branches of
    squaring along the escaping orbit so that
    `principalPullbackLogSeriesBottcher` is independent of escape time and
-   holomorphic locally on the basin.
+   holomorphic locally on the basin. Current exact target:
+   `PrincipalPullbackCoherentDataFor (2 : ℂ)`.
 2. **Basin route B (exterior inverse package first):** construct the inverse map
    on the exterior for `logSeriesBottcherApprox`, then define the basin extension
    via inverse dynamics and prove uniqueness from the semiconjugacy.
