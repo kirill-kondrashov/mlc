@@ -233,6 +233,62 @@ theorem exists_genuineBottcherCoordinateDataFor_of_basinLocalAnalyticity
   exact ⟨bottcher_map c,
     genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity c hslit⟩
 
+/-- `0` escapes to infinity for `f(z) = z^2 + 2`, hence belongs to the basin. -/
+lemma zero_mem_basin_two_constructive :
+    (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) := by
+  have h6_basin : (6 : ℂ) ∈ basin_of_infinity (2 : ℂ) := by
+    have h6_out : (6 : ℂ) ∈ {z : ℂ | ‖z‖ > ‖(2 : ℂ)‖ + 2} := by
+      norm_num
+    exact outside_disk_subset_quadratic_basin (2 : ℂ) <|
+      outside_open_subset_outside_disk (2 : ℂ) h6_out
+  have h2_basin : (2 : ℂ) ∈ basin_of_infinity (2 : ℂ) := by
+    have h2image : quadratic_map (2 : ℂ) (2 : ℂ) = 6 := by
+      norm_num [quadratic_map]
+    apply (basin_of_infinity_preimage_subset (2 : ℂ))
+    simpa [Set.preimage, h2image] using h6_basin
+  have h0image : quadratic_map (2 : ℂ) (0 : ℂ) = 2 := by
+    norm_num [quadratic_map]
+  apply (basin_of_infinity_preimage_subset (2 : ℂ))
+  simpa [Set.preimage, h0image] using h2_basin
+
+/-- The principal-slit approximation domain does not even contain `0`, so it
+cannot be a neighborhood of every basin point at `c = 2`. -/
+lemma zero_not_mem_slit_orbit_two :
+    (0 : ℂ) ∉ slit_orbit (2 : ℂ) := by
+  intro hzero
+  exact Complex.zero_notMem_slitPlane (by simpa using hzero 0)
+
+/-- Therefore the basin-local analyticity hypothesis needed to upgrade the
+current proxy to a genuine coordinate is false at `c = 2`. -/
+theorem not_bottcherBasinLocalAnalyticityHyp_two :
+    ¬ BottcherBasinLocalAnalyticityHyp (2 : ℂ) := by
+  intro hslit
+  have hnhds : slit_orbit (2 : ℂ) ∈ 𝓝 (0 : ℂ) :=
+    hslit 0 zero_mem_basin_two_constructive
+  have hmem : (0 : ℂ) ∈ slit_orbit (2 : ℂ) := mem_of_mem_nhds hnhds
+  exact zero_not_mem_slit_orbit_two hmem
+
+/-- The current proxy `bottcher_map = polar_green_map` cannot itself witness the
+theorem-facing genuine coordinate package at `c = 2`: differentiability on the
+open basin would force continuity at `0`, but the proxy is formally not
+continuous there. -/
+theorem not_genuineBottcherCoordinateDataFor_bottcherMap_two :
+    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) (bottcher_map (2 : ℂ)) := by
+  intro hcoord
+  rcases hcoord with ⟨_, _, _, _, hdiff, _, _⟩
+  have h0basin : (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) :=
+    zero_mem_basin_two_constructive
+  have hcont0 : ContinuousAt (bottcher_map (2 : ℂ)) 0 := by
+    have hdiff0 :
+        DifferentiableWithinAt ℂ (bottcher_map (2 : ℂ))
+          (basin_of_infinity (2 : ℂ)) 0 :=
+      hdiff 0 h0basin
+    exact hdiff0.continuousWithinAt.continuousAt
+      ((basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin)
+  exact
+    polar_green_map_not_continuousAt_zero (2 : ℂ) <|
+      by simpa [bottcher_map] using hcont0
+
 /-- Any full genuine coordinate package restricts to the first near-infinity
 phase of the classical proof on the canonical outside-open region. -/
 theorem genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor

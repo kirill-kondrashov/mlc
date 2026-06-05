@@ -176,6 +176,17 @@ $$
 
 i.e. local analyticity of the current Böttcher approximants on the whole basin.
 
+Moreover, for the **current proxy** route this missing input is now formally
+shown to fail at `c = 2`:
+
+1. `Quadratic.not_bottcherBasinLocalAnalyticityHyp_two`,
+2. `Quadratic.not_genuineBottcherCoordinateDataFor_bottcherMap_two`.
+
+So the present `Quadratic.bottcher_map := polar_green_map` cannot itself be the
+genuine coordinate sought by PLAN 06. Completing the plan now genuinely
+requires constructing a different theorem-facing coordinate object, not merely
+proving one more property of the current proxy.
+
 ### B. Classical analytic package
 
 The classical global theorem is not internalized yet:
