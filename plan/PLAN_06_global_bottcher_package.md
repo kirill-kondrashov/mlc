@@ -160,6 +160,22 @@ The code still lacks an actual theorem constructing a genuine coordinate `Φ`.
 Current `Quadratic.bottcher_map` is still the proxy `polar_green_map`, and the
 theorem-facing package is only a `Prop`.
 
+The strongest checked theorem now available is conditional:
+
+1. `ConstructiveBasinCoordinate.lean` defines
+   `Quadratic.BottcherBasinLocalAnalyticityHyp c`,
+2. and proves
+   `Quadratic.genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity`.
+
+So the unconditional coordinate theorem is **not yet implementable** from the
+current repository state. The exact missing input is now isolated:
+
+$$
+\forall z \in \mathcal B_\infty(c),\qquad \mathrm{slit\_orbit}(c)\in\mathcal N(z),
+$$
+
+i.e. local analyticity of the current Böttcher approximants on the whole basin.
+
 ### B. Classical analytic package
 
 The classical global theorem is not internalized yet:

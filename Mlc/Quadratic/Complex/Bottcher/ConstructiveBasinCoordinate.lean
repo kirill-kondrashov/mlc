@@ -182,11 +182,56 @@ def GenuineBottcherInversePackageFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
   (∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, φ z = w) ∧
   Set.InjOn φ {z : ℂ | ‖z‖ > ‖c‖ + 2}
 
+/-- Missing analytic input for upgrading the current theorem-facing
+`bottcher_map := polar_green_map` proxy to a genuine coordinate on the whole
+basin: every basin point admits a neighborhood contained in the slit-orbit
+domain used by the analytic Böttcher approximants. -/
+def BottcherBasinLocalAnalyticityHyp (c : ℂ) : Prop :=
+  ∀ z : ℂ, z ∈ basin_of_infinity c → slit_orbit c ∈ 𝓝 z
+
 /-- Bundled theorem-facing route matching the current pair of proof sketches. -/
 def GenuineBottcherRouteFor (c : ℂ) : Prop :=
   ∃ φ : ℂ → ℂ,
     GenuineBottcherCoordinateDataFor c φ ∧
     GenuineBottcherInversePackageFor c φ
+
+/-- Maximal honest coordinate-construction theorem currently supported by the
+repository: once the current `bottcher_map` proxy is known to be locally
+analytic at every basin point, its already-formalized dynamical/modulus
+properties upgrade it to the full theorem-facing genuine-coordinate package. -/
+theorem genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity
+    (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
+    GenuineBottcherCoordinateDataFor c (bottcher_map c) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    exact
+      bottcher_map_norm_gt_one_of_basin c z hz
+        (green_function_pos_of_basin c z hz)
+  · intro z hz
+    exact bottcher_map_norm_gt_one_implies_basin c hz
+  · intro z hz
+    exact bottcher_conj_on_basin c z hz
+  · intro z _hz
+    exact norm_bottcher_eq_exp_green c z
+  · intro z hz
+    have hana : AnalyticAt ℂ (bottcher_map c) z :=
+      bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
+        (hslit z hz)
+        ((basin_of_infinity_isOpen c).mem_nhds hz)
+    exact hana.differentiableAt.differentiableWithinAt
+  · intro z hz hzne
+    exact bottcher_map_continuousAt_of_ne_zero c z hzne
+  · exact tendsto_bottcher_map_div_atInfinity c
+
+/-- Existential coordinate-construction form of the current maximal honest
+theorem: the missing local-analyticity input on the whole basin is enough to
+produce some theorem-facing genuine coordinate, namely the current
+`bottcher_map`. -/
+theorem exists_genuineBottcherCoordinateDataFor_of_basinLocalAnalyticity
+    (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
+    ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
+  exact ⟨bottcher_map c,
+    genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity c hslit⟩
 
 /-- Any full genuine coordinate package restricts to the first near-infinity
 phase of the classical proof on the canonical outside-open region. -/
