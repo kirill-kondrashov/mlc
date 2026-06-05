@@ -136,6 +136,53 @@ This is the clean analytic blocker. The inverse package and all parameter-family
 steps are downstream of it. At present, this theorem is **not proved** in the
 repository.
 
+## Candidate loop status
+
+The candidate constructions have now been checked in order against the current
+repo/library support.
+
+1. **Candidate 1: local Böttcher at infinity via inversion** — **blocked**.
+   No packaged local Böttcher theorem near a superattracting fixed point was
+   found in the current repo or imported libraries.
+2. **Candidate 2: coherently-branched root-limit on one exterior domain** —
+   **active best route**.
+   Existing support already includes:
+   - slit-plane and rotated-slit branch domains in
+     `InverseBranchQuadratic.lean`,
+   - square-root right inverses on those domains,
+   - `analytic_root_aux` / `one_add_cpow` branch machinery,
+   - near-infinity asymptotic control in `BottcherOutsidePlan.lean`.
+   Also, `no_square_root_right_inverse_on_exterior` shows this must be done on a
+   simply connected exterior region, not on the full exterior at once.
+   The current constructed objects are now:
+   - `rootSeqRatioCandidate`
+   - `sectorialBottcherApprox`
+   - `eventuallyEq_bottcher_root_seq_ratio_rootSeqRatioCandidate_in_sector`
+   - `eventuallyEq_bottcher_root_seq_sectorialBottcherApprox_in_sector`
+   These give an explicit sectorial coherent-branch candidate and identify it
+   with the existing finite root approximants on the matching sector filter.
+3. **Candidate 3: pull back a near-infinity coordinate to the basin** —
+   **blocked downstream of Candidate 2**.
+   This only becomes meaningful after Candidate 2 produces a genuine holomorphic
+   near-infinity coordinate.
+4. **Candidate 4: Riemann-map / uniformization route** — **blocked**.
+   No usable Riemann-map / uniformization theorem support was found.
+5. **Candidate 5: Green + harmonic conjugate route** — **blocked**.
+   No usable global harmonic-conjugate package was found.
+6. **Candidate 6: functional-equation / fixed-point or Laurent-series route** —
+   **lower priority / effectively blocked**.
+   General analytic tools exist, but nothing close to a ready-made local
+   Böttcher construction; Candidate 2 has much stronger existing support.
+
+So the honest next implementation target is now:
+
+1. build the near-infinity coordinate by Candidate 2 on one explicit exterior
+   region with a coherent branch choice;
+2. upgrade the current **sectorial** candidate package to one honest
+   near-infinity map on a fixed simply connected exterior region;
+3. only then attempt the basin extension step for
+   `Quadratic.ClassicalGlobalBottcherTheoremFor`.
+
 ## Non-goals
 
 PLAN 06 should **not**:

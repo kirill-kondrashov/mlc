@@ -762,6 +762,22 @@ lemma tendsto_root_seq_ratio_candidate_atInfinity (c : ℂ) (N : ℕ) :
           ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)))
     (a := ((2 : ℂ) ^ (N + 1))⁻¹) hprod
 
+/-- Explicit coherent-branch ratio candidate for the `(N+1)`-st Böttcher root
+approximation on a simply connected exterior sector. -/
+noncomputable def rootSeqRatioCandidate (c : ℂ) (N : ℕ) (z : ℂ) : ℂ :=
+  (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+      (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
+    ((2 : ℂ) ^ (N + 1))⁻¹
+
+/-- The associated sectorial coordinate candidate itself. -/
+noncomputable def sectorialBottcherApprox (c : ℂ) (N : ℕ) (z : ℂ) : ℂ :=
+  z * rootSeqRatioCandidate c N z
+
+/-- The explicit coherent-branch ratio candidate is normalized at infinity. -/
+lemma tendsto_rootSeqRatioCandidate_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto (rootSeqRatioCandidate c N) atInfinity (𝓝 (1 : ℂ)) := by
+  simpa [rootSeqRatioCandidate] using tendsto_root_seq_ratio_candidate_atInfinity c N
+
 lemma root_seq_ratio_candidate_eq_div
     (c : ℂ) (N : ℕ) (z : ℂ) (hz : z ≠ 0)
     (hA : (quadratic_map c)^[N] z ≠ 0) :
@@ -1105,13 +1121,9 @@ lemma tendsto_bottcher_root_seq_ratio_atInfinity_in_sector
     (c : ℂ) (N : ℕ) :
     Tendsto (fun z => bottcher_root_seq c (N + 1) z / z)
       (atInfinity ⊓ 𝓟 (arg_sector N)) (𝓝 (1 : ℂ)) := by
-  let cand : ℂ → ℂ := fun z =>
-    (( (quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
-        (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)) ^
-      ((2 : ℂ) ^ (N + 1))⁻¹
-  have hCand : Tendsto cand atInfinity (𝓝 (1 : ℂ)) :=
-    tendsto_root_seq_ratio_candidate_atInfinity c N
-  have hCand' : Tendsto cand (atInfinity ⊓ 𝓟 (arg_sector N)) (𝓝 (1 : ℂ)) :=
+  have hCand : Tendsto (rootSeqRatioCandidate c N) atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_rootSeqRatioCandidate_atInfinity c N
+  have hCand' : Tendsto (rootSeqRatioCandidate c N) (atInfinity ⊓ 𝓟 (arg_sector N)) (𝓝 (1 : ℂ)) :=
     hCand.mono_left inf_le_left
   have hA0 : ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 :=
     eventually_atInfinity_iter_ne_zero c N
@@ -1156,7 +1168,7 @@ lemma tendsto_bottcher_root_seq_ratio_atInfinity_in_sector
     exact hbase.filter_mono inf_le_left
   have hEq :
       ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)),
-        bottcher_root_seq c (N + 1) z / z = cand z := by
+        bottcher_root_seq c (N + 1) z / z = rootSeqRatioCandidate c N z := by
     refine (hbase'.and hsector).mono ?_
     intro z hz
     rcases hz with ⟨⟨hzne, hA0, hA, hargCand⟩, hzarg⟩
@@ -1164,8 +1176,87 @@ lemma tendsto_bottcher_root_seq_ratio_atInfinity_in_sector
         |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ)) := hzarg
     have h := bottcher_root_seq_ratio_eq_candidate_of_sector
       (c := c) (N := N) (z := z) hzne hA0 hA hargCand hzarg'
-    simpa [cand] using h
+    simpa [rootSeqRatioCandidate] using h
   exact (tendsto_congr' hEq).2 hCand'
+
+/-- On the coherent-branch sector, the current `(N+1)`-st root approximation has
+the explicit ratio candidate as its normalized ratio. -/
+lemma eventuallyEq_bottcher_root_seq_ratio_rootSeqRatioCandidate_in_sector
+    (c : ℂ) (N : ℕ) :
+    (fun z => bottcher_root_seq c (N + 1) z / z)
+      =ᶠ[atInfinity ⊓ 𝓟 (arg_sector N)] rootSeqRatioCandidate c N := by
+  have hA0 : ∀ᶠ z in atInfinity, (quadratic_map c)^[N] z ≠ 0 :=
+    eventually_atInfinity_iter_ne_zero c N
+  have hA : ∀ᶠ z in atInfinity, ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 :=
+    eventually_atInfinity_iter_sq_add_c_ne_zero c N
+  have hargCand : ∀ᶠ z in atInfinity,
+      |Complex.arg
+          (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+            (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+        < Real.pi / 2 :=
+    eventually_atInfinity_abs_arg_lt_pi_div_four_candidate c N
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hsector :
+      ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)),
+        |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ)) := by
+    have : ∀ᶠ z in (𝓟 (arg_sector N)),
+        |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ)) := by
+      exact Filter.eventually_principal.2 (by intro z hz; exact hz)
+    exact this.filter_mono inf_le_right
+  have hbase :
+      ∀ᶠ z in atInfinity,
+        z ≠ 0 ∧
+          (quadratic_map c)^[N] z ≠ 0 ∧
+            ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 ∧
+              |Complex.arg
+                  (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+                    (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+                < Real.pi / 2 := by
+    exact hzne.and (hA0.and (hA.and hargCand))
+  have hbase' :
+      ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)),
+        z ≠ 0 ∧
+          (quadratic_map c)^[N] z ≠ 0 ∧
+            ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 ∧
+              |Complex.arg
+                  (((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 *
+                    (1 + (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))|
+                < Real.pi / 2 := by
+    exact hbase.filter_mono inf_le_left
+  refine (hbase'.and hsector).mono ?_
+  intro z hz
+  rcases hz with ⟨⟨hzne, hA0, hA, hargCand⟩, hzarg⟩
+  have h := bottcher_root_seq_ratio_eq_candidate_of_sector
+    (c := c) (N := N) (z := z) hzne hA0 hA hargCand hzarg
+  simpa [rootSeqRatioCandidate] using h
+
+/-- Hence, on the coherent-branch sector, the explicit sectorial candidate agrees
+eventually with the current finite root approximation itself. -/
+lemma eventuallyEq_bottcher_root_seq_sectorialBottcherApprox_in_sector
+    (c : ℂ) (N : ℕ) :
+    (fun z => bottcher_root_seq c (N + 1) z)
+      =ᶠ[atInfinity ⊓ 𝓟 (arg_sector N)] sectorialBottcherApprox c N := by
+  have hratio :
+      (fun z => bottcher_root_seq c (N + 1) z / z)
+        =ᶠ[atInfinity ⊓ 𝓟 (arg_sector N)] rootSeqRatioCandidate c N :=
+    eventuallyEq_bottcher_root_seq_ratio_rootSeqRatioCandidate_in_sector c N
+  have hzne : ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)), z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact (hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))).filter_mono inf_le_left
+  refine (hratio.and hzne).mono ?_
+  intro z hz
+  rcases hz with ⟨hratioz, hzne⟩
+  calc
+    bottcher_root_seq c (N + 1) z = (bottcher_root_seq c (N + 1) z / z) * z := by
+      field_simp [hzne]
+    _ = rootSeqRatioCandidate c N z * z := by
+      exact congrArg (fun t => t * z) hratioz
+    _ = sectorialBottcherApprox c N z := by
+      simp [sectorialBottcherApprox, mul_comm]
 
 
 lemma norm_bottcher_root_seq_of_ne_zero
