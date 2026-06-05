@@ -92,17 +92,22 @@ The root consumer side is now partially prepared:
    `genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge`, and
    `mlc_conjecture_of_genuineBottcherMotionBridgeTwo` now make the family →
    motion → puzzle-boundary-motion reduction explicit in checked Lean,
-6. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
+6. `MainConjecture.lean` now isolates the still-closer local step
+   `GenuineBottcherLocalParameterExtensionBridgeTwo` and the derived
+   depthwise bridge
+   `genuineBottcherLocalFamilyBridgeTwo_of_localParameterExtensionBridge`,
+   so the route → local-family seam is now explicit too,
+7. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
    Bottcher route into the existing `MainPathData` interface once that bridge is
    available,
-7. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
+8. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
    Bottcher route, the bridge to puzzle-boundary motion, and the existing
    Track-1/Track-2 package.
 
 So the remaining work is now more exact: the repository no longer lacks the
 Phase-5 consumer theorem; it lacks the genuine coordinate theorem itself and the
-bridge from that route to the local parameter-family package feeding
-`GenuineBottcherFamilyBridgeTwo`.
+bridge from that route to the stronger local parameter-extension package feeding
+`GenuineBottcherLocalParameterExtensionBridgeTwo`.
 
 ---
 

@@ -1639,6 +1639,29 @@ def GenuineBottcherFamilyBridgeTwo : Prop :=
   ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
     Nonempty Quadratic.GenuineBottcherFamilyHyp
 
+/-- Still closer to the actual classical global Böttcher theorem package:
+from the single-parameter genuine route at `c = 2`, produce one local
+holomorphic parameter family around `2` controlling all puzzle depths. -/
+def GenuineBottcherLocalParameterExtensionBridgeTwo : Prop :=
+  ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
+    Nonempty (Quadratic.GenuineBottcherLocalParameterFamilyData (2 : ℂ))
+
+/-- Pointwise depth-`n` version extracted from the stronger local-parameter
+extension bridge. This isolates the immediate next output needed by the motion
+layer without yet pretending the full global family package is available. -/
+def GenuineBottcherLocalFamilyBridgeTwo : Prop :=
+  ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ), ∀ n : ℕ,
+    Nonempty (Quadratic.GenuineBottcherLocalFamilyData n (2 : ℂ))
+
+/-- A local parameter family around `2` yields the depthwise local family
+packages needed on the motion side. -/
+theorem genuineBottcherLocalFamilyBridgeTwo_of_localParameterExtensionBridge
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo) :
+    GenuineBottcherLocalFamilyBridgeTwo := by
+  intro h_route n
+  rcases h_ext h_route with ⟨h_local⟩
+  exact ⟨h_local.toLocalFamilyData n⟩
+
 /-- Any theorem-facing bridge to the genuine local family package immediately
 supplies the more concrete Bottcher-motion bridge. -/
 theorem genuineBottcherMotionBridgeTwo_of_familyBridge

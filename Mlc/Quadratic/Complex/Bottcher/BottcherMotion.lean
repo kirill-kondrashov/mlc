@@ -82,6 +82,57 @@ structure GenuineBottcherFamilyHyp where
   h_stab : parameter_dynamics_stability_hyp
   family : ∀ (n : ℕ) (c₀ : ℂ), GenuineBottcherLocalFamilyData n c₀
 
+/-- Stronger local target centered at a single base parameter: one local
+parameter family controls all puzzle depths simultaneously. This is the natural
+next theorem-facing target after the single-parameter genuine route at
+`c = 2`. -/
+structure GenuineBottcherLocalParameterFamilyData (c₀ : ℂ) where
+  r : ℝ
+  r_pos : 0 < r
+  phi : ℂ → ℂ → ℂ
+  norm_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c → 1 < ‖phi c z‖
+  basin_of_norm_gt_one :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, 1 < ‖phi c z‖ → z ∈ basin_of_infinity c
+  conj_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c →
+        phi c (MLC.quadratic_map c z) = (phi c z)^2
+  modulus_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c →
+        ‖phi c z‖ = Real.exp (green_function c z)
+  continuous_on_basin_ne_zero :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt (phi c) z
+  tendsto_div_atInfinity :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      Tendsto (fun z => phi c z / z) atInfinity (𝓝 (1 : ℂ))
+  param_holo :
+    ∀ z : ℂ, DifferentiableOn ℂ (fun c => phi c z) (ball c₀ r)
+  puzzle_boundary_eq_equipotential :
+    ∀ n : ℕ, ∀ c : ℂ, c ∈ ball c₀ r →
+      PuzzleBoundary c n = equipotential (BottcherData.ofFamily phi) c n
+
+/-- A local parameter family around `c₀` yields the depth-`n` family package
+needed by the motion layer. -/
+def GenuineBottcherLocalParameterFamilyData.toLocalFamilyData
+    {c₀ : ℂ} (h : GenuineBottcherLocalParameterFamilyData c₀) (n : ℕ) :
+    GenuineBottcherLocalFamilyData n c₀ :=
+  { r := h.r
+    r_pos := h.r_pos
+    phi := h.phi
+    norm_on_basin := h.norm_on_basin
+    basin_of_norm_gt_one := h.basin_of_norm_gt_one
+    conj_on_basin := h.conj_on_basin
+    modulus_on_basin := h.modulus_on_basin
+    continuous_on_basin_ne_zero := h.continuous_on_basin_ne_zero
+    tendsto_div_atInfinity := h.tendsto_div_atInfinity
+    param_holo := h.param_holo
+    puzzle_boundary_eq_equipotential := fun c hc => h.puzzle_boundary_eq_equipotential n c hc }
+
 /-- The induced motion from a Böttcher coordinate: move points by varying `c`. -/
 def bottcher_motion (_B : BottcherData) (E : Set ℂ) : HolomorphicMotion E :=
   { f := fun _ z => z
