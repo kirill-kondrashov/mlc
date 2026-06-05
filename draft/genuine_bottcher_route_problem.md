@@ -1,4 +1,4 @@
-# Remaining problem 1: genuine holomorphic Böttcher coordinate at $$c=2$$
+# Remaining problem 1: genuine Böttcher route at $$c=2$$
 
 Let
 
@@ -6,17 +6,23 @@ $$
 f(z)=z^2+2,
 $$
 
-let
+and let
 
 $$
 K(f)=\{z\in\mathbb C : \{f^{\circ n}(z)\}_{n\geq 0} \text{ is bounded}\},
 \qquad
 U_\infty=\mathbb C\setminus K(f),
 \qquad
+V=\{z\in\mathbb C : |z|>4\},
+\qquad
 \Omega=\{w\in\mathbb C : |w|>1\},
 $$
 
-and let $$G:U_\infty\to(0,\infty)$$ be the Green function of $$f$$.
+with Green function
+
+$$
+G:U_\infty\to(0,\infty).
+$$
 
 Prove that there exists a holomorphic map
 
@@ -36,8 +42,18 @@ $$
 \qquad \text{for every } z\in U_\infty,
 $$
 
+$$
+\lim_{z\to\infty}\frac{\Phi(z)}{z}=1,
+$$
+
+$$
+\Phi(U_\infty)=\Omega,
+$$
+
 and
 
 $$
-\lim_{z\to\infty}\frac{\Phi(z)}{z}=1.
+\Phi|_V:V\to\Omega
 $$
+
+is injective.

@@ -51,13 +51,12 @@ refuted in Lean.
 
 The expert-facing documentation has been cleaned up accordingly:
 
-1. `draft/genuine_bottcher_coordinate_problem.md` states the first honest
-   remaining positive target: replace the current proxy by a genuine holomorphic
-   Böttcher coordinate at `c = 2`.
-2. `draft/genuine_bottcher_inverse_problem.md` states the matching exterior
-   inverse package for that genuine coordinate.
-3. `proof_sketches/` now mirrors `draft/`: it contains one rigorous
-   human-readable proof for each current remaining positive target.
+1. `draft/genuine_bottcher_route_problem.md` states the bundled single-parameter
+   genuine Böttcher route still missing at `c = 2`.
+2. `draft/genuine_bottcher_local_parameter_extension_problem.md` states the next
+   local parameter-family extension problem near `c = 2`.
+3. `proof_sketches/` now mirrors `draft/`: it contains one human-readable proof
+   sketch for each current remaining positive target.
 
 So the earlier explicit frontier
 
@@ -108,8 +107,8 @@ through:
 The old proxy-based routes are now formally eliminated. The exact remaining
 positive targets are:
 
-1. `draft/genuine_bottcher_coordinate_problem.md`
-2. `draft/genuine_bottcher_inverse_problem.md`
+1. `draft/genuine_bottcher_route_problem.md`
+2. `draft/genuine_bottcher_local_parameter_extension_problem.md`
 
 In particular, the last axiom can no longer be eliminated by proving the
 already-refuted basin-valued inverse theorem for the current proxy
@@ -141,7 +140,7 @@ routes remain formally refuted as well.
    historical plans.
 3. `draft/` now records the exact remaining positive mathematical targets after
    factoring out the proxy-based obstructions.
-4. `proof_sketches/` records the rigorous human-readable proofs of the current
+4. `proof_sketches/` records the human-readable proof sketches of the current
    `draft/` targets.
 5. The current root-facing story is therefore honest: one residual
    theorem-facing assumption remains, and its elimination now clearly requires a
