@@ -373,17 +373,45 @@ repo/library support.
       interface refactor is needed because Route A now satisfies the existing
       canonical `GenuineBottcherNearInfinityDataFor` interface.
 
-So the honest next implementation target is now:
+So the honest next implementation target is now basin extension.
 
-1. construct a basin extension of `logSeriesBottcherApprox` from the canonical
-   near-infinity coordinate;
-2. prove the extension is independent of the escape iterate used to pull back;
-3. prove differentiability/nonvanishing/conjugacy on the full basin;
-4. prove the Green-function modulus identity for the extended coordinate;
-5. package these as `ClassicalGlobalBottcherTheoremFor` (at least first for
-   `c = 2`).
-4. only then attempt the basin extension step for
-   `Quadratic.ClassicalGlobalBottcherTheoremFor`.
+Current basin-extension status:
+
+1. **PASSED (candidate only):** a concrete principal-branch pullback candidate is
+   defined by `exists_iterate_mem_outside_open_of_mem_basin`,
+   `basinEscapeTime`, `principalPullbackLogSeriesBottcher`, and
+   `basinLogSeriesExtensionCandidate`. It pulls the canonical near-infinity
+   coordinate back from the first escaping iterate using the principal
+   `2^n`-root.
+2. **FAILED:** independence of the escape iterate is not proved. This is the
+   main obstruction for the principal-pullback candidate; it requires coherent
+   branch control for the roots along the basin orbit.
+3. **FAILED:** differentiability, nonvanishing, and conjugacy on the full basin
+   are not proved. They depend on the same independence/coherent-branch theorem,
+   plus local holomorphicity of the pullback branches.
+4. **FAILED:** the Green-function modulus identity for the extended coordinate
+   is not proved. It should follow after a coherent basin extension exists and
+   is shown compatible with the near-infinity normalization.
+5. **PASSED as a reduction seam, FAILED as a theorem:** the exact data needed to
+   finish the classical theorem is isolated as `LogSeriesBasinExtensionDataFor`.
+   The reductions
+   `LogSeriesBasinExtensionDataFor.toClassicalGlobalBottcherDataFor` and
+   `classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData` prove that
+   this data implies `ClassicalGlobalBottcherTheoremFor`. No actual
+   `LogSeriesBasinExtensionDataFor (2 : ℂ)` is constructed yet.
+
+Next alternatives for the failed basin-extension step:
+
+1. **Basin route A (coherent pullback branches):** formalize inverse branches of
+   squaring along the escaping orbit so that
+   `principalPullbackLogSeriesBottcher` is independent of escape time and
+   holomorphic locally on the basin.
+2. **Basin route B (exterior inverse package first):** construct the inverse map
+   on the exterior for `logSeriesBottcherApprox`, then define the basin extension
+   via inverse dynamics and prove uniqueness from the semiconjugacy.
+3. **Basin route C (classical theorem seam):** import/formalize a standard global
+   Böttcher extension theorem for superattracting infinity and instantiate it
+   with the now-proved canonical near-infinity coordinate.
 
 ## Non-goals
 
