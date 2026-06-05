@@ -1632,6 +1632,23 @@ def GenuineBottcherMotionBridgeTwo : Prop :=
   ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
     Nonempty Quadratic.BottcherMotionHyp
 
+/-- Next theorem-facing refinement of PLAN 06: the genuine route at `c = 2`
+should eventually produce a local parameter-family package strong enough to feed
+the Bottcher-motion layer. -/
+def GenuineBottcherFamilyBridgeTwo : Prop :=
+  ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
+    Nonempty Quadratic.GenuineBottcherFamilyHyp
+
+/-- Any theorem-facing bridge to the genuine local family package immediately
+supplies the more concrete Bottcher-motion bridge. -/
+theorem genuineBottcherMotionBridgeTwo_of_familyBridge
+    (h_family : GenuineBottcherFamilyBridgeTwo) :
+    GenuineBottcherMotionBridgeTwo := by
+  intro h_route
+  exact
+    ⟨Quadratic.bottcher_motion_hyp_of_genuineBottcherFamily
+      (Classical.choice (h_family h_route))⟩
+
 /-- Any theorem-facing bridge to Bottcher-based motion immediately supplies the
 exact puzzle-boundary-motion bridge needed by the Phase-5 root seam. -/
 theorem genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge
@@ -1987,6 +2004,19 @@ theorem mlc_conjecture_of_genuineBottcherMotionBridgeTwo
   exact
     mlc_conjecture_of_genuineBottcherRoute_two
       (genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge h_bridge)
+      h_route h_track12
+
+/-- Combined theorem-facing cutover through the new local family package:
+once the genuine route at `c = 2` yields a genuine Böttcher family, the
+existing motion layer and Track-1/Track-2 package already close MLC. -/
+theorem mlc_conjecture_of_genuineBottcherFamilyBridgeTwo
+    (h_family : GenuineBottcherFamilyBridgeTwo)
+    (h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_genuineBottcherMotionBridgeTwo
+      (genuineBottcherMotionBridgeTwo_of_familyBridge h_family)
       h_route h_track12
 
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/

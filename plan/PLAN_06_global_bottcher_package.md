@@ -80,19 +80,29 @@ The root consumer side is now partially prepared:
    `GenuineBottcherMotionBridgeTwo`, which asks for Bottcher-based motion data
    from the genuine route and converts it to the puzzle-boundary-motion bridge
    through the existing constructor in `BottcherMotion.lean`,
-3. `genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge` and
-   `mlc_conjecture_of_genuineBottcherMotionBridgeTwo` now make that reduction
-   explicit in checked Lean,
-4. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
+3. `MainConjecture.lean` now also exposes the still-more-precise seam
+   `GenuineBottcherFamilyBridgeTwo`, which asks for a local parameter-family
+   package from the genuine route and reduces it to the motion bridge,
+4. `BottcherMotion.lean` now exposes the theorem-facing family package
+   `GenuineBottcherLocalFamilyData` / `GenuineBottcherFamilyHyp` together with
+   checked constructors
+   `bottcher_motion_hyp_of_genuineBottcherFamily` and
+   `puzzle_boundary_motion_hyp_of_genuineBottcherFamily`,
+5. `genuineBottcherMotionBridgeTwo_of_familyBridge`,
+   `genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge`, and
+   `mlc_conjecture_of_genuineBottcherMotionBridgeTwo` now make the family →
+   motion → puzzle-boundary-motion reduction explicit in checked Lean,
+6. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
    Bottcher route into the existing `MainPathData` interface once that bridge is
    available,
-5. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
+7. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
    Bottcher route, the bridge to puzzle-boundary motion, and the existing
    Track-1/Track-2 package.
 
 So the remaining work is now more exact: the repository no longer lacks the
 Phase-5 consumer theorem; it lacks the genuine coordinate theorem itself and the
-bridge from that route to Bottcher-based motion / `Quadratic.PuzzleBoundaryMotionHyp`.
+bridge from that route to the local parameter-family package feeding
+`GenuineBottcherFamilyBridgeTwo`.
 
 ---
 

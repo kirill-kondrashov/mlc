@@ -8,7 +8,7 @@ set_option linter.unnecessarySimpa false
 
 namespace MLC.Quadratic
 
-open Complex Topology Set Metric
+open Complex Topology Set Metric Filter
 
 noncomputable section
 
@@ -17,9 +17,70 @@ structure BottcherData where
   /-- `phi c z` is the Böttcher coordinate for the map `f_c` (placeholder). -/
   phi : ℂ → ℂ → ℂ
 
+/-- Forget a theorem-facing parameter family to the minimal motion-side
+`BottcherData` wrapper. -/
+def BottcherData.ofFamily (Φ : ℂ → ℂ → ℂ) : BottcherData where
+  phi := Φ
+
 /-- The equipotential of level `n` under a Böttcher coordinate. -/
 def equipotential (B : BottcherData) (c : ℂ) (n : ℕ) : Set ℂ :=
   {z | ‖B.phi c z‖ = (1 / 2) ^ n}
+
+/-- Placeholder for the component-mapping hypothesis (to be replaced by
+analytic theory). -/
+def homeomorphism_maps_component_hyp : Prop :=
+  True
+
+/-- Placeholder for parameter-dynamics stability (to be replaced by analytic
+theory). -/
+def parameter_dynamics_stability_hyp : Prop :=
+  True
+
+/-- Theorem-facing local family package for the genuine Böttcher plan:
+around a base parameter `c₀` and puzzle depth `n`, we have a small parameter
+disk together with a family whose fibers satisfy the expected genuine
+Böttcher-coordinate properties. This is kept self-contained on the motion side
+of the dependency graph so it can feed `BottcherMotionHyp` without creating an
+import cycle back through `ConstructiveBasinCoordinate.lean`. The remaining
+analytic work is to actually build such families and prove the boundary
+compatibility clause. -/
+structure GenuineBottcherLocalFamilyData (n : ℕ) (c₀ : ℂ) where
+  r : ℝ
+  r_pos : 0 < r
+  phi : ℂ → ℂ → ℂ
+  norm_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c → 1 < ‖phi c z‖
+  basin_of_norm_gt_one :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, 1 < ‖phi c z‖ → z ∈ basin_of_infinity c
+  conj_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c →
+        phi c (MLC.quadratic_map c z) = (phi c z)^2
+  modulus_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c →
+        ‖phi c z‖ = Real.exp (green_function c z)
+  continuous_on_basin_ne_zero :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt (phi c) z
+  tendsto_div_atInfinity :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      Tendsto (fun z => phi c z / z) atInfinity (𝓝 (1 : ℂ))
+  param_holo :
+    ∀ z : ℂ, DifferentiableOn ℂ (fun c => phi c z) (ball c₀ r)
+  puzzle_boundary_eq_equipotential :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      PuzzleBoundary c n = equipotential (BottcherData.ofFamily phi) c n
+
+/-- Global theorem-facing family package: local genuine Böttcher families are
+available for every puzzle depth and base parameter, together with the existing
+topological/dynamical side hypotheses used by the motion layer. -/
+structure GenuineBottcherFamilyHyp where
+  h_top : homeomorphism_maps_component_hyp
+  h_stab : parameter_dynamics_stability_hyp
+  family : ∀ (n : ℕ) (c₀ : ℂ), GenuineBottcherLocalFamilyData n c₀
 
 /-- The induced motion from a Böttcher coordinate: move points by varying `c`. -/
 def bottcher_motion (_B : BottcherData) (E : Set ℂ) : HolomorphicMotion E :=
@@ -33,14 +94,6 @@ def bottcher_motion (_B : BottcherData) (E : Set ℂ) : HolomorphicMotion E :=
     h_holo := by
       intro z hz
       simpa using (differentiableOn_const : DifferentiableOn ℂ (fun _ => z) (ball 0 1)) }
-
-/-- Placeholder for the component-mapping hypothesis (to be replaced by analytic theory). -/
-def homeomorphism_maps_component_hyp : Prop :=
-  True
-
-/-- Placeholder for parameter-dynamics stability (to be replaced by analytic theory). -/
-def parameter_dynamics_stability_hyp : Prop :=
-  True
 
 /-- Identification of the dynamical puzzle piece when the sublevel set is connected. -/
 lemma dynamical_puzzle_piece_eq_green_sublevel (c : ℂ) (n : ℕ) (z : ℂ)
@@ -107,6 +160,63 @@ def puzzle_boundary_motion_hyp_of_bottcher (h : BottcherMotionHyp) :
   { motion := fun n c₀ _hc₀ =>
       puzzle_boundary_motion_exists_of_data n c₀
         (puzzle_boundary_motion_data_of_bottcher n c₀ (h.data n c₀)) }
+
+/-- Build Bottcher-motion data directly from a theorem-facing local genuine
+family package. The current motion-preservation proof still factors through the
+existing witness-driven green-sublevel seam; the point of this wrapper is to
+make the required family-shaped input explicit. -/
+def bottcher_motion_data_of_genuineBottcherLocalFamily_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp)
+    (_h_top : homeomorphism_maps_component_hyp)
+    (_h_stab : parameter_dynamics_stability_hyp)
+    {n : ℕ} {c₀ : ℂ}
+    (h : GenuineBottcherLocalFamilyData n c₀) :
+    BottcherMotionData n c₀ :=
+  { B := BottcherData.ofFamily h.phi
+    r := h.r
+    r_pos := h.r_pos
+    E := PuzzleBoundary c₀ n
+    E_eq := rfl
+    preserves := by
+      exact
+        motion_preserves_para_piece_of_green_sublevel_of_witness_hyp
+          h_witness _h_top _h_stab n c₀ h.r
+          (BottcherData.ofFamily h.phi) (PuzzleBoundary c₀ n) rfl }
+
+/-- Produce Bottcher-based motion from the global theorem-facing genuine family
+package and an external witness source. -/
+def bottcher_motion_hyp_of_genuineBottcherFamily_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp)
+    (h : GenuineBottcherFamilyHyp) :
+    BottcherMotionHyp :=
+  { data := fun n c₀ =>
+      bottcher_motion_data_of_genuineBottcherLocalFamily_of_witness_hyp
+        h_witness h.h_top h.h_stab (h.family n c₀) }
+
+/-- Default production of Bottcher-based motion from the theorem-facing genuine
+family package. -/
+def bottcher_motion_hyp_of_genuineBottcherFamily
+    (h : GenuineBottcherFamilyHyp) :
+    BottcherMotionHyp :=
+  bottcher_motion_hyp_of_genuineBottcherFamily_of_witness_hyp
+    para_puzzle_transport_witness_hyp h
+
+/-- The theorem-facing genuine family package already yields puzzle-boundary
+motion through the existing Bottcher-motion layer. -/
+def puzzle_boundary_motion_hyp_of_genuineBottcherFamily_of_witness_hyp
+    (h_witness : ParaPuzzleTransportWitnessHyp)
+    (h : GenuineBottcherFamilyHyp) :
+    PuzzleBoundaryMotionHyp :=
+  puzzle_boundary_motion_hyp_of_bottcher
+    (bottcher_motion_hyp_of_genuineBottcherFamily_of_witness_hyp h_witness h)
+
+/-- Default puzzle-boundary-motion constructor from the theorem-facing genuine
+family package. -/
+def puzzle_boundary_motion_hyp_of_genuineBottcherFamily
+    (h : GenuineBottcherFamilyHyp) :
+    PuzzleBoundaryMotionHyp :=
+  puzzle_boundary_motion_hyp_of_genuineBottcherFamily_of_witness_hyp
+    para_puzzle_transport_witness_hyp h
 
 /-- Build Böttcher motion data from Green sublevel hypotheses. -/
 def bottcher_motion_data_of_green_sublevel_of_witness_hyp
