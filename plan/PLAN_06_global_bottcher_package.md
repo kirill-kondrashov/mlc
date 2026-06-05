@@ -145,7 +145,7 @@ repo/library support.
    No packaged local Böttcher theorem near a superattracting fixed point was
    found in the current repo or imported libraries.
 2. **Candidate 2: coherently-branched root-limit on one exterior domain** —
-   **active best route**.
+   **blocked as a direct witness for the current near-infinity interface**.
    Existing support already includes:
    - slit-plane and rotated-slit branch domains in
      `InverseBranchQuadratic.lean`,
@@ -165,25 +165,49 @@ repo/library support.
    In particular, the sectorial candidate now carries the direct normalization
    statement `sectorialBottcherApprox c N z / z → 1` on
    `atInfinity ⊓ 𝓟 (arg_sector N)`.
+   The current obstruction is now formal:
+   - `not_exterior_subset_arg_sector`
+   proves that no `arg_sector N` contains a full exterior neighborhood
+   `{z | R < ‖z‖}`.
+   Hence the present sectorial Candidate-2 package cannot directly fill
+   `ClassicalGlobalBottcherDataFor.nearPhi`, whose domain is an honest exterior
+   neighborhood. Completing this route would require a new gluing/patching
+   theorem across sectors, not just one more sector estimate.
 3. **Candidate 3: pull back a near-infinity coordinate to the basin** —
-   **blocked downstream of Candidate 2**.
-   This only becomes meaningful after Candidate 2 produces a genuine holomorphic
-   near-infinity coordinate.
+   **blocked downstream of Candidate 7**.
+   This only becomes meaningful after the correction-product route, or another
+   route, produces a genuine holomorphic near-infinity coordinate.
 4. **Candidate 4: Riemann-map / uniformization route** — **blocked**.
    No usable Riemann-map / uniformization theorem support was found.
 5. **Candidate 5: Green + harmonic conjugate route** — **blocked**.
    No usable global harmonic-conjugate package was found.
 6. **Candidate 6: functional-equation / fixed-point or Laurent-series route** —
-   **lower priority / effectively blocked**.
-   General analytic tools exist, but nothing close to a ready-made local
-   Böttcher construction; Candidate 2 has much stronger existing support.
+   **superseded by Candidate 7 below**.
+   The old sector branch attempt exposed that the next route must avoid taking
+   roots of the leading `z^(2^n)` term directly.
+7. **Candidate 7: near-one correction product at infinity** —
+   **new active best route**.
+   This refactors the root construction as
+   `z` times a product of correction factors tending to `1`, so fractional
+   powers are applied only near the slit-plane-safe point `1` and no shrinking
+   `arg_sector N` condition is imposed on `z`.
+   Checked finite-stage objects now exist in `BottcherOutsidePlan.lean`:
+   - `nearOneCorrectionFactor`
+   - `finiteProductBottcherRatio`
+   - `finiteProductBottcherApprox`
+   - `tendsto_nearOneCorrectionFactor_atInfinity`
+   - `tendsto_finiteProductBottcherRatio_atInfinity`
+   - `tendsto_finiteProductBottcherApprox_div_atInfinity`
+   These prove full-filter normalization for every finite product approximation.
+   The missing theorem is convergence of the finite products as `n → ∞`,
+   preferably locally uniformly on some `{z | R < ‖z‖}`, followed by
+   holomorphicity of the limit and the Böttcher conjugacy identity.
 
 So the honest next implementation target is now:
 
-1. build the near-infinity coordinate by Candidate 2 on one explicit exterior
-   region with a coherent branch choice;
-2. upgrade the current **sectorial** candidate package to one honest
-   near-infinity map on a fixed simply connected exterior region;
+1. prove convergence of the Candidate-7 finite products on one full exterior
+   region `{z | R < ‖z‖}`;
+2. package the locally uniform limit as the near-infinity coordinate;
 3. only then attempt the basin extension step for
    `Quadratic.ClassicalGlobalBottcherTheoremFor`.
 

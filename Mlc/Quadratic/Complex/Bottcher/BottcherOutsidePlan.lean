@@ -14,6 +14,7 @@ namespace MLC
 
 open Quadratic Complex Topology Set Filter
 open scoped Uniformity
+open scoped BigOperators
 
 /-!
 Plan: eliminate `proxy_bottcher_map_inj_on_outside`.
@@ -786,6 +787,77 @@ lemma tendsto_rootSeqRatioCandidate_atInfinity (c : ℂ) (N : ℕ) :
     Tendsto (rootSeqRatioCandidate c N) atInfinity (𝓝 (1 : ℂ)) := by
   simpa [rootSeqRatioCandidate] using tendsto_root_seq_ratio_candidate_atInfinity c N
 
+/-- Branch-safe correction factor for the product route. Unlike
+`rootSeqRatioCandidate`, this takes a fractional power only of a term tending to
+`1`, so it does not impose a shrinking sector condition on `z`. -/
+noncomputable def nearOneCorrectionFactor (c : ℂ) (N : ℕ) (z : ℂ) : ℂ :=
+  ((1 : ℂ) +
+      (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2) ^
+    ((2 : ℂ) ^ (N + 1))⁻¹
+
+/-- Each branch-safe correction factor is normalized at infinity. -/
+lemma tendsto_nearOneCorrectionFactor_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto (nearOneCorrectionFactor c N) atInfinity (𝓝 (1 : ℂ)) := by
+  simpa [nearOneCorrectionFactor] using
+    tendsto_cpow_const_of_tendsto_one
+      (f := fun z : ℂ =>
+        (1 : ℂ) +
+          (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+      (a := ((2 : ℂ) ^ (N + 1))⁻¹)
+      (tendsto_root_ratio_term_atInfinity c N)
+
+/-- Finite product candidate for the next route: factor out `z` first, then
+multiply only near-`1` correction factors. The missing future step is convergence
+of these finite products as `n → ∞`, not a sector/argument correction for `z`. -/
+noncomputable def finiteProductBottcherRatio (c : ℂ) : ℕ → ℂ → ℂ
+  | 0, _ => 1
+  | n + 1, z => nearOneCorrectionFactor c n z * finiteProductBottcherRatio c n z
+
+/-- The corresponding finite product coordinate approximation. -/
+noncomputable def finiteProductBottcherApprox (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
+  z * finiteProductBottcherRatio c n z
+
+lemma finiteProductBottcherApprox_div (c : ℂ) (n : ℕ) {z : ℂ} (hz : z ≠ 0) :
+    finiteProductBottcherApprox c n z / z = finiteProductBottcherRatio c n z := by
+  calc
+    finiteProductBottcherApprox c n z / z =
+        (z * finiteProductBottcherRatio c n z) / z := by
+      simp [finiteProductBottcherApprox]
+    _ = finiteProductBottcherRatio c n z := by
+      field_simp [hz, mul_comm, mul_left_comm, mul_assoc]
+
+/-- Every finite product candidate has the correct normalization at infinity,
+with no sector restriction. -/
+lemma tendsto_finiteProductBottcherRatio_atInfinity (c : ℂ) :
+    ∀ n : ℕ, Tendsto (finiteProductBottcherRatio c n) atInfinity (𝓝 (1 : ℂ))
+  | 0 => by
+      simpa [finiteProductBottcherRatio] using
+        (tendsto_const_nhds : Tendsto (fun _ : ℂ => (1 : ℂ)) atInfinity (𝓝 (1 : ℂ)))
+  | n + 1 => by
+      have hprod : Tendsto (finiteProductBottcherRatio c n) atInfinity (𝓝 (1 : ℂ)) :=
+        tendsto_finiteProductBottcherRatio_atInfinity c n
+      have hfactor : Tendsto (nearOneCorrectionFactor c n) atInfinity (𝓝 (1 : ℂ)) :=
+        tendsto_nearOneCorrectionFactor_atInfinity c n
+      have hmul := hfactor.mul hprod
+      simpa [finiteProductBottcherRatio] using hmul
+
+/-- Consequently every finite product coordinate approximation is normalized at
+infinity on the full at-infinity filter, not merely on a sector filter. -/
+lemma tendsto_finiteProductBottcherApprox_div_atInfinity (c : ℂ) (n : ℕ) :
+    Tendsto (fun z => finiteProductBottcherApprox c n z / z) atInfinity (𝓝 (1 : ℂ)) := by
+  have hratio : Tendsto (finiteProductBottcherRatio c n) atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_finiteProductBottcherRatio_atInfinity c n
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hEq :
+      (fun z => finiteProductBottcherApprox c n z / z)
+        =ᶠ[atInfinity] finiteProductBottcherRatio c n := by
+    filter_upwards [hzne] with z hz
+    exact finiteProductBottcherApprox_div c n hz
+  exact (tendsto_congr' hEq).2 hratio
+
 lemma root_seq_ratio_candidate_eq_div
     (c : ℂ) (N : ℕ) (z : ℂ) (hz : z ≠ 0)
     (hA : (quadratic_map c)^[N] z ≠ 0) :
@@ -1087,6 +1159,57 @@ lemma eventually_atInfinity_root_seq_ratio_candidate_eq_div
 
 def arg_sector (N : ℕ) : Set ℂ :=
   {z | |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ))}
+
+/-- A single `arg_sector N` can never contain a full exterior neighborhood of
+infinity. This is the formal obstruction to using the current sectorial
+Candidate-2 package directly as the theorem-facing near-infinity coordinate,
+whose interface is defined on `{z | R < ‖z‖}`. -/
+lemma not_exterior_subset_arg_sector (R : ℝ) (N : ℕ) :
+    ¬ ({z : ℂ | R < ‖z‖} ⊆ arg_sector N) := by
+  intro hsubset
+  let a : ℝ := max R 0 + 1
+  let z0 : ℂ := ((-a : ℝ) : ℂ)
+  have ha_pos : 0 < a := by
+    dsimp [a]
+    linarith [le_max_right R 0]
+  have hR_lt_a : R < a := by
+    dsimp [a]
+    linarith [le_max_left R 0]
+  have hz0_norm : ‖z0‖ = a := by
+    have hnorm_abs : ‖z0‖ = |(-a : ℝ)| := by
+      simpa [z0] using (Complex.norm_real (-a))
+    have hneg : (-a : ℝ) < 0 := by
+      linarith
+    rw [hnorm_abs, abs_of_neg hneg]
+    ring
+  have hz0_out : z0 ∈ ({z : ℂ | R < ‖z‖} : Set ℂ) := by
+    simpa [hz0_norm] using hR_lt_a
+  have hz0_sector : z0 ∈ arg_sector N := hsubset hz0_out
+  have hz0_arg : Complex.arg z0 = Real.pi := by
+    have hneg : (-a : ℝ) < 0 := by linarith
+    simpa [z0] using (Complex.arg_ofReal_of_neg hneg)
+  have hsector :
+      Real.pi < Real.pi / (2 * (2 ^ (N + 1) : ℝ)) := by
+    have h := hz0_sector
+    simp [arg_sector, hz0_arg, abs_of_pos Real.pi_pos] at h
+    exact h
+  have hden_ge_one : (1 : ℝ) ≤ 2 * (2 ^ (N + 1) : ℝ) := by
+    have hpow_ge_one : (1 : ℝ) ≤ (2 : ℝ) ^ (N + 1) :=
+      one_le_pow₀ (by norm_num : (1 : ℝ) ≤ 2)
+    nlinarith
+  have hden_pos : (0 : ℝ) < 2 * (2 ^ (N + 1) : ℝ) :=
+    lt_of_lt_of_le zero_lt_one hden_ge_one
+  have hdiv_le : Real.pi / (2 * (2 ^ (N + 1) : ℝ)) ≤ Real.pi := by
+    have hinv_le : (1 : ℝ) / (2 * (2 ^ (N + 1) : ℝ)) ≤ 1 := by
+      have h := one_div_le_one_div_of_le zero_lt_one hden_ge_one
+      simpa using h
+    have hpi_nonneg : 0 ≤ Real.pi := le_of_lt Real.pi_pos
+    calc
+      Real.pi / (2 * (2 ^ (N + 1) : ℝ))
+          = Real.pi * ((1 : ℝ) / (2 * (2 ^ (N + 1) : ℝ))) := by ring
+      _ ≤ Real.pi * 1 := mul_le_mul_of_nonneg_left hinv_le hpi_nonneg
+      _ = Real.pi := by ring
+  linarith
 
 /-- Hence the sectorial coherent-branch coordinate candidate itself is normalized
 on the corresponding sector filter. -/
