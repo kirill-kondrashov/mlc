@@ -264,31 +264,51 @@ repo/library support.
    - `InvertedLocalBottcherDataFor.toGenuineBottcherNearInfinityDataFor`
    - `InvertedLocalBottcherTheoremFor`
    - `genuineBottcherNearInfinityRouteFor_of_invertedLocalBottcherTheoremFor`
+   - `invertedQuadraticMap_ne_sq_of_mul_ne_zero`
+   - `invertedQuadraticMap_half_ne_half_sq_two`
+   - `not_exists_linear_invertedLocalConj_two`
    Thus Candidate 9 is not disproved: its pullback algebra, exterior-valuedness,
    conjugacy, differentiability, and normalization reduction are checked.
+   The naive identity coordinate `ψ(w)=w` and every nonzero scalar-linear
+   coordinate `ψ(w)=a w` are formally ruled out, so Candidate 9 cannot be
+   completed by just using a linear Laurent coordinate.
    The remaining blocker is precisely the local theorem constructing
    `InvertedLocalBottcherDataFor c`, i.e. the local Böttcher theorem for
    `w ↦ w^2/(1+c w^2)` near the superattracting fixed point `0`.
 10. **Candidate 10: explicit majorant proof for Candidate 8** —
-   **recommended next practical route**.
-   Rather than opening a new analytic fixed-point formalization, prove the exact
-   estimates needed by `LogCorrectionSeriesMajorizedOnExterior`: a
-   double-exponential lower bound for `‖(quadratic_map c)^[n] z‖` on a sufficiently
-   large exterior region and a near-one logarithm estimate
-   `‖Log(1+w)‖ ≤ C‖w‖` for `‖w‖` small. This should discharge Candidate 8 using
-   the already-checked M-test bridge and avoids the larger burden of a full local
-   power-series fixed-point theorem.
+   **completed for the convergence seam**.
+   Rather than opening a new analytic fixed-point formalization, this route proves
+   the exact estimates needed by `LogCorrectionSeriesMajorizedOnExterior`.
+   Checked objects now exist in `BottcherOutsidePlan.lean`:
+   - `nearOneLogCorrection_eq_simple`
+   - `exteriorGrowthLower`
+   - `exteriorGrowthLower_nonneg`
+   - `exteriorGrowthLower_le_norm_iterate`
+   - `LogCorrectionSeriesMajorizedOnExterior.of_large_radius`
+   - `LogCorrectionSeriesConvergesOnExterior.of_large_radius`
+   Thus the Candidate-8 M-test/convergence seam is discharged on any exterior
+   radius `R` with `‖c‖ + 2 ≤ R`.
+11. **Candidate 11: log-series-to-Böttcher package bridge** —
+   **new active route**.
+   Starting from `LogCorrectionSeriesConvergesOnExterior.of_large_radius`, prove
+   that `logSeriesBottcherApprox` is a genuine near-infinity Böttcher coordinate:
+   1. `logCorrectionSeries c z → 0` as `z → ∞`,
+   2. hence `logSeriesBottcherApprox c z / z → 1`,
+   3. locally uniform convergence plus differentiability of finite log sums gives
+      differentiability on the exterior region,
+   4. the shifted logarithmic series gives the conjugacy
+      `Φ(f_c z) = (Φ z)^2`,
+   5. exterior-valuedness follows from normalization after possibly enlarging
+      the radius.
 
 So the honest next implementation target is now:
 
-1. pursue Candidate 10 by proving the exterior double-exponential lower bound
-   and the near-one logarithm estimate;
-2. use them to prove `LogCorrectionSeriesMajorizedOnExterior c R` for a
-   sufficiently large exterior radius `R`;
-3. derive `LogCorrectionSeriesConvergesOnExterior c R` via the checked M-test
-   bridge;
-4. prove normalization and Böttcher conjugacy for `logSeriesBottcherApprox`;
-5. only then attempt the basin extension step for
+1. prove the normalization of `logSeriesBottcherApprox` at infinity from the
+   now-checked majorant/convergence seam;
+2. prove the logarithmic shift identity and derive Böttcher conjugacy;
+3. package differentiability and exterior-valuedness on a sufficiently large
+   exterior region;
+4. only then attempt the basin extension step for
    `Quadratic.ClassicalGlobalBottcherTheoremFor`.
 
 ## Non-goals

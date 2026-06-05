@@ -1062,6 +1062,181 @@ def LogCorrectionSeriesMajorizedOnExterior (c : ℂ) (R : ℝ) : Prop :=
     Summable u ∧
       ∀ n z, z ∈ {z : ℂ | R < ‖z‖} → ‖nearOneLogCorrection c n z‖ ≤ u n
 
+/-- Algebraic simplification of the Candidate-8 logarithmic correction: away
+from the harmless zeros, the term inside the logarithm is exactly
+`1 + c / (f_c^[N](z))^2`. Thus Candidate 10 only has to bound the orbit
+denominator and the near-one logarithm. -/
+lemma nearOneLogCorrection_eq_simple
+    (c : ℂ) (N : ℕ) (z : ℂ)
+    (hz : z ≠ 0) (hA : (quadratic_map c)^[N] z ≠ 0) :
+    nearOneLogCorrection c N z =
+      ((2 : ℂ) ^ (N + 1))⁻¹ *
+        Complex.log ((1 : ℂ) + c / (((quadratic_map c)^[N] z) ^ 2)) := by
+  have hzpow : z ^ (2 ^ (N + 1)) ≠ 0 := pow_ne_zero _ hz
+  have hzpowN : z ^ (2 ^ N) ≠ 0 := pow_ne_zero _ hz
+  have hApow : ((quadratic_map c)^[N] z) ^ 2 ≠ 0 := pow_ne_zero 2 hA
+  have hpow : z ^ (2 ^ (N + 1)) = (z ^ (2 ^ N)) ^ 2 := by
+    simp [pow_mul, pow_succ]
+  have hterm :
+      (c / z ^ (2 ^ (N + 1))) /
+          ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2 =
+        c / (((quadratic_map c)^[N] z) ^ 2) := by
+    rw [hpow]
+    field_simp [hzpowN, hApow]
+  simp [nearOneLogCorrection, hterm]
+
+/-- Recursive exterior lower bound used by Candidate 10. Starting far enough
+outside, the quadratic map grows at least like `x ↦ x^2/2`. -/
+noncomputable def exteriorGrowthLower : ℝ → ℕ → ℝ
+  | R, 0 => R
+  | R, n + 1 => (exteriorGrowthLower R n) ^ 2 / 2
+
+lemma exteriorGrowthLower_nonneg {R : ℝ} (hR : 0 ≤ R) :
+    ∀ n, 0 ≤ exteriorGrowthLower R n
+  | 0 => hR
+  | n + 1 => by
+      have hn := exteriorGrowthLower_nonneg hR n
+      exact div_nonneg (sq_nonneg _) (by norm_num)
+
+/-- Candidate-10 growth estimate, in recursive form: once `z` starts in a
+sufficiently large exterior region, every iterate dominates the recursive
+double-exponential lower bound. -/
+lemma exteriorGrowthLower_le_norm_iterate
+    (c z : ℂ) (R : ℝ)
+    (hR0 : 0 ≤ R) (hRc : ‖c‖ + 2 ≤ R) (hR4 : 4 ≤ R)
+    (hz : R ≤ ‖z‖) :
+    ∀ n, exteriorGrowthLower R n ≤ ‖(quadratic_map c)^[n] z‖
+  | 0 => by simpa [exteriorGrowthLower] using hz
+  | n + 1 => by
+      have ih : exteriorGrowthLower R n ≤ ‖(quadratic_map c)^[n] z‖ :=
+        exteriorGrowthLower_le_norm_iterate c z R hR0 hRc hR4 hz n
+      have hlower_nonneg : 0 ≤ exteriorGrowthLower R n :=
+        exteriorGrowthLower_nonneg hR0 n
+      have hzn_ge : R ≤ ‖(quadratic_map c)^[n] z‖ := by
+        have hstart : ‖c‖ + 1 ≤ ‖z‖ := by linarith
+        have hiter := iterate_quadratic_map_norm_ge c z n hstart
+        exact le_trans hz hiter
+      have hquad_lower :
+          ‖quadratic_map c ((quadratic_map c)^[n] z)‖ ≥
+            ‖(quadratic_map c)^[n] z‖ ^ 2 - ‖c‖ :=
+        quadratic_map_norm_lower c ((quadratic_map c)^[n] z)
+      have hhalf :
+          ‖(quadratic_map c)^[n] z‖ ^ 2 / 2 ≤
+            ‖(quadratic_map c)^[n] z‖ ^ 2 - ‖c‖ := by
+        have hc_le : ‖c‖ ≤ ‖(quadratic_map c)^[n] z‖ ^ 2 / 2 := by
+          have hcnonneg : 0 ≤ ‖c‖ := norm_nonneg c
+          have hn_ge_c2 : ‖c‖ + 2 ≤ ‖(quadratic_map c)^[n] z‖ := le_trans hRc hzn_ge
+          nlinarith [hcnonneg, hn_ge_c2]
+        nlinarith
+      have hmono_sq :
+          (exteriorGrowthLower R n) ^ 2 / 2 ≤
+            ‖(quadratic_map c)^[n] z‖ ^ 2 / 2 := by
+        nlinarith [ih, hlower_nonneg, norm_nonneg ((quadratic_map c)^[n] z)]
+      have hnext :
+          (exteriorGrowthLower R n) ^ 2 / 2 ≤
+            ‖quadratic_map c ((quadratic_map c)^[n] z)‖ :=
+        le_trans hmono_sq (le_trans hhalf hquad_lower)
+      calc
+        exteriorGrowthLower R (n + 1)
+            = (exteriorGrowthLower R n) ^ 2 / 2 := by
+              simp [exteriorGrowthLower]
+        _ ≤ ‖quadratic_map c ((quadratic_map c)^[n] z)‖ := hnext
+        _ = ‖(quadratic_map c)^[n + 1] z‖ := by
+              rw [Function.iterate_succ_apply']
+
+/-- Candidate 10 discharges the additive M-test seam from a concrete exterior
+radius. The key inputs are already formalized: exterior iterates stay outside
+and grow at least linearly, while `Complex.norm_log_one_add_half_le_self` bounds
+the logarithm near `1`. -/
+lemma LogCorrectionSeriesMajorizedOnExterior.of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R) :
+    LogCorrectionSeriesMajorizedOnExterior c R := by
+  let u : ℕ → ℝ := fun n => ((3 : ℝ) / 2) * ‖c‖ * ((1 / 2 : ℝ) ^ (n + 1))
+  have hgeom : Summable (fun n : ℕ => ((1 / 2 : ℝ) ^ n)) :=
+    summable_geometric_of_norm_lt_one (by norm_num : ‖(1 / 2 : ℝ)‖ < 1)
+  have hu : Summable u := by
+    have hshift : Summable (fun n : ℕ => ((1 / 2 : ℝ) ^ (n + 1))) := by
+      simpa [pow_succ'] using (hgeom.mul_left (1 / 2 : ℝ))
+    exact hshift.mul_left (((3 : ℝ) / 2) * ‖c‖)
+  refine ⟨u, hu, ?_⟩
+  intro n z hz
+  have hzR : R < ‖z‖ := hz
+  have hz_ge_c2 : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR (le_of_lt hzR)
+  have hz_ne : z ≠ 0 := by
+    have hpos : 0 < ‖z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  have hiter_ge_start : ‖z‖ ≤ ‖(quadratic_map c)^[n] z‖ := by
+    have hstart : ‖c‖ + 1 ≤ ‖z‖ := by linarith
+    exact iterate_quadratic_map_norm_ge c z n hstart
+  have hiter_ge_c2 : ‖c‖ + 2 ≤ ‖(quadratic_map c)^[n] z‖ :=
+    le_trans hz_ge_c2 hiter_ge_start
+  have hA_ne : (quadratic_map c)^[n] z ≠ 0 := by
+    have hpos : 0 < ‖(quadratic_map c)^[n] z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  let w : ℂ := c / (((quadratic_map c)^[n] z) ^ 2)
+  have hw_norm_le_c : ‖w‖ ≤ ‖c‖ := by
+    have hden_norm_ge_one : 1 ≤ ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+      have hbase : 1 ≤ ‖(quadratic_map c)^[n] z‖ := by
+        have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+        linarith
+      calc
+        1 ≤ ‖(quadratic_map c)^[n] z‖ ^ 2 := by
+          nlinarith
+        _ = ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+          simp [norm_pow]
+    have hden_pos : 0 < ‖(((quadratic_map c)^[n] z) ^ 2)‖ := lt_of_lt_of_le zero_lt_one hden_norm_ge_one
+    calc
+      ‖w‖ = ‖c‖ / ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+        simp [w]
+      _ ≤ ‖c‖ := by
+        exact div_le_self (norm_nonneg c) (by linarith)
+  have hw_half : ‖w‖ ≤ (1 / 2 : ℝ) := by
+    by_cases hc0 : ‖c‖ = 0
+    · have : ‖w‖ = 0 := le_antisymm (by simpa [hc0] using hw_norm_le_c) (norm_nonneg _)
+      nlinarith
+    · have hc_pos : 0 < ‖c‖ := lt_of_le_of_ne (norm_nonneg c) (Ne.symm hc0)
+      have hden_norm_ge : 2 * ‖c‖ ≤ ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+        have hbase : ‖c‖ + 2 ≤ ‖(quadratic_map c)^[n] z‖ := hiter_ge_c2
+        calc
+          2 * ‖c‖ ≤ ‖(quadratic_map c)^[n] z‖ ^ 2 := by
+            nlinarith [norm_nonneg c, hbase]
+          _ = ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+            simp [norm_pow]
+      have hden_pos : 0 < ‖(((quadratic_map c)^[n] z) ^ 2)‖ :=
+        lt_of_lt_of_le (by nlinarith : 0 < 2 * ‖c‖) hden_norm_ge
+      have hw_eq : ‖w‖ = ‖c‖ / ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+        simp [w]
+      rw [hw_eq]
+      rw [div_le_iff₀ hden_pos]
+      nlinarith
+  have hlog_bound :
+      ‖Complex.log ((1 : ℂ) + w)‖ ≤ ((3 : ℝ) / 2) * ‖w‖ :=
+    Complex.norm_log_one_add_half_le_self hw_half
+  have hsimple :=
+    nearOneLogCorrection_eq_simple c n z hz_ne hA_ne
+  have hscalar_norm :
+      ‖(((2 : ℂ) ^ (n + 1))⁻¹)‖ = (1 / 2 : ℝ) ^ (n + 1) := by
+    simp [norm_inv, norm_pow]
+  calc
+    ‖nearOneLogCorrection c n z‖
+        = ‖(((2 : ℂ) ^ (n + 1))⁻¹) *
+            Complex.log ((1 : ℂ) + w)‖ := by
+          simp [hsimple, w]
+    _ = ((1 / 2 : ℝ) ^ (n + 1)) *
+          ‖Complex.log ((1 : ℂ) + w)‖ := by
+          simp [hscalar_norm]
+    _ ≤ ((1 / 2 : ℝ) ^ (n + 1)) * (((3 : ℝ) / 2) * ‖w‖) := by
+          exact mul_le_mul_of_nonneg_left hlog_bound (pow_nonneg (by norm_num) _)
+    _ ≤ ((1 / 2 : ℝ) ^ (n + 1)) * (((3 : ℝ) / 2) * ‖c‖) := by
+          exact mul_le_mul_of_nonneg_left
+            (mul_le_mul_of_nonneg_left hw_norm_le_c (by norm_num)) (pow_nonneg (by norm_num) _)
+    _ = u n := by
+          simp [u, mul_comm, mul_left_comm]
+
 /-- A summable exterior majorant gives locally uniform convergence of the
 Candidate-8 logarithmic correction series. -/
 lemma LogCorrectionSeriesConvergesOnExterior.of_majorant
@@ -1076,6 +1251,14 @@ lemma LogCorrectionSeriesConvergesOnExterior.of_majorant
       (tendstoUniformlyOn_tsum (f := fun n z => nearOneLogCorrection c n z)
         (u := u) (s := {z : ℂ | R < ‖z‖}) hu hbound)
   exact hU.tendstoLocallyUniformlyOn
+
+/-- Candidate 10 proves the locally uniform convergence seam for Candidate 8 on
+any exterior radius dominating `‖c‖ + 2`. -/
+lemma LogCorrectionSeriesConvergesOnExterior.of_large_radius
+    (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R) :
+    LogCorrectionSeriesConvergesOnExterior c R :=
+  LogCorrectionSeriesConvergesOnExterior.of_majorant
+    (LogCorrectionSeriesMajorizedOnExterior.of_large_radius c hR)
 
 /-- If the Candidate-8 additive convergence seam is proved, then the finite
 logarithmic correction sums converge locally uniformly to the logarithmic series

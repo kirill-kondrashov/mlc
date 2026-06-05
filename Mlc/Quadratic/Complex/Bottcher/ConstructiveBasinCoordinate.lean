@@ -193,6 +193,63 @@ lemma invertedQuadraticMap_inv_eq_inv_quadratic
     _ = (MLC.quadratic_map c z)⁻¹ := by
       simp [MLC.quadratic_map]
 
+/-- The naive local coordinate `ψ(w)=w` does not conjugate the inverted map to
+squaring, except at degenerate points. Candidate 9 therefore needs a genuine
+local Böttcher correction, not just the inversion coordinate itself. -/
+lemma invertedQuadraticMap_ne_sq_of_mul_ne_zero
+    {c w : ℂ} (hden : 1 + c * w ^ 2 ≠ 0) (hcw : c * w ^ 4 ≠ 0) :
+    invertedQuadraticMap c w ≠ w ^ 2 := by
+  intro heq
+  have hdiv : w ^ 2 / (1 + c * w ^ 2) = w ^ 2 := by
+    simpa [invertedQuadraticMap] using heq
+  have hmul : w ^ 2 = w ^ 2 * (1 + c * w ^ 2) := by
+    rw [div_eq_iff hden] at hdiv
+    exact hdiv
+  have hzero : w ^ 2 * (c * w ^ 2) = 0 := by
+    calc
+      w ^ 2 * (c * w ^ 2)
+          = w ^ 2 * (1 + c * w ^ 2) - w ^ 2 := by ring
+      _ = 0 := by
+          rw [← hmul]
+          ring
+  have hcw4 : c * w ^ 4 = w ^ 2 * (c * w ^ 2) := by ring
+  exact hcw (by simpa [hcw4] using hzero)
+
+/-- Concrete `c = 2` witness that the identity local coordinate fails. -/
+lemma invertedQuadraticMap_half_ne_half_sq_two :
+    invertedQuadraticMap (2 : ℂ) ((1 : ℂ) / 2) ≠ ((1 : ℂ) / 2) ^ 2 := by
+  apply invertedQuadraticMap_ne_sq_of_mul_ne_zero
+  · norm_num
+  · norm_num
+
+/-- No nonzero scalar-linear local coordinate `ψ(w)=a*w` conjugates the inverted
+`c=2` dynamics to squaring on even a small disk. Candidate 9 therefore cannot be
+completed by a closed-form linear Laurent coordinate; it needs genuine higher
+order local Böttcher coefficients. -/
+lemma not_exists_linear_invertedLocalConj_two :
+    ¬ ∃ a : ℂ, a ≠ 0 ∧
+      (∀ w : ℂ, ‖w‖ < 1 →
+        a * invertedQuadraticMap (2 : ℂ) w = (a * w) ^ 2) := by
+  rintro ⟨a, ha, hconj⟩
+  have hhalf := hconj ((1 : ℂ) / 2) (by norm_num)
+  have hthird := hconj ((1 : ℂ) / 3) (by norm_num)
+  have ha_half : a = (2 : ℂ) / 3 := by
+    norm_num [invertedQuadraticMap, pow_two] at hhalf
+    field_simp [ha] at hhalf
+    calc
+      a = (a * 6) / 6 := by norm_num
+      _ = ((2 : ℂ) ^ 2) / 6 := by rw [hhalf]
+      _ = (2 : ℂ) / 3 := by norm_num
+  have ha_third : a = (9 : ℂ) / 11 := by
+    norm_num [invertedQuadraticMap, pow_two] at hthird
+    field_simp [ha] at hthird
+    calc
+      a = (a * 11) / 11 := by norm_num
+      _ = ((3 : ℂ) ^ 2) / 11 := by rw [hthird]
+      _ = (9 : ℂ) / 11 := by norm_num
+  have hneq : ((2 : ℂ) / 3) ≠ (9 : ℂ) / 11 := by norm_num
+  exact hneq (ha_half.symm.trans ha_third)
+
 /-- Candidate-9 local theorem surface. This is intentionally local at the
 superattracting fixed point of the inverted map. The hard missing theorem is to
 construct such data from a local analytic fixed-point/power-series argument. -/
