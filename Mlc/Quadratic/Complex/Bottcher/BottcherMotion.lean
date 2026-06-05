@@ -24,7 +24,7 @@ def BottcherData.ofFamily (Φ : ℂ → ℂ → ℂ) : BottcherData where
 
 /-- The equipotential of level `n` under a Böttcher coordinate. -/
 def equipotential (B : BottcherData) (c : ℂ) (n : ℕ) : Set ℂ :=
-  {z | ‖B.phi c z‖ = (1 / 2) ^ n}
+  {z | ‖B.phi c z‖ = Real.exp ((1 / 2 : ℝ) ^ n)}
 
 /-- Placeholder for the component-mapping hypothesis (to be replaced by
 analytic theory). -/
@@ -62,6 +62,9 @@ structure GenuineBottcherLocalFamilyData (n : ℕ) (c₀ : ℂ) where
     ∀ c : ℂ, c ∈ ball c₀ r →
       ∀ z : ℂ, z ∈ basin_of_infinity c →
         ‖phi c z‖ = Real.exp (green_function c z)
+  fiber_holo_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      DifferentiableOn ℂ (phi c) (basin_of_infinity c)
   continuous_on_basin_ne_zero :
     ∀ c : ℂ, c ∈ ball c₀ r →
       ∀ z : ℂ, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt (phi c) z
@@ -104,6 +107,9 @@ structure GenuineBottcherLocalParameterFamilyData (c₀ : ℂ) where
     ∀ c : ℂ, c ∈ ball c₀ r →
       ∀ z : ℂ, z ∈ basin_of_infinity c →
         ‖phi c z‖ = Real.exp (green_function c z)
+  fiber_holo_on_basin :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      DifferentiableOn ℂ (phi c) (basin_of_infinity c)
   continuous_on_basin_ne_zero :
     ∀ c : ℂ, c ∈ ball c₀ r →
       ∀ z : ℂ, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt (phi c) z
@@ -128,10 +134,60 @@ def GenuineBottcherLocalParameterFamilyData.toLocalFamilyData
     basin_of_norm_gt_one := h.basin_of_norm_gt_one
     conj_on_basin := h.conj_on_basin
     modulus_on_basin := h.modulus_on_basin
+    fiber_holo_on_basin := h.fiber_holo_on_basin
     continuous_on_basin_ne_zero := h.continuous_on_basin_ne_zero
     tendsto_div_atInfinity := h.tendsto_div_atInfinity
     param_holo := h.param_holo
     puzzle_boundary_eq_equipotential := fun c hc => h.puzzle_boundary_eq_equipotential n c hc }
+
+/-- Fixed exterior region used by the near-infinity parameter-family phase of
+the classical Böttcher proof. -/
+def exteriorRegion (R : ℝ) : Set ℂ :=
+  {z : ℂ | R < ‖z‖}
+
+/-- Phase-1 theorem-facing family package: a holomorphic family on one uniform
+exterior region near a base parameter. This matches the first half of the local
+parameter-extension proof sketch before any pullback to the full basin. -/
+structure GenuineBottcherNearInfinityParameterFamilyData (c₀ : ℂ) where
+  r : ℝ
+  R : ℝ
+  r_pos : 0 < r
+  R_pos : 0 < R
+  phi : ℂ → ℂ → ℂ
+  norm_on_exterior :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ exteriorRegion R → 1 < ‖phi c z‖
+  conj_on_exterior :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ exteriorRegion R →
+        phi c (MLC.quadratic_map c z) = (phi c z)^2
+  fiber_holo_on_exterior :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      DifferentiableOn ℂ (phi c) (exteriorRegion R)
+  tendsto_div_atInfinity :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      Tendsto (fun z => phi c z / z) atInfinity (𝓝 (1 : ℂ))
+  param_holo_on_exterior :
+    ∀ z : ℂ, z ∈ exteriorRegion R →
+      DifferentiableOn ℂ (fun c => phi c z) (ball c₀ r)
+
+/-- Stronger Phase-1 package: a joint near-infinity parameter family together
+with its fiberwise extension to the full basin package already used by the
+motion layer. This is the exact bridge from the proof sketch's near-infinity
+construction to the existing local-parameter-extension surface. -/
+structure GenuineBottcherNearInfinityParameterExtensionData (c₀ : ℂ)
+    extends GenuineBottcherNearInfinityParameterFamilyData c₀ where
+  global : GenuineBottcherLocalParameterFamilyData c₀
+  agrees_on_exterior :
+    ∀ c : ℂ, c ∈ ball c₀ r →
+      ∀ z : ℂ, z ∈ exteriorRegion R → global.phi c z = phi c z
+
+/-- Forget the explicit near-infinity phase once the full local parameter
+extension package has been obtained. -/
+def GenuineBottcherNearInfinityParameterExtensionData.toLocalParameterFamilyData
+    {c₀ : ℂ} (h : GenuineBottcherNearInfinityParameterExtensionData c₀) :
+    GenuineBottcherLocalParameterFamilyData c₀ :=
+  h.global
 
 /-- The induced motion from a Böttcher coordinate: move points by varying `c`. -/
 def bottcher_motion (_B : BottcherData) (E : Set ℂ) : HolomorphicMotion E :=

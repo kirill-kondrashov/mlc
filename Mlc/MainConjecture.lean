@@ -1646,12 +1646,43 @@ def GenuineBottcherLocalParameterExtensionBridgeTwo : Prop :=
   ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
     Nonempty (Quadratic.GenuineBottcherLocalParameterFamilyData (2 : ℂ))
 
+/-- Earlier Phase-1 seam matching the revised proof sketch: from the genuine
+single-parameter route at `c = 2`, first construct one uniform near-infinity
+parameter family near `2`. -/
+def GenuineBottcherNearInfinityParameterBridgeTwo : Prop :=
+  ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
+    Nonempty (Quadratic.GenuineBottcherNearInfinityParameterFamilyData (2 : ℂ))
+
+/-- Sharpened Phase-1 seam: the near-infinity family near `2` should already be
+packaged together with its fiberwise extension to the full local-parameter
+family used by the motion layer. -/
+def GenuineBottcherNearInfinityParameterExtensionBridgeTwo : Prop :=
+  ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
+    Nonempty (Quadratic.GenuineBottcherNearInfinityParameterExtensionData (2 : ℂ))
+
 /-- Pointwise depth-`n` version extracted from the stronger local-parameter
 extension bridge. This isolates the immediate next output needed by the motion
 layer without yet pretending the full global family package is available. -/
 def GenuineBottcherLocalFamilyBridgeTwo : Prop :=
   ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ), ∀ n : ℕ,
     Nonempty (Quadratic.GenuineBottcherLocalFamilyData n (2 : ℂ))
+
+/-- Promotion seam still needed after the local parameter-extension package at
+`c = 2`: extend that one-base-parameter family package to the global family
+hypothesis consumed by the motion layer. -/
+def GenuineBottcherFamilyPromotionBridgeTwo : Prop :=
+  ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
+    Quadratic.GenuineBottcherLocalParameterFamilyData (2 : ℂ) →
+      Nonempty Quadratic.GenuineBottcherFamilyHyp
+
+/-- The sharpened Phase-1 bridge already contains the current local
+parameter-extension package as its global component. -/
+theorem genuineBottcherLocalParameterExtensionBridgeTwo_of_nearInfinityParameterExtensionBridge
+    (h_ext : GenuineBottcherNearInfinityParameterExtensionBridgeTwo) :
+    GenuineBottcherLocalParameterExtensionBridgeTwo := by
+  intro h_route
+  rcases h_ext h_route with ⟨h_near⟩
+  exact ⟨h_near.toLocalParameterFamilyData⟩
 
 /-- A local parameter family around `2` yields the depthwise local family
 packages needed on the motion side. -/
@@ -1661,6 +1692,17 @@ theorem genuineBottcherLocalFamilyBridgeTwo_of_localParameterExtensionBridge
   intro h_route n
   rcases h_ext h_route with ⟨h_local⟩
   exact ⟨h_local.toLocalFamilyData n⟩
+
+/-- Once the local parameter-extension package at `c = 2` can be promoted to
+the global family hypothesis, the existing family-facing motion chain applies
+unchanged. -/
+theorem genuineBottcherFamilyBridgeTwo_of_localParameterExtensionBridge_of_promotion
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo) :
+    GenuineBottcherFamilyBridgeTwo := by
+  intro h_route
+  rcases h_ext h_route with ⟨h_local⟩
+  exact h_promote h_route h_local
 
 /-- Any theorem-facing bridge to the genuine local family package immediately
 supplies the more concrete Bottcher-motion bridge. -/
@@ -2040,6 +2082,22 @@ theorem mlc_conjecture_of_genuineBottcherFamilyBridgeTwo
   exact
     mlc_conjecture_of_genuineBottcherMotionBridgeTwo
       (genuineBottcherMotionBridgeTwo_of_familyBridge h_family)
+      h_route h_track12
+
+/-- Combined theorem-facing cutover through the local parameter-extension stage:
+once the route at `c = 2` yields the local extension package and that package is
+promoted to the global family hypothesis, the existing family/motion chain
+already closes MLC. -/
+theorem mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo)
+    (h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_genuineBottcherFamilyBridgeTwo
+      (genuineBottcherFamilyBridgeTwo_of_localParameterExtensionBridge_of_promotion
+        h_ext h_promote)
       h_route h_track12
 
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/

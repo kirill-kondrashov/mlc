@@ -147,15 +147,30 @@ def ConstructiveBasinBottcherCoordinateData (c : ℂ) : Prop :=
     (∀ u : ℂ, ‖u‖ = 1 → ∀ ρ : ℝ, 0 < ρ →
       φ ((ρ : ℂ) * u) = u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))))
 
+/-- Phase-1 theorem-facing package for the classical global Böttcher proof:
+holomorphic near infinity on the canonical outside-open region, conjugates the
+quadratic map there, is exterior-valued there, and is normalized at infinity. -/
+def GenuineBottcherNearInfinityDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
+  (∀ z, ‖z‖ > ‖c‖ + 2 → 1 < ‖φ z‖) ∧
+  (∀ z, ‖z‖ > ‖c‖ + 2 → φ (MLC.quadratic_map c z) = (φ z)^2) ∧
+  DifferentiableOn ℂ φ {z : ℂ | ‖z‖ > ‖c‖ + 2} ∧
+  Tendsto (fun z => φ z / z) atInfinity (𝓝 (1 : ℂ))
+
+/-- Bundled single-parameter Phase-1 route. -/
+def GenuineBottcherNearInfinityRouteFor (c : ℂ) : Prop :=
+  ∃ φ : ℂ → ℂ, GenuineBottcherNearInfinityDataFor c φ
+
 /-- The theorem-facing coordinate package matching the current genuine Böttcher
-proof sketch: exterior-valued exactly on the basin, conjugates the quadratic map
-to squaring on the basin, has the Green-function modulus there, is continuous on
-the basin away from `0`, and is normalized at infinity. -/
+proof sketch: holomorphic and exterior-valued exactly on the basin, conjugates
+the quadratic map to squaring on the basin, has the Green-function modulus
+there, is continuous on the basin away from `0`, and is normalized at
+infinity. -/
 def GenuineBottcherCoordinateDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
   (∀ z, z ∈ basin_of_infinity c → 1 < ‖φ z‖) ∧
   (∀ z, 1 < ‖φ z‖ → z ∈ basin_of_infinity c) ∧
   (∀ z, z ∈ basin_of_infinity c → φ (MLC.quadratic_map c z) = (φ z)^2) ∧
   (∀ z, z ∈ basin_of_infinity c → ‖φ z‖ = Real.exp (green_function c z)) ∧
+  DifferentiableOn ℂ φ (basin_of_infinity c) ∧
   (∀ z, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt φ z) ∧
   Tendsto (fun z => φ z / z) atInfinity (𝓝 (1 : ℂ))
 
@@ -171,6 +186,33 @@ def GenuineBottcherRouteFor (c : ℂ) : Prop :=
   ∃ φ : ℂ → ℂ,
     GenuineBottcherCoordinateDataFor c φ ∧
     GenuineBottcherInversePackageFor c φ
+
+/-- Any full genuine coordinate package restricts to the first near-infinity
+phase of the classical proof on the canonical outside-open region. -/
+theorem genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor
+    {c : ℂ} {φ : ℂ → ℂ}
+    (h_coord : GenuineBottcherCoordinateDataFor c φ) :
+    GenuineBottcherNearInfinityDataFor c φ := by
+  rcases h_coord with
+    ⟨h_norm_on_basin, _, h_conj_on_basin, _, h_holo_on_basin, _, h_tendsto⟩
+  refine ⟨?_, ?_, ?_, h_tendsto⟩
+  · intro z hz
+    exact h_norm_on_basin z <|
+      outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz)
+  · intro z hz
+    exact h_conj_on_basin z <|
+      outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz)
+  · refine h_holo_on_basin.mono ?_
+    intro z hz
+    exact outside_disk_subset_quadratic_basin c (outside_open_subset_outside_disk c hz)
+
+/-- The full genuine Böttcher route automatically contains the Phase-1
+near-infinity package. -/
+theorem genuineBottcherNearInfinityRouteFor_of_genuineBottcherRouteFor
+    {c : ℂ} (h_route : GenuineBottcherRouteFor c) :
+    GenuineBottcherNearInfinityRouteFor c := by
+  rcases h_route with ⟨φ, h_coord, _h_inv⟩
+  exact ⟨φ, genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor h_coord⟩
 
 /-- Constructive realization of the missing basin-valued Böttcher coordinate
 using the explicit proxy `polar_green_map`. -/

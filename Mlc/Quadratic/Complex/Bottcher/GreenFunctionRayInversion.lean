@@ -1141,7 +1141,7 @@ theorem basin_external_ray_map_data_of_genuine_bottcher_inverse_package
     (h_inv : Quadratic.GenuineBottcherInversePackageFor c φ) :
     Quadratic.BasinExternalRayMapDataFor c φ := by
   rcases h_coord with
-    ⟨h_norm_on_basin, h_basin_of_norm_gt_one, h_conj_on_basin, -, -, -⟩
+    ⟨h_norm_on_basin, h_basin_of_norm_gt_one, h_conj_on_basin, -, -, -, -⟩
   rcases h_inv with ⟨h_surj, h_inj_outside⟩
   exact
     basin_external_ray_map_data_of_surj_of_injOn_outside_open

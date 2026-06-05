@@ -97,17 +97,38 @@ The root consumer side is now partially prepared:
    depthwise bridge
    `genuineBottcherLocalFamilyBridgeTwo_of_localParameterExtensionBridge`,
    so the route → local-family seam is now explicit too,
-7. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
+7. `ConstructiveBasinCoordinate.lean` now also exposes the explicit Phase-1
+   single-parameter package
+   `Quadratic.GenuineBottcherNearInfinityDataFor` /
+   `Quadratic.GenuineBottcherNearInfinityRouteFor`,
+8. `BottcherMotion.lean` now exposes the matching Phase-1 parameter-family
+   surfaces
+   `Quadratic.GenuineBottcherNearInfinityParameterFamilyData` and
+   `Quadratic.GenuineBottcherNearInfinityParameterExtensionData`,
+9. `MainConjecture.lean` now isolates the earlier near-infinity seams
+   `GenuineBottcherNearInfinityParameterBridgeTwo` and
+   `GenuineBottcherNearInfinityParameterExtensionBridgeTwo`,
+10. `MainConjecture.lean` now also makes explicit the promotion seam from one
+   local parameter-extension package near `2` to the global family hypothesis
+   consumed by the motion layer:
+   `GenuineBottcherFamilyPromotionBridgeTwo`,
+11. `mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo` now
+   records that local parameter extension is only enough to close the root once
+   this promotion seam is supplied as well.
+12. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
    Bottcher route into the existing `MainPathData` interface once that bridge is
    available,
-8. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
+13. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
    Bottcher route, the bridge to puzzle-boundary motion, and the existing
    Track-1/Track-2 package.
 
 So the remaining work is now more exact: the repository no longer lacks the
 Phase-5 consumer theorem; it lacks the genuine coordinate theorem itself and the
-bridge from that route to the stronger local parameter-extension package feeding
-`GenuineBottcherLocalParameterExtensionBridgeTwo`.
+bridge from that route first to the near-infinity parameter family, then to the
+stronger local parameter-extension package feeding
+`GenuineBottcherLocalParameterExtensionBridgeTwo`, and finally the promotion of
+that one-base-parameter package to the global family hypothesis consumed by the
+motion layer.
 
 ---
 
@@ -138,6 +159,14 @@ same coordinate is:
 2. injective on $$V$$.
 
 ### D. Final root rewiring
+
+Before the root can consume the new local parameter-extension package, the repo
+also needs one global-family promotion theorem:
+
+1. from the local package around `2`, produce the global family hypothesis
+   `Quadratic.GenuineBottcherFamilyHyp`.
+
+### E. Final root rewiring
 
 `MainConjecture.lean` still routes the root through proxy-specialized objects:
 
@@ -172,6 +201,12 @@ with the properties:
 This is the first mathematical milestone. Without it, all later pullback and
 global-extension arguments are blocked.
 
+The theorem-facing Lean surface for this phase is now explicit:
+
+1. `Quadratic.GenuineBottcherNearInfinityDataFor`,
+2. `Quadratic.GenuineBottcherNearInfinityRouteFor`,
+3. `GenuineBottcherNearInfinityParameterBridgeTwo`.
+
 ### Phase 2. Global extension to the basin
 
 Extend the local coordinate to all of $$U_\infty$$ by a pullback / iterate
@@ -188,6 +223,14 @@ Required outputs:
    on the basin,
 3. holomorphicity on the basin,
 4. nonvanishing on the basin.
+
+On the parameter side, the analogous target is now also explicit:
+
+1. construct `Quadratic.GenuineBottcherNearInfinityParameterFamilyData (2 : ℂ)`,
+2. strengthen it to
+   `Quadratic.GenuineBottcherNearInfinityParameterExtensionData (2 : ℂ)`,
+3. then forget the explicit near-infinity phase via
+   `genuineBottcherLocalParameterExtensionBridgeTwo_of_nearInfinityParameterExtensionBridge`.
 
 ### Phase 3. Identify the modulus with the Green function
 
@@ -226,11 +269,13 @@ These results should be assembled into
 ### Phase 5. Assemble and cut over the root
 
 1. Prove `Quadratic.GenuineBottcherRouteFor (2 : ℂ)`.
-2. Use the generic bridge in `GreenFunctionRayInversion.lean` to obtain basin and
+2. Prove the local-parameter-extension bridge at `2` and the promotion seam
+   `GenuineBottcherFamilyPromotionBridgeTwo`.
+3. Use the generic bridge in `GreenFunctionRayInversion.lean` to obtain basin and
    exterior inverse data for `Φ`.
-3. Replace the proxy-specialized root consumption in `MainConjecture.lean` with
+4. Replace the proxy-specialized root consumption in `MainConjecture.lean` with
    the theorem-facing genuine-coordinate route.
-4. Remove `MLC.basinExternalRayKernelTwo`.
+5. Remove `MLC.basinExternalRayKernelTwo`.
 
 ---
 
