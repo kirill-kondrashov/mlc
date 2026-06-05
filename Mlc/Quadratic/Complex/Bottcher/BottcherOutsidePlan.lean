@@ -9,6 +9,7 @@ import Mathlib.Topology.Maps.Proper.CompactlyGenerated
 import Mathlib.Topology.SeparatedMap
 import Mathlib.Topology.DiscreteSubset
 import Mathlib.Analysis.Complex.Liouville
+import Mathlib.Topology.Algebra.InfiniteSum.UniformOn
 
 namespace MLC
 
@@ -809,9 +810,8 @@ lemma tendsto_nearOneCorrectionFactor_atInfinity (c : ℂ) (N : ℕ) :
 /-- Finite product candidate for the next route: factor out `z` first, then
 multiply only near-`1` correction factors. The missing future step is convergence
 of these finite products as `n → ∞`, not a sector/argument correction for `z`. -/
-noncomputable def finiteProductBottcherRatio (c : ℂ) : ℕ → ℂ → ℂ
-  | 0, _ => 1
-  | n + 1, z => nearOneCorrectionFactor c n z * finiteProductBottcherRatio c n z
+noncomputable def finiteProductBottcherRatio (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
+  ∏ k ∈ Finset.range n, nearOneCorrectionFactor c k z
 
 /-- The corresponding finite product coordinate approximation. -/
 noncomputable def finiteProductBottcherApprox (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
@@ -839,7 +839,12 @@ lemma tendsto_finiteProductBottcherRatio_atInfinity (c : ℂ) :
       have hfactor : Tendsto (nearOneCorrectionFactor c n) atInfinity (𝓝 (1 : ℂ)) :=
         tendsto_nearOneCorrectionFactor_atInfinity c n
       have hmul := hfactor.mul hprod
-      simpa [finiteProductBottcherRatio] using hmul
+      have hEq :
+          finiteProductBottcherRatio c (n + 1) =
+            fun z => nearOneCorrectionFactor c n z * finiteProductBottcherRatio c n z := by
+        funext z
+        simp [finiteProductBottcherRatio, Finset.prod_range_succ, mul_comm]
+      simpa [hEq] using hmul
 
 /-- Consequently every finite product coordinate approximation is normalized at
 infinity on the full at-infinity filter, not merely on a sector filter. -/
@@ -856,6 +861,247 @@ lemma tendsto_finiteProductBottcherApprox_div_atInfinity (c : ℂ) (n : ℕ) :
         =ᶠ[atInfinity] finiteProductBottcherRatio c n := by
     filter_upwards [hzne] with z hz
     exact finiteProductBottcherApprox_div c n hz
+  exact (tendsto_congr' hEq).2 hratio
+
+/-- Conditional infinite product ratio for Candidate 7. This is the actual
+candidate ratio; unlike the default unconditional product, the conditional
+summation filter over `ℕ` follows the ordered partial products over
+`Finset.range n`. -/
+noncomputable def correctionProductBottcherRatio (c : ℂ) (z : ℂ) : ℂ :=
+  ∏'[SummationFilter.conditional ℕ] n, nearOneCorrectionFactor c n z
+
+/-- Candidate-7 coordinate obtained from the ordered correction product. -/
+noncomputable def correctionProductBottcherApprox (c : ℂ) (z : ℂ) : ℂ :=
+  z * correctionProductBottcherRatio c z
+
+lemma correctionProductBottcherApprox_div (c : ℂ) {z : ℂ} (hz : z ≠ 0) :
+    correctionProductBottcherApprox c z / z = correctionProductBottcherRatio c z := by
+  calc
+    correctionProductBottcherApprox c z / z =
+        (z * correctionProductBottcherRatio c z) / z := by
+      simp [correctionProductBottcherApprox]
+    _ = correctionProductBottcherRatio c z := by
+      field_simp [hz, mul_comm, mul_left_comm, mul_assoc]
+
+/-- Normalization of the ordered correction product ratio is exactly the
+normalization of the Candidate-7 coordinate. -/
+lemma tendsto_correctionProductBottcherApprox_div_atInfinity_of_ratio
+    {c : ℂ}
+    (hratio : Tendsto (correctionProductBottcherRatio c) atInfinity (𝓝 (1 : ℂ))) :
+    Tendsto (fun z => correctionProductBottcherApprox c z / z) atInfinity (𝓝 (1 : ℂ)) := by
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hEq :
+      (fun z => correctionProductBottcherApprox c z / z)
+        =ᶠ[atInfinity] correctionProductBottcherRatio c := by
+    filter_upwards [hzne] with z hz
+    exact correctionProductBottcherApprox_div c hz
+  exact (tendsto_congr' hEq).2 hratio
+
+/-- The exact convergence seam for Candidate 7 on a full exterior region. This
+is now the missing theorem: prove locally uniform convergence of the near-one
+correction product on `{z | R < ‖z‖}`. -/
+def CorrectionProductConvergesOnExterior (c : ℂ) (R : ℝ) : Prop :=
+  HasProdLocallyUniformlyOn
+    (fun n z => nearOneCorrectionFactor c n z)
+    (correctionProductBottcherRatio c)
+    {z : ℂ | R < ‖z‖}
+
+/-- If the Candidate-7 product convergence seam is proved, then the finite
+product ratios converge locally uniformly to the ordered correction product on
+the full exterior region. -/
+lemma CorrectionProductConvergesOnExterior.tendsto_finiteProductRatio
+    {c : ℂ} {R : ℝ} (h : CorrectionProductConvergesOnExterior c R) :
+    TendstoLocallyUniformlyOn (finiteProductBottcherRatio c)
+      (correctionProductBottcherRatio c) atTop {z : ℂ | R < ‖z‖} := by
+  simpa [CorrectionProductConvergesOnExterior, finiteProductBottcherRatio] using
+    h.tendstoLocallyUniformlyOn_finsetRange
+
+/-- Additive logarithmic correction term for Candidate 8. It is the logarithm
+of the same near-`1` correction used by Candidate 7, with the Böttcher exponent
+pulled outside the logarithm. -/
+noncomputable def nearOneLogCorrection (c : ℂ) (N : ℕ) (z : ℂ) : ℂ :=
+  ((2 : ℂ) ^ (N + 1))⁻¹ *
+    Complex.log
+      ((1 : ℂ) +
+        (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+
+/-- Each logarithmic correction term tends to zero at infinity. -/
+lemma tendsto_nearOneLogCorrection_atInfinity (c : ℂ) (N : ℕ) :
+    Tendsto (nearOneLogCorrection c N) atInfinity (𝓝 (0 : ℂ)) := by
+  have hterm := tendsto_root_ratio_term_atInfinity c N
+  have hlog :
+      Tendsto
+        (fun z : ℂ =>
+          Complex.log
+            ((1 : ℂ) +
+              (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
+        atInfinity (𝓝 (0 : ℂ)) := by
+    have h :=
+      tendsto_log_of_tendsto_slitPlane
+        (f := fun z : ℂ =>
+          (1 : ℂ) +
+            (c / z ^ (2 ^ (N + 1))) / ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2)
+        (x := (1 : ℂ)) hterm one_mem_slitPlane
+    simpa using h
+  simpa [nearOneLogCorrection] using
+    (tendsto_const_nhds.mul hlog :
+      Tendsto
+        (fun z : ℂ =>
+          ((2 : ℂ) ^ (N + 1))⁻¹ *
+            Complex.log
+              ((1 : ℂ) +
+                (c / z ^ (2 ^ (N + 1))) /
+                  ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
+        atInfinity (𝓝 (((2 : ℂ) ^ (N + 1))⁻¹ * 0)))
+
+/-- Finite logarithmic correction sum for Candidate 8. -/
+noncomputable def finiteLogCorrectionSum (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
+  ∑ k ∈ Finset.range n, nearOneLogCorrection c k z
+
+/-- Finite Candidate-8 ratio approximation. -/
+noncomputable def finiteLogSeriesBottcherRatio (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
+  Complex.exp (finiteLogCorrectionSum c n z)
+
+/-- Finite Candidate-8 coordinate approximation. -/
+noncomputable def finiteLogSeriesBottcherApprox (c : ℂ) (n : ℕ) (z : ℂ) : ℂ :=
+  z * finiteLogSeriesBottcherRatio c n z
+
+/-- Every finite logarithmic correction sum is normalized to zero at infinity. -/
+lemma tendsto_finiteLogCorrectionSum_atInfinity (c : ℂ) :
+    ∀ n : ℕ, Tendsto (finiteLogCorrectionSum c n) atInfinity (𝓝 (0 : ℂ))
+  | 0 => by
+      simpa [finiteLogCorrectionSum] using
+        (tendsto_const_nhds : Tendsto (fun _ : ℂ => (0 : ℂ)) atInfinity (𝓝 (0 : ℂ)))
+  | n + 1 => by
+      have hsum : Tendsto (finiteLogCorrectionSum c n) atInfinity (𝓝 (0 : ℂ)) :=
+        tendsto_finiteLogCorrectionSum_atInfinity c n
+      have hterm : Tendsto (nearOneLogCorrection c n) atInfinity (𝓝 (0 : ℂ)) :=
+        tendsto_nearOneLogCorrection_atInfinity c n
+      have hadd := hterm.add hsum
+      have hEq :
+          finiteLogCorrectionSum c (n + 1) =
+            fun z => nearOneLogCorrection c n z + finiteLogCorrectionSum c n z := by
+        funext z
+        simp [finiteLogCorrectionSum, Finset.sum_range_succ, add_comm]
+      simpa [hEq] using hadd
+
+/-- Every finite logarithmic ratio approximation tends to `1` at infinity. -/
+lemma tendsto_finiteLogSeriesBottcherRatio_atInfinity (c : ℂ) (n : ℕ) :
+    Tendsto (finiteLogSeriesBottcherRatio c n) atInfinity (𝓝 (1 : ℂ)) := by
+  have hsum : Tendsto (finiteLogCorrectionSum c n) atInfinity (𝓝 (0 : ℂ)) :=
+    tendsto_finiteLogCorrectionSum_atInfinity c n
+  have hexp : Tendsto (fun z : ℂ => Complex.exp (finiteLogCorrectionSum c n z))
+      atInfinity (𝓝 (Complex.exp (0 : ℂ))) :=
+    (Complex.continuous_exp.tendsto (0 : ℂ)).comp hsum
+  simpa [finiteLogSeriesBottcherRatio] using hexp
+
+lemma finiteLogSeriesBottcherApprox_div (c : ℂ) (n : ℕ) {z : ℂ} (hz : z ≠ 0) :
+    finiteLogSeriesBottcherApprox c n z / z = finiteLogSeriesBottcherRatio c n z := by
+  calc
+    finiteLogSeriesBottcherApprox c n z / z =
+        (z * finiteLogSeriesBottcherRatio c n z) / z := by
+      simp [finiteLogSeriesBottcherApprox]
+    _ = finiteLogSeriesBottcherRatio c n z := by
+      field_simp [hz, mul_comm, mul_left_comm, mul_assoc]
+
+/-- Every finite logarithmic coordinate approximation is normalized at infinity. -/
+lemma tendsto_finiteLogSeriesBottcherApprox_div_atInfinity (c : ℂ) (n : ℕ) :
+    Tendsto (fun z => finiteLogSeriesBottcherApprox c n z / z) atInfinity (𝓝 (1 : ℂ)) := by
+  have hratio : Tendsto (finiteLogSeriesBottcherRatio c n) atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_finiteLogSeriesBottcherRatio_atInfinity c n
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hEq :
+      (fun z => finiteLogSeriesBottcherApprox c n z / z)
+        =ᶠ[atInfinity] finiteLogSeriesBottcherRatio c n := by
+    filter_upwards [hzne] with z hz
+    exact finiteLogSeriesBottcherApprox_div c n hz
+  exact (tendsto_congr' hEq).2 hratio
+
+/-- Logarithmic correction series for Candidate 8. This uses the standard
+unconditional `tsum`; the intended proof route is via an absolute summable
+majorant, so order-independence is exactly the right convergence mode. -/
+noncomputable def logCorrectionSeries (c : ℂ) (z : ℂ) : ℂ :=
+  ∑' n : ℕ, nearOneLogCorrection c n z
+
+/-- Infinite Candidate-8 ratio. -/
+noncomputable def logSeriesBottcherRatio (c : ℂ) (z : ℂ) : ℂ :=
+  Complex.exp (logCorrectionSeries c z)
+
+/-- Infinite Candidate-8 coordinate. -/
+noncomputable def logSeriesBottcherApprox (c : ℂ) (z : ℂ) : ℂ :=
+  z * logSeriesBottcherRatio c z
+
+lemma logSeriesBottcherApprox_div (c : ℂ) {z : ℂ} (hz : z ≠ 0) :
+    logSeriesBottcherApprox c z / z = logSeriesBottcherRatio c z := by
+  calc
+    logSeriesBottcherApprox c z / z =
+        (z * logSeriesBottcherRatio c z) / z := by
+      simp [logSeriesBottcherApprox]
+    _ = logSeriesBottcherRatio c z := by
+      field_simp [hz, mul_comm, mul_left_comm, mul_assoc]
+
+/-- The exact additive convergence seam for Candidate 8 on a full exterior
+region. This is the missing theorem: prove locally uniform summability of the
+near-one logarithmic corrections on `{z | R < ‖z‖}`. -/
+def LogCorrectionSeriesConvergesOnExterior (c : ℂ) (R : ℝ) : Prop :=
+  HasSumLocallyUniformlyOn
+    (fun n z => nearOneLogCorrection c n z)
+    (logCorrectionSeries c)
+    {z : ℂ | R < ‖z‖}
+
+/-- Concrete Weierstrass-test seam for Candidate 8. Proving this for some
+exterior radius is the quantitative tail estimate still missing from the repo. -/
+def LogCorrectionSeriesMajorizedOnExterior (c : ℂ) (R : ℝ) : Prop :=
+  ∃ u : ℕ → ℝ,
+    Summable u ∧
+      ∀ n z, z ∈ {z : ℂ | R < ‖z‖} → ‖nearOneLogCorrection c n z‖ ≤ u n
+
+/-- A summable exterior majorant gives locally uniform convergence of the
+Candidate-8 logarithmic correction series. -/
+lemma LogCorrectionSeriesConvergesOnExterior.of_majorant
+    {c : ℂ} {R : ℝ} (h : LogCorrectionSeriesMajorizedOnExterior c R) :
+    LogCorrectionSeriesConvergesOnExterior c R := by
+  rcases h with ⟨u, hu, hbound⟩
+  have hU :
+      TendstoUniformlyOn
+        (fun s z => ∑ n ∈ s, nearOneLogCorrection c n z)
+        (logCorrectionSeries c) atTop {z : ℂ | R < ‖z‖} := by
+    simpa [logCorrectionSeries] using
+      (tendstoUniformlyOn_tsum (f := fun n z => nearOneLogCorrection c n z)
+        (u := u) (s := {z : ℂ | R < ‖z‖}) hu hbound)
+  exact hU.tendstoLocallyUniformlyOn
+
+/-- If the Candidate-8 additive convergence seam is proved, then the finite
+logarithmic correction sums converge locally uniformly to the logarithmic series
+on the full exterior region. -/
+lemma LogCorrectionSeriesConvergesOnExterior.tendsto_finiteLogCorrectionSum
+    {c : ℂ} {R : ℝ} (h : LogCorrectionSeriesConvergesOnExterior c R) :
+    TendstoLocallyUniformlyOn (finiteLogCorrectionSum c)
+      (logCorrectionSeries c) atTop {z : ℂ | R < ‖z‖} := by
+  simpa [LogCorrectionSeriesConvergesOnExterior, finiteLogCorrectionSum] using
+    h.tendstoLocallyUniformlyOn_finsetRange
+
+/-- Normalization of the logarithmic ratio is exactly normalization of the
+Candidate-8 coordinate. -/
+lemma tendsto_logSeriesBottcherApprox_div_atInfinity_of_ratio
+    {c : ℂ}
+    (hratio : Tendsto (logSeriesBottcherRatio c) atInfinity (𝓝 (1 : ℂ))) :
+    Tendsto (fun z => logSeriesBottcherApprox c z / z) atInfinity (𝓝 (1 : ℂ)) := by
+  have hzne : ∀ᶠ z in atInfinity, z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+  have hEq :
+      (fun z => logSeriesBottcherApprox c z / z)
+        =ᶠ[atInfinity] logSeriesBottcherRatio c := by
+    filter_upwards [hzne] with z hz
+    exact logSeriesBottcherApprox_div c hz
   exact (tendsto_congr' hEq).2 hratio
 
 lemma root_seq_ratio_candidate_eq_div

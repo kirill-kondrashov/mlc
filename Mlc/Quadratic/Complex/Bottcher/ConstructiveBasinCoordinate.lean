@@ -161,6 +161,168 @@ def GenuineBottcherNearInfinityDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
 def GenuineBottcherNearInfinityRouteFor (c : ℂ) : Prop :=
   ∃ φ : ℂ → ℂ, GenuineBottcherNearInfinityDataFor c φ
 
+/-- Candidate 9 works in the inverted coordinate `w = 1 / z`, where infinity
+for `z ↦ z^2 + c` becomes the superattracting fixed point `w = 0`. -/
+noncomputable def invertedQuadraticMap (c : ℂ) (w : ℂ) : ℂ :=
+  w ^ 2 / (1 + c * w ^ 2)
+
+/-- Pull a local Böttcher coordinate at `w = 0` back to a near-infinity
+coordinate in the original `z`-plane. -/
+noncomputable def infinityCoordinateOfInvertedLocal (ψ : ℂ → ℂ) (z : ℂ) : ℂ :=
+  (ψ z⁻¹)⁻¹
+
+/-- The algebraic identity relating the inverted quadratic dynamics to the
+original dynamics away from the pole and preimage of zero. -/
+lemma invertedQuadraticMap_inv_eq_inv_quadratic
+    (c z : ℂ) (hz : z ≠ 0) (hq : MLC.quadratic_map c z ≠ 0) :
+    invertedQuadraticMap c z⁻¹ = (MLC.quadratic_map c z)⁻¹ := by
+  have hquad_ne : z ^ 2 + c ≠ 0 := by
+    simpa [MLC.quadratic_map] using hq
+  have hzpow : z ^ 2 ≠ 0 := pow_ne_zero 2 hz
+  have hden_eq : 1 + c * z⁻¹ ^ 2 = (z ^ 2 + c) / z ^ 2 := by
+    field_simp [hz]
+  have hden : 1 + c * z⁻¹ ^ 2 ≠ 0 := by
+    rw [hden_eq]
+    exact div_ne_zero hquad_ne hzpow
+  calc
+    invertedQuadraticMap c z⁻¹ = z⁻¹ ^ 2 / (1 + c * z⁻¹ ^ 2) := by
+      simp [invertedQuadraticMap]
+    _ = (z ^ 2 + c)⁻¹ := by
+      rw [hden_eq]
+      field_simp [hz, hzpow, hquad_ne]
+    _ = (MLC.quadratic_map c z)⁻¹ := by
+      simp [MLC.quadratic_map]
+
+/-- Candidate-9 local theorem surface. This is intentionally local at the
+superattracting fixed point of the inverted map. The hard missing theorem is to
+construct such data from a local analytic fixed-point/power-series argument. -/
+structure InvertedLocalBottcherDataFor (c : ℂ) where
+  radius : ℝ
+  radius_pos : 0 < radius
+  psi : ℂ → ℂ
+  exterior_to_local :
+    ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 → ‖z⁻¹‖ < radius
+  local_nonzero :
+    ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 → psi z⁻¹ ≠ 0
+  local_maps_unit :
+    ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 → ‖psi z⁻¹‖ < 1
+  local_conj :
+    ∀ w : ℂ, ‖w‖ < radius →
+      psi (invertedQuadraticMap c w) = (psi w)^2
+  local_differentiable :
+    DifferentiableOn ℂ psi (Metric.ball 0 radius)
+  normalization_at_zero :
+    Tendsto (fun w : ℂ => w / psi w) (𝓝 (0 : ℂ)) (𝓝 (1 : ℂ))
+
+/-- The original-plane coordinate associated to Candidate-9 local data. -/
+noncomputable def InvertedLocalBottcherDataFor.nearInfinityPhi
+    {c : ℂ} (h : InvertedLocalBottcherDataFor c) : ℂ → ℂ :=
+  infinityCoordinateOfInvertedLocal h.psi
+
+/-- Candidate 9 is sufficient for the checked near-infinity Böttcher interface.
+This reduction is formalized; what remains missing is the local analytic theorem
+constructing `InvertedLocalBottcherDataFor c`. -/
+theorem InvertedLocalBottcherDataFor.toGenuineBottcherNearInfinityDataFor
+    {c : ℂ} (h : InvertedLocalBottcherDataFor c) :
+    GenuineBottcherNearInfinityDataFor c h.nearInfinityPhi := by
+  let S : Set ℂ := {z : ℂ | ‖z‖ > ‖c‖ + 2}
+  have hzne : ∀ z ∈ S, z ≠ 0 := by
+    intro z hz hzero
+    have hzgt : ‖z‖ > ‖c‖ + 2 := hz
+    have hznorm : ‖z‖ = 0 := by
+      simp [hzero]
+    have hzpos : 0 < ‖z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith [hzgt, hc_nonneg]
+    linarith [hzpos, hznorm]
+  have hqne : ∀ z ∈ S, MLC.quadratic_map c z ≠ 0 := by
+    intro z hz hzero
+    have hzge : ‖z‖ ≥ ‖c‖ + 2 := le_of_lt hz
+    have hnorm_ge : ‖MLC.quadratic_map c z‖ ≥ ‖z‖ + 1 :=
+      quadratic_map_norm_ge_add_one c z hzge
+    have hzpos : 0 < ‖z‖ + 1 := by
+      have hz0 : 0 ≤ ‖z‖ := norm_nonneg z
+      linarith
+    have hnorm_pos : 0 < ‖MLC.quadratic_map c z‖ := lt_of_lt_of_le hzpos hnorm_ge
+    simpa [hzero] using hnorm_pos
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro z hz
+    have hpsi_ne : h.psi z⁻¹ ≠ 0 := h.local_nonzero z hz
+    have hpsi_lt : ‖h.psi z⁻¹‖ < 1 := h.local_maps_unit z hz
+    have hpsi_pos : 0 < ‖h.psi z⁻¹‖ := norm_pos_iff.2 hpsi_ne
+    have hinv_norm : ‖(h.psi z⁻¹)⁻¹‖ = (‖h.psi z⁻¹‖)⁻¹ := norm_inv _
+    have hone_lt : 1 < (‖h.psi z⁻¹‖)⁻¹ := by
+      rw [one_lt_inv₀ hpsi_pos]
+      exact hpsi_lt
+    simpa [InvertedLocalBottcherDataFor.nearInfinityPhi,
+      infinityCoordinateOfInvertedLocal, hinv_norm] using hone_lt
+  · intro z hz
+    have hzS : z ∈ S := hz
+    have hz_ne : z ≠ 0 := hzne z hzS
+    have hq_ne : MLC.quadratic_map c z ≠ 0 := hqne z hzS
+    have hzloc : ‖z⁻¹‖ < h.radius := h.exterior_to_local z hz
+    have hconj := h.local_conj z⁻¹ hzloc
+    have hinv_dyn :
+        invertedQuadraticMap c z⁻¹ = (MLC.quadratic_map c z)⁻¹ :=
+      invertedQuadraticMap_inv_eq_inv_quadratic c z hz_ne hq_ne
+    calc
+      h.nearInfinityPhi (MLC.quadratic_map c z)
+          = (h.psi (MLC.quadratic_map c z)⁻¹)⁻¹ := by
+              rfl
+      _ = (h.psi (invertedQuadraticMap c z⁻¹))⁻¹ := by
+              rw [hinv_dyn]
+      _ = ((h.psi z⁻¹)^2)⁻¹ := by
+              rw [hconj]
+      _ = ((h.psi z⁻¹)⁻¹)^2 := by
+              simp [inv_pow]
+      _ = (h.nearInfinityPhi z)^2 := by
+              rfl
+  · have hinv_diff : DifferentiableOn ℂ (fun z : ℂ => z⁻¹) S := by
+      refine (differentiableOn_inv (𝕜 := ℂ) (R := ℂ)).mono ?_
+      intro z hz
+      exact hzne z hz
+    have hcomp :
+        DifferentiableOn ℂ (fun z : ℂ => h.psi z⁻¹) S := by
+      refine h.local_differentiable.comp hinv_diff ?_
+      intro z hz
+      simpa [Metric.mem_ball, dist_eq_norm] using h.exterior_to_local z hz
+    have hcomp_ne : ∀ z ∈ S, h.psi z⁻¹ ≠ 0 := by
+      intro z hz
+      exact h.local_nonzero z hz
+    exact hcomp.inv hcomp_ne
+  · have hinv_tendsto :
+        Tendsto (fun z : ℂ => z⁻¹) atInfinity (𝓝 (0 : ℂ)) := by
+      simpa using tendsto_atInfinity_inv_pow_zero (k := 1) (by norm_num : 0 < 1)
+    have hratio_tendsto :
+        Tendsto (fun z : ℂ => z⁻¹ / h.psi z⁻¹) atInfinity (𝓝 (1 : ℂ)) :=
+      h.normalization_at_zero.comp hinv_tendsto
+    have hzne_eventually : ∀ᶠ z in atInfinity, z ≠ 0 := by
+      have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+        eventually_atInfinity_norm_gt (0 : ℝ)
+      exact hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))
+    have hEq :
+        (fun z : ℂ => h.nearInfinityPhi z / z)
+          =ᶠ[atInfinity] fun z : ℂ => z⁻¹ / h.psi z⁻¹ := by
+      filter_upwards [hzne_eventually] with z hz
+      calc
+        h.nearInfinityPhi z / z = (h.psi z⁻¹)⁻¹ / z := by
+          rfl
+        _ = z⁻¹ / h.psi z⁻¹ := by
+          field_simp [hz, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
+    exact (tendsto_congr' hEq).2 hratio_tendsto
+
+/-- Candidate-9 theorem surface: a local inverted Böttcher theorem is enough to
+produce the near-infinity phase of the genuine route. -/
+def InvertedLocalBottcherTheoremFor (c : ℂ) : Prop :=
+  Nonempty (InvertedLocalBottcherDataFor c)
+
+theorem genuineBottcherNearInfinityRouteFor_of_invertedLocalBottcherTheoremFor
+    {c : ℂ} (h : InvertedLocalBottcherTheoremFor c) :
+    GenuineBottcherNearInfinityRouteFor c := by
+  rcases h with ⟨hlocal⟩
+  exact ⟨hlocal.nearInfinityPhi,
+    hlocal.toGenuineBottcherNearInfinityDataFor⟩
+
 /-- The theorem-facing coordinate package matching the current genuine Böttcher
 proof sketch: holomorphic and exterior-valued exactly on the basin, conjugates
 the quadratic map to squaring on the basin, has the Green-function modulus

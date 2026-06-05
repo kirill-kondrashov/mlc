@@ -186,7 +186,7 @@ repo/library support.
    The old sector branch attempt exposed that the next route must avoid taking
    roots of the leading `z^(2^n)` term directly.
 7. **Candidate 7: near-one correction product at infinity** —
-   **new active best route**.
+   **partially constructed; blocked at the convergence/tail-estimate seam**.
    This refactors the root construction as
    `z` times a product of correction factors tending to `1`, so fractional
    powers are applied only near the slit-plane-safe point `1` and no shrinking
@@ -195,20 +195,100 @@ repo/library support.
    - `nearOneCorrectionFactor`
    - `finiteProductBottcherRatio`
    - `finiteProductBottcherApprox`
+   - `correctionProductBottcherRatio`
+   - `correctionProductBottcherApprox`
    - `tendsto_nearOneCorrectionFactor_atInfinity`
    - `tendsto_finiteProductBottcherRatio_atInfinity`
    - `tendsto_finiteProductBottcherApprox_div_atInfinity`
-   These prove full-filter normalization for every finite product approximation.
-   The missing theorem is convergence of the finite products as `n → ∞`,
-   preferably locally uniformly on some `{z | R < ‖z‖}`, followed by
-   holomorphicity of the limit and the Böttcher conjugacy identity.
+   - `CorrectionProductConvergesOnExterior`
+   - `CorrectionProductConvergesOnExterior.tendsto_finiteProductRatio`
+   - `tendsto_correctionProductBottcherApprox_div_atInfinity_of_ratio`
+   These prove full-filter normalization for every finite product approximation,
+   define the ordered conditional infinite-product candidate, and identify the
+   exact convergence seam. The missing theorem is still a quantitative
+   summable/uniform tail estimate proving locally uniform convergence of the
+   products on some `{z | R < ‖z‖}`. Without that, holomorphicity of the limit,
+   normalization of the infinite product, and the Böttcher conjugacy identity
+   cannot be discharged.
+8. **Candidate 8: logarithmic near-one series** —
+   **partially constructed; blocked at the additive majorant seam**.
+   This is the additive version of Candidate 7:
+   \[
+     \Phi(z)=z\cdot\exp\left(\sum_{n\ge0} 2^{-(n+1)}
+       \Log\left(1+\frac{c}{f_c^n(z)^2}\right)\right).
+   \]
+   It keeps the same near-one branch safety, but replaces infinite-product
+   convergence by locally uniform convergence of a complex-valued series. This
+   is more formalizable in Lean because `Summable`, locally uniform series, and
+   differentiability of locally uniform limits are already better developed than
+   the multiplicative product estimates needed by Candidate 7.
+   Checked objects now exist in `BottcherOutsidePlan.lean`:
+   - `nearOneLogCorrection`
+   - `finiteLogCorrectionSum`
+   - `finiteLogSeriesBottcherRatio`
+   - `finiteLogSeriesBottcherApprox`
+   - `logCorrectionSeries`
+   - `logSeriesBottcherRatio`
+   - `logSeriesBottcherApprox`
+   - `tendsto_nearOneLogCorrection_atInfinity`
+   - `tendsto_finiteLogCorrectionSum_atInfinity`
+   - `tendsto_finiteLogSeriesBottcherRatio_atInfinity`
+   - `tendsto_finiteLogSeriesBottcherApprox_div_atInfinity`
+   - `LogCorrectionSeriesConvergesOnExterior`
+   - `LogCorrectionSeriesMajorizedOnExterior`
+   - `LogCorrectionSeriesConvergesOnExterior.of_majorant`
+   - `LogCorrectionSeriesConvergesOnExterior.tendsto_finiteLogCorrectionSum`
+   - `tendsto_logSeriesBottcherApprox_div_atInfinity_of_ratio`
+   Thus Candidate 8 now has a concrete infinite coordinate candidate and a
+   checked Weierstrass-test bridge. The remaining blocker is proving
+   `LogCorrectionSeriesMajorizedOnExterior c R` for some large `R`: a summable
+   uniform majorant for
+   `‖nearOneLogCorrection c n z‖` on `{z | R < ‖z‖}`. The current repository has
+   qualitative escape and linear/monotone exterior growth lemmas, but not yet
+   the double-exponential exterior lower bound and complex-log near-one estimate
+   needed to discharge this majorant.
+9. **Candidate 9: Laurent/fixed-point local Böttcher construction at infinity** —
+   **partially formalized; blocked at the local superattracting theorem**.
+   Work in the coordinate `w = 1/z` near `w = 0` and construct the normalized
+   local Böttcher function by a power-series or contraction/fixed-point theorem
+   for the functional equation. This avoids choosing iterated roots and avoids
+   the global product/series tail, but it requires formalizing a local analytic
+   fixed-point/power-series convergence theorem that is not currently packaged
+   in the repo.
+   Checked objects now exist in `ConstructiveBasinCoordinate.lean`:
+   - `invertedQuadraticMap`
+   - `infinityCoordinateOfInvertedLocal`
+   - `invertedQuadraticMap_inv_eq_inv_quadratic`
+   - `InvertedLocalBottcherDataFor`
+   - `InvertedLocalBottcherDataFor.nearInfinityPhi`
+   - `InvertedLocalBottcherDataFor.toGenuineBottcherNearInfinityDataFor`
+   - `InvertedLocalBottcherTheoremFor`
+   - `genuineBottcherNearInfinityRouteFor_of_invertedLocalBottcherTheoremFor`
+   Thus Candidate 9 is not disproved: its pullback algebra, exterior-valuedness,
+   conjugacy, differentiability, and normalization reduction are checked.
+   The remaining blocker is precisely the local theorem constructing
+   `InvertedLocalBottcherDataFor c`, i.e. the local Böttcher theorem for
+   `w ↦ w^2/(1+c w^2)` near the superattracting fixed point `0`.
+10. **Candidate 10: explicit majorant proof for Candidate 8** —
+   **recommended next practical route**.
+   Rather than opening a new analytic fixed-point formalization, prove the exact
+   estimates needed by `LogCorrectionSeriesMajorizedOnExterior`: a
+   double-exponential lower bound for `‖(quadratic_map c)^[n] z‖` on a sufficiently
+   large exterior region and a near-one logarithm estimate
+   `‖Log(1+w)‖ ≤ C‖w‖` for `‖w‖` small. This should discharge Candidate 8 using
+   the already-checked M-test bridge and avoids the larger burden of a full local
+   power-series fixed-point theorem.
 
 So the honest next implementation target is now:
 
-1. prove convergence of the Candidate-7 finite products on one full exterior
-   region `{z | R < ‖z‖}`;
-2. package the locally uniform limit as the near-infinity coordinate;
-3. only then attempt the basin extension step for
+1. pursue Candidate 10 by proving the exterior double-exponential lower bound
+   and the near-one logarithm estimate;
+2. use them to prove `LogCorrectionSeriesMajorizedOnExterior c R` for a
+   sufficiently large exterior radius `R`;
+3. derive `LogCorrectionSeriesConvergesOnExterior c R` via the checked M-test
+   bridge;
+4. prove normalization and Böttcher conjugacy for `logSeriesBottcherApprox`;
+5. only then attempt the basin extension step for
    `Quadratic.ClassicalGlobalBottcherTheoremFor`.
 
 ## Non-goals
