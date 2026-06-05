@@ -316,6 +316,100 @@ theorem genuineBottcherNearInfinityRouteFor_of_genuineBottcherRouteFor
   rcases h_route with ⟨φ, h_coord, _h_inv⟩
   exact ⟨φ, genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor h_coord⟩
 
+/-- The missing classical one-parameter global Böttcher theorem should first
+produce a near-infinity coordinate on some exterior neighborhood, then extend it
+to a global basin coordinate. The existing route consumes only the global
+extension, but the exterior witness is recorded here so the formal statement
+matches the analytic theorem that still needs to be internalized. -/
+structure ClassicalGlobalBottcherDataFor (c : ℂ) where
+  R : ℝ
+  R_pos : 0 < R
+  nearPhi : ℂ → ℂ
+  phi : ℂ → ℂ
+  norm_on_exterior :
+    ∀ z : ℂ, z ∈ exteriorRegion R → 1 < ‖nearPhi z‖
+  conj_on_exterior :
+    ∀ z : ℂ, z ∈ exteriorRegion R →
+      nearPhi (MLC.quadratic_map c z) = (nearPhi z)^2
+  near_holo_on_exterior :
+    DifferentiableOn ℂ nearPhi (exteriorRegion R)
+  extends_nearPhi :
+    ∀ z : ℂ, z ∈ exteriorRegion R → phi z = nearPhi z
+  norm_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → 1 < ‖phi z‖
+  basin_of_norm_gt_one :
+    ∀ z : ℂ, 1 < ‖phi z‖ → z ∈ basin_of_infinity c
+  conj_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      phi (MLC.quadratic_map c z) = (phi z)^2
+  holo_on_basin :
+    DifferentiableOn ℂ phi (basin_of_infinity c)
+  modulus_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      ‖phi z‖ = Real.exp (green_function c z)
+  tendsto_div_atInfinity :
+    Tendsto (fun z => phi z / z) atInfinity (𝓝 (1 : ℂ))
+
+/-- Bundled formulation of the classical global Böttcher theorem at one
+parameter. This is now the precise missing analytic theorem for PLAN 06, before
+the separate inverse-package step. -/
+def ClassicalGlobalBottcherTheoremFor (c : ℂ) : Prop :=
+  Nonempty (ClassicalGlobalBottcherDataFor c)
+
+/-- The classical theorem's basin-valued coordinate is automatically nonzero on
+the basin since it is exterior-valued there. -/
+theorem ClassicalGlobalBottcherDataFor.nonvanishing_on_basin
+    {c : ℂ} (h : ClassicalGlobalBottcherDataFor c) :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → h.phi z ≠ 0 := by
+  intro z hz hzero
+  have hnorm : 1 < ‖h.phi z‖ := h.norm_on_basin z hz
+  have hnot : ¬ 1 < ‖h.phi z‖ := by simpa [hzero]
+  exact hnot hnorm
+
+/-- The classical theorem already contains the theorem-facing global coordinate
+package consumed by the current route. -/
+theorem ClassicalGlobalBottcherDataFor.toGenuineBottcherCoordinateDataFor
+    {c : ℂ} (h : ClassicalGlobalBottcherDataFor c) :
+    GenuineBottcherCoordinateDataFor c h.phi := by
+  refine
+    ⟨h.norm_on_basin, h.basin_of_norm_gt_one, h.conj_on_basin,
+      h.modulus_on_basin, h.holo_on_basin, ?_, h.tendsto_div_atInfinity⟩
+  intro z hz _hne
+  exact
+    (h.holo_on_basin z hz).continuousWithinAt.continuousAt
+      ((basin_of_infinity_isOpen c).mem_nhds hz)
+
+/-- Hence the classical theorem also contains the already-defined near-infinity
+phase on the canonical outside-open region. -/
+theorem ClassicalGlobalBottcherDataFor.toGenuineBottcherNearInfinityDataFor
+    {c : ℂ} (h : ClassicalGlobalBottcherDataFor c) :
+    GenuineBottcherNearInfinityDataFor c h.phi := by
+  exact
+    genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor
+      h.toGenuineBottcherCoordinateDataFor
+
+/-- Once the separate inverse package is supplied for the same global
+coordinate, the existing theorem-facing route follows immediately. -/
+theorem ClassicalGlobalBottcherDataFor.toGenuineBottcherRouteFor
+    {c : ℂ} (h : ClassicalGlobalBottcherDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c h.phi) :
+    GenuineBottcherRouteFor c := by
+  exact ⟨h.phi, h.toGenuineBottcherCoordinateDataFor, h_inv⟩
+
+/-- Existential coordinate-package consequence of the bundled classical theorem. -/
+theorem exists_genuineBottcherCoordinateDataFor_of_classicalGlobalBottcherTheoremFor
+    {c : ℂ} (h : ClassicalGlobalBottcherTheoremFor c) :
+    ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
+  rcases h with ⟨hclassical⟩
+  exact ⟨hclassical.phi, hclassical.toGenuineBottcherCoordinateDataFor⟩
+
+/-- Existential near-infinity consequence of the bundled classical theorem. -/
+theorem genuineBottcherNearInfinityRouteFor_of_classicalGlobalBottcherTheoremFor
+    {c : ℂ} (h : ClassicalGlobalBottcherTheoremFor c) :
+    GenuineBottcherNearInfinityRouteFor c := by
+  rcases h with ⟨hclassical⟩
+  exact ⟨hclassical.phi, hclassical.toGenuineBottcherNearInfinityDataFor⟩
+
 /-- Any local parameter-family package already contains a uniform near-infinity
 parameter family by restricting to a sufficiently large exterior region whose
 radius dominates the whole parameter ball around `c₀`. -/

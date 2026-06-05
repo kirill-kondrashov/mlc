@@ -10,12 +10,13 @@ The checked root-side chain is already in place:
 1. `Quadratic.GenuineBottcherCoordinateDataFor`
 2. `Quadratic.GenuineBottcherInversePackageFor`
 3. `Quadratic.GenuineBottcherRouteFor`
-4. `GenuineBottcherNearInfinityParameterExtensionBridgeTwo`
-5. `GenuineBottcherLocalParameterExtensionBridgeTwo`
-6. `GenuineBottcherFamilyPromotionBridgeTwo`
-7. `GenuineBottcherFamilyBridgeTwo`
-8. `GenuineBottcherMotionBridgeTwo`
-9. `GenuineBottcherPuzzleBoundaryMotionBridgeTwo`
+4. `Quadratic.ClassicalGlobalBottcherTheoremFor`
+5. `GenuineBottcherNearInfinityParameterExtensionBridgeTwo`
+6. `GenuineBottcherLocalParameterExtensionBridgeTwo`
+7. `GenuineBottcherFamilyPromotionBridgeTwo`
+8. `GenuineBottcherFamilyBridgeTwo`
+9. `GenuineBottcherMotionBridgeTwo`
+10. `GenuineBottcherPuzzleBoundaryMotionBridgeTwo`
 
 So the repository no longer lacks a target interface. It lacks the actual
 mathematics producing those interfaces.
@@ -33,63 +34,61 @@ The current proxy route is dead:
 
 ## Exact missing object
 
-Construct a map
+Internalize the **classical global theorem** first, before the inverse package:
 
-$$
-\Phi : U_\infty(2) \to \Omega
-$$
+1. `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`
 
-with the classical Böttcher properties:
+Its content is:
 
-$$
-\Phi(f(z)) = \Phi(z)^2,
-\qquad
-\frac{\Phi(z)}{z}\to 1,
-\qquad
-|\Phi(z)| = e^{G(z)},
-$$
+1. a near-infinity Böttcher coordinate on some exterior neighborhood,
+2. an extension of that coordinate to the full basin of infinity,
+3. holomorphicity and nonvanishing on the basin,
+4. normalization at infinity,
+5. the Green-function modulus identity on the basin.
 
-plus:
+Only after that comes the separate inverse package:
 
 1. surjectivity onto `Ω`,
 2. injectivity on `V = {z : |z| > 4}`.
 
-In code, this means proving `Quadratic.GenuineBottcherRouteFor (2 : ℂ)` for
-some **new** `Φ`.
-
 ## Short missing-step list
 
-### Step 1. Construct the new near-infinity coordinate
+### Step 1. Prove the classical global theorem
 
-Prove `Quadratic.GenuineBottcherNearInfinityRouteFor (2 : ℂ)` for a new map
-`Φ`, not for `Quadratic.bottcher_map`.
+Prove `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)` for a **new**
+coordinate object, not for `Quadratic.bottcher_map`.
 
-Required properties:
+This single theorem must now internalize the classical analytic core:
 
-1. holomorphicity on `{z : ‖z‖ > R}`,
-2. semiconjugacy to squaring there,
-3. normalization `Φ(z)/z → 1`,
-4. image in `{w : 1 < ‖w‖}`.
+1. near-infinity construction on an exterior region,
+2. extension to the full basin,
+3. basin holomorphicity,
+4. basin nonvanishing / exterior-valuedness,
+5. normalization at infinity,
+6. Green-function modulus identity.
 
-### Step 2. Extend that coordinate to the full basin
+The code already contains the checked reduction
 
-Promote the near-infinity coordinate to a global theorem-facing coordinate
-package:
+1. `ClassicalGlobalBottcherDataFor.toGenuineBottcherCoordinateDataFor`
 
-1. `Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) Φ`
+so once Step 1 is proved, the theorem-facing coordinate package follows.
+Right now this is the **stuck point**: the interface is in Lean, but the repo
+still does not construct a witness of
+`Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
 
-This is the main missing theorem. It must be proved for the new `Φ`, not for
-the proxy.
+### Step 2. Prove the inverse-package consequences
 
-### Step 3. Prove the inverse-package consequences
-
-Using the same `Φ`, prove:
+Using the same global `Φ`, prove:
 
 1. `Quadratic.GenuineBottcherInversePackageFor (2 : ℂ) Φ`
 
-This is the surjectivity/injectivity part.
+Then the checked reduction
 
-### Step 4. Build the parameter-family bridge
+1. `ClassicalGlobalBottcherDataFor.toGenuineBottcherRouteFor`
+
+recovers `Quadratic.GenuineBottcherRouteFor (2 : ℂ)`.
+
+### Step 3. Build the parameter-family bridge
 
 From the single-parameter route, construct the near-infinity parameter package:
 
@@ -105,9 +104,9 @@ $$
 \text{family/motion chain}.
 $$
 
-### Step 5. Finish the root cutover
+### Step 4. Finish the root cutover
 
-After Steps 2–4:
+After Steps 1–3:
 
 1. replace proxy-based root consumption with the genuine route,
 2. discharge `MLC.basinExternalRayKernelTwo`,
@@ -115,13 +114,13 @@ After Steps 2–4:
 
 ## Immediate next theorem
 
-The next exact theorem to attack is:
+The next exact theorem to attack is now:
 
-1. a **new** witness for `Quadratic.GenuineBottcherNearInfinityRouteFor (2 : ℂ)`,
-   or equivalently the near-infinity half of a new witness for
-   `Quadratic.GenuineBottcherRouteFor (2 : ℂ)`.
+1. `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`
 
-That is now the clean first blocker. Everything else is downstream.
+This is the clean analytic blocker. The inverse package and all parameter-family
+steps are downstream of it. At present, this theorem is **not proved** in the
+repository.
 
 ## Non-goals
 
@@ -130,12 +129,15 @@ PLAN 06 should **not**:
 1. keep upgrading `polar_green_map`,
 2. redefine `Quadratic.bottcher_map` prematurely,
 3. revive old proxy-based inverse statements,
-4. reintroduce Lyubich-style root dependencies.
+4. collapse the classical theorem and inverse package into one opaque target,
+5. reintroduce Lyubich-style root dependencies.
 
 ## Success criterion
 
 PLAN 06 is complete when:
 
-1. a theorem proves `Quadratic.GenuineBottcherRouteFor (2 : ℂ)` for a new `Φ`,
-2. `MainConjecture.lean` closes from that theorem-facing route,
-3. `MLC.basinExternalRayKernelTwo` disappears from the root path.
+1. a theorem proves `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)` for a
+   new `Φ`,
+2. the matching inverse package proves `Quadratic.GenuineBottcherRouteFor (2 : ℂ)`,
+3. `MainConjecture.lean` closes from that theorem-facing route,
+4. `MLC.basinExternalRayKernelTwo` disappears from the root path.
