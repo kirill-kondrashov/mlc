@@ -773,6 +773,14 @@ noncomputable def rootSeqRatioCandidate (c : ℂ) (N : ℕ) (z : ℂ) : ℂ :=
 noncomputable def sectorialBottcherApprox (c : ℂ) (N : ℕ) (z : ℂ) : ℂ :=
   z * rootSeqRatioCandidate c N z
 
+lemma sectorialBottcherApprox_div (c : ℂ) (N : ℕ) {z : ℂ} (hz : z ≠ 0) :
+    sectorialBottcherApprox c N z / z = rootSeqRatioCandidate c N z := by
+  calc
+    sectorialBottcherApprox c N z / z = (z * rootSeqRatioCandidate c N z) / z := by
+      simp [sectorialBottcherApprox]
+    _ = rootSeqRatioCandidate c N z := by
+      field_simp [hz, mul_comm, mul_left_comm, mul_assoc]
+
 /-- The explicit coherent-branch ratio candidate is normalized at infinity. -/
 lemma tendsto_rootSeqRatioCandidate_atInfinity (c : ℂ) (N : ℕ) :
     Tendsto (rootSeqRatioCandidate c N) atInfinity (𝓝 (1 : ℂ)) := by
@@ -1079,6 +1087,28 @@ lemma eventually_atInfinity_root_seq_ratio_candidate_eq_div
 
 def arg_sector (N : ℕ) : Set ℂ :=
   {z | |Complex.arg z| < Real.pi / (2 * (2 ^ (N + 1) : ℝ))}
+
+/-- Hence the sectorial coherent-branch coordinate candidate itself is normalized
+on the corresponding sector filter. -/
+lemma tendsto_sectorialBottcherApprox_div_atInfinity_in_sector
+    (c : ℂ) (N : ℕ) :
+    Tendsto (fun z => sectorialBottcherApprox c N z / z)
+      (atInfinity ⊓ 𝓟 (arg_sector N)) (𝓝 (1 : ℂ)) := by
+  have hCand : Tendsto (rootSeqRatioCandidate c N) atInfinity (𝓝 (1 : ℂ)) :=
+    tendsto_rootSeqRatioCandidate_atInfinity c N
+  have hCand' :
+      Tendsto (rootSeqRatioCandidate c N) (atInfinity ⊓ 𝓟 (arg_sector N)) (𝓝 (1 : ℂ)) :=
+    hCand.mono_left inf_le_left
+  have hzne : ∀ᶠ z in (atInfinity ⊓ 𝓟 (arg_sector N)), z ≠ 0 := by
+    have hpos : ∀ᶠ z in atInfinity, 0 < ‖z‖ :=
+      eventually_atInfinity_norm_gt (0 : ℝ)
+    exact (hpos.mono (fun _ hz => (norm_ne_zero_iff).1 (ne_of_gt hz))).filter_mono inf_le_left
+  have hEq :
+      (fun z => sectorialBottcherApprox c N z / z)
+        =ᶠ[atInfinity ⊓ 𝓟 (arg_sector N)] rootSeqRatioCandidate c N := by
+    filter_upwards [hzne] with z hz
+    exact sectorialBottcherApprox_div c N hz
+  exact (tendsto_congr' hEq).2 hCand'
 
 lemma eventually_atInfinity_iter_sq_add_c_ne_zero (c : ℂ) (N : ℕ) :
     ∀ᶠ z in atInfinity, ((quadratic_map c)^[N] z) ^ 2 + c ≠ 0 := by

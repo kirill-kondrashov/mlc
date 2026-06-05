@@ -157,10 +157,14 @@ repo/library support.
    The current constructed objects are now:
    - `rootSeqRatioCandidate`
    - `sectorialBottcherApprox`
+   - `tendsto_sectorialBottcherApprox_div_atInfinity_in_sector`
    - `eventuallyEq_bottcher_root_seq_ratio_rootSeqRatioCandidate_in_sector`
    - `eventuallyEq_bottcher_root_seq_sectorialBottcherApprox_in_sector`
    These give an explicit sectorial coherent-branch candidate and identify it
    with the existing finite root approximants on the matching sector filter.
+   In particular, the sectorial candidate now carries the direct normalization
+   statement `sectorialBottcherApprox c N z / z → 1` on
+   `atInfinity ⊓ 𝓟 (arg_sector N)`.
 3. **Candidate 3: pull back a near-infinity coordinate to the basin** —
    **blocked downstream of Candidate 2**.
    This only becomes meaningful after Candidate 2 produces a genuine holomorphic
