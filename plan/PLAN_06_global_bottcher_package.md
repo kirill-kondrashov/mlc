@@ -239,14 +239,12 @@ repo/library support.
    - `LogCorrectionSeriesConvergesOnExterior.of_majorant`
    - `LogCorrectionSeriesConvergesOnExterior.tendsto_finiteLogCorrectionSum`
    - `tendsto_logSeriesBottcherApprox_div_atInfinity_of_ratio`
-   Thus Candidate 8 now has a concrete infinite coordinate candidate and a
-   checked Weierstrass-test bridge. The remaining blocker is proving
-   `LogCorrectionSeriesMajorizedOnExterior c R` for some large `R`: a summable
-   uniform majorant for
-   `‖nearOneLogCorrection c n z‖` on `{z | R < ‖z‖}`. The current repository has
-   qualitative escape and linear/monotone exterior growth lemmas, but not yet
-   the double-exponential exterior lower bound and complex-log near-one estimate
-   needed to discharge this majorant.
+   Candidate 10 below has now discharged the majorant/convergence seam. Thus
+   Candidate 8 has a concrete infinite coordinate candidate, a checked
+   Weierstrass-test bridge, and locally uniform convergence on every exterior
+   region `{z | R < ‖z‖}` with `‖c‖ + 2 ≤ R`. The remaining work is no longer
+   convergence of the series, but the final bridge from the convergent series to
+   the near-infinity Böttcher package.
 9. **Candidate 9: Laurent/fixed-point local Böttcher construction at infinity** —
    **partially formalized; blocked at the local superattracting theorem**.
    Work in the coordinate `w = 1/z` near `w = 0` and construct the normalized
@@ -289,7 +287,7 @@ repo/library support.
    Thus the Candidate-8 M-test/convergence seam is discharged on any exterior
    radius `R` with `‖c‖ + 2 ≤ R`.
 11. **Candidate 11: log-series-to-Böttcher package bridge** —
-   **new active route**.
+   **partially passed; active route**.
    Starting from `LogCorrectionSeriesConvergesOnExterior.of_large_radius`, prove
    that `logSeriesBottcherApprox` is a genuine near-infinity Böttcher coordinate:
    1. `logCorrectionSeries c z → 0` as `z → ∞`,
@@ -300,29 +298,54 @@ repo/library support.
       `Φ(f_c z) = (Φ z)^2`,
    5. exterior-valuedness follows from normalization after possibly enlarging
       the radius.
-   Current checked progress:
-   - `tendsto_logCorrectionSeries_atInfinity`
-   - `tendsto_logSeriesBottcherRatio_atInfinity`
-   - `tendsto_logSeriesBottcherApprox_div_atInfinity`
-   - `eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity`
-   - `exists_radius_one_lt_norm_logSeriesBottcherApprox`
-   Thus normalization and eventual exterior-valuedness are proved. The remaining
-   blockers are:
-   - the shifted-series identity needed for
+   Current pass/fail status:
+   - **PASSED:** `logCorrectionSeries c z → 0` at infinity, by
+     `tendsto_logCorrectionSeries_atInfinity`.
+   - **PASSED:** normalization of the ratio and coordinate, by
+     `tendsto_logSeriesBottcherRatio_atInfinity` and
+     `tendsto_logSeriesBottcherApprox_div_atInfinity`.
+   - **FAILED:** shifted-series conjugacy
      `logSeriesBottcherApprox c (quadratic_map c z) =
-      (logSeriesBottcherApprox c z)^2`;
-   - differentiability of the infinite log-series coordinate on an exterior
-     region, which requires packaging differentiability of each log correction
-     term and applying the locally uniform series theorem.
+      (logSeriesBottcherApprox c z)^2` is not proved. The missing formal step is
+     now narrowed: the finite algebra is checked by
+     `nearOneLogCorrection_quadratic_map_eq_two_mul_succ` and
+     `finiteLogCorrectionSum_quadratic_map_eq_two_mul_tail`; what remains is
+     passing this finite identity to the `tsum` limit and handling the
+     `exp(log(1+c/z^2))` branch step.
+   - **FAILED:** differentiability of the infinite log-series coordinate on an
+     exterior region is not proved. The missing formal step is to package
+     differentiability of each `nearOneLogCorrection c n` on an exterior region
+     and then apply the locally uniform series differentiability theorem.
+   - **PASSED partially:** exterior-valuedness is proved eventually at infinity,
+     by `eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity` and
+     `exists_radius_one_lt_norm_logSeriesBottcherApprox`; it is not yet proved on
+     the canonical outside-open region `‖z‖ > ‖c‖ + 2`.
+
+   Alternative routes for the failed steps:
+   1. **Conjugacy route A (preferred):** prove a finite partial-sum shift identity
+      for `finiteLogCorrectionSum` (now done), pass it to the limit using
+      `LogCorrectionSeriesConvergesOnExterior.of_large_radius`, then exponentiate.
+   2. **Conjugacy route B:** avoid logarithm branch bookkeeping by deriving
+      conjugacy from the already-related finite root approximants and locally
+      uniform uniqueness of limits on an exterior region.
+   3. **Differentiability route A (preferred):** prove
+      `DifferentiableOn ℂ (nearOneLogCorrection c n) {z | R < ‖z‖}` for large
+      `R` using `AnalyticOn.clog`/`DifferentiableOn.clog`, then use
+      `differentiableOn_tsum_of_summable_norm`.
+   4. **Differentiability route B:** first prove the conjugacy and normalization,
+      then use a local inverse/implicit functional-equation argument to get
+      differentiability from a finite-stage locally uniform limit, avoiding a
+      direct derivative proof for every summand.
 
 So the honest next implementation target is now:
 
-1. prove the normalization of `logSeriesBottcherApprox` at infinity from the
-   now-checked majorant/convergence seam;
-2. prove the logarithmic shift identity and derive Böttcher conjugacy;
-3. package differentiability and exterior-valuedness on a sufficiently large
-   exterior region;
-4. only then attempt the basin extension step for
+1. prove the finite partial-sum shift identity for `finiteLogCorrectionSum`;
+2. pass that identity to `logCorrectionSeries` and exponentiate to get
+   Böttcher conjugacy for `logSeriesBottcherApprox`;
+3. prove differentiability of each `nearOneLogCorrection c n` on a sufficiently
+   large exterior region and apply `differentiableOn_tsum_of_summable_norm`;
+4. strengthen eventual exterior-valuedness to the same chosen exterior region;
+5. only then attempt the basin extension step for
    `Quadratic.ClassicalGlobalBottcherTheoremFor`.
 
 ## Non-goals

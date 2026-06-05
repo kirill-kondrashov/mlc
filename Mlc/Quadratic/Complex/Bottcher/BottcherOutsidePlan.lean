@@ -1086,6 +1086,83 @@ lemma nearOneLogCorrection_eq_simple
     field_simp [hzpowN, hApow]
   simp [nearOneLogCorrection, hterm]
 
+/-- One-step shift identity for the logarithmic corrections. This is the finite
+algebra behind the desired Böttcher conjugacy for the infinite log-series. -/
+lemma nearOneLogCorrection_quadratic_map_eq_two_mul_succ
+    (c : ℂ) (N : ℕ) (z : ℂ)
+    (hz : z ≠ 0)
+    (hzq : quadratic_map c z ≠ 0)
+    (hA : (quadratic_map c)^[N + 1] z ≠ 0) :
+    nearOneLogCorrection c N (quadratic_map c z) =
+      (2 : ℂ) * nearOneLogCorrection c (N + 1) z := by
+  have hAleft : (quadratic_map c)^[N] (quadratic_map c z) ≠ 0 := by
+    simpa [Function.iterate_succ_apply] using hA
+  have hleft :=
+    nearOneLogCorrection_eq_simple c N (quadratic_map c z) hzq hAleft
+  have hright :=
+    nearOneLogCorrection_eq_simple c (N + 1) z hz hA
+  have hscalar :
+      ((2 : ℂ) ^ (N + 1))⁻¹ =
+        (2 : ℂ) * ((2 : ℂ) ^ (N + 2))⁻¹ := by
+    have h2 : (2 : ℂ) ≠ 0 := by norm_num
+    have hpow : (2 : ℂ) ^ (N + 2) = (2 : ℂ) * (2 : ℂ) ^ (N + 1) := by
+      have hN : N + 2 = (N + 1) + 1 := by omega
+      rw [hN, pow_succ]
+      ring
+    rw [hpow]
+    field_simp [h2, pow_ne_zero (N + 1) h2]
+  calc
+    nearOneLogCorrection c N (quadratic_map c z)
+        = ((2 : ℂ) ^ (N + 1))⁻¹ *
+            Complex.log ((1 : ℂ) + c / (((quadratic_map c)^[N] (quadratic_map c z)) ^ 2)) := hleft
+    _ = ((2 : ℂ) ^ (N + 1))⁻¹ *
+            Complex.log ((1 : ℂ) + c / (((quadratic_map c)^[N + 1] z) ^ 2)) := by
+          rw [Function.iterate_succ_apply]
+    _ = (2 : ℂ) * (((2 : ℂ) ^ (N + 2))⁻¹ *
+            Complex.log ((1 : ℂ) + c / (((quadratic_map c)^[N + 1] z) ^ 2))) := by
+          rw [hscalar]
+          ring
+    _ = (2 : ℂ) * nearOneLogCorrection c (N + 1) z := by
+          rw [hright]
+
+/-- Finite partial-sum shift identity behind the desired Böttcher conjugacy.
+The remaining infinite conjugacy step is to pass this identity to the `tsum`
+limit. -/
+lemma finiteLogCorrectionSum_quadratic_map_eq_two_mul_tail
+    (c : ℂ) (n : ℕ) (z : ℂ)
+    (hz : z ≠ 0)
+    (hzq : quadratic_map c z ≠ 0)
+    (hA : ∀ k : ℕ, k ≤ n → (quadratic_map c)^[k + 1] z ≠ 0) :
+    finiteLogCorrectionSum c n (quadratic_map c z) =
+      (2 : ℂ) * (finiteLogCorrectionSum c (n + 1) z -
+        nearOneLogCorrection c 0 z) := by
+  induction n with
+  | zero =>
+      simp [finiteLogCorrectionSum]
+  | succ n ih =>
+      have hA_n : ∀ k : ℕ, k ≤ n → (quadratic_map c)^[k + 1] z ≠ 0 := by
+        intro k hk
+        exact hA k (Nat.le_trans hk (Nat.le_succ n))
+      have ih' := ih hA_n
+      have hterm :
+          nearOneLogCorrection c n (quadratic_map c z) =
+            (2 : ℂ) * nearOneLogCorrection c (n + 1) z :=
+        nearOneLogCorrection_quadratic_map_eq_two_mul_succ c n z hz hzq
+          (hA n (Nat.le_succ n))
+      calc
+        finiteLogCorrectionSum c (n + 1) (quadratic_map c z)
+            = finiteLogCorrectionSum c n (quadratic_map c z) +
+                nearOneLogCorrection c n (quadratic_map c z) := by
+              simp [finiteLogCorrectionSum, Finset.sum_range_succ]
+        _ = (2 : ℂ) * (finiteLogCorrectionSum c (n + 1) z -
+              nearOneLogCorrection c 0 z) +
+              (2 : ℂ) * nearOneLogCorrection c (n + 1) z := by
+              rw [ih', hterm]
+        _ = (2 : ℂ) * (finiteLogCorrectionSum c (n + 2) z -
+              nearOneLogCorrection c 0 z) := by
+              simp [finiteLogCorrectionSum, Finset.sum_range_succ]
+              ring
+
 /-- Recursive exterior lower bound used by Candidate 10. Starting far enough
 outside, the quadratic map grows at least like `x ↦ x^2/2`. -/
 noncomputable def exteriorGrowthLower : ℝ → ℕ → ℝ
