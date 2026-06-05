@@ -44,10 +44,14 @@ without affecting the checked root frontier.
 
 ## Next plan surface
 
-The remaining repo-facing target is no longer the Lyubich bridge. The next plan
-should attack:
+The remaining repo-facing target is no longer the Lyubich bridge and no longer
+the old degree-one proxy route in isolation. The live next plan is now:
 
-1. `MLC.basinExternalRayKernelTwo`
+1. `PLAN_06_global_bottcher_package.md`
+
+That plan attacks `MLC.basinExternalRayKernelTwo` through the theorem-facing
+global Bottcher coordinate package. `PLAN_05_restricted_winding_degree_one.md`
+remains only as a downstream auxiliary route once the genuine coordinate exists.
 
 ## Success criterion achieved
 

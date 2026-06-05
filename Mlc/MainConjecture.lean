@@ -1617,6 +1617,22 @@ def ResidualOpenVirtualNearMoleculeData : Prop :=
 def MainPathData : Prop :=
   Quadratic.PuzzleBoundaryMotionHyp ∧ IRNoTowerPrimitiveAndMoleculeBridgeTargetData
 
+/-- Phase-5 seam for the theorem-facing Bottcher plan: once the genuine
+coordinate route at `c = 2` is shown to supply puzzle-boundary motion, the
+remaining Track-1/Track-2 package plugs into the existing main-path consumer
+without using the proxy-specific root kernel. -/
+def GenuineBottcherPuzzleBoundaryMotionBridgeTwo : Prop :=
+  Quadratic.GenuineBottcherRouteFor (2 : ℂ) → Quadratic.PuzzleBoundaryMotionHyp
+
+/-- Package the theorem-facing Bottcher route together with the residual
+Track-1/Track-2 inputs into the existing main-path datum. -/
+theorem mainPathData_of_genuineBottcherRoute_two
+    (h_motion_of_route : GenuineBottcherPuzzleBoundaryMotionBridgeTwo)
+    (h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    MainPathData :=
+  ⟨h_motion_of_route h_route, h_track12⟩
+
 /-- Main seam assembly from boundary-motion data and the combined Track-1+Track-2
     datum. -/
 theorem mlc_conjecture_of_motionHyp_track12_data
@@ -1927,6 +1943,20 @@ theorem mlc_conjecture_of_mainPathData
     (h_main : MainPathData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_motionHyp_track12_data h_main.1 h_main.2
+
+/-- Theorem-facing PLAN 06 root seam: once the genuine Bottcher route at `c = 2`
+is connected to puzzle-boundary motion, the existing Track-1/Track-2 route
+already closes MLC. This isolates the remaining non-proxy gap without changing
+the checked root yet. -/
+theorem mlc_conjecture_of_genuineBottcherRoute_two
+    (h_motion_of_route : GenuineBottcherPuzzleBoundaryMotionBridgeTwo)
+    (h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_mainPathData
+      (mainPathData_of_genuineBottcherRoute_two
+        h_motion_of_route h_route h_track12)
 
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
 lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two

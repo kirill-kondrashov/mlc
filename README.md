@@ -136,8 +136,9 @@ routes remain formally refuted as well.
 ## Repository Snapshot
 
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
-2. `plan/` has been pruned to the single live frontier file
-   `PLAN_04_lyubich_bridge.md`.
+2. `plan/` now records the live theorem-facing Bottcher plan in
+   `PLAN_06_global_bottcher_package.md`, alongside completed or auxiliary
+   historical plans.
 3. `draft/` now records the exact remaining positive mathematical targets after
    factoring out the proxy-based obstructions.
 4. `proof_sketches/` records the rigorous human-readable proofs of the current
