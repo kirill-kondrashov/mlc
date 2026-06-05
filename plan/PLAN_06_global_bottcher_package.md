@@ -76,16 +76,23 @@ The root consumer side is now partially prepared:
 
 1. `MainConjecture.lean` exposes
    `GenuineBottcherPuzzleBoundaryMotionBridgeTwo`,
-2. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
+2. `MainConjecture.lean` now also exposes the more concrete seam
+   `GenuineBottcherMotionBridgeTwo`, which asks for Bottcher-based motion data
+   from the genuine route and converts it to the puzzle-boundary-motion bridge
+   through the existing constructor in `BottcherMotion.lean`,
+3. `genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge` and
+   `mlc_conjecture_of_genuineBottcherMotionBridgeTwo` now make that reduction
+   explicit in checked Lean,
+4. `mainPathData_of_genuineBottcherRoute_two` packages the theorem-facing
    Bottcher route into the existing `MainPathData` interface once that bridge is
    available,
-3. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
+5. `mlc_conjecture_of_genuineBottcherRoute_two` closes MLC from the genuine
    Bottcher route, the bridge to puzzle-boundary motion, and the existing
    Track-1/Track-2 package.
 
 So the remaining work is now more exact: the repository no longer lacks the
 Phase-5 consumer theorem; it lacks the genuine coordinate theorem itself and the
-bridge from that route to `Quadratic.PuzzleBoundaryMotionHyp`.
+bridge from that route to Bottcher-based motion / `Quadratic.PuzzleBoundaryMotionHyp`.
 
 ---
 

@@ -1624,6 +1624,24 @@ without using the proxy-specific root kernel. -/
 def GenuineBottcherPuzzleBoundaryMotionBridgeTwo : Prop :=
   Quadratic.GenuineBottcherRouteFor (2 : ℂ) → Quadratic.PuzzleBoundaryMotionHyp
 
+/-- More concrete PLAN 06 seam through the existing Bottcher-motion layer:
+the genuine route at `c = 2` should eventually produce Bottcher-based motion
+data, which then yields puzzle-boundary motion through the already-defined
+constructor in `BottcherMotion.lean`. -/
+def GenuineBottcherMotionBridgeTwo : Prop :=
+  ∀ h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ),
+    Nonempty Quadratic.BottcherMotionHyp
+
+/-- Any theorem-facing bridge to Bottcher-based motion immediately supplies the
+exact puzzle-boundary-motion bridge needed by the Phase-5 root seam. -/
+theorem genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge
+    (h_bridge : GenuineBottcherMotionBridgeTwo) :
+    GenuineBottcherPuzzleBoundaryMotionBridgeTwo := by
+  intro h_route
+  exact
+    Quadratic.puzzle_boundary_motion_hyp_of_bottcher
+      (Classical.choice (h_bridge h_route))
+
 /-- Package the theorem-facing Bottcher route together with the residual
 Track-1/Track-2 inputs into the existing main-path datum. -/
 theorem mainPathData_of_genuineBottcherRoute_two
@@ -1957,6 +1975,19 @@ theorem mlc_conjecture_of_genuineBottcherRoute_two
     mlc_conjecture_of_mainPathData
       (mainPathData_of_genuineBottcherRoute_two
         h_motion_of_route h_route h_track12)
+
+/-- Combined theorem-facing cutover through the Bottcher-motion layer:
+once the genuine Bottcher route produces Bottcher-based motion, the existing
+Track-1/Track-2 package already closes MLC. -/
+theorem mlc_conjecture_of_genuineBottcherMotionBridgeTwo
+    (h_bridge : GenuineBottcherMotionBridgeTwo)
+    (h_route : Quadratic.GenuineBottcherRouteFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_genuineBottcherRoute_two
+      (genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge h_bridge)
+      h_route h_track12
 
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
 lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
