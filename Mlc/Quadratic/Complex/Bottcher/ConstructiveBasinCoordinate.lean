@@ -161,6 +161,27 @@ def GenuineBottcherNearInfinityDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
 def GenuineBottcherNearInfinityRouteFor (c : ℂ) : Prop :=
   ∃ φ : ℂ → ℂ, GenuineBottcherNearInfinityDataFor c φ
 
+/-- Candidate 8/10/11 now supplies the canonical near-infinity Böttcher package:
+the logarithmic-series coordinate is exterior-valued and conjugates to squaring
+on the canonical outside-open region, is differentiable there, and is normalized
+at infinity. -/
+theorem genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox (c : ℂ) :
+    GenuineBottcherNearInfinityDataFor c (MLC.logSeriesBottcherApprox c) := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro z hz
+    exact MLC.one_lt_norm_logSeriesBottcherApprox_of_outside_open c hz
+  · intro z hz
+    exact MLC.logSeriesBottcherApprox_conj_of_large_radius c (R := ‖c‖ + 2) le_rfl hz
+  · exact MLC.logSeriesBottcherApprox_differentiableOn_large_radius c (R := ‖c‖ + 2) le_rfl
+  · exact MLC.tendsto_logSeriesBottcherApprox_div_atInfinity c
+
+/-- Existential near-infinity route supplied by the logarithmic-series
+coordinate. -/
+theorem genuineBottcherNearInfinityRouteFor_logSeriesBottcherApprox (c : ℂ) :
+    GenuineBottcherNearInfinityRouteFor c :=
+  ⟨MLC.logSeriesBottcherApprox c,
+    genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox c⟩
+
 /-- Candidate 9 works in the inverted coordinate `w = 1 / z`, where infinity
 for `z ↦ z^2 + c` becomes the superattracting fixed point `w = 0`. -/
 noncomputable def invertedQuadraticMap (c : ℂ) (w : ℂ) : ℂ :=

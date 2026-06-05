@@ -320,13 +320,26 @@ repo/library support.
      Route A then passes the identity to `tsum` and handles the
      `exp(log(1+c/z^2))` branch step.
    - **FAILED:** differentiability of the infinite log-series coordinate on an
-     exterior region is not proved. The missing formal step is to package
-     differentiability of each `nearOneLogCorrection c n` on an exterior region
-     and then apply the locally uniform series differentiability theorem.
-   - **PASSED partially:** exterior-valuedness is proved eventually at infinity,
-     by `eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity` and
-     `exists_radius_one_lt_norm_logSeriesBottcherApprox`; it is not yet proved on
-     the canonical outside-open region `‖z‖ > ‖c‖ + 2`.
+     exterior region is now fixed. The checked theorems are
+     `nearOneLogCorrection_differentiableOn_large_radius`,
+     `logCorrectionSeries_differentiableOn_large_radius`,
+     `logSeriesBottcherRatio_differentiableOn_large_radius`, and
+     `logSeriesBottcherApprox_differentiableOn_large_radius`.
+   - **PASSED on a large exterior region:** exterior-valuedness, conjugacy,
+     differentiability, and normalization are packaged by
+     `exists_logSeriesNearInfinityDataOn`. This gives a genuine near-infinity
+     package on some `{z | R < ‖z‖}` with `‖c‖ + 2 ≤ R`.
+   - **PASSED for the canonical interface:** Route A now pulls exterior-valuedness
+     back from a large iterate using the canonical outside-open conjugacy and the
+     escaping orbit. The checked theorem is
+     `one_lt_norm_logSeriesBottcherApprox_of_outside_open`.
+   - **PASSED:** the existing theorem-facing package is now filled by
+     `genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox`, and the
+     existential route by
+     `genuineBottcherNearInfinityRouteFor_logSeriesBottcherApprox`.
+   - **FAILED / downstream:** this is still only the near-infinity phase. It does
+     not yet extend the coordinate to the full basin and therefore does not prove
+     `ClassicalGlobalBottcherTheoremFor`.
 
    Alternative routes for the failed steps:
    1. **Conjugacy route A:** **PASSED.** The finite shift identity is passed to
@@ -346,22 +359,29 @@ repo/library support.
    3. **Conjugacy route C:** **PASSED.** `logCorrectionTail` and
       `logCorrectionSeries_eq_zero_add_tail_of_large_radius` split the `tsum`
       reindexing into reusable tail lemmas.
-   4. **Differentiability route A (preferred):** prove
-      `DifferentiableOn ℂ (nearOneLogCorrection c n) {z | R < ‖z‖}` for large
-      `R` using `AnalyticOn.clog`/`DifferentiableOn.clog`, then use
-      `differentiableOn_tsum_of_summable_norm`.
-   5. **Differentiability route B:** first prove the conjugacy and normalization,
+   4. **Differentiability route A:** **PASSED.** Summand differentiability and
+      `differentiableOn_tsum_of_summable_norm` now prove differentiability of the
+      infinite log-series coordinate on every sufficiently large exterior region.
+   5. **Differentiability route B:** fallback only; first prove the conjugacy and normalization,
       then use a local inverse/implicit functional-equation argument to get
       differentiability from a finite-stage locally uniform limit, avoiding a
       direct derivative proof for every summand.
+   6. **Canonical exterior-valuedness route A:** **PASSED.** The orbit pullback
+      proof gives `1 < ‖logSeriesBottcherApprox c z‖` on all
+      `‖z‖ > ‖c‖ + 2`.
+   7. **Canonical exterior-valuedness route B:** **SKIPPED / unnecessary.** No
+      interface refactor is needed because Route A now satisfies the existing
+      canonical `GenuineBottcherNearInfinityDataFor` interface.
 
 So the honest next implementation target is now:
 
-1. prove differentiability of each `nearOneLogCorrection c n` on a sufficiently
-   large exterior region and apply `differentiableOn_tsum_of_summable_norm`;
-2. strengthen eventual exterior-valuedness to the same chosen exterior region;
-3. package the resulting near-infinity coordinate into
-   `GenuineBottcherNearInfinityDataFor`;
+1. construct a basin extension of `logSeriesBottcherApprox` from the canonical
+   near-infinity coordinate;
+2. prove the extension is independent of the escape iterate used to pull back;
+3. prove differentiability/nonvanishing/conjugacy on the full basin;
+4. prove the Green-function modulus identity for the extended coordinate;
+5. package these as `ClassicalGlobalBottcherTheoremFor` (at least first for
+   `c = 2`).
 4. only then attempt the basin extension step for
    `Quadratic.ClassicalGlobalBottcherTheoremFor`.
 

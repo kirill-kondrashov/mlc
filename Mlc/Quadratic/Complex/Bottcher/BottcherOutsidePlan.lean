@@ -1517,6 +1517,126 @@ lemma logSeriesBottcherApprox_conj_of_large_radius
     _ = (logSeriesBottcherApprox c z)^2 := by
           rfl
 
+/-- On a sufficiently large exterior region, the simple logarithm argument used
+by `nearOneLogCorrection` stays in the slit plane. -/
+lemma nearOneLogCorrection_simple_arg_mem_slitPlane_of_large_radius
+    (c : ℂ) (n : ℕ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R)
+    {z : ℂ} (hz : R < ‖z‖) :
+    (1 : ℂ) + c / (((quadratic_map c)^[n] z) ^ 2) ∈ Complex.slitPlane := by
+  have hz_ge_c2 : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR (le_of_lt hz)
+  have hiter_ge_start : ‖z‖ ≤ ‖(quadratic_map c)^[n] z‖ := by
+    have hstart : ‖c‖ + 1 ≤ ‖z‖ := by linarith
+    exact iterate_quadratic_map_norm_ge c z n hstart
+  have hiter_ge_c2 : ‖c‖ + 2 ≤ ‖(quadratic_map c)^[n] z‖ :=
+    le_trans hz_ge_c2 hiter_ge_start
+  have hhalf : ‖c / (((quadratic_map c)^[n] z) ^ 2)‖ ≤ (1 / 2 : ℝ) := by
+    by_cases hc0 : ‖c‖ = 0
+    · have hc_zero : c = 0 := norm_eq_zero.mp hc0
+      simp [hc_zero]
+    · have hc_pos : 0 < ‖c‖ := lt_of_le_of_ne (norm_nonneg c) (Ne.symm hc0)
+      have hden_ge : 2 * ‖c‖ ≤ ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+        calc
+          2 * ‖c‖ ≤ ‖(quadratic_map c)^[n] z‖ ^ 2 := by
+            nlinarith [norm_nonneg c, hiter_ge_c2]
+          _ = ‖(((quadratic_map c)^[n] z) ^ 2)‖ := by
+            simp [norm_pow]
+      have hden_pos : 0 < ‖(((quadratic_map c)^[n] z) ^ 2)‖ :=
+        lt_of_lt_of_le (by nlinarith : 0 < 2 * ‖c‖) hden_ge
+      rw [norm_div]
+      rw [div_le_iff₀ hden_pos]
+      nlinarith
+  exact Complex.mem_slitPlane_of_norm_lt_one (lt_of_le_of_lt hhalf (by norm_num : (1 / 2 : ℝ) < 1))
+
+/-- Each logarithmic correction summand is differentiable on any sufficiently
+large exterior region. -/
+lemma nearOneLogCorrection_differentiableOn_large_radius
+    (c : ℂ) (n : ℕ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R) :
+    DifferentiableOn ℂ (nearOneLogCorrection c n) {z : ℂ | R < ‖z‖} := by
+  let U : Set ℂ := {z : ℂ | R < ‖z‖}
+  let A : ℂ → ℂ := fun z => (quadratic_map c)^[n] z
+  let simple : ℂ → ℂ := fun z =>
+    ((2 : ℂ) ^ (n + 1))⁻¹ *
+      Complex.log ((1 : ℂ) + c / ((A z) ^ 2))
+  have hA_diff : DifferentiableOn ℂ A U :=
+    ((quadratic_map_differentiable c).iterate n).differentiableOn
+  have hden_ne : ∀ z ∈ U, (A z) ^ 2 ≠ 0 := by
+    intro z hz
+    have hz_ge_c2 : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR (le_of_lt hz)
+    have hiter_ge_start : ‖z‖ ≤ ‖A z‖ := by
+      have hstart : ‖c‖ + 1 ≤ ‖z‖ := by linarith
+      exact iterate_quadratic_map_norm_ge c z n hstart
+    have hpos : 0 < ‖A z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact pow_ne_zero 2 ((norm_ne_zero_iff).1 (ne_of_gt hpos))
+  have harg_diff :
+      DifferentiableOn ℂ (fun z => (1 : ℂ) + c / ((A z) ^ 2)) U := by
+    have hsq : DifferentiableOn ℂ (fun z => (A z) ^ 2) U := hA_diff.pow 2
+    have hinv : DifferentiableOn ℂ (fun z => ((A z) ^ 2)⁻¹) U :=
+      hsq.inv hden_ne
+    simpa [div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc] using
+      (hinv.const_mul c).const_add (1 : ℂ)
+  have hlog_diff :
+      DifferentiableOn ℂ (fun z => Complex.log ((1 : ℂ) + c / ((A z) ^ 2))) U := by
+    refine harg_diff.clog ?_
+    intro z hz
+    exact nearOneLogCorrection_simple_arg_mem_slitPlane_of_large_radius c n hR hz
+  have hsimple_diff : DifferentiableOn ℂ simple U := by
+    simpa [simple] using hlog_diff.const_mul (((2 : ℂ) ^ (n + 1))⁻¹)
+  refine hsimple_diff.congr ?_
+  intro z hz
+  have hz_ne : z ≠ 0 := by
+    have hpos : 0 < ‖z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      have hzR : R < ‖z‖ := hz
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  have hA_ne : A z ≠ 0 := by
+    have hz_ge_c2 : ‖c‖ + 2 ≤ ‖z‖ := le_trans hR (le_of_lt hz)
+    have hiter_ge_start : ‖z‖ ≤ ‖A z‖ := by
+      have hstart : ‖c‖ + 1 ≤ ‖z‖ := by linarith
+      exact iterate_quadratic_map_norm_ge c z n hstart
+    have hpos : 0 < ‖A z‖ := by
+      have hc_nonneg : 0 ≤ ‖c‖ := norm_nonneg c
+      linarith
+    exact (norm_ne_zero_iff).1 (ne_of_gt hpos)
+  simpa [simple, A] using (nearOneLogCorrection_eq_simple c n z hz_ne hA_ne)
+
+/-- The infinite logarithmic correction series is differentiable on any
+sufficiently large exterior region. -/
+lemma logCorrectionSeries_differentiableOn_large_radius
+      (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R) :
+      DifferentiableOn ℂ (logCorrectionSeries c) {z : ℂ | R < ‖z‖} := by
+    rcases LogCorrectionSeriesMajorizedOnExterior.of_large_radius (c := c) hR with
+      ⟨u, hu, hbound⟩
+    have hUopen : IsOpen ({z : ℂ | R < ‖z‖} : Set ℂ) :=
+      isOpen_lt continuous_const continuous_norm
+    exact differentiableOn_tsum_of_summable_norm
+      (F := fun n z => nearOneLogCorrection c n z)
+      (U := {z : ℂ | R < ‖z‖})
+      hu
+      (fun n => nearOneLogCorrection_differentiableOn_large_radius c n hR)
+      hUopen
+      hbound
+
+/-- The logarithmic ratio candidate is differentiable on any sufficiently large
+exterior region. -/
+lemma logSeriesBottcherRatio_differentiableOn_large_radius
+      (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R) :
+      DifferentiableOn ℂ (logSeriesBottcherRatio c) {z : ℂ | R < ‖z‖} := by
+    have hlog := logCorrectionSeries_differentiableOn_large_radius c hR
+    simpa [logSeriesBottcherRatio] using hlog.cexp
+
+/-- The logarithmic Böttcher approximation is differentiable on any sufficiently
+large exterior region. -/
+lemma logSeriesBottcherApprox_differentiableOn_large_radius
+      (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R) :
+      DifferentiableOn ℂ (logSeriesBottcherApprox c) {z : ℂ | R < ‖z‖} := by
+    have hid : DifferentiableOn ℂ (fun z : ℂ => z) {z : ℂ | R < ‖z‖} :=
+      differentiableOn_id
+    have hratio := logSeriesBottcherRatio_differentiableOn_large_radius c hR
+    simpa [logSeriesBottcherApprox] using hid.mul hratio
+
 /-- The logarithmic correction series itself is normalized at infinity. This is
 Tannery's theorem applied to the Candidate-10 summable majorant and the already
 checked termwise limits. -/
@@ -1615,6 +1735,103 @@ lemma exists_radius_one_lt_norm_logSeriesBottcherApprox (c : ℂ) :
   refine ⟨R, ?_⟩
   intro z hz
   exact hR ‖z‖ (le_of_lt hz) z rfl
+
+/-- Strict outside-open forward invariance for all iterates. -/
+lemma quadratic_map_iter_maps_outside_open (c : ℂ) {z : ℂ}
+    (hz : ‖z‖ > ‖c‖ + 2) :
+    ∀ n : ℕ, ‖(quadratic_map c)^[n] z‖ > ‖c‖ + 2
+  | 0 => by simpa using hz
+  | n + 1 => by
+      have hn := quadratic_map_iter_maps_outside_open c hz n
+      have hge :
+          ‖quadratic_map c ((quadratic_map c)^[n] z)‖ ≥
+            ‖(quadratic_map c)^[n] z‖ + 1 :=
+        quadratic_map_norm_ge_add_one c ((quadratic_map c)^[n] z) (le_of_lt hn)
+      have hgt : ‖quadratic_map c ((quadratic_map c)^[n] z)‖ > ‖c‖ + 2 := by
+        linarith
+      simpa [Function.iterate_succ_apply'] using hgt
+
+/-- Iterated Böttcher conjugacy on the canonical outside-open region. -/
+lemma logSeriesBottcherApprox_conj_iterate_outside_open
+    (c : ℂ) {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) :
+    ∀ n : ℕ,
+      logSeriesBottcherApprox c ((quadratic_map c)^[n] z) =
+        (logSeriesBottcherApprox c z) ^ (2 ^ n)
+  | 0 => by simp
+  | n + 1 => by
+      have hn_out : ‖(quadratic_map c)^[n] z‖ > ‖c‖ + 2 :=
+        quadratic_map_iter_maps_outside_open c hz n
+      calc
+        logSeriesBottcherApprox c ((quadratic_map c)^[n + 1] z)
+            = logSeriesBottcherApprox c (quadratic_map c ((quadratic_map c)^[n] z)) := by
+                rw [Function.iterate_succ_apply']
+        _ = (logSeriesBottcherApprox c ((quadratic_map c)^[n] z)) ^ 2 := by
+                exact logSeriesBottcherApprox_conj_of_large_radius
+                  c (R := ‖c‖ + 2) le_rfl hn_out
+        _ = ((logSeriesBottcherApprox c z) ^ (2 ^ n)) ^ 2 := by
+                rw [logSeriesBottcherApprox_conj_iterate_outside_open c hz n]
+        _ = (logSeriesBottcherApprox c z) ^ (2 ^ (n + 1)) := by
+                simp [pow_mul, pow_succ]
+
+/-- Route A succeeds: exterior-valuedness holds on the full canonical
+outside-open region by pulling eventual exterior-valuedness back along the
+canonical conjugacy and escaping orbit. -/
+lemma one_lt_norm_logSeriesBottcherApprox_of_outside_open
+    (c : ℂ) {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) :
+    1 < ‖logSeriesBottcherApprox c z‖ := by
+  rcases exists_radius_one_lt_norm_logSeriesBottcherApprox c with ⟨Rext, hExt⟩
+  have hescape : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop :=
+    iterate_quadratic_map_tendsto_infty c z (le_of_lt hz)
+  have hevent := (Filter.tendsto_atTop.1 hescape) (Rext + 1)
+  rcases (Filter.eventually_atTop.1 hevent) with ⟨N, hN⟩
+  have hlarge : Rext < ‖(quadratic_map c)^[N] z‖ := by
+    have hN' : Rext + 1 ≤ ‖(quadratic_map c)^[N] z‖ := hN N le_rfl
+    linarith
+  have hPhi_large : 1 < ‖logSeriesBottcherApprox c ((quadratic_map c)^[N] z)‖ :=
+    hExt ((quadratic_map c)^[N] z) hlarge
+  have hconj := logSeriesBottcherApprox_conj_iterate_outside_open c hz N
+  have hpow_norm :
+      ‖logSeriesBottcherApprox c ((quadratic_map c)^[N] z)‖ =
+        ‖logSeriesBottcherApprox c z‖ ^ (2 ^ N) := by
+    rw [hconj, norm_pow]
+  have hpow_gt : 1 < ‖logSeriesBottcherApprox c z‖ ^ (2 ^ N) := by
+    simpa [hpow_norm] using hPhi_large
+  by_contra hnot
+  have hle : ‖logSeriesBottcherApprox c z‖ ≤ 1 := le_of_not_gt hnot
+  have hpow_le : ‖logSeriesBottcherApprox c z‖ ^ (2 ^ N) ≤ 1 := by
+    exact pow_le_one₀ (norm_nonneg _) hle
+  linarith
+
+/-- Large-radius near-infinity package for the logarithmic Böttcher candidate.
+This is the honest package currently proved: all near-infinity properties hold
+on some exterior region, but this is weaker than the canonical
+`GenuineBottcherNearInfinityDataFor`, whose exterior-valuedness field is fixed
+on `{‖z‖ > ‖c‖ + 2}`. -/
+def LogSeriesNearInfinityDataOn (c : ℂ) (R : ℝ) : Prop :=
+  (‖c‖ + 2 ≤ R) ∧
+  (∀ z : ℂ, R < ‖z‖ → 1 < ‖logSeriesBottcherApprox c z‖) ∧
+  (∀ z : ℂ, R < ‖z‖ →
+    logSeriesBottcherApprox c (quadratic_map c z) =
+      (logSeriesBottcherApprox c z)^2) ∧
+  DifferentiableOn ℂ (logSeriesBottcherApprox c) {z : ℂ | R < ‖z‖} ∧
+  Tendsto (fun z => logSeriesBottcherApprox c z / z) atInfinity (𝓝 (1 : ℂ))
+
+/-- The logarithmic Böttcher candidate satisfies the full near-infinity package
+on some sufficiently large exterior region. -/
+lemma exists_logSeriesNearInfinityDataOn (c : ℂ) :
+    ∃ R : ℝ, LogSeriesNearInfinityDataOn c R := by
+  rcases exists_radius_one_lt_norm_logSeriesBottcherApprox c with ⟨Rext, hExt⟩
+  let R : ℝ := max (‖c‖ + 2) Rext
+  have hbase : ‖c‖ + 2 ≤ R := le_max_left _ _
+  have hRext : Rext ≤ R := le_max_right _ _
+  refine ⟨R, ?_⟩
+  refine ⟨hbase, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    exact hExt z (lt_of_le_of_lt hRext hz)
+  · intro z hz
+    exact logSeriesBottcherApprox_conj_of_large_radius c hbase hz
+  · exact logSeriesBottcherApprox_differentiableOn_large_radius c hbase
+  · exact tendsto_logSeriesBottcherApprox_div_atInfinity c
 
 /-- If the Candidate-8 additive convergence seam is proved, then the finite
 logarithmic correction sums converge locally uniformly to the logarithmic series
