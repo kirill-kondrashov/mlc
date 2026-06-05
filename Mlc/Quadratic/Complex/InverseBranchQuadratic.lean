@@ -208,7 +208,7 @@ lemma quadratic_map_iter_eq_imp_eq_of_iter_left_inverse
 
 /-!
 If one had a *right-inverse* square root branch on the exterior and a
-left inverse for `bottcher_map` on the basin, one could build a left
+left inverse for `proxy_bottcher_map` on the basin, one could build a left
 inverse for `quadratic_map` on the basin. This is recorded as a
 hypothesis-driven lemma to make the remaining gap explicit.
 -/
@@ -218,25 +218,25 @@ lemma quadratic_map_left_inverse_on_basin_of_sqrt_branch
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn exterior sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_norm : ∀ z, z ∈ basin_of_infinity c → 1 < ‖bottcher_map c z‖)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_norm : ∀ z, z ∈ basin_of_infinity c → 1 < ‖proxy_bottcher_map c z‖)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
-  refine ⟨fun z => external_ray_map c (sqrt (bottcher_map c z)), ?_, ?_⟩
+  refine ⟨fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)), ?_, ?_⟩
   · intro z hz
-    have hz' : 1 < ‖bottcher_map c z‖ := h_norm z hz
-    have hz_ext : bottcher_map c z ∈ exterior := hz'
-    have hsq : sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z :=
-      h_sqrt (bottcher_map c z) hz_ext
+    have hz' : 1 < ‖proxy_bottcher_map c z‖ := h_norm z hz
+    have hz_ext : proxy_bottcher_map c z ∈ exterior := hz'
+    have hsq : sqrt ((proxy_bottcher_map c z) ^ 2) = proxy_bottcher_map c z :=
+      h_sqrt (proxy_bottcher_map c z) hz_ext
     have hconj := h_conj z hz
     calc
-      external_ray_map c (sqrt (bottcher_map c (quadratic_map c z)))
-          = external_ray_map c (sqrt ((bottcher_map c z) ^ 2)) := by
+      external_ray_map c (sqrt (proxy_bottcher_map c (quadratic_map c z)))
+          = external_ray_map c (sqrt ((proxy_bottcher_map c z) ^ 2)) := by
               simp [hconj]
-      _ = external_ray_map c (bottcher_map c z) := by simp [hsq]
+      _ = external_ray_map c (proxy_bottcher_map c z) := by simp [hsq]
       _ = z := h_left_bottcher z hz
   · intro y hy
     exact h_maps hy
@@ -246,24 +246,24 @@ lemma quadratic_map_left_inverse_on_basin_of_sqrt_branch_slitPlaneRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn slitPlaneRight sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRight)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRight)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
-  refine ⟨fun z => external_ray_map c (sqrt (bottcher_map c z)), ?_, ?_⟩
+  refine ⟨fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)), ?_, ?_⟩
   · intro z hz
-    have hz_mem : bottcher_map c z ∈ slitPlaneRight := h_mem z hz
-    have hsq : sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z :=
-      h_sqrt (bottcher_map c z) hz_mem
+    have hz_mem : proxy_bottcher_map c z ∈ slitPlaneRight := h_mem z hz
+    have hsq : sqrt ((proxy_bottcher_map c z) ^ 2) = proxy_bottcher_map c z :=
+      h_sqrt (proxy_bottcher_map c z) hz_mem
     have hconj := h_conj z hz
     calc
-      external_ray_map c (sqrt (bottcher_map c (quadratic_map c z)))
-          = external_ray_map c (sqrt ((bottcher_map c z) ^ 2)) := by
+      external_ray_map c (sqrt (proxy_bottcher_map c (quadratic_map c z)))
+          = external_ray_map c (sqrt ((proxy_bottcher_map c z) ^ 2)) := by
               simp [hconj]
-      _ = external_ray_map c (bottcher_map c z) := by simp [hsq]
+      _ = external_ray_map c (proxy_bottcher_map c z) := by simp [hsq]
       _ = z := h_left_bottcher z hz
   · intro y hy
     exact h_maps hy
@@ -273,24 +273,24 @@ lemma quadratic_map_left_inverse_on_basin_of_sqrt_branch_slitPlaneRotRight
     (sqrt : ℂ → ℂ)
     (h_sqrt : SquareRootRightInverseOn (slitPlaneRotRight θ) sqrt)
     (h_conj : ∀ z, z ∈ basin_of_infinity c →
-      bottcher_map c (quadratic_map c z) = (bottcher_map c z) ^ 2)
+      proxy_bottcher_map c (quadratic_map c z) = (proxy_bottcher_map c z) ^ 2)
     (h_left_bottcher : ∀ z, z ∈ basin_of_infinity c →
-      external_ray_map c (bottcher_map c z) = z)
-    (h_mem : ∀ z, z ∈ basin_of_infinity c → bottcher_map c z ∈ slitPlaneRotRight θ)
-    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (bottcher_map c z)))
+      external_ray_map c (proxy_bottcher_map c z) = z)
+    (h_mem : ∀ z, z ∈ basin_of_infinity c → proxy_bottcher_map c z ∈ slitPlaneRotRight θ)
+    (h_maps : MapsTo (fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)))
       (basin_of_infinity c) (basin_of_infinity c)) :
     HasLeftInverseOn (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by
-  refine ⟨fun z => external_ray_map c (sqrt (bottcher_map c z)), ?_, ?_⟩
+  refine ⟨fun z => external_ray_map c (sqrt (proxy_bottcher_map c z)), ?_, ?_⟩
   · intro z hz
-    have hz_mem : bottcher_map c z ∈ slitPlaneRotRight θ := h_mem z hz
-    have hsq : sqrt ((bottcher_map c z) ^ 2) = bottcher_map c z :=
-      h_sqrt (bottcher_map c z) hz_mem
+    have hz_mem : proxy_bottcher_map c z ∈ slitPlaneRotRight θ := h_mem z hz
+    have hsq : sqrt ((proxy_bottcher_map c z) ^ 2) = proxy_bottcher_map c z :=
+      h_sqrt (proxy_bottcher_map c z) hz_mem
     have hconj := h_conj z hz
     calc
-      external_ray_map c (sqrt (bottcher_map c (quadratic_map c z)))
-          = external_ray_map c (sqrt ((bottcher_map c z) ^ 2)) := by
+      external_ray_map c (sqrt (proxy_bottcher_map c (quadratic_map c z)))
+          = external_ray_map c (sqrt ((proxy_bottcher_map c z) ^ 2)) := by
               simp [hconj]
-      _ = external_ray_map c (bottcher_map c z) := by simp [hsq]
+      _ = external_ray_map c (proxy_bottcher_map c z) := by simp [hsq]
       _ = z := h_left_bottcher z hz
   · intro y hy
     exact h_maps hy

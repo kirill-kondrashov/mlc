@@ -27,7 +27,7 @@ def basin_of_infinity (c : ℂ) : Set ℂ :=
 /-- The theorem-facing Böttcher coordinate is now realized constructively by the
 explicit proxy `polar_green_map`. The remaining frontier no longer needs a
 separate coordinate-data axiom for the norm/continuity/ray package. -/
-noncomputable def bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
+noncomputable def proxy_bottcher_map (c : ℂ) (z : ℂ) : ℂ :=
   polar_green_map c z
 
 lemma orbit_eq_iter_quadratic_map (c z : ℂ) (n : ℕ) :
@@ -102,13 +102,13 @@ def ExternalRayMapDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
         (∀ z, ‖z‖ > ‖c‖ + 2 → f (φ z) = z)
 
 /-- Data package for an exterior inverse of the current theorem-facing
-`bottcher_map`. -/
+`proxy_bottcher_map`. -/
 def ExternalRayMapData (c : ℂ) : Prop :=
-  ExternalRayMapDataFor c (bottcher_map c)
+  ExternalRayMapDataFor c (proxy_bottcher_map c)
 
 /-- Preferred basin-valued theorem-facing package suggested by the current
 mathematical analysis. Unlike `ExternalRayMapData`, this formulation keeps the
-actual coordinate fixed to `bottcher_map` and only asks for exterior-valuedness
+actual coordinate fixed to `proxy_bottcher_map` and only asks for exterior-valuedness
 on the basin itself, so it avoids the false full-exterior surjectivity demand
 for the restricted outside map. -/
 def BasinExternalRayMapDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
@@ -120,9 +120,9 @@ def BasinExternalRayMapDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
       (∀ z, ‖z‖ > ‖c‖ + 2 → Ψ (φ z) = z)
 
 /-- Preferred basin-valued theorem-facing package specialized to the current
-`bottcher_map`. -/
+`proxy_bottcher_map`. -/
 def BasinExternalRayMapData (c : ℂ) : Prop :=
-  BasinExternalRayMapDataFor c (bottcher_map c)
+  BasinExternalRayMapDataFor c (proxy_bottcher_map c)
 
 /-- `c = 2` specialization of the basin-valued package. This is the precise
 single-theorem target behind the expert note in `draft/`. -/
@@ -142,7 +142,7 @@ recover the usual exterior inverse data. -/
 lemma externalRayMapData_of_basinExternalRayMapData (c : ℂ)
     (h_data : BasinExternalRayMapData c) :
     ExternalRayMapData c :=
-  externalRayMapDataFor_of_basinExternalRayMapDataFor c (bottcher_map c) h_data
+  externalRayMapDataFor_of_basinExternalRayMapDataFor c (proxy_bottcher_map c) h_data
 
 /-- The inverse of the Böttcher map exists on the exterior (ray map). This
 global theorem-facing seam is still used elsewhere in the repository, but the
@@ -157,15 +157,15 @@ axiom external_ray_map_exists_two : ExternalRayMapData (2 : ℂ)
 /-- Unpack the ray-map data package into its existential form. -/
 theorem external_ray_map_exists_of_data (c : ℂ) (h_data : ExternalRayMapData c) :
     ∃ f : ℂ → ℂ,
-      (∀ w, 1 < ‖w‖ → bottcher_map c (f w) = w) ∧
-        (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z) :=
+      (∀ w, 1 < ‖w‖ → proxy_bottcher_map c (f w) = w) ∧
+        (∀ z, ‖z‖ > ‖c‖ + 2 → f (proxy_bottcher_map c z) = z) :=
   h_data
 
 theorem external_ray_map_data_of_exists (c : ℂ)
     (h_exists :
       ∃ f : ℂ → ℂ,
-        (∀ w, 1 < ‖w‖ → bottcher_map c (f w) = w) ∧
-          (∀ z, ‖z‖ > ‖c‖ + 2 → f (bottcher_map c z) = z)) :
+        (∀ w, 1 < ‖w‖ → proxy_bottcher_map c (f w) = w) ∧
+          (∀ z, ‖z‖ > ‖c‖ + 2 → f (proxy_bottcher_map c z) = z)) :
     ExternalRayMapData c :=
   h_exists
 
@@ -175,24 +175,24 @@ noncomputable def external_ray_map_of_data {c : ℂ}
 
 lemma external_ray_map_of_data_right_inverse {c : ℂ}
     (h_data : ExternalRayMapData c) (w : ℂ) (hw : 1 < ‖w‖) :
-    bottcher_map c (external_ray_map_of_data h_data w) = w := by
+    proxy_bottcher_map c (external_ray_map_of_data h_data w) = w := by
   exact (Classical.choose_spec h_data).1 w hw
 
 lemma external_ray_map_of_data_left_inverse_large {c : ℂ}
     (h_data : ExternalRayMapData c) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
-    external_ray_map_of_data h_data (bottcher_map c z) = z := by
+    external_ray_map_of_data h_data (proxy_bottcher_map c z) = z := by
   exact (Classical.choose_spec h_data).2 z hz
 
 noncomputable def external_ray_map (c : ℂ) (w : ℂ) : ℂ :=
   external_ray_map_of_data (external_ray_map_exists c) w
 
 lemma external_ray_map_right_inverse (c : ℂ) (w : ℂ) (hw : 1 < ‖w‖) :
-    bottcher_map c (external_ray_map c w) = w := by
+    proxy_bottcher_map c (external_ray_map c w) = w := by
   simpa [external_ray_map] using
     external_ray_map_of_data_right_inverse (external_ray_map_exists c) w hw
 
 lemma external_ray_map_left_inverse_large (c : ℂ) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
-    external_ray_map c (bottcher_map c z) = z := by
+    external_ray_map c (proxy_bottcher_map c z) = z := by
   simpa [external_ray_map] using
     external_ray_map_of_data_left_inverse_large (external_ray_map_exists c) z hz
 
@@ -208,9 +208,9 @@ def bottcher_domain (c : ℂ) : Set ℂ :=
   external_ray_map c '' {w | 1 < ‖w‖}
 
 theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
-    ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) := by
+    ‖proxy_bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) := by
   by_cases hz : z = 0
-  · simp [bottcher_map, polar_green_map, hz]
+  · simp [proxy_bottcher_map, polar_green_map, hz]
   · have hnormz : (‖z‖ : ℝ) ≠ 0 := norm_ne_zero_iff.2 hz
     have hdir : ‖z / (‖z‖ : ℂ)‖ = 1 := by
       rw [norm_div, Complex.norm_real, norm_norm, div_self hnormz]
@@ -219,17 +219,17 @@ theorem norm_bottcher_eq_exp_green (c : ℂ) (z : ℂ) :
           Real.exp (MLC.Quadratic.green_function c z) := by
       simp [Complex.norm_real, abs_of_pos (Real.exp_pos _)]
     calc
-      ‖bottcher_map c z‖
+      ‖proxy_bottcher_map c z‖
           = ‖(z / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c z) : ℂ)‖ := by
-              simp [bottcher_map, polar_green_map, hz]
+              simp [proxy_bottcher_map, polar_green_map, hz]
       _ = ‖z / (‖z‖ : ℂ)‖ * ‖(Real.exp (MLC.Quadratic.green_function c z) : ℂ)‖ := by
             rw [norm_mul]
       _ = 1 * Real.exp (MLC.Quadratic.green_function c z) := by
             rw [hdir, hexp]
       _ = Real.exp (MLC.Quadratic.green_function c z) := by ring
 
-theorem bottcher_map_continuousAt_of_ne_zero (c : ℂ) (z : ℂ) (hz : z ≠ 0) :
-    ContinuousAt (bottcher_map c) z := by
+theorem proxy_bottcher_map_continuousAt_of_ne_zero (c : ℂ) (z : ℂ) (hz : z ≠ 0) :
+    ContinuousAt (proxy_bottcher_map c) z := by
   have hnorm_ne : (‖z‖ : ℂ) ≠ 0 := by
     exact_mod_cast (norm_ne_zero_iff.2 hz)
   have hdiv : ContinuousAt (fun w : ℂ => w / (‖w‖ : ℂ)) z :=
@@ -253,9 +253,9 @@ theorem bottcher_map_continuousAt_of_ne_zero (c : ℂ) (z : ℂ) (hz : z ≠ 0) 
         (Real.exp (MLC.Quadratic.green_function c w) : ℂ)) z
   exact hdir.mul hexp
 
-theorem bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
+theorem proxy_bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
     (hρ : 0 < ρ) :
-    bottcher_map c ((ρ : ℂ) * u) =
+    proxy_bottcher_map c ((ρ : ℂ) * u) =
       u * ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u))) := by
   have hu0 : u ≠ 0 := by
     intro hu'
@@ -276,53 +276,53 @@ theorem bottcher_map_apply_ray (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ)
     rw [hnormC]
     exact hdir'
   calc
-    bottcher_map c ((ρ : ℂ) * u)
+    proxy_bottcher_map c ((ρ : ℂ) * u)
         = ((((ρ : ℂ) * u) / (‖((ρ : ℂ) * u)‖ : ℂ)) *
             ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u)))) := by
-              simp [bottcher_map, polar_green_map, hz0]
+              simp [proxy_bottcher_map, polar_green_map, hz0]
     _ = u * ↑(Real.exp (MLC.Quadratic.green_function c ((ρ : ℂ) * u))) := by rw [hdir]
 
 lemma bottcher_right_inv_of_mem (c : ℂ) (w : ℂ)
-    (_hw : w ∈ bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
-    bottcher_map c (external_ray_map c w) = w := by
+    (_hw : w ∈ proxy_bottcher_map c '' bottcher_domain c) (hw' : 1 < ‖w‖) :
+    proxy_bottcher_map c (external_ray_map c w) = w := by
   exact external_ray_map_right_inverse c w hw'
 
 theorem bottcher_left_inv_of_data {c : ℂ} (h_data : ExternalRayMapData c)
     (z : ℂ) (hz : z ∈ basin_of_infinity c)
-    (h_inj : Function.Injective (bottcher_map c)) :
-    external_ray_map_of_data h_data (bottcher_map c z) = z := by
+    (h_inj : Function.Injective (proxy_bottcher_map c)) :
+    external_ray_map_of_data h_data (proxy_bottcher_map c z) = z := by
   have hz' : z ∉ MLC.Quadratic.K c := by
     have : z ∈ (MLC.Quadratic.K c)ᶜ := by
       simpa [basin_eq_compl_K c] using hz
     simpa [Set.mem_compl_iff] using this
   have hpos : 0 < MLC.Quadratic.green_function c z :=
     (MLC.Quadratic.green_function_pos_iff_not_mem_K c z).2 hz'
-  have hnorm : 1 < ‖bottcher_map c z‖ := by
-    have hnorm' : ‖bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) :=
+  have hnorm : 1 < ‖proxy_bottcher_map c z‖ := by
+    have hnorm' : ‖proxy_bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) :=
       norm_bottcher_eq_exp_green c z
     have hgt : 1 < Real.exp (MLC.Quadratic.green_function c z) := by
       simpa using (Real.one_lt_exp_iff.mpr hpos)
     simpa [hnorm'] using hgt
   have hright :
-      bottcher_map c (external_ray_map_of_data h_data (bottcher_map c z)) =
-        bottcher_map c z := by
-    simpa using external_ray_map_of_data_right_inverse h_data (bottcher_map c z) hnorm
+      proxy_bottcher_map c (external_ray_map_of_data h_data (proxy_bottcher_map c z)) =
+        proxy_bottcher_map c z := by
+    simpa using external_ray_map_of_data_right_inverse h_data (proxy_bottcher_map c z) hnorm
   exact h_inj hright
 
 theorem bottcher_left_inv (c : ℂ) (z : ℂ) (hz : z ∈ basin_of_infinity c)
-    (h_inj : Function.Injective (bottcher_map c)) :
-    external_ray_map c (bottcher_map c z) = z := by
+    (h_inj : Function.Injective (proxy_bottcher_map c)) :
+    external_ray_map c (proxy_bottcher_map c z) = z := by
   simpa [external_ray_map] using
     bottcher_left_inv_of_data (external_ray_map_exists c) z hz h_inj
 
 lemma external_ray_map_left_inverse_outside_open_of_data {c : ℂ}
     (h_data : ExternalRayMapData c) (z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
-    external_ray_map_of_data h_data (bottcher_map c z) = z := by
+    external_ray_map_of_data h_data (proxy_bottcher_map c z) = z := by
   exact external_ray_map_of_data_left_inverse_large h_data z hz
 
 lemma external_ray_map_left_inverse_outside_open (c : ℂ) (z : ℂ)
     (hz : ‖z‖ > ‖c‖ + 2) :
-    external_ray_map c (bottcher_map c z) = z := by
+    external_ray_map c (proxy_bottcher_map c z) = z := by
   simpa [external_ray_map] using
     external_ray_map_left_inverse_outside_open_of_data (external_ray_map_exists c) z hz
 
@@ -416,7 +416,7 @@ lemma fixed_point_is_fixed (c : ℂ) : MLC.Quadratic.fc c (fixed_point c) = fixe
 axiom bottcher_seq_converges (c : ℂ) :
     TendstoLocallyUniformlyOn
       (fun n z => ((fun w => w^2 + c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
-      (bottcher_map c) atTop (basin_of_infinity c)
+      (proxy_bottcher_map c) atTop (basin_of_infinity c)
 
 /-- Extension of the ray map to the closed exterior of the disk. -/
 noncomputable def extended_ray_map (c : ℂ) (w : ℂ) : ℂ :=
@@ -439,8 +439,8 @@ theorem extended_ray_map_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
   simpa [extended_ray_map, hw'] using (fixed_point_mem_K c)
 
 /-- Surjectivity of Böttcher map onto the exterior ray parameters. -/
-theorem bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
-    w ∈ Quadratic.bottcher_map c '' Quadratic.bottcher_domain c := by
+theorem proxy_bottcher_map_surj (c w : ℂ) (hw : 1 < ‖w‖) :
+    w ∈ Quadratic.proxy_bottcher_map c '' Quadratic.bottcher_domain c := by
   let h_data : ExternalRayMapData c := external_ray_map_exists c
   refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_, ?_⟩
   · exact ⟨w, hw, rfl⟩

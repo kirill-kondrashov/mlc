@@ -38,36 +38,28 @@ project_frontier(MLC.mlc_conjecture)
 
 ## Current Status
 
-The checked root is now routed through a **single honest basin-valued kernel**:
-a theorem-shaped minimal-counterexample wrapper for the specialized statement
-`Quadratic.BasinExternalRayMapDataTwo`. This package asks for a right inverse to
-the fixed `bottcher_map (2)` on the full exterior `Ω = {w : |w| > 1}` and a
-left inverse on the outside-open source region `V = {z : |z| > 4}`.
+The checked root still has a single non-core project assumption,
+`MLC.basinExternalRayKernelTwo`, but the Böttcher-coordinate side has advanced
+substantially.
 
-The former full-exterior degree route is no longer root-facing. The monodromy
-Problem A package remains formalized as an auxiliary route in
-`Mlc.Bottcher.DegreeOne`, but the old Problem B package has now been formally
-refuted in Lean.
+The old proxy coordinate `Quadratic.proxy_bottcher_map := polar_green_map` is not
+the theorem-facing coordinate. The current genuine near-infinity coordinate is
+the logarithmic-series coordinate
 
-The expert-facing documentation has been cleaned up accordingly:
+```lean
+MLC.logSeriesBottcherApprox c
+```
 
-1. `draft/genuine_bottcher_coordinate_problem.md` states the first honest
-   remaining positive target: replace the current proxy by a genuine holomorphic
-   Böttcher coordinate at `c = 2`.
-2. `draft/genuine_bottcher_inverse_problem.md` states the matching exterior
-   inverse package for that genuine coordinate.
-3. `proof_sketches/` now mirrors `draft/`: it contains one rigorous
-   human-readable proof for each current remaining positive target.
+and the canonical near-infinity package is now checked:
 
-So the earlier explicit frontier
+```lean
+Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox
+Quadratic.genuineBottcherNearInfinityRouteFor_logSeriesBottcherApprox
+```
 
-1. para-puzzle connectedness,
-2. residual virtual near-Molecule data,
-3. chosen-true primitive bridge data,
-4. bounded-type primitive Feigenbaum inputs,
-
-has been pushed off the checked root. Those routes still exist in the repo, but
-they are no longer part of `Axioms(MLC.mlc_conjecture)`.
+This gives exterior-valuedness, conjugacy to squaring, differentiability on the
+canonical outside-open region, and normalization at infinity for the genuine
+coordinate, without adding axioms.
 
 ## Remaining Blocker
 
@@ -79,20 +71,30 @@ It is the theorem-shaped scope interface
 `BasinExternalRayMapDataTwoMinimalCounterexample`, whose positive content is the
 specialized basin-valued inverse package `Quadratic.BasinExternalRayMapDataTwo`.
 
-So there is only **one** root-facing missing theorem in the checked proof.
-However, the current constructive coordinate
+So there is only **one** root-facing missing theorem in the checked proof. The
+current analytic blocker behind it is no longer the near-infinity construction:
+it is extending `logSeriesBottcherApprox` from the canonical outside-open region
+to the full basin of infinity.
 
-$$
-\phi(z)=
-\begin{cases}
-\dfrac{z}{|z|}\,e^{G(z)}, & z\neq 0,\\
-e^{G(0)}, & z=0
-\end{cases}
-$$
+The principal pullback candidate is formalized:
 
-does **not** satisfy the old expert-facing inverse targets. The current `draft/`
-folder therefore records the corrected positive targets that remain after those
-proxy-based routes were formally ruled out.
+```lean
+Quadratic.principalPullbackLogSeriesBottcher
+Quadratic.basinLogSeriesExtensionCandidate
+```
+
+and the exact remaining coherent-pullback target is isolated as:
+
+```lean
+Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
+```
+
+One field is already checked:
+`basinLogSeriesExtensionCandidate_extends_near`, agreement with the
+near-infinity coordinate on the canonical exterior. The remaining fields are
+basin exterior-valuedness, basin characterization by exterior norm, basin
+semiconjugacy, differentiability on the basin, Green-function modulus, and
+normalization of the total extension.
 
 ## Non-solutions
 
@@ -103,48 +105,45 @@ through:
 2. `InconsistencyRoute` / `lyubich_conformal_bridge`
 3. renormalization-tower existence bridge axioms
 
-## Remaining Mathematical Targets
+## Remaining Mathematical Target
 
-The old proxy-based routes are now formally eliminated. The exact remaining
-positive targets are:
+The immediate target is:
 
-1. `draft/genuine_bottcher_coordinate_problem.md`
-2. `draft/genuine_bottcher_inverse_problem.md`
+```lean
+Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
+```
 
-In particular, the last axiom can no longer be eliminated by proving the
-already-refuted basin-valued inverse theorem for the current proxy
+Current reduction seams:
 
-$$
-\phi(z)=\frac{z}{|z|}e^{G(z)}
-$$
+```lean
+Quadratic.LogSeriesBasinExtensionDataFor
+Quadratic.PrincipalPullbackCoherentDataFor
+Quadratic.LogSeriesExteriorInverseBasinExtensionDataFor
+Quadratic.ClassicalGlobalExtensionFromNearInfinityDataFor
+```
 
-away from $$z=0$$. The positive human-readable proofs of the corrected
-replacement package are now written in `proof_sketches/`; the remaining checked
-work is to internalize that package in Lean.
+Checked reductions show that any of these basin-extension/global-extension data
+packages is enough to obtain the classical global Böttcher theorem. The next
+exact target is therefore:
 
-This basin-valued target is the codomain-correct replacement for the false
-statement that the restricted map `φ|_V : V → Ω` should already have positive
-constant fiber degree over all of `Ω`.
-
-The false degree package is now explicitly ruled out by
-`Mlc.Bottcher.DegreeOne.not_restrictedLocalHomeomorphPositiveConstantDegreeTwo`
-and by
-`MLC.not_restrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexample`.
-The earlier closed-preimage, compact-preimage, and direct proper/local witness
-routes remain formally refuted as well.
+```lean
+Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
+```
 
 ## Repository Snapshot
 
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
-2. `plan/` has been pruned to the single live frontier file
-   `PLAN_04_lyubich_bridge.md`.
+2. `plan/` records the live theorem-facing Böttcher plan in
+   `PLAN_06_global_bottcher_package.md`, alongside completed or auxiliary
+   historical plans.
 3. `draft/` now records the exact remaining positive mathematical targets after
    factoring out the proxy-based obstructions.
-4. `proof_sketches/` records the rigorous human-readable proofs of the current
+4. `proof_sketches/` records the human-readable proof sketches of the current
    `draft/` targets.
 5. The current root-facing story is therefore honest: one residual
-   theorem-facing assumption remains, and its elimination now clearly requires a
-   genuine Böttcher coordinate package rather than the current proxy.
+   theorem-facing assumption remains, the genuine near-infinity Böttcher
+   coordinate is checked, and the remaining work is the basin extension and
+   inverse package.
 
 ## Dependencies
 

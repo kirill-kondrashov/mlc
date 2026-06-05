@@ -12,18 +12,18 @@ structure LocalInverseAt (c : ℂ) (z : ℂ) where
   (hUslit : U ⊆ slit_orbit c)
   (hUbasin : U ⊆ basin_of_infinity c)
   (hz : z ∈ U)
-  (hderiv : deriv (bottcher_map c) z ≠ 0)
+  (hderiv : deriv (proxy_bottcher_map c) z ≠ 0)
 
 /-- The associated local inverse map from `LocalInverseAt`. -/
 noncomputable def local_inverse_at {c : ℂ} {z : ℂ}
     (h : LocalInverseAt c z) : ℂ → ℂ :=
   external_ray_map_local c h.U h.hUopen h.hUslit h.hUbasin z h.hz h.hderiv
 
-/-- Local right-inverse property near `bottcher_map c z`. -/
+/-- Local right-inverse property near `proxy_bottcher_map c z`. -/
 lemma local_inverse_right_inverse
     {c : ℂ} {z : ℂ} (h : LocalInverseAt c z) :
-    ∀ᶠ y in 𝓝 (bottcher_map c z),
-      bottcher_map c (local_inverse_at h y) = y := by
+    ∀ᶠ y in 𝓝 (proxy_bottcher_map c z),
+      proxy_bottcher_map c (local_inverse_at h y) = y := by
   simpa [local_inverse_at] using
     (external_ray_map_local_right_inverse c h.U h.hUopen h.hUslit h.hUbasin z h.hz h.hderiv)
 
@@ -31,7 +31,7 @@ lemma local_inverse_right_inverse
 lemma local_inverse_left_inverse
     {c : ℂ} {z : ℂ} (h : LocalInverseAt c z) :
     ∀ᶠ x in 𝓝 z,
-      local_inverse_at h (bottcher_map c x) = x := by
+      local_inverse_at h (proxy_bottcher_map c x) = x := by
   simpa [local_inverse_at] using
     (external_ray_map_local_left_inverse c h.U h.hUopen h.hUslit h.hUbasin z h.hz h.hderiv)
 
@@ -75,17 +75,17 @@ def EventualSlitInverseCompatible {c : ℂ} (hA : EventualSlitInverseAtlas c) : 
   ∀ z w
     (hz : z ∈ eventual_slit_set c ∩ basin_of_infinity c)
     (hw : w ∈ eventual_slit_set c ∩ basin_of_infinity c),
-      ∀ᶠ y in 𝓝 (bottcher_map c z) ⊓ 𝓝 (bottcher_map c w),
+      ∀ᶠ y in 𝓝 (proxy_bottcher_map c z) ⊓ 𝓝 (proxy_bottcher_map c w),
         local_inverse_at (Classical.choose (hA z hz)) y =
           local_inverse_at (Classical.choose (hA w hw)) y
 
 def GlobalInverseOnEventualSlit (c : ℂ) (hA : EventualSlitInverseAtlas c) : Prop :=
   ∃ g : ℂ → ℂ,
     (∀ z (hz : z ∈ eventual_slit_set c ∩ basin_of_infinity c),
-      ∀ᶠ y in 𝓝 (bottcher_map c z),
+      ∀ᶠ y in 𝓝 (proxy_bottcher_map c z),
         g y = local_inverse_at (Classical.choose (hA z hz)) y) ∧
     (∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-      ∀ᶠ x in 𝓝 z, g (bottcher_map c x) = x)
+      ∀ᶠ x in 𝓝 z, g (proxy_bottcher_map c x) = x)
 
 def EventualSlitInverseGluing (c : ℂ) : Prop :=
   ∀ hA : EventualSlitInverseAtlas c,
@@ -106,14 +106,14 @@ We record this as a hypothesis for future use.
 def EventualSlitLocalUniqueness (c : ℂ) : Prop :=
   ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
     ∀ h₁ h₂ : LocalInverseAt c z,
-      (∀ᶠ x in 𝓝 z, local_inverse_at h₁ (bottcher_map c x) = x) →
-      (∀ᶠ x in 𝓝 z, local_inverse_at h₂ (bottcher_map c x) = x) →
-        ∀ᶠ y in 𝓝 (bottcher_map c z), local_inverse_at h₁ y = local_inverse_at h₂ y
+      (∀ᶠ x in 𝓝 z, local_inverse_at h₁ (proxy_bottcher_map c x) = x) →
+      (∀ᶠ x in 𝓝 z, local_inverse_at h₂ (proxy_bottcher_map c x) = x) →
+        ∀ᶠ y in 𝓝 (proxy_bottcher_map c z), local_inverse_at h₁ y = local_inverse_at h₂ y
 
 def EventualSlitOverlapHyp (c : ℂ) : Prop :=
   ∀ z w, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
     w ∈ eventual_slit_set c ∩ basin_of_infinity c →
-      Filter.NeBot (𝓝 (bottcher_map c z) ⊓ 𝓝 (bottcher_map c w))
+      Filter.NeBot (𝓝 (proxy_bottcher_map c z) ⊓ 𝓝 (proxy_bottcher_map c w))
 
 def EventualSlitCompatibilityFromOverlap (c : ℂ) : Prop :=
   ∀ hA : EventualSlitInverseAtlas c,
@@ -150,7 +150,7 @@ def EventualSlitNonzeroDeriv (c : ℂ) : Prop :=
   ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
     ∃ U : Set ℂ, IsOpen U ∧ z ∈ U ∧
       U ⊆ slit_orbit c ∧ U ⊆ basin_of_infinity c ∧
-      deriv (bottcher_map c) z ≠ 0
+      deriv (proxy_bottcher_map c) z ≠ 0
 
 def EventualSlitOpenNeighborhood (c : ℂ) : Prop :=
   ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
@@ -159,7 +159,7 @@ def EventualSlitOpenNeighborhood (c : ℂ) : Prop :=
 
 def EventualSlitDerivNonzero (c : ℂ) : Prop :=
   ∀ z, z ∈ eventual_slit_set c ∩ basin_of_infinity c →
-    deriv (bottcher_map c) z ≠ 0
+    deriv (proxy_bottcher_map c) z ≠ 0
 
 def EventualSlitNonzeroDerivHyp (c : ℂ) : Prop :=
   EventualSlitOpenNeighborhood c ∧ EventualSlitDerivNonzero c
@@ -205,7 +205,7 @@ lemma choose_local_inverse_left_inverse
     {c : ℂ} (hA : SlitInverseAtlas c) (z : ℂ)
     (hz : z ∈ slit_orbit c ∩ basin_of_infinity c) :
     ∀ᶠ x in 𝓝 z,
-      local_inverse_at (choose_local_inverse hA z hz) (bottcher_map c x) = x := by
+      local_inverse_at (choose_local_inverse hA z hz) (proxy_bottcher_map c x) = x := by
   simpa using
     (local_inverse_left_inverse (choose_local_inverse hA z hz))
 
@@ -220,23 +220,23 @@ def SlitInverseCompatible {c : ℂ} (hA : SlitInverseAtlas c) : Prop :=
   ∀ z w
     (hz : z ∈ slit_orbit c ∩ basin_of_infinity c)
     (hw : w ∈ slit_orbit c ∩ basin_of_infinity c),
-      ∀ᶠ y in 𝓝 (bottcher_map c z) ⊓ 𝓝 (bottcher_map c w),
+      ∀ᶠ y in 𝓝 (proxy_bottcher_map c z) ⊓ 𝓝 (proxy_bottcher_map c w),
         local_inverse_at (choose_local_inverse hA z hz) y =
           local_inverse_at (choose_local_inverse hA w hw) y
 
 def GlobalInverseOnSlit (c : ℂ) (hA : SlitInverseAtlas c) : Prop :=
   ∃ g : ℂ → ℂ,
     (∀ z (hz : z ∈ slit_orbit c ∩ basin_of_infinity c),
-      ∀ᶠ y in 𝓝 (bottcher_map c z),
+      ∀ᶠ y in 𝓝 (proxy_bottcher_map c z),
         g y = local_inverse_at (choose_local_inverse hA z hz) y) ∧
     (∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c →
-      ∀ᶠ x in 𝓝 z, g (bottcher_map c x) = x)
+      ∀ᶠ x in 𝓝 z, g (proxy_bottcher_map c x) = x)
 
 lemma global_inverse_left_inverse_on_slit
     {c : ℂ} {hA : SlitInverseAtlas c}
     (hG : GlobalInverseOnSlit c hA) :
     ∀ z, z ∈ slit_orbit c ∩ basin_of_infinity c →
-      ∀ᶠ x in 𝓝 z, (Classical.choose hG) (bottcher_map c x) = x := by
+      ∀ᶠ x in 𝓝 z, (Classical.choose hG) (proxy_bottcher_map c x) = x := by
   have hleft := (Classical.choose_spec hG).2
   intro z hz
   simpa using (hleft z hz)

@@ -31,7 +31,7 @@ rerouted the root away from the false full-exterior degree package to the honest
 The monodromy / covering-degree route from Problem A remains formalized in
 `Mlc.Bottcher.DegreeOne`, but it is no longer the live root because its former
 Problem B input is false as stated. The checked root now ends at the codomain-
-correct basin-valued inverse package for the actual `bottcher_map`.
+correct basin-valued inverse package for the actual `proxy_bottcher_map`.
 
 ---
 
@@ -44,10 +44,14 @@ without affecting the checked root frontier.
 
 ## Next plan surface
 
-The remaining repo-facing target is no longer the Lyubich bridge. The next plan
-should attack:
+The remaining repo-facing target is no longer the Lyubich bridge and no longer
+the old degree-one proxy route in isolation. The live next plan is now:
 
-1. `MLC.basinExternalRayKernelTwo`
+1. `PLAN_06_global_bottcher_package.md`
+
+That plan attacks `MLC.basinExternalRayKernelTwo` through the theorem-facing
+global Bottcher coordinate package. `PLAN_05_restricted_winding_degree_one.md`
+remains only as a downstream auxiliary route once the genuine coordinate exists.
 
 ## Success criterion achieved
 
