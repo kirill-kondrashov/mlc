@@ -76,6 +76,20 @@ Right now this is the **stuck point**: the interface is in Lean, but the repo
 still does not construct a witness of
 `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
 
+More precisely, the current code only supplies proxy-side partial results:
+
+1. `proxy_bottcher_map_differentiableOn_open` and
+   `proxy_bottcher_map_analyticOnNhd_open` work only on open sets
+   `U ⊆ slit_orbit c ∩ basin_of_infinity c`;
+2. `slit_orbit` already fails at the basin point `0` when `c = 2`;
+3. `BottcherOutsidePlan.lean` explicitly notes that the strong normalization
+   `Tendsto (fun z => proxy_bottcher_map c z / z) atInfinity (𝓝 1)` is **not
+   expected** for the current explicit proxy.
+
+So replacing `proxy_bottcher_map` by definition is not the next step. The next
+step is proving a different global coordinate theorem and only then cutting over
+the consumers.
+
 ### Step 2. Prove the inverse-package consequences
 
 Using the same global `Φ`, prove:

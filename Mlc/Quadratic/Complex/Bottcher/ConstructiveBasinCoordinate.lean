@@ -289,6 +289,46 @@ theorem not_genuineBottcherCoordinateDataFor_bottcherMap_two :
     polar_green_map_not_continuousAt_zero (2 : ℂ) <|
       by simpa [proxy_bottcher_map] using hcont0
 
+/-- Any function whose pointwise basin values are defined by the existing
+principal-branch root sequence must agree with the current proxy on the basin,
+since that sequence is already formalized to converge there to
+`proxy_bottcher_map`. -/
+theorem eq_proxyBottcherMap_on_basin_of_rootSeq_limit
+    {c : ℂ} {φ : ℂ → ℂ}
+    (hlim : ∀ z : ℂ, z ∈ basin_of_infinity c →
+      Tendsto (fun n => bottcher_root_seq c n z) atTop (𝓝 (φ z))) :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → φ z = proxy_bottcher_map c z := by
+  intro z hz
+  exact tendsto_nhds_unique (hlim z hz) (bottcher_root_seq_tendsto_at c hz)
+
+/-- Therefore the current root-sequence limit cannot itself supply a genuine
+global coordinate at `c = 2`: it would force continuity of the proxy at `0`,
+contradicting the existing obstruction theorem. -/
+theorem not_genuineBottcherCoordinateDataFor_of_rootSeq_limit_two
+    {φ : ℂ → ℂ}
+    (hlim : ∀ z : ℂ, z ∈ basin_of_infinity (2 : ℂ) →
+      Tendsto (fun n => bottcher_root_seq (2 : ℂ) n z) atTop (𝓝 (φ z))) :
+    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) φ := by
+  intro hcoord
+  rcases hcoord with ⟨_, _, _, _, hdiff, _, _⟩
+  have h0basin : (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) :=
+    zero_mem_basin_two_constructive
+  have hcont0 : ContinuousAt φ 0 := by
+    have hdiff0 :
+        DifferentiableWithinAt ℂ φ (basin_of_infinity (2 : ℂ)) 0 :=
+      hdiff 0 h0basin
+    exact hdiff0.continuousWithinAt.continuousAt
+      ((basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin)
+  have hEq :
+      φ =ᶠ[𝓝 (0 : ℂ)] proxy_bottcher_map (2 : ℂ) := by
+    filter_upwards [(basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin] with z hz
+    exact eq_proxyBottcherMap_on_basin_of_rootSeq_limit hlim z hz
+  have hproxyCont0 : ContinuousAt (proxy_bottcher_map (2 : ℂ)) 0 :=
+    hcont0.congr_of_eventuallyEq hEq.symm
+  exact
+    polar_green_map_not_continuousAt_zero (2 : ℂ) <|
+      by simpa [proxy_bottcher_map] using hproxyCont0
+
 /-- Any full genuine coordinate package restricts to the first near-infinity
 phase of the classical proof on the canonical outside-open region. -/
 theorem genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor
@@ -395,6 +435,18 @@ theorem ClassicalGlobalBottcherDataFor.toGenuineBottcherRouteFor
     (h_inv : GenuineBottcherInversePackageFor c h.phi) :
     GenuineBottcherRouteFor c := by
   exact ⟨h.phi, h.toGenuineBottcherCoordinateDataFor, h_inv⟩
+
+/-- In particular, the already-formalized principal-branch root sequence cannot
+be used as the witness for the classical global Böttcher theorem at `c = 2`. -/
+theorem not_exists_classicalGlobalBottcherDataFor_of_rootSeq_limit_two :
+    ¬ ∃ h : ClassicalGlobalBottcherDataFor (2 : ℂ),
+        ∀ z : ℂ, z ∈ basin_of_infinity (2 : ℂ) →
+          Tendsto (fun n => bottcher_root_seq (2 : ℂ) n z) atTop (𝓝 (h.phi z)) := by
+  intro h
+  rcases h with ⟨hclassical, hlim⟩
+  exact
+    not_genuineBottcherCoordinateDataFor_of_rootSeq_limit_two hlim
+      hclassical.toGenuineBottcherCoordinateDataFor
 
 /-- Existential coordinate-package consequence of the bundled classical theorem. -/
 theorem exists_genuineBottcherCoordinateDataFor_of_classicalGlobalBottcherTheoremFor
