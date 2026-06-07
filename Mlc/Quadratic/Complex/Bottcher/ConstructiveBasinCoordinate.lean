@@ -404,6 +404,25 @@ lemma overlap_root_multiplier_exists
     ∃ ζ : ℂ, ζ ∈ rootsOfUnitySet (2 ^ N) ∧ w₂ = ζ * w₁ :=
   pullbackRootSet_torsor_transitive hN hw₁ hw₂ hA
 
+/-- Products of finite lists of `n`-th roots of unity are again `n`-th roots of
+unity. This is the algebraic engine behind multiplying overlap factors around a
+chart chain. -/
+lemma rootsOfUnitySet_list_prod
+    {n : ℕ} (L : List ℂ)
+    (hL : ∀ ζ : ℂ, ζ ∈ L → ζ ∈ rootsOfUnitySet n) :
+    L.prod ∈ rootsOfUnitySet n := by
+  induction L with
+  | nil =>
+      simpa using one_mem_rootsOfUnitySet n
+  | cons ζ L ih =>
+      have hζ : ζ ∈ rootsOfUnitySet n := hL ζ (by simp)
+      have hL' : ∀ η : ℂ, η ∈ L → η ∈ rootsOfUnitySet n := by
+        intro η hη
+        exact hL η (by simp [hη])
+      have ih' : L.prod ∈ rootsOfUnitySet n := ih hL'
+      dsimp [rootsOfUnitySet] at hζ ih' ⊢
+      simp [mul_pow, hζ, ih']
+
 /-- Abstract overlap multiplier data for adjacent zero-free charts in a
 continued root construction. A product of these multipliers around a closed loop
 is the monodromy element. -/
@@ -415,6 +434,95 @@ structure OverlapRootMultiplierData (N : ℕ) where
   monodromyProduct : ℂ
   product_mem :
     monodromyProduct ∈ rootsOfUnitySet (2 ^ N)
+
+/-- The level-`N` value whose `2^N`-th roots are continued along a basin loop. -/
+noncomputable def basinLoopRootEquationValue
+    (c : ℂ) (N : ℕ) {z₀ : ℂ} (γ : BasinLoop c z₀) (t : ℝ) : ℂ :=
+  MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] (γ.path t))
+
+/-- One chart cell in a finite chart-chain cover of a basin loop. It records an
+interval of loop time and a zero-free chart containing the corresponding
+level-`N` Böttcher values. -/
+structure BasinLoopChartCell
+    (c : ℂ) (N : ℕ) (z₀ : ℂ) (γ : BasinLoop c z₀) where
+  tStart : ℝ
+  tEnd : ℝ
+  tStart_mem : tStart ∈ Set.Icc (0 : ℝ) 1
+  tEnd_mem : tEnd ∈ Set.Icc (0 : ℝ) 1
+  ordered : tStart ≤ tEnd
+  chart : ZeroFreeChartRootBranchData N
+  image_mem_chart :
+    ∀ t : ℝ, t ∈ Set.Icc tStart tEnd →
+      basinLoopRootEquationValue c N γ t ∈ chart.chart
+
+/-- An adjacent-chart overlap step. The multiplier records how the right local
+root branch compares with the left one on the overlap value. -/
+structure BasinLoopChartOverlapStep
+    (c : ℂ) (N : ℕ) (z₀ : ℂ) (γ : BasinLoop c z₀) where
+  left : BasinLoopChartCell c N z₀ γ
+  right : BasinLoopChartCell c N z₀ γ
+  overlapTime : ℝ
+  overlapTime_mem_left : overlapTime ∈ Set.Icc left.tStart left.tEnd
+  overlapTime_mem_right : overlapTime ∈ Set.Icc right.tStart right.tEnd
+  value_mem_left_chart :
+    basinLoopRootEquationValue c N γ overlapTime ∈ left.chart.chart
+  value_mem_right_chart :
+    basinLoopRootEquationValue c N γ overlapTime ∈ right.chart.chart
+  multiplier : ℂ
+  multiplier_mem : multiplier ∈ rootsOfUnitySet (2 ^ N)
+  rootBranch_overlap :
+    right.chart.rootBranch (basinLoopRootEquationValue c N γ overlapTime) =
+      multiplier * left.chart.rootBranch (basinLoopRootEquationValue c N γ overlapTime)
+
+/-- A finite chart chain along a concrete basin loop. The cells cover the loop in
+time, and the overlap steps carry the root-of-unity transition multipliers. -/
+structure BasinLoopChartChain
+    (c : ℂ) (N : ℕ) (z₀ : ℂ) (γ : BasinLoop c z₀) where
+  cells : List (BasinLoopChartCell c N z₀ γ)
+  covers_loop :
+    ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+      ∃ cell ∈ cells, t ∈ Set.Icc cell.tStart cell.tEnd
+  overlaps : List (BasinLoopChartOverlapStep c N z₀ γ)
+
+/-- The ordered list of overlap multipliers carried by a chart chain. -/
+def BasinLoopChartChain.overlapMultipliers
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) : List ℂ :=
+  chain.overlaps.map (fun step => step.multiplier)
+
+lemma BasinLoopChartChain.overlapMultipliers_mem
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) :
+    ∀ ζ : ℂ, ζ ∈ chain.overlapMultipliers → ζ ∈ rootsOfUnitySet (2 ^ N) := by
+  intro ζ hζ
+  rcases List.mem_map.1 hζ with ⟨step, hstep, rfl⟩
+  exact step.multiplier_mem
+
+/-- The product of all adjacent-chart overlap multipliers. This is the concrete
+finite-chain monodromy element at level `N`. -/
+def BasinLoopChartChain.monodromyProduct
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) : ℂ :=
+  chain.overlapMultipliers.prod
+
+lemma BasinLoopChartChain.monodromyProduct_mem
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) :
+    chain.monodromyProduct ∈ rootsOfUnitySet (2 ^ N) :=
+  rootsOfUnitySet_list_prod chain.overlapMultipliers chain.overlapMultipliers_mem
+
+/-- A concrete finite chart chain supplies the earlier abstract overlap
+multiplier surface, with the monodromy product computed as the list product of
+its actual adjacent overlap multipliers. -/
+noncomputable def BasinLoopChartChain.toOverlapRootMultiplierData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) :
+    OverlapRootMultiplierData N where
+  index := {ζ : ℂ // ζ ∈ chain.overlapMultipliers}
+  multiplier := fun ζ => ζ.1
+  multiplier_mem := fun ζ => chain.overlapMultipliers_mem ζ.1 ζ.2
+  monodromyProduct := chain.monodromyProduct
+  product_mem := chain.monodromyProduct_mem
 
 /-- Analytic continuation of a local pullback root branch around a basin loop.
 The output branch may differ from the input branch by a root-of-unity multiplier;
@@ -471,6 +579,36 @@ lemma ZeroFreeChartRootBranchData.trivialContinuation_multiplier
     (start_branch : LocalPullbackRootBranchData c N z₀) :
     (chart.trivialContinuation γ start_branch).multiplier = 1 := rfl
 
+/-- Continuation data obtained by following an actual finite chart chain. The
+endpoint branch is required to differ from the start branch by the product of the
+recorded overlap multipliers. -/
+structure ChartChainContinuationData
+    (c : ℂ) (N : ℕ) (z₀ : ℂ)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) where
+  chain : BasinLoopChartChain c N z₀ γ
+  end_branch : LocalPullbackRootBranchData c N z₀
+  continued_center_value :
+    end_branch.branch z₀ = chain.monodromyProduct * start_branch.branch z₀
+
+/-- A chart-chain continuation is an analytic continuation whose multiplier is
+the finite product of adjacent overlap multipliers. -/
+noncomputable def ChartChainContinuationData.toAnalyticContinuation
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {start_branch : LocalPullbackRootBranchData c N z₀}
+    (h : ChartChainContinuationData c N z₀ γ start_branch) :
+    AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch where
+  end_branch := h.end_branch
+  multiplier := h.chain.monodromyProduct
+  multiplier_mem := h.chain.monodromyProduct_mem
+  continued_center_value := h.continued_center_value
+
+lemma ChartChainContinuationData.toAnalyticContinuation_multiplier
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {start_branch : LocalPullbackRootBranchData c N z₀}
+    (h : ChartChainContinuationData c N z₀ γ start_branch) :
+    h.toAnalyticContinuation.multiplier = h.chain.monodromyProduct := rfl
+
 /-- Actual monodromy representation for basin loops based at `z₀`. This is the
 PLAN 08 target replacing the abstract `PullbackRootMonodromyRepresentation Loop`
 with the concrete loop type `BasinLoop c z₀`. -/
@@ -497,6 +635,65 @@ noncomputable def BasinLoopPullbackRootMonodromyData.toMonodromyTrivialPullbackD
   representation := h.representation
   trivial_monodromy := htriv
   escape_time_independent := hind
+
+/-- Chart-chain monodromy data for every concrete basin loop based at `z₀`.
+This is the global PLAN 08 layer immediately after the same-chart local step:
+each loop receives actual finite chart-chain data, the representation is the
+product of its overlap multipliers, and compatibility across levels is recorded
+as the expected squaring relation. -/
+structure BasinLoopChartChainMonodromyData (c z₀ : ℂ) where
+  base_mem_basin : z₀ ∈ basin_of_infinity c
+  chain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀), BasinLoopChartChain c N z₀ γ
+  monodromy_compat :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ((chain (N + 1) γ).monodromyProduct) ^ 2 =
+        (chain N γ).monodromyProduct
+  continued_branch :
+    ∀ (N : ℕ) (_γ : BasinLoop c z₀)
+      (_start_branch : LocalPullbackRootBranchData c N z₀),
+      LocalPullbackRootBranchData c N z₀
+  continued_center_value :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀)
+      (start_branch : LocalPullbackRootBranchData c N z₀),
+      (continued_branch N γ start_branch).branch z₀ =
+        (chain N γ).monodromyProduct * start_branch.branch z₀
+
+/-- The monodromy representation encoded by chart-chain overlap products. -/
+noncomputable def BasinLoopChartChainMonodromyData.representation
+    {c z₀ : ℂ} (h : BasinLoopChartChainMonodromyData c z₀) :
+    PullbackRootMonodromyRepresentation (BasinLoop c z₀) where
+  monodromy := fun N γ => (h.chain N γ).monodromyProduct
+  monodromy_mem := fun N γ => (h.chain N γ).monodromyProduct_mem
+  monodromy_compat := h.monodromy_compat
+
+/-- Chart-chain monodromy data realizes the concrete basin-loop monodromy data
+required by PLAN 08. -/
+noncomputable def BasinLoopChartChainMonodromyData.toBasinLoopPullbackRootMonodromyData
+    {c z₀ : ℂ} (h : BasinLoopChartChainMonodromyData c z₀) :
+    BasinLoopPullbackRootMonodromyData c z₀ where
+  base_mem_basin := h.base_mem_basin
+  representation := h.representation
+  realized_by_continuation := by
+    intro N γ start_branch
+    refine ⟨?_, ?_⟩
+    · exact
+      { end_branch := h.continued_branch N γ start_branch
+        multiplier := (h.chain N γ).monodromyProduct
+        multiplier_mem := (h.chain N γ).monodromyProduct_mem
+        continued_center_value := h.continued_center_value N γ start_branch }
+    · simp [BasinLoopChartChainMonodromyData.representation]
+
+/-- Triviality criterion for the chart-chain representation: if every finite
+overlap product is `1`, the induced basin-loop monodromy representation is
+trivial. -/
+lemma BasinLoopChartChainMonodromyData.representation_trivial_of_products
+    {c z₀ : ℂ} (h : BasinLoopChartChainMonodromyData c z₀)
+    (hprod : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (h.chain N γ).monodromyProduct = 1) :
+    h.representation.Trivial := by
+  intro N γ
+  exact hprod N γ
 
 /-- Every basin point eventually enters the canonical outside-open region. -/
 lemma exists_iterate_mem_outside_open_of_mem_basin

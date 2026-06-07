@@ -209,21 +209,18 @@ The concrete proof strategy suggested by
 
    Then the local branches glue to a single-valued branch along the loop.
 
-The key local theorem surface should be:
+The key local theorem surface has been implemented:
 
 ```lean
 ZeroFreeChartRootBranchData
 ```
 
-with fields:
+It packages:
 
 1. a zero-free simply connected chart;
 2. a logarithm branch on that chart;
 3. the induced `2^N`-root branch;
 4. proof that continuation inside the chart has trivial monodromy.
-
-Then the global basin-loop theorem should be built by chaining such charts along
-the loop and multiplying the overlap root-of-unity factors.
 
 Current status of the local chart step: **implemented**. The same-chart trivial
 monodromy constructors are:
@@ -234,6 +231,26 @@ AnalyticContinuationAlongBasinLoop.trivial_multiplier
 ZeroFreeChartRootBranchData.trivialContinuation
 ZeroFreeChartRootBranchData.trivialContinuation_multiplier
 ```
+
+The finite chart-chain product layer is also now implemented. The global
+chart-chain declarations are:
+
+```lean
+BasinLoopChartCell
+BasinLoopChartOverlapStep
+BasinLoopChartChain
+BasinLoopChartChain.monodromyProduct
+BasinLoopChartChain.toOverlapRootMultiplierData
+ChartChainContinuationData
+BasinLoopChartChainMonodromyData
+BasinLoopChartChainMonodromyData.toBasinLoopPullbackRootMonodromyData
+BasinLoopChartChainMonodromyData.representation_trivial_of_products
+```
+
+Therefore neither the local zero-free-chart step nor the finite chain/product
+bookkeeping is the current blocker. The current NEXT step is mathematical:
+construct such chart-chain monodromy data for the actual basin of `c = 2` with
+level compatibility, and prove every normalized overlap product is `1`.
 
 ### 8. Produce existing seam
 
@@ -275,11 +292,11 @@ LogSeriesBasinExtensionDataFor (2 : ℂ)
    `AnalyticContinuationAlongBasinLoop.trivial_multiplier`,
    `ZeroFreeChartRootBranchData.trivialContinuation`, and
    `ZeroFreeChartRootBranchData.trivialContinuation_multiplier`.
-11. **NEXT:** construct actual chart chains along basin loops and multiply the
-   overlap multipliers.
-12. **NEXT:** construct actual `BasinLoopPullbackRootMonodromyData` for
+11. **DONE:** construct finite chart chains along basin loops and multiply the
+   overlap multipliers via `BasinLoopChartChain.monodromyProduct`.
+12. **NEXT:** construct actual `BasinLoopChartChainMonodromyData` for
    `c = 2`.
-13. **NEXT:** prove its monodromy is trivial.
+13. **NEXT:** prove its normalized overlap-product monodromy is trivial.
 14. **NEXT:** build `EscapeTimeIndependentPullbackDataFor (2 : ℂ)`.
 15. **NEXT:** connect to `PrincipalPullbackCoherentDataFor`.
 
