@@ -211,3 +211,6 @@ The remaining formal step is to construct `MonodromyTrivialPullbackDataFor
 1. a covering-space construction and deck-invariance/descent proof; or
 2. a direct analytic continuation theorem proving trivial monodromy for the
    normalized branch.
+
+The focused formalization plan for this analytic-continuation/monodromy layer is
+`plan/PLAN_08_analytic_continuation_monodromy.md`.

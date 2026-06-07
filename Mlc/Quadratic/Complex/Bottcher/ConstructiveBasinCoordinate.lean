@@ -344,6 +344,73 @@ structure MonodromyTrivialPullbackDataFor (c : ℂ) where
   trivial_monodromy : representation.Trivial
   escape_time_independent : EscapeTimeIndependentPullbackDataFor c
 
+/-- A concrete loop in the basin of infinity, based at `z₀`. This is the first
+PLAN 08 replacement for the earlier abstract `Loop : Type` placeholder. -/
+structure BasinLoop (c z₀ : ℂ) where
+  path : ℝ → ℂ
+  continuousOn_path : ContinuousOn path (Set.Icc (0 : ℝ) 1)
+  source : path 0 = z₀
+  target : path 1 = z₀
+  maps_to_basin : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 → path t ∈ basin_of_infinity c
+
+/-- Local holomorphic branch of a finite pullback root equation near a basin
+point. This is a theorem surface for the local analytic branch data required by
+PLAN 08. -/
+structure LocalPullbackRootBranchData (c : ℂ) (N : ℕ) (z₀ : ℂ) where
+  center_mem_basin : z₀ ∈ basin_of_infinity c
+  U : Set ℂ
+  U_mem_nhds : U ∈ 𝓝 z₀
+  branch : ℂ → ℂ
+  branch_differentiableOn : DifferentiableOn ℂ branch U
+  root_eq :
+    ∀ z : ℂ, z ∈ U →
+      (branch z) ^ (2 ^ N) =
+        MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)
+  center_value_mem_rootSet :
+    branch z₀ ∈
+      pullbackRootSet (2 ^ N)
+        (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z₀))
+
+/-- Analytic continuation of a local pullback root branch around a basin loop.
+The output branch may differ from the input branch by a root-of-unity multiplier;
+that multiplier is the monodromy element. -/
+structure AnalyticContinuationAlongBasinLoop
+    (c : ℂ) (N : ℕ) (z₀ : ℂ)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) where
+  end_branch : LocalPullbackRootBranchData c N z₀
+  multiplier : ℂ
+  multiplier_mem : multiplier ∈ rootsOfUnitySet (2 ^ N)
+  continued_center_value :
+    end_branch.branch z₀ = multiplier * start_branch.branch z₀
+
+/-- Actual monodromy representation for basin loops based at `z₀`. This is the
+PLAN 08 target replacing the abstract `PullbackRootMonodromyRepresentation Loop`
+with the concrete loop type `BasinLoop c z₀`. -/
+structure BasinLoopPullbackRootMonodromyData (c z₀ : ℂ) where
+  base_mem_basin : z₀ ∈ basin_of_infinity c
+  representation : PullbackRootMonodromyRepresentation (BasinLoop c z₀)
+  realized_by_continuation :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀)
+      (start_branch : LocalPullbackRootBranchData c N z₀),
+      ∃ cont : AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch,
+        cont.multiplier = representation.monodromy N γ
+
+/-- If actual basin-loop monodromy data is available and its monodromy is
+trivial, then it supplies the abstract monodromy representation surface from
+PLAN 07. The remaining hard input is still the escape-time-independent pullback
+data. -/
+noncomputable def BasinLoopPullbackRootMonodromyData.toMonodromyTrivialPullbackDataFor
+    {c z₀ : ℂ}
+    (h : BasinLoopPullbackRootMonodromyData c z₀)
+    (htriv : h.representation.Trivial)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c where
+  Loop := BasinLoop c z₀
+  representation := h.representation
+  trivial_monodromy := htriv
+  escape_time_independent := hind
+
 /-- Every basin point eventually enters the canonical outside-open region. -/
 lemma exists_iterate_mem_outside_open_of_mem_basin
     (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
