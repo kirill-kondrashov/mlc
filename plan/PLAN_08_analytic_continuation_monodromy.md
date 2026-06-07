@@ -225,6 +225,16 @@ with fields:
 Then the global basin-loop theorem should be built by chaining such charts along
 the loop and multiplying the overlap root-of-unity factors.
 
+Current status of the local chart step: **implemented**. The same-chart trivial
+monodromy constructors are:
+
+```lean
+AnalyticContinuationAlongBasinLoop.trivial
+AnalyticContinuationAlongBasinLoop.trivial_multiplier
+ZeroFreeChartRootBranchData.trivialContinuation
+ZeroFreeChartRootBranchData.trivialContinuation_multiplier
+```
+
 ### 8. Produce existing seam
 
 Once actual monodromy is built and proved trivial, fill:
@@ -254,7 +264,7 @@ LogSeriesBasinExtensionDataFor (2 : ℂ)
 5. **DONE:** connect actual basin-loop monodromy data to
    `MonodromyTrivialPullbackDataFor` via
    `BasinLoopPullbackRootMonodromyData.toMonodromyTrivialPullbackDataFor`.
-6. **NEXT:** define `ZeroFreeChartRootBranchData`.
+6. **DONE:** define `ZeroFreeChartRootBranchData`.
 7. **DONE:** add the local chart theorem surface `ZeroFreeChartRootBranchData`.
 8. **DONE:** prove the overlap multiplier theorem surface
    `overlap_root_multiplier_exists`.
