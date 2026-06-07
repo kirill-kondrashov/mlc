@@ -7,7 +7,7 @@ near-infinity Böttcher coordinate
 MLC.logSeriesBottcherApprox c
 ```
 
-and proved, for every \(c\), the theorem-facing package
+and proved, for every $c$, the theorem-facing package
 
 ```lean
 Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox c
@@ -24,23 +24,23 @@ outside region to the full basin of infinity.
 
 ## Candidate extension
 
-For \(z\in U_\infty\), choose an escape time \(N\) such that
+For $z\in U_\infty$, choose an escape time $N$ such that
 
-\[
+$$
 f^{\circ N}(z)
-\]
+$$
 
 lies in the canonical outside region. Define
 
-\[
+$$
 \Phi(z)
   =
   \left(
     \Phi_\infty(f^{\circ N}(z))
   \right)^{1/2^N},
-\]
+$$
 
-where \(\Phi_\infty\) is the near-infinity coordinate
+where $\Phi_\infty$ is the near-infinity coordinate
 `logSeriesBottcherApprox` and the root branch is chosen coherently along the
 orbit.
 
@@ -70,7 +70,7 @@ It packages the remaining requirements:
 1. agreement with `logSeriesBottcherApprox` on the outside region;
 2. exterior-valuedness on the basin;
 3. basin characterization by exterior norm;
-4. semiconjugacy \(\Phi(f(z))=\Phi(z)^2\);
+4. semiconjugacy $\Phi(f(z))=\Phi(z)^2$;
 5. differentiability on the basin;
 6. Green-function modulus identity;
 7. normalization at infinity.
