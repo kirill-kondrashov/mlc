@@ -937,6 +937,60 @@ theorem classicalGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtens
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.extensionData
 
+/-- Cover-strategy seam: construct the coherent pullback on a cover where
+monodromy is trivial, prove that the lifted coordinate is constant on fibers
+(deck-invariant), and descend it to a basin coordinate with the required
+properties. This is the Lean form of the group-theoretic cover strategy. -/
+structure MonodromyTrivializingCoverBasinExtensionDataFor (c : ℂ) where
+  Cover : Type
+  projection : Cover → ℂ
+  liftedPhi : Cover → ℂ
+  phi : ℂ → ℂ
+  projection_maps_basin :
+    ∀ x : Cover, projection x ∈ basin_of_infinity c
+  covers_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → ∃ x : Cover, projection x = z
+  same_fiber_liftedPhi :
+    ∀ x y : Cover, projection x = projection y → liftedPhi x = liftedPhi y
+  descends_to_phi :
+    ∀ x : Cover, phi (projection x) = liftedPhi x
+  extends_near :
+    ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 → phi z = MLC.logSeriesBottcherApprox c z
+  norm_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → 1 < ‖phi z‖
+  basin_of_norm_gt_one :
+    ∀ z : ℂ, 1 < ‖phi z‖ → z ∈ basin_of_infinity c
+  conj_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      phi (MLC.quadratic_map c z) = (phi z)^2
+  holo_on_basin :
+    DifferentiableOn ℂ phi (basin_of_infinity c)
+  modulus_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      ‖phi z‖ = Real.exp (green_function c z)
+  tendsto_div_atInfinity :
+    Tendsto (fun z => phi z / z) atInfinity (𝓝 (1 : ℂ))
+
+/-- A monodromy-trivializing cover with deck-invariant lifted coordinate gives
+the logarithmic-series basin extension data. -/
+noncomputable def MonodromyTrivializingCoverBasinExtensionDataFor.toLogSeriesBasinExtensionDataFor
+    {c : ℂ} (h : MonodromyTrivializingCoverBasinExtensionDataFor c) :
+    LogSeriesBasinExtensionDataFor c where
+  phi := h.phi
+  extends_near := h.extends_near
+  norm_on_basin := h.norm_on_basin
+  basin_of_norm_gt_one := h.basin_of_norm_gt_one
+  conj_on_basin := h.conj_on_basin
+  holo_on_basin := h.holo_on_basin
+  modulus_on_basin := h.modulus_on_basin
+  tendsto_div_atInfinity := h.tendsto_div_atInfinity
+
+theorem classicalGlobalBottcherTheoremFor_of_monodromyTrivializingCoverData
+    {c : ℂ} (h : MonodromyTrivializingCoverBasinExtensionDataFor c) :
+    ClassicalGlobalBottcherTheoremFor c :=
+  classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
+    h.toLogSeriesBasinExtensionDataFor
+
 /-- Basin route C seam: a classical global Böttcher extension theorem can be
 used directly once instantiated with the already-proved canonical
 near-infinity logarithmic-series coordinate. -/

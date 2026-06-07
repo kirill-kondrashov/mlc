@@ -110,6 +110,7 @@ The following theorem surfaces isolate the remaining work:
 LogSeriesBasinExtensionDataFor
 PrincipalPullbackCoherentDataFor
 LogSeriesExteriorInverseBasinExtensionDataFor
+MonodromyTrivializingCoverBasinExtensionDataFor
 ClassicalGlobalExtensionFromNearInfinityDataFor
 ```
 
@@ -120,7 +121,9 @@ Checked reductions:
 3. `PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionDataFor`
 4. `classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData`
 5. `classicalGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtensionData`
-6. `classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData`
+6. `MonodromyTrivializingCoverBasinExtensionDataFor.toLogSeriesBasinExtensionDataFor`
+7. `classicalGlobalBottcherTheoremFor_of_monodromyTrivializingCoverData`
+8. `classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData`
 
 ## Next implementation routes
 
@@ -141,6 +144,12 @@ nonzero roots differ by a root of unity, and the Böttcher equation identifies
 level-`N` roots as compatible level-`N+1` roots along an escaping orbit. What is
 not yet proved is the analytic part: selecting a compatible basepoint
 independently of escape time and varying holomorphically on basin neighborhoods.
+
+The cover strategy suggested by this torsor picture is isolated by
+`MonodromyTrivializingCoverBasinExtensionDataFor`: construct the coherent
+pullback on a monodromy-trivializing cover, prove same-fiber/deck invariance, and
+descend it to the basin. This is a reduction seam, not yet a construction of the
+cover data.
 
 ### Route B: exterior inverse first
 
