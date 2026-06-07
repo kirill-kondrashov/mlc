@@ -371,6 +371,46 @@ structure LocalPullbackRootBranchData (c : ℂ) (N : ℕ) (z₀ : ℂ) where
       pullbackRootSet (2 ^ N)
         (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z₀))
 
+/-- Local zero-free chart carrying a logarithm branch and therefore a local
+`2^N`-root branch. This is the local building block in PLAN 08's chart-based
+monodromy proof template. -/
+structure ZeroFreeChartRootBranchData (N : ℕ) where
+  chart : Set ℂ
+  chart_zero_free : (0 : ℂ) ∉ chart
+  logBranch : ℂ → ℂ
+  logBranch_exp :
+    ∀ w : ℂ, w ∈ chart → Complex.exp (logBranch w) = w
+  rootBranch : ℂ → ℂ
+  rootBranch_eq :
+    ∀ w : ℂ, w ∈ chart →
+      rootBranch w = Complex.exp (((2 : ℂ) ^ N)⁻¹ * logBranch w)
+  rootBranch_pow :
+    ∀ w : ℂ, w ∈ chart → (rootBranch w) ^ (2 ^ N) = w
+
+/-- If two local root branches solve the same equation on an overlap, then at a
+point of the overlap they differ by a `2^N`-th root of unity. This is the
+overlap-multiplier step in the PLAN 08 proof template. -/
+lemma overlap_root_multiplier_exists
+    {N : ℕ} {A w₁ w₂ : ℂ}
+    (hN : 2 ^ N ≠ 0)
+    (hA : A ≠ 0)
+    (hw₁ : w₁ ∈ pullbackRootSet (2 ^ N) A)
+    (hw₂ : w₂ ∈ pullbackRootSet (2 ^ N) A) :
+    ∃ ζ : ℂ, ζ ∈ rootsOfUnitySet (2 ^ N) ∧ w₂ = ζ * w₁ :=
+  pullbackRootSet_torsor_transitive hN hw₁ hw₂ hA
+
+/-- Abstract overlap multiplier data for adjacent zero-free charts in a
+continued root construction. A product of these multipliers around a closed loop
+is the monodromy element. -/
+structure OverlapRootMultiplierData (N : ℕ) where
+  index : Type
+  multiplier : index → ℂ
+  multiplier_mem :
+    ∀ i, multiplier i ∈ rootsOfUnitySet (2 ^ N)
+  monodromyProduct : ℂ
+  product_mem :
+    monodromyProduct ∈ rootsOfUnitySet (2 ^ N)
+
 /-- Analytic continuation of a local pullback root branch around a basin loop.
 The output branch may differ from the input branch by a root-of-unity multiplier;
 that multiplier is the monodromy element. -/
