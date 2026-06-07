@@ -149,7 +149,8 @@ The cover strategy suggested by this torsor picture is isolated by
 `MonodromyTrivializingCoverBasinExtensionDataFor`: construct the coherent
 pullback on a monodromy-trivializing cover, prove same-fiber/deck invariance, and
 descend it to the basin. This is a reduction seam, not yet a construction of the
-cover data.
+cover data. See `plan/PLAN_07_monodromy_cover_route.md` for the focused
+monodromy-cover plan.
 
 ### Route B: exterior inverse first
 
