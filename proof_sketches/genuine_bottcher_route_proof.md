@@ -1,190 +1,103 @@
-# Proof sketch for Remaining problem 1: genuine Böttcher route at $$c=2$$
+# Proof sketch: basin extension for the genuine Böttcher coordinate
 
-Let
+The current Lean development has already constructed the canonical
+near-infinity Böttcher coordinate
 
-$$
-f(z)=z^2+2,
-\qquad
-U_\infty=\mathbb C\setminus K(f),
-\qquad
-V=\{z\in\mathbb C: |z|>4\},
-\qquad
-\Omega=\{w\in\mathbb C: |w|>1\},
-$$
+```lean
+MLC.logSeriesBottcherApprox c
+```
 
-and let $$G:U_\infty\to(0,\infty)$$ be the Green function of $$f$$.
+and proved, for every $c$, the theorem-facing package
 
-## Claim
+```lean
+Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox c
+```
 
-There exists a holomorphic map
+Thus the remaining issue for
 
-$$
-\Phi:U_\infty\to\Omega
-$$
+```lean
+Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
+```
 
-such that
+is not the local coordinate at infinity. It is the extension from the canonical
+outside region to the full basin of infinity.
 
-$$
-\Phi(f(z))=\Phi(z)^2,
-\qquad
-|\Phi(z)|=e^{G(z)},
-\qquad
-\frac{\Phi(z)}{z}\to 1
-\quad (z\to\infty),
-$$
+## Candidate extension
 
-with
+For $z\in U_\infty$, choose an escape time $N$ such that
 
 $$
-\Phi(U_\infty)=\Omega
+f^{\circ N}(z)
 $$
 
-and such that $$\Phi|_V$$ is injective.
-
-## Proof sketch
-
-### 1. Global normalized Böttcher coordinate
-
-For a monic polynomial $$P(z)=z^d+a_{d-1}z^{d-1}+\cdots+a_0$$ of degree
-$$d\geq 2$$, the classical global Böttcher theorem gives a unique holomorphic
-map
+lies in the canonical outside region. Define
 
 $$
-\Phi_P:A_\infty(P)\to\{w\in\mathbb C:|w|>1\}
+\Phi(z)
+  =
+  \left(
+    \Phi_\infty(f^{\circ N}(z))
+  \right)^{1/2^N},
 $$
 
-satisfying
+where $\Phi_\infty$ is the near-infinity coordinate
+`logSeriesBottcherApprox` and the root branch is chosen coherently along the
+orbit.
 
-$$
-\Phi_P(P(z))=\Phi_P(z)^d
-\qquad\text{and}\qquad
-\lim_{z\to\infty}\frac{\Phi_P(z)}{z}=1.
-$$
+In Lean this candidate is represented by
 
-Applying this to
+```lean
+Quadratic.principalPullbackLogSeriesBottcher
+Quadratic.basinLogSeriesExtensionCandidate
+```
 
-$$
-P=f(z)=z^2+2
-$$
+The first escape time is represented by
 
-gives a holomorphic map
+```lean
+Quadratic.basinEscapeTime
+```
 
-$$
-\Phi:U_\infty\to\Omega
-$$
+## What must be proved
 
-with
+The core coherence theorem is:
 
-$$
-\Phi(f(z))=\Phi(z)^2
-\qquad\text{for all } z\in U_\infty
-$$
+```lean
+Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
+```
 
-and
+It packages the remaining requirements:
 
-$$
-\lim_{z\to\infty}\frac{\Phi(z)}{z}=1.
-$$
+1. agreement with `logSeriesBottcherApprox` on the outside region;
+2. exterior-valuedness on the basin;
+3. basin characterization by exterior norm;
+4. semiconjugacy $\Phi(f(z))=\Phi(z)^2$;
+5. differentiability on the basin;
+6. Green-function modulus identity;
+7. normalization at infinity.
 
-### 2. Identification of the modulus
+The first item is already checked by
 
-Set
+```lean
+Quadratic.basinLogSeriesExtensionCandidate_extends_near
+```
 
-$$
-u(z)=\log|\Phi(z)|.
-$$
+The remaining items depend on coherent branch independence for the pullback
+roots.
 
-Because $$\Phi$$ is holomorphic and nonvanishing on $$U_\infty$$, the function
-$$u$$ is harmonic on $$U_\infty$$. The functional equation gives
+## Resulting theorem
 
-$$
-u(f(z))=2u(z),
-$$
+Once `PrincipalPullbackCoherentDataFor (2 : ℂ)` is proved, Lean already has the
+reduction
 
-while the normalization at infinity yields
+```lean
+Quadratic.classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData
+```
 
-$$
-u(z)-\log|z|
-=
-\log\left|\frac{\Phi(z)}{z}\right|
-\longrightarrow 0
-\qquad (z\to\infty).
-$$
+which yields
 
-The Green function of a monic polynomial is characterized as the unique harmonic
-function on the basin of infinity satisfying exactly these two properties.
-Hence
+```lean
+Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
+```
 
-$$
-u=G
-$$
-
-on $$U_\infty$$, and therefore
-
-$$
-|\Phi(z)|=e^{G(z)}
-\qquad\text{for every } z\in U_\infty.
-$$
-
-### 3. Surjectivity onto $$\Omega$$
-
-The global Böttcher coordinate is the standard exterior coordinate on the basin
-of infinity. Its image contains an outer annulus
-
-$$
-\{w\in\mathbb C: |w|>\rho\}
-$$
-
-for some $$\rho>1$$ by the normalization at infinity. Since
-
-$$
-\Phi(f(z))=\Phi(z)^2,
-$$
-
-the image is forward invariant under squaring. By iterating backwards along the
-squaring map, every point of $$\Omega$$ has the same Green level and external
-angle as some point in that outer annulus, hence is hit by a point of the
-basin. Equivalently, the standard global Böttcher theorem identifies
-
-$$
-\Phi(U_\infty)=\Omega.
-$$
-
-### 4. Injectivity on $$V=\{|z|>4\}$$
-
-Near infinity the Böttcher coordinate is the classical local conformal
-coordinate. For $$f(z)=z^2+2$$ one has on $$V$$
-
-$$
-\left|\frac{f(z)-z^2}{z^2}\right|
-=
-\frac{2}{|z|^2}
-<
-\frac18.
-$$
-
-Thus the standard root-limit construction on $$V$$ converges normally and gives
-a univalent local Böttcher coordinate
-
-$$
-\Phi_V:V\to\Omega
-$$
-
-with
-
-$$
-\Phi_V(f(z))=\Phi_V(z)^2
-\qquad\text{and}\qquad
-\frac{\Phi_V(z)}{z}\to 1
-\quad(z\to\infty).
-$$
-
-By uniqueness of the normalized Böttcher coordinate near infinity,
-
-$$
-\Phi|_V=\Phi_V.
-$$
-
-Hence $$\Phi|_V$$ is injective.
-
-This proves the whole genuine Böttcher route required in Remaining problem 1.
+The next proof task is therefore exactly the coherent pullback branch theorem,
+not another construction of the near-infinity coordinate.

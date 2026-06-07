@@ -182,6 +182,1154 @@ theorem genuineBottcherNearInfinityRouteFor_logSeriesBottcherApprox (c : ℂ) :
   ⟨MLC.logSeriesBottcherApprox c,
     genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox c⟩
 
+/-!
+### Algebraic root-choice torsors
+
+The basin pullback obstruction can be separated into an algebraic finite-level
+part and an analytic coherence part. The definitions below formalize the
+finite-level group-theoretic picture: roots of a pullback equation form a torsor
+under roots of unity, and the Böttcher equation identifies the level-`N` root set
+as the compatible subset of the level-`N+1` root set.
+-/
+
+/-- The finite group of `n`-th roots of unity, as a set. -/
+def rootsOfUnitySet (n : ℕ) : Set ℂ :=
+  {ζ : ℂ | ζ ^ n = 1}
+
+/-- `1` is an `n`-th root of unity for every `n`. -/
+lemma one_mem_rootsOfUnitySet (n : ℕ) :
+    (1 : ℂ) ∈ rootsOfUnitySet n := by
+  simp [rootsOfUnitySet]
+
+/-- The finite root set for the pullback equation `w^n = A`. -/
+def pullbackRootSet (n : ℕ) (A : ℂ) : Set ℂ :=
+  {w : ℂ | w ^ n = A}
+
+/-- Multiplication by an `n`-th root of unity preserves the root set
+`{w | w^n = A}`. -/
+lemma rootsOfUnity_smul_pullbackRootSet
+    {n : ℕ} {A ζ w : ℂ}
+    (hζ : ζ ∈ rootsOfUnitySet n) (hw : w ∈ pullbackRootSet n A) :
+    ζ * w ∈ pullbackRootSet n A := by
+  dsimp [rootsOfUnitySet, pullbackRootSet] at hζ hw ⊢
+  rw [mul_pow, hζ, hw, one_mul]
+
+/-- If `A ≠ 0`, any two roots of `w^n = A` differ by an `n`-th root of unity.
+This is the algebraic torsor-transitivity statement. -/
+lemma pullbackRootSet_torsor_transitive
+    {n : ℕ} {A w v : ℂ}
+    (hn : n ≠ 0)
+    (hw : w ∈ pullbackRootSet n A) (hv : v ∈ pullbackRootSet n A)
+    (hA : A ≠ 0) :
+    ∃ ζ : ℂ, ζ ∈ rootsOfUnitySet n ∧ v = ζ * w := by
+  have hw_ne : w ≠ 0 := by
+    intro hzero
+    have : A = 0 := by
+      simpa [pullbackRootSet, hzero, hn] using hw.symm
+    exact hA this
+  refine ⟨v / w, ?_, ?_⟩
+  · dsimp [rootsOfUnitySet]
+    have hw_pow_ne : w ^ n ≠ 0 := by
+      rw [show w ^ n = A by simpa [pullbackRootSet] using hw]
+      exact hA
+    calc
+      (v / w) ^ n = v ^ n / w ^ n := by
+        simpa using (div_pow v w n)
+      _ = A / A := by
+        simp [pullbackRootSet] at hw hv
+        rw [hv, hw]
+      _ = 1 := by
+        field_simp [hA]
+  · field_simp [hw_ne]
+
+/-- If `B = A^2`, then every root of `w^(2^N)=A` is automatically a compatible
+root of `w^(2^(N+1))=B`. This is the finite-level transition map behind
+escape-time coherence. -/
+lemma pullbackRootSet_subset_next_of_sq
+    {N : ℕ} {A B : ℂ} (hB : B = A ^ 2) :
+    pullbackRootSet (2 ^ N) A ⊆ pullbackRootSet (2 ^ (N + 1)) B := by
+  intro w hw
+  dsimp [pullbackRootSet] at hw ⊢
+  calc
+    w ^ (2 ^ (N + 1)) = (w ^ (2 ^ N)) ^ 2 := by
+      simp [pow_mul, pow_succ]
+    _ = A ^ 2 := by rw [hw]
+    _ = B := hB.symm
+
+/-- For the checked near-infinity coordinate, consecutive orbit values satisfy
+the squaring relation whenever the earlier iterate is in the canonical
+outside-open region. -/
+lemma logSeriesBottcherApprox_iterate_succ_eq_sq
+    (c : ℂ) {z : ℂ} {N : ℕ}
+    (hN : ‖(MLC.quadratic_map c)^[N] z‖ > ‖c‖ + 2) :
+    MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N + 1] z) =
+      (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)) ^ 2 := by
+  calc
+    MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N + 1] z)
+        = MLC.logSeriesBottcherApprox c
+            (MLC.quadratic_map c ((MLC.quadratic_map c)^[N] z)) := by
+          rw [Function.iterate_succ_apply']
+    _ = (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)) ^ 2 := by
+          exact MLC.logSeriesBottcherApprox_conj_of_large_radius
+            c (R := ‖c‖ + 2) le_rfl hN
+
+/-- Concrete root-set transition for the logarithmic-series Böttcher values
+along an escaping orbit. -/
+lemma logSeries_pullbackRootSet_subset_next
+    (c : ℂ) {z : ℂ} {N : ℕ}
+    (hN : ‖(MLC.quadratic_map c)^[N] z‖ > ‖c‖ + 2) :
+    pullbackRootSet (2 ^ N)
+        (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z))
+      ⊆
+    pullbackRootSet (2 ^ (N + 1))
+        (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N + 1] z)) := by
+  refine pullbackRootSet_subset_next_of_sq ?_
+  exact logSeriesBottcherApprox_iterate_succ_eq_sq c hN
+
+/-- Abstract monodromy representation for pullback root choices. `Loop` is a
+placeholder for whatever formal loop/fundamental-group object is eventually used
+for the basin. The representation records the root-of-unity multiplier acquired
+by analytic continuation of a level-`N` pullback root around a loop. -/
+structure PullbackRootMonodromyRepresentation (Loop : Type*) where
+  monodromy : ℕ → Loop → ℂ
+  monodromy_mem :
+    ∀ N γ, monodromy N γ ∈ rootsOfUnitySet (2 ^ N)
+  monodromy_compat :
+    ∀ N γ, (monodromy (N + 1) γ) ^ 2 = monodromy N γ
+
+/-- Triviality of the pullback-root monodromy representation. -/
+def PullbackRootMonodromyRepresentation.Trivial
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop) : Prop :=
+  ∀ N γ, ρ.monodromy N γ = 1
+
+/-- Monodromy acts on every finite pullback root set by root-of-unity
+multiplication. This is the formal version of "continuation around a loop moves
+a chosen root to another root in the same torsor." -/
+lemma PullbackRootMonodromyRepresentation.smul_pullbackRootSet
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop)
+    (N : ℕ) (γ : Loop) {A w : ℂ}
+    (hw : w ∈ pullbackRootSet (2 ^ N) A) :
+    ρ.monodromy N γ * w ∈ pullbackRootSet (2 ^ N) A :=
+  rootsOfUnity_smul_pullbackRootSet (ρ.monodromy_mem N γ) hw
+
+/-- If monodromy is trivial, analytic continuation fixes every finite-level
+pullback root. This is the algebraic consequence that still has to be supplied
+analytically for actual basin loops. -/
+lemma PullbackRootMonodromyRepresentation.trivial_smul_eq
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop)
+    (hρ : ρ.Trivial) (N : ℕ) (γ : Loop) (w : ℂ) :
+    ρ.monodromy N γ * w = w := by
+  rw [hρ N γ]
+  simp
+
+/-- If a compatible monodromy tower is trivial at level `N + d`, then it is
+trivial at level `N`. This is the algebraic descent step shown in the PLAN 08
+blocker notebook: compatibility says the lower multiplier is the square of the
+next one. -/
+lemma PullbackRootMonodromyRepresentation.monodromy_eq_one_of_add_eq_one
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop)
+    (γ : Loop) (N d : ℕ)
+    (h : ρ.monodromy (N + d) γ = 1) :
+    ρ.monodromy N γ = 1 := by
+  induction d with
+  | zero =>
+      simpa using h
+  | succ d ih =>
+      have htop : ρ.monodromy (N + d + 1) γ = 1 := by
+        simpa [Nat.add_assoc] using h
+      have hprev : ρ.monodromy (N + d) γ = 1 := by
+        calc
+          ρ.monodromy (N + d) γ = (ρ.monodromy ((N + d) + 1) γ) ^ 2 := by
+            exact (ρ.monodromy_compat (N + d) γ).symm
+          _ = 1 := by rw [htop]; norm_num
+      exact ih hprev
+
+lemma PullbackRootMonodromyRepresentation.monodromy_eq_one_of_le_of_top_eq_one
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop)
+    {γ : Loop} {N K : ℕ}
+    (hNK : N ≤ K) (hK : ρ.monodromy K γ = 1) :
+    ρ.monodromy N γ = 1 := by
+  rcases Nat.exists_eq_add_of_le hNK with ⟨d, rfl⟩
+  exact ρ.monodromy_eq_one_of_add_eq_one γ N d hK
+
+/-- Triviality at arbitrarily high levels implies full triviality of a compatible
+monodromy representation. One high trivial level only descends to lower levels;
+to cover every requested level `N`, we need a trivial level `K ≥ N`. -/
+lemma PullbackRootMonodromyRepresentation.trivial_of_arbitrarily_high_trivial
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop)
+    (hhigh : ∀ (N : ℕ) (γ : Loop),
+      ∃ K : ℕ, N ≤ K ∧ ρ.monodromy K γ = 1) :
+    ρ.Trivial := by
+  intro N γ
+  rcases hhigh N γ with ⟨K, hNK, hK⟩
+  exact ρ.monodromy_eq_one_of_le_of_top_eq_one hNK hK
+
+/-- Data expressing the analytic consequence that a basin pullback value is
+independent of which escaping iterate is used. This is the root-level part of
+the coherent pullback theorem, before differentiability and modulus are added. -/
+structure EscapeTimeIndependentPullbackDataFor (c : ℂ) where
+  value :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → ℂ
+  compatible_with_every_escape_time :
+    ∀ z (hz : z ∈ basin_of_infinity c) (N : ℕ),
+      ‖(MLC.quadratic_map c)^[N] z‖ > ‖c‖ + 2 →
+        value z hz ∈
+          pullbackRootSet (2 ^ N)
+            (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z))
+  agrees_near_infinity :
+    ∀ z (hz : z ∈ basin_of_infinity c),
+      ‖z‖ > ‖c‖ + 2 →
+        value z hz = MLC.logSeriesBottcherApprox c z
+
+/-- PLAN 07 theorem surface: a monodromy representation together with a proof
+that its analytic monodromy is trivial should yield escape-time-independent
+pullback values. The final analytic work is to construct this data for the basin
+loops of `c = 2`. -/
+structure MonodromyTrivialPullbackDataFor (c : ℂ) where
+  Loop : Type
+  representation : PullbackRootMonodromyRepresentation Loop
+  trivial_monodromy : representation.Trivial
+  escape_time_independent : EscapeTimeIndependentPullbackDataFor c
+
+/-- A concrete loop in the basin of infinity, based at `z₀`. This is the first
+PLAN 08 replacement for the earlier abstract `Loop : Type` placeholder. -/
+structure BasinLoop (c z₀ : ℂ) where
+  path : ℝ → ℂ
+  continuousOn_path : ContinuousOn path (Set.Icc (0 : ℝ) 1)
+  source : path 0 = z₀
+  target : path 1 = z₀
+  maps_to_basin : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 → path t ∈ basin_of_infinity c
+
+/-- The constant basin loop based at a basin point. -/
+def BasinLoop.constant (c z₀ : ℂ) (hz₀ : z₀ ∈ basin_of_infinity c) :
+    BasinLoop c z₀ where
+  path := fun _ => z₀
+  continuousOn_path := continuousOn_const
+  source := rfl
+  target := rfl
+  maps_to_basin := by
+    intro _t _ht
+    exact hz₀
+
+/-- Local holomorphic branch of a finite pullback root equation near a basin
+point. This is a theorem surface for the local analytic branch data required by
+PLAN 08. -/
+structure LocalPullbackRootBranchData (c : ℂ) (N : ℕ) (z₀ : ℂ) where
+  center_mem_basin : z₀ ∈ basin_of_infinity c
+  U : Set ℂ
+  U_mem_nhds : U ∈ 𝓝 z₀
+  branch : ℂ → ℂ
+  branch_differentiableOn : DifferentiableOn ℂ branch U
+  root_eq :
+    ∀ z : ℂ, z ∈ U →
+      (branch z) ^ (2 ^ N) =
+        MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)
+  center_value_mem_rootSet :
+    branch z₀ ∈
+      pullbackRootSet (2 ^ N)
+        (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z₀))
+
+/-- Local zero-free chart carrying a logarithm branch and therefore a local
+`2^N`-root branch. This is the local building block in PLAN 08's chart-based
+monodromy proof template. -/
+structure ZeroFreeChartRootBranchData (N : ℕ) where
+  chart : Set ℂ
+  chart_zero_free : (0 : ℂ) ∉ chart
+  logBranch : ℂ → ℂ
+  logBranch_exp :
+    ∀ w : ℂ, w ∈ chart → Complex.exp (logBranch w) = w
+  rootBranch : ℂ → ℂ
+  rootBranch_eq :
+    ∀ w : ℂ, w ∈ chart →
+      rootBranch w = Complex.exp (((2 : ℂ) ^ N)⁻¹ * logBranch w)
+  rootBranch_pow :
+    ∀ w : ℂ, w ∈ chart → (rootBranch w) ^ (2 ^ N) = w
+
+/-- The right half-plane, used in the explicit family of high-level comparison
+examples. It is zero-free and carries the principal logarithm. -/
+def complexRightHalfPlane : Set ℂ :=
+  {w : ℂ | 0 < w.re}
+
+/-- The punctured plane carries the principal logarithm as a pointwise logarithm
+branch. This gives a canonical zero-free chart whenever the loop image is known
+not to hit `0`. -/
+noncomputable def puncturedPlaneZeroFreeChartRootBranchData
+    (N : ℕ) : ZeroFreeChartRootBranchData N where
+  chart := {w : ℂ | w ≠ 0}
+  chart_zero_free := by simp
+  logBranch := Complex.log
+  logBranch_exp := by
+    intro w hw
+    exact Complex.exp_log hw
+  rootBranch := fun w => Complex.exp (((2 : ℂ) ^ N)⁻¹ * Complex.log w)
+  rootBranch_eq := by
+    intro w _hw
+    rfl
+  rootBranch_pow := by
+    intro w hw
+    rw [← Complex.exp_nat_mul]
+    have hpow_ne : ((2 : ℂ) ^ N) ≠ 0 :=
+      pow_ne_zero _ (by norm_num : (2 : ℂ) ≠ 0)
+    have hcast : ((2 ^ N : ℕ) : ℂ) = (2 : ℂ) ^ N := by
+      norm_num
+    have hmul :
+        ((2 ^ N : ℕ) : ℂ) * (((2 : ℂ) ^ N)⁻¹ * Complex.log w) =
+          Complex.log w := by
+      rw [hcast]
+      field_simp [hpow_ne]
+    rw [hmul, Complex.exp_log hw]
+
+/-- The right half-plane carries the principal logarithm as a zero-free chart.
+This is the formal global chart used by the generalized special case in the
+PLAN 08 blocker notebook. -/
+noncomputable def rightHalfPlaneZeroFreeChartRootBranchData
+    (N : ℕ) : ZeroFreeChartRootBranchData N where
+  chart := complexRightHalfPlane
+  chart_zero_free := by
+    simp [complexRightHalfPlane]
+  logBranch := Complex.log
+  logBranch_exp := by
+    intro w hw
+    exact Complex.exp_log (by
+      intro hzero
+      simp [complexRightHalfPlane, hzero] at hw)
+  rootBranch := fun w => Complex.exp (((2 : ℂ) ^ N)⁻¹ * Complex.log w)
+  rootBranch_eq := by
+    intro w _hw
+    rfl
+  rootBranch_pow := by
+    intro w hw
+    rw [← Complex.exp_nat_mul]
+    have hpow_ne : ((2 : ℂ) ^ N) ≠ 0 :=
+      pow_ne_zero _ (by norm_num : (2 : ℂ) ≠ 0)
+    have hcast : ((2 ^ N : ℕ) : ℂ) = (2 : ℂ) ^ N := by
+      norm_num
+    have hmul :
+        ((2 ^ N : ℕ) : ℂ) * (((2 : ℂ) ^ N)⁻¹ * Complex.log w) =
+          Complex.log w := by
+      rw [hcast]
+      field_simp [hpow_ne]
+    have hw_ne : w ≠ 0 := by
+      intro hzero
+      simp [complexRightHalfPlane, hzero] at hw
+    rw [hmul, Complex.exp_log hw_ne]
+
+/-- At `c = 2`, the second iterate has the polynomial form used in the
+generalized special-case proof. -/
+lemma quadraticMap_two_second_iterate_eq (z : ℂ) :
+    (MLC.quadratic_map (2 : ℂ))^[2] z = 6 + 4 * z^2 + z^4 := by
+  norm_num [Function.iterate_succ_apply', Function.iterate_zero_apply,
+    MLC.quadratic_map]
+  ring
+
+/-- Generalized radius-family estimate from the notebook. If `‖z‖ = r`, then
+the real part of the second iterate is bounded below by `6 - 4*r^2 - r^4`. -/
+lemma quadraticMap_two_second_iterate_re_lower_bound
+    (z : ℂ) (r : ℝ) (hr : ‖z‖ = r) :
+    6 - 4 * r^2 - r^4 ≤
+      ((MLC.quadratic_map (2 : ℂ))^[2] z).re := by
+  let u : ℂ := z^2
+  have hiter :
+      (MLC.quadratic_map (2 : ℂ))^[2] z = 6 + 4 * u + u^2 := by
+    dsimp [u]
+    norm_num [Function.iterate_succ_apply', Function.iterate_zero_apply,
+      MLC.quadratic_map]
+    ring
+  have hre_u : -‖u‖ ≤ u.re :=
+    (abs_le.mp (Complex.abs_re_le_norm u)).1
+  have hre_u2 : -‖u^2‖ ≤ (u^2).re :=
+    (abs_le.mp (Complex.abs_re_le_norm (u^2))).1
+  have hnorm_u : ‖u‖ = r^2 := by
+    dsimp [u]
+    rw [norm_pow, hr]
+  have hnorm_u2 : ‖u^2‖ = r^4 := by
+    rw [norm_pow, hnorm_u]
+    ring
+  have hcalc : 6 - 4 * ‖u‖ - ‖u^2‖ ≤ (6 + 4 * u + u^2).re := by
+    have h4 : -4 * ‖u‖ ≤ 4 * u.re := by nlinarith
+    have hmain :
+        6 + (-4 * ‖u‖) + (-‖u^2‖) ≤
+          6 + 4 * u.re + (u^2).re := by
+      nlinarith
+    simpa [Complex.add_re, Complex.mul_re, Complex.ofReal_re] using hmain
+  have hleft : 6 - 4 * r^2 - r^4 = 6 - 4 * ‖u‖ - ‖u^2‖ := by
+    rw [hnorm_u, hnorm_u2]
+  rw [hiter, hleft]
+  exact hcalc
+
+/-- If the generalized radius-family inequality is positive, the second iterate
+lies in the right half-plane. For the circle family in the notebook this applies
+whenever `r < sqrt (-2 + sqrt 10)`, expressed here through the equivalent
+sufficient inequality `0 < 6 - 4*r^2 - r^4`. -/
+lemma quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
+    (z : ℂ) {r : ℝ}
+    (hr : ‖z‖ = r) (hpos : 0 < 6 - 4 * r^2 - r^4) :
+    (MLC.quadratic_map (2 : ℂ))^[2] z ∈ complexRightHalfPlane := by
+  exact lt_of_lt_of_le hpos
+    (quadraticMap_two_second_iterate_re_lower_bound z r hr)
+
+/-- If two local root branches solve the same equation on an overlap, then at a
+point of the overlap they differ by a `2^N`-th root of unity. This is the
+overlap-multiplier step in the PLAN 08 proof template. -/
+lemma overlap_root_multiplier_exists
+    {N : ℕ} {A w₁ w₂ : ℂ}
+    (hN : 2 ^ N ≠ 0)
+    (hA : A ≠ 0)
+    (hw₁ : w₁ ∈ pullbackRootSet (2 ^ N) A)
+    (hw₂ : w₂ ∈ pullbackRootSet (2 ^ N) A) :
+    ∃ ζ : ℂ, ζ ∈ rootsOfUnitySet (2 ^ N) ∧ w₂ = ζ * w₁ :=
+  pullbackRootSet_torsor_transitive hN hw₁ hw₂ hA
+
+/-- Products of finite lists of `n`-th roots of unity are again `n`-th roots of
+unity. This is the algebraic engine behind multiplying overlap factors around a
+chart chain. -/
+lemma rootsOfUnitySet_list_prod
+    {n : ℕ} (L : List ℂ)
+    (hL : ∀ ζ : ℂ, ζ ∈ L → ζ ∈ rootsOfUnitySet n) :
+    L.prod ∈ rootsOfUnitySet n := by
+  induction L with
+  | nil =>
+      simpa using one_mem_rootsOfUnitySet n
+  | cons ζ L ih =>
+      have hζ : ζ ∈ rootsOfUnitySet n := hL ζ (by simp)
+      have hL' : ∀ η : ℂ, η ∈ L → η ∈ rootsOfUnitySet n := by
+        intro η hη
+        exact hL η (by simp [hη])
+      have ih' : L.prod ∈ rootsOfUnitySet n := ih hL'
+      dsimp [rootsOfUnitySet] at hζ ih' ⊢
+      simp [mul_pow, hζ, ih']
+
+/-- Abstract overlap multiplier data for adjacent zero-free charts in a
+continued root construction. A product of these multipliers around a closed loop
+is the monodromy element. -/
+structure OverlapRootMultiplierData (N : ℕ) where
+  index : Type
+  multiplier : index → ℂ
+  multiplier_mem :
+    ∀ i, multiplier i ∈ rootsOfUnitySet (2 ^ N)
+  monodromyProduct : ℂ
+  product_mem :
+    monodromyProduct ∈ rootsOfUnitySet (2 ^ N)
+
+/-- The level-`N` value whose `2^N`-th roots are continued along a basin loop. -/
+noncomputable def basinLoopRootEquationValue
+    (c : ℂ) (N : ℕ) {z₀ : ℂ} (γ : BasinLoop c z₀) (t : ℝ) : ℂ :=
+  MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] (γ.path t))
+
+/-- A loop level is escaping if the whole level-`N` loop image lies in the
+canonical outside-open region where the logarithmic-series coordinate is already
+known to be exterior-valued. -/
+def BasinLoopLevelEscapes (c : ℂ) (N : ℕ) {z₀ : ℂ}
+    (γ : BasinLoop c z₀) : Prop :=
+  ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+    ‖(MLC.quadratic_map c)^[N] (γ.path t)‖ > ‖c‖ + 2
+
+/-- Once a loop level is in the outside-open region, every later level is also
+outside-open by forward invariance. -/
+lemma BasinLoopLevelEscapes.mono
+    {c : ℂ} {K L : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (hKL : K ≤ L) (hesc : BasinLoopLevelEscapes c K γ) :
+    BasinLoopLevelEscapes c L γ := by
+  rcases Nat.exists_eq_add_of_le hKL with ⟨d, rfl⟩
+  intro t ht
+  have hK := hesc t ht
+  have hd := MLC.quadratic_map_iter_maps_outside_open c hK d
+  rw [Nat.add_comm K d]
+  simpa [Function.iterate_add, Function.comp_apply] using hd
+
+/-- At an escaping level, the corresponding root-equation value is nonzero. -/
+lemma basinLoopRootEquationValue_ne_zero_of_outside_open
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀} {t : ℝ}
+    (houtside :
+      ‖(MLC.quadratic_map c)^[N] (γ.path t)‖ > ‖c‖ + 2) :
+    basinLoopRootEquationValue c N γ t ≠ 0 := by
+  have hnorm :
+      1 <
+        ‖MLC.logSeriesBottcherApprox c
+          ((MLC.quadratic_map c)^[N] (γ.path t))‖ :=
+    MLC.one_lt_norm_logSeriesBottcherApprox_of_outside_open c houtside
+  intro hzero
+  have hzero' :
+      MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] (γ.path t)) = 0 := by
+    simpa [basinLoopRootEquationValue] using hzero
+  have hnorm_zero :
+      ‖MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] (γ.path t))‖ = 0 := by
+    simp [hzero']
+  have : ¬ (1 : ℝ) < 0 := by norm_num
+  exact this (by simpa [hnorm_zero] using hnorm)
+
+lemma basinLoopRootEquationValue_ne_zero_of_level_escapes
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (hesc : BasinLoopLevelEscapes c N γ) :
+    ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+      basinLoopRootEquationValue c N γ t ≠ 0 := by
+  intro t ht
+  exact basinLoopRootEquationValue_ne_zero_of_outside_open (hesc t ht)
+
+/-- One chart cell in a finite chart-chain cover of a basin loop. It records an
+interval of loop time and a zero-free chart containing the corresponding
+level-`N` Böttcher values. -/
+structure BasinLoopChartCell
+    (c : ℂ) (N : ℕ) (z₀ : ℂ) (γ : BasinLoop c z₀) where
+  tStart : ℝ
+  tEnd : ℝ
+  tStart_mem : tStart ∈ Set.Icc (0 : ℝ) 1
+  tEnd_mem : tEnd ∈ Set.Icc (0 : ℝ) 1
+  ordered : tStart ≤ tEnd
+  chart : ZeroFreeChartRootBranchData N
+  image_mem_chart :
+    ∀ t : ℝ, t ∈ Set.Icc tStart tEnd →
+      basinLoopRootEquationValue c N γ t ∈ chart.chart
+
+/-- An adjacent-chart overlap step. The multiplier records how the right local
+root branch compares with the left one on the overlap value. -/
+structure BasinLoopChartOverlapStep
+    (c : ℂ) (N : ℕ) (z₀ : ℂ) (γ : BasinLoop c z₀) where
+  left : BasinLoopChartCell c N z₀ γ
+  right : BasinLoopChartCell c N z₀ γ
+  overlapTime : ℝ
+  overlapTime_mem_left : overlapTime ∈ Set.Icc left.tStart left.tEnd
+  overlapTime_mem_right : overlapTime ∈ Set.Icc right.tStart right.tEnd
+  value_mem_left_chart :
+    basinLoopRootEquationValue c N γ overlapTime ∈ left.chart.chart
+  value_mem_right_chart :
+    basinLoopRootEquationValue c N γ overlapTime ∈ right.chart.chart
+  multiplier : ℂ
+  multiplier_mem : multiplier ∈ rootsOfUnitySet (2 ^ N)
+  rootBranch_overlap :
+    right.chart.rootBranch (basinLoopRootEquationValue c N γ overlapTime) =
+      multiplier * left.chart.rootBranch (basinLoopRootEquationValue c N γ overlapTime)
+
+/-- A finite chart chain along a concrete basin loop. The cells cover the loop in
+time, and the overlap steps carry the root-of-unity transition multipliers. -/
+structure BasinLoopChartChain
+    (c : ℂ) (N : ℕ) (z₀ : ℂ) (γ : BasinLoop c z₀) where
+  cells : List (BasinLoopChartCell c N z₀ γ)
+  covers_loop :
+    ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+      ∃ cell ∈ cells, t ∈ Set.Icc cell.tStart cell.tEnd
+  overlaps : List (BasinLoopChartOverlapStep c N z₀ γ)
+
+/-- Local logarithm branches in a chart chain are restrictions of one global
+zero-free logarithm branch along all overlap values. This is the formal
+special-case comparison input from the notebook: if every local branch is
+obtained by restricting the same logarithm, no overlap can acquire a nontrivial
+root-of-unity multiplier. -/
+structure ChartChainLocalLogsRestrictGlobal
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ)
+    (globalChart : ZeroFreeChartRootBranchData N) where
+  overlap_value_mem_global :
+    ∀ step ∈ chain.overlaps,
+      basinLoopRootEquationValue c N γ step.overlapTime ∈ globalChart.chart
+  left_logBranch_eq_global :
+    ∀ step (_hstep : step ∈ chain.overlaps),
+      step.left.chart.logBranch
+          (basinLoopRootEquationValue c N γ step.overlapTime) =
+        globalChart.logBranch
+          (basinLoopRootEquationValue c N γ step.overlapTime)
+  right_logBranch_eq_global :
+    ∀ step (_hstep : step ∈ chain.overlaps),
+      step.right.chart.logBranch
+          (basinLoopRootEquationValue c N γ step.overlapTime) =
+        globalChart.logBranch
+          (basinLoopRootEquationValue c N γ step.overlapTime)
+
+/-- If the level-`N` loop image avoids `0`, the whole loop is covered by the
+single punctured-plane chart and has no overlap multipliers. -/
+noncomputable def BasinLoopChartChain.of_nonzero_values
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hnonzero :
+      ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+        basinLoopRootEquationValue c N γ t ≠ 0) :
+    BasinLoopChartChain c N z₀ γ :=
+  let cell : BasinLoopChartCell c N z₀ γ :=
+    { tStart := 0
+      tEnd := 1
+      tStart_mem := by simp
+      tEnd_mem := by simp
+      ordered := by norm_num
+      chart := puncturedPlaneZeroFreeChartRootBranchData N
+      image_mem_chart := by
+        intro t ht
+        exact hnonzero t ht }
+  { cells := [cell]
+    covers_loop := by
+      intro t ht
+      exact ⟨cell, by simp, ht⟩
+    overlaps := [] }
+
+/-- Escaping levels have a canonical one-chart chain: the near-infinity value is
+exterior-valued, hence nonzero, so the punctured-plane chart applies. -/
+noncomputable def BasinLoopChartChain.of_escaping_level
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hesc : BasinLoopLevelEscapes c N γ) :
+    BasinLoopChartChain c N z₀ γ :=
+  BasinLoopChartChain.of_nonzero_values γ
+    (basinLoopRootEquationValue_ne_zero_of_level_escapes hesc)
+
+/-- The ordered list of overlap multipliers carried by a chart chain. -/
+def BasinLoopChartChain.overlapMultipliers
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) : List ℂ :=
+  chain.overlaps.map (fun step => step.multiplier)
+
+lemma BasinLoopChartChain.overlapMultipliers_mem
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) :
+    ∀ ζ : ℂ, ζ ∈ chain.overlapMultipliers → ζ ∈ rootsOfUnitySet (2 ^ N) := by
+  intro ζ hζ
+  rcases List.mem_map.1 hζ with ⟨step, hstep, rfl⟩
+  exact step.multiplier_mem
+
+/-- The product of all adjacent-chart overlap multipliers. This is the concrete
+finite-chain monodromy element at level `N`. -/
+def BasinLoopChartChain.monodromyProduct
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) : ℂ :=
+  chain.overlapMultipliers.prod
+
+lemma BasinLoopChartChain.monodromyProduct_mem
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) :
+    chain.monodromyProduct ∈ rootsOfUnitySet (2 ^ N) :=
+  rootsOfUnitySet_list_prod chain.overlapMultipliers chain.overlapMultipliers_mem
+
+lemma overlapMultiplier_list_prod_eq_one
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (L : List (BasinLoopChartOverlapStep c N z₀ γ))
+    (hL : ∀ step ∈ L, step.multiplier = 1) :
+    (L.map (fun step => step.multiplier)).prod = 1 := by
+  induction L with
+  | nil =>
+      simp
+  | cons step rest ih =>
+      have hstep : step.multiplier = 1 := hL step (by simp)
+      have hrest : ∀ step ∈ rest, step.multiplier = 1 := by
+        intro step' hstep'
+        exact hL step' (by simp [hstep'])
+      simp [hstep, ih hrest]
+
+lemma ChartChainLocalLogsRestrictGlobal.overlap_multiplier_eq_one
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    {globalChart : ZeroFreeChartRootBranchData N}
+    (hrestrict : ChartChainLocalLogsRestrictGlobal chain globalChart)
+    (step : BasinLoopChartOverlapStep c N z₀ γ)
+    (hstep : step ∈ chain.overlaps) :
+    step.multiplier = 1 := by
+  let A : ℂ := basinLoopRootEquationValue c N γ step.overlapTime
+  have hA_global : A ∈ globalChart.chart :=
+    hrestrict.overlap_value_mem_global step hstep
+  have hleft :
+      step.left.chart.rootBranch A = globalChart.rootBranch A := by
+    calc
+      step.left.chart.rootBranch A =
+          Complex.exp (((2 : ℂ) ^ N)⁻¹ * step.left.chart.logBranch A) := by
+            rw [step.left.chart.rootBranch_eq A step.value_mem_left_chart]
+      _ = Complex.exp (((2 : ℂ) ^ N)⁻¹ * globalChart.logBranch A) := by
+            rw [hrestrict.left_logBranch_eq_global step hstep]
+      _ = globalChart.rootBranch A := by
+            rw [globalChart.rootBranch_eq A hA_global]
+  have hright :
+      step.right.chart.rootBranch A = globalChart.rootBranch A := by
+    calc
+      step.right.chart.rootBranch A =
+          Complex.exp (((2 : ℂ) ^ N)⁻¹ * step.right.chart.logBranch A) := by
+            rw [step.right.chart.rootBranch_eq A step.value_mem_right_chart]
+      _ = Complex.exp (((2 : ℂ) ^ N)⁻¹ * globalChart.logBranch A) := by
+            rw [hrestrict.right_logBranch_eq_global step hstep]
+      _ = globalChart.rootBranch A := by
+            rw [globalChart.rootBranch_eq A hA_global]
+  have hA_ne : A ≠ 0 := by
+    intro hA0
+    exact globalChart.chart_zero_free (by simpa [hA0] using hA_global)
+  have hroot_ne : globalChart.rootBranch A ≠ 0 := by
+    intro hroot0
+    have hpow_ne : 2 ^ N ≠ 0 := pow_ne_zero N (by norm_num : (2 : ℕ) ≠ 0)
+    have hA0 : A = 0 := by
+      simpa [hroot0, hpow_ne] using (globalChart.rootBranch_pow A hA_global).symm
+    exact hA_ne hA0
+  have hsame :
+      globalChart.rootBranch A = step.multiplier * globalChart.rootBranch A := by
+    calc
+      globalChart.rootBranch A = step.right.chart.rootBranch A := hright.symm
+      _ = step.multiplier * step.left.chart.rootBranch A := step.rootBranch_overlap
+      _ = step.multiplier * globalChart.rootBranch A := by rw [hleft]
+  have hmul :
+      step.multiplier * globalChart.rootBranch A =
+        1 * globalChart.rootBranch A := by
+    rw [one_mul]
+    exact hsame.symm
+  exact mul_right_cancel₀ hroot_ne hmul
+
+lemma ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    {globalChart : ZeroFreeChartRootBranchData N}
+    (hrestrict : ChartChainLocalLogsRestrictGlobal chain globalChart) :
+    chain.monodromyProduct = 1 := by
+  dsimp [BasinLoopChartChain.monodromyProduct,
+    BasinLoopChartChain.overlapMultipliers]
+  exact overlapMultiplier_list_prod_eq_one chain.overlaps
+    (fun step hstep => hrestrict.overlap_multiplier_eq_one step hstep)
+
+lemma BasinLoopChartChain.monodromyProduct_of_nonzero_values
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hnonzero :
+      ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+        basinLoopRootEquationValue c N γ t ≠ 0) :
+    (BasinLoopChartChain.of_nonzero_values γ hnonzero).monodromyProduct = 1 := by
+  simp [BasinLoopChartChain.of_nonzero_values, BasinLoopChartChain.monodromyProduct,
+    BasinLoopChartChain.overlapMultipliers]
+
+lemma BasinLoopChartChain.monodromyProduct_of_escaping_level
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hesc : BasinLoopLevelEscapes c N γ) :
+    (BasinLoopChartChain.of_escaping_level γ hesc).monodromyProduct = 1 := by
+  simp [BasinLoopChartChain.of_escaping_level,
+    BasinLoopChartChain.monodromyProduct_of_nonzero_values]
+
+/-- A concrete finite chart chain supplies the earlier abstract overlap
+multiplier surface, with the monodromy product computed as the list product of
+its actual adjacent overlap multipliers. -/
+noncomputable def BasinLoopChartChain.toOverlapRootMultiplierData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) :
+    OverlapRootMultiplierData N where
+  index := {ζ : ℂ // ζ ∈ chain.overlapMultipliers}
+  multiplier := fun ζ => ζ.1
+  multiplier_mem := fun ζ => chain.overlapMultipliers_mem ζ.1 ζ.2
+  monodromyProduct := chain.monodromyProduct
+  product_mem := chain.monodromyProduct_mem
+
+/-- Analytic continuation of a local pullback root branch around a basin loop.
+The output branch may differ from the input branch by a root-of-unity multiplier;
+that multiplier is the monodromy element. -/
+structure AnalyticContinuationAlongBasinLoop
+    (c : ℂ) (N : ℕ) (z₀ : ℂ)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) where
+  end_branch : LocalPullbackRootBranchData c N z₀
+  multiplier : ℂ
+  multiplier_mem : multiplier ∈ rootsOfUnitySet (2 ^ N)
+  continued_center_value :
+    end_branch.branch z₀ = multiplier * start_branch.branch z₀
+
+/-- Local trivial monodromy: if a continuation stays in one chart/one chosen
+branch, the endpoint branch is the starting branch and the monodromy multiplier
+is `1`. This is the local zero-free-chart case in PLAN 08; global monodromy is
+obtained only after chaining such local continuations and controlling the
+overlap multipliers. -/
+noncomputable def AnalyticContinuationAlongBasinLoop.trivial
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch where
+  end_branch := start_branch
+  multiplier := 1
+  multiplier_mem := one_mem_rootsOfUnitySet (2 ^ N)
+  continued_center_value := by simp
+
+/-- The monodromy multiplier of the same-chart continuation is trivial. -/
+lemma AnalyticContinuationAlongBasinLoop.trivial_multiplier
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    (AnalyticContinuationAlongBasinLoop.trivial γ start_branch).multiplier = 1 := rfl
+
+/-- A zero-free chart supplies the same local trivial continuation: inside one
+fixed chart with one fixed logarithm branch, no root-of-unity factor is acquired.
+The chart argument is included to make the PLAN 08 local step explicit; the
+remaining global work is to pass between many such charts and multiply overlap
+factors. -/
+noncomputable def ZeroFreeChartRootBranchData.trivialContinuation
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (_chart : ZeroFreeChartRootBranchData N)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch :=
+  AnalyticContinuationAlongBasinLoop.trivial γ start_branch
+
+lemma ZeroFreeChartRootBranchData.trivialContinuation_multiplier
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (chart : ZeroFreeChartRootBranchData N)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    (chart.trivialContinuation γ start_branch).multiplier = 1 := rfl
+
+/-- Continuation data obtained by following an actual finite chart chain. The
+endpoint branch is required to differ from the start branch by the product of the
+recorded overlap multipliers. -/
+structure ChartChainContinuationData
+    (c : ℂ) (N : ℕ) (z₀ : ℂ)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) where
+  chain : BasinLoopChartChain c N z₀ γ
+  end_branch : LocalPullbackRootBranchData c N z₀
+  continued_center_value :
+    end_branch.branch z₀ = chain.monodromyProduct * start_branch.branch z₀
+
+/-- A chart-chain continuation is an analytic continuation whose multiplier is
+the finite product of adjacent overlap multipliers. -/
+noncomputable def ChartChainContinuationData.toAnalyticContinuation
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {start_branch : LocalPullbackRootBranchData c N z₀}
+    (h : ChartChainContinuationData c N z₀ γ start_branch) :
+    AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch where
+  end_branch := h.end_branch
+  multiplier := h.chain.monodromyProduct
+  multiplier_mem := h.chain.monodromyProduct_mem
+  continued_center_value := h.continued_center_value
+
+lemma ChartChainContinuationData.toAnalyticContinuation_multiplier
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {start_branch : LocalPullbackRootBranchData c N z₀}
+    (h : ChartChainContinuationData c N z₀ γ start_branch) :
+    h.toAnalyticContinuation.multiplier = h.chain.monodromyProduct := rfl
+
+/-- Actual monodromy representation for basin loops based at `z₀`. This is the
+PLAN 08 target replacing the abstract `PullbackRootMonodromyRepresentation Loop`
+with the concrete loop type `BasinLoop c z₀`. -/
+structure BasinLoopPullbackRootMonodromyData (c z₀ : ℂ) where
+  base_mem_basin : z₀ ∈ basin_of_infinity c
+  representation : PullbackRootMonodromyRepresentation (BasinLoop c z₀)
+  realized_by_continuation :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀)
+      (start_branch : LocalPullbackRootBranchData c N z₀),
+      ∃ cont : AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch,
+        cont.multiplier = representation.monodromy N γ
+
+/-- If actual basin-loop monodromy data is available and its monodromy is
+trivial, then it supplies the abstract monodromy representation surface from
+PLAN 07. The remaining hard input is still the escape-time-independent pullback
+data. -/
+noncomputable def BasinLoopPullbackRootMonodromyData.toMonodromyTrivialPullbackDataFor
+    {c z₀ : ℂ}
+    (h : BasinLoopPullbackRootMonodromyData c z₀)
+    (htriv : h.representation.Trivial)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c where
+  Loop := BasinLoop c z₀
+  representation := h.representation
+  trivial_monodromy := htriv
+  escape_time_independent := hind
+
+/-- Chart-chain monodromy data for every concrete basin loop based at `z₀`.
+This is the global PLAN 08 layer immediately after the same-chart local step:
+each loop receives actual finite chart-chain data, the representation is the
+product of its overlap multipliers, and compatibility across levels is recorded
+as the expected squaring relation. -/
+structure BasinLoopChartChainMonodromyData (c z₀ : ℂ) where
+  base_mem_basin : z₀ ∈ basin_of_infinity c
+  chain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀), BasinLoopChartChain c N z₀ γ
+  monodromy_compat :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ((chain (N + 1) γ).monodromyProduct) ^ 2 =
+        (chain N γ).monodromyProduct
+  continued_branch :
+    ∀ (N : ℕ) (_γ : BasinLoop c z₀)
+      (_start_branch : LocalPullbackRootBranchData c N z₀),
+      LocalPullbackRootBranchData c N z₀
+  continued_center_value :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀)
+      (start_branch : LocalPullbackRootBranchData c N z₀),
+      (continued_branch N γ start_branch).branch z₀ =
+        (chain N γ).monodromyProduct * start_branch.branch z₀
+
+/-- The monodromy representation encoded by chart-chain overlap products. -/
+noncomputable def BasinLoopChartChainMonodromyData.representation
+    {c z₀ : ℂ} (h : BasinLoopChartChainMonodromyData c z₀) :
+    PullbackRootMonodromyRepresentation (BasinLoop c z₀) where
+  monodromy := fun N γ => (h.chain N γ).monodromyProduct
+  monodromy_mem := fun N γ => (h.chain N γ).monodromyProduct_mem
+  monodromy_compat := h.monodromy_compat
+
+/-- Chart-chain monodromy data realizes the concrete basin-loop monodromy data
+required by PLAN 08. -/
+noncomputable def BasinLoopChartChainMonodromyData.toBasinLoopPullbackRootMonodromyData
+    {c z₀ : ℂ} (h : BasinLoopChartChainMonodromyData c z₀) :
+    BasinLoopPullbackRootMonodromyData c z₀ where
+  base_mem_basin := h.base_mem_basin
+  representation := h.representation
+  realized_by_continuation := by
+    intro N γ start_branch
+    refine ⟨?_, ?_⟩
+    · exact
+      { end_branch := h.continued_branch N γ start_branch
+        multiplier := (h.chain N γ).monodromyProduct
+        multiplier_mem := (h.chain N γ).monodromyProduct_mem
+        continued_center_value := h.continued_center_value N γ start_branch }
+    · simp [BasinLoopChartChainMonodromyData.representation]
+
+/-- Triviality criterion for the chart-chain representation: if every finite
+overlap product is `1`, the induced basin-loop monodromy representation is
+trivial. -/
+lemma BasinLoopChartChainMonodromyData.representation_trivial_of_products
+    {c z₀ : ℂ} (h : BasinLoopChartChainMonodromyData c z₀)
+    (hprod : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (h.chain N γ).monodromyProduct = 1) :
+    h.representation.Trivial := by
+  intro N γ
+  exact hprod N γ
+
+/-- Chart-chain version of descent: if for every requested level `N` and loop
+there is a higher level `K ≥ N` whose overlap product is already trivial, then
+the induced compatible monodromy representation is trivial at every level. -/
+lemma BasinLoopChartChainMonodromyData.representation_trivial_of_arbitrarily_high_products
+    {c z₀ : ℂ} (h : BasinLoopChartChainMonodromyData c z₀)
+    (hprod : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ∃ K : ℕ, N ≤ K ∧ (h.chain K γ).monodromyProduct = 1) :
+    h.representation.Trivial := by
+  exact h.representation.trivial_of_arbitrarily_high_trivial hprod
+
+/-- Conditional construction of the PLAN 08 chart-chain monodromy data. If every
+level-`N` loop image avoids `0`, the punctured-plane chart gives a one-chart
+chain for every loop; all overlap products are empty products, hence compatible
+and trivial. The missing theorem for `c = 2` is precisely the supplied
+nonvanishing hypothesis. -/
+noncomputable def BasinLoopChartChainMonodromyData.of_nonzero_values_two
+    {z₀ : ℂ}
+    (hz₀ : z₀ ∈ basin_of_infinity (2 : ℂ))
+    (hnonzero :
+      ∀ (N : ℕ) (γ : BasinLoop (2 : ℂ) z₀) (t : ℝ),
+        t ∈ Set.Icc (0 : ℝ) 1 →
+          basinLoopRootEquationValue (2 : ℂ) N γ t ≠ 0) :
+    BasinLoopChartChainMonodromyData (2 : ℂ) z₀ where
+  base_mem_basin := hz₀
+  chain := fun N γ =>
+    BasinLoopChartChain.of_nonzero_values γ (hnonzero N γ)
+  monodromy_compat := by
+    intro N γ
+    simp [BasinLoopChartChain.monodromyProduct_of_nonzero_values]
+  continued_branch := fun _N _γ start_branch => start_branch
+  continued_center_value := by
+    intro N γ start_branch
+    simp [BasinLoopChartChain.monodromyProduct_of_nonzero_values]
+
+lemma BasinLoopChartChainMonodromyData.of_nonzero_values_two_products
+    {z₀ : ℂ}
+    (hz₀ : z₀ ∈ basin_of_infinity (2 : ℂ))
+    (hnonzero :
+      ∀ (N : ℕ) (γ : BasinLoop (2 : ℂ) z₀) (t : ℝ),
+        t ∈ Set.Icc (0 : ℝ) 1 →
+          basinLoopRootEquationValue (2 : ℂ) N γ t ≠ 0)
+    (N : ℕ) (γ : BasinLoop (2 : ℂ) z₀) :
+    ((BasinLoopChartChainMonodromyData.of_nonzero_values_two hz₀ hnonzero).chain
+      N γ).monodromyProduct = 1 := by
+  simp [BasinLoopChartChainMonodromyData.of_nonzero_values_two,
+    BasinLoopChartChain.monodromyProduct_of_nonzero_values]
+
+/-- Escaping-level replacement for the all-level chart-chain interface. Instead
+of requiring a chart chain at every early level, it records for each basin loop a
+single escaping level, the one-chart chain there, and the resulting trivial
+overlap product. A future descent/comparison theorem should transport this data
+back to the all-level interface when needed. -/
+structure EscapingLevelBasinLoopChartChainMonodromyData (c z₀ : ℂ) where
+  base_mem_basin : z₀ ∈ basin_of_infinity c
+  level : BasinLoop c z₀ → ℕ
+  level_escapes :
+    ∀ γ : BasinLoop c z₀, BasinLoopLevelEscapes c (level γ) γ
+  chain :
+    ∀ γ : BasinLoop c z₀, BasinLoopChartChain c (level γ) z₀ γ
+  product_trivial :
+    ∀ γ : BasinLoop c z₀, (chain γ).monodromyProduct = 1
+
+/-- If a loop-wise escaping level is supplied, the escaping-level chart-chain
+monodromy data is automatic by the punctured-plane one-chart construction. -/
+noncomputable def EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes
+    {c z₀ : ℂ}
+    (hz₀ : z₀ ∈ basin_of_infinity c)
+    (level : BasinLoop c z₀ → ℕ)
+    (hesc : ∀ γ : BasinLoop c z₀, BasinLoopLevelEscapes c (level γ) γ) :
+    EscapingLevelBasinLoopChartChainMonodromyData c z₀ where
+  base_mem_basin := hz₀
+  level := level
+  level_escapes := hesc
+  chain := fun γ => BasinLoopChartChain.of_escaping_level γ (hesc γ)
+  product_trivial := by
+    intro γ
+    exact BasinLoopChartChain.monodromyProduct_of_escaping_level γ (hesc γ)
+
+/-- `c = 2` specialization of the escaping-level replacement interface. -/
+noncomputable def EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two
+    {z₀ : ℂ}
+    (hz₀ : z₀ ∈ basin_of_infinity (2 : ℂ))
+    (level : BasinLoop (2 : ℂ) z₀ → ℕ)
+    (hesc : ∀ γ : BasinLoop (2 : ℂ) z₀,
+      BasinLoopLevelEscapes (2 : ℂ) (level γ) γ) :
+    EscapingLevelBasinLoopChartChainMonodromyData (2 : ℂ) z₀ :=
+  EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes hz₀ level hesc
+
+/-- Stronger escaping-level replacement matching the descent theorem: for every
+requested lower level `N₀` and every loop, record a higher escaping level `K ≥ N₀`
+with its canonical one-chart chain. This is the formal version of taking a
+sampled maximum in the notebook, but over the continuum loop and above an
+arbitrary requested lower level. -/
+structure ArbitrarilyHighEscapingLevelBasinLoopChartChainData (c z₀ : ℂ) where
+  base_mem_basin : z₀ ∈ basin_of_infinity c
+  levelAbove : BasinLoop c z₀ → ℕ → ℕ
+  levelAbove_ge :
+    ∀ (γ : BasinLoop c z₀) (N₀ : ℕ), N₀ ≤ levelAbove γ N₀
+  levelAbove_escapes :
+    ∀ (γ : BasinLoop c z₀) (N₀ : ℕ),
+      BasinLoopLevelEscapes c (levelAbove γ N₀) γ
+  chainAbove :
+    ∀ (γ : BasinLoop c z₀) (N₀ : ℕ),
+      BasinLoopChartChain c (levelAbove γ N₀) z₀ γ
+  productAbove_trivial :
+    ∀ (γ : BasinLoop c z₀) (N₀ : ℕ),
+      (chainAbove γ N₀).monodromyProduct = 1
+
+/-- Once arbitrarily high escaping levels are supplied, the corresponding
+one-chart chains and trivial products are automatic. -/
+noncomputable def ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_levelAbove_escapes
+    {c z₀ : ℂ}
+    (hz₀ : z₀ ∈ basin_of_infinity c)
+    (levelAbove : BasinLoop c z₀ → ℕ → ℕ)
+    (hge : ∀ (γ : BasinLoop c z₀) (N₀ : ℕ), N₀ ≤ levelAbove γ N₀)
+    (hesc : ∀ (γ : BasinLoop c z₀) (N₀ : ℕ),
+      BasinLoopLevelEscapes c (levelAbove γ N₀) γ) :
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀ where
+  base_mem_basin := hz₀
+  levelAbove := levelAbove
+  levelAbove_ge := hge
+  levelAbove_escapes := hesc
+  chainAbove := fun γ N₀ =>
+    BasinLoopChartChain.of_escaping_level γ (hesc γ N₀)
+  productAbove_trivial := by
+    intro γ N₀
+    exact BasinLoopChartChain.monodromyProduct_of_escaping_level γ (hesc γ N₀)
+
+/-- A single uniform escaping level for each loop automatically gives
+arbitrarily high escaping levels: for a requested lower level `N₀`, use
+`max N₀ (level γ)`. -/
+noncomputable def ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_eventual_level_escapes
+    {c z₀ : ℂ}
+    (hz₀ : z₀ ∈ basin_of_infinity c)
+    (level : BasinLoop c z₀ → ℕ)
+    (hesc : ∀ γ : BasinLoop c z₀, BasinLoopLevelEscapes c (level γ) γ) :
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀ :=
+  ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_levelAbove_escapes
+    hz₀
+    (fun γ N₀ => max N₀ (level γ))
+    (fun _γ N₀ => le_max_left N₀ _)
+    (fun γ N₀ =>
+      BasinLoopLevelEscapes.mono (le_max_right N₀ (level γ)) (hesc γ))
+
+/-- The one-level escaping replacement data can be upgraded to the
+arbitrarily-high version needed by descent. -/
+noncomputable def EscapingLevelBasinLoopChartChainMonodromyData.toArbitrarilyHigh
+    {c z₀ : ℂ} (E : EscapingLevelBasinLoopChartChainMonodromyData c z₀) :
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀ :=
+  ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_eventual_level_escapes
+    E.base_mem_basin E.level E.level_escapes
+
+/-- `c = 2` specialization of the arbitrarily-high escaping-level replacement. -/
+noncomputable def ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_levelAbove_escapes_two
+    {z₀ : ℂ}
+    (hz₀ : z₀ ∈ basin_of_infinity (2 : ℂ))
+    (levelAbove : BasinLoop (2 : ℂ) z₀ → ℕ → ℕ)
+    (hge : ∀ (γ : BasinLoop (2 : ℂ) z₀) (N₀ : ℕ), N₀ ≤ levelAbove γ N₀)
+    (hesc : ∀ (γ : BasinLoop (2 : ℂ) z₀) (N₀ : ℕ),
+      BasinLoopLevelEscapes (2 : ℂ) (levelAbove γ N₀) γ) :
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData (2 : ℂ) z₀ :=
+  ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_levelAbove_escapes
+    hz₀ levelAbove hge hesc
+
+/-- Arbitrarily high escaping-level chain data supplies exactly the high-level
+trivial products needed by the chart-chain descent lemma, provided the all-level
+chart-chain monodromy data is available for comparison. The remaining analytic
+descent/comparison task is to relate these high-level chains to the all-level
+chain family in `BasinLoopChartChainMonodromyData`; this lemma packages the
+algebraic endpoint once that comparison is known. -/
+lemma BasinLoopChartChainMonodromyData.representation_trivial_of_high_escaping_comparison
+    {c z₀ : ℂ}
+    (h : BasinLoopChartChainMonodromyData c z₀)
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀)
+    (hcompare : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (h.chain (E.levelAbove γ N) γ).monodromyProduct =
+        (E.chainAbove γ N).monodromyProduct) :
+    h.representation.Trivial := by
+  apply h.representation_trivial_of_arbitrarily_high_products
+  intro N γ
+  refine ⟨E.levelAbove γ N, E.levelAbove_ge γ N, ?_⟩
+  rw [hcompare N γ]
+  exact E.productAbove_trivial γ N
+
+/-- Product-comparison data between an all-level chart-chain monodromy package
+and the canonical one-chart chains available at arbitrarily high escaping levels.
+This is the exact remaining PLAN 08 analytic comparison target after uniform
+escape and algebraic descent have been formalized. -/
+structure HighEscapingChartChainProductComparisonData
+    {c z₀ : ℂ}
+    (h : BasinLoopChartChainMonodromyData c z₀)
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  product_eq :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (h.chain (E.levelAbove γ N) γ).monodromyProduct =
+        (E.chainAbove γ N).monodromyProduct
+
+/-- Special-case analytic comparison data: at every high escaping level, all
+local logs in the all-level chain are restrictions of a single global zero-free
+logarithm branch. This is the formal version of the notebook's
+"local logs are restrictions" proof: the all-level high product is forced to be
+`1`, hence agrees with the canonical one-chart high product. -/
+structure HighEscapingChartChainLocalLogsRestrictGlobalData
+    {c z₀ : ℂ}
+    (h : BasinLoopChartChainMonodromyData c z₀)
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  globalChart :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ChartChainLocalLogsRestrictGlobal
+        (h.chain (E.levelAbove γ N) γ)
+        (globalChart N γ)
+
+/-- If all local logs in the all-level high chains are restrictions of a common
+global log branch, then the required high escaping product comparison follows. -/
+noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
+    {c z₀ : ℂ}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingChartChainLocalLogsRestrictGlobalData h E) :
+    HighEscapingChartChainProductComparisonData h E where
+  product_eq := by
+    intro N γ
+    calc
+      (h.chain (E.levelAbove γ N) γ).monodromyProduct = 1 :=
+        (R.localLogs_restrict N γ).monodromyProduct_eq_one
+      _ = (E.chainAbove γ N).monodromyProduct := by
+        exact (E.productAbove_trivial γ N).symm
+
+/-- Special case of comparison: if the all-level high chain is literally the
+same chain as the canonical escaping one-chart chain, then their products agree.
+The notebook's one-chart/refinement picture is a geometric generalization of
+this exact-chain case. -/
+noncomputable def HighEscapingChartChainProductComparisonData.of_chain_eq
+    {c z₀ : ℂ}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = E.chainAbove γ N) :
+    HighEscapingChartChainProductComparisonData h E where
+  product_eq := by
+    intro N γ
+    rw [hchain N γ]
+
+/-- Once the analytic product comparison is available, the all-level monodromy
+representation is trivial. -/
+lemma HighEscapingChartChainProductComparisonData.representation_trivial
+    {c z₀ : ℂ}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (C : HighEscapingChartChainProductComparisonData h E) :
+    h.representation.Trivial :=
+  h.representation_trivial_of_high_escaping_comparison E C.product_eq
+
 /-- Every basin point eventually enters the canonical outside-open region. -/
 lemma exists_iterate_mem_outside_open_of_mem_basin
     (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
@@ -194,6 +1342,105 @@ lemma exists_iterate_mem_outside_open_of_mem_basin
   refine ⟨N, ?_⟩
   have hN' : ‖c‖ + 3 ≤ ‖(MLC.quadratic_map c)^[N] z‖ := hN N le_rfl
   linarith
+
+/-- Uniform escape over a continuous basin loop. Pointwise basin escape gives an
+open cover of the compact interval by level-escape sets; a finite subcover and
+forward invariance of the outside-open region give one level that works for the
+whole loop. This is the compactness step isolated in the PLAN 08 blocker
+notebook. -/
+lemma BasinLoop.exists_levelEscapes
+    {c z₀ : ℂ} (γ : BasinLoop c z₀) :
+    ∃ N : ℕ, BasinLoopLevelEscapes c N γ := by
+  let I : Set ℝ := Set.Icc (0 : ℝ) 1
+  let U : ℕ → Set {t : ℝ // t ∈ I} := fun N =>
+    {t : {t : ℝ // t ∈ I} |
+      ‖(MLC.quadratic_map c)^[N] (γ.path t.1)‖ > ‖c‖ + 2}
+  have hUo : ∀ N, IsOpen (U N) := by
+    intro N
+    have hcont_path : Continuous (fun t : {t : ℝ // t ∈ I} => γ.path t.1) := by
+      exact (continuousOn_iff_continuous_restrict).1 (by
+        simpa [I] using γ.continuousOn_path)
+    have hcont_iter :
+        Continuous (fun t : {t : ℝ // t ∈ I} =>
+          (MLC.quadratic_map c)^[N] (γ.path t.1)) :=
+      ((continuous_quadratic_map c).iterate N).comp hcont_path
+    have hcont_norm :
+        Continuous (fun t : {t : ℝ // t ∈ I} =>
+          ‖(MLC.quadratic_map c)^[N] (γ.path t.1)‖) :=
+      continuous_norm.comp hcont_iter
+    simpa [U] using isOpen_lt continuous_const hcont_norm
+  have hcover : Set.univ ⊆ ⋃ N, U N := by
+    intro t _ht
+    have hbasin : γ.path t.1 ∈ basin_of_infinity c :=
+      γ.maps_to_basin t.1 (by simp [I] at t ⊢)
+    rcases exists_iterate_mem_outside_open_of_mem_basin c (γ.path t.1) hbasin with
+      ⟨N, hN⟩
+    exact Set.mem_iUnion.2 ⟨N, hN⟩
+  rcases isCompact_univ.elim_finite_subcover U hUo hcover with ⟨S, hS⟩
+  let K : ℕ := S.sup id
+  refine ⟨K, ?_⟩
+  intro t ht
+  have htcover :
+      (⟨t, by simpa [I] using ht⟩ : {t : ℝ // t ∈ I}) ∈ ⋃ N ∈ S, U N :=
+    hS (by simp)
+  rcases Set.mem_iUnion.1 htcover with ⟨N, hNmem⟩
+  rcases Set.mem_iUnion.1 hNmem with ⟨hNS, hNU⟩
+  have hNK : N ≤ K := by
+    dsimp [K]
+    exact Finset.le_sup (f := id) hNS
+  rcases Nat.exists_eq_add_of_le hNK with ⟨d, hKd⟩
+  rw [hKd]
+  have hd := MLC.quadratic_map_iter_maps_outside_open c hNU d
+  rw [Nat.add_comm N d]
+  simpa [Function.iterate_add, Function.comp_apply] using hd
+
+/-- The compactness theorem supplies the loop-wise escaping level required by the
+escaping-level chart-chain data. -/
+noncomputable def EscapingLevelBasinLoopChartChainMonodromyData.of_uniform_escape
+    {c z₀ : ℂ} (hz₀ : z₀ ∈ basin_of_infinity c) :
+    EscapingLevelBasinLoopChartChainMonodromyData c z₀ :=
+  EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes
+    hz₀
+    (fun γ => Classical.choose γ.exists_levelEscapes)
+    (fun γ => Classical.choose_spec γ.exists_levelEscapes)
+
+/-- `c = 2` specialization of the uniform-escape constructor. -/
+noncomputable def EscapingLevelBasinLoopChartChainMonodromyData.of_uniform_escape_two
+    {z₀ : ℂ} (hz₀ : z₀ ∈ basin_of_infinity (2 : ℂ)) :
+    EscapingLevelBasinLoopChartChainMonodromyData (2 : ℂ) z₀ :=
+  EscapingLevelBasinLoopChartChainMonodromyData.of_uniform_escape hz₀
+
+/-- Uniform escape also supplies the arbitrarily-high escaping levels needed by
+the algebraic descent theorem. -/
+noncomputable def ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape
+    {c z₀ : ℂ} (hz₀ : z₀ ∈ basin_of_infinity c) :
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀ :=
+  (EscapingLevelBasinLoopChartChainMonodromyData.of_uniform_escape hz₀).toArbitrarilyHigh
+
+/-- `c = 2` specialization of arbitrarily-high escaping levels from uniform
+escape over loops. -/
+noncomputable def ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape_two
+    {z₀ : ℂ} (hz₀ : z₀ ∈ basin_of_infinity (2 : ℂ)) :
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData (2 : ℂ) z₀ :=
+  ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape hz₀
+
+/-- Uniform-escape specialization of the comparison endpoint: after the compact
+uniform escape theorem, the only remaining input is product comparison with the
+uniformly chosen high one-chart chains. -/
+lemma BasinLoopChartChainMonodromyData.representation_trivial_of_uniform_escape_comparison
+    {c z₀ : ℂ}
+    (h : BasinLoopChartChainMonodromyData c z₀)
+    (hcompare : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (h.chain
+          ((ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape
+            h.base_mem_basin).levelAbove γ N) γ).monodromyProduct =
+        ((ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape
+            h.base_mem_basin).chainAbove γ N).monodromyProduct) :
+    h.representation.Trivial :=
+  h.representation_trivial_of_high_escaping_comparison
+    (ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape
+      h.base_mem_basin)
+    hcompare
 
 /-- A concrete escape time for basin points. -/
 noncomputable def basinEscapeTime (c z : ℂ) (hz : z ∈ basin_of_infinity c) : ℕ :=
@@ -630,6 +1877,27 @@ lemma zero_mem_basin_two_constructive :
   apply (basin_of_infinity_preimage_subset (2 : ℂ))
   simpa [Set.preimage, h0image] using h2_basin
 
+/-- The logarithmic-series coordinate vanishes at `0` by definition. -/
+lemma logSeriesBottcherApprox_zero (c : ℂ) :
+    MLC.logSeriesBottcherApprox c 0 = 0 := by
+  simp [MLC.logSeriesBottcherApprox]
+
+/-- The all-level nonvanishing input from the first notebook option is false for
+the current all-level interface: at `c = 2`, the constant basin loop based at
+`0` has level-`0` root-equation value equal to `0`. This is why PLAN 08 needs
+the escaping-level reformulation rather than chart chains at every early level. -/
+lemma not_forall_basinLoopRootEquationValue_ne_zero_two_zero :
+    ¬ (∀ (N : ℕ) (γ : BasinLoop (2 : ℂ) (0 : ℂ)) (t : ℝ),
+      t ∈ Set.Icc (0 : ℝ) 1 →
+        basinLoopRootEquationValue (2 : ℂ) N γ t ≠ 0) := by
+  intro hnonzero
+  let γ : BasinLoop (2 : ℂ) (0 : ℂ) :=
+    BasinLoop.constant (2 : ℂ) (0 : ℂ) zero_mem_basin_two_constructive
+  have hneq := hnonzero 0 γ 0 (by simp)
+  have hval : basinLoopRootEquationValue (2 : ℂ) 0 γ 0 = 0 := by
+    simp [γ, BasinLoop.constant, basinLoopRootEquationValue, logSeriesBottcherApprox_zero]
+  exact hneq hval
+
 /-- The principal-slit approximation domain does not even contain `0`, so it
 cannot be a neighborhood of every basin point at `c = 2`. -/
 lemma zero_not_mem_slit_orbit_two :
@@ -837,6 +2105,60 @@ theorem classicalGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtens
     ClassicalGlobalBottcherTheoremFor c :=
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.extensionData
+
+/-- Cover-strategy seam: construct the coherent pullback on a cover where
+monodromy is trivial, prove that the lifted coordinate is constant on fibers
+(deck-invariant), and descend it to a basin coordinate with the required
+properties. This is the Lean form of the group-theoretic cover strategy. -/
+structure MonodromyTrivializingCoverBasinExtensionDataFor (c : ℂ) where
+  Cover : Type
+  projection : Cover → ℂ
+  liftedPhi : Cover → ℂ
+  phi : ℂ → ℂ
+  projection_maps_basin :
+    ∀ x : Cover, projection x ∈ basin_of_infinity c
+  covers_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → ∃ x : Cover, projection x = z
+  same_fiber_liftedPhi :
+    ∀ x y : Cover, projection x = projection y → liftedPhi x = liftedPhi y
+  descends_to_phi :
+    ∀ x : Cover, phi (projection x) = liftedPhi x
+  extends_near :
+    ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 → phi z = MLC.logSeriesBottcherApprox c z
+  norm_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → 1 < ‖phi z‖
+  basin_of_norm_gt_one :
+    ∀ z : ℂ, 1 < ‖phi z‖ → z ∈ basin_of_infinity c
+  conj_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      phi (MLC.quadratic_map c z) = (phi z)^2
+  holo_on_basin :
+    DifferentiableOn ℂ phi (basin_of_infinity c)
+  modulus_on_basin :
+    ∀ z : ℂ, z ∈ basin_of_infinity c →
+      ‖phi z‖ = Real.exp (green_function c z)
+  tendsto_div_atInfinity :
+    Tendsto (fun z => phi z / z) atInfinity (𝓝 (1 : ℂ))
+
+/-- A monodromy-trivializing cover with deck-invariant lifted coordinate gives
+the logarithmic-series basin extension data. -/
+noncomputable def MonodromyTrivializingCoverBasinExtensionDataFor.toLogSeriesBasinExtensionDataFor
+    {c : ℂ} (h : MonodromyTrivializingCoverBasinExtensionDataFor c) :
+    LogSeriesBasinExtensionDataFor c where
+  phi := h.phi
+  extends_near := h.extends_near
+  norm_on_basin := h.norm_on_basin
+  basin_of_norm_gt_one := h.basin_of_norm_gt_one
+  conj_on_basin := h.conj_on_basin
+  holo_on_basin := h.holo_on_basin
+  modulus_on_basin := h.modulus_on_basin
+  tendsto_div_atInfinity := h.tendsto_div_atInfinity
+
+theorem classicalGlobalBottcherTheoremFor_of_monodromyTrivializingCoverData
+    {c : ℂ} (h : MonodromyTrivializingCoverBasinExtensionDataFor c) :
+    ClassicalGlobalBottcherTheoremFor c :=
+  classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
+    h.toLogSeriesBasinExtensionDataFor
 
 /-- Basin route C seam: a classical global Böttcher extension theorem can be
 used directly once instantiated with the already-proved canonical

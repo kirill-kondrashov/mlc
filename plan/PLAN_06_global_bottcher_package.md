@@ -75,6 +75,13 @@ Already checked:
 4. `basinEscapeTime_eq_zero_of_outside_open`
 5. `principalPullbackLogSeriesBottcher_eq_near_of_outside_open`
 6. `basinLogSeriesExtensionCandidate_extends_near`
+7. `rootsOfUnitySet`
+8. `pullbackRootSet`
+9. `rootsOfUnity_smul_pullbackRootSet`
+10. `pullbackRootSet_torsor_transitive`
+11. `pullbackRootSet_subset_next_of_sq`
+12. `logSeriesBottcherApprox_iterate_succ_eq_sq`
+13. `logSeries_pullbackRootSet_subset_next`
 
 The exact remaining Route-A target is:
 
@@ -103,6 +110,7 @@ The following theorem surfaces isolate the remaining work:
 LogSeriesBasinExtensionDataFor
 PrincipalPullbackCoherentDataFor
 LogSeriesExteriorInverseBasinExtensionDataFor
+MonodromyTrivializingCoverBasinExtensionDataFor
 ClassicalGlobalExtensionFromNearInfinityDataFor
 ```
 
@@ -113,7 +121,9 @@ Checked reductions:
 3. `PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionDataFor`
 4. `classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData`
 5. `classicalGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtensionData`
-6. `classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData`
+6. `MonodromyTrivializingCoverBasinExtensionDataFor.toLogSeriesBasinExtensionDataFor`
+7. `classicalGlobalBottcherTheoremFor_of_monodromyTrivializingCoverData`
+8. `classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData`
 
 ## Next implementation routes
 
@@ -127,6 +137,23 @@ PrincipalPullbackCoherentDataFor (2 : ℂ)
 
 This means proving the principal pullback candidate is independent of escape
 time and is holomorphic locally on the basin.
+
+Current Route-A progress: the finite-level algebraic torsor picture is checked.
+Root choices for `w^n = A` are acted on by `n`-th roots of unity, any two
+nonzero roots differ by a root of unity, and the Böttcher equation identifies
+level-`N` roots as compatible level-`N+1` roots along an escaping orbit. What is
+not yet proved is the analytic part: selecting a compatible basepoint
+independently of escape time and varying holomorphically on basin neighborhoods.
+The monodromy-representation theorem surface is now also formalized through
+`PullbackRootMonodromyRepresentation`, `EscapeTimeIndependentPullbackDataFor`,
+and `MonodromyTrivialPullbackDataFor`.
+
+The cover strategy suggested by this torsor picture is isolated by
+`MonodromyTrivializingCoverBasinExtensionDataFor`: construct the coherent
+pullback on a monodromy-trivializing cover, prove same-fiber/deck invariance, and
+descend it to the basin. This is a reduction seam, not yet a construction of the
+cover data. See `plan/PLAN_07_monodromy_cover_route.md` for the focused
+monodromy-cover plan.
 
 ### Route B: exterior inverse first
 

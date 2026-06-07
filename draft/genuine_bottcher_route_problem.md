@@ -1,59 +1,58 @@
-# Remaining problem 1: genuine Böttcher route at $$c=2$$
+# Remaining problem: classical global Böttcher theorem at $c=2$
 
 Let
 
 $$
 f(z)=z^2+2,
-$$
-
-and let
-
-$$
-K(f)=\{z\in\mathbb C : \{f^{\circ n}(z)\}_{n\geq 0} \text{ is bounded}\},
 \qquad
-U_\infty=\mathbb C\setminus K(f),
-\qquad
-V=\{z\in\mathbb C : |z|>4\},
-\qquad
-\Omega=\{w\in\mathbb C : |w|>1\},
+U_\infty=\{z:\|f^{\circ n}(z)\|\to\infty\},
 $$
 
-with Green function
+and let $G$ be the Green function of $f$ on $U_\infty$.
+
+Prove the theorem represented in Lean by
+
+```lean
+Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
+```
+
+for the genuine logarithmic-series near-infinity coordinate currently formalized
+as
+
+```lean
+MLC.logSeriesBottcherApprox (2 : ℂ)
+```
+
+The near-infinity part is already checked in Lean. The remaining mathematical
+problem is to extend this coordinate from the canonical outside region to the
+whole basin.
+
+Concretely, construct a holomorphic map
 
 $$
-G:U_\infty\to(0,\infty).
+\Phi:U_\infty\to\{w:|w|>1\}
 $$
 
-Prove that there exists a holomorphic map
+such that:
 
-$$
-\Phi:U_\infty\to\Omega
-$$
+1. $\Phi(f(z))=\Phi(z)^2$ for all $z\in U_\infty$;
+2. $|\Phi(z)|=e^{G(z)}$ for all $z\in U_\infty$;
+3. $\Phi(z)/z\to 1$ as $z\to\infty$;
+4. on the canonical outside region, $\Phi$ agrees with
+   `MLC.logSeriesBottcherApprox (2 : ℂ)`.
 
-such that
+The current candidate extension is the principal pullback along an escaping
+iterate:
 
-$$
-\Phi(f(z))=\Phi(z)^2
-\qquad \text{for every } z\in U_\infty,
-$$
+```lean
+Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ)
+```
 
-$$
-|\Phi(z)|=e^{G(z)}
-\qquad \text{for every } z\in U_\infty,
-$$
+The exact remaining Lean target for this candidate is:
 
-$$
-\lim_{z\to\infty}\frac{\Phi(z)}{z}=1,
-$$
+```lean
+Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
+```
 
-$$
-\Phi(U_\infty)=\Omega,
-$$
-
-and
-
-$$
-\Phi|_V:V\to\Omega
-$$
-
-is injective.
+The main obstacle is proving coherent branch independence for the $2^n$-roots
+used in the pullback.
