@@ -182,6 +182,105 @@ theorem genuineBottcherNearInfinityRouteFor_logSeriesBottcherApprox (c : ℂ) :
   ⟨MLC.logSeriesBottcherApprox c,
     genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox c⟩
 
+/-!
+### Algebraic root-choice torsors
+
+The basin pullback obstruction can be separated into an algebraic finite-level
+part and an analytic coherence part. The definitions below formalize the
+finite-level group-theoretic picture: roots of a pullback equation form a torsor
+under roots of unity, and the Böttcher equation identifies the level-`N` root set
+as the compatible subset of the level-`N+1` root set.
+-/
+
+/-- The finite group of `n`-th roots of unity, as a set. -/
+def rootsOfUnitySet (n : ℕ) : Set ℂ :=
+  {ζ : ℂ | ζ ^ n = 1}
+
+/-- The finite root set for the pullback equation `w^n = A`. -/
+def pullbackRootSet (n : ℕ) (A : ℂ) : Set ℂ :=
+  {w : ℂ | w ^ n = A}
+
+/-- Multiplication by an `n`-th root of unity preserves the root set
+`{w | w^n = A}`. -/
+lemma rootsOfUnity_smul_pullbackRootSet
+    {n : ℕ} {A ζ w : ℂ}
+    (hζ : ζ ∈ rootsOfUnitySet n) (hw : w ∈ pullbackRootSet n A) :
+    ζ * w ∈ pullbackRootSet n A := by
+  dsimp [rootsOfUnitySet, pullbackRootSet] at hζ hw ⊢
+  rw [mul_pow, hζ, hw, one_mul]
+
+/-- If `A ≠ 0`, any two roots of `w^n = A` differ by an `n`-th root of unity.
+This is the algebraic torsor-transitivity statement. -/
+lemma pullbackRootSet_torsor_transitive
+    {n : ℕ} {A w v : ℂ}
+    (hn : n ≠ 0)
+    (hw : w ∈ pullbackRootSet n A) (hv : v ∈ pullbackRootSet n A)
+    (hA : A ≠ 0) :
+    ∃ ζ : ℂ, ζ ∈ rootsOfUnitySet n ∧ v = ζ * w := by
+  have hw_ne : w ≠ 0 := by
+    intro hzero
+    have : A = 0 := by
+      simpa [pullbackRootSet, hzero, hn] using hw.symm
+    exact hA this
+  refine ⟨v / w, ?_, ?_⟩
+  · dsimp [rootsOfUnitySet]
+    have hw_pow_ne : w ^ n ≠ 0 := by
+      rw [show w ^ n = A by simpa [pullbackRootSet] using hw]
+      exact hA
+    calc
+      (v / w) ^ n = v ^ n / w ^ n := by
+        simpa using (div_pow v w n)
+      _ = A / A := by
+        simp [pullbackRootSet] at hw hv
+        rw [hv, hw]
+      _ = 1 := by
+        field_simp [hA]
+  · field_simp [hw_ne]
+
+/-- If `B = A^2`, then every root of `w^(2^N)=A` is automatically a compatible
+root of `w^(2^(N+1))=B`. This is the finite-level transition map behind
+escape-time coherence. -/
+lemma pullbackRootSet_subset_next_of_sq
+    {N : ℕ} {A B : ℂ} (hB : B = A ^ 2) :
+    pullbackRootSet (2 ^ N) A ⊆ pullbackRootSet (2 ^ (N + 1)) B := by
+  intro w hw
+  dsimp [pullbackRootSet] at hw ⊢
+  calc
+    w ^ (2 ^ (N + 1)) = (w ^ (2 ^ N)) ^ 2 := by
+      simp [pow_mul, pow_succ]
+    _ = A ^ 2 := by rw [hw]
+    _ = B := hB.symm
+
+/-- For the checked near-infinity coordinate, consecutive orbit values satisfy
+the squaring relation whenever the earlier iterate is in the canonical
+outside-open region. -/
+lemma logSeriesBottcherApprox_iterate_succ_eq_sq
+    (c : ℂ) {z : ℂ} {N : ℕ}
+    (hN : ‖(MLC.quadratic_map c)^[N] z‖ > ‖c‖ + 2) :
+    MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N + 1] z) =
+      (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)) ^ 2 := by
+  calc
+    MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N + 1] z)
+        = MLC.logSeriesBottcherApprox c
+            (MLC.quadratic_map c ((MLC.quadratic_map c)^[N] z)) := by
+          rw [Function.iterate_succ_apply']
+    _ = (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)) ^ 2 := by
+          exact MLC.logSeriesBottcherApprox_conj_of_large_radius
+            c (R := ‖c‖ + 2) le_rfl hN
+
+/-- Concrete root-set transition for the logarithmic-series Böttcher values
+along an escaping orbit. -/
+lemma logSeries_pullbackRootSet_subset_next
+    (c : ℂ) {z : ℂ} {N : ℕ}
+    (hN : ‖(MLC.quadratic_map c)^[N] z‖ > ‖c‖ + 2) :
+    pullbackRootSet (2 ^ N)
+        (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z))
+      ⊆
+    pullbackRootSet (2 ^ (N + 1))
+        (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N + 1] z)) := by
+  refine pullbackRootSet_subset_next_of_sq ?_
+  exact logSeriesBottcherApprox_iterate_succ_eq_sq c hN
+
 /-- Every basin point eventually enters the canonical outside-open region. -/
 lemma exists_iterate_mem_outside_open_of_mem_basin
     (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
