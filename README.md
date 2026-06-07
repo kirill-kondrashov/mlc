@@ -136,10 +136,10 @@ Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
 2. `plan/` records the live theorem-facing Böttcher plan in
    `PLAN_06_global_bottcher_package.md`, alongside completed or auxiliary
    historical plans.
-3. `draft/` now records the exact remaining positive mathematical targets after
-   factoring out the proxy-based obstructions.
-4. `proof_sketches/` records the human-readable proof sketches of the current
-   `draft/` targets.
+3. `draft/` now records the single remaining positive mathematical target:
+   `draft/genuine_bottcher_route_problem.md`.
+4. `proof_sketches/` records the matching human-readable sketch:
+   `proof_sketches/genuine_bottcher_route_proof.md`.
 5. The current root-facing story is therefore honest: one residual
    theorem-facing assumption remains, the genuine near-infinity Böttcher
    coordinate is checked, and the remaining work is the basin extension and
