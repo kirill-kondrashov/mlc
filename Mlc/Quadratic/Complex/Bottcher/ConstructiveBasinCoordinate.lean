@@ -281,6 +281,69 @@ lemma logSeries_pullbackRootSet_subset_next
   refine pullbackRootSet_subset_next_of_sq ?_
   exact logSeriesBottcherApprox_iterate_succ_eq_sq c hN
 
+/-- Abstract monodromy representation for pullback root choices. `Loop` is a
+placeholder for whatever formal loop/fundamental-group object is eventually used
+for the basin. The representation records the root-of-unity multiplier acquired
+by analytic continuation of a level-`N` pullback root around a loop. -/
+structure PullbackRootMonodromyRepresentation (Loop : Type*) where
+  monodromy : ℕ → Loop → ℂ
+  monodromy_mem :
+    ∀ N γ, monodromy N γ ∈ rootsOfUnitySet (2 ^ N)
+  monodromy_compat :
+    ∀ N γ, (monodromy (N + 1) γ) ^ 2 = monodromy N γ
+
+/-- Triviality of the pullback-root monodromy representation. -/
+def PullbackRootMonodromyRepresentation.Trivial
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop) : Prop :=
+  ∀ N γ, ρ.monodromy N γ = 1
+
+/-- Monodromy acts on every finite pullback root set by root-of-unity
+multiplication. This is the formal version of "continuation around a loop moves
+a chosen root to another root in the same torsor." -/
+lemma PullbackRootMonodromyRepresentation.smul_pullbackRootSet
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop)
+    (N : ℕ) (γ : Loop) {A w : ℂ}
+    (hw : w ∈ pullbackRootSet (2 ^ N) A) :
+    ρ.monodromy N γ * w ∈ pullbackRootSet (2 ^ N) A :=
+  rootsOfUnity_smul_pullbackRootSet (ρ.monodromy_mem N γ) hw
+
+/-- If monodromy is trivial, analytic continuation fixes every finite-level
+pullback root. This is the algebraic consequence that still has to be supplied
+analytically for actual basin loops. -/
+lemma PullbackRootMonodromyRepresentation.trivial_smul_eq
+    {Loop : Type*} (ρ : PullbackRootMonodromyRepresentation Loop)
+    (hρ : ρ.Trivial) (N : ℕ) (γ : Loop) (w : ℂ) :
+    ρ.monodromy N γ * w = w := by
+  rw [hρ N γ]
+  simp
+
+/-- Data expressing the analytic consequence that a basin pullback value is
+independent of which escaping iterate is used. This is the root-level part of
+the coherent pullback theorem, before differentiability and modulus are added. -/
+structure EscapeTimeIndependentPullbackDataFor (c : ℂ) where
+  value :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → ℂ
+  compatible_with_every_escape_time :
+    ∀ z (hz : z ∈ basin_of_infinity c) (N : ℕ),
+      ‖(MLC.quadratic_map c)^[N] z‖ > ‖c‖ + 2 →
+        value z hz ∈
+          pullbackRootSet (2 ^ N)
+            (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z))
+  agrees_near_infinity :
+    ∀ z (hz : z ∈ basin_of_infinity c),
+      ‖z‖ > ‖c‖ + 2 →
+        value z hz = MLC.logSeriesBottcherApprox c z
+
+/-- PLAN 07 theorem surface: a monodromy representation together with a proof
+that its analytic monodromy is trivial should yield escape-time-independent
+pullback values. The final analytic work is to construct this data for the basin
+loops of `c = 2`. -/
+structure MonodromyTrivialPullbackDataFor (c : ℂ) where
+  Loop : Type
+  representation : PullbackRootMonodromyRepresentation Loop
+  trivial_monodromy : representation.Trivial
+  escape_time_independent : EscapeTimeIndependentPullbackDataFor c
+
 /-- Every basin point eventually enters the canonical outside-open region. -/
 lemma exists_iterate_mem_outside_open_of_mem_basin
     (c z : ℂ) (hz : z ∈ basin_of_infinity c) :

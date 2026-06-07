@@ -144,6 +144,9 @@ nonzero roots differ by a root of unity, and the Böttcher equation identifies
 level-`N` roots as compatible level-`N+1` roots along an escaping orbit. What is
 not yet proved is the analytic part: selecting a compatible basepoint
 independently of escape time and varying holomorphically on basin neighborhoods.
+The monodromy-representation theorem surface is now also formalized through
+`PullbackRootMonodromyRepresentation`, `EscapeTimeIndependentPullbackDataFor`,
+and `MonodromyTrivialPullbackDataFor`.
 
 The cover strategy suggested by this torsor picture is isolated by
 `MonodromyTrivializingCoverBasinExtensionDataFor`: construct the coherent

@@ -184,19 +184,30 @@ for all relevant loops and all compatible levels.
 
 ## Recommended next formal step
 
-Do not try to construct the full cover immediately. First formalize a theorem
-surface for the monodromy representation:
+The first theorem surface for the monodromy representation is now formalized:
 
 ```lean
 PullbackRootMonodromyRepresentation
+PullbackRootMonodromyRepresentation.Trivial
+PullbackRootMonodromyRepresentation.smul_pullbackRootSet
+PullbackRootMonodromyRepresentation.trivial_smul_eq
+EscapeTimeIndependentPullbackDataFor
+MonodromyTrivialPullbackDataFor
 ```
 
-with fields:
+This records:
 
 1. level-wise maps to `rootsOfUnitySet (2^N)`;
 2. compatibility under squaring;
 3. action on `pullbackRootSet`;
-4. a statement that trivial monodromy implies escape-time-independent pullback.
+4. the algebraic fact that trivial monodromy fixes every finite-level pullback
+   root;
+5. the analytic consequence still needed: escape-time-independent pullback
+   values.
 
-This will make the analytic topology gap precise before attempting a full
-covering-space construction.
+The remaining formal step is to construct `MonodromyTrivialPullbackDataFor
+(2 : ℂ)` from actual basin loop/monodromy topology. This still requires either:
+
+1. a covering-space construction and deck-invariance/descent proof; or
+2. a direct analytic continuation theorem proving trivial monodromy for the
+   normalized branch.
