@@ -40,27 +40,22 @@ project_frontier(MLC.mlc_conjecture)
 
 One non-core project axiom remains: `MLC.basinExternalRayKernelTwo`.
 
-The current analytic target is:
-
-```lean
-Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
-```
-
-The genuine canonical near-infinity coordinate is already constructed as:
+The current analytic route is to construct a genuine global Böttcher coordinate
+at `c = 2` and use it to replace the remaining basin-external-ray axiom. The
+near-infinity part is complete: the canonical coordinate is
 
 ```lean
 MLC.logSeriesBottcherApprox c
 ```
 
-and packaged by:
+packaged by:
 
 ```lean
 Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox
 Quadratic.genuineBottcherNearInfinityRouteFor_logSeriesBottcherApprox
 ```
 
-The remaining blocker is basin extension. The current principal pullback
-candidate is:
+The remaining work is basin extension. The current pullback candidate is:
 
 ```lean
 Quadratic.principalPullbackLogSeriesBottcher
@@ -73,12 +68,60 @@ The exact Route-A target is:
 Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
 ```
 
-One field is checked:
-`Quadratic.basinLogSeriesExtensionCandidate_extends_near`, agreement with the
-near-infinity coordinate on the canonical exterior. The open fields are
-coherent branch independence, basin exterior-valuedness, basin characterization,
-basin semiconjugacy, basin differentiability, Green-function modulus, and
-normalization of the total basin extension.
+One field is checked: agreement with the near-infinity coordinate on the
+canonical exterior.
+
+```lean
+Quadratic.basinLogSeriesExtensionCandidate_extends_near
+```
+
+The live obstruction is coherent pullback-root monodromy along basin loops.
+PLAN 08 has reduced this to a precise analytic comparison input:
+
+```lean
+Quadratic.HighEscapingChartChainProductComparisonData
+```
+
+The finite chart-chain algebra is formalized:
+
+```lean
+Quadratic.BasinLoopChartChain
+Quadratic.BasinLoopChartChain.monodromyProduct
+Quadratic.BasinLoopChartChainMonodromyData
+Quadratic.BasinLoopChartChainMonodromyData.toBasinLoopPullbackRootMonodromyData
+```
+
+Uniform escape over continuous basin loops and algebraic descent from high
+escaping levels are formalized:
+
+```lean
+Quadratic.BasinLoop.exists_levelEscapes
+Quadratic.ArbitrarilyHighEscapingLevelBasinLoopChartChainData
+Quadratic.PullbackRootMonodromyRepresentation.trivial_of_arbitrarily_high_trivial
+```
+
+The special comparison case where local logarithm branches are restrictions of
+one global logarithm branch is also formalized:
+
+```lean
+Quadratic.ChartChainLocalLogsRestrictGlobal
+Quadratic.ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
+Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
+```
+
+The generalized right-half-plane family from the notebook is checked:
+
+```lean
+Quadratic.rightHalfPlaneZeroFreeChartRootBranchData
+Quadratic.quadraticMap_two_second_iterate_re_lower_bound
+Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
+```
+
+What remains is to prove that the actual high all-level chart chains satisfy the
+local-log restriction/same-continuation comparison hypothesis. After that,
+`HighEscapingChartChainProductComparisonData` should give trivial monodromy and
+feed into `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` and then
+`PrincipalPullbackCoherentDataFor (2 : ℂ)`.
 
 Current reduction seams:
 
@@ -89,13 +132,8 @@ Quadratic.LogSeriesExteriorInverseBasinExtensionDataFor
 Quadratic.ClassicalGlobalExtensionFromNearInfinityDataFor
 ```
 
-Checked reductions show that any of these basin-extension/global-extension data
-packages is enough to obtain the classical global Böttcher theorem. The next
-exact target is therefore:
-
-```lean
-Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
-```
+Checked reductions show that these basin-extension/global-extension packages are
+enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
 
 ## Repository Snapshot
 
@@ -106,8 +144,10 @@ Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
    `draft/genuine_bottcher_route_problem.md`.
 4. `proof_sketches/` records the matching human-readable sketch:
    `proof_sketches/genuine_bottcher_route_proof.md`.
-5. The genuine near-infinity Böttcher coordinate is checked; the remaining work
-   is the basin extension and inverse package.
+5. `plan/PLAN_08_analytic_continuation_monodromy.md` records the current
+   monodromy/chart-chain comparison frontier.
+6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb` visualizes the
+   remaining comparison theorem and checked special cases.
 
 ## Dependencies
 
