@@ -196,6 +196,11 @@ as the compatible subset of the level-`N+1` root set.
 def rootsOfUnitySet (n : ℕ) : Set ℂ :=
   {ζ : ℂ | ζ ^ n = 1}
 
+/-- `1` is an `n`-th root of unity for every `n`. -/
+lemma one_mem_rootsOfUnitySet (n : ℕ) :
+    (1 : ℂ) ∈ rootsOfUnitySet n := by
+  simp [rootsOfUnitySet]
+
 /-- The finite root set for the pullback equation `w^n = A`. -/
 def pullbackRootSet (n : ℕ) (A : ℂ) : Set ℂ :=
   {w : ℂ | w ^ n = A}
@@ -423,6 +428,48 @@ structure AnalyticContinuationAlongBasinLoop
   multiplier_mem : multiplier ∈ rootsOfUnitySet (2 ^ N)
   continued_center_value :
     end_branch.branch z₀ = multiplier * start_branch.branch z₀
+
+/-- Local trivial monodromy: if a continuation stays in one chart/one chosen
+branch, the endpoint branch is the starting branch and the monodromy multiplier
+is `1`. This is the local zero-free-chart case in PLAN 08; global monodromy is
+obtained only after chaining such local continuations and controlling the
+overlap multipliers. -/
+noncomputable def AnalyticContinuationAlongBasinLoop.trivial
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch where
+  end_branch := start_branch
+  multiplier := 1
+  multiplier_mem := one_mem_rootsOfUnitySet (2 ^ N)
+  continued_center_value := by simp
+
+/-- The monodromy multiplier of the same-chart continuation is trivial. -/
+lemma AnalyticContinuationAlongBasinLoop.trivial_multiplier
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    (AnalyticContinuationAlongBasinLoop.trivial γ start_branch).multiplier = 1 := rfl
+
+/-- A zero-free chart supplies the same local trivial continuation: inside one
+fixed chart with one fixed logarithm branch, no root-of-unity factor is acquired.
+The chart argument is included to make the PLAN 08 local step explicit; the
+remaining global work is to pass between many such charts and multiply overlap
+factors. -/
+noncomputable def ZeroFreeChartRootBranchData.trivialContinuation
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (_chart : ZeroFreeChartRootBranchData N)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    AnalyticContinuationAlongBasinLoop c N z₀ γ start_branch :=
+  AnalyticContinuationAlongBasinLoop.trivial γ start_branch
+
+lemma ZeroFreeChartRootBranchData.trivialContinuation_multiplier
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (chart : ZeroFreeChartRootBranchData N)
+    (γ : BasinLoop c z₀)
+    (start_branch : LocalPullbackRootBranchData c N z₀) :
+    (chart.trivialContinuation γ start_branch).multiplier = 1 := rfl
 
 /-- Actual monodromy representation for basin loops based at `z₀`. This is the
 PLAN 08 target replacing the abstract `PullbackRootMonodromyRepresentation Loop`

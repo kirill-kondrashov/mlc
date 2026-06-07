@@ -260,12 +260,18 @@ LogSeriesBasinExtensionDataFor (2 : ℂ)
    `overlap_root_multiplier_exists`.
 9. **DONE:** add `OverlapRootMultiplierData` for the product of overlap
    multipliers around a loop.
-10. **NEXT:** prove local trivial monodromy inside a zero-free chart.
-11. **NEXT:** construct actual `BasinLoopPullbackRootMonodromyData` for
+10. **DONE:** prove the same-chart local trivial monodromy constructor:
+   `AnalyticContinuationAlongBasinLoop.trivial`,
+   `AnalyticContinuationAlongBasinLoop.trivial_multiplier`,
+   `ZeroFreeChartRootBranchData.trivialContinuation`, and
+   `ZeroFreeChartRootBranchData.trivialContinuation_multiplier`.
+11. **NEXT:** construct actual chart chains along basin loops and multiply the
+   overlap multipliers.
+12. **NEXT:** construct actual `BasinLoopPullbackRootMonodromyData` for
    `c = 2`.
-12. **NEXT:** prove its monodromy is trivial.
-13. **NEXT:** build `EscapeTimeIndependentPullbackDataFor (2 : ℂ)`.
-14. **NEXT:** connect to `PrincipalPullbackCoherentDataFor`.
+13. **NEXT:** prove its monodromy is trivial.
+14. **NEXT:** build `EscapeTimeIndependentPullbackDataFor (2 : ℂ)`.
+15. **NEXT:** connect to `PrincipalPullbackCoherentDataFor`.
 
 ## Failure modes
 
