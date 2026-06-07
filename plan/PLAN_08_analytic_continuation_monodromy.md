@@ -248,9 +248,117 @@ BasinLoopChartChainMonodromyData.representation_trivial_of_products
 ```
 
 Therefore neither the local zero-free-chart step nor the finite chain/product
-bookkeeping is the current blocker. The current NEXT step is mathematical:
-construct such chart-chain monodromy data for the actual basin of `c = 2` with
-level compatibility, and prove every normalized overlap product is `1`.
+bookkeeping is the current blocker. The conditional actual-data constructor is
+also implemented:
+
+```lean
+puncturedPlaneZeroFreeChartRootBranchData
+BasinLoopChartChain.of_nonzero_values
+BasinLoopChartChain.monodromyProduct_of_nonzero_values
+BasinLoopChartChainMonodromyData.of_nonzero_values_two
+BasinLoopChartChainMonodromyData.of_nonzero_values_two_products
+```
+
+It constructs `BasinLoopChartChainMonodromyData (2 : ℂ) z₀` once the following
+nonvanishing input is proved:
+
+```lean
+∀ (N : ℕ) (γ : BasinLoop (2 : ℂ) z₀) (t : ℝ),
+  t ∈ Set.Icc (0 : ℝ) 1 →
+    basinLoopRootEquationValue (2 : ℂ) N γ t ≠ 0
+```
+
+Thus the current blocker is no longer chart bookkeeping. It is the analytic
+nonvanishing theorem above, or a replacement interface that only asks for
+zero-free charts at sufficiently large escaping levels where
+`one_lt_norm_logSeriesBottcherApprox_of_outside_open` applies.
+
+The first option is now formally known to be false at the all-level interface:
+
+```lean
+logSeriesBottcherApprox_zero
+not_forall_basinLoopRootEquationValue_ne_zero_two_zero
+```
+
+The escaping-level replacement has therefore been implemented:
+
+```lean
+BasinLoop.constant
+BasinLoopLevelEscapes
+basinLoopRootEquationValue_ne_zero_of_outside_open
+basinLoopRootEquationValue_ne_zero_of_level_escapes
+BasinLoopChartChain.of_escaping_level
+BasinLoopChartChain.monodromyProduct_of_escaping_level
+EscapingLevelBasinLoopChartChainMonodromyData
+EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes
+EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two
+```
+
+The algebraic descent and arbitrarily-high escaping-level layer from the
+notebook have also been implemented:
+
+```lean
+BasinLoopLevelEscapes.mono
+PullbackRootMonodromyRepresentation.monodromy_eq_one_of_add_eq_one
+PullbackRootMonodromyRepresentation.monodromy_eq_one_of_le_of_top_eq_one
+PullbackRootMonodromyRepresentation.trivial_of_arbitrarily_high_trivial
+BasinLoopChartChainMonodromyData.representation_trivial_of_arbitrarily_high_products
+ArbitrarilyHighEscapingLevelBasinLoopChartChainData
+ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_eventual_level_escapes
+EscapingLevelBasinLoopChartChainMonodromyData.toArbitrarilyHigh
+BasinLoopChartChainMonodromyData.representation_trivial_of_high_escaping_comparison
+```
+
+The compactness/uniform-escape step from the notebook is also implemented:
+
+```lean
+BasinLoop.exists_levelEscapes
+EscapingLevelBasinLoopChartChainMonodromyData.of_uniform_escape
+EscapingLevelBasinLoopChartChainMonodromyData.of_uniform_escape_two
+ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape
+ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape_two
+```
+
+The current blocker is now narrower: prove the analytic comparison theorem
+identifying the all-level chart-chain products with the canonical one-chart
+products at sufficiently high escaping levels. Uniform escape and algebraic
+descent from high-level triviality to all lower pullback levels are formalized.
+
+The comparison endpoint, exact-chain special case, and uniform-escape
+specialization have now been formalized:
+
+```lean
+HighEscapingChartChainProductComparisonData
+HighEscapingChartChainProductComparisonData.of_chain_eq
+HighEscapingChartChainProductComparisonData.representation_trivial
+BasinLoopChartChainMonodromyData.representation_trivial_of_uniform_escape_comparison
+```
+
+The special case "local logs are restrictions of one global log branch" is now
+formalized too:
+
+```lean
+ChartChainLocalLogsRestrictGlobal
+ChartChainLocalLogsRestrictGlobal.overlap_multiplier_eq_one
+ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
+HighEscapingChartChainLocalLogsRestrictGlobalData
+HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
+```
+
+The generalized right-half-plane family from the notebook is formalized as:
+
+```lean
+complexRightHalfPlane
+rightHalfPlaneZeroFreeChartRootBranchData
+quadraticMap_two_second_iterate_eq
+quadraticMap_two_second_iterate_re_lower_bound
+quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
+```
+
+The remaining comparison input is analytic: show that the actual all-level
+chart-chain product at a sufficiently high escaping level satisfies this
+local-log restriction hypothesis, or more generally has the same endpoint
+multiplier as the canonical one-chart high-level continuation.
 
 ### 8. Produce existing seam
 
@@ -294,9 +402,17 @@ LogSeriesBasinExtensionDataFor (2 : ℂ)
    `ZeroFreeChartRootBranchData.trivialContinuation_multiplier`.
 11. **DONE:** construct finite chart chains along basin loops and multiply the
    overlap multipliers via `BasinLoopChartChain.monodromyProduct`.
-12. **NEXT:** construct actual `BasinLoopChartChainMonodromyData` for
-   `c = 2`.
-13. **NEXT:** prove its normalized overlap-product monodromy is trivial.
+12. **BLOCKED / CONDITIONAL:** construct actual
+   `BasinLoopChartChainMonodromyData` for `c = 2`. The conditional constructor
+   `BasinLoopChartChainMonodromyData.of_nonzero_values_two` is implemented, and
+   the all-level nonvanishing input is formally false at `z₀ = 0`. The
+   escaping-level replacement
+   `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two` is
+   implemented.
+13. **NEXT:** prove the analytic comparison theorem producing
+   `HighEscapingChartChainProductComparisonData` for the actual chains.
+   Exact-chain comparison, loop-wise uniform escape, and algebraic descent are
+   implemented.
 14. **NEXT:** build `EscapeTimeIndependentPullbackDataFor (2 : ℂ)`.
 15. **NEXT:** connect to `PrincipalPullbackCoherentDataFor`.
 
