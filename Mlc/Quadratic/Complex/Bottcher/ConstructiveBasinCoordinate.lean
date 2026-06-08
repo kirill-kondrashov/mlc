@@ -445,6 +445,38 @@ structure ZeroFreeChartRootBranchData (N : ℕ) where
   rootBranch_pow :
     ∀ w : ℂ, w ∈ chart → (rootBranch w) ^ (2 ^ N) = w
 
+/-- A zero-free chart whose logarithm branch is analytic on a connected open
+domain. This is the exact local package needed by the notebook's identity
+principle argument: once two branch systems agree on a neighborhood of one
+point in such a chart, they agree on the whole chart. -/
+structure ConnectedAnalyticZeroFreeChartRootBranchData (N : ℕ)
+    extends ZeroFreeChartRootBranchData N where
+  chart_isOpen : IsOpen chart
+  chart_isPreconnected : IsPreconnected chart
+  logBranch_analyticOn : AnalyticOnNhd ℂ logBranch chart
+
+lemma ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eventuallyEq
+    {N : ℕ} (left right : ConnectedAnalyticZeroFreeChartRootBranchData N)
+    (hsame_chart : left.chart = right.chart)
+    {w₀ : ℂ} (hw₀ : w₀ ∈ left.chart)
+    (heq : left.logBranch =ᶠ[𝓝 w₀] right.logBranch) :
+    EqOn left.logBranch right.logBranch left.chart := by
+  have hright_analytic : AnalyticOnNhd ℂ right.logBranch left.chart := by
+    simpa [hsame_chart] using right.logBranch_analyticOn
+  exact left.logBranch_analyticOn.eqOn_of_preconnected_of_eventuallyEq
+    hright_analytic left.chart_isPreconnected hw₀ heq
+
+lemma ConnectedAnalyticZeroFreeChartRootBranchData.rootBranch_eq_of_eventuallyEq
+    {N : ℕ} (left right : ConnectedAnalyticZeroFreeChartRootBranchData N)
+    (hsame_chart : left.chart = right.chart)
+    {w₀ : ℂ} (hw₀ : w₀ ∈ left.chart)
+    (heq : left.logBranch =ᶠ[𝓝 w₀] right.logBranch) :
+    left.rootBranch w₀ = right.rootBranch w₀ := by
+  have hw₀_right : w₀ ∈ right.chart := by
+    simpa [hsame_chart] using hw₀
+  have hlog : left.logBranch w₀ = right.logBranch w₀ := heq.eq_of_nhds
+  rw [left.rootBranch_eq w₀ hw₀, right.rootBranch_eq w₀ hw₀_right, hlog]
+
 /-- The right half-plane, used in the explicit family of high-level comparison
 examples. It is zero-free and carries the principal logarithm. -/
 def complexRightHalfPlane : Set ℂ :=
@@ -700,6 +732,50 @@ structure BasinLoopChartOverlapStep
     right.chart.rootBranch (basinLoopRootEquationValue c N γ overlapTime) =
       multiplier * left.chart.rootBranch (basinLoopRootEquationValue c N γ overlapTime)
 
+lemma BasinLoopChartOverlapStep.multiplier_eq_one_of_logBranch_eq
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (step : BasinLoopChartOverlapStep c N z₀ γ)
+    (hlog :
+      step.left.chart.logBranch
+          (basinLoopRootEquationValue c N γ step.overlapTime) =
+        step.right.chart.logBranch
+          (basinLoopRootEquationValue c N γ step.overlapTime)) :
+    step.multiplier = 1 := by
+  let A : ℂ := basinLoopRootEquationValue c N γ step.overlapTime
+  have hleft_right :
+      step.left.chart.rootBranch A = step.right.chart.rootBranch A := by
+    rw [step.left.chart.rootBranch_eq A step.value_mem_left_chart,
+      step.right.chart.rootBranch_eq A step.value_mem_right_chart, hlog]
+  have hA_ne : A ≠ 0 := by
+    intro hA0
+    exact step.left.chart.chart_zero_free (by simpa [A, hA0] using step.value_mem_left_chart)
+  have hroot_ne : step.left.chart.rootBranch A ≠ 0 := by
+    intro hroot0
+    have hpow_ne : 2 ^ N ≠ 0 := pow_ne_zero N (by norm_num : (2 : ℕ) ≠ 0)
+    have hA0 : A = 0 := by
+      simpa [hroot0, hpow_ne] using
+        (step.left.chart.rootBranch_pow A step.value_mem_left_chart).symm
+    exact hA_ne hA0
+  have hmul :
+      step.multiplier * step.left.chart.rootBranch A =
+        1 * step.left.chart.rootBranch A := by
+    calc
+      step.multiplier * step.left.chart.rootBranch A =
+          step.right.chart.rootBranch A := by
+            simpa [A] using step.rootBranch_overlap.symm
+      _ = step.left.chart.rootBranch A := hleft_right.symm
+      _ = 1 * step.left.chart.rootBranch A := by simp
+  exact mul_right_cancel₀ hroot_ne hmul
+
+lemma BasinLoopChartOverlapStep.multiplier_eq_one_of_eventuallyEq
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (step : BasinLoopChartOverlapStep c N z₀ γ)
+    (heq :
+      step.left.chart.logBranch =ᶠ[𝓝 (basinLoopRootEquationValue c N γ step.overlapTime)]
+        step.right.chart.logBranch) :
+    step.multiplier = 1 :=
+  step.multiplier_eq_one_of_logBranch_eq heq.eq_of_nhds
+
 /-- A finite chart chain along a concrete basin loop. The cells cover the loop in
 time, and the overlap steps carry the root-of-unity transition multipliers. -/
 structure BasinLoopChartChain
@@ -873,6 +949,30 @@ lemma ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
     BasinLoopChartChain.overlapMultipliers]
   exact overlapMultiplier_list_prod_eq_one chain.overlaps
     (fun step hstep => hrestrict.overlap_multiplier_eq_one step hstep)
+
+/-- Abstract overlap input for the generalized analytic theorem from the
+notebook: at every adjacent overlap value, the left and right local logarithm
+branches agree on a whole neighborhood of that value. Combined with the
+identity-principle chart lemma above, this is the local hypothesis that forces
+all overlap multipliers to be trivial. -/
+structure ChartChainLocalLogsEventuallyEqAtOverlaps
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) where
+  overlap_eventuallyEq :
+    ∀ step (_hstep : step ∈ chain.overlaps),
+      step.left.chart.logBranch =ᶠ[𝓝 (basinLoopRootEquationValue c N γ step.overlapTime)]
+        step.right.chart.logBranch
+
+lemma ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    (heq : ChartChainLocalLogsEventuallyEqAtOverlaps chain) :
+    chain.monodromyProduct = 1 := by
+  dsimp [BasinLoopChartChain.monodromyProduct,
+    BasinLoopChartChain.overlapMultipliers]
+  exact overlapMultiplier_list_prod_eq_one chain.overlaps
+    (fun step hstep =>
+      step.multiplier_eq_one_of_eventuallyEq (heq.overlap_eventuallyEq step hstep))
 
 lemma BasinLoopChartChain.monodromyProduct_of_nonzero_values
     {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)

@@ -319,9 +319,9 @@ ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape
 ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape_two
 ```
 
-The current blocker is now narrower: prove the analytic comparison theorem
-identifying the all-level chart-chain products with the canonical one-chart
-products at sufficiently high escaping levels. Uniform escape and algebraic
+The current blocker is now narrower: the abstract overlap-equality comparison
+argument is formalized, so the remaining task is to prove that the **actual**
+high-level chart chains satisfy its hypotheses. Uniform escape and algebraic
 descent from high-level triviality to all lower pullback levels are formalized.
 
 The comparison endpoint, exact-chain special case, and uniform-escape
@@ -345,6 +345,19 @@ HighEscapingChartChainLocalLogsRestrictGlobalData
 HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
 ```
 
+The abstract overlap-equality theorem from the notebook's rigorous proof is now
+formalized too:
+
+```lean
+ConnectedAnalyticZeroFreeChartRootBranchData
+ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eventuallyEq
+ConnectedAnalyticZeroFreeChartRootBranchData.rootBranch_eq_of_eventuallyEq
+BasinLoopChartOverlapStep.multiplier_eq_one_of_logBranch_eq
+BasinLoopChartOverlapStep.multiplier_eq_one_of_eventuallyEq
+ChartChainLocalLogsEventuallyEqAtOverlaps
+ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
+```
+
 The generalized right-half-plane family from the notebook is formalized as:
 
 ```lean
@@ -355,10 +368,12 @@ quadraticMap_two_second_iterate_re_lower_bound
 quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-The remaining comparison input is analytic: show that the actual all-level
-chart-chain product at a sufficiently high escaping level satisfies this
-local-log restriction hypothesis, or more generally has the same endpoint
-multiplier as the canonical one-chart high-level continuation.
+The remaining comparison input is now even more specific: show that the actual
+all-level chart chains at a sufficiently high escaping level supply the
+overlap-neighborhood equality data required by
+`ChartChainLocalLogsEventuallyEqAtOverlaps` (or a stronger global restriction
+package implying it). Once that data is available, the monodromy product
+comparison follows from the formalized overlap-equality theorem.
 
 ### 8. Produce existing seam
 
@@ -409,10 +424,13 @@ LogSeriesBasinExtensionDataFor (2 : ℂ)
    escaping-level replacement
    `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two` is
    implemented.
-13. **NEXT:** prove the analytic comparison theorem producing
-   `HighEscapingChartChainProductComparisonData` for the actual chains.
-   Exact-chain comparison, loop-wise uniform escape, and algebraic descent are
-   implemented.
+13. **PARTIAL DONE / NEXT:** the abstract overlap-equality comparison theorem is
+   formalized. The remaining work is to construct, for the actual high
+   escaping chart chains, the overlap-neighborhood equality data (or a
+   stronger global chart package) needed to invoke
+   `ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one`, and
+   then package the result as
+   `HighEscapingChartChainProductComparisonData`.
 14. **NEXT:** build `EscapeTimeIndependentPullbackDataFor (2 : ℂ)`.
 15. **NEXT:** connect to `PrincipalPullbackCoherentDataFor`.
 
