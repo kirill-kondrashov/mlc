@@ -477,6 +477,131 @@ lemma ConnectedAnalyticZeroFreeChartRootBranchData.rootBranch_eq_of_eventuallyEq
   have hlog : left.logBranch w₀ = right.logBranch w₀ := heq.eq_of_nhds
   rw [left.rootBranch_eq w₀ hw₀, right.rootBranch_eq w₀ hw₀_right, hlog]
 
+/-- Two holomorphic logarithm branches on the same connected zero-free chart are
+equal on the whole chart once they agree at one point. This is the base step in
+the frontier notebook's rigorous proof: the difference has exponential equal to
+`1`, hence takes values in the discrete set `2π i ℤ`, so connectedness forces
+it to be constant. -/
+lemma ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eqAt
+    {N : ℕ} (left right : ConnectedAnalyticZeroFreeChartRootBranchData N)
+    (hsame_chart : left.chart = right.chart)
+    {w₀ : ℂ} (hw₀ : w₀ ∈ left.chart)
+    (hlog : left.logBranch w₀ = right.logBranch w₀) :
+    EqOn left.logBranch right.logBranch left.chart := by
+  let d : ℂ → ℂ := fun w => left.logBranch w - right.logBranch w
+  have hright_analytic : AnalyticOnNhd ℂ right.logBranch left.chart := by
+    simpa [hsame_chart] using right.logBranch_analyticOn
+  have hcont_d : ContinuousOn d left.chart := by
+    exact left.logBranch_analyticOn.continuousOn.sub hright_analytic.continuousOn
+  have hpre_d : IsPreconnected (d '' left.chart) :=
+    left.chart_isPreconnected.image d hcont_d
+  have hsubset :
+      d '' left.chart ⊆ Set.range (fun n : ℤ => n * (2 * π * Complex.I)) := by
+    intro z hz
+    rcases hz with ⟨w, hw, rfl⟩
+    have hw_right : w ∈ right.chart := by
+      simpa [hsame_chart] using hw
+    have hw_ne : w ≠ 0 := by
+      intro hw_zero
+      exact left.chart_zero_free (by simpa [hw_zero] using hw)
+    have hexp_one : Complex.exp (d w) = 1 := by
+      dsimp [d]
+      rw [Complex.exp_sub, left.logBranch_exp w hw, right.logBranch_exp w hw_right, div_self hw_ne]
+    rcases Complex.exp_eq_one_iff.mp hexp_one with ⟨n, hn⟩
+    exact ⟨n, hn.symm⟩
+  have hcount :
+      (Set.range (fun n : ℤ => n * (2 * π * Complex.I))).Countable :=
+    Set.countable_range _
+  have himage_subsingleton : (d '' left.chart).Subsingleton :=
+    (Set.Countable.isTotallyDisconnected hcount) _ hsubset hpre_d
+  intro w hw
+  have hw_image : d w ∈ d '' left.chart := ⟨w, hw, rfl⟩
+  have hw₀_image : d w₀ ∈ d '' left.chart := ⟨w₀, hw₀, rfl⟩
+  have hd_eq : d w = d w₀ := himage_subsingleton hw_image hw₀_image
+  have hd_zero : d w = 0 := by
+    calc
+      d w = d w₀ := hd_eq
+      _ = 0 := by simpa [d, hlog]
+  exact sub_eq_zero.mp (by simpa [d] using hd_zero)
+
+/-- Root-branch version of
+`ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eqAt`. -/
+lemma ConnectedAnalyticZeroFreeChartRootBranchData.rootBranch_eq_of_eqAt
+    {N : ℕ} (left right : ConnectedAnalyticZeroFreeChartRootBranchData N)
+    (hsame_chart : left.chart = right.chart)
+    {w₀ : ℂ} (hw₀ : w₀ ∈ left.chart)
+    (hlog : left.logBranch w₀ = right.logBranch w₀) :
+    left.rootBranch w₀ = right.rootBranch w₀ := by
+  have hw₀_right : w₀ ∈ right.chart := by
+    simpa [hsame_chart] using hw₀
+  rw [left.rootBranch_eq w₀ hw₀, right.rootBranch_eq w₀ hw₀_right]
+  exact congrArg (fun z => Complex.exp (((2 : ℂ) ^ N)⁻¹ * z)) hlog
+
+/-- Abstract chain comparison theorem formalizing the frontier notebook's
+rigorous proof. Two systems of holomorphic logarithm branches on the same
+finite connected chart chain agree on every chart if:
+1. they agree at one starting point on the first chart; and
+2. each system is internally compatible across consecutive overlaps. -/
+lemma logBranch_eqOn_of_chain_initialEq
+    {N m : ℕ}
+    (act can : ℕ → ConnectedAnalyticZeroFreeChartRootBranchData N)
+    (hsame_chart : ∀ j, j ≤ m → (act j).chart = (can j).chart)
+    (wStart : ℂ) (hwStart : wStart ∈ (act 0).chart)
+    (hstart_eq : (act 0).logBranch wStart = (can 0).logBranch wStart)
+    (overlapPoint : ℕ → ℂ)
+    (hoverlap_mem_left : ∀ j, j < m → overlapPoint j ∈ (act j).chart)
+    (hoverlap_mem_right : ∀ j, j < m → overlapPoint j ∈ (act (j + 1)).chart)
+    (hact :
+      ∀ j, j < m →
+        (act (j + 1)).logBranch =ᶠ[𝓝 (overlapPoint j)] (act j).logBranch)
+    (hcan :
+      ∀ j, j < m →
+        (can (j + 1)).logBranch =ᶠ[𝓝 (overlapPoint j)] (can j).logBranch) :
+    ∀ j, j ≤ m → EqOn (act j).logBranch (can j).logBranch (act j).chart := by
+  refine Nat.rec ?_ ?_
+  · intro _hj
+    exact
+      ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eqAt
+        (act 0) (can 0) (hsame_chart 0 (Nat.zero_le m)) hwStart hstart_eq
+  · intro j ih hj_succ
+    have hj : j ≤ m := Nat.le_of_succ_le hj_succ
+    have hj_lt : j < m := lt_of_lt_of_le (Nat.lt_succ_self j) hj_succ
+    have hprev_eqOn : EqOn (act j).logBranch (can j).logBranch (act j).chart := ih hj
+    have hp_left : overlapPoint j ∈ (act j).chart := hoverlap_mem_left j hj_lt
+    have hp_right : overlapPoint j ∈ (act (j + 1)).chart := hoverlap_mem_right j hj_lt
+    have hprev_eventuallyEq :
+        (act j).logBranch =ᶠ[𝓝 (overlapPoint j)] (can j).logBranch := by
+      filter_upwards [(act j).chart_isOpen.mem_nhds hp_left] with z hz
+      exact hprev_eqOn hz
+    have hnext_eventuallyEq :
+        (act (j + 1)).logBranch =ᶠ[𝓝 (overlapPoint j)] (can (j + 1)).logBranch :=
+      (hact j hj_lt).trans <| hprev_eventuallyEq.trans <| (hcan j hj_lt).symm
+    exact
+      ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eventuallyEq
+        (act (j + 1)) (can (j + 1)) (hsame_chart (j + 1) hj_succ) hp_right
+        hnext_eventuallyEq
+
+/-- Endpoint value corollary of `logBranch_eqOn_of_chain_initialEq`. -/
+lemma logBranch_eq_of_chain_initialEq
+    {N m j : ℕ}
+    (act can : ℕ → ConnectedAnalyticZeroFreeChartRootBranchData N)
+    (hsame_chart : ∀ k, k ≤ m → (act k).chart = (can k).chart)
+    (wStart : ℂ) (hwStart : wStart ∈ (act 0).chart)
+    (hstart_eq : (act 0).logBranch wStart = (can 0).logBranch wStart)
+    (overlapPoint : ℕ → ℂ)
+    (hoverlap_mem_left : ∀ k, k < m → overlapPoint k ∈ (act k).chart)
+    (hoverlap_mem_right : ∀ k, k < m → overlapPoint k ∈ (act (k + 1)).chart)
+    (hact :
+      ∀ k, k < m →
+        (act (k + 1)).logBranch =ᶠ[𝓝 (overlapPoint k)] (act k).logBranch)
+    (hcan :
+      ∀ k, k < m →
+        (can (k + 1)).logBranch =ᶠ[𝓝 (overlapPoint k)] (can k).logBranch)
+    (hj : j ≤ m) {w : ℂ} (hw : w ∈ (act j).chart) :
+    (act j).logBranch w = (can j).logBranch w :=
+  logBranch_eqOn_of_chain_initialEq act can hsame_chart
+    wStart hwStart hstart_eq overlapPoint hoverlap_mem_left hoverlap_mem_right hact hcan j hj hw
+
 /-- The right half-plane, used in the explicit family of high-level comparison
 examples. It is zero-free and carries the principal logarithm. -/
 def complexRightHalfPlane : Set ℂ :=
@@ -1358,10 +1483,94 @@ lemma BasinLoopChartChainMonodromyData.representation_trivial_of_high_escaping_c
   rw [hcompare N γ]
   exact E.productAbove_trivial γ N
 
+/-- Product-comparison data between an actual family of high escaping chart
+chains and the canonical one-chart chains available at arbitrarily high
+escaping levels. This is the step-13 target in the current PLAN 08 interface:
+it does not assume that an all-level `BasinLoopChartChainMonodromyData` has
+already been constructed. -/
+structure HighEscapingActualChartChainsProductComparisonData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  actualChain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      BasinLoopChartChain c (E.levelAbove γ N) z₀ γ
+  product_eq :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (actualChain N γ).monodromyProduct =
+        (E.chainAbove γ N).monodromyProduct
+
+/-- Step-13 wrapper for the generalized overlap-equality theorem at high
+escaping levels: for each requested lower level and loop, the actual high-level
+chart chain is supplied directly, together with the overlap-neighborhood
+equality hypotheses forcing its monodromy product to be trivial. This avoids
+prematurely requiring an all-level
+`BasinLoopChartChainMonodromyData`. -/
+structure HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  actualChain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      BasinLoopChartChain c (E.levelAbove γ N) z₀ γ
+  localLogs_eventuallyEq :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ChartChainLocalLogsEventuallyEqAtOverlaps (actualChain N γ)
+
+/-- The high-level overlap-equality wrapper already suffices to compare the
+actual chain products with the canonical one-chart products. -/
+def HighEscapingActualChartChainsEventuallyEqAtOverlapsData.toProductComparisonData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (A : HighEscapingActualChartChainsEventuallyEqAtOverlapsData E) :
+    HighEscapingActualChartChainsProductComparisonData E where
+  actualChain := A.actualChain
+  product_eq := by
+    intro N γ
+    calc
+      (A.actualChain N γ).monodromyProduct = 1 :=
+        (A.localLogs_eventuallyEq N γ).monodromyProduct_eq_one
+      _ = (E.chainAbove γ N).monodromyProduct := by
+        exact (E.productAbove_trivial γ N).symm
+
+/-- Special-case high-level comparison data: at every high escaping level, all
+local logs in the actual chart chain are restrictions of a single global
+zero-free logarithm branch. This packages the notebook's global-log route
+without requiring an all-level chart-chain monodromy object first. -/
+structure HighEscapingActualChartChainsLocalLogsRestrictGlobalData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  actualChain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      BasinLoopChartChain c (E.levelAbove γ N) z₀ γ
+  globalChart :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ChartChainLocalLogsRestrictGlobal
+        (actualChain N γ)
+        (globalChart N γ)
+
+/-- If all local logs in the actual high chains are restrictions of a common
+global log branch, then the required high escaping product comparison follows. -/
+def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparisonData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E) :
+    HighEscapingActualChartChainsProductComparisonData E where
+  actualChain := R.actualChain
+  product_eq := by
+    intro N γ
+    calc
+      (R.actualChain N γ).monodromyProduct = 1 :=
+        (R.localLogs_restrict N γ).monodromyProduct_eq_one
+      _ = (E.chainAbove γ N).monodromyProduct := by
+        exact (E.productAbove_trivial γ N).symm
+
 /-- Product-comparison data between an all-level chart-chain monodromy package
-and the canonical one-chart chains available at arbitrarily high escaping levels.
-This is the exact remaining PLAN 08 analytic comparison target after uniform
-escape and algebraic descent have been formalized. -/
+and the canonical one-chart chains available at arbitrarily high escaping
+levels. This is the bridge form used once a high-level actual chain family has
+been identified with the corresponding levels of an all-level
+`BasinLoopChartChainMonodromyData`. -/
 structure HighEscapingChartChainProductComparisonData
     {c z₀ : ℂ}
     (h : BasinLoopChartChainMonodromyData c z₀)
@@ -1370,6 +1579,21 @@ structure HighEscapingChartChainProductComparisonData
     ∀ (N : ℕ) (γ : BasinLoop c z₀),
       (h.chain (E.levelAbove γ N) γ).monodromyProduct =
         (E.chainAbove γ N).monodromyProduct
+
+/-- Once a high-level actual comparison package has been connected to the
+all-level chart family, it yields the earlier bridge-style comparison data. -/
+def HighEscapingActualChartChainsProductComparisonData.toAllLevelProductComparisonData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (C : HighEscapingActualChartChainsProductComparisonData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = C.actualChain N γ) :
+    HighEscapingChartChainProductComparisonData h E where
+  product_eq := by
+    intro N γ
+    rw [hchain N γ]
+    exact C.product_eq N γ
 
 /-- Special-case analytic comparison data: at every high escaping level, all
 local logs in the all-level chain are restrictions of a single global zero-free

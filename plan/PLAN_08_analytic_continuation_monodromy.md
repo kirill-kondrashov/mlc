@@ -23,8 +23,8 @@ replacement, and abstract overlap-equality theorem are already formalized. What
 remains is:
 
 ```lean
-ChartChainLocalLogsEventuallyEqAtOverlaps
-HighEscapingChartChainProductComparisonData
+HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsProductComparisonData
 ```
 
 for the **actual** high-escaping chart chains at `c = 2`.
@@ -352,9 +352,14 @@ high-level chart chains satisfy its hypotheses. Uniform escape and algebraic
 descent from high-level triviality to all lower pullback levels are formalized.
 
 The comparison endpoint, exact-chain special case, and uniform-escape
-specialization have now been formalized:
+specialization have now been formalized. There are now two layers:
+the high-level-only wrapper that does **not** assume an all-level chart-chain
+monodromy package yet, and the older bridge form that applies once one is
+available:
 
 ```lean
+HighEscapingActualChartChainsProductComparisonData
+HighEscapingActualChartChainsProductComparisonData.toAllLevelProductComparisonData
 HighEscapingChartChainProductComparisonData
 HighEscapingChartChainProductComparisonData.of_chain_eq
 HighEscapingChartChainProductComparisonData.representation_trivial
@@ -368,6 +373,8 @@ formalized too:
 ChartChainLocalLogsRestrictGlobal
 ChartChainLocalLogsRestrictGlobal.overlap_multiplier_eq_one
 ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparisonData
 HighEscapingChartChainLocalLogsRestrictGlobalData
 HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
 ```
@@ -383,6 +390,8 @@ BasinLoopChartOverlapStep.multiplier_eq_one_of_logBranch_eq
 BasinLoopChartOverlapStep.multiplier_eq_one_of_eventuallyEq
 ChartChainLocalLogsEventuallyEqAtOverlaps
 ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
+HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsEventuallyEqAtOverlapsData.toProductComparisonData
 ```
 
 The generalized right-half-plane family from the notebook is formalized as:
@@ -455,7 +464,10 @@ triviality; it is not produced by the overlap-comparison theorem alone.
    escaping chart chains, the overlap-neighborhood equality data (or a stronger
    global chart package) needed to invoke
    `ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one`, and
-   then package the result as
+   package the result first as
+   `HighEscapingActualChartChainsEventuallyEqAtOverlapsData` or
+   `HighEscapingActualChartChainsLocalLogsRestrictGlobalData`. Only after an
+   all-level chart family is available should this be bridged to
    `HighEscapingChartChainProductComparisonData`.
 14. **HANDOFF, NOT A NEW PLAN 08 BLOCKER:** combine the resulting monodromy
     triviality statement with an independently supplied
