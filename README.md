@@ -118,7 +118,9 @@ Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
 What remains is to prove that the actual high all-level chart chains satisfy the
-local-log restriction/same-continuation comparison hypothesis. After that,
+local overlap-equality / same-continuation comparison hypothesis. The stronger
+one-global-log restriction package is now understood as a special case, not the
+general Step 13 target. After that,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and
 feed into `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` and then
 `PrincipalPullbackCoherentDataFor (2 : ℂ)`.

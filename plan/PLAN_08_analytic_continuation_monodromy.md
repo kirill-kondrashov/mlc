@@ -34,6 +34,18 @@ and the canonical branches agree on neighborhoods of every adjacent overlap in a
 high-escaping chart chain. Once that is built, the formalized comparison theorem
 forces the high-level monodromy products to be trivial.
 
+The stronger special-case package
+
+```lean
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData
+```
+
+is still useful, but only when the whole high-level loop image lies in one
+zero-free global logarithm domain. The counterexample notebook
+`notebooks/frontier_plan08_step13_actual_high_escaping_charts.ipynb`
+shows numerically that this fails for arbitrary basin loops, so it is no longer
+the primary Step 13 target.
+
 ## Scope boundary
 
 PLAN 08 is only the analytic-continuation / monodromy-comparison layer. It is
@@ -207,20 +219,29 @@ The concrete proof strategy suggested by
    A_N([t_i,t_{i+1}])\subset U_i.
    $$
 
-3. **Choose local roots.** On each chart define
+3. **Choose normalized local logarithms.** On each chart choose a local
+   logarithm branch `Log_i` obtained by continuation of the actual normalized
+   starting germ. Do **not** assume in advance that there is one global
+   logarithm branch on a neighborhood of the whole loop image.
+
+4. **Choose local roots.** On each chart define
 
    $$
    W_i(t)=\exp\left(\frac{1}{2^N}\mathrm{Log}_i(A_N(t))\right).
    $$
 
-4. **Compare roots on overlaps.** On each overlap, prove the two local roots
-   differ by a locally constant element
+5. **Compare roots on overlaps.** On each overlap, prove the two neighboring
+   local roots differ by a locally constant element
 
    $$
    \zeta_i\in\mu_{2^N}.
    $$
 
-5. **Multiply overlap factors.** Define
+   Equivalently, prove the local logarithm branches agree on a neighborhood of
+   each overlap value, which is exactly the hypothesis consumed by
+   `ChartChainLocalLogsEventuallyEqAtOverlaps`.
+
+6. **Multiply overlap factors.** Define
 
    $$
    \rho_N(\gamma)=\prod_i \zeta_i.
@@ -228,13 +249,19 @@ The concrete proof strategy suggested by
 
    This is the monodromy element.
 
-6. **Prove triviality.** Show
+7. **Prove triviality.** Show
 
    $$
    \rho_N(\gamma)=1.
    $$
 
-   Then the local branches glue to a single-valued branch along the loop.
+   Then the local branches glue coherently along the loop.
+
+The counterexample notebook also shows what this template must **not** require:
+for general high-escaping loops, one cannot demand a single simply connected
+zero-free neighborhood of the whole loop image carrying one global logarithm.
+That stronger route survives only under an extra zero-winding / admissibility
+hypothesis.
 
 The key local theorem surface has been implemented:
 
@@ -407,9 +434,11 @@ quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 The remaining comparison input is now even more specific: show that the actual
 all-level chart chains at a sufficiently high escaping level supply the
 overlap-neighborhood equality data required by
-`ChartChainLocalLogsEventuallyEqAtOverlaps` (or a stronger global restriction
-package implying it). Once that data is available, the monodromy product
-comparison follows from the formalized overlap-equality theorem.
+`ChartChainLocalLogsEventuallyEqAtOverlaps`. A stronger global-restriction
+package still implies this, but the counterexample notebook shows it is only a
+special case, not the general theorem to pursue. Once the local overlap data is
+available, the monodromy product comparison follows from the formalized
+overlap-equality theorem.
 
 ### 8. Downstream handoff after PLAN 08
 
@@ -461,13 +490,15 @@ triviality; it is not produced by the overlap-comparison theorem alone.
 13. **PARTIAL DONE / ACTIVE FRONTIER:** the abstract overlap-equality
    comparison theorem is formalized. Starting from the escaping-level chain data
    from Step 12, the remaining work is to construct, for the actual high
-   escaping chart chains, the overlap-neighborhood equality data (or a stronger
-   global chart package) needed to invoke
-   `ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one`, and
-   package the result first as
-   `HighEscapingActualChartChainsEventuallyEqAtOverlapsData` or
-   `HighEscapingActualChartChainsLocalLogsRestrictGlobalData`. Only after an
-   all-level chart family is available should this be bridged to
+   escaping chart chains, the overlap-neighborhood equality data needed to
+   invoke `ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one`,
+   and package the result first as
+   `HighEscapingActualChartChainsEventuallyEqAtOverlapsData`. The stronger
+   global-chart package
+   `HighEscapingActualChartChainsLocalLogsRestrictGlobalData` survives only as a
+   special-case route when the high-level image admits one global logarithm
+   domain. Only after an all-level chart family is available should this be
+   bridged to
    `HighEscapingChartChainProductComparisonData`.
 14. **HANDOFF, NOT A NEW PLAN 08 BLOCKER:** combine the resulting monodromy
     triviality statement with an independently supplied
