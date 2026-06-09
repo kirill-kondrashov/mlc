@@ -192,7 +192,7 @@ Possible proof routes:
 ### 7. Local chart proof template
 
 The concrete proof strategy suggested by
-`notebooks/plan08_missing_monodromy_theorem.ipynb` is:
+`notebooks/frontier_plan08_step13_actual_high_escaping_charts.ipynb` is:
 
 1. **Push a basin loop to the `A`-plane.** For a basin loop `γ`, define
 

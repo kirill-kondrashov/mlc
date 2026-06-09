@@ -146,8 +146,10 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
    `proof_sketches/genuine_bottcher_route_proof.md`.
 5. `plan/PLAN_08_analytic_continuation_monodromy.md` records the current
    monodromy/chart-chain comparison frontier.
-6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb` visualizes the
-   remaining comparison theorem and checked special cases.
+6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb`,
+   `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`, and
+   `notebooks/frontier_plan08_step13_actual_high_escaping_charts.ipynb`
+   visualize the live PLAN 08 frontier.
 
 ## Dependencies
 
