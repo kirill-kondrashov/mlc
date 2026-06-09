@@ -1,6 +1,6 @@
 # PLAN 08: Analytic continuation and monodromy formalization
 
-**Status:** PLANNED  
+**Status:** ACTIVE — narrowed to the actual high-level overlap-comparison frontier  
 **Depends on:** `PLAN_07_monodromy_cover_route.md`
 
 ## Classification of the blocker
@@ -17,21 +17,48 @@ formalize coherent branch continuation on the basin of infinity.
 
 ## Immediate target
 
-Construct an actual monodromy representation for basin loops:
+The live PLAN 08 frontier is no longer "construct the whole monodromy story from
+scratch". The concrete loop type, local chart data, chart chains, escaping-level
+replacement, and abstract overlap-equality theorem are already formalized. What
+remains is:
 
 ```lean
-PullbackRootMonodromyRepresentation
+ChartChainLocalLogsEventuallyEqAtOverlaps
+HighEscapingChartChainProductComparisonData
 ```
 
-not for an abstract placeholder `Loop : Type`, but for a genuine formal type of
-loops in the basin of infinity.
+for the **actual** high-escaping chart chains at `c = 2`.
 
-This should eventually supply:
+Concretely, PLAN 08 now needs to prove that the actual local logarithm branches
+and the canonical branches agree on neighborhoods of every adjacent overlap in a
+high-escaping chart chain. Once that is built, the formalized comparison theorem
+forces the high-level monodromy products to be trivial.
+
+## Scope boundary
+
+PLAN 08 is only the analytic-continuation / monodromy-comparison layer. It is
+an input to the genuine Böttcher route, but it is **not** the whole route.
+
+The minimal dependency chain is:
+
+1. PLAN 08 proves the actual high-level chart-chain comparison theorem.
+2. This yields the monodromy-triviality ingredient for basin-loop pullback
+   roots.
+3. That ingredient is then combined with escape-time-independent pullback data
+   and basin-extension arguments elsewhere.
+4. Those downstream seams produce `PrincipalPullbackCoherentDataFor (2 : ℂ)`,
+   `LogSeriesBasinExtensionDataFor (2 : ℂ)`, and then the theorem-facing
+   genuine Böttcher packages.
+
+So the following objects are **downstream consumers / handoff targets**, not
+independent PLAN 08 subgoals:
 
 ```lean
+EscapeTimeIndependentPullbackDataFor (2 : ℂ)
 MonodromyTrivialPullbackDataFor (2 : ℂ)
 PrincipalPullbackCoherentDataFor (2 : ℂ)
 ClassicalGlobalBottcherTheoremFor (2 : ℂ)
+GenuineBottcherCoordinateDataFor (2 : ℂ)
 ```
 
 ## Required formal components
@@ -375,25 +402,22 @@ overlap-neighborhood equality data required by
 package implying it). Once that data is available, the monodromy product
 comparison follows from the formalized overlap-equality theorem.
 
-### 8. Produce existing seam
+### 8. Downstream handoff after PLAN 08
 
-Once actual monodromy is built and proved trivial, fill:
+Once the actual high-level comparison theorem is proved, the PLAN 08-specific
+analytic continuation task is finished. What remains after that is a **handoff**
+to the basin-extension package:
 
 ```lean
 MonodromyTrivialPullbackDataFor (2 : ℂ)
-```
-
-Then prove:
-
-```lean
 PrincipalPullbackCoherentDataFor (2 : ℂ)
-```
-
-or directly:
-
-```lean
 LogSeriesBasinExtensionDataFor (2 : ℂ)
 ```
+
+These are still needed for the full genuine Böttcher route, but they are not
+separate monodromy-comparison subtasks. In particular, `EscapeTimeIndependentPullbackDataFor`
+is an additional root-coherence input that must be combined with monodromy
+triviality; it is not produced by the overlap-comparison theorem alone.
 
 ## Recommended implementation order
 
@@ -417,22 +441,30 @@ LogSeriesBasinExtensionDataFor (2 : ℂ)
    `ZeroFreeChartRootBranchData.trivialContinuation_multiplier`.
 11. **DONE:** construct finite chart chains along basin loops and multiply the
    overlap multipliers via `BasinLoopChartChain.monodromyProduct`.
-12. **BLOCKED / CONDITIONAL:** construct actual
-   `BasinLoopChartChainMonodromyData` for `c = 2`. The conditional constructor
-   `BasinLoopChartChainMonodromyData.of_nonzero_values_two` is implemented, and
-   the all-level nonvanishing input is formally false at `z₀ = 0`. The
-   escaping-level replacement
-   `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two` is
-   implemented.
-13. **PARTIAL DONE / NEXT:** the abstract overlap-equality comparison theorem is
-   formalized. The remaining work is to construct, for the actual high
-   escaping chart chains, the overlap-neighborhood equality data (or a
-   stronger global chart package) needed to invoke
+12. **BLOCKED IN ITS ORIGINAL FORM / REPLACED AT HIGH LEVELS:** construct
+   actual `BasinLoopChartChainMonodromyData` for `c = 2`. The literal all-level
+   constructor `BasinLoopChartChainMonodromyData.of_nonzero_values_two` is
+   implemented, but its hypothesis is formally false at `z₀ = 0`. So this exact
+   all-level route is not a live prerequisite anymore. The intended replacement
+   interface at sufficiently high escaping levels,
+   `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two`, is
+   implemented and is the route used by the later comparison steps.
+13. **PARTIAL DONE / ACTIVE FRONTIER:** the abstract overlap-equality
+   comparison theorem is formalized. Starting from the escaping-level chain data
+   from Step 12, the remaining work is to construct, for the actual high
+   escaping chart chains, the overlap-neighborhood equality data (or a stronger
+   global chart package) needed to invoke
    `ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one`, and
    then package the result as
    `HighEscapingChartChainProductComparisonData`.
-14. **NEXT:** build `EscapeTimeIndependentPullbackDataFor (2 : ℂ)`.
-15. **NEXT:** connect to `PrincipalPullbackCoherentDataFor`.
+14. **HANDOFF, NOT A NEW PLAN 08 BLOCKER:** combine the resulting monodromy
+    triviality statement with an independently supplied
+    `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` to fill
+    `MonodromyTrivialPullbackDataFor (2 : ℂ)`.
+15. **HANDOFF TO PLAN 06 / BASIN EXTENSION PACKAGE:** use that seam to build
+    `PrincipalPullbackCoherentDataFor (2 : ℂ)` (or another equivalent
+    `LogSeriesBasinExtensionDataFor (2 : ℂ)` route) toward the theorem-facing
+    genuine Böttcher coordinate package.
 
 ## Failure modes
 
