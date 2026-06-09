@@ -1,6 +1,6 @@
 # PLAN 08: Analytic continuation and monodromy formalization
 
-**Status:** PLANNED  
+**Status:** ACTIVE — Step 13 abstract local proof formalized; actual `V_j` construction handed off to PLAN 09  
 **Depends on:** `PLAN_07_monodromy_cover_route.md`
 
 ## Classification of the blocker
@@ -17,21 +17,77 @@ formalize coherent branch continuation on the basin of infinity.
 
 ## Immediate target
 
-Construct an actual monodromy representation for basin loops:
+The live PLAN 08 frontier is no longer "construct the whole monodromy story from
+scratch". The concrete loop type, local chart data, chart chains, escaping-level
+replacement, abstract overlap-equality theorem, and the direct bridge from
+open overlap equality to trivial monodromy are already formalized. In
+particular, the abstract local implication is now checked through
 
 ```lean
-PullbackRootMonodromyRepresentation
+ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn
+BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn
 ```
 
-not for an abstract placeholder `Loop : Type`, but for a genuine formal type of
-loops in the basin of infinity.
+What remains is to consume the output of
 
-This should eventually supply:
+```text
+PLAN_09_actual_overlap_neighborhoods.md
+```
+
+namely the genuine overlap-neighborhood and branch-equality package for the
+actual high-escaping chart chains, in order to build:
 
 ```lean
+HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsProductComparisonData
+```
+
+for the **actual** high-escaping chart chains at `c = 2`.
+
+Concretely, the geometric existence work for the actual charts `U_j`, overlap
+neighborhoods `V_j`, and local branch equalities has now been split out into
+`PLAN_09_actual_overlap_neighborhoods.md`. PLAN 08 keeps the abstract
+comparison theorem and the final packaging step: once PLAN 09 supplies those
+genuine chart data, the formalized comparison theorem already forces the
+high-level monodromy products to be trivial.
+
+The stronger special-case package
+
+```lean
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData
+```
+
+is still useful, but only when the whole high-level loop image lies in one
+zero-free global logarithm domain. The counterexample notebook
+`notebooks/archive/plan08_step13_actual_high_escaping_charts_frontier.ipynb`
+shows numerically that this fails for arbitrary basin loops, so it is no longer
+the primary Step 13 target.
+
+## Scope boundary
+
+PLAN 08 is only the analytic-continuation / monodromy-comparison layer. It is
+an input to the genuine Böttcher route, but it is **not** the whole route.
+
+The minimal dependency chain is:
+
+1. PLAN 08 proves the actual high-level chart-chain comparison theorem.
+2. This yields the monodromy-triviality ingredient for basin-loop pullback
+   roots.
+3. That ingredient is then combined with escape-time-independent pullback data
+   and basin-extension arguments elsewhere.
+4. Those downstream seams produce `PrincipalPullbackCoherentDataFor (2 : ℂ)`,
+   `LogSeriesBasinExtensionDataFor (2 : ℂ)`, and then the theorem-facing
+   genuine Böttcher packages.
+
+So the following objects are **downstream consumers / handoff targets**, not
+independent PLAN 08 subgoals:
+
+```lean
+EscapeTimeIndependentPullbackDataFor (2 : ℂ)
 MonodromyTrivialPullbackDataFor (2 : ℂ)
 PrincipalPullbackCoherentDataFor (2 : ℂ)
 ClassicalGlobalBottcherTheoremFor (2 : ℂ)
+GenuineBottcherCoordinateDataFor (2 : ℂ)
 ```
 
 ## Required formal components
@@ -165,7 +221,7 @@ Possible proof routes:
 ### 7. Local chart proof template
 
 The concrete proof strategy suggested by
-`notebooks/plan08_missing_monodromy_theorem.ipynb` is:
+`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` is:
 
 1. **Push a basin loop to the `A`-plane.** For a basin loop `γ`, define
 
@@ -180,20 +236,29 @@ The concrete proof strategy suggested by
    A_N([t_i,t_{i+1}])\subset U_i.
    $$
 
-3. **Choose local roots.** On each chart define
+3. **Choose normalized local logarithms.** On each chart choose a local
+   logarithm branch `Log_i` obtained by continuation of the actual normalized
+   starting germ. Do **not** assume in advance that there is one global
+   logarithm branch on a neighborhood of the whole loop image.
+
+4. **Choose local roots.** On each chart define
 
    $$
    W_i(t)=\exp\left(\frac{1}{2^N}\mathrm{Log}_i(A_N(t))\right).
    $$
 
-4. **Compare roots on overlaps.** On each overlap, prove the two local roots
-   differ by a locally constant element
+5. **Compare roots on overlaps.** On each overlap, prove the two neighboring
+   local roots differ by a locally constant element
 
    $$
    \zeta_i\in\mu_{2^N}.
    $$
 
-5. **Multiply overlap factors.** Define
+   Equivalently, prove the local logarithm branches agree on a neighborhood of
+   each overlap value, which is exactly the hypothesis consumed by
+   `ChartChainLocalLogsEventuallyEqAtOverlaps`.
+
+6. **Multiply overlap factors.** Define
 
    $$
    \rho_N(\gamma)=\prod_i \zeta_i.
@@ -201,13 +266,33 @@ The concrete proof strategy suggested by
 
    This is the monodromy element.
 
-6. **Prove triviality.** Show
+7. **Prove triviality.** Show
 
    $$
    \rho_N(\gamma)=1.
    $$
 
-   Then the local branches glue to a single-valued branch along the loop.
+   Then the local branches glue coherently along the loop.
+
+   This abstract implication is now formalized both through the eventual-equality
+   API
+
+   ```lean
+   ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
+   ```
+
+   and directly from open overlap equalities via
+
+   ```lean
+   ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn
+   BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn
+   ```
+
+The counterexample notebook also shows what this template must **not** require:
+for general high-escaping loops, one cannot demand a single simply connected
+zero-free neighborhood of the whole loop image carrying one global logarithm.
+That stronger route survives only under an extra zero-winding / admissibility
+hypothesis.
 
 The key local theorem surface has been implemented:
 
@@ -319,15 +404,20 @@ ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape
 ArbitrarilyHighEscapingLevelBasinLoopChartChainData.of_uniform_escape_two
 ```
 
-The current blocker is now narrower: prove the analytic comparison theorem
-identifying the all-level chart-chain products with the canonical one-chart
-products at sufficiently high escaping levels. Uniform escape and algebraic
+The current blocker is now narrower: the abstract overlap-equality comparison
+argument is formalized, so the remaining task is to prove that the **actual**
+high-level chart chains satisfy its hypotheses. Uniform escape and algebraic
 descent from high-level triviality to all lower pullback levels are formalized.
 
 The comparison endpoint, exact-chain special case, and uniform-escape
-specialization have now been formalized:
+specialization have now been formalized. There are now two layers:
+the high-level-only wrapper that does **not** assume an all-level chart-chain
+monodromy package yet, and the older bridge form that applies once one is
+available:
 
 ```lean
+HighEscapingActualChartChainsProductComparisonData
+HighEscapingActualChartChainsProductComparisonData.toAllLevelProductComparisonData
 HighEscapingChartChainProductComparisonData
 HighEscapingChartChainProductComparisonData.of_chain_eq
 HighEscapingChartChainProductComparisonData.representation_trivial
@@ -341,8 +431,25 @@ formalized too:
 ChartChainLocalLogsRestrictGlobal
 ChartChainLocalLogsRestrictGlobal.overlap_multiplier_eq_one
 ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparisonData
 HighEscapingChartChainLocalLogsRestrictGlobalData
 HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
+```
+
+The abstract overlap-equality theorem from the notebook's rigorous proof is now
+formalized too:
+
+```lean
+ConnectedAnalyticZeroFreeChartRootBranchData
+ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eventuallyEq
+ConnectedAnalyticZeroFreeChartRootBranchData.rootBranch_eq_of_eventuallyEq
+BasinLoopChartOverlapStep.multiplier_eq_one_of_logBranch_eq
+BasinLoopChartOverlapStep.multiplier_eq_one_of_eventuallyEq
+ChartChainLocalLogsEventuallyEqAtOverlaps
+ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
+HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsEventuallyEqAtOverlapsData.toProductComparisonData
 ```
 
 The generalized right-half-plane family from the notebook is formalized as:
@@ -355,30 +462,32 @@ quadraticMap_two_second_iterate_re_lower_bound
 quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-The remaining comparison input is analytic: show that the actual all-level
-chart-chain product at a sufficiently high escaping level satisfies this
-local-log restriction hypothesis, or more generally has the same endpoint
-multiplier as the canonical one-chart high-level continuation.
+The remaining comparison input is now even more specific: show that the actual
+all-level chart chains at a sufficiently high escaping level supply the
+overlap-neighborhood equality data required by
+`ChartChainLocalLogsEventuallyEqAtOverlaps`. That existence problem is now
+tracked explicitly in `PLAN_09_actual_overlap_neighborhoods.md`. A stronger
+global-restriction package still implies this, but the counterexample notebook
+shows it is only a special case, not the general theorem to pursue. Once PLAN 09
+produces the local overlap data, the monodromy product comparison follows from
+the formalized overlap-equality theorem.
 
-### 8. Produce existing seam
+### 8. Downstream handoff after PLAN 08
 
-Once actual monodromy is built and proved trivial, fill:
+Once the actual high-level comparison theorem is proved, the PLAN 08-specific
+analytic continuation task is finished. What remains after that is a **handoff**
+to the basin-extension package:
 
 ```lean
 MonodromyTrivialPullbackDataFor (2 : ℂ)
-```
-
-Then prove:
-
-```lean
 PrincipalPullbackCoherentDataFor (2 : ℂ)
-```
-
-or directly:
-
-```lean
 LogSeriesBasinExtensionDataFor (2 : ℂ)
 ```
+
+These are still needed for the full genuine Böttcher route, but they are not
+separate monodromy-comparison subtasks. In particular, `EscapeTimeIndependentPullbackDataFor`
+is an additional root-coherence input that must be combined with monodromy
+triviality; it is not produced by the overlap-comparison theorem alone.
 
 ## Recommended implementation order
 
@@ -402,19 +511,37 @@ LogSeriesBasinExtensionDataFor (2 : ℂ)
    `ZeroFreeChartRootBranchData.trivialContinuation_multiplier`.
 11. **DONE:** construct finite chart chains along basin loops and multiply the
    overlap multipliers via `BasinLoopChartChain.monodromyProduct`.
-12. **BLOCKED / CONDITIONAL:** construct actual
-   `BasinLoopChartChainMonodromyData` for `c = 2`. The conditional constructor
-   `BasinLoopChartChainMonodromyData.of_nonzero_values_two` is implemented, and
-   the all-level nonvanishing input is formally false at `z₀ = 0`. The
-   escaping-level replacement
-   `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two` is
-   implemented.
-13. **NEXT:** prove the analytic comparison theorem producing
-   `HighEscapingChartChainProductComparisonData` for the actual chains.
-   Exact-chain comparison, loop-wise uniform escape, and algebraic descent are
-   implemented.
-14. **NEXT:** build `EscapeTimeIndependentPullbackDataFor (2 : ℂ)`.
-15. **NEXT:** connect to `PrincipalPullbackCoherentDataFor`.
+12. **BLOCKED IN ITS ORIGINAL FORM / REPLACED AT HIGH LEVELS:** construct
+   actual `BasinLoopChartChainMonodromyData` for `c = 2`. The literal all-level
+   constructor `BasinLoopChartChainMonodromyData.of_nonzero_values_two` is
+   implemented, but its hypothesis is formally false at `z₀ = 0`. So this exact
+   all-level route is not a live prerequisite anymore. The intended replacement
+   interface at sufficiently high escaping levels,
+   `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two`, is
+   implemented and is the route used by the later comparison steps.
+13. **PARTIAL DONE / HANDED OFF:** the abstract overlap-equality comparison
+   theorem and its open-set bridge to monodromy triviality are formalized.
+   Starting from the escaping-level chain data from Step 12, the remaining
+   geometric existence work has been split out to
+   `PLAN_09_actual_overlap_neighborhoods.md`: construct, for the actual
+   high-escaping chart chains, the overlap-neighborhood equality data needed
+   to invoke those abstract theorems. PLAN 08 then packages the result first as
+   `HighEscapingActualChartChainsEventuallyEqAtOverlapsData`. The stronger
+   global-chart package
+   `HighEscapingActualChartChainsLocalLogsRestrictGlobalData` survives only as a
+   special-case route when the high-level image admits one global logarithm
+   domain. Only after PLAN 09 supplies the actual domains, overlap
+   neighborhoods, and logarithm/root branches for genuine high-escaping loops
+   should this be bridged to
+   `HighEscapingChartChainProductComparisonData`.
+14. **HANDOFF, NOT A NEW PLAN 08 BLOCKER:** combine the resulting monodromy
+    triviality statement with an independently supplied
+    `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` to fill
+    `MonodromyTrivialPullbackDataFor (2 : ℂ)`.
+15. **HANDOFF TO PLAN 06 / BASIN EXTENSION PACKAGE:** use that seam to build
+    `PrincipalPullbackCoherentDataFor (2 : ℂ)` (or another equivalent
+    `LogSeriesBasinExtensionDataFor (2 : ℂ)` route) toward the theorem-facing
+    genuine Böttcher coordinate package.
 
 ## Failure modes
 

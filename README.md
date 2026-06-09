@@ -76,7 +76,7 @@ Quadratic.basinLogSeriesExtensionCandidate_extends_near
 ```
 
 The live obstruction is coherent pullback-root monodromy along basin loops.
-PLAN 08 has reduced this to a precise analytic comparison input:
+PLAN 08 has reduced the Lean side to a precise analytic comparison input:
 
 ```lean
 Quadratic.HighEscapingChartChainProductComparisonData
@@ -117,8 +117,34 @@ Quadratic.quadraticMap_two_second_iterate_re_lower_bound
 Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-What remains is to prove that the actual high all-level chart chains satisfy the
-local-log restriction/same-continuation comparison hypothesis. After that,
+What remains is no longer a new abstract comparison theorem. The current gap is
+the **theorem-level / Lean instantiation for the genuine high-escaping curve**:
+
+1. choose the actual charts `U_j`,
+2. choose the actual interior overlaps `V_j`,
+3. choose the closing overlap `V_cl ⊂ U_m ∩ U_0`,
+4. construct the actual logarithm branches `b_j` from the normalized base germ,
+5. prove the interior and closing equalities needed by the cyclic monodromy
+   comparison.
+
+The stronger one-global-log restriction package is now understood as a special
+case, not the general Step 13 / PLAN 09 target.
+
+At the notebook level, the current frontier has been reorganized into a
+construction skeleton:
+
+- `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` now starts from
+  a worked numerical high-level curve and gives an explicit recipe for `U_j`,
+  `V_j`, `V_cl`, and `b_j`;
+- the notebook also records numerical counterexamples to the naive unpadded
+  chart rule, the naive overlap rule, the naive independently-chosen-branch
+  rule, and the naive open-chain proof;
+- for each of those, it gives a repaired candidate and a rigorous
+  notebook-level construction/proof pattern;
+- what is still missing is to lift that recipe from the worked example to the
+  genuine high-escaping geometry and formalize it in Lean.
+
+Once that theorem-level package exists,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and
 feed into `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` and then
 `PrincipalPullbackCoherentDataFor (2 : ℂ)`.
@@ -144,10 +170,15 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
    `draft/genuine_bottcher_route_problem.md`.
 4. `proof_sketches/` records the matching human-readable sketch:
    `proof_sketches/genuine_bottcher_route_proof.md`.
-5. `plan/PLAN_08_analytic_continuation_monodromy.md` records the current
-   monodromy/chart-chain comparison frontier.
-6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb` visualizes the
-   remaining comparison theorem and checked special cases.
+5. `plan/PLAN_08_analytic_continuation_monodromy.md` records the checked
+   comparison layer, and `plan/PLAN_09_actual_overlap_neighborhoods.md` records
+   the current geometric/theorem-level handoff.
+6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb`,
+   `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`, and
+   `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb`
+   visualize the live PLAN 08 / PLAN 09 frontier, while
+   `notebooks/archive/plan08_step13_actual_high_escaping_charts_frontier.ipynb`
+   preserves the older Step 13 counterexample/status notebook.
 
 ## Dependencies
 
