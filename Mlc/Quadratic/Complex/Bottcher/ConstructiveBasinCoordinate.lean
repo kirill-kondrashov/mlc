@@ -537,6 +537,19 @@ lemma ConnectedAnalyticZeroFreeChartRootBranchData.rootBranch_eq_of_eqAt
   rw [left.rootBranch_eq w₀ hw₀, right.rootBranch_eq w₀ hw₀_right]
   exact congrArg (fun z => Complex.exp (((2 : ℂ) ^ N)⁻¹ * z)) hlog
 
+/-- If two logarithm branches agree on a set, then the induced local root branches
+agree on that set as well. This is the direct root-level clause in the weakened
+frontier notebook theorem. -/
+lemma ZeroFreeChartRootBranchData.rootBranch_eqOn_of_logBranch_eqOn
+    {N : ℕ} (left right : ZeroFreeChartRootBranchData N)
+    {s : Set ℂ}
+    (hleft : s ⊆ left.chart)
+    (hright : s ⊆ right.chart)
+    (hlog : EqOn left.logBranch right.logBranch s) :
+    EqOn left.rootBranch right.rootBranch s := by
+  intro w hw
+  rw [left.rootBranch_eq w (hleft hw), right.rootBranch_eq w (hright hw), hlog hw]
+
 /-- Abstract chain comparison theorem formalizing the frontier notebook's
 rigorous proof. Two systems of holomorphic logarithm branches on the same
 finite connected chart chain agree on every chart if:
@@ -901,6 +914,18 @@ lemma BasinLoopChartOverlapStep.multiplier_eq_one_of_eventuallyEq
     step.multiplier = 1 :=
   step.multiplier_eq_one_of_logBranch_eq heq.eq_of_nhds
 
+/-- Set-level version of `BasinLoopChartOverlapStep.multiplier_eq_one_of_logBranch_eq`:
+if the neighboring logarithm branches agree on a neighborhood set containing the
+overlap value, then the overlap multiplier is trivial. -/
+lemma BasinLoopChartOverlapStep.multiplier_eq_one_of_eqOn
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (step : BasinLoopChartOverlapStep c N z₀ γ)
+    {s : Set ℂ}
+    (hoverlap : basinLoopRootEquationValue c N γ step.overlapTime ∈ s)
+    (hlog : EqOn step.left.chart.logBranch step.right.chart.logBranch s) :
+    step.multiplier = 1 :=
+  step.multiplier_eq_one_of_logBranch_eq (hlog hoverlap)
+
 /-- A finite chart chain along a concrete basin loop. The cells cover the loop in
 time, and the overlap steps carry the root-of-unity transition multipliers. -/
 structure BasinLoopChartChain
@@ -1088,6 +1113,24 @@ structure ChartChainLocalLogsEventuallyEqAtOverlaps
       step.left.chart.logBranch =ᶠ[𝓝 (basinLoopRootEquationValue c N γ step.overlapTime)]
         step.right.chart.logBranch
 
+/-- The weakened frontier notebook theorem packages open-set overlap equalities of
+local logarithm branches into the eventual-equality structure used by the
+formalized monodromy theorem. -/
+def ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    (hoverlap_eqOn :
+      ∀ step ∈ chain.overlaps,
+        ∃ V : Set ℂ, IsOpen V ∧
+          basinLoopRootEquationValue c N γ step.overlapTime ∈ V ∧
+          EqOn step.left.chart.logBranch step.right.chart.logBranch V) :
+    ChartChainLocalLogsEventuallyEqAtOverlaps chain where
+  overlap_eventuallyEq := by
+    intro step hstep
+    rcases hoverlap_eqOn step hstep with ⟨V, hVopen, hVmem, hVeq⟩
+    filter_upwards [hVopen.mem_nhds hVmem] with w hw
+    exact hVeq hw
+
 lemma ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
     {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
     {chain : BasinLoopChartChain c N z₀ γ}
@@ -1098,6 +1141,20 @@ lemma ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
   exact overlapMultiplier_list_prod_eq_one chain.overlaps
     (fun step hstep =>
       step.multiplier_eq_one_of_eventuallyEq (heq.overlap_eventuallyEq step hstep))
+
+/-- Direct local-chart-chain version of the weakened frontier notebook proof:
+open overlap neighborhoods on which adjacent logarithm branches agree force every
+overlap multiplier, and hence the whole monodromy product, to be `1`. -/
+lemma BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    (hoverlap_eqOn :
+      ∀ step ∈ chain.overlaps,
+        ∃ V : Set ℂ, IsOpen V ∧
+          basinLoopRootEquationValue c N γ step.overlapTime ∈ V ∧
+          EqOn step.left.chart.logBranch step.right.chart.logBranch V) :
+    chain.monodromyProduct = 1 :=
+  (ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn hoverlap_eqOn).monodromyProduct_eq_one
 
 lemma BasinLoopChartChain.monodromyProduct_of_nonzero_values
     {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)

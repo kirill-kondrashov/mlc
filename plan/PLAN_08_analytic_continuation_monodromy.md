@@ -1,6 +1,6 @@
 # PLAN 08: Analytic continuation and monodromy formalization
 
-**Status:** ACTIVE — narrowed to the actual high-level overlap-comparison frontier  
+**Status:** ACTIVE — Step 13 abstract local proof formalized; actual high-escaping chart construction still open  
 **Depends on:** `PLAN_07_monodromy_cover_route.md`
 
 ## Classification of the blocker
@@ -19,8 +19,16 @@ formalize coherent branch continuation on the basin of infinity.
 
 The live PLAN 08 frontier is no longer "construct the whole monodromy story from
 scratch". The concrete loop type, local chart data, chart chains, escaping-level
-replacement, and abstract overlap-equality theorem are already formalized. What
-remains is:
+replacement, abstract overlap-equality theorem, and the direct bridge from
+open overlap equality to trivial monodromy are already formalized. In
+particular, the abstract local implication is now checked through
+
+```lean
+ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn
+BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn
+```
+
+What remains is:
 
 ```lean
 HighEscapingActualChartChainsEventuallyEqAtOverlapsData
@@ -31,8 +39,9 @@ for the **actual** high-escaping chart chains at `c = 2`.
 
 Concretely, PLAN 08 now needs to prove that the actual local logarithm branches
 and the canonical branches agree on neighborhoods of every adjacent overlap in a
-high-escaping chart chain. Once that is built, the formalized comparison theorem
-forces the high-level monodromy products to be trivial.
+high-escaping chart chain, and to package those genuine chart data into the
+wrapper interfaces above. Once that is built, the formalized comparison theorem
+already forces the high-level monodromy products to be trivial.
 
 The stronger special-case package
 
@@ -256,6 +265,20 @@ The concrete proof strategy suggested by
    $$
 
    Then the local branches glue coherently along the loop.
+
+   This abstract implication is now formalized both through the eventual-equality
+   API
+
+   ```lean
+   ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one
+   ```
+
+   and directly from open overlap equalities via
+
+   ```lean
+   ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn
+   BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn
+   ```
 
 The counterexample notebook also shows what this template must **not** require:
 for general high-escaping loops, one cannot demand a single simply connected
@@ -488,17 +511,19 @@ triviality; it is not produced by the overlap-comparison theorem alone.
    `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two`, is
    implemented and is the route used by the later comparison steps.
 13. **PARTIAL DONE / ACTIVE FRONTIER:** the abstract overlap-equality
-   comparison theorem is formalized. Starting from the escaping-level chain data
-   from Step 12, the remaining work is to construct, for the actual high
-   escaping chart chains, the overlap-neighborhood equality data needed to
-   invoke `ChartChainLocalLogsEventuallyEqAtOverlaps.monodromyProduct_eq_one`,
-   and package the result first as
+   comparison theorem and its open-set bridge to monodromy triviality are
+   formalized. Starting from the escaping-level chain data from Step 12, the
+   remaining work is to construct, for the actual high-escaping chart chains,
+   the overlap-neighborhood equality data needed to invoke those abstract
+   theorems, and package the result first as
    `HighEscapingActualChartChainsEventuallyEqAtOverlapsData`. The stronger
    global-chart package
    `HighEscapingActualChartChainsLocalLogsRestrictGlobalData` survives only as a
    special-case route when the high-level image admits one global logarithm
-   domain. Only after an all-level chart family is available should this be
-   bridged to
+   domain. The remaining mathematical gap is the actual construction of the
+   domains, overlap neighborhoods, and logarithm/root branches for genuine
+   high-escaping loops. Only after that chart family is available should this
+   be bridged to
    `HighEscapingChartChainProductComparisonData`.
 14. **HANDOFF, NOT A NEW PLAN 08 BLOCKER:** combine the resulting monodromy
     triviality statement with an independently supplied
