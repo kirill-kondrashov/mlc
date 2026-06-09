@@ -150,8 +150,8 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
    monodromy/chart-chain comparison frontier.
 6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb`,
    `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`, and
-   `notebooks/frontier_plan08_step13_actual_high_escaping_charts.ipynb`
-   visualize the live PLAN 08 frontier.
+   `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb`
+   visualize the live PLAN 08 / PLAN 09 frontier.
 
 ## Dependencies
 
