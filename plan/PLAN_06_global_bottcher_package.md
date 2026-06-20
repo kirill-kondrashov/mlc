@@ -22,6 +22,18 @@ The theorem-facing reductions are already in place:
 
 So the current work is only to construct the missing classical data.
 
+## Frontier reduction note
+
+After the root reduction to the two remaining non-core frontier axes
+
+1. `MLC.unifiedGenuineRootKernelTwo`
+2. `MLC.residualOpenVirtualNearMoleculeAxiom`
+
+the earlier completed/downstream plans were moved to `plan/archive/`. The live
+`plan/` frontier is now just the Böttcher-axis package (`PLAN_06`–`PLAN_09`),
+while the residual-open renormalization barrier remains an external blocker not
+currently attacked by a separate active plan file in this directory.
+
 ## What is now proved
 
 The canonical near-infinity phase is complete for the logarithmic-series
