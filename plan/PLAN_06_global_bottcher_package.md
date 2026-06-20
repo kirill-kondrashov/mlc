@@ -63,7 +63,13 @@ near-infinity region to the full basin of infinity.
 The live notebook tracking this final Lean frontier is now:
 
 ```text
-notebooks/frontier_plan06_principal_pullback_coherence.ipynb
+notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb
+```
+
+The theorem-by-theorem A/B/C unpacking of that unified statement is now kept in
+
+```text
+notebooks/plan06_principal_pullback_coherence_companion.ipynb
 ```
 
 The current principal pullback candidate is:

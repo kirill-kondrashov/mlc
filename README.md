@@ -201,10 +201,13 @@ $$
 for the actual high-escaping chart cover.
 
 The single live frontier notebook is now
-`notebooks/frontier_plan06_principal_pullback_coherence.ipynb`, which isolates
-the remaining PLAN 06 theorem surface
-`Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)` and the coherent
-pullback-branch obstruction behind the genuine Böttcher cutover.
+`notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb`, which
+isolates the single strongest missing global Bottcher theorem behind the genuine
+cutover. Its companion notebook
+`notebooks/plan06_principal_pullback_coherence_companion.ipynb` unpacks that
+frontier into the theorem surfaces
+`Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)` and the matching inverse
+package.
 
 Once this theorem-level package exists,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and
@@ -235,12 +238,14 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
    comparison layer, and `plan/PLAN_09_actual_overlap_neighborhoods.md` records
    the current geometric/theorem-level handoff.
 6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb`,
-   `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`,
+   `notebooks/plan08_step13_overlap_comparison_companion.ipynb`,
    `notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb`, and
    `notebooks/plan09_vanishing_cocycle_companion.ipynb`
    visualize the checked PLAN 08 / PLAN 09 reduction, while
-   `notebooks/frontier_plan06_principal_pullback_coherence.ipynb` isolates the
-   live coherent-pullback frontier, and
+   `notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb` isolates
+   the live unified frontier, while
+   `notebooks/plan06_principal_pullback_coherence_companion.ipynb` keeps the
+   PLAN 06 companion unpacking, and
    `notebooks/archive/plan08_step13_actual_high_escaping_charts_frontier.ipynb`
    preserves the older Step 13 counterexample/status notebook.
 

@@ -74,11 +74,15 @@ The notebook split is now:
 The single live repository frontier has moved one step downstream to
 
 ```text
-notebooks/frontier_plan06_principal_pullback_coherence.ipynb
+notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb
 ```
 
-which records the remaining coherent-pullback / `PrincipalPullbackCoherentDataFor`
-problem that still has to consume the PLAN 09 output.
+The remaining coherent-pullback / `PrincipalPullbackCoherentDataFor` problem is
+now tracked as a companion unpacking notebook:
+
+```text
+notebooks/plan06_principal_pullback_coherence_companion.ipynb
+```
 
 ## Required components
 

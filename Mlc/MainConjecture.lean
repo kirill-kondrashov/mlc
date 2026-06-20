@@ -2154,6 +2154,42 @@ theorem mlc_conjecture_of_principalPullbackCoherentData_two
     mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
       h_ext h_promote hroute h_track12
 
+/-- Route-B version of the genuine-root cutover: if one builds a full basin
+extension together with an exterior inverse, and that extension is identified
+with the checked principal pullback candidate, then the PLAN 06 coherent-data and
+inverse-package targets follow automatically and the existing genuine-route
+closure theorem applies. -/
+theorem mlc_conjecture_of_logSeriesExteriorInverseBasinExtensionData_two
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo)
+    (h_routeB : Quadratic.LogSeriesExteriorInverseBasinExtensionDataFor (2 : ℂ))
+    (h_eq :
+      h_routeB.extensionData.phi =
+        Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_principalPullbackCoherentData_two
+      h_ext
+      h_promote
+      (h_routeB.extensionData.toPrincipalPullbackCoherentDataFor_of_eq_candidate h_eq)
+      (h_routeB.toGenuineBottcherInversePackageFor_of_eq_candidate h_eq)
+      h_track12
+
+/-- Unified PLAN 06 cutover: once the last global Böttcher theorem is available
+at `c = 2`, the existing genuine-route closure chain already proves MLC without
+going through the proxy-specific basin-external-ray axiom path. -/
+theorem mlc_conjecture_of_unifiedGlobalBottcherTheorem_two
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo)
+    (h_unified : Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_unified with ⟨hdata⟩
+  exact
+    mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
+      h_ext h_promote hdata.toGenuineBottcherRouteFor h_track12
+
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
 lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :

@@ -1046,6 +1046,47 @@ noncomputable def BasinLoopChartChain.of_escaping_level
   BasinLoopChartChain.of_nonzero_values γ
     (basinLoopRootEquationValue_ne_zero_of_level_escapes hesc)
 
+/-- The canonical one-chart chain on a nonzero loop image already comes from the
+single punctured-plane logarithm branch: there are no overlaps, so the
+global-log compatibility conditions are vacuous. -/
+noncomputable def ChartChainLocalLogsRestrictGlobal.of_nonzero_values
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hnonzero :
+      ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+        basinLoopRootEquationValue c N γ t ≠ 0) :
+    ChartChainLocalLogsRestrictGlobal
+      (BasinLoopChartChain.of_nonzero_values γ hnonzero)
+      (puncturedPlaneZeroFreeChartRootBranchData N) where
+  overlap_value_mem_global := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
+  left_logBranch_eq_global := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
+  right_logBranch_eq_global := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
+
+/-- In particular, every canonical escaping-level one-chart chain satisfies the
+frontier notebook's anchored-global-log hypothesis with the punctured-plane
+logarithm branch. This is the checked positive model case; the remaining open
+problem is to connect the actual high-escaping chart chains to comparably simple
+global-log geometry. -/
+noncomputable def ChartChainLocalLogsRestrictGlobal.of_escaping_level
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hesc : BasinLoopLevelEscapes c N γ) :
+    ChartChainLocalLogsRestrictGlobal
+      (BasinLoopChartChain.of_escaping_level γ hesc)
+      (puncturedPlaneZeroFreeChartRootBranchData N) :=
+  ChartChainLocalLogsRestrictGlobal.of_nonzero_values γ
+    (basinLoopRootEquationValue_ne_zero_of_level_escapes hesc)
+
 /-- The ordered list of overlap multipliers carried by a chart chain. -/
 def BasinLoopChartChain.overlapMultipliers
     {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
@@ -1297,6 +1338,19 @@ lemma ChartChainLocalLogsEqOnOverlapNeighborhoodData.monodromyProduct_eq_one
     (D : ChartChainLocalLogsEqOnOverlapNeighborhoodData chain) :
     chain.monodromyProduct = 1 :=
   D.toEventuallyEqAtOverlaps.monodromyProduct_eq_one
+
+/-- The canonical escaping-level one-chart chain has no overlaps, so the PLAN 09
+overlap-neighborhood equality package is vacuous. -/
+noncomputable def ChartChainLocalLogsEqOnOverlapNeighborhoodData.of_escaping_level
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hesc : BasinLoopLevelEscapes c N γ) :
+    ChartChainLocalLogsEqOnOverlapNeighborhoodData
+      (BasinLoopChartChain.of_escaping_level γ hesc) where
+  overlapData := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_escaping_level, BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
 
 lemma BasinLoopChartChain.monodromyProduct_of_nonzero_values
     {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
@@ -1742,6 +1796,27 @@ structure HighEscapingActualChartChainsProductComparisonData
       (actualChain N γ).monodromyProduct =
         (E.chainAbove γ N).monodromyProduct
 
+/-- Bridge constructor: if the chosen actual high-escaping chain is the
+canonical escaping-level one-chart chain, then its product agrees with the
+canonical high escaping product immediately. -/
+noncomputable def HighEscapingActualChartChainsProductComparisonData.of_actualChain_eq_escapingLevel
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (actualChain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        BasinLoopChartChain c (E.levelAbove γ N) z₀ γ)
+    (hchain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        actualChain N γ =
+          BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)) :
+    HighEscapingActualChartChainsProductComparisonData E where
+  actualChain := actualChain
+  product_eq := by
+    intro N γ
+    rw [hchain N γ]
+    exact BasinLoopChartChain.monodromyProduct_of_escaping_level γ
+      (E.levelAbove_escapes γ N)
+
 /-- Step-13 wrapper for the generalized overlap-equality theorem at high
 escaping levels: for each requested lower level and loop, the actual high-level
 chart chain is supplied directly, together with the overlap-neighborhood
@@ -1801,6 +1876,29 @@ def HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toProductComparison
     HighEscapingActualChartChainsProductComparisonData E :=
   A.toEventuallyEqAtOverlapsData.toProductComparisonData
 
+/-- Bridge constructor: if the chosen actual high-escaping chart chain is known
+to coincide with the canonical escaping-level one-chart chain, then the PLAN 09
+overlap-neighborhood equality package follows automatically. This isolates the
+remaining frontier to proving that comparison hypothesis for the downstream
+"actual" chains. -/
+noncomputable def HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.of_actualChain_eq_escapingLevel
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (actualChain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        BasinLoopChartChain c (E.levelAbove γ N) z₀ γ)
+    (hchain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        actualChain N γ =
+          BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)) :
+    HighEscapingActualChartChainsEqOnOverlapNeighborhoodData E where
+  actualChain := actualChain
+  localLogs_eqOn_overlapNeighborhoods := by
+    intro N γ
+    simpa [hchain N γ] using
+      ChartChainLocalLogsEqOnOverlapNeighborhoodData.of_escaping_level γ
+        (E.levelAbove_escapes γ N)
+
 /-- Special-case high-level comparison data: at every high escaping level, all
 local logs in the actual chart chain are restrictions of a single global
 zero-free logarithm branch. This packages the notebook's global-log route
@@ -1820,6 +1918,49 @@ structure HighEscapingActualChartChainsLocalLogsRestrictGlobalData
         (actualChain N γ)
         (globalChart N γ)
 
+/-- The canonical one-chart high-escaping chains satisfy the notebook's
+global-log hypothesis directly, using the punctured-plane logarithm branch at
+every high level. This formalizes a restricted positive case of the missing
+Adjusted-frontier step. What remains open is proving that the actual high-
+escaping chart chains used downstream admit such a package. -/
+noncomputable def
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData.canonicalLocalLogsRestrictGlobalData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) :
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData E where
+  actualChain := fun N γ =>
+    BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)
+  globalChart := fun N γ =>
+    puncturedPlaneZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict := by
+    intro N γ
+    exact
+      ChartChainLocalLogsRestrictGlobal.of_escaping_level γ
+        (E.levelAbove_escapes γ N)
+
+/-- Bridge constructor: if the chosen actual high-escaping chart chain is known
+to be the canonical escaping-level one-chart chain, then the frontier
+notebook's anchored-global-log package follows automatically. -/
+noncomputable def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.of_actualChain_eq_escapingLevel
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (actualChain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        BasinLoopChartChain c (E.levelAbove γ N) z₀ γ)
+    (hchain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        actualChain N γ =
+          BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)) :
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData E where
+  actualChain := actualChain
+  globalChart := fun N γ =>
+    puncturedPlaneZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict := by
+    intro N γ
+    simpa [hchain N γ] using
+      ChartChainLocalLogsRestrictGlobal.of_escaping_level γ
+        (E.levelAbove_escapes γ N)
+
 /-- If all local logs in the actual high chains are restrictions of a common
 global log branch, then the required high escaping product comparison follows. -/
 def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparisonData
@@ -1835,6 +1976,20 @@ def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparison
         (R.localLogs_restrict N γ).monodromyProduct_eq_one
       _ = (E.chainAbove γ N).monodromyProduct := by
         exact (E.productAbove_trivial γ N).symm
+
+/-- Notebook proposition (`Exact rigorous proof status`): once the actual
+high-escaping chart chains are restrictions of a common global logarithm
+branch, each high-level actual chain has trivial monodromy product. This is the
+formal core of the notebook's reduction from anchored global-log data to
+vanishing transition cocycle / closing monodromy. -/
+theorem HighEscapingActualChartChainsLocalLogsRestrictGlobalData.actualChain_monodromyProduct_eq_one
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E) :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (R.actualChain N γ).monodromyProduct = 1 := by
+  intro N γ
+  exact (R.localLogs_restrict N γ).monodromyProduct_eq_one
 
 /-- If the actual high escaping chains are restrictions of a common global
 logarithm branch and they agree with the all-level chart chains at those high
@@ -1852,6 +2007,25 @@ lemma HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_tr
   intro N γ
   rw [hchain N γ]
   exact (R.toProductComparisonData.product_eq N γ)
+
+/-- Notebook proposition (`Exact rigorous proof status`), packaged in the form
+actually consumed by the current Lean closure chain: anchored global-log data
+for the actual high-escaping chart chains, together with comparison to the
+all-level chart-chain monodromy package and escape-time-independent pullback
+values, yields `MonodromyTrivialPullbackDataFor`. -/
+noncomputable def
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor_of_rigorousReduction
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  (h.toBasinLoopPullbackRootMonodromyData).toMonodromyTrivialPullbackDataFor
+    (R.representation_trivial hchain)
+    hind
 
 /-- The actual-chain global-log route also supplies the PLAN 06 handoff to
 monodromy-trivial pullback data once escape-time-independent pullback values are
@@ -2180,6 +2354,43 @@ structure LogSeriesBasinExtensionDataFor (c : ℂ) where
   tendsto_div_atInfinity :
     Tendsto (fun z => phi z / z) atInfinity (𝓝 (1 : ℂ))
 
+/-- A full basin extension of the logarithmic-series coordinate already yields the
+escape-time-independent pullback values from frontier Theorem A: use the global
+coordinate value `phi z`, push it forward by semiconjugacy, and identify the
+escaping iterate with the near-infinity logarithmic-series formula. -/
+def LogSeriesBasinExtensionDataFor.toEscapeTimeIndependentPullbackDataFor
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    EscapeTimeIndependentPullbackDataFor c where
+  value z hz := h.phi z
+  compatible_with_every_escape_time z hz N hN := by
+    have hmap : MapsTo (MLC.quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) :=
+      basin_of_infinity_forward_invariant c
+    have hiter_basin : ∀ n : ℕ, ((MLC.quadratic_map c)^[n] z) ∈ basin_of_infinity c := by
+      intro n
+      exact (MapsTo.iterate hmap n) hz
+    have hpow :
+        ∀ n : ℕ,
+          h.phi ((MLC.quadratic_map c)^[n] z) = (h.phi z) ^ (2 ^ n) := by
+      intro n
+      induction n with
+      | zero =>
+          simp
+      | succ n ihn =>
+          calc
+            h.phi ((MLC.quadratic_map c)^[n + 1] z)
+                = h.phi (MLC.quadratic_map c (((MLC.quadratic_map c)^[n]) z)) := by
+                    rw [Function.iterate_succ_apply']
+            _ = (h.phi (((MLC.quadratic_map c)^[n]) z)) ^ 2 := by
+                  exact h.conj_on_basin _ (hiter_basin n)
+            _ = ((h.phi z) ^ (2 ^ n)) ^ 2 := by rw [ihn]
+            _ = (h.phi z) ^ ((2 ^ n) * 2) := by rw [← pow_mul]
+            _ = (h.phi z) ^ (2 ^ (n + 1)) := by
+                  simp [Nat.pow_succ, Nat.mul_comm]
+    dsimp [pullbackRootSet]
+    rw [← hpow N]
+    exact h.extends_near ((MLC.quadratic_map c)^[N] z) hN
+  agrees_near_infinity z hz hz_large := h.extends_near z hz_large
+
 /-- Route A seam for the principal pullback candidate. These are exactly the
 coherent-branch facts still missing after defining
 `basinLogSeriesExtensionCandidate`: agreement with the near-infinity formula,
@@ -2220,6 +2431,13 @@ noncomputable def PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionData
   holo_on_basin := h.holo_on_basin
   modulus_on_basin := h.modulus_on_basin
   tendsto_div_atInfinity := h.tendsto_div_atInfinity
+
+/-- Frontier Theorem A is an automatic consequence of the stronger coherent-data
+package from Theorem B. -/
+noncomputable def PrincipalPullbackCoherentDataFor.toEscapeTimeIndependentPullbackDataFor
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c) :
+    EscapeTimeIndependentPullbackDataFor c :=
+  h.toLogSeriesBasinExtensionDataFor.toEscapeTimeIndependentPullbackDataFor
 
 /-- Candidate 9 works in the inverted coordinate `w = 1 / z`, where infinity
 for `z ↦ z^2 + c` becomes the superattracting fixed point `w = 0`. -/
@@ -2739,6 +2957,19 @@ theorem classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.toLogSeriesBasinExtensionDataFor
 
+/-- Any full logarithmic-series basin extension already contains the theorem-facing
+global coordinate package consumed by the genuine-route closure chain. -/
+theorem LogSeriesBasinExtensionDataFor.toGenuineBottcherCoordinateDataFor
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    GenuineBottcherCoordinateDataFor c h.phi := by
+  refine
+    ⟨h.norm_on_basin, h.basin_of_norm_gt_one, h.conj_on_basin,
+      h.modulus_on_basin, h.holo_on_basin, ?_, h.tendsto_div_atInfinity⟩
+  intro z hz _hne
+  exact
+    (h.holo_on_basin z hz).continuousWithinAt.continuousAt
+      ((basin_of_infinity_isOpen c).mem_nhds hz)
+
 /-- Basin route B seam: first construct an exterior inverse for the
 near-infinity logarithmic-series coordinate, then use inverse dynamics to supply
 the global basin extension data. This separates the inverse-package strategy
@@ -2758,6 +2989,111 @@ theorem classicalGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtens
     ClassicalGlobalBottcherTheoremFor c :=
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.extensionData
+
+/-- If the basin extension data is known to be realized by the checked principal
+pullback candidate, then the extension fields repackage directly into the active
+PLAN 06 coherent-data target from frontier Theorem B. -/
+def LogSeriesBasinExtensionDataFor.toPrincipalPullbackCoherentDataFor_of_eq_candidate
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c)
+    (h_eq : h.phi = basinLogSeriesExtensionCandidate c) :
+    PrincipalPullbackCoherentDataFor c where
+  extends_near z hz := by
+    simpa [h_eq] using h.extends_near z hz
+  norm_on_basin z hz := by
+    simpa [h_eq] using h.norm_on_basin z hz
+  basin_of_norm_gt_one z hz := by
+    exact h.basin_of_norm_gt_one z (by simpa [h_eq] using hz)
+  conj_on_basin z hz := by
+    simpa [h_eq] using h.conj_on_basin z hz
+  holo_on_basin := by
+    simpa [h_eq] using h.holo_on_basin
+  modulus_on_basin z hz := by
+    simpa [h_eq] using h.modulus_on_basin z hz
+  tendsto_div_atInfinity := by
+    simpa [h_eq] using h.tendsto_div_atInfinity
+
+/-- A Route-B exterior inverse already supplies the theorem-facing inverse
+package: right-inverse gives surjectivity onto the exterior, and the left
+inverse on the outside-open region gives injectivity there. -/
+theorem LogSeriesExteriorInverseBasinExtensionDataFor.toGenuineBottcherInversePackageFor
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c) :
+    GenuineBottcherInversePackageFor c h.extensionData.phi := by
+  refine ⟨?_, ?_⟩
+  · intro w hw
+    exact ⟨h.inverseOnExterior w, h.right_inverse w hw⟩
+  · intro z₁ hz₁ z₂ hz₂ hEq
+    calc
+      z₁ = h.inverseOnExterior (MLC.logSeriesBottcherApprox c z₁) := by
+        symm
+        exact h.left_inverse_on_outside z₁ hz₁
+      _ = h.inverseOnExterior (h.extensionData.phi z₁) := by
+        rw [h.extensionData.extends_near z₁ hz₁]
+      _ = h.inverseOnExterior (h.extensionData.phi z₂) := by rw [hEq]
+      _ = h.inverseOnExterior (MLC.logSeriesBottcherApprox c z₂) := by
+        rw [h.extensionData.extends_near z₂ hz₂]
+      _ = z₂ := h.left_inverse_on_outside z₂ hz₂
+
+/-- Specialized frontier Theorem C for the checked principal pullback candidate:
+once the Route-B inverse data is shown to extend that same candidate, the current
+inverse-package target follows immediately. -/
+theorem LogSeriesExteriorInverseBasinExtensionDataFor.toGenuineBottcherInversePackageFor_of_eq_candidate
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c)
+    (h_eq : h.extensionData.phi = basinLogSeriesExtensionCandidate c) :
+    GenuineBottcherInversePackageFor c (basinLogSeriesExtensionCandidate c) := by
+  simpa [h_eq] using h.toGenuineBottcherInversePackageFor
+
+/-- Lean-facing package for the unified PLAN 06 theorem: a full global extension
+of the checked near-infinity logarithmic-series coordinate together with the
+matching theorem-facing inverse package. This is the exact data needed to
+produce a genuine Böttcher route without going through the proxy-specific root
+axiom. -/
+structure UnifiedGlobalBottcherDataFor (c : ℂ) where
+  extensionData : LogSeriesBasinExtensionDataFor c
+  inversePackage : GenuineBottcherInversePackageFor c extensionData.phi
+
+/-- Proposition form of the unified PLAN 06 frontier theorem. -/
+def UnifiedGlobalBottcherTheoremFor (c : ℂ) : Prop :=
+  Nonempty (UnifiedGlobalBottcherDataFor c)
+
+/-- The unified PLAN 06 package directly supplies the theorem-facing genuine
+Böttcher route used by the closure chain. -/
+theorem UnifiedGlobalBottcherDataFor.toGenuineBottcherRouteFor
+    {c : ℂ} (h : UnifiedGlobalBottcherDataFor c) :
+    GenuineBottcherRouteFor c := by
+  exact
+    ⟨h.extensionData.phi,
+      h.extensionData.toGenuineBottcherCoordinateDataFor,
+      h.inversePackage⟩
+
+/-- A Route-B extension with exterior inverse is already a witness for the
+unified PLAN 06 theorem surface. -/
+def LogSeriesExteriorInverseBasinExtensionDataFor.toUnifiedGlobalBottcherDataFor
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c) :
+    UnifiedGlobalBottcherDataFor c where
+  extensionData := h.extensionData
+  inversePackage := h.toGenuineBottcherInversePackageFor
+
+theorem unifiedGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtensionData
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c) :
+    UnifiedGlobalBottcherTheoremFor c :=
+  ⟨h.toUnifiedGlobalBottcherDataFor⟩
+
+/-- In particular, the active PLAN 06 candidate-level route also yields the
+unified theorem surface once the coherent-data and inverse-package witnesses are
+available for that same candidate. -/
+noncomputable def PrincipalPullbackCoherentDataFor.toUnifiedGlobalBottcherDataFor
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c (basinLogSeriesExtensionCandidate c)) :
+    UnifiedGlobalBottcherDataFor c where
+  extensionData := h.toLogSeriesBasinExtensionDataFor
+  inversePackage := by
+    simpa [PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionDataFor] using h_inv
+
+theorem unifiedGlobalBottcherTheoremFor_of_principalPullbackCoherentData
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c (basinLogSeriesExtensionCandidate c)) :
+    UnifiedGlobalBottcherTheoremFor c :=
+  ⟨h.toUnifiedGlobalBottcherDataFor h_inv⟩
 
 /-- Cover-strategy seam: construct the coherent pullback on a cover where
 monodromy is trivial, prove that the lifted coordinate is constant on fibers
