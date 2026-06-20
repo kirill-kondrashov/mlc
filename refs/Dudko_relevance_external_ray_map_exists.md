@@ -42,7 +42,7 @@ Current formal blocker in codebase:
 - `2309.02107` (MLC at Feigenbaum points): a priori bounds -> local connectivity at IR class.
 - `1808.10425` (satellite bounded type): local connectivity at additional IR classes.
 
-Why useful:
+Role:
 - They support a Track-1/Track-2 pivot (renormalization/classification route), which can reduce dependence on an external-ray axiom in global strategy.
 
 ### Medium relevance
@@ -61,6 +61,6 @@ These do not appear to directly supply the exact theorem form currently needed i
 without circular external-ray assumptions.
 
 ## Practical conclusion
-- Useful Dudko material exists for a renormalization/classification-based MLC path.
+- Dudko material exists for a renormalization/classification-based MLC path.
 - No immediate direct replacement theorem was identified for the current outside-open injectivity/closed-range subgoal.
-- If we stay on the current elimination route, we still need a new non-circular analytic/topological proof of Step 3/4 in the present formal model.
+- If we stay on the current elimination route, we still need a non-circular analytic/topological proof of Step 3/4 in the present formal model.

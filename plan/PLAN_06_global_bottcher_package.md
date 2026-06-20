@@ -30,10 +30,10 @@ After the root reduction to the two remaining non-core frontier axes
 1. `MLC.unifiedGenuineRootKernelTwo`
 2. `MLC.residualOpenVirtualNearMoleculeAxiom`
 
-the earlier completed/downstream plans were moved to `plan/archive/`. The live
-`plan/` frontier is now just the Böttcher-axis package (`PLAN_06`–`PLAN_09`),
-while the residual-open renormalization barrier remains an external blocker not
-currently attacked by a separate active plan file in this directory.
+the completed/downstream plans were moved to `plan/archive/`. The `plan/`
+frontier now consists of the Böttcher-axis package (`PLAN_06`–`PLAN_09`), while
+the residual-open renormalization barrier remains an external input not
+addressed by a separate plan file in this directory.
 
 ## What is now proved
 
@@ -73,7 +73,7 @@ is now filled without adding axioms.
 The remaining problem is to extend `logSeriesBottcherApprox` from the canonical
 near-infinity region to the full basin of infinity.
 
-The live notebook tracking this final Lean frontier is now:
+The notebook tracking this Lean frontier is:
 
 ```text
 notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb
@@ -151,7 +151,7 @@ Checked reductions:
 8. `classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData`
 9. `MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`
 
-The new root-facing cutover theorem
+The root-facing cutover theorem
 
 ```lean
 MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two
@@ -160,8 +160,8 @@ MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two
 shows the intended rewiring explicitly: the active PLAN 06 target
 `PrincipalPullbackCoherentDataFor (2 : ℂ)`, together with the matching inverse
 package for `basinLogSeriesExtensionCandidate (2 : ℂ)`, already lands in the
-existing genuine-Böttcher MLC closure chain. So the remaining work is no longer
-to discover a root consumer; it is to internalize the coherent-data and inverse
+existing genuine-Böttcher MLC closure chain. Therefore the remaining work is to
+internalize the coherent-data and inverse
 package inputs without using the proxy-specific `basinExternalRayKernelTwo`
 route.
 

@@ -2,28 +2,26 @@
 
 **Status:** COMPLETE
 **Frontier role:** root attack finished
-**Primary files:** `Mlc/MainConjecture.lean`, `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`, `README.md`, `check_axioms.lean`
+**Files:** `Mlc/MainConjecture.lean`, `Mlc/Quadratic/Complex/Bottcher/BottcherAxioms.lean`, `README.md`, `check_axioms.lean`
 
 ---
 
 ## Root result of this plan
 
-`MLC.lyubich_conformal_bridge` is no longer in `Axioms(MLC.mlc_conjecture)`.
-This plan successfully removed the old bridge from the checked root, but the
-root frontier did **not** collapse to a single project axiom. The checked root
-now has two non-core axioms:
+`MLC.lyubich_conformal_bridge` is absent from `Axioms(MLC.mlc_conjecture)`.
+The checked root has two non-core axioms:
 
 1. `MLC.residualOpenVirtualNearMoleculeAxiom`
 2. `MLC.unifiedGenuineRootKernelTwo`
 
-This plan first removed the old hidden Lyubich/tower contradiction route, then
-collapsed the wider explicit chosen-true / residual-open frontier as far as the
-current formal reductions allow, and finally rerouted the root away from the
-false full-exterior degree package to the honest `c = 2` genuine-route kernel.
+This plan removed the hidden Lyubich/tower contradiction route, reduced the
+explicit chosen-true / residual-open frontier as far as the formal reductions
+allow, and rerouted the root away from the false full-exterior degree package to
+the `c = 2` genuine-route kernel.
 
 ---
 
-## Final root route
+## Root route
 
 `MLC.mlc_conjecture` now runs through:
 
@@ -32,22 +30,21 @@ false full-exterior degree package to the honest `c = 2` genuine-route kernel.
 3. `MLC.basinExternalRayKernelTwo`
 
 The monodromy / covering-degree route from Problem A remains formalized in
-`Mlc.Bottcher.DegreeOne`, but it is no longer the live root because its former
-Problem B input is false as stated. The checked root now ends at the codomain-
+`Mlc.Bottcher.DegreeOne`, but it is not root-facing because its Problem B input
+is false as stated. The checked root now ends at the codomain-
 correct basin-valued inverse package for the actual `proxy_bottcher_map`.
 
 ---
 
-## Meaning of the old bridge now
+## Bridge status
 
-The old bridge is still present in `PrimitiveModulusDivergence.lean` and
-`InconsistencyRoute.lean`, but it is no longer root-facing. It is now a
-quarantined legacy route that can be deleted, deprecated, or further shrunk
-without affecting the checked root frontier.
+The bridge is present in `PrimitiveModulusDivergence.lean` and
+`InconsistencyRoute.lean`, but it is not root-facing. Removing, deprecating, or
+shrinking this route does not affect the checked root frontier.
 
 ## Residual audit: why the bridge is not an immediate remaining reduction
 
-There is no honest immediate Lean reduction of
+There is no immediate Lean reduction of
 `MLC.residualOpenVirtualNearMoleculeAxiom` through
 `MLC.lyubich_conformal_bridge`.
 
@@ -65,7 +62,7 @@ the frontier:
    not vacuous.
 3. So the checked root would still retain a genuine open non-core axiom.
 
-Therefore the live theorem-proving work splits into two independent axes:
+Therefore the theorem-proving work splits into two independent axes:
 
 1. `PLAN_06_global_bottcher_package.md` / PLAN 08 / PLAN 09 for
    `MLC.unifiedGenuineRootKernelTwo`;
@@ -76,6 +73,6 @@ Therefore the live theorem-proving work splits into two independent axes:
 ## Success criterion achieved
 
 1. `MLC.lyubich_conformal_bridge` stays absent from `Axioms(MLC.mlc_conjecture)`.
-2. the checked root is honestly documented as still depending on
+2. the checked root is documented as still depending on
    `MLC.residualOpenVirtualNearMoleculeAxiom` and
    `MLC.unifiedGenuineRootKernelTwo`.

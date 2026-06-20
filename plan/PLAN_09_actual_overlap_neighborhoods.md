@@ -34,8 +34,8 @@ such that:
 PLAN 08 already proves that these data imply trivial overlap multipliers and a
 trivial chart-chain monodromy product. Since the abstract Čech-gluing
 implication is now formalized in Lean as
-`Quadratic.logBranch_eqOn_closing_of_coboundary`, the live PLAN 09 frontier is
-more precise: prove that the actual transition cocycle of the local logarithm
+`Quadratic.logBranch_eqOn_closing_of_coboundary`, the PLAN 09 target is: prove
+that the actual transition cocycle of the local logarithm
 branches has vanishing class
 
 $$
@@ -64,7 +64,7 @@ HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toProductComparisonData
 The remaining work is to construct the actual cover/branch data and prove the
 vanishing-cocycle theorem that feeds these interfaces.
 
-More precisely, the live Lean blocker is now the pair of comparison inputs
+More precisely, the Lean target is the pair of comparison inputs
 
 ```lean
 HighEscapingActualChartChainsLocalLogsRestrictGlobalData (E := ...)
@@ -72,7 +72,7 @@ HighEscapingActualChartChainsLocalLogsRestrictGlobalData (E := ...)
   h.chain (E.levelAbove γ N) γ = R.actualChain N γ
 ```
 
-for the downstream all-level chart family `h`. Once those are available, the new
+for the downstream all-level chart family `h`. Once those are available, the
 bridge
 
 ```lean
@@ -97,7 +97,7 @@ The notebook split is now:
 2. `notebooks/plan09_vanishing_cocycle_companion.ipynb` for the isolated PLAN 09
    cocycle-vanishing theorem layer.
 
-The single live repository frontier has moved one step downstream to
+The repository frontier is recorded in
 
 ```text
 notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb
@@ -211,7 +211,7 @@ $$
 c_{jk} = b_k - b_j \in 2\pi i \mathbf Z.
 $$
 
-The live theorem is to prove that this cocycle is a coboundary:
+The theorem is to prove that this cocycle is a coboundary:
 
 $$
 [c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z).
@@ -308,7 +308,7 @@ This is the exact output consumed back in PLAN 08.
 
 ## Scope boundary
 
-This plan should not reprove abstract monodromy triviality, add a new global
+This plan should not reprove abstract monodromy triviality, add a separate global
 logarithm theorem, or replace the local theorem by a special-case global-domain
 package.
 
@@ -341,5 +341,5 @@ HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullb
 ```
 
 so the PLAN 09 theorem-level target is now aligned with the genuine-route
-rewiring in PLAN 06 rather than only with the older proxy-root comparison
+rewiring in PLAN 06 rather than only with the proxy-root comparison
 surface.

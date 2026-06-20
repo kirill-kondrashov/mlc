@@ -2,11 +2,15 @@
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
 
-[Live dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
+[Dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
-This repository formalizes a Lean 4 conditional proof of the Mandelbrot local
-connectivity conjecture, with the remaining assumptions isolated as explicit
-project axioms.
+> [!IMPORTANT]
+> This repository is an experimental Lean 4 formalization attempt, not a
+> completed proof of the Mandelbrot local connectivity conjecture. It formalizes
+> reductions, definitions, and proof obligations from the current literature
+> corpus, with remaining mathematical inputs isolated as explicit project
+> axioms. Its intended use is to provide infrastructure for automatically
+> checking a proof of MLC when a complete proof appears in the literature.
 
 ## Mathematical statement and notation
 
@@ -21,12 +25,12 @@ $x$ means that every neighbourhood $U$ of $x$ contains a connected
 neighbourhood $V$ of $x$ with $V \subset U$. In Lean this is the
 predicate `MLC.LocallyConnectedAt`.
 
-The formal root theorem is:
+The conjectural statement formalized at the root is:
 
-**Theorem (MLC).** The Mandelbrot set $\mathcal M$, with the subspace
+**Conjecture (MLC).** The Mandelbrot set $\mathcal M$, with the subspace
 topology inherited from $\mathbb C$, is locally connected.
 
-In Lean this theorem is `MLC.mlc_conjecture`; it has type
+In Lean this conditional declaration is `MLC.mlc_conjecture`; it has type
 `LocallyConnectedSpace MLC.mandelbrotSet`.
 
 ## Checked Lean status
@@ -38,7 +42,7 @@ make build
 make check
 ```
 
-The root theorem is sorry-free. The current `make check` axiom frontier is:
+The root declaration is sorry-free. The current `make check` axiom frontier is:
 
 ```text
 Quot.sound
@@ -120,7 +124,7 @@ corresponding items are:
 
 ## How the Lean root uses these inputs
 
-The checked root theorem is in
+The checked conditional root declaration is in
 [`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean#L4515-L4523). It reduces MLC
 to the two mathematical inputs above:
 
