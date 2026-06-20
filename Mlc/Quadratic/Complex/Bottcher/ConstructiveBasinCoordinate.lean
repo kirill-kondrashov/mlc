@@ -11,13 +11,13 @@ namespace Quadratic
 lemma norm_polar_green_map_eq_exp_green (c z : ℂ) :
     ‖polar_green_map c z‖ = Real.exp (green_function c z) := by
   by_cases hz : z = 0
-  · simp [polar_green_map, hz, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+  · simp [polar_green_map, hz]
   · have hnormz : (‖z‖ : ℝ) ≠ 0 := norm_ne_zero_iff.2 hz
     have hdir : ‖z / (‖z‖ : ℂ)‖ = 1 := by
       rw [norm_div, Complex.norm_real, norm_norm, div_self hnormz]
     have hexp :
         ‖(Real.exp (green_function c z) : ℂ)‖ = Real.exp (green_function c z) := by
-      simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+      simp
     calc
       ‖polar_green_map c z‖
           = ‖(z / (‖z‖ : ℂ)) * (Real.exp (green_function c z) : ℂ)‖ := by
@@ -37,37 +37,10 @@ lemma one_lt_norm_polar_green_map_of_mem_basin (c z : ℂ)
   rw [norm_polar_green_map_eq_exp_green]
   simpa using (Real.one_lt_exp_iff.mpr hgreen_pos)
 
-/-- Constructive basin-valued Böttcher coordinate obtained by restricting the
-explicit proxy to the basin of infinity. -/
-noncomputable def basin_polar_green_map (c : ℂ) :
-    {z : ℂ // z ∈ basin_of_infinity c} → {w : ℂ // 1 < ‖w‖} :=
-  fun z => ⟨polar_green_map c z.1, one_lt_norm_polar_green_map_of_mem_basin c z.1 z.2⟩
-
-@[simp] lemma basin_polar_green_map_coe (c : ℂ) (z : {z : ℂ // z ∈ basin_of_infinity c}) :
-    ((basin_polar_green_map c z : {w : ℂ // 1 < ‖w‖}) : ℂ) = polar_green_map c z := rfl
-
-/-- The basin-valued constructive coordinate has the expected Green-function
-modulus. -/
-lemma norm_basin_polar_green_map_eq_exp_green (c : ℂ)
-    (z : {z : ℂ // z ∈ basin_of_infinity c}) :
-    ‖((basin_polar_green_map c z : {w : ℂ // 1 < ‖w‖}) : ℂ)‖ =
-      Real.exp (green_function c z) := by
-  simpa using norm_polar_green_map_eq_exp_green c z
-
 /-- Continuity of the explicit constructive coordinate away from `0`. -/
 lemma polar_green_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
     ContinuousAt (polar_green_map c) z :=
   polar_green_map_continuousAt_of_ne_zero_outsidePlan c z hz
-
-/-- The basin-valued constructive coordinate is continuous away from `0` on the
-subspace basin. -/
-lemma basin_polar_green_map_continuousAt_of_ne_zero (c : ℂ)
-    (z : {z : ℂ // z ∈ basin_of_infinity c}) (hz : (z : ℂ) ≠ 0) :
-    ContinuousAt (fun w : {z : ℂ // z ∈ basin_of_infinity c} =>
-      (((basin_polar_green_map c w : {u : ℂ // 1 < ‖u‖}) : ℂ))) z := by
-  simpa [basin_polar_green_map] using
-    (polar_green_map_continuousAt_of_ne_zero c (z : ℂ) hz).comp
-      continuous_subtype_val.continuousAt
 
 /-- Exact ray formula for the constructive coordinate. -/
 lemma polar_green_map_apply_ray (c u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ) (hρ : 0 < ρ) :
@@ -75,7 +48,7 @@ lemma polar_green_map_apply_ray (c u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ) (hρ :
       u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))) := by
   have hu0 : u ≠ 0 := by
     intro hu'
-    simpa [hu'] using hu
+    simp [hu'] at hu
   have hρ0 : ((ρ : ℂ)) ≠ 0 := by
     exact_mod_cast (ne_of_gt hρ)
   have hz0 : ((ρ : ℂ) * u) ≠ 0 := mul_ne_zero hρ0 hu0
@@ -136,17 +109,6 @@ lemma tendsto_polar_green_map_div_atInfinity (c : ℂ) :
       _ = ((Real.exp (green_function c z - Real.log ‖z‖)) : ℂ) := by
             simp [Real.exp_sub, Real.exp_log hz, div_eq_mul_inv]
   exact (tendsto_congr' hratio).2 hExpC
-
-/-- Optional theorem-facing summary of the constructive basin-valued coordinate
-carried by the explicit proxy. -/
-def ConstructiveBasinBottcherCoordinateData (c : ℂ) : Prop :=
-  ∃ φ : ℂ → ℂ,
-    (∀ z, z ∈ basin_of_infinity c → 1 < ‖φ z‖) ∧
-    (∀ z, ‖φ z‖ = Real.exp (green_function c z)) ∧
-    (∀ z, z ≠ 0 → ContinuousAt φ z) ∧
-    Tendsto (fun z => φ z / z) atInfinity (𝓝 (1 : ℂ)) ∧
-    (∀ u : ℂ, ‖u‖ = 1 → ∀ ρ : ℝ, 0 < ρ →
-      φ ((ρ : ℂ) * u) = u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))))
 
 /-- Phase-1 theorem-facing package for the classical global Böttcher proof:
 holomorphic near infinity on the canonical outside-open region, conjugates the
@@ -2701,56 +2663,11 @@ def GenuineBottcherInversePackageFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
   (∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, φ z = w) ∧
   Set.InjOn φ {z : ℂ | ‖z‖ > ‖c‖ + 2}
 
-/-- Missing analytic input for upgrading the current theorem-facing
-`proxy_bottcher_map := polar_green_map` proxy to a genuine coordinate on the whole
-basin: every basin point admits a neighborhood contained in the slit-orbit
-domain used by the analytic Böttcher approximants. -/
-def BottcherBasinLocalAnalyticityHyp (c : ℂ) : Prop :=
-  ∀ z : ℂ, z ∈ basin_of_infinity c → slit_orbit c ∈ 𝓝 z
-
 /-- Bundled theorem-facing route matching the current pair of proof sketches. -/
 def GenuineBottcherRouteFor (c : ℂ) : Prop :=
   ∃ φ : ℂ → ℂ,
     GenuineBottcherCoordinateDataFor c φ ∧
     GenuineBottcherInversePackageFor c φ
-
-/-- Maximal honest coordinate-construction theorem currently supported by the
-repository: once the current `proxy_bottcher_map` proxy is known to be locally
-analytic at every basin point, its already-formalized dynamical/modulus
-properties upgrade it to the full theorem-facing genuine-coordinate package. -/
-theorem genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity
-    (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
-    GenuineBottcherCoordinateDataFor c (proxy_bottcher_map c) := by
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · intro z hz
-    exact
-      proxy_bottcher_map_norm_gt_one_of_basin c z hz
-        (green_function_pos_of_basin c z hz)
-  · intro z hz
-    exact proxy_bottcher_map_norm_gt_one_implies_basin c hz
-  · intro z hz
-    exact bottcher_conj_on_basin c z hz
-  · intro z _hz
-    exact norm_bottcher_eq_exp_green c z
-  · intro z hz
-    have hana : AnalyticAt ℂ (proxy_bottcher_map c) z :=
-      proxy_bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
-        (hslit z hz)
-        ((basin_of_infinity_isOpen c).mem_nhds hz)
-    exact hana.differentiableAt.differentiableWithinAt
-  · intro z hz hzne
-    exact proxy_bottcher_map_continuousAt_of_ne_zero c z hzne
-  · exact tendsto_proxy_bottcher_map_div_atInfinity c
-
-/-- Existential coordinate-construction form of the current maximal honest
-theorem: the missing local-analyticity input on the whole basin is enough to
-produce some theorem-facing genuine coordinate, namely the current
-`proxy_bottcher_map`. -/
-theorem exists_genuineBottcherCoordinateDataFor_of_basinLocalAnalyticity
-    (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
-    ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
-  exact ⟨proxy_bottcher_map c,
-    genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity c hslit⟩
 
 /-- `0` escapes to infinity for `f(z) = z^2 + 2`, hence belongs to the basin. -/
 lemma zero_mem_basin_two_constructive :
@@ -2790,84 +2707,6 @@ lemma not_forall_basinLoopRootEquationValue_ne_zero_two_zero :
   have hval : basinLoopRootEquationValue (2 : ℂ) 0 γ 0 = 0 := by
     simp [γ, BasinLoop.constant, basinLoopRootEquationValue, logSeriesBottcherApprox_zero]
   exact hneq hval
-
-/-- The principal-slit approximation domain does not even contain `0`, so it
-cannot be a neighborhood of every basin point at `c = 2`. -/
-lemma zero_not_mem_slit_orbit_two :
-    (0 : ℂ) ∉ slit_orbit (2 : ℂ) := by
-  intro hzero
-  exact Complex.zero_notMem_slitPlane (by simpa using hzero 0)
-
-/-- Therefore the basin-local analyticity hypothesis needed to upgrade the
-current proxy to a genuine coordinate is false at `c = 2`. -/
-theorem not_bottcherBasinLocalAnalyticityHyp_two :
-    ¬ BottcherBasinLocalAnalyticityHyp (2 : ℂ) := by
-  intro hslit
-  have hnhds : slit_orbit (2 : ℂ) ∈ 𝓝 (0 : ℂ) :=
-    hslit 0 zero_mem_basin_two_constructive
-  have hmem : (0 : ℂ) ∈ slit_orbit (2 : ℂ) := mem_of_mem_nhds hnhds
-  exact zero_not_mem_slit_orbit_two hmem
-
-/-- The current proxy `proxy_bottcher_map = polar_green_map` cannot itself witness the
-theorem-facing genuine coordinate package at `c = 2`: differentiability on the
-open basin would force continuity at `0`, but the proxy is formally not
-continuous there. -/
-theorem not_genuineBottcherCoordinateDataFor_bottcherMap_two :
-    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) (proxy_bottcher_map (2 : ℂ)) := by
-  intro hcoord
-  rcases hcoord with ⟨_, _, _, _, hdiff, _, _⟩
-  have h0basin : (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) :=
-    zero_mem_basin_two_constructive
-  have hcont0 : ContinuousAt (proxy_bottcher_map (2 : ℂ)) 0 := by
-    have hdiff0 :
-        DifferentiableWithinAt ℂ (proxy_bottcher_map (2 : ℂ))
-          (basin_of_infinity (2 : ℂ)) 0 :=
-      hdiff 0 h0basin
-    exact hdiff0.continuousWithinAt.continuousAt
-      ((basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin)
-  exact
-    polar_green_map_not_continuousAt_zero (2 : ℂ) <|
-      by simpa [proxy_bottcher_map] using hcont0
-
-/-- Any function whose pointwise basin values are defined by the existing
-principal-branch root sequence must agree with the current proxy on the basin,
-since that sequence is already formalized to converge there to
-`proxy_bottcher_map`. -/
-theorem eq_proxyBottcherMap_on_basin_of_rootSeq_limit
-    {c : ℂ} {φ : ℂ → ℂ}
-    (hlim : ∀ z : ℂ, z ∈ basin_of_infinity c →
-      Tendsto (fun n => bottcher_root_seq c n z) atTop (𝓝 (φ z))) :
-    ∀ z : ℂ, z ∈ basin_of_infinity c → φ z = proxy_bottcher_map c z := by
-  intro z hz
-  exact tendsto_nhds_unique (hlim z hz) (bottcher_root_seq_tendsto_at c hz)
-
-/-- Therefore the current root-sequence limit cannot itself supply a genuine
-global coordinate at `c = 2`: it would force continuity of the proxy at `0`,
-contradicting the existing obstruction theorem. -/
-theorem not_genuineBottcherCoordinateDataFor_of_rootSeq_limit_two
-    {φ : ℂ → ℂ}
-    (hlim : ∀ z : ℂ, z ∈ basin_of_infinity (2 : ℂ) →
-      Tendsto (fun n => bottcher_root_seq (2 : ℂ) n z) atTop (𝓝 (φ z))) :
-    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) φ := by
-  intro hcoord
-  rcases hcoord with ⟨_, _, _, _, hdiff, _, _⟩
-  have h0basin : (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) :=
-    zero_mem_basin_two_constructive
-  have hcont0 : ContinuousAt φ 0 := by
-    have hdiff0 :
-        DifferentiableWithinAt ℂ φ (basin_of_infinity (2 : ℂ)) 0 :=
-      hdiff 0 h0basin
-    exact hdiff0.continuousWithinAt.continuousAt
-      ((basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin)
-  have hEq :
-      φ =ᶠ[𝓝 (0 : ℂ)] proxy_bottcher_map (2 : ℂ) := by
-    filter_upwards [(basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin] with z hz
-    exact eq_proxyBottcherMap_on_basin_of_rootSeq_limit hlim z hz
-  have hproxyCont0 : ContinuousAt (proxy_bottcher_map (2 : ℂ)) 0 :=
-    hcont0.congr_of_eventuallyEq hEq.symm
-  exact
-    polar_green_map_not_continuousAt_zero (2 : ℂ) <|
-      by simpa [proxy_bottcher_map] using hproxyCont0
 
 /-- Any full genuine coordinate package restricts to the first near-infinity
 phase of the classical proof on the canonical outside-open region. -/
@@ -2991,6 +2830,15 @@ theorem LogSeriesBasinExtensionDataFor.toGenuineBottcherCoordinateDataFor
   exact
     (h.holo_on_basin z hz).continuousWithinAt.continuousAt
       ((basin_of_infinity_isOpen c).mem_nhds hz)
+
+/-- Existential coordinate-package form of the active candidate-facing basin
+extension surface. This is the replacement for the old proxy-based existence
+seam: once `LogSeriesBasinExtensionDataFor c` is available, the constructive
+route already has a genuine basin coordinate directly from the extension datum. -/
+theorem exists_genuineBottcherCoordinateDataFor_of_logSeriesBasinExtensionData
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
+  exact ⟨h.phi, h.toGenuineBottcherCoordinateDataFor⟩
 
 /-- Basin route B seam: first construct an exterior inverse for the
 near-infinity logarithmic-series coordinate, then use inverse dynamics to supply
@@ -3242,18 +3090,6 @@ theorem ClassicalGlobalBottcherDataFor.toGenuineBottcherRouteFor
     GenuineBottcherRouteFor c := by
   exact ⟨h.phi, h.toGenuineBottcherCoordinateDataFor, h_inv⟩
 
-/-- In particular, the already-formalized principal-branch root sequence cannot
-be used as the witness for the classical global Böttcher theorem at `c = 2`. -/
-theorem not_exists_classicalGlobalBottcherDataFor_of_rootSeq_limit_two :
-    ¬ ∃ h : ClassicalGlobalBottcherDataFor (2 : ℂ),
-        ∀ z : ℂ, z ∈ basin_of_infinity (2 : ℂ) →
-          Tendsto (fun n => bottcher_root_seq (2 : ℂ) n z) atTop (𝓝 (h.phi z)) := by
-  intro h
-  rcases h with ⟨hclassical, hlim⟩
-  exact
-    not_genuineBottcherCoordinateDataFor_of_rootSeq_limit_two hlim
-      hclassical.toGenuineBottcherCoordinateDataFor
-
 /-- Existential coordinate-package consequence of the bundled classical theorem. -/
 theorem exists_genuineBottcherCoordinateDataFor_of_classicalGlobalBottcherTheoremFor
     {c : ℂ} (h : ClassicalGlobalBottcherTheoremFor c) :
@@ -3343,21 +3179,6 @@ noncomputable def GenuineBottcherLocalParameterFamilyData.toNearInfinityParamete
     {c₀ : ℂ} (h : GenuineBottcherLocalParameterFamilyData c₀) :
     GenuineBottcherNearInfinityParameterFamilyData c₀ :=
   (h.toNearInfinityParameterExtensionData).toNearInfinityParameterFamilyData
-
-/-- Constructive realization of the missing basin-valued Böttcher coordinate
-using the explicit proxy `polar_green_map`. -/
-theorem constructive_basin_bottcher_coordinate_data (c : ℂ) :
-    ConstructiveBasinBottcherCoordinateData c := by
-  refine ⟨polar_green_map c, ?_, ?_, ?_, ?_, ?_⟩
-  · intro z hz
-    exact one_lt_norm_polar_green_map_of_mem_basin c z hz
-  · intro z
-    exact norm_polar_green_map_eq_exp_green c z
-  · intro z hz
-    exact polar_green_map_continuousAt_of_ne_zero c z hz
-  · exact tendsto_polar_green_map_div_atInfinity c
-  · intro u hu ρ hρ
-    exact polar_green_map_apply_ray c u hu ρ hρ
 
 end Quadratic
 

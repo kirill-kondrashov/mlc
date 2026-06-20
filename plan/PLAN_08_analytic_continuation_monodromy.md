@@ -362,8 +362,10 @@ The first option is now formally known to be false at the all-level interface:
 
 ```lean
 logSeriesBottcherApprox_zero
-not_forall_basinLoopRootEquationValue_ne_zero_two_zero
 ```
+
+Indeed, the constant basin loop at `z₀ = 0` for `c = 2` gives a level-`0`
+counterexample, since `basinLoopRootEquationValue (2 : ℂ) 0 γ 0 = 0`.
 
 The escaping-level replacement has therefore been implemented:
 

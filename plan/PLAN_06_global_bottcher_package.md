@@ -1,7 +1,7 @@
 # PLAN 06: Genuine Böttcher coordinate frontier
 
 **Status:** ACTIVE  
-**Root goal:** eliminate `MLC.basinExternalRayKernelTwo`
+**Root goal:** eliminate `MLC.unifiedGenuineRootKernelTwo`
 
 ## Current theorem target
 
@@ -11,8 +11,9 @@ The remaining analytic target is still:
 Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
 ```
 
-This should provide a genuine basin Böttcher coordinate `Φ`, not the proxy
-`Quadratic.proxy_bottcher_map`.
+This should provide a genuine basin Böttcher coordinate `Φ` through the
+candidate / extension-data route already formalized in
+`ConstructiveBasinCoordinate.lean`, not through the archived proxy root route.
 
 The theorem-facing reductions are already in place:
 
