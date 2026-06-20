@@ -101,8 +101,13 @@ $A_\infty(f_2)$, such that:
 5. on a sufficiently large exterior region, $\Phi$ agrees with the
    normalized near-infinity Böttcher coordinate.
 
-This is the mathematical content represented at the root by
-`MLC.unifiedGenuineRootKernelTwo`. The relevant Lean entry points are:
+In Lean, `MLC.unifiedGenuineRootKernelTwo` packages this input together with a
+route-to-puzzle-boundary-motion bridge. The motion-bridge conjunct is already
+available theorem-facing as
+`MLC.MainProof.genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM`; the
+remaining mathematical target in this package is
+`Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)`. The relevant Lean entry
+points are:
 
 - [`Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox`](Mlc/Quadratic/Complex/Bottcher/ConstructiveBasinCoordinate.lean#L130-L145)
 - [`MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`](Mlc/MainConjecture.lean#L2152-L2173)
@@ -162,7 +167,7 @@ make graphs
 
 ## Repository entry points
 
-- Root theorem: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4515-L4523)
+- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4515-L4523)
 - Root axiom check: [`check_axioms.lean`](check_axioms.lean)
 - Dependency graph generator:
   [`scripts/generate_dependency_graph_site.py`](scripts/generate_dependency_graph_site.py)
