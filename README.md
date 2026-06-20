@@ -117,8 +117,8 @@ Quadratic.quadraticMap_two_second_iterate_re_lower_bound
 Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-What remains is no longer a new abstract comparison theorem. The current gap is
-the **theorem-level / Lean instantiation for the genuine high-escaping curve**:
+Current PLAN 09 work is the theorem/Lean instantiation for the actual
+high-escaping curve:
 
 1. choose the actual charts `U_j`,
 2. choose the actual interior overlaps `V_j`,
@@ -127,22 +127,16 @@ the **theorem-level / Lean instantiation for the genuine high-escaping curve**:
 5. prove the interior and closing equalities needed by the cyclic monodromy
    comparison.
 
-The stronger one-global-log restriction package is now understood as a special
-case, not the general Step 13 / PLAN 09 target.
+The one-global-log restriction package is a special case, not the general
+Step 13 / PLAN 09 target.
 
-At the notebook level, the current frontier has been reorganized into a
-construction skeleton:
+The current notebook summary is:
 
-- `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` now starts from
-  a worked numerical high-level curve and gives an explicit recipe for `U_j`,
-  `V_j`, `V_cl`, and `b_j`;
-- the notebook also records numerical counterexamples to the naive unpadded
-  chart rule, the naive overlap rule, the naive independently-chosen-branch
-  rule, and the naive open-chain proof;
-- for each of those, it gives a repaired candidate and a rigorous
-  notebook-level construction/proof pattern;
-- what is still missing is to lift that recipe from the worked example to the
-  genuine high-escaping geometry and formalize it in Lean.
+- `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` lists the
+  remaining mathematical point, the outstanding theorem, the Lean package to
+  build, and the completion criterion for PLAN 09;
+- the earlier numerical examples and counterexamples are kept in the related
+  notebooks and git history.
 
 Once that theorem-level package exists,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and
@@ -164,8 +158,7 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
 ## Repository Snapshot
 
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
-2. `plan/PLAN_06_global_bottcher_package.md` records the live theorem-facing
-   Böttcher plan.
+2. `plan/PLAN_06_global_bottcher_package.md` records the current Böttcher plan.
 3. `draft/` now records the single remaining positive mathematical target:
    `draft/genuine_bottcher_route_problem.md`.
 4. `proof_sketches/` records the matching human-readable sketch:
