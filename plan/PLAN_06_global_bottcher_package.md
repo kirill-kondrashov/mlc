@@ -60,6 +60,12 @@ is now filled without adding axioms.
 The remaining problem is to extend `logSeriesBottcherApprox` from the canonical
 near-infinity region to the full basin of infinity.
 
+The live notebook tracking this final Lean frontier is now:
+
+```text
+notebooks/frontier_plan06_principal_pullback_coherence.ipynb
+```
+
 The current principal pullback candidate is:
 
 ```lean

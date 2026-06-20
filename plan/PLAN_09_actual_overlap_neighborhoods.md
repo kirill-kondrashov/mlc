@@ -68,8 +68,17 @@ The notebook split is now:
 
 1. `notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb` for the
    closing theorem, the abstract Čech-gluing criterion, and the model cases;
-2. `notebooks/frontier_plan09_vanishing_cocycle.ipynb` for the isolated live
-   cocycle-vanishing frontier.
+2. `notebooks/plan09_vanishing_cocycle_companion.ipynb` for the isolated PLAN 09
+   cocycle-vanishing theorem layer.
+
+The single live repository frontier has moved one step downstream to
+
+```text
+notebooks/frontier_plan06_principal_pullback_coherence.ipynb
+```
+
+which records the remaining coherent-pullback / `PrincipalPullbackCoherentDataFor`
+problem that still has to consume the PLAN 09 output.
 
 ## Required components
 

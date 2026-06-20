@@ -191,14 +191,20 @@ closing theorem, the Čech-gluing reduction, a rigorous vanishing-cocycle
 criterion, two positive numerical examples, a counterexample attempt showing
 why the closing equality is necessary, and the one-domain special case.
 
-`notebooks/frontier_plan09_vanishing_cocycle.ipynb` isolates the live PLAN 09
-frontier: prove
+`notebooks/plan09_vanishing_cocycle_companion.ipynb` now records the PLAN 09
+cocycle-vanishing layer: prove
 
 $$
 [c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z)
 $$
 
 for the actual high-escaping chart cover.
+
+The single live frontier notebook is now
+`notebooks/frontier_plan06_principal_pullback_coherence.ipynb`, which isolates
+the remaining PLAN 06 theorem surface
+`Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)` and the coherent
+pullback-branch obstruction behind the genuine Böttcher cutover.
 
 Once this theorem-level package exists,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and
@@ -229,11 +235,12 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
    comparison layer, and `plan/PLAN_09_actual_overlap_neighborhoods.md` records
    the current geometric/theorem-level handoff.
 6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb`,
-   `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`, and
-   `notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb`
-   visualize the checked PLAN 08 / abstract PLAN 09 reduction, while
-   `notebooks/frontier_plan09_vanishing_cocycle.ipynb` isolates the live
-   cocycle-vanishing theorem, and
+   `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`,
+   `notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb`, and
+   `notebooks/plan09_vanishing_cocycle_companion.ipynb`
+   visualize the checked PLAN 08 / PLAN 09 reduction, while
+   `notebooks/frontier_plan06_principal_pullback_coherence.ipynb` isolates the
+   live coherent-pullback frontier, and
    `notebooks/archive/plan08_step13_actual_high_escaping_charts_frontier.ipynb`
    preserves the older Step 13 counterexample/status notebook.
 
