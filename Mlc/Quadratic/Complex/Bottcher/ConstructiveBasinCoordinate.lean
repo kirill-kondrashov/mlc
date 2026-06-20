@@ -1885,6 +1885,56 @@ structure HighEscapingActualChartChainsLocalLogsRestrictGlobalData
         (actualChain N γ)
         (globalChart N γ)
 
+/-- PLAN 09 theorem input for the actual-chain global-log route. It is only a
+    data interface: constructing an inhabitant is the remaining geometric
+    problem. -/
+structure HighEscapingActualChartChainsGlobalLogInput
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  actualChain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      BasinLoopChartChain c (E.levelAbove γ N) z₀ γ
+  globalChart :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ChartChainLocalLogsRestrictGlobal
+        (actualChain N γ)
+        (globalChart N γ)
+
+/-- The PLAN 09 global-log input is exactly the data needed by
+    `HighEscapingActualChartChainsLocalLogsRestrictGlobalData`. -/
+def HighEscapingActualChartChainsGlobalLogInput.toLocalLogsRestrictGlobalData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogInput E) :
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData E where
+  actualChain := I.actualChain
+  globalChart := I.globalChart
+  localLogs_restrict := I.localLogs_restrict
+
+/-- PLAN 09 input plus comparison to an all-level chart-chain family. This is the
+    form needed before passing to the PLAN 08 monodromy interface. -/
+structure HighEscapingActualChartChainsGlobalLogComparisonInput
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀)
+    (h : BasinLoopChartChainMonodromyData c z₀)
+    extends HighEscapingActualChartChainsGlobalLogInput E where
+  chain_eq :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = actualChain N γ
+
+/-- The comparison input packages directly into the existing actual-chain
+    global-log data and the chain-identification hypothesis consumed by PLAN 08. -/
+def HighEscapingActualChartChainsGlobalLogComparisonInput.toLocalLogsRestrictGlobalData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogComparisonInput E h) :
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData E :=
+  I.toHighEscapingActualChartChainsGlobalLogInput.toLocalLogsRestrictGlobalData
+
 /-- The canonical one-chart high-escaping chains satisfy the notebook's
 global-log hypothesis directly, using the punctured-plane logarithm branch at
 every high level. This formalizes a restricted positive case of the missing
@@ -2092,6 +2142,29 @@ def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toAllLevelRestrictG
     intro N γ
     simpa [hchain N γ] using R.localLogs_restrict N γ
 
+/-- The focused PLAN 09 comparison input supplies the all-level global-log
+    interface by using the existing transfer theorem. -/
+def HighEscapingActualChartChainsGlobalLogComparisonInput.toAllLevelRestrictGlobalData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogComparisonInput E h) :
+    HighEscapingChartChainLocalLogsRestrictGlobalData h E :=
+  I.toLocalLogsRestrictGlobalData.toAllLevelRestrictGlobalData I.chain_eq
+
+/-- The focused PLAN 09 comparison input gives the high-escaping product
+    comparison consumed by PLAN 08. -/
+def HighEscapingActualChartChainsGlobalLogComparisonInput.toProductComparisonData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogComparisonInput E h) :
+    HighEscapingChartChainProductComparisonData h E where
+  product_eq := by
+    intro N γ
+    rw [I.chain_eq N γ]
+    exact I.toLocalLogsRestrictGlobalData.toProductComparisonData.product_eq N γ
+
 /-- If all local logs in the all-level high chains are restrictions of a common
 global log branch, then the required high escaping product comparison follows. -/
 noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
@@ -2158,6 +2231,30 @@ lemma HighEscapingChartChainProductComparisonData.representation_trivial
     (C : HighEscapingChartChainProductComparisonData h E) :
     h.representation.Trivial :=
   h.representation_trivial_of_high_escaping_comparison E C.product_eq
+
+/-- The focused PLAN 09 comparison input trivializes the all-level monodromy
+    representation. -/
+lemma HighEscapingActualChartChainsGlobalLogComparisonInput.representation_trivial
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogComparisonInput E h) :
+    h.representation.Trivial :=
+  I.toProductComparisonData.representation_trivial
+
+/-- Direct PLAN 09-to-PLAN 08 handoff from the focused comparison input, once the
+    escape-time-independent pullback values are supplied. -/
+noncomputable def
+    HighEscapingActualChartChainsGlobalLogComparisonInput.toMonodromyTrivialPullbackDataFor
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogComparisonInput E h)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  (h.toBasinLoopPullbackRootMonodromyData).toMonodromyTrivialPullbackDataFor
+    I.representation_trivial
+    hind
 
 /-- Every basin point eventually enters the canonical outside-open region. -/
 lemma exists_iterate_mem_outside_open_of_mem_basin
