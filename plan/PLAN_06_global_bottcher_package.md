@@ -1,7 +1,7 @@
 # PLAN 06: Genuine Böttcher coordinate frontier
 
 **Status:** ACTIVE  
-**Root goal:** eliminate `MLC.basinExternalRayKernelTwo`
+**Root goal:** eliminate `MLC.unifiedGenuineRootKernelTwo`
 
 ## Current theorem target
 
@@ -11,8 +11,9 @@ The remaining analytic target is still:
 Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
 ```
 
-This should provide a genuine basin Böttcher coordinate `Φ`, not the proxy
-`Quadratic.proxy_bottcher_map`.
+This should provide a genuine basin Böttcher coordinate `Φ` through the
+candidate / extension-data route already formalized in
+`ConstructiveBasinCoordinate.lean`, not through the archived proxy root route.
 
 The theorem-facing reductions are already in place:
 
@@ -21,6 +22,18 @@ The theorem-facing reductions are already in place:
 3. `ClassicalGlobalBottcherDataFor.toGenuineBottcherRouteFor`
 
 So the current work is only to construct the missing classical data.
+
+## Frontier reduction note
+
+After the root reduction to the two remaining non-core frontier axes
+
+1. `MLC.unifiedGenuineRootKernelTwo`
+2. `MLC.residualOpenVirtualNearMoleculeAxiom`
+
+the completed/downstream plans were moved to `plan/archive/`. The `plan/`
+frontier now consists of the Böttcher-axis package (`PLAN_06`–`PLAN_09`), while
+the residual-open renormalization barrier remains an external input not
+addressed by a separate plan file in this directory.
 
 ## What is now proved
 
@@ -59,6 +72,18 @@ is now filled without adding axioms.
 
 The remaining problem is to extend `logSeriesBottcherApprox` from the canonical
 near-infinity region to the full basin of infinity.
+
+The notebook tracking this Lean frontier is:
+
+```text
+notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb
+```
+
+The theorem-by-theorem A/B/C unpacking of that unified statement is now kept in
+
+```text
+notebooks/plan06_principal_pullback_coherence_companion.ipynb
+```
 
 The current principal pullback candidate is:
 
@@ -124,6 +149,21 @@ Checked reductions:
 6. `MonodromyTrivializingCoverBasinExtensionDataFor.toLogSeriesBasinExtensionDataFor`
 7. `classicalGlobalBottcherTheoremFor_of_monodromyTrivializingCoverData`
 8. `classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData`
+9. `MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`
+
+The root-facing cutover theorem
+
+```lean
+MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two
+```
+
+shows the intended rewiring explicitly: the active PLAN 06 target
+`PrincipalPullbackCoherentDataFor (2 : ℂ)`, together with the matching inverse
+package for `basinLogSeriesExtensionCandidate (2 : ℂ)`, already lands in the
+existing genuine-Böttcher MLC closure chain. Therefore the remaining work is to
+internalize the coherent-data and inverse
+package inputs without using the proxy-specific `basinExternalRayKernelTwo`
+route.
 
 ## Next implementation routes
 

@@ -46,6 +46,17 @@ logSeries_pullbackRootSet_subset_next
 So the remaining issue is not algebraic root existence. It is analytic topology:
 monodromy, covers, lifted holomorphic branches, and descent.
 
+The surrounding Lean route has now been rewired one step further upstream:
+global-log high-escaping comparison data already packages to
+
+```lean
+Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+```
+
+once escape-time-independent pullback values are supplied. Accordingly, the
+cover route should now be viewed as one possible construction of the coherent
+pullback/inverse package feeding PLAN 06, not as an isolated replacement root.
+
 ## Required components
 
 ### 1. Fundamental group / covering interface

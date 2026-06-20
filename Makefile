@@ -1,4 +1,10 @@
-.PHONY: all build check cache clean graphs serve
+.PHONY: all build check cache clean graphs notebook notebook-env notebook-render serve
+
+NOTEBOOK_HOST ?= 127.0.0.1
+NOTEBOOK_PORT ?= 8888
+NOTEBOOK_DIR ?= $(CURDIR)/notebooks
+NOTEBOOK_PROJECT_DIR ?= $(CURDIR)/notebooks
+NOTEBOOK_HTML_DIR ?= $(CURDIR)/notebooks-html
 
 # Default target
 all: check
@@ -25,6 +31,19 @@ graphs:
 # Serve the generated graph site locally over HTTP
 serve: graphs
 	cd scripts && poetry run python serve_graph_site.py --directory ../site --port 8000
+
+# Sync the local uv environment used for notebooks
+notebook-env:
+	@command -v uv >/dev/null 2>&1 || { echo "uv not found; install uv locally and retry."; exit 1; }
+	uv sync --project "$(NOTEBOOK_PROJECT_DIR)" --locked
+
+# Render repository notebooks to static HTML pages
+notebook-render: notebook-env
+	uv run --project "$(NOTEBOOK_PROJECT_DIR)" --no-sync python "$(NOTEBOOK_PROJECT_DIR)/render_notebooks.py" --input-dir "$(NOTEBOOK_DIR)" --output-dir "$(NOTEBOOK_HTML_DIR)"
+
+# Serve rendered notebook HTML locally
+notebook: notebook-render
+	cd "$(NOTEBOOK_HTML_DIR)" && python -m http.server "$(NOTEBOOK_PORT)" --bind "$(NOTEBOOK_HOST)"
 
 # A target that ensures cache is fetched if lake-manifest.json is newer than a marker file
 # This attempts to satisfy "getting cache on change of files"

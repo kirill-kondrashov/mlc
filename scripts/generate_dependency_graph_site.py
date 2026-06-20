@@ -42,6 +42,10 @@ EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
 # point like `external_ray_map_exists`.
 MISSING_AXIOMS: tuple[str, ...] = ()
 INJON_BRIDGE_SYMBOL = "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two"
+ALTERNATIVE_GRAPH_SYMBOLS = (
+    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
+    "MLC.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two_of_onM",
+)
 CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two",
@@ -56,6 +60,10 @@ CONSTRUCTION_SYMBOLS = (
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two",
     "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two",
 )
+
+
+def graph_slug(fq_name: str) -> str:
+    return fq_name.replace(".", "_")
 
 
 @dataclass(frozen=True)
@@ -437,8 +445,13 @@ def graph_page_html(title: str) -> str:
     }}
     .wrap {{
       display: grid;
-      grid-template-rows: auto 1fr;
-      height: 100vh;
+      grid-template-rows: auto minmax(0, 1fr);
+      min-height: 100vh;
+    }}
+    .content {{
+      display: grid;
+      grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+      min-height: 0;
     }}
     .toolbar {{
       border-bottom: 1px solid var(--border);
@@ -833,6 +846,7 @@ function renderLegend() {{
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.minDegree, state.minDegree, state.maxDegree)}}"></span>${{state.minDegree}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(midD, state.minDegree, state.maxDegree)}}"></span>${{midD}}</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{degreeColor(state.maxDegree, state.minDegree, state.maxDegree)}}"></span>${{state.maxDegree}}</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#9ca3af"></span>Other declaration</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.constructionEdge}}"></span>Construction route</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.coreAxiomFill}};border-color:${{state.palette.coreAxiomRing}}"></span>Core axiom</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Project axiom</span>
@@ -1399,8 +1413,14 @@ def graph_page_html_v2(title: str) -> str:
     }}
     .wrap {{
       display: grid;
-      grid-template-rows: auto 1fr;
-      height: 100vh;
+      grid-template-rows: auto minmax(0, 1fr);
+      min-height: 100vh;
+    }}
+    .content {{
+      display: grid;
+      grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+      min-height: 0;
+      overflow: hidden;
     }}
     .toolbar {{
       border-bottom: 1px solid var(--border);
@@ -1478,6 +1498,7 @@ def graph_page_html_v2(title: str) -> str:
     #scene {{
       width: 100%;
       height: 100%;
+      min-height: 0;
       position: relative;
       background: var(--canvas-bg);
     }}
@@ -1505,6 +1526,86 @@ def graph_page_html_v2(title: str) -> str:
       white-space: normal;
       z-index: 10;
     }}
+    .view-help {{
+      border-right: 1px solid var(--border);
+      background: var(--panel);
+      padding: 12px 14px 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 0;
+      overflow: auto;
+    }}
+    .view-help h2 {{
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--text);
+    }}
+    .view-help p {{
+      margin: 0;
+    }}
+    .view-help-grid {{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: start;
+    }}
+    .view-help-visual {{
+      min-width: 0;
+    }}
+    .view-help-details {{
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }}
+    .view-help-block {{
+      min-width: 0;
+    }}
+    .view-help-block h3 {{
+      margin: 0 0 6px;
+      font-size: 13px;
+      color: var(--text);
+    }}
+    .view-help-block p {{
+      margin: 0;
+    }}
+    .view-help-figure {{
+      margin: 0 0 8px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--button-bg) 82%, transparent);
+    }}
+    .view-help-figure svg {{
+      display: block;
+      width: 100%;
+      height: auto;
+    }}
+    .view-help-figure figcaption {{
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }}
+    @media (max-width: 760px) {{
+      .content {{
+        grid-template-columns: 1fr;
+      }}
+      .view-help {{
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        max-height: none;
+      }}
+    }}
+    .view-help code {{
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      font-size: 12px;
+      color: var(--text);
+      background: color-mix(in srgb, var(--button-bg) 88%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0 4px;
+    }}
   </style>
 </head>
 <body>
@@ -1527,7 +1628,13 @@ def graph_page_html_v2(title: str) -> str:
     <button id="themeBtn" type="button">Theme</button>
     <div id="legend" class="legend"></div>
   </div>
-  <div id="scene"><canvas id="canvas3d"></canvas><canvas id="canvas2d"></canvas><div id="hover"></div></div>
+  <div class="content">
+    <div class="view-help">
+      <h2 id="viewHelpTitle">View guide</h2>
+      <div id="viewHelpBody"></div>
+    </div>
+    <div id="scene"><canvas id="canvas3d"></canvas><canvas id="canvas2d"></canvas><div id="hover"></div></div>
+  </div>
 </div>
 <script src="graph.js"></script>
 </body>
@@ -1546,6 +1653,8 @@ def graph_page_js() -> str:
   const modeBtn = document.getElementById("modeBtn");
   const themeBtn = document.getElementById("themeBtn");
   const hoverEl = document.getElementById("hover");
+  const viewHelpTitleEl = document.getElementById("viewHelpTitle");
+  const viewHelpBodyEl = document.getElementById("viewHelpBody");
   const THEME_KEY = "mlc_graph_theme";
   const MODE_KEY = "mlc_graph_mode_v2";
   const VIEW2D_KEY = "mlc_graph_2d_view_v2";
@@ -1613,6 +1722,200 @@ def graph_page_js() -> str:
   function normalize2DView(view) {
     if (view === "radial" || view === "layered" || view === "kind" || view === "columns" || view === "spiral") return view;
     return "layered";
+  }
+
+  const VIEW_HELP = {
+    "3d": { title: "3D" },
+    "layered": { title: "Layered DAG" },
+    "radial": { title: "Radial Rings" },
+    "kind": { title: "Kind Lanes" },
+    "columns": { title: "Depth Columns" },
+    "spiral": { title: "Spiral" }
+  };
+  let guideExample = null;
+
+  function escapeHtml(text) {
+    return String(text ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+  }
+
+  function guideNodeLabel(node) {
+    return String(node?.label || node?.id || "");
+  }
+
+  function guideSvgLabel(node) {
+    const s = guideNodeLabel(node);
+    return s.length > 22 ? `${s.slice(0, 21)}…` : s;
+  }
+
+  function kindNoun(kind) {
+    switch (String(kind || "")) {
+      case "theorem": return "theorem";
+      case "lemma": return "lemma";
+      case "def": return "definition";
+      case "abbrev": return "abbreviation";
+      case "axiom": return "axiom";
+      case "structure": return "structure";
+      case "class": return "class";
+      case "instance": return "instance";
+      default: return "declaration";
+    }
+  }
+
+  function edgeKey(sourceId, targetId) {
+    return `${String(sourceId)}→${String(targetId)}`;
+  }
+
+  function buildGuideFigure(viewKey, example) {
+    if (!example) return "";
+    const width = 260;
+    const height = 168;
+    const bg = "#07111f";
+    const stroke = "#94a3b8";
+    const grid = "#334155";
+    const root = example.rootNode;
+    const deps = example.dependencies;
+    const ordered = [root, ...deps];
+    const positions = {};
+    if (viewKey === "layered") {
+      positions[root.id] = { x: 130, y: 30 };
+      const xs = deps.length === 1 ? [130] : deps.length === 2 ? [92, 168] : [72, 130, 188];
+      deps.forEach((n, i) => { positions[n.id] = { x: xs[i] || (72 + i * 58), y: 114 }; });
+    } else if (viewKey === "radial") {
+      positions[root.id] = { x: 130, y: 84 };
+      const pts = [{ x: 182, y: 60 }, { x: 103, y: 131 }, { x: 70, y: 58 }];
+      deps.forEach((n, i) => { positions[n.id] = pts[i] || { x: 190, y: 108 }; });
+    } else if (viewKey === "kind") {
+      const laneY = { theorem: 34, lemma: 68, def: 100, abbrev: 100, axiom: 134 };
+      const xs = [68, 144, 206];
+      positions[root.id] = { x: 66, y: laneY[String(root.kind || "")] || 34 };
+      deps.forEach((n, i) => {
+        positions[n.id] = { x: xs[i] || (140 + i * 30), y: laneY[String(n.kind || "")] || 68 };
+      });
+    } else if (viewKey === "columns") {
+      positions[root.id] = { x: 48, y: 84 };
+      const ys = deps.length === 1 ? [84] : deps.length === 2 ? [64, 112] : [56, 92, 128];
+      deps.forEach((n, i) => { positions[n.id] = { x: 170, y: ys[i] || (56 + i * 34) }; });
+    } else if (viewKey === "spiral") {
+      positions[root.id] = { x: 82, y: 86 };
+      const pts = [{ x: 128, y: 60 }, { x: 170, y: 82 }, { x: 150, y: 126 }];
+      deps.forEach((n, i) => { positions[n.id] = pts[i] || { x: 194, y: 118 }; });
+    } else {
+      positions[root.id] = { x: 78, y: 56 };
+      const pts = [{ x: 132, y: 48 }, { x: 186, y: 94 }, { x: 154, y: 28 }];
+      deps.forEach((n, i) => { positions[n.id] = pts[i] || { x: 198, y: 120 }; });
+    }
+    const markerId = `vh-arrow-${viewKey}`;
+    let decorations = "";
+    if (viewKey === "layered") {
+      decorations = `
+        <text x="10" y="26" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">depth 0</text>
+        <text x="10" y="110" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">depth 1</text>
+        <line x1="28" y1="34" x2="244" y2="34" stroke="${grid}" stroke-width="1"/>
+        <line x1="28" y1="118" x2="244" y2="118" stroke="${grid}" stroke-width="1"/>`;
+    } else if (viewKey === "radial") {
+      decorations = `
+        <circle cx="130" cy="84" r="18" fill="none" stroke="${grid}" stroke-width="1.2"/>
+        <circle cx="130" cy="84" r="56" fill="none" stroke="${grid}" stroke-width="1.2"/>`;
+    } else if (viewKey === "kind") {
+      decorations = `
+        <text x="10" y="24" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">theorem</text>
+        <text x="10" y="92" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">def / abbrev</text>
+        <text x="10" y="146" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">axiom</text>
+        <line x1="20" y1="34" x2="244" y2="34" stroke="${grid}" stroke-width="1"/>
+        <line x1="20" y1="100" x2="244" y2="100" stroke="${grid}" stroke-width="1"/>
+        <line x1="20" y1="134" x2="244" y2="134" stroke="${grid}" stroke-width="1"/>`;
+    } else if (viewKey === "columns") {
+      decorations = `
+        <text x="34" y="20" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">distance 0</text>
+        <text x="146" y="20" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">distance 1</text>
+        <line x1="88" y1="28" x2="88" y2="152" stroke="${grid}" stroke-width="1"/>`;
+    } else if (viewKey === "spiral") {
+      decorations = `<path d="M 76 86 C 98 56, 134 42, 164 58 C 190 74, 190 114, 154 132" fill="none" stroke="${grid}" stroke-width="1.2"/>`;
+    } else if (viewKey === "3d") {
+      decorations = `<ellipse cx="132" cy="84" rx="92" ry="48" fill="none" stroke="${grid}" stroke-width="1.2"/>`;
+    }
+    const edgesSvg = example.dependencies.map((n) => {
+      const a = positions[root.id];
+      const b = positions[n.id];
+      return `<path d="M ${a.x} ${a.y} L ${b.x} ${b.y}" fill="none" stroke="${stroke}" stroke-width="2" marker-end="url(#${markerId})"/>`;
+    }).join("");
+    const nodesSvg = ordered.map((n) => {
+      const p = positions[n.id];
+      const isRoot = n.id === root.id;
+      const r = isRoot ? 11 : 9;
+      return `
+        <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${rgb01ToCss(n.color, 1)}" stroke="${isRoot ? "#22c55e" : "#f8fafc"}" stroke-width="${isRoot ? 2.4 : 1.2}"/>
+        <text x="${p.x}" y="${p.y + 4}" text-anchor="middle" font-size="9" fill="#07111f" font-family="IBM Plex Sans, Segoe UI, sans-serif">${escapeHtml(guideSvgLabel(n))}</text>`;
+    }).join("");
+    return `
+      <figure class="view-help-figure">
+        <svg viewBox="0 0 ${width} ${height}" aria-label="Current graph guide fragment">
+          <rect x="0" y="0" width="${width}" height="${height}" rx="10" fill="${bg}"/>
+          <defs>
+            <marker id="${markerId}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="${stroke}"/>
+            </marker>
+          </defs>
+          ${decorations}
+          ${edgesSvg}
+          ${nodesSvg}
+        </svg>
+        <figcaption>Highlighted fragment from the current graph.</figcaption>
+      </figure>`;
+  }
+
+  function guideViewText(viewKey) {
+    switch (viewKey) {
+      case "layered":
+        return "Here the vertical coordinate is the topological layer. Direct dependencies of the root are shown in the first lower layer. If one layer is crowded, it is wrapped into subrows.";
+      case "radial":
+        return "Here the radial coordinate is the ring index from the root. Direct dependencies of the root are shown on the first ring. The angular coordinate has no semantic meaning.";
+      case "kind":
+        return "Here the vertical lane is the declaration kind. In this fragment the highlighted nodes include a theorem, an abbreviation, and an axiom. Graph distance is not a coordinate in this view.";
+      case "columns":
+        return "Here the horizontal coordinate is the displayed depth. Graph distance 1 from the root is shown in the first column. Vertical position inside one column is only packing.";
+      case "spiral":
+        return "Here increasing distance from the center along the spiral orders declarations away from the root. The first outward turn corresponds to direct dependencies, but this embedding is only approximate.";
+      default:
+        return "Here no screen axis is a canonical graph coordinate. The exact data are the declarations and the directed dependency edges; the screen coordinates come from the camera projection.";
+    }
+  }
+
+  function buildGuideBody(viewKey, example) {
+    if (!example) return `<p>No concrete guide fragment is available for this graph.</p>`;
+    const root = example.rootNode;
+    const depClauses = example.dependencies.map((n) => {
+      return `<code>${escapeHtml(guideNodeLabel(root))} → ${escapeHtml(guideNodeLabel(n))}</code> means that the ${kindNoun(root.kind)} <code>${escapeHtml(guideNodeLabel(root))}</code> uses the ${kindNoun(n.kind)} <code>${escapeHtml(guideNodeLabel(n))}</code>.`;
+    }).join(" ");
+    const depthSentence = `The root is <code>${escapeHtml(guideNodeLabel(root))}</code>, so graph distance 0 means this declaration itself. Graph distance 1 means a direct dependency of the root.`;
+    return `
+      <div class="view-help-grid">
+        <div class="view-help-visual">
+          ${buildGuideFigure(viewKey, example)}
+        </div>
+        <div class="view-help-details">
+          <div class="view-help-block">
+            <h3>Fragment</h3>
+            <p>${depthSentence} ${depClauses} The same nodes and edges are highlighted in the main graph.</p>
+          </div>
+          <div class="view-help-block">
+            <h3>This view</h3>
+            <p>${guideViewText(viewKey)}</p>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function updateViewHelp(modeValue, view2dValue) {
+    if (!viewHelpTitleEl || !viewHelpBodyEl) return;
+    const key = modeValue === "3d" ? "3d" : normalize2DView(view2dValue);
+    const info = VIEW_HELP[key] || VIEW_HELP["layered"];
+    viewHelpTitleEl.textContent = `View guide: ${info.title}`;
+    viewHelpBodyEl.innerHTML = buildGuideBody(key, guideExample);
   }
 
   const V3 = {
@@ -1705,6 +2008,7 @@ def graph_page_js() -> str:
       <span class="legend-item"><span class="legend-dot" style="background:#ffb703"></span>Theorem</span>
       <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span>Definition</span>
       <span class="legend-item"><span class="legend-dot" style="background:#8ecae6"></span>Lemma</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#9ca3af"></span>Other declaration</span>
       <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Root</span>
       <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing axiom</span>
       <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Core axiom</span>
@@ -1983,11 +2287,57 @@ def graph_page_js() -> str:
     }
     const depthOfIndex = nodeData.map((_, i) => Number(nodes[i].depth || 0));
     const maxDepth = depthOfIndex.reduce((m, d) => Math.max(m, d), 0);
+    function selectGuideExample() {
+      const rootIndex = idToIndex.get(rootId);
+      if (rootIndex === undefined) return null;
+      const rootEdges = edgeData.filter((e) => e.sourceIndex === rootIndex);
+      const depthOneEdges = rootEdges.filter((e) => depthOfIndex[e.targetIndex] === 1);
+      const preferred = depthOneEdges.length ? depthOneEdges : rootEdges;
+      const chosen = [];
+      const usedTargets = new Set();
+      function takeEdge(predicates) {
+        for (const e of preferred) {
+          if (usedTargets.has(e.targetIndex)) continue;
+          const kind = String(nodeData[e.targetIndex].kind || "");
+          if (predicates.includes(kind)) {
+            usedTargets.add(e.targetIndex);
+            chosen.push(e);
+            return;
+          }
+        }
+      }
+      takeEdge(["theorem", "lemma"]);
+      takeEdge(["def", "abbrev"]);
+      takeEdge(["axiom"]);
+      for (const e of preferred) {
+        if (chosen.length >= 3) break;
+        if (usedTargets.has(e.targetIndex)) continue;
+        usedTargets.add(e.targetIndex);
+        chosen.push(e);
+      }
+      if (!chosen.length) return null;
+      const dependencyIndices = chosen.map((e) => e.targetIndex);
+      return {
+        rootIndex,
+        rootNode: nodeData[rootIndex],
+        dependencyIndices,
+        dependencies: dependencyIndices.map((i) => nodeData[i]),
+        nodeIndices: [rootIndex, ...dependencyIndices],
+        edgeKeys: new Set(chosen.map((e) => edgeKey(e.sourceId, e.targetId)))
+      };
+    }
+    guideExample = selectGuideExample();
+    const guideNodeIdSet = new Set(guideExample ? guideExample.nodeIndices.map((i) => nodeData[i].id) : []);
     const neighborhoodByIndex = new Map();
     for (let i = 0; i < nodeData.length; i += 1) neighborhoodByIndex.set(i, new Set([i]));
     for (const e of edgeData) {
       neighborhoodByIndex.get(e.sourceIndex).add(e.targetIndex);
       neighborhoodByIndex.get(e.targetIndex).add(e.sourceIndex);
+      e.guide = guideExample ? guideExample.edgeKeys.has(edgeKey(e.sourceId, e.targetId)) : false;
+    }
+    for (let i = 0; i < nodeData.length; i += 1) {
+      nodeData[i].guide = guideNodeIdSet.has(nodeData[i].id);
+      if (nodeData[i].guide && nodeData[i].id !== rootId) nodeData[i].sizeScale *= 1.08;
     }
     let hoveredNodeIndex = -1;
 
@@ -2437,13 +2787,16 @@ def graph_page_js() -> str:
         const segLen = Math.hypot(tx - sx, ty - sy);
         if (segLen <= 1e-4) continue;
         const isFocusedEdge = focusedSet ? (e.sourceIndex === hoveredNodeIndex || e.targetIndex === hoveredNodeIndex) : false;
+        const isGuideEdge = !!e.guide;
         const edgeAlpha = e.alpha * (focusedSet ? (isFocusedEdge ? 1.0 : 0.14) : 1.0);
         if (edgeAlpha <= 0.03) continue;
-        const lineColor = rgb01ToCss(e.color, edgeAlpha);
+        const lineColor = isGuideEdge
+          ? rgb01ToCss([0.98, 0.91, 0.38], Math.max(edgeAlpha, 0.95))
+          : rgb01ToCss(e.color, edgeAlpha);
         ctx2d.strokeStyle = lineColor;
         ctx2d.lineWidth = Math.max(
           1 / Math.max(0.35, layout2d.scale),
-          (isFocusedEdge ? 1.85 : 1.08) / Math.max(0.35, layout2d.scale)
+          (isGuideEdge ? 2.2 : (isFocusedEdge ? 1.85 : 1.08)) / Math.max(0.35, layout2d.scale)
         );
         ctx2d.beginPath();
         let tipDx = tx - sx;
@@ -2488,6 +2841,7 @@ def graph_page_js() -> str:
         const n = nodeData[i];
         const isFocusedNode = focusedSet ? focusedSet.has(i) : false;
         const isHoveredNode = i === hoveredNodeIndex;
+        const isGuideNode = !!n.guide;
         const alphaMul = focusedSet && !isFocusedNode ? 0.24 : 1.0;
         const r = p.r * (n.sizeScale || 1) * (isHoveredNode ? 1.16 : 1.0);
         const fill = rgb01ToCss(n.color, Math.max(0.12, n.alpha * alphaMul));
@@ -2502,6 +2856,13 @@ def graph_page_js() -> str:
           ctx2d.arc(p.x, p.y, r + 1.6 / Math.max(0.35, layout2d.scale), 0, Math.PI * 2);
           ctx2d.stroke();
         }
+        if (isGuideNode && n.id !== rootId) {
+          ctx2d.strokeStyle = "#fde047";
+          ctx2d.lineWidth = Math.max(1.1 / Math.max(0.35, layout2d.scale), 2.0 / Math.max(0.35, layout2d.scale));
+          ctx2d.beginPath();
+          ctx2d.arc(p.x, p.y, r + 2.6 / Math.max(0.35, layout2d.scale), 0, Math.PI * 2);
+          ctx2d.stroke();
+        }
         if (isHoveredNode) {
           ctx2d.strokeStyle = rgb01ToCss([0.96, 0.98, 1.0], 0.95);
           ctx2d.lineWidth = Math.max(1.2 / Math.max(0.35, layout2d.scale), 2.1 / Math.max(0.35, layout2d.scale));
@@ -2511,6 +2872,7 @@ def graph_page_js() -> str:
         }
         const showLabel =
           n.id === rootId ||
+          isGuideNode ||
           (focusedSet && isFocusedNode) ||
           (!q && layout2d.view !== "radial" && Number(nodes[i].depth || 0) <= 1) ||
           (q && (
@@ -2967,6 +3329,7 @@ def graph_page_js() -> str:
         fitCamera();
       }
       if (modeBtn) modeBtn.textContent = modeButtonText();
+      updateViewHelp(renderMode.value, layout2d.view);
       try { localStorage.setItem(MODE_KEY, renderMode.value); } catch (_err) {}
     }
 
@@ -3002,6 +3365,7 @@ def graph_page_js() -> str:
         layout2d.view = normalize2DView(view2dSel.value);
         try { localStorage.setItem(VIEW2D_KEY, layout2d.view); } catch (_err) {}
         build2DLayout();
+        updateViewHelp(renderMode.value, layout2d.view);
       });
     }
 
@@ -3054,9 +3418,11 @@ def graph_page_js() -> str:
         if (len <= 1e-3) continue;
         const ux = dx / len;
         const uy = dy / len;
-        const color = rgb01ToCss(e.color, e.alpha);
+        const color = e.guide
+          ? rgb01ToCss([0.98, 0.91, 0.38], 0.95)
+          : rgb01ToCss(e.color, e.alpha);
         ctx2d.strokeStyle = color;
-        ctx2d.lineWidth = 1.2;
+        ctx2d.lineWidth = e.guide ? 2.0 : 1.2;
         ctx2d.beginPath();
         ctx2d.moveTo(a.x, a.y);
         ctx2d.lineTo(b.x, b.y);
@@ -3101,9 +3467,17 @@ def graph_page_js() -> str:
           ctx2d.arc(p.x, p.y, r + 2, 0, Math.PI * 2);
           ctx2d.stroke();
         }
+        if (n.guide && n.id !== rootId) {
+          ctx2d.strokeStyle = "#fde047";
+          ctx2d.lineWidth = 1.8;
+          ctx2d.beginPath();
+          ctx2d.arc(p.x, p.y, r + 3, 0, Math.PI * 2);
+          ctx2d.stroke();
+        }
 
         const showLabel =
           n.id === rootId ||
+          n.guide ||
           (q && (
             String(n.id).toLowerCase().includes(q) ||
             String(n.label).toLowerCase().includes(q) ||
@@ -3188,6 +3562,7 @@ def graph_page_js() -> str:
     }
 
     renderLegend();
+    updateViewHelp(renderMode.value, layout2d.view);
     if (hasWebGL) {
       fitCamera();
       buildSphereBuffers();
@@ -3358,6 +3733,61 @@ def write_graph(output_root: Path, slug: str, title: str, payload: dict[str, obj
     return f"{slug}/index.html"
 
 
+def drop_embedded_axioms(payload: dict[str, object]) -> dict[str, object]:
+    embedded = set(EMBEDDED_AXIOMS)
+    nodes = [
+        node for node in payload["nodes"]
+        if node.get("fq_name") not in embedded
+    ]
+    keep = {node["id"] for node in nodes}
+    edges = [
+        edge for edge in payload["edges"]
+        if edge.get("source") in keep and edge.get("target") in keep
+    ]
+    out = dict(payload)
+    out["nodes"] = nodes
+    out["edges"] = edges
+    return out
+
+
+def align_root_project_axiom_tiers(
+    payload: dict[str, object], semantic_frontier: set[str]
+) -> dict[str, object]:
+    frontier = set(semantic_frontier) - set(EMBEDDED_AXIOMS)
+    nodes = []
+    for node in payload["nodes"]:
+        updated = dict(node)
+        if updated.get("kind") == "axiom" and updated.get("axiom_tier") == "project":
+            if updated.get("fq_name") not in frontier:
+                updated["axiom_tier"] = "none"
+        nodes.append(updated)
+    out = dict(payload)
+    out["nodes"] = nodes
+    return out
+
+
+def retain_only_semantic_root_axioms(
+    payload: dict[str, object], semantic_frontier: set[str]
+) -> dict[str, object]:
+    frontier = set(semantic_frontier) - set(EMBEDDED_AXIOMS)
+    nodes = [
+        node for node in payload["nodes"]
+        if not (
+            node.get("kind") == "axiom"
+            and node.get("fq_name") not in frontier
+        )
+    ]
+    keep = {node["id"] for node in nodes}
+    edges = [
+        edge for edge in payload["edges"]
+        if edge.get("source") in keep and edge.get("target") in keep
+    ]
+    out = dict(payload)
+    out["nodes"] = nodes
+    out["edges"] = edges
+    return out
+
+
 def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     fq_index, edges = build_full_graph(repo_root)
 
@@ -3371,6 +3801,8 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     if root_decl.fq_name == "MLC.mlc_conjecture":
         axiom_frontier = collect_axioms_from_check_axioms(repo_root)
         for ax_name in sorted(axiom_frontier):
+            if ax_name in EMBEDDED_AXIOMS:
+                continue
             if ax_name not in fq_index:
                 fq_index[ax_name] = Decl(
                     kind="axiom",
@@ -3410,6 +3842,10 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
         extra_nodes=root_extra_nodes,
         extra_edges=root_extra_edges,
     )
+    if root_decl.fq_name == "MLC.mlc_conjecture":
+        root_payload = drop_embedded_axioms(root_payload)
+        root_payload = align_root_project_axiom_tiers(root_payload, axiom_frontier)
+        root_payload = retain_only_semantic_root_axioms(root_payload, axiom_frontier)
     root_href = write_graph(
         output_root,
         "mlc_conjecture",
@@ -3420,9 +3856,11 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     links: list[tuple[str, str]] = [
         (f"Rooted graph: {root_decl.fq_name}", root_href),
     ]
-    bridge_decl = fq_index.get(INJON_BRIDGE_SYMBOL)
     mlc_decl = fq_index.get("MLC.mlc_conjecture")
-    if bridge_decl is not None:
+    for sym in ALTERNATIVE_GRAPH_SYMBOLS:
+        bridge_decl = fq_index.get(sym)
+        if bridge_decl is None:
+            continue
         extra_nodes: set[str] = set()
         extra_edges: list[dict[str, str]] = []
         if mlc_decl is not None:
@@ -3443,7 +3881,7 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
         )
         bridge_href = write_graph(
             output_root,
-            "mlc_conjecture_injon_bridge",
+            graph_slug(bridge_decl.fq_name),
             f"Lean Dependency Graph: {bridge_decl.fq_name}",
             bridge_payload,
         )

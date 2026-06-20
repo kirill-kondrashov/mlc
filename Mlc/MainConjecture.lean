@@ -8,12 +8,9 @@ import Mlc.InconsistencyRoute
 import Mlc.RenormalizationTowerExistence
 import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.Bottcher.DegreeOneInj
-import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
-import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mlc.MoleculeToSatelliteNestData
 import Mlc.FastTowerExistenceObstruction
-import Mlc.Quadratic.Complex.Bottcher.GreenFunctionRayInversion
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
@@ -1753,6 +1750,22 @@ theorem genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge
     Quadratic.puzzle_boundary_motion_hyp_of_bottcher
       (Classical.choice (h_bridge h_route))
 
+/-- The current root already has an unconditional puzzle-boundary-motion source
+from the `bottcher_onM_hyp` stub, so the theorem-facing genuine-route bridge can
+be discharged without any extra analytic input from the route itself. -/
+theorem genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM :
+    GenuineBottcherPuzzleBoundaryMotionBridgeTwo := by
+  intro _h_route
+  exact
+    Quadratic.puzzle_boundary_motion_hyp_of_onM
+      { h_top := bottcher_onM_hyp.h_top
+        h_stab := bottcher_onM_hyp.h_stab
+        B := bottcher_onM_hyp.B
+        r := bottcher_onM_hyp.r
+        r_pos := bottcher_onM_hyp.r_pos
+        in_M := bottcher_onM_hyp.in_M
+        hconn := trivial }
+
 /-- Package the theorem-facing Bottcher route together with the residual
 Track-1/Track-2 inputs into the existing main-path datum. -/
 theorem mainPathData_of_genuineBottcherRoute_two
@@ -2128,6 +2141,82 @@ theorem mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
       (genuineBottcherFamilyBridgeTwo_of_localParameterExtensionBridge_of_promotion
         h_ext h_promote)
       h_route h_track12
+
+/-- Root-facing genuine-route cutover through the active PLAN 06 target. If the
+principal pullback candidate at `c = 2` is proved coherent, and the same
+candidate is given the matching inverse package on the exterior / outside-open
+region, then it produces the theorem-facing genuine Böttcher route consumed by
+the existing local-parameter-extension closure chain. This rewires the root
+entrypoint away from the proxy-specific `BasinExternalRayMapDataTwo` package and
+toward the genuine coordinate strategy tracked in PLAN 06/08/09. -/
+theorem mlc_conjecture_of_principalPullbackCoherentData_two
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo)
+    (h_coh : Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ))
+    (h_inv :
+      Quadratic.GenuineBottcherInversePackageFor
+        (2 : ℂ)
+        (Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ)))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  let hclassical : Quadratic.ClassicalGlobalBottcherDataFor (2 : ℂ) :=
+    h_coh.toLogSeriesBasinExtensionDataFor.toClassicalGlobalBottcherDataFor
+  have hroute : Quadratic.GenuineBottcherRouteFor (2 : ℂ) := by
+    exact hclassical.toGenuineBottcherRouteFor (by simpa [hclassical] using h_inv)
+  exact
+    mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
+      h_ext h_promote hroute h_track12
+
+/-- Route-B version of the genuine-root cutover: if one builds a full basin
+extension together with an exterior inverse, and that extension is identified
+with the checked principal pullback candidate, then the PLAN 06 coherent-data and
+inverse-package targets follow automatically and the existing genuine-route
+closure theorem applies. -/
+theorem mlc_conjecture_of_logSeriesExteriorInverseBasinExtensionData_two
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo)
+    (h_routeB : Quadratic.LogSeriesExteriorInverseBasinExtensionDataFor (2 : ℂ))
+    (h_eq :
+      h_routeB.extensionData.phi =
+        Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact
+    mlc_conjecture_of_principalPullbackCoherentData_two
+      h_ext
+      h_promote
+      (h_routeB.extensionData.toPrincipalPullbackCoherentDataFor_of_eq_candidate h_eq)
+      (h_routeB.toGenuineBottcherInversePackageFor_of_eq_candidate h_eq)
+      h_track12
+
+/-- Unified PLAN 06 cutover: once the last global Böttcher theorem is available
+at `c = 2`, the existing genuine-route closure chain already proves MLC without
+going through the proxy-specific basin-external-ray axiom path. -/
+theorem mlc_conjecture_of_unifiedGlobalBottcherTheorem_two
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo)
+    (h_unified : Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_unified with ⟨hdata⟩
+  exact
+    mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
+      h_ext h_promote hdata.toGenuineBottcherRouteFor h_track12
+
+/-- Stronger unified cutover: the current repository already has a direct
+puzzle-boundary-motion bridge from `bottcher_onM_hyp`, so the unified global
+Böttcher theorem at `c = 2` by itself is enough on the analytic side of the
+root closure chain. -/
+theorem mlc_conjecture_of_unifiedGlobalBottcherTheorem_two_of_onM
+    (h_unified : Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_unified with ⟨hdata⟩
+  exact
+    mlc_conjecture_of_genuineBottcherRoute_two
+      genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM
+      hdata.toGenuineBottcherRouteFor
+      h_track12
 
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
 lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
@@ -2938,41 +3027,6 @@ theorem not_restrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexam
     hminimal
       Mlc.Bottcher.DegreeOne.not_restrictedLocalHomeomorphPositiveConstantDegreeTwo
 
-/-- Honest root-facing theorem shape after eliminating the false full-exterior
-degree statement: construct a basin-valued exterior inverse for the actual
-`proxy_bottcher_map` at `c = 2`, with a right inverse on all of the exterior and a
-left inverse on the outside-open source region. -/
-def BasinExternalRayMapDataTwoMinimalCounterexample : Prop :=
-  ¬ Quadratic.BasinExternalRayMapDataTwo → False
-
-/-- Theorem-shaped scope interface for the basin-valued external-ray package. -/
-abbrev BasinExternalRayMapDataTwoScope : Prop :=
-  BasinExternalRayMapDataTwoMinimalCounterexample
-
-/-- Recover the honest basin-valued external-ray package from its
-minimal-counterexample formulation. -/
-theorem basinExternalRayMapDataTwo_of_minimalCounterexample
-    (hminimal : BasinExternalRayMapDataTwoMinimalCounterexample) :
-    Quadratic.BasinExternalRayMapDataTwo := by
-  classical
-  by_contra hdata
-  exact hminimal hdata
-
-/-- The minimal-counterexample wrapper itself is impossible for the current
-constructive coordinate, because the wrapped basin-valued package is already
-formally refuted. -/
-theorem not_basinExternalRayMapDataTwoMinimalCounterexample :
-    ¬ BasinExternalRayMapDataTwoMinimalCounterexample := by
-  intro hminimal
-  exact not_basinExternalRayMapData_two
-    (basinExternalRayMapDataTwo_of_minimalCounterexample hminimal)
-
-/-- Scope alias for the root wrapper is likewise impossible. -/
-theorem not_basinExternalRayMapDataTwoScope :
-    ¬ BasinExternalRayMapDataTwoScope := by
-  simpa [BasinExternalRayMapDataTwoScope] using
-    not_basinExternalRayMapDataTwoMinimalCounterexample
-
 /-- Constructive CP5 endpoint from the direct closure criterion witness. -/
 def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
   AnalyticDerivConstructivePayloadTwo ∨
@@ -3170,14 +3224,6 @@ def RootSeedPayloadTwoNoAnchor : Prop :=
 exact root-safe outside-open injectivity witness target. -/
 def RootSeedPayloadTwoStrictMonoFreeIngressTwo : Prop :=
   GreenRayLogGtAnchorTwoSeam ∧ RootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo
-
-/-- Build centralized root-seed payload from the strict-mono-free ingress
-payload. -/
-theorem mlc_conjecture_of_external_ray_map_exists_two :
-    Quadratic.ExternalRayMapData (2 : ℂ) →
-    LocallyConnectedSpace mandelbrotSet := by
-  intro h_ext
-  exact mlc_conjecture_of_externalRayMapData_two h_ext
 
 /-- Root theorem routed through the centralized root-seed payload selector. -/
 def RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo : Prop :=
@@ -3511,21 +3557,15 @@ def RootCutoverAfterExplicitSubcutoffSourceUnlockTwo : Prop :=
     ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo →
       LocallyConnectedSpace mandelbrotSet
 
-/-- Current root-frontier witness at `c = 2`.
-This is the single swap point for removing
-`MLC.Quadratic.external_ray_map_exists` from `mlc_conjecture`. -/
-lemma externalRayMapData_two_root_frontier :
-    Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_exists (2 : ℂ)
+/-! ### Legacy direct seam route (bypassing `external_ray_map_exists`)
 
-/-! ### Direct proof route (bypassing `external_ray_map_exists`)
-
-The direct route wires `mlc_conjecture` through the FR/IR dichotomy using:
+This legacy route wires `mlc_conjecture` through the FR/IR dichotomy using:
 1. The existing para-puzzle connectivity axiom for the FR branch (Yoccoz shrinkage).
 2. A single seam axiom for the IR branch (local connectivity of IR parameters).
 
 This replaces the vacuous `external_ray_map_exists(2) → False → MainPathData`
-chain with a mathematically sound proof skeleton.
+chain with a mathematically sound proof skeleton, but after the genuine
+Böttcher cutover it is no longer the checked root route.
 -/
 
 /-- Seam axiom: the Mandelbrot set is locally connected at every infinitely
@@ -4434,6 +4474,14 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     boundedTypeConstructive_of_chosenTrueProblem45Axioms
     residualOpenVirtualNearMoleculeAxiom
 
+/-- The existing residual-open Problem 4.3/4.4 root axiom already supplies the
+Track-1/Track-2 package consumed by the genuine-route closure chain. -/
+theorem irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom :
+    IRNoTowerPrimitiveAndMoleculeBridgeTargetData :=
+  ⟨noTowerPrimitive_of_problem44
+      (problem44_of_residualOpenVirtualNearMolecule residualOpenVirtualNearMoleculeAxiom),
+    problem43_of_residualOpenVirtualNearMolecule residualOpenVirtualNearMoleculeAxiom⟩
+
 /-- Root-facing closure of the honest basin-valued external-ray package. -/
 theorem mlc_conjecture_of_basinExternalRayMapData_two
     (hdata : Quadratic.BasinExternalRayMapDataTwo) :
@@ -4442,36 +4490,37 @@ theorem mlc_conjecture_of_basinExternalRayMapData_two
     mlc_conjecture_of_externalRayMapData_two
       (Quadratic.externalRayMapData_of_basinExternalRayMapData (2 : ℂ) hdata)
 
-/-- Final root-facing kernel after ruling out the false full-exterior degree
-route. The single remaining theorem-shaped input is the specialized
-basin-valued external-ray package for the actual `proxy_bottcher_map` at `c = 2`. -/
-axiom basinExternalRayKernelTwo : BasinExternalRayMapDataTwoMinimalCounterexample
+/-- New root-facing kernel for the genuine-route strategy. This packages the
+remaining PLAN 06/08/09 frontier at `c = 2` without going through the old
+`basinExternalRayKernelTwo` proxy route. The residual Problem 4.3/4.4 axiom
+already supplies the Track-1/Track-2 payload separately, so the checked root
+only needs the last theorem-facing route input together with the route-to-motion
+bridge actually consumed by the closure chain. -/
+def UnifiedGenuineRootKernelTwo : Prop :=
+  GenuineBottcherPuzzleBoundaryMotionBridgeTwo ∧
+    Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)
 
-/-- Root closure from the honest basin-valued external-ray kernel. -/
-theorem mlc_conjecture_of_basinExternalRayKernelTwo
-    (hkernel : BasinExternalRayMapDataTwoMinimalCounterexample) :
+/-- Root-facing axiom for the genuine-route frontier. -/
+axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
+
+/-- Root closure from the unified genuine-route kernel. -/
+theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
+    (hkernel : UnifiedGenuineRootKernelTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact
-    mlc_conjecture_of_basinExternalRayMapData_two
-      (basinExternalRayMapDataTwo_of_minimalCounterexample hkernel)
-
-/-- The remaining root axiom is inconsistent with the current constructive
-coordinate package, because that package already rules out
-`Quadratic.BasinExternalRayMapDataTwo`. -/
-theorem false_of_basinExternalRayKernelTwo
-    (hkernel : BasinExternalRayMapDataTwoMinimalCounterexample) :
-    False := by
-  exact not_basinExternalRayMapDataTwoMinimalCounterexample hkernel
+    mlc_conjecture_of_unifiedGlobalBottcherTheorem_two_of_onM
+      hkernel.2
+      irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. The checked root now depends only
-    on a single honest theorem-shaped axiom: a basin-valued exterior inverse
-    package for the actual `proxy_bottcher_map` at `c = 2`, with a global right
-    inverse on the exterior and a left inverse on the outside-open source
-    region. -/
+    the Mandelbrot set is locally connected. The checked root now depends on the
+    genuine-route frontier package at `c = 2`: the unified global Böttcher
+    theorem together with the theorem-facing route-to-motion bridge.
+    The Track-1/Track-2 combinatorial package is supplied from the existing
+    residual Problem 4.3/4.4 root axiom. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_basinExternalRayKernelTwo basinExternalRayKernelTwo
+  mlc_conjecture_of_unifiedGenuineRootKernelTwo unifiedGenuineRootKernelTwo
 
 
 end MainProof

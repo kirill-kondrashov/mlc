@@ -2,193 +2,181 @@
 
 [![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
 
-[Live dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/) *(GitHub Pages deploys from `main`; the checked-in `site/` directory reflects the current branch state.)*
+[Dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
-A Lean 4 formalization of the Mandelbrot local connectivity statement
-`MLC.mlc_conjecture`.
+> [!IMPORTANT]
+> This repository is an experimental Lean 4 formalization attempt, not a
+> completed proof of the Mandelbrot local connectivity conjecture. It formalizes
+> reductions, definitions, and proof obligations from the current literature
+> corpus, with remaining mathematical inputs isolated as explicit project
+> axioms. Its intended use is to provide infrastructure for automatically
+> checking a proof of MLC when a complete proof appears in the literature.
 
-## Quick Start
+## Mathematical statement and notation
+
+Let $f_c : \mathbb C \to \mathbb C$ be the
+[quadratic polynomial](https://en.wikipedia.org/wiki/Quadratic_polynomial)
+$f_c(z) = z^2 + c$. The
+[Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) is
+
+```math
+\mathcal M = \{c \in \mathbb C : (f_c^n(0))_{n \ge 0} \text{ is bounded}\}.
+```
+
+For a [topological space](https://en.wikipedia.org/wiki/Topological_space) $X$
+and a point $x \in X$,
+[local connectivity](https://en.wikipedia.org/wiki/Locally_connected_space) at
+$x$ means that every neighbourhood $U$ of $x$ contains a connected
+neighbourhood $V$ of $x$ with $V \subset U$. In Lean this is the
+predicate `MLC.LocallyConnectedAt`.
+
+The conjectural statement formalized at the root is:
+
+**Conjecture (MLC).** The Mandelbrot set $\mathcal M$, with the subspace
+topology inherited from $\mathbb C$, is locally connected.
+
+In Lean this conditional declaration is `MLC.mlc_conjecture`; it has type
+`LocallyConnectedSpace MLC.mandelbrotSet`.
+
+The formal statement of the conjecture is based on DeepMind's
+[`formal-conjectures`](https://github.com/google-deepmind/formal-conjectures)
+repository, specifically
+[`FormalConjectures/Wikipedia/Mandelbrot.lean`](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean).
+
+## Checked Lean status
+
+Run:
 
 ```bash
 make build
 make check
 ```
 
-Expected `make check` output:
+The root declaration is sorry-free. The current `make check` axiom frontier is:
 
 ```text
-✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
-All axioms used:
-- Quot.sound
-- propext
-- Classical.choice
-- MLC.basinExternalRayKernelTwo
+Quot.sound
+propext
+Classical.choice
+MLC.residualOpenVirtualNearMoleculeAxiom
+MLC.unifiedGenuineRootKernelTwo
 ```
 
-## Current Frontier
+The first three are standard Lean foundations. The project frontier consists
+of the last two axioms.
 
-```text
-Axioms(MLC.mlc_conjecture)
-= {Quot.sound, propext, Classical.choice,
-   MLC.basinExternalRayKernelTwo}
+## Remaining mathematical inputs
 
-project_frontier(MLC.mlc_conjecture)
-= {MLC.basinExternalRayKernelTwo}
+### 1. Global Böttcher extension at $c = 2$
+
+Let $f_2(z) = z^2 + 2$, and let
+
+```math
+A_\infty(f_2) = \{z \in \mathbb C : |f_2^n(z)| \to \infty\}
 ```
 
-## Current Status
+be the basin of infinity. Let $G_2$ denote the
+[Green function](https://en.wikipedia.org/wiki/Green%27s_function) of $f_2$.
+Near infinity there is a normalized
+[Böttcher map](https://en.wikipedia.org/wiki/B%C3%B6ttcher%27s_theorem) $\phi$
+satisfying
 
-One non-core project axiom remains: `MLC.basinExternalRayKernelTwo`.
-
-The current analytic route is to construct a genuine global Böttcher coordinate
-at `c = 2` and use it to replace the remaining basin-external-ray axiom. The
-near-infinity part is complete: the canonical coordinate is
-
-```lean
-MLC.logSeriesBottcherApprox c
+```math
+\phi(f_2(z)) = \phi(z)^2, \qquad \phi(z) / z \to 1 \quad (z \to \infty).
 ```
 
-packaged by:
+**Theorem (global Böttcher extension at $c = 2$).** There is a map
+$\Phi : \mathbb C \to \mathbb C$,
+[holomorphic](https://en.wikipedia.org/wiki/Holomorphic_function) on
+$A_\infty(f_2)$, such that:
 
-```lean
-Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox
-Quadratic.genuineBottcherNearInfinityRouteFor_logSeriesBottcherApprox
+1. $\Phi(f_2(z)) = \Phi(z)^2$ for all $z \in A_\infty(f_2)$;
+2. $z \in A_\infty(f_2)$ if and only if $|\Phi(z)| > 1$;
+3. $|\Phi(z)| = \exp(G_2(z))$;
+4. $\Phi(z) / z \to 1$ as $z \to \infty$;
+5. on a sufficiently large exterior region, $\Phi$ agrees with the
+   normalized near-infinity Böttcher coordinate.
+
+This is the mathematical content represented at the root by
+`MLC.unifiedGenuineRootKernelTwo`. The relevant Lean entry points are:
+
+- [`Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox`](Mlc/Quadratic/Complex/Bottcher/ConstructiveBasinCoordinate.lean#L130-L145)
+- [`MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`](Mlc/MainConjecture.lean#L2152-L2173)
+- [`MLC.MainProof.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two`](Mlc/MainConjecture.lean#L2195-L2208)
+
+### 2. Virtual Molecule a priori control
+
+Consider a quadratic polynomial whose first quadratic-like renormalization is
+primitive. Following Dudko's 2025 notation, this renormalization is encoded by
+a primitive copy $M_1 \subset \mathcal M$, together with a chain of satellite
+copies
+
+```math
+\mathcal M = M^{(0)} \supsetneq M^{(1)} \supsetneq \cdots
+\supsetneq M^{(n)} \supsetneq M^{(n+1)}.
 ```
 
-The remaining work is basin extension. The current pullback candidate is:
+Here each $M^{(j+1)}$ is a maximal satellite subcopy of $M^{(j)}$. The
+virtual Molecule regime is the range of parameter scales between the ambient
+copy $\mathcal M$ and $M^{(n)}$; in Dudko's formulation, this is the range
+not controlled by the puzzle levels used between $M^{(n)}$ and $M_1$.
 
-```lean
-Quadratic.principalPullbackLogSeriesBottcher
-Quadratic.basinLogSeriesExtensionCandidate
+**Theorem (virtual Molecule a priori control).** Uniform a priori bounds hold
+in the remaining unbounded satellite quadratic-like cases, and the
+near-degenerate regime extends to the virtual Molecule setting above. Here
+“a priori bounds” means uniform positive lower bounds for the conformal moduli
+of the annuli controlling the corresponding renormalization geometry.
+Equivalently, there is uniform geometric control of the relevant
+renormalization scales along the chain of satellite copies, including the
+virtual bounded-type satellite and virtual near-neutral subcases described in
+Section 4.5 of Dudko's note.
+
+This is the mathematical content represented at the root by
+`MLC.residualOpenVirtualNearMoleculeAxiom`. In `refs/2512.24171v1.txt`, the
+corresponding items are:
+
+1. Problem 4.3: pseudo-Siegel a priori bounds in the remaining unbounded
+   satellite quadratic-like cases
+2. Interpolation Problem 4.4: a Virtual Molecule version of the
+   Near-Degenerate Regime
+3. Section 4.5: Virtual near-Molecule Renormalization
+
+## How the Lean root uses these inputs
+
+The checked conditional root declaration is in
+[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean#L4515-L4523). It reduces MLC
+to the two mathematical inputs above:
+
+- the global Böttcher extension package at $c = 2$
+- the virtual Molecule / near-neutral renormalization package
+
+The dependency graph visualizes this reduction:
+
+```bash
+make graphs
 ```
 
-The exact Route-A target is:
+## Repository entry points
 
-```lean
-Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)
+- Root theorem: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4515-L4523)
+- Root axiom check: [`check_axioms.lean`](check_axioms.lean)
+- Dependency graph generator:
+  [`scripts/generate_dependency_graph_site.py`](scripts/generate_dependency_graph_site.py)
+- Global Böttcher plan: [`plan/PLAN_06_global_bottcher_package.md`](plan/PLAN_06_global_bottcher_package.md)
+- Monodromy plan: [`plan/PLAN_08_analytic_continuation_monodromy.md`](plan/PLAN_08_analytic_continuation_monodromy.md)
+- Actual overlap plan: [`plan/PLAN_09_actual_overlap_neighborhoods.md`](plan/PLAN_09_actual_overlap_neighborhoods.md)
+
+## Notebooks
+
+```bash
+make notebook
 ```
 
-One field is checked: agreement with the near-infinity coordinate on the
-canonical exterior.
+This renders `notebooks/` to static HTML and serves them locally on
+`127.0.0.1:8888`.
 
-```lean
-Quadratic.basinLogSeriesExtensionCandidate_extends_near
-```
-
-The live obstruction is coherent pullback-root monodromy along basin loops.
-PLAN 08 has reduced the Lean side to a precise analytic comparison input:
-
-```lean
-Quadratic.HighEscapingChartChainProductComparisonData
-```
-
-The finite chart-chain algebra is formalized:
-
-```lean
-Quadratic.BasinLoopChartChain
-Quadratic.BasinLoopChartChain.monodromyProduct
-Quadratic.BasinLoopChartChainMonodromyData
-Quadratic.BasinLoopChartChainMonodromyData.toBasinLoopPullbackRootMonodromyData
-```
-
-Uniform escape over continuous basin loops and algebraic descent from high
-escaping levels are formalized:
-
-```lean
-Quadratic.BasinLoop.exists_levelEscapes
-Quadratic.ArbitrarilyHighEscapingLevelBasinLoopChartChainData
-Quadratic.PullbackRootMonodromyRepresentation.trivial_of_arbitrarily_high_trivial
-```
-
-The special comparison case where local logarithm branches are restrictions of
-one global logarithm branch is also formalized:
-
-```lean
-Quadratic.ChartChainLocalLogsRestrictGlobal
-Quadratic.ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
-Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
-```
-
-The generalized right-half-plane family from the notebook is checked:
-
-```lean
-Quadratic.rightHalfPlaneZeroFreeChartRootBranchData
-Quadratic.quadraticMap_two_second_iterate_re_lower_bound
-Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
-```
-
-Current PLAN 09 work is to prove the closing trivial-monodromy theorem for the
-actual high-escaping curve.
-
-More precisely, one must prove the following theorem.
-
-**Theorem (closing trivial monodromy).** Let
-
-$$
-U_0, \dots, U_m \subset \mathbf{C}^{\times}, \qquad
-V_j \subset U_j \cap U_{j+1} \ \ (0 \le j < m), \qquad
-V_{\mathrm{cl}} \subset U_m \cap U_0,
-$$
-
-$$
-b_j : U_j \to \mathbf{C} \qquad (0 \le j \le m),
-$$
-
-Assume that
-
-$$
-A_K([t_j, t_{j+1}]) \subset U_j \qquad (0 \le j \le m),
-$$
-
-$$
-b_{j+1}\vert_{V_j} = b_j\vert_{V_j} \qquad (0 \le j < m),
-$$
-
-and that all branches are obtained by analytic continuation of the same
-normalized base germ. Then
-
-$$
-b_m\vert_{V_{\mathrm{cl}}} = b_0\vert_{V_{\mathrm{cl}}}.
-$$
-
-`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` records this
-theorem, two positive numerical examples, a counterexample attempt showing why
-the closing equality is necessary, and the one-domain special case.
-
-Once this theorem-level package exists,
-`HighEscapingChartChainProductComparisonData` should give trivial monodromy and
-feed into `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` and then
-`PrincipalPullbackCoherentDataFor (2 : ℂ)`.
-
-Current reduction seams:
-
-```lean
-Quadratic.LogSeriesBasinExtensionDataFor
-Quadratic.PrincipalPullbackCoherentDataFor
-Quadratic.LogSeriesExteriorInverseBasinExtensionDataFor
-Quadratic.ClassicalGlobalExtensionFromNearInfinityDataFor
-```
-
-Checked reductions show that these basin-extension/global-extension packages are
-enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
-
-## Repository Snapshot
-
-1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
-2. `plan/PLAN_06_global_bottcher_package.md` records the current Böttcher plan.
-3. `draft/` now records the single remaining positive mathematical target:
-   `draft/genuine_bottcher_route_problem.md`.
-4. `proof_sketches/` records the matching human-readable sketch:
-   `proof_sketches/genuine_bottcher_route_proof.md`.
-5. `plan/PLAN_08_analytic_continuation_monodromy.md` records the checked
-   comparison layer, and `plan/PLAN_09_actual_overlap_neighborhoods.md` records
-   the current geometric/theorem-level handoff.
-6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb`,
-   `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`, and
-   `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb`
-   visualize the live PLAN 08 / PLAN 09 frontier, while
-   `notebooks/archive/plan08_step13_actual_high_escaping_charts_frontier.ipynb`
-   preserves the older Step 13 counterexample/status notebook.
+The main frontier notebook is
+[`notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb`](notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb).
 
 ## Dependencies
 

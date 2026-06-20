@@ -1,6 +1,10 @@
 /.lake
+__pycache__/
 output*.txt
 *.log
 *.out
 *.aux
 site/
+notebooks/.ipynb_checkpoints/
+notebooks/.venv/
+notebooks-html/

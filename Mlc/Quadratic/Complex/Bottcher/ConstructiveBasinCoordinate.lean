@@ -11,13 +11,13 @@ namespace Quadratic
 lemma norm_polar_green_map_eq_exp_green (c z : ℂ) :
     ‖polar_green_map c z‖ = Real.exp (green_function c z) := by
   by_cases hz : z = 0
-  · simp [polar_green_map, hz, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+  · simp [polar_green_map, hz]
   · have hnormz : (‖z‖ : ℝ) ≠ 0 := norm_ne_zero_iff.2 hz
     have hdir : ‖z / (‖z‖ : ℂ)‖ = 1 := by
       rw [norm_div, Complex.norm_real, norm_norm, div_self hnormz]
     have hexp :
         ‖(Real.exp (green_function c z) : ℂ)‖ = Real.exp (green_function c z) := by
-      simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+      simp
     calc
       ‖polar_green_map c z‖
           = ‖(z / (‖z‖ : ℂ)) * (Real.exp (green_function c z) : ℂ)‖ := by
@@ -37,37 +37,10 @@ lemma one_lt_norm_polar_green_map_of_mem_basin (c z : ℂ)
   rw [norm_polar_green_map_eq_exp_green]
   simpa using (Real.one_lt_exp_iff.mpr hgreen_pos)
 
-/-- Constructive basin-valued Böttcher coordinate obtained by restricting the
-explicit proxy to the basin of infinity. -/
-noncomputable def basin_polar_green_map (c : ℂ) :
-    {z : ℂ // z ∈ basin_of_infinity c} → {w : ℂ // 1 < ‖w‖} :=
-  fun z => ⟨polar_green_map c z.1, one_lt_norm_polar_green_map_of_mem_basin c z.1 z.2⟩
-
-@[simp] lemma basin_polar_green_map_coe (c : ℂ) (z : {z : ℂ // z ∈ basin_of_infinity c}) :
-    ((basin_polar_green_map c z : {w : ℂ // 1 < ‖w‖}) : ℂ) = polar_green_map c z := rfl
-
-/-- The basin-valued constructive coordinate has the expected Green-function
-modulus. -/
-lemma norm_basin_polar_green_map_eq_exp_green (c : ℂ)
-    (z : {z : ℂ // z ∈ basin_of_infinity c}) :
-    ‖((basin_polar_green_map c z : {w : ℂ // 1 < ‖w‖}) : ℂ)‖ =
-      Real.exp (green_function c z) := by
-  simpa using norm_polar_green_map_eq_exp_green c z
-
 /-- Continuity of the explicit constructive coordinate away from `0`. -/
 lemma polar_green_map_continuousAt_of_ne_zero (c z : ℂ) (hz : z ≠ 0) :
     ContinuousAt (polar_green_map c) z :=
   polar_green_map_continuousAt_of_ne_zero_outsidePlan c z hz
-
-/-- The basin-valued constructive coordinate is continuous away from `0` on the
-subspace basin. -/
-lemma basin_polar_green_map_continuousAt_of_ne_zero (c : ℂ)
-    (z : {z : ℂ // z ∈ basin_of_infinity c}) (hz : (z : ℂ) ≠ 0) :
-    ContinuousAt (fun w : {z : ℂ // z ∈ basin_of_infinity c} =>
-      (((basin_polar_green_map c w : {u : ℂ // 1 < ‖u‖}) : ℂ))) z := by
-  simpa [basin_polar_green_map] using
-    (polar_green_map_continuousAt_of_ne_zero c (z : ℂ) hz).comp
-      continuous_subtype_val.continuousAt
 
 /-- Exact ray formula for the constructive coordinate. -/
 lemma polar_green_map_apply_ray (c u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ) (hρ : 0 < ρ) :
@@ -75,7 +48,7 @@ lemma polar_green_map_apply_ray (c u : ℂ) (hu : ‖u‖ = 1) (ρ : ℝ) (hρ :
       u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))) := by
   have hu0 : u ≠ 0 := by
     intro hu'
-    simpa [hu'] using hu
+    simp [hu'] at hu
   have hρ0 : ((ρ : ℂ)) ≠ 0 := by
     exact_mod_cast (ne_of_gt hρ)
   have hz0 : ((ρ : ℂ) * u) ≠ 0 := mul_ne_zero hρ0 hu0
@@ -136,17 +109,6 @@ lemma tendsto_polar_green_map_div_atInfinity (c : ℂ) :
       _ = ((Real.exp (green_function c z - Real.log ‖z‖)) : ℂ) := by
             simp [Real.exp_sub, Real.exp_log hz, div_eq_mul_inv]
   exact (tendsto_congr' hratio).2 hExpC
-
-/-- Optional theorem-facing summary of the constructive basin-valued coordinate
-carried by the explicit proxy. -/
-def ConstructiveBasinBottcherCoordinateData (c : ℂ) : Prop :=
-  ∃ φ : ℂ → ℂ,
-    (∀ z, z ∈ basin_of_infinity c → 1 < ‖φ z‖) ∧
-    (∀ z, ‖φ z‖ = Real.exp (green_function c z)) ∧
-    (∀ z, z ≠ 0 → ContinuousAt φ z) ∧
-    Tendsto (fun z => φ z / z) atInfinity (𝓝 (1 : ℂ)) ∧
-    (∀ u : ℂ, ‖u‖ = 1 → ∀ ρ : ℝ, 0 < ρ →
-      φ ((ρ : ℂ) * u) = u * ↑(Real.exp (green_function c ((ρ : ℂ) * u))))
 
 /-- Phase-1 theorem-facing package for the classical global Böttcher proof:
 holomorphic near infinity on the canonical outside-open region, conjugates the
@@ -615,6 +577,58 @@ lemma logBranch_eq_of_chain_initialEq
   logBranch_eqOn_of_chain_initialEq act can hsame_chart
     wStart hwStart hstart_eq overlapPoint hoverlap_mem_left hoverlap_mem_right hact hcan j hj hw
 
+/-- Lean formalization of the notebook's rigorous Čech-gluing criterion. If the
+transition differences between local logarithm branches are given by a
+coboundary `a_k - a_j`, then interior overlap equalities force all constants
+`a_j` to coincide, and hence the closing overlap equality follows. This is the
+abstract step separating the classical logarithm-gluing argument from the
+MLC-specific geometric work of producing the coboundary data on the actual
+high-escaping cover. -/
+lemma logBranch_eqOn_closing_of_coboundary
+    {N m : ℕ}
+    (charts : ℕ → ZeroFreeChartRootBranchData N)
+    (a : ℕ → ℂ)
+    (V : ℕ → Set ℂ) (Vcl : Set ℂ)
+    (hV_nonempty : ∀ j, j < m → (V j).Nonempty)
+    (hV_subset : ∀ j, j < m → V j ⊆ (charts j).chart ∩ (charts (j + 1)).chart)
+    (hinterior_eq : ∀ j, j < m → EqOn (charts (j + 1)).logBranch (charts j).logBranch (V j))
+    (hcoboundary :
+      ∀ j k,
+        EqOn
+          (fun w => (charts k).logBranch w - (charts j).logBranch w)
+          (fun _ => a k - a j)
+          ((charts j).chart ∩ (charts k).chart))
+    (hVcl_subset : Vcl ⊆ (charts m).chart ∩ (charts 0).chart) :
+    EqOn (charts m).logBranch (charts 0).logBranch Vcl := by
+  have hstep : ∀ j, j < m → a (j + 1) = a j := by
+    intro j hj
+    rcases hV_nonempty j hj with ⟨w, hwV⟩
+    have hw_overlap : w ∈ (charts j).chart ∩ (charts (j + 1)).chart :=
+      hV_subset j hj hwV
+    have hlog : (charts (j + 1)).logBranch w = (charts j).logBranch w :=
+      hinterior_eq j hj hwV
+    have hsub : a (j + 1) - a j = 0 := by
+      simpa [hlog] using (hcoboundary j (j + 1) hw_overlap).symm
+    exact sub_eq_zero.mp hsub
+  have hall : ∀ j, j ≤ m → a j = a 0 := by
+    intro j hj
+    induction j with
+    | zero =>
+        rfl
+    | succ j ih =>
+        have hj_le : j ≤ m := Nat.le_of_succ_le hj
+        have hj_lt : j < m := lt_of_lt_of_le (Nat.lt_succ_self j) hj
+        calc
+          a (j + 1) = a j := hstep j hj_lt
+          _ = a 0 := ih hj_le
+  intro w hw
+  have hw_overlap : w ∈ (charts 0).chart ∩ (charts m).chart := by
+    rcases hVcl_subset hw with ⟨hw_m, hw_0⟩
+    exact ⟨hw_0, hw_m⟩
+  have hsub : (charts m).logBranch w - (charts 0).logBranch w = 0 := by
+    simpa [hall m le_rfl] using (hcoboundary 0 m hw_overlap)
+  exact sub_eq_zero.mp hsub
+
 /-- The right half-plane, used in the explicit family of high-level comparison
 examples. It is zero-free and carries the principal logarithm. -/
 def complexRightHalfPlane : Set ℂ :=
@@ -994,6 +1008,47 @@ noncomputable def BasinLoopChartChain.of_escaping_level
   BasinLoopChartChain.of_nonzero_values γ
     (basinLoopRootEquationValue_ne_zero_of_level_escapes hesc)
 
+/-- The canonical one-chart chain on a nonzero loop image already comes from the
+single punctured-plane logarithm branch: there are no overlaps, so the
+global-log compatibility conditions are vacuous. -/
+noncomputable def ChartChainLocalLogsRestrictGlobal.of_nonzero_values
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hnonzero :
+      ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
+        basinLoopRootEquationValue c N γ t ≠ 0) :
+    ChartChainLocalLogsRestrictGlobal
+      (BasinLoopChartChain.of_nonzero_values γ hnonzero)
+      (puncturedPlaneZeroFreeChartRootBranchData N) where
+  overlap_value_mem_global := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
+  left_logBranch_eq_global := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
+  right_logBranch_eq_global := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
+
+/-- In particular, every canonical escaping-level one-chart chain satisfies the
+frontier notebook's anchored-global-log hypothesis with the punctured-plane
+logarithm branch. This is the checked positive model case; the remaining open
+problem is to connect the actual high-escaping chart chains to comparably simple
+global-log geometry. -/
+noncomputable def ChartChainLocalLogsRestrictGlobal.of_escaping_level
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hesc : BasinLoopLevelEscapes c N γ) :
+    ChartChainLocalLogsRestrictGlobal
+      (BasinLoopChartChain.of_escaping_level γ hesc)
+      (puncturedPlaneZeroFreeChartRootBranchData N) :=
+  ChartChainLocalLogsRestrictGlobal.of_nonzero_values γ
+    (basinLoopRootEquationValue_ne_zero_of_level_escapes hesc)
+
 /-- The ordered list of overlap multipliers carried by a chart chain. -/
 def BasinLoopChartChain.overlapMultipliers
     {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
@@ -1245,6 +1300,19 @@ lemma ChartChainLocalLogsEqOnOverlapNeighborhoodData.monodromyProduct_eq_one
     (D : ChartChainLocalLogsEqOnOverlapNeighborhoodData chain) :
     chain.monodromyProduct = 1 :=
   D.toEventuallyEqAtOverlaps.monodromyProduct_eq_one
+
+/-- The canonical escaping-level one-chart chain has no overlaps, so the PLAN 09
+overlap-neighborhood equality package is vacuous. -/
+noncomputable def ChartChainLocalLogsEqOnOverlapNeighborhoodData.of_escaping_level
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
+    (hesc : BasinLoopLevelEscapes c N γ) :
+    ChartChainLocalLogsEqOnOverlapNeighborhoodData
+      (BasinLoopChartChain.of_escaping_level γ hesc) where
+  overlapData := by
+    intro step hstep
+    have hempty : False := by
+      simpa [BasinLoopChartChain.of_escaping_level, BasinLoopChartChain.of_nonzero_values] using hstep
+    exact False.elim hempty
 
 lemma BasinLoopChartChain.monodromyProduct_of_nonzero_values
     {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
@@ -1690,6 +1758,32 @@ structure HighEscapingActualChartChainsProductComparisonData
       (actualChain N γ).monodromyProduct =
         (E.chainAbove γ N).monodromyProduct
 
+/-- Bridge constructor: if the chosen actual high-escaping chain is the
+canonical escaping-level one-chart chain, then its product agrees with the
+canonical high escaping product immediately. -/
+noncomputable def HighEscapingActualChartChainsProductComparisonData.of_actualChain_eq_escapingLevel
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (actualChain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        BasinLoopChartChain c (E.levelAbove γ N) z₀ γ)
+    (hchain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        actualChain N γ =
+          BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)) :
+    HighEscapingActualChartChainsProductComparisonData E where
+  actualChain := actualChain
+  product_eq := by
+    intro N γ
+    calc
+      (actualChain N γ).monodromyProduct
+          = (BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)).monodromyProduct := by
+              rw [hchain N γ]
+      _ = 1 := BasinLoopChartChain.monodromyProduct_of_escaping_level γ
+            (E.levelAbove_escapes γ N)
+      _ = (E.chainAbove γ N).monodromyProduct := by
+            exact (E.productAbove_trivial γ N).symm
+
 /-- Step-13 wrapper for the generalized overlap-equality theorem at high
 escaping levels: for each requested lower level and loop, the actual high-level
 chart chain is supplied directly, together with the overlap-neighborhood
@@ -1749,6 +1843,29 @@ def HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toProductComparison
     HighEscapingActualChartChainsProductComparisonData E :=
   A.toEventuallyEqAtOverlapsData.toProductComparisonData
 
+/-- Bridge constructor: if the chosen actual high-escaping chart chain is known
+to coincide with the canonical escaping-level one-chart chain, then the PLAN 09
+overlap-neighborhood equality package follows automatically. This isolates the
+remaining frontier to proving that comparison hypothesis for the downstream
+"actual" chains. -/
+noncomputable def HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.of_actualChain_eq_escapingLevel
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (actualChain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        BasinLoopChartChain c (E.levelAbove γ N) z₀ γ)
+    (hchain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        actualChain N γ =
+          BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)) :
+    HighEscapingActualChartChainsEqOnOverlapNeighborhoodData E where
+  actualChain := actualChain
+  localLogs_eqOn_overlapNeighborhoods := by
+    intro N γ
+    simpa [hchain N γ] using
+      ChartChainLocalLogsEqOnOverlapNeighborhoodData.of_escaping_level γ
+        (E.levelAbove_escapes γ N)
+
 /-- Special-case high-level comparison data: at every high escaping level, all
 local logs in the actual chart chain are restrictions of a single global
 zero-free logarithm branch. This packages the notebook's global-log route
@@ -1768,6 +1885,49 @@ structure HighEscapingActualChartChainsLocalLogsRestrictGlobalData
         (actualChain N γ)
         (globalChart N γ)
 
+/-- The canonical one-chart high-escaping chains satisfy the notebook's
+global-log hypothesis directly, using the punctured-plane logarithm branch at
+every high level. This formalizes a restricted positive case of the missing
+Adjusted-frontier step. What remains open is proving that the actual high-
+escaping chart chains used downstream admit such a package. -/
+noncomputable def
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData.canonicalLocalLogsRestrictGlobalData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) :
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData E where
+  actualChain := fun N γ =>
+    BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)
+  globalChart := fun N γ =>
+    puncturedPlaneZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict := by
+    intro N γ
+    exact
+      ChartChainLocalLogsRestrictGlobal.of_escaping_level γ
+        (E.levelAbove_escapes γ N)
+
+/-- Bridge constructor: if the chosen actual high-escaping chart chain is known
+to be the canonical escaping-level one-chart chain, then the frontier
+notebook's anchored-global-log package follows automatically. -/
+noncomputable def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.of_actualChain_eq_escapingLevel
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (actualChain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        BasinLoopChartChain c (E.levelAbove γ N) z₀ γ)
+    (hchain :
+      ∀ (N : ℕ) (γ : BasinLoop c z₀),
+        actualChain N γ =
+          BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)) :
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData E where
+  actualChain := actualChain
+  globalChart := fun N γ =>
+    puncturedPlaneZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict := by
+    intro N γ
+    simpa [hchain N γ] using
+      ChartChainLocalLogsRestrictGlobal.of_escaping_level γ
+        (E.levelAbove_escapes γ N)
+
 /-- If all local logs in the actual high chains are restrictions of a common
 global log branch, then the required high escaping product comparison follows. -/
 def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparisonData
@@ -1783,6 +1943,72 @@ def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparison
         (R.localLogs_restrict N γ).monodromyProduct_eq_one
       _ = (E.chainAbove γ N).monodromyProduct := by
         exact (E.productAbove_trivial γ N).symm
+
+/-- Notebook proposition (`Exact rigorous proof status`): once the actual
+high-escaping chart chains are restrictions of a common global logarithm
+branch, each high-level actual chain has trivial monodromy product. This is the
+formal core of the notebook's reduction from anchored global-log data to
+vanishing transition cocycle / closing monodromy. -/
+theorem HighEscapingActualChartChainsLocalLogsRestrictGlobalData.actualChain_monodromyProduct_eq_one
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E) :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      (R.actualChain N γ).monodromyProduct = 1 := by
+  intro N γ
+  exact (R.localLogs_restrict N γ).monodromyProduct_eq_one
+
+/-- If the actual high escaping chains are restrictions of a common global
+logarithm branch and they agree with the all-level chart chains at those high
+levels, then the all-level monodromy representation is trivial. This is the
+Lean endpoint of the frontier notebook's global-log proof strategy. -/
+lemma HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ) :
+    h.representation.Trivial := by
+  apply h.representation_trivial_of_high_escaping_comparison E
+  intro N γ
+  rw [hchain N γ]
+  exact (R.toProductComparisonData.product_eq N γ)
+
+/-- Notebook proposition (`Exact rigorous proof status`), packaged in the form
+actually consumed by the current Lean closure chain: anchored global-log data
+for the actual high-escaping chart chains, together with comparison to the
+all-level chart-chain monodromy package and escape-time-independent pullback
+values, yields `MonodromyTrivialPullbackDataFor`. -/
+noncomputable def
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor_of_rigorousReduction
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  (h.toBasinLoopPullbackRootMonodromyData).toMonodromyTrivialPullbackDataFor
+    (R.representation_trivial hchain)
+    hind
+
+/-- The actual-chain global-log route also supplies the PLAN 06 handoff to
+monodromy-trivial pullback data once escape-time-independent pullback values are
+available. -/
+noncomputable def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  (h.toBasinLoopPullbackRootMonodromyData).toMonodromyTrivialPullbackDataFor
+    (R.representation_trivial hchain)
+    hind
 
 /-- Product-comparison data between an all-level chart-chain monodromy package
 and the canonical one-chart chains available at arbitrarily high escaping
@@ -1831,6 +2057,23 @@ structure HighEscapingChartChainLocalLogsRestrictGlobalData
         (h.chain (E.levelAbove γ N) γ)
         (globalChart N γ)
 
+/-- Transfer the actual-chain anchored-global-log package to the all-level high
+escaping chain interface once the downstream chart chains are identified with
+the chosen actual high chains. This isolates the remaining blocker to exactly
+the geometric comparison theorem `hchain`. -/
+def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toAllLevelRestrictGlobalData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ) :
+    HighEscapingChartChainLocalLogsRestrictGlobalData h E where
+  globalChart := R.globalChart
+  localLogs_restrict := by
+    intro N γ
+    simpa [hchain N γ] using R.localLogs_restrict N γ
+
 /-- If all local logs in the all-level high chains are restrictions of a common
 global log branch, then the required high escaping product comparison follows. -/
 noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
@@ -1846,6 +2089,32 @@ noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toProductCom
         (R.localLogs_restrict N γ).monodromyProduct_eq_one
       _ = (E.chainAbove γ N).monodromyProduct := by
         exact (E.productAbove_trivial γ N).symm
+
+/-- The notebook's global-log route trivializes the all-level chart-chain
+representation once it is packaged as
+`HighEscapingChartChainLocalLogsRestrictGlobalData`. -/
+lemma HighEscapingChartChainLocalLogsRestrictGlobalData.representation_trivial
+    {c z₀ : ℂ}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingChartChainLocalLogsRestrictGlobalData h E) :
+    h.representation.Trivial := by
+  exact h.representation_trivial_of_high_escaping_comparison E
+    (R.toProductComparisonData.product_eq)
+
+/-- Once the global-log route has trivialized the all-level chart-chain
+representation, the remaining PLAN 06 handoff is just the independently supplied
+escape-time-independent pullback data. -/
+noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+    {c z₀ : ℂ}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingChartChainLocalLogsRestrictGlobalData h E)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  (h.toBasinLoopPullbackRootMonodromyData).toMonodromyTrivialPullbackDataFor
+    R.representation_trivial
+    hind
 
 /-- Special case of comparison: if the all-level high chain is literally the
 same chain as the canonical escaping one-chart chain, then their products agree.
@@ -2069,6 +2338,43 @@ structure LogSeriesBasinExtensionDataFor (c : ℂ) where
   tendsto_div_atInfinity :
     Tendsto (fun z => phi z / z) atInfinity (𝓝 (1 : ℂ))
 
+/-- A full basin extension of the logarithmic-series coordinate already yields the
+escape-time-independent pullback values from frontier Theorem A: use the global
+coordinate value `phi z`, push it forward by semiconjugacy, and identify the
+escaping iterate with the near-infinity logarithmic-series formula. -/
+def LogSeriesBasinExtensionDataFor.toEscapeTimeIndependentPullbackDataFor
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    EscapeTimeIndependentPullbackDataFor c where
+  value z hz := h.phi z
+  compatible_with_every_escape_time z hz N hN := by
+    have hmap : MapsTo (MLC.quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) :=
+      basin_of_infinity_forward_invariant c
+    have hiter_basin : ∀ n : ℕ, ((MLC.quadratic_map c)^[n] z) ∈ basin_of_infinity c := by
+      intro n
+      exact (MapsTo.iterate hmap n) hz
+    have hpow :
+        ∀ n : ℕ,
+          h.phi ((MLC.quadratic_map c)^[n] z) = (h.phi z) ^ (2 ^ n) := by
+      intro n
+      induction n with
+      | zero =>
+          simp
+      | succ n ihn =>
+          calc
+            h.phi ((MLC.quadratic_map c)^[n + 1] z)
+                = h.phi (MLC.quadratic_map c (((MLC.quadratic_map c)^[n]) z)) := by
+                    rw [Function.iterate_succ_apply']
+            _ = (h.phi (((MLC.quadratic_map c)^[n]) z)) ^ 2 := by
+                  exact h.conj_on_basin _ (hiter_basin n)
+            _ = ((h.phi z) ^ (2 ^ n)) ^ 2 := by rw [ihn]
+            _ = (h.phi z) ^ ((2 ^ n) * 2) := by rw [← pow_mul]
+            _ = (h.phi z) ^ (2 ^ (n + 1)) := by
+                  simp [Nat.pow_succ, Nat.mul_comm]
+    dsimp [pullbackRootSet]
+    rw [← hpow N]
+    exact h.extends_near ((MLC.quadratic_map c)^[N] z) hN
+  agrees_near_infinity z hz hz_large := h.extends_near z hz_large
+
 /-- Route A seam for the principal pullback candidate. These are exactly the
 coherent-branch facts still missing after defining
 `basinLogSeriesExtensionCandidate`: agreement with the near-infinity formula,
@@ -2109,6 +2415,13 @@ noncomputable def PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionData
   holo_on_basin := h.holo_on_basin
   modulus_on_basin := h.modulus_on_basin
   tendsto_div_atInfinity := h.tendsto_div_atInfinity
+
+/-- Frontier Theorem A is an automatic consequence of the stronger coherent-data
+package from Theorem B. -/
+noncomputable def PrincipalPullbackCoherentDataFor.toEscapeTimeIndependentPullbackDataFor
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c) :
+    EscapeTimeIndependentPullbackDataFor c :=
+  h.toLogSeriesBasinExtensionDataFor.toEscapeTimeIndependentPullbackDataFor
 
 /-- Candidate 9 works in the inverted coordinate `w = 1 / z`, where infinity
 for `z ↦ z^2 + c` becomes the superattracting fixed point `w = 0`. -/
@@ -2350,56 +2663,11 @@ def GenuineBottcherInversePackageFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
   (∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, φ z = w) ∧
   Set.InjOn φ {z : ℂ | ‖z‖ > ‖c‖ + 2}
 
-/-- Missing analytic input for upgrading the current theorem-facing
-`proxy_bottcher_map := polar_green_map` proxy to a genuine coordinate on the whole
-basin: every basin point admits a neighborhood contained in the slit-orbit
-domain used by the analytic Böttcher approximants. -/
-def BottcherBasinLocalAnalyticityHyp (c : ℂ) : Prop :=
-  ∀ z : ℂ, z ∈ basin_of_infinity c → slit_orbit c ∈ 𝓝 z
-
 /-- Bundled theorem-facing route matching the current pair of proof sketches. -/
 def GenuineBottcherRouteFor (c : ℂ) : Prop :=
   ∃ φ : ℂ → ℂ,
     GenuineBottcherCoordinateDataFor c φ ∧
     GenuineBottcherInversePackageFor c φ
-
-/-- Maximal honest coordinate-construction theorem currently supported by the
-repository: once the current `proxy_bottcher_map` proxy is known to be locally
-analytic at every basin point, its already-formalized dynamical/modulus
-properties upgrade it to the full theorem-facing genuine-coordinate package. -/
-theorem genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity
-    (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
-    GenuineBottcherCoordinateDataFor c (proxy_bottcher_map c) := by
-  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · intro z hz
-    exact
-      proxy_bottcher_map_norm_gt_one_of_basin c z hz
-        (green_function_pos_of_basin c z hz)
-  · intro z hz
-    exact proxy_bottcher_map_norm_gt_one_implies_basin c hz
-  · intro z hz
-    exact bottcher_conj_on_basin c z hz
-  · intro z _hz
-    exact norm_bottcher_eq_exp_green c z
-  · intro z hz
-    have hana : AnalyticAt ℂ (proxy_bottcher_map c) z :=
-      proxy_bottcher_map_analyticAt_of_mem_nhds_slit_basin c z
-        (hslit z hz)
-        ((basin_of_infinity_isOpen c).mem_nhds hz)
-    exact hana.differentiableAt.differentiableWithinAt
-  · intro z hz hzne
-    exact proxy_bottcher_map_continuousAt_of_ne_zero c z hzne
-  · exact tendsto_proxy_bottcher_map_div_atInfinity c
-
-/-- Existential coordinate-construction form of the current maximal honest
-theorem: the missing local-analyticity input on the whole basin is enough to
-produce some theorem-facing genuine coordinate, namely the current
-`proxy_bottcher_map`. -/
-theorem exists_genuineBottcherCoordinateDataFor_of_basinLocalAnalyticity
-    (c : ℂ) (hslit : BottcherBasinLocalAnalyticityHyp c) :
-    ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
-  exact ⟨proxy_bottcher_map c,
-    genuineBottcherCoordinateDataFor_bottcherMap_of_basinLocalAnalyticity c hslit⟩
 
 /-- `0` escapes to infinity for `f(z) = z^2 + 2`, hence belongs to the basin. -/
 lemma zero_mem_basin_two_constructive :
@@ -2439,84 +2707,6 @@ lemma not_forall_basinLoopRootEquationValue_ne_zero_two_zero :
   have hval : basinLoopRootEquationValue (2 : ℂ) 0 γ 0 = 0 := by
     simp [γ, BasinLoop.constant, basinLoopRootEquationValue, logSeriesBottcherApprox_zero]
   exact hneq hval
-
-/-- The principal-slit approximation domain does not even contain `0`, so it
-cannot be a neighborhood of every basin point at `c = 2`. -/
-lemma zero_not_mem_slit_orbit_two :
-    (0 : ℂ) ∉ slit_orbit (2 : ℂ) := by
-  intro hzero
-  exact Complex.zero_notMem_slitPlane (by simpa using hzero 0)
-
-/-- Therefore the basin-local analyticity hypothesis needed to upgrade the
-current proxy to a genuine coordinate is false at `c = 2`. -/
-theorem not_bottcherBasinLocalAnalyticityHyp_two :
-    ¬ BottcherBasinLocalAnalyticityHyp (2 : ℂ) := by
-  intro hslit
-  have hnhds : slit_orbit (2 : ℂ) ∈ 𝓝 (0 : ℂ) :=
-    hslit 0 zero_mem_basin_two_constructive
-  have hmem : (0 : ℂ) ∈ slit_orbit (2 : ℂ) := mem_of_mem_nhds hnhds
-  exact zero_not_mem_slit_orbit_two hmem
-
-/-- The current proxy `proxy_bottcher_map = polar_green_map` cannot itself witness the
-theorem-facing genuine coordinate package at `c = 2`: differentiability on the
-open basin would force continuity at `0`, but the proxy is formally not
-continuous there. -/
-theorem not_genuineBottcherCoordinateDataFor_bottcherMap_two :
-    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) (proxy_bottcher_map (2 : ℂ)) := by
-  intro hcoord
-  rcases hcoord with ⟨_, _, _, _, hdiff, _, _⟩
-  have h0basin : (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) :=
-    zero_mem_basin_two_constructive
-  have hcont0 : ContinuousAt (proxy_bottcher_map (2 : ℂ)) 0 := by
-    have hdiff0 :
-        DifferentiableWithinAt ℂ (proxy_bottcher_map (2 : ℂ))
-          (basin_of_infinity (2 : ℂ)) 0 :=
-      hdiff 0 h0basin
-    exact hdiff0.continuousWithinAt.continuousAt
-      ((basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin)
-  exact
-    polar_green_map_not_continuousAt_zero (2 : ℂ) <|
-      by simpa [proxy_bottcher_map] using hcont0
-
-/-- Any function whose pointwise basin values are defined by the existing
-principal-branch root sequence must agree with the current proxy on the basin,
-since that sequence is already formalized to converge there to
-`proxy_bottcher_map`. -/
-theorem eq_proxyBottcherMap_on_basin_of_rootSeq_limit
-    {c : ℂ} {φ : ℂ → ℂ}
-    (hlim : ∀ z : ℂ, z ∈ basin_of_infinity c →
-      Tendsto (fun n => bottcher_root_seq c n z) atTop (𝓝 (φ z))) :
-    ∀ z : ℂ, z ∈ basin_of_infinity c → φ z = proxy_bottcher_map c z := by
-  intro z hz
-  exact tendsto_nhds_unique (hlim z hz) (bottcher_root_seq_tendsto_at c hz)
-
-/-- Therefore the current root-sequence limit cannot itself supply a genuine
-global coordinate at `c = 2`: it would force continuity of the proxy at `0`,
-contradicting the existing obstruction theorem. -/
-theorem not_genuineBottcherCoordinateDataFor_of_rootSeq_limit_two
-    {φ : ℂ → ℂ}
-    (hlim : ∀ z : ℂ, z ∈ basin_of_infinity (2 : ℂ) →
-      Tendsto (fun n => bottcher_root_seq (2 : ℂ) n z) atTop (𝓝 (φ z))) :
-    ¬ GenuineBottcherCoordinateDataFor (2 : ℂ) φ := by
-  intro hcoord
-  rcases hcoord with ⟨_, _, _, _, hdiff, _, _⟩
-  have h0basin : (0 : ℂ) ∈ basin_of_infinity (2 : ℂ) :=
-    zero_mem_basin_two_constructive
-  have hcont0 : ContinuousAt φ 0 := by
-    have hdiff0 :
-        DifferentiableWithinAt ℂ φ (basin_of_infinity (2 : ℂ)) 0 :=
-      hdiff 0 h0basin
-    exact hdiff0.continuousWithinAt.continuousAt
-      ((basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin)
-  have hEq :
-      φ =ᶠ[𝓝 (0 : ℂ)] proxy_bottcher_map (2 : ℂ) := by
-    filter_upwards [(basin_of_infinity_isOpen (2 : ℂ)).mem_nhds h0basin] with z hz
-    exact eq_proxyBottcherMap_on_basin_of_rootSeq_limit hlim z hz
-  have hproxyCont0 : ContinuousAt (proxy_bottcher_map (2 : ℂ)) 0 :=
-    hcont0.congr_of_eventuallyEq hEq.symm
-  exact
-    polar_green_map_not_continuousAt_zero (2 : ℂ) <|
-      by simpa [proxy_bottcher_map] using hproxyCont0
 
 /-- Any full genuine coordinate package restricts to the first near-infinity
 phase of the classical proof on the canonical outside-open region. -/
@@ -2628,6 +2818,28 @@ theorem classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.toLogSeriesBasinExtensionDataFor
 
+/-- Any full logarithmic-series basin extension already contains the theorem-facing
+global coordinate package consumed by the genuine-route closure chain. -/
+theorem LogSeriesBasinExtensionDataFor.toGenuineBottcherCoordinateDataFor
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    GenuineBottcherCoordinateDataFor c h.phi := by
+  refine
+    ⟨h.norm_on_basin, h.basin_of_norm_gt_one, h.conj_on_basin,
+      h.modulus_on_basin, h.holo_on_basin, ?_, h.tendsto_div_atInfinity⟩
+  intro z hz _hne
+  exact
+    (h.holo_on_basin z hz).continuousWithinAt.continuousAt
+      ((basin_of_infinity_isOpen c).mem_nhds hz)
+
+/-- Existential coordinate-package form of the active candidate-facing basin
+extension surface. This is the replacement for the old proxy-based existence
+seam: once `LogSeriesBasinExtensionDataFor c` is available, the constructive
+route already has a genuine basin coordinate directly from the extension datum. -/
+theorem exists_genuineBottcherCoordinateDataFor_of_logSeriesBasinExtensionData
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
+  exact ⟨h.phi, h.toGenuineBottcherCoordinateDataFor⟩
+
 /-- Basin route B seam: first construct an exterior inverse for the
 near-infinity logarithmic-series coordinate, then use inverse dynamics to supply
 the global basin extension data. This separates the inverse-package strategy
@@ -2647,6 +2859,111 @@ theorem classicalGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtens
     ClassicalGlobalBottcherTheoremFor c :=
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.extensionData
+
+/-- If the basin extension data is known to be realized by the checked principal
+pullback candidate, then the extension fields repackage directly into the active
+PLAN 06 coherent-data target from frontier Theorem B. -/
+def LogSeriesBasinExtensionDataFor.toPrincipalPullbackCoherentDataFor_of_eq_candidate
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c)
+    (h_eq : h.phi = basinLogSeriesExtensionCandidate c) :
+    PrincipalPullbackCoherentDataFor c where
+  extends_near z hz := by
+    simpa [h_eq] using h.extends_near z hz
+  norm_on_basin z hz := by
+    simpa [h_eq] using h.norm_on_basin z hz
+  basin_of_norm_gt_one z hz := by
+    exact h.basin_of_norm_gt_one z (by simpa [h_eq] using hz)
+  conj_on_basin z hz := by
+    simpa [h_eq] using h.conj_on_basin z hz
+  holo_on_basin := by
+    simpa [h_eq] using h.holo_on_basin
+  modulus_on_basin z hz := by
+    simpa [h_eq] using h.modulus_on_basin z hz
+  tendsto_div_atInfinity := by
+    simpa [h_eq] using h.tendsto_div_atInfinity
+
+/-- A Route-B exterior inverse already supplies the theorem-facing inverse
+package: right-inverse gives surjectivity onto the exterior, and the left
+inverse on the outside-open region gives injectivity there. -/
+theorem LogSeriesExteriorInverseBasinExtensionDataFor.toGenuineBottcherInversePackageFor
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c) :
+    GenuineBottcherInversePackageFor c h.extensionData.phi := by
+  refine ⟨?_, ?_⟩
+  · intro w hw
+    exact ⟨h.inverseOnExterior w, h.right_inverse w hw⟩
+  · intro z₁ hz₁ z₂ hz₂ hEq
+    calc
+      z₁ = h.inverseOnExterior (MLC.logSeriesBottcherApprox c z₁) := by
+        symm
+        exact h.left_inverse_on_outside z₁ hz₁
+      _ = h.inverseOnExterior (h.extensionData.phi z₁) := by
+        rw [h.extensionData.extends_near z₁ hz₁]
+      _ = h.inverseOnExterior (h.extensionData.phi z₂) := by rw [hEq]
+      _ = h.inverseOnExterior (MLC.logSeriesBottcherApprox c z₂) := by
+        rw [h.extensionData.extends_near z₂ hz₂]
+      _ = z₂ := h.left_inverse_on_outside z₂ hz₂
+
+/-- Specialized frontier Theorem C for the checked principal pullback candidate:
+once the Route-B inverse data is shown to extend that same candidate, the current
+inverse-package target follows immediately. -/
+theorem LogSeriesExteriorInverseBasinExtensionDataFor.toGenuineBottcherInversePackageFor_of_eq_candidate
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c)
+    (h_eq : h.extensionData.phi = basinLogSeriesExtensionCandidate c) :
+    GenuineBottcherInversePackageFor c (basinLogSeriesExtensionCandidate c) := by
+  simpa [h_eq] using h.toGenuineBottcherInversePackageFor
+
+/-- Lean-facing package for the unified PLAN 06 theorem: a full global extension
+of the checked near-infinity logarithmic-series coordinate together with the
+matching theorem-facing inverse package. This is the exact data needed to
+produce a genuine Böttcher route without going through the proxy-specific root
+axiom. -/
+structure UnifiedGlobalBottcherDataFor (c : ℂ) where
+  extensionData : LogSeriesBasinExtensionDataFor c
+  inversePackage : GenuineBottcherInversePackageFor c extensionData.phi
+
+/-- Proposition form of the unified PLAN 06 frontier theorem. -/
+def UnifiedGlobalBottcherTheoremFor (c : ℂ) : Prop :=
+  Nonempty (UnifiedGlobalBottcherDataFor c)
+
+/-- The unified PLAN 06 package directly supplies the theorem-facing genuine
+Böttcher route used by the closure chain. -/
+theorem UnifiedGlobalBottcherDataFor.toGenuineBottcherRouteFor
+    {c : ℂ} (h : UnifiedGlobalBottcherDataFor c) :
+    GenuineBottcherRouteFor c := by
+  exact
+    ⟨h.extensionData.phi,
+      h.extensionData.toGenuineBottcherCoordinateDataFor,
+      h.inversePackage⟩
+
+/-- A Route-B extension with exterior inverse is already a witness for the
+unified PLAN 06 theorem surface. -/
+def LogSeriesExteriorInverseBasinExtensionDataFor.toUnifiedGlobalBottcherDataFor
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c) :
+    UnifiedGlobalBottcherDataFor c where
+  extensionData := h.extensionData
+  inversePackage := h.toGenuineBottcherInversePackageFor
+
+theorem unifiedGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtensionData
+    {c : ℂ} (h : LogSeriesExteriorInverseBasinExtensionDataFor c) :
+    UnifiedGlobalBottcherTheoremFor c :=
+  ⟨h.toUnifiedGlobalBottcherDataFor⟩
+
+/-- In particular, the active PLAN 06 candidate-level route also yields the
+unified theorem surface once the coherent-data and inverse-package witnesses are
+available for that same candidate. -/
+noncomputable def PrincipalPullbackCoherentDataFor.toUnifiedGlobalBottcherDataFor
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c (basinLogSeriesExtensionCandidate c)) :
+    UnifiedGlobalBottcherDataFor c where
+  extensionData := h.toLogSeriesBasinExtensionDataFor
+  inversePackage := by
+    simpa [PrincipalPullbackCoherentDataFor.toLogSeriesBasinExtensionDataFor] using h_inv
+
+theorem unifiedGlobalBottcherTheoremFor_of_principalPullbackCoherentData
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c (basinLogSeriesExtensionCandidate c)) :
+    UnifiedGlobalBottcherTheoremFor c :=
+  ⟨h.toUnifiedGlobalBottcherDataFor h_inv⟩
 
 /-- Cover-strategy seam: construct the coherent pullback on a cover where
 monodromy is trivial, prove that the lifted coordinate is constant on fibers
@@ -2716,6 +3033,23 @@ theorem classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInf
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.extensionData
 
+/-- Route-C direct handoff to the unified PLAN 06 theorem surface: once the
+classical extension from the checked near-infinity coordinate is available and
+the same global basin coordinate is equipped with the exterior inverse package,
+the root-facing unified theorem follows immediately. -/
+noncomputable def ClassicalGlobalExtensionFromNearInfinityDataFor.toUnifiedGlobalBottcherDataFor
+    {c : ℂ} (h : ClassicalGlobalExtensionFromNearInfinityDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c h.extensionData.phi) :
+    UnifiedGlobalBottcherDataFor c where
+  extensionData := h.extensionData
+  inversePackage := h_inv
+
+theorem unifiedGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData
+    {c : ℂ} (h : ClassicalGlobalExtensionFromNearInfinityDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c h.extensionData.phi) :
+    UnifiedGlobalBottcherTheoremFor c :=
+  ⟨h.toUnifiedGlobalBottcherDataFor h_inv⟩
+
 /-- The classical theorem's basin-valued coordinate is automatically nonzero on
 the basin since it is exterior-valued there. -/
 theorem ClassicalGlobalBottcherDataFor.nonvanishing_on_basin
@@ -2755,18 +3089,6 @@ theorem ClassicalGlobalBottcherDataFor.toGenuineBottcherRouteFor
     (h_inv : GenuineBottcherInversePackageFor c h.phi) :
     GenuineBottcherRouteFor c := by
   exact ⟨h.phi, h.toGenuineBottcherCoordinateDataFor, h_inv⟩
-
-/-- In particular, the already-formalized principal-branch root sequence cannot
-be used as the witness for the classical global Böttcher theorem at `c = 2`. -/
-theorem not_exists_classicalGlobalBottcherDataFor_of_rootSeq_limit_two :
-    ¬ ∃ h : ClassicalGlobalBottcherDataFor (2 : ℂ),
-        ∀ z : ℂ, z ∈ basin_of_infinity (2 : ℂ) →
-          Tendsto (fun n => bottcher_root_seq (2 : ℂ) n z) atTop (𝓝 (h.phi z)) := by
-  intro h
-  rcases h with ⟨hclassical, hlim⟩
-  exact
-    not_genuineBottcherCoordinateDataFor_of_rootSeq_limit_two hlim
-      hclassical.toGenuineBottcherCoordinateDataFor
 
 /-- Existential coordinate-package consequence of the bundled classical theorem. -/
 theorem exists_genuineBottcherCoordinateDataFor_of_classicalGlobalBottcherTheoremFor
@@ -2857,21 +3179,6 @@ noncomputable def GenuineBottcherLocalParameterFamilyData.toNearInfinityParamete
     {c₀ : ℂ} (h : GenuineBottcherLocalParameterFamilyData c₀) :
     GenuineBottcherNearInfinityParameterFamilyData c₀ :=
   (h.toNearInfinityParameterExtensionData).toNearInfinityParameterFamilyData
-
-/-- Constructive realization of the missing basin-valued Böttcher coordinate
-using the explicit proxy `polar_green_map`. -/
-theorem constructive_basin_bottcher_coordinate_data (c : ℂ) :
-    ConstructiveBasinBottcherCoordinateData c := by
-  refine ⟨polar_green_map c, ?_, ?_, ?_, ?_, ?_⟩
-  · intro z hz
-    exact one_lt_norm_polar_green_map_of_mem_basin c z hz
-  · intro z
-    exact norm_polar_green_map_eq_exp_green c z
-  · intro z hz
-    exact polar_green_map_continuousAt_of_ne_zero c z hz
-  · exact tendsto_polar_green_map_div_atInfinity c
-  · intro u hu ρ hρ
-    exact polar_green_map_apply_ray c u hu ρ hρ
 
 end Quadratic
 

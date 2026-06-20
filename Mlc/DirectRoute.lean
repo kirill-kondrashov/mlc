@@ -17,10 +17,12 @@ The direct route needs three components:
 
 ## Current status
 
-- `PuzzleBoundaryMotionHyp` is equivalent to `ParaPuzzlePieceInterMandelbrotConnectedData`
   (proved in this file). Both reduce to:
   `∀ c ∈ M, ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ M)`
-- This connectivity is currently an axiom (`para_puzzle_piece_inter_mandelbrot_connected`).
+- This connectivity still has an axiom-backed local provider
+  (`para_puzzle_piece_inter_mandelbrot_connected`), but after the genuine
+  Böttcher root cutover it is no longer on the checked root frontier for
+  `MLC.mlc_conjecture`.
 - The IR branch components are also unproved.
 -/
 
@@ -64,12 +66,13 @@ This makes the remaining gaps explicit.
 
 /-! ### Simplified reduction
 
-The actual `mlc_conjecture` proof uses two axioms:
+The legacy direct seam route uses two axioms:
 1. `para_puzzle_piece_inter_mandelbrot_connected` (FR branch)
 2. `ir_locally_connected_seam` (IR branch)
 
 The `DirectMLCData` structure below shows the finer three-component
 decomposition of the IR branch, which `ir_locally_connected_seam` subsumes.
+The checked root now bypasses this route through the genuine Böttcher kernel.
 -/
 
 /-- The three components needed for the direct proof of MLC (fine-grained). -/

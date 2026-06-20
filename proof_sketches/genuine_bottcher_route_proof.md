@@ -13,14 +13,28 @@ and proved, for every $c$, the theorem-facing package
 Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox c
 ```
 
-Thus the remaining issue for
+Thus the remaining issue for the current root-facing theorem surface
+
+```lean
+Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)
+```
+
+is not the local coordinate at infinity. It is the extension from the canonical
+outside region to the full basin of infinity together with the matching inverse
+package on the exterior.
+
+Equivalently, the theorem-facing Böttcher side is reduced to building a
+`LogSeriesBasinExtensionDataFor (2 : ℂ)` plus a compatible
+`GenuineBottcherInversePackageFor`; the root no longer needs any separate
+sequence-level proxy axiom once those are available.
+
+In particular, the remaining issue for
 
 ```lean
 Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
 ```
 
-is not the local coordinate at infinity. It is the extension from the canonical
-outside region to the full basin of infinity.
+is still the same basin-extension problem.
 
 ## Candidate extension
 
@@ -86,18 +100,28 @@ roots.
 
 ## Resulting theorem
 
-Once `PrincipalPullbackCoherentDataFor (2 : ℂ)` is proved, Lean already has the
-reduction
+Once `PrincipalPullbackCoherentDataFor (2 : ℂ)` is proved and the same basin
+extension candidate is equipped with the matching exterior inverse package,
+Lean already has the reductions
 
 ```lean
 Quadratic.classicalGlobalBottcherTheoremFor_of_principalPullbackCoherentData
+Quadratic.unifiedGlobalBottcherTheoremFor_of_principalPullbackCoherentData
 ```
 
-which yields
+and, for the Route-C theorem surface,
+
+```lean
+Quadratic.unifiedGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData
+```
+
+which yield
 
 ```lean
 Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)
+Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)
 ```
 
-The next proof task is therefore exactly the coherent pullback branch theorem,
-not another construction of the near-infinity coordinate.
+So the next proof task is still exactly the coherent pullback / anchored
+global-log theorem producing the basin extension and inverse package, not
+another construction of the near-infinity coordinate.

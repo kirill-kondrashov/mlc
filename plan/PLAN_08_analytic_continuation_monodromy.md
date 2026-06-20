@@ -51,17 +51,17 @@ comparison theorem and the final packaging step: once PLAN 09 supplies those
 chart data, the formalized comparison theorem gives trivial high-level
 monodromy products.
 
-The stronger special-case package
+The global-restriction special-case package
 
 ```lean
 HighEscapingActualChartChainsLocalLogsRestrictGlobalData
 ```
 
-is still useful, but only when the whole high-level loop image lies in one
+applies only when the whole high-level loop image lies in one
 zero-free global logarithm domain. The counterexample notebook
 `notebooks/archive/plan08_step13_actual_high_escaping_charts_frontier.ipynb`
-shows numerically that this fails for arbitrary basin loops, so it is no longer
-the primary Step 13 target.
+shows numerically that this fails for arbitrary basin loops, so Step 13 uses
+the local overlap-equality target instead.
 
 ## Scope boundary
 
@@ -221,7 +221,7 @@ Possible proof routes:
 ### 7. Local chart proof template
 
 The concrete proof strategy suggested by
-`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` is:
+`notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb` is:
 
 1. **Push a basin loop to the `A`-plane.** For a basin loop `γ`, define
 
@@ -291,7 +291,7 @@ The concrete proof strategy suggested by
 The counterexample notebook also shows what this template must **not** require:
 for general high-escaping loops, one cannot demand a single simply connected
 zero-free neighborhood of the whole loop image carrying one global logarithm.
-That stronger route survives only under an extra zero-winding / admissibility
+That global-restriction route applies only under an extra zero-winding / admissibility
 hypothesis.
 
 The key local theorem surface has been implemented:
@@ -362,8 +362,10 @@ The first option is now formally known to be false at the all-level interface:
 
 ```lean
 logSeriesBottcherApprox_zero
-not_forall_basinLoopRootEquationValue_ne_zero_two_zero
 ```
+
+Indeed, the constant basin loop at `z₀ = 0` for `c = 2` gives a level-`0`
+counterexample, since `basinLoopRootEquationValue (2 : ℂ) 0 γ 0 = 0`.
 
 The escaping-level replacement has therefore been implemented:
 
@@ -412,7 +414,7 @@ descent from high-level triviality to all lower pullback levels are formalized.
 The comparison endpoint, exact-chain special case, and uniform-escape
 specialization have now been formalized. There are now two layers:
 the high-level-only wrapper that does **not** assume an all-level chart-chain
-monodromy package yet, and the older bridge form that applies once one is
+monodromy package yet, and the bridge form that applies once one is
 available:
 
 ```lean
@@ -465,7 +467,7 @@ quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 The remaining comparison input is: show that the actual all-level chart chains
 at a sufficiently high escaping level supply the overlap-neighborhood equality
 data required by `ChartChainLocalLogsEventuallyEqAtOverlaps`. That existence
-problem is tracked in `PLAN_09_actual_overlap_neighborhoods.md`. A stronger
+problem is tracked in `PLAN_09_actual_overlap_neighborhoods.md`. A
 global-restriction package still implies this, but only as a special case. Once
 PLAN 09 produces the local overlap data, the monodromy product comparison
 follows from the formalized overlap-equality theorem.
@@ -486,6 +488,20 @@ These are still needed for the full Böttcher route, but they are not
 separate monodromy-comparison subtasks. In particular, `EscapeTimeIndependentPullbackDataFor`
 is an additional root-coherence input that must be combined with monodromy
 triviality; it is not produced by the overlap-comparison theorem alone.
+
+This handoff is now reflected by checked Lean theorem surfaces:
+
+```lean
+Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.representation_trivial
+Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial
+Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+```
+
+So the PLAN 08 output is no longer just an abstract comparison statement: the
+global-log special case now lands directly at the `MonodromyTrivialPullbackDataFor`
+handoff expected by PLAN 06 once escape-time-independent pullback values are
+provided.
 
 ## Recommended implementation order
 
@@ -512,8 +528,8 @@ triviality; it is not produced by the overlap-comparison theorem alone.
 12. **BLOCKED IN ITS ORIGINAL FORM / REPLACED AT HIGH LEVELS:** construct
    actual `BasinLoopChartChainMonodromyData` for `c = 2`. The literal all-level
    constructor `BasinLoopChartChainMonodromyData.of_nonzero_values_two` is
-   implemented, but its hypothesis is formally false at `z₀ = 0`. So this exact
-   all-level route is not a live prerequisite anymore. The intended replacement
+   implemented, but its hypothesis is formally false at `z₀ = 0`. So this
+   all-level route is not a prerequisite. The replacement
    interface at sufficiently high escaping levels,
    `EscapingLevelBasinLoopChartChainMonodromyData.of_level_escapes_two`, is
    implemented and is the route used by the later comparison steps.
@@ -524,7 +540,7 @@ triviality; it is not produced by the overlap-comparison theorem alone.
    `PLAN_09_actual_overlap_neighborhoods.md`: construct, for the actual
    high-escaping chart chains, the overlap-neighborhood equality data needed
    to invoke those abstract theorems. PLAN 08 then packages the result first as
-   `HighEscapingActualChartChainsEventuallyEqAtOverlapsData`. The stronger
+   `HighEscapingActualChartChainsEventuallyEqAtOverlapsData`. The
    global-chart package
    `HighEscapingActualChartChainsLocalLogsRestrictGlobalData` survives only as a
    special-case route when the high-level image admits one global logarithm
@@ -532,7 +548,7 @@ triviality; it is not produced by the overlap-comparison theorem alone.
    neighborhoods, and logarithm/root branches for high-escaping loops
    should this be bridged to
    `HighEscapingChartChainProductComparisonData`.
-14. **HANDOFF, NOT A NEW PLAN 08 BLOCKER:** combine the resulting monodromy
+14. **HANDOFF, NOT A PLAN 08 BLOCKER:** combine the resulting monodromy
     triviality statement with an independently supplied
     `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` to fill
     `MonodromyTrivialPullbackDataFor (2 : ℂ)`.

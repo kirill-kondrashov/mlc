@@ -2,13 +2,13 @@
 
 **Status:** PARKED / AUXILIARY  
 **Frontier role:** downstream auxiliary route after the genuine global Bottcher package exists  
-**Primary formal hooks:** `Mlc/Quadratic/Complex/Bottcher/DegreeOneInj.lean`, `Mlc/MainConjecture.lean`
+**Formal hooks:** `Mlc/Quadratic/Complex/Bottcher/DegreeOneInj.lean`, `Mlc/MainConjecture.lean`
 
 ---
 
 ## Role of this plan now
 
-This plan is no longer the first live attack on the root axiom.
+This plan is an auxiliary route for the root axiom.
 
 The checked frontier has moved upstream to the theorem-facing genuine Bottcher
 package recorded in `PLAN_06_global_bottcher_package.md`. In particular, the
@@ -62,7 +62,7 @@ $$
 \exists\,w_0\in\Omega\quad\text{such that}\quad \#\,(\phi|_V)^{-1}(w_0)=1.
 $$
 
-Any stronger theorem is fully acceptable, especially:
+Any theorem implying the statement above suffices, including:
 
 1. $$\phi|_V$$ has covering degree $$1$$;
 2. $$\phi|_V$$ is injective;
@@ -97,7 +97,8 @@ The Lean development has already formalized the following:
    cardinality is constant on $$\Omega$$;
 2. from one singleton fiber, the code already derives injectivity on $$V$$;
 3. from injectivity on $$V$$ plus the already-wired surjectivity bridge, the
-   code already derives `ExternalRayMapData (2)` and then the root MLC theorem.
+   code already derives `ExternalRayMapData (2)` and then the conditional MLC
+   root declaration.
 
 But this route is now downstream of the genuine-coordinate plan:
 
@@ -129,6 +130,6 @@ under the identification $$\|2\|+2=4$$.
 
 ## Success criterion
 
-Produce a rigorous proof of the theorem above, or of any stronger theorem that
-immediately implies it, **after** the upstream global Bottcher package from
+Produce a rigorous proof of the theorem above, or of a theorem that immediately
+implies it, **after** the upstream global Bottcher package from
 `PLAN_06_global_bottcher_package.md` is available.
