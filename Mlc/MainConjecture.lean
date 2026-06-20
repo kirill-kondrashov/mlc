@@ -2129,6 +2129,31 @@ theorem mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
         h_ext h_promote)
       h_route h_track12
 
+/-- Root-facing genuine-route cutover through the active PLAN 06 target. If the
+principal pullback candidate at `c = 2` is proved coherent, and the same
+candidate is given the matching inverse package on the exterior / outside-open
+region, then it produces the theorem-facing genuine Böttcher route consumed by
+the existing local-parameter-extension closure chain. This rewires the root
+entrypoint away from the proxy-specific `BasinExternalRayMapDataTwo` package and
+toward the genuine coordinate strategy tracked in PLAN 06/08/09. -/
+theorem mlc_conjecture_of_principalPullbackCoherentData_two
+    (h_ext : GenuineBottcherLocalParameterExtensionBridgeTwo)
+    (h_promote : GenuineBottcherFamilyPromotionBridgeTwo)
+    (h_coh : Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ))
+    (h_inv :
+      Quadratic.GenuineBottcherInversePackageFor
+        (2 : ℂ)
+        (Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ)))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  let hclassical : Quadratic.ClassicalGlobalBottcherDataFor (2 : ℂ) :=
+    h_coh.toLogSeriesBasinExtensionDataFor.toClassicalGlobalBottcherDataFor
+  have hroute : Quadratic.GenuineBottcherRouteFor (2 : ℂ) := by
+    exact hclassical.toGenuineBottcherRouteFor (by simpa [hclassical] using h_inv)
+  exact
+    mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
+      h_ext h_promote hroute h_track12
+
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
 lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
     (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :

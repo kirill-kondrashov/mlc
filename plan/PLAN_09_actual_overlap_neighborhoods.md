@@ -242,3 +242,15 @@ HighEscapingActualChartChainsEqOnOverlapNeighborhoodData
 
 for the actual high-escaping chart chains at `c = 2`, together with the induced
 eventual-equality and product-comparison data used by PLAN 08.
+
+In the global-log special case tracked by the frontier notebook, the checked
+handoff now continues through
+
+```lean
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+```
+
+so the PLAN 09 theorem-level target is now aligned with the genuine-route
+rewiring in PLAN 06 rather than only with the older proxy-root comparison
+surface.

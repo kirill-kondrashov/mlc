@@ -487,6 +487,20 @@ separate monodromy-comparison subtasks. In particular, `EscapeTimeIndependentPul
 is an additional root-coherence input that must be combined with monodromy
 triviality; it is not produced by the overlap-comparison theorem alone.
 
+This handoff is now reflected by checked Lean theorem surfaces:
+
+```lean
+Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.representation_trivial
+Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial
+Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+```
+
+So the PLAN 08 output is no longer just an abstract comparison statement: the
+global-log special case now lands directly at the `MonodromyTrivialPullbackDataFor`
+handoff expected by PLAN 06 once escape-time-independent pullback values are
+provided.
+
 ## Recommended implementation order
 
 1. **DONE:** define `BasinLoop`.

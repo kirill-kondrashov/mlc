@@ -124,6 +124,21 @@ Checked reductions:
 6. `MonodromyTrivializingCoverBasinExtensionDataFor.toLogSeriesBasinExtensionDataFor`
 7. `classicalGlobalBottcherTheoremFor_of_monodromyTrivializingCoverData`
 8. `classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData`
+9. `MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`
+
+The new root-facing cutover theorem
+
+```lean
+MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two
+```
+
+shows the intended rewiring explicitly: the active PLAN 06 target
+`PrincipalPullbackCoherentDataFor (2 : ℂ)`, together with the matching inverse
+package for `basinLogSeriesExtensionCandidate (2 : ℂ)`, already lands in the
+existing genuine-Böttcher MLC closure chain. So the remaining work is no longer
+to discover a root consumer; it is to internalize the coherent-data and inverse
+package inputs without using the proxy-specific `basinExternalRayKernelTwo`
+route.
 
 ## Next implementation routes
 

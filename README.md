@@ -117,6 +117,10 @@ one global logarithm branch is also formalized:
 Quadratic.ChartChainLocalLogsRestrictGlobal
 Quadratic.ChartChainLocalLogsRestrictGlobal.monodromyProduct_eq_one
 Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
+Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.representation_trivial
+Quadratic.HighEscapingChartChainLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial
+Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
 ```
 
 The generalized right-half-plane family from the notebook is checked:
@@ -131,6 +135,18 @@ Current PLAN 09 work is to prove the vanishing-cocycle hypothesis for the
 actual high-escaping curve. The abstract Čech-gluing reduction from cocycle
 vanishing to closing equality is now formalized in Lean as
 `Quadratic.logBranch_eqOn_closing_of_coboundary`.
+
+The root-facing genuine-route cutover is now also exposed explicitly:
+
+```lean
+MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two
+```
+
+This theorem rewires the intended final entrypoint away from the false
+proxy-specific `BasinExternalRayMapDataTwo` package: once
+`Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)` and the matching inverse
+package for `Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ)` are available,
+the existing genuine Böttcher / local-parameter-extension chain closes MLC.
 
 The remaining theorem is therefore:
 

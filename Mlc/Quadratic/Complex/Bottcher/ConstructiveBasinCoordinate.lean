@@ -1836,6 +1836,39 @@ def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toProductComparison
       _ = (E.chainAbove γ N).monodromyProduct := by
         exact (E.productAbove_trivial γ N).symm
 
+/-- If the actual high escaping chains are restrictions of a common global
+logarithm branch and they agree with the all-level chart chains at those high
+levels, then the all-level monodromy representation is trivial. This is the
+Lean endpoint of the frontier notebook's global-log proof strategy. -/
+lemma HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ) :
+    h.representation.Trivial := by
+  apply h.representation_trivial_of_high_escaping_comparison E
+  intro N γ
+  rw [hchain N γ]
+  exact (R.toProductComparisonData.product_eq N γ)
+
+/-- The actual-chain global-log route also supplies the PLAN 06 handoff to
+monodromy-trivial pullback data once escape-time-independent pullback values are
+available. -/
+noncomputable def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  (h.toBasinLoopPullbackRootMonodromyData).toMonodromyTrivialPullbackDataFor
+    (R.representation_trivial hchain)
+    hind
+
 /-- Product-comparison data between an all-level chart-chain monodromy package
 and the canonical one-chart chains available at arbitrarily high escaping
 levels. This is the bridge form used once a high-level actual chain family has
@@ -1898,6 +1931,32 @@ noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toProductCom
         (R.localLogs_restrict N γ).monodromyProduct_eq_one
       _ = (E.chainAbove γ N).monodromyProduct := by
         exact (E.productAbove_trivial γ N).symm
+
+/-- The notebook's global-log route trivializes the all-level chart-chain
+representation once it is packaged as
+`HighEscapingChartChainLocalLogsRestrictGlobalData`. -/
+lemma HighEscapingChartChainLocalLogsRestrictGlobalData.representation_trivial
+    {c z₀ : ℂ}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingChartChainLocalLogsRestrictGlobalData h E) :
+    h.representation.Trivial := by
+  exact h.representation_trivial_of_high_escaping_comparison E
+    (R.toProductComparisonData.product_eq)
+
+/-- Once the global-log route has trivialized the all-level chart-chain
+representation, the remaining PLAN 06 handoff is just the independently supplied
+escape-time-independent pullback data. -/
+noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+    {c z₀ : ℂ}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (R : HighEscapingChartChainLocalLogsRestrictGlobalData h E)
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  (h.toBasinLoopPullbackRootMonodromyData).toMonodromyTrivialPullbackDataFor
+    R.representation_trivial
+    hind
 
 /-- Special case of comparison: if the all-level high chain is literally the
 same chain as the canonical escaping one-chart chain, then their products agree.
