@@ -14,14 +14,18 @@
 
 ## Mathematical statement and notation
 
-Let $f_c : \mathbb C \to \mathbb C$ be the quadratic polynomial
-$f_c(z) = z^2 + c$. The Mandelbrot set is
+Let $f_c : \mathbb C \to \mathbb C$ be the
+[quadratic polynomial](https://en.wikipedia.org/wiki/Quadratic_polynomial)
+$f_c(z) = z^2 + c$. The
+[Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) is
 
 ```math
 \mathcal M = \{c \in \mathbb C : (f_c^n(0))_{n \ge 0} \text{ is bounded}\}.
 ```
 
-For a topological space $X$ and a point $x \in X$, local connectivity at
+For a [topological space](https://en.wikipedia.org/wiki/Topological_space) $X$
+and a point $x \in X$,
+[local connectivity](https://en.wikipedia.org/wiki/Locally_connected_space) at
 $x$ means that every neighbourhood $U$ of $x$ contains a connected
 neighbourhood $V$ of $x$ with $V \subset U$. In Lean this is the
 predicate `MLC.LocallyConnectedAt`.
@@ -71,16 +75,20 @@ Let $f_2(z) = z^2 + 2$, and let
 A_\infty(f_2) = \{z \in \mathbb C : |f_2^n(z)| \to \infty\}
 ```
 
-be the basin of infinity. Let $G_2$ denote the Green function of $f_2$.
-Near infinity there is a normalized Böttcher map $\phi$ satisfying
+be the basin of infinity. Let $G_2$ denote the
+[Green function](https://en.wikipedia.org/wiki/Green%27s_function) of $f_2$.
+Near infinity there is a normalized
+[Böttcher map](https://en.wikipedia.org/wiki/B%C3%B6ttcher%27s_theorem) $\phi$
+satisfying
 
 ```math
 \phi(f_2(z)) = \phi(z)^2, \qquad \phi(z) / z \to 1 \quad (z \to \infty).
 ```
 
 **Theorem (global Böttcher extension at $c = 2$).** There is a map
-$\Phi : \mathbb C \to \mathbb C$, holomorphic on $A_\infty(f_2)$, such
-that:
+$\Phi : \mathbb C \to \mathbb C$,
+[holomorphic](https://en.wikipedia.org/wiki/Holomorphic_function) on
+$A_\infty(f_2)$, such that:
 
 1. $\Phi(f_2(z)) = \Phi(z)^2$ for all $z \in A_\infty(f_2)$;
 2. $z \in A_\infty(f_2)$ if and only if $|\Phi(z)| > 1$;
