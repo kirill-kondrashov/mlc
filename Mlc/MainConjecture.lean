@@ -3544,14 +3544,15 @@ lemma externalRayMapData_two_root_frontier :
     Quadratic.ExternalRayMapData (2 : ℂ) :=
   Quadratic.external_ray_map_exists (2 : ℂ)
 
-/-! ### Direct proof route (bypassing `external_ray_map_exists`)
+/-! ### Legacy direct seam route (bypassing `external_ray_map_exists`)
 
-The direct route wires `mlc_conjecture` through the FR/IR dichotomy using:
+This legacy route wires `mlc_conjecture` through the FR/IR dichotomy using:
 1. The existing para-puzzle connectivity axiom for the FR branch (Yoccoz shrinkage).
 2. A single seam axiom for the IR branch (local connectivity of IR parameters).
 
 This replaces the vacuous `external_ray_map_exists(2) → False → MainPathData`
-chain with a mathematically sound proof skeleton.
+chain with a mathematically sound proof skeleton, but after the genuine
+Böttcher cutover it is no longer the checked root route.
 -/
 
 /-- Seam axiom: the Mandelbrot set is locally connected at every infinitely
@@ -4479,11 +4480,12 @@ theorem mlc_conjecture_of_basinExternalRayMapData_two
 /-- New root-facing kernel for the genuine-route strategy. This packages the
 remaining PLAN 06/08/09 frontier at `c = 2` without going through the old
 `basinExternalRayKernelTwo` proxy route. The residual Problem 4.3/4.4 axiom
-already supplies the Track-1/Track-2 payload separately. -/
+already supplies the Track-1/Track-2 payload separately, so the checked root
+only needs the last theorem-facing route input together with the route-to-motion
+bridge actually consumed by the closure chain. -/
 def UnifiedGenuineRootKernelTwo : Prop :=
-  GenuineBottcherLocalParameterExtensionBridgeTwo ∧
-    GenuineBottcherFamilyPromotionBridgeTwo ∧
-      Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)
+  GenuineBottcherPuzzleBoundaryMotionBridgeTwo ∧
+    Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)
 
 /-- Root-facing axiom for the genuine-route frontier. -/
 axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
@@ -4492,17 +4494,17 @@ axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
 theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
     (hkernel : UnifiedGenuineRootKernelTwo) :
     LocallyConnectedSpace mandelbrotSet := by
+  rcases hkernel.2 with ⟨hdata⟩
   exact
-    mlc_conjecture_of_unifiedGlobalBottcherTheorem_two
+    mlc_conjecture_of_genuineBottcherRoute_two
       hkernel.1
-      hkernel.2.1
-      hkernel.2.2
+      hdata.toGenuineBottcherRouteFor
       irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected. The checked root now depends on the
     genuine-route frontier package at `c = 2`: the unified global Böttcher
-    theorem together with the two remaining local-parameter/family bridges.
+    theorem together with the theorem-facing route-to-motion bridge.
     The Track-1/Track-2 combinatorial package is supplied from the existing
     residual Problem 4.3/4.4 root axiom. -/
 theorem mlc_conjecture

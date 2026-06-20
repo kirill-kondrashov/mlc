@@ -9,14 +9,17 @@
 ## Root result of this plan
 
 `MLC.lyubich_conformal_bridge` is no longer in `Axioms(MLC.mlc_conjecture)`.
-The frontier has now been reduced all the way to a single project axiom:
+This plan successfully removed the old bridge from the checked root, but the
+root frontier did **not** collapse to a single project axiom. The checked root
+now has two non-core axioms:
 
-1. `MLC.basinExternalRayKernelTwo`
+1. `MLC.residualOpenVirtualNearMoleculeAxiom`
+2. `MLC.unifiedGenuineRootKernelTwo`
 
 This plan first removed the old hidden Lyubich/tower contradiction route, then
-collapsed the wider explicit chosen-true / residual-open frontier, and finally
-rerouted the root away from the false full-exterior degree package to the honest
-`c = 2` basin-valued external-ray kernel.
+collapsed the wider explicit chosen-true / residual-open frontier as far as the
+current formal reductions allow, and finally rerouted the root away from the
+false full-exterior degree package to the honest `c = 2` genuine-route kernel.
 
 ---
 
@@ -42,18 +45,37 @@ The old bridge is still present in `PrimitiveModulusDivergence.lean` and
 quarantined legacy route that can be deleted, deprecated, or further shrunk
 without affecting the checked root frontier.
 
-## Next plan surface
+## Residual audit: why the bridge is not an immediate remaining reduction
 
-The remaining repo-facing target is no longer the Lyubich bridge and no longer
-the old degree-one proxy route in isolation. The live next plan is now:
+There is no honest immediate Lean reduction of
+`MLC.residualOpenVirtualNearMoleculeAxiom` through
+`MLC.lyubich_conformal_bridge`.
 
-1. `PLAN_06_global_bottcher_package.md`
+What remains is exactly the renormalization-theory seam packaging Dudko Problem
+4.3 and Problem 4.4. The current repo already shows that the Gaussian proxy
+framework is hostile to a genuine Track-2 proof: the proxy conformal-modulus
+target is formally false in `Mlc/MoleculeGroetzschConnection.lean`. One can
+swap the Track-2 burden to the separate axiom `MLC.lyubich_conformal_bridge`,
+making the satellite-tower branch vacuous, but that only changes the shape of
+the frontier:
 
-That plan attacks `MLC.basinExternalRayKernelTwo` through the theorem-facing
-global Bottcher coordinate package. `PLAN_05_restricted_winding_degree_one.md`
-remains only as a downstream auxiliary route once the genuine coordinate exists.
+1. Track-2 can be discharged only by adding `MLC.lyubich_conformal_bridge` back
+   into the proof chain.
+2. Track-1 still requires the Virtual Molecule near-degenerate regime and is
+   not vacuous.
+3. So the checked root would still retain a genuine open non-core axiom.
+
+Therefore the live theorem-proving work splits into two independent axes:
+
+1. `PLAN_06_global_bottcher_package.md` / PLAN 08 / PLAN 09 for
+   `MLC.unifiedGenuineRootKernelTwo`;
+2. an external renormalization-theory barrier at
+   `MLC.residualOpenVirtualNearMoleculeAxiom`, not attacked by the frontier
+   notebook.
 
 ## Success criterion achieved
 
 1. `MLC.lyubich_conformal_bridge` stays absent from `Axioms(MLC.mlc_conjecture)`.
-2. the root frontier is reduced to one project axiom.
+2. the checked root is honestly documented as still depending on
+   `MLC.residualOpenVirtualNearMoleculeAxiom` and
+   `MLC.unifiedGenuineRootKernelTwo`.

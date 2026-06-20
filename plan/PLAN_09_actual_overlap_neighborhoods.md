@@ -64,6 +64,32 @@ HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toProductComparisonData
 The remaining work is to construct the actual cover/branch data and prove the
 vanishing-cocycle theorem that feeds these interfaces.
 
+More precisely, the live Lean blocker is now the pair of comparison inputs
+
+```lean
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData (E := ...)
+∀ (N : ℕ) (γ : BasinLoop (2 : ℂ) z₀),
+  h.chain (E.levelAbove γ N) γ = R.actualChain N γ
+```
+
+for the downstream all-level chart family `h`. Once those are available, the new
+bridge
+
+```lean
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toAllLevelRestrictGlobalData
+```
+
+transfers the anchored-global-log package to the all-level interface, and the
+existing checked closures already yield
+
+```lean
+MonodromyTrivialPullbackDataFor (2 : ℂ)
+EscapeTimeIndependentPullbackDataFor (2 : ℂ)
+```
+
+after separately supplying the basin-extension/coherence fields tracked by the
+PLAN 06 companion notebook.
+
 The notebook split is now:
 
 1. `notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb` for the
@@ -200,6 +226,55 @@ $$
 
 on the relevant overlaps.
 
+#### Equivalent formulations and literature
+
+For a connected open $\Omega \subset \mathbf C^*$, the cocycle-vanishing target
+admits three standard equivalent formulations:
+
+1. **Global log:** there exists holomorphic $L : \Omega \to \mathbf C$ with
+   $e^L = \mathrm{id}$.
+2. **Trivial monodromy / zero winding:** every loop $\sigma$ in $\Omega$ has
+   $\mathrm{wind}(\sigma, 0) = 0$.
+3. **Cech vanishing:** $\check H^1(\Omega, 2\pi i \mathbf Z) = 0$.
+
+The complex-analytic equivalence is standard:
+
+- log existence on simply connected zero-free domains: Conway IV.9.17,
+  Ahlfors §3.3 Theorem 9, Forster §1.1 Proposition 1.2;
+- monodromy theorem: Forster §5 Theorem 5.6, Conway IX.3, Ahlfors §8.2;
+- exponential sheaf sequence / Cech viewpoint:
+  $0 \to 2\pi i \mathbf Z \to \mathcal O \xrightarrow{\exp} \mathcal O^* \to 0$
+  (Forster §16, Griffiths-Harris §0.3 / §1.1).
+
+In Lean, the implication
+
+```lean
+anchored global log ⇒ cocycle is a coboundary ⇒ closing equality
+```
+
+is already formalized through
+
+```lean
+ChartChainLocalLogsRestrictGlobal
+logBranch_eqOn_closing_of_coboundary
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData.actualChain_monodromyProduct_eq_one
+```
+
+So the remaining mathematical step is not the abstract Cech/monodromy argument
+but the **dynamical construction of such an $\Omega$** for the actual
+high-escaping image. The standard sufficient criterion is the Green-function
+level-set condition
+
+$$
+G_f(f^K(\gamma(t))) > G_f(2)
+$$
+
+for all $t$, which places the image strictly above the critical-value
+equipotential and forces zero winding. Standard references for this level-set /
+Bottcher-coordinate viewpoint are Douady-Hubbard, *Etude dynamique des
+polynomes complexes* Part I §7, and Milnor, *Dynamics in One Complex Variable*
+§9.
+
 ### 6. Packaging into the PLAN 08 interface
 
 Assemble the chart, overlap, and branch-equality data into
@@ -261,6 +336,7 @@ handoff now continues through
 
 ```lean
 HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial
+HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toAllLevelRestrictGlobalData
 HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
 ```
 

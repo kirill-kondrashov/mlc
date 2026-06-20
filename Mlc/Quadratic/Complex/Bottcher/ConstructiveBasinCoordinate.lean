@@ -2095,6 +2095,23 @@ structure HighEscapingChartChainLocalLogsRestrictGlobalData
         (h.chain (E.levelAbove γ N) γ)
         (globalChart N γ)
 
+/-- Transfer the actual-chain anchored-global-log package to the all-level high
+escaping chain interface once the downstream chart chains are identified with
+the chosen actual high chains. This isolates the remaining blocker to exactly
+the geometric comparison theorem `hchain`. -/
+def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toAllLevelRestrictGlobalData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (R : HighEscapingActualChartChainsLocalLogsRestrictGlobalData E)
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ = R.actualChain N γ) :
+    HighEscapingChartChainLocalLogsRestrictGlobalData h E where
+  globalChart := R.globalChart
+  localLogs_restrict := by
+    intro N γ
+    simpa [hchain N γ] using R.localLogs_restrict N γ
+
 /-- If all local logs in the all-level high chains are restrictions of a common
 global log branch, then the required high escaping product comparison follows. -/
 noncomputable def HighEscapingChartChainLocalLogsRestrictGlobalData.toProductComparisonData
@@ -3167,6 +3184,23 @@ theorem classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInf
     ClassicalGlobalBottcherTheoremFor c :=
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.extensionData
+
+/-- Route-C direct handoff to the unified PLAN 06 theorem surface: once the
+classical extension from the checked near-infinity coordinate is available and
+the same global basin coordinate is equipped with the exterior inverse package,
+the root-facing unified theorem follows immediately. -/
+noncomputable def ClassicalGlobalExtensionFromNearInfinityDataFor.toUnifiedGlobalBottcherDataFor
+    {c : ℂ} (h : ClassicalGlobalExtensionFromNearInfinityDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c h.extensionData.phi) :
+    UnifiedGlobalBottcherDataFor c where
+  extensionData := h.extensionData
+  inversePackage := h_inv
+
+theorem unifiedGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData
+    {c : ℂ} (h : ClassicalGlobalExtensionFromNearInfinityDataFor c)
+    (h_inv : GenuineBottcherInversePackageFor c h.extensionData.phi) :
+    UnifiedGlobalBottcherTheoremFor c :=
+  ⟨h.toUnifiedGlobalBottcherDataFor h_inv⟩
 
 /-- The classical theorem's basin-valued coordinate is automatically nonzero on
 the basin since it is exterior-valued there. -/

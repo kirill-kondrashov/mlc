@@ -32,7 +32,6 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.residualOpenVirtualNearMoleculeAxiom
 - MLC.unifiedGenuineRootKernelTwo
 ```
@@ -42,22 +41,36 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
    MLC.residualOpenVirtualNearMoleculeAxiom,
    MLC.unifiedGenuineRootKernelTwo}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
-   MLC.residualOpenVirtualNearMoleculeAxiom,
+= {MLC.residualOpenVirtualNearMoleculeAxiom,
    MLC.unifiedGenuineRootKernelTwo}
 ```
 
 ## Current Status
 
-Three non-core project axioms remain:
-`MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`,
-`MLC.residualOpenVirtualNearMoleculeAxiom`, and
+Two non-core project axioms remain:
+`MLC.residualOpenVirtualNearMoleculeAxiom` and
 `MLC.unifiedGenuineRootKernelTwo`.
+
+They are now understood to be two independent frontier axes:
+
+1. `MLC.unifiedGenuineRootKernelTwo` is the active PLAN 06/08/09 analytic
+   Böttcher-coordinate program.
+2. `MLC.residualOpenVirtualNearMoleculeAxiom` is the renormalization-theory
+   seam packaging exactly Dudko Problem 4.3 (pseudo-Siegel a priori bounds in
+   the remaining unbounded satellite `ql` cases) and Problem 4.4 (the Virtual
+   Molecule near-degenerate interpolation regime).
+
+As of the Dec 2025 literature snapshot in `refs/2512.24171v1.txt`, Problems
+4.3 and 4.4 remain open. In the current repository, the Gaussian proxy modulus
+framework also cannot honestly prove the Track-2 side: see
+`Mlc/MoleculeGroetzschConnection.lean`, where the proxy makes the relevant
+conformal-modulus non-summability target false. So PLAN 06/08/09 can eliminate
+only `MLC.unifiedGenuineRootKernelTwo`; it does not attack
+`MLC.residualOpenVirtualNearMoleculeAxiom`.
 
 The current analytic route is to construct a genuine global Böttcher coordinate
 at `c = 2` and use it to replace the remaining unified genuine-route kernel. The
@@ -140,9 +153,16 @@ Quadratic.quadraticMap_two_second_iterate_re_lower_bound
 Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-Current PLAN 09 work is to prove the vanishing-cocycle hypothesis for the
-actual high-escaping curve. The abstract Čech-gluing reduction from cocycle
-vanishing to closing equality is now formalized in Lean as
+Current PLAN 09 work on the actual high-escaping cover is now split cleanly in
+Lean. The notebook's anchored-global-log reduction from the `Exact rigorous
+proof status` section is formalized as
+`Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.actualChain_monodromyProduct_eq_one`,
+`Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.representation_trivial`,
+and
+`Quadratic.HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor`.
+The remaining gap is to prove the anchored global-log / vanishing-cocycle
+hypothesis for the actual high-escaping cover itself. The abstract Čech-gluing
+reduction from cocycle vanishing to closing equality is formalized separately as
 `Quadratic.logBranch_eqOn_closing_of_coboundary`.
 
 The root-facing genuine-route cutover is now also exposed explicitly:
@@ -157,8 +177,8 @@ proxy-specific basin-external-ray route: once
 `Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)` and the matching inverse
 package for `Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ)` are available,
 or more directly once `Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)` is
-available together with the local-parameter/family bridges, the existing genuine
-Böttcher chain closes MLC.
+available together with a theorem-facing route-to-puzzle-boundary-motion bridge,
+the existing genuine Böttcher chain closes MLC.
 
 The remaining theorem is therefore:
 
@@ -191,8 +211,9 @@ $$
 b_m\vert_{V_{\mathrm{cl}}} = b_0\vert_{V_{\mathrm{cl}}}.
 $$
 
-This is now reduced to proving that the associated logarithm-transition cocycle
-class vanishes for the actual high-escaping chart cover:
+This is now reduced to proving enough anchored global-log data, equivalently the
+vanishing of the associated logarithm-transition cocycle class for the actual
+high-escaping chart cover:
 
 $$
 [c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z).
