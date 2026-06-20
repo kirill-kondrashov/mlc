@@ -25,7 +25,7 @@ check:
 	lake env lean --run check_axioms.lean
 
 # Build static dependency-graph pages under site/
-graphs:
+graphs: build
 	cd scripts && poetry run python generate_dependency_graph_site.py --output site
 
 # Serve the generated graph site locally over HTTP
