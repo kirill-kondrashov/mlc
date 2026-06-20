@@ -8,12 +8,9 @@ import Mlc.InconsistencyRoute
 import Mlc.RenormalizationTowerExistence
 import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.Bottcher.DegreeOneInj
-import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
-import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.MandelbrotEquivalence
 import Mlc.MoleculeToSatelliteNestData
 import Mlc.FastTowerExistenceObstruction
-import Mlc.Quadratic.Complex.Bottcher.GreenFunctionRayInversion
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
@@ -3197,14 +3194,6 @@ exact root-safe outside-open injectivity witness target. -/
 def RootSeedPayloadTwoStrictMonoFreeIngressTwo : Prop :=
   GreenRayLogGtAnchorTwoSeam ∧ RootSafeOutsideOpenInjWitnessTwoStrictMonoFreeIngressTwo
 
-/-- Build centralized root-seed payload from the strict-mono-free ingress
-payload. -/
-theorem mlc_conjecture_of_external_ray_map_exists_two :
-    Quadratic.ExternalRayMapData (2 : ℂ) →
-    LocallyConnectedSpace mandelbrotSet := by
-  intro h_ext
-  exact mlc_conjecture_of_externalRayMapData_two h_ext
-
 /-- Root theorem routed through the centralized root-seed payload selector. -/
 def RootEntryDetourViaInjSurjExteriorConstructivePayloadTwo : Prop :=
   InjSurjExteriorConstructivePayloadTwo
@@ -3536,13 +3525,6 @@ def RootCutoverAfterExplicitSubcutoffSourceUnlockTwo : Prop :=
   NoargDirectProperLocalWitnessTwoFromExplicitLocalizedSourceTwo →
     ExplicitSubcutoffWitnessCandidateFromGreenBoundsTwo →
       LocallyConnectedSpace mandelbrotSet
-
-/-- Current root-frontier witness at `c = 2`.
-This is the single swap point for removing
-`MLC.Quadratic.external_ray_map_exists` from `mlc_conjecture`. -/
-lemma externalRayMapData_two_root_frontier :
-    Quadratic.ExternalRayMapData (2 : ℂ) :=
-  Quadratic.external_ray_map_exists (2 : ℂ)
 
 /-! ### Legacy direct seam route (bypassing `external_ray_map_exists`)
 

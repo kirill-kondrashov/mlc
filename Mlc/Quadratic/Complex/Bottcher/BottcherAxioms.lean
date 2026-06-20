@@ -149,11 +149,6 @@ global theorem-facing seam is still used elsewhere in the repository, but the
 checked root is routed through the specialized `c = 2` version below. -/
 axiom external_ray_map_exists (c : ℂ) : ExternalRayMapData c
 
-/-- Root-facing specialization of the exterior inverse package at `c = 2`.
-    This is the connected external-ray branch currently needed by
-    `MLC.mlc_conjecture`. -/
-axiom external_ray_map_exists_two : ExternalRayMapData (2 : ℂ)
-
 /-- Unpack the ray-map data package into its existential form. -/
 theorem external_ray_map_exists_of_data (c : ℂ) (h_data : ExternalRayMapData c) :
     ∃ f : ℂ → ℂ,
