@@ -177,8 +177,9 @@ proxy-specific basin-external-ray route: once
 `Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)` and the matching inverse
 package for `Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ)` are available,
 or more directly once `Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)` is
-available together with a theorem-facing route-to-puzzle-boundary-motion bridge,
-the existing genuine Böttcher chain closes MLC.
+available, the existing genuine Böttcher chain closes MLC through the current
+`bottcher_onM_hyp` motion stub. The separate theorem-facing motion-bridge
+conjunct is no longer part of the live analytic frontier.
 
 The remaining theorem is therefore:
 

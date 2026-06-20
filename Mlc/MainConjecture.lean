@@ -1750,6 +1750,22 @@ theorem genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_motionBridge
     Quadratic.puzzle_boundary_motion_hyp_of_bottcher
       (Classical.choice (h_bridge h_route))
 
+/-- The current root already has an unconditional puzzle-boundary-motion source
+from the `bottcher_onM_hyp` stub, so the theorem-facing genuine-route bridge can
+be discharged without any extra analytic input from the route itself. -/
+theorem genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM :
+    GenuineBottcherPuzzleBoundaryMotionBridgeTwo := by
+  intro _h_route
+  exact
+    Quadratic.puzzle_boundary_motion_hyp_of_onM
+      { h_top := bottcher_onM_hyp.h_top
+        h_stab := bottcher_onM_hyp.h_stab
+        B := bottcher_onM_hyp.B
+        r := bottcher_onM_hyp.r
+        r_pos := bottcher_onM_hyp.r_pos
+        in_M := bottcher_onM_hyp.in_M
+        hconn := trivial }
+
 /-- Package the theorem-facing Bottcher route together with the residual
 Track-1/Track-2 inputs into the existing main-path datum. -/
 theorem mainPathData_of_genuineBottcherRoute_two
@@ -2186,6 +2202,21 @@ theorem mlc_conjecture_of_unifiedGlobalBottcherTheorem_two
   exact
     mlc_conjecture_of_genuineBottcherLocalParameterExtensionBridgeTwo
       h_ext h_promote hdata.toGenuineBottcherRouteFor h_track12
+
+/-- Stronger unified cutover: the current repository already has a direct
+puzzle-boundary-motion bridge from `bottcher_onM_hyp`, so the unified global
+Böttcher theorem at `c = 2` by itself is enough on the analytic side of the
+root closure chain. -/
+theorem mlc_conjecture_of_unifiedGlobalBottcherTheorem_two_of_onM
+    (h_unified : Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ))
+    (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rcases h_unified with ⟨hdata⟩
+  exact
+    mlc_conjecture_of_genuineBottcherRoute_two
+      genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM
+      hdata.toGenuineBottcherRouteFor
+      h_track12
 
 /-- Main-path seam from approach-to-`1` preimage data at `c = 2`. -/
 lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
@@ -4476,11 +4507,9 @@ axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
 theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
     (hkernel : UnifiedGenuineRootKernelTwo) :
     LocallyConnectedSpace mandelbrotSet := by
-  rcases hkernel.2 with ⟨hdata⟩
   exact
-    mlc_conjecture_of_genuineBottcherRoute_two
-      hkernel.1
-      hdata.toGenuineBottcherRouteFor
+    mlc_conjecture_of_unifiedGlobalBottcherTheorem_two_of_onM
+      hkernel.2
       irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
