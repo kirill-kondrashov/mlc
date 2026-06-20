@@ -33,6 +33,11 @@ topology inherited from $\mathbb C$, is locally connected.
 In Lean this conditional declaration is `MLC.mlc_conjecture`; it has type
 `LocallyConnectedSpace MLC.mandelbrotSet`.
 
+The formal statement of the conjecture is based on DeepMind's
+[`formal-conjectures`](https://github.com/google-deepmind/formal-conjectures)
+repository, specifically
+[`FormalConjectures/Wikipedia/Mandelbrot.lean`](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/Wikipedia/Mandelbrot.lean).
+
 ## Checked Lean status
 
 Run:
