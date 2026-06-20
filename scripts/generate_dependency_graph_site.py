@@ -336,9 +336,13 @@ def collect_axioms_from_check_axioms(repo_root: Path) -> set[str]:
             capture_output=True,
         )
     except FileNotFoundError:
-        return set()
+        raise RuntimeError("Cannot collect semantic axiom frontier: `lake` was not found")
     if proc.returncode != 0:
-        return set()
+        detail = (proc.stdout + "\n" + proc.stderr).strip()
+        raise RuntimeError(
+            "Cannot collect semantic axiom frontier: `check_axioms.lean` failed"
+            + (f"\n{detail}" if detail else "")
+        )
 
     axioms: set[str] = set()
     collecting = False
@@ -356,6 +360,10 @@ def collect_axioms_from_check_axioms(repo_root: Path) -> set[str]:
         ax = line[2:].strip()
         if ax:
             axioms.add(ax)
+    if not collecting:
+        raise RuntimeError(
+            "Cannot collect semantic axiom frontier: `All axioms used:` block was not found"
+        )
     return axioms
 
 
@@ -3788,6 +3796,29 @@ def retain_only_semantic_root_axioms(
     return out
 
 
+def assert_semantic_root_axioms_rendered(
+    payload: dict[str, object], semantic_frontier: set[str]
+) -> None:
+    frontier = set(semantic_frontier) - set(EMBEDDED_AXIOMS)
+    node_ids = {node["id"] for node in payload["nodes"]}
+    edge_pairs = {(edge["source"], edge["target"]) for edge in payload["edges"]}
+    root = payload["root"]
+
+    missing_nodes = sorted(frontier - node_ids)
+    missing_edges = sorted(
+        ax_name for ax_name in frontier
+        if (root, ax_name) not in edge_pairs
+    )
+
+    if missing_nodes or missing_edges:
+        details: list[str] = []
+        if missing_nodes:
+            details.append("missing semantic axiom nodes: " + ", ".join(missing_nodes))
+        if missing_edges:
+            details.append("missing root-to-axiom edges: " + ", ".join(missing_edges))
+        raise RuntimeError("Incomplete root axiom graph render: " + "; ".join(details))
+
+
 def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     fq_index, edges = build_full_graph(repo_root)
 
@@ -3846,6 +3877,7 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
         root_payload = drop_embedded_axioms(root_payload)
         root_payload = align_root_project_axiom_tiers(root_payload, axiom_frontier)
         root_payload = retain_only_semantic_root_axioms(root_payload, axiom_frontier)
+        assert_semantic_root_axioms_rendered(root_payload, axiom_frontier)
     root_href = write_graph(
         output_root,
         "mlc_conjecture",
