@@ -4,9 +4,9 @@ version = "0.1.0"
 description = "Local notebook environment for MLC exploratory notebooks"
 requires-python = ">=3.12"
 dependencies = [
-    "jupyterlab>=4.6,<5",
     "ipykernel>=6.29,<7",
     "matplotlib>=3.9,<4",
+    "nbconvert>=7.17,<8",
     "notebook>=7.4,<8",
     "numpy>=2.2,<3",
 ]

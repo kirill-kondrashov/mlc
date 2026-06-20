@@ -15,13 +15,13 @@ make check
 make notebook
 ```
 
-`make notebook` starts a local read-only JupyterLab server rooted at
-`notebooks/` on `127.0.0.1:8888`. It uses the uv project in `notebooks/`,
-installs the notebook dependencies there, and then launches JupyterLab from
-that environment with writes, kernel startup, and terminals disabled. The
-notebooks are saved without `kernelspec` metadata, and JupyterLab is exposed
-with no available kernels, so notebooks open with **No kernel** by default.
-Override `NOTEBOOK_HOST`, `NOTEBOOK_PORT`, `NOTEBOOK_DIR`, or
+`make notebook` renders `notebooks/` to static HTML and serves the rendered
+pages locally on
+`127.0.0.1:8888`. This is a simple nbviewer-style workflow: load the rendered
+notebook in a browser, rerender with `make notebook-render` after notebook
+changes, and refresh the page manually. The uv project in `notebooks/`
+contains the rendering dependencies. Override `NOTEBOOK_HOST`,
+`NOTEBOOK_PORT`, `NOTEBOOK_DIR`, `NOTEBOOK_HTML_DIR`, or
 `NOTEBOOK_PROJECT_DIR` if needed.
 
 Expected `make check` output:
@@ -127,10 +127,12 @@ Quadratic.quadraticMap_two_second_iterate_re_lower_bound
 Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-Current PLAN 09 work is to prove the closing trivial-monodromy theorem for the
-actual high-escaping curve.
+Current PLAN 09 work is to prove the vanishing-cocycle hypothesis for the
+actual high-escaping curve. The abstract Čech-gluing reduction from cocycle
+vanishing to closing equality is now formalized in Lean as
+`Quadratic.logBranch_eqOn_closing_of_coboundary`.
 
-More precisely, one must prove the following theorem.
+The remaining theorem is therefore:
 
 **Theorem (closing trivial monodromy).** Let
 
@@ -161,9 +163,17 @@ $$
 b_m\vert_{V_{\mathrm{cl}}} = b_0\vert_{V_{\mathrm{cl}}}.
 $$
 
-`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` records this
-theorem, two positive numerical examples, a counterexample attempt showing why
-the closing equality is necessary, and the one-domain special case.
+This is now reduced to proving that the associated logarithm-transition cocycle
+class vanishes for the actual high-escaping chart cover:
+
+$$
+[c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z).
+$$
+
+`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` records the
+closing theorem, the Čech-gluing reduction, a rigorous vanishing-cocycle
+criterion, two positive numerical examples, a counterexample attempt showing
+why the closing equality is necessary, and the one-domain special case.
 
 Once this theorem-level package exists,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and

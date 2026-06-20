@@ -615,6 +615,58 @@ lemma logBranch_eq_of_chain_initialEq
   logBranch_eqOn_of_chain_initialEq act can hsame_chart
     wStart hwStart hstart_eq overlapPoint hoverlap_mem_left hoverlap_mem_right hact hcan j hj hw
 
+/-- Lean formalization of the notebook's rigorous Čech-gluing criterion. If the
+transition differences between local logarithm branches are given by a
+coboundary `a_k - a_j`, then interior overlap equalities force all constants
+`a_j` to coincide, and hence the closing overlap equality follows. This is the
+abstract step separating the classical logarithm-gluing argument from the
+MLC-specific geometric work of producing the coboundary data on the actual
+high-escaping cover. -/
+lemma logBranch_eqOn_closing_of_coboundary
+    {N m : ℕ}
+    (charts : ℕ → ZeroFreeChartRootBranchData N)
+    (a : ℕ → ℂ)
+    (V : ℕ → Set ℂ) (Vcl : Set ℂ)
+    (hV_nonempty : ∀ j, j < m → (V j).Nonempty)
+    (hV_subset : ∀ j, j < m → V j ⊆ (charts j).chart ∩ (charts (j + 1)).chart)
+    (hinterior_eq : ∀ j, j < m → EqOn (charts (j + 1)).logBranch (charts j).logBranch (V j))
+    (hcoboundary :
+      ∀ j k,
+        EqOn
+          (fun w => (charts k).logBranch w - (charts j).logBranch w)
+          (fun _ => a k - a j)
+          ((charts j).chart ∩ (charts k).chart))
+    (hVcl_subset : Vcl ⊆ (charts m).chart ∩ (charts 0).chart) :
+    EqOn (charts m).logBranch (charts 0).logBranch Vcl := by
+  have hstep : ∀ j, j < m → a (j + 1) = a j := by
+    intro j hj
+    rcases hV_nonempty j hj with ⟨w, hwV⟩
+    have hw_overlap : w ∈ (charts j).chart ∩ (charts (j + 1)).chart :=
+      hV_subset j hj hwV
+    have hlog : (charts (j + 1)).logBranch w = (charts j).logBranch w :=
+      hinterior_eq j hj hwV
+    have hsub : a (j + 1) - a j = 0 := by
+      simpa [hlog] using (hcoboundary j (j + 1) hw_overlap).symm
+    exact sub_eq_zero.mp hsub
+  have hall : ∀ j, j ≤ m → a j = a 0 := by
+    intro j hj
+    induction j with
+    | zero =>
+        rfl
+    | succ j ih =>
+        have hj_le : j ≤ m := Nat.le_of_succ_le hj
+        have hj_lt : j < m := lt_of_lt_of_le (Nat.lt_succ_self j) hj
+        calc
+          a (j + 1) = a j := hstep j hj_lt
+          _ = a 0 := ih hj_le
+  intro w hw
+  have hw_overlap : w ∈ (charts 0).chart ∩ (charts m).chart := by
+    rcases hVcl_subset hw with ⟨hw_m, hw_0⟩
+    exact ⟨hw_0, hw_m⟩
+  have hsub : (charts m).logBranch w - (charts 0).logBranch w = 0 := by
+    simpa [hall m le_rfl] using (hcoboundary 0 m hw_overlap)
+  exact sub_eq_zero.mp hsub
+
 /-- The right half-plane, used in the explicit family of high-level comparison
 examples. It is zero-free and carries the principal logarithm. -/
 def complexRightHalfPlane : Set ℂ :=
