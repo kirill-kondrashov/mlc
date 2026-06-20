@@ -12,7 +12,17 @@ A Lean 4 formalization of the Mandelbrot local connectivity statement
 ```bash
 make build
 make check
+make notebook
 ```
+
+`make notebook` starts a local read-only JupyterLab server rooted at
+`notebooks/` on `127.0.0.1:8888`. It uses the uv project in `notebooks/`,
+installs the notebook dependencies there, and then launches JupyterLab from
+that environment with writes, kernel startup, and terminals disabled. The
+notebooks are saved without `kernelspec` metadata, and JupyterLab is exposed
+with no available kernels, so notebooks open with **No kernel** by default.
+Override `NOTEBOOK_HOST`, `NOTEBOOK_PORT`, `NOTEBOOK_DIR`, or
+`NOTEBOOK_PROJECT_DIR` if needed.
 
 Expected `make check` output:
 
