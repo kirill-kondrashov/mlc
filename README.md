@@ -170,10 +170,19 @@ $$
 [c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z).
 $$
 
-`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` records the
+`notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb` now records the
 closing theorem, the Čech-gluing reduction, a rigorous vanishing-cocycle
 criterion, two positive numerical examples, a counterexample attempt showing
 why the closing equality is necessary, and the one-domain special case.
+
+`notebooks/frontier_plan09_vanishing_cocycle.ipynb` isolates the live PLAN 09
+frontier: prove
+
+$$
+[c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z)
+$$
+
+for the actual high-escaping chart cover.
 
 Once this theorem-level package exists,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and
@@ -205,8 +214,10 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
    the current geometric/theorem-level handoff.
 6. `notebooks/plan08_chart_chain_monodromy_blocker.ipynb`,
    `notebooks/plan08_step13_overlap_comparison_frontier.ipynb`, and
-   `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb`
-   visualize the live PLAN 08 / PLAN 09 frontier, while
+   `notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb`
+   visualize the checked PLAN 08 / abstract PLAN 09 reduction, while
+   `notebooks/frontier_plan09_vanishing_cocycle.ipynb` isolates the live
+   cocycle-vanishing theorem, and
    `notebooks/archive/plan08_step13_actual_high_escaping_charts_frontier.ipynb`
    preserves the older Step 13 counterexample/status notebook.
 

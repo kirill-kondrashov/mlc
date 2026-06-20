@@ -1,11 +1,11 @@
 # PLAN 09: Actual overlap neighborhoods for high-escaping chart chains
 
-**Status:** PLANNED  
+**Status:** IN PROGRESS  
 **Depends on:** `PLAN_08_analytic_continuation_monodromy.md`
 
 ## Goal
 
-Construct the local overlap data needed to build
+Construct the actual high-escaping chart/overlap data needed to build
 
 ```lean
 HighEscapingActualChartChainsEqOnOverlapNeighborhoodData
@@ -32,8 +32,17 @@ such that:
 3. the actual neighboring logarithm branches agree on `V_j`.
 
 PLAN 08 already proves that these data imply trivial overlap multipliers and a
-trivial chart-chain monodromy product. This plan isolates the remaining
-geometric and analytic work.
+trivial chart-chain monodromy product. Since the abstract Čech-gluing
+implication is now formalized in Lean as
+`Quadratic.logBranch_eqOn_closing_of_coboundary`, the live PLAN 09 frontier is
+more precise: prove that the actual transition cocycle of the local logarithm
+branches has vanishing class
+
+$$
+[c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z)
+$$
+
+for the actual high-escaping chart cover.
 
 ## Current formalized starting point
 
@@ -52,13 +61,15 @@ HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toEventuallyEqAtOverlap
 HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toProductComparisonData
 ```
 
-The remaining work is to construct the open sets and branch-equality data that
-feed these interfaces.
+The remaining work is to construct the actual cover/branch data and prove the
+vanishing-cocycle theorem that feeds these interfaces.
 
-The current notebook
-`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb`
-summarizes the remaining theorem, the Lean target, and the completion
-criterion.
+The notebook split is now:
+
+1. `notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb` for the
+   closing theorem, the abstract Čech-gluing criterion, and the model cases;
+2. `notebooks/frontier_plan09_vanishing_cocycle.ipynb` for the isolated live
+   cocycle-vanishing frontier.
 
 ## Required components
 
@@ -153,7 +164,30 @@ and therefore by
 BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn.
 ```
 
-### 5. Packaging into the PLAN 08 interface
+### 5. Vanishing of the transition cocycle
+
+For all overlaps of the actual chart cover, define
+
+$$
+c_{jk} = b_k - b_j \in 2\pi i \mathbf Z.
+$$
+
+The live theorem is to prove that this cocycle is a coboundary:
+
+$$
+[c_{jk}] = 0 \in \check H^1(\Omega, 2\pi i \mathbf Z).
+$$
+
+Equivalently, one must construct constants $a_j \in 2\pi i \mathbf Z$ such
+that
+
+$$
+c_{jk} = a_k - a_j
+$$
+
+on the relevant overlaps.
+
+### 6. Packaging into the PLAN 08 interface
 
 Assemble the chart, overlap, and branch-equality data into
 
@@ -180,7 +214,9 @@ This is the exact output consumed back in PLAN 08.
 3. Define the actual branches by continuation from the normalized starting germ.
 4. Use uniqueness of analytic continuation / identity-theorem arguments to show
    the adjacent branches coincide on the overlap neighborhoods.
-5. Package the resulting data into the existing PLAN 08 interfaces.
+5. Prove that the resulting transition cocycle on the finite overlap nerve is
+   cohomologically trivial.
+6. Package the resulting data into the existing PLAN 08 interfaces.
 
 ## Scope boundary
 
@@ -193,6 +229,7 @@ Its purpose is:
 - construct the actual `V_j`,
 - construct the local branches on the actual charts,
 - prove equality on those `V_j`,
+- prove vanishing of the induced transition cocycle,
 - feed the result back into PLAN 08.
 
 ## Deliverable

@@ -221,7 +221,7 @@ Possible proof routes:
 ### 7. Local chart proof template
 
 The concrete proof strategy suggested by
-`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` is:
+`notebooks/plan09_actual_overlap_neighborhoods_companion.ipynb` is:
 
 1. **Push a basin loop to the `A`-plane.** For a basin loop `γ`, define
 
