@@ -4500,6 +4500,68 @@ def UnifiedGenuineRootKernelTwo : Prop :=
   GenuineBottcherPuzzleBoundaryMotionBridgeTwo ∧
     Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)
 
+/-- The motion-bridge conjunct of `UnifiedGenuineRootKernelTwo` is already
+    available from the theorem-facing `onM` bridge. Thus the remaining content
+    of the unified genuine root kernel is the global Böttcher theorem at
+    `c = 2`. -/
+theorem unifiedGenuineRootKernelTwo_motionBridge :
+    GenuineBottcherPuzzleBoundaryMotionBridgeTwo :=
+  genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM
+
+/-- Reduce the unified genuine root kernel to the single remaining PLAN 06
+    theorem surface. This introduces no new axiom: it only packages the proved
+    motion bridge with a supplied `UnifiedGlobalBottcherTheoremFor (2 : ℂ)`. -/
+theorem unifiedGenuineRootKernelTwo_of_unifiedGlobalBottcherTheorem_two
+    (h_unified : Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)) :
+    UnifiedGenuineRootKernelTwo :=
+  ⟨unifiedGenuineRootKernelTwo_motionBridge, h_unified⟩
+
+/-- Route-A reduction for the unified genuine root kernel: principal-pullback
+    coherence plus the matching inverse package imply the remaining global
+    Böttcher theorem surface, hence the kernel. -/
+theorem unifiedGenuineRootKernelTwo_of_principalPullbackCoherentData_two
+    (h_coh : Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ))
+    (h_inv :
+      Quadratic.GenuineBottcherInversePackageFor
+        (2 : ℂ)
+        (Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ))) :
+    UnifiedGenuineRootKernelTwo :=
+  unifiedGenuineRootKernelTwo_of_unifiedGlobalBottcherTheorem_two
+    (Quadratic.unifiedGlobalBottcherTheoremFor_of_principalPullbackCoherentData
+      h_coh h_inv)
+
+/-- Direct basin-extension reduction for the unified genuine root kernel:
+    a full logarithmic-series basin extension plus the matching inverse package
+    is exactly the remaining unified PLAN 06 theorem surface. -/
+theorem unifiedGenuineRootKernelTwo_of_logSeriesBasinExtensionData_two
+    (h_ext : Quadratic.LogSeriesBasinExtensionDataFor (2 : ℂ))
+    (h_inv : Quadratic.GenuineBottcherInversePackageFor (2 : ℂ) h_ext.phi) :
+    UnifiedGenuineRootKernelTwo :=
+  unifiedGenuineRootKernelTwo_of_unifiedGlobalBottcherTheorem_two
+    (Quadratic.unifiedGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
+      h_ext h_inv)
+
+/-- Route-B reduction for the unified genuine root kernel: a logarithmic-series
+    basin extension with its exterior inverse package already supplies the
+    unified PLAN 06 theorem surface. -/
+theorem unifiedGenuineRootKernelTwo_of_logSeriesExteriorInverseBasinExtensionData_two
+    (h_routeB : Quadratic.LogSeriesExteriorInverseBasinExtensionDataFor (2 : ℂ)) :
+    UnifiedGenuineRootKernelTwo :=
+  unifiedGenuineRootKernelTwo_of_unifiedGlobalBottcherTheorem_two
+    (Quadratic.unifiedGlobalBottcherTheoremFor_of_logSeriesExteriorInverseBasinExtensionData
+      h_routeB)
+
+/-- Route-C reduction for the unified genuine root kernel: a classical global
+    extension from the checked near-infinity coordinate plus the matching inverse
+    package gives the same unified PLAN 06 theorem surface. -/
+theorem unifiedGenuineRootKernelTwo_of_classicalGlobalExtensionFromNearInfinityData_two
+    (h_ext : Quadratic.ClassicalGlobalExtensionFromNearInfinityDataFor (2 : ℂ))
+    (h_inv : Quadratic.GenuineBottcherInversePackageFor (2 : ℂ) h_ext.extensionData.phi) :
+    UnifiedGenuineRootKernelTwo :=
+  unifiedGenuineRootKernelTwo_of_unifiedGlobalBottcherTheorem_two
+    (Quadratic.unifiedGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData
+      h_ext h_inv)
+
 /-- Root-facing axiom for the genuine-route frontier. -/
 axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
 

@@ -2010,6 +2010,24 @@ noncomputable def HighEscapingActualChartChainsLocalLogsRestrictGlobalData.toMon
     (R.representation_trivial hchain)
     hind
 
+/-- Canonical high-escaping handoff: if the all-level chart chains agree, at the
+    arbitrarily high escaping levels, with the canonical one-chart escaping
+    chains, then the anchored-global-log package is automatic and the
+    monodromy-trivial pullback package follows from the independently supplied
+    escape-time-independent pullback values. -/
+noncomputable def
+    ArbitrarilyHighEscapingLevelBasinLoopChartChainData.toMonodromyTrivialPullbackDataFor_of_chain_eq_escapingLevel
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀)
+    {h : BasinLoopChartChainMonodromyData c z₀}
+    (hchain : ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      h.chain (E.levelAbove γ N) γ =
+        BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N))
+    (hind : EscapeTimeIndependentPullbackDataFor c) :
+    MonodromyTrivialPullbackDataFor c :=
+  E.canonicalLocalLogsRestrictGlobalData.toMonodromyTrivialPullbackDataFor
+    hchain hind
+
 /-- Product-comparison data between an all-level chart-chain monodromy package
 and the canonical one-chart chains available at arbitrarily high escaping
 levels. This is the bridge form used once a high-level actual chain family has
@@ -2924,6 +2942,22 @@ structure UnifiedGlobalBottcherDataFor (c : ℂ) where
 /-- Proposition form of the unified PLAN 06 frontier theorem. -/
 def UnifiedGlobalBottcherTheoremFor (c : ℂ) : Prop :=
   Nonempty (UnifiedGlobalBottcherDataFor c)
+
+/-- Direct constructor for the unified PLAN 06 package from a full logarithmic-
+series basin extension and the matching theorem-facing inverse package. -/
+def LogSeriesBasinExtensionDataFor.toUnifiedGlobalBottcherDataFor
+{c : ℂ} (h : LogSeriesBasinExtensionDataFor c)
+(h_inv : GenuineBottcherInversePackageFor c h.phi) :
+UnifiedGlobalBottcherDataFor c where
+  extensionData := h
+  inversePackage := h_inv
+
+/-- Direct theorem surface for the unified PLAN 06 package. -/
+theorem unifiedGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
+{c : ℂ} (h : LogSeriesBasinExtensionDataFor c)
+(h_inv : GenuineBottcherInversePackageFor c h.phi) :
+UnifiedGlobalBottcherTheoremFor c :=
+  ⟨h.toUnifiedGlobalBottcherDataFor h_inv⟩
 
 /-- The unified PLAN 06 package directly supplies the theorem-facing genuine
 Böttcher route used by the closure chain. -/
