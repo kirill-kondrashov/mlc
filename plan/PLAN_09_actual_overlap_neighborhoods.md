@@ -5,10 +5,10 @@
 
 ## Goal
 
-Construct the genuine local overlap data needed to instantiate
+Construct the local overlap data needed to build
 
 ```lean
-HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsEqOnOverlapNeighborhoodData
 ```
 
 for the actual high-escaping chart chains at `c = 2`.
@@ -31,9 +31,9 @@ such that:
    `V_j ⊂ U_j ∩ U_{j+1}`,
 3. the actual neighboring logarithm branches agree on `V_j`.
 
-PLAN 08 already proves that once these data exist, the overlap multipliers and
-the chart-chain monodromy product are trivial. So this plan isolates the
-remaining geometric/analytic existence work.
+PLAN 08 already proves that these data imply trivial overlap multipliers and a
+trivial chart-chain monodromy product. This plan isolates the remaining
+geometric and analytic work.
 
 ## Current formalized starting point
 
@@ -46,21 +46,19 @@ ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn
 BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn
 HighEscapingActualChartChainsEventuallyEqAtOverlapsData
 HighEscapingActualChartChainsEventuallyEqAtOverlapsData.toProductComparisonData
+HighEscapingActualChartChainsEqOnOverlapNeighborhoodData
+HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toOverlapNeighborhoodData
+HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toProductComparisonData
 ```
 
-So the missing issue is **not** a new monodromy theorem. The missing issue is to
-construct the actual open sets and actual branch-equality data that feed those
-interfaces.
+The remaining work is to construct the open sets and branch-equality data that
+feed these interfaces.
 
-The frontier notebook
+The current notebook
 `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb`
-already records the right target:
-
-- the discarded universal global-log package is false in general;
-- the weakened local chart-chain theorem is the correct statement;
-- no numerical counterexample is currently known to that weakened theorem;
-- the missing proof is the existence of the genuine `V_j` and the equality of
-  actual adjacent branches on them.
+summarizes the remaining theorem, the Lean target, and the completion
+criterion.
 
 ## Required components
 
@@ -81,7 +79,7 @@ Needed outcome:
 ActualHighEscapingChartCoverData
 ```
 
-or an equivalent theorem surface producing the charts used by
+or an equivalent package producing the charts used by
 `EscapingLevelBasinLoopChartChainMonodromyData`.
 
 ### 2. Actual overlap neighborhoods
@@ -98,8 +96,7 @@ $$
 A_K(t_{j+1}) \in V_j.
 $$
 
-This is the exact point of the handoff: PLAN 08 consumes such `V_j`, but does
-not currently produce them.
+PLAN 08 uses such `V_j`, but does not construct them.
 
 Needed outcome:
 
@@ -107,8 +104,8 @@ Needed outcome:
 ActualHighEscapingOverlapNeighborhoodData
 ```
 
-or an equivalent package stating that every adjacent overlap value admits an
-actual open overlap neighborhood inside both neighboring charts.
+or an equivalent package stating that each adjacent overlap value admits an
+open overlap neighborhood inside both neighboring charts.
 
 ### 3. Actual local logarithm and root branches
 
@@ -127,7 +124,7 @@ Needed outcome:
 ActualHighEscapingLocalBranchData
 ```
 
-or a theorem surface that packages the actual branches attached to the chosen
+or a package that records the actual branches attached to the chosen
 charts.
 
 ### 4. Equality of actual neighboring branches on `V_j`
@@ -144,7 +141,7 @@ $$
 \xi_{j+1} = \xi_j \quad \text{on } V_j.
 $$
 
-This is the final missing hypothesis required by
+This is the remaining hypothesis required by
 
 ```lean
 ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn
@@ -161,12 +158,13 @@ BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn.
 Assemble the chart, overlap, and branch-equality data into
 
 ```lean
-HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsEqOnOverlapNeighborhoodData
 ```
 
 and then derive
 
 ```lean
+HighEscapingActualChartChainsEventuallyEqAtOverlapsData
 HighEscapingActualChartChainsProductComparisonData.
 ```
 
@@ -182,18 +180,18 @@ This is the exact output consumed back in PLAN 08.
 3. Define the actual branches by continuation from the normalized starting germ.
 4. Use uniqueness of analytic continuation / identity-theorem arguments to show
    the adjacent branches coincide on the overlap neighborhoods.
-5. Package the resulting data into the existing PLAN 08 theorem surface.
+5. Package the resulting data into the existing PLAN 08 interfaces.
 
 ## Scope boundary
 
-This plan should **not** try to reprove abstract monodromy triviality, invent a
-new global logarithm theorem, or replace the local theorem by a special-case
-global-domain package.
+This plan should not reprove abstract monodromy triviality, add a new global
+logarithm theorem, or replace the local theorem by a special-case global-domain
+package.
 
-Its purpose is narrower:
+Its purpose is:
 
-- construct the genuine `V_j`,
-- construct the genuine local branches on the actual charts,
+- construct the actual `V_j`,
+- construct the local branches on the actual charts,
 - prove equality on those `V_j`,
 - feed the result back into PLAN 08.
 
@@ -202,8 +200,8 @@ Its purpose is narrower:
 The deliverable of this plan is a checked constructor or theorem package giving
 
 ```lean
-HighEscapingActualChartChainsEventuallyEqAtOverlapsData
+HighEscapingActualChartChainsEqOnOverlapNeighborhoodData
 ```
 
 for the actual high-escaping chart chains at `c = 2`, together with the induced
-product-comparison data used by PLAN 08.
+eventual-equality and product-comparison data used by PLAN 08.

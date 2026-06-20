@@ -117,34 +117,45 @@ Quadratic.quadraticMap_two_second_iterate_re_lower_bound
 Quadratic.quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-What remains is no longer a new abstract comparison theorem. The current gap is
-the **theorem-level / Lean instantiation for the genuine high-escaping curve**:
+Current PLAN 09 work is to prove the closing trivial-monodromy theorem for the
+actual high-escaping curve.
 
-1. choose the actual charts `U_j`,
-2. choose the actual interior overlaps `V_j`,
-3. choose the closing overlap `V_cl ⊂ U_m ∩ U_0`,
-4. construct the actual logarithm branches `b_j` from the normalized base germ,
-5. prove the interior and closing equalities needed by the cyclic monodromy
-   comparison.
+More precisely, one must prove the following theorem.
 
-The stronger one-global-log restriction package is now understood as a special
-case, not the general Step 13 / PLAN 09 target.
+**Theorem (closing trivial monodromy).** Let
 
-At the notebook level, the current frontier has been reorganized into a
-construction skeleton:
+$$
+U_0, \dots, U_m \subset \mathbf{C}^{\times}, \qquad
+V_j \subset U_j \cap U_{j+1} \ \ (0 \le j < m), \qquad
+V_{\mathrm{cl}} \subset U_m \cap U_0,
+$$
 
-- `notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` now starts from
-  a worked numerical high-level curve and gives an explicit recipe for `U_j`,
-  `V_j`, `V_cl`, and `b_j`;
-- the notebook also records numerical counterexamples to the naive unpadded
-  chart rule, the naive overlap rule, the naive independently-chosen-branch
-  rule, and the naive open-chain proof;
-- for each of those, it gives a repaired candidate and a rigorous
-  notebook-level construction/proof pattern;
-- what is still missing is to lift that recipe from the worked example to the
-  genuine high-escaping geometry and formalize it in Lean.
+$$
+b_j : U_j \to \mathbf{C} \qquad (0 \le j \le m),
+$$
 
-Once that theorem-level package exists,
+Assume that
+
+$$
+A_K([t_j, t_{j+1}]) \subset U_j \qquad (0 \le j \le m),
+$$
+
+$$
+b_{j+1}\vert_{V_j} = b_j\vert_{V_j} \qquad (0 \le j < m),
+$$
+
+and that all branches are obtained by analytic continuation of the same
+normalized base germ. Then
+
+$$
+b_m\vert_{V_{\mathrm{cl}}} = b_0\vert_{V_{\mathrm{cl}}}.
+$$
+
+`notebooks/frontier_plan09_actual_overlap_neighborhoods.ipynb` records this
+theorem, two positive numerical examples, a counterexample attempt showing why
+the closing equality is necessary, and the one-domain special case.
+
+Once this theorem-level package exists,
 `HighEscapingChartChainProductComparisonData` should give trivial monodromy and
 feed into `EscapeTimeIndependentPullbackDataFor (2 : ℂ)` and then
 `PrincipalPullbackCoherentDataFor (2 : ℂ)`.
@@ -164,8 +175,7 @@ enough to obtain `Quadratic.ClassicalGlobalBottcherTheoremFor (2 : ℂ)`.
 ## Repository Snapshot
 
 1. `make build`, `make check`, and `./scripts/verify_output.sh` pass.
-2. `plan/PLAN_06_global_bottcher_package.md` records the live theorem-facing
-   Böttcher plan.
+2. `plan/PLAN_06_global_bottcher_package.md` records the current Böttcher plan.
 3. `draft/` now records the single remaining positive mathematical target:
    `draft/genuine_bottcher_route_problem.md`.
 4. `proof_sketches/` records the matching human-readable sketch:

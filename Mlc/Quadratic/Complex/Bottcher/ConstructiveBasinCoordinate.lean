@@ -1156,6 +1156,96 @@ lemma BasinLoopChartChain.monodromyProduct_eq_one_of_open_eqOn
     chain.monodromyProduct = 1 :=
   (ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn hoverlap_eqOn).monodromyProduct_eq_one
 
+/-- A concrete open overlap neighborhood for one chart-chain step. This is the
+theorem-level Lean surface for the notebook's actual overlap windows `V_j` and
+`V_cl`: the overlap value lies in an open set contained in both neighboring
+charts. -/
+structure BasinLoopChartOverlapNeighborhoodData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (step : BasinLoopChartOverlapStep c N z₀ γ) where
+  V : Set ℂ
+  V_isOpen : IsOpen V
+  overlapValue_mem : basinLoopRootEquationValue c N γ step.overlapTime ∈ V
+  V_subset_left_chart : V ⊆ step.left.chart.chart
+  V_subset_right_chart : V ⊆ step.right.chart.chart
+
+lemma BasinLoopChartOverlapNeighborhoodData.overlapValue_mem_left_chart
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {step : BasinLoopChartOverlapStep c N z₀ γ}
+    (D : BasinLoopChartOverlapNeighborhoodData step) :
+    basinLoopRootEquationValue c N γ step.overlapTime ∈ step.left.chart.chart :=
+  D.V_subset_left_chart D.overlapValue_mem
+
+lemma BasinLoopChartOverlapNeighborhoodData.overlapValue_mem_right_chart
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {step : BasinLoopChartOverlapStep c N z₀ γ}
+    (D : BasinLoopChartOverlapNeighborhoodData step) :
+    basinLoopRootEquationValue c N γ step.overlapTime ∈ step.right.chart.chart :=
+  D.V_subset_right_chart D.overlapValue_mem
+
+/-- A concrete overlap neighborhood together with equality of the neighboring
+local logarithm branches on it. This is exactly the theorem-level input
+produced by the PLAN 09 notebook recipe before passing to the already-checked
+PLAN 08 monodromy theorem. -/
+structure BasinLoopChartOverlapEqOnNeighborhoodData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (step : BasinLoopChartOverlapStep c N z₀ γ)
+    extends BasinLoopChartOverlapNeighborhoodData step where
+  logBranch_eqOn : EqOn step.left.chart.logBranch step.right.chart.logBranch V
+
+def BasinLoopChartOverlapEqOnNeighborhoodData.eventuallyEq
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {step : BasinLoopChartOverlapStep c N z₀ γ}
+    (D : BasinLoopChartOverlapEqOnNeighborhoodData step) :
+    step.left.chart.logBranch =ᶠ[𝓝 (basinLoopRootEquationValue c N γ step.overlapTime)]
+      step.right.chart.logBranch := by
+  filter_upwards [D.V_isOpen.mem_nhds D.overlapValue_mem] with w hw
+  exact D.logBranch_eqOn hw
+
+lemma BasinLoopChartOverlapEqOnNeighborhoodData.multiplier_eq_one
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {step : BasinLoopChartOverlapStep c N z₀ γ}
+    (D : BasinLoopChartOverlapEqOnNeighborhoodData step) :
+    step.multiplier = 1 :=
+  step.multiplier_eq_one_of_eqOn D.overlapValue_mem D.logBranch_eqOn
+
+/-- For every overlap step in a concrete chart chain, choose an explicit open
+overlap neighborhood on which the neighboring logarithm branches agree. Any
+closing/basepoint comparison is represented uniformly as just another element of
+`chain.overlaps`. -/
+structure ChartChainLocalLogsEqOnOverlapNeighborhoodData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ) where
+  overlapData :
+    ∀ step (_hstep : step ∈ chain.overlaps),
+      BasinLoopChartOverlapEqOnNeighborhoodData step
+
+lemma ChartChainLocalLogsEqOnOverlapNeighborhoodData.open_eqOn
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    (D : ChartChainLocalLogsEqOnOverlapNeighborhoodData chain) :
+    ∀ step ∈ chain.overlaps,
+      ∃ V : Set ℂ, IsOpen V ∧
+        basinLoopRootEquationValue c N γ step.overlapTime ∈ V ∧
+        EqOn step.left.chart.logBranch step.right.chart.logBranch V := by
+  intro step hstep
+  let h := D.overlapData step hstep
+  exact ⟨h.V, h.V_isOpen, h.overlapValue_mem, h.logBranch_eqOn⟩
+
+def ChartChainLocalLogsEqOnOverlapNeighborhoodData.toEventuallyEqAtOverlaps
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    (D : ChartChainLocalLogsEqOnOverlapNeighborhoodData chain) :
+    ChartChainLocalLogsEventuallyEqAtOverlaps chain :=
+  ChartChainLocalLogsEventuallyEqAtOverlaps.of_open_eqOn D.open_eqOn
+
+lemma ChartChainLocalLogsEqOnOverlapNeighborhoodData.monodromyProduct_eq_one
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    (D : ChartChainLocalLogsEqOnOverlapNeighborhoodData chain) :
+    chain.monodromyProduct = 1 :=
+  D.toEventuallyEqAtOverlaps.monodromyProduct_eq_one
+
 lemma BasinLoopChartChain.monodromyProduct_of_nonzero_values
     {c : ℂ} {N : ℕ} {z₀ : ℂ} (γ : BasinLoop c z₀)
     (hnonzero :
@@ -1540,6 +1630,50 @@ lemma BasinLoopChartChainMonodromyData.representation_trivial_of_high_escaping_c
   rw [hcompare N γ]
   exact E.productAbove_trivial γ N
 
+/-- PLAN 09 chart-cover data: for each requested lower level and basin loop,
+choose the concrete high-level chart chain itself. Each cell already carries its
+actual logarithm and root branches via `ZeroFreeChartRootBranchData`. -/
+structure ActualHighEscapingChartCoverData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  actualChain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      BasinLoopChartChain c (E.levelAbove γ N) z₀ γ
+
+/-- PLAN 09's "actual local branch" package is already encoded by the chosen
+chart cover: the cells of `actualChain N γ` contain the local logarithm and
+root branches. We keep the notebook's terminology as a named abbreviation. -/
+abbrev ActualHighEscapingLocalBranchData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) :=
+  ActualHighEscapingChartCoverData E
+
+/-- PLAN 09 overlap-neighborhood data for a chosen actual chart cover: every
+overlap step admits an explicit open set contained in both neighboring charts.
+As at the chain level, a closing/basepoint overlap is represented uniformly as
+another overlap step. -/
+structure ActualHighEscapingOverlapNeighborhoodData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (A : ActualHighEscapingChartCoverData E) where
+  overlapNeighborhood :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ∀ step (_hstep : step ∈ (A.actualChain N γ).overlaps),
+        BasinLoopChartOverlapNeighborhoodData step
+
+/-- Stronger PLAN 09 data: the chosen actual high-level chart chains come with
+explicit overlap neighborhoods on which the neighboring logarithm branches
+agree. This is the direct theorem-level formalization of the notebook's
+construction recipe, and it packages immediately into the earlier eventual-
+equality interface. -/
+structure HighEscapingActualChartChainsEqOnOverlapNeighborhoodData
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀)
+    extends ActualHighEscapingChartCoverData E where
+  localLogs_eqOn_overlapNeighborhoods :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ChartChainLocalLogsEqOnOverlapNeighborhoodData (actualChain N γ)
+
 /-- Product-comparison data between an actual family of high escaping chart
 chains and the canonical one-chart chains available at arbitrarily high
 escaping levels. This is the step-13 target in the current PLAN 08 interface:
@@ -1587,6 +1721,33 @@ def HighEscapingActualChartChainsEventuallyEqAtOverlapsData.toProductComparisonD
         (A.localLogs_eventuallyEq N γ).monodromyProduct_eq_one
       _ = (E.chainAbove γ N).monodromyProduct := by
         exact (E.productAbove_trivial γ N).symm
+
+def HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toOverlapNeighborhoodData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (A : HighEscapingActualChartChainsEqOnOverlapNeighborhoodData E) :
+    ActualHighEscapingOverlapNeighborhoodData A.toActualHighEscapingChartCoverData where
+  overlapNeighborhood := by
+    intro N γ step hstep
+    exact
+      ((A.localLogs_eqOn_overlapNeighborhoods N γ).overlapData step hstep).toBasinLoopChartOverlapNeighborhoodData
+
+def HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toEventuallyEqAtOverlapsData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (A : HighEscapingActualChartChainsEqOnOverlapNeighborhoodData E) :
+    HighEscapingActualChartChainsEventuallyEqAtOverlapsData E where
+  actualChain := A.actualChain
+  localLogs_eventuallyEq := by
+    intro N γ
+    exact (A.localLogs_eqOn_overlapNeighborhoods N γ).toEventuallyEqAtOverlaps
+
+def HighEscapingActualChartChainsEqOnOverlapNeighborhoodData.toProductComparisonData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (A : HighEscapingActualChartChainsEqOnOverlapNeighborhoodData E) :
+    HighEscapingActualChartChainsProductComparisonData E :=
+  A.toEventuallyEqAtOverlapsData.toProductComparisonData
 
 /-- Special-case high-level comparison data: at every high escaping level, all
 local logs in the actual chart chain are restrictions of a single global

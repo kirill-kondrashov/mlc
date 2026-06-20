@@ -17,9 +17,9 @@ formalize coherent branch continuation on the basin of infinity.
 
 ## Immediate target
 
-The live PLAN 08 frontier is no longer "construct the whole monodromy story from
+The current PLAN 08 task is no longer "construct the whole monodromy story from
 scratch". The concrete loop type, local chart data, chart chains, escaping-level
-replacement, abstract overlap-equality theorem, and the direct bridge from
+replacement, abstract overlap-equality theorem, and the bridge from
 open overlap equality to trivial monodromy are already formalized. In
 particular, the abstract local implication is now checked through
 
@@ -34,7 +34,7 @@ What remains is to consume the output of
 PLAN_09_actual_overlap_neighborhoods.md
 ```
 
-namely the genuine overlap-neighborhood and branch-equality package for the
+namely the overlap-neighborhood and branch-equality package for the
 actual high-escaping chart chains, in order to build:
 
 ```lean
@@ -45,11 +45,11 @@ HighEscapingActualChartChainsProductComparisonData
 for the **actual** high-escaping chart chains at `c = 2`.
 
 Concretely, the geometric existence work for the actual charts `U_j`, overlap
-neighborhoods `V_j`, and local branch equalities has now been split out into
+neighborhoods `V_j`, and local branch equalities has been split out into
 `PLAN_09_actual_overlap_neighborhoods.md`. PLAN 08 keeps the abstract
 comparison theorem and the final packaging step: once PLAN 09 supplies those
-genuine chart data, the formalized comparison theorem already forces the
-high-level monodromy products to be trivial.
+chart data, the formalized comparison theorem gives trivial high-level
+monodromy products.
 
 The stronger special-case package
 
@@ -66,7 +66,7 @@ the primary Step 13 target.
 ## Scope boundary
 
 PLAN 08 is only the analytic-continuation / monodromy-comparison layer. It is
-an input to the genuine Böttcher route, but it is **not** the whole route.
+an input to the Böttcher route, but it is not the whole route.
 
 The minimal dependency chain is:
 
@@ -76,8 +76,8 @@ The minimal dependency chain is:
 3. That ingredient is then combined with escape-time-independent pullback data
    and basin-extension arguments elsewhere.
 4. Those downstream seams produce `PrincipalPullbackCoherentDataFor (2 : ℂ)`,
-   `LogSeriesBasinExtensionDataFor (2 : ℂ)`, and then the theorem-facing
-   genuine Böttcher packages.
+   `LogSeriesBasinExtensionDataFor (2 : ℂ)`, and then the checked Böttcher
+   packages.
 
 So the following objects are **downstream consumers / handoff targets**, not
 independent PLAN 08 subgoals:
@@ -462,15 +462,13 @@ quadraticMap_two_second_iterate_re_lower_bound
 quadraticMap_two_second_iterate_mem_rightHalfPlane_of_norm
 ```
 
-The remaining comparison input is now even more specific: show that the actual
-all-level chart chains at a sufficiently high escaping level supply the
-overlap-neighborhood equality data required by
-`ChartChainLocalLogsEventuallyEqAtOverlaps`. That existence problem is now
-tracked explicitly in `PLAN_09_actual_overlap_neighborhoods.md`. A stronger
-global-restriction package still implies this, but the counterexample notebook
-shows it is only a special case, not the general theorem to pursue. Once PLAN 09
-produces the local overlap data, the monodromy product comparison follows from
-the formalized overlap-equality theorem.
+The remaining comparison input is: show that the actual all-level chart chains
+at a sufficiently high escaping level supply the overlap-neighborhood equality
+data required by `ChartChainLocalLogsEventuallyEqAtOverlaps`. That existence
+problem is tracked in `PLAN_09_actual_overlap_neighborhoods.md`. A stronger
+global-restriction package still implies this, but only as a special case. Once
+PLAN 09 produces the local overlap data, the monodromy product comparison
+follows from the formalized overlap-equality theorem.
 
 ### 8. Downstream handoff after PLAN 08
 
@@ -484,7 +482,7 @@ PrincipalPullbackCoherentDataFor (2 : ℂ)
 LogSeriesBasinExtensionDataFor (2 : ℂ)
 ```
 
-These are still needed for the full genuine Böttcher route, but they are not
+These are still needed for the full Böttcher route, but they are not
 separate monodromy-comparison subtasks. In particular, `EscapeTimeIndependentPullbackDataFor`
 is an additional root-coherence input that must be combined with monodromy
 triviality; it is not produced by the overlap-comparison theorem alone.
@@ -531,7 +529,7 @@ triviality; it is not produced by the overlap-comparison theorem alone.
    `HighEscapingActualChartChainsLocalLogsRestrictGlobalData` survives only as a
    special-case route when the high-level image admits one global logarithm
    domain. Only after PLAN 09 supplies the actual domains, overlap
-   neighborhoods, and logarithm/root branches for genuine high-escaping loops
+   neighborhoods, and logarithm/root branches for high-escaping loops
    should this be bridged to
    `HighEscapingChartChainProductComparisonData`.
 14. **HANDOFF, NOT A NEW PLAN 08 BLOCKER:** combine the resulting monodromy
@@ -540,8 +538,8 @@ triviality; it is not produced by the overlap-comparison theorem alone.
     `MonodromyTrivialPullbackDataFor (2 : ℂ)`.
 15. **HANDOFF TO PLAN 06 / BASIN EXTENSION PACKAGE:** use that seam to build
     `PrincipalPullbackCoherentDataFor (2 : ℂ)` (or another equivalent
-    `LogSeriesBasinExtensionDataFor (2 : ℂ)` route) toward the theorem-facing
-    genuine Böttcher coordinate package.
+    `LogSeriesBasinExtensionDataFor (2 : ℂ)` route) toward the checked
+    Böttcher coordinate package.
 
 ## Failure modes
 
@@ -549,4 +547,4 @@ If mathlib lacks enough covering/analytic-continuation infrastructure, the plan
 should stop after adding exact theorem surfaces rather than adding axioms.
 
 Do **not** replace this with random, principal, or nearest-root selection rules.
-Those are diagnostics, not theorem-facing coherent branch constructions.
+Those are diagnostics, not coherent branch constructions.
