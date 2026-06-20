@@ -1813,9 +1813,14 @@ noncomputable def HighEscapingActualChartChainsProductComparisonData.of_actualCh
   actualChain := actualChain
   product_eq := by
     intro N γ
-    rw [hchain N γ]
-    exact BasinLoopChartChain.monodromyProduct_of_escaping_level γ
-      (E.levelAbove_escapes γ N)
+    calc
+      (actualChain N γ).monodromyProduct
+          = (BasinLoopChartChain.of_escaping_level γ (E.levelAbove_escapes γ N)).monodromyProduct := by
+              rw [hchain N γ]
+      _ = 1 := BasinLoopChartChain.monodromyProduct_of_escaping_level γ
+            (E.levelAbove_escapes γ N)
+      _ = (E.chainAbove γ N).monodromyProduct := by
+            exact (E.productAbove_trivial γ N).symm
 
 /-- Step-13 wrapper for the generalized overlap-equality theorem at high
 escaping levels: for each requested lower level and loop, the actual high-level

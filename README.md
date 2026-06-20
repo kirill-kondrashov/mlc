@@ -32,7 +32,9 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.basinExternalRayKernelTwo
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.residualOpenVirtualNearMoleculeAxiom
+- MLC.unifiedGenuineRootKernelTwo
 ```
 
 ## Current Frontier
@@ -40,18 +42,25 @@ All axioms used:
 ```text
 Axioms(MLC.mlc_conjecture)
 = {Quot.sound, propext, Classical.choice,
-   MLC.basinExternalRayKernelTwo}
+   MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
+   MLC.residualOpenVirtualNearMoleculeAxiom,
+   MLC.unifiedGenuineRootKernelTwo}
 
 project_frontier(MLC.mlc_conjecture)
-= {MLC.basinExternalRayKernelTwo}
+= {MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected,
+   MLC.residualOpenVirtualNearMoleculeAxiom,
+   MLC.unifiedGenuineRootKernelTwo}
 ```
 
 ## Current Status
 
-One non-core project axiom remains: `MLC.basinExternalRayKernelTwo`.
+Three non-core project axioms remain:
+`MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`,
+`MLC.residualOpenVirtualNearMoleculeAxiom`, and
+`MLC.unifiedGenuineRootKernelTwo`.
 
 The current analytic route is to construct a genuine global Böttcher coordinate
-at `c = 2` and use it to replace the remaining basin-external-ray axiom. The
+at `c = 2` and use it to replace the remaining unified genuine-route kernel. The
 near-infinity part is complete: the canonical coordinate is
 
 ```lean
@@ -140,13 +149,16 @@ The root-facing genuine-route cutover is now also exposed explicitly:
 
 ```lean
 MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two
+MLC.MainProof.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two
 ```
 
-This theorem rewires the intended final entrypoint away from the false
-proxy-specific `BasinExternalRayMapDataTwo` package: once
+These theorems rewire the final entrypoint away from the old
+proxy-specific basin-external-ray route: once
 `Quadratic.PrincipalPullbackCoherentDataFor (2 : ℂ)` and the matching inverse
 package for `Quadratic.basinLogSeriesExtensionCandidate (2 : ℂ)` are available,
-the existing genuine Böttcher / local-parameter-extension chain closes MLC.
+or more directly once `Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)` is
+available together with the local-parameter/family bridges, the existing genuine
+Böttcher chain closes MLC.
 
 The remaining theorem is therefore:
 

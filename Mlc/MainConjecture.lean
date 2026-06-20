@@ -2999,41 +2999,6 @@ theorem not_restrictedLocalHomeomorphPositiveConstantDegreeTwoMinimalCounterexam
     hminimal
       Mlc.Bottcher.DegreeOne.not_restrictedLocalHomeomorphPositiveConstantDegreeTwo
 
-/-- Honest root-facing theorem shape after eliminating the false full-exterior
-degree statement: construct a basin-valued exterior inverse for the actual
-`proxy_bottcher_map` at `c = 2`, with a right inverse on all of the exterior and a
-left inverse on the outside-open source region. -/
-def BasinExternalRayMapDataTwoMinimalCounterexample : Prop :=
-  ¬ Quadratic.BasinExternalRayMapDataTwo → False
-
-/-- Theorem-shaped scope interface for the basin-valued external-ray package. -/
-abbrev BasinExternalRayMapDataTwoScope : Prop :=
-  BasinExternalRayMapDataTwoMinimalCounterexample
-
-/-- Recover the honest basin-valued external-ray package from its
-minimal-counterexample formulation. -/
-theorem basinExternalRayMapDataTwo_of_minimalCounterexample
-    (hminimal : BasinExternalRayMapDataTwoMinimalCounterexample) :
-    Quadratic.BasinExternalRayMapDataTwo := by
-  classical
-  by_contra hdata
-  exact hminimal hdata
-
-/-- The minimal-counterexample wrapper itself is impossible for the current
-constructive coordinate, because the wrapped basin-valued package is already
-formally refuted. -/
-theorem not_basinExternalRayMapDataTwoMinimalCounterexample :
-    ¬ BasinExternalRayMapDataTwoMinimalCounterexample := by
-  intro hminimal
-  exact not_basinExternalRayMapData_two
-    (basinExternalRayMapDataTwo_of_minimalCounterexample hminimal)
-
-/-- Scope alias for the root wrapper is likewise impossible. -/
-theorem not_basinExternalRayMapDataTwoScope :
-    ¬ BasinExternalRayMapDataTwoScope := by
-  simpa [BasinExternalRayMapDataTwoScope] using
-    not_basinExternalRayMapDataTwoMinimalCounterexample
-
 /-- Constructive CP5 endpoint from the direct closure criterion witness. -/
 def KnownLocalHomeomorphOnSourceCandidateTwo : Prop :=
   AnalyticDerivConstructivePayloadTwo ∨
@@ -4495,6 +4460,14 @@ theorem problem45_virtualNearMoleculeRenormalization_of_chosenTrueProblem45Axiom
     boundedTypeConstructive_of_chosenTrueProblem45Axioms
     residualOpenVirtualNearMoleculeAxiom
 
+/-- The existing residual-open Problem 4.3/4.4 root axiom already supplies the
+Track-1/Track-2 package consumed by the genuine-route closure chain. -/
+theorem irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom :
+    IRNoTowerPrimitiveAndMoleculeBridgeTargetData :=
+  ⟨noTowerPrimitive_of_problem44
+      (problem44_of_residualOpenVirtualNearMolecule residualOpenVirtualNearMoleculeAxiom),
+    problem43_of_residualOpenVirtualNearMolecule residualOpenVirtualNearMoleculeAxiom⟩
+
 /-- Root-facing closure of the honest basin-valued external-ray package. -/
 theorem mlc_conjecture_of_basinExternalRayMapData_two
     (hdata : Quadratic.BasinExternalRayMapDataTwo) :
@@ -4503,36 +4476,38 @@ theorem mlc_conjecture_of_basinExternalRayMapData_two
     mlc_conjecture_of_externalRayMapData_two
       (Quadratic.externalRayMapData_of_basinExternalRayMapData (2 : ℂ) hdata)
 
-/-- Final root-facing kernel after ruling out the false full-exterior degree
-route. The single remaining theorem-shaped input is the specialized
-basin-valued external-ray package for the actual `proxy_bottcher_map` at `c = 2`. -/
-axiom basinExternalRayKernelTwo : BasinExternalRayMapDataTwoMinimalCounterexample
+/-- New root-facing kernel for the genuine-route strategy. This packages the
+remaining PLAN 06/08/09 frontier at `c = 2` without going through the old
+`basinExternalRayKernelTwo` proxy route. The residual Problem 4.3/4.4 axiom
+already supplies the Track-1/Track-2 payload separately. -/
+def UnifiedGenuineRootKernelTwo : Prop :=
+  GenuineBottcherLocalParameterExtensionBridgeTwo ∧
+    GenuineBottcherFamilyPromotionBridgeTwo ∧
+      Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)
 
-/-- Root closure from the honest basin-valued external-ray kernel. -/
-theorem mlc_conjecture_of_basinExternalRayKernelTwo
-    (hkernel : BasinExternalRayMapDataTwoMinimalCounterexample) :
+/-- Root-facing axiom for the genuine-route frontier. -/
+axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
+
+/-- Root closure from the unified genuine-route kernel. -/
+theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
+    (hkernel : UnifiedGenuineRootKernelTwo) :
     LocallyConnectedSpace mandelbrotSet := by
   exact
-    mlc_conjecture_of_basinExternalRayMapData_two
-      (basinExternalRayMapDataTwo_of_minimalCounterexample hkernel)
-
-/-- The remaining root axiom is inconsistent with the current constructive
-coordinate package, because that package already rules out
-`Quadratic.BasinExternalRayMapDataTwo`. -/
-theorem false_of_basinExternalRayKernelTwo
-    (hkernel : BasinExternalRayMapDataTwoMinimalCounterexample) :
-    False := by
-  exact not_basinExternalRayMapDataTwoMinimalCounterexample hkernel
+    mlc_conjecture_of_unifiedGlobalBottcherTheorem_two
+      hkernel.1
+      hkernel.2.1
+      hkernel.2.2
+      irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. The checked root now depends only
-    on a single honest theorem-shaped axiom: a basin-valued exterior inverse
-    package for the actual `proxy_bottcher_map` at `c = 2`, with a global right
-    inverse on the exterior and a left inverse on the outside-open source
-    region. -/
+    the Mandelbrot set is locally connected. The checked root now depends on the
+    genuine-route frontier package at `c = 2`: the unified global Böttcher
+    theorem together with the two remaining local-parameter/family bridges.
+    The Track-1/Track-2 combinatorial package is supplied from the existing
+    residual Problem 4.3/4.4 root axiom. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_basinExternalRayKernelTwo basinExternalRayKernelTwo
+  mlc_conjecture_of_unifiedGenuineRootKernelTwo unifiedGenuineRootKernelTwo
 
 
 end MainProof
