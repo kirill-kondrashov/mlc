@@ -4507,9 +4507,11 @@ axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
 theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
     (hkernel : UnifiedGenuineRootKernelTwo) :
     LocallyConnectedSpace mandelbrotSet := by
+  rcases hkernel.2 with ⟨hdata⟩
   exact
-    mlc_conjecture_of_unifiedGlobalBottcherTheorem_two_of_onM
-      hkernel.2
+    mlc_conjecture_of_genuineBottcherRoute_two
+      hkernel.1
+      hdata.toGenuineBottcherRouteFor
       irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:

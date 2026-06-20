@@ -54,12 +54,16 @@ make check
 
 The root declaration is sorry-free. The current `make check` axiom frontier is:
 
+Expected `make check` output:
+
 ```text
-Quot.sound
-propext
-Classical.choice
-MLC.residualOpenVirtualNearMoleculeAxiom
-MLC.unifiedGenuineRootKernelTwo
+✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
+All axioms used:
+- Quot.sound
+- propext
+- Classical.choice
+- MLC.residualOpenVirtualNearMoleculeAxiom
+- MLC.unifiedGenuineRootKernelTwo
 ```
 
 The first three are standard Lean foundations. The project frontier consists
