@@ -1248,6 +1248,37 @@ structure BasinLoopChartOverlapEqOnNeighborhoodData
     extends BasinLoopChartOverlapNeighborhoodData step where
   logBranch_eqOn : EqOn step.left.chart.logBranch step.right.chart.logBranch V
 
+/-- Stronger overlap-neighborhood input: on an explicit open neighborhood, both
+local logarithm branches are restrictions of one global branch. This is the
+direct local form of the PLAN 09 global-log picture. -/
+structure BasinLoopChartOverlapGlobalLogNeighborhoodData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (step : BasinLoopChartOverlapStep c N z₀ γ)
+    (globalChart : ZeroFreeChartRootBranchData N)
+    extends BasinLoopChartOverlapNeighborhoodData step where
+  V_subset_global_chart : V ⊆ globalChart.chart
+  left_logBranch_eq_global : EqOn step.left.chart.logBranch globalChart.logBranch V
+  right_logBranch_eq_global : EqOn step.right.chart.logBranch globalChart.logBranch V
+
+/-- A common global logarithm branch on an overlap neighborhood implies equality
+of the neighboring local logarithm branches on that neighborhood. -/
+def BasinLoopChartOverlapGlobalLogNeighborhoodData.toEqOnNeighborhoodData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {step : BasinLoopChartOverlapStep c N z₀ γ}
+    {globalChart : ZeroFreeChartRootBranchData N}
+    (D : BasinLoopChartOverlapGlobalLogNeighborhoodData step globalChart) :
+    BasinLoopChartOverlapEqOnNeighborhoodData step where
+  V := D.V
+  V_isOpen := D.V_isOpen
+  overlapValue_mem := D.overlapValue_mem
+  V_subset_left_chart := D.V_subset_left_chart
+  V_subset_right_chart := D.V_subset_right_chart
+  logBranch_eqOn := by
+    intro w hw
+    calc
+      step.left.chart.logBranch w = globalChart.logBranch w := D.left_logBranch_eq_global hw
+      _ = step.right.chart.logBranch w := (D.right_logBranch_eq_global hw).symm
+
 def BasinLoopChartOverlapEqOnNeighborhoodData.eventuallyEq
     {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
     {step : BasinLoopChartOverlapStep c N z₀ γ}
@@ -1274,6 +1305,48 @@ structure ChartChainLocalLogsEqOnOverlapNeighborhoodData
   overlapData :
     ∀ step (_hstep : step ∈ chain.overlaps),
       BasinLoopChartOverlapEqOnNeighborhoodData step
+
+/-- Chain-level PLAN 09 global-log input on explicit overlap neighborhoods. -/
+structure ChartChainLocalLogsRestrictGlobalNeighborhoodData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    (chain : BasinLoopChartChain c N z₀ γ)
+    (globalChart : ZeroFreeChartRootBranchData N) where
+  overlapData :
+    ∀ step (_hstep : step ∈ chain.overlaps),
+      BasinLoopChartOverlapGlobalLogNeighborhoodData step globalChart
+
+/-- Explicit overlap-neighborhood restrictions of one global logarithm branch
+imply the weaker overlap-value restriction package. -/
+def ChartChainLocalLogsRestrictGlobalNeighborhoodData.toRestrictGlobal
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    {globalChart : ZeroFreeChartRootBranchData N}
+    (D : ChartChainLocalLogsRestrictGlobalNeighborhoodData chain globalChart) :
+    ChartChainLocalLogsRestrictGlobal chain globalChart where
+  overlap_value_mem_global := by
+    intro step hstep
+    exact (D.overlapData step hstep).V_subset_global_chart
+      (D.overlapData step hstep).overlapValue_mem
+  left_logBranch_eq_global := by
+    intro step hstep
+    exact (D.overlapData step hstep).left_logBranch_eq_global
+      (D.overlapData step hstep).overlapValue_mem
+  right_logBranch_eq_global := by
+    intro step hstep
+    exact (D.overlapData step hstep).right_logBranch_eq_global
+      (D.overlapData step hstep).overlapValue_mem
+
+/-- The same explicit global-log overlap data also yields the open-neighborhood
+equality package used by the PLAN 09 overlap theorem. -/
+def ChartChainLocalLogsRestrictGlobalNeighborhoodData.toEqOnOverlapNeighborhoodData
+    {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
+    {chain : BasinLoopChartChain c N z₀ γ}
+    {globalChart : ZeroFreeChartRootBranchData N}
+    (D : ChartChainLocalLogsRestrictGlobalNeighborhoodData chain globalChart) :
+    ChartChainLocalLogsEqOnOverlapNeighborhoodData chain where
+  overlapData := by
+    intro step hstep
+    exact (D.overlapData step hstep).toEqOnNeighborhoodData
 
 lemma ChartChainLocalLogsEqOnOverlapNeighborhoodData.open_eqOn
     {c : ℂ} {N : ℕ} {z₀ : ℂ} {γ : BasinLoop c z₀}
@@ -1903,6 +1976,25 @@ structure HighEscapingActualChartChainsGlobalLogInput
         (actualChain N γ)
         (globalChart N γ)
 
+/-- Stronger PLAN 09 global-log input: for each high-level actual chart chain,
+the local logarithm branches are restrictions of one global branch on explicit
+open overlap neighborhoods. This is closer to the notebook's geometric
+statement than `HighEscapingActualChartChainsGlobalLogInput`. -/
+structure HighEscapingActualChartChainsGlobalLogNeighborhoodInput
+    {c z₀ : ℂ}
+    (E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀) where
+  actualChain :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      BasinLoopChartChain c (E.levelAbove γ N) z₀ γ
+  globalChart :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ZeroFreeChartRootBranchData (E.levelAbove γ N)
+  localLogs_restrict_on_neighborhoods :
+    ∀ (N : ℕ) (γ : BasinLoop c z₀),
+      ChartChainLocalLogsRestrictGlobalNeighborhoodData
+        (actualChain N γ)
+        (globalChart N γ)
+
 /-- The PLAN 09 global-log input is exactly the data needed by
     `HighEscapingActualChartChainsLocalLogsRestrictGlobalData`. -/
 def HighEscapingActualChartChainsGlobalLogInput.toLocalLogsRestrictGlobalData
@@ -1913,6 +2005,41 @@ def HighEscapingActualChartChainsGlobalLogInput.toLocalLogsRestrictGlobalData
   actualChain := I.actualChain
   globalChart := I.globalChart
   localLogs_restrict := I.localLogs_restrict
+
+/-- The stronger neighborhood-level global-log input implies the weaker
+    restriction package. -/
+def HighEscapingActualChartChainsGlobalLogNeighborhoodInput.toGlobalLogInput
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogNeighborhoodInput E) :
+    HighEscapingActualChartChainsGlobalLogInput E where
+  actualChain := I.actualChain
+  globalChart := I.globalChart
+  localLogs_restrict := by
+    intro N γ
+    exact (I.localLogs_restrict_on_neighborhoods N γ).toRestrictGlobal
+
+/-- The stronger neighborhood-level global-log input packages directly into the
+    actual-chain target `HighEscapingActualChartChainsLocalLogsRestrictGlobalData`.
+    -/
+def HighEscapingActualChartChainsGlobalLogNeighborhoodInput.toLocalLogsRestrictGlobalData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogNeighborhoodInput E) :
+    HighEscapingActualChartChainsLocalLogsRestrictGlobalData E :=
+  I.toGlobalLogInput.toLocalLogsRestrictGlobalData
+
+/-- The stronger neighborhood-level global-log input also yields the overlap-
+    neighborhood equality package of PLAN 09. -/
+def HighEscapingActualChartChainsGlobalLogNeighborhoodInput.toEqOnOverlapNeighborhoodData
+    {c z₀ : ℂ}
+    {E : ArbitrarilyHighEscapingLevelBasinLoopChartChainData c z₀}
+    (I : HighEscapingActualChartChainsGlobalLogNeighborhoodInput E) :
+    HighEscapingActualChartChainsEqOnOverlapNeighborhoodData E where
+  actualChain := I.actualChain
+  localLogs_eqOn_overlapNeighborhoods := by
+    intro N γ
+    exact (I.localLogs_restrict_on_neighborhoods N γ).toEqOnOverlapNeighborhoodData
 
 /-- PLAN 09 input plus comparison to an all-level chart-chain family. This is the
     form needed before passing to the PLAN 08 monodromy interface. -/
