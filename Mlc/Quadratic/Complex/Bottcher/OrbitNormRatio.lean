@@ -249,6 +249,155 @@ lemma norm_orbit_two_ratio_tendsto_atTop_along_ray (u : ℂ) (hu : ‖u‖ = 1)
       linarith [norm_orbit_two_ray_gt_four u hu t₂ ht₂_gt_4 n]
     exact Real.exp_log (div_pos h2_pos h1_pos)
 
+/-- Per-step two-sided bound on the squared orbit norm along a ray at `c = 2`. -/
+private lemma orbit_two_norm_sq_step (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht : t > 4) (n : ℕ) :
+    ‖orbit (2 : ℂ) ((t : ℂ) * u) (n + 1)‖ ^ 2 ≤
+        ‖orbit (2 : ℂ) ((t : ℂ) * u) n‖ ^ 4 + 4 * ‖orbit (2 : ℂ) ((t : ℂ) * u) n‖ ^ 2 + 4 ∧
+      ‖orbit (2 : ℂ) ((t : ℂ) * u) (n + 1)‖ ^ 2 ≥
+        ‖orbit (2 : ℂ) ((t : ℂ) * u) n‖ ^ 4 - 4 * ‖orbit (2 : ℂ) ((t : ℂ) * u) n‖ ^ 2 + 4 := by
+  obtain ⟨sₙ, vₙ, hsₙ, hvₙ, heq⟩ := orbit_ray_decomposition u hu t ht n
+  have hsv : ‖(↑sₙ : ℂ) * vₙ‖ = sₙ := by
+    rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hvₙ, mul_one]
+  obtain ⟨lo, hi⟩ := norm_fc_two_sq_bounds sₙ vₙ hsₙ hvₙ
+  rw [Quadratic.orbit_succ, heq, hsv]
+  exact ⟨hi, lo⟩
+
+/-- The core multiplicative-growth polynomial inequality behind the large-ratio island:
+with `A = ‖aₙ‖²`, `B = ‖bₙ‖²`, `A > 16` and `B ≥ 2A`, the squared ratio grows by at
+least a factor `21/16` per step. -/
+private lemma large_ratio_poly (A B : ℝ) (hA : A > 16) (hB : B ≥ 2 * A) :
+    16 * A * (B ^ 2 - 4 * B + 4) ≥ 21 * B * (A ^ 2 + 4 * A + 4) := by
+  nlinarith [sq_nonneg (B - 2 * A), mul_pos (by linarith : (0:ℝ) < A) (by linarith : (0:ℝ) < B),
+    mul_nonneg (by linarith : (0:ℝ) ≤ B - 2 * A) (by linarith : (0:ℝ) ≤ A),
+    mul_nonneg (by linarith : (0:ℝ) ≤ B - 2 * A) (by linarith : (0:ℝ) ≤ B),
+    mul_pos (by linarith : (0:ℝ) < A) (by linarith : (0:ℝ) < A)]
+
+/-- Pure real-sequence engine behind the large-ratio island.  For opaque positive
+sequences `a, b` obeying the crude one-step squared-norm bounds and starting with
+squared ratio `≥ 2`, the squared ratio dominates the geometric sequence `2·(21/16)ⁿ`.
+Keeping `a, b` opaque prevents `nlinarith` from unfolding the orbit recursion. -/
+private lemma ratio_geom_lower (a b : ℕ → ℝ)
+    (ha4 : ∀ n, a n > 4) (hb4 : ∀ n, b n > 4)
+    (hUB : ∀ n, (a (n + 1)) ^ 2 ≤ (a n) ^ 4 + 4 * (a n) ^ 2 + 4)
+    (hLB : ∀ n, (b (n + 1)) ^ 2 ≥ (b n) ^ 4 - 4 * (b n) ^ 2 + 4)
+    (h0 : (b 0 / a 0) ^ 2 ≥ 2) :
+    ∀ n, (b n / a n) ^ 2 ≥ 2 * (21 / 16) ^ n := by
+  intro n
+  induction n with
+  | zero => simpa using h0
+  | succ n ih =>
+    have hAn : a n > 4 := ha4 n
+    have hBn : b n > 4 := hb4 n
+    have hApos : (0:ℝ) < a n := by linarith
+    have hBpos : (0:ℝ) < b n := by linarith
+    -- From ih, the current squared ratio is ≥ 2, giving B ≥ 2A.
+    have hgeom : (2:ℝ) * (21 / 16) ^ n ≥ 2 := by
+      have : (21 / 16 : ℝ) ^ n ≥ 1 := one_le_pow₀ (by norm_num)
+      linarith
+    have hrn2 : (b n / a n) ^ 2 ≥ 2 := le_trans hgeom ih
+    have hBA : (b n) ^ 2 ≥ 2 * (a n) ^ 2 := by
+      rw [div_pow, ge_iff_le, le_div_iff₀ (by positivity)] at hrn2; linarith
+    set A := (a n) ^ 2 with hA_def
+    set B := (b n) ^ 2 with hB_def
+    have hAgt : A > 16 := by rw [hA_def]; nlinarith [hAn]
+    have hBgt : B ≥ 2 * A := by rw [hA_def, hB_def]; linarith
+    have hpoly := large_ratio_poly A B hAgt hBgt
+    have hApos2 : (0:ℝ) < A := by rw [hA_def]; exact pow_pos hApos 2
+    have hBpos2 : (0:ℝ) < B := by rw [hB_def]; exact pow_pos hBpos 2
+    have haq : (a n) ^ 4 = A ^ 2 := by rw [hA_def]; ring
+    have hbq : (b n) ^ 4 = B ^ 2 := by rw [hB_def]; ring
+    have hLBb' : (b (n + 1)) ^ 2 ≥ B ^ 2 - 4 * B + 4 := by rw [← hbq]; linarith [hLB n]
+    have hUBa' : (a (n + 1)) ^ 2 ≤ A ^ 2 + 4 * A + 4 := by rw [← haq]; linarith [hUB n]
+    -- Abstract level-(n+1) squared norms into opaque reals so `nlinarith` stays fast.
+    set P := (b (n + 1)) ^ 2 with hP_def
+    set Q := (a (n + 1)) ^ 2 with hQ_def
+    have hQpos : (0:ℝ) < Q := by rw [hQ_def]; exact pow_pos (by linarith [ha4 (n + 1)]) 2
+    -- Cross-multiplied per-step growth: 16·P·A ≥ 21·B·Q.
+    have hcross : 16 * P * A ≥ 21 * B * Q := by
+      have h1 : 16 * P * A ≥ 16 * (B ^ 2 - 4 * B + 4) * A :=
+        by nlinarith [mul_nonneg (by linarith [hLBb'] : (0:ℝ) ≤ P - (B ^ 2 - 4 * B + 4)) hApos2.le]
+      have h2 : 21 * B * Q ≤ 21 * B * (A ^ 2 + 4 * A + 4) :=
+        by nlinarith [mul_nonneg hBpos2.le (by linarith [hUBa'] : (0:ℝ) ≤ (A ^ 2 + 4 * A + 4) - Q)]
+      nlinarith [h1, h2, hpoly]
+    have hstep : P / Q ≥ (21 / 16) * (B / A) := by
+      rw [ge_iff_le, show (21:ℝ) / 16 * (B / A) = (21 * B) / (16 * A) by ring,
+        div_le_div_iff₀ (by positivity) hQpos]
+      nlinarith [hcross]
+    have hih' : B / A ≥ 2 * (21 / 16) ^ n := by
+      rw [hB_def, hA_def, ← div_pow]; exact ih
+    rw [div_pow, ← hP_def, ← hQ_def]
+    calc P / Q
+        ≥ (21 / 16) * (B / A) := hstep
+      _ ≥ (21 / 16) * (2 * (21 / 16) ^ n) := by
+            have := mul_le_mul_of_nonneg_left hih' (by norm_num : (0:ℝ) ≤ 21 / 16); linarith
+      _ = 2 * (21 / 16) ^ (n + 1) := by ring
+
+/-- **Large-ratio orbit blow-up (direction-agnostic, Green-free).**
+For points on the same ray at `c = 2` with `t₁ > 4` and initial squared ratio
+`t₂² ≥ 2 t₁²`, the orbit-norm ratio tends to `∞`.  Unlike
+`norm_orbit_two_ratio_tendsto_atTop_along_ray`, this does **not** invoke Green
+monotonicity: it uses only the crude norm recursion `‖z²+2‖² ∈ [‖z‖⁴−4‖z‖²+4, …]`,
+which self-amplifies above the ratio threshold `≈ 1.231` (here `√2 > 1.231`). -/
+lemma norm_orbit_two_ratio_tendsto_atTop_along_ray_of_large_ratio
+    (u : ℂ) (hu : ‖u‖ = 1) {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₂ > 4)
+    (hratio : 2 * t₁ ^ 2 ≤ t₂ ^ 2) :
+    Tendsto (fun n : ℕ => ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ / ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖)
+      atTop atTop := by
+  have ha4 : ∀ n, ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ > 4 :=
+    fun n => norm_orbit_two_ray_gt_four u hu t₁ ht₁ n
+  have hb4 : ∀ n, ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ > 4 :=
+    fun n => norm_orbit_two_ray_gt_four u hu t₂ ht₂ n
+  have hUB : ∀ n, ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) (n + 1)‖ ^ 2 ≤
+      ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ ^ 4 + 4 * ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ ^ 2 + 4 :=
+    fun n => (orbit_two_norm_sq_step u hu t₁ ht₁ n).1
+  have hLB : ∀ n, ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) (n + 1)‖ ^ 2 ≥
+      ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ ^ 4 - 4 * ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ ^ 2 + 4 :=
+    fun n => (orbit_two_norm_sq_step u hu t₂ ht₂ n).2
+  have h0 : (‖orbit (2 : ℂ) ((t₂ : ℂ) * u) 0‖ / ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) 0‖) ^ 2 ≥ 2 := by
+    rw [Quadratic.orbit_zero, Quadratic.orbit_zero]
+    have e1 : ‖(t₁ : ℂ) * u‖ = t₁ := by
+      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hu, mul_one]
+    have e2 : ‖(t₂ : ℂ) * u‖ = t₂ := by
+      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith), hu, mul_one]
+    rw [e1, e2, div_pow, ge_iff_le, le_div_iff₀ (by positivity)]
+    linarith [hratio]
+  have hSbound := ratio_geom_lower _ _ ha4 hb4 hUB hLB h0
+  -- The squared ratio tends to ∞, hence the ratio itself does.
+  have hpow : Tendsto (fun n : ℕ => (21 / 16 : ℝ) ^ n) atTop atTop :=
+    tendsto_pow_atTop_atTop_of_one_lt (by norm_num)
+  have hgeom_top : Tendsto (fun n : ℕ => 2 * (21 / 16 : ℝ) ^ n) atTop atTop :=
+    Filter.Tendsto.const_mul_atTop (by norm_num) hpow
+  have hsqrt_top : Tendsto (fun n : ℕ => Real.sqrt (2 * (21 / 16 : ℝ) ^ n)) atTop atTop :=
+    Real.tendsto_sqrt_atTop.comp hgeom_top
+  refine tendsto_atTop_mono (fun n => ?_) hsqrt_top
+  have hx : (0:ℝ) ≤ ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ / ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ :=
+    le_of_lt (div_pos (by linarith [hb4 n]) (by linarith [ha4 n]))
+  calc Real.sqrt (2 * (21 / 16 : ℝ) ^ n)
+      ≤ Real.sqrt ((‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ / ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖) ^ 2) :=
+        Real.sqrt_le_sqrt (hSbound n)
+    _ = ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ / ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ := Real.sqrt_sq hx
+
+/-- **Green strict monotonicity along a ray at `c = 2`, large-ratio regime.**
+Wiring the constructive, Green-free island
+`norm_orbit_two_ratio_tendsto_atTop_along_ray_of_large_ratio` through the reduction
+lemma `green_function_lt_of_escaping_of_orbit_ratio_tendsto_atTop`.  Covers the
+large-ratio case `t₂² ≥ 2 t₁²` (`t₂ ≳ 1.41·t₁`) with no appeal to the seam axiom. -/
+lemma green_function_strictMono_along_ray_two_of_large_ratio
+    (u : ℂ) (hu : ‖u‖ = 1) {t₁ t₂ : ℝ} (ht₁ : t₁ > 4) (ht₂ : t₂ > 4)
+    (hratio : 2 * t₁ ^ 2 ≤ t₂ ^ 2) :
+    Quadratic.green_function (2 : ℂ) ((t₁ : ℂ) * u) <
+      Quadratic.green_function (2 : ℂ) ((t₂ : ℂ) * u) := by
+  have hesc_two : Quadratic.escape_bound (2 : ℂ) = 3 := by
+    have h2norm : ‖(2 : ℂ)‖ = 2 := by rw [Complex.norm_ofNat]
+    rw [Quadratic.escape_bound_eq_max, h2norm]; norm_num
+  have hesc₁ : ∀ n, ‖orbit (2 : ℂ) ((t₁ : ℂ) * u) n‖ > Quadratic.escape_bound (2 : ℂ) := by
+    intro n; rw [hesc_two]; linarith [norm_orbit_two_ray_gt_four u hu t₁ ht₁ n]
+  have hesc₂ : ∀ n, ‖orbit (2 : ℂ) ((t₂ : ℂ) * u) n‖ > Quadratic.escape_bound (2 : ℂ) := by
+    intro n; rw [hesc_two]; linarith [norm_orbit_two_ray_gt_four u hu t₂ ht₂ n]
+  exact GreenFunctionRayInversion.green_function_strictMono_along_ray_of_orbit_ratio
+    (2 : ℂ) u hesc₁ hesc₂
+    (norm_orbit_two_ratio_tendsto_atTop_along_ray_of_large_ratio u hu ht₁ ht₂ hratio)
+
 end OrbitNormRatio
 
 end MLC

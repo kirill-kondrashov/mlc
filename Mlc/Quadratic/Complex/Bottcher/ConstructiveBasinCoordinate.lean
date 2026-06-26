@@ -2533,8 +2533,102 @@ lemma principalPullbackLogSeriesBottcher_eq_near_of_outside_open
   have hesc := basinEscapeTime_eq_zero_of_outside_open c z hz
   simp [principalPullbackLogSeriesBottcher, hesc]
 
-/-- Total basin-extension candidate: use the principal pullback on the basin and
-the near-infinity formula off the basin. The off-basin branch is only a totality
+lemma principalPullbackLogSeriesBottcher_norm_eq_of_outside_open
+    (c z : ℂ) (hz : ‖z‖ > ‖c‖ + 2) :
+    ‖principalPullbackLogSeriesBottcher c z
+        (outside_disk_subset_quadratic_basin c
+          (outside_open_subset_outside_disk c hz))‖ =
+      ‖MLC.logSeriesBottcherApprox c z‖ := by
+  rw [principalPullbackLogSeriesBottcher_eq_near_of_outside_open c z hz]
+
+lemma green_function_orbit_eq_local (c z : ℂ) (n : ℕ) :
+    green_function c ((MLC.quadratic_map c)^[n] z) = 2 ^ n * green_function c z := by
+  induction n with
+  | zero => simp
+  | succ n ih =>
+      calc
+        green_function c ((MLC.quadratic_map c)^[n + 1] z)
+            = green_function c (MLC.quadratic_map c (((MLC.quadratic_map c)^[n]) z)) := by
+                rw [Function.iterate_succ_apply']
+        _ = green_function c (fc c (((MLC.quadratic_map c)^[n]) z)) := by
+              simp [quadratic_map, fc, add_comm]
+        _ = 2 * green_function c (((MLC.quadratic_map c)^[n]) z) := by
+              rw [green_function_functional_eq]
+        _ = 2 * (2 ^ n * green_function c z) := by rw [ih]
+        _ = 2 ^ (n + 1) * green_function c z := by ring
+
+lemma green_function_iterate_at_basinEscapeTime
+    (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
+    green_function c ((MLC.quadratic_map c)^[basinEscapeTime c z hz] z) =
+      2 ^ basinEscapeTime c z hz * green_function c z := by
+  simpa using green_function_orbit_eq_local c z (basinEscapeTime c z hz)
+
+lemma principalPullbackLogSeriesBottcher_eq_cpow_iterateValue
+    (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
+    let N := basinEscapeTime c z hz
+    let w := (MLC.quadratic_map c)^[N] z
+    principalPullbackLogSeriesBottcher c z hz =
+      (MLC.logSeriesBottcherApprox c w) ^ (((2 : ℂ) ^ N)⁻¹) := by
+  simp [principalPullbackLogSeriesBottcher]
+
+lemma principalPullbackIterate_mem_outside_open
+    (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
+    ‖(MLC.quadratic_map c)^[basinEscapeTime c z hz] z‖ > ‖c‖ + 2 := by
+  simpa using basinEscapeTime_spec c z hz
+
+lemma principalPullbackLogSeriesBottcher_iterate_ne_zero
+    (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
+    MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[basinEscapeTime c z hz] z) ≠ 0 := by
+  have hone : 1 < ‖MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[basinEscapeTime c z hz] z)‖ := by
+    exact MLC.one_lt_norm_logSeriesBottcherApprox_of_outside_open c
+      (principalPullbackIterate_mem_outside_open c z hz)
+  intro hzero
+  have hnorm0 : ‖MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[basinEscapeTime c z hz] z)‖ = 0 := by
+    simpa [hzero]
+  have : ¬ (1 < ‖MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[basinEscapeTime c z hz] z)‖) := by
+    simpa [hnorm0]
+  exact this hone
+
+lemma principalPullbackLogSeriesBottcher_norm_eq_rpow_iterateValue
+    (c z : ℂ) (hz : z ∈ basin_of_infinity c) :
+    let N := basinEscapeTime c z hz
+    let w := (MLC.quadratic_map c)^[N] z
+    ‖principalPullbackLogSeriesBottcher c z hz‖ = ‖MLC.logSeriesBottcherApprox c w‖ ^ ((1 : ℝ) / (2 : ℝ) ^ N) := by
+  intro N w
+  rw [principalPullbackLogSeriesBottcher_eq_cpow_iterateValue]
+  have h := Complex.norm_cpow_of_ne_zero
+    (z := MLC.logSeriesBottcherApprox c w)
+    (principalPullbackLogSeriesBottcher_iterate_ne_zero c z hz)
+    (w := ((2 : ℂ) ^ N)⁻¹)
+  have hreal : ((2 : ℂ) ^ N) = (↑((2 : ℝ) ^ N) : ℂ) := by
+    exact (Complex.ofReal_pow (2 : ℝ) N).symm
+  have him : (((2 : ℂ) ^ N)⁻¹).im = 0 := by
+    set r : ℝ := (2 : ℝ) ^ N
+    have h_inv : ((r : ℂ)⁻¹) = ((r⁻¹ : ℝ) : ℂ) := by
+      exact (Complex.ofReal_inv r).symm
+    calc
+      (((2 : ℂ) ^ N)⁻¹).im = ((r : ℂ)⁻¹).im := by rw [hreal]
+      _ = ((r⁻¹ : ℝ) : ℂ).im := by rw [h_inv]
+      _ = 0 := by exact Complex.ofReal_im _
+  have hre : (((2 : ℂ) ^ N)⁻¹).re = (1 : ℝ) / (2 : ℝ) ^ N := by
+    set r : ℝ := (2 : ℝ) ^ N
+    have h_inv : ((r : ℂ)⁻¹) = ((r⁻¹ : ℝ) : ℂ) := by
+      exact (Complex.ofReal_inv r).symm
+    calc
+      (((2 : ℂ) ^ N)⁻¹).re = ((r : ℂ)⁻¹).re := by rw [hreal]
+      _ = ((r⁻¹ : ℝ) : ℂ).re := by rw [h_inv]
+      _ = r⁻¹ := by exact Complex.ofReal_re _
+      _ = (1 : ℝ) / (2 : ℝ) ^ N := by simp [r, one_div]
+  simpa [him, hre] using h
+
+lemma principalPullbackLogSeriesBottcher_norm_on_basin_of_coherent_modulus
+    (c z : ℂ) (hz : z ∈ basin_of_infinity c)
+    (hmod : ‖principalPullbackLogSeriesBottcher c z hz‖ = Real.exp (green_function c z)) :
+    1 < ‖principalPullbackLogSeriesBottcher c z hz‖ := by
+  rw [hmod]
+  exact Real.one_lt_exp_iff.mpr (green_function_pos_of_basin c z hz)
+
+/-- Total basin-extension candidate: use the principal pullback on the basin and the near-infinity formula off the basin. The off-basin branch is only a totality
 convention and is not part of the theorem-facing classical data. -/
 noncomputable def basinLogSeriesExtensionCandidate (c z : ℂ) : ℂ :=
   by
@@ -2557,6 +2651,16 @@ lemma basinLogSeriesExtensionCandidate_extends_near
       (outside_open_subset_outside_disk c hz)
   simp [basinLogSeriesExtensionCandidate, hbasin,
     principalPullbackLogSeriesBottcher_eq_near_of_outside_open c z hz]
+
+lemma basinLogSeriesExtensionCandidate_norm_on_basin_of_principalPullback_modulus
+    {c : ℂ}
+    (hmod : ∀ z : ℂ, ∀ hz : z ∈ basin_of_infinity c,
+      ‖principalPullbackLogSeriesBottcher c z hz‖ = Real.exp (green_function c z)) :
+    ∀ z : ℂ, z ∈ basin_of_infinity c → 1 < ‖basinLogSeriesExtensionCandidate c z‖ := by
+  intro z hz
+  classical
+  simp [basinLogSeriesExtensionCandidate, hz,
+    principalPullbackLogSeriesBottcher_norm_on_basin_of_coherent_modulus c z hz (hmod z hz)]
 
 /-- Exact remaining basin-extension seam for the logarithmic-series coordinate.
 Supplying this data upgrades the already-checked near-infinity package to the
@@ -3082,6 +3186,31 @@ theorem exists_genuineBottcherCoordinateDataFor_of_logSeriesBasinExtensionData
     ∃ φ : ℂ → ℂ, GenuineBottcherCoordinateDataFor c φ := by
   exact ⟨h.phi, h.toGenuineBottcherCoordinateDataFor⟩
 
+/-- Any basin extension datum already packages the generic theorem-facing basin
+half of the genuine Böttcher route. This is the exact generic output that remains
+available before the separate inverse-package step. -/
+theorem exists_genuineBottcherNearInfinityAndCoordinateData_of_logSeriesBasinExtensionData
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    ∃ φ : ℂ → ℂ,
+      GenuineBottcherNearInfinityDataFor c φ ∧
+      GenuineBottcherCoordinateDataFor c φ := by
+  refine ⟨h.phi, ?_, h.toGenuineBottcherCoordinateDataFor⟩
+  exact genuineBottcherNearInfinityDataFor_of_genuineBottcherCoordinateDataFor
+    h.toGenuineBottcherCoordinateDataFor
+
+/-- Route A already packages one concrete generic candidate for the current basin
+extension theorem surface: the principal-pullback function carries both the
+canonical near-infinity phase and the theorem-facing basin coordinate package as
+soon as the coherent-data fields are supplied. -/
+theorem exists_genuineBottcherNearInfinityAndCoordinateData_of_principalPullbackCoherentData
+    {c : ℂ} (h : PrincipalPullbackCoherentDataFor c) :
+    ∃ φ : ℂ → ℂ,
+      GenuineBottcherNearInfinityDataFor c φ ∧
+      GenuineBottcherCoordinateDataFor c φ := by
+  exact
+    exists_genuineBottcherNearInfinityAndCoordinateData_of_logSeriesBasinExtensionData
+      h.toLogSeriesBasinExtensionDataFor
+
 /-- Basin route B seam: first construct an exterior inverse for the
 near-infinity logarithmic-series coordinate, then use inverse dynamics to supply
 the global basin extension data. This separates the inverse-package strategy
@@ -3290,6 +3419,23 @@ theorem classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInf
     ClassicalGlobalBottcherTheoremFor c :=
   classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData
     h.extensionData
+
+/-- If a generic constructor for the basin-extension half is available, the
+canonical near-infinity package supplied by `logSeriesBottcherApprox` upgrades it
+immediately to the Route-C input package. This isolates the remaining step to
+constructing only the global extension datum compatible with the already-checked
+near-infinity phase. -/
+noncomputable def classicalGlobalExtensionFromLogSeriesNearInfinityData
+    {c : ℂ} (extensionData : LogSeriesBasinExtensionDataFor c) :
+    ClassicalGlobalExtensionFromNearInfinityDataFor c where
+  near_data := genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox c
+  extensionData := extensionData
+
+theorem classicalGlobalBottcherTheoremFor_of_logSeriesBasinExtensionData_via_nearInfinity
+    {c : ℂ} (h : LogSeriesBasinExtensionDataFor c) :
+    ClassicalGlobalBottcherTheoremFor c :=
+  classicalGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData
+    (classicalGlobalExtensionFromLogSeriesNearInfinityData h)
 
 /-- Route-C direct handoff to the unified PLAN 06 theorem surface: once the
 classical extension from the checked near-infinity coordinate is available and

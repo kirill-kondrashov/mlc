@@ -1802,6 +1802,7 @@ lemma one_lt_norm_logSeriesBottcherApprox_of_outside_open
     exact pow_le_one₀ (norm_nonneg _) hle
   linarith
 
+
 /-- Large-radius near-infinity package for the logarithmic Böttcher candidate.
 This is the honest package currently proved: all near-infinity properties hold
 on some exterior region, but this is weaker than the canonical
@@ -2489,16 +2490,25 @@ lemma bottcher_root_seq_norm_eq_exp_potential
   have hpow :
       ‖(quadratic_map c)^[n] z‖ ^ ((1 : ℝ) / (2 : ℝ) ^ n) =
         Real.exp (((1 : ℝ) / (2 : ℝ) ^ n) * Real.log ‖(quadratic_map c)^[n] z‖) := by
-    -- `x ^ y = exp (y * log x)` for `x > 0`
     simp [Real.rpow_def_of_pos hpos, mul_comm, one_div]
   have hpot := potential_seq_eq_log_norm_iterate c z n h1
-  -- Assemble.
   calc
     ‖bottcher_root_seq c n z‖
         = ‖(quadratic_map c)^[n] z‖ ^ ((1 : ℝ) / (2 : ℝ) ^ n) := hnorm
     _ = Real.exp (((1 : ℝ) / (2 : ℝ) ^ n) * Real.log ‖(quadratic_map c)^[n] z‖) := hpow
     _ = Real.exp (Quadratic.potential_seq c z n) := by
           simp [hpot]
+
+lemma bottcher_root_seq_zero_norm_eq_exp_green_of_escape
+    (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
+    ‖bottcher_root_seq c 0 z‖ = Real.exp (Quadratic.potential_seq c z 0) := by
+  have h1 : 1 ≤ ‖(quadratic_map c)^[0] z‖ := by
+    have hR : (2 : ℝ) ≤ escape_bound c := by
+      have hR' := Quadratic.escape_bound_ge_R c
+      have hR2 := Quadratic.R_ge_two c
+      linarith
+    simpa using (show 1 ≤ ‖z‖ by linarith)
+  simpa using bottcher_root_seq_norm_eq_exp_potential c z 0 h1
 
 lemma norm_iterate_ge_one_of_escape
     (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
@@ -2799,12 +2809,12 @@ lemma bottcher_normalized_at_infty_norm_proof (c : ℂ) :
     bottcher_normalized_at_infty_norm c := by
   exact tendsto_norm_proxy_bottcher_map_div_norm_atInfinity c
 
-lemma bottcher_root_seq_norm_bounds_of_escape
+lemma potential_seq_green_function_bounds_of_escape
     (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
     let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
     ∀ n,
-      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ ≤ ‖bottcher_root_seq c n z‖ ∧
-        ‖bottcher_root_seq c n z‖ ≤ Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := by
+      Quadratic.green_function c z - (1 / 2 ^ n) * M ≤ Quadratic.potential_seq c z n ∧
+        Quadratic.potential_seq c z n ≤ Quadratic.green_function c z + (1 / 2 ^ n) * M := by
   intro M n
   have hdist :
       dist (Quadratic.potential_seq c z n) (Quadratic.green_function c z) ≤
@@ -2815,14 +2825,20 @@ lemma bottcher_root_seq_norm_bounds_of_escape
       exact norm_orbit_gt_escape_bound_of_ge c z 0 n (Nat.zero_le _) hesc0
     simpa [M] using
       (dist_potential_seq_green_function_le_of_escaping c z n hesc)
-  have hpot_le :
-      Quadratic.green_function c z - (1 / 2 ^ n) * M ≤ Quadratic.potential_seq c z n ∧
-        Quadratic.potential_seq c z n ≤ Quadratic.green_function c z + (1 / 2 ^ n) * M := by
-    have h' : |Quadratic.potential_seq c z n - Quadratic.green_function c z| ≤
-        (1 / 2 ^ n) * M := by
-      simpa [Real.dist_eq, abs_sub_comm] using hdist
-    have h'' := abs_sub_le_iff.mp h'
-    constructor <;> linarith
+  have h' : |Quadratic.potential_seq c z n - Quadratic.green_function c z| ≤
+      (1 / 2 ^ n) * M := by
+    simpa [Real.dist_eq, abs_sub_comm] using hdist
+  have h'' := abs_sub_le_iff.mp h'
+  constructor <;> linarith
+
+lemma bottcher_root_seq_norm_bounds_of_escape
+    (c z : ℂ) (hz : ‖z‖ > escape_bound c) :
+    let M : ℝ := 2 * ‖c‖ / (escape_bound c) ^ 2
+    ∀ n,
+      Real.exp (-(1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ ≤ ‖bottcher_root_seq c n z‖ ∧
+        ‖bottcher_root_seq c n z‖ ≤ Real.exp ((1 / 2 ^ n) * M) * ‖Quadratic.proxy_bottcher_map c z‖ := by
+  intro M n
+  have hpot_le := potential_seq_green_function_bounds_of_escape c z hz n
   have hnorm_root :
       ‖bottcher_root_seq c n z‖ = Real.exp (Quadratic.potential_seq c z n) := by
     have h1 := norm_iterate_ge_one_of_escape c z hz n
@@ -6734,6 +6750,46 @@ def OutsideOpenLocalAnalyticChartHypothesis (c : ℂ) : Prop :=
   ∀ z, ‖z‖ > ‖c‖ + 2 →
     ∃ U : Set ℂ,
       IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) U
+
+/-- Basin-local framework seam: for each basin point, provide a local open chart on
+which `proxy_bottcher_map` is analytic. This avoids baking in `slit_orbit`-specific
+neighborhood hypotheses at theorem level. -/
+def BasinLocalAnalyticChartHypothesis (c : ℂ) : Prop :=
+  ∀ z, z ∈ Quadratic.basin_of_infinity c →
+    ∃ U : Set ℂ,
+      IsOpen U ∧ z ∈ U ∧ AnalyticOnNhd ℂ (Quadratic.proxy_bottcher_map c) U
+
+/-- Basin-local analyticity seam extracted from local analytic charts. -/
+def BasinAnalyticityHypothesis (c : ℂ) : Prop :=
+  ∀ z, z ∈ Quadratic.basin_of_infinity c →
+    AnalyticAt ℂ (Quadratic.proxy_bottcher_map c) z
+
+lemma basinAnalyticityHypothesis_of_basinLocalAnalyticChartHypothesis
+    (c : ℂ)
+    (h_chart : BasinLocalAnalyticChartHypothesis c) :
+    BasinAnalyticityHypothesis c := by
+  intro z hz
+  rcases h_chart z hz with ⟨U, _hUopen, hzU, hUanalytic⟩
+  exact hUanalytic z hzU
+
+lemma basinLocalAnalyticChartHypothesis_of_mem_nhds_slit_basin
+    (c : ℂ)
+    (hslit : ∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z) :
+    BasinLocalAnalyticChartHypothesis c := by
+  intro z hz
+  rcases exists_open_subset_slit_orbit_basin_of_mem_nhds c z
+      (hslit z hz) ((basin_of_infinity_isOpen c).mem_nhds hz) with
+    ⟨U, hUopen, hzU, hUsub⟩
+  have hUslit : U ⊆ slit_orbit c := fun w hw => (hUsub hw).1
+  have hUbasin : U ⊆ Quadratic.basin_of_infinity c := fun w hw => (hUsub hw).2
+  exact ⟨U, hUopen, hzU, proxy_bottcher_map_analyticOnNhd_open c U hUopen hUslit hUbasin⟩
+
+lemma basinAnalyticityHypothesis_of_mem_nhds_slit_basin
+    (c : ℂ)
+    (hslit : ∀ z, z ∈ Quadratic.basin_of_infinity c → slit_orbit c ∈ 𝓝 z) :
+    BasinAnalyticityHypothesis c :=
+  basinAnalyticityHypothesis_of_basinLocalAnalyticChartHypothesis c
+    (basinLocalAnalyticChartHypothesis_of_mem_nhds_slit_basin c hslit)
 
 /-- Stronger framework seam: local analytic charts that stay inside
 outside-open. -/

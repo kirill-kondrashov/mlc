@@ -7,4 +7,5 @@ output*.txt
 site/
 notebooks/.ipynb_checkpoints/
 notebooks/.venv/
+.venv-notebooks/
 notebooks-html/

@@ -1,4 +1,3 @@
-import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.Quadratic.Complex.Bottcher.ConstructiveBasinCoordinate
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
@@ -634,6 +633,78 @@ lemma green_function_strictMono_along_real_ray_two {ρ₁ ρ₂ : ℝ} (h : ρ�
   rw [Real.log_div (by linarith) (by linarith)] at hN'
   linarith
 
+/-- **Abstract Lemma C reduction (direction-free core).**
+Strict ordering of the Green function from orbit-norm ratio blow-up.
+
+This is exactly the engine of the constructive `c = 2` real-ray argument
+(`green_function_strictMono_along_real_ray_two`), stripped of every real- or
+direction-specific ingredient. Given two escaping points `z₁, z₂` whose orbit
+norms diverge in ratio, the functional equation `G(orbitⁿ) = 2ⁿ·G` together with
+the uniform far-field bound `|G(z) − log‖z‖| ≤ M` forces `G(z₁) < G(z₂)`.
+
+Only the `hratio` hypothesis is geometry-specific; everything else holds for
+every `c`. This isolates the entire residual analytic content of
+`green_function_strictMono_along_ray_basin_seam` to a single orbit-geometry
+statement: *along a straight origin-ray, the outer orbit dominates the inner one
+in the limit.* -/
+lemma green_function_lt_of_escaping_of_orbit_ratio_tendsto_atTop
+    (c z₁ z₂ : ℂ)
+    (hesc₁ : ∀ n, ‖orbit c z₁ n‖ > escape_bound c)
+    (hesc₂ : ∀ n, ‖orbit c z₂ n‖ > escape_bound c)
+    (hratio : Tendsto (fun n => ‖orbit c z₂ n‖ / ‖orbit c z₁ n‖) atTop atTop) :
+    green_function c z₁ < green_function c z₂ := by
+  by_contra hle
+  push_neg at hle
+  set t₁ := green_function c z₁ with ht₁
+  set t₂ := green_function c z₂ with ht₂
+  set M := 2 * ‖c‖ / (escape_bound c) ^ 2 with hM
+  have hebpos : (0 : ℝ) < escape_bound c :=
+    lt_of_lt_of_le two_pos (le_trans (R_ge_two c) (escape_bound_ge_R c))
+  have hpos₁ : ∀ n, 0 < ‖orbit c z₁ n‖ := fun n => hebpos.trans (hesc₁ n)
+  have hpos₂ : ∀ n, 0 < ‖orbit c z₂ n‖ := fun n => hebpos.trans (hesc₂ n)
+  -- The log-gap between the two orbit norms is bounded uniformly in `n`.
+  have hlogbound : ∀ n,
+      Real.log ‖orbit c z₂ n‖ - Real.log ‖orbit c z₁ n‖ ≤ 2 * M + |t₁ - t₂| := by
+    intro n
+    set p := (2 : ℝ) ^ n with hp
+    have hg₁ := green_function_orbit_eq c z₁ n
+    have hg₂ := green_function_orbit_eq c z₂ n
+    -- Upper bound on the outer orbit: log ≤ G + M = 2ⁿ·t₂ + M.
+    have hub₂ : Real.log ‖orbit c z₂ n‖ ≤ p * t₂ + M := by
+      have hbdd := green_function_bdd_below_log c (orbit c z₂ n) (hesc₂ n)
+      rw [hg₂] at hbdd; linarith
+    -- Lower bound on the inner orbit: log ≥ G − M = 2ⁿ·t₁ − M.
+    have hlb₁ : Real.log ‖orbit c z₁ n‖ ≥ p * t₁ - M := by
+      have hbdd := green_function_bdd_above_log c (orbit c z₁ n) (hesc₁ n)
+      rw [hg₁] at hbdd; linarith
+    have hexp : p * (t₂ - t₁) = p * t₂ - p * t₁ := by ring
+    have h2n : p * (t₂ - t₁) ≤ |t₁ - t₂| :=
+      le_trans (mul_nonpos_of_nonneg_of_nonpos (pow_pos two_pos n).le (by linarith))
+               (abs_nonneg _)
+    linarith
+  -- But the log-ratio tends to `+∞`, contradicting the uniform bound.
+  have hlogtop : Tendsto (fun n => Real.log (‖orbit c z₂ n‖ / ‖orbit c z₁ n‖)) atTop atTop :=
+    Real.tendsto_log_atTop.comp hratio
+  obtain ⟨N, hN⟩ := Filter.eventually_atTop.mp
+    ((Filter.tendsto_atTop.mp hlogtop) (2 * M + |t₁ - t₂| + 1))
+  have hN' := hN N le_rfl
+  rw [Real.log_div (ne_of_gt (hpos₂ N)) (ne_of_gt (hpos₁ N))] at hN'
+  linarith [hlogbound N]
+
+/-- **Seam-shaped corollary.** The exact conclusion of
+`green_function_strictMono_along_ray_basin_seam` (strict radial monotonicity of
+`G` along a straight origin-ray `t ↦ t·u`), reduced to orbit-norm ratio blow-up
+along that ray. This makes precise the single remaining ingredient needed to
+discharge the seam: `‖orbitⁿ(ρ₂u)‖ / ‖orbitⁿ(ρ₁u)‖ → ∞`. -/
+lemma green_function_strictMono_along_ray_of_orbit_ratio
+    (c u : ℂ) {ρ₁ ρ₂ : ℝ}
+    (hesc₁ : ∀ n, ‖orbit c ((ρ₁ : ℂ) * u) n‖ > escape_bound c)
+    (hesc₂ : ∀ n, ‖orbit c ((ρ₂ : ℂ) * u) n‖ > escape_bound c)
+    (hratio : Tendsto
+      (fun n => ‖orbit c ((ρ₂ : ℂ) * u) n‖ / ‖orbit c ((ρ₁ : ℂ) * u) n‖) atTop atTop) :
+    green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u) :=
+  green_function_lt_of_escaping_of_orbit_ratio_tendsto_atTop c _ _ hesc₁ hesc₂ hratio
+
 /-- For `c = 2` and positive real radii, strict monotonicity along `u = 1`.
 This lifts the `ρ₁ > 4` result by iterating twice into the outside-open range
 and pulling back via `G(f²(z)) = 4 * G(z)`. -/
@@ -1228,6 +1299,80 @@ theorem exists_external_ray_map_data_of_genuine_bottcher_route
   rcases h_route with ⟨φ, h_coord, h_inv⟩
   exact ⟨φ, external_ray_map_data_of_genuine_bottcher_inverse_package c φ h_coord h_inv⟩
 
+/-- Any bundled unified global Böttcher theorem already yields the theorem-facing
+external-ray package, reducing the remaining public cutover to the single missing
+generic existence theorem for the unified hypothesis. -/
+theorem exists_external_ray_map_data_of_unifiedGlobalBottcherTheoremFor
+    (c : ℂ) (h : Quadratic.UnifiedGlobalBottcherTheoremFor c) :
+    ∃ φ : ℂ → ℂ, Quadratic.ExternalRayMapDataFor c φ := by
+  rcases h with ⟨hdata⟩
+  exact exists_external_ray_map_data_of_genuine_bottcher_route c hdata.toGenuineBottcherRouteFor
+
+/-- The same existential bridge is already available from the classical global theorem
+once a matching genuine inverse package has been supplied upstream. -/
+theorem exists_external_ray_map_data_of_classicalGlobalBottcherTheoremFor
+    (c : ℂ) (hclass : Quadratic.ClassicalGlobalBottcherTheoremFor c)
+    (hinv : ∀ ⦃φ : ℂ → ℂ⦄, Quadratic.GenuineBottcherCoordinateDataFor c φ →
+      Quadratic.GenuineBottcherInversePackageFor c φ) :
+    ∃ φ : ℂ → ℂ, Quadratic.ExternalRayMapDataFor c φ := by
+  rcases hclass with ⟨hdata⟩
+  exact
+    exists_external_ray_map_data_of_genuine_bottcher_route c
+      (hdata.toGenuineBottcherRouteFor (hinv hdata.toGenuineBottcherCoordinateDataFor))
+
+/-- Honest interface blocker for the final PLAN 02 cutover: the theoremized global
+route already gives some coordinate with exterior inverse data, but the public
+axiom layer still asks specifically for that data on `proxy_bottcher_map c`. -/
+def ProxyExternalRayCutoverSeam (c : ℂ) : Prop :=
+  ∀ ⦃φ : ℂ → ℂ⦄, Quadratic.GenuineBottcherCoordinateDataFor c φ →
+    Quadratic.ExternalRayMapDataFor c φ → Quadratic.ExternalRayMapData c
+
+/-- Alternate final PLAN 02 seam: instead of transporting a theorem-facing coordinate
+all the way to `proxy_bottcher_map c`, it is enough to derive *some* already-theoremized
+proxy-side hypothesis bundle whose conclusion is `ExternalRayMapData c`. -/
+def ProxyExternalRayHypothesisCutover (c : ℂ) : Prop :=
+  Quadratic.UnifiedGlobalBottcherTheoremFor c → Quadratic.ExternalRayMapData c
+
+/-- Once the remaining transport seam from a theorem-facing coordinate `φ` to the
+public proxy map is supplied, the unified global theorem package already yields the
+root-facing external-ray data required by `BottcherAxioms`. -/
+noncomputable def external_ray_map_exists_of_unifiedGlobalBottcherTheoremFor_of_cutoverSeam
+    (c : ℂ) (h : Quadratic.UnifiedGlobalBottcherTheoremFor c)
+    (hcut : ProxyExternalRayCutoverSeam c) :
+    Quadratic.ExternalRayMapData c := by
+  rcases h with ⟨hdata⟩
+  refine hcut hdata.extensionData.toGenuineBottcherCoordinateDataFor ?_
+  simpa [UnifiedGlobalBottcherDataFor.toGenuineBottcherRouteFor] using
+    external_ray_map_data_of_genuine_bottcher_inverse_package c hdata.extensionData.phi
+      hdata.extensionData.toGenuineBottcherCoordinateDataFor hdata.inversePackage
+
+/-- Classical-theorem version of the previous cutover wrapper. This is the exact
+remaining public interface step once the generic inverse package and proxy transport
+seams are both supplied. -/
+noncomputable def external_ray_map_exists_of_classicalGlobalBottcherTheoremFor_of_cutoverSeam
+    (c : ℂ) (hclass : Quadratic.ClassicalGlobalBottcherTheoremFor c)
+    (hinv : ∀ ⦃φ : ℂ → ℂ⦄, Quadratic.GenuineBottcherCoordinateDataFor c φ →
+      Quadratic.GenuineBottcherInversePackageFor c φ)
+    (hcut : ProxyExternalRayCutoverSeam c) :
+    Quadratic.ExternalRayMapData c := by
+  rcases hclass with ⟨hdata⟩
+  let h_inv : Quadratic.GenuineBottcherInversePackageFor c hdata.phi :=
+    hinv hdata.toGenuineBottcherCoordinateDataFor
+  refine hcut hdata.toGenuineBottcherCoordinateDataFor ?_
+  simpa using
+    external_ray_map_data_of_genuine_bottcher_inverse_package c hdata.phi
+      hdata.toGenuineBottcherCoordinateDataFor h_inv
+
+/-- Unified-package wrapper for the alternate proxy-side hypothesis route: if one can
+extract any existing theoremized `BottcherOutsidePlan`-style proxy hypothesis bundle
+from the unified global theorem package, then the public external-ray existence axiom
+can be cut over without identifying the constructive `φ` with `proxy_bottcher_map c`. -/
+noncomputable def external_ray_map_exists_of_unifiedGlobalBottcherTheoremFor_of_proxyHypothesisCutover
+    (c : ℂ) (h : Quadratic.UnifiedGlobalBottcherTheoremFor c)
+    (hcut : ProxyExternalRayHypothesisCutover c) :
+    Quadratic.ExternalRayMapData c :=
+  hcut h
+
 /-- Choice-based exterior inverse package at `c = 2` from exterior surjectivity
 plus injectivity on the outside-open region. This is the root-facing
 `ExternalRayMapData` version of the previous basin-valued construction. -/
@@ -1651,6 +1796,160 @@ theorem external_ray_map_exists_two_via_green_function_of_iter_left_inverse
   exact external_ray_map_exists_two_via_green_function_of_injOn_outside_open
     hlog_gt_anchor
     (proxy_bottcher_map_inj_on_outside_open_of_iter_left_inverse (2 : ℂ) h_left_iter)
+
+/-! ## Lemma F: Unconditional discharge of the external ray map for `c ∈ M`
+
+The `c = 2` route is a dead end because `c = 2 ∉ M`: its Julia set is a Cantor set the
+rays never reach, so `green_function 2` has a positive minimum along every ray and the
+radial proxy is **not** surjective onto `{‖w‖ > 1}`.  For `c ∈ M` the critical point
+`0 ∈ K c`, hence `green_function c 0 = 0`; every ray then sweeps `G` over all of
+`(0, ∞)` and surjectivity holds by the intermediate value theorem anchored at `ρ = 0`
+(no strict monotonicity needed).  Combined with the general far-exterior injectivity
+(from the strict-mono seam), this discharges `ExternalRayMapData c` for every `c ∈ M`. -/
+
+/-- **Mandelbrot ray-preimage.**  For `c ∈ M` the critical point `0 ∈ K c`, so
+`green_function c 0 = 0`.  Every positive target `t` therefore has a radial preimage
+`ρ > 0` with `green_function c (ρ · u) = t`, by IVT from `ρ = 0`. -/
+lemma exists_ray_preimage_green_of_mandelbrot (c : ℂ) (hc : c ∈ MandelbrotSet)
+    (u : ℂ) (hu : ‖u‖ = 1) (t : ℝ) (ht : 0 < t) :
+    ∃ ρ : ℝ, 0 < ρ ∧ green_function c ((ρ : ℂ) * u) = t := by
+  set g := fun ρ : ℝ => green_function c ((ρ : ℂ) * u) with hg_def
+  have hg_cont : Continuous g :=
+    (continuous_green_function c).comp (Complex.continuous_ofReal.mul continuous_const)
+  have hg0 : g 0 = 0 := by
+    have h0K : (0 : ℂ) ∈ K c := hc
+    simp only [hg_def, Complex.ofReal_zero, zero_mul]
+    exact (green_function_eq_zero_iff_mem_K c 0).2 h0K
+  obtain ⟨R₀, hR₀_pos, hR₀_ge⟩ : ∃ R₀ : ℝ, 0 < R₀ ∧ g R₀ ≥ t := by
+    have hbdd := bounded_sublevel_green_function c t
+    rw [isBounded_iff_forall_norm_le] at hbdd
+    obtain ⟨R, hR⟩ := hbdd
+    refine ⟨max 1 (R + 1), ?_, ?_⟩
+    · linarith [le_max_left 1 (R + 1)]
+    · by_contra h
+      push_neg at h
+      have hmem : (↑(max 1 (R+1)) * u : ℂ) ∈ {z : ℂ | green_function c z < t} := by
+        simpa [hg_def] using h
+      have hle := hR _ hmem
+      have hnorm : ‖(↑(max 1 (R+1)) * u : ℂ)‖ > R := by
+        rw [Complex.norm_mul, Complex.norm_real, Real.norm_of_nonneg, hu, mul_one]
+        · linarith [le_max_right 1 (R + 1)]
+        · exact le_trans (by norm_num) (le_max_left _ _)
+      linarith
+  have hIVT : ∃ ρ ∈ Set.Icc (0:ℝ) R₀, g ρ = t :=
+    intermediate_value_Icc hR₀_pos.le hg_cont.continuousOn
+      ⟨by rw [hg0]; exact ht.le, hR₀_ge⟩
+  obtain ⟨ρ, ⟨hρ_ge, _⟩, hρ_eq⟩ := hIVT
+  refine ⟨ρ, ?_, hρ_eq⟩
+  rcases lt_or_eq_of_le hρ_ge with hlt | rfl
+  · exact hlt
+  · rw [hg0] at hρ_eq; linarith
+
+/-- **Full-exterior surjectivity of the radial proxy at `c ∈ M`.**  For each `w` with
+`‖w‖ > 1`, the ray in direction `u = w/‖w‖` at Green value `log ‖w‖` provides a preimage. -/
+lemma surjOn_proxy_bottcher_map_of_mandelbrot (c : ℂ) (hc : c ∈ MandelbrotSet) :
+    ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.proxy_bottcher_map c z = w := by
+  intro w hw
+  have hw_pos : (0 : ℝ) < ‖w‖ := by linarith
+  set u : ℂ := w / (‖w‖ : ℂ) with hu_def
+  have hu : ‖u‖ = 1 := by
+    rw [hu_def, norm_div, Complex.norm_real, norm_norm, div_self hw_pos.ne']
+  have ht : 0 < Real.log ‖w‖ := Real.log_pos hw
+  obtain ⟨ρ, hρ_pos, hρ_eq⟩ :=
+    exists_ray_preimage_green_of_mandelbrot c hc u hu (Real.log ‖w‖) ht
+  refine ⟨(ρ : ℂ) * u, ?_⟩
+  rw [Quadratic.proxy_bottcher_map_apply_ray c u hu ρ hρ_pos, hρ_eq, Real.exp_log hw_pos,
+    hu_def]
+  exact div_mul_cancel₀ w (by exact_mod_cast hw_pos.ne')
+
+/-- **Far-exterior injectivity of the radial proxy (general `c`).**  Equal images force
+equal Green values (`exp` injective) and equal directions; the strict-mono ray seam then
+forces equal radii. -/
+lemma injOn_proxy_bottcher_map_outside_open (c : ℂ) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} := by
+  intro z₁ hz₁ z₂ hz₂ hEq
+  simp only [Set.mem_setOf_eq] at hz₁ hz₂
+  have hnp₁ : (0 : ℝ) < ‖z₁‖ := by linarith [norm_nonneg c]
+  have hnp₂ : (0 : ℝ) < ‖z₂‖ := by linarith [norm_nonneg c]
+  have hz₁0 : z₁ ≠ 0 := fun h => by rw [h, norm_zero] at hnp₁; exact lt_irrefl _ hnp₁
+  have hz₂0 : z₂ ≠ 0 := fun h => by rw [h, norm_zero] at hnp₂; exact lt_irrefl _ hnp₂
+  have hnorm_eq : Real.exp (green_function c z₁) = Real.exp (green_function c z₂) := by
+    have := congrArg norm hEq
+    rwa [Quadratic.norm_bottcher_eq_exp_green, Quadratic.norm_bottcher_eq_exp_green] at this
+  have hG_eq : green_function c z₁ = green_function c z₂ := by
+    have := congrArg Real.log hnorm_eq
+    rwa [Real.log_exp, Real.log_exp] at this
+  have hproxy₁ : Quadratic.proxy_bottcher_map c z₁ =
+      (z₁ / (‖z₁‖ : ℂ)) * (Real.exp (green_function c z₁) : ℂ) := by
+    simp [Quadratic.proxy_bottcher_map, Quadratic.polar_green_map, hz₁0]
+  have hproxy₂ : Quadratic.proxy_bottcher_map c z₂ =
+      (z₂ / (‖z₂‖ : ℂ)) * (Real.exp (green_function c z₂) : ℂ) := by
+    simp [Quadratic.proxy_bottcher_map, Quadratic.polar_green_map, hz₂0]
+  have hexp_ne : ((Real.exp (green_function c z₁) : ℝ) : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.exp_pos _).ne'
+  have hdir : z₁ / (‖z₁‖ : ℂ) = z₂ / (‖z₂‖ : ℂ) := by
+    have hEq' : (z₁ / (‖z₁‖ : ℂ)) * (Real.exp (green_function c z₁) : ℂ) =
+        (z₂ / (‖z₂‖ : ℂ)) * (Real.exp (green_function c z₁) : ℂ) := by
+      rw [← hproxy₁, hEq, hproxy₂, hG_eq]
+    exact mul_right_cancel₀ hexp_ne hEq'
+  set u : ℂ := z₁ / (‖z₁‖ : ℂ) with hu_def
+  have hu : ‖u‖ = 1 := by
+    rw [hu_def, norm_div, Complex.norm_real, norm_norm, div_self hnp₁.ne']
+  have hcast₁ : ((‖z₁‖ : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hnp₁.ne'
+  have hcast₂ : ((‖z₂‖ : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hnp₂.ne'
+  have hz₁_ray : z₁ = ((‖z₁‖ : ℝ) : ℂ) * u := by
+    rw [hu_def, mul_comm, div_mul_cancel₀ _ hcast₁]
+  have hz₂_ray : z₂ = ((‖z₂‖ : ℝ) : ℂ) * u := by
+    rw [hdir, mul_comm, div_mul_cancel₀ _ hcast₂]
+  rcases lt_trichotomy ‖z₁‖ ‖z₂‖ with hlt | heq | hgt
+  · exfalso
+    have hG₁ray : 0 < green_function c (((‖z₁‖ : ℝ) : ℂ) * u) := by
+      rw [← hz₁_ray]; exact green_function_pos_on_outside_open c z₁ hz₁
+    have := green_function_strictMono_along_ray_basin c u hu hnp₁ hlt hG₁ray
+    rw [← hz₁_ray, ← hz₂_ray, hG_eq] at this
+    exact lt_irrefl _ this
+  · rw [hz₁_ray, hz₂_ray, heq]
+  · exfalso
+    have hG₂ray : 0 < green_function c (((‖z₂‖ : ℝ) : ℂ) * u) := by
+      rw [← hz₂_ray]; exact green_function_pos_on_outside_open c z₂ hz₂
+    have := green_function_strictMono_along_ray_basin c u hu hnp₂ hgt hG₂ray
+    rw [← hz₁_ray, ← hz₂_ray, hG_eq] at this
+    exact lt_irrefl _ this
+
+/-- **Discharge of `external_ray_map_exists` for `c ∈ M`.**  Assembles the far-exterior
+injectivity and full-exterior surjectivity of the radial proxy into the root-facing
+external-ray data package.  No new axioms (uses only the strict-mono ray seam via
+injectivity). -/
+theorem external_ray_map_data_of_mandelbrot (c : ℂ) (hc : c ∈ MandelbrotSet) :
+    Quadratic.ExternalRayMapData c := by
+  classical
+  have h_surj : ∀ w : ℂ, 1 < ‖w‖ → ∃ z : ℂ, Quadratic.proxy_bottcher_map c z = w :=
+    surjOn_proxy_bottcher_map_of_mandelbrot c hc
+  have h_inj_outside :
+      Set.InjOn (Quadratic.proxy_bottcher_map c) {z : ℂ | ‖z‖ > ‖c‖ + 2} :=
+    injOn_proxy_bottcher_map_outside_open c
+  have h_norm_outside :
+      ∀ z : ℂ, ‖z‖ > ‖c‖ + 2 → 1 < ‖Quadratic.proxy_bottcher_map c z‖ := by
+    intro z hz
+    rw [Quadratic.norm_bottcher_eq_exp_green]
+    exact Real.one_lt_exp_iff.mpr (green_function_pos_on_outside_open c z hz)
+  refine ⟨fun w =>
+      if hw : 1 < ‖w‖ then
+        (if hV : ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.proxy_bottcher_map c z = w then
+          Classical.choose hV
+         else Classical.choose (h_surj w hw))
+      else 0, ?_, ?_⟩
+  · intro w hw
+    simp only [dif_pos hw]
+    by_cases hV : ∃ z : ℂ, ‖z‖ > ‖c‖ + 2 ∧ Quadratic.proxy_bottcher_map c z = w
+    · rw [dif_pos hV]; exact (Classical.choose_spec hV).2
+    · rw [dif_neg hV]; simpa using Classical.choose_spec (h_surj w hw)
+  · intro z hz
+    have hw : 1 < ‖Quadratic.proxy_bottcher_map c z‖ := h_norm_outside z hz
+    have hV : ∃ u : ℂ, ‖u‖ > ‖c‖ + 2 ∧
+        Quadratic.proxy_bottcher_map c u = Quadratic.proxy_bottcher_map c z := ⟨z, hz, rfl⟩
+    simp only [dif_pos hw, dif_pos hV]
+    exact h_inj_outside (Classical.choose_spec hV).1 hz (Classical.choose_spec hV).2
 
 end GreenFunctionRayInversion
 

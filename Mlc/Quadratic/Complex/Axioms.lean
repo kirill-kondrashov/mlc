@@ -22,14 +22,6 @@ and Julia sets (Douady-Hubbard), and the holomorphic motion principle (Slodkowsk
     Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984, Theorem 1, Chapter VIII] <https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf> (p. 47) -/
 axiom mandelbrot_set_connected : IsConnected MandelbrotSet
 
-/-- The filled Julia set is connected if `c` is in the Mandelbrot set.
-
-    Details:
-    If the critical point `0` has a bounded orbit, then the filled Julia set `K(c)` is connected.
-    Otherwise, `K(c)` is a Cantor set (totally disconnected).
-    Source: [Douady and Hubbard, Etude dynamique des polynômes complexes, 1984, Proposition 1, Chapter VIII] <https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf> (p. 47) -/
-axiom filled_julia_set_connected {c : ℂ} (h : c ∈ MandelbrotSet) : IsConnected (K c)
-
 /-- A holomorphic motion of a set E over the unit disk D. -/
 structure HolomorphicMotion (E : Set ℂ) where
   /-- The motion map t ↦ z ↦ f(t, z) -/
