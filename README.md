@@ -110,8 +110,8 @@ remaining mathematical target in this package is
 points are:
 
 - [`Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox`](Mlc/Quadratic/Complex/Bottcher/ConstructiveBasinCoordinate.lean#L130-L145)
-- [`MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`](Mlc/MainConjecture.lean#L2152-L2173)
-- [`MLC.MainProof.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two`](Mlc/MainConjecture.lean#L2195-L2208)
+- [`MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`](Mlc/MainConjecture.lean#L2152-L2168)
+- [`MLC.MainProof.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two`](Mlc/MainConjecture.lean#L2195-L2204)
 
 ### 2. Virtual Molecule a priori control
 
@@ -153,7 +153,7 @@ corresponding items are:
 ## How the Lean root uses these inputs
 
 The checked conditional root declaration is in
-[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean#L4515-L4523). It reduces MLC
+[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean#L4585-L4587). It reduces MLC
 to the two mathematical inputs above:
 
 - the global Böttcher extension package at $c = 2$
@@ -167,7 +167,7 @@ make graphs
 
 ## Repository entry points
 
-- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4515-L4523)
+- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4585-L4587)
 - Root axiom check: [`check_axioms.lean`](check_axioms.lean)
 - Dependency graph generator:
   [`scripts/generate_dependency_graph_site.py`](scripts/generate_dependency_graph_site.py)
