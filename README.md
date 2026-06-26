@@ -62,58 +62,51 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.residualOpenVirtualNearMoleculeAxiom
-- MLC.unifiedGenuineRootKernelTwo
 ```
 
-The first three are standard Lean foundations. The project frontier consists
-of the last two axioms.
+The first three are standard Lean foundations. The checked project frontier is
+now reduced to two project axioms:
+
+- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`
+- `MLC.residualOpenVirtualNearMoleculeAxiom`
+
+Mathematically, the intended end state is still stronger: the first item should
+ultimately be discharged from the residual Dudko-2025 package (Problem 4.3,
+Interpolation Problem 4.4, and §4.5), leaving only one genuinely open project
+axiom. But at the checked root, the standard Böttcher/Green axioms are no
+longer part of the axiom frontier.
 
 ## Remaining mathematical inputs
 
-### 1. Global Böttcher extension at $c = 2$
+### 1. Böttcher coordinate infrastructure
 
-Let $f_2(z) = z^2 + 2$, and let
+The exterior Böttcher coordinate φ_c and its inverse (external ray map) are
+standard objects in holomorphic dynamics. Four axioms encode their fundamental
+properties: existence of the inverse on {|w| > 1}, continuity of the extension
+to the unit circle, connectivity of the filled Julia set for c ∈ M, and
+injectivity of φ_c on the basin of infinity.
 
-```math
-A_\infty(f_2) = \{z \in \mathbb C : |f_2^n(z)| \to \infty\}
-```
+These axioms are used to prove Green sublevel connectivity
+(`GreenSublevelConnectedHyp`) and the identification
+`DynamicalPuzzlePiece c n 0 = GreenSublevel c n` for c ∈ M.
 
-be the basin of infinity. Let $G_2$ denote the
-[Green function](https://en.wikipedia.org/wiki/Green%27s_function) of $f_2$.
-Near infinity there is a normalized
-[Böttcher map](https://en.wikipedia.org/wiki/B%C3%B6ttcher%27s_theorem) $\phi$
-satisfying
+### 2. Parameter puzzle piece connectivity
 
-```math
-\phi(f_2(z)) = \phi(z)^2, \qquad \phi(z) / z \to 1 \quad (z \to \infty).
-```
+For each c ∈ M and depth n, the parameter puzzle piece
+`ParaPuzzlePieceAt c n ∩ M` is connected.
 
-**Theorem (global Böttcher extension at $c = 2$).** There is a map
-$\Phi : \mathbb C \to \mathbb C$,
-[holomorphic](https://en.wikipedia.org/wiki/Holomorphic_function) on
-$A_\infty(f_2)$, such that:
+In Lean the checked root-facing hook is now
+`MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
 
-1. $\Phi(f_2(z)) = \Phi(z)^2$ for all $z \in A_\infty(f_2)$;
-2. $z \in A_\infty(f_2)$ if and only if $|\Phi(z)| > 1$;
-3. $|\Phi(z)| = \exp(G_2(z))$;
-4. $\Phi(z) / z \to 1$ as $z \to \infty$;
-5. on a sufficiently large exterior region, $\Phi$ agrees with the
-   normalized near-infinity Böttcher coordinate.
+This is the precise remaining non-residual bridge between the current root and
+the desired one-axiom end state. Guided by Dudko's 2025 note, the goal is to
+show that this para-puzzle connectivity statement follows from the residual
+virtual-Molecule package rather than needing any separate standard Böttcher
+axioms at the root.
 
-In Lean, `MLC.unifiedGenuineRootKernelTwo` packages this input together with a
-route-to-puzzle-boundary-motion bridge. The motion-bridge conjunct is already
-available theorem-facing as
-`MLC.MainProof.genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM`; the
-remaining mathematical target in this package is
-`Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)`. The relevant Lean entry
-points are:
-
-- [`Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox`](Mlc/Quadratic/Complex/Bottcher/ConstructiveBasinCoordinate.lean#L130-L145)
-- [`MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`](Mlc/MainConjecture.lean#L2152-L2168)
-- [`MLC.MainProof.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two`](Mlc/MainConjecture.lean#L2195-L2204)
-
-### 2. Virtual Molecule a priori control
+### 3. Virtual Molecule a priori control
 
 Consider a quadratic polynomial whose first quadratic-like renormalization is
 primitive. Following Dudko's 2025 notation, this renormalization is encoded by
@@ -140,7 +133,7 @@ renormalization scales along the chain of satellite copies, including the
 virtual bounded-type satellite and virtual near-neutral subcases described in
 Section 4.5 of Dudko's note.
 
-This is the mathematical content represented at the root by
+This is the mathematical content represented internally by
 `MLC.residualOpenVirtualNearMoleculeAxiom`. In `refs/2512.24171v1.txt`, the
 corresponding items are:
 
@@ -150,14 +143,29 @@ corresponding items are:
    Near-Degenerate Regime
 3. Section 4.5: Virtual near-Molecule Renormalization
 
+Repository policy: no additional project axiom should be introduced beyond this
+residual Dudko-2025 package. Any other root-facing axiom should be treated only
+as a temporary presentation hook to be eliminated or identified as a direct
+consequence of this package.
+
 ## How the Lean root uses these inputs
 
 The checked conditional root declaration is in
-[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean#L4585-L4587). It reduces MLC
-to the two mathematical inputs above:
+[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean). It reduces MLC
+to:
 
-- the global Böttcher extension package at $c = 2$
+- the parameter puzzle piece connectivity (from `bottcher_onM_hyp` path)
 - the virtual Molecule / near-neutral renormalization package
+
+Note: the previous axiom `MLC.unifiedGenuineRootKernelTwo` (asserting a global
+Böttcher extension at $c = 2$) has been removed. That statement is
+mathematically false: for $c = 2 \notin \mathcal M$ the basin of infinity is
+not simply connected (the Julia set is a Cantor set), so no single-valued
+holomorphic Böttcher coordinate extending to the full basin can exist. The
+motion bridge that consumed it was proved to ignore its input, making the
+axiom dead code. See
+[`notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb`](notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb)
+for the full analysis.
 
 The dependency graph visualizes this reduction:
 
@@ -167,7 +175,7 @@ make graphs
 
 ## Repository entry points
 
-- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4585-L4587)
+- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4593-L4604)
 - Root axiom check: [`check_axioms.lean`](check_axioms.lean)
 - Dependency graph generator:
   [`scripts/generate_dependency_graph_site.py`](scripts/generate_dependency_graph_site.py)
