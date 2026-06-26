@@ -45,6 +45,18 @@ repository, specifically
 
 ## Checked Lean status
 
+Expected `make check` output:
+
+```text
+✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
+All axioms used:
+- Quot.sound
+- propext
+- Classical.choice
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.residualOpenVirtualNearMoleculeAxiom
+```
+
 Run:
 
 ```bash
@@ -60,19 +72,15 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
+- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
 The first three are standard Lean foundations. The remaining project axioms are:
 
-- `MLC.paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule`:
-  assuming the residual Dudko package below, one obtains a parameter-puzzle
-  transport witness on `M`. Concretely, for every parameter puzzle piece
-  `ParaPuzzlePieceAt c n` with `c ∈ M`, there is a holomorphic motion package on
-  a neighborhood of `c` whose preserved fibers identify
-  `ParaPuzzlePieceAt c n ∩ M` with a connected subset of the parameter line.
-  This is the exact bridge consumed by the checked root.
+- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`:
+  for every parameter `c ∈ M` and every puzzle depth `n`, the intersection
+  `ParaPuzzlePieceAt c n ∩ M` is connected.
 - `MLC.residualOpenVirtualNearMoleculeAxiom`: Dudko-2025's remaining open input,
   bundled as a single residual package consisting of
   1. **Problem 4.3**: pseudo-Siegel a priori bounds in the remaining unbounded
@@ -107,9 +115,8 @@ P_n(c) \cap \mathcal M
 is connected.
 
 This is the connectedness input used in the finite-branch/Yoccoz argument. In
-formal terms, the repository presently leaves this statement at the root in the
-form of the bridge axiom
-`MLC.paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule`.
+formal terms, the repository presently leaves this statement at the root as the
+axiom `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
 
 ### 2. Problem 4.3 of Dudko (2025): pseudo-Siegel a priori bounds in the remaining unbounded satellite quadratic-like cases
 
@@ -149,23 +156,21 @@ The final remaining deduction is the theorem asserted in the last paragraph of
 `refs/2512.24171v1.txt`: Problems 4.3 and 4.4, together with the arguments of
 §§4.1–4.5, imply the full MLC route formalized in this repository.
 
-Concretely, this means deriving from those inputs both:
+Concretely, this means deriving from those inputs the infinite-renormalization
+package used by the root proof, and then integrating the finite-branch
+parameter-puzzle connectedness statement with that same residual Dudko policy.
 
-1. the infinite-renormalization package used by the root proof; and
-2. the parameter-puzzle transport statement in item 1 above.
-
-Repository policy: these Dudko-style residual statements are the only allowed
-remaining project-level mathematical assumptions. Any bridge statement used by
-the checked root should ultimately be discharged from them rather than retained
-as an independent mathematical assumption.
+Repository policy target: the remaining project-level mathematical assumptions
+should be reduced to Dudko-style residual statements rather than a separate
+finite-branch theorem hook.
 
 ## How the Lean root uses these inputs
 
 The checked conditional root declaration is in
-[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean). It reduces MLC
+[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean). It currently reduces MLC
 to:
 
-- the parameter puzzle transport witness
+- para-puzzle connectedness on `M` for every depth
 - the virtual Molecule / near-neutral renormalization package
 
 The repository also records an excluded route: the statement previously named
