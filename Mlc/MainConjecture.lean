@@ -1,6 +1,7 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Yoccoz.Quadratic.Complex.Puzzle
+import Mlc.ParaPuzzleConnectivity
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
@@ -1803,6 +1804,15 @@ theorem noTowerPrimitive_of_problem44
     (h44 : Problem44VirtualMoleculeData) :
     IRNoTowerImpliesPrimitiveData :=
   h44
+
+/-- Target interface for the missing Dudko-to-para-puzzle bridge: the residual
+    open package should imply the para-puzzle transport witness needed by the
+    motion layer. This is stated explicitly so the checked root can isolate the
+    remaining open input in terms of Problems 4.3, 4.4, and the packaged
+    deduction route, rather than a downstream theorem-hook axiom. -/
+axiom paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Quadratic.ParaPuzzleTransportWitnessHyp
 
 /-- Problem 4.5 now directly provides the IR classification seam used by the
     root theorem. -/
@@ -4562,10 +4572,14 @@ theorem unifiedGenuineRootKernelTwo_of_classicalGlobalExtensionFromNearInfinityD
     (Quadratic.unifiedGlobalBottcherTheoremFor_of_classicalGlobalExtensionFromNearInfinityData
       h_ext h_inv)
 
-/-- Root-facing axiom for the genuine-route frontier. -/
-axiom unifiedGenuineRootKernelTwo : UnifiedGenuineRootKernelTwo
+-- The root-facing axiom `unifiedGenuineRootKernelTwo` has been removed.
+-- It asserted `UnifiedGlobalBottcherTheoremFor (2 : ℂ)` which is mathematically
+-- false (basin not simply connected for c=2 ∉ M). The motion bridge already
+-- ignores the route input, so the axiom was dead code.
 
-/-- Root closure from the unified genuine-route kernel. -/
+/-- Root closure from the unified genuine-route kernel (kept for
+    backwards compatibility with proof sketches, but no longer used
+    by the root theorem). -/
 theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
     (hkernel : UnifiedGenuineRootKernelTwo) :
     LocallyConnectedSpace mandelbrotSet := by
@@ -4577,14 +4591,30 @@ theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
       irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
-    the Mandelbrot set is locally connected. The checked root now depends on the
-    genuine-route frontier package at `c = 2`: the unified global Böttcher
-    theorem together with the theorem-facing route-to-motion bridge.
-    The Track-1/Track-2 combinatorial package is supplied from the existing
-    residual Problem 4.3/4.4 root axiom. -/
+    the Mandelbrot set is locally connected.
+
+    The checked root is intended to isolate the residual open Dudko-2025
+    frontier: Problem 4.3, Problem 4.4, and the packaged deduction route from
+    §§4.1–4.4 / §4.5 represented by `ResidualOpenVirtualNearMoleculeData`.
+
+    The previous `unifiedGenuineRootKernelTwo` axiom has been removed
+    (mathematically false for c = 2 ∉ M). The para-puzzle transport witness is
+    routed through the residual package interface instead of appearing as a
+    separate root-facing theorem-hook axiom. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture_of_unifiedGenuineRootKernelTwo unifiedGenuineRootKernelTwo
+  mlc_conjecture_of_motionHyp_track12_data
+    (Quadratic.puzzle_boundary_motion_hyp_of_onM_of_witness_hyp
+      (paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
+        residualOpenVirtualNearMoleculeAxiom)
+      { h_top := bottcher_onM_hyp.h_top
+        h_stab := bottcher_onM_hyp.h_stab
+        B := bottcher_onM_hyp.B
+        r := bottcher_onM_hyp.r
+        r_pos := bottcher_onM_hyp.r_pos
+        in_M := bottcher_onM_hyp.in_M
+        hconn := trivial })
+    irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 
 end MainProof

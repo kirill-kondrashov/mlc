@@ -54,110 +54,128 @@ make check
 
 The root declaration is sorry-free. The current `make check` axiom frontier is:
 
-Expected `make check` output:
-
 ```text
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
+- MLC.paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
 - MLC.residualOpenVirtualNearMoleculeAxiom
-- MLC.unifiedGenuineRootKernelTwo
 ```
 
-The first three are standard Lean foundations. The project frontier consists
-of the last two axioms.
+The first three are standard Lean foundations. The remaining project axioms are:
 
-## Remaining mathematical inputs
+- `MLC.paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule`:
+  assuming the residual Dudko package below, one obtains a parameter-puzzle
+  transport witness on `M`. Concretely, for every parameter puzzle piece
+  `ParaPuzzlePieceAt c n` with `c ∈ M`, there is a holomorphic motion package on
+  a neighborhood of `c` whose preserved fibers identify
+  `ParaPuzzlePieceAt c n ∩ M` with a connected subset of the parameter line.
+  This is the exact bridge consumed by the checked root.
+- `MLC.residualOpenVirtualNearMoleculeAxiom`: Dudko-2025's remaining open input,
+  bundled as a single residual package consisting of
+  1. **Problem 4.3**: pseudo-Siegel a priori bounds in the remaining unbounded
+     satellite quadratic-like cases;
+  2. **Interpolation Problem 4.4**: a Virtual Molecule version of the
+     Near-Degenerate Regime;
+  3. the deduction promised in the last paragraph of `refs/2512.24171v1.txt`:
+     Problems 4.3 and 4.4, together with the arguments of §§4.1–4.5, imply the
+     Track-1/Track-2 infinite-renormalization package and the transport witness
+     interface used at the root.
 
-### 1. Global Böttcher extension at $c = 2$
+These formulations specify exactly what remains unproved in this repository,
+without relying on internal file names or implementation details.
 
-Let $f_2(z) = z^2 + 2$, and let
+## Remaining open mathematical problems
+
+The repository is intended to isolate the remaining unproved mathematical
+content as explicit statements. For a first reading, the open problems are the
+following.
+
+### 1. Parameter-puzzle fiber connectedness from holomorphic transport
+
+For every parameter $c \in \mathcal M$ and every puzzle depth $n \ge 0$, let
+$P_n(c)$ denote the corresponding parameter puzzle piece. One needs a theorem
+asserting that the boundary of $P_n(c)$ admits a local holomorphic motion in
+parameter space whose preserved fibers imply that
 
 ```math
-A_\infty(f_2) = \{z \in \mathbb C : |f_2^n(z)| \to \infty\}
+P_n(c) \cap \mathcal M
 ```
 
-be the basin of infinity. Let $G_2$ denote the
-[Green function](https://en.wikipedia.org/wiki/Green%27s_function) of $f_2$.
-Near infinity there is a normalized
-[Böttcher map](https://en.wikipedia.org/wiki/B%C3%B6ttcher%27s_theorem) $\phi$
-satisfying
+is connected.
 
-```math
-\phi(f_2(z)) = \phi(z)^2, \qquad \phi(z) / z \to 1 \quad (z \to \infty).
-```
+This is the connectedness input used in the finite-branch/Yoccoz argument. In
+formal terms, the repository presently leaves this statement at the root in the
+form of the bridge axiom
+`MLC.paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule`.
 
-**Theorem (global Böttcher extension at $c = 2$).** There is a map
-$\Phi : \mathbb C \to \mathbb C$,
-[holomorphic](https://en.wikipedia.org/wiki/Holomorphic_function) on
-$A_\infty(f_2)$, such that:
+### 2. Problem 4.3 of Dudko (2025): pseudo-Siegel a priori bounds in the remaining unbounded satellite quadratic-like cases
 
-1. $\Phi(f_2(z)) = \Phi(z)^2$ for all $z \in A_\infty(f_2)$;
-2. $z \in A_\infty(f_2)$ if and only if $|\Phi(z)| > 1$;
-3. $|\Phi(z)| = \exp(G_2(z))$;
-4. $\Phi(z) / z \to 1$ as $z \to \infty$;
-5. on a sufficiently large exterior region, $\Phi$ agrees with the
-   normalized near-infinity Böttcher coordinate.
+One needs uniform a priori bounds in the remaining unbounded satellite
+quadratic-like renormalization cases. Concretely, this means uniform positive
+lower bounds for the conformal moduli of the annuli controlling the relevant
+quadratic-like renormalizations in the pseudo-Siegel/unbounded satellite
+regime.
 
-In Lean, `MLC.unifiedGenuineRootKernelTwo` packages this input together with a
-route-to-puzzle-boundary-motion bridge. The motion-bridge conjunct is already
-available theorem-facing as
-`MLC.MainProof.genuineBottcherPuzzleBoundaryMotionBridgeTwo_of_onM`; the
-remaining mathematical target in this package is
-`Quadratic.UnifiedGlobalBottcherTheoremFor (2 : ℂ)`. The relevant Lean entry
-points are:
+Equivalently, the renormalization geometry in these remaining unbounded
+satellite cases must stay in a precompact class and not degenerate at small
+scales.
 
-- [`Quadratic.genuineBottcherNearInfinityDataFor_logSeriesBottcherApprox`](Mlc/Quadratic/Complex/Bottcher/ConstructiveBasinCoordinate.lean#L130-L145)
-- [`MLC.MainProof.mlc_conjecture_of_principalPullbackCoherentData_two`](Mlc/MainConjecture.lean#L2152-L2168)
-- [`MLC.MainProof.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two`](Mlc/MainConjecture.lean#L2195-L2204)
+### 3. Interpolation Problem 4.4 of Dudko (2025): a Virtual Molecule version of the Near-Degenerate Regime
 
-### 2. Virtual Molecule a priori control
-
-Consider a quadratic polynomial whose first quadratic-like renormalization is
-primitive. Following Dudko's 2025 notation, this renormalization is encoded by
-a primitive copy $M_1 \subset \mathcal M$, together with a chain of satellite
-copies
+Assume the first quadratic-like renormalization of $f$ is primitive, encoded by
+a primitive copy $M_1 \subset \mathcal M$, and let
 
 ```math
 \mathcal M = M^{(0)} \supsetneq M^{(1)} \supsetneq \cdots
-\supsetneq M^{(n)} \supsetneq M^{(n+1)}.
+\supsetneq M^{(n)} \supsetneq M^{(n+1)}
 ```
 
-Here each $M^{(j+1)}$ is a maximal satellite subcopy of $M^{(j)}$. The
-virtual Molecule regime is the range of parameter scales between the ambient
-copy $\mathcal M$ and $M^{(n)}$; in Dudko's formulation, this is the range
-not controlled by the puzzle levels used between $M^{(n)}$ and $M_1$.
+be the canonical chain of maximal satellite copies described in §4.5 of
+Dudko's note. The virtual Molecule regime is the interval of parameter scales
+between the ambient copy $\mathcal M$ and $M^{(n)}$, i.e. the scales not
+controlled by the puzzle levels used between $M^{(n)}$ and $M_1$.
 
-**Theorem (virtual Molecule a priori control).** Uniform a priori bounds hold
-in the remaining unbounded satellite quadratic-like cases, and the
-near-degenerate regime extends to the virtual Molecule setting above. Here
-“a priori bounds” means uniform positive lower bounds for the conformal moduli
-of the annuli controlling the corresponding renormalization geometry.
-Equivalently, there is uniform geometric control of the relevant
-renormalization scales along the chain of satellite copies, including the
-virtual bounded-type satellite and virtual near-neutral subcases described in
-Section 4.5 of Dudko's note.
+The required statement is that the Near-Degenerate Regime extends to this
+virtual Molecule setting, with uniform geometric control across those
+intermediate scales, including the virtual bounded-type satellite and virtual
+near-neutral subcases.
 
-This is the mathematical content represented at the root by
-`MLC.residualOpenVirtualNearMoleculeAxiom`. In `refs/2512.24171v1.txt`, the
-corresponding items are:
+### 4. Deduction from §§4.1–4.5 to the MLC route formalized here
 
-1. Problem 4.3: pseudo-Siegel a priori bounds in the remaining unbounded
-   satellite quadratic-like cases
-2. Interpolation Problem 4.4: a Virtual Molecule version of the
-   Near-Degenerate Regime
-3. Section 4.5: Virtual near-Molecule Renormalization
+The final remaining deduction is the theorem asserted in the last paragraph of
+`refs/2512.24171v1.txt`: Problems 4.3 and 4.4, together with the arguments of
+§§4.1–4.5, imply the full MLC route formalized in this repository.
+
+Concretely, this means deriving from those inputs both:
+
+1. the infinite-renormalization package used by the root proof; and
+2. the parameter-puzzle transport statement in item 1 above.
+
+Repository policy: these Dudko-style residual statements are the only allowed
+remaining project-level mathematical assumptions. Any bridge statement used by
+the checked root should ultimately be discharged from them rather than retained
+as an independent mathematical assumption.
 
 ## How the Lean root uses these inputs
 
 The checked conditional root declaration is in
-[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean#L4585-L4587). It reduces MLC
-to the two mathematical inputs above:
+[`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean). It reduces MLC
+to:
 
-- the global Böttcher extension package at $c = 2$
+- the parameter puzzle transport witness
 - the virtual Molecule / near-neutral renormalization package
+
+The repository also records an excluded route: the statement previously named
+`MLC.unifiedGenuineRootKernelTwo`, asserting a global Böttcher extension at
+$c = 2$, is mathematically false. For $c = 2 \notin \mathcal M$ the basin of
+infinity is not simply connected (the Julia set is a Cantor set), so no
+single-valued holomorphic Böttcher coordinate extending to the full basin can
+exist. The corresponding motion bridge was shown not to use this input. See
+[`notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb`](notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb)
+for the analysis.
 
 The dependency graph visualizes this reduction:
 
@@ -167,7 +185,7 @@ make graphs
 
 ## Repository entry points
 
-- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4585-L4587)
+- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4593-L4604)
 - Root axiom check: [`check_axioms.lean`](check_axioms.lean)
 - Dependency graph generator:
   [`scripts/generate_dependency_graph_site.py`](scripts/generate_dependency_graph_site.py)
