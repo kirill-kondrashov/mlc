@@ -1805,14 +1805,12 @@ theorem noTowerPrimitive_of_problem44
     IRNoTowerImpliesPrimitiveData :=
   h44
 
-/-- Target interface for the missing Dudko-to-para-puzzle bridge: the residual
-    open package should imply the para-puzzle transport witness needed by the
-    motion layer. This is stated explicitly so the checked root can isolate the
-    remaining open input in terms of Problems 4.3, 4.4, and the packaged
-    deduction route, rather than a downstream theorem-hook axiom. -/
-axiom paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
-    (hRes : ResidualOpenVirtualNearMoleculeData) :
-    Quadratic.ParaPuzzleTransportWitnessHyp
+/-
+The residual Dudko package controls only the infinitely-renormalizable side of
+this proof. It does not currently contain the finite-branch para-puzzle
+transport/connectedness input, so that FR input remains separate in the present
+formalization.
+-/
 
 /-- Problem 4.5 now directly provides the IR classification seam used by the
     root theorem. -/
@@ -4593,27 +4591,18 @@ theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected.
 
-    The checked root is intended to isolate the residual open Dudko-2025
-    frontier: Problem 4.3, Problem 4.4, and the packaged deduction route from
-    §§4.1–4.4 / §4.5 represented by `ResidualOpenVirtualNearMoleculeData`.
+    The checked root currently depends on two mathematical inputs:
+    the finite-branch para-puzzle connectedness statement on `M`, and the
+    residual Dudko-2025 package encoding Problem 4.3 and Problem 4.4 together
+    with their use in the infinitely-renormalizable branch.
 
     The previous `unifiedGenuineRootKernelTwo` axiom has been removed
-    (mathematically false for c = 2 ∉ M). The para-puzzle transport witness is
-    routed through the residual package interface instead of appearing as a
-    separate root-facing theorem-hook axiom. -/
+    (mathematically false for c = 2 ∉ M). -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_motionHyp_track12_data
-    (Quadratic.puzzle_boundary_motion_hyp_of_onM_of_witness_hyp
-      (paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
-        residualOpenVirtualNearMoleculeAxiom)
-      { h_top := bottcher_onM_hyp.h_top
-        h_stab := bottcher_onM_hyp.h_stab
-        B := bottcher_onM_hyp.B
-        r := bottcher_onM_hyp.r
-        r_pos := bottcher_onM_hyp.r_pos
-        in_M := bottcher_onM_hyp.in_M
-        hconn := trivial })
+    (Quadratic.puzzleBoundaryMotionHyp_of_connected_data
+      Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom)
     irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 
