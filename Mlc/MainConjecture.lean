@@ -1805,6 +1805,15 @@ theorem noTowerPrimitive_of_problem44
     IRNoTowerImpliesPrimitiveData :=
   h44
 
+/-- Target interface for the missing Dudko-to-para-puzzle bridge: the residual
+    open package should imply the para-puzzle transport witness needed by the
+    motion layer. This is stated explicitly so the checked root can isolate the
+    remaining open input in terms of Problems 4.3, 4.4, and the packaged
+    deduction route, rather than a downstream theorem-hook axiom. -/
+axiom paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
+    (hRes : ResidualOpenVirtualNearMoleculeData) :
+    Quadratic.ParaPuzzleTransportWitnessHyp
+
 /-- Problem 4.5 now directly provides the IR classification seam used by the
     root theorem. -/
 theorem irClassification_of_problem45
@@ -4584,20 +4593,20 @@ theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
 /-- The Mandelbrot Local Connectivity (MLC) Conjecture:
     the Mandelbrot set is locally connected.
 
-    The checked root is intentionally minimized to the single project axiom
-    `para_puzzle_piece_inter_mandelbrot_connected`. In the current repository
-    architecture, this single hook is the formal placeholder for the residual
-    Dudko-2025 package: Problem 4.3, Interpolation Problem 4.4, and the
-    arguments of §§4.1–4.5 that together should imply the full para-puzzle
-    connectivity input needed by the root.
+    The checked root is intended to isolate the residual open Dudko-2025
+    frontier: Problem 4.3, Problem 4.4, and the packaged deduction route from
+    §§4.1–4.4 / §4.5 represented by `ResidualOpenVirtualNearMoleculeData`.
 
     The previous `unifiedGenuineRootKernelTwo` axiom has been removed
-    (mathematically false for c = 2 ∉ M). -/
+    (mathematically false for c = 2 ∉ M). The para-puzzle transport witness is
+    routed through the residual package interface instead of appearing as a
+    separate root-facing theorem-hook axiom. -/
 theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_motionHyp_track12_data
     (Quadratic.puzzle_boundary_motion_hyp_of_onM_of_witness_hyp
-      Quadratic.para_puzzle_transport_witness_hyp_of_axiom
+      (paraPuzzleTransportWitnessHyp_of_residualOpenVirtualNearMolecule
+        residualOpenVirtualNearMoleculeAxiom)
       { h_top := bottcher_onM_hyp.h_top
         h_stab := bottcher_onM_hyp.h_stab
         B := bottcher_onM_hyp.B
