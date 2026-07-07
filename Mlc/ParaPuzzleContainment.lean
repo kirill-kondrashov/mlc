@@ -2,7 +2,7 @@ import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.PuzzleLemmas
-import Mlc.Quadratic.Complex.Axioms
+import Mlc.FilledJuliaConnected
 
 /-!
 # M ⊆ ParaPuzzlePiece n

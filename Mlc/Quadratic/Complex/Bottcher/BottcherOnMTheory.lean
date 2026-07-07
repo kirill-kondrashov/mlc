@@ -1,4 +1,5 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
+import Mlc.Quadratic.Complex.Bottcher.BottcherCore
 import Mlc.Quadratic.Complex.Bottcher.BottcherAxioms
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMDefs
 import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
@@ -77,6 +78,137 @@ lemma bottcher_approx_differentiableOn_slit (c : ℂ) (n : ℕ) :
     (s := slit_orbit c) (c := (1 : ℂ) / (2 : ℂ) ^ n)
     hdiff.differentiableOn h0)
 
+/-- The `n`-th Böttcher approximant `z ↦ (f^[n] z)^{1/2^n}` is differentiable on the
+much larger set where only the `n`-th iterate (not the whole orbit) avoids the slit.
+This is the honest building block: the branch cut of the `n`-th approximant lives on
+`{z | (f^[n] z) ∉ slitPlane}`, and this cut moves with `n`. -/
+lemma bottcher_approx_differentiableOn_single_slit (c : ℂ) (n : ℕ) :
+    DifferentiableOn ℂ (fun z =>
+      ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n))
+      {z : ℂ | (quadratic_map c)^[n] z ∈ Complex.slitPlane} := by
+  have hdiff : Differentiable ℂ (fun z => (quadratic_map c)^[n] z) :=
+    (quadratic_map_differentiable c).iterate n
+  have h0 : ∀ z ∈ {z : ℂ | (quadratic_map c)^[n] z ∈ Complex.slitPlane},
+      (quadratic_map c)^[n] z ∈ Complex.slitPlane := fun _ hz => hz
+  simpa using (DifferentiableOn.cpow_const (f := fun z => (quadratic_map c)^[n] z)
+    (s := {z : ℂ | (quadratic_map c)^[n] z ∈ Complex.slitPlane})
+    (c := (1 : ℂ) / (2 : ℂ) ^ n)
+    hdiff.differentiableOn h0)
+
+/-!
+### Continuous roots of holomorphic functions
+
+General complex-analytic tool for the functional-equation route to basin
+analyticity: a continuous, non-vanishing `k`-th root of a locally holomorphic,
+non-vanishing function is itself holomorphic. This lets one transport
+holomorphy of `proxy_bottcher_map` from a neighbourhood of a *fixed* escaped
+iterate `f^[n] z` back to `z`, using the functional equation
+`proxy (f^[n] z) = (proxy z)^(2^n)`, avoiding the moving branch cut of the
+global power-approximation sequence.
+-/
+
+/-- The `k`-th roots of unity in `ℂ` form a finite set. -/
+theorem finite_kth_rootsOfUnity (k : ℕ) (hk : 0 < k) :
+    {z : ℂ | z ^ k = 1}.Finite := by
+  have hp : (Polynomial.X ^ k - Polynomial.C 1 : Polynomial ℂ) ≠ 0 :=
+    Polynomial.X_pow_sub_C_ne_zero hk 1
+  have hsub : {z : ℂ | z ^ k = 1} ⊆
+      (Polynomial.X ^ k - Polynomial.C 1 : Polynomial ℂ).rootSet ℂ := by
+    intro z hz
+    rw [Polynomial.mem_rootSet]
+    refine ⟨hp, ?_⟩
+    have hzk : z ^ k = 1 := hz
+    simp [hzk]
+  exact (Polynomial.rootSet_finite _ ℂ).subset hsub
+
+/-- If `g` is holomorphic on a neighbourhood of `z₀` and `g z₀ ≠ 0`, then there is
+a holomorphic `k`-th root branch `H` of `g` near `z₀`. -/
+theorem exists_holomorphic_kth_root
+    {g : ℂ → ℂ} {z₀ : ℂ} {k : ℕ} (hk : 0 < k)
+    (hg : ∀ᶠ w in 𝓝 z₀, DifferentiableAt ℂ g w) (hgz : g z₀ ≠ 0) :
+    ∃ H : ℂ → ℂ,
+      (∀ᶠ w in 𝓝 z₀, DifferentiableAt ℂ H w) ∧
+      (∀ᶠ w in 𝓝 z₀, (H w) ^ k = g w) ∧
+      (∀ᶠ w in 𝓝 z₀, H w ≠ 0) := by
+  obtain ⟨a, ha⟩ : ∃ a : ℂ, a ^ k = g z₀ := IsAlgClosed.exists_pow_nat_eq (g z₀) hk
+  set c := g z₀ with hc
+  have hcne : c ≠ 0 := hgz
+  have ha0 : a ≠ 0 := by
+    intro h; rw [h, zero_pow hk.ne'] at ha; exact hgz ha.symm
+  have hkne : (k : ℂ) ≠ 0 := by exact_mod_cast hk.ne'
+  have hgz0 : DifferentiableAt ℂ g z₀ := hg.self_of_nhds
+  have hgcont : ContinuousAt (fun w => g w / c) z₀ := (hgz0.div_const c).continuousAt
+  have hslit0 : (fun w => g w / c) z₀ ∈ Complex.slitPlane := by
+    have hval : (fun w => g w / c) z₀ = 1 := by simp only []; rw [hc]; exact div_self hcne
+    rw [hval]; exact Complex.one_mem_slitPlane
+  have hev_slit : ∀ᶠ w in 𝓝 z₀, g w / c ∈ Complex.slitPlane :=
+    hgcont.eventually_mem (Complex.isOpen_slitPlane.mem_nhds hslit0)
+  refine ⟨fun w => a * Complex.exp (Complex.log (g w / c) / k), ?_, ?_, ?_⟩
+  · filter_upwards [hg, hev_slit] with w hgw hslitw
+    have hlogw : DifferentiableAt ℂ (fun w => Complex.log (g w / c)) w :=
+      (hgw.div_const c).clog hslitw
+    exact (differentiableAt_const a).mul ((hlogw.div_const (k : ℂ)).cexp)
+  · filter_upwards [hev_slit] with w hslitw
+    have hwne : g w / c ≠ 0 := Complex.slitPlane_ne_zero hslitw
+    calc (a * Complex.exp (Complex.log (g w / c) / k)) ^ k
+        = a ^ k * (Complex.exp (Complex.log (g w / c) / k)) ^ k := by rw [mul_pow]
+      _ = a ^ k * Complex.exp ((Complex.log (g w / c) / k) * k) := by
+            rw [← Complex.exp_nat_mul]; ring_nf
+      _ = a ^ k * Complex.exp (Complex.log (g w / c)) := by rw [div_mul_cancel₀ _ hkne]
+      _ = c * (g w / c) := by rw [ha, Complex.exp_log hwne]
+      _ = g w := by field_simp
+  · filter_upwards with w
+    exact mul_ne_zero ha0 (Complex.exp_ne_zero _)
+
+/-- A continuous, non-vanishing `k`-th root of a locally holomorphic non-vanishing
+function is holomorphic. Here `h` is continuous at `z₀`, `g` is holomorphic on a
+neighbourhood with `g z₀ ≠ 0`, and `(h w)^k = g w` near `z₀`; then `h` is
+differentiable at `z₀`. -/
+theorem differentiableAt_of_continuousAt_kth_root
+    {h g : ℂ → ℂ} {z₀ : ℂ} {k : ℕ} (hk : 0 < k)
+    (hg : ∀ᶠ w in 𝓝 z₀, DifferentiableAt ℂ g w) (hgz : g z₀ ≠ 0)
+    (hhcont : ContinuousAt h z₀)
+    (hroot : ∀ᶠ w in 𝓝 z₀, (h w) ^ k = g w) :
+    DifferentiableAt ℂ h z₀ := by
+  obtain ⟨H, hHdiff, hHroot, hHne⟩ := exists_holomorphic_kth_root hk hg hgz
+  have hHdiff0 : DifferentiableAt ℂ H z₀ := hHdiff.self_of_nhds
+  have hHne0 : H z₀ ≠ 0 := hHne.self_of_nhds
+  have hHcont0 : ContinuousAt H z₀ := hHdiff0.continuousAt
+  set φ : ℂ → ℂ := fun w => h w / H w with hφdef
+  have hζ : φ z₀ ^ k = 1 := by
+    have hh0 : (h z₀) ^ k = g z₀ := hroot.self_of_nhds
+    have hH0 : (H z₀) ^ k = g z₀ := hHroot.self_of_nhds
+    have hdp : (φ z₀) ^ k = (h z₀) ^ k / (H z₀) ^ k := by rw [hφdef, div_pow]
+    rw [hdp, hh0, hH0, div_self hgz]
+  have hφcont : ContinuousAt φ z₀ := hhcont.div hHcont0 hHne0
+  have hφroot : ∀ᶠ w in 𝓝 z₀, (φ w) ^ k = 1 := by
+    filter_upwards [hroot, hHroot, hHne] with w hw hHw hHnew
+    have hdp : (φ w) ^ k = (h w) ^ k / (H w) ^ k := by rw [hφdef, div_pow]
+    rw [hdp, hw, hHw, div_self]
+    intro hgw
+    rw [hgw] at hHw
+    exact hHnew (pow_eq_zero_iff hk.ne' |>.1 hHw)
+  set ζ := φ z₀ with hζdef
+  have hfin : {z : ℂ | z ^ k = 1}.Finite := finite_kth_rootsOfUnity k hk
+  set T : Set ℂ := {z : ℂ | z ^ k = 1} \ {ζ} with hTdef
+  have hTfin : T.Finite := hfin.subset Set.diff_subset
+  have hTclosed : IsClosed T := hTfin.isClosed
+  have hζnotT : ζ ∉ T := by simp [hTdef]
+  have hTc_nhds : Tᶜ ∈ 𝓝 ζ := hTclosed.isOpen_compl.mem_nhds hζnotT
+  have hφmemTc : ∀ᶠ w in 𝓝 z₀, φ w ∈ Tᶜ := hφcont.eventually_mem hTc_nhds
+  have hφeq : ∀ᶠ w in 𝓝 z₀, φ w = ζ := by
+    filter_upwards [hφroot, hφmemTc] with w hru hnotT
+    by_contra hne
+    exact hnotT ⟨hru, hne⟩
+  have hheq : ∀ᶠ w in 𝓝 z₀, h w = ζ * H w := by
+    filter_upwards [hφeq, hHne] with w hw hHnew
+    have hdiv : h w / H w = ζ := hw
+    field_simp at hdiv ⊢
+    linear_combination hdiv
+  have hZH : DifferentiableAt ℂ (fun w => ζ * H w) z₀ :=
+    (differentiableAt_const ζ).mul hHdiff0
+  exact hZH.congr_of_eventuallyEq hheq
+
 lemma proxy_bottcher_map_continuousOn_slit_orbit (c : ℂ) :
     ContinuousOn (Quadratic.proxy_bottcher_map c) (slit_orbit c ∩ Quadratic.basin_of_infinity c) := by
   let F : ℕ → ℂ → ℂ :=
@@ -118,6 +250,33 @@ theorem proxy_bottcher_map_differentiableOn_open
     Filter.Eventually.of_forall (fun n =>
       (bottcher_approx_differentiableOn_slit c n).mono (by intro z hz; exact hUslit hz))
   exact TendstoLocallyUniformlyOn.differentiableOn hseq' hF hUopen
+
+/-- Weakest sufficient condition for basin differentiability of the proxy on an open
+set: `U` need not sit inside `slit_orbit c` (which demands every iterate avoid the
+slit). It suffices that, **eventually** in `n`, the `n`-th iterate maps all of `U`
+into `slitPlane`. This is the honest hypothesis behind the local-uniform-limit route,
+since `TendstoLocallyUniformlyOn.differentiableOn` only needs `∀ᶠ n` differentiability
+of the approximants. -/
+theorem proxy_bottcher_map_differentiableOn_open_of_eventually_iter_slit
+    (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
+    (hUslit : ∀ᶠ n in atTop, U ⊆ {z : ℂ | (quadratic_map c)^[n] z ∈ Complex.slitPlane})
+    (hUbasin : U ⊆ Quadratic.basin_of_infinity c) :
+    DifferentiableOn ℂ (Quadratic.proxy_bottcher_map c) U := by
+  let F : ℕ → ℂ → ℂ :=
+    fun n z => ((quadratic_map c)^[n] z) ^ ((1 : ℂ) / (2 : ℂ) ^ n)
+  have hseq :
+      TendstoLocallyUniformlyOn F (Quadratic.proxy_bottcher_map c) atTop
+        (Quadratic.basin_of_infinity c) := by
+    simpa [F, quadratic_map] using (Quadratic.bottcher_seq_converges c)
+  have hseq' :
+      TendstoLocallyUniformlyOn F (Quadratic.proxy_bottcher_map c) atTop U :=
+    hseq.mono (by intro z hz; exact hUbasin hz)
+  have hF :
+      ∀ᶠ n in atTop, DifferentiableOn ℂ (F n) U := by
+    filter_upwards [hUslit] with n hn
+    exact (bottcher_approx_differentiableOn_single_slit c n).mono hn
+  exact TendstoLocallyUniformlyOn.differentiableOn hseq' hF hUopen
+
 
 theorem proxy_bottcher_map_analyticOnNhd_open
     (c : ℂ) (U : Set ℂ) (hUopen : IsOpen U)
@@ -474,6 +633,25 @@ theorem bottcher_conj_iter (c : ℂ) :
 
 axiom proxy_bottcher_map_inj_on_K (c : ℂ) :
     Set.InjOn (Quadratic.proxy_bottcher_map c) (MLC.Quadratic.K c)
+
+/-- On the basin of infinity the proxy Böttcher map is non-vanishing:
+`‖proxy_bottcher_map c z‖ = exp(green c z) > 1`. -/
+theorem proxy_bottcher_map_ne_zero_of_mem_basin (c : ℂ) {z : ℂ}
+    (hz : z ∈ Quadratic.basin_of_infinity c) :
+    Quadratic.proxy_bottcher_map c z ≠ 0 := by
+  have hz' : z ∉ MLC.Quadratic.K c := by
+    have hmem : z ∈ (MLC.Quadratic.K c)ᶜ := by
+      simpa [basin_eq_compl_K c] using hz
+    simpa [Set.mem_compl_iff] using hmem
+  have hpos : 0 < MLC.Quadratic.green_function c z :=
+    (MLC.Quadratic.green_function_pos_iff_not_mem_K c z).2 hz'
+  have hnorm : ‖Quadratic.proxy_bottcher_map c z‖ = Real.exp (MLC.Quadratic.green_function c z) :=
+    norm_bottcher_eq_exp_green c z
+  have hgt : 1 < ‖Quadratic.proxy_bottcher_map c z‖ := by
+    rw [hnorm]; simpa using (Real.one_lt_exp_iff.mpr hpos)
+  intro h
+  rw [h, norm_zero] at hgt
+  linarith
 
 theorem basin_of_infinity_contains_large_ball (c : ℂ) :
     outside_disk c ⊆ basin_of_infinity c := by
@@ -1053,6 +1231,132 @@ theorem basin_of_infinity_isOpen (c : ℂ) : IsOpen (basin_of_infinity c) := by
     exact hmain
   have hzU_nhds : U ∈ 𝓝 z := hUopen.mem_nhds hzU
   exact Filter.mem_of_superset hzU_nhds hUsubset
+
+/-- Radial injectivity of the proxy Böttcher map on the (nonzero) basin.
+
+Since `proxy_bottcher_map c z = (z/‖z‖)·exp(green c z)` is the **radial** proxy,
+its injectivity is elementary and does *not* require holomorphy of the proxy:
+equal images force equal modulus `exp(green c z)` (hence equal Green values) and
+equal phase `z/‖z‖` (hence equal direction), after which strict monotonicity of
+the Green function along the common origin-ray forces equal radii.
+
+This reduces the basin-injectivity frontier
+(`proxy_bottcher_map_inj_on_basin_axiom`) to radial Green monotonicity — the
+hypothesis `hmono`, which is exactly the shape of
+`green_function_strictMono_along_ray_basin_seam`. -/
+theorem proxy_bottcher_map_injOn_nonzero_basin_of_green_ray_strictMono
+    (c : ℂ)
+    (hmono : ∀ (u : ℂ), ‖u‖ = 1 → ∀ {ρ₁ ρ₂ : ℝ}, 0 < ρ₁ → ρ₁ < ρ₂ →
+        0 < MLC.Quadratic.green_function c ((ρ₁ : ℂ) * u) →
+        MLC.Quadratic.green_function c ((ρ₁ : ℂ) * u)
+          < MLC.Quadratic.green_function c ((ρ₂ : ℂ) * u)) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c)
+      (Quadratic.basin_of_infinity c ∩ {z : ℂ | z ≠ 0}) := by
+  rintro z ⟨hzb, hz0⟩ w ⟨hwb, hw0⟩ hzw
+  simp only [Set.mem_setOf_eq] at hz0 hw0
+  -- Green values are positive on the basin.
+  have hgz : 0 < MLC.Quadratic.green_function c z := green_function_pos_of_basin c z hzb
+  have hgw : 0 < MLC.Quadratic.green_function c w := green_function_pos_of_basin c w hwb
+  -- Nonzero norms.
+  have hnz : (‖z‖ : ℝ) ≠ 0 := norm_ne_zero_iff.2 hz0
+  have hnw : (‖w‖ : ℝ) ≠ 0 := norm_ne_zero_iff.2 hw0
+  -- Explicit radial expansion of the proxy on nonzero points.
+  have hzexp : Quadratic.proxy_bottcher_map c z
+      = (z / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c z) : ℂ) := by
+    simp [Quadratic.proxy_bottcher_map, Quadratic.polar_green_map, hz0]
+  have hwexp : Quadratic.proxy_bottcher_map c w
+      = (w / (‖w‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c w) : ℂ) := by
+    simp [Quadratic.proxy_bottcher_map, Quadratic.polar_green_map, hw0]
+  -- Equal modulus forces equal Green values.
+  have hnormeq : Real.exp (MLC.Quadratic.green_function c z)
+      = Real.exp (MLC.Quadratic.green_function c w) := by
+    have := congrArg norm hzw
+    rwa [norm_bottcher_eq_exp_green, norm_bottcher_eq_exp_green] at this
+  have hgeq : MLC.Quadratic.green_function c z = MLC.Quadratic.green_function c w :=
+    Real.exp_injective hnormeq
+  -- Equal phase forces equal direction.
+  have hexpne : (Real.exp (MLC.Quadratic.green_function c w) : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.exp_pos _).ne'
+  have hdir : z / (‖z‖ : ℂ) = w / (‖w‖ : ℂ) := by
+    have hzw' : (z / (‖z‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c w) : ℂ)
+        = (w / (‖w‖ : ℂ)) * (Real.exp (MLC.Quadratic.green_function c w) : ℂ) := by
+      have := hzw
+      rw [hzexp, hwexp, hgeq] at this
+      exact this
+    exact mul_right_cancel₀ hexpne hzw'
+  -- Common unit direction and radial reconstruction.
+  have hnzC : (‖z‖ : ℂ) ≠ 0 := by exact_mod_cast hnz
+  have hnwC : (‖w‖ : ℂ) ≠ 0 := by exact_mod_cast hnw
+  set u : ℂ := w / (‖w‖ : ℂ) with hu_def
+  have hu_norm : ‖u‖ = 1 := by
+    rw [hu_def, norm_div, Complex.norm_real, norm_norm, div_self hnw]
+  have hzeq : z = (‖z‖ : ℂ) * u := by
+    rw [← hdir]
+    field_simp
+  have hweq : w = (‖w‖ : ℂ) * u := by
+    rw [hu_def]
+    field_simp
+  -- Rewrite Green values along the ray.
+  have hgz_ray : 0 < MLC.Quadratic.green_function c ((‖z‖ : ℂ) * u) := by
+    rw [← hzeq]; exact hgz
+  have hgw_ray : 0 < MLC.Quadratic.green_function c ((‖w‖ : ℂ) * u) := by
+    rw [← hweq]; exact hgw
+  have hposz : (0 : ℝ) < ‖z‖ := (norm_pos_iff).2 hz0
+  have hposw : (0 : ℝ) < ‖w‖ := (norm_pos_iff).2 hw0
+  -- Strict monotonicity forbids distinct radii.
+  have hradii : ‖z‖ = ‖w‖ := by
+    rcases lt_trichotomy (‖z‖) (‖w‖) with hlt | heq | hgt
+    · exfalso
+      have := hmono u hu_norm hposz hlt hgz_ray
+      rw [← hzeq, ← hweq, hgeq] at this
+      exact lt_irrefl _ this
+    · exact heq
+    · exfalso
+      have := hmono u hu_norm hposw hgt hgw_ray
+      rw [← hzeq, ← hweq, hgeq] at this
+      exact lt_irrefl _ this
+  rw [hzeq, hweq, hradii]
+
+/-- Functional-equation reduction for basin analyticity: if the proxy Böttcher map
+is holomorphic on a neighbourhood of a forward iterate `f^[n] z₀`, then it is
+holomorphic at `z₀` itself. Uses the conjugacy `proxy (f^[n] w) = (proxy w)^(2^n)`
+and the continuous-root criterion, with a **fixed** escape time `n`, avoiding the
+moving branch cut of the global power-approximation sequence. -/
+theorem proxy_bottcher_map_differentiableAt_of_iterate
+    (c : ℂ) (n : ℕ) {z₀ : ℂ}
+    (hz₀ : z₀ ∈ Quadratic.basin_of_infinity c) (hz₀0 : z₀ ≠ 0)
+    (hiter : ∀ᶠ w in 𝓝 ((quadratic_map c)^[n] z₀),
+      DifferentiableAt ℂ (Quadratic.proxy_bottcher_map c) w) :
+    DifferentiableAt ℂ (Quadratic.proxy_bottcher_map c) z₀ := by
+  set f := (quadratic_map c)^[n] with hf
+  have hfdiff : Differentiable ℂ f := (quadratic_map_differentiable c).iterate n
+  have hfcont : ContinuousAt f z₀ := (hfdiff z₀).continuousAt
+  -- g := proxy ∘ f, holomorphic near z₀
+  set g : ℂ → ℂ := fun w => Quadratic.proxy_bottcher_map c (f w) with hg
+  have hg_diff : ∀ᶠ w in 𝓝 z₀, DifferentiableAt ℂ g w := by
+    have hpre : ∀ᶠ w in 𝓝 z₀,
+        DifferentiableAt ℂ (Quadratic.proxy_bottcher_map c) (f w) :=
+      hfcont.tendsto.eventually hiter
+    filter_upwards [hpre] with w hw
+    exact hw.comp w (hfdiff w)
+  -- g z₀ ≠ 0
+  have hfz_basin : f z₀ ∈ Quadratic.basin_of_infinity c := by
+    have hmap : Set.MapsTo (quadratic_map c) (Quadratic.basin_of_infinity c)
+        (Quadratic.basin_of_infinity c) := quadratic_basin_forward_invariant c
+    exact (Set.MapsTo.iterate hmap n) hz₀
+  have hgz : g z₀ ≠ 0 := proxy_bottcher_map_ne_zero_of_mem_basin c hfz_basin
+  -- proxy continuous at z₀
+  have hhcont : ContinuousAt (Quadratic.proxy_bottcher_map c) z₀ :=
+    Quadratic.proxy_bottcher_map_continuousAt_of_ne_zero c z₀ hz₀0
+  -- root identity near z₀ from the conjugacy on the (open) basin
+  have hbasin_nhds : Quadratic.basin_of_infinity c ∈ 𝓝 z₀ :=
+    (basin_of_infinity_isOpen c).mem_nhds hz₀
+  have hroot : ∀ᶠ w in 𝓝 z₀,
+      (Quadratic.proxy_bottcher_map c w) ^ (2 ^ n) = g w := by
+    filter_upwards [hbasin_nhds] with w hw
+    exact (bottcher_conj_iter c n w hw).symm
+  exact differentiableAt_of_continuousAt_kth_root (k := 2 ^ n)
+    (pow_pos (by norm_num) n) hg_diff hgz hhcont hroot
 
 theorem basin_of_infinity_forward_invariant (c : ℂ) :
     MapsTo (quadratic_map c) (basin_of_infinity c) (basin_of_infinity c) := by

@@ -53,7 +53,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.green_sublevel_translate_inter_mandelbrot_connected
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
@@ -72,15 +72,15 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected
+- MLC.green_sublevel_translate_inter_mandelbrot_connected
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
 The first three are standard Lean foundations. The remaining project axioms are:
 
-- `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`:
-  for every parameter `c ∈ M` and every puzzle depth `n`, the intersection
-  `ParaPuzzlePieceAt c n ∩ M` is connected.
+- `MLC.green_sublevel_translate_inter_mandelbrot_connected`: for every parameter
+  `c ∈ M` and every depth `n`, the translated Green sublevel set
+  `{c' | G_c(c' - c) < (1/2)^n}` intersected with `M` is connected.
 - `MLC.residualOpenVirtualNearMoleculeAxiom`: Dudko-2025's remaining open input,
   bundled as a single residual package consisting of
   1. **Problem 4.3**: pseudo-Siegel a priori bounds in the remaining unbounded
@@ -97,28 +97,62 @@ without relying on internal file names or implementation details.
 
 ## Remaining open mathematical problems
 
-The repository is intended to isolate the remaining unproved mathematical
-content as explicit statements. For a first reading, the open problems are the
-following.
+The current checked frontier consists of two project-level mathematical inputs
+plus the residual Dudko package. Stated without Lean implementation details,
+the remaining open problems are the following.
 
-### 1. Parameter-puzzle fiber connectedness from holomorphic transport
+### 1. Boundary continuity of the external-ray parameterization (discharged)
 
-For every parameter $c \in \mathcal M$ and every puzzle depth $n \ge 0$, let
-$P_n(c)$ denote the corresponding parameter puzzle piece. One needs a theorem
-asserting that the boundary of $P_n(c)$ admits a local holomorphic motion in
-parameter space whose preserved fibers imply that
+For each quadratic polynomial $f_c(z) = z^2 + c$ with $c \in \mathcal M$, the
+former external-ray boundary-continuity axiom
+`MLC.Quadratic.extended_ray_map_free_continuous` is **no longer on the checked
+frontier**. The connectivity of the Green sublevel sets that it was used to
+establish is now obtained directly by potential theory (Route A): $G_c$ is
+harmonic on the basin of infinity (`green_function_harmonicOnNhd_basin`), and a
+harmonic minimum principle forces every connected component of a sublevel set
+`{z | G_c(z) < ε}` to meet `K(c)` (`green_sublevel_connected_direct`). This
+removes the dependence of `mlc_conjecture` on the external-ray continuity axiom
+entirely.
+
+### 2. Connectedness of the filled Julia set on the Mandelbrot set (discharged)
+
+For every parameter $c \in \mathcal M$, the filled Julia set
 
 ```math
-P_n(c) \cap \mathcal M
+K(c) = \{ z \in \mathbb C : (f_c^n(z))_{n \ge 0} \text{ is bounded} \}
 ```
 
-is connected.
+must be connected.
 
-This is the connectedness input used in the finite-branch/Yoccoz argument. In
-formal terms, the repository presently leaves this statement at the root as the
-axiom `MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected`.
+This statement is now a **theorem** (`Mlc/FilledJuliaConnected.lean`) and is no
+longer on the checked axiom frontier; it is retained here for context.
 
-### 2. Problem 4.3 of Dudko (2025): pseudo-Siegel a priori bounds in the remaining unbounded satellite quadratic-like cases
+### 4. Radial monotonicity of the Green function (discharged)
+
+The former basin-coordinate injectivity route recorded the residual radial input
+`MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`. This axiom is
+**no longer on the checked frontier**: the sublevel connectivity it was used to
+prove is now supplied directly by the potential-theory argument of Route A
+(`green_sublevel_connected_direct`, via `green_function_harmonicOnNhd_basin` and
+the harmonic minimum principle), so `mlc_conjecture` no longer depends on any
+radial-monotonicity seam.
+
+### 5. Parameter-space connectivity of translated Green sublevel sets
+
+For every parameter $c \in \mathcal M$ and every puzzle depth $n \ge 0$, the
+set
+
+```math
+\{ c' \in \mathbb C : G_c(c' - c) < 2^{-n} \} \cap \mathcal M
+```
+
+must be connected, where $G_c$ is the Green function of $f_c$.
+
+This is the remaining parameter-puzzle / finite-branch connectivity statement.
+In Lean it is recorded as
+`MLC.green_sublevel_translate_inter_mandelbrot_connected`.
+
+### 6. Problem 4.3 of Dudko (2025): pseudo-Siegel a priori bounds in the remaining unbounded satellite quadratic-like cases
 
 One needs uniform a priori bounds in the remaining unbounded satellite
 quadratic-like renormalization cases. Concretely, this means uniform positive
@@ -130,7 +164,7 @@ Equivalently, the renormalization geometry in these remaining unbounded
 satellite cases must stay in a precompact class and not degenerate at small
 scales.
 
-### 3. Interpolation Problem 4.4 of Dudko (2025): a Virtual Molecule version of the Near-Degenerate Regime
+### 7. Interpolation Problem 4.4 of Dudko (2025): a Virtual Molecule version of the Near-Degenerate Regime
 
 Assume the first quadratic-like renormalization of $f$ is primitive, encoded by
 a primitive copy $M_1 \subset \mathcal M$, and let
@@ -150,19 +184,12 @@ virtual Molecule setting, with uniform geometric control across those
 intermediate scales, including the virtual bounded-type satellite and virtual
 near-neutral subcases.
 
-### 4. Deduction from §§4.1–4.5 to the MLC route formalized here
+### 8. Deduction from §§4.1–4.5 to the MLC route formalized here
 
 The final remaining deduction is the theorem asserted in the last paragraph of
 `refs/2512.24171v1.txt`: Problems 4.3 and 4.4, together with the arguments of
-§§4.1–4.5, imply the full MLC route formalized in this repository.
-
-Concretely, this means deriving from those inputs the infinite-renormalization
-package used by the root proof, and then integrating the finite-branch
-parameter-puzzle connectedness statement with that same residual Dudko policy.
-
-Repository policy target: the remaining project-level mathematical assumptions
-should be reduced to Dudko-style residual statements rather than a separate
-finite-branch theorem hook.
+§§4.1–4.5, imply the full MLC route formalized in this repository, including
+the surviving infinite-renormalization/residual interface used at the root.
 
 ## How the Lean root uses these inputs
 
@@ -178,9 +205,8 @@ The repository also records an excluded route: the statement previously named
 $c = 2$, is mathematically false. For $c = 2 \notin \mathcal M$ the basin of
 infinity is not simply connected (the Julia set is a Cantor set), so no
 single-valued holomorphic Böttcher coordinate extending to the full basin can
-exist. The corresponding motion bridge was shown not to use this input. See
-[`notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb`](notebooks/frontier_plan06_unified_global_bottcher_theorem.ipynb)
-for the analysis.
+exist. The corresponding analysis has been archived at
+[`notebooks/archive/frontier_plan06_unified_global_bottcher_theorem.ipynb`](notebooks/archive/frontier_plan06_unified_global_bottcher_theorem.ipynb).
 
 The dependency graph visualizes this reduction:
 
@@ -194,9 +220,12 @@ make graphs
 - Root axiom check: [`check_axioms.lean`](check_axioms.lean)
 - Dependency graph generator:
   [`scripts/generate_dependency_graph_site.py`](scripts/generate_dependency_graph_site.py)
-- Global Böttcher plan: [`plan/PLAN_06_global_bottcher_package.md`](plan/PLAN_06_global_bottcher_package.md)
-- Monodromy plan: [`plan/PLAN_08_analytic_continuation_monodromy.md`](plan/PLAN_08_analytic_continuation_monodromy.md)
-- Actual overlap plan: [`plan/PLAN_09_actual_overlap_neighborhoods.md`](plan/PLAN_09_actual_overlap_neighborhoods.md)
+- Current frontier overview: [`plan/PLAN_00_frontier_overview.md`](plan/PLAN_00_frontier_overview.md)
+- Filled Julia connectedness plan: [`plan/PLAN_01_filled_julia_connected.md`](plan/PLAN_01_filled_julia_connected.md)
+- External-ray plan: [`plan/PLAN_02_external_rays.md`](plan/PLAN_02_external_rays.md)
+- Basin injectivity plan: [`plan/PLAN_03_basin_injectivity.md`](plan/PLAN_03_basin_injectivity.md)
+- Parameter-connectivity plan: [`plan/PLAN_04_parameter_connectivity.md`](plan/PLAN_04_parameter_connectivity.md)
+- Residual Dudko package plan: [`plan/PLAN_05_residual_open_package.md`](plan/PLAN_05_residual_open_package.md)
 
 ## Notebooks
 

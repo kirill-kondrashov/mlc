@@ -90,12 +90,12 @@ lemma radial_path_norm_le_w (w : ℂ) (hw : 1 < ‖w‖) :
       apply mul_nonneg ht0 (sub_nonneg.mpr (le_of_lt hw))
 
 /-- Auxiliary lemma to construct the path. -/
-lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ) 
+lemma construct_bottcher_path (c : ℂ) (hc : c ∈ MandelbrotSet) (z : ℂ) (w : ℂ)
     (h_norm_gt : 1 < ‖w‖) (hw_ne_zero : w ≠ 0)
-    (h_start : extended_ray_map c w = z) 
+    (h_start : extended_ray_map_free c w = z)
     (h_basin : z ∈ Quadratic.basin_of_infinity c) :
-    ∃ p : Path z (extended_ray_map c (w / ↑‖w‖)), p 1 ∈ MLC.Quadratic.K c ∧ 
-    ∀ t, p t = extended_ray_map c (w * (1 - t + t / ↑‖w‖)) := by
+    ∃ p : Path z (extended_ray_map_free c (w / ↑‖w‖)), p 1 ∈ MLC.Quadratic.K c ∧
+    ∀ t, p t = extended_ray_map_free c (w * (1 - t + t / ↑‖w‖)) := by
   let γ : Path w (w / ↑‖w‖) := {
     toFun := fun t => w * (1 - t + t / ↑‖w‖)
     continuous_toFun := by continuity
@@ -104,18 +104,18 @@ lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ)
   }
   
   have h_norm_γ := radial_path_norm_ge_one w h_norm_gt
-  have h_gamma_cont : Continuous (extended_ray_map c ∘ γ) :=
-    ContinuousOn.comp_continuous (extended_ray_map_continuous c) γ.continuous h_norm_γ
+  have h_gamma_cont : Continuous (extended_ray_map_free c ∘ γ) :=
+    ContinuousOn.comp_continuous (extended_ray_map_free_continuous c hc) γ.continuous h_norm_γ
 
-  let p_path : Path (extended_ray_map c w) (extended_ray_map c (w / ↑‖w‖)) := {
-    toFun := extended_ray_map c ∘ γ
+  let p_path : Path (extended_ray_map_free c w) (extended_ray_map_free c (w / ↑‖w‖)) := {
+    toFun := extended_ray_map_free c ∘ γ
     continuous_toFun := h_gamma_cont
     source' := by dsimp; rw [γ.source]
     target' := by dsimp; rw [γ.target]
   }
   
   -- Use h_start to redefine source
-  let p' : Path z (extended_ray_map c (w / ↑‖w‖)) := {
+  let p' : Path z (extended_ray_map_free c (w / ↑‖w‖)) := {
     toFun := p_path.toFun
     continuous_toFun := p_path.continuous_toFun
     source' := by rw [p_path.source', h_start]
@@ -128,7 +128,7 @@ lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ)
     rw [hp'_eq]
     dsimp [p_path]
     rw [γ.target]
-    apply extended_ray_map_lands
+    apply extended_ray_map_free_lands
     simp [hw_ne_zero]
 
   refine ⟨p', hp1_K, hp'_eq⟩
@@ -136,8 +136,7 @@ lemma construct_bottcher_path (c : ℂ) (z : ℂ) (w : ℂ)
 /--
 Every point in the Green sublevel set `S` is path-connected to `K_c` within `S`.
 -/
-lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
-    (h_surj : ∀ w, 1 < ‖w‖ → w ∈ proxy_bottcher_map c '' bottcher_domain c)
+lemma green_sublevel_joined_to_Kc (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ)
     (h_inj_basin : Set.InjOn (proxy_bottcher_map c) (basin_of_infinity c)) :
     let S := MLC.Quadratic.GreenSublevel c n
     let K := MLC.Quadratic.K c
@@ -153,32 +152,32 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
   
   have hw_ne_zero : w ≠ 0 := ne_zero_of_norm_ne_zero (ne_of_gt (lt_trans zero_lt_one h_norm_gt))
   
-  have h_start : extended_ray_map c w = z := by
-    rw [extended_ray_map_eq c w h_norm_gt]
+  have h_start : extended_ray_map_free c w = z := by
+    rw [extended_ray_map_free_eq c w h_norm_gt]
     have hright :
-        proxy_bottcher_map c (external_ray_map c w) = w :=
-      bottcher_right_inv_of_mem c w (h_surj w h_norm_gt) h_norm_gt
+        proxy_bottcher_map c (external_ray_map_free c w) = w :=
+      external_ray_map_free_right_inverse c hc w h_norm_gt
     have hphi_ext :
-        1 < ‖proxy_bottcher_map c (external_ray_map c w)‖ := by
+        1 < ‖proxy_bottcher_map c (external_ray_map_free c w)‖ := by
       simpa [hright] using h_norm_gt
     have hnorm_ext :
-        ‖proxy_bottcher_map c (external_ray_map c w)‖ =
-          Real.exp (green_function c (external_ray_map c w)) :=
-      norm_bottcher_eq_exp_green c (external_ray_map c w)
-    have hpos_ext : 0 < green_function c (external_ray_map c w) := by
-      have hgt_ext : 1 < Real.exp (green_function c (external_ray_map c w)) := by
+        ‖proxy_bottcher_map c (external_ray_map_free c w)‖ =
+          Real.exp (green_function c (external_ray_map_free c w)) :=
+      norm_bottcher_eq_exp_green c (external_ray_map_free c w)
+    have hpos_ext : 0 < green_function c (external_ray_map_free c w) := by
+      have hgt_ext : 1 < Real.exp (green_function c (external_ray_map_free c w)) := by
         simpa [hnorm_ext] using hphi_ext
       exact (Real.one_lt_exp_iff).1 hgt_ext
-    have hnotK_ext : external_ray_map c w ∉ MLC.Quadratic.K c :=
-      (green_function_pos_iff_not_mem_K c (external_ray_map c w)).1 hpos_ext
-    have h_basin_ext : external_ray_map c w ∈ basin_of_infinity c :=
-      z_in_basin_of_not_mem_K c (external_ray_map c w) hnotK_ext
+    have hnotK_ext : external_ray_map_free c w ∉ MLC.Quadratic.K c :=
+      (green_function_pos_iff_not_mem_K c (external_ray_map_free c w)).1 hpos_ext
+    have h_basin_ext : external_ray_map_free c w ∈ basin_of_infinity c :=
+      z_in_basin_of_not_mem_K c (external_ray_map_free c w) hnotK_ext
     have h_eq_phi :
-        proxy_bottcher_map c (external_ray_map c w) = proxy_bottcher_map c z := by
+        proxy_bottcher_map c (external_ray_map_free c w) = proxy_bottcher_map c z := by
       simpa [w] using hright
     exact h_inj_basin h_basin_ext h_basin h_eq_phi
 
-  obtain ⟨p', hp1_K, hp'_eq⟩ := construct_bottcher_path c z w h_norm_gt hw_ne_zero h_start h_basin
+  obtain ⟨p', hp1_K, hp'_eq⟩ := construct_bottcher_path c hc z w h_norm_gt hw_ne_zero h_start h_basin
   
   -- Cast p' to connect z to p' 1 explicitly
   let p'' : Path z (p' 1) := p'.cast rfl p'.target
@@ -196,20 +195,20 @@ lemma green_sublevel_joined_to_Kc (c : ℂ) (n : ℕ)
   have h_u_norm_le_w := radial_path_norm_le_w w h_norm_gt t
   
   by_cases hu_1 : ‖u‖ = 1
-  · have : extended_ray_map c u ∈ K := by
-      apply extended_ray_map_lands c u hu_1
+  · have : extended_ray_map_free c u ∈ K := by
+      apply extended_ray_map_free_lands c u hu_1
     apply K_subset_green_sublevel c n this
   · have hu_gt_1 : 1 < ‖u‖ := lt_of_le_of_ne h_u_norm_ge_1 (Ne.symm hu_1)
-    have hp'_val : extended_ray_map c u = external_ray_map c u := by
-      rw [extended_ray_map_eq c u hu_gt_1]
+    have hp'_val : extended_ray_map_free c u = external_ray_map_free c u := by
+      rw [extended_ray_map_free_eq c u hu_gt_1]
     
     simp only [S, MLC.Quadratic.GreenSublevel, mem_setOf_eq]
     rw [hp'_val]
-    have h_phi : ‖proxy_bottcher_map c (external_ray_map c u)‖ = ‖u‖ := by
-      rw [bottcher_right_inv_of_mem c u (h_surj u hu_gt_1) hu_gt_1]
-    rw [norm_bottcher_eq_exp_green c (external_ray_map c u)] at h_phi
+    have h_phi : ‖proxy_bottcher_map c (external_ray_map_free c u)‖ = ‖u‖ := by
+      rw [external_ray_map_free_right_inverse c hc u hu_gt_1]
+    rw [norm_bottcher_eq_exp_green c (external_ray_map_free c u)] at h_phi
     
-    have h_G : green_function c (external_ray_map c u) = Real.log ‖u‖ := by
+    have h_G : green_function c (external_ray_map_free c u) = Real.log ‖u‖ := by
       rw [← h_phi, Real.log_exp]
     
     rw [h_G]

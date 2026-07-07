@@ -70,7 +70,7 @@ structure GenuineBottcherLocalFamilyData (n : ℕ) (c₀ : ℂ) where
       ∀ z : ℂ, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt (phi c) z
   tendsto_div_atInfinity :
     ∀ c : ℂ, c ∈ ball c₀ r →
-      Tendsto (fun z => phi c z / z) atInfinity (𝓝 (1 : ℂ))
+      Tendsto (fun z => phi c z / z) (Filter.comap (fun z : ℂ => ‖z‖) Filter.atTop) (𝓝 (1 : ℂ))
   param_holo :
     ∀ z : ℂ, DifferentiableOn ℂ (fun c => phi c z) (ball c₀ r)
   puzzle_boundary_eq_equipotential :
@@ -115,7 +115,7 @@ structure GenuineBottcherLocalParameterFamilyData (c₀ : ℂ) where
       ∀ z : ℂ, z ∈ basin_of_infinity c → z ≠ 0 → ContinuousAt (phi c) z
   tendsto_div_atInfinity :
     ∀ c : ℂ, c ∈ ball c₀ r →
-      Tendsto (fun z => phi c z / z) atInfinity (𝓝 (1 : ℂ))
+      Tendsto (fun z => phi c z / z) (Filter.comap (fun z : ℂ => ‖z‖) Filter.atTop) (𝓝 (1 : ℂ))
   param_holo :
     ∀ z : ℂ, DifferentiableOn ℂ (fun c => phi c z) (ball c₀ r)
   puzzle_boundary_eq_equipotential :
@@ -166,7 +166,7 @@ structure GenuineBottcherNearInfinityParameterFamilyData (c₀ : ℂ) where
       DifferentiableOn ℂ (phi c) (exteriorRegion R)
   tendsto_div_atInfinity :
     ∀ c : ℂ, c ∈ ball c₀ r →
-      Tendsto (fun z => phi c z / z) atInfinity (𝓝 (1 : ℂ))
+      Tendsto (fun z => phi c z / z) (Filter.comap (fun z : ℂ => ‖z‖) Filter.atTop) (𝓝 (1 : ℂ))
   param_holo_on_exterior :
     ∀ z : ℂ, z ∈ exteriorRegion R →
       DifferentiableOn ℂ (fun c => phi c z) (ball c₀ r)

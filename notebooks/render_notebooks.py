@@ -71,6 +71,7 @@ def main() -> None:
     exporter = HTMLExporter(template_name="classic")
     exporter.exclude_input_prompt = True
     exporter.exclude_output_prompt = True
+    exporter.anchor_link_text = ""
 
     html_files: list[Path] = []
     for source in sorted(input_dir.rglob("*.ipynb")):

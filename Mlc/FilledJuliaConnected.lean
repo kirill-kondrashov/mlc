@@ -6,6 +6,8 @@ import Mathlib.Topology.Connected.Clopen
 import Mathlib.Topology.Compactness.Compact
 import Mathlib.Analysis.Normed.Group.Basic
 import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Topology.Maps.Proper.CompactlyGenerated
+import Mathlib.Topology.MetricSpace.Bounded
 
 /-!
 # Filled Julia set connectivity
@@ -25,9 +27,9 @@ replacing the axiom `filled_julia_set_connected` in `Axioms.lean`.
    of compact preconnected sets.
 -/
 
-namespace MLC
+namespace MLC.Quadratic
 
-open Complex Topology Set Filter Metric MLC.Quadratic
+open Complex Topology Set Filter Metric
 
 noncomputable section
 
@@ -53,19 +55,126 @@ theorem isPreconnected_sq_preimage {A : Set ℂ}
   have h0B : (0 : ℂ) ∈ B := by simp [hB_def, h0]
   have h_neg_B : ∀ z ∈ B, -z ∈ B := fun z hz => by
     show (-z) ^ 2 ∈ A; rwa [neg_sq]
+  -- The squaring map z ↦ z² is proper (preimage of compact is compact), hence a closed map.
+  have sq_closed : IsClosedMap (fun z : ℂ => z ^ 2) := by
+    apply IsProperMap.isClosedMap
+    rw [isProperMap_iff_isCompact_preimage]
+    refine ⟨continuous_pow 2, fun K hK => ?_⟩
+    obtain ⟨r, hKsub⟩ := Metric.isBounded_iff_subset_closedBall (0 : ℂ) |>.mp hK.isBounded
+    apply isCompact_of_isClosed_isBounded
+    · exact hK.isClosed.preimage (continuous_pow 2)
+    · refine Metric.isBounded_iff_subset_closedBall (0 : ℂ) |>.2 ⟨Real.sqrt r, ?_⟩
+      intro z hz
+      rw [Metric.mem_closedBall, dist_zero_right]
+      have hzK : z ^ 2 ∈ K := hz
+      have hzK' := hKsub hzK
+      rw [Metric.mem_closedBall, dist_zero_right] at hzK'
+      have hzK'' : ‖z‖ ^ 2 ≤ r := by simpa [norm_pow] using hzK'
+      calc ‖z‖ = Real.sqrt (‖z‖ ^ 2) := (Real.sqrt_sq (norm_nonneg z)).symm
+      _ ≤ Real.sqrt r := Real.sqrt_le_sqrt hzK''
   rw [isPreconnected_iff_subset_of_fully_disjoint_closed hBclosed]
   intro U V hUcl hVcl hBUV hdisj
-  -- Partition B into: D₁ (both z,-z ∈ U), D₂ (both in V), M₁₂ (z∈U,-z∈V)
-  -- Images under squaring give disjoint closed cover of A.
-  -- For each a ∈ A, pick z with z² = a. Both ±z ∈ B. Classify by which is in U/V.
-  -- Three disjoint closed images cover A; preconnectedness forces all in one.
-  -- Since 0 ∈ U (WLOG) gives 0 ∈ A_U, all of A is in A_U, so B ⊆ U.
-  -- (Or 0 ∈ V symmetrically.)
-  -- The key disjointness proof:
-  -- If a ∈ A_U ∩ A_V: ∃ z₁ ∈ D₁, z₂ ∈ D₂ with z₁²=z₂²=a.
-  -- Then z₂=±z₁. If z₂=z₁: z₁ ∈ U ∩ V = ∅. If z₂=-z₁: -z₁ ∈ V (from D₂)
-  -- but -z₁ ∈ U (from D₁), so -z₁ ∈ U ∩ V = ∅.
-  sorry
+  -- It suffices to show: if 0 ∈ W₁, then B ⊆ W₁ (then apply to (U,V) or (V,U)).
+  suffices key : ∀ W₁ W₂ : Set ℂ, IsClosed W₁ → IsClosed W₂ → B ⊆ W₁ ∪ W₂ →
+      Disjoint W₁ W₂ → (0 : ℂ) ∈ W₁ → B ⊆ W₁ by
+    rcases hBUV h0B with h0U | h0V
+    · exact Or.inl (key U V hUcl hVcl hBUV hdisj h0U)
+    · exact Or.inr (key V U hVcl hUcl (fun x hx => by
+          rcases hBUV hx with h | h; exact Or.inr h; exact Or.inl h)
+        hdisj.symm h0V)
+  intro W₁ W₂ hW₁ hW₂ hBW hWdisj h0W₁
+  -- Partition B by how the pair (z, −z) falls in W₁ or W₂.
+  let B₁₁ : Set ℂ := B ∩ W₁ ∩ ((fun z : ℂ => -z) ⁻¹' W₁)
+  let B₂₂ : Set ℂ := B ∩ W₂ ∩ ((fun z : ℂ => -z) ⁻¹' W₂)
+  let B₁₂ : Set ℂ := B ∩ W₁ ∩ ((fun z : ℂ => -z) ⁻¹' W₂)
+  have hB₁₁_cl : IsClosed B₁₁ :=
+    (hBclosed.inter hW₁).inter (hW₁.preimage continuous_neg)
+  have hB₂₂_cl : IsClosed B₂₂ :=
+    (hBclosed.inter hW₂).inter (hW₂.preimage continuous_neg)
+  have hB₁₂_cl : IsClosed B₁₂ :=
+    (hBclosed.inter hW₁).inter (hW₂.preimage continuous_neg)
+  -- The sq-images of these sets lie in A and are closed.
+  let A₁ : Set ℂ := (· ^ 2) '' B₁₁
+  let A₂ : Set ℂ := (· ^ 2) '' B₂₂
+  let A₁₂ : Set ℂ := (· ^ 2) '' B₁₂
+  have hA₁_cl : IsClosed A₁ := sq_closed B₁₁ hB₁₁_cl
+  have hA₂₁₂_cl : IsClosed (A₂ ∪ A₁₂) :=
+    (sq_closed B₂₂ hB₂₂_cl).union (sq_closed B₁₂ hB₁₂_cl)
+  -- 0 ∈ A₁ (since 0 ∈ B₁₁).
+  have h0A₁ : (0 : ℂ) ∈ A₁ := by
+    refine ⟨0, ?_, by norm_num⟩
+    simp [B₁₁, h0B, h0W₁]
+  -- Every element of A lies in A₁ ∪ A₂ ∪ A₁₂.
+  have hA_cov : A ⊆ A₁ ∪ (A₂ ∪ A₁₂) := by
+    intro a ha
+    obtain ⟨z, hz⟩ := complex_exists_sq_root a
+    have hzB : z ∈ B := show z ^ 2 ∈ A from hz ▸ ha
+    have h_negB : -z ∈ B := h_neg_B z hzB
+    rcases hBW hzB with hzW₁ | hzW₂
+    · rcases hBW h_negB with h_negW₁ | h_negW₂
+      · exact Or.inl ⟨z, ⟨⟨hzB, hzW₁⟩, h_negW₁⟩, hz⟩
+      · exact Or.inr (Or.inr ⟨z, ⟨⟨hzB, hzW₁⟩, h_negW₂⟩, hz⟩)
+    · rcases hBW h_negB with h_negW₁ | h_negW₂
+      · -- z ∈ W₂, −z ∈ W₁: use −z ∈ B₁₂ with (−z)² = z² = a
+        exact Or.inr (Or.inr ⟨-z, ⟨⟨h_negB, h_negW₁⟩, by simpa using hzW₂⟩,
+                                by simpa [neg_sq] using hz⟩)
+      · exact Or.inr (Or.inl ⟨z, ⟨⟨hzB, hzW₂⟩, h_negW₂⟩, hz⟩)
+  -- A₁ and A₂ ∪ A₁₂ are disjoint.
+  have hA_disj : Disjoint A₁ (A₂ ∪ A₁₂) := by
+    rw [Set.disjoint_left]
+    rintro a ⟨z₁, ⟨⟨_, hz₁W₁⟩, h_negz₁W₁⟩, hz₁⟩ (⟨z₂, ⟨⟨_, hz₂W₂⟩, _⟩, hz₂⟩ |
+                                                    ⟨z₂, ⟨⟨_, hz₂W₁⟩, h_negz₂W₂⟩, hz₂⟩)
+    · -- a ∈ A₁ ∩ A₂: z₁² = z₂², z₁ ∈ W₁, z₂ ∈ W₂
+      have hsquare : z₁ ^ 2 = z₂ ^ 2 := by simpa using hz₁.trans hz₂.symm
+      rcases sq_eq_sq_iff_eq_or_eq_neg.mp hsquare with rfl | rfl
+      · -- z₁ = z₂ ∈ W₁ ∩ W₂
+        exact absurd (Set.disjoint_left.mp hWdisj hz₁W₁) (by simp [hz₂W₂])
+      · -- z₁ = -z₂: z₂ = -z₁ ∈ W₁ (since -z₁ ∈ W₁ from B₁₁)
+        have hz₂W₁' : z₂ ∈ W₁ := by simpa using h_negz₁W₁
+        exact (Set.disjoint_left.mp hWdisj hz₂W₁' hz₂W₂).elim
+    · -- a ∈ A₁ ∩ A₁₂: z₁² = z₂², z₁ ∈ W₁, -z₁ ∈ W₁, z₂ ∈ W₁, -z₂ ∈ W₂
+      have hsquare : z₁ ^ 2 = z₂ ^ 2 := by simpa using hz₁.trans hz₂.symm
+      rcases sq_eq_sq_iff_eq_or_eq_neg.mp hsquare with rfl | rfl
+      · -- z₁ = z₂: -z₁ = -z₂ ∈ W₁ ∩ W₂
+        have hnegz₁W₂ : -z₁ ∈ W₂ := by simpa using h_negz₂W₂
+        exact (Set.disjoint_left.mp hWdisj h_negz₁W₁ hnegz₁W₂).elim
+      · -- z₁ = -z₂: -z₂ = z₁ ∈ W₁. -z₂ ∈ W₂ (from B₁₂). So z₁ = -z₂ ∈ W₁ ∩ W₂.
+        have hnegz₂W₁ : -z₂ ∈ W₁ := by simpa using hz₁W₁
+        have hnegz₂W₂ : -z₂ ∈ W₂ := by simpa using h_negz₂W₂
+        exact (Set.disjoint_left.mp hWdisj hnegz₂W₁ hnegz₂W₂).elim
+  -- By preconnectedness of A, A ⊆ A₁ (since A ⊆ A₁ ∪ (A₂ ∪ A₁₂), both closed, disjoint,
+  -- and 0 ∈ A₁ prevents A ⊆ A₂ ∪ A₁₂).
+  rcases (isPreconnected_iff_subset_of_fully_disjoint_closed hAclosed).mp hA
+      A₁ (A₂ ∪ A₁₂) hA₁_cl hA₂₁₂_cl hA_cov hA_disj with hAinA₁ | hAinA₂₁₂
+  · -- A ⊆ A₁: every z ∈ B has z² ∈ A₁, so some w with w² = z² ∈ W₁ and -w ∈ W₁ → z ∈ W₁.
+    intro z hz
+    obtain ⟨w, ⟨⟨_, hwW₁⟩, h_negwW₁⟩, hw⟩ := hAinA₁ (show z ^ 2 ∈ A from hz)
+    rcases sq_eq_sq_iff_eq_or_eq_neg.mp hw with rfl | rfl
+    · exact hwW₁
+    · -- w = -z: then `-w = z`, so the preimage-membership field gives `z ∈ W₁`.
+      simpa using h_negwW₁
+  · -- A ⊆ A₂ ∪ A₁₂ contradicts 0 ∈ A₁ and Disjoint A₁ (A₂ ∪ A₁₂).
+    exact absurd (Set.disjoint_left.mp hA_disj h0A₁ (hAinA₂₁₂ h0)) id
+
+/-- If `A ⊆ ℂ` is closed, preconnected, and contains `c`, then the pullback
+under `z ↦ z^2 + c` is preconnected. -/
+theorem isPreconnected_quadratic_preimage {A : Set ℂ} {c : ℂ}
+    (hA : IsPreconnected A) (hAclosed : IsClosed A) (hc : c ∈ A) :
+    IsPreconnected {z : ℂ | z ^ 2 + c ∈ A} := by
+  let T : Homeomorph ℂ ℂ := Homeomorph.addRight (-c)
+  have hpre_eq : IsPreconnected ((fun z : ℂ => z + (-c)) '' A) ↔ IsPreconnected A :=
+    T.isEmbedding.isInducing.isPreconnected_image
+  have hA' : IsPreconnected ((fun z : ℂ => z + (-c)) '' A) := hpre_eq.2 hA
+  have hAclosed' : IsClosed ((fun z : ℂ => z + (-c)) '' A) :=
+    T.isClosedMap _ hAclosed
+  have h0' : (0 : ℂ) ∈ (fun z : ℂ => z + (-c)) '' A := by
+    refine ⟨c, hc, by simp⟩
+  have hsq : IsPreconnected {z : ℂ | z ^ 2 ∈ (fun z : ℂ => z + (-c)) '' A} :=
+    isPreconnected_sq_preimage hA' hAclosed' h0'
+  have hEq : {z : ℂ | z ^ 2 ∈ (fun z : ℂ => z + (-c)) '' A} = {z : ℂ | z ^ 2 + c ∈ A} := by
+    ext z
+    simp [Set.mem_image, exists_eq_right, add_comm, add_left_comm, add_assoc]
+  simpa [hEq] using hsq
 
 /-! ## Part 2: Decreasing intersection of compact connected sets -/
 
@@ -167,8 +276,110 @@ This proves the statement that was previously axiomatized as
 `filled_julia_set_connected`. -/
 theorem filled_julia_set_connected_proved {c : ℂ} (hc : c ∈ MandelbrotSet) :
     IsConnected (K c) := by
-  sorry
+  let S : ℕ → Set ℂ := fun n => {z : ℂ | ‖orbit c z n‖ ≤ R c}
+  have horbit_fc : ∀ n z, orbit c (fc c z) n = orbit c z (n + 1) := by
+    intro n z
+    induction n with
+    | zero => simp [fc, orbit_succ]
+    | succ n ih => simp [orbit_succ, ih]
+  have hS_closed : ∀ n, IsClosed (S n) := by
+    intro n
+    dsimp [S]
+    simpa using isClosed_le ((continuous_orbit c n).norm) continuous_const
+  have hS_compact : ∀ n, IsCompact (S n) := by
+    intro n
+    have hsubset : S n ⊆ Metric.closedBall (0 : ℂ) (R c) := by
+      intro z hz
+      rcases le_or_gt ‖z‖ (R c) with hle | hgt
+      · simpa [Metric.mem_closedBall, dist_zero_right] using hle
+      · exfalso
+        have hge : ‖orbit c z n‖ ≥ ‖z‖ := norm_orbit_ge_of_norm_ge_R c z n hgt
+        exact not_lt_of_ge (le_trans hge hz) hgt
+    refine (isCompact_closedBall (x := (0 : ℂ)) (r := R c)).of_isClosed_subset (hS_closed n) hsubset
+  have hcrit : ∀ n, ‖orbit c 0 n‖ ≤ R c := by
+    intro n
+    rcases hc with ⟨M, hM⟩
+    by_cases hgt : ‖orbit c 0 n‖ > R c
+    · exfalso
+      rcases escape_lemma (c := c) (z := 0) n hgt M with ⟨N, hN⟩
+      have hbig := hN (max N n) (le_max_left _ _)
+      have hbound := hM (max N n)
+      exact not_lt_of_ge hbound hbig
+    · exact le_of_not_gt hgt
+  have hS_nonempty : ∀ n, (S n).Nonempty := by
+    intro n
+    exact ⟨0, by simpa [S] using hcrit n⟩
+  have hS_pre : ∀ n, IsPreconnected (S n) := by
+    intro n
+    induction n with
+    | zero =>
+        have hEq : S 0 = Metric.closedBall (0 : ℂ) (R c) := by
+          ext z
+          simp [S, Metric.mem_closedBall, dist_zero_right]
+        rw [hEq]
+        exact (convex_closedBall (0 : ℂ) (R c)).isPreconnected
+    | succ n ihn =>
+        have hEq : S (n + 1) = {z : ℂ | z ^ 2 + c ∈ S n} := by
+          ext z
+          change ‖orbit c z (n + 1)‖ ≤ R c ↔ z ^ 2 + c ∈ S n
+          rw [show orbit c z (n + 1) = orbit c (fc c z) n by simpa [horbit_fc]]
+          simp [S, fc]
+        have hcrit_shift : orbit c c n = orbit c 0 (n + 1) := by
+          simpa [fc, orbit_zero] using (horbit_fc n 0)
+        have hcSn : c ∈ S n := by
+          change ‖orbit c c n‖ ≤ R c
+          rw [hcrit_shift]
+          exact hcrit (n + 1)
+        rw [hEq]
+        exact isPreconnected_quadratic_preimage ihn (hS_closed n) hcSn
+  have hS_anti_step : ∀ n, S (n + 1) ⊆ S n := by
+    intro n z hz
+    by_cases hgt : ‖orbit c z n‖ > R c
+    · have hge : ‖orbit c z (n + 1)‖ ≥ ‖orbit c z n‖ := by
+        simpa [orbit_succ] using norm_orbit_ge_of_norm_ge_R c (orbit c z n) 1 hgt
+      exact (not_lt_of_ge (le_trans hge hz) hgt).elim
+    · exact le_of_not_gt hgt
+  have hS_anti : Antitone S := by
+    intro m n hmn
+    induction hmn with
+    | refl => intro z hz; exact hz
+    | @step n hle ih => exact Set.Subset.trans (hS_anti_step n) ih
+  have hK_subset : K c ⊆ ⋂ k, S k := by
+    intro z hz
+    rw [Set.mem_iInter]
+    intro k
+    rcases hz with ⟨M, hM⟩
+    change ‖orbit c z k‖ ≤ R c
+    by_cases hgt : ‖orbit c z k‖ > R c
+    · exfalso
+      rcases escape_lemma (c := c) (z := z) k hgt M with ⟨N, hN⟩
+      have hbig := hN (max N k) (le_max_left _ _)
+      have hbound := hM (max N k)
+      exact not_lt_of_ge hbound hbig
+    · exact le_of_not_gt hgt
+  have hK_superset : (⋂ k, S k) ⊆ K c := by
+    intro z hz
+    refine ⟨R c, ?_⟩
+    intro k
+    have hk : z ∈ S k := by
+      rw [Set.mem_iInter] at hz
+      exact hz k
+    exact hk
+  have hK_eq : K c = ⋂ n, S n := by
+    exact Set.Subset.antisymm hK_subset hK_superset
+  have hpre : IsPreconnected (K c) := by
+    rw [hK_eq]
+    exact isPreconnected_iInter_of_sequence hS_anti hS_nonempty hS_compact hS_pre
+  have hne : (K c).Nonempty := by
+    rw [hK_eq]
+    have h_inter := IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
+      S (fun n => hS_anti_step n) hS_nonempty (hS_compact 0) hS_closed
+    simpa [Set.mem_iInter] using h_inter
+  exact ⟨hne, hpre⟩
+
+/-- The filled Julia set `K c` is connected for `c ∈ MandelbrotSet`. -/
+theorem filled_julia_set_connected {c : ℂ} (hc : c ∈ MandelbrotSet) :
+    IsConnected (K c) :=
+  filled_julia_set_connected_proved hc
 
 end
-
-end MLC

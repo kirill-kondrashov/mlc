@@ -1,6 +1,7 @@
 import Mlc.GreenSublevelConnected
 import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 
 /-!
 # Para-puzzle connectivity from Böttcher infrastructure
@@ -51,14 +52,33 @@ theorem bottcher_surj_from_ray_map :
 
 /-! ## Step 2: Basin injectivity axiom -/
 
-/-- For every parameter `c`, the proxy Böttcher map is injective on the basin
-    of infinity. For `c ∈ M` with connected `K(c)`, this is a standard fact:
-    the Böttcher coordinate is the Riemann map from the basin to `{|w| > 1}`.
-    
-    This replaces the more opaque `para_puzzle_piece_inter_mandelbrot_connected`
-    in the axiom frontier with a standard dynamical statement. -/
-axiom proxy_bottcher_map_inj_on_basin_axiom (c : ℂ) :
-    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c)
+/-- For every parameter `c ∈ M`, the proxy Böttcher map is injective on the
+    basin of infinity.
+
+    This is now a **theorem**, not an axiom. Because `proxy_bottcher_map` is the
+    *radial* proxy `(z/‖z‖)·exp(green c z)`, injectivity is elementary
+    (`proxy_bottcher_map_injOn_nonzero_basin_of_green_ray_strictMono`): it reduces
+    to strict monotonicity of the Green function along origin-rays
+    (`green_function_strictMono_along_ray_basin_seam`), together with `0 ∉ basin`
+    for `c ∈ M` (the critical point stays in `K(c)`). -/
+theorem proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
+    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
+  have hmono : ∀ (u : ℂ), ‖u‖ = 1 → ∀ {ρ₁ ρ₂ : ℝ}, 0 < ρ₁ → ρ₁ < ρ₂ →
+      0 < MLC.Quadratic.green_function c ((ρ₁ : ℂ) * u) →
+      MLC.Quadratic.green_function c ((ρ₁ : ℂ) * u)
+        < MLC.Quadratic.green_function c ((ρ₂ : ℂ) * u) :=
+    fun u hu => Quadratic.green_function_strictMono_along_ray_basin_seam c u hu
+  have hbase :=
+    proxy_bottcher_map_injOn_nonzero_basin_of_green_ray_strictMono c hmono
+  have h0K : (0 : ℂ) ∈ MLC.Quadratic.K c := hc
+  have h0 : (0 : ℂ) ∉ Quadratic.basin_of_infinity c := by
+    rw [Quadratic.basin_eq_compl_K]
+    simpa using h0K
+  intro z hz w hw hzw
+  refine hbase ⟨hz, ?_⟩ ⟨hw, ?_⟩ hzw
+  · exact fun h => h0 (h ▸ hz)
+  · exact fun h => h0 (h ▸ hw)
 
 /-! ## Step 3: Green sublevel connectivity (proved) -/
 
@@ -66,8 +86,6 @@ axiom proxy_bottcher_map_inj_on_basin_axiom (c : ℂ) :
     Proved from basin injectivity + exterior ray surjectivity. -/
 theorem green_sublevel_connected_hyp_proved : Quadratic.GreenSublevelConnectedHyp :=
   green_sublevel_connected_onM
-    bottcher_surj_from_ray_map
-    (fun c _hc => proxy_bottcher_map_inj_on_basin_axiom c)
 
 /-! ## Step 4: DynamicalPuzzlePiece = GreenSublevel for c ∈ M -/
 
@@ -116,11 +134,43 @@ theorem paraPuzzlePieceAt_eq_green_translate {c : ℂ} (hc : c ∈ MandelbrotSet
 
 /-- The intersection of a Green sublevel translate with the Mandelbrot set is
     connected. This is the core of the Yoccoz puzzle connectivity theorem.
-    
+
     Mathematically: for `c ∈ M`, the set `{G_c < (1/2)^n}` is a topological
     disk (simply connected bounded domain), and its translate `c + {G_c < (1/2)^n}`
     intersected with the Mandelbrot set inherits connectivity from the
-    holomorphic motion of the puzzle boundary (lambda lemma). -/
+    holomorphic motion of the puzzle boundary (lambda lemma).
+
+    ## Frontier-axiom status (labeled; honest)
+
+    This is one of the two remaining non-core frontier axioms (Tier C). It is a
+    **parameter-plane** connectivity statement — precisely the connectivity of a
+    Yoccoz *parameter-puzzle piece*, the mathematical heart of MLC for finitely
+    renormalizable parameters. Two routes were investigated:
+
+    * **Metric route (Ahlfors/Schwarz–Pick λ-lemma).** Fully built as sound
+      standalone mathematics (`AhlforsSchwarz`, `UltrahyperbolicMetric`,
+      `UltrahyperbolicPullback`, `UltrahyperbolicDistance`), but it hits a
+      *completeness obstruction*: the constructed curvature `≤ -1` metric on
+      `ℂ∖{0,1}` is not complete (density `∼ ‖w-1‖^{-5/6}`, finite radial distance
+      to a puncture), so the two-trajectory Schwarz–Pick bound does not force
+      continuity-in-space. Correct but insufficient.
+
+    * **Böttcher route (C).** Realize the moving equipotential boundaries through
+      the space-holomorphic parametrization `z = Φ_c⁻¹(ω)`, making the residual
+      continuity free (`LambdaLemma.isConnected_image_of_differentiableOn`). The
+      base case — a genuine near-infinity two-variable holomorphic Böttcher family
+      with fiber-holo (z), param-holo (c) and joint continuity in `(c,z)` — is
+      built and axiom-clean (`BottcherParamHolo`,
+      `Quadratic.logSeriesNearInfinityParameterFamily`).
+
+    Remaining for a full discharge (assessed as Yoccoz-scale, deliberately NOT
+    pursued): (1) the full-basin monodromy-coherent coordinate
+    (`ConstructiveBasinCoordinate`), (2) the holomorphic inverse `Φ_c⁻¹`,
+    (3) a nontrivial puzzle-boundary `HolomorphicMotion`, and (4) the
+    Douady–Hubbard parameter↔dynamical correspondence identifying
+    `{G_c(·-c) < (1/2)ⁿ} ∩ M` as the holomorphic image of a connected reference
+    set — item (4) is essentially Yoccoz's theorem and is as hard as this axiom
+    itself. Kept as a labeled frontier axiom pending that formalization. -/
 axiom green_sublevel_translate_inter_mandelbrot_connected (c : ℂ)
     (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)

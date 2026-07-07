@@ -2,6 +2,7 @@ import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Yoccoz.Quadratic.Complex.Puzzle
 import Mlc.ParaPuzzleConnectivity
+import Mlc.FilledJuliaConnected
 import Mlc.LcAtOfShrink
 import Mlc.InfinitelyRenormalizable
 import Mlc.AxiomsMainConjecture
@@ -15,6 +16,7 @@ import Mlc.FastTowerExistenceObstruction
 import Mathlib.Topology.Connected.LocallyConnected
 import Mathlib.Topology.Bornology.Basic
 import Mathlib.Analysis.Complex.Basic
+import Mlc.Quadratic.Complex.InverseBranchQuadratic
 
 namespace MLC
 
@@ -271,11 +273,33 @@ def BottcherApproachToOneSeqPreimageData (c : ℂ) : Prop :=
 def BottcherApproachOneSeqFiberData (c : ℂ) : Prop :=
   ∀ n : ℕ, ∃ z, Quadratic.proxy_bottcher_map c z = approach_one_seq n
 
+/-- Theorem-facing exact countable-fiber seam target at the canonical
+    approach-to-`1` exterior sequence. -/
+def BottcherApproachOneSeqFiberDataFor (φ : ℂ → ℂ) : Prop :=
+  ∀ n : ℕ, ∃ z, φ z = approach_one_seq n
+
+/-- Root obstruction seam for a theorem-facing coordinate: no point of `K c` maps to
+    `1`. This isolates the remaining non-proxy ingredient needed by the abstract
+    `c = 2` contradiction. -/
+def NoKPointMapsToOneFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
+  ∀ z, z ∈ MLC.Quadratic.K c → φ z ≠ 1
+
 /-- Build the approach-to-`1` preimage seam from the exact countable-fiber
     target. -/
 lemma bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData
     (c : ℂ) (h_fiber : BottcherApproachOneSeqFiberData c) :
     BottcherApproachToOneSeqPreimageData c := by
+  classical
+  refine ⟨fun n => Classical.choose (h_fiber n), ?_⟩
+  convert tendsto_approach_one_seq using 1
+  funext n
+  exact Classical.choose_spec (h_fiber n)
+
+/-- Theorem-facing exact fibers along `approach_one_seq` likewise produce a
+    theorem-facing preimage sequence converging to `1`. -/
+lemma bottcherApproachToOneSeqPreimageDataFor_of_approachOneSeqFiberDataFor
+    {φ : ℂ → ℂ} (h_fiber : BottcherApproachOneSeqFiberDataFor φ) :
+    ∃ z : ℕ → ℂ, Tendsto (fun n => φ (z n)) atTop (𝓝 (1 : ℂ)) := by
   classical
   refine ⟨fun n => Classical.choose (h_fiber n), ?_⟩
   convert tendsto_approach_one_seq using 1
@@ -288,13 +312,19 @@ lemma bottcherApproachToOneSeqPreimageData_two_of_approachOneSeqFiberData
     BottcherApproachToOneSeqPreimageData (2 : ℂ) :=
   bottcherApproachToOneSeqPreimageData_of_approachOneSeqFiberData (2 : ℂ) h_fiber
 
-/-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
-    (without using `proxy_bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
-lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
-    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+/-- Abstract root contradiction schema for a theorem-facing coordinate `φ` at
+    `c = 2`: if the coordinate has the Green-function modulus identity, is
+    continuous on `K(2) \ {0}`, sends no point of `K(2)` to `1`, and a preimage
+    sequence approaches `1`, then contradiction follows. -/
+lemma false_of_bottcher_approach_to_one_seq_preimage_dataFor_two
+    {φ : ℂ → ℂ}
+    (h_data : ∃ z : ℕ → ℂ, Tendsto (fun n => φ (z n)) atTop (𝓝 (1 : ℂ)))
+    (h_norm : ∀ z, ‖φ z‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) z))
+    (h_cont : ∀ z, z ∈ MLC.Quadratic.K (2 : ℂ) → z ≠ 0 → ContinuousAt φ z)
+    (h_notK : NoKPointMapsToOneFor (2 : ℂ) φ) :
     False := by
   rcases h_data with ⟨z, hu_tend⟩
-  let u : ℕ → ℂ := fun n => Quadratic.proxy_bottcher_map (2 : ℂ) (z n)
+  let u : ℕ → ℂ := fun n => φ (z n)
   have hu_tend' : Tendsto u atTop (𝓝 (1 : ℂ)) := by simpa [u] using hu_tend
   have hu_bounded : IsBounded (Set.range u) :=
     isBounded_range_of_tendsto u hu_tend'
@@ -308,12 +338,12 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     calc
       0 < Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) := Real.exp_pos _
       _ = ‖u n‖ := by
-            simpa [u] using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
+            simpa [u] using (h_norm (z n)).symm
   have hgreen_eq : ∀ n, MLC.Quadratic.green_function (2 : ℂ) (z n) = Real.log ‖u n‖ := by
     intro n
     have hnorm :
         Real.exp (MLC.Quadratic.green_function (2 : ℂ) (z n)) = ‖u n‖ := by
-      simpa [u] using (Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) (z n)).symm
+      simpa [u] using (h_norm (z n)).symm
     have := congrArg Real.log hnorm
     simpa [Real.log_exp] using this
   set C : ℝ := 2 * ‖(2 : ℂ)‖ / (MLC.Quadratic.escape_bound (2 : ℂ)) ^ 2
@@ -346,7 +376,7 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
     simpa [Metric.mem_closedBall, dist_eq_norm] using hz_bound n
   have hbounded_ball : IsBounded (Metric.closedBall (0 : ℂ) B) := by
     simpa using (isBounded_closedBall : IsBounded (Metric.closedBall (0 : ℂ) B))
-  obtain ⟨a, _ha_cl, φ, hφmono, hφtend⟩ :=
+  obtain ⟨a, _ha_cl, ψ, hψmono, hψtend⟩ :=
     tendsto_subseq_of_bounded hbounded_ball hz_mem
   have hlog_tend : Tendsto (fun n => Real.log ‖u n‖) atTop (𝓝 (0 : ℝ)) := by
     have hnorm_tend' : Tendsto (fun n => ‖u n‖) atTop (𝓝 ‖(1 : ℂ)‖) :=
@@ -360,12 +390,12 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
       Tendsto (fun n => MLC.Quadratic.green_function (2 : ℂ) (z n)) atTop (𝓝 (0 : ℝ)) := by
     simpa [hgreen_eq] using hlog_tend
   have hgreen_sub_tend :
-      Tendsto (fun n => MLC.Quadratic.green_function (2 : ℂ) (z (φ n))) atTop (𝓝 (0 : ℝ)) :=
-    hgreen_tend.comp hφmono.tendsto_atTop
+      Tendsto (fun n => MLC.Quadratic.green_function (2 : ℂ) (z (ψ n))) atTop (𝓝 (0 : ℝ)) :=
+    hgreen_tend.comp hψmono.tendsto_atTop
   have hgreen_lim :
-      Tendsto (fun n => MLC.Quadratic.green_function (2 : ℂ) (z (φ n))) atTop
+      Tendsto (fun n => MLC.Quadratic.green_function (2 : ℂ) (z (ψ n))) atTop
         (𝓝 (MLC.Quadratic.green_function (2 : ℂ) a)) := by
-    exact ((MLC.Quadratic.continuous_green_function (2 : ℂ)).continuousAt).tendsto.comp hφtend
+    exact ((MLC.Quadratic.continuous_green_function (2 : ℂ)).continuousAt).tendsto.comp hψtend
   have hgreen_a_zero : MLC.Quadratic.green_function (2 : ℂ) a = 0 :=
     tendsto_nhds_unique hgreen_lim hgreen_sub_tend
   have haK : a ∈ MLC.Quadratic.K (2 : ℂ) :=
@@ -373,25 +403,35 @@ lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
   have ha0 : a ≠ 0 := by
     intro ha_zero
     exact zero_not_mem_K_two (by simpa [ha_zero] using haK)
-  have hcont_phi : ContinuousAt (Quadratic.proxy_bottcher_map (2 : ℂ)) a :=
-    proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) a ha0
+  have hcont_phi : ContinuousAt φ a :=
+    h_cont a haK ha0
   have hphi_sub_tend :
-      Tendsto (fun n => Quadratic.proxy_bottcher_map (2 : ℂ) (z (φ n))) atTop
-        (𝓝 (Quadratic.proxy_bottcher_map (2 : ℂ) a)) :=
-    hcont_phi.tendsto.comp hφtend
+      Tendsto (fun n => φ (z (ψ n))) atTop
+        (𝓝 (φ a)) :=
+    hcont_phi.tendsto.comp hψtend
   have hu_sub_tend :
-      Tendsto (fun n => u (φ n)) atTop (𝓝 (1 : ℂ)) :=
-    hu_tend'.comp hφmono.tendsto_atTop
+      Tendsto (fun n => u (ψ n)) atTop (𝓝 (1 : ℂ)) :=
+    hu_tend'.comp hψmono.tendsto_atTop
   have hu_sub_tend_phi :
-      Tendsto (fun n => u (φ n)) atTop (𝓝 (Quadratic.proxy_bottcher_map (2 : ℂ) a)) := by
+      Tendsto (fun n => u (ψ n)) atTop (𝓝 (φ a)) := by
     have hsub_eq :
-        (fun n => Quadratic.proxy_bottcher_map (2 : ℂ) (z (φ n))) = (fun n => u (φ n)) := by
+        (fun n => φ (z (ψ n))) = (fun n => u (ψ n)) := by
       funext n
       rfl
     simpa [hsub_eq] using hphi_sub_tend
-  have hphi_a : Quadratic.proxy_bottcher_map (2 : ℂ) a = 1 :=
+  have hphi_a : φ a = 1 :=
     tendsto_nhds_unique hu_sub_tend_phi hu_sub_tend
-  exact (proxy_bottcher_map_eq_one_not_mem_K_two a haK) hphi_a
+  exact (h_notK a haK) hphi_a
+
+/-- Contradiction from abstract approach-to-`1` preimage data at `c = 2`
+    (without using `proxy_bottcher_map_inj_on_K` or `extended_ray_map_continuous`). -/
+lemma false_of_bottcher_approach_to_one_seq_preimage_data_two
+    (h_data : BottcherApproachToOneSeqPreimageData (2 : ℂ)) :
+    False := by
+  exact false_of_bottcher_approach_to_one_seq_preimage_dataFor_two h_data
+    (fun z => Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) z)
+    (fun z hzK hz0 => proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z hz0)
+    (fun z hzK => proxy_bottcher_map_eq_one_not_mem_K_two z hzK)
 
 /-- The exact-fiber target along the canonical sequence approaching `1` is
 formally impossible for the current constructive coordinate at `c = 2`. -/
@@ -2233,17 +2273,29 @@ lemma mainPathData_of_bottcherApproachToOneSeqPreimageData_two
   have hFalse : False := false_of_bottcher_approach_to_one_seq_preimage_data_two h_data
   exact False.elim hFalse
 
-/-- Minimal surjectivity seam: every exterior point has some Böttcher preimage. -/
+/-- Minimal surjectivity seam for a theorem-facing coordinate: every exterior point
+has some preimage. -/
+def BottcherSurjOnExteriorFor (φ : ℂ → ℂ) : Prop :=
+  ∀ w, 1 < ‖w‖ → ∃ z, φ z = w
+
+/-- Proxy-specialized minimal surjectivity seam. -/
 def BottcherSurjOnExterior (c : ℂ) : Prop :=
-  ∀ w, 1 < ‖w‖ → ∃ z, Quadratic.proxy_bottcher_map c z = w
+  BottcherSurjOnExteriorFor (Quadratic.proxy_bottcher_map c)
+
+/-- Any theorem-facing external-ray data package already yields minimal exterior
+surjectivity for the same coordinate. -/
+lemma bottcherSurjOnExteriorFor_of_externalRayMapDataFor
+    {c : ℂ} {φ : ℂ → ℂ} (h_data : Quadratic.ExternalRayMapDataFor c φ) :
+    BottcherSurjOnExteriorFor φ := by
+  rcases h_data with ⟨f, hright, -⟩
+  intro w hw
+  exact ⟨f w, hright w hw⟩
 
 /-- Outside-open surjectivity implies minimal exterior surjectivity. -/
 lemma bottcherSurjOnExterior_of_externalRayMapData
     {c : ℂ} (h_data : Quadratic.ExternalRayMapData c) :
-    BottcherSurjOnExterior c := by
-  intro w hw
-  refine ⟨Quadratic.external_ray_map_of_data h_data w, ?_⟩
-  exact Quadratic.external_ray_map_of_data_right_inverse h_data w hw
+    BottcherSurjOnExterior c :=
+  bottcherSurjOnExteriorFor_of_externalRayMapDataFor h_data
 
 /-- Build exact canonical-sequence fiber data directly from minimal exterior
 surjectivity. -/
@@ -2254,12 +2306,436 @@ lemma bottcherApproachOneSeqFiberData_of_surjOnExterior
   rcases h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n) with ⟨z, hz_map⟩
   exact ⟨z, hz_map⟩
 
+/-- Theorem-facing exact fibers extracted from theorem-facing minimal exterior
+surjectivity. -/
+lemma bottcherApproachOneSeqFiberDataFor_of_surjOnExteriorFor
+    {φ : ℂ → ℂ} (h_surj : BottcherSurjOnExteriorFor φ) :
+    BottcherApproachOneSeqFiberDataFor φ := by
+  intro n
+  rcases h_surj (approach_one_seq n) (norm_approach_one_seq_gt_one n) with ⟨z, hz_map⟩
+  exact ⟨z, hz_map⟩
+
+/-- Theorem-facing preimage data extracted from theorem-facing minimal exterior
+surjectivity. -/
+lemma bottcherApproachToOneSeqPreimageDataFor_of_surjOnExteriorFor
+    {φ : ℂ → ℂ} (h_surj : BottcherSurjOnExteriorFor φ) :
+    ∃ z : ℕ → ℂ, Tendsto (fun n => φ (z n)) atTop (𝓝 (1 : ℂ)) :=
+  bottcherApproachToOneSeqPreimageDataFor_of_approachOneSeqFiberDataFor
+    (bottcherApproachOneSeqFiberDataFor_of_surjOnExteriorFor h_surj)
+
+/-- Exact theorem-facing root transport payload needed to pass from a candidate
+coordinate `φ` to the checked proxy coordinate at `c = 2`. An instance is
+obtained from a pointwise identification `φ = proxy_bottcher_map (2 : ℂ)`. -/
+structure RootBottcherTransportDataFor (φ : ℂ → ℂ) : Prop where
+  norm_eq_green :
+    ∀ z, ‖φ z‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) z)
+  continuousOnK_ne_zero :
+    ∀ z, z ∈ MLC.Quadratic.K (2 : ℂ) → z ≠ 0 → ContinuousAt φ z
+  noKPointMapsToOne :
+    NoKPointMapsToOneFor (2 : ℂ) φ
+
+/-- Basin-level uniqueness seam for normalized quadratic Böttcher coordinates at
+`c = 2`. This is the theorem-facing transport principle suggested by the
+standard ratio argument: two holomorphic basin coordinates with the same
+quadratic conjugacy, the same Green-function modulus, and the same normalization
+at infinity should coincide. The current PLAN 02 continuation uses this only as
+an explicit seam to isolate the remaining analytic theorem. -/
+def RootBottcherUniquenessSeam : Prop :=
+  ∀ {φ ψ : ℂ → ℂ},
+    Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ →
+    Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) ψ →
+    (∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → φ z = ψ z)
+
+/-- Consequences on the closed filled Julia set needed in the root branch of
+PLAN 02 for a normalized quadratic Böttcher coordinate `φ` at `c = 2`.
+Concretely, this stores exactly the three conclusions proved in the frontier
+notebook for the explicit root model: the identity
+`‖φ z‖ = exp(green_function (2 : ℂ) z)` on all `z : ℂ`, continuity of `φ` at
+all points of `K(2) \ {0}`, and the exclusion statement
+`NoKPointMapsToOneFor (2 : ℂ) φ`. -/
+structure RootBottcherBoundaryExtensionDataFor (φ : ℂ → ℂ) : Prop where
+  norm_eq_green :
+    ∀ z, ‖φ z‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) z)
+  continuousOnK_ne_zero :
+    ∀ z, z ∈ MLC.Quadratic.K (2 : ℂ) → z ≠ 0 → ContinuousAt φ z
+  noKPointMapsToOne :
+    NoKPointMapsToOneFor (2 : ℂ) φ
+
+/-- At the current root parameter interface, the downstream transport payload is
+exactly the same data as the global boundary-extension package. Keeping both
+names makes the theorem-facing transport step explicit while allowing downstream
+lemmas to consume only the minimal fields they actually use. -/
+lemma rootBottcherTransportDataFor_iff_boundaryExtensionDataFor
+    {φ : ℂ → ℂ} :
+    RootBottcherTransportDataFor φ ↔ RootBottcherBoundaryExtensionDataFor φ := by
+  constructor
+  · intro h
+    exact ⟨h.norm_eq_green, h.continuousOnK_ne_zero, h.noKPointMapsToOne⟩
+  · intro h
+    exact ⟨h.norm_eq_green, h.continuousOnK_ne_zero, h.noKPointMapsToOne⟩
+
+lemma rootBottcherBoundaryExtensionDataFor_of_transport
+    {φ : ℂ → ℂ} (h : RootBottcherTransportDataFor φ) :
+    RootBottcherBoundaryExtensionDataFor φ :=
+  (rootBottcherTransportDataFor_iff_boundaryExtensionDataFor).mp h
+
+lemma rootBottcherTransportDataFor_of_boundaryExtensionData
+    {φ : ℂ → ℂ} (h : RootBottcherBoundaryExtensionDataFor φ) :
+    RootBottcherTransportDataFor φ :=
+  (rootBottcherTransportDataFor_iff_boundaryExtensionDataFor).mpr h
+
+/-- Extra root-side input corresponding to the boundary values established in the
+frontier notebook. For a normalized quadratic Böttcher coordinate `φ` at `c = 2`,
+this hypothesis package asserts the three statements on the filled Julia set
+`K(2)` that do not follow merely from the basin-side theory:
+1. `‖φ z‖ = exp(green_function (2 : ℂ) z)` for `z ∈ K(2)`;
+2. continuity of `φ` at every `z ∈ K(2) \ {0}`;
+3. `NoKPointMapsToOneFor (2 : ℂ) φ`.
+These are exactly the formal counterparts of the boundary conclusions derived in
+`notebooks/frontier_plan02_root_boundary_extension.ipynb`. -/
+structure RootBottcherBoundaryExtensionHypothesesFor (φ : ℂ → ℂ) : Prop where
+  norm_eq_green_on_K :
+    ∀ z, z ∈ MLC.Quadratic.K (2 : ℂ) →
+      ‖φ z‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) z)
+  continuousOnK_ne_zero :
+    ∀ z, z ∈ MLC.Quadratic.K (2 : ℂ) → z ≠ 0 → ContinuousAt φ z
+  noKPointMapsToOne :
+    NoKPointMapsToOneFor (2 : ℂ) φ
+
+/-- Abstract implication encoding the missing analytic theorem in the root branch:
+if `φ` is a normalized quadratic Böttcher coordinate at `c = 2` and the three
+boundary statements from `RootBottcherBoundaryExtensionHypothesesFor φ` hold on
+`K(2)`, then one obtains the global root-side package
+`RootBottcherBoundaryExtensionDataFor φ`. In mathematical terms, this is the
+place where a formal proof of continuous extension of the Böttcher coordinate to
+`∂K(2)` and the associated boundary parameterization would enter. -/
+def RootBottcherBoundaryExtensionSeam : Prop :=
+  ∀ {φ : ℂ → ℂ},
+    Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ →
+    RootBottcherBoundaryExtensionHypothesesFor φ →
+    RootBottcherBoundaryExtensionDataFor φ
+
+/-- Genuine root Böttcher-coordinate data are invariant under pointwise equality
+of coordinates. This is the safe global transport lemma needed before any
+explicit model coordinate can be substituted into the theorem-facing basin
+package. -/
+lemma genuineBottcherCoordinateDataFor_two_congr
+    {φ ψ : ℂ → ℂ}
+    (hEq : ∀ z, φ z = ψ z)
+    (hφ : Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ) :
+    Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) ψ := by
+  have hfun : φ = ψ := funext hEq
+  rcases hφ with ⟨hgt, hmem, hfunc, hnorm, hdiff, hcont, htend⟩
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    simpa [hfun] using hgt z hz
+  · intro z hz
+    have hφnorm : 1 < ‖φ z‖ := by simpa [hfun] using hz
+    simpa [hfun] using hmem z hφnorm
+  · intro z hz
+    simpa [hfun] using hfunc z hz
+  · intro z hz
+    simpa [hfun] using hnorm z hz
+  · simpa [hfun] using hdiff
+  · intro z hz hz0
+    simpa [hfun] using hcont z hz hz0
+  · simpa [hfun] using htend
+
+/-- The three theorem-facing root boundary-extension hypotheses are invariant
+under pointwise equality of coordinates. This packages the obvious transport
+needed once a genuine root coordinate is identified with a checked model
+coordinate. -/
+lemma rootBottcherBoundaryExtensionHypothesesFor_congr
+    {φ ψ : ℂ → ℂ}
+    (hEq : ∀ z, φ z = ψ z)
+    (hφ : RootBottcherBoundaryExtensionHypothesesFor φ) :
+    RootBottcherBoundaryExtensionHypothesesFor ψ := by
+  have hfun : φ = ψ := funext hEq
+  refine ⟨?_, ?_, ?_⟩
+  · intro z hzK
+    simpa [hfun] using hφ.norm_eq_green_on_K z hzK
+  · intro z hzK hz0
+    simpa [hfun] using hφ.continuousOnK_ne_zero z hzK hz0
+  · intro z hzK hψ
+    apply hφ.noKPointMapsToOne z hzK
+    simpa [hfun] using hψ
+
+/-- The current literature-facing transport blocker: basin-level uniqueness does
+not suffice on its own; one still needs a boundary-extension theorem at the root
+parameter. We package the expected route as uniqueness on the basin followed by
+a separate boundary-extension seam. -/
+def RootBottcherUniquenessTransportSeam : Prop :=
+  ∀ {φ : ℂ → ℂ},
+    RootBottcherUniquenessSeam →
+    RootBottcherBoundaryExtensionSeam →
+    Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ →
+    RootBottcherBoundaryExtensionDataFor φ
+
+/-- The weakest literature-facing seam immediately yields the explicit
+boundary-extension package. -/
+lemma rootBottcherBoundaryExtensionDataFor_of_boundaryExtensionSeam
+    (h_seam : RootBottcherBoundaryExtensionSeam)
+    {φ : ℂ → ℂ}
+    (hφ : Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ)
+    (hExtHyp : RootBottcherBoundaryExtensionHypothesesFor φ) :
+    RootBottcherBoundaryExtensionDataFor φ :=
+  h_seam hφ hExtHyp
+
+/-- Combining the literature-facing seam with the explicit extra root-side
+hypotheses yields the transport payload required by the theorem-facing root
+closure theorems. -/
+lemma rootBottcherTransportDataFor_of_boundaryExtensionSeam
+    (h_seam : RootBottcherBoundaryExtensionSeam)
+    {φ : ℂ → ℂ}
+    (hφ : Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ)
+    (hExtHyp : RootBottcherBoundaryExtensionHypothesesFor φ) :
+    RootBottcherTransportDataFor φ :=
+  rootBottcherTransportDataFor_of_boundaryExtensionData
+    (h_seam hφ hExtHyp)
+
+/-- Explicit Chebyshev-model root coordinate from the frontier notebook: this is
+`\phi_P(z) = (z + \sqrt{z^2 - 4}) / 2`, the normalized Böttcher coordinate for
+`P(z) = z^2 - 2` on the slit-plane model. At this stage we record only the
+explicit formula, so that subsequent Lean work can theoremize its basin domain,
+boundary values, and affine transport. -/
+noncomputable def rootChebyshevCoordinate (z : ℂ) : ℂ :=
+  (z + Complex.sqrt (z ^ 2 - 4)) / 2
+
+/-- The explicit Chebyshev-model formula at the root parameter. -/
+@[simp] lemma rootChebyshevCoordinate_def (z : ℂ) :
+    rootChebyshevCoordinate z = (z + Complex.sqrt (z ^ 2 - 4)) / 2 := rfl
+
+/-- On the Chebyshev boundary arc, the quadratic radicand is the square of the
+positive imaginary branch. -/
+lemma rootChebyshev_radicand_two_cos
+    (θ : ℝ) :
+    ((((2 * Real.cos θ : ℝ) : ℂ) ^ 2) - 4) =
+      (((2 * Real.sin θ : ℝ) : ℂ) * Complex.I) ^ 2 := by
+  have hcos : (Complex.cos (θ : ℂ)).re = Real.cos θ := Complex.cos_ofReal_re θ
+  have hsin : (Complex.sin (θ : ℂ)).re = Real.sin θ := Complex.sin_ofReal_re θ
+  norm_num [pow_two, Complex.ext_iff, hcos, hsin]
+  nlinarith [Real.cos_sq_add_sin_sq θ]
+
+/-- The principal square root on the root-model boundary picks the positive
+imaginary branch for `0 ≤ θ ≤ π`. -/
+lemma rootChebyshev_sqrt_two_cos
+    {θ : ℝ} (hθ : θ ∈ Set.Icc (0 : ℝ) Real.pi) :
+    Complex.sqrt ((((2 * Real.cos θ : ℝ) : ℂ) ^ 2) - 4) =
+      ((2 * Real.sin θ : ℝ) : ℂ) * Complex.I := by
+  rcases eq_or_lt_of_le hθ.1 with h0 | h0
+  · subst h0
+    norm_num [rootChebyshev_radicand_two_cos, Complex.sqrt, pow_two]
+  · rcases eq_or_lt_of_le hθ.2 with hπ | hmid
+    · have hθπ : θ = Real.pi := hπ
+      subst hθπ
+      norm_num [rootChebyshev_radicand_two_cos, Complex.sqrt, pow_two]
+    · have hmid' : θ ∈ Set.Ioo (0 : ℝ) Real.pi := ⟨h0, hmid⟩
+      have hsin : 0 < Real.sin θ := Real.sin_pos_of_mem_Ioo hmid'
+      rw [rootChebyshev_radicand_two_cos]
+      set a := (2 * Real.sin θ : ℝ)
+      have ha : 0 < a := by positivity
+      set b := (a ^ 2 : ℝ)
+      have hb : 0 ≤ b := sq_nonneg a
+      have step1 : ((a : ℂ) * Complex.I) ^ 2 = -(b : ℂ) := by
+        simp [b]; ring_nf; rw [Complex.I_sq]; ring
+      rw [step1]
+      have hneg : Complex.sqrt (-(b : ℂ)) = Complex.I * Complex.sqrt (b : ℂ) :=
+        Complex.sqrt_neg_of_nonneg (RCLike.ofReal_nonneg.mpr hb)
+      rw [hneg]
+      have hpos : Complex.sqrt (b : ℂ) = (Real.sqrt b : ℝ) :=
+        Complex.sqrt_of_nonneg (RCLike.ofReal_nonneg.mpr hb)
+      rw [hpos]
+      simp [Real.sqrt_sq ha.le, b]
+      ring
+
+/-- Boundary value of the explicit Chebyshev-model root coordinate on the main
+arc `[-2,2]`. -/
+lemma rootChebyshevCoordinate_two_cos_eq_exp_Iθ
+    {θ : ℝ} (hθ : θ ∈ Set.Icc (0 : ℝ) Real.pi) :
+    rootChebyshevCoordinate (((2 * Real.cos θ : ℝ) : ℂ)) =
+      Complex.exp (Complex.I * θ) := by
+  rw [rootChebyshevCoordinate_def, rootChebyshev_sqrt_two_cos hθ]
+  have hcos : (Complex.cos (θ : ℂ)).re = Real.cos θ := Complex.cos_ofReal_re θ
+  have hsin : (Complex.sin (θ : ℂ)).re = Real.sin θ := Complex.sin_ofReal_re θ
+  apply Complex.ext <;>
+    simp [Complex.exp_re, Complex.exp_im, Complex.mul_re, Complex.mul_im, hcos, hsin]
+
+/-- Explicit root coordinate transported across the affine conjugacy
+`A(z) = i z` from `P(z) = z^2 - 2` to the repository normalization `f(z) = z^2 + 2`.
+This is the boundary-side candidate for the theorem-facing root coordinate. -/
+noncomputable def rootChebyshevCoordinatePlus (z : ℂ) : ℂ :=
+  -Complex.I * rootChebyshevCoordinate (Complex.I * z)
+
+@[simp] lemma rootChebyshevCoordinatePlus_def (z : ℂ) :
+    rootChebyshevCoordinatePlus z = -Complex.I * rootChebyshevCoordinate (Complex.I * z) := rfl
+
+/-- At the branch point `0` for the repository normalization `z^2 + 2`,
+the affine-transported explicit coordinate takes the unit value `1`, coming from the
+Chebyshev boundary angle `θ = π/2` and the transport factor `-i`. This is the first
+checked affine transport of the explicit boundary theorem across `A(z) = i z`. -/
+lemma rootChebyshevCoordinatePlus_zero_eq_one :
+    rootChebyshevCoordinatePlus (0 : ℂ) = 1 := by
+  rw [rootChebyshevCoordinatePlus_def]
+  have hπ2 : (Real.pi / 2) ∈ Set.Icc (0 : ℝ) Real.pi := by
+    constructor
+    · positivity
+    · have h : Real.pi / 2 ≤ Real.pi := by
+        nlinarith [Real.pi_pos]
+      exact h
+  have hbase := rootChebyshevCoordinate_two_cos_eq_exp_Iθ (θ := Real.pi / 2) hπ2
+  have harg : (((2 * Real.cos (Real.pi / 2) : ℝ) : ℂ)) = (0 : ℂ) := by
+    norm_num [Real.cos_pi_div_two]
+  rw [harg] at hbase
+  rw [mul_zero, hbase]
+  have hexp : Complex.exp (Complex.I * (Real.pi / 2 : ℝ)) = Complex.I := by
+    rw [mul_comm]
+    rw [Complex.exp_mul_I]
+    apply Complex.ext <;> simp [Real.cos_pi_div_two, Real.sin_pi_div_two]
+  rw [hexp]
+  simp [Complex.I_sq]
+
+/-- The transported explicit root coordinate hits the distinguished boundary value `1`
+at a point outside the filled Julia set of `z^2 + 2`. This records, on the explicit
+model side, the geometric mismatch with the theorem-facing exclusion field
+`NoKPointMapsToOneFor (2 : ℂ) φ`. -/
+lemma rootChebyshevCoordinatePlus_exists_eq_one_off_K_two :
+    ∃ z : ℂ, z ∉ MLC.Quadratic.K (2 : ℂ) ∧ rootChebyshevCoordinatePlus z = 1 := by
+  refine ⟨0, zero_not_mem_K_two, rootChebyshevCoordinatePlus_zero_eq_one⟩
+
+/-- The explicit boundary-extension package is exactly the payload needed by the
+root closure bridge. -/
+lemma rootBottcherTransportDataFor_of_boundaryExtension
+    {φ : ℂ → ℂ}
+    (h_ext : RootBottcherBoundaryExtensionDataFor φ) :
+    RootBottcherTransportDataFor φ := by
+  exact ⟨h_ext.norm_eq_green, h_ext.continuousOnK_ne_zero, h_ext.noKPointMapsToOne⟩
+
+/-- Any genuine normalized quadratic Böttcher coordinate at the root parameter
+already satisfies the theorem-facing global modulus identity coming from the
+constructive basin package. This isolates the root boundary-extension work from
+the normalization-at-infinity choice. -/
+lemma rootBottcher_norm_eq_green_of_genuine_two
+    {φ : ℂ → ℂ}
+    (hφ : Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ) :
+    ∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) →
+      ‖φ z‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) z) :=
+  hφ.2.2.2.1
+
+/-- Any genuine normalized quadratic Böttcher coordinate at the root parameter
+canonically yields the first field of the root transport package. This is the
+first concrete step away from the proxy-specific API. -/
+lemma rootBottcherTransportDataFor_of_genuine_two
+    {φ : ℂ → ℂ}
+    (h_transport : RootBottcherBoundaryExtensionDataFor φ)
+    (hφ : Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ) :
+    RootBottcherTransportDataFor φ := by
+  exact rootBottcherTransportDataFor_of_boundaryExtension h_transport
+
+/-- Helper: pointwise analyticity on an open set upgrades to `DifferentiableOn`. -/
+lemma differentiableOn_of_analyticAt_on_open
+    {s : Set ℂ} {f : ℂ → ℂ} (hs : IsOpen s)
+    (hanalytic : ∀ z, z ∈ s → AnalyticAt ℂ f z) :
+    DifferentiableOn ℂ f s := by
+  intro z hz
+  exact (hanalytic z hz).differentiableAt.differentiableWithinAt
+
+/-- The checked proxy coordinate already satisfies the non-analytic fields of the
+full genuine basin package at `c = 2`: basin/exterior norm equivalence,
+quadratic conjugacy on the basin, Green-function modulus on the basin,
+continuity away from `0`, and the normalization at infinity. The remaining
+unpackaged field is differentiability on the whole basin. -/
+lemma proxy_bottcher_map_two_genuine_fields_except_differentiableOn :
+    (∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) →
+      1 < ‖Quadratic.proxy_bottcher_map (2 : ℂ) z‖) ∧
+    (∀ z, 1 < ‖Quadratic.proxy_bottcher_map (2 : ℂ) z‖ →
+      z ∈ Quadratic.basin_of_infinity (2 : ℂ)) ∧
+    (∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) →
+      Quadratic.proxy_bottcher_map (2 : ℂ) (MLC.quadratic_map (2 : ℂ) z) =
+        (Quadratic.proxy_bottcher_map (2 : ℂ) z)^2) ∧
+    (∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) →
+      ‖Quadratic.proxy_bottcher_map (2 : ℂ) z‖ =
+        Real.exp (MLC.Quadratic.green_function (2 : ℂ) z)) ∧
+    (∀ z, z ∈ Quadratic.basin_of_infinity (2 : ℂ) → z ≠ 0 →
+      ContinuousAt (Quadratic.proxy_bottcher_map (2 : ℂ)) z) ∧
+    Tendsto (fun z => (Quadratic.proxy_bottcher_map (2 : ℂ) z) / z)
+      atInfinity (𝓝 (1 : ℂ)) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro z hz
+    exact proxy_bottcher_map_norm_gt_one_of_basin (2 : ℂ) z hz
+      (green_function_pos_of_basin (2 : ℂ) z hz)
+  · intro z hz
+    exact proxy_bottcher_map_norm_gt_one_implies_basin (2 : ℂ) hz
+  · intro z hz
+    exact bottcher_conj_on_basin (2 : ℂ) z hz
+  · intro z hz
+    exact Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) z
+  · intro z hz hz0
+    exact Quadratic.proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z hz0
+  · exact tendsto_proxy_bottcher_map_div_atInfinity (2 : ℂ)
+
+/-- The checked coordinate `Quadratic.proxy_bottcher_map (2 : ℂ)` satisfies the
+three concrete boundary conclusions appearing in the frontier notebook's proof of
+continuous extension for the root model. -/
+lemma rootBottcherBoundaryExtensionHypothesesFor_proxy_two :
+    RootBottcherBoundaryExtensionHypothesesFor (Quadratic.proxy_bottcher_map (2 : ℂ)) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro z hzK
+    exact Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) z
+  · intro z hzK hz0
+    exact proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z hz0
+  · intro z hzK
+    exact proxy_bottcher_map_eq_one_not_mem_K_two z hzK
+
+/-- The checked coordinate `Quadratic.proxy_bottcher_map (2 : ℂ)` satisfies the
+full root-side conclusion package used downstream in PLAN 02. In concrete terms,
+this gives the global identity `‖φ z‖ = exp(green_function (2 : ℂ) z)`,
+continuity at each point of `K(2) \ {0}`, and the exclusion statement
+`NoKPointMapsToOneFor (2 : ℂ) φ`. -/
+lemma rootBottcherBoundaryExtensionDataFor_proxy_two :
+    RootBottcherBoundaryExtensionDataFor (Quadratic.proxy_bottcher_map (2 : ℂ)) := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro z
+    exact Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) z
+  · intro z hzK hz0
+    exact proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z hz0
+  · intro z hzK
+    exact proxy_bottcher_map_eq_one_not_mem_K_two z hzK
+
+/-- Pointwise identification with the checked proxy coordinate transports the
+full genuine root Böttcher package. This prepares the theorem-facing seam for a
+future explicit identification theorem without forcing any proxy-specific
+boundary argument into that identification step. -/
+lemma genuineBottcherCoordinateDataFor_two_of_eq_proxy
+    {φ : ℂ → ℂ}
+    (h_eq : φ = Quadratic.proxy_bottcher_map (2 : ℂ))
+    (h_proxy : Quadratic.GenuineBottcherCoordinateDataFor
+      (2 : ℂ) (Quadratic.proxy_bottcher_map (2 : ℂ))) :
+    Quadratic.GenuineBottcherCoordinateDataFor (2 : ℂ) φ := by
+  exact genuineBottcherCoordinateDataFor_two_congr (fun z => by simpa [h_eq]) h_proxy
+
+/-- Pointwise identification with the checked proxy coordinate transports the
+exact root payload required by the theorem-facing closure theorems. -/
+lemma rootBottcherTransportDataFor_of_eq_proxy_two
+    {φ : ℂ → ℂ}
+    (h_eq : φ = Quadratic.proxy_bottcher_map (2 : ℂ)) :
+    RootBottcherTransportDataFor φ := by
+  subst h_eq
+  exact rootBottcherTransportDataFor_of_boundaryExtension
+    rootBottcherBoundaryExtensionDataFor_proxy_two
+
 /-- Build exact canonical-sequence fiber data directly from outside-open
     exterior surjectivity. -/
 lemma bottcherApproachOneSeqFiberData_two_of_surjOnExterior
     (h_surj : BottcherSurjOnExterior (2 : ℂ)) :
     BottcherApproachOneSeqFiberData (2 : ℂ) :=
   bottcherApproachOneSeqFiberData_of_surjOnExterior (2 : ℂ) h_surj
+
+/-- `c = 2` specialization: theorem-facing external-ray data already yields minimal
+exterior surjectivity for that coordinate. -/
+lemma bottcherSurjOnExteriorFor_two_of_externalRayMapDataFor
+    {φ : ℂ → ℂ} (h_data : Quadratic.ExternalRayMapDataFor (2 : ℂ) φ) :
+    BottcherSurjOnExteriorFor φ :=
+  bottcherSurjOnExteriorFor_of_externalRayMapDataFor h_data
 
 /-- `c = 2` specialization: outside-open surjectivity implies minimal exterior
 surjectivity. -/
@@ -2302,6 +2778,57 @@ theorem mlc_conjecture_of_bottcherApproachToOneSeqPreimageData_two
   exact mlc_conjecture_of_mainPathData
     (mainPathData_of_bottcherApproachToOneSeqPreimageData_two h_data)
 
+/-- Theorem-facing root contradiction: an abstract coordinate at `c = 2` with
+minimal exterior surjectivity and the explicit non-landing seam already implies
+MLC. -/
+theorem mlc_conjecture_of_bottcherSurjOnExteriorFor_two
+   {φ : ℂ → ℂ}
+   (h_surj : BottcherSurjOnExteriorFor φ)
+   (h_norm : ∀ z, ‖φ z‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) z))
+   (h_cont : ∀ z, z ∈ MLC.Quadratic.K (2 : ℂ) → z ≠ 0 → ContinuousAt φ z)
+   (h_notK : NoKPointMapsToOneFor (2 : ℂ) φ) :
+   LocallyConnectedSpace mandelbrotSet := by
+ have hFalse : False :=
+   false_of_bottcher_approach_to_one_seq_preimage_dataFor_two
+     (bottcherApproachToOneSeqPreimageDataFor_of_surjOnExteriorFor h_surj)
+     h_norm h_cont h_notK
+ exact False.elim hFalse
+
+/-- Theorem-facing root bridge: an abstract external-ray package at `c = 2`
+plus the explicit root non-landing seam already implies MLC. -/
+theorem mlc_conjecture_of_externalRayMapDataFor_two
+   {φ : ℂ → ℂ}
+   (h_data : Quadratic.ExternalRayMapDataFor (2 : ℂ) φ)
+   (h_norm : ∀ z, ‖φ z‖ = Real.exp (MLC.Quadratic.green_function (2 : ℂ) z))
+   (h_cont : ∀ z, z ∈ MLC.Quadratic.K (2 : ℂ) → z ≠ 0 → ContinuousAt φ z)
+   (h_notK : NoKPointMapsToOneFor (2 : ℂ) φ) :
+   LocallyConnectedSpace mandelbrotSet :=
+ mlc_conjecture_of_bottcherSurjOnExteriorFor_two
+   (bottcherSurjOnExteriorFor_two_of_externalRayMapDataFor h_data)
+   h_norm h_cont h_notK
+
+/-- Packaged form of the theorem-facing root bridge, isolating the exact transport
+payload still missing for a constructive coordinate. -/
+theorem mlc_conjecture_of_externalRayMapDataFor_two_of_boundaryExtension
+   {φ : ℂ → ℂ}
+   (h_data : Quadratic.ExternalRayMapDataFor (2 : ℂ) φ)
+  (h_boundary : RootBottcherBoundaryExtensionDataFor φ) :
+   LocallyConnectedSpace mandelbrotSet :=
+ mlc_conjecture_of_externalRayMapDataFor_two h_data
+   h_boundary.norm_eq_green
+   h_boundary.continuousOnK_ne_zero
+   h_boundary.noKPointMapsToOne
+
+/-- Equivalent packaged form of the theorem-facing root bridge, phrased using the
+explicit downstream transport wrapper. -/
+theorem mlc_conjecture_of_externalRayMapDataFor_two_of_transport
+  {φ : ℂ → ℂ}
+  (h_data : Quadratic.ExternalRayMapDataFor (2 : ℂ) φ)
+  (h_transport : RootBottcherTransportDataFor φ) :
+  LocallyConnectedSpace mandelbrotSet :=
+ mlc_conjecture_of_externalRayMapDataFor_two_of_boundaryExtension h_data
+   (rootBottcherBoundaryExtensionDataFor_of_transport h_transport)
+
 /-- Rooted reduction theorem: exact countable-fiber data at the canonical
 `approach_one_seq` for `c = 2` implies the full MLC statement. -/
 theorem mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
@@ -2317,12 +2844,32 @@ theorem mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
   exact mlc_conjecture_of_bottcherApproachOneSeqFiberData_two
     (bottcherApproachOneSeqFiberData_two_of_surjOnExterior h_surj)
 
+/-- Root-facing extractor: explicit external-ray-map data at `c = 2` already
+provides theorem-facing minimal exterior surjectivity. This is the maximal
+checked weakening currently available before the remaining proxy-specific fiber
+bridge is generalized. -/
+theorem bottcherSurjOnExteriorFor_two_of_externalRayMapData_two
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    BottcherSurjOnExteriorFor (Quadratic.proxy_bottcher_map (2 : ℂ)) :=
+  bottcherSurjOnExteriorFor_two_of_externalRayMapDataFor h_data
+
+/-- Proxy-specialized instance of the theorem-facing root bridge. This records
+that the old explicit root closure is now obtained by supplying the three
+additional root hypotheses for `Quadratic.proxy_bottcher_map (2 : ℂ)` to the
+abstract theorem-facing bridge. -/
+theorem mlc_conjecture_of_externalRayMapData_two_via_theoremFacing
+    (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_externalRayMapDataFor_two h_data
+    (fun z => Quadratic.norm_bottcher_eq_exp_green (2 : ℂ) z)
+    (fun z hzK hz0 => proxy_bottcher_map_continuousAt_of_ne_zero (2 : ℂ) z hz0)
+    (fun z hzK => proxy_bottcher_map_eq_one_not_mem_K_two z hzK)
+
 /-- Root bridge from explicit external-ray-map data at `c = 2`. -/
 theorem mlc_conjecture_of_externalRayMapData_two
     (h_data : Quadratic.ExternalRayMapData (2 : ℂ)) :
-    LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_bottcherSurjOnExterior_two_via_fiber
-    (bottcherSurjOnExterior_two_of_externalRayMapData h_data)
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_externalRayMapData_two_via_theoremFacing h_data
 
 /-- Root-facing bridge for the direct proper/local route at `c = 2`: once
 outside-open injectivity is available, the restricted-map proper/local witness
@@ -4592,9 +5139,10 @@ theorem mlc_conjecture_of_unifiedGenuineRootKernelTwo
     the Mandelbrot set is locally connected.
 
     The checked root currently depends on two mathematical inputs:
-    the finite-branch para-puzzle connectedness statement on `M`, and the
-    residual Dudko-2025 package encoding Problem 4.3 and Problem 4.4 together
-    with their use in the infinitely-renormalizable branch.
+    the para-puzzle connectedness route packaged in
+    `para_puzzle_connectivity_data_proved`, and the residual Dudko-2025 package
+    encoding Problem 4.3 and Problem 4.4 together with their use in the
+    infinitely-renormalizable branch.
 
     The previous `unifiedGenuineRootKernelTwo` axiom has been removed
     (mathematically false for c = 2 ∉ M). -/
@@ -4602,7 +5150,7 @@ theorem mlc_conjecture
     : LocallyConnectedSpace mandelbrotSet :=
   mlc_conjecture_of_motionHyp_track12_data
     (Quadratic.puzzleBoundaryMotionHyp_of_connected_data
-      Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_axiom)
+      para_puzzle_connectivity_data_proved)
     irNoTowerPrimitiveAndMoleculeBridgeTargetData_of_residualOpenVirtualNearMoleculeAxiom
 
 
