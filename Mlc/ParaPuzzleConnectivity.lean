@@ -132,20 +132,80 @@ theorem paraPuzzlePieceAt_eq_green_translate {c : ℂ} (hc : c ∈ MandelbrotSet
 
 /-! ## Step 5: Green-sublevel–M intersection connectivity axiom -/
 
-/-- The intersection of a Green sublevel translate with the Mandelbrot set is
-    connected. This is the core of the Yoccoz puzzle connectivity theorem.
+/-- **The un-intersected parameter translate is connected (unconditional).** For
+    `c ∈ M`, the parameter-plane set `{c' | G_c(c'-c) < (1/2)^n}` is connected,
+    because it is the translate by `+c` of the dynamical Green sublevel
+    `{w | G_c(w) < (1/2)^n}`, whose connectivity is already proved
+    (`green_sublevel_connected_hyp_proved`), and translation is a homeomorphism.
 
-    Mathematically: for `c ∈ M`, the set `{G_c < (1/2)^n}` is a topological
-    disk (simply connected bounded domain), and its translate `c + {G_c < (1/2)^n}`
-    intersected with the Mandelbrot set inherits connectivity from the
-    holomorphic motion of the puzzle boundary (lambda lemma).
+    This isolates the entire residual difficulty of frontier axiom A into the
+    intersection `∩ MandelbrotSet`: the reference set is connected *for free*; only
+    the Douady–Hubbard parameter↔dynamical correspondence carving out `M` remains. -/
+theorem green_sublevel_translate_connected {c : ℂ} (hc : c ∈ MandelbrotSet) (n : ℕ) :
+    IsConnected {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} := by
+  have hconn : IsConnected (Quadratic.GreenSublevel c n) :=
+    green_sublevel_connected_hyp_proved.connected c n hc
+  have himg : (fun w => w + c) '' Quadratic.GreenSublevel c n
+      = {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} := by
+    ext c'
+    constructor
+    · rintro ⟨w, hw, rfl⟩
+      have : green_function c w < (1 / 2 : ℝ) ^ n := hw
+      simpa [add_sub_cancel_right] using this
+    · intro hc'
+      exact ⟨c' - c, hc', by ring⟩
+  rw [← himg]
+  exact hconn.image _ (continuous_id.add continuous_const).continuousOn
+
+
+/-! ### Elementary containment fragments (no frontier axiom)
+
+    The intersection `{c' | G_c(c'-c) < (1/2)ⁿ} ∩ M` is connected *for free* in the
+    two extreme strata, where the Green-sublevel translate and `M` are nested. Only
+    the intermediate **straddling** stratum — where the equipotential neighborhood
+    genuinely crosses `∂M` — requires the Yoccoz parameter↔dynamical correspondence.
+    These two lemmas carve those trivial strata out of the frontier axiom. -/
+
+/-- **Subset stratum (core-clean).** If the Green-sublevel translate is entirely
+    contained in `M`, the intersection equals the translate itself, whose
+    connectivity is already proved unconditionally (`green_sublevel_translate_connected`).
+    No frontier axiom is used. -/
+theorem green_sublevel_translate_inter_mandelbrot_connected_of_subset {c : ℂ}
+    (hc : c ∈ MandelbrotSet) (n : ℕ)
+    (hsub : {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet) :
+    IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
+  rw [Set.inter_eq_left.mpr hsub]
+  exact green_sublevel_translate_connected hc n
+
+/-- **Superset stratum (off the `mlc_conjecture` path).** If `M` is contained in the
+    Green-sublevel translate, the intersection equals `M`, connected by
+    `mandelbrot_set_connected`. This documents the second trivial stratum; it is
+    **not** consumed by the main derivation below, so it does not add
+    `mandelbrot_set_connected` to the MLC frontier. -/
+theorem green_sublevel_translate_inter_mandelbrot_connected_of_superset {c : ℂ}
+    (n : ℕ)
+    (hsup : MandelbrotSet ⊆ {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}) :
+    IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
+  rw [Set.inter_eq_right.mpr hsup]
+  exact mandelbrot_set_connected
+
+/-- **Weaker frontier axiom: straddling stratum only.** The connectivity of a
+    Yoccoz parameter-puzzle piece intersected with `M`, *restricted* to the
+    non-trivial case where the Green-sublevel translate is **not** contained in `M`.
+
+    This is a strictly weaker statement than the previous
+    `green_sublevel_translate_inter_mandelbrot_connected` axiom: it carries the
+    extra hypothesis `hstraddle` and therefore no longer asserts anything on the
+    subset stratum (which is now discharged unconditionally by
+    `green_sublevel_translate_inter_mandelbrot_connected_of_subset`). The residual
+    mathematical content is exactly the Douady–Hubbard parameter↔dynamical
+    correspondence for pieces whose equipotential boundary crosses `∂M` — i.e.
+    Yoccoz's theorem for finitely renormalizable parameters.
 
     ## Frontier-axiom status (labeled; honest)
 
-    This is one of the two remaining non-core frontier axioms (Tier C). It is a
-    **parameter-plane** connectivity statement — precisely the connectivity of a
-    Yoccoz *parameter-puzzle piece*, the mathematical heart of MLC for finitely
-    renormalizable parameters. Two routes were investigated:
+    One of the two remaining non-core frontier axioms (Tier C). Two discharge
+    routes were investigated:
 
     * **Metric route (Ahlfors/Schwarz–Pick λ-lemma).** Fully built as sound
       standalone mathematics (`AhlforsSchwarz`, `UltrahyperbolicMetric`,
@@ -163,17 +223,25 @@ theorem paraPuzzlePieceAt_eq_green_translate {c : ℂ} (hc : c ∈ MandelbrotSet
       built and axiom-clean (`BottcherParamHolo`,
       `Quadratic.logSeriesNearInfinityParameterFamily`).
 
-    Remaining for a full discharge (assessed as Yoccoz-scale, deliberately NOT
-    pursued): (1) the full-basin monodromy-coherent coordinate
-    (`ConstructiveBasinCoordinate`), (2) the holomorphic inverse `Φ_c⁻¹`,
-    (3) a nontrivial puzzle-boundary `HolomorphicMotion`, and (4) the
-    Douady–Hubbard parameter↔dynamical correspondence identifying
-    `{G_c(·-c) < (1/2)ⁿ} ∩ M` as the holomorphic image of a connected reference
-    set — item (4) is essentially Yoccoz's theorem and is as hard as this axiom
-    itself. Kept as a labeled frontier axiom pending that formalization. -/
-axiom green_sublevel_translate_inter_mandelbrot_connected (c : ℂ)
-    (hc : c ∈ MandelbrotSet) (n : ℕ) :
+    Remaining for a full discharge (Yoccoz-scale, deliberately NOT pursued): the
+    full-basin monodromy-coherent coordinate, the holomorphic inverse `Φ_c⁻¹`, a
+    nontrivial puzzle-boundary `HolomorphicMotion`, and the parameter↔dynamical
+    correspondence. Kept as a labeled frontier axiom pending that formalization. -/
+axiom green_sublevel_translate_inter_mandelbrot_connected_straddling (c : ℂ)
+    (hc : c ∈ MandelbrotSet) (n : ℕ)
+    (hstraddle : ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet)) :
     IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+
+/-- **Full Green-sublevel–M intersection connectivity**, now derived (not axiomatized)
+    by a case split on the subset stratum: the trivial subset case is discharged
+    unconditionally, and only the straddling case invokes the weaker frontier axiom
+    `green_sublevel_translate_inter_mandelbrot_connected_straddling`. -/
+theorem green_sublevel_translate_inter_mandelbrot_connected (c : ℂ)
+    (hc : c ∈ MandelbrotSet) (n : ℕ) :
+    IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
+  by_cases hsub : {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet
+  · exact green_sublevel_translate_inter_mandelbrot_connected_of_subset hc n hsub
+  · exact green_sublevel_translate_inter_mandelbrot_connected_straddling c hc n hsub
 
 /-! ## Step 6: Para-puzzle connectivity (proved from axioms 1 + 2) -/
 

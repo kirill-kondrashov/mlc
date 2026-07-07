@@ -53,7 +53,7 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.green_sublevel_translate_inter_mandelbrot_connected
+- MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
@@ -72,15 +72,17 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.green_sublevel_translate_inter_mandelbrot_connected
+- MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
 The first three are standard Lean foundations. The remaining project axioms are:
 
-- `MLC.green_sublevel_translate_inter_mandelbrot_connected`: for every parameter
-  `c ∈ M` and every depth `n`, the translated Green sublevel set
-  `{c' | G_c(c' - c) < (1/2)^n}` intersected with `M` is connected.
+- `MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`: for every
+  parameter `c ∈ M` and every depth `n` **such that the translated Green sublevel
+  `{c' | G_c(c' - c) < (1/2)^n}` is not entirely contained in `M`** (the
+  *straddling* stratum), that translate intersected with `M` is connected. The two
+  nested strata are discharged unconditionally (see §5).
 - `MLC.residualOpenVirtualNearMoleculeAxiom`: Dudko-2025's remaining open input,
   bundled as a single residual package consisting of
   1. **Problem 4.3**: pseudo-Siegel a priori bounds in the remaining unbounded
@@ -148,9 +150,45 @@ set
 
 must be connected, where $G_c$ is the Green function of $f_c$.
 
-This is the remaining parameter-puzzle / finite-branch connectivity statement.
-In Lean it is recorded as
-`MLC.green_sublevel_translate_inter_mandelbrot_connected`.
+This is the remaining parameter-puzzle / finite-branch connectivity statement,
+now restricted to the non-trivial *straddling* stratum. In Lean it is recorded as
+`MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`.
+
+**Literature correspondence and current localization.** Unlike the residual
+Dudko package (axiom B below), this statement is *classical* mathematics — the
+Yoccoz parameter puzzle together with the Douady–Hubbard parameter↔dynamical
+correspondence (§4.1–§4.2 and Theorem 4.1 of `refs/2512.24171v1.txt` cover the
+finitely-renormalizable and bounded-type cases). It is a **formalization** gap in
+this repository, not an open research problem. The frontier has been sharpened so
+that this is explicit:
+
+- The *un-intersected* parameter translate `{c' | G_c(c' - c) < 2^{-n}}` is now
+  **proved connected**, unconditionally and from Lean-core axioms only
+  (`green_sublevel_translate_connected` in `Mlc/ParaPuzzleConnectivity.lean`): it
+  is the image of the already-proved-connected dynamical Green sublevel under the
+  translation homeomorphism `w ↦ w + c`.
+- The two **nested strata** of the intersection are discharged unconditionally,
+  carving them out of the frontier axiom:
+  - *subset stratum* (`green_sublevel_translate_inter_mandelbrot_connected_of_subset`,
+    core-clean): if the translate is contained in `M`, the intersection equals the
+    translate, connected by the previous point;
+  - *superset stratum* (`green_sublevel_translate_inter_mandelbrot_connected_of_superset`,
+    off the `mlc_conjecture` path): if `M` is contained in the translate, the
+    intersection equals `M`, connected by `mandelbrot_set_connected`.
+  Consequently the checked frontier axiom
+  `green_sublevel_translate_inter_mandelbrot_connected_straddling` is *strictly
+  weaker*: it asserts connectivity only on the intermediate **straddling** stratum
+  (translate not contained in `M`), where the equipotential boundary genuinely
+  crosses `∂M`. This is exactly the Yoccoz parameter↔dynamical correspondence.
+- Hence the entire residual content of the axiom is the intersection
+  `∩ M`. The sharpest conditional reduction (`Mlc/ParaPuzzleCarvingReduction.lean`,
+  `ParaPieceCarvedByMotion` + `isConnected_..._of_carvedByMotion`) shows the axiom
+  follows from a *single* space-holomorphic self-motion of the (proved-connected)
+  translate whose time-`t` image is that translate `∩ M` — i.e. the
+  Douady–Hubbard wringing/tubing map on the puzzle piece. Everything surrounding
+  this map (`K(c)` connected, dynamical- and parameter-plane sublevel
+  connectivity, space-holomorphic connectivity transport via the Słodkowski/λ-lemma
+  layer) is proved and axiom-clean.
 
 ### 6. Problem 4.3 of Dudko (2025): pseudo-Siegel a priori bounds in the remaining unbounded satellite quadratic-like cases
 
