@@ -1,6 +1,7 @@
 import Mlc.Quadratic.Complex.Bottcher.BottcherOutsidePlan
 import Mlc.Quadratic.Complex.Bottcher.BottcherMotion
 
+
 namespace MLC
 
 open Quadratic Complex Topology Set Filter Metric Real
@@ -555,6 +556,161 @@ lemma logBranch_eqOn_of_chain_initialEq
       ConnectedAnalyticZeroFreeChartRootBranchData.logBranch_eqOn_of_eventuallyEq
         (act (j + 1)) (can (j + 1)) (hsame_chart (j + 1) hj_succ) hp_right
         hnext_eventuallyEq
+
+/-- The `n`-th roots of unity form a countable set whenever `n ≠ 0`. -/
+lemma rootsOfUnitySet_countable (n : ℕ) (hn : n ≠ 0) :
+    (rootsOfUnitySet n).Countable := by
+  classical
+  let p : Polynomial ℂ := (Polynomial.X ^ n) - Polynomial.C 1
+  have hp_ne : p ≠ 0 := by
+    simpa [p] using Polynomial.X_pow_sub_C_ne_zero (Nat.pos_of_ne_zero hn) (1 : ℂ)
+  have hfin : {x : ℂ | p.IsRoot x}.Finite :=
+    Polynomial.finite_setOf_isRoot hp_ne
+  have hEq : rootsOfUnitySet n = {x : ℂ | p.IsRoot x} := by
+    ext z
+    simp [rootsOfUnitySet, p, Polynomial.IsRoot, sub_eq_zero]
+  rw [hEq]
+  exact hfin.countable
+
+/-- Two local finite-level pullback branches solving the same nonvanishing
+pullback equation agree on a preconnected overlap once they agree at one overlap
+point. -/
+lemma localPullbackRootBranch_eqOn_of_eqAt
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (left right : LocalPullbackRootBranchData c N z₀)
+    {s : Set ℂ}
+    (hs_pre : IsPreconnected s)
+    (hs_subset_left : s ⊆ left.U)
+    (hs_subset_right : s ⊆ right.U)
+    (hs_nonzero : ∀ z ∈ s,
+      MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z) ≠ 0)
+    {w₀ : ℂ} (hw₀ : w₀ ∈ s)
+    (hEq : left.branch w₀ = right.branch w₀) :
+    EqOn left.branch right.branch s := by
+  intro z hz
+  let A : ℂ → ℂ := fun z =>
+    MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)
+  have hleft_root : ∀ z ∈ s, left.branch z ∈ pullbackRootSet (2 ^ N) (A z) := by
+    intro z hz
+    dsimp [pullbackRootSet, A]
+    simpa using left.root_eq z (hs_subset_left hz)
+  have hright_root : ∀ z ∈ s, right.branch z ∈ pullbackRootSet (2 ^ N) (A z) := by
+    intro z hz
+    dsimp [pullbackRootSet, A]
+    simpa using right.root_eq z (hs_subset_right hz)
+  let ratio : ℂ → ℂ := fun z => right.branch z / left.branch z
+  have hratio_cont : ContinuousOn ratio s := by
+    refine (right.branch_differentiableOn.continuousOn.mono hs_subset_right).div
+      (left.branch_differentiableOn.continuousOn.mono hs_subset_left) ?_
+    intro z hz
+    have hA : A z ≠ 0 := hs_nonzero z hz
+    have hroot : left.branch z ∈ pullbackRootSet (2 ^ N) (A z) := hleft_root z hz
+    intro hz0
+    have : A z = 0 := by
+      simpa [pullbackRootSet, hz0] using hroot.symm
+    exact hA this
+  have hratio_pre : IsPreconnected (ratio '' s) := hs_pre.image ratio hratio_cont
+  have hratio_sub : ratio '' s ⊆ rootsOfUnitySet (2 ^ N) := by
+    intro ζ hζ
+    rcases hζ with ⟨z, hz, hratio_eq⟩
+    rcases pullbackRootSet_torsor_transitive (n := 2 ^ N)
+      (pow_ne_zero N (by norm_num : 2 ≠ 0))
+      (hleft_root z hz) (hright_root z hz) (hs_nonzero z hz) with ⟨η, hη, hmul⟩
+    have hleft_ne : left.branch z ≠ 0 := by
+      intro hz0
+      have : A z = 0 := by
+        simpa [pullbackRootSet, hz0] using (hleft_root z hz).symm
+      exact hs_nonzero z hz this
+    have hratio_eval : ratio z = η := by
+      dsimp [ratio]
+      rw [hmul]
+      field_simp [hleft_ne]
+    rw [← hratio_eq, hratio_eval]
+    exact hη
+  have hsubsingleton : (ratio '' s).Subsingleton := by
+    exact (Set.Countable.isTotallyDisconnected
+      (rootsOfUnitySet_countable (2 ^ N) (pow_ne_zero N (by norm_num : 2 ≠ 0))))
+      _ hratio_sub hratio_pre
+  have hw₀_img : ratio w₀ ∈ ratio '' s := ⟨w₀, hw₀, rfl⟩
+  have hz_img : ratio z ∈ ratio '' s := ⟨z, hz, rfl⟩
+  have hconst : ratio z = ratio w₀ := hsubsingleton hz_img hw₀_img
+  have hleft0_ne : left.branch w₀ ≠ 0 := by
+    intro hz0
+    have : A w₀ = 0 := by
+      simpa [pullbackRootSet, hz0] using (hleft_root w₀ hw₀).symm
+    exact hs_nonzero w₀ hw₀ this
+  have hratio_w₀ : ratio w₀ = 1 := by
+    dsimp [ratio]
+    rw [← hEq, div_self hleft0_ne]
+  have hratio_z : ratio z = 1 := by rw [hconst, hratio_w₀]
+  have hleft_ne : left.branch z ≠ 0 := by
+    intro hz0
+    have : A z = 0 := by
+      simpa [pullbackRootSet, hz0] using (hleft_root z hz).symm
+    exact hs_nonzero z hz this
+  have hmul : right.branch z = 1 * left.branch z := (div_eq_iff hleft_ne).mp hratio_z
+  simpa [eq_comm] using hmul
+
+/-- Rotating a local pullback root branch by a compatible `2^N`-th root of unity
+preserves the pullback equation. -/
+noncomputable def LocalPullbackRootBranchData.rotate
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (D : LocalPullbackRootBranchData c N z₀)
+    {ζ : ℂ} (hζ : ζ ∈ rootsOfUnitySet (2 ^ N)) :
+    LocalPullbackRootBranchData c N z₀ where
+  center_mem_basin := D.center_mem_basin
+  U := D.U
+  U_mem_nhds := D.U_mem_nhds
+  branch := fun z => ζ * D.branch z
+  branch_differentiableOn := by
+    simpa using D.branch_differentiableOn.const_mul ζ
+  root_eq := by
+    intro z hz
+    have hzroot : D.branch z ∈ pullbackRootSet (2 ^ N)
+        (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z)) := by
+      simpa [pullbackRootSet] using D.root_eq z hz
+    have hrot := rootsOfUnity_smul_pullbackRootSet hζ hzroot
+    simpa [pullbackRootSet] using hrot
+  center_value_mem_rootSet := by
+    exact rootsOfUnity_smul_pullbackRootSet hζ D.center_value_mem_rootSet
+
+/-- On a preconnected overlap, one local branch can be rotated by a
+root-of-unity multiplier so that it agrees with the other branch everywhere. -/
+lemma localPullbackRootBranch_eqOn_of_alignable
+    {c : ℂ} {N : ℕ} {z₀ : ℂ}
+    (left right : LocalPullbackRootBranchData c N z₀)
+    {s : Set ℂ}
+    (hs_pre : IsPreconnected s)
+    (hs_subset_left : s ⊆ left.U)
+    (hs_subset_right : s ⊆ right.U)
+    (hs_nonzero : ∀ z ∈ s,
+      MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z) ≠ 0)
+    {w₀ : ℂ} (hw₀ : w₀ ∈ s) :
+    ∃ aligned : LocalPullbackRootBranchData c N z₀,
+      aligned.U = right.U ∧
+      (∃ ζ : ℂ, ζ ∈ rootsOfUnitySet (2 ^ N) ∧
+        aligned.branch = fun z => ζ * right.branch z) ∧
+      EqOn left.branch aligned.branch s := by
+  have hleft_root : left.branch w₀ ∈ pullbackRootSet (2 ^ N)
+      (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] w₀)) := by
+    simpa [pullbackRootSet] using left.root_eq w₀ (hs_subset_left hw₀)
+  have hright_root : right.branch w₀ ∈ pullbackRootSet (2 ^ N)
+      (MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] w₀)) := by
+    simpa [pullbackRootSet] using right.root_eq w₀ (hs_subset_right hw₀)
+  rcases pullbackRootSet_torsor_transitive (n := 2 ^ N)
+    (pow_ne_zero N (by norm_num : 2 ≠ 0))
+    hright_root hleft_root (hs_nonzero w₀ hw₀) with ⟨ζ, hζ, hmul⟩
+  let aligned : LocalPullbackRootBranchData c N z₀ := right.rotate hζ
+  have hs_subset_aligned : s ⊆ aligned.U := by
+    intro z hz
+    simpa [aligned] using hs_subset_right hz
+  have hEqAt : left.branch w₀ = aligned.branch w₀ := by
+    simpa [aligned] using hmul
+  refine ⟨aligned, ?_, ?_, ?_⟩
+  · simp [aligned, LocalPullbackRootBranchData.rotate]
+  · exact ⟨ζ, hζ, by simp [aligned, LocalPullbackRootBranchData.rotate]⟩
+  · exact localPullbackRootBranch_eqOn_of_eqAt
+      left aligned hs_pre hs_subset_left hs_subset_aligned hs_nonzero hw₀ hEqAt
 
 /-- Endpoint value corollary of `logBranch_eqOn_of_chain_initialEq`. -/
 lemma logBranch_eq_of_chain_initialEq
@@ -2637,7 +2793,7 @@ noncomputable def basinLogSeriesExtensionCandidate (c z : ℂ) : ℂ :=
       if hz : z ∈ basin_of_infinity c then
         principalPullbackLogSeriesBottcher c z hz
       else
-        MLC.logSeriesBottcherApprox c z
+        0
 
 /-- The total basin-extension candidate agrees with the near-infinity formula on
 the canonical outside-open region. This proves the first field of the

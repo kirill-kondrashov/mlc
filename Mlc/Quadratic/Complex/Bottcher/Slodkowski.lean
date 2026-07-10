@@ -84,32 +84,68 @@ theorem isPreconnected_image (H : SpaceHolomorphicMotion E) {t : ℂ}
 
 end SpaceHolomorphicMotion
 
-/-- **Puzzle-piece–as–motion-image hypothesis** (the Douady–Hubbard
-parameter↔dynamical correspondence, motion form). For a parameter `c` and puzzle
-level `n`, the parameter Green-sublevel piece `{c' | G_c(c'-c) < 2⁻ⁿ} ∩ M` is the
-image, under some time-slice of a space-holomorphic motion, of a *connected*
-reference set `E` (morally the connected dynamical puzzle piece). This is the
-statement that Yoccoz's parameter↔dynamical correspondence — combined with the
-holomorphic Böttcher-inverse motion — is designed to provide. -/
+/-- **Motion-image packaging predicate for the current target.** For a parameter
+`c` and level `n`, the translated Green-sublevel target
+`{c' | G_c(c'-c) < 2⁻ⁿ} ∩ M` is realized as the image of some connected reference
+set under some time-slice of a space-holomorphic motion.
+
+Historically this is motivated by a Douady–Hubbard/Yoccoz-style correspondence,
+but in the current repository it should be read only as a predicate about the
+existing target set. By `paraPieceIsMotionImage_iff_connected`, it is equivalent
+to connectedness of that target and is therefore not a smaller reduction input. -/
 def ParaPieceIsMotionImage (c : ℂ) (n : ℕ) : Prop :=
   ∃ (E : Set ℂ) (H : SpaceHolomorphicMotion E) (t : ℂ),
     t ∈ Metric.ball (0 : ℂ) 1 ∧ IsConnected E ∧
       H.f t '' E = {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet
 
-/-- **Reduction of frontier axiom A to the correspondence.** If the parameter
-puzzle piece is the space-holomorphic-motion image of a connected reference set,
-then it is connected. This discharges
-`green_sublevel_translate_inter_mandelbrot_connected` *conditionally* on
-`ParaPieceIsMotionImage`, replacing the opaque frontier axiom by the named,
-standard mathematical input (Słodkowski's λ-lemma + the Douady–Hubbard
-correspondence). The metric-completeness obstruction is bypassed because the
-motion is holomorphic in space. -/
+/-- The identity motion on any set, viewed as a space-holomorphic motion on the
+whole plane. This packages no geometric input beyond the set itself. -/
+noncomputable def identitySpaceHolomorphicMotion (E : Set ℂ) :
+    SpaceHolomorphicMotion E where
+  f := fun _ z => z
+  h_zero := by intro z _; rfl
+  h_inj := by intro _ _ a _ b _ h; exact h
+  h_holo := by
+    intro z _
+    simpa using differentiableAt_id.differentiableWithinAt
+  U := Set.univ
+  hEU := by intro z hz; trivial
+  hU_open := isOpen_univ
+  h_space_holo := by
+    intro _ _
+    simpa using differentiableOn_id
+
+/-- **Conditional image-connectivity theorem.** If the current translated
+Green-sublevel target is realized as the space-holomorphic-motion image of a
+connected reference set, then it is connected.
+
+This theorem is logically valid, but by `paraPieceIsMotionImage_iff_connected`
+its hypothesis is equivalent to the conclusion for the exact same target. So it
+should not be read as a genuine reduction of the live frontier, only as a
+transport lemma once an independently defined geometric consumer exists. -/
 theorem isConnected_greenSublevel_inter_mandelbrot_of_motionImage
     (c : ℂ) (n : ℕ) (h : ParaPieceIsMotionImage c n) :
     IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
   obtain ⟨E, H, t, ht, hE, himg⟩ := h
   rw [← himg]
   exact H.isConnected_image ht hE
+
+/-- `ParaPieceIsMotionImage` is exactly connectivity packaging for its target set:
+the forward implication transports connectedness along a motion image, while the
+reverse implication uses the identity space-holomorphic motion. -/
+theorem paraPieceIsMotionImage_iff_connected (c : ℂ) (n : ℕ) :
+    ParaPieceIsMotionImage c n ↔
+      IsConnected
+        ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
+  constructor
+  · intro h
+    exact isConnected_greenSublevel_inter_mandelbrot_of_motionImage c n h
+  · intro hconn
+    refine ⟨{c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet,
+      identitySpaceHolomorphicMotion _, 0, ?_, hconn, ?_⟩
+    · simpa [Metric.mem_ball, dist_zero_right]
+    · ext z
+      simp [identitySpaceHolomorphicMotion]
 
 /-- For `t` in the unit disk, `1 + t ≠ 0` (used to build injective scaling
 slices). -/
