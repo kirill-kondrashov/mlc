@@ -20,6 +20,27 @@ open Quadratic Complex Topology Set Filter Molecule
 
 
 
+/-- Generic finite-side endpoint: once a Mandelbrot parameter is equipped with a
+    connected window family shrinking to the basepoint, the finitely
+    renormalizable hypothesis is no longer used by the topological LC consumer.
+    It is retained only as a theorem-facing compatibility parameter. -/
+theorem mlc_finitely_renormalizable_of_connectednessWindowData
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (W K : ℕ → Set ℂ)
+    (hW : ConnectednessWindowParameterPieceData c W K) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact lc_at_of_connectednessWindow_family_data c hc W K hW
+
+/-- Generic finite-side endpoint specialized to a parameter-piece family. -/
+theorem mlc_finitely_renormalizable_of_parameterPieceData
+    (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (_h : FinitelyRenormalizable c)
+    (P : ℕ → Set ℂ)
+    (hP : ParameterPieceLcAtData c P) :
+    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  exact lc_at_of_shrink_of_family_data c hc P hP
+
 /-- Yoccoz's Theorem (MLC for Finitely Renormalizable Parameters).
     Proved by Jean-Christophe Yoccoz in the early 1990s.
     If the Yoccoz puzzle moduli diverge (Finitely Renormalizable),
@@ -31,7 +52,17 @@ theorem mlc_finitely_renormalizable_of_paraPuzzleConnectedData
     (_h : FinitelyRenormalizable c)
     (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact lc_at_of_shrink_of_data h_conn c hc h_para_shrink
+  exact mlc_finitely_renormalizable_of_parameterPieceData c hc _h
+    (fun n => MLC.Quadratic.ParaPuzzlePieceAt c n)
+    { piece_open := fun n => para_puzzle_piece_open c n
+      base_mem := by
+        intro n
+        have hc_in_inter : c ∈ ⋂ k, MLC.Quadratic.ParaPuzzlePieceAt c k := by
+          rw [h_para_shrink]
+          exact Set.mem_singleton c
+        exact Set.mem_iInter.mp hc_in_inter n
+      basis := fun U hU => para_puzzle_piece_basis c h_para_shrink U hU
+      inter_mandelbrot_connected := fun n => h_conn c hc n }
 
 /-- Stronger bridge-target variant routed through
     `ParaPuzzleMandelbrotSubsetData`. -/
@@ -45,17 +76,18 @@ theorem mlc_finitely_renormalizable_of_paraPuzzleMandelbrotSubsetData
     (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_mandelbrot_subset_data hsub)
     c hc _h h_para_shrink
 
-/-- Transport-witness bridge-target variant routed through
-    `ParaPuzzleInterMandelbrotTransportData`. -/
+/-- Transport-witness bridge-target variant routed through the generic
+    connected-window interface. -/
 theorem mlc_finitely_renormalizable_of_paraPuzzleTransportData
     (htr : ParaPuzzleInterMandelbrotTransportData)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (_h : FinitelyRenormalizable c)
     (h_para_shrink : (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c}) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact mlc_finitely_renormalizable_of_paraPuzzleConnectedData
-    (Quadratic.para_puzzle_piece_inter_mandelbrot_connected_data_of_transport_data htr)
-    c hc _h h_para_shrink
+  exact mlc_finitely_renormalizable_of_connectednessWindowData c hc _h
+    (fun n => MLC.Quadratic.ParaPuzzlePieceAt c n)
+    (fun n => htr.transportSet c n)
+    (connectednessWindowData_of_paraPuzzleTransportData htr c hc h_para_shrink)
 
 /-- Existential-transport bridge-target variant routed through
     `ParaPuzzleInterMandelbrotTransportExistsData`. -/

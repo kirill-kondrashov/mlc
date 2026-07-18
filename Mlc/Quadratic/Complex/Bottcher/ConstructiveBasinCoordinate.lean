@@ -576,8 +576,9 @@ lemma rootsOfUnitySet_countable (n : ℕ) (hn : n ≠ 0) :
 pullback equation agree on a preconnected overlap once they agree at one overlap
 point. -/
 lemma localPullbackRootBranch_eqOn_of_eqAt
-    {c : ℂ} {N : ℕ} {z₀ : ℂ}
-    (left right : LocalPullbackRootBranchData c N z₀)
+    {c : ℂ} {N : ℕ} {z₁ z₂ : ℂ}
+    (left : LocalPullbackRootBranchData c N z₁)
+    (right : LocalPullbackRootBranchData c N z₂)
     {s : Set ℂ}
     (hs_pre : IsPreconnected s)
     (hs_subset_left : s ⊆ left.U)
@@ -677,8 +678,9 @@ noncomputable def LocalPullbackRootBranchData.rotate
 /-- On a preconnected overlap, one local branch can be rotated by a
 root-of-unity multiplier so that it agrees with the other branch everywhere. -/
 lemma localPullbackRootBranch_eqOn_of_alignable
-    {c : ℂ} {N : ℕ} {z₀ : ℂ}
-    (left right : LocalPullbackRootBranchData c N z₀)
+    {c : ℂ} {N : ℕ} {z₁ z₂ : ℂ}
+    (left : LocalPullbackRootBranchData c N z₁)
+    (right : LocalPullbackRootBranchData c N z₂)
     {s : Set ℂ}
     (hs_pre : IsPreconnected s)
     (hs_subset_left : s ⊆ left.U)
@@ -686,7 +688,7 @@ lemma localPullbackRootBranch_eqOn_of_alignable
     (hs_nonzero : ∀ z ∈ s,
       MLC.logSeriesBottcherApprox c ((MLC.quadratic_map c)^[N] z) ≠ 0)
     {w₀ : ℂ} (hw₀ : w₀ ∈ s) :
-    ∃ aligned : LocalPullbackRootBranchData c N z₀,
+    ∃ aligned : LocalPullbackRootBranchData c N z₂,
       aligned.U = right.U ∧
       (∃ ζ : ℂ, ζ ∈ rootsOfUnitySet (2 ^ N) ∧
         aligned.branch = fun z => ζ * right.branch z) ∧
@@ -700,7 +702,7 @@ lemma localPullbackRootBranch_eqOn_of_alignable
   rcases pullbackRootSet_torsor_transitive (n := 2 ^ N)
     (pow_ne_zero N (by norm_num : 2 ≠ 0))
     hright_root hleft_root (hs_nonzero w₀ hw₀) with ⟨ζ, hζ, hmul⟩
-  let aligned : LocalPullbackRootBranchData c N z₀ := right.rotate hζ
+  let aligned : LocalPullbackRootBranchData c N z₂ := right.rotate hζ
   have hs_subset_aligned : s ⊆ aligned.U := by
     intro z hz
     simpa [aligned] using hs_subset_right hz
