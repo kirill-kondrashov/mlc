@@ -1,9 +1,9 @@
-# Deferred -- do not send
+# Retired -- incorrect topology target
 
-Result 76 already established that bundled Mathlib has no usable Riemann-map or
-exterior-uniformization theorem. Results 78--79 also leave the required
-simple-connectedness package unavailable.
+An exterior coordinate should compare `MandelbrotSetᶜ` with the exterior unit
+disk, neither of which is ordinarily simply connected in `ℂ`. Do not revive
+this prompt's simply-connected-plane-domain formulation.
 
-Do not rerun this generic audit. Resume it only after a separately scoped
-complex-analysis development provides both a checked
-`IsSimplyConnected (MandelbrotSetᶜ)` theorem and a real Riemann-mapping API.
+Use the corrected exterior/spherical target audit:
+
+`plan/GPT54_PROMPT_88_CORRECT_EXTERIOR_UNIFORMIZATION_TARGET.md`

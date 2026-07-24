@@ -1,8 +1,10 @@
-# Deferred -- do not send
+# Deferred -- corrected prerequisite required
 
-The required parameter exterior coordinate remains unavailable. Result 76
-blocked uniformization, and Result 79 blocked the preceding global
-connectedness theorem.
+Result 85 has now proved exterior connectedness, but it does not construct a
+parameter coordinate. This prompt's former ordinary-simple-connectedness
+prerequisite was incorrect for an exterior domain.
 
-This construction may be reconsidered only after a genuine coordinate source
-theorem is formalized; it is not a current worker task.
+Do not send it until the corrected exterior/spherical or direct parameter
+Böttcher source theorem has been identified by:
+
+`plan/GPT54_PROMPT_88_CORRECT_EXTERIOR_UNIFORMIZATION_TARGET.md`

@@ -1,30 +1,34 @@
 # Foundation sequence for the parameter exterior
 
-This is the corrected sequence after Results 77--86. It does not treat a
+This is the corrected sequence after Results 77--87. It does not treat a
 missing global parameter coordinate, a generic planar-complement theorem, or a
 Riemann map as an implicit hypothesis.
 
 ## Completed and retired gates
 
 1. `GPT54_PROMPT_77_DEFINE_FULLNESS_AND_EXTERIOR_TARGETS.md`
-   Completed as a specification/source audit.
+   Completed as a specification/source audit, but its ordinary
+   `IsSimplyConnected (MandelbrotSetᶜ)` target is corrected below.
 
 2. `GPT54_PROMPT_78_PROVE_FULL_COMPACT_COMPLEMENT_SIMPLY_CONNECTED.md`
-   Blocked: bundled Mathlib lacks the substantial generic planar-topology
-   bridge from a full compactum to a simply connected complement.
+   Retired as mathematically misformulated. An exterior domain such as
+   `{z : ℂ | 1 < ‖z‖}` is not simply connected as a subspace of `ℂ`, so a
+   full compactum does not give the stated ordinary-simple-connectedness
+   conclusion.
 
 3. `GPT54_PROMPT_79_PROVE_MANDELBROT_FULLNESS.md`
-   Blocked: the repository has no non-axiomatic global parameter-exterior
-   theorem proving `IsConnected (MandelbrotSetᶜ)`.
+   Superseded by Results 85--87: the repository now proves
+   `IsConnected (MandelbrotSetᶜ)` non-axiomatically.
 
 4. `GPT54_PROMPT_82_FIND_DIRECT_MANDELBROT_EXTERIOR_SIMPLE_CONNECTEDNESS.md`
-   Retired. It would repeat the missing global-exterior step found by Result
-   79 and cannot independently establish simple connectedness.
+   Retired. Ordinary simple connectedness of the exterior is the wrong
+   topological target.
 
 5. `GPT54_PROMPT_80_FORMALIZE_UNBOUNDED_RIEMANN_MAP.md` and
    `GPT54_PROMPT_81_BUILD_PARAMETER_EXTERNAL_COORDINATE_AND_ARC.md`
-   Deferred. Result 76 already found no usable Riemann-map theorem, and their
-   topological prerequisites are unavailable.
+   Retired in their old form. The correct target is an exterior/spherical
+   uniformization or a direct parameter Böttcher theorem, not a Riemann map
+   from an ordinary simply connected plane domain.
 
 ## Active finite escape-locus route
 
@@ -44,17 +48,20 @@ Riemann map as an implicit hypothesis.
    exterior-superlevel connectedness.
 
 9. `GPT54_PROMPT_87_REPAIR_ESCAPE_LEVEL_CONNECTEDNESS_MAXIMUM_MODULUS.md`
-   Active repair: reuse or extract the `BasinConnected` maximum-modulus
-   argument for the entire parameter iterate and the checked outer containment
-   `ParameterEscapeLevel 0 ⊆ ParameterEscapeLevel n`.
+   Completed. `Mlc/ParameterEscapeExhaustion.lean` now proves every finite
+   escape level preconnected and connected by the maximum-modulus argument.
 
 10. `GPT54_PROMPT_85_ASSEMBLE_ESCAPE_EXHAUSTION_CONNECTEDNESS.md`
-   Only after 86 and 87 produce all required checked lemmas, derive
-   `IsConnected (MandelbrotSetᶜ)` from the nested union using Mathlib's
-   connected-union theorem. Do not claim simple connectedness, uniformization,
-   parameter rays, or a parapuzzle boundary arc.
+   Completed. `Mlc/ParameterEscapeExhaustion.lean` now proves
+   `IsConnected (MandelbrotSetᶜ)` by the nested connected-union theorem.
 
-The finite escape-locus route may establish only exterior connectedness. Even
-if it succeeds, actual parameter rays/equipotentials and the moving-parapuzzle
-provider remain separate unsolved gates. Every stage is a hard gate: record an
-exact missing theorem rather than introducing an axiom or placeholder.
+11. `GPT54_PROMPT_88_CORRECT_EXTERIOR_UNIFORMIZATION_TARGET.md`
+   Current gate: state and source-check the correct exterior/spherical
+   coordinate theorem, then identify a non-axiomatic direct parameter Böttcher
+   construction route. It must not use the existing Mandelbrot-connectedness
+   axiom in the final no-new-axiom route.
+
+The finite escape-locus route has discharged exterior connectedness, but it
+does not itself provide a parameter coordinate, rays/equipotentials, or the
+moving-parapuzzle provider. Every stage is a hard gate: record an exact
+missing theorem rather than introducing an axiom or placeholder.

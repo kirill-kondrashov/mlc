@@ -1,13 +1,14 @@
-# Completed -- do not rerun
+# Superseded by Result 85 -- do not rerun
 
-Result 79 is recorded in:
+The finite escape-locus route now proves:
 
-`plan/GPT54_RESULT_79_PROVE_MANDELBROT_FULLNESS.md`
+```lean
+mandelbrotSet_compl_isConnected :
+  IsConnected (MandelbrotSetᶜ)
+```
 
-It established that the repository has no non-axiomatic global
-parameter-exterior theorem proving `IsConnected (MandelbrotSetᶜ)`. Re-running
-this broad audit would only duplicate that blocker.
+in `Mlc/ParameterEscapeExhaustion.lean`, without a new axiom.
 
-The active replacement is the finite escape-locus route beginning with:
+The next unresolved question is the correct exterior coordinate theorem:
 
-`plan/GPT54_PROMPT_83_BUILD_PARAMETER_ESCAPE_EXHAUSTION.md`
+`plan/GPT54_PROMPT_88_CORRECT_EXTERIOR_UNIFORMIZATION_TARGET.md`

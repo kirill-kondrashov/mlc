@@ -57,10 +57,11 @@ Accordingly, Prompts 69--71 must not be sent.
 
 The generic topology and uniformization routes remain blocked. However, the
 separate parameter-exterior roadmap has now checked a concrete, non-circular
-finite escape exhaustion in `Mlc/ParameterEscapeExhaustion.lean`. Its active
-next gate is to reuse the maximum-modulus superlevel argument already present
-in `Mlc/BasinConnected.lean` to prove the levels connected. This route does
-not yet supply parameter rays or parapuzzle boundary arcs.
+finite escape exhaustion and connectedness of the entire parameter exterior in
+`Mlc/ParameterEscapeExhaustion.lean`. The active next gate is the correctly
+formulated exterior/spherical coordinate theorem or a direct parameter
+Böttcher construction. This route does not yet supply parameter rays or
+parapuzzle boundary arcs.
 
 See:
 

@@ -161,7 +161,7 @@ theorem isPreconnected_parameterEscapeLevel (n : ℕ) :
   set U : Set ℂ := {c : ℂ | 2 < ‖P c‖} with hUdef
   have hEqU : U = ParameterEscapeLevel n := by
     ext c
-    simp [U, hUdef, P, hPdef, ParameterEscapeLevel]
+    simp [U, P, ParameterEscapeLevel]
   have hEsub : {c : ℂ | 2 < ‖c‖} ⊆ U := by
     intro c hc
     rw [hEqU]
@@ -217,5 +217,25 @@ theorem parameterEscapeLevel_isConnected (n : ℕ) :
       norm_num [Set.mem_setOf_eq]
     exact exterior_subset_parameterEscapeLevel n h
   exact ⟨hne, hpre⟩
+
+theorem mandelbrotSet_compl_isConnected :
+    IsConnected (MandelbrotSetᶜ) := by
+  rw [compl_mandelbrot_eq_iUnion_parameterEscapeLevel]
+  let s : ℕ → Set ℂ := ParameterEscapeLevel
+  have hs_conn : ∀ n, IsConnected (s n) := by
+    intro n
+    simpa [s] using parameterEscapeLevel_isConnected n
+  have hs_mono : ∀ m n : ℕ, m ≤ n → s m ⊆ s n := by
+    intro m n hmn
+    induction hmn with
+    | refl => exact subset_rfl
+    | @step n hle ih => exact ih.trans parameterEscapeLevel_mono
+  have hs0_ne : (s 0).Nonempty := by
+    simpa [s] using (parameterEscapeLevel_isConnected 0).nonempty
+  have hs_link : ∀ n, (s n ∩ s (Order.succ n)).Nonempty := by
+    intro n
+    rcases hs0_ne with ⟨z, hz⟩
+    exact ⟨z, hs_mono 0 n (Nat.zero_le n) hz, hs_mono 0 (n + 1) (Nat.zero_le (n + 1)) hz⟩
+  simpa [s] using IsConnected.iUnion_of_chain hs_conn hs_link
 
 end MLC.Quadratic
