@@ -10,6 +10,46 @@ open Set Topology Filter
 def ParameterEscapeLevel (n : ℕ) : Set ℂ :=
   {c : ℂ | 2 < ‖orbit c 0 (n + 1)‖}
 
+/-- If the critical orbit returns to zero, it is periodic from zero and hence
+bounded. -/
+lemma boundedOrbit_of_orbit_zero (c : ℂ) (n : ℕ)
+    (h : orbit c 0 (n + 1) = 0) :
+    boundedOrbit c 0 := by
+  let N : ℕ := n + 1
+  have hN_pos : 0 < N := by
+    dsimp [N]
+    omega
+  have hN : orbit c 0 N = 0 := by
+    simpa [N] using h
+  have hN' : (fc c)^[N] 0 = 0 := hN
+  have hmultiple : ∀ q : ℕ, orbit c 0 (N * q) = 0 := by
+    intro q
+    induction q with
+    | zero => simp
+    | succ q ih =>
+        have ih' : (fc c)^[N * q] 0 = 0 := ih
+        rw [Nat.mul_succ]
+        change (fc c)^[N * q + N] 0 = 0
+        rw [Function.iterate_add_apply, hN', ih']
+  refine ⟨∑ i ∈ Finset.range N, ‖orbit c 0 i‖, ?_⟩
+  intro m
+  let r : ℕ := m % N
+  have hr : r < N := by
+    exact Nat.mod_lt _ hN_pos
+  have horbit : orbit c 0 m = orbit c 0 r := by
+    have hmultiple' := hmultiple (m / N)
+    change (fc c)^[N * (m / N)] 0 = 0 at hmultiple'
+    rw [← Nat.mod_add_div m N]
+    change (fc c)^[r + N * (m / N)] 0 = (fc c)^[r] 0
+    rw [Function.iterate_add_apply, hmultiple']
+  rw [horbit]
+  exact Finset.single_le_sum (fun _ _ => norm_nonneg _) (Finset.mem_range.mpr hr)
+
+lemma mandelbrot_of_orbit_zero (c : ℂ) (n : ℕ)
+    (h : orbit c 0 (n + 1) = 0) :
+    c ∈ MandelbrotSet :=
+  boundedOrbit_of_orbit_zero c n h
+
 lemma isOpen_parameterEscapeLevel (n : ℕ) : IsOpen (ParameterEscapeLevel n) := by
   dsimp [ParameterEscapeLevel]
   exact isOpen_lt continuous_const ((continuous_orbit_zero_param (n + 1)).norm)

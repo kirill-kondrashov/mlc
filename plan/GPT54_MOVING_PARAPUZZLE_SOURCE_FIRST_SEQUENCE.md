@@ -58,10 +58,26 @@ Accordingly, Prompts 69--71 must not be sent.
 The generic topology and uniformization routes remain blocked. However, the
 separate parameter-exterior roadmap has now checked a concrete, non-circular
 finite escape exhaustion and connectedness of the entire parameter exterior in
-`Mlc/ParameterEscapeExhaustion.lean`. The active next gate is the correctly
-formulated exterior/spherical coordinate theorem or a direct parameter
-Böttcher construction. This route does not yet supply parameter rays or
-parapuzzle boundary arcs.
+Mlc/ParameterEscapeExhaustion.lean. The near-infinity Böttcher extension
+structures remain theorem-facing contracts, not available constructors. The
+finite filled-level audit split the Mandelbrot-connectedness route into an
+algebraic critical-value-containment gate followed by a missing polynomial
+closed-lemniscate theorem. The derivative gate stopped at its first-escape
+transition; the Gauss--Lucas critical-point location theorem is now proved in
+Mlc/ParameterOrbitPolynomial.lean. The route remains blocked at
+critical-value containment and polynomial closed-lemniscate topology. Prompt
+94 confirmed that no checked upgrade from critical points to critical values is
+available. The alternative direct critical-orbit route has completed its local
+germ and one-step coherence gates in Prompts 104 and 101. Prompt 102 then
+identified the genuine next obstruction: there is no parameter-loop analytic
+continuation or monodromy interface for these local germs. Prompt 105 has now packaged reusable local parameter charts with coherence at
+all later finite escape levels. Prompt 106 has constructed the constant root-of-unity overlap transitions.
+Prompt 107 has now built a finite ordered parameter-path chart chain with
+explicit adjacent overlap witnesses. Prompt 108 has constructed a finite closed-loop transition product at a common
+level. Prompt 109 is now active to define canonical local transitions and their
+cocycle comparison law before any product-invariance or monodromy claim. No parameter rays or parapuzzle
+boundary arcs are currently justified.
+
 
 See:
 
