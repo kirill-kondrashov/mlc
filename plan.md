@@ -154,9 +154,11 @@ an independently formalized bridge or a corrected parameter-piece definition.
 
 ## Motivic alternative-direction refresh (2026-08-30)
 
-The external note
-[`bridge_between_pacman_renormalization_and_noncommutative_motives.md`](refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md)
-was audited as an exploratory connection to BGT and Efimov, not adopted as a
+The canonical external note,
+[Pacman renormalization and noncommutative motives](https://github.com/kirill-kondrashov/raw/blob/main/bridge_between_pacman_renormalization_and_noncommutative_motives.md),
+and its repository
+[audit summary](refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md)
+were audited as an exploratory connection to BGT and Efimov, not adopted as a
 concrete proof plan. The note itself marks its finite marked-model categories,
 refinement system, categorical renormalization, and parameter realization
 `Q_n(P)` as additional constructions. Its connectedness and MLC-neighborhood

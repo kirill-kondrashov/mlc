@@ -1,7 +1,7 @@
-# External bridge note: Pacman renormalization and noncommutative motives
+# Audit summary: Pacman renormalization and noncommutative motives
 
 Source:
-https://github.com/kirill-kondrashov/raw/blob/fix_render_bridge_pacman/bridge_between_pacman_renormalization_and_noncommutative_motives.md
+https://github.com/kirill-kondrashov/raw/blob/main/bridge_between_pacman_renormalization_and_noncommutative_motives.md
 
 Retrieved and audited on 2026-08-30.
 

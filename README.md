@@ -1,94 +1,101 @@
 # Mandelbrot Local Connectivity in Lean 4
 
-[![build](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
+[![Lean CI](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/kirill-kondrashov/mlc/actions/workflows/lean_action_ci.yml)
 
 [Dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
-## 1. Mathematical objects
+This repository formalizes parts of the Mandelbrot local-connectivity
+conjecture in Lean 4. The root theorem is `sorry`-free and currently depends
+on two explicitly named project-level axioms.
 
-For \(c,z\in\mathbb C\), let
+## Contents
 
-\[
+- [Mathematical setting](#mathematical-setting)
+- [Formal theorem](#formal-theorem)
+- [Axiom frontier](#axiom-frontier)
+- [Proved components](#proved-components)
+- [Current discharge target](#current-discharge-target)
+- [Pacman and motive bridge](#pacman-and-motive-bridge)
+- [Efimov and BGT source layer](#efimov-and-bgt-source-layer)
+- [Validation](#validation)
+- [Repository map](#repository-map)
+- [Dependencies](#dependencies)
+
+## Mathematical setting
+
+For $c,z\in\mathbb C$, define
+
+$$
 f_c(z)=z^2+c,\qquad f_c^0(z)=z,\qquad
 f_c^{n+1}(z)=f_c(f_c^n(z)).
-\]
+$$
 
-The Mandelbrot set is
+The Mandelbrot set and the filled Julia set are
 
-\[
-\mathcal M
- =
+$$
+\mathcal M=
 \left\{
 c\in\mathbb C:
 \left(f_c^n(0)\right)_{n\geq 0}
 \text{ is bounded}
-\right\}.
-\]
+\right\},
+$$
 
-The filled Julia set of \(f_c\) is
-
-\[
-K_c
- =
+$$
+K_c=
 \left\{
 z\in\mathbb C:
 \left(f_c^n(z)\right)_{n\geq 0}
 \text{ is bounded}
 \right\}.
-\]
+$$
 
-Let \(G_c:\mathbb C\to\mathbb R\) denote the dynamical Green function of
-\(f_c\). For \(n\in\mathbb N\), define
+Let $G_c:\mathbb C\to\mathbb R$ be the dynamical Green function of $f_c$.
+For $n\in\mathbb N$, set
 
-\[
+$$
 S_n(c)=\{z\in\mathbb C:G_c(z)<2^{-n}\},
-\]
+$$
 
-\[
-T_n(c)
- =
-\{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}\cap\mathcal M.
-\]
+$$
+\tau_c(S)=\{c+z:z\in S\},
+\qquad
+T_n(c)=\tau_c(S_n(c))\cap\mathcal M.
+$$
 
-The Lean counterparts are `MandelbrotSet`, `green_function`, and the
-translated Green-sublevel expressions in
-`Mlc/ParaPuzzleConnectivity.lean`.
+The corresponding Lean objects are `MandelbrotSet`, `green_function`, and the
+translated Green-sublevel sets in
+[`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean).
 
-The frozen parameter puzzle object used by the current root route is
+The frozen parameter puzzle object is
 
 ```lean
 ParaPuzzlePieceAt c n =
-  {c' | c' - c ∈ DynamicalPuzzlePiece c n 0}.
+  {c' | c' - c ∈ DynamicalPuzzlePiece c n 0}
 ```
 
-For \(c\in\mathcal M\), the repository proves the identification
+and, for $c\in\mathcal M$, the repository proves
 
-\[
+$$
 \operatorname{ParaPuzzlePieceAt}(c,n)
- =
+=
 \{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}.
-\]
+$$
 
-## 2. Root statement
+## Formal theorem
 
-The formalized Mandelbrot local-connectivity statement is
-
-\[
-\mathcal M\text{ is locally connected}.
-\]
-
-Its Lean declaration is
+The formalized target is local connectivity of the Mandelbrot set:
 
 ```lean
 MLC.mlc_conjecture : LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
-The declaration is proved without `sorry`; its proof depends on the two
-project-level inputs listed in Section 3.
+The declaration contains no `sorry`. Its current proof depends on the two
+project-level axioms in the next section.
 
-## 3. Checked axiom frontier
+## Axiom frontier
 
-The current `make check` output has the following form:
+Expected `make check` output:
 
 ```text
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
@@ -100,7 +107,8 @@ All axioms used:
 - MLC.residualOpenVirtualNearMoleculeAxiom
 ```
 
-The first three declarations are Lean foundations. The project frontier is:
+`Quot.sound`, `propext`, and `Classical.choice` are Lean foundations. The
+project-level frontier is the following.
 
 ### A. Straddling parameter connectivity
 
@@ -115,278 +123,266 @@ MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling
         ∩ MandelbrotSet)
 ```
 
-Mathematically, A asserts
+Equivalently, for $c\in\mathcal M$ and $n\in\mathbb N$,
 
-\[
-\neg\bigl(c+S_n(c)\subseteq\mathcal M\bigr)
+$$
+\tau_c(S_n(c))\not\subseteq\mathcal M
 \Longrightarrow
-T_n(c)\text{ is connected}
-\]
+T_n(c)\text{ is connected}.
+$$
 
-for every \(c\in\mathcal M\) and \(n\in\mathbb N\).
+The unrestricted translated sublevel is connected; the remaining case is its
+intersection with $\mathcal M$ when the two sets straddle one another.
 
-### B. Residual virtual near-Molecule input
+### B. Virtual near-Molecule renormalization
 
-`MLC.residualOpenVirtualNearMoleculeAxiom` packages the following
-renormalization statements:
+`MLC.residualOpenVirtualNearMoleculeAxiom` packages the remaining
+renormalization input from Dudko's Problems 4.3 and 4.4 and Sections 4.1--4.5:
 
 1. pseudo-Siegel a priori bounds in the remaining unbounded satellite
    quadratic-like cases;
-2. the Virtual Molecule version of the Near-Degenerate Regime;
-3. the implication from Problems 4.3 and 4.4 and the arguments of
-   Dudko's §§4.1–4.5 to the infinite-renormalization interface consumed by
-   `Mlc/MainConjecture.lean`.
+2. a Virtual Molecule version of the Near-Degenerate Regime;
+3. the infinite-renormalization interface consumed by
+   [`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean).
 
-The source is `refs/2512.24171v1.txt`.
+The source is [Dudko, arXiv:2512.24171](https://arxiv.org/abs/2512.24171),
+with repository copies at
+[`refs/2512.24171v1.pdf`](refs/2512.24171v1.pdf) and
+[`refs/2512.24171v1.txt`](refs/2512.24171v1.txt).
 
-## 4. Proved reductions
+## Proved components
 
-The following implications are theorem-level results in the repository.
+The following results are theorem-level and are not project-level axioms.
 
 ### Filled Julia sets
 
-\[
+$$
 c\in\mathcal M\Longrightarrow K_c\text{ is connected}.
-\]
+$$
 
-Formal source: `Mlc/FilledJuliaConnected.lean`.
+Formal source:
+[`Mlc/FilledJuliaConnected.lean`](Mlc/FilledJuliaConnected.lean).
 
 ### Dynamical Green sublevels
 
-\[
-c\in\mathcal M
-\Longrightarrow
-S_n(c)\text{ is connected}.
-\]
+$$
+c\in\mathcal M\Longrightarrow S_n(c)\text{ is connected}.
+$$
 
-The proof uses connectedness of \(K_c\), continuity and nonnegativity of
-\(G_c\), harmonicity on the basin of infinity, and the harmonic minimum
-principle. Formal source: `Mlc/GreenSublevelConnectedDirect.lean`.
+The proof uses connectedness of $K_c$, continuity and nonnegativity of $G_c$,
+harmonicity on the basin of infinity, and the harmonic minimum principle.
+Formal source:
+[`Mlc/GreenSublevelConnectedDirect.lean`](Mlc/GreenSublevelConnectedDirect.lean).
 
 ### Translated sublevels
 
-Translation by \(c\) gives
+Translation by $c$ gives
 
-\[
-c\in\mathcal M
-\Longrightarrow
-\{c':G_c(c'-c)<2^{-n}\}\text{ is connected}.
-\]
+$$
+c\in\mathcal M\Longrightarrow
+\tau_c(S_n(c))\text{ is connected}.
+$$
 
 Formal theorem: `green_sublevel_translate_connected`.
 
-### Nested intersection strata
+### Containment strata
 
-The two containment cases are proved:
+The two containment cases for $T_n(c)$ are proved:
 
-\[
-\{c':G_c(c'-c)<2^{-n}\}\subseteq\mathcal M
+$$
+\tau_c(S_n(c))\subseteq\mathcal M
 \Longrightarrow
-T_n(c)=\{c':G_c(c'-c)<2^{-n}\},
-\]
+T_n(c)=\tau_c(S_n(c)),
+$$
 
 and
 
-\[
-\mathcal M\subseteq\{c':G_c(c'-c)<2^{-n}\}
+$$
+\mathcal M\subseteq\tau_c(S_n(c))
 \Longrightarrow
 T_n(c)=\mathcal M.
-\]
+$$
 
 The first case uses translated-sublevel connectedness. The second uses
-connectedness of \(\mathcal M\) and is off the root derivation because the
-corresponding theorem uses the existing `mandelbrot_set_connected` input.
+connectedness of $\mathcal M$ and is off the root derivation.
 
-Consequently, A is restricted to the intermediate straddling case.
+### Near-infinity Böttcher data
 
-### Analytic infrastructure
+The repository contains axiom-clean local data for a parameter-dependent
+Böttcher coordinate
 
-The repository contains axiom-clean near-infinity parameter Böttcher data:
-
-\[
+$$
 (c,z)\longmapsto\Phi_c(z)
-\]
+$$
 
-with joint continuity on the exterior domain, parameter holomorphy, fiber
-holomorphy, and a parametrized local inverse. Formal sources are under
-`Mlc/Quadratic/Complex/Bottcher/`.
+on an exterior domain, including joint continuity, parameter holomorphy,
+fiber holomorphy, and a parametrized local inverse. Formal sources are under
+[`Mlc/Quadratic/Complex/Bottcher/`](Mlc/Quadratic/Complex/Bottcher/).
+Extending this data through the full basin and proving the finite
+phase--parameter comparison remain separate obligations.
 
-This infrastructure supplies local analytic input for a future
-phase–parameter construction. The finite-basin parameter-piece comparison
-remains a separate theorem obligation.
+## Current discharge target
 
-## 5. Exact goal for A
+The target is to replace the frontier declaration in Section A by a theorem
+with the same type:
 
-The target theorem is the declaration in Section 3A with `axiom` replaced by
-`theorem`. The current plan uses a finite parameter realization
-\(Q_n(P(c,n))\), defined from finite marked Pacman or parapuzzle data without
-an `IsConnected` field.
+```lean
+theorem green_sublevel_translate_inter_mandelbrot_connected_straddling
+    (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ)
+    (hstraddle :
+      ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+        ⊆ MandelbrotSet)) :
+    IsConnected
+      ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+        ∩ MandelbrotSet)
+```
 
-The exact comparison required for the frozen root target is
+The current non-circular route has three required steps:
 
-\[
-Q_n(P(c,n))
- =
+1. construct finite marked Pacman or parapuzzle data and an independently
+   defined realization predicate;
+2. prove connectedness of the resulting parameter locus using a
+   phase/component-attachment theorem or an equivalent no-separation
+   argument;
+3. prove the exact comparison between that locus and $T_n(c)$.
+
+In particular, introducing connectedness as a field of the realization
+structure, or replacing the frozen target by an unproved motion image, would
+only restate the frontier.
+
+## Pacman and motive bridge
+
+The canonical bridge specification is the
+[remote `main` document](https://github.com/kirill-kondrashov/raw/blob/main/bridge_between_pacman_renormalization_and_noncommutative_motives.md).
+The repository keeps a concise
+[audit summary](refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md).
+The specification compares Pacman renormalization with BGT localizing motives
+and Efimov's relative rigid motives. It explicitly treats the following as
+additional constructions:
+
+| Dynamical datum | Candidate categorical datum | Repository status |
+| --- | --- | --- |
+| Finite marked Pacman model | Object of a finite model category | Requires construction |
+| Marked conjugacy | Morphism or equivalence of models | Requires morphism spaces |
+| Boundary gluing | Exact quotient or cofiber sequence | Requires a stable model |
+| Depth refinement | Exact functors between perfect categories | Requires refinement maps |
+| Pacman renormalization | Exact endofunctor on the colimit category | Requires categorical renormalization |
+| Marked model at depth $n$ | Parameter locus $Q_n(P)$ | Requires a realization predicate |
+| MLC for $\mathcal M$ | Connected-neighborhood basis from $Q_n(P)$ | Requires a geometric theorem |
+
+A proposed finite marked model has the form
+
+$$
+P=(f,S,G,\psi,\mathfrak m_n),
+$$
+
+where $f$ is a Pacman, $S$ is a sector, $G$ is first-return data, $\psi$ is
+the gluing map, and $\mathfrak m_n$ is finite external-ray and bubble
+marking. The bridge note proposes a topological model category, a spectral
+enhancement, perfect modules, refinement functors, and a categorical
+renormalization endofunctor.
+
+The corresponding parameter locus is intended to be defined independently
+of its topological properties:
+
+$$
+Q_n(P)=
+\{c\in\mathcal M:\operatorname{Real}_n(P,c)\}.
+$$
+
+The required properties are nonemptiness, compactness, connectedness,
+refinement nesting, nonempty compatible-chain intersections, and the
+connected-neighborhood condition
+
+$$
+\forall c\in\mathcal M\ \forall O\subseteq\mathcal M,\quad
+c\in O\text{ and }O\text{ relatively open}
+\Longrightarrow
+\exists n,P,\quad
+c\in\operatorname{int}_{\mathcal M}Q_n(P)
+\subseteq Q_n(P)\subseteq O.
+$$
+
+None of these properties has been obtained from BGT or Efimov. The exact
+comparison required for the current frozen target is
+
+$$
+Q_n(P(c,n))=
 \{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}\cap\mathcal M.
-\tag{5.1}
-\]
+$$
 
-The connectedness mechanism is categorical. For a finite marking group
-\(G_P\), let
+## Efimov and BGT source layer
 
-\[
-E_P=\operatorname{Loc}(BG_P)
-\]
+The source-backed categorical interfaces are the universal localizing
+invariant
 
-be the rigid convolution coefficient category, let \(\mathcal C_n(P)\) be
-the finite idempotent-complete stable incidence category, and set
+$$
+U_{\mathrm{loc}}:
+\operatorname{Cat}^{\mathrm{perf}}_\infty
+\longrightarrow
+\operatorname{Mot}^{\mathrm{loc}},
+$$
 
-\[
-M_n(P)
- =
-U_{\mathrm{loc},E_P}\bigl(\mathcal C_n(P)\bigr)
-\in \operatorname{Mot}^{\mathrm{loc}}_{E_P}.
-\]
+relative localizing motives over a rigid monoidal coefficient category,
+duality and rigidity, relative tensor products, trace-class and nuclear
+refinement, and inverse-limit or internal-Hom descriptions of morphisms.
 
-The required conservative realization is a morphism
+For a finite marking group $G_P$, the proposed relative data are
 
-\[
+$$
+E_P=\operatorname{Loc}(BG_P),\qquad
+M_n(P)=U_{\mathrm{loc},E_P}\bigl(\mathcal C_n(P)\bigr),
+$$
+
+where $\mathcal C_n(P)$ is the finite incidence category of the marked model.
+The required separation-to-idempotent map has the form
+
+$$
 \chi_{P,n}:
-C\bigl(Q_n(P),\mathbb Z\bigr)
+C(Q_n(P),\mathbb Z)
 \longrightarrow
 \pi_0\operatorname{End}_{\operatorname{Mot}^{\mathrm{loc}}_{E_P}}
 (M_n(P)).
-\tag{5.2}
-\]
+$$
 
-For every nonempty proper relatively clopen
-\(U\subseteq Q_n(P)\), the characteristic function \(1_U\) must satisfy
+For every nonempty proper relatively clopen $U\subseteq Q_n(P)$, the
+characteristic function $1_U$ must map to a nontrivial idempotent:
 
-\[
+$$
 \chi_{P,n}(1_U)^2=\chi_{P,n}(1_U),\qquad
-\chi_{P,n}(1_U)\neq 0,\qquad
-\chi_{P,n}(1_U)\neq 1.
-\tag{5.3}
-\]
+\chi_{P,n}(1_U)\neq0,\qquad
+\chi_{P,n}(1_U)\neq1.
+$$
 
-The selected motive must satisfy
+The selected motive must independently satisfy
 
-\[
-\neg\exists e\in
-\pi_0\operatorname{End}_{\operatorname{Mot}^{\mathrm{loc}}_{E_P}}(M_n(P)):
-\quad
-e^2=e\ \land\ e\neq0\ \land\ e\neq1.
-\tag{5.4}
-\]
+$$
+\neg\exists e,\quad
+e^2=e\land e\neq0\land e\neq1
+$$
 
-Equations (5.2)–(5.4) give
+in its endomorphism ring. This is the contradiction mechanism that would
+prove connectedness of $Q_n(P)$.
 
-\[
-Q_n(P)\text{ disconnected}
-\Longrightarrow
-\text{a nontrivial idempotent of }
-\pi_0\operatorname{End}(M_n(P))
-\Longrightarrow\bot,
-\]
+The Lean interface in
+[`Mlc/MotivicConnectednessFrontier.lean`](Mlc/MotivicConnectednessFrontier.lean)
+records this mechanism as a proposition. It abstracts the actual relative
+motive and contributes no declaration to the root axiom list. The elementary
+topological obstruction is formalized in
+[`Mlc/MotivicIntersectionNoGo.lean`](Mlc/MotivicIntersectionNoGo.lean):
+connected ambient sets and a straddling condition do not imply connectedness
+of their intersection, while a nontrivial clopen split yields a nontrivial
+idempotent in $C(X,\mathbb Z)$.
 
-so \(Q_n(P)\) is connected. Equation (5.1) then proves A.
+The external sources are:
 
-## 6. Lean categorical frontier contract
+- [Dudko--Lyubich--Selinger, *Pacmen*](refs/1703.01206v3.pdf)
+- [Blumberg--Gepner--Tabuada, *A universal characterization of higher algebraic K-theory*](https://arxiv.org/abs/1001.2282)
+- [Efimov, *Rigidity of the category of localizing motives*](https://arxiv.org/abs/2510.17010)
 
-The category-theoretic interface is recorded in
-`Mlc/MotivicConnectednessFrontier.lean`.
+## Validation
 
-```lean
-MLC.Motivic.GreenSublevelStraddlingMotivicFrontier : Prop
-```
-
-Its payload
-
-```lean
-MLC.Motivic.SeparationReflectingIndecomposable
-```
-
-contains:
-
-```text
-characteristic :
-  C(Q, ℤ) →* EndM
-
-reflects_clopen :
-  nontrivial clopen U ⊆ Q
-    → characteristic (1_U) is a nontrivial idempotent
-
-indecomposable :
-  EndM has no nontrivial idempotent.
-```
-
-`EndM` is a ring-level abstraction for
-\(\pi_0\operatorname{End}_{\operatorname{Mot}^{\mathrm{loc}}_{E_P}}(M_n(P))\).
-The file proves the conditional implication from this contract to the
-straddling connectivity conclusion. Instantiating `EndM` with an actual
-Efimov relative motive, constructing \(Q_n(P)\), and proving (5.1) remain
-open implementation goals. The contract contributes no declaration to the
-root axiom list.
-
-The topological separation test in
-`Mlc/MotivicIntersectionNoGo.lean` proves that connectedness of two ambient
-sets and a straddling condition alone supply no intersection theorem. It also
-proves that a nontrivial clopen split yields a nontrivial idempotent in
-\(C(X,\mathbb Z)\).
-
-## 7. Efimov source layer
-
-The motivic plan uses:
-
-\[
-U_{\mathrm{loc}}:\operatorname{Cat}^{\mathrm{perf}}
-\longrightarrow\operatorname{Mot}^{\mathrm{loc}},
-\]
-
-the universal finitary localizing invariant, together with the following
-source results from Efimov, arXiv:2510.17010v1:
-
-- rigidity of \(\operatorname{Mot}^{\mathrm{loc}}\);
-- dualizability and rigidity of relative
-  \(\operatorname{Mot}^{\mathrm{loc}}_E\) over a rigid monoidal base;
-- eventual trace-class characterizations of nuclear ind-systems;
-- inverse-limit and internal-Hom descriptions of morphisms from nuclear or
-  proper sources;
-- equivariant and local-system variants, including product decompositions over
-  disconnected bases.
-
-These results provide the refinement, duality, and endomorphism framework in
-(5.2)–(5.4). The finite phase–parameter realization, conservativity of
-\(\chi_{P,n}\), motive indecomposability, and comparison (5.1) require
-separate proofs.
-
-The source files are kept in the canonical raw reference directory:
-
-```text
-/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.pdf
-/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.tex
-```
-
-## 8. Root dependency structure
-
-The current theorem path has the form
-
-\[
-\begin{aligned}
-\texttt{MLC.mlc\_conjecture}
-&\Leftarrow
-\text{finite/primitive branch data}
-+\text{satellite renormalization data}\\
-&\Leftarrow
-\text{A}
-+\text{B}.
-\end{aligned}
-\]
-
-The Molecule dependency is pinned in `lake-manifest.json` at
-`385fc36c553947cf125d09848c2a3077fc751209`.
-
-## 9. Validation commands
+Run the repository checks from the root:
 
 ```bash
 make build
@@ -394,25 +390,24 @@ make check
 ./scripts/verify_output.sh
 ```
 
-The expected project-level axiom names are exactly the two declarations in
-Section 3.
+## Repository map
 
-## 10. Repository entry points
+| Component | Path |
+| --- | --- |
+| Root theorem | [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean) |
+| Axiom report | [`check_axioms.lean`](check_axioms.lean) |
+| Straddling target | [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean) |
+| Motivic frontier contract | [`Mlc/MotivicConnectednessFrontier.lean`](Mlc/MotivicConnectednessFrontier.lean) |
+| Topological intersection obstruction | [`Mlc/MotivicIntersectionNoGo.lean`](Mlc/MotivicIntersectionNoGo.lean) |
+| Frontier overview | [`plan/PLAN_00_frontier_overview.md`](plan/PLAN_00_frontier_overview.md) |
+| Parameter route | [`plan/PLAN_04_parameter_connectivity.md`](plan/PLAN_04_parameter_connectivity.md) |
+| Efimov route | [`plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`](plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md) |
+| Canonical Pacman/motive bridge | [Remote `main` document](https://github.com/kirill-kondrashov/raw/blob/main/bridge_between_pacman_renormalization_and_noncommutative_motives.md) |
+| Pacman/motive bridge audit | [`refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md`](refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md) |
 
-- Root theorem: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean)
-- Axiom report: [`check_axioms.lean`](check_axioms.lean)
-- Straddling target: [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean)
-- Categorical contract:
-  [`Mlc/MotivicConnectednessFrontier.lean`](Mlc/MotivicConnectednessFrontier.lean)
-- Topological motivic gate:
-  [`Mlc/MotivicIntersectionNoGo.lean`](Mlc/MotivicIntersectionNoGo.lean)
-- Frontier overview: [`plan/PLAN_00_frontier_overview.md`](plan/PLAN_00_frontier_overview.md)
-- Parameter route: [`plan/PLAN_04_parameter_connectivity.md`](plan/PLAN_04_parameter_connectivity.md)
-- Efimov route: [`plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`](plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md)
-- Dudko source: [`refs/2512.24171v1.txt`](refs/2512.24171v1.txt)
+## Dependencies
 
-## 11. Dependencies
-
+- [Lean 4](https://github.com/leanprover/lean4)
 - [mathlib4](https://github.com/leanprover-community/mathlib4)
 - [yoccoz-theorem](https://github.com/kirill-kondrashov/yoccoz-theorem)
 - [molecule-conjecture](https://github.com/kirill-kondrashov/molecule-conjecture)
