@@ -43,3 +43,28 @@ infrastructure only: it is not a puzzle-boundary motion and does not identify
 the motion image with the frozen Green-sublevel intersection. The theorem
 `green_sublevel_translate_inter_mandelbrot_connected_straddling` therefore
 remains the live frontier axiom.
+
+## Frozen straddling continuation audit
+
+An independent theorem-surface and proof search was completed against the exact
+target
+
+```lean
+IsConnected
+  ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+```
+
+The only immediate Lean proof is to rewrite through
+`paraPuzzlePieceAt_eq_green_translate` and invoke the older
+`MLC.Quadratic.para_puzzle_piece_inter_mandelbrot_connected` axiom. That is an
+equivalent opaque replacement and is explicitly not an acceptable discharge.
+The axiom-clean facts currently available — connectedness of the un-intersected
+translate, connected escape levels, and connectedness of the Mandelbrot
+complement — do not imply connectedness after intersection. The missing
+ingredient remains a genuine parameter-side phase/component-attachment theorem
+for this frozen target; classical moving parapuzzles do not supply that bridge
+in the current definitions.
+
+No source theorem was replaced by an unsupported proof, and no new axiom,
+`sorry`, or `admit` was added. The straddling axiom remains unchanged pending
+an independently formalized bridge or a corrected parameter-piece definition.
