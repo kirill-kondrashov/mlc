@@ -17,6 +17,15 @@ project axioms:
 1. `MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`
 2. `MLC.residualOpenVirtualNearMoleculeAxiom`
 
+**Dependency refresh:** `lake-manifest.json` now pins
+`molecule-conjecture` to upstream revision
+`385fc36c553947cf125d09848c2a3077fc751209`. The upstream refined export is now
+a pair consisting of the operator package and canonical fast-fixed-point data;
+the compatibility layer projects those components explicitly. The root-facing
+Problem 4.3 uniform-bound target is kept as a direct residual interface because
+the bound does not depend on a Molecule witness, so the upstream normalization
+carrier does not enter the checked MLC proof.
+
 **Update (2026-07, straddling refactor):** frontier axiom 1 was sharpened from
 `green_sublevel_translate_inter_mandelbrot_connected` to a strictly weaker
 `..._straddling` variant. The two nested strata of the intersection are now

@@ -37,7 +37,7 @@ lemma not_satelliteRenormalizableTower_of_mem_mandelbrot
     ¬ SatelliteRenormalizableTower c := by
   intro hTower
   have hdiv : PrincipalNestTarget.ModulusNotSummableTarget c hTower :=
-    h_mod Molecule.molecule_conjecture_refined c hc hTower
+    h_mod (Molecule.molecule_conjecture_refined).1 c hc hTower
   exact PrincipalNestTarget.not_modulusNotSummableTarget c hTower hdiv
 
 /-- Any single Mandelbrot satellite tower refutes the current Gaussian-target bridge data. -/
@@ -62,7 +62,7 @@ lemma not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal
     ¬ SatelliteRenormalizableTower c := by
   intro hTower
   have hdiv : PrincipalNestTarget.ConformalModulusNotSummableTarget c hTower :=
-    h_mod Molecule.molecule_conjecture_refined c hc hTower
+    h_mod (Molecule.molecule_conjecture_refined).1 c hc hTower
   exact PrincipalNestTarget.not_conformalModulusNotSummableTarget c hTower hdiv
 
 /-- Any single Mandelbrot satellite tower refutes conformal-target bridge data. -/
@@ -89,6 +89,18 @@ lemma not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform
   have h_conf : MoleculeConformalModulusLowerBoundData :=
     moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData h_uniform
   exact not_satelliteRenormalizableTower_of_mem_mandelbrot_conformal h_conf c hc
+
+/-- Direct residual uniform bounds also exclude a satellite tower in the
+    current Gaussian-modulus model, without requiring a Molecule witness. -/
+lemma not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform_direct
+    (h_uniform : MoleculeUniformConformalLowerBoundDirectData) (c : ℂ)
+    (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
+    ¬ SatelliteRenormalizableTower c := by
+  intro hTower
+  have h_conf : PrincipalNestTarget.ConformalModulusNotSummableTarget c hTower :=
+    PrincipalNestTarget.conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
+      c hTower (h_uniform c hc hTower)
+  exact PrincipalNestTarget.not_conformalModulusNotSummableTarget c hTower h_conf
 
 /-- Uniform conformal-target variant: any Mandelbrot satellite tower refutes the
     stronger uniform bridge data. -/

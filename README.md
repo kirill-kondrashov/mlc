@@ -254,7 +254,7 @@ make graphs
 
 ## Repository entry points
 
-- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L4593-L4604)
+- Root declaration: [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean#L5228-L5233)
 - Root axiom check: [`check_axioms.lean`](check_axioms.lean)
 - Dependency graph generator:
   [`scripts/generate_dependency_graph_site.py`](scripts/generate_dependency_graph_site.py)

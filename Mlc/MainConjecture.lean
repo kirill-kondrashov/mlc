@@ -125,7 +125,7 @@ lemma irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBrid
   have h_noTowerOnM :
       ∀ (c : ℂ), c ∈ MLC.Quadratic.MandelbrotSet → ¬ SatelliteRenormalizableTower c := by
     intro c hc
-    exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform h_uniform c hc
+    exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform_direct h_uniform c hc
   intro c hc h_ir
   exact classify_infinitely_renormalizable_of_noTowerImpliesPrimitive_of_noTowerOnM
     h_noTowerPrim h_noTowerOnM c hc h_ir
@@ -1856,8 +1856,18 @@ theorem mlc_conjecture_of_motionHyp_track12_data
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
     (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
-    h_motion h_track12.1 h_track12.2
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  rcases dichotomy c with h_fin | h_inf
+  · exact finite_lc_provider_of_motionHyp h_motion c hc h_fin
+  · by_cases hTower : SatelliteRenormalizableTower c
+    · exact lc_at_of_shrink_of_connected_at c hc
+        (finite_connectedAt_provider_of_motionHyp h_motion c hc)
+        (MoleculeBridgeTarget.parameter_shrink_of_moleculeUniformBridgeTarget
+          h_track12.2 c hc hTower)
+    · exact mlc_primitive_renormalizable_ax c hc
+        (h_track12.1 c hc h_inf hTower)
 
 /-- Main seam assembly from boundary-motion data, Track-1 no-tower
     classification, and direct satellite-side local-connectivity data. -/
@@ -2117,8 +2127,7 @@ theorem irClassification_of_boundedTypeConstructive_and_residualOpen
 /-- Likewise, the new bounded-type constructive slice and the residual open seam
     recover the full satellite local-connectivity payload. The bounded-type
     region uses the new constructive cutover, while the unbounded/interpolation
-    region uses the Problem 4.3 uniform bridge through the refined Molecule
-    theorem. -/
+    region uses the direct Problem 4.3 uniform bridge target. -/
 theorem satelliteLC_of_boundedTypeConstructive_and_residualOpen
     (hBT : BoundedTypeProblem45ConstructiveData)
     (hRes : ResidualOpenVirtualNearMoleculeData) :
@@ -2128,7 +2137,7 @@ theorem satelliteLC_of_boundedTypeConstructive_and_residualOpen
   · exact hBT.2 c hc hSat hBounded
   · exact MoleculeBridgeTarget.lc_of_moleculeUniformBridgeTarget
       (problem43_of_residualOpenVirtualNearMolecule hRes)
-      Molecule.molecule_conjecture_refined c hc hSat
+      c hc hSat
 
 /-- Reassemble the old Problem 4.5 root-facing payload from the new
     bounded-type constructive route plus the residual open 4.3/4.4 seam. -/
