@@ -1,48 +1,131 @@
-# Current status
+# Current status (2026-08-30)
 
-## Checked frontier already completed
+## Checked frontier
+
+The root declaration `MLC.mlc_conjecture` is sorry-free and its checked
+frontier is unchanged:
+
+- `MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`
+  (parameter-side straddling connectivity);
+- `MLC.residualOpenVirtualNearMoleculeAxiom`
+  (Dudko Problems 4.3 and 4.4).
+
+The Molecule dependency is pinned to
+`385fc36c553947cf125d09848c2a3077fc751209`. The refreshed upstream API is
+adapted without adding its witness-level axiom to the root frontier.
+
+## Completed parameter infrastructure
 
 - Prompt 101: checked local successor coherence for the parameter critical-orbit branch.
-- Prompt 104: checked local parameter critical-orbit germ off `MandelbrotSet`.
+- Prompt 104: checked local parameter critical-orbit germs off `MandelbrotSet`.
 - Prompt 105: checked packaged local chart data and higher-level lifts.
 - Prompt 106: checked local overlap transitions by constant roots of unity on preconnected overlaps.
-- Prompt 107: checked finite parameter-path chart chain with explicit adjacent overlap neighborhoods.
+- Prompt 107: checked finite parameter-path chart chains with explicit adjacent overlap neighborhoods.
+- Prompt 108 (`Mlc/ParameterCriticalOrbitLoopProduct.lean`): checked a finite common-level transition product.
+- Prompt 109 (`Mlc/ParameterCriticalOrbitLoopComparison.lean`): checked quotient-defined local transitions, uniqueness, and the triple-overlap cocycle.
 
-## Active work
-
-- Prompt 108 (`Mlc/ParameterCriticalOrbitLoopProduct.lean`) is now checked at the finite transition-product level requested by the Lead.
-- Prompt 109 (`Mlc/ParameterCriticalOrbitLoopComparison.lean`) is now checked for canonical local transitions, uniqueness, and the triple-overlap cocycle.
-- I removed an accidental axiom introduced during earlier debugging; the final checked file is back to an honest non-axiomatic state.
-- The loop package now uses an explicit basepoint chart for the closing datum, which resolved the earlier structural issue.
+The loop package is deliberately finite. It does not prove product triviality,
+chart/refinement independence, homotopy invariance, a global monodromy
+representation, or a global parameter Böttcher coordinate. That route is
+paused until a geometric parameter object supplies the missing transport data.
 
 ## Validation
 
-- `lake env lean Mlc/ParameterCriticalOrbitPathChain.lean` ✅
-- `lake env lean Mlc/ParameterCriticalOrbitLoopProduct.lean` ✅
-- `lake build` ✅
+- `make build` ✅
+- `make check` ✅
+- `./scripts/verify_output.sh` ✅
+- Targeted checks for the parameter path, loop product, and loop comparison modules ✅
 
-## Notes
+## Current decision for `green_sublevel_...`
 
-- Prompt 108 now provides a checked finite ordered product of adjacent and closing transition multipliers at a common finite level, with a proof that the product lies in `rootsOfUnitySet (2 ^ level)`.
-- Prompt 108 still does **not** prove triviality of that product, chart/refinement independence, homotopy invariance, a monodromy representation, or any global parameter Böttcher coordinate.
-- Prompt 109 proves only the local quotient-defined comparison/cocycle layer. Refinement comparison remains blocked because the current path-chain API has no common triple-overlap or explicit coarse-to-refined edge transport data.
-- Prompt 102 remains open at the global level: there is still no checked parameter-loop continuation/gluing theorem over `MandelbrotSetᶜ`, so no justified monodromy representation or global parameter Böttcher coordinate claim yet.
+**Option B is selected:** define a genuine finite-level moving parameter piece
+independently of connectedness, rather than trying to prove the frozen
+translated-Green intersection by an equivalent witness or motion-image
+package.
 
-## Next steps
+Option A remains parked because no independently verified theorem in the
+current repository or literature import has been shown to target exactly
 
-- If continuing, the next honest step is a separate invariance/triviality prompt building on the checked finite-product package from Prompt 108.
+```lean
+IsConnected
+  ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+```
 
-## Direct Route-C update
+The existing `ParaPuzzlePieceAt` is a frozen-base dynamical translate. It is
+not yet a moving parameter wake, ray/equipotential component, or
+phase-parameter object, so the classical parapuzzle theorem cannot simply be
+rewritten into the current target.
 
-The current direct implementation has added
-`Mlc/Quadratic/Complex/Bottcher/BottcherParamMotion.lean`. It proves a
-nontrivial space-holomorphic motion of an explicit connected closed disk,
-tracked by the checked parametrized near-infinity Böttcher inverse along a
-small simultaneous parameter/dynamical path. This is local analytic
-infrastructure only: it is not a puzzle-boundary motion and does not identify
-the motion image with the frozen Green-sublevel intersection. The theorem
-`green_sublevel_translate_inter_mandelbrot_connected_straddling` therefore
-remains the live frontier axiom.
+## Active plan: replace the frozen target honestly
+
+### Phase 0 — guardrails (complete)
+
+- Keep the ambient translated Green sublevel connectivity proof.
+- Keep the subset and superset strata separate.
+- Do not use `ParaPieceCarvedByMotion`,
+  `ParaPieceIsMotionImage`, or any `∃ S, IsConnected S ∧ S = target`
+  formulation as a discharge; the repository proves these are either
+  impossible on the live stratum or equivalent to the target.
+
+### Phase 1 — specify an independent parameter object (next)
+
+Choose one finite depth and the main-cardioid class first, with base parameter
+`c = 0`. If that explicit model exposes a genuine boundary/separation
+obstruction, record it before attempting a primitive component. Define the
+parameter piece from parameter boundary data and a complementary component,
+using the existing finite boundary-graph scaffold in
+`Mlc/Quadratic/Complex/FiniteParapuzzleBoundary.lean`.
+
+The definition must include:
+
+- actual boundary/ray/equipotential data, not a connectedness field;
+- the complementary component containing the base parameter;
+- nesting/refinement data;
+- a separate theorem target for its relative intersection with `M`.
+
+The first deliverable is a precise object/theorem pair and a comparison
+statement, if one can be proved, to the frozen translated-Green target.
+
+### Phase 2 — prove the restricted geometric theorem
+
+For the selected class and finite level:
+
+1. construct the finite parameter boundary arcs and prove their basic
+   compactness, closedness, and separation properties;
+2. identify the intended parameter component independently of connectedness;
+3. prove the phase-parameter correspondence for that restricted family;
+4. prove relative connectivity and the nesting/shrinkage facts required by
+   `LcAtOfShrink`.
+
+The first restricted theorem is allowed to cover only the selected class. It
+must not be generalized to all `c ∈ MandelbrotSet` until the hypotheses and
+correspondence are actually established.
+
+### Phase 3 — migrate the root consumer
+
+Adapt `LcAtOfShrink` and the finite/primitive branch consumers to the genuine
+parameter-piece family. Only after the new family supplies the required
+relative connected neighborhoods should the frozen `ParaPuzzlePieceAt` route
+be removed and the straddling axiom deleted.
+
+Success conditions:
+
+- no weaker replacement axiom is introduced;
+- the new parameter object is not defined by connectedness;
+- `make check` no longer lists
+  `MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`.
+
+## Direct Route-C status
+
+`Mlc/Quadratic/Complex/Bottcher/BottcherParamMotion.lean` proves a nontrivial
+space-holomorphic motion of an explicit connected closed disk, using the
+checked near-infinity parametrized Böttcher inverse. This is reusable local
+analytic infrastructure, but it is not an equipotential or parapuzzle
+boundary and does not identify its image with the frozen target.
+
+Do not resume λ-lemma, Słodkowski, full-basin Böttcher, or finite loop
+invariance work for this frontier until Phase 1 fixes a genuine geometric
+consumer requiring that machinery.
 
 ## Frozen straddling continuation audit
 
@@ -111,3 +194,9 @@ intersection rule is false, while a nontrivial clopen split yields a
 nontrivial idempotent in the elementary realization `C(X, ℤ)`. This
 formalizes the necessary shape of the missing conservative bridge without
 claiming a Pacman realization or changing the axiom frontier.
+
+## Crash recovery
+
+The 2026-08-30 Copilot crash was a Node/V8 heap-exhaustion event, not a Lean
+failure. The repository was revalidated afterward; the crash report remains
+untracked and is intentionally not part of the source or commit history.
