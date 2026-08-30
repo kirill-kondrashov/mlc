@@ -106,10 +106,15 @@ The finite algebraic incidence gate is now implemented in
 endomorphism ring of a finite attachment graph, proves that a connected
 attachment graph has no nontrivial idempotent, and supplies
 `boundaryIncidenceGraph` on the finite boundary-arc subtype from
-`FiniteParapuzzleBoundary.lean`. The remaining inputs are the
-attachment-connectivity theorem and the conservative map from
-`C(Q_n(P), ℤ)`; no Efimov motive or parameter realization has yet been
-constructed.
+`FiniteParapuzzleBoundary.lean`. It also proves
+`boundaryIncidenceGraph_connected_iff_carrier_connected`, identifying graph
+connectivity with connectedness of the finite boundary carrier. The
+exact-target conditional consumer
+`green_sublevel_translate_inter_mandelbrot_connected_of_incidenceMotiveBridge`
+is wired through the conservative map from `C(Q_n(P), ℤ)`. The finite
+realization, carrier-connectivity input, conservative bridge, and exact
+comparison remain open; no Efimov motive or parameter realization has yet
+been constructed.
 
 ## Reduction architecture
 

@@ -378,10 +378,13 @@ The finite algebraic shadow of the proposed motive is implemented in
 [`Mlc/MotivicFiniteIncidence.lean`](Mlc/MotivicFiniteIncidence.lean). It
 defines the edge-constant integer incidence endomorphism ring and proves that
 a connected finite attachment graph has no nontrivial idempotent. The module
-also adapts the finite boundary-arc scaffold to an incidence graph and
-isolates the missing conservative map from $C(Q_n(P),\mathbb Z)$ to that
-ring. This is a proved intermediate gate, not an instantiation of Efimov's
-relative motive and not a replacement for the frozen-target comparison.
+also adapts the finite boundary-arc scaffold to an incidence graph and proves
+that connectedness of the finite union of arc carriers is equivalent to
+connectivity of that graph. Its conditional exact-target consumers isolate the missing
+conservative map from $C(Q_n(P),\mathbb Z)$ to the incidence ring and wire the
+concrete boundary graph to the frozen set. This is a proved intermediate gate,
+not an instantiation of Efimov's relative motive and not a replacement for the
+frozen-target comparison.
 
 The external sources are:
 

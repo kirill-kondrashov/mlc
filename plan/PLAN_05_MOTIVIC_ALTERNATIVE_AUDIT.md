@@ -319,8 +319,10 @@ value of an idempotent along graph walks and uses
 
 The module also defines `boundaryIncidenceGraph` on the finite subtype of
 arcs supplied by `FiniteParapuzzleBoundary.lean`; adjacency is distinctness
-plus nonempty carrier intersection. Thus the remaining graph-side obligation
-is an ordinary finite attachment-connectivity theorem. The type
+plus nonempty carrier intersection. The theorem
+`boundaryIncidenceGraph_connected_iff_carrier_connected` proves that, for this
+finite arc model, a connected union of carriers is equivalent to a connected
+attachment graph. The type
 `IncidenceMotiveBridge` isolates the genuinely missing comparison
 
 ```text
@@ -329,10 +331,15 @@ C(Q, Z) -> IncidenceEndomorphismRing(G)
 
 and requires only preservation of nontrivial clopen characteristic functions.
 The conditional theorem
-`connectedSpace_of_incidenceMotiveBridge` then feeds this comparison and the
+`connectedSpace_of_incidenceMotiveBridge` feeds this comparison and the
 independently proved graph indecomposability into the existing motivic
-connectedness contract. No Efimov motive, realization predicate, or root axiom
-is introduced by this module.
+connectedness contract. The exact-target consumers
+`green_sublevel_translate_inter_mandelbrot_connected_of_incidenceMotiveBridge`
+and
+`green_sublevel_translate_inter_mandelbrot_connected_of_boundaryIncidenceMotiveBridge`
+also prove the target's nonemptiness from `c ∈ M` and wire the contract to
+the frozen set. No Efimov motive, realization predicate, or root axiom is
+introduced by this module.
 
 ### Checked topological gate (2026-08-30)
 

@@ -275,11 +275,22 @@ The first concrete algebraic gate is now proved in
 `Mlc/MotivicFiniteIncidence.lean`: integer-valued functions constant along
 the edges of a connected finite boundary-incidence graph have no nontrivial
 idempotents. The file defines the graph on the finite subtype of boundary
-arcs from `FiniteParapuzzleBoundary.lean` and isolates the remaining
-conservative comparison
-`C(Q_n(P), ℤ) → IncidenceEndomorphismRing(G_P)`. This comparison, the
-attachment-graph connectivity theorem, and the independent realization locus
-are still open; the frozen straddling axiom is unchanged.
+arcs from `FiniteParapuzzleBoundary.lean` and proves
+`boundaryIncidenceGraph_connected_iff_carrier_connected`: for this finite
+arc model, carrier connectedness is equivalent to connectivity of the
+arc-attachment graph. The theorems
+`green_sublevel_translate_inter_mandelbrot_connected_of_incidenceMotiveBridge`
+and
+`green_sublevel_translate_inter_mandelbrot_connected_of_boundaryIncidenceMotiveBridge`
+now wire a connected graph (or the concrete boundary graph) and a conservative
+bridge `C(Q_n(P), ℤ) → IncidenceEndomorphismRing(G_P)` to the exact frozen
+target, with target nonemptiness proved from the base parameter `c`.
+
+The remaining obligations are to construct the finite marked realization and
+its connected boundary carrier independently, prove the conservative bridge,
+and establish the exact comparison with that realization. No Efimov motive or
+root-axiom discharge has been introduced; the frozen straddling axiom is
+unchanged.
 
 ## Crash recovery
 
