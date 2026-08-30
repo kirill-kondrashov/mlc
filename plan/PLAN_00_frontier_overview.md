@@ -37,9 +37,10 @@ translate is **not** contained in `M` (the equipotential boundary crosses `∂M`
 
 **Update (2026-07):** the earlier dynamical-plane seams
 `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` and
-`MLC.Quadratic.extended_ray_map_free_continuous` have since been **discharged**
-(the sublevel connectivity they supported is now proved directly by potential
-theory — Route A — see the discharged sections in `README.md`), so the live
+`MLC.Quadratic.extended_ray_map_free_continuous` have been **removed from the
+checked root path** (the sublevel connectivity they supported is now proved
+directly by potential theory — Route A — see the corresponding section in
+`README.md`), so the live
 `make check` frontier is exactly the two axioms above.
 
 ### Literature correspondence (Dudko, arXiv 2512.24171)
@@ -61,17 +62,18 @@ theory — Route A — see the discharged sections in `README.md`), so the live
 
 The former axiom `filled_julia_set_connected` is **discharged**
 (`filled_julia_set_connected_proved`, `Mlc/FilledJuliaConnected.lean`) and no longer
-appears in the checked frontier. The former `proxy_bottcher_map_inj_on_basin_axiom`
-is likewise **discharged** into the theorem
-`proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot`, leaving in its place the more
-elementary radial-monotonicity seam `green_function_strictMono_along_ray_basin_seam`
-(item 1).
+appears in the checked frontier. The theorem
+`proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot` remains as a legacy
+radial-proxy adapter; it still consumes the radial-monotonicity seam
+`green_function_strictMono_along_ray_basin_seam`, and neither input is used by
+the checked root path.
 
 The former axiom pair `external_ray_map_exists` / `extended_ray_map_continuous` is
-now **reduced to a single boundary-continuity axiom** `extended_ray_map_free_continuous`
-(item 2). The *existence* of the external-ray parameterization for `c ∈ M` is proved
-by `GreenRayDischarge.external_ray_map_data_of_mandelbrot` (depends only on the radial
-ray seam, item 1); the on-path connectivity proof uses the axiom-free
+now represented by a legacy off-path boundary-continuity axiom
+`extended_ray_map_free_continuous`. The *existence* of the external-ray
+parameterization for `c ∈ M` is proved by
+`GreenRayDischarge.external_ray_map_data_of_mandelbrot` (depends only on the
+legacy radial ray seam); the checked connectivity proof uses the axiom-free
 `external_ray_map_free` / `extended_ray_map_free` (in `BottcherAxioms.lean`), so
 `external_ray_map_exists` no longer appears on the `mlc_conjecture` frontier. Only the
 continuity to the unit circle remains axiomatic, and its statement is
@@ -186,9 +188,9 @@ monotonicity — all removed from the checked frontier (see `README.md`).
 > **⚠️ HISTORICAL SECTION (superseded).** Everything from here to the
 > "Tier C — axiom A" heading below is the detailed analysis of the old
 > radial-proxy axioms (external-ray existence, external-ray boundary continuity,
-> radial Green monotonicity). **All of these axioms have since been discharged /
-> removed from the checked frontier** (see the "Discharged axioms" record near the
-> end and `README.md`). The notes are retained only as a record of why the
+> radial Green monotonicity). **These inputs have been removed from the checked
+> root path, not proved by the direct Route-A bypass** (see the corresponding
+> record near the end and `README.md`). The notes are retained only as a record of why the
 > radial-proxy route was abandoned in favour of direct potential theory (Route A).
 > The live frontier is exactly axioms **A** and **B**.
 

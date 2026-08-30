@@ -4,14 +4,17 @@ import Mlc.Quadratic.Complex.Axioms
 import Mathlib.Topology.Order.IntermediateValue
 
 /-!
-# Upstream discharge of the external-ray-map existence axiom for `c ∈ M`
+# Legacy radial-proxy external-ray construction for `c ∈ M`
 
 This file proves `external_ray_map_data_of_mandelbrot`, the exact statement of the
-former `external_ray_map_exists` axiom restricted to its true domain `c ∈ MandelbrotSet`,
-using only Lean-core axioms plus the radial strict-monotonicity seam
-(`green_function_strictMono_along_ray_basin_seam`).  It is deliberately placed **upstream**
-of `BottcherAxioms` so that `external_ray_map` / `extended_ray_map` can be redefined
-axiom-free there.
+former `external_ray_map_exists` axiom restricted to its true domain
+`c ∈ MandelbrotSet`, using only Lean-core axioms plus the radial
+strict-monotonicity seam
+(`green_function_strictMono_along_ray_basin_seam`). It is deliberately placed
+**upstream** of `BottcherAxioms` so that the compatibility
+`external_ray_map` / `extended_ray_map` definitions can be available without an
+additional existence axiom. This legacy radial-proxy construction is not used
+by the checked `MLC.mlc_conjecture` path.
 
 The construction is elementary:
 * For `c ∈ M` the critical value `0 ∈ K c`, so `green_function c 0 = 0`; every origin ray

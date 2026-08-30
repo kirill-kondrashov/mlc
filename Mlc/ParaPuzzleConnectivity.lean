@@ -4,28 +4,18 @@ import Mlc.Quadratic.Complex.PuzzleLemmas2
 import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 
 /-!
-# Para-puzzle connectivity from Böttcher infrastructure
+# Para-puzzle connectivity and the parameter frontier
 
-This file proves `ParaPuzzlePieceInterMandelbrotConnectedData` (and hence
-`para_puzzle_piece_inter_mandelbrot_connected`) from two clean axioms:
+The checked root path uses the direct potential-theory proof
+`green_sublevel_connected_direct` for dynamical Green-sublevel connectivity.
+It then identifies the frozen translated dynamical piece with the corresponding
+parameter translate and invokes only the explicitly labeled straddling
+parameter-connectivity frontier.
 
-1. **Basin injectivity** (`proxy_bottcher_map_inj_on_basin_axiom`):
-   For every parameter `c`, the proxy Böttcher map is injective on the basin
-   of infinity. This is a standard fact in holomorphic dynamics: for connected
-   K(c), the Böttcher coordinate is conformal on the basin.
-
-2. **Green-sublevel–M intersection connectivity**
-   (`green_sublevel_translate_inter_mandelbrot_connected`):
-   For `c ∈ M` and every `n`, the set
-   `{c' | G_c(c' − c) < (1/2)^n} ∩ M` is connected.
-   This is the core content of the Yoccoz puzzle connectivity theorem.
-
-The proof chain:
-- Basin injectivity + exterior ray surjectivity (from `external_ray_map_exists`)
-  → `GreenSublevelConnectedHyp` (Green sublevels are connected for c ∈ M)
-  → `DynamicalPuzzlePiece c n 0 = GreenSublevel c n` for c ∈ M
-  → `ParaPuzzlePieceAt c n = {c' | G_c(c' − c) < (1/2)^n}`
-  → `ParaPuzzlePieceAt c n ∩ M` is connected (by axiom 2)
+The radial-proxy and external-ray adapters retained below are compatibility and
+exploration lemmas. They are off the checked `MLC.mlc_conjecture` path and still
+expose the legacy radial-monotonicity assumptions where their statements require
+them.
 -/
 
 namespace MLC
@@ -34,7 +24,7 @@ open Quadratic Complex Topology Set Filter
 
 noncomputable section
 
-/-! ## Step 1: Böttcher surjectivity from `external_ray_map_exists` -/
+/-! ## Legacy adapter: Böttcher surjectivity from `external_ray_map_exists` -/
 
 /-- The proxy Böttcher map is surjective onto `{w | 1 < ‖w‖}` from the
     `bottcher_domain`. This follows from the right-inverse property of the
@@ -50,17 +40,15 @@ theorem bottcher_surj_from_ray_map :
     Quadratic.external_ray_map_right_inverse c w hw
   exact ⟨Quadratic.external_ray_map c w, h_mem, h_inv⟩
 
-/-! ## Step 2: Basin injectivity axiom -/
+/-! ## Legacy adapter: radial-proxy basin injectivity -/
 
-/-- For every parameter `c ∈ M`, the proxy Böttcher map is injective on the
-    basin of infinity.
+/-- Compatibility theorem for the legacy radial-proxy route.
 
-    This is now a **theorem**, not an axiom. Because `proxy_bottcher_map` is the
-    *radial* proxy `(z/‖z‖)·exp(green c z)`, injectivity is elementary
-    (`proxy_bottcher_map_injOn_nonzero_basin_of_green_ray_strictMono`): it reduces
-    to strict monotonicity of the Green function along origin-rays
-    (`green_function_strictMono_along_ray_basin_seam`), together with `0 ∉ basin`
-    for `c ∈ M` (the critical point stays in `K(c)`). -/
+    Because `proxy_bottcher_map` is the radial proxy
+    `(z/‖z‖)·exp(green c z)`, its proof still consumes the legacy radial
+    monotonicity seam `green_function_strictMono_along_ray_basin_seam`.
+    It is not used by the checked root path, which uses
+    `green_sublevel_connected_direct`. -/
 theorem proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot (c : ℂ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
     Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
@@ -80,10 +68,10 @@ theorem proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot (c : ℂ)
   · exact fun h => h0 (h ▸ hz)
   · exact fun h => h0 (h ▸ hw)
 
-/-! ## Step 3: Green sublevel connectivity (proved) -/
+/-! ## Step 3: Green sublevel connectivity (proved directly) -/
 
 /-- Green sublevel sets `{G_c < (1/2)^n}` are connected for `c ∈ M`.
-    Proved from basin injectivity + exterior ray surjectivity. -/
+    The checked proof is the direct Route-A potential-theory argument. -/
 theorem green_sublevel_connected_hyp_proved : Quadratic.GreenSublevelConnectedHyp :=
   green_sublevel_connected_onM
 
@@ -243,10 +231,11 @@ theorem green_sublevel_translate_inter_mandelbrot_connected (c : ℂ)
   · exact green_sublevel_translate_inter_mandelbrot_connected_of_subset hc n hsub
   · exact green_sublevel_translate_inter_mandelbrot_connected_straddling c hc n hsub
 
-/-! ## Step 6: Para-puzzle connectivity (proved from axioms 1 + 2) -/
+/-! ## Step 6: Para-puzzle connectivity (Route A plus the straddling frontier) -/
 
 /-- Para-puzzle pieces intersected with M are connected — proved from
-    basin injectivity + Green-sublevel–M intersection connectivity. -/
+    the direct dynamical Green-sublevel theorem plus the
+    Green-sublevel–M intersection connectivity frontier. -/
 theorem para_puzzle_piece_inter_mandelbrot_connected_proved (c : ℂ)
     (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet) := by

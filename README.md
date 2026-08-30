@@ -129,15 +129,15 @@ must be connected.
 This statement is now a **theorem** (`Mlc/FilledJuliaConnected.lean`) and is no
 longer on the checked axiom frontier; it is retained here for context.
 
-### 4. Radial monotonicity of the Green function (discharged)
+### 4. Radial monotonicity of the Green function (removed from the checked root path)
 
 The former basin-coordinate injectivity route recorded the residual radial input
 `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`. This axiom is
-**no longer on the checked frontier**: the sublevel connectivity it was used to
-prove is now supplied directly by the potential-theory argument of Route A
+**no longer on the checked root path**: the sublevel connectivity it was used to
+prove is supplied directly by the potential-theory argument of Route A
 (`green_sublevel_connected_direct`, via `green_function_harmonicOnNhd_basin` and
-the harmonic minimum principle), so `mlc_conjecture` no longer depends on any
-radial-monotonicity seam.
+the harmonic minimum principle). The legacy seam remains declared for
+off-path radial-proxy experiments; it is not claimed to have been proved.
 
 ### 5. Parameter-space connectivity of translated Green sublevel sets
 
