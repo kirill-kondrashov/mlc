@@ -374,6 +374,15 @@ connected ambient sets and a straddling condition do not imply connectedness
 of their intersection, while a nontrivial clopen split yields a nontrivial
 idempotent in $C(X,\mathbb Z)$.
 
+The finite algebraic shadow of the proposed motive is implemented in
+[`Mlc/MotivicFiniteIncidence.lean`](Mlc/MotivicFiniteIncidence.lean). It
+defines the edge-constant integer incidence endomorphism ring and proves that
+a connected finite attachment graph has no nontrivial idempotent. The module
+also adapts the finite boundary-arc scaffold to an incidence graph and
+isolates the missing conservative map from $C(Q_n(P),\mathbb Z)$ to that
+ring. This is a proved intermediate gate, not an instantiation of Efimov's
+relative motive and not a replacement for the frozen-target comparison.
+
 The external sources are:
 
 - [Dudko--Lyubich--Selinger, *Pacmen*](refs/1703.01206v3.pdf)
@@ -398,6 +407,7 @@ make check
 | Axiom report | [`check_axioms.lean`](check_axioms.lean) |
 | Straddling target | [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean) |
 | Motivic frontier contract | [`Mlc/MotivicConnectednessFrontier.lean`](Mlc/MotivicConnectednessFrontier.lean) |
+| Finite incidence algebraic gate | [`Mlc/MotivicFiniteIncidence.lean`](Mlc/MotivicFiniteIncidence.lean) |
 | Topological intersection obstruction | [`Mlc/MotivicIntersectionNoGo.lean`](Mlc/MotivicIntersectionNoGo.lean) |
 | Frontier overview | [`plan/PLAN_00_frontier_overview.md`](plan/PLAN_00_frontier_overview.md) |
 | Parameter route | [`plan/PLAN_04_parameter_connectivity.md`](plan/PLAN_04_parameter_connectivity.md) |

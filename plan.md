@@ -271,6 +271,16 @@ abstract endomorphism monoid is only a Lean placeholder until the actual
 relative Efimov motive is constructed; the conditional theorem in that file
 proves the existing topological conclusion from the contract.
 
+The first concrete algebraic gate is now proved in
+`Mlc/MotivicFiniteIncidence.lean`: integer-valued functions constant along
+the edges of a connected finite boundary-incidence graph have no nontrivial
+idempotents. The file defines the graph on the finite subtype of boundary
+arcs from `FiniteParapuzzleBoundary.lean` and isolates the remaining
+conservative comparison
+`C(Q_n(P), ℤ) → IncidenceEndomorphismRing(G_P)`. This comparison, the
+attachment-graph connectivity theorem, and the independent realization locus
+are still open; the frozen straddling axiom is unchanged.
+
 ## Crash recovery
 
 The 2026-08-30 Copilot crash was a Node/V8 heap-exhaustion event, not a Lean

@@ -101,6 +101,16 @@ intersection rule is false, while a nontrivial clopen split yields a
 nontrivial idempotent in `C(X, ℤ)`. This sharpens the required conservative
 realization without changing the two-axiom frontier.
 
+The finite algebraic incidence gate is now implemented in
+`Mlc/MotivicFiniteIncidence.lean`. It defines the edge-constant integer
+endomorphism ring of a finite attachment graph, proves that a connected
+attachment graph has no nontrivial idempotent, and supplies
+`boundaryIncidenceGraph` on the finite boundary-arc subtype from
+`FiniteParapuzzleBoundary.lean`. The remaining inputs are the
+attachment-connectivity theorem and the conservative map from
+`C(Q_n(P), ℤ)`; no Efimov motive or parameter realization has yet been
+constructed.
+
 ## Reduction architecture
 
 - Local connectivity of `M` ← para-puzzle connectivity

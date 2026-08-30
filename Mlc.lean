@@ -56,3 +56,4 @@ import Mlc.ParameterCriticalOrbitLoopProduct
 import Mlc.ParameterCriticalOrbitLoopComparison
 import Mlc.MotivicIntersectionNoGo
 import Mlc.MotivicConnectednessFrontier
+import Mlc.MotivicFiniteIncidence

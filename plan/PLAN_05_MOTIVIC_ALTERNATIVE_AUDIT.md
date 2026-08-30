@@ -300,6 +300,40 @@ incidence category and prove the separation-to-idempotent implication for one
 finite marked model. If this implication cannot be stated without assuming
 the desired connectedness, route M1 is not a real reduction.
 
+### Finite incidence gate (2026-08-30)
+
+The first algebraic incidence gate is now implemented in
+`Mlc/MotivicFiniteIncidence.lean`. For a graph `G`, it defines
+
+```text
+IncidenceEndomorphismRing(G)
+  = {f : V(G) -> Z | f is constant on every incidence edge}.
+```
+
+The theorem
+`incidenceCenter_noNontrivialIdempotent` proves, without any topological or
+connectedness assumption on a parameter locus, that a connected incidence
+graph has no nontrivial idempotent in this ring. Its proof propagates the
+value of an idempotent along graph walks and uses
+`e(v)^2 = e(v)` in `Z`.
+
+The module also defines `boundaryIncidenceGraph` on the finite subtype of
+arcs supplied by `FiniteParapuzzleBoundary.lean`; adjacency is distinctness
+plus nonempty carrier intersection. Thus the remaining graph-side obligation
+is an ordinary finite attachment-connectivity theorem. The type
+`IncidenceMotiveBridge` isolates the genuinely missing comparison
+
+```text
+C(Q, Z) -> IncidenceEndomorphismRing(G)
+```
+
+and requires only preservation of nontrivial clopen characteristic functions.
+The conditional theorem
+`connectedSpace_of_incidenceMotiveBridge` then feeds this comparison and the
+independently proved graph indecomposability into the existing motivic
+connectedness contract. No Efimov motive, realization predicate, or root axiom
+is introduced by this module.
+
 ### Checked topological gate (2026-08-30)
 
 The first gate is now formalized in
