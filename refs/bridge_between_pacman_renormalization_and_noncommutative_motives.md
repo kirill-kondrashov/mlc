@@ -43,6 +43,13 @@ phase-parameter comparison identifies it with a `Q_n(P)` in the repository.
 This note therefore supports an alternative research direction and does not
 discharge the existing Lean axiom.
 
+The Efimov source used for the current plan is arXiv:2510.17010v1,
+*Rigidity of the category of localizing motives*. The canonical raw copies
+are kept outside this repository at
+`/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.pdf`
+and
+`/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.tex`.
+
 Related source texts named by the note:
 
 - BGT, "A universal characterization of higher algebraic K-theory";

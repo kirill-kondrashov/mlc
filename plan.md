@@ -162,13 +162,38 @@ refinement system, categorical renormalization, and parameter realization
 `Q_n(P)` as additional constructions. Its connectedness and MLC-neighborhood
 requirements are not consequences of Efimov's rigidity theorem.
 
-The revised alternative is a two-layer program:
+The revised alternative is now a source-backed conditional route using
+Efimov, *Rigidity of the category of localizing motives*,
+arXiv:2510.17010v1. The canonical raw references are:
+
+- `/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.pdf`
+- `/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.tex`
+
+Efimov proves the interfaces needed for the categorical middle layer:
+`U_loc : Cat^perf -> Mot^loc`, rigidity and dualizability of
+`Mot^loc` and `Mot^loc_E` (`th:rigidity_over_Sp_intro`,
+`th:dualizability_and_rigidity`), trace-class/nuclear refinement
+(`prop:nuclear_equiv_cond`), inverse-limit/internal-Hom descriptions of
+motivic morphisms (`th:morphisms_in_Mot^loc_via_limits`,
+`th:morphisms_in_Mot^loc_via_internal_Hom`), and equivariant/local-system
+motives (`th:G_equivariant_motives`). These results do not imply connectedness
+of a parameter locus.
+
+The active alternative is a three-gate program:
 
 1. construct an independently defined topological realization of finite
    marked Pacman data and prove a phase/component-attachment or no-separation
    theorem;
-2. use relative localizing motives to organize refinement, renormalization,
-   trace-class/nuclear behavior, and possible shrinking estimates.
+2. construct a finite incidence category, a conservative
+   separation-to-idempotent map, and an independently proved
+   indecomposability result;
+3. prove the exact comparison with the frozen translated-Green target.
+
+For a finite marking group `G_P`, the proposed relative base is the rigid
+convolution category `E_P = Loc(BG_P)`. Refinements become exact strongly
+continuous `E_P`-linear functors; eventual trace-class behavior makes Efimov's
+nuclear and inverse-limit theorems applicable. A general `Mot_Q` local-system
+construction is optional and cannot replace the finite geometric gate.
 
 This gives a possible route to a moving parameter-piece replacement, and may
 also be useful for the residual virtual near-Molecule package, but it does not
@@ -182,9 +207,11 @@ with a motivic parameter locus. The required missing bridge is a conservative
 topological realization: a clopen split of a parameter locus must produce a
 categorical idempotent or split exact decomposition, and the relevant marked
 model/motive must be shown independently to forbid it. `K`, `THH`, `TC`, or
-Efimov's universal property alone do not provide this implication.
+Efimov's universal property alone do not provide this implication. The exact
+comparison is mandatory if the named frozen theorem is to be discharged;
+moving-piece consumer migration alone is only a fallback.
 
-The detailed exploratory route, stop conditions, and Lean integration order
+The detailed source-specific route, stop conditions, and Lean integration order
 are recorded in `plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`. The checked axiom
 frontier is unchanged and no source axiom was added or weakened.
 

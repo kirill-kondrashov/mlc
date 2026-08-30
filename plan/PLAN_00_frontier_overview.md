@@ -85,14 +85,15 @@ mathematics — leaving axiom B as the labelled open residual, and ultimately
 discharging axiom B once the underlying open mathematics (Dudko Problems 4.3/4.4)
 is available.
 
-**Update (2026-08-30, motivic alternative):** the Pacman/noncommutative-motive
-note is retained as an exploratory bridge, not as a concrete proof of axiom A.
-Its finite marked-model and parameter-realization structures are additional
-constructions, and the required connectedness of its loci is not supplied by
-BGT or Efimov. A possible use is to combine an independently proved
-phase/component realization with Efimov relative motives for refinement and
-shrinking. Until a conservative topological realization is built, the frozen
-translated-Green intersection remains the checked frontier.
+**Update (2026-08-30, Efimov route):** the Pacman/noncommutative-motive note is
+now paired with the source-specific conditional plan
+`plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`, grounded in Efimov,
+arXiv:2510.17010v1. Efimov supplies the relative localizing-motive,
+rigidity, trace-class/nuclear refinement, and equivariant/local-system
+interfaces, but not the finite phase-parameter realization, a conservative
+separation-to-idempotent theorem, or motive indecomposability. The exact
+frozen translated-Green comparison is also still missing, so the checked
+frontier is unchanged.
 
 The first Plan 05 gate is now checked by
 `Mlc/MotivicIntersectionNoGo.lean`: a generic connected/open straddling

@@ -255,14 +255,21 @@ No uncovered class may be hidden inside:
 
 The external Pacman/motive note is now recorded in
 `refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md` and
-expanded in `plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`.
+expanded in `plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`, using Efimov,
+*Rigidity of the category of localizing motives*, arXiv:2510.17010v1. The
+canonical raw PDF and TeX source are stored at:
 
-This direction is exploratory rather than a new axiom-A proof. Efimov's
-relative localizing motives can organize finite marked renormalizations,
-refinement maps, trace-class/nuclear behavior, and scaling. They do not imply
-that a parameter-plane locus is connected. The note's own `Q_n(P)` parameter
-realization is an additional object whose compactness, connectedness, nesting,
-and MLC neighborhood property remain to be constructed.
+- `/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.pdf`
+- `/home/kir/pers/raw/refs/efimov-rigidity-category-localizing-motives-2510.17010v1.tex`
+
+This direction is a conditional route rather than a completed axiom-A proof.
+Efimov's `U_loc`, rigid relative motive categories, trace-class/nuclear
+refinement criteria, inverse-limit descriptions of morphisms, and
+equivariant/local-system motives can organize finite marked renormalizations
+and scaling. They do not imply that a parameter-plane locus is connected. The
+note's own `Q_n(P)` parameter realization is an additional object whose
+compactness, connectedness, nesting, and MLC neighborhood property remain to
+be constructed.
 
 The only potentially useful connectivity mechanism is a conservative
 topological realization:
@@ -277,8 +284,11 @@ disconnected parameter locus
 The two arrows involving categorical data are not supplied by BGT or Efimov
 and must not be assumed. The frozen translated-Green target still has no
 verified comparison with `Q_n(P)`. Therefore the immediate target remains a
-genuine phase/component-attachment theorem, with motives used only after the
-geometric object and its consumer are fixed.
+genuine phase/component-attachment theorem, followed by a conservative
+separation-to-idempotent theorem and an independently proved
+indecomposability result. The exact frozen-target comparison is required for a
+literal discharge of the named theorem; otherwise this route only supports a
+future moving-piece consumer migration.
 
 The generic topological shortcut is now formally ruled out in
 `Mlc/MotivicIntersectionNoGo.lean`: connected ambient sets, openness, a common
