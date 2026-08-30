@@ -222,6 +222,37 @@ nontrivial idempotent in the elementary realization `C(X, ℤ)`. This
 formalizes the necessary shape of the missing conservative bridge without
 claiming a Pacman realization or changing the axiom frontier.
 
+### Single remaining discharge sentence
+
+The one sentence that must replace the current frontier axiom is:
+
+```lean
+theorem green_sublevel_translate_inter_mandelbrot_connected_straddling
+    (c : ℂ) (hc : c ∈ MandelbrotSet) (n : ℕ)
+    (hstraddle :
+      ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+        ⊆ MandelbrotSet)) :
+    IsConnected
+      ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+        ∩ MandelbrotSet)
+```
+
+Under the current Efimov plan, the non-circular proof of this sentence must
+construct a finite marked model `P(c,n)`, prove its independently defined
+realization locus `Q_n(P(c,n))` connected, and prove the exact comparison
+
+```text
+Q_n(P(c,n))
+  = {c' | green_function c (c' - c) < (1 / 2)^n} ∩ MandelbrotSet.
+```
+
+The connectedness step itself is expected to factor through the
+phase/component-attachment theorem, conservative separation-to-idempotent
+map, and independent motive indecomposability recorded in
+`plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`. Efimov supplies only the
+categorical refinement infrastructure; until the construction and comparison
+are proved, the declaration remains an axiom.
+
 ## Crash recovery
 
 The 2026-08-30 Copilot crash was a Node/V8 heap-exhaustion event, not a Lean
