@@ -40,6 +40,7 @@ import Mlc.Quadratic.Complex.Bottcher.BottcherInverse
 import Mlc.Quadratic.Complex.Bottcher.BottcherJointAnalytic
 import Mlc.Quadratic.Complex.Bottcher.BottcherJointDeriv
 import Mlc.Quadratic.Complex.Bottcher.BottcherParamInverse
+import Mlc.Quadratic.Complex.Bottcher.BottcherParamMotion
 import Mlc.Quadratic.Complex.Bottcher.UltrahyperbolicDistance
 import Mlc.BasinConnected
 import Mlc.BottcherLocalRootBranch
@@ -52,3 +53,4 @@ import Mlc.ParameterOrbitPolynomial
 import Mlc.ParameterCriticalOrbitLocal
 import Mlc.ParameterCriticalOrbitPathChain
 import Mlc.ParameterCriticalOrbitLoopProduct
+import Mlc.ParameterCriticalOrbitLoopComparison

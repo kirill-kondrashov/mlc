@@ -29,7 +29,8 @@ its straddling branch calls that axiom.
 | ✅ | Motion-image packaging audit | 🟩🟩🟩🟩🟩 100% | proved equivalent to target connectivity, hence not a reduction |
 | ✅ | Numerical falsifiability screening | 🟩🟩🟩🟩🟩 100% | no robust counterexample, but no proof |
 | ✅ | Literature exact-match audit | 🟩🟩🟩🟩🟩 100% | classical parapuzzles use moving parameter geometry, not frozen `G_c(c'-c)` |
-| 🟡 | Genuine parameter-piece replacement | 🟩⬜⬜⬜⬜ 20% | Option B selected; exact object/API still to be specified |
+| 🟡 | Genuine parameter-piece replacement | 🟩⬜⬜⬜⬜ 20% | Route-C construction selected; actual equipotential/parapuzzle object and API still to be specified |
+| ✅ | Local Böttcher inverse motion base | 🟩🟩🟩🟩🟩 100% | `BottcherParamMotion.lean`: nontrivial space-holomorphic motion of an explicit connected disk with a uniform inverse identity |
 | ⬜ | Downstream interface migration | ⬜⬜⬜⬜⬜ 0% | `ParaPuzzlePieceAt` still reduces to frozen Green translate |
 | ⬜ | Delete straddling axiom | ⬜⬜⬜⬜⬜ 0% | final milestone |
 
@@ -77,7 +78,23 @@ There are two possible meanings:
    parameter piece by a genuine moving-parameter parapuzzle object, prove the
    consumer from that object, then delete the unused theorem and axiom.
 
-The second route is currently the only sourced, credible path.
+The moving-parameter Route-C construction is currently the only sourced,
+credible path. Its local Böttcher inverse/motion base is checked, but the
+actual finite-level parameter piece and its correspondence theorem are not.
+
+## New checked Route-C brick
+
+`Mlc/Quadratic/Complex/Bottcher/BottcherParamMotion.lean` extracts a
+positive-radius local motion from `exists_param_holo_bottcher_inverse`. Its
+source is a closed disk and its slices are explicit translations, so
+space-holomorphy, injectivity, source connectedness, and nontriviality are
+proved without a new axiom. The local inverse recovers the translated point
+along a simultaneous parameter/dynamical path.
+
+This is intentionally not presented as the required parapuzzle boundary:
+there is still no theorem identifying the disk with an equipotential, a moving
+parameter piece, or the frozen target intersected with `M`. The straddling
+frontier therefore remains unchanged.
 
 ## Prompt forecast
 

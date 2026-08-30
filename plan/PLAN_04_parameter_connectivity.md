@@ -16,6 +16,25 @@ connected-witness packaging.
 
 ## Checked formal facts
 
+### 0. Current Route-C analytic milestone
+
+The exact frozen translated-Green target remains the downstream objective. The
+active constructive route is now the independently meaningful near-infinity
+Böttcher family and its parametrized inverse, not a definition of the target as
+a motion image.
+
+The checked modules
+`Mlc/Quadratic/Complex/Bottcher/BottcherParamHolo.lean`,
+`BottcherParamInverse.lean`, and `BottcherParamMotion.lean` now provide a local
+parameter inverse and a nontrivial space-holomorphic motion of an explicit
+connected closed disk. The inverse identity is tracked simultaneously in the
+parameter and dynamical coordinates.
+
+This is infrastructure only. The disk is not yet an equipotential or
+parapuzzle boundary, and no theorem identifies its image with a Mandelbrot
+parameter piece or with the frozen target. The straddling axiom is therefore
+unchanged.
+
 ### 1. The live frontier is the straddling case only
 
 `Mlc/ParaPuzzleConnectivity.lean` no longer exposes a single unrestricted frontier
@@ -171,6 +190,19 @@ Required deliverables:
    independently of connectedness;
 3. prove connectivity from component/separation topology, not from a packaged
    exact image of a connected set.
+
+### Route-C progress inside Phase 2
+
+The first local analytic substage is complete. For every base parameter, the
+checked parametrized Böttcher inverse supplies a positive-radius neighborhood
+and an explicit nontrivial translation motion of a connected closed disk.
+Space-holomorphy, injectivity, source connectedness, and nontriviality are
+proved without a new project axiom.
+
+This does not satisfy the Phase-2 parameter-piece deliverable: the source is
+not an equipotential or parapuzzle boundary, and the
+Douady–Hubbard parameter/dynamical correspondence is still absent. It advances
+the analytic base without changing the frontier status.
 
 ### Phase 2 go/no-go rule for analytic infrastructure
 
