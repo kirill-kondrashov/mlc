@@ -29,7 +29,7 @@ its straddling branch calls that axiom.
 | ✅ | Motion-image packaging audit | 🟩🟩🟩🟩🟩 100% | proved equivalent to target connectivity, hence not a reduction |
 | ✅ | Numerical falsifiability screening | 🟩🟩🟩🟩🟩 100% | no robust counterexample, but no proof |
 | ✅ | Literature exact-match audit | 🟩🟩🟩🟩🟩 100% | classical parapuzzles use moving parameter geometry, not frozen `G_c(c'-c)` |
-| 🟡 | Efimov/noncommutative-motive alternative audit | 🟩⬜⬜⬜⬜ 20% | motivic bridge and stop conditions specified; no conservative topological realization |
+| 🟡 | Efimov/noncommutative-motive alternative audit | 🟩🟩⬜⬜⬜ 35% | generic intersection shortcut formally refuted; clopen-to-idempotent realization checked; no Pacman conservative bridge |
 | 🟡 | Genuine parameter-piece replacement | 🟩⬜⬜⬜⬜ 20% | Route-C construction selected; actual equipotential/parapuzzle object and API still to be specified |
 | ✅ | Local Böttcher inverse motion base | 🟩🟩🟩🟩🟩 100% | `BottcherParamMotion.lean`: nontrivial space-holomorphic motion of an explicit connected disk with a uniform inverse identity |
 | ⬜ | Downstream interface migration | ⬜⬜⬜⬜⬜ 0% | `ParaPuzzlePieceAt` still reduces to frozen Green translate |
@@ -96,6 +96,19 @@ This is intentionally not presented as the required parapuzzle boundary:
 there is still no theorem identifying the disk with an equipotential, a moving
 parameter piece, or the frozen target intersected with `M`. The straddling
 frontier therefore remains unchanged.
+
+## Checked Plan 05 gate
+
+`Mlc/MotivicIntersectionNoGo.lean` formalizes two boundaries of the
+alternative route:
+
+- the generic connected-intersection inference is false, using
+  `(\mathbb C \setminus \{0\}) ∩ [-1,1]`;
+- a nontrivial clopen split does produce a nontrivial idempotent in the
+  elementary realization `C(X, ℤ)`.
+
+The result is a real separation-to-algebra test, but it is not yet a
+finite-marked-Pacman realization and does not remove the straddling axiom.
 
 ## Prompt forecast
 

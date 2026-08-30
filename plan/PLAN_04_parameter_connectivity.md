@@ -279,3 +279,10 @@ and must not be assumed. The frozen translated-Green target still has no
 verified comparison with `Q_n(P)`. Therefore the immediate target remains a
 genuine phase/component-attachment theorem, with motives used only after the
 geometric object and its consumer are fixed.
+
+The generic topological shortcut is now formally ruled out in
+`Mlc/MotivicIntersectionNoGo.lean`: connected ambient sets, openness, a common
+point, and a straddling hypothesis do not imply connectedness of the
+intersection. The same module checks the elementary clopen-to-idempotent
+implication in `C(X, ℤ)`, but supplies neither the Pacman realization nor its
+conservative comparison.

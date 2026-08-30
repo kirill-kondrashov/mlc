@@ -104,3 +104,10 @@ Efimov's universal property alone do not provide this implication.
 The detailed exploratory route, stop conditions, and Lean integration order
 are recorded in `plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`. The checked axiom
 frontier is unchanged and no source axiom was added or weakened.
+
+The first falsification gate is now checked in
+`Mlc/MotivicIntersectionNoGo.lean`: a generic connected/open straddling
+intersection rule is false, while a nontrivial clopen split yields a
+nontrivial idempotent in the elementary realization `C(X, ℤ)`. This
+formalizes the necessary shape of the missing conservative bridge without
+claiming a Pacman realization or changing the axiom frontier.

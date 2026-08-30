@@ -152,6 +152,40 @@ incidence category and prove the separation-to-idempotent implication for one
 finite marked model. If this implication cannot be stated without assuming
 the desired connectedness, route M1 is not a real reduction.
 
+### Checked topological gate (2026-08-30)
+
+The first gate is now formalized in
+`Mlc/MotivicIntersectionNoGo.lean`, which is imported by `Mlc.lean`.
+
+1. The generic implication
+
+   ```text
+   S and K connected + S open + S ∩ K nonempty + S ⊄ K
+   -> S ∩ K connected
+   ```
+
+   is false. A checked counterexample is the punctured plane
+   `S = ℂ \ {0}` and the embedded segment
+   `K = [-1,1] ⊂ ℝ ⊂ ℂ`. Both ambient sets are connected, the segment
+   meets the punctured plane, and the intersection is disconnected by the
+   intermediate value theorem.
+
+2. The elementary topological realization
+   `integerValuedRealization X := C(X, ℤ)` passes the
+   separation-to-idempotent test: every nontrivial clopen subset produces a
+   continuous characteristic function `e` with `e * e = e`, `e ≠ 0`, and
+   `e ≠ 1`.
+
+This is a necessary-condition test, not a proof of the frontier. It confirms
+that a future Pacman incidence realization must carry information beyond the
+two ambient connectedness statements. The module contains no Pacman
+connectedness assumption, no motive axiom, and no `sorry`.
+
+The gate does **not** yet provide the missing finite marked Pacman model or a
+conservative functor from it to `C(Q_n(P), ℤ)`. Consequently M1 remains
+blocked at the phase/component-attachment and conservativity steps; no
+infinity-categorical implementation is justified by this test alone.
+
 ## Candidate route M2: use motives for the moving-piece replacement
 
 Instead of proving the frozen equality, define the finite parameter object

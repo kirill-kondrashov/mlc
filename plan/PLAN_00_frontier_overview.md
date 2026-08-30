@@ -83,6 +83,12 @@ phase/component realization with Efimov relative motives for refinement and
 shrinking. Until a conservative topological realization is built, the frozen
 translated-Green intersection remains the checked frontier.
 
+The first Plan 05 gate is now checked by
+`Mlc/MotivicIntersectionNoGo.lean`: a generic connected/open straddling
+intersection rule is false, while a nontrivial clopen split yields a
+nontrivial idempotent in `C(X, ℤ)`. This sharpens the required conservative
+realization without changing the two-axiom frontier.
+
 ## Reduction architecture
 
 - Local connectivity of `M` ← para-puzzle connectivity
