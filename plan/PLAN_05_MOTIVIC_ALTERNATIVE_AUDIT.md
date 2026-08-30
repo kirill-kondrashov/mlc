@@ -1,7 +1,7 @@
 # PLAN 05: Efimov/noncommutative-motive alternative for the frozen straddling frontier
 
-**Status:** EXPLORATORY; not a replacement proof plan yet  
-**Date:** 2026-08-30  
+**Status:** EXPLORATORY; not a replacement proof plan yet
+**Date:** 2026-08-30
 **Depends on:** `PLAN_00_frontier_overview.md`, `PLAN_04_parameter_connectivity.md`
 
 ## Executive conclusion
