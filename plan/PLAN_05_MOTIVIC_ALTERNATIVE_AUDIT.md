@@ -270,6 +270,29 @@ The exact-target route requires item 6. A moving-piece replacement without
 item 6 may be mathematically useful, but it does not discharge the named
 frozen theorem and must be reported as a consumer migration instead.
 
+### Lean frontier capture
+
+The categorical sentence is recorded as the non-axiomatic proposition
+`MLC.Motivic.GreenSublevelStraddlingMotivicFrontier` in
+`Mlc/MotivicConnectednessFrontier.lean`. For each straddling target it asks
+for a realization set `Q` equal to the frozen target, together with an
+abstract endomorphism monoid standing for
+`π₀ End_{Mot^loc_E}(M_n(P))`. Its
+`SeparationReflectingIndecomposable` payload requires:
+
+```text
+nontrivial clopen split of Q
+  -> nontrivial idempotent in the motive endomorphism monoid
+and
+no nontrivial idempotent in that monoid.
+```
+
+The file proves the conditional implication from this contract to
+`IsConnected Q`. It deliberately does not claim that the abstract monoid is
+already an Efimov motive, nor that `Q` has already been constructed
+independently of the target. Those are the geometric and categorical
+implementation obligations still separating the contract from a discharge.
+
 ### First falsification test
 
 Before implementing any large infinity-categorical construction, specify the

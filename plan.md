@@ -253,6 +253,22 @@ map, and independent motive indecomposability recorded in
 categorical refinement infrastructure; until the construction and comparison
 are proved, the declaration remains an axiom.
 
+The categorical interface is now captured without adding a root axiom in
+`Mlc/MotivicConnectednessFrontier.lean` as
+`MLC.Motivic.GreenSublevelStraddlingMotivicFrontier`. Its
+`SeparationReflectingIndecomposable` field abstracts
+
+```text
+π₀ End_{Mot^loc_E}(M_n(P))
+```
+
+and requires both directions needed for the contradiction: every nontrivial
+clopen split of the realization locus maps to a nontrivial idempotent, while
+the selected motive endomorphism monoid has no nontrivial idempotent. The
+abstract endomorphism monoid is only a Lean placeholder until the actual
+relative Efimov motive is constructed; the conditional theorem in that file
+proves the existing topological conclusion from the contract.
+
 ## Crash recovery
 
 The 2026-08-30 Copilot crash was a Node/V8 heap-exhaustion event, not a Lean
