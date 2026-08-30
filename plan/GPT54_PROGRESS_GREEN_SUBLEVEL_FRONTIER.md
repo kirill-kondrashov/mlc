@@ -29,6 +29,7 @@ its straddling branch calls that axiom.
 | ✅ | Motion-image packaging audit | 🟩🟩🟩🟩🟩 100% | proved equivalent to target connectivity, hence not a reduction |
 | ✅ | Numerical falsifiability screening | 🟩🟩🟩🟩🟩 100% | no robust counterexample, but no proof |
 | ✅ | Literature exact-match audit | 🟩🟩🟩🟩🟩 100% | classical parapuzzles use moving parameter geometry, not frozen `G_c(c'-c)` |
+| 🟡 | Efimov/noncommutative-motive alternative audit | 🟩⬜⬜⬜⬜ 20% | motivic bridge and stop conditions specified; no conservative topological realization |
 | 🟡 | Genuine parameter-piece replacement | 🟩⬜⬜⬜⬜ 20% | Route-C construction selected; actual equipotential/parapuzzle object and API still to be specified |
 | ✅ | Local Böttcher inverse motion base | 🟩🟩🟩🟩🟩 100% | `BottcherParamMotion.lean`: nontrivial space-holomorphic motion of an explicit connected disk with a uniform inverse identity |
 | ⬜ | Downstream interface migration | ⬜⬜⬜⬜⬜ 0% | `ParaPuzzlePieceAt` still reduces to frozen Green translate |

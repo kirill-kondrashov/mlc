@@ -68,3 +68,39 @@ in the current definitions.
 No source theorem was replaced by an unsupported proof, and no new axiom,
 `sorry`, or `admit` was added. The straddling axiom remains unchanged pending
 an independently formalized bridge or a corrected parameter-piece definition.
+
+## Motivic alternative-direction refresh (2026-08-30)
+
+The external note
+[`bridge_between_pacman_renormalization_and_noncommutative_motives.md`](refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md)
+was audited as an exploratory connection to BGT and Efimov, not adopted as a
+concrete proof plan. The note itself marks its finite marked-model categories,
+refinement system, categorical renormalization, and parameter realization
+`Q_n(P)` as additional constructions. Its connectedness and MLC-neighborhood
+requirements are not consequences of Efimov's rigidity theorem.
+
+The revised alternative is a two-layer program:
+
+1. construct an independently defined topological realization of finite
+   marked Pacman data and prove a phase/component-attachment or no-separation
+   theorem;
+2. use relative localizing motives to organize refinement, renormalization,
+   trace-class/nuclear behavior, and possible shrinking estimates.
+
+This gives a possible route to a moving parameter-piece replacement, and may
+also be useful for the residual virtual near-Molecule package, but it does not
+yet identify the frozen target
+
+```lean
+{c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet
+```
+
+with a motivic parameter locus. The required missing bridge is a conservative
+topological realization: a clopen split of a parameter locus must produce a
+categorical idempotent or split exact decomposition, and the relevant marked
+model/motive must be shown independently to forbid it. `K`, `THH`, `TC`, or
+Efimov's universal property alone do not provide this implication.
+
+The detailed exploratory route, stop conditions, and Lean integration order
+are recorded in `plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`. The checked axiom
+frontier is unchanged and no source axiom was added or weakened.

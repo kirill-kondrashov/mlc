@@ -74,6 +74,15 @@ mathematics — leaving axiom B as the labelled open residual, and ultimately
 discharging axiom B once the underlying open mathematics (Dudko Problems 4.3/4.4)
 is available.
 
+**Update (2026-08-30, motivic alternative):** the Pacman/noncommutative-motive
+note is retained as an exploratory bridge, not as a concrete proof of axiom A.
+Its finite marked-model and parameter-realization structures are additional
+constructions, and the required connectedness of its loci is not supplied by
+BGT or Efimov. A possible use is to combine an independently proved
+phase/component realization with Efimov relative motives for refinement and
+shrinking. Until a conservative topological realization is built, the frozen
+translated-Green intersection remains the checked frontier.
+
 ## Reduction architecture
 
 - Local connectivity of `M` ← para-puzzle connectivity

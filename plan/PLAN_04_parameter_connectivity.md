@@ -250,3 +250,32 @@ No uncovered class may be hidden inside:
    `MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`.
 3. No weaker replacement axiom is introduced.
 4. The final route makes uncovered mathematical content visible class by class.
+
+## Alternative direction audit: Efimov and noncommutative motives
+
+The external Pacman/motive note is now recorded in
+`refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md` and
+expanded in `plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`.
+
+This direction is exploratory rather than a new axiom-A proof. Efimov's
+relative localizing motives can organize finite marked renormalizations,
+refinement maps, trace-class/nuclear behavior, and scaling. They do not imply
+that a parameter-plane locus is connected. The note's own `Q_n(P)` parameter
+realization is an additional object whose compactness, connectedness, nesting,
+and MLC neighborhood property remain to be constructed.
+
+The only potentially useful connectivity mechanism is a conservative
+topological realization:
+
+```text
+disconnected parameter locus
+ -> nontrivial clopen split
+ -> categorical idempotent/split exact decomposition
+ -> contradiction with independently proved marked-model indecomposability.
+```
+
+The two arrows involving categorical data are not supplied by BGT or Efimov
+and must not be assumed. The frozen translated-Green target still has no
+verified comparison with `Q_n(P)`. Therefore the immediate target remains a
+genuine phase/component-attachment theorem, with motives used only after the
+geometric object and its consumer are fixed.
