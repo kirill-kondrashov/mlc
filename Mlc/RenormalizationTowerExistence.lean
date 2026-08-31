@@ -262,16 +262,14 @@ abbrev MoleculeOperatorPackage : Prop :=
 /-- Direct integration of upstream zero-argument theorem into the MLC namespace. -/
 theorem molecule_operator_package :
     MoleculeOperatorPackage :=
-  Molecule.molecule_conjecture_refined
+  (Molecule.molecule_conjecture_refined).1
 
-/-- Current fast fixed-point witness extracted from upstream local fixed-point API.
-    This remains separate from `molecule_operator_package` because the packaged
-    contract is presently weaker than the fixed-point interface needed here. -/
+/-- Current fast fixed-point witness extracted from the canonical fixed-point
+    component of the upstream refined export. -/
 theorem exists_rfast_fixed_point_of_molecule_local_fixed_api :
     ∃ g : BMol, IsFastRenormalizable g ∧ Rfast g = g := by
-  exact ⟨Molecule.molecule_local_fixed_point,
-    Molecule.molecule_local_fixed_point_is_renorm,
-    Molecule.molecule_local_fixed_point_is_fixed⟩
+  rcases (Molecule.molecule_conjecture_refined).2 with ⟨g, h_fast, h_fix⟩
+  exact ⟨g, h_fast, h_fix⟩
 
 /-- Backward-compatible name for the integrated fixed-point bridge witness. -/
 theorem exists_rfast_fixed_point_of_molecule_conjecture_refined :

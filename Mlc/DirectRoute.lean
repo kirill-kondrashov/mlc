@@ -108,11 +108,28 @@ theorem directMLCData_iff :
     classify/bridge data. -/
 abbrev DirectMLCPackagedData : Prop := MLCClassifyBridgeSeamData
 
+/-- Packaged direct-route payload alias for the theorem-facing moving-window
+    route: genuine finite-side moving-window provider + packaged IR
+    classify/bridge data. -/
+abbrev DirectMovingWindowMLCPackagedData : Prop := MLCMovingWindowClassifyBridgeSeamData
+
 /-- Packaged direct-route payload using boundary-motion finite-branch data
     and packaged IR classify/bridge data. -/
 structure DirectMotionIRPackagedData : Prop where
   motion : PuzzleBoundaryMotionHyp
   ir : IRClassifyBridgeData
+
+/-- Direct-route payload for the new moving-window main route. This isolates
+    the honest finite-side source contract without pretending it has already
+    been constructed from para-puzzle data. -/
+structure DirectMovingWindowMLCData : Prop where
+  finite_window : FiniteMovingWindowProviderData
+  ir_classification : IRClassificationData
+  satellite_bridge :
+    MoleculeConjectureRefined →
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : SatelliteRenormalizableTower c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
 
 /-- Characterization of motion-based packaged direct-route payload. -/
 theorem directMotionIRPackagedData_iff :
@@ -122,6 +139,20 @@ theorem directMotionIRPackagedData_iff :
     exact ⟨h.motion, h.ir⟩
   · intro h
     exact ⟨h.1, h.2⟩
+
+/-- Characterization of the moving-window direct-route payload. -/
+theorem directMovingWindowMLCData_iff :
+    DirectMovingWindowMLCData ↔
+      FiniteMovingWindowProviderData ∧ IRClassifyBridgeData := by
+  constructor
+  · intro h
+    exact ⟨h.finite_window,
+      irClassifyBridgeData_of_classify_bridge_data h.ir_classification h.satellite_bridge⟩
+  · intro h
+    exact
+      { finite_window := h.1
+        ir_classification := h.2.classify
+        satellite_bridge := h.2.bridge }
 
 /-- Extract packaged IR classify/bridge payload from `DirectMLCData`. -/
 def irClassifyBridgeData_of_directMLCData
@@ -147,6 +178,24 @@ def directMLCPackagedData_of_directMotionIRPackagedData
   mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData
     h.motion
     h.ir
+
+/-- Extract packaged IR classify/bridge payload from the moving-window
+    direct-route data. -/
+def irClassifyBridgeData_of_directMovingWindowMLCData
+    (h : DirectMovingWindowMLCData) :
+    IRClassifyBridgeData :=
+  irClassifyBridgeData_of_classify_bridge_data
+    h.ir_classification
+    h.satellite_bridge
+
+/-- Convert moving-window direct-route data to the canonical moving-window
+    packaged seam payload. -/
+def directMovingWindowMLCPackagedData_of_directMovingWindowMLCData
+    (h : DirectMovingWindowMLCData) :
+    DirectMovingWindowMLCPackagedData :=
+  mlcMovingWindowClassifyBridgeSeamData_of_finiteMovingWindowProviderData_irClassifyBridgeData
+    h.finite_window
+    (irClassifyBridgeData_of_directMovingWindowMLCData h)
 
 /-- Convert canonical packaged seam payload to motion-based packaged direct-route
     data. -/
@@ -189,6 +238,19 @@ theorem directMLCPackagedData_iff_directMLCData :
   · intro h
     exact directMLCPackagedData_of_directMLCData h
 
+/-- Moving-window direct-route payload and its packaged seam form are
+    equivalent. -/
+theorem directMovingWindowMLCPackagedData_iff_directMovingWindowMLCData :
+    DirectMovingWindowMLCPackagedData ↔ DirectMovingWindowMLCData := by
+  constructor
+  · intro h
+    exact
+      { finite_window := h.finite_window
+        ir_classification := h.ir.classify
+        satellite_bridge := h.ir.bridge }
+  · intro h
+    exact directMovingWindowMLCPackagedData_of_directMovingWindowMLCData h
+
 /-- Motion-based packaged and fine-grained direct-route payloads are
     equivalent. -/
 theorem directMotionIRPackagedData_iff_directMLCData :
@@ -213,12 +275,25 @@ theorem mlc_conjecture_of_directMotionIRPackagedData
   exact mlc_conjecture_of_directMLCPackagedData
     (directMLCPackagedData_of_directMotionIRPackagedData h)
 
+/-- MLC follows from the packaged moving-window direct-route data. -/
+theorem mlc_conjecture_of_directMovingWindowMLCPackagedData
+    (h : DirectMovingWindowMLCPackagedData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_MLCMovingWindowClassifyBridgeSeamData h
+
 /-- MLC follows from `DirectMLCData` — no axioms beyond core needed. -/
 theorem mlc_conjecture_of_directMLCData
     (h : DirectMLCData) :
     LocallyConnectedSpace mandelbrotSet := by
   exact mlc_conjecture_of_directMotionIRPackagedData
     (directMotionIRPackagedData_of_directMLCData h)
+
+/-- MLC follows from the theorem-facing moving-window direct-route payload. -/
+theorem mlc_conjecture_of_directMovingWindowMLCData
+    (h : DirectMovingWindowMLCData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  exact mlc_conjecture_of_directMovingWindowMLCPackagedData
+    (directMovingWindowMLCPackagedData_of_directMovingWindowMLCData h)
 
 /-! ### Non-motion bridge wrappers
 

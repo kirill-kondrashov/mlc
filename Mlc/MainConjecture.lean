@@ -67,6 +67,40 @@ theorem mlc_strategy_of_branchLocalData
   · exact h_fin_lc c hc h_fin_renorm
   · exact mlc_infinitely_renormalizable h_classify h_bridge c hc h_inf_renorm
 
+/-- The exact theorem-facing contract for a genuine moving-window finite-side
+    provider: for each finitely renormalizable Mandelbrot parameter, produce a
+    shrinking connected window family around the basepoint. -/
+def FiniteMovingWindowProviderData : Prop :=
+  ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+    ∃ (W K : ℕ → Set ℂ), ConnectednessWindowParameterPieceData c W K
+
+/-- Convert a genuine moving-window provider directly into finite-side local
+    connectivity using the generic endpoint from `InfinitelyRenormalizable`. -/
+lemma finite_lc_provider_of_movingWindowData
+    (h_fin_window : FiniteMovingWindowProviderData) :
+    ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : FinitelyRenormalizable c),
+      MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
+  intro c hc hfin
+  rcases h_fin_window c hc hfin with ⟨W, K, hWK⟩
+  exact mlc_finitely_renormalizable_of_connectednessWindowData c hc hfin W K hWK
+
+/-- Axiom-free theorem-facing main strategy route whose finite branch is
+    supplied by a genuine moving-window provider. -/
+theorem mlc_strategy_of_movingWindowData
+    (h_fin_window : FiniteMovingWindowProviderData)
+    (h_classify : ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+      (_h : InfinitelyRenormalizable c),
+      PrimitiveRenormalizable c ∨ SatelliteRenormalizableTower c)
+    (h_bridge :
+      MoleculeConjectureRefined →
+      ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (_h : SatelliteRenormalizableTower c),
+        MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩) :
+    LocallyConnectedSpace MLC.Quadratic.MandelbrotSet := by
+  exact mlc_strategy_of_branchLocalData
+    (finite_lc_provider_of_movingWindowData h_fin_window)
+    h_classify
+    h_bridge
+
 /-- Explicit classification data hook for infinitely renormalizable parameters. -/
 
 def IRClassificationData : Prop :=
@@ -91,7 +125,7 @@ lemma irClassificationData_of_noTowerImpliesPrimitiveData_of_moleculeUniformBrid
   have h_noTowerOnM :
       ∀ (c : ℂ), c ∈ MLC.Quadratic.MandelbrotSet → ¬ SatelliteRenormalizableTower c := by
     intro c hc
-    exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform h_uniform c hc
+    exact not_satelliteRenormalizableTower_of_mem_mandelbrot_uniform_direct h_uniform c hc
   intro c hc h_ir
   exact classify_infinitely_renormalizable_of_noTowerImpliesPrimitive_of_noTowerOnM
     h_noTowerPrim h_noTowerOnM c hc h_ir
@@ -1822,8 +1856,18 @@ theorem mlc_conjecture_of_motionHyp_track12_data
     (h_motion : Quadratic.PuzzleBoundaryMotionHyp)
     (h_track12 : IRNoTowerPrimitiveAndMoleculeBridgeTargetData) :
     LocallyConnectedSpace mandelbrotSet := by
-  exact mlc_conjecture_of_motionHyp_noTowerImpliesPrimitive_moleculeUniformBridgeTarget
-    h_motion h_track12.1 h_track12.2
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  apply locallyConnectedSpace_of_locallyConnectedAt
+  intro ⟨c, hc⟩
+  rcases dichotomy c with h_fin | h_inf
+  · exact finite_lc_provider_of_motionHyp h_motion c hc h_fin
+  · by_cases hTower : SatelliteRenormalizableTower c
+    · exact lc_at_of_shrink_of_connected_at c hc
+        (finite_connectedAt_provider_of_motionHyp h_motion c hc)
+        (MoleculeBridgeTarget.parameter_shrink_of_moleculeUniformBridgeTarget
+          h_track12.2 c hc hTower)
+    · exact mlc_primitive_renormalizable_ax c hc
+        (h_track12.1 c hc h_inf hTower)
 
 /-- Main seam assembly from boundary-motion data, Track-1 no-tower
     classification, and direct satellite-side local-connectivity data. -/
@@ -2083,8 +2127,7 @@ theorem irClassification_of_boundedTypeConstructive_and_residualOpen
 /-- Likewise, the new bounded-type constructive slice and the residual open seam
     recover the full satellite local-connectivity payload. The bounded-type
     region uses the new constructive cutover, while the unbounded/interpolation
-    region uses the Problem 4.3 uniform bridge through the refined Molecule
-    theorem. -/
+    region uses the direct Problem 4.3 uniform bridge target. -/
 theorem satelliteLC_of_boundedTypeConstructive_and_residualOpen
     (hBT : BoundedTypeProblem45ConstructiveData)
     (hRes : ResidualOpenVirtualNearMoleculeData) :
@@ -2094,7 +2137,7 @@ theorem satelliteLC_of_boundedTypeConstructive_and_residualOpen
   · exact hBT.2 c hc hSat hBounded
   · exact MoleculeBridgeTarget.lc_of_moleculeUniformBridgeTarget
       (problem43_of_residualOpenVirtualNearMolecule hRes)
-      Molecule.molecule_conjecture_refined c hc hSat
+      c hc hSat
 
 /-- Reassemble the old Problem 4.5 root-facing payload from the new
     bounded-type constructive route plus the residual open 4.3/4.4 seam. -/
@@ -4172,6 +4215,13 @@ structure MLCClassifyBridgeSeamData : Prop where
   puzzle_connected : Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData
   ir : IRClassifyBridgeData
 
+/-- Packaged seam payload for the moving-window route:
+    a genuine finite-side moving-window provider plus packaged IR
+    classify/bridge data. -/
+structure MLCMovingWindowClassifyBridgeSeamData : Prop where
+  finite_window : FiniteMovingWindowProviderData
+  ir : IRClassifyBridgeData
+
 /-- Characterization of packaged IR classify/bridge payload. -/
 theorem irClassifyBridgeData_iff :
     IRClassifyBridgeData ↔
@@ -4193,6 +4243,16 @@ theorem mlcClassifyBridgeSeamData_iff :
   constructor
   · intro h
     exact ⟨h.puzzle_connected, h.ir⟩
+  · intro h
+    exact ⟨h.1, h.2⟩
+
+/-- Characterization of the packaged moving-window classify/bridge seam payload. -/
+theorem mlcMovingWindowClassifyBridgeSeamData_iff :
+    MLCMovingWindowClassifyBridgeSeamData ↔
+      FiniteMovingWindowProviderData ∧ IRClassifyBridgeData := by
+  constructor
+  · intro h
+    exact ⟨h.finite_window, h.ir⟩
   · intro h
     exact ⟨h.1, h.2⟩
 
@@ -4514,6 +4574,15 @@ def mlcClassifyBridgeSeamData_of_paraPuzzleConnectedData_irClassifyBridgeData
   puzzle_connected := h_conn
   ir := h_ir
 
+/-- Build packaged moving-window classify/bridge seam payload from a genuine
+    finite-side moving-window provider and packaged IR classify/bridge data. -/
+def mlcMovingWindowClassifyBridgeSeamData_of_finiteMovingWindowProviderData_irClassifyBridgeData
+    (h_fin_window : FiniteMovingWindowProviderData)
+    (h_ir : IRClassifyBridgeData) :
+    MLCMovingWindowClassifyBridgeSeamData where
+  finite_window := h_fin_window
+  ir := h_ir
+
 /-- Build packaged classify/bridge seam payload from boundary-motion hypotheses
     + packaged IR classify/bridge data. -/
 def mlcClassifyBridgeSeamData_of_motionHyp_irClassifyBridgeData
@@ -4588,6 +4657,15 @@ theorem mlc_conjecture_of_MLCClassifyBridgeSeamData
   mlc_conjecture_of_MLCSeamData
     (mlcSeamData_of_MLCClassifyBridgeSeamData h)
 
+/-- Direct MLC assembly from the packaged moving-window classify/bridge seam
+    payload. This isolates the finite-side source requirement from the rest of
+    the main strategy interface. -/
+theorem mlc_conjecture_of_MLCMovingWindowClassifyBridgeSeamData
+    (h : MLCMovingWindowClassifyBridgeSeamData) :
+    LocallyConnectedSpace mandelbrotSet := by
+  rw [mandelbrotSet_eq_MandelbrotSet]
+  exact mlc_strategy_of_movingWindowData h.finite_window h.ir.classify h.ir.bridge
+
 /-- Direct MLC assembly from boundary-motion hypotheses + packaged IR
     classify/bridge data. -/
 theorem mlc_conjecture_of_motionHyp_irClassifyBridgeData
@@ -4623,6 +4701,16 @@ theorem mlc_conjecture_of_finite_irClassifyBridgeData
     h_fin_lc
     h_ir.classify
     h_ir.bridge
+
+/-- Constructive-route assembly from a genuine moving-window finite-side
+    provider plus packaged IR classify/bridge data. -/
+theorem mlc_conjecture_of_finiteMovingWindowProviderData_irClassifyBridgeData
+    (h_fin_window : FiniteMovingWindowProviderData)
+    (h_ir : IRClassifyBridgeData) :
+    LocallyConnectedSpace mandelbrotSet :=
+  mlc_conjecture_of_MLCMovingWindowClassifyBridgeSeamData
+    (mlcMovingWindowClassifyBridgeSeamData_of_finiteMovingWindowProviderData_irClassifyBridgeData
+      h_fin_window h_ir)
 
 /-- Build packaged IR classify/bridge payload from boundary-motion hypotheses,
     explicit IR classification, and molecule bridge target data. -/

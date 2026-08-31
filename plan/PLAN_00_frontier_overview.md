@@ -11,55 +11,133 @@ Human-facing companion: `notebooks/frontier_full_proof_roadmap.ipynb`
 ## Verified frontier
 
 `make check` reports `MLC.mlc_conjecture` is `sorry`-free and depends on three
-Lean-core axioms (`Quot.sound`, `propext`, `Classical.choice`) plus **four** non-core
+Lean-core axioms (`Quot.sound`, `propext`, `Classical.choice`) plus **two** non-core
 project axioms:
 
-1. `MLC.Quadratic.green_function_strictMono_along_ray_basin_seam`
-2. `MLC.Quadratic.extended_ray_map_free_continuous`
-3. `MLC.green_sublevel_translate_inter_mandelbrot_connected`
-4. `MLC.residualOpenVirtualNearMoleculeAxiom`
+1. `MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`
+2. `MLC.residualOpenVirtualNearMoleculeAxiom`
+
+**Dependency refresh:** `lake-manifest.json` now pins
+`molecule-conjecture` to upstream revision
+`385fc36c553947cf125d09848c2a3077fc751209`. The upstream refined export is now
+a pair consisting of the operator package and canonical fast-fixed-point data;
+the compatibility layer projects those components explicitly. The root-facing
+Problem 4.3 uniform-bound target is kept as a direct residual interface because
+the bound does not depend on a Molecule witness, so the upstream normalization
+carrier does not enter the checked MLC proof.
+
+**Update (2026-07, straddling refactor):** frontier axiom 1 was sharpened from
+`green_sublevel_translate_inter_mandelbrot_connected` to a strictly weaker
+`..._straddling` variant. The two nested strata of the intersection are now
+discharged unconditionally — subset stratum via
+`green_sublevel_translate_inter_mandelbrot_connected_of_subset` (core-clean) and
+superset stratum via `..._of_superset` (off-path, from `mandelbrot_set_connected`).
+The live frontier axiom asserts connectivity only where the Green-sublevel
+translate is **not** contained in `M` (the equipotential boundary crosses `∂M`).
+
+**Update (2026-07):** the earlier dynamical-plane seams
+`MLC.Quadratic.green_function_strictMono_along_ray_basin_seam` and
+`MLC.Quadratic.extended_ray_map_free_continuous` have been **removed from the
+checked root path** (the sublevel connectivity they supported is now proved
+directly by potential theory — Route A — see the corresponding section in
+`README.md`), so the live
+`make check` frontier is exactly the two axioms above.
+
+### Literature correspondence (Dudko, arXiv 2512.24171)
+
+- Axiom 1 (`green_sublevel_translate_inter_mandelbrot_connected`) ↔ the **Yoccoz
+  parameter puzzle + Douady–Hubbard parameter↔dynamical correspondence**
+  (§4.1–§4.2, Theorem 4.1 for the bounded-type/finitely-renormalizable cases).
+  This is *established* mathematics — a Lean **formalization** gap, not open
+  research. It has been localized (`green_sublevel_translate_connected`,
+  `ParaPieceCarvedByMotion`) to the single Douady–Hubbard wringing/tubing carving
+  motion; everything around it is proved and axiom-clean.
+- Axiom 2 (`residualOpenVirtualNearMoleculeAxiom` =
+  `Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData`) ↔ the
+  literature's **open** frontier: **Problem 4.3** (pseudo-Siegel a priori bounds
+  in the remaining unbounded satellite ql cases) and **Interpolation Problem 4.4**
+  (Virtual Molecule version of the Near-Degenerate Regime), reached through the
+  §4.5 Virtual near-Molecule Renormalization setting. These are genuinely unsolved
+  in the literature.
 
 The former axiom `filled_julia_set_connected` is **discharged**
 (`filled_julia_set_connected_proved`, `Mlc/FilledJuliaConnected.lean`) and no longer
-appears in the checked frontier. The former `proxy_bottcher_map_inj_on_basin_axiom`
-is likewise **discharged** into the theorem
-`proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot`, leaving in its place the more
-elementary radial-monotonicity seam `green_function_strictMono_along_ray_basin_seam`
-(item 1).
+appears in the checked frontier. The theorem
+`proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot` remains as a legacy
+radial-proxy adapter; it still consumes the radial-monotonicity seam
+`green_function_strictMono_along_ray_basin_seam`, and neither input is used by
+the checked root path.
 
 The former axiom pair `external_ray_map_exists` / `extended_ray_map_continuous` is
-now **reduced to a single boundary-continuity axiom** `extended_ray_map_free_continuous`
-(item 2). The *existence* of the external-ray parameterization for `c ∈ M` is proved
-by `GreenRayDischarge.external_ray_map_data_of_mandelbrot` (depends only on the radial
-ray seam, item 1); the on-path connectivity proof uses the axiom-free
+now represented by a legacy off-path boundary-continuity axiom
+`extended_ray_map_free_continuous`. The *existence* of the external-ray
+parameterization for `c ∈ M` is proved by
+`GreenRayDischarge.external_ray_map_data_of_mandelbrot` (depends only on the
+legacy radial ray seam); the checked connectivity proof uses the axiom-free
 `external_ray_map_free` / `extended_ray_map_free` (in `BottcherAxioms.lean`), so
 `external_ray_map_exists` no longer appears on the `mlc_conjecture` frontier. Only the
 continuity to the unit circle remains axiomatic, and its statement is
 `external_ray_map_exists`-free and restricted to `c ∈ M`.
 
-A full formal proof means discharging axioms 1–4 as theorems (no new axioms), leaving
-axiom 5 as the labelled open residual, and ultimately discharging axiom 5 once the
-underlying mathematics is available.
+A full formal proof means discharging axiom A (parameter-puzzle connectivity) as a
+theorem (no new axioms) — a formalization of established Yoccoz/Douady–Hubbard
+mathematics — leaving axiom B as the labelled open residual, and ultimately
+discharging axiom B once the underlying open mathematics (Dudko Problems 4.3/4.4)
+is available.
+
+**Update (2026-08-30, Efimov route):** the Pacman/noncommutative-motive note is
+now paired with the source-specific conditional plan
+`plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`, grounded in Efimov,
+arXiv:2510.17010v1. Efimov supplies the relative localizing-motive,
+rigidity, trace-class/nuclear refinement, and equivariant/local-system
+interfaces, but not the finite phase-parameter realization, a conservative
+separation-to-idempotent theorem, or motive indecomposability. The exact
+frozen translated-Green comparison is also still missing, so the checked
+frontier is unchanged.
+
+The first Plan 05 gate is now checked by
+`Mlc/MotivicIntersectionNoGo.lean`: a generic connected/open straddling
+intersection rule is false, while a nontrivial clopen split yields a
+nontrivial idempotent in `C(X, ℤ)`. This sharpens the required conservative
+realization without changing the two-axiom frontier.
+
+The finite algebraic incidence gate is now implemented in
+`Mlc/MotivicFiniteIncidence.lean`. It defines the edge-constant integer
+endomorphism ring of a finite attachment graph, proves that a connected
+attachment graph has no nontrivial idempotent, and supplies
+`boundaryIncidenceGraph` on the finite boundary-arc subtype from
+`FiniteParapuzzleBoundary.lean`. It also proves
+`boundaryIncidenceGraph_connected_iff_carrier_connected`, identifying graph
+connectivity with connectedness of the finite boundary carrier. The
+exact-target conditional consumer
+`green_sublevel_translate_inter_mandelbrot_connected_of_incidenceMotiveBridge`
+is wired through the conservative map from `C(Q_n(P), ℤ)`. The finite
+realization, carrier-connectivity input, conservative bridge, and exact
+comparison remain open; no Efimov motive or parameter realization has yet
+been constructed.
 
 ## Reduction architecture
 
 - Local connectivity of `M` ← para-puzzle connectivity
   (`para_puzzle_piece_inter_mandelbrot_connected_proved`).
-- Para-puzzle connectivity ← dynamical-plane Böttcher package (axioms 1,2,3) +
-  parameter-plane connectivity (axiom 4).
-- Infinite-branch / renormalization classification bottoms out at axiom 5.
+- Para-puzzle connectivity ← dynamical-plane Green-sublevel package (**now proved
+  from core axioms only**, Route A below) + parameter-plane connectivity
+  (**axiom 1**, `green_sublevel_translate_inter_mandelbrot_connected`).
+- Infinite-branch / renormalization classification bottoms out at **axiom 2**
+  (`residualOpenVirtualNearMoleculeAxiom` = Problems 4.3 + 4.4).
 
-## SCOPE (2026-07): eliminate the radial-proxy root cause (route (a))
+## SCOPE (2026-07): eliminate the radial-proxy root cause (route (a)) — ✅ COMPLETED
 
-Both unsound dynamical-plane axioms (2 `extended_ray_map_free_continuous` and
-3 `green_function_strictMono_along_ray_basin_seam`) exist **only** to make the
+The two former dynamical-plane axioms (`extended_ray_map_free_continuous` and
+`green_function_strictMono_along_ray_basin_seam`) existed **only** to make the
 *radial proxy* `(z/‖z‖)·exp(G_c)` serve as a Böttcher coordinate in the one place
-they are consumed: proving `green_sublevel_connected` (that `{G_c < ε}` is
-connected for `c ∈ M`). Fixing the root cause = proving that connectivity honestly.
+they were consumed: proving `green_sublevel_connected` (that `{G_c < ε}` is
+connected for `c ∈ M`). This has been **fixed at the root** via Route A (direct
+potential theory); both axioms are now off the checked frontier.
 
-### Route A — direct potential theory (RECOMMENDED)
+### Route A — direct potential theory (DONE)
 
-Prove `IsConnected {z | G_c(z) < ε}` for `c ∈ M` **without any Böttcher/ray map**:
+Proves `IsConnected {z | G_c(z) < ε}` for `c ∈ M` **without any Böttcher/ray map**:
 
 *Topological core.* Every connected component `U` of the open bounded set
 `{G_c < ε}` has `Ū ∩ K_c ≠ ∅`: otherwise `U ⊆ basin` (disjoint from `K_c`, and
@@ -67,11 +145,11 @@ Prove `IsConnected {z | G_c(z) < ε}` for `c ∈ M` **without any Böttcher/ray 
 `∂U` (continuity + component), so the **minimum principle** forces `G_c ≥ ε` on
 `U` — contradiction. Since `K_c ⊆ {G_c < ε}` is connected it lies in one
 component `C₀`; any other component's closure meets `K_c ⊆ C₀`, forcing overlap —
-so `{G_c < ε}` is connected. This proves the *purpose* of axioms 2 **and** 3 at
-once; the entire radial-proxy machinery (`proxy_bottcher_map` inj seam,
-`external_ray_map_free`, `extended_ray_map_free`, its continuity axiom) becomes
-**unused on-path** and both axioms drop. Projected frontier: **4 → 2 non-core**
-(only axiom 4 param-connectivity + axiom 5 residual remain).
+so `{G_c < ε}` is connected. This achieved the *purpose* of the two dynamical
+axioms at once; the entire radial-proxy machinery (`proxy_bottcher_map` inj seam,
+`external_ray_map_free`, `extended_ray_map_free`, its continuity axiom) is now
+**unused on-path** and both axioms have dropped. Achieved frontier: **2 non-core**
+(axiom 1 param-connectivity + axiom 2 residual).
 
 *Ingredients status.*
 - ✅ `G_c` continuous (`continuous_green_function`); `{G_c=0}=K_c`
@@ -79,45 +157,40 @@ once; the entire radial-proxy machinery (`proxy_bottcher_map` inj seam,
   (`filled_julia_set_connected`, proved); `{G_c<ε}` bounded
   (`bounded_sublevel_green_function`, ParaPuzzleBasis); functional eqn
   `G_c(f z)=2 G_c z`.
-- ❌ **LINCHPIN 1 — `G_c` harmonic on the basin.** Not in Yoccoz/Mathlib.
-  Provable: `G_c = lim 2^{-n} log‖f^n(·)‖` locally uniformly on the basin, each
-  `log‖f^n‖` harmonic where `f^n ≠ 0` (on the basin `f^n → ∞`, so `≠0` locally),
-  and harmonicity passes to locally-uniform limits (via the mean-value property
-  `HarmonicOnNhd.circleAverage_eq` + closedness of the mean-value condition).
-- ❌ **LINCHPIN 2 — harmonic minimum principle on a domain.** Not in Mathlib
-  (only mean-value + `harmonic_is_realOfHolomorphic` on balls). Prove: a harmonic
-  `u` attaining an interior min on a connected open set is constant (mean-value ⇒
-  the min-set is open and closed ⇒ all of the domain). Standalone, reusable.
+- ✅ **LINCHPIN 1 — `G_c` harmonic on the basin.** DONE
+  (`green_function_harmonicOnNhd_basin`): `G_c = lim 2^{-n} log‖f^n(·)‖` locally
+  uniformly on the basin, each `log‖f^n‖` harmonic where `f^n ≠ 0`, harmonicity
+  passing to locally-uniform limits via the mean-value property.
+- ✅ **LINCHPIN 2 — harmonic minimum principle on a domain.** DONE (standalone,
+  in the harmonic minimum-principle layer): a harmonic `u` attaining an interior
+  min on a connected open set is constant.
 
-*Risk:* Linchpins 1–2 are genuine analysis builds (~medium each), but both are
-standard and self-contained; no open mathematics is involved (unlike axioms 4,5).
-This is the highest-value near-term target: it removes two *unsound* axioms and
-converts them to theorems.
+*Outcome:* Linchpins 1–2 were genuine analysis builds but standard and
+self-contained; both are now proved, so the two *unsound* radial-proxy axioms are
+converted away and no longer appear on the checked frontier.
 
-### Route B — genuine Böttcher biholomorphism (NOT recommended)
+### Route B — genuine Böttcher biholomorphism (NOT pursued)
 
 Build `φ_c : basin ≅ {|w|>1}` from the existing product scaffolding
 (`BottcherProductAnalytic.correctionProductBottcherRatio`, analytic on the far
-exterior) + the fact that `f_c` has **no critical point in the basin** for `c∈M`
-(the only finite critical point `0 ∈ K_c`), via a covering/monodromy degree-1
-argument. This discharges injectivity (axiom 3) but **cannot** discharge axiom 2:
-continuous boundary landing at `|w|=1` is Carathéodory extension = local
-connectivity of `J(c)`, which is **open / false for some `c∈M`**. So Route B
-still needs Route A's accumulation topology for connectivity, and adds a hard
-Mathlib covering-degree formalization on top. Dominated by Route A.
+exterior) + the fact that `f_c` has **no critical point in the basin** for `c∈M`,
+via a covering/monodromy degree-1 argument. This would discharge injectivity but
+**cannot** discharge boundary continuity: continuous boundary landing at `|w|=1`
+is Carathéodory extension = local connectivity of `J(c)`, which is **open / false
+for some `c∈M`**. Dominated by Route A, which was pursued and completed.
 
-**Decision: pursue Route A. First concrete step = LINCHPIN 2 (harmonic minimum
-principle), as a standalone lemma, since it is self-contained and reusable.**
+**Status: Route A completed. Both dynamical-plane axioms discharged.**
 
-## Feasibility tiers
+## Feasibility tiers (current 2-axiom frontier)
 
 | Axiom | Content | Tier | Feasibility |
 |---|---|---|---|
-| 3. radial Green monotonicity (proxy injectivity **proved**) | Green potential, `c ∈ M` | A | High — proxy injectivity discharged; seam remains |
-| 1. ray-map existence | dynamical Böttcher, `c ∈ M` | A/B | **Math proved for `c ∈ M`** (`external_ray_map_data_of_mandelbrot`); axiom removal blocked by layering refactor + `bottcher_seq_converges` swap |
-| 2. ray-map continuity to circle | Carathéodory boundary landing | C | Low in full generality (= Julia local connectivity) |
-| 4. parameter-puzzle connectivity | λ-lemma / holomorphic motions | C | Low-medium — known math, large Mathlib gap |
-| 5. virtual near-Molecule residual | Dudko–Lyubich open program | D | Not feasible now — open research |
+| A. `green_sublevel_translate_inter_mandelbrot_connected` (parameter-puzzle connectivity) | Yoccoz puzzle + Douady–Hubbard parameter↔dynamical correspondence, `c ∈ M` | C | **Established mathematics; Lean-formalization gap only.** Localized to a single Douady–Hubbard carving motion (`ParaPieceCarvedByMotion`); everything around it proved and axiom-clean |
+| B. `residualOpenVirtualNearMoleculeAxiom` (= Problems 4.3 ∧ 4.4) | Dudko–Lyubich Virtual near-Molecule program | D | **Open research** — not feasible now (Problem 4.3 pseudo-Siegel bounds; Interpolation Problem 4.4) |
+
+*Discharged (historical):* filled-Julia connectivity, proxy-Böttcher injectivity,
+external-ray existence, external-ray boundary continuity, radial Green
+monotonicity — all removed from the checked frontier (see `README.md`).
 
 - **Tier A** — known mathematics, machinery already partially in the repository.
 - **Tier B** — feasible after an interface refactor or a parameter restriction.
@@ -127,6 +200,15 @@ principle), as a standalone lemma, since it is self-contained and reusable.**
   underlying mathematics not being complete.
 
 ## Per-axiom status and route
+
+> **⚠️ HISTORICAL SECTION (superseded).** Everything from here to the
+> "Tier C — axiom A" heading below is the detailed analysis of the old
+> radial-proxy axioms (external-ray existence, external-ray boundary continuity,
+> radial Green monotonicity). **These inputs have been removed from the checked
+> root path, not proved by the direct Route-A bypass** (see the corresponding
+> record near the end and `README.md`). The notes are retained only as a record of why the
+> radial-proxy route was abandoned in favour of direct potential theory (Route A).
+> The live frontier is exactly axioms **A** and **B**.
 
 ### ⛔ CRITICAL (2026-07): axiom 2 is ALSO UNSOUND for `c ∈ M`
 
@@ -358,46 +440,54 @@ rigidity, and a constructive scaffold in `BottcherOutsidePlan.lean`
 in `BottcherProductAnalytic.lean`. These remain valid building blocks but do **not**
 resolve the `c = 2` surjectivity falsity above; they must be redirected to `c ∈ M`.
 
-### Tier C — axiom 2 (`extended_ray_map_continuous`)
+### Tier C — axiom A (`green_sublevel_translate_inter_mandelbrot_connected`) — LIVE
 
-`Mlc/GreenSublevelJoinedToKc.lean` uses continuity to build a radial path landing
-*on* `K(c)` at `|w| = 1`, i.e. Carathéodory boundary extension = local connectivity of
-`K(c)`, which is **not known** for all `c ∈ M`. Honest options: (1) stratify to
-finitely renormalizable `c` (Yoccoz local connectivity) and route the residual through
-axiom 5; or (2) refactor `GreenSublevelJoinedToKc` to use only open-exterior
-continuity (`{|w|>1}`), avoiding boundary landing. Do the consumer inspection/refactor
-before attempting the theorem.
+Parameter-plane Yoccoz puzzle connectivity; standard proof via holomorphic motions
+and the Słodkowski / λ-lemma + the Douady–Hubbard parameter↔dynamical
+correspondence. **Established mathematics**, but Mathlib lacks the λ-lemma
+foundation, so this is a large formalization build (not open research).
 
-### Tier C — axiom 4 (`green_sublevel_translate_inter_mandelbrot_connected`)
+*Current localization (this repo):* the un-intersected translate
+`{c' | G_c(c'-c) < 2^{-n}}` is **proved connected** from core axioms only
+(`green_sublevel_translate_connected`); the residual is exactly the `∩ M` carving,
+reduced to a single space-holomorphic motion
+(`Mlc/ParaPuzzleCarvingReduction.lean`, `ParaPieceCarvedByMotion`). The Słodkowski
+statement layer + a c-holomorphic parametrized Böttcher inverse (via a ℂ² inverse
+function theorem) are built and axiom-clean (`Bottcher/Slodkowski.lean`,
+`Bottcher/BottcherParamInverse.lean`). The remaining ingredient — the actual
+Douady–Hubbard wringing map — is Yoccoz-scale.
 
-Parameter-plane Yoccoz puzzle connectivity; standard proof via holomorphic motions and
-the Słodkowski / λ-lemma. Known mathematics, but Mathlib lacks the λ-lemma foundation,
-so this is a large build. `Mlc/ParaPuzzleContainment.lean` offers an alternate bridge
-but currently depends on `filled_julia_set_connected` (now proved), so re-audit whether
-that route is unblocked before committing to the λ-lemma build.
+### Tier D — axiom B (`residualOpenVirtualNearMoleculeAxiom`) — LIVE, OPEN
 
-### Tier D — axiom 5 (`residualOpenVirtualNearMoleculeAxiom`)
-
-`Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData`: pseudo-Siegel
-a priori bounds in the remaining unbounded satellite ql cases (Problem 4.3) and the
-virtual Molecule near-degenerate interpolation regime (Problem 4.4). This is the open
-Dudko–Lyubich near-Molecule program; the mathematics itself is not complete in the
+`Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData`:
+pseudo-Siegel a priori bounds in the remaining unbounded satellite ql cases
+(**Problem 4.3**) and the virtual Molecule near-degenerate interpolation regime
+(**Interpolation Problem 4.4**). This is the **open** Dudko–Lyubich near-Molecule
+program (arXiv 2512.24171, §4.5); the mathematics itself is not complete in the
 literature. Keep it as the single labelled residual; do not expand it with new
 theorem-hook axioms.
 
-## Recommended execution order
+## Discharged axioms (historical record)
 
-1. Discharge the radial-monotonicity seam
-   `green_function_strictMono_along_ray_basin_seam` from Green-potential theory
-   (proxy basin-injectivity is already a theorem).
-2. **Axiom 1 requires a semantic fix first, not a direct discharge.** The `∀ c`
-   statement is false at `c = 2` (see Tier A/B section: proxy is not surjective onto
-   `{‖w‖ > 1}` outside `M`). Restrict the axiom to `c ∈ mandelbrot`, thread `c ∈ M`
-   through consumers, then discharge via the Green-ray route + a "rays reach the Julia
-   set" (`inf_ρ G_c(ρ·u) = 0`) lemma. Injectivity is already a theorem.
-3. Refactor/stratify and discharge axiom 2.
-4. Scope axiom 4 (λ-lemma foundation or Yoccoz stratum).
-5. Leave axiom 5 as the labelled open residual.
+The following were on earlier frontiers and are now **off** the checked frontier:
+
+- `filled_julia_set_connected` → theorem (`Mlc/FilledJuliaConnected.lean`).
+- proxy-Böttcher basin injectivity → theorem
+  (`proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot`).
+- `external_ray_map_exists` / `extended_ray_map_continuous` → replaced then
+  eliminated via the axiom-free `c ∈ M` ray map + Route A.
+- `extended_ray_map_free_continuous` and
+  `green_function_strictMono_along_ray_basin_seam` → dropped: the sublevel
+  connectivity they supported is proved directly by potential theory (Route A,
+  `green_sublevel_connected_direct`).
+
+**Soundness note (important history):** several of the discharged proxy axioms were
+*unsound as originally stated* (e.g. radial Green monotonicity is false for some
+`c ∈ M` — the rabbit's real ray falsifies it; and the `∀ c` ray-existence form is
+false at `c = 2`). They were not "discharged" by proving a false statement — they
+were **removed** by replacing the radial-proxy route with genuine potential theory
+restricted to `c ∈ M`. Future work must preserve this: never reintroduce a `∀ c`
+proxy-coordinate axiom.
 
 ## Validation policy
 
@@ -407,14 +497,8 @@ changed; rerender notebooks with `make notebook-render`.
 
 ## Honesty note
 
-A fully axiom-free formal proof of MLC is **not currently attainable**: axiom 5 encodes
-mathematics that is itself open. **Axiom 3 is UNSOUND as stated** (radial Green
-monotonicity is false for `c ∈ M` — see the critical note above; the rabbit's real ray
-falsifies it and even leaves/re-enters `K`). It cannot be discharged; it must be
-*replaced* by the genuine (holomorphic) Böttcher coordinate, which is a substantial
-refactor, not a discharge. **Axiom 1 as originally stated (`∀ c`) is likewise unsound**
-(false at `c = 2`); it was removed from the frontier via the `c ∈ M`-restricted
-axiom-free ray map. Axiom 2 (`extended_ray_map_free_continuous`) is Carathéodory
-boundary landing = local connectivity of `K(c)`, not known for all `c ∈ M`; axiom 4
-needs the λ-lemma foundation. Record blockers explicitly rather than implying full proof
-is imminent.
+A fully axiom-free formal proof of MLC is **not currently attainable**: axiom B
+encodes mathematics (Dudko Problems 4.3/4.4) that is itself open. Axiom A is
+established mathematics but a substantial Mathlib/λ-lemma formalization gap; it has
+been localized to a single Douady–Hubbard carving motion but not discharged.
+Record blockers explicitly rather than implying full proof is imminent.

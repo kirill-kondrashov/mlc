@@ -1240,10 +1240,11 @@ equal images force equal modulus `exp(green c z)` (hence equal Green values) and
 equal phase `z/‖z‖` (hence equal direction), after which strict monotonicity of
 the Green function along the common origin-ray forces equal radii.
 
-This reduces the basin-injectivity frontier
-(`proxy_bottcher_map_inj_on_basin_axiom`) to radial Green monotonicity — the
-hypothesis `hmono`, which is exactly the shape of
-`green_function_strictMono_along_ray_basin_seam`. -/
+This is a compatibility lemma for the legacy radial-proxy route. It reduces
+radial-proxy basin injectivity to radial Green monotonicity — the hypothesis
+`hmono`, which is exactly the shape of
+`green_function_strictMono_along_ray_basin_seam`. It is not used by the checked
+root path, whose dynamical sublevel connectivity is proved directly. -/
 theorem proxy_bottcher_map_injOn_nonzero_basin_of_green_ray_strictMono
     (c : ℂ)
     (hmono : ∀ (u : ℂ), ‖u‖ = 1 → ∀ {ρ₁ ρ₂ : ℝ}, 0 < ρ₁ → ρ₁ < ρ₂ →

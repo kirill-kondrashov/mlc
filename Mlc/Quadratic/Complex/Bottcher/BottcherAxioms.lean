@@ -213,10 +213,11 @@ theorem extended_ray_map_free_lands (c : ℂ) (w : ℂ) (hw : ‖w‖ = 1) :
   have hw' : ¬ 1 < ‖w‖ := by simp [hw]
   simpa [extended_ray_map_free, hw'] using (fixed_point_mem_K c)
 
-/-- Continuity of the extended axiom-free ray map to the unit circle, restricted to the
-Mandelbrot set.  This is the sole remaining ray-map axiom on the `mlc_conjecture` path;
-unlike the former `extended_ray_map_continuous`, its statement does not reference
-`external_ray_map_exists`. -/
+/-- Legacy continuity input for the radial-proxy extension at the unit circle.
+This is retained for exploratory ray-map work and is not used by the checked
+`mlc_conjecture` path, which obtains Green-sublevel connectivity directly from
+potential theory. Unlike the former `extended_ray_map_continuous`, its statement
+does not reference `external_ray_map_exists`. -/
 axiom extended_ray_map_free_continuous (c : ℂ) (hc : c ∈ MandelbrotSet) :
     ContinuousOn (extended_ray_map_free c) {w | 1 ≤ ‖w‖}
 

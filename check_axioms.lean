@@ -15,7 +15,7 @@ def main : IO UInt32 := do
   let metaM : MetaM (Array Name) := Lean.collectAxioms name
   let expectedAxioms : List Name :=
    [``Quot.sound, ``propext, ``Classical.choice,
-    ``MLC.green_sublevel_translate_inter_mandelbrot_connected,
+    ``MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling,
     ``MLC.residualOpenVirtualNearMoleculeAxiom]
   
   try

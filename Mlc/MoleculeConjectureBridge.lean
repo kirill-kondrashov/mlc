@@ -43,6 +43,16 @@ def MoleculeUniformConformalLowerBoundData : Prop :=
     (_hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c),
     PrincipalNestTarget.UniformConformalLowerBoundTarget c hTower
 
+/-- Root-facing direct form of the uniform conformal lower-bound target.
+
+    The bound itself is independent of the Molecule witness. Keeping this
+    residual interface direct avoids importing an unrelated upstream
+    normalization carrier merely to supply an unused argument. -/
+def MoleculeUniformConformalLowerBoundDirectData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c),
+    PrincipalNestTarget.UniformConformalLowerBoundTarget c hTower
+
 /-- Uniform conformal lower-bound data implies conformal bridge data. -/
 theorem moleculeConformalModulusLowerBoundData_of_uniformConformalLowerBoundData
     (h_uniform : MoleculeUniformConformalLowerBoundData) :
@@ -221,7 +231,7 @@ theorem molecule_conjecture_implies_mlc_satellite
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizable c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact h_bridge Molecule.molecule_conjecture_refined c hc h
+  exact h_bridge (Molecule.molecule_conjecture_refined).1 c hc h
 
 theorem molecule_conjecture_implies_mlc_satellite_of_tower
     (h_bridge :
@@ -230,6 +240,6 @@ theorem molecule_conjecture_implies_mlc_satellite_of_tower
         MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (h : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact h_bridge Molecule.molecule_conjecture_refined c hc h
+  exact h_bridge (Molecule.molecule_conjecture_refined).1 c hc h
 
 end MLC

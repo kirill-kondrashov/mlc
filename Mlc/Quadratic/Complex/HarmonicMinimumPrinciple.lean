@@ -18,7 +18,7 @@ connectedness (clopen) argument globalises this to the whole set.
 
 This is `LINCHPIN 2` of route (a) in `plan/PLAN_00_frontier_overview.md`: it is one
 of the two analysis inputs needed to prove `{z | G_c z < ε}` connected directly,
-discharging the unsound radial-proxy axioms 2 and 3.
+bypassing the obsolete radial-proxy inputs on the checked root path.
 -/
 
 open Complex Metric Set Filter Topology InnerProductSpace
