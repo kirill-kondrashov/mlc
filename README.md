@@ -25,43 +25,43 @@ on two explicitly named project-level axioms.
 
 For $c,z\in\mathbb C$, define
 
-$$
+```math
 f_c(z)=z^2+c,\qquad f_c^0(z)=z,\qquad
 f_c^{n+1}(z)=f_c(f_c^n(z)).
-$$
+```
 
 The Mandelbrot set and the filled Julia set are
 
-$$
+```math
 \mathcal M=
 \left\{
 c\in\mathbb C:
 \left(f_c^n(0)\right)_{n\geq 0}
 \text{ is bounded}
 \right\},
-$$
+```
 
-$$
+```math
 K_c=
 \left\{
 z\in\mathbb C:
 \left(f_c^n(z)\right)_{n\geq 0}
 \text{ is bounded}
 \right\}.
-$$
+```
 
 Let $G_c:\mathbb C\to\mathbb R$ be the dynamical Green function of $f_c$.
 For $n\in\mathbb N$, set
 
-$$
+```math
 S_n(c)=\{z\in\mathbb C:G_c(z)<2^{-n}\},
-$$
+```
 
-$$
+```math
 \tau_c(S)=\{c+z:z\in S\},
 \qquad
 T_n(c)=\tau_c(S_n(c))\cap\mathcal M.
-$$
+```
 
 The corresponding Lean objects are `MandelbrotSet`, `green_function`, and the
 translated Green-sublevel sets in
@@ -76,11 +76,11 @@ ParaPuzzlePieceAt c n =
 
 and, for $c\in\mathcal M$, the repository proves
 
-$$
-\operatorname{ParaPuzzlePieceAt}(c,n)
+```math
+\mathrm{ParaPuzzlePieceAt}(c,n)
 =
 \{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}.
-$$
+```
 
 ## Formal theorem
 
@@ -125,11 +125,11 @@ MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling
 
 Equivalently, for $c\in\mathcal M$ and $n\in\mathbb N$,
 
-$$
+```math
 \tau_c(S_n(c))\not\subseteq\mathcal M
 \Longrightarrow
 T_n(c)\text{ is connected}.
-$$
+```
 
 The unrestricted translated sublevel is connected; the remaining case is its
 intersection with $\mathcal M$ when the two sets straddle one another.
@@ -156,18 +156,18 @@ The following results are theorem-level and are not project-level axioms.
 
 ### Filled Julia sets
 
-$$
+```math
 c\in\mathcal M\Longrightarrow K_c\text{ is connected}.
-$$
+```
 
 Formal source:
 [`Mlc/FilledJuliaConnected.lean`](Mlc/FilledJuliaConnected.lean).
 
 ### Dynamical Green sublevels
 
-$$
+```math
 c\in\mathcal M\Longrightarrow S_n(c)\text{ is connected}.
-$$
+```
 
 The proof uses connectedness of $K_c$, continuity and nonnegativity of $G_c$,
 harmonicity on the basin of infinity, and the harmonic minimum principle.
@@ -178,10 +178,10 @@ Formal source:
 
 Translation by $c$ gives
 
-$$
+```math
 c\in\mathcal M\Longrightarrow
 \tau_c(S_n(c))\text{ is connected}.
-$$
+```
 
 Formal theorem: `green_sublevel_translate_connected`.
 
@@ -189,19 +189,19 @@ Formal theorem: `green_sublevel_translate_connected`.
 
 The two containment cases for $T_n(c)$ are proved:
 
-$$
+```math
 \tau_c(S_n(c))\subseteq\mathcal M
 \Longrightarrow
 T_n(c)=\tau_c(S_n(c)),
-$$
+```
 
 and
 
-$$
+```math
 \mathcal M\subseteq\tau_c(S_n(c))
 \Longrightarrow
 T_n(c)=\mathcal M.
-$$
+```
 
 The first case uses translated-sublevel connectedness. The second uses
 connectedness of $\mathcal M$ and is off the root derivation.
@@ -211,9 +211,9 @@ connectedness of $\mathcal M$ and is off the root derivation.
 The repository contains axiom-clean local data for a parameter-dependent
 Böttcher coordinate
 
-$$
+```math
 (c,z)\longmapsto\Phi_c(z)
-$$
+```
 
 on an exterior domain, including joint continuity, parameter holomorphy,
 fiber holomorphy, and a parametrized local inverse. Formal sources are under
@@ -272,9 +272,9 @@ additional constructions:
 
 A proposed finite marked model has the form
 
-$$
+```math
 P=(f,S,G,\psi,\mathfrak m_n),
-$$
+```
 
 where $f$ is a Pacman, $S$ is a sector, $G$ is first-return data, $\psi$ is
 the gluing map, and $\mathfrak m_n$ is finite external-ray and bubble
@@ -285,43 +285,43 @@ renormalization endofunctor.
 The corresponding parameter locus is intended to be defined independently
 of its topological properties:
 
-$$
+```math
 Q_n(P)=
-\{c\in\mathcal M:\operatorname{Real}_n(P,c)\}.
-$$
+\{c\in\mathcal M:\mathrm{Real}_n(P,c)\}.
+```
 
 The required properties are nonemptiness, compactness, connectedness,
 refinement nesting, nonempty compatible-chain intersections, and the
 connected-neighborhood condition
 
-$$
+```math
 \forall c\in\mathcal M\ \forall O\subseteq\mathcal M,\quad
 c\in O\text{ and }O\text{ relatively open}
 \Longrightarrow
 \exists n,P,\quad
-c\in\operatorname{int}_{\mathcal M}Q_n(P)
+c\in\mathrm{int}_{\mathcal M}Q_n(P)
 \subseteq Q_n(P)\subseteq O.
-$$
+```
 
 None of these properties has been obtained from BGT or Efimov. The exact
 comparison required for the current frozen target is
 
-$$
+```math
 Q_n(P(c,n))=
 \{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}\cap\mathcal M.
-$$
+```
 
 ## Efimov and BGT source layer
 
 The source-backed categorical interfaces are the universal localizing
 invariant
 
-$$
+```math
 U_{\mathrm{loc}}:
-\operatorname{Cat}^{\mathrm{perf}}_\infty
+\mathrm{Cat}^{\mathrm{perf}}_\infty
 \longrightarrow
-\operatorname{Mot}^{\mathrm{loc}},
-$$
+\mathrm{Mot}^{\mathrm{loc}},
+```
 
 relative localizing motives over a rigid monoidal coefficient category,
 duality and rigidity, relative tensor products, trace-class and nuclear
@@ -329,37 +329,37 @@ refinement, and inverse-limit or internal-Hom descriptions of morphisms.
 
 For a finite marking group $G_P$, the proposed relative data are
 
-$$
-E_P=\operatorname{Loc}(BG_P),\qquad
+```math
+E_P=\mathrm{Loc}(BG_P),\qquad
 M_n(P)=U_{\mathrm{loc},E_P}\bigl(\mathcal C_n(P)\bigr),
-$$
+```
 
 where $\mathcal C_n(P)$ is the finite incidence category of the marked model.
 The required separation-to-idempotent map has the form
 
-$$
+```math
 \chi_{P,n}:
 C(Q_n(P),\mathbb Z)
 \longrightarrow
-\pi_0\operatorname{End}_{\operatorname{Mot}^{\mathrm{loc}}_{E_P}}
+\pi_0\mathrm{End}_{\mathrm{Mot}^{\mathrm{loc}}_{E_P}}
 (M_n(P)).
-$$
+```
 
 For every nonempty proper relatively clopen $U\subseteq Q_n(P)$, the
 characteristic function $1_U$ must map to a nontrivial idempotent:
 
-$$
+```math
 \chi_{P,n}(1_U)^2=\chi_{P,n}(1_U),\qquad
 \chi_{P,n}(1_U)\neq0,\qquad
 \chi_{P,n}(1_U)\neq1.
-$$
+```
 
 The selected motive must independently satisfy
 
-$$
+```math
 \neg\exists e,\quad
 e^2=e\land e\neq0\land e\neq1
-$$
+```
 
 in its endomorphism ring. This is the contradiction mechanism that would
 prove connectedness of $Q_n(P)$.
