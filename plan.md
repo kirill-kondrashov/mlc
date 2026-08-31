@@ -1,4 +1,4 @@
-# Current status (2026-08-30)
+# Current status (2026-08-31)
 
 ## Checked frontier
 
@@ -293,6 +293,10 @@ root-axiom discharge has been introduced; the frozen straddling axiom is
 unchanged.
 
 ## Crash recovery
+
+The README now uses GitHub-compatible fenced `math` blocks and allowlisted
+`\mathrm` notation for display formulas; this avoids Markdown delimiter,
+heading, and unsupported-macro failures in the rendered repository page.
 
 The 2026-08-30 Copilot crash was a Node/V8 heap-exhaustion event, not a Lean
 failure. The repository was revalidated afterward; the crash report remains

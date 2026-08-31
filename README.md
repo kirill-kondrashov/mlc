@@ -77,7 +77,7 @@ ParaPuzzlePieceAt c n =
 and, for $c\in\mathcal M$, the repository proves
 
 ```math
-\operatorname{ParaPuzzlePieceAt}(c,n)
+\mathrm{ParaPuzzlePieceAt}(c,n)
 =
 \{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}.
 ```
@@ -287,7 +287,7 @@ of its topological properties:
 
 ```math
 Q_n(P)=
-\{c\in\mathcal M:\operatorname{Real}_n(P,c)\}.
+\{c\in\mathcal M:\mathrm{Real}_n(P,c)\}.
 ```
 
 The required properties are nonemptiness, compactness, connectedness,
@@ -299,7 +299,7 @@ connected-neighborhood condition
 c\in O\text{ and }O\text{ relatively open}
 \Longrightarrow
 \exists n,P,\quad
-c\in\operatorname{int}_{\mathcal M}Q_n(P)
+c\in\mathrm{int}_{\mathcal M}Q_n(P)
 \subseteq Q_n(P)\subseteq O.
 ```
 
@@ -318,9 +318,9 @@ invariant
 
 ```math
 U_{\mathrm{loc}}:
-\operatorname{Cat}^{\mathrm{perf}}_\infty
+\mathrm{Cat}^{\mathrm{perf}}_\infty
 \longrightarrow
-\operatorname{Mot}^{\mathrm{loc}},
+\mathrm{Mot}^{\mathrm{loc}},
 ```
 
 relative localizing motives over a rigid monoidal coefficient category,
@@ -330,7 +330,7 @@ refinement, and inverse-limit or internal-Hom descriptions of morphisms.
 For a finite marking group $G_P$, the proposed relative data are
 
 ```math
-E_P=\operatorname{Loc}(BG_P),\qquad
+E_P=\mathrm{Loc}(BG_P),\qquad
 M_n(P)=U_{\mathrm{loc},E_P}\bigl(\mathcal C_n(P)\bigr),
 ```
 
@@ -341,7 +341,7 @@ The required separation-to-idempotent map has the form
 \chi_{P,n}:
 C(Q_n(P),\mathbb Z)
 \longrightarrow
-\pi_0\operatorname{End}_{\operatorname{Mot}^{\mathrm{loc}}_{E_P}}
+\pi_0\mathrm{End}_{\mathrm{Mot}^{\mathrm{loc}}_{E_P}}
 (M_n(P)).
 ```
 
