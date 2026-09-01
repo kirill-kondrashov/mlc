@@ -3,7 +3,8 @@
 **Status:** ACTIVE
 **Goal:** prove every non-core project axiom without introducing new axioms, until only
 the three Lean-core axioms and the single open research package
-`MLC.residualOpenVirtualNearMoleculeAxiom` remain.
+`MLC.residualOpenVirtualNearMoleculeAxiom` remain. The checked frontier currently
+contains that residual package plus the parameter-side straddling formalization gap.
 
 Human-facing companion: `notebooks/frontier_full_proof_roadmap.ipynb`
 (rendered to `notebooks-html/frontier_full_proof_roadmap.html`).
@@ -19,7 +20,9 @@ project axioms:
 
 **Dependency refresh:** `lake-manifest.json` now pins
 `molecule-conjecture` to upstream revision
-`385fc36c553947cf125d09848c2a3077fc751209`. The upstream refined export is now
+`1d69ecc98ae04f3ccb7c732e5d4112ab17e2ce84`, with `yoccoz-theorem` at
+`83dbced5590174ec9342ab7f4e031a031b8ff798`. Both dependencies and mathlib are
+aligned with Lean `v4.28.0`. The upstream refined export is now
 a pair consisting of the operator package and canonical fast-fixed-point data;
 the compatibility layer projects those components explicitly. The root-facing
 Problem 4.3 uniform-bound target is kept as a direct residual interface because

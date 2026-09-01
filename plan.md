@@ -10,9 +10,17 @@ frontier is unchanged:
 - `MLC.residualOpenVirtualNearMoleculeAxiom`
   (Dudko Problems 4.3 and 4.4).
 
-The Molecule dependency is pinned to
-`385fc36c553947cf125d09848c2a3077fc751209`. The refreshed upstream API is
-adapted without adding its witness-level axiom to the root frontier.
+The Molecule dependency is pinned to upstream revision
+`1d69ecc98ae04f3ccb7c732e5d4112ab17e2ce84`; `yoccoz-theorem` is pinned to
+`83dbced5590174ec9342ab7f4e031a031b8ff798`. Both dependencies and mathlib
+are aligned with Lean `v4.28.0`, and the refreshed upstream API is adapted
+without adding its witness-level axiom to the root frontier.
+
+The Lean 4.28 migration is complete. The root toolchain is
+`leanprover/lean4:v4.28.0`, mathlib is locked to its `v4.28.0` revision, and
+the compatibility updates are limited to the new Laplacian notation scope and
+the `SimpleGraph.loopless` structure wrapper. `make build`, `make check`, and
+`./scripts/verify_output.sh` pass.
 
 ## Completed parameter infrastructure
 

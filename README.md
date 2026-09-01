@@ -425,4 +425,4 @@ make check
 - [yoccoz-theorem](https://github.com/kirill-kondrashov/yoccoz-theorem)
 - [molecule-conjecture](https://github.com/kirill-kondrashov/molecule-conjecture)
 
-Lean toolchain: `leanprover/lean4:v4.27.0-rc1`.
+Lean toolchain: `leanprover/lean4:v4.28.0`.

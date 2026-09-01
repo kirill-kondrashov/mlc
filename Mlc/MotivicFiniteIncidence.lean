@@ -125,9 +125,7 @@ def boundaryIncidenceGraph
   symm := by
     intro u v huv
     exact ⟨Ne.symm huv.1, by simpa [inter_comm] using huv.2⟩
-  loopless := by
-    intro u huv
-    exact huv.1 rfl
+  loopless := ⟨fun _ huv => huv.1 rfl⟩
 
 lemma boundaryArc_carrier_nonempty (γ : MLC.Quadratic.BoundaryArc) :
     γ.carrier.Nonempty := by

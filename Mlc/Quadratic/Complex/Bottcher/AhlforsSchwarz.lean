@@ -27,6 +27,7 @@ comparison argument.
 namespace MLC.Quadratic
 
 open Filter Topology Set Metric
+open scoped Laplacian
 
 /-- **Interior maximum via domination outside a compact set.** If `f` is continuous on an
 open set `U`, `K ⊆ U` is compact and contains a point `z₀`, and `f z ≤ f z₀` for every
