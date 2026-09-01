@@ -35,6 +35,7 @@ All results are sorry-free and use only the Lean-core axioms.
 namespace MLC.Quadratic
 
 open Complex Metric Set Filter Topology
+open scoped Laplacian
 
 open InnerProductSpace in
 /-- **Density-form Ahlfors–Schwarz lemma.** Let `ρ : ℂ → ℝ` be continuous and nonnegative on

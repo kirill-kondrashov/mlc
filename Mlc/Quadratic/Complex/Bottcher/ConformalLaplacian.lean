@@ -33,6 +33,7 @@ second-order chain rule `iteratedDeriv_vcomp_two` splits this into a Hessian ter
 namespace MLC.Quadratic
 
 open Complex
+open scoped Laplacian
 
 variable {f : ℂ → ℂ} {x v : ℂ}
 

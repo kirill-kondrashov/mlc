@@ -38,6 +38,7 @@ the substantial analytic content still to come.
 namespace MLC.Quadratic
 
 open Complex Set
+open scoped Laplacian
 
 noncomputable section
 

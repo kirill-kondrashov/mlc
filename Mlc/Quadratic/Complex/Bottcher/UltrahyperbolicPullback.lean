@@ -34,6 +34,7 @@ to the wiring step that consumes this contraction.
 namespace MLC.Quadratic
 
 open Complex Metric
+open scoped Laplacian
 
 open InnerProductSpace in
 /-- **Curvature `≤ -1` is preserved under holomorphic pullback.** With

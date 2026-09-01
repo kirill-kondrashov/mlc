@@ -34,6 +34,7 @@ it here from Taylor's theorem with the Peano remainder (`taylor_tendsto`).
 namespace MLC.Quadratic
 
 open Filter Topology Set Metric
+open scoped Laplacian
 
 /-- **One-dimensional second-derivative test.** If `g : ℝ → ℝ` is `C²` and has a
 local maximum at `a`, then its second derivative there is nonpositive. -/
