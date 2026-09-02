@@ -50,8 +50,8 @@ lemma connectedComponentIn_greenSublevel_inter_K_nonempty
   by_contra hempty
   rw [Set.not_nonempty_iff_eq_empty] at hempty
   -- `W` is disjoint from `K_c`, hence contained in the basin of infinity.
-  have hWbasin : W ⊆ Quadratic.basin_of_infinity c := by
-    rw [Quadratic.basin_eq_compl_K]
+  have hWbasin : W ⊆ basin_of_infinity c := by
+    rw [basin_eq_compl_K]
     intro z hz hzK
     exact (Set.eq_empty_iff_forall_notMem.1 hempty z) ⟨hz, hzK⟩
   -- `G_c` is harmonic on `W`.

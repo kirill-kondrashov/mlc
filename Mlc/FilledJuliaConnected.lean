@@ -12,8 +12,8 @@ import Mathlib.Topology.MetricSpace.Bounded
 /-!
 # Filled Julia set connectivity
 
-Proves `IsConnected (K c)` for `c ∈ MandelbrotSet` from ground axioms,
-replacing the axiom `filled_julia_set_connected` in `Axioms.lean`.
+Proves `IsConnected (K c)` for `c ∈ MandelbrotSet`, replacing an earlier
+axiom-backed placeholder.
 
 ## Proof outline
 

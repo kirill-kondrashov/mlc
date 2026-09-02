@@ -99,13 +99,12 @@ theorem green_sublevel_translate_connected {c : ℂ} (hc : c ∈ MandelbrotSet) 
   exact hconn.image _ (continuous_id.add continuous_const).continuousOn
 
 
-/-! ### Elementary containment fragments (no frontier axiom)
+/-! ### Elementary containment fragment (no frontier axiom)
 
-    The intersection `{c' | G_c(c'-c) < (1/2)ⁿ} ∩ M` is connected *for free* in the
-    two extreme strata, where the Green-sublevel translate and `M` are nested. Only
-    the intermediate **straddling** stratum — where the equipotential neighborhood
-    genuinely crosses `∂M` — requires the Yoccoz parameter↔dynamical correspondence.
-    These two lemmas carve those trivial strata out of the frontier axiom. -/
+    If the Green-sublevel translate is entirely contained in `M`, the intersection
+    is the translate itself. Only the intermediate **straddling** stratum — where
+    the equipotential neighborhood genuinely crosses `∂M` — requires the
+    Yoccoz parameter↔dynamical correspondence. -/
 
 /-- **Subset stratum (core-clean).** If the Green-sublevel translate is entirely
     contained in `M`, the intersection equals the translate itself, whose
@@ -117,18 +116,6 @@ theorem green_sublevel_translate_inter_mandelbrot_connected_of_subset {c : ℂ}
     IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
   rw [Set.inter_eq_left.mpr hsub]
   exact green_sublevel_translate_connected hc n
-
-/-- **Superset stratum (off the `mlc_conjecture` path).** If `M` is contained in the
-    Green-sublevel translate, the intersection equals `M`, connected by
-    `mandelbrot_set_connected`. This documents the second trivial stratum; it is
-    **not** consumed by the main derivation below, so it does not add
-    `mandelbrot_set_connected` to the MLC frontier. -/
-theorem green_sublevel_translate_inter_mandelbrot_connected_of_superset {c : ℂ}
-    (n : ℕ)
-    (hsup : MandelbrotSet ⊆ {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}) :
-    IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
-  rw [Set.inter_eq_right.mpr hsup]
-  exact mandelbrot_set_connected
 
 /-- **Weaker frontier axiom: straddling stratum only.** The connectivity of a
     Yoccoz parameter-puzzle piece intersected with `M`, *restricted* to the
