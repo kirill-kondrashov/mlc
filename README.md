@@ -65,7 +65,9 @@ All axioms used:
 `check_axioms.lean` imports only `Mlc.Core`, and every tracked `Mlc/**/*.lean`
 module is in that transitive closure. `Mlc.lean` is retained as the package
 entry point and `check_axioms.lean` as the executable checker; no stale project
-Lean modules remain.
+Lean modules remain. The complete tracked Lean source pass is warning-free;
+the terminal `MLC.mlc_conjecture` is the only root-path declaration without a
+downstream consumer.
 
 ## Validation
 

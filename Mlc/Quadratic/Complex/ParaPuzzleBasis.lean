@@ -1,6 +1,5 @@
 import Mathlib.Topology.Order
 import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Topology.Connected.LocallyConnected
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.PuzzleLemmas
