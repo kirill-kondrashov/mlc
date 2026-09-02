@@ -62,8 +62,10 @@ All axioms used:
 - The subset stratum of $T_n(c)$ is connected without an axiom.
 - Yoccoz shrinking and the Molecule bridge assemble local connectivity.
 
-The root-only cleanup removed stale experimental and motivic modules; none of
-them contributes to the checked theorem.
+`check_axioms.lean` imports only `Mlc.Core`, and every tracked `Mlc/**/*.lean`
+module is in that transitive closure. `Mlc.lean` is retained as the package
+entry point and `check_axioms.lean` as the executable checker; no stale project
+Lean modules remain.
 
 ## Validation
 
