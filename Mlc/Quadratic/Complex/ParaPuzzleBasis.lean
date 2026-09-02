@@ -66,7 +66,7 @@ theorem isCompact_closure_para_puzzle_piece (c : ℂ) (n : ℕ) :
   have hisom : Isometry (fun z : ℂ => z + c) := by
     refine Isometry.of_dist_eq ?_
     intro z w
-    simpa using dist_add_right z w c
+    exact dist_add_right z w c
   have himage :
       ParaPuzzlePieceAt c n = (fun z : ℂ => z + c) '' DynamicalPuzzlePiece c n 0 := by
     ext z
@@ -114,7 +114,8 @@ lemma mem_dynamicalPuzzlePiece_of_mem_closure_and_green_zero
   let U : Set ℂ := {w | green_function c w < (1 / 2) ^ n}
   have hzU : z ∈ U := by
     dsimp [U]
-    simpa [hz_green] using (pow_pos (by norm_num : (0 : ℝ) < 1 / 2) n)
+    rw [hz_green]
+    positivity
   have h0U : (0 : ℂ) ∈ U := by
     by_contra h0_notin
     rw [DynamicalPuzzlePiece, connectedComponentIn_eq_empty h0_notin, closure_empty] at hz_closure

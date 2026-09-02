@@ -173,16 +173,16 @@ theorem isPreconnected_quadratic_preimage {A : Set ℂ} {c : ℂ}
     isPreconnected_sq_preimage hA' hAclosed' h0'
   have hEq : {z : ℂ | z ^ 2 ∈ (fun z : ℂ => z + (-c)) '' A} = {z : ℂ | z ^ 2 + c ∈ A} := by
     ext z
-    simp [Set.mem_image, exists_eq_right, add_comm, add_left_comm, add_assoc]
+    simp [add_comm]
   simpa [hEq] using hsq
 
 /-! ## Part 2: Decreasing intersection of compact connected sets -/
 
-/-- A decreasing intersection of nonempty compact preconnected subsets
-of a T2 space is preconnected. -/
+/-- A decreasing intersection of compact preconnected subsets of a T2 space
+is preconnected. -/
 theorem isPreconnected_iInter_of_sequence {X : Type*} [TopologicalSpace X]
     [T2Space X] {S : ℕ → Set X}
-    (h_anti : Antitone S) (h_ne : ∀ n, (S n).Nonempty)
+    (h_anti : Antitone S)
     (h_compact : ∀ n, IsCompact (S n))
     (h_conn : ∀ n, IsPreconnected (S n)) :
     IsPreconnected (⋂ n, S n) := by
@@ -320,7 +320,7 @@ theorem filled_julia_set_connected_proved {c : ℂ} (hc : c ∈ MandelbrotSet) :
         have hEq : S (n + 1) = {z : ℂ | z ^ 2 + c ∈ S n} := by
           ext z
           change ‖orbit c z (n + 1)‖ ≤ R c ↔ z ^ 2 + c ∈ S n
-          rw [show orbit c z (n + 1) = orbit c (fc c z) n by simpa [horbit_fc]]
+          rw [show orbit c z (n + 1) = orbit c (fc c z) n from (horbit_fc n z).symm]
           simp [S, fc]
         have hcrit_shift : orbit c c n = orbit c 0 (n + 1) := by
           simpa [fc, orbit_zero] using (horbit_fc n 0)
@@ -367,7 +367,7 @@ theorem filled_julia_set_connected_proved {c : ℂ} (hc : c ∈ MandelbrotSet) :
     exact Set.Subset.antisymm hK_subset hK_superset
   have hpre : IsPreconnected (K c) := by
     rw [hK_eq]
-    exact isPreconnected_iInter_of_sequence hS_anti hS_nonempty hS_compact hS_pre
+    exact isPreconnected_iInter_of_sequence hS_anti hS_compact hS_pre
   have hne : (K c).Nonempty := by
     rw [hK_eq]
     have h_inter := IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed

@@ -1,4 +1,3 @@
-import Mlc.Quadratic.Complex.GreenSublevel
 import Mlc.GreenSublevelConnectedDirect
 
 namespace MLC

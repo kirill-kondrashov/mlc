@@ -1,4 +1,3 @@
-import Mlc.Quadratic.Complex.ParaPuzzle
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
 
 namespace MLC.Quadratic

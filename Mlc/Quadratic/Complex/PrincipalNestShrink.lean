@@ -32,7 +32,8 @@ theorem para_iInter_eq_singleton_of_dyn_iInter_eq_singleton
     intro n
     have h0_all : 0 ∈ ⋂ k, DynamicalPuzzlePiece c k 0 := by
       have : 0 ∈ ({0} : Set ℂ) := by simp
-      simpa [h_dyn] using this
+      rw [h_dyn]
+      exact this
     exact (mem_paraPuzzlePieceAt_iff c c n).2
       (by simpa using Set.mem_iInter.mp h0_all n)
 

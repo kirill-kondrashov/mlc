@@ -1,5 +1,4 @@
 import Mlc.GreenSublevelConnected
-import Mlc.Quadratic.Complex.PuzzleLemmas2
 
 /-!
 # Para-puzzle connectivity and the parameter frontier
