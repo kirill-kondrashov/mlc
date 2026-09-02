@@ -1,7 +1,7 @@
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Quadratic.Complex.PuzzleLemmas
 import Yoccoz.Quadratic.Complex.Escape
-import Mlc.Quadratic.Complex.ConformalGroetzsch
+import Yoccoz.Quadratic.Complex.Groetzsch
 import Mathlib.MeasureTheory.Measure.MeasureSpace
 
 namespace MLC
@@ -18,7 +18,7 @@ Yoccoz theorem using conformal modulus.
 This is the classical direction used in the MLC strategy:
 divergence of annulus moduli implies the critical puzzle pieces shrink to `{0}`.
 
-We prove it from `cgroetzsch_criterion` (for parameters in `MandelbrotSet`) plus the escape
+We prove it from `groetzsch_criterion` (for parameters in `MandelbrotSet`) plus the escape
 argument (for parameters outside `MandelbrotSet`).
 -/
 
@@ -28,12 +28,8 @@ lemma isOpen_dynamicalPuzzlePiece_conformal (c : ℂ) (n : ℕ) :
     IsOpen.preimage (continuous_green_function c) isOpen_Iio
   simpa [DynamicalPuzzlePiece] using IsOpen.connectedComponentIn h_base
 
-lemma nullMeasurable_dynamicalPuzzlePiece_conformal (c : ℂ) (n : ℕ) :
-    MeasureTheory.NullMeasurableSet (DynamicalPuzzlePiece c n 0) MeasureTheory.volume := by
-  exact (isOpen_dynamicalPuzzlePiece_conformal c n).measurableSet.nullMeasurableSet
-
 theorem yoccoz_theorem_conformal (c : ℂ) :
-    ¬ Summable (fun n => cmodulus (PuzzleAnnulus c n)) →
+    ¬ Summable (fun n => modulus (PuzzleAnnulus c n)) →
     (⋂ n, DynamicalPuzzlePiece c n 0) = {0} := by
   intro h_div
   by_cases hc : c ∈ MandelbrotSet
@@ -53,23 +49,25 @@ theorem yoccoz_theorem_conformal (c : ℂ) :
       exact isPreconnected_connectedComponentIn
     have h_meas : ∀ n, NullMeasurableSet (DynamicalPuzzlePiece c n 0) volume := by
       intro n
-      exact nullMeasurable_dynamicalPuzzlePiece_conformal c n
+      exact (isOpen_dynamicalPuzzlePiece_conformal c n).measurableSet.nullMeasurableSet
     -- Rewrite the annuli as `PuzzleAnnulus`.
-    have h_div' : ¬ Summable (fun n => cmodulus (DynamicalPuzzlePiece c n 0 \ DynamicalPuzzlePiece c (n + 1) 0)) := by
+    have h_div' : ¬ Summable
+        (fun n => modulus (DynamicalPuzzlePiece c n 0 \ DynamicalPuzzlePiece c (n + 1) 0)) := by
       exact h_div
-    exact cgroetzsch_criterion (P := fun n => DynamicalPuzzlePiece c n 0) h_nested h_zero h_conn h_meas h_div'
+    exact groetzsch_criterion (P := fun n => DynamicalPuzzlePiece c n 0)
+      h_nested h_zero h_conn h_meas h_div'
   · -- Outside `M`, puzzle pieces eventually become empty, hence the moduli are summable.
     exfalso
     apply h_div
     rcases dynamical_puzzle_piece_empty_of_large_n c hc with ⟨N, hN⟩
     -- Finite-support argument: beyond `N`, the annuli are empty, hence have modulus `0`.
     refine summable_of_finite_support ?_
-    have h_support : (Function.support fun n ↦ cmodulus (PuzzleAnnulus c n)) ⊆ Iio N := by
+    have h_support : (Function.support fun n ↦ modulus (PuzzleAnnulus c n)) ⊆ Iio N := by
       intro n hn
       rw [Function.mem_support, ne_eq] at hn
       by_contra h_ge
       have h_ge' : n ≥ N := by simpa using (le_of_not_gt h_ge)
-      have : cmodulus (PuzzleAnnulus c n) = 0 := by
+      have : modulus (PuzzleAnnulus c n) = 0 := by
         rw [PuzzleAnnulus]
         have h_empty : DynamicalPuzzlePiece c n 0 = ∅ := by
           ext x
@@ -81,7 +79,7 @@ theorem yoccoz_theorem_conformal (c : ℂ) :
             exact connectedComponentIn_nonempty_iff.1 ⟨x, hx⟩
           exact hN n h_ge' h0
         rw [h_empty]
-        simp [cmodulus, modulus_empty]
+        simp [modulus_empty]
       exact hn this
     exact Set.Finite.subset (Set.finite_Iio N) h_support
 
@@ -90,4 +88,3 @@ end
 end Quadratic
 
 end MLC
-

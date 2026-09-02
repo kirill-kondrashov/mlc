@@ -1,4 +1,4 @@
-import Mlc.GreenSublevelConnected
+import Mlc.GreenSublevelConnectedDirect
 
 /-!
 # Para-puzzle connectivity and the parameter frontier
@@ -19,14 +19,7 @@ open Quadratic Complex Topology Set Filter
 
 noncomputable section
 
-/-! ## Step 3: Green sublevel connectivity (proved directly) -/
-
-/-- Green sublevel sets `{G_c < (1/2)^n}` are connected for `c ∈ M`.
-    The checked proof is the direct Route-A potential-theory argument. -/
-theorem green_sublevel_connected_hyp_proved : Quadratic.GreenSublevelConnectedHyp :=
-  green_sublevel_connected_onM
-
-/-! ## Step 4: DynamicalPuzzlePiece = GreenSublevel for c ∈ M -/
+/-! ## Step 3: DynamicalPuzzlePiece = GreenSublevel for c ∈ M -/
 
 /-- If a set `S` is connected and `x ∈ S`, then the connected component of `x`
     in `S` is `S` itself. -/
@@ -48,7 +41,7 @@ theorem dynamicalPuzzlePiece_eq_greenSublevel {c : ℂ} (hc : c ∈ MandelbrotSe
     Quadratic.GreenSublevel c n
   -- GreenSublevel c n is connected (proved) and contains 0
   have h_conn : IsConnected (Quadratic.GreenSublevel c n) :=
-    green_sublevel_connected_hyp_proved.connected c n hc
+    green_sublevel_connected_direct c n hc
   have h_zero : (0 : ℂ) ∈ Quadratic.GreenSublevel c n :=
     Quadratic.green_sublevel_contains_0 c n hc
   -- The connected component of 0 in a connected set is the whole set
@@ -83,7 +76,7 @@ theorem paraPuzzlePieceAt_eq_green_translate {c : ℂ} (hc : c ∈ MandelbrotSet
 theorem green_sublevel_translate_connected {c : ℂ} (hc : c ∈ MandelbrotSet) (n : ℕ) :
     IsConnected {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} := by
   have hconn : IsConnected (Quadratic.GreenSublevel c n) :=
-    green_sublevel_connected_hyp_proved.connected c n hc
+    green_sublevel_connected_direct c n hc
   have himg : (fun w => w + c) '' Quadratic.GreenSublevel c n
       = {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} := by
     ext c'

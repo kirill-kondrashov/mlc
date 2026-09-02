@@ -18,8 +18,11 @@ noncomputable section
 
 /-- Primitive renormalizable parameters in the root-facing interface. -/
 def PrimitiveRenormalizable (c : ℂ) : Prop :=
-  ∀ (hc : c ∈ MLC.Quadratic.MandelbrotSet),
-    MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩
+  ∀ (hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (U : Set MLC.Quadratic.MandelbrotSet),
+    U ∈ 𝓝 (⟨c, hc⟩ : MLC.Quadratic.MandelbrotSet) →
+      ∃ V ∈ 𝓝 (⟨c, hc⟩ : MLC.Quadratic.MandelbrotSet),
+        IsPreconnected V ∧ V ⊆ U
 
 private lemma isProperMap_pow2 : IsProperMap (fun z : ℂ => z^2) := by
   rw [isProperMap_iff_isCompact_preimage]

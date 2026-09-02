@@ -21,11 +21,6 @@ theorem green_sublevel_contains_0 (c : ℂ) (n : ℕ) (hc : c ∈ MandelbrotSet)
     simp only [GreenSublevel, mem_setOf_eq, h0]
     positivity
 
-/-- Connectivity data for Green sublevels on the Mandelbrot set. -/
-structure GreenSublevelConnectedHyp : Prop where
-  connected :
-    ∀ (c : ℂ) (n : ℕ), c ∈ MandelbrotSet → IsConnected (GreenSublevel c n)
-
 end
 
 end MLC.Quadratic

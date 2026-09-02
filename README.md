@@ -85,7 +85,7 @@ make check
 | Root theorem | [`Mlc/Core.lean`](Mlc/Core.lean) |
 | Parameter frontier | [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean) |
 | Green-sublevel proof | [`Mlc/GreenSublevelConnectedDirect.lean`](Mlc/GreenSublevelConnectedDirect.lean) |
-| Molecule bridge | [`Mlc/MoleculeToSatelliteNestData.lean`](Mlc/MoleculeToSatelliteNestData.lean) |
+| Molecule bridge | [`Mlc/MoleculeToParameterShrink.lean`](Mlc/MoleculeToParameterShrink.lean) |
 | Axiom checker | [`check_axioms.lean`](check_axioms.lean) |
 
 ## Sources and dependencies

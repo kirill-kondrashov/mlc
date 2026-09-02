@@ -1,32 +1,9 @@
-import Mlc.Quadratic.Complex.PuzzleLemmas2
+import Mlc.Quadratic.Complex.ParaPuzzleBasis
 import Mathlib.Topology.Connected.LocallyConnected
 
 namespace MLC
 
 open Quadratic Complex Topology Set Filter
-
-/-- Local connectedness at one point, expressed by connected neighborhoods. -/
-def LocallyConnectedAt (X : Type*) [TopologicalSpace X] (x : X) : Prop :=
-  ∀ U ∈ 𝓝 x, ∃ V ∈ 𝓝 x, V ⊆ U ∧ IsConnected V
-
-/-- Pointwise local connectedness implies a locally connected space. -/
-lemma locallyConnectedSpace_of_locallyConnectedAt {X : Type*} [TopologicalSpace X]
-    (h : ∀ x : X, LocallyConnectedAt X x) : LocallyConnectedSpace X := by
-  rw [locallyConnectedSpace_iff_connectedComponentIn_open]
-  intro F hF x _
-  rw [isOpen_iff_mem_nhds]
-  intro y hy
-  have hyF : y ∈ F := connectedComponentIn_subset F x hy
-  have h_nhds : F ∈ 𝓝 y := hF.mem_nhds hyF
-  obtain ⟨V, hV_nhds, hV_sub, hV_conn⟩ := h y F h_nhds
-  filter_upwards [hV_nhds] with z hz
-  have hy_in_V : y ∈ V := mem_of_mem_nhds hV_nhds
-  have hV_sub_comp : V ⊆ connectedComponentIn F y :=
-    IsPreconnected.subset_connectedComponentIn hV_conn.isPreconnected hy_in_V hV_sub
-  have h_eq : connectedComponentIn F y = connectedComponentIn F x :=
-    (connectedComponentIn_eq hy).symm
-  rw [← h_eq]
-  exact hV_sub_comp hz
 
 /-- Connectedness is preserved by the subtype inclusion, in both directions. -/
 lemma isConnected_subtype_val_image {X : Type*} [TopologicalSpace X] {p : X → Prop}
@@ -69,32 +46,33 @@ lemma para_puzzle_piece_basis_induced (c : ℂ) (hc : c ∈ MandelbrotSet)
   obtain ⟨V, hV_sub_U, hV_open, hc_in_V⟩ := hU
   obtain ⟨W, hW_open, hW_eq⟩ := isOpen_induced_iff.mp hV_open
   rw [← hW_eq] at hc_in_V hV_sub_U
-  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis c h W
+  obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis_sketch c h W
     (hW_open.mem_nhds hc_in_V)
   use n
   intro x hx
   apply hV_sub_U
   exact hn_sub hx
 
-/-- Shrinking connected parameter pieces give local connectedness at `c`. -/
-lemma lc_at_of_shrink_of_connected_at
+/-! Shrinking connected parameter pieces give a basis of preconnected
+neighborhoods at `c`. -/
+lemma preconnected_nhds_of_shrink_of_connected_at
     (c : ℂ) (hc : c ∈ MandelbrotSet)
     (h_conn_at : ∀ n, IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet))
     (h : (⋂ n, ParaPuzzlePieceAt c n) = {c}) :
-    LocallyConnectedAt MandelbrotSet ⟨c, hc⟩ := by
-  rw [LocallyConnectedAt]
+    ∀ U ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet), ∃ V ∈ 𝓝 (⟨c, hc⟩ : MandelbrotSet),
+      IsPreconnected V ∧ V ⊆ U := by
   intro U hU
   obtain ⟨n, hn_sub⟩ := para_puzzle_piece_basis_induced c hc h U hU
   let V := {x : MandelbrotSet | x.val ∈ ParaPuzzlePieceAt c n}
-  refine ⟨V, ?_, hn_sub, ?_⟩
+  refine ⟨V, ?_, ?_, hn_sub⟩
   · rw [mem_nhds_iff]
     refine ⟨V, subset_rfl, ?_, ?_⟩
     · rw [isOpen_induced_iff]
-      exact ⟨ParaPuzzlePieceAt c n, para_puzzle_piece_open c n, rfl⟩
+      exact ⟨ParaPuzzlePieceAt c n, para_puzzle_piece_at_isOpen c n, rfl⟩
     · have hc_in_inter : c ∈ ⋂ k, ParaPuzzlePieceAt c k := by
         rw [h]
         exact Set.mem_singleton c
       exact Set.mem_iInter.mp hc_in_inter n
-  · exact para_puzzle_piece_induced_connected_of_at c h_conn_at n
+  · exact (para_puzzle_piece_induced_connected_of_at c h_conn_at n).isPreconnected
 
 end MLC

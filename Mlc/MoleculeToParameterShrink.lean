@@ -24,12 +24,12 @@ theorem depthsFromSatelliteTower_monotone (c : ℂ) (h : SatelliteRenormalizable
 
 def ConformalModulusNotSummableTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
   ¬ Summable (fun n =>
-    MLC.Quadratic.cmodulus
+    MLC.Quadratic.modulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
 
 def UniformConformalLowerBoundTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
   ∃ μ > 0, ∀ n,
-    μ ≤ MLC.Quadratic.cmodulus
+    μ ≤ MLC.Quadratic.modulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n)
 
 theorem conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
@@ -40,7 +40,7 @@ theorem conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
   rcases h_uniform with ⟨μ, hμ_pos, hμ_lb⟩
   have h_lim : Filter.Tendsto
       (fun n =>
-        MLC.Quadratic.cmodulus
+        MLC.Quadratic.modulus
           (MLC.Quadratic.PrincipalNest.dynAnnulus c
             (depthsFromSatelliteTower c h) n))
       Filter.atTop (nhds 0) :=
@@ -49,22 +49,22 @@ theorem conformalModulusNotSummableTarget_of_uniformConformalLowerBoundTarget
   specialize h_lim (μ / 2) (by positivity)
   rcases h_lim with ⟨N, hN⟩
   have h_dist : dist
-      (MLC.Quadratic.cmodulus
+      (MLC.Quadratic.modulus
         (MLC.Quadratic.PrincipalNest.dynAnnulus c
           (depthsFromSatelliteTower c h) N)) 0 < μ / 2 :=
     hN N (le_refl N)
   have h_lbN : μ ≤
-      MLC.Quadratic.cmodulus
+      MLC.Quadratic.modulus
         (MLC.Quadratic.PrincipalNest.dynAnnulus c
           (depthsFromSatelliteTower c h) N) :=
     hμ_lb N
   have h_nonnegN : 0 ≤
-      MLC.Quadratic.cmodulus
+      MLC.Quadratic.modulus
         (MLC.Quadratic.PrincipalNest.dynAnnulus c
           (depthsFromSatelliteTower c h) N) :=
     le_trans (le_of_lt hμ_pos) h_lbN
   have h_ltN :
-      MLC.Quadratic.cmodulus
+      MLC.Quadratic.modulus
         (MLC.Quadratic.PrincipalNest.dynAnnulus c
           (depthsFromSatelliteTower c h) N) < μ / 2 := by
     simpa [Real.dist_eq, abs_of_nonneg h_nonnegN] using h_dist
@@ -150,18 +150,17 @@ lemma principal_nest_disjoint_union_of_monotone_depths
 
 lemma principal_nest_modulus_sum_of_monotone_depths
     (c : ℂ) (depths : ℕ → ℕ) (hmono : Monotone depths) (n : ℕ) :
-    MLC.Quadratic.cmodulus (MLC.Quadratic.PrincipalNest.dynAnnulus c depths n) =
+    MLC.Quadratic.modulus (MLC.Quadratic.PrincipalNest.dynAnnulus c depths n) =
     ∑ k ∈ Finset.Ico (depths n) (depths (n + 1)),
-      MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c k) := by
+      MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c k) := by
   let P := fun n => MLC.Quadratic.DynamicalPuzzlePiece c n 0
   let A := fun n => MLC.Quadratic.PuzzleAnnulus c n
-  have h_meas_A : ∀ n, MeasureTheory.NullMeasurableSet (A n) MeasureTheory.volume := by
+  have h_meas_A : ∀ n, MeasurableSet (A n) := by
     intro n
-    apply MeasureTheory.NullMeasurableSet.diff
-    · exact MLC.Quadratic.nullMeasurable_dynamicalPuzzlePiece_conformal c n
-    · exact MLC.Quadratic.nullMeasurable_dynamicalPuzzlePiece_conformal c (n + 1)
+    exact (MLC.Quadratic.isOpen_dynamicalPuzzlePiece_conformal c n).measurableSet.diff
+      (MLC.Quadratic.isOpen_dynamicalPuzzlePiece_conformal c (n + 1)).measurableSet
   rw [principal_nest_disjoint_union_of_monotone_depths c depths hmono n]
-  apply MLC.Quadratic.cmodulus_finset_sum
+  apply MLC.Quadratic.modulus_finset_sum
   · intro i hi j hj hij
     simp at hi hj
     rw [Function.onFun, Set.disjoint_left]
@@ -187,28 +186,28 @@ theorem paraPuzzle_shrink_of_conformalModulusNotSummableTarget
     (hdiv : ConformalModulusNotSummableTarget c hTower) :
     (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} := by
   change ¬ Summable (fun n =>
-    MLC.Quadratic.cmodulus
+    MLC.Quadratic.modulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c
         (depthsFromSatelliteTower c hTower) n)) at hdiv
   have h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} := by
     apply MLC.Quadratic.yoccoz_theorem_conformal
     have h_full_div :
         ¬ Summable (fun n =>
-          MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c n)) := by
+          MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c n)) := by
       intro h_sum
       apply hdiv
       let depths := depthsFromSatelliteTower c hTower
       let B := fun n => MLC.Quadratic.PrincipalNest.dynAnnulus c depths n
-      have h_summable_B : Summable (fun n => MLC.Quadratic.cmodulus (B n)) := by
+      have h_summable_B : Summable (fun n => MLC.Quadratic.modulus (B n)) := by
         apply summable_of_sum_range_le
-          (c := ∑' k, MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c k))
+          (c := ∑' k, MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c k))
         · intro n
           exact MLC.Quadratic.modulus_nonneg _
         · intro N
           have h_collapse :
-              ∑ n ∈ Finset.range N, MLC.Quadratic.cmodulus (B n) =
+              ∑ n ∈ Finset.range N, MLC.Quadratic.modulus (B n) =
                 ∑ k ∈ Finset.Ico (depths 0) (depths N),
-                  MLC.Quadratic.cmodulus (MLC.Quadratic.PuzzleAnnulus c k) := by
+                  MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c k) := by
             induction N with
             | zero =>
                 simp

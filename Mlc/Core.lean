@@ -2,7 +2,7 @@ import Yoccoz.Yoccoz
 import Mlc.LocalConnectivity
 import Mlc.ParaPuzzleConnectivity
 import Mlc.RenormalizationTypes
-import Mlc.MoleculeToSatelliteNestData
+import Mlc.MoleculeToParameterShrink
 import Mathlib.Topology.Connected.LocallyConnected
 
 namespace MLC
@@ -29,7 +29,9 @@ def IRNoTowerImpliesPrimitiveData : Prop :=
 
 /-- Problem 4.3 in the root-facing uniform conformal-modulus form. -/
 def Problem43PseudoSiegelAPrioriBoundsData : Prop :=
-  MoleculeBridgeTarget.MoleculeImpliesUniformConformalLowerBoundTarget
+  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
+    (hTower : SatelliteRenormalizableTower c),
+    PrincipalNestTarget.UniformConformalLowerBoundTarget c hTower
 
 /-- Interpolation Problem 4.4 in the root-facing classification form. -/
 def Problem44VirtualMoleculeData : Prop :=
@@ -55,22 +57,22 @@ theorem parameter_shrink_of_yoccoz
 theorem mlc_conjecture :
     LocallyConnectedSpace mandelbrotSet := by
   rcases residualOpenVirtualNearMoleculeAxiom with ⟨h_uniform, h_primitive⟩
-  apply locallyConnectedSpace_of_locallyConnectedAt
-  intro ⟨c, hc⟩
+  rw [locallyConnectedSpace_iff_connected_subsets]
+  intro ⟨c, hc⟩ U hU
   rcases dichotomy c with h_fin | h_inf
   · have h_dyn :
         (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} :=
       MLC.yoccoz_theorem c (by
         simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin)
-    exact lc_at_of_shrink_of_connected_at c hc
+    exact preconnected_nhds_of_shrink_of_connected_at c hc
       (para_puzzle_piece_inter_mandelbrot_connected_proved c hc)
-      (parameter_shrink_of_yoccoz c hc h_fin h_dyn)
+      (parameter_shrink_of_yoccoz c hc h_fin h_dyn) U hU
   · by_cases h_tower : SatelliteRenormalizableTower c
-    · exact lc_at_of_shrink_of_connected_at c hc
+    · exact preconnected_nhds_of_shrink_of_connected_at c hc
         (para_puzzle_piece_inter_mandelbrot_connected_proved c hc)
-        (MoleculeBridgeTarget.parameter_shrink_of_moleculeUniformBridgeTarget
-          h_uniform c hc h_tower)
-    · exact h_primitive c hc h_inf h_tower hc
+        (PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget
+          c h_tower (h_uniform c hc h_tower)) U hU
+    · exact h_primitive c hc h_inf h_tower hc U hU
 
 end
 
