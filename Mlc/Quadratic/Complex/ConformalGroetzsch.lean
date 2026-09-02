@@ -8,69 +8,10 @@ open MeasureTheory BigOperators Set
 
 noncomputable def cmodulus := modulus
 
-/-- Abstract interface for a true conformal modulus on annulus-like sets.
-    The current `cmodulus` remains the Gaussian proxy inherited from the Yoccoz
-    package; primitive-Feigenbaum work that genuinely needs conformal invariance
-    should target this theorem surface instead of using the proxy definitionally. -/
-structure AnnulusConformalModulusAPI where
-  mod : Set ℂ → ℝ
-  nonneg : ∀ A : Set ℂ, 0 ≤ mod A
-  affine_invariant :
-    ∀ (A : Set ℂ) (a b : ℂ), a ≠ 0 → mod ((fun z : ℂ => a * z + b) '' A) = mod A
-
-/-- Existence of a genuine conformal-modulus API. This keeps the new route
-    separate from the Gaussian proxy while giving downstream theorems a named
-    theorem-facing handle. -/
-def TrueConformalModulusData : Prop :=
-  Nonempty AnnulusConformalModulusAPI
-
-/-- A concrete fallback conformal-modulus API. It is intentionally weak but
-    satisfies the abstract interface, so it can serve as a canonical witness
-    whenever the theorem graph only needs *some* API inhabitant rather than a
-    constructive analytic model. -/
-def unitAnnulusConformalModulus : AnnulusConformalModulusAPI where
-  mod := fun _ => 1
-  nonneg := by
-    intro A
-    norm_num
-  affine_invariant := by
-    intro A a b ha
-    rfl
-
-/-- The true-modulus interface is inhabited by the canonical fallback API. -/
-theorem unitTrueConformalModulusData : TrueConformalModulusData :=
-  ⟨unitAnnulusConformalModulus⟩
-
-/-- Chosen true conformal-modulus API associated to `TrueConformalModulusData`. -/
-noncomputable def chosenTrueConformalModulus
-    (h : TrueConformalModulusData) : AnnulusConformalModulusAPI :=
-  Classical.choice h
-
-theorem chosenTrueConformalModulus_nonneg
-    (h : TrueConformalModulusData) (A : Set ℂ) :
-    0 ≤ (chosenTrueConformalModulus h).mod A :=
-  (chosenTrueConformalModulus h).nonneg A
-
-theorem chosenTrueConformalModulus_affine_invariant
-    (h : TrueConformalModulusData) (A : Set ℂ) (a b : ℂ) (ha : a ≠ 0) :
-    (chosenTrueConformalModulus h).mod ((fun z : ℂ => a * z + b) '' A) =
-      (chosenTrueConformalModulus h).mod A :=
-  (chosenTrueConformalModulus h).affine_invariant A a b ha
-
-/-- Modulus is monotonic. -/
-theorem cmodulus_le_of_subset {A B : Set ℂ} (h : A ⊆ B) (_hA : NullMeasurableSet A volume) :
-    cmodulus A ≤ cmodulus B := by
-  unfold cmodulus modulus
-  apply integral_mono_measure (Measure.restrict_mono h le_rfl)
-  · apply ae_restrict_of_ae
-    apply ae_of_all
-    intro z
-    exact le_of_lt (Real.exp_pos _)
-  · exact weight_integrable.integrableOn
-
-/-- Modulus is additive on finite disjoint unions. -/
-theorem cmodulus_finset_sum {ι : Type*} [DecidableEq ι] {s : Finset ι} {A : ι → Set ℂ}
-    (h_disj : PairwiseDisjoint s A) (h_meas : ∀ i ∈ s, NullMeasurableSet (A i) volume) :
+theorem cmodulus_finset_sum {ι : Type*} [DecidableEq ι] {s : Finset ι}
+    {A : ι → Set ℂ}
+    (h_disj : PairwiseDisjoint s A)
+    (h_meas : ∀ i ∈ s, NullMeasurableSet (A i) volume) :
     cmodulus (⋃ i ∈ s, A i) = ∑ i ∈ s, cmodulus (A i) := by
   induction s using Finset.induction_on with
   | empty =>
@@ -90,23 +31,20 @@ theorem cmodulus_finset_sum {ι : Type*} [DecidableEq ι] {s : Finset ι} {A : �
         apply Set.subset_insert
       · intro j hj
         exact h_meas j (Finset.mem_insert_of_mem hj)
-    · -- Disjointness
-      apply Disjoint.aedisjoint
+    · apply Disjoint.aedisjoint
       rw [Set.disjoint_right]
       intro z h_union h_i
       simp only [Set.mem_iUnion] at h_union
       rcases h_union with ⟨j, hj_s, h_z_j⟩
       have h_neq : i ≠ j := ne_comm.mp (ne_of_mem_of_not_mem hj_s hi)
-      have h_disj_ij := h_disj (Finset.mem_insert_self i s) (Finset.mem_insert_of_mem hj_s) h_neq
+      have h_disj_ij :=
+        h_disj (Finset.mem_insert_self i s) (Finset.mem_insert_of_mem hj_s) h_neq
       exact Set.disjoint_left.1 h_disj_ij h_i h_z_j
-    · -- Measurability of Union (2nd arg)
-      apply NullMeasurableSet.biUnion s.finite_toSet.countable
+    · apply NullMeasurableSet.biUnion s.finite_toSet.countable
       intro j hj
       exact h_meas j (Finset.mem_insert_of_mem hj)
-    · -- Integrability A i
-      exact weight_integrable.integrableOn
-    · -- Integrability Union
-      exact weight_integrable.integrableOn
+    · exact weight_integrable.integrableOn
+    · exact weight_integrable.integrableOn
 
 theorem cgroetzsch_criterion {P : ℕ → Set ℂ}
     (h_nested : ∀ n, P (n + 1) ⊆ P n)

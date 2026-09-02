@@ -2,6 +2,7 @@ import Mlc.Quadratic.Complex.GreenHarmonic
 import Mlc.Quadratic.Complex.HarmonicMinimumPrinciple
 import Mlc.Quadratic.Complex.GreenSublevel
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
+import Mlc.FilledJuliaConnected
 
 /-!
 # Direct proof that Green sublevel sets are connected (Route A)
@@ -118,7 +119,7 @@ connected. -/
 theorem green_sublevel_connected_direct (c : ℂ) (n : ℕ)
     (hc : c ∈ MandelbrotSet) :
     IsConnected (GreenSublevel c n) := by
-  have hK_conn : IsConnected (K c) := filled_julia_set_connected hc
+  have hK_conn : IsConnected (K c) := filled_julia_set_connected_proved hc
   have hK_sub : K c ⊆ GreenSublevel c n := by
     intro z hz
     have hz0 : green_function c z = 0 := (green_function_eq_zero_iff_mem_K c z).2 hz

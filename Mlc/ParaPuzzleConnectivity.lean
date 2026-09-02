@@ -1,5 +1,4 @@
 import Mlc.GreenSublevelConnected
-import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.PuzzleLemmas2
 
 /-!
@@ -163,13 +162,6 @@ theorem para_puzzle_piece_inter_mandelbrot_connected_proved (c : ℂ)
     IsConnected (ParaPuzzlePieceAt c n ∩ MandelbrotSet) := by
   rw [paraPuzzlePieceAt_eq_green_translate hc n]
   exact green_sublevel_translate_inter_mandelbrot_connected c hc n
-
-/-- The full data package for para-puzzle connectivity, proved from
-    Böttcher infrastructure. -/
-theorem para_puzzle_connectivity_data_proved :
-    Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData := by
-  intro c hc n
-  exact para_puzzle_piece_inter_mandelbrot_connected_proved c hc n
 
 end
 

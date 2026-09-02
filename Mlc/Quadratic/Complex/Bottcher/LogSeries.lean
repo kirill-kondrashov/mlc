@@ -15,12 +15,6 @@ open scoped BigOperators
 def atInfinity : Filter ℂ :=
   Filter.comap (fun z : ℂ => ‖z‖) atTop
 
-lemma continuous_quadratic_map (c : ℂ) : Continuous (quadratic_map c) := by
-  have h_pow : Continuous (fun z : ℂ => z ^ 2) := continuous_id.pow 2
-  have h_add : Continuous (fun z : ℂ => z ^ 2 + c) :=
-    h_pow.add continuous_const
-  simpa [quadratic_map] using h_add
-
 lemma quadratic_map_differentiable (c : ℂ) :
     Differentiable ℂ (quadratic_map c) := by
   unfold quadratic_map
@@ -914,45 +908,6 @@ lemma tendsto_logSeriesBottcherApprox_div_atInfinity (c : ℂ) :
   filter_upwards [hzne] with z hz
   exact logSeriesBottcherApprox_div c hz
 
-lemma eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity (c : ℂ) :
-    ∀ᶠ z in atInfinity, 1 < ‖logSeriesBottcherApprox c z‖ := by
-  have hratioNorm :
-      Tendsto ((fun a : ℂ => ‖a‖) ∘
-        (fun z : ℂ => logSeriesBottcherApprox c z / z)) atInfinity (𝓝 ‖(1 : ℂ)‖) :=
-    (continuous_norm.tendsto (1 : ℂ)).comp
-      (tendsto_logSeriesBottcherApprox_div_atInfinity c)
-  have hratioHalf : ∀ᶠ z in atInfinity,
-      (1 / 2 : ℝ) < ‖logSeriesBottcherApprox c z / z‖ := by
-    have hball : Metric.ball (‖(1 : ℂ)‖) (1 / 2) ∈ 𝓝 ‖(1 : ℂ)‖ :=
-      Metric.ball_mem_nhds _ (by norm_num)
-    filter_upwards [hratioNorm.eventually hball] with z hz
-    have hzabs : |‖logSeriesBottcherApprox c z / z‖ - 1| < (1 / 2 : ℝ) := by
-      simpa [Metric.ball, Real.dist_eq, abs_sub_comm] using hz
-    nlinarith [abs_lt.1 hzabs |>.1, abs_lt.1 hzabs |>.2]
-  have hlarge : ∀ᶠ z in atInfinity, (2 : ℝ) < ‖z‖ :=
-    eventually_atInfinity_norm_gt 2
-  refine (hratioHalf.and hlarge).mono ?_
-  intro z hz
-  have hz_ne : z ≠ 0 := (norm_ne_zero_iff).1 (ne_of_gt (lt_trans (by norm_num) hz.2))
-  have hprod : 1 < ‖logSeriesBottcherApprox c z / z‖ * ‖z‖ := by
-    nlinarith [hz.1, hz.2]
-  have hnorm :
-      ‖logSeriesBottcherApprox c z / z‖ * ‖z‖ =
-        ‖logSeriesBottcherApprox c z‖ := by
-    rw [norm_div]
-    field_simp [(norm_ne_zero_iff).2 hz_ne]
-  rw [hnorm] at hprod
-  exact hprod
-
-lemma exists_radius_one_lt_norm_logSeriesBottcherApprox (c : ℂ) :
-    ∃ R : ℝ, ∀ z : ℂ, R < ‖z‖ → 1 < ‖logSeriesBottcherApprox c z‖ := by
-  have h := eventually_one_lt_norm_logSeriesBottcherApprox_atInfinity c
-  dsimp [atInfinity] at h
-  rcases (Filter.eventually_atTop.1 ((Filter.eventually_comap).1 h)) with ⟨R, hR⟩
-  refine ⟨R, ?_⟩
-  intro z hz
-  exact hR ‖z‖ (le_of_lt hz) z rfl
-
 lemma quadratic_map_iter_maps_outside_open (c : ℂ) {z : ℂ}
     (hz : ‖z‖ > ‖c‖ + 2) :
     ∀ n : ℕ, ‖(quadratic_map c)^[n] z‖ > ‖c‖ + 2
@@ -984,26 +939,5 @@ lemma logSeriesBottcherApprox_conj_iterate_outside_open
           rw [logSeriesBottcherApprox_conj_iterate_outside_open c hz n]
         _ = (logSeriesBottcherApprox c z) ^ (2 ^ (n + 1)) := by
           simp [pow_mul, pow_succ]
-
-lemma one_lt_norm_logSeriesBottcherApprox_of_outside_open
-    (c : ℂ) {z : ℂ} (hz : ‖z‖ > ‖c‖ + 2) :
-    1 < ‖logSeriesBottcherApprox c z‖ := by
-  rcases exists_radius_one_lt_norm_logSeriesBottcherApprox c with ⟨Rext, hExt⟩
-  have hescape : Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop :=
-    iterate_quadratic_map_tendsto_infty c z (le_of_lt hz)
-  rcases (Filter.eventually_atTop.1
-    ((Filter.tendsto_atTop.1 hescape) (Rext + 1))) with ⟨N, hN⟩
-  have hlarge : Rext < ‖(quadratic_map c)^[N] z‖ := by
-    have hN' := hN N le_rfl
-    linarith
-  have hPhi_large := hExt ((quadratic_map c)^[N] z) hlarge
-  have hconj := logSeriesBottcherApprox_conj_iterate_outside_open c hz N
-  have hpow_gt : 1 < ‖logSeriesBottcherApprox c z‖ ^ (2 ^ N) := by
-    simpa [hconj, norm_pow] using hPhi_large
-  by_contra hnot
-  have hle : ‖logSeriesBottcherApprox c z‖ ≤ 1 := le_of_not_gt hnot
-  have hpow_le : ‖logSeriesBottcherApprox c z‖ ^ (2 ^ N) ≤ 1 :=
-    pow_le_one₀ (norm_nonneg _) hle
-  linarith
 
 end MLC

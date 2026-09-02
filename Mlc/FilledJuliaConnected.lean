@@ -271,9 +271,7 @@ theorem isPreconnected_iInter_of_sequence {X : Type*} [TopologicalSpace X]
 
 /-! ## Part 3: Filled Julia set connectivity -/
 
-/-- The filled Julia set `K c` is connected for `c ∈ MandelbrotSet`.
-This proves the statement that was previously axiomatized as
-`filled_julia_set_connected`. -/
+/-- The filled Julia set `K c` is connected for `c ∈ MandelbrotSet`. -/
 theorem filled_julia_set_connected_proved {c : ℂ} (hc : c ∈ MandelbrotSet) :
     IsConnected (K c) := by
   let S : ℕ → Set ℂ := fun n => {z : ℂ | ‖orbit c z n‖ ≤ R c}
@@ -376,10 +374,5 @@ theorem filled_julia_set_connected_proved {c : ℂ} (hc : c ∈ MandelbrotSet) :
       S (fun n => hS_anti_step n) hS_nonempty (hS_compact 0) hS_closed
     simpa [Set.mem_iInter] using h_inter
   exact ⟨hne, hpre⟩
-
-/-- The filled Julia set `K c` is connected for `c ∈ MandelbrotSet`. -/
-theorem filled_julia_set_connected {c : ℂ} (hc : c ∈ MandelbrotSet) :
-    IsConnected (K c) :=
-  filled_julia_set_connected_proved hc
 
 end

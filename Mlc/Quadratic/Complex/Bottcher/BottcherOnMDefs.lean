@@ -11,7 +11,4 @@ def quadratic_map (c : ℂ) (z : ℂ) : ℂ :=
 def basin_of_infinity (c : ℂ) : Set ℂ :=
   {z | Tendsto (fun n => ‖(quadratic_map c)^[n] z‖) atTop atTop}
 
-def outside_disk (c : ℂ) : Set ℂ :=
-  basin_of_infinity c
-
 end MLC
