@@ -91,10 +91,8 @@ make check
 | Molecule bridge | [`Mlc/MoleculeToParameterShrink.lean`](Mlc/MoleculeToParameterShrink.lean) |
 | Axiom checker | [`check_axioms.lean`](check_axioms.lean) |
 
-## Sources and dependencies
+## Dependencies
 
-- [Dudko, arXiv:2512.24171](https://arxiv.org/abs/2512.24171)
-- [Efimov, arXiv:2510.17010](https://arxiv.org/abs/2510.17010)
 - [Lean 4](https://github.com/leanprover/lean4)
 - [mathlib4](https://github.com/leanprover-community/mathlib4)
 - [yoccoz-theorem](https://github.com/kirill-kondrashov/yoccoz-theorem)
