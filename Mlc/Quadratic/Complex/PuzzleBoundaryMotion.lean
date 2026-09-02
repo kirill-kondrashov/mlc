@@ -2,6 +2,7 @@ import Mlc.Quadratic.Complex.Axioms
 import Mlc.Quadratic.Complex.ParaPuzzle
 import Mlc.Quadratic.Complex.PuzzleLemmas2
 import Mlc.ParaPuzzleContainment
+import Mlc.Quadratic.Complex.GreenSublevel
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Green
 import Mathlib.Topology.Basic
@@ -14,42 +15,6 @@ namespace MLC.Quadratic
 open Complex Topology Set Metric
 
 noncomputable section
-
-/-- The boundary of the depth-`n` Green level set used in the puzzle construction. -/
-def PuzzleBoundary (c : ℂ) (n : ℕ) : Set ℂ :=
-  frontier {w | green_function c w < (1 / 2) ^ n}
-
-/-- The Green sublevel set at depth `n`. -/
-def GreenSublevel (c : ℂ) (n : ℕ) : Set ℂ :=
-  {w | green_function c w < (1 / 2) ^ n}
-
-/-- If `c ∈ M`, then `0` lies in the Green sublevel set. -/
-theorem green_sublevel_contains_0 (c : ℂ) (n : ℕ) (hc : c ∈ MandelbrotSet) :
-    0 ∈ GreenSublevel c n := by
-  have h0K : 0 ∈ K c := hc
-  have h0 : green_function c 0 = 0 :=
-    (green_function_eq_zero_iff_mem_K c 0).2 h0K
-  have hpos : (0 : ℝ) < (1 / 2 : ℝ) ^ n := by
-    exact pow_pos (by norm_num) _
-  have : green_function c 0 < (1 / 2 : ℝ) ^ n := by
-    simpa [h0] using hpos
-  exact this
-
-/-- If `c ∈ M`, then `c` lies in the Green sublevel set. -/
-theorem green_sublevel_contains_c (c : ℂ) (n : ℕ) (hc : c ∈ MandelbrotSet) :
-    c ∈ GreenSublevel c n := by
-  have hcK : c ∈ K c := mem_K_of_mandelbrot hc
-  have hc0 : green_function c c = 0 :=
-    (green_function_eq_zero_iff_mem_K c c).2 hcK
-  have hpos : (0 : ℝ) < (1 / 2 : ℝ) ^ n := by
-    exact pow_pos (by norm_num) _
-  have : green_function c c < (1 / 2 : ℝ) ^ n := by
-    simpa [hc0] using hpos
-  exact this
-
-/-- Hypothesis: Green sublevels are connected on the Mandelbrot set. -/
-structure GreenSublevelConnectedHyp : Prop where
-  connected : ∀ (c : ℂ) (n : ℕ), c ∈ MandelbrotSet → IsConnected (GreenSublevel c n)
 
 /-- Rescale the unit disk to the parameter disk centered at `c₀` with radius `r`. -/
 def rescale_param (c₀ : ℂ) (r : ℝ) (t : ℂ) : ℂ :=

@@ -33,10 +33,8 @@ structure HolomorphicMotion (E : Set ℂ) where
   /-- For each fixed z in E, it is holomorphic in time on the unit disk -/
   h_holo : ∀ z ∈ E, DifferentiableOn ℂ (fun t ↦ f t z) (Metric.ball 0 1)
 
-/-- Seam axiom: strict monotonicity of the Green function along a fixed unit ray
-inside the basin. This is the basin-level radial monotonicity payload used by
-`GreenFunctionRayInversion` without appealing to
-`MLC.Quadratic.external_ray_map_exists`. -/
+/-- Legacy seam axiom for strict monotonicity of the Green function along a
+fixed unit ray inside the basin. It is outside the checked root path. -/
 axiom green_function_strictMono_along_ray_basin_seam
     (c : ℂ) (u : ℂ) (hu : ‖u‖ = 1)
     {ρ₁ ρ₂ : ℝ} (hρ₁ : 0 < ρ₁) (h12 : ρ₁ < ρ₂)
@@ -44,8 +42,3 @@ axiom green_function_strictMono_along_ray_basin_seam
     green_function c ((ρ₁ : ℂ) * u) < green_function c ((ρ₂ : ℂ) * u)
 
 end MLC.Quadratic
-
-/-!
-Additional high-level axioms used in the MLC strategy live in `Mlc/AxiomsMainConjecture.lean`
-to avoid import cycles with the low-level puzzle lemmas.
--/

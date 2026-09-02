@@ -1,7 +1,7 @@
 import Yoccoz.Quadratic.Complex.Basic
 import Yoccoz.Quadratic.Complex.Puzzle
 import Yoccoz.Yoccoz
-import Mlc.LcAtOfShrink
+import Mlc.LocalConnectivity
 import Molecule.Rfast
 import Mlc.MoleculeRenormalizationTower
 import Mathlib.Analysis.Calculus.Deriv.Polynomial

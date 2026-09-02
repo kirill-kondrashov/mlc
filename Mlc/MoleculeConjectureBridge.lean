@@ -1,6 +1,6 @@
 import Molecule.Conjecture
-import Mlc.LcAtOfShrink
-import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
+import Mlc.LocalConnectivity
+import Mlc.ParaPuzzleConnectivity
 import Mlc.RenormalizationTypes
 import Mlc.MoleculeToParameterShrink
 
@@ -136,7 +136,8 @@ theorem refined_conjecture_implies_lc_of_tower_of_modulusLowerBoundData
     (h_mol : MoleculeConjectureRefined)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact lc_at_of_shrink c hc
+  exact lc_at_of_shrink_of_connected_at c hc
+    (para_puzzle_piece_inter_mandelbrot_connected_proved c hc)
     (molecule_parameter_shrink_of_tower_of_modulusLowerBoundData h_mod h_mol c hc hTower)
 
 /-- Local connectivity from conformal-target Molecule shrinkage data. -/
@@ -145,7 +146,8 @@ theorem refined_conjecture_implies_lc_of_tower_of_conformalModulusLowerBoundData
     (h_mol : MoleculeConjectureRefined)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact lc_at_of_shrink c hc
+  exact lc_at_of_shrink_of_connected_at c hc
+    (para_puzzle_piece_inter_mandelbrot_connected_proved c hc)
     (molecule_parameter_shrink_of_tower_of_conformalModulusLowerBoundData h_mod h_mol c hc hTower)
 
 /-- Local connectivity directly from uniform conformal lower-bound bridge data. -/
@@ -154,7 +156,8 @@ theorem refined_conjecture_implies_lc_of_tower_of_uniformConformalLowerBoundData
     (h_mol : MoleculeConjectureRefined)
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) (hTower : SatelliteRenormalizableTower c) :
     MLC.LocallyConnectedAt MLC.Quadratic.MandelbrotSet ⟨c, hc⟩ := by
-  exact lc_at_of_shrink c hc
+  exact lc_at_of_shrink_of_connected_at c hc
+    (para_puzzle_piece_inter_mandelbrot_connected_proved c hc)
     (molecule_parameter_shrink_of_tower_of_uniformConformalLowerBoundData
       h_uniform h_mol c hc hTower)
 

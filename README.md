@@ -103,8 +103,8 @@ All axioms used:
 - Quot.sound
 - propext
 - Classical.choice
-- MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling
 - MLC.residualOpenVirtualNearMoleculeAxiom
+- MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling
 ```
 
 `Quot.sound`, `propext`, and `Classical.choice` are Lean foundations. The
@@ -143,7 +143,7 @@ renormalization input from Dudko's Problems 4.3 and 4.4 and Sections 4.1--4.5:
    quadratic-like cases;
 2. a Virtual Molecule version of the Near-Degenerate Regime;
 3. the infinite-renormalization interface consumed by
-   [`Mlc/MainConjecture.lean`](Mlc/MainConjecture.lean).
+   [`Mlc/Core.lean`](Mlc/Core.lean).
 
 The source is [Dudko, arXiv:2512.24171](https://arxiv.org/abs/2512.24171),
 with repository copies at
@@ -206,20 +206,14 @@ T_n(c)=\mathcal M.
 The first case uses translated-sublevel connectedness. The second uses
 connectedness of $\mathcal M$ and is off the root derivation.
 
-### Near-infinity Böttcher data
+### Potential-theory core
 
-The repository contains axiom-clean local data for a parameter-dependent
-Böttcher coordinate
-
-```math
-(c,z)\longmapsto\Phi_c(z)
-```
-
-on an exterior domain, including joint continuity, parameter holomorphy,
-fiber holomorphy, and a parametrized local inverse. Formal sources are under
-[`Mlc/Quadratic/Complex/Bottcher/`](Mlc/Quadratic/Complex/Bottcher/).
-Extending this data through the full basin and proving the finite
-phase--parameter comparison remain separate obligations.
+The checked connectivity route proves harmonicity of $G_c$ on the basin of
+infinity and applies the harmonic minimum principle to the bounded sublevels.
+The formal interfaces are
+[`Mlc/Quadratic/Complex/GreenHarmonic.lean`](Mlc/Quadratic/Complex/GreenHarmonic.lean)
+and
+[`Mlc/Quadratic/Complex/HarmonicMinimumPrinciple.lean`](Mlc/Quadratic/Complex/HarmonicMinimumPrinciple.lean).
 
 ## Current discharge target
 
@@ -406,15 +400,15 @@ make check
 
 | Component | Path |
 | --- | --- |
-| Root theorem | [`MLC.mlc_conjecture`](Mlc/MainConjecture.lean) |
+| Root theorem | [`MLC.mlc_conjecture`](Mlc/Core.lean) |
 | Axiom report | [`check_axioms.lean`](check_axioms.lean) |
 | Straddling target | [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean) |
+| Local-connectivity consumer | [`Mlc/LocalConnectivity.lean`](Mlc/LocalConnectivity.lean) |
+| Green-sublevel definitions | [`Mlc/Quadratic/Complex/GreenSublevel.lean`](Mlc/Quadratic/Complex/GreenSublevel.lean) |
 | Motivic frontier contract | [`Mlc/MotivicConnectednessFrontier.lean`](Mlc/MotivicConnectednessFrontier.lean) |
 | Finite incidence algebraic gate | [`Mlc/MotivicFiniteIncidence.lean`](Mlc/MotivicFiniteIncidence.lean) |
 | Topological intersection obstruction | [`Mlc/MotivicIntersectionNoGo.lean`](Mlc/MotivicIntersectionNoGo.lean) |
-| Frontier overview | [`plan/PLAN_00_frontier_overview.md`](plan/PLAN_00_frontier_overview.md) |
-| Parameter route | [`plan/PLAN_04_parameter_connectivity.md`](plan/PLAN_04_parameter_connectivity.md) |
-| Efimov route | [`plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md`](plan/PLAN_05_MOTIVIC_ALTERNATIVE_AUDIT.md) |
+| Satellite bridge target | [`Mlc/MoleculeToSatelliteNestData.lean`](Mlc/MoleculeToSatelliteNestData.lean) |
 | Canonical Pacman/motive bridge | [Remote `main` document](https://github.com/kirill-kondrashov/raw/blob/main/bridge_between_pacman_renormalization_and_noncommutative_motives.md) |
 | Pacman/motive bridge audit | [`refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md`](refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md) |
 

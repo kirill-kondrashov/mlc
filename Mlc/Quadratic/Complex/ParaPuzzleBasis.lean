@@ -7,7 +7,6 @@ import Yoccoz.Quadratic.Complex.Green
 import Yoccoz.Quadratic.Complex.GreenLemmas
 import Yoccoz.Quadratic.Complex.Escape
 import Mlc.Quadratic.Complex.ParaPuzzle
-import Mlc.Quadratic.Complex.Axioms
 import Mlc.Quadratic.Complex.PrincipalNestShrink
 import Mlc.ParaPuzzleContainment
 import Mathlib.Topology.Connected.Basic

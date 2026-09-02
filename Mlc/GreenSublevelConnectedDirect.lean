@@ -1,17 +1,14 @@
 import Mlc.Quadratic.Complex.GreenHarmonic
 import Mlc.Quadratic.Complex.HarmonicMinimumPrinciple
-import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
+import Mlc.Quadratic.Complex.GreenSublevel
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
 
 /-!
 # Direct proof that Green sublevel sets are connected (Route A)
 
 This file discharges the connectivity of the Green sublevel sets
-`GreenSublevel c n = {z | G_c z < (1/2)ⁿ}` for `c ∈ M` by a *direct*
-potential-theory argument, replacing the earlier route through the radial-proxy
-Böttcher machinery (which relied on the unsound axioms
-`extended_ray_map_free_continuous` and
-`green_function_strictMono_along_ray_basin_seam`).
+`GreenSublevel c n = {z | G_c z < (1/2)ⁿ}` for `c ∈ M` by a direct
+potential-theory argument, replacing the earlier radial-proxy route.
 
 The argument is the classical minimum-principle proof:
 

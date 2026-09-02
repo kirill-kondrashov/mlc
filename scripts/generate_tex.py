@@ -233,17 +233,18 @@ def main():
     
     # Map of file path to module name
     files = [
-        ('MainConjecture.lean', 'Main Conjecture'),
-        ('LcAtOfShrink.lean', 'Local Connectivity from Shrinking'),
-        ('Yoccoz.lean', 'Yoccoz Theorem'),
-        ('InfinitelyRenormalizable.lean', 'Infinitely Renormalizable Case'),
+        ('Core.lean', 'Root Theorem'),
+        ('LocalConnectivity.lean', 'Local Connectivity from Shrinking'),
+        ('ParaPuzzleConnectivity.lean', 'Parameter Puzzle Connectivity'),
+        ('MoleculeToSatelliteNestData.lean', 'Molecule Bridge Target'),
+        ('MotivicConnectednessFrontier.lean', 'Motivic Connectivity Frontier'),
+        ('MotivicFiniteIncidence.lean', 'Finite Incidence Algebra'),
+        ('MotivicIntersectionNoGo.lean', 'Intersection Obstruction'),
+        ('Quadratic/Complex/GreenSublevel.lean', 'Green Sublevels'),
+        ('Quadratic/Complex/GreenHarmonic.lean', 'Green Harmonicity'),
+        ('Quadratic/Complex/HarmonicMinimumPrinciple.lean', 'Harmonic Minimum Principle'),
         ('Quadratic/Complex/PuzzleLemmas2.lean', 'Puzzle Lemmas (Correspondence & Openness)'),
-        ('Quadratic/Complex/Escape.lean', 'Escape Lemma'),
-        ('Quadratic/Complex/Green.lean', 'Green\'s Function'),
         ('Quadratic/Complex/Puzzle.lean', 'Puzzle Definitions'),
-        ('Quadratic/Complex/PuzzleLemmas.lean', 'Basic Puzzle Lemmas'),
-        ('Quadratic/Complex/Basic.lean', 'Basic Definitions'),
-        ('Quadratic/Complex/GreenLemmas.lean', 'Green\'s Function Lemmas'),
     ]
     
     for rel_path, title in files:

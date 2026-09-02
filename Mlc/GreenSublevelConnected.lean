@@ -1,4 +1,4 @@
-import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
+import Mlc.Quadratic.Complex.GreenSublevel
 import Mathlib.Topology.Connected.PathConnected
 import Mlc.GreenSublevelConnectedDirect
 
@@ -17,12 +17,10 @@ lemma green_continuous (c : ℂ) : Continuous (MLC.Quadratic.green_function c) :
 /--
 For `c ∈ M` the Green sublevel sets `{z | G_c(z) < ε}` are connected.
 
-Discharged directly by the potential-theory argument of `green_sublevel_connected_direct`
-(Route A: `G_c` is harmonic on the basin, so a minimum principle forces every connected
-component of the sublevel set to meet `K_c`). The former route through
-`green_sublevel_joined_to_Kc` — which depended on the unsound axioms
-`extended_ray_map_free_continuous` and `green_function_strictMono_along_ray_basin_seam` —
-is no longer used.
+Discharged directly by the potential-theory argument of
+`green_sublevel_connected_direct`: `G_c` is harmonic on the basin, so a
+minimum principle forces every connected component of the sublevel set to meet
+`K_c`. The earlier radial-proxy route is no longer used.
 -/
 lemma green_sublevel_connected_of_connected_Kc (c : ℂ) (n : ℕ)
     (hc : c ∈ MLC.Quadratic.MandelbrotSet) :

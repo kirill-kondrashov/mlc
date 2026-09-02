@@ -1,7 +1,6 @@
 import Mlc.GreenSublevelConnected
 import Mlc.ParaPuzzleContainment
 import Mlc.Quadratic.Complex.PuzzleLemmas2
-import Mlc.Quadratic.Complex.Bottcher.BottcherOnMTheory
 
 /-!
 # Para-puzzle connectivity and the parameter frontier
@@ -12,10 +11,8 @@ It then identifies the frozen translated dynamical piece with the corresponding
 parameter translate and invokes only the explicitly labeled straddling
 parameter-connectivity frontier.
 
-The radial-proxy and external-ray adapters retained below are compatibility and
-exploration lemmas. They are off the checked `MLC.mlc_conjecture` path and still
-expose the legacy radial-monotonicity assumptions where their statements require
-them.
+The module contains only the parameter-puzzle identities and the labeled
+straddling frontier used by the checked root theorem.
 -/
 
 namespace MLC
@@ -23,50 +20,6 @@ namespace MLC
 open Quadratic Complex Topology Set Filter
 
 noncomputable section
-
-/-! ## Legacy adapter: Böttcher surjectivity from `external_ray_map_exists` -/
-
-/-- The proxy Böttcher map is surjective onto `{w | 1 < ‖w‖}` from the
-    `bottcher_domain`. This follows from the right-inverse property of the
-    external ray map. -/
-theorem bottcher_surj_from_ray_map :
-    ∀ c w, 1 < ‖w‖ → w ∈ Quadratic.proxy_bottcher_map c '' Quadratic.bottcher_domain c := by
-  intro c w hw
-  -- external_ray_map c w is in bottcher_domain by construction
-  have h_mem : Quadratic.external_ray_map c w ∈ Quadratic.bottcher_domain c :=
-    ⟨w, hw, rfl⟩
-  -- proxy_bottcher_map c (external_ray_map c w) = w by right inverse
-  have h_inv : Quadratic.proxy_bottcher_map c (Quadratic.external_ray_map c w) = w :=
-    Quadratic.external_ray_map_right_inverse c w hw
-  exact ⟨Quadratic.external_ray_map c w, h_mem, h_inv⟩
-
-/-! ## Legacy adapter: radial-proxy basin injectivity -/
-
-/-- Compatibility theorem for the legacy radial-proxy route.
-
-    Because `proxy_bottcher_map` is the radial proxy
-    `(z/‖z‖)·exp(green c z)`, its proof still consumes the legacy radial
-    monotonicity seam `green_function_strictMono_along_ray_basin_seam`.
-    It is not used by the checked root path, which uses
-    `green_sublevel_connected_direct`. -/
-theorem proxy_bottcher_map_inj_on_basin_of_mem_mandelbrot (c : ℂ)
-    (hc : c ∈ MLC.Quadratic.MandelbrotSet) :
-    Set.InjOn (Quadratic.proxy_bottcher_map c) (Quadratic.basin_of_infinity c) := by
-  have hmono : ∀ (u : ℂ), ‖u‖ = 1 → ∀ {ρ₁ ρ₂ : ℝ}, 0 < ρ₁ → ρ₁ < ρ₂ →
-      0 < MLC.Quadratic.green_function c ((ρ₁ : ℂ) * u) →
-      MLC.Quadratic.green_function c ((ρ₁ : ℂ) * u)
-        < MLC.Quadratic.green_function c ((ρ₂ : ℂ) * u) :=
-    fun u hu => Quadratic.green_function_strictMono_along_ray_basin_seam c u hu
-  have hbase :=
-    proxy_bottcher_map_injOn_nonzero_basin_of_green_ray_strictMono c hmono
-  have h0K : (0 : ℂ) ∈ MLC.Quadratic.K c := hc
-  have h0 : (0 : ℂ) ∉ Quadratic.basin_of_infinity c := by
-    rw [Quadratic.basin_eq_compl_K]
-    simpa using h0K
-  intro z hz w hw hzw
-  refine hbase ⟨hz, ?_⟩ ⟨hw, ?_⟩ hzw
-  · exact fun h => h0 (h ▸ hz)
-  · exact fun h => h0 (h ▸ hw)
 
 /-! ## Step 3: Green sublevel connectivity (proved directly) -/
 
@@ -192,29 +145,11 @@ theorem green_sublevel_translate_inter_mandelbrot_connected_of_superset {c : ℂ
 
     ## Frontier-axiom status (labeled; honest)
 
-    One of the two remaining non-core frontier axioms (Tier C). Two discharge
-    routes were investigated:
-
-    * **Metric route (Ahlfors/Schwarz–Pick λ-lemma).** Fully built as sound
-      standalone mathematics (`AhlforsSchwarz`, `UltrahyperbolicMetric`,
-      `UltrahyperbolicPullback`, `UltrahyperbolicDistance`), but it hits a
-      *completeness obstruction*: the constructed curvature `≤ -1` metric on
-      `ℂ∖{0,1}` is not complete (density `∼ ‖w-1‖^{-5/6}`, finite radial distance
-      to a puncture), so the two-trajectory Schwarz–Pick bound does not force
-      continuity-in-space. Correct but insufficient.
-
-    * **Böttcher route (C).** Realize the moving equipotential boundaries through
-      the space-holomorphic parametrization `z = Φ_c⁻¹(ω)`, making the residual
-      continuity free (`LambdaLemma.isConnected_image_of_differentiableOn`). The
-      base case — a genuine near-infinity two-variable holomorphic Böttcher family
-      with fiber-holo (z), param-holo (c) and joint continuity in `(c,z)` — is
-      built and axiom-clean (`BottcherParamHolo`,
-      `Quadratic.logSeriesNearInfinityParameterFamily`).
-
-    Remaining for a full discharge (Yoccoz-scale, deliberately NOT pursued): the
-    full-basin monodromy-coherent coordinate, the holomorphic inverse `Φ_c⁻¹`, a
-    nontrivial puzzle-boundary `HolomorphicMotion`, and the parameter↔dynamical
-    correspondence. Kept as a labeled frontier axiom pending that formalization. -/
+    The remaining full discharge is the Douady–Hubbard
+    parameter↔dynamical correspondence for the straddling pieces, for example
+    through a genuine holomorphic motion whose image is the concrete
+    parameter intersection. That research-scale input is retained as this
+    labeled frontier axiom. -/
 axiom green_sublevel_translate_inter_mandelbrot_connected_straddling (c : ℂ)
     (hc : c ∈ MandelbrotSet) (n : ℕ)
     (hstraddle : ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet)) :
@@ -248,15 +183,6 @@ theorem para_puzzle_connectivity_data_proved :
     Quadratic.ParaPuzzlePieceInterMandelbrotConnectedData := by
   intro c hc n
   exact para_puzzle_piece_inter_mandelbrot_connected_proved c hc n
-
-/-- Transport witness hypothesis, proved from Böttcher infrastructure. -/
-theorem para_puzzle_transport_witness_hyp_proved :
-    Quadratic.ParaPuzzleTransportWitnessHyp := by
-  refine ⟨?_⟩
-  intro c hc n
-  exact ⟨ParaPuzzlePieceAt c n ∩ MandelbrotSet,
-    para_puzzle_piece_inter_mandelbrot_connected_proved c hc n,
-    rfl⟩
 
 end
 

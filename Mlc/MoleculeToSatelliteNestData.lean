@@ -2,7 +2,7 @@ import Mlc.MoleculeConjectureBridge
 import Mlc.SatellitePrincipalNestData
 import Mlc.SatelliteRenormalizationTower
 import Mlc.MoleculeToParameterShrink
-import Mlc.LcAtOfShrink
+import Mlc.LocalConnectivity
 import Mlc.ParaPuzzleConnectivity
 
 namespace MLC

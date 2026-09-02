@@ -124,8 +124,7 @@ def BasinExternalRayMapDataFor (c : ℂ) (φ : ℂ → ℂ) : Prop :=
 def BasinExternalRayMapData (c : ℂ) : Prop :=
   BasinExternalRayMapDataFor c (proxy_bottcher_map c)
 
-/-- `c = 2` specialization of the basin-valued package. This is the precise
-single-theorem target behind the expert note in `draft/`. -/
+/-- `c = 2` specialization of the basin-valued package. -/
 def BasinExternalRayMapDataTwo : Prop :=
   BasinExternalRayMapData (2 : ℂ)
 
