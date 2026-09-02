@@ -233,17 +233,19 @@ def main():
     
     # Map of file path to module name
     files = [
-        ('MainConjecture.lean', 'Main Conjecture'),
-        ('LcAtOfShrink.lean', 'Local Connectivity from Shrinking'),
-        ('Yoccoz.lean', 'Yoccoz Theorem'),
-        ('InfinitelyRenormalizable.lean', 'Infinitely Renormalizable Case'),
-        ('Quadratic/Complex/PuzzleLemmas2.lean', 'Puzzle Lemmas (Correspondence & Openness)'),
-        ('Quadratic/Complex/Escape.lean', 'Escape Lemma'),
-        ('Quadratic/Complex/Green.lean', 'Green\'s Function'),
-        ('Quadratic/Complex/Puzzle.lean', 'Puzzle Definitions'),
-        ('Quadratic/Complex/PuzzleLemmas.lean', 'Basic Puzzle Lemmas'),
-        ('Quadratic/Complex/Basic.lean', 'Basic Definitions'),
-        ('Quadratic/Complex/GreenLemmas.lean', 'Green\'s Function Lemmas'),
+        ('Core.lean', 'Root Theorem'),
+        ('LocalConnectivity.lean', 'Local Connectivity from Shrinking'),
+        ('ParaPuzzleConnectivity.lean', 'Parameter Puzzle Connectivity'),
+        ('MoleculeToParameterShrink.lean', 'Molecule to Parameter Shrinkage'),
+        ('Quadratic/Complex/GreenSublevel.lean', 'Green Sublevels'),
+        ('Quadratic/Complex/GreenHarmonic.lean', 'Green Harmonicity'),
+        ('Quadratic/Complex/HarmonicMinimumPrinciple.lean', 'Harmonic Minimum Principle'),
+        ('Quadratic/Complex/ParaPuzzle.lean', 'Parameter Puzzle Definitions'),
+        ('Quadratic/Complex/ParaPuzzleBasis.lean', 'Parameter Puzzle Basis'),
+        ('Quadratic/Complex/PrincipalNestAnnulus.lean', 'Principal Nest Annuli'),
+        ('Quadratic/Complex/PrincipalNestShrink.lean', 'Principal Nest Shrinkage'),
+        ('Quadratic/Complex/YoccozConformal.lean', 'Yoccoz Conformal Criterion'),
+        ('Quadratic/Complex/ConformalGroetzsch.lean', 'Conformal Grötzsch'),
     ]
     
     for rel_path, title in files:

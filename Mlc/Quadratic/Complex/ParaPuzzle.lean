@@ -19,9 +19,4 @@ lemma mem_paraPuzzlePieceAt_iff (c c' : ℂ) (n : ℕ) :
     c' ∈ ParaPuzzlePieceAt c n ↔ c' - c ∈ DynamicalPuzzlePiece c n 0 := by
   rfl
 
-lemma mem_paraPuzzlePieceAt_self (c : ℂ) (n : ℕ) :
-    c ∈ ParaPuzzlePieceAt c n ↔ 0 ∈ DynamicalPuzzlePiece c n 0 := by
-  simp [ParaPuzzlePieceAt]
-
-
 end MLC.Quadratic

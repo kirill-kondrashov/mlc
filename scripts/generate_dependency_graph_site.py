@@ -9,9 +9,6 @@ Output layout:
     mlc_conjecture/
       index.html
       graph.json
-    mlc_conjecture_injon_bridge/
-      index.html
-      graph.json
 """
 
 from __future__ import annotations
@@ -38,27 +35,14 @@ TOKEN_RE = re.compile(r"[A-Za-z0-9_.']+")
 TOKEN_CHARS = r"A-Za-z0-9_.']"
 EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
 # Keep "missing" axiom markers opt-in and empty by default; the rooted graph
-# should reflect the current branch state rather than a historical comparison
-# point like `external_ray_map_exists`.
+# should reflect the current checked frontier rather than a historical
+# comparison point.
 MISSING_AXIOMS: tuple[str, ...] = ()
-INJON_BRIDGE_SYMBOL = "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two"
-ALTERNATIVE_GRAPH_SYMBOLS = (
-    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
-    "MLC.mlc_conjecture_of_unifiedGlobalBottcherTheorem_two_of_onM",
-)
+ALTERNATIVE_GRAPH_SYMBOLS: tuple[str, ...] = ()
 CONSTRUCTION_SYMBOLS = (
-    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_of_injOn_two",
-    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_analyticAt_two",
-    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenAnalyticityHypothesis_two",
-    "MLC.mlc_conjecture_of_isProperMap_restrict_of_outsideOpenAnalyticityHypothesis_two",
-    "MLC.mlc_conjecture_of_analyticAt_of_preimageCompact_two",
-    "MLC.mlc_conjecture_of_analyticAt_of_preimageClosed_two",
-    "MLC.mlc_conjecture_of_analyticAt_of_boundaryExclusion_two",
-    "MLC.mlc_conjecture_of_nonSlitAnalyticConstructivePayloadTwo",
-    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_outsideOpenQuotientConstHypothesis_two",
-    "MLC.mlc_conjecture_of_nonSlitQuotientConstConstructivePayloadTwo",
-    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_injOn_outside_open_two",
-    "MLC.mlc_conjecture_of_isClosedRange_restrict_of_mem_nhds_slit_of_iter_left_inverse_two",
+    "MLC.preconnected_nhds_of_shrink_of_connected_at",
+    "MLC.para_puzzle_piece_inter_mandelbrot_connected_proved",
+    "MLC.PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget",
 )
 
 

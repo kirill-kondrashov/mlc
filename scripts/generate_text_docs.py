@@ -7,10 +7,15 @@ DOCS_DIR = Path("../docs")
 DOCS_DIR.mkdir(exist_ok=True)
 
 FILES = [
-    "MainConjecture", "Yoccoz", "InfinitelyRenormalizable", "LcAtOfShrink",
-    "Quadratic/Complex/Groetzsch", "Quadratic/Complex/Basic", "Quadratic/Complex/Green",
-    "Quadratic/Complex/GreenLemmas", "Quadratic/Complex/Puzzle", "Quadratic/Complex/PuzzleLemmas",
-    "Quadratic/Complex/PuzzleLemmas2", "Quadratic/Complex/Escape"
+    "Core", "LocalConnectivity", "ParaPuzzleConnectivity",
+    "MoleculeToParameterShrink",
+    "Quadratic/Complex/GreenSublevel", "Quadratic/Complex/GreenHarmonic",
+    "Quadratic/Complex/HarmonicMinimumPrinciple",
+    "Quadratic/Complex/ParaPuzzle", "Quadratic/Complex/ParaPuzzleBasis",
+    "Quadratic/Complex/PrincipalNestAnnulus",
+    "Quadratic/Complex/PrincipalNestShrink",
+    "Quadratic/Complex/YoccozConformal",
+    "Quadratic/Complex/ConformalGroetzsch"
 ]
 
 def sanitize_tex(text):

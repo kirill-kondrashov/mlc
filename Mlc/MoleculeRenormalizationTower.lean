@@ -1,5 +1,4 @@
 import Molecule.Rfast
-import Mlc.Quadratic.Complex.PrincipalNest
 
 namespace MLC
 
@@ -7,35 +6,27 @@ open Molecule
 
 noncomputable section
 
-/-!
-This file packages the purely *combinatorial* consequences of having an infinite tower of
-renormalizations in the Molecule framework.
-
-It does **not** connect to Yoccoz puzzle geometry yet; the purpose is to have a clean place
-to build the eventual dictionary:
-
-  satellite renormalization tower (BMol) -> cofinal "principal nest" index sequence.
--/
-
+/-- A sequence of molecule models connected by renormalization relations. -/
 structure RenormalizationTower (g : BMol) where
-  /-- The n-th renormalization level map. -/
+  /-- The model at each tower depth. -/
   gₙ : ℕ → BMol
+  /-- The initial model is the supplied base model. -/
   g0 : gₙ 0 = g
-  /-- Each level renormalizes to the next. -/
+  /-- Every consecutive pair is related by renormalization. -/
   step : ∀ n : ℕ, Nonempty (RenormalizationRelation (gₙ n) (gₙ (n + 1)))
 
 namespace RenormalizationTower
 
+/-- Choose the renormalization relation at one tower step. -/
 noncomputable def rel {g : BMol} (T : RenormalizationTower g) (n : ℕ) :
     RenormalizationRelation (T.gₙ n) (T.gₙ (n + 1)) :=
   Classical.choice (T.step n)
 
+/-- The relative period recorded at one tower step. -/
 noncomputable def period {g : BMol} (T : RenormalizationTower g) (n : ℕ) : ℕ :=
   (T.rel n).p
 
-theorem period_ge_two {g : BMol} (T : RenormalizationTower g) (n : ℕ) : 2 ≤ T.period n :=
-  (T.rel n).p_pos
-
+/-- The cumulative period through a given tower depth. -/
 noncomputable def cumulativePeriod {g : BMol} (T : RenormalizationTower g) : ℕ → ℕ
   | 0 => 0
   | n + 1 => cumulativePeriod T n + T.period n
@@ -43,51 +34,13 @@ noncomputable def cumulativePeriod {g : BMol} (T : RenormalizationTower g) : ℕ
 theorem cumulativePeriod_monotone {g : BMol} (T : RenormalizationTower g) :
     Monotone T.cumulativePeriod := by
   intro a b hab
-  -- Induct from `a` up to `b`.
-  refine Nat.le_induction (m := a) (n := b) ?base ?step hab
+  refine Nat.le_induction (m := a) (n := b) ?_ ?_ hab
   · rfl
   · intro k _hk ih
-    -- `cumulativePeriod (k+1) = cumulativePeriod k + period k ≥ cumulativePeriod k`.
     simpa [RenormalizationTower.cumulativePeriod] using
       le_trans ih (Nat.le_add_right _ _)
 
-theorem le_cumulativePeriod_of_le {g : BMol} (T : RenormalizationTower g) :
-    ∀ N : ℕ, ∃ n : ℕ, N ≤ T.cumulativePeriod n := by
-  intro N
-  refine ⟨N, ?_⟩
-  -- The cumulative sum grows at least linearly since each period is >= 2.
-  -- In particular, `cumulativePeriod n ≥ n`.
-  have hlin : ∀ n : ℕ, n ≤ T.cumulativePeriod n := by
-    intro n
-    induction n with
-    | zero => simp [cumulativePeriod]
-    | succ n ih =>
-        have hper : 1 ≤ T.period n := le_trans (by decide : (1 : ℕ) ≤ 2) (T.period_ge_two n)
-        simpa [cumulativePeriod, Nat.succ_eq_add_one, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using
-          add_le_add ih hper
-  exact le_trans (le_of_eq rfl) (hlin N)
-
-theorem cumulativePeriod_cofinal {g : BMol} (T : RenormalizationTower g) :
-    MLC.Quadratic.PrincipalNest.Cofinal T.cumulativePeriod :=
-  le_cumulativePeriod_of_le T
-
 end RenormalizationTower
-
-/-- Extra geometric data witnessing that a renormalization tower level is
-    obtained from principal-nest geometry by affine normalization.
-
-    The bare `RenormalizationTower` only records the BMol states and the
-    renormalization relations between them. Primitive Feigenbaum Step-4
-    arguments need this stronger companion package in order to compare
-    principal-nest annuli with renormalized fundamental annuli. -/
-structure RenormalizationTowerNormalizationData {g : BMol} (c : ℂ)
-    (T : RenormalizationTower g) where
-  normalize : ℕ → ℂ → ℂ
-  affine_formula : ∀ n : ℕ, ∃ a b : ℂ, a ≠ 0 ∧ normalize n = fun z => a * z + b
-  outer_image : ∀ n : ℕ,
-    normalize n '' MLC.Quadratic.DynamicalPuzzlePiece c (T.cumulativePeriod n) 0 = (T.gₙ n).V
-  inner_image : ∀ n : ℕ,
-    normalize n '' MLC.Quadratic.DynamicalPuzzlePiece c (T.cumulativePeriod (n + 1)) 0 = (T.gₙ n).U
 
 end
 

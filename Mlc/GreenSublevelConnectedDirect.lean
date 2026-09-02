@@ -1,17 +1,15 @@
 import Mlc.Quadratic.Complex.GreenHarmonic
 import Mlc.Quadratic.Complex.HarmonicMinimumPrinciple
-import Mlc.Quadratic.Complex.PuzzleBoundaryMotion
+import Mlc.Quadratic.Complex.GreenSublevel
 import Mlc.Quadratic.Complex.ParaPuzzleBasis
+import Mlc.FilledJuliaConnected
 
 /-!
 # Direct proof that Green sublevel sets are connected (Route A)
 
 This file discharges the connectivity of the Green sublevel sets
-`GreenSublevel c n = {z | G_c z < (1/2)ⁿ}` for `c ∈ M` by a *direct*
-potential-theory argument, replacing the earlier route through the radial-proxy
-Böttcher machinery (which relied on the unsound axioms
-`extended_ray_map_free_continuous` and
-`green_function_strictMono_along_ray_basin_seam`).
+`GreenSublevel c n = {z | G_c z < (1/2)ⁿ}` for `c ∈ M` by a direct
+potential-theory argument, replacing the earlier radial-proxy route.
 
 The argument is the classical minimum-principle proof:
 
@@ -37,7 +35,7 @@ lemma isOpen_greenSublevel (c : ℂ) (n : ℕ) : IsOpen (GreenSublevel c n) :=
 /-- **Route-A key lemma.**  For `c ∈ M`, every connected component of the Green
 sublevel set meets the filled Julia set `K_c`. -/
 lemma connectedComponentIn_greenSublevel_inter_K_nonempty
-    (c : ℂ) (n : ℕ) (_hc : c ∈ MandelbrotSet) {y : ℂ}
+    (c : ℂ) (n : ℕ) {y : ℂ}
     (hy : y ∈ GreenSublevel c n) :
     (connectedComponentIn (GreenSublevel c n) y ∩ K c).Nonempty := by
   have hcont : Continuous (green_function c) := continuous_green_function c
@@ -53,8 +51,8 @@ lemma connectedComponentIn_greenSublevel_inter_K_nonempty
   by_contra hempty
   rw [Set.not_nonempty_iff_eq_empty] at hempty
   -- `W` is disjoint from `K_c`, hence contained in the basin of infinity.
-  have hWbasin : W ⊆ Quadratic.basin_of_infinity c := by
-    rw [Quadratic.basin_eq_compl_K]
+  have hWbasin : W ⊆ basin_of_infinity c := by
+    rw [basin_eq_compl_K]
     intro z hz hzK
     exact (Set.eq_empty_iff_forall_notMem.1 hempty z) ⟨hz, hzK⟩
   -- `G_c` is harmonic on `W`.
@@ -121,7 +119,7 @@ connected. -/
 theorem green_sublevel_connected_direct (c : ℂ) (n : ℕ)
     (hc : c ∈ MandelbrotSet) :
     IsConnected (GreenSublevel c n) := by
-  have hK_conn : IsConnected (K c) := filled_julia_set_connected hc
+  have hK_conn : IsConnected (K c) := filled_julia_set_connected_proved hc
   have hK_sub : K c ⊆ GreenSublevel c n := by
     intro z hz
     have hz0 : green_function c z = 0 := (green_function_eq_zero_iff_mem_K c z).2 hz
@@ -133,7 +131,7 @@ theorem green_sublevel_connected_direct (c : ℂ) (n : ℕ)
   apply isPreconnected_of_forall k0
   intro y hy
   obtain ⟨k, hkW, hkK⟩ :=
-    connectedComponentIn_greenSublevel_inter_K_nonempty c n hc hy
+    connectedComponentIn_greenSublevel_inter_K_nonempty c n hy
   refine ⟨connectedComponentIn (GreenSublevel c n) y ∪ K c,
     Set.union_subset (connectedComponentIn_subset _ _) hK_sub,
     Or.inr hk0, Or.inl (mem_connectedComponentIn hy), ?_⟩

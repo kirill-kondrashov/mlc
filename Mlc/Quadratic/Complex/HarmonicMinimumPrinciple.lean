@@ -16,9 +16,8 @@ minimum of `f` is a local maximum of `‖exp (-F)‖`, hence
 `norm_eventually_eq_of_isLocalMax` forces `f` to be locally constant.  A
 connectedness (clopen) argument globalises this to the whole set.
 
-This is `LINCHPIN 2` of route (a) in `plan/PLAN_00_frontier_overview.md`: it is one
-of the two analysis inputs needed to prove `{z | G_c z < ε}` connected directly,
-bypassing the obsolete radial-proxy inputs on the checked root path.
+This is the second analysis input needed to prove `{z | G_c z < ε}` connected
+directly, bypassing the obsolete radial-proxy inputs on the checked root path.
 -/
 
 open Complex Metric Set Filter Topology InnerProductSpace
