@@ -15,6 +15,7 @@ noncomputable section
 
 namespace PrincipalNestTarget
 
+/-- Convert a satellite tower into its sequence of cumulative puzzle depths. -/
 def depthsFromSatelliteTower (c : ℂ) (h : SatelliteRenormalizableTower c) : ℕ → ℕ :=
   RenormalizationTower.cumulativePeriod (satelliteTower c h)
 
@@ -22,11 +23,13 @@ theorem depthsFromSatelliteTower_monotone (c : ℂ) (h : SatelliteRenormalizable
     Monotone (depthsFromSatelliteTower c h) :=
   satelliteTower_depths_monotone c h
 
+/-- The principal-nest modulus sequence is not summable. -/
 def ConformalModulusNotSummableTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
   ¬ Summable (fun n =>
     MLC.Quadratic.modulus
       (MLC.Quadratic.PrincipalNest.dynAnnulus c (depthsFromSatelliteTower c h) n))
 
+/-- A uniform positive lower bound for every principal-nest modulus. -/
 def UniformConformalLowerBoundTarget (c : ℂ) (h : SatelliteRenormalizableTower c) : Prop :=
   ∃ μ > 0, ∀ n,
     μ ≤ MLC.Quadratic.modulus

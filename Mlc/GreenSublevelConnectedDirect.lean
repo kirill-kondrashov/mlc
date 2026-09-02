@@ -35,7 +35,7 @@ lemma isOpen_greenSublevel (c : ℂ) (n : ℕ) : IsOpen (GreenSublevel c n) :=
 /-- **Route-A key lemma.**  For `c ∈ M`, every connected component of the Green
 sublevel set meets the filled Julia set `K_c`. -/
 lemma connectedComponentIn_greenSublevel_inter_K_nonempty
-    (c : ℂ) (n : ℕ) (_hc : c ∈ MandelbrotSet) {y : ℂ}
+    (c : ℂ) (n : ℕ) {y : ℂ}
     (hy : y ∈ GreenSublevel c n) :
     (connectedComponentIn (GreenSublevel c n) y ∩ K c).Nonempty := by
   have hcont : Continuous (green_function c) := continuous_green_function c
@@ -131,7 +131,7 @@ theorem green_sublevel_connected_direct (c : ℂ) (n : ℕ)
   apply isPreconnected_of_forall k0
   intro y hy
   obtain ⟨k, hkW, hkK⟩ :=
-    connectedComponentIn_greenSublevel_inter_K_nonempty c n hc hy
+    connectedComponentIn_greenSublevel_inter_K_nonempty c n hy
   refine ⟨connectedComponentIn (GreenSublevel c n) y ∪ K c,
     Set.union_subset (connectedComponentIn_subset _ _) hK_sub,
     Or.inr hk0, Or.inl (mem_connectedComponentIn hy), ?_⟩

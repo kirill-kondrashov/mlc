@@ -9,9 +9,6 @@ Output layout:
     mlc_conjecture/
       index.html
       graph.json
-    mlc_conjecture_injon_bridge/
-      index.html
-      graph.json
 """
 
 from __future__ import annotations
@@ -43,9 +40,9 @@ EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
 MISSING_AXIOMS: tuple[str, ...] = ()
 ALTERNATIVE_GRAPH_SYMBOLS: tuple[str, ...] = ()
 CONSTRUCTION_SYMBOLS = (
-    "MLC.lc_at_of_shrink_of_connected_at",
+    "MLC.preconnected_nhds_of_shrink_of_connected_at",
     "MLC.para_puzzle_piece_inter_mandelbrot_connected_proved",
-    "MLC.MoleculeBridgeTarget.parameter_shrink_of_moleculeUniformBridgeTarget",
+    "MLC.PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget",
 )
 
 

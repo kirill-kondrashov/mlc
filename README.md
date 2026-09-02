@@ -61,13 +61,16 @@ All axioms used:
 - Translation identifies the frozen parameter pieces with those sublevels.
 - The subset stratum of $T_n(c)$ is connected without an axiom.
 - Yoccoz shrinking and the Molecule bridge assemble local connectivity.
+- Retained glue forwards to standard Mathlib/Yoccoz APIs, including
+  `locallyConnectedSpace_iff_connected_subsets`, `Set.image_iInter`,
+  `integral_biUnion_finset`, `modulus`, and `groetzsch_criterion`.
 
 `check_axioms.lean` imports only `Mlc.Core`, and every tracked `Mlc/**/*.lean`
 module is in that transitive closure. `Mlc.lean` is retained as the package
 entry point and `check_axioms.lean` as the executable checker; no stale project
-Lean modules remain. The complete tracked Lean source pass is warning-free;
-the terminal `MLC.mlc_conjecture` is the only root-path declaration without a
-downstream consumer.
+Lean modules remain. Every retained declaration is in the root dependency
+closure, with `MLC.mlc_conjecture` as the intentional terminal node. The
+complete tracked Lean source pass is warning-free.
 
 ## Validation
 

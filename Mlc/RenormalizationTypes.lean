@@ -162,15 +162,20 @@ theorem parameterToBMol_spec (c : ℂ) :
   refine ⟨g, rfl, ?_⟩
   simp [criticalValue, g, f, hcp0]
 
+/-- The quadratic polynomial encoded as a molecule model. -/
 noncomputable def parameterToBMol (c : ℂ) : BMol :=
   Classical.choose (parameterToBMol_spec c)
 
+/-- The finitely renormalizable side of the root dichotomy. -/
 abbrev FinitelyRenormalizable := NonRenormalizable
 
+/-- Summability of the full quadratic puzzle-annulus modulus sequence. -/
 def PuzzleModulusSummable (c : ℂ) : Prop :=
   Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c n))
 
+/-- The infinitely renormalizable side, represented by modulus summability. -/
 structure InfinitelyRenormalizable (c : ℂ) : Prop where
+  /-- The puzzle modulus sequence is summable. -/
   puzzleModulusSummable : PuzzleModulusSummable c
 
 @[simp] theorem puzzleModulusSummable_iff_not_finitelyRenormalizable (c : ℂ) :

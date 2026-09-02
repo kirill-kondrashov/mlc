@@ -7,7 +7,7 @@ namespace Quadratic
 
 open MeasureTheory
 
-theorem modulus_finset_sum {ι : Type*} [DecidableEq ι] {s : Finset ι}
+theorem modulus_finset_sum {ι : Type*} {s : Finset ι}
     {A : ι → Set ℂ}
     (h_disj : Set.PairwiseDisjoint s A)
     (h_meas : ∀ i ∈ s, MeasurableSet (A i)) :

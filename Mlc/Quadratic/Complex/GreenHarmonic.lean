@@ -167,12 +167,6 @@ theorem green_function_harmonicAt_of_mem_basin
     rw [hgreenN, ← mul_assoc, inv_mul_cancel₀ h2, one_mul]
   exact (harmonicAt_congr_nhds hEq).2 hharm_smul
 
-/-- **Linchpin 1.**  The Green function is harmonic on the whole basin of
-infinity. -/
-theorem green_function_harmonicOnNhd_basin (c : ℂ) :
-    HarmonicOnNhd (green_function c) (basin_of_infinity c) :=
-  fun _ hp => green_function_harmonicAt_of_mem_basin c hp
-
 end Quadratic
 
 end MLC

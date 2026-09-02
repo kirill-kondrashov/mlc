@@ -12,6 +12,7 @@ namespace MLC
 open Quadratic Complex Topology Set Filter
 open scoped BigOperators
 
+/-- The filter of complex points tending to infinity in norm. -/
 def atInfinity : Filter ℂ :=
   Filter.comap (fun z : ℂ => ‖z‖) atTop
 
@@ -373,6 +374,7 @@ lemma tendsto_green_function_minus_log_norm_atInfinity (c : ℂ) :
       exact lt_of_le_of_lt hle hlt
   simpa [Real.norm_eq_abs] using hgoal
 
+/-- The logarithmic correction contributed by the `N`-th iterate. -/
 noncomputable def nearOneLogCorrection (c : ℂ) (N : ℕ) (z : ℂ) : ℂ :=
   ((2 : ℂ) ^ (N + 1))⁻¹ *
     Complex.log
@@ -441,15 +443,19 @@ lemma tendsto_nearOneLogCorrection_atInfinity (c : ℂ) (N : ℕ) :
                   ((quadratic_map c)^[N] z / z ^ (2 ^ N)) ^ 2))
         atInfinity (𝓝 (((2 : ℂ) ^ (N + 1))⁻¹ * 0)))
 
+/-- The sum of all logarithmic Böttcher corrections. -/
 noncomputable def logCorrectionSeries (c : ℂ) (z : ℂ) : ℂ :=
   ∑' n : ℕ, nearOneLogCorrection c n z
 
+/-- The correction series with its first term omitted. -/
 noncomputable def logCorrectionTail (c : ℂ) (z : ℂ) : ℂ :=
   ∑' n : ℕ, nearOneLogCorrection c (n + 1) z
 
+/-- The exponential correction factor in the Böttcher approximation. -/
 noncomputable def logSeriesBottcherRatio (c : ℂ) (z : ℂ) : ℂ :=
   Complex.exp (logCorrectionSeries c z)
 
+/-- The near-infinity Böttcher coordinate given by the logarithmic series. -/
 noncomputable def logSeriesBottcherApprox (c : ℂ) (z : ℂ) : ℂ :=
   z * logSeriesBottcherRatio c z
 
@@ -462,6 +468,7 @@ lemma logSeriesBottcherApprox_div (c : ℂ) {z : ℂ} (hz : z ≠ 0) :
     _ = logSeriesBottcherRatio c z := by
       field_simp [hz, mul_comm, mul_left_comm, mul_assoc]
 
+/-- A summable majorant for the correction series outside radius `R`. -/
 def LogCorrectionSeriesMajorizedOnExterior (c : ℂ) (R : ℝ) : Prop :=
   ∃ u : ℕ → ℝ,
     Summable u ∧
@@ -521,55 +528,6 @@ lemma nearOneLogCorrection_quadratic_map_eq_two_mul_succ
           ring
     _ = (2 : ℂ) * nearOneLogCorrection c (N + 1) z := by
           rw [hright]
-
-noncomputable def exteriorGrowthLower : ℝ → ℕ → ℝ
-  | R, 0 => R
-  | R, n + 1 => (exteriorGrowthLower R n) ^ 2 / 2
-
-lemma exteriorGrowthLower_nonneg {R : ℝ} (hR : 0 ≤ R) :
-    ∀ n, 0 ≤ exteriorGrowthLower R n
-  | 0 => hR
-  | n + 1 => by
-      exact div_nonneg (sq_nonneg _) (by norm_num)
-
-lemma exteriorGrowthLower_le_norm_iterate
-    (c z : ℂ) (R : ℝ)
-    (hR0 : 0 ≤ R) (hRc : ‖c‖ + 2 ≤ R) (hR4 : 4 ≤ R)
-    (hz : R ≤ ‖z‖) :
-    ∀ n, exteriorGrowthLower R n ≤ ‖(quadratic_map c)^[n] z‖
-  | 0 => by simpa [exteriorGrowthLower] using hz
-  | n + 1 => by
-      have ih : exteriorGrowthLower R n ≤ ‖(quadratic_map c)^[n] z‖ :=
-        exteriorGrowthLower_le_norm_iterate c z R hR0 hRc hR4 hz n
-      have hlower_nonneg : 0 ≤ exteriorGrowthLower R n :=
-        exteriorGrowthLower_nonneg hR0 n
-      have hzn_ge : R ≤ ‖(quadratic_map c)^[n] z‖ := by
-        have hstart : ‖c‖ + 1 ≤ ‖z‖ := by linarith
-        exact le_trans hz (iterate_quadratic_map_norm_ge c z n hstart)
-      have hquad_lower :
-          ‖quadratic_map c ((quadratic_map c)^[n] z)‖ ≥
-            ‖(quadratic_map c)^[n] z‖ ^ 2 - ‖c‖ :=
-        quadratic_map_norm_lower c ((quadratic_map c)^[n] z)
-      have hhalf :
-          ‖(quadratic_map c)^[n] z‖ ^ 2 / 2 ≤
-            ‖(quadratic_map c)^[n] z‖ ^ 2 - ‖c‖ := by
-        have hc_le : ‖c‖ ≤ ‖(quadratic_map c)^[n] z‖ ^ 2 / 2 := by
-          have hn_ge_c2 : ‖c‖ + 2 ≤ ‖(quadratic_map c)^[n] z‖ :=
-            le_trans hRc hzn_ge
-          nlinarith [norm_nonneg c]
-        nlinarith
-      have hmono_sq :
-          (exteriorGrowthLower R n) ^ 2 / 2 ≤
-            ‖(quadratic_map c)^[n] z‖ ^ 2 / 2 := by
-        nlinarith [ih, hlower_nonneg, norm_nonneg ((quadratic_map c)^[n] z)]
-      calc
-        exteriorGrowthLower R (n + 1)
-            = (exteriorGrowthLower R n) ^ 2 / 2 := by
-              simp [exteriorGrowthLower]
-        _ ≤ ‖quadratic_map c ((quadratic_map c)^[n] z)‖ :=
-          le_trans hmono_sq (le_trans hhalf hquad_lower)
-        _ = ‖(quadratic_map c)^[n + 1] z‖ := by
-              rw [Function.iterate_succ_apply']
 
 lemma LogCorrectionSeriesMajorizedOnExterior.of_large_radius
     (c : ℂ) {R : ℝ} (hR : ‖c‖ + 2 ≤ R) :

@@ -68,7 +68,7 @@ theorem paraPuzzlePieceAt_eq_green_translate {c : ℂ} (hc : c ∈ MandelbrotSet
     `c ∈ M`, the parameter-plane set `{c' | G_c(c'-c) < (1/2)^n}` is connected,
     because it is the translate by `+c` of the dynamical Green sublevel
     `{w | G_c(w) < (1/2)^n}`, whose connectivity is already proved
-    (`green_sublevel_connected_hyp_proved`), and translation is a homeomorphism.
+    (`green_sublevel_connected_direct`), and translation is a homeomorphism.
 
     This isolates the entire residual difficulty of frontier axiom A into the
     intersection `∩ MandelbrotSet`: the reference set is connected *for free*; only

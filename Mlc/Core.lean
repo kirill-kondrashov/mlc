@@ -47,8 +47,7 @@ axiom residualOpenVirtualNearMoleculeAxiom :
 
 /-- Yoccoz shrinkage on the finitely renormalizable branch. -/
 theorem parameter_shrink_of_yoccoz
-    (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (_h : FinitelyRenormalizable c)
+    (c : ℂ)
     (h_dyn : (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0}) :
     (⋂ n, MLC.Quadratic.ParaPuzzlePieceAt c n) = {c} :=
   MLC.Quadratic.PrincipalNest.para_iInter_eq_singleton_of_dyn_iInter_eq_singleton c h_dyn
@@ -66,7 +65,7 @@ theorem mlc_conjecture :
         simpa [FinitelyRenormalizable, NonRenormalizable] using h_fin)
     exact preconnected_nhds_of_shrink_of_connected_at c hc
       (para_puzzle_piece_inter_mandelbrot_connected_proved c hc)
-      (parameter_shrink_of_yoccoz c hc h_fin h_dyn) U hU
+      (parameter_shrink_of_yoccoz c h_dyn) U hU
   · by_cases h_tower : SatelliteRenormalizableTower c
     · exact preconnected_nhds_of_shrink_of_connected_at c hc
         (para_puzzle_piece_inter_mandelbrot_connected_proved c hc)

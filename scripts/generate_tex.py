@@ -236,15 +236,16 @@ def main():
         ('Core.lean', 'Root Theorem'),
         ('LocalConnectivity.lean', 'Local Connectivity from Shrinking'),
         ('ParaPuzzleConnectivity.lean', 'Parameter Puzzle Connectivity'),
-        ('MoleculeToSatelliteNestData.lean', 'Molecule Bridge Target'),
-        ('MotivicConnectednessFrontier.lean', 'Motivic Connectivity Frontier'),
-        ('MotivicFiniteIncidence.lean', 'Finite Incidence Algebra'),
-        ('MotivicIntersectionNoGo.lean', 'Intersection Obstruction'),
+        ('MoleculeToParameterShrink.lean', 'Molecule to Parameter Shrinkage'),
         ('Quadratic/Complex/GreenSublevel.lean', 'Green Sublevels'),
         ('Quadratic/Complex/GreenHarmonic.lean', 'Green Harmonicity'),
         ('Quadratic/Complex/HarmonicMinimumPrinciple.lean', 'Harmonic Minimum Principle'),
-        ('Quadratic/Complex/PuzzleLemmas2.lean', 'Puzzle Lemmas (Correspondence & Openness)'),
-        ('Quadratic/Complex/Puzzle.lean', 'Puzzle Definitions'),
+        ('Quadratic/Complex/ParaPuzzle.lean', 'Parameter Puzzle Definitions'),
+        ('Quadratic/Complex/ParaPuzzleBasis.lean', 'Parameter Puzzle Basis'),
+        ('Quadratic/Complex/PrincipalNestAnnulus.lean', 'Principal Nest Annuli'),
+        ('Quadratic/Complex/PrincipalNestShrink.lean', 'Principal Nest Shrinkage'),
+        ('Quadratic/Complex/YoccozConformal.lean', 'Yoccoz Conformal Criterion'),
+        ('Quadratic/Complex/ConformalGroetzsch.lean', 'Conformal Grötzsch'),
     ]
     
     for rel_path, title in files:

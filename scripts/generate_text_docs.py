@@ -8,11 +8,14 @@ DOCS_DIR.mkdir(exist_ok=True)
 
 FILES = [
     "Core", "LocalConnectivity", "ParaPuzzleConnectivity",
-    "MoleculeToSatelliteNestData", "MotivicConnectednessFrontier",
-    "MotivicFiniteIncidence", "MotivicIntersectionNoGo",
+    "MoleculeToParameterShrink",
     "Quadratic/Complex/GreenSublevel", "Quadratic/Complex/GreenHarmonic",
     "Quadratic/Complex/HarmonicMinimumPrinciple",
-    "Quadratic/Complex/Puzzle", "Quadratic/Complex/PuzzleLemmas2"
+    "Quadratic/Complex/ParaPuzzle", "Quadratic/Complex/ParaPuzzleBasis",
+    "Quadratic/Complex/PrincipalNestAnnulus",
+    "Quadratic/Complex/PrincipalNestShrink",
+    "Quadratic/Complex/YoccozConformal",
+    "Quadratic/Complex/ConformalGroetzsch"
 ]
 
 def sanitize_tex(text):

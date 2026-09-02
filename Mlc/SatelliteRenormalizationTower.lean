@@ -9,6 +9,7 @@ noncomputable section
 abbrev SatelliteRenormalizableTower (c : ℂ) : Prop :=
   Nonempty (RenormalizationTower (parameterToBMol c))
 
+/-- Choose the renormalization tower supplied for a satellite parameter. -/
 noncomputable def satelliteTower (c : ℂ) (h : SatelliteRenormalizableTower c) :
     RenormalizationTower (parameterToBMol c) :=
   Classical.choice h
