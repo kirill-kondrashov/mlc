@@ -97,10 +97,19 @@ parameter plane:
   parameter-puzzle tower.
 - `Mlc/CategoricalResidual.lean` presents the two residual renormalization
   inputs as a binary product in `Type`.
+- `Mlc/EfimovCategoricalBridge.lean` records an honest conditional
+  Efimov/Pacman interface: rigid monoidal tower levels with adjunctions,
+  strong Mittag--Leffler data, a graded additive `K_n` shadow with an explicit
+  limit-comparison input, compatible `TopCat` realization, and a
+  space-holomorphic carving bridge whose source is the proved translated Green
+  sublevel rather than an arbitrary connected set.
 
 The categorical presentations are logically equivalent to the two existing
 frontier inputs; they do not discharge either open mathematical problem. A
-`K_n`-theoretic layer has not yet been introduced.
+`K_n`-theoretic layer is represented only by the explicit graded additive
+interface in `Mlc/EfimovCategoricalBridge.lean`; Mathlib does not currently
+provide the stable infinity-categorical or algebraic `K`-theory machinery
+needed to instantiate it.
 
 ## Validation
 
@@ -121,6 +130,7 @@ make check
 | Green-sublevel proof | [`Mlc/GreenSublevelConnectedDirect.lean`](Mlc/GreenSublevelConnectedDirect.lean) |
 | Molecule bridge | [`Mlc/MoleculeToParameterShrink.lean`](Mlc/MoleculeToParameterShrink.lean) |
 | Categorical warm-up | [`Mlc/CategoricalMandelbrot.lean`](Mlc/CategoricalMandelbrot.lean) |
+| Efimov/Pacman interface | [`Mlc/EfimovCategoricalBridge.lean`](Mlc/EfimovCategoricalBridge.lean) |
 | Axiom checker | [`check_axioms.lean`](check_axioms.lean) |
 
 ## Dependencies

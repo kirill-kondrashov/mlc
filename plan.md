@@ -58,29 +58,43 @@ None of these results constructs the Pacman refinement tower or a realization
 to `TopCat / ℂ`. In particular, they do not imply connectedness of
 `{c' | green_function c (c' - c) < 2^(-n)} ∩ MandelbrotSet`. A genuine
 space-holomorphic carving/motion statement remains the exact missing
-phase--parameter bridge. Adding a `K_n` statement before that bridge would
-only add an unconnected abstraction, so no Lean K-theory placeholder is
-introduced.
+phase--parameter bridge. The new Lean layer therefore exposes only explicit
+conditional interfaces and a degreewise `K_n` shadow; it does not claim that
+these interfaces are instantiated by Efimov's theorems.
 
-The next sound categorical interface is therefore conditional and should
-contain:
+The first honest version of that interface is now in
+`Mlc/EfimovCategoricalBridge.lean`:
 
-1. a strongly Mittag--Leffler sequence of Pacman models;
-2. its stable/dualizable categorical realization;
-3. an equality between its realized parameter locus and the Green-sublevel
-   pullback;
-4. a space-holomorphic carving map, which can then be consumed by
-   a future carving-reduction module. The current checked repository has no
-   separate carving-reduction module; the only checked frontier interface is
-   `MLC.green_sublevel_intersection_categorical` in
-   `Mlc/ParaPuzzleConnectivity.lean`.
+1. `DualizablePacmanTower` stores rigid monoidal levels, refinement functors,
+   and explicit adjacent adjunctions.
+2. `StrongMittagLefflerData` records Efimov's eventual essential-constancy
+   clause and the `Φₙₖ` functors with both adjoint witnesses. The fields are
+   explicit inputs; no stable-infinity-category theorem is claimed.
+3. `PacmanKTheory` exposes a graded additive finite-level invariant, while
+   `KTheoryMittagLeffler` applies Mathlib's native type-valued
+   `Functor.IsMittagLeffler` degree by degree. This is a checkable shadow, not
+   an implementation of actual algebraic or continuous `K`-theory.
+   `KTheoryLimitComparison` packages the separate continuous-limit comparison
+   input rather than pretending that Mathlib proves Efimov's theorem.
+4. `PacmanRealization` records a compatible realization into
+   `Over (TopCat.of ℂ)`.
+5. `SpaceHolomorphicCarvingData` contains the non-opaque bridge still needed
+   for the frontier: the already-proved translated Green sublevel as the
+   fixed connected source, a space-holomorphic map, and an exact image
+   equality with the Green-sublevel/Mandelbrot intersection. This prevents
+   the interface from choosing the target itself as a vacuous source.
 
-## Later categorical/K-theory layer
+`greenSublevelIntersectionCategorical_of_efimovBridge` proves the final
+connectedness implication from that carving data. The categorical/K-theory
+interfaces do not themselves discharge the carving field or the residual
+near-Molecule axiom; those remain the two checked project-level inputs.
 
-After the categorical frontier is stable, introduce the category and functors
-needed for the nested boundary/interior approximations. Define the relevant
-universal constructions first; add a $K_n$ interface for $n \ge 2$ only after
-those constructions have concrete objects, morphisms, and comparison maps.
+## Later categorical/K-theory work
+
+The interface is now present, but its mathematical instantiation remains later
+work: construct the actual stable/dualizable Pacman levels, identify the
+graded invariant with genuine `K_n` for `n ≥ 2`, prove the Efimov
+limit-comparison input, and establish the space-holomorphic carving image.
 
 ## Ten-iteration frontier search
 
