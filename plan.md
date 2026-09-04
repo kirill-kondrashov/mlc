@@ -19,15 +19,24 @@
 
 ## Categorical frontier
 
-1. Prove `GreenSublevelIntersectionCategoricalData` directly. Work with
-   approximations in `Over (TopCat.of ℂ)`, pullback intersections, and the
-   universal parameter-puzzle tower rather than first proving the old
-   set-theoretic connectivity statement.
-2. Prove the residual categorical input by discharging its two product
+1. `GreenSublevelIntersectionCategoricalData` is now known to be exactly the
+   old set-theoretic straddling statement, via
+   `greenSublevelIntersectionCategoricalData_iff`. The base closure proves
+   connectedness of the Green-sublevel approximation and identifies the image
+   of its pullback with the set intersection, but does not prove that the
+   pullback is connected.
+2. The missing categorical theorem is a genuine carving result: construct a
+   connected parameter approximation and a morphism into the pullback whose
+   ambient image is the full straddling intersection. In dynamical terms this
+   is the Douady--Hubbard parameter--dynamical correspondence, or an
+   equivalent space-holomorphic motion of the puzzle boundary. Category
+   theory can transport connectedness once this morphism is constructed; it
+   cannot provide the morphism from the current base axioms.
+3. Prove the residual categorical input by discharging its two product
    components: the pseudo-Siegel a priori bounds and the virtual
    near-Molecule interpolation problem. The product/limit wrapper is already
    formalized and adds no mathematical strength.
-3. Refine the categorical parameter-puzzle limit so its image and connectedness
+4. Refine the categorical parameter-puzzle limit so its image and connectedness
    properties are stated through categorical cones and morphisms, with the
    existing set lemmas used only as proved equivalence bridges.
 
