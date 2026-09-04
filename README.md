@@ -111,6 +111,13 @@ interface in `Mlc/EfimovCategoricalBridge.lean`; Mathlib does not currently
 provide the stable infinity-categorical or algebraic `K`-theory machinery
 needed to instantiate it.
 
+The Efimov source inventory in
+[`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
+`2405.12169v3`, `2502.04123v2`, `2505.13260v2`, `2510.17010v1`, and
+`2603.08653v2`. A source-level audit found no Mandelbrot, Green-function,
+holomorphic-motion, or connectedness theorem in those papers; they supply
+categorical/K-theoretic infrastructure, not the missing parameter carving.
+
 ## Validation
 
 ```bash

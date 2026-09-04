@@ -42,17 +42,19 @@
 
 ## Efimov/Pacman assessment
 
-The TeX sources for Efimov's three relevant papers are stored in
+The TeX sources for Efimov's five relevant papers are stored in
 `refs/`; the detailed audit is in
 `refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md`.
 Their usable inputs are:
 
+- continuous `K`-theory as a localizing invariant on dualizable presentable
+  stable categories;
 - rigidity, nuclearity, trace-class maps, and internal-Hom descriptions for
   localizing motives;
 - inverse-limit formulas for continuous localizing invariants under strong
   Mittag--Leffler hypotheses;
-- theorem-of-the-heart and `KH` dévissage for dualizable categories with
-  suitable `t`-structures.
+- theorem-of-the-heart and `KH`/Quillen dévissage for dualizable categories
+  with suitable `t`-structures.
 
 None of these results constructs the Pacman refinement tower or a realization
 to `TopCat / ℂ`. In particular, they do not imply connectedness of
@@ -68,8 +70,9 @@ The first honest version of that interface is now in
 1. `DualizablePacmanTower` stores rigid monoidal levels, refinement functors,
    and explicit adjacent adjunctions.
 2. `StrongMittagLefflerData` records Efimov's eventual essential-constancy
-   clause and the `Φₙₖ` functors with both adjoint witnesses. The fields are
-   explicit inputs; no stable-infinity-category theorem is claimed.
+   clause and the `Φₙₖ` functors with both adjoint witnesses, including the
+   colimit-preservation field corresponding to strong continuity. The fields
+   are explicit inputs; no stable-infinity-category theorem is claimed.
 3. `PacmanKTheory` exposes a graded additive finite-level invariant, while
    `KTheoryMittagLeffler` applies Mathlib's native type-valued
    `Functor.IsMittagLeffler` degree by degree. This is a checkable shadow, not
@@ -110,7 +113,7 @@ replacement axiom:
 | 5 | Yoccoz and Molecule dependency search | Neither dependency supplies the required parameter--dynamical correspondence for the current Green/Mandelbrot pullback. |
 | 6 | Categorical limits and compact nested intersections | `isPreconnected_iInter_of_sequence` proves a decreasing intersection of compact preconnected sets is preconnected, but the current target is an open Green sublevel intersected with `M`; no qualifying compact connected approximants are available. `TopCat` limits alone preserve only the universal property, not connectedness. |
 | 7 | Exact Efimov hypotheses | The inverse-limit $K$-theory results require dualizable stable categories, strong Mittag--Leffler transition data, and realization hypotheses. The current `RenormalizationTower` contains only `BMol` objects and nonempty renormalization relations. |
-| 8 | Conditional motive-to-parameter realization | A sound future interface must separately provide a Pacman stable-category tower, its realization in `Over (TopCat.of ℂ)`, equality with the Green/Mandelbrot pullback, and a connected-image/carving theorem. Packaging the conclusion alone would merely rename the frontier axiom, so no Lean placeholder was added. |
+| 8 | Conditional motive-to-parameter realization | Implemented the honest conditional interface in `Mlc/EfimovCategoricalBridge.lean`: categorical tower, graded invariant, realization, and fixed-source carving fields remain explicit inputs; no frontier theorem is asserted from packaging alone. |
 | 9 | Molecule special strata and proper-map reductions | `Molecule.MolSet` is only `closure MainCardioid`; its connectedness and compactness do not identify it with `MandelbrotSet` or contain the target intersection. The dependency's proper-map lemmas apply to power-map preimages, not to this parameter pullback. |
 | 10 | Consolidation and reference audit | The smallest non-circular next theorem is a genuine Douady--Hubbard/Yoccoz carving or equivalent space-holomorphic motion whose image is the straddling intersection. Stale references to a nonexistent carving module were removed from the plan and motive bridge. |
 
@@ -118,6 +121,45 @@ The search therefore sharpened the target but did not discharge
 `MLC.green_sublevel_intersection_categorical`. Efimov's results remain useful
 for organizing a future $K_n$ tower, not for proving connectedness in the
 parameter plane.
+
+## 2026-09-04 Efimov breadth/depth search
+
+The Google Scholar profile and the arXiv author feed were rechecked before
+downloading the missing source archives. The repository now stores the
+current relevant versions:
+
+- `2405.12169v3`, *K-theory and localizing invariants of large categories*;
+- `2502.04123v2`, *Localizing invariants of inverse limits*;
+- `2505.13260v2`, *Some remarks on Quillen's Dévissage theorem*;
+- `2510.17010v1`, *Rigidity of the category of localizing motives*;
+- `2603.08653v2`, *Theorem of the heart for Weibel's homotopy K-theory*.
+
+The source-level terminology scan found zero occurrences of `Mandelbrot`,
+`Julia`, `Green`, `renormalization`, `holomorphic motion`, `connectedness`,
+`local connectivity`, `Douady`, `Yoccoz`, `dynamical`, or `parameter plane`
+in those five Efimov source trees. The source archives and API metadata are
+integrity-checked and the extracted TeX is retained under `refs/`.
+
+The deeper proof search gives a strict separation of obligations. Efimov's
+theorems can justify the categorical portion:
+
+1. build actual dualizable stable Pacman levels and strongly continuous
+   transitions;
+2. verify the strong Mittag--Leffler and homological-epimorphism hypotheses;
+3. identify the resulting continuous `K`-theory limit, using `KH`/dévissage
+   only after a valid `t`-structure is supplied.
+
+They do not provide the independent geometric portion:
+
+1. a conservative realization into `Over (TopCat.of ℂ)`;
+2. equality of its image with the Green-sublevel/Mandelbrot pullback;
+3. a connected-source space-holomorphic carving map.
+
+Consequently the new source evidence strengthens the categorical interface
+but does not discharge the checked frontier axiom. A PDF compilation probe
+was also run; both new arXiv sources stop at the same missing local
+`mathabx.sty` package in the available TeX installation, while gzip/archive
+integrity and theorem/source scans succeed.
 
 ## Validation
 

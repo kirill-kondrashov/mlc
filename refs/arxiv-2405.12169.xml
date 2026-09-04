@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/k1NfwUPixAOP6Vy22IDWKabMr7c</id>
+  <title>arXiv Query: search_query=&amp;id_list=2405.12169&amp;start=0&amp;max_results=10</title>
+  <updated>2026-09-04T21:18:47Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2405.12169" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2405.12169v3</id>
+    <title>K-theory and localizing invariants of large categories</title>
+    <updated>2025-02-06T12:33:26Z</updated>
+    <link href="https://arxiv.org/abs/2405.12169v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2405.12169v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper we introduce and study the so-called continuous $K$-theory for a certain class of "large" stable $\infty$-categories, more precisely, for dualizable presentable categories. For compactly generated categories, the continuous $K$-theory is simply the usual (non-connective) $K$-theory of the full subcategory of compact objects. More generally, we show that any localizing invariant of small stable $\infty$-categories can be uniquely extended to a localizing invariant of dualizable categories.
+  We compute the continuous $K$-theory for categories of sheaves on locally compact Hausdorff spaces. Using the special case for sheaves on the real line, we give an alternative proof of the theorem of Kasprowski and Winges \cite{KW19} on the commutation of $K$-theory with infinite products for small stable $\infty$-categories.
+  We also study the general theory of dualizable categories. In particular, we give an "explicit" proof of Ramzi's theorem \cite{Ram24a} on the $ω_1$-presentability of the category of dualizable categories. Among other things, we prove that dualizability is equivalent to "flatness" in the category of presentable stable categories.</summary>
+    <category term="math.KT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.CT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.NT" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2024-05-20T16:52:58Z</published>
+    <arxiv:comment>133 pages; v3: some results added, exposition expanded, typos corrected, references added</arxiv:comment>
+    <arxiv:primary_category term="math.KT"/>
+    <author>
+      <name>Alexander I. Efimov</name>
+    </author>
+  </entry>
+</feed>

@@ -75,6 +75,8 @@ structure DualizablePacmanTower where
   transition : ∀ n, (level (n + 1)).carrier ⥤ (level n).carrier
   rightAdjoint : ∀ n, (level n).carrier ⥤ (level (n + 1)).carrier
   transitionAdjunction : ∀ n, Adjunction (transition n) (rightAdjoint n)
+  rightAdjointPreservesColimits :
+    ∀ n, PreservesColimits (rightAdjoint n)
 
 /-- The eventual-stabilization clause used for the endofunctors
     `Fₘₙ Fₘₙᴿ` in Efimov's strong Mittag--Leffler condition. -/
@@ -109,6 +111,8 @@ structure StrongMittagLefflerData (T : DualizablePacmanTower) where
     ∀ n k, (T.level k).carrier ⥤ (T.level n).carrier
   phiLeftAdjunction : ∀ n k, Adjunction (phiLeftAdjoint n k) (phi n k)
   phiRightAdjunction : ∀ n k, Adjunction (phi n k) (phiRightAdjoint n k)
+  phiRightAdjointPreservesColimits :
+    ∀ n k, PreservesColimits (phiRightAdjoint n k)
 
 /-- The graded additive target used as a native stand-in for finite-level
     `K_n`-groups. The actual algebraic `K`-theory functor is intentionally not

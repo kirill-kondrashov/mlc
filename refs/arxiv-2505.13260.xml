@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/vmso8GOVMlPUVCuFOKXiG1qwjkA</id>
+  <title>arXiv Query: search_query=&amp;id_list=2505.13260&amp;start=0&amp;max_results=10</title>
+  <updated>2026-09-04T21:18:47Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2505.13260" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2505.13260v2</id>
+    <title>Some remarks on Quillen's Dévissage theorem</title>
+    <updated>2025-05-28T19:03:20Z</updated>
+    <link href="https://arxiv.org/abs/2505.13260v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2505.13260v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper we give a different proof of Quillen's Dévissage theorem using Barwick's theorem of the heart. The key ingredient is a certain short exact sequence of dg categories, which is closely related with the Auslander-type construction for nilpotent extensions which was used in the papers of Kuznetsov-Lunts \cite{KL15}, Land-Tamme \cite{LT19} and the author \cite{E20}.</summary>
+    <category term="math.KT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.CT" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-05-19T15:42:40Z</published>
+    <arxiv:comment>14 pages; v2: minor corrections, typos fixed</arxiv:comment>
+    <arxiv:primary_category term="math.KT"/>
+    <author>
+      <name>Alexander I. Efimov</name>
+    </author>
+  </entry>
+</feed>
