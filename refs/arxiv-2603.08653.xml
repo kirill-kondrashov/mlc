@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/o3VNr1Z1E5A3u+uMwHlRECIp9zU</id>
+  <title>arXiv Query: search_query=&amp;id_list=2603.08653&amp;start=0&amp;max_results=10</title>
+  <updated>2026-09-04T19:34:28Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2603.08653" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2603.08653v2</id>
+    <title>Theorem of the heart for Weibel's homotopy $K$-theory</title>
+    <updated>2026-03-16T14:23:50Z</updated>
+    <link href="https://arxiv.org/abs/2603.08653v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2603.08653v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper we prove the theorem of the heart for Weibel's homotopy $K$-theory $KH.$ Namely, if $\mathcal{C}$ is a small stable $\infty$-category with a bounded $t$-structure, then the realization functor $D^b(\mathcal{C}^{\heartsuit})\to \mathcal{C}$ induces an equivalence of spectra $KH(\mathcal{C}^{\heartsuit})\xrightarrow{\sim}KH(\mathcal{C}).$ In a certain sense this result is dual to the Dundas-Goodwillie-McCarthy theorem. We deduce the dévissage theorem for $KH$ of abelian categories, also on the level of spectra (in all degrees). More generally, we prove these results for dualizable categories with nice $t$-structures and for the so-called coherently assembled abelian categories.
+  The proof is heavily based on another new result, which is a much stronger version of Barwick's theorem of the heart. Its special case states the following: if $\mathcal{C}$ is a small stable category with a bounded $t$-structure, such that for some $n\geq 1$ the realization functor induces isomorphisms on $\operatorname{Ext}^{\leq n}$ between the objects of $\mathcal{C}^{\heartsuit},$ then the map $K_j(\mathcal{C}^{\heartsuit})\to K_j(\mathcal{C})$ is an isomorphism for $j\geq -n-1,$ and a monomorphism for $j = -n-2.$ Moreover, we prove that these estimates are sharp, even for dg categories over a field. In particular the naive $K$-theoretic theorem of the heart fails for $K_{-3}.$</summary>
+    <category term="math.KT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.CT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.NT" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-03-09T17:31:36Z</published>
+    <arxiv:comment>93 pages; v2: minor changes, typos fixed, references added</arxiv:comment>
+    <arxiv:primary_category term="math.KT"/>
+    <author>
+      <name>Alexander I. Efimov</name>
+    </author>
+  </entry>
+</feed>

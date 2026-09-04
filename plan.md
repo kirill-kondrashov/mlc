@@ -40,6 +40,38 @@
    properties are stated through categorical cones and morphisms, with the
    existing set lemmas used only as proved equivalence bridges.
 
+## Efimov/Pacman assessment
+
+The TeX sources for Efimov's three relevant papers are stored in
+`refs/`; the detailed audit is in
+`refs/bridge_between_pacman_renormalization_and_noncommutative_motives.md`.
+Their usable inputs are:
+
+- rigidity, nuclearity, trace-class maps, and internal-Hom descriptions for
+  localizing motives;
+- inverse-limit formulas for continuous localizing invariants under strong
+  Mittag--Leffler hypotheses;
+- theorem-of-the-heart and `KH` dévissage for dualizable categories with
+  suitable `t`-structures.
+
+None of these results constructs the Pacman refinement tower or a realization
+to `TopCat / ℂ`. In particular, they do not imply connectedness of
+`{c' | green_function c (c' - c) < 2^(-n)} ∩ MandelbrotSet`. The current
+carving target `ParaPieceCarvedByMotion` remains the exact missing
+phase--parameter bridge. Adding a `K_n` statement before that bridge would
+only add an unconnected abstraction, so no Lean K-theory placeholder is
+introduced.
+
+The next sound categorical interface is therefore conditional and should
+contain:
+
+1. a strongly Mittag--Leffler sequence of Pacman models;
+2. its stable/dualizable categorical realization;
+3. an equality between its realized parameter locus and the Green-sublevel
+   pullback;
+4. a space-holomorphic carving map, which can then be consumed by
+   `ParaPuzzleCarvingReduction`.
+
 ## Later categorical/K-theory layer
 
 After the categorical frontier is stable, introduce the category and functors
