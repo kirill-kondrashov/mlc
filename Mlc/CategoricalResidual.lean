@@ -43,9 +43,13 @@ end Categorical
 def CategoricalResidualOpenVirtualNearMoleculeData : Prop :=
   Nonempty Categorical.residualInputCone.pt
 
+/-- The original root-facing conjunction of the two residual inputs. -/
+abbrev ResidualOpenVirtualNearMoleculeData : Prop :=
+  Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData
+
 theorem categoricalResidualOpenVirtualNearMoleculeData_iff :
     CategoricalResidualOpenVirtualNearMoleculeData ↔
-      Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData := by
+      ResidualOpenVirtualNearMoleculeData := by
   constructor
   · rintro ⟨h⟩
     exact ⟨h.1.down, h.2.down⟩

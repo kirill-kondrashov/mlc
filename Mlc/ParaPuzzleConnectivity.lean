@@ -39,6 +39,13 @@ def GreenSublevelIntersectionCategoricalData : Prop :=
       ImageConnected
         (intersection (greenSublevelApproximation c n) mandelbrotApproximation)
 
+/-- The original set-theoretic form of the parameter-connectivity input. -/
+def GreenSublevelIntersectionSetData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+    ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet) →
+      IsConnected
+        ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+
 /-! ## Step 3: DynamicalPuzzlePiece = GreenSublevel for c ∈ M -/
 
 /-- If a set `S` is connected and `x ∈ S`, then the connected component of `x`
@@ -150,6 +157,35 @@ theorem green_sublevel_translate_inter_mandelbrot_connected_of_subset {c : ℂ}
     labeled frontier axiom. -/
 axiom green_sublevel_intersection_categorical :
   GreenSublevelIntersectionCategoricalData
+
+/-- The categorical and set-theoretic parameter-connectivity inputs are
+    equivalent. -/
+theorem greenSublevelIntersectionCategoricalData_iff :
+    GreenSublevelIntersectionCategoricalData ↔
+      GreenSublevelIntersectionSetData := by
+  constructor
+  · intro h c hc n hstraddle
+    have hnotfactor :
+        ¬ factorsThrough (greenSublevelApproximation c n) mandelbrotApproximation := by
+      intro hfactor
+      exact hstraddle (factorsThrough_ofSet_iff.mp hfactor)
+    have hcat := h c hc n hnotfactor
+    change _root_.IsConnected
+      (image (intersection (greenSublevelApproximation c n) mandelbrotApproximation)) at hcat
+    rw [image_intersection] at hcat
+    simpa [greenSublevelApproximation, mandelbrotApproximation,
+      image_ofSet] using hcat
+  · intro h c hc n hnotfactor
+    have hstraddle :
+        ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet) := by
+      intro hsub
+      exact hnotfactor (factorsThrough_ofSet_iff.mpr hsub)
+    have hset := h c hc n hstraddle
+    change _root_.IsConnected
+      (image (intersection (greenSublevelApproximation c n) mandelbrotApproximation))
+    rw [image_intersection]
+    simpa [greenSublevelApproximation, mandelbrotApproximation,
+      image_ofSet] using hset
 
 theorem green_sublevel_translate_inter_mandelbrot_connected_straddling (c : ℂ)
     (hc : c ∈ MandelbrotSet) (n : ℕ)
