@@ -3,6 +3,7 @@ import Mlc.LocalConnectivity
 import Mlc.ParaPuzzleConnectivity
 import Mlc.RenormalizationTypes
 import Mlc.MoleculeToParameterShrink
+import Mlc.CategoricalResidual
 import Mathlib.Topology.Connected.LocallyConnected
 
 namespace MLC
@@ -21,29 +22,9 @@ theorem dichotomy (c : ℂ) :
   · exact Or.inl h_fin
   · exact Or.inr (infinitelyRenormalizable_of_not_finitelyRenormalizable c h_fin)
 
-/-- Track 1 of the residual near-Molecule program. -/
-def IRNoTowerImpliesPrimitiveData : Prop :=
-  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (_h : InfinitelyRenormalizable c),
-    ¬ SatelliteRenormalizableTower c → PrimitiveRenormalizable c
-
-/-- Problem 4.3 in the root-facing uniform conformal-modulus form. -/
-def Problem43PseudoSiegelAPrioriBoundsData : Prop :=
-  ∀ (c : ℂ) (_hc : c ∈ MLC.Quadratic.MandelbrotSet)
-    (hTower : SatelliteRenormalizableTower c),
-    PrincipalNestTarget.UniformConformalLowerBoundTarget c hTower
-
-/-- Interpolation Problem 4.4 in the root-facing classification form. -/
-def Problem44VirtualMoleculeData : Prop :=
-  IRNoTowerImpliesPrimitiveData
-
-/-- The explicit open residual for the virtual near-Molecule regime. -/
-def ResidualOpenVirtualNearMoleculeData : Prop :=
-  Problem43PseudoSiegelAPrioriBoundsData ∧ Problem44VirtualMoleculeData
-
-/-- The remaining Dudko–Lyubich residual used by the root theorem. -/
+/-- The remaining Dudko–Lyubich residual as a categorical product witness. -/
 axiom residualOpenVirtualNearMoleculeAxiom :
-  ResidualOpenVirtualNearMoleculeData
+  CategoricalResidualOpenVirtualNearMoleculeData
 
 /-- Yoccoz shrinkage on the finitely renormalizable branch. -/
 theorem parameter_shrink_of_yoccoz
@@ -55,7 +36,9 @@ theorem parameter_shrink_of_yoccoz
 /-- The Mandelbrot set is locally connected modulo the two explicit frontier inputs. -/
 theorem mlc_conjecture :
     LocallyConnectedSpace mandelbrotSet := by
-  rcases residualOpenVirtualNearMoleculeAxiom with ⟨h_uniform, h_primitive⟩
+  rcases residualOpenVirtualNearMoleculeAxiom with ⟨h_residual⟩
+  have h_uniform : Problem43PseudoSiegelAPrioriBoundsData := h_residual.1.down
+  have h_primitive : Problem44VirtualMoleculeData := h_residual.2.down
   rw [locallyConnectedSpace_iff_connected_subsets]
   intro ⟨c, hc⟩ U hU
   rcases dichotomy c with h_fin | h_inf

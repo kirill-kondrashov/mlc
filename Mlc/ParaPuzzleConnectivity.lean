@@ -1,3 +1,4 @@
+import Mlc.CategoricalTopologicalApproximation
 import Mlc.GreenSublevelConnectedDirect
 
 /-!
@@ -18,6 +19,25 @@ namespace MLC
 open Quadratic Complex Topology Set Filter
 
 noncomputable section
+
+open Categorical
+
+/-- The dynamical Green sublevel as a topological approximation over the
+    ambient parameter plane. -/
+def greenSublevelApproximation (c : ℂ) (n : ℕ) : Approximation :=
+  ofSet {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+
+/-- The Mandelbrot set as a topological approximation over the parameter
+    plane. -/
+def mandelbrotApproximation : Approximation :=
+  ofSet MandelbrotSet
+
+/-- Categorical form of the straddling parameter-connectivity input. -/
+def GreenSublevelIntersectionCategoricalData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+    ¬ factorsThrough (greenSublevelApproximation c n) mandelbrotApproximation →
+      ImageConnected
+        (intersection (greenSublevelApproximation c n) mandelbrotApproximation)
 
 /-! ## Step 3: DynamicalPuzzlePiece = GreenSublevel for c ∈ M -/
 
@@ -128,10 +148,26 @@ theorem green_sublevel_translate_inter_mandelbrot_connected_of_subset {c : ℂ}
     through a genuine holomorphic motion whose image is the concrete
     parameter intersection. That research-scale input is retained as this
     labeled frontier axiom. -/
-axiom green_sublevel_translate_inter_mandelbrot_connected_straddling (c : ℂ)
+axiom green_sublevel_intersection_categorical :
+  GreenSublevelIntersectionCategoricalData
+
+theorem green_sublevel_translate_inter_mandelbrot_connected_straddling (c : ℂ)
     (hc : c ∈ MandelbrotSet) (n : ℕ)
     (hstraddle : ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet)) :
-    IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+    IsConnected ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
+  have hnotfactor :
+      ¬ factorsThrough (greenSublevelApproximation c n) mandelbrotApproximation := by
+    intro hfactor
+    apply hstraddle
+    simpa [greenSublevelApproximation, mandelbrotApproximation,
+      Quadratic.GreenSublevel] using
+      (factorsThrough_ofSet_iff.mp hfactor)
+  have hcat := green_sublevel_intersection_categorical c hc n hnotfactor
+  change _root_.IsConnected
+    (image (intersection (greenSublevelApproximation c n) mandelbrotApproximation)) at hcat
+  rw [image_intersection] at hcat
+  simpa [greenSublevelApproximation, mandelbrotApproximation,
+    image_ofSet] using hcat
 
 /-- **Full Green-sublevel–M intersection connectivity**, now derived (not axiomatized)
     by a case split on the subset stratum: the trivial subset case is discharged
