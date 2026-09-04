@@ -84,9 +84,11 @@ The current frontier is the categorical form of
 
 in the straddling case. It is equivalent to the existing set-level
 statement by `greenSublevelIntersectionCategoricalData_iff`. The repository
-already proves the connected un-intersected Green-sublevel translate and
-reduces the remaining step to the carving interface
-`ParaPieceCarvedByMotion` in `Mlc/ParaPuzzleCarvingReduction.lean`.
+already proves the connected un-intersected Green-sublevel translate. The
+remaining checked declaration is the explicit axiom
+`MLC.green_sublevel_intersection_categorical` in
+`Mlc/ParaPuzzleConnectivity.lean`; no separate carving-reduction module or
+`ParaPieceCarvedByMotion` declaration exists on the current branch.
 
 Efimov's results leave three independent bridges to be proved:
 
@@ -97,7 +99,7 @@ Efimov's results leave three independent bridges to be proved:
    Green-sublevel/Mandelbrot pullback.
 3. **Connectivity bridge.** Prove that the realization of the relevant
    categorical construction is a connected image, or otherwise prove the
-   `ParaPieceCarvedByMotion` statement.
+   corresponding Douady--Hubbard/Yoccoz carving statement.
 
 Only the first bridge is in the natural scope of noncommutative motives.
 The second and third are the Douady--Hubbard/Yoccoz phase--parameter
@@ -117,12 +119,11 @@ conditional interface that packages:
 - its realization as an approximation in `TopCat / ℂ`;
 - an equality between the realized parameter locus and the current pullback;
 - a space-holomorphic carving map from the already-connected Green-sublevel
-  translate.
+  translate, together with a proof that its image is the current pullback.
 
-The final item is precisely the existing `ParaPieceCarvedByMotion` target.
-Once it is supplied by genuine dynamics, the existing connected-image theorem
-discharges the frontier. Until then, Efimov's results organize a possible
-later $K_n$ layer but do not reduce the checked axiom count.
+Once these data are supplied by genuine dynamics, the standard connected-image
+argument can discharge the frontier. Until then, Efimov's results organize a
+possible later $K_n$ layer but do not reduce the checked axiom count.
 
 ## Existing note scope
 
@@ -142,6 +143,7 @@ intersection above.
 Related background:
 
 - BGT, *A universal characterization of higher algebraic K-theory*;
-- the existing Pacman bridge note and `Mlc/ParaPuzzleCarvingReduction.lean`;
+- this Pacman bridge note and `Mlc/ParaPuzzleConnectivity.lean` for the
+  checked categorical frontier;
 - `Mlc/CategoricalTopologicalApproximation.lean` for the current
   over-category/pullback formalization.

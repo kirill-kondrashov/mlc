@@ -56,8 +56,8 @@ Their usable inputs are:
 
 None of these results constructs the Pacman refinement tower or a realization
 to `TopCat / ℂ`. In particular, they do not imply connectedness of
-`{c' | green_function c (c' - c) < 2^(-n)} ∩ MandelbrotSet`. The current
-carving target `ParaPieceCarvedByMotion` remains the exact missing
+`{c' | green_function c (c' - c) < 2^(-n)} ∩ MandelbrotSet`. A genuine
+space-holomorphic carving/motion statement remains the exact missing
 phase--parameter bridge. Adding a `K_n` statement before that bridge would
 only add an unconnected abstraction, so no Lean K-theory placeholder is
 introduced.
@@ -70,7 +70,10 @@ contain:
 3. an equality between its realized parameter locus and the Green-sublevel
    pullback;
 4. a space-holomorphic carving map, which can then be consumed by
-   `ParaPuzzleCarvingReduction`.
+   a future carving-reduction module. The current checked repository has no
+   separate carving-reduction module; the only checked frontier interface is
+   `MLC.green_sublevel_intersection_categorical` in
+   `Mlc/ParaPuzzleConnectivity.lean`.
 
 ## Later categorical/K-theory layer
 
@@ -78,6 +81,29 @@ After the categorical frontier is stable, introduce the category and functors
 needed for the nested boundary/interior approximations. Define the relevant
 universal constructions first; add a $K_n$ interface for $n \ge 2$ only after
 those constructions have concrete objects, morphisms, and comparison maps.
+
+## Ten-iteration frontier search
+
+The requested breadth search was completed without introducing a disguised
+replacement axiom:
+
+| Iteration | Route | Result |
+| --- | --- | --- |
+| 1 | Checked branch, imports, and axiom closure | The categorical root still has exactly the two project-level frontier axioms. |
+| 2 | Historical Böttcher-motion/Słodkowski scaffolding | The historical motion files are not on this branch and their key fields are assumptions, so importing them would not discharge the frontier. |
+| 3 | Generic topological intersection arguments | Connectedness of the Green translate and of `MandelbrotSet` separately is insufficient; connected intersections need a carving or monotonicity theorem. |
+| 4 | Historical Böttcher and boundary-motion search | The available scaffolding does not construct a nontrivial parameter motion or identify its image with the target intersection. |
+| 5 | Yoccoz and Molecule dependency search | Neither dependency supplies the required parameter--dynamical correspondence for the current Green/Mandelbrot pullback. |
+| 6 | Categorical limits and compact nested intersections | `isPreconnected_iInter_of_sequence` proves a decreasing intersection of compact preconnected sets is preconnected, but the current target is an open Green sublevel intersected with `M`; no qualifying compact connected approximants are available. `TopCat` limits alone preserve only the universal property, not connectedness. |
+| 7 | Exact Efimov hypotheses | The inverse-limit $K$-theory results require dualizable stable categories, strong Mittag--Leffler transition data, and realization hypotheses. The current `RenormalizationTower` contains only `BMol` objects and nonempty renormalization relations. |
+| 8 | Conditional motive-to-parameter realization | A sound future interface must separately provide a Pacman stable-category tower, its realization in `Over (TopCat.of ℂ)`, equality with the Green/Mandelbrot pullback, and a connected-image/carving theorem. Packaging the conclusion alone would merely rename the frontier axiom, so no Lean placeholder was added. |
+| 9 | Molecule special strata and proper-map reductions | `Molecule.MolSet` is only `closure MainCardioid`; its connectedness and compactness do not identify it with `MandelbrotSet` or contain the target intersection. The dependency's proper-map lemmas apply to power-map preimages, not to this parameter pullback. |
+| 10 | Consolidation and reference audit | The smallest non-circular next theorem is a genuine Douady--Hubbard/Yoccoz carving or equivalent space-holomorphic motion whose image is the straddling intersection. Stale references to a nonexistent carving module were removed from the plan and motive bridge. |
+
+The search therefore sharpened the target but did not discharge
+`MLC.green_sublevel_intersection_categorical`. Efimov's results remain useful
+for organizing a future $K_n$ tower, not for proving connectedness in the
+parameter plane.
 
 ## Validation
 
