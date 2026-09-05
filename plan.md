@@ -221,6 +221,23 @@ them.
 
 **Axiom status: no axiom discharged.** The checked surface is unchanged.
 
+## Eighth ten-iteration proof round
+
+The eighth round is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_round8.md`.
+It tested good-cover nerves, component cosheaves, persistence and Reeb
+graphs, Thurston pullback contraction, extension of the near-infinity
+Böttcher family, stable-component gluing, locale/frame descent,
+noncommutative `K_0`, and finite obstruction extraction.
+
+The most concrete remaining implementation route is to extend the sound
+near-infinity Böttcher family to a basin-wide, jointly holomorphic family and
+then prove its exact image is the literal straddling intersection. The
+alternative gluing and invariant routes still require connected finite stages
+or effective descent hypotheses.
+
+**Axiom status: no axiom discharged.** The checked surface is unchanged.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:
