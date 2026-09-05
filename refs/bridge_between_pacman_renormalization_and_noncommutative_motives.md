@@ -173,6 +173,49 @@ categorical differences; it does not by itself detect connectedness of a
 subset of the parameter plane. In particular, a `K_n` equivalence cannot be
 used as a connectedness proof without a new conservative realization theorem.
 
+## Finite-etale `K₀` component shadow
+
+The current Lean development now isolates the smallest consequence of a
+degree-zero finite-etale/localizing invariant that is relevant to the
+frontier. In `Mlc/EfimovCategoricalBridge.lean`,
+
+```lean
+abbrev FiniteEtaleKZeroProbe (S : Set ℂ) := LocallyConstant S Bool
+```
+
+is used as a component probe. For nonempty `S`, Mathlib proves the exact
+equivalence
+
+```text
+IsConnected S ↔ every `FiniteEtaleKZeroProbe S` is constant.
+```
+
+This is deliberately not identified with actual algebraic or continuous
+`K₀`: it is the finite-etale two-point shadow, where a nonconstant probe is a
+clopen decomposition. The proof forwards to the standard locally-constant
+and preconnectedness APIs, so it adds no project axiom.
+
+Two Efimov-shaped obligations are exposed over this probe:
+
+- `FiniteEtaleKZeroDescentData` requires every target probe to descend to a
+  connected finite stage of an inverse system. This is the topological
+  component analogue of strong Mittag--Leffler descent.
+- `FiniteEtaleKZeroRestrictionSurjective` requires restriction from the
+  connected translated Green sublevel to the target intersection to be
+  surjective. With the target's existing nonemptiness and the ambient
+  connectedness theorem, restriction-surjectivity is proved equivalent to
+  target connectedness. Hence
+  `greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData`
+  is an exact relative-excision reformulation, not a weaker substitute.
+
+`EfimovGreenSublevelKZeroBridge` packages this component data alongside the
+rigid tower, strong-Mittag--Leffler fields, graded invariant, limit comparison,
+and `TopCat` realization. The package sharpens the missing input but does not
+instantiate it: Efimov's papers still do not provide the Mandelbrot
+realization, the restriction-surjectivity proof, or the
+Douady--Hubbard/Yoccoz carving theorem. The checked root axiom set therefore
+remains unchanged.
+
 ## Decision for the current Lean development
 
 The Efimov papers do not discharge

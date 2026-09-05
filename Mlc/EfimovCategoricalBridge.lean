@@ -5,6 +5,8 @@ import Mathlib.CategoryTheory.CofilteredSystem
 import Mathlib.CategoryTheory.GradedObject
 import Mathlib.CategoryTheory.Limits.HasLimits
 import Mathlib.CategoryTheory.Monoidal.Rigid.Basic
+import Mathlib.Topology.Connected.Clopen
+import Mathlib.Topology.LocallyConstant.Basic
 
 /-!
 # Efimov-style categorical bridge
@@ -26,6 +28,9 @@ those theories:
 * `SpaceHolomorphicCarvingData` is the genuine dynamical input: a connected
   source, a space-holomorphic map, and an exact image identification with the
   Green-sublevel/Mandelbrot intersection.
+* `FiniteEtaleKZeroProbe` is the finite-etale/component-level shadow of a
+  degree-zero localizing invariant; its triviality is equivalent to
+  connectedness for nonempty subsets of `ℂ`.
 
 No field in this file is an axiom of the root theorem. The final theorem is
 only the standard connected-image implication from the carving datum.
@@ -191,6 +196,234 @@ structure SpaceHolomorphicCarvingData (c : ℂ) (n : ℕ) where
   image_eq :
     map '' {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} =
       ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+
+/-- The finite-etale, degree-zero component probe of a space.
+
+    Efimov's continuous `K`-theory is not available in Mathlib, so this is
+    deliberately only its component-level shadow: locally constant
+    two-valued functions detect clopen decompositions. -/
+abbrev FiniteEtaleKZeroProbe (S : Set ℂ) :=
+  LocallyConstant S Bool
+
+/-- The component probe is trivial when every finite-etale two-point object is
+    pulled back from one point. -/
+def FiniteEtaleKZeroProbeTrivial (S : Set ℂ) : Prop :=
+  ∀ f : FiniteEtaleKZeroProbe S, ∃ b : Bool, f = LocallyConstant.const S b
+
+theorem finiteEtaleKZeroProbeTrivial_of_isConnected {S : Set ℂ}
+    (hS : IsConnected S) : FiniteEtaleKZeroProbeTrivial S := by
+  obtain ⟨x, hx⟩ := hS.nonempty
+  letI : PreconnectedSpace S := Subtype.preconnectedSpace hS.isPreconnected
+  intro f
+  refine ⟨f ⟨x, hx⟩, ?_⟩
+  ext y
+  exact f.apply_eq_of_preconnectedSpace y ⟨x, hx⟩
+
+theorem isConnected_of_finiteEtaleKZeroProbeTrivial {S : Set ℂ}
+    (hS : S.Nonempty) (hprobe : FiniteEtaleKZeroProbeTrivial S) :
+    IsConnected S := by
+  refine ⟨hS, ?_⟩
+  apply isPreconnected_of_forall_constant
+  intro f hf x hx y hy
+  let g : FiniteEtaleKZeroProbe S :=
+    { toFun := fun z : S => f z
+      isLocallyConstant :=
+        (IsLocallyConstant.iff_continuous _).2
+          (continuousOn_iff_continuous_restrict.mp hf) }
+  obtain ⟨b, hgb⟩ := hprobe g
+  have hxg := congrArg (fun q => q ⟨x, hx⟩) hgb
+  have hyg := congrArg (fun q => q ⟨y, hy⟩) hgb
+  exact (show f x = b from hxg) |>.trans (show b = f y from hyg.symm)
+
+theorem isConnected_iff_finiteEtaleKZeroProbeTrivial {S : Set ℂ}
+    (hS : S.Nonempty) :
+    IsConnected S ↔ FiniteEtaleKZeroProbeTrivial S := by
+  constructor
+  · exact finiteEtaleKZeroProbeTrivial_of_isConnected
+  · exact isConnected_of_finiteEtaleKZeroProbeTrivial hS
+
+/-- A finite-stage descent certificate for the component probe.
+
+    This is the concrete topological obligation suggested by Efimov's
+    strongly Mittag--Leffler inverse-limit formalism. It asks that every
+    finite-etale probe on `S` descend along one stage projection, while each
+    stage is connected. It is weaker than constructing a space-holomorphic
+    carving map and is independent of the unavailable stable
+    infinity-categorical machinery. -/
+structure FiniteEtaleKZeroDescentData (S : Set ℂ) where
+  stage : ℕ → Set ℂ
+  projection : ∀ k, ContinuousMap S (stage k)
+  stageConnected : ∀ k, IsConnected (stage k)
+  descend :
+    ∀ f : FiniteEtaleKZeroProbe S, ∃ k : ℕ, ∃ g : FiniteEtaleKZeroProbe (stage k),
+      f = LocallyConstant.comap (projection k) g
+
+theorem isConnected_of_finiteEtaleKZeroDescent
+    {S : Set ℂ} (hS : S.Nonempty)
+    (hdesc : FiniteEtaleKZeroDescentData S) :
+    IsConnected S := by
+  apply isConnected_of_finiteEtaleKZeroProbeTrivial hS
+  intro f
+  obtain ⟨k, g, hfg⟩ := hdesc.descend f
+  obtain ⟨b, hgb⟩ :=
+    finiteEtaleKZeroProbeTrivial_of_isConnected (hdesc.stageConnected k) g
+  refine ⟨b, ?_⟩
+  rw [hfg, hgb]
+  rfl
+
+/-- The inclusion of one parameter subset into another, used to restrict
+    finite-etale probes. -/
+def finiteEtaleKZeroInclusion {S T : Set ℂ} (hST : S ⊆ T) :
+    ContinuousMap S T where
+  toFun := fun z => ⟨(z : ℂ), hST z.property⟩
+  continuous_toFun :=
+    Continuous.subtype_mk continuous_subtype_val (fun z => hST z.property)
+
+/-- Restriction of a finite-etale component probe along a subset inclusion. -/
+def finiteEtaleKZeroRestriction {S T : Set ℂ} (hST : S ⊆ T) :
+    FiniteEtaleKZeroProbe T → FiniteEtaleKZeroProbe S :=
+  fun f => LocallyConstant.comap (finiteEtaleKZeroInclusion hST) f
+
+def FiniteEtaleKZeroRestrictionSurjective {S T : Set ℂ} (hST : S ⊆ T) : Prop :=
+  Function.Surjective (finiteEtaleKZeroRestriction hST)
+
+theorem finiteEtaleKZeroRestrictionSurjective_of_isConnected
+    {S T : Set ℂ} (hST : S ⊆ T) (hS : IsConnected S) :
+    FiniteEtaleKZeroRestrictionSurjective hST := by
+  intro f
+  obtain ⟨b, hfb⟩ := finiteEtaleKZeroProbeTrivial_of_isConnected hS f
+  refine ⟨LocallyConstant.const T b, ?_⟩
+  rw [hfb]
+  rfl
+
+/-! ### Relative `K₀` excision criterion -/
+
+theorem isConnected_of_finiteEtaleKZeroRestrictionSurjective
+    {S T : Set ℂ} (hST : S ⊆ T) (hS : S.Nonempty) (hT : IsConnected T)
+    (hrestriction : FiniteEtaleKZeroRestrictionSurjective (S := S) (T := T) hST) :
+    IsConnected S := by
+  apply isConnected_of_finiteEtaleKZeroProbeTrivial hS
+  intro f
+  obtain ⟨g, hgf⟩ := hrestriction f
+  obtain ⟨b, hgb⟩ := finiteEtaleKZeroProbeTrivial_of_isConnected hT g
+  refine ⟨b, ?_⟩
+  rw [← hgf, hgb]
+  rfl
+
+theorem finiteEtaleKZeroRestrictionSurjective_iff_isConnected
+    {S T : Set ℂ} (hST : S ⊆ T) (hS : S.Nonempty) (hT : IsConnected T) :
+    FiniteEtaleKZeroRestrictionSurjective hST ↔ IsConnected S := by
+  constructor
+  · exact isConnected_of_finiteEtaleKZeroRestrictionSurjective hST hS hT
+  · exact finiteEtaleKZeroRestrictionSurjective_of_isConnected hST
+
+/-- The parameter set whose connectedness is the current straddling frontier. -/
+def greenSublevelIntersectionSet (c : ℂ) (n : ℕ) : Set ℂ :=
+  {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet
+
+theorem greenSublevelIntersectionSet_nonempty {c : ℂ}
+    (hc : c ∈ MandelbrotSet) (n : ℕ) :
+    (greenSublevelIntersectionSet c n).Nonempty := by
+  refine ⟨c, ?_, hc⟩
+  change green_function c (c - c) < (1 / 2 : ℝ) ^ n
+  have h0 := Quadratic.green_sublevel_contains_0 c n hc
+  change green_function c 0 < (1 / 2 : ℝ) ^ n at h0
+  simpa [sub_self] using h0
+
+def GreenSublevelIntersectionFiniteEtaleKZeroData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+    ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet) →
+      FiniteEtaleKZeroProbeTrivial (greenSublevelIntersectionSet c n)
+
+theorem greenSublevelIntersectionSetData_iff_finiteEtaleKZeroData :
+    GreenSublevelIntersectionSetData ↔
+      GreenSublevelIntersectionFiniteEtaleKZeroData := by
+  constructor
+  · intro h c hc n hstraddle
+    exact
+      (isConnected_iff_finiteEtaleKZeroProbeTrivial
+        (greenSublevelIntersectionSet_nonempty hc n)).mp
+        (by simpa [greenSublevelIntersectionSet] using h c hc n hstraddle)
+  · intro h c hc n hstraddle
+    exact
+      (isConnected_iff_finiteEtaleKZeroProbeTrivial
+        (greenSublevelIntersectionSet_nonempty hc n)).mpr
+        (h c hc n hstraddle)
+
+theorem greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroData :
+    GreenSublevelIntersectionCategoricalData ↔
+      GreenSublevelIntersectionFiniteEtaleKZeroData :=
+  greenSublevelIntersectionCategoricalData_iff.trans
+    greenSublevelIntersectionSetData_iff_finiteEtaleKZeroData
+
+theorem greenSublevelIntersectionSet_subset_greenSublevel (c : ℂ) (n : ℕ) :
+    greenSublevelIntersectionSet c n ⊆
+      {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} :=
+  fun _ hz => hz.1
+
+/-! A localizing-invariant interpretation: vanishing of the relative
+    component-level term is represented here by surjectivity of restriction
+    on finite-etale probes. -/
+
+def GreenSublevelIntersectionFiniteEtaleKZeroExcisionData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+    ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet) →
+      FiniteEtaleKZeroRestrictionSurjective
+        (greenSublevelIntersectionSet_subset_greenSublevel c n)
+
+theorem greenSublevelIntersectionSetData_iff_finiteEtaleKZeroExcisionData :
+    GreenSublevelIntersectionSetData ↔
+      GreenSublevelIntersectionFiniteEtaleKZeroExcisionData := by
+  constructor
+  · intro h c hc n hstraddle
+    exact finiteEtaleKZeroRestrictionSurjective_of_isConnected
+      (greenSublevelIntersectionSet_subset_greenSublevel c n)
+      (h c hc n hstraddle)
+  · intro h c hc n hstraddle
+    exact isConnected_of_finiteEtaleKZeroRestrictionSurjective
+      (greenSublevelIntersectionSet_subset_greenSublevel c n)
+      (greenSublevelIntersectionSet_nonempty hc n)
+      (green_sublevel_translate_connected hc n)
+      (h c hc n hstraddle)
+
+theorem greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData :
+    GreenSublevelIntersectionCategoricalData ↔
+      GreenSublevelIntersectionFiniteEtaleKZeroExcisionData :=
+  greenSublevelIntersectionCategoricalData_iff.trans
+    greenSublevelIntersectionSetData_iff_finiteEtaleKZeroExcisionData
+
+theorem greenSublevelIntersectionCategoricalData_of_finiteEtaleKZeroExcision
+    (h : GreenSublevelIntersectionFiniteEtaleKZeroExcisionData) :
+    GreenSublevelIntersectionCategoricalData :=
+  greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData.mpr h
+
+/-- A target-specific Efimov bridge can replace exact image carving by
+    finite-stage descent of the component-level `K₀` shadow. -/
+structure EfimovGreenSublevelKZeroBridge
+    (T : DualizablePacmanTower) (K : PacmanKTheory T) [HasLimit K.values] where
+  strongMittagLeffler : StrongMittagLefflerData T
+  kTheoryMittagLeffler : KTheoryMittagLeffler K
+  kTheoryLimit : KTheoryLimitComparison K
+  realization : PacmanRealization T
+  componentDescent :
+    GreenSublevelIntersectionFiniteEtaleKZeroData
+
+theorem greenSublevelIntersectionCategorical_of_efimovKZeroBridge
+    {T : DualizablePacmanTower} {K : PacmanKTheory T} {c : ℂ} {n : ℕ}
+    [HasLimit K.values] (h : EfimovGreenSublevelKZeroBridge T K)
+    (hc : c ∈ MandelbrotSet)
+    (hstraddle :
+      ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet)) :
+    ImageConnected
+      (intersection (greenSublevelApproximation c n) mandelbrotApproximation) := by
+  have hcatData : GreenSublevelIntersectionCategoricalData :=
+    greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroData.mpr
+      h.componentDescent
+  apply hcatData c hc n
+  intro hfactor
+  apply hstraddle
+  simpa [greenSublevelApproximation, mandelbrotApproximation] using
+    (factorsThrough_ofSet_iff.mp hfactor)
 
 /-- A complete conditional bridge assembling Efimov-style categorical data
     with the parameter realization/carving datum. -/

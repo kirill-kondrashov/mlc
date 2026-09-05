@@ -102,7 +102,14 @@ parameter plane:
   strong Mittag--Leffler data, a graded additive `K_n` shadow with an explicit
   limit-comparison input, compatible `TopCat` realization, and a
   space-holomorphic carving bridge whose source is the proved translated Green
-  sublevel rather than an arbitrary connected set.
+  sublevel rather than an arbitrary connected set. It also contains a
+  finite-etale degree-zero component probe
+  `FiniteEtaleKZeroProbe S := LocallyConstant S Bool`. The proved equivalence
+  `IsConnected S ↔ FiniteEtaleKZeroProbeTrivial S` (for nonempty `S`) gives an
+  axiom-free `K₀`-like connectedness test. Finite-stage descent and relative
+  restriction-surjectivity are exposed as explicit Efimov-inspired inputs;
+  the latter is proved equivalent to the straddling connectedness statement,
+  so it refines the frontier without disguising or adding an axiom.
 
 The categorical presentations are logically equivalent to the two existing
 frontier inputs; they do not discharge either open mathematical problem. A
@@ -110,6 +117,15 @@ frontier inputs; they do not discharge either open mathematical problem. A
 interface in `Mlc/EfimovCategoricalBridge.lean`; Mathlib does not currently
 provide the stable infinity-categorical or algebraic `K`-theory machinery
 needed to instantiate it.
+
+The finite-etale probe is intentionally a topological shadow rather than a
+claim that Mathlib already contains continuous algebraic `K`-theory. It
+detects exactly the obstruction relevant here: a nontrivial locally constant
+two-valued function is a clopen decomposition. The target-specific theorem
+`greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData`
+therefore gives a precise relative-localizing-invariant reformulation of the
+remaining parameter-puzzle axiom. Efimov's results motivate the descent and
+excision interfaces, but do not prove their Mandelbrot realization fields.
 
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes

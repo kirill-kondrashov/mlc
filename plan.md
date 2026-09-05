@@ -161,6 +161,52 @@ was also run; both new arXiv sources stop at the same missing local
 `mathabx.sty` package in the available TeX installation, while gzip/archive
 integrity and theorem/source scans succeed.
 
+## 2026-09-05 finite-etale `K₀` component route
+
+The next Efimov-inspired iteration replaces an unavailable exact continuous
+`K`-theory implementation by the smallest finite-etale shadow that can still
+see connectedness:
+
+```lean
+abbrev FiniteEtaleKZeroProbe (S : Set ℂ) := LocallyConstant S Bool
+```
+
+For every nonempty set `S`, the checked theorem
+`isConnected_iff_finiteEtaleKZeroProbeTrivial` proves
+
+```text
+IsConnected S ↔ every locally constant Bool-valued probe on S is constant.
+```
+
+The proof is entirely axiom-free and forwards to Mathlib's
+`isPreconnected_of_forall_constant`, `LocallyConstant.apply_eq_of_preconnectedSpace`,
+and the restricted-continuity API. Thus the probe is not presented as genuine
+algebraic `K₀`; it is the finite-etale/component-level part of a possible
+degree-zero localizing invariant.
+
+Two conditional Efimov interfaces are now available:
+
+1. `FiniteEtaleKZeroDescentData` asks that every probe descend to one connected
+   finite stage of an inverse system. Its `isConnected_of_finiteEtaleKZeroDescent`
+   theorem is the topological analogue of strong Mittag--Leffler descent.
+2. `FiniteEtaleKZeroRestrictionSurjective` asks for surjectivity of restriction
+   from the connected translated Green sublevel to its Mandelbrot intersection.
+   The theorem
+   `finiteEtaleKZeroRestrictionSurjective_iff_isConnected` shows that, with
+   the already-proved nonemptiness and ambient connectedness, this is exactly
+   equivalent to the target connectedness statement. Consequently
+   `greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData`
+   is a faithful relative-excision reformulation, not a weaker proxy or a new
+   opaque axiom.
+
+`EfimovGreenSublevelKZeroBridge` packages the existing rigid tower,
+strong-Mittag--Leffler, graded invariant, limit comparison, realization, and
+finite-stage component data. The bridge theorem derives the categorical
+frontier from the component data, but no field is inferred from Efimov's
+papers: the missing geometric realization/excision input remains the
+Douady--Hubbard/Yoccoz parameter--dynamical theorem. The checked root axiom
+set is unchanged.
+
 ## Validation
 
 Run:
