@@ -186,6 +186,23 @@ map is supplied, but no current theorem constructs it.
 
 **Axiom status: no axiom discharged.** The checked surface is unchanged.
 
+## Sixth ten-iteration proof round
+
+The sixth round is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_round6.md`.
+It tested polynomial-hull arguments, Riemann-map/equipotential crosscuts,
+winding-number and topological-degree obstructions, Loewner evolution,
+equipotential trees, Berkovich specialization, categorical `pi_0` base
+change, Runge extension of component probes, and an explicit test of replacing
+the frontier by its conditional carving theorem.
+
+These routes again stop at an exact parameter-side map, connected-fiber
+specialization, or an equivalent theorem. The current categorical bridge
+already proves the connected-image implication and the axiom collector
+confirms that the existence part is still absent.
+
+**Axiom status: no axiom discharged.** The checked surface is unchanged.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:
