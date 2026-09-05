@@ -131,6 +131,24 @@ The main next step is still to construct the exact-image parameter carving
 map, or an equivalent compatible outer/inner realization, without adding that
 existence statement as a replacement axiom.
 
+## Third ten-iteration proof round
+
+The third round is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_round3.md`.
+It tested ten different mechanisms: frozen-basis/local-connectedness limits,
+pure planar full-continuum intersection, finite-time outer orbit stages,
+escape-coordinate polynomial lemniscates, quasiconformal wringing,
+Teichmuller space, `K_0` probe extension, strong Mittag--Leffler inverse
+limits, Green-gradient deformation, and analytic continuation of separating
+probes.
+
+The formalization checks confirm that the available finite-stage limit
+theorems require connected stage intersections that are not established, while
+the quasiconformal, Teichmuller, and probe-continuation routes require the same
+exact parameter realization already exposed by
+`TopCatSurjectiveMorphism`. The frontier is therefore unchanged and the
+axiom-minimal target remains the connected-source carving map.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:
