@@ -31,6 +31,10 @@ those theories:
 * `FiniteEtaleKZeroProbe` is the finite-etale/component-level shadow of a
   degree-zero localizing invariant; its triviality is equivalent to
   connectedness for nonempty subsets of `ℂ`.
+* `DouadyHubbardYoccozCategoricalCarvingData` and
+  `DouadyHubbardYoccozCategoricalTheorem` express the parameter--dynamical
+  carving as a surjective morphism in `TopCat` and prove its connected-image
+  consequence.
 
 No field in this file is an axiom of the root theorem. The final theorem is
 only the standard connected-image implication from the carving datum.
@@ -182,6 +186,15 @@ structure PacmanRealization (T : DualizablePacmanTower) where
     ∀ n,
       realize (n + 1) ≅ T.transition n ⋙ realize n
 
+/-- The un-intersected parameter translate used by the
+    Douady--Hubbard/Yoccoz carving statement. -/
+def greenSublevelTranslateSet (c : ℂ) (n : ℕ) : Set ℂ :=
+  {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+
+/-- The Green-sublevel/Mandelbrot pullback as a parameter set. -/
+def greenSublevelIntersectionSet (c : ℂ) (n : ℕ) : Set ℂ :=
+  greenSublevelTranslateSet c n ∩ MandelbrotSet
+
 /-- The genuine dynamical bridge required to turn the abstract tower into
     the current parameter-frontier theorem. -/
 structure SpaceHolomorphicCarvingData (c : ℂ) (n : ℕ) where
@@ -189,13 +202,124 @@ structure SpaceHolomorphicCarvingData (c : ℂ) (n : ℕ) where
   map : ℂ → ℂ
   mapsTo :
     MapsTo map
-      {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
-      ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+      (greenSublevelTranslateSet c n)
+      (greenSublevelIntersectionSet c n)
   differentiableOn_map :
-    DifferentiableOn ℂ map {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+    DifferentiableOn ℂ map (greenSublevelTranslateSet c n)
   image_eq :
-    map '' {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} =
-      ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet)
+    map '' (greenSublevelTranslateSet c n) =
+      greenSublevelIntersectionSet c n
+
+/-- A surjective morphism in `TopCat` between subspaces of the parameter
+    plane. In the topological category, this is the concrete
+    regular-epimorphic part of a carving map that is needed for connectedness
+    transport. -/
+structure TopCatSurjectiveMorphism (S T : Set ℂ) where
+  hom : TopCat.of S ⟶ TopCat.of T
+  surjective : Function.Surjective hom.hom
+
+theorem isConnected_of_topCatSurjectiveMorphism
+    {S T : Set ℂ} (hS : IsConnected S)
+    (h : TopCatSurjectiveMorphism S T) :
+    IsConnected T := by
+  letI : ConnectedSpace S := Subtype.connectedSpace hS
+  have hT : ConnectedSpace T := by
+    rw [connectedSpace_iff_univ]
+    have hcontinuous : Continuous h.hom.hom :=
+      ContinuousMap.continuous_toFun h.hom.hom
+    have himage : IsConnected (Set.range h.hom.hom) := by
+      simpa only [Set.image_univ] using
+        (isConnected_univ.image h.hom.hom hcontinuous.continuousOn)
+    rw [h.surjective.range_eq] at himage
+    exact himage
+  exact isConnected_iff_connectedSpace.mpr hT
+
+/-- The categorical form of the Douady--Hubbard/Yoccoz carving datum:
+    a connected Green-sublevel source admits a surjective `TopCat` morphism
+    onto the Green-sublevel/Mandelbrot pullback. -/
+structure DouadyHubbardYoccozCategoricalCarvingData (c : ℂ) (n : ℕ) where
+  hc : c ∈ MandelbrotSet
+  carving :
+    TopCatSurjectiveMorphism
+      (greenSublevelTranslateSet c n)
+      (greenSublevelIntersectionSet c n)
+
+theorem isConnected_greenSublevelIntersection_of_douadyHubbardYoccozCarving
+    {c : ℂ} {n : ℕ}
+    (h : DouadyHubbardYoccozCategoricalCarvingData c n) :
+    IsConnected (greenSublevelIntersectionSet c n) :=
+  isConnected_of_topCatSurjectiveMorphism
+    (by simpa [greenSublevelTranslateSet] using
+      green_sublevel_translate_connected h.hc n)
+    h.carving
+
+def SpaceHolomorphicCarvingData.toDouadyHubbardYoccozCategoricalCarvingData
+    {c : ℂ} {n : ℕ} (h : SpaceHolomorphicCarvingData c n) :
+    DouadyHubbardYoccozCategoricalCarvingData c n := by
+  refine
+    { hc := h.hc
+      carving :=
+        { hom := TopCat.ofHom
+            { toFun := fun z : greenSublevelTranslateSet c n =>
+                ⟨h.map (z : ℂ), h.mapsTo z.property⟩
+              continuous_toFun := by
+                apply Continuous.subtype_mk
+                exact continuousOn_iff_continuous_restrict.mp
+                  h.differentiableOn_map.continuousOn }
+          surjective := ?_ } }
+  intro y
+  have hy : (y : ℂ) ∈ h.map '' greenSublevelTranslateSet c n := by
+    rw [h.image_eq]
+    exact y.property
+  rcases hy with ⟨x, hx, hxy⟩
+  refine ⟨⟨x, hx⟩, ?_⟩
+  exact Subtype.ext hxy
+
+/-- The categorical Douady--Hubbard/Yoccoz parameter--dynamical theorem,
+    restricted to the straddling pieces. -/
+def DouadyHubbardYoccozCategoricalTheorem : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+    ¬ greenSublevelTranslateSet c n ⊆ MandelbrotSet →
+      Nonempty (DouadyHubbardYoccozCategoricalCarvingData c n)
+
+theorem greenSublevelIntersectionCategoricalData_of_douadyHubbardYoccoz
+    (h : DouadyHubbardYoccozCategoricalTheorem) :
+    GreenSublevelIntersectionCategoricalData := by
+  intro c hc n hfactor
+  have hstraddle : ¬ greenSublevelTranslateSet c n ⊆ MandelbrotSet := by
+    intro hsub
+    apply hfactor
+    apply factorsThrough_ofSet_iff.mpr
+    simpa [greenSublevelTranslateSet, greenSublevelApproximation,
+      mandelbrotApproximation] using hsub
+  obtain ⟨hcarving⟩ := h c hc n hstraddle
+  have hconnected :=
+    isConnected_greenSublevelIntersection_of_douadyHubbardYoccozCarving hcarving
+  change IsConnected
+    (image (intersection (greenSublevelApproximation c n) mandelbrotApproximation))
+  rw [image_intersection]
+  simpa [greenSublevelTranslateSet, greenSublevelIntersectionSet,
+    greenSublevelApproximation, mandelbrotApproximation, image_ofSet] using
+    hconnected
+
+theorem douadyHubbardYoccozCategoricalTheorem_of_spaceHolomorphicCarving
+    (h :
+      ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+        ¬ greenSublevelTranslateSet c n ⊆ MandelbrotSet →
+          Nonempty (SpaceHolomorphicCarvingData c n)) :
+    DouadyHubbardYoccozCategoricalTheorem := by
+  intro c hc n hstraddle
+  obtain ⟨hcarving⟩ := h c hc n hstraddle
+  exact ⟨hcarving.toDouadyHubbardYoccozCategoricalCarvingData⟩
+
+theorem greenSublevelIntersectionCategoricalData_of_spaceHolomorphicCarving
+    (h :
+      ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+        ¬ greenSublevelTranslateSet c n ⊆ MandelbrotSet →
+          Nonempty (SpaceHolomorphicCarvingData c n)) :
+    GreenSublevelIntersectionCategoricalData :=
+  greenSublevelIntersectionCategoricalData_of_douadyHubbardYoccoz
+    (douadyHubbardYoccozCategoricalTheorem_of_spaceHolomorphicCarving h)
 
 /-- The finite-etale, degree-zero component probe of a space.
 
@@ -360,10 +484,6 @@ def GreenSublevelIntersectionFiniteEtaleKZeroPullbackData : Prop :=
       FiniteEtaleKZeroPullbackExcision
         (greenSublevelApproximation c n) mandelbrotApproximation
 
-/-- The parameter set whose connectedness is the current straddling frontier. -/
-def greenSublevelIntersectionSet (c : ℂ) (n : ℕ) : Set ℂ :=
-  {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet
-
 theorem greenSublevelIntersectionSet_nonempty {c : ℂ}
     (hc : c ∈ MandelbrotSet) (n : ℕ) :
     (greenSublevelIntersectionSet c n).Nonempty := by
@@ -379,7 +499,8 @@ theorem greenSublevelIntersectionCategoricalData_of_finiteEtaleKZeroPullbackData
   intro c hc n hstraddle
   apply imageConnected_intersection_of_finiteEtaleKZeroPullbackExcision
   · rw [image_intersection]
-    simpa [greenSublevelIntersectionSet, greenSublevelApproximation,
+    simpa [greenSublevelIntersectionSet, greenSublevelTranslateSet,
+      greenSublevelApproximation,
       mandelbrotApproximation, image_ofSet] using
       (greenSublevelIntersectionSet_nonempty hc n)
   · change IsConnected (image (greenSublevelApproximation c n))
@@ -420,15 +541,17 @@ theorem greenSublevelIntersectionSetData_iff_finiteEtaleKZeroData :
       GreenSublevelIntersectionFiniteEtaleKZeroData := by
   constructor
   · intro h c hc n hstraddle
-    exact
-      (isConnected_iff_finiteEtaleKZeroProbeTrivial
-        (greenSublevelIntersectionSet_nonempty hc n)).mp
-        (by simpa [greenSublevelIntersectionSet] using h c hc n hstraddle)
+    exact (isConnected_iff_finiteEtaleKZeroProbeTrivial
+      (greenSublevelIntersectionSet_nonempty hc n)).mp (by
+        simpa [greenSublevelIntersectionSet, greenSublevelTranslateSet] using
+          h c hc n hstraddle)
   · intro h c hc n hstraddle
-    exact
-      (isConnected_iff_finiteEtaleKZeroProbeTrivial
-        (greenSublevelIntersectionSet_nonempty hc n)).mpr
-        (h c hc n hstraddle)
+    have hstraddle' :
+        ¬ greenSublevelTranslateSet c n ⊆ MandelbrotSet := by
+      simpa [greenSublevelTranslateSet] using hstraddle
+    exact (isConnected_iff_finiteEtaleKZeroProbeTrivial
+      (greenSublevelIntersectionSet_nonempty hc n)).mpr
+      (h c hc n hstraddle')
 
 theorem greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroData :
     GreenSublevelIntersectionCategoricalData ↔
@@ -520,6 +643,7 @@ theorem isConnected_greenSublevel_inter_mandelbrot_of_spaceHolomorphicCarving
     {c : ℂ} {n : ℕ} (h : SpaceHolomorphicCarvingData c n) :
     IsConnected
       ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet) := by
+  change IsConnected (greenSublevelIntersectionSet c n)
   rw [← h.image_eq]
   exact
     (green_sublevel_translate_connected h.hc n).image h.map

@@ -221,6 +221,38 @@ realization, the restriction-surjectivity proof, or the
 Douady--Hubbard/Yoccoz carving theorem. The checked root axiom set therefore
 remains unchanged.
 
+## Categorical Douady--Hubbard/Yoccoz carving
+
+The geometric bridge is now expressed separately from the Efimov package in
+`Mlc/EfimovCategoricalBridge.lean`. A
+`TopCatSurjectiveMorphism S T` is a morphism
+`TopCat.of S ⟶ TopCat.of T` together with surjectivity of its underlying
+continuous map. Mathlib's connected-image theorem proves that such a morphism
+transports connectedness from `S` to `T`.
+
+`DouadyHubbardYoccozCategoricalCarvingData c n` specializes this construction
+to
+
+```text
+S = {c' | G_c(c' - c) < 2^(-n)}
+T = S ∩ MandelbrotSet.
+```
+
+`DouadyHubbardYoccozCategoricalTheorem` asserts the existence of this
+surjective `TopCat` morphism in the straddling case. The checked theorem
+`greenSublevelIntersectionCategoricalData_of_douadyHubbardYoccoz` proves that
+this categorical existence statement implies the current frontier. The
+constructor
+`SpaceHolomorphicCarvingData.toDouadyHubbardYoccozCategoricalCarvingData`
+shows that an actual space-holomorphic carving map supplies the categorical
+morphism, including continuity and surjectivity.
+
+This is a reformulation and proof of the categorical consequence, not a proof
+of the existence assertion. The latter remains the genuine
+Douady--Hubbard/Yoccoz parameter--dynamical theorem; neither Efimov's
+localizing-invariant results nor the current graded `K`-theory shadow
+constructs that morphism.
+
 ## Decision for the current Lean development
 
 The Efimov papers do not discharge

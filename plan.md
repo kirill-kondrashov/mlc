@@ -25,13 +25,17 @@
    connectedness of the Green-sublevel approximation and identifies the image
    of its pullback with the set intersection, but does not prove that the
    pullback is connected.
-2. The missing categorical theorem is a genuine carving result: construct a
-   connected parameter approximation and a morphism into the pullback whose
-   ambient image is the full straddling intersection. In dynamical terms this
-   is the Douady--Hubbard parameter--dynamical correspondence, or an
-   equivalent space-holomorphic motion of the puzzle boundary. Category
-   theory can transport connectedness once this morphism is constructed; it
-   cannot provide the morphism from the current base axioms.
+2. The missing categorical theorem is now formalized as
+   `DouadyHubbardYoccozCategoricalTheorem`: for every straddling piece,
+   construct a surjective morphism in `TopCat` from the connected translated
+   Green sublevel to the Green-sublevel/Mandelbrot pullback. The theorem
+   `greenSublevelIntersectionCategoricalData_of_douadyHubbardYoccoz` proves
+   the connected-image consequence. A constructor from
+   `SpaceHolomorphicCarvingData` shows that a genuine space-holomorphic
+   parameter carving supplies this categorical datum. The existence of that
+   morphism is still the Douady--Hubbard/Yoccoz parameter--dynamical
+   correspondence; category theory transports connectedness but does not
+   manufacture the morphism.
 3. Prove the residual categorical input by discharging its two product
    components: the pseudo-Siegel a priori bounds and the virtual
    near-Molecule interpolation problem. The product/limit wrapper is already
@@ -218,6 +222,34 @@ excision statement is equivalent to the original categorical frontier, an
 instance cannot be manufactured from the abstract Efimov tower fields alone.
 The remaining proof obligation is now isolated as a concrete conservative
 realization/excision theorem rather than an opaque connectedness declaration.
+
+## 2026-09-05 categorical Douady--Hubbard/Yoccoz reformulation
+
+The parameter--dynamical input is now stated in native categorical terms
+without claiming an unproved instance:
+
+- `TopCatSurjectiveMorphism S T` packages a continuous morphism
+  `TopCat.of S ⟶ TopCat.of T` together with surjectivity of its underlying
+  map.
+- `isConnected_of_topCatSurjectiveMorphism` proves that a surjective
+  `TopCat` morphism carries connected source subsets to connected target
+  subsets, using Mathlib's `ConnectedSpace` and `IsConnected.image` APIs.
+- `DouadyHubbardYoccozCategoricalCarvingData c n` specializes this to a
+  morphism from the translated Green sublevel to its Mandelbrot pullback.
+- `DouadyHubbardYoccozCategoricalTheorem` quantifies this carving datum over
+  all straddling parameters. Its connected-image theorem
+  `greenSublevelIntersectionCategoricalData_of_douadyHubbardYoccoz` derives
+  the current categorical frontier.
+- `SpaceHolomorphicCarvingData.toDouadyHubbardYoccozCategoricalCarvingData`
+  proves that the existing holomorphic carving interface implies the
+  categorical one, including continuity and surjectivity of the induced
+  `TopCat` morphism.
+
+The remaining unproved statement is precisely the existence field in
+`DouadyHubbardYoccozCategoricalTheorem`; it is not derivable from Efimov's
+strong-Mittag--Leffler or `K`-theory interfaces alone. The root axiom set is
+therefore unchanged and the new categorical theorem is a sound, strictly
+structured reduction of the analytic frontier.
 
 ## Validation
 

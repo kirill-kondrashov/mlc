@@ -110,6 +110,11 @@ parameter plane:
   restriction-surjectivity are exposed as explicit Efimov-inspired inputs;
   the latter is proved equivalent to the straddling connectedness statement,
   so it refines the frontier without disguising or adding an axiom.
+  The `DouadyHubbardYoccozCategoricalCarvingData` structure reformulates the
+  parameter--dynamical theorem as a surjective morphism in `TopCat` from the
+  connected Green-sublevel source to the pullback target, and
+  `greenSublevelIntersectionCategoricalData_of_douadyHubbardYoccoz` proves
+  that this categorical theorem implies the frontier.
 
 The categorical presentations are logically equivalent to the two existing
 frontier inputs; they do not discharge either open mathematical problem. A
@@ -129,6 +134,13 @@ remaining parameter-puzzle axiom. The stronger categorical statement
 identifies the same condition directly on the pullback in `TopCat / ℂ`.
 Efimov's results motivate the descent and excision interfaces, but do not
 prove their Mandelbrot realization fields.
+
+The categorical Douady--Hubbard/Yoccoz theorem is a proved reduction, not an
+unproved assertion: a surjective `TopCat` morphism from the connected
+translated Green sublevel yields connectedness of the pullback by the
+standard connected-image theorem. The existence of that morphism for the
+actual Mandelbrot pieces remains the analytic parameter--dynamical content;
+the repository does not claim to have proved that existence.
 
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
