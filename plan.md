@@ -82,6 +82,30 @@ conditional connected-image interface, but its exact-image field remains an
 explicit research obligation and must not be attributed to Yoccoz without the
 additional graph, motion, and phase--parameter hypotheses.
 
+## Ten-iteration frontier proof search
+
+The detailed proof attempts are recorded in
+`refs/green_sublevel_intersection_categorical_proof_attempts.md`. Ten routes
+were tried and revised:
+
+1. connectedness of the two factors;
+2. compact decreasing outer stages;
+3. increasing inner uniform-bound stages;
+4. finite detection of a separation by compactness;
+5. Green-function monotonicity;
+6. Böttcher/external-ray parametrization;
+7. classical Yoccoz parapuzzles;
+8. finite-etale `K₀` component detection;
+9. a regular epimorphism in `TopCat`;
+10. a two-sided outer/inner realization comparison.
+
+The exact formalized successes are the orbit-envelope limit identities and
+compactness in `Mlc/CategoricalMandelbrot.lean`, the `K₀`-shadow equivalence
+and excision reformulations in `Mlc/EfimovCategoricalBridge.lean`, and the
+surjective connected-image implication for categorical carving. The remaining
+existence/image equality is the same phase--parameter theorem in every
+presentation; no proof attempt reduced the checked axiom surface.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:

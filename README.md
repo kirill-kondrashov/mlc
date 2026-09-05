@@ -181,6 +181,13 @@ content. Since the current source is a full Green sublevel rather than a
 graph-cut parapuzzle, the repository does not claim that this existence field
 is supplied by the classical Yoccoz theorem.
 
+The ten-iteration proof search for the remaining frontier is recorded in
+[`refs/green_sublevel_intersection_categorical_proof_attempts.md`](refs/green_sublevel_intersection_categorical_proof_attempts.md).
+It formalizes the successful connected-image reduction and separately records
+why factor connectedness, outer/inner limits, Böttcher coordinates, classical
+Yoccoz parapuzzles, and finite-etale `K₀` descent do not by themselves supply
+the missing carving existence theorem.
+
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
 `2405.12169v3`, `2502.04123v2`, `2505.13260v2`, `2510.17010v1`, and
