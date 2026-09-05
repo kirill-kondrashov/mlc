@@ -203,6 +203,24 @@ confirms that the existence part is still absent.
 
 **Axiom status: no axiom discharged.** The checked surface is unchanged.
 
+## Seventh ten-iteration proof round
+
+The seventh round is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_round7.md`.
+It tested the universal filled-Julia incidence space, Hubbard-tree/regulated
+arc arguments, modulus bounds for separating annuli, semialgebraic orbit
+stages, monodromy, structural-stability strata, external-ray incidence,
+categorical `K_0` localization, universal polynomial-like families, and a
+formal dependency audit.
+
+The incidence, tree, modulus, and family routes all require a new exact
+parameter realization or finite-stage connectivity theorem. The existing
+`TopCatSurjectiveMorphism` and finite-etale interfaces formalize the
+connectedness transport once such data are supplied, but do not construct
+them.
+
+**Axiom status: no axiom discharged.** The checked surface is unchanged.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:
