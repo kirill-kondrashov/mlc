@@ -317,6 +317,49 @@ theorem finiteEtaleKZeroRestrictionSurjective_iff_isConnected
   · exact isConnected_of_finiteEtaleKZeroRestrictionSurjective hST hS hT
   · exact finiteEtaleKZeroRestrictionSurjective_of_isConnected hST
 
+/-! ### Categorical pullback criterion -/
+
+/-- Triviality of the finite-etale component probe of a categorical
+    approximation. -/
+def FiniteEtaleKZeroProbeTrivialApproximation (A : Approximation) : Prop :=
+  FiniteEtaleKZeroProbeTrivial (image A)
+
+theorem imageConnected_iff_finiteEtaleKZeroProbeTrivialApproximation
+    {A : Approximation} (hA : (image A).Nonempty) :
+    ImageConnected A ↔ FiniteEtaleKZeroProbeTrivialApproximation A := by
+  change IsConnected (image A) ↔ FiniteEtaleKZeroProbeTrivial (image A)
+  exact isConnected_iff_finiteEtaleKZeroProbeTrivial hA
+
+theorem image_intersection_subset_left (A B : Approximation) :
+    image (intersection A B) ⊆ image A := by
+  rw [image_intersection]
+  exact inter_subset_left
+
+/-- Relative finite-etale `K₀` excision for a pullback in `TopCat / ℂ`.
+
+    This is the component-level shadow of the vanishing of a relative
+    localizing invariant: every finite-etale probe on the pullback extends
+    along the left leg of the pullback. -/
+def FiniteEtaleKZeroPullbackExcision (A B : Approximation) : Prop :=
+  FiniteEtaleKZeroRestrictionSurjective
+    (image_intersection_subset_left A B)
+
+theorem imageConnected_intersection_of_finiteEtaleKZeroPullbackExcision
+    {A B : Approximation} (hnonempty : (image (intersection A B)).Nonempty)
+    (hA : ImageConnected A)
+    (hExc : FiniteEtaleKZeroPullbackExcision A B) :
+    ImageConnected (intersection A B) := by
+  change IsConnected (image (intersection A B))
+  exact isConnected_of_finiteEtaleKZeroRestrictionSurjective
+    (image_intersection_subset_left A B) hnonempty hA hExc
+
+/-- The target-specific pullback form of the finite-etale `K₀` input. -/
+def GreenSublevelIntersectionFiniteEtaleKZeroPullbackData : Prop :=
+  ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
+    ¬ factorsThrough (greenSublevelApproximation c n) mandelbrotApproximation →
+      FiniteEtaleKZeroPullbackExcision
+        (greenSublevelApproximation c n) mandelbrotApproximation
+
 /-- The parameter set whose connectedness is the current straddling frontier. -/
 def greenSublevelIntersectionSet (c : ℂ) (n : ℕ) : Set ℂ :=
   {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ∩ MandelbrotSet
@@ -329,6 +372,43 @@ theorem greenSublevelIntersectionSet_nonempty {c : ℂ}
   have h0 := Quadratic.green_sublevel_contains_0 c n hc
   change green_function c 0 < (1 / 2 : ℝ) ^ n at h0
   simpa [sub_self] using h0
+
+theorem greenSublevelIntersectionCategoricalData_of_finiteEtaleKZeroPullbackData
+    (h : GreenSublevelIntersectionFiniteEtaleKZeroPullbackData) :
+    GreenSublevelIntersectionCategoricalData := by
+  intro c hc n hstraddle
+  apply imageConnected_intersection_of_finiteEtaleKZeroPullbackExcision
+  · rw [image_intersection]
+    simpa [greenSublevelIntersectionSet, greenSublevelApproximation,
+      mandelbrotApproximation, image_ofSet] using
+      (greenSublevelIntersectionSet_nonempty hc n)
+  · change IsConnected (image (greenSublevelApproximation c n))
+    simpa [greenSublevelApproximation, image_ofSet] using
+      (green_sublevel_translate_connected hc n)
+  · exact h c hc n hstraddle
+
+theorem greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroPullbackData :
+    GreenSublevelIntersectionCategoricalData ↔
+      GreenSublevelIntersectionFiniteEtaleKZeroPullbackData := by
+  constructor
+  · intro h c hc n hstraddle
+    have hset :
+        ¬ ({c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n} ⊆ MandelbrotSet) := by
+      intro hsub
+      apply hstraddle
+      apply factorsThrough_ofSet_iff.mpr
+      simpa [greenSublevelApproximation, mandelbrotApproximation] using hsub
+    have hconn :=
+      (greenSublevelIntersectionCategoricalData_iff.mp h) c hc n hset
+    change FiniteEtaleKZeroRestrictionSurjective
+      (image_intersection_subset_left
+        (greenSublevelApproximation c n) mandelbrotApproximation)
+    apply finiteEtaleKZeroRestrictionSurjective_of_isConnected
+      (image_intersection_subset_left
+        (greenSublevelApproximation c n) mandelbrotApproximation)
+    simpa [image_intersection, greenSublevelApproximation,
+      mandelbrotApproximation, image_ofSet] using hconn
+  · exact greenSublevelIntersectionCategoricalData_of_finiteEtaleKZeroPullbackData
 
 def GreenSublevelIntersectionFiniteEtaleKZeroData : Prop :=
   ∀ (c : ℂ) (_hc : c ∈ MandelbrotSet) (n : ℕ),
@@ -398,15 +478,15 @@ theorem greenSublevelIntersectionCategoricalData_of_finiteEtaleKZeroExcision
   greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData.mpr h
 
 /-- A target-specific Efimov bridge can replace exact image carving by
-    finite-stage descent of the component-level `K₀` shadow. -/
+    relative finite-etale `K₀` excision on the categorical pullback. -/
 structure EfimovGreenSublevelKZeroBridge
     (T : DualizablePacmanTower) (K : PacmanKTheory T) [HasLimit K.values] where
   strongMittagLeffler : StrongMittagLefflerData T
   kTheoryMittagLeffler : KTheoryMittagLeffler K
   kTheoryLimit : KTheoryLimitComparison K
   realization : PacmanRealization T
-  componentDescent :
-    GreenSublevelIntersectionFiniteEtaleKZeroData
+  pullbackExcision :
+    GreenSublevelIntersectionFiniteEtaleKZeroPullbackData
 
 theorem greenSublevelIntersectionCategorical_of_efimovKZeroBridge
     {T : DualizablePacmanTower} {K : PacmanKTheory T} {c : ℂ} {n : ℕ}
@@ -417,8 +497,8 @@ theorem greenSublevelIntersectionCategorical_of_efimovKZeroBridge
     ImageConnected
       (intersection (greenSublevelApproximation c n) mandelbrotApproximation) := by
   have hcatData : GreenSublevelIntersectionCategoricalData :=
-    greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroData.mpr
-      h.componentDescent
+    greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroPullbackData.mpr
+      h.pullbackExcision
   apply hcatData c hc n
   intro hfactor
   apply hstraddle

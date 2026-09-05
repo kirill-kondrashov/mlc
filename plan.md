@@ -199,13 +199,25 @@ Two conditional Efimov interfaces are now available:
    is a faithful relative-excision reformulation, not a weaker proxy or a new
    opaque axiom.
 
-`EfimovGreenSublevelKZeroBridge` packages the existing rigid tower,
-strong-Mittag--Leffler, graded invariant, limit comparison, realization, and
-finite-stage component data. The bridge theorem derives the categorical
-frontier from the component data, but no field is inferred from Efimov's
-papers: the missing geometric realization/excision input remains the
-Douady--Hubbard/Yoccoz parameter--dynamical theorem. The checked root axiom
-set is unchanged.
+The generic categorical criterion
+`imageConnected_intersection_of_finiteEtaleKZeroPullbackExcision` derives
+connectedness of a pullback in `TopCat / ℂ` from source connectedness,
+nonemptiness, and relative probe-surjectivity. Its target-specialized form is
+the exact equivalence
+`greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroPullbackData`.
+`EfimovGreenSublevelKZeroBridge` now packages this pullback-excision input
+alongside the rigid tower, strong-Mittag--Leffler data, graded invariant,
+limit comparison, and realization. The bridge theorem derives the
+categorical frontier from the pullback-excision field, but no field is
+inferred from Efimov's papers: the missing geometric realization/excision
+input remains the Douady--Hubbard/Yoccoz parameter--dynamical theorem. The
+checked root axiom set is unchanged.
+
+This does not constitute an unconditional discharge: because the pullback
+excision statement is equivalent to the original categorical frontier, an
+instance cannot be manufactured from the abstract Efimov tower fields alone.
+The remaining proof obligation is now isolated as a concrete conservative
+realization/excision theorem rather than an opaque connectedness declaration.
 
 ## Validation
 

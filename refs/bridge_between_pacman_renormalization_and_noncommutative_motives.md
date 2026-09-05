@@ -208,9 +208,14 @@ Two Efimov-shaped obligations are exposed over this probe:
   `greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData`
   is an exact relative-excision reformulation, not a weaker substitute.
 
-`EfimovGreenSublevelKZeroBridge` packages this component data alongside the
-rigid tower, strong-Mittag--Leffler fields, graded invariant, limit comparison,
-and `TopCat` realization. The package sharpens the missing input but does not
+The generic theorem
+`imageConnected_intersection_of_finiteEtaleKZeroPullbackExcision` transports
+this criterion to pullbacks in `TopCat / \mathbb C`, and
+`greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroPullbackData`
+proves the target-specific equivalence. `EfimovGreenSublevelKZeroBridge`
+packages the pullback-excision input alongside the rigid tower,
+strong-Mittag--Leffler fields, graded invariant, limit comparison, and
+`TopCat` realization. The package sharpens the missing input but does not
 instantiate it: Efimov's papers still do not provide the Mandelbrot
 realization, the restriction-surjectivity proof, or the
 Douady--Hubbard/Yoccoz carving theorem. The checked root axiom set therefore

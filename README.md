@@ -124,8 +124,11 @@ detects exactly the obstruction relevant here: a nontrivial locally constant
 two-valued function is a clopen decomposition. The target-specific theorem
 `greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData`
 therefore gives a precise relative-localizing-invariant reformulation of the
-remaining parameter-puzzle axiom. Efimov's results motivate the descent and
-excision interfaces, but do not prove their Mandelbrot realization fields.
+remaining parameter-puzzle axiom. The stronger categorical statement
+`greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroPullbackData`
+identifies the same condition directly on the pullback in `TopCat / ℂ`.
+Efimov's results motivate the descent and excision interfaces, but do not
+prove their Mandelbrot realization fields.
 
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
