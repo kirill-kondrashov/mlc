@@ -170,6 +170,22 @@ Lean foundations plus
 `MLC.residualOpenVirtualNearMoleculeAxiom` and
 `MLC.green_sublevel_intersection_categorical`.
 
+## Fifth ten-iteration proof round
+
+The fifth round is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_round5.md`.
+It tested effective quotients/coequalizers, Stein factorization, monotone
+decompositions, pinched-disk models, polynomial-like moduli, covering-space
+lifts, categorical effective descent, Vietoris--Begle degree-zero invariants,
+renormalization coequalizers, and an exact dependency audit of the Lean root.
+
+All categorical and invariant-level routes still require an exact continuous
+image map from a connected source to the literal straddling intersection.
+The existing `TopCatSurjectiveMorphism` theorem proves the transport once that
+map is supplied, but no current theorem constructs it.
+
+**Axiom status: no axiom discharged.** The checked surface is unchanged.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:

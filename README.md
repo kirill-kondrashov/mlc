@@ -211,6 +211,13 @@ coverings, hyperbolic-component unions, filled-Julia semicontinuity,
 lamination quotients, shape theory, Mayer--Vietoris `K`-theory, Green-depth
 induction, and first-exit paths. **No axiom was discharged.**
 
+A fifth ten-iteration round is recorded in
+[`refs/green_sublevel_intersection_categorical_proof_attempts_round5.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round5.md).
+It tests effective quotients, Stein factorization, monotone decompositions,
+pinched-disk models, polynomial-like moduli, covering-space lifting,
+categorical descent, Vietoris--Begle degree-zero invariants, renormalization
+coequalizers, and a formal dependency audit. **No axiom was discharged.**
+
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
 `2405.12169v3`, `2502.04123v2`, `2505.13260v2`, `2510.17010v1`, and
