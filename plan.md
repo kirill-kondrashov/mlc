@@ -149,6 +149,27 @@ exact parameter realization already exposed by
 `TopCatSurjectiveMorphism`. The frontier is therefore unchanged and the
 axiom-minimal target remains the connected-source carving map.
 
+## Fourth ten-iteration proof round
+
+The fourth round is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_round4.md`.
+It tested parameter Green-potential level sets, finite kneading graphs,
+branched-covering arguments, hyperbolic-component unions, filled-Julia
+semicontinuity, lamination quotients, shape theory, Mayer--Vietoris
+`K`-theory, induction on Green depth, and first-exit path arguments.
+
+The round found no axiom-free discharge. Finite-stage methods still require
+connected finite-stage intersections; potential, shape, and homological
+methods require new parameter-plane information; and the dynamical
+functional equation does not preserve Mandelbrot membership under translation.
+The exact carving/realization map remains the smallest sufficient missing
+input.
+
+**Axiom status: no axiom discharged.** The checked surface remains the three
+Lean foundations plus
+`MLC.residualOpenVirtualNearMoleculeAxiom` and
+`MLC.green_sublevel_intersection_categorical`.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:

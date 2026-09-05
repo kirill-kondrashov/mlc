@@ -204,6 +204,13 @@ extension, strong Mittag--Leffler inverse limits, Green-gradient deformation,
 and analytic continuation of component probes. These routes likewise reduce
 to an exact parameter-carving map; none adds an unconditional theorem.
 
+A fourth ten-iteration round is recorded in
+[`refs/green_sublevel_intersection_categorical_proof_attempts_round4.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round4.md).
+It tests parameter-potential level sets, finite kneading graphs, branched
+coverings, hyperbolic-component unions, filled-Julia semicontinuity,
+lamination quotients, shape theory, Mayer--Vietoris `K`-theory, Green-depth
+induction, and first-exit paths. **No axiom was discharged.**
+
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
 `2405.12169v3`, `2502.04123v2`, `2505.13260v2`, `2510.17010v1`, and
