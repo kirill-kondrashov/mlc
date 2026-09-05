@@ -238,6 +238,24 @@ or effective descent hypotheses.
 
 **Axiom status: no axiom discharged.** The checked surface is unchanged.
 
+## Up-to-100 proof search
+
+The one-hundred-attempt report is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_100.md`.
+The attempts are grouped into ten batches covering planar continuum theory,
+potential/PDE methods, complex dynamics and renormalization, quasiconformal
+and Böttcher realization, finite orbit approximations, categorical descent,
+homology/shape/`K_0`, non-Archimedean and computational models, Lean-level
+audits, and hybrid exact-image constructions.
+
+The search stopped at attempt 100 without a discharge. It confirms the same
+minimal frontier: construct an exact continuous (preferably
+space-holomorphic) image map from the connected frozen Green source onto the
+literal straddling intersection, or prove an equivalent connected-stage and
+probe-descent theorem.
+
+**Axiom status: no axiom discharged.** The checked surface is unchanged.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:

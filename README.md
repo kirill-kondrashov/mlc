@@ -239,6 +239,13 @@ Thurston pullback contraction, extension of the near-infinity Böttcher family,
 stable-component gluing, locale descent, noncommutative `K_0`, and finite
 obstruction extraction. **No axiom was discharged.**
 
+An up-to-100-attempt proof search is recorded in
+[`refs/green_sublevel_intersection_categorical_proof_attempts_100.md`](refs/green_sublevel_intersection_categorical_proof_attempts_100.md).
+It records one hundred markdown/Lean reductions across planar topology,
+potential theory, renormalization, quasiconformal realization, finite
+approximations, categorical descent, homological invariants, non-Archimedean
+models, and direct axiom audits. **No axiom was discharged.**
+
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
 `2405.12169v3`, `2502.04123v2`, `2505.13260v2`, `2510.17010v1`, and
