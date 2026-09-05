@@ -188,6 +188,14 @@ why factor connectedness, outer/inner limits, Böttcher coordinates, classical
 Yoccoz parapuzzles, and finite-etale `K₀` descent do not by themselves supply
 the missing carving existence theorem.
 
+A second ten-iteration round is recorded in
+[`refs/green_sublevel_intersection_categorical_proof_attempts_round2.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round2.md).
+It tests continuum separation, proper maps, straightening, external-ray
+graphs, harmonic measure, renormalization inverse limits, prime ends,
+Alexander duality, finite-stage regular epimorphisms, and axiom-minimality.
+The result is the same: only the explicit connected-surjective carving
+implication is formalized; its existence remains the frontier.
+
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
 `2405.12169v3`, `2502.04123v2`, `2505.13260v2`, `2510.17010v1`, and

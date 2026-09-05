@@ -106,6 +106,31 @@ surjective connected-image implication for categorical carving. The remaining
 existence/image equality is the same phase--parameter theorem in every
 presentation; no proof attempt reduced the checked axiom surface.
 
+## Second ten-iteration proof round
+
+The second round is documented in
+`refs/green_sublevel_intersection_categorical_proof_attempts_round2.md`.
+It tried continuum separation, proper polynomial-like pullbacks, straightening
+families, external-ray graph cuts, harmonic measure, renormalization inverse
+limits, prime ends, Alexander duality, finite-stage regular epimorphisms, and a
+minimal continuous-surjection formulation. The last route is the exact
+formalized reduction already represented by
+`TopCatSurjectiveMorphism`.
+
+The CLI axiom check remains intentionally unchanged:
+
+```text
+Quot.sound
+propext
+Classical.choice
+MLC.residualOpenVirtualNearMoleculeAxiom
+MLC.green_sublevel_intersection_categorical
+```
+
+The main next step is still to construct the exact-image parameter carving
+map, or an equivalent compatible outer/inner realization, without adding that
+existence statement as a replacement axiom.
+
 ## Two-sided orbit approximation of the Mandelbrot object
 
 `Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:
