@@ -155,6 +155,23 @@ translated Green sublevel, and it requires an actual differentiable map and
 an exact image equality with the intersection. The module does not provide an
 instance of that data.
 
+There is an important model distinction. The full Green-sublevel tower is not
+the classical graph-cut Yoccoz puzzle tower. The checked theorem
+`iInter_green_sublevel_translate_eq_translate_filledJulia` proves
+
+```text
+⋂ n, {c' | G_c(c' - c) < 2^(-n)} = (fun z => z + c) '' K c.
+```
+
+Thus the frozen source tower retains a translated filled Julia set and does
+not generally shrink to the center parameter. Classical Yoccoz parapuzzles
+use ray/equipotential graphs and a phase--parameter construction; their
+finite-level connectivity results cannot be cited as an automatic proof of
+the stronger full-sublevel intersection axiom used here. Any future
+unconditional route must either prove a new carving theorem for this exact
+full-sublevel target or replace the source with a faithful graph-cut
+parapuzzle formalization.
+
 Efimov's results leave three independent bridges to be proved:
 
 1. **Model bridge.** Construct marked Pacman models, morphisms, spectral

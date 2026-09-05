@@ -26,9 +26,17 @@ MLC.mlc_conjecture : LocallyConnectedSpace MLC.mandelbrotSet
 
 is equivalent to it by `MLC.Categorical.mlc_conjecture_iff_categorical`.
 
-The parameter pieces used by the proof are
+The current frozen parameter neighborhoods are
 $A_n(c)=\{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}$ and
-$T_n(c)=A_n(c)\cap\mathcal M$.
+$T_n(c)=A_n(c)\cap\mathcal M$. They are a deliberately simplified
+Green-sublevel model, not the graph-cut Yoccoz parapuzzle pieces. The proved
+identity
+`iInter_green_sublevel_translate_eq_translate_filledJulia` shows that
+$\bigcap_n A_n(c)=c+K_c$, so this tower does not shrink to $c$ in general.
+The remaining frontier therefore should not be described as a direct proof of
+the classical Yoccoz theorem: it is a stronger/different finite-level
+intersection statement whose missing input is a genuine phase--parameter
+carving theorem (or a replacement by faithful graph-cut parapuzzles).
 
 ## Checked Lean state
 
@@ -72,7 +80,9 @@ All axioms used:
 - The dynamical Green sublevels $\{z:G_c(z)<2^{-n}\}$ are connected.
 - Translation identifies the frozen parameter pieces with those sublevels.
 - The subset stratum of $T_n(c)$ is connected without an axiom.
-- Yoccoz shrinking and the Molecule bridge assemble local connectivity.
+- The Yoccoz/Molecule interfaces are used only for the checked conditional
+  root assembly; the simplified Green-sublevel tower itself is not a faithful
+  shrinking Yoccoz tower.
 - Retained glue forwards to standard Mathlib/Yoccoz APIs, including
   `locallyConnectedSpace_iff_connected_subsets`, `Set.image_iInter`,
   `integral_biUnion_finset`, `modulus`, and `groetzsch_criterion`.
@@ -139,8 +149,10 @@ The categorical Douady--Hubbard/Yoccoz theorem is a proved reduction, not an
 unproved assertion: a surjective `TopCat` morphism from the connected
 translated Green sublevel yields connectedness of the pullback by the
 standard connected-image theorem. The existence of that morphism for the
-actual Mandelbrot pieces remains the analytic parameter--dynamical content;
-the repository does not claim to have proved that existence.
+actual Mandelbrot intersection remains the analytic parameter--dynamical
+content. Since the current source is a full Green sublevel rather than a
+graph-cut parapuzzle, the repository does not claim that this existence field
+is supplied by the classical Yoccoz theorem.
 
 The Efimov source inventory in
 [`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes

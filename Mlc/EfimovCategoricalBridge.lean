@@ -25,16 +25,16 @@ those theories:
 * `PacmanKTheory` records a graded additive-valued finite-level invariant.
 * `PacmanRealization` records a compatible realization into the existing
   topological over-category.
-* `SpaceHolomorphicCarvingData` is the genuine dynamical input: a connected
-  source, a space-holomorphic map, and an exact image identification with the
-  Green-sublevel/Mandelbrot intersection.
+* `SpaceHolomorphicCarvingData` is the genuine dynamical input for the current
+  frozen model: a connected source, a space-holomorphic map, and an exact image
+  identification with the full Green-sublevel/Mandelbrot intersection.
 * `FiniteEtaleKZeroProbe` is the finite-etale/component-level shadow of a
   degree-zero localizing invariant; its triviality is equivalent to
   connectedness for nonempty subsets of `ℂ`.
 * `DouadyHubbardYoccozCategoricalCarvingData` and
   `DouadyHubbardYoccozCategoricalTheorem` express the parameter--dynamical
-  carving as a surjective morphism in `TopCat` and prove its connected-image
-  consequence.
+  carving for that frozen model as a surjective morphism in `TopCat` and prove
+  its connected-image consequence.
 
 No field in this file is an axiom of the root theorem. The final theorem is
 only the standard connected-image implication from the carving datum.

@@ -10,8 +10,10 @@ It then identifies the frozen translated dynamical piece with the corresponding
 parameter translate and invokes only the explicitly labeled straddling
 parameter-connectivity frontier.
 
-The module contains only the parameter-puzzle identities and the labeled
-straddling frontier used by the checked root theorem.
+The module contains the frozen Green-translate identities and the labeled
+straddling frontier used by the checked root theorem. The frozen pieces are a
+simplified model and are not the graph-cut parapuzzles of the classical
+Yoccoz construction.
 -/
 
 namespace MLC
@@ -116,6 +118,45 @@ theorem green_sublevel_translate_connected {c : ℂ} (hc : c ∈ MandelbrotSet) 
   rw [← himg]
   exact hconn.image _ (continuous_id.add continuous_const).continuousOn
 
+/-! ### The full Green-sublevel tower is not a classical Yoccoz tower
+
+    Its intersection is the translate of the filled Julia set, rather than the
+    center parameter. This is why the remaining intersection axiom should not
+    be presented as a direct citation of the classical parapuzzle theorem. -/
+
+/-- The nested full Green sublevels converge exactly to the translated filled
+    Julia set. In particular, these full sublevels are not the shrinking
+    graph-cut Yoccoz puzzle pieces. -/
+theorem iInter_green_sublevel_translate_eq_translate_filledJulia (c : ℂ) :
+    (⋂ n, {c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}) =
+      (fun z => z + c) '' Quadratic.K c := by
+  ext c'
+  constructor
+  · intro hc'
+    have hle : ∀ n, green_function c (c' - c) ≤ (1 / 2 : ℝ) ^ n := by
+      intro n
+      exact le_of_lt (Set.mem_iInter.mp hc' n)
+    have hgreen : green_function c (c' - c) = 0 := by
+      have hnonneg : 0 ≤ green_function c (c' - c) :=
+        green_function_nonneg c (c' - c)
+      by_contra hne
+      have hpos : 0 < green_function c (c' - c) :=
+        lt_of_le_of_ne hnonneg (Ne.symm hne)
+      obtain ⟨N, hN⟩ : ∃ N : ℕ, (1 / 2 : ℝ) ^ N < green_function c (c' - c) := by
+        have h_tendsto : Tendsto (fun n : ℕ => (1 / 2 : ℝ) ^ n) atTop (𝓝 0) :=
+          tendsto_pow_atTop_nhds_zero_of_lt_one (by norm_num) (by norm_num)
+        exact ((tendsto_order.1 h_tendsto).2 (green_function c (c' - c)) hpos).exists
+      exact not_lt_of_ge (hle N) hN
+    have hK : c' - c ∈ Quadratic.K c :=
+      (green_function_eq_zero_iff_mem_K c (c' - c)).1 hgreen
+    exact ⟨c' - c, hK, by ring⟩
+  · rintro ⟨z, hz, rfl⟩
+    refine Set.mem_iInter.mpr ?_
+    intro n
+    change green_function c ((z + c) - c) < (1 / 2 : ℝ) ^ n
+    rw [add_sub_cancel_right, (green_function_eq_zero_iff_mem_K c z).2 hz]
+    positivity
+
 
 /-! ### Elementary containment fragment (no frontier axiom)
 
@@ -136,23 +177,25 @@ theorem green_sublevel_translate_inter_mandelbrot_connected_of_subset {c : ℂ}
   exact green_sublevel_translate_connected hc n
 
 /-- **Weaker frontier axiom: straddling stratum only.** The connectivity of a
-    Yoccoz parameter-puzzle piece intersected with `M`, *restricted* to the
-    non-trivial case where the Green-sublevel translate is **not** contained in `M`.
+    full Green-sublevel translate intersected with `M`, *restricted* to the
+    non-trivial case where the Green-sublevel translate is **not** contained in
+    `M`.
 
     This is a strictly weaker statement than the previous
     `green_sublevel_translate_inter_mandelbrot_connected` axiom: it carries the
     extra hypothesis `hstraddle` and therefore no longer asserts anything on the
     subset stratum (which is now discharged unconditionally by
-    `green_sublevel_translate_inter_mandelbrot_connected_of_subset`). The residual
-    mathematical content is exactly the Douady–Hubbard parameter↔dynamical
-    correspondence for pieces whose equipotential boundary crosses `∂M` — i.e.
-    Yoccoz's theorem for finitely renormalizable parameters.
+    `green_sublevel_translate_inter_mandelbrot_connected_of_subset`). The
+    residual mathematical content is an exact phase--parameter realization for
+    the full Green-sublevel target. Classical Yoccoz parapuzzles use additional
+    ray/equipotential graph data, so this axiom is not identified with the
+    finite-level Yoccoz theorem.
 
     ## Frontier-axiom status (labeled; honest)
 
-    The remaining full discharge is the Douady–Hubbard
-    parameter↔dynamical correspondence for the straddling pieces, for example
-    through a genuine holomorphic motion whose image is the concrete
+    The remaining full discharge is a Douady--Hubbard-style
+    parameter↔dynamical correspondence for the straddling full sublevels, for
+    example through a genuine holomorphic motion whose image is the concrete
     parameter intersection. That research-scale input is retained as this
     labeled frontier axiom. -/
 axiom green_sublevel_intersection_categorical :

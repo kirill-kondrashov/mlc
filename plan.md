@@ -44,6 +44,44 @@
    properties are stated through categorical cones and morphisms, with the
    existing set lemmas used only as proved equivalence bridges.
 
+## Model correction: full Green sublevels versus Yoccoz parapuzzles
+
+The current source
+
+```lean
+{c' | green_function c (c' - c) < (1 / 2 : ℝ) ^ n}
+```
+
+is the translate of the **entire** dynamical Green sublevel. It is connected
+for `c ∈ MandelbrotSet`, but it is not the classical graph-cut Yoccoz puzzle
+piece. The new theorem
+
+```lean
+iInter_green_sublevel_translate_eq_translate_filledJulia
+```
+
+proves
+
+```text
+⋂ n, {c' | G_c(c' - c) < 2^(-n)} = (fun z => z + c) '' K c.
+```
+
+Thus this tower generally retains a translated filled Julia set and does not
+shrink to the center parameter. The remaining straddling axiom is consequently
+not a direct formalization of the usual finite-level Yoccoz parapuzzle theorem.
+The sound next choices are:
+
+1. prove the current full-sublevel intersection theorem directly from a new
+   phase--parameter realization result; or
+2. introduce genuine graph-cut dynamical and parameter parapuzzles, prove their
+   carving/properness theorem, and use those pieces for the local-connectivity
+   root.
+
+The existing `DouadyHubbardYoccozCategoricalCarvingData` is still a valid
+conditional connected-image interface, but its exact-image field remains an
+explicit research obligation and must not be attributed to Yoccoz without the
+additional graph, motion, and phase--parameter hypotheses.
+
 ## Efimov/Pacman assessment
 
 The TeX sources for Efimov's five relevant papers are stored in
