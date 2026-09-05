@@ -82,6 +82,58 @@ conditional connected-image interface, but its exact-image field remains an
 explicit research obligation and must not be attributed to Yoccoz without the
 additional graph, motion, and phase--parameter hypotheses.
 
+## Two-sided orbit approximation of the Mandelbrot object
+
+`Mlc/CategoricalMandelbrot.lean` now contains a separate two-sided envelope:
+
+```lean
+innerOrbitSet N :=
+  {c | ∀ n, ‖orbit c 0 n‖ ≤ (N : ℝ)}
+
+outerOrbitSet N :=
+  {c | ‖c‖ ≤ 2 ∧ ∀ n ≤ N, ‖orbit c 0 n‖ ≤ 2}
+```
+
+The inner system is increasing and exhausts `M`:
+
+```lean
+⋃ N, innerOrbitSet N = MandelbrotSet
+```
+
+because every bounded orbit has a real bound and hence a natural bound above
+it. The outer system is decreasing, each stage is compact, and
+
+```lean
+⋂ N, outerOrbitSet N = MandelbrotSet
+```
+
+by the Molecule repository's `Molecule.mandelbrot_eq_inter` characterization
+and its universal parameter-disk bound. The corresponding categorical
+approximations are connected to the Mandelbrot object by explicit finite-stage
+morphisms:
+
+```text
+innerOrbitApproximation N  --->  setApproximation
+setApproximation              --->  outerOrbitApproximation N
+```
+
+This is not a rewrapping of the existing Green/puzzle API. It separates
+finite-time nonescape observations from uniform bounded-orbit witnesses and
+gives two independent limit presentations of `M`. It is the intended base for
+a later outer/inner realization comparison: a proposed categorical or
+phase--parameter construction must map into the outer stages and eventually
+land in an inner stage, rather than choosing `M` itself as a vacuous source.
+
+The generic transfer lemmas
+`TwoSidedSetApproximation.isConnected_of_inner` and
+`TwoSidedSetApproximation.isPreconnected_of_outer` make the future obligations
+explicit. To obtain connectedness from the inner side, it is enough to prove
+connectedness of every increasing uniform-bound stage and exhibit their common
+base point. To obtain preconnectedness from the outer side, it is enough to
+prove preconnectedness of every compact finite-prefix enclosure; the decreasing
+compact-intersection theorem then applies. Neither condition is currently
+claimed for the actual stages, so no new project axiom has been introduced.
+
 ## Efimov/Pacman assessment
 
 The TeX sources for Efimov's five relevant papers are stored in

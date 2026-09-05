@@ -103,8 +103,8 @@ parameter plane:
 - `Mlc/CategoricalRoot.lean` defines the categorical MLC object, root theorem,
   and equivalence with the compatibility theorem.
 - `Mlc/CategoricalMandelbrot.lean` gives the boundary, interior, ordinary
-  subspace presentations, a deliberately finer boundary topology, and the
-  parameter-puzzle tower.
+  subspace presentations, a deliberately finer boundary topology, the
+  parameter-puzzle tower, and a two-sided orbit approximation of `M`.
 - `Mlc/CategoricalResidual.lean` presents the two residual renormalization
   inputs as a binary product in `Type`.
 - `Mlc/EfimovCategoricalBridge.lean` records an honest conditional
@@ -132,6 +132,33 @@ frontier inputs; they do not discharge either open mathematical problem. A
 interface in `Mlc/EfimovCategoricalBridge.lean`; Mathlib does not currently
 provide the stable infinity-categorical or algebraic `K`-theory machinery
 needed to instantiate it.
+
+The same `CategoricalMandelbrot` module contains a nontrivial two-sided
+approximation envelope:
+
+- `innerOrbitSet N` consists of parameters whose entire critical orbit is
+  bounded by the single natural witness `N`; these sets increase with `N` and
+  satisfy `⋃ N, innerOrbitSet N = M` directly from `boundedOrbit`.
+- `outerOrbitSet N` consists of parameters in the universal disk
+  `‖c‖ ≤ 2` whose first `N` critical-orbit observations stay within radius
+  `2`; these compact sets decrease with `N` and satisfy
+  `⋂ N, outerOrbitSet N = M` using `Molecule.mandelbrot_eq_inter`.
+- `innerOrbitApproximation N` and `outerOrbitApproximation N` are their
+  objects in `Over (TopCat.of ℂ)`. For every `N`, explicit morphisms give the
+  sandwich `innerOrbitApproximation N → M → outerOrbitApproximation N`.
+- `TwoSidedSetApproximation.isConnected_of_inner` and
+  `TwoSidedSetApproximation.isPreconnected_of_outer` expose the two genuine
+  finite-stage routes: connected increasing inner stages, or compact
+  preconnected decreasing outer stages. The repository does not assume either
+  finite-stage property, so these are proof interfaces rather than hidden
+  replacements for the frontier axiom.
+
+The limit identities are proved rather than postulated:
+`iUnion_innerOrbitSet_eq_set` and `iInter_outerOrbitSet_eq_set`. This is a
+separate orbit-envelope layer from the simplified Green-sublevel tower: it
+provides finite dynamical observations on the outer side and finite uniform
+bound witnesses on the inner side, so later phase--parameter or K-theoretic
+arguments can be attached to a genuine two-sided system.
 
 The finite-etale probe is intentionally a topological shadow rather than a
 claim that Mathlib already contains continuous algebraic `K`-theory. It
