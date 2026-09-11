@@ -5,56 +5,61 @@
 [Dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
 This repository contains a compact Lean 4 formalization of the Mandelbrot
-local-connectivity conjecture, conditional on two explicit categorical inputs.
+local-connectivity conjecture with an explicit repaired root input and no
+replacement axioms.
 
 ## Target
 
 For $c,z\in\mathbb C$, write $f_c(z)=z^2+c$ and let $\mathcal M$ be the
-Mandelbrot set. The canonical root theorem is categorical:
+Mandelbrot set. The sound repaired root theorem is categorical:
 
 ```lean
 MLC.Categorical.categorical_mlc_conjecture :
-  MLC.Categorical.MLCConjecture
+  MLC.RootInput →
+    MLC.Categorical.MLCConjecture
 ```
 
 Here `MLC.Categorical.MLCConjecture` is local connectedness of the object
 `TopCat.of MLC.mandelbrotSet`. The compatibility theorem
 
 ```lean
-MLC.mlc_conjecture : LocallyConnectedSpace MLC.mandelbrotSet
+MLC.mlc_conjecture :
+  MLC.RootInput →
+    LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
 is equivalent to it by `MLC.Categorical.mlc_conjecture_iff_categorical`.
 
-The current frozen parameter neighborhoods are
-$A_n(c)=\{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}$ and
-$T_n(c)=A_n(c)\cap\mathcal M$. They are a deliberately simplified
-Green-sublevel model, not the graph-cut Yoccoz parapuzzle pieces. The proved
-identity
-`iInter_green_sublevel_translate_eq_translate_filledJulia` shows that
-$\bigcap_n A_n(c)=c+K_c$, so this tower does not shrink to $c$ in general.
-The remaining frontier therefore should not be described as a direct proof of
-the classical Yoccoz theorem: it is a stronger/different finite-level
-intersection statement whose missing input is a genuine phase--parameter
-carving theorem (or a replacement by faithful graph-cut parapuzzles).
+The frozen parameter neighborhoods
+$A_n(c)=\{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}$ are a deliberately simplified
+Green-sublevel model, not graph-cut Yoccoz parapuzzle pieces. They do not
+shrink to $c$: `iInter_green_sublevel_translate_eq_translate_filledJulia`
+identifies their intersection with $c+K_c$, and
+`Mlc/ModelRegression.lean` records the resulting non-shrinking theorem. The
+universal Green-sublevel/Mandelbrot intersection axiom is therefore removed
+from the supported theory after the counterexample in
+[`refs/green_sublevel_intersection_categorical_counterexample.md`](refs/green_sublevel_intersection_categorical_counterexample.md).
+
+The replacement uses connected components of metric balls together with the
+finite outer approximations `Categorical.Mandelbrot.outerOrbitSet`. The
+theorem `ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer`
+proves local connectedness from the explicit
+`ParameterComponent.MandelbrotUniformOuterBuffer` hypothesis. No inhabitant
+of that hypothesis is currently claimed.
+
+The refutation is now also formalized: `MLC.not_greenSublevelIntersectionCategoricalData`
+uses the exact 298-cell interval certificate from the counterexample reference
+and depends only on Lean foundations. Thus the old frontier is explicitly
+known to be incompatible with the repository's frozen definitions.
 
 ## Checked Lean state
 
-Both root formulations are `sorry`-free and use the same project-level axioms:
+The repaired root theorems are `sorry`-free. Their theorem argument is the
+explicit `MLC.RootInput` proposition; it is not hidden as a project axiom. The
+formal counterexample proves that the old Green-intersection frontier is
+incompatible with the repository's definitions.
 
-1. `MLC.green_sublevel_intersection_categorical`:
-   connectedness of $T_n(c)$ in the genuine straddling case
-   $A_n(c)\not\subseteq\mathcal M$.
-2. `MLC.residualOpenVirtualNearMoleculeAxiom`: a categorical product witness
-   for the root-facing conjunction of Dudko--Lyubich Problems 4.3 and 4.4
-   (pseudo-Siegel bounds and the virtual near-Molecule classification).
-
-The categorical parameter input is equivalent to its old set-theoretic form by
-`greenSublevelIntersectionCategoricalData_iff`. The residual product input is
-equivalent to the original conjunction by
-`categoricalResidualOpenVirtualNearMoleculeData_iff`.
-
-The remaining reported axioms are Lean foundations:
+The repaired route and counterexample use only Lean foundations:
 
 ```text
 Quot.sound
@@ -67,12 +72,13 @@ Expected `make check` output:
 ```text
 ✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
 All axioms used:
-- Quot.sound
 - propext
+- Quot.sound
 - Classical.choice
-- MLC.residualOpenVirtualNearMoleculeAxiom
-- MLC.green_sublevel_intersection_categorical
 ```
+
+The checker then reports that the root theorems require `MLC.RootInput` and
+audits the foundation-only counterexample.
 
 ## Proved core
 
@@ -80,16 +86,17 @@ All axioms used:
 - The dynamical Green sublevels $\{z:G_c(z)<2^{-n}\}$ are connected.
 - Translation identifies the frozen parameter pieces with those sublevels.
 - The subset stratum of $T_n(c)$ is connected without an axiom.
-- The Yoccoz/Molecule interfaces are used only for the checked conditional
-  root assembly; the simplified Green-sublevel tower itself is not a faithful
-  shrinking Yoccoz tower.
+- Components of metric balls are connected, and the component/outer-buffer
+  reduction is proved without a project-level frontier axiom.
+- The simplified Green-sublevel tower itself is not a faithful shrinking
+  Yoccoz tower.
 - Retained glue forwards to standard Mathlib/Yoccoz APIs, including
   `locallyConnectedSpace_iff_connected_subsets`, `Set.image_iInter`,
   `integral_biUnion_finset`, `modulus`, and `groetzsch_criterion`.
 
-`check_axioms.lean` checks both `MLC.mlc_conjecture` and
-`MLC.Categorical.categorical_mlc_conjecture` and requires identical axiom
-frontiers. The complete checked Lean source pass is warning-free.
+`check_axioms.lean` checks both repaired root theorems and the counterexample
+against the foundational frontier. The complete checked Lean source pass is
+warning-free.
 
 ## Categorical migration
 
@@ -100,13 +107,24 @@ parameter plane:
   objects of `Over (TopCat.of ℂ)`, the over-category over $\mathbb C$,
   intersections as categorical pullbacks, and
   nested approximations as opposite-indexed diagrams with a universal limit.
-- `Mlc/CategoricalRoot.lean` defines the categorical MLC object, root theorem,
-  and equivalence with the compatibility theorem.
+- `Mlc/CategoricalRoot.lean` defines the categorical MLC object, the
+  `RootInput` structure, the repaired categorical root theorem, and its
+  equivalence with the compatibility target.
 - `Mlc/CategoricalMandelbrot.lean` gives the boundary, interior, ordinary
   subspace presentations, a deliberately finer boundary topology, the
   parameter-puzzle tower, and a two-sided orbit approximation of `M`.
 - `Mlc/CategoricalResidual.lean` presents the two residual renormalization
   inputs as a binary product in `Type`.
+- `Mlc/ParameterComponentApproximation.lean` defines dyadic metric-ball
+  components, proves the component/outer-buffer local-connectedness
+  reduction, and instantiates it for the finite outer critical-orbit
+  approximations of the Mandelbrot set.
+- `Mlc/ModelRegression.lean` records that the frozen Green tower does not
+  shrink to its center and that the imported Gaussian weighted-area proxy is
+  summable.
+- `Mlc/GreenSublevelIntersectionCounterexample.lean` formalizes the finite
+  interval certificate, the horizontal separation argument, and the
+  foundation-only negation of the frozen Green-intersection datum.
 - `Mlc/EfimovCategoricalBridge.lean` records an honest conditional
   Efimov/Pacman interface: rigid monoidal tower levels with adjunctions,
   strong Mittag--Leffler data, a graded additive `K_n` shadow with an explicit
@@ -268,6 +286,7 @@ make check
 | Public root | [`Mlc.lean`](Mlc.lean) |
 | Categorical root | [`Mlc/CategoricalRoot.lean`](Mlc/CategoricalRoot.lean) |
 | Compatibility root | [`Mlc/Core.lean`](Mlc/Core.lean) |
+| Repaired outer-buffer input | [`Mlc/ParameterComponentApproximation.lean`](Mlc/ParameterComponentApproximation.lean) |
 | Parameter frontier | [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean) |
 | Green-sublevel proof | [`Mlc/GreenSublevelConnectedDirect.lean`](Mlc/GreenSublevelConnectedDirect.lean) |
 | Molecule bridge | [`Mlc/MoleculeToParameterShrink.lean`](Mlc/MoleculeToParameterShrink.lean) |

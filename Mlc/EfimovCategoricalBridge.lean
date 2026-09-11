@@ -34,7 +34,9 @@ those theories:
 * `DouadyHubbardYoccozCategoricalCarvingData` and
   `DouadyHubbardYoccozCategoricalTheorem` express the parameter--dynamical
   carving for that frozen model as a surjective morphism in `TopCat` and prove
-  its connected-image consequence.
+  its connected-image consequence. These are conditional interfaces only:
+  the universal frozen Green-sublevel carving statement is refuted by the
+  counterexample reference and is not imported by the root theorem.
 
 No field in this file is an axiom of the root theorem. The final theorem is
 only the standard connected-image implication from the carving datum.

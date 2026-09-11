@@ -1,74 +1,94 @@
 import Mlc.Core
+import Mlc.GreenSublevelIntersectionCounterexample
 import Lean
 
 open Lean Meta
 
 def main : IO UInt32 := do
   initSearchPath (← findSysroot)
-  let env ← importModules #[{ module := `Mlc.Core }] {}
-  
+  let env ← importModules #[
+    { module := `Mlc.Core },
+    { module := `Mlc.GreenSublevelIntersectionCounterexample }
+  ] {}
+
   let name := ``MLC.mlc_conjecture
   let categoricalName := ``MLC.Categorical.categorical_mlc_conjecture
-  
-  let coreContext : Core.Context := { fileName := "<check_axioms>", fileMap := default }
+  let negationName := ``MLC.not_greenSublevelIntersectionCategoricalData
+  let expectedAxioms : List Name :=
+    [``Quot.sound, ``propext, ``Classical.choice]
+
+  let coreContext : Core.Context :=
+    { fileName := "<check_axioms>", fileMap := default }
   let coreState : Core.State := { env := env }
-  
-  let metaM : MetaM (Array Name × Array Name) := do
+
+  let rootMetaM : MetaM (Array Name × Array Name) := do
     let rootAxioms ← Lean.collectAxioms name
     let categoricalAxioms ← Lean.collectAxioms categoricalName
     pure (rootAxioms, categoricalAxioms)
-  let expectedAxioms : List Name :=
-   [``Quot.sound, ``propext, ``Classical.choice,
-    ``MLC.green_sublevel_intersection_categorical,
-    ``MLC.residualOpenVirtualNearMoleculeAxiom]
-  
+  let negationMetaM : MetaM (Array Name) :=
+    Lean.collectAxioms negationName
+
   try
     let (((axioms, categoricalAxioms), _), _) ←
-      (metaM.run).run coreContext coreState |>.toIO (fun _ => IO.userError "Axiom check failed")
+      (rootMetaM.run).run coreContext coreState |>.toIO
+        (fun _ => IO.userError "Axiom check failed")
+    let ((negationAxioms, _), _) ←
+      (negationMetaM.run).run coreContext coreState |>.toIO
+        (fun _ => IO.userError "Negation axiom check failed")
+
     let axiomsList := axioms.toList
     let categoricalAxiomsList := categoricalAxioms.toList
-    let hasSorry := axioms.contains ``sorryAx
-    let unexpected := axiomsList.filter (fun ax => !(expectedAxioms.contains ax))
-    let missing := expectedAxioms.filter (fun ax => !(axiomsList.contains ax))
-    let categoricalHasSorry := categoricalAxioms.contains ``sorryAx
-    let categoricalUnexpected :=
-      categoricalAxiomsList.filter (fun ax => !(expectedAxioms.contains ax))
-    let categoricalMissing :=
-      expectedAxioms.filter (fun ax => !(categoricalAxiomsList.contains ax))
+    let negationAxiomsList := negationAxioms.toList
+    let unexpected (actual : List Name) :=
+      actual.filter (fun ax => !(expectedAxioms.contains ax))
+    let missing (actual : List Name) :=
+      expectedAxioms.filter (fun ax => !(actual.contains ax))
     let sameAxiomSet :=
       axiomsList.all (fun ax => categoricalAxioms.contains ax) &&
         categoricalAxiomsList.all (fun ax => axioms.contains ax)
-    
-    if hasSorry then
+    let rootViolation :=
+      !(unexpected axiomsList).isEmpty ||
+        !(missing axiomsList).isEmpty ||
+        !(unexpected categoricalAxiomsList).isEmpty ||
+        !(missing categoricalAxiomsList).isEmpty ||
+        !sameAxiomSet ||
+        axioms.contains ``sorryAx ||
+        categoricalAxioms.contains ``sorryAx
+    let negationViolation :=
+      !(unexpected negationAxiomsList).isEmpty ||
+        !(missing negationAxiomsList).isEmpty ||
+        negationAxioms.contains ``sorryAx
+
+    if axioms.contains ``sorryAx then
       IO.println s!"❌ The proof of '{name}' relies on 'sorry'!"
     else
       IO.println s!"✅ The proof of '{name}' is free of 'sorry'."
-    
+
     IO.println "All axioms used:"
     for ax in axiomsList do
       IO.println s!"- {ax}"
-    
-    if hasSorry || categoricalHasSorry then
-      return (1 : UInt32)
-    else if !unexpected.isEmpty || !missing.isEmpty ||
-        !categoricalUnexpected.isEmpty || !categoricalMissing.isEmpty || !sameAxiomSet then
+
+    IO.println
+      "The root theorems require the explicit `MLC.RootInput` hypothesis."
+    if negationAxioms.contains ``sorryAx then
+      IO.println s!"❌ The proof of '{negationName}' relies on 'sorry'!"
+    else
+      IO.println s!"✅ The proof of '{negationName}' is free of 'sorry'."
+
+    if rootViolation || negationViolation then
       IO.println "❌ Axiom frontier violation for `MLC.mlc_conjecture`."
-      if !unexpected.isEmpty then
-        IO.println "Unexpected axioms:"
-        for ax in unexpected do
-          IO.println s!"- {ax}"
-      if !missing.isEmpty then
-        IO.println "Missing required axioms:"
-        for ax in missing do
-          IO.println s!"- {ax}"
-      if !categoricalUnexpected.isEmpty then
-        IO.println "Unexpected categorical-root axioms:"
-        for ax in categoricalUnexpected do
-          IO.println s!"- {ax}"
-      if !categoricalMissing.isEmpty then
-        IO.println "Missing categorical-root axioms:"
-        for ax in categoricalMissing do
-          IO.println s!"- {ax}"
+      for ax in unexpected axiomsList do
+        IO.println s!"- Unexpected axiom: {ax}"
+      for ax in missing axiomsList do
+        IO.println s!"- Missing required axiom: {ax}"
+      for ax in unexpected categoricalAxiomsList do
+        IO.println s!"- Unexpected categorical-root axiom: {ax}"
+      for ax in missing categoricalAxiomsList do
+        IO.println s!"- Missing categorical-root axiom: {ax}"
+      for ax in unexpected negationAxiomsList do
+        IO.println s!"- Unexpected negation axiom: {ax}"
+      for ax in missing negationAxiomsList do
+        IO.println s!"- Missing negation axiom: {ax}"
       if !sameAxiomSet then
         IO.println "❌ The categorical root and compatibility root use different axiom sets."
       return (1 : UInt32)
