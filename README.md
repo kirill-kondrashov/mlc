@@ -151,6 +151,36 @@ interface in `Mlc/EfimovCategoricalBridge.lean`; Mathlib does not currently
 provide the stable infinity-categorical or algebraic `K`-theory machinery
 needed to instantiate it.
 
+## Combinatorial limits, classification, and flow interfaces
+
+The implementation of
+[`refs/mandelbrot_combinatorial_limit_and_flow_program.md`](refs/mandelbrot_combinatorial_limit_and_flow_program.md)
+is split into proved certificate interfaces and explicitly retained
+obligations:
+
+- `Mlc/CertifiedOrbitApproximation.lean` defines finite compact-cell outer
+  stages and proves their nested compact limit is the Mandelbrot set. The
+  exact finite-orbit stages are supplied as a verified one-cell baseline;
+  cubical, interval, or CAD cell generators must still provide their
+  certificate fields.
+- `Mlc/CertifiedTrappingRegions.lean` defines rational-box forward-trapping
+  certificates and proves that certified inner boxes lie in the Mandelbrot
+  set. `InnerDensity` remains an explicit proposition and is not assumed.
+- `Mlc/ParameterClassification.lean` proves an exhaustive priority
+  classification interface, including first escape times outside the
+  Mandelbrot set. The residual class is retained rather than declared empty.
+- `Mlc/ParameterAddressSpace.lean` proves compact nested address
+  intersections and singleton uniqueness under a vanishing-diameter
+  certificate. Address coverage remains a separate obligation.
+- `Mlc/FiniteComponentCriterion.lean` proves that finite local-piece cover
+  certificates imply the existing `MandelbrotUniformOuterBuffer` root input.
+- `Mlc/FlowInterfaces.lean` formalizes uniform-limit parametrizations and
+  terminal radial-extension data. These are theorem inputs only; no terminal
+  extension or flow-to-MLC theorem is asserted.
+
+These modules introduce no project-level axioms and are imported by the
+public `Mlc.lean` root.
+
 The same `CategoricalMandelbrot` module contains a nontrivial two-sided
 approximation envelope:
 
@@ -292,6 +322,12 @@ make check
 | Molecule bridge | [`Mlc/MoleculeToParameterShrink.lean`](Mlc/MoleculeToParameterShrink.lean) |
 | Categorical warm-up | [`Mlc/CategoricalMandelbrot.lean`](Mlc/CategoricalMandelbrot.lean) |
 | Efimov/Pacman interface | [`Mlc/EfimovCategoricalBridge.lean`](Mlc/EfimovCategoricalBridge.lean) |
+| Certified finite outer stages | [`Mlc/CertifiedOrbitApproximation.lean`](Mlc/CertifiedOrbitApproximation.lean) |
+| Certified inner trapping regions | [`Mlc/CertifiedTrappingRegions.lean`](Mlc/CertifiedTrappingRegions.lean) |
+| Parameter classification | [`Mlc/ParameterClassification.lean`](Mlc/ParameterClassification.lean) |
+| Nested parameter addresses | [`Mlc/ParameterAddressSpace.lean`](Mlc/ParameterAddressSpace.lean) |
+| Finite-component bridge | [`Mlc/FiniteComponentCriterion.lean`](Mlc/FiniteComponentCriterion.lean) |
+| Flow and deformation interfaces | [`Mlc/FlowInterfaces.lean`](Mlc/FlowInterfaces.lean) |
 | Axiom checker | [`check_axioms.lean`](check_axioms.lean) |
 
 ## Dependencies
