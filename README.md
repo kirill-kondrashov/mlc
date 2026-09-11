@@ -4,302 +4,312 @@
 
 [Dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
-This repository contains a compact Lean 4 formalization of the Mandelbrot
-local-connectivity conjecture with an explicit repaired root input and no
-replacement axioms.
+This repository contains a Lean 4 formalization of the Mandelbrot
+local-connectivity target with an explicit, conditional root input.
 
-## Target
+## Current mathematical target
 
-For $c,z\in\mathbb C$, write $f_c(z)=z^2+c$ and let $\mathcal M$ be the
-Mandelbrot set. The sound repaired root theorem is categorical:
+Let
+
+$$
+f_c(z)=z^2+c,\qquad
+p_0(c)=0,\qquad
+p_{n+1}(c)=f_c(p_n(c)).
+$$
+
+The formal Mandelbrot set is
+
+$$
+M
+=\left\{c\in\mathbb C:
+  \exists B\in\mathbb R\ \forall n\in\mathbb N,\
+  \lVert p_n(c)\rVert\le B
+\right\}
+=\bigcap_{n\in\mathbb N}
+  \left\{c:\lVert p_n(c)\rVert\le2\right\}.
+$$
+
+The target is
+
+$$
+\mathrm{MLC}(M)
+:=\mathrm{LocallyConnectedSpace}(M).
+$$
+
+The categorical target is definitionally equivalent:
+
+```lean
+MLC.Categorical.MLCConjecture
+  ↔ LocallyConnectedSpace MLC.mandelbrotSet
+```
+
+The public root has no `GreenSublevelIntersectionCategoricalData` hypothesis.
+
+## Root input and exact frontier
+
+For $N\in\mathbb N$, define the finite critical-orbit outer stage
+
+$$
+O_N
+:=\left\{c:
+  \lVert c\rVert\le2\ \land\
+  \forall n\le N,\ \lVert p_n(c)\rVert\le2
+  \right\}.
+$$
+
+The following are proved:
+
+$$
+\begin{aligned}
+&M\subseteq O_N,\\
+&N\le L\Longrightarrow O_L\subseteq O_N,\\
+&O_N\text{ is compact},\\
+&\bigcap_{N\in\mathbb N}O_N=M.
+\end{aligned}
+$$
+
+For $x\in M$, $r>0$, and $N\in\mathbb N$, write
+
+$$
+C_N(x,r)
+:=\operatorname{Comp}_{x}
+  \left(O_N\cap\overline B(x,r)\right).
+$$
+
+The root-facing finite-stage buffer predicate is
+
+$$
+\begin{aligned}
+\mathrm{BUF}(M,O):\Longleftrightarrow
+\forall x\in M\ \forall\varepsilon>0\ \exists r,\delta\in\mathbb R:\quad
+&0<\delta<r<\varepsilon\\
+&{}\land
+\forall N\ \exists L\ge N:
+O_L\cap\overline B(x,\delta)
+\subseteq C_N(x,r).
+\end{aligned}
+$$
+
+The root input is the proposition
+
+```lean
+structure MLC.RootInput : Prop where
+  uniformOuterBuffer :
+    MLC.ParameterComponent.MandelbrotUniformOuterBuffer
+```
+
+Mathematically, `MLC.RootInput` is exactly the packaged proposition
+$\mathrm{BUF}(M,O)$. The proved root implication is
+
+$$
+\boxed{
+\mathrm{BUF}(M,O)
+\Longrightarrow
+\mathrm{MLC.RootInput}
+\Longrightarrow
+\mathrm{MLC}(M).
+}
+$$
+
+The public declarations are:
 
 ```lean
 MLC.Categorical.categorical_mlc_conjecture :
-  MLC.RootInput →
-    MLC.Categorical.MLCConjecture
-```
+  MLC.RootInput → MLC.Categorical.MLCConjecture
 
-Here `MLC.Categorical.MLCConjecture` is local connectedness of the object
-`TopCat.of MLC.mandelbrotSet`. The compatibility theorem
-
-```lean
 MLC.mlc_conjecture :
-  MLC.RootInput →
-    LocallyConnectedSpace MLC.mandelbrotSet
+  MLC.RootInput → LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
-is equivalent to it by `MLC.Categorical.mlc_conjecture_iff_categorical`.
+No inhabitant of `MLC.RootInput` or $\mathrm{BUF}(M,O)$ is currently
+provided. Therefore the repository does not prove $\mathrm{MLC}(M)$
+unconditionally.
 
-The frozen parameter neighborhoods
-$A_n(c)=\{c'\in\mathbb C:G_c(c'-c)<2^{-n}\}$ are a deliberately simplified
-Green-sublevel model, not graph-cut Yoccoz parapuzzle pieces. They do not
-shrink to $c$: `iInter_green_sublevel_translate_eq_translate_filledJulia`
-identifies their intersection with $c+K_c$, and
-`Mlc/ModelRegression.lean` records the resulting non-shrinking theorem. The
-universal Green-sublevel/Mandelbrot intersection axiom is therefore removed
-from the supported theory after the counterexample in
-[`refs/green_sublevel_intersection_categorical_counterexample.md`](refs/green_sublevel_intersection_categorical_counterexample.md).
+## Implemented current-state interfaces
 
-The replacement uses connected components of metric balls together with the
-finite outer approximations `Categorical.Mandelbrot.outerOrbitSet`. The
-theorem `ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer`
-proves local connectedness from the explicit
-`ParameterComponent.MandelbrotUniformOuterBuffer` hypothesis. No inhabitant
-of that hypothesis is currently claimed.
+| Module | Current theorem-level content | Remaining input |
+| --- | --- | --- |
+| `Mlc/CategoricalMandelbrot.lean` | Compact decreasing outer stages and increasing bounded-orbit inner stages with exact limits equal to $M$. | No finite-stage connectedness theorem is assumed. |
+| `Mlc/ParameterComponentApproximation.lean` | Components of metric balls; $\mathrm{BUF}(M,O)\Rightarrow\mathrm{MLC}(M)$. | No inhabitant of $\mathrm{BUF}(M,O)$. |
+| `Mlc/CertifiedOrbitApproximation.lean` | Finite compact-cell outer systems with $\bigcap_N E_N=M$. | A nontrivial dyadic, interval, CAD, or semialgebraic cell generator. |
+| `Mlc/CertifiedTrappingRegions.lean` | Rational-box trapping certificates imply parameter-box inclusion in $M$. | Inner density. |
+| `Mlc/ParameterClassification.lean` | Least escape time outside $M$ and an exhaustive priority classification with a retained residual class. | Class-specific component estimates and decidability are not asserted. |
+| `Mlc/ParameterAddressSpace.lean` | Nonempty nested address intersections and singleton uniqueness under vanishing diameter. | Address coverage and vanishing diameter for a concrete generator. |
+| `Mlc/FiniteComponentCriterion.lean` | Finite local-piece certificates imply $\mathrm{BUF}(M,O)$ and hence `MLC.RootInput`. | A finite-component certificate is not supplied. |
+| `Mlc/FlowInterfaces.lean` | Uniform-limit parametrization and terminal radial-extension structures. | No flow construction or flow-to-MLC theorem is asserted. |
 
-The refutation is now also formalized: `MLC.not_greenSublevelIntersectionCategoricalData`
-uses the exact 298-cell interval certificate from the counterexample reference
-and depends only on Lean foundations. Thus the old frontier is explicitly
-known to be incompatible with the repository's frozen definitions.
+## Explicit unresolved propositions
 
-## Checked Lean state
+### Finite component route
 
-The repaired root theorems are `sorry`-free. Their theorem argument is the
-explicit `MLC.RootInput` proposition; it is not hidden as a project axiom. The
-formal counterexample proves that the old Green-intersection frontier is
-incompatible with the repository's definitions.
+The implemented finite-component proposition has the form
 
-The repaired route and counterexample use only Lean foundations:
+$$
+\begin{aligned}
+\mathrm{FC}:\Longleftrightarrow
+\forall k\ \exists\text{ finite }J,\ T,\
+\{(P_i,r_i,\delta_i)\}_{i\in J}:\quad
+&0<\delta_i<r_i<2^{-k}\quad(i\in J),\\
+&O_T\subseteq\bigcup_{i\in J}P_i,\\
+&\forall i\in J\ \forall c\in M\cap P_i\ \forall N\ \exists L\ge N:\\
+&\qquad O_L\cap\overline B(c,\delta_i)
+\subseteq C_N(c,r_i).
+\end{aligned}
+$$
 
-```text
-Quot.sound
-propext
-Classical.choice
-```
+The proved implication is
 
-Expected `make check` output:
+$$
+\mathrm{FC}
+\Longrightarrow
+\mathrm{BUF}(M,O)
+\Longrightarrow
+\mathrm{MLC}(M).
+$$
 
-```text
-✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
-All axioms used:
-- propext
-- Quot.sound
-- Classical.choice
-```
+The repository contains no proof of $\mathrm{FC}$.
 
-The checker then reports that the root theorems require `MLC.RootInput` and
-audits the foundation-only counterexample.
+### Certified inner route
 
-## Proved core
+For a finite increasing family $F=(F_N)_{N\in\mathbb N}$ of rational
+trapping certificates, define
 
-- $K_c$ is connected for $c\in\mathcal M$.
-- The dynamical Green sublevels $\{z:G_c(z)<2^{-n}\}$ are connected.
-- Translation identifies the frozen parameter pieces with those sublevels.
-- The subset stratum of $T_n(c)$ is connected without an axiom.
-- Components of metric balls are connected, and the component/outer-buffer
-  reduction is proved without a project-level frontier axiom.
-- The simplified Green-sublevel tower itself is not a faithful shrinking
-  Yoccoz tower.
-- Retained glue forwards to standard Mathlib/Yoccoz APIs, including
-  `locallyConnectedSpace_iff_connected_subsets`, `Set.image_iInter`,
-  `integral_biUnion_finset`, `modulus`, and `groetzsch_criterion`.
+$$
+I_N(F):=\bigcup_{\tau\in F_N}P_\tau.
+$$
 
-`check_axioms.lean` checks both repaired root theorems and the counterexample
-against the foundational frontier. The complete checked Lean source pass is
-warning-free.
+The proved properties are
 
-## Categorical migration
+$$
+I_N(F)\subseteq M,\qquad
+N\le L\Longrightarrow I_N(F)\subseteq I_L(F).
+$$
 
-The root reformulation uses `TopCat` and its over-category over the ambient
-parameter plane:
+The missing density statement is
 
-- `Mlc/CategoricalTopologicalApproximation.lean` treats approximations as
-  objects of `Over (TopCat.of ℂ)`, the over-category over $\mathbb C$,
-  intersections as categorical pullbacks, and
-  nested approximations as opposite-indexed diagrams with a universal limit.
-- `Mlc/CategoricalRoot.lean` defines the categorical MLC object, the
-  `RootInput` structure, the repaired categorical root theorem, and its
-  equivalence with the compatibility target.
-- `Mlc/CategoricalMandelbrot.lean` gives the boundary, interior, ordinary
-  subspace presentations, a deliberately finer boundary topology, the
-  parameter-puzzle tower, and a two-sided orbit approximation of `M`.
-- `Mlc/CategoricalResidual.lean` presents the two residual renormalization
-  inputs as a binary product in `Type`.
-- `Mlc/ParameterComponentApproximation.lean` defines dyadic metric-ball
-  components, proves the component/outer-buffer local-connectedness
-  reduction, and instantiates it for the finite outer critical-orbit
-  approximations of the Mandelbrot set.
-- `Mlc/ModelRegression.lean` records that the frozen Green tower does not
-  shrink to its center and that the imported Gaussian weighted-area proxy is
-  summable.
-- `Mlc/GreenSublevelIntersectionCounterexample.lean` formalizes the finite
-  interval certificate, the horizontal separation argument, and the
-  foundation-only negation of the frozen Green-intersection datum.
-- `Mlc/EfimovCategoricalBridge.lean` records an honest conditional
-  Efimov/Pacman interface: rigid monoidal tower levels with adjunctions,
-  strong Mittag--Leffler data, a graded additive `K_n` shadow with an explicit
-  limit-comparison input, compatible `TopCat` realization, and a
-  space-holomorphic carving bridge whose source is the proved translated Green
-  sublevel rather than an arbitrary connected set. It also contains a
-  finite-etale degree-zero component probe
-  `FiniteEtaleKZeroProbe S := LocallyConstant S Bool`. The proved equivalence
-  `IsConnected S ↔ FiniteEtaleKZeroProbeTrivial S` (for nonempty `S`) gives an
-  axiom-free `K₀`-like connectedness test. Finite-stage descent and relative
-  restriction-surjectivity are exposed as explicit Efimov-inspired inputs;
-  the latter is proved equivalent to the straddling connectedness statement,
-  so it refines the frontier without disguising or adding an axiom.
-  The `DouadyHubbardYoccozCategoricalCarvingData` structure reformulates the
-  parameter--dynamical theorem as a surjective morphism in `TopCat` from the
-  connected Green-sublevel source to the pullback target, and
-  `greenSublevelIntersectionCategoricalData_of_douadyHubbardYoccoz` proves
-  that this categorical theorem implies the frontier.
+$$
+\mathrm{ID}(F):\Longleftrightarrow
+\forall c\in M\ \forall\varepsilon>0\
+\exists N\ \exists x\in I_N(F),\ d(x,c)<\varepsilon.
+$$
 
-The categorical presentations are logically equivalent to the two existing
-frontier inputs; they do not discharge either open mathematical problem. A
-`K_n`-theoretic layer is represented only by the explicit graded additive
-interface in `Mlc/EfimovCategoricalBridge.lean`; Mathlib does not currently
-provide the stable infinity-categorical or algebraic `K`-theory machinery
-needed to instantiate it.
+Under this proposition,
 
-## Combinatorial limits, classification, and flow interfaces
+$$
+\mathrm{ID}(F)
+\Longrightarrow
+\overline{\bigcup_N I_N(F)}=M.
+$$
 
-The implementation of
-[`refs/mandelbrot_combinatorial_limit_and_flow_program.md`](refs/mandelbrot_combinatorial_limit_and_flow_program.md)
-is split into proved certificate interfaces and explicitly retained
-obligations:
+No family with a proved instance of $\mathrm{ID}(F)$ is supplied.
 
-- `Mlc/CertifiedOrbitApproximation.lean` defines finite compact-cell outer
-  stages and proves their nested compact limit is the Mandelbrot set. The
-  exact finite-orbit stages are supplied as a verified one-cell baseline;
-  cubical, interval, or CAD cell generators must still provide their
-  certificate fields.
-- `Mlc/CertifiedTrappingRegions.lean` defines rational-box forward-trapping
-  certificates and proves that certified inner boxes lie in the Mandelbrot
-  set. `InnerDensity` remains an explicit proposition and is not assumed.
-- `Mlc/ParameterClassification.lean` proves an exhaustive priority
-  classification interface, including first escape times outside the
-  Mandelbrot set. The residual class is retained rather than declared empty.
-- `Mlc/ParameterAddressSpace.lean` proves compact nested address
-  intersections and singleton uniqueness under a vanishing-diameter
-  certificate. Address coverage remains a separate obligation.
-- `Mlc/FiniteComponentCriterion.lean` proves that finite local-piece cover
-  certificates imply the existing `MandelbrotUniformOuterBuffer` root input.
-- `Mlc/FlowInterfaces.lean` formalizes uniform-limit parametrizations and
-  terminal radial-extension data. These are theorem inputs only; no terminal
-  extension or flow-to-MLC theorem is asserted.
+### Address route
 
-These modules introduce no project-level axioms and are imported by the
-public `Mlc.lean` root.
+For a finite-cell system $E=(Q_{N,i})$, an address
+$a=(a_N)_{N\in\mathbb N}$ satisfies
 
-The same `CategoricalMandelbrot` module contains a nontrivial two-sided
-approximation envelope:
+$$
+Q_{N+1,a_{N+1}}\subseteq Q_{N,a_N}.
+$$
 
-- `innerOrbitSet N` consists of parameters whose entire critical orbit is
-  bounded by the single natural witness `N`; these sets increase with `N` and
-  satisfy `⋃ N, innerOrbitSet N = M` directly from `boundedOrbit`.
-- `outerOrbitSet N` consists of parameters in the universal disk
-  `‖c‖ ≤ 2` whose first `N` critical-orbit observations stay within radius
-  `2`; these compact sets decrease with `N` and satisfy
-  `⋂ N, outerOrbitSet N = M` using `Molecule.mandelbrot_eq_inter`.
-- `innerOrbitApproximation N` and `outerOrbitApproximation N` are their
-  objects in `Over (TopCat.of ℂ)`. For every `N`, explicit morphisms give the
-  sandwich `innerOrbitApproximation N → M → outerOrbitApproximation N`.
-- `TwoSidedSetApproximation.isConnected_of_inner` and
-  `TwoSidedSetApproximation.isPreconnected_of_outer` expose the two genuine
-  finite-stage routes: connected increasing inner stages, or compact
-  preconnected decreasing outer stages. The repository does not assume either
-  finite-stage property, so these are proof interfaces rather than hidden
-  replacements for the frontier axiom.
+The proved compactness statement is
 
-The limit identities are proved rather than postulated:
-`iUnion_innerOrbitSet_eq_set` and `iInter_outerOrbitSet_eq_set`. This is a
-separate orbit-envelope layer from the simplified Green-sublevel tower: it
-provides finite dynamical observations on the outer side and finite uniform
-bound witnesses on the inner side, so later phase--parameter or K-theoretic
-arguments can be attached to a genuine two-sided system.
+$$
+\bigcap_N Q_{N,a_N}\ne\varnothing.
+$$
 
-The finite-etale probe is intentionally a topological shadow rather than a
-claim that Mathlib already contains continuous algebraic `K`-theory. It
-detects exactly the obstruction relevant here: a nontrivial locally constant
-two-valued function is a clopen decomposition. The target-specific theorem
-`greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroExcisionData`
-therefore gives a precise relative-localizing-invariant reformulation of the
-remaining parameter-puzzle axiom. The stronger categorical statement
-`greenSublevelIntersectionCategoricalData_iff_finiteEtaleKZeroPullbackData`
-identifies the same condition directly on the pullback in `TopCat / ℂ`.
-Efimov's results motivate the descent and excision interfaces, but do not
-prove their Mandelbrot realization fields.
+Under the explicit vanishing-diameter proposition
 
-The categorical Douady--Hubbard/Yoccoz theorem is a proved reduction, not an
-unproved assertion: a surjective `TopCat` morphism from the connected
-translated Green sublevel yields connectedness of the pullback by the
-standard connected-image theorem. The existence of that morphism for the
-actual Mandelbrot intersection remains the analytic parameter--dynamical
-content. Since the current source is a full Green sublevel rather than a
-graph-cut parapuzzle, the repository does not claim that this existence field
-is supplied by the classical Yoccoz theorem.
+$$
+\begin{aligned}
+\mathrm{VD}(E):\Longleftrightarrow
+\forall a\ \forall x,y\in\mathbb C:\quad
+&\left(\forall N,\ x\in Q_{N,a_N}\right)
+\land\left(\forall N,\ y\in Q_{N,a_N}\right)\\
+&\Longrightarrow
+\forall\varepsilon>0,\ d(x,y)<\varepsilon,
+\end{aligned}
+$$
 
-The ten-iteration proof search for the remaining frontier is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts.md`](refs/green_sublevel_intersection_categorical_proof_attempts.md).
-It formalizes the successful connected-image reduction and separately records
-why factor connectedness, outer/inner limits, Böttcher coordinates, classical
-Yoccoz parapuzzles, and finite-etale `K₀` descent do not by themselves supply
-the missing carving existence theorem.
+the intersection is a singleton. Coverage remains the separate obligation
 
-A second ten-iteration round is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_round2.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round2.md).
-It tests continuum separation, proper maps, straightening, external-ray
-graphs, harmonic measure, renormalization inverse limits, prime ends,
-Alexander duality, finite-stage regular epimorphisms, and axiom-minimality.
-The result is the same: only the explicit connected-surjective carving
-implication is formalized; its existence remains the frontier.
+$$
+\mathrm{AC}(E):\Longleftrightarrow
+\forall c\in M\ \exists a\ \forall N,\ c\in Q_{N,a_N}.
+$$
 
-A third ten-iteration round is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_round3.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round3.md).
-It tests frozen-basis limits, finite orbit stages, escape-coordinate
-lemniscates, quasiconformal wringing, Teichmuller realization, `K_0` probe
-extension, strong Mittag--Leffler inverse limits, Green-gradient deformation,
-and analytic continuation of component probes. These routes likewise reduce
-to an exact parameter-carving map; none adds an unconditional theorem.
+No concrete generator is currently shown to satisfy both $\mathrm{VD}(E)$
+and $\mathrm{AC}(E)$.
 
-A fourth ten-iteration round is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_round4.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round4.md).
-It tests parameter-potential level sets, finite kneading graphs, branched
-coverings, hyperbolic-component unions, filled-Julia semicontinuity,
-lamination quotients, shape theory, Mayer--Vietoris `K`-theory, Green-depth
-induction, and first-exit paths. **No axiom was discharged.**
+### Flow route
 
-A fifth ten-iteration round is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_round5.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round5.md).
-It tests effective quotients, Stein factorization, monotone decompositions,
-pinched-disk models, polynomial-like moduli, covering-space lifting,
-categorical descent, Vietoris--Begle degree-zero invariants, renormalization
-coequalizers, and a formal dependency audit. **No axiom was discharged.**
+A coherent parametrization consists of continuous maps
 
-A sixth ten-iteration round is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_round6.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round6.md).
-It tests polynomial hulls, Riemann-map crosscuts, winding and degree
-obstructions, Loewner evolution, equipotential trees, Berkovich
-specialization, categorical `pi_0` base change, Runge extension, and an
-explicit axiom-replacement audit. **No axiom was discharged.**
+$$
+h_N:\overline{\mathbb D}\to\mathbb C,\qquad
+h:\overline{\mathbb D}\to\mathbb C
+$$
 
-A seventh ten-iteration round is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_round7.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round7.md).
-It tests universal filled-Julia incidence spaces, Hubbard trees, modulus
-bounds, semialgebraic finite stages, monodromy, structural-stability strata,
-external-ray incidence, `K_0` localization, universal polynomial-like
-families, and a dependency audit. **No axiom was discharged.**
+with $h_N(\overline{\mathbb D})\subseteq S$, uniform convergence
+$h_N\to h$, and surjectivity $h(\overline{\mathbb D})=S$. The implemented
+limit theorem proves the range equality from the stated fields.
 
-An eighth ten-iteration round is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_round8.md`](refs/green_sublevel_intersection_categorical_proof_attempts_round8.md).
-It tests good-cover nerves, component cosheaves, persistence and Reeb graphs,
-Thurston pullback contraction, extension of the near-infinity Böttcher family,
-stable-component gluing, locale descent, noncommutative `K_0`, and finite
-obstruction extraction. **No axiom was discharged.**
+A terminal radial-extension certificate is a continuous map
 
-An up-to-100-attempt proof search is recorded in
-[`refs/green_sublevel_intersection_categorical_proof_attempts_100.md`](refs/green_sublevel_intersection_categorical_proof_attempts_100.md).
-It records one hundred markdown/Lean reductions across planar topology,
-potential theory, renormalization, quasiconformal realization, finite
-approximations, categorical descent, homological invariants, non-Archimedean
-models, and direct axiom audits. **No axiom was discharged.**
+$$
+H:[1,e]\times\mathbb C\to\mathbb C
+$$
 
-The Efimov source inventory in
-[`refs/efimov_source_inventory.md`](refs/efimov_source_inventory.md) includes
-`2405.12169v3`, `2502.04123v2`, `2505.13260v2`, `2510.17010v1`, and
-`2603.08653v2`. A source-level audit found no Mandelbrot, Green-function,
-holomorphic-motion, or connectedness theorem in those papers; they supply
-categorical/K-theoretic infrastructure, not the missing parameter carving.
+such that
+
+$$
+\begin{aligned}
+&H([1,e]\times\mathbb C)\subseteq A,\\
+&H(1,x)\in S\quad(x\in\mathbb C),\\
+&H(1,x)=x\quad(x\in S).
+\end{aligned}
+$$
+
+These are explicit interfaces only. No theorem currently derives
+$\mathrm{MLC}(M)$ from either interface.
+
+## Current status
+
+$$
+\boxed{
+\mathrm{FC}
+\Longrightarrow
+\mathrm{BUF}(M,O)
+\Longrightarrow
+\mathrm{RootInput}
+\Longrightarrow
+\mathrm{MLC}(M)
+}
+$$
+
+The current unproved existence obligations are
+
+$$
+\mathrm{FC},\qquad
+\mathrm{BUF}(M,O),\qquad
+\exists F\,\mathrm{ID}(F),\qquad
+\exists E\,(\mathrm{VD}(E)\land\mathrm{AC}(E)),
+\qquad
+\mathrm{RootFlowInput}(M).
+$$
+
+These are propositions or certificate structures, not project-level axioms.
+The repository does not assert any of them globally.
+
+The supported root axiom frontier is
+
+$$
+\operatorname{Axioms}(\text{root})
+=\{\mathrm{propext},\mathrm{Quot.sound},\mathrm{Classical.choice}\}.
+$$
+
+There is no project-level `axiom`, no `sorryAx`, and no unconditional MLC
+theorem.
 
 ## Validation
 
@@ -309,25 +319,20 @@ make check
 ./scripts/verify_output.sh
 ```
 
-## Core files
+## Main files
 
 | Purpose | Path |
 | --- | --- |
-| Public root | [`Mlc.lean`](Mlc.lean) |
+| Public import root | [`Mlc.lean`](Mlc.lean) |
 | Categorical root | [`Mlc/CategoricalRoot.lean`](Mlc/CategoricalRoot.lean) |
-| Compatibility root | [`Mlc/Core.lean`](Mlc/Core.lean) |
-| Repaired outer-buffer input | [`Mlc/ParameterComponentApproximation.lean`](Mlc/ParameterComponentApproximation.lean) |
-| Parameter frontier | [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean) |
-| Green-sublevel proof | [`Mlc/GreenSublevelConnectedDirect.lean`](Mlc/GreenSublevelConnectedDirect.lean) |
-| Molecule bridge | [`Mlc/MoleculeToParameterShrink.lean`](Mlc/MoleculeToParameterShrink.lean) |
-| Categorical warm-up | [`Mlc/CategoricalMandelbrot.lean`](Mlc/CategoricalMandelbrot.lean) |
-| Efimov/Pacman interface | [`Mlc/EfimovCategoricalBridge.lean`](Mlc/EfimovCategoricalBridge.lean) |
-| Certified finite outer stages | [`Mlc/CertifiedOrbitApproximation.lean`](Mlc/CertifiedOrbitApproximation.lean) |
-| Certified inner trapping regions | [`Mlc/CertifiedTrappingRegions.lean`](Mlc/CertifiedTrappingRegions.lean) |
+| Compatibility theorem | [`Mlc/Core.lean`](Mlc/Core.lean) |
+| Outer-buffer theorem | [`Mlc/ParameterComponentApproximation.lean`](Mlc/ParameterComponentApproximation.lean) |
+| Finite outer certificates | [`Mlc/CertifiedOrbitApproximation.lean`](Mlc/CertifiedOrbitApproximation.lean) |
+| Inner trapping certificates | [`Mlc/CertifiedTrappingRegions.lean`](Mlc/CertifiedTrappingRegions.lean) |
 | Parameter classification | [`Mlc/ParameterClassification.lean`](Mlc/ParameterClassification.lean) |
-| Nested parameter addresses | [`Mlc/ParameterAddressSpace.lean`](Mlc/ParameterAddressSpace.lean) |
+| Address interface | [`Mlc/ParameterAddressSpace.lean`](Mlc/ParameterAddressSpace.lean) |
 | Finite-component bridge | [`Mlc/FiniteComponentCriterion.lean`](Mlc/FiniteComponentCriterion.lean) |
-| Flow and deformation interfaces | [`Mlc/FlowInterfaces.lean`](Mlc/FlowInterfaces.lean) |
+| Flow interfaces | [`Mlc/FlowInterfaces.lean`](Mlc/FlowInterfaces.lean) |
 | Axiom checker | [`check_axioms.lean`](check_axioms.lean) |
 
 ## Dependencies
