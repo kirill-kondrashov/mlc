@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean graphs serve
+.PHONY: all build check cache clean graphs serve proof-pdf check-uniform
 
 # Default target
 all: check
@@ -17,6 +17,17 @@ build:
 # However, lake handles its own dependencies well.
 check:
 	lake env lean --run check_axioms.lean
+
+check-uniform:
+	lake build Mlc.UniformGeometricRoot Mlc.UniformGeometricVertexControl Mlc.TrappingRegionObstruction Mlc.FiniteTrappingRegions
+	lake env lean --run check_uniform_program.lean
+
+proof-pdf: docs/uniform_geometric_mlc.pdf
+
+docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex
+	pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 
 # Build static dependency-graph pages under site/
 graphs: build
@@ -40,3 +51,4 @@ auto-build: .cache_marker
 # Clean build artifacts
 clean:
 	rm -f docs/proof.aux docs/proof.log docs/proof.out docs/proof.toc .cache_marker
+	rm -f docs/uniform_geometric_mlc.aux docs/uniform_geometric_mlc.log docs/uniform_geometric_mlc.out docs/uniform_geometric_mlc.toc docs/uniform_geometric_mlc.build.log

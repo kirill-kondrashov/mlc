@@ -1,0 +1,601 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=28mm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\input{glyphtounicode}
+\pdfgentounicode=1
+\hypersetup{
+  pdftitle={Uniform geometric estimates and Mandelbrot local connectivity},
+  pdfsubject={Conditional local-connectivity theorem and trapping estimates}
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\M}{\mathcal M}
+\newcommand{\D}{D}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Int}{\operatorname{int}}
+\newcommand{\LC}{\operatorname{LC}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\Conn}{\operatorname{Connected}}
+\newcommand{\Cpt}{\operatorname{Compact}}
+\newcommand{\Closed}{\operatorname{Closed}}
+\newcommand{\Convex}{\operatorname{Convex}}
+\newcommand{\Affine}{\operatorname{Affine}}
+
+\title{Uniform geometric estimates\\and Mandelbrot local connectivity}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Task}
+\begin{gather*}
+ \N=\{0,1,2,\ldots\},\qquad
+ f_c(z)=z^2+c,\qquad
+ p_0(c)=0,\qquad p_{n+1}(c)=p_n(c)^2+c,\\
+ \M=\{c\in\C:\exists B\ge0\ \forall n\in\N,\ |p_n(c)|\le B\},\\
+ B(c,r)=\{z\in\C:|z-c|<r\}.
+\end{gather*}
+\begin{equation*}
+ \LC(X)\ \Longleftrightarrow\
+ \begin{gathered}
+ \forall c\in X\ \forall\eta>0\ \exists\delta>0\
+ \exists V\subseteq X:\\
+ \Conn(V)\ \land\
+ X\cap B(c,\delta)\subseteq V\subseteq X\cap B(c,\eta)
+ \end{gathered}
+ \qquad(X\subseteq\C).
+\end{equation*}
+Prove $\LC(\M)$.
+
+\section{Orbit bounds}
+
+\begin{lemma}\label{lem:escape}
+\begin{equation}\label{eq:escape}
+ \M=\{c\in\C:\forall n\in\N,\ |p_n(c)|\le2\}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+\begin{gather*}
+ n\in\N,\qquad q=|p_n(c)|>2,\qquad |c|\le q,\\
+ |p_n(c)|=q,\qquad
+ |p_{n+j}(c)|\ge q
+ \ \Longrightarrow\
+ \begin{aligned}[t]
+ |p_{n+j+1}(c)|
+ &\ge |p_{n+j}(c)|^2-|c|\\
+ &\ge |p_{n+j}(c)|\bigl(|p_{n+j}(c)|-1\bigr)\\
+ &\ge(q-1)|p_{n+j}(c)|,
+ \end{aligned}\\
+ \forall j\in\N,\quad |p_{n+j}(c)|\ge q(q-1)^j
+ \xrightarrow[j\to\infty]{}+\infty.
+\end{gather*}
+\begin{align*}
+ |c|>2
+ &\Longrightarrow
+ |p_1(c)|=|c|>2
+ \Longrightarrow c\notin\M,\\
+ |c|\le2\ \land\ |p_n(c)|>2
+ &\Longrightarrow
+ |p_n(c)|>2\ \land\ |c|\le|p_n(c)|
+ \Longrightarrow c\notin\M,\\
+ c\in\M
+ &\Longrightarrow \forall n\in\N,\ |p_n(c)|\le2,\\
+ \bigl(\forall n\in\N,\ |p_n(c)|\le2\bigr)
+ &\Longrightarrow
+ \exists B\ge0\ \forall n\in\N,\ |p_n(c)|\le B
+ \Longrightarrow c\in\M.
+ \qedhere
+\end{align*}
+\end{proof}
+
+\begin{definition}
+\begin{equation}\label{eq:outer}
+ O_N=\overline B(0,2)\cap
+       \bigcap_{j=0}^{N}p_j^{-1}\bigl(\overline B(0,2)\bigr),
+ \qquad
+ \D=[-2,2]+i[-2,2].
+\end{equation}
+\end{definition}
+
+\begin{lemma}\label{lem:outer}
+\begin{gather}
+ 0\in\M\subseteq O_{N+1}\subseteq O_N\subseteq\D,\qquad
+ \bigcap_{N\in\N}O_N=\M,\label{eq:outer-properties}\\
+ \Cpt(O_N),\qquad \Cpt(\M),\qquad
+ \Cpt(\D),\qquad\Convex(\D).\notag
+\end{gather}
+\end{lemma}
+\begin{proof}
+\begin{gather*}
+ p_0=0\in\Z[X],\qquad
+ p_{n+1}=p_n^2+X\in\Z[X],\qquad p_n\in C(\C,\C),\\
+ \Closed\bigl(p_j^{-1}(\overline B(0,2))\bigr),\qquad
+ \Closed(O_N),\qquad O_N\subseteq\overline B(0,2)
+ \Longrightarrow\Cpt(O_N),\\
+ \forall n\in\N,\quad p_n(0)=0,\qquad
+ O_{N+1}=O_N\cap p_{N+1}^{-1}(\overline B(0,2)),\\
+ \bigcap_{N\in\N}O_N
+ =\overline B(0,2)\cap
+   \bigcap_{j\in\N}p_j^{-1}(\overline B(0,2))
+ \overset{\eqref{eq:escape}}{=}\M,\\
+ \Closed(\M),\qquad\M\subseteq\overline B(0,2)
+ \Longrightarrow\Cpt(\M),\\
+ \overline B(0,2)\subseteq\D,\qquad
+ \D\simeq[-2,2]^2
+ \Longrightarrow\Cpt(\D)\land\Convex(\D).
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\section{Uniform convergence}
+
+\begin{definition}
+\begin{equation*}
+ \|F-G\|_\infty=\sup_{z\in\D}|F(z)-G(z)|
+ \qquad(F,G\in C(\D,\C)).
+\end{equation*}
+\begin{gather*}
+ A,B\subseteq\C,\qquad A,B\ne\varnothing,\qquad
+ \Cpt(A),\qquad\Cpt(B),\\
+ \dist(z,A)=\inf_{a\in A}|z-a|,\qquad
+ d_H(A,B)=
+ \max\left\{\sup_{a\in A}\dist(a,B),\
+             \sup_{b\in B}\dist(b,A)\right\}.
+\end{gather*}
+\begin{equation}\label{eq:hypotheses}
+ \begin{gathered}
+ \nu\in\N^\N,\qquad R_\bullet\in C(\D,\D)^\N,\\
+ \mathsf A(\nu,R_\bullet)\ \Longleftrightarrow\
+ \left\{
+ \begin{aligned}
+ &R_0=\id_\D,\\
+ &\forall n\in\N,\quad \nu_n\ge n,\\
+ &\forall n\in\N\ \forall c\in O_{\nu_n},\quad R_n(c)=c,\\
+ &\forall n\in\N\ \forall z\in\D\ \exists w\in O_{\nu_n},\
+                  |R_n(z)-w|\le2^{-n},\\
+ &\forall n\in\N,\quad
+                  \|R_{n+1}-R_n\|_\infty\le8\,2^{-n}.
+ \end{aligned}
+ \right.
+ \end{gathered}
+\end{equation}
+\end{definition}
+
+\begin{lemma}[Vertex bound]\label{lem:vertices}
+\begin{gather*}
+ 0<\#\mathcal T<\infty,\qquad
+ T=\conv\{v_{T,0},v_{T,1},v_{T,2}\},\qquad
+ \bigcup_{T\in\mathcal T}T=\D,\\
+ F,G\in C(\D,\C),\qquad b\ge0.
+\end{gather*}
+\begin{equation*}
+ \left.
+ \begin{aligned}
+ &\forall T\in\mathcal T,\quad
+    \Affine(F|_T)\land\Affine(G|_T),\\
+ &\forall T\in\mathcal T\ \forall\ell\in\{0,1,2\},\quad
+    |F(v_{T,\ell})-G(v_{T,\ell})|\le b
+ \end{aligned}
+ \right\}
+ \Longrightarrow \|F-G\|_\infty\le b.
+\end{equation*}
+\end{lemma}
+\begin{proof}
+\begin{gather*}
+ z\in\D
+ \Longrightarrow
+ \exists T\in\mathcal T\ \exists\lambda_0,\lambda_1,\lambda_2\ge0:
+ \quad
+ \sum_{\ell=0}^2\lambda_\ell=1,\qquad
+ z=\sum_{\ell=0}^2\lambda_\ell v_{T,\ell},\\
+ \begin{aligned}
+ |F(z)-G(z)|
+ &=\left|\sum_{\ell=0}^2
+          \lambda_\ell\bigl(F(v_{T,\ell})-G(v_{T,\ell})\bigr)\right|\\
+ &\le\sum_{\ell=0}^2
+          \lambda_\ell|F(v_{T,\ell})-G(v_{T,\ell})|
+ \le b\sum_{\ell=0}^2\lambda_\ell=b.
+ \end{aligned}
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\begin{theorem}[Uniform limit]\label{thm:uniform}
+\begin{equation*}
+ \mathsf A(\nu,R_\bullet)\ \Longrightarrow\
+ \exists R\in C(\D,\D):
+ \quad
+ \begin{cases}
+ \forall n\in\N,\quad \|R_n-R\|_\infty\le16\,2^{-n},\\
+ R(\D)=\M,\\
+ \forall c\in\M,\quad R(c)=c.
+ \end{cases}
+\end{equation*}
+\end{theorem}
+\begin{proof}
+\begin{align}
+ m>n\quad\Longrightarrow\quad
+ \|R_m-R_n\|_\infty
+ &\le\sum_{j=n}^{m-1}\|R_{j+1}-R_j\|_\infty\notag\\
+ &\le8\sum_{j=n}^{m-1}2^{-j}
+ =16\,2^{-n}\bigl(1-2^{-(m-n)}\bigr).\label{eq:cauchy}
+\end{align}
+\begin{gather}
+ \lim_{n\to\infty}\sup_{m\ge n}\|R_m-R_n\|_\infty=0,\notag\\
+ \operatorname{Complete}(\C)\Longrightarrow
+ R(z):=\lim_{n\to\infty}R_n(z)\in\C,\notag\\
+ \forall n\in\N\ \forall z\in\D,\quad
+ |R_n(z)-R(z)|\le16\,2^{-n}.\label{eq:tail}
+\end{gather}
+\begin{gather*}
+ z_0\in\D,\qquad \varepsilon>0,\qquad
+ \exists n\in\N:\quad32\,2^{-n}<\varepsilon/2,\\
+ R_n\in C(\D,\C)
+ \Longrightarrow
+ \exists\delta>0\ \forall z\in\D:\quad
+ |z-z_0|<\delta
+ \Longrightarrow |R_n(z)-R_n(z_0)|<\varepsilon/2,\\
+ |z-z_0|<\delta
+ \Longrightarrow
+ |R(z)-R(z_0)|
+ \le32\,2^{-n}+|R_n(z)-R_n(z_0)|<\varepsilon,\\
+ R\in C(\D,\C),\qquad
+ \Closed(\D),\qquad
+ \forall n,\ R_n(\D)\subseteq\D
+ \Longrightarrow R(\D)\subseteq\D,\\
+ \forall n\in\N,\quad\|R_n-R\|_\infty\le16\,2^{-n}.
+\end{gather*}
+\begin{gather}
+ z\in\D,\qquad k\in\N,\qquad n\ge k,\notag\\
+ O_{\nu_n}\subseteq O_k,\qquad
+ \exists w_n\in O_{\nu_n}:\quad
+ |R_n(z)-w_n|\le2^{-n},\notag\\
+ |R(z)-w_n|
+ \le|R(z)-R_n(z)|+|R_n(z)-w_n|
+ \le17\,2^{-n}\xrightarrow[n\to\infty]{}0,\notag\\
+ \Closed(O_k)\Longrightarrow R(z)\in O_k,\qquad
+ R(z)\in\bigcap_kO_k=\M,\notag\\
+ c\in\M
+ \Longrightarrow
+ \forall n,\ c\in O_{\nu_n}\ \land\ R_n(c)=c
+ \Longrightarrow R(c)=c,\notag\\
+ R(\D)\subseteq\M\subseteq R(\D),\qquad
+ R(\D)=\M.\label{eq:retraction}
+\end{gather}
+\end{proof}
+
+\begin{corollary}[Images]\label{cor:images}
+\begin{gather*}
+ \mathsf A(\nu,R_\bullet),\qquad E_n=R_n(\D),\qquad
+ \widehat E_n=\bigcap_{j=0}^nE_j,\\
+ \Longrightarrow\quad
+ \M\subseteq O_{\nu_n}\subseteq E_n\subseteq\D,\qquad
+ \Cpt(E_n),\qquad d_H(E_n,\M)\le16\,2^{-n},\\
+ \widehat E_{n+1}\subseteq\widehat E_n,\qquad
+ d_H(\widehat E_n,\M)\le16\,2^{-n},\qquad
+ \bigcap_nE_n=\bigcap_n\widehat E_n=\M.
+\end{gather*}
+\end{corollary}
+\begin{proof}
+\begin{gather*}
+ c\in O_{\nu_n}\Longrightarrow c=R_n(c)\in E_n,\qquad
+ R_n\in C(\D,\D)\land\Cpt(\D)\Longrightarrow\Cpt(E_n),\\
+ y=R_n(z)\in E_n
+ \Longrightarrow
+ \dist(y,\M)\le|R_n(z)-R(z)|\le16\,2^{-n},\\
+ \M\subseteq\widehat E_n\subseteq E_n
+ \Longrightarrow
+ 0\le d_H(\widehat E_n,\M)\le d_H(E_n,\M)\le16\,2^{-n},\\
+ \widehat E_{n+1}=\widehat E_n\cap E_{n+1}\subseteq\widehat E_n,\\
+ y\in\bigcap_nE_n
+ \Longrightarrow
+ 0\le\dist(y,\M)\le\inf_n16\,2^{-n}=0
+ \Longrightarrow y\in\M,\\
+ \bigcap_n\widehat E_n=\bigcap_n\bigcap_{j=0}^nE_j
+ =\bigcap_nE_n=\M.
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\begin{corollary}[Continuity modulus]\label{cor:modulus}
+\begin{gather*}
+ \mathsf A(\nu,R_\bullet),\qquad R=\lim_{n\to\infty}R_n,\qquad
+ L_\bullet\in[0,\infty)^\N,\\
+ \forall n\in\N\ \forall z,w\in\D,\quad
+ |R_n(z)-R_n(w)|\le L_n|z-w|,\\
+ \delta_k=\frac{2^{-(k+1)}}{1+L_{k+6}}>0,\\
+ \Longrightarrow\quad
+ \forall k\in\N\ \forall z,w\in\D,\quad
+ |z-w|<\delta_k\Longrightarrow |R(z)-R(w)|<2^{-k}.
+\end{gather*}
+\end{corollary}
+\begin{proof}
+\begin{align*}
+ n=k+6,\quad |z-w|<\delta_k
+ \quad\Longrightarrow\quad
+ |R(z)-R(w)|
+ &\le32\,2^{-n}+L_n|z-w|\\
+ &\le2^{-(k+1)}+(1+L_n)|z-w|\\
+ &<2^{-(k+1)}+(1+L_n)\delta_k
+ =2^{-k}.
+ \qedhere
+\end{align*}
+\end{proof}
+
+\section{Deformation and local connectedness}
+
+\begin{theorem}[Terminal deformation]\label{thm:deform}
+\begin{gather*}
+ \mathsf A(\nu,R_\bullet),\qquad R=\lim_{n\to\infty}R_n\\
+ \Longrightarrow
+ \exists H\in C(\D\times[0,1],\D):\\
+ H(z,0)=z,\qquad H(c,t)=c\quad(c\in\M),\qquad
+ H(z,1)=R(z),\qquad H(\D,1)=\M,\\
+ t_n=1-2^{-n},\qquad H(z,t_n)=R_n(z),\\
+ \forall n\in\N\ \forall t\in[t_n,1]:\\
+ \sup_{z\in\D}|H(z,t)-R(z)|\le16\,2^{-n},\qquad
+ d_H(H(\D,t),\M)\le16\,2^{-n}.
+\end{gather*}
+\end{theorem}
+\begin{proof}
+\begin{gather*}
+ \lambda_n(t)=\frac{t-t_n}{t_{n+1}-t_n},\qquad
+ H_n(z,t)=(1-\lambda_n(t))R_n(z)+\lambda_n(t)R_{n+1}(z),\\
+ H(z,t)=
+ \begin{cases}
+ H_n(z,t),&t_n\le t\le t_{n+1},\\
+ R(z),&t=1,
+ \end{cases}\\
+ H_n(z,t_{n+1})=R_{n+1}(z)=H_{n+1}(z,t_{n+1}),\\
+ H_n\in C(\D\times[t_n,t_{n+1}],\D),\qquad
+ s<1\Longrightarrow\#\{n:t_n\le s\}<\infty,\\
+ H|_{\D\times[0,1)}\in C(\D\times[0,1),\D).
+\end{gather*}
+\begin{gather}
+ t_j\le t\le t_{j+1},\quad j\ge n
+ \quad\Longrightarrow\quad
+ \begin{aligned}[t]
+ |H(z,t)-R(z)|
+ &\le(1-\lambda_j(t))16\,2^{-j}
+       +\lambda_j(t)16\,2^{-(j+1)}\\
+ &\le16\,2^{-j}\le16\,2^{-n},
+ \end{aligned}\label{eq:deform-rate}\\
+ (z_\ell,s_\ell)\longrightarrow(z,1)
+ \quad\Longrightarrow\quad
+ \begin{aligned}[t]
+ |H(z_\ell,s_\ell)-R(z)|
+ &\le |H(z_\ell,s_\ell)-R(z_\ell)|
+       +|R(z_\ell)-R(z)|\\
+ &\longrightarrow0,
+ \end{aligned}\notag\\
+ H\in C(\D\times[0,1],\D),\qquad
+ H(z,0)=R_0(z)=z,\qquad H(z,1)=R(z),\notag\\
+ c\in\M,\quad t\in[t_n,t_{n+1}]\Longrightarrow
+ H(c,t)=(1-\lambda_n(t))c+\lambda_n(t)c=c,\qquad
+ H(c,1)=c,\notag\\
+ \M\subseteq H(\D,t),\qquad
+ \dist(H(z,t),\M)\le|H(z,t)-R(z)|,\notag\\
+ t\in[t_n,1]\Longrightarrow
+ d_H(H(\D,t),\M)\le16\,2^{-n}.\notag
+\end{gather}
+\end{proof}
+
+\begin{theorem}[Conditional local connectedness]\label{thm:mlc}
+\begin{equation*}
+ \boxed{
+ \forall\nu\in\N^\N\ \forall R_\bullet\in C(\D,\D)^\N,\quad
+ \mathsf A(\nu,R_\bullet)\Longrightarrow\LC(\M).
+ }
+\end{equation*}
+\end{theorem}
+\begin{proof}
+\begin{gather*}
+ \mathsf A(\nu,R_\bullet)
+ \overset{\ref{thm:uniform}}{\Longrightarrow}
+ \exists R\in C(\D,\D):\
+ R(\D)=\M\ \land\ \forall c\in\M,\ R(c)=c,\\
+ c\in\M,\qquad\eta>0,\qquad
+ \exists\delta>0\ \forall z\in\D:\quad
+ |z-c|<\delta\Longrightarrow |R(z)-c|<\eta,\\
+ W=\D\cap B(c,\delta),\qquad V=R(W),\\
+ c\in W,\qquad\Convex(W)\Longrightarrow\Conn(W)
+ \Longrightarrow\Conn(V),\\
+ y\in\M\cap B(c,\delta)
+ \Longrightarrow y\in W\ \land\ y=R(y)
+ \Longrightarrow y\in V,\\
+ y\in V\Longrightarrow
+ \exists z\in W:\ y=R(z)\in\M,\quad
+ |y-c|=|R(z)-R(c)|<\eta,\\
+ \M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta)
+ \Longrightarrow\LC(\M).
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\section{Trapping rectangles}
+
+\begin{proposition}[Single-rectangle obstruction]\label{prop:single}
+\begin{equation*}
+ U=[a,b]+i[u,v],\quad a<b,\quad u<v,\quad
+ 0\in U,\quad f_c(U)\subseteq U
+ \quad\Longrightarrow\quad |\operatorname{Re}c|\le\frac12.
+\end{equation*}
+\end{proposition}
+\begin{proof}
+\begin{gather*}
+ c=f_c(0)\in U,\qquad x=\operatorname{Re}c\in[a,b],\\
+ z_-=x+iu\in U,\qquad z_+=x+iv\in U,\\
+ \operatorname{Im}f_c(z_-)=2xu+\operatorname{Im}c\in[u,v],\qquad
+ \operatorname{Im}f_c(z_+)=2xv+\operatorname{Im}c\in[u,v],\\
+ 2|x|(v-u)
+ =\left|\operatorname{Im}f_c(z_+)-\operatorname{Im}f_c(z_-)\right|
+ \le v-u,\\
+ v-u>0\Longrightarrow|\operatorname{Re}c|=|x|\le\frac12.
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\begin{corollary}[Failure of density]\label{cor:no-single-density}
+\begin{gather*}
+ \forall n\in\N\ \forall c\in I_n\
+ \exists a,b,u,v\in\R:\\
+ a<b,\quad u<v,\quad0\in[a,b]+i[u,v],\quad
+ f_c([a,b]+i[u,v])\subseteq[a,b]+i[u,v]\\
+ \Longrightarrow\quad
+ \overline{\bigcup_{n\in\N}I_n}\ne\M,\\
+ \neg\left[
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists n\in\N\ \exists z\in I_n,\ |z-c|<\varepsilon
+ \right].
+\end{gather*}
+\end{corollary}
+\begin{proof}
+\begin{gather*}
+ S=\operatorname{Re}^{-1}([-1/2,1/2]),\qquad
+ \operatorname{Re}\in C(\C,\R)\Longrightarrow\Closed(S),\\
+ \bigcup_nI_n\subseteq S
+ \Longrightarrow\overline{\bigcup_nI_n}\subseteq S,\\
+ f_{-1}(0)=-1,\qquad f_{-1}(-1)=0,\qquad
+ \forall n\in\N,\quad p_{2n}(-1)=0,\quad p_{2n+1}(-1)=-1,\\
+ -1\in\M\setminus S,\qquad
+ \overline{\bigcup_nI_n}\ne\M,\\
+ n\in\N,\quad z\in I_n
+ \Longrightarrow
+ |z-(-1)|=|z+1|
+ \ge\operatorname{Re}z+1\ge\frac12>\frac14.
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\begin{definition}
+\begin{gather}
+ s\ge1,\qquad
+ U_j=[a_j,b_j]+i[u_j,v_j],\qquad
+ a_j<b_j,\quad u_j<v_j,\qquad
+ U=\bigcup_{j=1}^sU_j,\notag\\
+ U_j^{-\delta}=[a_j+\delta,b_j-\delta]
+                   +i[u_j+\delta,v_j-\delta].\label{eq:inset}
+\end{gather}
+\end{definition}
+
+\begin{proposition}[Finite-union trapping]\label{prop:trap}
+\begin{gather}
+ 0\in U,\quad f_c(U)\subseteq U\quad\Longrightarrow\quad c\in\M,
+ \label{eq:weak-trap}\\
+ \left.
+ \begin{gathered}
+ 0\in U,\quad P\subseteq\C,\quad\delta>0,\\
+ \forall c\in P\ \forall z\in U\ \exists j\in\{1,\ldots,s\},\
+                       f_c(z)\in U_j^{-\delta}
+ \end{gathered}
+ \right\}
+ \Longrightarrow
+ \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,
+ \quad P\subseteq\Int\M.\label{eq:finite-trap}
+\end{gather}
+\end{proposition}
+\begin{proof}
+\begin{gather*}
+ B=\max_{1\le j\le s}
+   \bigl(\max\{|a_j|,|b_j|\}+\max\{|u_j|,|v_j|\}\bigr),\\
+ z\in U_j\Longrightarrow
+ |z|\le|\operatorname{Re}z|+|\operatorname{Im}z|
+ \le B,\\
+ p_0(c)=0\in U,\qquad
+ p_n(c)\in U\Longrightarrow p_{n+1}(c)=f_c(p_n(c))\in U,\\
+ \forall n\in\N,\quad |p_n(c)|\le B
+ \Longrightarrow c\in\M.
+\end{gather*}
+\begin{gather*}
+ c\in P,\qquad |c'-c|\le\delta,\qquad z\in U,\qquad
+ f_c(z)\in U_j^{-\delta},\\
+ f_{c'}(z)-f_c(z)=c'-c,\qquad
+ |\operatorname{Re}(c'-c)|,\ |\operatorname{Im}(c'-c)|
+ \le|c'-c|\le\delta,\\
+ a_j\le\operatorname{Re}f_{c'}(z)\le b_j,\qquad
+ u_j\le\operatorname{Im}f_{c'}(z)\le v_j,\\
+ f_{c'}(U)\subseteq U
+ \overset{\eqref{eq:weak-trap}}{\Longrightarrow} c'\in\M,\\
+ \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,\qquad
+ P\subseteq\bigcup_{c\in P}B(c,\delta)\subseteq\Int\M.
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\begin{proposition}[Period two]\label{prop:two}
+\begin{gather*}
+ a=\frac1{16},\qquad b=\frac1{64},\qquad
+ d=\frac1{256},\qquad\delta=\frac1{1024},\\
+ P=-1+[-d,d]+i[-d,d],\qquad
+ U_0=[-a,a]+i[-a,a],\qquad
+ U_1=-1+[-b,b]+i[-b,b],\\
+ \forall c\in P,\quad
+ f_c(U_0)\subseteq U_1^{-\delta},\qquad
+ f_c(U_1)\subseteq U_0^{-\delta},\\
+ \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,\qquad
+ P\subseteq\Int\M.
+\end{gather*}
+\end{proposition}
+\begin{proof}
+\begin{gather*}
+ c=-1+e+if,\qquad |e|,|f|\le d,\\
+ z=x+iy\in U_0,\qquad
+ f_c(z)+1=(x^2-y^2+e)+i(2xy+f),\\
+ |\operatorname{Re}(f_c(z)+1)|,\
+ |\operatorname{Im}(f_c(z)+1)|
+ \le2a^2+d=\frac3{256}<b-\delta=\frac{15}{1024},\\
+ z=-1+x+iy\in U_1,\qquad
+ f_c(z)=(-2x+x^2-y^2+e)+i(-2y+2xy+f),\\
+ |\operatorname{Re}f_c(z)|,\ |\operatorname{Im}f_c(z)|
+ \le2b+2b^2+d=\frac{73}{2048}
+ <a-\delta=\frac{126}{2048},\\
+ 0\in U_0\subseteq U_0\cup U_1,\qquad
+ \forall c\in P,\quad
+ f_c(U_0\cup U_1)\subseteq U_0^{-\delta}\cup U_1^{-\delta},\\
+ \overset{\eqref{eq:finite-trap}}{\Longrightarrow}\quad
+ \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,\qquad
+ P\subseteq\Int\M.
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\begin{lemma}[Closure of inner approximations]
+\begin{gather*}
+ \left.
+ \begin{gathered}
+ \forall n\in\N,\quad I_n\subseteq I_{n+1}\subseteq\M,\\
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists n\in\N\ \exists z\in I_n,\quad |z-c|<\varepsilon
+ \end{gathered}
+ \right\}
+ \Longrightarrow
+ \overline{\bigcup_nI_n}=\M.
+\end{gather*}
+\end{lemma}
+\begin{proof}
+\begin{gather*}
+ \bigcup_nI_n\subseteq\M,\qquad\Closed(\M)
+ \Longrightarrow\overline{\bigcup_nI_n}\subseteq\M,\\
+ c\in\M\Longrightarrow
+ \forall\varepsilon>0,\quad
+ B(c,\varepsilon)\cap\bigcup_nI_n\ne\varnothing
+ \Longrightarrow c\in\overline{\bigcup_nI_n},\\
+ \M\subseteq\overline{\bigcup_nI_n}\subseteq\M.
+ \qedhere
+\end{gather*}
+\end{proof}
+
+\end{document}

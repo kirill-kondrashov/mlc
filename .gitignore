@@ -9,3 +9,4 @@ notebooks/.ipynb_checkpoints/
 notebooks/.venv/
 .venv-notebooks/
 notebooks-html/
+/docs/uniform_geometric_mlc.toc

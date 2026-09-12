@@ -8,3 +8,7 @@ import Mlc.FiniteComponentCriterion
 import Mlc.FlowInterfaces
 import Mlc.ParameterClassification
 import Mlc.ParameterAddressSpace
+import Mlc.FiniteTrappingRegions
+import Mlc.TrappingRegionObstruction
+import Mlc.UniformGeometricRoot
+import Mlc.UniformGeometricVertexControl

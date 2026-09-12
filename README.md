@@ -36,9 +36,6 @@ MLC.Categorical.MLCConjecture
   ↔ LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
-The public root contains no `GreenSublevelIntersectionCategoricalData`
-field.
-
 ## Root input
 
 For $N\in\mathbb N$, define
@@ -147,7 +144,9 @@ remains open.
 
 ### Finite inner systems
 
-A rational trapping certificate $\tau=(P_\tau,U_\tau,B_\tau)$ satisfies
+A finite-union trapping certificate has a rational parameter rectangle
+$P_\tau$, a finite union $U_\tau$ of rational rectangles, and a bound
+$B_\tau$, satisfying
 
 $$
 \begin{aligned}
@@ -189,6 +188,12 @@ It implies
 $$
 \overline{\bigcup_N I_N(F)}=M.
 $$
+
+The single-rectangle scheme in `CertifiedTrappingRegions.lean` satisfies
+$|\operatorname{Re}c|\le1/2$ for every certified parameter, so its
+`InnerDensity` proposition is false. Finite unions admit a certificate for
+the parameter box centered at $-1$ with real and imaginary halfwidth
+$1/256$; this is an instance of `FiniteTrappingRegions.lean`.
 
 ### Addresses and classification
 
@@ -238,16 +243,17 @@ partition.
 
 ### Finite-component bridge
 
-The finite-component certificate proposition has the form
+Here $P_i$ are rational closed rectangles, $r_i,\delta_i\in\mathbb R$,
+and $k,T,N,L\in\mathbb N$. The finite-component proposition is
 
 $$
 \begin{aligned}
 \mathrm{FC}:\Longleftrightarrow
 \forall k\ \exists\text{ finite }J,\ T,\
 \{(P_i,r_i,\delta_i)\}_{i\in J}:\quad
-&0<\delta_i<r_i<2^{-k},\\
+&\forall i\in J,\quad 0<\delta_i<r_i<2^{-k},\\
 &O_T\subseteq\bigcup_{i\in J}P_i,\\
-&\forall i,c\in M\cap P_i,\ \forall N\ \exists L\ge N:\\
+&\forall i\in J\ \forall c\in M\cap P_i\ \forall N\ \exists L\ge N:\\
 &\qquad O_L\cap\overline B(c,\delta_i)
 \subseteq C_N(c,r_i).
 \end{aligned}
@@ -263,52 +269,62 @@ $$
 
 The repository contains no proof of $\mathrm{FC}$.
 
-### Parametrisation and flow
+### Uniform geometric deformation
 
-A coherent parametrisation consists of continuous maps
+[Proof document (PDF)](docs/uniform_geometric_mlc.pdf) ·
+[LaTeX source](docs/uniform_geometric_mlc.tex).
 
-$$
-h_N:\overline{\mathbb D}\to\mathbb C,\qquad
-h:\overline{\mathbb D}\to\mathbb C,
-$$
-
-with $h_N(\overline{\mathbb D})\subseteq S$, uniform convergence
-$h_N\to h$, and $h(\overline{\mathbb D})=S$. The range equality is proved
-from the stated fields.
-
-A terminal extension is a continuous map
-
-$$
-H:[1,e]\times\mathbb C\to\mathbb C
-$$
-
-with
+Let $D=[-2,2]+i[-2,2]$. The program $\mathrm{UG}$ seeks rational
+piecewise-affine maps $R_n:D\to D$ and integers $N_n\ge n$ such that
 
 $$
 \begin{aligned}
-&H([1,e]\times\mathbb C)\subseteq A,\\
-&H(1,x)\in S\quad(x\in\mathbb C),\\
-&H(1,x)=x\quad(x\in S).
+&R_0=\operatorname{id}_D,\qquad R_n|_{O_{N_n}}=\operatorname{id},\\
+&\forall z\in D\ \exists w\in O_{N_n},\quad |R_n(z)-w|\le2^{-n},\\
+&\|R_{n+1}-R_n\|_\infty\le8\,2^{-n}.
 \end{aligned}
 $$
 
-These structures carry no theorem deriving $\mathrm{MLC}(M)$.
+The proved reduction yields a continuous limit $R:D\to M$ satisfying
+
+$$
+\|R_n-R\|_\infty\le16\,2^{-n},\qquad R|_M=\operatorname{id}_M.
+$$
+
+Images of convex neighborhoods under $R$ give
+
+$$
+\mathrm{UG}\Longrightarrow\text{a continuous retraction }D\to M
+\Longrightarrow\mathrm{MLC}(M).
+$$
+
+The PDF proves the uniform-limit and deformation implications and the
+trapping estimates. Existence of an infinite compatible tower remains
+unproved.
+
+The Lean formalisation of the implication is
+
+```lean
+MLC.UniformGeometry.mandelbrot_locallyConnected_of_squareTower
+  (T : MLC.UniformGeometry.OrbitRetractionTower
+    MLC.UniformGeometry.parameterSquare) :
+  LocallyConnectedSpace MLC.mandelbrotSet
+```
 
 ## Current obligations
 
 The remaining existence statements are
 
 $$
-\mathrm{BUF}(M,O),\qquad
+\mathrm{UG},\qquad \mathrm{BUF}(M,O),\qquad
 \mathrm{FC},\qquad
 \exists F\,\mathrm{ID}(F),\qquad
-\exists E\,(\mathrm{VD}(E)\land\mathrm{AC}(E)),
-\qquad
-\mathrm{RootFlowInput}(M).
+\exists E\,(\mathrm{VD}(E)\land\mathrm{AC}(E)).
 $$
 
-They occur as theorem hypotheses or certificate fields. The project declares
-no global instance for any of them.
+Here $F$ uses finite-union trapping certificates. These existence statements
+remain explicit obligations; the single-rectangle density statement has a
+proved negation.
 
 The root axiom frontier is
 
@@ -326,7 +342,22 @@ unconditional theorem of $\mathrm{MLC}(M)$.
 make build
 make check
 ./scripts/verify_output.sh
+make check-uniform
+make proof-pdf
 ```
+
+Expected `make check` output:
+
+```text
+✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
+All axioms used:
+- propext
+- Quot.sound
+- Classical.choice
+```
+
+This summary concerns `MLC.RootInput → LocallyConnectedSpace M`; it
+does not supply the `MLC.RootInput` argument.
 
 ## Main files
 
@@ -337,12 +368,18 @@ make check
 | Compatibility theorem | [`Mlc/Core.lean`](Mlc/Core.lean) |
 | Outer-buffer theorem | [`Mlc/ParameterComponentApproximation.lean`](Mlc/ParameterComponentApproximation.lean) |
 | Finite outer systems | [`Mlc/CertifiedOrbitApproximation.lean`](Mlc/CertifiedOrbitApproximation.lean) |
-| Inner trapping systems | [`Mlc/CertifiedTrappingRegions.lean`](Mlc/CertifiedTrappingRegions.lean) |
+| Finite-union trapping systems | [`Mlc/FiniteTrappingRegions.lean`](Mlc/FiniteTrappingRegions.lean) |
+| Single-rectangle obstruction | [`Mlc/TrappingRegionObstruction.lean`](Mlc/TrappingRegionObstruction.lean) |
 | Parameter classification | [`Mlc/ParameterClassification.lean`](Mlc/ParameterClassification.lean) |
 | Address interface | [`Mlc/ParameterAddressSpace.lean`](Mlc/ParameterAddressSpace.lean) |
 | Finite-component bridge | [`Mlc/FiniteComponentCriterion.lean`](Mlc/FiniteComponentCriterion.lean) |
 | Flow interfaces | [`Mlc/FlowInterfaces.lean`](Mlc/FlowInterfaces.lean) |
+| Fixed geometric domain | [`Mlc/UniformGeometricDomain.lean`](Mlc/UniformGeometricDomain.lean) |
+| Uniform limit estimates | [`Mlc/UniformGeometricApproximation.lean`](Mlc/UniformGeometricApproximation.lean) |
+| Retraction and local connectedness | [`Mlc/RetractionLocalConnectivity.lean`](Mlc/RetractionLocalConnectivity.lean) |
+| Geometric theorem assembly | [`Mlc/UniformGeometricRoot.lean`](Mlc/UniformGeometricRoot.lean) |
 | Axiom checker | [`check_axioms.lean`](check_axioms.lean) |
+| Geometric theorem audit | [`check_uniform_program.lean`](check_uniform_program.lean) |
 
 ## Dependencies
 
