@@ -269,13 +269,13 @@ $$
 
 The repository contains no proof of $\mathrm{FC}$.
 
-### Uniform geometric deformation
+### Uniform geometric reduction
 
 [Proof document (PDF)](docs/uniform_geometric_mlc.pdf) ·
 [LaTeX source](docs/uniform_geometric_mlc.tex).
 
-Let $D=[-2,2]+i[-2,2]$. The program $\mathrm{UG}$ seeks rational
-piecewise-affine maps $R_n:D\to D$ and integers $N_n\ge n$ such that
+Let $D=[-2,2]+i[-2,2]$. The hypothesis $\mathrm{UG}$ asserts the
+existence of continuous maps $R_n:D\to D$ and integers $N_n\ge n$ such that
 
 $$
 \begin{aligned}
@@ -298,9 +298,9 @@ $$
 \Longrightarrow\mathrm{MLC}(M).
 $$
 
-The PDF proves the uniform-limit and deformation implications and the
-trapping estimates. Existence of an infinite compatible tower remains
-unproved.
+The PDF proves the uniform-limit retraction theorem and its
+local-connectivity consequence. Existence of an infinite compatible
+tower remains unproved.
 
 The Lean formalisation of the implication is
 

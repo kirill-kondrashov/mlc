@@ -6,33 +6,23 @@
 \pdfgentounicode=1
 \hypersetup{
   pdftitle={Uniform geometric estimates and Mandelbrot local connectivity},
-  pdfsubject={Conditional local-connectivity theorem, trapping, and approximation bounds}
+  pdfsubject={Conditional MLC theorem from an unproved uniform geometric hypothesis}
 }
 
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 
 \newcommand{\C}{\mathbb C}
 \newcommand{\R}{\mathbb R}
-\newcommand{\Q}{\mathbb Q}
 \newcommand{\N}{\mathbb N}
-\newcommand{\Z}{\mathbb Z}
 \newcommand{\M}{\mathcal M}
 \newcommand{\D}{D}
-\newcommand{\dist}{\operatorname{dist}}
 \newcommand{\id}{\operatorname{id}}
-\newcommand{\Int}{\operatorname{int}}
 \newcommand{\LC}{\operatorname{LC}}
-\newcommand{\conv}{\operatorname{conv}}
 \newcommand{\Conn}{\operatorname{Connected}}
-\newcommand{\Cpt}{\operatorname{Compact}}
-\newcommand{\Closed}{\operatorname{Closed}}
-\newcommand{\Convex}{\operatorname{Convex}}
-\newcommand{\Affine}{\operatorname{Affine}}
 
 \title{Uniform geometric estimates\\and Mandelbrot local connectivity}
 \author{}
@@ -42,227 +32,361 @@
 \maketitle
 
 \section*{Task}
+Prove $\LC(\M)$ by establishing the existence assertion $\mathsf{UG}$
+in Definition~\ref{def:ug}.  Theorem~\ref{thm:mlc} proves
+$\mathsf{UG}\Longrightarrow\LC(\M)$.  The assertion $\mathsf{UG}$
+remains unproved.
+
+\section{Definitions and local connectedness}
+
+All subsets of $\C$ carry the Euclidean subspace topology.
+The notation $\Conn(V)$ asserts that $V$ is connected.
+
+\begin{definition}[Critical orbit and Mandelbrot set]\label{def:mandelbrot}
 \begin{gather*}
-  \N:=\{0,1,2,\ldots\},\qquad
-  f_c(z):=z^2+c,\qquad
-  p_0(c):=0,\qquad p_{n+1}(c):=p_n(c)^2+c,\\
-  \M:=\{c\in\C:\exists B\ge0\ \forall n\in\N,\ |p_n(c)|\le B\},\\
-  B(c,r):=\{z\in\C:|z-c|<r\}.
+ \N:=\{0,1,2,\ldots\},\qquad f_c(z):=z^2+c
+ \quad(c,z\in\C),\\
+ p_0(c):=0,\qquad p_{n+1}(c):=p_n(c)^2+c
+ \quad(c\in\C,\ n\in\N),\\
+ \M:=\{c\in\C:\exists B\in[0,\infty)\ \forall n\in\N,\
+                         |p_n(c)|\le B\}.
 \end{gather*}
-\begin{equation*}
-  \LC(X):=
+\end{definition}
+\noindent
+In words, $\N$ is the set of nonnegative integers.  For each complex
+parameter $c$, $f_c$ sends $z$ to $z^2+c$.  The critical orbit starts
+at $p_0(c)=0$ and satisfies $p_{n+1}(c)=p_n(c)^2+c$ for every
+$n\in\N$.  A complex parameter $c$ belongs to $\M$ if and only if
+there is a nonnegative real number $B$ such that $|p_n(c)|\le B$
+for every $n\in\N$.
+
+\begin{definition}[Connected neighborhoods]\label{def:lc}
+For $c\in\C$, $r>0$, and $X\subseteq\C$, define
+\begin{gather*}
+ B(c,r):=\{z\in\C:|z-c|<r\},\qquad
+ \overline B(c,r):=\{z\in\C:|z-c|\le r\},\\
+ \LC(X):=
+ \left[
  \begin{gathered}
  \forall c\in X\ \forall\eta>0\ \exists\delta>0\
  \exists V\subseteq X:\\
  \Conn(V)\ \land\
  X\cap B(c,\delta)\subseteq V\subseteq X\cap B(c,\eta)
  \end{gathered}
- \qquad(X\subseteq\C).
-\end{equation*}
-Prove $\LC(\M)$.
+ \right].
+\end{gather*}
+\end{definition}
+\noindent
+In words, $B(c,r)$ consists of the points whose distance from $c$ is
+less than $r$, and $\overline B(c,r)$ consists of the points whose
+distance from $c$ is at most $r$.  The assertion $\LC(X)$ holds if and
+only if, for every $c\in X$ and every positive real number $\eta$,
+there exist a positive real number $\delta$ and a connected subset
+$V$ of $X$ containing $X\cap B(c,\delta)$ and contained in
+$X\cap B(c,\eta)$.
 
- \noindent
- In words, $\N$ is the set of nonnegative integers; $f_c$ is the
- quadratic map $z\mapsto z^2+c$; $p_0(c)$ is the complex number $0$;
- for every $n\in\N$, $p_{n+1}(c)$ is the complex number
- $p_n(c)^2+c$; $\M$ is the set of all complex numbers $c$ for which
- there exists a real number $B\ge0$ such that, for every $n\in\N$,
- $|p_n(c)|\le B$; and $B(c,r)$ is the open disk consisting of all
- complex numbers $z$ satisfying $|z-c|<r$.
-
- \noindent
- For a subset $X$ of $\C$, $\LC(X)$ means the following literal
- statement: for every $c\in X$ and every real number $\eta>0$, there
- exist a real number $\delta>0$ and a subset $V$ of $X$ such that $V$ is
- connected, $X\cap B(c,\delta)\subseteq V$, and
- $V\subseteq X\cap B(c,\eta)$.  The task is to prove this statement for
- $X=\M$.
-
- \paragraph{Notation and reading conventions.}
-The symbols $\C$, $\R$, $\Q$, and $\N$ denote the complex numbers, real
-numbers, rational numbers, and nonnegative integers, respectively.  The
-notation $C(X,Y)$ means the set of continuous maps from $X$ to $Y$, and
-$\overline B(c,r)$ denotes the closed disk with centre $c$ and radius
-$r$.  For a set $A$, $\mathbf 1_A$ is its indicator function,
-$\partial A$ is its boundary, and $\Int(A)$ is its interior.
-
-The abbreviations $\Cpt(A)$, $\Closed(A)$, $\Convex(A)$, and $\Conn(A)$
-mean, respectively, that $A$ is compact, closed, convex, and connected.
-The notation $A\mathbin{\dot\cup}B$ denotes a disjoint union.
-For nonempty compact sets $A,B\subseteq\C$,
+\begin{lemma}[Connected-neighborhood criterion]\label{lem:lc-criterion}
+For every $X\subseteq\C$,
 \[
- \dist(z,A):=\inf_{a\in A}|z-a|,
- \qquad
- d_H(A,B):=
- \max\left\{\sup_{a\in A}\dist(a,B),\
-             \sup_{b\in B}\dist(b,A)\right\}.
+ \LC(X)\quad\Longleftrightarrow\quad
+ \text{$X$ has a basis of connected relatively open sets}.
 \]
-In particular,
+\end{lemma}
+\noindent
+In words, $\LC(X)$ holds if and only if, for every relatively open
+subset $U$ of $X$ and every $c\in U$, there is a connected relatively
+open subset $V$ of $X$ with $c\in V\subseteq U$.
+\begin{proof}
+Suppose that $X$ has a basis of connected relatively open sets.
+For $c\in X$ and $\eta>0$, choose a connected relatively open set $V$
+such that
 \[
-d_H(A,B)=0\Longleftrightarrow A=B.
+ c\in V\subseteq X\cap B(c,\eta).
 \]
-The notation $A_n\downarrow A$ abbreviates
-\[
-\forall n\in\N,\quad A_{n+1}\subseteq A_n,
-\qquad
-\bigcap_{n\in\N}A_n=A,
-\]
-and $A_n\uparrow A$ abbreviates
-\[
-\forall n\in\N,\quad A_n\subseteq A_{n+1},
-\qquad
-\bigcup_{n\in\N}A_n=A.
-\]
+Relative openness gives $\delta>0$ with
+$X\cap B(c,\delta)\subseteq V$.  These choices satisfy
+Definition~\ref{def:lc}.
 
-Every displayed implication is a universally quantified implication.
-In particular,
+Conversely, assume $\LC(X)$.  Fix a relatively open subset $U$ of
+$X$ and $c\in U$, and define
 \[
-\mathsf A(\nu,R_\bullet)\Longrightarrow\LC(\M)
+ K:=\bigcup\{S\subseteq U:\Conn(S)\ \land\ c\in S\}.
 \]
-does not contain an existential assertion about $\nu$ or
-$R_\bullet$.  An existential assertion is written separately as
-$\mathsf{UG}$ in \eqref{eq:ug-existence}.  A displayed chain records
-successive applications of the preceding statements.
-
-\section{Orbit bounds}
-
-Lemma~\ref{lem:escape} gives the escape-radius description of $\M$.
-For every $N\in\N$, the definition of $O_N$ imposes the inequalities
-$|p_j(c)|\le2$ for $0\le j\le N$; Lemma~\ref{lem:outer} gives
+The family contains $\{c\}$.  Every member is connected and contains
+$c$, so $K$ is connected and $c\in K\subseteq U$.
+For any $y\in K$, relative openness of $U$ gives $\eta>0$ such that
+$X\cap B(y,\eta)\subseteq U$.  Applying $\LC(X)$ at $y$ gives
+$\delta>0$ and a connected set $V_y$ with
 \[
-\M\subseteq O_N,\qquad
-O_{N+1}\subseteq O_N,\qquad
-\bigcap_{N\in\N}O_N=\M.
+ X\cap B(y,\delta)\subseteq V_y
+ \subseteq X\cap B(y,\eta)\subseteq U.
 \]
+The sets $K$ and $V_y$ both contain $y$.  Their union is therefore a
+connected subset of $U$ containing $c$, so the definition of $K$ gives
+$K\cup V_y\subseteq K$.  In particular,
+$X\cap B(y,\delta)\subseteq K$.  This holds for every $y\in K$;
+hence $K$ is relatively open in $X$.  The set $K$ is the required
+connected relatively open neighborhood of $c$ inside $U$.
+\end{proof}
 
-\begin{lemma}\label{lem:escape}
+\section{Orbit bounds and outer sets}
+
+\begin{lemma}[Escape radius]\label{lem:escape}
 \begin{equation}\label{eq:escape}
  \M=\{c\in\C:\forall n\in\N,\ |p_n(c)|\le2\}.
 \end{equation}
 \end{lemma}
 \noindent
-In words, a parameter $c$ belongs to $\M$ exactly when every iterate
-$p_n(c)$ of the critical orbit has modulus at most $2$.
+In words, a complex parameter $c$ belongs to $\M$ if and only if
+$|p_n(c)|\le2$ for every $n\in\N$.
 \begin{proof}
-\begin{gather*}
- n\in\N,\qquad q:=|p_n(c)|>2,\qquad |c|\le q,\\
- |p_n(c)|=q,\qquad
- |p_{n+j}(c)|\ge q
- \ \Longrightarrow\
- \begin{aligned}[t]
+First suppose that $c\in\C$ and $n\in\N$ satisfy
+\[
+ q:=|p_n(c)|>2,\qquad |c|\le q.
+\]
+Induction on $j$ gives
+\begin{equation}\label{eq:escape-growth}
+ |p_{n+j}(c)|\ge q(q-1)^j\qquad(j\in\N).
+\end{equation}
+The case $j=0$ is equality.  For the induction step,
+$|p_{n+j}(c)|\ge q$ because $q-1>1$, and consequently
+\begin{align*}
  |p_{n+j+1}(c)|
  &\ge |p_{n+j}(c)|^2-|c|\\
- &\ge |p_{n+j}(c)|\bigl(|p_{n+j}(c)|-1\bigr)\\
- &\ge(q-1)|p_{n+j}(c)|,
- \end{aligned}\\
- \forall j\in\N,\quad |p_{n+j}(c)|\ge q(q-1)^j
- \xrightarrow[j\to\infty]{}+\infty.
-\end{gather*}
-\begin{align*}
- |c|>2
- &\Longrightarrow
- |p_1(c)|=|c|>2
- \Longrightarrow c\notin\M,\\
- |c|\le2\ \land\ |p_n(c)|>2
- &\Longrightarrow
- |p_n(c)|>2\ \land\ |c|\le|p_n(c)|
- \Longrightarrow c\notin\M,\\
- c\in\M
- &\Longrightarrow \forall n\in\N,\ |p_n(c)|\le2,\\
- \bigl(\forall n\in\N,\ |p_n(c)|\le2\bigr)
- &\Longrightarrow
- \exists B\ge0\ \forall n\in\N,\ |p_n(c)|\le B
- \Longrightarrow c\in\M.
- \qedhere
+ &\ge |p_{n+j}(c)|^2-|p_{n+j}(c)|\\
+ &\ge(q-1)|p_{n+j}(c)|\\
+ &\ge q(q-1)^{j+1}.
 \end{align*}
+Since $q-1>1$, the lower bound in \eqref{eq:escape-growth} tends to
+infinity.  Thus $c\notin\M$.
+
+If $|c|>2$, apply this argument with $n=1$ and $q=|p_1(c)|=|c|$.
+If $|c|\le2$ and $|p_n(c)|>2$ for some $n$, apply it with
+$q=|p_n(c)|$, which satisfies $|c|\le q$.  Hence membership in $\M$
+implies $|p_n(c)|\le2$ for every $n$.  Conversely, these inequalities
+give the bound $B=2$ in Definition~\ref{def:mandelbrot}.
 \end{proof}
 
-\begin{definition}
+\begin{definition}[Outer sets and parameter square]\label{def:outer}
+For $N\in\N$, define
 \begin{equation}\label{eq:outer}
  O_N:=\overline B(0,2)\cap
        \bigcap_{j=0}^{N}p_j^{-1}\bigl(\overline B(0,2)\bigr),
  \qquad
- \D:=[-2,2]+i[-2,2].
+ \D:=\{x+iy:x,y\in[-2,2]\}.
 \end{equation}
 \end{definition}
-
 \noindent
-In words, for each $N\in\N$, $O_N$ is the set of all complex numbers
-$c$ such that $|c|\le2$ and $|p_j(c)|\le2$ for every integer
-$j$ with $0\le j\le N$.  The set $\D$ is the closed square consisting
-of all complex numbers $x+iy$ with $-2\le x\le2$ and $-2\le y\le2$.
+In words, $O_N$ consists of the parameters $c$ satisfying $|c|\le2$
+and $|p_j(c)|\le2$ for every integer $j$ with $0\le j\le N$.
+The set $\D$ consists of the complex numbers whose real and imaginary
+parts both belong to $[-2,2]$.
 
-\begin{lemma}\label{lem:outer}
-\begin{gather}
- 0\in\M\subseteq O_{N+1}\subseteq O_N\subseteq\D,\qquad
- \bigcap_{N\in\N}O_N=\M,\label{eq:outer-properties}\\
- \Cpt(O_N),\qquad \Cpt(\M),\qquad
- \Cpt(\D),\qquad\Convex(\D).\notag
-\end{gather}
+\begin{lemma}[Nested closed outer sets]\label{lem:outer}
+For every $N\in\N$,
+\begin{equation}\label{eq:outer-properties}
+ 0\in\M\subseteq O_{N+1}\subseteq O_N\subseteq\D,
+ \qquad
+ \bigcap_{N\in\N}O_N=\M.
+\end{equation}
+Each $O_N$, $\M$, and $\D$ is compact and closed in $\C$, and $\D$
+is convex.
 \end{lemma}
 \noindent
-In words, $0$ belongs to $\M$; $\M$ is contained in every $O_N$;
-$O_{N+1}$ is contained in $O_N$; every $O_N$ is contained in $\D$; the
-intersection of all $O_N$ is $\M$; and $O_N$, $\M$, and $\D$ are compact
-while $\D$ is convex.
+In words, $0$ belongs to $\M$; every outer set contains $\M$;
+$O_{N+1}$ is contained in $O_N$; and every $O_N$ is contained in
+$\D$.  The intersection of all outer sets is $\M$.  Each outer set,
+the Mandelbrot set, and the parameter square is compact and closed,
+and the parameter square is convex.
 \begin{proof}
-\begin{gather*}
- p_0=0\in\Z[X],\qquad
- p_{n+1}=p_n^2+X\in\Z[X],\qquad p_n\in C(\C,\C),\\
- \Closed\bigl(p_j^{-1}(\overline B(0,2))\bigr),\qquad
- \Closed(O_N),\qquad O_N\subseteq\overline B(0,2)
- \Longrightarrow\Cpt(O_N),\\
- \forall n\in\N,\quad p_n(0)=0,\qquad
- O_{N+1}=O_N\cap p_{N+1}^{-1}(\overline B(0,2)),\\
+Induction using the orbit recurrence proves both that $p_n$ is
+continuous on $\C$ and that $p_n(0)=0$ for every $n\in\N$.
+Thus $0\in\M$.  Each $O_N$ is a finite intersection of closed sets
+and is contained in $\overline B(0,2)$; it is compact by the
+Heine--Borel theorem.  The identity
+\[
+ O_{N+1}=O_N\cap p_{N+1}^{-1}\bigl(\overline B(0,2)\bigr)
+\]
+gives nesting.  Lemma~\ref{lem:escape}, together with $p_1(c)=c$,
+gives $\M\subseteq O_N$ for every $N$ and
+\[
  \bigcap_{N\in\N}O_N
  =\overline B(0,2)\cap
-   \bigcap_{j\in\N}p_j^{-1}(\overline B(0,2))
- \overset{\eqref{eq:escape}}{=}\M,\\
- \Closed(\M),\qquad\M\subseteq\overline B(0,2)
- \Longrightarrow\Cpt(\M),\\
- \overline B(0,2)\subseteq\D,\qquad
- \D\simeq[-2,2]^2
- \Longrightarrow\Cpt(\D)\land\Convex(\D).
- \qedhere
-\end{gather*}
+   \bigcap_{j\in\N}p_j^{-1}\bigl(\overline B(0,2)\bigr)
+ =\M.
+\]
+This intersection is closed and bounded, so $\M$ is compact.
+The inequalities $|\operatorname{Re}z|\le|z|$ and
+$|\operatorname{Im}z|\le|z|$ give $\overline B(0,2)\subseteq\D$.
+The square $\D$ is closed and bounded, hence compact.  If $z,w\in\D$
+and $t\in[0,1]$, each coordinate of $(1-t)z+tw$ lies in $[-2,2]$.
+Thus $\D$ is convex.
 \end{proof}
 
-\section{Uniform convergence}
+\begin{definition}[Hausdorff outer gap]\label{def:outer-gap}
+For nonempty compact sets $A,B\subseteq\C$, define
+\begin{gather*}
+ \operatorname{dist}(z,A):=\inf_{a\in A}|z-a|,\\
+ d_H(A,B):=
+ \max\left\{\sup_{a\in A}\operatorname{dist}(a,B),\
+             \sup_{b\in B}\operatorname{dist}(b,A)\right\},\\
+ h_N:=d_H(O_N,\M)
+     =\sup_{z\in O_N}\operatorname{dist}(z,\M)
+ \qquad(N\in\N).
+\end{gather*}
+\end{definition}
+\noindent
+In words, $h_N$ is the largest distance from a point of the finite-stage
+outer set $O_N$ to the Mandelbrot set $\M$.  The second expression for
+$h_N$ is valid because $\M\subseteq O_N$.
 
-The sequence $\nu\in\N^\N$ specifies the orbit depth at each stage, and
-$R_\bullet\in C(\D,\D)^\N$ specifies the stage maps.  The predicate
-$\mathsf A(\nu,R_\bullet)$ is the conjunction of the five clauses in
-\eqref{eq:hypotheses}.
+\begin{theorem}[Hausdorff outer-gap convergence]\label{thm:outer-gap}
+\begin{gather}
+ 0\le h_{N+1}\le h_N,\qquad
+ \lim_{N\to\infty}h_N=0,\label{eq:outer-gap-limit}\\
+ \exists\nu\in\N^\N:\quad
+ \nu_0=0,\qquad
+ \forall n\ge1,\quad
+ \nu_n>\nu_{n-1},\quad
+ \nu_n\ge n,\quad
+ h_{\nu_n}\le2^{-n}.\label{eq:depth-selection}
+\end{gather}
+\end{theorem}
+\noindent
+In words, the finite-stage outer sets decrease to $\M$ in Hausdorff
+distance.  In particular, one can choose a strictly increasing sequence
+of orbit depths $\nu_n$ with $\nu_n\ge n$ and with outer-set error at
+most $2^{-n}$ for every $n\ge1$.
+\begin{proof}
+Since $O_{N+1}\subseteq O_N$,
+\[
+ h_{N+1}
+ =\sup_{z\in O_{N+1}}\operatorname{dist}(z,\M)
+ \le\sup_{z\in O_N}\operatorname{dist}(z,\M)
+ =h_N.
+\]
+Thus $(h_N)_{N\in\N}$ has a limit $h_\infty\ge0$.
 
-\begin{definition}
-\begin{equation*}
+Assume for contradiction that $h_\infty>0$.  For every $N\in\N$,
+compactness of $O_N$ and continuity of
+$z\mapsto\operatorname{dist}(z,\M)$ give
+$z_N\in O_N$ with
+\[
+ \operatorname{dist}(z_N,\M)=h_N.
+\]
+The sequence $(z_N)_{N\in\N}$ lies in the compact set $O_0$.
+Choose a convergent subsequence
+$z_{N_k}\to z_\infty\in O_0$.  Fix $m\in\N$.  For all sufficiently
+large $k$, $N_k\ge m$, and hence
+\[
+ z_{N_k}\in O_{N_k}\subseteq O_m.
+\]
+The set $O_m$ is closed, so $z_\infty\in O_m$.  Since $m$ was arbitrary,
+\[
+ z_\infty\in\bigcap_{m\in\N}O_m=\M.
+\]
+The distance function to a nonempty set is $1$-Lipschitz:
+\[
+ \left|\operatorname{dist}(z,A)-\operatorname{dist}(w,A)\right|
+ \le |z-w|.
+\]
+Therefore
+\[
+ h_{N_k}
+ =\operatorname{dist}(z_{N_k},\M)
+ \longrightarrow\operatorname{dist}(z_\infty,\M)=0,
+\]
+contradicting $h_{N_k}\to h_\infty>0$.  Hence
+$h_N\to0$.
+
+Choose $\nu_0:=0$.  Inductively, suppose that $\nu_{n-1}$ has been
+chosen for some $n\ge1$.  Since $h_N\to0$, there exists
+$N>\max\{n,\nu_{n-1}\}$ with $h_N\le2^{-n}$.  Set $\nu_n:=N$.
+This gives \eqref{eq:depth-selection}.
+\end{proof}
+
+\begin{proposition}[Image error from the outer gap]\label{prop:image-gap}
+Let $\nu\in\N^\N$ and let
+$T_\bullet\in C(\D,\D)^\N$.  Assume
+\[
+ \forall n\in\N\ \forall c\in O_{\nu_n},\qquad T_n(c)=c.
+\]
+Define
+\[
+ a_n:=\sup_{z\in\D}
+       \operatorname{dist}(T_n(z),O_{\nu_n}).
+\]
+Then
+\begin{equation}\label{eq:image-gap}
+ d_H(T_n(\D),\M)\le a_n+h_{\nu_n}
+ \qquad(n\in\N).
+\end{equation}
+\end{proposition}
+\noindent
+In words, the Hausdorff distance from the image $T_n(\D)$ to $\M$ is
+bounded by the sum of the distance from $T_n(\D)$ to its finite-stage
+outer set and the distance from that outer set to $\M$.
+\begin{proof}
+Fix $n\in\N$.  Since $\M\subseteq O_{\nu_n}$ and $T_n$ fixes
+$O_{\nu_n}$,
+\[
+ \M\subseteq T_n(\M)\subseteq T_n(\D).
+\]
+Thus
+\[
+ \sup_{c\in\M}\operatorname{dist}(c,T_n(\D))=0.
+\]
+Fix $z\in\D$ and $\varepsilon>0$.  Choose
+$w\in O_{\nu_n}$ with
+\[
+ |T_n(z)-w|
+ \le\operatorname{dist}(T_n(z),O_{\nu_n})+\varepsilon
+ \le a_n+\varepsilon.
+\]
+Then
+\[
+ \operatorname{dist}(T_n(z),\M)
+ \le |T_n(z)-w|+\operatorname{dist}(w,\M)
+ \le a_n+\varepsilon+h_{\nu_n}.
+\]
+Letting $\varepsilon\downarrow0$ and taking the supremum over
+$z\in\D$ gives
+\[
+ \sup_{y\in T_n(\D)}\operatorname{dist}(y,\M)
+ \le a_n+h_{\nu_n}.
+\]
+Together with the first directed distance, this is
+\eqref{eq:image-gap}.
+\end{proof}
+
+\section{Uniform geometric hypothesis}
+
+\begin{definition}[Uniform distance]\label{def:uniform-distance}
+For topological spaces $X,Y$, define
+\begin{gather*}
+ C(X,Y):=\{F:X\to Y:F\text{ is continuous}\},\\
  \|F-G\|_\infty:=\sup_{z\in\D}|F(z)-G(z)|
  \qquad(F,G\in C(\D,\C)).
-\end{equation*}
-\begin{gather*}
- A,B\subseteq\C,\qquad A,B\ne\varnothing,\qquad
- \Cpt(A),\qquad\Cpt(B),\\
- \dist(z,A):=\inf_{a\in A}|z-a|,\qquad
- d_H(A,B):=
- \max\left\{\sup_{a\in A}\dist(a,B),\
-             \sup_{b\in B}\dist(b,A)\right\}.
 \end{gather*}
+\end{definition}
+\noindent
+In words, $C(X,Y)$ is the set of continuous maps from $X$ to $Y$,
+and $\|F-G\|_\infty$ is the supremum of the distances between $F(z)$
+and $G(z)$ as $z$ ranges over $\D$.  This supremum is finite because
+$\D$ is nonempty and compact and $z\mapsto|F(z)-G(z)|$ is continuous.
+
+\begin{definition}[Uniform geometric existence]\label{def:ug}
+For $\nu\in\N^\N$ and $R_\bullet\in C(\D,\D)^\N$, define
 \begin{equation}\label{eq:hypotheses}
- \begin{gathered}
- \nu\in\N^\N,\qquad R_\bullet\in C(\D,\D)^\N,\\
- \mathsf A(\nu,R_\bullet):=
- \left\{
- \begin{aligned}
- &R_0=\id_\D,\\
- &\forall n\in\N,\quad \nu_n\ge n,\\
- &\forall n\in\N\ \forall c\in O_{\nu_n},\quad R_n(c)=c,\\
- &\forall n\in\N\ \forall z\in\D\ \exists w\in O_{\nu_n},\
-                  |R_n(z)-w|\le2^{-n},\\
- &\forall n\in\N,\quad
-                  \|R_{n+1}-R_n\|_\infty\le8\,2^{-n}.
- \end{aligned}
- \right.
- \end{gathered}
+\begin{aligned}
+ \mathsf A(\nu,R_\bullet):={}&(R_0=\id_\D)\\
+ &{}\land(\forall n\in\N,\ \nu_n\ge n)\\
+ &{}\land(\forall n\in\N\ \forall c\in O_{\nu_n},\ R_n(c)=c)\\
+ &{}\land\bigl(\forall n\in\N\ \forall z\in\D\
+        \exists w\in O_{\nu_n},\ |R_n(z)-w|\le2^{-n}\bigr)\\
+ &{}\land\bigl(\forall n\in\N,\
+        \|R_{n+1}-R_n\|_\infty\le8\,2^{-n}\bigr).
+\end{aligned}
 \end{equation}
 \begin{equation}\label{eq:ug-existence}
  \mathsf{UG}:=
@@ -270,1172 +394,257 @@ $\mathsf A(\nu,R_\bullet)$ is the conjunction of the five clauses in
  \mathsf A(\nu,R_\bullet).
 \end{equation}
 \end{definition}
+\noindent
+In words, $\mathsf A(\nu,R_\bullet)$ holds if and only if all the
+following conditions hold.  The map $R_0$ is the identity on $\D$.
+For every $n\in\N$, the integer $\nu_n$ is at least $n$.
+For every $n\in\N$ and every $c\in O_{\nu_n}$, $R_n(c)=c$.
+For every $n\in\N$ and every $z\in\D$, there is
+$w\in O_{\nu_n}$ with $|R_n(z)-w|\le2^{-n}$.
+For every $n\in\N$, the uniform distance between $R_{n+1}$ and $R_n$
+is at most $8\,2^{-n}$.
 
 \noindent
-In words, $\|F-G\|_\infty$ is the largest value of
-$|F(z)-G(z)|$ for $z\in\D$.  For a point $z$ and a nonempty compact
-set $A$, $\dist(z,A)$ is the infimum of $|z-a|$ over all $a\in A$.
-For nonempty compact sets $A$ and $B$, $d_H(A,B)$ is the larger of
-the supremum of $\dist(a,B)$ over $a\in A$ and the supremum of
-$\dist(b,A)$ over $b\in B$.
+In words, $\mathsf{UG}$ holds if and only if there exist a sequence
+of natural numbers $\nu$ and a sequence of continuous maps
+$R_n:\D\to\D$ for which $\mathsf A(\nu,R_\bullet)$ holds.
 
-\noindent
-Equivalently, \eqref{eq:hypotheses} asserts the conjunction of its five
-displayed clauses.  The existential content of $\mathsf{UG}$ is
-\[
-\exists\nu\in\N^\N\ \exists R_\bullet\in C(\D,\D)^\N,\
-\mathsf A(\nu,R_\bullet).
-\]
-Theorem~\ref{thm:mlc} has this existential assertion as its premise.
-
-The vertex hypotheses in Lemma~\ref{lem:vertices} imply the uniform
-estimate $\|F-G\|_\infty\le b$ on $\D$.
-
-\begin{lemma}[Vertex bound]\label{lem:vertices}
-\begin{gather*}
- 0<\#\mathcal T<\infty,\qquad
- T:=\conv\{v_{T,0},v_{T,1},v_{T,2}\},\qquad
- \bigcup_{T\in\mathcal T}T=\D,\\
- F,G\in C(\D,\C),\qquad b\ge0.
-\end{gather*}
-\begin{equation*}
- \left.
- \begin{aligned}
- &\forall T\in\mathcal T,\quad
-    \Affine(F|_T)\land\Affine(G|_T),\\
- &\forall T\in\mathcal T\ \forall\ell\in\{0,1,2\},\quad
-    |F(v_{T,\ell})-G(v_{T,\ell})|\le b
- \end{aligned}
- \right\}
- \Longrightarrow \|F-G\|_\infty\le b.
-\end{equation*}
-\end{lemma}
-\noindent
-In words, if $F$ and $G$ are affine on every triangle of the finite
-triangulation $\mathcal T$ and their values differ by at most $b$ at
-each triangle vertex, then their values differ by at most $b$ at every
-point of $\D$.
-\begin{proof}
-\begin{gather*}
- z\in\D
- \Longrightarrow
- \exists T\in\mathcal T\ \exists\lambda_0,\lambda_1,\lambda_2\ge0:
- \quad
- \sum_{\ell=0}^2\lambda_\ell=1,\qquad
- z=\sum_{\ell=0}^2\lambda_\ell v_{T,\ell},\\
- \begin{aligned}
- |F(z)-G(z)|
- &=\left|\sum_{\ell=0}^2
-          \lambda_\ell\bigl(F(v_{T,\ell})-G(v_{T,\ell})\bigr)\right|\\
- &\le\sum_{\ell=0}^2
-          \lambda_\ell|F(v_{T,\ell})-G(v_{T,\ell})|
- \le b\sum_{\ell=0}^2\lambda_\ell=b.
- \end{aligned}
- \qedhere
-\end{gather*}
-\end{proof}
-
-The last clause of \eqref{eq:hypotheses} gives
-\[
-\|R_m-R_n\|_\infty\le16\,2^{-n}\qquad(m>n),
-\]
-so $(R_n)_{n\in\N}$ has a uniform limit.  The fourth clause gives
-$R(\D)\subseteq O_k$ for every $k\in\N$, and the third clause gives
-$R|_\M=\id_\M$.
-
-\begin{theorem}[Uniform limit]\label{thm:uniform}
-\begin{equation*}
- \mathsf A(\nu,R_\bullet)\ \Longrightarrow\
- \exists R\in C(\D,\D):
- \quad
- \begin{cases}
- \forall n\in\N,\quad \|R_n-R\|_\infty\le16\,2^{-n},\\
- R(\D)=\M,\\
- \forall c\in\M,\quad R(c)=c.
- \end{cases}
-\end{equation*}
+\begin{theorem}[Summable candidate maps imply $\mathsf{UG}$]
+\label{thm:candidate-to-ug}
+Let $\nu\in\N^\N$ and $T_\bullet\in C(\D,\D)^\N$ satisfy
+\begin{gather}
+ \nu_0=0,\qquad
+ \forall n\ge1,\quad
+ \nu_n>\nu_{n-1},\quad
+ \nu_n\ge n,\quad
+ h_{\nu_n}\le2^{-n},\label{eq:candidate-depths}\\
+ \forall n\in\N\ \forall c\in O_{\nu_n},\qquad T_n(c)=c,\label{eq:candidate-fixing}\\
+ a_n:=\sup_{z\in\D}
+       \operatorname{dist}(T_n(z),O_{\nu_n})
+ \longrightarrow0,\label{eq:candidate-error}\\
+ b_n:=\|T_{n+1}-T_n\|_\infty,\qquad
+ \sum_{n=0}^{\infty}b_n<\infty.\label{eq:candidate-summability}
+\end{gather}
+Then $\mathsf{UG}$ holds.
 \end{theorem}
 \noindent
-In words, if $\mathsf A(\nu,R_\bullet)$ holds, then there is a continuous
-map $R:\D\to\D$ such that $\|R_n-R\|_\infty\le16\,2^{-n}$ for every
-$n\in\N$, the image of $\D$ under $R$ is $\M$, and $R$ fixes every point
-of $\M$.
+In words, after selecting outer sets whose Hausdorff errors decrease
+at a prescribed geometric rate, it is sufficient to construct
+continuous maps that fix the selected outer sets, approach those outer
+sets uniformly, and have summable adjacent uniform displacements.
+The resulting subsequence, preceded by the identity map, satisfies
+all five clauses of $\mathsf A$.
 \begin{proof}
+Define the tail displacements
+\[
+ s_n:=\sum_{j=n}^{\infty}b_j.
+\]
+The convergence of the series in \eqref{eq:candidate-summability}
+implies $s_n\to0$.  Since $a_n\to0$ and $s_n\to0$, one can choose
+strictly increasing integers $(j_n)_{n\ge1}$ recursively so that
+\[
+ j_n\ge n,\qquad
+ a_{j_n}\le2^{-n},\qquad
+ s_{j_n}\le8\,2^{-n}
+ \qquad(n\ge1).
+\]
+Set
+\[
+ \widetilde\nu_0:=0,\qquad
+ \widetilde R_0:=\id_\D,\qquad
+ \widetilde\nu_n:=\nu_{j_n},\qquad
+ \widetilde R_n:=T_{j_n}
+ \quad(n\ge1).
+\]
+For $n\ge1$, \eqref{eq:candidate-depths} gives
+\[
+ \widetilde\nu_n=\nu_{j_n}\ge j_n\ge n,
+ \]
+and \eqref{eq:candidate-fixing} gives
+\[
+ \forall c\in O_{\widetilde\nu_n},\qquad
+ \widetilde R_n(c)=c.
+\]
+Moreover, for every $z\in\D$,
+\[
+ \operatorname{dist}(\widetilde R_n(z),O_{\widetilde\nu_n})
+ =\operatorname{dist}(T_{j_n}(z),O_{\nu_{j_n}})
+ \le a_{j_n}\le2^{-n}.
+\]
+Since $O_{\widetilde\nu_n}$ is compact, this distance is attained;
+therefore the fourth clause of $\mathsf A$ holds for $n\ge1$.
+
+For $n\ge1$, the triangle inequality gives
+\begin{align*}
+ \|\widetilde R_{n+1}-\widetilde R_n\|_\infty
+ &\le\sum_{j=j_n}^{j_{n+1}-1}
+       \|T_{j+1}-T_j\|_\infty\\
+ &=\sum_{j=j_n}^{j_{n+1}-1}b_j
+ \le s_{j_n}
+ \le8\,2^{-n}.
+\end{align*}
+
+It remains to verify the clauses at $n=0$.  Since
+$p_0(c)=0$, one has $O_0=\overline B(0,2)$.  For every $z\in\D$,
+\[
+ \operatorname{dist}(z,O_0)\le2\sqrt2-2<1=2^{-0}.
+\]
+Indeed, this is immediate when $|z|\le2$, and when $|z|>2$ the
+point $2z/|z|$ belongs to $O_0$ and is at distance $|z|-2\le
+2\sqrt2-2$ from $z$.  Also, $\widetilde R_0=\id_\D$ fixes $O_0$.
+Compactness of $O_0$ gives, for each $z\in\D$, a point
+$w\in O_0$ with
+\[
+ |\widetilde R_0(z)-w|
+ =\operatorname{dist}(z,O_0)\le2^{-0}.
+\]
+Finally, both $\widetilde R_0(z)$ and $\widetilde R_1(z)$ belong to
+$\D$, so
+\[
+ \|\widetilde R_1-\widetilde R_0\|_\infty
+ \le\operatorname{diam}(\D)=4\sqrt2<8=8\,2^{-0}.
+\]
+Thus $\mathsf A(\widetilde\nu,\widetilde R_\bullet)$ holds, and
+\eqref{eq:ug-existence} gives $\mathsf{UG}$.
+\end{proof}
+
+\noindent
+Theorem~\ref{thm:outer-gap} and Proposition~\ref{prop:image-gap} are
+unconditional.  The convergence $h_N\to0$ is qualitative; no explicit
+modulus of the form $N=N(\varepsilon)$ is asserted.  The existence of
+maps satisfying \eqref{eq:candidate-fixing}--\eqref{eq:candidate-summability}
+is not asserted.  The current implications are
+\[
+\left[
+\begin{gathered}
+\text{there exist }\nu\text{ and }T_\bullet\text{ satisfying}\\
+\eqref{eq:candidate-depths}\text{--}\eqref{eq:candidate-summability}
+\end{gathered}
+\right]
+\Longrightarrow\mathsf{UG}
+\Longrightarrow\LC(\M).
+\]
+
+\begin{theorem}[Uniform limit and retraction]\label{thm:uniform}
+For $\nu\in\N^\N$ and $R_\bullet\in C(\D,\D)^\N$,
+\[
+ \mathsf A(\nu,R_\bullet)\Longrightarrow
+ \exists R\in C(\D,\D):
+ \begin{cases}
+  \forall n\in\N,\quad \|R_n-R\|_\infty\le16\,2^{-n},\\
+  R(\D)=\M,\\
+  \forall c\in\M,\quad R(c)=c.
+ \end{cases}
+\]
+\end{theorem}
+\noindent
+In words, every pair of sequences satisfying $\mathsf A$ has a
+continuous limit map $R:\D\to\D$ whose uniform distance from $R_n$
+is at most $16\,2^{-n}$ for every $n$.  The image of $R$ is $\M$,
+and $R$ fixes every point of $\M$.
+\begin{proof}
+Assume $\mathsf A(\nu,R_\bullet)$.  For $m,n\in\N$ with $m>n$, the
+triangle inequality and the adjacent-displacement bound give
 \begin{align}
- m>n\quad\Longrightarrow\quad
  \|R_m-R_n\|_\infty
  &\le\sum_{j=n}^{m-1}\|R_{j+1}-R_j\|_\infty\notag\\
- &\le8\sum_{j=n}^{m-1}2^{-j}
- =16\,2^{-n}\bigl(1-2^{-(m-n)}\bigr).\label{eq:cauchy}
+ &\le8\sum_{j=n}^{m-1}2^{-j}\notag\\
+ &=16\,2^{-n}\bigl(1-2^{-(m-n)}\bigr)
+ \le16\,2^{-n}.\label{eq:cauchy}
 \end{align}
-\begin{gather}
- \lim_{n\to\infty}\sup_{m\ge n}\|R_m-R_n\|_\infty=0,\notag\\
- \operatorname{Complete}(\C)\Longrightarrow
- R(z):=\lim_{n\to\infty}R_n(z)\in\C,\notag\\
- \forall n\in\N\ \forall z\in\D,\quad
- |R_n(z)-R(z)|\le16\,2^{-n}.\label{eq:tail}
-\end{gather}
-\begin{gather*}
- z_0\in\D,\qquad \varepsilon>0,\qquad
- \exists n\in\N:\quad32\,2^{-n}<\varepsilon/2,\\
- R_n\in C(\D,\C)
- \Longrightarrow
- \exists\delta>0\ \forall z\in\D:\quad
- |z-z_0|<\delta
- \Longrightarrow |R_n(z)-R_n(z_0)|<\varepsilon/2,\\
- |z-z_0|<\delta
- \Longrightarrow
+For each $z\in\D$, the bound
+$|R_m(z)-R_n(z)|\le\|R_m-R_n\|_\infty$ and \eqref{eq:cauchy}
+make $(R_n(z))_{n\in\N}$ a Cauchy sequence.  Completeness of $\C$ gives
+\[
+ R(z):=\lim_{n\to\infty}R_n(z).
+\]
+Since $\D$ is closed and each $R_n(z)$ belongs to $\D$, the limit
+$R(z)$ belongs to $\D$.  For fixed $n$ and $z$, the pointwise bound
+$|R_m(z)-R_n(z)|\le16\,2^{-n}$ holds for every $m>n$.
+Taking $m\to\infty$ and using continuity of the modulus yields
+\begin{equation}\label{eq:tail}
+ \forall n\in\N\ \forall z\in\D,\qquad
+ |R_n(z)-R(z)|\le16\,2^{-n}.
+\end{equation}
+
+For continuity, fix $z_0\in\D$ and $\varepsilon>0$.  Choose $n\in\N$
+such that $32\,2^{-n}<\varepsilon/2$.  Continuity of $R_n$ gives
+$\delta>0$ such that, for every $z\in\D$ with $|z-z_0|<\delta$,
+$|R_n(z)-R_n(z_0)|<\varepsilon/2$.  For these $z$,
+\begin{align*}
  |R(z)-R(z_0)|
- \le32\,2^{-n}+|R_n(z)-R_n(z_0)|<\varepsilon,\\
- R\in C(\D,\C),\qquad
- \Closed(\D),\qquad
- \forall n,\ R_n(\D)\subseteq\D
- \Longrightarrow R(\D)\subseteq\D,\\
- \forall n\in\N,\quad\|R_n-R\|_\infty\le16\,2^{-n}.
-\end{gather*}
-\begin{gather}
- z\in\D,\qquad k\in\N,\qquad n\ge k,\notag\\
- O_{\nu_n}\subseteq O_k,\qquad
- \exists w_n\in O_{\nu_n}:\quad
- |R_n(z)-w_n|\le2^{-n},\notag\\
+ &\le |R(z)-R_n(z)|+|R_n(z)-R_n(z_0)|+|R_n(z_0)-R(z_0)|\\
+ &\le32\,2^{-n}+|R_n(z)-R_n(z_0)|<\varepsilon.
+\end{align*}
+Thus $R\in C(\D,\D)$.  Taking the supremum over $z$ in
+\eqref{eq:tail} gives $\|R_n-R\|_\infty\le16\,2^{-n}$; hence the
+convergence is uniform.
+
+Fix $z\in\D$ and $k\in\N$.  For every $n\ge k$, choose
+$w_n\in O_{\nu_n}$ with $|R_n(z)-w_n|\le2^{-n}$.
+Since $\nu_n\ge n\ge k$, Lemma~\ref{lem:outer} gives
+$O_{\nu_n}\subseteq O_k$.  Moreover,
+\[
  |R(z)-w_n|
  \le|R(z)-R_n(z)|+|R_n(z)-w_n|
- \le17\,2^{-n}\xrightarrow[n\to\infty]{}0,\notag\\
- \Closed(O_k)\Longrightarrow R(z)\in O_k,\qquad
- R(z)\in\bigcap_kO_k=\M,\notag\\
- c\in\M
- \Longrightarrow
- \forall n,\ c\in O_{\nu_n}\ \land\ R_n(c)=c
- \Longrightarrow R(c)=c,\notag\\
- R(\D)\subseteq\M\subseteq R(\D),\qquad
- R(\D)=\M.\label{eq:retraction}
-\end{gather}
+ \le17\,2^{-n}\longrightarrow0.
+\]
+The set $O_k$ is closed, so $R(z)\in O_k$.  As $k$ was arbitrary,
+Lemma~\ref{lem:outer} implies
+$R(z)\in\bigcap_{k\in\N}O_k=\M$.
+
+For $c\in\M$, the same lemma gives $c\in O_{\nu_n}$ for every $n$.
+The fixing clause in \eqref{eq:hypotheses} therefore gives
+$R_n(c)=c$ for every $n$, and taking limits gives $R(c)=c$.
+Consequently $R(\D)\subseteq\M$ and, because $\M\subseteq\D$,
+$\M\subseteq R(\D)$.  Thus $R(\D)=\M$.
 \end{proof}
 
-For $E_n:=R_n(\D)$ and
-$\widehat E_n:=\bigcap_{j=0}^nE_j$, Corollary~\ref{cor:images} gives
+\section{Main current result}
+
+\begin{theorem}[Conditional Mandelbrot local connectivity]\label{thm:mlc}
 \[
-\M\subseteq\widehat E_{n+1}\subseteq\widehat E_n\subseteq E_n
-\quad\text{and}\quad
-d_H(\widehat E_n,\M)\le d_H(E_n,\M)\le16\,2^{-n}.
+ \boxed{\mathsf{UG}\Longrightarrow\LC(\M).}
 \]
-
-\begin{corollary}[Images]\label{cor:images}
-\begin{gather*}
- \mathsf A(\nu,R_\bullet),\qquad E_n:=R_n(\D),\qquad
- \widehat E_n:=\bigcap_{j=0}^nE_j,\\
- \Longrightarrow\quad
- \M\subseteq O_{\nu_n}\subseteq E_n\subseteq\D,\qquad
- \Cpt(E_n),\qquad d_H(E_n,\M)\le16\,2^{-n},\\
- \widehat E_{n+1}\subseteq\widehat E_n,\qquad
- d_H(\widehat E_n,\M)\le16\,2^{-n},\qquad
- \bigcap_nE_n=\bigcap_n\widehat E_n=\M.
-\end{gather*}
-\end{corollary}
-\noindent
-In words, under $\mathsf A(\nu,R_\bullet)$, the sets $E_n$ are compact
-outer sets containing $\M$ and satisfying
-$d_H(E_n,\M)\le16\,2^{-n}$; their finite intersections
-$\widehat E_n$ decrease, satisfy the same Hausdorff bound, and have
-intersection $\M$.
-\begin{proof}
-\begin{gather*}
- c\in O_{\nu_n}\Longrightarrow c=R_n(c)\in E_n,\qquad
- R_n\in C(\D,\D)\land\Cpt(\D)\Longrightarrow\Cpt(E_n),\\
- y=R_n(z)\in E_n
- \Longrightarrow
- \dist(y,\M)\le|R_n(z)-R(z)|\le16\,2^{-n},\\
- \M\subseteq\widehat E_n\subseteq E_n
- \Longrightarrow
- 0\le d_H(\widehat E_n,\M)\le d_H(E_n,\M)\le16\,2^{-n},\\
- \widehat E_{n+1}=\widehat E_n\cap E_{n+1}\subseteq\widehat E_n,\\
- y\in\bigcap_nE_n
- \Longrightarrow
- 0\le\dist(y,\M)\le\inf_n16\,2^{-n}=0
- \Longrightarrow y\in\M,\\
- \bigcap_n\widehat E_n=\bigcap_n\bigcap_{j=0}^nE_j
- =\bigcap_nE_n=\M.
- \qedhere
-\end{gather*}
-\end{proof}
-
-Assume, in addition, that
-\[
-\forall n\in\N\ \forall z,w\in\D,\qquad
-|R_n(z)-R_n(w)|\le L_n|z-w|.
-\]
-Corollary~\ref{cor:modulus} then gives an explicit modulus of continuity
-for $R$.
-
-\begin{corollary}[Continuity modulus]\label{cor:modulus}
-\begin{gather*}
- \mathsf A(\nu,R_\bullet),\qquad R:=\lim_{n\to\infty}R_n,\qquad
- L_\bullet\in[0,\infty)^\N,\\
- \forall n\in\N\ \forall z,w\in\D,\quad
- |R_n(z)-R_n(w)|\le L_n|z-w|,\\
- \delta_k:=\frac{2^{-(k+1)}}{1+L_{k+6}}>0,\\
- \Longrightarrow\quad
- \forall k\in\N\ \forall z,w\in\D,\quad
- |z-w|<\delta_k\Longrightarrow |R(z)-R(w)|<2^{-k}.
-\end{gather*}
-\end{corollary}
-\noindent
-In words, if $\mathsf A(\nu,R_\bullet)$ holds and $R_n$ is
-$L_n$-Lipschitz for every $n$, then the limit map $R$ has the explicit
-modulus
-\[
-\delta_k=\frac{2^{-(k+1)}}{1+L_{k+6}},
-\]
-meaning that $|z-w|<\delta_k$ implies
-$|R(z)-R(w)|<2^{-k}$ for all $z,w\in\D$.
-\begin{proof}
-\begin{align*}
- n=k+6,\quad |z-w|<\delta_k
- \quad\Longrightarrow\quad
- |R(z)-R(w)|
- &\le32\,2^{-n}+L_n|z-w|\\
- &\le2^{-(k+1)}+(1+L_n)|z-w|\\
- &<2^{-(k+1)}+(1+L_n)\delta_k
- =2^{-k}.
- \qedhere
-\end{align*}
-\end{proof}
-
-The modulus assertion is
-\[
-\forall k\in\N\ \forall z,w\in\D,\qquad
-|z-w|<\delta_k\Longrightarrow |R(z)-R(w)|<2^{-k}.
-\]
-
-\section{Deformation and local connectedness}
-
-Theorem~\ref{thm:deform} constructs a continuous interpolation between
-successive maps $R_n$ and the terminal map $R$.  The estimate
-\eqref{eq:deform-rate} implies continuity at $t=1$.
-
-\begin{theorem}[Terminal deformation]\label{thm:deform}
-\begin{gather*}
- \mathsf A(\nu,R_\bullet),\qquad R:=\lim_{n\to\infty}R_n\\
- \Longrightarrow
- \exists H\in C(\D\times[0,1],\D):\\
- H(z,0)=z,\qquad H(c,t)=c\quad(c\in\M),\qquad
- H(z,1)=R(z),\qquad H(\D,1)=\M,\\
- t_n:=1-2^{-n},\qquad H(z,t_n)=R_n(z),\\
- \forall n\in\N\ \forall t\in[t_n,1]:\\
- \sup_{z\in\D}|H(z,t)-R(z)|\le16\,2^{-n},\qquad
- d_H(H(\D,t),\M)\le16\,2^{-n}.
-\end{gather*}
 \end{theorem}
 \noindent
-In words, if $\mathsf A(\nu,R_\bullet)$ holds, then the maps $R_n$ can
-be joined by a continuous map $H:\D\times[0,1]\to\D$ that starts at the
-identity, fixes $\M$ pointwise, ends at $R$, and reaches $R_n$ at time
-$t_n=1-2^{-n}$.  For every $t\in[t_n,1]$, the image $H(\D,t)$ is within
-$16\,2^{-n}$ of $\M$ in Hausdorff distance and $H(\,\cdot\,,t)$ is
-uniformly within $16\,2^{-n}$ of $R$.
-\begin{proof}
-\begin{gather*}
- \lambda_n(t):=\frac{t-t_n}{t_{n+1}-t_n},\qquad
- H_n(z,t):=(1-\lambda_n(t))R_n(z)+\lambda_n(t)R_{n+1}(z),\\
- H(z,t):=
- \begin{cases}
- H_n(z,t),&t_n\le t\le t_{n+1},\\
- R(z),&t=1,
- \end{cases}\\
- H_n(z,t_{n+1})=R_{n+1}(z)=H_{n+1}(z,t_{n+1}),\\
- H_n\in C(\D\times[t_n,t_{n+1}],\D),\qquad
- s<1\Longrightarrow\#\{n:t_n\le s\}<\infty,\\
- H|_{\D\times[0,1)}\in C(\D\times[0,1),\D).
-\end{gather*}
-\begin{gather}
- t_j\le t\le t_{j+1},\quad j\ge n
- \quad\Longrightarrow\quad
- \begin{aligned}[t]
- |H(z,t)-R(z)|
- &\le(1-\lambda_j(t))16\,2^{-j}
-       +\lambda_j(t)16\,2^{-(j+1)}\\
- &\le16\,2^{-j}\le16\,2^{-n},
- \end{aligned}\label{eq:deform-rate}\\
- (z_\ell,s_\ell)\longrightarrow(z,1)
- \quad\Longrightarrow\quad
- \begin{aligned}[t]
- |H(z_\ell,s_\ell)-R(z)|
- &\le |H(z_\ell,s_\ell)-R(z_\ell)|
-       +|R(z_\ell)-R(z)|\\
- &\longrightarrow0,
- \end{aligned}\notag\\
- H\in C(\D\times[0,1],\D),\qquad
- H(z,0)=R_0(z)=z,\qquad H(z,1)=R(z),\notag\\
- c\in\M,\quad t\in[t_n,t_{n+1}]\Longrightarrow
- H(c,t)=(1-\lambda_n(t))c+\lambda_n(t)c=c,\qquad
- H(c,1)=c,\notag\\
- \M\subseteq H(\D,t),\qquad
- \dist(H(z,t),\M)\le|H(z,t)-R(z)|,\notag\\
- t\in[t_n,1]\Longrightarrow
- d_H(H(\D,t),\M)\le16\,2^{-n}.\notag
-\end{gather}
-\end{proof}
-
-For $c\in\M$ and $\eta>0$, continuity of $R$ at $c$ gives $\delta>0$
+In words, if there exist sequences $\nu$ and $R_\bullet$ satisfying
+$\mathsf A(\nu,R_\bullet)$, then for every $c\in\M$ and every
+$\eta>0$ there exist $\delta>0$ and a connected subset $V$ of $\M$
 with
-\[
-R\bigl(\D\cap B(c,\delta)\bigr)\subseteq B(c,\eta).
-\]
-The set $\D\cap B(c,\delta)$ is connected, its image under $R$ is
-connected, and
-\[
-\M\cap B(c,\delta)
-\subseteq R\bigl(\D\cap B(c,\delta)\bigr)
-\subseteq \M\cap B(c,\eta).
-\]
-
-\noindent
-The principal implication established in this document is
-\[
-\mathsf{UG}\Longrightarrow\LC(\M).
-\]
-The assertion $\mathsf{UG}$ is an explicit premise; no proof of
-$\mathsf{UG}$ is included here.
-
-\begin{theorem}[Main current theorem: conditional local connectedness]\label{thm:mlc}
-\begin{equation*}
- \boxed{
- \mathsf{UG}\Longrightarrow\LC(\M)
- }
-\end{equation*}
-\end{theorem}
- \noindent
- In words, the existence of a sequence satisfying the uniform geometric
- hypothesis $\mathsf{UG}$ implies that the Mandelbrot set $\M$ is locally
- connected.
- \begin{proof}
-Assume $\mathsf{UG}$ and choose $\nu\in\N^\N$ and
-$R_\bullet\in C(\D,\D)^\N$ satisfying
-$\mathsf A(\nu,R_\bullet)$, as permitted by
-\eqref{eq:ug-existence}.  Theorem~\ref{thm:uniform} then supplies the
-continuous retraction used below.
-\begin{gather*}
- \mathsf{UG}
- \overset{\eqref{eq:ug-existence}}{\Longrightarrow}
- \exists\nu\in\N^\N\ \exists R_\bullet\in C(\D,\D)^\N,\
- \mathsf A(\nu,R_\bullet),\\
- \mathsf A(\nu,R_\bullet)
- \overset{\ref{thm:uniform}}{\Longrightarrow}
- \exists R\in C(\D,\D):\
- R(\D)=\M\ \land\ \forall c\in\M,\ R(c)=c,\\
- c\in\M,\qquad\eta>0,\qquad
- \exists\delta>0\ \forall z\in\D:\quad
- |z-c|<\delta\Longrightarrow |R(z)-c|<\eta,\\
- W:=\D\cap B(c,\delta),\qquad V:=R(W),\\
- c\in W,\qquad\Convex(W)\Longrightarrow\Conn(W)
- \Longrightarrow\Conn(V),\\
- y\in\M\cap B(c,\delta)
- \Longrightarrow y\in W\ \land\ y=R(y)
- \Longrightarrow y\in V,\\
- y\in V\Longrightarrow
- \exists z\in W:\ y=R(z)\in\M,\quad
- |y-c|=|R(z)-R(c)|<\eta,\\
- \M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta)
- \Longrightarrow\LC(\M).
- \qedhere
-\end{gather*}
-\end{proof}
-
-\section{Trapping rectangles}
-
-For every bounded set $U\subseteq\C$ with $0\in U$ and
-$f_c(U)\subseteq U$,
-\[
-\sup_{n\in\N}|p_n(c)|<\infty
-\Longrightarrow c\in\M.
-\]
-Proposition~\ref{prop:single} gives the restriction imposed by a single
-rectangle, while Proposition~\ref{prop:trap} gives the corresponding
-finite-union statement.
-
-\begin{proposition}[Single-rectangle obstruction]\label{prop:single}
-\begin{equation*}
- U=[a,b]+i[u,v],\quad a<b,\quad u<v,\quad
- 0\in U,\quad f_c(U)\subseteq U
- \quad\Longrightarrow\quad |\operatorname{Re}c|\le\frac12.
-\end{equation*}
-\end{proposition}
-\noindent
-In words, if $U$ is a nondegenerate closed rectangle containing $0$ and
-is forward invariant under $f_c$, then the real part of $c$ lies in
-$[-1/2,1/2]$.
+$\M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta)$.
+By Lemma~\ref{lem:lc-criterion}, this conclusion states that $\M$
+is locally connected.
 \begin{proof}
-\begin{gather*}
- c=f_c(0)\in U,\qquad x:=\operatorname{Re}c\in[a,b],\\
- z_-:=x+iu\in U,\qquad z_+:=x+iv\in U,\\
- \operatorname{Im}f_c(z_-)=2xu+\operatorname{Im}c\in[u,v],\qquad
- \operatorname{Im}f_c(z_+)=2xv+\operatorname{Im}c\in[u,v],\\
- 2|x|(v-u)
- =\left|\operatorname{Im}f_c(z_+)-\operatorname{Im}f_c(z_-)\right|
- \le v-u,\\
- v-u>0\Longrightarrow|\operatorname{Re}c|=|x|\le\frac12.
- \qedhere
-\end{gather*}
+Assume $\mathsf{UG}$ and choose sequences satisfying
+$\mathsf A(\nu,R_\bullet)$ by \eqref{eq:ug-existence}.
+Theorem~\ref{thm:uniform} gives a continuous map $R:\D\to\D$
+such that $R(\D)=\M$ and $R(c)=c$ for every $c\in\M$.
+
+Fix $c\in\M$ and $\eta>0$.  Since $R(c)=c$, continuity at $c$ gives
+$\delta>0$ satisfying
+\[
+ \forall z\in\D,\qquad
+ |z-c|<\delta\Longrightarrow |R(z)-c|<\eta.
+\]
+Define
+\[
+ W:=\D\cap B(c,\delta),\qquad V:=R(W).
+\]
+The square $\D$ and the disk $B(c,\delta)$ are convex, so $W$ is
+convex.  It contains $c$ and is therefore nonempty and connected.
+Its continuous image $V$ is connected, and $V\subseteq\M$ because
+$R(\D)=\M$.
+
+If $y\in\M\cap B(c,\delta)$, then $y\in W$ and $R(y)=y$, so
+$y\in V$.  If $y\in V$, choose $z\in W$ with $y=R(z)$.
+Then $y\in\M$ and $|y-c|=|R(z)-c|<\eta$.  Hence
+\[
+ \M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta).
+\]
+The choices were made for arbitrary $c\in\M$ and $\eta>0$, proving
+$\LC(\M)$.  Lemma~\ref{lem:lc-criterion} identifies this with local
+connectedness in the Euclidean subspace topology.
 \end{proof}
-
-\begin{corollary}[Failure of density]\label{cor:no-single-density}
-\begin{gather*}
- \forall n\in\N\ \forall c\in I_n\
- \exists a,b,u,v\in\R:\\
- a<b,\quad u<v,\quad0\in[a,b]+i[u,v],\quad
- f_c([a,b]+i[u,v])\subseteq[a,b]+i[u,v]\\
- \Longrightarrow\quad
- \overline{\bigcup_{n\in\N}I_n}\ne\M,\\
- \neg\left[
- \forall c\in\M\ \forall\varepsilon>0\
- \exists n\in\N\ \exists z\in I_n,\ |z-c|<\varepsilon
- \right].
-\end{gather*}
-\end{corollary}
-\noindent
-In words, if every point of every $I_n$ admits a closed rectangle
-containing $0$ that is forward invariant under its corresponding map
-$f_c$, then $\overline{\bigcup_n I_n}$ is not $\M$ and the inner-density
-condition fails.
-\begin{proof}
-\begin{gather*}
- S:=\operatorname{Re}^{-1}([-1/2,1/2]),\qquad
- \operatorname{Re}\in C(\C,\R)\Longrightarrow\Closed(S),\\
- \bigcup_nI_n\subseteq S
- \Longrightarrow\overline{\bigcup_nI_n}\subseteq S,\\
- f_{-1}(0)=-1,\qquad f_{-1}(-1)=0,\qquad
- \forall n\in\N,\quad p_{2n}(-1)=0,\quad p_{2n+1}(-1)=-1,\\
- -1\in\M\setminus S,\qquad
- \overline{\bigcup_nI_n}\ne\M,\\
- n\in\N,\quad z\in I_n
- \Longrightarrow
- |z-(-1)|=|z+1|
- \ge\operatorname{Re}z+1\ge\frac12>\frac14.
- \qedhere
-\end{gather*}
-\end{proof}
-
-\begin{definition}
-\begin{gather}
- s\ge1,\qquad
- U_j:=[a_j,b_j]+i[u_j,v_j],\qquad
- a_j<b_j,\quad u_j<v_j,\qquad
- U:=\bigcup_{j=1}^sU_j,\notag\\
- U_j^{-\delta}:=[a_j+\delta,b_j-\delta]
-                   +i[u_j+\delta,v_j-\delta].\label{eq:inset}
-\end{gather}
-\end{definition}
-
-\noindent
-The sets $U_1,\ldots,U_s$ are nondegenerate closed rectangles,
-$U=\bigcup_{j=1}^sU_j$, and
-$U_j^{-\delta}$ is the displayed inset rectangle.  Its nonemptiness is
-equivalent to
-\[
-a_j+\delta\le b_j-\delta,\qquad
-u_j+\delta\le v_j-\delta.
-\]
-
-\begin{proposition}[Finite-union trapping]\label{prop:trap}
-\begin{gather}
- 0\in U,\quad f_c(U)\subseteq U\quad\Longrightarrow\quad c\in\M,
- \label{eq:weak-trap}\\
- \left.
- \begin{gathered}
- 0\in U,\quad P\subseteq\C,\quad\delta>0,\\
- \forall c\in P\ \forall z\in U\ \exists j\in\{1,\ldots,s\},\
-                       f_c(z)\in U_j^{-\delta}
- \end{gathered}
- \right\}
- \Longrightarrow
- \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,
- \quad P\subseteq\Int\M.\label{eq:finite-trap}
-\end{gather}
-\end{proposition}
-\noindent
-In words, a finite union $U$ containing $0$ and satisfying
-$f_c(U)\subseteq U$ certifies $c\in\M$.  Moreover, if every $f_c(z)$
-with $c\in P$ and $z\in U$ lies in one of the inset rectangles
-$U_j^{-\delta}$, then the closed $\delta$-neighborhood of $P$ lies in
-$\M$ and $P$ lies in $\Int(\M)$.
-\begin{proof}
-\begin{gather*}
- B:=\max_{1\le j\le s}
-   \bigl(\max\{|a_j|,|b_j|\}+\max\{|u_j|,|v_j|\}\bigr),\\
- z\in U_j\Longrightarrow
- |z|\le|\operatorname{Re}z|+|\operatorname{Im}z|
- \le B,\\
- p_0(c)=0\in U,\qquad
- p_n(c)\in U\Longrightarrow p_{n+1}(c)=f_c(p_n(c))\in U,\\
- \forall n\in\N,\quad |p_n(c)|\le B
- \Longrightarrow c\in\M.
-\end{gather*}
-\begin{gather*}
- c\in P,\qquad |c'-c|\le\delta,\qquad z\in U,\qquad
- f_c(z)\in U_j^{-\delta},\\
- f_{c'}(z)-f_c(z)=c'-c,\qquad
- |\operatorname{Re}(c'-c)|,\ |\operatorname{Im}(c'-c)|
- \le|c'-c|\le\delta,\\
- a_j\le\operatorname{Re}f_{c'}(z)\le b_j,\qquad
- u_j\le\operatorname{Im}f_{c'}(z)\le v_j,\\
- f_{c'}(U)\subseteq U
- \overset{\eqref{eq:weak-trap}}{\Longrightarrow} c'\in\M,\\
- \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,\qquad
- P\subseteq\bigcup_{c\in P}B(c,\delta)\subseteq\Int\M.
- \qedhere
-\end{gather*}
-\end{proof}
-
-\begin{proposition}[Period two]\label{prop:two}
-\begin{gather*}
- a:=\frac1{16},\qquad b:=\frac1{64},\qquad
- d:=\frac1{256},\qquad\delta:=\frac1{1024},\\
- P:=-1+[-d,d]+i[-d,d],\qquad
- U_0:=[-a,a]+i[-a,a],\qquad
- U_1:=-1+[-b,b]+i[-b,b],\\
- \forall c\in P,\quad
- f_c(U_0)\subseteq U_1^{-\delta},\qquad
- f_c(U_1)\subseteq U_0^{-\delta},\\
- \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,\qquad
- P\subseteq\Int\M.
-\end{gather*}
-\end{proposition}
-\noindent
-In words, with the displayed values of $a$, $b$, $d$, and $\delta$, every
-$c\in P$ maps $U_0$ into the $\delta$-inset of $U_1$ and maps $U_1$ into
-the $\delta$-inset of $U_0$; equivalently,
-\[
-\forall c\in P,\quad
-f_c(U_0\cup U_1)\subseteq U_0^{-\delta}\cup U_1^{-\delta},
-\]
-and
-\[
-\bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,\qquad
-P\subseteq\Int(\M).
-\]
-\begin{proof}
-\begin{gather*}
- c=-1+e+if,\qquad |e|,|f|\le d,\\
- z=x+iy\in U_0,\qquad
- f_c(z)+1=(x^2-y^2+e)+i(2xy+f),\\
- |\operatorname{Re}(f_c(z)+1)|,\
- |\operatorname{Im}(f_c(z)+1)|
- \le2a^2+d=\frac3{256}<b-\delta=\frac{15}{1024},\\
- z=-1+x+iy\in U_1,\qquad
- f_c(z)=(-2x+x^2-y^2+e)+i(-2y+2xy+f),\\
- |\operatorname{Re}f_c(z)|,\ |\operatorname{Im}f_c(z)|
- \le2b+2b^2+d=\frac{73}{2048}
- <a-\delta=\frac{126}{2048},\\
- 0\in U_0\subseteq U_0\cup U_1,\qquad
- \forall c\in P,\quad
- f_c(U_0\cup U_1)\subseteq U_0^{-\delta}\cup U_1^{-\delta},\\
- \overset{\eqref{eq:finite-trap}}{\Longrightarrow}\quad
- \bigcup_{c\in P}\overline B(c,\delta)\subseteq\M,\qquad
- P\subseteq\Int\M.
- \qedhere
-\end{gather*}
-\end{proof}
-
-\begin{definition}\label{def:inner-density}
-\begin{equation*}
- \mathsf{ID}(\mathcal P_\bullet):=
- \forall c\in\M\ \forall\varepsilon>0\
- \exists n\in\N\ \exists z\in I_n,\quad |z-c|<\varepsilon.
-\end{equation*}
-\end{definition}
-
-\noindent
-In words, $\mathsf{ID}(\mathcal P_\bullet)$ means that for every
-point $c\in\M$ and every real number $\varepsilon>0$, there exist
-$n\in\N$ and $z\in I_n$ such that $|z-c|<\varepsilon$.
-
-\begin{lemma}[Closure of inner approximations]\label{lem:inner-closure}
-\begin{gather*}
- \left.
- \begin{gathered}
- \forall n\in\N,\quad I_n\subseteq I_{n+1}\subseteq\M,\\
- \mathsf{ID}(\mathcal P_\bullet)
- \end{gathered}
- \right\}
- \Longrightarrow
- \overline{\bigcup_nI_n}=\M.
-\end{gather*}
-\end{lemma}
-\noindent
-In words, if the inner sets are increasing subsets of $\M$ and
-$\mathsf{ID}(\mathcal P_\bullet)$ holds, then the closure of their union
-is exactly $\M$.
-\begin{proof}
-\begin{gather*}
- \bigcup_nI_n\subseteq\M,\qquad\Closed(\M)
- \Longrightarrow\overline{\bigcup_nI_n}\subseteq\M,\\
- c\in\M\Longrightarrow
- \forall\varepsilon>0,\quad
- B(c,\varepsilon)\cap\bigcup_nI_n\ne\varnothing
- \Longrightarrow c\in\overline{\bigcup_nI_n},\\
- \M\subseteq\overline{\bigcup_nI_n}\subseteq\M.
- \qedhere
-\end{gather*}
-\end{proof}
-
-\section{Inner and outer approximation}
-
-The defining conditions give
-\[
-I_n\subseteq\M\subseteq O_n,\qquad
-I_n\subseteq I_{n+1},\qquad
-O_{n+1}\subseteq O_n.
-\]
-The unresolved region at stage $n$ is
-\[
-G_n:=O_n\setminus I_n.
-\]
-
-\begin{definition}\label{def:area-gap}
-\begin{gather*}
- \mu:=\mathcal L^2,\qquad
- \mu([a,b]+i[u,v]):=(b-a)(v-u)
- \quad(a\le b,\ u\le v),\\
- A\triangle B:=(A\setminus B)\cup(B\setminus A),\qquad
- A=_\mu B\ :=\ \mu(A\triangle B)=0,\\
- \mathcal R:=
- \{[a,b]+i[u,v]:a,b,u,v\in\Q,\ a<b,\ u<v\},\\
- \forall n\in\N:\quad
- \mathcal P_n\subseteq\mathcal R,\quad
- 0<\#\mathcal P_n<\infty,\quad
- \mathcal P_n\subseteq\mathcal P_{n+1},\quad
- \forall P\in\mathcal P_n,\ P\subseteq\Int\M.
-\end{gather*}
-\begin{equation}\label{eq:inner-outer-gap}
- \begin{gathered}
- \M_{\mathrm{inner}}^{(n)}:=I_n:=\bigcup_{P\in\mathcal P_n}P,\qquad
- \M_{\mathrm{outer}}^{(n)}:=O_n,\\
- G_n:=\M_{\mathrm{outer}}^{(n)}
-          \setminus\M_{\mathrm{inner}}^{(n)},\qquad
- g_n:=\mu(G_n),\qquad I_\infty:=\bigcup_{n\in\N}I_n.
- \end{gathered}
-\end{equation}
-\end{definition}
-
-\noindent
-In words, $\mu$ is planar Lebesgue measure.  For every real
-$a\le b$ and $u\le v$, the measure of the rectangle
-$[a,b]+i[u,v]$ is $(b-a)(v-u)$.  The symmetric difference
-$A\triangle B$ consists of the points that belong to exactly one of
-$A$ and $B$.  The notation $A=_\mu B$ means that the measure of this
-symmetric difference is zero.  The set $\mathcal R$ consists of all
-nondegenerate closed rectangles with rational real coordinates.
-
-\noindent
-For every $n\in\N$, $\mathcal P_n$ is a finite nonempty collection of
-rectangles from $\mathcal R$, $\mathcal P_n\subseteq\mathcal P_{n+1}$,
-and every rectangle in $\mathcal P_n$ is contained in $\Int(\M)$.
-The set $\M_{\mathrm{inner}}^{(n)}$ is the union of the rectangles in
-$\mathcal P_n$; the set $\M_{\mathrm{outer}}^{(n)}$ is $O_n$; the gap
-$G_n$ is the set difference
-$\M_{\mathrm{outer}}^{(n)}\setminus\M_{\mathrm{inner}}^{(n)}$; $g_n$
-is the measure of $G_n$; and $I_\infty$ is the union of all the
-$\M_{\mathrm{inner}}^{(n)}$.
-
-The quantity $g_n=\mu(G_n)$ satisfies
-\[
-G_{n+1}\subseteq G_n,\qquad
-G_n=(O_n\setminus\M)\mathbin{\dot\cup}(\M\setminus I_n),
-\]
-and Proposition~\ref{prop:area-enclosure} gives the corresponding
-measure and $L^1(\mu)$ identities.
-
-\begin{proposition}[Area enclosure]\label{prop:area-enclosure}
-\begin{gather}
- I_n\subseteq I_{n+1}\subseteq\M\subseteq O_{n+1}\subseteq O_n,
- \qquad
- \C\setminus O_n\subseteq\C\setminus\M,\notag\\
- \C=I_n\mathbin{\dot\cup}G_n
-          \mathbin{\dot\cup}(\C\setminus O_n),\qquad
- \bigcup_n(\C\setminus O_n)=\C\setminus\M,\notag\\
- \mu(I_n)\le\mu(\M)\le\mu(O_n),\qquad
- 0<g_n\le4\pi,\qquad g_{n+1}\le g_n,\notag\\
- \begin{aligned}
- g_n
- &=\mu(O_n)-\mu(I_n)\\
- &=\mu(O_n\setminus\M)+\mu(\M\setminus I_n)\\
- &=\|\mathbf1_{O_n}-\mathbf1_\M\|_{L^1(\mu)}
-   +\|\mathbf1_\M-\mathbf1_{I_n}\|_{L^1(\mu)}.
- \end{aligned}\label{eq:area-error}
-\end{gather}
-\end{proposition}
-\noindent
-In words, the inner sets increase inside $\M$ and the outer sets
-decrease around $\M$.  Their complements satisfy the corresponding
-reverse inclusion, the plane is partitioned into $I_n$, $G_n$, and
-$\C\setminus O_n$, and the complements of the outer sets increase to
-$\C\setminus\M$.  The measures satisfy
-$\mu(I_n)\le\mu(\M)\le\mu(O_n)$ and $0<g_{n+1}\le g_n\le4\pi$, while
-$g_n$ equals both
-\[
-\mu(O_n\setminus\M)+\mu(\M\setminus I_n)
-\]
-and the sum of the two corresponding $L^1(\mu)$ errors.
-\begin{proof}
-\begin{gather*}
- \varnothing\ne I_n\subseteq I_{n+1}\subseteq\Int\M,\qquad
- \Cpt(I_n),\qquad
- \M\subseteq O_{n+1}\subseteq O_n\subseteq\overline B(0,2),\\
- G_n=(O_n\setminus\M)\mathbin{\dot\cup}(\M\setminus I_n),
- \qquad
- O_n=I_n\mathbin{\dot\cup}G_n,\qquad G_{n+1}\subseteq G_n,\\
- \mu(O_n)=\mu(I_n)+\mu(G_n)\le\mu(\overline B(0,2))=4\pi,\\
- |\mathbf1_{O_n}-\mathbf1_\M|=\mathbf1_{O_n\setminus\M},
- \qquad
- |\mathbf1_\M-\mathbf1_{I_n}|=\mathbf1_{\M\setminus I_n},\\
- \|\mathbf1_{O_n}-\mathbf1_\M\|_{L^1(\mu)}
-   =\int_\C\mathbf1_{O_n\setminus\M}\,d\mu
-   =\mu(O_n\setminus\M),\\
- \|\mathbf1_\M-\mathbf1_{I_n}\|_{L^1(\mu)}
-   =\int_\C\mathbf1_{\M\setminus I_n}\,d\mu
-   =\mu(\M\setminus I_n),\\
- \bigcup_n(\C\setminus O_n)
- =\C\setminus\bigcap_nO_n=\C\setminus\M.
-\end{gather*}
-\begin{gather*}
- \exists c_n\in I_n:\quad
- \operatorname{Re}c_n=\max_{z\in I_n}\operatorname{Re}z,\qquad
- c_n\in\Int\M,\\
- \exists r>0:\quad B(c_n,r)\subseteq\M,\qquad
- B(c_n+r/2,r/4)\subseteq B(c_n,r),\\
- z\in B(c_n+r/2,r/4)
- \Longrightarrow
- \operatorname{Re}z>\operatorname{Re}c_n+r/4
- \Longrightarrow z\notin I_n,\\
- B(c_n+r/2,r/4)\subseteq\M\setminus I_n,\qquad
- g_n\ge\mu(\M\setminus I_n)\ge\frac{\pi r^2}{16}>0.
- \qedhere
-\end{gather*}
-\end{proof}
-
-The outer error satisfies
-\[
-O_n\setminus\M\downarrow\varnothing,\qquad
-\mu(O_n\setminus\M)\longrightarrow0.
-\]
-The decreasing intersection of the gap sets is
-\[
-\bigcap_{n\in\N}G_n=\M\setminus I_\infty.
-\]
-Therefore,
-\[
-\lim_{n\to\infty}g_n=0
-\Longleftrightarrow
-\mu(\M\setminus I_\infty)=0,
-\qquad
-I_\infty=\M\Longrightarrow\mu(\M\setminus I_\infty)=0.
-\]
-
-\begin{theorem}[Limit of the area gap]\label{thm:area-limit}
-\begin{gather}
- \mu(O_n\setminus\M)\downarrow0,\qquad
- g_n\downarrow\mu(\M\setminus I_\infty),\notag\\
- \lim_{n\to\infty}g_n
- =\mu(\partial\M)+\mu(\Int\M\setminus I_\infty),\label{eq:area-residual}\\
- \boxed{
- \lim_{n\to\infty}g_n=0
- \ \Longleftrightarrow\
- I_\infty=_\mu\M
- \ \Longleftrightarrow\
- \begin{gathered}
- \mu(\partial\M)=0,\\
- \mu(\Int\M\setminus I_\infty)=0
- \end{gathered}
- },\label{eq:area-zero}\\
- \lim_{n\to\infty}g_n=0
- \ \Longleftrightarrow\
- \begin{cases}
- \mathbf1_{I_n}\longrightarrow\mathbf1_\M
-       &\text{in }L^1(\mu),\\
- \mathbf1_{O_n}\longrightarrow\mathbf1_\M
-       &\text{in }L^1(\mu).
- \end{cases}\notag
-\end{gather}
-\end{theorem}
-\noindent
-In words, the outer error decreases to zero, while $g_n$ decreases to
-the measure of the part of $\M$ that is never included in the inner
-sets.  The limiting gap is the sum of the boundary measure
-$\mu(\partial\M)$ and the measure of the interior points omitted by
-$I_\infty$.  The area gap tends to zero exactly when
-$I_\infty=_\mu\M$, equivalently when both indicator functions converge
-to $\mathbf1_\M$ in $L^1(\mu)$.
-\begin{proof}
-\begin{gather*}
- G_{n+1}\subseteq G_n,\qquad
- G_\infty:=\bigcap_nG_n
- =\left(\bigcap_nO_n\right)\setminus\left(\bigcup_nI_n\right)
- =\M\setminus I_\infty,\\
- G_n=G_\infty\mathbin{\dot\cup}
-       \bigsqcup_{j=n}^{\infty}(G_j\setminus G_{j+1}),\\
- g_n=\mu(G_\infty)+
-       \sum_{j=n}^{\infty}\mu(G_j\setminus G_{j+1}),\qquad
- \sum_{j=0}^{\infty}\mu(G_j\setminus G_{j+1})\le g_0\le4\pi,\\
- \lim_{n\to\infty}g_n=\mu(G_\infty),\qquad
- O_n\setminus\M\downarrow\varnothing,\quad \mu(O_0)<\infty
- \Longrightarrow\mu(O_n\setminus\M)\downarrow0,\\
- I_\infty\subseteq\Int\M,\qquad
- \Closed(\M)\Longrightarrow\partial\M=\M\setminus\Int\M,\\
- \M\setminus I_\infty
- =\partial\M\mathbin{\dot\cup}(\Int\M\setminus I_\infty),\\
- I_\infty\triangle\M=\M\setminus I_\infty,\qquad
- \mu(\M\setminus I_\infty)=0
- \Longleftrightarrow
- \mu(\partial\M)=\mu(\Int\M\setminus I_\infty)=0,\\
- 0\le\|\mathbf1_{I_n}-\mathbf1_\M\|_{L^1(\mu)}\le g_n,\qquad
- 0\le\|\mathbf1_{O_n}-\mathbf1_\M\|_{L^1(\mu)}\le g_n,\\
- g_n=\|\mathbf1_{I_n}-\mathbf1_\M\|_{L^1(\mu)}
-       +\|\mathbf1_{O_n}-\mathbf1_\M\|_{L^1(\mu)}.
- \qedhere
-\end{gather*}
-\end{proof}
-
-Proposition~\ref{prop:two} supplies the explicit inner set $P_\star$;
-the period-two area-bound corollary gives the resulting numerical
-bounds for $\mu(\M)$ and $g_0$.
-
-\begin{corollary}[Period-two area bound]
-\begin{gather*}
- P_\star:=-1+[-1/256,1/256]+i[-1/256,1/256],\qquad
- \mathcal P_0:=\{P_\star\}\\
- \Longrightarrow\quad
- \frac1{16384}\le\mu(\M)\le4\pi,\qquad
- 0<g_n\le g_0=4\pi-\frac1{16384}.
-\end{gather*}
-\end{corollary}
-\noindent
-In words, the explicit period-two rectangle $P_\star$ gives
-$1/16384\le\mu(\M)\le4\pi$, and the area gaps satisfy
-$0<g_n\le g_0=4\pi-1/16384$.
-\begin{proof}
-\begin{gather*}
- P_\star\overset{\ref{prop:two}}{\subseteq}\Int\M,\qquad
- \mu(P_\star)=\left(\frac2{256}\right)^2=\frac1{16384},\\
- O_0=\overline B(0,2),\qquad
- \mu(O_0)=4\pi,\qquad
- g_0=\mu(O_0)-\mu(P_\star)=4\pi-\frac1{16384}.
- \qedhere
-\end{gather*}
-\end{proof}
-
-Here $\mathcal P_0=\{P_\star\}$ and
-$P_\star\subseteq\Int(\M)$.  No assertion
-$\overline{\bigcup_n I_n}=\M$ follows from this choice of
-$\mathcal P_0$.
-
-Proposition~\ref{prop:null-area} exhibits compact connected sets for
-which
-\[
-\mu(K\setminus A)=0,\qquad d_H(A,K)>0,\qquad\neg\LC(K).
-\]
-Thus, in general,
-\[
-\mu(K\setminus A)=0
-\not\Longrightarrow
-d_H(A,K)=0,
-\qquad
-\mu(K\setminus A)=0
-\not\Longrightarrow
-\LC(K).
-\]
-
-\begin{proposition}[Null area and topology]\label{prop:null-area}
-\begin{gather*}
- \exists A,K\subseteq\D:\quad
- \Cpt(A)\land\Cpt(K)\land\Conn(A)\land\Conn(K),\\
- A\subsetneq K,\qquad
- \mu(K\setminus A)=0,\qquad
- \mu(A)=\mu(K)=1,\qquad
- d_H(A,K)=1,\qquad\neg\LC(K),\\
- \exists(A_n)_{n\in\N}:\quad
- \forall n\in\N,\quad
- \varnothing\ne A_n\subseteq A_{n+1}\subseteq\Int K,\qquad
- \Cpt(A_n),\\
- \lim_{n\to\infty}\mu(K\setminus A_n)=0,\qquad
- \lim_{n\to\infty}d_H(A_n,K)=1.
-\end{gather*}
-\end{proposition}
-\noindent
-In words, there are compact connected sets $A\subsetneq K$ inside
-$\D$ such that $K\setminus A$ has measure zero, both sets have measure
-$1$, their Hausdorff distance is $1$, and $K$ is not locally connected.
-There are also nonempty increasing compact sets $A_n\subseteq\Int(K)$
-whose area error $\mu(K\setminus A_n)$ tends to zero while their
-Hausdorff distance from $K$ tends to $1$.
-\begin{proof}
-\begin{gather*}
- A:=[0,1]+i[-1,0],\qquad
- E:=\{0\}\cup\{1/m:m\in\N,\ m\ge1\},\qquad
- K:=A\cup(E+i[0,1]),\\
- 1/m\longrightarrow0
- \Longrightarrow\Cpt(E),\qquad
- \Cpt(A),\qquad\Cpt(E+i[0,1])
- \Longrightarrow\Cpt(K),\\
- \Convex(A),\qquad
- \forall e\in E,\quad
- \Convex(\{e\}+i[0,1]),\quad e\in A\cap(\{e\}+i[0,1]),\\
- \Conn(A)\land\Conn(K),\qquad i\in K\setminus A,\\
- 0\le\mu(K\setminus A)
- \le\sum_{e\in E}\mu(\{e\}+i[0,1])=0,\qquad
- \mu(A)=\mu(K)=1,\\
- e\in E,\quad0\le y\le1
- \Longrightarrow\dist(e+iy,A)=y,\qquad
- d_H(A,K)=\sup_{z\in K}\dist(z,A)=1.
-\end{gather*}
-\begin{gather*}
- \epsilon_n:=2^{-(n+2)},\qquad
- A_n:=[\epsilon_n,1-\epsilon_n]
-         +i[-1+\epsilon_n,-\epsilon_n],\\
- 0<\epsilon_{n+1}<\epsilon_n<1/2,\qquad
- \varnothing\ne A_n\subseteq A_{n+1}
-   \subseteq(0,1)+i(-1,0)\subseteq\Int K,\qquad\Cpt(A_n),\\
- \mu(K\setminus A_n)=1-(1-2\epsilon_n)^2
-     =4\epsilon_n-4\epsilon_n^2\longrightarrow0,\\
- d_H(A_n,A)=\sqrt2\,\epsilon_n,\qquad
- |d_H(A_n,K)-1|
- \le d_H(A_n,A)=\sqrt2\,\epsilon_n\longrightarrow0.
-\end{gather*}
-\begin{gather*}
- c_\star:=i/2,\qquad
- \Conn(V),\qquad c_\star\in V\subseteq K\cap B(c_\star,1/4),\\
- \Conn(\operatorname{Re}V),\qquad
- 0\in\operatorname{Re}V\subseteq E\subseteq\Q
- \Longrightarrow\operatorname{Re}V=\{0\},\\
- \forall\delta>0\ \exists m\in\N:\quad
- m\ge1,\quad m^{-1}<\min\{\delta,1/4\},\\
- m^{-1}+i/2\in(K\cap B(c_\star,\delta))\setminus V,\\
- \neg\left[
- \exists\delta>0\ \exists V\subseteq K:\
- \Conn(V)\land
- K\cap B(c_\star,\delta)\subseteq V\subseteq K\cap B(c_\star,1/4)
- \right],\\
- \neg\LC(K).
- \qedhere
-\end{gather*}
-\end{proof}
-
-The Hausdorff enclosure satisfies
-\[
-\lim_{n\to\infty}h_n=0
-\Longleftrightarrow
-\overline{\bigcup_nI_n}=\M,
-\]
-which is a set equality and is stronger than the measure equality
-$I_\infty=_\mu\M$.
-
-\begin{theorem}[Hausdorff enclosure]\label{thm:hausdorff-enclosure}
-\begin{gather}
- h_n:=d_H(I_n,O_n)=\sup_{z\in O_n}\dist(z,I_n),\qquad
- 0\le h_{n+1}\le h_n,\notag\\
- \max\{d_H(I_n,\M),\,d_H(O_n,\M)\}\le h_n,\notag\\
- h_n=0\ \Longleftrightarrow\ I_n=\M=O_n,\notag\\
- \lim_{n\to\infty}d_H(O_n,\M)=0,\notag\\
- \lim_{n\to\infty}h_n
- =d_H\left(\overline{\bigcup_nI_n},\M\right),\qquad
- \boxed{
- \lim_{n\to\infty}h_n=0\
- \Longleftrightarrow\
- \overline{\bigcup_nI_n}=\M
- }.\label{eq:hausdorff-enclosure}
-\end{gather}
-\end{theorem}
-\noindent
-In words, $h_n$ is decreasing and bounds the Hausdorff distances from
-$I_n$ and $O_n$ to $\M$.  It is zero exactly when
-$I_n=\M=O_n$.  The outer sets converge to $\M$ in Hausdorff distance,
-and the limit of $h_n$ is the Hausdorff distance between $\M$ and the
-closure of the union of the inner sets:
-\[
-\lim_{n\to\infty}h_n
-=d_H\left(\overline{\bigcup_nI_n},\M\right),\qquad
-\lim_{n\to\infty}h_n=0
-\Longleftrightarrow
-\overline{\bigcup_nI_n}=\M.
-\]
-\begin{proof}
-\begin{gather*}
- \varnothing\ne I_n\subseteq\M\subseteq O_n,\qquad
- \Cpt(I_n),\quad\Cpt(\M),\quad\Cpt(O_n),\\
- d_H(I_n,\M)=\sup_{z\in\M}\dist(z,I_n)\le h_n,\qquad
- d_H(O_n,\M)=\sup_{z\in O_n}\dist(z,\M)\le h_n,\\
- z\in O_{n+1}\subseteq O_n
- \Longrightarrow\dist(z,I_{n+1})\le\dist(z,I_n)\le h_n,\\
- h_n=0\Longleftrightarrow I_n=O_n
- \Longleftrightarrow I_n=\M=O_n.
-\end{gather*}
-\begin{gather*}
- J:=\overline{\bigcup_nI_n},\qquad
- \varnothing\ne J\subseteq\M,\qquad\Cpt(J),\qquad\varepsilon>0,\\
- U_n:=\{z\in\C:\dist(z,I_n)<\varepsilon\},\qquad
- U_n\subseteq U_{n+1},\qquad J\subseteq\bigcup_nU_n,\\
- \Cpt(J)\Longrightarrow
- \exists N:\quad J\subseteq U_N
- \Longrightarrow\forall n\ge N,\ d_H(I_n,J)\le\varepsilon,\\
- F_n:=O_n\cap\{z:\dist(z,\M)\ge\varepsilon\},\qquad
- \Cpt(F_n),\qquad F_{n+1}\subseteq F_n,\qquad
- \bigcap_nF_n=\varnothing,\\
- \Cpt(F_0)\Longrightarrow
- \exists N:\quad F_N=\varnothing
- \Longrightarrow\forall n\ge N,\ d_H(O_n,\M)\le\varepsilon,\\
- \lim_n d_H(I_n,J)=\lim_n d_H(O_n,\M)=0,\\
- |h_n-d_H(J,\M)|
- \le d_H(I_n,J)+d_H(O_n,\M)\longrightarrow0,\\
- \lim_nh_n=0\Longleftrightarrow d_H(J,\M)=0
- \Longleftrightarrow J=\M.
- \qedhere
-\end{gather*}
-\end{proof}
-
-\section{Logical dependency and current status}
-
-\[
-\mathsf{UG}\Longrightarrow\LC(\M),
-\qquad
-\mathsf{ID}(\mathcal P_\bullet)
-\Longrightarrow
-\overline{I_\infty}=\M
-\Longrightarrow
-\lim_{n\to\infty}h_n=0,
-\]
-and
-\[
-\lim_{n\to\infty}g_n=0
-\Longleftrightarrow
-I_\infty=_\mu\M.
-\]
-
-\begin{equation}\label{eq:logical-dependency}
-\begin{gathered}
-\mathsf{UG}
-\overset{\ref{thm:uniform}}{\Longrightarrow}
-\exists R\in C(\D,\D):\
-R(\D)=\M\ \land\ \forall c\in\M,\ R(c)=c\\
-\overset{\ref{thm:mlc}}{\Longrightarrow}\LC(\M),\\[4pt]
-\mathsf A(\nu,R_\bullet)
-\overset{\ref{thm:uniform}}{\Longrightarrow}
-\begin{cases}
-\|R_n-R\|_\infty\le16\,2^{-n},\\
-d_H(R_n(\D),\M)\le16\,2^{-n},
-\end{cases},\\
-\mathsf A(\nu,R_\bullet)
-\overset{\ref{thm:deform}}{\Longrightarrow}
-\begin{gathered}
-\exists H\in C(\D\times[0,1],\D):\\
-H(z,0)=z,\qquad H(z,1)=R(z),\qquad H(\D,1)=\M,\\
-\forall c\in\M\ \forall t\in[0,1],\quad H(c,t)=c
-\end{gathered}\\[4pt]
-\mathsf{ID}(\mathcal P_\bullet)
-\overset{\ref{lem:inner-closure}}{\Longrightarrow}
-\overline{I_\infty}=\M
-\overset{\ref{thm:hausdorff-enclosure}}{\Longrightarrow}
-\lim_{n\to\infty}h_n=0,\\
-\lim_{n\to\infty}g_n=0
-\overset{\ref{thm:area-limit}}{\Longleftrightarrow}
-I_\infty=_\mu\M.
-\end{gathered}
-\end{equation}
-
-\begin{proposition}[Current approximation status]\label{prop:current-status}
-\begin{gather*}
- \bigcap_{N\in\N}O_N=\M,\qquad
- \lim_{N\to\infty}d_H(O_N,\M)=0,\\
- P_\star\subseteq\Int(\M),\qquad
- \mu(P_\star)=\frac1{16384},\\
- \mathsf{UG}\Longrightarrow\LC(\M),\\
- \lim_{n\to\infty}g_n=0
- \Longrightarrow I_\infty=_\mu\M,\\
- \mathsf{ID}(\mathcal P_\bullet)
- \Longrightarrow\overline{I_\infty}=\M.
-\end{gather*}
-\end{proposition}
-\noindent
-In words, the proposition asserts
-\[
-\begin{gathered}
-\bigcap_{N\in\N}O_N=\M,\qquad
-\lim_{N\to\infty}d_H(O_N,\M)=0,\qquad
-P_\star\subseteq\Int(\M),\qquad
-\mu(P_\star)=\frac1{16384},\\
-\mathsf{UG}\Longrightarrow\LC(\M),\qquad
-\lim_{n\to\infty}g_n=0\Longrightarrow I_\infty=_\mu\M,\qquad
-\mathsf{ID}(\mathcal P_\bullet)
-\Longrightarrow\overline{I_\infty}=\M.
-\end{gathered}
-\]
- \begin{proof}
- \begin{gather*}
-  \bigcap_{N\in\N}O_N=\M
-  \overset{\ref{thm:hausdorff-enclosure}}{\Longrightarrow}
-  \lim_{N\to\infty}d_H(O_N,\M)=0,\\
-  P_\star\subseteq\Int(\M)
-  \overset{\ref{prop:two}}{\Longrightarrow}
-  \mu(P_\star)=\left(\frac2{256}\right)^2=\frac1{16384},\\
-  \mathsf{UG}
-  \overset{\ref{thm:mlc}}{\Longrightarrow}\LC(\M),\\
-  \lim_{n\to\infty}g_n=0
-  \overset{\ref{thm:area-limit}}{\Longrightarrow}
-  I_\infty=_\mu\M,\\
-  \mathsf{ID}(\mathcal P_\bullet)
-  \overset{\ref{lem:inner-closure}}{\Longrightarrow}
-  \overline{I_\infty}=\M.
-\end{gather*}
-\end{proof}
-
-\noindent
-The hypotheses left open in this document are
-\[
-\mathsf{UG},\qquad \mathsf{ID}(\mathcal P_\bullet).
-\]
-The established implications are
-\[
-\begin{gathered}
-\mathsf{UG}\Longrightarrow\LC(\M),\\
-\lim_{n\to\infty}g_n=0
-\Longrightarrow I_\infty=_\mu\M,\\
-\mathsf{ID}(\mathcal P_\bullet)
-\Longrightarrow\overline{I_\infty}=\M,\qquad
-\lim_{n\to\infty}h_n=0
-\Longleftrightarrow
-\overline{I_\infty}=\M.
-\end{gathered}
-\]
-\[
-P_\star\subseteq\Int(\M),\qquad
-\mu(P_\star)=\frac1{16384},
-\qquad
-\mathcal P_0=\{P_\star\}.
-\]
-\[
-\mu(K\setminus A)=0,\qquad
-d_H(A,K)=1,\qquad
-\neg\LC(K),
-\]
-\[
-\mu(K\setminus A)=0
-\not\Longrightarrow d_H(A,K)=0,\qquad
-\mu(K\setminus A)=0
-\not\Longrightarrow\LC(K).
-\]
-
-\begin{equation}\label{eq:mlc-negation}
-\neg\LC(\M)
-\Longleftrightarrow
-\begin{gathered}
-\exists c\in\M\ \exists\eta>0\ \forall\delta>0\ \forall V\subseteq\M:\\
-\neg\Bigl(
-\Conn(V)\ \land\
-\M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta)
-\Bigr).
-\end{gathered}
-\end{equation}
-\[
-\ref{thm:mlc}:\qquad
-\mathsf{UG}\Longrightarrow\LC(\M).
-\]
 
 \end{document}
