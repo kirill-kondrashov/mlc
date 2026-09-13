@@ -5,8 +5,8 @@
 \input{glyphtounicode}
 \pdfgentounicode=1
 \hypersetup{
-  pdftitle={Uniform geometric estimates and Mandelbrot local connectivity},
-  pdfsubject={Conditional MLC theorem from an unproved uniform geometric hypothesis}
+  pdftitle={Parameter-plane flow, controlled surgeries, and Mandelbrot local connectivity},
+  pdfsubject={Constructed image convergence and a conditional flow-with-surgeries reduction of MLC}
 }
 
 \newtheorem{theorem}{Theorem}[section]
@@ -24,7 +24,8 @@
 \newcommand{\LC}{\operatorname{LC}}
 \newcommand{\Conn}{\operatorname{Connected}}
 
-\title{Uniform geometric estimates\\and Mandelbrot local connectivity}
+\title{Parameter-plane flow, controlled surgeries,\\
+and Mandelbrot local connectivity}
 \author{}
 \date{}
 
@@ -32,12 +33,30 @@
 \maketitle
 
 \section*{Task}
-Prove $\LC(\M)$ by establishing the existence assertion $\mathsf{UG}$
-in Definition~\ref{def:ug}.  Theorem~\ref{thm:mlc} proves
-$\mathsf{UG}\Longrightarrow\LC(\M)$.  The assertion $\mathsf{UG}$
-remains unproved.
+Construct a generalized flow on the parameter square $\D$ whose
+continuous terminal map retracts $\D$ onto the Mandelbrot set $\M$.
+All domains and maps remain in the original parameter plane.
+The surgeries in Definition~\ref{def:relative-surgery} are controlled
+replacements of these maps; no auxiliary manifold or replacement
+of $\M$ by a homotopy-equivalent space is used.
 
-\section{Definitions and local connectedness}
+Theorem~\ref{thm:exterior-candidates} constructs maps whose images
+converge to $\M$ in Hausdorff distance.
+Proposition~\ref{prop:finite-horizons} constructs every finite
+horizon, with depths and continuity scales allowed to depend on
+that horizon.
+Theorems~\ref{thm:flow-equivalence}, \ref{thm:hierarchy}, and
+\ref{thm:surgery-completion} connect controlled flow, the finite
+assertions $\mathsf{UG}_m$, and convergent surgery sequences to the
+original assertion $\mathsf{UG}$.
+Theorem~\ref{thm:mlc} gives the resulting implication to MLC.
+The surgery continuation assertion in
+Definition~\ref{def:surgery-completion} remains unproved.
+In particular, this document does not establish a uniform terminal
+limit of the constructed exterior maps or a classification theorem
+asserting that every irregularity admits a prescribed surgery.
+
+\section{The target and local connectedness}
 
 All subsets of $\C$ carry the Euclidean subspace topology.
 The notation $\Conn(V)$ asserts that $V$ is connected.
@@ -223,6 +242,21 @@ and $t\in[0,1]$, each coordinate of $(1-t)z+tw$ lies in $[-2,2]$.
 Thus $\D$ is convex.
 \end{proof}
 
+\begin{definition}[Uniform distance]\label{def:uniform-distance}
+For topological spaces $X,Y$, define
+\begin{gather*}
+ C(X,Y):=\{F:X\to Y:F\text{ is continuous}\},\\
+ \|F-G\|_\infty:=\sup_{z\in\D}|F(z)-G(z)|
+ \qquad(F,G\in C(\D,\C)).
+\end{gather*}
+\end{definition}
+\noindent
+In words, $C(X,Y)$ is the set of continuous maps from $X$ to $Y$,
+and $\|F-G\|_\infty$ is the supremum of the distances between $F(z)$
+and $G(z)$ as $z$ ranges over $\D$.
+This supremum is finite because $\D$ is nonempty and compact
+and the function $z\mapsto|F(z)-G(z)|$ is continuous.
+
 \begin{definition}[Hausdorff outer gap]\label{def:outer-gap}
 For nonempty compact sets $A,B\subseteq\C$, define
 \begin{gather*}
@@ -236,9 +270,13 @@ For nonempty compact sets $A,B\subseteq\C$, define
 \end{gather*}
 \end{definition}
 \noindent
-In words, $h_N$ is the largest distance from a point of the finite-stage
-outer set $O_N$ to the Mandelbrot set $\M$.  The second expression for
-$h_N$ is valid because $\M\subseteq O_N$.
+In words, $\operatorname{dist}(z,A)$ is the infimum of the
+distances from $z$ to points of $A$.
+The Hausdorff distance is the larger of the two suprema of
+point-to-set distances, one in each direction.
+The gap $h_N$ is the largest distance from a point of the
+finite-stage outer set $O_N$ to $\M$.
+The second expression for $h_N$ is valid because $\M\subseteq O_N$.
 
 \begin{theorem}[Hausdorff outer-gap convergence]\label{thm:outer-gap}
 \begin{gather}
@@ -359,21 +397,7 @@ Together with the first directed distance, this is
 \eqref{eq:image-gap}.
 \end{proof}
 
-\section{Uniform geometric hypothesis}
-
-\begin{definition}[Uniform distance]\label{def:uniform-distance}
-For topological spaces $X,Y$, define
-\begin{gather*}
- C(X,Y):=\{F:X\to Y:F\text{ is continuous}\},\\
- \|F-G\|_\infty:=\sup_{z\in\D}|F(z)-G(z)|
- \qquad(F,G\in C(\D,\C)).
-\end{gather*}
-\end{definition}
-\noindent
-In words, $C(X,Y)$ is the set of continuous maps from $X$ to $Y$,
-and $\|F-G\|_\infty$ is the supremum of the distances between $F(z)$
-and $G(z)$ as $z$ ranges over $\D$.  This supremum is finite because
-$\D$ is nonempty and compact and $z\mapsto|F(z)-G(z)|$ is continuous.
+\section{Uniform geometric discretisation and its limit}
 
 \begin{definition}[Uniform geometric existence]\label{def:ug}
 For $\nu\in\N^\N$ and $R_\bullet\in C(\D,\D)^\N$, define
@@ -413,11 +437,7 @@ $R_n:\D\to\D$ for which $\mathsf A(\nu,R_\bullet)$ holds.
 \label{thm:candidate-to-ug}
 Let $\nu\in\N^\N$ and $T_\bullet\in C(\D,\D)^\N$ satisfy
 \begin{gather}
- \nu_0=0,\qquad
- \forall n\ge1,\quad
- \nu_n>\nu_{n-1},\quad
- \nu_n\ge n,\quad
- h_{\nu_n}\le2^{-n},\label{eq:candidate-depths}\\
+ \forall n\in\N,\quad \nu_n\ge n,\label{eq:candidate-depths}\\
  \forall n\in\N\ \forall c\in O_{\nu_n},\qquad T_n(c)=c,\label{eq:candidate-fixing}\\
  a_n:=\sup_{z\in\D}
        \operatorname{dist}(T_n(z),O_{\nu_n})
@@ -428,10 +448,10 @@ Let $\nu\in\N^\N$ and $T_\bullet\in C(\D,\D)^\N$ satisfy
 Then $\mathsf{UG}$ holds.
 \end{theorem}
 \noindent
-In words, after selecting outer sets whose Hausdorff errors decrease
-at a prescribed geometric rate, it is sufficient to construct
-continuous maps that fix the selected outer sets, approach those outer
-sets uniformly, and have summable adjacent uniform displacements.
+In words, it is sufficient to select depths at least their indices
+and construct continuous maps that fix the selected outer sets,
+approach those outer sets uniformly, and have summable adjacent
+uniform displacements.
 The resulting subsequence, preceded by the identity map, satisfies
 all five clauses of $\mathsf A$.
 \begin{proof}
@@ -508,23 +528,6 @@ Thus $\mathsf A(\widetilde\nu,\widetilde R_\bullet)$ holds, and
 \eqref{eq:ug-existence} gives $\mathsf{UG}$.
 \end{proof}
 
-\noindent
-Theorem~\ref{thm:outer-gap} and Proposition~\ref{prop:image-gap} are
-unconditional.  The convergence $h_N\to0$ is qualitative; no explicit
-modulus of the form $N=N(\varepsilon)$ is asserted.  The existence of
-maps satisfying \eqref{eq:candidate-fixing}--\eqref{eq:candidate-summability}
-is not asserted.  The current implications are
-\[
-\left[
-\begin{gathered}
-\text{there exist }\nu\text{ and }T_\bullet\text{ satisfying}\\
-\eqref{eq:candidate-depths}\text{--}\eqref{eq:candidate-summability}
-\end{gathered}
-\right]
-\Longrightarrow\mathsf{UG}
-\Longrightarrow\LC(\M).
-\]
-
 \begin{theorem}[Uniform limit and retraction]\label{thm:uniform}
 For $\nu\in\N^\N$ and $R_\bullet\in C(\D,\D)^\N$,
 \[
@@ -600,15 +603,1698 @@ Consequently $R(\D)\subseteq\M$ and, because $\M\subseteq\D$,
 $\M\subseteq R(\D)$.  Thus $R(\D)=\M$.
 \end{proof}
 
-\section{Main current result}
+\section{Controlled flow on the parameter square}
 
-\begin{theorem}[Conditional Mandelbrot local connectivity]\label{thm:mlc}
+\begin{definition}[Generalized flow with the original stage constraints]
+\label{def:controlled-flow}
+Define
 \[
- \boxed{\mathsf{UG}\Longrightarrow\LC(\M).}
+ t_n:=1-2^{-n}\qquad(n\in\N),\qquad H_t(z):=H(t,z).
+\]
+For $\nu\in\N^\N$ and $H\in C([0,1)\times\D,\D)$, define
+\begin{equation}\label{eq:controlled-flow}
+ \mathsf B(\nu,H):=
+ \left[
+ \begin{gathered}
+  H_0=\id_\D,\qquad \forall n\in\N,\quad\nu_n\ge n,\\
+  \forall t\in[0,1)\ \forall c\in\M,\quad H_t(c)=c,\\
+  \forall n\in\N\ \forall c\in O_{\nu_n},\quad H_{t_n}(c)=c,\\
+  \forall n\in\N\ \forall z\in\D\ \exists w\in O_{\nu_n},\
+                  |H_{t_n}(z)-w|\le2^{-n},\\
+  \forall s,t\in[0,1),\quad
+           \|H_t-H_s\|_\infty\le16|t-s|
+ \end{gathered}\right],
+\end{equation}
+and
+\[
+ \mathsf{Flow}:=
+ \exists\nu\in\N^\N\ \exists H\in C([0,1)\times\D,\D),\
+      \mathsf B(\nu,H).
+\]
+\end{definition}
+\noindent
+In words, the sampling time at level $n$ is $1-2^{-n}$.
+A generalized flow is a jointly continuous family of maps of
+$\D$ into itself, starting at the identity and fixing every point
+of $\M$ at every time.
+At each sampling time it fixes the prescribed finite-orbit outer
+set and meets the original proximity bound.
+The uniform distance between its maps at any two times is at most
+sixteen times the time difference.
+The depths are at least their indices.
+The assertion $\mathsf{Flow}$ states that such depths and a family
+exist.  No semigroup identity or Riemannian metric evolution is
+included in this definition.
+
+\begin{theorem}[Flow equivalence and constructed terminal extension]
+\label{thm:flow-equivalence}
+\[
+ \mathsf{Flow}\Longleftrightarrow\mathsf{UG}.
+\]
+For every $\mathsf B(\nu,H)$ there is a continuous extension
+$\overline H:[0,1]\times\D\to\D$ such that, with
+$R:=\overline H_1$,
+\begin{gather}
+ \forall t\in[0,1),\quad
+       \|H_t-R\|_\infty\le16(1-t),\label{eq:flow-terminal-rate}\\
+ \overline H_0=\id_\D,\qquad R(\D)=\M,\qquad
+ \forall t\in[0,1]\ \forall c\in\M,\quad\overline H_t(c)=c.
+ \label{eq:strong-deformation}
+\end{gather}
+\end{theorem}
+\noindent
+In words, the controlled-flow assertion is equivalent to the
+original uniform geometric assertion.
+Every controlled flow extends continuously to its terminal time.
+Its distance from the terminal map is at most $16(1-t)$ at time
+$t$.  The extension is a strong deformation retraction: it starts
+at the identity, fixes $\M$ throughout, and has terminal image $\M$.
+\begin{proof}
+Assume $\mathsf A(\nu,F_\bullet)$.
+For $t_n\le t\le t_{n+1}$, define
+\begin{equation}\label{eq:flow-interpolation}
+ \theta:=\frac{t-t_n}{t_{n+1}-t_n},\qquad
+ H_t(z):=(1-\theta)F_n(z)+\theta F_{n+1}(z).
+\end{equation}
+The formulas agree at the sampling times.  Each piece is jointly
+continuous, and only finitely many pieces meet a neighborhood of
+any time less than one.
+Convexity of $\D$ gives $H_t(\D)\subseteq\D$.
+Every $F_n$ fixes $\M$, so every interpolated map does also.
+On the interior of each time interval,
+\[
+ \partial_tH_t=
+      2^{n+1}(F_{n+1}-F_n),\qquad
+ \|\partial_tH_t\|_\infty\le16.
+\]
+Partitioning any interval $[s,t]\subset[0,1)$ at its finitely many
+sampling times and adding the corresponding bounds gives
+$\|H_t-H_s\|_\infty\le16|t-s|$.
+At the sampling times the original fixing and proximity clauses
+hold.  Thus $\mathsf B(\nu,H)$.
+
+Conversely, assume $\mathsf B(\nu,H)$ and define $F_n:=H_{t_n}$.
+Each $F_n$ is continuous, and all clauses of $\mathsf A$ except
+the adjacent-displacement clause are part of
+\eqref{eq:controlled-flow}.  The remaining clause follows from
+\[
+ \|F_{n+1}-F_n\|_\infty
+ \le16(t_{n+1}-t_n)
+ =16\,2^{-n-1}=8\,2^{-n}.
+\]
+This proves the equivalence.
+Theorem~\ref{thm:uniform} gives a continuous retraction $R$ with
+$F_n\to R$ uniformly.  For fixed $t<1$ and sufficiently large $n$,
+\[
+ \|H_t-F_n\|_\infty\le16(t_n-t).
+\]
+Passing to the limit gives \eqref{eq:flow-terminal-rate}.
+Define $\overline H_1:=R$ and $\overline H_t:=H_t$ for $t<1$.
+For $z,z_0\in\D$,
+\[
+ |H_t(z)-R(z_0)|\le16(1-t)+|R(z)-R(z_0)|.
+\]
+Continuity of $R$ proves joint continuity at each $(1,z_0)$.
+The fixing conditions and the image identity follow from
+\eqref{eq:controlled-flow} and Theorem~\ref{thm:uniform}.
+\end{proof}
+
+\begin{proposition}[Obstruction for an integrably Lipschitz ODE]
+\label{prop:ode-obstruction}
+Let $T>0$.  Suppose that $Y(t,z)\in\D$ solves
+\[
+ \partial_tY(t,z)=v(t,Y(t,z)),\qquad Y(0,z)=z
+\]
+with absolutely continuous trajectories on $[0,T]$.
+Assume that $L:[0,T]\to[0,\infty)$ is integrable and that,
+for almost every $t$ and all $x,y\in\D$,
+\[
+ |v(t,x)-v(t,y)|\le L(t)|x-y|.
+\]
+Then
+\[
+ |Y(t,z)-Y(t,w)|
+ \ge\exp\left(-\int_0^t L(u)\,du\right)|z-w|
+ \qquad(t\in[0,T],\ z,w\in\D).
+\]
+In particular, $Y(T,\cdot)$ cannot be a retraction onto $\M$.
+\end{proposition}
+\noindent
+In words, an ordinary differential equation whose spatial
+Lipschitz constants have finite time integral cannot identify
+distinct initial points at a finite terminal time.
+Its terminal map therefore cannot retract $\D$ onto the proper
+subset $\M$.
+\begin{proof}
+For fixed $z,w$, let $d(t):=|Y(t,z)-Y(t,w)|$.
+Absolute continuity and the Lipschitz assumption give
+$d'(t)\ge-L(t)d(t)$ for almost every $t$.
+Hence the absolutely continuous function
+$\exp(\int_0^t L(u)\,du)d(t)$ has nonnegative derivative almost
+everywhere and is nondecreasing.  This proves the asserted bound
+and injectivity of $Y(T,\cdot)$.
+The parameter $2$ lies in $\D\setminus\M$ because $p_2(2)=6>2$.
+If $R$ were a retraction onto $\M$, then
+$c:=R(2)\in\M$ would satisfy $R(c)=c=R(2)$ with $c\ne2$.
+Such a map is not injective.
+\end{proof}
+
+\section{Stage bounds and explicit seed maps}
+\label{sec:iteration}
+
+\begin{definition}[Stage bounds, depths, and continuity scales]
+\label{def:stage-data}
+Define
+\begin{gather}
+ K:=\overline B(0,2),\qquad
+ \epsilon_n:=2^{-n},\qquad
+ \beta_n:=8\,2^{-n},\qquad
+ \tau_n:=\sum_{j=n}^{\infty}\beta_j=16\,2^{-n},
+ \label{eq:stage-bounds}\\
+ \ell_0:=0,\qquad \ell_1:=1,\qquad
+ \ell_n:=\min\{N\in\N:N>\ell_{n-1},\
+                    N\ge n,\ h_N\le\epsilon_n\}\quad(n\ge2),
+ \label{eq:lower-depths}\\
+ \Lambda:=
+ \left\{\lambda\in\N^\N:
+ \begin{gathered}
+  \lambda_0=0,\quad\lambda_1=1,\\
+  \forall n\in\N,\quad
+  \lambda_n\ge\ell_n,\quad\lambda_{n+1}>\lambda_n
+ \end{gathered}\right\},\label{eq:admissible-depths}\\
+ \Delta:=
+ \left\{\delta\in(0,\infty)^\N:
+  \forall k\in\N,\quad
+  \delta_k\le2^{-k},\quad\delta_{k+1}\le\delta_k/2
+ \right\}.\label{eq:admissible-moduli}
+\end{gather}
+The minima in \eqref{eq:lower-depths} exist by
+Theorem~\ref{thm:outer-gap}.  In particular,
+\[
+ \ell\in\Lambda,\qquad (2^{-k})_{k\in\N}\in\Delta,\qquad
+ \forall\lambda\in\Lambda\ \forall n\ge2,\quad
+ \lambda_n\ge n,\quad h_{\lambda_n}\le\epsilon_n.
+\]
+\end{definition}
+\noindent
+In words, $K$ is the closed disk of radius two centered at zero.
+The stage-$n$ proximity bound is $\epsilon_n=2^{-n}$, the
+stage-$n$ adjacent-displacement bound is $\beta_n=8\,2^{-n}$, and
+the sum of the displacement bounds from stage $n$ onward is
+$\tau_n=16\,2^{-n}$.
+The first two lower depths are zero and one.  For $n\ge2$, $\ell_n$
+is the least natural number greater than $\ell_{n-1}$, at least $n$,
+and having outer gap at most $\epsilon_n$.
+An element $\lambda$ of $\Lambda$ starts at zero and one, is strictly
+increasing, and satisfies $\lambda_n\ge\ell_n$ for every $n$.
+An element $\delta$ of $\Delta$ consists of positive real numbers
+with $\delta_k\le2^{-k}$ and $\delta_{k+1}\le\delta_k/2$ for every $k$.
+Every such depth sequence satisfies $h_{\lambda_n}\le2^{-n}$ for
+$n\ge2$.  The definition of $\ell$ uses the exact gaps $h_N$;
+no algorithm for evaluating these minima is assumed.
+
+\begin{lemma}[Radial seed map]\label{lem:radial}
+Define
+\[
+ \Pi:\C\to K,\qquad \Pi(z):=\frac{2z}{\max\{2,|z|\}}.
+\]
+Then
+\begin{gather*}
+ \Pi|_K=\id_K,\qquad
+ |\Pi(z)-\Pi(w)|\le|z-w|\quad(z,w\in\C),\\
+ O_0=O_1=K=\Pi(\D),\qquad
+ \|\Pi|_\D-\id_\D\|_\infty=2\sqrt2-2<1.
+\end{gather*}
+\end{lemma}
+\noindent
+In words, $\Pi$ fixes every point of $K$, sends every complex number
+into $K$, and does not increase the distance between any two points.
+The outer sets at depths zero and one both equal $K$, and $K$ is
+the image of $\D$ under $\Pi$.
+The largest displacement of a point of $\D$ under $\Pi$ is
+$2\sqrt2-2$, which is less than one.
+\begin{proof}
+The formula gives $\Pi(z)=z$ when $|z|\le2$ and
+$\Pi(z)=2z/|z|$ when $|z|>2$.
+For $u:=\Pi(z)$ and any $v\in K$, these formulas give
+\begin{equation}\label{eq:projection-inequality}
+ \operatorname{Re}\bigl((z-u)\overline{(v-u)}\bigr)\le0.
+\end{equation}
+Indeed, the expression is zero when $z=u$.  Otherwise,
+$|u|=2$, $z-u=(|z|-2)u/2$, and
+$\operatorname{Re}(u\overline v)-|u|^2\le2|v|-4\le0$.
+Apply \eqref{eq:projection-inequality} to
+$u:=\Pi(z)$, $v:=\Pi(w)$ and then with $z,w$ interchanged.
+Adding the two inequalities yields
+\[
+ |u-v|^2
+ \le\operatorname{Re}\bigl((z-w)\overline{(u-v)}\bigr)
+ \le|z-w|\,|u-v|.
+\]
+If $u=v$ the required bound holds; otherwise divide by $|u-v|$.
+In particular, $\Pi$ is continuous.
+
+The identities $p_0(c)=0$ and $p_1(c)=c$ give $O_0=O_1=K$.
+Since $K\subseteq\D$ and $\Pi$ fixes $K$, $\Pi(\D)=K$.
+For $z\in\D$,
+\[
+ |\Pi(z)-z|=\max\{0,|z|-2\}\le2\sqrt2-2.
+\]
+Equality holds at $z=2+2i$.
+\end{proof}
+
+\section{Exterior evolution and constructed image convergence}
+
+\begin{theorem}[Classical exterior uniformization]\label{thm:uniformization}
+The set $\M$ is a nondegenerate connected compact set with connected
+complement.  There are inverse conformal maps
+\begin{gather*}
+ \Phi:\C\setminus\M\longrightarrow\{w\in\C:|w|>1\},\qquad
+ \Psi:=\Phi^{-1},\qquad
+ \lim_{|c|\to\infty}\frac{\Phi(c)}c=1.
+\end{gather*}
+Define the iterates and Green functions by
+\begin{gather*}
+ f_c^{\circ0}:=\id_\C,\qquad
+ f_c^{\circ(k+1)}:=f_c\circ f_c^{\circ k},\\
+ g_c(z):=\lim_{k\to\infty}
+             2^{-k}\log\max\{1,|f_c^{\circ k}(z)|\},\\
+ G(c):=
+ \begin{cases}
+  \log|\Phi(c)|,&c\notin\M,\\
+  0,&c\in\M.
+ \end{cases}
+\end{gather*}
+These limits exist, and
+\begin{gather}
+ G\in C(\C,[0,\infty)),\qquad G^{-1}(0)=\M,\qquad
+ G(c)-\log|c|\longrightarrow0\quad(|c|\to\infty),
+ \label{eq:parameter-green}\\
+ g_c(f_c(z))=2g_c(z),\qquad G(c)=g_c(c)=2g_c(0).
+ \label{eq:green-normalization}
+\end{gather}
+\end{theorem}
+\noindent
+In words, the exterior of $\M$ is conformally equivalent to the
+exterior unit disk, with the stated normalization at infinity.
+The function $g_c$ is the normalized logarithmic escape rate of
+the dynamical orbit starting at $z$.
+The parameter Green function equals $\log|\Phi|$ outside $\M$
+and is zero on $\M$; it is continuous across $\M$ and tends to
+infinity at infinity.
+Its normalization is twice the critical-point escape rate,
+not the critical-point escape rate itself.
+No extension of $\Psi$ to the unit circle is part of this statement.
+\begin{proof}
+Compactness was proved in Lemma~\ref{lem:outer}, and $0,-1\in\M$
+give nondegeneracy; the critical orbit at $-1$ alternates between
+zero and $-1$.
+The exterior uniformization and its normalization are
+Douady--Hubbard \cite[Chapter 8, Theorem 8.1, pp.~64--65]{DH};
+connectedness is Corollary~8.3 there.
+Continuity of the extended dynamical Green function is
+Proposition~8.1(b), p.~62, and the parameter identification
+is Corollary~8.4(a), p.~65.
+The functional equation in \eqref{eq:green-normalization} also
+follows by shifting the index in the defining limit.
+These are classical inputs independent of MLC.
+\end{proof}
+
+\begin{definition}[Positive-potential cutoffs]\label{def:exterior-cutoff}
+For $s>0$, define
+\begin{gather}
+ E_s:=\{c\in\C:G(c)\le s\},\qquad
+ \Gamma_s(\theta):=\Psi(e^{s+i\theta})
+       \quad(\theta\in\R/2\pi\mathbb Z),\label{eq:equipotentials}\\
+ \kappa(s):=d_H(E_s,\M),\label{eq:equipotential-gap}\\
+ P_s(c):=
+ \begin{cases}
+  c,&G(c)\le s,\\
+  \displaystyle\Psi\left(e^s\frac{\Phi(c)}{|\Phi(c)|}\right),
+       &G(c)>s,
+ \end{cases}
+ \qquad Q_s:=\Pi\circ P_s|_\D.\label{eq:exterior-cutoff}
+\end{gather}
+\end{definition}
+\noindent
+In words, $E_s$ consists of the actual parameters whose Green
+function is at most $s$, and $\Gamma_s$ is its equipotential curve.
+The number $\kappa(s)$ measures its Hausdorff gap from $\M$.
+The cutoff $P_s$ fixes every parameter of potential at most $s$;
+it moves every other parameter to potential $s$ along the same
+external angle.
+The map $Q_s$ restricts this operation to $\D$ and projects its
+values to $K\subseteq\D$.
+Neither the domain nor the target $\M$ is replaced by an
+auxiliary manifold.
+
+\begin{theorem}[Positive-level regularity and set convergence]
+\label{thm:positive-levels}
+Each $E_s$ is compact, and
+\begin{gather}
+ 0<s<t\Longrightarrow E_s\subseteq\operatorname{int}E_t,\qquad
+ \bigcap_{s>0}E_s=\M,\qquad
+ \kappa(s)\longrightarrow0\quad(s\downarrow0).
+ \label{eq:equipotential-convergence}
+\end{gather}
+Its boundary is the regular real-analytic Jordan curve $\Gamma_s$.
+The family $(s,c)\mapsto P_s(c)$ is jointly continuous for $s>0$,
+and
+\begin{gather}
+ P_s(\C)=E_s,\qquad P_s|_{E_s}=\id_{E_s},\qquad
+ P_s\circ P_t=P_{\min\{s,t\}},\label{eq:cutoff-retractions}\\
+ Q_s\in C(\D,\D),\qquad Q_s|_\M=\id_\M,\qquad
+ d_H(Q_s(\D),\M)\le\kappa(s).\label{eq:projected-gap}
+\end{gather}
+For every $s>0$, $Q_s(\D)\setminus\M\ne\varnothing$.
+\end{theorem}
+\noindent
+In words, positive equipotentials bound nested compact
+neighborhoods of $\M$ whose Hausdorff gaps tend to zero.
+Each boundary has an analytic parametrization by the circle.
+Distinct circle parameters give distinct points, and the tangent
+vector is nonzero at every parameter.
+The cutoffs vary continuously at every positive level, retract
+onto the corresponding neighborhoods, and compose by taking
+the smaller cutoff height.
+Their projected versions fix $\M$ and have images approaching
+$\M$ in Hausdorff distance.
+At every positive height, the projected image still contains a
+parameter outside $\M$.
+The composition identity is asserted for $P_s$, not for $Q_s$.
+\begin{proof}
+Continuity of $G$ and its behavior at infinity imply compactness
+and nesting.  The zero set in \eqref{eq:parameter-green} gives
+the intersection identity.
+If Hausdorff convergence failed, there would be $s_j\downarrow0$
+and $c_j\in E_{s_j}$ a fixed positive distance from $\M$.
+A subsequence converges in the compact set $E_{s_1}$ to a point
+$c$ with $G(c)=0$, contradicting that positive distance.
+
+The parametrization $\Gamma_s$ is injective on the circle and
+\[
+ \Gamma_s'(\theta)
+       =ie^{s+i\theta}\Psi'(e^{s+i\theta})\ne0.
+\]
+Its unbounded complementary component is
+$\Psi(\{|w|>e^s\})=\{G>s\}$.
+The Jordan curve theorem identifies its filled bounded region
+with $E_s$ and its boundary with $\Gamma_s$.
+
+For $c\notin\M$, the cutoff formula can be written
+\[
+ P_s(c)=
+ \Psi\left(e^{\min\{s,G(c)\}}\frac{\Phi(c)}{|\Phi(c)|}\right).
+\]
+This is jointly continuous while $s>0$ and $c\notin\M$.
+At $(s_0,c_0)$ with $c_0\in\M$, a neighborhood satisfies
+$G(c)<s_0/2$.  For $s$ sufficiently close to $s_0$, the cutoff
+is the identity throughout that neighborhood.
+This proves joint continuity without any boundary extension of
+$\Psi$ at modulus one.
+The cutoff replaces the potential by its minimum with $s$,
+leaving the angle unchanged, which proves
+\eqref{eq:cutoff-retractions}.
+
+The projection $\Pi$ is nonexpansive and fixes $\M$.
+Consequently, for every $x\in\C$,
+\[
+ \operatorname{dist}(\Pi(x),\M)
+       \le\operatorname{dist}(x,\M).
+\]
+Since $P_s(\D)\subseteq E_s$ and every $Q_s$ fixes $\M$,
+both the image bound and \eqref{eq:projected-gap} follow.
+Finally, $\M$ is a nonempty proper closed subset of the connected
+disk $K$, since $2\in K\setminus\M$.
+The relatively open set $K\cap\{G<s\}$ contains $\M$ and cannot
+equal $\M$: that would make $\M$ both open and closed in $K$.
+Choose $c\in K\cap\{G<s\}\setminus\M$.
+Both $P_s$ and $\Pi$ fix $c$, so $c\in Q_s(\D)\setminus\M$.
+\end{proof}
+
+\begin{lemma}[A quantitative orbit-depth bound for the cutoff]
+\label{lem:green-depth}
+For every $N\in\N$,
+\begin{equation}\label{eq:green-depth-bound}
+ \sup_{c\in O_N}G(c)\le2^{1-N}\log3.
+\end{equation}
+Thus
+\begin{equation}\label{eq:depth-cutoff-inclusion}
+ 2^{1-N}\log3\le s
+ \Longrightarrow
+ O_N\subseteq E_s,\quad Q_s|_{O_N}=\id_{O_N},
+ \quad h_N\le\kappa(s).
+\end{equation}
+\end{lemma}
+\noindent
+In words, membership in the depth-$N$ orbit approximation bounds
+the parameter Green function by $2^{1-N}\log3$.
+If that number is at most the cutoff height, the entire orbit
+approximation is fixed by the projected cutoff, and its Hausdorff
+gap from $\M$ is at most the equipotential gap at that height.
+\begin{proof}
+For $|c|\le2$ and $|z|\le2$, induction gives
+\[
+ |f_c^{\circ k}(z)|\le3^{2^k}-1\qquad(k\in\N).
+\]
+The initial bound is $|z|\le2$.
+If $A:=3^{2^k}$, the next bound follows from
+$(A-1)^2+2\le A^2-1$, since $A\ge3$.
+Dividing the corresponding logarithmic estimate by $2^k$ and
+passing to the limit gives $g_c(z)\le\log3$.
+For $c\in O_N$, both $|c|$ and $|p_N(c)|$ are at most two.
+The functional equation and normalization in
+\eqref{eq:green-normalization} therefore give
+\[
+ G(c)=2g_c(0)=2^{1-N}g_c(p_N(c))
+                         \le2^{1-N}\log3.
+\]
+The cutoff fixes $E_s$, and $\Pi$ fixes $O_N\subseteq K$.
+The inclusion and gap conclusions follow.
+\end{proof}
+
+\begin{theorem}[An explicit sequence with convergent images]
+\label{thm:exterior-candidates}
+Define
+\begin{gather}
+ a:=1+\max_{c\in\D}G(c),\qquad j_1:=0,\qquad s_1:=a,\\
+ j_n:=\min\{j\in\N:j>j_{n-1},\
+                    \kappa(a2^{-j})\le2^{-n}\},\qquad
+ s_n:=a2^{-j_n}\quad(n\ge2),\label{eq:cutoff-heights}\\
+ \lambda_0:=0,\qquad\lambda_1:=1,\notag\\
+ \lambda_n:=\min\{N\in\N:N>\lambda_{n-1},\
+                 N\ge n,\ 2^{1-N}\log3\le s_n\}\quad(n\ge2),
+ \label{eq:cutoff-depths}\\
+ T_0:=\id_\D,\qquad T_1:=\Pi|_\D=Q_a,\qquad
+ T_n:=Q_{s_n}\quad(n\ge2).\label{eq:actual-candidates}
+\end{gather}
+These sequences exist, $\lambda\in\Lambda$, and
+\begin{gather}
+ T_n\in C(\D,\D),\qquad
+ T_n|_{O_{\lambda_n}}=\id_{O_{\lambda_n}}
+                         \quad(n\in\N),\label{eq:actual-candidate-fixing}\\
+ \forall n\in\N\ \forall z\in\D\ \exists w\in O_{\lambda_n},\
+                         |T_n(z)-w|\le2^{-n},\label{eq:actual-candidate-error}\\
+ \forall n\ge2,\qquad d_H(T_n(\D),\M)\le2^{-n}.
+ \label{eq:constructed-image-convergence}
+\end{gather}
+\end{theorem}
+\noindent
+In words, the explicit cutoffs and the indicated selections of
+heights and orbit depths construct a sequence of continuous maps
+with the original initialization, fixing, and proximity properties.
+The images converge to $\M$ with the stated geometric error bound.
+The height selection uses the exact function $\kappa$; no effective
+modulus for $\kappa(s)\to0$ is supplied.
+The theorem does not assert the adjacent-displacement estimates
+for all levels or a common continuity modulus for these maps.
+\begin{proof}
+The maxima and minima defining $a$ and $j_n$ exist by compactness
+and Theorem~\ref{thm:positive-levels}.
+The sequence $j_n$ is strictly increasing, so $s_n\downarrow0$.
+The minimum defining $\lambda_n$ exists because
+$2^{1-N}\log3\to0$.
+Lemma~\ref{lem:green-depth} gives
+$h_{\lambda_n}\le\kappa(s_n)\le2^{-n}$ for $n\ge2$.
+Induction then gives $\lambda_n\ge\ell_n$: the integer $\lambda_n$
+is greater than $\lambda_{n-1}\ge\ell_{n-1}$, at least $n$, and
+has the gap required in \eqref{eq:lower-depths}.
+Hence $\lambda\in\Lambda$.
+
+The inequality $G<a$ on $\D$ gives $P_a|_\D=\id_\D$, so $Q_a=\Pi|_\D$.
+For $n\ge2$, \eqref{eq:depth-cutoff-inclusion} gives the fixing
+property.  For any $z\in\D$,
+\[
+ \operatorname{dist}(T_n(z),O_{\lambda_n})
+ \le\operatorname{dist}(T_n(z),\M)
+ \le\kappa(s_n)\le2^{-n}.
+\]
+Distance to the nonempty compact set $O_{\lambda_n}$ is attained,
+giving the required witness.
+The cases $n=0,1$ follow from Lemma~\ref{lem:radial}.
+The image bound follows from \eqref{eq:projected-gap}.
+\end{proof}
+
+\begin{lemma}[Differential equation and finite-band motion bound]
+\label{lem:exterior-speed}
+For $s>0$, define
+\begin{equation}\label{eq:exterior-speed}
+ V(s):=\max_{\theta\in\R/2\pi\mathbb Z}
+                     e^s|\Psi'(e^{s+i\theta})|.
+\end{equation}
+This is a finite continuous function on $(0,\infty)$.
+On each external ray, the height-parametrized trajectory
+$c(s):=\Psi(e^{s+i\theta})$ satisfies
+\begin{equation}\label{eq:exterior-ode}
+ \frac{dc}{ds}=\frac{\Phi(c)}{\Phi'(c)}
+             =\frac{\nabla G(c)}{|\nabla G(c)|^2},
+ \qquad |\nabla G(c)|=\frac{|\Phi'(c)|}{|\Phi(c)|}>0.
+\end{equation}
+For $0<s<t$,
+\begin{equation}\label{eq:finite-band-motion}
+ \|Q_t-Q_s\|_\infty
+ \le\sup_{c\in\C}|P_t(c)-P_s(c)|
+ \le\int_s^t V(u)\,du.
+\end{equation}
+\end{lemma}
+\noindent
+In words, the radial trajectories solve a regular differential
+equation on every positive-potential band.
+Their maximal speed at height $s$ is finite and varies continuously
+with the height.  Integrating that speed between two positive
+heights bounds the uniform change in the cutoff maps.
+The equipotentials have no positive-level critical points.
+The cutoff maps can have a derivative crease at their moving
+fixed-region boundary; the lemma does not assert smoothness there.
+\begin{proof}
+The derivative of $\Psi$ is continuous and nonzero in the exterior
+disk.  Taking its maximum on circles proves the properties of $V$.
+Differentiating $\Phi(c(s))=e^{s+i\theta}$ gives the first identity.
+Locally $G$ is the real part of a holomorphic logarithm of $\Phi$;
+identifying a planar gradient with a complex number gives
+$\nabla G=\overline{\Phi'/\Phi}$ and proves the remaining identities.
+
+If $G(c)\le s$, both cutoffs fix $c$.
+Otherwise their values lie on the same external ray at heights
+$s$ and $\min\{t,G(c)\}$.
+The fundamental theorem of calculus along that positive-height
+segment bounds their distance by $\int_s^t V(u)\,du$.
+Taking suprema and using nonexpansiveness of $\Pi$ proves
+\eqref{eq:finite-band-motion}.
+\end{proof}
+
+\begin{theorem}[Two sufficient terminal regularity conditions]
+\label{thm:exterior-terminal}
+Either of the following conditions implies $\mathsf{UG}$:
+\begin{gather}
+ \exists R\in C(\D,\D),\qquad
+       \|Q_s-R\|_\infty\longrightarrow0\quad(s\downarrow0),
+ \label{eq:uniform-exterior-limit}\\
+ \int_0^a V(s)\,ds<\infty.
+ \label{eq:integrable-exterior-speed}
+\end{gather}
+Condition~\eqref{eq:integrable-exterior-speed} implies
+\eqref{eq:uniform-exterior-limit}, with
+\begin{equation}\label{eq:exterior-tail}
+ \|Q_s-R\|_\infty\le\int_0^s V(u)\,du,\qquad
+ R(\D)=\M,\qquad R|_\M=\id_\M.
+\end{equation}
+\end{theorem}
+\noindent
+In words, uniform convergence of the exterior candidate family
+is sufficient to reconstruct the original uniform geometric tower.
+Integrability of the maximal radial speed down to height zero is
+a further sufficient condition, with the displayed tail estimate.
+Integrability at zero is not a consequence of the finite-band
+bound, is not proved here, and is not asserted to be necessary.
+\begin{proof}
+Assume \eqref{eq:uniform-exterior-limit}.
+The maps $T_n$ in Theorem~\ref{thm:exterior-candidates} converge
+uniformly to $R$.
+Choose strictly increasing indices $i_n\ge n$ for $n\ge1$
+with $\|T_{i_n}-R\|_\infty\le2^{-n}$.
+Define $U_0:=T_0$, $\nu_0:=0$, and
+$U_n:=T_{i_n}$, $\nu_n:=\lambda_{i_n}$ for $n\ge1$.
+These maps fix $O_{\nu_n}$ and their proximity errors tend to zero.
+For $n\ge1$,
+\[
+ \|U_{n+1}-U_n\|_\infty
+ \le2^{-(n+1)}+2^{-n}.
+\]
+The initial displacement is finite, so the series of adjacent
+displacements converges.  Theorem~\ref{thm:candidate-to-ug}
+therefore gives $\mathsf{UG}$.
+
+Now assume \eqref{eq:integrable-exterior-speed}.
+Equation~\eqref{eq:finite-band-motion} makes $Q_s$ uniformly
+Cauchy as $s\downarrow0$.
+Completeness of the space of continuous $\D$-valued maps yields
+a uniform limit $R$.
+Letting the smaller height tend to zero in
+\eqref{eq:finite-band-motion} proves the tail estimate.
+Every $Q_s$ fixes $\M$, so $R$ does also.
+Equation~\eqref{eq:projected-gap} gives
+$\operatorname{dist}(R(z),\M)=0$ for every $z$.
+Closedness of $\M$ and the fixing property give $R(\D)=\M$.
+\end{proof}
+
+\begin{theorem}[Classical boundary criterion and the reverse implication]
+\label{thm:mlc-to-ug}
+The inverse exterior map $\Psi$ extends continuously to the unit
+circle if and only if $\LC(\M)$.
+Under this condition, \eqref{eq:uniform-exterior-limit} holds.
+Consequently,
+\[
+ \LC(\M)\Longrightarrow\mathsf{UG}.
 \]
 \end{theorem}
 \noindent
-In words, if there exist sequences $\nu$ and $R_\bullet$ satisfying
+In words, local connectedness of the filled Mandelbrot set is
+equivalent to continuous boundary values of its inverse exterior
+uniformization.  The boundary values need not be injective.
+Those continuous boundary values give uniform convergence of the
+cutoff maps, and hence an original uniform geometric tower.
+This is a conditional reverse implication, not a proof that the
+boundary values exist.
+\begin{proof}
+Apply Milnor \cite[Theorem 16.6, printed p.~16-2]{Milnor} to
+$U:=\widehat{\C}\setminus\M$ and the inverse Riemann map
+$f(\zeta):=\Psi(1/\zeta)$, $f(0):=\infty$.
+That theorem equates continuous extension with local connectedness
+of both the boundary and the complementary compact set $\M$.
+
+Assume the equivalent conditions, and let $\widehat\Psi$ be the
+continuous extension to $\{|w|\ge1\}$.
+Its unit-circle values lie in $\partial\M$.
+Define, initially as a set-theoretic map,
+\[
+ R_\ast(c):=
+ \begin{cases}
+  c,&c\in\M,\\
+  \displaystyle\widehat\Psi\left(\frac{\Phi(c)}{|\Phi(c)|}\right),
+        &c\notin\M.
+ \end{cases}
+\]
+On the compact annulus $A_a:=\{w:1\le|w|\le e^a\}$, define
+\[
+ \mu_a(r):=
+ \sup_{\substack{w,v\in A_a\\|w-v|\le r}}
+                 |\widehat\Psi(w)-\widehat\Psi(v)|.
+\]
+Uniform continuity gives $\mu_a(r)\to0$ as $r\downarrow0$.
+For $0<s\le a$ and $c\notin\M$, put
+$\xi:=\Phi(c)/|\Phi(c)|$ and
+$r:=\exp(\min\{s,G(c)\})$.
+Then $1<r\le e^s$ and
+\[
+ |P_s(c)-R_\ast(c)|
+ =|\widehat\Psi(r\xi)-\widehat\Psi(\xi)|
+ \le\mu_a(e^s-1).
+\]
+The difference is zero on $\M$.
+Thus $P_s\to R_\ast$ uniformly on $\C$, making $R_\ast$
+continuous.  It fixes $\M$ and has image $\M$.
+Since $\Pi$ fixes that image,
+\[
+ \|Q_s-R_\ast|_\D\|_\infty\le\mu_a(e^s-1)\longrightarrow0.
+\]
+Theorem~\ref{thm:exterior-terminal} gives $\mathsf{UG}$.
+\end{proof}
+
+\section{Finite certificates and compatibility}
+
+\begin{definition}[Finite towers with shared data]\label{def:finite-towers}
+Fix $\lambda\in\Lambda$ and $\delta\in\Delta$.  Define
+\begin{gather}
+ \mathcal K_\delta:=
+ \left\{F\in C(\D,\D):
+ \begin{gathered}
+  \forall k\in\N\ \forall z,w\in\D,\\
+  |z-w|\le\delta_k\Longrightarrow |F(z)-F(w)|\le2^{-k}
+ \end{gathered}\right\},\label{eq:common-modulus}\\
+ e_i(F):=\sup_{z\in\D}\operatorname{dist}(F(z),O_{\lambda_i})
+ \qquad(i\in\N,\ F\in C(\D,\D)),\label{eq:stage-error}\\
+ \mathcal P_m(\lambda,\delta):=
+ \left\{(F_0,\ldots,F_m)\in\mathcal K_\delta^{m+1}:
+ \begin{gathered}
+  F_0=\id_\D,\\
+  \forall i\in\{1,\ldots,m\},\
+     (i=1\Longrightarrow F_i=\Pi|_\D),\\
+  \forall i\in\{1,\ldots,m\},\quad F_i(\D)\subseteq K,\\
+  \forall i\in\{0,\ldots,m\}\ \forall c\in O_{\lambda_i},\
+     F_i(c)=c,\\
+  \forall i\in\{0,\ldots,m\},\quad e_i(F_i)\le\epsilon_i,\\
+  \forall i\in\N\text{ with }i<m,\quad
+     \|F_{i+1}-F_i\|_\infty\le\beta_i
+ \end{gathered}\right\},\label{eq:finite-tower}\\
+ \mathsf{UG}_m(\lambda,\delta):=
+       [\,\mathcal P_m(\lambda,\delta)\ne\varnothing\,].
+ \label{eq:finite-ug}
+\end{gather}
+An integer interval with upper endpoint smaller than its lower
+endpoint is empty.  For $0\le m\le q$, define the restriction map
+\[
+ \rho_{m,q}:\mathcal P_q(\lambda,\delta)\to\mathcal P_m(\lambda,\delta),
+ \qquad
+ \rho_{m,q}(F_0,\ldots,F_q):=(F_0,\ldots,F_m).
+\]
+\end{definition}
+\noindent
+In words, every map in $\mathcal K_\delta$ sends $\D$ continuously
+into $\D$.  For every $k$ and every two points of $\D$ at distance
+at most $\delta_k$, their images under that map are at distance
+at most $2^{-k}$.
+The number $e_i(F)$ is the largest distance from $F(z)$ to
+$O_{\lambda_i}$ as $z$ ranges over $\D$.
+A level-$m$ tower consists of $m+1$ maps in $\mathcal K_\delta$.
+Its first map is the identity.  If $m\ge1$, its second map is $\Pi|_\D$,
+and every map with index at least one has image in $K$.
+For every index $i\le m$, its $i$th map fixes $O_{\lambda_i}$ and has
+error at most $\epsilon_i$.  For every $i<m$, its adjacent maps
+have uniform distance at most $\beta_i$.
+The assertion $\mathsf{UG}_m(\lambda,\delta)$ states that such a
+tower exists.  The map $\rho_{m,q}$ retains its first $m+1$ maps.
+The same $\lambda$ and $\delta$ are used at every level; the modulus
+condition is quantified over every $k$, even at a finite level.
+
+\begin{lemma}[Compact certificate spaces and restriction]
+\label{lem:prefix-compact}
+For every $\lambda\in\Lambda$ and $\delta\in\Delta$,
+$\mathcal K_\delta$ and every $\mathcal P_m(\lambda,\delta)$
+are compact in their uniform and finite-product topologies.
+Each $\rho_{m,q}$ is continuous, and
+\begin{equation}\label{eq:hierarchy-direction}
+ \forall m\in\N,\qquad
+ \mathsf{UG}_{m+1}(\lambda,\delta)
+ \Longrightarrow\mathsf{UG}_m(\lambda,\delta).
+\end{equation}
+\end{lemma}
+\noindent
+In words, the maps satisfying the shared modulus form a compact
+space for the uniform distance, and the level-$m$ towers form a
+compact space for coordinatewise uniform convergence.
+Restriction is continuous.  A tower at level $m+1$ supplies a tower
+at level $m$ by restriction.  Thus increasing the level strengthens
+the finite requirement in the implication direction
+$\mathsf{UG}_0\Longleftarrow\mathsf{UG}_1\Longleftarrow\cdots$.
+\begin{proof}
+For $\varepsilon>0$, choose $k$ with $2^{-k}<\varepsilon$.
+Equation~\eqref{eq:common-modulus} gives a single positive input
+radius $\delta_k$ valid for every map in $\mathcal K_\delta$.
+Thus this family is equicontinuous on the compact domain $\D$.
+All values lie in the compact set $\D$.
+The Arzela--Ascoli theorem therefore makes its closure compact
+in the uniform topology.
+If $F_j\in\mathcal K_\delta$ converge uniformly to $F$, then $F$ is
+continuous, takes values in the closed set $\D$, and satisfies
+every inequality in \eqref{eq:common-modulus} by passage to the
+limit.  Hence $\mathcal K_\delta$ is closed and compact.
+
+The distance to $O_{\lambda_i}$ is $1$-Lipschitz, so
+\begin{equation}\label{eq:stage-error-lipschitz}
+ |e_i(F)-e_i(G)|\le\|F-G\|_\infty.
+\end{equation}
+The conditions that a map equal a prescribed map, fix a prescribed
+set, or take values in the closed set $K$ are closed under uniform
+convergence.  Equation~\eqref{eq:stage-error-lipschitz} makes the
+error constraints closed.  The triangle inequality makes each
+adjacent-distance constraint closed.
+Consequently $\mathcal P_m(\lambda,\delta)$ is a closed subset of
+the compact finite product $\mathcal K_\delta^{m+1}$.
+Restriction is a coordinate projection, preserves every defining
+constraint, and is continuous.  Restricting any element of
+$\mathcal P_{m+1}$ proves \eqref{eq:hierarchy-direction}.
+\end{proof}
+
+\begin{proposition}[Constructed initial levels]
+\label{prop:finite-witnesses}
+For every $\lambda\in\Lambda$ and $\delta\in\Delta$,
+\[
+ (\id_\D)\in\mathcal P_0(\lambda,\delta),\qquad
+ (\id_\D,\Pi|_\D)\in\mathcal P_1(\lambda,\delta).
+\]
+The radial image is not the target set:
+$2\in\Pi(\D)\setminus\M$.
+\end{proposition}
+\noindent
+In words, the identity gives a level-zero tower, and the identity
+followed by the radial map gives a level-one tower, for every
+admissible choice of depths and continuity scales.
+The level-one image contains the parameter $2$, which is not in $\M$.
+\begin{proof}
+The identity and $\Pi|_\D$ belong to every $\mathcal K_\delta$,
+because both are $1$-Lipschitz and $\delta_k\le2^{-k}$.
+Lemma~\ref{lem:radial} gives
+\[
+ e_0(\id_\D)=2\sqrt2-2<\epsilon_0,\qquad
+ e_1(\Pi|_\D)=0,\qquad
+ \|\Pi|_\D-\id_\D\|_\infty<1<\beta_0.
+\]
+It also gives the required fixing and image conditions.
+This proves the two seed assertions.
+Finally, $\Pi(\D)=K$ contains $2$, whereas $p_2(2)=6>2$ and
+Lemma~\ref{lem:escape} give $2\notin\M$.
+\end{proof}
+
+\begin{proposition}[Every finite horizon with horizon-dependent data]
+\label{prop:finite-horizons}
+\begin{equation}\label{eq:all-finite-horizons}
+ \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
+ \exists\delta^{[m]}\in\Delta,\quad
+       \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}).
+\end{equation}
+For $m\ge2$, use the heights and depths
+$(s_n,\lambda_n^{\mathrm{ext}})$ from
+Theorem~\ref{thm:exterior-candidates} and define
+\begin{gather}
+ F_0^{[m]}:=\id_\D,\qquad F_1^{[m]}:=\Pi|_\D,\qquad
+ F_n^{[m]}:=Q_{s_m}\quad(n\ge2),\label{eq:finite-horizon-maps}\\
+ \lambda_0^{[m]}:=0,\qquad\lambda_1^{[m]}:=1,\qquad
+ \lambda_2^{[m]}:=\lambda_m^{\mathrm{ext}},\qquad
+ \lambda_n^{[m]}:=\max\{\lambda_{n-1}^{[m]}+1,\ell_n\}
+                         \quad(n\ge3).\label{eq:finite-horizon-depths}
+\end{gather}
+A common modulus for the three maps
+$\id_\D,\Pi|_\D,Q_{s_m}$ supplies $\delta^{[m]}$.
+\end{proposition}
+\noindent
+In words, every prescribed finite number of levels can be realized.
+After the identity and radial seed, use the same sufficiently
+deep cutoff map at all remaining levels of that finite horizon.
+Choose the first protected depth for that cutoff and then increase
+the depths.  The three continuous maps admit shared continuity
+scales for that horizon.
+The quantifiers in \eqref{eq:all-finite-horizons} allow the depths
+and scales to change with $m$; they do not supply one pair working
+for every $m$.
+\begin{proof}
+The cases $m=0,1$ follow from Proposition~\ref{prop:finite-witnesses}.
+Fix $m\ge2$.
+Since $\lambda_m^{\mathrm{ext}}\ge\ell_m\ge\ell_2$ and
+$\lambda_m^{\mathrm{ext}}\ge m$, the sequence
+\eqref{eq:finite-horizon-depths} belongs to $\Lambda$.
+For $2\le n\le m$, nesting and Lemma~\ref{lem:green-depth} give
+\[
+ O_{\lambda_n^{[m]}}
+ \subseteq O_{\lambda_m^{\mathrm{ext}}}
+ \subseteq E_{s_m}.
+\]
+Thus $F_n^{[m]}$ fixes the required outer set.  Its proximity error
+is at most its distance from $\M$, and
+\[
+ \sup_{z\in\D}
+   \operatorname{dist}(F_n^{[m]}(z),O_{\lambda_n^{[m]}})
+ \le\kappa(s_m)\le2^{-m}\le2^{-n}.
+\]
+The initial displacement is less than one.
+The displacement from $F_1^{[m]}$ to $F_2^{[m]}$ is at most
+$\operatorname{diam}(K)=4=\beta_1$.
+All subsequent displacements are zero.
+The initial proximity and fixing clauses hold by
+Lemma~\ref{lem:radial}.
+
+Uniform continuity of the three maps on $\D$ gives, for each $k$,
+a positive radius controlling all three image separations by
+$2^{-k}$.
+Decreasing these radii recursively to satisfy
+\eqref{eq:admissible-moduli} yields $\delta^{[m]}\in\Delta$.
+Therefore the prefix through level $m$ lies in
+$\mathcal P_m(\lambda^{[m]},\delta^{[m]})$.
+For fixed $m$, the infinite sequence in
+\eqref{eq:finite-horizon-maps} stabilizes at $Q_{s_m}$, whose image
+strictly contains $\M$ by Theorem~\ref{thm:positive-levels}.
+\end{proof}
+
+\begin{theorem}[Exact recovery of $\mathsf{UG}$ from the hierarchy]
+\label{thm:hierarchy}
+\begin{equation}\label{eq:hierarchy-equivalence}
+ \mathsf{UG}\quad\Longleftrightarrow\quad
+ \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
+       \forall m\in\N,\ \mathsf{UG}_m(\lambda,\delta).
+\end{equation}
+For each pair $(\lambda,\delta)$ witnessing the right-hand assertion,
+there are maps
+$F_\bullet\in C(\D,\D)^\N$ and $R\in C(\D,\D)$ such that
+\begin{gather}
+ \mathsf A(\lambda,F_\bullet),\qquad
+ R(\D)=\M,\qquad R|_\M=\id_\M,\label{eq:hierarchy-limit}\\
+ \forall n\ge2,\quad d_H(F_n(\D),\M)\le2^{1-n},\qquad
+ \forall n\in\N,\quad \|F_n-R\|_\infty\le16\,2^{-n}.
+ \label{eq:hierarchy-errors}
+\end{gather}
+\end{theorem}
+\noindent
+In words, $\mathsf{UG}$ holds if and only if there is one depth
+sequence $\lambda$ and one positive continuity-scale sequence
+$\delta$ for which a finite tower exists at every level.
+The depth sequence and the continuity scales are chosen before
+the universal quantifier over levels.
+From these towers one can select a compatible sequence satisfying
+the original five clauses of $\mathsf A$, not a replacement
+conclusion about local connectedness.
+Its stage-$n$ image has Hausdorff distance at most $2^{1-n}$ from
+$\M$ for $n\ge2$, and its uniform distance from its continuous
+retraction limit is at most $16\,2^{-n}$ for every $n$.
+\begin{proof}
+Assume first that $\lambda\in\Lambda$, $\delta\in\Delta$, and
+$\mathcal P_m(\lambda,\delta)\ne\varnothing$ for every $m$.
+For each $m$, define the set of prefixes extendible to every
+finite level by
+\begin{equation}\label{eq:viable-prefixes}
+ \mathcal V_m:=
+       \bigcap_{q\ge m}\rho_{m,q}\bigl(\mathcal P_q(\lambda,\delta)\bigr).
+\end{equation}
+For fixed $m$, the sets in this intersection are nonempty compact
+subsets of $\mathcal P_m$ by Lemma~\ref{lem:prefix-compact}.
+They are nested, since restricting a level-$(q+1)$ tower to
+level $q$ gives an element of $\mathcal P_q$.
+Compactness therefore implies that $\mathcal V_m$ is nonempty
+and compact.
+
+We claim
+\begin{equation}\label{eq:viable-surjection}
+ \rho_{m,m+1}(\mathcal V_{m+1})=\mathcal V_m
+ \qquad(m\in\N).
+\end{equation}
+The inclusion from left to right follows by restriction.
+For the opposite inclusion, fix $\sigma\in\mathcal V_m$.
+For $q\ge m+1$, define
+\[
+ A_q:=
+ \left\{\theta\in\rho_{m+1,q}(\mathcal P_q):
+                \rho_{m,m+1}(\theta)=\sigma\right\}.
+\]
+Each $A_q$ is compact, since it is a closed subset of a compact
+image under restriction.  It is nonempty because
+$\sigma\in\rho_{m,q}(\mathcal P_q)$.
+The family $(A_q)_{q\ge m+1}$ is nested.
+Its intersection is nonempty, and every member of that
+intersection belongs to $\mathcal V_{m+1}$ and restricts to
+$\sigma$.  This proves \eqref{eq:viable-surjection}.
+
+The set $\mathcal P_0$ has the unique element $(\id_\D)$, so its
+nonempty subset $\mathcal V_0$ has that same element.
+Starting with $\sigma_0:=(\id_\D)$, recursive choice using
+\eqref{eq:viable-surjection} gives
+\[
+ \sigma_m\in\mathcal V_m,\qquad
+ \rho_{m,m+1}(\sigma_{m+1})=\sigma_m
+ \qquad(m\in\N).
+\]
+Define the maps by their stabilized coordinates,
+\begin{equation}\label{eq:compatible-sequence}
+ F_n:=(\sigma_n)_n\qquad(n\in\N).
+\end{equation}
+For every $m\ge n$, the $n$th coordinate of $\sigma_m$ equals $F_n$.
+Thus every finite prefix of $F_\bullet$ belongs to $\mathcal P_m$.
+The sequence starts at the identity, fixes $O_{\lambda_n}$,
+and has adjacent distances at most $\beta_n$.
+Moreover, $\lambda_n\ge n$ and $e_n(F_n)\le\epsilon_n$.
+For each $z\in\D$, compactness and nonemptiness of $O_{\lambda_n}$
+provide $w\in O_{\lambda_n}$ attaining
+$\operatorname{dist}(F_n(z),O_{\lambda_n})$.
+Consequently $|F_n(z)-w|\le2^{-n}$.
+These are exactly the five clauses of $\mathsf A(\lambda,F_\bullet)$.
+Theorem~\ref{thm:uniform} supplies $R$ and the uniform bound in
+\eqref{eq:hierarchy-errors}.
+Proposition~\ref{prop:image-gap} and
+$h_{\lambda_n}\le\epsilon_n$ give the image bound for $n\ge2$.
+
+Conversely, suppose $\mathsf A(\alpha,U_\bullet)$ holds.
+We construct witnesses with the seed maps, increasing depths,
+outer-gap bounds, and shared modulus required above.
+Set
+\[
+ \lambda_0:=0,\qquad\lambda_1:=1,\qquad j_1:=0,
+\]
+and recursively, for $n\ge2$, define
+\begin{equation}\label{eq:normalizing-indices}
+ j_n:=\max\{n+1,\ell_n,j_{n-1}+1,\lambda_{n-1}+1\},
+ \qquad \lambda_n:=\alpha_{j_n}.
+\end{equation}
+Since $\alpha_j\ge j$, these definitions give
+$\lambda_n>\lambda_{n-1}$ and $\lambda_n\ge\ell_n$.
+Hence $\lambda\in\Lambda$.  Define
+\begin{equation}\label{eq:normalized-tower}
+ F_0:=\id_\D,\qquad F_1:=\Pi|_\D,\qquad
+ F_n:=\Pi\circ U_{j_n}\quad(n\ge2).
+\end{equation}
+For $n\ge2$, $U_{j_n}$ fixes $O_{\alpha_{j_n}}=O_{\lambda_n}$,
+and $\Pi$ fixes this set because it lies in $K$.
+The nonexpansive inequality of Lemma~\ref{lem:radial} gives
+\[
+ e_n(F_n)\le2^{-j_n}\le\epsilon_n.
+\]
+For $n\ge2$, \eqref{eq:cauchy} applied to the original tower gives
+\[
+ \|F_{n+1}-F_n\|_\infty
+ \le\|U_{j_{n+1}}-U_{j_n}\|_\infty
+ \le16\,2^{-j_n}\le8\,2^{-n}=\beta_n.
+\]
+The first displacement is less than one by Lemma~\ref{lem:radial}.
+The second is at most $\operatorname{diam}(K)=4=\beta_1$,
+since both $F_1$ and $F_2$ take values in $K$.
+All fixing and proximity conditions at indices zero and one
+were established in Proposition~\ref{prop:finite-witnesses}.
+
+It remains to construct a shared $\delta$.
+Theorem~\ref{thm:uniform} gives a continuous retraction $R$ with
+$U_j\to R$ uniformly.  Since $\Pi$ fixes $R(\D)=\M$,
+\[
+ \|F_n-R\|_\infty
+ \le\|U_{j_n}-R\|_\infty\longrightarrow0\quad(n\to\infty).
+\]
+Fix $k\in\N$.
+Choose $N_k\ge2$ with $\|F_n-R\|_\infty<2^{-k-3}$ for $n\ge N_k$.
+Uniform continuity of $R$ and of the finitely many maps
+$F_0,\ldots,F_{N_k-1}$ gives $\eta_k>0$ such that
+$|z-w|<\eta_k$ implies
+\[
+ |R(z)-R(w)|<2^{-k-2},\qquad
+ |F_i(z)-F_i(w)|<2^{-k-2}\quad(i<N_k).
+\]
+For $n\ge N_k$, the triangle inequality then gives
+\[
+ |F_n(z)-F_n(w)|
+ <2\cdot2^{-k-3}+2^{-k-2}
+ =2^{-k-1}<2^{-k}.
+\]
+Thus the radius $\eta_k$ controls every $F_n$.
+Define
+\begin{equation}\label{eq:normalizing-modulus}
+ \delta_0:=\min\{1,\eta_0/2\},\qquad
+ \delta_{k+1}:=\min\{2^{-k-1},\delta_k/2,\eta_{k+1}/2\}.
+\end{equation}
+Then $\delta\in\Delta$, and $|z-w|\le\delta_k$ implies
+$|F_n(z)-F_n(w)|\le2^{-k}$ for every $n$.
+Therefore every $F_n$ belongs to $\mathcal K_\delta$.
+Every prefix of \eqref{eq:normalized-tower} now belongs to
+$\mathcal P_m(\lambda,\delta)$, proving the reverse implication
+in \eqref{eq:hierarchy-equivalence}.
+\end{proof}
+
+\begin{definition}[One-step extension test]\label{def:extension-test}
+Fix $\lambda\in\Lambda$, $\delta\in\Delta$, $m\ge1$, and
+$\sigma:=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)$.
+Define
+\begin{gather}
+ \mathcal H_{m+1}:=
+ \left\{F\in\mathcal K_\delta:
+   F(\D)\subseteq K,\quad
+   \forall c\in O_{\lambda_{m+1}},\ F(c)=c
+ \right\},\label{eq:extension-class}\\
+ J_m(F;\sigma):=
+ \max\left\{\frac{e_{m+1}(F)}{\epsilon_{m+1}},
+             \frac{\|F-F_m\|_\infty}{\beta_m}\right\},
+ \qquad
+ q_m(\sigma):=\min_{F\in\mathcal H_{m+1}}J_m(F;\sigma),
+ \label{eq:extension-cost}\\
+ \mathcal E_m(\sigma):=
+       \{F\in\mathcal H_{m+1}:J_m(F;\sigma)\le1\},\qquad
+ \sigma\frown F:=(F_0,\ldots,F_m,F).
+ \label{eq:extension-set}
+\end{gather}
+\end{definition}
+\noindent
+In words, $\mathcal H_{m+1}$ consists of the maps with the shared
+continuity modulus, image in $K$, and pointwise fixing of
+$O_{\lambda_{m+1}}$.
+The cost $J_m(F;\sigma)$ is the maximum of the proposed next error
+divided by its allowed bound and the displacement from $F_m$
+divided by its allowed bound.
+The number $q_m(\sigma)$ is the minimum of this cost over
+$\mathcal H_{m+1}$.
+The set $\mathcal E_m(\sigma)$ consists of the maps whose cost
+is at most one, and $\sigma\frown F$ appends $F$ to the prefix.
+
+\begin{proposition}[Attained one-step criterion]\label{prop:extension-test}
+The minimum in \eqref{eq:extension-cost} is attained, and
+\begin{equation}\label{eq:extension-equivalence}
+ q_m(\sigma)\le1
+ \quad\Longleftrightarrow\quad
+ \mathcal E_m(\sigma)\ne\varnothing
+ \quad\Longleftrightarrow\quad
+ \exists F,\ \sigma\frown F\in\mathcal P_{m+1}(\lambda,\delta).
+\end{equation}
+\end{proposition}
+\noindent
+In words, the one-step optimization has a minimizing map.
+Its minimum is at most one if and only if a map can be appended
+to the particular prefix $\sigma$ while preserving all conditions
+through level $m+1$.
+\begin{proof}
+The map $\Pi|_\D$ belongs to $\mathcal H_{m+1}$ by
+Lemma~\ref{lem:radial}; hence this set is nonempty.
+It is closed in the compact space $\mathcal K_\delta$ by the
+same argument as in Lemma~\ref{lem:prefix-compact}.
+Equation~\eqref{eq:stage-error-lipschitz}, continuity of the uniform
+distance, and positivity of $\epsilon_{m+1}$ and $\beta_m$ show
+that $J_m$ is continuous.
+It attains its minimum on $\mathcal H_{m+1}$.
+The inequalities $J_m(F;\sigma)\le1$ are exactly the two new
+error and displacement constraints in \eqref{eq:finite-tower};
+membership in $\mathcal H_{m+1}$ supplies the new fixing,
+image, and modulus constraints.
+This proves \eqref{eq:extension-equivalence}.
+\end{proof}
+
+\begin{definition}[Extension assertion with a preserved invariant]
+\label{def:extension-invariant}
+Fix $\lambda\in\Lambda$, $\delta\in\Delta$, and subsets
+$\mathcal I_m\subseteq\mathcal P_m(\lambda,\delta)$ for $m\ge1$.
+Define
+\begin{equation}\label{eq:extension-invariant}
+ \mathsf{Ext}(\lambda,\delta,\mathcal I_\bullet):=
+ \left[
+ \begin{gathered}
+  (\id_\D,\Pi|_\D)\in\mathcal I_1,\\
+  \forall m\ge1\ \forall\sigma\in\mathcal I_m\
+    \exists F\in\mathcal E_m(\sigma),\
+       \sigma\frown F\in\mathcal I_{m+1}
+ \end{gathered}\right].
+\end{equation}
+\end{definition}
+\noindent
+In words, the selected family of prefixes contains the explicit
+level-one seed.  Every selected prefix has an extension meeting
+the next error and displacement bounds, and an extension can be
+chosen that belongs to the selected family at the next level.
+The assertion requires preservation of that family as well as
+the bound $q_m(\sigma)\le1$.
+
+\begin{theorem}[Recursive construction criterion]\label{thm:recursive-program}
+\begin{equation}\label{eq:recursive-program}
+ \mathsf{UG}\quad\Longleftrightarrow\quad
+ \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
+ \exists(\mathcal I_m\subseteq\mathcal P_m(\lambda,\delta))_{m\ge1},\
+       \mathsf{Ext}(\lambda,\delta,\mathcal I_\bullet).
+\end{equation}
+Under the right-hand assertion the sequence is constructed by
+\begin{gather}
+ F_0:=\id_\D,\qquad F_1:=\Pi|_\D,\qquad
+ \sigma_1:=(F_0,F_1),\label{eq:recursive-seed}\\
+ F_{m+1}\in\mathcal E_m(\sigma_m),\qquad
+ \sigma_{m+1}:=\sigma_m\frown F_{m+1}\in\mathcal I_{m+1}
+ \quad(m\ge1).\label{eq:recursive-step}
+\end{gather}
+Every such choice sequence satisfies $\mathsf A(\lambda,F_\bullet)$.
+\end{theorem}
+\noindent
+In words, the original assertion $\mathsf{UG}$ is equivalent to
+the existence of admissible shared data and a family preserved by
+the one-step extension operation.
+Given these data and the extension assertion, start with the
+identity and the radial map.  At each subsequent step choose
+an allowed extension that remains in the selected family.
+The resulting infinite sequence satisfies the original five
+conditions of $\mathsf A$.
+\begin{proof}
+Assume the right-hand assertion.  Its initial clause gives
+$\sigma_1\in\mathcal I_1$.
+Its extension clause permits recursive choice in
+\eqref{eq:recursive-step}.
+Induction gives $\sigma_m\in\mathcal I_m\subseteq\mathcal P_m$
+and ensures that each step leaves all earlier coordinates unchanged.
+For every $n$, its fixing and proximity conditions occur in
+$\sigma_{\max\{1,n\}}$, and its adjacent-displacement condition
+occurs in $\sigma_{n+1}$.
+As in the proof of Theorem~\ref{thm:hierarchy}, distance attainment
+in $O_{\lambda_n}$ turns proximity into the witness required
+by \eqref{eq:hypotheses}.  Hence $\mathsf A(\lambda,F_\bullet)$.
+
+Conversely, $\mathsf{UG}$ gives shared data with all
+$\mathcal P_m$ nonempty by Theorem~\ref{thm:hierarchy}.
+Choose $\mathcal I_m:=\mathcal V_m$ from
+\eqref{eq:viable-prefixes} for $m\ge1$.
+Since $\mathcal P_1$ has the unique element
+$(\id_\D,\Pi|_\D)$, its nonempty subset $\mathcal V_1$ contains
+the seed.
+Equation~\eqref{eq:viable-surjection} supplies an extension in
+$\mathcal V_{m+1}$ of every prefix in $\mathcal V_m$.
+Proposition~\ref{prop:extension-test} puts its new map in
+$\mathcal E_m(\sigma)$.
+Thus \eqref{eq:extension-invariant} holds.
+\end{proof}
+
+\section{Relative surgeries and convergence within a stage}
+
+\begin{definition}[Relative map surgery]\label{def:relative-surgery}
+Let $P\subseteq\D$, let $U$ be relatively open in $\D$, and let
+$A,B\in C(\D,\D)$ and $\chi\in C(\D,[0,1])$ satisfy
+\[
+ A|_P=B|_P=\id_P,\qquad \chi|_{\D\setminus U}=0.
+\]
+Define
+\begin{gather}
+ \mathcal S_\chi(A,B)(z):=(1-\chi(z))A(z)+\chi(z)B(z),
+ \label{eq:relative-surgery}\\
+ \omega_F(r):=
+ \sup_{\substack{z,w\in\D\\|z-w|\le r}}|F(z)-F(w)|
+ \quad(F\in C(\D,\C),\ r\ge0),\label{eq:map-modulus}\\
+ d:=\|B-A\|_\infty,\qquad
+ \alpha:=\sup_{z\in\D}\chi(z)|B(z)-A(z)|.
+ \label{eq:surgery-size}
+\end{gather}
+The application at level $m+1$ uses $P:=O_{\lambda_{m+1}}$.
+\end{definition}
+\noindent
+In words, a relative map surgery changes a map by a continuous
+weighted replacement on a specified region of the parameter square.
+Both maps fix the protected set, and the weight is zero outside
+the replacement region.
+The output at $z$ is the weighted average of $A(z)$ and $B(z)$.
+The modulus $\omega_F(r)$ is the largest image separation of two
+domain points separated by at most $r$.
+The number $d$ is the uniform distance between the two maps, and
+$\alpha$ is the uniform size of the actual replacement.
+This definition concerns maps of the fixed parameter domain,
+not the removal and attachment of pieces of an auxiliary manifold.
+
+\begin{lemma}[Quantitative conditions preserved by surgery]
+\label{lem:surgery-bounds}
+Under Definition~\ref{def:relative-surgery}, write
+$S:=\mathcal S_\chi(A,B)$.  Then $S\in C(\D,\D)$,
+$S|_P=\id_P$, and $S=A$ on $\D\setminus U$.
+Moreover,
+\begin{gather}
+ \|S-A\|_\infty=\alpha\le d,\qquad
+ e_i(S)\le e_i(A)+\alpha,\label{eq:surgery-error}\\
+ \|S-F\|_\infty\le\|A-F\|_\infty+\alpha
+       \quad(F\in C(\D,\D)),\label{eq:surgery-motion}\\
+ \omega_S(r)\le
+       \max\{\omega_A(r),\omega_B(r)\}+d\,\omega_\chi(r)
+       \quad(r\ge0).\label{eq:surgery-modulus}
+\end{gather}
+If both $A$ and $B$ take values in $K$, then $S$ does also.
+The maps $A$ and $S$ are homotopic relative to $P$.
+\end{lemma}
+\noindent
+In words, the replacement is continuous, stays in the parameter
+square, fixes the protected set, and leaves the map unchanged
+outside the prescribed region.
+Its effect on an outer-set error or a displacement bound is at
+most its uniform size $\alpha$.
+Its spatial modulus is bounded by the larger of the two input
+moduli plus the product of $d$ and the weight's modulus.
+If both input images lie in $K$, the output image lies in $K$.
+There is a homotopy of the maps that fixes $P$ throughout;
+no homotopy equivalence of their images is asserted.
+\begin{proof}
+Continuity, range, support, and fixing follow from the formula
+and convexity of $\D$ and $K$.
+Since $S(z)-A(z)=\chi(z)(B(z)-A(z))$, the uniform-size identity
+holds.  The distance function to $O_{\lambda_i}$ is $1$-Lipschitz,
+which proves \eqref{eq:surgery-error}.
+The triangle inequality proves \eqref{eq:surgery-motion}.
+For $z,w\in\D$, expand
+\begin{align*}
+ S(z)-S(w)
+ ={}&(1-\chi(z))(A(z)-A(w))
+       +\chi(z)(B(z)-B(w))\\
+    &+(\chi(z)-\chi(w))(B(w)-A(w)).
+\end{align*}
+Taking absolute values and then suprema proves
+\eqref{eq:surgery-modulus}.
+Finally,
+\[
+ Q(u,z):=(1-u\chi(z))A(z)+u\chi(z)B(z)
+ \qquad(u\in[0,1],\ z\in\D)
+\]
+is the stated relative homotopy.
+Taking $U=\D$ and $\chi=1$ gives a relative homotopy between any
+two maps $A,B\in C(\D,\D)$ that fix $P$.
+Existence of that homotopy therefore imposes no additional error,
+modulus, or displacement bound.
+\end{proof}
+
+\begin{definition}[A summable surgery sequence]\label{def:repair-sequence}
+Fix $\lambda\in\Lambda$, $\delta\in\Delta$, $m\ge1$, and
+$\sigma:=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)$.
+For a sequence $A_\bullet\in C(\D,\D)^\N$, define
+\begin{equation}\label{eq:repair-sequence}
+ \mathsf{Repair}_m(\sigma,A_\bullet):=
+ \left[
+ \begin{gathered}
+  A_0=F_m,\qquad \forall k\in\N,\quad A_k\in\mathcal H_{m+1},\\
+  \forall k\in\N,\quad
+       \|A_{k+1}-A_k\|_\infty\le\beta_m2^{-k-1},\\
+  \forall k\in\N,\quad
+       e_{m+1}(A_k)\le\epsilon_{m+1}+\beta_m2^{-k}
+ \end{gathered}\right].
+\end{equation}
+\end{definition}
+\noindent
+In words, the repair process starts at the last map of the existing
+prefix.  Every intermediate map has the shared continuity modulus,
+image in $K$, and pointwise fixing of the next protected outer set.
+Repair number $k$ changes the map by at most $\beta_m2^{-k-1}$.
+After $k$ repairs, the next outer-set error is at most
+$\epsilon_{m+1}+\beta_m2^{-k}$.
+Local replacements from Definition~\ref{def:relative-surgery}
+may implement the steps, provided that their modulus, error, and
+displacement estimates meet these conditions.
+
+\begin{theorem}[Convergent repairs are equivalent to an admissible extension]
+\label{thm:repair-limit}
+For the data in Definition~\ref{def:repair-sequence},
+\begin{equation}\label{eq:repair-equivalence}
+ q_m(\sigma)\le1
+ \quad\Longleftrightarrow\quad
+ \exists A_\bullet,\ \mathsf{Repair}_m(\sigma,A_\bullet).
+\end{equation}
+Every such sequence has a uniform limit $F\in\mathcal E_m(\sigma)$
+with
+\begin{equation}\label{eq:repair-tail}
+ \forall k\in\N,\qquad
+       \|A_k-F\|_\infty\le\beta_m2^{-k}.
+\end{equation}
+Conversely, for every $F\in\mathcal E_m(\sigma)$ the explicit sequence
+\begin{equation}\label{eq:explicit-repair}
+ A_k:=2^{-k}F_m+(1-2^{-k})F\qquad(k\in\N)
+\end{equation}
+satisfies \eqref{eq:repair-sequence} and converges uniformly to $F$.
+\end{theorem}
+\noindent
+In words, a repair sequence with the stated decreasing residual
+errors and summable changes exists exactly when the particular
+prefix has an admissible next map.
+Every successful repair sequence converges uniformly to such a
+map, with the displayed tail bound.
+Given an admissible next map, dyadic interpolation gives a repair
+sequence explicitly.  This converse construction presupposes that
+the next map has been obtained; it is not an existence proof for it.
+\begin{proof}
+Assume \eqref{eq:repair-sequence}.  For $j>k$,
+\[
+ \|A_j-A_k\|_\infty
+ \le\sum_{i=k}^{j-1}\beta_m2^{-i-1}
+ \le\beta_m2^{-k}.
+\]
+Completeness of $\C$, closedness of $\D$, and the uniform Cauchy
+bound give a uniform limit $F\in C(\D,\D)$, exactly as in the
+uniform-limit part of Theorem~\ref{thm:uniform}.
+Passage to the limit gives \eqref{eq:repair-tail}.
+The set $\mathcal H_{m+1}$ is closed under uniform convergence,
+so $F\in\mathcal H_{m+1}$.
+Equation~\eqref{eq:stage-error-lipschitz} and the decreasing residual
+give $e_{m+1}(F)\le\epsilon_{m+1}$.
+Taking $k=0$ in \eqref{eq:repair-tail} gives
+$\|F-F_m\|_\infty\le\beta_m$.  Thus
+$F\in\mathcal E_m(\sigma)$, and
+Proposition~\ref{prop:extension-test} yields $q_m(\sigma)\le1$.
+
+Conversely, choose $F\in\mathcal E_m(\sigma)$ using that proposition.
+The previous map $F_m$ fixes $O_{\lambda_{m+1}}$ by nesting, and
+belongs to $\mathcal H_{m+1}$.
+The class $\mathcal H_{m+1}$ is closed under convex combinations
+with constant coefficients: the range and fixing properties follow
+from convexity of $K$, and the common-modulus inequality follows
+by the triangle inequality.
+Therefore the maps in \eqref{eq:explicit-repair} belong to this class.
+Their consecutive distances are
+\[
+ \|A_{k+1}-A_k\|_\infty
+ =2^{-k-1}\|F-F_m\|_\infty\le\beta_m2^{-k-1},
+\]
+and
+\[
+ e_{m+1}(A_k)
+ \le e_{m+1}(F)+\|A_k-F\|_\infty
+ \le\epsilon_{m+1}+\beta_m2^{-k}.
+\]
+All repair conditions and uniform convergence follow.
+Each step is also the relative surgery
+$A_{k+1}=\mathcal S_{1/2}(A_k,F)$ with replacement region $U=\D$.
+Requiring smaller prescribed replacement regions would be an
+additional geometric condition, not part of this equivalence.
+\end{proof}
+
+\section{Irregularity tests and the limits of topological surgery}
+
+\begin{proposition}[Homotopy equivalence does not preserve local connectedness]
+\label{prop:comb-obstruction}
+Define
+\[
+ S:=\{0\}\cup\{1/j:j\in\N,\ j\ge1\},\qquad
+ C:=\{x+iy:x\in S,\ 0\le y\le1\}\cup[0,1].
+\]
+Then $C$ is a compact contractible subset of $\C$, but
+$\neg\LC(C)$.  In particular, $C$ is homotopy equivalent to a point
+and to a closed disk, both of which are locally connected.
+\end{proposition}
+\noindent
+In words, a compact planar set may admit a contraction to a point
+and have the homotopy type of a regular disk while failing local
+connectedness.  Preservation of homotopy type by a proposed
+topological surgery does not imply preservation of the conclusion
+needed for MLC.
+\begin{proof}
+The set $S$ is compact, so $C$ is a union of two compact sets.
+A contraction of $C$ to zero is
+\[
+ Q(t,x+iy):=
+ \begin{cases}
+  x+i(1-2t)y,&0\le t\le1/2,\\
+  (2-2t)x,&1/2\le t\le1.
+ \end{cases}
+\]
+Each formula takes values in $C$, and the formulas agree at
+$t=1/2$.  Hence this is a continuous contraction.
+
+Set $p:=i/2$ and $\eta:=1/4$.
+Every point of $C\cap B(p,\eta)$ has imaginary part greater than
+$1/4$, so its real part belongs to $S$.
+Every connected subset of $S$ is a singleton: a connected subset
+of $\R$ containing two distinct points contains their interval,
+whereas $S$ contains no nondegenerate interval.
+If the connected-neighborhood condition held at $p$ with radius
+$\eta$, there would be $\delta>0$ and a connected set $V$ with
+\[
+ C\cap B(p,\delta)\subseteq V\subseteq C\cap B(p,\eta).
+\]
+The continuous image $\operatorname{Re}(V)$ would be a connected
+subset of $S$ containing zero, hence would equal $\{0\}$.
+But for sufficiently large $j$,
+$1/j+i/2\in C\cap B(p,\delta)$, a contradiction.
+Thus $\neg\LC(C)$.
+The homotopy-equivalence assertions follow because $C$, a point,
+and a closed disk are nonempty contractible spaces.
+\end{proof}
+
+\begin{definition}[Temporal and spatial irregularity tests]
+\label{def:irregularity-tests}
+For a family $Q_s\in C(\D,\D)$ indexed by $0<s\le a$, define
+\begin{gather}
+ \Omega_Q(u):=\sup_{0<s,t\le u}\|Q_s-Q_t\|_\infty
+       \quad(0<u\le a),\label{eq:terminal-oscillation}\\
+ W_Q(r):=\sup_{0<s\le a}\omega_{Q_s}(r)
+       \quad(r\ge0).\label{eq:family-modulus}
+\end{gather}
+For a sequence $T_\bullet\in C(\D,\D)^\N$, define
+\[
+ W_T(r):=\sup_{n\in\N}\omega_{T_n}(r).
+\]
+\end{definition}
+\noindent
+In words, $\Omega_Q(u)$ is the largest uniform distance between
+two maps with indices at most $u$.
+The quantity $W_Q(r)$ is the largest image separation, over the
+whole family, of domain points separated by at most $r$.
+The quantity $W_T(r)$ is the corresponding bound for a sequence.
+These quantities are finite because all images lie in $\D$.
+
+\begin{proposition}[Exact regularity tests]\label{prop:regularity-tests}
+For a family as in Definition~\ref{def:irregularity-tests},
+\[
+ \Omega_Q(u)\longrightarrow0\quad(u\downarrow0)
+ \quad\Longleftrightarrow\quad
+ \exists R\in C(\D,\D),\
+       \|Q_s-R\|_\infty\longrightarrow0\quad(s\downarrow0).
+\]
+If $\Omega_Q(u)$ does not tend to zero, there are
+$\varepsilon>0$, a point
+$z_\ast\in\D$, indices $s_j,t_j\downarrow0$, and points
+$z_j\to z_\ast$ in $\D$ such that
+\[
+ |Q_{s_j}(z_j)-Q_{t_j}(z_j)|\ge\varepsilon.
+\]
+For a sequence $T_\bullet$,
+\[
+ W_T(r)\longrightarrow0\quad(r\downarrow0)
+ \quad\Longleftrightarrow\quad
+ \exists\delta\in\Delta\ \forall n\in\N,\quad
+                         T_n\in\mathcal K_\delta.
+\]
+If the latter limit fails, there are $\varepsilon>0$, a point
+$z_\ast\in\D$, strictly increasing indices $n_j$, and points
+$z_j,w_j\in\D$ such that
+\[
+ z_j\to z_\ast,\qquad w_j\to z_\ast,\qquad
+ |T_{n_j}(z_j)-T_{n_j}(w_j)|\ge\varepsilon.
+\]
+\end{proposition}
+\noindent
+In words, vanishing terminal oscillation is equivalent to uniform
+convergence to a continuous terminal map.
+Failure produces arbitrarily small pairs of indices with a fixed
+positive discrepancy at points approaching a common domain point.
+A sequence has vanishing common spatial modulus exactly when
+it admits the shared continuity scales used in the finite hierarchy.
+Failure of that condition produces arbitrarily late maps that
+separate pairs of points approaching a common domain point by a
+fixed positive amount.
+\begin{proof}
+If $\Omega_Q(u)\to0$, any sequence of positive indices decreasing
+to zero gives a uniformly Cauchy sequence of maps.
+Completeness of the space of continuous $\D$-valued maps gives a
+uniform limit $R$.
+The definition of $\Omega_Q$ then bounds the distance of every
+sufficiently small-index map from that same $R$.
+Conversely, the triangle inequality gives
+\[
+ \Omega_Q(u)\le
+       2\sup_{0<s\le u}\|Q_s-R\|_\infty\longrightarrow0.
+\]
+If the oscillation does not tend to zero, its monotonicity gives
+a positive discrepancy at arbitrarily small indices.
+Choose successive pairs below both members of the preceding pair,
+and below $1/j$, retaining a fixed smaller positive discrepancy.
+The uniform norm is attained on $\D$, so choose $z_j$ witnessing
+it.  A subsequence of these points converges by compactness.
+
+If $W_T(r)\to0$, choose for each $k$ a positive radius at which
+$W_T$ is at most $2^{-k}$.
+Decreasing these radii recursively as in
+\eqref{eq:normalizing-modulus} gives $\delta\in\Delta$ with
+$W_T(\delta_k)\le2^{-k}$.
+The reverse implication follows directly from
+\eqref{eq:common-modulus}.
+
+If $W_T(r)$ does not tend to zero, its monotonicity gives a fixed
+$\varepsilon>0$ such that arbitrarily small radii admit a map and
+a pair of points whose image separation is at least $\varepsilon$.
+Any finite subfamily is uniformly equicontinuous, since its maps
+are uniformly continuous on the compact domain.
+Consequently the choices can be made recursively with strictly
+increasing indices $n_j$ and $|z_j-w_j|<1/j$.
+Compactness of $\D$ supplies a convergent subsequence of $z_j$;
+the corresponding $w_j$ have the same limit.
+\end{proof}
+
+\noindent
+Proposition~\ref{prop:regularity-tests} describes temporal
+oscillation and spatial concentration, not a finite list of
+geometric singularity models.
+For a fixed prefix and fixed shared data, the additional obstruction
+$q_m(\sigma)>1$ excludes every admissible next map by
+Proposition~\ref{prop:extension-test}.
+A failure for one family, prefix, or choice of data is not a
+negation of the existential assertion $\mathsf{UG}$.
+Proposition~\ref{prop:ode-obstruction} concerns integrable spatial
+Lipschitz bounds for an ordinary ODE; it does not identify all
+possible failures of the generalized flow.
+
+\section{The surgery continuation assertion}
+
+\begin{definition}[Completion by controlled surgeries]
+\label{def:surgery-completion}
+Define
+\begin{equation}\label{eq:surgery-completion}
+ \mathsf{Surg}:=
+ \left[
+ \begin{gathered}
+  \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
+  \exists(\mathcal I_m\subseteq\mathcal P_m(\lambda,\delta))_{m\ge1}:\\
+  (\id_\D,\Pi|_\D)\in\mathcal I_1,\\
+  \forall m\ge1\ \forall\sigma\in\mathcal I_m\
+    \exists A_\bullet\in C(\D,\D)^\N\ \exists F\in C(\D,\D):\\
+  \mathsf{Repair}_m(\sigma,A_\bullet)\ \land\
+       \lim_{k\to\infty}\|A_k-F\|_\infty=0\ \land\
+       \sigma\frown F\in\mathcal I_{m+1}
+ \end{gathered}\right].
+\end{equation}
+The map $F$ is the unique uniform limit supplied by
+Theorem~\ref{thm:repair-limit}.
+\end{definition}
+\noindent
+In words, one depth sequence, one shared continuity modulus,
+and one family of finite prefixes must work throughout the process.
+The family contains the explicit seed.
+Every prefix in the family admits a summable repair sequence
+whose limiting map extends that prefix and remains in the family
+at the next level.
+The assertion quantifies over all levels and retains every earlier
+map; preserving homotopy type alone is not one of its substitutes.
+
+\begin{theorem}[Surgery completion gives the original controlled flow]
+\label{thm:surgery-completion}
+\[
+ \mathsf{Surg}\Longleftrightarrow\mathsf{UG}
+                    \Longleftrightarrow\mathsf{Flow}.
+\]
+For data witnessing $\mathsf{Surg}$, the flow can be constructed
+using the actual intermediate repair maps, not just the stage
+endpoints, and satisfies \eqref{eq:flow-terminal-rate} and
+\eqref{eq:strong-deformation}.
+\end{theorem}
+\noindent
+In words, completing the relative surgery program is equivalent
+to the original uniform geometric hypothesis and to its controlled
+flow formulation.
+The repair trajectories themselves can be placed in successive
+time intervals to construct a continuous terminal deformation
+onto $\M$, with the stated quantitative rate.
+\begin{proof}
+If $\mathsf{Surg}$ holds, Theorem~\ref{thm:repair-limit} makes the
+limit of every selected repair sequence an admissible next map.
+Thus Definition~\ref{def:extension-invariant} holds for the same
+families, and Theorem~\ref{thm:recursive-program} gives
+$\mathsf{UG}$.
+Conversely, that theorem supplies invariant-preserving extensions
+from $\mathsf{UG}$.
+For each such extension, the explicit sequence
+\eqref{eq:explicit-repair} verifies the surgery assertion.
+Theorem~\ref{thm:flow-equivalence} gives the second equivalence.
+
+To construct the flow from the repairs themselves, choose
+successive prefixes and repair sequences as in
+\eqref{eq:surgery-completion}; let $A_{m,k}$ denote the $k$th
+repair map in the extension from level $m$ to level $m+1$.
+On $[0,t_1]$, use the linear interpolation from $\id_\D$ to
+$\Pi|_\D$.
+For $m\ge1$ and $k\in\N$, define
+\[
+ t_{m,k}:=t_m+(t_{m+1}-t_m)(1-2^{-k}).
+\]
+Set $H_{t_{m,k}}:=A_{m,k}$ and interpolate linearly between
+successive such times.
+The ratio of the allowed displacement to the allotted time is
+\[
+ \frac{\beta_m2^{-k-1}}
+      {(t_{m+1}-t_m)2^{-k-1}}=16.
+\]
+At the accumulation time $t_{m+1}$,
+Theorem~\ref{thm:repair-limit} gives
+\[
+ \|A_{m,k}-F_{m+1}\|_\infty
+ \le\beta_m2^{-k}
+ =16(t_{m+1}-t_{m,k}).
+\]
+Thus each stage has a continuous endpoint, and its interpolated
+maps satisfy the same temporal Lipschitz bound.
+All intermediate maps fix $O_{\lambda_{m+1}}\supseteq\M$.
+The initial interpolation has speed less than two by
+Lemma~\ref{lem:radial}.
+Pasting the stages therefore yields $\mathsf B(\lambda,H)$.
+Theorem~\ref{thm:flow-equivalence} supplies its continuous terminal
+extension and quantitative convergence.
+\end{proof}
+
+\section{Main current result and unresolved geometric input}
+
+\begin{theorem}[Flow and surgery characterization of MLC]\label{thm:mlc}
+\[
+ \boxed{
+ \begin{gathered}
+  \mathsf{Surg}\Longleftrightarrow\mathsf{Flow}
+                  \Longleftrightarrow\mathsf{UG},\\
+  \left[
+   \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
+   \forall m\in\N,\ \mathsf{UG}_m(\lambda,\delta)
+  \right]\Longleftrightarrow\mathsf{UG},\\
+  \mathsf{UG}\Longleftrightarrow\LC(\M).
+ \end{gathered}}
+\]
+\end{theorem}
+\noindent
+In words, the existence of finite towers at every level with one
+shared depth sequence and one shared continuity modulus is
+equivalent to the original assertion $\mathsf{UG}$.
+Completion of the controlled surgery program and existence of
+the controlled generalized flow are equivalent to that same assertion.
+By the classical boundary criterion, they are also equivalent
+to local connectedness of $\M$.
+If there exist sequences $\nu$ and $R_\bullet$ satisfying
 $\mathsf A(\nu,R_\bullet)$, then for every $c\in\M$ and every
 $\eta>0$ there exist $\delta>0$ and a connected subset $V$ of $\M$
 with
@@ -616,6 +2302,11 @@ $\M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta)$.
 By Lemma~\ref{lem:lc-criterion}, this conclusion states that $\M$
 is locally connected.
 \begin{proof}
+The equivalence is Theorem~\ref{thm:hierarchy}.
+The surgery and flow equivalences are
+Theorem~\ref{thm:surgery-completion}.
+The implication $\LC(\M)\Longrightarrow\mathsf{UG}$ is
+Theorem~\ref{thm:mlc-to-ug}.
 Assume $\mathsf{UG}$ and choose sequences satisfying
 $\mathsf A(\nu,R_\bullet)$ by \eqref{eq:ug-existence}.
 Theorem~\ref{thm:uniform} gives a continuous map $R:\D\to\D$
@@ -646,5 +2337,46 @@ The choices were made for arbitrary $c\in\M$ and $\eta>0$, proving
 $\LC(\M)$.  Lemma~\ref{lem:lc-criterion} identifies this with local
 connectedness in the Euclidean subspace topology.
 \end{proof}
+
+\noindent
+Theorem~\ref{thm:exterior-candidates} establishes image convergence.
+Proposition~\ref{prop:finite-horizons} establishes
+\[
+ \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
+ \exists\delta^{[m]}\in\Delta,\quad
+          \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}).
+\]
+It does not establish the reversed quantifier order
+\[
+ \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
+          \forall m\in\N,\quad\mathsf{UG}_m(\lambda,\delta).
+\]
+Theorems~\ref{thm:repair-limit} and \ref{thm:surgery-completion}
+establish uniform convergence under their repair hypotheses.
+Neither establishes the existential continuation assertion
+\eqref{eq:surgery-completion}.
+For the explicit exterior family, an independent sufficient
+analytic condition is \eqref{eq:integrable-exterior-speed};
+that condition is not proved here.
+No implication from homotopy equivalence or from the absence of
+positive-level curve singularities to these missing estimates is
+used.
+
+\begin{thebibliography}{9}
+\bibitem{DH}
+A.~Douady and J.~H.~Hubbard,
+\emph{Exploring the Mandelbrot Set: The Orsay Notes},
+English translation.
+Chapter~8, Proposition~8.1(b), Theorem~8.1, and
+Corollaries~8.3--8.4, pp.~62--65.
+\url{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}.
+
+\bibitem{Milnor}
+J.~Milnor,
+\emph{Dynamics in One Complex Variable: Introductory Lectures},
+revised preprint, arXiv:math/9201272.
+Theorem~16.6, printed p.~16-2 (PDF p.~84).
+\url{https://arxiv.org/pdf/math/9201272}.
+\end{thebibliography}
 
 \end{document}
