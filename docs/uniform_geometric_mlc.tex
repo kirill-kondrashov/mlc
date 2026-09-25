@@ -5,8 +5,8 @@
 \input{glyphtounicode}
 \pdfgentounicode=1
 \hypersetup{
-  pdftitle={A stepwise program for Mandelbrot local connectivity},
-  pdfsubject={Functorial cutoff systems and the remaining Mandelbrot local-connectivity criterion}
+  pdftitle={A functorial approximation program for Mandelbrot local connectivity},
+  pdfsubject={Inverse systems, constructible cutoff morphisms, and the remaining MLC criterion}
 }
 
 \newtheorem{theorem}{Theorem}[section]
@@ -27,7 +27,7 @@
 \newcommand{\dH}{d_{\mathrm H}}
 \newcommand{\Lip}{\operatorname{Lip}}
 
-\title{A Stepwise Program for Mandelbrot Local Connectivity}
+\title{A Functorial Approximation Program for Mandelbrot Local Connectivity}
 \author{}
 \date{}
 
@@ -37,14 +37,14 @@
 \section*{Meaning and position relative to the literature}
 
 Throughout, MLC denotes the conjecture that the Mandelbrot set is
-locally connected at every point.
-The result below constructs continuous maps that fix successively
-deeper finite-orbit outer approximations to the Mandelbrot set.  Each
-map stays within an explicit \(2^{-n}\) distance of the finite-orbit
-outer set that it fixes, and the images contain the Mandelbrot set
-and converge to it in Hausdorff distance.  Thus finite
-critical-orbit tests yield quantitative continuous approximations
-of the full set.
+locally connected at every point.  The document uses compact
+Hausdorff objects, continuous morphisms, inverse systems, and
+uniformly metrized morphism spaces as its primary language.  The main
+construction is a cofinally indexed family of endomorphisms of a
+compact parameter object: each endomorphism restricts to the identity on a
+finite-orbit subobject, has an explicit factorization defect at that
+stage, and induces an image subobject converging to the Mandelbrot
+limit.
 
 The escape-radius description, exterior uniformization, and
 Carath\'eodory criterion used below are classical
@@ -53,30 +53,21 @@ current literature; known results establish local connectivity for
 special parameter classes, including certain bounded-type satellite
 parameters and Feigenbaum parameters
 \cite{DudkoStatus,DudkoLyubichSat,DudkoLyubichFeigenbaum}.
-The contribution claimed here is the explicit finite-depth
-Green-function bound and its assembly into a map-valued proof
-program.
+The document isolates an explicit finite-depth Green-function bound
+and organizes its consequences as a map-valued proof program;
+novelty relative to the cited literature has not been established.
 
-The categorical refinement below places finite-orbit outer sets and
-Green sublevels in naturally related inverse systems.  The cutoff
-maps are natural with respect to a constructible sequence of split
-retractions, and relative compactness of these morphisms in a mapping
-space is equivalent to MLC.  Establishing that compactness would prove
-the full conjecture, beyond results restricted to special parameter
-classes; the present document proves the criterion, not its
-compactness hypothesis.  Its priority relative to all existing
-formulations remains unverified.
+The finite-orbit and Green sublevel functors admit a natural
+comparison, and the external cutoffs form a constructible diagram of
+split retractions.  Relative compactness of its morphisms is
+equivalent to MLC; summable naturality defect is a sufficient
+certificate.  The document proves these categorical reductions and
+the finite-stage diagram.  The required compactness remains
+unestablished, so no unconditional advance over the known
+parameter-specific results is claimed; priority for this formulation
+also remains unverified.
 
-Step~8 characterizes summability of some cutoff sequence, while the
-categorical criterion below characterizes compactness of the explicit
-cutoff family.  Each criterion is equivalent to MLC.  Summability for
-the selected sequence is a sufficient route and may be stronger than
-MLC.
-The unconditional theorem gives quantitative approximations and a
-concrete proof target; these estimates provide no counterexample or
-obstruction to MLC.
-
-\section*{Strongest unconditional theorem proved below}
+\section*{Strongest unconditional categorical approximation}
 
 Set
 \[
@@ -102,46 +93,64 @@ For nonempty compact \(A,B\subseteq\C\), let
  \max\left\{\sup_{a\in A}\dist(a,B),\
              \sup_{b\in B}\dist(b,A)\right\}.
 \]
-Write \(C(X,Y)\) for the set of continuous maps from \(X\) to \(Y\).
+Let \(\mathbf{CompHaus}\) denote the category of compact Hausdorff
+spaces and continuous maps.  For compact Hausdorff \(X,Y\), write
+\(\operatorname{Hom}(X,Y)=C(X,Y)\); when \(Y\) is metrized, equip this
+morphism space with the uniform metric.  Let \(\mathbf N\) be the poset
+category of natural numbers.  The inclusions
+\(\iota_N:O_N\hookrightarrow\D\) define an inverse system
+\(\mathcal O:\mathbf N^{\mathrm{op}}\to\mathbf{CompHaus}\);
+Step~1 identifies its limit with \(\M\).
 
-\begin{summarytheorem}[Constructed outer-map approximation]
-There exist \(\lambda\in\N^\N\) and
-\(T_\bullet\in C(\D,\D)^\N\) with
+\begin{summarytheorem}[Cofinal family of stage-fixing endomorphisms]
+There exist a cofinal functor
+\(\lambda:\mathbf N\to\mathbf N\), with object map
+\(n\mapsto\lambda_n\), and
+\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\) such
+that
 \begin{gather}
  \lambda_0=0,\qquad\lambda_1=1,\qquad
  \forall n\in\N,\quad \lambda_n\ge n,\quad
  \lambda_{n+1}>\lambda_n,\label{eq:opening-depths}\\
  T_0=\id_{\D},\qquad T_1=\Pi|_{\D},\qquad
  \forall n\ge1,\quad T_n(\D)\subseteq K,\label{eq:opening-maps}\\
- \forall n\in\N\ \forall c\in O_{\lambda_n},\quad
-                  T_n(c)=c,\label{eq:opening-fixing}\\
  \forall n\in\N,\quad
- \sup_{z\in\D}\dist(T_n(z),O_{\lambda_n})\le2^{-n},
+ T_n\circ\iota_{\lambda_n}=\iota_{\lambda_n},
+ \label{eq:opening-fixing}\\
+ \forall n\in\N,\quad
+ \sup_{z\in\D}\dist(T_n(z),\operatorname{Im}(\iota_{\lambda_n}))
+                 \le2^{-n},
  \label{eq:opening-proximity}\\
- \forall n\in\N,\quad \M\subseteq T_n(\D),\qquad
- \forall n\ge2,\quad \dH(T_n(\D),\M)\le2^{-n}.
+ \forall n\in\N,\quad
+ \M\hookrightarrow\operatorname{Im}(T_n),\qquad
+ \forall n\ge2,\quad
+ \dH(\operatorname{Im}(T_n),\M)\le2^{-n}.
  \label{eq:opening-image-gap}
 \end{gather}
 \end{summarytheorem}
 \noindent
-The maps fix their finite-orbit outer sets, satisfy uniform
-proximity bounds, and have images converging to \(\M\) in Hausdorff
-distance.  The first proof route additionally requires summability
-of successive map movements, studied in Steps~7--8 and isolated in
-Step~13.
+Here \(\operatorname{Im}(T_n)\) is the compact image subobject in
+\(\mathbf{CompHaus}\).  The stage identities and factorization
+defects give a metrically controlled approximation of the inverse
+limit object.  The sequence is not yet a cone to \(\mathcal O\);
+Step~8 isolates the morphism-space compactness needed to obtain one.
 
 \section{Stepwise construction}
 
-\subsection*{Step 1. Identify the target and its finite-orbit outer sets.}
+\subsection*{Step 1. Represent finite-orbit constraints as compact objects.}
 
-\begin{lemma}[Escape radius and outer-set properties]
+\begin{lemma}[Escape radius and inverse-limit representation]
 \label{lem:outer-sets}
 \begin{gather}
  \M=\{c\in\C:\forall n\in\N,\ |p_n(c)|\le2\},\label{eq:escape}\\
  \M\subseteq O_{N+1}\subseteq O_N\subseteq K\subseteq\D,\qquad
- \bigcap_{N\in\N}O_N=\M.\label{eq:outer-nesting}
+ \bigcap_{N\in\N}O_N=\M,\label{eq:outer-nesting}\\
+ \varprojlim_{\mathbf N^{\mathrm{op}}}\mathcal O
+       \cong\M.\label{eq:outer-limit}
 \end{gather}
 The sets \(\M,O_N,K,\D\) are compact and closed, and \(\D\) is convex.
+The transition morphisms of \(\mathcal O\) are the inclusions
+\(\iota_{N+1,N}:O_{N+1}\hookrightarrow O_N\).
 \end{lemma}
 \begin{proof}
 Suppose \(q:=|p_n(c)|>2\) and \(|c|\le q\).  Induction gives
@@ -172,17 +181,26 @@ gives \(\M\subseteq O_N\) and
 \]
 The last equality also makes \(\M\) closed in \(K\), hence compact.
 Finally, \(K\subseteq\D\), and \(\D\) is a closed, bounded, convex
-square.
+square.  If \(X\) is compact Hausdorff and
+\(u_N:X\to O_N\) is a compatible cone, the composites
+\(\iota_N\circ u_N:X\to\D\) agree.  Their common image lies in
+\(\bigcap_NO_N=\M\), so they factor uniquely through the inclusion
+\(\M\hookrightarrow\D\).  This is the universal property in
+\(\mathbf{CompHaus}\) asserted in \eqref{eq:outer-limit}.
 \end{proof}
 
-\subsection*{Step 2. Prove Hausdorff convergence of the outer sets.}
+\subsection*{Step 2. Converge in the compact-subobject hyperspace.}
 
 \begin{definition}[Outer-set gap]\label{def:outer-gap}
+Let \(\mathcal K(K)\) be the metric space of nonempty compact
+subobjects of \(K\), equipped with the Hausdorff metric.
 For \(N\in\N\), define
 \[
  h_N:=\dH(O_N,\M)
      =\sup_{z\in O_N}\dist(z,\M).
 \]
+Thus \(N\mapsto O_N\) converges to the limit subobject \(\M\) in
+\(\mathcal K(K)\).
 \end{definition}
 
 \begin{theorem}[Outer-set gap tends to zero]\label{thm:outer-gap}
@@ -207,6 +225,9 @@ Then each minimum in \eqref{eq:lower-depths} exists,
  \forall\lambda\in\Lambda\ \forall n\ge2,\qquad
  \lambda_n\ge n,\quad h_{\lambda_n}\le2^{-n}.
 \]
+Every \(\lambda\in\Lambda\) is a cofinal functor
+\(\mathbf N\to\mathbf N\), so the reindexed inverse system
+\(\mathcal O\circ\lambda^{\mathrm{op}}\) has limit \(\M\).
 \end{theorem}
 \begin{proof}
 Nesting gives \(h_{N+1}\le h_N\).  Let \(h_\infty\) be the limit.
@@ -224,11 +245,13 @@ contrary to \(h_{N_k}\to h_\infty>0\).  Thus \(h_N\to0\).
 The required integers \(\ell_n\) now exist recursively.
 \end{proof}
 
-\subsection*{Step 3. Introduce the exterior conformal coordinate.}
+\subsection*{Step 3. Use exterior uniformization as an isomorphism.}
 
-\begin{theorem}[Classical exterior uniformization]\label{thm:uniformization}
+\begin{theorem}[Exterior-coordinate isomorphism and potential]
+\label{thm:uniformization}
 \(\M\) is nondegenerate, connected, and has connected complement.
-There are inverse conformal maps
+In the category \(\mathbf{Riem}\) of Riemann surfaces and
+biholomorphisms, there are inverse isomorphisms
 \[
  \Phi:\C\setminus\M\longrightarrow\{w\in\C:|w|>1\},
  \qquad \Psi:=\Phi^{-1},\qquad
@@ -249,13 +272,15 @@ Define
   0,&c\in\M.
  \end{cases}
 \]
-Then
-\begin{gather}
- G\in C(\C,[0,\infty)),\qquad G^{-1}(0)=\M,\qquad
- G(c)-\log|c|\longrightarrow0\quad(|c|\to\infty),\label{eq:green}\\
- g_c(f_c(z))=2g_c(z),\qquad G(c)=g_c(c)=2g_c(0).
+ The dynamical Green morphism \(g_c\) is compatible with iteration by
+ the doubling endomorphism on \([0,\infty)\).  The potential data
+ satisfy
+ \begin{gather}
+  G\in C(\C,[0,\infty)),\qquad G^{-1}(0)=\M,\qquad
+  G(c)-\log|c|\longrightarrow0\quad(|c|\to\infty),\label{eq:green}\\
+  g_c\circ f_c=2g_c,\qquad G(c)=g_c(c)=2g_c(0).
  \label{eq:green-normalization}
-\end{gather}
+ \end{gather}
 \end{theorem}
 \begin{proof}
 The connectedness and exterior uniformization are
@@ -274,7 +299,7 @@ The functional equation follows by shifting the index in the
 defining limit.
 \end{proof}
 
-\subsection*{Step 4. Define positive-potential cutoffs.}
+\subsection*{Step 4. Build split cutoff morphisms from the potential.}
 
 \begin{definition}[Equipotentials and cutoff maps]\label{def:cutoffs}
 For \(s>0\), define
@@ -291,15 +316,20 @@ For \(s>0\), define
  \qquad Q_s:=\Pi\circ P_s|_{\D}.
  \label{eq:cutoffs}
 \end{gather}
+Let \(e_s:E_s\hookrightarrow\C\) be the sublevel inclusion.
+The cutoff factors uniquely as a continuous morphism
+\(\bar P_s:\C\to E_s\) with \(e_s\circ\bar P_s=P_s\).
 \end{definition}
 
-\begin{theorem}[Positive-level cutoff properties]\label{thm:cutoff-properties}
+\begin{theorem}[Green levels as split-retract objects]
+\label{thm:cutoff-properties}
 For \(0<s<t\),
 \begin{gather}
  E_s\subseteq\operatorname{int}E_t,\qquad
  \bigcap_{s>0}E_s=\M,\qquad
  \lim_{s\downarrow0}\kappa(s)=0,\label{eq:equipotential-gap}\\
  P_s(\C)=E_s,\qquad P_s|_{E_s}=\id_{E_s},\qquad
+ \bar P_s\circ e_s=\id_{E_s},\qquad
  P_s\circ P_t=P_{\min\{s,t\}},\label{eq:cutoff-semigroup}\\
  Q_s\in C(\D,\D),\qquad Q_s|_\M=\id_\M,\qquad
  \dH(Q_s(\D),\M)\le\kappa(s).\label{eq:Q-gap}
@@ -310,6 +340,14 @@ The boundary of \(E_s\) is the regular real-analytic Jordan curve
 \[
  Q_s(\D)\setminus\M\ne\varnothing.
 \]
+For \(0<u<s<t\), the transition morphisms
+\[
+ r_{t,s}:=\bar P_s\circ e_t:E_t\to E_s
+\]
+satisfy \(r_{t,s}\circ e_{s,t}=\id_{E_s}\) and
+\(r_{s,u}\circ r_{t,s}=r_{t,u}\), where \(e_{s,t}:E_s\hookrightarrow E_t\)
+is inclusion.  Thus the Green cutoffs define a functorial system of
+split retractions.
 \end{theorem}
 \begin{proof}
 Continuity and properness of \(G\), together with \(G^{-1}(0)=\M\),
@@ -354,19 +392,25 @@ Choose \(c\in K\cap\{G<s\}\setminus\M\).  Then \(Q_s(c)=c\),
 so \(c\in Q_s(\D)\setminus\M\).
 \end{proof}
 
-\subsection*{Step 5. Bound the potential of every finite-orbit outer set.}
+\subsection*{Step 5. Factor finite-orbit objects through Green levels.}
 
-\begin{lemma}[Finite-depth Green bound]\label{lem:green-depth}
+\begin{lemma}[Finite-depth Green factorization]\label{lem:green-depth}
 For every \(N\in\N\),
 \begin{equation}\label{eq:green-depth-bound}
  \sup_{c\in O_N}G(c)\le2^{1-N}\log3.
 \end{equation}
 In particular,
 \begin{equation}\label{eq:depth-cutoff}
- 2^{1-N}\log3\le s
- \Longrightarrow O_N\subseteq E_s,\qquad
- Q_s|_{O_N}=\id_{O_N},\qquad h_N\le\kappa(s).
+ \begin{gathered}
+ 2^{1-N}\log3\le s\Longrightarrow
+  \exists\eta_{N,s}:O_N\to E_s\text{ such that}\\
+  e_s\circ\eta_{N,s}=j_N^\C,\qquad
+  \bar P_s\circ j_N^\C=\eta_{N,s},\\
+  Q_s|_{O_N}=\id_{O_N},\qquad h_N\le\kappa(s).
+ \end{gathered}
 \end{equation}
+\noindent
+Here \(j_N^\C:O_N\hookrightarrow\C\) denotes the ambient inclusion.
 \end{lemma}
 \begin{proof}
 For \(|c|\le2\) and \(|z|\le2\), induction gives
@@ -382,14 +426,18 @@ Equation~\eqref{eq:green-normalization} gives
  G(c)=2g_c(0)=2^{1-N}g_c(p_N(c))
                          \le2^{1-N}\log3.
 \]
-This proves \(O_N\subseteq E_s\) under the stated inequality.
-Since \(O_N\subseteq K\), both \(P_s\) and \(\Pi\) fix \(O_N\).
-The inclusion \(O_N\subseteq E_s\) gives \(h_N\le\kappa(s)\).
+This constructs the inclusion morphism
+\(\eta_{N,s}:O_N\to E_s\).  The cutoff retraction satisfies
+\(\bar P_s\circ j_N^\C=\eta_{N,s}\).  Since \(O_N\subseteq K\),
+\(\Pi\) fixes \(O_N\), so \(Q_s|_{O_N}=\id_{O_N}\).
+The inclusion \(O_N\hookrightarrow E_s\) gives
+\(h_N\le\kappa(s)\).
 \end{proof}
 
-\subsection*{Step 6. Construct maps with shrinking image gaps.}
+\subsection*{Step 6. Construct a cofinal family of approximate endomorphisms.}
 
-\begin{theorem}[Explicit exterior candidates]\label{thm:exterior-candidates}
+\begin{theorem}[Constructible exterior morphisms]
+\label{thm:exterior-candidates}
 Define
 \begin{gather}
  a:=1+\max_{z\in\D}G(z),\qquad j_1:=0,\qquad s_1:=a,\notag\\
@@ -403,8 +451,9 @@ Define
  T_0:=\id_{\D},\qquad T_1:=\Pi|_{\D}=Q_a,\qquad
  T_n:=Q_{s_n}\quad(n\ge2).\label{eq:candidate-maps}
 \end{gather}
-Then \(\lambda\in\Lambda\), \(T_n\in C(\D,\D)\), and all assertions
-of the opening theorem hold.
+Then \(\lambda\in\Lambda\), each \(T_n\) is an endomorphism of
+\(\D\) in \(\mathbf{CompHaus}\), and all assertions of the opening
+theorem hold.
 \end{theorem}
 \begin{proof}
 The minima defining \(j_n\) exist by
@@ -416,13 +465,18 @@ Lemma~\ref{lem:green-depth} gives
  h_{\lambda_n}\le\kappa(s_n)\le2^{-n}\qquad(n\ge2).
 \]
 The recursive definition and \eqref{eq:lower-depths} give
-\(\lambda_n\ge\ell_n\), so \(\lambda\in\Lambda\).
+\(\lambda_n\ge\ell_n\), so \(\lambda\in\Lambda\).  Hence
+\(\lambda\) is a cofinal reindexing of the finite-orbit diagram.
 
 Since \(G<a\) on \(\D\), \(P_a|_{\D}=\id_{\D}\) and
 \(Q_a=\Pi|_{\D}\).  At indices zero and one,
 \(O_0=O_1=K\); the identity and \(\Pi\) fix \(K\).
-For \(n\ge2\), \eqref{eq:depth-cutoff} gives
-\(T_n|_{O_{\lambda_n}}=\id\).
+For \(n\ge2\), the factorization morphism
+\(\eta_n:O_{\lambda_n}\to E_{s_n}\) from
+Lemma~\ref{lem:green-depth} satisfies
+\(\bar P_n\circ\iota_{\lambda_n}=\eta_n\).  Postcomposition with
+\(\Pi\circ e_{s_n}\) preserves the stage identity
+\(T_n\circ\iota_{\lambda_n}=\iota_{\lambda_n}\).
 For \(z\in\D\),
 \[
  \dist(T_n(z),O_{\lambda_n})
@@ -432,16 +486,53 @@ For \(z\in\D\),
 Distance to the compact set \(O_{\lambda_n}\) is attained.
 At \(n=0\), \(\dist(z,O_0)\le2\sqrt2-2<1\); at \(n=1\),
 \(T_1(\D)=O_1=K\).
-Every \(T_n\) fixes \(\M\), so \(\M\subseteq T_n(\D)\).
+The limit object \(\M\) factors through every image subobject
+\(\operatorname{Im}(T_n)\), since the stage identity restricts
+to \(\M\hookrightarrow\D\).
 Finally, for \(n\ge2\),
 \[
  \dH(T_n(\D),\M)\le\kappa(s_n)\le2^{-n}.
 \]
 \end{proof}
 
-\subsection*{Step 7. Estimate motion on positive-potential bands.}
+ \noindent
+ For \(n\ge2\), put \(O_n^\lambda:=O_{\lambda_n}\) and
+ \(E_n:=E_{s_n}\).  The inclusions define inverse functors
+ \[
+  \mathcal O^\lambda,\mathcal E:
+  \mathbf N_{\ge2}^{\mathrm{op}}\longrightarrow\mathbf{CompHaus}.
+ \]
+ The factor morphisms \(\eta_n:O_n^\lambda\to E_n\) form a natural
+ transformation:
+ \[
+  \iota_n^{\mathcal E}\circ\eta_{n+1}
+        =\eta_n\circ\iota_n^{\mathcal O}.
+ \]
+ Cofinality of \(\lambda\) and \(s_n\downarrow0\) give
+ \[
+  \varprojlim\mathcal O^\lambda\cong\M
+        \cong\varprojlim\mathcal E,\qquad
+  \varprojlim\eta=\id_\M.
+ \]
+ The restricted cutoff morphisms and split transition retractions
+ \[
+  \bar P_n:=\bar P_{s_n}|_{\D}:\D\to E_n,\qquad
+  r_{n,m}:=\bar P_{s_m}|_{E_n}:E_n\to E_m\quad(n\le m)
+ \]
+ define a covariant functor \(\mathcal R\) and a natural transformation
+ \(\underline{\D}\to\mathcal R\):
+ \[
+  r_{n,n}=\id_{E_n},\qquad
+  r_{m,k}\circ r_{n,m}=r_{n,k},\qquad
+  r_{n,m}\circ\bar P_n=\bar P_m,\qquad
+  r_{n,n+1}\circ\iota_n^{\mathcal E}=\id_{E_{n+1}}.
+ \]
+ For \(n\ge2\), the endomorphisms \(T_n\) in the main theorem are the
+ composites \(\Pi\circ e_{s_n}\circ\bar P_n\).
 
-\begin{lemma}[Exterior differential equation and band estimate]
+ \subsection*{Step 7. Control naturality defects in morphism spaces.}
+
+\begin{lemma}[External flow bounds the uniform morphism defect]
 \label{lem:band-motion}
 For \(s>0\), define
 \[
@@ -460,7 +551,7 @@ Then \(V\) is finite and continuous on \((0,\infty)\).  The curve
 For \(0<s<t\),
 \begin{equation}\label{eq:finite-band-motion}
  \|Q_t-Q_s\|_\infty
- \le\sup_{c\in\C}|P_t(c)-P_s(c)|
+ \le\|\bar P_t|_{\D}-\bar P_s|_{\D}\|_{\infty,\C}
  \le\int_s^t V(u)\,du.
 \end{equation}
 \end{lemma}
@@ -478,7 +569,17 @@ inequality in \eqref{eq:finite-band-motion}; nonexpansiveness of
 \end{proof}
 
 For the heights of Theorem~\ref{thm:exterior-candidates},
-\(s_1=a\), \(s_n\downarrow0\), and
+\(s_1=a\) and \(s_n\downarrow0\).  Their cone defects satisfy
+\[
+ d_n:=
+ \|\bar P_n-\iota_n^{\mathcal E}\circ\bar P_{n+1}\|_{\infty,\C}
+ =\sup_{z\in\D}|\bar P_n(z)-\bar P_{n+1}(z)|
+ \le\int_{s_{n+1}}^{s_n}V(u)\,du
+ \qquad(n\ge2).
+\]
+Thus \(d_n\) is the naturality defect of the constructible sequence
+against the inverse-inclusion diagram; the retraction diagram is
+exactly natural.
 \begin{equation}\label{eq:candidate-partial-motion}
  \sum_{n=1}^{N}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty
  \le\int_{s_{N+1}}^aV(u)\,du
@@ -491,7 +592,7 @@ In particular,
  \sum_{n=1}^{\infty}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty.
 \]
 
-\subsection*{Step 8. Characterize the terminal summability condition.}
+\subsection*{Step 8. Resolve the limit-cone defect by compactness.}
 
 \begin{definition}[Local connectedness]\label{def:local-connectedness}
 For \(X\subseteq\C\), define
@@ -507,7 +608,7 @@ For \(X\subseteq\C\), define
 \]
 \end{definition}
 
-\begin{theorem}[Summable cutoff motion is equivalent to MLC]
+\begin{theorem}[Summable endomorphisms induce an MLC retraction]
 \label{thm:summable-cutoff}
 With \(a\) as in Theorem~\ref{thm:exterior-candidates},
 \begin{equation}\label{eq:summable-cutoff-equivalence}
@@ -604,185 +705,109 @@ and the single term at \(n=1\) is finite.  This proves the reverse
 implication.
 \end{proof}
 
-\subsubsection*{Constructible inverse systems and a mapping-space criterion}
-
-Write \(\mathbf{CompHaus}\) for the category of compact Hausdorff
-spaces and continuous maps.  Let \(I\) be the ordered category with
-objects \(n\ge2\) and a unique morphism \(n\to m\) when \(n\le m\).
-For the depths and heights in Theorem~\ref{thm:exterior-candidates},
-put
-\[
- O_n^\lambda:=O_{\lambda_n},\qquad E_n:=E_{s_n}\qquad(n\ge2).
-\]
-The inclusions define inverse systems
-\[
- \mathcal O,\mathcal E:I^{\mathrm{op}}\longrightarrow\mathbf{CompHaus},
- \qquad \mathcal O(n)=O_n^\lambda,\quad\mathcal E(n)=E_n.
-\]
-The finite-depth Green bound gives \(O_n^\lambda\subseteq E_n\);
-these inclusions form a natural transformation \(j:\mathcal O\to
-\mathcal E\).  Since \(\lambda_n\to\infty\) and \(s_n\downarrow0\),
-\[
- \varprojlim_{I^{\mathrm{op}}}\mathcal O
-      \cong\M\cong\varprojlim_{I^{\mathrm{op}}}\mathcal E,
- \qquad
- \iota_n^{\mathcal E}\circ j_{n+1}
-       =j_n\circ\iota_n^{\mathcal O}.
-\]
-Here \(\iota_n^{\mathcal O}\) and \(\iota_n^{\mathcal E}\) are the
-bonding inclusions from level \(n+1\) to level \(n\).
-Under these identifications, \(\varprojlim j=\id_\M\).
-
-Define the cutoff morphisms
-\[
- \mathsf P_n:=P_{s_n}|_{\D}:\D\longrightarrow E_n.
-\]
-Regard \(\mathsf P_n\) as a map to \(E_a\) by inclusion.
-For \(n\le m\), define
-\[
- r_{n,m}:=P_{s_m}|_{E_n}:E_n\longrightarrow E_m.
-\]
-The semigroup law \(P_s\circ P_t=P_{\min\{s,t\}}\) gives
-\[
- r_{n,n}=\id_{E_n},\qquad
- r_{m,k}\circ r_{n,m}=r_{n,k},\qquad
- r_{n,m}\circ\mathsf P_n=\mathsf P_m
- \quad(n\le m\le k).
-\]
-Thus the \(r_{n,m}\) define a covariant functor
-\(\mathcal R:I\to\mathbf{CompHaus}\), and
-\(\mathsf P_\bullet\) is a natural transformation from the constant
-\(\D\)-diagram to \(\mathcal R\).  Each adjacent \(r_{n,n+1}\) is a
-retraction of the inclusion \(E_{n+1}\hookrightarrow E_n\).
-\[
- r_{n,n+1}\circ\iota_n^{\mathcal E}=\id_{E_{n+1}}.
-\]
-We call these functorially generated finite-stage data a
-\emph{constructible cutoff sequence}.
-
-The same maps are an approximate cone over the inverse system
-\(\mathcal E\).  Define its naturality defect by
-\begin{equation}\label{eq:cutoff-cone-defect}
- d_n:=
- \sup_{z\in\D}
- \left|\mathsf P_n(z)-\iota_n^{\mathcal E}
-                       \bigl(\mathsf P_{n+1}(z)\bigr)\right|
- =\sup_{z\in\D}|\mathsf P_n(z)-\mathsf P_{n+1}(z)|.
-\end{equation}
-The equalities \(r_{n,n+1}\mathsf P_n=\mathsf P_{n+1}\) hold
-exactly.  The quantities \(d_n\) measure the failure of the same
-sequence to be a cone for the inverse-limit bonding inclusions.
-
-\begin{theorem}[Categorical compactness criterion for the cutoffs]
-\label{thm:categorical-cutoff-compactness}
-For the heights in Theorem~\ref{thm:exterior-candidates},
+\begin{theorem}[Compactness of the cutoff morphisms is equivalent to MLC]
+\label{thm:cutoff-hom-compactness}
+For the explicit sequence \(\bar P_n:\D\to E_n\) from
+Step~6, regarded by inclusion as a family in \(C(\D,E_a)\),
 \[
  \LC(\M)\quad\Longleftrightarrow\quad
- \overline{\{\mathsf P_n:n\ge2\}}^{\,C(\D,E_a)}
- \text{ is compact},
+ \overline{\{\bar P_n:n\ge2\}}^{\,C(\D,E_a)}
+ \text{ is compact}.
 \]
-where \(C(\D,E_a)\) has the uniform (equivalently, compact-open)
-topology.  Equivalently, the constructible cutoff sequence is
-equicontinuous.
+By Arzel\`a--Ascoli, the right-hand condition is equivalent to one
+common continuity modulus for the whole family.
 \end{theorem}
 \begin{proof}
-The range of every \(\mathsf P_n\) lies in the compact set \(E_a\).
-If \(\LC(\M)\), the boundary extension in the proof of
+If \(\LC(\M)\), the Carath\'eodory extension in the proof of
 Theorem~\ref{thm:summable-cutoff} gives
 \[
- \|\mathsf P_n-R|_{\D}\|_\infty
+ \|\bar P_n-R|_{\D}\|_\infty
  \le\omega_a(e^{s_n}-1)\longrightarrow0.
 \]
-Thus the family has compact closure.
+Thus the morphism sequence converges in \(C(\D,E_a)\), and its
+closure is compact.
 
 Conversely, compactness of the closure gives a uniformly convergent
-subsequence \(\mathsf P_{n_j}\to R\), with \(n_j\to\infty\).
-For each fixed \(k\ge2\), eventually \(n_j\ge k\), and hence
-\(\mathsf P_{n_j}(\D)\subseteq E_{n_j}\subseteq E_k\).
-Closedness of \(E_k\) gives \(R(\D)\subseteq E_k\), so
+subsequence \(\bar P_{n_j}\to R\), with \(n_j\to\infty\).
+For each fixed \(k\ge2\), eventually \(n_j\ge k\), hence
+\(\bar P_{n_j}(\D)\subseteq E_{n_j}\subseteq E_k\).
+Closedness of \(E_k\) implies \(R(\D)\subseteq E_k\), so
 \[
  R(\D)\subseteq\bigcap_{k\ge2}E_k=\M.
 \]
-Every \(\mathsf P_n\) fixes \(\M\), so \(R|_{\M}=\id_\M\) and
-\(R(\D)=\M\).  The limit coordinates form a cone over
-\(\mathcal E\), hence a morphism
-\(\D\to\varprojlim_{I^{\mathrm{op}}}\mathcal E\cong\M\).
-Since \(\D\) is convex,
-the resulting retraction implies \(\LC(\M)\), by the retraction
-argument in Theorem~\ref{thm:summable-cutoff}.  The limit diagram
-identifies the target; local connectedness follows from the retraction
-of the locally connected square.
+Every \(\bar P_n\) fixes \(\M\); therefore \(R|_\M=\id_\M\) and
+\(R(\D)=\M\).  The coordinate maps \(R:\D\to E_k\) form a cone over
+\(\mathcal E\), hence determine a morphism
+\(\D\to\varprojlim\mathcal E\cong\M\).  The resulting retraction
+implies \(\LC(\M)\) by the local-connectedness argument in the
+preceding proof.
 \end{proof}
 
 \noindent
-This mapping-space formulation is functorial: for compact Hausdorff
-objects \(X,Y\) and continuous maps \(u:X\to\D\), \(v:E_a\to Y\),
-the induced map \(F\mapsto v\circ F\circ u\) on morphism spaces is
-continuous and preserves relative compactness.  Cofinal
-reindexings preserve the inverse-system diagrams, and under MLC all
-such cutoff subsequences converge to the same retraction.
-
-\noindent
-The constructible sequence also satisfies
-\[
- \mathsf P_n(\D)\subseteq E_n,\qquad
- \mathsf P_n|_{O_n^\lambda}=\id,\qquad
- \M\subseteq\mathsf P_n(\D),\qquad
- \dH(\mathsf P_n(\D),\M)\le\kappa(s_n)\le2^{-n}.
-\]
-Summable cone defect \(\sum_{n\ge2}d_n<\infty\) is a sufficient
-certificate for the compactness criterion: it makes
-\(\mathsf P_n\) uniformly Cauchy.  The finite-band estimate gives
-\[
- d_n\le\int_{s_{n+1}}^{s_n}V(u)\,du,
-\]
-so \(\int_0^aV(u)\,du<\infty\) is a stronger sufficient analytic
-target.  The categorical criterion itself is equivalent to MLC;
-its validity for the explicit cutoff family remains the unresolved
-problem.
+The criterion is functorial on morphism spaces: precomposition by a
+continuous map into \(\D\) and postcomposition by a continuous map
+out of \(E_a\) induce continuous maps of compact-open morphism spaces,
+so they preserve relative compactness.  Cofinal reindexing preserves
+the limit diagram; under MLC every such cutoff subsequence has the
+same limit retraction.  The summable defect \(\sum_{n\ge2}d_n<\infty\)
+is a sufficient compactness certificate, and
+\(\int_0^aV(u)\,du<\infty\) is a stronger sufficient estimate.
 
 \noindent
 The summability assertion for the particular heights selected in
-Theorem~\ref{thm:exterior-candidates} implies MLC.
-Under MLC, the equivalence supplies a summable height selection;
-that selection may differ from the explicit candidate heights.
+Theorem~\ref{thm:exterior-candidates} remains unproved.  Under MLC,
+the equivalence supplies a summable height selection; that selection
+may differ from the explicit candidate heights.
 The sufficient integral condition in
 \eqref{eq:candidate-partial-motion} is a concrete analytic target
 for proving summability of those candidates.
 
-\subsection*{Step 9. Convert summable candidates into the uniform tower.}
+\subsection*{Step 9. Convert summable morphisms into a limit cone.}
 
-\begin{definition}[Uniform geometric existence]\label{def:ug}
-For \(\nu\in\N^\N\) and \(R_\bullet\in C(\D,\D)^\N\), define
+\begin{definition}[Constructible approximate cone]\label{def:ug}
+For \(\nu\in\N^\N\), let
+\(\iota_{\nu_n}:O_{\nu_n}\hookrightarrow\D\) be the stage
+monomorphism.  For a sequence of endomorphisms
+\(R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\),
+define
 \begin{align}
  \mathsf A(\nu,R_\bullet):={}&(R_0=\id_{\D})\nonumber\\
  &{}\land(\forall n,\ \nu_n\ge n)\nonumber\\
- &{}\land(\forall n\ \forall c\in O_{\nu_n},\ R_n(c)=c)\nonumber\\
- &{}\land\left(\forall n\ \forall z\in\D\
-       \exists w\in O_{\nu_n},\ |R_n(z)-w|\le2^{-n}\right)\nonumber\\
+ &{}\land(\forall n,\ R_n\circ\iota_{\nu_n}=\iota_{\nu_n})\nonumber\\
+ &{}\land\left(\forall n,\
+       \sup_{z\in\D}\dist(R_n(z),O_{\nu_n})\le2^{-n}\right)\nonumber\\
  &{}\land\left(\forall n,\
        \|R_{n+1}-R_n\|_\infty\le8\,2^{-n}\right),
  \label{eq:UG-clauses}\\
  \mathsf{UG}:={}&
- \exists\nu\in\N^\N\ \exists R_\bullet\in C(\D,\D)^\N,\
+ \exists\nu\in\N^\N\
+ \exists R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N,\
                        \mathsf A(\nu,R_\bullet).\label{eq:UG}
 \end{align}
+Each finite-stage endomorphism restricts to the identity on its
+orbit-stage monomorphism;
+the last two clauses are respectively its factorization defect and
+the adjacent displacement defect.
 \end{definition}
 
-\begin{theorem}[Summable candidate maps imply \(\mathsf{UG}\)]
+\begin{theorem}[A summable morphism sequence yields a constructible cone]
 \label{thm:candidate-to-ug}
-Suppose \(\nu\in\N^\N\), \(T_\bullet\in C(\D,\D)^\N\), and
+Suppose \(\nu\in\N^\N\),
+\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\), and
 \begin{gather}
  \forall n,\quad\nu_n\ge n,\label{eq:candidate-depths}\\
- \forall n\ \forall c\in O_{\nu_n},\quad T_n(c)=c,\label{eq:candidate-fixes}\\
+ \forall n,\quad T_n\circ\iota_{\nu_n}=\iota_{\nu_n},
+ \label{eq:candidate-fixes}\\
  a_n:=\sup_{z\in\D}\dist(T_n(z),O_{\nu_n})\longrightarrow0,\label{eq:candidate-error}\\
  \sum_{n=0}^\infty b_n<\infty,\qquad
  b_n:=\|T_{n+1}-T_n\|_\infty.\label{eq:candidate-sum}
 \end{gather}
-Then \(\mathsf{UG}\).
+Then the cofinal restriction of \(T_\bullet\), together with the
+initial identity morphism, satisfies \(\mathsf{UG}\).
 \end{theorem}
 \begin{proof}
-Set \(s_j:=\sum_{k=j}^\infty b_k\).  Since \(s_j\to0\) and
+Set \(s_j:=\sum_{k=j}^\infty b_k\), the tail defect of the
+endomorphism sequence.  Since \(s_j\to0\) and
 \(a_j\to0\), choose strictly increasing \(j_n\ge n\) so that
 \[
  a_{j_n}\le2^{-n},\qquad s_{j_n}\le8\,2^{-n}\quad(n\ge1).
@@ -791,8 +816,8 @@ Set \(\nu'_0=0\), \(R_0=\id_{\D}\), and
 \(\nu'_n=\nu_{j_n}\), \(R_n=T_{j_n}\) for \(n\ge1\).
 The fixing and depth clauses follow from
 \eqref{eq:candidate-depths}--\eqref{eq:candidate-fixes}.
-Compactness of \(O_{\nu'_n}\) turns the distance bound into the
-point \(w\) in \eqref{eq:UG-clauses}.
+Compactness of \(O_{\nu'_n}\) turns each distance bound into a
+point witness for the corresponding stage factorization.
 For \(n\ge1\),
 \[
  \|R_{n+1}-R_n\|_\infty\le s_{j_n}\le8\,2^{-n}.
@@ -802,21 +827,27 @@ At \(n=0\), \(O_0=K\) and
  \sup_{z\in\D}\dist(z,K)\le2\sqrt2-2<1,\qquad
  \|T_{j_1}-\id_{\D}\|_\infty\le\operatorname{diam}(\D)=4\sqrt2<8.
 \]
-Thus \(\mathsf A(\nu',R_\bullet)\).
+The cofinal subsequence is a constructible approximate cone with
+summable transition defect, so \(\mathsf A(\nu',R_\bullet)\).
 \end{proof}
 
-\begin{theorem}[The tower limit is a retraction and implies MLC]
+\begin{theorem}[The categorical limit cone is a retraction]
 \label{thm:ug-to-mlc}
-\[
- \forall\nu\in\N^\N\ \forall R_\bullet\in C(\D,\D)^\N,\quad
+\begin{equation*}
+ \begin{gathered}
+ \forall\nu\in\N^\N,\\
+ \forall R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N,\\
  \mathsf A(\nu,R_\bullet)\Longrightarrow
- \exists R\in C(\D,\D):
+ \exists R\in\operatorname{End}_{\mathbf{CompHaus}}(\D)
+ \text{ such that}\\
  \begin{cases}
   \forall n,\quad\|R_n-R\|_\infty\le16\,2^{-n},\\
   R(\D)=\M,\qquad R|_\M=\id_\M.
  \end{cases}
-\]
-Consequently, \(\mathsf{UG}\Longrightarrow\LC(\M)\).
+ \end{gathered}
+\end{equation*}
+The limiting morphism factors through \(\M\) and is a retraction;
+consequently, \(\mathsf{UG}\Longrightarrow\LC(\M)\).
 \end{theorem}
 \begin{proof}
 For \(m>n\), \eqref{eq:UG-clauses} gives
@@ -824,15 +855,17 @@ For \(m>n\), \eqref{eq:UG-clauses} gives
  \|R_m-R_n\|_\infty
  \le8\sum_{j=n}^{m-1}2^{-j}\le16\,2^{-n}.
 \]
-Hence \(R_n\) converges uniformly to a continuous \(R:\D\to\D\)
-and the displayed tail estimate holds.
+Hence \(R_n\) is Cauchy in the uniform morphism space
+\(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\) and converges to a
+continuous morphism \(R:\D\to\D\) with the displayed tail estimate.
 Fix \(z\in\D\) and \(k\in\N\).  For \(n\ge k\), choose
 \(w_n\in O_{\nu_n}\) with \(|R_n(z)-w_n|\le2^{-n}\).
 Since \(\nu_n\ge n\ge k\), \(O_{\nu_n}\subseteq O_k\), and
 \[
  |R(z)-w_n|\le17\,2^{-n}\longrightarrow0.
 \]
-Closedness of \(O_k\) gives \(R(z)\in O_k\).  Thus
+Closedness of \(O_k\) gives \(R(z)\in O_k\).  Thus \(R\) factors
+through every stage monomorphism and hence through the limit object:
 \(R(\D)\subseteq\bigcap_kO_k=\M\).
 For \(c\in\M\), every \(R_n\) fixes \(c\); hence \(R(c)=c\).
 Therefore \(R(\D)=\M\).
@@ -878,9 +911,9 @@ The sum in \eqref{eq:summable-cutoff-equivalence}, together with
 Theorem~\ref{thm:candidate-to-ug} gives \(\mathsf{UG}\).
 \end{proof}
 
-\subsection*{Step 10. Organize the tower as finite compatible certificates.}
+\subsection*{Step 10. Take the limit of finite-prefix subobjects.}
 
-\begin{definition}[Shared continuity scales and finite towers]
+\begin{definition}[Compact morphism object and finite prefixes]
 \label{def:finite-towers}
 Define
 \[
@@ -897,6 +930,8 @@ For \(\delta\in\Delta\), let
    |z-w|\le\delta_k\Longrightarrow|F(z)-F(w)|\le2^{-k}
  \right\}.
 \]
+\(\mathcal K_\delta\) is a compact, closed subspace of the uniform
+morphism space \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\).
 Fix \(\lambda\in\Lambda\), \(\delta\in\Delta\), and set
 \[
  e_i(F):=\sup_{z\in\D}\dist(F(z),O_{\lambda_i}),\qquad
@@ -921,11 +956,11 @@ For \(m\in\N\), define
 \end{align}
 \end{definition}
 
-\begin{lemma}[Compactness and restriction]\label{lem:compact-towers}
+\begin{lemma}[Compactness and prefix morphisms]\label{lem:compact-towers}
 \(\mathcal K_\delta\) and each \(\mathcal P_m(\lambda,\delta)\)
 are compact in the uniform and finite-product topologies.
-Restriction from level \(m+1\) to level \(m\) is continuous and
-preserves the defining conditions.
+The truncation \(\rho_m:\mathcal P_{m+1}\to\mathcal P_m\) is a
+continuous morphism in \(\mathbf{CompHaus}\).
 \end{lemma}
 \begin{proof}
 The inequalities defining \(\mathcal K_\delta\) give
@@ -941,7 +976,7 @@ define closed subsets of the compact finite product
 \(\mathcal K_\delta^{m+1}\).
 \end{proof}
 
-\begin{theorem}[Common finite certificates are equivalent to \(\mathsf{UG}\)]
+\begin{theorem}[The limit of common finite prefixes is a constructible cone]
 \label{thm:hierarchy}
 \[
  \mathsf{UG}\Longleftrightarrow
@@ -950,13 +985,22 @@ define closed subsets of the compact finite product
 \]
 \end{theorem}
 \begin{proof}
-If common \(\lambda,\delta\) admit a tower at every level, let
-\(X:=\mathcal K_\delta^\N\), a compact product by Tychonoff's theorem.
-For each \(m\), let \(C_m\subseteq X\) consist of sequences whose
-first \(m+1\) coordinates lie in \(\mathcal P_m\).
-Each \(C_m\) is closed and nonempty; extend a finite tower by
-repeating its last coordinate.  Also \(C_{m+1}\subseteq C_m\).
-Compactness gives an element of \(\bigcap_m C_m\), which satisfies
+If common \(\lambda,\delta\) admit a prefix at every level, let
+\(X:=\mathcal K_\delta^\N\), the product object in
+\(\mathbf{CompHaus}\).  Let \(\pi_m:X\to\mathcal K_\delta^{m+1}\)
+be the prefix morphism and define the closed subobject
+\[
+ C_m:=\pi_m^{-1}\bigl(\mathcal P_m(\lambda,\delta)\bigr)
+       \hookrightarrow X.
+\]
+Each \(C_m\) is nonempty: a finite prefix extends to a point of \(X\)
+by repeating its last coordinate.  The truncation morphisms give
+\(C_{m+1}\hookrightarrow C_m\).  Compactness of \(X\) and the finite
+intersection property imply
+\[
+ \varprojlim_m C_m\cong\bigcap_m C_m\ne\varnothing.
+\]
+An object of this limit is a compatible infinite tower satisfying
 \(\mathsf A(\lambda,F_\bullet)\).
 
 Conversely, suppose \(\mathsf{UG}\) holds with maps \(U_n\) and
@@ -988,8 +1032,9 @@ Uniform convergence on compact \(\D\) makes the family
  |z-w|\le\delta_k\Longrightarrow
  |F_n(z)-F_n(w)|\le2^{-k}\quad\text{for every }n.
 \]
-Then every finite prefix belongs to
-\(\mathcal P_m(\lambda,\delta)\).
+Then every finite prefix is an object of
+\(\mathcal P_m(\lambda,\delta)\), and the compatible prefixes form a
+cone over the finite-prefix diagram.
 \end{proof}
 
 \begin{proposition}[Every finite horizon is separately realizable]
@@ -1039,8 +1084,11 @@ whereas the hierarchy theorem requires
  \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
  \forall m\in\N,\quad\mathsf{UG}_m(\lambda,\delta).
 \]
+The finite-horizon witnesses vary their base object
+\((\lambda,\delta)\); they therefore do not define a cone in one
+common compact product.
 
-\subsection*{Step 11. Interpolate the tower into a continuous flow.}
+\subsection*{Step 11. Interpolate the tower in the morphism space.}
 
 \begin{theorem}[Continuous interpolation and terminal retraction]
 \label{thm:interpolated-flow}
@@ -1070,6 +1118,9 @@ The square \(\D\) is convex.  Since
  \le\frac{8\,2^{-n}}{2^{-n-1}}=16.
 \]
 Thus \(H\) is \(16\)-Lipschitz in time on \([0,1)\).
+Equivalently, \(t\mapsto H_t\), where \(H_t(z):=H(t,z)\), is a
+\(16\)-Lipschitz path in
+\(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\).
 Theorem~\ref{thm:ug-to-mlc} supplies the uniform limit \(R\).
 Set \(H(1,\cdot)=R\); the tail estimate gives
 \(\|H(t,\cdot)-R\|_\infty\le16(1-t)\).
@@ -1077,9 +1128,9 @@ This proves continuity at \(t=1\), the endpoint conditions,
 and \eqref{eq:flow-estimates}.
 \end{proof}
 
-\subsection*{Step 12. Quantify each proposed map replacement.}
+\subsection*{Step 12. Perform convex replacement in morphism spaces.}
 
-\begin{definition}[Relative map replacement]\label{def:map-replacement}
+\begin{definition}[Relative hom-space replacement]\label{def:map-replacement}
 Let \(P\subseteq\D\), \(U\subseteq\D\) relatively open,
 \(A,B\in C(\D,\D)\), and \(\chi\in C(\D,[0,1])\) satisfy
 \[
@@ -1096,10 +1147,13 @@ For \(F\in C(\D,\C)\), define
  \omega_F(r):=
  \sup_{\substack{z,w\in\D\\|z-w|\le r}}|F(z)-F(w)|.
 \]
+Thus \(S\) is the convex interpolation of \(A,B\) in the ambient
+space of morphisms; the support and relative-fixing constraints
+specify a relative subspace of that morphism space.
 \end{definition}
 
 \begin{lemma}[Replacement estimates]\label{lem:replacement-estimates}
-The map \(S\) is continuous, maps \(\D\) into \(\D\), fixes \(P\),
+The convex combination \(S\) is a morphism \(\D\to\D\), fixes \(P\),
 and equals \(A\) on \(\D\setminus U\).  Moreover,
 \begin{gather}
  \|S-A\|_\infty=\alpha\le d,\qquad
@@ -1131,6 +1185,8 @@ The homotopy is
  H(u,z):=(1-u\chi(z))A(z)+u\chi(z)B(z)
  \qquad(0\le u\le1).
 \]
+It is a path in \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\)
+relative to the subset \(P\subseteq\D\).
 \end{proof}
 
 \begin{definition}[Admissible one-step extension]\label{def:one-step}
@@ -1149,12 +1205,15 @@ Define
 \]
 For \(\sigma=(F_0,\ldots,F_m)\), write
 \(\sigma\frown F:=(F_0,\ldots,F_m,F)\).
+\(\mathcal E_m(\sigma)\) is a closed subobject of admissible successor
+morphisms over the prefix \(\sigma\).
 \end{definition}
 
-\begin{theorem}[Extension-invariant criterion]\label{thm:extension-invariant}
+\begin{theorem}[Invariant subobjects characterize infinite lifts]
+\label{thm:extension-invariant}
 \(\mathsf{UG}\) is equivalent to the existence of
-\(\lambda\in\Lambda\), \(\delta\in\Delta\), and sets
-\(\mathcal I_m\subseteq\mathcal P_m(\lambda,\delta)\) for \(m\ge1\)
+\(\lambda\in\Lambda\), \(\delta\in\Delta\), and closed subobjects
+\(\mathcal I_m\hookrightarrow\mathcal P_m(\lambda,\delta)\) for \(m\ge1\)
 such that
 \begin{gather}
  (\id_{\D},\Pi|_{\D})\in\mathcal I_1,\label{eq:invariant-seed}\\
@@ -1163,6 +1222,10 @@ such that
                     \sigma\frown F\in\mathcal I_{m+1}.
  \label{eq:invariant-extension}
 \end{gather}
+The \(\mathcal I_m\) are nonempty closed subobjects of the
+finite-prefix objects;
+the second clause says that every object in this subdiagram has a
+successor lift.
 \end{theorem}
 \begin{proof}
 Equations~\eqref{eq:invariant-seed}--\eqref{eq:invariant-extension}
@@ -1174,7 +1237,7 @@ Let \(\mathcal I_m\) consist of its single prefix through level \(m\).
 The next coordinate verifies \eqref{eq:invariant-extension}.
 \end{proof}
 
-\begin{theorem}[Quantitative repair after an admissible extension]
+\begin{theorem}[Compact minimization and quantitative lift repair]
 \label{thm:repair-equivalence}
 For \(\sigma\in\mathcal P_m\), let
 \[
@@ -1227,7 +1290,7 @@ For a chosen \(F\in\mathcal E_m(\sigma)\), the sequence \(A_k\)
 converges to \(F\) while retaining the range, modulus, and fixed-set
 constraints and satisfying explicit displacement and error bounds.
 
-\subsection*{Step 13. State the remaining proof obligations.}
+\subsection*{Step 13. Identify the missing limit-cone morphism.}
 
 For the explicit heights of Theorem~\ref{thm:exterior-candidates},
 the remaining first-path assertion is
@@ -1238,22 +1301,27 @@ the remaining first-path assertion is
 By Theorem~\ref{thm:summable-cutoff}, proving
 \eqref{eq:remaining-motion} would prove \(\LC(\M)\).
 The rate-free categorical target is compactness of the cutoff family
-in Theorem~\ref{thm:categorical-cutoff-compactness}; that target is
+in Theorem~\ref{thm:cutoff-hom-compactness}; that target is
 itself equivalent to MLC.  Summable movement is one sufficient
-certificate for it.
+certificate for it.  Equivalently, the constructible morphisms
+\(\bar P_n\) must acquire a cone over the inverse system
+\(\mathcal E\); the defects \(d_n\) in Step~7 quantify that failure
+of naturality.
 The finite-band estimate \eqref{eq:candidate-partial-motion} reduces
 the stronger sufficient condition
 \[
  \int_0^aV(u)\,du<\infty
 \]
 to the required summability.  The alternate finite-tower route
-requires one common pair \((\lambda,\delta)\) and the
-invariant-preserving extension \eqref{eq:invariant-extension} at
-every level.  The categorical structures are established; their
-compactness or a common compatible extension remains to be proved.
+requires a common pair \((\lambda,\delta)\) and a compatible
+successor morphism at every level, as in
+\eqref{eq:invariant-extension}.  The inverse diagrams and transition
+morphisms are constructed; the limiting cone or a common compatible
+extension remains to be supplied.
 
 \begin{summarytheorem}[Strongest unconditional theorem proved]
-There are \(\lambda\in\N^\N\) and \(T_\bullet\in C(\D,\D)^\N\)
+There are a cofinal functor \(\lambda:\mathbf N\to\mathbf N\) and
+\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\)
 satisfying \eqref{eq:opening-depths}--\eqref{eq:opening-image-gap}.
 \end{summarytheorem}
 \begin{proof}
