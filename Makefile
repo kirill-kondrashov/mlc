@@ -25,9 +25,9 @@ check-uniform:
 proof-pdf: docs/uniform_geometric_mlc.pdf
 
 docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex
-	pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-	pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-	pdflatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 
 # Build static dependency-graph pages under site/
 graphs: build

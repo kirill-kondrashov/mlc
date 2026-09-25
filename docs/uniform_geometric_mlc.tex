@@ -1,20 +1,25 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[margin=27mm]{geometry}
-\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
-\input{glyphtounicode}
-\pdfgentounicode=1
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\setmainfont{Noto Serif}
+\setlength{\emergencystretch}{1em}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,unicode=true]{hyperref}
 \hypersetup{
-  pdftitle={A functorial approximation program for Mandelbrot local connectivity},
-  pdfsubject={Inverse systems, constructible cutoff morphisms, and the remaining MLC criterion}
+  pdftitle={Функториальная программа аппроксимации для локальной связности множества Мандельброта},
+  pdfsubject={Обратные системы, конструктивные морфизмы усечения и недостающий критерий MLC}
 }
 
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem*{summarytheorem}{Theorem}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem*{summarytheorem}{Теорема}
+\renewcommand{\proofname}{Доказательство}
 
 \newcommand{\C}{\mathbb C}
 \newcommand{\R}{\mathbb R}
@@ -27,49 +32,51 @@
 \newcommand{\dH}{d_{\mathrm H}}
 \newcommand{\Lip}{\operatorname{Lip}}
 
-\title{A Functorial Approximation Program for Mandelbrot Local Connectivity}
+\title{Функториальная программа аппроксимации для локальной связности множества Мандельброта}
 \author{}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{Meaning and position relative to the literature}
+\section*{Смысл результата и его место в литературе}
 
-Throughout, MLC denotes the conjecture that the Mandelbrot set is
-locally connected at every point.  The document uses compact
-Hausdorff objects, continuous morphisms, inverse systems, and
-uniformly metrized morphism spaces as its primary language.  The main
-construction is a cofinally indexed family of endomorphisms of a
-compact parameter object: each endomorphism restricts to the identity on a
-finite-orbit subobject, has an explicit factorization defect at that
-stage, and induces an image subobject converging to the Mandelbrot
-limit.
+\noindent
+Здесь MLC обозначает гипотезу о локальной связности множества
+Мандельброта в каждой точке. Основным языком документа служат
+объекты компактных хаусдорфовых пространств, непрерывные морфизмы,
+обратные системы и равномерно метризованные пространства морфизмов.
+Основная конструкция — кофинально индексированное семейство
+эндоморфизмов компактного объекта параметров: каждый эндоморфизм
+ограничивается тождественным отображением на подобъекте конечных
+орбит, имеет явный дефект факторизации на этом уровне и задаёт
+подобъект-образ, сходящийся к пределу — множеству Мандельброта.
 
-The escape-radius description, exterior uniformization, and
-Carath\'eodory criterion used below are classical
-\cite{DH,Milnor}.  The full MLC conjecture remains open in the
-current literature; known results establish local connectivity for
-special parameter classes, including certain bounded-type satellite
-parameters and Feigenbaum parameters
-\cite{DudkoStatus,DudkoLyubichSat,DudkoLyubichFeigenbaum}.
-The document isolates an explicit finite-depth Green-function bound
-and organizes its consequences as a map-valued proof program;
-novelty relative to the cited literature has not been established.
+Описание через радиус убегания, внешняя униформизация и критерий
+Каратеодори, используемые ниже, являются классическими
+\cite{DH,Milnor}. Гипотеза MLC остаётся открытой; известны результаты
+о локальной связности для специальных классов параметров, включая
+некоторые параметры-сателлиты ограниченного типа и параметры
+Фейгенбаума \cite{DudkoStatus,DudkoLyubichSat,DudkoLyubichFeigenbaum}.
+В документе выделена явная оценка функции Грина при конечной глубине
+и её следствия организованы в виде программы доказательства через
+отображения; новизна относительно цитируемой литературы не
+установлена.
 
-The finite-orbit and Green sublevel functors admit a natural
-comparison, and the external cutoffs form a constructible diagram of
-split retractions.  Relative compactness of its morphisms is
-equivalent to MLC; summable naturality defect is a sufficient
-certificate.  The document proves these categorical reductions and
-the finite-stage diagram.  The required compactness remains
-unestablished, so no unconditional advance over the known
-parameter-specific results is claimed; priority for this formulation
-also remains unverified.
+Функторы конечных орбит и подуровней функции Грина допускают
+естественное сравнение, а внешние усечения образуют конструктивную
+диаграмму расщеплённых ретракций. Относительная компактность
+соответствующего семейства морфизмов эквивалентна MLC; суммируемый
+дефект естественности даёт достаточный критерий. В документе
+доказаны эти категориальные редукции и диаграмма конечных уровней.
+Требуемая компактность пока не установлена, поэтому безусловное
+продвижение по сравнению с известными результатами для отдельных
+параметров не заявляется; приоритет данной формулировки также не
+проверен.
 
-\section*{Strongest unconditional categorical approximation}
+\section*{Наиболее сильная безусловная категориальная аппроксимация}
 
-Set
+Положим
 \[
  \N:=\{0,1,2,\ldots\},\qquad f_c(z):=z^2+c,
  \qquad p_0(c):=0,\qquad p_{n+1}(c):=p_n(c)^2+c,
@@ -83,31 +90,35 @@ Set
  O_N:=K\cap\bigcap_{j=0}^{N}p_j^{-1}(K),\qquad
  \Pi(z):=\frac{2z}{\max\{2,|z|\}}.
 \]
-For a nonempty set \(A\subseteq\C\), let
+Для непустого множества \(A\subseteq\C\) положим
 \[
  \dist(z,A):=\inf_{a\in A}|z-a|.
 \]
-For nonempty compact \(A,B\subseteq\C\), let
+Для непустых компактных \(A,B\subseteq\C\) положим
 \[
  \dH(A,B):=
  \max\left\{\sup_{a\in A}\dist(a,B),\
              \sup_{b\in B}\dist(b,A)\right\}.
 \]
-Let \(\mathbf{CompHaus}\) denote the category of compact Hausdorff
-spaces and continuous maps.  For compact Hausdorff \(X,Y\), write
-\(\operatorname{Hom}(X,Y)=C(X,Y)\); when \(Y\) is metrized, equip this
-morphism space with the uniform metric.  Let \(\mathbf N\) be the poset
-category of natural numbers.  The inclusions
-\(\iota_N:O_N\hookrightarrow\D\) define an inverse system
+Обозначим через \(\mathbf{CompHaus}\) категорию компактных
+хаусдорфовых пространств и непрерывных отображений. Для компактных
+хаусдорфовых \(X,Y\) положим
+\[
+ \operatorname{Hom}(X,Y):=C(X,Y).
+\]
+Если \(Y\) снабжено метрикой, пространство морфизмов наделим
+равномерной метрикой. Пусть \(\mathbf N\) — категория, соответствующая
+частично упорядоченному множеству натуральных чисел. Вложения
+\(\iota_N:O_N\hookrightarrow\D\) задают обратную систему
 \(\mathcal O:\mathbf N^{\mathrm{op}}\to\mathbf{CompHaus}\);
-Step~1 identifies its limit with \(\M\).
+в шаге~1 её предел отождествляется с \(\M\).
 
-\begin{summarytheorem}[Cofinal family of stage-fixing endomorphisms]
-There exist a cofinal functor
-\(\lambda:\mathbf N\to\mathbf N\), with object map
-\(n\mapsto\lambda_n\), and
-\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\) such
-that
+\begin{summarytheorem}[Кофинальное семейство эндоморфизмов, фиксирующих уровни]
+Существует кофинальный функтор
+\(\lambda:\mathbf N\to\mathbf N\) с отображением объектов
+\(n\mapsto\lambda_n\) и семейство
+\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\), такое,
+что
 \begin{gather}
  \lambda_0=0,\qquad\lambda_1=1,\qquad
  \forall n\in\N,\quad \lambda_n\ge n,\quad
@@ -129,17 +140,18 @@ that
 \end{gather}
 \end{summarytheorem}
 \noindent
-Here \(\operatorname{Im}(T_n)\) is the compact image subobject in
-\(\mathbf{CompHaus}\).  The stage identities and factorization
-defects give a metrically controlled approximation of the inverse
-limit object.  The sequence is not yet a cone to \(\mathcal O\);
-Step~8 isolates the morphism-space compactness needed to obtain one.
+Здесь \(\operatorname{Im}(T_n)\) — компактный подобъект-образ в
+\(\mathbf{CompHaus}\). Тождества на уровнях и дефекты факторизации
+задают метрически контролируемую аппроксимацию объекта-предела.
+Последовательность пока не образует конуса к \(\mathcal O\); в
+шаге~8 выделяется необходимое для его построения условие
+компактности пространства морфизмов.
 
-\section{Stepwise construction}
+\section{Пошаговая программа построения}
 
-\subsection*{Step 1. Represent finite-orbit constraints as compact objects.}
+\subsection*{Шаг 1. Представить конечные орбитальные ограничения компактными объектами.}
 
-\begin{lemma}[Escape radius and inverse-limit representation]
+\begin{lemma}[Радиус убегания и представление через обратный предел]
 \label{lem:outer-sets}
 \begin{gather}
  \M=\{c\in\C:\forall n\in\N,\ |p_n(c)|\le2\},\label{eq:escape}\\
@@ -148,66 +160,67 @@ Step~8 isolates the morphism-space compactness needed to obtain one.
  \varprojlim_{\mathbf N^{\mathrm{op}}}\mathcal O
        \cong\M.\label{eq:outer-limit}
 \end{gather}
-The sets \(\M,O_N,K,\D\) are compact and closed, and \(\D\) is convex.
-The transition morphisms of \(\mathcal O\) are the inclusions
+Множества \(\M,O_N,K,\D\) компактны и замкнуты, а \(\D\) выпукло.
+Переходные морфизмы \(\mathcal O\) — это вложения
 \(\iota_{N+1,N}:O_{N+1}\hookrightarrow O_N\).
 \end{lemma}
 \begin{proof}
-Suppose \(q:=|p_n(c)|>2\) and \(|c|\le q\).  Induction gives
+Пусть \(q:=|p_n(c)|>2\) и \(|c|\le q\). Индукцией получаем
 \[
  |p_{n+j}(c)|\ge q(q-1)^j\qquad(j\in\N).
 \]
-For the induction step, if \(r:=|p_{n+j}(c)|\ge q\), then
+На индукционном шаге, если \(r:=|p_{n+j}(c)|\ge q\), то
 \[
  |p_{n+j+1}(c)|
  \ge r^2-|c|
  \ge r^2-r
  \ge(q-1)r.
 \]
-Thus the orbit is unbounded.  If \(|c|>2\), use \(n=1\) and
-\(q=|p_1(c)|=|c|\).  If \(|c|\le2\) and an iterate has modulus
-greater than two, use that iterate as \(q\).  This proves one
-direction of \eqref{eq:escape}; the other follows by taking the
-bound \(B=2\).
+Следовательно, орбита неограниченна. Если \(|c|>2\), берём \(n=1\)
+и \(q=|p_1(c)|=|c|\). Если \(|c|\le2\) и некоторый член орбиты имеет
+модуль больше двух, берём его в качестве \(q\). Это доказывает одно
+направление равенства \eqref{eq:escape}; обратное следует из
+определения ограниченности с \(B=2\).
 
-Each \(p_j\) is continuous.  Hence each \(O_N\) is a finite
-intersection of closed sets and is a closed subset of the compact
-set \(K\).  The identities \(p_0(c)=0\) and \(p_1(c)=c\) give
-\(O_{N+1}\subseteq O_N\subseteq K\).  Equation~\eqref{eq:escape}
-gives \(\M\subseteq O_N\) and
+Каждое \(p_j\) непрерывно, поэтому \(p_j^{-1}(K)\) замкнуто.
+Следовательно, \(O_N\) замкнуто в компактном \(K\). Из равенств
+\(p_0(c)=0\) и \(p_1(c)=c\) следует
+\(O_{N+1}\subseteq O_N\subseteq K\). Равенство~\eqref{eq:escape}
+даёт \(\M\subseteq O_N\) и
 \[
  \bigcap_{N\in\N}O_N
  =K\cap\bigcap_{j\in\N}p_j^{-1}(K)=\M.
 \]
-The last equality also makes \(\M\) closed in \(K\), hence compact.
-Finally, \(K\subseteq\D\), and \(\D\) is a closed, bounded, convex
-square.  If \(X\) is compact Hausdorff and
-\(u_N:X\to O_N\) is a compatible cone, the composites
-\(\iota_N\circ u_N:X\to\D\) agree.  Their common image lies in
-\(\bigcap_NO_N=\M\), so they factor uniquely through the inclusion
-\(\M\hookrightarrow\D\).  This is the universal property in
-\(\mathbf{CompHaus}\) asserted in \eqref{eq:outer-limit}.
+Последнее равенство также показывает, что \(\M\) замкнуто в \(K\),
+а значит, компактно. Наконец, \(K\subseteq\D\), где \(\D\) —
+замкнутый ограниченный выпуклый квадрат. Пусть \(X\) — компактное
+хаусдорфово пространство, а \(u_N:X\to O_N\) — совместимый конус.
+Тогда композиции \(\iota_N\circ u_N:X\to\D\) совпадают. Их общий
+образ лежит в \(\bigcap_NO_N=\M\), поэтому они единственным образом
+факторизуются через вложение \(\M\hookrightarrow\D\). Это и есть
+универсальное свойство в \(\mathbf{CompHaus}\), утверждаемое в
+\eqref{eq:outer-limit}.
 \end{proof}
 
-\subsection*{Step 2. Converge in the compact-subobject hyperspace.}
+\subsection*{Шаг 2. Доказать сходимость в гиперпространстве компактных подобъектов.}
 
-\begin{definition}[Outer-set gap]\label{def:outer-gap}
-Let \(\mathcal K(K)\) be the metric space of nonempty compact
-subobjects of \(K\), equipped with the Hausdorff metric.
-For \(N\in\N\), define
+\begin{definition}[Зазор между внешними множествами]\label{def:outer-gap}
+Пусть \(\mathcal K(K)\) — пространство непустых компактных
+подобъектов \(K\) с метрикой Хаусдорфа.
+Для \(N\in\N\) положим
 \[
  h_N:=\dH(O_N,\M)
      =\sup_{z\in O_N}\dist(z,\M).
 \]
-Thus \(N\mapsto O_N\) converges to the limit subobject \(\M\) in
-\(\mathcal K(K)\).
+Итак, \(N\mapsto O_N\) сходится в \(\mathcal K(K)\) к предельному
+подобъекту \(\M\).
 \end{definition}
 
-\begin{theorem}[Outer-set gap tends to zero]\label{thm:outer-gap}
+\begin{theorem}[Зазор между внешними множествами стремится к нулю]\label{thm:outer-gap}
 \[
  0\le h_{N+1}\le h_N,\qquad \lim_{N\to\infty}h_N=0.
 \]
-Define
+Определим
 \begin{gather}
  \ell_0:=0,\qquad\ell_1:=1,\qquad
  \ell_n:=\min\{N\in\N:N>\ell_{n-1},\ N\ge n,\ h_N\le2^{-n}\}
@@ -219,52 +232,52 @@ Define
    \lambda_{n+1}>\lambda_n\}.
  \label{eq:depth-class}
 \end{gather}
-Then each minimum in \eqref{eq:lower-depths} exists,
-\(\ell\in\Lambda\), and
+Тогда все минимумы в \eqref{eq:lower-depths} существуют,
+\(\ell\in\Lambda\), и
 \[
  \forall\lambda\in\Lambda\ \forall n\ge2,\qquad
  \lambda_n\ge n,\quad h_{\lambda_n}\le2^{-n}.
 \]
-Every \(\lambda\in\Lambda\) is a cofinal functor
-\(\mathbf N\to\mathbf N\), so the reindexed inverse system
-\(\mathcal O\circ\lambda^{\mathrm{op}}\) has limit \(\M\).
+Каждая \(\lambda\in\Lambda\) задаёт кофинальный функтор
+\(\mathbf N\to\mathbf N\), поэтому переиндексированная обратная
+система \(\mathcal O\circ\lambda^{\mathrm{op}}\) имеет предел \(\M\).
 \end{theorem}
 \begin{proof}
-Nesting gives \(h_{N+1}\le h_N\).  Let \(h_\infty\) be the limit.
-For each \(N\), choose \(z_N\in O_N\) with
-\(\dist(z_N,\M)=h_N\).  If \(h_\infty>0\), compactness of \(O_0\)
-gives a subsequence \(z_{N_k}\to z_\infty\in O_0\).
-For every fixed \(m\), eventually \(N_k\ge m\), so
-\(z_{N_k}\in O_m\).  Closedness gives
-\(z_\infty\in\bigcap_mO_m=\M\).  Continuity of distance to a
-nonempty set then gives
+Из вложенности следует \(h_{N+1}\le h_N\). Обозначим предел через
+\(h_\infty\). Для каждого \(N\) выберем \(z_N\in O_N\) так, чтобы
+\(\dist(z_N,\M)=h_N\). Если \(h_\infty>0\), компактность \(O_0\)
+даёт подпоследовательность \(z_{N_k}\to z_\infty\in O_0\).
+Для каждого фиксированного \(m\) при достаточно больших \(k\)
+имеем \(N_k\ge m\), а значит, \(z_{N_k}\in O_m\). Замкнутость даёт
+\(z_\infty\in\bigcap_mO_m=\M\).  Непрерывность расстояния до непустого множества тогда даёт
 \[
  h_{N_k}=\dist(z_{N_k},\M)\longrightarrow0,
 \]
-contrary to \(h_{N_k}\to h_\infty>0\).  Thus \(h_N\to0\).
-The required integers \(\ell_n\) now exist recursively.
+что противоречит \(h_{N_k}\to h_\infty>0\). Следовательно,
+\(h_N\to0\), и требуемые целые числа \(\ell_n\) можно построить
+рекурсивно.
 \end{proof}
 
-\subsection*{Step 3. Use exterior uniformization as an isomorphism.}
+\subsection*{Шаг 3. Представить внешнюю униформизацию как изоморфизм.}
 
-\begin{theorem}[Exterior-coordinate isomorphism and potential]
+\begin{theorem}[Изоморфизм внешних координат и потенциал]
 \label{thm:uniformization}
-\(\M\) is nondegenerate, connected, and has connected complement.
-In the category \(\mathbf{Riem}\) of Riemann surfaces and
-biholomorphisms, there are inverse isomorphisms
+\(\M\) нетривиально, связно и имеет связное дополнение. В категории
+\(\mathbf{Riem}\) римановых поверхностей и бихоломорфизмов существуют
+взаимно обратные изоморфизмы
 \[
  \Phi:\C\setminus\M\longrightarrow\{w\in\C:|w|>1\},
  \qquad \Psi:=\Phi^{-1},\qquad
  \frac{\Phi(c)}{c}\longrightarrow1\quad(|c|\to\infty).
 \]
-For \(k\in\N\), define
+Для \(k\in\N\) положим
 \[
  f_c^{\circ0}:=\id_{\C},\qquad
  f_c^{\circ(k+1)}:=f_c\circ f_c^{\circ k},\qquad
  g_c(z):=\lim_{k\to\infty}2^{-k}
              \log\max\{1,|f_c^{\circ k}(z)|\}.
 \]
-Define
+Определим
 \[
  G(c):=
  \begin{cases}
@@ -272,9 +285,9 @@ Define
   0,&c\in\M.
  \end{cases}
 \]
- The dynamical Green morphism \(g_c\) is compatible with iteration by
- the doubling endomorphism on \([0,\infty)\).  The potential data
- satisfy
+ Динамическая функция Грина \(g_c\) согласована с действием
+ удвоения на \([0,\infty)\). Данные потенциала
+ удовлетворяют соотношениям
  \begin{gather}
   G\in C(\C,[0,\infty)),\qquad G^{-1}(0)=\M,\qquad
   G(c)-\log|c|\longrightarrow0\quad(|c|\to\infty),\label{eq:green}\\
@@ -283,26 +296,25 @@ Define
  \end{gather}
 \end{theorem}
 \begin{proof}
-The connectedness and exterior uniformization are
+Связность и внешняя униформизация следуют из
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=64}
-{Douady--Hubbard, Chapter 8, Theorem 8.1, pp.~64--65},
-and
+{теоремы 8.1, с.~64--65} и
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=65}
-{Corollary 8.3, p.~65}.
-Continuity of the extended dynamical Green function is
+{следствия 8.3, с.~65}.\par
+Непрерывность продолженной динамической функции Грина установлена в
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=62}
-{Proposition 8.1(b), p.~62}.
-The parameter normalization is
+{предложении 8.1(b), с.~62}.\par
+Нормировка параметрической функции приведена в
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=65}
-{Corollary 8.4(a), p.~65}.
-The functional equation follows by shifting the index in the
-defining limit.
+{следствии 8.4(a), с.~65}.
+Функциональное уравнение следует из сдвига индекса в определяющем
+пределе.
 \end{proof}
 
-\subsection*{Step 4. Build split cutoff morphisms from the potential.}
+\subsection*{Шаг 4. Построить расщеплённые морфизмы усечения из потенциала.}
 
-\begin{definition}[Equipotentials and cutoff maps]\label{def:cutoffs}
-For \(s>0\), define
+\begin{definition}[Эквипотенциали и отображения усечения]\label{def:cutoffs}
+При \(s>0\) положим
 \begin{gather}
  E_s:=\{c\in\C:G(c)\le s\},\qquad
  \kappa(s):=\dH(E_s,\M),\qquad
@@ -316,14 +328,15 @@ For \(s>0\), define
  \qquad Q_s:=\Pi\circ P_s|_{\D}.
  \label{eq:cutoffs}
 \end{gather}
-Let \(e_s:E_s\hookrightarrow\C\) be the sublevel inclusion.
-The cutoff factors uniquely as a continuous morphism
-\(\bar P_s:\C\to E_s\) with \(e_s\circ\bar P_s=P_s\).
+Пусть \(e_s:E_s\hookrightarrow\C\) — вложение подуровня. Усечение
+единственным образом факторизуется в непрерывный морфизм
+\(\bar P_s:\C\to E_s\), для которого
+\(e_s\circ\bar P_s=P_s\).
 \end{definition}
 
-\begin{theorem}[Green levels as split-retract objects]
+\begin{theorem}[Уровни Грина как объекты с расщеплёнными ретракциями]
 \label{thm:cutoff-properties}
-For \(0<s<t\),
+При \(0<s<t\) выполняются
 \begin{gather}
  E_s\subseteq\operatorname{int}E_t,\qquad
  \bigcap_{s>0}E_s=\M,\qquad
@@ -334,111 +347,117 @@ For \(0<s<t\),
  Q_s\in C(\D,\D),\qquad Q_s|_\M=\id_\M,\qquad
  \dH(Q_s(\D),\M)\le\kappa(s).\label{eq:Q-gap}
 \end{gather}
-The boundary of \(E_s\) is the regular real-analytic Jordan curve
-\(\Gamma_s\).  The map \((s,c)\mapsto P_s(c)\) is continuous on
-\((0,\infty)\times\C\).  For every \(s>0\),
+Граница \(E_s\) — регулярная вещественно-аналитическая кривая
+Жордана \(\Gamma_s\). Отображение \((s,c)\mapsto P_s(c)\) непрерывно
+на \((0,\infty)\times\C\). Для каждого \(s>0\)
 \[
  Q_s(\D)\setminus\M\ne\varnothing.
 \]
-For \(0<u<s<t\), the transition morphisms
+При \(0<u<s<t\) переходные морфизмы
 \[
  r_{t,s}:=\bar P_s\circ e_t:E_t\to E_s
 \]
-satisfy \(r_{t,s}\circ e_{s,t}=\id_{E_s}\) and
-\(r_{s,u}\circ r_{t,s}=r_{t,u}\), where \(e_{s,t}:E_s\hookrightarrow E_t\)
-is inclusion.  Thus the Green cutoffs define a functorial system of
-split retractions.
+удовлетворяют \(r_{t,s}\circ e_{s,t}=\id_{E_s}\) и
+\(r_{s,u}\circ r_{t,s}=r_{t,u}\), где \(e_{s,t}:E_s\hookrightarrow E_t\) — вложение. Следовательно,
+усечения по уровням Грина образуют функториальную систему
+расщеплённых ретракций.
 \end{theorem}
 \begin{proof}
-Continuity and properness of \(G\), together with \(G^{-1}(0)=\M\),
-give compactness, nesting, and the intersection identity.
-If \(\kappa(s)\not\to0\), choose \(s_j\downarrow0\) and
-\(c_j\in E_{s_j}\) at a fixed positive distance from \(\M\).
-Compactness of \(E_{s_1}\) gives a convergent subsequence with
-limit in \(G^{-1}(0)=\M\), a contradiction.
+Собственность \(G\) обеспечивает компактность каждого \(E_s\).
+Вложенность следует из определения, а равенство
+\(G^{-1}(0)=\M\) даёт \(\bigcap_{s>0}E_s=\M\).
+Если \(\kappa(s)\not\to0\), выберем
+\(s_j\downarrow0\) и \(c_j\in E_{s_j}\), для которых
+\(\dist(c_j,\M)\ge\varepsilon\) при некотором \(\varepsilon>0\).
+Компактность \(E_{s_1}\) даёт сходящуюся подпоследовательность
+с пределом в \(G^{-1}(0)=\M\), что невозможно.
 
-The map \(\Gamma_s\) is injective on the circle and
+Отображение \(\Gamma_s\) инъективно на окружности, причём
 \[
  \Gamma_s'(\theta)=ie^{s+i\theta}\Psi'(e^{s+i\theta})\ne0.
 \]
-The unbounded complementary component of this Jordan curve is
-\(\Psi(\{|w|>e^s\})=\{G>s\}\).  The Jordan curve theorem identifies
-its filled interior with \(E_s\).
+Неограниченная компонента дополнения этой кривой равна
+\(\Psi(\{|w|>e^s\})=\{G>s\}\). По теореме Жордана её заполненная
+внутренняя область совпадает с \(E_s\).
 
-For \(c\notin\M\), the cutoff has the equivalent formula
+Для \(c\notin\M\) усечение можно записать в эквивалентном виде
 \[
  P_s(c)=
  \Psi\left(e^{\min\{s,G(c)\}}\frac{\Phi(c)}{|\Phi(c)|}\right).
 \]
-This proves continuity away from \(\M\), including across \(G=s\).
-At \((s_0,c_0)\) with \(c_0\in\M\), continuity of \(G\) gives a
-neighborhood with \(G(c)<s_0/2\).  For \(s\) near \(s_0\), \(P_s\)
-is the identity there.  The semigroup identity follows by replacing
-the potential \(G(c)\) by \(\min\{s,G(c)\}\), without changing
-the external angle.
+Это доказывает непрерывность вне \(\M\), в том числе при переходе
+через \(G=s\). В точке \((s_0,c_0)\), где \(c_0\in\M\),
+непрерывность \(G\) даёт окрестность, в которой \(G(c)<s_0/2\).
+При \(s\), близком к \(s_0\), отображение \(P_s\) тождественно в
+этой окрестности. Полугрупповое тождество следует из замены
+потенциала \(G(c)\) на \(\min\{s,G(c)\}\) без изменения внешнего
+угла.
 
-The map \(\Pi\) is the nonexpansive metric projection onto \(K\)
-and fixes \(\M\subseteq K\).  Hence
+Отображение \(\Pi\) — нерастягивающая метрическая проекция на \(K\);
+оно фиксирует \(\M\subseteq K\). Поэтому
 \[
  \dist(\Pi(z),\M)\le\dist(z,\M).
 \]
-Since \(P_s(\D)\subseteq E_s\) and \(Q_s\) fixes \(\M\),
-\eqref{eq:Q-gap} follows.
+Так как \(P_s(\D)\subseteq E_s\), а \(Q_s\) фиксирует \(\M\),
+получаем \eqref{eq:Q-gap}.
 
-Finally, \(\M\) is a nonempty proper closed subset of the connected
-set \(K\), since \(2\in K\setminus\M\).  The relatively open set
-\(K\cap\{G<s\}\) contains \(\M\) and cannot equal \(\M\).
-Choose \(c\in K\cap\{G<s\}\setminus\M\).  Then \(Q_s(c)=c\),
-so \(c\in Q_s(\D)\setminus\M\).
+Наконец, \(\M\) — непустое собственное замкнутое подмножество
+связного множества \(K\), поскольку \(2\in K\setminus\M\).
+Относительно открытое множество \(K\cap\{G<s\}\) содержит \(\M\)
+и не может с ним совпадать. Выберем
+\(c\in K\cap\{G<s\}\setminus\M\). Тогда \(Q_s(c)=c\), откуда
+\(c\in Q_s(\D)\setminus\M\).
 \end{proof}
 
-\subsection*{Step 5. Factor finite-orbit objects through Green levels.}
+\subsection*{Шаг 5. Факторизовать объекты конечных орбит через уровни Грина.}
 
-\begin{lemma}[Finite-depth Green factorization]\label{lem:green-depth}
-For every \(N\in\N\),
+\begin{lemma}[Факторизация через подуровни Грина]
+\label{lem:green-depth}
+Для каждого \(N\in\N\)
 \begin{equation}\label{eq:green-depth-bound}
  \sup_{c\in O_N}G(c)\le2^{1-N}\log3.
 \end{equation}
-In particular,
+В частности,
 \begin{equation}\label{eq:depth-cutoff}
  \begin{gathered}
  2^{1-N}\log3\le s\Longrightarrow
-  \exists\eta_{N,s}:O_N\to E_s\text{ such that}\\
+  \exists\eta_{N,s}:O_N\to E_s\text{ такая, что}\\
   e_s\circ\eta_{N,s}=j_N^\C,\qquad
   \bar P_s\circ j_N^\C=\eta_{N,s},\\
   Q_s|_{O_N}=\id_{O_N},\qquad h_N\le\kappa(s).
  \end{gathered}
 \end{equation}
 \noindent
-Here \(j_N^\C:O_N\hookrightarrow\C\) denotes the ambient inclusion.
+Здесь \(j_N^\C:O_N\hookrightarrow\C\) обозначает вложение в
+окружающее пространство.
 \end{lemma}
 \begin{proof}
-For \(|c|\le2\) and \(|z|\le2\), induction gives
+При \(|c|\le2\) и \(|z|\le2\) индукцией получаем
 \[
  |f_c^{\circ k}(z)|\le3^{2^k}-1.
 \]
-The base case is \(k=0\).  If \(A=3^{2^k}\), the next case follows
-from \((A-1)^2+2\le A^2-1\).
-Consequently \(g_c(z)\le\log3\) for such \(c,z\).
-For \(c\in O_N\), both \(c\) and \(p_N(c)\) belong to \(K\).
-Equation~\eqref{eq:green-normalization} gives
+База индукции — \(k=0\). Если \(A=3^{2^k}\), следующий шаг следует
+из \((A-1)^2+2\le A^2-1\). Поэтому для таких \(c,z\)
+\(g_c(z)\le\log3\). Если \(c\in O_N\), то \(c\) и \(p_N(c)\)
+принадлежат \(K\). Из равенства~\eqref{eq:green-normalization}
+получаем
 \[
  G(c)=2g_c(0)=2^{1-N}g_c(p_N(c))
                          \le2^{1-N}\log3.
 \]
-This constructs the inclusion morphism
-\(\eta_{N,s}:O_N\to E_s\).  The cutoff retraction satisfies
-\(\bar P_s\circ j_N^\C=\eta_{N,s}\).  Since \(O_N\subseteq K\),
-\(\Pi\) fixes \(O_N\), so \(Q_s|_{O_N}=\id_{O_N}\).
-The inclusion \(O_N\hookrightarrow E_s\) gives
-\(h_N\le\kappa(s)\).
+Так строится морфизм-вложение \(\eta_{N,s}:O_N\to E_s\).
+Ретракция усечения удовлетворяет
+\(\bar P_s\circ j_N^\C=\eta_{N,s}\). Поскольку \(O_N\subseteq K\),
+Отображение \(\Pi\) фиксирует \(O_N\), поэтому
+\(Q_s|_{O_N}=\id_{O_N}\). Вложение \(O_N\hookrightarrow E_s\)
+даёт \(h_N\le\kappa(s)\).
 \end{proof}
 
-\subsection*{Step 6. Construct a cofinal family of approximate endomorphisms.}
+\subsection*{Шаг 6. Построить кофинальное семейство приближённых эндоморфизмов.}
 
-\begin{theorem}[Constructible exterior morphisms]
+\begin{theorem}[Конструктивные внешние морфизмы]
 \label{thm:exterior-candidates}
-Define
+Положим
 \begin{gather}
  a:=1+\max_{z\in\D}G(z),\qquad j_1:=0,\qquad s_1:=a,\notag\\
  j_n:=\min\{j\in\N:j>j_{n-1},\
@@ -451,96 +470,98 @@ Define
  T_0:=\id_{\D},\qquad T_1:=\Pi|_{\D}=Q_a,\qquad
  T_n:=Q_{s_n}\quad(n\ge2).\label{eq:candidate-maps}
 \end{gather}
-Then \(\lambda\in\Lambda\), each \(T_n\) is an endomorphism of
-\(\D\) in \(\mathbf{CompHaus}\), and all assertions of the opening
-theorem hold.
+Тогда \(\lambda\in\Lambda\), каждое \(T_n\) является эндоморфизмом
+\(\D\) в \(\mathbf{CompHaus}\), и выполняются все утверждения
+начальной теоремы.
 \end{theorem}
 \begin{proof}
-The minima defining \(j_n\) exist by
-\(\kappa(s)\to0\); hence \(s_n\downarrow0\).
-The minima defining \(\lambda_n\) exist because
-\(2^{1-N}\log3\to0\).
-Lemma~\ref{lem:green-depth} gives
+Минимумы, задающие \(j_n\), существуют, поскольку
+\(\kappa(s)\to0\); следовательно, \(s_n\downarrow0\).
+Минимумы, задающие \(\lambda_n\), существуют, так как
+\(2^{1-N}\log3\to0\). Лемма~\ref{lem:green-depth} даёт
 \[
  h_{\lambda_n}\le\kappa(s_n)\le2^{-n}\qquad(n\ge2).
 \]
-The recursive definition and \eqref{eq:lower-depths} give
-\(\lambda_n\ge\ell_n\), so \(\lambda\in\Lambda\).  Hence
-\(\lambda\) is a cofinal reindexing of the finite-orbit diagram.
+Из рекурсивного определения и \eqref{eq:lower-depths} следует
+\(\lambda_n\ge\ell_n\), поэтому \(\lambda\in\Lambda\). Значит,
+\(\lambda\) задаёт кофинальное переиндексирование диаграммы
+конечных орбит.
 
-Since \(G<a\) on \(\D\), \(P_a|_{\D}=\id_{\D}\) and
-\(Q_a=\Pi|_{\D}\).  At indices zero and one,
-\(O_0=O_1=K\); the identity and \(\Pi\) fix \(K\).
-For \(n\ge2\), the factorization morphism
-\(\eta_n:O_{\lambda_n}\to E_{s_n}\) from
-Lemma~\ref{lem:green-depth} satisfies
-\(\bar P_n\circ\iota_{\lambda_n}=\eta_n\).  Postcomposition with
-\(\Pi\circ e_{s_n}\) preserves the stage identity
+Так как \(G<a\) на \(\D\), имеем \(P_a|_{\D}=\id_{\D}\) и
+\(Q_a=\Pi|_{\D}\). На уровнях ноль и один \(O_0=O_1=K\);
+тождественное отображение и \(\Pi\) фиксируют \(K\).
+При \(n\ge2\) морфизм факторизации
+\(\eta_n:O_{\lambda_n}\to E_{s_n}\) из
+леммы~\ref{lem:green-depth} удовлетворяет
+\(\bar P_n\circ\iota_{\lambda_n}=\eta_n\). Посткомпозиция с
+\(\Pi\circ e_{s_n}\) сохраняет тождество на уровне
 \(T_n\circ\iota_{\lambda_n}=\iota_{\lambda_n}\).
-For \(z\in\D\),
+Для \(z\in\D\)
 \[
  \dist(T_n(z),O_{\lambda_n})
  \le\dist(T_n(z),\M)
  \le\kappa(s_n)\le2^{-n}.
 \]
-Distance to the compact set \(O_{\lambda_n}\) is attained.
-At \(n=0\), \(\dist(z,O_0)\le2\sqrt2-2<1\); at \(n=1\),
-\(T_1(\D)=O_1=K\).
-The limit object \(\M\) factors through every image subobject
-\(\operatorname{Im}(T_n)\), since the stage identity restricts
-to \(\M\hookrightarrow\D\).
-Finally, for \(n\ge2\),
+При \(n=0\) имеем \(\dist(z,O_0)\le2\sqrt2-2<1\); при \(n=1\)
+\(T_1(\D)=O_1=K\). Объект-предел \(\M\) факторизуется через
+каждый подобъект-образ \(\operatorname{Im}(T_n)\), поскольку
+тождество на уровне ограничивается вложением \(\M\hookrightarrow\D\).
+Наконец, при \(n\ge2\)
 \[
  \dH(T_n(\D),\M)\le\kappa(s_n)\le2^{-n}.
 \]
 \end{proof}
 
  \noindent
- For \(n\ge2\), put \(O_n^\lambda:=O_{\lambda_n}\) and
- \(E_n:=E_{s_n}\).  The inclusions define inverse functors
+ При \(n\ge2\) положим \(O_n^\lambda:=O_{\lambda_n}\) и
+ \(E_n:=E_{s_n}\). Вложения задают обратные функторы
  \[
   \mathcal O^\lambda,\mathcal E:
   \mathbf N_{\ge2}^{\mathrm{op}}\longrightarrow\mathbf{CompHaus}.
  \]
- The factor morphisms \(\eta_n:O_n^\lambda\to E_n\) form a natural
- transformation:
+ Морфизмы факторизации \(\eta_n:O_n^\lambda\to E_n\) образуют
+ естественное преобразование:
  \[
   \iota_n^{\mathcal E}\circ\eta_{n+1}
         =\eta_n\circ\iota_n^{\mathcal O}.
  \]
- Cofinality of \(\lambda\) and \(s_n\downarrow0\) give
+ Кофинальность \(\lambda\) и условие \(s_n\downarrow0\) дают
  \[
   \varprojlim\mathcal O^\lambda\cong\M
         \cong\varprojlim\mathcal E,\qquad
   \varprojlim\eta=\id_\M.
  \]
- The restricted cutoff morphisms and split transition retractions
- \[
-  \bar P_n:=\bar P_{s_n}|_{\D}:\D\to E_n,\qquad
-  r_{n,m}:=\bar P_{s_m}|_{E_n}:E_n\to E_m\quad(n\le m)
- \]
- define a covariant functor \(\mathcal R\) and a natural transformation
- \(\underline{\D}\to\mathcal R\):
+Ограничения усечений имеют тип
+\[
+ \bar P_n:=\bar P_{s_n}|_{\D}:\D\to E_n.
+\]
+Переходные морфизмы
+\[
+ r_{n,m}:=\bar P_{s_m}|_{E_n}:E_n\to E_m\quad(n\le m)
+\]
+являются расщеплёнными ретракциями и задают ковариантный функтор
+\(\mathcal R\). Семейство \(\bar P_n\) задаёт естественное
+преобразование \(\underline{\D}\to\mathcal R\):
  \[
   r_{n,n}=\id_{E_n},\qquad
   r_{m,k}\circ r_{n,m}=r_{n,k},\qquad
   r_{n,m}\circ\bar P_n=\bar P_m,\qquad
   r_{n,n+1}\circ\iota_n^{\mathcal E}=\id_{E_{n+1}}.
  \]
- For \(n\ge2\), the endomorphisms \(T_n\) in the main theorem are the
- composites \(\Pi\circ e_{s_n}\circ\bar P_n\).
+ При \(n\ge2\) эндоморфизмы \(T_n\) из основной теоремы являются
+ композициями \(\Pi\circ e_{s_n}\circ\bar P_n\).
 
- \subsection*{Step 7. Control naturality defects in morphism spaces.}
+\subsection*{Шаг 7. Оценить дефекты естественности в пространствах морфизмов.}
 
-\begin{lemma}[External flow bounds the uniform morphism defect]
+\begin{lemma}[Внешний поток оценивает равномерный дефект морфизмов]
 \label{lem:band-motion}
-For \(s>0\), define
+При \(s>0\) определим
 \[
  V(s):=\max_{\theta\in\R/2\pi\mathbb Z}
                      e^s|\Psi'(e^{s+i\theta})|.
 \]
-Then \(V\) is finite and continuous on \((0,\infty)\).  The curve
-\(c_\theta(s):=\Psi(e^{s+i\theta})\) satisfies
+Тогда \(V\) конечна и непрерывна на \((0,\infty)\). Кривая
+\(c_\theta(s):=\Psi(e^{s+i\theta})\) удовлетворяет уравнению
 \begin{equation}\label{eq:external-ray-ode}
  \frac{dc_\theta}{ds}
  =\frac{\Phi(c_\theta)}{\Phi'(c_\theta)}
@@ -548,7 +569,7 @@ Then \(V\) is finite and continuous on \((0,\infty)\).  The curve
  \qquad |\nabla G(c_\theta)|
        =\frac{|\Phi'(c_\theta)|}{|\Phi(c_\theta)|}>0.
 \end{equation}
-For \(0<s<t\),
+При \(0<s<t\) выполняется
 \begin{equation}\label{eq:finite-band-motion}
  \|Q_t-Q_s\|_\infty
  \le\|\bar P_t|_{\D}-\bar P_s|_{\D}\|_{\infty,\C}
@@ -556,20 +577,21 @@ For \(0<s<t\),
 \end{equation}
 \end{lemma}
 \begin{proof}
-The maximum defining \(V(s)\) is over a compact circle on which
-\(\Psi'\) is continuous and nonzero.  Differentiating
-\(\Phi(c_\theta(s))=e^{s+i\theta}\) proves the first equality
-in \eqref{eq:external-ray-ode}.  The gradient identity follows
-from \(G=\log|\Phi|\) and the Cauchy--Riemann equations.
-If \(G(c)\le s\), both cutoffs fix \(c\).  Otherwise their values
-lie on the same external ray between heights \(s\) and
-\(\min\{t,G(c)\}\).  Integration of the ray speed proves the second
-inequality in \eqref{eq:finite-band-motion}; nonexpansiveness of
-\(\Pi\) proves the first.
+Максимум в определении \(V(s)\) берётся по компактной окружности,
+на которой \(\Psi'\) непрерывна и не обращается в ноль.
+Дифференцирование равенства
+\(\Phi(c_\theta(s))=e^{s+i\theta}\) даёт первое равенство
+\eqref{eq:external-ray-ode}. Формула для градиента следует из
+\(G=\log|\Phi|\) и уравнений Коши--Римана. Если \(G(c)\le s\),
+оба усечения фиксируют \(c\). Иначе их значения лежат на одном и
+том же внешнем луче между уровнями \(s\) и \(\min\{t,G(c)\}\).
+Интегрирование скорости вдоль луча даёт вторую оценку
+\eqref{eq:finite-band-motion}; нерастягиваемость \(\Pi\) даёт
+первую.
 \end{proof}
 
-For the heights of Theorem~\ref{thm:exterior-candidates},
-\(s_1=a\) and \(s_n\downarrow0\).  Their cone defects satisfy
+Для высот из теоремы~\ref{thm:exterior-candidates},
+\(s_1=a\) и \(s_n\downarrow0\). Дефекты конуса удовлетворяют
 \[
  d_n:=
  \|\bar P_n-\iota_n^{\mathcal E}\circ\bar P_{n+1}\|_{\infty,\C}
@@ -577,40 +599,41 @@ For the heights of Theorem~\ref{thm:exterior-candidates},
  \le\int_{s_{n+1}}^{s_n}V(u)\,du
  \qquad(n\ge2).
 \]
-Thus \(d_n\) is the naturality defect of the constructible sequence
-against the inverse-inclusion diagram; the retraction diagram is
-exactly natural.
+Таким образом, \(d_n\) — дефект естественности конструктивной
+последовательности относительно диаграммы обратных вложений;
+диаграмма ретракций в точности естественна.
 \begin{equation}\label{eq:candidate-partial-motion}
  \sum_{n=1}^{N}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty
  \le\int_{s_{N+1}}^aV(u)\,du
  \qquad(N\ge1).
 \end{equation}
-In particular,
+В частности,
 \[
  \int_0^aV(u)\,du<\infty
  \Longrightarrow
  \sum_{n=1}^{\infty}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty.
 \]
 
-\subsection*{Step 8. Resolve the limit-cone defect by compactness.}
+\subsection*{Шаг 8. Устранить дефект конуса-предела с помощью компактности.}
 
-\begin{definition}[Local connectedness]\label{def:local-connectedness}
-For \(X\subseteq\C\), define
+\begin{definition}[Локальная связность]\label{def:local-connectedness}
+Для \(X\subseteq\C\) положим
 \[
  \LC(X):=
  \left[
  \begin{gathered}
   \forall c\in X\ \forall\eta>0\ \exists\delta>0\
   \exists V\subseteq X:\\
-  V\text{ is connected},\qquad
+  V\text{ связно},\qquad
   X\cap B(c,\delta)\subseteq V\subseteq X\cap B(c,\eta)
  \end{gathered}\right].
 \]
 \end{definition}
 
-\begin{theorem}[Summable endomorphisms induce an MLC retraction]
+\begin{theorem}[Суммируемая последовательность эндоморфизмов задаёт ретракцию MLC]
 \label{thm:summable-cutoff}
-With \(a\) as in Theorem~\ref{thm:exterior-candidates},
+Пусть \(a\) задано в теореме~\ref{thm:exterior-candidates}.
+Тогда
 \begin{equation}\label{eq:summable-cutoff-equivalence}
  \LC(\M)\quad\Longleftrightarrow\quad
  \left[
@@ -622,50 +645,48 @@ With \(a\) as in Theorem~\ref{thm:exterior-candidates},
        \|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty
  \end{gathered}\right].
 \end{equation}
-Every sequence on the right converges uniformly to a continuous
-retraction \(R:\D\to\M\).
+Каждая последовательность, удовлетворяющая правой части,
+равномерно сходится к непрерывной ретракции \(R:\D\to\M\).
 \end{theorem}
 \begin{proof}
-Suppose the sequence on the right exists and set
-\(b_n:=\|Q_{s_{n+1}}-Q_{s_n}\|_\infty\).
-For \(m>n\),
+Пусть существует последовательность из правой части и положим
+\(b_n:=\|Q_{s_{n+1}}-Q_{s_n}\|_\infty\). При \(m>n\)
 \[
  \|Q_{s_m}-Q_{s_n}\|_\infty\le\sum_{j=n}^{m-1}b_j.
 \]
-Thus \(Q_{s_n}\) converges uniformly to \(R\in C(\D,\D)\).
-Each \(Q_{s_n}\) fixes \(\M\), and
+Следовательно, \(Q_{s_n}\) равномерно сходится к
+\(R\in C(\D,\D)\). Каждое \(Q_{s_n}\) фиксирует \(\M\), а
 \[
  \dist(Q_{s_n}(z),\M)\le\kappa(s_n)\longrightarrow0.
 \]
-Since \(\M\) is closed, \(R(\D)\subseteq\M\); since \(R|_\M=\id\),
-\(R(\D)=\M\).
+Поскольку \(\M\) замкнуто, \(R(\D)\subseteq\M\); из
+\(R|_\M=\id\) следует \(R(\D)=\M\).
 
-Fix \(c\in\M\) and \(\eta>0\).  Choose \(\delta>0\) so that
+Зафиксируем \(c\in\M\) и \(\eta>0\). Выберем \(\delta>0\) так, чтобы
 \[
  z\in\D,\quad |z-c|<\delta
  \Longrightarrow |R(z)-c|<\eta.
 \]
-The set \(W:=\D\cap B(c,\delta)\) is convex and contains \(c\).
-Hence \(V:=R(W)\) is connected, and
+Множество \(W:=\D\cap B(c,\delta)\) выпукло и содержит \(c\).
+Поэтому \(V:=R(W)\) связно и
 \[
  \M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta).
 \]
-Thus \(\LC(\M)\).
+Следовательно, \(\LC(\M)\).
 
-Conversely, suppose \(\LC(\M)\).  The Carath\'eodory boundary
-criterion in
+Обратно, пусть \(\LC(\M)\). Критерий Каратеодори для границы из
 \href{https://arxiv.org/pdf/math/9201272#page=84}
-{Milnor, Theorem 16.6, PDF p.~84}
-gives a continuous extension \(\widehat\Psi\) of \(\Psi\) to
-\(\{|w|\ge1\}\).  On the compact annulus
-\(A_a:=\{w:1\le|w|\le e^a\}\), let
+{Милнор, теорема 16.6, с.~84 PDF-файла}
+даёт непрерывное продолжение \(\widehat\Psi\) отображения \(\Psi\)
+на \(\{|w|\ge1\}\). На компактном кольце
+\(A_a:=\{w:1\le|w|\le e^a\}\) положим
 \[
  \omega_a(r):=
  \sup_{\substack{w,v\in A_a\\|w-v|\le r}}
                    |\widehat\Psi(w)-\widehat\Psi(v)|.
 \]
-Uniform continuity gives \(\omega_a(r)\to0\) as \(r\downarrow0\).
-Define
+Из равномерной непрерывности следует
+\(\omega_a(r)\to0\) при \(r\downarrow0\). Определим
 \[
  R(c):=
  \begin{cases}
@@ -674,102 +695,104 @@ Define
              \frac{\Phi(c)}{|\Phi(c)|}\right),&c\notin\M.
  \end{cases}
 \]
-For \(0<s\le a\) and \(c\notin\M\), put
-\(\xi=\Phi(c)/|\Phi(c)|\) and \(r=\exp(\min\{s,G(c)\})\).
-Then
+При \(0<s\le a\) и \(c\notin\M\) положим
+\(\xi=\Phi(c)/|\Phi(c)|\) и \(r=\exp(\min\{s,G(c)\})\). Тогда
 \[
  |P_s(c)-R(c)|
  =|\widehat\Psi(r\xi)-\widehat\Psi(\xi)|
  \le\omega_a(e^s-1).
 \]
-The difference vanishes on \(\M\), so
+На \(\M\) разность равна нулю, поэтому
 \begin{equation}\label{eq:uniform-cutoff-limit}
  \sup_{c\in\C}|P_s(c)-R(c)|\le\omega_a(e^s-1).
 \end{equation}
-Therefore \(P_s\to R\) uniformly on \(\C\), and
+Следовательно, \(P_s\to R\) равномерно на \(\C\), причём
 \[
  \|Q_s-R|_{\D}\|_\infty\le\omega_a(e^s-1)\longrightarrow0.
 \]
-Choose recursively \(s_1=a\) and
+Рекурсивно выберем \(s_1=a\) и
 \[
  0<s_n<\min\{s_{n-1}/2,2^{-n}\},\qquad
  \kappa(s_n)\le2^{-n},\qquad
  \|Q_{s_n}-R\|_\infty\le2^{-n}\quad(n\ge2).
 \]
-Then
+Тогда
 \[
  \|Q_{s_{n+1}}-Q_{s_n}\|_\infty
  \le2^{-(n+1)}+2^{-n}\qquad(n\ge2),
 \]
-and the single term at \(n=1\) is finite.  This proves the reverse
-implication.
+а единственное слагаемое при \(n=1\) конечно. Это доказывает
+обратное следствие.
 \end{proof}
 
-\begin{theorem}[Compactness of the cutoff morphisms is equivalent to MLC]
+\begin{theorem}[Компактность морфизмов усечения эквивалентна MLC]
 \label{thm:cutoff-hom-compactness}
-For the explicit sequence \(\bar P_n:\D\to E_n\) from
-Step~6, regarded by inclusion as a family in \(C(\D,E_a)\),
+Для явной последовательности \(\bar P_n:\D\to E_n\) из
+шага~6, рассматриваемой через вложения как семейство в
+\(C(\D,E_a)\), выполняется
 \[
  \LC(\M)\quad\Longleftrightarrow\quad
  \overline{\{\bar P_n:n\ge2\}}^{\,C(\D,E_a)}
- \text{ is compact}.
+ \text{компактно}.
 \]
-By Arzel\`a--Ascoli, the right-hand condition is equivalent to one
-common continuity modulus for the whole family.
+По теореме Арцела--Асколи условие справа равносильно существованию
+общего модуля непрерывности для всего семейства.
 \end{theorem}
 \begin{proof}
-If \(\LC(\M)\), the Carath\'eodory extension in the proof of
-Theorem~\ref{thm:summable-cutoff} gives
+Если выполнено \(\LC(\M)\), то продолжение Каратеодори из
+доказательства теоремы~\ref{thm:summable-cutoff} даёт
 \[
  \|\bar P_n-R|_{\D}\|_\infty
  \le\omega_a(e^{s_n}-1)\longrightarrow0.
 \]
-Thus the morphism sequence converges in \(C(\D,E_a)\), and its
-closure is compact.
+Следовательно, последовательность морфизмов сходится в
+\(C(\D,E_a)\), и её замыкание компактно.
 
-Conversely, compactness of the closure gives a uniformly convergent
-subsequence \(\bar P_{n_j}\to R\), with \(n_j\to\infty\).
-For each fixed \(k\ge2\), eventually \(n_j\ge k\), hence
+Обратно, компактность замыкания даёт равномерно сходящуюся
+подпоследовательность \(\bar P_{n_j}\to R\), где \(n_j\to\infty\).
+Для каждого фиксированного \(k\ge2\) при достаточно больших \(j\)
+имеем \(n_j\ge k\), откуда
 \(\bar P_{n_j}(\D)\subseteq E_{n_j}\subseteq E_k\).
-Closedness of \(E_k\) implies \(R(\D)\subseteq E_k\), so
+Замкнутость \(E_k\) влечёт \(R(\D)\subseteq E_k\), поэтому
 \[
  R(\D)\subseteq\bigcap_{k\ge2}E_k=\M.
 \]
-Every \(\bar P_n\) fixes \(\M\); therefore \(R|_\M=\id_\M\) and
-\(R(\D)=\M\).  The coordinate maps \(R:\D\to E_k\) form a cone over
-\(\mathcal E\), hence determine a morphism
-\(\D\to\varprojlim\mathcal E\cong\M\).  The resulting retraction
-implies \(\LC(\M)\) by the local-connectedness argument in the
-preceding proof.
+Каждое \(\bar P_n\) фиксирует \(\M\), поэтому
+\(R|_\M=\id_\M\) и \(R(\D)=\M\). Координатные отображения
+\(R:\D\to E_k\) образуют конус над \(\mathcal E\), а значит,
+задают морфизм \(\D\to\varprojlim\mathcal E\cong\M\).
+Полученная ретракция влечёт \(\LC(\M)\) по доказанному выше
+аргументу локальной связности.
 \end{proof}
 
 \noindent
-The criterion is functorial on morphism spaces: precomposition by a
-continuous map into \(\D\) and postcomposition by a continuous map
-out of \(E_a\) induce continuous maps of compact-open morphism spaces,
-so they preserve relative compactness.  Cofinal reindexing preserves
-the limit diagram; under MLC every such cutoff subsequence has the
-same limit retraction.  The summable defect \(\sum_{n\ge2}d_n<\infty\)
-is a sufficient compactness certificate, and
-\(\int_0^aV(u)\,du<\infty\) is a stronger sufficient estimate.
+Критерий функториален на пространствах морфизмов: для непрерывных
+отображений \(X\to\D\) и \(E_a\to Y\) предпокомпозиция и
+посткомпозиция задают непрерывные отображения пространств морфизмов
+с компактно-открытой топологией, а потому сохраняют относительную
+компактность. Кофинальное переиндексирование сохраняет предел; при MLC все эти
+усечения сходятся к одному ретракционному морфизму. Суммируемость
+дефектов \(\sum_{n\ge2}d_n<\infty\) служит достаточным критерием
+компактности, а условие
+\(\int_0^aV(u)\,du<\infty\) является более сильной достаточной
+оценкой.
 
 \noindent
-The summability assertion for the particular heights selected in
-Theorem~\ref{thm:exterior-candidates} remains unproved.  Under MLC,
-the equivalence supplies a summable height selection; that selection
-may differ from the explicit candidate heights.
-The sufficient integral condition in
-\eqref{eq:candidate-partial-motion} is a concrete analytic target
-for proving summability of those candidates.
+Суммируемость перемещений для конкретных высот из
+теоремы~\ref{thm:exterior-candidates} пока не доказана. При MLC
+существуют высоты с суммируемыми перемещениями, но они могут
+отличаться от явных кандидатов. Достаточное интегральное
+условие \eqref{eq:candidate-partial-motion} задаёт конкретную
+аналитическую цель для доказательства суммируемости этих кандидатов.
 
-\subsection*{Step 9. Convert summable morphisms into a limit cone.}
+\subsection*{Шаг 9. Преобразовать суммируемые морфизмы в конус-предел.}
 
-\begin{definition}[Constructible approximate cone]\label{def:ug}
-For \(\nu\in\N^\N\), let
-\(\iota_{\nu_n}:O_{\nu_n}\hookrightarrow\D\) be the stage
-monomorphism.  For a sequence of endomorphisms
-\(R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\),
-define
+\begin{definition}[Конструктивный приближённый конус]\label{def:ug}
+Для \(\nu\in\N^\N\) обозначим через
+\(\iota_{\nu_n}:O_{\nu_n}\hookrightarrow\D\) мономорфизм уровня.
+Для последовательности эндоморфизмов
+\(R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\)
+определим
 \begin{align}
  \mathsf A(\nu,R_\bullet):={}&(R_0=\id_{\D})\nonumber\\
  &{}\land(\forall n,\ \nu_n\ge n)\nonumber\\
@@ -784,16 +807,16 @@ define
  \exists R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N,\
                        \mathsf A(\nu,R_\bullet).\label{eq:UG}
 \end{align}
-Each finite-stage endomorphism restricts to the identity on its
-orbit-stage monomorphism;
-the last two clauses are respectively its factorization defect and
-the adjacent displacement defect.
+Каждый \(R_n\) поточечно фиксирует образ вложения
+\(\iota_{\nu_n}\);
+последние два условия задают соответственно дефект факторизации и
+дефект перемещения между соседними членами.
 \end{definition}
 
-\begin{theorem}[A summable morphism sequence yields a constructible cone]
+\begin{theorem}[Суммируемая последовательность морфизмов задаёт конструктивный конус]
 \label{thm:candidate-to-ug}
-Suppose \(\nu\in\N^\N\),
-\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\), and
+Пусть \(\nu\in\N^\N\),
+\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\) и
 \begin{gather}
  \forall n,\quad\nu_n\ge n,\label{eq:candidate-depths}\\
  \forall n,\quad T_n\circ\iota_{\nu_n}=\iota_{\nu_n},
@@ -802,36 +825,35 @@ Suppose \(\nu\in\N^\N\),
  \sum_{n=0}^\infty b_n<\infty,\qquad
  b_n:=\|T_{n+1}-T_n\|_\infty.\label{eq:candidate-sum}
 \end{gather}
-Then the cofinal restriction of \(T_\bullet\), together with the
-initial identity morphism, satisfies \(\mathsf{UG}\).
+Тогда кофинальное ограничение \(T_\bullet\), дополненное начальным
+тождественным морфизмом, удовлетворяет \(\mathsf{UG}\).
 \end{theorem}
 \begin{proof}
-Set \(s_j:=\sum_{k=j}^\infty b_k\), the tail defect of the
-endomorphism sequence.  Since \(s_j\to0\) and
-\(a_j\to0\), choose strictly increasing \(j_n\ge n\) so that
+Положим \(s_j:=\sum_{k=j}^\infty b_k\), то есть хвостовой дефект
+последовательности эндоморфизмов. Поскольку \(s_j\to0\) и
+\(a_j\to0\), выберем строго возрастающую последовательность
+\(j_n\ge n\) так, чтобы
 \[
  a_{j_n}\le2^{-n},\qquad s_{j_n}\le8\,2^{-n}\quad(n\ge1).
 \]
-Set \(\nu'_0=0\), \(R_0=\id_{\D}\), and
-\(\nu'_n=\nu_{j_n}\), \(R_n=T_{j_n}\) for \(n\ge1\).
-The fixing and depth clauses follow from
-\eqref{eq:candidate-depths}--\eqref{eq:candidate-fixes}.
-Compactness of \(O_{\nu'_n}\) turns each distance bound into a
-point witness for the corresponding stage factorization.
-For \(n\ge1\),
+Положим \(\nu'_0=0\), \(R_0=\id_{\D}\), а при \(n\ge1\)
+\(\nu'_n=\nu_{j_n}\), \(R_n=T_{j_n}\). Условия глубины, фиксации и
+близости к уровню следуют из
+\eqref{eq:candidate-depths}--\eqref{eq:candidate-error} и выбора \(j_n\).
+При \(n\ge1\)
 \[
  \|R_{n+1}-R_n\|_\infty\le s_{j_n}\le8\,2^{-n}.
 \]
-At \(n=0\), \(O_0=K\) and
+При \(n=0\) имеем \(O_0=K\) и
 \[
  \sup_{z\in\D}\dist(z,K)\le2\sqrt2-2<1,\qquad
  \|T_{j_1}-\id_{\D}\|_\infty\le\operatorname{diam}(\D)=4\sqrt2<8.
 \]
-The cofinal subsequence is a constructible approximate cone with
-summable transition defect, so \(\mathsf A(\nu',R_\bullet)\).
+По построению соседние члены имеют суммируемый дефект перехода, поэтому
+\(\mathsf A(\nu',R_\bullet)\).
 \end{proof}
 
-\begin{theorem}[The categorical limit cone is a retraction]
+\begin{theorem}[Категориальный конус-предел является ретракцией]
 \label{thm:ug-to-mlc}
 \begin{equation*}
  \begin{gathered}
@@ -839,90 +861,90 @@ summable transition defect, so \(\mathsf A(\nu',R_\bullet)\).
  \forall R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N,\\
  \mathsf A(\nu,R_\bullet)\Longrightarrow
  \exists R\in\operatorname{End}_{\mathbf{CompHaus}}(\D)
- \text{ such that}\\
+ \text{такой, что}\\
  \begin{cases}
   \forall n,\quad\|R_n-R\|_\infty\le16\,2^{-n},\\
   R(\D)=\M,\qquad R|_\M=\id_\M.
  \end{cases}
  \end{gathered}
 \end{equation*}
-The limiting morphism factors through \(\M\) and is a retraction;
-consequently, \(\mathsf{UG}\Longrightarrow\LC(\M)\).
+Предельный морфизм факторизуется через \(\M\) и является ретракцией;
+следовательно, \(\mathsf{UG}\Longrightarrow\LC(\M)\).
 \end{theorem}
 \begin{proof}
-For \(m>n\), \eqref{eq:UG-clauses} gives
+При \(m>n\) из \eqref{eq:UG-clauses} следует
 \[
  \|R_m-R_n\|_\infty
  \le8\sum_{j=n}^{m-1}2^{-j}\le16\,2^{-n}.
 \]
-Hence \(R_n\) is Cauchy in the uniform morphism space
-\(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\) and converges to a
-continuous morphism \(R:\D\to\D\) with the displayed tail estimate.
-Fix \(z\in\D\) and \(k\in\N\).  For \(n\ge k\), choose
-\(w_n\in O_{\nu_n}\) with \(|R_n(z)-w_n|\le2^{-n}\).
-Since \(\nu_n\ge n\ge k\), \(O_{\nu_n}\subseteq O_k\), and
+Значит, \(R_n\) — последовательность Коши в равномерном пространстве
+морфизмов \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\), и она
+сходится к непрерывному морфизму \(R:\D\to\D\) с указанной оценкой
+хвоста. Зафиксируем \(z\in\D\) и \(k\in\N\). При \(n\ge k\) выберем
+\(w_n\in O_{\nu_n}\) так, чтобы \(|R_n(z)-w_n|\le2^{-n}\).
+Так как \(\nu_n\ge n\ge k\), имеем \(O_{\nu_n}\subseteq O_k\), а
 \[
  |R(z)-w_n|\le17\,2^{-n}\longrightarrow0.
 \]
-Closedness of \(O_k\) gives \(R(z)\in O_k\).  Thus \(R\) factors
-through every stage monomorphism and hence through the limit object:
+Замкнутость \(O_k\) даёт \(R(z)\in O_k\). Следовательно, \(R\)
+факторизуется через каждый мономорфизм уровня, а значит, и через
+объект-предел:
 \(R(\D)\subseteq\bigcap_kO_k=\M\).
-For \(c\in\M\), every \(R_n\) fixes \(c\); hence \(R(c)=c\).
-Therefore \(R(\D)=\M\).
+Каждое \(R_n\) фиксирует \(c\in\M\), поэтому \(R(c)=c\).
+Следовательно, \(R(\D)=\M\).
 
-For \(c\in\M\) and \(\eta>0\), choose \(\delta>0\) such that
+Для \(c\in\M\) и \(\eta>0\) выберем \(\delta>0\) так, чтобы
 \[
  z\in\D,\quad|z-c|<\delta
  \Longrightarrow |R(z)-c|<\eta.
 \]
-The set \(W=\D\cap B(c,\delta)\) is convex and contains \(c\).
-Thus \(V=R(W)\) is connected, and
+Множество \(W=\D\cap B(c,\delta)\) выпукло и содержит \(c\).
+Поэтому \(V=R(W)\) связно и
 \[
  \M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta).
 \]
-This is \(\LC(\M)\).
+Это и означает \(\LC(\M)\).
 \end{proof}
 
-\begin{corollary}[The uniform geometric hypothesis is equivalent to MLC]
+\begin{corollary}[Равномерная геометрическая гипотеза эквивалентна MLC]
 \label{cor:ug-equivalent-mlc}
 \[
  \mathsf{UG}\Longleftrightarrow\LC(\M).
 \]
 \end{corollary}
 \begin{proof}
-\(\mathsf{UG}\Rightarrow\LC(\M)\) is
-Theorem~\ref{thm:ug-to-mlc}.
-For the converse, take \((s_n)\) from
-Theorem~\ref{thm:summable-cutoff} and set
+Импликация \(\mathsf{UG}\Rightarrow\LC(\M)\) доказана в
+теореме~\ref{thm:ug-to-mlc}. Для обратной импликации возьмём
+\((s_n)\) из теоремы~\ref{thm:summable-cutoff} и положим
 \[
  T_0=\id_{\D},\qquad T_1=\Pi|_{\D},\qquad
  T_n=Q_{s_n}\quad(n\ge2).
 \]
-For \(n\ge2\), choose recursively
+При \(n\ge2\) рекурсивно выберем
 \[
  \nu_0=0,\quad\nu_1=1,\quad
  \nu_n:=\min\{N\in\N:N>\nu_{n-1},\ N\ge n,\
                          2^{1-N}\log3\le s_n\}.
 \]
-Lemma~\ref{lem:green-depth} gives the fixing and proximity clauses.
-The sum in \eqref{eq:summable-cutoff-equivalence}, together with
-\(\|\Pi-\id_{\D}\|_\infty=2\sqrt2-2<1\) gives
-\eqref{eq:candidate-sum}.
-Theorem~\ref{thm:candidate-to-ug} gives \(\mathsf{UG}\).
+Лемма~\ref{lem:green-depth} даёт условия фиксации и близости.
+Суммируемость в \eqref{eq:summable-cutoff-equivalence} вместе с
+\(\|\Pi-\id_{\D}\|_\infty=2\sqrt2-2<1\) даёт
+\eqref{eq:candidate-sum}. Теорема~\ref{thm:candidate-to-ug}
+влечёт \(\mathsf{UG}\).
 \end{proof}
 
-\subsection*{Step 10. Take the limit of finite-prefix subobjects.}
+\subsection*{Шаг 10. Перейти к пределу подобъектов конечных префиксов.}
 
-\begin{definition}[Compact morphism object and finite prefixes]
+\begin{definition}[Конечные префиксы морфизмов]
 \label{def:finite-towers}
-Define
+Определим
 \[
  \Delta:=
  \{\delta\in(0,\infty)^\N:
    \forall k,\ \delta_k\le2^{-k},\
    \delta_{k+1}\le\delta_k/2\}.
 \]
-For \(\delta\in\Delta\), let
+Для \(\delta\in\Delta\) положим
 \[
  \mathcal K_\delta:=
  \left\{F\in C(\D,\D):
@@ -930,14 +952,14 @@ For \(\delta\in\Delta\), let
    |z-w|\le\delta_k\Longrightarrow|F(z)-F(w)|\le2^{-k}
  \right\}.
 \]
-\(\mathcal K_\delta\) is a compact, closed subspace of the uniform
-morphism space \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\).
-Fix \(\lambda\in\Lambda\), \(\delta\in\Delta\), and set
+Пространство \(\mathcal K_\delta\) замкнуто и компактно в
+\(\operatorname{Hom}(\D,\D)\) с равномерной метрикой.
+Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\) и положим
 \[
  e_i(F):=\sup_{z\in\D}\dist(F(z),O_{\lambda_i}),\qquad
  \epsilon_i:=2^{-i},\qquad\beta_i:=8\,2^{-i}.
 \]
-For \(m\in\N\), define
+Для \(m\in\N\) определим
 \begin{align}
  \mathcal P_m(\lambda,\delta):=
  \left\{(F_0,\ldots,F_m)\in\mathcal K_\delta^{m+1}:
@@ -956,27 +978,29 @@ For \(m\in\N\), define
 \end{align}
 \end{definition}
 
-\begin{lemma}[Compactness and prefix morphisms]\label{lem:compact-towers}
-\(\mathcal K_\delta\) and each \(\mathcal P_m(\lambda,\delta)\)
-are compact in the uniform and finite-product topologies.
-The truncation \(\rho_m:\mathcal P_{m+1}\to\mathcal P_m\) is a
-continuous morphism in \(\mathbf{CompHaus}\).
+\begin{lemma}[Компактность и морфизмы префиксов]\label{lem:compact-towers}
+\(\mathcal K_\delta\) компактно в равномерной топологии, а каждое
+\(\mathcal P_m(\lambda,\delta)\) компактно в топологии конечного
+произведения.
+Усечение \(\rho_m:\mathcal P_{m+1}\to\mathcal P_m\) является
+непрерывным морфизмом в \(\mathbf{CompHaus}\).
 \end{lemma}
 \begin{proof}
-The inequalities defining \(\mathcal K_\delta\) give
-equicontinuity and a common compact range \(\D\).
-Uniform limits preserve those inequalities and the range.
-Arzel\`a--Ascoli gives compactness.
-For \(F,G\in C(\D,\D)\),
+Условия на \(\delta_k\) и \(F\) задают общий модуль непрерывности
+для \(\mathcal K_\delta\); все значения лежат в компактной \(\D\).
+По теореме Арцела--Асколи семейство относительно компактно.
+Равномерные пределы сохраняют условия определения, поэтому
+\(\mathcal K_\delta\) замкнуто и компактно.
+Для \(F,G\in C(\D,\D)\)
 \[
  |e_i(F)-e_i(G)|\le\|F-G\|_\infty.
 \]
-Thus fixing, range, error, and adjacent-displacement conditions
-define closed subsets of the compact finite product
-\(\mathcal K_\delta^{m+1}\).
+Следовательно, условия фиксации, на множество значений, на ошибку и
+на перемещение между соседними уровнями задают замкнутые подмножества
+компактного конечного произведения \(\mathcal K_\delta^{m+1}\).
 \end{proof}
 
-\begin{theorem}[The limit of common finite prefixes is a constructible cone]
+\begin{theorem}[Предел общих конечных префиксов задаёт конструктивный конус]
 \label{thm:hierarchy}
 \[
  \mathsf{UG}\Longleftrightarrow
@@ -985,59 +1009,62 @@ define closed subsets of the compact finite product
 \]
 \end{theorem}
 \begin{proof}
-If common \(\lambda,\delta\) admit a prefix at every level, let
-\(X:=\mathcal K_\delta^\N\), the product object in
-\(\mathbf{CompHaus}\).  Let \(\pi_m:X\to\mathcal K_\delta^{m+1}\)
-be the prefix morphism and define the closed subobject
+Пусть для одних и тех же \(\lambda,\delta\) существует префикс
+каждой длины. Положим \(X:=\mathcal K_\delta^\N\) — произведение
+в категории \(\mathbf{CompHaus}\). Пусть
+\(\pi_m:X\to\mathcal K_\delta^{m+1}\) — морфизм, выделяющий префикс,
+и определим замкнутый подобъект
 \[
  C_m:=\pi_m^{-1}\bigl(\mathcal P_m(\lambda,\delta)\bigr)
        \hookrightarrow X.
 \]
-Each \(C_m\) is nonempty: a finite prefix extends to a point of \(X\)
-by repeating its last coordinate.  The truncation morphisms give
-\(C_{m+1}\hookrightarrow C_m\).  Compactness of \(X\) and the finite
-intersection property imply
+Каждое \(C_m\) непусто: конечный префикс продолжается до точки \(X\)
+повторением последней координаты. Морфизмы усечения задают
+\(C_{m+1}\hookrightarrow C_m\). Из компактности \(X\) и свойства
+конечного пересечения следует
 \[
  \varprojlim_m C_m\cong\bigcap_m C_m\ne\varnothing.
 \]
-An object of this limit is a compatible infinite tower satisfying
-\(\mathsf A(\lambda,F_\bullet)\).
+Элемент этого предела задаёт совместимую бесконечную башню,
+удовлетворяющую \(\mathsf A(\lambda,F_\bullet)\).
 
-Conversely, suppose \(\mathsf{UG}\) holds with maps \(U_n\) and
-depths \(\alpha_n\).  Set \(\lambda_0=0,\lambda_1=1,j_1=0\), and,
-for \(n\ge2\), define
+Обратно, пусть \(\mathsf{UG}\) выполнена для отображений \(U_n\) и
+глубин \(\alpha_n\). Положим \(\lambda_0=0,\lambda_1=1,j_1=0\), а
+при \(n\ge2\) определим
 \[
  j_n:=\max\{n+1,\ell_n,j_{n-1}+1,\lambda_{n-1}+1\},
  \qquad\lambda_n:=\alpha_{j_n}.
 \]
-Then \(\lambda\in\Lambda\).  Define
+Тогда \(\lambda\in\Lambda\). Положим
 \[
  F_0:=\id_{\D},\qquad F_1:=\Pi|_{\D},\qquad
  F_n:=\Pi\circ U_{j_n}\quad(n\ge2).
 \]
-Since \(\Pi\) is nonexpansive and fixes every \(O_N\subseteq K\),
-the fixing and proximity clauses hold.  For \(n\ge2\),
+Так как \(\Pi\) нерастягивает расстояния и фиксирует каждое
+\(O_N\subseteq K\), выполняются условия фиксации и близости.
+При \(n\ge2\)
 \[
  \|F_{n+1}-F_n\|_\infty
  \le16\,2^{-j_n}\le8\,2^{-n}.
 \]
-The first displacement is \(<1\); the second is at most
-\(\operatorname{diam}(K)=4\).  The uniform limit theorem gives
-\(U_n\to R\), and \(\Pi\circ U_{j_n}\to R\) uniformly since
-\(R(\D)=\M\subseteq K\).
-Uniform convergence on compact \(\D\) makes the family
-\((F_n)\) equicontinuous.  Choose recursively positive scales
-\(\delta_k\le2^{-k}\), \(\delta_{k+1}\le\delta_k/2\), so that
+Первое перемещение меньше \(1\), второе не превосходит
+\(\operatorname{diam}(K)=4\). Теорема о равномерном пределе даёт
+\(U_n\to R\); кроме того, \(\Pi\circ U_{j_n}\to R\) равномерно,
+поскольку \(R(\D)=\M\subseteq K\).
+Равномерная сходимость на компактном \(\D\) обеспечивает
+равностепенную непрерывность семейства \((F_n)\). Рекурсивно
+выберем положительные масштабы
+\(\delta_k\le2^{-k}\), \(\delta_{k+1}\le\delta_k/2\) так, чтобы
 \[
  |z-w|\le\delta_k\Longrightarrow
- |F_n(z)-F_n(w)|\le2^{-k}\quad\text{for every }n.
+ |F_n(z)-F_n(w)|\le2^{-k}\quad\text{для всех }n.
 \]
-Then every finite prefix is an object of
-\(\mathcal P_m(\lambda,\delta)\), and the compatible prefixes form a
-cone over the finite-prefix diagram.
+Тогда каждый конечный префикс является объектом
+\(\mathcal P_m(\lambda,\delta)\), а совместимые префиксы образуют
+конус над диаграммой конечных префиксов.
 \end{proof}
 
-\begin{proposition}[Every finite horizon is separately realizable]
+\begin{proposition}[Каждый конечный горизонт реализуется отдельно]
 \label{prop:finite-horizons}
 \[
  \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
@@ -1046,57 +1073,57 @@ cone over the finite-prefix diagram.
 \]
 \end{proposition}
 \begin{proof}
-For \(m=0,1\), use \(\lambda\) from
-Theorem~\ref{thm:exterior-candidates},
-\(\delta_k=2^{-k}\), and \(\id_{\D}\) and \((\id_{\D},\Pi)\).
-Fix \(m\ge2\) and use \(s_m,\lambda_m\) from
-Theorem~\ref{thm:exterior-candidates}.
-Set \(F_0=\id_{\D}\), \(F_1=\Pi|_{\D}\), and
-\(F_i=Q_{s_m}\) for \(2\le i\le m\).
-Set \(\lambda^{[m]}_0=0,\lambda^{[m]}_1=1,
-\lambda^{[m]}_2=\lambda_m\), and
+При \(m=0,1\) возьмём \(\lambda\) из теоремы
+\ref{thm:exterior-candidates}, \(\delta_k=2^{-k}\), а также
+\(\id_{\D}\) и \((\id_{\D},\Pi)\). Пусть \(m\ge2\) и возьмём
+\(s_m,\lambda_m\) из теоремы~\ref{thm:exterior-candidates}.
+Положим \(F_0=\id_{\D}\), \(F_1=\Pi|_{\D}\) и
+\(F_i=Q_{s_m}\) при \(2\le i\le m\). Положим
+\(\lambda^{[m]}_0=0,\lambda^{[m]}_1=1,
+\lambda^{[m]}_2=\lambda_m\) и
 \[
  \lambda^{[m]}_i:=
  \max\{\lambda^{[m]}_{i-1}+1,\ell_i\}\quad(i\ge3).
 \]
-For \(2\le i\le m\), \(\lambda^{[m]}_i\ge\lambda_m\), so
+При \(2\le i\le m\) имеем \(\lambda^{[m]}_i\ge\lambda_m\), поэтому
 \[
  O_{\lambda^{[m]}_i}\subseteq O_{\lambda_m}\subseteq E_{s_m}.
 \]
-Thus \(Q_{s_m}\) fixes the required outer sets, and its error is at
-most \(\kappa(s_m)\le2^{-m}\le2^{-i}\).
-The first displacement is \(<1\), the second is at most \(4\),
-and all later displacements vanish.
-The stage-zero error is at most \(2\sqrt2-2<1\); the stage-one
-error is zero.  Both initial maps fix \(O_0=O_1=K\).
-The three maps are uniformly continuous; a recursively decreased
-common modulus supplies \(\delta^{[m]}\in\Delta\).
+Значит, \(Q_{s_m}\) фиксирует требуемые внешние множества, а ошибка
+не превосходит \(\kappa(s_m)\le2^{-m}\le2^{-i}\).
+Первое перемещение меньше \(1\), второе не превосходит \(4\), а
+все последующие перемещения равны нулю. Ошибка на нулевом уровне
+не превосходит \(2\sqrt2-2<1\); ошибка на первом уровне равна
+нулю. Оба начальных отображения фиксируют \(O_0=O_1=K\).
+Три отображения равномерно непрерывны; рекурсивное уменьшение
+общего модуля непрерывности задаёт \(\delta^{[m]}\in\Delta\).
 \end{proof}
 
-The available quantifier order is
+Доступный порядок кванторов имеет вид
 \[
  \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
  \exists\delta^{[m]}\in\Delta,\quad
               \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}),
 \]
-whereas the hierarchy theorem requires
+тогда как теорема о башне требует
 \[
  \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
  \forall m\in\N,\quad\mathsf{UG}_m(\lambda,\delta).
 \]
-The finite-horizon witnesses vary their base object
-\((\lambda,\delta)\); they therefore do not define a cone in one
-common compact product.
+Свидетели для конечных горизонтов используют разные базовые объекты
+\((\lambda,\delta)\), поэтому они не образуют конус в одном общем
+компактном произведении.
 
-\subsection*{Step 11. Interpolate the tower in the morphism space.}
+\subsection*{Шаг 11. Интерполировать башню в пространстве морфизмов.}
 
-\begin{theorem}[Continuous interpolation and terminal retraction]
+\begin{theorem}[Непрерывная интерполяция и предельная ретракция]
 \label{thm:interpolated-flow}
-Assume \(\mathsf A(\nu,R_\bullet)\).  Put
+Предположим, что выполнено \(\mathsf A(\nu,R_\bullet)\). Положим
 \[
  t_n:=1-2^{-n}\qquad(n\in\N).
 \]
-There is a continuous map \(H:[0,1]\times\D\to\D\) such that
+Тогда существует непрерывное отображение
+\(H:[0,1]\times\D\to\D\), для которого
 \begin{gather}
  H(0,z)=z,\qquad H(1,\D)=\M,\qquad
  H(t,c)=c\quad(c\in\M,\ 0\le t\le1),\label{eq:flow-endpoints}\\
@@ -1106,55 +1133,60 @@ There is a continuous map \(H:[0,1]\times\D\to\D\) such that
 \end{gather}
 \end{theorem}
 \begin{proof}
-For \(t_n\le t\le t_{n+1}\), set
+При \(t_n\le t\le t_{n+1}\) положим
 \[
  \theta:=\frac{t-t_n}{t_{n+1}-t_n},\qquad
  H(t,z):=(1-\theta)R_n(z)+\theta R_{n+1}(z).
 \]
-The square \(\D\) is convex.  Since
-\(t_{n+1}-t_n=2^{-n-1}\), the displacement bound gives
+Квадрат \(\D\) выпуклый. Поскольку
+\(t_{n+1}-t_n=2^{-n-1}\), оценка перемещения даёт
 \[
  \|\partial_tH(t,\cdot)\|_\infty
  \le\frac{8\,2^{-n}}{2^{-n-1}}=16.
 \]
-Thus \(H\) is \(16\)-Lipschitz in time on \([0,1)\).
-Equivalently, \(t\mapsto H_t\), where \(H_t(z):=H(t,z)\), is a
-\(16\)-Lipschitz path in
-\(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\).
-Theorem~\ref{thm:ug-to-mlc} supplies the uniform limit \(R\).
-Set \(H(1,\cdot)=R\); the tail estimate gives
+Значит, \(H\) является \(16\)-липшицевым по времени на \([0,1)\).
+Обозначим \(H_t:=H(t,\cdot)\). В равномерном пространстве морфизмов
+получаем путь
+\[
+ [0,1)\to\operatorname{Hom}(\D,\D),\qquad t\mapsto H_t,
+\]
+с константой Липшица \(16\).
+Теорема~\ref{thm:ug-to-mlc} даёт равномерный предел \(R\).
+Положим \(H(1,\cdot)=R\); оценка хвоста даёт
 \(\|H(t,\cdot)-R\|_\infty\le16(1-t)\).
-This proves continuity at \(t=1\), the endpoint conditions,
-and \eqref{eq:flow-estimates}.
+Тем самым доказаны непрерывность при \(t=1\), условия на концах
+и \eqref{eq:flow-estimates}.
 \end{proof}
 
-\subsection*{Step 12. Perform convex replacement in morphism spaces.}
+\subsection*{Шаг 12. Выполнить выпуклую замену в пространствах морфизмов.}
 
-\begin{definition}[Relative hom-space replacement]\label{def:map-replacement}
-Let \(P\subseteq\D\), \(U\subseteq\D\) relatively open,
-\(A,B\in C(\D,\D)\), and \(\chi\in C(\D,[0,1])\) satisfy
+\begin{definition}[Относительная замена в пространстве морфизмов]
+\label{def:map-replacement}
+Пусть \(P\subseteq\D\), \(U\subseteq\D\) относительно открыто,
+\(A,B\in C(\D,\D)\), а \(\chi\in C(\D,[0,1])\) удовлетворяет
 \[
  A|_P=B|_P=\id_P,\qquad\chi|_{\D\setminus U}=0.
 \]
-Set
+Положим
 \[
  S(z):=(1-\chi(z))A(z)+\chi(z)B(z),\qquad
  \alpha:=\sup_{z\in\D}\chi(z)|B(z)-A(z)|,\qquad
  d:=\|B-A\|_\infty.
 \]
-For \(F\in C(\D,\C)\), define
+Для \(F\in C(\D,\C)\) определим
 \[
  \omega_F(r):=
  \sup_{\substack{z,w\in\D\\|z-w|\le r}}|F(z)-F(w)|.
 \]
-Thus \(S\) is the convex interpolation of \(A,B\) in the ambient
-space of morphisms; the support and relative-fixing constraints
-specify a relative subspace of that morphism space.
+Таким образом, \(S\) — выпуклая интерполяция \(A,B\) в окружающем
+пространстве морфизмов; условия на носитель и относительную
+фиксацию задают соответствующее подпространство морфизмов.
 \end{definition}
 
-\begin{lemma}[Replacement estimates]\label{lem:replacement-estimates}
-The convex combination \(S\) is a morphism \(\D\to\D\), fixes \(P\),
-and equals \(A\) on \(\D\setminus U\).  Moreover,
+\begin{lemma}[Оценки для замены]\label{lem:replacement-estimates}
+Выпуклая комбинация \(S\) является морфизмом \(\D\to\D\),
+фиксирует \(P\) и совпадает с \(A\) на \(\D\setminus U\).
+Кроме того,
 \begin{gather}
  \|S-A\|_\infty=\alpha\le d,\qquad
  e_i(S)\le e_i(A)+\alpha,\label{eq:replacement-error}\\
@@ -1163,36 +1195,35 @@ and equals \(A\) on \(\D\setminus U\).  Moreover,
  \max\{\omega_A(r),\omega_B(r)\}+d\,\omega_\chi(r).
  \label{eq:replacement-modulus}
 \end{gather}
-If \(A(\D),B(\D)\subseteq K\), then \(S(\D)\subseteq K\).
-The maps \(A,S\) are homotopic relative to \(P\).
+Если \(A(\D),B(\D)\subseteq K\), то \(S(\D)\subseteq K\).
+Отображения \(A,S\) гомотопны относительно \(P\).
 \end{lemma}
 \begin{proof}
-The range, support, and fixing properties follow from the formula
-and convexity of \(\D\) and \(K\).
-The identity \(S-A=\chi(B-A)\) gives the first estimate;
-the distance function to \(O_{\lambda_i}\) is \(1\)-Lipschitz,
-giving the second.  The triangle inequality gives the third.
-For \(z,w\in\D\),
+Условия на образ, носитель и фиксацию следуют из формулы и
+выпуклости \(\D\) и \(K\). Равенство \(S-A=\chi(B-A)\) даёт первую
+оценку; функция расстояния до \(O_{\lambda_i}\) является
+1-липшицевой, что даёт вторую. Третья следует из неравенства
+треугольника. Для \(z,w\in\D\)
 \begin{align*}
  S(z)-S(w)
  ={}&(1-\chi(z))(A(z)-A(w))
      +\chi(z)(B(z)-B(w))\\
    &+(\chi(z)-\chi(w))(B(w)-A(w)).
 \end{align*}
-Taking absolute values proves \eqref{eq:replacement-modulus}.
-The homotopy is
+Переход к модулям доказывает \eqref{eq:replacement-modulus}.
+Гомотопия задаётся формулой
 \[
  H(u,z):=(1-u\chi(z))A(z)+u\chi(z)B(z)
  \qquad(0\le u\le1).
 \]
-It is a path in \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\)
-relative to the subset \(P\subseteq\D\).
+Это путь в \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\),
+неподвижный на подмножестве \(P\subseteq\D\).
 \end{proof}
 
-\begin{definition}[Admissible one-step extension]\label{def:one-step}
-Fix \(\lambda\in\Lambda\), \(\delta\in\Delta\), \(m\ge1\), and
+\begin{definition}[Допустимое расширение на один шаг]\label{def:one-step}
+Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\), \(m\ge1\) и
 \(\sigma=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\).
-Define
+Определим
 \[
  \mathcal E_m(\sigma):=
  \left\{F\in\mathcal K_\delta:
@@ -1203,18 +1234,18 @@ Define
   \|F-F_m\|_\infty\le8\,2^{-m}
  \end{gathered}\right\}.
 \]
-For \(\sigma=(F_0,\ldots,F_m)\), write
+Для \(\sigma=(F_0,\ldots,F_m)\) обозначим
 \(\sigma\frown F:=(F_0,\ldots,F_m,F)\).
-\(\mathcal E_m(\sigma)\) is a closed subobject of admissible successor
-morphisms over the prefix \(\sigma\).
+\(\mathcal E_m(\sigma)\) — замкнутый подобъект допустимых
+морфизмов-продолжений префикса \(\sigma\).
 \end{definition}
 
-\begin{theorem}[Invariant subobjects characterize infinite lifts]
+\begin{theorem}[Инвариантные подобъекты характеризуют бесконечные продолжения]
 \label{thm:extension-invariant}
-\(\mathsf{UG}\) is equivalent to the existence of
-\(\lambda\in\Lambda\), \(\delta\in\Delta\), and closed subobjects
-\(\mathcal I_m\hookrightarrow\mathcal P_m(\lambda,\delta)\) for \(m\ge1\)
-such that
+Условие \(\mathsf{UG}\) равносильно существованию
+\(\lambda\in\Lambda\), \(\delta\in\Delta\) и замкнутых подобъектов
+\(\mathcal I_m\hookrightarrow\mathcal P_m(\lambda,\delta)\) при \(m\ge1\)
+так, что
 \begin{gather}
  (\id_{\D},\Pi|_{\D})\in\mathcal I_1,\label{eq:invariant-seed}\\
  \forall m\ge1\ \forall\sigma\in\mathcal I_m\
@@ -1222,24 +1253,24 @@ such that
                     \sigma\frown F\in\mathcal I_{m+1}.
  \label{eq:invariant-extension}
 \end{gather}
-The \(\mathcal I_m\) are nonempty closed subobjects of the
-finite-prefix objects;
-the second clause says that every object in this subdiagram has a
-successor lift.
+Подобъекты \(\mathcal I_m\) непусты и замкнуты в объектах конечных
+префиксов; второе условие утверждает, что у каждого объекта этой
+поддиаграммы есть продолжение на следующий уровень.
 \end{theorem}
 \begin{proof}
-Equations~\eqref{eq:invariant-seed}--\eqref{eq:invariant-extension}
-give recursive choices of compatible prefixes; their coordinate
-sequence satisfies \(\mathsf A(\lambda,F_\bullet)\).
-Conversely, the common-data hierarchy in
-Theorem~\ref{thm:hierarchy} gives a normalized infinite tower.
-Let \(\mathcal I_m\) consist of its single prefix through level \(m\).
-The next coordinate verifies \eqref{eq:invariant-extension}.
+Равенства~\eqref{eq:invariant-seed}--\eqref{eq:invariant-extension}
+задают рекурсивный выбор совместимых префиксов; их координаты
+удовлетворяют \(\mathsf A(\lambda,F_\bullet)\).
+Обратно, теорема~\ref{thm:hierarchy} даёт нормированную бесконечную башню.
+Пусть \(\mathcal I_m\) состоит из её единственного префикса до
+уровня \(m\). Следующая координата проверяет
+\eqref{eq:invariant-extension}.
 \end{proof}
 
-\begin{theorem}[Compact minimization and quantitative lift repair]
+\begin{theorem}[Компактная минимизация и количественное исправление продолжения]
 \label{thm:repair-equivalence}
-For \(\sigma\in\mathcal P_m\), let
+Пусть \(\lambda\in\Lambda\), \(\delta\in\Delta\), \(m\ge1\) и
+\(\sigma\in\mathcal P_m(\lambda,\delta)\). Положим
 \[
  \mathcal H_{m+1}:=
  \{F\in\mathcal K_\delta:F(\D)\subseteq K,\
@@ -1252,14 +1283,14 @@ For \(\sigma\in\mathcal P_m\), let
  \frac{\|F-F_m\|_\infty}{8\,2^{-m}}
  \right\}.
 \]
-The minimum \(q_m(\sigma):=\min_{F\in\mathcal H_{m+1}}J_m(F;\sigma)\)
-is attained, and \(q_m(\sigma)\le1\) if and only if
-\(\mathcal E_m(\sigma)\ne\varnothing\).
-If \(F\in\mathcal E_m(\sigma)\), then
+Минимум \(q_m(\sigma):=\min_{F\in\mathcal H_{m+1}}J_m(F;\sigma)\)
+достигается, причём \(q_m(\sigma)\le1\) тогда и только тогда, когда
+\(\mathcal E_m(\sigma)\ne\varnothing\). Если
+\(F\in\mathcal E_m(\sigma)\), то
 \[
  A_k:=2^{-k}F_m+(1-2^{-k})F\qquad(k\in\N)
 \]
-converges uniformly to \(F\) and satisfies
+равномерно сходится к \(F\) и удовлетворяет условиям
 \begin{gather}
  A_0=F_m,\qquad A_k\in\mathcal H_{m+1},\label{eq:repair-class}\\
  \|A_{k+1}-A_k\|_\infty\le8\,2^{-m-k-1},\label{eq:repair-motion}\\
@@ -1268,100 +1299,115 @@ converges uniformly to \(F\) and satisfies
 \end{gather}
 \end{theorem}
 \begin{proof}
-\(\mathcal H_{m+1}\) is nonempty because \(\Pi|_{\D}\in\mathcal H_{m+1}\).
-It is closed in compact \(\mathcal K_\delta\).
-The error and uniform-distance functionals are continuous, so \(J_m\)
-attains its minimum.  The equivalence \(q_m(\sigma)\le1\) iff
-\(\mathcal E_m(\sigma)\ne\varnothing\) is the definition of \(J_m\).
-Since \(\lambda_{m+1}>\lambda_m\), \(F_m\) fixes
-\(O_{\lambda_{m+1}}\).  Constant convex combinations preserve the
-common modulus, the range \(K\), and fixing.
-The inequalities follow from
+Множество \(\mathcal H_{m+1}\) непусто, поскольку
+\(\Pi|_{\D}\in\mathcal H_{m+1}\), и замкнуто в компактном
+\(\mathcal K_\delta\). Функционалы ошибки и равномерного расстояния
+непрерывны, поэтому \(J_m\) достигает минимума. По определению
+\(J_m\), условие \(q_m(\sigma)\le1\) равносильно
+\(\mathcal E_m(\sigma)\ne\varnothing\). Поскольку
+\(\lambda_{m+1}>\lambda_m\), отображение \(F_m\) фиксирует
+\(O_{\lambda_{m+1}}\). Постоянные выпуклые комбинации сохраняют
+общий модуль непрерывности, образ \(K\) и фиксацию.
+Оценки следуют из равенства
 \[
  \|A_{k+1}-A_k\|_\infty
  =2^{-k-1}\|F-F_m\|_\infty
 \]
-and the \(1\)-Lipschitz property of distance to
-\(O_{\lambda_{m+1}}\).
+и из 1-липшицевости функции расстояния до \(O_{\lambda_{m+1}}\).
 \end{proof}
 
 \noindent
-For a chosen \(F\in\mathcal E_m(\sigma)\), the sequence \(A_k\)
-converges to \(F\) while retaining the range, modulus, and fixed-set
-constraints and satisfying explicit displacement and error bounds.
+Для выбранного \(F\in\mathcal E_m(\sigma)\) последовательность
+\(A_k\) сходится к \(F\), сохраняя условия на образ, модуль
+непрерывности и множество фиксации, а также удовлетворяя явным
+оценкам перемещения и ошибки.
 
-\subsection*{Step 13. Identify the missing limit-cone morphism.}
+\subsection*{Шаг 13. Выделить недостающий морфизм-конус к пределу.}
 
-For the explicit heights of Theorem~\ref{thm:exterior-candidates},
-the remaining first-path assertion is
+Для явных высот из теоремы~\ref{thm:exterior-candidates} остаётся
+доказать суммируемость перемещений
 \begin{equation}\label{eq:remaining-motion}
  \sum_{n=1}^{\infty}
        \|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty.
 \end{equation}
-By Theorem~\ref{thm:summable-cutoff}, proving
-\eqref{eq:remaining-motion} would prove \(\LC(\M)\).
-The rate-free categorical target is compactness of the cutoff family
-in Theorem~\ref{thm:cutoff-hom-compactness}; that target is
-itself equivalent to MLC.  Summable movement is one sufficient
-certificate for it.  Equivalently, the constructible morphisms
-\(\bar P_n\) must acquire a cone over the inverse system
-\(\mathcal E\); the defects \(d_n\) in Step~7 quantify that failure
-of naturality.
-The finite-band estimate \eqref{eq:candidate-partial-motion} reduces
-the stronger sufficient condition
+По теореме~\ref{thm:summable-cutoff} доказательство
+\eqref{eq:remaining-motion} повлекло бы \(\LC(\M)\).
+Категориальная цель, не требующая оценки скорости, — компактность
+семейства усечений из теоремы~\ref{thm:cutoff-hom-compactness};
+сама эта цель эквивалентна MLC. Суммируемость перемещений — один из
+достаточных критериев компактности. Эквивалентно, конструктивные
+морфизмы \(\bar P_n\) должны образовать конус над обратной системой
+\(\mathcal E\); дефекты \(d_n\) из шага~7 измеряют нарушение
+естественности.
+Оценка перемещений на конечном интервале
+\eqref{eq:candidate-partial-motion} сводит более сильное достаточное
+условие
 \[
  \int_0^aV(u)\,du<\infty
 \]
-to the required summability.  The alternate finite-tower route
-requires a common pair \((\lambda,\delta)\) and a compatible
-successor morphism at every level, as in
-\eqref{eq:invariant-extension}.  The inverse diagrams and transition
-morphisms are constructed; the limiting cone or a common compatible
-extension remains to be supplied.
+к требуемой суммируемости. Альтернативный путь через конечные
+башни требует одной общей пары \((\lambda,\delta)\) и совместимого
+морфизма-продолжения на каждом уровне, как в
+\eqref{eq:invariant-extension}. Обратные диаграммы и переходные
+морфизмы построены; остаётся предъявить предельный конус или общее
+совместимое продолжение.
 
-\begin{summarytheorem}[Strongest unconditional theorem proved]
-There are a cofinal functor \(\lambda:\mathbf N\to\mathbf N\) and
-\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\)
-satisfying \eqref{eq:opening-depths}--\eqref{eq:opening-image-gap}.
+\begin{summarytheorem}[Наиболее сильная доказанная безусловная теорема]
+Существует кофинальный функтор
+\(\lambda:\mathbf N\to\mathbf N\) и семейство эндоморфизмов
+\[
+ T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N,
+\]
+удовлетворяющие
+\eqref{eq:opening-depths}--\eqref{eq:opening-image-gap}.
 \end{summarytheorem}
 \begin{proof}
-Theorem~\ref{thm:exterior-candidates} constructs these sequences and
-establishes each assertion.
+Все утверждения доказаны в теореме~\ref{thm:exterior-candidates}.
 \end{proof}
 
-\begin{thebibliography}{9}
+\renewcommand{\refname}{Литература}
+\begin{thebibliography}{9}\small
 \bibitem{DH}
-A.~Douady and J.~H.~Hubbard,
-\emph{Exploring the Mandelbrot Set: The Orsay Notes},
-Chapter~8, Proposition~8.1(b), Theorem~8.1, and
-Corollaries~8.3--8.4, pp.~62--65.
+A.~Douady и J.~H.~Hubbard,
+\foreignlanguage{english}{\emph{Exploring the Mandelbrot Set: The Orsay Notes}},
+[\foreignlanguage{russian}{\emph{Исследование множества Мандельброта: записки из Орсе}}],
+гл.~8, предложение~8.1(b), теорема~8.1 и следствия~8.3--8.4,
+с.~62--65.
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}
-{Direct PDF link}.
+{Прямая ссылка на PDF}.
 
 \bibitem{Milnor}
 J.~Milnor,
-\emph{Dynamics in One Complex Variable: Introductory Lectures},
-Theorem~16.6, PDF p.~84.
+\foreignlanguage{english}{\emph{Dynamics in One Complex Variable: Introductory Lectures}}
+[\foreignlanguage{russian}{\emph{Динамика одной комплексной переменной: вводные лекции}}],
+теорема~16.6, с.~84 PDF-файла.
 \href{https://arxiv.org/pdf/math/9201272#page=84}
-{Direct PDF link}.
+{Прямая ссылка на PDF}.
 
 \bibitem{DudkoStatus}
 D.~Dudko,
-\emph{On the MLC Conjecture and the Renormalization Theory in
-Complex Dynamics}, arXiv:2512.24171 (2025), survey prepared for the
-Proceedings of ICM 2026.
-\href{https://arxiv.org/abs/2512.24171}{Direct arXiv link}.
+\foreignlanguage{english}{\emph{On the MLC Conjecture and the Renormalization Theory in
+Complex Dynamics}}
+[\foreignlanguage{russian}{\emph{О гипотезе MLC и теории перенормировок в комплексной динамике}}],
+arXiv:2512.24171 (2025), обзор, подготовленный
+для сборника \foreignlanguage{english}{Proceedings of ICM 2026}
+[\foreignlanguage{russian}{Труды Международного конгресса математиков 2026 года}].
+\href{https://arxiv.org/abs/2512.24171}{Прямая ссылка на arXiv}.
 
 \bibitem{DudkoLyubichSat}
-D.~Dudko and M.~Lyubich,
-\emph{Local connectivity of the Mandelbrot set at some satellite
-parameters of bounded type}, arXiv:1808.10425 (2018; revised 2023).
-\href{https://arxiv.org/abs/1808.10425}{Direct arXiv link}.
+D.~Dudko и M.~Lyubich,
+\foreignlanguage{english}{\emph{Local connectivity of the Mandelbrot set at some satellite
+parameters of bounded type}}
+[\foreignlanguage{russian}{\emph{Локальная связность множества Мандельброта в некоторых сателлитных параметрах ограниченного типа}}],
+arXiv:1808.10425 (2018; редакция 2023).
+\href{https://arxiv.org/abs/1808.10425}{Прямая ссылка на arXiv}.
 
 \bibitem{DudkoLyubichFeigenbaum}
-D.~Dudko and M.~Lyubich,
-\emph{MLC at Feigenbaum points}, arXiv:2309.02107 (2023; revised 2025).
-\href{https://arxiv.org/abs/2309.02107}{Direct arXiv link}.
+D.~Dudko и M.~Lyubich,
+\foreignlanguage{english}{\emph{MLC at Feigenbaum points}},
+[\foreignlanguage{russian}{\emph{MLC в точках Фейгенбаума}}],
+arXiv:2309.02107 (2023; редакция 2025).
+\href{https://arxiv.org/abs/2309.02107}{Прямая ссылка на arXiv}.
 \end{thebibliography}
 
 \end{document}
