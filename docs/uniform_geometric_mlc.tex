@@ -34,6 +34,39 @@
 \begin{document}
 \maketitle
 
+\section*{Meaning and position relative to the literature}
+
+Throughout, MLC denotes the conjecture that the Mandelbrot set is
+locally connected at every point.
+The result below constructs continuous maps that fix successively
+deeper finite-orbit outer approximations to the Mandelbrot set.  Each
+map stays within an explicit \(2^{-n}\) distance of the finite-orbit
+outer set that it fixes, and the images contain the Mandelbrot set
+and converge to it in Hausdorff distance.  Thus finite
+critical-orbit tests yield quantitative continuous approximations
+of the full set.
+
+The escape-radius description, exterior uniformization, and
+Carath\'eodory criterion used below are classical
+\cite{DH,Milnor}.  The full MLC conjecture remains open in the
+current literature; known results establish local connectivity for
+special parameter classes, including certain bounded-type satellite
+parameters and Feigenbaum parameters
+\cite{DudkoStatus,DudkoLyubichSat,DudkoLyubichFeigenbaum}.
+The contribution claimed here is the explicit finite-depth
+Green-function bound and its assembly into a map-valued proof
+program.  This document makes no priority claim that the exact
+formulation is new relative to all existing constructions.
+
+Step~8 proves that existence of some summably moving cutoff sequence
+is equivalent to MLC.  Step~13 identifies summability for the
+explicit sequence as a sufficient route: proving it would settle
+MLC.  The arbitrary-sequence criterion is equivalent to the full
+conjecture, while the specified-sequence estimate may be stronger.
+The unconditional theorem gives quantitative approximations and a
+concrete proof target; these estimates provide no counterexample or
+obstruction to MLC.
+
 \section*{Strongest unconditional theorem proved below}
 
 Set
@@ -82,9 +115,11 @@ There exist \(\lambda\in\N^\N\) and
 \end{gather}
 \end{summarytheorem}
 \noindent
-The theorem asserts outer-set fixing, geometric proximity, and
-Hausdorff convergence of the images.  It does not assert summability
-of \(\|T_{n+1}-T_n\|_\infty\).
+The maps fix their finite-orbit outer sets, satisfy uniform
+proximity bounds, and have images converging to \(\M\) in Hausdorff
+distance.  The first proof route additionally requires summability
+of successive map movements, studied in Steps~7--8 and isolated in
+Step~13.
 
 \section{Stepwise construction}
 
@@ -560,11 +595,11 @@ implication.
 \noindent
 The summability assertion for the particular heights selected in
 Theorem~\ref{thm:exterior-candidates} implies MLC.
-The criterion in \eqref{eq:summable-cutoff-equivalence} does not
-imply summability for that particular selection.
-Under MLC, it supplies another summable selection.
+Under MLC, the equivalence supplies a summable height selection;
+that selection may differ from the explicit candidate heights.
 The sufficient integral condition in
-\eqref{eq:candidate-partial-motion} is not proved.
+\eqref{eq:candidate-partial-motion} is a concrete analytic target
+for proving summability of those candidates.
 
 \subsection*{Step 9. Convert summable candidates into the uniform tower.}
 
@@ -990,7 +1025,7 @@ Let \(\mathcal I_m\) consist of its single prefix through level \(m\).
 The next coordinate verifies \eqref{eq:invariant-extension}.
 \end{proof}
 
-\begin{theorem}[Summable repairs do not supply a missing extension]
+\begin{theorem}[Quantitative repair after an admissible extension]
 \label{thm:repair-equivalence}
 For \(\sigma\in\mathcal P_m\), let
 \[
@@ -1039,11 +1074,11 @@ and the \(1\)-Lipschitz property of distance to
 \end{proof}
 
 \noindent
-The repair sequence is constructed after \(F\in\mathcal E_m(\sigma)\)
-is known.  It proves convergence of the replacement, not existence
-of an admissible next map.
+For a chosen \(F\in\mathcal E_m(\sigma)\), the sequence \(A_k\)
+converges to \(F\) while retaining the range, modulus, and fixed-set
+constraints and satisfying explicit displacement and error bounds.
 
-\subsection*{Step 13. Isolate the unproved estimate and record the result.}
+\subsection*{Step 13. State the remaining proof obligations.}
 
 For the explicit heights of Theorem~\ref{thm:exterior-candidates},
 the remaining first-path assertion is
@@ -1058,11 +1093,10 @@ the stronger sufficient condition
 \[
  \int_0^aV(u)\,du<\infty
 \]
-to the required summability; this integral bound is not established.
-The alternative finite-tower step requires one common pair
-\((\lambda,\delta)\) and the invariant-preserving extension
-\eqref{eq:invariant-extension} at every level.
-Neither condition is proved here.
+to the required summability.  The second route requires one common
+pair \((\lambda,\delta)\) and the invariant-preserving extension
+\eqref{eq:invariant-extension} at every level.  These are the two
+explicit proof obligations remaining in this program.
 
 \begin{summarytheorem}[Strongest unconditional theorem proved]
 There are \(\lambda\in\N^\N\) and \(T_\bullet\in C(\D,\D)^\N\)
@@ -1088,6 +1122,24 @@ J.~Milnor,
 Theorem~16.6, PDF p.~84.
 \href{https://arxiv.org/pdf/math/9201272#page=84}
 {Direct PDF link}.
+
+\bibitem{DudkoStatus}
+D.~Dudko,
+\emph{On the MLC Conjecture and the Renormalization Theory in
+Complex Dynamics}, arXiv:2512.24171 (2025), survey prepared for the
+Proceedings of ICM 2026.
+\href{https://arxiv.org/abs/2512.24171}{Direct arXiv link}.
+
+\bibitem{DudkoLyubichSat}
+D.~Dudko and M.~Lyubich,
+\emph{Local connectivity of the Mandelbrot set at some satellite
+parameters of bounded type}, arXiv:1808.10425 (2018; revised 2023).
+\href{https://arxiv.org/abs/1808.10425}{Direct arXiv link}.
+
+\bibitem{DudkoLyubichFeigenbaum}
+D.~Dudko and M.~Lyubich,
+\emph{MLC at Feigenbaum points}, arXiv:2309.02107 (2023; revised 2025).
+\href{https://arxiv.org/abs/2309.02107}{Direct arXiv link}.
 \end{thebibliography}
 
 \end{document}
