@@ -6,7 +6,7 @@
 \pdfgentounicode=1
 \hypersetup{
   pdftitle={A stepwise program for Mandelbrot local connectivity},
-  pdfsubject={Unconditional outer-map approximation and the precise remaining MLC estimate}
+  pdfsubject={Functorial cutoff systems and the remaining Mandelbrot local-connectivity criterion}
 }
 
 \newtheorem{theorem}{Theorem}[section]
@@ -55,14 +55,23 @@ parameters and Feigenbaum parameters
 \cite{DudkoStatus,DudkoLyubichSat,DudkoLyubichFeigenbaum}.
 The contribution claimed here is the explicit finite-depth
 Green-function bound and its assembly into a map-valued proof
-program.  This document makes no priority claim that the exact
-formulation is new relative to all existing constructions.
+program.
 
-Step~8 proves that existence of some summably moving cutoff sequence
-is equivalent to MLC.  Step~13 identifies summability for the
-explicit sequence as a sufficient route: proving it would settle
-MLC.  The arbitrary-sequence criterion is equivalent to the full
-conjecture, while the specified-sequence estimate may be stronger.
+The categorical refinement below places finite-orbit outer sets and
+Green sublevels in naturally related inverse systems.  The cutoff
+maps are natural with respect to a constructible sequence of split
+retractions, and relative compactness of these morphisms in a mapping
+space is equivalent to MLC.  Establishing that compactness would prove
+the full conjecture, beyond results restricted to special parameter
+classes; the present document proves the criterion, not its
+compactness hypothesis.  Its priority relative to all existing
+formulations remains unverified.
+
+Step~8 characterizes summability of some cutoff sequence, while the
+categorical criterion below characterizes compactness of the explicit
+cutoff family.  Each criterion is equivalent to MLC.  Summability for
+the selected sequence is a sufficient route and may be stronger than
+MLC.
 The unconditional theorem gives quantitative approximations and a
 concrete proof target; these estimates provide no counterexample or
 obstruction to MLC.
@@ -572,8 +581,11 @@ Then
  =|\widehat\Psi(r\xi)-\widehat\Psi(\xi)|
  \le\omega_a(e^s-1).
 \]
-The difference vanishes on \(\M\).  Therefore \(P_s\to R\)
-uniformly on \(\C\), and
+The difference vanishes on \(\M\), so
+\begin{equation}\label{eq:uniform-cutoff-limit}
+ \sup_{c\in\C}|P_s(c)-R(c)|\le\omega_a(e^s-1).
+\end{equation}
+Therefore \(P_s\to R\) uniformly on \(\C\), and
 \[
  \|Q_s-R|_{\D}\|_\infty\le\omega_a(e^s-1)\longrightarrow0.
 \]
@@ -591,6 +603,143 @@ Then
 and the single term at \(n=1\) is finite.  This proves the reverse
 implication.
 \end{proof}
+
+\subsubsection*{Constructible inverse systems and a mapping-space criterion}
+
+Write \(\mathbf{CompHaus}\) for the category of compact Hausdorff
+spaces and continuous maps.  Let \(I\) be the ordered category with
+objects \(n\ge2\) and a unique morphism \(n\to m\) when \(n\le m\).
+For the depths and heights in Theorem~\ref{thm:exterior-candidates},
+put
+\[
+ O_n^\lambda:=O_{\lambda_n},\qquad E_n:=E_{s_n}\qquad(n\ge2).
+\]
+The inclusions define inverse systems
+\[
+ \mathcal O,\mathcal E:I^{\mathrm{op}}\longrightarrow\mathbf{CompHaus},
+ \qquad \mathcal O(n)=O_n^\lambda,\quad\mathcal E(n)=E_n.
+\]
+The finite-depth Green bound gives \(O_n^\lambda\subseteq E_n\);
+these inclusions form a natural transformation \(j:\mathcal O\to
+\mathcal E\).  Since \(\lambda_n\to\infty\) and \(s_n\downarrow0\),
+\[
+ \varprojlim_{I^{\mathrm{op}}}\mathcal O
+      \cong\M\cong\varprojlim_{I^{\mathrm{op}}}\mathcal E,
+ \qquad
+ \iota_n^{\mathcal E}\circ j_{n+1}
+       =j_n\circ\iota_n^{\mathcal O}.
+\]
+Here \(\iota_n^{\mathcal O}\) and \(\iota_n^{\mathcal E}\) are the
+bonding inclusions from level \(n+1\) to level \(n\).
+Under these identifications, \(\varprojlim j=\id_\M\).
+
+Define the cutoff morphisms
+\[
+ \mathsf P_n:=P_{s_n}|_{\D}:\D\longrightarrow E_n.
+\]
+Regard \(\mathsf P_n\) as a map to \(E_a\) by inclusion.
+For \(n\le m\), define
+\[
+ r_{n,m}:=P_{s_m}|_{E_n}:E_n\longrightarrow E_m.
+\]
+The semigroup law \(P_s\circ P_t=P_{\min\{s,t\}}\) gives
+\[
+ r_{n,n}=\id_{E_n},\qquad
+ r_{m,k}\circ r_{n,m}=r_{n,k},\qquad
+ r_{n,m}\circ\mathsf P_n=\mathsf P_m
+ \quad(n\le m\le k).
+\]
+Thus the \(r_{n,m}\) define a covariant functor
+\(\mathcal R:I\to\mathbf{CompHaus}\), and
+\(\mathsf P_\bullet\) is a natural transformation from the constant
+\(\D\)-diagram to \(\mathcal R\).  Each adjacent \(r_{n,n+1}\) is a
+retraction of the inclusion \(E_{n+1}\hookrightarrow E_n\).
+\[
+ r_{n,n+1}\circ\iota_n^{\mathcal E}=\id_{E_{n+1}}.
+\]
+We call these functorially generated finite-stage data a
+\emph{constructible cutoff sequence}.
+
+The same maps are an approximate cone over the inverse system
+\(\mathcal E\).  Define its naturality defect by
+\begin{equation}\label{eq:cutoff-cone-defect}
+ d_n:=
+ \sup_{z\in\D}
+ \left|\mathsf P_n(z)-\iota_n^{\mathcal E}
+                       \bigl(\mathsf P_{n+1}(z)\bigr)\right|
+ =\sup_{z\in\D}|\mathsf P_n(z)-\mathsf P_{n+1}(z)|.
+\end{equation}
+The equalities \(r_{n,n+1}\mathsf P_n=\mathsf P_{n+1}\) hold
+exactly.  The quantities \(d_n\) measure the failure of the same
+sequence to be a cone for the inverse-limit bonding inclusions.
+
+\begin{theorem}[Categorical compactness criterion for the cutoffs]
+\label{thm:categorical-cutoff-compactness}
+For the heights in Theorem~\ref{thm:exterior-candidates},
+\[
+ \LC(\M)\quad\Longleftrightarrow\quad
+ \overline{\{\mathsf P_n:n\ge2\}}^{\,C(\D,E_a)}
+ \text{ is compact},
+\]
+where \(C(\D,E_a)\) has the uniform (equivalently, compact-open)
+topology.  Equivalently, the constructible cutoff sequence is
+equicontinuous.
+\end{theorem}
+\begin{proof}
+The range of every \(\mathsf P_n\) lies in the compact set \(E_a\).
+If \(\LC(\M)\), the boundary extension in the proof of
+Theorem~\ref{thm:summable-cutoff} gives
+\[
+ \|\mathsf P_n-R|_{\D}\|_\infty
+ \le\omega_a(e^{s_n}-1)\longrightarrow0.
+\]
+Thus the family has compact closure.
+
+Conversely, compactness of the closure gives a uniformly convergent
+subsequence \(\mathsf P_{n_j}\to R\), with \(n_j\to\infty\).
+For each fixed \(k\ge2\), eventually \(n_j\ge k\), and hence
+\(\mathsf P_{n_j}(\D)\subseteq E_{n_j}\subseteq E_k\).
+Closedness of \(E_k\) gives \(R(\D)\subseteq E_k\), so
+\[
+ R(\D)\subseteq\bigcap_{k\ge2}E_k=\M.
+\]
+Every \(\mathsf P_n\) fixes \(\M\), so \(R|_{\M}=\id_\M\) and
+\(R(\D)=\M\).  The limit coordinates form a cone over
+\(\mathcal E\), hence a morphism
+\(\D\to\varprojlim_{I^{\mathrm{op}}}\mathcal E\cong\M\).
+Since \(\D\) is convex,
+the resulting retraction implies \(\LC(\M)\), by the retraction
+argument in Theorem~\ref{thm:summable-cutoff}.  The limit diagram
+identifies the target; local connectedness follows from the retraction
+of the locally connected square.
+\end{proof}
+
+\noindent
+This mapping-space formulation is functorial: for compact Hausdorff
+objects \(X,Y\) and continuous maps \(u:X\to\D\), \(v:E_a\to Y\),
+the induced map \(F\mapsto v\circ F\circ u\) on morphism spaces is
+continuous and preserves relative compactness.  Cofinal
+reindexings preserve the inverse-system diagrams, and under MLC all
+such cutoff subsequences converge to the same retraction.
+
+\noindent
+The constructible sequence also satisfies
+\[
+ \mathsf P_n(\D)\subseteq E_n,\qquad
+ \mathsf P_n|_{O_n^\lambda}=\id,\qquad
+ \M\subseteq\mathsf P_n(\D),\qquad
+ \dH(\mathsf P_n(\D),\M)\le\kappa(s_n)\le2^{-n}.
+\]
+Summable cone defect \(\sum_{n\ge2}d_n<\infty\) is a sufficient
+certificate for the compactness criterion: it makes
+\(\mathsf P_n\) uniformly Cauchy.  The finite-band estimate gives
+\[
+ d_n\le\int_{s_{n+1}}^{s_n}V(u)\,du,
+\]
+so \(\int_0^aV(u)\,du<\infty\) is a stronger sufficient analytic
+target.  The categorical criterion itself is equivalent to MLC;
+its validity for the explicit cutoff family remains the unresolved
+problem.
 
 \noindent
 The summability assertion for the particular heights selected in
@@ -1088,15 +1237,20 @@ the remaining first-path assertion is
 \end{equation}
 By Theorem~\ref{thm:summable-cutoff}, proving
 \eqref{eq:remaining-motion} would prove \(\LC(\M)\).
+The rate-free categorical target is compactness of the cutoff family
+in Theorem~\ref{thm:categorical-cutoff-compactness}; that target is
+itself equivalent to MLC.  Summable movement is one sufficient
+certificate for it.
 The finite-band estimate \eqref{eq:candidate-partial-motion} reduces
 the stronger sufficient condition
 \[
  \int_0^aV(u)\,du<\infty
 \]
-to the required summability.  The second route requires one common
-pair \((\lambda,\delta)\) and the invariant-preserving extension
-\eqref{eq:invariant-extension} at every level.  These are the two
-explicit proof obligations remaining in this program.
+to the required summability.  The alternate finite-tower route
+requires one common pair \((\lambda,\delta)\) and the
+invariant-preserving extension \eqref{eq:invariant-extension} at
+every level.  The categorical structures are established; their
+compactness or a common compatible extension remains to be proved.
 
 \begin{summarytheorem}[Strongest unconditional theorem proved]
 There are \(\lambda\in\N^\N\) and \(T_\bullet\in C(\D,\D)^\N\)
