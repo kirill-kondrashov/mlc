@@ -141,7 +141,8 @@
 \]
 который замкнул бы конус конечных приближений на предельном объекте.
 Для его построения достаточно, например, доказать относительную
-компактность семейства морфизмов усечения из шага~8; в этой программе
+компактность семейства морфизмов усечения из
+теоремы~\ref{thm:cutoff-hom-compactness}; в этой программе
 она эквивалентна MLC. Достаточен также суммируемый дефект движения
 подходящих усечений или единая совместимая башня конечных
 сертификатов. Суммируемость для конкретно выбранных высот-кандидатов
@@ -149,8 +150,12 @@
 условием; её нельзя отождествлять с точной формулировкой зазора.
 Ни один из этих мостов от Основной теоремы к Основной гипотезе пока
 не доказан.
+Безусловная последовательность доказательства ниже завершается
+построением отдельного конечного сертификата для каждого горизонта.
+Его параметры могут зависеть от горизонта; это не утверждение об
+одной бесконечной башне и не вывод MLC.
 
-\section{Пошаговая программа построения}
+\section{Безусловное доказательство Основной теоремы}
 
 \subsection*{Шаг 1. Представить конечные орбитальные ограничения компактными объектами.}
 
@@ -617,7 +622,133 @@
  \sum_{n=1}^{\infty}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty.
 \]
 
-\subsection*{Шаг 8. Устранить дефект конуса-предела с помощью компактности.}
+\subsection*{Шаг 8. Реализовать каждый конечный горизонт отдельно.}
+
+\begin{definition}[Конечные префиксы морфизмов]
+\label{def:finite-towers}
+Определим
+\[
+ \Delta:=
+ \{\delta\in(0,\infty)^\N:
+   \forall k,\ \delta_k\le2^{-k},\
+   \delta_{k+1}\le\delta_k/2\}.
+\]
+Для \(\delta\in\Delta\) положим
+\[
+ \mathcal K_\delta:=
+ \left\{F\in C(\D,\D):
+   \forall k\ \forall z,w\in\D,\
+   |z-w|\le\delta_k\Longrightarrow|F(z)-F(w)|\le2^{-k}
+ \right\}.
+\]
+Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\) и положим
+\[
+ e_i(F):=\sup_{z\in\D}\dist(F(z),O_{\lambda_i}),\qquad
+ \epsilon_i:=2^{-i},\qquad\beta_i:=8\,2^{-i}.
+\]
+Для \(m\in\N\) определим
+\begin{align}
+ \mathcal P_m(\lambda,\delta):=
+ \left\{(F_0,\ldots,F_m)\in\mathcal K_\delta^{m+1}:
+ \begin{gathered}
+  F_0=\id_{\D},\quad
+  (m\ge1\Longrightarrow F_1=\Pi|_{\D}),\\
+  \forall i\in\{1,\ldots,m\},\quad F_i(\D)\subseteq K,\\
+  \forall i\in\{0,\ldots,m\}\ \forall c\in O_{\lambda_i},\
+                             F_i(c)=c,\\
+  \forall i\in\{0,\ldots,m\},\quad e_i(F_i)\le\epsilon_i,\\
+  \forall i<m,\quad\|F_{i+1}-F_i\|_\infty\le\beta_i
+ \end{gathered}\right\},\label{eq:finite-certificates}\\
+ \mathsf{UG}_m(\lambda,\delta):={}&
+                  [\mathcal P_m(\lambda,\delta)\ne\varnothing].
+ \label{eq:ug-m}
+\end{align}
+Компактность \(\mathcal K_\delta\) и \(\mathcal P_m(\lambda,\delta)\)
+доказывается ниже в лемме~\ref{lem:compact-towers}.
+\end{definition}
+
+\begin{proposition}[Каждый конечный горизонт реализуется отдельно]
+\label{prop:finite-horizons}
+\[
+ \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
+ \exists\delta^{[m]}\in\Delta,\qquad
+ \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}).
+\]
+\end{proposition}
+\begin{proof}
+При \(m=0\) возьмём \(\lambda^{[0]}=\lambda\) из теоремы
+\ref{thm:exterior-candidates} и \(F_0=\id_{\D}\). При \(m=1\)
+возьмём \(\lambda^{[1]}=\lambda\) и
+\((F_0,F_1)=(\id_{\D},\Pi|_{\D})\). В обоих случаях положим
+\(\delta_k^{[m]}=2^{-k}\). Тогда \(\delta^{[m]}\in\Delta\), а все
+отображения данного префикса принадлежат
+\(\mathcal K_{\delta^{[m]}}\). Имеем
+\(e_0(F_0)\le2\sqrt2-2<1\), и при \(m=1\)
+\(e_1(F_1)=0\), \(\|F_1-F_0\|_\infty<1\le\beta_0\).
+Так выполнены условия определения~\ref{def:finite-towers}.
+
+Пусть теперь \(m\ge2\), и возьмём \(s_m,\lambda_m\) из теоремы
+\ref{thm:exterior-candidates}.
+Положим \(F_0=\id_{\D}\), \(F_1=\Pi|_{\D}\) и
+\(F_i=Q_{s_m}\) при \(2\le i\le m\). Положим
+\(\lambda^{[m]}_0=0,\lambda^{[m]}_1=1,
+\lambda^{[m]}_2=\lambda_m\) и
+\[
+ \lambda^{[m]}_i:=
+ \max\{\lambda^{[m]}_{i-1}+1,\ell_i\}\quad(i\ge3).
+\]
+Так как \(\lambda\in\Lambda\) и \(\ell_m\ge\ell_2\), имеем
+\(\lambda_m\ge\ell_m\ge\ell_2\) и \(\lambda_m\ge m\ge2\).
+Рекурсия даёт \(\lambda^{[m]}_i\ge\ell_i\) при \(i\ge3\) и
+строгое возрастание; следовательно, \(\lambda^{[m]}\in\Lambda\).
+При \(2\le i\le m\) имеем \(\lambda^{[m]}_i\ge\lambda_m\), поэтому
+\[
+ O_{\lambda^{[m]}_i}\subseteq O_{\lambda_m}\subseteq E_{s_m}.
+\]
+Значит, \(Q_{s_m}\) фиксирует требуемые внешние множества, а ошибка
+не превосходит \(\kappa(s_m)\le2^{-m}\le2^{-i}\).
+Ошибка на нулевом уровне не превосходит \(2\sqrt2-2<1\);
+ошибка на первом уровне равна нулю. Начальные отображения
+фиксируют \(O_0=O_1=K\), причём
+\[
+ \|F_1-F_0\|_\infty<1\le\beta_0,\qquad
+ \|F_2-F_1\|_\infty\le\operatorname{diam}(K)=4=\beta_1.
+\]
+Все перемещения после второго равны нулю. Конечное семейство
+\(\{\id_{\D},\Pi|_{\D},Q_{s_m}\}\) равномерно непрерывно; рекурсивный
+выбор достаточно малых \(\delta_k^{[m]}>0\), с
+\(\delta_k^{[m]}\le2^{-k}\) и
+\(\delta_{k+1}^{[m]}\le\delta_k^{[m]}/2\), задаёт
+\(\delta^{[m]}\in\Delta\) и включает все \(F_i\) в
+\(\mathcal K_{\delta^{[m]}}\).
+\end{proof}
+
+\noindent
+\textbf{Итог безусловной последовательности шагов.} Для каждого
+конечного \(m\) существует сертификат \(\mathsf{UG}_m\), но его
+параметры \((\lambda^{[m]},\delta^{[m]})\) могут зависеть от \(m\).
+Это безусловное усиление Основной теоремы; оно не утверждает
+существования одной башни бесконечной длины.
+
+\begin{mainthm}[Основная теорема и конечногоризонтное усиление]
+Выполняются утверждения (1)--(5), и для каждого \(m\in\N\)
+существуют \(\lambda^{[m]}\in\Lambda\), \(\delta^{[m]}\in\Delta\),
+для которых \(\mathsf{UG}_m(\lambda^{[m]},\delta^{[m]})\).
+\end{mainthm}
+\begin{proof}
+Утверждения (1)--(5) доказаны в теореме~\ref{thm:exterior-candidates};
+конечногоризонтное утверждение доказано в
+предложении~\ref{prop:finite-horizons}.
+\end{proof}
+
+\section*{Диагностика зазора и условные критерии}
+
+\noindent
+Далее приведены эквивалентные критерии, условные следствия и
+исследовательские направления для Основного зазора. Они не являются
+шагами безусловного доказательства выше и не доказывают MLC.
+
+\subsection*{Критерий суммируемых отсечений}
 
 \begin{definition}[Локальная связность]\label{def:local-connectedness}
 Для \(X\subseteq\C\) положим
@@ -788,7 +919,7 @@
 условие \eqref{eq:candidate-partial-motion} задаёт конкретную
 аналитическую цель для доказательства суммируемости этих кандидатов.
 
-\subsection*{Шаг 9. Преобразовать суммируемые морфизмы в конус-предел.}
+\subsection*{Критерий конструктивного конуса}
 
 \begin{definition}[Конструктивный приближённый конус]\label{def:ug}
 Для \(\nu\in\N^\N\) обозначим через
@@ -936,50 +1067,11 @@
 влечёт \(\mathsf{UG}\).
 \end{proof}
 
-\subsection*{Шаг 10. Перейти к пределу подобъектов конечных префиксов.}
+\subsection*{Компактность и предельный объект башни конечных префиксов}
 
-\begin{definition}[Конечные префиксы морфизмов]
-\label{def:finite-towers}
-Определим
-\[
- \Delta:=
- \{\delta\in(0,\infty)^\N:
-   \forall k,\ \delta_k\le2^{-k},\
-   \delta_{k+1}\le\delta_k/2\}.
-\]
-Для \(\delta\in\Delta\) положим
-\[
- \mathcal K_\delta:=
- \left\{F\in C(\D,\D):
-   \forall k\ \forall z,w\in\D,\
-   |z-w|\le\delta_k\Longrightarrow|F(z)-F(w)|\le2^{-k}
- \right\}.
-\]
-Пространство \(\mathcal K_\delta\) замкнуто и компактно в
-\(\operatorname{Hom}(\D,\D)\) с равномерной метрикой.
-Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\) и положим
-\[
- e_i(F):=\sup_{z\in\D}\dist(F(z),O_{\lambda_i}),\qquad
- \epsilon_i:=2^{-i},\qquad\beta_i:=8\,2^{-i}.
-\]
-Для \(m\in\N\) определим
-\begin{align}
- \mathcal P_m(\lambda,\delta):=
- \left\{(F_0,\ldots,F_m)\in\mathcal K_\delta^{m+1}:
- \begin{gathered}
-  F_0=\id_{\D},\quad
-  (m\ge1\Longrightarrow F_1=\Pi|_{\D}),\\
-  \forall i\in\{1,\ldots,m\},\quad F_i(\D)\subseteq K,\\
-  \forall i\in\{0,\ldots,m\}\ \forall c\in O_{\lambda_i},\
-                             F_i(c)=c,\\
-  \forall i\in\{0,\ldots,m\},\quad e_i(F_i)\le\epsilon_i,\\
-  \forall i<m,\quad\|F_{i+1}-F_i\|_\infty\le\beta_i
- \end{gathered}\right\},\label{eq:finite-certificates}\\
- \mathsf{UG}_m(\lambda,\delta):={}&
-                  [\mathcal P_m(\lambda,\delta)\ne\varnothing].
- \label{eq:ug-m}
-\end{align}
-\end{definition}
+\noindent
+Обозначения \(\mathcal K_\delta\), \(\mathcal P_m(\lambda,\delta)\)
+и \(\mathsf{UG}_m\) заданы в определении~\ref{def:finite-towers}.
 
 \begin{lemma}[Компактность и морфизмы префиксов]\label{lem:compact-towers}
 \(\mathcal K_\delta\) компактно в равномерной топологии, а каждое
@@ -1067,42 +1159,8 @@
 конус над диаграммой конечных префиксов.
 \end{proof}
 
-\begin{proposition}[Каждый конечный горизонт реализуется отдельно]
-\label{prop:finite-horizons}
-\[
- \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
- \exists\delta^{[m]}\in\Delta,\qquad
- \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}).
-\]
-\end{proposition}
-\begin{proof}
-При \(m=0,1\) возьмём \(\lambda\) из теоремы
-\ref{thm:exterior-candidates}, \(\delta_k=2^{-k}\), а также
-\(\id_{\D}\) и \((\id_{\D},\Pi)\). Пусть \(m\ge2\) и возьмём
-\(s_m,\lambda_m\) из теоремы~\ref{thm:exterior-candidates}.
-Положим \(F_0=\id_{\D}\), \(F_1=\Pi|_{\D}\) и
-\(F_i=Q_{s_m}\) при \(2\le i\le m\). Положим
-\(\lambda^{[m]}_0=0,\lambda^{[m]}_1=1,
-\lambda^{[m]}_2=\lambda_m\) и
-\[
- \lambda^{[m]}_i:=
- \max\{\lambda^{[m]}_{i-1}+1,\ell_i\}\quad(i\ge3).
-\]
-При \(2\le i\le m\) имеем \(\lambda^{[m]}_i\ge\lambda_m\), поэтому
-\[
- O_{\lambda^{[m]}_i}\subseteq O_{\lambda_m}\subseteq E_{s_m}.
-\]
-Значит, \(Q_{s_m}\) фиксирует требуемые внешние множества, а ошибка
-не превосходит \(\kappa(s_m)\le2^{-m}\le2^{-i}\).
-Первое перемещение меньше \(1\), второе не превосходит \(4\), а
-все последующие перемещения равны нулю. Ошибка на нулевом уровне
-не превосходит \(2\sqrt2-2<1\); ошибка на первом уровне равна
-нулю. Оба начальных отображения фиксируют \(O_0=O_1=K\).
-Три отображения равномерно непрерывны; рекурсивное уменьшение
-общего модуля непрерывности задаёт \(\delta^{[m]}\in\Delta\).
-\end{proof}
-
-Доступный порядок кванторов имеет вид
+По предложению~\ref{prop:finite-horizons} доступный порядок
+кванторов имеет вид
 \[
  \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
  \exists\delta^{[m]}\in\Delta,\quad
@@ -1117,7 +1175,7 @@
 \((\lambda,\delta)\), поэтому они не образуют конус в одном общем
 компактном произведении.
 
-\subsection*{Шаг 11. Интерполировать башню в пространстве морфизмов.}
+\subsection*{Условная интерполяция башни в пространстве морфизмов}
 
 \begin{theorem}[Непрерывная интерполяция и предельная ретракция]
 \label{thm:interpolated-flow}
@@ -1161,7 +1219,7 @@
 и \eqref{eq:flow-estimates}.
 \end{proof}
 
-\subsection*{Шаг 12. Выполнить выпуклую замену в пространствах морфизмов.}
+\subsection*{Фильтрованные пространства продолжений}
 
 \begin{definition}[Относительная замена в пространстве морфизмов]
 \label{def:map-replacement}
@@ -1325,7 +1383,7 @@
 непрерывности и множество фиксации, а также удовлетворяя явным
 оценкам перемещения и ошибки.
 
-\subsection*{Шаг 13. Выделить недостающий морфизм-конус к пределу.}
+\subsection*{Точная формулировка Основного зазора}
 
 Для явных высот из теоремы~\ref{thm:exterior-candidates} остаётся
 доказать суммируемость перемещений
@@ -1372,7 +1430,7 @@
 \(\exists\lambda,\delta\,\forall m\): параметры конечных горизонтов
 пока не унифицированы.
 
-\subsection*{Шаг 14. Квантифицировать препятствие к продолжению.}
+\subsection*{Количественное препятствие к продолжению}
 
 \begin{proposition}[Непрерывность одноступенчатого препятствия]
 \label{prop:extension-obstruction}
@@ -1420,7 +1478,7 @@
 равенство для её образа.
 \end{proof}
 
-\subsection*{Шаг 15. Ослабить локальные бюджеты общим множителем.}
+\subsection*{Равномерно ослабленная башня}
 
 Для \(C_0\ge1\) определим \(\mathcal P_m^{(C_0)}(\lambda,\delta)\)
 из \(\mathcal P_m(\lambda,\delta)\) заменой двух оценок в
@@ -1483,7 +1541,7 @@
 Она не устраняет главного зазора: всё ещё требуется одна пара
 \((\lambda,\delta)\) и непустота префиксов любой длины.
 
-\subsection*{Шаг 16. Построить функториальную башню гомотопических данных.}
+\subsection*{Исследовательское направление: гомотопические данные}
 
 Так как \(0\in\M\subseteq O_N\), включения конечных орбитальных
 объектов задают башни компонент и групп
@@ -1505,7 +1563,8 @@
  \rho_m^{(C_0)}:X_{m+1}\to X_m.
 \]
 Слой над префиксом \(\sigma\) состоит из допустимых продолжений;
-функция \(q_m\) шага~14 измеряет критический множитель для
+функция \(q_m\) из предложения~\ref{prop:extension-obstruction}
+измеряет критический множитель для
 одноступенчатого продолжения при \(C_0=1\). Башня \(X_m\) сохраняет
 комбинаторику конечных префиксов и количественные бюджеты.
 
@@ -1557,7 +1616,7 @@
 закроет Основной зазор и докажет MLC. Условия общей базы и
 равномерного продолжения пока не установлены.
 
-\begin{mainthm}[Безусловная категориальная аппроксимация]
+\begin{mainthm}[Основная теорема и конечногоризонтное усиление]
 Существует кофинальный функтор
 \(\lambda:\mathbf N\to\mathbf N\) и семейство эндоморфизмов
 \[
@@ -1565,9 +1624,16 @@
 \]
 удовлетворяющие
 \eqref{eq:opening-depths}--\eqref{eq:opening-image-gap}.
+Кроме того,
+\[
+ \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
+ \exists\delta^{[m]}\in\Delta,\qquad
+ \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}).
+\]
 \end{mainthm}
 \begin{proof}
-Все утверждения доказаны в теореме~\ref{thm:exterior-candidates}.
+Первое утверждение доказано в теореме~\ref{thm:exterior-candidates},
+второе — в предложении~\ref{prop:finite-horizons}.
 \end{proof}
 
 \renewcommand{\refname}{Литература}
