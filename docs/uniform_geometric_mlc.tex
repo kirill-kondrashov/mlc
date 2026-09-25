@@ -50,11 +50,15 @@ Theorems~\ref{thm:flow-equivalence}, \ref{thm:hierarchy}, and
 assertions $\mathsf{UG}_m$, and convergent surgery sequences to the
 original assertion $\mathsf{UG}$.
 Theorem~\ref{thm:mlc} gives the resulting implication to MLC.
+Theorem~\ref{thm:summable-cutoff} identifies the existence of a
+summably moving sequence of the explicit exterior cutoffs with MLC.
 The surgery continuation assertion in
 Definition~\ref{def:surgery-completion} remains unproved.
-In particular, this document does not establish a uniform terminal
-limit of the constructed exterior maps or a classification theorem
-asserting that every irregularity admits a prescribed surgery.
+In particular, this document does not establish summability of the
+movements of the sequence selected in
+Theorem~\ref{thm:exterior-candidates}, a uniform terminal limit of
+the constructed exterior maps, or a classification theorem asserting
+that every irregularity admits a prescribed surgery.
 
 \section{The target and local connectedness}
 
@@ -1300,6 +1304,116 @@ Since $\Pi$ fixes that image,
 \]
 Theorem~\ref{thm:exterior-terminal} gives $\mathsf{UG}$.
 \end{proof}
+
+\begin{theorem}[Summable cutoff motion is equivalent to MLC]
+\label{thm:summable-cutoff}
+Let
+$a:=1+\max_{c\in\D}G(c)$, as in
+Theorem~\ref{thm:exterior-candidates}.  Then
+\begin{equation}\label{eq:summable-cutoff-criterion}
+ \LC(\M)\quad\Longleftrightarrow\quad
+ \left[
+ \begin{gathered}
+  \exists(s_n)_{n\ge1}\subset(0,\infty):\
+  s_1=a,\quad s_{n+1}<s_n,\quad s_n\longrightarrow0,\\
+  \forall n\ge2,\quad\kappa(s_n)\le2^{-n},\\
+  \sum_{n=1}^{\infty}
+       \|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty
+ \end{gathered}\right].
+\end{equation}
+Whenever the sequence on the right exists, the maps
+$Q_{s_n}$ converge uniformly to a continuous retraction
+$R:\D\to\M$.
+\end{theorem}
+\noindent
+In words, MLC holds if and only if there is a decreasing sequence
+of cutoff heights whose outer-image gaps tend to zero and whose
+successive maps have summable uniform displacement.
+Such a sequence converges uniformly to a continuous map that fixes
+$\M$ and has image exactly $\M$.
+The theorem does not prove summability for the particular
+height sequence selected in Theorem~\ref{thm:exterior-candidates}.
+\begin{proof}
+Assume first that the sequence on the right-hand side exists.
+Write
+\[
+ b_n:=\|Q_{s_{n+1}}-Q_{s_n}\|_\infty.
+\]
+For $m>n$, the triangle inequality gives
+\[
+ \|Q_{s_m}-Q_{s_n}\|_\infty
+ \le\sum_{j=n}^{m-1}b_j.
+\]
+Thus $(Q_{s_n})_{n\ge1}$ is uniformly Cauchy.
+Completeness of $\C$ and closedness of $\D$ give a uniform limit
+$R\in C(\D,\D)$.
+Every $Q_{s_n}$ fixes $\M$, so $R|_\M=\id_\M$.
+For each $z\in\D$, Theorem~\ref{thm:positive-levels} gives
+\[
+ \operatorname{dist}(Q_{s_n}(z),\M)\le\kappa(s_n)
+                         \longrightarrow0.
+\]
+Since $\M$ is closed and $Q_{s_n}(z)\to R(z)$, it follows that
+$R(z)\in\M$.  Therefore $R(\D)=\M$.
+
+Fix $c\in\M$ and $\eta>0$.
+Continuity of $R$ and $R(c)=c$ give $\delta>0$ such that
+\[
+ z\in\D,\quad |z-c|<\delta
+ \quad\Longrightarrow\quad |R(z)-c|<\eta.
+\]
+Set $W:=\D\cap B(c,\delta)$ and $V:=R(W)$.
+The set $W$ is convex and contains $c$, so it is nonempty and
+connected.  Hence $V$ is connected.  If
+$y\in\M\cap B(c,\delta)$, then $R(y)=y$, so $y\in V$.
+Also $V\subseteq\M\cap B(c,\eta)$ by the choice of $\delta$.
+This proves $\LC(\M)$.
+
+Conversely, assume $\LC(\M)$.
+Theorem~\ref{thm:mlc-to-ug} gives a continuous map
+$R:\D\to\M$ fixing $\M$ and satisfying
+\[
+ \|Q_s-R\|_\infty\longrightarrow0\qquad(s\downarrow0).
+\]
+Since $\kappa(s)\to0$ by Theorem~\ref{thm:positive-levels},
+choose recursively
+\[
+ a=s_1>s_2>s_3>\cdots>0,\qquad
+ s_n<2^{-n}\quad(n\ge2),
+\]
+so that for every $n\ge2$,
+\[
+ \kappa(s_n)\le2^{-n},\qquad
+ \|Q_{s_n}-R\|_\infty\le2^{-n}.
+\]
+Then, for $n\ge2$,
+\[
+ \|Q_{s_{n+1}}-Q_{s_n}\|_\infty
+ \le2^{-(n+1)}+2^{-n}.
+\]
+The remaining term
+$\|Q_{s_2}-Q_{s_1}\|_\infty$ is finite because both maps take
+values in the compact set $\D$.
+Thus the series in \eqref{eq:summable-cutoff-criterion} converges.
+\end{proof}
+
+\noindent
+For the specific heights $s_n=a2^{-j_n}$ in
+Theorem~\ref{thm:exterior-candidates}, the positive-level estimate
+\eqref{eq:finite-band-motion} gives, for every $N\ge1$,
+\begin{equation}\label{eq:candidate-motion-integral}
+ \sum_{n=1}^{N}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty
+ \le\int_{s_{N+1}}^{a}V(u)\,du.
+\end{equation}
+Consequently, $\int_0^aV(u)\,du<\infty$ would prove the requested
+summability for these heights.
+No such integrability estimate is established here.
+More generally, proving the series finite for these particular
+candidate heights would imply MLC by
+Theorem~\ref{thm:summable-cutoff}.
+The converse implication selects heights using the terminal
+uniform limit and does not show that the particular selection in
+Theorem~\ref{thm:exterior-candidates} has finite total displacement.
 
 \section{Finite certificates and compatibility}
 
