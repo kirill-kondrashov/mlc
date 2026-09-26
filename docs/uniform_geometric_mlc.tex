@@ -668,6 +668,179 @@
 \eqref{eq:external-maps} и определения \(Q_{s_n}\).
 \end{proof}
 
+\subsection*{Внутренние и внешние ячейки}
+
+Для \(n\ge2\) положим \(J_n:=\{0,\ldots,2^n-1\}\) и
+\[
+ q_{n,a}:=
+ \left[-2+\frac{4a}{2^n},-2+\frac{4(a+1)}{2^n}\right],
+ \qquad
+ Q_{n,(a,b)}:=
+ \{x+iy:x\in q_{n,a},\ y\in q_{n,b}\}
+ \quad(a,b\in J_n).
+\]
+Каждая ячейка \(Q_{n,\alpha}\) компактна и
+\[
+ \operatorname{diam}Q_{n,\alpha}\le8\cdot2^{-n}.
+\]
+Действительно, разности вещественных и мнимых частей двух точек одной
+ячейки не превосходят \(4\cdot2^{-n}\), а модуль комплексного числа
+не превосходит суммы модулей его вещественной и мнимой частей.
+Положим
+\[
+ U_{n,\alpha}:=O_{\lambda_n}\cap E_{s_n}\cap Q_{n,\alpha},
+ \qquad
+ I_{n,\alpha}:=\M\cap Q_{n,\alpha}.
+\]
+Здесь \(U_{n,\alpha}\) — внешняя ячейка общего уточнения систем
+\((O_{\lambda_n})\) и \((E_{s_n})\), а \(I_{n,\alpha}\) — её внутренняя
+часть. Обозначим
+\[
+ \mathcal A_n^{\mathrm{out}}:=
+   \{\alpha\in J_n^2:U_{n,\alpha}\ne\varnothing\},
+ \qquad
+ \mathcal A_n^{\mathrm{in}}:=
+   \{\alpha\in J_n^2:I_{n,\alpha}\ne\varnothing\}.
+\]
+Каждое \(I_{n,\alpha}\) компактно, а
+\(\mathcal A_n^{\mathrm{in}}\subseteq\mathcal A_n^{\mathrm{out}}\).
+Рассмотрим конечные дискретные категории
+\(\mathbf C_n^{\mathrm{in}}\) и \(\mathbf C_n^{\mathrm{out}}\) с объектами
+\(\mathcal A_n^{\mathrm{in}}\) и \(\mathcal A_n^{\mathrm{out}}\),
+соответственно. Отображение родителя
+\[
+ p_n(a',b'):=\left(\left\lfloor\frac{a'}2\right\rfloor,
+                       \left\lfloor\frac{b'}2\right\rfloor\right)
+ \qquad((a',b')\in J_{n+1}^2)
+\]
+ задаёт функторы перехода между уровнями: вложения
+ \(O_{\lambda_{n+1}}\subseteq O_{\lambda_n}\),
+ \(E_{s_{n+1}}\subseteq E_{s_n}\) и
+ \(Q_{n+1,\beta}\subseteq Q_{n,p_n(\beta)}\) дают вложения
+ \(U_{n+1,\beta}\hookrightarrow U_{n,p_n(\beta)}\) и
+ \(I_{n+1,\beta}\hookrightarrow I_{n,p_n(\beta)}\).
+ Все \(U_{n,\alpha}\) и \(I_{n,\alpha}\) компактны. Реализации
+ \(\mathcal U_n:\mathbf C_n^{\mathrm{out}}\to\mathbf{CompHaus}\) и
+ \(\mathcal I_n:\mathbf C_n^{\mathrm{in}}\to\mathbf{CompHaus}\) задаются
+ формулами \(\mathcal U_n(\alpha)=U_{n,\alpha}\) и
+ \(\mathcal I_n(\alpha)=I_{n,\alpha}\). Вложения между ячейками задают
+ естественные преобразования
+ \(\mathcal U_{n+1}\Rightarrow\mathcal U_n\circ p_n\) и
+ \(\mathcal I_{n+1}\Rightarrow\mathcal I_n\circ p_n\), а включения
+ \(I_{n,\alpha}\hookrightarrow U_{n,\alpha}\) задают естественное
+ преобразование \(\mathcal I_n\Rightarrow\mathcal U_n\circ j_n\), где
+ \(j_n:\mathbf C_n^{\mathrm{in}}\hookrightarrow\mathbf C_n^{\mathrm{out}}\),
+ совместимое с переходами между уровнями.
+
+\begin{proposition}[Сближение внутренних и внешних ячеек]
+\label{prop:cellwise-inner-outer}
+Для каждого \(n\ge2\) выполняются
+\[
+ \bigcup_{\alpha\in\mathcal A_n^{\mathrm{in}}}I_{n,\alpha}=\M,\qquad
+ \bigcup_{\alpha\in\mathcal A_n^{\mathrm{out}}}U_{n,\alpha}=O_{\lambda_n}.
+\]
+Для \(\alpha\in\mathcal A_n^{\mathrm{in}}\)
+\[
+ I_{n,\alpha}\subseteq U_{n,\alpha},
+ \qquad
+ \dH(I_{n,\alpha},U_{n,\alpha})\le8\cdot2^{-n}.
+\]
+Для \(\alpha\in\mathcal A_n^{\mathrm{out}}\setminus
+                    \mathcal A_n^{\mathrm{in}}\)
+\[
+ \sup_{z\in U_{n,\alpha}}\dist(z,\M)
+ \le h_{\lambda_n}\le\kappa(s_n)\le2^{-n}.
+\]
+В частности,
+\[
+ \dH\left(
+   \bigcup_{\alpha\in\mathcal A_n^{\mathrm{in}}}I_{n,\alpha},
+   \bigcup_{\alpha\in\mathcal A_n^{\mathrm{out}}}U_{n,\alpha}
+ \right)=h_{\lambda_n}\longrightarrow0.
+\]
+\end{proposition}
+\begin{proof}
+Свойства покрытия следуют из покрытия \(\D\) ячейками \(Q_{n,\alpha}\)
+и включений \(\M\subseteq O_{\lambda_n}\subseteq E_{s_n}\). Если
+\(\alpha\in\mathcal A_n^{\mathrm{in}}\), то
+\(I_{n,\alpha}\subseteq U_{n,\alpha}\).
+Для \(z\in U_{n,\alpha}\) выберем \(w\in I_{n,\alpha}\). Обе точки
+лежат в \(Q_{n,\alpha}\), поэтому
+\(|z-w|\le\operatorname{diam}Q_{n,\alpha}\le8\cdot2^{-n}\).
+Это даёт оценку Хаусдорфа.
+
+Если \(\alpha\in\mathcal A_n^{\mathrm{out}}\setminus
+                   \mathcal A_n^{\mathrm{in}}\), то
+\(U_{n,\alpha}\subseteq O_{\lambda_n}\), откуда
+\(\sup_{z\in U_{n,\alpha}}\dist(z,\M)\le h_{\lambda_n}\).
+Оценки \(h_{\lambda_n}\le\kappa(s_n)\le2^{-n}\) следуют из
+леммы~\ref{lem:green-depth} и выбора \(s_n,\lambda_n\).
+Объединения ячеек равны \(\M\) и \(O_{\lambda_n}\), соответственно,
+а \(\dH(O_{\lambda_n},\M)=h_{\lambda_n}\).
+\end{proof}
+
+\begin{theorem}[Предел категорий ячеек]
+\label{thm:cell-category-limit}
+Пусть
+\[
+ \mathfrak A^{\mathrm{out}}:=
+ \varprojlim(\mathcal A_n^{\mathrm{out}},p_n),\qquad
+ \mathfrak A^{\mathrm{in}}:=
+ \varprojlim(\mathcal A_n^{\mathrm{in}},p_n),
+\]
+где конечные множества индексов наделены дискретной топологией.
+Тогда \(\mathfrak A^{\mathrm{in}}=\mathfrak A^{\mathrm{out}}\).
+Для каждого адреса \(a=(\alpha_n)\) пересечение
+\[
+ \bigcap_{n\ge2}U_{n,\alpha_n}
+\]
+состоит из одной точки \(\pi(a)\in\M\). Отображение
+\(\pi:\mathfrak A^{\mathrm{out}}\to\M\) непрерывно и сюръективно;
+отождествление адресов с одинаковой точкой реализации задаёт
+гомеоморфизм
+\[
+ \mathfrak A^{\mathrm{out}}/{\sim}\ \cong\ \M,
+ \qquad a\sim b\Longleftrightarrow\pi(a)=\pi(b).
+\]
+\end{theorem}
+\begin{proof}
+Для каждого адреса множества \(U_{n,\alpha_n}\) непусты, компактны и
+вложены друг в друга. По свойству конечного пересечения компактности
+их пересечение непусто; оценки диаметра \(8\cdot2^{-n}\) показывают,
+что оно состоит из одной точки. Эта точка принадлежит всем
+\(O_{\lambda_n}\), а из \(\lambda_n\to\infty\) следует
+\(\bigcap_nO_{\lambda_n}=\M\). Значит, каждый внешний адрес на каждом
+уровне принадлежит \(\mathcal A_n^{\mathrm{in}}\), и
+\(\mathfrak A^{\mathrm{out}}\subseteq\mathfrak A^{\mathrm{in}}\).
+Обратное включение следует из
+\(I_{n,\alpha}\subseteq U_{n,\alpha}\).
+
+Для \(c=x+iy\in\M\) положим
+\[
+ a_n:=\min\left\{\left\lfloor\frac{2^n(x+2)}4\right\rfloor,2^n-1\right\},
+ \qquad
+ b_n:=\min\left\{\left\lfloor\frac{2^n(y+2)}4\right\rfloor,2^n-1\right\}.
+\]
+Тогда \((a_n,b_n)\in\mathcal A_n^{\mathrm{in}}\), и деление индексов на два даёт
+\(p_n(a_{n+1},b_{n+1})=(a_n,b_n)\). Поэтому эти индексы задают адрес
+с точкой реализации \(c\), и \(\pi\) сюръективно. Если два адреса
+совпадают на уровне \(n\), их
+точки реализации лежат в одной ячейке диаметра не более
+\(8\cdot2^{-n}\), что доказывает непрерывность \(\pi\). Пространство
+\(\mathfrak A^{\mathrm{out}}\) компактно как обратный предел конечных
+дискретных пространств. Непрерывная сюръекция \(\pi\) индуцирует
+непрерывную биекцию
+\(\mathfrak A^{\mathrm{out}}/{\sim}\to\M\); компактность области и
+хаусдорфовость \(\M\) дают гомеоморфизм.
+\end{proof}
+
+Предложение~\ref{prop:cellwise-inner-outer} даёт явную оценку
+расстояния Хаусдорфа для каждой внутренней ячейки и соответствующей
+внешней ячейки. Для отображений \(G_j\in\mathcal R_{m_j}\) условие
+\(\mathsf{EA}\) требует общего модуля равностепенной непрерывности;
+по предложению~\ref{prop:equicontinuous-selection} его выполнимость
+эквивалентна \(\LC(\M)\).
+
 \subsection*{Шаг 7. Оценить расстояния между отображениями \(Q_s\).}
 
 \begin{lemma}[Равномерная оценка расстояния между \(Q_s\) и \(Q_t\)]

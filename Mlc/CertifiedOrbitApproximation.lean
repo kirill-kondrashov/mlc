@@ -467,6 +467,56 @@ def dyadicGridOuterApproximation : FiniteCellOuterApproximation where
       exists_mem_dyadicGridBox n (by exact hz.1)
     exact mem_iUnion.mpr ⟨(i, j), ⟨hz, hbox⟩⟩
 
+/-- The part of a dyadic cell lying in the Mandelbrot set. -/
+def dyadicGridInnerCell (n : ℕ)
+    (i j : Fin (dyadicGridCount n)) : Set ℂ :=
+  MLC.Categorical.Mandelbrot.set ∩ dyadicGridBox n i j
+
+theorem dyadicGridInnerCell_subset_outerCell (n : ℕ)
+    (i j : Fin (dyadicGridCount n)) :
+    dyadicGridInnerCell n i j ⊆
+      dyadicGridOuterApproximation.cell n (i, j) := by
+  intro z hz
+  change z ∈ MLC.Categorical.Mandelbrot.set ∩
+    dyadicGridBox n i j at hz
+  change z ∈ MLC.Categorical.Mandelbrot.outerOrbitSet n ∩
+    dyadicGridBox n i j
+  exact ⟨MLC.Categorical.Mandelbrot.set_subset_outerOrbitSet n hz.1, hz.2⟩
+
+/-- Every point in an outer cell with a nonempty inner fiber is close to that
+fiber, with error bounded by the cell diameter. -/
+theorem dyadicGridOuterCell_near_innerCell (n : ℕ)
+    (i j : Fin (dyadicGridCount n))
+    (hinner : (dyadicGridInnerCell n i j).Nonempty) :
+    ∀ x, x ∈ dyadicGridOuterApproximation.cell n (i, j) →
+      ∃ y, y ∈ dyadicGridInnerCell n i j ∧
+        dist x y ≤ 8 * dyadicRadius n := by
+  intro x hx
+  obtain ⟨y, hy⟩ := hinner
+  refine ⟨y, hy, ?_⟩
+  change x ∈ MLC.Categorical.Mandelbrot.outerOrbitSet n ∩
+    dyadicGridBox n i j at hx
+  change y ∈ MLC.Categorical.Mandelbrot.set ∩
+    dyadicGridBox n i j at hy
+  exact dist_le_dyadicGridBox n i j hx.2 hy.2
+
+/-- The inner dyadic cells cover the Mandelbrot set at every resolution. -/
+theorem iUnion_dyadicGridInnerCell (n : ℕ) :
+    (⋃ i : Fin (dyadicGridCount n),
+      ⋃ j : Fin (dyadicGridCount n), dyadicGridInnerCell n i j) =
+      MLC.Categorical.Mandelbrot.set := by
+  ext z
+  constructor
+  · intro hz
+    rcases mem_iUnion.mp hz with ⟨i, hi⟩
+    rcases mem_iUnion.mp hi with ⟨j, hj⟩
+    exact hj.1
+  · intro hz
+    have hnorm : ‖z‖ ≤ 2 :=
+      (MLC.Categorical.Mandelbrot.set_subset_outerOrbitSet 0 hz).1
+    obtain ⟨i, j, hbox⟩ := exists_mem_dyadicGridBox n hnorm
+    exact mem_iUnion.mpr ⟨i, mem_iUnion.mpr ⟨j, ⟨hz, hbox⟩⟩⟩
+
 end
 end CertifiedOrbit
 end MLC
