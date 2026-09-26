@@ -26,9 +26,8 @@ FACTOR_FIGURES := \
 	docs/figures/factorization-global-levels.pdf \
 	docs/figures/factorization-slices.pdf \
 	docs/figures/factorization-critical-orbit.pdf \
-	docs/figures/factorization-source.pdf \
 	docs/figures/factorization-target.pdf \
-	docs/figures/factorization-map-analogy.pdf
+	docs/figures/factorization-component-geometry.pdf
 
 proof-pdf: docs/uniform_geometric_mlc.pdf
 

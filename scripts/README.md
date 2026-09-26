@@ -5,8 +5,8 @@ Utility scripts and Poetry entry points for graph generation and local serving.
 ## Factorization figures
 
 Install the optional plotting dependency and regenerate the global
-parameter-plane, `X_L`/`F_N` slice, critical-orbit, nested-slice, and
-outer-slice figures, along with a map analogy for the component inclusion:
+parameter-plane, `X_L`/`F_N` slice, critical-orbit, outer-slice, and
+component-geometry figures:
 
 ```sh
 poetry install --extras figures --no-root

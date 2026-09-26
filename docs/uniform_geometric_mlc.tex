@@ -4,7 +4,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{caption}
-\captionsetup[figure]{font=small}
+\captionsetup[figure]{font=small,skip=3pt}
+\setlength{\intextsep}{4pt}
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{russian}
@@ -350,10 +351,11 @@ F_N(c,r)\) это включение. Оно задаёт отображение
 \(A\) равна \(C_N(c,r)\), то есть \(X_L\subseteq C_N(c,r)\).
 
 \noindent\emph{Иллюстрация с фиксированными параметрами.}
-Сеточная выборка \(E\) — растр конечной прямоугольной сетки параметров
-\(c=x+iy\): пиксель окрашен, если соответствующий узел принадлежит \(E\).
-Формулы задают точное \(E\), растр показывает его геометрическое
-приближение.
+На рисунках срезы представлены сеточными выборками.\footnote{Сеточная
+выборка \(E\subseteq\C\) —
+растр конечной прямоугольной сетки параметров \(c=x+iy\), в котором
+пиксель окрашен тогда и только тогда, когда соответствующий узел
+принадлежит \(E\).}
 
 \begin{figure}[H]
  \begin{minipage}[t]{0.40\textwidth}
@@ -365,10 +367,10 @@ F_N(c,r)\) это включение. Оно задаёт отображение
  \end{minipage}\hfill
  \begin{minipage}[t]{0.56\textwidth}
   \vspace{0pt}
-  \small
-  Возьмём \(c_\ast=0\), \(\varepsilon=2\), \(N=2\), \(L=8\),
-  \(r=\frac65\), \(\delta=\frac34\). Орбита нуля при \(c_\ast=0\)
-  постоянна, поэтому \(c_\ast\in\M\), а \(0<\delta<r<\varepsilon\).
+  \scriptsize
+  Возьмём \(c_\ast=0\) и
+  \(0<\delta=\frac34<r=\frac65<\varepsilon=2\), \(N=2\), \(L=8\).
+  Орбита нуля при \(c_\ast=0\) постоянна, поэтому \(c_\ast\in\M\).
   \[
   \begin{aligned}
    X_8&=\{c:|c|\le\tfrac34,\\
@@ -378,7 +380,8 @@ F_N(c,r)\) это включение. Оно задаёт отображение
   \end{aligned}
   \]
   Здесь \(p_1(c)=c\), \(p_2(c)=c^2+c\), поэтому \(X_8\subseteq F_2\).
-  Включение задаёт отображение
+  Включение \(\iota_{8,2}^{0;\frac34,\frac65}\) оставляет параметр на
+  месте: \(c\mapsto c\). На множествах компонент оно задаёт отображение
   \[
    \varphi_{8,2}^{0;\frac34,\frac65}:
    \pi_0(X_8)\longrightarrow\pi_0(F_2).
@@ -397,7 +400,7 @@ F_N(c,r)\) это включение. Оно задаёт отображение
  \end{minipage}\hfill
  \begin{minipage}[t]{0.56\textwidth}
   \vspace{0pt}
-  \small
+  \scriptsize
   Для рис.~\ref{fig:factorization-orbit} возьмём \(c_0=-1\).
   Критическая орбита задаётся цепочкой
   \[
@@ -422,10 +425,10 @@ F_N(c,r)\) это включение. Оно задаёт отображение
  \end{minipage}\hfill
  \begin{minipage}[t]{0.56\textwidth}
   \vspace{0pt}
-  \small
+  \scriptsize
   На рис.~\ref{fig:factorization-global} взяты
-  \(\varepsilon=1\), \(r=\frac45\), \(\delta=\frac35\), \(N=2\),
-  \(L=6\). Условие \(O_j\) проверяет орбиту до индекса \(j\), поэтому
+  \(0<\delta=\frac35<r=\frac45<\varepsilon=1\), \(N=2\), \(L=6\).
+  Условие \(O_j\) проверяет орбиту до индекса \(j\), поэтому
   \(\M\subseteq O_{80}\subseteq O_6\subseteq O_2\).
   \[
    \begin{aligned}
@@ -433,42 +436,25 @@ F_N(c,r)\) это включение. Оно задаёт отображение
     X_6&=O_6\cap\overline B(c_0,\delta)\subseteq F_2.
    \end{aligned}
   \]
+  На фоне отдельно показаны слои \(O_2\setminus O_6\),
+  \(O_6\setminus O_{80}\) и \(O_{80}\): два последних вместе образуют
+  \(O_6\), граница которого выделена пунктиром. Надпись \(O_6\) стоит в
+  области \(O_6\setminus O_{80}\). Оранжевая заливка показывает не всё
+  \(O_6\), а только локальный срез \(X_6\).
   Поскольку \(O_{80}\subseteq O_6\), тёмная часть
   \(O_{80}\cap\overline B(c_0,\delta)\) входит в \(X_6\). Кроме неё,
   \(X_6\) содержит точки из \(O_6\setminus O_{80}\) в том же круге;
   поэтому оранжевая заливка частично перекрывает тёмную.
-  Голубая и оранжевая заливки вместе показывают \(F_2\), оранжевая —
-  \(X_6\); подписи нанесены прямо на них. Красная штриховая и
+  Полупрозрачная голубая заливка выделяет \(F_2\), оранжевая — \(X_6\);
+  подписи нанесены прямо на них. Красная штриховая и
   оранжевая точечная окружности ограничивают круги радиусов \(r\) и
   \(\delta\). Включение \(X_6\hookrightarrow F_2\) задаёт отображение
   \(\varphi_{6,2}^{c_0;\delta,r}\): каждая компонента \(X_6\) относится
   к компоненте \(F_2\), содержащей её. Здесь это \(C_2(c_0,r)\), как
-  показано на рис.~\ref{fig:factorization-target}. Светлая и тёмная
-  области фона показывают \(O_2\setminus O_{80}\) и \(O_{80}\);
-  звезда отмечает параметр \(c_0\), центр обоих кругов. Орбита при
+  показано на рис.~\ref{fig:factorization-target}.
+  Звезда отмечает параметр \(c_0\), центр обоих кругов. Орбита при
   \(c_0\) начинается с \(p_0(c_0)=0\), как показано на
   рис.~\ref{fig:factorization-orbit}.
- \end{minipage}
-\end{figure}
-
-\begin{figure}[H]
- \begin{minipage}[t]{0.40\textwidth}
-  \vspace{0pt}
-  \centering
-  \includegraphics[width=\linewidth]{docs/figures/factorization-source.pdf}
-  \captionof{figure}{Вложенный срез глубины \(6\), \(X_6\), при \(c_0=-1\).}
-  \label{fig:factorization-source}
- \end{minipage}\hfill
- \begin{minipage}[t]{0.56\textwidth}
-  \vspace{0pt}
-  \small
-  На рис.~\ref{fig:factorization-source} из \(O_6\) выделен вложенный
-  срез \(X_6=O_6\cap\overline B(c_0,\delta)\). Метка \(A\) указывает на
-  выбранную компоненту \(A\in\pi_0(X_6)\). Оранжевая заливка —
-  сеточная выборка \(X_6\), пунктирная окружность ограничивает радиус
-  \(\delta=\frac35\), звезда отмечает \(c_0\). На
-  рис.~\ref{fig:factorization-target} показано включение этой компоненты
-  в соответствующую компоненту \(F_2\).
  \end{minipage}
 \end{figure}
 
@@ -482,7 +468,7 @@ F_N(c,r)\) это включение. Оно задаёт отображение
  \end{minipage}\hfill
  \begin{minipage}[t]{0.56\textwidth}
   \vspace{0pt}
-  \small
+  \scriptsize
   Для \(c=c_0+u=-1+u\), \(|u|\le\frac45\), выполнены оценки
   \[
    |c|\le\frac95<2,\qquad
@@ -490,9 +476,9 @@ F_N(c,r)\) это включение. Оно задаёт отображение
   \]
   Поэтому \(F_2=\overline B(c_0,\frac45)=C_2(c_0,\frac45)\).
   На рис.~\ref{fig:factorization-target} синяя заливка показывает
-  сеточную выборку среза \(F_2\), оранжевый контур — вложенный срез
-  \(X_6\), звезда — \(c_0\). В этом примере включение задаёт отображение
-  компонент
+  сеточную выборку \(F_2\), оранжевый контур — срез \(X_6\), метка \(A\)
+  указывает на выбранную компоненту \(A\in\pi_0(X_6)\), звезда — \(c_0\).
+  В этом примере включение задаёт отображение компонент
   \[
    \begin{aligned}
     X_6&\subseteq F_2=C_2(c_0,r),\\
@@ -508,53 +494,53 @@ F_N(c,r)\) это включение. Оно задаёт отображение
 \end{figure}
 
 \noindent\emph{Геометрический смысл теоремы.}
-Внешний срез \(F_N(c,r)\) состоит из параметров \(c'\) в
-\(\overline B(c,r)\), для которых \(p_j(c')\in K\) при \(0\le j\le N\).
-Вложенный срез \(X_L(c,\delta)\) задаётся условиями до индекса
-\(L\ge N\) в круге \(\overline B(c,\delta)\). Обозначим через
-\(C_N(c,r)\) компоненту \(F_N\), содержащую \(c\). При подходящем
-\(L\) каждая компонента \(X_L\) лежит в ней:
+Рис.~\ref{fig:factorization-global} и~\ref{fig:factorization-target}
+показывают конкретные срезы \(X_6\subseteq F_2\) и выбранную компоненту
+\(A\in\pi_0(X_6)\), которая содержится в \(C_2(c_0,r)\). Теорема
+распространяет это свойство на каждую компоненту \(X_L\) при достаточной
+глубине \(L\):
 \[
  X_L(c,\delta)\subseteq C_N(c,r),\qquad
  \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)
  \quad\text{для каждого }A\in\pi_0(X_L(c,\delta)).
 \]
-Поэтому отображение компонент факторизуется через одноэлементное
-множество:
+У среза \(X_L\) могут быть разные компоненты, и все они переходят в
+одну компоненту \(C_N(c,r)\). Поэтому
 \[
- \pi_0(X_L(c,\delta))
- \xrightarrow{\ A\mapsto C_N(c,r)\ }
- \{C_N(c,r)\}
- \hookrightarrow
- \pi_0(F_N(c,r)).
+ \operatorname{im}\varphi_{L,N}^{c;\delta,r}
+ =\{C_N(c,r)\}.
 \]
-Географическая схема этого включения приведена на рис.~\ref{fig:factorization-map-analogy}.
+Пусть
+\(\mathcal R_N:=\pi_0(F_N(c,r))\setminus\{C_N(c,r)\}\) — множество
+остальных компонент \(F_N\), которое может быть пустым. Отображение
+компонент раскладывается как
+\[
+ \begin{aligned}
+  q &: \pi_0(X_L(c,\delta))\longrightarrow\{C_N(c,r)\},
+       &q(A)&=C_N(c,r),\\
+  j &: \{C_N(c,r)\}\hookrightarrow\pi_0(F_N(c,r)),
+       &\varphi_{L,N}^{c;\delta,r}&=j\circ q.
+ \end{aligned}
+\]
+Для наглядности рис.~\ref{fig:factorization-component-geometry}
+сравнивает промежуточную глубину \(\ell\) и достаточную глубину \(L\),
+где \(N\le\ell<L\). В изображённом случае срез \(X_\ell\) имеет
+компоненты \(A_0,A_1\subseteq C_N(c,r)\) и \(B\subseteq D\), где
+\(D\in\mathcal R_N\); поэтому
+\(\operatorname{im}\varphi_{\ell,N}^{c;\delta,r}=\{C_N(c,r),D\}\).
+Глубина \(L\) задаёт срез \(X_L\subseteq X_\ell\), в котором остаются
+компоненты \(A_0',A_1'\) внутри \(C_N(c,r)\). Поскольку \(D\) отделена
+от \(C_N(c,r)\), имеем \(B\cap X_L=\varnothing\), и
+\(\operatorname{im}\varphi_{L,N}^{c;\delta,r}=\{C_N(c,r)\}\).
+Так рисунок показывает, как дополнительное условие глубины сужает
+множество значений отображения. Число и форма изображённых компонент
+условны.
 
 \begin{figure}[H]
- \begin{minipage}[t]{0.40\textwidth}
-  \vspace{0pt}
-  \centering
-  \includegraphics[width=\linewidth]{docs/figures/factorization-map-analogy.pdf}
-  \captionof{figure}{Карта-схема компонент вложенного и внешнего срезов.}
-  \label{fig:factorization-map-analogy}
- \end{minipage}\hfill
- \begin{minipage}[t]{0.56\textwidth}
-  \vspace{0pt}
-  \small
-  На схеме зелёные участки вместе изображают \(F_N\). Тёмная суша
-  \(C_N(c,r)\) связна и содержит флажок \(c\); светлый остров показывает
-  ещё одну компоненту \(F_N\). Оранжевые пятна \(A_0,A_1,A_2\) условно
-  изображают отдельные компоненты вложенного среза \(X_L\), лежащие на
-  тёмной суше. Красная окружность задаёт радиус \(r\), оранжевая —
-  меньший радиус \(\delta\). Поэтому на карте видно, что
-  \[
-   A_i\in\pi_0(X_L),\qquad
-   \varphi_{L,N}^{c;\delta,r}(A_i)=C_N(c,r)
-   \quad(i=0,1,2).
-  \]
-  Переход к \(N+1\) добавляет правило отбора точек карты; область
-  внешнего приближения сужается: \(O_{N+1}\subseteq O_N\).
- \end{minipage}
+ \centering
+ \includegraphics[width=0.96\textwidth]{docs/figures/factorization-component-geometry.pdf}
+ \captionof{figure}{Срезы \(X_\ell\supseteq X_L\): образ компонент меняется с \(\{C_N,D\}\) на \(\{C_N\}\).}
+ \label{fig:factorization-component-geometry}
 \end{figure}
 
 \section*{Черновое доказательство теоремы о факторизации}

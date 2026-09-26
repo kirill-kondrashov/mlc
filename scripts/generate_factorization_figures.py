@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import ListedColormap
 from matplotlib.lines import Line2D
-from matplotlib.patches import Circle, FancyArrowPatch, Patch, Polygon
+from matplotlib.patches import Circle, Ellipse, FancyArrowPatch, Patch
 
 
 C0 = -1.0 + 0.0j
@@ -33,6 +33,8 @@ SLICE_DELTA = 0.75
 SLICE_HALF_WIDTH = 1.32
 
 OUTER_COLOR = "#b7d9e8"
+LEVEL_L_COLOR = "#83b4a6"
+LEVEL_L_EDGE = "#3d786d"
 DEEP_COLOR = "#193b59"
 SOURCE_COLOR = "#ed9b40"
 TARGET_COLOR = "#477d9e"
@@ -119,15 +121,18 @@ def make_global_figure(
     fig, ax = plt.subplots(figsize=(6.0, 5.0))
     classes = np.zeros(o_n.shape, dtype=np.uint8)
     classes[o_n] = 1
-    classes[o_deep] = 2
+    classes[o_l] = 2
+    classes[o_deep] = 3
     ax.imshow(
         classes,
         extent=global_bounds,
         origin="lower",
         interpolation="nearest",
-        cmap=ListedColormap(["white", OUTER_COLOR, DEEP_COLOR]),
+        cmap=ListedColormap(
+            ["white", OUTER_COLOR, LEVEL_L_COLOR, DEEP_COLOR]
+        ),
         vmin=0,
-        vmax=2,
+        vmax=3,
         aspect="equal",
     )
     parameters = global_x[None, :] + 1j * global_y[:, None]
@@ -167,6 +172,16 @@ def make_global_figure(
         levels=[0.5],
         colors=[SOURCE_COLOR],
         linewidths=0.9,
+        zorder=4,
+    )
+    ax.contour(
+        global_x,
+        global_y,
+        o_l.astype(np.uint8),
+        levels=[0.5],
+        colors=[LEVEL_L_EDGE],
+        linewidths=0.75,
+        linestyles="--",
         zorder=4,
     )
     ax.add_patch(
@@ -223,6 +238,17 @@ def make_global_figure(
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
         zorder=6,
     )
+    ax.text(
+        0.0,
+        -0.8,
+        r"$O_6$",
+        fontsize=14,
+        color=LEVEL_L_EDGE,
+        ha="center",
+        va="center",
+        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
+        zorder=6,
+    )
     style_parameter_axis(ax, global_bounds)
     ax.set_xlabel(r"$\operatorname{Re} c$", fontsize=12)
     ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=12)
@@ -237,12 +263,25 @@ def make_global_figure(
             Patch(
                 facecolor=OUTER_COLOR,
                 edgecolor="none",
-                label=rf"$O_{{{N}}}\setminus O_{{{DEEP_LEVEL}}}$",
+                label=rf"$O_{{{N}}}\setminus O_{{{L}}}$",
+            ),
+            Patch(
+                facecolor=LEVEL_L_COLOR,
+                edgecolor="none",
+                label=rf"$O_{{{L}}}\setminus O_{{{DEEP_LEVEL}}}$",
             ),
             Patch(
                 facecolor=DEEP_COLOR,
                 edgecolor="none",
                 label=rf"$O_{{{DEEP_LEVEL}}}$",
+            ),
+            Line2D(
+                [0],
+                [0],
+                color=LEVEL_L_EDGE,
+                linestyle="--",
+                linewidth=1.1,
+                label=rf"граница выборки $O_{{{L}}}$",
             ),
             Patch(
                 facecolor=TARGET_COLOR,
@@ -257,10 +296,10 @@ def make_global_figure(
         ],
         loc="upper right",
         framealpha=0.96,
-        fontsize=11,
+        fontsize=10,
         borderpad=0.5,
         handlelength=1.7,
-        labelspacing=0.45,
+        labelspacing=0.35,
     )
     save_pdf(
         fig,
@@ -507,91 +546,6 @@ def make_orbit_figure(output_dir: Path) -> None:
     )
 
 
-def make_source_figure(
-    output_dir: Path,
-    local_x: np.ndarray,
-    local_y: np.ndarray,
-    source: np.ndarray,
-    local_bounds: tuple[float, float, float, float],
-) -> None:
-    fig, ax = plt.subplots(figsize=(4.8, 4.5))
-    draw_mask(ax, local_x, local_y, source, SOURCE_COLOR)
-    ax.add_patch(
-        Circle(
-            (C0.real, C0.imag),
-            DELTA,
-            fill=False,
-            edgecolor="#6b4c2a",
-            linewidth=1.2,
-            linestyle="--",
-            zorder=3,
-        )
-    )
-    ax.scatter(
-        [C0.real],
-        [C0.imag],
-        marker="*",
-        s=90,
-        color=MARKER_COLOR,
-        edgecolor="white",
-        linewidth=0.6,
-        zorder=5,
-    )
-    ax.annotate(
-        r"$A$ (видимая компонента)",
-        xy=(-1.28, 0),
-        xytext=(-1.79, 0.28),
-        fontsize=11,
-        arrowprops={"arrowstyle": "->", "color": "#6b4c2a", "lw": 1.0},
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1.5},
-    )
-    ax.annotate(
-        r"$c_0=-1$",
-        xy=(C0.real, C0.imag),
-        xytext=(-0.83, -0.13),
-        fontsize=11,
-        arrowprops={"arrowstyle": "-", "color": MARKER_COLOR, "lw": 0.8},
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
-    )
-    style_parameter_axis(ax, local_bounds)
-    ax.set_xlabel(r"$\operatorname{Re} c$", fontsize=12)
-    ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=12)
-    ax.tick_params(labelsize=11, length=3, pad=3)
-    ax.set_xticks([-1.8, -1.4, -1.0, -0.6, -0.2])
-    ax.set_yticks([-0.8, -0.4, 0, 0.4, 0.8])
-    ax.set_title(
-        rf"Вложенный срез $X_{{{L}}}$ при $c_0=-1$",
-        fontsize=13,
-        pad=8,
-    )
-    ax.legend(
-        handles=[
-            Patch(
-                facecolor=SOURCE_COLOR,
-                edgecolor="none",
-                label=rf"выборка $X_{{{L}}}$, $\delta={DELTA}$",
-            ),
-            Line2D(
-                [0],
-                [0],
-                color="#6b4c2a",
-                linestyle="--",
-                linewidth=1.2,
-                label=r"$\partial\overline{B}(c_0,\delta)$",
-            ),
-        ],
-        loc="lower right",
-        framealpha=0.95,
-        fontsize=10.5,
-    )
-    save_pdf(
-        fig,
-        output_dir / "factorization-source.pdf",
-        "Вложенный срез X6 в численном примере",
-        "The nested finite-stage slice X6",
-    )
-
-
 def make_target_figure(
     output_dir: Path,
     local_x: np.ndarray,
@@ -707,201 +661,237 @@ def make_target_figure(
     )
 
 
-def make_map_analogy_figure(output_dir: Path) -> None:
-    fig, ax = plt.subplots(figsize=(6.0, 5.2))
-    ax.set_facecolor("#dceef5")
-    ax.set_xlim(-2.05, 2.05)
-    ax.set_ylim(-1.8, 1.8)
-    ax.set_aspect("equal", adjustable="box")
-    ax.axis("off")
-
-    coastline = np.array(
-        [
-            (-1.38, -0.55),
-            (-1.16, -0.72),
-            (-0.82, -0.56),
-            (-0.98, -0.9),
-            (-0.62, -0.84),
-            (-0.34, -1.13),
-            (-0.08, -0.84),
-            (0.22, -1.02),
-            (0.46, -0.62),
-            (0.7, -0.74),
-            (1.03, -0.52),
-            (0.88, -0.2),
-            (1.14, 0.03),
-            (0.84, 0.3),
-            (1.12, 0.53),
-            (0.98, 0.89),
-            (0.62, 0.8),
-            (0.55, 1.16),
-            (0.18, 0.98),
-            (-0.08, 1.25),
-            (-0.36, 0.92),
-            (-0.68, 1.08),
-            (-0.86, 0.72),
-            (-1.22, 0.72),
-            (-1.12, 0.35),
-            (-1.42, 0.08),
-            (-1.18, -0.2),
-        ],
-        dtype=float,
+def make_component_geometry_figure(output_dir: Path) -> None:
+    fig, axes = plt.subplots(
+        1, 2, figsize=(8.0, 3.2), gridspec_kw={"wspace": 0.08}
     )
-    ax.add_patch(
-        Polygon(
-            coastline,
-            closed=True,
-            facecolor="#8eaf79",
-            edgecolor="#4f7048",
-            linewidth=1.3,
-            zorder=1,
-        )
+    target_fill = "#e7f1f6"
+    neutral_fill = "#f1f3f5"
+    shallow_components = (
+        ((1.85, 2.85), r"$A_0$", 1.2, 0.72),
+        ((4.05, 3.7), r"$A_1$", 1.15, 0.72),
+        ((8.25, 2.95), r"$B$", 1.0, 0.72),
     )
 
-    small_island = coastline * 0.16 + np.array((1.46, 0.1))
-    ax.add_patch(
-        Polygon(
-            small_island,
-            closed=True,
-            facecolor="#cbdcb5",
-            edgecolor="#718b5e",
-            linewidth=1.1,
-            zorder=1,
-        )
-    )
-
-    ax.add_patch(
-        Circle(
-            (0, 0),
-            1.8,
-            fill=False,
-            edgecolor=MARKER_COLOR,
-            linewidth=1.5,
-            linestyle="--",
-            zorder=2,
-        )
-    )
-    ax.add_patch(
-        Circle(
-            (0, 0),
-            0.9,
-            fill=False,
-            edgecolor=SOURCE_COLOR,
-            linewidth=1.3,
-            linestyle=":",
-            zorder=3,
-        )
-    )
-
-    patch_shape = np.array(
-        [
-            (-1.0, -0.15),
-            (-0.75, -0.8),
-            (-0.1, -1.0),
-            (0.7, -0.65),
-            (1.0, -0.05),
-            (0.65, 0.6),
-            (0.05, 0.9),
-            (-0.65, 0.55),
-        ],
-        dtype=float,
-    )
-    patches = (
-        ((0.0, 0.0), r"$A_0$"),
-        ((-0.45, 0.38), r"$A_1$"),
-        ((0.43, -0.38), r"$A_2$"),
-    )
-    for center, label in patches:
-        center_array = np.asarray(center)
+    def add_region(
+        ax: plt.Axes,
+        center: tuple[float, float],
+        width: float,
+        height: float,
+        facecolor: str,
+        edgecolor: str,
+        *,
+        linewidth: float = 1.2,
+        linestyle: str = "-",
+        alpha: float = 1.0,
+        zorder: int = 1,
+    ) -> None:
         ax.add_patch(
-            Polygon(
-                patch_shape * 0.13 + center_array,
-                closed=True,
-                facecolor=SOURCE_COLOR,
-                edgecolor="#8c4c10",
-                linewidth=0.8,
-                zorder=4,
+            Ellipse(
+                center,
+                width,
+                height,
+                facecolor=facecolor,
+                edgecolor=edgecolor,
+                linewidth=linewidth,
+                linestyle=linestyle,
+                alpha=alpha,
+                zorder=zorder,
             )
         )
-        label_offset = (0.17, 0.13) if label == r"$A_0$" else (0.0, 0.0)
+
+    def add_component(
+        ax: plt.Axes,
+        center: tuple[float, float],
+        label: str,
+        width: float,
+        height: float,
+        *,
+        facecolor: str = SOURCE_COLOR,
+        linestyle: str = "-",
+        alpha: float = 1.0,
+        textcolor: str = "#704111",
+    ) -> None:
+        add_region(
+            ax,
+            center,
+            width,
+            height,
+            facecolor,
+            "#8c4c10",
+            linewidth=1.0,
+            linestyle=linestyle,
+            alpha=alpha,
+            zorder=3,
+        )
+        if label:
+            ax.text(
+                *center,
+                label,
+                fontsize=9,
+                color=textcolor,
+                ha="center",
+                va="center",
+                zorder=5,
+            )
+
+    def draw_outer_components(ax: plt.Axes, *, emphasize: bool) -> None:
         ax.text(
-            *(center_array + label_offset),
-            label,
-            fontsize=11,
-            color="#704111",
+            3.55,
+            4.52,
+            r"$C_N(c,r)$",
+            fontsize=10.5,
+            color="#285b78" if emphasize else TARGET_COLOR,
             ha="center",
-            va="center",
-            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.92, "pad": 1},
-            zorder=6,
+            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
+            zorder=4,
+        )
+        ax.text(
+            8.25,
+            3.82,
+            r"$D$",
+            fontsize=9.5,
+            color="#59636d",
+            ha="center",
+            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 0.8},
+            zorder=4,
         )
 
-    ax.scatter(
-        [0],
-        [0],
-        marker="*",
-        s=145,
-        color=MARKER_COLOR,
-        edgecolor="white",
-        linewidth=0.7,
-        zorder=7,
-    )
-    ax.text(
-        -0.85,
-        0.82,
-        r"$C_N(c,r)$",
-        fontsize=13,
-        color="#294b2b",
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1.2},
-        zorder=6,
-    )
-    ax.text(
-        1.46,
-        0.1,
-        r"$F_N$",
-        fontsize=12,
-        color="#4b633c",
+    def draw_base(ax: plt.Axes, *, emphasize: bool) -> None:
+        add_region(
+            ax,
+            (3.55, 2.95),
+            6.2,
+            4.1,
+            "#d7e9f2" if emphasize else target_fill,
+            "#285b78" if emphasize else TARGET_COLOR,
+            linewidth=2.0 if emphasize else 1.35,
+            zorder=1,
+        )
+        add_region(
+            ax,
+            (8.25, 2.95),
+            1.7,
+            1.4,
+            neutral_fill,
+            "#89939b",
+            linewidth=1.0,
+            zorder=1,
+        )
+        draw_outer_components(ax, emphasize=emphasize)
+
+    def mark_c(ax: plt.Axes) -> None:
+        ax.scatter(
+            [1.62],
+            [2.85],
+            marker="*",
+            s=55,
+            color=MARKER_COLOR,
+            edgecolor="white",
+            linewidth=0.45,
+            zorder=6,
+        )
+        ax.text(
+            1.62,
+            3.08,
+            r"$c$",
+            fontsize=8.5,
+            color=MARKER_COLOR,
+            ha="center",
+            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 0.5},
+            zorder=4,
+        )
+
+    for ax in axes:
+        ax.set_xlim(0, 10)
+        ax.set_ylim(0, 6)
+        ax.set_aspect("equal", adjustable="box")
+        ax.axis("off")
+
+    left = axes[0]
+    left.text(
+        5, 5.68, r"а) Промежуточная глубина $\ell$", fontsize=11.5,
         ha="center",
         va="center",
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
-        zorder=6,
     )
-    ax.text(
-        0.09,
-        -0.2,
-        r"$c$",
-        fontsize=12,
-        color=MARKER_COLOR,
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
-        zorder=6,
+    left.text(
+        5,
+        5.28,
+        r"$\operatorname{im}\varphi_{\ell,N}=\{C_N,D\}$",
+        fontsize=9.2,
+        ha="center",
+        va="center",
     )
-    ax.text(
-        -1.3,
-        1.25,
-        r"$r$",
-        fontsize=12,
-        color=MARKER_COLOR,
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
-        zorder=6,
-    )
-    ax.text(
-        0.62,
-        0.64,
-        r"$\delta$",
-        fontsize=12,
+    draw_base(left, emphasize=False)
+    for center, label, width, height in shallow_components:
+        add_component(left, center, label, width, height)
+    mark_c(left)
+    left.text(
+        3.55,
+        1.2,
+        r"$X_\ell=A_0\cup A_1\cup B$",
+        fontsize=9,
         color="#8c4c10",
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
-        zorder=6,
+        ha="center",
+        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.88, "pad": 1},
+        zorder=4,
     )
-    ax.set_title(
-        r"Карта-схема: $X_L\subseteq C_N(c,r)\subseteq F_N$",
-        fontsize=14,
-        pad=8,
+
+    right = axes[1]
+    right.text(
+        5,
+        5.68,
+        r"б) Достаточная глубина $L>\ell$",
+        fontsize=11.5,
+        ha="center",
+        va="center",
     )
+    right.text(
+        5,
+        5.28,
+        r"$\operatorname{im}\varphi_{L,N}=\{C_N\}$",
+        fontsize=9.2,
+        ha="center",
+        va="center",
+    )
+    draw_base(right, emphasize=True)
+    for center, label, width, height in shallow_components:
+        add_component(
+            right,
+            center,
+            label if label == r"$B$" else "",
+            width,
+            height,
+            facecolor="none",
+            linestyle="--",
+            alpha=0.65,
+            textcolor="#8c4c10",
+        )
+    for center, label, width, height in shallow_components[:2]:
+        add_component(
+            right,
+            center,
+            rf"${label[1:-1]}'$",
+            width * 0.68,
+            height * 0.68,
+        )
+    mark_c(right)
+    right.text(
+        3.55,
+        1.2,
+        r"$X_L=A_0'\cup A_1'$",
+        fontsize=9,
+        color="#8c4c10",
+        ha="center",
+        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.88, "pad": 1},
+        zorder=4,
+    )
+
     save_pdf(
         fig,
-        output_dir / "factorization-map-analogy.pdf",
-        "Карта-схема геометрического смысла теоремы",
-        "A map analogy for the inclusion of nested parameter slices",
+        output_dir / "factorization-component-geometry.pdf",
+        "Геометрическое ограничение на компоненты при увеличении глубины",
+        "Shallow and deep slices with component images before and after the theorem bound",
     )
 
 
@@ -950,11 +940,10 @@ def make_figures(output_dir: Path) -> None:
     )
     make_slices_figure(output_dir)
     make_orbit_figure(output_dir)
-    make_source_figure(output_dir, local_x, local_y, source, local_bounds)
     make_target_figure(
         output_dir, local_x, local_y, source, target, local_bounds
     )
-    make_map_analogy_figure(output_dir)
+    make_component_geometry_figure(output_dir)
 
 
 def main() -> None:
