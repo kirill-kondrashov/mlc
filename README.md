@@ -114,8 +114,8 @@ The repository supplies no global instance of $\mathrm{BUF}(M,O)$.
 
 ### Finite outer systems
 
-A finite-cell system provides finite index types $I_N$ and nonempty compact
-cells $Q_{N,i}$ with
+A finite-cell system provides finite index types $I_N$ and compact cells
+$Q_{N,i}$ (empty cells are permitted) with
 
 $$
 E_N:=\bigcup_{i\in I_N}Q_{N,i},
@@ -138,9 +138,17 @@ $$
 \bigcap_N E_N=M.
 $$
 
-The exact baseline $I_N=\{\ast\}$, $Q_{N,\ast}=O_N$ is implemented.
-Construction of a nontrivial dyadic, interval, CAD, or semialgebraic system
-remains open.
+Two systems are implemented. The baseline uses one cell $Q_{N,\ast}=O_N$.
+The dyadic system indexes all $2^N\times2^N$ closed grid squares in
+$[-2,2]^2$ and intersects each with $O_N$; its stage union is exactly $O_N$,
+and every cell has diameter at most $8\cdot2^{-N}$. The address interface
+requires chosen cells to be nonempty. For this grid, every nested address
+has a singleton intersection, and every $c\in M$ has a compatible address.
+
+The dyadic cells still use the finite-orbit inequalities defining $O_N$;
+empty cells are retained, so occupancy decisions are not needed for this
+formal decomposition. Producing cells from finite rational interval/CAD
+certificates alone and proving the local-connectivity buffer remain open.
 
 ### Finite inner systems
 
@@ -197,7 +205,7 @@ $1/256$; this is an instance of `FiniteTrappingRegions.lean`.
 
 ### Addresses and classification
 
-An address $a=(a_N)_N$ satisfies
+An address $a=(a_N)_N$ chooses a nonempty cell at every level and satisfies
 
 $$
 Q_{N+1,a_{N+1}}\subseteq Q_{N,a_N}.
@@ -222,6 +230,10 @@ $$
 \mathrm{AC}(E):\Longleftrightarrow
 \forall c\in M\ \exists a\ \forall N,\ c\in Q_{N,a_N}.
 $$
+
+For the dyadic outer system, any two points in one level-$N$ cell are at
+distance at most $8\cdot2^{-N}$, proving $\mathrm{VD}(E)$. A canonical
+dyadic index choice proves address coverage $\mathrm{AC}(E)$.
 
 For the dynamical classification, the formalisation proves
 
@@ -318,13 +330,14 @@ The remaining existence statements are
 $$
 \mathrm{UG},\qquad \mathrm{BUF}(M,O),\qquad
 \mathrm{FC},\qquad
-\exists F\,\mathrm{ID}(F),\qquad
-\exists E\,(\mathrm{VD}(E)\land\mathrm{AC}(E)).
+\exists F\,\mathrm{ID}(F).
 $$
 
 Here $F$ uses finite-union trapping certificates. These existence statements
-remain explicit obligations; the single-rectangle density statement has a
-proved negation.
+remain explicit obligations. For the dyadic outer system, $\mathrm{VD}(E)$
+and $\mathrm{AC}(E)$ are proved, but this address coding contains no local
+connectivity estimate; the single-rectangle density statement has a proved
+negation.
 
 The root axiom frontier is
 
