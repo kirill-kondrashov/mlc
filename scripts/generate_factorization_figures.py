@@ -14,23 +14,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import ListedColormap
 from matplotlib.lines import Line2D
-from matplotlib.patches import Circle, Ellipse, FancyArrowPatch, Patch
+from matplotlib.patches import Circle, Ellipse, Patch
 
 
-C0 = -1.0 + 0.0j
+C0 = 0.25 + 0.0j
 N = 2
-L = 6
+L = 20
 DEEP_LEVEL = 80
-RADIUS = 0.8
-DELTA = 0.6
-LOCAL_HALF_WIDTH = 0.96
+RADIUS = 0.4
+DELTA = 0.2
+LOCAL_HALF_WIDTH = 0.48
 
-SLICE_C0 = 0.0 + 0.0j
-SLICE_N = 2
-SLICE_L = 8
-SLICE_RADIUS = 1.2
-SLICE_DELTA = 0.75
-SLICE_HALF_WIDTH = 1.32
+SLICE_C0 = C0
+SLICE_N = N
+SLICE_L = L
+SLICE_RADIUS = RADIUS
+SLICE_DELTA = DELTA
+SLICE_HALF_WIDTH = LOCAL_HALF_WIDTH
 
 OUTER_COLOR = "#b7d9e8"
 LEVEL_L_COLOR = "#83b4a6"
@@ -217,8 +217,8 @@ def make_global_figure(
         zorder=5,
     )
     ax.text(
-        -0.42,
-        0.36,
+        C0.real + 0.62 * RADIUS,
+        C0.imag + 0.62 * RADIUS,
         r"$F_2$",
         fontsize=15,
         color=TARGET_COLOR,
@@ -228,9 +228,9 @@ def make_global_figure(
         zorder=6,
     )
     ax.text(
-        -0.8,
-        0.18,
-        r"$X_6$",
+        C0.real - 0.62 * DELTA,
+        C0.imag + 0.38 * DELTA,
+        rf"$X_{{{L}}}$",
         fontsize=15,
         color="#8c4c10",
         ha="center",
@@ -238,14 +238,13 @@ def make_global_figure(
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
         zorder=6,
     )
-    ax.text(
-        0.0,
-        -0.8,
-        r"$O_6$",
-        fontsize=14,
-        color=LEVEL_L_EDGE,
-        ha="center",
-        va="center",
+    ax.annotate(
+        r"$c_0=\frac{1}{4}$",
+        xy=(C0.real, C0.imag),
+        xytext=(C0.real + 0.1, C0.imag - 0.12),
+        fontsize=9,
+        color=MARKER_COLOR,
+        arrowprops={"arrowstyle": "-", "color": MARKER_COLOR, "lw": 0.8},
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1},
         zorder=6,
     )
@@ -254,7 +253,7 @@ def make_global_figure(
     ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=12)
     ax.tick_params(labelsize=11, length=3, pad=3)
     ax.set_title(
-        rf"Конечные уровни и окна при $c_0=-1$ ($N={N}$, $L={L}$)",
+        rf"Окрестность граничной точки $c_0=\frac{{1}}{{4}}$ ($N={N}$, $L={L}$)",
         fontsize=14,
         pad=9,
     )
@@ -321,10 +320,13 @@ def make_slices_figure(output_dir: Path) -> None:
         1501,
     )
     parameters = local_x[None, :] + 1j * local_y[:, None]
-    levels = finite_outer_levels(parameters, (SLICE_N, SLICE_L))
+    levels = finite_outer_levels(parameters, (SLICE_N, SLICE_L, DEEP_LEVEL))
     distance = np.abs(parameters - SLICE_C0)
     source = levels[SLICE_L] & (distance <= SLICE_DELTA)
     target = levels[SLICE_N] & (distance <= SLICE_RADIUS)
+    deep_in_target = np.ma.masked_where(
+        distance > SLICE_RADIUS, levels[DEEP_LEVEL].astype(float)
+    )
     if np.any(source & ~target):
         raise RuntimeError("The sampled nested slice escaped the outer slice.")
 
@@ -346,6 +348,15 @@ def make_slices_figure(output_dir: Path) -> None:
         vmax=1,
         aspect="equal",
         zorder=2,
+    )
+    ax.contour(
+        local_x,
+        local_y,
+        deep_in_target,
+        levels=[0.5],
+        colors=[DEEP_COLOR],
+        linewidths=0.8,
+        zorder=3,
     )
     ax.add_patch(
         Circle(
@@ -383,10 +394,10 @@ def make_slices_figure(output_dir: Path) -> None:
     ax.set_xlabel(r"$\operatorname{Re} c$", fontsize=13)
     ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=13)
     ax.tick_params(labelsize=12, length=3, pad=3)
-    ax.set_xticks([-1.2, -0.6, 0, 0.6, 1.2])
-    ax.set_yticks([-1.2, -0.6, 0, 0.6, 1.2])
+    ax.set_xticks(np.linspace(local_x[0], local_x[-1], 5))
+    ax.set_yticks(np.linspace(local_y[0], local_y[-1], 5))
     ax.set_title(
-        rf"Срезы $X_{{{SLICE_L}}}\subset F_{{{SLICE_N}}}$ при $c_\ast=0$",
+        rf"Срезы $X_{{{SLICE_L}}}\subset F_{{{SLICE_N}}}$ при $c_0=\frac{{1}}{{4}}$",
         fontsize=16,
         pad=9,
     )
@@ -408,7 +419,7 @@ def make_slices_figure(output_dir: Path) -> None:
                 color=MARKER_COLOR,
                 linestyle="--",
                 linewidth=1.35,
-                label=rf"$\partial\overline{{B}}(c_\ast,r)$, $r={SLICE_RADIUS:g}$",
+                label=rf"$\partial\overline{{B}}(c_0,r)$, $r={SLICE_RADIUS:g}$",
             ),
             Line2D(
                 [0],
@@ -416,7 +427,14 @@ def make_slices_figure(output_dir: Path) -> None:
                 color="#6b4c2a",
                 linestyle=":",
                 linewidth=1.1,
-                label=rf"$\partial\overline{{B}}(c_\ast,\delta)$, $\delta={SLICE_DELTA:g}$",
+                label=rf"$\partial\overline{{B}}(c_0,\delta)$, $\delta={SLICE_DELTA:g}$",
+            ),
+            Line2D(
+                [0],
+                [0],
+                color=DEEP_COLOR,
+                linewidth=0.8,
+                label=rf"граница уровня $O_{{{DEEP_LEVEL}}}$",
             ),
         ],
         loc="lower left",
@@ -428,121 +446,88 @@ def make_slices_figure(output_dir: Path) -> None:
     save_pdf(
         fig,
         output_dir / "factorization-slices.pdf",
-        "Срезы X8 и F2 при c*=0",
-        "Grid samples of the nested and outer local slices in the parameter plane",
+        "Локальные срезы у граничной точки c0=1/4",
+        "Grid samples of nested parameter slices near the main cardioid cusp",
     )
 
 
 def make_orbit_figure(output_dir: Path) -> None:
-    fig, ax = plt.subplots(figsize=(7.0, 5.4))
-    ax.add_patch(
-        Circle(
-            (0, 0),
-            2,
-            facecolor="#f4f6f8",
-            edgecolor="#46535f",
-            linewidth=1.2,
-            zorder=0,
-        )
+    orbit = [0.0]
+    for _ in range(18):
+        orbit.append(orbit[-1] ** 2 + C0.real)
+    steps = np.arange(len(orbit))
+    fig, ax = plt.subplots(figsize=(6.2, 3.8))
+    ax.axhspan(0, 0.5, facecolor="#f4f6f8", zorder=0)
+    ax.axhline(
+        0.5,
+        color=MARKER_COLOR,
+        linewidth=1.0,
+        linestyle="--",
+        label=r"параболическая неподвижная точка $\frac{1}{2}$",
+        zorder=1,
     )
-    ax.axhline(0, color="#cbd2d8", linewidth=0.65, zorder=1)
-    ax.axvline(0, color="#cbd2d8", linewidth=0.65, zorder=1)
-    ax.add_patch(
-        FancyArrowPatch(
-            (-0.08, 0.16),
-            (-0.92, 0.16),
-            connectionstyle="arc3,rad=0.35",
-            arrowstyle="-|>",
-            mutation_scale=15,
-            linewidth=1.4,
-            color=SOURCE_COLOR,
-            shrinkA=4,
-            shrinkB=4,
-            zorder=3,
-        )
-    )
-    ax.add_patch(
-        FancyArrowPatch(
-            (-0.92, -0.16),
-            (-0.08, -0.16),
-            connectionstyle="arc3,rad=0.35",
-            arrowstyle="-|>",
-            mutation_scale=15,
-            linewidth=1.4,
-            color=TARGET_COLOR,
-            shrinkA=4,
-            shrinkB=4,
-            zorder=3,
-        )
+    ax.plot(
+        steps,
+        orbit,
+        color=TARGET_COLOR,
+        linewidth=1.3,
+        marker="o",
+        markersize=3.5,
+        zorder=2,
     )
     ax.scatter(
-        [0],
-        [0],
+        [steps[0]],
+        [orbit[0]],
         marker="*",
         s=115,
         color=MARKER_COLOR,
         edgecolor="white",
         linewidth=0.7,
-        zorder=5,
-    )
-    ax.scatter(
-        [-1],
-        [0],
-        s=75,
-        color=DEEP_COLOR,
-        edgecolor="white",
-        linewidth=0.7,
-        zorder=5,
+        zorder=4,
     )
     ax.annotate(
-        r"$p_0=p_2=0$",
-        xy=(0, 0),
-        xytext=(0.18, 0.44),
+        r"$p_0=0$",
+        xy=(steps[0], orbit[0]),
+        xytext=(1.0, 0.06),
         fontsize=11,
-        arrowprops={"arrowstyle": "-", "color": MARKER_COLOR, "lw": 0.9},
+        arrowprops={"arrowstyle": "-", "color": MARKER_COLOR, "lw": 0.8},
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.92, "pad": 1.5},
     )
     ax.annotate(
-        r"$p_1=-1$",
-        xy=(-1, 0),
-        xytext=(-1.65, 0.68),
+        r"$p_1=\frac{1}{4}$",
+        xy=(steps[1], orbit[1]),
+        xytext=(2.3, 0.16),
         fontsize=11,
-        arrowprops={"arrowstyle": "-", "color": DEEP_COLOR, "lw": 0.9},
+        arrowprops={"arrowstyle": "-", "color": DEEP_COLOR, "lw": 0.8},
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.92, "pad": 1.5},
     )
     ax.text(
-        -0.54,
-        0.45,
-        r"$f_{-1}(0)=-1$",
-        ha="center",
+        0.98,
+        0.96,
+        r"$p_{n+1}=p_n^2+\frac{1}{4},\quad 0\leq p_n<\frac{1}{2}<2$",
+        transform=ax.transAxes,
+        ha="right",
+        va="top",
         fontsize=10,
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1.5},
     )
-    ax.text(
-        -0.54,
-        -0.66,
-        r"$f_{-1}(-1)=0$",
-        ha="center",
-        fontsize=10,
-        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1.5},
-    )
-    ax.text(1.03, 1.52, r"$K=\overline{B}(0,2)$", fontsize=10)
-    ax.set_xlim(-2.25, 2.25)
-    ax.set_ylim(-2.25, 2.25)
-    ax.set_aspect("equal", adjustable="box")
-    ax.set_xlabel(r"$\operatorname{Re} z$", fontsize=10)
-    ax.set_ylabel(r"$\operatorname{Im} z$", fontsize=10)
+    ax.set_xlim(-0.5, 18.5)
+    ax.set_ylim(-0.02, 0.58)
+    ax.set_xticks([0, 4, 8, 12, 16])
+    ax.set_xlabel(r"номер итерации $n$", fontsize=10)
+    ax.set_ylabel(r"$p_n(c_0)$", fontsize=10)
     ax.tick_params(labelsize=9, length=3, pad=3)
     ax.set_title(
-        r"Критическая орбита при фиксированном $c_0=-1$",
-        fontsize=12,
+        r"Орбита при граничном параметре $c_0=\frac{1}{4}$",
+        fontsize=11,
         pad=9,
     )
+    ax.legend(loc="lower right", fontsize=8.5, framealpha=0.95)
     save_pdf(
         fig,
         output_dir / "factorization-critical-orbit.pdf",
-        "Критическая орбита при c0=-1",
-        "The orbit 0 -> -1 -> 0 certifies c0 belongs to the Mandelbrot set",
+        "Критическая орбита при граничном c0=1/4",
+        "The critical orbit converges to the parabolic fixed point 1/2",
     )
 
 
@@ -552,10 +537,41 @@ def make_target_figure(
     local_y: np.ndarray,
     source: np.ndarray,
     target: np.ndarray,
+    deep: np.ndarray,
     local_bounds: tuple[float, float, float, float],
 ) -> None:
     fig, ax = plt.subplots(figsize=(4.8, 4.5))
     draw_mask(ax, local_x, local_y, target, TARGET_COLOR)
+    ax.imshow(
+        source.astype(np.uint8),
+        extent=(
+            float(local_x[0]),
+            float(local_x[-1]),
+            float(local_y[0]),
+            float(local_y[-1]),
+        ),
+        origin="lower",
+        interpolation="nearest",
+        cmap=ListedColormap(["none", SOURCE_COLOR]),
+        vmin=0,
+        vmax=1,
+        aspect="equal",
+        alpha=0.55,
+        zorder=2,
+    )
+    parameters = local_x[None, :] + 1j * local_y[:, None]
+    deep_in_target = np.ma.masked_where(
+        np.abs(parameters - C0) > RADIUS, deep.astype(float)
+    )
+    ax.contour(
+        local_x,
+        local_y,
+        deep_in_target,
+        levels=[0.5],
+        colors=[DEEP_COLOR],
+        linewidths=0.8,
+        zorder=3,
+    )
     ax.contour(
         local_x,
         local_y,
@@ -598,66 +614,48 @@ def make_target_figure(
         zorder=5,
     )
     ax.annotate(
-        r"$C_2(c_0,r)=F_2=\overline{B}(c_0,r)$",
-        xy=(-0.58, 0.25),
-        xytext=(-0.9, 0.69),
+        rf"$C_{{{N}}}(c_0,r)=F_{{{N}}}=\overline{{B}}(c_0,r)$",
+        xy=(C0.real + 0.24, C0.imag + 0.16),
+        xytext=(C0.real - 0.08, C0.imag + 0.4),
         fontsize=11,
         color=DEEP_COLOR,
         arrowprops={"arrowstyle": "->", "color": DEEP_COLOR, "lw": 1.0},
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1.5},
     )
     ax.annotate(
-        r"$A\subset X_6$",
-        xy=(-1.57, 0.08),
-        xytext=(-1.84, -0.21),
-        fontsize=11,
+        rf"$A\subset X_{{{L}}}$",
+        xy=(C0.real - 0.06, C0.imag + 0.03),
+        xytext=(C0.real - 0.25, C0.imag - 0.18),
+        fontsize=9.5,
         color="#8c4c10",
         arrowprops={"arrowstyle": "->", "color": SOURCE_COLOR, "lw": 0.9},
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1.5},
+    )
+    ax.text(
+        C0.real + 0.015,
+        C0.imag + 0.012,
+        r"$c_0$",
+        fontsize=9,
+        color=MARKER_COLOR,
+        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 0.5},
+        zorder=6,
     )
     style_parameter_axis(ax, local_bounds)
     ax.set_xlabel(r"$\operatorname{Re} c$", fontsize=12)
     ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=12)
     ax.tick_params(labelsize=11, length=3, pad=3)
-    ax.set_xticks([-1.8, -1.4, -1.0, -0.6, -0.2])
-    ax.set_yticks([-0.8, -0.4, 0, 0.4, 0.8])
+    ax.set_xticks(np.linspace(local_bounds[0], local_bounds[1], 5))
+    ax.set_yticks(np.linspace(local_bounds[2], local_bounds[3], 5))
     ax.set_title(
-        rf"Внешний срез $F_{{{N}}}$ при $c_0=-1$",
+        rf"Внешний срез $F_{{{N}}}$ у точки $c_0=\frac{{1}}{{4}}$",
         fontsize=13,
         pad=8,
-    )
-    ax.legend(
-        handles=[
-            Patch(
-                facecolor=TARGET_COLOR,
-                edgecolor="none",
-                label=rf"внешний срез $F_{{{N}}}$, $r={RADIUS}$",
-            ),
-            Line2D(
-                [0],
-                [0],
-                color=SOURCE_COLOR,
-                linewidth=1.4,
-                label=r"контур вложенного среза $X_6$",
-            ),
-            Line2D(
-                [0],
-                [0],
-                color=MARKER_COLOR,
-                linestyle="--",
-                linewidth=1.2,
-                label=r"$\partial\overline{B}(c_0,r)$",
-            ),
-        ],
-        loc="lower right",
-        framealpha=0.95,
-        fontsize=10.5,
     )
     save_pdf(
         fig,
         output_dir / "factorization-target.pdf",
-        "Внешний срез F2 и вложенный срез X6",
-        "The outer and nested local slices and their component map",
+        "Срезы около граничной точки c0=1/4",
+        "The finite local slices near the cusp parameter 1/4",
     )
 
 
@@ -668,7 +666,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
     target_fill = "#e7f1f6"
     neutral_fill = "#f1f3f5"
     shallow_components = (
-        ((1.85, 2.85), r"$A_0$", 1.2, 0.72),
+        ((1.97, 2.85), r"$A_0$", 1.1, 0.72),
         ((4.05, 3.7), r"$A_1$", 1.15, 0.72),
         ((8.25, 2.95), r"$B$", 1.0, 0.72),
     )
@@ -737,7 +735,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
 
     def draw_outer_components(ax: plt.Axes, *, emphasize: bool) -> None:
         ax.text(
-            3.55,
+            3.95,
             4.52,
             r"$C_N(c,r)$",
             fontsize=10.5,
@@ -760,8 +758,8 @@ def make_component_geometry_figure(output_dir: Path) -> None:
     def draw_base(ax: plt.Axes, *, emphasize: bool) -> None:
         add_region(
             ax,
-            (3.55, 2.95),
-            6.2,
+            (3.95, 2.95),
+            5.2,
             4.1,
             "#d7e9f2" if emphasize else target_fill,
             "#285b78" if emphasize else TARGET_COLOR,
@@ -827,7 +825,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
         add_component(left, center, label, width, height)
     mark_c(left)
     left.text(
-        3.55,
+        3.95,
         1.2,
         r"$X_\ell=A_0\cup A_1\cup B$",
         fontsize=9,
@@ -877,7 +875,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
         )
     mark_c(right)
     right.text(
-        3.55,
+        3.95,
         1.2,
         r"$A_0'\sim A_1'$",
         fontsize=9,
@@ -904,7 +902,7 @@ def make_figures(output_dir: Path) -> None:
             "axes.unicode_minus": False,
         }
     )
-    global_bounds = (-2.4, 0.7, -1.4, 1.4)
+    global_bounds = (-2.4, 0.85, -1.4, 1.4)
     global_x = np.linspace(global_bounds[0], global_bounds[1], 1301)
     global_y = np.linspace(global_bounds[2], global_bounds[3], 1101)
     global_parameters = global_x[None, :] + 1j * global_y[:, None]
@@ -922,7 +920,7 @@ def make_figures(output_dir: Path) -> None:
         C0.imag - LOCAL_HALF_WIDTH, C0.imag + LOCAL_HALF_WIDTH, 1601
     )
     local_parameters = local_x[None, :] + 1j * local_y[:, None]
-    local_levels = finite_outer_levels(local_parameters, (N, L))
+    local_levels = finite_outer_levels(local_parameters, (N, L, DEEP_LEVEL))
     distance = np.abs(local_parameters - C0)
     source = local_levels[L] & (distance <= DELTA)
     target = local_levels[N] & (distance <= RADIUS)
@@ -941,7 +939,13 @@ def make_figures(output_dir: Path) -> None:
     make_slices_figure(output_dir)
     make_orbit_figure(output_dir)
     make_target_figure(
-        output_dir, local_x, local_y, source, target, local_bounds
+        output_dir,
+        local_x,
+        local_y,
+        source,
+        target,
+        local_levels[DEEP_LEVEL],
+        local_bounds,
     )
     make_component_geometry_figure(output_dir)
 
