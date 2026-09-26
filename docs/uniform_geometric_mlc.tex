@@ -99,7 +99,15 @@
  \]
 \[
   \begin{gathered}
-  \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)\\
+  \mathsf{EA}_{\mathrm{seq}}\Longleftrightarrow
+  \exists(m_j)_{j\ge1}\ \exists(G_j)_{j\ge1},\\
+  1\le m_1<m_2<\cdots,\qquad m_j\longrightarrow\infty,\qquad
+  G_j\in\mathcal R_{m_j}.
+  \end{gathered}
+ \]
+ \[
+   \begin{gathered}
+   \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)\\
   \Longleftrightarrow\\
   \begin{gathered}
   1\le m_1<m_2<\cdots,\qquad m_j\longrightarrow\infty,\qquad
@@ -119,9 +127,103 @@
  \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr).
  \end{gathered}
  \]
+
+Для \(F\subseteq\C\) обозначим через \(\pi_0(F)\) множество его
+компонент связности. Если \(c\in F\), через
+\(\operatorname{Comp}_c(F)\) обозначим компоненту, содержащую \(c\).
+При \(c\in\M\), \(r>0\) и \(N\in\N\) положим
+\[
+ C_N(c,r):=
+ \operatorname{Comp}_c\bigl(O_N\cap\overline B(c,r)\bigr).
+\]
+Для \(L\ge N\) и \(0<\delta<r\) включение
+\[
+ O_L\cap\overline B(c,\delta)
+ \subseteq O_N\cap\overline B(c,r)
+\]
+индуцирует отображение множеств компонент
+\[
+ \varphi_{L,N}^{c;\delta,r}:
+ \pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr)
+ \longrightarrow
+ \pi_0\bigl(O_N\cap\overline B(c,r)\bigr),
+\]
+которое каждую компоненту меньшего множества переводит в единственную
+компоненту большего множества, содержащую её.
+
+\begin{definition}[Равномерный контроль компонент]
+\label{def:uniform-component-control}
+Условие \(\mathsf{UC}\) означает, что
 \begin{equation}
- \forall\rho,(m_j),(G_j),\qquad
-  \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)
+ \begin{gathered}
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists r,\delta\in\R,\quad 0<\delta<r<\varepsilon,\qquad\\
+ \forall N\in\N\ \exists L\in\N,\quad N\le L,\qquad
+ \forall A\in\pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr),\\
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r).
+ \end{gathered}
+ \label{eq:uniform-component-control}
+\end{equation}
+Здесь \(r,\delta\) зависят от \(c,\varepsilon\), но не от \(N\);
+индекс \(L\) может зависеть от \(c,\varepsilon,N\).
+Для фиксированных \(c,\varepsilon,N,L\) равенство
+\(\varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)\) для всех \(A\) равносильно
+включению
+\[
+ O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
+\]
+\end{definition}
+
+ \begin{proposition}[Диагональный критерий выбора с конечным числом оценок]
+ \label{prop:diagonal-finite-scale}
+ Условие \(\mathsf{EA}\) равносильно следующему условию: существуют
+ положительные числа \((\delta_i)_{i\ge1}\), для которых
+ \begin{equation}
+  \begin{gathered}
+  \forall k,M\in\N,\ k,M\ge1\ \exists m\in\N,\ m\ge M\
+  \exists G\in\mathcal R_m,\quad\\
+  \forall i\in\{1,\ldots,k\}\ \forall z,w\in\D,\qquad
+  |z-w|\le\delta_i\Longrightarrow
+  |G(z)-G(w)|\le2^{-i}.
+  \end{gathered}
+  \label{eq:diagonal-finite-scale}
+ \end{equation}
+ \end{proposition}
+ \begin{proof}
+ Пусть выполнено \(\mathsf{EAdata}(\rho,(m_j),(G_j))\). Положим
+ \(\delta_i:=\rho(2^{-i})\). Для любых \(k,M\ge1\) выберем \(j\ge k\)
+ так, чтобы \(m_j\ge M\). Тогда \(G_j\in\mathcal R_{m_j}\), а оценка
+ равностепенной непрерывности при \(\eta=2^{-i}\) даёт все неравенства
+ в \eqref{eq:diagonal-finite-scale} для \(1\le i\le k\).
+
+ Обратно, пусть существуют \((\delta_i)\), удовлетворяющие
+ \eqref{eq:diagonal-finite-scale}. Положим \(m_0:=0\). Последовательно
+ применяя это условие с \(k=j\) и \(M=m_{j-1}+1\), выберем
+ \(m_j\ge m_{j-1}+1\) и \(G_j\in\mathcal R_{m_j}\), для которых
+ \[
+  \forall i\in\N,\ 1\le i\le j\ \forall z,w\in\D,\qquad
+  |z-w|\le\delta_i\Longrightarrow
+  |G_j(z)-G_j(w)|\le2^{-i}.
+ \]
+ Тогда \(m_1<m_2<\cdots\), и \(m_j\to\infty\). Зафиксируем
+ \(\eta>0\) и выберем \(i\ge1\) так, чтобы \(2^{-i}\le\eta\).
+ Равномерная непрерывность конечного семейства
+ \(G_1,\ldots,G_{i-1}\) даёт \(\sigma_\eta>0\), для которого
+ \[
+  |z-w|\le\sigma_\eta\Longrightarrow
+  |G_j(z)-G_j(w)|\le\eta
+  \qquad(1\le j<i,\ z,w\in\D);
+ \]
+ при \(i=1\) положим \(\sigma_\eta:=1\). Положим
+ \(\rho(\eta):=\min\{\eta,\delta_i,\sigma_\eta\}\).
+ Если \(j\ge i\), требуемая оценка следует из неравенства с индексом
+ \(i\); если \(j<i\), она следует из выбора \(\sigma_\eta\).
+ Следовательно, \(\mathsf{EAdata}(\rho,(m_j),(G_j))\), то есть
+ \(\mathsf{EA}\).
+ \end{proof}
+ \begin{equation}
+  \forall\rho,(m_j),(G_j),\qquad
+   \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)
  \Longrightarrow
   \forall\eta>0,\qquad
   \omega_\M\!\left(\frac{\rho(\eta)}2\right)\le2\eta.
@@ -129,7 +231,7 @@
 \end{equation}
 \begin{equation}
   \begin{gathered}
-  \mathsf{Fin},\\
+  \mathsf{Fin},\qquad \mathsf{EA}_{\mathrm{seq}},\\
   \mathsf{EA}\quad\Longleftrightarrow\quad
   \lim_{r\downarrow0}\omega_\M(r)=0
   \quad\Longleftrightarrow\quad\LC(\M).
@@ -137,16 +239,184 @@
  \label{eq:main-discrepancy}
 \end{equation}
 
-Рассогласование состоит в различии требований к отображениям: теорема
-об аппроксимации даёт
-\(\forall m\ge1\ \exists G_m\in\mathcal R_m\), но её заключение не
-содержит общего модуля равностепенной непрерывности для этого выбора.
-Условие \(\mathsf{EA}\), эквивалентное \(\LC(\M)\), требует строго
-возрастающую последовательность \(m_j\to\infty\), отображения
-\(G_j\in\mathcal R_{m_j}\) и общий модуль равностепенной непрерывности
-\(\rho\) для всех \(G_j\) на \(\D\). Необходимое усиление заключения
-теоремы об аппроксимации состоит в существовании такого выбора с
-общим модулем.
+Теорема об аппроксимации уже задаёт требуемую в
+\(\mathsf{EA}_{\mathrm{seq}}\) строго возрастающую последовательность:
+\(m_j=j\), \(G_j=T_j\in\mathcal R_j\). Условие \(\mathsf{EA}\)
+добавляет существование одного модуля равностепенной непрерывности
+\(\rho\) для отображений некоторого такого выбора. По
+предложению~\ref{prop:diagonal-finite-scale} диагональный путь требует
+для каждого конечного \(k\) выполнения первых \(k\) оценок осцилляции
+при сколь угодно больших \(m\). Остающееся рассогласование состоит в
+отсутствии доказательства равномерной факторизации компонент
+\(\mathsf{UC}\), сформулированной в теореме
+\ref{thm:remaining-component-factorization}. По теореме
+\ref{thm:uniform-component-control} доказательство \(\mathsf{UC}\)
+дало бы \(\LC(\M)\), а значит, и \(\mathsf{EA}\).
+
+\section*{Остающееся рассогласование: факторизация локальных компонент}
+\label{sec:remaining-factorization}
+
+\begin{theorem}[Остающаяся теорема о факторизации компонент; не доказана]
+\label{thm:remaining-component-factorization}
+Для заданной системы внешних множеств \((O_N)\) выполнено условие
+\(\mathsf{UC}\), то есть
+\[
+ \begin{gathered}
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists r,\delta\in\R,\quad 0<\delta<r<\varepsilon,\qquad\\
+ \forall N\in\N\ \exists L\in\N,\quad N\le L,\qquad
+ \forall A\in\pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr),\\
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r).
+ \end{gathered}
+\]
+\end{theorem}
+
+\noindent\emph{Пробное доказательство (не завершено).}
+
+\subsection*{Шаг 1. Сведение выбора глубины к боковым компонентам}
+
+Ниже используются вложенность \(O_{N+1}\subseteq O_N\),
+\(\M\subseteq O_N\) и равенство \(\bigcap_NO_N=\M\); они установлены
+леммой~\ref{lem:outer-sets} в шаге~1.
+Для \(c\in\M\), \(0<\delta<r\) и \(N\in\N\) положим
+\[
+ F_N(c,r):=O_N\cap\overline B(c,r),\qquad
+ \mathcal B_N(c;r,\delta):=
+ \bigl(F_N(c,r)\setminus C_N(c,r)\bigr)\cap\overline B(c,\delta).
+\]
+Множество \(F_N(c,r)\) компактно и полуалгебраично: \(p_j\) — полиномы,
+а условия \(z\in K\), \(|p_j(z)|\le2\) и \(|z-c|\le r\) задаются
+полиномиальными неравенствами по вещественным координатам. По теореме о
+конечности числа компонент полуалгебраического множества
+\cite[теорема 2.4.5]{BCR} множество \(F_N(c,r)\) имеет конечное число
+компонент. Поэтому \(F_N(c,r)\setminus C_N(c,r)\), а значит и
+\(\mathcal B_N(c;r,\delta)\), компактно.
+
+\begin{proposition}[Компактностное сведение факторизации]
+\label{prop:factorization-compactness-reduction}
+Для фиксированных \(c\in\M\), \(0<\delta<r\) и \(N\in\N\) эквивалентны
+условия
+\[
+ \exists L\ge N,\qquad
+ O_L\cap\overline B(c,\delta)\subseteq C_N(c,r)
+\]
+и
+\[
+ \mathcal B_N(c;r,\delta)\cap\M=\varnothing.
+\]
+\end{proposition}
+\begin{proof}
+Если выполнено первое условие, то
+\(\mathcal B_N(c;r,\delta)\cap\M=\varnothing\), поскольку
+\(\M\subseteq O_L\). Обратно, пусть
+\(\mathcal B_N(c;r,\delta)\cap\M=\varnothing\). Если бы
+\(\mathcal B_N(c;r,\delta)\cap O_L\ne\varnothing\) для каждого \(L\ge N\),
+то вложенные непустые компактные множества
+\(\mathcal B_N(c;r,\delta)\cap O_L\) имели бы непустое пересечение.
+По \(\bigcap_{L\ge N}O_L=\M\) это пересечение равно
+\(\mathcal B_N(c;r,\delta)\cap\M\), противоречие. Значит, для некоторого
+\(L\ge N\) имеем
+\(\mathcal B_N(c;r,\delta)\cap O_L=\varnothing\). Так как \(O_L\subseteq
+O_N\) и \(\delta<r\), всякая точка
+\(O_L\cap\overline B(c,\delta)\), не принадлежащая \(C_N(c,r)\), лежала
+бы в \(\mathcal B_N(c;r,\delta)\cap O_L\). Следовательно, требуемое
+включение выполнено.
+\end{proof}
+
+\subsection*{Шаг 2. Фиксированный уровень и интерьерные точки}
+
+Итак, после выбора \(r,\delta\) существование индекса \(L\) следует из
+компактности; остаётся доказать, что
+\[
+ \forall N\in\N,\qquad
+ \mathcal B_N(c;r,\delta)\cap\M=\varnothing
+\]
+при одних и тех же радиусах \(r,\delta\). Для каждого фиксированного
+\(N\) это верно при некотором радиусе \(\delta_N>0\): остальные
+компоненты компактного множества \(F_N(c,r)\) конечны по числу и не
+содержат \(c\). Рассогласование состоит именно в отсутствии оценки
+\(\inf_N\delta_N>0\). Если \(c\in\operatorname{int}\M\), утверждение
+выполнено: можно выбрать \(\overline B(c,r)\subseteq\M\), и тогда
+\(F_N(c,r)=C_N(c,r)=\overline B(c,r)\) для всех \(N\).
+
+\subsection*{Шаг 3. Первый уровень разделения на границе}
+
+Зафиксируем \(c\in\partial\M\) и \(r>0\). Предположим, что единого
+\(\delta>0\) нет. По предложению~\ref{prop:factorization-compactness-reduction}
+можно выбрать \(\delta_k\downarrow0\), уровни \(N_k\) и точки
+\[
+ y_k\in\mathcal B_{N_k}(c;r,\delta_k)\cap\M.
+\]
+Для каждого фиксированного \(N\) конечность числа компонент
+\(F_N(c,r)\) даёт \(\eta_N>0\), для которого
+\[
+ F_N(c,r)\cap\overline B(c,\eta_N)\subseteq C_N(c,r).
+\]
+Поэтому после перехода к подпоследовательности \(N_k\to\infty\).
+Положим
+\[
+ n_k:=\min\{n\le N_k:y_k\notin C_n(c,r)\}.
+\]
+Поскольку \(O_0=K\), а \(K\) и \(\overline B(c,r)\) выпуклы,
+\(y_k\in C_0(c,r)\); следовательно, \(n_k\ge1\). Из выбора
+\(\eta_N\) следует \(n_k\to\infty\), и
+\[
+ y_k\in C_{n_k-1}(c,r),\qquad y_k\notin C_{n_k}(c,r).
+\]
+Множество \(C_{n_k-1}(c,r)\) связно и содержится в \(O_{n_k-1}\).
+Оно не может целиком лежать в \(O_{n_k}\), иначе содержало бы \(c,y_k\)
+в одной компоненте \(C_{n_k}(c,r)\). Следовательно, существует
+\(z_k\in C_{n_k-1}(c,r)\) такое, что
+\[
+ |p_{n_k}(z_k)|>2,\qquad
+ |p_{n_k}(c)|\le2,\qquad |p_{n_k}(y_k)|\le2.
+\]
+Иными словами, добавление очередного ограничения
+\(p_{n_k}^{-1}(K)\) отделяет от центральной компоненты точку \(y_k\),
+сколь угодно близкую к \(c\), хотя \(c,y_k\in\M\).
+
+\subsection*{Шаг 4. Равномерная устойчивость при добавлении одного ограничения}
+
+Категориальный индуктивный шаг, достаточный для завершения этой попытки,
+можно сформулировать так: найти \(\delta>0\), не зависящее от \(n\),
+для которого
+\begin{equation}
+ \M\cap\overline B(c,\delta)\cap
+ \bigl((C_{n-1}(c,r)\cap p_n^{-1}(K))\setminus C_n(c,r)\bigr)
+ =\varnothing
+ \qquad(n\ge1).
+ \label{eq:one-step-component-stability}
+\end{equation}
+Действительно, \(C_0(c,r)=K\cap\overline B(c,r)\), поэтому
+\(\M\cap\overline B(c,\delta)\subseteq C_0(c,r)\). Если точка из этого
+множества лежит в \(C_{n-1}(c,r)\), то она также лежит в \(p_n^{-1}(K)\);
+условие~\eqref{eq:one-step-component-stability} вынуждает её лежать в
+\(C_n(c,r)\). Индукция даёт
+\(\M\cap\overline B(c,\delta)\subseteq C_N(c,r)\) для всех \(N\), после
+чего предложение~\ref{prop:factorization-compactness-reduction} даёт
+индексы \(L\), требуемые в \(\mathsf{UC}\).
+
+Попытка доказать~\eqref{eq:one-step-component-stability} напрямую
+использует рекурсию
+\[
+ p_{n+1}(z)=p_n(z)^2+z.
+\]
+При нарушении включения связная компонента \(C_{n-1}(c,r)\) содержит
+точки по обе стороны нового ограничения \(|p_n|\le2\). Для точки
+\(z\in C_{n-1}(c,r)\) с \(|p_n(z)|>2\) оценка производной даёт лишь
+\[
+ 2-|p_n(c)|
+ < |p_n(z)-p_n(c)|
+ \le r\sup_{\zeta\in\overline B(c,r)}|p_n'(\zeta)|.
+\]
+Имеющиеся оценки не дают равномерной по \(n\) границы для правой части,
+а \(2-|p_n(c)|\) может обращаться в нуль, например при \(c=-2\).
+Поэтому этот расчёт не доказывает
+\eqref{eq:one-step-component-stability}. Искомый новый шаг должен
+контролировать размер компонент
+\(C_{n-1}(c,r)\cap p_n^{-1}(K)\), содержащих точки \(\M\) около \(c\),
+равномерно по номеру \(n\). Это и есть незакрытая часть пробного
+доказательства.
 
 \section*{Теорема об аппроксимации}
 
@@ -365,6 +635,132 @@
 \(h_N\to0\), и требуемые целые числа \(\ell_n\) можно построить
 рекурсивно.
 \end{proof}
+
+\subsection*{Равномерный по глубине контроль локальных компонент}
+
+Обозначим через \(\operatorname{Disc}(S)\) дискретную категорию с
+множеством объектов \(S\). Для фиксированных \(c\in\M\) и
+\(0<\delta<r\) положим
+\[
+ \mathbf P_L(c,\delta):=
+ \operatorname{Disc}\bigl(\pi_0(O_L\cap\overline B(c,\delta))\bigr),
+ \qquad
+ \mathbf C_N(c,r):=
+ \operatorname{Disc}\bigl(\pi_0(O_N\cap\overline B(c,r))\bigr).
+\]
+При \(L\ge N\) включение
+\[
+ O_L\cap\overline B(c,\delta)
+ \subseteq O_N\cap\overline B(c,r)
+\]
+переводит каждую компоненту связности левой части в единственную
+компоненту правой части и задаёт функтор
+\[
+ F_{L,N}^{c;\delta,r}:
+ \mathbf P_L(c,\delta)\longrightarrow\mathbf C_N(c,r).
+\]
+Включения при уточнении уровней также задают функторы
+\[
+ u_{L+1,L}:\mathbf P_{L+1}(c,\delta)\to\mathbf P_L(c,\delta),
+\qquad
+ v_{N+1,N}:\mathbf C_{N+1}(c,r)\to\mathbf C_N(c,r).
+\]
+Для \(L\ge N\) они удовлетворяют равенству
+\[
+ v_{N+1,N}\circ F_{L+1,N+1}^{c;\delta,r}
+ =
+ F_{L,N}^{c;\delta,r}\circ u_{L+1,L}.
+\]
+Равенство следует из того, что оба функториальных перехода посылают
+компоненту более глубокого уровня в компоненту более грубого уровня,
+содержащую её.
+
+Определим функторы реализации
+\[
+ \mathcal Y_L:\mathbf P_L(c,\delta)\to\mathbf{CompHaus},
+ \qquad
+ \mathcal X_N:\mathbf C_N(c,r)\to\mathbf{CompHaus}
+\]
+отображением каждого объекта в соответствующую компактную компоненту;
+компоненты компактных множеств замкнуты и потому компактны.
+Включения компонент задают естественные преобразования
+\[
+ \mathcal Y_{L+1}\Rightarrow\mathcal Y_L\circ u_{L+1,L},\qquad
+ \mathcal X_{N+1}\Rightarrow\mathcal X_N\circ v_{N+1,N},\qquad
+ \mathcal Y_L\Rightarrow\mathcal X_N\circ F_{L,N}^{c;\delta,r}.
+\]
+
+Компонента \(C_N(c,r)\), содержащая \(c\), является выделенным объектом
+\(\mathbf C_N(c,r)\). Условие \(\mathsf{UC}\) равносильно требованию,
+чтобы для выбранных \(r,\delta\) при каждом \(N\) существовал \(L\ge N\),
+для которого
+\begin{equation}
+ \forall A\in\pi_0(O_L\cap\overline B(c,\delta)),\qquad
+ F_{L,N}^{c;\delta,r}(A)=C_N(c,r).
+ \label{eq:component-functor-factorization}
+\end{equation}
+Иными словами, функтор от категории более глубоких локальных компонент
+должен факторизоваться через полную подкатегорию, состоящую из одного
+выделенного объекта. Коммутативность переходных функторов следует из
+вложенности множеств; факторизация~\eqref{eq:component-functor-factorization}
+есть дополнительное геометрическое утверждение.
+
+\begin{theorem}[Равномерный контроль локальных компонент влечёт локальную связность]
+\label{thm:uniform-component-control}
+\[
+ \mathsf{UC}\Longrightarrow\LC(\M).
+\]
+\end{theorem}
+\begin{proof}
+Зафиксируем \(c\in\M\) и относительную открытую окрестность \(U\) точки
+\(c\) в \(\M\). Выберем \(\varepsilon>0\) так, чтобы
+\(\M\cap B(c,\varepsilon)\subseteq U\), и применим
+\eqref{eq:uniform-component-control}. Положим
+\[
+ C:=\bigcap_{N\in\N}C_N(c,r).
+\]
+Из \(O_{N+1}\subseteq O_N\) следует
+\(C_{N+1}(c,r)\subseteq C_N(c,r)\). Множество
+\(O_N\cap\overline B(c,r)\) компактно; его компонента \(C_N(c,r)\)
+замкнута, поэтому компактна, связна и содержит \(c\). Теорема о
+пересечении убывающей последовательности непустых компактных связных
+множеств показывает, что \(C\) непусто, компактно и связно.
+Кроме того, \(C\subseteq\bigcap_NO_N=\M\) и
+\(C\subseteq\overline B(c,r)\).
+
+Пусть \(y\in\M\cap\overline B(c,\delta)\). Для каждого \(N\) условие
+\eqref{eq:uniform-component-control} даёт \(L\ge N\) с
+\[
+ O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
+\]
+Так как \(y\in\M\subseteq O_L\), имеем \(y\in C_N(c,r)\). Это верно
+для каждого \(N\), следовательно,
+\(\M\cap\overline B(c,\delta)\subseteq C\). Итак,
+\[
+ c\in\M\cap B(c,\delta)\subseteq C
+ \subseteq\M\cap\overline B(c,r)
+ \subseteq\M\cap B(c,\varepsilon)\subseteq U.
+\]
+Значит, \(C\) — связная окрестность \(c\), содержащаяся в \(U\).
+Поскольку \(c\) и \(U\) произвольны, \(\M\) локально связно.
+\end{proof}
+
+Таким образом, реализация выделенных объектов вместе с функториальными
+вложениями даёт связное множество
+\(\bigcap_N C_N(c,r)\subseteq\M\). Факторизация
+\eqref{eq:component-functor-factorization} обеспечивает, что это
+множество содержит \(\M\cap\overline B(c,\delta)\), то есть является
+окрестностью \(c\) в \(\M\). После этого предложение
+\ref{prop:equicontinuous-selection} даёт последовательность отображений
+с общим модулем непрерывности.
+
+В частности, \(\mathsf{UC}\) влечёт \(\mathsf{EA}\) по
+предложению~\ref{prop:equicontinuous-selection}, а значит, по
+предложению~\ref{prop:diagonal-finite-scale} даёт требуемые конечные
+оценки осцилляции при сколь угодно больших уровнях. Для конкретных
+внешних множеств \(O_N\) остаётся доказать именно факторизацию
+\eqref{eq:component-functor-factorization}; естественность функторов
+сама по себе её не влечёт.
 
 \subsection*{Шаг 3. Построить внешнее конформное отображение.}
 
@@ -839,7 +1235,13 @@
 внешней ячейки. Для отображений \(G_j\in\mathcal R_{m_j}\) условие
 \(\mathsf{EA}\) требует общего модуля равностепенной непрерывности;
 по предложению~\ref{prop:equicontinuous-selection} его выполнимость
-эквивалентна \(\LC(\M)\).
+эквивалентна \(\LC(\M)\). Оценки Хаусдорфа относятся к множествам
+\(I_{n,\alpha}\) и \(U_{n,\alpha}\) и не дают оценок осцилляции
+отображений \(G\). Поэтому из них не следует
+\eqref{eq:diagonal-finite-scale}: для выбранного диагонального пути
+остаётся выбрать \(\delta_i>0\) и доказать, что для каждого \(k\)
+первые \(k\) оценок одновременно выполняются для некоторого
+\(G\in\mathcal R_m\) при сколь угодно больших \(m\).
 
 \subsection*{Шаг 7. Оценить расстояния между отображениями \(Q_s\).}
 
@@ -1300,7 +1702,7 @@
  \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
  \exists\delta^{[m]}\in\Delta,\qquad
  \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}),\\
- \mathsf{Fin},\\
+ \mathsf{Fin},\qquad \mathsf{EA}_{\mathrm{seq}},\\
  \mathsf{EA}\quad\Longleftrightarrow\quad
  \lim_{r\downarrow0}\omega_\M(r)=0
  \quad\Longleftrightarrow\quad\LC(\M).
@@ -1324,7 +1726,9 @@
 Конечные последовательности существуют по предложению
 \ref{prop:finite-sequences-exist}. Утверждение \(\mathsf{Fin}\) следует из
 \(\mathcal T_m\subseteq\mathcal R_m\) по лемме
-\ref{lem:last-maps-in-R}. Эквивалентность MLC и \(\mathsf{EA}\)
+\ref{lem:last-maps-in-R}. Условие \(\mathsf{EA}_{\mathrm{seq}}\)
+выполняется при \(m_j=j\), \(G_j=T_j\) по теореме
+\ref{thm:constructed-external-maps}. Эквивалентность MLC и \(\mathsf{EA}\)
 доказана в предложении~\ref{prop:equicontinuous-selection};
 эквивалентность MLC и условия на \(\omega_\M\) — в предложении
 \ref{prop:omega-criterion}. Остальные утверждения доказаны в
@@ -1395,6 +1799,12 @@ J.~Milnor,
 теорема~16.6, с.~84 PDF-файла.
 \href{https://arxiv.org/pdf/math/9201272#page=84}
 {Прямая ссылка на PDF}.
+
+\bibitem{BCR}
+J.~Bochnak, M.~Coste и M.-F.~Roy,
+\foreignlanguage{english}{\emph{Real Algebraic Geometry}},
+Ergebnisse der Mathematik und ihrer Grenzgebiete, 3.~Folge, vol.~36,
+Springer-Verlag (1998), теорема~2.4.5.
 
 \bibitem{HurewiczWallman}
 W.~Hurewicz и H.~Wallman,
