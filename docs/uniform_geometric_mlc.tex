@@ -251,16 +251,20 @@
 \(\mathsf{UC}\), сформулированной в теореме
 \ref{thm:remaining-component-factorization}. По теореме
 \ref{thm:uniform-component-control} доказательство \(\mathsf{UC}\)
-дало бы \(\LC(\M)\), а значит, и \(\mathsf{EA}\).
+дало бы \(\LC(\M)\), а значит, и \(\mathsf{EA}\). Формулировка цели
+вынесена в отдельный раздел, а условный черновой маршрут — в следующий
+раздел «Черновое доказательство теоремы о факторизации»; в шаге~2
+последнего установлена эквивалентность
+\eqref{eq:factorization-lc-equivalence}.
 
 \section*{Остающееся рассогласование: факторизация локальных компонент}
 \label{sec:remaining-factorization}
 
-\begin{theorem}[Остающаяся теорема о факторизации компонент; не доказана]
+\begin{theorem}[Остающаяся теорема о факторизации локальных компонент]
 \label{thm:remaining-component-factorization}
 Для заданной системы внешних множеств \((O_N)\) выполнено условие
 \(\mathsf{UC}\), то есть
-\[
+\begin{equation}
  \begin{gathered}
  \forall c\in\M\ \forall\varepsilon>0\
  \exists r,\delta\in\R,\quad 0<\delta<r<\varepsilon,\qquad\\
@@ -268,10 +272,20 @@
  \forall A\in\pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr),\\
  \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r).
  \end{gathered}
-\]
+ \label{eq:factorization-target}
+\end{equation}
 \end{theorem}
 
-\noindent\emph{Пробное доказательство (не завершено).}
+\section*{Черновое доказательство теоремы о факторизации}
+\label{sec:factorization-draft-proof}
+\pdfbookmark[1]{Черновое доказательство теоремы о факторизации}{factorization-draft-proof}
+
+\noindent\emph{Статус.} Ниже отделены строгие редукции от спекулятивного
+шага. Теорема~\ref{thm:remaining-component-factorization}
+эквивалентна \(\LC(\M)\), как показывает шаг~2. Поэтому конечное
+умножение оценок ниже доказывает цель лишь условно: необходимая оценка
+потерь радиуса сформулирована отдельно в шаге~19 и не выводится из
+предыдущих шагов. Черновик не утверждает доказательство MLC.
 
 \subsection*{Шаг 1. Сведение выбора глубины к боковым компонентам}
 
@@ -279,11 +293,12 @@
 \(\M\subseteq O_N\) и равенство \(\bigcap_NO_N=\M\); они установлены
 леммой~\ref{lem:outer-sets} в шаге~1.
 Для \(c\in\M\), \(0<\delta<r\) и \(N\in\N\) положим
-\[
+\begin{equation}
+ \label{eq:factorization-local-data}
  F_N(c,r):=O_N\cap\overline B(c,r),\qquad
  \mathcal B_N(c;r,\delta):=
  \bigl(F_N(c,r)\setminus C_N(c,r)\bigr)\cap\overline B(c,\delta).
-\]
+\end{equation}
 Множество \(F_N(c,r)\) компактно и полуалгебраично: \(p_j\) — полиномы,
 а условия \(z\in K\), \(|p_j(z)|\le2\) и \(|z-c|\le r\) задаются
 полиномиальными неравенствами по вещественным координатам. По теореме о
@@ -296,20 +311,22 @@
 \label{prop:factorization-compactness-reduction}
 Для фиксированных \(c\in\M\), \(0<\delta<r\) и \(N\in\N\) эквивалентны
 условия
-\[
+\begin{equation}
+ \label{eq:factorization-finite-inclusion}
  \exists L\ge N,\qquad
  O_L\cap\overline B(c,\delta)\subseteq C_N(c,r)
-\]
+\end{equation}
 и
-\[
+\begin{equation}
+ \label{eq:no-bad-limit}
  \mathcal B_N(c;r,\delta)\cap\M=\varnothing.
-\]
+\end{equation}
 \end{proposition}
 \begin{proof}
-Если выполнено первое условие, то
-\(\mathcal B_N(c;r,\delta)\cap\M=\varnothing\), поскольку
-\(\M\subseteq O_L\). Обратно, пусть
-\(\mathcal B_N(c;r,\delta)\cap\M=\varnothing\). Если бы
+Из~\eqref{eq:factorization-finite-inclusion} следует
+\(\mathcal B_N(c;r,\delta)\cap\M=\varnothing\) по
+\eqref{eq:factorization-local-data} и \(\M\subseteq O_L\). Обратно, пусть
+выполнено~\eqref{eq:no-bad-limit}. Если бы
 \(\mathcal B_N(c;r,\delta)\cap O_L\ne\varnothing\) для каждого \(L\ge N\),
 то вложенные непустые компактные множества
 \(\mathcal B_N(c;r,\delta)\cap O_L\) имели бы непустое пересечение.
@@ -323,100 +340,640 @@ O_N\) и \(\delta<r\), всякая точка
 включение выполнено.
 \end{proof}
 
-\subsection*{Шаг 2. Фиксированный уровень и интерьерные точки}
+По~\eqref{eq:factorization-target} достаточно выбрать \(r,\delta\) так,
+чтобы~\eqref{eq:no-bad-limit} выполнялось при каждом \(N\).
 
-Итак, после выбора \(r,\delta\) существование индекса \(L\) следует из
-компактности; остаётся доказать, что
+\subsection*{Шаг 2. Определить силу факторизации}
+
+Внутренние точки \(\M\) удовлетворяют факторизации: при
+\(\overline B(c,r)\subseteq\M\) имеем \(F_N=C_N(c,r)\).
+Наоборот, \(\mathsf{UC}\Rightarrow\LC(\M)\) доказано в
+теореме~\ref{thm:uniform-component-control}. Если \(\M\) локально
+связно, выберем \(0<r<\varepsilon\) и связную открытую в \(\M\) окрестность
 \[
- \forall N\in\N,\qquad
- \mathcal B_N(c;r,\delta)\cap\M=\varnothing
+ c\in W\subseteq\M\cap B(c,r/2).
 \]
-при одних и тех же радиусах \(r,\delta\). Для каждого фиксированного
-\(N\) это верно при некотором радиусе \(\delta_N>0\): остальные
-компоненты компактного множества \(F_N(c,r)\) конечны по числу и не
-содержат \(c\). Рассогласование состоит именно в отсутствии оценки
-\(\inf_N\delta_N>0\). Если \(c\in\operatorname{int}\M\), утверждение
-выполнено: можно выбрать \(\overline B(c,r)\subseteq\M\), и тогда
-\(F_N(c,r)=C_N(c,r)=\overline B(c,r)\) для всех \(N\).
+Для некоторого \(\delta\in(0,r/2)\) имеем
+\(\M\cap\overline B(c,\delta)\subseteq W\). Тогда
+\(W\subseteq C_N(c,r)\) при каждом \(N\), и
+\(\mathcal B_N(c;r,\delta)\cap\M=\varnothing\). Шаг~1 даёт \(L\)
+для каждого \(N\). Получаем
+\begin{equation}
+ \mathsf{UC}\Longleftrightarrow\LC(\M).
+ \label{eq:factorization-lc-equivalence}
+\end{equation}
+ Следовательно, завершение граничного шага ниже является именно
+ спекулятивной попыткой доказать локальную связность \(\M\), а не
+ следствием одной лишь топологии. Далее рассматривается граничный случай.
 
 \subsection*{Шаг 3. Первый уровень разделения на границе}
 
-Зафиксируем \(c\in\partial\M\) и \(r>0\). Предположим, что единого
-\(\delta>0\) нет. По предложению~\ref{prop:factorization-compactness-reduction}
-можно выбрать \(\delta_k\downarrow0\), уровни \(N_k\) и точки
-\[
+Если теорема ложна, найдутся \(c\in\partial\M\) и
+\(\varepsilon>0\), для которых ни при каком \(0<r<\varepsilon\) нет
+общего радиуса \(\delta\). Зафиксируем такое \(r\). По
+предложению~\ref{prop:factorization-compactness-reduction} можно выбрать
+\(\delta_k\downarrow0\), уровни \(N_k\) и точки
+\begin{equation}
+ \label{eq:factorization-failure-sequence}
  y_k\in\mathcal B_{N_k}(c;r,\delta_k)\cap\M.
-\]
+\end{equation}
+Последовательность~\eqref{eq:factorization-failure-sequence}
+удовлетворяет \(y_k\to c\) и \(y_k\notin C_{N_k}(c,r)\).
 Для каждого фиксированного \(N\) конечность числа компонент
-\(F_N(c,r)\) даёт \(\eta_N>0\), для которого
-\[
+\(F_N(c,r)\) даёт \(0<\eta_N<r\), для которого
+\begin{equation}
+ \label{eq:fixed-level-radius}
  F_N(c,r)\cap\overline B(c,\eta_N)\subseteq C_N(c,r).
-\]
-Поэтому после перехода к подпоследовательности \(N_k\to\infty\).
+\end{equation}
+Для любого \(M_0\) минимум
+\(\min_{0\le N\le M_0}\eta_N\) положителен. Так как \(y_k\in\M\) и
+\(y_k\to c\), при достаточно больших \(k\) точка \(y_k\) лежит в
+\(C_n(c,r)\) для каждого \(0\le n\le M_0\). Поскольку
+\(y_k\notin C_{N_k}(c,r)\), получаем \(N_k>M_0\), а значит,
+\(N_k\to\infty\).
 Положим
-\[
+\begin{equation}
+ \label{eq:first-splitting-index}
  n_k:=\min\{n\le N_k:y_k\notin C_n(c,r)\}.
-\]
-Поскольку \(O_0=K\), а \(K\) и \(\overline B(c,r)\) выпуклы,
+\end{equation}
+Из определения~\eqref{eq:first-splitting-index}, \(c,y_k\in K=O_0\) и
+выпуклости \(K\cap\overline B(c,r)\) следует
 \(y_k\in C_0(c,r)\); следовательно, \(n_k\ge1\). Из выбора
-\(\eta_N\) следует \(n_k\to\infty\), и
-\[
+\(\eta_N\) и \(y_k\in C_n(c,r)\) при \(0\le n\le M_0\) для всех
+достаточно больших \(k\) следует \(n_k>M_0\), поэтому \(n_k\to\infty\).
+\begin{equation}
+ \label{eq:first-splitting-points}
  y_k\in C_{n_k-1}(c,r),\qquad y_k\notin C_{n_k}(c,r).
-\]
+\end{equation}
 Множество \(C_{n_k-1}(c,r)\) связно и содержится в \(O_{n_k-1}\).
 Оно не может целиком лежать в \(O_{n_k}\), иначе содержало бы \(c,y_k\)
-в одной компоненте \(C_{n_k}(c,r)\). Следовательно, существует
-\(z_k\in C_{n_k-1}(c,r)\) такое, что
-\[
+в одной компоненте \(C_{n_k}(c,r)\). Следовательно, существует \(z_k\)
+такое, что
+\begin{equation}
+ \label{eq:first-splitting-witness}
+ z_k\in C_{n_k-1}(c,r),\qquad
  |p_{n_k}(z_k)|>2,\qquad
  |p_{n_k}(c)|\le2,\qquad |p_{n_k}(y_k)|\le2.
-\]
-Иными словами, добавление очередного ограничения
-\(p_{n_k}^{-1}(K)\) отделяет от центральной компоненты точку \(y_k\),
-сколь угодно близкую к \(c\), хотя \(c,y_k\in\M\).
+\end{equation}
+На глубинах \(n_k\to\infty\) новая обрезка отделяет точки
+\(y_k\to c\); построение не даёт оценки \(|z_k-c|\to0\).
 
-\subsection*{Шаг 4. Равномерная устойчивость при добавлении одного ограничения}
+\subsection*{Шаг 4. Сформулировать равномерный переход}
 
-Категориальный индуктивный шаг, достаточный для завершения этой попытки,
-можно сформулировать так: найти \(\delta>0\), не зависящее от \(n\),
-для которого
+Для \(n\ge1\) обозначим
+ \begin{equation}
+  \label{eq:one-step-slice}
+  A_n(c,r):=C_{n-1}(c,r)\cap p_n^{-1}(K).
+ \end{equation}
+ Из \(F_n=F_{n-1}\cap p_n^{-1}(K)\) следует
+ \begin{equation}
+  \label{eq:root-component-pullback}
+  C_n(c,r)=\operatorname{Comp}_c(A_n(c,r)).
+ \end{equation}
+ Всякое связное подмножество \(F_n\), содержащее \(c\), лежит в
+ \(C_{n-1}(c,r)\), а значит, в \(A_n(c,r)\). Обратно,
+ \(A_n(c,r)\subseteq F_n\). Поэтому компоненты \(F_n\) и \(A_n(c,r)\),
+ содержащие \(c\), совпадают.
+Из~\eqref{eq:first-splitting-points}, включения \(\M\subseteq O_{n_k}\)
+и равенства~\eqref{eq:root-component-pullback} получаем
+ \(y_k\in A_{n_k}(c,r)\setminus C_{n_k}(c,r)\). Для замыкания черновика
+достаточно найти общий по \(n\) радиус \(\delta>0\), при котором
 \begin{equation}
  \M\cap\overline B(c,\delta)\cap
- \bigl((C_{n-1}(c,r)\cap p_n^{-1}(K))\setminus C_n(c,r)\bigr)
- =\varnothing
+ \bigl(A_n(c,r)\setminus C_n(c,r)\bigr)=\varnothing
  \qquad(n\ge1).
  \label{eq:one-step-component-stability}
 \end{equation}
 Действительно, \(C_0(c,r)=K\cap\overline B(c,r)\), поэтому
 \(\M\cap\overline B(c,\delta)\subseteq C_0(c,r)\). Если точка из этого
-множества лежит в \(C_{n-1}(c,r)\), то она также лежит в \(p_n^{-1}(K)\);
+множества лежит в \(C_{n-1}(c,r)\), то она лежит и в \(p_n^{-1}(K)\);
 условие~\eqref{eq:one-step-component-stability} вынуждает её лежать в
 \(C_n(c,r)\). Индукция даёт
-\(\M\cap\overline B(c,\delta)\subseteq C_N(c,r)\) для всех \(N\), после
-чего предложение~\ref{prop:factorization-compactness-reduction} даёт
-индексы \(L\), требуемые в \(\mathsf{UC}\).
+\begin{equation}
+ \M\cap\overline B(c,\delta)\subseteq C_N(c,r)
+ \qquad(N\in\N).
+ \label{eq:inductive-local-inclusion}
+\end{equation}
+По~\eqref{eq:inductive-local-inclusion} и предложению
+\ref{prop:factorization-compactness-reduction} это даёт
+\eqref{eq:factorization-target}.
 
-Попытка доказать~\eqref{eq:one-step-component-stability} напрямую
-использует рекурсию
+\paragraph{Коллард функции Грина.}
+
+В обозначениях определения~\ref{def:green-retractions} для \(n\ge1\)
+обозначим через \(\Sigma_n(c,r)\) возможное множество
+нового разреза при переходе \(C_{n-1}\to C_n\):
+\begin{equation}
+ \label{eq:green-separator}
+ g_n:=2^{2-n}\log3,\qquad
+ \Sigma_n(c,r):=C_{n-1}(c,r)\cap\{z:|p_n(z)|=2\}.
+\end{equation}
+Так как \(C_{n-1}(c,r)\subseteq O_{n-1}\), леммы
+\ref{lem:green-depth} и~\eqref{eq:equipotential-distance} дают
+\begin{equation}
+ \Sigma_n(c,r)\subseteq E_{g_n},\qquad
+ \forall z\in\Sigma_n(c,r),\quad
+ \dist(z,\M)\le\kappa(g_n).
+ \label{eq:green-separator-distance}
+\end{equation}
+Действительно, \(|p_n|\) непрерывна на связном \(C_{n-1}\); значения
+из~\eqref{eq:first-splitting-witness} по разные стороны от \(2\)
+вынуждают её принять значение \(2\). Поэтому свидетель отделён от
+\(c,y_k\) границей~\eqref{eq:green-separator}, но оценка
+\eqref{eq:green-separator-distance} сама по себе связность не даёт.
+Ниже она используется как масштабная оценка толщины новых разрезов.
+
+Ячеечные графы и их точное отождествление с корневыми компонентами
+установлены в шагах~8--10 и~15--16. Их переходные разрезы лежат на
+\(\Sigma_n(c,r)\); оценка накопленного эффекта этих разрезов будет
+дана нестрого в шаге~19.
+
+\subsection*{Шаг 5. Представить \(O_N\) как нулевое множество конечного потенциала}
+
+Положим \(\log^+0:=0\), а при \(t>0\) —
+\(\log^+t:=\max\{0,\log t\}\). Для \(N\ge1\) определим
+\begin{equation}
+ \label{eq:finite-orbit-potential}
+ \psi_N(z):=
+ \max_{1\le j\le N}
+ 2^{-j}\log^+\!\left(\frac{|p_j(z)|}{2}\right).
+\end{equation}
+По определению~\eqref{eq:finite-orbit-potential} каждая слагаемая
+непрерывна и субгармонична по \(z\), поэтому
+\(\psi_N\) также непрерывна и субгармонична. Из \(p_1(z)=z\) следует,
+что условие \(\psi_N(z)=0\) уже влечёт \(z\in K\); остальные нулевые
+слагаемые означают \(|p_j(z)|\le2\). Следовательно,
+\begin{equation}
+ \label{eq:finite-potential-zero-set}
+ O_N=\{z\in\C:\psi_N(z)=0\},\qquad
+ \psi_N\le\psi_{N+1}.
+\end{equation}
+В~\eqref{eq:finite-potential-zero-set} каждый новый уровень добавляет
+одно слагаемое; первая смена компоненты соответствует переходу
+\eqref{eq:one-step-slice}.
+
+\subsection*{Шаг 6. Свести общий радиус к положительности одного инфимума}
+
+Для фиксированных \(c\in\M\) и \(r>0\) положим
+\begin{equation}
+ \label{eq:component-radius}
+ \rho_N(c,r):=
+ \sup\Bigl(\{0\}\cup
+ \bigl\{\delta\in(0,r):
+ \M\cap\overline B(c,\delta)\subseteq C_N(c,r)\bigr\}\Bigr).
+\end{equation}
+Из~\eqref{eq:fixed-level-radius} следует \(\rho_N(c,r)>0\).
+Вложенность \(C_{N+1}(c,r)\subseteq C_N(c,r)\) даёт
+\(\rho_{N+1}(c,r)\le\rho_N(c,r)\). Для данного \(r\) существование
+одного \(\delta>0\), работающего при всех \(N\), равносильно
+\begin{equation}
+ \label{eq:uniform-component-radius}
+ \inf_{N\in\N}\rho_N(c,r)>0.
+\end{equation}
+Обратное направление следует из определения супремума в
+\eqref{eq:component-radius}.
+
+\subsection*{Шаг 7. Оценить высоту Грина у свидетеля первого разделения}
+
+По лемме~\ref{lem:green-depth} и включению
+\(z_k\in C_{n_k-1}(c,r)\subseteq O_{n_k-1}\) из
+\eqref{eq:first-splitting-witness} имеем
+\begin{equation}
+ \label{eq:green-depth-first-split}
+ 0\le G(z_k)\le 2^{2-n_k}\log3\longrightarrow0.
+\end{equation}
+Из~\eqref{eq:green-depth-first-split}, положив
+\(s_k:=2^{2-n_k}\log3\), получаем \(z_k\in E_{s_k}\) и
+\begin{equation}
+ \label{eq:split-witness-distance}
+ \dist(z_k,\M)\le\kappa(s_k)\longrightarrow0.
+\end{equation}
+По~\eqref{eq:split-witness-distance} разрезающие свидетели приближаются
+к \(\M\); они лежат в сужающемся по потенциалу
+колларде вокруг \(\M\), хотя не обязаны приближаться к \(c\).
+
+\subsection*{Шаг 8. Перенести свидетеля в конечную систему ячеек}
+
+Пусть \((\lambda_m)\) — последовательность глубин из
+теоремы~\ref{thm:constructed-external-maps}; по
+\eqref{eq:external-depths} она строго возрастает к бесконечности.
+Для больших \(k\) выберем
+\begin{equation}
+ \label{eq:split-grid-depth}
+ m_k:=\max\{m\ge2:\lambda_m\le n_k-1\}.
+\end{equation}
+Так как \(\lambda_m\to\infty\) по~\eqref{eq:external-depths} и
+\(n_k\to\infty\), множество в~\eqref{eq:split-grid-depth} непусто при
+больших \(k\) и \(m_k\to\infty\).
+По~\eqref{eq:first-splitting-witness} имеем
+\(z_k\in O_{n_k-1}\subseteq O_{\lambda_{m_k}}\); значит, \(z_k\)
+лежит в некоторой
+внешней ячейке \(U_{m_k,\alpha_k}\). Предложение
+\ref{prop:cellwise-inner-outer} даёт один из двух вариантов: либо
+ячейка содержит внутреннюю часть \(I_{m_k,\alpha_k}\) и \(z_k\)
+находится от неё на расстоянии не более \(8\cdot2^{-m_k}\) по
+\eqref{eq:dyadic-grid-diameter}, либо
+\(\dist(z_k,\M)\le h_{\lambda_{m_k}}\). По
+ \eqref{eq:external-mesh-bound}, \(h_{\lambda_{m_k}}\le2^{-m_k}\);
+так как \(m_k\to\infty\), обе оценки стремятся к нулю. Внешний свидетель приближается к внутренней
+геометрии, но связность его ячейки с ячейкой \(c\) не следует.
+
+\subsection*{Шаг 9. Отождествить графовый кластер с компонентой внешнего уровня}
+
+Для фиксированного \(m\) множества
 \[
- p_{n+1}(z)=p_n(z)^2+z.
+ A\in\pi_0\bigl(U_{m,\alpha}\cap\overline B(c,r)\bigr)
 \]
-При нарушении включения связная компонента \(C_{n-1}(c,r)\) содержит
-точки по обе стороны нового ограничения \(|p_n|\le2\). Для точки
-\(z\in C_{n-1}(c,r)\) с \(|p_n(z)|>2\) оценка производной даёт лишь
-\[
- 2-|p_n(c)|
- < |p_n(z)-p_n(c)|
- \le r\sup_{\zeta\in\overline B(c,r)}|p_n'(\zeta)|.
-\]
-Имеющиеся оценки не дают равномерной по \(n\) границы для правой части,
-а \(2-|p_n(c)|\) может обращаться в нуль, например при \(c=-2\).
-Поэтому этот расчёт не доказывает
-\eqref{eq:one-step-component-stability}. Искомый новый шаг должен
-контролировать размер компонент
-\(C_{n-1}(c,r)\cap p_n^{-1}(K)\), содержащих точки \(\M\) около \(c\),
-равномерно по номеру \(n\). Это и есть незакрытая часть пробного
-доказательства.
+являются компактными связными множествами, конечными по числу и
+покрывают \(O_{\lambda_m}\cap\overline B(c,r)\). Их граф смежности
+соединяет две вершины ровно тогда, когда соответствующие множества
+пересекаются. Объединение вершин каждой связной компоненты графа
+связно. Объединения для разных компонент графа попарно не пересекаются
+и компактны; поскольку таких объединений конечное число, они задают
+разбиение на компоненты связности всего множества
+\(O_{\lambda_m}\cap\overline B(c,r)\). Следовательно,
+\begin{equation}
+ H_m(c,r)=C_{\lambda_m}(c,r).
+\label{eq:dyadic-graph-component}
+\end{equation}
+Граф точно кодирует корневую компоненту внешнего уровня.
+
+\subsection*{Шаг 10. Свести ячеечный граф к общему радиусу}
+
+По~\eqref{eq:dyadic-graph-component} кластер графа на уровне \(m\)
+равен \(C_{\lambda_m}(c,r)\). Так как \(\lambda_m\to\infty\) и
+\(C_{N+1}(c,r)\subseteq C_N(c,r)\), включение
+\(\M\cap\overline B(c,\delta)\subseteq C_{\lambda_m}(c,r)\) для всех
+\(m\) равносильно требованию
+\begin{equation}
+ \label{eq:common-component-neighborhood}
+ \M\cap\overline B(c,\delta)\subseteq C_N(c,r)
+ \qquad\text{для всех }N.
+\end{equation}
+Действительно, \(\lambda_m\to\infty\), а компоненты \(C_N(c,r)\)
+вложены; поэтому контроль на выбранных уровнях \(\lambda_m\) влечёт
+контроль на каждом \(N\), и наоборот. Графовая формулировка полезна
+тем, что каждый её конечный срез можно представить конечным графом,
+но она не ослабляет недостающую оценку: требуется доказать, что
+кластер, содержащий \(c\), содержит все близкие точки \(\M\) на
+сколь угодно глубоких уровнях.
+
+\subsection*{Шаг 11. Развернуть рекурсию производных}
+
+Пусть \(D_n(c):=p_n'(c)\). Из
+\(p_{n+1}(c)=p_n(c)^2+c\) следует
+\begin{equation}
+ \label{eq:parameter-derivative-recurrence}
+ D_1(c)=1,\qquad D_{n+1}(c)=2p_n(c)D_n(c)+1,
+\end{equation}
+ последовательное раскрытие~\eqref{eq:parameter-derivative-recurrence}
+ даёт точную формулу
+\begin{equation}
+ \label{eq:parameter-derivative-series}
+ D_n(c)=
+ \sum_{j=0}^{n-1}2^j\prod_{\ell=1}^{j}p_{n-\ell}(c),
+ \qquad\text{(пустое произведение равно \(1\)).}
+\end{equation}
+Для \(c\in\M\) из~\eqref{eq:parameter-derivative-series} следует
+\begin{equation}
+ \label{eq:parameter-derivative-bound}
+ |D_n(c)|\le\sum_{j=0}^{n-1}4^j=\frac{4^n-1}{3}.
+\end{equation}
+Граница~\eqref{eq:parameter-derivative-bound} растёт с \(n\), а
+слагаемые в~\eqref{eq:parameter-derivative-series} могут взаимно
+сокращаться. Поэтому
+ограниченность критической орбиты сама по себе не даёт ни равномерной
+производной, ни положительного радиуса устойчивости.
+
+\subsection*{Шаг 12. Получить обратную ветвь и изолировать её ограничение}
+
+Если \(D_n(c)\ne0\), из~\eqref{eq:parameter-derivative-recurrence}
+положим
+\begin{equation}
+ \label{eq:inverse-branch-radius}
+ M_{2,n}:=\sup_{\zeta\in\overline B(c,r)}|p_n''(\zeta)|,\qquad
+ \sigma_n:=\min\left\{r,\frac{|D_n(c)|}{2(1+M_{2,n})}\right\}.
+\end{equation}
+Для \(z,w\in\overline B(c,\sigma_n)\) интегрирование производной по
+отрезку \([w,z]\) даёт
+\begin{equation}
+ \label{eq:inverse-branch-lipschitz}
+ |p_n(z)-p_n(w)|\ge\frac{|D_n(c)|}{2}|z-w|.
+\end{equation}
+При радиусе \(\sigma_n\) из~\eqref{eq:inverse-branch-radius}
+неравенство~\eqref{eq:inverse-branch-lipschitz} показывает, что \(p_n\)
+инъективно на этом диске. Но \(\sigma_n\) может
+стремиться к нулю или обращаться в нуль, а инъективность не
+гарантирует связность \(p_n(\overline B(c,\sigma_n))\cap K\) либо
+его пересечения с \(C_{n-1}(c,r)\). Тем самым аналитическая оценка
+производной полезна лишь вместе с контролем формы образа и положения
+предыдущей компоненты.
+
+\subsection*{Шаг 13. Сосчитать глобальные компоненты лемнискаты}
+
+Из рекурсии \(p_{n+1}=p_n^2+c\) следует
+\begin{equation}
+ d_1=1,\qquad d_{n+1}=2d_n,\qquad d_n:=\deg p_n=2^{n-1}.
+ \label{eq:parameter-polynomial-degree}
+\end{equation}
+По~\eqref{eq:parameter-polynomial-degree} \(p_n\) имеет степень \(d_n\).
+Пусть \(\partial K\) не содержит критических значений \(p_n\);
+обозначим через \(k_n\) число компонент
+\(p_n^{-1}(B(0,2))\), а через \(d_i\) степень ограничения \(p_n\) на
+\(i\)-ю компоненту, \(1\le i\le k_n\). Тогда
+\(\sum_{i=1}^{k_n}d_i=d_n\). Регулярная лемниската
+\(\{|p_n|=2\}\) состоит из конечного числа гладких замкнутых кривых.
+Если компонента \(p_n^{-1}(B(0,2))\) имела бы отверстие, область между
+соседними граничными кривыми внутри этого отверстия лежала бы в
+\(\{|p_n|>2\}\); принцип максимума на её замыкании дал бы
+\(|p_n|\le2\), противоречие. Поэтому все компоненты односвязны, а
+ограничения \(p_n\) являются собственными отображениями на \(B(0,2)\)
+степеней \(d_i\). Формула
+Римана--Гурвица \cite{Forster} даёт
+\begin{equation}
+ \sum_{p_n'(\zeta)=0,\ |p_n(\zeta)|<2}
+       \operatorname{mult}_{\zeta}(p_n')
+   =d_n-k_n,\qquad
+ \sum_{p_n'(\zeta)=0,\ |p_n(\zeta)|>2}
+       \operatorname{mult}_{\zeta}(p_n')
+   =k_n-1.
+ \label{eq:lemniscate-critical-count}
+\end{equation}
+Уравнение~\eqref{eq:lemniscate-critical-count} считает критические
+точки глобальной лемнискаты, но не локализует их относительно \(c\).
+
+\subsection*{Шаг 14. Отделить глобальную лемнискату от локального среза}
+
+Для нужного перехода используется не \(p_n^{-1}(K)\), а
+множество \(A_n(c,r)\) из~\eqref{eq:one-step-slice}.
+Даже полный счёт компонент \(p_n^{-1}(K)\) не контролирует
+\(\pi_0(A_n(c,r))\): пересечение двух связных множеств может быть
+несвязным. Поэтому формула Римана--Гурвица сама по себе не доказывает
+\eqref{eq:one-step-component-stability}; требуется локальная оценка
+взаимного положения лемнискаты и \(C_{n-1}(c,r)\).
+
+\subsection*{Шаг 15. Представить каждый локальный срез конечным графом}
+
+Для сетки \(Q_{m,\alpha}\) из~\eqref{eq:dyadic-grid-cells} при
+\(m\ge2\) положим
+\begin{equation}
+ \label{eq:grid-cell-slices}
+ V_{n,m,\alpha}:=F_n(c,r)\cap Q_{m,\alpha}.
+\end{equation}
+Полуалгебраичность даёт конечное число компонент у каждого
+\(V_{n,m,\alpha}\) \cite[теорема 2.4.5]{BCR}. В графе
+\(\mathsf G_{n,m}(c,r)\) вершины —
+компоненты~\eqref{eq:grid-cell-slices}, ребро означает непустое
+пересечение.
+Объединение вершин одной графовой компоненты связно; разные
+объединения образуют конечное замкнутое разбиение \(F_n(c,r)\).
+Пусть \(H_{n,m}(c,r)\) — объединение вершин графовой компоненты,
+содержащей вершину с \(c\in A\). Тогда
+\begin{equation}
+ H_{n,m}(c,r)=C_n(c,r).
+ \label{eq:grid-root-component}
+\end{equation}
+Включение \(F_n\hookrightarrow F_{n-1}\)
+задаёт отображение компонент; потеря нужной связности происходит
+ровно при переходе от уровня \(n-1\) к \(n\).
+
+\subsection*{Шаг 16. Сформулировать требуемую оценку перехода графов}
+
+Зафиксируем \(c\in\M\), \(\varepsilon>0\). Искомое равномерное
+условие в клеточной форме:
+\begin{equation}
+ \begin{gathered}
+ \exists\,0<\delta<r<\varepsilon,\qquad
+ \forall n\ge1\ \forall m\ge2\ \forall\alpha\in J_m^2\
+ \forall A\in\pi_0(V_{n,m,\alpha}),\\
+ A\cap\M\cap\overline B(c,\delta)\ne\varnothing
+ \Longrightarrow A\subseteq H_{n,m}(c,r).
+ \end{gathered}
+ \label{eq:grid-transition-stability}
+\end{equation}
+Здесь \(J_m^2\) и \(Q_{m,\alpha}\) заданы в
+\eqref{eq:dyadic-grid-cells}. Для фиксированных \(n,m\),
+\eqref{eq:grid-root-component} отождествляет \(H_{n,m}(c,r)\) с
+\(C_n(c,r)\). Условие~\eqref{eq:grid-transition-stability}
+достаточно для~\eqref{eq:common-component-neighborhood}: для
+\(y\in\M\cap\overline B(c,\delta)\) берём клетку, содержащую \(y\),
+и компоненту \(A\) этой клетки, содержащую \(y\); тогда
+\eqref{eq:grid-transition-stability} даёт \(A\subseteq C_n(c,r)\),
+а значит, \(y\in C_n(c,r)\). Обратный вывод неверен без отдельной
+оценки: включение~\eqref{eq:common-component-neighborhood} контролирует
+точки \(\M\), но не всю клеточную компоненту \(A\), которая может
+содержать и точки вне \(\M\). Таким образом,
+\eqref{eq:grid-transition-stability} — более сильное достаточное
+условие, а не эквивалентная переформулировка.
+Уровень \(N=0\) включён автоматически, поскольку
+\(\M\cap\overline B(c,\delta)\subseteq C_0(c,r)\).
+По шагу~4 это равносильно
+\eqref{eq:one-step-component-stability}. Оценки
+\eqref{eq:dyadic-grid-diameter} и
+\(h_{\lambda_m}\to0\) по~\eqref{eq:external-mesh-bound} контролируют
+размеры и расстояния вершин, но
+не дают требуемой связности цепи рёбер при всех \(n\).
+
+\subsection*{Шаг 17. Кодировать локальную компоненту связными мостами}
+
+Для \(y\in\M\cap\overline B(c,r)\) положим
+\begin{equation}
+ \label{eq:bridge-family}
+ \mathfrak B_N(c,r;y):=
+ \left\{\Gamma\subseteq F_N(c,r):
+ \Gamma\text{ компактно и связно},\ c,y\in\Gamma\right\}.
+\end{equation}
+Тогда
+\begin{equation}
+ \label{eq:bridge-component-equivalence}
+ y\in C_N(c,r)\quad\Longleftrightarrow\quad
+ \mathfrak B_N(c,r;y)\ne\varnothing.
+\end{equation}
+В прямом направлении берём \(\Gamma=C_N(c,r)\); обратное следует из
+определения компоненты. Графовый путь строит \(\Gamma\) как конечное
+объединение пересекающихся клеточных компонент.
+
+\subsection*{Шаг 18. Замкнуть условный шаг через компактностное сведение}
+
+Для фиксированных \(c\in\M\) и \(\varepsilon>0\), если
+\begin{equation}
+ \label{eq:all-level-bridges}
+ \exists\,0<\delta<r<\varepsilon\ \forall N\in\N\
+ \forall y\in\M\cap\overline B(c,\delta),\qquad
+ \mathfrak B_N(c,r;y)\ne\varnothing,
+\end{equation}
+то~\eqref{eq:bridge-component-equivalence} даёт
+\begin{equation}
+ \M\cap\overline B(c,\delta)\subseteq C_N(c,r)
+ \qquad(N\in\N).
+ \label{eq:bridge-to-components}
+\end{equation}
+Включение~\eqref{eq:bridge-to-components} есть ровно
+условие~\eqref{eq:common-component-neighborhood} для
+выбранных \(c,r,\delta\). По~\eqref{eq:no-bad-limit} и
+предложению~\ref{prop:factorization-compactness-reduction}
+получаем~\eqref{eq:factorization-target}.
+
+ \subsection*{Шаг 19. Изолировать недостающий равномерный бюджет потерь}
+
+ Пусть \(c\in\partial\M\), \(\varepsilon>0\), а
+ \((\lambda_m,s_m)_{m\ge2}\) — последовательности из
+ теоремы~\ref{thm:constructed-external-maps}. Тогда
+ \[
+  \lambda_m\ge m,\qquad
+  2^{1-\lambda_m}\log3\le s_m,\qquad
+  \kappa(s_m)\le2^{-m}.
+ \]
+ Для любого кандидата \(0<r<\varepsilon\) положим
+ \begin{equation}
+  R_m(c,r):=\rho_{\lambda_m}(c,r),\qquad
+  \mu_m:=8\cdot2^{-m}+\kappa(s_m).
+  \label{eq:block-radius-scales}
+ \end{equation}
+ В частности, \(0<\mu_m\le9\cdot2^{-m}\). Если
+ \(\lambda_m<n\le\lambda_{m+1}\), то
+ \[
+  \Sigma_n(c,r)\subseteq C_{n-1}(c,r)
+  \subseteq O_{n-1}\subseteq O_{\lambda_m}\subseteq E_{s_m}.
+ \]
+ Следовательно,
+ \(\dist(\Sigma_n(c,r),\M)\le\kappa(s_m)\); также диаметр ячейки
+ сетки~\eqref{eq:dyadic-grid-diameter} не превосходит \(8\cdot2^{-m}\).
+ Эти факты дают только близость разрезов к \(\M\) и мелкость ячеек.
+ Число \(\mu_m\) в~\eqref{eq:block-radius-scales} — масштабный
+ параметр, а не доказанная оценка потери связности.
+
+ Для предложенного количественного бюджета положим
+ \begin{equation}
+  \eta_m(c,r):=
+  C_{c,r}\left(
+  \sqrt{\frac{\mu_m}{r}}+
+  \sum_{n>\lambda_m}\sqrt{g_n}\right),
+  \qquad C_{c,r}>0.
+  \label{eq:block-radius-loss}
+ \end{equation}
+ Для любой фиксированной константы \(C_{c,r}\), независимой от \(m\),
+ геометрический ряд даёт
+ \begin{equation}
+  \sum_{n>\lambda_m}\sqrt{g_n}
+  \le
+  \frac{\sqrt{2\log3}}{1-2^{-1/2}}\,2^{-\lambda_m/2}
+  \le
+  \frac{\sqrt{2\log3}}{1-2^{-1/2}}\,2^{-m/2}.
+  \label{eq:tail-critical-loss}
+ \end{equation}
+ Отсюда \(\eta_m(c,r)\le C'_{c,r}2^{-m/2}\) и
+ \(\sum_{m\ge2}\eta_m(c,r)<\infty\). Это только суммируемость
+ предложенного бюджета; она не ограничивает фактическую потерю \(R_m-R_{m+1}\).
+
+ \medskip
+ \noindent\textbf{Непроверенное рабочее предположение \(\mathsf B\)
+ (не лемма).}
+ \begin{equation}
+  \begin{gathered}
+  \forall c\in\partial\M\ \forall\varepsilon>0\
+  \exists r\in(0,\varepsilon)\ \exists C_{c,r}>0\
+  \exists m_0\ge2\ \forall m\ge m_0,\\
+  \eta_m(c,r)\le\tfrac12,\qquad
+  R_{m+1}(c,r)\ge
+  \bigl(1-\eta_m(c,r)\bigr)R_m(c,r),
+  \end{gathered}
+  \label{eq:uniform-radius-loss-hypothesis}
+ \end{equation}
+ где \(R_m\) и \(\eta_m\) заданы в
+ \eqref{eq:block-radius-scales} и~\eqref{eq:block-radius-loss}.
+ Именно переход от расстояния разрезов до \(\M\) к нижней оценке
+ сохранённого радиуса в~\eqref{eq:uniform-radius-loss-hypothesis}
+ остаётся недоказанным.
+
+ Ни локальная нормальная форма \(u\mapsto u^2\), ни компактность
+ семейства отображений \((c,u)\mapsto(c,u^2+c)\) не дают этой оценки:
+ они не обеспечивают равномерного контроля обратного образа в параметре
+ \(c\). В частности, \(D_n(c)=p_n'(c)\) может обращаться в нуль, а
+ \eqref{eq:inverse-branch-lipschitz} действует лишь в радиусе, зависящем
+ от \(n\). Глобальный счёт
+ \eqref{eq:lemniscate-critical-count} не локализует критические точки
+ около рассматриваемой компоненты; при этом
+ \(\deg p_n=2^{n-1}\) по~\eqref{eq:parameter-polynomial-degree}, так
+ что конечность числа критических точек на каждом уровне не даёт
+ равномерного бюджета по блокам. Наконец,
+ \eqref{eq:grid-transition-stability} сильнее требуемого включения, а
+ оценки диаметра ячеек не доказывают существование цепи мостов.
+ Поэтому аргументы о сложении угловых потерь и общей константе
+ \(C_{c,r}\) не используются как доказанные факты.
+
+ \subsection*{Шаг 20. Вывести факторизацию условно из \(\mathsf B\)}
+
+ Предположим только на этом шаге рабочее условие
+ \eqref{eq:uniform-radius-loss-hypothesis}. Для внутренних точек
+ \(c\in\operatorname{int}\M\) факторизация уже следует из шага~2.
+ Для \(c\in\partial\M\) и \(\varepsilon>0\) выберем \(r,C_{c,r},m_0\)
+ из \(\mathsf B\). Увеличив \(m_0\), сохраним
+ \(\eta_m(c,r)\le\tfrac12\) для всех \(m\ge m_0\). Из
+ \eqref{eq:uniform-radius-loss-hypothesis} получаем
+ \begin{equation}
+  R_m(c,r)\ge
+  R_{m_0}(c,r)\prod_{j=m_0}^{m-1}
+  \bigl(1-\eta_j(c,r)\bigr),\qquad
+  \inf_{m\ge m_0}R_m(c,r)\ge
+  R_{m_0}(c,r)\prod_{j=m_0}^{\infty}
+  \bigl(1-\eta_j(c,r)\bigr)>0.
+  \label{eq:positive-limiting-radius}
+ \end{equation}
+ Действительно, \(R_{m_0}(c,r)>0\) по
+ \eqref{eq:fixed-level-radius}, ряд \(\sum_j\eta_j(c,r)\) сходится по
+ \eqref{eq:tail-critical-loss}, а
+ \(\log(1-x)\ge-2x\) при \(0\le x\le\tfrac12\).
+
+ Последовательность \(\rho_N(c,r)\) невозрастает и
+ \(\lambda_m\to\infty\); поэтому из~\eqref{eq:positive-limiting-radius}
+ следует
+ \begin{equation}
+  \inf_{N\in\N}\rho_N(c,r)>0.
+  \label{eq:all-level-radius-positive}
+ \end{equation}
+ Выберем \(0<\delta<\inf_N\rho_N(c,r)\). Для каждого \(N\) определение
+ \eqref{eq:component-radius} даёт допустимый радиус
+ \(\delta_N>\delta\); монотонность по радиусу поэтому даёт
+ \[
+  \M\cap\overline B(c,\delta)\subseteq C_N(c,r)
+  \qquad\text{для каждого }N.
+ \]
+ Предложение~\ref{prop:factorization-compactness-reduction} даёт для
+ каждого \(N\) некоторый \(L\ge N\), для которого
+ \(O_L\cap\overline B(c,\delta)\subseteq C_N(c,r)\). По определению
+ \(\varphi_{L,N}^{c;\delta,r}\) это означает
+ \(\varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)\) для каждой компоненты \(A\)
+ из~\eqref{eq:factorization-target}. Таким образом,
+ \eqref{eq:uniform-radius-loss-hypothesis} влечёт целевую теорему.
+ Поскольку \(\mathsf B\) не доказано, это условное замыкание не является
+ доказательством теоремы без дополнительного результата.
+
+ \subsection*{Шаг 21. Сопоставить недостающий переход с ренормализацией}
+
+ В обзоре Дудко \cite{Yoccoz,DudkoMLC} редукция Йоккоза связывает MLC с
+ жёсткостью вложенных собственных малых копий \(\M\): требуется, чтобы
+ пересечение каждой такой вложенной последовательности было одной
+ точкой. Это задаёт содержательный альтернативный маршрут: связать
+ \(C_N(c,r)\) с парапазловыми окрестностями малых копий, а затем получить
+ количественный контроль диаметра и компонент из жёсткости.
+ Необходимое здесь соответствие между этими окрестностями и
+ \(C_N(c,r)\), в частности оценка
+ \eqref{eq:uniform-radius-loss-hypothesis}, в настоящем тексте не
+ установлено.
+
+ Для отдельных классов параметров известны более сильные результаты.
+ Дудко и Любич \cite{DudkoLyubichSatellite} доказывают локальную связность
+ \(\M\) при некоторых бесконечно перенормируемых спутниковых параметрах
+ ограниченного типа; в работе \cite{DudkoLyubichFeigenbaum} получены
+ \emph{a priori} оценки и локальную связность в соответствующих точках
+ Фейгенбаума. Препринт Кана и Любича \cite{KahnLyubichElephant} доказывает
+ \emph{a priori} оценки для комбинаторики типа \emph{elephant eyes},
+ включая вырождающиеся последовательности малых копий. Эти результаты
+ дают конкретные модели для попытки доказать мостовую оценку, но не
+ покрывают все \(c\in\M\) и не влекут \(\mathsf B\) в заявленной
+ равномерности; общий фон перенормировки квадратичных полиномов
+ изложен также в~\cite{Lyubich97}.
 
 \section*{Теорема об аппроксимации}
 
@@ -982,9 +1539,10 @@ O_N\) и \(\delta<r\), всякая точка
 \(\kappa(s)\to0\); следовательно, \(s_n\downarrow0\).
 Минимумы, задающие \(\lambda_n\), существуют, так как
 \(2^{1-N}\log3\to0\). Лемма~\ref{lem:green-depth} даёт
-\[
+\begin{equation}
  h_{\lambda_n}\le\kappa(s_n)\le2^{-n}\qquad(n\ge2).
-\]
+ \label{eq:external-mesh-bound}
+\end{equation}
 Из рекурсивного определения и \eqref{eq:lower-depths} следует
 \(\lambda_n\ge\ell_n\), поэтому \(\lambda\in\Lambda\) и
 \(\lambda_n\to\infty\). Последовательность \((O_{\lambda_n})\)
@@ -1066,19 +1624,22 @@ O_N\) и \(\delta<r\), всякая точка
 
 \subsection*{Внутренние и внешние ячейки}
 
-Для \(n\ge2\) положим \(J_n:=\{0,\ldots,2^n-1\}\) и
-\[
+\begin{equation}
+ \label{eq:dyadic-grid-cells}
+ \begin{gathered}
+ n\ge2,\qquad J_n:=\{0,\ldots,2^n-1\},\qquad J_n^2:=J_n\times J_n,\\
  q_{n,a}:=
- \left[-2+\frac{4a}{2^n},-2+\frac{4(a+1)}{2^n}\right],
- \qquad
+ \left[-2+\frac{4a}{2^n},-2+\frac{4(a+1)}{2^n}\right],\\
  Q_{n,(a,b)}:=
  \{x+iy:x\in q_{n,a},\ y\in q_{n,b}\}
- \quad(a,b\in J_n).
-\]
+ \qquad((a,b)\in J_n^2).
+ \end{gathered}
+\end{equation}
 Каждая ячейка \(Q_{n,\alpha}\) компактна и
-\[
+\begin{equation}
  \operatorname{diam}Q_{n,\alpha}\le8\cdot2^{-n}.
-\]
+ \label{eq:dyadic-grid-diameter}
+\end{equation}
 Действительно, разности вещественных и мнимых частей двух точек одной
 ячейки не превосходят \(4\cdot2^{-n}\), а модуль комплексного числа
 не превосходит суммы модулей его вещественной и мнимой частей.
@@ -1782,7 +2343,7 @@ O_N\) и \(\delta<r\), всякая точка
 \end{description}
 
 \renewcommand{\refname}{Литература}
-\begin{thebibliography}{9}\small
+\begin{thebibliography}{99}\small
 \bibitem{DH}
 A.~Douady и J.~H.~Hubbard,
 \foreignlanguage{english}{\emph{Exploring the Mandelbrot Set: The Orsay Notes}},
@@ -1800,6 +2361,12 @@ J.~Milnor,
 \href{https://arxiv.org/pdf/math/9201272#page=84}
 {Прямая ссылка на PDF}.
 
+\bibitem{Forster}
+O.~Forster,
+\foreignlanguage{english}{\emph{Lectures on Riemann Surfaces}},
+Graduate Texts in Mathematics, vol.~81, Springer-Verlag (1981),
+формула Римана--Гурвица.
+
 \bibitem{BCR}
 J.~Bochnak, M.~Coste и M.-F.~Roy,
 \foreignlanguage{english}{\emph{Real Algebraic Geometry}},
@@ -1813,6 +2380,54 @@ W.~Hurewicz и H.~Wallman,
 Princeton Mathematical Series, vol.~4, Princeton University Press (1941).
 \href{https://archive.org/details/dimensiontheory00hure}
 {Прямая ссылка на каталог}.
+
+\bibitem{Yoccoz}
+J.-C.~Yoccoz,
+\foreignlanguage{english}{\emph{Théorème de Siegel, nombres de Bruno et
+polynômes quadratiques}},
+\foreignlanguage{english}{\emph{Petits diviseurs en dimension 1}},
+Astérisque, no.~231 (1995), pp.~1--88.
+\href{https://www.numdam.org/book-part/AST_1995__231__1_0/}
+{Страница статьи}.
+
+\bibitem{DudkoMLC}
+D.~Dudko,
+\foreignlanguage{english}{\emph{On the MLC Conjecture and the
+Renormalization Theory in Complex Dynamics}},
+arXiv:2512.24171 (2025), препринт, заявлен к публикации в
+\foreignlanguage{english}{\emph{Proceedings of the ICM 2026}}.
+\href{https://arxiv.org/abs/2512.24171}{Страница препринта}.
+
+\bibitem{DudkoLyubichSatellite}
+D.~Dudko и M.~Lyubich,
+\foreignlanguage{english}{\emph{Local connectivity of the Mandelbrot
+set at some satellite parameter of bounded type}},
+\foreignlanguage{english}{Geometric and Functional Analysis},
+vol.~33 (2023), no.~4, pp.~912--1047.
+\href{https://doi.org/10.1007/s00039-023-00637-8}{DOI}.
+
+\bibitem{DudkoLyubichFeigenbaum}
+D.~Dudko и M.~Lyubich,
+\foreignlanguage{english}{\emph{MLC at Feigenbaum points}},
+\foreignlanguage{english}{Publications Mathématiques de l'IHÉS},
+vol.~143 (2026), pp.~97--141.
+\href{https://doi.org/10.5802/pmihes.2}{DOI};
+\href{https://arxiv.org/abs/2309.02107}{препринт arXiv:2309.02107}.
+
+\bibitem{KahnLyubichElephant}
+J.~Kahn и M.~Lyubich,
+\foreignlanguage{english}{\emph{A priori bounds for some infinitely
+renormalizable quadratic: IV. Elephant Eyes}},
+arXiv:2601.21905 (2026), препринт.
+\href{https://arxiv.org/abs/2601.21905}{Страница препринта}.
+
+\bibitem{Lyubich97}
+M.~Lyubich,
+\foreignlanguage{english}{\emph{Dynamics of quadratic polynomials,
+I--II}},
+\foreignlanguage{english}{Acta Mathematica}, vol.~178 (1997), no.~2,
+pp.~185--297.
+\href{https://doi.org/10.1007/BF02392694}{DOI}.
 \end{thebibliography}
 
 \end{document}
