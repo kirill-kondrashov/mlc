@@ -849,7 +849,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
     right.text(
         5,
         5.28,
-        r"$\operatorname{im}\varphi_{L,N}=\{C_N\}$",
+        r"$\pi_0(X_L)/{\sim}=\{[A]\}$",
         fontsize=9.2,
         ha="center",
         va="center",
@@ -879,7 +879,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
     right.text(
         3.55,
         1.2,
-        r"$X_L=A_0'\cup A_1'$",
+        r"$A_0'\sim A_1'$",
         fontsize=9,
         color="#8c4c10",
         ha="center",

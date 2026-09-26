@@ -510,18 +510,43 @@ F_N(c,r)\) это включение. Оно задаёт отображение
  \operatorname{im}\varphi_{L,N}^{c;\delta,r}
  =\{C_N(c,r)\}.
 \]
-Пусть
-\(\mathcal R_N:=\pi_0(F_N(c,r))\setminus\{C_N(c,r)\}\) — множество
-остальных компонент \(F_N\), которое может быть пустым. Отображение
-компонент раскладывается как
+На множестве компонент \(\pi_0(X_L(c,\delta))\) зададим отношение
+эквивалентности
 \[
- \begin{aligned}
-  q &: \pi_0(X_L(c,\delta))\longrightarrow\{C_N(c,r)\},
-       &q(A)&=C_N(c,r),\\
-  j &: \{C_N(c,r)\}\hookrightarrow\pi_0(F_N(c,r)),
-       &\varphi_{L,N}^{c;\delta,r}&=j\circ q.
- \end{aligned}
+A\sim B
+\quad\Longleftrightarrow\quad
+\varphi_{L,N}^{c;\delta,r}(A)=\varphi_{L,N}^{c;\delta,r}(B).
 \]
+Фактор-множество \(\pi_0(X_L(c,\delta))/\sim\) состоит из классов
+компонент с одинаковым образом. Множество \(X_L(c,\delta)\) содержит
+\(c\), поэтому у него есть компонента \(A\). По теореме все компоненты
+эквивалентны, и фактор-множество состоит из одного класса:
+\[
+\pi_0(X_L(c,\delta))/\sim=\{[A]\}.
+\]
+Элементами фактор-множества служат классы связных компонент \(X_L\).
+На правой части рис.~\ref{fig:factorization-component-geometry}
+области \(A_0'\) и \(A_1'\) остаются раздельными; соотношение
+\(A_0'\sim A_1'\) означает, что их образы совпадают и обе компоненты
+входят в один класс \([A]\).
+\[
+\begin{aligned}
+ q &: \pi_0(X_L(c,\delta))\longrightarrow
+      \pi_0(X_L(c,\delta))/\sim,
+      &q(A)&=[A],\\
+ \bar\varphi_{L,N}^{c;\delta,r}&:
+      \pi_0(X_L(c,\delta))/\sim\longrightarrow\pi_0(F_N(c,r)),
+      &\bar\varphi_{L,N}^{c;\delta,r}([A])&=C_N(c,r),\\
+ \varphi_{L,N}^{c;\delta,r}&=\bar\varphi_{L,N}^{c;\delta,r}\circ q.
+\end{aligned}
+\]
+Таким образом, одноэлементный объект здесь — фактор-множество по
+\(\sim\); его единственный класс соответствует единственному значению
+\(\{C_N(c,r)\}\) отображения компонент.
+\(\mathcal R_N:=\pi_0(F_N(c,r))\setminus\{C_N(c,r)\}\) обозначает
+остальные компоненты \(F_N\).
+Для изображения ниже обозначим через \(D\in\mathcal R_N\) одну такую
+компоненту.
 Для наглядности рис.~\ref{fig:factorization-component-geometry}
 сравнивает промежуточную глубину \(\ell\) и достаточную глубину \(L\),
 где \(N\le\ell<L\). В изображённом случае срез \(X_\ell\) имеет
@@ -539,7 +564,7 @@ F_N(c,r)\) это включение. Оно задаёт отображение
 \begin{figure}[H]
  \centering
  \includegraphics[width=0.96\textwidth]{docs/figures/factorization-component-geometry.pdf}
- \captionof{figure}{Срезы \(X_\ell\supseteq X_L\): образ компонент меняется с \(\{C_N,D\}\) на \(\{C_N\}\).}
+ \captionof{figure}{Срезы \(X_\ell\supseteq X_L\): раздельные компоненты \(A_i'\) образуют класс \([A]\), соответствующий \(C_N(c,r)\).}
  \label{fig:factorization-component-geometry}
 \end{figure}
 
