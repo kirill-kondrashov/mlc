@@ -24,9 +24,11 @@ check-uniform:
 
 FACTOR_FIGURES := \
 	docs/figures/factorization-global-levels.pdf \
+	docs/figures/factorization-slices.pdf \
 	docs/figures/factorization-critical-orbit.pdf \
 	docs/figures/factorization-source.pdf \
-	docs/figures/factorization-target.pdf
+	docs/figures/factorization-target.pdf \
+	docs/figures/factorization-map-analogy.pdf
 
 proof-pdf: docs/uniform_geometric_mlc.pdf
 
@@ -35,7 +37,8 @@ docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(FACTOR_FIGURES)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 
-$(FACTOR_FIGURES): factorization-figure
+$(FACTOR_FIGURES) &: scripts/generate_factorization_figures.py scripts/pyproject.toml scripts/poetry.lock
+	cd scripts && poetry run python generate_factorization_figures.py --output-dir ../docs/figures
 
 factorization-figure:
 	cd scripts && poetry run python generate_factorization_figures.py --output-dir ../docs/figures

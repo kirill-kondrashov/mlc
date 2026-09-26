@@ -3,6 +3,8 @@
 \usepackage[margin=27mm]{geometry}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{caption}
+\captionsetup[figure]{font=small}
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{russian}
@@ -263,9 +265,60 @@
 \section*{Теорема о факторизации локальных компонент}
 \label{sec:remaining-factorization}
 
+В этом разделе \(\N=\{0,1,2,\ldots\}\), а
+\(\overline B(a,\rho):=\{z\in\C:|z-a|\le\rho\}\) обозначает замкнутый
+диск. Положим
+\[
+ K:=\overline B(0,2),\qquad f_c(z):=z^2+c,\qquad
+ p_0(c):=0,\qquad p_{j+1}(c):=p_j(c)^2+c,
+\]
+\[
+ \M:=\{c\in\C:\sup_{j\in\N}|p_j(c)|<\infty\},\qquad
+ O_N:=\{c\in K:p_j(c)\in K\text{ для }0\le j\le N\}.
+\]
+Это семейство множеств соответствует радиусу выхода \(2\):
+если \(|c|\le2\) и \(|z|>2\), то
+\(|f_c(z)|\ge|z|^2-2>|z|\); если \(|c|>2\), то начиная с
+\(|p_1(c)|=|c|\) имеем
+\(|p_{j+1}(c)|\ge|p_j(c)|^2-|c|\ge|p_j(c)|^2-|p_j(c)|>|p_j(c)|\).
+Поэтому \(\M=\bigcap_{N\in\N}O_N\). Из определения также следует
+вложенность \(O_L\subseteq O_N\) при \(L\ge N\).
+Подмножества \(\C\) рассматриваются с евклидовой подпространственной
+топологией. Для \(Y\subseteq\C\) через \(\pi_0(Y)\) обозначим множество
+его связных компонент, то есть максимальных связных подмножеств \(Y\).
+При \(c\in Y\) через \(\operatorname{Comp}_c(Y)\) обозначим компоненту,
+содержащую \(c\).
+Для \(c\in\M\), \(r>0\) и \(N\in\N\) положим
+\[
+ F_N(c,r):=O_N\cap\overline B(c,r),\qquad
+ C_N(c,r):=\operatorname{Comp}_c(F_N(c,r)).
+\]
+Иными словами, \(C_N(c,r)\) — связная компонента внешнего среза
+\(F_N(c,r)\), содержащая выделенную точку \(c\).
+Так как \(c\in\M=\bigcap_NO_N\), имеем \(c\in F_N(c,r)\), поэтому
+\(C_N(c,r)\) определена.
+Если \(L\ge N\) и \(0<\delta<r\), то
+\[
+ X_L(c,\delta):=O_L\cap\overline B(c,\delta)
+ \subseteq F_N(c,r).
+\]
+\noindent
+Будем называть \(F_N(c,r)\) локальным срезом внешнего приближения
+\(O_N\), а \(X_L(c,\delta)\) — вложенным срезом глубины \(L\).
+Обозначим через \(\iota_{L,N}^{c;\delta,r}:X_L(c,\delta)\hookrightarrow
+F_N(c,r)\) это включение. Оно задаёт отображение компонент
+\[
+ \varphi_{L,N}^{c;\delta,r}:=
+ \pi_0\!\left(\iota_{L,N}^{c;\delta,r}\right):
+ \pi_0\bigl(X_L(c,\delta)\bigr)\longrightarrow
+ \pi_0\bigl(F_N(c,r)\bigr),
+\]
+которое каждой компоненте вложенного среза ставит в соответствие
+единственную компоненту среза \(F_N(c,r)\), содержащую её.
+
 \begin{theorem}[Теорема о факторизации локальных компонент]
 \label{thm:remaining-component-factorization}
-Для заданной системы внешних множеств \((O_N)\) выполнено условие
+Для введённой системы внешних множеств \((O_N)\) выполнено условие
 \(\mathsf{UC}\), то есть
 \begin{equation}
  \begin{gathered}
@@ -279,133 +332,230 @@
 \end{equation}
 \end{theorem}
 
-\noindent\emph{Уровни и смысл формулировки.}
-Для параметра \(c\) последовательность \(p_j(c)=f_c^{\circ j}(0)\)
-есть орбита нуля при отображении \(f_c(z)=z^2+c\). Уровень \(N\)
-проверяет её начальный отрезок:
-\[
- O_N=\{c\in K:p_j(c)\in K\text{ для }0\le j\le N\}.
-\]
-Переход от \(N\) к \(N+1\) добавляет проверку
-\(p_{N+1}(c)\in K\), поэтому \(O_{N+1}\subseteq O_N\). По
-лемме~\ref{lem:outer-sets}
-\[
- \M=\bigcap_{N\in\N}O_N:
-\]
-это множество параметров, для которых вся орбита нуля остаётся в \(K\).
-Таким образом, индекс уровня — число проверенных итераций; множества
-\(O_N\) являются конечными внешними приближениями \(\M\).
+\noindent\emph{Смысл формулировки.}
+Индекс \(N\) задаёт последний проверяемый член орбиты. При переходе
+от \(N\) к \(N+1\) добавляется условие \(p_{N+1}(c)\in K\), поэтому
+\(O_{N+1}=O_N\cap p_{N+1}^{-1}(K)\subseteq O_N\). С ростом \(N\)
+множества \(O_N\) уточняют конечные внешние приближения \(\M\).
 
-Для каждой точки \(c\in\M\) и каждого \(\varepsilon>0\) выбираются
-радиусы \(0<\delta<r<\varepsilon\), общие для всех \(N\). При каждом
-заданном уровне \(N\) выбирается уровень \(L\ge N\), который может
-зависеть от \(N\). Обозначим
+Для каждого \(c\in\M\) и \(\varepsilon>0\) выбираются общие для всех
+\(N\) радиусы \(0<\delta<r<\varepsilon\), а для каждого \(N\) —
+индекс \(L\ge N\). Обозначим
 \[
- X_L:=O_L\cap\overline B(c,\delta),\qquad
- F_N:=O_N\cap\overline B(c,r).
+ X_L:=X_L(c,\delta),\qquad F_N:=F_N(c,r).
 \]
-Включение \(X_L\subseteq F_N\) индуцирует отображение
-\(\varphi_{L,N}^{c;\delta,r}:\pi_0(X_L)\to\pi_0(F_N)\), переводящее
-каждую компоненту \(A\) в компоненту \(F_N\), содержащую \(A\).
-Выделенная компонента \(C_N(c,r)\) содержит \(c\); теорема утверждает,
-что \(\varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)\) для каждой компоненты
-\(A\) источника. Это равенство сопоставляет компоненты целевого
-среза. Оно равносильно включению всего \(X_L\) в \(C_N(c,r)\).
+Вложенный срез включён в срез \(F_N\), поэтому каждая его компонента
+\(A\in\pi_0(X_L)\) содержится в единственной компоненте \(F_N\).
+Теорема утверждает, что при подходящем \(L\) эта компонента для каждого
+\(A\) равна \(C_N(c,r)\), то есть \(X_L\subseteq C_N(c,r)\).
 
-\noindent\emph{Численный пример.}
-Возьмём \(c_0=-1\). Для \(f_{c_0}(z)=z^2-1\) имеем
-\[
- p_0(c_0)=0,\qquad p_1(c_0)=-1,\qquad p_2(c_0)=0,
-\]
-поэтому критическая орбита имеет период \(2\) и \(c_0\in\M\).
-Рисунок~\ref{fig:factorization-orbit} показывает действия
-\(f_{-1}\) на точках этой орбиты в динамической плоскости; этим
-проверяется условие \(c_0\in\M\) из теоремы.
+\noindent\emph{Иллюстрация с фиксированными параметрами.}
+Сеточная выборка \(E\) — растр конечной прямоугольной сетки параметров
+\(c=x+iy\): пиксель окрашен, если соответствующий узел принадлежит \(E\).
+Формулы задают точное \(E\), растр показывает его геометрическое
+приближение.
 
 \begin{figure}[H]
- \centering
- \includegraphics[width=0.7\textwidth]{docs/figures/factorization-critical-orbit.pdf}
- \caption{Критическая орбита при фиксированном \(c_0=-1\). Точка
- \(p_0=0\) переходит под действием \(f_{-1}\) в \(p_1=-1\), а
- \(p_1\) под действием того же отображения переходит в \(p_2=0\).
- Периодическая орбита остаётся внутри \(K=\overline B(0,2)\), поэтому
- \(c_0\in\M\).}
- \label{fig:factorization-orbit}
-\end{figure}
-
-Выберем \(\varepsilon=1\), \(r=\frac45\), \(\delta=\frac35\),
-\(N=2\) и \(L=6\). Источник и цель в теореме имеют вид
-\[
- X_6=O_6\cap\overline B(c_0,\tfrac35),\qquad
- F_2=O_2\cap\overline B(c_0,\tfrac45),
-\]
-а включение \(X_6\hookrightarrow F_2\) индуцирует отображение
-\(\varphi_{6,2}^{c_0;\frac35,\frac45}:\pi_0(X_6)\to\pi_0(F_2)\).
-
-Глобальный рисунок показывает уровни \(O_2\) и \(O_{80}\) вместе с
-окнами локализации. Красная окружность не приближает границу \(\M\):
-это выбранная окрестность, пересечение которой с \(O_2\) задаёт цель
-\(F_2\). Оранжевая окружность задаёт меньшее окно; его пересечение с
-\(O_6\) даёт источник \(X_6\).
-
-\begin{figure}[H]
- \centering
- \includegraphics[width=0.55\textwidth]{docs/figures/factorization-global-levels.pdf}
- \caption{Глобальный параметрический контекст. Светлая область есть
- \(O_2\setminus O_{80}\), тёмная — \(O_{80}\), где
- \(\M\subseteq O_{80}\subseteq O_2\); уровни показаны сеточной выборкой.
- Красная окружность задаёт окно
- \(\overline B(c_0,r)\): пересечение этого окна с \(O_2\) образует цель
- \(F_2\). Оранжевая окружность задаёт меньшее окно
- \(\overline B(c_0,\delta)\): пересечение с \(O_6\) образует источник
- \(X_6\). Окружности задают локализацию для дальнейших рисунков; они
- не являются границами \(\M\).}
- \label{fig:factorization-global}
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-slices.pdf}
+  \captionof{figure}{Срезы \(X_8\subseteq F_2\) при \(c_\ast=0\).}
+  \label{fig:factorization-slices}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \small
+  Возьмём \(c_\ast=0\), \(\varepsilon=2\), \(N=2\), \(L=8\),
+  \(r=\frac65\), \(\delta=\frac34\). Орбита нуля при \(c_\ast=0\)
+  постоянна, поэтому \(c_\ast\in\M\), а \(0<\delta<r<\varepsilon\).
+  \[
+  \begin{aligned}
+   X_8&=\{c:|c|\le\tfrac34,\\
+      &\qquad |p_j(c)|\le2\ (0\le j\le8)\},\\
+   F_2&=\{c:|c|\le\tfrac65,\\
+      &\qquad |c^2+c|\le2\}.
+  \end{aligned}
+  \]
+  Здесь \(p_1(c)=c\), \(p_2(c)=c^2+c\), поэтому \(X_8\subseteq F_2\).
+  Включение задаёт отображение
+  \[
+   \varphi_{8,2}^{0;\frac34,\frac65}:
+   \pi_0(X_8)\longrightarrow\pi_0(F_2).
+  \]
+  Взаимное расположение срезов показано на рис.~\ref{fig:factorization-slices}.
+ \end{minipage}
 \end{figure}
 
 \begin{figure}[H]
- \centering
- \includegraphics[width=0.47\textwidth]{docs/figures/factorization-source.pdf}
- \caption{Источник
- \(X_6=O_6\cap\overline B(c_0,\delta)\) в параметрической плоскости.
- Оранжевая заливка показывает сеточную выборку \(X_6\); её связные
- компоненты являются элементами области определения \(\varphi_{6,2}\).
- Метка \(A\) указывает на компоненту источника, видимую в этой выборке.}
- \label{fig:factorization-source}
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-critical-orbit.pdf}
+  \captionof{figure}{Критическая орбита при \(c_0=-1\).}
+  \label{fig:factorization-orbit}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \small
+  Для рис.~\ref{fig:factorization-orbit} возьмём \(c_0=-1\).
+  Критическая орбита задаётся цепочкой
+  \[
+   \begin{aligned}
+    p_0(c_0)&=0\xrightarrow{f_{-1}}p_1(c_0)=-1,\\
+    p_1(c_0)&=-1\xrightarrow{f_{-1}}p_2(c_0)=0=p_0(c_0).
+   \end{aligned}
+  \]
+  Она повторяется с периодом \(2\) и лежит в
+  \(K=\overline B(0,2)\), поэтому \(c_0\in\M\).
+  Звезда отмечает \(p_0\), тёмная точка — \(p_1\).
+ \end{minipage}
 \end{figure}
-
-При \(c=-1+u\), \(|u|\le\frac45\), выполнены
-\[
- |c|\le\frac95<2,\qquad
- |p_2(c)|=|u(u-1)|\le\frac{36}{25}<2.
-\]
-Следовательно, \(F_2=\overline B(c_0,\frac45)\) и
-\(C_2(c_0,\frac45)=F_2\).
 
 \begin{figure}[H]
- \centering
- \includegraphics[width=0.62\textwidth]{docs/figures/factorization-target.pdf}
- \caption{Цель \(F_2=O_2\cap\overline B(c_0,r)\) и её корневая
- компонента \(C_2(c_0,r)\) в параметрической плоскости. Синяя область
- показывает сеточную выборку множества
- \(F_2=C_2(c_0,r)=\overline B(c_0,r)\). Оранжевый контур
- показывает вложенный источник \(X_6\); звезда отмечает \(c_0\).}
- \label{fig:factorization-target}
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-global-levels.pdf}
+  \captionof{figure}{Внешние приближения и окна при \(c_0=-1\).}
+  \label{fig:factorization-global}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \small
+  На рис.~\ref{fig:factorization-global} взяты
+  \(\varepsilon=1\), \(r=\frac45\), \(\delta=\frac35\), \(N=2\),
+  \(L=6\). Условие \(O_j\) проверяет орбиту до индекса \(j\), поэтому
+  \(\M\subseteq O_{80}\subseteq O_6\subseteq O_2\).
+  \[
+   \begin{aligned}
+    F_2&=O_2\cap\overline B(c_0,r),\\
+    X_6&=O_6\cap\overline B(c_0,\delta)\subseteq F_2.
+   \end{aligned}
+  \]
+  Поскольку \(O_{80}\subseteq O_6\), тёмная часть
+  \(O_{80}\cap\overline B(c_0,\delta)\) входит в \(X_6\). Кроме неё,
+  \(X_6\) содержит точки из \(O_6\setminus O_{80}\) в том же круге;
+  поэтому оранжевая заливка частично перекрывает тёмную.
+  Голубая и оранжевая заливки вместе показывают \(F_2\), оранжевая —
+  \(X_6\); подписи нанесены прямо на них. Красная штриховая и
+  оранжевая точечная окружности ограничивают круги радиусов \(r\) и
+  \(\delta\). Включение \(X_6\hookrightarrow F_2\) задаёт отображение
+  \(\varphi_{6,2}^{c_0;\delta,r}\): каждая компонента \(X_6\) относится
+  к компоненте \(F_2\), содержащей её. Здесь это \(C_2(c_0,r)\), как
+  показано на рис.~\ref{fig:factorization-target}. Светлая и тёмная
+  области фона показывают \(O_2\setminus O_{80}\) и \(O_{80}\);
+  звезда отмечает параметр \(c_0\), центр обоих кругов. Орбита при
+  \(c_0\) начинается с \(p_0(c_0)=0\), как показано на
+  рис.~\ref{fig:factorization-orbit}.
+ \end{minipage}
 \end{figure}
 
-Итак, \emph{цель} — это \(F_2\), множество, в котором сравниваются
-образы компонент источника. В данном примере \(F_2\) связно, поэтому
-для каждой компоненты \(A\in\pi_0(X_6)\) отображение, индуцированное
-включением \(\iota:X_6\hookrightarrow F_2\), имеет значение
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-source.pdf}
+  \captionof{figure}{Вложенный срез глубины \(6\), \(X_6\), при \(c_0=-1\).}
+  \label{fig:factorization-source}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \small
+  На рис.~\ref{fig:factorization-source} из \(O_6\) выделен вложенный
+  срез \(X_6=O_6\cap\overline B(c_0,\delta)\). Метка \(A\) указывает на
+  выбранную компоненту \(A\in\pi_0(X_6)\). Оранжевая заливка —
+  сеточная выборка \(X_6\), пунктирная окружность ограничивает радиус
+  \(\delta=\frac35\), звезда отмечает \(c_0\). На
+  рис.~\ref{fig:factorization-target} показано включение этой компоненты
+  в соответствующую компоненту \(F_2\).
+ \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-target.pdf}
+  \captionof{figure}{Внешний срез \(F_2\) и вложенный срез \(X_6\) при \(c_0=-1\).}
+  \label{fig:factorization-target}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \small
+  Для \(c=c_0+u=-1+u\), \(|u|\le\frac45\), выполнены оценки
+  \[
+   |c|\le\frac95<2,\qquad
+   |p_2(c)|=|u(u-1)|\le\frac{36}{25}<2.
+  \]
+  Поэтому \(F_2=\overline B(c_0,\frac45)=C_2(c_0,\frac45)\).
+  На рис.~\ref{fig:factorization-target} синяя заливка показывает
+  сеточную выборку среза \(F_2\), оранжевый контур — вложенный срез
+  \(X_6\), звезда — \(c_0\). В этом примере включение задаёт отображение
+  компонент
+  \[
+   \begin{aligned}
+    X_6&\subseteq F_2=C_2(c_0,r),\\
+    \varphi_{6,2}^{c_0;\delta,r}&:
+       \pi_0(X_6)\to\pi_0(F_2),\\
+    A&\longmapsto C_2(c_0,r).
+   \end{aligned}
+  \]
+  Это один численный случай условия \(\mathsf{UC}\): при \(N=2\)
+  выбран \(L=6\), а образом каждой компоненты вложенного среза служит
+  \(C_2(c_0,r)\).
+ \end{minipage}
+\end{figure}
+
+\noindent\emph{Геометрический смысл теоремы.}
+Внешний срез \(F_N(c,r)\) состоит из параметров \(c'\) в
+\(\overline B(c,r)\), для которых \(p_j(c')\in K\) при \(0\le j\le N\).
+Вложенный срез \(X_L(c,\delta)\) задаётся условиями до индекса
+\(L\ge N\) в круге \(\overline B(c,\delta)\). Обозначим через
+\(C_N(c,r)\) компоненту \(F_N\), содержащую \(c\). При подходящем
+\(L\) каждая компонента \(X_L\) лежит в ней:
 \[
- \pi_0(\iota):\pi_0(X_6)\longrightarrow\pi_0(F_2),
- \qquad A\longmapsto C_2(c_0,r)=F_2.
+ X_L(c,\delta)\subseteq C_N(c,r),\qquad
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)
+ \quad\text{для каждого }A\in\pi_0(X_L(c,\delta)).
 \]
-Оранжевый контур на рисунке цели показывает включение источника в
-целевое множество; отображение \(\pi_0(\iota)\) переводит компоненту
-источника в содержащую её компоненту цели. Этот численный пример
-поясняет уровни, локальные срезы и индуцированное отображение; он
-иллюстрирует формулировку при выбранных параметрах.
+Поэтому отображение компонент факторизуется через одноэлементное
+множество:
+\[
+ \pi_0(X_L(c,\delta))
+ \xrightarrow{\ A\mapsto C_N(c,r)\ }
+ \{C_N(c,r)\}
+ \hookrightarrow
+ \pi_0(F_N(c,r)).
+\]
+Географическая схема этого включения приведена на рис.~\ref{fig:factorization-map-analogy}.
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-map-analogy.pdf}
+  \captionof{figure}{Карта-схема компонент вложенного и внешнего срезов.}
+  \label{fig:factorization-map-analogy}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \small
+  На схеме зелёные участки вместе изображают \(F_N\). Тёмная суша
+  \(C_N(c,r)\) связна и содержит флажок \(c\); светлый остров показывает
+  ещё одну компоненту \(F_N\). Оранжевые пятна \(A_0,A_1,A_2\) условно
+  изображают отдельные компоненты вложенного среза \(X_L\), лежащие на
+  тёмной суше. Красная окружность задаёт радиус \(r\), оранжевая —
+  меньший радиус \(\delta\). Поэтому на карте видно, что
+  \[
+   A_i\in\pi_0(X_L),\qquad
+   \varphi_{L,N}^{c;\delta,r}(A_i)=C_N(c,r)
+   \quad(i=0,1,2).
+  \]
+  Переход к \(N+1\) добавляет правило отбора точек карты; область
+  внешнего приближения сужается: \(O_{N+1}\subseteq O_N\).
+ \end{minipage}
+\end{figure}
 
 \section*{Черновое доказательство теоремы о факторизации}
 \label{sec:factorization-draft-proof}
@@ -627,8 +777,9 @@ O_N\) и \(\delta<r\), каждая точка множества
 \eqref{eq:green-separator-distance} задаёт масштаб толщины новых
 разрезов.
 
-Ячеечные графы и их точное отождествление с корневыми компонентами
-установлены в шагах~8--10 и~15--16. Их переходные разрезы лежат на
+Ячеечные графы и их точное отождествление с компонентами внешних
+срезов, содержащими \(c\), установлены в шагах~8--10 и~15--16.
+Их переходные разрезы лежат на
 \(\Sigma_n(c,r)\); шаг~19 формулирует рабочую оценку их накопленного
 эффекта.
 
@@ -742,7 +893,8 @@ O_N\) и \(\delta<r\), каждая точка множества
  H_m(c,r)=C_{\lambda_m}(c,r).
 \label{eq:dyadic-graph-component}
 \end{equation}
-Граф точно кодирует корневую компоненту внешнего уровня.
+Граф точно задаёт компоненту \(O_{\lambda_m}\cap\overline B(c,r)\),
+содержащую \(c\).
 
 \subsection*{Шаг 10. Свести ячеечный граф к общему радиусу}
 
@@ -1107,8 +1259,9 @@ O_N\) и \(\delta<r\), каждая точка множества
 \item \textbf{Пазловые ячейки как мосты.} Разбиваем локальный срез
 \(O_n\cap\overline B(c,r)\) на конечные компактные ячейки и соединяем
 пересекающиеся ячейки рёбрами. Нужное включение следует, если каждый
-кластер, встречающий \(O_L\cap\overline B(c,\delta)\), входит в корневой
-кластер \(C_N(c,r)\). Предыдущий графовый критерий показывает, что
+кластер, встречающий \(O_L\cap\overline B(c,\delta)\), входит в
+\(C_N(c,r)\), то есть в компоненту \(O_N\cap\overline B(c,r)\),
+содержащую \(c\). Предыдущий графовый критерий показывает, что
 для этого вместе с уменьшением диаметра ячеек требуется оценить число
 и веса разделяющих кластеров.
 
