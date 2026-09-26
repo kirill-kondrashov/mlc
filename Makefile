@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean graphs serve proof-pdf check-uniform
+.PHONY: all build check cache clean graphs serve proof-pdf factorization-figure check-uniform
 
 # Default target
 all: check
@@ -22,12 +22,23 @@ check-uniform:
 	lake build Mlc.UniformGeometricRoot Mlc.UniformGeometricVertexControl Mlc.TrappingRegionObstruction Mlc.FiniteTrappingRegions
 	lake env lean --run check_uniform_program.lean
 
+FACTOR_FIGURES := \
+	docs/figures/factorization-global-levels.pdf \
+	docs/figures/factorization-critical-orbit.pdf \
+	docs/figures/factorization-source.pdf \
+	docs/figures/factorization-target.pdf
+
 proof-pdf: docs/uniform_geometric_mlc.pdf
 
-docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex
+docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(FACTOR_FIGURES)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+
+$(FACTOR_FIGURES): factorization-figure
+
+factorization-figure:
+	cd scripts && poetry run python generate_factorization_figures.py --output-dir ../docs/figures
 
 # Build static dependency-graph pages under site/
 graphs: build
