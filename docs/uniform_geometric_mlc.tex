@@ -59,12 +59,11 @@
 Доказательство шагов 1--8 также строит сертификат для каждого
 фиксированного конечного горизонта. Выборы уровней и модулей
 непрерывности в этих сертификатах могут зависеть от горизонта.
-Для MLC в этом подходе не хватает одной пары \((\lambda,\delta)\),
-для которой существуют совместимые сертификаты всех длин. По
-теореме~\ref{thm:hierarchy} и следствию
-\ref{cor:ug-equivalent-mlc} это общее условие равносильно MLC.
-Именно переход от сертификатов с зависящими от горизонта параметрами
-к одной общей башне остаётся недоказанным.
+Точная недостающая ступень в этом подходе — одна пара
+\((\lambda,\delta)\), для которой сертификаты существуют при всех
+конечных длинах. Теорема~\ref{thm:common-certificate-tower}
+доказывает, что такое общее условие равносильно MLC. Основная теорема
+даёт параметры, зависящие от горизонта, но не эту общую пару.
 
 \section*{Основная теорема}
 
@@ -137,6 +136,40 @@
 задают метрически контролируемую аппроксимацию объекта-предела.
 
 \section{Доказательство Основной теоремы}
+
+\subsection*{Локальная связность через равномерно малые континуумы}
+
+\begin{theorem}[Критерий равномерно малых континуумов]
+\label{thm:uniform-small-continua}
+Пусть \(X\) — компактное метрическое пространство с метрикой \(d\).
+Тогда \(X\) локально связно тогда и только тогда, когда
+\[
+ \forall\varepsilon>0\ \exists\delta>0\ \forall x,y\in X,\qquad
+ d(x,y)<\delta\ \Longrightarrow\
+ \exists C\subseteq X:
+ \begin{cases}
+ C\text{ компактно и связно},\\
+ x,y\in C,\\
+ \operatorname{diam}(C)<\varepsilon.
+ \end{cases}
+\]
+\end{theorem}
+\begin{proof}
+Если \(X\) локально связно, то у каждой точки есть связная открытая
+окрестность диаметра меньше \(\varepsilon\). Компактность даёт
+конечное подпокрытие этих окрестностей, а лемма Лебега — число
+\(\delta>0\). Если \(d(x,y)<\delta\), точки \(x,y\) лежат в одной
+такой окрестности; её замыкание в \(X\) компактно, связно и имеет
+диаметр меньше \(\varepsilon\).
+
+Обратно, пусть \(x\in V\), где \(V\) открыто в \(X\). Выберем
+\(\varepsilon>0\) так, чтобы \(B(x,\varepsilon)\cap X\subseteq V\).
+Для соответствующего \(\delta\) каждая точка \(y\in B(x,\delta)\cap X\)
+лежит вместе с \(x\) в связном множестве \(C\) диаметра меньше
+\(\varepsilon\), поэтому \(C\subseteq V\). Значит, компонента \(V\),
+содержащая \(x\), содержит шар \(B(x,\delta)\cap X\). Компоненты
+открытых множеств открыты, что равносильно локальной связности.
+\end{proof}
 
 \subsection*{Шаг 1. Представить конечные орбитальные ограничения компактными объектами.}
 
@@ -664,8 +697,31 @@
  \label{eq:ug-m}
 \end{align}
 Компактность \(\mathcal K_\delta\) и \(\mathcal P_m(\lambda,\delta)\)
-доказывается ниже в лемме~\ref{lem:compact-towers}.
+следует из следующей леммы.
 \end{definition}
+
+\begin{lemma}[Компактность пространств конечных сертификатов]
+\label{lem:compact-towers}
+\(\mathcal K_\delta\) компактно в равномерной топологии, а каждое
+\(\mathcal P_m(\lambda,\delta)\) компактно в топологии конечного
+произведения.
+\end{lemma}
+\begin{proof}
+Условия на \(\delta_k\) и \(F\) задают общий модуль непрерывности
+для \(\mathcal K_\delta\); все значения лежат в компактном \(\D\).
+По теореме Арцела--Асколи семейство относительно компактно.
+Равномерные пределы сохраняют условия определения, поэтому
+\(\mathcal K_\delta\) замкнуто и компактно.
+
+Для \(F,G\in C(\D,\D)\)
+\[
+ |e_i(F)-e_i(G)|\le\|F-G\|_\infty.
+\]
+Условия фиксации, на множество значений, на ошибку и на перемещение
+между соседними уровнями задают замкнутые подмножества компактного
+конечного произведения \(\mathcal K_\delta^{m+1}\). Значит,
+\(\mathcal P_m(\lambda,\delta)\) компактно.
+\end{proof}
 
 \begin{proposition}[Каждый конечный горизонт реализуется отдельно]
 \label{prop:finite-horizons}
@@ -723,641 +779,10 @@
 \(\mathcal K_{\delta^{[m]}}\).
 \end{proof}
 
-\noindent
-\textbf{Результат для конечных горизонтов.} Для каждого конечного
-\(m\) существует сертификат \(\mathsf{UG}_m\), но его параметры
-\((\lambda^{[m]},\delta^{[m]})\) могут зависеть от \(m\). Это не
-даёт одной башни сертификатов бесконечной длины.
-
-\begin{mainthm}[Основная теорема с сертификатами конечной длины]
-Выполняются утверждения (1)--(5), и для каждого \(m\in\N\)
-существуют \(\lambda^{[m]}\in\Lambda\), \(\delta^{[m]}\in\Delta\),
-для которых \(\mathsf{UG}_m(\lambda^{[m]},\delta^{[m]})\).
-Функториальное сравнение предельных объектов и количественные
-оценки дефекта для явной конструкции заданы в предложениях
-\ref{prop:functorial-comparison} и
-\ref{prop:cutoff-cone-defect}.
-\end{mainthm}
-\begin{proof}
-Утверждения (1)--(5) доказаны в теореме~\ref{thm:exterior-candidates};
-конечногоризонтное утверждение — в предложении
-\ref{prop:finite-horizons}; дополнительные данные явной конструкции
-доказаны в предложениях~\ref{prop:functorial-comparison} и
-\ref{prop:cutoff-cone-defect}.
-\end{proof}
-
-\appendix
-\section{Критерии, равносильные MLC, и точное описание зазора}
-\label{app:criteria}
-
-\noindent
-Здесь собраны критерии, равносильные MLC, и точное описание
-оставшегося зазора. Эти результаты дополняют анализ, но не входят
-в шаги 1--8.
-
-\begin{theorem}[Критерий равномерно малых континуумов]
-\label{thm:uniform-small-continua}
-Пусть \(X\) — компактное метрическое пространство с метрикой \(d\).
-Тогда \(X\) локально связно тогда и только тогда, когда
-\[
- \forall\varepsilon>0\ \exists\delta>0\ \forall x,y\in X,\qquad
- d(x,y)<\delta\ \Longrightarrow\
- \exists C\subseteq X:
- \begin{cases}
- C\text{ компактно и связно},\\
- x,y\in C,\\
- \operatorname{diam}(C)<\varepsilon.
- \end{cases}
-\]
-\end{theorem}
-\begin{proof}
-Пусть \(X\) локально связно и \(\varepsilon>0\). У каждой точки
-есть связная открытая окрестность диаметра меньше \(\varepsilon\).
-Компактность даёт конечное подпокрытие этих окрестностей, а лемма
-Лебега — число \(\delta>0\). Если \(d(x,y)<\delta\), то \(x,y\)
-лежат в одной такой окрестности; её замыкание в \(X\) компактно,
-связно и имеет диаметр меньше \(\varepsilon\).
-
-Обратно, пусть \(x\in V\), где \(V\) открыто в \(X\). Выберем
-\(\varepsilon>0\) так, чтобы \(B(x,\varepsilon)\cap X\subseteq V\).
-Для соответствующего \(\delta\) каждый \(y\in B(x,\delta)\cap X\)
-лежит вместе с \(x\) в связном множестве \(C\) диаметра меньше
-\(\varepsilon\), поэтому \(C\subseteq V\). Следовательно, компонента
-\(V\), содержащая \(x\), содержит \(B(x,\delta)\cap X\); все
-компоненты открытых множеств открыты. Компоненты \(V\) тем самым дают
-базу связных открытых окрестностей в \(X\), и \(X\) локально связно.
-\end{proof}
-
-Открытым остаётся переход от отдельных конечных сертификатов к одной
-совместимой бесконечной башне, либо эквивалентное построение
-ретракции \(\D\to\M\). Ниже отдельно разобраны суммируемость
-конкретных усечений и порядок кванторов конечных префиксов.
-
-\noindent
-Внешняя униформизация и геометрические свойства множества
-Мандельброта, используемые в шагах доказательства, опираются на
-классические источники \cite{DH,Milnor}. MLC остаётся открытой;
-известны доказательства для специальных классов параметров, включая
-некоторые сателлитные параметры ограниченного типа и параметры
-Фейгенбаума \cite{DudkoStatus,DudkoLyubichSat,DudkoLyubichFeigenbaum}.
-Этот библиографический контекст не используется как доказательство
-Основной теоремы или MLC.
-
-\subsection{Суммируемые отсечения и компактность усечений}
-
-\begin{definition}[Локальная связность]\label{def:local-connectedness}
-Для \(X\subseteq\C\) положим
-\[
- \LC(X):=
- \left[
- \begin{gathered}
-  \forall c\in X\ \forall\eta>0\ \exists\delta>0\
-  \exists V\subseteq X:\\
-  V\text{ связно},\qquad
-  X\cap B(c,\delta)\subseteq V\subseteq X\cap B(c,\eta)
- \end{gathered}\right].
-\]
-\end{definition}
-
-\begin{theorem}[Суммируемая последовательность эндоморфизмов задаёт ретракцию MLC]
-\label{thm:summable-cutoff}
-Пусть \(a\) задано в теореме~\ref{thm:exterior-candidates}.
-Тогда
-\begin{equation}\label{eq:summable-cutoff-equivalence}
- \LC(\M)\quad\Longleftrightarrow\quad
- \left[
- \begin{gathered}
-  \exists(s_n)_{n\ge1}\subset(0,\infty):\
-  s_1=a,\quad s_{n+1}<s_n,\quad s_n\to0,\\
-  \forall n\ge2,\quad\kappa(s_n)\le2^{-n},\\
-  \sum_{n=1}^{\infty}
-       \|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty
- \end{gathered}\right].
-\end{equation}
-Каждая последовательность, удовлетворяющая правой части,
-равномерно сходится к непрерывной ретракции \(R:\D\to\M\).
-\end{theorem}
-\begin{proof}
-Пусть существует последовательность из правой части и положим
-\(b_n:=\|Q_{s_{n+1}}-Q_{s_n}\|_\infty\). При \(m>n\)
-\[
- \|Q_{s_m}-Q_{s_n}\|_\infty\le\sum_{j=n}^{m-1}b_j.
-\]
-Следовательно, \(Q_{s_n}\) равномерно сходится к
-\(R\in C(\D,\D)\). Каждое \(Q_{s_n}\) фиксирует \(\M\), а
-\[
- \dist(Q_{s_n}(z),\M)\le\kappa(s_n)\longrightarrow0.
-\]
-Поскольку \(\M\) замкнуто, \(R(\D)\subseteq\M\); из
-\(R|_\M=\id\) следует \(R(\D)=\M\).
-
-Зафиксируем \(c\in\M\) и \(\eta>0\). Выберем \(\delta>0\) так, чтобы
-\[
- z\in\D,\quad |z-c|<\delta
- \Longrightarrow |R(z)-c|<\eta.
-\]
-Множество \(W:=\D\cap B(c,\delta)\) выпукло и содержит \(c\).
-Поэтому \(V:=R(W)\) связно и
-\[
- \M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta).
-\]
-Следовательно, \(\LC(\M)\).
-
-Обратно, пусть \(\LC(\M)\). Критерий Каратеодори для границы из
-\href{https://arxiv.org/pdf/math/9201272#page=84}
-{Милнор, теорема 16.6, с.~84 PDF-файла}
-даёт непрерывное продолжение \(\widehat\Psi\) отображения \(\Psi\)
-на \(\{|w|\ge1\}\). На компактном кольце
-\(A_a:=\{w:1\le|w|\le e^a\}\) положим
-\[
- \omega_a(r):=
- \sup_{\substack{w,v\in A_a\\|w-v|\le r}}
-                   |\widehat\Psi(w)-\widehat\Psi(v)|.
-\]
-Из равномерной непрерывности следует
-\(\omega_a(r)\to0\) при \(r\downarrow0\). Определим
-\[
- R(c):=
- \begin{cases}
-  c,&c\in\M,\\
-  \displaystyle\widehat\Psi\left(
-             \frac{\Phi(c)}{|\Phi(c)|}\right),&c\notin\M.
- \end{cases}
-\]
-При \(0<s\le a\) и \(c\notin\M\) положим
-\(\xi=\Phi(c)/|\Phi(c)|\) и \(r=\exp(\min\{s,G(c)\})\). Тогда
-\[
- |P_s(c)-R(c)|
- =|\widehat\Psi(r\xi)-\widehat\Psi(\xi)|
- \le\omega_a(e^s-1).
-\]
-На \(\M\) разность равна нулю, поэтому
-\begin{equation}\label{eq:uniform-cutoff-limit}
- \sup_{c\in\C}|P_s(c)-R(c)|\le\omega_a(e^s-1).
-\end{equation}
-Следовательно, \(P_s\to R\) равномерно на \(\C\), причём
-\[
- \|Q_s-R|_{\D}\|_\infty\le\omega_a(e^s-1)\longrightarrow0.
-\]
-Рекурсивно выберем \(s_1=a\) и
-\[
- 0<s_n<\min\{s_{n-1}/2,2^{-n}\},\qquad
- \kappa(s_n)\le2^{-n},\qquad
- \|Q_{s_n}-R\|_\infty\le2^{-n}\quad(n\ge2).
-\]
-Тогда
-\[
- \|Q_{s_{n+1}}-Q_{s_n}\|_\infty
- \le2^{-(n+1)}+2^{-n}\qquad(n\ge2),
-\]
-а единственное слагаемое при \(n=1\) конечно. Это доказывает
-обратное следствие.
-\end{proof}
-
-\begin{theorem}[Компактность морфизмов усечения эквивалентна MLC]
-\label{thm:cutoff-hom-compactness}
-Для явной последовательности \(\bar P_n:\D\to E_n\) из
-шага~6, рассматриваемой через вложения как семейство в
-\(C(\D,E_a)\), выполняется
-\[
- \LC(\M)\quad\Longleftrightarrow\quad
- \overline{\{\bar P_n:n\ge2\}}^{\,C(\D,E_a)}
- \text{компактно}.
-\]
-По теореме Арцела--Асколи условие справа равносильно существованию
-общего модуля непрерывности для всего семейства.
-\end{theorem}
-\begin{proof}
-Если выполнено \(\LC(\M)\), то продолжение Каратеодори из
-доказательства теоремы~\ref{thm:summable-cutoff} даёт
-\[
- \|\bar P_n-R|_{\D}\|_\infty
- \le\omega_a(e^{s_n}-1)\longrightarrow0.
-\]
-Следовательно, последовательность морфизмов сходится в
-\(C(\D,E_a)\), и её замыкание компактно.
-
-Обратно, компактность замыкания даёт равномерно сходящуюся
-подпоследовательность \(\bar P_{n_j}\to R\), где \(n_j\to\infty\).
-Для каждого фиксированного \(k\ge2\) при достаточно больших \(j\)
-имеем \(n_j\ge k\), откуда
-\(\bar P_{n_j}(\D)\subseteq E_{n_j}\subseteq E_k\).
-Замкнутость \(E_k\) влечёт \(R(\D)\subseteq E_k\), поэтому
-\[
- R(\D)\subseteq\bigcap_{k\ge2}E_k=\M.
-\]
-Каждое \(\bar P_n\) фиксирует \(\M\), поэтому
-\(R|_\M=\id_\M\) и \(R(\D)=\M\). Координатные отображения
-\(R:\D\to E_k\) образуют конус над \(\mathcal E\), а значит,
-задают морфизм \(\D\to\varprojlim\mathcal E\cong\M\).
-Полученная ретракция влечёт \(\LC(\M)\) по доказанному выше
-аргументу локальной связности.
-\end{proof}
-
-\noindent
-Критерий функториален на пространствах морфизмов: для непрерывных
-отображений \(X\to\D\) и \(E_a\to Y\) предпокомпозиция и
-посткомпозиция задают непрерывные отображения пространств морфизмов
-с компактно-открытой топологией, а потому сохраняют относительную
-компактность. Кофинальное переиндексирование сохраняет предел; при MLC все эти
-усечения сходятся к одному ретракционному морфизму. Суммируемость
-дефектов \(\sum_{n\ge2}d_n<\infty\) служит достаточным критерием
-компактности, а условие
-\(\int_0^aV(u)\,du<\infty\) является более сильной достаточной
-оценкой.
-
-\noindent
-Суммируемость перемещений для конкретных высот из
-теоремы~\ref{thm:exterior-candidates} пока не доказана. При MLC
-существуют высоты с суммируемыми перемещениями, но они могут
-отличаться от явных кандидатов. Достаточное интегральное
-условие \eqref{eq:candidate-partial-motion} задаёт конкретную
-аналитическую цель для доказательства суммируемости этих кандидатов.
-
-\subsection{Конструктивный конус и конечные префиксы}
-
-\begin{definition}[Конструктивный приближённый конус]\label{def:ug}
-Для \(\nu\in\N^\N\) обозначим через
-\(\iota_{\nu_n}:O_{\nu_n}\hookrightarrow\D\) мономорфизм уровня.
-Для последовательности эндоморфизмов
-\(R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\)
-определим
-\begin{align}
- \mathsf A(\nu,R_\bullet):={}&(R_0=\id_{\D})\nonumber\\
- &{}\land(\forall n,\ \nu_n\ge n)\nonumber\\
- &{}\land(\forall n,\ R_n\circ\iota_{\nu_n}=\iota_{\nu_n})\nonumber\\
- &{}\land\left(\forall n,\
-       \sup_{z\in\D}\dist(R_n(z),O_{\nu_n})\le2^{-n}\right)\nonumber\\
- &{}\land\left(\forall n,\
-       \|R_{n+1}-R_n\|_\infty\le8\,2^{-n}\right),
- \label{eq:UG-clauses}\\
- \mathsf{UG}:={}&
- \exists\nu\in\N^\N\
- \exists R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N,\
-                       \mathsf A(\nu,R_\bullet).\label{eq:UG}
-\end{align}
-Каждый \(R_n\) поточечно фиксирует образ вложения
-\(\iota_{\nu_n}\);
-последние два условия задают соответственно дефект факторизации и
-дефект перемещения между соседними членами.
-\end{definition}
-
-\begin{theorem}[Суммируемая последовательность морфизмов задаёт конструктивный конус]
-\label{thm:candidate-to-ug}
-Пусть \(\nu\in\N^\N\),
-\(T_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N\) и
-\begin{gather}
- \forall n,\quad\nu_n\ge n,\label{eq:candidate-depths}\\
- \forall n,\quad T_n\circ\iota_{\nu_n}=\iota_{\nu_n},
- \label{eq:candidate-fixes}\\
- a_n:=\sup_{z\in\D}\dist(T_n(z),O_{\nu_n})\longrightarrow0,\label{eq:candidate-error}\\
- \sum_{n=0}^\infty b_n<\infty,\qquad
- b_n:=\|T_{n+1}-T_n\|_\infty.\label{eq:candidate-sum}
-\end{gather}
-Тогда кофинальное ограничение \(T_\bullet\), дополненное начальным
-тождественным морфизмом, удовлетворяет \(\mathsf{UG}\).
-\end{theorem}
-\begin{proof}
-Положим \(s_j:=\sum_{k=j}^\infty b_k\), то есть хвостовой дефект
-последовательности эндоморфизмов. Поскольку \(s_j\to0\) и
-\(a_j\to0\), выберем строго возрастающую последовательность
-\(j_n\ge n\) так, чтобы
-\[
- a_{j_n}\le2^{-n},\qquad s_{j_n}\le8\,2^{-n}\quad(n\ge1).
-\]
-Положим \(\nu'_0=0\), \(R_0=\id_{\D}\), а при \(n\ge1\)
-\(\nu'_n=\nu_{j_n}\), \(R_n=T_{j_n}\). Условия глубины, фиксации и
-близости к уровню следуют из
-\eqref{eq:candidate-depths}--\eqref{eq:candidate-error} и выбора \(j_n\).
-При \(n\ge1\)
-\[
- \|R_{n+1}-R_n\|_\infty\le s_{j_n}\le8\,2^{-n}.
-\]
-При \(n=0\) имеем \(O_0=K\) и
-\[
- \sup_{z\in\D}\dist(z,K)\le2\sqrt2-2<1,\qquad
- \|T_{j_1}-\id_{\D}\|_\infty\le\operatorname{diam}(\D)=4\sqrt2<8.
-\]
-По построению соседние члены имеют суммируемый дефект перехода, поэтому
-\(\mathsf A(\nu',R_\bullet)\).
-\end{proof}
-
-\begin{theorem}[Категориальный конус-предел является ретракцией]
-\label{thm:ug-to-mlc}
-\begin{equation*}
- \begin{gathered}
- \forall\nu\in\N^\N,\\
- \forall R_\bullet\in\operatorname{End}_{\mathbf{CompHaus}}(\D)^\N,\\
- \mathsf A(\nu,R_\bullet)\Longrightarrow
- \exists R\in\operatorname{End}_{\mathbf{CompHaus}}(\D)
- \text{такой, что}\\
- \begin{cases}
-  \forall n,\quad\|R_n-R\|_\infty\le16\,2^{-n},\\
-  R(\D)=\M,\qquad R|_\M=\id_\M.
- \end{cases}
- \end{gathered}
-\end{equation*}
-Предельный морфизм факторизуется через \(\M\) и является ретракцией;
-следовательно, \(\mathsf{UG}\Longrightarrow\LC(\M)\).
-\end{theorem}
-\begin{proof}
-При \(m>n\) из \eqref{eq:UG-clauses} следует
-\[
- \|R_m-R_n\|_\infty
- \le8\sum_{j=n}^{m-1}2^{-j}\le16\,2^{-n}.
-\]
-Значит, \(R_n\) — последовательность Коши в равномерном пространстве
-морфизмов \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\), и она
-сходится к непрерывному морфизму \(R:\D\to\D\) с указанной оценкой
-хвоста. Зафиксируем \(z\in\D\) и \(k\in\N\). При \(n\ge k\) выберем
-\(w_n\in O_{\nu_n}\) так, чтобы \(|R_n(z)-w_n|\le2^{-n}\).
-Так как \(\nu_n\ge n\ge k\), имеем \(O_{\nu_n}\subseteq O_k\), а
-\[
- |R(z)-w_n|\le17\,2^{-n}\longrightarrow0.
-\]
-Замкнутость \(O_k\) даёт \(R(z)\in O_k\). Следовательно, \(R\)
-факторизуется через каждый мономорфизм уровня, а значит, и через
-объект-предел:
-\(R(\D)\subseteq\bigcap_kO_k=\M\).
-Каждое \(R_n\) фиксирует \(c\in\M\), поэтому \(R(c)=c\).
-Следовательно, \(R(\D)=\M\).
-
-Для \(c\in\M\) и \(\eta>0\) выберем \(\delta>0\) так, чтобы
-\[
- z\in\D,\quad|z-c|<\delta
- \Longrightarrow |R(z)-c|<\eta.
-\]
-Множество \(W=\D\cap B(c,\delta)\) выпукло и содержит \(c\).
-Поэтому \(V=R(W)\) связно и
-\[
- \M\cap B(c,\delta)\subseteq V\subseteq\M\cap B(c,\eta).
-\]
-Это и означает \(\LC(\M)\).
-\end{proof}
-
-\begin{corollary}[Равномерная геометрическая гипотеза эквивалентна MLC]
-\label{cor:ug-equivalent-mlc}
-\[
- \mathsf{UG}\Longleftrightarrow\LC(\M).
-\]
-\end{corollary}
-\begin{proof}
-Импликация \(\mathsf{UG}\Rightarrow\LC(\M)\) доказана в
-теореме~\ref{thm:ug-to-mlc}. Для обратной импликации возьмём
-\((s_n)\) из теоремы~\ref{thm:summable-cutoff} и положим
-\[
- T_0=\id_{\D},\qquad T_1=\Pi|_{\D},\qquad
- T_n=Q_{s_n}\quad(n\ge2).
-\]
-При \(n\ge2\) рекурсивно выберем
-\[
- \nu_0=0,\quad\nu_1=1,\quad
- \nu_n:=\min\{N\in\N:N>\nu_{n-1},\ N\ge n,\
-                         2^{1-N}\log3\le s_n\}.
-\]
-Лемма~\ref{lem:green-depth} даёт условия фиксации и близости.
-Суммируемость в \eqref{eq:summable-cutoff-equivalence} вместе с
-\(\|\Pi-\id_{\D}\|_\infty=2\sqrt2-2<1\) даёт
-\eqref{eq:candidate-sum}. Теорема~\ref{thm:candidate-to-ug}
-влечёт \(\mathsf{UG}\).
-\end{proof}
-
-\subsection{Общие конечные префиксы и порядок кванторов}
-
-\noindent
-Обозначения \(\mathcal K_\delta\), \(\mathcal P_m(\lambda,\delta)\)
-и \(\mathsf{UG}_m\) заданы в определении~\ref{def:finite-towers}.
-
-\begin{lemma}[Компактность и морфизмы префиксов]\label{lem:compact-towers}
-\(\mathcal K_\delta\) компактно в равномерной топологии, а каждое
-\(\mathcal P_m(\lambda,\delta)\) компактно в топологии конечного
-произведения.
-Усечение \(\rho_m:\mathcal P_{m+1}\to\mathcal P_m\) является
-непрерывным морфизмом в \(\mathbf{CompHaus}\).
-\end{lemma}
-\begin{proof}
-Условия на \(\delta_k\) и \(F\) задают общий модуль непрерывности
-для \(\mathcal K_\delta\); все значения лежат в компактной \(\D\).
-По теореме Арцела--Асколи семейство относительно компактно.
-Равномерные пределы сохраняют условия определения, поэтому
-\(\mathcal K_\delta\) замкнуто и компактно.
-Для \(F,G\in C(\D,\D)\)
-\[
- |e_i(F)-e_i(G)|\le\|F-G\|_\infty.
-\]
-Следовательно, условия фиксации, на множество значений, на ошибку и
-на перемещение между соседними уровнями задают замкнутые подмножества
-компактного конечного произведения \(\mathcal K_\delta^{m+1}\).
-\end{proof}
-
-\begin{theorem}[Предел общих конечных префиксов задаёт конструктивный конус]
-\label{thm:hierarchy}
-\[
- \mathsf{UG}\Longleftrightarrow
- \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
-       \forall m\in\N,\quad\mathsf{UG}_m(\lambda,\delta).
-\]
-\end{theorem}
-\begin{proof}
-Пусть для одних и тех же \(\lambda,\delta\) существует префикс
-каждой длины. Положим \(X:=\mathcal K_\delta^\N\) — произведение
-в категории \(\mathbf{CompHaus}\). Пусть
-\(\pi_m:X\to\mathcal K_\delta^{m+1}\) — морфизм, выделяющий префикс,
-и определим замкнутый подобъект
-\[
- C_m:=\pi_m^{-1}\bigl(\mathcal P_m(\lambda,\delta)\bigr)
-       \hookrightarrow X.
-\]
-Каждое \(C_m\) непусто: конечный префикс продолжается до точки \(X\)
-повторением последней координаты. Морфизмы усечения задают
-\(C_{m+1}\hookrightarrow C_m\). Из компактности \(X\) и свойства
-конечного пересечения следует
-\[
- \varprojlim_m C_m\cong\bigcap_m C_m\ne\varnothing.
-\]
-Элемент этого предела задаёт совместимую бесконечную башню,
-удовлетворяющую \(\mathsf A(\lambda,F_\bullet)\).
-
-Обратно, пусть \(\mathsf{UG}\) выполнена для отображений \(U_n\) и
-глубин \(\alpha_n\). Положим \(\lambda_0=0,\lambda_1=1,j_1=0\), а
-при \(n\ge2\) определим
-\[
- j_n:=\max\{n+1,\ell_n,j_{n-1}+1,\lambda_{n-1}+1\},
- \qquad\lambda_n:=\alpha_{j_n}.
-\]
-Тогда \(\lambda\in\Lambda\). Положим
-\[
- F_0:=\id_{\D},\qquad F_1:=\Pi|_{\D},\qquad
- F_n:=\Pi\circ U_{j_n}\quad(n\ge2).
-\]
-Так как \(\Pi\) нерастягивает расстояния и фиксирует каждое
-\(O_N\subseteq K\), выполняются условия фиксации и близости.
-При \(n\ge2\)
-\[
- \|F_{n+1}-F_n\|_\infty
- \le16\,2^{-j_n}\le8\,2^{-n}.
-\]
-Первое перемещение меньше \(1\), второе не превосходит
-\(\operatorname{diam}(K)=4\). Теорема о равномерном пределе даёт
-\(U_n\to R\); кроме того, \(\Pi\circ U_{j_n}\to R\) равномерно,
-поскольку \(R(\D)=\M\subseteq K\).
-Равномерная сходимость на компактном \(\D\) обеспечивает
-равностепенную непрерывность семейства \((F_n)\). Рекурсивно
-выберем положительные масштабы
-\(\delta_k\le2^{-k}\), \(\delta_{k+1}\le\delta_k/2\) так, чтобы
-\[
- |z-w|\le\delta_k\Longrightarrow
- |F_n(z)-F_n(w)|\le2^{-k}\quad\text{для всех }n.
-\]
-Тогда каждый конечный префикс является объектом
-\(\mathcal P_m(\lambda,\delta)\), а совместимые префиксы образуют
-конус над диаграммой конечных префиксов.
-\end{proof}
-
-По предложению~\ref{prop:finite-horizons} доступный порядок
-кванторов имеет вид
-\[
- \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
- \exists\delta^{[m]}\in\Delta,\quad
-              \mathsf{UG}_m(\lambda^{[m]},\delta^{[m]}),
-\]
-где глубины и модули могут зависеть от \(m\). Следующее
-промежуточное усиление унифицировало бы глубины, оставляя модуль
-зависимым от горизонта:
-\[
- \exists\lambda\in\Lambda\ \forall m\in\N\
- \exists\delta^{[m]}\in\Delta,\quad
-              \mathsf{UG}_m(\lambda,\delta^{[m]}).
-\]
-Оно пока не доказано. Полная унификация требует
-\[
- \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
- \forall m\in\N,\quad\mathsf{UG}_m(\lambda,\delta).
-\]
-По теореме~\ref{thm:hierarchy} и следствию
-\ref{cor:ug-equivalent-mlc} последнее условие эквивалентно MLC.
-При меняющихся \(\delta^{[m]}\) семейства \(\mathcal K_{\delta^{[m]}}\)
-не дают одного общего компактного объекта, к которому можно применить
-теорему о пределе префиксов.
-
-\section{Продолжения конечных сертификатов}
-\label{app:extension-mechanism}
-\noindent
-Здесь собраны результаты о продолжении фиксированного конечного
-префикса. Они описывают локальные препятствия к сборке общей башни,
-но сами по себе такого продолжения на всех уровнях не дают.
-
-\begin{definition}[Относительная замена в пространстве морфизмов]
-\label{def:map-replacement}
-Пусть \(P\subseteq\D\), \(U\subseteq\D\) относительно открыто,
-\(A,B\in C(\D,\D)\), а \(\chi\in C(\D,[0,1])\) удовлетворяет
-\[
- A|_P=B|_P=\id_P,\qquad\chi|_{\D\setminus U}=0.
-\]
-Положим
-\[
- S(z):=(1-\chi(z))A(z)+\chi(z)B(z),\qquad
- \alpha:=\sup_{z\in\D}\chi(z)|B(z)-A(z)|,\qquad
- d:=\|B-A\|_\infty.
-\]
-Для \(F\in C(\D,\C)\) определим
-\[
- \omega_F(r):=
- \sup_{\substack{z,w\in\D\\|z-w|\le r}}|F(z)-F(w)|.
-\]
-Таким образом, \(S\) — выпуклая интерполяция \(A,B\) в окружающем
-пространстве морфизмов; условия на носитель и относительную
-фиксацию задают соответствующее подпространство морфизмов.
-\end{definition}
-
-\begin{lemma}[Оценки для замены]\label{lem:replacement-estimates}
-Выпуклая комбинация \(S\) является морфизмом \(\D\to\D\),
-фиксирует \(P\) и совпадает с \(A\) на \(\D\setminus U\).
-Кроме того,
-\begin{gather}
- \|S-A\|_\infty=\alpha\le d,\qquad
- e_i(S)\le e_i(A)+\alpha,\label{eq:replacement-error}\\
- \|S-F\|_\infty\le\|A-F\|_\infty+\alpha,\label{eq:replacement-motion}\\
- \omega_S(r)\le
- \max\{\omega_A(r),\omega_B(r)\}+d\,\omega_\chi(r).
- \label{eq:replacement-modulus}
-\end{gather}
-Если \(A(\D),B(\D)\subseteq K\), то \(S(\D)\subseteq K\).
-Отображения \(A,S\) гомотопны относительно \(P\).
-\end{lemma}
-\begin{proof}
-Условия на образ, носитель и фиксацию следуют из формулы и
-выпуклости \(\D\) и \(K\). Равенство \(S-A=\chi(B-A)\) даёт первую
-оценку; функция расстояния до \(O_{\lambda_i}\) является
-1-липшицевой, что даёт вторую. Третья следует из неравенства
-треугольника. Для \(z,w\in\D\)
-\begin{align*}
- S(z)-S(w)
- ={}&(1-\chi(z))(A(z)-A(w))
-     +\chi(z)(B(z)-B(w))\\
-   &+(\chi(z)-\chi(w))(B(w)-A(w)).
-\end{align*}
-Переход к модулям доказывает \eqref{eq:replacement-modulus}.
-Гомотопия задаётся формулой
-\[
- H(u,z):=(1-u\chi(z))A(z)+u\chi(z)B(z)
- \qquad(0\le u\le1).
-\]
-Это путь в \(\operatorname{Hom}_{\mathbf{CompHaus}}(\D,\D)\),
-неподвижный на подмножестве \(P\subseteq\D\).
-\end{proof}
-
-\begin{definition}[Допустимое расширение на один шаг]\label{def:one-step}
+\begin{definition}[Профиль одноступенчатого продолжения]
+\label{def:one-step-extension-profile}
 Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\), \(m\ge1\) и
-\(\sigma=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\).
-Определим
-\[
- \mathcal E_m(\sigma):=
- \left\{F\in\mathcal K_\delta:
- \begin{gathered}
-  F(\D)\subseteq K,\qquad
-  \forall c\in O_{\lambda_{m+1}},\quad F(c)=c,\\
-  e_{m+1}(F)\le2^{-(m+1)},\qquad
-  \|F-F_m\|_\infty\le8\,2^{-m}
- \end{gathered}\right\}.
-\]
-Для \(\sigma=(F_0,\ldots,F_m)\) обозначим
-\(\sigma\frown F:=(F_0,\ldots,F_m,F)\).
-\(\mathcal E_m(\sigma)\) — замкнутый подобъект допустимых
-морфизмов-продолжений префикса \(\sigma\).
-\end{definition}
-
-\begin{theorem}[Инвариантные подобъекты характеризуют бесконечные продолжения]
-\label{thm:extension-invariant}
-Условие \(\mathsf{UG}\) равносильно существованию
-\(\lambda\in\Lambda\), \(\delta\in\Delta\) и замкнутых подобъектов
-\(\mathcal I_m\hookrightarrow\mathcal P_m(\lambda,\delta)\) при \(m\ge1\)
-так, что
-\begin{gather}
- (\id_{\D},\Pi|_{\D})\in\mathcal I_1,\label{eq:invariant-seed}\\
- \forall m\ge1\ \forall\sigma\in\mathcal I_m\
- \exists F\in\mathcal E_m(\sigma),\quad
-                    \sigma\frown F\in\mathcal I_{m+1}.
- \label{eq:invariant-extension}
-\end{gather}
-Подобъекты \(\mathcal I_m\) непусты и замкнуты в объектах конечных
-префиксов; второе условие утверждает, что у каждого объекта этой
-поддиаграммы есть продолжение на следующий уровень.
-\end{theorem}
-\begin{proof}
-Равенства~\eqref{eq:invariant-seed}--\eqref{eq:invariant-extension}
-задают рекурсивный выбор совместимых префиксов; их координаты
-удовлетворяют \(\mathsf A(\lambda,F_\bullet)\).
-Обратно, теорема~\ref{thm:hierarchy} даёт нормированную бесконечную башню.
-Пусть \(\mathcal I_m\) состоит из её единственного префикса до
-уровня \(m\). Следующая координата проверяет
-\eqref{eq:invariant-extension}.
-\end{proof}
-
-\begin{theorem}[Компактная минимизация и количественное исправление продолжения]
-\label{thm:repair-equivalence}
-Пусть \(\lambda\in\Lambda\), \(\delta\in\Delta\), \(m\ge1\) и
-\(\sigma\in\mathcal P_m(\lambda,\delta)\). Положим
+\(\sigma=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\). Положим
 \[
  \mathcal H_{m+1}:=
  \{F\in\mathcal K_\delta:F(\D)\subseteq K,\
@@ -1368,353 +793,238 @@
  \max\left\{
  \frac{e_{m+1}(F)}{2^{-(m+1)}},
  \frac{\|F-F_m\|_\infty}{8\,2^{-m}}
- \right\}.
+ \right\},\qquad
+ q_m(\sigma):=\inf_{F\in\mathcal H_{m+1}}J_m(F;\sigma).
 \]
-Минимум \(q_m(\sigma):=\min_{F\in\mathcal H_{m+1}}J_m(F;\sigma)\)
-достигается, причём \(q_m(\sigma)\le1\) тогда и только тогда, когда
-\(\mathcal E_m(\sigma)\ne\varnothing\). Если
-\(F\in\mathcal E_m(\sigma)\), то
-\[
- A_k:=2^{-k}F_m+(1-2^{-k})F\qquad(k\in\N)
-\]
-равномерно сходится к \(F\) и удовлетворяет условиям
-\begin{gather}
- A_0=F_m,\qquad A_k\in\mathcal H_{m+1},\label{eq:repair-class}\\
- \|A_{k+1}-A_k\|_\infty\le8\,2^{-m-k-1},\label{eq:repair-motion}\\
- e_{m+1}(A_k)\le2^{-(m+1)}+8\,2^{-m-k}.
- \label{eq:repair-error}
-\end{gather}
-\end{theorem}
-\begin{proof}
-Множество \(\mathcal H_{m+1}\) непусто, поскольку
-\(\Pi|_{\D}\in\mathcal H_{m+1}\), и замкнуто в компактном
-\(\mathcal K_\delta\). Функционалы ошибки и равномерного расстояния
-непрерывны, поэтому \(J_m\) достигает минимума. По определению
-\(J_m\), условие \(q_m(\sigma)\le1\) равносильно
-\(\mathcal E_m(\sigma)\ne\varnothing\). Поскольку
-\(\lambda_{m+1}>\lambda_m\), отображение \(F_m\) фиксирует
-\(O_{\lambda_{m+1}}\). Постоянные выпуклые комбинации сохраняют
-общий модуль непрерывности, образ \(K\) и фиксацию.
-Оценки следуют из равенства
-\[
- \|A_{k+1}-A_k\|_\infty
- =2^{-k-1}\|F-F_m\|_\infty
-\]
-и из 1-липшицевости функции расстояния до \(O_{\lambda_{m+1}}\).
-\end{proof}
+Множество \(\{F\in\mathcal H_{m+1}:J_m(F;\sigma)\le1\}\)
+состоит в точности из отображений, которыми сертификат \(\sigma\)
+можно продолжить на один уровень.
+\end{definition}
 
-\noindent
-Для выбранного \(F\in\mathcal E_m(\sigma)\) последовательность
-\(A_k\) сходится к \(F\), сохраняя условия на образ, модуль
-непрерывности и множество фиксации, а также удовлетворяя явным
-оценкам перемещения и ошибки.
-
-\subsection{Дефект предельного конуса}
-
-Для явных высот из теоремы~\ref{thm:exterior-candidates} остаётся
-доказать суммируемость перемещений
-\begin{equation}\label{eq:remaining-motion}
- \sum_{n=1}^{\infty}
-       \|Q_{s_{n+1}}-Q_{s_n}\|_\infty<\infty.
-\end{equation}
-По теореме~\ref{thm:summable-cutoff} доказательство
-\eqref{eq:remaining-motion} повлекло бы \(\LC(\M)\).
-Обозначим через \(\iota_{n,m}^{\mathcal E}:E_m\hookrightarrow E_n\)
-композицию вложений. Тогда для \(m>n\ge2\), рассматривая усечения как
-отображения в \(\C\), предложение~\ref{prop:cutoff-cone-defect} даёт
-\[
- \|\bar P_n-\iota_{n,m}^{\mathcal E}\circ\bar P_m\|_{\infty,\C}
- \le\sum_{j=n}^{m-1}d_j
- \le\int_{s_m}^{s_n}V(u)\,du.
-\]
-\begin{proposition}[Суммируемый дефект даёт предельную ретракцию]
-\label{prop:summable-cone-defect}
-Если \(\sum_{n\ge2}d_n<\infty\), то усечения равномерно сходятся к
-ретракции \(R:\D\to\M\).
-\end{proposition}
-\begin{proof}
-Для \(m>n\ge2\) предыдущая оценка показывает, что \((\bar P_n)\),
-рассматриваемые как отображения в \(\C\), равномерно сходятся к
-непрерывному \(R:\D\to\C\). Для каждого \(k\ge2\) и \(n\ge k\)
-\(\bar P_n(\D)\subseteq E_n\subseteq E_k\); замкнутость \(E_k\)
-даёт \(R(\D)\subseteq E_k\). Поэтому
-\(R(\D)\subseteq\bigcap_{k\ge2}E_k=\M\). Каждое \(\bar P_n\)
-тождественно на \(\M\), следовательно \(R|_\M=\id_\M\).
-\end{proof}
-Такая ретракция влечёт \(\LC(\M)\): непрерывность \(R\) и выпуклость
-\(\D\) дают связные окрестности в \(\M\) тем же аргументом, что в
-доказательстве теоремы~\ref{thm:summable-cutoff}.
-Иными словами, численный остаток для этого конкретного конуса —
-хвост \(\sum_{j\ge n}d_j\).
-Полученная оценка сводит суммируемость дефектов и перемещений к
-достаточному условию
-\[
- \int_0^aV(u)\,du<\infty,
-\]
-которое пока не доказано и может быть сильнее MLC. Компактность
-семейства усечений из теоремы~\ref{thm:cutoff-hom-compactness} —
-альтернативный критерий, эквивалентный MLC. Другой путь через конечные
-башни требует сначала унифицировать глубины, а затем модули
-непрерывности; полная унификация эквивалентна MLC по
-\ref{thm:hierarchy}--\ref{cor:ug-equivalent-mlc}.
-
-\noindent
-\textbf{Точный вид зазора.} Для некоторой башни уровней
-\(E_n\) требуется построить морфизмы \(S_n:\D\to E_n\), фиксирующие
-\(\M\), и доказать естественность относительно обратных вложений:
-\[
- \iota_n^{\mathcal E}\circ S_{n+1}=S_n.
-\]
-Тогда универсальное свойство предела даёт ретракцию
-\(\D\to\varprojlim\mathcal E\cong\M\). Для конструктивных усечений
-\(\bar P_n\) вместо точной естественности известны дефекты \(d_n\) и
-их оценки из предложения~\ref{prop:cutoff-cone-defect}; их
-суммируемость достаточна, но не установлена.
-Промежуточное усиление с одной последовательностью глубин и
-зависящими от горизонта модулями, описанное выше, пока не
-доказано. Текущие параметры конечных горизонтов зависят от \(m\);
-полная их унификация потребовала бы доказательства MLC.
-
-\subsection{Одношаговое препятствие к продолжению}
-
-\begin{proposition}[Непрерывность одноступенчатого препятствия]
+\begin{proposition}[Достижимый липшицев профиль препятствия продолжению]
 \label{prop:extension-obstruction}
-Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\) и \(m\ge1\).
-Для \(\sigma=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\)
-используем функцию \(q_m(\sigma)\) из
-теоремы~\ref{thm:repair-equivalence}. Если
-\(\tau=(G_0,\ldots,G_m)\in\mathcal P_m(\lambda,\delta)\), то
+Для каждого \(\sigma\in\mathcal P_m(\lambda,\delta)\) минимум
+\(q_m(\sigma)\) достигается, и
+\[
+ \exists F\in\mathcal K_\delta:
+ (F_0,\ldots,F_m,F)\in\mathcal P_{m+1}(\lambda,\delta)
+ \quad\Longleftrightarrow\quad q_m(\sigma)\le1.
+\]
+Для любых \(\sigma=(F_0,\ldots,F_m)\) и
+\(\tau=(G_0,\ldots,G_m)\) из \(\mathcal P_m(\lambda,\delta)\)
 \[
  |q_m(\sigma)-q_m(\tau)|
- \le
- \frac{\|F_m-G_m\|_\infty}{8\,2^{-m}}.
+ \le\frac{\|F_m-G_m\|_\infty}{8\,2^{-m}},
+ \qquad q_m(\sigma)\le2^{m+3}.
 \]
-Для \(r\ge0\) положим
-\[
- \mathcal X_m^r(\sigma):=
- \{F\in\mathcal H_{m+1}:J_m(F;\sigma)\le r\}.
-\]
-Тогда \(\mathcal X_m^r(\sigma)\) компактно,
-\(\mathcal X_m^r(\sigma)\ne\varnothing\) тогда и только тогда,
-когда \(q_m(\sigma)\le r\), и
-\[
- \mathcal X_m^1(\sigma)=\mathcal E_m(\sigma),\qquad
- \operatorname{Im}(\rho_m)=
- \{\sigma\in\mathcal P_m(\lambda,\delta):q_m(\sigma)\le1\}.
-\]
-Следовательно, множество префиксов, допускающих продолжение,
-замкнуто в \(\mathcal P_m(\lambda,\delta)\).
 \end{proposition}
 \begin{proof}
-Для каждого \(F\in\mathcal H_{m+1}\) неравенство треугольника даёт
+\(\mathcal H_{m+1}\) замкнуто в компактном \(\mathcal K_\delta\).
+Оно непусто: \(\Pi|_{\D}\in\mathcal K_\delta\), отображает \(\D\)
+в \(K\) и фиксирует \(O_{\lambda_{m+1}}\subseteq K\).
+Функционал \(J_m(\,\cdot\,;\sigma)\) непрерывен, поэтому его минимум
+достигается. Условие \(J_m(F;\sigma)\le1\) в точности задаёт ошибку и
+перемещение, необходимые для добавления последнего координатного
+отображения; это доказывает критерий продолжения.
+
+Для фиксированного \(F\in\mathcal H_{m+1}\) неравенство треугольника
+даёт
 \[
- \bigl|\|F-F_m\|_\infty-\|F-G_m\|_\infty\bigr|
+ \left|\|F-F_m\|_\infty-\|F-G_m\|_\infty\right|
  \le\|F_m-G_m\|_\infty.
 \]
-Операция максимума в определении \(J_m\) не увеличивает эту оценку.
-Беря минимумы по одному и тому же компактному множеству
-\(\mathcal H_{m+1}\), получаем заявленную липшицеву оценку для \(q_m\).
-Множество \(\mathcal X_m^r(\sigma)\) замкнуто в
-\(\mathcal H_{m+1}\), а минимум \(q_m\) достигается; отсюда следуют
-компактность и критерий непустоты. При \(r=1\) условия
-\(J_m(F;\sigma)\le1\) равносильны определениям
-\(\mathcal E_m(\sigma)\) и префикса в \(\mathcal P_{m+1}\).
-Проекция \(\rho_m\) забывает последнюю координату, что доказывает
-равенство для её образа.
+Операция максимума не увеличивает эту оценку; взятие минимумов по
+общему компактному множеству \(\mathcal H_{m+1}\) доказывает
+липшицеву границу.
+
+Наконец, \(\Pi(\D)=K\) и \(\operatorname{diam}(K)=4\), поэтому
+\(e_{m+1}(\Pi)\le4\) и
+\(\|\Pi-F_m\|_\infty\le4\), поскольку \(F_m(\D)\subseteq K\).
+Следовательно,
+\[
+ q_m(\sigma)\le J_m(\Pi;\sigma)
+ \le\max\{4\cdot2^{m+1},\,4/(8\,2^{-m})\}=2^{m+3}.
+\]
 \end{proof}
 
-\section{Критерий равномерно ослабленной башни}
-\label{app:uniform-slack}
+\noindent
+\textbf{Результат для конечных горизонтов.} Для каждого конечного
+\(m\) существует сертификат \(\mathsf{UG}_m\), но его параметры
+\((\lambda^{[m]},\delta^{[m]})\) могут зависеть от \(m\). Это не
+даёт одной башни сертификатов бесконечной длины.
 
-Для \(C_0\ge1\) определим \(\mathcal P_m^{(C_0)}(\lambda,\delta)\)
-из \(\mathcal P_m(\lambda,\delta)\) заменой двух оценок в
-\eqref{eq:finite-certificates} на
-\[
- e_i(F_i)\le C_0\,2^{-i},\qquad
- \|F_{i+1}-F_i\|_\infty\le8C_0\,2^{-i}.
-\]
-Все остальные условия остаются прежними.
-Множества \(\mathcal P_m^{(C_0)}\) компактны, а усечения префиксов
-непрерывны: доказательство леммы~\ref{lem:compact-towers} не меняется.
+\begin{mainthm}[Основная теорема с сертификатами конечной длины и профилем продолжения]
+Выполняются утверждения (1)--(5), и для каждого \(m\in\N\)
+существуют \(\lambda^{[m]}\in\Lambda\), \(\delta^{[m]}\in\Delta\),
+для которых \(\mathsf{UG}_m(\lambda^{[m]},\delta^{[m]})\).
+Функториальное сравнение предельных объектов и количественные
+оценки дефекта для явной конструкции заданы в предложениях
+\ref{prop:functorial-comparison} и
+\ref{prop:cutoff-cone-defect}. Для любого фиксированного набора \((\lambda,\delta)\) и допустимого
+\(\sigma\in\mathcal P_m(\lambda,\delta)\) минимум, задающий
+\(q_m(\sigma)\), достигается, а \(q_m\) липшицев по последнему
+отображению сертификата и точно определяет возможность продолжения
+на следующий уровень; кроме того,
+\(q_m(\sigma)\le2^{m+3}\).
+\end{mainthm}
+\begin{proof}
+Утверждения (1)--(5) доказаны в теореме~\ref{thm:exterior-candidates};
+конечногоризонтное утверждение — в предложении
+\ref{prop:finite-horizons}; дополнительные данные явной конструкции
+доказаны в предложениях~\ref{prop:functorial-comparison} и
+\ref{prop:cutoff-cone-defect}. Свойства профиля продолжения доказаны в
+предложении~\ref{prop:extension-obstruction}.
+\end{proof}
 
-\begin{theorem}[Эквивалентность равномерно ослабленной башни и MLC]
-\label{thm:uniform-slack-tower}
+\begin{theorem}[Общие конечные сертификаты эквивалентны MLC]
+\label{thm:common-certificate-tower}
 \[
  \LC(\M)\quad\Longleftrightarrow\quad
  \exists\lambda\in\Lambda\ \exists\delta\in\Delta\
- \exists C_0\ge1\ \forall m\in\N,\quad
- \mathcal P_m^{(C_0)}(\lambda,\delta)\ne\varnothing.
+ \forall m\in\N,\quad
+ \mathcal P_m(\lambda,\delta)\ne\varnothing.
 \]
 \end{theorem}
 \begin{proof}
-Если выполнена \(\LC(\M)\), то
-следствие~\ref{cor:ug-equivalent-mlc} и
-теорема~\ref{thm:hierarchy} дают правую часть с \(C_0=1\).
+Пусть существуют общие \(\lambda,\delta\). В компактном произведении
+\(X:=\mathcal K_\delta^\N\) положим
+\[
+ C_m:=\pi_m^{-1}\bigl(\mathcal P_m(\lambda,\delta)\bigr),
+\]
+где \(\pi_m\) выделяет первые \(m+1\) координат. По
+лемме~\ref{lem:compact-towers} множества \(C_m\) замкнуты. Они
+непусты: любой сертификат можно продолжить в \(X\), повторяя его
+последнее отображение. Кроме того, \(C_{m+1}\subseteq C_m\).
+Компактность \(X\) даёт
+\(\bigcap_m C_m\ne\varnothing\), то есть одну совместимую башню
+\(F_0,F_1,\ldots\) со всеми оценками конечных сертификатов.
 
-Обратно, зафиксируем общие \(\lambda,\delta,C_0\). Для каждого \(m\)
-условия, задающие \(\mathcal P_m^{(C_0)}\), замкнуты в компактном
-\(\mathcal K_\delta^{m+1}\). Тот же аргумент конечного пересечения,
-что и в доказательстве теоремы~\ref{thm:hierarchy}, даёт одну
-совместимую последовательность \(F_0,F_1,\ldots\), все конечные
-префиксы которой допустимы. Пусть
-\(k:=\lceil\log_2 C_0\rceil\), так что \(2^k\ge C_0\), и положим
+Из \(\|F_{n+1}-F_n\|_\infty\le8\,2^{-n}\) следует равномерная
+сходимость к непрерывному \(R:\D\to\D\) и
+\(\|R-F_n\|_\infty\le16\,2^{-n}\). Для фиксированного \(k\) и
+\(n\ge\max\{k,2\}\) имеем
 \[
- R_0:=\id_{\D},\quad \nu_0:=0,\qquad
- R_j:=F_{j+k},\quad \nu_j:=\lambda_{j+k}\quad(j\ge1).
+ \dist(R(z),O_k)
+ \le \|R-F_n\|_\infty+
+       \dist(F_n(z),O_{\lambda_n})
+ \le17\,2^{-n},
 \]
-При \(j\ge1\) выполняются
+поскольку \(O_{\lambda_n}\subseteq O_k\). Замкнутость \(O_k\) и
+\(\bigcap_kO_k=\M\) дают \(R(\D)\subseteq\M\). Башня фиксирует
+\(\M\) на каждом уровне, поэтому \(R|_\M=\id_\M\).
+Для \(c\in\M\) и \(\eta>0\) выберем \(\delta_c>0\) так, чтобы
+\(|R(z)-c|<\eta\) при \(z\in\D\) и \(|z-c|<\delta_c\).
+Образ \(R(\D\cap B(c,\delta_c))\) связен и лежит в
+\(\M\cap B(c,\eta)\), одновременно содержа
+\(\M\cap B(c,\delta_c)\). Значит, \(\LC(\M)\).
+
+Обратно, пусть \(\LC(\M)\). По критерию Каратеодори отображение
+\(\Psi=\Phi^{-1}\) непрерывно продолжается на \(\{|w|\ge1\}\);
+обозначим продолжение через \(\widehat\Psi\)
+\cite[теорема 16.6]{Milnor}. Определим ретракцию
 \[
- \sup_{z\in\D}\dist(R_j(z),O_{\nu_j})
- \le C_0\,2^{-(j+k)}\le2^{-j},
+ R(c):=
+ \begin{cases}
+  c,&c\in\M,\\
+  \widehat\Psi\!\left(\Phi(c)/|\Phi(c)|\right),&c\notin\M.
+ \end{cases}
 \]
+Значения \(\widehat\Psi\) на единичной окружности лежат в
+\(\partial\M\). Если \(c\notin\M\), то при
+\(\xi=\Phi(c)/|\Phi(c)|\) имеем
 \[
- \|R_{j+1}-R_j\|_\infty
- \le8C_0\,2^{-(j+k)}\le8\,2^{-j}.
+ |R(c)-c|
+ =|\widehat\Psi(\xi)-\widehat\Psi(e^{G(c)}\xi)|\longrightarrow0
+ \quad\text{при }c\to\partial\M,
 \]
-Кроме того, \(\nu_j\ge j\), \(R_j(\D)\subseteq K\), и \(R_j\)
-фиксирует \(O_{\nu_j}\). Начальные оценки имеют вид
+по равномерной непрерывности \(\widehat\Psi\) на компактных внешних
+кольцах и непрерывности \(G\). Поэтому \(R:\C\to\M\) непрерывно и
+\(R|_\M=\id_\M\).
+Для \(0<s\le a\) положим
 \[
- \sup_{z\in\D}\dist(z,O_0)\le2\sqrt2-2<1,\qquad
- \|R_1-\id_{\D}\|_\infty\le\operatorname{diam}(\D)=4\sqrt2<8.
+ \omega_a(r):=
+ \sup_{\substack{w,v\in A_a\\|w-v|\le r}}
+ |\widehat\Psi(w)-\widehat\Psi(v)|,\qquad
+ A_a:=\{w:1\le|w|\le e^a\}.
 \]
-Следовательно, \(\mathsf A(\nu,R_\bullet)\), то есть \(\mathsf{UG}\),
-выполнено. По теореме~\ref{thm:ug-to-mlc} получаем \(\LC(\M)\).
+Равномерная непрерывность на \(A_a\) даёт \(\omega_a(r)\to0\).
+Если \(c\notin\M\), положим
+\(\xi=\Phi(c)/|\Phi(c)|\) и \(r=\exp(\min\{s,G(c)\})\).
+Тогда \(P_s(c)=\widehat\Psi(r\xi)\), \(R(c)=\widehat\Psi(\xi)\) и
+\(|r\xi-\xi|\le e^s-1\). На \(\M\) оба отображения тождественны;
+поскольку \(\Pi\) нерастягивает расстояния и фиксирует \(\M\),
+получаем
+\[
+ \|Q_s-R|_\D\|_\infty\le\omega_a(e^s-1)\longrightarrow0.
+\]
+Положим \(\lambda_0=0\), \(\lambda_1=1\), а затем рекурсивно
+выберем \(s_1=a\) и при \(n\ge2\)
+\[
+ 0<s_n<\min\{s_{n-1}/2,2^{-n}\},\qquad
+ \kappa(s_n)\le2^{-n},\qquad
+ \|Q_{s_n}-R|_\D\|_\infty\le2^{-n}.
+\]
+Затем при каждом \(n\ge2\) выберем \(\lambda_n\) так, чтобы
+\(\lambda_n>\lambda_{n-1}\), \(\lambda_n\ge\ell_n\) и
+\(2^{1-\lambda_n}\log3\le s_n\), и положим
+\(F_0=\id_\D\), \(F_1=\Pi|_\D=Q_a\), \(F_n=Q_{s_n}\) при \(n\ge2\).
+Лемма~\ref{lem:green-depth} даёт фиксацию нужных \(O_{\lambda_n}\)
+на каждом уровне, а
+\[
+ \dist(Q_{s_n}(z),O_{\lambda_n})
+ \le\dist(Q_{s_n}(z),\M)\le\kappa(s_n)\le2^{-n}.
+\]
+Для \(n\ge2\)
+\[
+ \|F_{n+1}-F_n\|_\infty
+ \le2^{-(n+1)}+2^{-n}\le8\,2^{-n}.
+\]
+Первые два перемещения удовлетворяют бюджетам из
+предложения~\ref{prop:finite-horizons}. Равномерная сходимость
+\(Q_{s_n}\to R|_\D\) и непрерывность конечного числа начальных
+отображений дают равностепенную непрерывность всего семейства
+\((F_n)\); выберем из неё общий \(\delta\in\Delta\). Тогда каждый
+конечный префикс принадлежит \(\mathcal P_m(\lambda,\delta)\), что
+доказывает обратное включение.
 \end{proof}
 
-\noindent
-Эта эквивалентность ослабляет каждую локальную оценку одним общим
-множителем, после чего сдвиг индекса восстанавливает исходные бюджеты.
-Она не устраняет главного зазора: всё ещё требуется одна пара
-\((\lambda,\delta)\) и непустота префиксов любой длины.
-
-\section{Гомотопические данные и количественный зазор}
-\label{app:homotopy}
+\appendix
+\section{Заархивированные направления}
+\label{app:archived-approaches}
 
 \noindent
-Гомотопические группы орбитальных приближений \(O_N\) сами по себе
-не контролируют модули непрерывности и размеры связных множеств,
-необходимые для MLC. Можно изучать башню конечных пространств
-сертификатов
-\[
- X_m:=\mathcal P_m^{(C_0)}(\lambda,\delta),\qquad
- \rho_m^{(C_0)}:X_{m+1}\to X_m,
-\]
-но спектральная последовательность для её гомотопического предела
-требует отдельных условий и не даёт автоматически строгой совместной
-башни сертификатов с нужными количественными оценками. Их существование
-при одних \((\lambda,\delta,C_0)\) и есть недоказанный переход,
-эквивалентный MLC по теореме~\ref{thm:uniform-slack-tower}.
-Гомотопические данные в шагах доказательства не используются.
+Каждый путь ниже был сопоставлен с построенными оценками конечных
+уровней; в доказательство Основной теоремы включены только точный
+профиль \(q_m\), критерий компактности сертификатов и прямое
+следствие общей башни. Усилить геометрическое заключение до
+\(\LC(\M)\) не удалось: существование общей башни равносильно MLC.
+Остальные идеи не дают дополнительного утверждения без недоказанного
+перехода к общей башне.
 
-\section{Граничное разбиение и пределы склеек}
-\label{app:boundary-decomposition}
 
-\noindent
-Для связи разбиения \(\partial\M\) с уже построенными обратными
-системами недостаточно попарных пересечений: нужны граничные
-отображения, совместимые склейки на каждом уровне и теорема о пределе.
-Кроме того, граничные фрагменты не могут быть копиями \(\M\).
+\begin{description}
+\item[Эквипотенциальные отсечения.] Для отображений \(Q_s\) установлена конечнополосная оценка перемещения, а суммируемость или компактность подходящих усечений дала бы непрерывную ретракцию.
+Архивировано, поскольку ни интегральная оценка \(\int_0^a V(u)\,du<\infty\), ни равностепенная непрерывность явных кандидатов не доказаны, а требуемые критерии для подходящей последовательности эквивалентны MLC.
 
-\subsection*{Размерностное препятствие}
+\item[Исправление продолжений.] Локальные замены и выпуклая интерполяция дают оценки ошибки и перемещения при уже существующем допустимом продолжении, а точный липшицев профиль \(q_m\) перенесён в шаг~8.
+Остальная часть архивирована, поскольку не получено равномерного условия \(q_m\le1\); непосредственная оценка через \(\Pi\) даёт лишь растущую границу \(q_m\le2^{m+3}\).
 
-Предположим, что разбиение задано непустыми компактными связными
-множествами
-\[
- n\ge2,\qquad
- U_i\subseteq\partial\M,\qquad
- \partial\M=\bigcup_{i=1}^n U_i,\qquad
- U_i\cap U_j=\{p_{ij}\}\quad(i\ne j).
-\]
-Связность фрагментов и одноточечные пересечения дают лишь связность
-объединения, но не локальную связность. Сам по себе нерв этого
-замкнутого покрытия также не определяет топологию объединения без
-дополнительных условий на покрытие и его пересечения.
+\item[Унификация конечных сертификатов.] Предлагалось выбрать общие глубины и модуль непрерывности (или единый множитель ослабления), чтобы компактность дала совместимую башню всех конечных длин.
+Архивировано, поскольку такая общая башня эквивалентна MLC по теореме~\ref{thm:common-certificate-tower}, тогда как доказанные сертификаты пока зависят от горизонта.
 
-При \(|c|<1/4\) индукция по \(n\) даёт \(|p_n(c)|\le1/2\), поскольку
-\[
- |p_{n+1}(c)|\le |p_n(c)|^2+|c|\le\tfrac14+\tfrac14=\tfrac12.
-\]
-Следовательно, открытый диск \(B(0,1/4)\) лежит в \(\M\) и
-\(\dim_{\mathrm{top}}\M=2\). Поскольку
-\(\partial\M=\partial(\C\setminus\M)\), а граница открытого множества
-в плоскости имеет размерность покрытия не выше \(1\)
-\cite{HurewiczWallman}, получаем
-\(\dim_{\mathrm{top}}(\partial\M)\le1\). Каждое компактное
-\(U_i\subseteq\partial\M\) замкнуто в \(\partial\M\), поэтому его
-размерность не превосходит \(1\); значит, \(U_i\not\cong\M\).
+\item[Гомотопические данные.] Рассматривалось изучение компонент и высших групп пространств конечных сертификатов с фиксированным множителем ослабления и спектральной последовательности их гомотопического предела.
+Архивировано, поскольку при общих параметрах строгий предел уже следует из компактности, а при параметрах, меняющихся с горизонтом, нет одной обратной системы; гомотопические группы также не дают нужных количественных оценок.
 
-Если \(E_i\subseteq U_i\) — конечное множество концов, отождествлённых
-в факторе \(q_i:U_i\to Q_i\), положим \(F_i=q_i(E_i)\). При
-\(E_i\ne\varnothing\) фактор \(Q_i\) компактен и метризуем; выберем
-совместимую метрику \(d_i\) и положим
-\(d_i(q,F_i):=\min_{f\in F_i}d_i(q,f)\).
-Тогда
-\[
- Q_i=F_i\cup\bigcup_{m\ge1}
- \{q\in Q_i:d_i(q,F_i)\ge1/m\}.
-\]
-Каждое множество в объединении замкнуто и лежит в
-\(Q_i\setminus F_i\cong U_i\setminus E_i\), поэтому имеет размерность
-не выше \(1\); \(F_i\) конечно. Теорема о замкнутых суммах размерности
-даёт \(\dim_{\mathrm{top}}Q_i\le1\). Если \(E_i=\varnothing\), то
-\(Q_i=U_i\) и тот же вывод очевиден. Поэтому конечное отождествление
-не превращает \(U_i\) в копию \(\M\).
-Это препятствие относится к границе: копии, возникающие внутри \(\M\)
-при перенормировках, требуют конкретных результатов о
-tuning/straightening и не следуют из свойств \(U_i\)
-\cite{DH,Milnor}.
-
-\subsection*{Трансформированные системы и склейка}
-
-\noindent
-Предложения~\ref{prop:functorial-comparison} и
-\ref{thm:exterior-candidates} уже дают обратные системы
-\(\mathcal C=\mathcal O^\lambda\) и \(\mathcal C'=\mathcal E\),
-естественное преобразование между ними и предел \(\M\). Для
-\(W:=\D\cup E_{s_2}\), общего компактного окружения этих систем,
-возьмём компактное метрическое пространство \(Y_i\) и вложение
-\(\tau_i:W\hookrightarrow Y_i\). Оно переносит системы и их предел
-в \(Y_i\), давая копию \(\tau_i(\M)\cong\M\), но не связывает её с
-\(U_i\): отображение приклеивания к фрагменту границы из самого
-вложения не следует.
-
-\subsection*{Необходимые данные для склейки}
-
-Чтобы связать образ \(\tau_i(\M)\) с фрагментом \(U_i\), нужно задать
-непрерывное отображение с отмеченной границы
-\[
- a_i:B_i:=\tau_i(\partial\M)\longrightarrow U_i
-\]
-и определить согласованные идентификации их прообразов над точками
-\(p_{ij}\);
-если \(U_i\) должен быть образом \(B_i\), \(a_i\) должен быть
-сюръективным.
-На конечных уровнях для этого потребуются компактные объекты
-\(B_{i,n}\), непрерывные отображения \(a_{i,n}:B_{i,n}\to U_i\),
-совместимые с переходами уровней, и
-отождествление \(\varprojlim B_{i,n}\cong B_i\), индуцирующее \(a_i\).
-Сходимость \(\tau_i(O_{\lambda_n})\to\tau_i(\M)\) в метрике Хаусдорфа
-сама по себе не даёт сходимости границ.
-
-Затем нужны компактные хаусдорфовы склейки \(G_n\) с переходами
-между уровнями и естественное сравнение с \(\mathcal C\), для которого
-\[
- \varprojlim G_n\longrightarrow
- \varprojlim\mathcal C\cong\M
-\]
-является гомеоморфизмом. Если \(G_n\) строится как фактор, отношение
-склейки должно быть замкнутым. Попарных одноточечных пересечений
-недостаточно: обратный предел в общем случае не коммутирует с
-факторизацией.
-
-Существующие \(O_N\supseteq\M\) приближают \(\M\) снаружи. При
-\(s_n\downarrow0\) множества \(\D\setminus E_{s_n}\) возрастают к
-\(\D\setminus\M\); это исчерпание дополнения изнутри, а не внутренние
-приближения \(\M\). Ни эти предельные описания, ни биекция между
-приближениями и симплексами не дают контроля диаметра связных
-множеств. Для применения симплициальных данных к MLC нужна
-реализация, обеспечивающая критерий равномерно малых континуумов из
-теоремы~\ref{thm:uniform-small-continua}.
+\item[Разбиение границы и симплициальная склейка.]
+Рассматривались покрытие \(\partial\M\) фрагментами с одноточечными
+пересечениями, трансформированные копии и пределы склеенных комплексов.
+Архивировано, поскольку фрагменты и конечные отождествления их концов
+имеют размерность не выше \(1\) (по
+\(\dim_{\mathrm{top}}(\partial\M)\le1\) \cite{HurewiczWallman} и
+теореме о замкнутых суммах размерности), тогда как \(\M\) содержит
+\(B(0,1/4)\); необходимые отображения приклеивания, теорема о пределе
+склеек и контроль диаметра не построены.
+\end{description}
 
 \renewcommand{\refname}{Литература}
 \begin{thebibliography}{9}\small
@@ -1735,30 +1045,6 @@ J.~Milnor,
 \href{https://arxiv.org/pdf/math/9201272#page=84}
 {Прямая ссылка на PDF}.
 
-\bibitem{DudkoStatus}
-D.~Dudko,
-\foreignlanguage{english}{\emph{On the MLC Conjecture and the Renormalization Theory in
-Complex Dynamics}}
-[\foreignlanguage{russian}{\emph{О гипотезе MLC и теории перенормировок в комплексной динамике}}],
-arXiv:2512.24171 (2025), обзор, подготовленный
-для сборника \foreignlanguage{english}{Proceedings of ICM 2026}
-[\foreignlanguage{russian}{Труды Международного конгресса математиков 2026 года}].
-\href{https://arxiv.org/abs/2512.24171}{Прямая ссылка на arXiv}.
-
-\bibitem{DudkoLyubichSat}
-D.~Dudko и M.~Lyubich,
-\foreignlanguage{english}{\emph{Local connectivity of the Mandelbrot set at some satellite
-parameters of bounded type}}
-[\foreignlanguage{russian}{\emph{Локальная связность множества Мандельброта в некоторых сателлитных параметрах ограниченного типа}}],
-arXiv:1808.10425 (2018; редакция 2023).
-\href{https://arxiv.org/abs/1808.10425}{Прямая ссылка на arXiv}.
-
-\bibitem{DudkoLyubichFeigenbaum}
-D.~Dudko и M.~Lyubich,
-\foreignlanguage{english}{\emph{MLC at Feigenbaum points}},
-[\foreignlanguage{russian}{\emph{MLC в точках Фейгенбаума}}],
-arXiv:2309.02107 (2023; редакция 2025).
-\href{https://arxiv.org/abs/2309.02107}{Прямая ссылка на arXiv}.
 \bibitem{HurewiczWallman}
 W.~Hurewicz и H.~Wallman,
 \foreignlanguage{english}{\emph{Dimension Theory}}
