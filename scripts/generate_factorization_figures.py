@@ -20,7 +20,6 @@ from matplotlib.patches import Circle, Ellipse, Patch
 C0 = 0.25 + 0.0j
 N = 2
 L = 20
-DEEP_LEVEL = 80
 RADIUS = 0.4
 DELTA = 0.2
 LOCAL_HALF_WIDTH = 0.48
@@ -35,9 +34,10 @@ SLICE_HALF_WIDTH = LOCAL_HALF_WIDTH
 OUTER_COLOR = "#b7d9e8"
 LEVEL_L_COLOR = "#83b4a6"
 LEVEL_L_EDGE = "#3d786d"
-DEEP_COLOR = "#193b59"
+ANNOTATION_COLOR = "#193b59"
 SOURCE_COLOR = "#ed9b40"
 TARGET_COLOR = "#477d9e"
+TARGET_SLICE_COLOR = "#c9e1eb"
 MARKER_COLOR = "#b23a48"
 
 
@@ -116,23 +116,19 @@ def make_global_figure(
     global_y: np.ndarray,
     o_n: np.ndarray,
     o_l: np.ndarray,
-    o_deep: np.ndarray,
 ) -> None:
     fig, ax = plt.subplots(figsize=(6.0, 5.0))
     classes = np.zeros(o_n.shape, dtype=np.uint8)
     classes[o_n] = 1
     classes[o_l] = 2
-    classes[o_deep] = 3
     ax.imshow(
         classes,
         extent=global_bounds,
         origin="lower",
         interpolation="nearest",
-        cmap=ListedColormap(
-            ["white", OUTER_COLOR, LEVEL_L_COLOR, DEEP_COLOR]
-        ),
+        cmap=ListedColormap(["white", OUTER_COLOR, LEVEL_L_COLOR]),
         vmin=0,
-        vmax=3,
+        vmax=2,
         aspect="equal",
     )
     parameters = global_x[None, :] + 1j * global_y[:, None]
@@ -267,12 +263,7 @@ def make_global_figure(
             Patch(
                 facecolor=LEVEL_L_COLOR,
                 edgecolor="none",
-                label=rf"$O_{{{L}}}\setminus O_{{{DEEP_LEVEL}}}$",
-            ),
-            Patch(
-                facecolor=DEEP_COLOR,
-                edgecolor="none",
-                label=rf"$O_{{{DEEP_LEVEL}}}$",
+                label=rf"$O_{{{L}}}$",
             ),
             Line2D(
                 [0],
@@ -320,13 +311,10 @@ def make_slices_figure(output_dir: Path) -> None:
         1501,
     )
     parameters = local_x[None, :] + 1j * local_y[:, None]
-    levels = finite_outer_levels(parameters, (SLICE_N, SLICE_L, DEEP_LEVEL))
+    levels = finite_outer_levels(parameters, (SLICE_N, SLICE_L))
     distance = np.abs(parameters - SLICE_C0)
     source = levels[SLICE_L] & (distance <= SLICE_DELTA)
     target = levels[SLICE_N] & (distance <= SLICE_RADIUS)
-    deep_in_target = np.ma.masked_where(
-        distance > SLICE_RADIUS, levels[DEEP_LEVEL].astype(float)
-    )
     if np.any(source & ~target):
         raise RuntimeError("The sampled nested slice escaped the outer slice.")
 
@@ -348,15 +336,6 @@ def make_slices_figure(output_dir: Path) -> None:
         vmax=1,
         aspect="equal",
         zorder=2,
-    )
-    ax.contour(
-        local_x,
-        local_y,
-        deep_in_target,
-        levels=[0.5],
-        colors=[DEEP_COLOR],
-        linewidths=0.8,
-        zorder=3,
     )
     ax.add_patch(
         Circle(
@@ -429,13 +408,6 @@ def make_slices_figure(output_dir: Path) -> None:
                 linewidth=1.1,
                 label=rf"$\partial\overline{{B}}(c_0,\delta)$, $\delta={SLICE_DELTA:g}$",
             ),
-            Line2D(
-                [0],
-                [0],
-                color=DEEP_COLOR,
-                linewidth=0.8,
-                label=rf"граница уровня $O_{{{DEEP_LEVEL}}}$",
-            ),
         ],
         loc="lower left",
         framealpha=0.96,
@@ -498,7 +470,7 @@ def make_orbit_figure(output_dir: Path) -> None:
         xy=(steps[1], orbit[1]),
         xytext=(2.3, 0.16),
         fontsize=11,
-        arrowprops={"arrowstyle": "-", "color": DEEP_COLOR, "lw": 0.8},
+        arrowprops={"arrowstyle": "-", "color": ANNOTATION_COLOR, "lw": 0.8},
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.92, "pad": 1.5},
     )
     ax.text(
@@ -537,11 +509,11 @@ def make_target_figure(
     local_y: np.ndarray,
     source: np.ndarray,
     target: np.ndarray,
-    deep: np.ndarray,
+    o_l: np.ndarray,
     local_bounds: tuple[float, float, float, float],
 ) -> None:
     fig, ax = plt.subplots(figsize=(4.8, 4.5))
-    draw_mask(ax, local_x, local_y, target, TARGET_COLOR)
+    draw_mask(ax, local_x, local_y, target, TARGET_SLICE_COLOR)
     ax.imshow(
         source.astype(np.uint8),
         extent=(
@@ -559,19 +531,6 @@ def make_target_figure(
         alpha=0.55,
         zorder=2,
     )
-    parameters = local_x[None, :] + 1j * local_y[:, None]
-    deep_in_target = np.ma.masked_where(
-        np.abs(parameters - C0) > RADIUS, deep.astype(float)
-    )
-    ax.contour(
-        local_x,
-        local_y,
-        deep_in_target,
-        levels=[0.5],
-        colors=[DEEP_COLOR],
-        linewidths=0.8,
-        zorder=3,
-    )
     ax.contour(
         local_x,
         local_y,
@@ -580,6 +539,20 @@ def make_target_figure(
         colors=[SOURCE_COLOR],
         linewidths=1.4,
         zorder=4,
+    )
+    parameters = local_x[None, :] + 1j * local_y[:, None]
+    o_l_boundary = np.ma.masked_where(
+        np.abs(parameters - C0) > RADIUS, o_l.astype(float)
+    )
+    ax.contour(
+        local_x,
+        local_y,
+        o_l_boundary,
+        levels=[0.5],
+        colors=[LEVEL_L_EDGE],
+        linewidths=0.9,
+        linestyles="dashdot",
+        zorder=5,
     )
     ax.add_patch(
         Circle(
@@ -618,8 +591,8 @@ def make_target_figure(
         xy=(C0.real + 0.24, C0.imag + 0.16),
         xytext=(C0.real - 0.08, C0.imag + 0.4),
         fontsize=11,
-        color=DEEP_COLOR,
-        arrowprops={"arrowstyle": "->", "color": DEEP_COLOR, "lw": 1.0},
+        color=ANNOTATION_COLOR,
+        arrowprops={"arrowstyle": "->", "color": ANNOTATION_COLOR, "lw": 1.0},
         bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.9, "pad": 1.5},
     )
     ax.annotate(
@@ -906,11 +879,10 @@ def make_figures(output_dir: Path) -> None:
     global_x = np.linspace(global_bounds[0], global_bounds[1], 1301)
     global_y = np.linspace(global_bounds[2], global_bounds[3], 1101)
     global_parameters = global_x[None, :] + 1j * global_y[:, None]
-    global_levels = finite_outer_levels(global_parameters, (N, L, DEEP_LEVEL))
+    global_levels = finite_outer_levels(global_parameters, (N, L))
     o_n = global_levels[N]
     o_l = global_levels[L]
-    o_deep = global_levels[DEEP_LEVEL]
-    if np.any(o_l & ~o_n) or np.any(o_deep & ~o_l):
+    if np.any(o_l & ~o_n):
         raise RuntimeError("Finite outer stages lost their nesting.")
 
     local_x = np.linspace(
@@ -920,7 +892,7 @@ def make_figures(output_dir: Path) -> None:
         C0.imag - LOCAL_HALF_WIDTH, C0.imag + LOCAL_HALF_WIDTH, 1601
     )
     local_parameters = local_x[None, :] + 1j * local_y[:, None]
-    local_levels = finite_outer_levels(local_parameters, (N, L, DEEP_LEVEL))
+    local_levels = finite_outer_levels(local_parameters, (N, L))
     distance = np.abs(local_parameters - C0)
     source = local_levels[L] & (distance <= DELTA)
     target = local_levels[N] & (distance <= RADIUS)
@@ -934,7 +906,7 @@ def make_figures(output_dir: Path) -> None:
         float(local_y[-1]),
     )
     make_global_figure(
-        output_dir, global_bounds, global_x, global_y, o_n, o_l, o_deep
+        output_dir, global_bounds, global_x, global_y, o_n, o_l
     )
     make_slices_figure(output_dir)
     make_orbit_figure(output_dir)
@@ -944,7 +916,7 @@ def make_figures(output_dir: Path) -> None:
         local_y,
         source,
         target,
-        local_levels[DEEP_LEVEL],
+        local_levels[L],
         local_bounds,
     )
     make_component_geometry_figure(output_dir)
