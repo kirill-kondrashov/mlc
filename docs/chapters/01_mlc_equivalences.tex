@@ -1,0 +1,293 @@
+\chapter{MLC и эквивалентные утверждения}
+\noindent В главе формулируется гипотеза MLC и вводятся несколько языков для её количественного изучения: модуль диаметров малых связных множеств, конечные и последовательные аппроксимации, равностепенная аппроксимация и равномерный контроль компонент. Здесь доказываются диагональный критерий и критерий локальной связности через компактные связные множества; связи MLC с равностепенной аппроксимацией и факторизацией устанавливаются в главах 5 и 6.
+
+\section{Обозначения}
+
+Положим
+\[
+ \N:=\{0,1,2,\ldots\},\qquad f_c(z):=z^2+c,\qquad
+ p_0(c):=0,\qquad p_{n+1}(c):=p_n(c)^2+c,
+\]
+\[
+ \M:=\{c\in\C:\sup_{n\in\N}|p_n(c)|<\infty\},\qquad
+ K:=\overline B(0,2),\qquad
+ \D:=\{x+iy:x,y\in[-2,2]\},
+\]
+\[
+ O_N:=K\cap\bigcap_{j=0}^{N}p_j^{-1}(K),\qquad
+ \Pi(z):=\frac{2z}{\max\{2,|z|\}}.
+\]
+Для непустого \(A\subseteq\C\) и непустых компактных \(A,B\subseteq\C\)
+положим
+\[
+ \dist(z,A):=\inf_{a\in A}|z-a|,\qquad
+ \dH(A,B):=
+ \max\left\{\sup_{a\in A}\dist(a,B),\
+             \sup_{b\in B}\dist(b,A)\right\}.
+\]
+
+\section{Основная гипотеза и эквивалентные формулировки}
+
+Пусть \(\mathcal K(\M)\) — множество непустых компактных подмножеств
+\(\M\). Для \(C\in\mathcal K(\M)\) положим
+\[
+ \operatorname{diam}C:=\sup\{|u-v|:u,v\in C\}.
+\]
+Для \(x,y\in\M\) положим
+\[
+ \mathcal C_\M(x,y):=
+ \{C\in\mathcal K(\M):C\text{ связно},\ x,y\in C\}.
+\]
+При \(r>0\) положим
+\[
+ \omega_\M(r):=
+  \sup_{\substack{x,y\in\M\\|x-y|<r}}
+  \inf_{C\in\mathcal C_\M(x,y)}\operatorname{diam}C
+  \in[0,+\infty],\qquad \inf\varnothing:=+\infty.
+ \]
+ Для \(m\ge1\) положим
+ \[
+  \mathcal R_m:=
+ \left\{G\in C(\D,K):
+ \begin{array}{l}
+ \exists N\in\N,\ N\ge m,\quad G|_{O_N}=\id_{O_N},\\[1mm]
+ \displaystyle\sup_{z\in\D}\dist(G(z),O_N)\le2^{-m}
+ \end{array}
+ \right\}.
+\]
+\[
+ \mathsf{Fin}:\Leftrightarrow
+ \forall m\ge1,\quad\mathcal R_m\ne\varnothing.
+ \]
+\[
+  \begin{gathered}
+  \mathsf{EA}_{\mathrm{seq}}\Leftrightarrow
+  \exists(m_j)_{j\ge1}\ \exists(G_j)_{j\ge1},\\
+  1\le m_1<m_2<\cdots,\qquad m_j\longrightarrow\infty,\qquad
+  G_j\in\mathcal R_{m_j}.
+  \end{gathered}
+ \]
+ \[
+   \begin{gathered}
+   \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)\\
+  \Leftrightarrow\\
+  \begin{gathered}
+  1\le m_1<m_2<\cdots,\qquad m_j\longrightarrow\infty,\qquad
+  G_j\in\mathcal R_{m_j},\\
+ \rho:(0,\infty)\to(0,\infty),\\
+  \forall\eta>0,\qquad 0<\rho(\eta)\le\eta,\\
+  \forall\eta>0\ \forall j\ge1\ \forall z,w\in\D,\qquad
+  |z-w|\le\rho(\eta)\Rightarrow
+  |G_j(z)-G_j(w)|\le\eta.
+  \end{gathered}
+ \end{gathered}
+ \]
+\[
+ \begin{gathered}
+ \mathsf{EA}\Leftrightarrow
+ \exists\rho\ \exists(m_j)_{j\ge1}\ \exists(G_j)_{j\ge1},\\
+ \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr).
+ \end{gathered}
+ \]
+
+Для \(F\subseteq\C\) обозначим через \(\pi_0(F)\) множество его
+компонент связности. Если \(c\in F\), через
+\(\operatorname{Comp}_c(F)\) обозначим компоненту, содержащую \(c\).
+При \(c\in\M\), \(r>0\) и \(N\in\N\) положим
+\[
+ C_N(c,r):=
+ \operatorname{Comp}_c\bigl(O_N\cap\overline B(c,r)\bigr).
+\]
+Для \(L\ge N\) и \(0<\delta<r\) включение
+\[
+ O_L\cap\overline B(c,\delta)
+ \subseteq O_N\cap\overline B(c,r)
+\]
+индуцирует отображение множеств компонент
+\[
+ \varphi_{L,N}^{c;\delta,r}:
+ \pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr)
+ \longrightarrow
+ \pi_0\bigl(O_N\cap\overline B(c,r)\bigr),
+\]
+которое каждую компоненту меньшего множества переводит в единственную
+компоненту большего множества, содержащую её.
+
+\begin{definition}[Равномерный контроль компонент]
+\label{def:uniform-component-control}
+Условие \(\mathsf{UC}\) означает, что
+\begin{equation}
+ \begin{gathered}
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists r,\delta\in\R,\quad 0<\delta<r<\varepsilon,\qquad\\
+ \forall N\in\N\ \exists L\in\N,\quad N\le L,\qquad
+ \forall A\in\pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr),\\
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r).
+ \end{gathered}
+ \label{eq:uniform-component-control}
+\end{equation}
+Радиусы \(r,\delta\) выбираются по \(c,\varepsilon\) и общие для всех
+\(N\); индекс \(L\) может зависеть от \(c,\varepsilon,N\).
+Для фиксированных \(c,\varepsilon,N,L\) равенство
+\(\varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)\) для всех \(A\) равносильно
+включению
+\[
+ O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
+\]
+\end{definition}
+
+ \begin{proposition}[Диагональный критерий выбора с конечным числом оценок]
+ \label{prop:diagonal-finite-scale}
+ Условие \(\mathsf{EA}\) равносильно следующему условию: существуют
+ положительные числа \((\delta_i)_{i\ge1}\), для которых
+ \begin{equation}
+  \begin{gathered}
+  \forall k,M\in\N,\ k,M\ge1\ \exists m\in\N,\ m\ge M\
+  \exists G\in\mathcal R_m,\quad\\
+  \forall i\in\{1,\ldots,k\}\ \forall z,w\in\D,\qquad
+  |z-w|\le\delta_i\Rightarrow
+  |G(z)-G(w)|\le2^{-i}.
+  \end{gathered}
+  \label{eq:diagonal-finite-scale}
+ \end{equation}
+ \end{proposition}
+ \begin{proof}
+ Пусть выполнено \(\mathsf{EAdata}(\rho,(m_j),(G_j))\). Положим
+ \(\delta_i:=\rho(2^{-i})\). Для любых \(k,M\ge1\) выберем \(j\ge k\)
+ так, чтобы \(m_j\ge M\). Тогда \(G_j\in\mathcal R_{m_j}\), а оценка
+ равностепенной непрерывности при \(\eta=2^{-i}\) даёт все неравенства
+ в \eqref{eq:diagonal-finite-scale} для \(1\le i\le k\).
+
+ Обратно, пусть существуют \((\delta_i)\), удовлетворяющие
+ \eqref{eq:diagonal-finite-scale}. Положим \(m_0:=0\). Последовательно
+ применяя это условие с \(k=j\) и \(M=m_{j-1}+1\), выберем
+ \(m_j\ge m_{j-1}+1\) и \(G_j\in\mathcal R_{m_j}\), для которых
+ \[
+  \forall i\in\N,\ 1\le i\le j\ \forall z,w\in\D,\qquad
+  |z-w|\le\delta_i\Rightarrow
+  |G_j(z)-G_j(w)|\le2^{-i}.
+ \]
+ Тогда \(m_1<m_2<\cdots\), и \(m_j\to\infty\). Зафиксируем
+ \(\eta>0\) и выберем \(i\ge1\) так, чтобы \(2^{-i}\le\eta\).
+ Равномерная непрерывность конечного семейства
+ \(G_1,\ldots,G_{i-1}\) даёт \(\sigma_\eta>0\), для которого
+ \[
+  |z-w|\le\sigma_\eta\Rightarrow
+  |G_j(z)-G_j(w)|\le\eta
+  \qquad(1\le j<i,\ z,w\in\D);
+ \]
+ при \(i=1\) положим \(\sigma_\eta:=1\). Положим
+ \(\rho(\eta):=\min\{\eta,\delta_i,\sigma_\eta\}\).
+ Если \(j\ge i\), требуемая оценка следует из неравенства с индексом
+ \(i\); если \(j<i\), она следует из выбора \(\sigma_\eta\).
+ Следовательно, \(\mathsf{EAdata}(\rho,(m_j),(G_j))\), то есть
+ \(\mathsf{EA}\).
+ \end{proof}
+ \begin{equation}
+  \forall\rho,(m_j),(G_j),\qquad
+   \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)
+ \Rightarrow
+  \forall\eta>0,\qquad
+  \omega_\M\!\left(\frac{\rho(\eta)}2\right)\le2\eta.
+  \label{eq:quantitative-diameter-bound}
+\end{equation}
+\begin{equation}
+  \begin{gathered}
+  \mathsf{Fin},\qquad \mathsf{EA}_{\mathrm{seq}},\\
+  \mathsf{EA}\quad\Leftrightarrow\quad
+  \lim_{r\downarrow0}\omega_\M(r)=0
+  \quad\Leftrightarrow\quad\LC(\M).
+  \end{gathered}
+ \label{eq:main-discrepancy}
+\end{equation}
+
+Теорема об аппроксимации из главы~\ref{ch:approximation}
+даёт требуемую в \(\mathsf{EA}_{\mathrm{seq}}\) последовательность:
+\(m_j=j\), \(G_j=T_j\in\mathcal R_j\). Это отдельный результат о конечных
+приближениях; отображения \(T_j\) не входят в доказательство
+\(\mathsf{AM}\), \(\mathsf{GC}\) или условной факторизации. Для редукций используется лишь диадическая сетка, построенная в
+главе~\ref{ch:approximation}.
+Условие \(\mathsf{EA}\) усиливает существование таких отображений
+требованием общего модуля равностепенной непрерывности \(\rho\).
+По предложению~\ref{prop:diagonal-finite-scale} диагональный путь
+требует для каждого конечного \(k\) выполнения первых \(k\) оценок
+осцилляции при сколь угодно больших \(m\). Теорема
+\ref{thm:uniform-component-control} устанавливает
+\(\mathsf{UC}\Longleftrightarrow\LC(\M)\), откуда следует, что
+безусловная факторизация локальных компонент уже влечёт MLC. Обратная
+импликация от локальной связности к \(\mathsf{AM}\) или \(\mathsf{GC}\)
+здесь не рассматривается и не требуется для целевой цепочки. Ниже
+условная теорема доказывает \(\mathsf H_{\M}\Rightarrow\mathsf{UC}\), а
+оставшиеся строгие редукции разделены по двум открытым оценкам.
+Искомая логическая цепочка имеет вид
+\[
+ \mathsf H_{\M}\;(\mathsf{AM}+\mathsf{GC})
+ \ \Longrightarrow\ \mathsf{UC}
+ \ \Longleftrightarrow\ \LC(\M).
+\]
+Итак, доказательство \(\mathsf{AM}\) и \(\mathsf{GC}\) завершило бы
+доказательство MLC через теорему о факторизации; обратные импликации к
+открытым оценкам здесь не предполагаются.
+
+\section{Критерий через компактные связные множества малого диаметра}
+
+\begin{theorem}[Критерий локальной связности через компактные связные множества]
+\label{thm:small-connected-compacts}
+Пусть \(X\) — компактное метрическое пространство с метрикой \(d\).
+Тогда \(X\) локально связно тогда и только тогда, когда
+\[
+ \forall\varepsilon>0\ \exists\delta>0\ \forall x,y\in X,\qquad
+ d(x,y)<\delta\ \Rightarrow\
+ \exists C\subseteq X:
+ \begin{cases}
+ C\text{ компактно и связно},\\
+ x,y\in C,\\
+ \operatorname{diam}(C)<\varepsilon.
+ \end{cases}
+\]
+\end{theorem}
+\begin{proof}
+Если \(X\) локально связно, то у каждой точки есть связная открытая
+окрестность диаметра меньше \(\varepsilon\). Компактность даёт
+конечное подпокрытие этих окрестностей, а лемма Лебега — число
+\(\delta>0\). Если \(d(x,y)<\delta\), точки \(x,y\) лежат в одной
+такой окрестности; её замыкание в \(X\) компактно, связно и имеет
+диаметр меньше \(\varepsilon\).
+
+Обратно, пусть \(x\in V\), где \(V\) открыто в \(X\). Выберем
+\(\varepsilon>0\) так, чтобы \(B(x,\varepsilon)\cap X\subseteq V\).
+Для соответствующего \(\delta\) каждая точка \(y\in B(x,\delta)\cap X\)
+лежит вместе с \(x\) в связном множестве \(C\) диаметра меньше
+\(\varepsilon\), поэтому \(C\subseteq V\). Значит, компонента \(V\),
+содержащая \(x\), содержит шар \(B(x,\delta)\cap X\). Компоненты
+открытых множеств открыты, что равносильно локальной связности.
+\end{proof}
+
+\begin{proposition}[Критерий локальной связности через функцию \(\omega_\M\)]
+\label{prop:omega-criterion}
+\[
+ \lim_{r\downarrow0}\omega_\M(r)=0
+ \quad\Leftrightarrow\quad
+ \LC(\M).
+\]
+\end{proposition}
+\begin{proof}
+Пусть \(\lim_{r\downarrow0}\omega_\M(r)=0\). Для каждого
+\(\varepsilon>0\) существует \(\delta>0\) такое, что
+\(\omega_\M(\delta)<\varepsilon\). При \(|x-y|<\delta\) имеем
+\[
+ \inf_{C\in\mathcal C_\M(x,y)}\operatorname{diam}C
+ \le\omega_\M(\delta)<\varepsilon.
+\]
+Значит, существует \(C\in\mathcal C_\M(x,y)\) с
+\(\operatorname{diam}C<\varepsilon\). Теорема
+\ref{thm:small-connected-compacts} даёт \(\LC(\M)\).
+
+Обратно, пусть \(\LC(\M)\). Применим теорему
+\ref{thm:small-connected-compacts} к \(\varepsilon/2\) и получим
+\(\delta>0\). При \(0<r\le\delta\) для каждой пары
+\(x,y\in\M\), \(|x-y|<r\), существует
+\(C\in\mathcal C_\M(x,y)\) с \(\operatorname{diam}C<\varepsilon/2\).
+Следовательно, \(\omega_\M(r)\le\varepsilon/2<\varepsilon\), откуда
+\(\lim_{r\downarrow0}\omega_\M(r)=0\).
+\end{proof}

@@ -29,9 +29,17 @@ FACTOR_FIGURES := \
 	docs/figures/factorization-target.pdf \
 	docs/figures/factorization-component-geometry.pdf
 
+PROOF_CHAPTERS := \
+	docs/chapters/01_mlc_equivalences.tex \
+	docs/chapters/02_factorization_lemma.tex \
+	docs/chapters/03_am_hypothesis.tex \
+	docs/chapters/04_gc_hypothesis.tex \
+	docs/chapters/05_mlc_factorization_connection.tex \
+	docs/chapters/06_approximation_theorem.tex
+
 proof-pdf: docs/uniform_geometric_mlc.pdf
 
-docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(FACTOR_FIGURES)
+docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(PROOF_CHAPTERS) $(FACTOR_FIGURES)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<

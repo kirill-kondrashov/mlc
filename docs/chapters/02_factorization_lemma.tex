@@ -1,0 +1,623 @@
+\chapter{Лемма о факторизации}
+\noindent В главе доказывается абстрактный критерий, который по суммируемым оценкам цены разрезов обеспечивает устойчивость корневых компонент вложенной фильтрации. Затем модуль путей и контактные графы связывают потерю локального радиуса с этой ценой. Для множества Мандельброта критерий даёт условную факторизацию при совместном выполнении гипотез AM и GC; сами оценки разбираются в следующих главах.
+
+\section{Общие критерии через разрезы и модуль путей}
+\label{sec:general-cut-theorems}
+
+Сначала отделим общую схему от конкретной параметрической фильтрации,
+вводимой ниже. Пусть
+\((Z,d)\) — компактное метрическое пространство, а
+\[
+ Y_0\supseteq Y_1\supseteq\cdots
+\]
+— непустые компакты с \(X:=\bigcap_{n\ge0}Y_n\ne\varnothing\).
+Обозначим через \(\overline B_d(x,t)\) замкнутый шар в \(Z\). Для
+\(A\subseteq Z\), \(x\in A\) через \(\operatorname{Comp}_x(A)\)
+обозначим компоненту связности \(A\), содержащую \(x\). Для
+\(x\in X\), \(r>0\) положим
+\[
+ C_n^X(x,r):=
+ \operatorname{Comp}_x\bigl(Y_n\cap\overline B_d(x,r)\bigr),\qquad
+ \rho_n^X(x,r):=
+ \sup\{\delta\in[0,r]:
+ X\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r)\}.
+\]
+Пусть \(\lambda_m\in\{0,1,2,\ldots\}\),
+\(1\le\lambda_1<\lambda_2<\cdots\), и
+\(\lambda_m\to\infty\). Сократим обозначения:
+\[
+ R_m:=\rho_{\lambda_m}^X(x,r),\qquad
+ \Delta_m:=R_m-R_{m+1}\ge0.
+\]
+Для блока глубин разрешается задать любую неотрицательную величину
+\(\mathfrak c_m\), интерпретируемую как цену конечного разделяющего
+набора. В следующей теореме используются только её численные оценки.
+
+\begin{theorem}[Абстрактный критерий суммируемой цены разрезов]
+\label{thm:abstract-summable-cut}
+Зафиксируем \(x\in X\), \(r>0\) и последовательность
+\((\lambda_m)\), определённую выше. Пусть существуют числа
+\(\mathfrak c_m\ge0\), \(\epsilon_m\ge0\) и константы \(A,B>0\),
+не зависящие от \(m\), такие, что
+\[
+ \sum_m\epsilon_m<\infty,\qquad
+ \exists m_0\ \forall m\ge m_0,\quad
+ 0\le\Delta_m\le A\mathfrak c_m,\qquad
+ \mathfrak c_m\le B R_m\epsilon_m,\qquad R_m>0.
+\]
+Если множества \(Y_n\cap\overline B_d(x,r)\) имеют конечное число
+компонент, то существует \(\delta>0\), для которого
+\[
+ X\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r)
+ \qquad(n\ge0).
+\]
+В частности, система компонент конечных приближений факторизуется
+в смысле включения
+\[
+ \forall n\ \exists L\ge n,\qquad
+ Y_L\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r).
+\]
+Если для каждого \(x\in X\) и \(\varepsilon>0\) такие точечные данные
+можно выбрать с \(r<\varepsilon\), то \(X\) локально связно.
+\end{theorem}
+\begin{proof}
+Положим \(q_m:=AB\epsilon_m\). По предположению
+\(\Delta_m\le q_mR_m\) при всех \(m\ge m_0\). Из суммируемости следует,
+что \(q_m\le1/2\) для всех достаточно больших \(m\); увеличим \(m_0\),
+чтобы это неравенство и \(R_m>0\) выполнялись при каждом \(m\ge m_0\).
+Тогда
+\[
+ R_m\ge R_{m_0}\prod_{j=m_0}^{m-1}(1-q_j)
+ \ge R_{m_0}\exp\!\left(-2\sum_{j=m_0}^{\infty}q_j\right)>0
+ \qquad(m\ge m_0).
+\]
+Последовательность \(\rho_n^X(x,r)\) невозрастает, а
+\(\lambda_m\to\infty\), поэтому
+\(\inf_n\rho_n^X(x,r)=\inf_mR_m>0\). Выберем
+\(0<\delta<\inf_n\rho_n^X(x,r)\). По определению супремума и
+наследственности включения при уменьшении радиуса получаем
+\[
+ X\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r)
+ \qquad(n\ge0).
+\]
+Для фиксированного \(n\) множество
+\[
+ B_n:=\bigl(Y_n\cap\overline B_d(x,\delta)\bigr)
+       \setminus C_n^X(x,r).
+\]
+Поскольку \(\delta<r\), это в точности пересечение
+\(Y_n\cap\overline B_d(x,\delta)\) с объединением всех компонент
+\(Y_n\cap\overline B_d(x,r)\), кроме \(C_n^X(x,r)\). Эти компоненты
+компактны, и их конечность показывает, что \(B_n\) компактно.
+Кроме того, \(B_n\cap X\) пусто. Если бы
+\(Y_L\cap\overline B_d(x,\delta)\cap B_n\ne\varnothing\) для всех
+\(L\ge n\), вложенность компактных множеств дала бы непустое
+пересечение, лежащее в \(X\cap B_n\), противоречие. Следовательно,
+для некоторого \(L\ge n\)
+\[
+ Y_L\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r).
+\]
+Наконец,
+\(C:=\bigcap_n C_n^X(x,r)\) — пересечение убывающих непустых
+компактных связных множеств. Оно компактно и связно, содержится в
+\(X\cap\overline B_d(x,r)\) и содержит
+\(X\cap\overline B_d(x,\delta)\). Выбирая \(r<\varepsilon\), получаем
+связную окрестность \(x\) внутри любого заданного относительного
+окружения. Значит, \(X\) локально связно.
+\end{proof}
+
+\subsection{Две независимые оценки для геометрических фильтраций}
+
+Связь цены разреза с потерей радиуса можно выразить без упоминания
+динамики. Пусть \(\mathcal Q_m=\{Q_{m,\alpha}\}_{\alpha\in J_m}\) —
+конечное семейство компактных ячеек, а \(\Gamma_m\) — семейство
+непрерывных путей. Определим дискретный \(1\)-модуль
+\[
+ \operatorname{Mod}_{1,m}(\Gamma_m):=
+ \inf\left\{
+ \sum_{\alpha\in J_m}w_\alpha\operatorname{diam}Q_{m,\alpha}:
+ \begin{array}{l}
+ w_\alpha\ge0,\\[-1mm]
+ \displaystyle
+ \sum_{\alpha:\,Q_{m,\alpha}\cap\gamma([0,1])\ne\varnothing}
+ w_\alpha\ge1\quad(\gamma\in\Gamma_m)
+ \end{array}\right\}.
+\]
+ Далее рассматриваются блоки с \(\Delta_m>0\); при \(\Delta_m=0\)
+ радиальное неравенство тривиально.
+ Для блока с \(\Delta_m>0\) положим
+\[
+ \mathcal L_m^X(x,r):=
+ X\cap\bigl(C_{\lambda_m}^X(x,r)
+                \setminus C_{\lambda_{m+1}}^X(x,r)\bigr).
+\]
+Из определения радиуса следует
+\[
+ R_{m+1}=\min\{R_m,\dist(x,\mathcal L_m^X(x,r))\}.
+\]
+Действительно, при каждом \(t<R_m\) точки
+\(X\cap\overline B_d(x,t)\) лежат в корневой компоненте уровня
+\(\lambda_m\), а первые из них, исключаемые из корневой компоненты
+уровня \(\lambda_{m+1}\), принадлежат
+\(\mathcal L_m^X(x,r)\).
+При конечном числе компонент среза
+\(Y_{\lambda_{m+1}}\cap\overline B_d(x,r)\) множество
+\(\mathcal L_m^X(x,r)\) является конечным объединением пересечений
+этих компонент с \(X\cap C_{\lambda_m}^X(x,r)\); значит, оно компактно,
+и существует ближайшая к \(x\) точка \(y_m\) в этом множестве.
+Пусть
+\[
+ n_m:=\min\{n:\lambda_m<n\le\lambda_{m+1},\
+                    y_m\notin C_n^X(x,r)\}.
+\]
+Предположим, что срез \(C_{n_m-1}^X(x,r)\) путём связен, и обозначим
+через \(\Gamma_m\) семейство всех непрерывных путей в нём от \(x\) до
+\(y_m\). Для компактных полуалгебраических срезов это свойство
+следует из теоремы о триангуляции полуалгебраических множеств; ниже оно
+применимо к конечным полиномиальным срезам. Пусть \(\mathcal Q_m\) —
+конечное семейство ячеек положительного диаметра, покрывающее все интерфейсы блока,
+включая \(\Sigma_{n_m}\), причём
+\(\Sigma_{n_m}\) пересекает каждый путь из \(\Gamma_m\). Обозначим
+через \(\widehat{\mathfrak c}_m\) минимальную цену графового разреза,
+отделяющего корень от компоненты, содержащей \(y_m\); цена разреза,
+представленного набором \(S\) ячеек, равна
+\(\sum_{\alpha\in S}\operatorname{diam}Q_{m,\alpha}\).
+
+Цена любого набора ячеек, пересекающего каждый путь из \(\Gamma_m\),
+не меньше этого модуля: индикаторы выбранных ячеек допустимы в
+инфимуме. В частности, если каждое реберное разделение в конечном
+контактном графе пересекает все такие пути и
+\(\widehat{\mathfrak c}_m\) — минимальная цена допустимого графового
+разреза, то
+\begin{equation}
+ \operatorname{Mod}_{1,m}(\Gamma_m)\le\widehat{\mathfrak c}_m.
+ \label{eq:modulus-below-cut}
+\end{equation}
+Следовательно, независимая от масштаба нижняя оценка
+\begin{equation}
+ \operatorname{Mod}_{1,m}(\Gamma_m)\ge a_{x,r}\,\Delta_m,\qquad
+ a_{x,r}>0,
+ \label{eq:annular-modulus-target}
+\end{equation}
+немедленно даёт радиальный переход
+\(\Delta_m\le a_{x,r}^{-1}\widehat{\mathfrak c}_m\). Это формулировка в
+языке дискретного модуля семейств кривых; её общий источник —
+количественная толщина путей, а не только связность конечного графа.
+
+Для планарной клеточной системы зададим контактную кратность
+\[
+ v_{m,\alpha}:=
+ \#\{n:\lambda_m<n\le\lambda_{m+1},\
+                 Q_{m,\alpha}\cap\Sigma_n\ne\varnothing\},
+\]
+а \(z_{m,\alpha}\in Q_{m,\alpha}\) выберем произвольно. Соответствующая
+атомарная контактная мера и её полная масса равны
+\[
+ \Xi_m:=
+ \sum_{\alpha\in J_m}
+ v_{m,\alpha}\operatorname{diam}(Q_{m,\alpha})\delta_{z_{m,\alpha}}.
+\]
+Для определения цены разреза рассмотрим локальный срез
+\(C_{n-1}^X(x,r)\), его внутреннюю часть
+\(A_n:=C_{n-1}^X(x,r)\cap Y_n\) и внешнюю часть
+\(U_n:=C_{n-1}^X(x,r)\setminus A_n\). Вершины конечного интерфейсного
+графа — компоненты \(A_n\) и замыкания компонент \(U_n\); ребро означает
+непустое пересечение. Для ребра \(e=(A,\overline U)\) контакт есть
+\(P_e:=A\cap\overline U\). Предполагается, что \(\Sigma_n\) содержит
+все эти контакты и что ячейки блока покрывают каждый интерфейс. Корневая
+вершина — компонента \(A_n\), содержащая \(x\), то есть \(C_n^X(x,r)\).
+Удаляться могут только рёбра между \(A_n\)-вершинами и
+\(\overline U_n\)-вершинами; рёбра между двумя \(\overline U_n\)-вершинами
+сохраняются. Обозначим через
+\[
+I_{n,m}:=\{\alpha\in J_m:Q_{m,\alpha}\cap\Sigma_n\ne\varnothing\}.
+\]
+Набор \(S\subseteq I_{n,m}\) удаляет ребро \(e=(A,\overline U)\), если
+\(P_e\subseteq\bigcup_{\alpha\in S}Q_{m,\alpha}\); он допустим, если после
+удаления корневая вершина не соединена ни с одной другой вершиной
+\(A_n\), пересекающей \(X\). Пусть \(\operatorname{cap}_{n,m}\) —
+минимальная цена допустимого разреза, где цена \(S\) равна
+\(\sum_{\alpha\in S}\operatorname{diam}(Q_{m,\alpha})\). Положим
+\[
+\mathfrak c_m:=
+\sum_{\lambda_m<n\le\lambda_{m+1}}\operatorname{cap}_{n,m}.
+\]
+Полный набор \(I_{n,m}\) покрывает все контакты, удаляет каждое ребро
+между \(A_n\)- и \(\overline U_n\)-вершинами. Разные вершины,
+заданные компонентами \(A_n\), не пересекаются, поэтому этот набор
+допустим.
+Перестановка конечных сумм даёт
+\begin{equation}
+ \mathfrak c_m\le\Xi_m(\C).
+ \label{eq:block-capacity-contact-mass}
+\end{equation}
+Искомый контроль этой массы имеет естественную общую формулировку через
+Carleson-упаковку. Если \(\Delta_m>0\), пусть \(y_m\) — ближайшая точка
+\(\mathcal L_m^X(x,r)\), а \(n_m\) — её первый отделяющий уровень в
+блоке. Обозначим через \(\widehat{\mathfrak c}_m\) минимальную цену
+контактного разреза, отделяющего корневую компоненту уровня \(n_m\) от
+компоненты, содержащей \(y_m\). Последняя является \(X\)-содержащей,
+поэтому любой разрез, допустимый в определении
+\(\operatorname{cap}_{n_m,m}\), допустим и для этой задачи. Следовательно,
+\begin{equation}
+ \widehat{\mathfrak c}_m
+ \le\operatorname{cap}_{n_m,m}
+ \le\mathfrak c_m.
+ \label{eq:target-cut-block-bound}
+\end{equation}
+
+Для фильтрации Мандельброта берём \(Y_n=O_n\),
+\(P_n(c)=p_n(c)/2\), \(X=\M\). При выборе центров ячеек мера \(\Xi_m\)
+есть контактная мера блоковой сетки. Для блоков с
+\(\Delta_m>0\) и достаточно больших \(m\) имеем
+\begin{equation}
+ a_{c,r}\Delta_m\le
+ \operatorname{Mod}_{1,m}(\Gamma_m)
+ \le\widehat{\mathfrak c}_m
+ \le\mathfrak c_m
+ \le\Xi_m(\C)
+ \le B_{c,r} R_m\epsilon_m,
+\label{eq:mandelbrot-hypothesis-chain}
+\end{equation}
+где \(\epsilon_m=\epsilon_m(r)\). Первое неравенство — \(\mathsf{AM}\);
+второе следует из того, что каждый допустимый графовый разрез
+пересекает все пути из \(\Gamma_m\), а третье — из
+\eqref{eq:target-cut-block-bound}. Четвёртое есть
+\eqref{eq:block-capacity-contact-mass}, последнее — \(\mathsf{GC}\).
+Поэтому
+\[
+ \Delta_m\le a_{c,r}^{-1}\mathfrak c_m,\qquad
+ \mathfrak c_m\le B_{c,r}R_m\epsilon_m.
+\]
+При \(\Delta_m=0\) первая оценка тривиальна.
+В теореме~\ref{thm:abstract-summable-cut} берём
+\(A=a_{c,r}^{-1}\) и \(B=B_{c,r}\). Это именно её две количественные
+гипотезы; гипотезы
+\(\mathsf{AM}\) и \(\mathsf{GC}\), если они выполнены одновременно,
+завершают условный переход к факторизации.
+Суммируемость \(\epsilon_m\) доказана в
+предложении~\ref{prop:mandelbrot-green-block-scales}; открытыми
+остаются именно нижняя оценка модуля и Carleson-оценка полной
+контактной массы.
+
+\begin{definition}[Совместная гипотеза для факторизации]
+\label{def:factorization-open-hypotheses}
+Зафиксируем последовательности \((s_m)\), \((\lambda_m)\) из
+предложения~\ref{prop:mandelbrot-green-block-scales}. Для фиксированных
+\(c\in\partial\M\), \(r>0\) обозначим через \(\mathsf{AM}(c,r)\) и
+\(\mathsf{GC}(c,r)\) соответственно утверждения
+\begin{equation}
+ \begin{aligned}
+ \mathsf{AM}(c,r):\quad&
+ \exists a_{c,r}>0\ \exists m_A\in\{2,3,\ldots\}\
+ \forall m\ge m_A,\quad
+ \Delta_m>0\Longrightarrow
+ \operatorname{Mod}_{1,m}(\Gamma_m)\ge a_{c,r}\Delta_m,\\
+ \mathsf{GC}(c,r):\quad&
+ \exists B_{c,r}>0\ \exists m_G\in\{2,3,\ldots\}\
+ \forall m\ge m_G,\quad
+ R_m>0\ \land\
+ \Xi_m(\C)\le B_{c,r}R_m\epsilon_m.
+ \end{aligned}
+\end{equation}
+Глобальная гипотеза \(\mathsf H_{\M}\) означает, что для каждого
+\(c\in\partial\M\) и \(\varepsilon>0\) существует \(0<r<\varepsilon\),
+для которого одновременно выполнены \(\mathsf{AM}(c,r)\) и
+\(\mathsf{GC}(c,r)\). Для фиксированных блоковых масштабов
+\(\sum_m\epsilon_m(r)<\infty\).
+\end{definition}
+
+\section{Условная теорема о факторизации локальных компонент}
+\label{sec:remaining-factorization}
+
+В этом разделе \(\N=\{0,1,2,\ldots\}\), а
+\(\overline B(a,\rho):=\{z\in\C:|z-a|\le\rho\}\) обозначает замкнутый
+диск. Положим
+\[
+ K:=\overline B(0,2),\qquad f_c(z):=z^2+c,\qquad
+ p_0(c):=0,\qquad p_{j+1}(c):=p_j(c)^2+c,
+\]
+\[
+ \M:=\{c\in\C:\sup_{j\in\N}|p_j(c)|<\infty\},\qquad
+ O_N:=\{c\in K:p_j(c)\in K\text{ для }0\le j\le N\}.
+\]
+Это семейство множеств соответствует радиусу выхода \(2\):
+если \(|c|\le2\) и \(|z|>2\), то
+\(|f_c(z)|\ge|z|^2-2>|z|\); если \(|c|>2\), то начиная с
+\(|p_1(c)|=|c|\) имеем
+\(|p_{j+1}(c)|\ge|p_j(c)|^2-|c|\ge|p_j(c)|^2-|p_j(c)|>|p_j(c)|\).
+Поэтому \(\M=\bigcap_{N\in\N}O_N\). Из определения также следует
+вложенность \(O_L\subseteq O_N\) при \(L\ge N\).
+Подмножества \(\C\) рассматриваются с евклидовой подпространственной
+топологией. Для \(Y\subseteq\C\) через \(\pi_0(Y)\) обозначим множество
+его связных компонент, то есть максимальных связных подмножеств \(Y\).
+При \(c\in Y\) через \(\operatorname{Comp}_c(Y)\) обозначим компоненту,
+содержащую \(c\).
+Для \(c\in\M\), \(r>0\) и \(N\in\N\) положим
+\[
+ F_N(c,r):=O_N\cap\overline B(c,r),\qquad
+ C_N(c,r):=\operatorname{Comp}_c(F_N(c,r)).
+\]
+Иными словами, \(C_N(c,r)\) — связная компонента внешнего среза
+\(F_N(c,r)\), содержащая выделенную точку \(c\).
+Так как \(c\in\M=\bigcap_NO_N\), имеем \(c\in F_N(c,r)\), поэтому
+\(C_N(c,r)\) определена.
+Если \(L\ge N\) и \(0<\delta<r\), то
+\[
+ X_L(c,\delta):=O_L\cap\overline B(c,\delta)
+ \subseteq F_N(c,r).
+\]
+\noindent
+Будем называть \(F_N(c,r)\) локальным срезом внешнего приближения
+\(O_N\), а \(X_L(c,\delta)\) — вложенным срезом глубины \(L\).
+Обозначим через \(\iota_{L,N}^{c;\delta,r}:X_L(c,\delta)\hookrightarrow
+F_N(c,r)\) это включение. Оно задаёт отображение компонент
+\[
+ \varphi_{L,N}^{c;\delta,r}:=
+ \pi_0\!\left(\iota_{L,N}^{c;\delta,r}\right):
+ \pi_0\bigl(X_L(c,\delta)\bigr)\longrightarrow
+ \pi_0\bigl(F_N(c,r)\bigr),
+\]
+которое каждой компоненте вложенного среза ставит в соответствие
+единственную компоненту среза \(F_N(c,r)\), содержащую её.
+
+\begin{theorem}[Условная теорема о факторизации локальных компонент]
+\label{thm:remaining-component-factorization}
+Предположим, что для каждого \(c\in\partial\M\) и
+\(\varepsilon>0\) существуют общие \(0<r<\varepsilon\) и допустимые
+блочные данные, для которых одновременно выполнены открытые оценки
+\(\mathsf{AM}(c,r)\) и \(\mathsf{GC}(c,r)\) (совместная гипотеза
+\(\mathsf H_{\M}\)). Тогда для введённой системы внешних множеств
+\((O_N)\) выполнено условие \(\mathsf{UC}\), то есть
+\begin{equation}
+ \begin{gathered}
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists r,\delta\in\R,\quad 0<\delta<r<\varepsilon,\qquad\\
+ \forall N\in\N\ \exists L\in\N,\quad N\le L,\qquad
+ \forall A\in\pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr),\\
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r).
+ \end{gathered}
+ \label{eq:factorization-target}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Зафиксируем \(c\in\M\) и \(\varepsilon>0\). Если
+\(c\in\operatorname{int}\M\), выберем \(0<r<\varepsilon\) так, чтобы
+\(\overline B(c,r)\subseteq\M\), и положим \(\delta=r/2\). Тогда
+\(F_N(c,r)=\overline B(c,r)\) для всех \(N\), а
+\(O_N\cap\overline B(c,\delta)=\overline B(c,\delta)\); можно взять
+\(L=N\).
+
+Пусть теперь \(c\in\partial\M\).
+\begin{fuzzystep}
+\noindent\textbf{Используемые открытые оценки:}
+\(\mathsf{AM}(c,r)\) и \(\mathsf{GC}(c,r)\).
+Глобальное предположение теоремы обеспечивает общие \(r\), блочные
+данные и константы \(a_{c,r},B_{c,r}>0\), для которых они выполнены.
+Цепочка~\eqref{eq:mandelbrot-hypothesis-chain} даёт для всех
+достаточно больших \(m\)
+\[
+ \Delta_m\le a_{c,r}^{-1}\mathfrak c_m,\qquad
+ \mathfrak c_m\le B_{c,r}R_m(c,r)\epsilon_m.
+\]
+При \(\Delta_m=0\) первое неравенство тривиально. Кроме того,
+\(\sum_m\epsilon_m<\infty\) по
+предложению~\ref{prop:mandelbrot-green-block-scales}, \(R_m>0\)
+начиная с некоторого индекса по \(\mathsf{GC}\), а множества
+\(O_N\cap\overline B(c,r)\) имеют конечное число компонент по
+полуалгебраичности. Поэтому
+теорема~\ref{thm:abstract-summable-cut} применима с
+\(A=a_{c,r}^{-1}\), \(B=B_{c,r}\), \(Z=K\), \(X=\M\) и \(Y_N=O_N\).
+После отбрасывания конечного числа блоков она даёт \(0<\delta<r\) и
+для каждого \(N\) индекс \(L\ge N\), для которого
+\[
+ O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
+\]
+\end{fuzzystep}
+Следовательно, каждая компонента этого вложенного среза отображается
+в \(C_N(c,r)\), что и есть \eqref{eq:factorization-target}.
+\end{proof}
+
+\noindent\emph{Смысл формулировки.}
+Индекс \(N\) задаёт последний проверяемый член орбиты. При переходе
+от \(N\) к \(N+1\) добавляется условие \(p_{N+1}(c)\in K\), поэтому
+\(O_{N+1}=O_N\cap p_{N+1}^{-1}(K)\subseteq O_N\). С ростом \(N\)
+множества \(O_N\) уточняют конечные внешние приближения \(\M\).
+
+Для каждого \(c\in\M\) и \(\varepsilon>0\) выбираются общие для всех
+\(N\) радиусы \(0<\delta<r<\varepsilon\), а для каждого \(N\) —
+индекс \(L\ge N\). Обозначим
+\[
+ X_L:=X_L(c,\delta),\qquad F_N:=F_N(c,r).
+\]
+Вложенный срез включён в срез \(F_N\), поэтому каждая его компонента
+\(A\in\pi_0(X_L)\) содержится в единственной компоненте \(F_N\).
+Теорема утверждает, что при подходящем \(L\) эта компонента для каждого
+\(A\) равна \(C_N(c,r)\), то есть \(X_L\subseteq C_N(c,r)\).
+
+Срезы на рисунках представлены сеточными выборками.\footnote{Сеточная
+выборка \(E\subseteq\C\) —
+растр конечной прямоугольной сетки параметров \(c=x+iy\), в котором
+пиксель окрашен тогда и только тогда, когда соответствующий узел
+принадлежит \(E\).}
+Для конкретного примера выбрана граничная точка \(c_0=\frac14\) —
+острие главной кардиоиды \(\M\). Сколь угодно близко к \(c_0\) есть
+вещественные параметры вне \(\M\), поэтому здесь особенно важно
+проследить, как конечные внешние приближения уточняют локальную
+геометрию у границы.
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-critical-orbit.pdf}
+  \captionof{figure}{Критическая орбита при граничном параметре \(c_0=\frac14\).}
+  \label{fig:factorization-orbit}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \scriptsize
+  Для \(c_0=\frac14\) имеем \(p_0(c_0)=0\),
+  \(p_1(c_0)=\frac14\), \(p_2(c_0)=\frac5{16}\), а далее
+  \(p_{n+1}(c_0)=p_n(c_0)^2+\frac14\). Орбита возрастает к
+  параболической неподвижной точке \(\frac12\), поэтому все её члены
+  лежат в \(K=\overline B(0,2)\) и \(c_0\in\M\).
+  Для вещественного \(c>\frac14\) орбита строго возрастает; если бы она
+  была ограничена, её предел был бы вещественной неподвижной точкой
+  \(x^2+c=x\), которой при \(c>\frac14\) нет. Значит, такие \(c\) не
+  принадлежат \(\M\), и \(c_0\in\partial\M\).
+ \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-global-levels.pdf}
+  \captionof{figure}{Внешние приближения и окна у точки \(c_0=\frac14\in\partial\M\).}
+  \label{fig:factorization-global}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \scriptsize
+  На рис.~\ref{fig:factorization-global} взяты
+  \(0<\delta=\frac15<r=\frac25<\varepsilon=\frac12\), \(N=2\), \(L=20\).
+  Условие \(O_j\) проверяет орбиту до индекса \(j\), поэтому
+  \(\M\subseteq O_{20}\subseteq O_2\).
+  \[
+   \begin{aligned}
+    F_2&=O_2\cap\overline B(c_0,r),\\
+    X_{20}&=O_{20}\cap\overline B(c_0,\delta)\subseteq F_2.
+   \end{aligned}
+  \]
+  На фоне отдельно показаны слои \(O_2\setminus O_{20}\) и \(O_{20}\);
+  пунктиром выделена граница \(O_{20}\). Оранжевая заливка показывает не
+  всё \(O_{20}\), а только локальный срез \(X_{20}\).
+  Полупрозрачная голубая заливка выделяет \(F_2\), оранжевая — \(X_{20}\);
+  подписи нанесены прямо на них. Красная штриховая и
+  оранжевая точечная окружности ограничивают круги радиусов \(r\) и
+  \(\delta\). Включение \(X_{20}\hookrightarrow F_2\) задаёт отображение
+  \(\varphi_{20,2}^{c_0;\delta,r}\): каждая компонента \(X_{20}\)
+  относится к компоненте \(F_2\), содержащей её. Здесь это
+  \(C_2(c_0,r)\), как
+  показано на рис.~\ref{fig:factorization-target}.
+  Звезда отмечает граничный параметр \(c_0=\frac14\), центр обоих кругов.
+ \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-target.pdf}
+  \captionof{figure}{Срезы \(F_2\), \(X_{20}\) и граница \(O_{20}\) у граничной точки \(c_0=\frac14\).}
+  \label{fig:factorization-target}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \scriptsize
+  Для \(c=c_0+u=\frac14+u\), \(|u|\le\frac25\), имеем оценки
+  \[
+   |c|\le\frac{13}{20}<2,\qquad
+   |p_2(c)|=|c(c+1)|
+   \le\frac{13}{20}\cdot\frac{33}{20}
+   =\frac{429}{400}<2.
+  \]
+  Поэтому \(F_2=\overline B(c_0,\frac25)=C_2(c_0,\frac25)\).
+  На рис.~\ref{fig:factorization-target} синяя заливка показывает
+  сеточную выборку \(F_2\), оранжевая заливка и контур — срез \(X_{20}\),
+  а зелёный штрихпунктир — границу \(O_{20}\). Метка \(A\) указывает на
+  выбранную компоненту \(A\in\pi_0(X_{20})\), звезда — граничный
+  параметр \(c_0\).
+  В этом примере включение задаёт отображение компонент
+  \[
+   \begin{aligned}
+    X_{20}&\subseteq F_2=C_2(c_0,r),\\
+    \varphi_{20,2}^{c_0;\delta,r}&:
+       \pi_0(X_{20})\to\pi_0(F_2),\\
+    A&\longmapsto C_2(c_0,r).
+   \end{aligned}
+  \]
+  Это один численный случай условия \(\mathsf{UC}\): при \(N=2\)
+  выбран \(L=20\), а образом каждой компоненты вложенного среза служит
+  \(C_2(c_0,r)\).
+ \end{minipage}
+\end{figure}
+
+\noindent\emph{Геометрический смысл теоремы.}
+Рис.~\ref{fig:factorization-global} и~\ref{fig:factorization-target}
+показывают срезы \(X_{20}\subseteq F_2\) у граничной точки
+\(c_0=\frac14\) и выбранную компоненту \(A\in\pi_0(X_{20})\), которая
+содержится в \(C_2(c_0,r)\). Теорема
+распространяет это свойство на каждую компоненту \(X_L\) при достаточной
+глубине \(L\):
+\[
+ X_L(c,\delta)\subseteq C_N(c,r),\qquad
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)
+ \quad\text{для каждого }A\in\pi_0(X_L(c,\delta)).
+\]
+У среза \(X_L\) могут быть разные компоненты, и все они переходят в
+одну компоненту \(C_N(c,r)\). Поэтому
+\[
+ \operatorname{im}\varphi_{L,N}^{c;\delta,r}
+ =\{C_N(c,r)\}.
+\]
+На множестве компонент \(\pi_0(X_L(c,\delta))\) зададим отношение
+эквивалентности
+\[
+A\sim B
+\quad\Longleftrightarrow\quad
+\varphi_{L,N}^{c;\delta,r}(A)=\varphi_{L,N}^{c;\delta,r}(B).
+\]
+Фактор-множество \(\pi_0(X_L(c,\delta))/\sim\) состоит из классов
+компонент с одинаковым образом. Множество \(X_L(c,\delta)\) содержит
+\(c\), поэтому у него есть компонента \(A\). По теореме все компоненты
+эквивалентны, и фактор-множество состоит из одного класса:
+\[
+\pi_0(X_L(c,\delta))/\sim=\{[A]\}.
+\]
+Элементами фактор-множества служат классы связных компонент \(X_L\).
+На правой части рис.~\ref{fig:factorization-component-geometry}
+области \(A_0'\) и \(A_1'\) остаются раздельными; соотношение
+\(A_0'\sim A_1'\) означает, что их образы совпадают и обе компоненты
+входят в один класс \([A]\).
+\[
+\begin{aligned}
+ q &: \pi_0(X_L(c,\delta))\longrightarrow
+      \pi_0(X_L(c,\delta))/\sim,
+      &q(A)&=[A],\\
+ \bar\varphi_{L,N}^{c;\delta,r}&:
+      \pi_0(X_L(c,\delta))/\sim\longrightarrow\pi_0(F_N(c,r)),
+      &\bar\varphi_{L,N}^{c;\delta,r}([A])&=C_N(c,r),\\
+ \varphi_{L,N}^{c;\delta,r}&=\bar\varphi_{L,N}^{c;\delta,r}\circ q.
+\end{aligned}
+\]
+Таким образом, одноэлементный объект здесь — фактор-множество по
+\(\sim\); его единственный класс соответствует единственному значению
+\(\{C_N(c,r)\}\) отображения компонент.
+\(\mathcal R_N:=\pi_0(F_N(c,r))\setminus\{C_N(c,r)\}\) обозначает
+остальные компоненты \(F_N\).
+Для изображения ниже обозначим через \(D\in\mathcal R_N\) одну такую
+компоненту.
+Для наглядности рис.~\ref{fig:factorization-component-geometry}
+сравнивает промежуточную глубину \(\ell\) и достаточную глубину \(L\),
+где \(N\le\ell<L\). В изображённом случае срез \(X_\ell\) имеет
+компоненты \(A_0,A_1\subseteq C_N(c,r)\) и \(B\subseteq D\), где
+\(D\in\mathcal R_N\); поэтому
+\(\operatorname{im}\varphi_{\ell,N}^{c;\delta,r}=\{C_N(c,r),D\}\).
+Глубина \(L\) задаёт срез \(X_L\subseteq X_\ell\), в котором остаются
+компоненты \(A_0',A_1'\) внутри \(C_N(c,r)\). Поскольку \(D\) отделена
+от \(C_N(c,r)\), имеем \(B\cap X_L=\varnothing\), и
+\(\operatorname{im}\varphi_{L,N}^{c;\delta,r}=\{C_N(c,r)\}\).
+Так рисунок показывает, как дополнительное условие глубины сужает
+множество значений отображения. Число и форма изображённых компонент
+условны. Точка \(c\) на схеме расположена у края \(C_N(c,r)\), чтобы
+связать её с граничным численным примером выше; это расположение также
+схематично.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.96\textwidth]{docs/figures/factorization-component-geometry.pdf}
+ \captionof{figure}{Срезы \(X_\ell\supseteq X_L\): раздельные компоненты \(A_i'\) образуют класс \([A]\), соответствующий \(C_N(c,r)\).}
+ \label{fig:factorization-component-geometry}
+\end{figure}

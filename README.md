@@ -284,7 +284,9 @@ The repository contains no proof of $\mathrm{FC}$.
 ### Uniform geometric reduction
 
 [Proof document (PDF)](docs/uniform_geometric_mlc.pdf) ·
-[LaTeX source](docs/uniform_geometric_mlc.tex).
+[LaTeX master source](docs/uniform_geometric_mlc.tex) ·
+[chapter sources](docs/chapters/) ·
+[approximation chapter](docs/chapters/06_approximation_theorem.tex).
 
 Let $D=[-2,2]+i[-2,2]$. The hypothesis $\mathrm{UG}$ asserts the
 existence of continuous maps $R_n:D\to D$ and integers $N_n\ge n$ such that
