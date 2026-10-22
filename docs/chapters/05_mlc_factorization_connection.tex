@@ -1,53 +1,52 @@
-\chapter{Связь MLC и леммы о факторизации}
-\noindent В главе устанавливается, что равномерная факторизация локальных компонент эквивалентна локальной связности множества Мандельброта. Компактностная редукция сводит конечное включение к отсутствию «плохих» точек в предельном множестве; обратное направление строит связную окрестность как пересечение вложенных компактных компонент. Тем самым условие равномерной факторизации является точным критерием MLC.
+\chapter{The Connection between MLC and the Factorization Lemma}
+\noindent This chapter establishes that uniform factorization of local components is equivalent to local connectivity of the Mandelbrot set. A compactness reduction turns the finite-level inclusion into the absence of “bad” points in the limit set; the converse constructs a connected neighborhood as an intersection of nested compact components. Thus uniform factorization is an exact criterion for MLC.
 
-\section{Компактностная редукция факторизации}
+\section{Compactness Reduction for Factorization}
 \label{sec:factorization-compactness-reduction}
 
-Для последующего сравнения предельного множества с конечными
-приближениями зафиксируем $c\in\M$, $0<\delta<r$ и $N\in\N$ и
-положим
+For later comparison of the limit set with the finite approximations,
+fix \(c\in\M\), \(0<\delta<r\), and \(N\in\N\), and set
 \begin{equation}
  \label{eq:factorization-local-data}
  F_N(c,r):=O_N\cap\overline B(c,r),\qquad
  \mathcal B_N(c;r,\delta):=
  \bigl(F_N(c,r)\setminus C_N(c,r)\bigr)\cap\overline B(c,\delta).
 \end{equation}
-Множество $F_N(c,r)$ компактно и полуалгебраично. Поэтому оно имеет
-конечное число компонент, каждая из которых компактна, и
-$\mathcal B_N(c;r,\delta)$ компактно.
+The set \(F_N(c,r)\) is compact and semialgebraic. It therefore has
+finitely many components, each compact, and
+\(\mathcal B_N(c;r,\delta)\) is compact.
 
-\begin{proposition}[Компактностное сведение факторизации]
+\begin{proposition}[Compactness Reduction for Factorization]
 \label{prop:factorization-compactness-reduction}
-Для фиксированных $c\in\M$, $0<\delta<r$ и $N\in\N$ эквивалентны
-условия
+For fixed \(c\in\M\), \(0<\delta<r\), and \(N\in\N\), the following
+conditions are equivalent:
 \begin{equation}
  \label{eq:factorization-finite-inclusion}
  \exists L\ge N,\qquad
  O_L\cap\overline B(c,\delta)\subseteq C_N(c,r)
 \end{equation}
-и
+and
 \begin{equation}
  \label{eq:no-bad-limit}
  \mathcal B_N(c;r,\delta)\cap\M=\varnothing.
 \end{equation}
 \end{proposition}
 \begin{proof}
-Из~\eqref{eq:factorization-finite-inclusion} и $\M\subseteq O_L$
-следует~\eqref{eq:no-bad-limit}. Обратно, если
-$\mathcal B_N(c;r,\delta)\cap\M=\varnothing$, вложенные компактные
-множества $\mathcal B_N(c;r,\delta)\cap O_L$, $L\ge N$, не могут быть
-все непустыми: их пересечение равно
-$\mathcal B_N(c;r,\delta)\cap\M$. Для некоторого $L\ge N$ поэтому
-$\mathcal B_N(c;r,\delta)\cap O_L=\varnothing$. Из $O_L\subseteq O_N$
-и $\delta<r$ следует~\eqref{eq:factorization-finite-inclusion}.
+The inclusion~\eqref{eq:factorization-finite-inclusion} and
+\(\M\subseteq O_L\) imply~\eqref{eq:no-bad-limit}. Conversely, suppose
+\(\mathcal B_N(c;r,\delta)\cap\M=\varnothing\). The nested compact sets
+\(\mathcal B_N(c;r,\delta)\cap O_L\), \(L\ge N\), cannot all be
+nonempty: their intersection is
+\(\mathcal B_N(c;r,\delta)\cap\M\). Thus for some \(L\ge N\),
+\(\mathcal B_N(c;r,\delta)\cap O_L=\varnothing\). Since
+\(O_L\subseteq O_N\) and \(\delta<r\), this gives
+\eqref{eq:factorization-finite-inclusion}.
 \end{proof}
 
-\section{Равномерный контроль компонент и локальная связность}
+\section{Uniform Component Control and Local Connectivity}
 
-Обозначим через \(\operatorname{Disc}(S)\) дискретную категорию с
-множеством объектов \(S\). Для фиксированных \(c\in\M\) и
-\(0<\delta<r\) положим
+Let \(\operatorname{Disc}(S)\) denote the discrete category with object
+set \(S\). For fixed \(c\in\M\) and \(0<\delta<r\), set
 \[
  \mathbf P_L(c,\delta):=
  \operatorname{Disc}\bigl(\pi_0(O_L\cap\overline B(c,\delta))\bigr),
@@ -55,147 +54,182 @@ $\mathcal B_N(c;r,\delta)\cap O_L=\varnothing$. Из $O_L\subseteq O_N$
  \mathbf C_N(c,r):=
  \operatorname{Disc}\bigl(\pi_0(O_N\cap\overline B(c,r))\bigr).
 \]
-При \(L\ge N\) включение
+For \(L\ge N\), the inclusion
 \[
  O_L\cap\overline B(c,\delta)
  \subseteq O_N\cap\overline B(c,r)
 \]
-переводит каждую компоненту связности левой части в единственную
-компоненту правой части и задаёт функтор
+sends each connected component of the left-hand set to the unique
+component of the right-hand set that contains it, and defines a functor
 \[
  F_{L,N}^{c;\delta,r}:
  \mathbf P_L(c,\delta)\longrightarrow\mathbf C_N(c,r).
 \]
-Включения при уточнении уровней также задают функторы
+The inclusions at successive levels also define functors
 \[
  u_{L+1,L}:\mathbf P_{L+1}(c,\delta)\to\mathbf P_L(c,\delta),
 \qquad
  v_{N+1,N}:\mathbf C_{N+1}(c,r)\to\mathbf C_N(c,r).
 \]
-Для \(L\ge N\) они удовлетворяют равенству
+For \(L\ge N\), they satisfy the identity
 \[
  v_{N+1,N}\circ F_{L+1,N+1}^{c;\delta,r}
  =
  F_{L,N}^{c;\delta,r}\circ u_{L+1,L}.
 \]
-Равенство следует из того, что оба функториальных перехода посылают
-компоненту более глубокого уровня в компоненту более грубого уровня,
-содержащую её.
+This identity holds because both composites send a component at the
+deeper level to the component at the coarser level that contains it.
 
-Определим функторы реализации
+Define realization functors
 \[
  \mathcal Y_L:\mathbf P_L(c,\delta)\to\mathbf{CompHaus},
  \qquad
  \mathcal X_N:\mathbf C_N(c,r)\to\mathbf{CompHaus}
 \]
-отображением каждого объекта в соответствующую компактную компоненту;
-компоненты компактных множеств замкнуты и потому компактны.
-Включения компонент задают естественные преобразования
+by sending each object to its corresponding compact component;
+components of compact sets are closed and hence compact. Inclusions of
+components define natural transformations
 \[
  \mathcal Y_{L+1}\Rightarrow\mathcal Y_L\circ u_{L+1,L},\qquad
  \mathcal X_{N+1}\Rightarrow\mathcal X_N\circ v_{N+1,N},\qquad
  \mathcal Y_L\Rightarrow\mathcal X_N\circ F_{L,N}^{c;\delta,r}.
 \]
 
-Компонента \(C_N(c,r)\), содержащая \(c\), является выделенным объектом
-\(\mathbf C_N(c,r)\). Условие \(\mathsf{UC}\) равносильно требованию,
-чтобы для выбранных \(r,\delta\) при каждом \(N\) существовал \(L\ge N\),
-для которого
+The component \(C_N(c,r)\) containing \(c\) is a distinguished object
+of \(\mathbf C_N(c,r)\). Condition \(\mathsf{UC}\) is equivalent to
+requiring that, for the chosen \(r,\delta\), for every \(N\) there be
+some \(L\ge N\) such that
 \begin{equation}
  \forall A\in\pi_0(O_L\cap\overline B(c,\delta)),\qquad
  F_{L,N}^{c;\delta,r}(A)=C_N(c,r).
  \label{eq:component-functor-factorization}
 \end{equation}
-Иными словами, функтор от категории более глубоких локальных компонент
-должен факторизоваться через полную подкатегорию, состоящую из одного
-выделенного объекта. Коммутативность переходных функторов следует из
-вложенности множеств; факторизация~\eqref{eq:component-functor-factorization}
-есть дополнительное геометрическое утверждение.
+Equivalently, the functor from the category of deeper local components
+must factor through the full subcategory on the single distinguished
+object. Commutativity of the transition functors follows from the set
+inclusions; the factorization in
+\eqref{eq:component-functor-factorization} is the additional geometric
+assertion.
 
-\begin{theorem}[Эквивалентность равномерного контроля компонент и локальной связности]
+\begin{theorem}[Uniform Component Control Is Equivalent to Local Connectivity]
 \label{thm:uniform-component-control}
 \[
- \mathsf{UC}\Longleftrightarrow\LC(\M).
+ \mathsf{UC}\leftrightarrow\LC(\M).
 \]
 \end{theorem}
 \begin{proof}
-Сначала предположим \(\LC(\M)\). Зафиксируем \(c\in\M\) и
-\(\varepsilon>0\). Локальная связность даёт связную окрестность \(V\) точки \(c\),
-открытую в \(\M\), для которой
+First suppose \(\LC(\M)\). Fix \(c\in\M\) and \(\varepsilon>0\).
+Local connectivity gives a connected neighborhood \(V\) of \(c\), open
+in \(\M\), such that
 \[
  c\in V\subseteq \M\cap B(c,\varepsilon/2).
 \]
-Так как \(V\) открыто в \(\M\), существует \(d>0\) такое, что
-\(\M\cap B(c,d)\subseteq V\). Положим
+Since \(V\) is open in \(\M\), there is \(d>0\) such that
+\(\M\cap B(c,d)\subseteq V\). Set
 \[
  \delta:=\min\{d/2,\varepsilon/4\},\qquad r:=3\varepsilon/4,
  \qquad W:=\overline V^{\,\M}.
 \]
-Тогда \(0<\delta<r<\varepsilon\),
-\(\M\cap\overline B(c,\delta)\subseteq V\), а \(W\) компактно и
-связно, содержит \(c\) и лежит в
-\(\M\cap\overline B(c,\varepsilon/2)\subseteq
-\overline B(c,r)\). Поэтому \(W\subseteq C_N(c,r)\) для каждого
-\(N\): это связное подмножество \(F_N(c,r)\), содержащее \(c\).
-В частности,
+Then \(0<\delta<r<\varepsilon\),
+\(\M\cap\overline B(c,\delta)\subseteq V\), and \(W\) is compact and
+connected, contains \(c\), and lies in
+\(\M\cap\overline B(c,\varepsilon/2)\subseteq\overline B(c,r)\).
+Therefore \(W\subseteq C_N(c,r)\) for every \(N\), since it is a
+connected subset of \(F_N(c,r)\) containing \(c\). In particular,
 \[
  \mathcal B_N(c;r,\delta)\cap\M=\varnothing
  \qquad(N\in\N).
 \]
-Предложение~\ref{prop:factorization-compactness-reduction} даёт для
-каждого \(N\) индекс \(L\ge N\), для которого
+Proposition~\ref{prop:factorization-compactness-reduction} gives, for
+each \(N\), an index \(L\ge N\) such that
 \[
  O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
 \]
-Значит, выполнено \(\mathsf{UC}\).
+Thus \(\mathsf{UC}\) holds.
 
-Теперь предположим \(\mathsf{UC}\). Зафиксируем \(c\in\M\) и
-относительную открытую окрестность \(U\) точки \(c\) в \(\M\).
-Выберем \(\varepsilon>0\) так, чтобы
-\(\M\cap B(c,\varepsilon)\subseteq U\), и применим
-\eqref{eq:uniform-component-control}. Положим
+Now suppose \(\mathsf{UC}\). Fix \(c\in\M\) and a relatively open
+neighborhood \(U\) of \(c\) in \(\M\). Choose \(\varepsilon>0\) such
+that \(\M\cap B(c,\varepsilon)\subseteq U\), apply
+\eqref{eq:uniform-component-control}, and set
 \[
  C:=\bigcap_{N\in\N}C_N(c,r).
 \]
-Из \(O_{N+1}\subseteq O_N\) следует
-\(C_{N+1}(c,r)\subseteq C_N(c,r)\). Множество
-\(O_N\cap\overline B(c,r)\) компактно; его компонента \(C_N(c,r)\)
-замкнута, поэтому компактна, связна и содержит \(c\). Теорема о
-пересечении убывающей последовательности непустых компактных связных
-множеств показывает, что \(C\) непусто, компактно и связно.
-Кроме того, \(C\subseteq\bigcap_NO_N=\M\) и
-\(C\subseteq\overline B(c,r)\).
+Since \(O_{N+1}\subseteq O_N\), we have
+\(C_{N+1}(c,r)\subseteq C_N(c,r)\). The set
+\(O_N\cap\overline B(c,r)\) is compact; its component \(C_N(c,r)\) is
+closed, hence compact and connected, and contains \(c\). The theorem
+on intersections of decreasing nonempty compact connected sets shows
+that \(C\) is nonempty, compact, and connected. Moreover,
+\(C\subseteq\bigcap_NO_N=\M\) and \(C\subseteq\overline B(c,r)\).
 
-Пусть \(y\in\M\cap\overline B(c,\delta)\). Для каждого \(N\) условие
-\eqref{eq:uniform-component-control} даёт \(L\ge N\) с
+Let \(y\in\M\cap\overline B(c,\delta)\). For each \(N\),
+\eqref{eq:uniform-component-control} gives \(L\ge N\) such that
 \[
  O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
 \]
-Так как \(y\in\M\subseteq O_L\), имеем \(y\in C_N(c,r)\). Это верно
-для каждого \(N\), следовательно,
-\(\M\cap\overline B(c,\delta)\subseteq C\). Итак,
+Since \(y\in\M\subseteq O_L\), we have \(y\in C_N(c,r)\). This holds
+for every \(N\), so
+\(\M\cap\overline B(c,\delta)\subseteq C\). Hence
 \[
  c\in\M\cap B(c,\delta)\subseteq C
  \subseteq\M\cap\overline B(c,r)
  \subseteq\M\cap B(c,\varepsilon)\subseteq U.
 \]
-Значит, \(C\) — связная окрестность \(c\), содержащаяся в \(U\).
-Поскольку \(c\) и \(U\) произвольны, \(\M\) локально связно.
+Thus \(C\) is a connected neighborhood of \(c\) contained in \(U\).
+Since \(c\) and \(U\) were arbitrary, \(\M\) is locally connected.
 \end{proof}
 
-Таким образом, реализация выделенных объектов вместе с функториальными
-вложениями даёт связное множество
-\(\bigcap_N C_N(c,r)\subseteq\M\). Факторизация
-\eqref{eq:component-functor-factorization} обеспечивает, что это
-множество содержит \(\M\cap\overline B(c,\delta)\), то есть является
-окрестностью \(c\) в \(\M\). После этого предложение
-\ref{prop:equicontinuous-selection} даёт последовательность отображений
-с общим модулем непрерывности.
+Thus, realizing the distinguished objects together with the functorial
+inclusions gives the connected set
+\(\bigcap_N C_N(c,r)\subseteq\M\). Factorization
+\eqref{eq:component-functor-factorization} ensures that this set
+contains \(\M\cap\overline B(c,\delta)\), so it is a neighborhood of
+\(c\) in \(\M\). Proposition~\ref{prop:equicontinuous-selection} then
+gives a sequence of maps with a common modulus of continuity.
 
-В частности, \(\mathsf{UC}\) влечёт \(\mathsf{EA}\) по
-предложению~\ref{prop:equicontinuous-selection}, а значит, по
-предложению~\ref{prop:diagonal-finite-scale} даёт требуемые конечные
-оценки осцилляции при сколь угодно больших уровнях. Для конкретных
-внешних множеств \(O_N\) завершение маршрута требует геометрической
-факторизации~\eqref{eq:component-functor-factorization}; естественность
-функторов задаёт согласованность переходов между уровнями.
+In particular, \(\mathsf{UC}\) implies \(\mathsf{EA}\) by
+Proposition~\ref{prop:equicontinuous-selection}, and hence, by
+Proposition~\ref{prop:diagonal-finite-scale}, gives the required finite
+oscillation estimates at arbitrarily large levels. For the specific
+outer sets \(O_N\), completing this route requires the geometric
+factorization~\eqref{eq:component-functor-factorization}; naturality of
+the functors expresses compatibility of the transitions between levels.
+
+\section{Status of the Categorical Route in Lean}
+
+The component categories and realization functors in this chapter are
+not yet formalized in Lean. In particular, the present development does
+not contain the component-set functors
+\(\mathbf P_L(c,\delta)\to\mathbf C_N(c,r)\), their realizations in
+\(\mathbf{CompHaus}\), or a Lean proof of the factorization
+\eqref{eq:component-functor-factorization}. The AM and GC estimates and
+their implication to this factorization are also not formalized.
+
+The current Lean development formalizes related interfaces, but not
+this proof route:
+\begin{itemize}
+  \item \texttt{MLC.Categorical.Approximation} is the over-category of
+  the parameter plane, and \texttt{MLC.Categorical.ApproximationTower}
+  is the type of inverse diagrams in that over-category.
+  \texttt{MLC.Categorical.Mandelbrot.outerOrbitApproximationTower}
+  packages the finite-orbit outer approximations as such a diagram.
+  The set-level intersection theorem has not yet been identified with
+  the generic categorical limit object.
+  \item \texttt{MLC.Categorical.MLCConjecture} states local
+  connectedness of the Mandelbrot object in \texttt{TopCat}.
+  \texttt{MLC.Categorical.categorical\_mlc\_conjecture} proves this
+  target from \texttt{MLC.RootInput}, whose mathematical content is
+  \texttt{MLC.ParameterComponent.\allowbreak MandelbrotUniformOuterBuffer}. This
+  is an explicit theorem hypothesis, not a project axiom.
+  \item A separate conditional route:
+  \texttt{MLC.UniformGeometry.}\\
+  \texttt{mandelbrot\_locallyConnected\_of\_squareTower}
+  derives local connectedness from an orbit-retraction tower. Existence
+  of such a tower is not established, and this route is distinct from
+  the AM/GC factorization argument.
+\end{itemize}
+
+Thus the categorical language in this document provides a precise
+mathematical organization of the proposed component argument, while
+Lean currently formalizes the topological target and conditional
+interfaces rather than the AM/GC proof itself.

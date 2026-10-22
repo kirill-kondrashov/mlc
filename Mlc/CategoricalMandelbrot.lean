@@ -276,6 +276,21 @@ theorem outerOrbitApproximation_step (N : ℕ) :
     Nonempty (outerOrbitApproximation (N + 1) ⟶ outerOrbitApproximation N) :=
   ⟨ofSetHom (outerOrbitSet_antitone (Nat.le_succ N))⟩
 
+/-- The finite-orbit outer approximations as an inverse diagram in the
+    over-category of the parameter plane. -/
+def outerOrbitApproximationTower : ApproximationTower where
+  obj n := outerOrbitApproximation n.unop
+  map {n m} f :=
+    ofSetHom (outerOrbitSet_antitone (CategoryTheory.le_of_op_hom f))
+  map_id := by
+    intro n
+    apply Over.OverMorphism.ext
+    rfl
+  map_comp := by
+    intro n m k f g
+    apply Over.OverMorphism.ext
+    rfl
+
 /-- The topological boundary of the Mandelbrot set. -/
 def boundary : Set ℂ :=
   frontier set

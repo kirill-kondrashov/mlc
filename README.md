@@ -288,6 +288,49 @@ The repository contains no proof of $\mathrm{FC}$.
 [chapter sources](docs/chapters/) ·
 [approximation chapter](docs/chapters/06_approximation_theorem.tex).
 
+The linked master is the canonical English source for the six-chapter
+proof document. The approximation chapter proves the finite and
+sequential approximation statements and characterizes equicontinuous
+approximation by MLC.
+
+The AM/GC argument is conditional in the theorem-proving sense: the
+factorization theorem assumes the joint hypothesis `H_M`. This says
+that, for every boundary parameter `c` and every scale `epsilon`, there
+is a radius `r < epsilon` shared by `AM(c, r)` and `GC(c, r)`, together
+with admissible block data for which both estimates hold. The theorem
+then proves uniform component control (`UC`); it does not prove `H_M`.
+Chapter 5 proves `UC` equivalent to MLC, so proving `H_M` would imply
+MLC.
+
+Here “factorization” has a specific component-theoretic meaning. In the
+conclusion, `c` may be any point of the Mandelbrot set; interior points
+are handled directly, and AM/GC are used only for boundary points.
+Given radii `0 < delta < r` and levels `L >= N`, set
+`X_L = O_L intersect closed_ball(c, delta)` and
+`F_N = O_N intersect closed_ball(c, r)`. Inclusion induces a map from
+the connected components of `X_L` to those of `F_N`. The theorem says
+that, for each `N`, some sufficiently large `L` makes every component
+map to the distinguished component `C_N(c, r)` containing `c`;
+equivalently, `X_L` is contained in `C_N(c, r)`. In the categorical
+formulation, this map factors through the one-object subcategory on
+`C_N(c, r)`. The chapter's auxiliary relation `A ~ B` means that two
+components of `X_L` have the same image under this map; its quotient
+records the map's fibers and is a singleton under the theorem. It is
+not a relation on parameters or an extra hypothesis.
+
+The AM/GC estimates, component categories, and factorization argument
+are not currently formalized in Lean.
+
+The Lean categorical development is related but does not formalize that
+analytic route. `MLC.Categorical.Approximation` is the over-category of
+the parameter plane, and
+`MLC.Categorical.Mandelbrot.outerOrbitApproximationTower` packages the
+finite-orbit outer approximations as an inverse diagram. The generic
+categorical limit has not yet been identified with the set-level
+intersection theorem. The categorical MLC target is instead proved from
+the explicit `MLC.RootInput` hypothesis; this is a separate conditional
+interface, not a project axiom and not a proof of the AM/GC estimates.
+
 Let $D=[-2,2]+i[-2,2]$. The hypothesis $\mathrm{UG}$ asserts the
 existence of continuous maps $R_n:D\to D$ and integers $N_n\ge n$ such that
 

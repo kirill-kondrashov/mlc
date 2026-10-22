@@ -1,34 +1,33 @@
-\chapter{Теорема об аппроксимации и связь с эквивалентными MLC утверждениями}
+\chapter{The Approximation Theorem and Its Relation to Equivalent MLC Statements}
 \label{ch:approximation}
-\noindent В главе строятся отображения, фиксирующие всё более глубокие конечные внешние приближения множества Мандельброта и сходящиеся к нему по расстоянию Хаусдорфа; отсюда следуют существование аппроксимаций на каждом масштабе и подходящей последовательности без предположения MLC. Затем доказывается более сильная эквивалентность: равностепенная аппроксимация с общим модулем непрерывности существует тогда и только тогда, когда выполнена MLC. Доказательство использует внешнее конформное отображение, ретракции на Green-подуровни и компактность семейств отображений.
+\noindent This chapter constructs maps that fix increasingly deep finite outer approximations to the Mandelbrot set and converge to it in Hausdorff distance. This yields approximations at every scale and a suitable sequence without assuming MLC. It then proves a stronger equivalence: equicontinuous approximation with a common modulus of continuity holds if and only if MLC holds. The proof uses the external conformal map, retractions onto Green sublevel sets, and compactness of families of maps.
 
-\section{Формулировка теоремы об аппроксимации}
+\section{Statement of the Approximation Theorem}
 \label{sec:approximation-statement}
 
-\noindent\emph{Роль результата.} Теорема сохранена как самостоятельное
-утверждение о конечных внешних приближениях: она даёт
-\(\mathsf{Fin}\) и \(\mathsf{EA}_{\mathrm{seq}}\) в
-\eqref{eq:main-discrepancy}. Построенные отображения \(T_n\) не
-используются в \(\mathsf{AM}\)-редукции, \(\mathsf{GC}\)-редукции или
-условном переходе от \(\mathsf H_{\M}\) к факторизации; в редукциях
-используется лишь диадическая сетка, построенная в этой главе.
+\noindent\emph{Role of the result.} The theorem is retained as an
+independent result about finite outer approximations: it establishes
+\(\mathsf{Fin}\) and \(\mathsf{EA}_{\mathrm{seq}}\) in
+\eqref{eq:main-discrepancy}. The constructed maps \(T_n\) are not used
+in the \(\mathsf{AM}\) or \(\mathsf{GC}\) reductions, nor in the
+conditional implication from \(\mathsf H_{\M}\) to factorization; those
+reductions use only the dyadic grid constructed in this chapter.
 
-Обозначим через \(\mathbf{CompHaus}\) категорию компактных
-хаусдорфовых пространств и непрерывных отображений. Для компактных
-хаусдорфовых \(X,Y\) положим
+Let \(\mathbf{CompHaus}\) denote the category of compact Hausdorff
+spaces and continuous maps. For compact Hausdorff spaces \(X,Y\), set
 \[
  \operatorname{Hom}(X,Y):=C(X,Y).
 \]
-Если \(Y\) снабжено метрикой, пространство морфизмов наделим
-равномерной метрикой. Пусть \(\mathbf N\) — категория, соответствующая
-частично упорядоченному множеству натуральных чисел. Вложения
-\(\iota_N:O_N\hookrightarrow\D\) задают обратную систему
-\(\mathcal O:\mathbf N^{\mathrm{op}}\to\mathbf{CompHaus}\);
-в шаге~1 её предел отождествляется с \(\M\).
+If \(Y\) is metrized, equip the morphism space with the uniform metric.
+Let \(\mathbf N\) be the category associated with the partially ordered
+set of natural numbers. The inclusions \(\iota_N:O_N\hookrightarrow\D\)
+define an inverse system
+\(\mathcal O:\mathbf N^{\mathrm{op}}\to\mathbf{CompHaus}\); Step~1
+identifies its limit with \(\M\).
 
-\begin{approxthm}[Последовательность эндоморфизмов, фиксирующих уровни]
-Существуют \(\lambda=(\lambda_n)_{n\in\N}\in\N^\N\) и непрерывные
-отображения \(T_n:\D\to\D\), \(n\in\N\), для которых
+\begin{approxthm}[A Sequence of Endomorphisms Fixing Successive Levels]
+There exist \(\lambda=(\lambda_n)_{n\in\N}\in\N^\N\) and continuous
+maps \(T_n:\D\to\D\), \(n\in\N\), such that
 \begin{gather}
  \lambda_0=0,\qquad\lambda_1=1,\qquad
  \forall n\in\N,\quad \lambda_n\ge n,\quad
@@ -52,12 +51,12 @@
 \end{gather}
 \end{approxthm}
 
-\section{Доказательство теоремы об аппроксимации}
+\section{Proof of the Approximation Theorem}
 \label{sec:approximation-proof}
 
-\subsection{Шаг 1. Представить конечные орбитальные ограничения компактными объектами.}
+\subsection{Step 1. Realize Finite Orbit Constraints as Compact Objects}
 
-\begin{lemma}[Описание \(\M\) через множества \(O_N\)]
+\begin{lemma}[Description of \(\M\) by the Sets \(O_N\)]
 \label{lem:outer-sets}
 \begin{gather}
  \M=\{c\in\C:\forall n\in\N,\ |p_n(c)|\le2\},\label{eq:escape}\\
@@ -66,69 +65,64 @@
  \varprojlim_{\mathbf N^{\mathrm{op}}}\mathcal O
        \cong\M.\label{eq:outer-limit}
 \end{gather}
-Множества \(\M,O_N,K,\D\) компактны и замкнуты, а \(\D\) выпукло.
-Переходные морфизмы \(\mathcal O\) — это вложения
+The sets \(\M,O_N,K,\D\) are compact and closed, and \(\D\) is convex.
+The transition morphisms in \(\mathcal O\) are the inclusions
 \(\iota_{N+1,N}:O_{N+1}\hookrightarrow O_N\).
 \end{lemma}
 \begin{proof}
-Пусть \(q:=|p_n(c)|>2\) и \(|c|\le q\). Индукцией получаем
+Suppose \(q:=|p_n(c)|>2\) and \(|c|\le q\). Induction gives
 \[
  |p_{n+j}(c)|\ge q(q-1)^j\qquad(j\in\N).
 \]
-На индукционном шаге, если \(r:=|p_{n+j}(c)|\ge q\), то
+For the induction step, if \(r:=|p_{n+j}(c)|\ge q\), then
 \[
  |p_{n+j+1}(c)|
  \ge r^2-|c|
  \ge r^2-r
  \ge(q-1)r.
 \]
-Следовательно, модуль орбитальных точек принимает сколь угодно
-большие значения. Если \(|c|>2\), берём \(n=1\) и
-\(q=|p_1(c)|=|c|\). Если \(|c|\le2\) и некоторый член орбиты имеет
-модуль больше двух, берём его в качестве \(q\). Это доказывает одно
-направление равенства \eqref{eq:escape}; обратное следует из
-определения ограниченности с \(B=2\).
+Thus the orbit is unbounded. If \(|c|>2\), take \(n=1\) and
+\(q=|p_1(c)|=|c|\). If \(|c|\le2\) and some orbit iterate has modulus
+greater than \(2\), use it as \(q\). This proves one direction of
+\eqref{eq:escape}; the converse follows from boundedness with \(B=2\).
 
-Каждое \(p_j\) непрерывно, поэтому \(p_j^{-1}(K)\) замкнуто.
-Следовательно, \(O_N\) замкнуто в компактном \(K\). Из равенств
-\(p_0(c)=0\) и \(p_1(c)=c\) следует
-\(O_{N+1}\subseteq O_N\subseteq K\). Равенство~\eqref{eq:escape}
-даёт \(\M\subseteq O_N\) и
+Each \(p_j\) is continuous, so \(p_j^{-1}(K)\) is closed. Hence \(O_N\)
+is closed in the compact set \(K\). Since \(p_0(c)=0\) and \(p_1(c)=c\),
+we have \(O_{N+1}\subseteq O_N\subseteq K\). Equation~\eqref{eq:escape}
+gives \(\M\subseteq O_N\) and
 \[
  \bigcap_{N\in\N}O_N
  =K\cap\bigcap_{j\in\N}p_j^{-1}(K)=\M.
 \]
-Последнее равенство также показывает, что \(\M\) замкнуто в \(K\),
-а значит, компактно. Наконец, \(K\subseteq\D\), где \(\D\) —
-замкнутый ограниченный выпуклый квадрат. Пусть \(X\) — компактное хаусдорфово пространство и
-\(u_N:X\to O_N\) — отображения, удовлетворяющие
-\(\forall N,\ \iota_{N+1,N}\circ u_{N+1}=u_N\). Тогда композиции
-\(\iota_N\circ u_N:X\to\D\) совпадают. Их общий
-образ лежит в \(\bigcap_NO_N=\M\), поэтому они единственным образом
-факторизуются через вложение \(\M\hookrightarrow\D\). Это и есть
-универсальное свойство в \(\mathbf{CompHaus}\), утверждаемое в
-\eqref{eq:outer-limit}.
+The same equality shows that \(\M\) is closed in \(K\), hence compact.
+Finally, \(K\subseteq\D\), where \(\D\) is a closed, bounded, convex
+square. Let \(X\) be a compact Hausdorff space and let
+\(u_N:X\to O_N\) be maps satisfying
+\(\forall N,\ \iota_{N+1,N}\circ u_{N+1}=u_N\). Then the composites
+\(\iota_N\circ u_N:X\to\D\) all agree. Their common image lies in
+\(\bigcap_NO_N=\M\), so they factor uniquely through the inclusion
+\(\M\hookrightarrow\D\). This is the universal property in
+\(\mathbf{CompHaus}\) asserted in~\eqref{eq:outer-limit}.
 \end{proof}
 
-\subsection{Шаг 2. Доказать сходимость в пространстве компактных подмножеств.}
+\subsection{Step 2. Prove Convergence in the Space of Compact Subsets}
 
-\begin{definition}[Расстояние Хаусдорфа до множества \(\M\)]
+\begin{definition}[Hausdorff Distance to \(\M\)]
 \label{def:outer-distance}
-Пусть \(\mathcal K(K)\) — пространство непустых компактных
-подмножеств \(K\) с метрикой Хаусдорфа.
-Для \(N\in\N\) положим
+Let \(\mathcal K(K)\) be the space of nonempty compact subsets of \(K\)
+with the Hausdorff metric. For \(N\in\N\), set
 \[
  h_N:=\dH(O_N,\M)
      =\sup_{z\in O_N}\dist(z,\M).
 \]
-Последовательность \((O_N)\) сходится в \(\mathcal K(K)\) к \(\M\).
+The sequence \((O_N)\) converges to \(\M\) in \(\mathcal K(K)\).
 \end{definition}
 
-\begin{theorem}[Сходимость расстояния Хаусдорфа]\label{thm:outer-distance}
+\begin{theorem}[Convergence in Hausdorff Distance]\label{thm:outer-distance}
 \[
  0\le h_{N+1}\le h_N,\qquad \lim_{N\to\infty}h_N=0.
 \]
-Определим
+Define
 \begin{gather}
  \ell_0:=0,\qquad\ell_1:=1,\qquad
  \ell_n:=\min\{N\in\N:N>\ell_{n-1},\ N\ge n,\ h_N\le2^{-n}\}
@@ -140,53 +134,52 @@
    \lambda_{n+1}>\lambda_n\}.
  \label{eq:depth-class}
 \end{gather}
-Тогда все минимумы в \eqref{eq:lower-depths} существуют,
-\(\ell\in\Lambda\), и
+Then every minimum in \eqref{eq:lower-depths} exists,
+\(\ell\in\Lambda\), and
 \[
  \forall\lambda\in\Lambda\ \forall n\ge2,\qquad
  \lambda_n\ge n,\quad h_{\lambda_n}\le2^{-n}.
 \]
-Для каждой \(\lambda\in\Lambda\) имеем \(\lambda_n\to\infty\) и
-\(\bigcap_{n\in\N}O_{\lambda_n}=\M\). Поэтому предел
-переиндексированной обратной системы
-\(\mathcal O\circ\lambda^{\mathrm{op}}\) равен \(\M\).
+For every \(\lambda\in\Lambda\), we have \(\lambda_n\to\infty\) and
+\(\bigcap_{n\in\N}O_{\lambda_n}=\M\). Hence the limit of the reindexed
+inverse system \(\mathcal O\circ\lambda^{\mathrm{op}}\) is \(\M\).
 \end{theorem}
 \begin{proof}
-Из вложенности следует \(h_{N+1}\le h_N\). Обозначим предел через
-\(h_\infty\). Для каждого \(N\) выберем \(z_N\in O_N\) так, чтобы
-\(\dist(z_N,\M)=h_N\). Если \(h_\infty>0\), компактность \(O_0\)
-даёт подпоследовательность \(z_{N_k}\to z_\infty\in O_0\).
-Для каждого фиксированного \(m\) при достаточно больших \(k\)
-имеем \(N_k\ge m\), а значит, \(z_{N_k}\in O_m\). Замкнутость даёт
-\(z_\infty\in\bigcap_mO_m=\M\).  Непрерывность расстояния до непустого множества тогда даёт
+Nestedness gives \(h_{N+1}\le h_N\). Let the limit be \(h_\infty\).
+For each \(N\), choose \(z_N\in O_N\) such that
+\(\dist(z_N,\M)=h_N\). If \(h_\infty>0\), compactness of \(O_0\)
+gives a subsequence \(z_{N_k}\to z_\infty\in O_0\). For each fixed
+\(m\), we have \(N_k\ge m\) for all sufficiently large \(k\), hence
+\(z_{N_k}\in O_m\). Since \(O_m\) is closed,
+\(z_\infty\in\bigcap_mO_m=\M\). Continuity of distance to a nonempty
+set then gives
 \[
  h_{N_k}=\dist(z_{N_k},\M)\longrightarrow0,
 \]
-что противоречит \(h_{N_k}\to h_\infty>0\). Следовательно,
-\(h_N\to0\), и требуемые целые числа \(\ell_n\) можно построить
-рекурсивно.
+contradicting \(h_{N_k}\to h_\infty>0\). Therefore \(h_N\to0\), and
+the required integers \(\ell_n\) can be constructed recursively.
 \end{proof}
 
-\subsection{Шаг 3. Построить внешнее конформное отображение.}
+\subsection{Step 3. Construct the External Conformal Map}
 
-\begin{theorem}[Внешнее конформное отображение и функция Грина]
+\begin{theorem}[The External Conformal Map and Green Function]
 \label{thm:external-conformal-map}
-\(\M\) нетривиально, связно и имеет связное дополнение. В категории
-\(\mathbf{Riem}\) римановых поверхностей и бихоломорфизмов существуют
-взаимно обратные изоморфизмы
+\(\M\) is nontrivial and connected, and its complement is connected.
+In the category \(\mathbf{Riem}\) of Riemann surfaces and
+biholomorphisms, there are mutually inverse isomorphisms
 \[
  \Phi:\C\setminus\M\longrightarrow\{w\in\C:|w|>1\},
  \qquad \Psi:=\Phi^{-1},\qquad
  \frac{\Phi(c)}{c}\longrightarrow1\quad(|c|\to\infty).
 \]
-Для \(k\in\N\) положим
+For \(k\in\N\), set
 \[
  f_c^{\circ0}:=\id_{\C},\qquad
  f_c^{\circ(k+1)}:=f_c\circ f_c^{\circ k},\qquad
  g_c(z):=\lim_{k\to\infty}2^{-k}
              \log\max\{1,|f_c^{\circ k}(z)|\}.
 \]
-Определим
+Define
 \[
  G(c):=
  \begin{cases}
@@ -194,7 +187,7 @@
   0,&c\in\M.
  \end{cases}
 \]
-Функции \(g_c\) и \(G\) удовлетворяют соотношениям
+The functions \(g_c\) and \(G\) satisfy
  \begin{gather}
   G\in C(\C,[0,\infty)),\qquad G^{-1}(0)=\M,\qquad
   G(c)-\log|c|\longrightarrow0\quad(|c|\to\infty),\label{eq:green}\\
@@ -203,25 +196,25 @@
  \end{gather}
 \end{theorem}
 \begin{proof}
-Связность \(\M\) и существование \(\Phi\) следуют из
+Connectedness of \(\M\) and the existence of \(\Phi\) follow from
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=64}
-{теоремы 8.1, с.~64--65} и
+{Theorem~8.1, pp.~64--65} and
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=65}
-{следствия 8.3, с.~65}.\par
-Непрерывность продолженной динамической функции Грина установлена в
+{Corollary~8.3, p.~65}.\par
+The extended dynamical Green function is continuous by
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=62}
-{предложении 8.1(b), с.~62}.\par
-Нормировка параметрической функции приведена в
+{Proposition~8.1(b)} on page~62.\par
+The normalization of the parameter Green function is given in
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf#page=65}
-{следствии 8.4(a), с.~65}.
-Функциональное уравнение следует из сдвига индекса в определяющем
-пределе.
+{Corollary~8.4(a), p.~65}.
+The functional equation follows by shifting the index in the defining
+limit.
 \end{proof}
 
-\subsection{Шаг 4. Построить ретракции на подуровни функции Грина.}
+\subsection{Step 4. Construct Retractions onto Green Sublevel Sets}
 
-\begin{definition}[Линии уровня функции Грина и ретракции]\label{def:green-retractions}
-При \(s>0\) положим
+\begin{definition}[Green Level Curves and Retractions]\label{def:green-retractions}
+For \(s>0\), set
 \begin{gather}
  E_s:=\{c\in\C:G(c)\le s\},\qquad
  \kappa(s):=\dH(E_s,\M),\qquad
@@ -235,15 +228,14 @@
  \qquad Q_s:=\Pi\circ P_s|_{\D}.
  \label{eq:green-projection}
 \end{gather}
-Пусть \(e_s:E_s\hookrightarrow\C\) — вложение. Отображение \(P_s\)
-единственным образом факторизуется в непрерывное отображение
-\(\bar P_s:\C\to E_s\), для которого
-\(e_s\circ\bar P_s=P_s\).
+Let \(e_s:E_s\hookrightarrow\C\) be the inclusion. The map \(P_s\)
+factors uniquely through a continuous map \(\bar P_s:\C\to E_s\) such
+that \(e_s\circ\bar P_s=P_s\).
 \end{definition}
 
-\begin{theorem}[Ретракции на подуровни функции Грина]
+\begin{theorem}[Retractions onto Green Sublevel Sets]
 \label{thm:green-projection}
-При \(0<s<t\) выполняются
+For \(0<s<t\), the following hold:
 \begin{gather}
  E_s\subseteq\operatorname{int}E_t,\qquad
  \bigcap_{s>0}E_s=\M,\qquad
@@ -254,120 +246,116 @@
  Q_s\in C(\D,\D),\qquad Q_s|_\M=\id_\M,\qquad
  \dH(Q_s(\D),\M)\le\kappa(s).\label{eq:Q-hausdorff-estimate}
 \end{gather}
-Граница \(E_s\) — регулярная вещественно-аналитическая кривая
-Жордана \(\Gamma_s\). Отображение \((s,c)\mapsto P_s(c)\) непрерывно
-на \((0,\infty)\times\C\). Для каждого \(s>0\)
+The boundary of \(E_s\) is the regular real-analytic Jordan curve
+\(\Gamma_s\). The map \((s,c)\mapsto P_s(c)\) is continuous on
+\((0,\infty)\times\C\). For every \(s>0\),
 \[
  Q_s(\D)\setminus\M\ne\varnothing.
 \]
-При \(0<u<s<t\) переходные морфизмы
+For \(0<u<s<t\), the transition morphisms
 \[
  r_{t,s}:=\bar P_s\circ e_t:E_t\to E_s
 \]
-удовлетворяют \(r_{t,s}\circ e_{s,t}=\id_{E_s}\) и
-\(r_{s,u}\circ r_{t,s}=r_{t,u}\), где \(e_{s,t}:E_s\hookrightarrow E_t\) — вложение. Следовательно,
-отображения \(r_{t,s}\) образуют согласованную систему ретракций.
+obey \(r_{t,s}\circ e_{s,t}=\id_{E_s}\) and
+\(r_{s,u}\circ r_{t,s}=r_{t,u}\), where \(e_{s,t}:E_s\hookrightarrow E_t\)
+is the inclusion. Thus the maps \(r_{t,s}\) form a compatible system
+of retractions.
 \end{theorem}
 \begin{proof}
-Собственность \(G\) обеспечивает компактность каждого \(E_s\).
-Вложенность следует из определения, а равенство
-\(G^{-1}(0)=\M\) даёт \(\bigcap_{s>0}E_s=\M\).
-Если \(\limsup_{s\downarrow0}\kappa(s)>0\), выберем
-\(s_j\downarrow0\) и \(c_j\in E_{s_j}\), для которых
-\(\dist(c_j,\M)\ge\varepsilon\) при некотором \(\varepsilon>0\).
-Компактность \(E_{s_1}\) даёт сходящуюся подпоследовательность
-с пределом \(c_\infty\in G^{-1}(0)=\M\). Непрерывность расстояния
-даёт \(\dist(c_\infty,\M)=0\), тогда как выбранная нижняя граница
-даёт \(\dist(c_\infty,\M)\ge\varepsilon\).
+Properness of \(G\) makes each \(E_s\) compact. The nesting follows
+from the definition, and \(G^{-1}(0)=\M\) gives
+\(\bigcap_{s>0}E_s=\M\). If \(\limsup_{s\downarrow0}\kappa(s)>0\),
+choose \(s_j\downarrow0\) and \(c_j\in E_{s_j}\) with
+\(\dist(c_j,\M)\ge\varepsilon\) for some \(\varepsilon>0\).
+Compactness of \(E_{s_1}\) gives a convergent subsequence with limit
+\(c_\infty\in G^{-1}(0)=\M\). Continuity of distance gives
+\(\dist(c_\infty,\M)=0\), contradicting the lower bound
+\(\dist(c_\infty,\M)\ge\varepsilon\).
 
-Отображение \(\Gamma_s\) инъективно на окружности, причём
+The map \(\Gamma_s\) is injective on the circle, and
 \[
  \Gamma_s'(\theta)=ie^{s+i\theta}\Psi'(e^{s+i\theta})\ne0.
 \]
-Неограниченная компонента дополнения этой кривой равна
-\(\Psi(\{|w|>e^s\})=\{G>s\}\). По теореме Жордана её заполненная
-внутренняя область совпадает с \(E_s\).
+The unbounded component of the complement of this curve is
+\(\Psi(\{|w|>e^s\})=\{G>s\}\). By the Jordan curve theorem, the filled
+interior is \(E_s\).
 
-Для \(c\notin\M\) отображение \(P_s\) можно записать в виде
+For \(c\notin\M\), the map \(P_s\) can be written as
 \[
  P_s(c)=
  \Psi\left(e^{\min\{s,G(c)\}}\frac{\Phi(c)}{|\Phi(c)|}\right).
 \]
-Это доказывает непрерывность вне \(\M\), в том числе при переходе
-через \(G=s\). В точке \((s_0,c_0)\), где \(c_0\in\M\),
-непрерывность \(G\) даёт окрестность, в которой \(G(c)<s_0/2\).
-При \(s\), близком к \(s_0\), отображение \(P_s\) тождественно в
-этой окрестности. Полугрупповое тождество следует из замены
-потенциала \(G(c)\) на \(\min\{s,G(c)\}\) без изменения внешнего
-угла.
+This proves continuity outside \(\M\), including across \(G=s\). At a
+point \((s_0,c_0)\) with \(c_0\in\M\), continuity of \(G\) gives a
+neighborhood on which \(G(c)<s_0/2\). For \(s\) near \(s_0\), \(P_s\)
+is the identity on this neighborhood. The semigroup identity follows
+by replacing the potential \(G(c)\) with \(\min\{s,G(c)\}\) while
+leaving the external angle unchanged.
 
-Отображение \(\Pi\) — нерастягивающая метрическая проекция на \(K\);
-оно фиксирует \(\M\subseteq K\). Поэтому
+The map \(\Pi\) is a nonexpansive metric projection onto \(K\) and fixes
+\(\M\subseteq K\). Hence
 \[
  \dist(\Pi(z),\M)\le\dist(z,\M).
 \]
-Так как \(P_s(\D)\subseteq E_s\), а \(Q_s\) фиксирует \(\M\),
-получаем \eqref{eq:Q-hausdorff-estimate}.
+Since \(P_s(\D)\subseteq E_s\) and \(Q_s\) fixes \(\M\), this proves
+\eqref{eq:Q-hausdorff-estimate}.
 
-Наконец, \(\M\) — непустое собственное замкнутое подмножество
-связного множества \(K\), поскольку \(2\in K\setminus\M\).
-Относительно открытое множество \(K\cap\{G<s\}\) содержит \(\M\).
-Так как \(K\) связно, а \(\M\) — его непустое собственное замкнутое
-подмножество, это множество также содержит точку из \(K\setminus\M\).
-Выберем
-\(c\in K\cap\{G<s\}\setminus\M\). Тогда \(Q_s(c)=c\), откуда
-\(c\in Q_s(\D)\setminus\M\).
+Finally, \(c_0=\frac14\) is a boundary point of \(\M\), and there are
+real parameters \(c_j>\frac14\) outside \(\M\) with \(c_j\to c_0\)
+(as established in the boundary example of
+Chapter~\ref{sec:remaining-factorization}). Since \(G(c_0)=0\) and
+\(G\) is continuous, for every \(s>0\) some such \(c_j\) lies in
+\(K\cap\{G<s\}\setminus\M\). For this point \(Q_s(c_j)=c_j\), so
+\(c_j\in Q_s(\D)\setminus\M\).
 \end{proof}
 
-\subsection{Шаг 5. Вложить множества \(O_N\) в подуровни функции Грина.}
+\subsection{Step 5. Embed \(O_N\) in Green Sublevel Sets}
 
-\begin{lemma}[Вложение \(O_N\) в подуровень функции Грина]
+\begin{lemma}[Embedding \(O_N\) in a Green Sublevel Set]
 \label{lem:green-depth}
-Для каждого \(N\in\N\)
+For every \(N\in\N\),
 \begin{equation}\label{eq:green-depth-bound}
  \sup_{c\in O_N}G(c)\le2^{1-N}\log3.
 \end{equation}
-В частности,
+In particular,
 \begin{equation}\label{eq:green-depth-condition}
  \begin{gathered}
- 2^{1-N}\log3\le s\Rightarrow
-  \exists\eta_{N,s}:O_N\to E_s\text{ такая, что}\\
+ 2^{1-N}\log3\le s\to
+  \exists\eta_{N,s}:O_N\to E_s\text{ such that}\\
   e_s\circ\eta_{N,s}=j_N^\C,\qquad
   \bar P_s\circ j_N^\C=\eta_{N,s},\\
   Q_s|_{O_N}=\id_{O_N},\qquad h_N\le\kappa(s).
  \end{gathered}
 \end{equation}
 \noindent
-Здесь \(j_N^\C:O_N\hookrightarrow\C\) обозначает вложение в
-окружающее пространство.
+Here \(j_N^\C:O_N\hookrightarrow\C\) denotes the inclusion into the
+ambient space.
 \end{lemma}
 \begin{proof}
-При \(|c|\le2\) и \(|z|\le2\) индукцией получаем
+For \(|c|\le2\) and \(|z|\le2\), induction gives
 \[
  |f_c^{\circ k}(z)|\le3^{2^k}-1.
 \]
-База индукции — \(k=0\). Если \(A=3^{2^k}\), следующий шаг следует
-из \((A-1)^2+2\le A^2-1\). Поэтому для таких \(c,z\)
-\(g_c(z)\le\log3\). Если \(c\in O_N\), то \(c\) и \(p_N(c)\)
-принадлежат \(K\). Из равенства~\eqref{eq:green-normalization}
-получаем
+The base case is \(k=0\). If \(A=3^{2^k}\), the induction step follows
+from \((A-1)^2+2\le A^2-1\). Thus \(g_c(z)\le\log3\) for these
+\(c,z\). If \(c\in O_N\), then \(c,p_N(c)\in K\). By
+\eqref{eq:green-normalization},
 \[
  G(c)=2g_c(0)=2^{1-N}g_c(p_N(c))
                          \le2^{1-N}\log3.
 \]
-Так получается вложение \(\eta_{N,s}:O_N\to E_s\).
-Отображение \(\bar P_s\) удовлетворяет
-\(\bar P_s\circ j_N^\C=\eta_{N,s}\). Поскольку \(O_N\subseteq K\),
-отображение \(\Pi\) фиксирует \(O_N\), поэтому
-\(Q_s|_{O_N}=\id_{O_N}\). Вложение \(O_N\hookrightarrow E_s\)
-даёт \(h_N\le\kappa(s)\).
+This gives the inclusion \(\eta_{N,s}:O_N\to E_s\).
+The map \(\bar P_s\) satisfies
+\(\bar P_s\circ j_N^\C=\eta_{N,s}\). Since \(O_N\subseteq K\),
+\(\Pi\) fixes \(O_N\), so \(Q_s|_{O_N}=\id_{O_N}\). The inclusion
+\(O_N\hookrightarrow E_s\) gives \(h_N\le\kappa(s)\).
 \end{proof}
 
-\subsection{Шаг 6. Построить последовательность приближённых эндоморфизмов.}
+\subsection{Step 6. Construct a Sequence of Approximate Endomorphisms}
 
-\begin{theorem}[Конструктивные внешние морфизмы]
+\begin{theorem}[Explicit External Morphisms]
 \label{thm:constructed-external-maps}
-Положим
+Set
 \begin{gather}
  a:=1+\max_{z\in\D}G(z),\qquad j_1:=0,\qquad s_1:=a,\notag\\
  j_n:=\min\{j\in\N:j>j_{n-1},\
@@ -380,59 +368,57 @@
  T_0:=\id_{\D},\qquad T_1:=\Pi|_{\D}=Q_a,\qquad
  T_n:=Q_{s_n}\quad(n\ge2).\label{eq:external-maps}
 \end{gather}
-Тогда \(\lambda\in\Lambda\), каждое \(T_n\) является эндоморфизмом
-\(\D\) в \(\mathbf{CompHaus}\), и выполняются все утверждения
-начальной теоремы.
+Then \(\lambda\in\Lambda\), each \(T_n\) is an endomorphism of
+\(\D\) in \(\mathbf{CompHaus}\), and all assertions of the initial
+theorem hold.
 \end{theorem}
 \begin{proof}
-Минимумы, задающие \(j_n\), существуют, поскольку
-\(\kappa(s)\to0\); следовательно, \(s_n\downarrow0\).
-Минимумы, задающие \(\lambda_n\), существуют, так как
-\(2^{1-N}\log3\to0\). Лемма~\ref{lem:green-depth} даёт
+The minima defining \(j_n\) exist because \(\kappa(s)\to0\); hence
+\(s_n\downarrow0\). The minima defining \(\lambda_n\) exist because
+\(2^{1-N}\log3\to0\). Lemma~\ref{lem:green-depth} gives
 \begin{equation}
  h_{\lambda_n}\le\kappa(s_n)\le2^{-n}\qquad(n\ge2).
  \label{eq:external-mesh-bound}
 \end{equation}
-Из рекурсивного определения и \eqref{eq:lower-depths} следует
-\(\lambda_n\ge\ell_n\), поэтому \(\lambda\in\Lambda\) и
-\(\lambda_n\to\infty\). Последовательность \((O_{\lambda_n})\)
-состоит из множеств конечных орбит.
+The recursive definition and \eqref{eq:lower-depths} imply
+\(\lambda_n\ge\ell_n\), so \(\lambda\in\Lambda\) and
+\(\lambda_n\to\infty\). The sequence \((O_{\lambda_n})\) consists of
+finite-orbit approximations.
 
-Так как \(G<a\) на \(\D\), имеем \(P_a|_{\D}=\id_{\D}\) и
-\(Q_a=\Pi|_{\D}\). На уровнях ноль и один \(O_0=O_1=K\);
-тождественное отображение и \(\Pi\) фиксируют \(K\).
-При \(n\ge2\) морфизм факторизации
-\(\eta_n:O_{\lambda_n}\to E_{s_n}\) из
-леммы~\ref{lem:green-depth} удовлетворяет
-\(\bar P_n\circ\iota_{\lambda_n}=\eta_n\). Посткомпозиция с
-\(\Pi\circ e_{s_n}\) сохраняет тождество на уровне
+Since \(G<a\) on \(\D\), we have \(P_a|_{\D}=\id_{\D}\) and
+\(Q_a=\Pi|_{\D}\). At levels zero and one, \(O_0=O_1=K\), which are
+fixed by the identity map and by \(\Pi\). For \(n\ge2\), the
+factorization morphism \(\eta_n:O_{\lambda_n}\to E_{s_n}\) from
+Lemma~\ref{lem:green-depth} satisfies
+\(\bar P_n\circ\iota_{\lambda_n}=\eta_n\). Postcomposition with
+\(\Pi\circ e_{s_n}\) preserves the identity
 \(T_n\circ\iota_{\lambda_n}=\iota_{\lambda_n}\).
-Для \(z\in\D\)
+For \(z\in\D\)
 \[
  \dist(T_n(z),O_{\lambda_n})
  \le\dist(T_n(z),\M)
  \le\kappa(s_n)\le2^{-n}.
 \]
-При \(n=0\) имеем \(\dist(z,O_0)\le2\sqrt2-2<1\); при \(n=1\)
-\(T_1(\D)=O_1=K\). Так как каждый \(T_n\) фиксирует \(\M\), имеем
+For \(n=0\), \(\dist(z,O_0)\le2\sqrt2-2<1\); for \(n=1\),
+\(T_1(\D)=O_1=K\). Since every \(T_n\) fixes \(\M\), we have
 \(\M\subseteq T_n(\D)\).
-Наконец, при \(n\ge2\)
+Finally, for \(n\ge2\),
 \[
  \dH(T_n(\D),\M)\le\kappa(s_n)\le2^{-n}.
 \]
 \end{proof}
 
-\begin{proposition}[Сравнение конечных систем]
+\begin{proposition}[Comparison of Finite Systems]
 \label{prop:inverse-system-comparison}
-Для \(\lambda,s_n\) из теоремы~\ref{thm:constructed-external-maps} при
-\(n\ge2\) положим \(O_n^\lambda:=O_{\lambda_n}\) и \(E_n:=E_{s_n}\).
-Вложения задают обратные функторы
+For \(\lambda,s_n\) from Theorem~\ref{thm:constructed-external-maps},
+set \(O_n^\lambda:=O_{\lambda_n}\) and \(E_n:=E_{s_n}\) for \(n\ge2\).
+The inclusions define inverse functors
 \[
  \mathcal O^\lambda,\mathcal E:
  \mathbf N_{\ge2}^{\mathrm{op}}\longrightarrow\mathbf{CompHaus}.
 \]
-Морфизмы факторизации \(\eta_n:O_n^\lambda\to E_n\) образуют
-естественное преобразование и индуцируют тождество на пределах:
+The factorization morphisms \(\eta_n:O_n^\lambda\to E_n\) form a
+natural transformation and induce the identity on the limits:
 \[
  \iota_n^{\mathcal E}\circ\eta_{n+1}
        =\eta_n\circ\iota_n^{\mathcal O},\qquad
@@ -440,39 +426,40 @@
        \cong\varprojlim\mathcal E,\qquad
  \varprojlim\eta=\id_\M.
 \]
-Если \(\bar P_n:=\bar P_{s_n}|_{\D}:\D\to E_n\), то
+If \(\bar P_n:=\bar P_{s_n}|_{\D}:\D\to E_n\), then
 \[
  r_{n,m}:=\bar P_{s_m}|_{E_n}:E_n\to E_m\qquad(n\le m)
  \]
- задают ковариантный функтор \(\mathcal S\), а \((\bar P_n)\)
- образует естественное преобразование \(\underline{\D}\to\mathcal S\):
+ define a covariant functor \(\mathcal S\), and \((\bar P_n)\) forms a
+ natural transformation \(\underline{\D}\to\mathcal S\):
 \[
  r_{n,n}=\id_{E_n},\qquad
  r_{m,k}\circ r_{n,m}=r_{n,k},\qquad
  r_{n,m}\circ\bar P_n=\bar P_m,\qquad
  r_{n,n+1}\circ\iota_n^{\mathcal E}=\id_{E_{n+1}}.
 \]
-При \(n\ge2\) эндоморфизмы \(T_n\) из теоремы об аппроксимации имеют вид
+For \(n\ge2\), the endomorphisms \(T_n\) from the approximation theorem
+are given by
 \(T_n=\Pi\circ e_{s_n}\circ\bar P_n\).
 \end{proposition}
 \begin{proof}
-Лемма~\ref{lem:green-depth} даёт вложения
-\(O_{\lambda_n}\hookrightarrow E_{s_n}\), на которых \(\bar P_{s_n}\)
-тождественно. Поэтому \(\eta_n\) являются
-вложениями, естественность следует из коммутативности диаграмм
-вложений. Из \(\lambda_n\to\infty\) и \(s_n\downarrow0\) следуют
-указанные пределы. Индуцированное отображение \(\varprojlim\eta\)
-тождественно на каждом \(c\in\M\).
+Lemma~\ref{lem:green-depth} gives inclusions
+\(O_{\lambda_n}\hookrightarrow E_{s_n}\) on which \(\bar P_{s_n}\) is
+the identity. Thus each \(\eta_n\) is an inclusion, and naturality
+follows from commutativity of the inclusion diagrams. The stated limits
+follow from \(\lambda_n\to\infty\) and \(s_n\downarrow0\). The induced
+map \(\varprojlim\eta\) is the identity at every \(c\in\M\).
 
-Остальные тождества следуют из
-\eqref{eq:retraction-composition}: переходы \(r_{n,m}\) композиционно
-совместимы и являются левыми обратными к вложениям \(E_m\hookrightarrow E_n\);
-равенство \(r_{n,m}\circ\bar P_n=\bar P_m\) задаёт естественность
-\((\bar P_n)\). Последняя формула для \(T_n\) следует из
-\eqref{eq:external-maps} и определения \(Q_{s_n}\).
+The remaining identities follow from
+\eqref{eq:retraction-composition}: the transitions \(r_{n,m}\) are
+compatible with composition and are left inverses to the inclusions
+\(E_m\hookrightarrow E_n\); the identity
+\(r_{n,m}\circ\bar P_n=\bar P_m\) expresses naturality of
+\((\bar P_n)\). The final formula for \(T_n\) follows from
+\eqref{eq:external-maps} and the definition of \(Q_{s_n}\).
 \end{proof}
 
-\subsection{Внутренние и внешние ячейки}
+\subsection{Inner and Outer Cells}
 
 \begin{equation}
  \label{eq:dyadic-grid-cells}
@@ -485,23 +472,22 @@
  \qquad((a,b)\in J_n^2).
  \end{gathered}
 \end{equation}
-Каждая ячейка \(Q_{n,\alpha}\) компактна и
+Each cell \(Q_{n,\alpha}\) is compact and satisfies
 \begin{equation}
  \operatorname{diam}Q_{n,\alpha}\le8\cdot2^{-n}.
  \label{eq:dyadic-grid-diameter}
 \end{equation}
-Действительно, разности вещественных и мнимых частей двух точек одной
-ячейки удовлетворяют оценке \(4\cdot2^{-n}\), а
-\(|x+iy|\le|x|+|y|\).
-Положим
+Indeed, the differences of the real and imaginary parts of two points
+in one cell are each at most \(4\cdot2^{-n}\), and
+\(|x+iy|\le|x|+|y|\). Set
 \[
  U_{n,\alpha}:=O_{\lambda_n}\cap E_{s_n}\cap Q_{n,\alpha},
  \qquad
  I_{n,\alpha}:=\M\cap Q_{n,\alpha}.
 \]
-Здесь \(U_{n,\alpha}\) — внешняя ячейка общего уточнения систем
-\((O_{\lambda_n})\) и \((E_{s_n})\), а \(I_{n,\alpha}\) — её внутренняя
-часть. Обозначим
+Here \(U_{n,\alpha}\) is an outer cell in the common refinement of the
+systems \((O_{\lambda_n})\) and \((E_{s_n})\), and \(I_{n,\alpha}\) is
+its inner part. Define
 \[
  \mathcal A_n^{\mathrm{out}}:=
    \{\alpha\in J_n^2:U_{n,\alpha}\ne\varnothing\},
@@ -509,56 +495,56 @@
  \mathcal A_n^{\mathrm{in}}:=
    \{\alpha\in J_n^2:I_{n,\alpha}\ne\varnothing\}.
 \]
-Каждое \(I_{n,\alpha}\) компактно, а
+Each \(I_{n,\alpha}\) is compact, and
 \(\mathcal A_n^{\mathrm{in}}\subseteq\mathcal A_n^{\mathrm{out}}\).
-Рассмотрим конечные дискретные категории
-\(\mathbf C_n^{\mathrm{in}}\) и \(\mathbf C_n^{\mathrm{out}}\) с объектами
-\(\mathcal A_n^{\mathrm{in}}\) и \(\mathcal A_n^{\mathrm{out}}\),
-соответственно. Отображение родителя
+Let \(\mathbf C_n^{\mathrm{in}}\) and
+\(\mathbf C_n^{\mathrm{out}}\) be the finite discrete categories with
+object sets \(\mathcal A_n^{\mathrm{in}}\) and
+\(\mathcal A_n^{\mathrm{out}}\), respectively. The parent map
 \[
  p_n(a',b'):=\left(\left\lfloor\frac{a'}2\right\rfloor,
                        \left\lfloor\frac{b'}2\right\rfloor\right)
  \qquad((a',b')\in J_{n+1}^2)
 \]
- задаёт функторы перехода между уровнями: вложения
- \(O_{\lambda_{n+1}}\subseteq O_{\lambda_n}\),
- \(E_{s_{n+1}}\subseteq E_{s_n}\) и
- \(Q_{n+1,\beta}\subseteq Q_{n,p_n(\beta)}\) дают вложения
- \(U_{n+1,\beta}\hookrightarrow U_{n,p_n(\beta)}\) и
- \(I_{n+1,\beta}\hookrightarrow I_{n,p_n(\beta)}\).
- Все \(U_{n,\alpha}\) и \(I_{n,\alpha}\) компактны. Реализации
- \(\mathcal U_n:\mathbf C_n^{\mathrm{out}}\to\mathbf{CompHaus}\) и
- \(\mathcal I_n:\mathbf C_n^{\mathrm{in}}\to\mathbf{CompHaus}\) задаются
- формулами \(\mathcal U_n(\alpha)=U_{n,\alpha}\) и
- \(\mathcal I_n(\alpha)=I_{n,\alpha}\). Вложения между ячейками задают
- естественные преобразования
- \(\mathcal U_{n+1}\Rightarrow\mathcal U_n\circ p_n\) и
- \(\mathcal I_{n+1}\Rightarrow\mathcal I_n\circ p_n\), а включения
- \(I_{n,\alpha}\hookrightarrow U_{n,\alpha}\) задают естественное
- преобразование \(\mathcal I_n\Rightarrow\mathcal U_n\circ j_n\), где
- \(j_n:\mathbf C_n^{\mathrm{in}}\hookrightarrow\mathbf C_n^{\mathrm{out}}\),
- совместимое с переходами между уровнями.
+defines transition functors between levels: the inclusions
+\(O_{\lambda_{n+1}}\subseteq O_{\lambda_n}\),
+\(E_{s_{n+1}}\subseteq E_{s_n}\), and
+\(Q_{n+1,\beta}\subseteq Q_{n,p_n(\beta)}\) induce inclusions
+\(U_{n+1,\beta}\hookrightarrow U_{n,p_n(\beta)}\) and
+\(I_{n+1,\beta}\hookrightarrow I_{n,p_n(\beta)}\).
+All \(U_{n,\alpha}\) and \(I_{n,\alpha}\) are compact. The realization
+functors \(\mathcal U_n:\mathbf C_n^{\mathrm{out}}\to\mathbf{CompHaus}\)
+and \(\mathcal I_n:\mathbf C_n^{\mathrm{in}}\to\mathbf{CompHaus}\)
+send \(\alpha\) to \(U_{n,\alpha}\) and \(I_{n,\alpha}\),
+respectively. Inclusions between cells define natural transformations
+\(\mathcal U_{n+1}\Rightarrow\mathcal U_n\circ p_n\) and
+\(\mathcal I_{n+1}\Rightarrow\mathcal I_n\circ p_n\). The inclusions
+\(I_{n,\alpha}\hookrightarrow U_{n,\alpha}\) define a natural
+transformation \(\mathcal I_n\Rightarrow\mathcal U_n\circ j_n\), where
+\(j_n:\mathbf C_n^{\mathrm{in}}\hookrightarrow\mathbf C_n^{\mathrm{out}}\);
+these transformations are compatible with the transitions between
+levels.
 
-\begin{proposition}[Сближение внутренних и внешних ячеек]
+\begin{proposition}[Convergence of Inner and Outer Cells]
 \label{prop:cellwise-inner-outer}
-Для каждого \(n\ge2\) выполняются
+For every \(n\ge2\), the following hold:
 \[
  \bigcup_{\alpha\in\mathcal A_n^{\mathrm{in}}}I_{n,\alpha}=\M,\qquad
  \bigcup_{\alpha\in\mathcal A_n^{\mathrm{out}}}U_{n,\alpha}=O_{\lambda_n}.
 \]
-Для \(\alpha\in\mathcal A_n^{\mathrm{in}}\)
+For \(\alpha\in\mathcal A_n^{\mathrm{in}}\),
 \[
  I_{n,\alpha}\subseteq U_{n,\alpha},
  \qquad
  \dH(I_{n,\alpha},U_{n,\alpha})\le8\cdot2^{-n}.
 \]
-Для \(\alpha\in\mathcal A_n^{\mathrm{out}}\setminus
-                    \mathcal A_n^{\mathrm{in}}\)
+For \(\alpha\in\mathcal A_n^{\mathrm{out}}\setminus
+\mathcal A_n^{\mathrm{in}}\),
 \[
  \sup_{z\in U_{n,\alpha}}\dist(z,\M)
  \le h_{\lambda_n}\le\kappa(s_n)\le2^{-n}.
 \]
-В частности,
+In particular,
 \[
  \dH\left(
    \bigcup_{\alpha\in\mathcal A_n^{\mathrm{in}}}I_{n,\alpha},
@@ -567,104 +553,102 @@
 \]
 \end{proposition}
 \begin{proof}
-Свойства покрытия следуют из покрытия \(\D\) ячейками \(Q_{n,\alpha}\)
-и включений \(\M\subseteq O_{\lambda_n}\subseteq E_{s_n}\). Если
-\(\alpha\in\mathcal A_n^{\mathrm{in}}\), то
+The covering properties follow from the grid covering \(\D\) and the
+inclusions \(\M\subseteq O_{\lambda_n}\subseteq E_{s_n}\). If
+\(\alpha\in\mathcal A_n^{\mathrm{in}}\), then
 \(I_{n,\alpha}\subseteq U_{n,\alpha}\).
-Для \(z\in U_{n,\alpha}\) выберем \(w\in I_{n,\alpha}\). Обе точки
-лежат в \(Q_{n,\alpha}\), поэтому
-\(|z-w|\le\operatorname{diam}Q_{n,\alpha}\le8\cdot2^{-n}\).
-Это даёт оценку Хаусдорфа.
+For \(z\in U_{n,\alpha}\), choose \(w\in I_{n,\alpha}\). Both points
+lie in \(Q_{n,\alpha}\), so
+\(|z-w|\le\operatorname{diam}Q_{n,\alpha}\le8\cdot2^{-n}\). This gives
+the Hausdorff bound.
 
-Если \(\alpha\in\mathcal A_n^{\mathrm{out}}\setminus
-                   \mathcal A_n^{\mathrm{in}}\), то
-\(U_{n,\alpha}\subseteq O_{\lambda_n}\), откуда
+If \(\alpha\in\mathcal A_n^{\mathrm{out}}\setminus
+\mathcal A_n^{\mathrm{in}}\), then
+\(U_{n,\alpha}\subseteq O_{\lambda_n}\), hence
 \(\sup_{z\in U_{n,\alpha}}\dist(z,\M)\le h_{\lambda_n}\).
-Оценки \(h_{\lambda_n}\le\kappa(s_n)\le2^{-n}\) следуют из
-леммы~\ref{lem:green-depth} и выбора \(s_n,\lambda_n\).
-Объединения ячеек равны \(\M\) и \(O_{\lambda_n}\), соответственно,
-а \(\dH(O_{\lambda_n},\M)=h_{\lambda_n}\).
+The bounds \(h_{\lambda_n}\le\kappa(s_n)\le2^{-n}\) follow from
+Lemma~\ref{lem:green-depth} and the choice of \(s_n,\lambda_n\). The
+unions of cells are \(\M\) and \(O_{\lambda_n}\), respectively, and
+\(\dH(O_{\lambda_n},\M)=h_{\lambda_n}\).
 \end{proof}
 
-\begin{theorem}[Предел категорий ячеек]
+\begin{theorem}[Inverse Limit of Cell-Address Sets]
 \label{thm:cell-category-limit}
-Пусть
+Let
 \[
  \mathfrak A^{\mathrm{out}}:=
  \varprojlim(\mathcal A_n^{\mathrm{out}},p_n),\qquad
  \mathfrak A^{\mathrm{in}}:=
  \varprojlim(\mathcal A_n^{\mathrm{in}},p_n),
 \]
-где конечные множества индексов наделены дискретной топологией.
-Тогда \(\mathfrak A^{\mathrm{in}}=\mathfrak A^{\mathrm{out}}\).
-Для каждого адреса \(a=(\alpha_n)\) пересечение
+where the finite index sets carry the discrete topology. Then
+\(\mathfrak A^{\mathrm{in}}=\mathfrak A^{\mathrm{out}}\). For every
+address \(a=(\alpha_n)\), the intersection
 \[
  \bigcap_{n\ge2}U_{n,\alpha_n}
 \]
-состоит из одной точки \(\pi(a)\in\M\). Отображение
-\(\pi:\mathfrak A^{\mathrm{out}}\to\M\) непрерывно и сюръективно;
-отождествление адресов с одинаковой точкой реализации задаёт
-гомеоморфизм
+consists of a single point \(\pi(a)\in\M\). The map
+\(\pi:\mathfrak A^{\mathrm{out}}\to\M\) is continuous and surjective;
+identifying addresses with the same realization point gives a
+homeomorphism
 \[
  \mathfrak A^{\mathrm{out}}/{\sim}\ \cong\ \M,
- \qquad a\sim b\Leftrightarrow\pi(a)=\pi(b).
+ \qquad a\sim b\leftrightarrow\pi(a)=\pi(b).
 \]
 \end{theorem}
 \begin{proof}
-Для каждого адреса множества \(U_{n,\alpha_n}\) непусты, компактны и
-вложены друг в друга. По свойству конечного пересечения компактности
-их пересечение непусто; оценки диаметра \(8\cdot2^{-n}\) показывают,
-что оно состоит из одной точки. Эта точка принадлежит всем
-\(O_{\lambda_n}\), а из \(\lambda_n\to\infty\) следует
-\(\bigcap_nO_{\lambda_n}=\M\). Значит, каждый внешний адрес на каждом
-уровне принадлежит \(\mathcal A_n^{\mathrm{in}}\), и
+For every address, the sets \(U_{n,\alpha_n}\) are nonempty, compact,
+and nested. The finite intersection property for compact sets makes
+their intersection nonempty; the diameter bounds \(8\cdot2^{-n}\)
+show that it consists of a single point. This point belongs to every
+\(O_{\lambda_n}\), and \(\lambda_n\to\infty\) gives
+\(\bigcap_nO_{\lambda_n}=\M\). Thus every outer address has its index
+at each level in \(\mathcal A_n^{\mathrm{in}}\), so
 \(\mathfrak A^{\mathrm{out}}\subseteq\mathfrak A^{\mathrm{in}}\).
-Обратное включение следует из
+The reverse inclusion follows from
 \(I_{n,\alpha}\subseteq U_{n,\alpha}\).
 
-Для \(c=x+iy\in\M\) положим
+For \(c=x+iy\in\M\), set
 \[
  a_n:=\min\left\{\left\lfloor\frac{2^n(x+2)}4\right\rfloor,2^n-1\right\},
  \qquad
  b_n:=\min\left\{\left\lfloor\frac{2^n(y+2)}4\right\rfloor,2^n-1\right\}.
 \]
-Тогда \((a_n,b_n)\in\mathcal A_n^{\mathrm{in}}\), и деление индексов на два даёт
-\(p_n(a_{n+1},b_{n+1})=(a_n,b_n)\). Поэтому эти индексы задают адрес
-с точкой реализации \(c\), и \(\pi\) сюръективно. Если два адреса
-совпадают на уровне \(n\), их
-точки реализации лежат в одной ячейке \(Q_{n,\alpha}\), где
-\(\operatorname{diam}Q_{n,\alpha}\le8\cdot2^{-n}\); это доказывает
-непрерывность \(\pi\). Пространство
-\(\mathfrak A^{\mathrm{out}}\) компактно как обратный предел конечных
-дискретных пространств. Непрерывная сюръекция \(\pi\) индуцирует
-непрерывную биекцию
-\(\mathfrak A^{\mathrm{out}}/{\sim}\to\M\); компактность области и
-хаусдорфовость \(\M\) дают гомеоморфизм.
+Then \((a_n,b_n)\in\mathcal A_n^{\mathrm{in}}\), and halving the
+indices gives \(p_n(a_{n+1},b_{n+1})=(a_n,b_n)\). Thus these indices
+define an address realizing \(c\), so \(\pi\) is surjective. If two
+addresses agree at level \(n\), their realization points lie in the
+same cell \(Q_{n,\alpha}\), whose diameter is at most
+\(8\cdot2^{-n}\); this proves continuity of \(\pi\). The space
+\(\mathfrak A^{\mathrm{out}}\) is compact as an inverse limit of finite
+discrete spaces. The continuous surjection \(\pi\) induces a continuous
+bijection \(\mathfrak A^{\mathrm{out}}/{\sim}\to\M\); compactness of the
+domain and Hausdorffness of \(\M\) make this a homeomorphism.
 \end{proof}
 
-Предложение~\ref{prop:cellwise-inner-outer} даёт явную оценку
-расстояния Хаусдорфа для каждой внутренней ячейки и соответствующей
-внешней ячейки. Для отображений \(G_j\in\mathcal R_{m_j}\) условие
-\(\mathsf{EA}\) требует общего модуля равностепенной непрерывности;
-по предложению~\ref{prop:equicontinuous-selection} его выполнимость
-эквивалентна \(\LC(\M)\). Оценки Хаусдорфа описывают множества
-\(I_{n,\alpha}\) и \(U_{n,\alpha}\); для диагонального условия
-\eqref{eq:diagonal-finite-scale} дополнительно выбираются
-\(\delta_i>0\) и для каждого \(k\) доказывается одновременное
-выполнение первых \(k\) оценок для некоторого
-\(G\in\mathcal R_m\) при сколь угодно больших \(m\).
+Proposition~\ref{prop:cellwise-inner-outer} gives an explicit
+Hausdorff-distance bound for each inner cell and its corresponding
+outer cell. For maps \(G_j\in\mathcal R_{m_j}\), condition
+\(\mathsf{EA}\) requires a common equicontinuity modulus; by
+Proposition~\ref{prop:equicontinuous-selection}, this holds exactly
+when \(\LC(\M)\) holds. The Hausdorff bounds describe the sets
+\(I_{n,\alpha}\) and \(U_{n,\alpha}\); to obtain the diagonal condition
+\eqref{eq:diagonal-finite-scale}, one must additionally choose
+\(\delta_i>0\) and prove that, for each \(k\), the first \(k\) estimates
+hold simultaneously for some \(G\in\mathcal R_m\) at arbitrarily
+large \(m\).
 
-\subsection{Шаг 7. Оценить расстояния между отображениями \(Q_s\).}
+\subsection{Step 7. Estimate Distances between the Maps \(Q_s\)}
 
-\begin{lemma}[Равномерная оценка расстояния между \(Q_s\) и \(Q_t\)]
+\begin{lemma}[Uniform Distance Bound between \(Q_s\) and \(Q_t\)]
 \label{lem:band-motion}
-При \(s>0\) определим
+For \(s>0\), define
 \[
  V(s):=\max_{\theta\in\R/2\pi\mathbb Z}
                      e^s|\Psi'(e^{s+i\theta})|.
 \]
-Тогда \(V\) конечна и непрерывна на \((0,\infty)\). Кривая
-\(c_\theta(s):=\Psi(e^{s+i\theta})\) удовлетворяет уравнению
+Then \(V\) is finite and continuous on \((0,\infty)\). The curve
+\(c_\theta(s):=\Psi(e^{s+i\theta})\) satisfies
 \begin{equation}\label{eq:external-ray-ode}
  \frac{dc_\theta}{ds}
  =\frac{\Phi(c_\theta)}{\Phi'(c_\theta)}
@@ -672,7 +656,7 @@
  \qquad |\nabla G(c_\theta)|
        =\frac{|\Phi'(c_\theta)|}{|\Phi(c_\theta)|}>0.
 \end{equation}
-При \(0<s<t\) выполняется
+For \(0<s<t\), we have
 \begin{equation}\label{eq:finite-band-motion}
  \|Q_t-Q_s\|_\infty
  \le\|\bar P_t|_{\D}-\bar P_s|_{\D}\|_{\infty,\C}
@@ -680,29 +664,28 @@
 \end{equation}
 \end{lemma}
 \begin{proof}
-Максимум в определении \(V(s)\) берётся по компактной окружности,
-на которой \(\Psi'\) непрерывна и \(|\Psi'|>0\).
-Дифференцирование равенства
-\(\Phi(c_\theta(s))=e^{s+i\theta}\) даёт первое равенство
-\eqref{eq:external-ray-ode}. Формула для градиента следует из
-\(G=\log|\Phi|\) и уравнений Коши--Римана. Если \(G(c)\le s\),
-оба отображения фиксируют \(c\). Иначе их значения лежат на одном и
-том же внешнем луче между уровнями \(s\) и \(\min\{t,G(c)\}\).
-Интегрирование скорости вдоль луча даёт вторую оценку
-\eqref{eq:finite-band-motion}; нерастягиваемость \(\Pi\) даёт
-первую.
+The maximum in the definition of \(V(s)\) is taken over a compact
+circle on which \(\Psi'\) is continuous and nonzero. Differentiating
+\(\Phi(c_\theta(s))=e^{s+i\theta}\) gives the first equality in
+\eqref{eq:external-ray-ode}. The gradient formula follows from
+\(G=\log|\Phi|\) and the Cauchy--Riemann equations. If \(G(c)\le s\),
+both maps fix \(c\). Otherwise their values lie on the same external
+ray between levels \(s\) and \(\min\{t,G(c)\}\). Integrating the speed
+along the ray gives the second estimate in
+\eqref{eq:finite-band-motion}; nonexpansiveness of \(\Pi\) gives the
+first.
 \end{proof}
 
-\begin{proposition}[Расстояния между соседними отображениями \(Q_{s_n}\)]
+\begin{proposition}[Distances between Consecutive Maps \(Q_{s_n}\)]
 \label{prop:consecutive-retraction-distances}
-Для высот из теоремы~\ref{thm:constructed-external-maps},
-\(s_1=a\) и \(s_n\downarrow0\). При \(n\ge2\) положим
+For the heights from Theorem~\ref{thm:constructed-external-maps},
+with \(s_1=a\) and \(s_n\downarrow0\), define for \(n\ge2\)
 \[
  d_n:=
  \|\bar P_n-\iota_n^{\mathcal E}\circ\bar P_{n+1}\|_{\infty,\C}
  =\sup_{z\in\D}|\bar P_n(z)-\bar P_{n+1}(z)|.
 \]
-Тогда для \(n\ge2\), \(N\ge2\) и \(N\ge1\) соответственно
+Then for \(n\ge2\), \(N\ge2\), and \(N\ge1\), respectively,
 \begin{align}
  d_n&\le\int_{s_{n+1}}^{s_n}V(u)\,du,\label{eq:retraction-distance-bound}\\
  \sum_{n=2}^{N}d_n
@@ -711,50 +694,49 @@
    &\le\int_{s_{N+1}}^aV(u)\,du.
    \label{eq:retraction-motion-sum}
 \end{align}
-В частности, если \(\int_0^aV(u)\,du<\infty\), обе бесконечные
-суммы \(\sum_{n\ge2}d_n\) и
-\(\sum_{n\ge1}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty\) конечны.
+In particular, if \(\int_0^aV(u)\,du<\infty\), then both infinite sums
+\(\sum_{n\ge2}d_n\) and
+\(\sum_{n\ge1}\|Q_{s_{n+1}}-Q_{s_n}\|_\infty\) are finite.
 \end{proposition}
 \begin{proof}
-При \(t=s_n\), \(s=s_{n+1}\) оценка
-\eqref{eq:finite-band-motion} даёт первую границу. Суммирование по
-непересекающимся интервалам \([s_{n+1},s_n]\) даёт вторую.
-Поскольку \(s_1=a\), то же суммирование для расстояний между \(Q_{s_n}\)
-даёт третью. Последнее утверждение следует из сходимости несобственного
-интеграла.
+For \(t=s_n\) and \(s=s_{n+1}\), estimate
+\eqref{eq:finite-band-motion} gives the first bound. Summing over the
+disjoint intervals \([s_{n+1},s_n]\) gives the second. Since \(s_1=a\),
+the same summation for distances between \(Q_{s_n}\) gives the third.
+The final assertion follows from convergence of the improper integral.
 \end{proof}
 
-\subsection{Шаг 8. Построить допустимую последовательность для каждого \(m\).}
+\subsection{Step 8. Construct an Admissible Sequence for Each \(m\)}
 
-\begin{definition}[Допустимые конечные последовательности отображений]
+\begin{definition}[Admissible Finite Sequences of Maps]
 \label{def:finite-sequences}
-Определим
+Define
 \[
  \Delta:=
  \{\delta\in(0,\infty)^\N:
    \forall k,\ \delta_k\le2^{-k},\
    \delta_{k+1}\le\delta_k/2\}.
 \]
-Для \(\delta\in\Delta\) положим
+For \(\delta\in\Delta\), set
 \[
  \mathcal K_\delta:=
  \left\{F\in C(\D,\D):
    \forall k\ \forall z,w\in\D,\
-   |z-w|\le\delta_k\Rightarrow|F(z)-F(w)|\le2^{-k}
+   |z-w|\le\delta_k\to|F(z)-F(w)|\le2^{-k}
  \right\}.
 \]
-Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\) и положим
+Fix \(\lambda\in\Lambda\) and \(\delta\in\Delta\), and set
 \[
  e_i(F):=\sup_{z\in\D}\dist(F(z),O_{\lambda_i}),\qquad
  \epsilon_i:=2^{-i},\qquad\beta_i:=8\,2^{-i}.
 \]
-Для \(m\in\N\) определим
+For \(m\in\N\), define
 \begin{align}
  \mathcal P_m(\lambda,\delta):=
  \left\{(F_0,\ldots,F_m)\in\mathcal K_\delta^{m+1}:
  \begin{gathered}
   F_0=\id_{\D},\quad
-  (m\ge1\Rightarrow F_1=\Pi|_{\D}),\\
+  (m\ge1\to F_1=\Pi|_{\D}),\\
   \forall i\in\{1,\ldots,m\},\quad F_i(\D)\subseteq K,\\
   \forall i\in\{0,\ldots,m\}\ \forall c\in O_{\lambda_i},\
                              F_i(c)=c,\\
@@ -765,34 +747,34 @@
                   [\mathcal P_m(\lambda,\delta)\ne\varnothing].
  \label{eq:ug-m}
 \end{align}
-Компактность \(\mathcal K_\delta\) и \(\mathcal P_m(\lambda,\delta)\)
-следует из следующей леммы.
+Compactness of \(\mathcal K_\delta\) and \(\mathcal P_m(\lambda,\delta)\)
+follows from the next lemma.
 \end{definition}
 
-\begin{lemma}[Компактность пространств допустимых конечных последовательностей]
+\begin{lemma}[Compactness of the Spaces of Admissible Finite Sequences]
 \label{lem:compact-sequences}
-\(\mathcal K_\delta\) компактно в равномерной топологии, а каждое
-\(\mathcal P_m(\lambda,\delta)\) компактно в топологии конечного
-произведения.
+\(\mathcal K_\delta\) is compact in the uniform topology, and each
+\(\mathcal P_m(\lambda,\delta)\) is compact in the finite product
+topology.
 \end{lemma}
 \begin{proof}
-Условия на \(\delta_k\) и \(F\) задают общий модуль непрерывности
-для \(\mathcal K_\delta\); все значения лежат в компактном \(\D\).
-По теореме Арцела--Асколи семейство относительно компактно.
-Равномерные пределы сохраняют условия определения, поэтому
-\(\mathcal K_\delta\) замкнуто и компактно.
+The conditions on \(\delta_k\) and \(F\) give a common modulus of
+continuity for \(\mathcal K_\delta\); all values lie in the compact
+space \(\D\). By the Arzelà--Ascoli theorem, the family is relatively
+compact. Uniform limits preserve the defining conditions, so
+\(\mathcal K_\delta\) is closed and compact.
 
-Для \(F,G\in C(\D,\D)\)
+For \(F,G\in C(\D,\D)\),
 \[
  |e_i(F)-e_i(G)|\le\|F-G\|_\infty.
 \]
-Условия фиксации, на множество значений, на ошибку и на расстояние
-между соседними отображениями задают замкнутые подмножества компактного
-конечного произведения \(\mathcal K_\delta^{m+1}\). Значит,
-\(\mathcal P_m(\lambda,\delta)\) компактно.
+The fixing, range, approximation-error, and successive-distance
+conditions define closed subsets of the compact finite product
+\(\mathcal K_\delta^{m+1}\). Hence \(\mathcal P_m(\lambda,\delta)\) is
+compact.
 \end{proof}
 
-\begin{proposition}[Существование допустимой последовательности при каждом \(m\)]
+\begin{proposition}[An Admissible Sequence Exists for Every \(m\)]
 \label{prop:finite-sequences-exist}
 \[
  \forall m\in\N\ \exists\lambda^{[m]}\in\Lambda\
@@ -801,58 +783,54 @@
 \]
 \end{proposition}
 \begin{proof}
-При \(m=0\) возьмём \(\lambda^{[0]}=\lambda\) из теоремы
-\ref{thm:constructed-external-maps} и \(F_0=\id_{\D}\). При \(m=1\)
-возьмём \(\lambda^{[1]}=\lambda\) и
-\((F_0,F_1)=(\id_{\D},\Pi|_{\D})\). В обоих случаях положим
-\(\delta_k^{[m]}=2^{-k}\). Тогда \(\delta^{[m]}\in\Delta\), а все
-отображения данной последовательности принадлежат
-\(\mathcal K_{\delta^{[m]}}\). Имеем
-\(e_0(F_0)\le2\sqrt2-2<1\), и при \(m=1\)
-\(e_1(F_1)=0\), \(\|F_1-F_0\|_\infty<1\le\beta_0\).
-Так выполнены условия определения~\ref{def:finite-sequences}.
+For \(m=0\), take \(\lambda^{[0]}=\lambda\) from
+Theorem~\ref{thm:constructed-external-maps} and \(F_0=\id_{\D}\). For
+\(m=1\), take \(\lambda^{[1]}=\lambda\) and
+\((F_0,F_1)=(\id_{\D},\Pi|_{\D})\). In both cases set
+\(\delta_k^{[m]}=2^{-k}\). Then \(\delta^{[m]}\in\Delta\), and all maps
+in the sequence belong to \(\mathcal K_{\delta^{[m]}}\). We have
+\(e_0(F_0)\le2\sqrt2-2<1\), and for \(m=1\),
+\(e_1(F_1)=0\) and \(\|F_1-F_0\|_\infty<1\le\beta_0\). Thus the
+conditions in Definition~\ref{def:finite-sequences} hold.
 
-Пусть теперь \(m\ge2\), и возьмём \(s_m,\lambda_m\) из теоремы
-\ref{thm:constructed-external-maps}.
-Положим \(F_0=\id_{\D}\), \(F_1=\Pi|_{\D}\) и
-\(F_i=Q_{s_m}\) при \(2\le i\le m\). Положим
+Now let \(m\ge2\), and take \(s_m,\lambda_m\) from Theorem
+\ref{thm:constructed-external-maps}. Set \(F_0=\id_{\D}\),
+\(F_1=\Pi|_{\D}\), and \(F_i=Q_{s_m}\) for \(2\le i\le m\). Define
 \(\lambda^{[m]}_0=0,\lambda^{[m]}_1=1,
-\lambda^{[m]}_2=\lambda_m\) и
+\lambda^{[m]}_2=\lambda_m\), and
 \[
  \lambda^{[m]}_i:=
  \max\{\lambda^{[m]}_{i-1}+1,\ell_i\}\quad(i\ge3).
 \]
-Так как \(\lambda\in\Lambda\) и \(\ell_m\ge\ell_2\), имеем
-\(\lambda_m\ge\ell_m\ge\ell_2\) и \(\lambda_m\ge m\ge2\).
-Рекурсия даёт \(\lambda^{[m]}_i\ge\ell_i\) при \(i\ge3\) и
-строгое возрастание; следовательно, \(\lambda^{[m]}\in\Lambda\).
-При \(2\le i\le m\) имеем \(\lambda^{[m]}_i\ge\lambda_m\), поэтому
+Since \(\lambda\in\Lambda\) and \(\ell_m\ge\ell_2\), we have
+\(\lambda_m\ge\ell_m\ge\ell_2\) and \(\lambda_m\ge m\ge2\). The
+recursion gives \(\lambda^{[m]}_i\ge\ell_i\) for \(i\ge3\) and strict
+increase, so \(\lambda^{[m]}\in\Lambda\). For \(2\le i\le m\),
+\(\lambda^{[m]}_i\ge\lambda_m\), and therefore
 \[
  O_{\lambda^{[m]}_i}\subseteq O_{\lambda_m}\subseteq E_{s_m}.
 \]
-Значит, \(Q_{s_m}\) фиксирует требуемые внешние множества, а ошибка
-на уровне \(i\) ограничена сверху величиной
-\(\kappa(s_m)\le2^{-m}\le2^{-i}\).
-На нулевом уровне \(e_0(F_0)\le2\sqrt2-2<1\), а на первом
-\(e_1(F_1)=0\). Начальные отображения
-фиксируют \(O_0=O_1=K\), причём
+Thus \(Q_{s_m}\) fixes the required outer sets, and the approximation
+error at level \(i\) is at most
+\(\kappa(s_m)\le2^{-m}\le2^{-i}\). At level zero,
+\(e_0(F_0)\le2\sqrt2-2<1\), while at level one \(e_1(F_1)=0\). The
+initial maps fix \(O_0=O_1=K\), and
 \[
  \|F_1-F_0\|_\infty<1\le\beta_0,\qquad
  \|F_2-F_1\|_\infty\le\operatorname{diam}(K)=4=\beta_1.
 \]
-Все расстояния между соседними отображениями после второго равны нулю.
-Конечное семейство
-\(\{\id_{\D},\Pi|_{\D},Q_{s_m}\}\) равномерно непрерывно; рекурсивный
-выбор достаточно малых \(\delta_k^{[m]}>0\), с
-\(\delta_k^{[m]}\le2^{-k}\) и
-\(\delta_{k+1}^{[m]}\le\delta_k^{[m]}/2\), задаёт
-\(\delta^{[m]}\in\Delta\) и включает все \(F_i\) в
+All successive distances after the second map are zero. The finite
+family \(\{\id_{\D},\Pi|_{\D},Q_{s_m}\}\) is uniformly continuous.
+Recursively choose sufficiently small \(\delta_k^{[m]}>0\), with
+\(\delta_k^{[m]}\le2^{-k}\) and
+\(\delta_{k+1}^{[m]}\le\delta_k^{[m]}/2\); then
+\(\delta^{[m]}\in\Delta\) and every \(F_i\) belongs to
 \(\mathcal K_{\delta^{[m]}}\).
 \end{proof}
 
-\begin{definition}[Последние отображения допустимых последовательностей]
+\begin{definition}[Terminal Maps of Admissible Sequences]
 \label{def:last-maps}
-Для \(m\ge1\) положим
+For \(m\ge1\), set
 \[
  \mathcal T_m:=
  \left\{G\in C(\D,K):
@@ -863,29 +841,29 @@
 \]
 \end{definition}
 
-\begin{lemma}
+\begin{lemma}[Terminal Maps Belong to \(\mathcal R_m\)]
 \label{lem:last-maps-in-R}
 \[
  \forall m\ge1,\qquad \mathcal T_m\subseteq\mathcal R_m.
 \]
 \end{lemma}
 \begin{proof}
-Пусть \(G\in\mathcal T_m\). По определению существуют
-\(\lambda\in\Lambda\), \(\delta\in\Delta\) и
-\((F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\), для которых
-\(G=F_m\). Положим \(N=\lambda_m\). Тогда \(N\ge m\),
-\(G|_{O_N}=\id_{O_N}\) и
+Let \(G\in\mathcal T_m\). By definition, there are
+\(\lambda\in\Lambda\), \(\delta\in\Delta\), and
+\((F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\) such that
+\(G=F_m\). Set \(N=\lambda_m\). Then \(N\ge m\),
+\(G|_{O_N}=\id_{O_N}\), and
 \[
  G(\D)\subseteq K,\qquad
  \sup_{z\in\D}\dist(G(z),O_N)=e_m(F_m)\le2^{-m}.
 \]
-Следовательно, \(G\in\mathcal R_m\).
+Therefore \(G\in\mathcal R_m\).
 \end{proof}
 
-\begin{definition}[Функционал продолжения на следующий индекс]
+\begin{definition}[Extension Functional for the Next Index]
 \label{def:extension-functional}
-Зафиксируем \(\lambda\in\Lambda\), \(\delta\in\Delta\), \(m\ge1\) и
-\(\sigma=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\). Положим
+Fix \(\lambda\in\Lambda\), \(\delta\in\Delta\), \(m\ge1\), and
+\(\sigma=(F_0,\ldots,F_m)\in\mathcal P_m(\lambda,\delta)\). Set
 \[
  \mathcal H_{m+1}:=
  \{F\in\mathcal K_\delta:F(\D)\subseteq K,\
@@ -907,17 +885,17 @@
 \]
 \end{definition}
 
-\begin{proposition}[Минимум функционала продолжения]
+\begin{proposition}[A Minimum for the Extension Functional]
 \label{prop:extension-minimum}
-Для каждого \(\sigma\in\mathcal P_m(\lambda,\delta)\) минимум
-\(q_m(\sigma)\) достигается, и
+For every \(\sigma\in\mathcal P_m(\lambda,\delta)\), the minimum
+\(q_m(\sigma)\) is attained, and
 \[
  \exists F\in\mathcal K_\delta:
  (F_0,\ldots,F_m,F)\in\mathcal P_{m+1}(\lambda,\delta)
- \quad\Leftrightarrow\quad q_m(\sigma)\le1.
+ \quad\leftrightarrow\quad q_m(\sigma)\le1.
 \]
-Для любых \(\sigma=(F_0,\ldots,F_m)\) и
-\(\tau=(G_0,\ldots,G_m)\) из \(\mathcal P_m(\lambda,\delta)\)
+For any \(\sigma=(F_0,\ldots,F_m)\) and
+\(\tau=(G_0,\ldots,G_m)\) in \(\mathcal P_m(\lambda,\delta)\),
 \[
  |q_m(\sigma)-q_m(\tau)|
  \le\frac{\|F_m-G_m\|_\infty}{8\,2^{-m}},
@@ -925,102 +903,100 @@
 \]
 \end{proposition}
 \begin{proof}
-\(\mathcal H_{m+1}\) замкнуто в компактном \(\mathcal K_\delta\).
-Оно непусто: \(\Pi|_{\D}\in\mathcal K_\delta\), отображает \(\D\)
-в \(K\) и фиксирует \(O_{\lambda_{m+1}}\subseteq K\).
-Функционал \(J_m(\,\cdot\,;\sigma)\) непрерывен, поэтому его минимум
-достигается. Из определения \(J_m\) условие \(J_m(F;\sigma)\le1\)
-равносильно двум оценкам
+\(\mathcal H_{m+1}\) is closed in the compact space
+\(\mathcal K_\delta\). It is nonempty: \(\Pi|_{\D}\in\mathcal K_\delta\),
+maps \(\D\) into \(K\), and fixes \(O_{\lambda_{m+1}}\subseteq K\).
+The functional \(J_m(\,\cdot\,;\sigma)\) is continuous, so its minimum
+is attained. By the definition of \(J_m\), the condition
+\(J_m(F;\sigma)\le1\) is equivalent to the two estimates
 \[
  e_{m+1}(F)\le2^{-(m+1)},\qquad
  \|F-F_m\|_\infty\le8\,2^{-m}.
 \]
-Вместе с условиями \(F\in\mathcal H_{m+1}\) они равносильны
+Together with \(F\in\mathcal H_{m+1}\), these are equivalent to
 \((F_0,\ldots,F_m,F)\in\mathcal P_{m+1}(\lambda,\delta)\).
 
-Для фиксированного \(F\in\mathcal H_{m+1}\) неравенство треугольника
-даёт
+For fixed \(F\in\mathcal H_{m+1}\), the triangle inequality gives
 \[
  \left|\|F-F_m\|_\infty-\|F-G_m\|_\infty\right|
  \le\|F_m-G_m\|_\infty.
 \]
-Операция максимума сохраняет эту липшицеву оценку. Взятие минимумов по
-общему компактному множеству \(\mathcal H_{m+1}\) даёт указанную оценку
-для \(q_m\).
+Taking the maximum preserves this Lipschitz bound. Taking minima over
+the common compact set \(\mathcal H_{m+1}\) gives the stated estimate
+for \(q_m\).
 
-Наконец, \(\Pi(\D)=K\) и \(\operatorname{diam}(K)=4\), поэтому
-\(e_{m+1}(\Pi)\le4\) и
-\(\|\Pi-F_m\|_\infty\le4\), поскольку \(F_m(\D)\subseteq K\).
-Следовательно,
+Finally, \(\Pi(\D)=K\) and \(\operatorname{diam}(K)=4\), so
+\(e_{m+1}(\Pi)\le4\) and \(\|\Pi-F_m\|_\infty\le4\), since
+\(F_m(\D)\subseteq K\). Therefore
 \[
  q_m(\sigma)\le J_m(\Pi;\sigma)
  \le\max\{4\cdot2^{m+1},\,4/(8\,2^{-m})\}=2^{m+3}.
 \]
 \end{proof}
 
-\section{Равностепенная аппроксимация и MLC}
+\section{Equicontinuous Approximation and MLC}
 
-\begin{proposition}[Эквивалентность локальной связности и \(\mathsf{EA}\)]
+\begin{proposition}[Local Connectivity Is Equivalent to \(\mathsf{EA}\)]
 \label{prop:equicontinuous-selection}
 \[
- \LC(\M)\quad\Leftrightarrow\quad\mathsf{EA},
+ \LC(\M)\quad\leftrightarrow\quad\mathsf{EA},
 \]
 \[
  \forall\rho,(m_j),(G_j),\qquad
  \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)
- \Rightarrow
+ \to
  \forall\varepsilon>0,\qquad
  \omega_\M\!\left(\frac{\rho(\varepsilon/3)}2\right)
  \le\frac{2\varepsilon}3.
 \]
 \end{proposition}
 \begin{proof}
-Пусть выполнено \(\mathsf{EAdata}(\rho,(m_j),(G_j))\). Для каждого
-\(j\) выберем \(N_j\ge m_j\), удовлетворяющее определению
-\(\mathcal R_{m_j}\). Тогда
+Suppose \(\mathsf{EAdata}(\rho,(m_j),(G_j))\) holds. For each \(j\),
+choose \(N_j\ge m_j\) as in the definition of \(\mathcal R_{m_j}\).
+Then
 \[
  G_j(\D)\subseteq K,\qquad
  G_j|_{O_{N_j}}=\id_{O_{N_j}},\qquad
  \sup_{z\in\D}\dist(G_j(z),O_{N_j})\le2^{-m_j}.
 \]
-По теореме Арцела--Асколи существует равномерно сходящаяся
-подпоследовательность \(G_{j_\nu}\to R\in C(\D,K)\).
-Для фиксированного \(k\) при достаточно больших \(\nu\)
-\(N_{j_\nu}\ge k\), поэтому \(O_{N_{j_\nu}}\subseteq O_k\), и
+By the Arzelà--Ascoli theorem, a subsequence
+\(G_{j_\nu}\to R\in C(\D,K)\) converges uniformly. For fixed \(k\),
+we have \(N_{j_\nu}\ge k\) for all sufficiently large \(\nu\), hence
+\(O_{N_{j_\nu}}\subseteq O_k\), and
 \[
  \dist(R(z),O_k)
  \le\|R-G_{j_\nu}\|_\infty+2^{-m_{j_\nu}}
  \longrightarrow0.
 \]
-Следовательно, \(R(\D)\subseteq\bigcap_kO_k=\M\). Поскольку
-\(\M\subseteq O_{N_j}\) и \(G_j|_{O_{N_j}}=\id\), имеем
+Therefore \(R(\D)\subseteq\bigcap_kO_k=\M\). Since
+\(\M\subseteq O_{N_j}\) and \(G_j|_{O_{N_j}}=\id\), we have
 \(R|_\M=\id_\M\).
 
-Равномерный предел сохраняет оценки модуля:
+The uniform limit preserves the modulus estimates:
 \[
- |z-w|\le\rho(\eta)\Rightarrow|R(z)-R(w)|\le\eta
+ |z-w|\le\rho(\eta)\to|R(z)-R(w)|\le\eta
  \qquad(\eta>0,\ z,w\in\D).
 \]
-Положим \(r_\varepsilon:=\rho(\varepsilon/3)/2\). При
-\(x,y\in\M\), \(|x-y|<r_\varepsilon\), множество
+Set \(r_\varepsilon:=\rho(\varepsilon/3)/2\). For
+\(x,y\in\M\) with \(|x-y|<r_\varepsilon\), the set
 \[
  C:=R\bigl(\D\cap\overline B(x,r_\varepsilon)\bigr)
 \]
-компактно и связно, содержит \(x,y\) и лежит в \(\M\). Для каждого
-\(z\in\D\cap\overline B(x,r_\varepsilon)\)
+is compact and connected, contains \(x,y\), and lies in \(\M\). For
+each \(z\in\D\cap\overline B(x,r_\varepsilon)\),
 \[
  |R(z)-x|=|R(z)-R(x)|\le\varepsilon/3.
 \]
-Отсюда \(\operatorname{diam}C\le2\varepsilon/3\), и
+Hence \(\operatorname{diam}C\le2\varepsilon/3\), and
 \[
  \omega_\M(r_\varepsilon)\le2\varepsilon/3<\varepsilon.
 \]
-Теорема~\ref{thm:small-connected-compacts} даёт \(\LC(\M)\).
+Theorem~\ref{thm:small-connected-compacts} gives \(\LC(\M)\).
 
-Пусть теперь \(\LC(\M)\). По теореме Каратеодори
-\(\Psi=\Phi^{-1}\) непрерывно продолжается на \(\{|w|\ge1\}\);
-обозначим продолжение через \(\widehat\Psi\)
-\cite[теорема 16.6]{Milnor}. Положим
+Now suppose \(\LC(\M)\). By Carathéodory's theorem,
+\(\Psi=\Phi^{-1}\) extends continuously to \(\{|w|\ge1\}\); denote
+the extension by \(\widehat\Psi\)
+\cite[Theorem~16.6]{Milnor}. Define
 \[
  R(c):=
  \begin{cases}
@@ -1028,42 +1004,42 @@
   \widehat\Psi\!\left(\Phi(c)/|\Phi(c)|\right),&c\notin\M.
  \end{cases}
 \]
-Для \(c\notin\M\) положим \(\xi=\Phi(c)/|\Phi(c)|\). При
-\(c\to\partial\M\) выполнено \(G(c)\to0\), поэтому
+For \(c\notin\M\), set \(\xi=\Phi(c)/|\Phi(c)|\). As
+\(c\to\partial\M\), we have \(G(c)\to0\), and thus
 \[
  |R(c)-c|
  =|\widehat\Psi(\xi)-\widehat\Psi(e^{G(c)}\xi)|
  \longrightarrow0.
 \]
-Следовательно, \(R:\C\to\M\) непрерывно и \(R|_\M=\id_\M\).
-На кольце \(A_a=\{w:1\le|w|\le e^a\}\) положим
+Thus \(R:\C\to\M\) is continuous and \(R|_\M=\id_\M\). On the annulus
+\(A_a=\{w:1\le|w|\le e^a\}\), define
 \[
  \omega_a(r):=
  \sup_{\substack{w,v\in A_a\\|w-v|\le r}}
  |\widehat\Psi(w)-\widehat\Psi(v)|.
 \]
-Тогда \(\omega_a(r)\to0\) при \(r\downarrow0\). Для \(0<s\le a\) и
-\(c\notin\M\) положим
-\(\xi=\Phi(c)/|\Phi(c)|\) и \(r=\exp(\min\{s,G(c)\})\). Тогда
-\(P_s(c)=\widehat\Psi(r\xi)\), \(R(c)=\widehat\Psi(\xi)\) и
-\(|r\xi-\xi|\le e^s-1\). На \(\M\) отображения \(P_s\) и \(R\)
-совпадают. Так как \(R(\D)\subseteq\M\subseteq K\) и отображение
-\(\Pi\) является 1-липшицевым, для \(z\in\D\)
+Then \(\omega_a(r)\to0\) as \(r\downarrow0\). For \(0<s\le a\) and
+\(c\notin\M\), set
+\(\xi=\Phi(c)/|\Phi(c)|\) and \(r=\exp(\min\{s,G(c)\})\). Then
+\(P_s(c)=\widehat\Psi(r\xi)\), \(R(c)=\widehat\Psi(\xi)\), and
+\(|r\xi-\xi|\le e^s-1\). The maps \(P_s\) and \(R\) agree on \(\M\).
+Since \(R(\D)\subseteq\M\subseteq K\) and \(\Pi\) is 1-Lipschitz, for
+\(z\in\D\)
 \[
  |Q_s(z)-R(z)|
  =|\Pi(P_s(z))-\Pi(R(z))|
  \le|P_s(z)-R(z)|
  \le\omega_a(e^s-1).
 \]
-Следовательно,
+Therefore
 \[
  \|Q_s-R|_\D\|_\infty
  \le\omega_a(e^s-1)\longrightarrow0
  \qquad(s\downarrow0).
 \]
 
-Положим \(\lambda_0=0,\lambda_1=1,s_1=a\). Для каждого \(n\ge2\)
-выберем \(s_n\) и \(\lambda_n\) так, чтобы
+Set \(\lambda_0=0,\lambda_1=1,s_1=a\). For each \(n\ge2\), choose
+\(s_n\) and \(\lambda_n\) so that
 \[
  0<s_n<\min\{s_{n-1}/2,2^{-n}\},\qquad
  \kappa(s_n)\le2^{-n},\qquad
@@ -1074,13 +1050,13 @@
  \lambda_n\ge\ell_n,\qquad
  2^{1-\lambda_n}\log3\le s_n.
 \]
-Тогда \(\lambda\in\Lambda\) и \(\lambda_n\ge n\) при \(n\ge1\).
-Положим
+Then \(\lambda\in\Lambda\) and \(\lambda_n\ge n\) for \(n\ge1\).
+Set
 \[
  F_1=\Pi|_\D,\qquad F_n=Q_{s_n}\quad(n\ge2).
 \]
-Тогда \(F_n\to R|_\D\) равномерно, откуда
-\(\{F_n:n\ge1\}\) равностепенно непрерывно. Определим
+Then \(F_n\to R|_\D\) uniformly, so \(\{F_n:n\ge1\}\) is
+equicontinuous. Define
 \[
  \Omega(r):=
  \sup_{n\ge1}\ \sup_{\substack{z,w\in\D\\|z-w|\le r}}
@@ -1090,64 +1066,75 @@
  r_\eta:=\sup\{r\in(0,1]:\Omega(r)\le\eta\},\qquad
  \rho(\eta):=\min\{\eta,r_\eta/2\}\quad(\eta>0).
 \]
-Равностепенная непрерывность даёт \(r_\eta>0\). Монотонность
-\(\Omega\) и определение супремума дают
+Equicontinuity gives \(r_\eta>0\). Monotonicity of \(\Omega\) and the
+definition of the supremum imply
 \[
  0<\rho(\eta)\le\eta,\qquad \Omega(\rho(\eta))\le\eta.
 \]
-Лемма~\ref{lem:green-depth} даёт \(Q_{s_n}|_{O_{\lambda_n}}=\id\).
-При \(n\ge2\)
+Lemma~\ref{lem:green-depth} gives \(Q_{s_n}|_{O_{\lambda_n}}=\id\).
+For \(n\ge2\),
 \[
  \sup_{z\in\D}\dist(F_n(z),O_{\lambda_n})
  \le\sup_{z\in\D}\dist(Q_{s_n}(z),\M)
  \le\kappa(s_n)\le2^{-n}.
 \]
-Кроме того, \(F_n(\D)\subseteq K\). Отображение \(F_1=\Pi|_\D\)
-фиксирует \(O_1=K\), отображает \(\D\) в \(K\) и имеет нулевое
-расстояние до \(O_1\). Поэтому \(F_n\in\mathcal R_n\) для всех
-\(n\ge1\). При \(m_j=j\) и \(G_j=F_j\) выполнено
-\(\mathsf{EAdata}(\rho,(m_j),(G_j))\).
+Moreover, \(F_n(\D)\subseteq K\). The map \(F_1=\Pi|_\D\) fixes
+\(O_1=K\), maps \(\D\) into \(K\), and has zero distance from \(O_1\).
+Thus \(F_n\in\mathcal R_n\) for every \(n\ge1\). Taking \(m_j=j\) and
+\(G_j=F_j\) gives \(\mathsf{EAdata}(\rho,(m_j),(G_j))\).
 \end{proof}
 
-\section{Другие рассмотренные подходы}
+\section{Other Approaches Considered}
 \label{sec:other-approaches}
 
 \noindent
-В доказательство теоремы об аппроксимации включены функция \(q_m\), компактность
-пространств допустимых последовательностей и критерий через
-равностепенную непрерывность последовательности отображений
-\(G_j\in\mathcal R_{m_j}\) при \(m_j\to\infty\). Ниже перечислены
-альтернативные подходы и оценки для дальнейшего усиления доказательства.
+The approximation-theorem proof includes the functional \(q_m\),
+compactness of the spaces of admissible sequences, and a criterion
+using equicontinuity of a sequence of maps \(G_j\in\mathcal R_{m_j}\)
+with \(m_j\to\infty\). The alternative approaches and estimates below
+may help strengthen the proof.
 
 
 \begin{description}
-\item[Ретракции \(Q_s\).] Для отображений \(Q_s\) получена оценка расстояния между уровнями; конечность \(\int_0^aV(u)\,du\) обеспечила бы их равномерную сходимость при \(s\downarrow0\).
-Этот маршрут сводится к оценке интеграла \(\int_0^aV(u)\,du\), конечность которого обеспечит равномерную сходимость ретракций.
+\item[Retractions \(Q_s\).] A bound on the distance between the maps
+\(Q_s\) at different levels has been proved. Finiteness of
+\(\int_0^aV(u)\,du\) would imply their uniform convergence as
+\(s\downarrow0\). This route therefore reduces to estimating that
+integral.
 
-\item[Продолжение последовательности.] Локальные изменения отображений и выпуклая интерполяция дают оценки ошибки и равномерных расстояний при наличии допустимого продолжения, а минимум \(q_m\) точно характеризует добавление следующего отображения.
-Для продолжения при каждом \(m\) требуется равномерная оценка; имеющаяся граница \(q_m(\sigma)\le2^{m+3}\) растёт с \(m\) и оставляет этот количественный шаг открытым.
+\item[Extending a sequence.] Local modifications of maps and convex
+interpolation give error and uniform-distance bounds when an
+admissible extension exists; the minimum \(q_m\) characterizes exactly
+whether the next map can be added. A uniform bound is needed to extend
+the sequence at every \(m\). The current estimate
+\(q_m(\sigma)\le2^{m+3}\) grows with \(m\), leaving this quantitative
+step open.
 
-\item[Сумма расстояний.] Рассматривалось условие суммируемости равномерных расстояний между \(G_j\) и \(G_{j+1}\) при \(m_j\to\infty\):
+\item[Summable distances.] We considered the condition that the uniform
+distances between \(G_j\) and \(G_{j+1}\) are summable as
+\(m_j\to\infty\):
 \[
  \sum_{j\ge1}\|G_{j+1}-G_j\|_\infty<\infty.
 \]
-Равностепенная непрерывность уже даёт равномерно сходящуюся подпоследовательность по теореме Арцела--Асколи; суммируемость расстояний задаёт дополнительный количественный маршрут к равномерной сходимости.
+Equicontinuity already gives a uniformly convergent subsequence by
+Arzelà--Ascoli; summability of the distances provides an additional
+quantitative route to uniform convergence.
 
-\item[Гомотопические инварианты.] Изучались компоненты связности и высшие гомотопические группы \(\mathcal P_m\) при \(m\to\infty\).
-Если при фиксированных \((\lambda,\delta)\) все множества
-\(\mathcal P_m\) непусты, компактность соответствующих вложенных
-множеств последовательностей даёт совместимую бесконечную последовательность.
-При параметрах, зависящих от \(m\), потребовались бы обратная система
-и количественные оценки.
+\item[Homotopy invariants.] We considered the connected components and
+higher homotopy groups of \(\mathcal P_m\) as \(m\to\infty\). If, for
+fixed \((\lambda,\delta)\), all the sets
+\(\mathcal P_m\) are nonempty, compactness of the corresponding
+nested sets of sequences gives a compatible infinite sequence. If
+the parameters depend on \(m\), an inverse system and quantitative
+estimates would be needed.
 
-\item[Разбиение границы и склейка.]
-Рассматривались покрытия \(\partial\M\) компактными множествами с
-одноточечными пересечениями, их образы и пределы склеенных комплексов.
-Конечные объединения таких множеств имеют топологическую размерность
-\(\le1\) (по
-\(\dim_{\mathrm{top}}(\partial\M)\le1\) \cite{HurewiczWallman} и
-теореме о замкнутых суммах размерности), а \(\M\) содержит
-\(B(0,1/4)\). Для построения по этому маршруту задаются отображения,
-определяющие отождествления, и оценивается стремление диаметров
-склеиваемых множеств к нулю.
+\item[Boundary decompositions and gluing.]
+We considered covers of \(\partial\M\) by compact sets with
+one-point intersections, their images, and limits of the glued
+complexes. Finite unions of such sets have topological dimension
+\(\le1\), by \(\dim_{\mathrm{top}}(\partial\M)\le1\)
+\cite{HurewiczWallman} and the theorem on the dimension of closed
+unions; moreover, \(\M\) contains \(B(0,1/4)\). This route requires
+explicit maps defining the identifications and estimates showing that
+the diameters of the glued sets tend to zero.
 \end{description}

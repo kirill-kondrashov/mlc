@@ -10,29 +10,28 @@
 \setlength{\intextsep}{4pt}
 \usepackage{fontspec}
 \usepackage{polyglossia}
-\setdefaultlanguage{russian}
-\setotherlanguage{english}
+\setdefaultlanguage{english}
 \setmainfont{Noto Serif}
 \setlength{\emergencystretch}{1em}
 \setcounter{tocdepth}{1}
 \usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,unicode=true]{hyperref}
 \hypersetup{
-  pdftitle={Локальная связность множества Мандельброта: факторизация локальных компонент},
-  pdfsubject={Строгая условная теорема о факторизации и открытые геометрические оценки}
+  pdftitle={Local Connectivity of the Mandelbrot Set: Factorization of Local Components},
+  pdfsubject={A Conditional Factorization Theorem and Open Geometric Estimates}
 }
 
-\newtheorem{theorem}{Теорема}[chapter]
-\newtheorem{lemma}[theorem]{Лемма}
-\newtheorem{proposition}[theorem]{Предложение}
-\newtheorem{corollary}[theorem]{Следствие}
-\newtheorem{definition}[theorem]{Определение}
-\newtheorem{openestimate}[theorem]{Открытая гипотеза}
-\newtheorem*{approxthm}{Теорема об аппроксимации}
-\renewcommand{\proofname}{Доказательство}
-\definecolor{heuristicblue}{RGB}{28,76,132}
-\newenvironment{fuzzystep}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{openestimate}[theorem]{Open conjecture}
+\newtheorem*{approxthm}{Approximation theorem}
+\renewcommand{\proofname}{Proof}
+\definecolor{conditionalblue}{RGB}{28,76,132}
+\newenvironment{conditionalstep}
   {\begin{mdframed}[
-     linecolor=heuristicblue,
+     linecolor=conditionalblue,
      linewidth=1.2pt,
      leftline=true,
      rightline=false,
@@ -48,7 +47,7 @@
      skipbelow=\medskipamount,
      backgroundcolor=white,
      nobreak=true
-   ]\begingroup\color{heuristicblue}\small}
+   ]\begingroup\color{conditionalblue}\small}
   {\endgroup\end{mdframed}}
 
 \newcommand{\C}{\mathbb C}
@@ -62,8 +61,8 @@
 \newcommand{\dH}{d_{\mathrm H}}
 \newcommand{\Lip}{\operatorname{Lip}}
 
-\title{Локальная связность множества Мандельброта:\\
-Теорема о факторизации локальных компонент}
+\title{Local Connectivity of the Mandelbrot Set:\\
+A Conditional Factorization Theorem for Local Components}
 \author{}
 \date{}
 
@@ -79,45 +78,42 @@
 \input{docs/chapters/05_mlc_factorization_connection.tex}
 \input{docs/chapters/06_approximation_theorem.tex}
 
-\renewcommand{\bibname}{Литература}
-\addcontentsline{toc}{chapter}{Литература}
+\renewcommand{\bibname}{References}
+\addcontentsline{toc}{chapter}{References}
 \begin{thebibliography}{99}\small
 \bibitem{DH}
-A.~Douady и J.~H.~Hubbard,
+A.~Douady and J.~H.~Hubbard,
 \foreignlanguage{english}{\emph{Exploring the Mandelbrot Set: The Orsay Notes}},
-[\foreignlanguage{russian}{\emph{Исследование множества Мандельброта: записки из Орсе}}],
-гл.~8, предложение~8.1(b), теорема~8.1 и следствия~8.3--8.4,
-с.~62--65.
+Chapter~8, Proposition~8.1(b), Theorem~8.1, and Corollaries~8.3--8.4,
+pp.~62--65.
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}
-{Прямая ссылка на PDF}.
+{PDF}.
 
 \bibitem{Milnor}
 J.~Milnor,
-\foreignlanguage{english}{\emph{Dynamics in One Complex Variable: Introductory Lectures}}
-[\foreignlanguage{russian}{\emph{Динамика одной комплексной переменной: вводные лекции}}],
-теорема~16.6, с.~84 PDF-файла.
+\foreignlanguage{english}{\emph{Dynamics in One Complex Variable: Introductory Lectures}},
+Theorem~16.6, p.~84 of the PDF.
 \href{https://arxiv.org/pdf/math/9201272#page=84}
-{Прямая ссылка на PDF}.
+{PDF}.
 
 \bibitem{Forster}
 O.~Forster,
 \foreignlanguage{english}{\emph{Lectures on Riemann Surfaces}},
 Graduate Texts in Mathematics, vol.~81, Springer-Verlag (1981),
-формула Римана--Гурвица.
+Riemann--Hurwitz formula.
 
 \bibitem{BCR}
-J.~Bochnak, M.~Coste и M.-F.~Roy,
+J.~Bochnak, M.~Coste, and M.-F.~Roy,
 \foreignlanguage{english}{\emph{Real Algebraic Geometry}},
 Ergebnisse der Mathematik und ihrer Grenzgebiete, 3.~Folge, vol.~36,
-Springer-Verlag (1998), теорема~2.4.5.
+Springer-Verlag (1998), Theorem~2.4.5.
 
 \bibitem{HurewiczWallman}
-W.~Hurewicz и H.~Wallman,
-\foreignlanguage{english}{\emph{Dimension Theory}}
-[\foreignlanguage{russian}{\emph{Теория размерности}}],
+W.~Hurewicz and H.~Wallman,
+\foreignlanguage{english}{\emph{Dimension Theory}},
 Princeton Mathematical Series, vol.~4, Princeton University Press (1941).
 \href{https://archive.org/details/dimensiontheory00hure}
-{Прямая ссылка на каталог}.
+{Catalog record}.
 
 \bibitem{Yoccoz}
 J.-C.~Yoccoz,
@@ -126,18 +122,18 @@ polynômes quadratiques}},
 \foreignlanguage{english}{\emph{Petits diviseurs en dimension 1}},
 Astérisque, no.~231 (1995), pp.~1--88.
 \href{https://www.numdam.org/book-part/AST_1995__231__1_0/}
-{Страница статьи}.
+{Article page}.
 
 \bibitem{DudkoMLC}
 D.~Dudko,
 \foreignlanguage{english}{\emph{On the MLC Conjecture and the
 Renormalization Theory in Complex Dynamics}},
-arXiv:2512.24171 (2025), препринт, заявлен к публикации в
+arXiv:2512.24171 (2025), preprint, submitted to
 \foreignlanguage{english}{\emph{Proceedings of the ICM 2026}}.
-\href{https://arxiv.org/abs/2512.24171}{Страница препринта}.
+\href{https://arxiv.org/abs/2512.24171}{arXiv page}.
 
 \bibitem{DudkoLyubichSatellite}
-D.~Dudko и M.~Lyubich,
+D.~Dudko and M.~Lyubich,
 \foreignlanguage{english}{\emph{Local connectivity of the Mandelbrot
 set at some satellite parameter of bounded type}},
 \foreignlanguage{english}{Geometric and Functional Analysis},
@@ -145,19 +141,19 @@ vol.~33 (2023), no.~4, pp.~912--1047.
 \href{https://doi.org/10.1007/s00039-023-00637-8}{DOI}.
 
 \bibitem{DudkoLyubichFeigenbaum}
-D.~Dudko и M.~Lyubich,
+D.~Dudko and M.~Lyubich,
 \foreignlanguage{english}{\emph{MLC at Feigenbaum points}},
 \foreignlanguage{english}{Publications Mathématiques de l'IHÉS},
 vol.~143 (2026), pp.~97--141.
 \href{https://doi.org/10.5802/pmihes.2}{DOI};
-\href{https://arxiv.org/abs/2309.02107}{препринт arXiv:2309.02107}.
+\href{https://arxiv.org/abs/2309.02107}{arXiv:2309.02107}.
 
 \bibitem{KahnLyubichElephant}
-J.~Kahn и M.~Lyubich,
+J.~Kahn and M.~Lyubich,
 \foreignlanguage{english}{\emph{A priori bounds for some infinitely
 renormalizable quadratic: IV. Elephant Eyes}},
-arXiv:2601.21905 (2026), препринт.
-\href{https://arxiv.org/abs/2601.21905}{Страница препринта}.
+arXiv:2601.21905 (2026), preprint.
+\href{https://arxiv.org/abs/2601.21905}{arXiv page}.
 
 \bibitem{Lyubich97}
 M.~Lyubich,
