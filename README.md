@@ -17,12 +17,12 @@ $$
 
 $$
 M
-=\left\{c\in\mathbb C:
+=\lbrace c\in\mathbb C:
   \exists B\in\mathbb R\ \forall n\in\mathbb N,\
   \lVert p_n(c)\rVert\le B
-\right\}
+\rbrace
 =\bigcap_{n\in\mathbb N}
-  \left\{c:\lVert p_n(c)\rVert\le2\right\}.
+  \lbrace c:\lVert p_n(c)\rVert\le2\rbrace.
 $$
 
 $$
@@ -42,10 +42,10 @@ For $N\in\mathbb N$, define
 
 $$
 O_N
-:=\left\{c:
+:=\lbrace c:
   \lVert c\rVert\le2\ \land\
   \forall n\le N,\ \lVert p_n(c)\rVert\le2
-  \right\}.
+  \rbrace.
 $$
 
 The formalisation proves
@@ -62,8 +62,8 @@ $$
 For $x\in M$, $r>0$, and $N\in\mathbb N$, let
 
 $$
-C_N(x,r):=\operatorname{Comp}_{x}
-  \left(O_N\cap\overline B(x,r)\right).
+C_N(x,r):=\mathrm{Comp}_{x}
+  (O_N\cap\overline B(x,r)).
 $$
 
 The root proposition is
@@ -198,7 +198,7 @@ $$
 $$
 
 The single-rectangle scheme in `CertifiedTrappingRegions.lean` satisfies
-$|\operatorname{Re}c|\le1/2$ for every certified parameter, so its
+$|\mathrm{Re}c|\le1/2$ for every certified parameter, so its
 `InnerDensity` proposition is false. Finite unions admit a certificate for
 the parameter box centered at $-1$ with real and imaginary halfwidth
 $1/256$; this is an instance of `FiniteTrappingRegions.lean`.
@@ -217,8 +217,8 @@ $$
 \begin{aligned}
 \mathrm{VD}(E):\Longleftrightarrow
 \forall a\ \forall x,y\in\mathbb C:\quad
-&\left(\forall N,\ x\in Q_{N,a_N}\right)
-\land\left(\forall N,\ y\in Q_{N,a_N}\right)\\
+&(\forall N,\ x\in Q_{N,a_N})
+\land(\forall N,\ y\in Q_{N,a_N})\\
 &\Longrightarrow
 \forall\varepsilon>0,\ d(x,y)<\varepsilon,
 \end{aligned}
@@ -262,7 +262,7 @@ $$
 \begin{aligned}
 \mathrm{FC}:\Longleftrightarrow
 \forall k\ \exists\text{ finite }J,\ T,\
-\{(P_i,r_i,\delta_i)\}_{i\in J}:\quad
+\lbrace(P_i,r_i,\delta_i)\rbrace_{i\in J}:\quad
 &\forall i\in J,\quad 0<\delta_i<r_i<2^{-k},\\
 &O_T\subseteq\bigcup_{i\in J}P_i,\\
 &\forall i\in J\ \forall c\in M\cap P_i\ \forall N\ \exists L\ge N:\\
@@ -336,16 +336,16 @@ existence of continuous maps $R_n:D\to D$ and integers $N_n\ge n$ such that
 
 $$
 \begin{aligned}
-&R_0=\operatorname{id}_D,\qquad R_n|_{O_{N_n}}=\operatorname{id},\\
+&R_0=\mathrm{id}_D,\qquad R_n|_{O_{N_n}}=\mathrm{id},\\
 &\forall z\in D\ \exists w\in O_{N_n},\quad |R_n(z)-w|\le2^{-n},\\
-&\|R_{n+1}-R_n\|_\infty\le8\,2^{-n}.
+&\lVert R_{n+1}-R_n\rVert_\infty\le8\,2^{-n}.
 \end{aligned}
 $$
 
 The proved reduction yields a continuous limit $R:D\to M$ satisfying
 
 $$
-\|R_n-R\|_\infty\le16\,2^{-n},\qquad R|_M=\operatorname{id}_M.
+\lVert R_n-R\rVert_\infty\le16\,2^{-n},\qquad R|_M=\mathrm{id}_M.
 $$
 
 Images of convex neighborhoods under $R$ give
@@ -387,8 +387,8 @@ negation.
 The root axiom frontier is
 
 $$
-\operatorname{Axioms}(\text{root})
-=\{\mathrm{propext},\mathrm{Quot.sound},\mathrm{Classical.choice}\}.
+\mathrm{Axioms}(\text{root})
+=\lbrace\mathrm{propext},\mathrm{Quot.sound},\mathrm{Classical.choice}\rbrace.
 $$
 
 The source contains no project-level `axiom`, no `sorryAx`, and no
