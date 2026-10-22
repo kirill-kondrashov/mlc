@@ -66,18 +66,17 @@ C_N(x,r):=\mathrm{Comp}_{x}
   (O_N\cap\overline B(x,r)).
 $$
 
-The root proposition is
+The root proposition $\mathrm{BUF}(M,O)$ states that, for every $x\in M$
+and every $\varepsilon>0$, there are $r,\delta\in\mathbb R$ such that
 
 $$
-\begin{aligned}
-\mathrm{BUF}(M,O):\Longleftrightarrow
-\forall x\in M\ \forall\varepsilon>0\ \exists r,\delta\in\mathbb R:\quad
-&0<\delta<r<\varepsilon\\
-&{}\land
-\forall N\ \exists L\ge N:
-O_L\cap\overline B(x,\delta)
-\subseteq C_N(x,r).
-\end{aligned}
+0<\delta<r<\varepsilon
+$$
+
+and, for every $N$, there is $L\ge N$ satisfying
+
+$$
+O_L\cap\overline B(x,\delta)\subseteq C_N(x,r).
 $$
 
 Its Lean packaging is
@@ -256,19 +255,24 @@ partition.
 ### Finite-component bridge
 
 Here $P_i$ are rational closed rectangles, $r_i,\delta_i\in\mathbb R$,
-and $k,T,N,L\in\mathbb N$. The finite-component proposition is
+and $k,T,N,L\in\mathbb N$. The finite-component proposition
+$\mathrm{FC}$ states that, for every $k$, there are a finite set $J$, a
+stage $T$, and data $(P_i,r_i,\delta_i)$ for $i\in J$ satisfying the
+following conditions:
 
 $$
-\begin{aligned}
-\mathrm{FC}:\Longleftrightarrow
-\forall k\ \exists\text{ finite }J,\ T,\
-\lbrace(P_i,r_i,\delta_i)\rbrace_{i\in J}:\quad
-&\forall i\in J,\quad 0<\delta_i<r_i<2^{-k},\\
-&O_T\subseteq\bigcup_{i\in J}P_i,\\
-&\forall i\in J\ \forall c\in M\cap P_i\ \forall N\ \exists L\ge N:\\
-&\qquad O_L\cap\overline B(c,\delta_i)
-\subseteq C_N(c,r_i).
-\end{aligned}
+0<\delta_i<r_i<2^{-k}\qquad\text{for every }i\in J.
+$$
+
+$$
+O_T\subseteq\bigcup_{i\in J}P_i.
+$$
+
+For every $i\in J$, every $c\in M\cap P_i$, and every $N$, there is
+$L\ge N$ such that
+
+$$
+O_L\cap\overline B(c,\delta_i)\subseteq C_N(c,r_i).
 $$
 
 The proved bridge is
