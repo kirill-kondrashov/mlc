@@ -1,0 +1,616 @@
+\chapter{The Factorization Lemma}
+\noindent This chapter proves an abstract criterion under which summable cut-cost estimates stabilize root components in a nested filtration. It then uses path modulus and contact graphs to relate loss of local radius to cut cost. For the Mandelbrot set, the criterion yields conditional factorization from the joint AM and GC hypotheses; the estimates themselves are treated in the following chapters.
+
+\section{General Criteria via Cuts and Path Modulus}
+\label{sec:general-cut-theorems}
+
+First separate the general scheme from the specific parameter
+filtration introduced below. Let \((Z,d)\) be a compact metric space,
+and let
+\[
+ Y_0\supseteq Y_1\supseteq\cdots
+\]
+be nonempty compact sets with \(X:=\bigcap_{n\ge0}Y_n\ne\varnothing\).
+Write \(\overline B_d(x,t)\) for the closed ball in \(Z\). For
+\(A\subseteq Z\) and \(x\in A\), let \(\operatorname{Comp}_x(A)\) be
+the connected component of \(A\) containing \(x\). For \(x\in X\) and
+\(r>0\), set
+\[
+ C_n^X(x,r):=
+ \operatorname{Comp}_x\bigl(Y_n\cap\overline B_d(x,r)\bigr),\qquad
+ \rho_n^X(x,r):=
+ \sup\{\delta\in[0,r]:
+ X\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r)\}.
+\]
+Let \(\lambda_m\in\{0,1,2,\ldots\}\),
+\(1\le\lambda_1<\lambda_2<\cdots\), and
+\(\lambda_m\to\infty\). Use the abbreviations
+\[
+ R_m:=\rho_{\lambda_m}^X(x,r),\qquad
+ \Delta_m:=R_m-R_{m+1}\ge0.
+\]
+For each depth block, allow any nonnegative quantity
+\(\mathfrak c_m\), interpreted as the cost of a finite separating
+family. The following theorem uses only its numerical bounds.
+
+\begin{theorem}[Abstract Criterion for Summable Cut Costs]
+\label{thm:abstract-summable-cut}
+Fix \(x\in X\), \(r>0\), and the sequence \((\lambda_m)\) defined
+above. Suppose there are numbers \(\mathfrak c_m\ge0\),
+\(\epsilon_m\ge0\) and constants \(A,B>0\), independent of \(m\), such
+that
+\[
+ \sum_m\epsilon_m<\infty,\qquad
+ \exists m_0\ \forall m\ge m_0,\quad
+ 0\le\Delta_m\le A\mathfrak c_m,\qquad
+ \mathfrak c_m\le B R_m\epsilon_m,\qquad R_m>0.
+\]
+If each set \(Y_n\cap\overline B_d(x,r)\) has finitely many connected
+components, then there exists \(\delta>0\) such that
+\[
+ X\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r)
+ \qquad(n\ge0).
+\]
+In particular, the component system of the finite approximations
+factorizes in the sense of the inclusion
+\[
+ \forall n\ \exists L\ge n,\qquad
+ Y_L\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r).
+\]
+If for each \(x\in X\) and \(\varepsilon>0\) such pointwise data can be
+chosen with \(r<\varepsilon\), then \(X\) is locally connected.
+\end{theorem}
+\begin{proof}
+Set \(q_m:=AB\epsilon_m\). By hypothesis,
+\(\Delta_m\le q_mR_m\) for all \(m\ge m_0\). Summability implies
+\(q_m\le1/2\) for all sufficiently large \(m\); increase \(m_0\) so
+that this and \(R_m>0\) hold for every \(m\ge m_0\). Then
+\[
+ R_m\ge R_{m_0}\prod_{j=m_0}^{m-1}(1-q_j)
+ \ge R_{m_0}\exp\!\left(-2\sum_{j=m_0}^{\infty}q_j\right)>0
+ \qquad(m\ge m_0).
+\]
+The sequence \(\rho_n^X(x,r)\) is nonincreasing and
+\(\lambda_m\to\infty\), so
+\(\inf_n\rho_n^X(x,r)=\inf_mR_m>0\). Choose
+\(0<\delta<\inf_n\rho_n^X(x,r)\). By the definition of the supremum
+and monotonicity of the inclusion as the radius decreases, we obtain
+\[
+ X\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r)
+ \qquad(n\ge0).
+\]
+For fixed \(n\), the set
+\[
+ B_n:=\bigl(Y_n\cap\overline B_d(x,\delta)\bigr)
+       \setminus C_n^X(x,r).
+\]
+Since \(\delta<r\), this is exactly the intersection of
+\(Y_n\cap\overline B_d(x,\delta)\) with the union of all components of
+\(Y_n\cap\overline B_d(x,r)\) except \(C_n^X(x,r)\). These components
+are compact, and their finiteness implies that \(B_n\) is compact.
+Moreover, \(B_n\cap X=\varnothing\). If
+\(Y_L\cap\overline B_d(x,\delta)\cap B_n\ne\varnothing\) for every
+\(L\ge n\), nested compactness would give a nonempty intersection lying
+in \(X\cap B_n\), a contradiction. Hence for some \(L\ge n\),
+\[
+ Y_L\cap\overline B_d(x,\delta)\subseteq C_n^X(x,r).
+\]
+Finally, \(C:=\bigcap_n C_n^X(x,r)\) is the intersection of a
+decreasing sequence of nonempty compact connected sets. It is compact
+and connected, lies in \(X\cap\overline B_d(x,r)\), and contains
+\(X\cap\overline B_d(x,\delta)\). Choosing \(r<\varepsilon\) gives a
+connected neighborhood of \(x\) inside any prescribed relative
+neighborhood. Thus \(X\) is locally connected.
+\end{proof}
+
+\subsection{Two Independent Estimates for Geometric Filtrations}
+
+The relation between cut cost and radius loss can be expressed without
+reference to dynamics. Let
+\(\mathcal Q_m=\{Q_{m,\alpha}\}_{\alpha\in J_m}\) be a finite family of
+compact cells, and let \(\Gamma_m\) be a family of continuous paths.
+Define the discrete \(1\)-modulus by
+\[
+ \operatorname{Mod}_{1,m}(\Gamma_m):=
+ \inf\left\{
+ \sum_{\alpha\in J_m}w_\alpha\operatorname{diam}Q_{m,\alpha}:
+ \begin{array}{l}
+ w_\alpha\ge0,\\[-1mm]
+ \displaystyle
+ \sum_{\alpha:\,Q_{m,\alpha}\cap\gamma([0,1])\ne\varnothing}
+ w_\alpha\ge1\quad(\gamma\in\Gamma_m)
+ \end{array}\right\}.
+\]
+We consider blocks with \(\Delta_m>0\) below; when \(\Delta_m=0\), the
+radial inequality is trivial. For a block with \(\Delta_m>0\), set
+\[
+ \mathcal L_m^X(x,r):=
+ X\cap\bigl(C_{\lambda_m}^X(x,r)
+                \setminus C_{\lambda_{m+1}}^X(x,r)\bigr).
+\]
+The definition of the radius gives
+\[
+ R_{m+1}=\min\{R_m,\dist(x,\mathcal L_m^X(x,r))\}.
+\]
+Indeed, for every \(t<R_m\), the points of
+\(X\cap\overline B_d(x,t)\) lie in the root component at level
+\(\lambda_m\), and the first points excluded from the root component at
+level \(\lambda_{m+1}\) belong to \(\mathcal L_m^X(x,r)\). If the slice
+\(Y_{\lambda_{m+1}}\cap\overline B_d(x,r)\) has finitely many
+components, then \(\mathcal L_m^X(x,r)\) is a finite union of
+intersections of these components with
+\(X\cap C_{\lambda_m}^X(x,r)\). Thus it is compact, and there is a
+point \(y_m\) in it nearest to \(x\). Let
+\[
+ n_m:=\min\{n:\lambda_m<n\le\lambda_{m+1},\
+                    y_m\notin C_n^X(x,r)\}.
+\]
+Assume that the slice \(C_{n_m-1}^X(x,r)\) is path connected, and let
+\(\Gamma_m\) be the family of all paths in it from \(x\) to \(y_m\).
+For compact semialgebraic slices, this follows from the triangulation
+theorem for semialgebraic sets; it applies below to finite polynomial
+slices. Let \(\mathcal Q_m\) be a finite family of positive-diameter
+cells covering all interfaces in the block, including
+\(\Sigma_{n_m}\), and suppose \(\Sigma_{n_m}\) meets every path in
+\(\Gamma_m\). Let \(\widehat{\mathfrak c}_m\) be the minimum cost of a
+graph cut separating the root from the component containing \(y_m\);
+the cost of a cut represented by a cell set \(S\) is
+\(\sum_{\alpha\in S}\operatorname{diam}Q_{m,\alpha}\).
+
+Any cell family meeting every path in \(\Gamma_m\) has cost at least
+the modulus: the indicators of the selected cells are admissible
+weights in its infimum. In particular, if every edge cut in the finite
+contact graph meets all such paths and \(\widehat{\mathfrak c}_m\) is
+the minimum cost of an admissible graph cut, then
+\begin{equation}
+ \operatorname{Mod}_{1,m}(\Gamma_m)\le\widehat{\mathfrak c}_m.
+ \label{eq:modulus-below-cut}
+\end{equation}
+Consequently, a scale-independent lower bound
+\begin{equation}
+ \operatorname{Mod}_{1,m}(\Gamma_m)\ge a_{x,r}\,\Delta_m,\qquad
+ a_{x,r}>0,
+ \label{eq:annular-modulus-target}
+\end{equation}
+immediately yields the radial estimate
+\(\Delta_m\le a_{x,r}^{-1}\widehat{\mathfrak c}_m\). This is a
+formulation in terms of the discrete modulus of a curve family; its
+source is quantitative thickness of paths, not merely connectivity of
+the finite graph.
+
+For a planar cell system, define the contact multiplicity
+\[
+ v_{m,\alpha}:=
+ \#\{n:\lambda_m<n\le\lambda_{m+1},\
+                 Q_{m,\alpha}\cap\Sigma_n\ne\varnothing\},
+\]
+and choose \(z_{m,\alpha}\in Q_{m,\alpha}\) arbitrarily. The
+corresponding atomic contact measure and its total mass are
+\[
+ \Xi_m:=
+ \sum_{\alpha\in J_m}
+ v_{m,\alpha}\operatorname{diam}(Q_{m,\alpha})\delta_{z_{m,\alpha}}.
+\]
+To define cut costs, consider the local slice \(C_{n-1}^X(x,r)\), its
+inner part \(A_n:=C_{n-1}^X(x,r)\cap Y_n\), and its outer part
+\(U_n:=C_{n-1}^X(x,r)\setminus A_n\). The vertices of the finite
+interface graph are the components of \(A_n\) and the closures of the
+components of \(U_n\); an edge represents a nonempty intersection. For
+an edge \(e=(A,\overline U)\), the contact set is
+\(P_e:=A\cap\overline U\). Assume that \(\Sigma_n\) contains all these
+contacts and that the block cells cover every interface. The root
+vertex is the component of \(A_n\) containing \(x\), namely
+\(C_n^X(x,r)\). Only edges between \(A_n\)-vertices and
+\(\overline U_n\)-vertices may be deleted; edges between two
+\(\overline U_n\)-vertices are retained. Define
+\[
+I_{n,m}:=\{\alpha\in J_m:Q_{m,\alpha}\cap\Sigma_n\ne\varnothing\}.
+\]
+For \(S\subseteq I_{n,m}\), delete an edge \(e=(A,\overline U)\) when
+\(P_e\subseteq\bigcup_{\alpha\in S}Q_{m,\alpha}\). Call \(S\)
+admissible if, after its deletion, the root vertex is disconnected from
+every other \(A_n\)-vertex meeting \(X\). Let
+\(\operatorname{cap}_{n,m}\) be the minimum cost of an admissible cut,
+where the cost of \(S\) is
+\(\sum_{\alpha\in S}\operatorname{diam}(Q_{m,\alpha})\). Set
+\[
+\mathfrak c_m:=
+\sum_{\lambda_m<n\le\lambda_{m+1}}\operatorname{cap}_{n,m}.
+\]
+The full set \(I_{n,m}\) covers all contacts and deletes every edge
+between an \(A_n\)-vertex and an \(\overline U_n\)-vertex. Distinct
+vertices arising from components of \(A_n\) are disjoint, so this set
+is admissible. Reordering the finite sums gives
+\begin{equation}
+ \mathfrak c_m\le\Xi_m(\C).
+ \label{eq:block-capacity-contact-mass}
+\end{equation}
+The desired bound for this mass has a natural general formulation as a
+Carleson packing estimate. If \(\Delta_m>0\), let \(y_m\) be a nearest
+point of \(\mathcal L_m^X(x,r)\), and let \(n_m\) be its first
+separating level in the block. Let \(\widehat{\mathfrak c}_m\) be the
+minimum cost of a contact cut separating the root component at level
+\(n_m\) from the component containing \(y_m\). The latter meets \(X\),
+so every cut admissible in the definition of
+\(\operatorname{cap}_{n_m,m}\) is admissible for this problem.
+Consequently,
+\begin{equation}
+ \widehat{\mathfrak c}_m
+ \le\operatorname{cap}_{n_m,m}
+ \le\mathfrak c_m.
+ \label{eq:target-cut-block-bound}
+\end{equation}
+
+For the Mandelbrot filtration, take \(Y_n=O_n\),
+\(P_n(c)=p_n(c)/2\), and \(X=\M\). With the chosen cell centers,
+\(\Xi_m\) is the contact measure of the block grid. For blocks with
+\(\Delta_m>0\) and sufficiently large \(m\), we have
+\begin{equation}
+ a_{c,r}\Delta_m\le
+ \operatorname{Mod}_{1,m}(\Gamma_m)
+ \le\widehat{\mathfrak c}_m
+ \le\mathfrak c_m
+ \le\Xi_m(\C)
+ \le B_{c,r} R_m\epsilon_m,
+\label{eq:mandelbrot-hypothesis-chain}
+\end{equation}
+where \(\epsilon_m=\epsilon_m(r)\). The first inequality is
+\(\mathsf{AM}\); the second follows because every admissible graph cut
+meets all paths in \(\Gamma_m\), and the third follows from
+\eqref{eq:target-cut-block-bound}. The fourth is
+\eqref{eq:block-capacity-contact-mass}, and the last is \(\mathsf{GC}\).
+Hence
+\[
+ \Delta_m\le a_{c,r}^{-1}\mathfrak c_m,\qquad
+ \mathfrak c_m\le B_{c,r}R_m\epsilon_m.
+\]
+When \(\Delta_m=0\), the first estimate is trivial. In
+Theorem~\ref{thm:abstract-summable-cut}, take
+\(A=a_{c,r}^{-1}\) and \(B=B_{c,r}\). These are exactly its two
+quantitative hypotheses; if \(\mathsf{AM}\) and \(\mathsf{GC}\) both
+hold, they complete the conditional passage to factorization. The
+summability of \(\epsilon_m\) is proved in
+Proposition~\ref{prop:mandelbrot-green-block-scales}; the open
+ingredients are precisely the modulus lower bound and the Carleson
+estimate for total contact mass.
+
+\begin{definition}[Joint Hypothesis for Factorization]
+\label{def:factorization-open-hypotheses}
+Fix the sequences \((s_m)\), \((\lambda_m)\) from
+Proposition~\ref{prop:mandelbrot-green-block-scales}. For fixed
+\(c\in\partial\M\) and \(r>0\), let \(\mathsf{AM}(c,r)\) and
+\(\mathsf{GC}(c,r)\) denote, respectively, the statements
+\begin{equation}
+ \begin{aligned}
+ \mathsf{AM}(c,r):\quad&
+ \exists a_{c,r}>0\ \exists m_A\in\{2,3,\ldots\}\
+ \forall m\ge m_A,\quad
+ \Delta_m>0\longrightarrow
+ \operatorname{Mod}_{1,m}(\Gamma_m)\ge a_{c,r}\Delta_m,\\
+ \mathsf{GC}(c,r):\quad&
+ \exists B_{c,r}>0\ \exists m_G\in\{2,3,\ldots\}\
+ \forall m\ge m_G,\quad
+ R_m>0\ \land\
+ \Xi_m(\C)\le B_{c,r}R_m\epsilon_m.
+ \end{aligned}
+\end{equation}
+The global hypothesis \(\mathsf H_{\M}\) means that for every
+\(c\in\partial\M\) and \(\varepsilon>0\), there is \(0<r<\varepsilon\)
+such that both \(\mathsf{AM}(c,r)\) and \(\mathsf{GC}(c,r)\) hold. For
+the fixed block scales, \(\sum_m\epsilon_m(r)<\infty\).
+\end{definition}
+
+\section{Conditional Theorem on Factorization of Local Components}
+\label{sec:remaining-factorization}
+
+Throughout this section, \(\N=\{0,1,2,\ldots\}\), and
+\(\overline B(a,\rho):=\{z\in\C:|z-a|\le\rho\}\) denotes the closed
+disk. Set
+\[
+ K:=\overline B(0,2),\qquad f_c(z):=z^2+c,\qquad
+ p_0(c):=0,\qquad p_{j+1}(c):=p_j(c)^2+c,
+\]
+\[
+ \M:=\{c\in\C:\sup_{j\in\N}|p_j(c)|<\infty\},\qquad
+ O_N:=\{c\in K:p_j(c)\in K\text{ for }0\le j\le N\}.
+\]
+This family corresponds to the escape radius \(2\): if \(|c|\le2\)
+and \(|z|>2\), then \(|f_c(z)|\ge|z|^2-2>|z|\); if \(|c|>2\), then
+starting from \(|p_1(c)|=|c|\), we have
+\(|p_{j+1}(c)|\ge|p_j(c)|^2-|c|\ge|p_j(c)|^2-|p_j(c)|>|p_j(c)|\).
+Thus \(\M=\bigcap_{N\in\N}O_N\). The definition also gives
+\(O_L\subseteq O_N\) when \(L\ge N\). Subsets of \(\C\) carry the
+Euclidean subspace topology. For \(Y\subseteq\C\), let \(\pi_0(Y)\)
+denote its set of connected components, that is, its maximal connected
+subsets. For \(c\in Y\), let \(\operatorname{Comp}_c(Y)\) denote the
+component containing \(c\). For \(c\in\M\), \(r>0\), and \(N\in\N\),
+set
+\[
+ F_N(c,r):=O_N\cap\overline B(c,r),\qquad
+ C_N(c,r):=\operatorname{Comp}_c(F_N(c,r)).
+\]
+In other words, \(C_N(c,r)\) is the connected component of the outer
+slice \(F_N(c,r)\) containing the distinguished point \(c\). Since
+\(c\in\M=\bigcap_NO_N\), we have \(c\in F_N(c,r)\), so \(C_N(c,r)\) is
+defined. If \(L\ge N\) and \(0<\delta<r\), then
+\[
+ X_L(c,\delta):=O_L\cap\overline B(c,\delta)
+ \subseteq F_N(c,r).
+\]
+\noindent
+Call \(F_N(c,r)\) the local slice of the outer approximation \(O_N\),
+and \(X_L(c,\delta)\) the nested slice at depth \(L\). Let
+\(\iota_{L,N}^{c;\delta,r}:X_L(c,\delta)\hookrightarrow F_N(c,r)\)
+denote this inclusion. It induces a map on components
+\[
+ \varphi_{L,N}^{c;\delta,r}:=
+ \pi_0\!\left(\iota_{L,N}^{c;\delta,r}\right):
+ \pi_0\bigl(X_L(c,\delta)\bigr)\longrightarrow
+ \pi_0\bigl(F_N(c,r)\bigr),
+\]
+that sends each component of the nested slice to the unique component
+of \(F_N(c,r)\) containing it.
+
+\begin{theorem}[Conditional Factorization Theorem for Local Components]
+\label{thm:remaining-component-factorization}
+Suppose that for every \(c\in\partial\M\) and \(\varepsilon>0\), there
+are a common radius \(0<r<\varepsilon\) and admissible block data for
+which both open estimates \(\mathsf{AM}(c,r)\) and \(\mathsf{GC}(c,r)\)
+hold (the joint hypothesis \(\mathsf H_{\M}\)). Then the outer system
+\((O_N)\) defined above satisfies \(\mathsf{UC}\), namely
+\begin{equation}
+ \begin{gathered}
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists r,\delta\in\R,\quad 0<\delta<r<\varepsilon,\qquad\\
+ \forall N\in\N\ \exists L\in\N,\quad N\le L,\qquad
+ \forall A\in\pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr),\\
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r).
+ \end{gathered}
+ \label{eq:factorization-target}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Fix \(c\in\M\) and \(\varepsilon>0\). If
+\(c\in\operatorname{int}\M\), choose \(0<r<\varepsilon\) such that
+\(\overline B(c,r)\subseteq\M\), and set \(\delta=r/2\). Then
+\(F_N(c,r)=\overline B(c,r)\) for every \(N\), and
+\(O_N\cap\overline B(c,\delta)=\overline B(c,\delta)\); take \(L=N\).
+
+Now let \(c\in\partial\M\).
+\begin{conditionalstep}
+\noindent\textbf{Open estimates used:}
+\(\mathsf{AM}(c,r)\) and \(\mathsf{GC}(c,r)\).
+The global hypothesis of the theorem supplies a common \(r\), block
+data, and constants \(a_{c,r},B_{c,r}>0\) for which both hold. The
+chain~\eqref{eq:mandelbrot-hypothesis-chain} gives, for all sufficiently
+large \(m\),
+\[
+ \Delta_m\le a_{c,r}^{-1}\mathfrak c_m,\qquad
+ \mathfrak c_m\le B_{c,r}R_m(c,r)\epsilon_m.
+\]
+When \(\Delta_m=0\), the first inequality is trivial. Moreover,
+\(\sum_m\epsilon_m<\infty\) by
+Proposition~\ref{prop:mandelbrot-green-block-scales}, \(R_m>0\) for all
+sufficiently large \(m\) by \(\mathsf{GC}\), and the sets
+\(O_N\cap\overline B(c,r)\) have finitely many components by
+semialgebraicity. Therefore Theorem~\ref{thm:abstract-summable-cut}
+applies with \(A=a_{c,r}^{-1}\), \(B=B_{c,r}\), \(Z=K\), \(X=\M\), and
+\(Y_N=O_N\). After discarding finitely many blocks, it gives
+\(0<\delta<r\) and, for every \(N\), an index \(L\ge N\) such that
+\[
+ O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
+\]
+\end{conditionalstep}
+Thus every component of this nested slice maps to \(C_N(c,r)\), which
+is exactly \eqref{eq:factorization-target}.
+\end{proof}
+
+\noindent\emph{Meaning of the factorization.}
+The index \(N\) specifies the last orbit iterate being checked. Passing
+from \(N\) to \(N+1\) adds the condition \(p_{N+1}(c)\in K\), so
+\(O_{N+1}=O_N\cap p_{N+1}^{-1}(K)\subseteq O_N\). As \(N\) increases,
+the sets \(O_N\) refine the finite outer approximations to \(\M\).
+
+For each \(c\in\M\) and \(\varepsilon>0\), choose radii
+\(0<\delta<r<\varepsilon\) common to all \(N\), and for each \(N\)
+choose an index \(L\ge N\). Write
+\[
+ X_L:=X_L(c,\delta),\qquad F_N:=F_N(c,r).
+\]
+The nested slice is contained in \(F_N\), so each of its components
+\(A\in\pi_0(X_L)\) lies in a unique component of \(F_N\). The theorem
+asserts that for a suitable \(L\), this component is \(C_N(c,r)\) for
+every \(A\), that is, \(X_L\subseteq C_N(c,r)\).
+Thus the inclusion-induced map on components is constant and factors
+through the one-object discrete category on \(C_N(c,r)\). No
+equivalence relation is assumed in this assertion. The relation
+introduced below identifies two components exactly when their images
+agree; its quotient records the fibers of this map and is a singleton
+under the theorem.
+
+The slices in the figures are shown as grid samples.\footnote{A grid
+sample of \(E\subseteq\C\) is a rasterization on a finite rectangular
+grid of parameters \(c=x+iy\), with a pixel colored exactly when its
+corresponding grid node belongs to \(E\).}
+For the numerical illustration, take the boundary point
+\(c_0=\frac14\), the cusp of the main cardioid of \(\M\). Real
+parameters outside \(\M\) occur arbitrarily close to \(c_0\), making
+this a useful example for visualizing how finite outer approximations
+refine the local geometry near the boundary.
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-critical-orbit.pdf}
+  \captionof{figure}{The critical orbit at the boundary parameter \(c_0=\frac14\).}
+  \label{fig:factorization-orbit}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \scriptsize
+  At \(c_0=\frac14\), we have \(p_0(c_0)=0\),
+  \(p_1(c_0)=\frac14\), \(p_2(c_0)=\frac5{16}\), and thereafter
+  \(p_{n+1}(c_0)=p_n(c_0)^2+\frac14\). The orbit
+  increases to the parabolic fixed point \(\frac12\), so all its
+  iterates lie in \(K=\overline B(0,2)\) and \(c_0\in\M\).
+  For real \(c>\frac14\), the orbit is strictly increasing; if it were
+  bounded, its limit would be a real fixed point of \(x^2+c=x\), which
+  does not exist for \(c>\frac14\). Thus such \(c\) lie outside \(\M\),
+  and \(c_0\in\partial\M\).
+ \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-global-levels.pdf}
+  \captionof{figure}{Outer approximations and local windows at \(c_0=\frac14\in\partial\M\).}
+  \label{fig:factorization-global}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \scriptsize
+  In Figure~\ref{fig:factorization-global}, take
+  \(0<\delta=\frac15<r=\frac25<\varepsilon=\frac12\), \(N=2\), \(L=20\).
+  The condition defining \(O_j\) checks the orbit through index \(j\),
+  so \(\M\subseteq O_{20}\subseteq O_2\).
+  \[
+   \begin{aligned}
+    F_2&=O_2\cap\overline B(c_0,r),\\
+    X_{20}&=O_{20}\cap\overline B(c_0,\delta)\subseteq F_2.
+   \end{aligned}
+  \]
+  The background separately shows the layers \(O_2\setminus O_{20}\)
+  and \(O_{20}\); the boundary of \(O_{20}\) is dashed. The orange fill
+  shows not all of \(O_{20}\), but only the local slice \(X_{20}\).
+  Translucent blue marks \(F_2\), and orange marks \(X_{20}\); their
+  labels are placed directly on the regions. The red dashed and orange
+  dotted circles bound the disks of radii \(r\) and \(\delta\). The
+  inclusion \(X_{20}\hookrightarrow F_2\) induces the component map
+  \(\varphi_{20,2}^{c_0;\delta,r}\): each component of \(X_{20}\) maps
+  to the component of \(F_2\) containing it. Here that component is
+  \(C_2(c_0,r)\), as shown in Figure~\ref{fig:factorization-target}.
+  The star marks the boundary parameter \(c_0=\frac14\), the center of
+  both disks.
+ \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{minipage}[t]{0.40\textwidth}
+  \vspace{0pt}
+  \centering
+  \includegraphics[width=\linewidth]{docs/figures/factorization-target.pdf}
+  \captionof{figure}{The slices \(F_2\), \(X_{20}\), and boundary of \(O_{20}\) near \(c_0=\frac14\).}
+  \label{fig:factorization-target}
+ \end{minipage}\hfill
+ \begin{minipage}[t]{0.56\textwidth}
+  \vspace{0pt}
+  \scriptsize
+  For \(c=c_0+u=\frac14+u\), \(|u|\le\frac25\), we have
+  \[
+   |c|\le\frac{13}{20}<2,\qquad
+   |p_2(c)|=|c(c+1)|
+   \le\frac{13}{20}\cdot\frac{33}{20}
+   =\frac{429}{400}<2.
+  \]
+  Therefore \(F_2=\overline B(c_0,\frac25)=C_2(c_0,\frac25)\).
+  In Figure~\ref{fig:factorization-target}, the blue fill shows the
+  grid sample of \(F_2\), the orange fill and outline show the slice
+  \(X_{20}\), and the green dash-dotted curve is the boundary of
+  \(O_{20}\). The label \(A\) marks the selected component
+  \(A\in\pi_0(X_{20})\), and the star marks the boundary parameter
+  \(c_0\). In this example, the inclusion induces the component map
+  \[
+   \begin{aligned}
+    X_{20}&\subseteq F_2=C_2(c_0,r),\\
+    \varphi_{20,2}^{c_0;\delta,r}&:
+       \pi_0(X_{20})\to\pi_0(F_2),\\
+    A&\longmapsto C_2(c_0,r).
+   \end{aligned}
+  \]
+  This is one numerical instance of \(\mathsf{UC}\): for \(N=2\), the
+  choice \(L=20\) makes \(C_2(c_0,r)\) the image of every component of
+  the nested slice.
+ \end{minipage}
+\end{figure}
+
+\noindent\emph{Geometric meaning of the theorem.}
+Figures~\ref{fig:factorization-global} and~\ref{fig:factorization-target}
+show the slices \(X_{20}\subseteq F_2\) near the boundary point
+\(c_0=\frac14\) and a selected component \(A\in\pi_0(X_{20})\) that
+lies in \(C_2(c_0,r)\). At sufficiently large depth \(L\), the theorem
+extends this property to every component of \(X_L\):
+\[
+ X_L(c,\delta)\subseteq C_N(c,r),\qquad
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)
+ \quad\text{for every }A\in\pi_0(X_L(c,\delta)).
+\]
+The slice \(X_L\) may have several components, all of which map to the
+single component \(C_N(c,r)\). Thus
+\[
+ \operatorname{im}\varphi_{L,N}^{c;\delta,r}
+ =\{C_N(c,r)\}.
+\]
+Define an equivalence relation on the set of components
+\(\pi_0(X_L(c,\delta))\) by
+\[
+A\sim B
+\quad\longleftrightarrow\quad
+\varphi_{L,N}^{c;\delta,r}(A)=\varphi_{L,N}^{c;\delta,r}(B).
+\]
+The quotient set \(\pi_0(X_L(c,\delta))/\sim\) consists of equivalence
+classes of components with the same image. Since \(X_L(c,\delta)\)
+contains \(c\), it has a component \(A\). By the theorem, all
+components are equivalent, so the quotient is a singleton:
+\[
+\pi_0(X_L(c,\delta))/\sim=\{[A]\}.
+\]
+The elements of this quotient are classes of connected components of
+\(X_L\). In the right-hand panel of
+Figure~\ref{fig:factorization-component-geometry}, the regions \(A_0'\)
+and \(A_1'\) remain disjoint; \(A_0'\sim A_1'\) means that their images
+agree and both components lie in the same class \([A]\).
+\[
+\begin{aligned}
+ q &: \pi_0(X_L(c,\delta))\longrightarrow
+      \pi_0(X_L(c,\delta))/\sim,
+      &q(A)&=[A],\\
+ \bar\varphi_{L,N}^{c;\delta,r}&:
+      \pi_0(X_L(c,\delta))/\sim\longrightarrow\pi_0(F_N(c,r)),
+      &\bar\varphi_{L,N}^{c;\delta,r}([A])&=C_N(c,r),\\
+ \varphi_{L,N}^{c;\delta,r}&=\bar\varphi_{L,N}^{c;\delta,r}\circ q.
+\end{aligned}
+\]
+The quotient set is a singleton, but its unique element is an
+equivalence class of source components, not a component of the target.
+The induced map from this quotient to \(\pi_0(F_N(c,r))\) sends that
+class to \(C_N(c,r)\). Equivalently, the component map factors through
+the one-object discrete category on \(C_N(c,r)\); the quotient merely
+records its fibers.
+\(\mathcal E_N:=\pi_0(F_N(c,r))\setminus\{C_N(c,r)\}\) denotes the
+remaining components of \(F_N\). For the illustration below, let
+\(D\in\mathcal E_N\) be one such component.
+Figure~\ref{fig:factorization-component-geometry} compares an
+intermediate depth \(\ell\) with a sufficient depth \(L\), where
+\(N\le\ell<L\). In the illustrated case, \(X_\ell\) has components
+\(A_0,A_1\subseteq C_N(c,r)\) and \(B\subseteq D\), with
+\(D\in\mathcal E_N\); hence
+\(\operatorname{im}\varphi_{\ell,N}^{c;\delta,r}=\{C_N(c,r),D\}\).
+At depth \(L\), the slice \(X_L\subseteq X_\ell\) retains components
+\(A_0',A_1'\) inside \(C_N(c,r)\). Since \(D\) is separated from
+\(C_N(c,r)\), \(B\cap X_L=\varnothing\), and
+\(\operatorname{im}\varphi_{L,N}^{c;\delta,r}=\{C_N(c,r)\}\).
+Thus the figure illustrates how increasing the depth restricts the
+image of the component map. The number and shape of the components are
+schematic. The point \(c\) is drawn near the edge of \(C_N(c,r)\) to
+connect the diagram to the boundary example above; this placement is
+also schematic.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.96\textwidth]{docs/figures/factorization-component-geometry.pdf}
+ \captionof{figure}{Slices \(X_\ell\supseteq X_L\): the disjoint components \(A_i'\) form the class \([A]\) mapped to \(C_N(c,r)\).}
+ \label{fig:factorization-component-geometry}
+\end{figure}

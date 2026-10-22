@@ -1,0 +1,296 @@
+\chapter{MLC and Equivalent Statements}
+\noindent This chapter states the MLC conjecture and introduces several quantitative formulations: the diameter modulus for small connected sets, finite and sequential approximations, equicontinuous approximation, and uniform component control. It proves a diagonal criterion and a local-connectivity criterion using compact connected sets; the links between MLC, equicontinuous approximation, and factorization are established in Chapters~5 and~6.
+
+\section{Notation}
+
+Set
+\[
+ \N:=\{0,1,2,\ldots\},\qquad f_c(z):=z^2+c,\qquad
+ p_0(c):=0,\qquad p_{n+1}(c):=p_n(c)^2+c,
+\]
+\[
+ \M:=\{c\in\C:\sup_{n\in\N}|p_n(c)|<\infty\},\qquad
+ K:=\overline B(0,2),\qquad
+ \D:=\{x+iy:x,y\in[-2,2]\},
+\]
+\[
+ O_N:=K\cap\bigcap_{j=0}^{N}p_j^{-1}(K),\qquad
+ \Pi(z):=\frac{2z}{\max\{2,|z|\}}.
+\]
+For nonempty \(A\subseteq\C\) and nonempty compact \(A,B\subseteq\C\),
+set
+\[
+ \dist(z,A):=\inf_{a\in A}|z-a|,\qquad
+ \dH(A,B):=
+ \max\left\{\sup_{a\in A}\dist(a,B),\
+             \sup_{b\in B}\dist(b,A)\right\}.
+\]
+
+\section{The Main Conjecture and Equivalent Formulations}
+
+Let \(\mathcal K(\M)\) be the set of nonempty compact subsets of
+\(\M\). For \(C\in\mathcal K(\M)\), set
+\[
+ \operatorname{diam}C:=\sup\{|u-v|:u,v\in C\}.
+\]
+For \(x,y\in\M\), set
+\[
+ \mathcal C_\M(x,y):=
+ \{C\in\mathcal K(\M):C\text{ is connected},\ x,y\in C\}.
+\]
+For \(r>0\), set
+\[
+ \omega_\M(r):=
+  \sup_{\substack{x,y\in\M\\|x-y|<r}}
+  \inf_{C\in\mathcal C_\M(x,y)}\operatorname{diam}C
+  \in[0,+\infty],\qquad \inf\varnothing:=+\infty.
+ \]
+ For \(m\ge1\), set
+ \[
+  \mathcal R_m:=
+ \left\{G\in C(\D,K):
+ \begin{array}{l}
+ \exists N\in\N,\ N\ge m,\quad G|_{O_N}=\id_{O_N},\\[1mm]
+ \displaystyle\sup_{z\in\D}\dist(G(z),O_N)\le2^{-m}
+ \end{array}
+ \right\}.
+\]
+\[
+ \mathsf{Fin}:\leftrightarrow
+ \forall m\ge1,\quad\mathcal R_m\ne\varnothing.
+ \]
+\[
+  \begin{gathered}
+  \mathsf{EA}_{\mathrm{seq}}\leftrightarrow
+  \exists(m_j)_{j\ge1}\ \exists(G_j)_{j\ge1},\\
+  1\le m_1<m_2<\cdots,\qquad m_j\longrightarrow\infty,\qquad
+  G_j\in\mathcal R_{m_j}.
+  \end{gathered}
+ \]
+ \[
+   \begin{gathered}
+   \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)\\
+  \leftrightarrow\\
+  \begin{gathered}
+  1\le m_1<m_2<\cdots,\qquad m_j\longrightarrow\infty,\qquad
+  G_j\in\mathcal R_{m_j},\\
+ \rho:(0,\infty)\to(0,\infty),\\
+  \forall\eta>0,\qquad 0<\rho(\eta)\le\eta,\\
+  \forall\eta>0\ \forall j\ge1\ \forall z,w\in\D,\qquad
+  |z-w|\le\rho(\eta)\to
+  |G_j(z)-G_j(w)|\le\eta.
+  \end{gathered}
+ \end{gathered}
+ \]
+\[
+ \begin{gathered}
+ \mathsf{EA}\leftrightarrow
+ \exists\rho\ \exists(m_j)_{j\ge1}\ \exists(G_j)_{j\ge1},\\
+ \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr).
+ \end{gathered}
+ \]
+
+For \(F\subseteq\C\), let \(\pi_0(F)\) denote its set of connected
+components. If \(c\in F\), let \(\operatorname{Comp}_c(F)\) denote the
+component containing \(c\). For \(c\in\M\), \(r>0\), and \(N\in\N\),
+set
+\[
+ C_N(c,r):=
+ \operatorname{Comp}_c\bigl(O_N\cap\overline B(c,r)\bigr).
+\]
+For \(L\ge N\) and \(0<\delta<r\), the inclusion
+\[
+ O_L\cap\overline B(c,\delta)
+ \subseteq O_N\cap\overline B(c,r)
+\]
+induces a map between the sets of components
+\[
+ \varphi_{L,N}^{c;\delta,r}:
+ \pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr)
+ \longrightarrow
+ \pi_0\bigl(O_N\cap\overline B(c,r)\bigr),
+\]
+that sends each component of the smaller set to the unique component
+of the larger set that contains it.
+
+\begin{definition}[Uniform Component Control]
+\label{def:uniform-component-control}
+Condition \(\mathsf{UC}\) means that
+\begin{equation}
+ \begin{gathered}
+ \forall c\in\M\ \forall\varepsilon>0\
+ \exists r,\delta\in\R,\quad 0<\delta<r<\varepsilon,\qquad\\
+ \forall N\in\N\ \exists L\in\N,\quad N\le L,\qquad
+ \forall A\in\pi_0\bigl(O_L\cap\overline B(c,\delta)\bigr),\\
+ \varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r).
+ \end{gathered}
+ \label{eq:uniform-component-control}
+\end{equation}
+The radii \(r,\delta\) are chosen as functions of \(c,\varepsilon\) and
+are common to all \(N\); the index \(L\) may depend on
+\(c,\varepsilon,N\). For fixed \(c,\varepsilon,N,L\), the condition
+\(\varphi_{L,N}^{c;\delta,r}(A)=C_N(c,r)\) for every \(A\) is equivalent
+to the inclusion
+\[
+ O_L\cap\overline B(c,\delta)\subseteq C_N(c,r).
+\]
+\end{definition}
+
+ \begin{proposition}[Diagonal Selection Criterion with Finitely Many Estimates]
+ \label{prop:diagonal-finite-scale}
+ The condition \(\mathsf{EA}\) is equivalent to the following: there
+ exist positive numbers \((\delta_i)_{i\ge1}\) such that
+ \begin{equation}
+  \begin{gathered}
+  \forall k,M\in\N,\ k,M\ge1\ \exists m\in\N,\ m\ge M\
+  \exists G\in\mathcal R_m,\quad\\
+  \forall i\in\{1,\ldots,k\}\ \forall z,w\in\D,\qquad
+  |z-w|\le\delta_i\to
+  |G(z)-G(w)|\le2^{-i}.
+  \end{gathered}
+  \label{eq:diagonal-finite-scale}
+ \end{equation}
+ \end{proposition}
+ \begin{proof}
+ Suppose \(\mathsf{EAdata}(\rho,(m_j),(G_j))\) holds, and set
+ \(\delta_i:=\rho(2^{-i})\). Given \(k,M\ge1\), choose \(j\ge k\)
+ such that \(m_j\ge M\). Then \(G_j\in\mathcal R_{m_j}\), and the
+ equicontinuity estimate with \(\eta=2^{-i}\) gives all the inequalities
+ in \eqref{eq:diagonal-finite-scale} for \(1\le i\le k\).
+
+ Conversely, suppose \((\delta_i)\) satisfies
+ \eqref{eq:diagonal-finite-scale}, and set \(m_0:=0\). Applying the
+ condition successively with \(k=j\) and \(M=m_{j-1}+1\), choose
+ \(m_j\ge m_{j-1}+1\) and \(G_j\in\mathcal R_{m_j}\) such that
+ \[
+  \forall i\in\N,\ 1\le i\le j\ \forall z,w\in\D,\qquad
+  |z-w|\le\delta_i\to
+  |G_j(z)-G_j(w)|\le2^{-i}.
+ \]
+ Then \(m_1<m_2<\cdots\) and \(m_j\to\infty\). Fix \(\eta>0\) and
+ choose \(i\ge1\) such that \(2^{-i}\le\eta\). Uniform continuity of
+ the finite family \(G_1,\ldots,G_{i-1}\) gives \(\sigma_\eta>0\) such
+ that
+ \[
+  |z-w|\le\sigma_\eta\to
+  |G_j(z)-G_j(w)|\le\eta
+  \qquad(1\le j<i,\ z,w\in\D);
+ \]
+ when \(i=1\), set \(\sigma_\eta:=1\). Define
+ \(\rho(\eta):=\min\{\eta,\delta_i,\sigma_\eta\}\). If \(j\ge i\), the
+ required estimate follows from the inequality with index \(i\); if
+ \(j<i\), it follows from the choice of \(\sigma_\eta\). Hence
+ \(\mathsf{EAdata}(\rho,(m_j),(G_j))\), and therefore \(\mathsf{EA}\),
+ holds.
+ \end{proof}
+ \begin{equation}
+  \forall\rho,(m_j),(G_j),\qquad
+   \mathsf{EAdata}\bigl(\rho,(m_j),(G_j)\bigr)
+ \to
+  \forall\eta>0,\qquad
+  \omega_\M\!\left(\frac{\rho(\eta)}2\right)\le2\eta.
+  \label{eq:quantitative-diameter-bound}
+\end{equation}
+\begin{equation}
+  \begin{gathered}
+  \mathsf{EA}\longrightarrow\mathsf{EA}_{\mathrm{seq}}
+  \longrightarrow\mathsf{Fin},\qquad
+  \mathsf{EA}\quad\longleftrightarrow\quad
+  \lim_{r\downarrow0}\omega_\M(r)=0
+  \quad\leftrightarrow\quad\LC(\M).
+  \end{gathered}
+ \label{eq:main-discrepancy}
+\end{equation}
+
+The approximation theorem in Chapter~\ref{ch:approximation} supplies the
+sequence required by \(\mathsf{EA}_{\mathrm{seq}}\): \(m_j=j\) and
+\(G_j=T_j\in\mathcal R_j\). It is a separate result about finite
+approximations; the maps \(T_j\) are not used in the proofs of
+\(\mathsf{AM}\), \(\mathsf{GC}\), or the conditional factorization
+theorem. The reductions use only the dyadic grid constructed in
+Chapter~\ref{ch:approximation}. The implication
+\(\mathsf{EA}_{\mathrm{seq}}\to\mathsf{Fin}\) follows by
+monotonicity of the approximation requirements. The stronger condition
+\(\mathsf{EA}\) additionally requires a common equicontinuity modulus
+\(\rho\). By Proposition~\ref{prop:diagonal-finite-scale}, the diagonal
+criterion requires the first \(k\) oscillation estimates to hold
+simultaneously at arbitrarily large levels, for each finite \(k\).
+Theorem~\ref{thm:uniform-component-control} establishes
+\(\mathsf{UC}\leftrightarrow\LC(\M)\), so unconditional factorization
+of local components already implies MLC. The converse implication from
+local connectivity to \(\mathsf{AM}\) or \(\mathsf{GC}\) is neither
+considered here nor needed for the target implication chain. The
+conditional theorem below proves \(\mathsf H_{\M}\to\mathsf{UC}\);
+the two remaining reductions are isolated as open estimates. The
+resulting logical chain is
+\[
+ \mathsf H_{\M}\;(\mathsf{AM}+\mathsf{GC})
+ \ \longrightarrow\ \mathsf{UC}
+ \ \longleftrightarrow\ \LC(\M).
+\]
+Thus, proving \(\mathsf{AM}\) and \(\mathsf{GC}\) would prove MLC through
+the factorization theorem; no reverse implications to the open
+estimates are assumed.
+
+\section{A Criterion via Compact Connected Sets of Small Diameter}
+
+\begin{theorem}[Local Connectivity Criterion via Compact Connected Sets]
+\label{thm:small-connected-compacts}
+Let \(X\) be a compact metric space with metric \(d\). Then \(X\) is
+locally connected if and only if
+\[
+ \forall\varepsilon>0\ \exists\delta>0\ \forall x,y\in X,\qquad
+ d(x,y)<\delta\ \to\
+ \exists C\subseteq X:
+ \begin{cases}
+ C\text{ is compact and connected},\\
+ x,y\in C,\\
+ \operatorname{diam}(C)<\varepsilon.
+ \end{cases}
+\]
+\end{theorem}
+\begin{proof}
+If \(X\) is locally connected, every point has a connected open
+neighborhood of diameter less than \(\varepsilon\). Compactness gives a
+finite subcover, and the Lebesgue number lemma gives \(\delta>0\). If
+\(d(x,y)<\delta\), then \(x,y\) lie in one such neighborhood; its
+closure in \(X\) is compact and connected and has diameter less than
+\(\varepsilon\).
+
+Conversely, let \(x\in V\), where \(V\) is open in \(X\). Choose
+\(\varepsilon>0\) such that \(B(x,\varepsilon)\cap X\subseteq V\).
+For the corresponding \(\delta\), every \(y\in B(x,\delta)\cap X\)
+lies with \(x\) in a connected set \(C\) of diameter less than
+\(\varepsilon\), so \(C\subseteq V\). Thus the component of \(V\)
+containing \(x\) contains \(B(x,\delta)\cap X\). Components of open
+sets are open, which is equivalent to local connectivity.
+\end{proof}
+
+\begin{proposition}[Local Connectivity Criterion via \(\omega_\M\)]
+\label{prop:omega-criterion}
+\[
+ \lim_{r\downarrow0}\omega_\M(r)=0
+ \quad\leftrightarrow\quad
+ \LC(\M).
+\]
+\end{proposition}
+\begin{proof}
+Suppose \(\lim_{r\downarrow0}\omega_\M(r)=0\). For every
+\(\varepsilon>0\), there is \(\delta>0\) such that
+\(\omega_\M(\delta)<\varepsilon\). If \(|x-y|<\delta\), then
+\[
+ \inf_{C\in\mathcal C_\M(x,y)}\operatorname{diam}C
+ \le\omega_\M(\delta)<\varepsilon.
+\]
+Hence there is \(C\in\mathcal C_\M(x,y)\) with
+\(\operatorname{diam}C<\varepsilon\). Theorem
+\ref{thm:small-connected-compacts} gives \(\LC(\M)\).
+
+Conversely, suppose \(\LC(\M)\). Apply Theorem
+\ref{thm:small-connected-compacts} with \(\varepsilon/2\) to obtain
+\(\delta>0\). For \(0<r\le\delta\), every pair \(x,y\in\M\) with
+\(|x-y|<r\) lies in some \(C\in\mathcal C_\M(x,y)\) with
+\(\operatorname{diam}C<\varepsilon/2\). Therefore
+\(\omega_\M(r)\le\varepsilon/2<\varepsilon\), and hence
+\(\lim_{r\downarrow0}\omega_\M(r)=0\).
+\end{proof}

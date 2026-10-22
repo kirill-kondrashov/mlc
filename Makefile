@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean graphs serve
+.PHONY: all build check cache clean graphs serve proof-pdf factorization-figure check-uniform
 
 # Default target
 all: check
@@ -17,6 +17,38 @@ build:
 # However, lake handles its own dependencies well.
 check:
 	lake env lean --run check_axioms.lean
+
+check-uniform:
+	lake build Mlc.UniformGeometricRoot Mlc.UniformGeometricVertexControl Mlc.TrappingRegionObstruction Mlc.FiniteTrappingRegions
+	lake env lean --run check_uniform_program.lean
+
+FACTOR_FIGURES := \
+	docs/figures/factorization-global-levels.pdf \
+	docs/figures/factorization-slices.pdf \
+	docs/figures/factorization-critical-orbit.pdf \
+	docs/figures/factorization-target.pdf \
+	docs/figures/factorization-component-geometry.pdf
+
+PROOF_CHAPTERS := \
+	docs/chapters/01_mlc_equivalences.tex \
+	docs/chapters/02_factorization_lemma.tex \
+	docs/chapters/03_am_hypothesis.tex \
+	docs/chapters/04_gc_hypothesis.tex \
+	docs/chapters/05_mlc_factorization_connection.tex \
+	docs/chapters/06_approximation_theorem.tex
+
+proof-pdf: docs/uniform_geometric_mlc.pdf
+
+docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(PROOF_CHAPTERS) $(FACTOR_FIGURES)
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+
+$(FACTOR_FIGURES) &: scripts/generate_factorization_figures.py scripts/pyproject.toml scripts/poetry.lock
+	cd scripts && poetry run python generate_factorization_figures.py --output-dir ../docs/figures
+
+factorization-figure:
+	cd scripts && poetry run python generate_factorization_figures.py --output-dir ../docs/figures
 
 # Build static dependency-graph pages under site/
 graphs: build
@@ -40,3 +72,4 @@ auto-build: .cache_marker
 # Clean build artifacts
 clean:
 	rm -f docs/proof.aux docs/proof.log docs/proof.out docs/proof.toc .cache_marker
+	rm -f docs/uniform_geometric_mlc.aux docs/uniform_geometric_mlc.log docs/uniform_geometric_mlc.out docs/uniform_geometric_mlc.toc docs/uniform_geometric_mlc.build.log

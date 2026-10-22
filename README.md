@@ -4,73 +4,399 @@
 
 [Dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
-This repository contains a compact Lean 4 formalization of the Mandelbrot
-local-connectivity conjecture, conditional on two explicit mathematical inputs.
+Lean 4 formalisation of the Mandelbrot local-connectivity target with an
+explicit root hypothesis.
 
-## Target
+## Formal target
 
-For $c,z\in\mathbb C$, write $f_c(z)=z^2+c$ and let $\mathcal M$ be the
-Mandelbrot set. The checked root theorem is
+$$
+f_c(z)=z^2+c,\qquad
+p_0(c)=0,\qquad
+p_{n+1}(c)=f_c(p_n(c)).
+$$
+
+$$
+M
+=\lbrace c\in\mathbb C:
+  \exists B\in\mathbb R\ \forall n\in\mathbb N,\
+  \lVert p_n(c)\rVert\le B
+\rbrace
+=\bigcap_{n\in\mathbb N}
+  \lbrace c:\lVert p_n(c)\rVert\le2\rbrace.
+$$
+
+$$
+\mathrm{MLC}(M):=\mathrm{LocallyConnectedSpace}(M).
+$$
+
+The categorical target satisfies
 
 ```lean
-MLC.mlc_conjecture : LocallyConnectedSpace MLC.mandelbrotSet
+MLC.Categorical.MLCConjecture
+  ↔ LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
-The parameter pieces used by the proof are
+## Root input
+
+For $N\in\mathbb N$, define
 
 $$
-A_n(c)=\{c'\in\mathbb C:G_c(c'-c)<2^{-n}\},\qquad
-T_n(c)=A_n(c)\cap\mathcal M.
+O_N
+:=\lbrace c:
+  \lVert c\rVert\le2\ \land\
+  \forall n\le N,\ \lVert p_n(c)\rVert\le2
+  \rbrace.
 $$
 
-## Checked Lean state
+The formalisation proves
 
-`MLC.mlc_conjecture` is `sorry`-free. Its only project-level axioms are:
+$$
+\begin{aligned}
+&M\subseteq O_N,\\
+&N\le L\Longrightarrow O_L\subseteq O_N,\\
+&\forall N,\ O_N\text{ is compact},\\
+&\bigcap_N O_N=M.
+\end{aligned}
+$$
 
-1. `MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling`:
-   connectedness of $T_n(c)$ in the genuine straddling case
-   $A_n(c)\not\subseteq\mathcal M$.
-2. `MLC.residualOpenVirtualNearMoleculeAxiom`: the root-facing conjunction of
-   Dudko--Lyubich Problems 4.3 and 4.4 (pseudo-Siegel bounds and the virtual
-   near-Molecule classification).
+For $x\in M$, $r>0$, and $N\in\mathbb N$, let
 
-The remaining reported axioms are Lean foundations:
+$$
+C_N(x,r):=\mathrm{Comp}_{x}
+  (O_N\cap\overline B(x,r)).
+$$
 
-```text
-Quot.sound
-propext
-Classical.choice
+The root proposition $\mathrm{BUF}(M,O)$ states that, for every $x\in M$
+and every $\varepsilon>0$, there are $r,\delta\in\mathbb R$ such that
+
+$$
+0<\delta<r<\varepsilon
+$$
+
+and, for every $N$, there is $L\ge N$ satisfying
+
+$$
+O_L\cap\overline B(x,\delta)\subseteq C_N(x,r).
+$$
+
+Its Lean packaging is
+
+```lean
+structure MLC.RootInput : Prop where
+  uniformOuterBuffer :
+    MLC.ParameterComponent.MandelbrotUniformOuterBuffer
 ```
 
-Expected `make check` output:
+The root theorems are
 
-```text
-✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
-All axioms used:
-- Quot.sound
-- propext
-- Classical.choice
-- MLC.residualOpenVirtualNearMoleculeAxiom
-- MLC.green_sublevel_translate_inter_mandelbrot_connected_straddling
+```lean
+MLC.Categorical.categorical_mlc_conjecture :
+  MLC.RootInput → MLC.Categorical.MLCConjecture
+
+MLC.mlc_conjecture :
+  MLC.RootInput → LocallyConnectedSpace MLC.mandelbrotSet
 ```
 
-## Proved core
+The formal implication chain is
 
-- $K_c$ is connected for $c\in\mathcal M$.
-- The dynamical Green sublevels $\{z:G_c(z)<2^{-n}\}$ are connected.
-- Translation identifies the frozen parameter pieces with those sublevels.
-- The subset stratum of $T_n(c)$ is connected without an axiom.
-- Yoccoz shrinking and the Molecule bridge assemble local connectivity.
-- Retained glue forwards to standard Mathlib/Yoccoz APIs, including
-  `locallyConnectedSpace_iff_connected_subsets`, `Set.image_iInter`,
-  `integral_biUnion_finset`, `modulus`, and `groetzsch_criterion`.
+$$
+\mathrm{BUF}(M,O)
+\Longrightarrow
+\mathrm{RootInput}
+\Longrightarrow
+\mathrm{MLC}(M).
+$$
 
-`check_axioms.lean` imports only `Mlc.Core`, and every tracked `Mlc/**/*.lean`
-module is in that transitive closure. `Mlc.lean` is retained as the package
-entry point and `check_axioms.lean` as the executable checker; no stale project
-Lean modules remain. Every retained declaration is in the root dependency
-closure, with `MLC.mlc_conjecture` as the intentional terminal node. The
-complete tracked Lean source pass is warning-free.
+The repository supplies no global instance of $\mathrm{BUF}(M,O)$.
+
+## Implemented interfaces
+
+### Finite outer systems
+
+A finite-cell system provides finite index types $I_N$ and compact cells
+$Q_{N,i}$ (empty cells are permitted) with
+
+$$
+E_N:=\bigcup_{i\in I_N}Q_{N,i},
+$$
+
+$$
+\begin{aligned}
+&N\le L\Longrightarrow E_L\subseteq E_N,\\
+&M\subseteq E_N,\\
+&x\in Q_{N,i}\Longrightarrow
+  \exists y\in O_N,\ d(x,y)\le2^{-N}.
+\end{aligned}
+$$
+
+The proved limit theorem is
+
+$$
+\forall N,\ E_N\text{ is compact},
+\qquad
+\bigcap_N E_N=M.
+$$
+
+Two systems are implemented. The baseline uses one cell $Q_{N,\ast}=O_N$.
+The dyadic system indexes all $2^N\times2^N$ closed grid squares in
+$[-2,2]^2$ and intersects each with $O_N$; its stage union is exactly $O_N$,
+and every cell has diameter at most $8\cdot2^{-N}$. The address interface
+requires chosen cells to be nonempty. For this grid, every nested address
+has a singleton intersection, and every $c\in M$ has a compatible address.
+
+The dyadic cells still use the finite-orbit inequalities defining $O_N$;
+empty cells are retained, so occupancy decisions are not needed for this
+formal decomposition. Producing cells from finite rational interval/CAD
+certificates alone and proving the local-connectivity buffer remain open.
+
+### Finite inner systems
+
+A finite-union trapping certificate has a rational parameter rectangle
+$P_\tau$, a finite union $U_\tau$ of rational rectangles, and a bound
+$B_\tau$, satisfying
+
+$$
+\begin{aligned}
+&0\in U_\tau,\\
+&\forall c\in P_\tau\ \forall z\in U_\tau,\ f_c(z)\in U_\tau,\\
+&\forall z\in U_\tau,\ \lVert z\rVert\le B_\tau.
+\end{aligned}
+$$
+
+The proved soundness theorem is
+
+$$
+\tau\text{ is certified}\Longrightarrow P_\tau\subseteq M.
+$$
+
+For an increasing finite family $F=(F_N)_N$, define
+
+$$
+I_N(F):=\bigcup_{\tau\in F_N}P_\tau.
+$$
+
+The formalisation proves
+
+$$
+I_N(F)\subseteq M,\qquad
+N\le L\Longrightarrow I_N(F)\subseteq I_L(F).
+$$
+
+The unresolved density proposition is
+
+$$
+\mathrm{ID}(F):\Longleftrightarrow
+\forall c\in M\ \forall\varepsilon>0\
+\exists N\ \exists x\in I_N(F),\ d(x,c)<\varepsilon.
+$$
+
+It implies
+
+$$
+\overline{\bigcup_N I_N(F)}=M.
+$$
+
+The single-rectangle scheme in `CertifiedTrappingRegions.lean` satisfies
+$|\mathrm{Re}c|\le1/2$ for every certified parameter, so its
+`InnerDensity` proposition is false. Finite unions admit a certificate for
+the parameter box centered at $-1$ with real and imaginary halfwidth
+$1/256$; this is an instance of `FiniteTrappingRegions.lean`.
+
+### Addresses and classification
+
+An address $a=(a_N)_N$ chooses a nonempty cell at every level and satisfies
+
+$$
+Q_{N+1,a_{N+1}}\subseteq Q_{N,a_N}.
+$$
+
+The nested intersection is nonempty. Under
+
+$$
+\begin{aligned}
+\mathrm{VD}(E):\Longleftrightarrow
+\forall a\ \forall x,y\in\mathbb C:\quad
+&(\forall N,\ x\in Q_{N,a_N})
+\land(\forall N,\ y\in Q_{N,a_N})\\
+&\Longrightarrow
+\forall\varepsilon>0,\ d(x,y)<\varepsilon,
+\end{aligned}
+$$
+
+it is a singleton. Address coverage is the separate proposition
+
+$$
+\mathrm{AC}(E):\Longleftrightarrow
+\forall c\in M\ \exists a\ \forall N,\ c\in Q_{N,a_N}.
+$$
+
+For the dyadic outer system, any two points in one level-$N$ cell are at
+distance at most $8\cdot2^{-N}$, proving $\mathrm{VD}(E)$. A canonical
+dyadic index choice proves address coverage $\mathrm{AC}(E)$.
+
+For the dynamical classification, the formalisation proves
+
+$$
+c\notin M\Longleftrightarrow
+\exists n,\ \lVert p_n(c)\rVert>2,
+$$
+
+with a least escape time. It also proves an exhaustive priority partition
+
+$$
+\forall c,\quad
+D_0(c)\lor D_1(c)\lor D_2(c)\lor D_3(c)\lor D_4(c)\lor D_5(c),
+$$
+
+where the classes are attracting, parabolic, Siegel, Cremer, eventually
+periodic, and residual. The residual class remains present in the formal
+partition.
+
+### Finite-component bridge
+
+Here $P_i$ are rational closed rectangles, $r_i,\delta_i\in\mathbb R$,
+and $k,T,N,L\in\mathbb N$. The finite-component proposition
+$\mathrm{FC}$ states that, for every $k$, there are a finite set $J$, a
+stage $T$, and data $(P_i,r_i,\delta_i)$ for $i\in J$ satisfying the
+following conditions:
+
+$$
+0<\delta_i<r_i<2^{-k}\qquad\text{for every }i\in J.
+$$
+
+$$
+O_T\subseteq\bigcup_{i\in J}P_i.
+$$
+
+For every $i\in J$, every $c\in M\cap P_i$, and every $N$, there is
+$L\ge N$ such that
+
+$$
+O_L\cap\overline B(c,\delta_i)\subseteq C_N(c,r_i).
+$$
+
+The proved bridge is
+
+$$
+\mathrm{FC}\Longrightarrow\mathrm{BUF}(M,O)
+\Longrightarrow\mathrm{RootInput}
+\Longrightarrow\mathrm{MLC}(M).
+$$
+
+The repository contains no proof of $\mathrm{FC}$.
+
+### Uniform geometric reduction
+
+[Proof document (PDF)](docs/uniform_geometric_mlc.pdf) ·
+[LaTeX master source](docs/uniform_geometric_mlc.tex) ·
+[chapter sources](docs/chapters/) ·
+[approximation chapter](docs/chapters/06_approximation_theorem.tex).
+
+The linked master is the canonical English source for the six-chapter
+proof document. The approximation chapter proves the finite and
+sequential approximation statements and characterizes equicontinuous
+approximation by MLC.
+
+The AM/GC argument is conditional in the theorem-proving sense: the
+factorization theorem assumes the joint hypothesis `H_M`. This says
+that, for every boundary parameter `c` and every scale `epsilon`, there
+is a radius `r < epsilon` shared by `AM(c, r)` and `GC(c, r)`, together
+with admissible block data for which both estimates hold. The theorem
+then proves uniform component control (`UC`); it does not prove `H_M`.
+Chapter 5 proves `UC` equivalent to MLC, so proving `H_M` would imply
+MLC.
+
+Here “factorization” has a specific component-theoretic meaning. In the
+conclusion, `c` may be any point of the Mandelbrot set; interior points
+are handled directly, and AM/GC are used only for boundary points.
+Given radii `0 < delta < r` and levels `L >= N`, set
+`X_L = O_L intersect closed_ball(c, delta)` and
+`F_N = O_N intersect closed_ball(c, r)`. Inclusion induces a map from
+the connected components of `X_L` to those of `F_N`. The theorem says
+that, for each `N`, some sufficiently large `L` makes every component
+map to the distinguished component `C_N(c, r)` containing `c`;
+equivalently, `X_L` is contained in `C_N(c, r)`. In the categorical
+formulation, this map factors through the one-object subcategory on
+`C_N(c, r)`. The chapter's auxiliary relation `A ~ B` means that two
+components of `X_L` have the same image under this map; its quotient
+records the map's fibers and is a singleton under the theorem. It is
+not a relation on parameters or an extra hypothesis.
+
+The AM/GC estimates, component categories, and factorization argument
+are not currently formalized in Lean.
+
+The Lean categorical development is related but does not formalize that
+analytic route. `MLC.Categorical.Approximation` is the over-category of
+the parameter plane, and
+`MLC.Categorical.Mandelbrot.outerOrbitApproximationTower` packages the
+finite-orbit outer approximations as an inverse diagram. The generic
+categorical limit has not yet been identified with the set-level
+intersection theorem. The categorical MLC target is instead proved from
+the explicit `MLC.RootInput` hypothesis; this is a separate conditional
+interface, not a project axiom and not a proof of the AM/GC estimates.
+
+Let $D=[-2,2]+i[-2,2]$. The hypothesis $\mathrm{UG}$ asserts the
+existence of continuous maps $R_n:D\to D$ and integers $N_n\ge n$ such that
+
+$$
+\begin{aligned}
+&R_0=\mathrm{id}_D,\qquad R_n|_{O_{N_n}}=\mathrm{id},\\
+&\forall z\in D\ \exists w\in O_{N_n},\quad |R_n(z)-w|\le2^{-n},\\
+&\lVert R_{n+1}-R_n\rVert_\infty\le8\,2^{-n}.
+\end{aligned}
+$$
+
+The proved reduction yields a continuous limit $R:D\to M$ satisfying
+
+$$
+\lVert R_n-R\rVert_\infty\le16\,2^{-n},\qquad R|_M=\mathrm{id}_M.
+$$
+
+Images of convex neighborhoods under $R$ give
+
+$$
+\mathrm{UG}\Longrightarrow\text{a continuous retraction }D\to M
+\Longrightarrow\mathrm{MLC}(M).
+$$
+
+The PDF proves the uniform-limit retraction theorem and its
+local-connectivity consequence. Existence of an infinite compatible
+tower remains unproved.
+
+The Lean formalisation of the implication is
+
+```lean
+MLC.UniformGeometry.mandelbrot_locallyConnected_of_squareTower
+  (T : MLC.UniformGeometry.OrbitRetractionTower
+    MLC.UniformGeometry.parameterSquare) :
+  LocallyConnectedSpace MLC.mandelbrotSet
+```
+
+## Current obligations
+
+The remaining existence statements are
+
+$$
+\mathrm{UG},\qquad \mathrm{BUF}(M,O),\qquad
+\mathrm{FC},\qquad
+\exists F\,\mathrm{ID}(F).
+$$
+
+Here $F$ uses finite-union trapping certificates. These existence statements
+remain explicit obligations. For the dyadic outer system, $\mathrm{VD}(E)$
+and $\mathrm{AC}(E)$ are proved, but this address coding contains no local
+connectivity estimate; the single-rectangle density statement has a proved
+negation.
+
+The root axiom frontier is
+
+$$
+\mathrm{Axioms}(\text{root})
+=\lbrace\mathrm{propext},\mathrm{Quot.sound},\mathrm{Classical.choice}\rbrace.
+$$
+
+The source contains no project-level `axiom`, no `sorryAx`, and no
+unconditional theorem of $\mathrm{MLC}(M)$.
 
 ## Validation
 
@@ -78,18 +404,44 @@ complete tracked Lean source pass is warning-free.
 make build
 make check
 ./scripts/verify_output.sh
+make check-uniform
+make proof-pdf
 ```
 
-## Core files
+Expected `make check` output:
+
+```text
+✅ The proof of 'MLC.mlc_conjecture' is free of 'sorry'.
+All axioms used:
+- propext
+- Quot.sound
+- Classical.choice
+```
+
+This summary concerns `MLC.RootInput → LocallyConnectedSpace M`; it
+does not supply the `MLC.RootInput` argument.
+
+## Main files
 
 | Purpose | Path |
 | --- | --- |
-| Public root | [`Mlc.lean`](Mlc.lean) |
-| Root theorem | [`Mlc/Core.lean`](Mlc/Core.lean) |
-| Parameter frontier | [`Mlc/ParaPuzzleConnectivity.lean`](Mlc/ParaPuzzleConnectivity.lean) |
-| Green-sublevel proof | [`Mlc/GreenSublevelConnectedDirect.lean`](Mlc/GreenSublevelConnectedDirect.lean) |
-| Molecule bridge | [`Mlc/MoleculeToParameterShrink.lean`](Mlc/MoleculeToParameterShrink.lean) |
+| Public import root | [`Mlc.lean`](Mlc.lean) |
+| Categorical root | [`Mlc/CategoricalRoot.lean`](Mlc/CategoricalRoot.lean) |
+| Compatibility theorem | [`Mlc/Core.lean`](Mlc/Core.lean) |
+| Outer-buffer theorem | [`Mlc/ParameterComponentApproximation.lean`](Mlc/ParameterComponentApproximation.lean) |
+| Finite outer systems | [`Mlc/CertifiedOrbitApproximation.lean`](Mlc/CertifiedOrbitApproximation.lean) |
+| Finite-union trapping systems | [`Mlc/FiniteTrappingRegions.lean`](Mlc/FiniteTrappingRegions.lean) |
+| Single-rectangle obstruction | [`Mlc/TrappingRegionObstruction.lean`](Mlc/TrappingRegionObstruction.lean) |
+| Parameter classification | [`Mlc/ParameterClassification.lean`](Mlc/ParameterClassification.lean) |
+| Address interface | [`Mlc/ParameterAddressSpace.lean`](Mlc/ParameterAddressSpace.lean) |
+| Finite-component bridge | [`Mlc/FiniteComponentCriterion.lean`](Mlc/FiniteComponentCriterion.lean) |
+| Flow interfaces | [`Mlc/FlowInterfaces.lean`](Mlc/FlowInterfaces.lean) |
+| Fixed geometric domain | [`Mlc/UniformGeometricDomain.lean`](Mlc/UniformGeometricDomain.lean) |
+| Uniform limit estimates | [`Mlc/UniformGeometricApproximation.lean`](Mlc/UniformGeometricApproximation.lean) |
+| Retraction and local connectedness | [`Mlc/RetractionLocalConnectivity.lean`](Mlc/RetractionLocalConnectivity.lean) |
+| Geometric theorem assembly | [`Mlc/UniformGeometricRoot.lean`](Mlc/UniformGeometricRoot.lean) |
 | Axiom checker | [`check_axioms.lean`](check_axioms.lean) |
+| Geometric theorem audit | [`check_uniform_program.lean`](check_uniform_program.lean) |
 
 ## Dependencies
 

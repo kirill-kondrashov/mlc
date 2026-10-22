@@ -1,0 +1,232 @@
+\chapter{The GC Hypothesis: A Green-Contact Estimate}
+\noindent This chapter studies the open GC hypothesis, a Carleson bound for the total mass of contact cells. For the Mandelbrot set, it constructs summable block scales and estimates how close the interfaces are to the limit set; double counting and low Green-height estimates give rigorous reductions to contact mass. The remaining unproved step is the uniform bound with the required radius factor.
+
+\section{The Open Carleson Budget}
+
+\begin{openestimate}[Carleson Budget for Green Interfaces (\(\mathsf{GC}\))]
+\label{thm:green-contact-carleson}
+Let \(X\) be a compact full continuum in the plane, let \(G\) be a
+Green function extended continuously by zero on \(X\), and set
+\(E_s:=\{z:G(z)\le s\}\). Consider a decreasing compact filtration
+\(Y_n\searrow X\) defined by the constraints
+\[
+ Y_n=Y_{n-1}\cap P_n^{-1}(\overline{\mathbb D}),
+\]
+where each \(P_n\) is nonconstant and holomorphic in a neighborhood of
+\(Y_0\). Assume that
+\[
+ \Sigma_n\subseteq
+ Y_{n-1}\cap P_n^{-1}(\partial\mathbb D)\cap E_{g_n},
+\]
+where each \(\Sigma_n\) is compact and its interface graph is finite;
+assume that all contacts of this graph are included in \(\Sigma_n\), as
+described above. Suppose the contact cells of block \(m\) lie in the
+\(\mu_m\)-neighborhood of \(X\), with \(g_n,\mu_m\ge0\). For fixed
+\(x\in X\) and \(r>0\), use the radii \(R_m\) defined above, assume
+\(R_m>0\) for all sufficiently large \(m\), and set
+\[
+ \epsilon_m:=
+ \sqrt{\frac{\mu_m}{r}}+
+ \sum_{\lambda_m<n\le\lambda_{m+1}}\sqrt{g_n}.
+\]
+Assuming \(\sum_m\epsilon_m<\infty\), the goal is to prove that there
+exist \(B_{x,r}>0\) and \(m_0\), independent of \(m\), such that for
+every \(m\ge m_0\)
+\begin{equation}
+ \Xi_m(\C)\le B_{x,r} R_m\epsilon_m.
+ \label{eq:green-contact-carleson}
+\end{equation}
+\end{openestimate}
+This open estimate does not follow merely from the interfaces being
+close to \(X\): the bound \(\mu_m\to0\) does not control how many
+different \(\Sigma_n\) meet the same cell. A proof requires local
+Carleson control of the contact measure, including the multiplicities
+of critical maps and overlaps of inverse branches. This is an open
+goal, not a proved consequence of the holomorphic constraints alone.
+If the stated class of filtrations is too broad, one should identify
+independently verifiable conditions on local degrees and overlaps while
+retaining applicability to multiple holomorphic Green filtrations, not
+just one recursion.
+
+\section{Summable Scales for the Mandelbrot Set}
+
+\begin{proposition}[Summable Block Scales for \(\M\)]
+\label{prop:mandelbrot-green-block-scales}
+For \(c\in\partial\M\), \(r>0\), and \(n\ge1\), set
+\begin{equation}
+ \Sigma_n(c,r):=C_{n-1}(c,r)\cap\{z:|p_n(z)|=2\}.
+ \label{eq:green-separator}
+\end{equation}
+There exist numbers \(s_m>0\) and strictly increasing integers
+\(\lambda_m\ge m\), \(m\ge1\), such that, on setting for \(m\ge1\)
+\[
+ g_n:=2^{2-n}\log3,\qquad
+ \mu_m:=8\cdot2^{-m}+\kappa(s_m),\qquad
+ \epsilon_m(r):=
+ \sqrt{\frac{\mu_m}{r}}+
+ \sum_{\lambda_m<n\le\lambda_{m+1}}\sqrt{g_n},
+\]
+we have \(\mu_m\le9\cdot2^{-m}\) for \(m\ge2\) and
+\(\sum_{m\ge1}\epsilon_m(r)<\infty\) for every \(r>0\). The sequences
+\(s_m,\lambda_m\) can be chosen once, independently of \(c,r\).
+Moreover, if a cell \(Q_{m,\alpha}\) in the grid
+\eqref{eq:dyadic-grid-cells} meets the interface \(\Sigma_n\) for
+\(m\ge2\) and \(\lambda_m<n\le\lambda_{m+1}\), then
+\[
+ \sup_{z\in Q_{m,\alpha}}\dist(z,\M)\le\mu_m.
+\]
+\end{proposition}
+\begin{proof}
+By Theorem~\ref{thm:green-projection},
+\(\kappa(s)=\dH(E_s,\M)\to0\) as \(s\downarrow0\). Set
+\(s_1=1\), \(\lambda_1=1\). For \(m\ge2\), choose \(s_m>0\) so that
+\[
+ \kappa(s_m)\le2^{-m},\qquad s_m\le2^{-m},\qquad
+ s_m\le s_{m-1}/2.
+\]
+Next choose \(\lambda_m>\lambda_{m-1}\), \(\lambda_m\ge m\),
+recursively large enough that \(2^{1-\lambda_m}\log3\le s_m\). For
+\(m\ge2\), \(\lambda_m<n\le\lambda_{m+1}\), and
+\(\zeta\in\Sigma_n(c,r)\), we have \(\zeta\in O_{n-1}\); by
+Lemma~\ref{lem:green-depth},
+\[
+ G(\zeta)\le2^{2-n}\log3=g_n
+ \le2^{1-\lambda_m}\log3\le s_m.
+\]
+Hence \(\dist(\zeta,\M)\le\kappa(s_m)\). If
+\(Q_{m,\alpha}\cap\Sigma_n(c,r)\ne\varnothing\), choose
+\(\zeta\in Q_{m,\alpha}\cap\Sigma_n(c,r)\). The cell-diameter bound
+\(\operatorname{diam}Q_{m,\alpha}\le8\cdot2^{-m}\) gives the claimed
+distance bound to \(\M\).
+
+Finally,
+\[
+ \sum_{n>\lambda_m}\sqrt{g_n}
+ \le\frac{\sqrt{2\log3}}{1-2^{-1/2}}\,2^{-\lambda_m/2}
+ \le\frac{\sqrt{2\log3}}{1-2^{-1/2}}\,2^{-m/2},
+\]
+and \(\sqrt{\mu_m/r}\le3r^{-1/2}2^{-m/2}\). Both contributions are
+summable over \(m\ge2\); the initial term \(\epsilon_1(r)\) is finite.
+This proves the proposition.
+\end{proof}
+
+\section{Reduction to GC: Contact Packing}
+\label{sec:gc-open-reductions}
+
+Fix \(c\in\partial\M\) and \(r>0\), and write
+$\Sigma_n=\Sigma_n(c,r)$.
+For the grid \(Q_{m,\alpha}\), set
+\[
+ I_{n,m}:=\{\alpha:Q_{m,\alpha}\cap\Sigma_n(c,r)\ne\varnothing\},\qquad
+ v_{m,\alpha}:=\#\{n:\lambda_m<n\le\lambda_{m+1},\
+                         \alpha\in I_{n,m}\}.
+\]
+For chosen centers \(z_{m,\alpha}\in Q_{m,\alpha}\), the contact
+measure is
+\[
+ \Xi_m:=\sum_{\alpha\in J_m^2}
+ v_{m,\alpha}\operatorname{diam}(Q_{m,\alpha})\delta_{z_{m,\alpha}}.
+\]
+Since all cells meeting \(\Sigma_n\) cover the interface, the full set
+of these cells is an admissible contact cut at each level. Hence
+\begin{equation}
+ \mathfrak c_m\le
+ \sum_{\lambda_m<n\le\lambda_{m+1}}
+       \sum_{\alpha\in I_{n,m}}\operatorname{diam}Q_{m,\alpha}
+ =\sum_{\alpha\in J_m^2}
+       v_{m,\alpha}\operatorname{diam}Q_{m,\alpha}
+ =\Xi_m(\C).
+ \label{eq:gc-mass-reduction}
+\end{equation}
+The middle equality is an exact double count; it includes the
+multiplicity with which a cell meets different interfaces. The
+diameter estimate gives only
+\[
+ \mathfrak c_m\le8\cdot2^{-m}\sum_{\alpha\in J_m^2}v_{m,\alpha},
+ \qquad v_{m,\alpha}\le\lambda_{m+1}-\lambda_m,
+ \qquad |J_m^2|=4^m.
+\]
+These finite estimates do not yield the factor \(R_m\), and therefore
+do not imply the Carleson budget \(\mathsf{GC}\).
+
+Proposition~\ref{prop:mandelbrot-green-block-scales} gives precise
+localization of the contacts: if \(Q_{m,\alpha}\) meets \(\Sigma_n\) in
+the block \(\lambda_m<n\le\lambda_{m+1}\), then
+\[
+ \sup_{z\in Q_{m,\alpha}}\dist(z,\M)\le\mu_m\le9\cdot2^{-m}.
+\]
+Moreover, for \(\zeta\in\Sigma_n\), the exact normalization is
+\[
+ g_\zeta(p_n(\zeta))=2^{n-1}G(\zeta).
+\]
+This allows the contacts to be split by dynamical height. Choose
+choose \(0<\tau_m\le2^{-m}\) so that
+\(\kappa(2^{-\lambda_m}\tau_m)\le2^{-2m}\), and set
+\[
+ \Sigma_n^-(\tau_m):=
+ \{\zeta\in\Sigma_n:g_\zeta(p_n(\zeta))\le\tau_m\},
+ \qquad
+ a_{n,m}^-:=\sup\bigl(\{G(\zeta):\zeta\in\Sigma_n^-(\tau_m)\}\cup\{0\}\bigr),
+\]
+we obtain, for \(\lambda_m<n\le\lambda_{m+1}\),
+\begin{equation}
+ \forall\zeta\in\Sigma_n^-(\tau_m),\quad
+ \dist(\zeta,\M)\le2^{-2m},\qquad
+ \sum_{\lambda_m<n\le\lambda_{m+1}}\sqrt{a_{n,m}^-}
+ \le\frac{2^{-m}}{1-2^{-1/2}}.
+ \label{eq:gc-low-height-budget}
+\end{equation}
+Such a choice of \(\tau_m\) is possible because
+\(\kappa(s)\to0\) as \(s\downarrow0\). Indeed, for these \(\zeta\),
+\[
+ G(\zeta)=2^{1-n}g_\zeta(p_n(\zeta))
+ \le2^{1-n}\tau_m\le2^{-\lambda_m}\tau_m,
+\]
+which gives the distance estimate by the choice of \(\tau_m\). Also,
+\[
+ \sum_{\lambda_m<n\le\lambda_{m+1}}\sqrt{a_{n,m}^-}
+ \le\sqrt{\tau_m}\sum_{n>\lambda_m}2^{(1-n)/2}
+ =\frac{\sqrt{\tau_m}\,2^{-\lambda_m/2}}{1-2^{-1/2}}
+ \le\frac{2^{-m}}{1-2^{-1/2}}.
+\]
+This rigorous estimate controls only the low-height part: it does not
+bound the number of contact cells or the sum of their multiplicities.
+
+Local inverse maps offer another possible source of weights, but
+require uniform estimates. For fixed \(n\) and \(\zeta\), let
+\(q_n(\zeta)\) be the local degree of \(p_n\) at \(\zeta\). Then
+\[
+ p_n(\zeta+w)-p_n(\zeta)=w^{q_n(\zeta)}h_{n,\zeta}(w),
+ \qquad h_{n,\zeta}(0)\ne0.
+\]
+On a sufficiently small disk, choose bounds
+\(0<a\le|h_{n,\zeta}(w)|\le b\). For
+\(0<t\le a\delta^{q_n(\zeta)}\), it follows that
+\begin{equation}
+ \overline B\!\left(\zeta,(t/b)^{1/q_n(\zeta)}\right)
+ \subseteq\{|z-\zeta|\le\delta,\ |p_n(z)-p_n(\zeta)|\le t\}
+ \subseteq\overline B\!\left(\zeta,(t/a)^{1/q_n(\zeta)}\right).
+ \label{eq:local-degree-pullback}
+\end{equation}
+At a regular center \(q_n=1\); at a critical center the degree may be
+larger. For each fixed \(n\), compactness of \(\Sigma_n\) gives a finite
+cover by such charts, but their number, radii, constants, and overlap
+multiplicities depend on \(n\). The global identity follows from
+\(\deg p_1=1\) and \(\deg p_{n+1}=2\deg p_n\), since
+\(p_{n+1}=p_n^2+c\):
+\[
+ \sum_{p_n'(\zeta)=0}(q_n(\zeta)-1)
+ =\deg p_n'=2^{n-1}-1
+\]
+also gives no local estimate on a block interface. Finally, smallness
+of \(G(\zeta)\) and closeness of \(\zeta\) to \(\M\) alone do not imply
+smallness of the Euclidean radius \(t\) in the image of \(p_n\).
+Summing estimates \eqref{eq:local-degree-pullback} requires separate
+uniform bounds for image radii, degrees, and overlaps.
+
+Thus, the established results give an exact passage from contact cells
+to the total mass \(\Xi_m(\C)\), as well as a summable bound on the
+thickness of their collar. The open step is the local Carleson bound
+for this mass in terms of \(R_m\epsilon_m\); neither proximity of the
+interfaces to \(\M\), finiteness of the graphs, nor a global count of
+critical multiplicities proves it.

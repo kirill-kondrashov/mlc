@@ -7,7 +7,9 @@ DOCS_DIR = Path("../docs")
 DOCS_DIR.mkdir(exist_ok=True)
 
 FILES = [
-    "Core", "LocalConnectivity", "ParaPuzzleConnectivity",
+    "Core", "CategoricalRoot", "CategoricalTopologicalApproximation",
+    "CategoricalMandelbrot", "CategoricalResidual",
+    "LocalConnectivity", "ParaPuzzleConnectivity",
     "MoleculeToParameterShrink",
     "Quadratic/Complex/GreenSublevel", "Quadratic/Complex/GreenHarmonic",
     "Quadratic/Complex/HarmonicMinimumPrinciple",

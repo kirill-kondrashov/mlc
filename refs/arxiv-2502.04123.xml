@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/rw8KvaoqHaUFKqog3uPBLO9gK0o</id>
+  <title>arXiv Query: search_query=&amp;id_list=2502.04123&amp;start=0&amp;max_results=10</title>
+  <updated>2026-09-04T19:34:43Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2502.04123" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2502.04123v2</id>
+    <title>Localizing invariants of inverse limits</title>
+    <updated>2025-02-10T13:08:13Z</updated>
+    <link href="https://arxiv.org/abs/2502.04123v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2502.04123v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper we study the category of nuclear modules on an affine formal scheme as defined by Clausen and Scholze \cite{CS20}. We also study related constructions in the framework of dualizable and rigid monoidal categories. We prove that the $K$-theory (in the sense of \cite{E24}) of the category of nuclear modules on $\operatorname{Spf}(R^{\wedge}_I)$ is isomorphic to the classical continuous $K$-theory, which in the noetherian case is given by the limit $\varprojlim\limits_{n} K(R/I^n).$ This isomorphism was conjectured previously by Clausen and Scholze.
+  More precisely, we study two versions of the category of nuclear modules: the original one defined in \cite{CS20} and a different version, which contains the original one as a full subcategory. For our category $\operatorname{Nuc}(R^{\wedge}_I)$ we give three equivalent definitions. The first definition is by taking the internal $\operatorname{Hom}$ in the category $\operatorname{Cat}_R^{\operatorname{dual}}$ of $R$-linear dualizable categories. The second definition is by taking the rigidification of the usual $I$-complete derived category of $R.$ The third definition is by taking an inverse limit in $\operatorname{Cat}_R^{\operatorname{dual}}.$ For each of the three approaches we prove that the corresponding construction is well-behaved in a certain sense.
+  Moreover, we prove that the two versions of the category of nuclear modules have the same $K$-theory, and in fact the same finitary localizing invariants.</summary>
+    <category term="math.KT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.CT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.NT" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-02-06T14:55:07Z</published>
+    <arxiv:comment>121 pages; v2: minor changes, typos corrected</arxiv:comment>
+    <arxiv:primary_category term="math.KT"/>
+    <author>
+      <name>Alexander I. Efimov</name>
+    </author>
+  </entry>
+</feed>

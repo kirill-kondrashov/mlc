@@ -1,0 +1,159 @@
+\chapter{The AM Hypothesis}
+\noindent This chapter studies the open AM hypothesis: a block-uniform lower bound for the discrete path modulus in terms of the loss of radius of the root component. It proves the exact recursion for this loss, identifies the first separating level, and bounds the modulus above by the cost of a finite graph cut. The missing ingredient is precisely the uniform lower bound for the modulus; possible geometric conditions that could yield it are discussed.
+
+\section{The Open Path-Modulus Estimate}
+
+\begin{openestimate}[Annular Path-Modulus Estimate (\(\mathsf{AM}\))]
+\label{thm:annular-path-modulus}
+For holomorphically generated planar Green filtrations with finite
+interface graphs, one must prove \eqref{eq:annular-modulus-target} for
+all sufficiently large \(m\) with \(\Delta_m>0\), using a constant
+\(a_{x,r}>0\) independent of the block. In the general setting, the
+goal is to find independently verifiable geometric hypotheses that do
+not assume local connectivity of the limit set; natural languages for
+such hypotheses include discrete modulus, annular linear connectivity,
+and Loewner-type estimates.
+\end{openestimate}
+No Loewner-geometric hypothesis is assumed here. Independently
+verifiable conditions sufficient for \eqref{eq:annular-modulus-target}
+must be formulated and then checked for the specific filtration;
+arbitrary finite graphs do not suffice.
+
+\section{Reduction to AM: Path Modulus}
+\label{sec:am-open-reductions}
+
+The open estimate \(\mathsf{AM}\) requires a block-uniform lower bound
+\[
+ \operatorname{Mod}_{1,m}(\Gamma_m)\ge a_{c,r}\Delta_m,
+ \qquad a_{c,r}>0,
+\]
+where \(\Gamma_m\) consists of all paths in the slice immediately before
+the first loss of the root component. Neither finiteness of the
+interface graph nor a positive distance between components of a fixed
+slice alone gives a constant uniform in the depth.
+
+Fix \(c\in\partial\M\) and \(r>0\). For \(n\ge1\), set
+\begin{equation}
+ \label{eq:one-step-slice}
+ A_n(c,r):=C_{n-1}(c,r)\cap p_n^{-1}(K),\qquad
+ U_n(c,r):=C_{n-1}(c,r)\cap\{|p_n|>2\},
+\end{equation}
+where \(\Sigma_n(c,r)\) is defined in~\eqref{eq:green-separator}. We
+have \(C_n(c,r)=\operatorname{Comp}_c(A_n(c,r))\): every connected
+subset of \(F_n(c,r)\) containing \(c\) lies in \(C_{n-1}(c,r)\), and
+\(A_n(c,r)\subseteq F_n(c,r)\). Semialgebraicity gives finitely many
+components of \(A_n\) and \(U_n\); the components of \(A_n\) and the
+closures of the components of \(U_n\) in \(C_{n-1}\) are compact
+connected sets \cite[Theorem~2.4.5]{BCR}. By triangulation of
+semialgebraic sets, the connected set \(C_{n-1}(c,r)\) is path
+connected; in particular, the paths used below exist.
+
+Set
+\begin{equation}
+ \label{eq:block-newly-separated-set}
+ \mathcal L_m(c,r):=\M\cap
+ \bigl(C_{\lambda_m}(c,r)\setminus C_{\lambda_{m+1}}(c,r)\bigr),
+ \qquad R_m:=\rho_{\lambda_m}^{\M}(c,r),\quad
+ \Delta_m:=R_m-R_{m+1}.
+\end{equation}
+The decomposition
+\(\M\setminus C_n=(\M\setminus C_{n-1})\,\dot\cup\,
+\bigl(\M\cap(C_{n-1}\setminus C_n)\bigr)\)
+gives the exact recursion
+\begin{equation}
+ \label{eq:one-step-radius-recursion}
+ \rho_n^{\M}(c,r)=
+ \min\left\{\rho_{n-1}^{\M}(c,r),
+ \dist\bigl(c,\M\cap(C_{n-1}(c,r)\setminus C_n(c,r))\bigr)\right\}.
+\end{equation}
+Iteration gives
+\begin{equation}
+ \label{eq:block-radius-loss-exact}
+ R_{m+1}=\min\{R_m,\dist(c,\mathcal L_m(c,r))\}.
+\end{equation}
+When \(\Delta_m>0\), the finite number of components of
+\(O_{\lambda_{m+1}}\cap\overline B(c,r)\) shows that
+\(\mathcal L_m(c,r)\) is a finite union of intersections of \(\M\) with
+non-root components of this level: any such component meeting
+\(C_{\lambda_m}(c,r)\) lies entirely in it, since it is a connected
+subset of the level-\(\lambda_m\) slice. Thus \(\mathcal L_m(c,r)\) is
+compact; choose a point \(y_m\) in it nearest to \(c\). Let \(n_m\) be
+the first index in the block for which \(y_m\notin C_{n_m}(c,r)\). Then
+\[
+ y_m\in C_{n_m-1}(c,r)\cap p_{n_m}^{-1}(K),\qquad
+ y_m\notin C_{n_m}(c,r).
+\]
+Let \(\Gamma_m\) be the family of all paths
+\(\gamma\in C^0([0,1],C_{n_m-1}(c,r))\) with
+\(\gamma(0)=c\) and \(\gamma(1)=y_m\). This family is nonempty because
+\(C_{n_m-1}(c,r)\) is path connected. Hence every path in
+\(C_{n_m-1}(c,r)\) from \(c\) to \(y_m\) exits \(p_{n_m}^{-1}(K)\) and
+meets the interface \(\Sigma_{n_m}(c,r)\).
+
+This separation can be encoded as a finite graph cut. The vertices are
+the components of \(A_{n_m}\) and the closures of components of
+\(U_{n_m}\). Their intersection graph is connected because the
+corresponding compact connected sets cover the connected set
+\(C_{n_m-1}\). An edge between a vertex \(A\in\pi_0(A_{n_m})\) and a
+closure \(\overline U\) has contact set
+\[
+ P_e:=A\cap\overline U^{\,C_{n_m-1}}\subseteq\Sigma_{n_m}(c,r).
+\]
+Indeed, \(|p_{n_m}|\le2\) on \(A\), while \(|p_{n_m}|\ge2\) on the
+closure of \(U\); equality follows because the intersection is
+nonempty. Set
+\[
+ I_{n_m,m}:=\{\alpha:Q_{m,\alpha}\cap\Sigma_{n_m}(c,r)\ne\varnothing\}.
+\]
+For \(S\subseteq I_{n_m,m}\), delete an edge \(e\) exactly when
+\(P_e\subseteq\bigcup_{\alpha\in S}Q_{m,\alpha}\). Call \(S\)
+admissible if it separates the root vertex \(C_{n_m}\) from the vertex
+\(A^*\) containing \(y_m\). The full set \(I_{n_m,m}\) is admissible,
+so the minimum cost
+\(\sum_{\alpha\in S}\operatorname{diam}Q_{m,\alpha}\) is attained;
+denote it by \(\widehat{\mathfrak c}_m\).
+
+Every admissible cut meets every path \(\gamma\in\Gamma_m\). Indeed,
+the preimages under \(\gamma\) of the vertex sets form a finite closed
+cover of \([0,1]\), whose intersection graph is connected. If
+\(\gamma\) avoids the selected cells, every contact along this graph
+path remains uncovered, so the corresponding edges are not deleted.
+This leaves a path from the root to \(A^*\), contradicting admissibility.
+Therefore the indicators of the selected cells are admissible weights
+in the discrete-modulus definition, and the minimum over \(I_{n_m,m}\)
+is the target cost \(\widehat{\mathfrak c}_m\) in
+\eqref{eq:modulus-below-cut}: any cell covering a contact point meets
+\(\Sigma_{n_m}(c,r)\).
+\begin{equation}
+ \operatorname{Mod}_{1,m}(\Gamma_m)
+ \le\widehat{\mathfrak c}_m
+ \le\operatorname{cap}_{n_m,m}
+ \le\mathfrak c_m.
+ \label{eq:am-cut-reduction}
+\end{equation}
+The second inequality follows because the target cut separates only
+one component meeting \(\M\), whereas \(\operatorname{cap}_{n_m,m}\)
+separates all such components; the last inequality follows from the
+definition of the total block cost.
+
+Thus, the rigorous part of the reduction bounds the modulus above by
+the cut cost. To complete the argument, the converse, block-uniform
+lower bound \(\mathsf{AM}\) is needed. For fixed \(n\), finitely many
+components give a positive distance from the root component to the
+others, but this constant depends on \(n\) and does not control blocks
+as \(m\to\infty\). Discrete modulus and uniform annular/Loewner
+estimates remain potentially sufficient quantitative frameworks; they
+are not assumed to be established properties of \(\M\).
+
+To interpret the missing uniformity, define the minimum radial
+excursion
+\[
+ H_n(c,r;y):=\inf_{\substack{\gamma\in C^0([0,1],C_{n-1}(c,r))\\
+                   \gamma(0)=c,\ \gamma(1)=y}}
+                   \max_{t\in[0,1]}|\gamma(t)-c|.
+\]
+If \(y\notin C_n(c,r)\), every such path meets \(\Sigma_n\), so
+\(H_n(c,r;y)\ge\max\{|y-c|,\dist(c,\Sigma_n(c,r))\}\). This topological
+intersection alone does not bound the radial excursion uniformly in
+\(n\); such a bound would provide an additional route to quantitative
+control of the loss.

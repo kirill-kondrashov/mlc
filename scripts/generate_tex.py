@@ -233,7 +233,11 @@ def main():
     
     # Map of file path to module name
     files = [
-        ('Core.lean', 'Root Theorem'),
+        ('Core.lean', 'Compatibility Root Theorem'),
+        ('CategoricalRoot.lean', 'Categorical Root Theorem'),
+        ('CategoricalTopologicalApproximation.lean', 'Categorical Topological Approximations'),
+        ('CategoricalMandelbrot.lean', 'Categorical Mandelbrot Warm-up'),
+        ('CategoricalResidual.lean', 'Categorical Residual Input'),
         ('LocalConnectivity.lean', 'Local Connectivity from Shrinking'),
         ('ParaPuzzleConnectivity.lean', 'Parameter Puzzle Connectivity'),
         ('MoleculeToParameterShrink.lean', 'Molecule to Parameter Shrinkage'),

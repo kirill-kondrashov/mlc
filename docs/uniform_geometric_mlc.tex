@@ -1,0 +1,166 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage[margin=27mm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup[figure]{font=small,skip=3pt}
+\setlength{\intextsep}{4pt}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\setmainfont{Noto Serif}
+\setlength{\emergencystretch}{1em}
+\setcounter{tocdepth}{1}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,unicode=true]{hyperref}
+\hypersetup{
+  pdftitle={Local Connectivity of the Mandelbrot Set: Factorization of Local Components},
+  pdfsubject={A Conditional Factorization Theorem and Open Geometric Estimates}
+}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{openestimate}[theorem]{Open conjecture}
+\newtheorem*{approxthm}{Approximation theorem}
+\renewcommand{\proofname}{Proof}
+\definecolor{conditionalblue}{RGB}{28,76,132}
+\newenvironment{conditionalstep}
+  {\begin{mdframed}[
+     linecolor=conditionalblue,
+     linewidth=1.2pt,
+     leftline=true,
+     rightline=false,
+     topline=false,
+     bottomline=false,
+     leftmargin=0pt,
+     rightmargin=0pt,
+     innerleftmargin=8pt,
+     innerrightmargin=0pt,
+     innertopmargin=2pt,
+     innerbottommargin=2pt,
+     skipabove=\medskipamount,
+     skipbelow=\medskipamount,
+     backgroundcolor=white,
+     nobreak=true
+   ]\begingroup\color{conditionalblue}\small}
+  {\endgroup\end{mdframed}}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\M}{\mathcal M}
+\newcommand{\D}{D}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\LC}{\operatorname{LC}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\dH}{d_{\mathrm H}}
+\newcommand{\Lip}{\operatorname{Lip}}
+
+\title{Local Connectivity of the Mandelbrot Set:\\
+A Conditional Factorization Theorem for Local Components}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\clearpage
+
+\input{docs/chapters/01_mlc_equivalences.tex}
+\input{docs/chapters/02_factorization_lemma.tex}
+\input{docs/chapters/03_am_hypothesis.tex}
+\input{docs/chapters/04_gc_hypothesis.tex}
+\input{docs/chapters/05_mlc_factorization_connection.tex}
+\input{docs/chapters/06_approximation_theorem.tex}
+
+\renewcommand{\bibname}{References}
+\addcontentsline{toc}{chapter}{References}
+\begin{thebibliography}{99}\small
+\bibitem{DH}
+A.~Douady and J.~H.~Hubbard,
+\foreignlanguage{english}{\emph{Exploring the Mandelbrot Set: The Orsay Notes}},
+Chapter~8, Proposition~8.1(b), Theorem~8.1, and Corollaries~8.3--8.4,
+pp.~62--65.
+\href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}
+{PDF}.
+
+\bibitem{Milnor}
+J.~Milnor,
+\foreignlanguage{english}{\emph{Dynamics in One Complex Variable: Introductory Lectures}},
+Theorem~16.6, p.~84 of the PDF.
+\href{https://arxiv.org/pdf/math/9201272#page=84}
+{PDF}.
+
+\bibitem{Forster}
+O.~Forster,
+\foreignlanguage{english}{\emph{Lectures on Riemann Surfaces}},
+Graduate Texts in Mathematics, vol.~81, Springer-Verlag (1981),
+Riemann--Hurwitz formula.
+
+\bibitem{BCR}
+J.~Bochnak, M.~Coste, and M.-F.~Roy,
+\foreignlanguage{english}{\emph{Real Algebraic Geometry}},
+Ergebnisse der Mathematik und ihrer Grenzgebiete, 3.~Folge, vol.~36,
+Springer-Verlag (1998), Theorem~2.4.5.
+
+\bibitem{HurewiczWallman}
+W.~Hurewicz and H.~Wallman,
+\foreignlanguage{english}{\emph{Dimension Theory}},
+Princeton Mathematical Series, vol.~4, Princeton University Press (1941).
+\href{https://archive.org/details/dimensiontheory00hure}
+{Catalog record}.
+
+\bibitem{Yoccoz}
+J.-C.~Yoccoz,
+\foreignlanguage{english}{\emph{Théorème de Siegel, nombres de Bruno et
+polynômes quadratiques}},
+\foreignlanguage{english}{\emph{Petits diviseurs en dimension 1}},
+Astérisque, no.~231 (1995), pp.~1--88.
+\href{https://www.numdam.org/book-part/AST_1995__231__1_0/}
+{Article page}.
+
+\bibitem{DudkoMLC}
+D.~Dudko,
+\foreignlanguage{english}{\emph{On the MLC Conjecture and the
+Renormalization Theory in Complex Dynamics}},
+arXiv:2512.24171 (2025), preprint, submitted to
+\foreignlanguage{english}{\emph{Proceedings of the ICM 2026}}.
+\href{https://arxiv.org/abs/2512.24171}{arXiv page}.
+
+\bibitem{DudkoLyubichSatellite}
+D.~Dudko and M.~Lyubich,
+\foreignlanguage{english}{\emph{Local connectivity of the Mandelbrot
+set at some satellite parameter of bounded type}},
+\foreignlanguage{english}{Geometric and Functional Analysis},
+vol.~33 (2023), no.~4, pp.~912--1047.
+\href{https://doi.org/10.1007/s00039-023-00637-8}{DOI}.
+
+\bibitem{DudkoLyubichFeigenbaum}
+D.~Dudko and M.~Lyubich,
+\foreignlanguage{english}{\emph{MLC at Feigenbaum points}},
+\foreignlanguage{english}{Publications Mathématiques de l'IHÉS},
+vol.~143 (2026), pp.~97--141.
+\href{https://doi.org/10.5802/pmihes.2}{DOI};
+\href{https://arxiv.org/abs/2309.02107}{arXiv:2309.02107}.
+
+\bibitem{KahnLyubichElephant}
+J.~Kahn and M.~Lyubich,
+\foreignlanguage{english}{\emph{A priori bounds for some infinitely
+renormalizable quadratic: IV. Elephant Eyes}},
+arXiv:2601.21905 (2026), preprint.
+\href{https://arxiv.org/abs/2601.21905}{arXiv page}.
+
+\bibitem{Lyubich97}
+M.~Lyubich,
+\foreignlanguage{english}{\emph{Dynamics of quadratic polynomials,
+I--II}},
+\foreignlanguage{english}{Acta Mathematica}, vol.~178 (1997), no.~2,
+pp.~185--297.
+\href{https://doi.org/10.1007/BF02392694}{DOI}.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/IdRmo8B07/sVRdCBdQZq6a/Ck0I</id>
+  <title>arXiv Query: search_query=&amp;id_list=2510.17010&amp;start=0&amp;max_results=10</title>
+  <updated>2026-09-04T19:34:22Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2510.17010" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2510.17010v1</id>
+    <title>Rigidity of the category of localizing motives</title>
+    <updated>2025-10-19T21:19:30Z</updated>
+    <link href="https://arxiv.org/abs/2510.17010v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2510.17010v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper we study the category of localizing motives $\operatorname{Mot}^{\operatorname{loc}}$ -- the target of the universal finitary localizing invariant of idempotent-complete stable categories as defined by Blumberg-Gepner-Tabuada. We prove that this (presentable stable) category is rigid symmetric monoidal in the sense of Gaitsgory and Rozenblyum. In particular, it is dualizable. More precisely, we prove a more general version of this result for the category $\operatorname{Mot}^{\operatorname{loc}}_{\mathcal{E}}$ -- the target of the universal finitary localizing invariant of dualizable modules over a rigid symmetric monoidal category $\mathcal{E}.$
+  We obtain general results on morphisms and internal $\operatorname{Hom}$ in the categories $\operatorname{Mot}^{\operatorname{loc}}_{\mathcal{E}}$ of localizing motives. As an application we compute the morphisms in multiple non-trivial examples. In particular, we prove the corepresentability statements for $\operatorname{TR}$ (topological restriction) and $\operatorname{TC}$ (topological cyclic homology) when restricted to connective $\mathbb{E}_1$-rings. As a corollary, for a connective $\mathbb{E}_{\infty}$-ring $R$ we obtain a $\operatorname{TR}(R)$-module structure on the nil $K$-theory spectrum $NK(R).$
+  We also apply the rigidity theorem to define refined versions of negative cyclic homology and periodic cyclic homology. This was announced previously in \cite{E24b}, and certain very interesting examples were computed by Meyer and Wagner in \cite{MW24}. Here we do several computations in characteristic $0,$ in particular showing that in seemingly innocuous situations the answer can be given by an interesting algebra of overconvergent functions.</summary>
+    <category term="math.KT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.AT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.CT" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.NT" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-10-19T21:19:30Z</published>
+    <arxiv:comment>133 pages</arxiv:comment>
+    <arxiv:primary_category term="math.KT"/>
+    <author>
+      <name>Alexander I. Efimov</name>
+    </author>
+  </entry>
+</feed>

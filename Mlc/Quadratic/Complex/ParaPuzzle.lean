@@ -11,7 +11,11 @@ We model the parameter piece of depth `n` at `c` as the translate of the
 dynamical puzzle piece around the critical point.
 -/
 
-/-- Parameter puzzle piece of depth `n` centered at `c`. -/
+/-- Simplified frozen parameter piece of depth `n` centered at `c`.
+
+    This is a translate of a full dynamical Green sublevel component. It is
+    useful for the checked reduction, but it is not the graph-cut
+    parapuzzle piece used in the classical Yoccoz construction. -/
 def ParaPuzzlePieceAt (c : ℂ) (n : ℕ) : Set ℂ :=
   {c' | c' - c ∈ DynamicalPuzzlePiece c n 0}
 
