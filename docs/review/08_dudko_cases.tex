@@ -1,0 +1,142 @@
+\chapter{Dudko--Lyubich and current MLC cases}
+
+\section{A common theorem shape}
+
+The recent literature proves local connectivity for different
+renormalization classes.  Their analytic arguments are not identical, but
+the formal end point is uniform:
+\[
+ \text{class predicate}
+\ +\ \text{connected shrinking parameter pieces}
+\ \Longrightarrow\ \text{MLC at }c.
+\]
+The Lean structure \lean{LiteratureMLCData} records this common shape.  Its
+fields are:
+\begin{enumerate}
+\item membership in the source-specific parameter class;
+\item a connected shrinking \lean{ParameterPuzzleBasis};
+\item a source key identifying the analytic theorem that produced the data.
+\end{enumerate}
+The theorem
+\lean{localConnectivity_of_literatureMLCData} is proved once and reused by
+the source-specific certificates.
+
+\section{Bounded-type satellite parameters}
+
+\begin{definition}[Bounded-type satellite class]
+\label{def:bounded-satellite}
+A bounded-type satellite predicate is a predicate
+$\mathsf{Sat}_{\mathrm{bt}}:\C\to\Prop$ which records an infinite
+satellite renormalization tower together with a uniform bound on its
+combinatorial rotation data.
+\end{definition}
+
+\begin{theorem}[Dudko--Lyubich satellite MLC]
+\label{thm:dudko-lyubich-satellite}
+For the bounded-type satellite class covered by Dudko--Lyubich, the
+Mandelbrot set is locally connected at every parameter in the class.
+\end{theorem}
+
+The formal certificate is
+\lean{BoundedTypeSatelliteCertificate}.  Its class predicate is a parameter,
+because the combinatorial definition of bounded type has to be built from
+the renormalization tower rather than guessed from a period sequence.
+Once the analytic proof constructs the parameter-puzzle basis, the theorem
+\lean{localConnectivity_of_boundedTypeSatelliteCertificate} gives the
+topological conclusion.
+
+\section{Feigenbaum points}
+
+\begin{definition}[Feigenbaum class]
+\label{def:feigenbaum-class}
+A Feigenbaum predicate $\mathsf{Fbg}:\C\to\Prop$ records the primitive
+period-doubling (or the corresponding bounded combinatorial) renormalization
+data together with the limiting parameter.
+\end{definition}
+
+\begin{theorem}[Dudko--Lyubich Feigenbaum MLC]
+\label{thm:dudko-lyubich-feigenbaum}
+For the Feigenbaum points covered by Dudko--Lyubich, the associated
+principal-nest bounds and parapuzzle construction imply local connectivity
+of $\M$ at the parameter.
+\end{theorem}
+
+The Lean endpoint is
+\lean{FeigenbaumCertificate}.  The certificate deliberately does not
+identify ``Feigenbaum'' with an informal numerical address: the exact
+combinatorics must be supplied as the predicate $\mathsf{Fbg}$.
+
+\section{Parabolically bounded primitive renormalization}
+
+Kahn--Kapiamba--Lyubich prove MLC for a class of infinitely renormalizable
+primitive parameters which may approach the cusp.  Their geometric tools
+include:
+\begin{itemize}
+\item the Thin--Thick Decomposition;
+\item Value Calculus;
+\item the Wanderers Theorem;
+\item the Wave Lemma.
+\end{itemize}
+These estimates control degeneration that is not covered by a fixed
+compactness assumption on the renormalization types.
+
+\begin{theorem}[Parabolically bounded primitive MLC]
+\label{thm:parabolic-primitive-mlc}
+For the parabolically bounded primitive class of
+\lean{arXiv:2606.27272}, the Mandelbrot set is locally connected at every
+parameter covered by the theorem.
+\end{theorem}
+
+The formal endpoint is
+\lean{ParabolicallyBoundedPrimitiveCertificate}.  The missing work is the
+formal definition of the class and the formalization of the four geometric
+tools that construct its parameter-puzzle basis.
+
+\section{Neutral renormalization}
+
+The neutral regime is not an MLC theorem by itself.  The recent papers
+\lean{arXiv:2609.15500} and \lean{arXiv:2609.37383} provide machinery:
+bubble bounds, pseudo-bubbles, neutral cascades, butterfly bounds, and
+rigidity of neutral towers.  The analytic role of these results is:
+\[
+\text{neutral geometry}
+\Longrightarrow
+\text{controlled renormalization}
+\Longrightarrow
+\text{parameter-puzzle data}.
+\]
+The hybrid-class theorem \lean{arXiv:2610.25983} supplies an analytic
+parameter-space layer for generalized polynomial-like maps, but it does not
+by itself assert MLC.
+
+\begin{openestimate}[Neutral-to-parameter bridge]
+\label{est:neutral-parameter}
+Formalize bubble and neutral-cascade geometry, state the rigidity theorem for
+marked towers, and construct the connected shrinking parameter pieces needed
+by \lean{NeutralRenormalizationCertificate}.
+\end{openestimate}
+
+\section{Status of the current contracts}
+
+\begin{center}\small
+\begin{tabular}{@{}P{0.23\textwidth}@{\hspace{4pt}}P{0.58\textwidth}@{\hspace{4pt}}P{0.12\textwidth}@{}}
+\textbf{Class} & \textbf{Lean contract} & \textbf{Status}\\
+\hline
+Bounded-type satellite &
+\lean{BoundedTypeSatelliteCertificate} &
+interface\\
+Feigenbaum &
+\lean{FeigenbaumCertificate} &
+interface\\
+Parabolic primitive &
+\lean{ParabolicallyBoundedPrimitiveCertificate} &
+interface\\
+Neutral renormalization &
+\lean{NeutralRenormalizationCertificate} &
+machinery open\\
+\end{tabular}
+\end{center}
+
+The certificates prevent a common formalization error: proving a generic
+topological lemma and then silently treating the published analytic estimate
+as if it had already been verified in Lean.

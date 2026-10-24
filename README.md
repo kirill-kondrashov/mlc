@@ -140,6 +140,8 @@ The foundational vocabulary and parameter-puzzle basis interface are in
 [`Mlc/Literature/Foundations.lean`](Mlc/Literature/Foundations.lean).
 The renormalization-to-MLC bridge is in
 [`Mlc/Literature/Renormalization.lean`](Mlc/Literature/Renormalization.lean).
+Dudko--Lyubich and current MLC-case certificate contracts are in
+[`Mlc/Literature/Dudko.lean`](Mlc/Literature/Dudko.lean).
 
 ## Implemented interfaces
 
