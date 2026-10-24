@@ -192,12 +192,6 @@ def annotate_known_points(ax: plt.Axes) -> None:
             "#62c5ff",
             (-0.52, 0.24),
         ),
-        (
-            FEIGENBAUM,
-            "Feigenbaum\n(Dudko--Lyubich)",
-            "#f5c542",
-            (0.10, -0.30),
-        ),
     ]
     for point, label, color, offset in points:
         ax.scatter(
@@ -242,16 +236,6 @@ def add_main_legend(ax: plt.Axes) -> None:
                 color="#f2f2f2",
                 lw=1,
                 label="rendered boundary of $M$",
-            ),
-            Line2D(
-                [0],
-                [0],
-                marker="o",
-                color="none",
-                markerfacecolor="#f5c542",
-                markeredgecolor="#11151d",
-                markersize=5,
-                label="named proved class",
             ),
         ],
         loc="lower left",
@@ -378,51 +362,72 @@ def make_figure(output: Path) -> None:
     )
 
     yoccoz = figure.add_subplot(grid[0, 1])
-    plot_render(
-        yoccoz,
-        (-1.95, -1.55, -0.22, 0.22),
-        1100,
-        700,
-        1100,
-        title="B. Yoccoz finite-renormalization mechanism",
-        boundary_color="#62c5ff",
+    yoccoz.set_xlim(0, 1)
+    yoccoz.set_ylim(0, 1)
+    yoccoz.set_aspect("equal")
+    yoccoz.axis("off")
+    yoccoz.set_title(
+        "B. Yoccoz: nested parapuzzles and the missing bridge",
+        fontsize=10,
+        pad=8,
     )
-    center = (-1.76, 0.0)
-    for width, height, color in [
-        (0.15, 0.15, "#62c5ff"),
-        (0.09, 0.09, "#f5c542"),
-        (0.045, 0.045, "#ff8b7b"),
+    for left, bottom, width, height, color, label in [
+        (0.06, 0.16, 0.45, 0.66, "#62c5ff", r"$\mathcal{P}_n(c)$"),
+        (0.16, 0.26, 0.25, 0.46, "#f5c542", r"$\mathcal{P}_{n+1}(c)$"),
+        (0.25, 0.35, 0.08, 0.28, "#ff8b7b", r"$\mathcal{P}_{n+2}(c)$"),
     ]:
         yoccoz.add_patch(
             Rectangle(
-                (center[0] - width / 2, center[1] - height / 2),
+                (left, bottom),
                 width,
                 height,
                 fill=False,
                 edgecolor=color,
-                linewidth=1.0,
+                linewidth=2.0,
                 linestyle="--",
-                zorder=8,
             )
         )
-    yoccoz.scatter(
-        [center[0]],
-        [center[1]],
-        s=22,
-        color="#62c5ff",
-        edgecolor="#11151d",
-        linewidth=0.5,
-        zorder=9,
+        yoccoz.text(
+            left + width / 2,
+            bottom + height + 0.025,
+            label,
+            color=color,
+            fontsize=9,
+            ha="center",
+        )
+    yoccoz.scatter([0.29], [0.49], s=24, color="#62c5ff", zorder=4)
+    yoccoz.annotate(
+        "",
+        xy=(0.88, 0.49),
+        xytext=(0.62, 0.49),
+        arrowprops={"arrowstyle": "->", "lw": 1.6, "color": "#313a4d"},
+    )
+    yoccoz.text(
+        0.69,
+        0.60,
+        "modulus divergence",
+        fontsize=7.4,
+        ha="center",
+        color="#313a4d",
+    )
+    yoccoz.text(
+        0.69,
+        0.39,
+        r"$\bigcap_n\overline{\mathcal{P}_n(c)}=\{c\}$",
+        fontsize=8,
+        ha="center",
+        color="#313a4d",
     )
     yoccoz.text(
         0.02,
-        0.04,
-        "Nested schematic parapuzzle pieces $\\mathcal{P}_n(c)$.\n"
-        "Lean: `yoccoz_puzzle_shrinkage`; parameter basis is open.",
-        transform=yoccoz.transAxes,
-        fontsize=6.5,
-        color="#f7f8fa",
-        bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 2},
+        0.02,
+        "Proved dynamical endpoint: `yoccoz_puzzle_shrinkage`.\n"
+        "Open parameter endpoint: connected shrinking parapuzzles.",
+        fontsize=6.7,
+        color="#313a4d",
+        ha="left",
+        va="bottom",
+        bbox={"facecolor": "#f5f7fa", "edgecolor": "#9aa4b2", "pad": 3},
     )
 
     cases = figure.add_subplot(grid[1, 0])
@@ -508,6 +513,29 @@ def make_figure(output: Path) -> None:
         fontsize=6.2,
         color="#f7f8fa",
         bbox={"facecolor": "#10131a", "alpha": 0.88, "pad": 2},
+    )
+    frontier.add_patch(
+        Rectangle(
+            (0.03, 0.84),
+            0.035,
+            0.10,
+            transform=frontier.transAxes,
+            facecolor="none",
+            edgecolor="#ff8b7b",
+            hatch="///",
+            linewidth=0.8,
+        )
+    )
+    frontier.text(
+        0.08,
+        0.89,
+        "hatched = unresolved theorem coverage\n"
+        "(schematic; not a certified subset of $M$)",
+        transform=frontier.transAxes,
+        fontsize=6.2,
+        color="#7f1d1d",
+        va="center",
+        bbox={"facecolor": "white", "edgecolor": "#ff8b7b", "pad": 2},
     )
 
     figure.suptitle(
