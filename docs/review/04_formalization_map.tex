@@ -42,6 +42,9 @@ proved\\
 Parameter parapuzzles &
 Connected induced pieces and a basis interface. &
 partial\\
+Phase--parameter contracts &
+External rays, dynamical graphs, parameter graphs, and topological transport. &
+interface\\
 Renormalization towers &
 Typed tower and period interfaces. &
 partial\\
@@ -83,11 +86,15 @@ the phase--parameter theorem where external rays, graph cuts, holomorphic
 motion, and renormalization estimates must eventually be formalized.
 
 The new module \lean{Mlc.Literature.Foundations} gives typed names for the
-quadratic map, orbit, filled Julia set, Julia set, and Mandelbrot set.  It
-also defines \lean{ParameterPuzzleBasis},
-\lean{APrioriBounds}, and \lean{RenormalizationMLCInterface}.  These are
-deliberately structural: the analytic fields required by the papers are
-visible in Lean before any theorem is claimed.
+quadratic map, orbit, filled Julia set, Julia set, and Mandelbrot set.  Its
+main structural interfaces are:
+\begin{itemize}
+\item \lean{ParameterPuzzleBasis};
+\item \lean{APrioriBounds};
+\item \lean{RenormalizationMLCInterface}.
+\end{itemize}
+The analytic fields required by the papers are visible in Lean before any
+theorem is claimed.
 
 \section{The current conditional root}
 
