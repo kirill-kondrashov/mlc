@@ -1,0 +1,140 @@
+\chapter{Conditional theorem matrix}
+
+\section{Why family statements matter}
+
+A pointwise certificate is not yet a literature theorem.  A published result
+usually has the form
+\[
+\forall c,\qquad
+\mathsf{Class}(c)\Longrightarrow
+\mathsf{AnalyticEstimates}(c)\Longrightarrow
+\mathsf{MLCAt}(c).
+\]
+The formalization must therefore distinguish:
+\begin{enumerate}
+\item the definition of $\mathsf{Class}$;
+\item the analytic construction of estimates and puzzle data;
+\item the theorem transporting those data to local connectivity;
+\item the quantification over the whole class.
+\end{enumerate}
+The module \lean{Mlc.Literature.CaseTheorems} contains the last step.
+
+\section{Finitely renormalizable parameters}
+
+The dynamical half is already a theorem:
+\[
+\mathsf{FinitelyRenormalizable}(c)
+\Longrightarrow
+\bigcap_n P_n(c,0)=\{0\}.
+\]
+The Lean declaration is
+\lean{Literature.yoccoz_puzzle_shrinkage}; internally it invokes
+\lean{Quadratic.yoccoz_theorem_conformal}.
+
+The missing parameter-plane family input is
+\[
+\forall c\in\M,\quad
+\mathsf{FinitelyRenormalizable}(c)
+\Longrightarrow
+\exists\ \text{phase--parameter puzzle data at }c.
+\]
+Its Lean name is
+\lean{FinitelyRenormalizablePhaseParameterData}.  The theorem
+\lean{finitelyRenormalizableMLC_of_phaseParameterData} proves the exact
+pointwise MLC result from that family input.
+
+\begin{conditionalstep}
+The formalization has therefore separated the classical Yoccoz theorem into
+two independently auditable lines:
+\[
+\begin{gathered}
+\text{modulus divergence}\\
+\Downarrow\\
+\text{dynamical puzzle shrinking}\\
+\Downarrow\quad\text{(phase--parameter existence still open)}\\
+\text{connected shrinking parameter pieces}\\
+\Downarrow\\
+\text{MLC at the parameter}.
+\end{gathered}
+\]
+\end{conditionalstep}
+
+\section{Published infinite-renormalization cases}
+
+For a source-specific predicate $\mathsf{Class}$ define
+\[
+\mathsf{CertFamily}(\mathsf{Class})
+:=
+\forall c\in\M,\quad
+\mathsf{Class}(c)\Longrightarrow
+\exists\,\mathsf{LiteratureMLCData}(\mathsf{Class},c).
+\]
+The theorem
+\lean{pointwiseMLC_of_literatureCertificateFamily} proves
+\[
+\mathsf{CertFamily}(\mathsf{Class})
+\Longrightarrow
+\mathsf{PointwiseMLCResult}(\mathsf{Class}).
+\]
+
+The source-specific corollaries are:
+\begin{itemize}
+\item \lean{boundedTypeSatelliteMLC_of_certificateFamily};
+\item \lean{feigenbaumMLC_of_certificateFamily};
+\item \lean{parabolicallyBoundedPrimitiveMLC_of_certificateFamily};
+\item \lean{neutralRenormalizationMLC_of_certificateFamily}.
+\end{itemize}
+The first three correspond to direct MLC-case results or their formal
+endpoints.  The neutral theorem is intentionally only a contract: the
+current neutral papers provide rigidity and geometric estimates, not a
+global MLC theorem for every neutral parameter.
+
+\section{Global phase--parameter implication}
+
+If the phase--parameter result is supplied for every $c\in\M$, then the
+local basis criterion gives the global statement:
+\[
+\mathsf{YoccozPhaseParameterResult}
+\Longrightarrow
+\operatorname{LocallyConnectedSpace}(\M).
+\]
+This is proved as
+\lean{globalMLC_of_yoccozPhaseParameterResult}.  It is a deliberately
+strong conditional theorem.  It does not claim that the premise is known;
+rather, it identifies the exact universal existence statement whose proof
+would close the target through this route.
+
+\section{Logical status table}
+
+\begin{center}\small
+\begin{tabular}{@{}P{0.30\textwidth}@{\hspace{4pt}}P{0.47\textwidth}@{\hspace{4pt}}P{0.13\textwidth}@{}}
+\textbf{Layer} & \textbf{Statement} & \textbf{Status}\\
+\hline
+Yoccoz dynamics &
+\lean{FinitelyRenormalizable} implies dynamical puzzle shrinking. &
+proved\\
+Parameter realization &
+Finite-renormalization data produce connected shrinking parapuzzles. &
+open input\\
+Bounded satellite &
+Certificate family implies pointwise MLC on the class. &
+proved conditionally\\
+Feigenbaum &
+Certificate family implies pointwise MLC on the class. &
+proved conditionally\\
+Parabolic primitive &
+Certificate family implies pointwise MLC on the class. &
+proved conditionally\\
+Neutral &
+Rigidity/geometric certificate family implies pointwise MLC. &
+proved conditionally\\
+All parameters &
+\lean{YoccozPhaseParameterResult} implies global MLC. &
+proved conditionally\\
+\end{tabular}
+\end{center}
+
+This matrix is the formal counterpart of the current human frontier:
+published papers discharge different analytic certificate families, while
+the repository still has to formalize their definitions, estimates, and
+parameter-plane realization one class at a time.

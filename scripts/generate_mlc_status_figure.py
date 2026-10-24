@@ -339,88 +339,117 @@ def make_figure(output: Path) -> None:
     )
     figure = plt.figure(figsize=(13.0, 8.25), facecolor="white")
     grid = figure.add_gridspec(
-        3,
-        4,
-        height_ratios=[1.0, 1.0, 0.82],
-        wspace=0.25,
-        hspace=0.42,
+        2,
+        2,
+        width_ratios=[1.03, 0.97],
+        height_ratios=[1.0, 1.0],
+        wspace=0.27,
+        hspace=0.38,
         left=0.045,
         right=0.98,
-        top=0.89,
+        top=0.90,
         bottom=0.08,
     )
 
-    main = figure.add_subplot(grid[0:2, 0:2])
+    main = figure.add_subplot(grid[0, 0])
     x, y, _ = plot_render(
         main,
         (-2.08, 0.78, -1.24, 1.24),
         1400,
         900,
         850,
-        title="Mandelbrot set: global high-depth render",
+        title="A. Classical and finite-combinatorial coverage",
     )
     overlay_main_components(main, x, y)
     annotate_known_points(main)
     add_main_legend(main)
-    zoom_windows = [
-        (
-            (-1.47, -1.34, -0.115, 0.115),
-            "#f5c542",
-            "A",
-        ),
-        (
-            (-0.748, -0.739, 0.127, 0.137),
-            "#62c5ff",
-            "B",
-        ),
-    ]
-    for (x_min, x_max, y_min, y_max), color, label in zoom_windows:
-        main.add_patch(
-            Rectangle(
-                (x_min, y_min),
-                x_max - x_min,
-                y_max - y_min,
-                fill=False,
-                edgecolor=color,
-                linewidth=1.15,
-                linestyle="--",
-                zorder=10,
-            )
-        )
-        main.text(
-            x_min,
-            y_max,
-            label,
-            fontsize=8,
-            color=color,
-            ha="left",
-            va="bottom",
-            bbox={"facecolor": "#10131a", "edgecolor": color, "pad": 1.5},
-            zorder=11,
-        )
     main.text(
         0.02,
         0.015,
-        "The red/white boundary is resolved numerically only; "
-        "pointwise MLC coverage is a theorem-level question.",
+        "Green: interior / hyperbolic geometry.  Blue: selected "
+        "postcritically finite and parabolic classes.\n"
+        "Lean: escape-radius and finite-orbit theorems; parameter-plane "
+        "landing remains a separate contract.",
         transform=main.transAxes,
-        fontsize=7,
+        fontsize=6.5,
         color="#e4e7ec",
         va="bottom",
         bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 3},
     )
 
-    zoom_feigenbaum = figure.add_subplot(grid[0, 2:4])
+    yoccoz = figure.add_subplot(grid[0, 1])
     plot_render(
-        zoom_feigenbaum,
+        yoccoz,
+        (-1.95, -1.55, -0.22, 0.22),
+        1100,
+        700,
+        1100,
+        title="B. Yoccoz finite-renormalization mechanism",
+        boundary_color="#62c5ff",
+    )
+    center = (-1.76, 0.0)
+    for width, height, color in [
+        (0.15, 0.15, "#62c5ff"),
+        (0.09, 0.09, "#f5c542"),
+        (0.045, 0.045, "#ff8b7b"),
+    ]:
+        yoccoz.add_patch(
+            Rectangle(
+                (center[0] - width / 2, center[1] - height / 2),
+                width,
+                height,
+                fill=False,
+                edgecolor=color,
+                linewidth=1.0,
+                linestyle="--",
+                zorder=8,
+            )
+        )
+    yoccoz.scatter(
+        [center[0]],
+        [center[1]],
+        s=22,
+        color="#62c5ff",
+        edgecolor="#11151d",
+        linewidth=0.5,
+        zorder=9,
+    )
+    yoccoz.text(
+        0.02,
+        0.04,
+        "Nested schematic parapuzzle pieces $\\mathcal{P}_n(c)$.\n"
+        "Lean: `yoccoz_puzzle_shrinkage`; parameter basis is open.",
+        transform=yoccoz.transAxes,
+        fontsize=6.5,
+        color="#f7f8fa",
+        bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 2},
+    )
+
+    cases = figure.add_subplot(grid[1, 0])
+    cases.axis("off")
+    cases.text(
+        0.0,
+        1.08,
+        "C. Infinite-renormalization cases with published estimates",
+        transform=cases.transAxes,
+        fontsize=10,
+        ha="left",
+        va="bottom",
+    )
+    case_grid = cases.get_subplotspec().subgridspec(
+        1, 2, wspace=0.22
+    )
+    feigenbaum = figure.add_subplot(case_grid[0])
+    plot_render(
+        feigenbaum,
         (-1.47, -1.34, -0.115, 0.115),
         900,
         620,
-        1250,
-        title="Deep zoom: Feigenbaum window",
+        1400,
+        title="Feigenbaum case",
         boundary_color="#f5c542",
     )
-    zoom_feigenbaum.scatter(
+    feigenbaum.scatter(
         [FEIGENBAUM.real],
         [FEIGENBAUM.imag],
         s=24,
@@ -429,43 +458,60 @@ def make_figure(output: Path) -> None:
         linewidth=0.5,
         zorder=5,
     )
-    zoom_feigenbaum.text(
+    feigenbaum.text(
         0.02,
         0.04,
-        "bounded-type Feigenbaum points: cited theorem class\n"
-        "nearby unbounded combinatorics: not covered",
-        transform=zoom_feigenbaum.transAxes,
-        fontsize=6.8,
+        "Dudko--Lyubich\n`FeigenbaumCertificate`",
+        transform=feigenbaum.transAxes,
+        fontsize=6.3,
         color="#f7f8fa",
         bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 2},
     )
-
-    zoom_satellite = figure.add_subplot(grid[1, 2:4])
+    satellite = figure.add_subplot(case_grid[1])
     plot_render(
-        zoom_satellite,
-        (-0.748, -0.739, 0.127, 0.137),
+        satellite,
+        (-0.20, 0.02, 0.62, 0.84),
         900,
         620,
-        1800,
-        title="Deep zoom: representative open frontier",
+        1400,
+        title="Bounded satellite / cusp",
         boundary_color="#62c5ff",
     )
-    zoom_satellite.text(
+    satellite.text(
         0.02,
         0.04,
-        "seahorse-valley microscope: intricate boundary geometry\n"
-        "visual complexity is not a proof of local connectivity",
-        transform=zoom_satellite.transAxes,
-        fontsize=6.8,
+        "Dudko--Lyubich and KKL\n"
+        "`BoundedTypeSatelliteCertificate`",
+        transform=satellite.transAxes,
+        fontsize=6.3,
         color="#f7f8fa",
         bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 2},
     )
 
-    status = figure.add_subplot(grid[2, :])
-    add_status_table(status)
+    frontier = figure.add_subplot(grid[1, 1])
+    plot_render(
+        frontier,
+        (-0.748, -0.739, 0.127, 0.137),
+        1100,
+        720,
+        1900,
+        title="D. Neutral / unbounded frontier",
+        boundary_color="#ff8b7b",
+    )
+    frontier.text(
+        0.02,
+        0.04,
+        "Neutral bubble and rigidity papers provide machinery;\n"
+        "unbounded combinatorics and the parameter bridge remain open.\n"
+        "The frozen full-Green categorical datum is refuted at $(i,16)$.",
+        transform=frontier.transAxes,
+        fontsize=6.2,
+        color="#f7f8fa",
+        bbox={"facecolor": "#10131a", "alpha": 0.88, "pad": 2},
+    )
 
     figure.suptitle(
-        "Figure 1.1. Mandelbrot components versus the MLC proof frontier",
+        "Figure 1.1. Four coverage layers for the MLC program",
         fontsize=16,
         fontweight="bold",
         color="#182133",
@@ -473,8 +519,9 @@ def make_figure(output: Path) -> None:
     figure.text(
         0.045,
         0.025,
-        "Computational render at finite resolution; labels summarize the "
-        "literature inventory and Lean status, not a proof of local connectivity.",
+        "All renders are finite-resolution illustrations.  Each panel names "
+        "the theorem family and Lean endpoint; a visual boundary point is "
+        "never itself a proof of local connectivity.",
         fontsize=8,
         color="#4e5969",
     )
