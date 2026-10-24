@@ -5,20 +5,18 @@
 The classical route combines hyperbolic or subhyperbolic dynamics, puzzle
 pieces, and the phase--parameter correspondence.  The main classes to record
 are:
-\begin{center}
-\begin{tabular}{p{0.27\textwidth}p{0.42\textwidth}p{0.22\textwidth}}
-\textbf{Class} & \textbf{Mathematical content} & \textbf{Primary source}\\
-\hline
-Interior parameters & Local connectivity is local in an open subset of
-the plane. & elementary topology\\
-Hyperbolic/subhyperbolic cases & Expansion or attracting-cycle control gives
-finite geometric models and parameter control. & Douady--Hubbard\\
-Misiurewicz and related postcritically finite cases & Finite orbit
-combinatorics and landing data. & Douady--Hubbard; Yoccoz\\
-Finitely renormalizable cases & Divergent puzzle moduli and shrinking
-parameter pieces. & Yoccoz\\
-\end{tabular}
-\end{center}
+\begin{itemize}
+\item \textbf{Interior parameters.}  Local connectivity is local in an
+      open subset of the plane.
+\item \textbf{Hyperbolic and subhyperbolic cases.}  Expansion or
+      attracting-cycle control gives finite geometric models and parameter
+      control; the foundational source is Douady--Hubbard.
+\item \textbf{Misiurewicz and related postcritically finite cases.}
+      Finite orbit combinatorics and landing data, treated in the
+      Douady--Hubbard/Yoccoz framework.
+\item \textbf{Finitely renormalizable cases.}  Divergent puzzle moduli and
+      shrinking parameter pieces, with Yoccoz as the primary source.
+\end{itemize}
 
 The exact hypotheses matter.  The review will not use the informal phrase
 ``all regular parameters'' as a Lean theorem name; each class receives a
@@ -44,7 +42,7 @@ formal continuation of the series.
 Two recent parameter classes are especially important for this project:
 \begin{enumerate}
 \item bounded-type satellite parameters, treated in the GAFA paper and
-      arXiv:1808.10425;
+      \lean{arXiv:1808.10425};
 \item Feigenbaum points, treated in arXiv:2309.02107 and the 2026
       Publications Mathématiques de l'IHÉS publication.
 \end{enumerate}
@@ -52,6 +50,40 @@ Both results use substantial renormalization, a priori-bound, and
 parameter-puzzle machinery.  The formalization target is not merely the
 final sentence ``MLC holds at $c$'', but the chain of definitions and lemmas
 that produces the shrinking connected parameter basis.
+
+\section{The 2025--2026 expansion}
+
+The current source inventory adds several results that belong in the
+renormalization layer rather than in a generic bibliography:
+\begin{center}\small
+\begin{tabular}{@{}P{0.31\textwidth}@{\hspace{4pt}}P{0.48\textwidth}@{\hspace{4pt}}P{0.15\textwidth}@{}}
+\textbf{Source} & \textbf{Formalization-relevant content} & \textbf{Role}\\
+\hline
+Kahn--Kapiamba--Lyubich,
+\lean{arXiv:2606.27272} &
+MLC and a priori bounds for parabolically bounded primitive
+renormalization; Thin--Thick Decomposition, Value Calculus, Wanderers
+Theorem, and Wave Lemma. & MLC case\\
+Dudko--Lim,
+\lean{arXiv:2609.15500} &
+Uniform bounds for bubbles of neutral quadratic polynomials. & geometry\\
+Dudko--Lim--Lyubich,
+\lean{arXiv:2609.37383} &
+Rigidity of the attractor of neutral renormalization and combinatorial
+rigidity of neutral towers. & rigidity\\
+Shen, \lean{arXiv:2610.25983} &
+Complex analytic structure of hybrid classes of generalized
+polynomial-like mappings. & analytic base\\
+\end{tabular}
+\end{center}
+
+The first of these is a new pointwise MLC class and must eventually be
+represented by a precise Lean predicate for parabolically bounded primitive
+renormalization.  The neutral-renormalization papers do not by themselves
+prove global MLC, but they supply geometric and rigidity lemmas that the
+future parameter-puzzle and straightening layers must consume.  The hybrid
+class theorem belongs one level below renormalization: it describes the
+analytic parameter space in which polynomial-like straightening lives.
 
 \section{Dudko's survey and the remaining frontier}
 

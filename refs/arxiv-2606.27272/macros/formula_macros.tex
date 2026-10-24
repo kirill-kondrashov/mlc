@@ -1,0 +1,165 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Basic constructions and abbreviations 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\term}[1]{{\emph{#1}}}
+\def\claim{\textbf{claim} }
+\newcommand{\inv}{^{-1}}
+\newcommand{\invp}[1]{\inv(#1)}
+\newcommand{\invps}[1]{\inv(\setof{#1})}
+\newcommand{\norm}[1]{\left\Vert #1 \right\Vert}
+\newcommand{\pair}[2]{\left< #1, #2 \right>}
+\newcommand{\setof}[1]{\left\{ #1 \right\}}
+\newcommand{\setofst}[2]{\left\{ #1 \mid #2 \right\}}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\cl}[1]{\overline{#1}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\bb}[1]{{\mathbf{#1}}}
+\newcommand{\butnot}[1]{\sm \setof{#1}}
+\newcommand{\re}[1]{|_{#1}}
+\newcommand{\lrp}[1]{\left( #1 \right)}
+
+
+\newcommand{\largergiven}[1]{\ggg_{#1}}
+\newcommand{\smallergiven}[1]{\lll_{#1}}
+
+
+\newcommand{\largegiven}[1]{\largergiven{#1} 1}
+\newcommand{\smallgiven}[1]{\smallergiven{#1} 1}
+
+
+\newcommand{\inn}{\operatorname{in}}
+
+
+
+
+
+\newcommand{\from}{\colon}
+\newcommand{\sm}{\setminus}
+\newcommand{\thh}{^{\text{th}}}
+\newcommand{\st}{^\text{st}}
+\newcommand{\cc}{\Subset}
+
+
+
+
+
+%\def\setof#1\st#2\eset{\{#1\mid#2\}}
+\def\<#1>{\left< #1 \right>}
+\newcommand{\dd}{\partial}
+\newcommand{\pd}[3]{\frac{\dd^{#1} #2}{\dd #3^{#1} }}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Blackboard bold letters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\let\AAA\A
+\let\HHH\H
+\let\OOO\O
+\let\PPP\P
+\newcommand{\A}{\mathbb A}
+\newcommand{\B}{\mathbb B}
+\newcommand{\C}{\mathbb C}
+\newcommand{\D}{\mathbb D}
+\newcommand{\E}{\mathbb E}
+\newcommand{\F}{\mathbb F}
+\newcommand{\G}{\mathbb G}
+\renewcommand{\H}{\mathbb H}
+\newcommand{\I}{\mathbb I}
+\newcommand{\J}{\mathbb J}
+\newcommand{\K}{\mathbb K}
+\renewcommand{\L}{\mathbb L}
+\newcommand{\M}{\mathbb M}
+\newcommand{\N}{\mathbb N}
+\renewcommand{\O}{\mathbb O}
+\renewcommand{\P}{\mathbb P}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+% We omit this one because the section command \S is really useful
+%\newcommand{\S}{\mathbb S}
+\newcommand{\T}{\mathbb T}
+\newcommand{\U}{\mathbb U}
+\newcommand{\V}{\mathbb V}
+\newcommand{\W}{\mathbb W}
+\newcommand{\X}{\mathbb X}
+\newcommand{\Y}{\mathbb Y}
+\newcommand{\Z}{\mathbb Z}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Calligraphic letters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\let\SSSS\SS
+\let\AAAA\AA
+\renewcommand{\AA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\CC}{\mathcal C}
+\newcommand{\DD}{\mathcal D}
+\newcommand{\EE}{\mathcal E}
+\newcommand{\FF}{\mathcal F}
+\newcommand{\GG}{\mathcal G}
+\newcommand{\HH}{\mathcal H}
+\newcommand{\II}{\mathcal I}
+\newcommand{\JJ}{\mathcal J}
+\newcommand{\KK}{\mathcal K}
+\newcommand{\LL}{\mathcal L}
+\newcommand{\MM}{\mathcal M}
+\newcommand{\NN}{\mathcal N}
+\newcommand{\OO}{\mathcal O}
+\newcommand{\PP}{\mathcal P}
+\newcommand{\QQ}{\mathcal Q}
+\newcommand{\RR}{\mathcal R}
+\renewcommand{\SS}{\mathcal S}
+\newcommand{\TT}{\mathcal T}
+\newcommand{\UU}{\mathcal U}
+\newcommand{\VV}{\mathcal V}
+\newcommand{\WW}{\mathcal W}
+\newcommand{\XX}{\mathcal X}
+\newcommand{\YY}{\mathcal Y}
+\newcommand{\ZZ}{\mathcal Z}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Standard spaces                               
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\zplus}{\Z^+}
+\newcommand{\chat}{\hat\C}
+\newcommand{\Hu}{\mathbb H^+}
+\newcommand{\Hl}{\mathbb H^-}
+\newcommand{\dD}{\dd \D}
+\newcommand{\ddd}{\dd \D}
+\newcommand{\CP}{\C \mathbb{P}}
+\newcommand{\cld}{\cl{\D}}
+
+
+
+
+%\DeclareMathOperator{}{}
+\DeclareMathOperator{\SL}{SL}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Some standard operators                              
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareMathOperator{\mmod}{mod}
+\DeclareMathOperator{\Teich}{Teich}
+\DeclareMathOperator{\Isom}{Isom}
+\DeclareMathOperator{\Log}{Log}
+\DeclareMathOperator{\Mod}{Mod}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Homeo}{Homeo}
+\DeclareMathOperator{\Deck}{Deck}
+\DeclareMathOperator{\Comp}{Comp}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Dom}{Dom}
+
+
+
+
+
+
+
+
+

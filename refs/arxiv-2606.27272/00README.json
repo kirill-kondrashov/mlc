@@ -1,0 +1,15 @@
+{
+  "key": "kahn-kapiamba-lyubich-parabolic-primitive",
+  "arxiv_id": "2606.27272",
+  "arxiv_version": "1",
+  "role": "mlc-case",
+  "title": "MLC for parabolically bounded primitive renormalization",
+  "authors": [
+    "Jeremy Kahn",
+    "Alex Kapiamba",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-2606.27272.xml",
+  "source_archive": "arxiv-2606.27272-source.tar.gz",
+  "main_tex": "arxiv-2606.27272/waves-with-Misha.tex"
+}

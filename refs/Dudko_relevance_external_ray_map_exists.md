@@ -64,3 +64,20 @@ without circular external-ray assumptions.
 - Dudko material exists for a renormalization/classification-based MLC path.
 - No immediate direct replacement theorem was identified for the current outside-open injectivity/closed-range subgoal.
 - If we stay on the current elimination route, we still need a non-circular analytic/topological proof of Step 3/4 in the present formal model.
+
+## 2026 additions
+
+The current MLC review also tracks the newer arXiv sources:
+
+- `arxiv-2606.27272`: Kahn--Kapiamba--Lyubich, MLC for parabolically
+  bounded primitive renormalization;
+- `arxiv-2609.15500`: Dudko--Lim, uniform bounds for neutral bubbles;
+- `arxiv-2609.37383`: Dudko--Lim--Lyubich, rigidity of the neutral
+  renormalization attractor;
+- `arxiv-2610.25983`: Shen, analytic structure of generalized
+  polynomial-like hybrid classes.
+
+These sources extend the formalization target, but only the first is itself
+an MLC theorem.  The other three provide geometric, rigidity, and analytic
+machinery that still has to be connected to the parameter-plane local
+connectivity interface.

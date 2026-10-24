@@ -1,0 +1,232 @@
+\ProvidesPackage{Preset}
+
+% Packages
+\RequirePackage{
+accents
+,amsmath
+,amsfonts
+,amssymb
+,amsthm
+,bbm
+,caption
+,enumitem
+% ,float
+,graphicx
+,mathtools
+,marginnote
+,multirow
+,hyphenat
+,yfonts
+,mathrsfs
+,tikz-cd
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{thmx}{Theorem}
+\renewcommand{\thethmx}{\Alph{thmx}}
+\newtheorem{corx}[thmx]{Corollary}
+\newtheorem{conj}[thmx]{Conjecture}
+\newtheorem{ques}[thmx]{Question}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+\newtheorem*{claim}{Claim}
+\newtheorem*{claim1}{Claim 1}
+\newtheorem*{claim2}{Claim 2}
+\newtheorem*{claim3}{Claim 3}
+\newtheorem*{claim4}{Claim 4}
+\newtheorem*{claim5}{Claim 5}
+\newtheorem*{claim6}{Claim 6}
+\newtheorem*{claim7}{Claim 7}
+\newtheorem*{claim8}{Claim 8}
+\newtheorem*{claim9}{Claim 9}
+\newtheorem*{case1}{Case 1}
+\newtheorem*{case2}{Case 2}
+\newtheorem*{case3}{Case 3}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\dime}[1]{\textup{dim}\left( #1 \right)}
+\newcommand{\seq}[1]{\left\langle #1 \right\rangle}
+
+\providecommand*{\Masymp}{\underset{\raisebox{0.2ex}{$\scriptscriptstyle \threshold$}}{\asymp}}
+\providecommand*{\Msucc}{\underset{\raisebox{0.2ex}{$\scriptscriptstyle \threshold$}}{\succ}}
+\providecommand*{\Mprec}{\underset{\raisebox{0.2ex}{$\scriptscriptstyle \threshold$}}{\prec}}
+
+\providecommand*{\Arch}{\textnormal{Arch}}
+\providecommand*{\abar}{\ensuremath{\bar{a}}}
+\providecommand*{\attr}{\ensuremath{\mathcal{A}}}
+\providecommand*{\B}{\ensuremath{\mathbb{B}}}
+\providecommand*{\C}{\ensuremath{\mathbb{C}}}
+\providecommand*{\comb}{\textnormal{comb}}
+\providecommand*{\CP}{\textnormal{CP}}
+\providecommand*{\CV}{\textnormal{CV}}
+\providecommand*{\critr}{\dot{\mathsf{c}}}
+\providecommand*{\RS}{\ensuremath{\hat{\mathbb{C}}}}
+\providecommand*{\D}{\ensuremath{\mathbb{D}}}
+\providecommand*{\diam}{\textnormal{diam}}
+\providecommand*{\dist}{\textnormal{dist}}
+\providecommand*{\Dom}{\textnormal{Dom}}
+\providecommand*{\ext}{\textnormal{ext}}
+\providecommand*{\Id}{\textnormal{Id}}
+\providecommand*{\hair}{\ensuremath{\mathfrak{h}}}
+\providecommand*{\Hors}{\textnormal{Hors}}
+\providecommand*{\lake}{\ensuremath{\mathtt{L}}}
+\providecommand*{\M}{\ensuremath{\mathbb{M}}}
+\providecommand*{\threshold}{\ensuremath{\mathbf{M}}}
+\providecommand*{\modu}{\textnormal{mod}}
+\providecommand*{\N}{\ensuremath{\mathbb{N}}}
+\providecommand*{\poincare}{\ensuremath{\Delta}}
+\providecommand*{\Q}{\ensuremath{\mathbb{Q}}}
+\providecommand*{\R}{\ensuremath{\mathbb{R}}}
+\providecommand*{\renorm}{\ensuremath{\mathcal{R}}}
+\providecommand*{\Rsec}{\ensuremath{\mathcal{R}}_{\textnormal{sec}}}
+\providecommand*{\rot}{\textnormal{rot}}
+\providecommand*{\tiling}{\ensuremath{\mathfrak{T}}}
+\providecommand*{\Kont}{\ensuremath{\mathcal{K}}}
+\providecommand*{\Time}{\ensuremath{\mathcal{T}}}
+\providecommand*{\UHP}{\ensuremath{\mathbb{H}}}
+\providecommand*{\T}{\ensuremath{\mathbb{T}}}
+\providecommand*{\Z}{\ensuremath{\mathbb{Z}}}
+
+\providecommand*{\Aext}{\ensuremath{\mathtt{A}}}
+\providecommand*{\Bubb}{\ensuremath{\mathtt{B}}}
+\providecommand*{\crit}{\mathtt{C}}
+\providecommand*{\Dext}{\ensuremath{\mathtt{D}}}
+\providecommand*{\Fext}{\ensuremath{\mathtt{F}}}
+\providecommand*{\Gext}{\ensuremath{\mathtt{G}}}
+\providecommand*{\Iext}{\mathtt{I}}
+\providecommand*{\Uext}{\mathtt{U}}
+\providecommand*{\Wext}{\mathtt{W}}
+\providecommand*{\Xext}{\mathtt{X}}
+\providecommand*{\Yext}{\mathtt{Y}}
+
+\providecommand*{\fjord}{\ensuremath{\mathtt{V}}}
+\providecommand*{\Fjord}{\ensuremath{\mathbb{V}}}
+\providecommand*{\gauss}{\ensuremath{\mathfrak{g}}}
+\providecommand*{\Irrat}{\ensuremath{\Theta}}
+\providecommand*{\qq}{\ensuremath{\mathfrak{q}}}
+\providecommand*{\shift}{\ensuremath{\mathfrak{s}}}
+\providecommand*{\rotate}{\mathbbm{r}}
+\providecommand*{\The}{\ensuremath{\Sigma^{\mathbb{N}}}}
+\providecommand*{\TheCpt}{\ensuremath{\overline{\Theta}}}
+\providecommand*{\TheBi}{\ensuremath{\underleftarrow{\Theta}}}
+\providecommand*{\TheBiCpt}{\ensuremath{\underleftarrow{\overline{\Theta}}}}
+\providecommand*{\ttheta}{\ensuremath{\boldsymbol{\theta}}}
+\providecommand*{\tttheta}{\ensuremath{\underaccent{\bar}{\boldsymbol{\theta}}}}
+
+\providecommand*{\aalpha}{\ensuremath{\boldsymbol{\alpha}}}
+\providecommand*{\nnu}{\ensuremath{\boldsymbol{\nu}}}
+\providecommand*{\pphi}{\ensuremath{\boldsymbol{\phi}}}
+\providecommand*{\ttau}{\ensuremath{\boldsymbol{\tau}}}
+
+\providecommand*{\fbold}{\ensuremath{\boldsymbol{f}}}
+\providecommand*{\fboldbar}{\ensuremath{\underaccent{\bar}{\boldsymbol{f}}}}
+\providecommand*{\gbold}{\ensuremath{\boldsymbol{g}}}
+\providecommand*{\gboldbar}{\ensuremath{\underaccent{\bar}{\boldsymbol{g}}}}
+
+\providecommand*{\Bchain}{\ensuremath{\boldsymbol{\Gamma}}}
+\providecommand*{\BBchain}{\ensuremath{\boldsymbol{\Upsilon}}}
+\providecommand*{\Bbold}{\ensuremath{\mathbf{B}}}
+\providecommand*{\Fbold}{\ensuremath{\mathbf{F}}}
+\providecommand*{\Gbold}{\ensuremath{\mathbf{G}}}
+\providecommand*{\Ibold}{\ensuremath{\mathbf{I}}}
+\providecommand*{\Kbold}{\ensuremath{\mathbf{K}}}
+\providecommand*{\Hbold}{\ensuremath{\mathbf{H}}}
+\providecommand*{\Nbold}{\ensuremath{\mathbf{N}}}
+\providecommand*{\Sbold}{\ensuremath{\mathbf{S}}}
+\providecommand*{\Tbold}{\ensuremath{\mathbf{T}}}
+\providecommand*{\Ubold}{\ensuremath{\mathbf{U}}}
+\providecommand*{\Wbold}{\ensuremath{\mathbf{W}}}
+\providecommand*{\Zbold}{\ensuremath{\mathbf{Z}}}
+\providecommand*{\kbold}{\ensuremath{\mathbf{k}}}
+
+\providecommand*{\parH}{\partial_{\UHP}}
+\providecommand*{\parR}{\partial_{\R}}
+\providecommand*{\parRess}{\partial^{\textnormal{ess}}_{\R}}
+\providecommand*{\nbh}{\textnormal{nbh}}
+\providecommand*{\iinfty}{\ensuremath{\boldsymbol{\infty}}}
+\providecommand*{\Butterfly}{\textnormal{\textbf{HB}}}
+\providecommand*{\butterfly}{\textnormal{HB}}
+\providecommand*{\orbsec}{\textnormal{orb}_{\textnormal{sec}}}
+\providecommand*{\towsec}{\textnormal{Tow}_{\textnormal{sec}}}
+\providecommand*{\TBC}{\textcolor{red}{[ADD MORE]}}
+
+% To access the 'figures' folder
+% \graphicspath{ {figures/} }
+
+
+% To adjust the caption
+% \captionsetup[figure]{font=small,justification=centering}
+
+
+
+\newcommand{\wZ}{{\widehat Z}}
+
+
+\newcommand{\MM}{{\mathcal M}}
+
+
+
+    
+\everymath{\displaystyle}
+
+
+\usepackage{marginnote}
+\newcommand{\hide}[1]{}
+
+\usepackage{ifthen,changepage}
+\usepackage{xargs}
+
+\newcommandx{\leftmarginnote}[2][2=0pt]
+           {\checkoddpage
+            \ifoddpage
+              {\reversemarginpar\marginnote{#1}[#2]}
+            \else
+              {\marginnote{#1}[#2]}
+            \fi}
+\newcommandx{\rightmarginnote}[2][2=0pt]
+           {\checkoddpage
+            \ifoddpage
+              {\marginnote{#1}[#2]}
+            \else
+              {\reversemarginpar\marginnote{#1}[#2]}
+            \fi}
+
+
+
+
+\newcounter{reminder}
+\newcommand{\reminder}[1]{\rightmarginnote{\stepcounter{reminder}\textcolor{red}{Note~\arabic{reminder}}}$\langle$~{\sf #1 }~$\rangle$}
+
+
+
+\def\note#1
+{\marginpar
+{$\leftarrow$
+\par
+\hfuzz=20pt \hbadness=9000 \hyphenpenalty=-100 \exhyphenpenalty=-100
+\pretolerance=-1 \tolerance=9999 \doublehyphendemerits=-100000
+\finalhyphendemerits=-100000 \baselineskip=6pt
+#1}\hfuzz=1pt}
+
+
+\newcommand{\RR}{{\mathcal R}}
+
+
+\makeatletter
+\def\subsubsection{\@startsection{subsubsection}{3}%
+  \z@                         % indentation
+  {.4\linespacing}           % space before
+  {-.5em}                     % run-in space after
+  {\normalfont\itshape}}
+\makeatother

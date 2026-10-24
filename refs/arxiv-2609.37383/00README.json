@@ -1,0 +1,15 @@
+{
+  "key": "dudko-lim-lyubich-neutral-rigidity",
+  "arxiv_id": "2609.37383",
+  "arxiv_version": "1",
+  "role": "renormalization",
+  "title": "Rigidity of the attractor of neutral renormalization",
+  "authors": [
+    "Dzmitry Dudko",
+    "Willie Rush Lim",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-2609.37383.xml",
+  "source_archive": "arxiv-2609.37383-source.tar.gz",
+  "main_tex": "arxiv-2609.37383/main.tex"
+}

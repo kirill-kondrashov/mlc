@@ -10,7 +10,7 @@ distinguished orbit, and the finite conditions
 \]
 form a decreasing compact outer approximation to $\M$.  This part is already
 formalized in
-\verb|Mlc.Categorical.Mandelbrot|, including
+\lean{Mlc.Categorical.Mandelbrot}, including
 \[
 \bigcap_N O_N=\M.
 \]
@@ -29,10 +29,15 @@ The analytic core has the shape
 \bigcap_n P_n=\{0\},
 \]
 where $A_n=P_n\setminus P_{n+1}$.  The current Lean theorem
-\verb|MLC.Quadratic.yoccoz_theorem_conformal| proves the corresponding
-shrinking statement from the formal modulus hypothesis.  Its theorem-facing
-alias is
-\verb|MLC.Literature.yoccoz_puzzle_shrinkage|.
+proving the corresponding shrinking statement from the formal modulus
+hypothesis is
+\begin{center}
+\lean{MLC.Quadratic.yoccoz_theorem_conformal}.
+\end{center}
+Its theorem-facing alias is
+\begin{center}
+\lean{MLC.Literature.yoccoz_puzzle_shrinkage}.
+\end{center}
 
 This is a dynamical-plane result.  To use it for MLC one needs a
 phase--parameter theorem that transports the shrinking of dynamical pieces to
@@ -63,9 +68,9 @@ polynomial-like maps.  A useful formal tower must carry at least:
 \text{straightening} & \text{parameter-plane correspondence}.
 \end{array}
 \]
-The files \verb|Mlc.RenormalizationTypes|,
-\verb|Mlc.MoleculeRenormalizationTower|, and
-\verb|Mlc.SatelliteRenormalizationTower| currently provide typed interfaces
+The files \lean{Mlc.RenormalizationTypes},
+\lean{Mlc.MoleculeRenormalizationTower}, and
+\lean{Mlc.SatelliteRenormalizationTower} currently provide typed interfaces
 for part of this list.  They should be treated as a foundation for the
 formalization, not as a completed proof of the corresponding published
 theorems.

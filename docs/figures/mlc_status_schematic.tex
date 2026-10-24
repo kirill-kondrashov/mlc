@@ -1,55 +1,11 @@
-\begin{figure}[ht]
+\begin{figure}[p]
 \centering
-\begin{tikzpicture}[scale=1.55]
-  \clip (-2.35,-1.35) rectangle (0.75,1.35);
-  \fill[gray!8] (-2.35,-1.35) rectangle (0.75,1.35);
-  \draw[->,gray!70] (-2.3,0) -- (0.7,0) node[right] {$\Re c$};
-  \draw[->,gray!70] (0,-1.3) -- (0,1.3) node[above] {$\Im c$};
-
-  % Cardioid: c(t) = e^{it}/2 - e^{2it}/4.
-  \fill[green!20]
-    plot[domain=0:360,samples=240,variable=\t]
-      ({0.5*cos(\t)-0.25*cos(2*\t)},
-       {0.5*sin(\t)-0.25*sin(2*\t)}) -- cycle;
-  \draw[green!55!black,thick]
-    plot[domain=0:360,samples=240,variable=\t]
-      ({0.5*cos(\t)-0.25*cos(2*\t)},
-       {0.5*sin(\t)-0.25*sin(2*\t)});
-
-  % A few schematic hyperbolic bulbs.
-  \foreach \x/\y/\rx/\ry in {
-    -1.25/0/0.25/0.25,
-    -0.12/0.72/0.18/0.18,
-    -0.12/-0.72/0.18/0.18,
-    0.28/0.02/0.15/0.15} {
-    \fill[green!20] (\x,\y) ellipse [x radius=\rx,y radius=\ry];
-    \draw[green!55!black] (\x,\y) ellipse [x radius=\rx,y radius=\ry];
-  }
-
-  % Known boundary classes are points/classes, not open coloured regions.
-  \fill[blue!75!black] (-2,0) circle (0.035);
-  \fill[blue!75!black] (-1.75,0.18) circle (0.035);
-  \fill[blue!75!black] (-0.55,0.35) circle (0.035);
-  \fill[blue!75!black] (-0.55,-0.35) circle (0.035);
-  \node[blue!55!black,align=left,font=\scriptsize] at (-1.78,-0.95)
-    {selected proven\\boundary classes};
-
-  % The unresolved boundary is deliberately schematic.
-  \draw[red!75!black,dashed,very thick]
-    plot[domain=0:360,samples=180,variable=\t]
-      ({0.5*cos(\t)-0.25*cos(2*\t)+0.035*cos(7*\t)},
-       {0.5*sin(\t)-0.25*sin(2*\t)+0.035*sin(7*\t)});
-  \node[red!70!black,align=left,font=\scriptsize] at (-1.02,1.08)
-    {open frontier:\\unbounded combinatorics};
-
-  \node[align=left,font=\scriptsize] at (-1.15,-1.18)
-    {green: interior (trivial)\\
-     blue: proved pointwise classes};
-\end{tikzpicture}
-\caption{A schematic status picture of the Mandelbrot set.  It is not a
-numerically certified rendering of $\M$ and no coloured region should be read
-as a theorem about an entire boundary arc.  The dashed contour marks the
-remaining global frontier, especially infinitely renormalizable parameters
-with unbounded combinatorics.}
+\includegraphics[width=0.98\textwidth]{docs/figures/mlc_status_render.pdf}
+\caption{A numerical and literature-status picture of the Mandelbrot set.  It is not a
+numerically certified characteristic function of the unresolved set.  The
+high-depth render, zoom panels, and component--theorem ledger compare the
+geometry of $M$ with the current proof inventory.  The coloured labels are
+literature classes, not claims that a whole visible boundary arc has already
+been proved locally connected.}
 \label{fig:mlc-status}
 \end{figure}

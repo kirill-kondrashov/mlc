@@ -26,8 +26,8 @@ conclusion match the statement used here.
 
 \section{Current Lean status}
 
-\begin{center}
-\begin{tabular}{p{0.34\textwidth}p{0.48\textwidth}p{0.12\textwidth}}
+\begin{center}\small
+\begin{tabularx}{0.98\textwidth}{@{}P{0.25\textwidth}@{}Y@{}P{0.13\textwidth}@{}}
 \textbf{Layer} & \textbf{Current content} & \textbf{Status}\\
 \hline
 Orbit and outer approximations &
@@ -48,25 +48,46 @@ partial\\
 Bounded-type satellite and Feigenbaum cases &
 Named literature interfaces and source ledger. &
 open formalization\\
+Parabolically bounded primitive renormalization &
+Thin--Thick, Value Calculus, Wanderers, and Wave Lemma inputs. &
+open formalization\\
+Neutral renormalization &
+Bubble bounds, attractor rigidity, and hybrid-class geometry. &
+open formalization\\
 Global MLC &
-Target \verb|LocallyConnectedSpace M|. &
+Target \lean{LocallyConnectedSpace M}. &
 open\\
-\end{tabular}
+\end{tabularx}
 \end{center}
 
-The module \verb|Mlc.Literature.Review| is deliberately conservative:
-\verb|yoccoz_puzzle_shrinkage| is a theorem, while
-\verb|FinitelyRenormalizableMLC|, \verb|BoundedTypeSatelliteMLC|, and
-\verb|FeigenbaumMLC| are propositions describing the exact obligations.
+The module \lean{Mlc.Literature.Review} is deliberately conservative:
+\begin{itemize}
+\item \lean{yoccoz_puzzle_shrinkage} is a theorem;
+\item \lean{FinitelyRenormalizableMLC},
+      \lean{BoundedTypeSatelliteMLC}, and \lean{FeigenbaumMLC} are
+      propositions describing exact obligations.
+\end{itemize}
 No external paper is silently converted into an axiom.
 
-The structure \verb|ParaPuzzleCertificate| isolates the topological half of
+The structure \lean{ParaPuzzleCertificate} isolates the topological half of
 the classical argument.  Its connectedness and singleton-intersection fields
-imply local connectivity through
-\verb|localConnectivity_of_paraPuzzleCertificate|.  The remaining
-\verb|YoccozParameterPuzzleResult| is the phase--parameter existence theorem:
-it is where external rays, graph cuts, holomorphic motion, and
-renormalization estimates must eventually be formalized.
+imply local connectivity through the theorem
+\begin{center}
+\lean{localConnectivity_of_paraPuzzleCertificate}.
+\end{center}
+The remaining existence proposition is
+\begin{center}
+\lean{YoccozParameterPuzzleResult},
+\end{center}
+the phase--parameter theorem where external rays, graph cuts, holomorphic
+motion, and renormalization estimates must eventually be formalized.
+
+The new module \lean{Mlc.Literature.Foundations} gives typed names for the
+quadratic map, orbit, filled Julia set, Julia set, and Mandelbrot set.  It
+also defines \lean{ParameterPuzzleBasis},
+\lean{APrioriBounds}, and \lean{RenormalizationMLCInterface}.  These are
+deliberately structural: the analytic fields required by the papers are
+visible in Lean before any theorem is claimed.
 
 \section{The current conditional root}
 
@@ -75,7 +96,7 @@ The existing root is
 \mathrm{BUF}(\M,O)\Longrightarrow\mathrm{MLC}(\M),
 \]
 implemented by
-\verb|MLC.mlc_conjecture_of_uniformOuterBuffer|.  The alternative uniform
+\lean{MLC.mlc_conjecture_of_uniformOuterBuffer}.  The alternative uniform
 geometric route and the finite-component route are useful independent
 interfaces, but their existence hypotheses remain open.  The review keeps
 these routes visible because they are possible formalization targets, not

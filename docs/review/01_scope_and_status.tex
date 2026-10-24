@@ -1,5 +1,258 @@
 \chapter{Scope and status}
 
+\section{Conventions and elementary objects}
+
+We work in the complex plane $\C$ with its Euclidean metric and write
+\[
+\overline B(a,r):=\{z\in\C:|z-a|\le r\},\qquad
+B(a,r):=\{z\in\C:|z-a|<r\}.
+\]
+The natural numbers are $\N=\{0,1,2,\ldots\}$.  For a map $g$, the notation
+$g^{\circ n}$ means the $n$-fold iterate, with $g^{\circ0}=\id$.
+
+\begin{definition}[Quadratic family and critical orbit]
+\label{def:quadratic-family}
+For $c\in\C$ let
+\[
+ f_c(z):=z^2+c,\qquad
+ p_n(c):=f_c^{\circ n}(0).
+\]
+The orbit of a point $z$ is
+\[
+ \operatorname{Orb}_c(z):=\{f_c^{\circ n}(z):n\in\N\}.
+\]
+\end{definition}
+
+\begin{definition}[Filled Julia set and Julia set]
+\label{def:filled-julia}
+The filled Julia set and Julia set of $f_c$ are
+\[
+ \Kc:=\{z\in\C:\sup_{n\in\N}|f_c^{\circ n}(z)|<\infty\},
+ \qquad
+ \Jc:=\partial\Kc.
+\]
+\end{definition}
+
+\begin{definition}[Mandelbrot set]
+\label{def:mandelbrot}
+The Mandelbrot set is the critical-orbit locus
+\[
+ \M:=\{c\in\C:0\in\Kc\}
+   =\{c\in\C:\sup_{n\in\N}|p_n(c)|<\infty\}.
+\]
+\end{definition}
+
+\begin{theorem}[Escape-radius criterion]
+\label{thm:escape-radius}
+If $|z|>\max\{2,|c|\}$, then
+\[
+ |f_c^{\circ n}(z)|\longrightarrow\infty.
+\]
+Consequently, for $c\in\C$,
+\[
+ c\in\M\quad\Longleftrightarrow\quad
+ |p_n(c)|\le2\text{ for every }n\in\N,
+\]
+and $\M\subseteq\overline B(0,2)$.
+\end{theorem}
+
+\begin{proof}
+If $|z|>\max\{2,|c|\}$, then
+\[
+ |f_c(z)|\ge |z|^2-|c|>|z|^2-|z|>|z|.
+\]
+The same inequality applies inductively to every subsequent iterate.  The
+critical orbit statement follows by applying the inequality to the first
+iterate which leaves $\overline B(0,2)$; the converse is immediate from the
+definition of $\Kc$.
+\end{proof}
+
+\begin{definition}[Finite outer approximations]
+\label{def:finite-outer}
+For $N\in\N$ set
+\[
+ O_N:=\left\{c\in\C:
+ |c|\le2,\quad |p_j(c)|\le2\text{ for every }j\le N\right\}.
+\]
+\end{definition}
+
+\begin{theorem}[Compact nested approximation]
+\label{thm:finite-outer}
+The sets $O_N$ are compact, $O_{N+1}\subseteq O_N$, and
+\[
+ \M\subseteq O_N,\qquad
+ \bigcap_{N\in\N}O_N=\M.
+\]
+\end{theorem}
+
+\begin{proof}
+Each $p_j$ is a polynomial in $c$, so the defining inequalities are closed.
+The escape-radius criterion gives $O_N\subseteq\overline B(0,2)$, hence
+compactness.  The nesting and inclusion of $\M$ are immediate, and the
+intersection equality follows by checking the $N$-th orbit inequality at
+the stage $N$.
+\end{proof}
+
+\section{Local connectivity and components}
+
+\begin{definition}[Local connectedness at a point]
+\label{def:local-connectedness}
+Let $X$ be a topological space and $x\in X$.  We say that $X$ is locally
+connected at $x$ if every neighbourhood $U\in\mathcal N_X(x)$ contains a
+neighbourhood $V\in\mathcal N_X(x)$ such that $V$ is preconnected and
+$V\subseteq U$.  The space is locally connected if it is locally connected
+at every point.
+\end{definition}
+
+\begin{definition}[Component modulus]
+\label{def:component-modulus}
+For $x,y\in\M$ define
+\[
+ \omega_\M(r):=
+ \sup_{\substack{x,y\in\M\\|x-y|<r}}
+ \inf\{\diam C:C\subseteq\M\text{ compact and connected},\
+ x,y\in C\}.
+\]
+The convention is $\inf\varnothing=+\infty$.
+\end{definition}
+
+\begin{theorem}[Metric criterion for local connectivity]
+\label{thm:metric-lc}
+For a compact metric space $X$, local connectedness is equivalent to
+\[
+ \forall\varepsilon>0\ \exists\delta>0\ \forall x,y\in X,\qquad
+ d(x,y)<\delta\Longrightarrow
+ \exists C\subseteq X:
+ \begin{cases}
+ C\text{ is compact and connected},\\
+ x,y\in C,\qquad \diam C<\varepsilon.
+ \end{cases}
+\]
+In particular,
+\[
+ \M\text{ is locally connected}
+\quad\Longleftrightarrow\quad
+ \lim_{r\downarrow0}\omega_\M(r)=0.
+\]
+\end{theorem}
+
+\section{Green functions and external coordinates}
+
+\begin{definition}[Escape-rate Green function]
+\label{def:green-function}
+For $c,z\in\C$ define
+\[
+ G_c(z):=\lim_{n\to\infty}2^{-n}\log^+
+       |f_c^{\circ n}(z)|,
+ \qquad \log^+ t:=\max\{\log t,0\}.
+\]
+\end{definition}
+
+\begin{theorem}[Green-function properties]
+\label{thm:green-properties}
+For every $c\in\C$, the limit in Definition~\ref{def:green-function}
+exists and $G_c$ is continuous.  Moreover,
+\[
+ G_c(f_c(z))=2G_c(z),\qquad
+ G_c(z)=0\Longleftrightarrow z\in\Kc,
+\]
+and $G_c$ is harmonic on $\C\setminus\Kc$.  On the basin of infinity there
+is a unique normalized Böttcher coordinate $\phi_c$ satisfying
+\[
+ \phi_c(f_c(z))=\phi_c(z)^2,\qquad
+ \phi_c(z)=z+O(1)\quad(z\to\infty),
+\]
+with $G_c(z)=\log|\phi_c(z)|$.
+\end{theorem}
+
+\begin{definition}[External ray]
+\label{def:external-ray}
+For $\theta\in\R/\Z$, the external ray of angle $\theta$ is
+\[
+ R_c(\theta):=
+ \phi_c^{-1}\{re^{2\pi i\theta}:r>1\}.
+\]
+Landing of $R_c(\theta)$ means that its closure in $\C$ contains a unique
+finite endpoint.
+\end{definition}
+
+\begin{conditionalstep}
+The Böttcher coordinate and the Green function describe the basin of
+infinity.  To obtain a parameter-plane theorem one additionally needs a
+joint phase--parameter construction: rays and equipotentials must move with
+$c$, their finite graphs must cut both dynamical and parameter planes, and
+the resulting parapuzzle pieces must have the same combinatorics.  This is
+the first genuinely non-elementary bridge in the MLC program.
+\end{conditionalstep}
+
+\section{Puzzles, parapuzzles, and modulus}
+
+\begin{definition}[Puzzle graph and puzzle piece]
+\label{def:puzzle-piece}
+Fix a finite collection of landing external rays and equipotential arcs
+which is forward invariant under angle doubling.  The resulting graph at
+depth $n$ is denoted by $\Gamma_n(c)$.  A dynamical puzzle piece is a
+connected component
+\[
+ P_n(c,z):=\operatorname{Comp}_z(\C\setminus\Gamma_n(c))
+\]
+containing $z$.  The critical puzzle piece is $P_n(c,0)$.
+\end{definition}
+
+\begin{definition}[Parapuzzle piece]
+\label{def:parapuzzle-piece}
+Let $\mathcal G_n$ be the corresponding parameter graph obtained from the
+phase--parameter correspondence.  A parameter parapuzzle piece is a
+connected component of $\C\setminus\mathcal G_n$ with fixed finite
+combinatorial data.  We write $\mathcal P_n(c)$ for the piece containing
+$c$.
+\end{definition}
+
+\begin{definition}[Annulus modulus]
+\label{def:annulus-modulus}
+If $A=U\setminus\overline V$ is a doubly connected domain conformally
+equivalent to $\{1<|z|<R\}$, define
+\[
+ \modulus(A):=\frac{1}{2\pi}\log R.
+\]
+\end{definition}
+
+\begin{theorem}[Grötzsch--Yoccoz shrinking criterion]
+\label{thm:yoccoz-shrink}
+Suppose that $P_{n+1}(c,0)\subseteq P_n(c,0)$ are connected puzzle pieces
+and that the annuli
+\[
+ A_n:=P_n(c,0)\setminus\overline{P_{n+1}(c,0)}
+\]
+are nondegenerate.  If
+\[
+ \sum_{n\in\N}\modulus(A_n)=+\infty,
+\]
+then
+\[
+ \bigcap_{n\in\N}\overline{P_n(c,0)}=\{0\}.
+\]
+\end{theorem}
+
+\begin{theorem}[Parameter shrinking implication]
+\label{thm:parameter-shrinking}
+Assume that the phase--parameter correspondence sends the connected
+dynamical pieces in Theorem~\ref{thm:yoccoz-shrink} to connected
+parapuzzle pieces $\mathcal P_n(c)$ and that
+\[
+ \bigcap_{n\in\N}\overline{\mathcal P_n(c)}=\{c\}.
+\]
+Then $\M$ is locally connected at $c$.
+\end{theorem}
+
+\begin{conditionalstep}
+Theorem~\ref{thm:yoccoz-shrink} is a dynamical-plane modulus statement.
+Theorem~\ref{thm:parameter-shrinking} is the parameter-plane conclusion.
+The latter is not obtained by replacing a parapuzzle by a translated full
+Green sublevel; the graph-cut, landing, and phase--parameter hypotheses have
+to be formalized separately.
+\end{conditionalstep}
+
 \section{The target}
 
 Let
@@ -28,8 +281,8 @@ The first distinction of this review is therefore:
 \end{enumerate}
 These statements are related by the phase--parameter machinery, but they are
 not interchangeable.  The Lean declarations
-\verb|Mlc.Literature.MandelbrotLocallyConnectedAt| and
-\verb|Mlc.Literature.GlobalMLC| keep this distinction explicit.
+\lean{Mlc.Literature.MandelbrotLocallyConnectedAt} and
+\lean{Mlc.Literature.GlobalMLC} keep this distinction explicit.
 
 \section{A status picture}
 

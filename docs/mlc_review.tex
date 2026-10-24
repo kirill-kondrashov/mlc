@@ -6,16 +6,64 @@
 \usepackage{polyglossia}
 \setdefaultlanguage{english}
 \setmainfont{Noto Serif}
+\usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc}
 \usepackage{array}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage{mdframed}
 \usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,unicode=true]{hyperref}
 \setlength{\emergencystretch}{1em}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \setcounter{tocdepth}{1}
 
 \newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
 \newcommand{\M}{\mathcal M}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Kc}{K_c}
+\newcommand{\Jc}{J_c}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\modulus}{\operatorname{mod}}
 \newcommand{\LocallyConnectedSpace}{\operatorname{LocallyConnectedSpace}}
+\newcommand{\lean}[1]{\nolinkurl{#1}}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{openestimate}[theorem]{Open estimate}
+\newtheorem*{conjecture}{Conjecture}
+
+\definecolor{conditionalblue}{RGB}{28,76,132}
+\newenvironment{conditionalstep}
+  {\begin{mdframed}[
+     linecolor=conditionalblue,
+     linewidth=1.2pt,
+     leftline=true,
+     rightline=false,
+     topline=false,
+     bottomline=false,
+     leftmargin=0pt,
+     rightmargin=0pt,
+     innerleftmargin=8pt,
+     innerrightmargin=0pt,
+     innertopmargin=2pt,
+     innerbottommargin=2pt,
+     skipabove=\medskipamount,
+     skipbelow=\medskipamount,
+     backgroundcolor=white,
+     nobreak=true
+   ]\begingroup\color{conditionalblue}\small}
+  {\endgroup\end{mdframed}}
 
 \title{The Mandelbrot Local Connectivity Conjecture:\\
 A Literature Review and Formalization Program}
@@ -83,5 +131,35 @@ D.~Dudko,
 \emph{On the MLC Conjecture and the Renormalization Theory in Complex
 Dynamics}, arXiv:2512.24171.
 \href{https://arxiv.org/abs/2512.24171}{arXiv}.
+
+\bibitem{KahnKapiambaLyubich}
+J.~Kahn, A.~Kapiamba, and M.~Lyubich,
+\emph{MLC for parabolically bounded primitive renormalization},
+arXiv:2606.27272.
+\href{https://arxiv.org/abs/2606.27272}{arXiv}.
+
+\bibitem{DudkoLimBubbles}
+D.~Dudko and W.~R.~Lim,
+\emph{Uniform bounds for bubbles of neutral quadratic polynomials},
+arXiv:2609.15500.
+\href{https://arxiv.org/abs/2609.15500}{arXiv}.
+
+\bibitem{DudkoLimLyubichRigidity}
+D.~Dudko, W.~R.~Lim, and M.~Lyubich,
+\emph{Rigidity of the attractor of neutral renormalization},
+arXiv:2609.37383.
+\href{https://arxiv.org/abs/2609.37383}{arXiv}.
+
+\bibitem{ShenHybrid}
+W.~Shen,
+\emph{Complex Analytic Structure of Hybrid Classes of Generalized
+Polynomial-like Mappings}, arXiv:2610.25983.
+\href{https://arxiv.org/abs/2610.25983}{arXiv}.
+
+\bibitem{DudkoLuoLyubichNeutral}
+D.~Dudko, Y.~Luo, and M.~Lyubich,
+\emph{Uniform a priori bounds for neutral renormalization. Variation II:
+\(\psi^\bullet\)-ql Siegel maps}, arXiv:2509.23031.
+\href{https://arxiv.org/abs/2509.23031}{arXiv}.
 \end{thebibliography}
 \end{document}

@@ -57,6 +57,46 @@
       "title": "A priori bounds for some infinitely renormalizable quadratic: IV. Elephant Eyes",
       "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
       "existing_pdf": null
+    },
+    {
+      "key": "kahn-kapiamba-lyubich-parabolic-primitive",
+      "arxiv_id": "2606.27272",
+      "role": "mlc-case",
+      "title": "MLC for parabolically bounded primitive renormalization",
+      "authors": ["Jeremy Kahn", "Alex Kapiamba", "Mikhail Lyubich"],
+      "existing_pdf": null
+    },
+    {
+      "key": "dudko-lim-neutral-bubbles",
+      "arxiv_id": "2609.15500",
+      "role": "renormalization",
+      "title": "Uniform bounds for bubbles of neutral quadratic polynomials",
+      "authors": ["Dzmitry Dudko", "Willie Rush Lim"],
+      "existing_pdf": null
+    },
+    {
+      "key": "dudko-lim-lyubich-neutral-rigidity",
+      "arxiv_id": "2609.37383",
+      "role": "renormalization",
+      "title": "Rigidity of the attractor of neutral renormalization",
+      "authors": ["Dzmitry Dudko", "Willie Rush Lim", "Mikhail Lyubich"],
+      "existing_pdf": null
+    },
+    {
+      "key": "shen-hybrid-classes",
+      "arxiv_id": "2610.25983",
+      "role": "supporting",
+      "title": "Complex Analytic Structure of Hybrid Classes of Generalized Polynomial-like Mappings",
+      "authors": ["Weixiao Shen"],
+      "existing_pdf": null
+    },
+    {
+      "key": "dudko-luo-lyubich-neutral-bounds",
+      "arxiv_id": "2509.23031",
+      "role": "renormalization",
+      "title": "Uniform a priori bounds for neutral renormalization. Variation II: psi-bullet ql Siegel maps",
+      "authors": ["Dzmitry Dudko", "Yusheng Luo", "Mikhail Lyubich"],
+      "existing_pdf": "Dudko_2509.23031.pdf"
     }
   ]
 }

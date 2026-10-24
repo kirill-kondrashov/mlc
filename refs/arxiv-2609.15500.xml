@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/m85teL+s0ZWRkuvTZL8mL5CAjRQ</id>
+  <title>arXiv Query: search_query=&amp;id_list=2609.15500&amp;start=0&amp;max_results=10</title>
+  <updated>2026-10-24T09:35:29Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2609.15500" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2609.15500v1</id>
+    <title>Uniform bounds for bubbles of neutral quadratic polynomials</title>
+    <updated>2026-09-14T12:51:38Z</updated>
+    <link href="https://arxiv.org/abs/2609.15500v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.15500v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Given a quadratic polynomial with an irrationally indifferent fixed point of bounded type, a bubble is an iterated preimage of its Siegel disk. Similar to pseudo-Siegel disks, one constructs pseudo-bubbles from bubbles by filling in parabolic fjords. We introduce the near-degenerate regime for the $α'$-Dynamics controlling the geometry of these pseudo-bubbles in deep scale. Consequently, we obtain uniform bounds on the size and regularity of pseudo-bubbles independent of the rotation number. In [DLL], jointly with Lyubich, this result serves as a necessary ingredient for establishing uniform butterfly bounds and ultimately the combinatorial rigidity of the full attractor of neutral renormalization.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-14T12:51:38Z</published>
+    <arxiv:comment>33 pages, 11 figures</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+    <author>
+      <name>Willie Rush Lim</name>
+    </author>
+  </entry>
+</feed>

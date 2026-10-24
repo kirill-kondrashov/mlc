@@ -99,6 +99,18 @@ def BoundedTypeSatelliteMLC (isBoundedTypeSatellite : ℂ → Prop) : Prop :=
 def FeigenbaumMLC (isFeigenbaum : ℂ → Prop) : Prop :=
   PointwiseMLCResult isFeigenbaum
 
+/-- The pointwise target shape for parabolically bounded primitive
+renormalization. -/
+def ParabolicallyBoundedPrimitiveMLC
+    (isParabolicallyBoundedPrimitive : ℂ → Prop) : Prop :=
+  PointwiseMLCResult isParabolicallyBoundedPrimitive
+
+/-- The abstract implication proved by a neutral-renormalization rigidity
+theorem once tower and conjugacy predicates have been formalized. -/
+def NeutralTowerRigidity
+    (Tower : Type*) (sameCombinatorics conformallyConjugate : Tower → Tower → Prop) : Prop :=
+  ∀ a b, sameCombinatorics a b → conformallyConjugate a b
+
 /-- The local puzzle-shrinkage theorem already available in this repository. -/
 theorem yoccoz_puzzle_shrinkage (c : ℂ)
     (h : MLC.FinitelyRenormalizable c) :
@@ -204,6 +216,34 @@ def dudkoMLC : Reference :=
     locator := "arXiv:2512.24171"
     url := "https://arxiv.org/abs/2512.24171" }
 
+def kahnKapiambaLyubichParabolicPrimitive : Reference :=
+  { key := "kahn-kapiamba-lyubich-parabolic-primitive"
+    authors := "J. Kahn, A. Kapiamba, and M. Lyubich"
+    title := "MLC for parabolically bounded primitive renormalization"
+    locator := "arXiv:2606.27272"
+    url := "https://arxiv.org/abs/2606.27272" }
+
+def dudkoLimNeutralBubbles : Reference :=
+  { key := "dudko-lim-neutral-bubbles"
+    authors := "D. Dudko and W. R. Lim"
+    title := "Uniform bounds for bubbles of neutral quadratic polynomials"
+    locator := "arXiv:2609.15500"
+    url := "https://arxiv.org/abs/2609.15500" }
+
+def dudkoLimLyubichNeutralRigidity : Reference :=
+  { key := "dudko-lim-lyubich-neutral-rigidity"
+    authors := "D. Dudko, W. R. Lim, and M. Lyubich"
+    title := "Rigidity of the attractor of neutral renormalization"
+    locator := "arXiv:2609.37383"
+    url := "https://arxiv.org/abs/2609.37383" }
+
+def shenHybridClasses : Reference :=
+  { key := "shen-hybrid-classes"
+    authors := "W. Shen"
+    title := "Complex Analytic Structure of Hybrid Classes of Generalized Polynomial-like Mappings"
+    locator := "arXiv:2610.25983"
+    url := "https://arxiv.org/abs/2610.25983" }
+
 def reviewedResults : List ResultRecord :=
   [ { key := "yoccoz-puzzle-shrinkage"
       statement := "Divergent puzzle-annulus moduli force the critical puzzle pieces to shrink to the critical point."
@@ -233,6 +273,22 @@ def reviewedResults : List ResultRecord :=
       statement := "Local connectivity at the Feigenbaum points covered by the paper."
       status := .openObligation
       reference := dudkoLyubichFeigenbaum }
+  , { key := "kahn-kapiamba-lyubich-parabolic-primitive-mlc"
+      statement := "Local connectivity for the parabolically bounded primitive class."
+      status := .openObligation
+      reference := kahnKapiambaLyubichParabolicPrimitive }
+  , { key := "dudko-lim-neutral-bubbles"
+      statement := "Uniform geometric bounds for bubbles in neutral quadratic dynamics."
+      status := .interfaceOnly
+      reference := dudkoLimNeutralBubbles }
+  , { key := "dudko-lim-lyubich-neutral-rigidity"
+      statement := "Combinatorial rigidity of neutral renormalization towers."
+      status := .interfaceOnly
+      reference := dudkoLimLyubichNeutralRigidity }
+  , { key := "shen-hybrid-classes"
+      statement := "Local complex-analytic structure of generalized polynomial-like hybrid classes."
+      status := .interfaceOnly
+      reference := shenHybridClasses }
   , { key := "global-mlc"
       statement := "The Mandelbrot set is locally connected."
       status := .openObligation

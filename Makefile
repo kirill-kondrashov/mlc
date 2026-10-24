@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean graphs serve proof-pdf review-pdf factorization-figure check-uniform
+.PHONY: all build check cache clean graphs serve proof-pdf review-pdf mlc-status-figure factorization-figure check-uniform
 
 # Default target
 all: check
@@ -41,6 +41,8 @@ proof-pdf: docs/uniform_geometric_mlc.pdf
 
 review-pdf: docs/mlc_review.pdf
 
+MLC_STATUS_FIGURE := docs/figures/mlc_status_render.pdf
+
 REVIEW_CHAPTERS := \
 	docs/review/01_scope_and_status.tex \
 	docs/review/02_foundational_machinery.tex \
@@ -48,9 +50,14 @@ REVIEW_CHAPTERS := \
 	docs/review/04_formalization_map.tex \
 	docs/review/05_source_policy_and_roadmap.tex
 
-docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex
+docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+
+$(MLC_STATUS_FIGURE): scripts/generate_mlc_status_figure.py scripts/pyproject.toml scripts/poetry.lock
+	cd scripts && poetry run python generate_mlc_status_figure.py --output ../docs/figures/mlc_status_render.pdf
+
+mlc-status-figure: $(MLC_STATUS_FIGURE)
 
 docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(PROOF_CHAPTERS) $(FACTOR_FIGURES)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
@@ -86,3 +93,4 @@ auto-build: .cache_marker
 clean:
 	rm -f docs/proof.aux docs/proof.log docs/proof.out docs/proof.toc .cache_marker
 	rm -f docs/uniform_geometric_mlc.aux docs/uniform_geometric_mlc.log docs/uniform_geometric_mlc.out docs/uniform_geometric_mlc.toc docs/uniform_geometric_mlc.build.log
+	rm -f docs/mlc_review.aux docs/mlc_review.log docs/mlc_review.out docs/mlc_review.toc

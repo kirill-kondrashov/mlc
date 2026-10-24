@@ -34,6 +34,11 @@ the choice is recorded in `00README.json`.
 | `dudko-lyubich-satellite` | Dudko--Lyubich, bounded-type satellite parameters | proved MLC case |
 | `dudko-lyubich-feigenbaum` | Dudko--Lyubich, *MLC at Feigenbaum points* | proved MLC case |
 | `dudko-mlc-2025` | Dudko, *On the MLC Conjecture...* | current status and renormalization roadmap |
+| `kahn-kapiamba-lyubich-parabolic-primitive` | *MLC for parabolically bounded primitive renormalization* | 2026 MLC case |
+| `dudko-lim-neutral-bubbles` | *Uniform bounds for bubbles of neutral quadratic polynomials* | neutral geometry |
+| `dudko-lim-lyubich-neutral-rigidity` | *Rigidity of the attractor of neutral renormalization* | neutral rigidity |
+| `shen-hybrid-classes` | *Complex Analytic Structure of Hybrid Classes...* | hybrid-class analytic base |
+| `dudko-luo-lyubich-neutral-bounds` | *Uniform a priori bounds for neutral renormalization. Variation II* | neutral a priori bounds |
 
 The label “Volume III” refers to the Astérisque paper above.  The review
 does not assume that there is a canonical standalone “Volume IV”: later

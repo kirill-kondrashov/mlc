@@ -10,10 +10,17 @@ For every arXiv reference used in a formalization task, the repository keeps:
 \item the selected main \TeX{} file.
 \end{enumerate}
 The executable policy is implemented by
-\verb|scripts/fetch_arxiv_sources.py| and the manifest
-\verb|refs/mlc_sources.json|.  This is preferable to copying a single PDF:
+\lean{scripts/fetch_arxiv_sources.py} and the manifest
+\lean{refs/mlc_sources.json}.  This is preferable to copying a single PDF:
 definitions, theorem labels, and notation can be searched directly while
 formalizing.
+
+The current manifest includes the 2025--2026 additions
+\lean{2509.23031}, \lean{2606.27272}, \lean{2609.15500},
+\lean{2609.37383}, and \lean{2610.25983}.  The review records their
+mathematical role separately from the older MLC-case papers: some are direct
+local-connectivity theorems, while others provide neutral-renormalization,
+rigidity, or hybrid-class machinery.
 
 \section{Removal of duplicates}
 

@@ -1,0 +1,221 @@
+\usepackage{bm}
+\usepackage{tikz}
+
+\theoremstyle{theorem}
+\newtheorem*{thmA}{Theorem A}
+\newtheorem*{thmB}{Theorem B}
+\newtheorem*{thmC}{Theorem C}
+\newtheorem*{thmD}{Theorem D}
+\newtheorem*{thmE}{Theorem E}
+\newtheorem*{conjecture*}{Conjecture}
+\newtheorem*{lemmaA}{Lemma}
+
+\newcommand{\shrink}[2]{#1_{\left>#2\right<}}
+\newcommand{\dcara}{\dd_C}
+\newcommand{\pql}{$\psi$-ql }
+\newcommand{\toto}{\rightrightarrows}
+
+\newcommand{\BA}{\mathbf{A}}
+\newcommand{\FB}{\mathfrak{B}}
+\newcommand{\fl}{\mathfrak{l}}
+\newcommand{\FL}{\mathfrak{L}}
+\newcommand{\FD}{\mathfrak{D}}
+
+\newcommand{\Mol}{\MM ol}
+
+\newcommand{\tot}{{\mathrm{tot}}}
+\newcommand{\inner}{{\mathrm{inn}}}
+\newcommand{\comp}{{\mathrm{comp}}}
+\newcommand{\biv}{{\mathrm{biv}}}
+\newcommand{\br}{{\mathrm{br}}}
+\newcommand{\nbr}{{\mathrm{ubr}}}
+\newcommand{\ver}{{\mathrm{ver}}}
+\newcommand{\hor}{{\mathrm{hor}}}
+\newcommand{\bd}{{\mathrm{bd}}}
+\newcommand{\nbd}{{\mathrm{nbd}}}
+\newcommand{\fun}{{\mathrm{fun}}}
+\newcommand{\str}{{\mathrm{str}}}
+\newcommand{\sta}{{\mathrm{sta}}}
+\newcommand{\cra}{{\mathrm{cra}}}
+\newcommand{\std}{{\mathrm{std}}}
+\newcommand{\cen}{{\mathrm{cen}}}
+\newcommand{\rip}{{\mathrm{rip}}}
+\newcommand{\van}{{\mathrm{van}}}
+\newcommand{\out}{\operatorname{out}}
+\newcommand{\bgg}{\mathbf G}
+\newcommand{\inbr}{{\mathrm{in}}}
+\newcommand{\splitwave}{{\mathrm{split}}}
+\newcommand{\overwave}{{\mathrm{over}}}
+\newcommand{\outbr}{{\mathrm{out}}}
+\newcommand{\amp}{{\mathrm{amp}}}
+
+\newcommand{\etf}{{E(T_f)}}
+\newcommand{\rt}[1]{\operatorname{rt}(#1)}
+
+
+
+
+\newcommand{\wcan}{W_{\operatorname{can}}}
+\newcommand{\fcan}{\FF_{\operatorname{can}}}
+\newcommand{\ren}[1]{\RR #1}
+
+\newcommand{\dominates}{\multimap}
+\newcommand{\weakarrows}{\rightarrow}
+\newcommand{\weakdominates}{\dominates}
+\newcommand{\bh}{\mathbf H}
+\newcommand{\hperp}{\HH^\biv}
+\newcommand{\hv}{\HH^\ver}
+\newcommand{\topdom}{\rightsquigarrow}
+
+
+\newcommand{\p}{\mathbf p}
+\newcommand{\bound}{\mathbf b}
+\newcommand{\n}{\mathbf n}
+\newcommand{\q}{\mathbf q}
+\newcommand{\wstd}{\WW(\RR F)}
+\newcommand{\Flux}{\operatorname{Flux}_{\operatorname{std}}}
+
+
+
+\theoremstyle{definition}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+
+
+
+\newcommand{\com} {{ \mathrm{com}}}
+\newcommand{\thin} {{\mathrm{thin}}}
+\newcommand{\thick} {{ \mathrm{thick}}}
+\newcommand{\loc}{{\mathrm {loc}}}
+\newcommand{\ess}{{\mathrm{ess}}}
+\newcommand{\ness}{{\mathrm{ne}}}
+\newcommand{\pro}{{\mathrm{pr}}}
+
+\newcommand{\locflux} {\WW^\perp_\loc}
+\DeclareMathOperator{\flux}{flux}
+\newcommand{\stdflux}[1]{\flux(#1)}
+\newcommand{\ddi}{\dd^i}
+
+%\newcommand{\re}{{\mathrm{(r)}}}
+\newcommand{\essre}{{\mathrm{ess(r)}}}
+\newcommand{\nere}{{\mathrm{ne(r)}}}
+\newcommand{\verre}{{\mathrm{ver(r)}}}
+
+\newcommand{\Cyl}{{\mathrm{Cyl}}}
+\newcommand{\hsubset}{{ \,\underset{h}{\subset}\, }    }
+\newcommand{\hsupset}{{ \, \underset{h}{\supset} \, }     }
+
+% \newcommand{\lp}{\multimap}
+\newcommand{\lp}{{\,\mathrm {dominates}\,}}
+
+\DeclareMathOperator{\disk}{disk}
+\DeclareMathOperator{\preper}{preper}
+\DeclareMathOperator{\val}{Val}
+
+\newcommand{\clone}[3]{#1^{#2}_{#3}}
+\newcommand{\PF}{Perron-Fr\"obenius}
+
+\newcommand{\FJ}{\mathfrak{J}}
+\newcommand{\BU}{\mathbf{U}}
+\newcommand{\FK}{\mathfrak{K}}
+\newcommand{\FT}{\mathfrak{T}}
+\newcommand{\BT}{\mathbf{T}}
+\newcommand{\BK}{\mathbf{K}}
+\newcommand{\per}{\mathbf{n}}
+\newcommand{\translationregion}{T}
+
+%\input{ak_macros}
+
+\makeatletter
+\newtheorem{repeatlem@}{Lemma}
+\newenvironment{repeatlem}[1]{%
+	\def\therepeatlem@{\ref{#1}}
+	\repeatlem@
+}
+{\endrepeatlem@}
+\makeatother
+
+\makeatletter
+\newtheorem{repeatprop@}{Proposition}
+\newenvironment{repeatprop}[1]{%
+	\def\therepeatprop@{\ref{#1}}
+	\repeatprop@
+}
+{\endrepeatprop@}
+\makeatother
+
+
+\newcommand{\good}{^g}
+\newcommand{\bad}{^b}
+\newcommand{\vg}{^{g\dominates}}
+\newcommand{\gdom}{\vg}
+\newcommand{\gb}{^{gb\dominates}}
+\newcommand{\bv}{^{b}}
+\newcommand{\gbg}{^{gb\dominates g}}
+\newcommand{\gdomg}{^{g \dominates g}}
+
+\newcommand{\xwbv}{X}
+%\newcommand{\xhv}{X^{h+v}}
+\newcommand{\xhv}{X}
+
+\newcommand{\jj}{\jmath}
+
+\newcommand{\Card}{Card}
+
+% Define a command for a cardioid symbol
+% The 'scale' factor controls the overall size. 
+% For a symbol roughly the size of an M, a scale of about 0.05 to 0.1 might be appropriate 
+% for a standard 10pt or 12pt article font size.
+\newcommand{\cardioidsymbol}{%
+    \begin{tikzpicture}[scale=0.08, baseline=(current bounding box.center)]
+        \draw[line width=0.5pt, smooth] 
+            plot[domain=0:360, samples=360, variable=\t] 
+            ({2*(1+cos(\t))*cos(\t)}, {2*(1+cos(\t))*sin(\t)});
+    \end{tikzpicture}%
+}
+
+\renewcommand{\Card}{\cardioidsymbol}
+
+% Define a new command for the adjusted cardioid symbol
+% New modifications:
+% 1. Belly button to the right: Achieved by setting the polar equation domain from -180 to 180 (or 0 to 360) 
+%    and changing the 'x' and 'y' coordinates in the plot.
+% 2. Lift it up three points: Achieved with the 'yshift=3pt' option.
+% 3. Shrink it 15\%: Achieved by reducing the scale factor by 15\%. 
+%    Since the previous scale was 0.08, the new scale is 0.08 * (1 - 0.15) = 0.068.
+\newcommand{\cardioidsymbolRightShifted}{%
+    \begin{tikzpicture}[
+        scale=0.068, % Reduced 15\% from the original 0.08 scale
+        yshift=3pt, % Lifted up 3 points
+        baseline=(current bounding box.center)
+    ]
+        % Polar equation: r = 2(1 + cos(t))
+        % Standard Cartesian plot: (r*cos(t), r*sin(t))
+        % For a right-facing cardioid, the standard plot is used over the full domain.
+        \draw[line width=0.5pt, smooth] 
+            plot[domain=0:360, samples=360, variable=\t] 
+            ({2*(1+cos(\t))*cos(\t)}, {2*(1+cos(\t))*sin(\t)});
+    \end{tikzpicture}%
+}
+
+\renewcommand{\Card}{\cardioidsymbolRightShifted}
+
+\renewcommand{\Card}{\operatorname{Card}}
+
+\newcommand{\gc}[1]{\breve{#1}}
+
+\newcommand{\tunedby}{\bot}
+
+\newcommand{\gr}[1]{{\color{Green} #1}}
+
+\newcommand{\alex}[1]{{\color{Cyan} #1}}
+
+
+\newcommand{\bK}{\mathbf K}
+\newcommand{\mathhyphen}{\text{-}}
+
+
+
+
+

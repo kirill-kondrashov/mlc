@@ -1,0 +1,51 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Basic non-numbered headers
+%                          
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcommand{\header}[1]{\subsection*{#1}}
+\newcommand{\subheader}[1]{\subsubsection*{#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Theorem environments  
+%    We label everything (including equations) together                           
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% We omit this for projects that do not have sections 
+% \numberwithin{equation}{section}
+
+\newtheorem{thm}{Theorem}[equation]
+\newtheorem{cor}[equation]{Corollary}
+\newtheorem{lem}[equation]{Lemma}
+\newtheorem{prop}[equation]{Proposition}
+\newtheorem{theorem}[equation]{Theorem}
+\newtheorem{lemma}[equation]{Lemma}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{corollary}[equation]{Corollary}
+\newtheorem{ptheorem}[equation]{Proposed Theorem}
+\newtheorem{ctheorem}[equation]{Conditional Theorem}
+\newtheorem{atheorem}[equation]{Approximate Theorem}
+\newtheorem{conjecture}[equation]{Conjecture}
+
+
+
+\theoremstyle{remark}
+\newtheorem{rem}[equation]{Remark}
+\newtheorem{notation}[equation]{Notation}
+\newtheorem{exc}[equation]{Exercise}
+\newtheorem{exe}[equation]{Exercise}
+\newtheorem{exercise}[equation]{Exercise}
+\newtheorem{example}[equation]{Example}
+\newtheorem{nonex}[equation]{Non-Example}
+\newtheorem{question}[equation]{Question}
+\newtheorem{remark}[equation]{Remark}
+\newtheorem{trem}[equation]{Technical Remark}
+
+
+\theoremstyle{definition}
+\newtheorem{defn}[equation]{Definition}
+\newtheorem{problem}[equation]{Problem}
+
+

@@ -1,5 +1,6 @@
 -- This module serves as the root of the concise MLC library.
 import Mlc.Core
+import Mlc.Literature.Foundations
 import Mlc.Literature.Review
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample
