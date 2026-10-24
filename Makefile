@@ -52,7 +52,9 @@ REVIEW_CHAPTERS := \
 	docs/review/06_phase_parameter.tex \
 	docs/review/07_lyubich_renormalization.tex \
 	docs/review/08_dudko_cases.tex \
-	docs/review/09_combinatorial_contracts.tex
+	docs/review/09_combinatorial_contracts.tex \
+	docs/review/10_categorical_branch.tex \
+	docs/review/11_lean_inventory.tex
 
 docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<

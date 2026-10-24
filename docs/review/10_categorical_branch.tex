@@ -1,0 +1,325 @@
+\chapter{The categorical branch and the conditional MLC roots}
+
+\section{What category theory changes}
+
+The categorical development does not replace the analytic problem by a
+formal trick.  It performs two more limited tasks:
+\begin{enumerate}
+\item it packages subsets of the parameter plane and their inclusions as
+      objects and morphisms in a topological over-category;
+\item it isolates the exact parameter--dynamical existence statement whose
+      connected-image consequence is formal.
+\end{enumerate}
+The first task is elementary category theory in \texttt{TopCat}.  The second
+task is still complex dynamics and is not supplied by the category
+interfaces.
+
+\section{The over-category of parameter approximations}
+
+\begin{definition}[Approximation over the parameter plane]
+\label{def:categorical-approximation}
+Let
+\[
+ \mathsf{Plane}:=\operatorname{TopCat.of}\C.
+\]
+An approximation is an object of the over-category
+\[
+ \mathsf{Approx}:=\mathsf{TopCat}/\mathsf{Plane}.
+\]
+For $S\subseteq\C$, the canonical approximation is
+\[
+ \mathsf{ofSet}(S):=
+ \bigl(\operatorname{TopCat.of}S\longrightarrow\mathsf{Plane}\bigr).
+\]
+\end{definition}
+
+The implementation is:
+\begin{itemize}
+\item \lean{Mlc.CategoricalTopologicalApproximation.Approximation};
+\item \lean{Mlc.CategoricalTopologicalApproximation.ofSet};
+\item \lean{Mlc.CategoricalTopologicalApproximation.setInclusion}.
+\end{itemize}
+The underlying parameter subset of an arbitrary approximation is its range:
+\[
+ \operatorname{image}(A):=
+ \operatorname{range}(A\to\mathsf{Plane}).
+\]
+
+\begin{theorem}[Images and categorical intersections]
+\label{thm:categorical-image-intersection}
+For approximations $A,B$,
+\[
+ \operatorname{image}(A\times_{\mathsf{Plane}}B)
+ =
+ \operatorname{image}(A)\cap\operatorname{image}(B).
+\]
+For subsets $S,T\subseteq\C$,
+\[
+ \mathsf{ofSet}(S)\longrightarrow\mathsf{ofSet}(T)
+\quad\Longleftrightarrow\quad S\subseteq T.
+\]
+\end{theorem}
+
+These are theorems
+\lean{Categorical.image_intersection} and
+\lean{Categorical.factorsThrough_ofSet_iff}.  They are important because
+they show that the categorical pullback is not an abstract replacement for
+set intersection: its image is exactly the ordinary set intersection.
+
+\section{The finite-orbit tower}
+
+\begin{definition}[Outer and inner orbit approximations]
+\label{def:categorical-orbit-tower}
+For $N\in\N$ define
+\[
+ I_N:=\left\{c:\forall n,\ |p_n(c)|\le N\right\},
+\qquad
+ O_N:=\left\{c:|c|\le2,\ \forall n\le N,\ |p_n(c)|\le2\right\}.
+\]
+The inner sets are increasing and the outer sets are decreasing.
+\end{definition}
+
+The exact Lean declarations are
+\lean{Categorical.Mandelbrot.innerOrbitSet} and
+\lean{Categorical.Mandelbrot.outerOrbitSet}.  The following statements are
+proved:
+\begin{align*}
+ I_N&\subseteq\M,
+ &\bigcup_N I_N&=\M,\\
+ \M&\subseteq O_N,
+ &\bigcap_N O_N&=\M.
+\end{align*}
+The corresponding theorem names are
+\begin{center}
+\lean{Categorical.Mandelbrot.iUnion_innerOrbitSet_eq_set},
+\qquad
+\lean{Categorical.Mandelbrot.iInter_outerOrbitSet_eq_set}.
+\end{center}
+
+\begin{remark}
+The outer and inner limits agree as sets for different reasons.  This
+agreement does not say that the finite stages are connected, and it does not
+imply local connectivity of the limit.  The missing information is
+component control, represented in the repository by the buffer and
+finite-component interfaces.
+\end{remark}
+
+\section{The categorical root}
+
+\begin{definition}[Root input]
+\label{def:categorical-root-input}
+The current root input is the proposition
+\[
+\begin{gathered}
+\mathsf{BUF}(\M,O):\quad
+\forall c\in\M\ \forall\varepsilon>0\
+\exists\,0<\delta<r<\varepsilon,\\
+\forall N\ \exists L\ge N,\qquad
+O_L\cap\overline B(c,\delta)
+\subseteq
+\operatorname{Comp}_c(O_N\cap\overline B(c,r)).
+\end{gathered}
+\]
+\end{definition}
+
+Its Lean packaging is
+\lean{MLC.RootInput}; the field is
+\lean{ParameterComponent.MandelbrotUniformOuterBuffer}.
+The topological theorem
+\lean{ParameterComponent.locallyConnectedSpace_of_uniformOuterBuffer}
+proves
+\[
+ \mathsf{BUF}(\M,O)\Longrightarrow
+ \operatorname{LocallyConnectedSpace}(\M).
+\]
+
+\begin{theorem}[Categorical compatibility root]
+\label{thm:categorical-compatibility-root}
+Let
+\[
+ \mathsf{MLC}_{\mathrm{cat}}
+ :=
+ \operatorname{LocallyConnectedSpace}
+   \bigl(\operatorname{TopCat.of}\M\bigr).
+\]
+Then
+\[
+ \mathsf{MLC}_{\mathrm{cat}}
+ \Longleftrightarrow
+ \operatorname{LocallyConnectedSpace}(\M),
+\]
+and $\mathsf{BUF}(\M,O)$ implies both sides.
+\end{theorem}
+
+The exact declarations are:
+\begin{itemize}
+\item \lean{Categorical.MLCConjecture};
+\item \lean{Categorical.mlcConjecture_iff_set};
+\item \lean{Categorical.categorical_mlc_conjecture};
+\item \lean{MLC.mlc_conjecture}.
+\end{itemize}
+The literature-facing wrappers are:
+\begin{itemize}
+\item \lean{Literature.categoricalMLC_iff_setMLC};
+\item \lean{Literature.categoricalMLC_of_rootInput};
+\item \lean{Literature.setMLC_of_rootInput}.
+\end{itemize}
+
+\section{Finite covers and uniform geometric towers}
+
+The finite-component branch replaces the pointwise buffer by finite
+certificate data.  At scale $k$, a certificate supplies finitely many
+rational parameter boxes and a stage $T$ covering $O_T$.  Each local box
+comes with radii and a component-control implication.  The theorem
+\[
+ \mathsf{FC}\Longrightarrow\mathsf{BUF}(\M,O)
+\Longrightarrow\mathsf{MLC}(\M)
+\]
+is implemented by
+\lean{FiniteComponent.uniformOuterBuffer_of_finiteComponentCriterion}
+and
+\lean{FiniteComponent.rootInput_of_finiteComponentCriterion}.
+
+The independent uniform-geometric branch assumes a tower of maps
+\[
+ R_n:D\longrightarrow D,\qquad
+ R_n|_{O_{N_n}}=\id,\qquad
+ \|R_{n+1}-R_n\|_\infty\le C2^{-n}.
+\]
+The limit is a retraction $D\to\M$.  The proved implication is
+\[
+ \mathsf{UG}\Longrightarrow
+ \text{continuous retraction }D\to\M
+\Longrightarrow\mathsf{MLC}.
+\]
+The root theorem is
+\lean{UniformGeometry.mandelbrot_locallyConnected_of_squareTower}.
+Its tower existence is not asserted.
+
+\begin{remark}
+The categorical statement
+\lean{UniformGeometry.categorical_mlc_of_squareTower}
+is a packaging of the same set-level conclusion in \texttt{TopCat}; it is
+not evidence that the tower exists.  Likewise,
+\lean{FlowInterfaces.CoherentParametrization} and
+\lean{FlowInterfaces.TerminalExtension} are explicit construction
+obligations, not project axioms.
+\end{remark}
+
+\section{The categorical Green-sublevel branch}
+
+For $c\in\M$ and $n\in\N$ define the frozen translate
+\[
+ U_n(c):=\{c':G_c(c'-c)<2^{-n}\},
+\qquad
+ V_n(c):=U_n(c)\cap\M.
+\]
+The un-intersected set $U_n(c)$ is connected.  The current code proves
+\[
+ \bigcap_n U_n(c)=(c+K_c),
+\]
+not $\{c\}$.  This is the theorem
+\lean{Quadratic.iInter_green_sublevel_translate_eq_translate_filledJulia}.
+
+The desired straddling statement would be
+\[
+ U_n(c)\not\subseteq\M
+\Longrightarrow V_n(c)\text{ is connected}.
+\]
+Its categorical form is
+\lean{GreenSublevelIntersectionCategoricalData}.
+The equivalence with the set-level formulation is proved by
+\lean{greenSublevelIntersectionCategoricalData_iff}.
+
+\begin{theorem}[Frozen full-sublevel obstruction]
+\label{thm:frozen-sublevel-obstruction}
+The universal frozen Green-sublevel intersection statement is false.  There
+are $c\in\M$ and $n$ for which $V_n(c)$ is disconnected.
+\end{theorem}
+
+The machine-checked witness is $c=i$, $n=16$.  The theorem is
+\lean{not_greenSublevelIntersectionCategoricalData}; its set-level source is
+\lean{GreenCounterexample.not_greenSublevelIntersectionSetData}.
+Consequently, the full Green-sublevel categorical datum cannot be cited as
+the classical Yoccoz parapuzzle theorem.
+
+\section{Carving, Efimov-style interfaces, and the literature}
+
+\begin{definition}[Categorical carving datum]
+\label{def:categorical-carving}
+A carving datum at $(c,n)$ is a surjective continuous morphism
+\[
+ \operatorname{TopCat.of}U_n(c)\longrightarrow
+ \operatorname{TopCat.of}V_n(c).
+\]
+Since the source is connected, its image is connected.
+\end{definition}
+
+The exact native theorem is
+\lean{Efimov.isConnected_of_topCatSurjectiveMorphism}.
+The stronger analytic input
+\lean{Efimov.SpaceHolomorphicCarvingData} supplies a differentiable map
+with exact image $V_n(c)$ and is converted to
+\lean{Efimov.DouadyHubbardYoccozCategoricalCarvingData}.
+The existence proposition is
+\lean{Efimov.DouadyHubbardYoccozCategoricalTheorem}.
+
+The Efimov-inspired part is intentionally limited by available foundations:
+\begin{itemize}
+\item \lean{Efimov.DualizablePacmanTower} records rigid monoidal levels and
+      adjoint transitions;
+\item \lean{Efimov.StrongMittagLefflerData} records stabilization clauses;
+\item \lean{Efimov.PacmanKTheory} records a graded additive shadow, not
+      algebraic $K$-theory;
+\item \lean{Efimov.PacmanRealization} records a realization into the
+      topological approximation category.
+\end{itemize}
+Mathlib does not provide the stable infinity-categorical and continuous
+$K$-theoretic machinery used in Efimov's papers.  Therefore the category
+interfaces organize a future realization theorem but do not prove the
+missing parameter carving.
+
+\begin{conditionalstep}
+The correct relation to the literature is:
+\[
+\begin{gathered}
+\text{Douady--Hubbard/Yoccoz phase--parameter theorem}\\
+\Downarrow\\
+\text{carving or connected shrinking parapuzzle data}\\
+\Downarrow\\
+\text{topological connected-image theorem in Lean}\\
+\Downarrow\\
+\text{pointwise MLC and, after uniformization, the global target}.
+\end{gathered}
+\]
+The categorical layer proves the third line.  It does not supply the first
+line, and the counterexample proves that the frozen full-sublevel version of
+the first line is false.
+\end{conditionalstep}
+
+\section{Categorical status ledger}
+
+\begin{center}\small
+\begin{tabular}{@{}P{0.30\textwidth}@{\hspace{4pt}}P{0.48\textwidth}@{\hspace{4pt}}P{0.14\textwidth}@{}}
+\textbf{Statement} & \textbf{Lean content} & \textbf{Status}\\
+\hline
+Set/categorical target equivalence &
+\lean{Categorical.mlcConjecture_iff_set} &
+proved\\
+Root input to categorical MLC &
+\lean{Categorical.categorical_mlc_conjecture} &
+proved conditionally\\
+Finite-component bridge &
+\lean{FiniteComponent.rootInput_of_finiteComponentCriterion} &
+proved conditionally\\
+Uniform tower to MLC &
+\lean{UniformGeometry.mandelbrot_locallyConnected_of_squareTower} &
+proved conditionally\\
+Frozen Green intersection &
+\lean{not_greenSublevelIntersectionCategoricalData} &
+refuted\\
+Space-holomorphic carving &
+\lean{Efimov.SpaceHolomorphicCarvingData} &
+open input\\
+\end{tabular}
+\end{center}

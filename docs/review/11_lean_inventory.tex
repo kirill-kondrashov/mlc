@@ -1,0 +1,265 @@
+\chapter{Lean inventory: declarations and mathematical meaning}
+
+\section{How to read the formalization}
+
+The repository uses three kinds of declarations:
+\begin{enumerate}
+\item \textbf{definitions}: mathematical objects and predicates;
+\item \textbf{theorems}: propositions proved from the current Lean
+      dependencies and earlier declarations;
+\item \textbf{structures}: explicit data packages whose existence is still
+      an input unless a constructor theorem is provided.
+\end{enumerate}
+The distinction is essential.  A structure such as
+\lean{RootInput} or \lean{PhaseParameterPuzzleData} is not an axiom merely
+because a theorem accepts it as an argument.
+
+\section{Public roots and exact Mandelbrot approximations}
+
+\begin{description}
+\item[\lean{Mlc/Core.lean}]
+Defines \lean{MLC.mlc_conjecture}: the compatibility theorem from
+\lean{RootInput} to \lean{LocallyConnectedSpace M}.  Its proof uses only the
+categorical root and the foundation axioms reported by the audit.
+
+\item[\lean{Mlc/CategoricalRoot.lean}]
+Defines \lean{MLC.RootInput},
+\lean{Categorical.mandelbrotObject}, and
+\lean{Categorical.MLCConjecture}.  The theorem
+\lean{Categorical.mlcConjecture_iff_set} is definitional equivalence between
+the categorical and subspace targets.
+
+\item[\lean{Mlc/CategoricalMandelbrot.lean}]
+Defines the increasing inner and decreasing outer orbit systems.  The
+theorems
+\lean{Categorical.Mandelbrot.iUnion_innerOrbitSet_eq_set} and
+\lean{Categorical.Mandelbrot.iInter_outerOrbitSet_eq_set} prove the two exact
+limit identities.  Compactness is
+\lean{Categorical.Mandelbrot.isCompact_outerOrbitSet}.
+\end{description}
+
+\section{Topology and local-connectivity bridges}
+
+\begin{description}
+\item[\lean{Mlc/LocalConnectivity.lean}]
+Transfers connectedness between a subspace and its image and proves the
+connected-basis lemma used by parameter puzzles.
+
+\item[\lean{Mlc/ParameterComponentApproximation.lean}]
+Defines \lean{ParameterComponent.UniformOuterBuffer} and proves
+\lean{ParameterComponent.locallyConnectedSpace_of_uniformOuterBuffer}.
+This is the set-level theorem behind the categorical root.
+
+\item[\lean{Mlc/FiniteComponentCriterion.lean}]
+Defines rational local pieces and finite cover certificates.  The theorem
+\lean{FiniteComponent.uniformOuterBuffer_of_finiteComponentCriterion}
+turns finite certificates into the uniform buffer.
+
+\item[\lean{Mlc/RetractionLocalConnectivity.lean}]
+Proves that a continuous retraction from a convex ambient domain onto
+$\M$ yields local connectivity.
+
+\item[\lean{Mlc/FlowInterfaces.lean}]
+Defines \lean{FlowInterfaces.CoherentParametrization},
+\lean{FlowInterfaces.TerminalExtension}, and their explicit image/retraction
+obligations.  These are interfaces for deformation or flow proofs.
+\end{description}
+
+\section{Complex dynamics, Green functions, and puzzles}
+
+\begin{description}
+\item[\textbf{GreenSublevel}]
+The module \lean{Mlc/Quadratic/Complex/GreenSublevel.lean} defines
+\lean{Quadratic.GreenSublevel} and proves that it contains the
+critical point for $c\in\M$.
+
+\item[\lean{Mlc/GreenSublevelConnectedDirect.lean}]
+Proves connectedness of the dynamical Green sublevels by direct potential
+theory.
+
+\item[\lean{Mlc/ParaPuzzleConnectivity.lean}]
+Defines the set-level Green/intersection connectivity input, proves its
+equivalence with the categorical version, and proves the conditional
+parapuzzle connectedness theorem.
+
+\item[\lean{Mlc/GreenSublevelIntersectionCounterexample.lean}]
+Contains the certified $c=i$, $n=16$ obstruction.  The theorem
+\lean{MLC.not_greenSublevelIntersectionCategoricalData} prevents the
+full-sublevel model from being mistaken for the Yoccoz graph-cut model.
+
+\item[\lean{Mlc/Quadratic/Complex/YoccozConformal.lean}]
+Proves the conformal Yoccoz shrinking theorem from divergence of puzzle
+annulus moduli:
+\lean{Quadratic.yoccoz_theorem_conformal}.
+
+\item[\lean{Mlc/Quadratic/Complex/ParaPuzzleBasis.lean}]
+Shows how connected shrinking parameter pieces produce a neighbourhood basis
+in the Mandelbrot subspace.
+\end{description}
+
+\section{Renormalization and current case interfaces}
+
+\begin{description}
+\item[\lean{Mlc/RenormalizationTypes.lean}]
+Defines primitive, finite/infinite renormalization predicates and the
+modulus-summability interface.
+
+\item[\lean{Mlc/MoleculeRenormalizationTower.lean}]
+Defines \lean{RenormalizationTower}, chooses its relations, and proves
+monotonicity of cumulative periods.
+
+\item[\lean{Mlc/SatelliteRenormalizationTower.lean}]
+Specializes towers to satellite-renormalizable parameters.
+
+\item[\lean{Mlc/MoleculeToParameterShrink.lean}]
+Proves the principal-nest finite-union decomposition and the bridge from
+uniform principal-nest bounds to shrinking parameter puzzles.
+
+\item[\lean{Mlc/Literature/Combinatorics.lean}]
+Adds explicit bounded-type, period-doubling, primitive/satellite/neutral
+profile predicates and the arithmetic divergence theorem
+\lean{not_summable_of_uniform_lower_bound}.
+
+\item[\lean{Mlc/Literature/Renormalization.lean}]
+Packages the a priori-bound certificate and proves its pointwise MLC
+conclusion once connected parameter pieces are supplied.
+
+\item[\lean{Mlc/Literature/Dudko.lean}]
+Provides source-specific contracts for bounded-type satellite, Feigenbaum,
+parabolically bounded primitive, and neutral-renormalization classes.
+\end{description}
+
+\section{Categorical and Efimov-facing interfaces}
+
+\begin{description}
+\item[\lean{Mlc/CategoricalTopologicalApproximation.lean}]
+Implements the over-category of topological approximations, pullbacks, image
+intersection, and factorization through subset inclusions.
+
+\item[\lean{Mlc/EfimovCategoricalBridge.lean}]
+Defines the native Mathlib-level substitutes for Pacman towers, strong
+Mittag--Leffler data, graded invariant shadows, topological realizations,
+and connected surjective morphisms.  It proves connectedness transport but
+does not implement stable infinity-categories or continuous $K$-theory.
+
+\item[\lean{Mlc/UniformGeometricRoot.lean}]
+Assembles the conditional uniform retraction theorem and its categorical
+form.
+
+\item[\lean{Mlc/Literature/Categorical.lean}]
+Provides review-facing wrappers:
+\lean{categoricalMLC_of_rootInput},
+\lean{categoricalMLC_of_finiteComponentCriterion},
+\lean{categoricalMLC_of_squareRetractionTower}, and the explicit refutation
+\lean{frozenGreenSublevelCarving_is_refuted}.
+\end{description}
+
+\section{Certified approximations, classification, and analytic support}
+
+\begin{description}
+\item[\lean{Mlc/CertifiedOrbitApproximation.lean}]
+Defines finite-cell outer systems, compact stage unions, nested addresses,
+and the diameter-control interface.  Its baseline and dyadic constructions
+are sound outer approximations; they do not provide the missing local
+connectivity buffer.
+
+\item[\lean{Mlc/CertifiedTrappingRegions.lean}]
+Defines finite trapping certificates for parameter boxes and proves their
+soundness: a certified box is contained in $\M$.
+
+\item[\lean{Mlc/FiniteTrappingRegions.lean}]
+Extends the single-box certificate to finite unions and supplies the
+period-two interior example used by the regression checks.
+
+\item[\lean{Mlc/TrappingRegionObstruction.lean}]
+Proves that the single-rectangle certificate scheme cannot be dense in
+$\M$.  This is a negative result about one certificate design, not a
+negative result about finite-union certificates.
+
+\item[\lean{Mlc/ParameterAddressSpace.lean}]
+Defines compatible dyadic addresses, nested intersections, and the
+singleton/coverage conditions \lean{VD} and \lean{AC}.  The dyadic system
+proves both conditions, but these address facts alone do not imply MLC.
+
+\item[\lean{Mlc/ParameterClassification.lean}]
+Proves the escape criterion and first-escape time, then gives an exhaustive
+priority partition into attracting, parabolic, Siegel, Cremer, eventually
+periodic, and residual predicates.  The residual class is deliberately
+retained rather than declared empty.
+
+\item[\lean{Mlc/ModelRegression.lean}]
+Collects frozen-model exclusions and protects the project from silently
+reintroducing a refuted Green-sublevel or trapping-region shortcut.
+\end{description}
+
+\section{Complex-analytic support modules}
+
+The Böttcher and Green-function layer is split so that each analytic
+construction has a small theorem surface:
+\begin{itemize}
+\item \lean{Mlc/Quadratic/Complex/Bottcher/LogSeries.lean} contains the
+      logarithmic series and convergence estimates;
+\item \lean{Mlc/Quadratic/Complex/Bottcher/CpowSlit.lean} handles the slit
+      power map used in the coordinate construction;
+\item \lean{Mlc/Quadratic/Complex/Bottcher/ConstructiveBasinCoordinate.lean}
+      packages the basin coordinate;
+\item \lean{Mlc/Quadratic/Complex/Bottcher/BottcherOnMDefs.lean} records
+      the coordinate definitions and normalization;
+\item \lean{Mlc/Quadratic/Complex/GreenHarmonic.lean} and
+      \lean{Mlc/Quadratic/Complex/HarmonicMinimumPrinciple.lean} provide
+      harmonicity and minimum-principle tools;
+\item \lean{Mlc/Quadratic/Complex/GreenSublevel.lean} and
+      \lean{Mlc/Quadratic/Complex/ConformalGroetzsch.lean} connect Green
+      sublevels with modulus arguments.
+\end{itemize}
+The formal review treats these as analytic foundations, not as an automatic
+proof of boundary landing or parameter-plane realization.
+
+\section{Uniform geometry, residual categories, and regressions}
+
+\begin{description}
+\item[\lean{Mlc/UniformGeometricDomain.lean}]
+Defines the fixed square $D=[-2,2]^2$ and the
+\lean{OrbitRetractionTower} contract.
+
+\item[\lean{Mlc/UniformGeometricApproximation.lean}]
+Proves uniform Cauchy estimates and the continuous limit of an admissible
+tower.
+
+\item[\lean{Mlc/RetractionLocalConnectivity.lean}]
+Turns the limit into a retraction and the retraction into local
+connectedness.
+
+\item[\lean{Mlc/UniformGeometricRoot.lean}]
+Assembles these lemmas into the conditional square-tower theorem.
+
+\item[\lean{Mlc/CategoricalResidual.lean}]
+Packages the residual pseudo-Siegel and virtual-molecule inputs as a
+categorical product/limit interface.  The inputs remain open.
+
+\item[\lean{Mlc/GreenSublevelIntersectionCounterexample.lean}]
+Contains the checked integer certificate and the theorem-level refutation
+of the universal frozen Green-intersection proposition.
+\end{description}
+
+\section*{Formalization status}
+\addcontentsline{toc}{section}{Formalization status}
+
+The current codebase therefore proves the following hierarchy:
+\[
+\begin{gathered}
+\text{finite orbit identities, compactness, and elementary topology}\\
+\Downarrow\\
+\text{conditional buffer, finite-cover, retraction, and carving theorems}\\
+\Downarrow\\
+\text{pointwise MLC from explicit puzzle/renormalization certificates}\\
+\Downarrow\\
+\text{global MLC only if one of the open existence packages is supplied}.
+\end{gathered}
+\]
+It does not contain a project-level axiom asserting MLC, and the categorical
+Green-sublevel intersection proposal is explicitly refuted.  This is the
+correct formal boundary relative to the cited literature: known published
+cases are represented by source-specific contracts, while the analytic
+estimates and their parameter-plane realization remain the obligations that
+the future formalization must discharge.

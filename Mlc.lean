@@ -5,6 +5,7 @@ import Mlc.Literature.PhaseParameter
 import Mlc.Literature.Renormalization
 import Mlc.Literature.Dudko
 import Mlc.Literature.Combinatorics
+import Mlc.Literature.Categorical
 import Mlc.Literature.Review
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample

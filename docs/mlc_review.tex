@@ -7,6 +7,8 @@
 \setdefaultlanguage{english}
 \setmainfont{Noto Serif}
 \usepackage{graphicx}
+\usepackage{pdflscape}
+\usepackage[hypcap=false]{caption}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc}
 \usepackage{array}
@@ -14,7 +16,8 @@
 \usepackage{url}
 \usepackage{mdframed}
 \usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,unicode=true]{hyperref}
-\setlength{\emergencystretch}{1em}
+\setlength{\emergencystretch}{3em}
+\sloppy
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.15}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -34,7 +37,7 @@
 \newcommand{\modulus}{\operatorname{mod}}
 \newcommand{\Prop}{\operatorname{Prop}}
 \newcommand{\LocallyConnectedSpace}{\operatorname{LocallyConnectedSpace}}
-\newcommand{\lean}[1]{\nolinkurl{#1}}
+\newcommand{\lean}[1]{\path{#1}}
 
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -86,6 +89,8 @@ A Literature Review and Formalization Program}
 \input{review/07_lyubich_renormalization.tex}
 \input{review/08_dudko_cases.tex}
 \input{review/09_combinatorial_contracts.tex}
+\input{review/10_categorical_branch.tex}
+\input{review/11_lean_inventory.tex}
 
 \renewcommand{\bibname}{Selected references}
 \addcontentsline{toc}{chapter}{Selected references}
@@ -143,6 +148,12 @@ J.~Kahn, A.~Kapiamba, and M.~Lyubich,
 \emph{MLC for parabolically bounded primitive renormalization},
 arXiv:2606.27272.
 \href{https://arxiv.org/abs/2606.27272}{arXiv}.
+
+\bibitem{KahnLyubichElephant}
+J.~Kahn and M.~Lyubich,
+\emph{A priori bounds for some infinitely renormalizable quadratic: IV.
+Elephant Eyes}, arXiv:2601.21905.
+\href{https://arxiv.org/abs/2601.21905}{arXiv}.
 
 \bibitem{DudkoLimBubbles}
 D.~Dudko and W.~R.~Lim,

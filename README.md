@@ -142,6 +142,12 @@ The renormalization-to-MLC bridge is in
 [`Mlc/Literature/Renormalization.lean`](Mlc/Literature/Renormalization.lean).
 Dudko--Lyubich and current MLC-case certificate contracts are in
 [`Mlc/Literature/Dudko.lean`](Mlc/Literature/Dudko.lean).
+The discrete combinatorial layer is in
+[`Mlc/Literature/Combinatorics.lean`](Mlc/Literature/Combinatorics.lean).
+The categorical branch and its explicit frozen-Green counterexample are
+documented in
+[`Mlc/Literature/Categorical.lean`](Mlc/Literature/Categorical.lean) and
+review chapters 10--11.
 
 ## Implemented interfaces
 

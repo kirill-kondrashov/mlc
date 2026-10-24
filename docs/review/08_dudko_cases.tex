@@ -92,6 +92,29 @@ The formal endpoint is
 formal definition of the class and the formalization of the four geometric
 tools that construct its parameter-puzzle basis.
 
+\section{Elephant-eye a priori bounds}
+
+Kahn--Lyubich's
+\lean{arXiv:2601.21905} develops a priori bounds for another family of
+infinitely renormalizable quadratics whose little Mandelbrot copies can
+approach a cusp.  This paper is not entered in the ledger as a standalone
+MLC theorem unless its exact parameter-plane conclusion is extracted and
+formalized.  Its role in the current program is more precise:
+\[
+\begin{gathered}
+\text{bordered-surface geometry}\\
+\Longrightarrow\ \text{uniform thin--thick control}\\
+\Longrightarrow\ \text{candidate principal-nest bounds}.
+\end{gathered}
+\]
+The resulting analytic data can feed the same certificate
+\begin{center}
+\lean{ParabolicallyBoundedPrimitiveCertificate}
+\end{center}
+or a future
+source-specific certificate, but the class predicate and parameter-puzzle
+construction must remain explicit.
+
 \section{Neutral renormalization}
 
 The neutral regime is not an MLC theorem by itself.  The recent papers

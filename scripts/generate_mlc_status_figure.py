@@ -337,20 +337,20 @@ def make_figure(output: Path) -> None:
             "ytick.color": "#313a4d",
         }
     )
-    figure = plt.figure(figsize=(8.5, 10.5), facecolor="white")
+    figure = plt.figure(figsize=(13.0, 8.25), facecolor="white")
     grid = figure.add_gridspec(
         3,
-        2,
-        height_ratios=[1.75, 1.0, 1.15],
-        wspace=0.28,
-        hspace=0.48,
-        left=0.07,
-        right=0.97,
-        top=0.92,
+        4,
+        height_ratios=[1.0, 1.0, 0.82],
+        wspace=0.25,
+        hspace=0.42,
+        left=0.045,
+        right=0.98,
+        top=0.89,
         bottom=0.08,
     )
 
-    main = figure.add_subplot(grid[0, :])
+    main = figure.add_subplot(grid[0:2, 0:2])
     x, y, _ = plot_render(
         main,
         (-2.08, 0.78, -1.24, 1.24),
@@ -410,7 +410,7 @@ def make_figure(output: Path) -> None:
         bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 3},
     )
 
-    zoom_feigenbaum = figure.add_subplot(grid[1, 0])
+    zoom_feigenbaum = figure.add_subplot(grid[0, 2:4])
     plot_render(
         zoom_feigenbaum,
         (-1.47, -1.34, -0.115, 0.115),
@@ -440,7 +440,7 @@ def make_figure(output: Path) -> None:
         bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 2},
     )
 
-    zoom_satellite = figure.add_subplot(grid[1, 1])
+    zoom_satellite = figure.add_subplot(grid[1, 2:4])
     plot_render(
         zoom_satellite,
         (-0.748, -0.739, 0.127, 0.137),
@@ -466,12 +466,12 @@ def make_figure(output: Path) -> None:
 
     figure.suptitle(
         "Figure 1.1. Mandelbrot components versus the MLC proof frontier",
-        fontsize=15,
+        fontsize=16,
         fontweight="bold",
         color="#182133",
     )
     figure.text(
-        0.055,
+        0.045,
         0.025,
         "Computational render at finite resolution; labels summarize the "
         "literature inventory and Lean status, not a proof of local connectivity.",
