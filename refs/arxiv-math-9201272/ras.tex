@@ -1,0 +1,71 @@
+% This file is supposed to imitate the -ras.tex- file which contained
+% the macros -insertRaster- and -RasterBox- for including SUN raster files
+% in TeX.  But here we assume that the original raster files have been
+% converted to PostScript, so we use -psfig- rather than -sunbitmap-.
+% There was a bug in the way -ras.tex- scaled these bitmaps, and this file
+% attempts to preserve this bug so that the resulting figures are identical
+% to the raster figures in the original paper.
+
+\input psfig
+%\magnification=1200
+\def\outlineit#1{%
+\centerline{
+\vbox {\hrule height .5pt
+	  \hbox {\vrule width .5pt \vbox to 3in{ \hsize 5in
+	  #1}\vrule width 3pt}
+				\hrule height 3pt}}}
+
+\newif\ifboxfigure      % set to true if you want the figure boxed
+\boxfigurefalse
+
+\def\BoxIt#1#2{%        % put a box around #1, leaving a gap of #2
+	\vbox{\hrule
+	\hbox{\vrule\kern#2\vbox{\kern#2#1\kern#2}\kern#2\vrule}
+		   \hrule}}
+
+\def\insertRaster #1 pixels #2  by #3 scaled #4 {
+%  #1 is the raster file
+%  #2 is the width of the picture in pixels
+%  #3 is the height of the picture in pixels
+%  #4 is scaling 500 means half size 2000 means double size 1000 is actual  
+			\medskip
+			 \hbox to \hsize{%
+
+			 \hss
+			 \RasterBox {#1} {#2} {#3} {#4}
+			 \hss
+			 }%
+}
+\def\RasterBox #1 #2 #3 #4{
+
+% dimen0 and dimen1 are the dimensions of the hbox which are setup in
+% the same way as -ras.tex- unfortunately psfig includes images in a 
+% different manner from sunbitmap, so it must be scaled using different
+% values, hence dimen2 and dimen3 and MAGIC number 65/72
+
+\dimen5=65pt
+\divide\dimen5 by 72
+
+\dimen0=#2\dimen5
+\divide\dimen0 by 1000
+\dimen1=#3\dimen5
+\divide\dimen1 by 1000
+\dimen2=#3\dimen5
+\divide\dimen2 by 1000
+\dimen3=#2\dimen5
+\divide\dimen3 by 1000
+
+\setbox4=\hbox to #4\dimen0{
+ \vbox to #4\dimen1{
+ \vss
+ \psfig{figure=#1,height=#4\dimen2,width=#4\dimen3}
+ }
+ \hss
+ }
+ \ifboxfigure\BoxIt{\box4}{0pt}
+ \else\box4
+ \fi
+ }
+
+% \insertRaster towrrab.pic pixels 500 by 500 scaled 400
+

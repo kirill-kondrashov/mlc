@@ -1,0 +1,14 @@
+{
+  "key": "dudko-lyubich-satellite",
+  "arxiv_id": "1808.10425",
+  "arxiv_version": "4",
+  "role": "mlc-case",
+  "title": "Local connectivity of the Mandelbrot set at some satellite parameters of bounded type",
+  "authors": [
+    "Dzmitry Dudko",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-1808.10425.xml",
+  "source_archive": "arxiv-1808.10425-source.tar.gz",
+  "main_tex": "arxiv-1808.10425/MLCatSatParam.tex"
+}

@@ -1,0 +1,82 @@
+\chapter{Formalization map}
+
+\section{The dependency graph}
+
+The intended Lean dependency graph is:
+\[
+\begin{array}{c}
+\text{complex analysis and topology}\\
+\downarrow\\
+\text{quadratic dynamics, Green functions, Böttcher coordinates}\\
+\downarrow\\
+\text{puzzles and parapuzzles}\\
+\downarrow\\
+\text{modulus, a priori bounds, renormalization}\\
+\downarrow\\
+\text{phase--parameter correspondence}\\
+\downarrow\\
+\text{local connectedness at a parameter class}\\
+\downarrow\\
+\text{global MLC}.
+\end{array}
+\]
+Every downward arrow is a separately checked theorem.  A result may be
+imported from an existing Lean dependency only when its exact hypotheses and
+conclusion match the statement used here.
+
+\section{Current Lean status}
+
+\begin{center}
+\begin{tabular}{p{0.34\textwidth}p{0.48\textwidth}p{0.12\textwidth}}
+\textbf{Layer} & \textbf{Current content} & \textbf{Status}\\
+\hline
+Orbit and outer approximations &
+Escape criterion, compact finite stages, and exact intersection. &
+proved\\
+Local component criterion &
+Uniform outer buffer implies local connectedness. &
+proved conditionally\\
+Yoccoz modulus shrinkage &
+Puzzle-annulus divergence implies shrinking critical pieces. &
+proved\\
+Parameter parapuzzles &
+Connected induced pieces and a basis interface. &
+partial\\
+Renormalization towers &
+Typed tower and period interfaces. &
+partial\\
+Bounded-type satellite and Feigenbaum cases &
+Named literature interfaces and source ledger. &
+open formalization\\
+Global MLC &
+Target \verb|LocallyConnectedSpace M|. &
+open\\
+\end{tabular}
+\end{center}
+
+The module \verb|Mlc.Literature.Review| is deliberately conservative:
+\verb|yoccoz_puzzle_shrinkage| is a theorem, while
+\verb|FinitelyRenormalizableMLC|, \verb|BoundedTypeSatelliteMLC|, and
+\verb|FeigenbaumMLC| are propositions describing the exact obligations.
+No external paper is silently converted into an axiom.
+
+The structure \verb|ParaPuzzleCertificate| isolates the topological half of
+the classical argument.  Its connectedness and singleton-intersection fields
+imply local connectivity through
+\verb|localConnectivity_of_paraPuzzleCertificate|.  The remaining
+\verb|YoccozParameterPuzzleResult| is the phase--parameter existence theorem:
+it is where external rays, graph cuts, holomorphic motion, and
+renormalization estimates must eventually be formalized.
+
+\section{The current conditional root}
+
+The existing root is
+\[
+\mathrm{BUF}(\M,O)\Longrightarrow\mathrm{MLC}(\M),
+\]
+implemented by
+\verb|MLC.mlc_conjecture_of_uniformOuterBuffer|.  The alternative uniform
+geometric route and the finite-component route are useful independent
+interfaces, but their existence hypotheses remain open.  The review keeps
+these routes visible because they are possible formalization targets, not
+because they have already proved MLC.

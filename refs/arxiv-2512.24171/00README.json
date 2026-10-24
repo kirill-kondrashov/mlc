@@ -1,0 +1,13 @@
+{
+  "key": "dudko-mlc-2025",
+  "arxiv_id": "2512.24171",
+  "arxiv_version": "1",
+  "role": "survey",
+  "title": "On the MLC Conjecture and the Renormalization Theory in Complex Dynamics",
+  "authors": [
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-2512.24171.xml",
+  "source_archive": "arxiv-2512.24171-source.tar.gz",
+  "main_tex": "arxiv-2512.24171/main.tex"
+}

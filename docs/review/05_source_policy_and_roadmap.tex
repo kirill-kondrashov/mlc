@@ -1,0 +1,48 @@
+\chapter{Source policy and roadmap}
+
+\section{ArXiv sources}
+
+For every arXiv reference used in a formalization task, the repository keeps:
+\begin{enumerate}
+\item the arXiv identifier and version metadata;
+\item the compressed source archive;
+\item an extracted source tree; and
+\item the selected main \TeX{} file.
+\end{enumerate}
+The executable policy is implemented by
+\verb|scripts/fetch_arxiv_sources.py| and the manifest
+\verb|refs/mlc_sources.json|.  This is preferable to copying a single PDF:
+definitions, theorem labels, and notation can be searched directly while
+formalizing.
+
+\section{Removal of duplicates}
+
+The reference directory is not cleaned by filename heuristics.  A duplicate
+is removed only after matching its identifier, version, checksum, and
+provenance.  Research notes remain separate from primary sources because
+they document failed proof attempts and rejected reductions.
+
+\section{Work packages}
+
+\begin{enumerate}
+\item Normalize the source inventory and verify all arXiv versions.
+\item Finish the common analytic foundations: complex derivatives,
+      polynomial-like maps, Green functions, Böttcher coordinates, and
+      modulus.
+\item Replace informal puzzle objects with explicit graph-cut dynamical and
+      parameter puzzles.
+\item Formalize the phase--parameter map and its connectedness consequences.
+\item Assemble the finitely renormalizable/Yoccoz theorem.
+\item Formalize the principal nest and a priori-bound interfaces used by
+      Lyubich.
+\item Add the bounded-type satellite and Feigenbaum combinatorial predicates
+      and prove the corresponding local-connectivity implications.
+\item Revisit the global root only after the parameter-class theorems are
+      available; retain every genuinely open existence statement as an
+      explicit proposition.
+\end{enumerate}
+
+The immediate deliverable is intentionally modest but durable: a review that
+states the frontier correctly, a reproducible source pipeline, and Lean
+names for the results being formalized.  Subsequent commits can then replace
+each interface with a theorem without changing the public review vocabulary.

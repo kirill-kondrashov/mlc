@@ -1,0 +1,13 @@
+{
+  "key": "dudko-decoration",
+  "arxiv_id": "1004.0633",
+  "arxiv_version": "1",
+  "role": "supporting",
+  "title": "The Decoration Theorem for Mandelbrot sets",
+  "authors": [
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-1004.0633.xml",
+  "source_archive": "arxiv-1004.0633-source.tar.gz",
+  "main_tex": "arxiv-1004.0633/decoration.tex"
+}

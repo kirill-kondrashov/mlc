@@ -1,0 +1,45 @@
+\def\IMSmarkvadjust{0 pt}
+\def\IMSmarkhadjust{0 pt}
+\def\IMSmarkhpadding{0 pt}
+\def\SBIMSMark#1#2#3{
+%
+ \font\SBF=cmss10 at 10 true pt
+ \font\SBI=cmssi10 at 10 true pt
+ \setbox0=\hbox{\SBF \hbox to \IMSmarkhpadding{\relax}
+                Stony Brook IMS Preprint \##1}
+ \setbox2=\hbox to \wd0{\hfil \SBI #2}
+ \setbox4=\hbox to \wd0{\hfil \SBI #3}
+ \setbox6=\hbox to \wd0{\hss
+             \vbox{\hsize=\wd0 \parskip=0pt \baselineskip=10 true pt
+                   \copy0 \break%
+                   \copy2 \break% 
+                   \copy4 \break}}
+ \dimen0=\ht6   \advance\dimen0 by \vsize \advance\dimen0 by 8 true pt
+                \advance\dimen0 by -\pagetotal
+	        \advance\dimen0 by \IMSmarkvadjust
+ \dimen2=\hsize \advance\dimen2 by .25 true in
+	        \advance\dimen2 by \IMSmarkhadjust
+
+%
+%   Check for publication info
+%
+%  \newread\jref
+  \openin2=publishd.tex
+  \ifeof2\setbox0=\hbox to 0pt{}
+  \else 
+     \setbox0=\hbox to 3.1 true in{
+                \vbox to \ht6{\hsize=3 true in \parskip=0pt  \noindent  
+%%%%%%%%%%%%%  {\SBI Published in modified form:}\hfil\break
+                \input publishd.tex 
+                \vfill}}
+  \fi
+  \closein2
+  \ht0=0pt \dp0=0pt
+%
+%
+ \ht6=0pt \dp6=0pt
+ \setbox8=\vbox to \dimen0{\vfill \hbox to \dimen2{\copy0 \hss \copy6}}
+ \ht8=0pt \dp8=0pt \wd8=0pt
+ \copy8
+ \message{*** Stony Brook IMS Preprint #1, #2. #3 ***}
+}

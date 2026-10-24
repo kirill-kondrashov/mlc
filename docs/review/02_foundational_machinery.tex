@@ -1,0 +1,71 @@
+\chapter{Foundational machinery}
+
+\section{The dynamical plane}
+
+The first layer consists of the escape-radius and filled-Julia-set
+definitions.  For a quadratic polynomial the critical orbit is the
+distinguished orbit, and the finite conditions
+\[
+ O_N=\left\{c: |c|\leq 2,\quad |p_j(c)|\leq 2\text{ for }j\leq N\right\}
+\]
+form a decreasing compact outer approximation to $\M$.  This part is already
+formalized in
+\verb|Mlc.Categorical.Mandelbrot|, including
+\[
+\bigcap_N O_N=\M.
+\]
+The corresponding increasing approximation by a uniform orbit bound is also
+available.  These set-theoretic identities do not imply local connectivity:
+an intersection of compact connected-looking approximants needs additional
+component control.
+
+\section{Puzzle pieces and moduli}
+
+The Yoccoz puzzle supplies nested dynamical pieces around the critical point.
+The analytic core has the shape
+\[
+\sum_{n\geq 0}\operatorname{mod}(A_n)=+\infty
+\quad\Longrightarrow\quad
+\bigcap_n P_n=\{0\},
+\]
+where $A_n=P_n\setminus P_{n+1}$.  The current Lean theorem
+\verb|MLC.Quadratic.yoccoz_theorem_conformal| proves the corresponding
+shrinking statement from the formal modulus hypothesis.  Its theorem-facing
+alias is
+\verb|MLC.Literature.yoccoz_puzzle_shrinkage|.
+
+This is a dynamical-plane result.  To use it for MLC one needs a
+phase--parameter theorem that transports the shrinking of dynamical pieces to
+shrinking of parameter parapuzzle pieces.  The parameter pieces must be
+defined with their ray/equipotential graphs; a frozen translate of a full
+Green sublevel is not automatically a Yoccoz parapuzzle.
+
+\section{External rays and conformal coordinates}
+
+Douady--Hubbard's external uniformization, Caratheodory boundary theory,
+landing, and the phase--parameter correspondence are separate formal
+modules.  The present repository contains partial Böttcher and Green
+function developments, but its axiom audit intentionally does not claim a
+global external-ray landing theorem.  The review therefore records the
+Douady--Hubbard result as an interface until all hypotheses and boundary
+extensions are machine checked.
+
+\section{Renormalization}
+
+Renormalization turns a quadratic polynomial into a tower of smaller
+polynomial-like maps.  A useful formal tower must carry at least:
+\[
+\begin{array}{ll}
+\text{domains and restrictions} & \text{proper degree-two maps}\\
+\text{markings} & \text{critical orbit and puzzle data}\\
+\text{moduli} & \text{annulus geometry and lower bounds}\\
+\text{combinatorics} & \text{primitive/satellite type and bounds}\\
+\text{straightening} & \text{parameter-plane correspondence}.
+\end{array}
+\]
+The files \verb|Mlc.RenormalizationTypes|,
+\verb|Mlc.MoleculeRenormalizationTower|, and
+\verb|Mlc.SatelliteRenormalizationTower| currently provide typed interfaces
+for part of this list.  They should be treated as a foundation for the
+formalization, not as a completed proof of the corresponding published
+theorems.

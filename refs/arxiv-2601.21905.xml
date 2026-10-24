@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/N1/QuBNkesUTYNJov/KZPpVflmA</id>
+  <title>arXiv Query: search_query=&amp;id_list=2601.21905&amp;start=0&amp;max_results=10</title>
+  <updated>2026-10-24T07:31:30Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2601.21905" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2601.21905v1</id>
+    <title>A priori bounds for some infinitely renormalizable quadratic: IV. Elephant Eyes</title>
+    <updated>2026-01-29T16:00:14Z</updated>
+    <link href="https://arxiv.org/abs/2601.21905v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2601.21905v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this paper we prove a priori bounds for an ``elephant eye'' combinatorics. Little $M$-copies specifying these combinatorics are allowed to converge to the cusp of the Mandelbrot set. To handle it, we develope a new geometric tool: uniform thin-thick decompositions for bordered Riemann surfaces.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-01-29T16:00:14Z</published>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Jeremy Kahn</name>
+    </author>
+    <author>
+      <name>Misha Lyubich</name>
+    </author>
+  </entry>
+</feed>

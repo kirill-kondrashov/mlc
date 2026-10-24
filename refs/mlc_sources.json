@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "description": "Canonical arXiv source inputs for the MLC literature review.",
+  "sources": [
+    {
+      "key": "lyubich-geometry-1993",
+      "arxiv_id": "math/9309215",
+      "role": "core",
+      "title": "Geometry of quadratic polynomials: moduli, rigidity and local connectivity",
+      "authors": ["Mikhail Lyubich"],
+      "existing_pdf": null
+    },
+    {
+      "key": "milnor-dynamics-1992",
+      "arxiv_id": "math/9201272",
+      "role": "exposition",
+      "title": "Dynamics in One Complex Variable",
+      "authors": ["John Milnor"],
+      "existing_pdf": "9201272v1.pdf"
+    },
+    {
+      "key": "dudko-decoration",
+      "arxiv_id": "1004.0633",
+      "role": "supporting",
+      "title": "The Decoration Theorem for Mandelbrot sets",
+      "authors": ["Dzmitry Dudko"],
+      "existing_pdf": "Dudko_1004.0633.pdf"
+    },
+    {
+      "key": "dudko-lyubich-satellite",
+      "arxiv_id": "1808.10425",
+      "role": "mlc-case",
+      "title": "Local connectivity of the Mandelbrot set at some satellite parameters of bounded type",
+      "authors": ["Dzmitry Dudko", "Mikhail Lyubich"],
+      "existing_pdf": "Dudko_1808.10425.pdf"
+    },
+    {
+      "key": "dudko-lyubich-feigenbaum",
+      "arxiv_id": "2309.02107",
+      "role": "mlc-case",
+      "title": "MLC at Feigenbaum points",
+      "authors": ["Dzmitry Dudko", "Mikhail Lyubich"],
+      "existing_pdf": "Dudko_2309.02107.pdf"
+    },
+    {
+      "key": "dudko-mlc-2025",
+      "arxiv_id": "2512.24171",
+      "role": "survey",
+      "title": "On the MLC Conjecture and the Renormalization Theory in Complex Dynamics",
+      "authors": ["Dzmitry Dudko"],
+      "existing_pdf": "2512.24171v1.pdf"
+    },
+    {
+      "key": "kahn-lyubich-elephant-eyes",
+      "arxiv_id": "2601.21905",
+      "role": "supporting",
+      "title": "A priori bounds for some infinitely renormalizable quadratic: IV. Elephant Eyes",
+      "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
+      "existing_pdf": null
+    }
+  ]
+}

@@ -10,3 +10,4 @@ notebooks/.venv/
 .venv-notebooks/
 notebooks-html/
 /docs/uniform_geometric_mlc.toc
+/docs/mlc_review.toc

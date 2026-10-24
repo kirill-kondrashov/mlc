@@ -1,0 +1,283 @@
+
+ \section{Dynamical weights}
+ 
+
+\sss{Local weights}
+We will now consider a renormalizable $\psi$-ql map
+$$  F\equiv (f,i): U' \ra U $$
+with little  Julia sets $ J_n =\di K_n $, $n=0, 1, \dots, p-1$, and their
+preimages $J_n' = \di K_n' = -J_n$, $n=1,\dots, p-1$.
+(As usual, we identify $J_n/ K_n$  in $U'$ with $J_n/K_n$ in $U$.)
+% We let $\JJ= \cup J_n$ and $\JJ' = \cup J_n'$. 
+
+The following lemma shows that 
+% Let us consider
+all the local weights $\WW_n^\KK = \WW (J_n) $ are $2-$comparable:  
+
+   
+\begin{lem}\label{comparison of dyn loc w}
+We have:
+$$
+       \WW_1^\KK \leq \dots \leq \WW_{p-1}^\KK  \leq \WW_0^\KK \leq 2\WW_1^\KK
+$$
+\end{lem}
+
+\bignote{Prepare the ransformation Rule!} 
+
+We let $\WW_\loc^\KK =  \WW_0^\KK \equiv \max \WW_k^\KK $.
+
+The local weight $\WW(\di U)= (1/2) \, \WW(\di U') $
+is called $\WW^\ver$.
+
+\sss{Local fluxes}
+%Given an $1\leq n\leq p-1$, 
+%let us consider  the domain $ D_n $
+%%% the group of all little Julia set 
+%consisiting of  two adjacent sectors, $n$th and $(n+1)$st.
+%%% and all local edges connecting these Julia sets.  
+%%%Let $W_\loc^\perp (n)$ be the total flux passing through these edges,
+%%%plus the sum of all local weights through the little Julia sets
+%%%involved (of course, in the locally bounded case,
+%%%we can take only one of them). 
+%Let us define the corresponding {\em local flux} as   $W_\loc^\perp (n) := \WW(D_n) $.
+%
+
+
+For $0\leq n\leq p-1$, 
+let us define {\em local flux}  $\WW_n^\Hub $
+as the sum of all $\WW(K_m)$ and $\WW^\perp(G_i)$ comprising the
+path $\gamma_n$ in the Hubbard tree $\Hub$.
+
+\bignote{Need to extend the above discussion of fluxes to surfaces with
+  punctures (at $\alpha$ and $\alpha'$).} 
+  
+The paths $\gamma_n$ form a Markov tiling of $\Hub$,
+so we can consider  the corresponding $p\times p$  {\em Hubbard matrix} $A_\Hub$. 
+Applying the Transformation Rules  (Lemma \ref{generaltransform rules})
+and the Parallel Law (Lemma \ref{transform rule for concatenation}), we obtain
+
+\begin{lem}
+      $\displaystyle {\WW_n^\Hub \leq \sum_{A_{nm} =1} \WW_m^\Hub } $
+\end{lem}  
+
+Putting this together with Lemma \ref{bounded deg}, we conclude:
+
+\begin{lem}\label{loc fluxes} 
+  All local fluxes $W_n^\Hub  $ are comparable,
+  with a constant  depending only on $\bb$.
+%  the combinatorial bounds,  i.e., on  the number of eyes). 
+Hence
+$
+     \WW(\SAS) \asymp p \WW_\loc^\Hub.  
+$
+\end{lem}
+
+We let $\WW^\Hub_\loc : = \max \WW^\Hub_n$.
+Note that by definition $\WW^\Hub_\loc \geq \WW^\KK_\loc$
+but {\em a priori} they can be incomparable.    
+We will see below that this is not the case in our situation. 
+
+\msk
+
+\bignote{Now $\WW^\Ray_n$ is put on the same footing.
+Call them ``external'' fluxes? (while  the fluxes through $\Hub$
+``internal''?
+Use notation $\WW_n$, $\WW_n^{\mathrm in}$, and $\WW_n^\ext$?} 
+
+\sss{Segment diagram weight} 
+% \sss{Bound on the segment weights}
+% \sss{Self-intersecting segments}
+
+We call a segment $\si$  in the translation region
+``self-intersecting''  if 
+its translation $\si'$  by $-1$ crosses itself
+(amounting to self-intersection on the quotient  cylinder.) 
+
+\begin{lem}\label{self-intersecting segments} 
+  The total weight of self-interseting segments in  the translation
+  region is $O(p+\WW_\loc^\Hub)$.   \note{Check!!} 
+\end{lem}
+
+\begin{proof}
+For a self-intersecting sgment $\si$, the translation $\si'$ cannot
+represent the lift $f^*(\si)$, since otherwise tho segments in $U'\sm
+\KK'$ would intersect. The alternative is that $f^*(\si)$ is broken.
+By Lemma \ref{key estimate}, the total weight of these segments is
+$O(p+\WW^\Hub_\loc)$.
+\end{proof}
+
+Let us call a segment $\si$ {\em peripheral} if its translation $\si'$
+exits the translation region.   \note{define!} 
+Since the total weight of these segments is  $O(\WW^\Hub_\loc)$, \note{OK?}
+% $O(\WW^\perp_\loc+\WW^\perp(\RR_0)+\WW^\ver)$,
+we conclude: 
+
+\begin{cor}
+  The total weight of self-intersecting and peripheral segments in the
+  translation region is
+  $O(p+\WW_\loc^\Hub)$. 
+% $O(p+\WW_\loc^\Hub+\WW^\perp(\RR_0)+\WW^\ver)$. 
+\end{cor}  
+
+\bignote{The error  term used to contain $\WW^\perp(\RR_0)+\WW^\ver$.
+Why?}
+
+The same analysis applies to the complement of the translation region
+\note{be more precise!} leading to the following conclusion:
+
+\begin{cor}\label{long and peripheral} 
+  The total weight of self-intersecting and peripheral segments   is
+   $O(p+\WW_\loc^\Hub)$. 
+%  $O(p+\WW_\loc^\Hub+\WW^\perp(\RR_0)+\WW^\ver)$. 
+\end{cor}
+
+With this in hands, only short segments in the translation region are left unattended.
+
+\begin{lem}
+  The total weight of short segments is $O(p+\WW^\ver)$.
+\end{lem}
+
+\begin{proof}
+Indeed, any short segment extends to either one of the segments listed
+in Corollary \ref{long and peripheral},
+or a loop surrounding a little Julia set, 
+or  a vertical arc-segment,
+or else to a ``snake'' composed of inner and outer short segments.
+Note now that
+loops around little Julia sets have small weight
+(since they are dual to the local fluxes),
+while snake's weights are bounded  by one (since they
+intersect their translations). The conclusion follows. 
+%and their total weight can be bounded as in
+%Lemma \ref{self-intersecting segments}.
+\end{proof}  
+
+Putting these together, we obtain:
+
+\begin{cor}\label{total segments weight}
+  The total weight of the segment diagram in $U\sm \KK$ is
+  bounded by  $O(p + \WW^\Hub_\loc + \WW^\ver)$.
+\end{cor}
+
+For $\la>1$, let us say that we  enjoy $\la$-{\em ampliphication} if
+$ \WW^\ver \geq \la \WW^\KK_\loc$. 
+
+\begin{cor}\label{total segments weight 2}
+ For any $\la>1$,  either we enjoy $\la$-ampliphication 
+  or else
+  $$ \WW(\SSS_{U\sm \KK }) = O_\la (p + \WW^\Hub_\loc ). $$
+\end{cor}
+
+
+
+\sss{Arc-segment and long arc diagrams} 
+
+
+\begin{lem}\label{arc-segments and long arcs}
+  The total weight of arc-segments and long%
+\footnote{in both the translation region and its complement} 
+arcs   in  $U\sm \KK$ 
+  is  bounded by  the total weight of segments in $U\sm \KK$. 
+% We have:
+%$$
+%    \WW(\AS) + \WW(\AAA^\long) \leq \WW
+%$$
+\end{lem} 
+
+\begin{proof}
+For the same reason as for long segments in $U\sm \KK$,
+ all arc-segments and long arcs get broken under the immersion 
+$i:  U'\sm \KK \ra U\sm \KK $.  By   Lemma \ref{broken arc-segments},
+their total weight is bounded by the total weight of segments in 
+$U'\sm \KK$. But the latter is bounded by the total weight of segments
+in $U\sm \KK$. 
+\end{proof}
+
+Combining this with Corollary \ref{total segments weight 2},
+we obtain:
+
+\begin{cor}\label{everything} 
+  For any $\la>1$,  either we enjoy $\la$-ampliphication  or else
+  $$ \WW(\SSS) + \WW(\AS) + \WW(\AAA^\lo)  + \WW(\AAA^\pe) = O_\la (p + \WW^\Hub_\loc ), $$
+where all the diagrams are considered in $U\sm \KK$.   
+\end{cor}  
+
+\sss{Conclusions}
+
+Since the total weight $\WW(\SAS)$ of segments, arcs, and arc-segments in $U\sm \KK$
+is of order $p \WW_\loc^\Hub$ (by Lemma \ref{loc fluxes}), we conclude: 
+
+\begin{cor}\label{small proportion}
+   For any $\la>1$,  either we enjoy $\la$-ampliphication,  or else
+ \begin{equation}\label{small proportion estimate}
+   \WW(\SSS) + \WW(\AS) + \WW(\AAA^\lo) + \WW(\AAA^\pe)    = o (\WW(\SAS) )\
+   {\mathrm{as}} \  p\to \infty, \ % {\mathrm{and}}\
+   \WW(\SAS)\to \infty,
+\end{equation}    
+where all the diagrams are considered in $U\sm \KK$.     
+\end{cor}
+
+%\begin{lem}
+%  The total weight of segments,  arc-segments, and long arcs in $U\sm \Kfilled$
+%is  %  $O(p+\WW^\Hub_ \loc + \WW^\ver)$.
+% $O(p + \WW^\ver)$. \note{elaborate!} 
+%\end{lem}
+
+In summary, we obtain:
+
+\begin{thm}\label{short arcs}
+  For any $\la>1$,  either we enjoy $\la$-ampliphication,  or else
+  the elephant's share of the total weight $\WW(\SAS)$ is supprted on
+  short arcs of the translation region%
+\footnote{which is the same as ``short arcs in the complement of the
+  translation region''}
+  $($provided $p$ and $\WW(\SAS)$ are sufficiently big$)$. 
+\end{thm}  
+
+\begin{proof}
+  What is unaccounted in the left hand side of
+  (\ref{small proportion estimate}) is the weight of short arcs.
+\end{proof}  
+
+\begin{cor}\label{loc weights comparison} 
+%   Under the above circumstances, \note{informally speaking} 
+% if there is no amplification, then
+If the second option of the above Theorem is realized then 
+  
+\ssk\nin {\rm (i)} 
+$\WW_\loc^\Hub\asymp \WW_\loc^\KK$. 
+
+\ssk\nin {\rm (ii)}
+For any $\kappa\in (0,1)$ and $\eps>0$,
+if the period $p$ and the  local weight $\WW_\loc^\KK$ are sufficiently big
+then for any $n \in [1,\kappa \qq] $
+at least $ (1-\eps) $-proportion of the local weight $\WW_n^\KK$ is supported on
+the two short arcs emanated from $K_n$.  
+%
+%\ssk\nin {\rm (ii)}
+% There exist absolute $t$ and $C$ such that 
+%for $n \leq \qq - t$ at least 
+%$ \WW_n^\KK - C$ part of the local weight $\WW_n^\KK$ is supported on
+%the two short arcs emanated from $K_n$.  
+\end{cor}
+
+\bignote{The error term in (ii) used to be additive $O(1)$.
+It can be selected as $O(1/p)$.  }
+
+\begin{proof}
+(i)   Indeed, $\WW(\AAA^\sh) = O(p\, \WW_\loc^\KK)$
+  while $\WW(\SAS) \asymp p\, \WW_\loc^\Hub $, and
+  by   the last theorem, $\WW(\AAA^\sh) \sim \WW(\SAS) $. 
+
+  \msk (ii) It follows from Corollary \ref{small proportion}
+  that the assertion is true for some $n_0\in [\kappa \qq, \qq)$.
+  Pulling the correspondng  short arcs back, we obtain the desired for all $n\leq n_0$. 
+\end{proof}  
+
+
+
+% We arrive at the final conclusion of this section:
+%
+%Thus, up to this error, {\em  the whole weight of the canonical arc-segment
+%diagram is alighned with the Hubbard tree. } 
+

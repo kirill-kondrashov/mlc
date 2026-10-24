@@ -1,0 +1,67 @@
+\chapter{Scope and status}
+
+\section{The target}
+
+Let
+\[
+ f_c(z)=z^2+c,\qquad p_0(c)=0,\qquad p_{n+1}(c)=f_c(p_n(c)),
+\]
+and let
+\[
+ \M=\{c\in\C:\sup_n |p_n(c)|<\infty\}
+\]
+be the Mandelbrot set.  The global MLC conjecture is
+\[
+ \mathsf{MLC}:\qquad \LocallyConnectedSpace(\M).
+\]
+The pointwise statement is weaker in presentation but is the form used by
+the literature: for $c\in\M$, every neighbourhood of $c$ in $\M$ contains
+a connected neighbourhood of $c$.
+
+The first distinction of this review is therefore:
+\begin{enumerate}
+\item a theorem about a parameter class;
+\item a theorem about local connectivity of the corresponding Julia set;
+\item a theorem about local connectivity of the Mandelbrot set at those
+      parameters; and
+\item the global statement $\mathsf{MLC}$.
+\end{enumerate}
+These statements are related by the phase--parameter machinery, but they are
+not interchangeable.  The Lean declarations
+\verb|Mlc.Literature.MandelbrotLocallyConnectedAt| and
+\verb|Mlc.Literature.GlobalMLC| keep this distinction explicit.
+
+\section{A status picture}
+
+\input{figures/mlc_status_schematic.tex}
+
+The green interior in Figure~\ref{fig:mlc-status} is not the interesting
+part of the conjecture: open subsets of the plane are locally connected.  At
+the boundary, the established regions are best recorded as classes of
+parameters rather than as literal open subsets of the drawing.  In
+particular, ``bounded type'' and ``Feigenbaum'' refer to renormalization
+conditions, not to a visually isolated bulb.
+
+\section{What remains open}
+
+The full conjecture remains open.  The main unresolved frontier is the
+parameter-plane control needed for general infinitely renormalizable
+quadratics, in particular cases with unbounded combinatorics.  Recent
+bounded-type satellite and Feigenbaum results enlarge the proved set of
+parameters, but do not supply a uniform theorem for every boundary
+parameter.
+
+The repository must consequently distinguish:
+\[
+\begin{array}{c}
+\text{proved Lean theorem}\\
+\Downarrow\\
+\text{formal theorem interface with explicit hypotheses}\\
+\Downarrow\\
+\text{external analytic result still to be formalized}\\
+\Downarrow\\
+\mathsf{MLC}.
+\end{array}
+\]
+Replacing an external result by an `axiom` would make the final theorem
+shorter, but would not constitute the requested formalization.

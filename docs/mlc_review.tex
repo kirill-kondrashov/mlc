@@ -1,0 +1,87 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage[margin=27mm]{geometry}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\setmainfont{Noto Serif}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{array}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,unicode=true]{hyperref}
+\setlength{\emergencystretch}{1em}
+\setcounter{tocdepth}{1}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\M}{\mathcal M}
+\newcommand{\LocallyConnectedSpace}{\operatorname{LocallyConnectedSpace}}
+
+\title{The Mandelbrot Local Connectivity Conjecture:\\
+A Literature Review and Formalization Program}
+\author{}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\clearpage
+
+\input{review/01_scope_and_status.tex}
+\input{review/02_foundational_machinery.tex}
+\input{review/03_known_results.tex}
+\input{review/04_formalization_map.tex}
+\input{review/05_source_policy_and_roadmap.tex}
+
+\renewcommand{\bibname}{Selected references}
+\addcontentsline{toc}{chapter}{Selected references}
+\begin{thebibliography}{99}\small
+\bibitem{DH}
+A.~Douady and J.~H.~Hubbard,
+\emph{Exploring the Mandelbrot Set: The Orsay Notes}.
+\href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}{PDF}.
+
+\bibitem{Yoccoz}
+J.-C.~Yoccoz,
+\emph{Theorème de Siegel, nombres de Bruno et polynômes quadratiques},
+Astérisque 231 (1995), pp.~1--88.
+\href{https://www.numdam.org/book-part/AST_1995__231__1_0/}{Article page}.
+
+\bibitem{LyubichGeometry}
+M.~Lyubich,
+\emph{Geometry of quadratic polynomials: moduli, rigidity and local
+connectivity}, arXiv:math/9309215.
+\href{https://arxiv.org/abs/math/9309215}{arXiv}.
+
+\bibitem{LyubichDynamics}
+M.~Lyubich,
+\emph{Dynamics of quadratic polynomials, I--II},
+Acta Mathematica 178 (1997), no.~2, pp.~185--297.
+\href{https://doi.org/10.1007/BF02392694}{DOI}.
+
+\bibitem{LyubichIII}
+M.~Lyubich,
+\emph{Dynamics of quadratic polynomials, III: parapuzzle and SBR measures},
+Astérisque 261 (2000), pp.~173--200.
+\href{https://numdam.org/item/AST_2000__261__173_0/}{Article page}.
+
+\bibitem{DudkoLyubichSatellite}
+D.~Dudko and M.~Lyubich,
+\emph{Local connectivity of the Mandelbrot set at some satellite parameter
+of bounded type}, Geometric and Functional Analysis 33 (2023), no.~4,
+pp.~912--1047.
+\href{https://arxiv.org/abs/1808.10425}{arXiv}.
+
+\bibitem{DudkoLyubichFeigenbaum}
+D.~Dudko and M.~Lyubich,
+\emph{MLC at Feigenbaum points}, Publications Mathématiques de l'IHÉS 143
+(2026), pp.~97--141.
+\href{https://arxiv.org/abs/2309.02107}{arXiv}.
+
+\bibitem{DudkoMLC}
+D.~Dudko,
+\emph{On the MLC Conjecture and the Renormalization Theory in Complex
+Dynamics}, arXiv:2512.24171.
+\href{https://arxiv.org/abs/2512.24171}{arXiv}.
+\end{thebibliography}
+\end{document}

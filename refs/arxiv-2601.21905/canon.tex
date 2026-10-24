@@ -1,0 +1,1803 @@
+\section{Canonical laminations}
+
+\subsection{Ideally marked hyperbolic plane}
+ 
+
+\sss{Quadrilaterals}
+  Let $\BPi$ be a  standard rectangle with horizontal sides $\BI$ and
+  $\BJ$. It supports  the vertical foliation $\FF$. We let 
+$$
+   \WW(\BI, \BJ) =  \WW(\BPi)  = \WW(\FF) 
+$$
+be its conformal {\it width}, which is also equal to the width of the 
+{\it full path family} in $\Pi$ connecting $\BI$ to $\BJ$.  
+
+\begin{rem}
+  We will sometimes use notation $\WW\{ \BI, \BJ\}$ to emphasize that the
+  pair of intervales $\BI$ and $\BJ$ is non-ordered. 
+\end{rem}
+
+Let $\Bga$ and $\Bde$ be the hyperbolic geodesics in $\Pi$ sharing
+the endpoints with $\BI$ and $\BJ$ respectively. We let $d_\hyp\equiv d_\Pi$ be the
+hyperbolic distance in $\BPi$, and $l_\hyp\equiv l_\BPi$ be the
+ hyperbolic length  (similar notation will be used for other
+hyperbolic Riemann surfaces). 
+
+\begin{lem}\label{geod in quadr}
+    Let $\eps>0$ and let $\Bga^\eps=\{ z\in\Bga: \ \dist_\hyp (z, \Bde)
+    < \eps\} $. Then 
+$$
+       l_\hyp (\Bga^\eps) = \WW(\BPi) + O_\eps (1).
+$$
+\end{lem}
+
+Let us now formulate an important transformation rule: 
+
+\begin{lem}\label{tranform rule for rectangles}
+   Let $\Bi: \BPi'\ra \BPi$ be a holomorpic map between two rectangles
+which extends to homeomorphisms between the respective  horizontal  sides
+$\BI'\ra \BI$ and $\BJ'\ra \BJ$. Then
+$$
+      \WW(  \BPi' ) \leq \WW ( \BPi ). 
+$$ 
+\end{lem}
+
+\begin{proof}
+Let $\De$ and $\De'$ be the horizontal path families in $\BPi$
+and $\BPi'$ respectively.  
+ Any  path  $\de$ in $\BPi$  contains a subpath that lifts to a 
+  path in $\De'$.  Hence 
+$$
+     \WW(\BPi)= \LL(\De) \geq \LL(\De') = \WW(\BPi').
+$$
+\end{proof}
+
+\sss{Canonical lamination}
+ 
+  Let us consider the hyperbolic plane in the disk model $\D$. 
+An {\it ideal marking } of $\D$ is a {\em tiling}  $\II$
+of the circle  $\T=\di \D$ into intervals $\BI_1, \dots \BI_p$
+(written in the order they appear on $\T$, up to a cyclic permutation). 
+Thus, we can label the intervals by elements of $\Z/ p\Z$. 
+We call $p$ the {\it cardinality } of the marking. 
+
+Any non-adjacent pair of intervals $\BI_m$, $\BI_n$
+determines an ideal quadrilateral $\ol \BPi_{mn}$ with ``horizontal'' sides $\BI_m $ and  $\BI_n $.
+Let $\ol \FF_{mn}$ be the vertical harmonic foliation in $\ol \BPi_{mn}$,
+and let  
+$$
+   \ol \WW_{mn}\equiv \ol \WW(\BI_m, \BI_n) \equiv \WW (\ol  \BPi_{mn} ) \equiv \WW(\ol \FF_{mn} )
+$$ 
+be the width of this quadrilateral.
+It is equal to the width of the full path family in $\D$  connecting $\BI_n$ to $\BI_m$. 
+
+Removing  the square buffers from the  quadrilaterals $\ol \BPi_{mn}$
+with width  greater than 2,
+we obtain quadralaterals $\BPi_{mn}$ supporting foliations $\FF_{mn}$
+with widths
+$$
+  \WW_{mn} \equiv  \WW(\BI_m, \BI_n) \equiv \WW (\BPi_{mn}  ) \equiv
+  \WW(\FF_{mn} )  = \ol \WW_{mn} -2. 
+$$
+
+\begin{rem}
+   Again, we sometimes wlll use notation  $\WW_{\{ mn\} } \equiv
+   \WW\{\BI_m, \BI_n\}$ to emphasize that the pair $\{m,n\}$ is not
+   ordered. 
+\end{rem}
+
+\begin{lem}\label{canon fol}
+    The foliations $\FF_{mn}$ together  form a lamination
+    $\FF(\D,\II)$   on $\D$ (supported on $\bigsqcup \BPi_{mn}$).  
+\end{lem}
+
+\begin{proof}
+  Follows from the Non-Intersection Principle.
+\end{proof}
+
+The lamination $\FF(\D,\II)$ is called the {\it canonical lamination
+of the  marked hyperbolic plane}. 
+
+\begin{cor}
+   There exits at most $p-2$ quadrilaterals $\BPi_{\{mn\}} $.
+\end{cor}
+
+\sss{Conformal geometry vs hyperbolic}
+
+Let $\Bga_n$ be the hyperbolic geodesic in $(\D, \II)$ sharing the
+endpoints with the $\BI_n$.
+Let
+$$
+\Bga^\eps_{mn}= \{ z\in\Bga_m : \ \dist_\hyp (z, \Bga_n) < \eps\}.
+$$
+%
+% For non-adjacent $I_m$ and $I_n$ we let
+% $$
+%      d_{mn}\equiv d(\geoD_m, \geoD_n)
+% $$
+% be the hyperbolic distance between $\geoD_m$ and $\geoD_n$. 
+%
+% \sss{Thin part} 
+
+Lemma \ref{geod in quadr}  implies: 
+
+\begin{lem}\label{hyp d vs length}
+   We have: $\WW_{mn} = l_\hyp(\Bga_{mn}^\eps )   + O_\eps (1). $
+\end{lem}
+
+\sss{Thick part}
+
+let $\BGa= \cup \Bga_n$. 
+It is  the polygonal curve that bounds  the convex hull $\BP$  of $\di \II= \bigcup \di \BI_n$.  
+Let $ \BGa^\eps = \bigcup \Bga^\eps_{mn}$ be the $\eps$-{\it thin part} of $\BGa$. 
+
+\begin{prop}\label{thick part estimate}
+ For an ideally  marked hyperbolic plane $(\D, \II)$ with $p$
+ intervals $I_n$ and for any $\eps>0$, we have:
+$$
+       l_\hyp (\BGa \sm \BGa^\eps) = O(p/\eps).
+$$
+\end{prop}
+
+\begin{proof}
+  Let $L= l_\hyp (\BGa \sm \BGa^\eps) $.
+% and let $P$ be the ideal polygon
+%  bounded by $\BGa$  (i.e., $P$ is the convex hull of $\di\II$). 
+  Let us consider a biggest net of $\eps$-separated points $\{ x_i\}$ in $\BGa\sm
+  \BGa^\eps$. It contains approximately  $ L/\eps$ points. The
+  hyperbolic  disks $\BD_i$  of
+  radius $\eps/2$ centered at these points do not overlap, so the total
+  hyperbolic area of the half-disks $\BD_i \cap \BP$  is bouded by the hyperbolic area of the polygon
+  $\BP $, which is equal to  $\pi (p-2)$. It gives
+$$
+        \frac L\eps \cdot \eps^2  \leq C  p.
+$$
+\end{proof}
+
+
+ \sss{Thin-thick Decomposition}
+
+Let $\ol  \WW_n \equiv \bar \WW(\BI_n)$ be the width of the path family connecting $\BI_n$ 
+all other non-adjacent intervals (i.e., to  $\displaystyle{ \T\sm \bigcup_{|k-n| >1} \BI_k } $),
+and let 
+$$
+           \WW_n\equiv    \WW(\BI_n) =   \max  \{ \ol \WW(\BI_n)  -2, \ 0 \} .
+$$ 
+We call
+$$
+      \BW \equiv \BW(\D, \II ) :  = \sum \WW_n 
+$$
+the {\it total weight} of the marked hyperbolic plane. 
+
+\begin{thm}\label{main estimate} 
+For any ideal marking $\II = (\BI_1, \dots, \BI_p)$ of the hyperbolic plane
+$\D$,  we have:
+$$
+         \BW (\D, \II)   - O(p)    \leq   2 \sum \WW\{\BI_n, \BI_m\}  
+     \leq    \BW(\D, \II ) 
+$$
+$($where the summation in the middle is taken over non-ordered pairs
+$\{ \BI_m, \BI_n\}$$)$. 
+\end{thm} 
+
+\begin{proof}
+  Since the rectangles $\BPi_{mn}$ are disjoint, we have for each $m$: 
+$$
+    \sum_n \WW_{\{mn\}} \leq \WW_m.
+$$
+Summation over $m$ gives the right-hand side estimate (note that each
+$\WW_{ \{mn\} }$ is counted twice as we sum  them  up). 
+
+\msk To prove the left-hand estimate, let us take $\eps$ to be the
+Margulis constant. Then the  geodesic intervals $\Bga^\eps_{mn}$ are
+pairwise disjoint.  Let 
+$$
+   \BGa^\thin = \bigsqcup_{|m-n|>1} \Bga_{mn}^\eps 
+$$
+(where $|m-n|$ means the natural distance in $\Z/ p\Z$ such that $m$
+and $m+1$ stay distance 1 apart).  
+Together with Lemma \ref{hyp d vs length} this implies:
+
+$$
+     2\sum \WW_{ \{mn\} } \geq \sum_{|m-n|>1} l_\hyp (\Bga_{mn}^\eps ) - O(p)
+     =  l_\hyp ( \BGa^\thin  ) - O(p).
+$$
+
+Combining this with Lemma \ref{thick part estimate}, we obtain: 
+\begin{equation}\label{thin-thick part}
+     2\sum \WW_{ \{mn\} } \geq   l_\hyp ( \BGa^\thin \cup \BGa^\thick ) - O(p).
+\end{equation}
+
+
+Let us now consider the cuspidal  part of $\BGa$:  
+$$
+ \BGa^\cusp=  \bigcup_{|m-n|=1} \Bga^\eps_{mn}.
+$$
+We have a partition: 
+$$
+   \BGa =    \BGa^\thin \cup \BGa^\cusp \cup \BGa^\thick. 
+$$
+Incorporating it into (\ref{thin-thick part}), we obtain:
+$$
+    2\sum \WW_{ \{mn\} } \geq   l_\hyp ( \BGa\sm \BGa^\cusp ) - O(p).
+$$
+
+Finally, let $\Bga_m^\eps$ consists of those points $z\in \Bga_m$ that
+stay distance less than $\eps$ from the geodesic connecting the
+endpoints of $\Bga_{m-1}\cup \Bga_m \cup \Bga_{m+1}$. Since $\eps$ is
+the Margulis constant, $\Bga_m^\eps \subset \Bga_m\sm \BGa^\cusp$, 
+so the last estimate implies
+$$
+       2\sum \WW_{ \{mn\} } \geq  \sum  l_\hyp ( \Bga_m^\eps ) - O(p).
+$$
+By Lemma \ref{hyp d vs length},
+$ l_\hyp ( \Bga_m^\eps ) = \WW_m + O(1)$, and we are done.
+\end{proof}
+
+\sss{Local weights and fluxes for a partially marked plane}
+
+Let $\II= (\BI_1, \dots, \BI_p)$ be a disjoint family of closed
+intervales in $\T$.
+% with disjoint interiors.
+ It is called a {\it partial marking} of $\D$ (of cardinality $p$). 
+The {\it gaps} $G_k$  of a partially marked plane are the closures of the
+components of $\displaystyle{ \T \sm \bigcup \BI_n}$. Of course, putting
+together the intervals and the gaps, we obtain a full ideal  marking
+of $\D$. The {\it local weights} $\WW(\BI_n)$ and {\it fluxes}
+$\WW(\BG_k)$ are understood in the sense of this full marking.     
+ 
+Let us consider two partially marked copies of the hyperbolic planes, $(\D, \II)$ 
+and $ (\D', \II')$, of the same cardinality. We write 
+$\Bi : (\D',\II')  \ra (\D, \II) $ for a map $\Bi: \D' \ra \D$
+that  extends to a  homeomorphism   $\BI_n' \ra \BI_n$ for any  $n=1,\dots, p$.   
+In this case, we have an obvious consistent labeling  of the gaps
+$\BG_k$ and $\BG_k'$. 
+
+\begin{lem}\label{transform rules on D}
+  For any holomorphic map $\Bi: (\D', \II') \ra (\D, \II) $ between
+  partially marked hyperbolic disks we have:
+
+\ssk\nin $\mathrm { (i) } $
+$
+   \WW(\BI_m' , \BI_n')  \leq \WW(\BI_m, \BI_n). 
+$
+
+\ssk\nin $ \mathrm {(ii)} $  $\WW(\BG_k' ) \geq \WW(\BG_k)$. 
+\end{lem}
+
+\begin{proof}
+  The first estimate follows directly from 
+Lemma \ref{tranform rule for rectangles} .  For the second one, observe that
+that $\WW (\BG_k)= \WW (\BI_m, \BI_n )^{-1}$, where $\BI_m$ and
+$\BI_n$ are the marked intervals adjacent to the gap $\BG_k$.  
+\end{proof}
+
+\subsection{Riemann surfaces with boundary}
+
+\sss{Universal covering}
+
+Let us now consider a compact Riemann surface $S$ with non-empty
+boundary $\di S = \bigsqcup J_k$. We let $\pi: \D \ra \inter S$ be the 
+universal covering, 
+and we let $\La\subset \T$ be the limit set for the  group $\De$
+of deck transformations.  Then $\pi$ extends continuously to $\T\sm
+\La$, and
+$$
+    \pi:  \ol \D \sm \La \ra  S 
+$$ 
+is the  universal covering of $S$. Moreover, $\pi$ restricted to  any component of
+$\T\sm \La$  gives us a universal covering of some component $J_k$ of
+$\di S$.  Such a component of $\T\sm \La$ will be denoted $\BJ_k$
+(usually we will need only one component for each $k$, 
+so we will not use an extra label for it). 
+The stabilizer of $\BJ_k$ in $\De$ is a cyclic groups generated by
+a hyperbolic M\"obius transformation $T_k$ with fixed points in  $\di \BJ_k$.
+
+
+\sss {Local weghts}
+
+We let $\A_k$ be the covering annulus of $S$ corresponding to the
+cyclic group $<T_k>$. We call its width $\WW(\A_k)$ 
+the {\it local  weight} of $J_k$. We will also use notation $\WW(J_k)$
+for this weight.  
+
+ We let
+$$
+  \BW(S) = \sum \WW(J_k)
+$$
+be the {\it total weight} of $S$. 
+
+% \begin{lem}
+%    We have: $\WW(J_k) = \WW)\BJ_k + O(1) $.
+% \end{lem}
+
+\sss{Canonical arc diagram}
+  Here we will summarize some notions and results  from \cite{K}. 
+
+  An {\it arc}  $\alpha$ is a proper path in $S$ up to proper homotopy. 
+Any arc connects some components $J_k$ and $J_i$ of $\di S$
+and lifts to an arc $\ba$ in $\D$ connecting some intervals $\BJ_k$
+and $\BJ_i$. We let  $\ol\WW(\alpha)= \ol\WW(\BJ_k, \BJ_i)$.
+It is the width of the quadrilateral $\ol \BPi_\alpha=\ol \D$ with
+horizontal sides $\BJ_k$ and $\BJ_i$.  
+It is independent of the lift used. 
+
+If $\ol\WW(\alpha)> 2$ then
+by removing from $\ol\BPi_\alpha$ the square buffers we obtain a
+rectangle $\BPi_\ba$.  In this case we let
+$$
+      \WW(\alpha) = \WW(\BPi_\ba)  = \ol \WW(\alpha)-2.
+$$ 
+If $\bar\WW(\alpha)\leq 2$ we let  $\WW(\alpha) =0$.
+
+Non-degenerate quadrilaterals $\BPi_\alpha$ project injectively to 
+disjoint  {\it canonical quadrilaterals} $\Pi_\alpha\subset S$.  
+Each of them supports the canonical
+vertical foliation. Altogether these foliations form the
+{\it canonical lamination} of $S$. 
+
+Arcs with positive weight form the {\it canonical arc diagram}
+$\AAA_S$ on $S$.
+
+% \sss{Thick surfaces}
+
+\sss{Thin-thick decomposition}
+
+\begin{thm}\label{thin-thick for S}
+   Let $S$ be  a compact Riemann surface with boundary,
+$\chi=\chi(S)$ be its Euler characteristic. Then  we have:
+$$
+    \BW(S)  -  O( | \chi | ) \leq   2 \sum_{\alpha\in \AAA_S}  \WW(\alpha)  \leq \BW(S). 
+$$
+\end{thm}
+
+\begin{proof}
+    For any component $J_k$ of $\di  S $, $\WW(J_k)\geq \sum
+    \WW(\alpha)$, where the summation is taken over the arcs that land
+    on $J_k$. This implies that right-hand side estimate. 
+
+ To prove the other one, let us consider the simple closed geodesics
+ $\gamma_k$ homotopic to the $J_k$. Then 
+\begin{equation}\label{geod and annuli} 
+        \WW_k =  \frac 1\pi\,   l_\hyp(\gamma_k) \quad \mathrm{so}\ 
+\BW  (S) = \frac 1\pi \sum l_\hyp(\gamma_k). 
+\end{equation}
+
+Let $P$ be the Riemann surface bounded the geodesics $\gamma_k$. 
+As in the proof of Proposition \ref{thick part estimate}, let $\eps$ be the Margulis
+constant for $P$ (equal to the Margulis constant for the double of $P$).
+
+Take some arc $\alpha$ connecting $J_k$ to $J_i$, and lift it to the
+universal covering. We obtain an arc $\ba$ in $\D$ connecting $\BJ_k$
+to $\BJ_i$. Moreover, the geodesics $\gamma_k$ and $\gamma_i$ lift to
+the geodesics $\Bga_k$ and $\Bga_i$ in $\D$ sharing the endpoints with $\BJ_k$ and $\BJ_i$
+respectively. By Lemma \ref{geod in quadr}, 
+\begin{equation}\label{rectangle  and geod}   
+   \WW(\alpha) \equiv \WW(\ba) =\frac 1\pi\, l_\hyp (\Bga_{ki} ^\eps)
+   + O(1)= \frac 1\pi \, l_\hyp (\gamma_{ki} ^\eps) +O(1),
+\end{equation}
+where $\gamma_{ki}^\eps$ are defined on $S$ in the same way as the
+$\Bga_{ki}^\eps$ are defined in $\D$, and in fact, the latter is the
+lift of the former.  
+
+Let 
+$$
+   \gamma_k^\thick: =  \gamma_k \sm \bigsqcup_i \gamma_{ki}^\eps. 
+$$
+Then the Gauss-Bonnet  argument (as in Proposition \ref{thick part estimate}) shows that 
+$$
+    \sum l_\hyp ( \gamma_k^\thick ) = O(\area (P) ) = O(|\chi | ).
+$$
+Putting this together with (\ref{geod and annuli}) and (\ref{rectangle  and geod}), we obtain the
+desired. 
+\end{proof}
+
+% \bignote{``Marked Riemann surfaces'' are hidden here} 
+
+\subsection{Marked Riemann surfaces with boundary}
+\note{need?}
+
+Two particular cases that we have considered above can be unified in
+one frame. 
+
+\sss{Boundary marking}
+Assume now that some boundary components $J^k$ of $S$ are   
+partitioned into several intervals, 
+$\II^k= (\BI_1^k, \dots, \BI_{p_k}^k)$.
+If some component $J^k$ is not
+partitioned, we let $J^k\equiv I^k_1$  and  $p_k=1$.
+% In this case we can still refer to $J^k$ as an ``interval''.
+% We will also use one-index labeling $I_n$ if it does not lead to a confusion.  
+We say that $S$ is endowed with  the boundary marking $\II=\bigsqcup I^k$.
+We let $|\II| = \sum p_k$ be the {\it cardinality} of the marking.  
+ 
+An {\it arc} $\alpha $ on a marked surface is a path connecting some
+{\it non-adjacent }  marked 1-manifolds $I^k_m$ and $I^j_n$, %  (that could be circles),
+up to proper homotopy.  Lifting $\alpha $ to the universal covering $\D$,
+we obtain an arc $\Bsi$ connecting two ideal intervals $\BJ^k_n$ and
+$\BJ^i_m$.
+Then we define the weight of $\alpha$ as
+
+$$
+   \WW(\alpha)= \WW (\BJ^k_n, \BJ^j_m). 
+$$
+
+Arcs with positive weights form a weighted arc diagram $\AAA(S, \II)$
+of the marked surface.
+
+
+Let us also define {\it local weights} $\WW( J^k_n)$.
+If $J^k_n$ is a circle then the definition is the same is in the
+unmarked case. Otherwise we define it as the width of the recatnge in
+the universal covering with horizontal sides $\BJ^k_n$ and the
+complement in $\T$ of $\BJ^k_n$ together with two adjacent lifted intervals. 
+
+The {\it total weight} of a marked surface is defined as
+$$
+   \BW(S, \II) = \sum_\II \WW( J^k_n ).
+$$ 
+
+
+\sss{Thin-thick decomposition}
+
+\begin{thm}\label{thin-thick for marked surfaces}
+    Let $(S, \II)$ be a marked  compact Riemann surface with bundary,
+$\chi=\chi(S)$ be its Euler characteristic. Then
+$$
+  \BW(S, \II) - O( | \chi |  + |\II|) \leq 2\, \sum_{\AAA(S, \II) } \WW(\alpha ) \leq
+  \BW(S, \II).
+$$   
+\end{thm}
+
+\note{Use total weight notation}
+
+\begin{proof}
+  Combination of the above two arguments. 
+\end{proof}
+
+\sss{Proper domains}
+% \sss{Polygons}
+Let $S$ be  a compact Riemann surface $S$ with  boundary, and 
+let $D$ be a   % simply connected
+domain in $S$ (defined up to homotopy) bounded (rel $S$) by several
+ideal intervals  $\tl J_n\subset  J_n $ and several arcs $G_j$ (called {\it edges}).
+% We will call $D$  a {\it proper polygon}.
+ We  call $D$ a {\it proper domain}.)
+ 
+% Let $\BD$ be a lift of $D$ to the universal covering $\D$.
+% Its ``horizontal'' sides  are contained in some
+% intervals $\BJ^n\subset \T$ that cover $J_n$, which determines a
+% partial marking of $\T$. Gaps $\BG_k$ of this marking correspond to
+% the edges $G_k$ of $D$.   
+
+Let $\BD$ be 
+ the covering of $S$ corresponding to  $D$. It is  a partially marked
+ Riemann surface $(\BD, \II)$  with  marked intervals  $\BJ^k_n$
+ covering the $J_n$,
+ together with other components of $\di D$.
+%%%  and gaps $\BG_j$ covering (with degree $1$)  the $G_j$. 
+
+\bignote{Pay attention to  the outer boundary}
+ 
+This determines local weights $\WW(\tl J_n) \equiv \WW(J_n) : = \WW (\BJ_n)$,
+{\it  fluxes} $\WW^\perp (G_j):= \WW(\BG_j)$, and the total weight of $D$:
+$$
+   \BW(D)  : = \sum \WW (J_n) + \sum \WW^\perp (G_j).  
+$$
+
+% We can also define $\BW^{gap} (D)$ by .....
+
+\msk
+We can also consider arcs $\alpha$ in $D$
+connecting various pairs of intervals $\tl J_n$ and $\tl J_m$.
+Letting   $\WW(\alpha):= \WW(\ba)$, 
+where $\ba$ is the  lift of $\alpha$ to $\BD$, we obtain the weighted arc
+diagram $\AAA_D$.
+
+Along with arcs, we can consider {\it segments} $\si$ connecting two
+edges $G_j $ and $G_i$.  Each segment is lifted to an arc $\Bsi$ in $\BD$
+connecting the corresponding  gaps  $\BG_j$ and  $\BG_i$. 
+Letting $\WW(\si) := \WW(\Bsi)$, we obtain  the  {\it weighted segment diagram}
+$\SSS_D$. 
+
+We  can also consider {\it arc-segments} in $D$ connecting intervals
+$\tl J_n$ to  gaps $G_j$, and to define their weights.
+They form the  {\it weighted  arc-segment diagram} $\AS_D$. 
+Altogether,
+arcs, segments and arc-segments form the  {\it weighted  arc-segment diagram}
+$\SAS_D$. 
+
+\ssk
+Summing  up the  weights of arcs, segments, or arc-segments,
+we obtain the {\em total weights} of the corresponding diagrams,
+$\BW(\AAA_D)$, $\BW (\SSS_D)$, and $\BW(\AS_D)$.
+{We will use the same notation, $\BW(\QQ)$, for any famly of
+ arc-segments.)  
+Theorem \ref{main estimate}
+% \ref{thin-thick for marked surfaces}
+implies:
+
+ \begin{cor}\label{thin-thick for domains}
+  Let  $D\subset S$ be  a proper $p$-gon as 
+   Then  
+ $$
+      \BW(D) - O( p)  \leq   2\, \sum_{\AS_D}  \WW(\si)    \leq  \BW(D). 
+ $$
+ \end{cor}
+
+
+\comm{*****
+In fact, for any arc $G$ in $S$  we can define the flux 
+$\WW^\perp(G)$ through $G$ as follows. 
+% by  letting $D$ be the surface $S$ cut along $G$.
+Let $G$ land on boundary components $J_n$ and $J_m$.
+Then it can be lifted to an arc $\BG$ in $\D$ landing on $\BJ_n$ and
+$\BJ_m$.
+This determines an ideal  quadrilateral with {\it vertical} sides $\BJ_n$
+and $\BJ_m$. Its width is $\WW^\perp(G)$.  
+
+Similarly, given two arcs $G_i$ and $G_j$ 
+(that could be equal: $G_i=G_j$)
+ connected by  a segment
+$\si$ in $S$, we can define the weight $\WW(\si)$  as follows. 
+% by considering a
+% domain $D$ obtainded by cutting $S$ along $G_i$ and $G_j$. 
+Let $G_i$ land on $J_n$ and $J_m$, while $G_j$ land
+on $J_s$ and $J_t$. Then we can lift the whole configuration to $\bar\D$
+marking four  $\BJ$-intervals on $\T$. The segment $\Bsi$ connects two
+gaps in this configuration that should be viewed as the horizontal
+sides of a quadrilaterlal. Then $\WW(\si)$ is the width of this quadrilateral.
+
+
+Of course, we can deine the weight of a general arc-segment in $S$ as well. 
+
+******* } 
+
+\subsection {Transformation rules}
+
+By passing to the Universal Covering (or to the annulus covering), 
+transformation rules of  Lemma \ref{transform rules on D} readily
+generalize from the disk to arbitrary marked Riemann surfaces: 
+
+\begin{lem}\label{generaltransform rules}
+Let $i: S' \ra S$ be a  holomorphic map between
+two compact  Riemann surfaces with boundary.
+Then 
+
+\ssk\nin $ \mathrm{(i)} $  If a boundary component $J' $ of $S'$ is mapped
+with degree $d$ to a boundary component $J $ of $S$ then 
+$ \WW(J')\leq d\cdot \WW(J)$;
+
+\ssk\nin $ \mathrm{(ii)} $  If a  gap  % segment
+$G ' $ of $S'$ is mapped
+to a   gap  % segment
+$G $ of $S$ then $\WW^\perp (G')\geq \WW^\perp (G)- 2 $;
+
+\bignote{Used to be a ``segment'' instead of a ``gap''.
+  Also: Notation``$\si$'' is used for segments} 
+
+\ssk\nin $\mathrm { (iii) } $
+ If an arc $a ' $ of $S'$ is mapped
+to an arc  $\alpha $ of $S$ then $\WW (\alpha')\leq \WW (\alpha)$;
+
+\ssk 
+In case of a covering map, all the above inequalities become
+equalities (without  subtracting ``$2$'' in $\mathrm { (ii) } $). 
+\end{lem}
+
+% \begin{cor}
+%  Under the circumstance of the above lemma, let $D'\subset S'$ and
+%  $D\subset S$ be  proper domains such that $i(D')$ is properly
+%  isotopic to $D$. Then 
+% $$
+%   \BW^{gap} (D') \geq \BW^{gap}(D) - O(p+|\chi|).
+% $$ 
+% \end{cor}
+
+\bignote{Extension to arc diagrams is hidden here} 
+
+\comm{*****
+We can also naturally define the flux $\WW^\perp (X)$  through a weighted arc diagram 
+$X= \sum x_i G_i$, namely
+$$
+         \WW^\perp (X) =\sum x_i \WW^\perp (G_i).
+$$
+By linearity, property (ii) of Lemma \ref{generaltransform rules}
+extends to this more general  situation:
+
+\begin{cor}\label{flux through arc diag}
+  Under the circumstances of the above lemma,
+if  a weighted  arc diagram $X ' $ of $S'$ is mapped by $i$
+to a weighted  arc diagram   $X $ of $S$ then 
+$$
+  \WW^\perp (X')\geq \WW^\perp (X)-O(|X'|),
+$$
+with the equality (with no error term) in case of the covering map.
+\end{cor}
+*****************}
+
+
+Finally, let us also consider the case of concatenation of several
+arcs. By Lemma \ref{generaltransform rules} \note{specify} 
+and  the Parallel Law,we have: 
+
+
+\begin{lem}\label{transform rule for concatenation}
+Let $i: S' \ra S$ be a  holomorphic map between
+two compact  Riemann surfaces with boundary.
+Let $G_1', \dots , G_n'$ be a family of arcs on $S'$ 
+whose concatenation through some imporper boundary components $J_k'$ 
+forms an arc $G$ in $S$. Then
+$$
+   \sum \WW^\perp (G_k') + \sum \WW( J_k') \geq \WW^\perp(G) - O(n). 
+$$
+\end{lem} 
+
+
+\sss{Key estimate} 
+
+Let $S$ and $S'$ be two Riemann surfaces, and let $D\subset S$ and
+$D'\subset S'$ be two proper domains, endowed with their
+segment diagrams, $\SSS_D$ and $\SSS_{D'}$.
+% immersed foliations $\FF$ and $\FF'$. 
+%Note that the domains $D$ and $D'$ have
+%the same cardinality $p$ of their markings $\II$ and $\II'$, 
+%as well as they have the same Euler characteristic.
+
+Let $i: S' \ra S $ be a holomorphic map such that $i(D')$ is properly
+  isotopic to $D$.  Given any  segment $\sigma \in \SSS_D$, the pullback
+  $i^*(\si)$ is a   concatenation of several  segments $\si_k'\in \SSS_{D'}$.  \note{picture?} 
+  We say
+  that $\si$ {\it breaks} under the pullback if $i^*(\si)$ comprises more
+  than one segment. Let $\SSS_D^\br$ stand for the set of segments that break.     
+ % Following our notational style, $\BW (\SSS_D^\br)$ means their total
+%  weight. 
+  
+
+% Given any  leaf $L$ of $\FF$, the pullback
+%  $i^*(L)$ is a   concatenation of several  segments in $D'$. We say
+%  that $L$ {\it breakes} under the pullback if $i^*(L)$ comprises more
+%  than one segment. Let $\FF^\br$ stand for the set of leaves that break.     
+  
+%As usual, the weights of all path families are measured in the
+% Universal Covering. 
+
+
+\begin{lem}\label{key estimate} 
+  Under the above circumstances,  we have:
+$$
+     \BW (\SSS_D^\br) \leq \BW (\SSS_{D'}) - \BW (\SSS_D)  + O(p+|\chi|). 
+$$
+\end{lem}
+
+\begin{proof}
+  By Maximality of $\SSS_{D'} $ we have:
+$$
+\BW(\SSS_{D'}) \geq \BW  ( i^*(\SSS_D) ) - O(p+|\chi|)
+  \geq \BW (\SSS_D)  + \BW(\SSS_D^\br) - O(p+|\chi|).
+$$
+The last estimate follows from the fact that    $\WW(\si') \geq \WW(\si)$
+for any lift $ \si_k'\in \SSS_{D'}  $ of  a segment $\si\in \SSS_D$. Since
+broken segments  admit at least two lifts, their weights are counted
+at least twice in $i^* (\SSS_D) $, so
+$ \WW(i^*(\SSS_D)) \geq \WW(\SSS_D)+\WW(\SSS_D^\br)$.  
+\end{proof}
+
+
+\comm{*****
+\begin{lem}\label{key estimate} 
+  Under the above circumstances,  we have:
+$$
+     \WW(\FF^\br) \leq \BW(D', \II') - \BW (D, \II)  + O(p+|\chi|). 
+$$
+\end{lem}
+
+\begin{proof}
+  By Maximality of $\FF'$, we have:
+$$
+   \BW(D', \II') \geq \WW( i^*(\FF) ) - O(p+|\chi|) \geq \BW (D, \II)
+   + \WW(\FF^\br)
+   - O(p+|\chi|).
+$$
+The last estimate follows from the fact that    $\WW(\si') \geq \WW(\si)$
+for any lift $ \si' $ of  a segment $\si$ in $D$. Since
+broken segments $\si$ admit at least two lifts, their weights counted
+at least twice in $i^* (\FF)$, so
+$ \WW(i^*(\FF)) \geq \WW(\FF)+\WW(\FF^\br)$.  
+\end{proof}
+************************} 
+
+We can similarly define arcs and arc-segments in $D$ that break,
+$\AAA_D^\br$ and $\AS_D^\br$.
+% and their total weights,
+% $\BW (\AAA_D^\br)$ and $\BW (\AAA_D^\br)$ .
+Let us say that an arc in $D$  is {\em short} if it connects 
+ two consecutive intervals, and {\em long} otherwise.
+ Let $\AAA_D^\sh$ and $\AAA_D^\lo$ stand respectively for the
+ familes of those arcs, and let $\AAA_D^\lobr$ stand for the
+ family of long arcs that break.
+
+
+ \begin{lem}\label{broken arc-segments} 
+   Under the above circumstances, we have:
+
+ %  \ssk\nin {\rm (i)}
+$$
+\BW(\AS_D^\br) \leq \BW (\SSS_{D'} ) \quad {\mathrm {and}} \quad
+\BW(\AAA_D^\lobr) \leq \BW (\SSS_{D'} ) + \BW (\AS_{D'} )  .
+$$
+   
+ \end{lem}
+
+ \begin{proof}
+The pullback $i^*(\alpha) $ of any arc-segment  $\alpha\in \AS_D^\br$
+ consists of at least two pieces, one of which must be a
+ segment in $D'$. Moreover, the weight of this segment is at least
+ $\WW(\alpha)$. Hence
+ $$
+ \BW(\SSS_{D'} ) 
+%  \sum_{\alpha\in \AS_D^\br} \WW  (i^*(\alpha) )
+ \geq \sum_{\alpha\in \AS_D^\br} \WW (\alpha) = \BW(\AS^\br).  
+ $$
+
+ \ssk 
+Similarly,    the pullback $i^*(\alpha)$  of any  long arc
+$\alpha\in \AAA^\lobr $ that breaks consists of
+
+\ssk\nin $\bullet$ either two pieces, one which must be an arc-segment
+in $D'$;
+
+\ssk\nin $\bullet$
+or at least three pieces, one of which (a ``middle'' one)  must be a
+segment in $D'$.
+
+\ssk The second desird estimate follows. 
+\end{proof}   
+ 
+ 
+\comm{****** 
+
+\subsection{Closed curve diagram}
+
+\sss{Definition}
+Given a non-trivial and non-cuspidal  simple closed curve $\gamma$ on a Riemann surface $S$,
+let  $\A_\gamma$ be  the covering annulus  corresponding to $\gamma$,,
+and let  $\Bga$ be the closed geodesic homotopic to $\gamma$.
+Then we let 
+$$
+    \WW(\gamma)= \mod \A_\gamma= \pi/  l_\hyp(\Bga).
+$$
+
+For $M$ sufficiently big (``4''), 
+the $M$-{\it canonical curve diagram} $\CC$ is the family of simple
+closed curves $\gamma$ with $\WW(\gamma) > M$. 
+
+\begin{lem}\label{disjointness in CC}
+  The curves is $\CC$ are pairwise disjoint.  
+\end{lem} 
+
+\sss{Transformation rules} 
+
+\begin{lem}\label{tranform rules for CC}
+  Let $i: S' \ra S$ be a holomorphic map between Riemann surfaces.
+Let $\gamma\in \CC$ and $\gamma'\in \CC'$  be simple closed curves
+such that $i(\gamma')$ is homologous to  $d\cdot[\gamma$. 
+ Then $\WW(\gamma') \leq d^{-1} \cdot \WW(\gamma)$.
+In the case when $i$ is a covering, the equality holds. 
+\end{lem}
+
+\begin{proof}
+We can assume that $\gamma'$ is a closed geodesic.
+By the Schwarz Lemma, 
+$$
+     l_\hyp(\gamma') \geq  l_\hyp (i(\gamma)) = d\cdot l_\hyp (\gamma),
+$$
+and the conclusion follows. 
+\end{proof}
+
+\sss{Flux vs weight}
+
+\begin{lem} \label{flux vs weight}
+  Let $\alpha $ be an arc, and let $\si$ be a segment with both ends on
+  $\alpha$ that land on the opposite sides of $\alpha$ (the
+  orientation preserving situation).  Let us consider a simple closed curve $\gamma$ obtained 
+  by connecting the endpoints of $\si$ along $\alpha$. Then
+$$
+   \WW(\gamma) \geq \frac 12  \bar\WW (\si), 
+$$  
+as long as $\bar \WW(\si) > 2/\pi$.
+
+\end{lem}
+
+\begin{proof}
+  Let $\alpha$ lenad on boundary components $I$ and $J$.
+Then our configuration of arcs lifts to the universal covering $\D$ as
+follows:
+
+\begin{itemize}
+\item $I$ lifts to two ideal arcs $\BI$ and $\BI'$; 
+          $J$ lifts to two ideal arcs $\BJ$ and $\BJ'$
+
+\item $\alpha$ lifts to two arcs: $\Bal$ connecting $\BI$ to $\BJ$,
+  and $\Bal'$ connecting $\BI'$ to $\BJ'$. 
+
+\item $\si$ lifts to an arc $\Bsi$ connecting $\Bal$ and $\Bal'$;
+
+\item $\gamma$ lifts to aa axis $\Bga$ connecting the ideal gap $\BG$
+  between $\BI$ and $\BJ$ to the ideal gap $\BG'$ between $\BI'$ and $\BJ'$
+  (and separating $\BI$, $\BI'$ from $\BJ$, $\BJ'$.
+
+\end{itemize} 
+
+Let us uniformalize $\D$ be the horizontal strip of width $\pi$ so
+that $\Bga$ becomes an axis of this strip. (We will keep the same  notatin 
+for all the objects under consideration.) The deck transformation
+$T_\gamma$
+along this axis is a translation by some number $a$. Moreover,
+$\WW(\gamma) = \pi/a$. 
+
+The curves representing $\WW(\si)$ connect $\BG$ to $\BG'$,
+so they go over the convex hulls  $[\BI, \BI']$ and $[\BJ, \BJ']$,
+both of which have length greater than $a$. Hence these curves have
+length at least $\min (\pi, a)$. 
+
+Let us put the Euclidean metric on the union of two rectangles based upon the above
+intervals
+and going across the strip. Then the length of all curves with respect to this
+metric   is bounded in the same way. The area of these metrics is
+bounded by $2\pi a$. Hence   
+$$
+  \bar\WW(\si) \leq \frac {2\pi a} { \min (\pi, a)^2  } =\max \left(\frac{2\pi}
+  a, \frac 2\pi \right) = 2 \max ( \WW(\gamma), 1/\pi). 
+$$
+The conclusion follows. 
+\end{proof}
+
+******* } 
+
+\comm{***** 
+
+\sss{Flux through the ray diagram}
+
+For an arc $\alpha$ on $U'\sm \KK'$, the inclusion $i_*(\alpha)$ is well
+defined if
+
+\ssk\nin $\bullet$
+$\alpha$ is horizontal with both ends landing on some $K_n$; 
+
+ \ssk\nin $\bullet$
+or $\alpha$ is vertical with one end landing on some $K_n$; in which case it admits a unique extension
+to a vertcal arc $ i_*(\alpha)$ on $U$ by means of the homotopy
+retraction $U\ra U'$. 
+
+\msk
+We say that a WAD $X'$ on $U'$ is {\it invariant} under $F$  if :
+
+\ssk \nin $\bullet$ 
+The inclusions $i_*(\alpha)$ are well defined for all $\alpha\in
+\supp X'$; 
+
+\ssk \nin $\bullet$ $f_*\alpha$ is an arc for any $\alpha\in \supp X'$
+  (in other wirds $\alpha$ and $-\alpha$ do not cross); 
+
+\ssk \nin $\bullet$   $i_*(X')= f_*(X')$.
+ 
+
+\ssk\nin
+We let $X=f_*(X')=i_*(X')$ be the image WAD on $U$. 
+
+\msk
+For instance, consider the {\it ray diagram}  $\RR'$ on $U'\sm \KK'$ supported on all external rays
+landing on the little Julia sets $K_n$, $n =0,\dots, p-1$, with weights
+$$
+   r_n' =  (\# \ \mbox{ of external rays landing on $K_n )^{-1}$. }
+$$
+
+\begin{lem}\label{flux through inv WAD}
+    Let $X'=\RR'$ be the  invariant ray daigram on 
+$U'\sm f^{-1}    (\KK)$. 
+Then
+$$
+  \WW^\perp (Y')\geq \WW^\perp (X') - O( p (1 +  \WW^\ver) ) 
+% - o(p\, \WW_\loc) 
+$$ 
+for any   WAD $Y'$  such that  $i_* (Y') = i_* (X')$.
+\end{lem}
+
+\begin{proof}
+Let  us decompose $i$ as $j\circ e$ where
+$$
+  e : U'\sm (\KK\cup \KK') \ra U'\sm \KK,\quad j: U' \sm \KK \ra U\sm \KK.
+$$
+We let $Z = e_*(X')$, so $j_*(Z) = X$.   Then
+%
+\begin{equation}\label{restricted X}
+   \WW^\perp (X) \leq \WW^\perp (Z) + O(p (1 +  \WW^\ver) ). 
+\end{equation}
+Indeed,  for any proper path $\gamma$  in $U\sm \KK $  crossing $\alpha \in \supp X$, 
+a lift $j^*(\gamma)$ that begins on a little Julia setis either
+crosses $ j^*\alpha\in Z$  or is vertical
+ (and the vertical weights
+get summed up over the whole diagram $X$ containing $O( p) $ arcs). 
+
+\comm{******
+If it is vertical, three situations can occur:
+
+\ssk\nin (i) $\gamma$ is well localized in the translation region
+(meaning that its ``dives" into the Translation region withon a
+bounded number of blocks). The total weight of such  
+
+\ssk \nin (ii) $\gamma$ dives into the Translation region in a
+non-localized way. The total weight of such arcs is
+$O(p+\WW_{periph})$. 
+
+\ssk \nin (iii) $\gamma$ exits the Translation region.
+The total weight of such arcs is
+$O(\WW_{periph})$. 
+
+% \bignote{What to do with the peripheral error ?}
+*********}
+
+Since $i_*(Y') =X$, we have $e_*(Y') = Z$, and Corollary 
+\ref{flux through arc diag} yields: 
+$$
+   \WW^\perp (Y') \geq \WW^\perp (Z) - O(p).
+$$
+Putting it together with (\ref{restricted X}), we obtain: 
+$$
+      \WW^\perp (Y') \geq \WW^\perp (X) - O(p(1+  \WW^\ver)) 
+% - o(...).
+$$
+But since $f: U' \sm (f^{-1}\KK)\ra U\sm \KK$ is a covering map and
+$f_* (X')= X$, 
+we also have:
+$$\WW^\perp (X') = \WW^\perp (X).$$ 
+\end{proof}
+   
+\begin{rem}\label{refinement}
+The above estimate comes through if we replace the Riemann surfaces
+$S=U\sm \KK$ and $S'= U'\sm f^{-1} \KK$ with 
+$$
+    S^n  = U^n\sm f^{-n} \KK. \quad \mathrm{and} \quad   S^{n+1}   
+$$
+coming together
+with the  covering-immersion pair $F =(f ,i) : S^{n+1} \ra S^n$, 
+and two   arc diagrams,  $X^{n+1} =\RR^{n+1} $ and $Y^{n+1}$,  on $S^{n+1}$ 
+such that $X^{n+1} $ is $F_n$-invariant and  $i_ * (Y^{n+1} ) = i_*(X^{n+1})$.   
+The error term should be interpreted as the vertical weight on $S^{n+1}$. 
+When we want to emphasize  where the weight is calculated, 
+we use notation like $\WW(X; S)$. 
+\end{rem}
+
+Next, we will sharpen the error term in  the previous lemma. 
+
+
+\begin{lem}\label{flux through inv WAD-improved}
+Fix an arbitrary small $\eps>0$ and a big $N$. 
+Under the circumstances of the previous lemma
+(adjusted as in the above Remark), 
+either $W^\ver \geq N \WW^\loc$
+or else
+$$
+  \WW^\perp (Y^n;\, S^n  )\geq 
+\WW^\perp (X^n; \,    S^n) - \eps\, p\, \WW^\loc  
+$$ 
+for some $n = O( N/\eps) $. 
+% (Here $U^n$ is the $n$ times restricted domain).
+\end{lem}  
+
+\begin{proof}
+We will pursue the following strategy. 
+  If for some restriction to  $S^n$, 
+the newborn vertical saisfies $W^\ver (S^n) < \eps \WW^\loc$, 
+then we obtain the desired estimate. Otherwise, we have the
+definite (in terms of $\WW^\loc$) vertical weight created under each restriction. 
+Under $\asymp N/\eps$ steps, we will create at least $N\WW^\loc$ of
+the vertical weight.
+Then we will push it forward by a baby version of the Covering Lemma. 
+
+
+Let  
+$$
+\Si^n : = U^n \sm f^{-(n-1) } \KK.
+$$
+
+%For $n\geq N$, let  
+%$$
+%S^n  : = U^n\sm f^{-N} \KK, \quad
+%(S^{n+1})' : = U^{n+1} \sm f^{-(N+1) } \KK.
+%$$
+
+Let us consider the covering annulus $\A^n$ of $S^n$ corresponding to the loop
+$\di U^n $, and let $\BBB^n $ be the similar annuli for the $\Si^n $.
+
+Let  $\Pi^n$ be the universal coverings of the $\A^n$  realized as strips
+(with the top $T^n  =\R+ h_n \pi $  covering the outer boundary $\di U^n$ and the
+bottom $\R$).  We  select the heights $h_n$ so that $\A^n= \Pi^n/\Z$. 
+Similarly, $P^n$ are the univesal coverins of the $\BB^n $. 
+
+We mark external rays  $\hat \RR^n(i)$  on the annuli
+and the strips within one fundamental region
+(using the same notation in $\A^n$ and $\Pi^n$). 
+They select for us  initervals $\hat K^n(i)$ on the bottom $\R$ corresponding to the little Julia
+sets. By definition, the flux $\WW^\perp$ through $\RR^n(i)$ is
+equal to the height of 
+% width of the vertical  foliation $\FF^n$ in $\Pi^n$  through $\hat\RR^n(i)$ in 
+the quadralateral $\Pi^n(i)$ whose horizontal sides are
+the top of $\Pi^n$  and the interval $\hat K^n(i)$. 
+
+\comm{*****
+Let $I^n$ be the interval on the bottom $\R$ of $\Pi^n$ which is the
+convex hull of the  the intervals $\hat K^n ( q-(n-1) ) $ and 
+$\hat K^n (q- (n-3))$. 
+Let $w^n $ be the  the width of the path family going from $\R$ to
+$\R$ skipping over $I^n $
+(i.e., the height 
+ of the rectangle $\Pi^n$ with
+horizontal sides $I^n$ and $T^n$). 
+We claim that the $w^n$ are small.
+% in terms of $N$ only. 
+
+To see it, let us also consider the
+% annulus $\A$ covering $U\sm \KK$, its universal covering $\Pi$.
+% Then we have  the 
+covering map $f_n :  \A^n \ra \A$ of degree $2^N$ and its linear
+lift $\hat f_n :  \Pi_N\ra \Pi$. 
+Under this map,  the interval $\hat f_n  ( I^n) $ 
+covers (essentially with degree one) the whole bottom of $\A$, which implies that $w_n$ is bounded
+by the height of  $\A$ plus $O(1)$ 
+% the rectangle $\Pi$ with horizontal sides $1$ and $T$. 
+Since this annulus is bad, we are done. \note{comment?} 
+*****}
+
+
+Let $k=[1/\eps]$, and let $n\leq kN$. 
+Let us consider the foliation $\FF^n (i)$ representing the flux
+through $\RR^n (i)$ in $\Pi^n $. 
+Let us pull it back by $i^*$ to $\Pi^{n+1}$.  
+A leaf $L$ can either be fully lifted to $\Pi^{n+1}$ or else it can be broken.
+ It the former case,  it contributes to the flux through $\RR^{n+1}(i)$.
+It the latter case, it has at least  two vertical lifts that begin on
+the opposite side of $K^n(i)$.  
+% If some leaf $L$ of $\FF^n$ fully lifts to $\Pi^{n+1}$ then all the leaves
+%below it do the same. It follows that the family of ``broken leaves''
+%$i^*(L)$ form a foliation near the top. 
+
+So, the weight of the broken leaves is bounded by the vertical weight
+of $A^{n+1}$.  If the total of this flux  is smaller then $\eps p  \, \WW^\loc$ then 
+% $$
+%    \sum_i     \WW(\FF^N(i) ) -  \WW(\FF^n(i) )  < \eps (n-N) p \, \WW^\loc.
+%$$
+%Hence for some $k\in (N,n]$ we would have
+%$$
+%     \sum_i  \WW(\FF^{k-1}  (i) ) -  \WW(\FF^k(i) )  < \eps p \, \WW^\loc,
+%$$
+we obtain  the desired error estimate. 
+
+Otherwise, for all  $n\leq k N$, the weight of broken leaves of
+$\FF^n(i)$ (for any $i$ in the ``middle''  the translation region) is at
+least $\eps\WW_\loc$. 
+ % $$
+%  \sum_i     \WW(\FF^N(i) ) -  \WW(\FF^n(i) )  \geq  \eps p (n-N) \, \WW^\loc,
+%$$
+%so for some $i$. 
+%$$
+%    \WW(\FF^N(i) ) -  \WW(\FF^n(i) )  \geq  \eps  (n-N) \, \WW^\loc,
+%$$
+After $kN$ restrictions we create at least $N\WW_\loc$ of the vertical
+weight.  
+
+If it is localized outside the interval $I^n_{kN}$ in $\A^{kN}$ contianing the
+last $kN$ sectors, 
+%As we know, only small amount of $\FF^n(i) $  can skip over $I^n$,
+%so most of this flux lands well inside the trnalation region (at least
+%on its forward side). Assume good part of it actually lands outside
+%$I^{kN}$.  
+then there is  a standard rectangle $P$ in the translation
+region but outside $I^n_{kN}$ whose width is at least as big  (up to a bounded additive
+error).  Under the map 
+$\hat f_{kN}: \Pi^{kN} \ra \Pi$ composed with the projection $\Pi\ra \A$, 
+this rectangle is mapped with degree one to $\A$.
+Hence  $A$ has at least as big width.  
+%
+%By the above consideration, $\WW (\A^N)$ is at least $\asymp N\WW^\loc$.
+%Moreover, a definite part of the newly created vertical weight is
+%localized on a vertical rectangle $\Pi$ in $\A^N$ such that $f^N$ is
+%injective on its horizontal side (since it can be selected well inside
+%the translation region). By the Covering Lemma (a baby version), 
+%this weight can be pushed forward to $\A$.   
+
+Otherwise we would create a big vertical weight in $\A^n$ landing on
+$I^n_{kN}$.  Let us consider a disk $D$ containg  $kdN/2$ little Julia
+sets (in the $kN/2$ consecutive sectors) aligned with the Hubbard
+marking.  Let $\mathbf D$ be the corresponding psuedo-disk. 
+The above vertical weight blocks the canonical arc diagram in $\mathbf
+D$ to skip over several little Julia sets in the same translation
+orbit from ``above''. 
+ Neither an arccan be a ``serpant'' winding above these little Julia
+ sets
+since it would create a self-intersection. So, any arc can leave
+$\mathbf D$ only through $\RR(0)$ or  by going ``under'' all little Julia sets,
+
+In either case, its push-forward
+% would  connect the next little Juli set to $\RR(1)$ and 
+would  intersect itself. 
+\end{proof}
+
+\sss{Cobras}
+
+
+Let us begin with a non-dynamical situation. 
+Let us mark an (oriented)  arc $\alpha$  in $U\sm \KK$ connecting a
+boundary component  $I$ to a component $J$.  
+A  segment $\si$ in $(U, \alpha)$  is called a {\it cobra}
+(attached to  $\alpha$) if it  begins and  ends  on $\alpha$ and is
+homotopically trivial in $U\sm (I \cup J \cup \alpha)$ (where its endpoints
+are allowed to slide along $\alpha$).  
+It is oriented so that its end is ahead of the tail (on $\alpha$).  
+ Its weight
+$\WW(\si)$ is the flux through $\alpha$ along $\si$.  \note{defined?}
+
+
+ Let us consider a twisted arc $\alpha^\si$ on $U\sm \KK$  obtained by adding to $\alpha$
+ the  segment $\si$, while erasing the corresponding piece of $\alpha$.  \note{picture}
+The following lemma shows that this operation leads to a loss of the
+flux (as long as the weight of the cobra is sufficiently big). 
+
+\begin{lem}\label{loss of cobra}
+If $\WW(\si) > 0 $ then 
+$$
+ \WW^\perp (\alpha^\si)  \leq  \WW^\perp (\alpha) - \WW( \si ) + O(1).
+$$
+\end{lem}
+
+\begin{proof}
+   Let us lif the segment $\alpha$ to a segment $\ba$ connecting some
+   ideal intervals $\BI$ and $\BJ$ (lifts of of the corresponding
+   boundary components). 
+   Let $\Bsi$ be the lift of the cobra that begins on $\ba$. It
+   connects $\ba$ to another lift $\ba_1$ of $\alpha$.  
+  The latter begins on some ideal interval  $\BI_1$ (another lift of $I$)  and ends on some
+  $\BJ_1$.
+
+Assume for definiteness that the cobra $\si$ is negatively oriented
+with respect to $\alpha$ (i.e.,  we turn right from $\alpha$ to
+$\si$). Then the ideal intervals under consideration appear on the
+circle $\T$ in the following cyclic order: $(\BI, \BJ_1, \BI_1, \BJ
+)$. Let us consider the canonical arc-segment diagram of this partially marked
+disk. By our assumption, it contains the arc $\Bsi$ connecting the gaps 
+$(\BJ, \BI)$ and $(\BJ_1, \BI_1)$. Besides, it may contain four segments $\Bga(\BI), \dots,
+\Bga(\BJ)$ connecting the gaps attached to the corresponding intervals
+$\BI$ etc., and  some arc-segments begining on these
+intervals (altogether there are at most five arc-segments with
+positive weight).   
+
+ Let us first assume that all the latter arc-segments have zero weight.
+ Then we have:
+$$
+   \WW^\perp(\ba) = \WW(\Bsi) + \WW(\Bga(\BI)) + \WW(\Bga(\BJ)) + O(1),  
+$$    
+$$
+   \WW^\perp(\ba^\si) = \WW(\Bga(\BI))  + \WW(\Bga(\BJ_1)) +O(1). 
+$$      
+So, it is enough to show that
+\begin{equation}\label{desired estimate} 
+   \WW(\Bga(\BJ_1)) \leq \WW(\Bga(\BJ) ).
+\end{equation} 
+
+Let $T$ be the deck transformation moving $\ba_1$ to $\ba$. 
+It moves the configuration $\CC:=(\BI, \BJ_1, \BI_1, \BJ)$ to 
+$T(\CC)= (\BJ, \BI,  T(\BJ),   T(\BI) ) $ (up to cyclic permutation).
+Let $L$ be the gap  between $T(\BI)$ and $\BJ$, and let $\Bde$ be the
+segment of $T(\CC)$  connecting $L$ to  the gap $(\BJ, \BI)$. 
+Then 
+$$
+  \WW(\Bga(\BJ_1)) = \WW(\Bde).  
+$$
+Moreover,  the  fixed points $q^u$ and $q^s$ of $T$ lie in the gap $(\BI_1, \BJ)$,
+(with $q^s$ ahead of $q^u$). \note{to be justified}
+It follows that $T(\BI)$ lies in  between $q^s$ and $\BJ$,
+and thus  $L\subset (\BI_1, \BJ)$.
+Hence $\WW(\Bde) \leq \WW(\Bga(\BJ) )$, and 
+the desired estimate (\ref{desired estimate}) follows. 
+
+\msk In the general case, there could also be the arc-segment $\Bom$ connecting
+$\BI$ to the gap $(\BJ_1, \BI_1)$ that intersects $\Bsi$ but not
+$\ba$. 
+But then $T(\Bom)$ goes from $T(\BI)$ to $(\BJ, \BI)$  contributing
+the same flux through $\ba$.
+\end{proof}
+
+ Let us now consider  a family $\SSS$ of disjoint cobras $\si_i$ with
+ the same (say, negaive) orientation attached to
+ some arc $\alpha$. Let $D_i$ be the Jordan disk bounded by $\si_i$ and
+ the segment of $\alpha$ sharing the endpoints with $\si_i$.   
+Any pair of these disks are  either nested or disjoint,
+so we can talk about  innermost and outermost cobras. 
+The outemost cobras form a  family with disjoint $D_i$.
+Let us define the twisted arc $\alpha^\SSS$ 
+by twisting $\alpha$ simultaneously  along the outermost cobras. 
+
+We define $\WW(S)$ as the total weigh of the cobras in $\SSS$. 
+
+\begin{cor}\label{loss of several cobras}
+Let  $\SSS$ be a family of negative cobras of positive weight attached to some arc $\alpha$. Then 
+$$
+ \WW^\perp (\alpha^\SSS)  \leq  \WW^\perp (\alpha) - \WW( \SSS ) + O(p).
+$$
+\end{cor}
+
+\begin{proof}
+  The twisted arc $\alpha^\SSS$ can also be obtained by twisting
+  $\alpha$ consecutively along the innermost cobras. In this way we
+  will make use of all the cobras of $\SSS$, 
+loosing each time the weight of the cobra, up to a bounded additive
+constant
+(Lemma \ref{loss of cobra}). Since there exists at most $O(p)$
+disjoint cobras, the conclusion follows.  
+\end{proof}
+
+More generally, we can consider a disjoint family $\SSS$  of  cobras
+with the same orientation attached to
+a WAD $X$, and twist $X$ along this family.  
+It immediately follows that 
+\begin{equation}\label{cobras attached to diag}
+    \WW^\perp(X^\SSS) \leq \WW^\perp (X) - \WW(\SSS) + O(p), 
+\end{equation}
+where $\WW(\SSS)$ should be computed with the corresponding weights. 
+
+Let us now pass to a dynamical setting. 
+Let $X$ be an invariant WAD in $U'\sm (\KK \cup \KK')$.
+We say that the cobra $\si$  attched to $X$  is {\it tame} if $i_*(\si)$ is a trivial
+segment on $U'\sm \KK$
+(so, $\si$  surrounds only isles of $\KK'$). 
+
+\begin{lem}\label{tame cobras}
+Fix a big $N$.
+Let $X$ be an invariant WAD, 
+% with $\WW^\perp (X') \geq C\, |X'|$. Then
+and let $ \SSS $  be a family  of disjoint  tame cobras $\si_i$
+attached to $X$.  
+If $\WW^\loc$ is sufficiently big then either $\WW^\ver\geq N \WW^\loc$ or else
+$$
+      \WW (\SSS)   = o ( p \WW^\ver ).   
+$$
+\end{lem} 
+
+\begin{proof}
+We can consider separately negatively oriented and positively oriented
+families. In either case,  the twisted WAD $X^\SSS$  is  well defined. 
+By (\ref{cobras attached to diag}),  
+ we loose the total (weighted) flux of these cobras.
+%$$
+% \WW^\perp (Y')  = \WW^\perp (X') - \WW({\SSS} )  
+% \leq (1-\eps) \WW(X')
+%$$
+% (assuming the desired estimate fails). 
+On the other hand, since the cobras are tame, we have $i_*(X^\SSS) =
+  i_*(X)$, so by Lemma \ref{flux through inv WAD-improved}
+$$
+     \WW^\perp (X^\SSS) \geq \WW^\perp (X) -  o ( p  \WW^\loc).
+$$
+and the conclusion follows. 
+%Comparing this with the previous formula, we obtain the desired.
+% $$   
+%     \WW^\perp (X')  \leq \frac A\eps\,  |X'|, 
+%$$
+% which contradicts our assumption as long as $C> A/\eps$. 
+\end{proof}
+
+
+\comm{****
+\sss{Generalized cobras} 
+We will need  more general creatures:
+a {\it generalized cobra} (attached to $X'$)  is a segment $\si'$ in
+$U'$  with endpoints on two adjacent edges $\RR_1$ and $\RR_2$  of
+$X'$ (so, both $\RR_i$ land on the same little Julia set $J_n$).
+A generalized cobra is tame if in the region bounded by $\si \cup
+\RR_1\cup \RR_2 \cup J_n$ (where $J_n$ is understood as a piece of
+the ideal boundary  of $U'$) 
+there are no other little Julia sets $J_k$.   
+Lemma~\ref{tame cobras} has the following generalized version': 
+
+\begin{lem}\label{tame generalized cobras}
+Let $X'$ be an invariant WAD, 
+% with $\WW^\perp (X') \geq C\, |X'|$. Then
+and let $ \SSS $  be a family  of disjoint  tame generalized cobras $\si_i$
+attached to $X$.  Then
+$$
+      \WW (\SSS)   = O( |X'| + p\, \WW^\ver + |\SSS|\, \WW_\loc ) .  
+$$
+\end{lem} 
+
+\begin{proof}
+Proceed as in  Lemma~\ref{tame cobras}: 
+ consider a WAD $Y'$ on $U'$  obtained by adding to $X'$
+   segments $\si_i'$, while erasing the corresponding pieces of $X'$.  
+   Then:
+$$
+ \WW^\perp (Y')  = \WW^\perp (X') - \WW({\SSS} )  
+% \leq (1-\eps) \WW(X')
+$$
+% (assuming the desired estimate fails). 
+
+  On the other hand, since the cobras are tame, we have $i_*(Y') =
+  i_*(X')$, so by Lemma \ref{flux through inv WAD}
+$$
+     \WW^\perp (Y') \geq \WW^\perp (X') -  O( |X'|+ p\, \WW^\ver).  
+$$
+Comparing this with the previous formula, we obtain the desired.
+% $$   
+%     \WW^\perp (X')  \leq \frac A\eps\,  |X'|, 
+%$$
+% which contradicts our assumption as long as $C> A/\eps$. 
+\end{proof}
+
+****}
+
+
+
+\sss{Cobras in the Elephant eye}
+
+Assume now that we have a multi-elephant combinatorics with $d$ eyes
+(so the period is equal to $pd+1$. 
+For the WAD $\RR'$ of external rays,
+we let $\RR' (n)$ be the union of rays landing on $J_n$, and $\RR_k' (n)$
+be the corresponding  individual rays.
+Similarly,  for the diagram $\RR=i_*(\RR')$,
+we use notation $\RR(n)$ and $\RR_k (n)$. 
+
+Note that  $\RR (0)$ comprises two rays, so together with $J_0$ they
+divide $U$  into two half-disk. Let $H_+$ be the one that does
+not contain  the critical value $c$. For our combinatorics, it contains only
+bounded number of the little Julia sets. Accordingly, $H_-$ is the
+other half-disk. 
+
+% We will use notation $\RR''(n)$ etc. for the rays in $U''\sm f^{-2} (\KK)$.
+
+\begin{lem}\label{many tame cobras} 
+ Any cobra $\si$ in $U \sm f^{-1} (\KK)$ attached to  $\RR(0)$ produces a tame cobra
+ of the same weight in $U' \sm f^{-2} (\KK)$ attached to $\RR'(d\, p)$. 
+\end{lem}
+
+\begin{proof}
+   Since the cobras in $U\sm f^{-1}(\KK)$ attached to $\RR'(0)$ form a $0$-symmetric 
+family, we can assume without loss of generality that $\si$ is
+contained in $H_+'$. 
+
+    We have: $f(H_+')\supset H_+$,  % \note{for genuine ql maps}
+and all little Julia sets $J_{pk}$ in $H_+'$ except $J_{pd}$ are mapped
+to $H_-$. It follows that the  lift of $\si$ 
+ by $f:  H_+' \ra U $  is a  tame cobra in $H_+'\sm f^{-2}(\KK)$ attached to
+$\RR'(d\, p)$. 
+\end{proof}
+
+%  Comparing this with Lemma \ref{tame cobras}, we conclude: 
+
+\begin{lem}
+   If the total weight of cobras in $U\sm \KK$ attached to $\RR(0)$ 
+is at least  $p \WW_\loc$ (in order), we are done. 
+\end{lem}
+
+\begin{proof}
+%       We can assume that $\WW^\ver < 2 \WW_\loc$. 
+%
+% Reducing the cobras in question to  $U\sm f^{-1} (\KK)$ we loose
+%$\leq p \WW^\ver$ of their weight. What is left is still much bigger
+%than $p\WW_\loc$. 
+    Lemma \ref{many tame cobras} produces for us a family of tame
+  cobras in $U'\sm f^{-1}(\KK)$ of the total weight $p\WW^\loc$,
+  \note{be careful}
+and Lemma \ref{tame cobras} leads to a contradiction. 
+\end{proof}
+
+
+%\begin{rem}
+%   How strong is the assumption that the total flux through $\RR(0)$ 
+%is much bigger than $ p\WW_\loc $ ? 
+%If it is violated then most leaves of the canonical foliation 
+%intersect $\RR(0)$  bounded number of times. 
+%I thnk this case can be reduced  the case of the CAD localized in the
+%translation region, but have not yet looked at it closely.   
+%\end{rem}
+
+%{\it Question.}  
+%How to rule out the situation when most of the flux through $\RR(0)$ 
+%is comprised of curves that keep rotating around $0$ in the same
+%direction ? 
+
+\comm{****
+\begin{lem}\label{many cobras}
+Assume the canonical WAD is not localized in the translation region.    
+At least $\asymp p\, \WW_\loc$  of the flux through $\RR(0)$ is supported on
+ cobras in $H_+$.
+\end{lem}
+
+\begin{proof}
+  In the non-localized case,  at least $\asymp p\, \WW_\loc$  of the flux through $\RR(0)$ 
+is supported on the canonical WAD.   \note{justify}
+Let us take an arc $\alpha$ of the
+canonical WAD crossing $\RR(0)$. There are three possible cases:
+
+\ssk \nin (i) It is trapped inside $H_+$;
+
+\ssk \nin (ii) It returns to $\RR(0$ from $H_+$ crossing it through
+the same ray as it entered;
+
+\ssk \nin (iii)  
+It returns to $\RR(0) $ from $H_+$ crossing it through
+the diffenrent  ray.
+
+\msk In case (i)  it lands on some  little Julia set in $H_+$
+(possibly, on $J_0$), and the
+total weihgt of such arcs is bounded by $(d+1)\, \WW_\loc$.  
+
+\ssk
+In case (ii) $\alpha$ bounds a cobra in $H_+$.
+
+\ssk In case (iii), we have similar three subcases according to its behavior in $H_-$:
+
+\ssk\nin (iii-a) After entering $H_-$ it is trapped over there; 
+
+\ssk\nin (iii-b) It returns back to $\RR(0) $ from $H_- $ crossing it through
+the same ray as it entered;
+
+\ssk\nin (iii-c) It returns back to $\RR(0) $ from $H_- $ crossing it through
+the different ray;
+
+\ssk
+Case (iii-a) leads to localization. \note{justify}
+
+\ssk 
+Case (iii-b) creates a cobra.
+
+Finlly, in case (iii-c) we have again three subcases, etc. 
+
+\msk In the end, we have: 
+
+\ssk \nin 1)
+ $\alpha$ either lands on some little Julia set in $H_+$:
+totall weight of these arcs is still at most $(d+1) \, \WW_\loc$; 
+
+\ssk \nin 2)  or it
+creates a cobra based on $\RR(0)$ (which is what we want);
+
+\ssk \nin 3) or it lands on some little Julia set in $H_-$ after a
+bounded number of revolutions, which again leads to the localized case; 
+
+\ssk \nin 4) or or it lands on some little Julia set in $H_-$ after an
+unbounded number of revolutions.  
+\end{proof}
+
+
+\begin{lem}\label{many tame cobras} 
+  Assume the canonical WAD is not localized in the translation region.   
+Then  at least 1/2 of the flux through $\RR'(d\, p)$ is supported  on tame
+    cobras. 
+\end{lem}
+
+\begin{proof}
+    We have: $f(H_+)\supset H_+$, \note{for genuine ql maps}
+and all little Julia sets $J_{pk}$ in $H_+$ except $J_{pd}$ are mapped
+to $H_-$. Lifting by $f:  H_+'\ra U$  the cobras from  Lemma \ref{many cobras},  
+ we obtain tame cobras in $H_+'$ attached to
+$\RR(d\, p)$ that occupy at least 1/2 of the flux through $\RR'(d\, p)$. 
+\end{proof}
+****}
+
+\comm{***********
+\subsection{Rotation number} 
+
+Let us define the {\it rotaion number}  $\rho(K)$ around a little  Julia set
+$K=K_i$ as follows.   Take any ray $\RR$ landing at  $K$ oriented
+from $K$ to $\di U$.   Consider the immersed foliation $\FF$
+through $\RR$ oriented positively with repect to $\RR$. 
+Then we have the (partially defined)   first return map $T: \RR\ra
+\RR$. 
+ For any $a\in \RR$ and $b= T(a)$, we let $c(a, b)= 1=
+-c(b,a)$. If $T(a)$ is not well defined, we let $c(a,b)=0$ for all
+$b\in \RR$.  
+This function can be extended to a cocycle $c(a,b)$ for the
+equivalence relation generated by $\FF$ on $\RR$. 
+ Then we let
+$$
+   \rho(K_i) =  \limsup_{n\to \infty}   \frac 1n \int_{\RR} c(a,a_n) \, d\mu(a),
+$$ 
+where $a_n$ is the $n$th return of the leaf $L_a$ to $\RR$, 
+and  $\mu$ is the transverse measure on $\FF$.
+
+\begin{lem}
+  The rotation number $\rho(K)$ does not depend on the choice of the ray
+  $\RR$. 
+\end{lem}
+***************}
+
+\subsection{Poincar\'e return map}
+
+Given some arc $G$ for a map $f$, we can consider the return map $T=T_G$ to $G$ along the
+immersed foliation $\FF^\perp$. 
+More precisely, let us consider the covering corresponding to $U\sm
+G$.  Its ideal boundary is marked with four ideal intervals, two of which, 
+$\BG$ and $\BG^\#$, correspond to $G$.
+% (two others correspond to the
+% boundary components where $G$ lands). 
+Let us consider the canonical foliation on this surface. 
+It defines the  transit map from $\BG$ to $\BG\sqcup \BG^\#$,
+which  can be viewed as the return map to $G$.  \note{makes sense?}
+ It comes together wirh 
+% the quasi-invariant transverse measure $\mu$ on $G$, and 
+the sign function $\eps(x)\in \{0,\pm 1\}$ recording whether the return is well defined
+(otherwise $\eps=0$) and if so, whether it is  orientation
+preserving (in this case, it goes from $\BG$ to $\BG^\#$) or
+reversing (then it  goes from $\BG$ to itself). 
+
+\begin{lem}
+  Assume we have a sequence of maps $f_n$ as above. Then the
+  corresponding return maps converge almost everywhere to a
+   measure preserving automorphism. 
+\end{lem}
+
+Here the ``measure'' $\mu$  is a weak limit of the flux measures
+$\mu_n$ through $G$. 
+
+If $G=\RR$ is an external ray then  $T$ is monotonic on $\{x: \ \eps (x)=1 \} $,
+since the corresponding foliation (albeit immersed) \note{OK?} 
+ lives on the plane. 
+
+
+Given a sequence of maps $f_n$ with periods $p_n \to \infty$ 
+and a ray  $\RR$ (independent of $n$ in an appropriate sense),
+let us consider  the coresponding return maps $(T_n, \mu_n, \eps_n)$. 
+
+
+\begin{lem}
+  Assume 
+$$  \WW^\ver (f_n) \leq 2 \WW_\loc (f_n), \quad p\cdot \WW_\loc (f_n) = o(\WW^\perp (\RR, f_n)); \quad
+  \WW^\perp (\RR, f_n)\asymp  \locflux.
+$$ 
+Then the maps $(T_n, \mu_n, \eps_n)$ have a limit
+$(T, \mu, \eps)$. Moreover, $\eps(x)\not= 0$ a.e., $T$ preserves $\mu$ and is monotonic on 
+ $\{x: \ \eps(x)=1 \} $.
+\end{lem}
+
+\begin{proof} 
+Let us orient  the ray $\RR$ from the little $J$ -set to $\di U$.
+For any point $a\in \RR$,  orient the leaf $L_a^n$ of
+$\FF_n^\perp$ positively with repsect to $\RR$.  
+
+Let us consider the set $X_n\subset \RR$ of points that
+  never return to $\RR$ in positive time. 
+This set can return to another edge $G$ of our cell decomposition,
+but it must be   wandering  under the return maps.  Hence the number
+of returns is bounded by   
+$$
+       (1+\de)  \locflux) /\mu_n(X)
+$$
+(since the  trnasverse measure is almost preserved  under the
+holonomies). 
+It follows that there exists at most 
+$$
+   C p\cdot  \locflux  /\mu_n(X)
+$$
+different homtopy classes of arc-segments in this foliation (with some
+absolute $C$). Since each of them has weight at most $\WW_\loc(f_n) $, we
+obtain:
+$$
+  \mu_n(X)  \leq Cp\WW_\loc (f_n)\cdot  \locflux
+  /\mu_n(X),
+$$
+and thus
+$$
+   \mu_n(X) \leq \sqrt{Cp\WW_\loc (f_n)\cdot 
+      \locflux } = o(\WW^\perp(\RR, f_n )). 
+$$
+Thus, in the limit the return map is well defined almost everywhere. 
+\end{proof}
+
+\begin{lem}
+  Under the assumptions of the previous lemma,  one of the following
+  situations occur:
+
+\ssk \nin $\mathrm{ (i)}$ There is a cobra in $H_+$ of definite weight based upon  a
+ray $\RR_i(0)$;
+
+\ssk \nin $\mathrm {(ii)}  $  $T|\RR(1) =\id$ (so all the leaves of the ``limiting lamination'' are closed). 
+\end{lem}
+
+\begin{proof}
+  If there is a cobra of definite weight based upon $\RR(1)$ then
+  one of its lifts is the desired cobra based upon $\RR(0)$.  
+
+Otherwise $\eps(x)=1$ a.e. for the return map $T_1$  to $\RR(1)$, so it is
+monotonic. Since it is measure preserving, it is identical. 
+\end{proof} 
+
+\msk
+\subsubsection{Quadratic-like restrictions}
+Below, we will restric ourselves to the case of two eyes
+(of period $2p+1$). 
+
+Let us consider a cobra segment $S$ based on sone $\RR(n)$ with $n<p$
+that begins by crossing  the edge $e_{n-1} $  connecting $K_n$ to $K_{n-1}$.
+Assume it is part of some canonical arc $\alpha$.  Then typically it cannot cross the
+path $\de_{n-2}$ of edges $e_{j-1}$ consecutively connecting $K_j$ to $K_{j-1}$,  $j=n-2,\dots
+1$, for it would lead to an interection between $\alpha$ and $f^* \alpha$. Hence $S$
+goes around  $\de_{n-2}$  returning to $\RR(n)$ on the other side of $\de_{n-2}$, or else
+it comes back through $e_n$.  
+%Let us consider a segment of the first kind. 
+
+\note{How about returning through $e_{n-1}$? }
+
+
+There are only bounded number of segments of this kind. \note{why?}  
+Assume the total weight of the corresponding arcs is of order
+$p\WW_\loc$. Then we can push-forward such a segment to obtain at
+most $O(p)$ segments of weight of order $\WW_\loc$. These segments
+represent cobras based on $\RR_{n+1}$ of the same type, and there are
+only a bounded number  of those,   \note{why?} 
+so in fact, there is only bounded
+number of push-forwards in question.  \note{elaborate!}
+
+Doing this finitely many times,  we obtain a segment $S$  whose
+push-forward $f_*S$ encloses $S$, creating a quadratic-like
+restriction of the map.  \note{why?} 
+
+\msk
+Somewhat different approach. 
+Let us  have a cobra $S$ (which is part of a canonical arc $\alpha$) 
+ based upon some ray $\Ray(n)$ that together
+bound a disk $D$. 
+Assume:
+
+\ssk \nin (0)
+  $D$ does not contain $K_1 $; 
+
+\ssk \nin (i)
+ $\alpha$ is pushable forward 
+(as we know, a typical arc is such);  
+
+\ssk\nin (ii)
+ $\Ray(n+1)$ is disjoint from $D$;
+
+\ssk\nin (iii) 
+There is  a maximal string of at least two consecutive  little Julia sets 
+$K_l , \dots , K_m$ contained in $D$, with $m< n$. 
+
+\ssk
+Then $f_* (D)$ 
+is a cobra-disk  based upon $\Ray(n+1)$ 
+that encloses $K_{n+1}$. Hence it cannot be disjoint from $D$.
+By (ii), $f_*(D)$ cannot be contained in $D$. 
+Hence 
+
+\ssk\nin
+a) either $f_*(S)$ enters $D$ through the mouth of $S$ creating a new
+cobra on $\Ray(n)$, or else  
+
+\ssk \nin
+b)  $f_*(D)\supset D$. 
+
+\ssk\nin 
+Assume in addition that
+
+\ssk\nin (iv) 
+ $D\supset K_0$
+
+\ssk
+ Then Case a) is excuded. Indeed $ f(D) \supset K_1$, 
+while $f(D) \sm D \not\supset K_1$. \note{why?} 
+Hence $D\supset K_1$ contradicting assumption (0).  
+
+Case  b)  is excluded since otherwise we would obtain 
+a  %  (homotopic) 
+quadratic-like map $f: D\ra f  (D) $.
+
+\ssk 
+How to excule the situaton when $D\not\supset K_0$ (to get rid of
+(iv))? In this case, $D$ is sometimes a Thirston obstruction.
+Namley, in case a) if $f(D)\sm D $ is 
+
+ 
+
+\msk
+\subsubsection{Cobras with long tails} 
+
+Let us consider a cobra based on $\RR(1)$ whose tail extends further
+into the translation region crossing consecutively $\RR(1), \dots , \RR(N)$ so that the tail region
+ bounded by $\RR(1)$ and $\RR(N)$ is empty (no little Julia sets inside). 
+Let us pull it back starting with   the shift at the translation region. These
+pullbacks contain a bounded number of little Julia sets located outside
+the translation region.  Hence, after a bounded number of pullbacks,
+we will either lose all these Julia sets, or will stabilize. In the
+former case, we obtain an empty cobra that crosses about $N$ rays.
+So, if the total weight of such cobras is of order $p\WW_\loc$, then the
+total flux they produce is of order $Np \WW_\loc$.  This is not
+allowed if $N$ is sufficiently big. 
+
+In the latter case, we obtain a Thurston obstruction.   
+ 
+\sss{Confined situation}
+Assume we have cobras encircling  almost the whole set
+of little Julia sets $J_{k+p}$, $0\leq k\leq p$. 
+Then canonical arcs that start at $J_l$, $0\leq l\leq p$, 
+either produce a quadrtic-like restriction, or empty cobras as above, 
+or else they are confined. 
+
+
+\subsection{No closed curves}
+
+\begin{lem}
+  If $f$ is not intermediately renormalizable then the $2$-Canonical Closed Curve
+  Diagram $\CC$ is empty. 
+\end{lem}
+
+\begin{proof}
+First note that a curve $\gamma\in \CC$ cannot suround a single Julia set $J_s$ since in this case
+the local weight of $J_s$ would be less than $1$. 
+
+
+ Let us take a curve $\gamma\in \CC$ surrounding the
+  smallest number of little Julia sets.  
+  Let $s\in [0,p)$ and $t\in (0,p)$ be the smallest ones such that $K_s$ and $K_{-t}$
+  are surrounded by $\gamma_s:= \gamma$.
+Let us pull $\gamma_s$ back $s+t$ times along the
+  orbit of $K_s$. We obtain curves $\gamma_{s-1}, \dots, \gamma_{-t}$. 
+By Lemma \ref{flux vs weight},
+$$
+   \WW(\gamma_{s-n}) \geq d_n^{-1}  \WW(\gamma_{s-n+1}),
+$$
+where $d_s=2$ and  $d_n=1 $ for $n\not=s$. It follows that all the curves $\gamma_{s-n}$,
+belong to $\CC$.
+Hence they are disjoint, so the correspoding Jordan disks $D_{s-n}$ are either disjoint or nested.  
+
+Furthermore, since $\gamma$ surrounds the minimal number of little Julia sets,
+all these curves 
+surround the same number of little Julia sets.
+It follows that if the disks $D_{s-n}$ and $D_{s-m}$ are nested then 
+$\gamma_{s-n}$ and $\gamma_{s-m}$ are homotopic in $\C\sm \KK$.
+
+Putting the above ingredients together, we see that $D_{-t}\cap \KK$
+overlaps with $D\cap \KK$, the map $f^{s+t} : D_{-t}\ra D$ is a branched covering of degree two (if $s>0$) or one
+(if $s=0$). 
+Moreover, $\gamma_{-t}$ is homotopic to $\gamma$ in $\C\sm \KK$. 
+In the former case,  $f$ is intermediately renormalizable;
+in the latter case these curves form a Thurston obstruction (that does not exist in our situation).   
+\end{proof}
+
+\subsection{Long rectangles} 
+
+\bignote{Written Feb 2017} 
+
+We assume that the period is $2p+1$ (so it is really the doube eye case).
+
+  Let us consider a non-confined arc $\alpha$ that begins and ends deep inside the
+  translation region.  Then we have an initial and the final pieces of
+  $\alpha$, $\alpha_i$ and $\alpha_f$. Both of them must exit the
+  translation region.  Assume they  cross $\Ray (1)$ before exiting the
+  region. (It should be possible to achieve  tihs  typically by taking
+  $f_*(\alpha)$.) If there is another ray, $\Ray(n)$,  deep inside the tranlation
+  region, then pieces of $\Ray(1)$ and $\Ray(n)$, together with pieces
+  $A_i$ and $A_f$
+  of  $\alpha_i $ and $\alpha_f$, form a long rectangle $R$. 
+Let us analyze the structure of this rectangle. 
+
+Assume first that both pieces $A_i $ and $A_f$  cross $\Ray(1)$
+positively (``from inside'').  Let us also assume that we have just
+one loop on the other side of $\Ray(1)$ and this loop does not contain
+$K_0$, so this loop is a  is a cobra. 
+Then consider several cases:
+
+1) The rectangle $R$  is empty, i.e., it does not contain any little $K$-sets.
+Then our cobra has a long tail.
+
+2)  $R$ contains a string of consequtive little $K$-sets in the
+adjunct orbit (of $K_{p+1}$). and then ``dive down " or ``up".
+ Let us push forward $\alpha$. Then both horizontal sides of $R$
+ go ``up" or ``down'', which forces $f(R)$ and $R$ cross. 
+
+3) The pieces $\alpha_i$ and $\alpha_f$ don't dive, 
+  but eventuallay land at the adjunct Julia set.
+  Then look at the main string of little Julia sets (the translation orbit of $K_1$)
+  and argue that they are confined.
+
+  ***************  } 

@@ -1,0 +1,605 @@
+\input header
+\input ras
+\footline={\hss\tenrm 9-\folio\hss}\pageno=1
+
+\centerline{\bf GLOBAL FIXED POINT THEORY}\bigskip
+
+\centerline{\bf \S9. The Holomorphic Fixed Point Formula}\medskip
+
+First note the following.
+
+{\QP{\bf 9.1. Lemma.} \it Every rational map \[f(z)\not\equiv z\]
+of degree \[d\] has exactly \[d+1\]
+fixed points, counted with multiplicity.\medskip}
+
+Here, by definition, the {\bit multiplicity} of a fixed point
+is equal to one whenever the multplier satisfies \[\lambda\ne 1\], and
+is strictly greater than one otherwise. (Compare \S7.) As an example, in
+the special case of a polynomial map of degree \[d\ge 2\],
+there is exactly one fixed point at infinity, and hence
+\[d\] finite fixed points counted with multiplicity.\smallskip
+
+{\bf Proof.}
+Conjugating \[f\] by a fractional linear automorphism if necessary, we
+may assume that the point at infinity is not fixed by \[f\]. Hence we
+can write \[f\] as a quotient \[f(z)=p(z)/q(z)\] where
+the polynomial \[q(z)\] has degree equal to \[d\] and \[p(z)\] has
+degree at most \[d\]. Now the equation
+\[f(z)=z\] is equivalent to the polynomial
+equation \[p(z)=zq(z)\] of degree \[d+1\], and the assertion follows.\QED
+\smallskip
+
+Both Fatou and Julia made use of a ``well known'' relation between the
+multipliers at the fixed
+points of a rational map. Consider first an isolated
+fixed point \[f(z_0)=z_0\] of a holomorphic map in one complex variable.
+If \[z_0\ne\infty\], we define the {\bit holomorphic index} of \[f\] at
+\[z_0\] to be the residue
+$$	\iota(f\,,\,z_0)\;=\;{1\over 2\pi i}\oint {dz\over z-f(z)}	$$
+where we integrate in a small loop in the positive direction around \[z_0\].
+As usual, if \[z_0\in\hat\C\] happens to be the point at infinity, then
+we must first introduce the local uniformizing parameter \[\zeta=\phi(z)=1/z\].
+In this case, we define the residue of \[f\] at \[\infty\] to be equal to
+the residue of \[\phi\circ f\circ \phi^{-1}\] at the origin.
+
+{\QP{\bf 9.2. Theorem.} {\it For any rational map \[\;f:\hat\C\to\hat\C\;\]
+with \[f(z)\] not identically equal to \[z\], we have the relation
+$$	\sum_{f(z)=z}\,\iota(f,z)\;=\; 1\,,	$$
+to be summed over all fixed points.
+In the case of a simple fixed point, where the multiplier
+\[\lambda=f'(z_0)\] satisfies \[\lambda\ne 1\], the index is given by
+$$	\iota(f,z_0)\;=\;{1\over 1-\lambda}\;.	$$
+In any case, the index at \[z_0\] is a local analytic invariant. That
+is, if \[\,g=\phi\circ f\circ\phi^{-1}\]
+where \[\phi\] is a local holomorphic change of coordinate, then
+\[\iota(f,z_0)=\iota(g,\phi(z_0))\].}\medskip}
+
+\noindent
+As an application, if \[f\] has one fixed point with multiplier very close
+to 1, and hence with \[|\iota|\] large, then it must have at least one
+other fixed point with \[|\iota|\] large and hence with \[\lambda\]
+close to (or equal to) 1.\smallskip
+
+{\bf Proof of 9.2.} Conjugating \[f\] by a linear fractional automorphism
+if necessary, we may assume that the point at infinity is not fixed by \[f\].
+Then \[f(z)\] remains bounded as \[|z|\to\infty\], and there is
+a Laurent series expansion of the form
+$$	\big( z-f(z)\big)^{-1}\;=\; z^{-1}+c_2z^{-2}+c_3z^{-3}+\cdots	$$
+for large \[|z|\]. It follows that
+the integral of \[\;{1\over 2\pi i}\cdot {dz\over z-f(z)}\;\] in a large loop
+around the origin is equal to \[+1\]. Evidently this integral is equal to
+the sum of the residues \[\iota(f,z_j)\] at the fixed points of \[f\];
+hence the summation formula. The
+computation of \[\iota(f,z_j)\] at a fixed point with multiplier \[\lambda_j
+\ne 1\] is similar, using the Laurent series expansion of \[\big(z-f(z)
+\big)^{-1}\] in a neighborhood of \[z_j\].
+
+The proof that \[f\] is a local analytic
+invariant, even at a multiple fixed point where \[\lambda=1\],
+can be sketched as follows. Choose a 1-parameter family of perturbations
+\[f_t\] of the given map \[f_0\]
+so that \[f_t\] has distinct fixed points, all with multiplier
+different from 1, for all small \[t\ne 0\]. For example we can set \[f_t(z) 
+=f(z)+t\]. Thus a fixed point \[z_0\]
+of \[f=f_0\] will split up into a cluster of nearby simple fixed points for
+\[t\ne 0\].  Since the integral in a fixed loop around \[z_0\] varies
+continuously with \[t\], and since this integral is a sum of residues which
+are evidently local analytic invariants when \[t\ne 0\], it follows that
+\[\iota(f_0\,,\,z_0)\] is also a local analytic invariant.\QED\smallskip
+
+For generalizations of this formula, the reader is referred to
+Atiyah and Bott.\medskip
+
+{\bf Examples.} A rational map \[f(z)=c\] of degree zero has just one fixed
+point, with multiplier zero and hence with index \[\iota(f,c)=1\]. A
+rational map of degree one
+usually has two distinct fixed points, and the relation
+$$	{1\over 1-\lambda_1}+{1\over 1-\lambda_2}\;=\;1	$$
+simplifies to \[\lambda_1\lambda_2=1\]. Any polynomial map \[p(z)\]
+of degree two or more has a ``superattractive'' fixed point at infinity, with
+multiplier zero and hence with index \[\iota(p,\infty)=1\]. Thus
+the sum of the indices
+of the {\it finite} fixed points of a polynomial map of degree \[\ge 2\]
+is always zero.
+For a polynomial of degree exactly two, the relation
+$$      {1\over 1-\lambda_1}+{1\over 1-\lambda_2}\;=\;0 $$
+for the finite fixed points simplifies to \[\;{1\over 2}
+(\lambda_1+\lambda_2)=1\,\].\medskip
+
+{\QP{\bf 9.3. Lemma.} {\it A fixed point with multiplier \[\lambda\ne 1\]
+is attracting if and only if its index \[\iota\]
+has real part \[{\cal R}(\iota)>{1\over 2}\].}\bigskip}
+
+Geometrically, this is proved by noting that inversion carries the disk
+\[1+D\] having the origin as boundary point to the appropriate half-plane.
+Computationally, it can be proved by noting that \[{1\over 2}<{\cal R}
+({1\over 1-\lambda})\] if and only if
+$$	1\;<\;{1\over 1-\lambda}+{1\over 1-\bar\lambda}\;.	$$
+Clearing denominators, this reduces easily to the required inequality
+\[\lambda\bar\lambda<1\].\QED
+
+One important consequence is the following.\medskip
+
+{\QP{\bf 9.4. Corollary.} {\it Every rational map of degree two or more
+must have either a repelling fixed point, or a fixed point
+with \[\lambda= 1\], or both.}\bigskip}
+
+{\bf Proof.} If the \[d+1\] fixed points were distinct and were all
+attracting or neutral, then each index would have real part \[{\cal R}(\iota)
+\ge{1\over 2}\], hence the sum would have real part greater than or equal to
+\[{d+1\over 2}>1\]; but this would contradict the Fixed Point Formula.\QED
+
+Since repelling points and parabolic points both belong to the Julia set,
+this yields another proof of the following. (Compare \S4.4, as well as
+\S4.3 and \S7.5.)
+
+{\QP{\bf 9.5. Corollary.} \it The Julia set, for any rational map of
+degree two or more, is always non-vacuous.\smallskip}
+\lln\medskip
+
+{\bf Problem 9-1.} If \[\;f(z)=z+\alpha z^2+\beta z^3+({\rm higher\;terms})
+\,\],
+with \[\alpha\ne 0\], show that the holomorphic index is given by
+\[\iota(f,0)=\beta/\alpha^2\]. As an example,
+consider the one-parameter family of cubic maps
+$$	f_\alpha(z)\;=\;z+\alpha z^2+z^3	$$
+with a double fixed point at the origin. Show that the remaining finite
+fixed point of \[f_\alpha\]
+is attracting if and only if \[\alpha^2\] lies within a unit disk centered
+at \[-1\], or if and only if \[\alpha\] lies within a figure 8 shaped region
+bounded by a lemniscate. Show that \[f_\alpha\] can be perturbed so that the
+double fixed point at the origin splits up into two fixed points which
+are {\it both} attractive
+if and only if \[\alpha^2\] lies inside the disk of radius \[1/2\] centered
+at \[1/2\], or if and only if \[\alpha\] lies within a region bounded
+by a lemniscate shaped like the symbol \[\infty\].\smallskip
+
+{\bf Problem 9-2.} Any fixed point \[z_0\] for \[f\] is evidently also a
+fixed point for \[f^{\circ n}\]. If \[z_0\] is attracting [or repelling],
+show that \[\iota(f^{\circ n},z_0)\] tends to the limit 1 [or 0] as
+\[n\to\infty\]. If \[\;f(z)=z+\alpha z^k+({\rm higher\;terms})\,\], show that
+\[\iota(f^{\circ n},0)\] tends to the limit \[k/2\].
+
+\vfil\eject % \bigskip\bigskip
+\footline={\hss\tenrm 10-\folio\hss}\pageno=1
+
+\centerline{\bf \S10. Most Periodic Orbits Repel.}\bigskip
+
+This section will prove the following theorem of Fatou. By a {\bit cycle}
+we will mean simply a periodic orbit of \[f\]. Recall that a cycle is
+called {\bit attracting}, {\bit neutral}, or {\bit repelling} according as its
+multiplier \[\lambda\] satisfies \[|\lambda|<1\,,\;|\lambda|=1\], or
+\[|\lambda|>1\].
+
+{\QP{\bf 10.1. Theorem.} {\it Let \[f:\C\to\C\] be a rational map
+of degree two or more. Then \[f\] has at most a finite number of
+cycles which are attracting or neutral.}\medskip}
+
+We will see in \S11 that there always exist infinitely many repelling
+cycles. Shishikura has given
+the sharp upper bound of \[2d-2\] for the number of attracting or neutral
+cycles, using methods of quasi-conformal surgery. However the classical
+proof, which is given here, shows only that this number is less than
+or equal to \[6d-6\].\smallskip
+
+First consider the case of an attracting cycle \[\,\hat z_0\mapsto \hat z_1\mapsto\cdots
+\mapsto \hat z_m=\hat z_0\,\].
+Each \[\hat z_j\] is an attracting fixed point for the \[m$-fold composition
+\[f^{\circ m}\]. If \[\Omega_j\] is the immediate basin for \[\hat z_j\] under
+\[f^{\circ m}\], then the union \[\Omega_0\cup\cdots\cup\Omega_{m-1}\] will be
+called the {\bit immediate basin}$\,$ for our \[m$-cycle. It can be described
+as the union of those components of the Fatou set which intersect the given
+attracting cycle. We continue to assume that \[f\] has degree two or more.
+
+{\QP{\bf 10.2. Lemma.} \it The immediate basin \[\Omega_0\cup\cdots\cup
+\Omega_{m-1}\] for any attracting cycle
+of \[f\] must contain at least one critical point of \[f\].\medskip}
+
+{\bf Proof.} In the special case of an attracting fixed point, this was proved
+in \S6.6. Applying this result to the \[m$-fold iterate of \[f\], we see
+that the immediate basin \[\Omega_0\] for the fixed point \[\hat z_0\]
+of \[f^{\circ m}\] must contain at least one critical point \[z_0\] of
+\[f^{\circ m}\]. Let
+\[\,z_0\mapsto z_1\mapsto\cdots\,\] be the orbit of this critical point
+under \[f\]. By the chain rule,
+at least one the the \[m\] points \[z_0\,,\,z_1\,,\,
+\ldots\,,\,z_{m-1}\] must be a critical point for \[f\]. Since \[z_j
+\in\Omega_j\], this proves the Lemma.\QED
+
+Next consider a parabolic cycle \[\,\hat z_0\mapsto \hat z_1\mapsto\cdots
+\mapsto \hat z_m=\hat z_0\,\], with multiplier
+\[\lambda\] equal to a \[q$-th root of unity. Then the \[qm$-fold
+iterate \[f^{\circ qm}\]
+maps each \[\hat z_j\] to itself with multiplier \[\lambda^q\] equal to \[1\].
+Recall that the number \[n\ge 1\] of attracting petals around \[\hat z_j\]
+must be some multiple of \[q\]. (Compare 7.2 and 7.6.)\smallskip
+
+{\bf Definition.} The union of
+those components of the Fatou set which contain one of these \[n\] attracting
+petals around one of the \[m\] points of the cycle will be called
+the {\bit immediate basin} of this parabolic
+cycle. Thus the number \[nm\] of connected components of
+this immediate basin is some multiple of \[qm\].
+
+{\QP{\bf 10.3. Lemma.} \it If \[f\] has degree \[d\ge 2\], then
+the immediate basin for any parabolic cycle must also
+contain at least one critical point.\medskip}
+
+{\bf Proof.} In the case of a fixed point with multiplier \[\lambda=1\],
+this was proved in \S7.10. The general case follows easily, just as in the
+argument above.\QED
+
+In fact, it is not difficult to check that there must be at least
+\[n/q\] distinct critical points in such an immediate basin.
+Combining 10.2 and 10.3 we obtain the following.
+
+{\QP{\bf 10.4. Lemma.} {\it A rational map of degree \[d\ge 2\] can
+have at most \[2d-2\] cycles which are attracting or parabolic.
+Similarly, a polynomial map of degree \[d\ge 2\] can
+have at most \[d-1\] cycles in the finite plane
+which are attracting or parabolic.}\medskip}
+
+{\bf Proof.} Since the immediate basins for distinct cycles are distinct
+by definition, it follows from 10.2 and 10.3 that
+the number of attracting or parabolic cycles is less
+than or equal to the number of critical points. In the case of a polynomial
+of degree \[d\], the number of finite critical points is clearly at
+most \[d-1\]. In the case of a rational function of degree \[d\], by
+the Riemann-Hurwitz formula \S5.1 the number of critical
+ponts, counted with multiplicity, is equal to \[2d-2\]. Hence
+the number of distinct critical points is at most \[2d-2\]. In either
+case, the conclusion follows.\QED
+
+{\bf 10.5. Remark.} This Lemma gives a practical computational procedure
+for finding all attracting or parabolic cycles. We must simply follow the
+orbits of all critical points, and test for convergence.
+
+{\QP{\bf 10.6. Lemma.} {\it For a rational map of degree \[d\ge 2\],
+the number of neutral cycles which have multiplier \[\lambda\ne 1\]
+is at most \[4d-4\].}\medskip}
+
+Evidently 10.4 and 10.6 together imply Theorem 10.1.
+The proof of 10.6 begins as follows. Following Fatou, we perturb the given
+map \[f\] and then applying 10.4. It will be convenient
+to compare \[f\] with the map \[z\mapsto z^d\] of the same degree.
+Note that this model map has no neutral cycles. It has
+superattractive fixed points at zero and infinity,
+but otherwise all of its periodic points are strictly repelling, with
+\[|\lambda|=d^m>1\] where \[m\] is the period. Let
+\[f(z)=p(z)/q(z)\] where \[p(z)\] and \[q(z)\] are polynomials, at least
+one of which has degree \[d\]. Consider the one-parameter family of
+rational maps
+$$	f_t(z)\;= \;{(1-t)p(z)\,+\,tz^d\over (1-t)q(z)\,+\,t\;\;\;}	$$
+with \[f_0(z)=f(z)\] and \[f_1(z)=z^d\]. There will be some finite set
+of exceptional values of \[t\] for which the numerator and denominator
+of this fraction have a common divisor. Algebraically this condition
+is expressed by setting the ``resultant'' of the numerator and denominator
+equal to zero.  Geometrically, it means that
+a zero and pole of \[f_t\] crash together. If we exclude this finite set of
+bad values of \[t\], then clearly \[f_t(z)\] is holomorphic as a function
+of two variables, and each \[f_t\] has degree \[d\].
+
+Suppose that \[f=f_0\] had \[4d-3\] distinct neutral cycles
+with multipliers \[\lambda_j\ne 1\].
+By the Implicit Function Theorem, we could follow each
+of these cycles under a small deformation of \[f_0\]. Thus, for small
+values of \[|t|\], the map \[f_t\] would have corresponding cycles
+with multipliers \[\lambda_j(t)\] which depend holomorphically on \[t\],
+with \[|\lambda_j(0)|=1\].
+
+{\QP{\bf 10.7. Sub-Lemma.} {\it None of these functions \[t\mapsto
+\lambda_j(t)\] can be constant throughout a neighborhood of \[t=0\].}\medskip}
+
+{\bf Proof.} Suppose that for some \[j\] the function \[t\mapsto
+\lambda_j(t)\] were constant throughout a neighborhood of \[t=0\]. Then
+we will show that it is possible to continue analytically along any path
+from 0 to 1 in the \[t$-plane which misses the finitely many
+exceptional values of \[t\].
+To prove this, we must check that the set of \[t\] for which we can continue
+is both open and closed. But it is closed since any limit point of periodic
+points with fixed multiplier \[\lambda_j\ne 1\] is itself a periodic point
+with this same multiplier; and it is open since any such cycle varies
+smoothly with \[t\], throughout some open neighborhood
+in the \[t$-plane, by the Implicit Function Theorem.
+Now continuing analytically to \[t=1\], we see that the map \[z\mapsto z^d\]
+must also have  a cycle with mutiplier equal to \[\lambda_j\], with \[|
+\lambda_j|=1\]. But this is known to be false, which proves 10.7.\QED
+
+The proof of 10.6 continues as follows. We can express each of our \[4d-3\]
+multipliers as a locally convergent power series
+$$	\lambda_j(t)/\lambda_j(0)\;=\;1+a_j t^{n(j)}+({\rm higher\;terms})\,,
+	 $$
+where \[a_j\ne 0\] and \[n(j)\ge 1\].
+Hence \[\log|\lambda_j(t)|\] is equal to the real part of\break
+\[\;a_j t^{n(j)}+
+{\rm (higher\;terms)}\,\]. If we ignore the higher order terms, this means
+that we can divide the \[t$-plane into \[n(j)\] sectors for which
+\[|\lambda_j(t)|>1\] and \[n(j)\] congruent sectors for which
+\[|\lambda_j(t)|<1\]. Taking account of the higher order terms, we have
+the following statement. Note that \[{\rm sgn}(
+\log|\lambda|)\] is equal to \[+1\] or \[-1\] according as \[|\lambda|>1\] or
+\[|\lambda|<1\].
+
+{\QP{\bf Assertion.} \it The step function
+$$	\theta\;\mapsto\;\sigma_j(\theta)\;\;=\;\;\lim_{r\to 0}
+	\;{\rm sgn}\,\log|\lambda_j(r e^{i\theta})|	$$
+is well defined with value \[\pm 1\]
+except at finitely many jump discontinuities; and has average equal to
+zero.\smallskip}
+
+\noindent Therefore the sum \[\;\sigma_1(\theta)+\cdots+\sigma_{4d-3}
+(\theta)\;\] is also a well defined step function with average zero.
+Since this sum takes odd
+values almost everywhere, we can choose some \[\theta\] for which
+\[\sigma_1(\theta)+\cdots+\sigma_{4d-3}(\theta)\le -1\].
+If we choose \[r\] sufficiently small and set \[t=re^{i\theta}\],
+this means that \[f_t\] has at least \[2d-1\] distinct cycles
+with multiplier satisfying \[|\lambda_j|<1\].
+But this is impossible by 10.4, which proves 10.6 and 10.1.\QED
+
+\vfil\eject % \bigskip\bigskip
+\footline={\hss\tenrm 11-\folio\hss}\pageno=1
+
+\centerline{\bf \S11. Repelling Cycles are Dense in \[J\].}\bigskip
+
+We saw in \S4.3 that every repelling cycle is contained in the
+Julia set. The following much sharper statement was proved
+by Fatou and by Julia. (Compare 11.9.)
+
+{\QP{\bf 11.1. Theorem.} {\it The Julia set for any rational map
+of degree \[\ge 2\] is equal
+to the closure of its set of repelling periodic points.}\medskip}
+
+\noindent Since the proofs by Julia and by Fatou are interesting and
+different, we will give both.\medskip
+
+{\bf Proof following Julia.} We will use
+the Holomorphic Fixed Point Formula of \S9.
+Recall from 9.4 that every rational map \[f\] of degree two or more has either
+a repelling fixed point, or a fixed point with \[\lambda=1\]. In either
+case, this fixed point belongs to the Julia set \[J(f)\].
+(Compare \S4.3 and \S7.5.)\smallskip
+
+Thus we can start with a fixed point \[z_0\] in the Julia set. Let \[U
+\subset\hat\C\] be any open set, disjoint from \[z_0\],
+which intersects \[J(f)\]. The next step
+is to construct a special orbit \[\;\cdots\mapsto z_2\mapsto z_1
+\mapsto z_0\;\] which passes through \[U\] and terminates at this fixed point
+\[z_0\]. By definition, such an orbit is called {\bit homoclinic} if
+the backwards limit \[\lim_{j\to\infty} \;z_j\] exists and is equal to
+the terminal point \[z_0\]. To construct a homoclinic orbit, we will
+appeal to Theorem 4.8 which says that there exists an integer \[r>0\] and
+a point \[z_r\in J(f)\cap U\] so that the \[r$-th forward image \[f^{\circ
+r}(z_r)\] is equal to \[z_0\]. Given any neighborhood \[N_0\] of \[z_0\], we
+can repeat this argument and conclude that there exists an integer \[q>r\]
+and a point \[z_q\in N_0\] so that \[f^{\circ(q-r)}(z_q)=z_r\]. (Figure 11.)
+\vskip .5in
+\midinsert
+\insertRaster homoc.ps pixels 480 by 640 scaled 500
+\vskip -.3in
+\centerline{Figure 11. A homoclinic orbit.}
+\vfil
+\endinsert
+
+To be more explicit, in the case where \[z_0\] is a repelling fixed point
+we choose \[N_0\] to be a linearizing neighborhood, as in the
+Koenigs Theorem 6.1. In the parabolic case, we choose \[N_0\]
+to be a flower neighborhood, as in 7.2. In either case, we choose \[N_0\]
+small enough to be disjoint from \[z_r\]. It then follows that we can
+inductively choose preimages \[\cdots\mapsto
+z_j\mapsto z_{j-1}\mapsto\cdots\mapsto
+z_q\], all inside of the neighborhood \[N_0\]. {\it These preimages \[z_j\]
+will automatically converge to \[z_0\] as \[j\to\infty\].} If \[z_0\] is
+repelling, this is clear. In the parabolic case, \[z_q\]
+cannot belong to an attracting petal; hence it must belong to a repelling
+petal, and again this statement is clear.\smallskip
+
+First suppose that none of the points \[\;\cdots\mapsto z_j\mapsto\cdots
+\mapsto z_0\;\] in this homoclinic orbit are critical points of \[f\].
+Then a sufficiently small disk neighborhood \[V_q\] of\break
+\[z_q\in N_0\] will map
+diffeomorphically under \[f^{\circ q}\] onto a neighborhood \[V_0\] of
+\[z_0\]. Pulling this neighborhood \[V_q\] back under iterates of \[f^{-1}\],
+we obtain neighborhoods \[z_j\in V_j\] for all \[j\], shrinking down towards
+the limit point \[z_0\] as \[j\to\infty\]. In particular, if we choose
+\[p\] sufficiently large, then \[\bar V_p\subset V_0\]. Now \[f^{-p}\] maps
+the simply connected open set \[V_0\] holomorphically into a compact subset
+of itself. Hence it contracts the Poincar\'e metric on \[V_0\] by a
+factor \[c<1\], and therefore must have a attractive fixed point \[z'\]
+within \[V_p\]. Evidently this point \[z'\in V_p\] is a repelling periodic
+point of period \[p\] under the map \[f\]. Since the orbit of \[z'\]
+under \[f\] intersects the
+required open set \[U\], the conclusion follows.
+\bigskip
+
+If our homoclinic orbit contains critical points, then this argument must
+be modified very slightly as follows. We can still choose simply
+connected neighborhoods \[V_j\] of the \[z_j\] so that \[\bar V_p\subset
+V_0\] for some large \[p\], and so that \[f\] maps each \[V_j\] onto
+\[V_{j-1}\]. However, some finite number of these mappings will be branched.
+Choose a slit \[S\] in \[V_0\] from the boundary to the midpoint \[z_0\]
+so as to be disjoint from
+\[\bar V_p\], and choose some sector in \[V_p\] which maps isomorphically
+onto \[V_0-S\] under \[f^{\circ p}\]. The proof now proceeds just as
+before.\QED\medskip
+% \advancepageno
+
+{\bf Proof of 11.1 following Fatou.} In this case, the main idea is an easy
+application of Montel's Theorem (\S2.5). However, we must use Theorem 10.1 to
+finish the argument.\smallskip
+
+To begin the proof, recall from 4.9 that the Julia set \[J(f)\] has
+no isolated points. Hence we can exclude finitely many points of \[J(f)\]
+without affecting the argument. Let \[z_0\] be any point of \[J(f)\]
+which is not a fixed point, and not a critical value. In other words, we
+assume that there are \[d\] preimages \[z_1\,,\,\ldots\,,\,z_d\], which
+are distinct from each other and from \[z_0\], where \[d\ge 2\] is the degree.
+By the Inverse Function Theorem, we can find \[d\] holomorphic functions
+\[z\mapsto \varphi_j(z)\] which are defined throughout some neighborhood \[N\] of
+\[z_0\], and which satisfy \[f(\varphi_j(z))=z\], with \[\varphi_j(z_0)=z_j\].
+We claim that for some \[n>0\] and for some \[z\in N\] the function
+\[f^{\circ n}(z)\] must take one of the three values \[z\,,\,
+\varphi_1(z)\] or \[\varphi_2(z)\]. For otherwise the family of holomorphic
+functions
+$$	g_n(z)\;=\;	{\bigl(f^{\circ n}(z)-\varphi_1(z)\bigr)\,\bigl(
+	z-\varphi_2(z)\bigr)
+	\over \bigl(f^{\circ n}(z) -\varphi_2(z)\bigr)\,\bigl
+	(z-\varphi_1(z)\bigr)}	$$
+on \[N\] would avoid the three values \[0\,,\,1\] and \[\infty\], and hence
+be a normal family. It would then follow easily that \[\{f^{\circ n}|N\}\]
+was also a normal family, contradicting the hypothesis that \[N\]
+intersects the Julia set. Thus we can find \[z\in N\] so as to satisfy either
+\[f^{\circ n}(z)=z\] or \[f^{\circ n}(z)=\varphi_j(z)\]. Clearly it
+follows that \[z\] is a periodic point of period \[n\] or \[n+1\]
+respectively.\smallskip
+
+This shows that every point in \[J(f)\] can be approximated arbitrarily
+closely by periodic points. Since all but finitely many of these periodic
+points must repel, this completes the proof.\QED
+\smallskip
+
+There are a number of interesting corollaries.
+
+{\QP{\bf 11.2. Corollary.} {\it If \[U\] is an open set which intersects the
+Julia set \[J\] of \[f\], then for \[n\] sufficiently large
+the image \[\;f^{\circ n}(U\cap J)\;\] is equal
+to the entire Julia\break set \[J\].}\medskip}
+
+{\bf Proof.} We know that \[U\] contains a repelling periodic point \[z_0\] of
+period say \[p\]. Thus \[z_0\] is fixed by the iterate \[g=f^{\circ p}\].
+Choose a
+small neighborhood \[V\subset U\] of \[z_0\] with the property that
+\[V\subset g(V)\]. Then clearly \[V\subset g(V)\subset g^{\circ 2}
+(V)\subset\cdots\,\]. But it follows from 4.6 or 4.8 that the union of
+the open sets \[g^{\circ n}(V)\] contains the entire Julia set \[J=
+J(f)=J(g)\].
+Since \[J\] is compact, this implies that \[J\subset g^{\circ n}(V)\subset
+g^{\circ n}(U)\] for \[n\] sufficiently large, and the corresponding
+statement for \[f\] follows.\QED
+
+
+{\QP{\bf 11.3. Corollary.} {\it If a Julia set \[J\] is not connected,
+then it has uncountably many distinct connected components.}\medskip}
+
+{\bf Proof.} Suppose that \[J\] is the union \[J_0\cup J_1\] of two disjoint
+non-vacuous compact subsets. After replacing \[f\] by some iterate
+\[g=f^{\circ n}\], we may assume by 11.2 that\break
+\[g(J_0)=J\] and \[g(J_1)=J\].
+Now to each point \[z\in J\] we can assign an infinite sequence of symbols
+$$	\epsilon_0(z)\,,\,\epsilon_1(z)\,,\,\epsilon_2(z)\,,\,\ldots\;\;\in\;
+	\{0,1\}		$$
+by setting
+\[\epsilon_k(z)\] equal to zero or one according as \[g^{\circ k}(z)\]
+belongs to \[J_0\] or \[J_1\]. It is not difficult to check that
+points with different symbol sequences must belong to different connected
+components of \[J\], and that all possible symbol sequences actually occur.
+\QED
+
+{\bf Remark.} Evidently only countably many of the connected components of
+\[J\] can have positive Lebesgue measure. I don't know whether
+all but countably many of the components of \[J\] must be single points.
+\smallskip
+
+Siegel disks and Cremer points do not seem directly related to critical
+points, yet there is a connection as follows. By a {\bit critical orbit}
+we will mean the forward orbit of some critical point.
+
+{\QP\bf 11.4. Corollary. {\it Every boundary point of a maximal
+Siegel disk \[U\]
+belongs to the closure of some critical orbit.}\medskip}
+
+{\bf Proof.} Otherwise, we could construct a small disk \[V\] around
+the given point \[z_0\in\partial U\] so that the forward orbits of all
+critical points avoid \[V\]. This would mean that
+every branch of the \[n$-fold iterated inverse function \[f^{-n}\]
+could be defined as a single valued holomorphic function \[f^{-n}:V\to
+\hat\C\]. Let us choose that particular branch which carries the intersection
+\[U\cap V\] into \[U\] by a
+``rotation'' of \[U\]. Since the rotation number is irrational, we can choose
+some subsequence of these inverse maps which converges to the identity
+map on \[U\cap V\]. This is evidently a normal family, since it avoids
+the central
+part of \[U\]. Hence there is a sub-sub-sequence \[\{f^{-n(i)}\}\] which
+converges on all of \[V\], necessarily to the identity map of \[V\].
+It follows easily that the corresponding
+sequence of forward iterates \[f^{\circ n(i)}\] also converges to
+the identity on \[V\]. But this contradicts 11.2.\QED
+
+{\QP\bf 11.5. Corollary. {\it Every Cremer point
+is a non-isolated point in the closure of some critical orbit.}\medskip}
+
+{\bf Proof.} (This proof applies also to parabolic cycles. Compare \S10.3.) 
+Otherwise we could choose a small disk \[V\]
+around the given point \[z_0\] so that no critical orbit intersects the
+punctured disk \[V\ssm\{z_0\}\]. Replacing \[f\] by some iterate if necessary,
+we may assume that \[z_0\] is fixed by \[f\].
+Arguing as above, there exists a unique
+holomorphic branch  \[f^{-n}:V\to\hat\C\] of the \[n$-fold iterated inverse
+function which fixes the point \[z_0\]. These inverse maps form a normal
+family since, for example, they avoid any periodic orbit which is disjoint
+from \[V\]. Thus we can choose a subsequence \[f^{-n(i)}\]
+converging locally uniformly to some holomorphic map \[h:V\to\hat\C\].
+By the Inverse function Theorem, since \[|h'(z_0)|=1\], this \[h\] must map some
+small neighborhood of \[z_0\] isomorphically onto a neighborhood \[V'\] of \[z_0\].
+It follows that the corresponding forward maps \[f^{\circ n(i)}\] converge
+on \[V'\] to the inverse map \[h^{-1}:V'\to V\]. Again,
+this contradicts 11.2.\QED
+\smallskip
+
+By definition, the rational map \[f\] is called {\bit post critically finite~}
+(or is called a {\bit Thurston map\/}) if
+it has the property that every critical orbit is finite, or in other words
+is either periodic or eventually periodic. According to Thurston, such a
+map can be uniquely specified by a finite topological description.
+(Compare Douady \& Hubbard [DH1].)
+
+{\QP\bf 11.6. Corollary. {\it If \[f\] is post critically finite,
+then every periodic
+orbit of \[f\] is either repelling or superattracting.}\smallskip}
+
+{\QP\bf 11.7. Corollary. {\it More generally, suppose that \[f\] has the
+property that every critical orbit either is finite, or converges to an
+attracting periodic orbit. Then every periodic orbit of \[f\] is either
+attracting or repelling; there are no parabolic cycles, Cremer cycles, 
+or Siegel cycles.}\medskip}
+
+\noindent (Compare 13.5, 14.4)
+The proofs are immediate, and will be left to the reader.\QED
+
+By definition, \[z_0\] belongs to the Julia set if {\it some} sequence of
+iterates of \[f\] has no subsequence which converges throughout a neighborhood
+of \[z_0\]. However, a priori, there could be other sequences which do
+converge.
+
+{\QP{\bf 11.8. Corollary.} \it If \[z_0\] belongs to the Julia set, then
+no sequence of iterates of \[f\] can converge uniformly
+throughout a neighborhood of \[z_0\].\medskip}
+
+For if \[\{f^{\circ n(i)}\}\] converges uniformly,
+with \[n(i)\to\infty\], then according to Weierstrass (\S1.4) the
+sequence of derivatives \[df^{\circ n(i)}(z)/dz\] must also converge. But
+if \[z_1\] is a repelling periodic point, then evidently the sequence of
+derivatives at \[z_1\] diverges to infinity.\QED
+\medskip
+
+{\bf 11.9. Concluding Remark.} The statement that the Julia set is equal to the
+closure of the set of repelling periodic points is actually true for an
+arbitrary holomorphic map of an arbitrary Riemann surface, providing that we
+exclude just one exceptional case. For transcendental functions this
+was proved by Baker [Ba1], and for maps of a torus or a Hyperbolic surface
+it follows easily from \S4. The unique exceptional case occurs for degree one
+maps of \[\hat\C\]
+which have just one parabolic fixed point --- for example the map \[f(z)=z+1\]
+with \[J(f)=\{\infty\}\].
+
+On the other hand, for a holomorphic map of a complex 1-dimensional manifold
+with two or more connected components (for example where both components
+map into one), the Julia set can clearly be much bigger than the repelling
+orbit closure.
+
+\vfill
+\bigskip
+
+%\rightline{jwm, version of 9-3-91}
+
+\end

@@ -5,7 +5,7 @@ Date: 2026-02-20
 ## Downloaded into `refs/`
 
 ArXiv / open PDFs downloaded:
-- `Dudko_2512.24171.pdf` (ICM note, includes 2025/2026 status)
+- `2512.24171v1.pdf` (ICM note, includes 2025/2026 status)
 - `Dudko_2509.25658.pdf`
 - `Dudko_2509.23031.pdf`
 - `Dudko_2407.15548.pdf`
@@ -14,7 +14,7 @@ ArXiv / open PDFs downloaded:
 - `Dudko_2209.02800.pdf`
 - `Dudko_1808.10425.pdf`
 - `Dudko_1802.03045.pdf`
-- `Dudko_1703.01206.pdf`
+- `1703.01206v3.pdf`
 - `Dudko_1610.02434.pdf`
 - `Dudko_1603.04059.pdf`
 - `Dudko_1512.08539.pdf`

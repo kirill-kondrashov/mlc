@@ -1,0 +1,768 @@
+
+% \section{Unbounded combinatorics with confined canonical WAD}
+\section{Pull-off Argument: unbounded combinatorics}
+
+\subsection{Setting}\label{assumptions sec} 
+%\subsection{Assumptions}\label{assumptions sec} 
+
+Consider the class $\QQ\equiv \QQ(\ul \qq, \bar\bb)$
+of renormalizable pseudo-ql maps $f: U' \ra U $ with the elephant eye
+combinatorics with parameters $ \qq\equiv \qq_f \geq  \ul\qq  $ and $\bb\equiv \bb_f\leq \bar \bb $,
+and  renormalization periods $p\equiv p_f= \qq+\bb$.
+Let $\AAA=\AAA_f$ stand for  the Canonical WAD of $f$  in $U\sm \KK$. 
+
+Take an integer  $ N \in (1,     \qq-\bb]  $.
+Let $\Om\subset U$ be  a topological disk 
+in the translation region 
+% with $\di \Om \subset U\sm \KK$
+which is the union of 
+$2N+1$ consecutive  sectors $\Sec_n\supset K_n$,
+$n \in \II = [l-N, l+N] \subset \Z/ p\Z$.
+Note that $\Om$ contains the chain of $2N$ short arcs
+connecting the $K_n$, $n\in \II$
+(or rather: appropriate representatives of these arcs). 
+In what follows, we will also use notation $\De_m$ for $\Sec_m$. 
+
+\comm{******
+\ssk\nin (T1) 
+$$
+    \Om= \bigcup_{m=- N }^N \De_m,\quad \di \De_m\subset U\sm \KK,
+$$
+where the $\De_m$ are Jordan disks with disjoint interiors such that $f$ univalently maps $\De_m$ onto $\De_{m+1}$;
+each $\De_m$ contains a block $\BB_m\subset \II$ of  $d$ little Julia sets, i.e.,
+$$    
+                        \De_m\cap \KK = \bigcup_{n\in\BB_m } K_n; 
+$$ 
+ 
+
+%\ssk \nin (T1) There is a ``central block'' $\BB \subset \II$ of $d$ little Julia sets such that
+%$$
+%    \II = \bigsqcup_{m=-N}^N \BB_m, \quad \{\mathrm{where}}\ \BB_m=\BB+m;  
+%$$
+
+\ssk \nin (T2)  For any $n\in \II$, at least $\WW_n-O(1)$ part of the local weight $\WW_n$ is supported on $\AAA$
+    (with an absolute additive constant);
+
+\ssk\nin (T3) Any horizontal arc  $\alpha\in \AAA^\hor$ that begins in $\De_m$ with $|m| <  N$ 
+  is confined to $\De_{m-1}\cup \De_m\cup \De_{m+1}$;
+%  and it ends in $\BB+m \pm 1$; 
+
+ % \ssk\nin (T4) Any horizontal arc $\alpha$ that lands in $\BB+m$ with $-N <    m \leq N$ has a legitimate pullback $f^*\alpha$
+ %    (that, of course,  lands in $\BB + m-1$).  
+ ***************} 
+
+
+\bignote{In what follows, Ref (T2) should be replaced with Corollary \ref{loc weights comparison} (ii) } 
+  
+
+ Such a domain $\Om$ will be called a {\it translation domain} of size
+ $2N+1$ centered at $K_l$. 
+% with  base $\De=\De_0$.
+Let us also   impose the following property on such a domain:
+
+\ssk\nin (P1)
+All local weights $\WW_n$, $n\in \II$,  are $(1-\eps)$-comparable.
+
+\ssk\nin (P2)
+$(1-\eps)$-proportion of the local weight $\WW_n$, $n\in \II$,
+is carried by two short arcs emanated from $\KK_n$.
+
+\ssk Here $\eps>0$ can be selected arbitrary small as long as
+$\WW_\loc$ and $p$ are big enough.  
+
+\ssk Note that (P1) is easily enforced because all the colca weights are
+$2-$comparable (Lemma \ref{comparison of dyn loc w}). 
+Property (P2) can be enforced to Corollary \ref{loc weights comparison}. 
+
+
+ We say that  $\Om\cap \KK$ is the {\it $\KK$-slice} of $\Om$.
+% (and similarly for any other domain, for that matter).  
+Let  $(f^n)^*\Om $ be the pullback of $\Om$ under $f^n$ centered at $K_{l-n}$.
+(We will see later that  actually  the pullback  $(f^n)^*\Om $
+% for $n\leq 3p$
+is independent of the base.) 
+
+We let
+$$
+  \Om[\kappa]= \bigcup_{|m| \leq \kappa N} \De_m. 
+$$
+
+The Julia sets $\KK_{\pm N} $ will be called {\it peripheral}. Let
+$\pp\II= \KK_N\cup \KK_{-N}$ be the family  of two peripheral Julia sets
+and $\II^\circ= \II\sm \pp\II$ be the complementary family of non-peripheral Julia sets. 
+
+
+
+We let  $\BOM$ stand for the pseudo-disk corresponding to $\Om$, and  $(\Bf^n)^*\BOM$ for the corresponding  pullbacks.
+
+For $s\in \II^\circ$, let $\CC(K_s |\, \II) $   be the conductance of the restricted electric circuit $\AAA|\, \II$ with battery $\{K_s , {\pp}\II\} $. 
+Thus,  the potential difference 1 between $K_s$ and ${\pp}\II$ 
+creates current  $\CC(\BB |\, \II) $ in the restricted circuit. 
+By the Series Law, we have: 
+
+% \ssk\nin (T4)
+If $s\in \KK_m$ with $|m|\leq  \kappa N$ for some
+$\kappa\in (0,1)$ then
+\begin{equation}\label{T4}
+  \CC (K_s, \II  ) \leq \frac C{(1-\kappa )N} \, \WW_\loc,
+\end{equation}
+with an absolute $C$. 
+% where $C$ depends only on $d$. 
+
+\bignote{ Below Ref (T4) should be replaced with (\ref{T4}) ! }
+
+It is convenient to play with many translation domains $\Om_l$
+simultaneously:
+
+
+\bsk\nin
+{\bf Translation Property}.  \note{OK name?} 
+For arbitrary big  $N, L\in \N$ 
+% function  $L=L(N)\to \infty$  and an arbitrary big $N$ 
+there exists  $\underline{p}=\underline{p}(N,L)$ such that any 
+map $f\in \QQ$ with $p \geq \underline{p}$ has  $L$ 
+pairwise disjoint translation domains $\Om_l $
+centered at some $K_l$
+of size $2N+1$. 
+
+
+\msk
+Here the index $l$ runs over some subset $\LL\subset \Z/p\Z$ of size $L$. 
+All objects associated with $\Om_l$ will be labeled by $l$ if needed, e.g., 
+% $\BB_l$,
+$\II_l$ etc. \note{more?}  
+
+\comm{*******
+\subsection{Example: Multi-elephant eye with confined  canonical
+  WAD} \label{confinement assumption}
+
+Let us consider the multi-elephant eye combinatorics with $r$ eyes. 
+Let $\Gamma$ be the almost invariant marking of $U\sm \KK$ by Hubbard arcs.
+
+Given a subfamily  $\JJ\subset \Z/p\Z$ of little Julia sets,  
+let us say that an arc $\alpha$ is {\it confined to $\JJ$} if it does not cross 
+marked Hubbard edges  attached to any $K_m$ with  $m\not\in \JJ$. 
+
+\bignote{Formulate in terms of sectors}
+
+Let $\JJ_n = \{ n+jq \}_{j=0}^{r-1}$ be the ``fundamental family' 'of Julia sets
+containing $K_n$, and let 
+$$
+   \JJ_n(R) = \bigcup_{ |k |\leq R}  ( \JJ_n +k ) 
+$$ 
+stand for its ``$R$-neighborhood''. 
+
+For the moment, let us label the little Julia sets from $-p/2$ to $p/2$. 
+
+\msk\nin {\bf Confinement Assumption:}
+Any canonical arc that begins on  $K_n$ with $|n| \geq q/N$ 
+is confined  to the region  $ \JJ_n(p/N)$. 
+% $\{m:\,   |m-n|< p/N\} \subset \Z/p\Z$.
+
+\bignote{Make it stronger: confinement to any region of size $q/N$
+  with two buffers of the same size.}
+
+\msk
+Under this assumption,
+ the canonical WAD well inside the translation region descends to the Ecalle-Voronin cylinder ${\Cyl}$.
+Let us refine it to a triangulation of  ${\Cyl}$ with vertices $K_n$ and $\pm i \infty$.
+Then we can connect $+i\infty$ to $-i\infty$ with a simple curve $\gamma$ composed of edges  of the triangles. 
+ Cutting $\Cyl$ along $\gamma$ we obtain a topological strip in  $\Cyl=\C/\Z$ 
+that lifts to a fundamental domain % $\Delta$ 
+on $\C$.  
+Taking the union of its $2N+1$ 
+% forward and backward  
+translates, we obtain $\Om$. 
+
+********** } 
+
+
+\subsection{Amplification Theorem}
+
+
+\begin{thm}% [Amplification]
+\label{amplification thm}
+% Under the Translation Assumption,
+For any amplification factor $\la > 1$ 
+there exist $\underline{\WW}_\loc = \underline{\WW}_\loc(N) $ and  $\underline{p}=\underline{p}(, \la, N,L) $
+% (``very  big'')
+such that for all sufficiently big $N$ and $L$ % and sufficiently big $W_\loc$ (in terms of $N$),
+we have:
+$$
+     \WW^\ver \geq \la \, \WW_\loc,
+$$ 
+as long as $\WW_\loc\geq \underline{\WW}_\loc$ and $p\geq \underline{p}$. 
+% where $C(N)\to \infty $ as $N\to \infty$.
+\end{thm}
+
+\subsection{Definite local loss}
+
+Let us first show that if the local vertical weight is definite in  some pullback $(\Bf^n)^* \BOM$ with $n\leq 3p$,
+then the Amplification Theorem holds:
+
+\begin{lem}\label{def vert does it}
+% Under the Translation Assumption, 
+Assume there exists a  $\de > 0$ 
+such that each domain  $\BOM_l$ has a  pullback $(\Bf^n)^*\BOM_l$ with $n\leq 3p$
+that  satisfies
+$$
+      \WW ((\Bf^n)^*\BOM_l\sm K_{s-n}) \geq \de \, \WW_\loc, 
+$$
+where $K_{s-n}\in (\Bf^n)^* \BOM_l$ and the vertex $K_s$, $s\in\II_l$, 
+stays distance at most $\kappa N$ from $K_l$. 
+Then there exists  $L=L(N)$ such that the conclusion of the Amplification Theorem holds.
+% that for all $N$ big enough we have: 
+% $$
+%     \WW(\AAA^\ver) \geq \la \, \WW_\loc,
+% $$ 
+% as long as $\WW_\loc\geq \underline{\WW}_\loc(N)$ and $p\geq \underline{p}(N,L)$. (Here quantification is the same as in  teh Amplification Theorem.}
+\end{lem}
+
+% Here the distance is the combinatorial distance in the canonical arc diagram $\AAA$
+%%%  (where each arc is assigned length 1).   
+
+\begin{proof}
+We let $\BOM\equiv \BOM_l$ % and  $\BOM_{-n}\equiv (\Bf^n)^*\BOM$, 
+for simplicity. 
+
+  Let us apply the Covering Lemma to  the map $\Bf^n: (\Bf^n)^* \BOM \sm K_{s-n}\ra \BOM\sm K_s$.
+The local degree of this map is at most $8$; the big degree is at most $8^N$. The buffer is given by the maximal immersed annulus
+in $\BOM\sm \KK$ around $K_s$; its width, $\WW_s \asymp  \WW_\loc$, is comparable with $\WW ((\Bf^n)^* \BOM \sm K_{s-n})$, by the assumption. 
+Hence
+$$
+      \WW(\BOM\sm K_s) \asymp \WW((\Bf^n)^*\BOM\sm K_{s-n} ) \asymp \WW_\loc. 
+$$    
+
+
+% Let us show that this leads to  amplifications of the vertical weight. Indeed, 
+Any vertical path in
+the annulus $\BOM\sm K_s$ either crosses  a peripheral
+Julia set $K_m$,  $m\in \pp \II$, 
+or  overflows a vertical path in $\BOM\sm\KK$ beginning on some  non-peripheral Julia set $K_m$, $m\in \II^\circ$. 
+
+In the former case, our path follows the horizontal  electric circuit
+in $\BOM$. By  (\ref{T4}),       % property  (T4),
+the width of this
+family is bounded by $\frac C {(1-\kappa) N}\, \WW_\loc$ for $N$ big enough.  %   where $\eps(N)\to 0$ as $N\to 0$. 
+
+The width of the latter  path family is bounded by 
+$$
+  \sum_{m\in \II^\circ} \WW^\ver (K_m|\, \BOM\sm \KK)  %  \sum_{m\in \II^\circ} \WW (K_m\ra \KK \cup \di U  |\, U \sm \KK) +O(N)  
+                        = \sum_{m\in \II^\circ} \WW^\ver (K_m) +O(N),  
+$$
+where the last equality follows from  Corollary \ref{loc weights comparison} (ii).
+% property (T2)
+% and the definition of the non-peripheral vertices
+% (saying that no horizontal canonical arcs connect $K_m$ to $K_n$,
+where   $m\in \II^\circ$, $n\not\in  \II$).
+% (here we use notation $\II$ of the union of the $K_n$ over $n\in \II$).  
+Putting the above remarks together, we conclude that for some $n\in \II^\circ$, 
+$$
+   \WW^\ver (K_m) \geq \frac c {N} \WW_\loc.
+$$
+% with  $c>0$ depending only on $d$. 
+
+Let us now recall that by the Translation Property we can do it for $L$ domains $\BOM_l$, $l\in \LL$, with disjoint $\KK$-slices. 
+This gives as $L$  different Julia sets $K_{m_l}$,  $m_l\in \II_l $. Letting $L= 2\la N/c $,
+we obtain
+$$  
+   \WW^\ver\geq \sum_{l\in \LL}  (\WW^\ver (K_{m_l})- 2) \geq   \la \WW_\loc. 
+$$
+\end{proof}
+
+
+\bignote{Section ``Essential arcs'' is hidden below}
+
+\comm{**********
+
+\subsection{Essential arcs}
+
+For $\xi\in (0,1)$, 
+we say that a horizontal arc $\alpha\in \AAA$ is $\xi$-{\it essential} if $\WW(\alpha)\geq \xi \WW_\loc$. 
+We let $\AAA^\ess$ be the weighted arc diagram comprised of all essential arcs
+(we will often let $\xi$ be implicit in the terminology and notation). 
+
+For a simple closed curve $\gamma\subset U\sm \KK$, 
+let the {\it flux} $\WW^\perp (\gamma)$ be the the width of the
+annulus associated with $\gamma$ that covers $U\sm \KK$.
+
+\begin{lem}\label{definite flux}
+  Assume $p$ is the smallest renormalization period of $f$. 
+ Then  for any natural $1\leq d<p $ there exists $\si =\si (d)>0 $ such that for any Jordan curve $\gamma$ surrounding $d$ little Julia sets
+we have $\WW^\perp (\gamma) \geq \si \cdot \WW_\loc$.
+% wthere $\WW^\perp (\gamma)$ is the flux through $\gamma$. 
+\end{lem}
+
+\bignote{Note that ``$d$'' is reserved for the number of Julia sets in the
+  fundamental sector.}
+
+\begin{proof}
+   Let us do induction in $d$. For $d=1$ we can let $\si=1/2$. Let us pass from $d-1$ to $d$. 
+Of course, we can assume that $\si(1)\geq \si(2)\geq\dots \geq \si(d-1)$.
+
+Let $\gamma$ surrounds $d$ little Julia sets $K_n$, $n\in \BB\subset \Z/p\Z$, and let $\De$ be the disc bounded by $\gamma$.
+
+\msk\nin
+{\em Claim:} There exists $\xi=\xi(d)$ such that if $\WW^\perp(\gamma)< \xi/2$ then the graph of $\xi$-essential arcs in $\De$
+is connected. 
+
+\msk Since $\si(d-1)$ is well defined  inductively, we can let 
+$$
+   \xi(d)=  \frac {\si(d-1)} {3(d+1)}. 
+$$
+Assume $\BB=\BB_1\sqcup \BB_2$, where $\BB_1\not=\emptyset$ and $\BB_2\not=\emptyset$ 
+cannot be connected with $\xi$-essential arcs in $\De$. Since there are at most $3(d+1)$ 
+arcs (vertical and horizontal) in $\De$, and the total weight eminated from $\BB_1$ is at least $\si(d-1)$, 
+one of the arcs eminated from $\BB_1$ has weight  at least $\xi (d)$. By the assumption, this arc must be vertical, 
+so $\WW^\perp(\gamma) \geq  \xi$ --  contradiction. 
+
+\msk  
+
+We let now 
+\begin{equation}\label{si(d)}
+  \si(d) =  2^{-(d+2)}\si(d-1) < \xi(d)/2. 
+\end{equation}
+Assume 
+\begin{equation}\label{bound on the flux}
+   \WW^\perp(\gamma)< \si (d). 
+\end{equation}
+Then by the Claim the graph of the $\xi$-essential arcs in $\De$ is connected. 
+
+Select some little Julia set $K_n$ surrounded by $\gamma$, 
+and let $\om := (f^p)^\# \gamma$  be the pullback of $\gamma$ based at $K_n$ (immersed into $U\sm \KK$).    
+Since $\deg(f^p: \om\ra \gamma) \leq 2^d$, we have  the usual estimate
+$$
+    \WW^\perp(\om) \leq 2^d \WW^\perp(\gamma) < \si (d-1).
+$$
+By the induction assumption, $\om$ cannot surround less than  $d$ little Julia sets, 
+so it must suround all the $K_n$, $n\in \BB$ (and of course, nothing else). 
+
+Moreover, $\om$ cannot cross any of the $\xi$-essintial arcs in $\De$, for otherwise
+$\WW^\perp(\om) \geq \xi$ contradicting (\ref{si(d)}) and (\ref{bound on the flux}). 
+Since the graph of these arcs is connected,
+$\om$ is homotopic to $\gamma$ in  $U\sm \KK$. But then $f$ is renormalizable with intermediate period
+$p/d \in (1,  p) $.  
+\end{proof}
+
+% Select some $\xi= \xi(d) > 0$, to be specified below. 
+% We say that a horizontal arc $\alpha\in \AAA$ is {\it essential} if $\WW(\alpha)\geq \xi \WW_\loc$. 
+
+\begin{lem}\label{ess chains}
+There exist $\xi= \xi(d)$ and  $C=C(d)$ such that for any $m$ with $|m|< N-l $ we have the following property:
+
+\ssk \nin {\rm (i)} Either there is a vertical arc $\alpha$ emanating from $\De_m$  with $\WW(\alpha)> \xi$, 
+
+\ssk \nin {\rm (ii)} Or else,   any $K_n \in \BB_m$  can be connected to 
+each  neighboring block $\BB_{m+i}$, $i\in \{\pm 1\}$,
+by a path of length $\leq C$ of $\xi$-essential arcs confined to 
+$$
+         \bigcup_{ |n-m|\leq C} \De_n. 
+$$  
+\end{lem}
+
+\begin{proof}
+Taking $\xi < \si(d)/3(d+1) $, we ensure that there an arc $\alpha$ eminated from $\De_m$ with $\WW(\alpha)> \xi$. 
+If this arc is vertical then option (i) holds. Otherwise each $\De_m$ can be connected to a neigboring block, 
+$\BB_{m+1}$ or $\BB_{m-1}$, with an essential arc.   % \note{remark on periodicity}
+
+Let us orient the arcs $\alpha\in \AAA^\ess$ so that each $\alpha$ connects $\BB_m$ to $\BB_{m+i}$ with $i\geq 0$. 
+  Let us push the $\BB_m$ and $\AAA^\ess$ to the cylinder $\Cyl$; 
+we denote the corresponding vertices and arcs downstairs by $\bar K_n$ and  $\bar \alpha$. 
+Let us consider the recurrent core $\bar \RR$ of $\bar \BB$ consisting of the vertices $\bar K_n$  that can be included in a loop
+of $\bar\AAA^\ess$. Restriction of $\bar \AAA^\ess$ to $\bar\RR$ is ``connected with orientation'': any vertex can be connected to any other
+by an orinented path of length bounded in terms of  $d$.
+%It is comprised of blocks $\bar \RR_i$ which are cyclically permuted by the graph.  
+Hence for any $K_n$ and $K_s$ in $\RR_m\subset \BB_m$ (the lift of
+$\bar \RR$ to $\BB_m$)
+\note{connectivity issue}
+there exists $i\geq 0$ (bounded in terms of $d$) such that 
+ $K_n$ can be connected to $K_{s+i}$ in $\AAA^\ess$. 
+Let us show that $i>0$ for some of these $i's$. Otherwise, the  connected component of $\RR_m$ (disregarding the orientation)
+would be a finite isolated block in $\AAA^\ess$ whose size can be bounded {\it a priori } by some  $d'$ depending only on $d$.
+This is impossible provided $\xi< \si(d')/ 3(d'+1)$.  
+
+Since for any $K_t\in \RR_m$,  $K_{s+i}$ can be further connected  to $K_{t+j}$ with some (controlled) $j\geq i$, we see that 
+ for any $K_n$ and $K_t$ in $\RR_m$ there exists $i > 0$ (bounded in terms of $d$) such that 
+ $K_n$ can be connected to $K_{t+i}$ in $\AAA^\ess$.  Reversing orientation, we obtain the same property with $i<0$. 
+
+Finally, if $\bar K_n\not \in \bar \RR$ then it can be connected to some $\bar K_s\in \bar \RR$ 
+by a (disoriented) path of $\bar \AAA^\ess$ of length bounded in terms of $d$. The conclusion follows. 
+\end{proof}
+
+******* } 
+
+\bignote{Section ``Loosing Julia sets'' is hidden below}
+
+\comm{****
+\subsection{Loosing Julia sets}
+
+Let us say that a set $K_m$, $m\in \II_l$, {\it gets lost} under the $n$-th pullback
+if $K_{m-n}\not\subset (f^n)^* \Om_l$. Note that then $K_{m+k}$ gets lost under any further pullback $(f^k)^*$, $k\geq n$. 
+
+\begin{lem}\label{getting lost}
+Assume that for each  set $K_l$, $l\in \LL$,  the following property holds:
+There exists a vertex $K_j$  of the graph $\AAA|\, \II_l$ on distance
+at most $\kappa N$ from $K_l$, 
+ which gets lost under $n$-th pullback,   $n \leq  3 p$. Then the Amplification Thereom is valid. 
+\end{lem}
+ 
+\begin{proof}
+Our assumption implies that  $K_j$ gets lost under the $3p$-th pullback, thus 
+\begin{equation}\label{pulled-off J-set}
+   K_j \not\subset (f^{3p} )^*\Om , \quad \Om \equiv \Om_l.
+\end{equation}    \note{regular $\Om$}
+By Lemma \ref{ess chains}, $K_j$ can be connected to $K_l$ by a chain of essential arcs confined to 
+\begin{equation}\label{cup BB+m}
+   \bigsqcup_{|m| \leq  \kappa  N+C} \BB_m.
+\end{equation}
+%  Without loss of generality,  
+% we can assume that  $K_j$ is the closest to $K_l$ vertex in this chain with property  (\ref{pulled-off J-set}).   
+Then there exists $K_s\subset  (f^{3p} )^*\Om $ and 
+$K_t\not\subset (f^{3p} )^*\Om $, $|s|, |t|\leq \kappa N+C$,
+connected by an essential arc $\alpha$.
+But then $\alpha$ restricts to a vertical arc in  $ (\Bf^p)^*\BOM $ of definite weight that begins on $K_s$.
+By Lemma \ref{def vert does it}, this implies  the Amplification Thereom.  
+\end{proof}
+
+\begin{rem}
+  We see, in partucular, that assuming  the contrary to the
+  Amplification Theorem, 
+the pullback $(f^n)^*\Om$ is independent of the base Julia  set $K_l$. 
+\end{rem}
+
+
+% Let $\{K_n\}_{n\in \II}$ be the family of little Julia sets contained in $\Om_0$,
+% $\II\subset \Z/p\Z$. 
+
+\begin{lem}\label{interesting moments}
+Assume that for each $l\in \LL$ there exists a pullback $(f^n)^* \Om_l\not\supset K_1$, $n\leq 3p$,   
+containing a horizontal arc $\alpha$ with endpoints on distance at
+most $\kappa N$ from  $K_{l-n}$
+such that  both  lifts  $f^* \alpha$  are pulled off.
+Then  the concluison of the  Amplification Theorem  holds. 
+\end{lem}
+ 
+\begin{proof}
+Take some $l\in \LL$, and let $\Om \equiv \Om_l$. 
+
+Let the arc $\alpha$ lands on $K_i$ and $K_j$. By Lemma \ref{getting lost}, if one of the  Julia sets,  
+ $K_{i-1}$ or $K_{j-1}$, gets lost then the concluison of the Amplification Theorem  holds. 
+So, assume both $K_{i-1}$ and $K_{j-1}$  are contained in $( f^{n+1})^*\, \Om$. Let $\beta= f^* \alpha$ be the lift of $\alpha$ that begins on $K_{i-1}$. 
+If it pulls off then  it ends on $K_{j-1}'$. Hence $K_{j-1}'\subset ( f^{n+1})^*  \Om$. 
+
+Since  $( f^n)^* \Om $ does not contain $K_1$, 
+the map $f: ( f^{n+1})^*\, \Om \ra ( f^n)^*\,  \Om $ is univalent. 
+It follows that $K_{j-1}\not\subset ( f^{n+1})^*\,  \Om $, so this little Julia set gets lost.
+The concluison follows. 
+\end{proof}
+
+********************************} 
+
+\bignote{\S ``Good fit'' is hidden below}
+
+\comm{*****
+  
+\subsection{Good  fit}
+
+We say that a horizontal arc $\alpha$ {\it fits into a domain}
+$(f^n)^* \Om$,  
+$$ 
+     \alpha\hsubset (f^n)^* \Om,
+$$ 
+ if it is contained in it up to homotopy in $U\sm \KK$ rel $\KK$.  
+ If $\alpha\hsubset (f^n)^* (\Om[\kappa]) $,
+we say that it  {\em fits $\kappa$-well  into } $(f^n)^* \Om$.
+
+\bignote{Make the terminology and notations consistent!} 
+
+\bignote{For one eye, we have an {\em amazing} fit! (except for a boun
+ded number of pullbacks)} 
+
+
+
+\begin{lem}\label{fitting of  arcs}
+   If an arc $\alpha$ fits $\kappa$-well into some domain
+   $(f^n)^*\Om$,  
+then it fits $(1-\kappa)$-well into all domains
+$(f^{n+j})^*\Om$ for  $j=0,1,\dots,  (1-2\kappa) N $.
+\end{lem}
+
+\begin{proof}
+      We have: 
+$$
+          (f^j)^* (\Om[1-\kappa] ) \hsupset \Om [\kappa] , \quad
+          0\leq j  \leq      (1-2\kappa)  N. 
+$$
+Hence 
+$$
+  (f^{n+j})^* ( \Om [1-\kappa])  \hsupset (f^n)^*(\Om[\kappa]   )
+  \hsupset \alpha  ,\quad j=0,1,\dots, (1-2\kappa)N. 
+$$ 
+\end{proof}
+
+For $\xi\in (0,1)$, 
+we say that a horizontal arc $\alpha\in \AAA$ is $\xi$-{\it essential} if $\WW(\alpha)\geq \xi \WW_\loc$. 
+We let $\AAA^\ess$ be the weighted arc diagram comprised of all essential arcs
+(we will often let $\xi$ be implicit in the terminology and
+notation; just  an  apriori selected small number).
+              \note{quantify  better?} 
+
+\bignote{This def was transferred from \S ``Essential arcs''.}
+
+
+\begin{lem}\label{fitting of ess arcs}
+  Assume the conclusion of the Amplification Theorem fails.
+  Let $\alpha$ be an essential horizontal arc.   
+  Then there exists  $l\in \LL$  such that $\alpha$ fits $(1-\kappa)$-well into
+   $ (1-2 \kappa) |\II|$ domains $(f^m)^*\Om$, $m< p$,
+\end{lem}
+
+\begin{proof}
+  There are  at least $ (1-2d\kappa) |\JJ|$ domains  $(f^m)^*(\Om[1-\kappa])$,
+  $m< p$, containing one endpoint of $\alpha$. If $\alpha$ does not
+  fit into such a  domain, it creates a definite veritcal arc in it.
+  If this happens for every $l\in \LL$ then
+  by Lemma \ref{def vert does it},   the conclusion of the
+  Amplification Theorem is valid.
+\end{proof}
+
+**************************}
+
+
+\subsection{Confinement}
+
+\note{ Move next to Lemma 2.2 ?} 
+
+\begin{lem}\label{localization of local weight}
+  Under the Translation Assumption, either the Amplification Theorem holds, or else 
+  for any little Julia set $K_n$, there exists  $O(N)$  horizontal arcs $\alpha^n_i$ that begin on $K_n$ 
+% and end on  $O(N)$ other little Julia sets $K_m$, 
+with total weight
+$$
+    \sum_i \WW(\alpha^n_i) \geq (1-\eps) \WW_n, 
+$$
+where $\eps=\eps(N)= O(\sqrt{1/N})$. Moreover, these arcs are confined to the pullback $(\Bf^j)^* \BOM$
+of some translation domain $\BOM$
+% centered at $K_n$ 
+(here $n+j\equiv l \ \mod p$ and $0\leq j< p$). 
+\end{lem}
+
+\begin{proof}
+Let us consider $L$ translation domains $\BOM_l$, $l\in \LL$. Assume that the vertical weight in each of these domains
+emanating from the non-peripheral part $\II_l^\circ$ is at least $\WW_\loc/N$.
+Then by  Corollary \ref{loc weights comparison} (ii)  %property (T2)
+the vertical weight in 
+$U\sm \LL$ emanating from each $\II_l^\circ$ and supported on vertical
+arcs is at least $ \WW_\loc/ {2N}$, 
+%$\WW_\loc/N - O(N)\geq  \WW_\loc/ {2N}$,
+as long as $\WW_\loc$ is sufficiently big (in terms of $N$). 
+Thus, if $L > 2 N \la$, we achieve amplification. 
+
+\bignote{The $\Om_l$ should be selected well inside the translation region!} 
+
+So, let us assume that for some translation domain $\BOM\equiv \BOM_l$ we have
+$$
+  \WW^\ver(\II^\circ|\, \BOM) \leq \frac  {\WW_\loc}N.  
+$$
+Together with property \ref{T4} this implies:  
+$$
+   \WW(\BOM\sm K_l) \leq \frac CN \, \WW_\loc. 
+$$
+By the Covering Lemma,
+$$
+     \WW( (\Bf^j)^* \BOM  \sm K_n ) \leq  \sqrt{4\,  \WW_\loc \cdot
+       \WW(\BOM\sm K_l )} \leq \frac C {\sqrt{N}}\,  \WW_\loc, 
+$$
+with a constant $C$ depending only on $d$.
+Hence the rest of the local weight at $K_n$ is the horizontal weight confined to  $(\Bf^j)^* \BOM$. Since this domain contains 
+$O(N)$ little Julia sets, this horizontal weight, up to an additive constant $O(N)$,  is localized on at most $O(N)$ horizontal arcs.
+\end{proof}
+
+
+\subsection{Proof of the Amplification Theorem. }
+%
+\comm{******
+Assume the conclusion of the Amplification Theorem fails.  
+If $L$ is big enough, then by Lemmas \ref{getting lost} and \ref{interesting moments},
+for some $l\in \LL$ no little Julia set and no horizontal arc (of the type specified in the lemmas) 
+get lost (respectively: pulled off) under $3p$ pullbacks of
+$\BOM\equiv \BOM_l$;
+and moreover, the fitting property of Lemma \ref{fitting of ess arcs} is also satisfied
+for this $\Om$.  
+Then ******* }
+%
+Assuming that  the conclusion of the Amplification Theorem fails,  
+we will show that one of the domains $(\Bf^n)^*\, \BOM_l$, $ n\leq 3p$, contains a definite vertical weight 
+(i.e., of order $N\cdot \WW_\loc$), and the Covering Lemma will complete the proof. 
+
+% Since $l$ is fixed from now on, we will skip it from the notation. 
+
+
+%Note that to this end,  we can replace $U$ with $U^p$
+%(since  we can  push forward a definite vertical arc in $\BOM_{n+p}$ to an definite vertical arc in $\BOM_n$;
+%just using that $\deg f^p\leq 2^N$, not the Covering Lemma). So, we  replace $U$ with $U^p$ without changing notation. 
+
+By Lemma \ref{sym vert arcs} (adapted to our situation), the domain 
+$V:= ( f^{l+p})^*\, \Om \supset K_0$ \note{!} 
+contains two symmetric vertical curves
+landing on $K_0$ and disjoint from $\AAA^\hor(V)$. 
+
+Let $\AAA_l$ be the set of horizontal  arcs that begin on $K_l$.  
+\note{Defined in \S \ref{assumptions sec}?} 
+Then Lemma \ref{in p steps} ensures that all $\alpha\in \AAA_l$
+get pulled off in less than $p$ iterates.  
+Let $n=n(\alpha)$ be the pull-off moment, i.e.,
+there exist a legitimate horizontal pullback $(f^k)^*\alpha $  for $k=0,1,\dots , n-1$, 
+while  $(f^n)^* \alpha$ pulls off. 
+By  Lemma  \ref{interesting moments},
+% \ref{J-sets don't pull off}   and \ref{def vert does it}, 
+ $n(\alpha) \in \II_l$. \note{Need subscript $l$?} 
+
+
+ Given an $\eps>0$, let $\xi=\eps/3d$. 
+Let $\AAA_l^\ess$ be the set of $\xi$-essential arcs that begin on
+$K_l$.  Their total weight is at least $(1-\eps)\WW_l$ . 
+
+\bignote{Next line: These are the moments when $(f^n)^*\BOM \supset K_1$ !} 
+
+Let $\nu_n$ be the total horizontal  weight in $(\Bf^{n-1})^*\, \BOM'$ that gets pulled off under $\Bf^*$, $n\in \II$,
+and let $\eta_n$ be the part of $\WW_0$ that was used at that moment  for creation
+of new horizontal arcs. %  compare (\ref{bound by W-1}).
+Then the new horizontal weight that can be created in  $(\Bf^n)^*\, \BOM' $ is bounded by 
+\begin{equation}\label{bound on nu}
+    \frac 14 (2\nu_n  + \eta_n) +O(N). 
+\end{equation}
+Hence the loss of the horizontal weight as we pass from   $(\Bf^{n-1})^*\, \BOM'$ to  $(\Bf^n)^*\, \BOM'$ is at least
+\begin{equation}\label{loss at one step}
+    \nu_n  -  \frac 14 (2\nu_n +  \eta_n ) - O(N) = \frac 12 \nu_n - \frac 14 \eta_n  - O(N). 
+  \end{equation}\label{nu-prime}
+
+  Let us represent $\eta_n$ as $\sum \eta(\alpha)$
+ over the horizontal arcs $\alpha\in (f^{n-1})^* \BOM'  $ that gets
+pulled off under $f^*$,
+where $\eta (\alpha)$ is the part of $\WW_0$ used for creation of
+new horizontal arcs connecting $K_0$ to $f^*\alpha$.
+Then we have:
+\begin{equation}\label{penalty} 
+  \sum \eta_n  = \sum_{n\in \II}  \sum_{\alpha\in (f^{n-1})^*\BOM'}  \eta (\alpha) =
+  \sum_\alpha\sum_n  \eta (\alpha) \leq  (2N+1) \sum_\alpha\eta(\alpha) 
+  \leq (2N+1) \WW_1. 
+\end{equation}  
+
+On the other hand, let us now show that
+\begin{equation}\label{bounds on sums}
+    \sum_{n \in \II_l} \nu_n  \geq \frac {  2N+1  }2 \WW_0 (1-\eps).
+%   \sum \nu_n  \geq \frac { (1- 2 \kappa)\,  | \II | }2 \WW_l (1-\eps)
+% \quad \sum \si_n \leq {|\JJ|}\, \WW_1,
+\end{equation}
+\comm{****  since:
+
+\ssk\nin (i)
+ All horizontal arcs of $\AAA_l $ get pulled off at moments $n\in\II$;
+
+\ssk\nin (ii)
+The total weight of these arcs is at least $\WW_l (1-\eps)$;
+
+\ssk\nin (iii)
+Each of the arcs $(f^{  n(\alpha) -1  })^* \alpha$, where $\alpha\in \AAA_l^\ess$,
+fits well  into $(1-2 \kappa)\,  |\II|$ domains
+$(f^{m-1})^* \Om$ (Lemma \ref{fitting of ess  arcs});
+% since the blocks $\BB_m$ with $|m|\leq (1-\kappa) N$  do not get lost
+% in  the pullback process;
+
+\ssk\nin (iv)
+Each of these arcs has two ends: this yields  $1/2$;
+
+\ssk\nin (v)
+  At the moments $n\not\in \II$,  we do not gain any  horizontal weight.   
+
+\bignote{More details !} 
+
+*********} 
+%
+Let $K_m$, $m\in \II$,  be the family  of little Julia sets in $V$
+(introduced in the beginning of the proof) 
+and   let $\AAA_0$ be the set of horizontal arcs in $\BV$  that begin on
+$K_0$ and fit into $ V$.  
+ By Lemma  \ref{interesting moments},
+ for any  horizontal arc $\beta \in \AAA_0$,  
+the  pulled-off  moment $n(\beta) $ belongs to $\II$. 
+Since the correspondence $\beta\mapsto (f^{n(\beta)-1} )^*\beta$
+is at most  two-to-one, the total weight of the arcs  
+$(f^{n(\beta)-1} )^*\beta$, $\beta\in \AAA_0$,  is at least $\WW_0/2$. 
+Moreover,
+% by Lemma \ref{fitting of arcs},  
+each of the arcs $(f^{n(\beta)-1} )^*\beta$ fits into one of the $2N+1$ \note{explain}
+domains $ (f^{m-1})^* \Om ' $, $m \in \II_0$,   \note{ $\Om'= (f^p)^* (\Om)$ } 
+implying (\ref{bounds on sums}).
+
+\bignote{In fact
+  all the events in question happen within a bounded range of moments.
+  Indeed, the loss of the short arc must happen at the Julia
+  set $K_i$, $-\bb\leq i <0$  (before the short arc enters the
+  translation region). At this moment one can form some arcs from $K_0$
+  to $K_i$. These arcs must be lost at some $K_i$, $i\geq -2\bb$, etc.
+  Hence the essential weight emanating from $K_0$ must be formed in bounded
+  number of steps. }
+
+
+Summing (\ref{loss at one step} ) up over $n\in \II$, taking into
+account  (\ref{penalty}) and  (\ref{bounds on sums}), 
+we see that the total horizontal loss is at least
+\begin{equation}\label{loss of ess weight}
+   \frac {2N+1}  4 [  (1-\eps)\WW_0 -\WW_1] - O(N^2 ).
+%  \frac {|\II|} 4 [ (1- 2 \kappa) (1-\eps)\WW_l -\WW_1] - O(N^2 ).
+% = \frac  {|\JJ|} 4  (\WW_0 -\WW_1 - O(N))
+\end{equation}
+So, if $\WW_0$ is definitely bigger than $\WW_1$, we are done. 
+
+\comm{*******
+\msk
+Assume this is not the case.
+% (Then (\ref{loss of ess weight}) shows only  that the gain of horizontal is
+% bounded by $ N \eps'  \WW_\loc$.)  
+Assume also that  $\WW_0$ is definitely bigger than
+$\WW_1$ (and hence is definitely bigger than $\WW_l$  as well):
+$$
+     \WW_0- \WW_l \geq 2\de \WW_\loc,
+$$
+with an absolute $\de>0$. %  (to be selected below). 
+
+By Lemma \ref{localization of local weight}, \note{!!} 
+the total weight of  $\AAA_0$
+is at least $(1-\eps)\WW_0$, where $\eps = O(1/\sqrt{\kappa N})$, so
+it is definitely bigger than $\WW_l$.  Let $\tl \AAA_0$ be the family of those arcs
+$\beta\in \AAA_0$ that are not  $f^l$-pullbacks of arcs $\alpha\in \AAA_l $.  
+\bignote{It can be old arcs with a bigger weight -- correct counting (?) }
+The
+total weight of these arcs is at least 
+$$
+  (1-\eps)\WW_0 - \WW_l\geq \de \WW_\loc
+$$ 
+(if $\eps$ is small enough).
+Each arc $\beta$ gets pulled off under $(f^n)^*$ at some moment $n(\beta)<p$.
+In fact, $n(\beta)\leq p - \kappa \qq$ (if $\beta$ is essential),
+for otherwise $(f^{n(\beta)-1} )^*\beta$
+would be a short arc in the translation region (by Corollary \ref{loc weights comparison}),
+which cannot be pulled off.
+********}
+
+
+ 
+\msk  
+On the other hand, if $\WW_0$ is approximately equal to $\WW_1$, 
+we replace estimate (\ref{bound on nu}) with 
+$$
+      (\WW_0-\WW_1) +  \nu_n/ 2 = \eps' \WW_\loc +\nu_n/2,
+$$
+which results in the  horizontal loss $\nu_n/2- \eps' \WW_\loc$.
+Summing these up, taking (\ref{bounds on sums}) into account,
+we produce, once again,  a total horizontal loss of order $N\WW_\loc$. 
+
+% The rest of the argument is the same as in the bounded case for big
+% enough $N$, 
+% provided  $\kappa=\kappa(d)$ and $\eps=\eps(N)$  are sufficiently
+% small while $\WW_\loc=\WW_\loc(N) $ is
+%sufficiently big  (all independent of $p>>N$). 
+
+                                                                                     

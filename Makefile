@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean graphs serve proof-pdf factorization-figure check-uniform
+.PHONY: all build check cache clean graphs serve proof-pdf review-pdf factorization-figure check-uniform
 
 # Default target
 all: check
@@ -38,6 +38,19 @@ PROOF_CHAPTERS := \
 	docs/chapters/06_approximation_theorem.tex
 
 proof-pdf: docs/uniform_geometric_mlc.pdf
+
+review-pdf: docs/mlc_review.pdf
+
+REVIEW_CHAPTERS := \
+	docs/review/01_scope_and_status.tex \
+	docs/review/02_foundational_machinery.tex \
+	docs/review/03_known_results.tex \
+	docs/review/04_formalization_map.tex \
+	docs/review/05_source_policy_and_roadmap.tex
+
+docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 
 docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(PROOF_CHAPTERS) $(FACTOR_FIGURES)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<

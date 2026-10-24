@@ -1,0 +1,1090 @@
+
+% written in plaintex
+\input header
+\def\PSL{{\rm PSL}}
+\def\PD{\rho}
+\def\SD{\sigma}
+\footline={\hss\tenrm i-\folio\hss}\pageno=1
+
+%table of content format
+\def\leaderfill{{\leaders\hbox to 1em{\hss.\hss}\hfill}\hfil}
+\def\eleaderfill{\hfill\hbox to 1em{\hss\hss}\hfill}
+
+\vbox{}\vskip -2\baselineskip
+
+\centerline{\bf DYNAMICS IN ONE COMPLEX VARIABLE}\smallskip
+\centerline{\bf Introductory Lectures}\smallskip
+\centerline{(Partially revised version of 9-5-91)}
+\smallskip
+
+\centerline{\bf John Milnor}\smallskip
+% (SUNY Stony Brook and IAS Princeton)}\smallskip % \medskip
+
+\centerline{\bit Institute for Mathematical Sciences, SUNY, Stony Brook NY}
+\medskip
+
+\centerline{\bf Table of Contents.}\smallskip
+\line{Preface\leaderfill }
+\line{Chronological Table\leaderfill }
+\smallskip
+\line{{\bf Riemann Surfaces}.\eleaderfill}
+\line{\kern15pt 1.  Simply Connected Surfaces\leaderfill (9 pages)}
+\line{\kern15pt 2. The Universal Covering, Montel's Theorem\leaderfill (5)}
+\smallskip
+\line{{\bf The Julia Set}.\eleaderfill}
+\line{\kern15pt 3. Fatou and Julia: Dynamics
+on the Riemann Sphere\leaderfill (9)}
+\line{\kern15pt 4. Dynamics on Other Riemann Surfaces\leaderfill (6)}
+\line{\kern15pt 5. Smooth Julia Sets\leaderfill (4)}
+\smallskip
+\line{{\bf Local Fixed Point Theory}.\eleaderfill}
+\line{\kern15pt 6. Attracting and Repelling Fixed Points\leaderfill (7)}
+\line{\kern15pt 7. Parabolic Fixed Points: the Leau-Fatou Flower\leaderfill (8)}
+\line{\kern15pt 8. Cremer Points and Siegel Disks \leaderfill (11)}
+\smallskip
+\line{{\bf Global Fixed Point Theory}.\eleaderfill}
+\line{\kern15pt 9. The Holomorphic Fixed Point Formula\leaderfill (3)}
+\line{\kern10pt 10. Most Periodic Orbits Repel\leaderfill (3)}
+\line{\kern10pt 11. Repelling Cycles are Dense in \[J\]\leaderfill (5)}
+\smallskip
+\line{{\bf Structure of the Fatou Set}.\eleaderfill}
+\line{\kern10pt 12. Herman Rings\leaderfill (4)}
+\line{\kern10pt 13. The
+Sullivan Classification of Fatou Components\leaderfill (4)}
+\line{\kern10pt 14. Sub-hyperbolic and hyperbolic Maps\leaderfill (7)}
+\smallskip
+\line{{\bf Carath\'eodory Theory}.\eleaderfill}
+\line{\kern10pt 15. Prime Ends\leaderfill (5)}
+\line{\kern10pt 16. Local Connectivity\leaderfill (4)}
+\smallskip
+\line{{\bf Polynomial Maps}.\eleaderfill}
+\line{\kern10pt 17. The Filled Julia Set \[K\,$\leaderfill (4)}
+\line{\kern10pt 18. External Rays and Periodic Points\leaderfill (8)}
+\smallskip
+\line{Appendix A. Theorems from Classical Analysis\leaderfill (4)}
+\line{Appendix B. Length-Area-Modulus Inequalities\leaderfill (6)}
+\line{Appendix C. Continued Fractions\leaderfill (5)}
+\line{Appendix D. Remarks on Two Complex Variables\leaderfill (2)}
+\line{Appendix E. Branched Coverings and Orbifolds\leaderfill (4)}
+\line{Appendix F. Parameter Space\leaderfill (3)}
+\line{Appendix G. Remarks on Computer Graphics\leaderfill (2)}
+\smallskip
+\line{References\leaderfill (7)}
+\line{Index\leaderfill (3)}
+
+
+
+\eject
+
+\centerline{\bf PREFACE.}\bigskip
+
+These notes will study the dynamics of iterated holomorphic
+mappings from a\break Riemann surface to itself, concentrating on
+the classical case of rational maps of the\break Riemann sphere.
+They are based on introductory lectures
+given at Stony Brook during the Fall Term of 1989-90. I am grateful
+to the audience
+for a great deal of constructive criticism, and
+to Branner, Douady, Hubbard, and Shishikura who
+taught me most of what I know in this field. The surveys by
+Blanchard, Devaney, Douady, Keen, and Lyubich have been extremely useful, and
+are highly recommended
+to the reader. (Compare the list of references at the end.) Also, I want to
+thank A. Poirier for his criticisms of my first draft.\smallskip
+
+This subject is large and rapidly growing. These lectures are intended to
+introduce the reader to some key ideas in
+the field, and to form a basis for further study.
+The reader is assumed to be familiar with the rudiments of complex variable
+theory and of two-dimensional differential geometry. % Compare the list
+\bigskip
+\rightline{John Milnor, Stony Brook, February 1990}\medskip
+\vfil\eject  % \bigskip
+
+\centerline{\bf CHRONOLOGICAL TABLE}\bigskip
+
+Following is a list of some of the founders of the field of complex dynamics.
+\smallskip
+
+$$\vbox{\settabs 2 \columns
+\+Hermann Amandus Schwarz & 1843--1921\cr
+\+Henri Poincar\'e & 1854--1912\cr
+\+Gabriel Ko$\!$enigs	& 1858--1931\cr
+\+L\'eopold Leau &	1868--1940$\pm$\cr
+% \+L. \`E. B\"otk$\!$her  & ??\cr %(= L. \`E. B\"otk$\!$her = &\cr
+\+Lucyan Emil B\"ottcher  & 1872-- ~?\cr
+\+Constantin Carath\'eodory & 1873--1950\cr
+\+Samuel Latt\`es & 1875$\pm$-1918\cr
+\+Paul Montel   & 1876--1975\cr
+\+Pierre Fatou &	1878--1929\cr
+\+Paul Koebe & 1882--1945\cr
+\+Gaston Julia &        1893--1978 \cr
+\+Carl Ludwig Siegel &  1896--1981\cr
+\+Hubert Cremer &	1897--1983\cr
+\+Charles Morrey & 1907--1984\cr}$$
+\smallskip
+
+\noindent Among the many present day workers in the field, let me mention
+a few whose work is emphasized in these notes:
+Lars Ahlfors (1907),
+Lipman Bers (1914),
+Adrien Douady (1935),
+Vladimir I. Arnold (1937),
+Dennis P. Sullivan (1941),
+Michael R. Herman (1942),
+Bodil Branner (1943),
+John Hamal Hubbard    (1945),
+William P. Thurston (1946),
+Mary Rees (1953),
+Jean-Christophe Yoccoz (1955),
+Mikhail Y. Lyubich (1959),
+and Mitsuhiro Shishikura (1960).
+% \bigskip
+\vfil
+%\noindent ------------
+
+%\noindent * B\"ottcher was born in
+%Warsaw, took his doctorate in Leipzig (1898), and was active in Lvov
+%and Kazan. The Russian form of his name is ~{\cyr L. \`E. B\"etkher\cdprime}.
+
+\eject
+\footline={\hss\tenrm 1-\folio\hss}\pageno=1
+
+
+\centerline{\bf RIEMANN SURFACES}\medskip
+
+
+\centerline{\bf \S1. Simply Connected Surfaces.}\medskip
+
+The first two sections will present an overview of well known material.
+\smallskip
+
+By a {\bit Riemann surface} we mean a connected complex analytic manifold
+of complex dimension one. Two such surfaces \[S\] and \[S'\] are
+{\bit conformally isomorphic} if there is a homeomorphism
+from \[S\] onto \[S'\] which is holomorphic, with holomorphic inverse.
+(Thus our conformal maps must always preserve orientation.) According
+to \Poincare and Koebe, there are only three simply connected Riemann surfaces,
+up to isomorphism.
+
+{\QP{\bf 1.1. Uniformization Theorem.} \it Any simply connected Riemann
+surface is conformally isomorphic either
+
+\noindent $(a)$ to the plane \[\C\]
+consisting of all complex numbers \[z=x+iy\],
+
+\noindent $(b)$ to the open unit disk
+\[D\subset\C\] consisting of all \[z\] with \[|z|^2=x^2+y^2<1\], or
+
+\noindent $(c)$ to the
+Riemann sphere \[\hat\C\] consisting of \[\C\] together with a point at
+infinity.\medskip}
+
+The proof, which is quite difficult, may be found in Springer, or Farkas \&
+Kra, or Ahlfors [A2], or in Beardon.\QED
+
+For the rest of this section, we will discuss these three surfaces in more
+detail. We begin with a study of the unit disk \[D\].
+
+{\QP{\bf 1.2. Schwarz Lemma.} {\it If \[f:D\to D\] is a holomorphic map with
+\[f(0)=0\], then the derivative at the origin satisfies \[|f'(0)|\le 1\].
+If equality holds, then \[f\] is a rotation about the origin, that is
+\[f(z)=\lambda z\] for some constant \[\lambda
+=f'(0)\] on the unit circle. In particular,
+it follows that \[f\] is a conformal automorphism of \[D\]. On the other
+hand, if \[|f'(0)|<1\], then \[|f(z)|<|z|\] for all \[z\ne 0\], and
+\[f\] is not a conformal automorphism.}\medskip}
+
+{\bf Proof.} We use the {\bit maximum modulus principle}, which
+asserts that a non-constant
+holomorphic function cannot attain its maximum absolute value at 
+any interior point of its region of definition. First note that the
+quotient function \[g(z)=f(z)/z\] is well defined and holomorphic
+throughout the disk \[D\]. Since \[|g(z)|<1/r\] when \[|z|=r<1\], it follows
+by the maximum modulus principle that \[|g(z)|< 1/r\] for all \[z\] in the
+disk \[|z|\le r\]. Taking the limit as \[r\to 1\], we see that \[|g(z)|\le
+1\] for all \[z\in D\]. Again by the maximum modulus principle, we see that
+the case \[|g(z)|=1\], with \[z\] in the open disk, can occur only if the
+function \[g(z)\] is constant. If we exclude this case \[f(z)/z=c\],
+then it follows that \[|g(z)|=|f(z)/z|<1\] for all \[z\ne 0\], and similarly
+that \[|g(0)|=|f'(0)|<1\]. Evidently the composition of two such maps
+must also satisfy \[|f_1(f_2(z))|<|z|\], and hence cannot be the identity
+map of \[D\]. \QED
+
+{\bf 1.3. Remarks.} The Schwarz Lemma was first proved in this generality
+by Carath\'eo\-dory. If we map the disk \[D_r\] of radius \[r\] into the disk
+\[D_s\] of radius \[s\],
+with \[f(0)=0\], then a similar argument shows that \[|f'(0)|
+\le s/r\]. Even if we drop the condition that \[f(0)=0\], we certainly get the
+inequality
+$$      |f'(0)|\le 2s/r\qquad{\rm whenever}\qquad f(D_r)\subset D_s     $$
+since the difference \[f(z)-f(0)\] takes values in \[D_{2s}\].
+(In fact the extra factor of 2 is unnecessary. Compare Problem 1-2.)
+One easy corollary
+is the {\bit Theorem of Liouville}, which says that a bounded function
+which is defined and holomorphic everywhere on \[\C\] must be constant.
+Another closely related statement is the following.
+
+{\QP{\bf 1.4. Theorem of Weierstrass.} \it If a sequence of holomorphic
+functions converges uniformly, then their derivatives also converge uniformly,
+and the limit function is itself holomorphic.\smallskip}
+
+\noindent In fact the convergence of first derivatives follows easily from the
+discussion above. For the proof of the full theorem, see for example [A1].
+\smallskip
+
+It follows from this discussion that our three model surfaces
+really are distinct. For there are natural inclusion maps \[D\to\C\to\hat\C\];
+yet it follows from the maximum modulus principle and Liouville's Theorem
+that every holomorphic map \[\hat\C\to\C\] or %\break
+\[\C\to D\] must be constant.\medskip
+
+It is often more convenient to work with the {\bit upper half-plane}
+\[H\], consisting of all complex numbers \[w=u+iv\] with \[v>0\].
+
+{\QP{\bf 1.5. Lemma.} {\it The half-plane \[H\] is conformally isomorphic to
+the disk \[D\] under the holomorphic mapping \[z=(i-w)/(i+w)\], with
+inverse \[w=i(1-z)/(1+z)\].}\medskip}
+
+{\bf Proof.} We have \[|z|^2<1\] if and only if \[|i-w|^2=
+u^2+(1-2v+v^2)\] is less than
+\[|i+w|^2=u^2+(1+2v+v^2)\], or in other words if and only if \[0<v\]. \QED
+
+{\QP{\bf 1.6. Lemma.} {\it Given any point \[z_0\] of \[D\], there exists
+a conformal automorphism \[f\] of \[D\] which maps \[z_0\] to the origin.
+Furthermore, \[f\] is uniquely determined up to composition with a rotation
+which fixes the origin.}\medskip}
+
+{\bf Proof.} Given any two points \[w_1\] and \[w_2\] of the upper
+half-plane \[H\], it is easy to check that there
+exists a automorphism of the form \[w\mapsto a+bw\] which carries \[w_1\]
+to \[w_2\]. Here the coefficients \[a\] and \[b\]
+are to be real, with \[b>0\]. Since \[H\]  is conformally isomorphic to
+\[D\], it follows that there exists a conformal automorphism of \[D\]
+carrying any given point to zero. As noted above, the Schwarz Lemma
+implies that
+any automorphism of \[D\] which fixes the origin is a rotation. \QED
+
+{\QP{\bf 1.7. Theorem.} \it The group \[G(H)\] consisting of all
+conformal automorphisms of the upper half-plane \[H\] can be identified
+with the group of all fractional linear transformations \[w\mapsto
+(aw+b)/(cw+d)\] with real coefficients and with determinant \[ad-bc>0\].
+\medskip}
+
+If we normalize so that \[ad-bc=1\], then these coefficients are
+well defined up to a simultaneous change of sign. {\it
+Thus \[G(H)\] is isomorphic to the group \[\PSL(2,\R)\], consisting of all
+\[2\times 2\] real matrices with determinant \[+1\] modulo the subgroup
+\[\{\pm I\}\].}  To prove 1.7, it is only necessary to
+note that this group acts transitively on \[H\], and that it contains the
+group of ``rotations''
+$$	g(w)= (w\cos\theta+\sin\theta)/(-w\sin\theta+\cos\theta)\,,
+ \eqno (1)$$
+which fix the point \[g(i)=i\] with \[g'(i)=e^{2i\theta
+}\]. By 1.6, there can be no further
+automorphisms. (Compare Problem 1-2.)\QED\smallskip
+
+Next we introduce the {\bit Poincar\'e metric} on the half-plane \[H\].
+
+{\QP{\bf 1.8. Theorem.} {\it There exists one and, up to multiplication by
+a constant, only one Riemannian metric on the half-plane \[H\] which is invariant
+under every conformal automorphism of \[H\].}\medskip}
+
+It follows immediately that the same statement is true for the disk
+\[D\], or for any other Riemann surface which is conformally isomorphic
+to \[H\].\smallskip
+
+{\bf Proof of 1.8.} A Riemannian metric \[ds^2=g_{11}dx^2
++2g_{12}dxdy+g_{22}dy^2\] is said to be {\bit conformal}$\,$ if
+\[g_{11}=g_{22}\] and \[g_{12}=0\], so that the matrix
+\[[g_{ij}]\], evaluated at any point \[z\],
+is some multiple of the identity matrix. Such a metric can be
+written as\break \[ds^2=\gamma(x+iy)^2(dx^2+dy^2)\], or briefly as \[ds=\gamma(z)
+|dz|\], where the function \[\gamma(z)\] is smooth and strictly positive.
+By definition, such a metric is {\bit invariant} under a conformal
+automorphism \[z'=f(z)\] if and only if it satisfies the identity
+\[\gamma(z')|dz'|=\gamma(z)|dz|\], or in other words.
+$$	\gamma(f(z))=\gamma(z)/|f'(z)|\,.	\eqno (2)	$$
+Equivalently, we may say that \[f\] is an {\bit isometry} with respect to
+the metric.
+
+As an example, suppose that a conformal metric \[\gamma(w)
+|dw|\] on the upper half-plane
+is invariant under every linear automorphism \[f(w)=a+bw\]. Then we must
+have\break \[\gamma(a+bi)=\gamma(i)/b\,\]. If we normalize by setting \[\,
+\gamma(i)
+=1\,\], then we are led to the\break formula \[\gamma(u+iv)=1/v\], or
+in other words
+$$	ds=|dw|/v\qquad {\rm for}\quad w=u+iv\in H \,. \eqno(3) $$
+{\it In fact, the metric defined by this formula is invariant under every
+conformal automorphism \[g\] of \[H\].} For, if we select some arbitrary point
+\[w_1\in H\] and set \[g(w_1)=w_2\], then \[g\]
+can be expressed as the composition of a linear automorphism of the form
+\[g_1(w)= a+bw\] which maps \[w_1\] to \[w_2\]
+and an automorphism \[g_2\] which fixes \[w_2\].
+We have constructed the metric (3) so that \[g_1\] is an isometry,
+and it follows from
+1.2 and 1.5 that \[|g'_2(w_2)|=1\], so that \[g_2\] is an isometry at \[w_2\].
+Thus our metric is invariant at an arbitrarily chosen point under an arbitrary
+automorphism.
+
+To complete the proof of 1.8, we must show that a metric which is invariant
+under all automorphisms
+of \[H\] is necessarily conformal. For this purpose, it is
+convenient to pass to the equivalent problem on \[D\]. In fact
+a brief computation shows that any metric on \[D\] which is 
+preserved by all rotations about the origin must be conformal
+at the origin. Further details will be left to the reader. \QED
+
+{\bf Definition.} This metric \[ds=|dw|/v\] is called
+the {\bit Poincar\'e metric} on the upper half-plane
+\[H\]. It can be shown that this is
+the unique conformal metric on \[H\] which is complete, with
+constant Gaussian curvature equal to \[-1\].
+(Compare Problems 1-9 and 2-2.)
+The corresponding expression on \[D\] is
+$$ ds = 2|dz|/(1-|z|^2)\qquad {\rm for}\quad z=x+iy\in D\,, \eqno (4)$$
+as can be verified using 1.5 and (2).\smallskip
+
+{\bf Caution:} Some authors call \[|dz|/(1-|z|^2)\] the Poincar\'e
+metric on \[D\], and correspondingly call
+\[{1\over 2}|dw|/v\] the Poincar\'e metric on \[H\].
+These modified metrics have constant Gaussian curvature equal to \[-4\].
+\smallskip
+
+Thus there is a preferred Riemannian metric \[ds\] on \[D\] or on \[H\].
+More generally, if \[S\] is any Riemann surface which is conformally
+isomorphic to \[D\], then there is a corresponding Poincar\'e metric
+\[ds\] on \[S\].
+Hence we can define the {\bit Poincar\'e distance} \[\PD(z_1\,,\, z_2)
+=\PD_S(z_1\,,\, z_2)\] between two points of \[S\]
+as the minimum, over all paths \[P\] joining
+\[z_1\] to \[z_2\], of the integral \[\,\int_P\,ds\]. 
+
+{\QP{\bf 1.9. Lemma.} \it The disk \[D\]
+with this \Poincare metric is {\bit complete}. That is:
+
+\noindent $(a)$ every Cauchy sequence with respect to the metric \[\rho_D\] converges,
+
+\noindent $(b)$ every closed neighborhood \[\;N_r(z_0\,,\,\rho_D)\;=\;\{z\in D : \rho_D
+(z,z_0)\le r\}\;\] is a compact subset of \[D\], and
+
+\noindent$(c)$ any path leading from \[z_0\] to a point of the boundary
+\[\partial D=\bar D\ssm D\subset \hat\C\] has infinite \Poincare length.
+
+\noindent Furthermore, any two points of \[D\] are joined by a unique
+minimal geodesic.\medskip}
+
+(Compare Willmore.) Equivalently, we
+have exactly the same statements for the half-plane \[H\].\smallskip
+
+{\bf Proof.} Given any two points of \[D\] we can first choose a conformal
+automorphism which moves the first point to the origin and the second
+to some point \[\xi\] on the positive real axis. For any path \[P\]
+between \[0\] and \[\xi\] within \[D\] we have
+$$	\int_P ds\;=\;\int_P\;{2|dz|\over 1-|z|^2}\;\ge\;\int_P\,{2|dx|\over
+ 1-x^2}	\;\ge\;\int_{[0,\xi]}\;{2dx\over 1-x^2}\;=\;\log{1+\xi\over 1-\xi}\;,
+	$$
+with equality if and only if \[P\] is the straight line segment \[[0,\xi]\].
+For any \[z\in D\], it follows easily  that the \Poincare distance \[\rho
+=\rho_D
+(0,z)\] is equal to \[\log\big((1+|z|)/(1-|z|)\big)\], and that the straight line
+segment from \[0\] to \[z\] is the unique minimal \Poincare geodesic. Clearly
+\[\rho\to\infty\] as \[|z|\to 1\], which proves (c). The proof of (b), and
+hence of (a) is now straightforward.\QED\smallskip
+
+The \Poincare metric
+has the marvelous property of never increasing under holomorphic maps.
+
+{\QP {\bf 1.10. Theorem of Pick.} {\it If \[f:S\to T\] is a holomorphic
+map between
+Riemann surfaces, both of which are conformally isomorphic to \[D\], then
+$$	  \PD_{T}(f(z_1), \,f(z_2))\;\le\;\PD_{S}(z_1,\,z_2) \,.	$$
+Furthermore, if equality holds for some
+\[z_1\ne z_2\] in \[S\], then \[f\] must be
+a conformal isomorphism from \[S\] onto \[T\].}\medskip}
+
+{\bf Proof.} Join \[z_1\] to \[z_2\] by a geodesic of length equal to
+the distance \[\PD_{S}(z_1\,,
+\,z_2)\]. Let \[ds\] be the element of \Poincare length along this
+geodesic, and let \[ds'\] be the element of length along the image curve in
+\[T\]. It follows from the Schwarz Lemma and the definition of the
+\Poincare metric that \[|ds'/ds|\le 1\], with equality if and only if \[f\]
+is a conformal isomorphism; and the conclusion follows.\QED
+
+Note that this distance depends sharply on the choice of \[S\].
+As an example, suppose that \[U\subset D\] is a
+simply connected open subset with \[U\ne D\]. Then \[U\] is conformally
+isomorphic to \[D\] by the Riemann Mapping Theorem. Applying 1.10 to the
+inclusion\break \[U\to D\], we see that
+$$	\PD_D(z_1\,,\,z_2)\;<\;	\PD_U(z_1\,,\,z_2)	$$
+for any two distinct points \[z_1\] and \[z_2\] in \[U\].\smallskip
+
+{\bf 1.11. Remark.} In the special case of a holomorphic map from \[S\]
+to itself, if the sharper inequality
+$$	\PD(f(z_1),f(z_2))\le c\PD(z_1\,,\,z_2)	$$
+is satisfied for all \[z_1\] and \[z_2\], where \[0<c<1\] is constant,
+then \[f\] necessarily has a unique fixed point. However,
+the example \[z\mapsto z^2\] on the unit disk shows that a map with a
+unique fixed point need not satisfy this sharper inequality; and
+the example \[w\mapsto w+i\] on the upper half-plane shows that map which
+simply reduces \Poincare distance need not have any fixed point. (See also
+Problem 1-1.)\medskip
+
+Next let us consider the {\bit Riemann sphere} \[\hat\C\],
+that is the compact Riemann surface consisting of the complex
+numbers \[\C\] together with a single point at infinity. The conformal
+structure on this complex manifold can be specified by using
+the usual coordinate \[z\] as uniformizing parameter in the finite plane
+\[\C\], and using \[\zeta=1/z\] as uniformizing parameter in \[\hat\C\ssm
+\{0\}\].
+
+When studying \[\hat\C\], we need some {\bit spherical metric} \[\SD\]
+which is adapted to the topology, so that the point at infinity has
+finite distance from other points of \[\hat\C\]. The precise choice of such
+a metric does not matter for our purposes. However, one good choice
+would be the distance function \[\SD(z_1\,,\,z_2)\] which is associated with
+the Riemannian metric
+$$	ds=2|dz|/(1+|z|^2)\,.	\eqno (6)	$$
+This metric is smooth and well behaved, even in a neighborhood
+of the point at infinity, and has constant Gaussian curvature \[+1\].
+It corresponds to the standard metric on the unit sphere in \[\R^3\]
+under stereographic projection.
+Note that the map \[z\mapsto 1/z\] is an isometry for this metric.
+(However, it is certainly not true that every conformal self-map of \[\hat\C\]
+is an isometry.)\smallskip
+
+The group \[G(\hat\C)\] consisting of all conformal automorphisms of \[\hat
+\C\] can be described as follows. By definition,
+an automorphism \[g\in G(\hat\C)\] is called an {\bit involution}
+if the composition \[g\circ g\] is the identity map of \[\hat\C\].
+
+{\QP{\bf 1.12. Theorem.} \it 
+Every conformal automorphism \[g\] of \[\hat\C\] can be
+expressed as a {\bit fractional linear transformation} or {\bit M\"obius
+transformation}
+$$	g(z)\;=\; (az+b)/(cz+d)\,,	$$
+where the coefficients are complex numbers with determinant \[ad-bc\ne 0\].
+Every non-identity automorphism of \[\hat\C\] either has two distinct fixed
+points or one double fixed point in \[\hat\C\]. In general,
+two non-identity elements of \[G(\hat\C)\] commute if and only if they have
+precisely the same fixed points: the only exceptions to this statement
+are provided by pairs of commuting involutions.\medskip}
+
+Here by a ``double'' fixed point we mean one at which the derivative \[g'(z)\]
+is equal to \[+1\].
+If we normalize so that \[ad-bc=1\], then the coefficients are
+well defined up to a simultaneous change of sign.
+{\it Thus the group \[G(\hat\C)\] of conformal
+automorphisms can be identified with the group \[\PSL(2,\C)\] consisting of
+all complex matrices with determinant \[+1\] modulo the subgroup \[\{\pm
+I\}\].}\smallskip
+
+{\bf 1.13. Remark.} The group \[G(\C)\] of all conformal automorphisms
+of the complex plane can be identified with the subgroup of \[G(\hat\C)\]
+consisting of automorphisms \[g\] which fix the point \[\infty\], since
+every conformal automorphism of \[\C\] extends uniquely
+to a conformal automorphism of \[\hat\C\]. (Compare Ahlfors [A1, p.124] .)
+It follows easily that \[G(\C)\] consists
+of all affine transformations
+$$	g(z)\;=\;\lambda z+c	 $$
+with complex coefficients \[\lambda\ne 0\] and \[c\].\smallskip
+
+{\bf Proof of 1.12.} Clearly \[G(\hat\C)\] contains this group of fractional
+linear transformations as a subgroup. After composing the given \[g\in G(\hat
+\C)\] with a suitable element of this subgroup, we may assume that \[g(0)=0\]
+and \[g(\infty)=\infty\]. But then the quotient \[g(z)/z\] is a bounded
+holomorphic function, hence constant by Liouville's Theorem (\S1.3). Thus
+\[g\] is linear, and hence itself is an element of \[\PSL(2,\C)\].
+
+The fixed points of a fractional linear transformation can be
+determined by solving a quadratic equation, so it is easy to check that there
+must be at least one and
+at most two distinct solutions in the extended plane \[\hat\C\].
+In particular, if an automorphism of \[\hat\C\] 
+fixes three distinct points, then it must be the identity map.
+
+In general, if two automorphisms \[g\] and \[h\] commute, we
+can say that \[g\] maps every fixed point of \[h\] to a fixed point of \[h\],
+and that \[h\] maps every fixed point of \[g\] to a fixed point of \[g\].
+However, this leaves open the possibility that \[g\] interchanges the two fixed
+of \[h\] and that \[h\] interchanges the two fixed points of \[g\].
+If this is indeed the case, then both \[g\circ g\]
+and \[h\circ h\] have at least four fixed points, hence both must equal
+the identity map. (An example of this phenomenon is provided by the two
+commuting involutions \[g(z)= -z\] with fixed points \[\{0,\infty\}\], and
+\[h(z)= 1/z\] with fixed points \[\{\pm 1\}\].) If we exclude this possibility,
+then elements which commute must have exactly the same fixed points.
+
+Conversely, let us consider the subgroup consisting of all
+elements of \[G(\hat\C)\] which fix two specified points \[z_0\ne z_1\].
+It is convenient to conjugate by an automorphism
+which carries \[z_0\] to zero and \[z_1\] to infinity. The argument above
+shows that an automorphism \[g\] fixes both zero and infinity if and only
+if it has the form \[g(z)=\lambda z\] for some \[\lambda\ne 0\]. Thus the
+subgroup consisting of all such elements is isomorphic to the multiplicative
+group \[\C\ssm\{0\}\], and hence is commutative as required.
+
+Finally, consider automorphisms \[g\] which fix only the point at infinity.
+A similar argument shows that \[g(z)\] must be equal to \[z+c\]
+for some constant \[c\ne 0\]. (Compare 1.13.)
+These automorphisms, together with the identity map, form a subgroup of
+\[G(\hat\C)\] which is isomorphic to the additive group of \[\C\]; which again
+is commutative as required. Further details will be left to the reader.\QED
+
+The corresponding discussion for the group \[G(H)\] (or \[G(D)\])
+will be important in \S3. To fix our ideas, let
+us concentrate on the case of the half-plane. It follows from 1.7 that every
+automorphism of \[H\] extends uniquely to an automorphism of \[\hat
+\C\]. Hence 1.12 applies immediately. However, we must consider not only
+fixed points inside of \[H\] but also fixed points which lie on the
+boundary \[\partial H=\R\cup\infty\]. A priori, we should also consider
+fixed points which lie in the lower half-plane, completely outside of the
+closure \[\bar H\]. However, it is easy to check that \[w\] is a fixed point
+of a fractional linear transformation with real coefficients
+if and only if the complex
+conjugate \[\bar w\] is also a fixed point. Thus each fixed point in the lower
+half-plane, outside of \[\bar H\], is paired with a fixed point
+which is inside the upper half-plane \[H\].\smallskip
+
+{\bf 1.14. Definition.} The non-identity automorphisms of \[H\] fall into
+three classes, as follows:
+
+An automorphism \[g\in G(H)\] is said to be {\bit elliptic} if it has a
+fixed point \[w_0\in H\]. We may also describe \[g\] as a {\bit rotation}
+around \[w_0\]. (Compare (1) above.)
+
+The automorphism \[g\in G(H)\] is {\bit hyperbolic} if it has two distinct
+fixed points on the boundary \[\partial H\]. As an example,
+\[g\] fixes the two points \[0\]
+and \[\infty\] if and only if it has the form \[g(w)=\lambda w\] with
+\[\lambda>0\].
+
+The automorphism \[g\in G(H)\]
+is {\bit parabolic} if it has just one double fixed
+point, which necessarily belongs to the boundary \[\partial H=\R\cup
+\infty\]. For example, if this double fixed point is the point at infinity,
+then \[g\] is necessarily a translation: \[g(w)=w+c\;\] for some constant
+\[c\ne 0\] in \[\R\].
+
+{\QP{\bf 1.15. Lemma.} \it Two non-identity elements of \[G(H)\] commute if
+and only if they have exactly
+the same fixed points in \[\bar H=H\cup\R\cup\infty\]. The set
+of all group elements with some specified
+fixed point set, together with the identity
+element, forms a commutative subgroup, which is isomorphic to a circle in the
+elliptic case and to a real line in the parabolic or hyperbolic cases.
+\medskip}
+
+The proof is easily supplied.\QED
+
+Again, we could equally well work with \[D\] in place of \[H\].
+One defect of this exposition is that it requires going outside of the
+half-plane \[H\] in order to distinguish between parabolic and hyperbolic
+automorphisms. For a more intrinsic description of the difference between
+these cases, see Problem 1-5.
+
+\lln\medskip
+
+We conclude this section with a number of problems for the reader.\medskip
+
+{\bf Problem 1-1.} If a holomorphic map \[f:D\to D\] fixes the
+origin, and is not a rotation, prove that the successive images \[f^
+{\circ n}(z)\] converge to zero for all \[z\] in the open disk \[D\],
+and prove that this convergence is uniform on compact subsets of \[D\].
+(Here \[f^{\circ n}\] stands for the \[n$-fold iterate \[f\circ\cdots\circ
+f\]. The example \[f(z)=z^2\] shows that convergence need not be uniform
+on all of \[D\].) \smallskip
+
+{\bf Problem 1-2.} Show that the group \[G(D)\] of conformal
+automorphisms of the unit disk \[D\] consists of all maps
+$$	g(z)\;=\; e^{i\theta} (z-a)/(1-\bar a z)	$$
+with \[|e^{i\theta}|=1\], where \[a\in D\] is the unique point which maps
+to zero. (Compare 1.7.) Check that \[|g'(0)|\le 1\], and conclude using 1.2
+that any holomorphic map \[f:D\to D\] must satisfy \[|f'(0)|\le 1\].
+\smallskip
+
+{\bf Problem 1-3.} Show that the action of the group
+\[G(\hat\C)\] on \[\hat\C\]
+is {\bit simply 3-transitive}. That is, there is one and only one automorphism
+which carries three distinct specified points of \[\hat\C\]
+into three other specified
+points. Similarly, show that the action of of \[G(\C)\] on \[\C\] is simply
+2-transitive. Show that the action of \[G(D)\] on the boundary circle
+\[\partial D\] carries three specified points into three other specified
+points if and only if they have the same cyclic order; and show that the
+action of \[G(D)\] carries two points of \[D\] into two other specified
+points if and only if they have the same \Poincare distance.\smallskip
+
+%{\bf Problem 1-4.} Using polar coordinates \[z=re^{i\theta}\] on the unit
+%disk, show that the \Poincare metric is given by
+%$$	ds=2|dz|/(1-r^2) =2\sqrt{(dr^2+r^2d\theta^2)}/(1-r^2)\ge 2|dr|
+%/(1-r^2)\,,	$$
+%where equality holds along any radial line \[\theta={\rm constant}\].
+%Conclude that the associated distance function satisfies
+%\[\PD(0,\, re^{i\theta})=\log((1+r)/(1-r))\]. In particular,
+%show that this expression tends to infinity as \[r\to 1\], and hence check
+%directly that the
+%boundary of \[D\] has infinite \Poincare distance from any interior point, and
+%that the closed neighborhood \[N_r(0,\rho_D)\] is a compact subset of \[D\].
+%(\S1.8.)\smallskip
+
+{\bf Problem 1-4.} By an {\bit anti-holomorphic} automorphism of \[\hat\C\]
+we mean an orientation reversing self-homeomorphism of the form \[z\mapsto
+\eta(\bar z)\], where \[\eta\] is holomorphic.
+If \[L\] is a straight line or circle in
+\[\hat\C\], show that there is one and only one anti-holomorphic involution
+of \[\hat\C\] having \[L\] as fixed point set, and show that no other
+non-vacuous fixed point sets can occur. Show that the automorphism group
+\[G(\hat\C)\] acts transitively on the set of straight lines and circles
+in \[\hat\C\]. Similarly, show that any
+anti-holomorphic involution of \[D\] is the reflection in some \Poincare
+geodesic; and show that \[G(D)\] acts transitively on the set of such
+geodesics.\smallskip
+
+{\bf Problem 1-5.}  Let \[g\] be an automorphism of \[D\] with \[g\circ g\]
+not the identity map. Show that \[g\] is hyperbolic
+if and only if there exists an automorphism \[h\] which satisfies
+$$	h\circ g\circ h^{-1}\;=\;g^{-1}\,,	$$
+or if and only if there exists some necessarily unique geodesic \[L\] with
+respect to the \Poincare metric which is mapped onto itself by \[g\],
+or if and only if \[g\] commutes with some anti-holomorphic involution.
+(The possible choices for \[h\] are just the \[180
+^\circ\] rotations about the points of \[L\].)\smallskip
+
+{\bf Problem 1-6.} Define the {\bit infinite band} \[B\subset\C\] of width
+\[\pi\] to be the set
+of all \[z=x+iy\] with \[|y|<\pi/2\]. Show that the exponential map carries
+\[B\] isomorphically onto the right half-plane \[\{u+iv:u>0\}\]. Show that
+the \Poincare metric on \[B\] takes the form
+$$	ds=|dz|/cos\,y\,. \eqno (7)	$$
+Show that the
+real axis is a geodesic whose \Poincare arclength coincides with its usual
+Euclidean arclength, and show that each real translation \[z\mapsto z+c\] is
+a hyperbolic automorphism of \[B\] having the real axis as its unique
+invariant geodesic.\smallskip
+\eject
+
+{\bf Problem 1-7.} Given four distinct points \[z_j\] in
+\[\hat\C\] show that the {\bit cross ratio}
+$$	\chi(z_1\,,\,z_2\,;\,z_3\,,\,z_4)
+	\;\;=\;\;{(z_1-z_3)(z_2-z_4)\over(z_1-z_4)(z_2-z_3)}\;\;\in
+	\;\;\C\ssm\{0,1\} $$
+is invariant under fractional linear transformations, and show that \[\chi\]
+is real if and
+only if the four points lie on a straight line or circle. \smallskip
+
+{\bf Problem 1-8.} Show that each \Poincare
+neighborhood \[N_r(w_0\,,\,\rho_H)\] in the upper half-plane is bounded
+by a Euclidean circle, but that \[w_0\] is not its Euclidean center. Show that
+each \Poincare geodesic in the upper half-plane is a straight line or
+semi-circle which meets the real axis orthogonally. If the geodesic 
+through \[w_1\] and \[w_2\] meets \[\partial H=\R\cup\infty\] at the points
+\[\alpha\] and \[\beta\], show that the \Poincare distance between \[w_1\]
+and \[w_2\] is equal to the logarithm of the cross ratio
+\[\chi(w_1\,,\,w_2\,;\,\alpha\,,\,\beta)\]. Prove corresponding
+statements for the unit disk.\smallskip
+
+{\bf Problem 1-9.} The Gaussian curvature of a conformal metric \[ds=
+\gamma(w)|dw|\] with \[w=u+iv\] is given by the formula
+$$	 K\;\;=\;\; {\gamma_u^2+\gamma_v^2 -\gamma(\gamma_{uu}+\gamma_{vv})
+	\over \gamma^4}	$$
+where the subscripts stand for partial derivatives. (Compare Willmore, p. 79.)
+Check that the \Poincare metrics (3), (4) and (7) have curvature \[K\equiv-1\],
+and more generally that the metric
+\[ds=c|dw|/v\] has curvature \[K\equiv-1/c^2\].
+Check that the spherical metric (6) has curvature \[K\equiv +1\].\smallskip
+
+{\bf Problem 1-10.} Classify conjugacy classes in the groups \[G(H)\cong
+\PSL(2,\R)\] as follows.
+Show that every automorphism of \[H\] without fixed point is conjugate to
+a unique transformation of the form \[w\mapsto w+1\] or \[w\mapsto w-1\] or
+\[w\mapsto\lambda w\] with \[\lambda>1\]; and show that the conjugacy class of
+an automorphism \[g\] with fixed point \[w_0\in H\] is uniquely determined
+by the derivative \[\lambda=g'(w_0)\], where \[|\lambda|=1\].
+Show also that each non-identity element of \[\PSL_2(\R)\] belongs
+to one and only one ``one-parameter subgroup'', and that each
+one-parameter subgroup is conjugate to either
+$$      t\;\;\mapsto\;\;
+        \left[\matrix{1&t\cr 0&1\cr}\right]\quad{\rm or}\quad
+        \left[\matrix{e^t&0\cr 0&e^{-t}\cr}\right]\quad{\rm or}\quad
+        \left[\matrix{\cos t&\sin t\cr -\sin t&\cos t\cr}\right]      $$
+according as its elements are parabolic or hyperbolic or elliptic.
+Here \[t\] ranges over the additive group of real numbers.\smallskip
+
+{\bf Problem 1-11.} For a non-identity automorphism \[g\in G(\hat\C)\], show
+that the derivatives \[g'(z)\] at the two
+fixed points are reciprocals, say \[\lambda\] and \[\lambda^{-1}\],
+and show that the sum \[\lambda+\lambda^{-1}\] is a complete conjugacy
+class invariant. (Here \[\lambda=1\] if and only if the two fixed points
+coincide. In the
+special case of a fixed point at infinity, one must evaluate the
+derivative using the local coordinate \[\zeta=1/z\].)\smallskip
+
+{\bf Problem 1-12.} Show that the conjugacy class of
+a non-identity automorphism \[\;g(z)=\lambda z+c\;\]
+in the group \[G(\C)\] is uniquely
+determined by its image under the homomorphism \[g\mapsto \lambda\in\C\ssm
+\{0\}\].
+
+\vfil
+%\rightline{jwm, version of 8-28-91}
+\eject
+% \bigskip\bigskip
+\footline={\hss\tenrm 2-\folio\hss}\pageno=1
+
+\centerline{\bf \S2. The  Universal Covering, Montel's Theorem.}\bigskip
+
+If \[S\] is a completely arbitrary Riemann surface, then the universal
+covering \[\tilde S\] is a well defined simply connected Riemann surface,
+with a canonical projection map \[p:\tilde S\to S\].
+(Compare Munkres, and also Appendix E.) According to the Uniformization
+Theorem, this universal covering \[\tilde S\] must be
+conformally isomorphic to one of the three model surfaces (\S1.1).
+Thus we have the following.
+
+{\QP{\bf 2.1. Lemma.} \it Every Riemann surface \[S\] is conformally
+isomorphic to a quotient of the form \[\tilde S/\Gamma\], where
+\[\tilde S\] is a simply connected surface which is isomorphic to
+either \[D\], \[\C\], or \[\hat\C\]. Here \[\Gamma\] %subset G(\tilde S)\]
+is a discrete group of conformal automorphisms of \[\tilde S\],
+such that every non-identity element of \[\Gamma\] acts without fixed points
+on \[\tilde S\].\medskip}
+
+This discrete group \[\Gamma\subset G(\tilde S)\] can be identified with
+the fundamental group \[\pi_1(S)\]. The elements of \[\Gamma\]
+are called {\bit deck transformations}. They can be characterized as
+maps \[\gamma:\tilde S\to\tilde S\] which satisfy the identity
+\[\gamma=p\circ\gamma\], that is maps for which the diagram
+$$      \matrix{\tilde S&\buildrel \gamma\over\longrightarrow& \tilde S\cr
+       \;\;\;\downarrow p &&\;\;\;\downarrow p\cr
+        S&\buildrel = \over\longrightarrow& S}  $$
+is commutative.
+Conversely, if we are given a group \[\Gamma\] of conformal automorphisms
+of a simply connected surface \[\tilde S\] which is discrete as a subgroup of
+\[G(\tilde S)\], and such that every non-identity element of \[\Gamma\] acts
+without fixed points,
+then it is not difficult to check that \[\Gamma\] is the group
+of deck transformations for a universal covering map \[\tilde S\to\tilde
+S/\Gamma\]. (Compare Problem 2-1.)\smallskip
+
+We can analyze the three possibilities for \[\tilde S\] as follows.\smallskip
+% (Note that (1) implies the sharper condition that \[\Gamma\] acts
+% properly discontinuously --- that is, for any compact subset \[K\subset\tilde
+% S\] there are only finitely many \[\gamma\] with \[\gamma(K)\cap K\ne
+% \emptyset\].)
+
+{\bf Spherical Case.} According to 1.12, every conformal automorphism of the
+Riemann sphere \[\hat\C\] has
+at least one fixed point. Therefore, if \[S\cong\hat\C/\Gamma\]
+is a Riemann surface with universal covering
+\[\tilde S\cong \hat\C\], then the group \[\Gamma\subset G(\hat\C)\] must be
+trivial, hence \[S\] itself must be isomorphic to \[\hat\C\].\smallskip
+
+{\bf Euclidean Case.} By 1.13, the group \[G(\C)\] of conformal
+automorphisms of the complex plane
+consists of all affine transformations \[z\mapsto \lambda z+c\] with
+\[\lambda\ne 0\]. Every such transformation with \[\lambda
+\ne 1\] has a fixed point.
+Hence, if \[S\cong\C/\Gamma\] is a surface with universal covering
+\[\tilde S\cong \C\], then \[\Gamma\] must be a discrete 
+group of translations \[z\mapsto z+c\] of the complex plane \[\C\].
+There are three subcases:
+
+If \[\Gamma\] is trivial, then \[S\] itself is isomorphic to \[\C\].
+
+If \[\Gamma\] has just one generator, then \[S\] is isomorphic to
+the cylinder \[\C/\Z\], which in turn is isomorphic under the exponential
+map to the {\bit punctured plane} \[\C\ssm\{0\}\].
+
+If \[\Gamma\] has two generators, then it can be described as a two-dimensional
+{\bit lattice}\break
+\[\Lambda\subset\C\], that is an additive group generated by
+two complex numbers which are linearly independent over \[\R\]. The
+quotient \[{\bf T}=\C/ \Lambda\] is called a {\bit torus}.\smallskip
+
+In all three of these cases, note that our surface inherits a locally
+Euclidean geometry from the Euclidean metric \[|dz|\] on its universal
+covering surface. For example the punctured plane \[\C\ssm\{0\}\], consisting
+of points \[\exp(z)=w\], has a complete locally Euclidean metric \[|dz|
+=|dw/w|\]. It is easy to check that such a metric is unique up to a
+multiplicative constant. (Compare Problem 2-2.) We will refer to these
+Riemann surfaces as [complete locally] {\bit
+Euclidean surfaces}. The term ``{\bit parabolic surface\/}'' is also commonly used
+in the literature.\smallskip
+
+{\bf Hyperbolic Case.} In all other cases, the universal covering \[\tilde
+S\] must be conformally isomorphic to the unit disk. Such Riemann surfaces
+are said to be {\bit Hyperbolic}. {\it As an example, any Riemann surface
+with non-abelian fundamental group, and in particular any
+surface of higher genus, is necessarily Hyperbolic.}
+
+{\bf Remark.} Here the word ``Hyperbolic'' is a reference to Hyperbolic
+Geometry, that is the geometry of Lobachevsky.
+Unfortunately the term ``hyperbolic'' has at least three
+different well established meanings in conformal dynamics. (Compare \S1.14
+and \S14.) In a crude attempt to avoid confusion, I will alway capitalize the
+word when it is used with this geometric meaning.\smallskip
+
+Every Hyperbolic surface \[S\] possesses a unique {\bit \Poincare metric},
+which is complete, with Gaussian curvature identically equal to \[-1\].
+To construct this metric, we note that the \Poincare metric on \[\tilde S\]
+is invariant under the action of \[\Gamma\]. Hence there is one and only one
+metric on \[S\] so that the projection \[\tilde S\cong D\to S\]
+is a local isometry. Hence, just as in \S1.9, there is an
+associated {\bit \Poincare distance function} \[\rho(z,z')=\rho_S(z,z')\] which
+is equal to the length of a shortest geodesic from \[z\]to \[z'\]. As in 1.10
+we have:
+
+{\QP{\bf 2.2. Lemma.} \it If \[f:S\to T\] is a holomorphic map
+between Hyperbolic surfaces, then
+$$	 \PD_T(f(z),\,f(z'))\;\le\;\PD_S(z,z')\,.	$$
+Furthermore, if equality holds for some \[z\ne z'\], then it follows
+that \[f\] is a {\bit local isometry}. That is, \[f\] preserves the
+infinitesimal distance element \[ds\], and hence preserves the distances
+between nearby points.\medskip}
+
+{\bf Proof.} This follows, just as in 1.10, since a minimal geodesic
+joining \[z\] to \[z'\] must be mapped isometrically.\QED
+
+{\bf Caution:} It no longer follows that \[f\] must be a conformal
+isomorphism from \[S\] to \[T\]. However,
+if \[f\] is a local isometry, then we can at least assert that \[f\] induces
+an isometry \[\tilde S\buildrel\cong\over\longrightarrow\tilde T\] between
+the universal covering surfaces, and hence that \[f\] is a covering map
+from \[S\] onto \[T\].\smallskip
+
+Here is an example. The map \[f(z)= z^2\] on the
+{\bit punctured disk} \[D\ssm\{0\}\] is certainly not an automorphism, since
+it is
+two-to-one. However, the universal covering of \[D\ssm\{0\}\] can be identified
+with the left half-plane, mapped to \[D\ssm\{0\}\] by the exponential map,
+and \[f\] lifts to the automorphism \[w\mapsto 2w\] of this left half-plane.
+Therefore, \[f\] is a covering map, and
+preserves the \Poincare metric locally.\smallskip
+
+Note that the punctured disk has abelian fundamental group \[\pi_1(D\ssm\{0\})
+\cong\Z\]. Here is another such example.
+For any \[ r>1\], the {\bit annulus}
+$$	{\cal A}_r\;=\;\{\,z\; : \; 1<|z|<r\,\}		$$
+is a Hyperbolic surface, since it admits a holomorphic map to the unit disk.
+The fundamental group \[\pi_1({\cal A}_r)\] is evidently also free cyclic.
+In fact annuli and the punctured disk
+are the only Hyperbolic surfaces with abelian fundamental
+group, other than the disk itself. (Compare Problem 2-3.)\smallskip
+
+{\bf Maximal Hyperbolic Example.} If \[a_1\,,\,a_2\,,
+\,a_3\] are three distinct points of \[\hat\C\], then the complement
+\[\;\Sigma_3\,=\,\hat\C\ssm\{a_1\,,\,a_2\,,\,a_3\}\,\cong\,\C\ssm\{0,1\}\;\]
+is called a {\bit thrice punctured sphere}. This is evidently a Hyperbolic
+surface, for example since its fundamental group is not abelian.
+One immediate corollary of this observation is the following.
+
+{\QP {\bf 2.3. Picard's Theorem.}
+{\it Any holomorphic map from \[\C\] to \[\hat\C\] which omits three
+different values must be constant. More generally, if the Riemann surface
+\[S\] admits some non-constant
+holomorphic map to the thrice punctured
+sphere \[\Sigma_3\], then \[S\] must be Hyperbolic.}\medskip}
+
+For this map \[f:S\to \Sigma_3\] can be
+lifted to a holomorphic map from the universal covering \[\tilde S\]
+to the universal covering \[\tilde \Sigma_3\cong D\]. By Liouville's
+Theorem (\S1.3) it follows that \[\tilde S\cong D\].\QED
+
+Let \[U\subset \hat\C\] be any connected open set which omits at least
+three points, and hence is Hyperbolic.
+It is often useful to compare the \Poincare distance between two points
+of \[U\] with the spherical distance between the same two points within
+\[\hat\C\]. (See \S1(6).) Here is a crude estimate.
+Again let \[N_r(z,\rho_U)\] be the closed neighborhood of
+some fixed radius \[r\] with respect to the \Poincare metric about
+the point \[z\] of \[U\].
+
+{\QP {\bf 2.4. Lemma.} {\it 
+As \[z\] converges towards the boundary \[\partial U\] in the spherical
+metric,  the spherical diameter
+of the neighborhood \[N_r(z,\rho_U)\] tends to zero.}\medskip}
+
+\noindent (For a sharper statement in the simply connected case, see
+A.8 in the Appendix.) \smallskip
+
+{\bf Proof of 2.4.}
+First consider the special case \[U=\Sigma_3=\hat\C\ssm\{a_1\,,\,
+a_2\,,\,a_3\}\]. Choose some fixed base point \[z_0\] in \[U=\Sigma_3\].
+For each fixed \[r>0\], the neighborhood \[N_r(z_0,\,\rho_U)\] is the image
+under projection of a corresponding neighborhood in the universal covering
+surface, and hence is compact and connected. (Compare 1.9.)
+Now, as \[z\] tends to one of the three boundary points \[a_1\] of \[U\],
+it must eventually
+leave any compact subset of \[U\], hence the distance \[\PD_U(z,\,z_0)\] must
+tend to infinity. For fixed \[r\], it follows that the neighborhood
+\[N_r(z,\,\rho_U)\] will eventually be
+disjoint from any given compact subset of \[\Sigma_3\]. In fact, since the set
+\[N_r(z,\,\rho_U)\] is connected, this entire set must tend to just one
+boundary point \[a_1\] with respect to the spherical metric.
+
+Now consider an arbitrary Hyperbolic open set \[U\subset\hat\C\]. Given a
+sequence of points of \[U\] tending to the boundary, we can choose a
+subsequence \[\{z_j\}\] which converges to a single boundary point \[a_1\].
+Choose two other boundary points \[a_2\]
+and \[a_3\], and consider the inclusion map
+from \[U\] to \[\Sigma_3=\hat\C\ssm\{a_1\,,\,a_2\,,\,a_3\}\]. Applying the
+Pick inequality 2.2, we have \[N_r(z_j\,,\,\rho_U)\subset N_r(z_j\,,\,\rho_
+{\Sigma_3})\], and it follows from the discussion above that
+this entire neighborhood converges to the boundary point \[a_1\]
+as \[j\to\infty\].\QED\smallskip
+
+Using the \Poincare metric, we will develop another important tool.
+A sequence of maps \[f_n:S\to\hat\C\] on a Riemann surface
+\[S\] is said to {\bit converge locally uniformly} (or\break {\bit uniformly
+on compact sets}) to the limit \[g:S\to\hat\C\] if for
+every compact subset \[K\subset S\] the\eject
+\noindent sequence
+\[\{f_n|K\}\] of maps \[f_n\] restricted to \[K\] converges
+uniformly to \[g|K\]. Here it is to be understood that we use the
+spherical metric \[\SD(z_1\,,\,z_2)\] on the target space \[\hat\C\].
+\smallskip
+
+{\bf Definition.} Let \[S\] and \[S'\] be Riemann surfaces, with \[S'\]
+compact. A collection \[{\cal F}\] of holomorphic maps
+\[f_\alpha:S\to S'\] is {\bit normal}\[\] if every infinite
+sequence of maps from \[{\cal F}\] contains a subsequence which converges
+locally uniformly to a limit.\smallskip
+
+(For the case of a non-compact target space \[S'\], see 2.6 below.)
+Note that the limit function \[g\] must itself be holomorphic, by the Theorem
+of Weierstrass. However, this limit \[g\] need not belong to the given family.
+Roughly speaking, a family of maps is normal if and only if its closure,
+in the space of all holomorphic maps from \[S\] to \[S'\], is a compact
+set. (Ahlfors [A1, p.213].)
+
+{\QP {\bf 2.5. Montel's Theorem.} {\it Let \[S\] be any Riemann surface,
+which we may as well suppose to be Hyperbolic. If a collection \[{\cal F}\]
+of holomorphic maps from \[S\] to the Riemann sphere \[\hat\C\] takes values
+in some Hyperbolic open subset \[U\subset\hat\C\], or equivalently
+if there are three distinct points of \[\hat\C\] which never occur as
+values, then this collection \[{\cal F}\] is normal.} \medskip}
+
+More explicitly, any sequence of holomorphic maps \[f_n:S\to U\]
+contains a subsequence which converges, uniformly on compact subsets of \[S\],
+to some holomorphic map \[g:S\to\bar U\]. Here it is essential that \[g\] be
+allowed to take values in the closure \[\bar U\]. However, the proof will
+show that the image \[g(S)\] is either contained in \[ U\], or is a single
+point belonging to the boundary of \[ U\].\smallskip
+
+{\bf Proof of 2.5.} First note by
+2.3 that the surface \[S\] must be Hyperbolic, unless all of our maps
+are constant. Hence \[S\] also has a \Poincare metric.
+Choose a countable dense subset of points \[z_j\in S\,,\;j\ge 1\].
+(It follows easily from \S1.1 that every Riemann surface possesses a countable
+dense subset. This statement was first proved by Rad\'o. Compare
+Ahlfors \& Sario.) Given any sequence
+of holomorphic maps \[f_n:S\to U\subset\hat\C\], we can first choose an
+infinite subsequence \[\{f_{n(p)}\}\] of the \[f_n\] so that the
+images \[f_{n(p)}(z_1)\] converge to a limit within the closure of
+\[U\]. Then choose a sub-sub-sequence
+\[f_{n(p(q))}\] so that the \[f_{n(p(q))}(z_2)\] also converge to a limit,
+and continue inductively. By a diagonal procedure,
+taking the first element of the first subsequence, the second element of the
+second subsequence, and so on, we construct a new infinite sequence of maps
+\[g_m=f_{n_m}\] so that \[\lim_{m\to\infty}g_m(z_j)\in \bar U\] exists
+for every choice of \[z_j\].
+
+{\bf Case 1.} Suppose that every one of these limit points in \[\bar U\]
+actually belongs to the set \[U\] itself. Given any compact set \[K\subset S\]
+and any \[\epsilon>0\], we can choose finitely many \[z_j\] so that every
+point \[z\in K\] has Poincar\'e distance \[\rho_S(z,z_j)<\epsilon\] from one of
+these \[z_j\]. Further, we can choose \[m_0\] so that 
+\[\rho_U(g_m(z_j)\,,\,g_n(z_j))<\epsilon\] for each of these finitely many
+\[z_j\], whenever \[m,\,n>m_0\,\]. For any \[z\in K\] it then follows using
+2.2 that \[\PD_U(g_m(z)\,,\,g_n(z))<3\epsilon\] whenever \[m,\,n>m_0\].
+Thus the \[g_m(z)\] form a Cauchy sequence.
+It follows that the sequence of functions \[\{g_m\}\] converges
+to a limit, and that this convergence is uniform
+on compact subsets of \[S\].
+
+{\bf Case 2.} Suppose on the other hand that \[\lim_{m\to\infty}
+g_m(z_j)\] is actually a boundary point \[a_0\in\partial U\] for some \[z_j\].
+Then it follows
+from 2.4 that \[g_m(z)\] converges to \[a_0\] for every \[z\in S\],
+and that this convergence is uniform on compact subsets of \[S\].\QED
+ \smallskip
+
+{\bf 2.6. Remark.} If we consider maps \[S\to S'\] where the target space
+\[S'\] is not compact, then the definition should be modified as follows.
+We continue to assume that \[S\] is connected.
+A collection \[\cal F\] of maps \[f_\alpha:S\to S'\] is {\bit normal~}
+if every infinite sequence of maps from \[\cal F\] contains a subsequence
+which either
+
+\noindent $(1)$  converges locally uniformly
+to a holomorphic map from \[S\] to \[S'\], or
+
+\noindent $(2)$ diverges locally uniformly to infinity, in the sense that
+the successive images of any compact subset of \[S\] eventually miss any given
+compact subset of \[S'\].\smallskip
+
+\lln
+
+{\bf Concluding Problems.}\smallskip
+
+{\bf Problem 2-1.} Let \[S\] be a simply connected Riemann surface, and let
+\[\Gamma\subset G(S)\] be a discrete subgroup; that is, suppose that the
+identity element
+is an isolated point of \[\Gamma\]. If every non-identity element of
+\[\Gamma\] acts on \[S\] without fixed points, show that the action of
+\[\Gamma\] is
+{\bit properly discontinuous}. That is, for every compact \[K\subset S\]
+show that
+only finitely many group elements satisfy \[K\cap\gamma(K)\ne
+\emptyset\]. Show that each \[z\in S\] has a neighborhood \[U\] whose
+translates \[\gamma(U)\] are pairwise disjoint. Conclude that \[S/\Gamma\]
+is a well defined Riemann surface with \[S\] as its universal covering.
+\smallskip
+
+{\bf Problem 2-2.} Show that any Riemann surface which
+is not conformally isomorphic to \[\hat\C\],
+has one and up to a multiplicative constant only
+one conformal Riemann metric which is complete, with constant Gaussian
+curvature. (Make use of Hopf's Theorem which asserts that, for each
+real number \[K\], there is one and only
+one complete simply connected surface of constant curvature \[K\] up to
+isometry. See Willmore p. 162.) On the other hand, show that \[\hat\C\]
+has a 3-dimensional family of conformal metrics with curvature \[+1\].
+\smallskip
+
+{\bf Problem 2-3.} Using Problems 1-10 and 1-6, show that every Hyperbolic
+surface
+with abelian fundamental group is conformally isomorphic either to the disk
+\[D\], or the punctured disk \[D\ssm\{0\}\], or to the annulus
+$$	{\cal A}_r\;=\;\{z\in\C:1<|z|<r\}	$$
+for some uniquely defined \[ r>1\]. Define the {\bit modulus} of
+this annulus to be the number \[\mod\!({\cal A}_r)
+=\log r/2\pi>0\].
+Show that this annulus has a unique simple closed geodesic, which has
+length \[\ell=\pi/\mod\!({\cal A}_r)=2\pi^2/\log r\,\]. On the other hand,
+show that the punctured disk \[D\ssm\{0\}\] has no closed geodesic.
+This punctured disk, which is conformally isomorphic to the set
+\[{\cal A}_\infty\;=\;\{z\in\C:1<|z|<\infty\}\], is sometimes described
+as an annulus of infinite modulus. (However this designation is ambiguous,
+since the Euclidean surface \[\C-\{0\}\]
+might also be described as an annulus of infinite modulus.)
+\smallskip %By definition, this punctured disk has infinite modulus.\smallskip
+
+{\bf Problem 2-4.} If \[S\] and \[S'\] are Hyperbolic Riemann surfaces
+(not necessarily compact), show that {\bit every~} family of maps from
+\[S\] to \[S'\] is normal.\smallskip
+
+{\bf Problem 2-5.}
+Show that normality is a local property. More precisely,
+let \[S\] and \[S'\] be any Riemann surfaces,
+and let \[\{f_\alpha\}\] be a family of holomorphic maps from \[S\] to \[S'\].
+If every point of \[S\] has a neighborhood \[U\] such
+that the collection \[\{f_\alpha|U\}\] of restricted maps
+is normal, show by a diagonal argument as in the
+proof of 2.5 that \[\{f_\alpha\}\] is normal.
+\bigskip\vfill
+
+%\rightline{jwm, version of 8-28-91}
+\end

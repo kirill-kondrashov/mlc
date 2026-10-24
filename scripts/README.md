@@ -2,6 +2,19 @@
 
 Utility scripts and Poetry entry points for graph generation and local serving.
 
+## Literature sources
+
+The reproducible arXiv source fetcher is independent of the Poetry package:
+
+```sh
+python scripts/fetch_arxiv_sources.py
+```
+
+Use `--key dudko-lyubich-feigenbaum` to fetch one manifest entry, or
+`--force` to refresh an already extracted source tree.  It stores the
+compressed archive, metadata, extracted TeX, and a small `00README.json`
+marker under `refs/`.
+
 ## Factorization figures
 
 Install the optional plotting dependency and regenerate the global

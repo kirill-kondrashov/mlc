@@ -109,6 +109,30 @@ $$
 
 The repository supplies no global instance of $\mathrm{BUF}(M,O)$.
 
+## Literature review and source inventory
+
+The standalone review is
+[the MLC review in LaTeX](docs/mlc_review.tex) with the generated
+[PDF](docs/mlc_review.pdf).  It separates proved parameter classes,
+conditional interfaces, and the unresolved global frontier; the schematic
+status picture is in
+[`docs/figures/mlc_status_schematic.tex`](docs/figures/mlc_status_schematic.tex).
+
+Canonical bibliographic inputs and reproducible arXiv source trees are
+catalogued in [`refs/README.md`](refs/README.md) and
+[`refs/mlc_sources.json`](refs/mlc_sources.json).  To refresh the source
+archives and extracted TeX:
+
+```bash
+python scripts/fetch_arxiv_sources.py
+```
+
+The Lean-facing literature ledger is
+[`Mlc/Literature/Review.lean`](Mlc/Literature/Review.lean).  Its theorem
+interfaces do not add axioms: the Yoccoz puzzle-shrinkage theorem is linked
+to the existing proof, while the bounded-type satellite, Feigenbaum, and
+global MLC statements remain explicit obligations.
+
 ## Implemented interfaces
 
 ### Finite outer systems
