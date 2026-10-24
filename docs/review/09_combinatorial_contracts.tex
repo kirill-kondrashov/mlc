@@ -1,0 +1,124 @@
+\chapter{Combinatorial contracts and modulus arithmetic}
+
+\section{Discrete renormalization data}
+
+\begin{definition}[Renormalization profile]
+\label{def:renormalization-profile}
+A discrete renormalization profile consists of:
+\[
+ (\tau,p_n,\rho_n)_{n\in\N},
+\]
+where $\tau$ is one of the primitive, satellite, or neutral types,
+$p_n\in\N$ is the relative period at level $n$, and
+$\rho_n\in\N$ records the combinatorial rotation data.
+\end{definition}
+
+\begin{definition}[Bounded type]
+\label{def:bounded-type}
+The rotation profile $(\rho_n)$ is of bounded type if
+\[
+ \exists B\in\N\ \forall n,\qquad \rho_n\le B.
+\]
+\end{definition}
+
+The Lean definitions make bounded type an explicit predicate:
+\begin{itemize}
+\item \lean{RenormalizationCombinatorics};
+\item \lean{BoundedType};
+\item \lean{IsBoundedTypeSatelliteProfile}.
+\end{itemize}
+They do not identify bounded type with a numerical picture or with bounded
+periods: the rotation sequence is a separate field.
+
+\begin{definition}[Cumulative depth]
+\label{def:cumulative-depth}
+For a profile with periods $(p_n)$ define
+\[
+ d_0:=0,\qquad d_{n+1}:=d_n+p_n.
+\]
+\end{definition}
+
+\begin{theorem}[Depth monotonicity]
+\label{thm:depth-monotonicity}
+If $p_n>0$ for every $n$, then $d_n$ is monotone.  For the period-doubling
+profile $p_n=2$, one has $d_n=2n$.
+\end{theorem}
+
+The proofs are elementary arithmetic and are available as
+\lean{cumulativeDepth_monotone} and
+\lean{cumulativeDepth_periodDoubling}.  This separates the discrete
+renormalization bookkeeping from the analytic construction of the tower.
+
+\section{Modulus divergence}
+
+\begin{lemma}[Uniform lower bound]
+\label{lem:combinatorial-modulus-lower}
+Let $(a_n)$ be a sequence of nonnegative real numbers.  If
+\[
+ \exists\mu>0\ \forall n,\qquad \mu\le a_n,
+\]
+then $\sum_n a_n$ is divergent.
+\end{lemma}
+
+\begin{proof}
+The $N$-th partial sum is at least $N\mu$, so the partial sums are
+unbounded.
+\end{proof}
+
+The exact Lean theorem is
+\lean{not_summable_of_uniform_lower_bound}; the wrapper
+\lean{not_summable_of_aPrioriBounds} applies it to
+\lean{APrioriBounds}.  This is the arithmetic core shared by the principal
+nest arguments in the Lyubich, Dudko--Lyubich, and Kahn--Kapiamba--Lyubich
+routes.
+
+\begin{theorem}[Tower-to-puzzle arithmetic contract]
+\label{thm:tower-to-puzzle-arithmetic}
+Suppose a renormalization tower has cumulative depths $d_n$, and suppose its
+principal-nest annulus at level $n$ is the disjoint union of ordinary puzzle
+annuli with indices in $[d_n,d_{n+1})$.  If the principal-nest moduli have
+the uniform lower bound $\mu>0$, then the ordinary puzzle-annulus modulus
+series is not summable.
+\end{theorem}
+
+\begin{proof}
+The principal-nest moduli are finite sums of disjoint ordinary annulus
+moduli.  Summability of the ordinary series would imply summability of the
+principal-nest series, contradicting Lemma~\ref{lem:combinatorial-modulus-lower}.
+\end{proof}
+
+\section{Source-specific combinatorial predicates}
+
+\begin{center}\small
+\begin{tabular}{@{}P{0.29\textwidth}@{\hspace{4pt}}P{0.49\textwidth}@{\hspace{4pt}}P{0.14\textwidth}@{}}
+\textbf{Class} & \textbf{Discrete contract} & \textbf{Use}\\
+\hline
+Bounded-type satellite &
+\lean{IsBoundedTypeSatelliteProfile}: satellite type plus bounded rotation
+sequence. & Dudko--Lyubich\\
+Period doubling &
+\lean{IsPeriodDoublingProfile}: primitive type and $p_n=2$. &
+Feigenbaum\\
+Bounded period doubling &
+\lean{IsBoundedPeriodDoublingProfile}: period doubling plus bounded
+rotation data. & Feigenbaum interface\\
+Neutral &
+\lean{IsNeutralProfile}: neutral tower label; bubble and rigidity fields are
+separate. & Dudko--Lim--Lyubich\\
+\end{tabular}
+\end{center}
+
+The parabolically bounded primitive class is intentionally not reduced to
+one of these elementary predicates.  Its cusp control is an analytic
+estimate, not merely a bound on the integer rotation sequence.  The source
+contract is:
+\begin{center}
+\lean{ParabolicallyBoundedPrimitiveCertificate}.
+\end{center}
+
+\begin{openestimate}[Analytic realization of combinatorics]
+\label{est:combinatorial-realization}
+Construct the marked renormalization tower whose discrete profile satisfies
+the relevant predicate, prove the principal-nest decomposition, and supply
+the modulus bounds required by the corresponding certificate.
+\end{openestimate}
