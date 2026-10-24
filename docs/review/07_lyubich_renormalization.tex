@@ -1,0 +1,147 @@
+\chapter{Lyubich renormalization and a priori bounds}
+
+\section{Polynomial-like maps}
+
+\begin{definition}[Polynomial-like map]
+\label{def:polynomial-like}
+A polynomial-like map of degree $d$ is a proper holomorphic map
+\[
+ g:U\longrightarrow V
+\]
+where $U,V\subset\C$ are simply connected domains with
+$\overline U\subset V$ and $d\ge2$.  Its filled Julia set is
+\[
+ K(g):=\{z\in U:g^{\circ n}(z)\in U\text{ for every }n\in\N\}.
+\]
+\end{definition}
+
+\begin{definition}[Quadratic renormalization]
+\label{def:quadratic-renormalization}
+A quadratic polynomial $f_c$ is renormalizable at depth $m$ if there are
+domains $U\Subset V$ around the critical orbit and an integer $p>1$ such
+that
+\[
+ f_c^{\circ p}:U\to V
+\]
+is polynomial-like of degree two.  The renormalization is the normalized
+polynomial-like map obtained from this restriction and its affine marking.
+\end{definition}
+
+\begin{definition}[Renormalization tower]
+\label{def:renormalization-tower}
+A renormalization tower is a sequence
+\[
+ g_0,\ g_1,\ g_2,\ldots
+\]
+of marked polynomial-like maps together with renormalization relations
+$g_n\rightsquigarrow g_{n+1}$.  The cumulative depth is
+\[
+ d_0=0,\qquad d_{n+1}=d_n+p_n,
+\]
+where $p_n$ is the period of the $n$-th renormalization step.
+\end{definition}
+
+The Lean structure \lean{RenormalizationTower} stores the sequence and the
+nonempty relation at each step.  The theorem
+\lean{RenormalizationTower.cumulativePeriod_monotone} proves monotonicity of
+the cumulative depths without adding analytic assumptions.
+
+\section{Principal nests and modulus}
+
+\begin{definition}[Principal nest]
+\label{def:principal-nest}
+For a renormalizable quadratic map, a principal nest is a nested sequence
+\[
+ V_0\supset V_1\supset V_2\supset\cdots
+\]
+of critical puzzle domains adapted to the renormalization tower.  Its
+principal-nest annuli are
+\[
+ A_n^{\mathrm{pn}}:=V_n\setminus\overline{V_{n+1}}.
+\]
+\end{definition}
+
+\begin{definition}[A priori bounds]
+\label{def:apriori-bounds}
+A tower has uniform a priori bounds if there exists $\mu>0$ such that
+\[
+ \modulus(A_n^{\mathrm{pn}})\ge\mu
+\qquad\text{for every }n.
+\]
+\end{definition}
+
+\begin{lemma}[Uniform lower bounds imply divergence]
+\label{lem:uniform-bound-divergence}
+If $\modulus(A_n^{\mathrm{pn}})\ge\mu>0$ for every $n$, then
+\[
+ \sum_n\modulus(A_n^{\mathrm{pn}})=+\infty.
+\]
+\end{lemma}
+
+\begin{proof}
+The partial sums dominate $N\mu$ and therefore are unbounded.
+\end{proof}
+
+\begin{theorem}[Renormalization-to-puzzle shrinking]
+\label{thm:renormalization-to-puzzle}
+Suppose a satellite tower has a uniform principal-nest lower bound and that
+the principal-nest annuli decompose into disjoint finite unions of the
+ordinary puzzle annuli.  Then the ordinary puzzle-annulus moduli are not
+summable, and the critical dynamical puzzle pieces shrink to $\{0\}$.
+\end{theorem}
+
+The first implication is a finite-sum comparison.  The second is the
+Grötzsch--Yoccoz theorem from Chapter~1.  In Lean this chain is implemented
+by
+\begin{center}
+\lean{PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget}.
+\end{center}
+
+\section{Parameter-plane conclusion}
+
+\begin{theorem}[Satellite a priori bounds imply pointwise MLC]
+\label{thm:satellite-apriori-mlc}
+Let $c\in\M$.  Assume:
+\begin{enumerate}
+\item a satellite renormalization tower at $c$;
+\item a uniform principal-nest modulus lower bound;
+\item connected parameter parapuzzle pieces at every depth.
+\end{enumerate}
+Then $\M$ is locally connected at $c$.
+\end{theorem}
+
+\begin{proof}
+The modulus lower bound gives singleton intersection of the parameter
+parapuzzles by Theorem~\ref{thm:renormalization-to-puzzle}.  Connectedness
+and the neighbourhood-basis property then give local connectedness by
+Theorem~\ref{thm:topological-transport}.  The Lean theorem
+\lean{localConnectivity_of_satelliteAPrioriCertificate} packages this
+implication.
+\end{proof}
+
+\section{Primitive, satellite, and neutral regimes}
+
+The renormalization type is not cosmetic:
+\begin{itemize}
+\item primitive renormalization produces disjoint little Julia copies and
+      is the natural setting for principal-nest modulus estimates;
+\item satellite renormalization accumulates around roots of hyperbolic
+      components and requires control of combinatorial rotation data;
+\item neutral renormalization introduces Siegel disks, bubbles, hedgehogs,
+      and neutral cascades, where ordinary expanding estimates degenerate.
+\end{itemize}
+
+Lyubich's bounded-type and a priori-bound machinery, Dudko--Lyubich's
+satellite and Feigenbaum results, and the 2025--2026 Kahn/Dudko/Lim papers
+all fit into this common contract.  Their analytic estimates differ, but
+the formal target is the same: construct a tower certificate, prove
+modulus control, realize connected parameter pieces, and invoke the
+topological transport theorem.
+
+\begin{openestimate}[Renormalization existence and estimates]
+\label{est:renormalization}
+For each literature class, define the exact combinatorial predicate,
+construct the corresponding marked tower, formalize the relevant a priori
+bounds, and prove that its parameter parapuzzles satisfy the hypotheses of
+Theorem~\ref{thm:satellite-apriori-mlc}.
+\end{openestimate}

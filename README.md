@@ -138,6 +138,8 @@ to the existing proof, while the bounded-type satellite, Feigenbaum, and
 global MLC statements remain explicit obligations.
 The foundational vocabulary and parameter-puzzle basis interface are in
 [`Mlc/Literature/Foundations.lean`](Mlc/Literature/Foundations.lean).
+The renormalization-to-MLC bridge is in
+[`Mlc/Literature/Renormalization.lean`](Mlc/Literature/Renormalization.lean).
 
 ## Implemented interfaces
 

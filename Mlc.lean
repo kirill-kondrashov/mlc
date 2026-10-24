@@ -2,6 +2,7 @@
 import Mlc.Core
 import Mlc.Literature.Foundations
 import Mlc.Literature.PhaseParameter
+import Mlc.Literature.Renormalization
 import Mlc.Literature.Review
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample

@@ -49,9 +49,11 @@ REVIEW_CHAPTERS := \
 	docs/review/03_known_results.tex \
 	docs/review/04_formalization_map.tex \
 	docs/review/05_source_policy_and_roadmap.tex \
-	docs/review/06_phase_parameter.tex
+	docs/review/06_phase_parameter.tex \
+	docs/review/07_lyubich_renormalization.tex
 
 docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
 
