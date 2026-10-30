@@ -1,8 +1,9 @@
-\documentclass[11pt,a4paper]{report}
+\documentclass[11pt,a4paper,oneside,openany]{book}
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathrsfs}
 \usepackage{xcolor}
 \usepackage[margin=27mm]{geometry}
-\usepackage{fontspec}
+\usepackage[no-math]{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{english}
 \setmainfont{Noto Serif}
@@ -23,9 +24,14 @@
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \setcounter{tocdepth}{1}
+\hypersetup{
+  pdftitle={The Mandelbrot Local Connectivity Problem},
+  pdfsubject={Dynamics, literature, and the audited boundary of the Lean formalization}
+}
 
 \newcommand{\C}{\mathbb C}
 \newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
 \newcommand{\R}{\mathbb R}
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\M}{\mathcal M}
@@ -37,15 +43,32 @@
 \newcommand{\modulus}{\operatorname{mod}}
 \newcommand{\Prop}{\operatorname{Prop}}
 \newcommand{\LocallyConnectedSpace}{\operatorname{LocallyConnectedSpace}}
-\newcommand{\lean}[1]{\path{#1}}
+\newcommand{\lean}[1]{\textup{\path{#1}}}
+\newcommand{\leanref}[2]{%
+  \href{https://github.com/kirill-kondrashov/mlc/blob/systematize/#1}{\textup{\nolinkurl{#2}}}}
+\newcommand{\weightedarea}{m_{\mathrm G}}
+\newcommand{\coveragefigure}[3]{%
+  \clearpage
+  \begin{landscape}
+  \thispagestyle{plain}
+  \begin{center}
+  \includegraphics[page=#1,width=0.94\linewidth,height=0.78\textheight,keepaspectratio]{docs/figures/mlc_status_render.pdf}
+  \captionof{figure}{#2}
+  \label{#3}
+  \end{center}
+  \end{landscape}
+  \clearpage}
 
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{formalobligation}[theorem]{Formalization obligation}
+\newtheorem{openestimate}[theorem]{Open problem}
+\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
-\newtheorem{openestimate}[theorem]{Open estimate}
 \newtheorem*{conjecture}{Conjecture}
 
 \definecolor{conditionalblue}{RGB}{28,76,132}
@@ -66,46 +89,92 @@
      skipabove=\medskipamount,
      skipbelow=\medskipamount,
      backgroundcolor=white,
-     nobreak=true
+     nobreak=false
    ]\begingroup\color{conditionalblue}\small}
   {\endgroup\end{mdframed}}
 
-\title{The Mandelbrot Local Connectivity Conjecture:\\
-A Literature Review and Formalization Program}
+\title{The Mandelbrot Local Connectivity Problem:\\
+Dynamics, Literature, and Formal Proofs}
 \author{}
-\date{October 2026}
+\date{Working manuscript --- 30 October 2026}
 
 \begin{document}
+\frontmatter
 \maketitle
+\input{review/00_reading_guide.tex}
 \tableofcontents
+\listoffigures
 \clearpage
 
+\mainmatter
+\part{The problem and its elementary foundations}
 \input{review/01_scope_and_status.tex}
+\input{review/13_quadratic_foundations.tex}
+\input{review/14_topological_foundations.tex}
+
+\part{Analytic and combinatorial machinery}
 \input{review/02_foundational_machinery.tex}
-\input{review/03_known_results.tex}
-\input{review/04_formalization_map.tex}
-\input{review/05_source_policy_and_roadmap.tex}
 \input{review/06_phase_parameter.tex}
 \input{review/07_lyubich_renormalization.tex}
-\input{review/08_dudko_cases.tex}
 \input{review/09_combinatorial_contracts.tex}
+\part{Published results and the remaining frontier}
+\input{review/03_known_results.tex}
+\input{review/08_dudko_cases.tex}
+
+\part{Formal proof architecture and its audit}
+\input{review/15_frozen_model_audit.tex}
 \input{review/10_categorical_branch.tex}
-\input{review/11_lean_inventory.tex}
 \input{review/12_conditional_theorem_matrix.tex}
 
-\renewcommand{\bibname}{Selected references}
-\addcontentsline{toc}{chapter}{Selected references}
+\appendix
+\input{review/04_formalization_map.tex}
+\input{review/11_lean_inventory.tex}
+\input{review/05_source_policy_and_roadmap.tex}
+
+\backmatter
+\renewcommand{\bibname}{References}
+\addcontentsline{toc}{chapter}{References}
 \begin{thebibliography}{99}\small
 \bibitem{DH}
 A.~Douady and J.~H.~Hubbard,
 \emph{Exploring the Mandelbrot Set: The Orsay Notes}.
 \href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}{PDF}.
 
+\bibitem{DHPolynomialLike}
+A.~Douady and J.~H.~Hubbard,
+\emph{On the dynamics of polynomial-like mappings},
+Annales scientifiques de l'École Normale Supérieure (4) 18
+(1985), no.~2, pp.~287--343.
+\href{https://www.numdam.org/item/ASENS_1985_4_18_2_287_0/}
+{Article page}.
+
 \bibitem{Yoccoz}
 J.-C.~Yoccoz,
 \emph{Theorème de Siegel, nombres de Bruno et polynômes quadratiques},
 Astérisque 231 (1995), pp.~1--88.
 \href{https://www.numdam.org/book-part/AST_1995__231__1_0/}{Article page}.
+
+\bibitem{HubbardYoccoz}
+J.~H.~Hubbard,
+\emph{Local connectivity of Julia sets and bifurcation loci:
+three theorems of J.-C.~Yoccoz},
+in \emph{Topological Methods in Modern Mathematics},
+Publish or Perish (1993), pp.~467--511.
+
+\bibitem{LyubichBook}
+M.~Lyubich,
+\emph{Conformal Geometry and Dynamics of Quadratic Polynomials,
+vol.~I--II}, online book manuscript.
+\href{https://www.math.stonybrook.edu/~mlyubich/book.pdf}{Author's manuscript};
+\href{https://www.math.stonybrook.edu/~mlyubich/papers/index.html}
+{author's publication list}.
+
+\bibitem{LyubichNotes}
+M.~Lyubich,
+\emph{Conformal Geometry and Dynamics of Quadratic Polynomials},
+ICTP lecture manuscript (2013), 256 PDF pages.
+\href{https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf}
+{ICTP copy}.
 
 \bibitem{LyubichGeometry}
 M.~Lyubich,
@@ -127,7 +196,7 @@ Astérisque 261 (2000), pp.~173--200.
 
 \bibitem{DudkoLyubichSatellite}
 D.~Dudko and M.~Lyubich,
-\emph{Local connectivity of the Mandelbrot set at some satellite parameter
+\emph{Local connectivity of the Mandelbrot set at some satellite parameters
 of bounded type}, Geometric and Functional Analysis 33 (2023), no.~4,
 pp.~912--1047.
 \href{https://arxiv.org/abs/1808.10425}{arXiv}.
@@ -149,6 +218,12 @@ J.~Kahn, A.~Kapiamba, and M.~Lyubich,
 \emph{MLC for parabolically bounded primitive renormalization},
 arXiv:2606.27272.
 \href{https://arxiv.org/abs/2606.27272}{arXiv}.
+
+\bibitem{ElephantPuzzles}
+D.~Dudko, A.~Kapiamba, M.~Lyubich, and C.~Peterson,
+\emph{Elephant puzzles}, in preparation, as cited in
+arXiv:2606.27272v1.  No publicly archived manuscript is
+specified by that source.
 
 \bibitem{KahnLyubichElephant}
 J.~Kahn and M.~Lyubich,

@@ -1,4 +1,5 @@
 \chapter{Conditional theorem matrix}
+\label{chap:theorem-matrix}
 
 \section{Why family statements matter}
 
@@ -19,44 +20,51 @@ The formalization must therefore distinguish:
 \end{enumerate}
 The module \lean{Mlc.Literature.CaseTheorems} contains the last step.
 
-\section{Finitely renormalizable parameters}
+\section{The legacy finite-renormalization implication}
 
-The dynamical half is already a theorem:
+The code contains the implication
 \[
 \mathsf{FinitelyRenormalizable}(c)
 \Longrightarrow
 \bigcap_n P_n(c,0)=\{0\}.
 \]
-The Lean declaration is
-\lean{Literature.yoccoz_puzzle_shrinkage}; internally it invokes
-\lean{Quadratic.yoccoz_theorem_conformal}.
+Its Lean declaration
+\lean{Literature.yoccoz_puzzle_shrinkage} invokes
+\lean{Quadratic.yoccoz_theorem_conformal}.  However,
+Chapter~\ref{chap:frozen-audit} proves that its premise is false for
+every $c$: the legacy predicate means nonsummability of Gaussian
+areas of nested differences.  Thus this theorem does not establish
+the classical Yoccoz result for a nonempty parameter class.
 
-The missing parameter-plane family input is
+The family interface
 \[
 \forall c\in\M,\quad
 \mathsf{FinitelyRenormalizable}(c)
 \Longrightarrow
 \exists\ \text{phase--parameter puzzle data at }c.
 \]
-Its Lean name is
-\lean{FinitelyRenormalizablePhaseParameterData}.  The theorem
+is named \lean{FinitelyRenormalizablePhaseParameterData}.
+Its present indexing class is empty, so this interface itself is
+vacuously satisfied.  The theorem
 \lean{finitelyRenormalizableMLC_of_phaseParameterData} proves the exact
-pointwise MLC result from that family input.
+formal implication, with the same limitation.
 
 \begin{conditionalstep}
-The formalization has therefore separated the classical Yoccoz theorem into
-two independently auditable lines:
+The classical theorem must instead be rebuilt using the genuine
+objects:
 \[
 \begin{gathered}
-\text{modulus divergence}\\
+\text{graph-cut puzzles and conformal modulus}\\
 \Downarrow\\
-\text{dynamical puzzle shrinking}\\
-\Downarrow\quad\text{(phase--parameter existence still open)}\\
-\text{connected shrinking parameter pieces}\\
+\text{the source's finite-renormalization hypotheses and estimates}\\
+\Downarrow\quad\text{(analytic formalization pending)}\\
+\text{connected parameter intersections and shrinking compact closures}\\
 \Downarrow\\
 \text{MLC at the parameter}.
 \end{gathered}
 \]
+The last implication is already available independently of the frozen
+model as \lean{localConnectivity_of_compact_parameterPieces}.
 \end{conditionalstep}
 
 \section{Published infinite-renormalization cases}
@@ -107,15 +115,21 @@ would close the target through this route.
 \section{Logical status table}
 
 \begin{center}\small
-\begin{tabular}{@{}P{0.30\textwidth}@{\hspace{4pt}}P{0.47\textwidth}@{\hspace{4pt}}P{0.13\textwidth}@{}}
+\begin{tabularx}{0.98\textwidth}{@{}P{0.25\textwidth}@{\hspace{8pt}}Y@{\hspace{8pt}}P{0.18\textwidth}@{}}
 \textbf{Layer} & \textbf{Statement} & \textbf{Status}\\
 \hline
-Yoccoz dynamics &
-\lean{FinitelyRenormalizable} implies dynamical puzzle shrinking. &
-proved\\
-Parameter realization &
-Finite-renormalization data produce connected shrinking parapuzzles. &
-open input\\
+Frozen finite class &
+The legacy finite predicate has no instances. &
+refuted class\\
+Frozen satellite bounds &
+The certificate's uniform Gaussian-area lower bound is impossible. &
+refuted input\\
+Compact parameter pieces &
+Connected induced pieces with shrinking compact closures give MLC. &
+proved endpoint\\
+Classical Yoccoz &
+Source-defined finite-renormalization class and conformal estimates. &
+formalization pending\\
 Bounded satellite &
 Certificate family implies pointwise MLC on the class. &
 proved conditionally\\
@@ -131,10 +145,12 @@ proved conditionally\\
 All parameters &
 \lean{YoccozPhaseParameterResult} implies global MLC. &
 proved conditionally\\
-\end{tabular}
+\end{tabularx}
 \end{center}
 
-This matrix is the formal counterpart of the current human frontier:
-published papers discharge different analytic certificate families, while
-the repository still has to formalize their definitions, estimates, and
-parameter-plane realization one class at a time.
+The matrix describes the repository's logical status, not equality
+between formal coverage and the human frontier.  Published papers
+prove the classical source theorems; they do not supply instances of
+the refuted frozen certificates.  Their definitions, analytic
+estimates, and parameter-plane realizations must be formalized in
+replacement models, one class at a time.

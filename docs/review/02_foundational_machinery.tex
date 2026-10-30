@@ -1,78 +1,336 @@
-\chapter{Foundational machinery}
+\chapter[Green functions and conformal geometry]{Green functions, external coordinates, and conformal modulus}
+\label{chap:analytic-foundations}
 
-\section{The dynamical plane}
+Escape separates the bounded and unbounded orbits.  Potential theory
+adds a numerical scale on the escaping basin, and a conformal coordinate
+adds an angle.  Neither construction alone cuts the filled Julia set
+into small pieces.  Landing rays and their graph cuts are the next step.
+The classical account in this chapter follows
+Douady--Hubbard and Lyubich~\cite{DH,LyubichBook,LyubichNotes}.
 
-The first layer consists of the escape-radius and filled-Julia-set
-definitions.  For a quadratic polynomial the critical orbit is the
-distinguished orbit, and the finite conditions
+\section{The escape-rate potential}
+
+\begin{definition}[Green function]
+\label{def:green-function}
+Write $u(z)=\log\max\{1,|z|\}$.  The escape-rate Green function is
 \[
- O_N=\left\{c: |c|\leq 2,\quad |p_j(c)|\leq 2\text{ for }j\leq N\right\}
+ G_c(z)=\lim_{n\to\infty}G_{c,n}(z),\qquad
+ G_{c,n}(z)=2^{-n}u(f_c^{\circ n}(z)).
 \]
-form a decreasing compact outer approximation to $\M$.  This part is already
-formalized in
-\lean{Mlc.Categorical.Mandelbrot}, including
+\end{definition}
+
+\begin{lemma}[A uniform telescoping estimate]
+\label{lem:green-telescope}
+With $A_c=\log(1+|c|)$,
 \[
-\bigcap_N O_N=\M.
+ |u(f_c(z))-2u(z)|\le A_c.
 \]
-The corresponding increasing approximation by a uniform orbit bound is also
-available.  These set-theoretic identities do not imply local connectivity:
-an intersection of compact connected-looking approximants needs additional
-component control.
-
-\section{Puzzle pieces and moduli}
-
-The Yoccoz puzzle supplies nested dynamical pieces around the critical point.
-The analytic core has the shape
+Consequently
 \[
-\begin{gathered}
-\sum_{n\geq 0}\operatorname{mod}(A_n)=+\infty,\\[2mm]
-\Longrightarrow\\[2mm]
-\bigcap_n P_n=\{0\},
-\end{gathered}
+ |G_{c,n+1}(z)-G_{c,n}(z)|\le2^{-(n+1)}A_c
 \]
-where $A_n=P_n\setminus P_{n+1}$.  The current Lean theorem
-proving the corresponding shrinking statement from the formal modulus
-hypothesis is
-\begin{center}
-\lean{MLC.Quadratic.yoccoz_theorem_conformal}.
-\end{center}
-Its theorem-facing alias is
-\begin{center}
-\lean{MLC.Literature.yoccoz_puzzle_shrinkage}.
-\end{center}
+for every $z$, uniformly on the whole plane.
+\end{lemma}
 
-This is a dynamical-plane result.  To use it for MLC one needs a
-phase--parameter theorem that transports the shrinking of dynamical pieces to
-shrinking of parameter parapuzzle pieces.  The parameter pieces must be
-defined with their ray/equipotential graphs; a frozen translate of a full
-Green sublevel is not automatically a Yoccoz parapuzzle.
-
-\section{External rays and conformal coordinates}
-
-Douady--Hubbard's external uniformization, Caratheodory boundary theory,
-landing, and the phase--parameter correspondence are separate formal
-modules.  The present repository contains partial Böttcher and Green
-function developments, but its axiom audit intentionally does not claim a
-global external-ray landing theorem.  The review therefore records the
-Douady--Hubbard result as an interface until all hypotheses and boundary
-extensions are machine checked.
-
-\section{Renormalization}
-
-Renormalization turns a quadratic polynomial into a tower of smaller
-polynomial-like maps.  A useful formal tower must carry at least:
+\begin{proof}
+The two elementary inequalities
 \[
-\begin{array}{ll}
-\text{domains and restrictions} & \text{proper degree-two maps}\\
-\text{markings} & \text{critical orbit and puzzle data}\\
-\text{moduli} & \text{annulus geometry and lower bounds}\\
-\text{combinatorics} & \text{primitive/satellite type and bounds}\\
-\text{straightening} & \text{parameter-plane correspondence}.
-\end{array}
+ \max\{1,|z^2+c|\}\le(1+|c|)\max\{1,|z|\}^2
 \]
-The files \lean{Mlc.RenormalizationTypes},
-\lean{Mlc.MoleculeRenormalizationTower}, and
-\lean{Mlc.SatelliteRenormalizationTower} currently provide typed interfaces
-for part of this list.  They should be treated as a foundation for the
-formalization, not as a completed proof of the corresponding published
-theorems.
+and
+\[
+ \max\{1,|z|\}^2\le(1+|c|)\max\{1,|z^2+c|\}
+\]
+follow respectively from $|z^2+c|\le|z|^2+|c|$ and
+$|z|^2\le|z^2+c|+|c|$.  Taking logarithms proves the first bound.
+Apply it to $f_c^{\circ n}(z)$ and multiply by $2^{-(n+1)}$.
+\end{proof}
+
+\begin{theorem}[Existence and elementary properties]
+\label{thm:green-properties}
+For fixed $c$, the defining sequence converges uniformly to a continuous
+nonnegative function.  Moreover,
+\[
+ |G_c(z)-G_{c,n}(z)|\le2^{-n}A_c,\qquad
+ G_c(f_c(z))=2G_c(z),
+\]
+and
+\[
+ G_c(z)=0\quad\Longleftrightarrow\quad z\in K_c.
+\]
+\end{theorem}
+
+\begin{proof}
+The geometric tail in Lemma~\ref{lem:green-telescope} makes the sequence
+uniformly Cauchy and gives the stated error bound.  Each term is
+continuous and nonnegative, so the limit has those properties.
+Shifting the iterate index gives the functional equation.
+
+A bounded orbit makes $u(f_c^{\circ n}(z))$ bounded, so its normalized
+limit is zero.  An unbounded orbit escapes by
+Theorem~\ref{thm:escape-radius}.  Choose an iterate $w$ with
+$u(w)>A_c$.  The estimate at $n=0$ gives $G_c(w)>0$, and the functional
+equation gives $G_c(z)>0$.
+\end{proof}
+
+The basin of infinity is therefore the open set
+$\mathcal A_c=\C\setminus K_c=\{G_c>0\}$.
+On that set $G_c$ is harmonic.  Locally, sufficiently high iterates
+avoid zero and remain in the escaping region, so their logarithmic
+potentials are harmonic; local uniform convergence preserves
+harmonicity.  A sharper version of the same expansion gives
+$G_c(z)-\log|z|\to0$ at infinity.
+
+\paragraph{Lean correspondence.}
+The imported Green development defines \lean{Quadratic.green_function}
+using a convenient escape cutoff.  Changing a fixed cutoff in the
+truncated logarithm changes the normalized terms by $O(2^{-n})$,
+so it gives the same escape-rate limit.
+The harmonicity endpoint is
+\leanref{Mlc/Quadratic/Complex/GreenHarmonic.lean}{green_function_harmonicAt_of_mem_basin}.
+The logarithmic-series construction is separated into the modules
+listed in Appendix~\ref{chap:lean-inventory}.  These results do not
+assert external-ray landing.
+
+\section{Böttcher coordinates: local and global}
+
+\begin{definition}[Normalized Böttcher coordinate]
+A Böttcher coordinate near infinity is a conformal map $\phi_c$ on
+a neighbourhood of infinity satisfying
+\[
+ \phi_c(f_c(z))=\phi_c(z)^2,\qquad
+ \frac{\phi_c(z)}z\longrightarrow1.
+\]
+\end{definition}
+
+For large $|z|$, one can choose the logarithm near $1$ and write
+\[
+ \phi_c(z)=z\exp\left(
+       \sum_{k\ge0}2^{-(k+1)}
+       \log\left(1+\frac{c}{(f_c^{\circ k}(z))^2}\right)\right).
+\]
+The escape estimates make the series locally uniformly convergent.
+Its index shift gives the functional equation, and its small tail
+gives the normalization.  Near infinity the derivative tends to $1$,
+so the coordinate is conformal after shrinking its domain.
+The normalization removes the root-of-unity ambiguity for a monic
+quadratic polynomial.
+
+\begin{theorem}[Global external coordinate in the connected case]
+\label{thm:global-bottcher}
+If $c\in\M$, the local coordinate extends to a conformal isomorphism
+\[
+ \phi_c:\C\setminus K_c\longrightarrow\C\setminus\overline{\mathbb D},
+\]
+and $G_c=\log|\phi_c|$ there.  This global statement uses the
+connectedness of $K_c$.
+\end{theorem}
+
+This is a classical theorem~\cite{DH,LyubichBook}.  A universal global
+coordinate for every $c\in\C$ would be false.  If $c\notin\M$, the
+critical point $0$ lies in the basin of infinity.  A conformal
+conjugacy on that entire basin would have nonzero derivative at $0$,
+but differentiating its functional equation there gives
+\[
+ 0=2\phi_c(0)\phi_c'(0).
+\]
+Both factors on the right would be nonzero in the exterior disk.
+The contradiction explains the connectedness hypothesis directly.
+
+\section{Dynamical rays, parameter rays, and landing}
+
+\begin{definition}[Dynamical external ray]
+\label{def:external-ray}
+For $c\in\M$ and $\theta\in\R/\Z$, define
+\[
+ \gamma_{c,\theta}(t)=
+       \phi_c^{-1}(e^{\,t+2\pi i\theta}),\qquad t>0.
+\]
+The ray lands at $z_\theta$ if
+$\lim_{t\downarrow0}\gamma_{c,\theta}(t)=z_\theta$.
+\end{definition}
+
+The use of a limit is important.  Merely selecting a point in the
+closure of a ray does not prove that the ray lands.  The functional
+equation gives
+\[
+ f_c(\gamma_{c,\theta}(t))=\gamma_{c,2\theta}(2t).
+\]
+If both relevant rays land, continuity gives
+$f_c(z_\theta)=z_{2\theta}$.
+
+Douady--Hubbard also construct a parameter uniformization
+\[
+ \Phi:\C\setminus\M\longrightarrow
+                 \C\setminus\overline{\mathbb D},
+ \qquad \frac{\Phi(c)}c\longrightarrow1.
+\]
+It is obtained by evaluating the suitably continued local dynamical
+coordinate at the escaping critical value.  This is a separate theorem;
+it does not require the false global dynamical coordinate for
+$c\notin\M$.  The normalization of the associated parameter potential is
+\[
+ G_{\M}(c)=\log|\Phi(c)|=G_c(c)=2G_c(0).
+\]
+Parameter rays are
+$\Phi^{-1}(e^{\,t+2\pi i\theta})$, again with $t>0$.
+They live in the parameter plane, whereas
+$\gamma_{c,\theta}$ lives in a fixed dynamical plane.
+
+\begin{theorem}[Boundary extension criterion]
+Let $K$ be a nondegenerate full plane continuum: a compact connected
+set with at least two points whose complement is connected.
+The exterior domain is considered in the Riemann sphere
+$\widehat\C=\C\cup\{\infty\}$, so it includes infinity and is simply
+connected.  Its normalized external uniformization extends
+continuously to the boundary circle if and only if $\partial K$
+is locally connected.
+\end{theorem}
+
+This is the exterior form of Carathéodory's boundary theorem.
+For $\M$, it describes the global boundary-extension problem behind
+MLC.  A continuous extension makes every parameter ray land.
+Existence of individual limits is weaker than continuity of the
+extension in the angle; one must retain that distinction when choosing
+the fields of an external-ray interface.
+
+\section{Graph cuts and genuine puzzle domains}
+
+\begin{definition}[Puzzle graph and piece]
+\label{def:puzzle-piece}
+Fix $c\in\M$, a positive potential height $h$, and finitely many
+landing rays whose angles are forward invariant under doubling.
+Adjoin their landing points and the exterior region $\{G_c\ge h\}$
+to form a closed cutting set $\Gamma_0(c)$, chosen to be forward
+invariant.  Put
+\[
+ \Gamma_n(c)=(f_c^{\circ n})^{-1}(\Gamma_0(c)).
+\]
+For $z\notin\Gamma_n(c)$, the puzzle piece is
+\[
+ P_n(c,z)=\operatorname{Comp}_z(\C\setminus\Gamma_n(c)).
+\]
+\end{definition}
+
+The exterior region truncates the pieces at an equipotential.  Including
+landing points closes the ray cuts.  Forward invariance gives
+$\Gamma_n\subseteq\Gamma_{n+1}$, hence nesting of pieces containing
+a point that avoids the graphs.  Components of the open complement
+are open because the plane is locally connected.
+Jordan-boundary and proper-map properties require additional
+nondegeneracy and marking arguments; they do not follow from a finite
+list of angles alone.
+
+Critical points on the graph need separate boundary pieces or a
+modified graph.  Likewise, a critical orbit with a neutral degeneracy
+cannot simply be assigned the same nondegenerate annuli as an
+expanding puzzle.  The source theorem specifies how such cases are
+handled.
+
+\begin{definition}[Parameter parapuzzle piece]
+\label{def:parapuzzle-piece}
+A parameter parapuzzle piece is a parameter domain on which specified
+finite landing-ray and critical-orbit combinatorics persist, bounded
+by the corresponding parameter ray and equipotential cuts.
+We write $\mathcal P_n(c)$ for the marked domain containing $c$.
+\end{definition}
+
+This definition points to a construction, rather than a translation
+of a fixed dynamical domain.  Holomorphic motion and the critical-value
+diagonal relate the two planes; Chapter~\ref{chap:phase-parameter}
+states the resulting proof obligations precisely.
+
+\section{Extremal length and annulus modulus}
+
+\begin{definition}[Extremal length]
+For a family $\Gamma$ of rectifiable curves in a plane domain $D$,
+define
+\[
+ \lambda_D(\Gamma)=
+ \sup_\rho
+ \frac{\bigl(\inf_{\gamma\in\Gamma}\int_\gamma\rho\,|dz|\bigr)^2}
+      {\int_D\rho^2\,dA},
+\]
+where $\rho$ ranges over nonnegative measurable densities with finite
+positive area integral.
+\end{definition}
+
+Under a conformal map the density transforms by the absolute value
+of its derivative.  The length integral and the area integral then
+transform compatibly, proving conformal invariance of the ratio and
+of its supremum.
+
+\begin{definition}[Conformal modulus of a ring domain]
+\label{def:annulus-modulus}
+A ring domain is a doubly connected plane domain with specified inner
+and outer complementary components.  Its conformal modulus is the
+extremal length of curves joining the two boundary components.
+For a round annulus it is
+\[
+ \modulus A(r,R)=\frac{1}{2\pi}\log(R/r).
+\]
+\end{definition}
+
+\begin{proof}[Proof of the round-annulus formula]
+The density $\rho(z)=1/|z|$ has area
+$2\pi\log(R/r)$, and every joining curve has length at least
+$\log(R/r)$ in this metric.  This gives the lower bound.
+For an arbitrary density, Cauchy--Schwarz on radial segments gives
+\[
+ \int_0^{2\pi}\left(\int_r^R\rho(te^{i\theta})\,dt\right)^2d\theta
+ \le\log(R/r)\int_{A(r,R)}\rho^2\,dA.
+\]
+At least one radial segment therefore has squared length at most
+$\log(R/r)/(2\pi)$ times the area.  Taking the infimum over all
+joining curves gives the reverse bound.
+\end{proof}
+
+\begin{theorem}[Serial Grötzsch inequality]
+Let disjoint essential subannuli $A_1,\ldots,A_k$ of a ring domain $A$
+separate its boundary components in series.  Then
+\[
+ \modulus(A)\ge\sum_{j=1}^k\modulus(A_j).
+\]
+\end{theorem}
+
+\begin{proof}
+Choose almost extremal densities $\rho_j$ on the subannuli, with
+least joining length $L_j$ and area $E_j$.  Every curve crossing $A$
+crosses every $A_j$.  The density equal to
+$(L_j/E_j)\rho_j$ on $A_j$ and zero elsewhere has least crossing
+length at least $\sum_j L_j^2/E_j$ and area equal to that sum.
+Its extremal-length ratio is therefore at least
+$\sum_j L_j^2/E_j$.  Let the densities approach their suprema.
+\end{proof}
+
+This is a geometric serial inequality, not finite additivity of a
+measure on arbitrary disjoint sets.
+
+\begin{theorem}[Grötzsch shrinking criterion]
+\label{thm:yoccoz-shrink}
+Let $P_n$ be bounded Jordan domains containing $0$, with
+$\overline{P_{n+1}}\subset P_n$.  If
+\[
+ \sum_n\modulus(P_n\setminus\overline{P_{n+1}})=+\infty,
+\]
+then $\bigcap_n\overline{P_n}=\{0\}$.
+\end{theorem}
+
+\begin{proof}
+The intersection $E$ is a nonempty full continuum by nested
+compactness.  If it contains more than one point, ring-domain
+uniformization gives finite modulus to $P_0\setminus E$: both
+complementary continua are nondegenerate.
+All the displayed annuli separate its complementary components in
+series.  The serial inequality bounds every partial sum by this
+finite modulus, contradicting divergence.
+\end{proof}
+
+\paragraph{Formal boundary.}
+The classical extremal-length and conformal-modulus statements above
+are mathematical proofs and source theorems.  The similarly named
+\lean{MLC.Quadratic.yoccoz_theorem_conformal} currently uses Gaussian
+weighted area and frozen sublevels instead.
+Chapter~\ref{chap:frozen-audit} proves that its divergence premise is
+impossible.  A genuine ring-domain formalization is still required
+before the classical theorem can be claimed as kernel-checked.

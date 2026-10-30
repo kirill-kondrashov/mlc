@@ -1,0 +1,514 @@
+\chapter{Quadratic dynamics and finite observations}
+\label{chap:quadratic-foundations}
+
+The same polynomial acts in two different roles.  With $c$ fixed, it
+iterates points in the dynamical plane.  With the initial point fixed at
+the critical point, it defines functions of the parameter $c$.  Keeping
+these roles separate is essential when passing from Julia sets to the
+Mandelbrot set.
+
+\section{The family and its distinguished orbit}
+
+\begin{definition}[Quadratic family]
+\label{def:quadratic-family}
+For $c,z\in\C$ and $n\in\N=\{0,1,\ldots\}$, set
+\[
+ f_c(z)=z^2+c,\qquad
+ f_c^{\circ0}(z)=z,\qquad
+ f_c^{\circ(n+1)}(z)=f_c(f_c^{\circ n}(z)).
+\]
+The critical orbit is the sequence
+\[
+ p_n(c)=f_c^{\circ n}(0).
+\]
+\end{definition}
+
+Since $f_c'(z)=2z$, the unique critical point is $0$ and its critical
+value is $c$.  In particular,
+\[
+ p_0(c)=0,\quad p_1(c)=c,\quad
+ p_2(c)=c^2+c,\quad p_3(c)=(c^2+c)^2+c.
+\]
+The orbit starting at $c$ is the critical orbit with its first term
+removed:
+\[
+ f_c^{\circ n}(c)=p_{n+1}(c).
+\]
+Thus bounds on either orbit differ by at most the initial value $0$.
+This shift explains several appearances of the critical value, rather
+than the critical point, in phase--parameter constructions.
+
+\begin{lemma}[Dependence on the parameter]
+\label{lem:orbit-polynomial}
+For each $n$, $p_n$ is a polynomial in $c$, hence continuous.  For $n\ge1$
+it is monic of degree $2^{n-1}$.
+\end{lemma}
+
+\begin{proof}
+The assertion starts with $p_1(c)=c$.  The recurrence
+$p_{n+1}=p_n^2+c$ preserves polynomial dependence.  When $n\ge1$,
+the leading term of $p_n^2$ has degree $2^n>1$, so adding $c$ changes
+neither its coefficient nor its degree.
+\end{proof}
+
+\paragraph{Lean correspondence.}
+The review names
+\leanref{Mlc/Literature/Foundations.lean}{quadraticMap} and
+\leanref{Mlc/Literature/Foundations.lean}{quadraticOrbit}
+are abbreviations of the imported quadratic map and orbit.  The recurrence
+is \lean{MLC.Quadratic.orbit_succ}; continuity in the parameter is
+\lean{Molecule.continuous_orbit}.  The degree calculation above is a
+text proof; a named review lemma for that degree remains to be added.
+
+\section{Bounded orbits and escape}
+
+\begin{definition}[Bounded orbit]
+An orbit is bounded if there is $B\in\R$ such that
+\[
+ |f_c^{\circ n}(z)|\le B\qquad(n\in\N).
+\]
+It escapes if $|f_c^{\circ n}(z)|\to+\infty$.
+\end{definition}
+
+Unboundedness of an arbitrary sequence does not imply convergence to
+infinity.  For quadratic orbits the following growth estimate supplies
+that implication.
+
+\begin{lemma}[Quantitative escape estimate]
+\label{lem:escape-growth}
+Suppose $a=|z|>2$ and $a\ge|c|$.  Set $q=a-1>1$.  Then
+\[
+ |f_c^{\circ n}(z)|\ge a q^n\qquad(n\in\N).
+\]
+\end{lemma}
+
+\begin{proof}
+For any $w$ with $r=|w|\ge a$, the reverse triangle inequality gives
+\[
+ |f_c(w)|\ge r^2-|c|
+       \ge r^2-r=r(r-1)\ge qr.
+\]
+The estimate at $n=0$ is equality.  Induction now gives the stated bound,
+and in particular keeps every subsequent modulus at least $a$.
+Since $q>1$, the lower bound tends to infinity.
+\end{proof}
+
+\begin{theorem}[Escape-radius criterion]
+\label{thm:escape-radius}
+If $|z|>\max\{2,|c|\}$, then the orbit of $z$ escapes.  More generally,
+every unbounded quadratic orbit escapes.
+\end{theorem}
+
+\begin{proof}
+The first assertion follows from Lemma~\ref{lem:escape-growth}.  An
+unbounded orbit has a term of modulus greater than
+$\max\{2,|c|\}$.  Apply the first assertion to that term and discard the
+finite initial segment.
+\end{proof}
+
+The multiplicative lower bound is the important point in this proof.
+Strictly increasing moduli alone would allow a finite limit and would
+therefore leave a gap in the escape argument.
+
+\begin{definition}[Filled Julia and Julia sets]
+\label{def:filled-julia}
+The filled Julia set is the bounded-orbit set
+\[
+ K_c=\{z:\exists B\in\R\ \forall n,\ |f_c^{\circ n}(z)|\le B\},
+\]
+and the Julia set is its topological boundary $J_c=\partial K_c$.
+\end{definition}
+
+\begin{definition}[Mandelbrot set]
+\label{def:mandelbrot}
+The Mandelbrot set is
+\[
+ \M=\{c:0\in K_c\}
+    =\{c:\exists B\in\R\ \forall n,\ |p_n(c)|\le B\}.
+\]
+\end{definition}
+
+\begin{theorem}[Universal critical-orbit bound]
+\label{thm:critical-bound}
+For every $c\in\C$,
+\[
+ c\in\M\quad\Longleftrightarrow\quad
+ |p_n(c)|\le2\text{ for every }n.
+\]
+Consequently $\M\subseteq\overline B(0,2)$.
+\end{theorem}
+
+\begin{proof}
+If $|c|>2$, the critical value $p_1(c)=c$ satisfies the hypotheses of
+Lemma~\ref{lem:escape-growth}, including the allowed equality
+$|p_1(c)|=|c|$.  Thus $c\notin\M$.
+Suppose instead that $|c|\le2$ and some $p_j(c)$ has modulus greater
+than $2$.  Then $|p_j(c)|>|c|$, so the orbit again escapes.
+These two cases prove that a bounded critical orbit stays in the closed
+disk of radius $2$.  The converse follows by choosing the bound $B=2$,
+and the disk inclusion follows from $p_1(c)=c$.
+\end{proof}
+
+\paragraph{Lean correspondence.}
+Boundedness is expressed exactly by
+\leanref{Mlc/Literature/Foundations.lean}{filledJulia_iff_bounded_orbit}
+and
+\leanref{Mlc/Literature/Foundations.lean}{criticalOrbit_iff_mandelbrot}.
+The universal radius statement is the imported theorem
+\lean{Molecule.mandelbrot_eq_inter}; its use is visible in
+\leanref{Mlc/CategoricalMandelbrot.lean}{set_subset_outerOrbitSet}.
+The distinction between an escaping and a bounded critical orbit is
+packaged by
+\leanref{Mlc/ParameterClassification.lean}{not_mem_mandelbrot_iff_exists_escape}.
+
+\section{Compactness and invariance in the dynamical plane}
+
+\begin{proposition}[A closed-set description of $K_c$]
+\label{prop:filled-julia-compact}
+With $R_c=\max\{2,|c|\}$,
+\[
+ K_c=\bigcap_{n\ge0}(f_c^{\circ n})^{-1}
+                       \bigl(\overline B(0,R_c)\bigr).
+\]
+In particular $K_c$ is compact.
+\end{proposition}
+
+\begin{proof}
+A bounded orbit cannot contain a term of modulus greater than $R_c$,
+by the escape criterion.  Conversely the displayed inequalities give
+a common bound.  Every iterate is continuous, so the intersection is
+closed.  The term $n=0$ places the intersection in
+$\overline B(0,R_c)$.  A closed bounded subset of $\C\simeq\R^2$ is
+compact by the Heine--Borel theorem.
+\end{proof}
+
+\begin{proposition}[Complete invariance]
+\label{prop:filled-julia-invariant}
+For every $c$,
+\[
+ f_c^{-1}(K_c)=K_c,\qquad f_c(K_c)=K_c.
+\]
+\end{proposition}
+
+\begin{proof}
+The orbit of $f_c(z)$ is the tail of the orbit of $z$.  Adding or removing
+the single finite initial value $z$ preserves boundedness.  This proves
+the inverse-image equality and the inclusion $f_c(K_c)\subseteq K_c$.
+For $w\in K_c$, a solution of $z^2=w-c$ exists in $\C$.  Its image is
+$w$, and the inverse-image equality places $z$ in $K_c$, proving the
+reverse inclusion.
+\end{proof}
+
+These are statements about a fixed dynamical system.  Connectedness of
+$K_c$ and variation of $K_c$ with $c$ require additional arguments.
+The classical connectedness criterion
+\[
+ K_c\text{ connected}\quad\Longleftrightarrow\quad c\in\M
+\]
+belongs to the external-coordinate theory of
+Douady--Hubbard~\cite{DH}.  It is distinct from local connectivity of
+either $J_c$ or $\M$.
+
+\section{Periodic orbits, multipliers, and the first components}
+
+\begin{definition}[Periodic point and multiplier]
+A point $z$ is periodic with return period $p\ge1$ if
+$f_c^{\circ p}(z)=z$.  Its prime period is the least such $p$.
+The multiplier for a return period is
+\[
+ \lambda_{c,p}(z)=(f_c^{\circ p})'(z).
+\]
+The cycle is attracting, repelling, or neutral according as the
+modulus of its prime-period multiplier is less than, greater than,
+or equal to $1$.  It is superattracting when that multiplier is zero.
+\end{definition}
+
+\begin{proposition}[Multiplier product]
+For any $z$ and $p\ge1$,
+\[
+ (f_c^{\circ p})'(z)
+   =\prod_{j=0}^{p-1}2f_c^{\circ j}(z).
+\]
+For a periodic point, changing the starting point on its cycle
+preserves this product.  Passing from prime period $p$ to return
+period $mp$ raises the multiplier to its $m$-th power.
+\end{proposition}
+
+\begin{proof}
+Apply the chain rule repeatedly, using $f_c'(w)=2w$.
+On a periodic orbit a change of starting point cyclically permutes
+the factors.  A return through the cycle $m$ times repeats the
+same product $m$ times.
+\end{proof}
+
+\begin{definition}[Parabolic, Siegel, and Cremer cycles]
+A neutral cycle is parabolic when its multiplier is a root of
+unity.  At an irrationally neutral cycle, the multiplier has the
+form $e^{2\pi i\theta}$ with $\theta\notin\Q$.
+Such a cycle is Siegel when its return map is locally analytically
+conjugate to $w\mapsto e^{2\pi i\theta}w$, and Cremer when no such
+local conjugacy exists.  A local analytic conjugacy is a conformal
+coordinate near the periodic point that intertwines the two maps.
+\end{definition}
+
+\begin{definition}[Hyperbolic and Misiurewicz parameters]
+For $c\in\M$, call $c$ hyperbolic if the critical orbit is attracted
+to an attracting periodic cycle $\mathcal O$, meaning
+$\min_{w\in\mathcal O}|p_n(c)-w|\to0$.
+Call it Misiurewicz if the
+critical point is strictly preperiodic to a repelling cycle.
+Here strictly preperiodic means that the orbit eventually becomes
+periodic but its starting point is not periodic.
+In this quadratic connectedness-locus setting, the subhyperbolic
+cases consist of the hyperbolic and Misiurewicz cases.
+\end{definition}
+
+\paragraph{Lean correspondence.}
+The return-period predicate and derivative are
+\leanref{Mlc/ParameterClassification.lean}{PeriodicPoint} and
+\leanref{Mlc/ParameterClassification.lean}{multiplier}.
+The structures and predicates \lean{LocalLinearization},
+\lean{HasParabolicCycle}, \lean{HasSiegelCycle}, and
+\lean{HasCremerCycle} express the indicated local conditions.
+The multiplier-product calculation is a text proof here.
+The theorem \lean{classification_complete} is an exhaustive
+priority partition with an explicit residual case; it neither
+proves MLC on each part nor classifies all renormalization types.
+
+\begin{proposition}[The attracting fixed-point component]
+\label{prop:main-cardioid}
+The parameters with an attracting fixed point form
+\[
+ \mathcal H_0=
+ \left\{\frac{\lambda}{2}-\frac{\lambda^2}{4}:
+                         |\lambda|<1\right\}.
+\]
+The boundary parametrization is
+$c(\theta)=e^{2\pi i\theta}/2-e^{4\pi i\theta}/4$.
+Its cusp $c(0)=1/4$ has fixed-point multiplier $1$.
+\end{proposition}
+
+\begin{proof}
+If $\alpha$ is a fixed point, then
+$c=\alpha-\alpha^2$ and its multiplier is $\lambda=2\alpha$.
+Conversely, the displayed parameter has fixed point $\lambda/2$
+with multiplier $\lambda$.  The map
+$\lambda\mapsto\lambda/2-\lambda^2/4$ is injective on the closed
+unit disk: equality at distinct arguments would force their sum
+to be $2$, which is impossible there.  Its image of the boundary
+circle therefore parametrizes the cardioid boundary.
+\end{proof}
+
+\begin{proposition}[The attracting period-two component]
+\label{prop:period-two-component}
+The parameters with an attracting cycle of prime period two form
+the disk
+\[
+ \mathcal H_2=\{c:|c+1|<1/4\}.
+\]
+\end{proposition}
+
+\begin{proof}
+The factorization
+\[
+ f_c^{\circ2}(z)-z
+ =(z^2-z+c)(z^2+z+c+1)
+\]
+separates fixed points from period-two candidates.
+For the two roots $a,b$ of the second factor, $ab=c+1$,
+so their cycle multiplier is $4ab=4(c+1)$.
+The factors share a root, or the two candidates coincide, only
+at $c=-3/4$, which lies on the displayed disk boundary.
+Away from that parameter, the candidates form a genuine two-cycle,
+attracting exactly when $|4(c+1)|<1$.
+\end{proof}
+
+These elementary component formulas explain the green contours in
+Figure~\ref{fig:mlc-status}; the formulas are text proofs rather
+than newly claimed Lean declarations.  They identify open covered
+regions and two classical boundaries.  They provide no
+classification of the rest of $\partial\M$.
+
+\section{Finite observations in parameter space}
+
+\begin{definition}[Finite outer approximation]
+\label{def:finite-outer}
+For $N\in\N$, set
+\[
+ O_N=\{c:|c|\le2,\quad |p_j(c)|\le2\text{ for }0\le j\le N\}.
+\]
+\end{definition}
+
+The stages $O_0$ and $O_1$ both equal $\overline B(0,2)$; the first
+additional orbit constraint appears at $O_2$:
+\[
+ O_2=\{c:|c|\le2,\ |c^2+c|\le2\}.
+\]
+Writing $c=x+iy$, the squared norm constraints are polynomial
+inequalities in $x,y$.  Thus each finite stage is a real semialgebraic
+set.  Its finite description should be distinguished from an algorithm
+for classifying all its connected components at a useful complexity.
+
+\begin{theorem}[Compact nested outer approximation]
+\label{thm:finite-outer}
+For every $N$,
+\[
+ O_N\text{ is compact},\qquad
+ O_{N+1}\subseteq O_N,\qquad
+ \M\subseteq O_N,\qquad
+ \bigcap_N O_N=\M.
+\]
+\end{theorem}
+
+\begin{proof}
+Continuity of $p_j$ makes each norm inequality closed.  Their finite
+intersection with $\overline B(0,2)$ is closed and bounded, hence
+compact.  Increasing $N$ adds constraints and proves nesting.
+The universal critical-orbit bound proves $\M\subseteq O_N$.
+Finally, if $c\in O_N$ for every $N$, choose $N=j$ to obtain
+$|p_j(c)|\le2$ for every $j$; Theorem~\ref{thm:critical-bound} then
+gives $c\in\M$.
+\end{proof}
+
+\paragraph{Lean correspondence.}
+The definition is
+\leanref{Mlc/CategoricalMandelbrot.lean}{outerOrbitSet}.
+The four conclusions are
+\lean{isCompact_outerOrbitSet},
+\lean{outerOrbitSet_antitone},
+\lean{set_subset_outerOrbitSet}, and
+\lean{iInter_outerOrbitSet_eq_set} in
+\lean{MLC.Categorical.Mandelbrot}.
+The last equality also proves closedness and compactness of $\M$,
+without using MLC.
+
+\begin{proposition}[First-escape witnesses]
+\label{prop:first-escape}
+If $c\notin\M$, there is a least $n$ such that $|p_n(c)|>2$.
+Every such witness excludes $c$ from all outer stages $O_N$ with $N\ge n$.
+\end{proposition}
+
+\begin{proof}
+Theorem~\ref{thm:critical-bound} supplies at least one violating index.
+The well-ordering of $\N$ supplies the least one.  A stage with $N\ge n$
+contains the violated $n$-th constraint.
+\end{proof}
+
+The least index is a mathematical existence statement.  In an exact
+computation, certifying the strict inequality additionally requires
+representations and error bounds for the parameter and its orbit.
+The Lean predicates \lean{escapeAt} and \lean{firstEscapeAt}, and the
+theorem
+\leanref{Mlc/ParameterClassification.lean}{exists_firstEscape_of_not_mem},
+keep the witness separate from any claim of decidability.
+
+\section{What convergence of outer approximations gives}
+
+\begin{lemma}[Eventual containment]
+\label{lem:outer-eventual-containment}
+If an open set $U\subseteq\C$ contains $\M$, then $O_N\subseteq U$ for
+some $N$.
+\end{lemma}
+
+\begin{proof}
+Otherwise the compact sets $F_N=O_N\setminus U$ would be nonempty and
+nested.  They lie in the compact set $O_0$, so their intersection would
+be nonempty.  Yet
+\[
+ \bigcap_N F_N=\left(\bigcap_N O_N\right)\setminus U
+              =\M\setminus U=\varnothing,
+\]
+a contradiction.
+\end{proof}
+
+For a nonempty compact set $A$, write
+$\dist(z,A)=\inf_{a\in A}|z-a|$.  For two such sets define the Hausdorff
+distance by
+\[
+ d_{\mathrm H}(A,B)=
+ \max\left\{\sup_{a\in A}\dist(a,B),\
+             \sup_{b\in B}\dist(b,A)\right\}.
+\]
+The set $\M$ is nonempty because $0\in\M$.  Applying
+Lemma~\ref{lem:outer-eventual-containment} to its open
+$\varepsilon$-neighbourhood gives
+\[
+ d_{\mathrm H}(O_N,\M)\longrightarrow0.
+\]
+This compactness proof supplies no computable rate.  It also supplies
+no bound on the components of $O_N\cap B(c,r)$; that is the additional
+information needed for local connectivity.
+
+\paragraph{Formal boundary.}
+The exact limit and finite-stage compactness are kernel-checked as above.
+The general Hausdorff-convergence argument is included here as a text
+proof, rather than attributed to a declaration that merely states the
+set intersection.  Chapter~\ref{chap:topological-foundations} isolates
+the separate, formally proved component-buffer implication.
+
+\section{An exhaustion by bounds is not a finite certificate}
+
+The categorical approximation module also defines
+\[
+ W_N=\{c:\forall n,\ |p_n(c)|\le N\}.
+\]
+The index bounds the orbit values; it does not bound the number of
+observations.  Consequently every $W_N$ still involves infinitely many
+conditions.
+
+\begin{proposition}[Saturation of the orbit-bound exhaustion]
+\label{prop:inner-saturation}
+The sets $W_N$ are increasing, $\bigcup_N W_N=\M$, and
+\[
+ W_N=\M\qquad\text{whenever }N\ge2.
+\]
+\end{proposition}
+
+\begin{proof}
+Increasing the allowed bound preserves all inequalities.  Every bounded
+orbit admits an integer upper bound, proving the union equality.
+Each $W_N$ is contained in $\M$ by definition.  Conversely, the
+critical-orbit bound $2$ places every $c\in\M$ in every $W_N$ with
+$N\ge2$.
+\end{proof}
+
+The saturation assertion is
+\leanref{Mlc/CategoricalMandelbrot.lean}{innerOrbitSet_eq_set_of_two_le};
+the exhaustion assertion is \lean{iUnion_innerOrbitSet_eq_set}.
+Thus this two-sided presentation is an exact logical approximation
+system.  Computable inner approximations require different objects,
+such as the trapping certificates in
+\leanref{Mlc/CertifiedTrappingRegions.lean}{Mlc/CertifiedTrappingRegions.lean}
+and
+\leanref{Mlc/FiniteTrappingRegions.lean}{Mlc/FiniteTrappingRegions.lean}.
+Those certificates prove forward invariance of a bounded finite union of
+rectangles, uniformly over a parameter box.  Iterating the invariant-set
+inclusion then proves boundedness of every critical orbit in that box.
+The finite certificate is the invariant-set calculation, rather than a
+finite prefix of the orbit.
+
+\section{Examples and the meaning of a render}
+
+Some exact critical orbits are useful reference points:
+\[
+\begin{array}{c|l}
+c & p_0(c),p_1(c),p_2(c),\ldots\\
+\hline
+0 & 0,0,0,\ldots\\
+-1 & 0,-1,0,-1,\ldots\\
+-2 & 0,-2,2,2,\ldots\\
+i & 0,i,-1+i,-i,-1+i,-i,\ldots\\
+1 & 0,1,2,5,\ldots
+\end{array}
+\]
+The first four orbits are bounded.  For $c=1$, the value $5$ at time $3$
+certifies escape, although the first three values have modulus at most
+$2$.  Finite survival is therefore compatible with eventual escape.
+
+An ideal exact-arithmetic render with cutoff $N$ displays a finite-stage
+survival set.  A floating-point render adds numerical errors to that
+finite-time limitation.  Neither version identifies the set of parameters
+not yet covered by published local-connectivity theorems.  In particular,
+the colour of a pixel certifies neither its infinite orbit nor its
+renormalization type.  The coverage illustrations in this book use
+separate symbols and captions for theorem classes and numerical geometry.

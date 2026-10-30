@@ -20,14 +20,15 @@ The intended Lean dependency graph is:
 \text{global MLC}.
 \end{array}
 \]
-Every downward arrow is a separately checked theorem.  A result may be
+Each downward arrow is a separate proof obligation; the diagram is
+an intended mathematical architecture.  A result may be
 imported from an existing Lean dependency only when its exact hypotheses and
 conclusion match the statement used here.
 
 \section{Current Lean status}
 
 \begin{center}\small
-\begin{tabularx}{0.98\textwidth}{@{}P{0.25\textwidth}@{}Y@{}P{0.13\textwidth}@{}}
+\begin{tabularx}{0.98\textwidth}{@{}P{0.25\textwidth}@{\hspace{8pt}}Y@{\hspace{8pt}}P{0.13\textwidth}@{}}
 \textbf{Layer} & \textbf{Current content} & \textbf{Status}\\
 \hline
 Orbit and outer approximations &
@@ -36,9 +37,12 @@ proved\\
 Local component criterion &
 Uniform outer buffer implies local connectedness. &
 proved conditionally\\
-Yoccoz modulus shrinkage &
-Puzzle-annulus divergence implies shrinking critical pieces. &
-proved\\
+Frozen modulus audit &
+Gaussian nested differences are summable; the legacy finite class is empty. &
+proved obstruction\\
+Classical Yoccoz shrinking &
+Graph cuts and conformal-modulus estimates. &
+pending\\
 Parameter parapuzzles &
 Connected induced pieces and a basis interface. &
 partial\\
@@ -50,8 +54,9 @@ TopCat over-approximations, conditional roots, carving interfaces, and the
 refuted frozen Green-sublevel proposal. &
 mixed\\
 Renormalization towers &
-Typed tower, cumulative depths, and principal-nest modulus contracts. &
-partial\\
+Discrete indices and frozen weighted-area contracts; positive lower-bound
+certificate refuted. &
+model audit\\
 Bounded-type satellite and Feigenbaum cases &
 Named literature interfaces and source ledger. &
 open formalization\\
@@ -65,7 +70,8 @@ Dudko--Lyubich/KKL case certificates &
 Source-specific class predicates plus connected shrinking parameter pieces. &
 interface\\
 Combinatorial profiles &
-Bounded type, period doubling, cumulative depths, and modulus divergence. &
+Coarse type labels, additive depth, multiplicative return period,
+and nonnegative-series arithmetic. &
 proved arithmetic\\
 Global MLC &
 Target \lean{LocallyConnectedSpace M}. &
@@ -75,25 +81,32 @@ open\\
 
 The module \lean{Mlc.Literature.Review} is deliberately conservative:
 \begin{itemize}
-\item \lean{yoccoz_puzzle_shrinkage} is a theorem;
-\item \lean{FinitelyRenormalizableMLC},
-      \lean{BoundedTypeSatelliteMLC}, and \lean{FeigenbaumMLC} are
-      propositions describing exact obligations.
+\item \lean{yoccoz_puzzle_shrinkage} is a theorem of the frozen
+      model with an impossible premise;
+\item \lean{FinitelyRenormalizableMLC} concerns the same empty
+      legacy class;
+\item \lean{BoundedTypeSatelliteMLC} and \lean{FeigenbaumMLC}
+      are parameterized targets whose actual source-class
+      definitions still have to be implemented.
 \end{itemize}
 No external paper is silently converted into an axiom.
 
-The structure \lean{ParaPuzzleCertificate} isolates the topological half of
-the classical argument.  Its connectedness and singleton-intersection fields
+The legacy structure \lean{ParaPuzzleCertificate} is tied to the
+frozen full-sublevel pieces.  Its connectedness and singleton-intersection fields
 imply local connectivity through the theorem
 \begin{center}
 \lean{localConnectivity_of_paraPuzzleCertificate}.
 \end{center}
-The remaining existence proposition is
+Its corresponding family proposition is
 \begin{center}
 \lean{YoccozParameterPuzzleResult},
 \end{center}
-the phase--parameter theorem where external rays, graph cuts, holomorphic
-motion, and renormalization estimates must eventually be formalized.
+quantified over every $c\in\M$.  Unlike the finite family in
+Chapter~\ref{chap:theorem-matrix}, it is not indexed by the empty
+legacy finite class.
+Its frozen-piece existence requirement is separate from the
+classical graph-cut construction and cannot be supplied merely by
+citing a Yoccoz theorem.
 
 The new module \lean{Mlc.Literature.Foundations} gives typed names for the
 quadratic map, orbit, filled Julia set, Julia set, and Mandelbrot set.  Its
@@ -103,8 +116,15 @@ main structural interfaces are:
 \item \lean{APrioriBounds};
 \item \lean{RenormalizationMLCInterface}.
 \end{itemize}
-The analytic fields required by the papers are visible in Lean before any
-theorem is claimed.
+These records specify the shape of required data, rather than
+constructing those data or identifying an arbitrary real-valued
+field with conformal modulus.
+The constructor
+\leanref{Mlc/Literature/Foundations.lean}{ParameterPuzzleBasis.of_compactClosure}
+supplies the topological basis from actual compact parameter pieces.
+The audit in
+\leanref{Mlc/Literature/ModelAudit.lean}{summable_weightedArea_differences}
+separately explains why the inherited analytic model must be replaced.
 
 \section{The current conditional root}
 

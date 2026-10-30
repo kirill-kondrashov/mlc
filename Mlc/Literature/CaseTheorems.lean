@@ -16,7 +16,8 @@ namespace Literature
 
 noncomputable section
 
-/-- A family of phase--parameter data for finitely renormalizable parameters. -/
+/-- A legacy family indexed by the frozen-model predicate.
+`ModelAudit` proves that the index predicate has no instances. -/
 def FinitelyRenormalizablePhaseParameterData : Prop :=
   ∀ (c : ℂ) (hc : c ∈ reviewMandelbrotSet),
     FinitelyRenormalizable c →

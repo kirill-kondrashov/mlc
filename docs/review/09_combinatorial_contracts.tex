@@ -1,4 +1,5 @@
 \chapter{Combinatorial contracts and modulus arithmetic}
+\label{chap:combinatorics}
 
 \section{Discrete renormalization data}
 
@@ -29,6 +30,10 @@ The Lean definitions make bounded type an explicit predicate:
 \end{itemize}
 They do not identify bounded type with a numerical picture or with bounded
 periods: the rotation sequence is a separate field.
+Nor do these fields yet identify the integer rotation sequence with a
+marked rational rotation number or its continued-fraction data.
+The current profile has one constant type label; a tower with mixed
+primitive and satellite levels needs richer, level-dependent data.
 
 \begin{definition}[Cumulative depth]
 \label{def:cumulative-depth}
@@ -47,7 +52,35 @@ profile $p_n=2$, one has $d_n=2n$.
 The proofs are elementary arithmetic and are available as
 \lean{cumulativeDepth_monotone} and
 \lean{cumulativeDepth_periodDoubling}.  This separates the discrete
-renormalization bookkeeping from the analytic construction of the tower.
+bookkeeping from the analytic construction of the tower.  The additive
+depth is an index, not a return period in the original dynamics.
+
+\begin{definition}[Original return period]
+Given relative periods $p_n$, put
+\[
+ T_0=1,\qquad T_{n+1}=T_np_n.
+\]
+\end{definition}
+
+\begin{proposition}[Period-doubling arithmetic]
+If every $p_n=2$, then
+\[
+ d_n=2n,\qquad T_n=2^n.
+\]
+\end{proposition}
+
+\begin{proof}
+Induct on $n$, using the additive recurrence for $d_n$ and the
+multiplicative recurrence for $T_n$.
+\end{proof}
+
+The second recurrence and its proof are
+\leanref{Mlc/Literature/Combinatorics.lean}{relativePeriodProduct} and
+\lean{relativePeriodProduct_periodDoubling}.
+The period-doubling profile is tagged satellite: successive little
+Julia sets meet at the marked periodic attachment point.
+It is a particular bounded-combinatorics example, not the definition
+of the entire Feigenbaum class.
 
 \section{Modulus divergence}
 
@@ -72,20 +105,30 @@ The exact Lean theorem is
 nest arguments in the Lyubich, Dudko--Lyubich, and Kahn--Kapiamba--Lyubich
 routes.
 
-\begin{theorem}[Tower-to-puzzle arithmetic contract]
+\begin{theorem}[Finite-block arithmetic contract]
 \label{thm:tower-to-puzzle-arithmetic}
-Suppose a renormalization tower has cumulative depths $d_n$, and suppose its
-principal-nest annulus at level $n$ is the disjoint union of ordinary puzzle
-annuli with indices in $[d_n,d_{n+1})$.  If the principal-nest moduli have
-the uniform lower bound $\mu>0$, then the ordinary puzzle-annulus modulus
-series is not summable.
+Let $a_k\ge0$, let $d_n$ be nondecreasing integers, and suppose numbers
+$b_n$ satisfy the exact comparison
+\[
+ b_n=\sum_{d_n\le k<d_{n+1}}a_k.
+\]
+If $b_n\ge\mu>0$ for every $n$, then $\sum_k a_k$ is not summable.
 \end{theorem}
 
 \begin{proof}
-The principal-nest moduli are finite sums of disjoint ordinary annulus
-moduli.  Summability of the ordinary series would imply summability of the
-principal-nest series, contradicting Lemma~\ref{lem:combinatorial-modulus-lower}.
+The index blocks are disjoint.  If $\sum_k a_k$ converged, every
+partial sum of the $b_n$ would be bounded by that nonnegative total.
+But the first $N$ terms of $(b_n)$ have sum at least $N\mu$, a
+contradiction.
 \end{proof}
+
+The exact finite-block identity is an assumption of this arithmetic
+theorem.  In \lean{Mlc/MoleculeToParameterShrink.lean} an instance
+comes from additivity of Gaussian weighted area on disjoint frozen
+differences.  The audit proves that its proposed positive lower bounds
+cannot exist.  For genuine conformal moduli, serial Grötzsch gives an
+inequality, generally not this identity; the source-specific analytic
+comparison must be proved before invoking the arithmetic contract.
 
 \section{Source-specific combinatorial predicates}
 
@@ -97,8 +140,8 @@ Bounded-type satellite &
 \lean{IsBoundedTypeSatelliteProfile}: satellite type plus bounded rotation
 sequence. & Dudko--Lyubich\\
 Period doubling &
-\lean{IsPeriodDoublingProfile}: primitive type and $p_n=2$. &
-Feigenbaum\\
+\lean{IsPeriodDoublingProfile}: satellite type and $p_n=2$. &
+period-doubling example\\
 Bounded period doubling &
 \lean{IsBoundedPeriodDoublingProfile}: period doubling plus bounded
 rotation data. & Feigenbaum interface\\
@@ -116,9 +159,12 @@ contract is:
 \lean{ParabolicallyBoundedPrimitiveCertificate}.
 \end{center}
 
-\begin{openestimate}[Analytic realization of combinatorics]
+\begin{formalobligation}[Analytic realization of combinatorics]
 \label{est:combinatorial-realization}
 Construct the marked renormalization tower whose discrete profile satisfies
 the relevant predicate, prove the principal-nest decomposition, and supply
-the modulus bounds required by the corresponding certificate.
-\end{openestimate}
+the genuine conformal bounds and marked parameter basis required by
+the source theorem.  Bounded relative periods in the Feigenbaum
+theorem and bounded auxiliary rotation data in the present profile
+must remain distinct until their relation is proved.
+\end{formalobligation}

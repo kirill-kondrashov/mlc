@@ -1,4 +1,5 @@
 \chapter{Lyubich renormalization and a priori bounds}
+\label{chap:renormalization}
 
 \section{Polynomial-like maps}
 
@@ -8,54 +9,121 @@ A polynomial-like map of degree $d$ is a proper holomorphic map
 \[
  g:U\longrightarrow V
 \]
-where $U,V\subset\C$ are simply connected domains with
-$\overline U\subset V$ and $d\ge2$.  Its filled Julia set is
+where $U,V\subset\C$ are topological disks, $U\Subset V$, and
+$d\ge2$.  Properness means that the inverse image of each compact
+subset of $V$ is compact in $U$.  The degree is the number of
+preimages of a regular value, counted with multiplicity.
+Its filled Julia set is
 \[
- K(g):=\{z\in U:g^{\circ n}(z)\in U\text{ for every }n\in\N\}.
+ K(g):=\{z\in U:g^{\circ n}(z)\in U\text{ for every }n\in\N\},
 \]
-\end{definition}
+ where an iterate is required to remain in the domain at each preceding
+ step.
+ \end{definition}
 
-\begin{definition}[Quadratic renormalization]
+ The compact-containment condition is essential.  A proper map
+ $\C\to\C$ is not, with those domains, a polynomial-like restriction:
+ its source closure is not compactly contained in its target.
+ The current construction \lean{parameterToBMol_spec} uses
+ $U=V=\C$ to obtain a molecule-model object.  That typed object does
+ not by itself supply the domains in Definition~\ref{def:polynomial-like}.
+
+ \section{Hybrid equivalence and straightening}
+
+ \begin{definition}[Quasiconformal map]
+ An orientation-preserving homeomorphism $h$ between plane domains is
+ quasiconformal if it has locally square-integrable weak first
+ derivatives and
+ \[
+  |\overline\partial h|\le k|\partial h|\quad\text{almost everywhere}
+  \qquad\text{for some }0\le k<1.
+ \]
+ Its maximal dilatation is at most $(1+k)/(1-k)$.
+ \end{definition}
+
+ \begin{definition}[Hybrid equivalence]
+ Polynomial-like maps $g_1,g_2$ are hybrid equivalent if a
+ quasiconformal conjugacy $h$ is defined on neighbourhoods of their
+ filled Julia sets and satisfies
+ \[
+  h\circ g_1=g_2\circ h,\qquad
+  \overline\partial h=0\quad\text{almost everywhere on }K(g_1).
+ \]
+ \end{definition}
+
+ \begin{theorem}[Douady--Hubbard straightening]
+ Every degree-$d$ polynomial-like map is hybrid equivalent to a
+ degree-$d$ polynomial.  If its filled Julia set is connected, the
+ polynomial is unique up to affine conjugacy.  In the connected
+ degree-two case, monic centred normalization gives a unique
+ polynomial $z^2+c$.
+ \end{theorem}
+
+ The theorem is a classical analytic input~\cite{DHPolynomialLike}.
+ Its proof constructs an invariant Beltrami structure outside the
+ filled Julia set and integrates it by the measurable Riemann mapping
+ theorem.  Normalization and rigidity produce uniqueness.  Formalizing
+ that argument requires more than a record containing a chosen
+ straightening parameter: the conjugacy, its domain, and the vanishing
+ Beltrami coefficient are part of the proof.
+
+ \section{Renormalization periods and little Julia sets}
+
+ \begin{definition}[Quadratic renormalization]
 \label{def:quadratic-renormalization}
-A quadratic polynomial $f_c$ is renormalizable at depth $m$ if there are
-domains $U\Subset V$ around the critical orbit and an integer $p>1$ such
+A quadratic polynomial $f_c$ is renormalizable with period $p$ if there are
+domains $U\Subset V$ containing the critical point and an integer $p>1$ such
 that
 \[
  f_c^{\circ p}:U\to V
 \]
-is polynomial-like of degree two.  The renormalization is the normalized
-polynomial-like map obtained from this restriction and its affine marking.
+is polynomial-like of degree two with connected filled Julia set and
+the prescribed little-Julia-set orbit combinatorics.  The
+renormalization is the normalized restriction with its affine and
+external marking.  The orbit of the little filled Julia set
+$K'=K(f_c^{\circ p}|_U)$ consists of
+$K',f_c(K'),\ldots,f_c^{\circ(p-1)}(K')$.
 \end{definition}
 
 \begin{definition}[Renormalization tower]
 \label{def:renormalization-tower}
-A renormalization tower is a sequence
+A marked renormalization tower is a sequence
 \[
  g_0,\ g_1,\ g_2,\ldots
 \]
 of marked polynomial-like maps together with renormalization relations
-$g_n\rightsquigarrow g_{n+1}$.  The cumulative depth is
+$g_n\rightsquigarrow g_{n+1}$, where $g_{n+1}$ is a normalized
+restriction of $g_n^{\circ p_n}$.  The return period measured in the
+original dynamics is
 \[
- d_0=0,\qquad d_{n+1}=d_n+p_n,
+ T_0=1,\qquad T_{n+1}=T_np_n.
 \]
 where $p_n$ is the period of the $n$-th renormalization step.
 \end{definition}
 
-The Lean structure \lean{RenormalizationTower} stores the sequence and the
-nonempty relation at each step.  The theorem
-\lean{RenormalizationTower.cumulativePeriod_monotone} proves monotonicity of
-the cumulative depths without adding analytic assumptions.
+The Lean structure \lean{RenormalizationTower} stores a sequence of
+molecule models and a nonempty relation at each step.  Its existing
+\lean{cumulativePeriod} is an additive indexing sequence.  The
+monotonicity theorem for that sequence is valid arithmetic, but its
+value is not $T_n$ above.  The review's separate definition
+\lean{relativePeriodProduct} records the multiplicative bookkeeping;
+Chapter~\ref{chap:combinatorics} gives the exact comparison.
 
 \section{Principal nests and modulus}
 
 \begin{definition}[Principal nest]
 \label{def:principal-nest}
-For a renormalizable quadratic map, a principal nest is a nested sequence
+For a quadratic map with an appropriate puzzle, a principal nest is a
+nested sequence
 \[
  V_0\supset V_1\supset V_2\supset\cdots
 \]
-of critical puzzle domains adapted to the renormalization tower.  Its
-principal-nest annuli are
+of critical puzzle domains selected by successive critical first
+returns.  The return time is the least positive iterate bringing the
+critical point back to the selected domain, when that return exists.
+The associated first-return map can have several branches; its
+critical branch determines the next critical domain.
+The principal-nest annuli, at levels with proper nesting, are
 \[
  A_n^{\mathrm{pn}}:=V_n\setminus\overline{V_{n+1}}.
 \]
@@ -63,11 +131,16 @@ principal-nest annuli are
 
 \begin{definition}[A priori bounds]
 \label{def:apriori-bounds}
-A tower has uniform a priori bounds if there exists $\mu>0$ such that
+A given tower has a priori bounds if there exists $\mu>0$ such that
 \[
  \modulus(A_n^{\mathrm{pn}})\ge\mu
-\qquad\text{for every }n.
+\qquad\text{for every specified nondegenerate level }n.
 \]
+For polynomial-like renormalizations the analogous bound is
+$\modulus(V_n\setminus\overline{U_n})\ge\mu$.
+Bounds uniform over a family require the same $\mu$ for all its
+towers.  Beau bounds require a family-uniform eventual lower bound,
+while the entry level may depend on the initial geometry.
 \end{definition}
 
 \begin{lemma}[Uniform lower bounds imply divergence]
@@ -82,66 +155,78 @@ If $\modulus(A_n^{\mathrm{pn}})\ge\mu>0$ for every $n$, then
 The partial sums dominate $N\mu$ and therefore are unbounded.
 \end{proof}
 
-\begin{theorem}[Renormalization-to-puzzle shrinking]
+\begin{theorem}[Shrinking of a bounded principal nest]
 \label{thm:renormalization-to-puzzle}
-Suppose a satellite tower has a uniform principal-nest lower bound and that
-the principal-nest annuli decompose into disjoint finite unions of the
-ordinary puzzle annuli.  Then the ordinary puzzle-annulus moduli are not
-summable, and the critical dynamical puzzle pieces shrink to $\{0\}$.
+Suppose the principal domains are bounded Jordan domains containing
+$0$, their closures are properly nested, and every intervening annulus
+has conformal modulus at least $\mu>0$.  Then
+$\bigcap_n\overline{V_n}=\{0\}$.
 \end{theorem}
 
-The first implication is a finite-sum comparison.  The second is the
-Grötzsch--Yoccoz theorem from Chapter~1.  In Lean this chain is implemented
-by
-\begin{center}
-\lean{PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget}.
-\end{center}
+\begin{proof}
+The modulus series diverges by Lemma~\ref{lem:uniform-bound-divergence}.
+Apply Theorem~\ref{thm:yoccoz-shrink} to this nest.
+\end{proof}
+
+This theorem concerns conformal moduli of genuine annuli.  The current
+Lean declaration
+\lean{PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget}
+instead uses Gaussian areas of frozen differences.
+Corollary~\ref{cor:no-frozen-certificate} proves that its lower-bound
+input is impossible.  It therefore cannot serve as the formal
+implementation of the classical theorem above.
+
+Likewise, serial annuli satisfy the Grötzsch inequality, generally not
+an arbitrary finite-additivity identity.  Passing between principal
+and ordinary puzzle scales requires the actual analytic comparison
+from the source; a set partition by itself supplies no conformal
+modulus formula.
 
 \section{Parameter-plane conclusion}
 
-\begin{theorem}[Satellite a priori bounds imply pointwise MLC]
+\begin{theorem}[Conditional parameter endpoint]
 \label{thm:satellite-apriori-mlc}
-Let $c\in\M$.  Assume:
-\begin{enumerate}
-\item a satellite renormalization tower at $c$;
-\item a uniform principal-nest modulus lower bound;
-\item connected parameter parapuzzle pieces at every depth.
-\end{enumerate}
+Let $c\in\M$.  Suppose a renormalization argument and its
+phase--parameter construction produce open nested parameter pieces
+$Q_n$ containing $c$, with compact closures, connected intersections
+$Q_n\cap\M$, and
+$\bigcap_n\overline{Q_n}=\{c\}$.
 Then $\M$ is locally connected at $c$.
 \end{theorem}
 
 \begin{proof}
-The modulus lower bound gives singleton intersection of the parameter
-parapuzzles by Theorem~\ref{thm:renormalization-to-puzzle}.  Connectedness
-and the neighbourhood-basis property then give local connectedness by
-Theorem~\ref{thm:topological-transport}.  The Lean theorem
-\lean{localConnectivity_of_satelliteAPrioriCertificate} packages this
-implication.
+Apply Theorem~\ref{thm:parameter-shrinking}.  This model-independent
+step is implemented by
+\leanref{Mlc/Literature/Foundations.lean}{localConnectivity_of_compact_parameterPieces}.
+The analytic argument must supply its hypotheses in parameter space;
+dynamical shrinking alone has not yet supplied them.
 \end{proof}
 
 \section{Primitive, satellite, and neutral regimes}
 
 The renormalization type is not cosmetic:
 \begin{itemize}
-\item primitive renormalization produces disjoint little Julia copies and
+\item primitive renormalization produces pairwise disjoint little filled Julia sets and
       is the natural setting for principal-nest modulus estimates;
-\item satellite renormalization accumulates around roots of hyperbolic
-      components and requires control of combinatorial rotation data;
+\item satellite renormalization has little filled Julia sets meeting at
+      marked periodic points and requires control of rotation data;
 \item neutral renormalization introduces Siegel disks, bubbles, hedgehogs,
       and neutral cascades, where ordinary expanding estimates degenerate.
 \end{itemize}
 
 Lyubich's bounded-type and a priori-bound machinery, Dudko--Lyubich's
 satellite and Feigenbaum results, and the 2025--2026 Kahn/Dudko/Lim papers
-all fit into this common contract.  Their analytic estimates differ, but
-the formal target is the same: construct a tower certificate, prove
-modulus control, realize connected parameter pieces, and invoke the
-topological transport theorem.
+motivate a common proof architecture~\cite{LyubichDynamics,LyubichIII}.
+Their analytic estimates differ; a source-specific formalization must
+construct genuine marked towers, prove conformal control, realize
+connected parameter pieces, and invoke the topological transport
+theorem.  This requires replacing the refuted frozen certificate,
+rather than filling its fields.
 
-\begin{openestimate}[Renormalization existence and estimates]
+\begin{formalobligation}[Renormalization existence and estimates]
 \label{est:renormalization}
 For each literature class, define the exact combinatorial predicate,
 construct the corresponding marked tower, formalize the relevant a priori
 bounds, and prove that its parameter parapuzzles satisfy the hypotheses of
 Theorem~\ref{thm:satellite-apriori-mlc}.
-\end{openestimate}
+\end{formalobligation}

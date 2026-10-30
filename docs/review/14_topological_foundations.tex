@@ -1,0 +1,445 @@
+\chapter[Connected neighbourhoods and topological endpoints]{Connected neighbourhoods and the topological endpoint}
+\label{chap:topological-foundations}
+
+The analytic theories considered later have different hypotheses but a
+common topological task: produce small connected neighbourhoods in the
+parameter set.  This chapter proves the endpoint independently of rays,
+modulus, and renormalization.  It also identifies two gaps that a picture
+of nested pieces can conceal: connectedness of an ambient piece need not
+give connectedness of its intersection with $\M$, and a singleton
+intersection of open pieces need not give a neighbourhood basis.
+
+\section{Subspaces, connectedness, and components}
+
+\begin{definition}[Neighbourhood in a subspace]
+For $S\subseteq X$ and $x\in S$, a set $U\subseteq S$ is a neighbourhood
+of $x$ if some open set $V\subseteq X$ satisfies
+\[
+ x\in V\cap S\subseteq U.
+\]
+We write $U\in\mathcal N_S(x)$.  A neighbourhood need not itself be open.
+\end{definition}
+
+\begin{definition}[Connected sets]
+A space is preconnected if it cannot be written as the union of two
+disjoint nonempty open subsets.  It is connected if it is preconnected
+and nonempty.  A subset has either property when endowed with its
+subspace topology.
+\end{definition}
+
+Lean uses \lean{IsPreconnected} for the first property and
+\lean{IsConnected} for the second.  Keeping the nonemptiness condition
+explicit avoids special conventions for empty pieces and absent
+components.
+
+\begin{definition}[Connected component]
+For $x\in A\subseteq X$, $\operatorname{Comp}_x(A)$ is the union of all
+connected subsets of $A$ containing $x$.  It is the maximal connected
+subset of $A$ containing $x$.
+\end{definition}
+
+The union is connected because its members share $x$.  Thus
+\[
+ x\in\operatorname{Comp}_x(A)\subseteq A.
+\]
+If $A\subseteq B$ and $x\in A$, maximality gives
+\[
+ \operatorname{Comp}_x(A)\subseteq\operatorname{Comp}_x(B).
+\]
+Connected components are closed in their ambient subspace.  They need
+not be open, even when that subspace is an open subset of a larger
+space lacking local connectedness.
+
+\begin{lemma}[Subtype and ambient connectedness]
+Let $\iota:S\hookrightarrow X$ be the inclusion and let $V\subseteq S$.
+Then $V$ is connected if and only if $\iota(V)$ is connected.
+\end{lemma}
+
+\begin{proof}
+The inclusion is a homeomorphism from $S$ to its image with the induced
+topology.  Restrict that homeomorphism to $V$; preconnectedness and
+nonemptiness are preserved in both directions.
+\end{proof}
+
+This is the exact role of
+\leanref{Mlc/LocalConnectivity.lean}{isConnected_subtype_val_image}.
+For a parameter piece $Q\subseteq\C$, its induced subset of the
+Mandelbrot subtype has image $Q\cap\M$.  Consequently, connectedness of
+$Q$ alone is insufficient; the relevant condition is connectedness of
+$Q\cap\M$.
+
+\section{Local connectedness and dyadic components}
+
+\begin{definition}[Local connectedness]
+\label{def:local-connectedness}
+A space $X$ is locally connected at $x$ in the neighbourhood formulation
+used here if
+\[
+ \forall U\in\mathcal N_X(x)\quad
+ \exists V\in\mathcal N_X(x),\qquad
+ V\subseteq U,\quad V\text{ preconnected}.
+\]
+It is locally connected if this holds at every point.
+\end{definition}
+
+A neighbourhood contains its base point, so the selected $V$ is
+automatically nonempty.  For the global property this formulation agrees
+with the usual basis of open connected sets.
+The formal definition is
+\leanref{Mlc/Literature/Review.lean}{LocallyConnectedAt}; its equivalence
+with \lean{LocallyConnectedSpace} is \lean{locallyConnectedAt_iff}.
+
+\begin{definition}[Dyadic component]
+For a metric space $X$, put
+\[
+ D_n(x)=\operatorname{Comp}_x\bigl(B_X(x,2^{-n})\bigr).
+\]
+\end{definition}
+
+\begin{theorem}[The missing component condition]
+\label{thm:dyadic-components}
+A metric space $X$ is locally connected if and only if every $D_n(x)$
+is a neighbourhood of $x$.
+\end{theorem}
+
+\begin{proof}
+Assume local connectedness.  Inside the open ball choose a connected
+neighbourhood of $x$.  It lies in the component $D_n(x)$, making that
+component a neighbourhood.
+
+Conversely, given $U\in\mathcal N_X(x)$, choose $n$ so large that
+$B_X(x,2^{-n})\subseteq U$.  The component $D_n(x)$ is connected,
+is a neighbourhood by hypothesis, and is contained in $U$.
+\end{proof}
+
+The theorem is
+\leanref{Mlc/ParameterComponentApproximation.lean}{locallyConnectedSpace_iff_dyadicComponent_mem_nhds}.
+The unconditional lemma \lean{dyadicComponent_connected} proves
+connectedness of each component.  The difficult condition is that it be a
+neighbourhood; its connectedness follows from its definition.
+
+At an interior point of $S\subseteq\C$, sufficiently small disks lie in
+$S$ and supply connected neighbourhoods directly.  Boundary points are
+where this argument stops.  This explains why colouring known open
+components in the Mandelbrot picture does little to address the
+conjecture.
+
+\section{Compact shrinking and neighbourhood bases}
+
+\begin{lemma}[Compact singleton intersection]
+\label{lem:compact-singleton-basis}
+Let $(K_n)$ be a nested sequence of compact subsets of a Hausdorff space,
+with $x\in K_n$ for every $n$.  If
+\[
+ \bigcap_n K_n=\{x\},
+\]
+then every neighbourhood $U$ of $x$ contains some $K_n$.  If in addition
+each $K_n$ is a neighbourhood, the sequence is a neighbourhood basis.
+\end{lemma}
+
+\begin{proof}
+Choose an open neighbourhood $V$ of $x$ contained in $U$.  If no $K_n$
+were contained in $V$, all sets $K_n\setminus V$ would be nonempty,
+compact, and nested.  Compactness of $K_0$ would give a point in their
+intersection.  That intersection is
+\[
+ \left(\bigcap_n K_n\right)\setminus V=\{x\}\setminus V=\varnothing,
+\]
+a contradiction.  The final assertion is the definition of a basis.
+\end{proof}
+
+The general Hausdorff-space lemma is already implemented as
+\leanref{Mlc/Quadratic/Complex/ParaPuzzleBasis.lean}{MLC.Quadratic.hasBasis_nhds_of_iInter_singleton}.
+Its proof uses only compactness and nesting; it is valid independently
+of the frozen puzzle definitions elsewhere in that file.
+
+\begin{proposition}[Why open intersections are insufficient]
+\label{prop:open-singleton-counterexample}
+There are bounded open connected sets $Q_n\subseteq\C$ such that
+\[
+ 0\in Q_{n+1}\subseteq Q_n,\qquad
+ \bigcap_n Q_n=\{0\},
+\]
+but $(Q_n)$ is not a neighbourhood basis at $0$.
+\end{proposition}
+
+\begin{proof}
+Let $a_n=1/(n+1)$ and set
+\[
+ Q_n=B(0,a_n)\ \cup\
+      \{x+iy:0<x<2,\ 0<y<a_n\}.
+\]
+The disk and the rectangle are open, connected, and intersect, so their
+union is connected.  The sequence is nested and contains $0$.
+Every nonzero point eventually leaves the disks; a point in every
+rectangle would have $0<y\le\inf_n a_n=0$, which is impossible.
+Thus the intersection is $\{0\}$.  Yet $1+ia_n/2\in Q_n$ for every
+$n$, so no $Q_n$ lies in $B(0,1/2)$.
+
+The closures retain an entire interval:
+\[
+ \bigcap_n\overline{Q_n}=[0,2]\subset\R\subset\C.
+\]
+This is exactly the compactness obstruction absent from the open
+intersection statement.
+\end{proof}
+
+\begin{lemma}[Proper nesting repairs the closure gap]
+\label{lem:proper-nesting}
+For any sequence of subsets of a topological space, if
+$\overline{Q_{n+1}}\subseteq Q_n$ for every $n$, then
+\[
+ \bigcap_n\overline{Q_n}=\bigcap_n Q_n.
+\]
+\end{lemma}
+
+\begin{proof}
+One inclusion follows from $Q_n\subseteq\overline{Q_n}$.  For the other,
+a point in every closure belongs to
+$\overline{Q_{n+1}}\subseteq Q_n$ for each $n$.
+\end{proof}
+
+This is kernel-checked as
+\leanref{Mlc/Literature/Foundations.lean}{iInter_closure_eq_of_closure_succ_subset}.
+Thus bounded, properly nested parameter domains with singleton
+intersection satisfy the compact closure version of the shrinking
+criterion.  Without proper nesting, the closure intersection must be
+proved separately.
+
+\section{A model-independent parameter-puzzle theorem}
+
+\begin{definition}[Connected neighbourhood basis]
+A countable connected neighbourhood basis at $x\in X$ is a sequence
+$(V_n)$ such that each $V_n$ is a preconnected neighbourhood of $x$ and
+every neighbourhood of $x$ contains some $V_n$.
+\end{definition}
+
+Nesting is useful extra structure, but is unnecessary for this
+definition or for its local-connectivity conclusion.
+The Lean structure is
+\leanref{Mlc/Literature/Foundations.lean}{ConnectedNeighborhoodBasis}.
+
+\begin{theorem}[Parameter shrinking implication]
+\label{thm:parameter-shrinking}
+Let $c\in\M$ and let $Q_n\subseteq\C$ satisfy:
+\begin{enumerate}
+\item $Q_n$ is open, $c\in Q_n$, and $Q_{n+1}\subseteq Q_n$;
+\item $\overline{Q_n}$ is compact for every $n$;
+\item $\bigcap_n\overline{Q_n}=\{c\}$;
+\item $Q_n\cap\M$ is connected for every $n$.
+\end{enumerate}
+Then $\M$ is locally connected at $c$.
+\end{theorem}
+
+\begin{proof}
+The closures are nested compact neighbourhoods of $c$.
+Lemma~\ref{lem:compact-singleton-basis} gives their cofinality in the
+neighbourhood filter of the plane.  Since $Q_n\subseteq\overline{Q_n}$,
+the open sets $Q_n$ also refine every ambient neighbourhood.
+
+An open neighbourhood of $c$ in the subspace $\M$ has the form
+$W\cap\M$ for some ambient open neighbourhood $W$.  Choose $n$ with
+$Q_n\subseteq W$.  Then $Q_n\cap\M$ is a connected neighbourhood
+of $c$ in $\M$ contained in $W\cap\M$.  This is the required local
+basis.
+\end{proof}
+
+\paragraph{Lean correspondence.}
+The constructor
+\leanref{Mlc/Literature/Foundations.lean}{ParameterPuzzleBasis.of_compactClosure}
+derives the basis field from compact closure shrinking.  The theorem
+\leanref{Mlc/Literature/Foundations.lean}{localConnectivity_of_compact_parameterPieces}
+states the resulting implication directly.
+It imposes no Green-sublevel definition on $Q_n$.
+Its hypotheses can therefore be used by a future genuine graph-cut
+parapuzzle construction.
+
+If a proof already supplies the cofinal neighbourhood-basis condition,
+the shorter endpoint is
+\lean{localConnectivity_of_parameterPuzzleBasis}.  The structure
+\lean{ParameterPuzzleBasis} records openness, connected intersection
+with $\M$, containment of the parameter, cofinality, nesting, and
+singleton intersection.  Merely recording nesting and a singleton open
+intersection would omit an essential hypothesis.
+
+\section{Components of decreasing compact sets}
+
+\begin{lemma}[Compact components]
+A connected component of a compact subset of a metric space is compact.
+\end{lemma}
+
+\begin{proof}
+The component is closed in the compact subspace.  Its inclusion into the
+ambient space is continuous, so its ambient image is compact.
+\end{proof}
+
+\begin{theorem}[Components commute with compact decreasing limits]
+\label{thm:component-intersection}
+Let $(F_N)$ be a decreasing sequence of compact sets in a metric space,
+and assume $x\in F_N$ for every $N$.  Then
+\[
+ \operatorname{Comp}_x\left(\bigcap_N F_N\right)
+     =\bigcap_N\operatorname{Comp}_x(F_N).
+\]
+\end{theorem}
+
+\begin{proof}
+Monotonicity of components gives the left-to-right inclusion.
+For the reverse inclusion, the components on the right are compact,
+connected, nested, and share $x$.  Their intersection is connected:
+if two disjoint relatively open sets separated it, compactness would
+force that separation at some finite level, contradicting connectedness
+there.  The intersection is contained in every $F_N$ and contains $x$.
+Maximality of the component in $\bigcap_N F_N$ therefore gives the
+reverse inclusion.
+\end{proof}
+
+The two results are
+\leanref{Mlc/ParameterComponentApproximation.lean}{isCompact_component}
+and
+\leanref{Mlc/ParameterComponentApproximation.lean}{component_iInter_eq}.
+The compactness hypothesis is doing actual work: general connected sets
+can lose connectedness under intersections.
+
+\section{Uniform outer buffers}
+
+For a compact decreasing outer system $O_N$ with limit $S$, define
+\[
+ C_N(x,r)=\operatorname{Comp}_x
+                  (O_N\cap\overline B(x,r)),\qquad x\in S.
+\]
+
+\begin{definition}[Uniform outer buffer]
+\label{def:uniform-outer-buffer}
+The pair $(S,O)$ satisfies $\mathrm{BUF}(S,O)$ if, for every $x\in S$
+and $\varepsilon>0$, there are radii
+\[
+ 0<\delta<r<\varepsilon
+\]
+such that
+\[
+ \forall N\ \exists L\ge N,\qquad
+ O_L\cap\overline B(x,\delta)\subseteq C_N(x,r).
+\]
+\end{definition}
+
+The radii are chosen before $N$.  The deeper stage $L$ may depend on
+$N$.  This quantifier order makes a single neighbourhood survive the
+entire inverse limit.
+
+\begin{theorem}[Buffer implies local connectedness]
+\label{thm:buffer-lc}
+If $O_N$ are compact and decreasing, $\bigcap_N O_N=S$, and
+$\mathrm{BUF}(S,O)$ holds, then $S$ is locally connected.
+\end{theorem}
+
+\begin{proof}
+Fix $x\in S$ and a neighbourhood $U$ in $S$.  Choose
+$\varepsilon>0$ with $S\cap B(x,\varepsilon)\subseteq U$, and obtain
+$r,\delta$ from the buffer condition.  Set
+\[
+ D=\bigcap_N C_N(x,r).
+\]
+By Theorem~\ref{thm:component-intersection},
+$D=\operatorname{Comp}_x(S\cap\overline B(x,r))$, so $D$ is connected
+and is contained in $U$.
+
+For $y\in S\cap B(x,\delta)$ and each $N$, choose the index $L$
+provided by the buffer condition.  Since $S\subseteq O_L$, that
+condition places $y$ in $C_N(x,r)$.  Hence
+$S\cap B(x,\delta)\subseteq D$.  The connected set $D$ is therefore a
+neighbourhood of $x$ in $S$, as required.
+\end{proof}
+
+This is
+\leanref{Mlc/ParameterComponentApproximation.lean}{locallyConnectedSpace_of_uniformOuterBuffer}.
+For the finite-orbit stages of $\M$, it yields the existing conditional
+root.  Compactness and the exact outer limit are already proved; the
+global buffer itself is an additional unproved geometric input.
+
+\section{Small continua and the diameter modulus}
+
+\begin{definition}[Continuum and diameter modulus]
+\label{def:component-modulus}
+A continuum is a nonempty compact connected metric space.
+For a nonempty compact metric space $X$ and $r>0$, write
+$\diam C=\sup_{u,v\in C}d(u,v)$ and define
+\[
+ \omega_X(r)=
+ \sup_{\substack{x,y\in X\\d(x,y)<r}}
+ \inf\{\diam C:C\subseteq X\text{ a continuum},\ x,y\in C\}.
+\]
+The infimum of the empty family is $+\infty$.
+\end{definition}
+
+\begin{theorem}[Uniform small-continuum criterion]
+\label{thm:metric-lc}
+For nonempty compact metric $X$, local connectedness is equivalent to:
+for every $\varepsilon>0$ there is $\delta>0$ such that any
+$x,y\in X$ with $d(x,y)<\delta$ lie in a continuum of diameter less
+than $\varepsilon$.  Equivalently,
+\[
+ \lim_{r\downarrow0}\omega_X(r)=0.
+\]
+\end{theorem}
+
+\begin{proof}
+Assume local connectedness.  For each $a\in X$, choose a connected
+neighbourhood $V_a\subseteq B_X(a,\varepsilon/4)$, and an open
+neighbourhood $U_a\subseteq V_a$ of $a$.  A finite subfamily of the
+$U_a$ covers $X$.  By the Lebesgue-number lemma it has a number
+$\delta>0$ such that every pair at distance less than $\delta$ lies
+in one member.  The closure of the corresponding $V_a$ is compact
+and connected and has diameter at most $\varepsilon/2$.
+
+Conversely, choose a ball $B_X(x,\varepsilon)$ inside a given
+neighbourhood.  Apply the small-continuum condition with diameter
+bound $\varepsilon$.  Every $y\in B_X(x,\delta)$ can be joined to
+$x$ by a continuum contained in $B_X(x,\varepsilon)$.  Therefore
+the component of that ball containing $x$ contains
+$B_X(x,\delta)$ and is a connected neighbourhood.
+The modulus formulation follows directly by choosing a strictly
+smaller diameter bound before taking the infimum and supremum.
+\end{proof}
+
+This quantitative criterion is also used in
+\lean{docs/uniform_geometric_mlc.tex}.  The proof above is included in
+the mathematical account; the current Lean root uses the component
+criterion rather than claiming that this particular extended-real
+modulus has already been implemented.
+
+\section{Continuous retractions}
+
+\begin{definition}[Retraction]
+Maps $i:Y\to X$ and $r:X\to Y$ form a continuous retraction if both
+are continuous and $r\circ i=\id_Y$.
+\end{definition}
+
+\begin{theorem}[Local connectedness descends through a retraction]
+\label{thm:retraction-lc}
+If $X$ is locally connected and $i,r$ form a continuous retraction,
+then $Y$ is locally connected.
+\end{theorem}
+
+\begin{proof}
+Fix $y\in Y$ and $U\in\mathcal N_Y(y)$.  The preimage
+$r^{-1}(U)$ is a neighbourhood of $i(y)$.  Choose a connected
+neighbourhood $W$ of $i(y)$ contained in that preimage.
+The image $r(W)$ is connected and lies in $U$.
+Continuity of $i$ makes $i^{-1}(W)$ a neighbourhood of $y$, and
+\[
+ i^{-1}(W)\subseteq r(W)
+\]
+because $r(i(z))=z$.  Thus $r(W)$ is a connected neighbourhood
+of $y$ inside $U$.
+\end{proof}
+
+The exact result is
+\leanref{Mlc/RetractionLocalConnectivity.lean}{locallyConnectedSpace_of_continuous_retraction}.
+It requires neither compactness nor separation assumptions.
+The same file proves that convex subsets of real normed spaces are
+locally connected and obtains the conditional Mandelbrot conclusion
+from a supplied retraction of a convex parameter domain.
+Constructing such a retraction is the remaining input; taking an
+arbitrary continuous image would not supply the right-inverse
+argument used in this proof.

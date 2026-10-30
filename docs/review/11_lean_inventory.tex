@@ -1,4 +1,7 @@
-\chapter{Lean inventory: declarations and mathematical meaning}
+\chapter[Lean declaration inventory]{Lean inventory: declarations and mathematical meaning}
+\label{chap:lean-inventory}
+\begingroup
+\raggedright
 
 \section{How to read the formalization}
 
@@ -13,6 +16,9 @@ The repository uses three kinds of declarations:
 The distinction is essential.  A structure such as
 \lean{RootInput} or \lean{PhaseParameterPuzzleData} is not an axiom merely
 because a theorem accepts it as an argument.
+Conversely, kernel acceptance alone does not establish that a definition
+represents its classical namesake.  Chapter~\ref{chap:frozen-audit}
+checks that distinction explicitly.
 
 \section{Public roots and exact Mandelbrot approximations}
 
@@ -36,6 +42,9 @@ theorems
 \lean{Categorical.Mandelbrot.iInter_outerOrbitSet_eq_set} prove the two exact
 limit identities.  Compactness is
 \lean{Categorical.Mandelbrot.isCompact_outerOrbitSet}.
+The theorem \lean{Categorical.Mandelbrot.innerOrbitSet_eq_set_of_two_le}
+shows that every inner orbit stage with bound at least $2$ already
+equals $\M$; these stages retain infinitely many orbit conditions.
 \end{description}
 
 \section{Topology and local-connectivity bridges}
@@ -44,6 +53,13 @@ limit identities.  Compactness is
 \item[\lean{Mlc/LocalConnectivity.lean}]
 Transfers connectedness between a subspace and its image and proves the
 connected-basis lemma used by parameter puzzles.
+
+\item[\lean{Mlc/Literature/Foundations.lean}]
+Defines \lean{ParameterPuzzleBasis} independently of the frozen
+puzzle construction.  The constructor
+\lean{ParameterPuzzleBasis.of_compactClosure} and theorem
+\lean{localConnectivity_of_compact_parameterPieces} prove the
+compact-closure endpoint of Chapter~\ref{chap:topological-foundations}.
 
 \item[\lean{Mlc/ParameterComponentApproximation.lean}]
 Defines \lean{ParameterComponent.UniformOuterBuffer} and proves
@@ -88,9 +104,17 @@ Contains the certified $c=i$, $n=16$ obstruction.  The theorem
 full-sublevel model from being mistaken for the Yoccoz graph-cut model.
 
 \item[\lean{Mlc/Quadratic/Complex/YoccozConformal.lean}]
-Proves the conformal Yoccoz shrinking theorem from divergence of puzzle
-annulus moduli:
-\lean{Quadratic.yoccoz_theorem_conformal}.
+Contains the legacy implication
+\lean{Quadratic.yoccoz_theorem_conformal}.  Its ``moduli'' are
+Gaussian areas, whose required divergence is impossible.
+It is a valid implication with an empty premise, rather than a
+formalization of the classical conformal theorem.
+
+\item[\lean{Mlc/Literature/ModelAudit.lean}]
+Proves \lean{summable_weightedArea_differences},
+\lean{not_finitelyRenormalizable_in_frozenModel}, and
+\lean{not_nonempty_satelliteAPrioriCertificate}.
+These are semantic obstructions within the existing sound logic.
 
 \item[\lean{Mlc/Quadratic/Complex/ParaPuzzleBasis.lean}]
 Shows how connected shrinking parameter pieces produce a neighbourhood basis
@@ -101,28 +125,35 @@ in the Mandelbrot subspace.
 
 \begin{description}
 \item[\lean{Mlc/RenormalizationTypes.lean}]
-Defines primitive, finite/infinite renormalization predicates and the
-modulus-summability interface.
+Contains legacy predicates: the primitive name packages local
+connectivity itself, the finite name denotes an empty class, and
+the infinite name packages weighted-area summability.  None may
+be identified with classical combinatorial renormalization by name.
 
 \item[\lean{Mlc/MoleculeRenormalizationTower.lean}]
-Defines \lean{RenormalizationTower}, chooses its relations, and proves
-monotonicity of cumulative periods.
+Defines the frozen \lean{RenormalizationTower}, chooses its relations,
+and proves monotonicity of its additive cumulative index.  Genuine
+relative return periods multiply instead.
 
 \item[\lean{Mlc/SatelliteRenormalizationTower.lean}]
 Specializes towers to satellite-renormalizable parameters.
 
 \item[\lean{Mlc/MoleculeToParameterShrink.lean}]
-Proves the principal-nest finite-union decomposition and the bridge from
-uniform principal-nest bounds to shrinking parameter puzzles.
+Proves a finite-union decomposition of frozen differences and an
+arithmetic transfer.  The positive uniform weighted-area input is
+refuted by the audit; conformal modulus has no such general
+finite-additivity rule.
 
 \item[\lean{Mlc/Literature/Combinatorics.lean}]
 Adds explicit bounded-type, period-doubling, primitive/satellite/neutral
 profile predicates and the arithmetic divergence theorem
-\lean{not_summable_of_uniform_lower_bound}.
+\lean{not_summable_of_uniform_lower_bound}.  Period doubling is
+satellite; \lean{relativePeriodProduct_periodDoubling} proves its
+multiplicative period $2^n$.
 
 \item[\lean{Mlc/Literature/Renormalization.lean}]
-Packages the a priori-bound certificate and proves its pointwise MLC
-conclusion once connected parameter pieces are supplied.
+Retains the frozen a priori-bound certificate and its conditional
+MLC implication for compatibility.  The certificate has no instances.
 
 \item[\lean{Mlc/Literature/Dudko.lean}]
 Provides source-specific contracts for bounded-type satellite, Feigenbaum,
@@ -210,7 +241,8 @@ construction has a small theorem surface:
       harmonicity and minimum-principle tools;
 \item \lean{Mlc/Quadratic/Complex/GreenSublevel.lean} and
       \lean{Mlc/Quadratic/Complex/ConformalGroetzsch.lean} connect Green
-      sublevels with modulus arguments.
+      sublevels with the inherited weighted-area arguments; the latter
+      must not be read as conformal modulus.
 \end{itemize}
 The formal review treats these as analytic foundations, not as an automatic
 proof of boundary landing or parameter-plane realization.
@@ -252,14 +284,15 @@ The current codebase therefore proves the following hierarchy:
 \Downarrow\\
 \text{conditional buffer, finite-cover, retraction, and carving theorems}\\
 \Downarrow\\
-\text{pointwise MLC from explicit puzzle/renormalization certificates}\\
+\text{pointwise MLC from explicit connected parameter bases}\\
 \Downarrow\\
 \text{global MLC only if one of the open existence packages is supplied}.
 \end{gathered}
 \]
-It does not contain a project-level axiom asserting MLC, and the categorical
-Green-sublevel intersection proposal is explicitly refuted.  This is the
-correct formal boundary relative to the cited literature: known published
-cases are represented by source-specific contracts, while the analytic
-estimates and their parameter-plane realization remain the obligations that
-the future formalization must discharge.
+It also proves that the frozen finite class is empty and its satellite
+lower-bound certificate is impossible.  It contains no project-level
+axiom asserting MLC.  Known published cases are represented by
+source-specific contracts, rather than completed analytic proofs.
+The classical definitions, conformal estimates, and their
+parameter-plane realization remain formalization obligations.
+\par\endgroup

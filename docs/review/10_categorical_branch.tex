@@ -66,7 +66,7 @@ These are theorems
 they show that the categorical pullback is not an abstract replacement for
 set intersection: its image is exactly the ordinary set intersection.
 
-\section{The finite-orbit tower}
+\section{Orbit-bound and finite-orbit towers}
 
 \begin{definition}[Outer and inner orbit approximations]
 \label{def:categorical-orbit-tower}
@@ -97,6 +97,12 @@ The corresponding theorem names are
 \end{center}
 
 \begin{remark}
+The inner definition contains infinitely many orbit inequalities.
+Indeed, $I_N=\M$ for every $N\ge2$, by the universal critical-orbit
+bound.  This is
+\leanref{Mlc/CategoricalMandelbrot.lean}{innerOrbitSet_eq_set_of_two_le};
+it must be distinguished from finite trapping certificates.
+
 The outer and inner limits agree as sets for different reasons.  This
 agreement does not say that the finite stages are connected, and it does not
 imply local connectivity of the limit.  The missing information is
@@ -180,13 +186,23 @@ is implemented by
 and
 \lean{FiniteComponent.rootInput_of_finiteComponentCriterion}.
 
-The independent uniform-geometric branch assumes a tower of maps
+The independent uniform-geometric branch uses the compact convex
+square $D=[-2,2]^2\supseteq\M$ and continuous maps
 \[
- R_n:D\longrightarrow D,\qquad
- R_n|_{O_{N_n}}=\id,\qquad
- \|R_{n+1}-R_n\|_\infty\le C2^{-n}.
+ \begin{gathered}
+ N_n\ge n,\qquad R_n:D\longrightarrow D,\qquad
+ R_n|_{O_{N_n}}=\id,\\
+ \forall x\in D\quad\exists y\in O_{N_n},\qquad
+ |R_n(x)-y|\le2^{-n},\\
+ \|R_{n+1}-R_n\|_\infty\le8\cdot2^{-n}.
+ \end{gathered}
 \]
-The limit is a retraction $D\to\M$.  The proved implication is
+The summable adjacent-map bound gives a continuous uniform limit
+$R$, with $\|R_n-R\|_\infty\le16\cdot2^{-n}$.
+The proximity field places $R(x)$ in every closed outer stage,
+because $N_n\ge n$ and the proximity error tends to zero.
+The fixing field gives $R|_{\M}=\id$.
+Thus the limit is a retraction $D\to\M$.  The proved implication is
 \[
  \mathsf{UG}\Longrightarrow
  \text{continuous retraction }D\to\M
@@ -263,6 +279,12 @@ with exact image $V_n(c)$ and is converted to
 \lean{Efimov.DouadyHubbardYoccozCategoricalCarvingData}.
 The existence proposition is
 \lean{Efimov.DouadyHubbardYoccozCategoricalTheorem}.
+Its universal version is refuted: it would imply the false
+Green-intersection statement.  Likewise a universal family of the
+stronger \lean{SpaceHolomorphicCarvingData} would contradict the
+checked $c=i$, $n=16$ obstruction.  Individual carving data and
+the connected-image implication remain meaningful; their universal
+frozen realization is impossible.
 
 The Efimov-inspired part is intentionally limited by available foundations:
 \begin{itemize}
@@ -283,18 +305,22 @@ missing parameter carving.
 The correct relation to the literature is:
 \[
 \begin{gathered}
-\text{Douady--Hubbard/Yoccoz phase--parameter theorem}\\
+\text{source-defined Douady--Hubbard/Yoccoz phase--parameter machinery}\\
 \Downarrow\\
-\text{carving or connected shrinking parapuzzle data}\\
+\text{genuine connected parameter pieces and a shrinking basis}\\
 \Downarrow\\
-\text{topological connected-image theorem in Lean}\\
+\text{model-independent topological endpoint in Lean}\\
 \Downarrow\\
-\text{pointwise MLC and, after uniformization, the global target}.
+\text{pointwise MLC; global MLC after covering every parameter}.
 \end{gathered}
 \]
-The categorical layer proves the third line.  It does not supply the first
-line, and the counterexample proves that the frozen full-sublevel version of
-the first line is false.
+The source construction uses moving graphs and marked
+motions~\cite{DH,HubbardYoccoz,LyubichIII}.  A suitable continuous
+surjection can express a connectedness step categorically when
+one is actually available.  The historical ``Douady--Hubbard/Yoccoz''
+name on a frozen carving interface does not identify it with that
+classical construction.  In particular, the literature does not
+supply the refuted universal frozen carving.
 \end{conditionalstep}
 
 \section{Categorical status ledger}
@@ -320,6 +346,6 @@ Frozen Green intersection &
 refuted\\
 Space-holomorphic carving &
 \lean{Efimov.SpaceHolomorphicCarvingData} &
-open input\\
+universal family refuted\\
 \end{tabular}
 \end{center}

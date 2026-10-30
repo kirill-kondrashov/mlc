@@ -41,13 +41,13 @@ def IsBoundedTypeSatelliteProfile (R : RenormalizationCombinatorics) : Prop :=
   IsSatelliteProfile R ∧ BoundedType R.rotation
 
 def IsPeriodDoublingProfile (R : RenormalizationCombinatorics) : Prop :=
-  IsPrimitiveProfile R ∧ ∀ n, R.period n = 2
+  IsSatelliteProfile R ∧ ∀ n, R.period n = 2
 
 def IsBoundedPeriodDoublingProfile
     (R : RenormalizationCombinatorics) : Prop :=
   IsPeriodDoublingProfile R ∧ BoundedType R.rotation
 
-/-- Cumulative return depth of a discrete renormalization profile. -/
+/-- Additive bookkeeping depth, distinct from the period of a nested return map. -/
 def cumulativeDepth (R : RenormalizationCombinatorics) : ℕ → ℕ
   | 0 => 0
   | n + 1 => cumulativeDepth R n + R.period n
@@ -72,6 +72,22 @@ theorem cumulativeDepth_periodDoubling
       simp [cumulativeDepth]
   | succ n ih =>
       simp [cumulativeDepth, h, ih, Nat.mul_succ]
+
+/-- Period in the original dynamics, obtained by composing relative return times. -/
+def relativePeriodProduct (R : RenormalizationCombinatorics) : ℕ → ℕ
+  | 0 => 1
+  | n + 1 => relativePeriodProduct R n * R.period n
+
+theorem relativePeriodProduct_periodDoubling
+    (R : RenormalizationCombinatorics)
+    (h : ∀ n, R.period n = 2) :
+    ∀ n, relativePeriodProduct R n = 2 ^ n := by
+  intro n
+  induction n with
+  | zero =>
+      simp [relativePeriodProduct]
+  | succ n ih =>
+      simp [relativePeriodProduct, h, ih, pow_succ]
 
 theorem not_summable_of_uniform_lower_bound
     {a : ℕ → ℝ} {μ : ℝ}

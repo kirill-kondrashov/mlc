@@ -55,8 +55,8 @@ def PointwiseMLCResult (parameterClass : ℂ → Prop) : Prop :=
   ∀ (c : ℂ) (hc : c ∈ MLC.mandelbrotSet),
     parameterClass c → MandelbrotLocallyConnectedAt c hc
 
-/-- The finite-level data needed to turn Yoccoz parapuzzles into a local
-connectivity proof at one parameter. -/
+/-- Legacy data for the frozen translated Green-sublevel pieces.
+These pieces are distinct from graph-cut Yoccoz parapuzzles. -/
 structure ParaPuzzleCertificate
     (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet) : Prop where
   connected :
@@ -74,7 +74,8 @@ theorem localConnectivity_of_paraPuzzleCertificate
   exact MLC.preconnected_nhds_of_shrink_of_connected_at
     c hc data.connected data.shrinks
 
-/-- The unresolved existence statement for a Yoccoz-style parameter basis. -/
+/-- A legacy existence statement for the frozen parameter pieces.
+`YoccozPhaseParameterResult` is the separate preliminary phase--parameter interface. -/
 def YoccozParameterPuzzleResult : Prop :=
   ∀ (c : ℂ) (hc : c ∈ MLC.Quadratic.MandelbrotSet),
     Nonempty (ParaPuzzleCertificate c hc)
@@ -111,7 +112,8 @@ def NeutralTowerRigidity
     (Tower : Type*) (sameCombinatorics conformallyConjugate : Tower → Tower → Prop) : Prop :=
   ∀ a b, sameCombinatorics a b → conformallyConjugate a b
 
-/-- The local puzzle-shrinkage theorem already available in this repository. -/
+/-- A legacy weighted-area divergence implication. `ModelAudit` proves that
+its premise has no instances; it is not the classical Yoccoz theorem. -/
 theorem yoccoz_puzzle_shrinkage (c : ℂ)
     (h : MLC.FinitelyRenormalizable c) :
     (⋂ n, MLC.Quadratic.DynamicalPuzzlePiece c n 0) = {0} :=
@@ -134,6 +136,7 @@ theorem uniformOuterBuffer_implies_globalMLC :
 
 inductive ProofStatus
   | provedInLibrary
+  | modelOnly
   | interfaceOnly
   | openObligation
   deriving Repr, DecidableEq
@@ -246,8 +249,8 @@ def shenHybridClasses : Reference :=
 
 def reviewedResults : List ResultRecord :=
   [ { key := "yoccoz-puzzle-shrinkage"
-      statement := "Divergent puzzle-annulus moduli force the critical puzzle pieces to shrink to the critical point."
-      status := .provedInLibrary
+      statement := "The frozen weighted-area divergence implication is kernel-checked, but ModelAudit proves its premise impossible. Classical conformal-modulus shrinking remains to be formalized."
+      status := .modelOnly
       reference := yoccoz }
   , { key := "douady-hubbard-phase-parameter"
       statement := "The phase--parameter and external-ray machinery needed for parameter puzzles."

@@ -1,5 +1,6 @@
 import Mlc.Core
 import Mlc.GreenSublevelIntersectionCounterexample
+import Mlc.Literature.ModelAudit
 import Lean
 
 open Lean Meta
@@ -8,7 +9,8 @@ def main : IO UInt32 := do
   initSearchPath (← findSysroot)
   let env ← importModules #[
     { module := `Mlc.Core },
-    { module := `Mlc.GreenSublevelIntersectionCounterexample }
+    { module := `Mlc.GreenSublevelIntersectionCounterexample },
+    { module := `Mlc.Literature.ModelAudit }
   ] {}
 
   let name := ``MLC.mlc_conjecture
@@ -16,6 +18,13 @@ def main : IO UInt32 := do
   let negationName := ``MLC.not_greenSublevelIntersectionCategoricalData
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice]
+  let literatureNames := #[
+    ``MLC.Literature.localConnectivity_of_compact_parameterPieces,
+    ``MLC.Categorical.Mandelbrot.innerOrbitSet_eq_set_of_two_le,
+    ``MLC.Literature.relativePeriodProduct_periodDoubling,
+    ``MLC.Literature.ModelAudit.not_finitelyRenormalizable_in_frozenModel,
+    ``MLC.Literature.ModelAudit.not_nonempty_satelliteAPrioriCertificate
+  ]
 
   let coreContext : Core.Context :=
     { fileName := "<check_axioms>", fileMap := default }
@@ -27,6 +36,11 @@ def main : IO UInt32 := do
     pure (rootAxioms, categoricalAxioms)
   let negationMetaM : MetaM (Array Name) :=
     Lean.collectAxioms negationName
+  let literatureMetaM : MetaM (Array (Name × Array Name)) := do
+    let mut results := #[]
+    for declaration in literatureNames do
+      results := results.push (declaration, ← Lean.collectAxioms declaration)
+    pure results
 
   try
     let (((axioms, categoricalAxioms), _), _) ←
@@ -35,6 +49,9 @@ def main : IO UInt32 := do
     let ((negationAxioms, _), _) ←
       (negationMetaM.run).run coreContext coreState |>.toIO
         (fun _ => IO.userError "Negation axiom check failed")
+    let ((literatureAxioms, _), _) ←
+      (literatureMetaM.run).run coreContext coreState |>.toIO
+        (fun _ => IO.userError "Literature axiom check failed")
 
     let axiomsList := axioms.toList
     let categoricalAxiomsList := categoricalAxioms.toList
@@ -75,7 +92,16 @@ def main : IO UInt32 := do
     else
       IO.println s!"✅ The proof of '{negationName}' is free of 'sorry'."
 
-    if rootViolation || negationViolation then
+    let mut literatureViolation := false
+    for (declaration, declarationAxioms) in literatureAxioms do
+      let forbidden := unexpected declarationAxioms.toList
+      if !forbidden.isEmpty then
+        literatureViolation := true
+        IO.println s!"❌ Unexpected axioms for '{declaration}': {forbidden}"
+    if !literatureViolation then
+      IO.println "✅ Literature foundations and frozen-model audit use only permitted axioms."
+
+    if rootViolation || negationViolation || literatureViolation then
       IO.println "❌ Axiom frontier violation for `MLC.mlc_conjecture`."
       for ax in unexpected axiomsList do
         IO.println s!"- Unexpected axiom: {ax}"

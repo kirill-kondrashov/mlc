@@ -21,6 +21,19 @@ The current manifest includes the 2025--2026 additions
 mathematical role separately from the older MLC-case papers: some are direct
 local-connectivity theorems, while others provide neutral-renormalization,
 rigidity, or hybrid-class machinery.
+The preprint \lean{2606.27272} also cites \emph{Elephant puzzles}
+as in preparation for a puzzle Teichmüller-diameter input.
+An unpublished dependency is recorded as such; no downloadable
+source archive or proof is invented for it.
+
+\section{Books and research-paper series}
+
+Lyubich's author page lists the online \emph{Conformal Geometry and
+Dynamics} book as volumes I--II.  The local 2013 ICTP notes are a
+separate manuscript version.  \emph{Dynamics of quadratic
+polynomials, III} and \emph{A priori bounds, IV: Elephant Eyes}
+belong to research-paper series, not additional volumes of that book.
+The source inventory preserves these distinctions.
 
 \section{Removal of duplicates}
 
@@ -33,6 +46,8 @@ they document failed proof attempts and rejected reductions.
 
 \begin{enumerate}
 \item Normalize the source inventory and verify all arXiv versions.
+\item Replace the audited Gaussian-area proxy with genuine conformal
+      modulus and retain the obstruction theorems as regression guards.
 \item Finish the common analytic foundations: complex derivatives,
       polynomial-like maps, Green functions, Böttcher coordinates, and
       modulus.
@@ -49,7 +64,9 @@ they document failed proof attempts and rejected reductions.
       explicit proposition.
 \end{enumerate}
 
-The immediate deliverable is intentionally modest but durable: a review that
-states the frontier correctly, a reproducible source pipeline, and Lean
-names for the results being formalized.  Subsequent commits can then replace
-each interface with a theorem without changing the public review vocabulary.
+The present book increment adds mathematical foundations,
+compact-closure endpoints, and a checked model audit.  It remains
+short of complete literature coverage and of the planned full-length
+treatment.  Some frozen public interfaces require replacement,
+rather than an existence proof: the audit has established that their
+inputs are impossible.

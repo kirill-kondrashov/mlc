@@ -4,10 +4,10 @@ import Mlc.MoleculeToParameterShrink
 /-!
 # Renormalization-facing MLC contracts
 
-This module connects the existing satellite renormalization and principal-nest
-developments to the literature-facing pointwise MLC target.  The analytic
-renormalization bounds remain hypotheses; the topological and modulus
-implications are proved.
+This module preserves the legacy satellite/principal-nest implications.
+`Literature.ModelAudit` proves that their weighted-area lower-bound input
+cannot exist. Genuine conformal-modulus bounds and graph-cut parameter
+pieces require a separate construction.
 -/
 
 namespace MLC
@@ -17,8 +17,8 @@ open Filter Set Topology
 
 noncomputable section
 
-/-- A satellite renormalization certificate carrying the uniform principal
-nest modulus estimate used by the Lyubich/Dudko route. -/
+/-- A legacy frozen-model certificate. Its lower-bound field is refuted in
+`Literature.ModelAudit`; it is not a certificate for a published theorem. -/
 structure SatelliteAPrioriCertificate (c : ℂ) where
   tower : SatelliteRenormalizableTower c
   uniformBound :

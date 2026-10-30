@@ -26,24 +26,37 @@ the choice is recorded in `00README.json`.
 | Key | Source | Role |
 | --- | --- | --- |
 | `douady-hubbard-orsay` | Douady--Hubbard, *Exploring the Mandelbrot Set: The Orsay Notes* | phase--parameter, external rays, foundational topology |
-| `yoccoz-1995` | Yoccoz, *Theoreme de Siegel...*, Asterisque 231 | finitely-renormalizable puzzle/modulus theorem |
+| `douady-hubbard-polynomial-like` | Douady--Hubbard, *On the dynamics of polynomial-like mappings*, Ann. Sci. ENS 18 (1985), 287--343 | polynomial-like maps and straightening |
+| `hubbard-yoccoz` | Hubbard, *Local connectivity of Julia sets and bifurcation loci: three theorems of J.-C. Yoccoz* | exposition of the puzzle and MLC theorems |
+| `yoccoz-1995` | Yoccoz, *Theoreme de Siegel...*, Asterisque 231 | Siegel/Brjuno foundation; distinct from the Hubbard puzzle exposition |
 | `lyubich-geometry-1993` | Lyubich, *Geometry of quadratic polynomials...*, arXiv:math/9309215 | rigidity, moduli, local connectivity |
 | `lyubich-dynamics-1997` | Lyubich, *Dynamics of quadratic polynomials, I--II* | renormalization and a priori bounds |
 | `lyubich-dynamics-iii` | Lyubich, *Dynamics of quadratic polynomials, III* | parapuzzles and SBR measures |
-| `lyubich-conformal-notes` | Lyubich, *Conformal Geometry and Dynamics of Quadratic Polynomials* | lecture-note exposition and notation |
-| `dudko-lyubich-satellite` | Dudko--Lyubich, bounded-type satellite parameters | proved MLC case |
+| `lyubich-conformal-notes` | Lyubich, *Conformal Geometry and Dynamics of Quadratic Polynomials*, ICTP manuscript (2013), 256 PDF pages | existing local lecture-note version |
+| `lyubich-conformal-book` | Lyubich, *Conformal Geometry and Dynamics of Quadratic Polynomials*, online book I--II | author-maintained book manuscript |
+| `dudko-lyubich-satellite` | Dudko--Lyubich, some bounded-type satellite parameters | source-specific MLC construction |
 | `dudko-lyubich-feigenbaum` | Dudko--Lyubich, *MLC at Feigenbaum points* | proved MLC case |
 | `dudko-mlc-2025` | Dudko, *On the MLC Conjecture...* | current status and renormalization roadmap |
 | `kahn-kapiamba-lyubich-parabolic-primitive` | *MLC for parabolically bounded primitive renormalization* | 2026 MLC case |
+| `elephant-puzzles` | Dudko--Kapiamba--Lyubich--Peterson, *Elephant puzzles*, in preparation as cited in arXiv:2606.27272v1 | puzzle Teichmuller-diameter dependency; no public manuscript specified there |
+| `kahn-lyubich-elephant-eyes` | Kahn--Lyubich, *A priori bounds ... IV. Elephant Eyes*, arXiv:2601.21905 | separate research-paper series |
 | `dudko-lim-neutral-bubbles` | *Uniform bounds for bubbles of neutral quadratic polynomials* | neutral geometry |
 | `dudko-lim-lyubich-neutral-rigidity` | *Rigidity of the attractor of neutral renormalization* | neutral rigidity |
 | `shen-hybrid-classes` | *Complex Analytic Structure of Hybrid Classes...* | hybrid-class analytic base |
 | `dudko-luo-lyubich-neutral-bounds` | *Uniform a priori bounds for neutral renormalization. Variation II* | neutral a priori bounds |
 
-The label “Volume III” refers to the Astérisque paper above.  The review
-does not assume that there is a canonical standalone “Volume IV”: later
-results are cited as separate papers until a primary source establishes a
-formal volume label.
+Lyubich's [publication list](https://www.math.stonybrook.edu/~mlyubich/papers/index.html)
+lists the [online book](https://www.math.stonybrook.edu/~mlyubich/book.pdf)
+as volumes I--II. The 2013 ICTP PDF already in this directory is a separate
+manuscript version. The Astérisque paper's “III” and the a priori-bounds
+series' “IV” are research-article numbers, rather than extra book volumes.
+Likewise, *Elephant puzzles* and *Elephant Eyes* are different works.
+
+The book now records the Gaussian-area obstruction proved in
+[`Mlc/Literature/ModelAudit.lean`](../Mlc/Literature/ModelAudit.lean).
+Classical source theorems must be formalized using genuine conformal
+modulus and graph-cut pieces; their proofs cannot supply the refuted
+frozen lower-bound certificate.
 
 ## Storage policy
 

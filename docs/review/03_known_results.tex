@@ -1,4 +1,5 @@
 \chapter{Known parameter classes}
+\label{chap:known-classes}
 
 \section{Classical classes}
 
@@ -20,7 +21,42 @@ are:
 
 The exact hypotheses matter.  The review will not use the informal phrase
 ``all regular parameters'' as a Lean theorem name; each class receives a
-predicate and a proof obligation.
+predicate and a proof obligation.  The classical puzzle conclusions are
+recorded in Hubbard's exposition of Yoccoz's
+theorems~\cite{HubbardYoccoz}; Dudko's
+survey~\cite[Section~2]{DudkoMLC} explains their reduction of the
+remaining global problem to nested renormalization copies.
+The legacy code predicate \lean{FinitelyRenormalizable} has a different,
+empty meaning, as proved in Chapter~\ref{chap:frozen-audit}.
+
+\begin{definition}[Finite renormalization depth]
+A quadratic polynomial is finitely renormalizable when the lengths
+of its successive nontrivial marked quadratic-like
+renormalization chains are bounded.  A nonrenormalizable polynomial
+has depth zero.  Each step has relative period at least two and uses
+the genuine little-Julia-set orbit combinatorics of
+Definition~\ref{def:quadratic-renormalization}.
+\end{definition}
+
+\begin{theorem}[Yoccoz: the repelling finite-depth case]
+\label{thm:classical-yoccoz-finite}
+Let $c\in\M$.  Suppose every periodic cycle of $f_c$ is repelling
+and $f_c$ is finitely renormalizable.  Then $J_c$ is locally
+connected and $\M$ is locally connected at $c$.
+\end{theorem}
+
+This is a classical source theorem~\cite{HubbardYoccoz,DudkoMLC},
+whose proof uses graph-cut puzzles, their geometric shrinking, and
+the separate parameter-plane construction.  The two conclusions
+concern different spaces; one is not obtained by merely translating
+the other.  Parabolic parameters and attracting interiors belong
+to the additional classical cases above.  The source theorem
+retains its stated hypotheses, rather than asserting the same
+proof for a Cremer or Siegel cycle.
+
+The theorem is included here with its mathematical definitions.
+Its complete analytic Lean proof remains a formalization
+obligation; the empty legacy predicate supplies no substitute.
 
 \section{Lyubich's machinery}
 
@@ -30,12 +66,15 @@ rigidity, a priori bounds, and parapuzzles.  The 1997 Acta Mathematica
 papers are the core reference for the renormalization framework.  The
 Astérisque paper
 \emph{Dynamics of quadratic polynomials, III: parapuzzle and SBR measures}
-is kept as a separate ``Volume III'' source in the inventory.
+is kept as a separate research article in the inventory.
 
-The phrase ``Volume IV'' is not used as a canonical identifier in the
-current source inventory.  Later results are therefore cited by their actual
-paper or preprint title until a primary bibliographic source establishes a
-formal continuation of the series.
+The online book \emph{Conformal Geometry and Dynamics of Quadratic
+Polynomials} is listed by its author as volumes I--II.
+The repository's 2013 ICTP notes are another version of that expository
+project.  Neither the Astérisque article's ``III'' nor the ``IV'' in
+Kahn--Lyubich's a priori-bound series establishes an additional volume
+of the book.  These sources have separate bibliographic
+entries~\cite{LyubichBook,LyubichNotes,LyubichIII,KahnLyubichElephant}.
 
 \section{Dudko--Lyubich results}
 
@@ -43,7 +82,8 @@ Two recent parameter classes are especially important for this project:
 \begin{enumerate}
 \item bounded-type satellite parameters, treated in the GAFA paper and
       \lean{arXiv:1808.10425};
-\item Feigenbaum points, treated in arXiv:2309.02107 and the 2026
+\item all infinitely renormalizable parameters of bounded combinatorics,
+      called Feigenbaum points in arXiv:2309.02107 and the 2026
       Publications Mathématiques de l'IHÉS publication.
 \end{enumerate}
 Both results use substantial renormalization, a priori-bound, and
@@ -84,6 +124,43 @@ prove global MLC, but they supply geometric and rigidity lemmas that the
 future parameter-puzzle and straightening layers must consume.  The hybrid
 class theorem belongs one level below renormalization: it describes the
 analytic parameter space in which polynomial-like straightening lives.
+
+\section{The remaining nested-copy problem}
+
+A small Mandelbrot copy is a quadratic-like renormalization locus
+equipped with its marked straightening homeomorphism onto $\M$.
+The corresponding tuning map embeds $\M$ back into that locus.
+An infinite strictly nested sequence of such copies records
+successive renormalizations:
+\[
+ \M_1\supsetneq\M_2\supsetneq\cdots.
+\]
+Each copy is compact and connected.  These two properties guarantee a
+nonempty connected intersection, but do not guarantee a singleton.
+Dudko records the Yoccoz reduction in the
+form~\cite[Section~2, equation~(2.1)]{DudkoMLC}
+\[
+ \text{every such nested renormalization chain has singleton intersection}.
+\]
+Proving this remaining rigidity statement in full generality would close
+the global problem through the classical reduction.
+
+The bounded-combinatorics theorem handles an important family of such
+chains.  The 2026 primitive parabolic-tail theorem handles a further
+class whose periods can be unbounded.  Therefore ``unbounded'' by
+itself does not mean ``unproved''.  The frontier includes the
+unrestricted satellite problem and the interpolation between
+renormalization regimes described in
+\cite[Section~4]{DudkoMLC}.  The exact union of the named covered
+classes must retain each theorem's additional hypotheses.
+
+\coveragefigure{6}{A deeper numerical window near
+$-0.743643+0.131825i$, of width $6\cdot10^{-6}$, provides geometric
+context for the frontier.  It is not a classification of
+$\mathscr U_{\rm cov}$ and does not identify a set where MLC fails.
+The unresolved problem is the missing theorem for unrestricted
+combinatorics and transitions between regimes, rather than a feature
+detectable from escape-time colours.}{fig:mlc-frontier}
 
 \section{Dudko's survey and the remaining frontier}
 

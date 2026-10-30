@@ -7,6 +7,7 @@ import Mlc.Literature.Dudko
 import Mlc.Literature.Combinatorics
 import Mlc.Literature.Categorical
 import Mlc.Literature.CaseTheorems
+import Mlc.Literature.ModelAudit
 import Mlc.Literature.Review
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample

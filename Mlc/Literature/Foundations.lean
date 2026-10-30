@@ -48,7 +48,7 @@ theorem filledJulia_iff_bounded_orbit (c z : ℂ) :
       ∃ B : ℝ, ∀ n, ‖quadraticOrbit c z n‖ ≤ B :=
   Iff.rfl
 
-/-- A nested connected neighborhood basis at one point. -/
+/-- A countable connected neighborhood basis at one point. -/
 structure ConnectedNeighborhoodBasis
     (X : Type*) [TopologicalSpace X] (x : X) where
   piece : ℕ → Set X
@@ -126,6 +126,64 @@ theorem localConnectivity_of_parameterPuzzleBasis
     (B : ParameterPuzzleBasis c hc) :
     MandelbrotLocallyConnectedAt c hc :=
   B.realized.locallyConnectedAt
+
+theorem iInter_closure_eq_of_closure_succ_subset
+    {X : Type*} [TopologicalSpace X] (piece : ℕ → Set X)
+    (hclosure : ∀ n, closure (piece (n + 1)) ⊆ piece n) :
+    (⋂ n, closure (piece n)) = ⋂ n, piece n := by
+  ext x
+  constructor
+  · intro hx
+    exact mem_iInter.mpr fun n => hclosure n (mem_iInter.mp hx (n + 1))
+  · intro hx
+    exact mem_iInter.mpr fun n => subset_closure (mem_iInter.mp hx n)
+
+/-- Compact closure shrinking supplies the cofinality required of parameter pieces. -/
+def ParameterPuzzleBasis.of_compactClosure
+    {c : ℂ} {hc : c ∈ reviewMandelbrotSet}
+    (piece : ℕ → Set ℂ)
+    (hopen : ∀ n, IsOpen (piece n))
+    (hconnected : ∀ n, IsConnected (piece n ∩ reviewMandelbrotSet))
+    (hcontains : ∀ n, c ∈ piece n)
+    (hnested : ∀ n, piece (n + 1) ⊆ piece n)
+    (hcompact : ∀ n, IsCompact (closure (piece n)))
+    (hshrinks : (⋂ n, closure (piece n)) = {c}) :
+    ParameterPuzzleBasis c hc where
+  piece := piece
+  open_piece := hopen
+  connected_piece := hconnected
+  contains_parameter := hcontains
+  basis := by
+    have hclosure_nhds : ∀ n, closure (piece n) ∈ 𝓝 c :=
+      fun n => mem_of_superset ((hopen n).mem_nhds (hcontains n)) subset_closure
+    have hbasis := MLC.Quadratic.hasBasis_nhds_of_iInter_singleton
+      hcompact (fun n => closure_mono (hnested n)) hshrinks hclosure_nhds
+    intro U hU
+    obtain ⟨n, _, hn⟩ := hbasis.mem_iff.mp hU
+    exact ⟨n, subset_closure.trans hn⟩
+  nested := hnested
+  singleton_intersection := by
+    apply Subset.antisymm
+    · intro z hz
+      rw [← hshrinks]
+      exact mem_iInter.mpr fun n => subset_closure (mem_iInter.mp hz n)
+    · rintro z rfl
+      exact mem_iInter.mpr hcontains
+
+/-- The compact graph-cut criterion, independent of the frozen Green-sublevel model. -/
+theorem localConnectivity_of_compact_parameterPieces
+    {c : ℂ} (hc : c ∈ reviewMandelbrotSet)
+    (piece : ℕ → Set ℂ)
+    (hopen : ∀ n, IsOpen (piece n))
+    (hconnected : ∀ n, IsConnected (piece n ∩ reviewMandelbrotSet))
+    (hcontains : ∀ n, c ∈ piece n)
+    (hnested : ∀ n, piece (n + 1) ⊆ piece n)
+    (hcompact : ∀ n, IsCompact (closure (piece n)))
+    (hshrinks : (⋂ n, closure (piece n)) = {c}) :
+    MandelbrotLocallyConnectedAt c hc :=
+  localConnectivity_of_parameterPuzzleBasis
+    (ParameterPuzzleBasis.of_compactClosure piece hopen hconnected hcontains
+      hnested hcompact hshrinks)
 
 /-- The qualitative renormalization classes used by the review ledger. -/
 inductive RenormalizationClass

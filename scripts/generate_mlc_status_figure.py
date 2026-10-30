@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a high-resolution Mandelbrot status figure for the review."""
+"""Render a six-page theorem-coverage atlas for the MLC book."""
 
 from __future__ import annotations
 
@@ -12,9 +12,11 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch, Rectangle
+from matplotlib.ticker import MaxNLocator
 
 
 FEIGENBAUM = -1.401155189092 + 0.0j
@@ -28,7 +30,7 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=Path,
         default=Path("docs/figures/mlc_status_render.pdf"),
-        help="output PDF path",
+        help="output multipage PDF path",
     )
     return parser.parse_args()
 
@@ -119,10 +121,10 @@ def plot_render(
     ax.set_xlim(bounds[0], bounds[1])
     ax.set_ylim(bounds[2], bounds[3])
     ax.set_aspect("equal", adjustable="box")
-    ax.set_title(title, fontsize=11, pad=7)
-    ax.set_xlabel(r"$\operatorname{Re} c$", fontsize=8)
-    ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=8)
-    ax.tick_params(labelsize=7, length=2, pad=2)
+    ax.set_title(title, fontsize=12, pad=8)
+    ax.set_xlabel(r"$\operatorname{Re} c$", fontsize=10)
+    ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=10)
+    ax.tick_params(labelsize=9, length=2, pad=3)
     return x, y, inside
 
 
@@ -161,7 +163,7 @@ def overlay_main_components(
         -0.03,
         "main cardioid\n(attracting fixed point)",
         color="#d9ffe1",
-        fontsize=7,
+        fontsize=9,
         ha="center",
         va="center",
         bbox={"facecolor": "#15291b", "edgecolor": "#5abf72", "alpha": 0.9},
@@ -171,7 +173,7 @@ def overlay_main_components(
         -0.02,
         "period 2",
         color="#d9ffe1",
-        fontsize=7,
+        fontsize=9,
         ha="center",
         va="center",
         bbox={"facecolor": "#15291b", "edgecolor": "#5abf72", "alpha": 0.9},
@@ -207,7 +209,7 @@ def annotate_known_points(ax: plt.Axes) -> None:
             label,
             xy=(point.real, point.imag),
             xytext=(point.real + offset[0], point.imag + offset[1]),
-            fontsize=7,
+            fontsize=9,
             color=color,
             ha="center",
             va="center",
@@ -239,7 +241,7 @@ def add_main_legend(ax: plt.Axes) -> None:
             ),
         ],
         loc="lower left",
-        fontsize=7,
+        fontsize=8.5,
         framealpha=0.9,
         facecolor="#10131a",
         edgecolor="#667085",
@@ -247,67 +249,69 @@ def add_main_legend(ax: plt.Axes) -> None:
     )
 
 
-def add_status_table(ax: plt.Axes) -> None:
-    ax.axis("off")
-    ax.set_title(
-        "Components and theorem coverage",
-        fontsize=10,
-        loc="left",
-        pad=8,
+def rendered_page(
+    title: str,
+    bounds: tuple[float, float, float, float],
+    width: int,
+    height: int,
+    max_iter: int,
+) -> tuple[plt.Figure, plt.Axes, plt.Axes, np.ndarray, np.ndarray]:
+    figure = plt.figure(figsize=(11.5, 6.2), facecolor="white")
+    ax = figure.add_axes((0.07, 0.13, 0.56, 0.73))
+    x, y, _ = plot_render(
+        ax, bounds, width, height, max_iter, title=""
     )
-    rows = [
-        ["Interior", "open subset of C", "proved"],
-        ["Hyperbolic / subhyp.", "DH external rays", "partial"],
-        ["Misiurewicz / parabolic", "DH--Yoccoz puzzles", "interface"],
-        ["Finitely renorm.", "Yoccoz moduli", "interface"],
-        ["Bounded satellite", "Dudko--Lyubich", "interface"],
-        ["Feigenbaum", "Dudko--Lyubich", "interface"],
-        ["Parabolic primitive", "Kahn--Kapiamba--Lyubich", "interface"],
-        ["Neutral renorm.", "Dudko--Lim--Lyubich", "interface"],
-        ["Unbounded IR frontier", "not covered", "open"],
-    ]
-    table = ax.table(
-        cellText=rows,
-        colLabels=["component / class", "mathematical input", "Lean"],
-        colWidths=[0.24, 0.55, 0.15],
-        cellLoc="left",
-        colLoc="left",
-        loc="upper left",
-        bbox=[0.0, 0.05, 1.0, 0.82],
-    )
-    table.auto_set_font_size(False)
-    table.set_fontsize(8.2)
-    table.scale(1.0, 1.65)
-    for (row, column), cell in table.get_celld().items():
-        cell.set_edgecolor("#596273")
-        cell.set_linewidth(0.45)
-        cell.PAD = 0.045
-        if row == 0:
-            cell.set_facecolor("#263244")
-            cell.get_text().set_color("white")
-            cell.get_text().set_weight("bold")
-        else:
-            cell.set_facecolor("#171c27" if row % 2 else "#202735")
-            cell.get_text().set_color("#e8edf5")
-            if column == 2:
-                status = rows[row - 1][2]
-                cell.get_text().set_color(
-                    "#8ee39b"
-                    if status == "proved"
-                    else "#f5c542"
-                    if status == "interface"
-                    else "#ff8b7b"
-                )
-    ax.text(
-        0.0,
-        0.0,
-        "The overlay records the proof inventory, not a decidable "
-        "characteristic function of the unresolved set.",
-        transform=ax.transAxes,
-        fontsize=7,
+    notes = figure.add_axes((0.69, 0.15, 0.29, 0.70))
+    notes.axis("off")
+    figure.suptitle(title, fontsize=16, color="#182133", y=0.97)
+    figure.text(
+        0.07,
+        0.025,
+        f"Finite-time orbit render: {width} x {height} samples; "
+        f"{max_iter} iterates.  Pixel colours do not classify theorem coverage.",
+        fontsize=9,
         color="#4e5969",
-        va="top",
     )
+    return figure, ax, notes, x, y
+
+
+def note(ax: plt.Axes, y: float, heading: str, body: str) -> None:
+    ax.text(
+        0, y, heading, fontsize=12, fontweight="bold",
+        va="top", color="#182133",
+    )
+    ax.text(
+        0, y - 0.09, body, fontsize=10, linespacing=1.5,
+        va="top", color="#313a4d",
+    )
+
+
+def puzzle_diagram(ax: plt.Axes, *, parameter: bool) -> None:
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    labels = (
+        [r"$Q_n(c)$", r"$Q_{n+1}(c)$", r"$Q_{n+2}(c)$"]
+        if parameter
+        else [r"$P_n(c,0)$", r"$P_{n+1}(c,0)$", r"$P_{n+2}(c,0)$"]
+    )
+    for (left, bottom, width, height), color, label in zip(
+        [(0.04, 0.04, 0.92, 0.90), (0.18, 0.16, 0.64, 0.63),
+         (0.35, 0.29, 0.30, 0.34)],
+        ["#2878b5", "#bf8b00", "#a64131"],
+        labels,
+    ):
+        ax.add_patch(
+            Rectangle((left, bottom), width, height, fill=False,
+                      edgecolor=color, linewidth=1.8)
+        )
+        ax.text(
+            left + 0.025, bottom + height - 0.035, label,
+            fontsize=12, color=color, va="top",
+        )
+    ax.scatter([0.50], [0.40], s=22, color="#182133")
+    ax.text(0.55, 0.38, r"$c$" if parameter else r"$0$", fontsize=12)
 
 
 def make_figure(output: Path) -> None:
@@ -321,249 +325,182 @@ def make_figure(output: Path) -> None:
             "ytick.color": "#313a4d",
         }
     )
-    figure = plt.figure(figsize=(13.0, 8.25), facecolor="white")
-    grid = figure.add_gridspec(
-        2,
-        2,
-        width_ratios=[1.03, 0.97],
-        height_ratios=[1.0, 1.0],
-        wspace=0.27,
-        hspace=0.38,
-        left=0.045,
-        right=0.98,
-        top=0.90,
-        bottom=0.08,
-    )
-
-    main = figure.add_subplot(grid[0, 0])
-    x, y, _ = plot_render(
-        main,
-        (-2.08, 0.78, -1.24, 1.24),
-        1400,
-        900,
-        850,
-        title="A. Classical and finite-combinatorial coverage",
-    )
-    overlay_main_components(main, x, y)
-    annotate_known_points(main)
-    add_main_legend(main)
-    main.text(
-        0.02,
-        0.015,
-        "Green: interior / hyperbolic geometry.  Blue: selected "
-        "postcritically finite and parabolic classes.\n"
-        "Lean: escape-radius and finite-orbit theorems; parameter-plane "
-        "landing remains a separate contract.",
-        transform=main.transAxes,
-        fontsize=6.5,
-        color="#e4e7ec",
-        va="bottom",
-        bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 3},
-    )
-
-    yoccoz = figure.add_subplot(grid[0, 1])
-    yoccoz.set_xlim(0, 1)
-    yoccoz.set_ylim(0, 1)
-    yoccoz.set_aspect("equal")
-    yoccoz.axis("off")
-    yoccoz.set_title(
-        "B. Yoccoz: nested parapuzzles and the missing bridge",
-        fontsize=10,
-        pad=8,
-    )
-    for left, bottom, width, height, color, label in [
-        (0.06, 0.16, 0.45, 0.66, "#62c5ff", r"$\mathcal{P}_n(c)$"),
-        (0.16, 0.26, 0.25, 0.46, "#f5c542", r"$\mathcal{P}_{n+1}(c)$"),
-        (0.25, 0.35, 0.08, 0.28, "#ff8b7b", r"$\mathcal{P}_{n+2}(c)$"),
-    ]:
-        yoccoz.add_patch(
-            Rectangle(
-                (left, bottom),
-                width,
-                height,
-                fill=False,
-                edgecolor=color,
-                linewidth=2.0,
-                linestyle="--",
-            )
-        )
-        yoccoz.text(
-            left + width / 2,
-            bottom + height + 0.025,
-            label,
-            color=color,
-            fontsize=9,
-            ha="center",
-        )
-    yoccoz.scatter([0.29], [0.49], s=24, color="#62c5ff", zorder=4)
-    yoccoz.annotate(
-        "",
-        xy=(0.88, 0.49),
-        xytext=(0.62, 0.49),
-        arrowprops={"arrowstyle": "->", "lw": 1.6, "color": "#313a4d"},
-    )
-    yoccoz.text(
-        0.69,
-        0.60,
-        "modulus divergence",
-        fontsize=7.4,
-        ha="center",
-        color="#313a4d",
-    )
-    yoccoz.text(
-        0.69,
-        0.39,
-        r"$\bigcap_n\overline{\mathcal{P}_n(c)}=\{c\}$",
-        fontsize=8,
-        ha="center",
-        color="#313a4d",
-    )
-    yoccoz.text(
-        0.02,
-        0.02,
-        "Proved dynamical endpoint: `yoccoz_puzzle_shrinkage`.\n"
-        "Open parameter endpoint: connected shrinking parapuzzles.",
-        fontsize=6.7,
-        color="#313a4d",
-        ha="left",
-        va="bottom",
-        bbox={"facecolor": "#f5f7fa", "edgecolor": "#9aa4b2", "pad": 3},
-    )
-
-    cases = figure.add_subplot(grid[1, 0])
-    cases.axis("off")
-    cases.text(
-        0.0,
-        1.08,
-        "C. Infinite-renormalization cases with published estimates",
-        transform=cases.transAxes,
-        fontsize=10,
-        ha="left",
-        va="bottom",
-    )
-    case_grid = cases.get_subplotspec().subgridspec(
-        1, 2, wspace=0.22
-    )
-    feigenbaum = figure.add_subplot(case_grid[0])
-    plot_render(
-        feigenbaum,
-        (-1.47, -1.34, -0.115, 0.115),
-        900,
-        620,
-        1400,
-        title="Feigenbaum case",
-        boundary_color="#f5c542",
-    )
-    feigenbaum.scatter(
-        [FEIGENBAUM.real],
-        [FEIGENBAUM.imag],
-        s=24,
-        color="#f5c542",
-        edgecolor="#11151d",
-        linewidth=0.5,
-        zorder=5,
-    )
-    feigenbaum.text(
-        0.02,
-        0.04,
-        "Dudko--Lyubich\n`FeigenbaumCertificate`",
-        transform=feigenbaum.transAxes,
-        fontsize=6.3,
-        color="#f7f8fa",
-        bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 2},
-    )
-    satellite = figure.add_subplot(case_grid[1])
-    plot_render(
-        satellite,
-        (-0.20, 0.02, 0.62, 0.84),
-        900,
-        620,
-        1400,
-        title="Bounded satellite / cusp",
-        boundary_color="#62c5ff",
-    )
-    satellite.text(
-        0.02,
-        0.04,
-        "Dudko--Lyubich and KKL\n"
-        "`BoundedTypeSatelliteCertificate`",
-        transform=satellite.transAxes,
-        fontsize=6.3,
-        color="#f7f8fa",
-        bbox={"facecolor": "#10131a", "alpha": 0.86, "pad": 2},
-    )
-
-    frontier = figure.add_subplot(grid[1, 1])
-    plot_render(
-        frontier,
-        (-0.748, -0.739, 0.127, 0.137),
-        1100,
-        720,
-        1900,
-        title="D. Neutral / unbounded frontier",
-        boundary_color="#ff8b7b",
-    )
-    frontier.text(
-        0.02,
-        0.04,
-        "Neutral bubble and rigidity papers provide machinery;\n"
-        "unbounded combinatorics and the parameter bridge remain open.\n"
-        "The frozen full-Green categorical datum is refuted at $(i,16)$.",
-        transform=frontier.transAxes,
-        fontsize=6.2,
-        color="#f7f8fa",
-        bbox={"facecolor": "#10131a", "alpha": 0.88, "pad": 2},
-    )
-    frontier.add_patch(
-        Rectangle(
-            (0.03, 0.84),
-            0.035,
-            0.10,
-            transform=frontier.transAxes,
-            facecolor="none",
-            edgecolor="#ff8b7b",
-            hatch="///",
-            linewidth=0.8,
-        )
-    )
-    frontier.text(
-        0.08,
-        0.89,
-        "hatched = unresolved theorem coverage\n"
-        "(schematic; not a certified subset of $M$)",
-        transform=frontier.transAxes,
-        fontsize=6.2,
-        color="#7f1d1d",
-        va="center",
-        bbox={"facecolor": "white", "edgecolor": "#ff8b7b", "pad": 2},
-    )
-
-    figure.suptitle(
-        "Figure 1.1. Four coverage layers for the MLC program",
-        fontsize=16,
-        fontweight="bold",
-        color="#182133",
-    )
-    figure.text(
-        0.045,
-        0.025,
-        "All renders are finite-resolution illustrations.  Each panel names "
-        "the theorem family and Lean endpoint; a visual boundary point is "
-        "never itself a proof of local connectivity.",
-        fontsize=8,
-        color="#4e5969",
-    )
     output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(
+    with PdfPages(
         output,
-        format="pdf",
-        dpi=400,
-        metadata={
-            "Title": "Mandelbrot components versus the MLC proof frontier",
-            "Subject": "Numerical Mandelbrot render with literature coverage",
-        },
-    )
-    plt.close(figure)
+        metadata={"Title": "MLC theorem-coverage atlas",
+                  "Subject": "Separate numerical contexts and proof obligations"},
+    ) as pdf:
+        figure, ax, notes, x, y = rendered_page(
+            "Classical coverage: the global context",
+            (-2.08, 0.78, -1.24, 1.24), 1500, 1300, 1000,
+        )
+        overlay_main_components(ax, x, y)
+        annotate_known_points(ax)
+        add_main_legend(ax)
+        note(notes, 0.98, "Interior and named points",
+             "Green contours locate the main\n"
+             "cardioid and period-two component.\n"
+             "Blue markers locate two classical\n"
+             "boundary parameters.")
+        note(notes, 0.59, "Source and proof layer",
+             "Douady--Hubbard: external geometry.\n"
+             "Yoccoz: marked puzzle machinery.\n"
+             "Lean: orbit bounds and compact\n"
+             "outer stages are proved.")
+        note(notes, 0.20, "Boundary coverage",
+             "The theorem classes are specified\n"
+             "by hypotheses, not filled pixel masks.")
+        pdf.savefig(figure, dpi=350)
+        plt.close(figure)
+
+        figure = plt.figure(figsize=(11.5, 6.2), facecolor="white")
+        figure.suptitle(
+            "The Yoccoz route: two planes and a separate analytic bridge",
+            fontsize=16, color="#182133", y=0.97,
+        )
+        dynamical = figure.add_axes((0.07, 0.30, 0.30, 0.53))
+        parameter = figure.add_axes((0.63, 0.30, 0.30, 0.53))
+        puzzle_diagram(dynamical, parameter=False)
+        puzzle_diagram(parameter, parameter=True)
+        figure.text(0.22, 0.86, "Dynamical graph-cut pieces",
+                    ha="center", fontsize=12)
+        figure.text(0.78, 0.86, "Parameter graph-cut pieces",
+                    ha="center", fontsize=12)
+        figure.text(0.50, 0.67, "phase--parameter\nconstruction",
+                    ha="center", fontsize=12, linespacing=1.6)
+        figure.text(0.50, 0.52, r"$\Longrightarrow$",
+                    ha="center", fontsize=32, color="#bf8b00")
+        figure.text(0.50, 0.41, "formalization pending",
+                    ha="center", fontsize=11, color="#8c6200")
+        figure.text(
+            0.22, 0.24,
+            "Conformal-modulus divergence\n"
+            "is a classical analytic input.",
+            ha="center", fontsize=11, linespacing=1.5,
+        )
+        figure.text(
+            0.78, 0.24,
+            "Connected intersections with M;\n"
+            "compact closures shrink to c.",
+            ha="center", fontsize=11, linespacing=1.5,
+        )
+        figure.text(
+            0.50, 0.07,
+            r"Kernel-checked endpoint: these parameter hypotheses "
+            r"$\Longrightarrow$ MLC at $c$.",
+            ha="center", fontsize=12, color="#236638",
+        )
+        pdf.savefig(figure)
+        plt.close(figure)
+
+        figure, ax, notes, _, _ = rendered_page(
+            "Bounded satellite results: a limb context, not a coverage mask",
+            (-0.20, 0.02, 0.62, 0.84), 1200, 1200, 1600,
+        )
+        root = -0.125 + 3j * np.sqrt(3) / 8
+        ax.scatter([root.real], [root.imag], s=35, color="#62c5ff", zorder=5)
+        ax.annotate(
+            "1/3 attachment", (root.real, root.imag),
+            xytext=(-0.18, 0.632), fontsize=10, color="white",
+            arrowprops={"arrowstyle": "-", "color": "#62c5ff"},
+            bbox={"facecolor": "#10131a", "alpha": 0.9, "pad": 3},
+        )
+        note(notes, 0.98, "What the theorem selects",
+             "Infinite marked satellite towers\n"
+             "with the source's bounded-type\n"
+             "and additional hypotheses.\n"
+             "A whole limb is not selected.")
+        note(notes, 0.59, "Published result",
+             "Dudko--Lyubich, arXiv:1808.10425:\n"
+             "some bounded-type satellite classes.\n"
+             "The attachment marker is classical;\n"
+             "it is only a location reference.")
+        note(notes, 0.20, "Lean boundary",
+             "A generic certificate endpoint exists.\n"
+             "The source construction is pending.")
+        pdf.savefig(figure, dpi=350)
+        plt.close(figure)
+
+        figure, ax, notes, _, _ = rendered_page(
+            "Feigenbaum points: bounded combinatorics, including period doubling",
+            (-1.47, -1.34, -0.115, 0.115), 1000, 1500, 1800,
+        )
+        ax.scatter(
+            [FEIGENBAUM.real], [FEIGENBAUM.imag],
+            s=45, color="#f5c542", edgecolor="#11151d", zorder=5,
+        )
+        ax.annotate(
+            "period-doubling limit", (FEIGENBAUM.real, 0),
+            xytext=(-1.46, 0.075), fontsize=10, color="white",
+            arrowprops={"arrowstyle": "-", "color": "#f5c542"},
+            bbox={"facecolor": "#10131a", "alpha": 0.9, "pad": 3},
+        )
+        note(notes, 0.98, "The marked example",
+             "c is approximately -1.401155189092.\n"
+             "Successive relative periods are 2;\n"
+             "original return periods are 2^n.\n"
+             "Period doubling is satellite.")
+        note(notes, 0.59, "Published coverage",
+             "Dudko--Lyubich, arXiv:2309.02107:\n"
+             "MLC at all infinitely renormalizable\n"
+             "parameters of bounded type,\n"
+             "including mixed combinatorics.")
+        note(notes, 0.20, "Lean boundary",
+             "The period product is proved.\n"
+             "Analytic beau bounds are pending.")
+        pdf.savefig(figure, dpi=350)
+        plt.close(figure)
+
+        figure, ax, notes, _, _ = rendered_page(
+            "Primitive parabolic tails: the cusp context",
+            (0.18, 0.285, -0.0525, 0.0525), 1200, 1200, 1800,
+        )
+        ax.scatter([0.25], [0], s=35, color="#62c5ff", zorder=5)
+        ax.annotate(
+            "main cusp", (0.25, 0), xytext=(0.19, 0.036),
+            fontsize=10, color="white",
+            arrowprops={"arrowstyle": "-", "color": "#62c5ff"},
+            bbox={"facecolor": "#10131a", "alpha": 0.9, "pad": 3},
+        )
+        note(notes, 0.98, "Parabolically bounded",
+             "A finite union of individual types\n"
+             "and source-defined parabolic tails,\n"
+             "restricted to prime primitive types.\n"
+             "Nearness to the cusp is insufficient.")
+        note(notes, 0.59, "Kahn--Kapiamba--Lyubich",
+             "arXiv:2606.27272, Theorems A--C:\n"
+             "beau bounds + bounded puzzle\n"
+             "Teichmueller diameter -> rigidity\n"
+             "and pointwise MLC.")
+        note(notes, 0.20, "Lean boundary",
+             "The source-class certificate is an\n"
+             "interface, not the analytic proof.")
+        pdf.savefig(figure, dpi=350)
+        plt.close(figure)
+
+        figure, ax, notes, _, _ = rendered_page(
+            "The unresolved frontier: a deep numerical context",
+            (-0.743646, -0.743640, 0.131822, 0.131828), 1300, 1300, 2600,
+        )
+        ax.ticklabel_format(axis="both", style="plain", useOffset=False)
+        ax.xaxis.set_major_locator(MaxNLocator(4))
+        ax.yaxis.set_major_locator(MaxNLocator(4))
+        note(notes, 0.98, "Open coverage questions",
+             "General unbounded satellite cases;\n"
+             "interpolation between regimes;\n"
+             "parameter realization from the\n"
+             "appropriate neutral estimates.")
+        note(notes, 0.59, "What this window means",
+             "Its width is 0.000006 in parameter space.\n"
+             "The image illustrates fine geometry.\n"
+             "No pixel here is certified as outside\n"
+             "all known theorem classes.")
+        note(notes, 0.20, "No known failure locus",
+             "Unresolved coverage means a missing\n"
+             "applicable proof, not a failure of MLC.")
+        pdf.savefig(figure, dpi=350)
+        plt.close(figure)
 
 
 if __name__ == "__main__":

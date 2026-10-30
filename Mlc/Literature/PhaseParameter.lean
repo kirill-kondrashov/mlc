@@ -19,7 +19,8 @@ open Filter Set Topology
 
 noncomputable section
 
-/-- An external ray with a specified landing point and potential parameter. -/
+/-- A preliminary ray interface. Its `atTop` landing convention and missing
+potential/escape conditions do not yet specify physical external rays. -/
 structure ExternalRaySystem (c : ℂ) where
   ray : ℝ → ℝ → ℂ
   landing : ℝ → ℂ
@@ -30,7 +31,8 @@ structure ExternalRaySystem (c : ℂ) where
   dynamics : ∀ θ t,
     quadraticMap c (ray θ t) = ray (2 * θ) (2 * t)
 
-/-- A finite-level dynamical puzzle graph and its critical pieces. -/
+/-- Preliminary graphs and nested critical pieces. Their graph-complement
+component relation and conformal moduli remain to be specified. -/
 structure DynamicalPuzzleSystem (c : ℂ) where
   rays : ExternalRaySystem c
   graph : ℕ → Set ℂ
@@ -83,8 +85,8 @@ theorem localConnectivity_of_phaseParameterData
   localConnectivity_of_parameterPuzzleBasis
     D.toParameterPuzzleBasis
 
-/-- The exact existence statement left by the graph-cut phase--parameter
-theorem.  It is a proposition, not an axiom declaration. -/
+/-- Universal existence of the current preliminary data.
+This is a proposition, not a proof of the classical graph-cut construction. -/
 def YoccozPhaseParameterResult : Prop :=
   ∀ (c : ℂ) (hc : c ∈ reviewMandelbrotSet),
     Nonempty (PhaseParameterPuzzleData c hc)
