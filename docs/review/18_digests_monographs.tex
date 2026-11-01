@@ -1,0 +1,269 @@
+\chapter{Source digests III: monographs and exact examples}
+\label{ch:digests-monographs}
+
+This chapter digests two monographs that the approaches to MLC take as
+background: Milnor's introductory lectures~\cite{Milnor} and Lyubich's notes
+\cite{LyubichNotes}.  It then records exact Julia-set examples that the
+monographs use, together with their formal counterparts.  As before, the
+statements are those of the sources, up to notation; theorem numbers are
+those printed in the sources.
+
+\section{Milnor's introductory lectures}
+\label{sec:digest-milnor}
+
+The lectures~\cite{Milnor} are the standard entry point for the quadratic
+family.  The following definitions and results concern the quadratic family.
+
+\subsection*{Definitions}
+
+\begin{definition}[Fatou and Julia sets]
+\label{def:milnor-fatou-julia}
+Let $f$ be a nonconstant holomorphic self-map of the Riemann sphere.  A point
+$z_0$ is in the Fatou set if some neighbourhood of $z_0$ carries a normal family of
+iterates.  The Julia set $J(f)$ is the complement of the Fatou set; it is closed.
+\end{definition}
+
+\begin{definition}[Multipliers and cycle types]
+\label{def:milnor-multiplier}
+For a cycle $z_1,\dots,z_n$ of period $n$, the multiplier is
+$\lambda=(f^{\circ n})'(z_1)=f'(z_1)\cdots f'(z_n)$.  The cycle is attracting,
+repelling, or neutral according as $|\lambda|<1$, $|\lambda|>1$, or $|\lambda|=1$,
+and superattracting if $\lambda=0$.
+\end{definition}
+
+\begin{definition}[Filled Julia set; Böttcher coordinate; external rays]
+\label{def:milnor-K-bottcher-rays}
+For a polynomial $f$ of degree $d\ge2$ the filled Julia set is
+$K(f)=\{z:\ \{f^{\circ n}(z)\}_{n\ge0}\text{ is bounded}\}$.  Near infinity there is a
+Böttcher coordinate $\phi$ with $\phi\circ f\circ\phi^{-1}(w)=w^d$, unique up to a
+$(d-1)$-st root of unity.  If $K(f)$ is connected, $\phi\colon\C\setminus K\to\C\setminus\overline{\mathbb D}$
+is a conformal isomorphism with $\phi(f(z))=\phi(z)^d$.  With $\psi=\phi^{-1}$, the
+external ray at angle $t\in\R/\Z$ is $R_t=\psi(\{re^{2\pi it}:r>1\})$, and $f(R_t)=R_{dt}$.
+The ray lands at $z_t$ if $\lim_{r\to1}\psi(re^{2\pi it})$ exists.
+\end{definition}
+
+\begin{definition}[Quadratic family and parameter sets]
+\label{def:milnor-quadratic}
+Every quadratic polynomial is affinely conjugate to a unique $f_c(z)=z^2+c$.  Put
+\begin{align*}
+ \M&=\{c:\ K(f_c)\text{ contains the critical point }0\},\\
+ Q&=\{c:\ K(f_c)\text{ has an interior point}\},
+\end{align*}
+and let $\mathcal H$ be the set of parameters with an attracting periodic orbit in
+the finite plane.  Then $\mathcal H\subset Q\subset\M$.  Milnor does not give a
+separate definition of ``hyperbolic component''; the phrase refers to components
+of the interior of $\M$.
+\end{definition}
+
+\subsection*{Results}
+
+\begin{theorem}[Milnor, Theorem~3.3]
+\label{thm:milnor-3-3}
+Every attracting periodic orbit lies in the Fatou set.  The whole basin of
+attraction of such an orbit lies in the Fatou set; its boundary lies in the Julia
+set, and every repelling periodic orbit lies in the Julia set.  Status: proved in
+the text.
+\end{theorem}
+
+\begin{theorem}[Milnor, Lemma~17.1]
+\label{thm:milnor-17-1}
+$K$ is compact.  It consists of $J$ together with the bounded components of
+$\C\setminus J$; these components are simply connected, and $J=\partial K$.
+Status: proved in the text.
+\end{theorem}
+
+\begin{theorem}[Milnor, Theorem~18.1; cited]
+\label{thm:milnor-18-1}
+If $K(f)$ is connected, every periodic external ray lands at a periodic point that
+is repelling or parabolic.  Status: attributed to Sullivan, Douady and Hubbard; not
+proved in the text.
+\end{theorem}
+
+\begin{theorem}[Milnor, Theorem~18.2; cited]
+\label{thm:milnor-18-2}
+If $K(f)$ is connected, every repelling or parabolic periodic point is the landing
+point of at least one external ray, which is periodic.  Status: attributed to
+Douady and Yoccoz; only the parabolic case is proved in the text.
+\end{theorem}
+
+\begin{remark}[What Milnor reports about $\M$]
+The text reports, as known from Douady and Hubbard, that $\M$ is connected with
+connected complement, that each hyperbolic component of the interior of $\M$ admits a
+canonical parametrization, and that the boundary of $\M$ can be studied with external
+rays.  It states as widely believed that $\mathcal H=\operatorname{int}\M$ and
+$\M=\overline{\mathcal H}$.  It does not state local connectivity of $\M$ as a
+conjecture, and no theorem asserting it appears there.
+\end{remark}
+
+\section{Lyubich's notes (ICTP, 2013)}
+\label{sec:digest-lyubich-notes}
+
+The notes~\cite{LyubichNotes} divide into four parts: conformal and quasiconformal
+geometry (including Teichmüller theory and holomorphic motions); the dynamical
+plane of the quadratic family (periodic motions, hyperbolic, parabolic and
+Misiurewicz maps, quasiconformal deformations, quadratic-like maps); remarkable
+functional equations (linearization, Siegel disks, Böttcher coordinates,
+Écalle--Voronin cylinders); the parameter plane, combinatorics of external rays,
+Thurston theory; and little Mandelbrot copies, the straightening theorem and the
+Yoccoz puzzle.
+
+\subsection*{Definitions}
+
+\begin{definition}[Basin of infinity, filled Julia set, Mandelbrot set]
+\label{def:lyubich-basic}
+For $f_c(z)=z^2+c$ let $D(\infty)=\{z:\ f_c^n(z)\to\infty\}$.  Then
+$K(f_c)=\widehat{\C}\setminus D(\infty)$, $J(f_c)=\partial K(f_c)$, and
+\[
+ \M=\{c:\ K(f_c)\text{ is connected}\}=\{c:\ f_c^n(0)\not\to\infty\}.
+\]
+\end{definition}
+
+\begin{definition}[Green function, Böttcher coordinate, external rays]
+\label{def:lyubich-green}
+On the basin of infinity the Green function is
+$G_c(z)=\lim_{n\to\infty}2^{-n}\log^+|f_c^n(z)|=\log|B_c(z)|$, where $B_c$ is the
+Böttcher coordinate.  Equipotentials are the level sets of $G_c$.  External rays are
+$R_c(\theta)=B_c^{-1}\{re^{2\pi i\theta}:r>1\}$.
+\end{definition}
+
+\begin{definition}[Quadratic-like maps, hybrid equivalence, modulus]
+\label{def:lyubich-ql}
+A quadratic-like map is a holomorphic degree-two branched covering $f\colon U\to U'$
+between conformal disks with $U\Subset U'$, and $K(f)=\{z:\ f^n(z)\in U\ \forall n\}$,
+$J(f)=\partial K(f)$.  Two quadratic-like maps are hybrid equivalent if they are
+quasiconformally conjugate by a map $h$ with $\bar\partial h=0$ a.e.\ on $K(f)$.
+For an annulus conformally equivalent to $\{1<|z|<R\}$ the modulus is
+$\modulus(A)=\frac{1}{2\pi}\log R$.  The fundamental annulus of $f$ is $U'\setminus\overline U$.
+\end{definition}
+
+\begin{definition}[Renormalization; primitive and satellite]
+\label{def:lyubich-renorm}
+If $f^p$ restricts to a quadratic-like map on a smaller domain, the resulting
+quadratic-like germ, after adjustment and rescaling, is the renormalization $Rf$.  It
+is primitive when the associated little Julia sets are disjoint and satellite otherwise.
+\end{definition}
+
+\begin{definition}[Combinatorial rotation number]
+\label{def:lyubich-rotation}
+If a periodic orbit of external rays is cyclically permuted with $q$ rays, and the
+permutation advances by $p$ positions, its combinatorial rotation number is $p/q\in\Q/\Z$.
+\end{definition}
+
+\begin{definition}[Puzzles and parapuzzles]
+\label{def:lyubich-puzzle}
+A puzzle is the partition of the dynamical plane cut by finitely many external rays,
+equipotentials, and their pullbacks.  A parapuzzle is the corresponding partition of
+the parameter plane, given by the same ray and equipotential combinatorics.
+\end{definition}
+
+\begin{remark}
+The notes use the phrase a priori bounds for a uniform lower bound on the moduli of
+fundamental annuli in successive renormalizations, but they give no standalone
+definition or theorem with that name.  The relevant discussion is incomplete in the notes.
+\end{remark}
+
+\subsection*{Results}
+
+\begin{theorem}[Lyubich notes, Theorem~4.13]
+\label{thm:lyubich-4-13}
+For a quadratic polynomial, $J$ and $K$ are either connected or Cantor sets.  The
+Cantor case occurs exactly when $f^n(0)\to\infty$.  Status: proved in the notes.
+\end{theorem}
+
+\begin{theorem}[Lyubich notes, Theorem~6.10; Douady--Hubbard connectivity]
+\label{thm:lyubich-6-10}
+$\M$ is connected, and the parameter Böttcher map
+$\Phi_\M\colon\C\setminus\M\to\C\setminus\overline{\mathbb D}$ is conformal and tangent to
+the identity at infinity.  Status: proved in the notes.
+\end{theorem}
+
+\begin{theorem}[Lyubich notes, Theorem~6.12; multiplier theorem]
+\label{thm:lyubich-6-12}
+For every hyperbolic component $H\subset\operatorname{int}\M$ the multiplier map
+$\lambda\colon H\to\mathbb D$ is a conformal isomorphism.  Status: proved in the notes.
+\end{theorem}
+
+\begin{theorem}[Lyubich notes, Theorem~9.2; straightening]
+\label{thm:lyubich-9-2}
+Every quadratic-like map is hybrid conjugate to some $f_c$; if its Julia set is
+connected, $f_c$ is unique.  Status: existence and uniqueness proved in the notes.
+\end{theorem}
+
+\begin{theorem}[Lyubich notes, Theorem~7.36; main cardioid]
+\label{thm:lyubich-7-36}
+$\M$ is locally connected at every point of the main cardioid.  Status: proved in the notes.
+\end{theorem}
+
+\begin{theorem}[Lyubich notes, Theorems~11.5--11.6; Yoccoz]
+\label{thm:lyubich-11-5}
+If every periodic point of $f$ is hyperbolic and $f$ is not infinitely renormalizable,
+then $J(f)$ is locally connected.  In particular this holds when both fixed points are
+repelling and $f$ is not renormalizable.  Status: the notes present the puzzle proof of
+Chapter~11.
+\end{theorem}
+
+\begin{theorem}[Lyubich notes, Theorem~10.15]
+\label{thm:lyubich-10-15}
+The interior of a little Mandelbrot copy is canonically homeomorphic to the interior of
+$\M$.  Status: proved in Chapter~10.
+\end{theorem}
+
+\begin{remark}[Status of MLC in the notes]
+The notes prove local connectivity of $\M$ on the main cardioid and state local
+connectivity at non-renormalizable parameter points.  They do not prove global
+local connectivity of $\M$, which the notes treat as open.
+\end{remark}
+
+\begin{remark}[Numbering]
+The printed numbering of the notes is not fully consistent: Chapter~6 starts with
+the number 28 and Chapter~10 uses numbers 42--44.  The numbers above are those
+printed at the places cited, and should be checked against the printed text.
+\end{remark}
+
+\section{Exact examples from the monographs}
+\label{sec:digest-examples}
+
+The following two examples are standard in Milnor's lectures.  Both are proved
+formally in the repository.
+
+\begin{theorem}[Filled and Julia sets for $c=0$]
+\label{thm:example-zero}
+$K(f_0)=\{|z|\le1\}$ and $J(f_0)=\{|z|=1\}$.
+\end{theorem}
+
+\begin{proof}
+The orbit of $z$ is $z^{2^n}$.  If $|z|\le1$ it stays in the closed disk, and if
+$|z|>1$ then $|z|^{2^n}\ge|z|^n\to\infty$.  So $K(f_0)$ is the closed disk.  Its boundary
+is the unit circle, and $J=\partial K$ by Milnor's Lemma~17.1.
+\end{proof}
+
+\begin{theorem}[Filled and Julia sets for $c=-2$]
+\label{thm:example-minus-two}
+$K(f_{-2})=J(f_{-2})=\{x\in\R:\ -2\le x\le2\}$.
+\end{theorem}
+
+\begin{proof}
+If $x\in[-2,2]$, the real orbit stays in $[-2,2]$, since $y^2-2\in[-2,2]$ whenever
+$y\in[-2,2]$.  For the converse, let $z\notin[-2,2]$.  Solve $w^2-zw+1=0$.  Its roots $w$
+and $w^{-1}$ satisfy $z=w+w^{-1}$.  If one root had modulus $1$, then $z=w+\overline w$
+would be real with $|z|\le2$, which is excluded.  So some root $w$ has $|w|>1$.  By
+induction $f_{-2}^n(z)=w^{2^n}+w^{-2^n}$, because
+$(a+a^{-1})^2-2=a^2+a^{-2}$.  Hence $|f_{-2}^n(z)|\ge|w|^{2^n}-1\to\infty$.  Thus
+$K(f_{-2})=[-2,2]$.  The segment is compact with empty interior in $\C$, so it equals its
+own frontier, and $J(f_{-2})=\partial K(f_{-2})=[-2,2]$.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:example-minus-two} places $c=-2$ at the left end of the real slice of
+$\M$, which by Theorem~\ref{thm:real-slice} is $[-2,\tfrac14]$.  The parameter $c=0$ is
+interior to that slice.
+\end{remark}
+
+\paragraph{Lean correspondence.}
+Theorem~\ref{thm:example-zero} is
+\leanref{Mlc/Quadratic/Examples.lean}{filledJulia_zero} and
+\leanref{Mlc/Quadratic/Examples.lean}{julia_zero}.  Theorem~\ref{thm:example-minus-two} is
+\leanref{Mlc/Quadratic/Examples.lean}{filledJulia_neg_two} and
+\leanref{Mlc/Quadratic/Examples.lean}{julia_neg_two}.  The Joukowski step is
+\leanref{Mlc/Quadratic/Examples.lean}{exists_joukowski_root_outside}, and the
+unboundedness estimate is \leanref{Mlc/Quadratic/Examples.lean}{not_boundedOrbit_neg_two_of_root}.

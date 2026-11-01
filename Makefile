@@ -61,7 +61,9 @@ REVIEW_CHAPTERS := \
 	docs/review/12_conditional_theorem_matrix.tex \
 	docs/review/15_frozen_model_audit.tex \
 	docs/review/16_digests_foundations.tex \
-	docs/review/17_digests_modern.tex
+	docs/review/17_digests_modern.tex \
+	docs/review/18_digests_monographs.tex \
+	docs/review/19_digests_pacman_neutral.tex
 
 docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<

@@ -1,0 +1,266 @@
+\chapter[Pacman and neutral bounds]{Source digests IV: Pacman renormalization and neutral bounds}
+\label{ch:digests-pacman-neutral}
+
+This chapter digests two recent papers that the survey~\cite{DudkoMLC} uses as
+building blocks: the Pacman renormalization near Siegel parameters of
+Dudko, Lyubich and Selinger~\cite{DudkoLyubichSelinger}, and the uniform a priori
+bounds for neutral renormalization of Dudko and Lyubich~\cite{DudkoLyubichNeutral}.
+Statements are those of the sources, up to notation; theorem numbers are those
+printed in the sources.
+
+\section{Pacman renormalization near Siegel parameters}
+\label{sec:digest-pacman}
+
+The paper~\cite{DudkoLyubichSelinger} places the Branner--Douady surgery relating
+limbs of $\M$ in the framework of Pacman renormalization.  Its authors are
+Dudko, Lyubich and Selinger.  (The survey cites this paper as its reference~[20]
+for the Pacman/Siegel hyperbolicity result.)
+
+\subsection*{Definitions}
+
+\begin{definition}[Notation for rotations]
+\label{def:pacman-rotation}
+Put $e(z)=e^{2\pi iz}$ and $p_\theta(z)=e(\theta)z+z^2$.  The set $\Theta_{\rm bnd}$ consists of
+rotation numbers with bounded continued-fraction entries, and $\Theta_{\rm per}$ of
+numbers periodic under the map
+\[
+ \mathcal R(\theta)=\begin{cases}\theta/(1-\theta), & 0\le\theta\le\tfrac12,\\
+                      (2\theta-1)/\theta, & \tfrac12\le\theta\le1.\end{cases}
+\]
+A Siegel map has a neutral fixed point with multiplier $e(\theta)$, a quasidisk
+Siegel disk compactly contained in its domain, and exactly one critical point on the
+boundary of the Siegel disk.
+\end{definition}
+
+\begin{definition}[Full pacman; truncated pacman]
+\label{def:pacman-full}
+A full pacman is a map $f\colon U\to V$, where $V$ is a closed topological disk with a
+critical arc $\gamma_1$ joining $\partial V$ to a fixed point $\alpha\in\operatorname{int}V$,
+such that $U\Subset V$ and $\gamma_1$ has exactly three lifts: $\gamma_0\subset U$ starting
+at $\alpha$, and $\gamma_\pm\subset\partial U$ starting at the pre-fixed point $\alpha_0$.
+Moreover $f\colon U\setminus\gamma_0\to V\setminus\gamma_1$ is a two-to-one branched covering,
+and $f$ extends locally conformally across $\partial U\setminus\{\alpha_0\}$.  A truncated
+pacman is obtained by removing a small disk around $\alpha_0$.
+\end{definition}
+
+\begin{definition}[Dynamical objects of a pacman]
+\label{def:pacman-dynamics}
+The non-escaping set is $K_f=\bigcap_{n\ge0}f^{-n}(U)$, and $V\setminus K_f$ is the escaping
+set.  The pacman Julia set is $J_f=\bigcup_{n\ge0}f^{-n}(\partial Z_f)$, where $Z_f$ is the
+Siegel disk when there is one.  External rays are leaves of the pulled-back lamination.
+\end{definition}
+
+\begin{definition}[Prepacman; pacman renormalization]
+\label{def:pacman-renorm}
+A prepacman is a sector $S$, split by an interior ray into two pieces $T_\pm$, with
+holomorphic maps $f_\pm\colon U_\pm\to S$, $U_\pm\subset T_\pm$, such that a gluing map
+$\psi\colon S\to V$ projects $(f_-,f_+)$ to a pacman.  A map $f$ is renormalizable if a
+prepacman $G=(f^a\colon U_-\to S,\ f^b\colon U_+\to S)$ realizes the first return to $S$,
+with the preceding orbits covering a neighbourhood of $\alpha$ compactly contained in $U$.
+The glued pacman is the renormalization $Rf$.  The return times $a,b$ are recorded, and the
+renormalization is prime when $a+b=3$.
+\end{definition}
+
+\begin{definition}[Siegel pacman; standard Siegel pacman]
+\label{def:pacman-siegel}
+A pacman is Siegel if it has a Siegel disk $Z_f$, $\gamma_1$ is an external ray followed by
+an internal ray that meets $\partial Z_f$ at a non-precritical point, and the truncation disk
+is an equipotential subdisk of $Z_f$.  A standard Siegel pacman is one in which $\gamma_0$
+passes through the critical value, and the standard renormalization is based at the
+critical value.
+\end{definition}
+
+\begin{definition}[Satellite valuable flower]
+\label{def:pacman-flower}
+An open forward-invariant set $H$ with $H\cup\{\alpha\}$ connected, divided into $q$
+petals $H_i$ with $g(H_i)\subset H_{i+p}$, such that an attracting $q$-cycle attracts all
+points of $H$ and $H_{-p}$ contains the critical point.  Its combinatorial rotation number is
+$p/q$, and its multiplier is that of the attracting cycle.
+\end{definition}
+
+\subsection*{Results}
+
+\begin{theorem}[Dudko--Lyubich--Selinger, Theorems~1.1 and~7.7]
+\label{thm:dls-1-1}
+For every $\theta\in\Theta_{\rm per}$ the renormalization $R$ has a unique periodic Siegel
+pacman $f_*$.  It is hyperbolic with one-dimensional unstable manifold.  Locally, its stable
+manifold is the set of pacmen with the same multiplier, and every point of it is Siegel.
+Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich--Selinger, Corollaries~1.2 and~7.9]
+\label{thm:dls-1-2}
+Nearby maps with a fixed rotation number $\theta\in\Theta_{\rm per}$ have Siegel disks that
+depend continuously on the map, and nearby locally Siegel maps remain Siegel.  Status:
+proved in the paper, using earlier results.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich--Selinger, Theorem~1.3]
+\label{thm:dls-1-3}
+If $p_n/q_n$ are the continued-fraction approximants of $\theta\in\Theta_{\rm per}$, then
+$|c(\theta)-a_{p_n/q_n}|\sim q_n^{-2}$.  Status: proved in the paper via Theorem~8.2.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich--Selinger, Theorem~3.2; bounded type]
+\label{thm:dls-3-2}
+For $\theta\in\Theta_{\rm bnd}$ the closed Siegel disk of $p_\theta$ is a quasidisk containing
+the critical point.  Conversely, a one-critical-point map whose compactly contained Siegel
+disk is a quasidisk containing the critical point has a bounded-type rotation number.  Status:
+the paper uses results of Douady--Ghys, Herman, Świątek and Avila--Lyubich.
+\end{theorem}
+
+\begin{theorem}[Petersen, Theorem~3.3 of the paper; cited]
+\label{thm:dls-petersen}
+For the bounded-type rotation numbers of the paper, the filled Julia set $K_{p_\theta}$ is locally connected,
+and the components that remain after removing bubbles of bounded generation have arbitrarily small
+diameter.  Status: cited from Petersen.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich--Selinger, Theorem~3.12]
+\label{thm:dls-3-12}
+For every standard Siegel pacman, $K_f$ is locally connected; the components of bounded
+generation shrink, and every periodic point of $J_f$ is the landing point of a bubble chain.
+Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich--Selinger, Theorem~3.16]
+\label{thm:dls-3-16}
+Near $f_*$ the renormalization $R$ is an analytic compact operator, and $Rf_*=f_*$.  Status:
+proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich--Selinger, Theorem~8.2; satellite flowers]
+\label{thm:dls-8-2}
+For a sequence $p_n/q_n\to\theta_*$ satisfying the displayed renormalization relation, a
+transverse one-dimensional slice contains continuous paths of satellite valuable flowers with
+rotation numbers $p_n/q_n$ and a prescribed multiplier path.  The exponent in the displayed
+distance estimate is not legible in the plain-text version examined, so it is not recorded here.
+Status: proved in the paper.
+\end{theorem}
+
+\subsection*{Relation to MLC}
+
+The paper proves local connectivity of $K_f$ for standard Siegel pacmen
+(Theorem~\ref{thm:dls-3-12}) and recalls the local connectivity of Julia sets of
+bounded-type Siegel polynomials (Petersen).  It does not prove local connectivity of
+$\M$ itself.  It states that a later work applies these methods to some bounded-type
+satellite parameters.  Its appendix states that a molecule-conjecture framework would
+imply MLC for all infinitely renormalizable satellite-type parameters; this is conditional
+and is not claimed here.
+
+\section{Uniform a priori bounds for neutral renormalization}
+\label{sec:digest-neutral-apriori}
+
+The paper~\cite{DudkoLyubichNeutral} proves uniform bounds for neutral quadratic polynomials
+$f_\theta(z)=e(\theta)z+z^2$, with $\theta$ in the bounded-type set.
+
+\subsection*{Definitions}
+
+\begin{definition}[Critical point and combinatorial intervals]
+\label{def:neutral-critical}
+For $f_\theta$ the critical point is $c_0(f_\theta)=-e(\theta)/2$.  If $p_n/q_n$ are the best
+approximants of $\theta$ and $Z$ is the Siegel disk, the level-$n$ interval is
+$I^n_f(x)=[x,f^{q_n}(x)]\subset\partial Z$.  Its combinatorial length is $|I|=|h(I)|_{\R/\Z}$,
+where $h\colon(Z,\alpha)\to(\mathbb D,0)$ is the linearizing map.
+\end{definition}
+
+\begin{definition}[Pseudo-Siegel bounds]
+\label{def:neutral-pseudo-siegel}
+$f_\theta$ has pseudo-Siegel bounds if there are disks
+$\widehat Z^{-1}_\theta\supset\widehat Z^0_\theta\supset\widehat Z^1_\theta\supset\cdots$ with
+$\bigcap_{m\ge-1}\widehat Z^m_\theta=H_\theta$, such that $\widehat Z^m_\theta$ is almost invariant
+under $f_\theta^{q_{m+1}}$, its boundary carries a nest of tilings of essentially bounded
+geometry, and $f_\theta$ is injective on the relevant disk.  The bounds are uniform when the
+constants of the tilings are independent of $\theta$.
+\end{definition}
+
+\begin{definition}[Mother Hedgehog]
+\label{def:neutral-hedgehog}
+A hull is a compact connected full set.  A Mother Hedgehog of $f_\theta$ is an invariant hull
+$H_f$ containing $0$ and $c_0(f)$.
+\end{definition}
+
+\begin{definition}[Parameter compactification]
+\label{def:neutral-theta}
+Put $\Theta=\{\theta=[0;a_1,a_2,\dots]:\ a_i\in\N_{\ge1}\cup\{\infty\}\}$ and
+$\underline\Theta=(\R\setminus\Q)/\Z$.  The boundary of $\Theta$ corresponds to Lavaurs--Epstein
+towers.
+\end{definition}
+
+\begin{definition}[$\delta$-pseudo-Siegel disk]
+\label{def:neutral-delta}
+Inductively, $\widehat Z^n=Z$ for large $n$, and either $\widehat Z^m=\widehat Z^{m+1}$, or
+$\widehat Z^m=\widehat Z^{m+1}\cup Z^m$ where $Z^m$ is a $\delta/2$-near-rotation domain called the
+core.  The second operation is the regularization at level $m$; it fills sufficiently deep
+parabolic fjords.
+\end{definition}
+
+\begin{remark}
+The paper refers to $\psi^\bullet$-quasi-quadratic-like maps and to neutral renormalization
+towers, but defines neither in the present text; it refers both to an external paper cited as
+{[DLL]}.
+\end{remark}
+
+\subsection*{Results}
+
+\begin{theorem}[Dudko--Lyubich, Theorem~1.1; uniform bounds]
+\label{thm:neutral-1-1}
+There is an absolute constant $K$ such that, for every bounded-type Siegel quadratic polynomial
+$f=f_\theta$ and every combinatorial interval $I=I^n_f(x)$, one has $W^+_3(I)\le K$.  Status:
+proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich, Theorem~1.2; Mother Hedgehog]
+\label{thm:neutral-1-2}
+For every neutral quadratic polynomial $f=f_\theta$ with $\theta\notin\Q$ there is a Mother
+Hedgehog $H_f\ni c_0(f)$ such that $f\colon H_f\to H_f$ is a homeomorphism.  Status: proved in the
+paper (also Theorem~11.2).
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich, Theorem~1.3; quasidisk approximation]
+\label{thm:neutral-1-3}
+There is an absolute $K$ such that every bounded-type Siegel quadratic polynomial has a disk
+$\widehat Z_f\supset Z_f$ which is a $K$-quasidisk and on which $f$ is injective.  Status: proved in
+the paper (detailed as Theorem~11.1).
+\end{theorem}
+
+\begin{theorem}[Sector bounds; cited in the paper as {[DL2]}]
+\label{thm:neutral-1-5}
+There is a compact sector renormalization operator $R_{\rm sec}$ for all neutral quadratic polynomials,
+with the properties (I)--(VI) listed in the paper: uniform continuity of the pseudo-Siegel disks,
+existence throughout $\Theta$, continuous Mother Hedgehogs, precompact transcendental closest-return
+limits, compatibility with renormalization, and star-like Mother Hedgehogs.  Status: cited in the
+paper as {[DL2]}; the reference list of the paper gives its details.
+\end{theorem}
+
+\begin{theorem}[QL Siegel bounds; cited in the paper as {[DLL]}]
+\label{thm:neutral-1-6}
+If $g\colon X\to Y$ is quadratic-like with bounded-type Siegel disk $Z_g$, and $K_g=W_\bullet(g)=W(Y\setminus Z_g)$,
+then for $I=[x,g^{q_{n+1}}x]$ one has $W^+_3(I)=O(K_g/q_{n+1})$.  In particular bounded $K_g$ gives
+$W^+_3(I)=O(1)$.  Status: cited in the paper as {[DLL]}.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich, Theorem~10.1; golden mean]
+\label{thm:neutral-10-1}
+For an eventually golden-mean $\theta$ there is an absolute $K$ with $W^+_3(I)\le K$ for every combinatorial
+interval $I\subset\partial Z$.  Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich, Theorem~10.2; scale dichotomy]
+\label{thm:neutral-10-2}
+For the same $\theta$ there are absolute $N,K$ and a sequence of geodesic pseudo-Siegel disks such that, if
+$\ell_{m+1}\le|I|\le\ell_m$, then either $|I|\ge\ell_m/2$, or $|I|\le N\ell_{m+1}$ and $W^+_3(I)\le K$.
+Status: proved in the paper.
+\end{theorem}
+
+\subsection*{Relation to MLC}
+
+The paper states that Yoccoz proved MLC at parameters that are not infinitely quadratic-like
+renormalizable, and it formulates the principle that a priori bounds for every combinatorial class
+should give quasiconformal conjugacy, hence singleton parameter classes, hence MLC.  It notes that
+quadratic-like bounds in general fail in the satellite case when the Julia set is not locally connected
+at the critical point.  Its authors state that the uniform neutral bounds control satellite
+renormalization relevant to MLC, and they conjecture that pseudo-Siegel bounds for satellite
+renormalization, interpolated with the primitive bounds of Kahn--Lyubich, would complete the proof
+of MLC.  that conjecture is not proved here.  The paper also refers to MLC at bounded-type parameters
+proved in an earlier work by the same authors, cited there under its own label.
