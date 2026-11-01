@@ -1,6 +1,7 @@
 import Mlc.Core
 import Mlc.GreenSublevelIntersectionCounterexample
 import Mlc.Literature.ModelAudit
+import Mlc.Literature.NestedCopies
 import Mlc.Quadratic.Complex.FirstComponents
 import Mlc.Quadratic.RealSlice
 import Mlc.Quadratic.Examples
@@ -18,6 +19,7 @@ def main : IO UInt32 := do
     { module := `Mlc.Core },
     { module := `Mlc.GreenSublevelIntersectionCounterexample },
     { module := `Mlc.Literature.ModelAudit },
+    { module := `Mlc.Literature.NestedCopies },
     { module := `Mlc.Quadratic.Complex.FirstComponents },
     { module := `Mlc.Quadratic.RealSlice },
     { module := `Mlc.Quadratic.Examples },
@@ -56,7 +58,9 @@ def main : IO UInt32 := do
     ``MLC.Quadratic.mandelbrot_conj_iff,
     ``MLC.Quadratic.neg_mem_K_iff,
     ``MLC.Quadratic.conj_mem_K_iff,
-    ``MLC.Quadratic.neg_mem_J_iff
+    ``MLC.Quadratic.neg_mem_J_iff,
+    ``MLC.Literature.subsingleton_iInter_of_diam_tendsto_zero,
+    ``MLC.Literature.exists_unique_mem_iInter_of_antitone
   ]
 
   let coreContext : Core.Context :=

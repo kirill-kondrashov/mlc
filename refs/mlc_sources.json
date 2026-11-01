@@ -137,6 +137,14 @@
       "title": "Local connectivity of Julia sets for unicritical polynomials",
       "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
       "existing_pdf": null
+    },
+    {
+      "key": "martens-nowicki-invariant-measures",
+      "arxiv_id": "math/9606220",
+      "role": "supporting",
+      "title": "Invariant measures for typical quadratic maps",
+      "authors": ["Marco Martens", "Tomasz Nowicki"],
+      "existing_pdf": null
     }
   ]
 }

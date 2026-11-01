@@ -1,0 +1,76 @@
+\bigskip
+\centerline{\bf 5. Appendix}
+\bigskip
+
+\flushpar
+In this appendix some basic notions of interval dynamics are collected. The
+details can be found in [MS].
+
+\bigskip
+
+\flushpar
+The hyperbolic length of an interval $I\subset T\subset [-1,1]$ within $T$ 
+is defined to be
+$$
+\text{hyp}(I,T)=\ln\frac{|L\cup I|\cdot |R\cup I|}{|L|\cdot |R|},
+$$
+where $L,R\subset T$ are the connected components of $T\setminus I$ and 
+$|J|$ stands for the length of the interval $J\subset [-1,1]$.
+
+\flushpar
+The Schwarzian derivative of a $C^3$ map $f:[-1,1]\to [-1,1]$ is
+$$
+Sf(x)=\frac{D^3f(x)}{Df(x)}-\frac32\cdot\frac{D^2f(x)}{Df(x)}.
+$$
+where $D^if(x)$ stands for the $i^{th}$ derivative of $f$ in $x\in [-1,1]$.
+
+\proclaim{Expansion-Lemma} If $f:[-1,1]\to [-1,1]$ has $Sf(x)\le 0$ for all
+$x\in [-1,1]$ and $f^n|T$ is monotone then
+$$
+\text{hyp}(f^n(I),f^n(T))\ge \text{hyp}(I,T),
+$$
+where $I\subset T$.
+\endproclaim
+
+\proclaim{Koebe-Distortion-Lemma} For each $\tau>0$ there exists 
+$1\le K(\tau)<\infty$ with the following property. 
+Let $f^n:T\to f^n(T)$ be monotone and $Sf(x)\le 0$
+for all $x\in [-1,1]$. If $I\subset T$ is an interval such that both component
+$L,R\subset T\setminus I$ satisfy
+$$
+\frac{|f^n(L)|}{|f^n(T)|},\frac{|f^n(R)|}{|f^n(T)|}\ge \tau
+$$
+then $f^n|I$ has bounded distortion
+$$
+\frac{|Df^n(x)|}{|Df^n(y)|}\le K(\tau),
+$$
+for all $x,y\in I$.
+Moreover $K(\tau)\to 1$ when $\tau\to \infty$.
+\endproclaim
+
+\flushpar
+An $S-$unimodal map is a $C^3$ endomorphism $f:[-1,1]\to [-1,1]$ such that
+
+\parindent=15pt
+\item{1)} $f(\pm1)=-1$,
+\item{2)} $Df(x)>0$ for $x<0$,
+\item{3)} $Df(x)<0$ for $x>0$,
+\item{4)} $Df(0)=0$ and up to a $C^1$ change of coordinates
+$f$ equals locally $x\to |x|^{\alpha}$ with $\alpha>1$. 
+The point $x=0$ is called the critical point and $\alpha>1$ is called the
+critical exponent of $f$. 
+\item{5)} $Sf(x)<0$, $x\ne 0$.
+
+\flushpar
+The orbit of the critical point $x=0$ is called the critical orbit. The 
+critical orbit is said to be recurrent if it accumulates at the critical 
+point.
+
+\bigskip
+
+\flushpar
+\demo{Usage of constants} Every uniform constant, that is a constant which
+is independent of the actual map, appearing in estimates will be denoted by 
+$C$. Constants which play a specific role in the statement of Lemmas will
+usually have a specific name.
+\enddemo

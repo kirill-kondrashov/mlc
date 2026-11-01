@@ -274,7 +274,7 @@ with $K\to1$ and $\epsilon\to\infty$ as the essential period $p_e(M')\to\infty$ 
 \label{thm:ast-B}
 Lebesgue almost every real quadratic map $P_c(z)=z^2+c$ which is non-hyperbolic and at most finitely renormalizable has a
 finite absolutely continuous invariant measure (p.~174).  \emph{Status:} proved in the paper
-from Theorem~\ref{thm:ast-A} (through Theorem~5.1 below), the Martens--Nowicki geometric criterion, and Lyubich's exponential
+from Theorem~\ref{thm:ast-A} (through Theorem~5.1 below), the Martens--Nowicki summability criterion (Section~\ref{sec:martens-nowicki}), and Lyubich's exponential
 decay of scaling factors in the quasi-quadratic case \cite{LyubichQuasiQuadratic}.
 \end{theorem}
 
@@ -282,7 +282,7 @@ decay of scaling factors in the quasi-quadratic case \cite{LyubichQuasiQuadratic
 \label{cor:ast-sbr}
 For almost all $c\in[-2,1/4]$ the quadratic polynomial $P_c$ has a unique SBR measure on its invariant interval $I_c$
 (p.~174).  \emph{Status:} derived in the paper from Theorem~\ref{thm:ast-B}.  The
-uniqueness and the almost-everywhere convergence are, in the source, known results cited from Martens--Nowicki.
+the uniqueness of the SBR measure is the Martens--Nowicki Theorem~\ref{thm:mn-A}, stated jointly with Lyubich (Section~\ref{sec:martens-nowicki}).
 \end{corollary}
 
 \begin{theorem}[Theorem 5.1: real non-renormalizable parameters]
@@ -299,7 +299,7 @@ part is new in the source.
 Let $\mathcal C$ be a fine family of Mandelbrot copies, and let $\mathcal E_{\mathcal C}$ be the set of infinitely renormalizable
 parameters whose combinatorics $(M_0,M_1,\dots)$ satisfy $M_n\in\mathcal C$.  Then $\M$ is locally connected at every point of
 $\mathcal E_{\mathcal C}$, and $\mathcal E_{\mathcal C}$ has zero Lebesgue measure (pp.~198--199).
-\emph{Status:} proved in the paper, conditional on the fineness of $\mathcal C$.
+\emph{Status:} proved in the paper, conditional on the fineness of $\mathcal C$.  The topological step of the proof (nested copies with diameters tending to zero meet in one point) is formalized as \leanref{Mlc/Literature/NestedCopies.lean}{exists_unique_mem_iInter_of_antitone}; bounded shape and fineness are not formalized.
 \end{proposition}
 
 \paragraph{Proof strategy (from the source).}
@@ -324,6 +324,90 @@ The paper proves local connectivity of $\M$ only at points of $\mathcal E_{\math
 Mandelbrot copies (Proposition~\ref{prop:ast-fine}).  It does not prove MLC.  The author conjectures that the family of real maximal
 copies is fine, which would give bounded shape for all real copies.  Theorem~\ref{thm:ast-C} gives bounded shape for the maximal real copies other than the doubling one, but fineness is only conjectured.  He remarks that
 fineness of the full family of complex maximal copies would imply MLC, and says that he is not sure whether this holds (p.~199).  Julia-set local connectivity enters only as cited background.
+
+\section{The Martens--Nowicki criterion}
+\label{sec:martens-nowicki}
+
+\paragraph{Identity.}
+M.~Martens and T.~Nowicki, \emph{Invariant measures for typical quadratic maps}, arXiv:math/9606220, Asterisque 261
+(2000), 239--252 \cite{MartensNowicki}.  The title and authors are confirmed by the metadata and by
+\texttt{refs/arxiv-math-9606220/main.tex}, lines 15--31; the journal pages are those listed by NUMDAM, since the
+source files do not give them.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{$S$-unimodal maps.}  A map $f\colon[-1,1]\to[-1,1]$ is $S$-unimodal with critical exponent $\alpha$ if it is
+$C^3$, $f(\pm1)=-1$, $Df>0$ on $x<0$, $Df<0$ on $x>0$, $Df(0)=0$, $Sf<0$, and near $0$ it is $x\mapsto|x|^\alpha$ up to a
+differentiable change of coordinates, with $\alpha>1$ (\texttt{main.tex}, lines 838--849).  The quadratic family is
+$q_t(x)=-2tx^2+2t-1$ (lines 67--72).
+\item \emph{Nice points and first returns.}  $\mathcal N=\{x:\ f^i(x)\notin(-|x|,|x|)\text{ for all }i\ge0\}$ (lines 253--258).
+For $x\in\mathcal N$ put $U_x=(-|x|,|x|)$; the points of $U_x$ that return to $U_x$ form $D_x$, and the first-return map is
+$R_x\colon D_x\to U_x$ (lines 260--264).  The central component $V_x\subset D_x$ contains $0$, and $\psi(x)=\partial V_x\cap(0,1)$
+(lines 286--305).
+\item \emph{Scaling factors.}  Choose $u_1\in\mathcal N$, put $u_n=\psi(u_{n-1})$ and $U_n=(-u_n,u_n)$; then $U_{n+1}$ is the
+central component of $D_n$ (lines 306--317).  The scaling factor of level $n$ is $\sigma_n=u_{n+1}/u_n$ (lines 319--328).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Martens--Nowicki, Theorem B]
+\label{thm:mn-B}
+If an $S$-unimodal map with critical exponent $\alpha>1$ has summable scaling factors,
+\[
+\sum_{n\ge1}\sigma_n^{1/\alpha}\ <\ \infty,
+\]
+then it has an absolutely continuous invariant probability measure (\texttt{main.tex}, lines 191--199).  \emph{Status:}
+proved in the paper, using the Nowicki--van Strien summability criterion \cite{NowickiVanStrien} (lines 633--645).
+\end{theorem}
+
+\begin{corollary}[Martens--Nowicki, Corollary]
+\label{cor:mn-finite}
+A quadratic map with only finitely many central returns has an absolutely continuous invariant probability measure
+(\texttt{main.tex}, lines 201--204).  \emph{Status:} derived from Theorem~\ref{thm:mn-B} together with a renormalization
+input that the paper cites.
+\end{corollary}
+
+\begin{theorem}[Martens--Nowicki, Theorem A, joint with Lyubich]
+\label{thm:mn-A}
+A typical quadratic map has a unique SBR measure.  More precisely, for parameters in $\mathcal P$ the support of the SBR
+measure is the periodic attractor; for parameters in $\mathcal R$ it is a Cantor set; for parameters in $\mathcal M$ it is
+absolutely continuous and supported on the orbit of a periodic interval; and $\mathcal P\cup\mathcal R\cup\mathcal M$ has
+full Lebesgue measure (\texttt{main.tex}, lines 121--145).  \emph{Status:} stated in the paper as joint with Lyubich.  The
+paper derives it from Theorem~\ref{thm:mn-B} and from Lyubich's result that for almost every parameter in $\mathcal I$ the
+map has only finitely many central returns (lines 215--223).
+\end{theorem}
+
+\paragraph{Proof strategy (from the source).}
+\begin{itemize}
+\item Proposition~3.1: small scaling factors give derivative growth along the critical orbit (\texttt{main.tex}, lines 386--401).
+\item The Nowicki--van Strien summability criterion turns this growth into an absolutely continuous invariant measure
+(lines 633--645).
+\item A Teleman-type decomposition of the critical orbit splits the derivative sum; the outside pieces are estimated
+exponentially by Proposition~4.1 (cited from Guckenheimer and Ma\~n\'e) and the return pieces by Proposition~3.1 (lines 661--724).
+\item Lemma~4.2 shows that distinct decompositions cannot have the same data, so the products decay geometrically and the sum
+converges (lines 725--763).
+\end{itemize}
+
+\paragraph{External inputs.}
+Nowicki--van Strien, \emph{Absolutely continuous measures under a summability condition}, Invent.\ Math.\ 93 (1988)
+\cite{NowickiVanStrien}; Martens, \emph{Interval dynamics} (thesis, 1990), for distortion (\texttt{main.tex}, lines 179--181);
+Lyubich, \emph{Combinatorics, geometry and attractors of quasi-quadratic maps} \cite{LyubichQuasiQuadratic}, for the exponential
+decay of scaling factors (lines 181--187); Lyubich--Milnor, \emph{The Fibonacci unimodal map}, J.\ Amer.\ Math.\ Soc.\ 6 (1993),
+425--457 (lines 181--187); Guckenheimer and Ma\~n\'e, for Proposition~4.1; and Lyubich's parapuzzle preprint, cited as [L4] in the
+paper's bibliography (\texttt{Dynamics of Quadratic Polynomials, III: Parapuzzles}, Stony Brook preprint).
+
+\paragraph{Relation to Lyubich's Theorem B.}
+Lyubich's Astérisque paper uses the criterion in the following form: together with the exponential decay of scaling factors
+in the quasi-quadratic case, the criterion gives an absolutely continuous invariant measure once the principal nest is eventually
+free from central cascades (Section~\ref{sec:lyubich-ast261}).  Theorem~\ref{thm:ast-5-1} supplies this condition for a set of full
+measure among the non-renormalizable real parameters.  The bibliography entry [L4] of the Martens--Nowicki paper has the title of
+the parapuzzle paper of Part~III; we identify it with the Astérisque paper by this title series, which is our identification and
+not a statement of the source.
+
+\paragraph{Scope.}
+The paper does not claim that every non-hyperbolic quadratic map has an absolutely continuous invariant measure; it notes that
+for parameters in $\mathcal I$ large enough there are maps without one (\texttt{main.tex}, lines 213--216).  The uniqueness statement
+of Theorem~\ref{thm:mn-A} concerns typical parameters only.
 
 \section{Summary of this chapter}
 \label{sec:digests-iv-summary}
@@ -354,4 +438,4 @@ proved, conditional on fineness\\
 The covering laws of Section~\ref{sec:kl-qa} are the analytic tools of the Kahn--Lyubich unicritical theorem (Section~\ref{sec:kl-unicritical}) and of the a priori bounds series of Chapter~\ref{ch:digests-apriori-limbs}.  In the parapuzzle paper, the parameter analogue of the same moduli growth gives local connectivity of $\M$ on fine families; the fineness hypothesis is the point where that paper's argument meets the open problem.
 
 \paragraph{Not covered here.}
-Martens and Nowicki's criterion for absolutely continuous invariant measures is cited, not digested.  Lyubich's 1994 Annals paper \cite{LyubichQuasiQuadratic} and the Acta papers \cite{LyubichDynamics} are cited, not digested in this chapter.  The Lean development contains no formalization of any statement in this chapter.
+Martens and Nowicki's criterion for absolutely continuous invariant measures is cited, not digested.  Lyubich's 1994 Annals paper \cite{LyubichQuasiQuadratic} and the Acta papers \cite{LyubichDynamics} are cited, not digested in this chapter.  The Lean development formalizes only the topological step of Proposition~\ref{prop:ast-fine} (nested copies with shrinking diameters meet in one point, \leanref{Mlc/Literature/NestedCopies.lean}{subsingleton_iInter_of_diam_tendsto_zero}); the statements of this chapter otherwise have no Lean counterpart.

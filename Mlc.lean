@@ -9,6 +9,7 @@ import Mlc.Literature.Categorical
 import Mlc.Literature.CaseTheorems
 import Mlc.Literature.ModelAudit
 import Mlc.Literature.Review
+import Mlc.Literature.NestedCopies
 import Mlc.Quadratic.Complex.FirstComponents
 import Mlc.Quadratic.RealSlice
 import Mlc.Quadratic.Examples
