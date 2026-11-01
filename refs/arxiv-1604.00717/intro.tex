@@ -1,0 +1,93 @@
+\section{Introduction}
+
+
+
+One of the central examples of universality on one-dimensional dynamics is
+provided by Siegel disks of quadratic polynomials. Let us consider, for instance,
+the mapping 
+$$P_\theta(z)=z^2+e^{2\pi i\theta}z,\text{ where }\theta=(\sqrt{5}-1)/2$$
+is the inverse golden mean. By a classical result of Siegel \cite{Sieg}, the dynamics of $P_\theta$
+is linearizable near the origin. The Siegel disk of $P_\theta$, which we will further
+denote $\Delta_\theta$ is the maximal neighborhood of zero in which a conformal
+change of coordinates reduces $P_\theta$ to the form $w\mapsto e^{2\pi i\theta}w$.
+By the results of Douady, Ghys, Herman, and Shishikura \cite{Do}, the topological disk $\Delta_\theta$
+is bounded by  a Jordan curve which contains the only critical point of $P_\theta$ and thus coincides with the
+postcritical set of $P_\theta$.
+
+
+It has  been observed numerically (cf. the work of Manton and Nauenberg \cite{MN}), 
+that the boundary of $\Delta_\theta$ is asymptotically
+self-similar near the critical point. Moreover, the scaling factor is universal
+in a large class of analytic mappings with a golden-mean Siegel disk.
+In 1983 Widom \cite{Wi} defined a renormalization procedure for $P_\theta$ which
+``blows up'' a part of the invariant curve $\partial \Delta_\theta$ near the critical
+point, and conjectured that the renormalizations of $P_\theta$ converge to a fixed point.
+In addition, he conjectured that in a suitable functional space this fixed point
+is hyperbolic with one-dimensional unstable direction.
+
+In 1986
+MacKay and Persival \cite{MP} extended the conjecture to other rotation numbers,
+postulating the 
+existence of a hyperbolic renormalization horseshoe corresponding to Siegel disks of 
+analytic maps,
+analogous to Lanford's horseshoe for critical circle maps \cite{La1,La2}. 
+
+In 1994 Stirnemann \cite{Stir} gave a computer-assisted proof of the existence of a
+renormalization fixed point with a golden-mean Siegel disk, see also \cite{Bur}.
+In 1998, McMullen \cite{McM} proved the asymptotic self-similarity of  golden-mean
+Siegel disks in the quadratic family. He constructed a version of renormalization 
+based on holomorphic commuting pairs of de~Faria \cite{dF1,dF2}, and
+showed that the renormalizations of a quadratic polynomial with a golden Siegel disk
+ near the critical point converge
+to a fixed point geometrically fast. 
+More generally, he constructed a renormalization horseshoe for bounded
+type rotation numbers, and used renormalization to show that the Hausdorff dimension of
+the corresponding quadratic Julia sets is strictly less than two.
+
+A major break-through in the renormalization theory for Siegel disks is due to the concept of {\it cylinder renormalization} which was first introduced by the second author in the context of critical circle maps \cite{Ya1}. For rotation numbers of {\it high type} (that is, for those, whose continued fraction expansion has a large lower bound on the coefficients) cylinder renormalization can also be described as ``almost parabolic renormalization'', based on the nonlinear perturbed Fatou coordinate change. In a seminal paper with far-reaching consequence \cite{IS} H.~Inou and M.~Shishikura proved a version of {\it a priori} bounds for Siegel renormalization of high type, and proved a renormalization convergence result. In 
+\cite{Ya3} the second author used the results of \cite{IS} to construct a cylinder renormalization horseshoe for rotation numbers of high type. However, these results do not cover the golden-mean case, which is, in a sense, the extreme opposite of the almost parabolic case. 
+
+
+The issue of hyperbolicity of cylinder renormalization for golden-mean Siegel disks  has been studied in our earlier paper \cite{GaYa}. In that work we provided a numerical evidence for the existence of a hyperbolic fixed point of cylinder renormalization with a single unstable direction, and computed the bounds on its spectrum. The principal difficulty in this numerical study was the computation of the nonlinear change of coordinates in the definition of cylinder renormalization. It was implemented using the constructive Beltrami equation solver developed by the first author in \cite{Ga}. This difficulty has also precluded us from turning the numerical study of \cite{GaYa} into a rigorous computer-assisted proof.
+
+Having thus attracted much attention, the renormalization hyperbolicity part of the conjecture of Widom for golden-mean
+Siegel disks has been  open until now. In this paper we finally settle it. To do this, we return to the setting of {\it almost 
+commuting holomorphic pairs}, used by Stirnemann \cite{Stir} in his proof of the existence of a golden-mean fixed point. 
+Surprisingly, this approach, which was essentially abandoned in the field since the late 1990's has finally bore fruit.
+
+% For one-column wide figures uset 
+\begin{figure}
+% Use the relevant command for your figure-insertion program
+% to insert the figure file.
+% For example, with the option graphics use
+\centering
+% If not, use
+\vspace{2mm}       % Give the correct figure height in cm
+\begin{tabular}{c c} 
+\includegraphics[height=5cm]{Siegel4.pdf} \quad & \quad \includegraphics[width=5cm,height=5cm]{Siegel2.pdf}
+\end{tabular}
+\vspace{4mm}       % Give the correct figure height in cm
+\caption{The filled Julia set of the golden mean quadratic polynomial $e^{2 i \pi \theta} z+ z^2$ (grey), together with a blow up around the critical point. The Siegel disk is bounded by the black curve.}
+\label{fig:1}       % Give a unique label
+\end{figure}
+
+Having shown the renormalization hyperbolicity, we use an approach of \cite{Ya3} to prove that for every map in the stable manifold of the golden-mean renormalization fixed point the Siegel disk is a quasidisk, whose boundary coincides with the closure of the critical orbit. Combining this with results of McMullen's  \cite{McM}, we show that the natural quasiconformal conjugacy between any such map and $P_\theta$ (defined in a neighborhood of the Siegel disk) is, in fact, $C^{1+\alpha}$ conformal on the boundary of the Siegel disk. This implies, in particular, that $P_\theta$ lies in the stable manifold of the fixed point, and thus our renormalization fixed point coincides with the one constructed in \cite{McM}.
+
+Our proof of hyperbolicity of renormalization has an important bonus. We are able to extend the definition of Siegel renormalization to 
+dissipative H\'enon-like maps, similarly to the way it was done for Feigenbaum renormalization by A.~de~Carvalho, M.~Lyubich, and M.~Martens in \cite{CLM}. 
+In this larger function space we show that the golden-mean fixed point
+remains hyperbolic with a single unstable direction (in fact, no new non-trivial eigendirections are added to its spectrum by passing to a larger space). In a forthcoming joint paper with R.~Radu \cite{GaRYa} we use this result to settle an important open problem in two-dimensional dynamics -- we show that the Siegel disk of a highly dissipative H\'enon map with a golden-mean semi-Siegel fixed point is bounded by a topological circle, dynamics on which is quasisymmetrically conjugate to a rigid rotation.
+
+%%Furthermore, the hyperbolic fixed point we have constructed can be used to produce new examples of quadratic polynomial Julia sets with positive area. We show how to modify the arguments of Buff-Ch{\'e}ritat \cite{BC} using our renormalization theorem (rather than the results of Inou-Shishikura \cite{IS}) to produce Cremer quadratics  with rotation numbers close to the golden mean, and positive area Julia sets. 
+
+
+\subsection*{Structure of the paper}
+The following brief guide to the layout of the paper will be useful to the reader. The next section (\secref{sec:symmetric}) contains the principal definitions of the function spaces of almost commuting pairs and the renormalization transformation acting upon them. In \secref{sec:ACSM} we specialize to considering the subspace of symmetric almost commuting pairs. The somewhat restrictive quadratic symmetry condition is, however, broad enough to include renormalizations of Siegel quadratic polynomials. Further in this section we formulate \thmref{mainthm1} on hyperbolicity of renormalization of symmetric almost commuting pairs, which is our first principal result. The proof of \thmref{mainthm1} occupies a substantial portion of the paper and includes rigorous computer-assisted estimates; we postpone it until  \secref{sec:pfmain1}. 
+
+In \secref{sec:ACM} we generalize the hyperbolicity result to pairs without the symmetry condition. A key ingredient here is a non-linearity norm which is discussed in the opening pages of the section. The hyperbolicity of renormalization result in the space of general almost commuting pairs is proved (in two different Banach metrics) in \thmref{mainthm2} and \thmref{mainthm3}. 
+
+The subject of \secref{sec:quasiarc} is \thmref{mainthm4}, which establishes that the postcritical set of an almost commuting pair in the stable manifold of the renormalization fixed point $\zeta_*$ is an invariant quasi-arc. This result, together with McMullen's theory of holomorphic pairs is used in \secref{sec:holomorphic} to demonstrate that the golden-mean Siegel quadratic polynomial lies in $W^s(\zeta_*)$. 
+
+In \secref{sec:RenACM} we extend our results to dissipative maps in two variables, and prove our final renormalization hyperbolicity result for these maps (\thmref{mainthm6}).
+
+Finally, as already mentioned above, \secref{sec:pfmain1} contains the computer-assisted proof of \thmref{mainthm1}.

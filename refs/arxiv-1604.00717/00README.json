@@ -1,0 +1,14 @@
+{
+  "key": "gaidashev-yampolsky-golden-mean",
+  "arxiv_id": "1604.00717",
+  "arxiv_version": "4",
+  "role": "supporting",
+  "title": "Golden mean Siegel disk universality and renormalization",
+  "authors": [
+    "Denis Gaidashev",
+    "Michael Yampolsky"
+  ],
+  "metadata": "arxiv-1604.00717.xml",
+  "source_archive": "arxiv-1604.00717-source.tar.gz",
+  "main_tex": "arxiv-1604.00717/main.tex"
+}

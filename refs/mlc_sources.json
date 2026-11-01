@@ -145,6 +145,14 @@
       "title": "Invariant measures for typical quadratic maps",
       "authors": ["Marco Martens", "Tomasz Nowicki"],
       "existing_pdf": null
+    },
+    {
+      "key": "gaidashev-yampolsky-golden-mean",
+      "arxiv_id": "1604.00717",
+      "role": "supporting",
+      "title": "Golden mean Siegel disk universality and renormalization",
+      "authors": ["Denis Gaidashev", "Michael Yampolsky"],
+      "existing_pdf": null
     }
   ]
 }

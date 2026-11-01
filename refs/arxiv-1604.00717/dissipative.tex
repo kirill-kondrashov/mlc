@@ -1,0 +1,352 @@
+
+\section{Renormalization for  pairs of two-dimensional dissipative maps}\label{sec:RenACM}
+Let $\Omega, \Gamma$ be  domains in $\CC^2$. We denote $O(\Omega,\Gamma)$ the Banach space of pairs of bounded analytic functions 
+$F=(F_1(x,y),F_2(x,y))$  from $\Omega$ and $\Gamma$ respectively to $\CC^2$ equipped with the norm
+\begin{equation}
+\label{eq:unormm}\| F\|= \frac{1}{2} \left(   \sup_{(x,y) \in \Omega}|F_1(x,y)|+  \sup_{(x,y)\in \Gamma} |F_2(x,y) | \right).
+\end{equation}
+We let $O(\Omega,\Gamma,\delta)$ stand for the $\delta$-ball around the origin in this Banach space. 
+%%The spaces of $O(\hat\Omega,\hat\Gamma)$ and $O(\tl\Omega,\tl\Gamma)$ are analogously defined.
+
+
+In what follows, we fix $W_1$, $Z_1$, $\tl Z$, and $\tl W$ as in \thmref{mainthm3}, and $R>0$ such that $\DD_R\subset Z_1\cap W_1$, and let 
+$\Omega=Z_1 \times \DD_R$, $\Gamma=W_1 \times \DD_R$.
+We select $\hat Z_1$ and $\hat W_1$ so that
+$$Z_1 \Subset \hat Z_1\Subset \tl Z,\; W_1\Subset \hat W_1\Subset \tl W.$$
+We define an isometric embedding $\iota$ of the space $\cH(Z_1,W_1)$ into $O(\Omega,\Gamma)$ which send the pair $\zeta=(\eta,\xi)$ to
+the  pair of functions $\iota(\zeta)$:
+\begin{equation}
+\label{eq:embed}
+\left(\left(x \atop  y\right)\mapsto \left(\eta(x) \atop \eta(x) \right), 
+\left(x \atop  y\right)\mapsto \left(\xi(x) \atop \xi(x) \right)   \right).
+\end{equation}
+
+
+
+Let $\cU$ be an open neighborhood of $\zeta_*$ in $\cC(Z_1,W_1)$, and let $Q$ be a neighborhood of $0$ in $\CC$.
+We will consider an open subset of  $O(\Omega,\Gamma)$ of pairs of maps of the form
+\begin{eqnarray}
+\label{eq:A} A(x,y)&=&(a(x,y),h(x,y))=(a_y(x),h_y(x)),\\
+\label{eq:B} B(x,y)&=&(b(x,y),g(x,y))=(b_y(x),g_y(x)), 
+\end{eqnarray}
+such that
+\begin{itemize}
+\item[1)] the pair $(a(x,y),b(x,y))$ is in a $\delta$-neighborhood  of  $\cU$ in $\cH(Z_1,W_1)$,
+\item[2)]  $(h,g) \in O(\Omega,\Gamma)$ are such that  $|\partial_x h(x,0)|>0$ and  $|\partial_x g(x,0)|>0$ whenever $x \notin \bar Q$,  and 
+$$(h(x,y)-h(x,0),g(x,y)-g(x,0)) \in \cO(\Omega,\Gamma,\delta).$$ 
+\end{itemize}
+This open subset of $O(\Omega,\Gamma)$ will be denoted $\cB(\cU,Q,\delta)$ for brevity.
+
+Given a pair $\Sigma=(A,B)$ as in $(\ref{eq:A})-(\ref{eq:B})$ we set 
+$$\cL \Sigma \equiv (a(x,0),b(x,0)).$$
+%%By condition $1)$ above, there exists a pair $ \zeta \in \cA(U,V,Z_1,W_1,\eps)$  such that the pair $\cL \Sigma$ is $\delta$-close to $\zeta$ in the uniform norm. 
+
+
+\subsection{The first step in defining renormalization: appropriate coordinate transformations}\label{transformations}
+We will now define a renormalization operator on pairs of 2D maps in several steps. Similarly to \cite{CLM}, the first 
+step will be to define  a sufficiently high pre-renormalization in a neighborhood of $(\eta^{-1}(0),0)$, and then pull such a 
+pair back to neighborhood of $(0,0)$ by a coordinate change which will reduce the order of magnitude of the
+ dependence of our pair on the $y$-coordinate. 
+
+
+Let $(\eta,\xi) \in \cB(Z_1,W_1)$ be $n\geq 2$ times renormalizable,  and consider its $n$-th renormalization written as
+$$\cR^n\zeta=\lambda_n^{-1}\circ \left(\eta \circ \xi \circ \zeta^{\bar l_n}, \eta \circ \xi \circ \zeta^{\bar m_n } \right) \circ \lambda_n,$$
+%%where $\bar l_n=(a_1,b_1; \ldots ; a_{n-1},b_{n-1})$ is the multi-index such that
+%%$$\zeta^{\bar l_n}:=\xi^{b_{n-1}} \circ \eta^{a_{n-1}} \ldots \circ \xi^{b_1} \circ \eta^{a_1},$$ 
+%%and similarly for $\bar m_n$, while 
+where $\lambda_n$ is the appropriate (anti-)linear transformation. 
+
+ For a  sufficiently large $n$, the function $\eta^{-1}$ is a diffeomorphism of the neighborhood $\lambda_n (Z_1 \cup W_1)$, and one can define the $n$-th pre-renormalization of $\zeta$ on $\eta^{-1}(\lambda_n (Z_1 \cup W_1))$ as 
+$$\hat p \cR^n\zeta=\left(\xi \circ \zeta^{\bar l_n} \circ \eta, \xi \circ \zeta^{\bar m_n } \circ \eta \right).$$
+
+Next, suppose that $\Sigma=(A,B)$ lies in $\cB(\cU,Q,\delta)$ with $\cU$ and $\delta$ sufficiently small, so that 
+the following pre-renormalization  is defined in a neighborhood of $\eta^{-1}(\lambda_n (Z_1 \cup W_1))\times \{ 0\}$:
+$$\hat p \cR^n \Sigma = \left(B \circ \Sigma^{\bar l_n} \circ A, B \circ \Sigma^{\bar m_n} \circ A \right).$$
+
+We will denote $$\pi_1(x,y)=x\text{ and }\pi_2(x,y)=y.$$
+Set
+$$\phi_y(x) := \pi_1 \circ A \circ B(x,y) \equiv a(b(x,y),g(x,y)).$$
+For sufficiently small $Q$ and $\delta$ and for all  $z \in \DD_r$ for some large $r$, the map $\phi_z$ is close to $\eta \circ \xi$ and is a diffeomorphism of a neighborhood of $\pi_1 \Sigma^{\bar l_n}(\lambda_n (Z_1),0) \approx \zeta^{\bar l_n}(\lambda_n (Z_1))$.  Similarly,  for all $z \in \DD_r$ for some large $r$, the map $g_z$ is a diffeomorphism of  a neighborhood of $\pi_1  \Sigma^{\bar l_n}(\lambda_n (Z_1),0)$. We can chose the constants to guarantee that $r>2R$.
+
+
+
+Furthermore, let
+$$w_z(x)\equiv w(x,z) := g_{z}\left(\phi_{z}^{-1}( x) \right).$$
+This is a diffeomorphism of a neighborhood of   $\pi_1 A \circ B \circ \Sigma^{\bar l_n}(\lambda_n (Z_1),0)$ in $\CC^2$ onto its image for all $z \in \DD_R$ for some large $R>0$.  Notice, that $\partial_z  w_z(x)$ and $\partial_z w^{-1}_z(x)$ are functions whose uniform norms are $O(\delta)$.
+
+We are now ready to define our first change of coordinates:
+$$H(x,y) =  (a_y(x),w_{g_0^{-1}(y)}^{-1}(y)),$$
+where the function $g^{-1}_z$ is defined by 
+\begin{equation}\label{g_inv}
+g_z^{-1}(g(x,z))=x
+\end{equation}
+outside a neighborhood of $g(Q,0)$ in  $\CC$. The transformation $H$ is close to $\left(\eta(x),\eta(\xi(g_0^{-1}(y))) \right)$, and therefore, for small $\delta$,  is a diffeomorphism of a neighborhood of $$\pi_1  B \circ \Sigma^{\bar l_n}(\lambda_n (Z_1),0) \approx \xi(\zeta^{\bar l_n}(\lambda_n (Z_1)))$$ onto its image. Notice that
+\begin{eqnarray}
+\label{correction} w_{g_0^{-1}(y)}^{-1}(y)-w_{g_z^{-1}(y)}^{-1}(y) \sim \left( \partial_z w_{g_z^{-1}(y)}^{-1}(y)  \right) \left(\partial_z g_z^{-1}(y)  \right) z&=&O(\delta^2) O(z),\\
+\label{comp} w_{z_1}^{-1} \circ w_{z_2} -id \sim \partial_z w_z (z_2-z_1)&=&O(\delta) O(z_2-z_1).
+\end{eqnarray}
+%The first difference is of the form $z \gamma(z,y)$ where $\gamma$ is a function whose uniform norm is $O(\delta^2)$, while the second is of the form $O(\delta) O(z_2-z_1)$ 
+
+
+ We use $H(x,y)$ to pull back $\hat p \cR^n\Sigma$ to a neighborhood of definition of the $n$-th pre-renormalization of an almost commuting pair $(\eta,\xi)$ - that is, a neighborhood of  $\lambda_n (Z_1 \cup W_1)$ in $\CC^2$:
+$$p \cR^n\Sigma\equiv(\bar A, \bar B) = H \circ \left( B \circ \Sigma^{\bar l_n} \circ A, B \circ \Sigma^{\bar m_n} \circ  A \right) \circ H^{-1}(x,y).$$
+
+The first map in this pair becomes
+% \begin{eqnarray}
+% \nonumber  \bar A(x,y)&=&H \circ B \circ \Sigma^{\bar l_n} \circ A \circ H^{-1}(x,y) \\
+% \nonumber &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}  \atop    w_{\pi_2 B^{-1} (\pi_1 B \circ  \Sigma^{\bar l_n},0) }^{-1}  \circ \pi_2 B \circ \Sigma^{\bar l_n} } \right) \circ A \circ H^{-1}(x,y) \\
+% \nonumber &{(\ref{correction}) \atop =}&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}  \atop    w_{\pi_2 B^{-1} B \circ \Sigma^{\bar l_n} }^{-1}  \circ \pi_2 B \circ \Sigma^{\bar l_n} +O(\delta^2)} \right) \circ A \circ H^{-1}(x,y) \\
+% \nonumber & =& \left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}  \atop    w_{\pi_2 B^{-1} B \circ \Sigma^{\bar l_n} }^{-1}  \circ g_{\pi_2 \Sigma^{\bar l_n} } \circ \pi_1 \Sigma^{\bar l_n} +O(\delta^2)} \right) \circ A \circ H^{-1}(x,y) \\
+% \nonumber  &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}   \atop     w_{\pi_2 \Sigma^{\bar l_n} }^{-1}  \circ w_{\pi_2 \Sigma^{\bar l_n} }\circ \phi_{\pi_2 \Sigma^{\bar l_n}} \circ \pi_1 \Sigma^{\bar l_n} +O(\delta^2)} \right) \circ A \circ H^{-1}(x,y) \\
+% \nonumber  &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}   \atop  \pi_1 A \circ B \circ \Sigma^{\bar l_n} +O(\delta^2)} \right) \circ A \circ H^{-1}(x,y).
+% \end{eqnarray}
+\begin{eqnarray}
+\nonumber  \bar A(x,y)&=&H \circ B \circ \Sigma^{\bar l_n} \circ A \circ H^{-1}(x,y) \\
+\nonumber &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}  \atop    w_{g_0^{-1}( \pi_2 B \circ \Sigma^{\bar l_n}  )}^{-1}  \circ \pi_2 B \circ \Sigma^{\bar l_n} } \right) \circ A \circ H^{-1}(x,y) \\
+\nonumber &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}  \atop    w_{(g_0^{-1} \circ g) \circ \Sigma^{\bar l_n}  }^{-1}  \circ \pi_2 B \circ \Sigma^{\bar l_n} } \right) \circ A \circ H^{-1}(x,y) \\
+\nonumber &{(\ref{correction}) \atop =}&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}  \atop    w_{ {(g_{ \pi_2 \Sigma^{\bar l_n}  }^{-1} \circ g) \circ \Sigma^{\bar l_n}  }  }^{-1}  \circ \pi_2 B \circ \Sigma^{\bar l_n} +O(\delta^2)} \right) \circ A \circ H^{-1}(x,y) \\
+\nonumber & {(\ref{g_inv}) \atop =}& \left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}  \atop   w_{\pi_1 \Sigma^{\bar l_n} }^{-1}   \circ g_{\pi_2 \Sigma^{\bar l_n} } \circ \pi_1 \Sigma^{\bar l_n} +O(\delta^2)} \right) \circ A \circ H^{-1}(x,y) \\
+\nonumber  &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}   \atop     w_{\pi_1 \Sigma^{\bar l_n} }^{-1}  \circ w_{\pi_2 \Sigma^{\bar l_n} }\circ \phi_{\pi_2 \Sigma^{\bar l_n}} \circ \pi_1 \Sigma^{\bar l_n} +O(\delta^2)} \right) \circ A \circ H^{-1}(x,y) \\
+%\nonumber  &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}   \atop     \phi_{\pi_2 \Sigma^{\bar l_n}} \circ \pi_1 \Sigma^{\bar l_n} +O({\pi_1 \Sigma^{\bar l_n}} -{\pi_2 \Sigma^{\bar l_n} })+O(\delta^2)} \right) \circ A \circ H^{-1}(x,y) \\
+\nonumber  &{(\ref{comp}) \atop =}&\left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}   \atop  \pi_1 A \circ B \circ \Sigma^{\bar l_n} +O(\delta) O\left({\pi_1 \Sigma^{\bar l_n}} -{\pi_2 \Sigma^{\bar l_n} }\right)+O(\delta^2)} \right) \circ A \circ H^{-1}(x,y).
+\end{eqnarray}
+
+\noindent
+ We remark that the inverse $H^{-1}(x,y)=H^{-1}_{appr}(x,y)+O(\delta^2)$, where
+$$H^{-1}_{appr}(x,y):=\left(a^{-1}_{w_{\phi_0^{-1}(y)}(y)}(x), w_{\phi_0^{-1}(y)}(y) \right).$$
+Indeed, set  $\chi(y):=w_{\phi_0^{-1}\left(w^{-1}_{g_0^{-1}(y)}(y) \right)} \left(w^{-1}_{g_0^{-1}(y)}(y)\right)$, then we can use the fact that $\phi_0^{-1}=g_0^{-1} \circ w_0$, together with (\ref{comp}),  in the following computation:
+\begin{eqnarray}
+\nonumber \chi(y)&=&w_{g_0^{-1} \circ \left(w_0 \circ w^{-1}_{g_0^{-1}(y)}\right)(y)} \left(w^{-1}_{g_0^{-1}(y)}(y)\right)=w_{g_0^{-1}\left(y+O(\delta)\right)} \left(w^{-1}_{g_0^{-1}(y)}(y)\right) \\
+\nonumber &=&w_{g_0^{-1}(y)+O(\delta)} \left(w^{-1}_{g_0^{-1}(y)}(y)\right)=y+O(\delta^2),
+\end{eqnarray}
+therefore,
+\begin{eqnarray}
+\nonumber H_{appr}^{-1} \circ H(x,y)&=& \left(a^{-1}_{w_{\phi_0^{-1} \circ \pi_2} \circ \pi_2 } \circ \pi_1, w_{\phi_0^{-1} \circ \pi_2} \circ \pi_2 \right) \circ (a_y(x),w_{g_0^{-1}(y)}^{-1}(y)) \\
+\nonumber &=&\left(a^{-1}_{\chi(y)}(a_y(x)), \chi(y)\right) \\
+\nonumber &=&(x,y)+O(\delta^2).
+\end{eqnarray}
+We now have
+$$A \circ H^{-1}(x,y)=(a,h) \circ \left(a^{-1}_{w_{\phi_0^{-1}(y)}(y)}(x), w_{\phi_0^{-1}(y)}(y) \right) +O(\delta^2)=(x,h(H^{-1}_{appr}(x,y)))+O(\delta^2),$$
+\noindent
+and
+$$ \bar{A}(x,y)= \left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n} \atop  \pi_1 A \circ B \circ \Sigma^{\bar l_n} + O(\delta) \ O\!\left({\pi_1 \Sigma^{\bar l_n}} -{\pi_2 \Sigma^{\bar l_n} }\right) } \right)(x,h(H^{-1}_{appr}(x,y)))+O(\delta^2).$$
+
+%\nonumber &=&  \left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}\atop  \pi_1 A \circ B \circ \Sigma^{\bar l_n}} \right)(x,h(H^{-1}_{appr}(x,y))+O(\delta^2).
+
+
+% We remark that the inverse 
+% $$H^{-1}(x,y)=\left(a^{-1}_{ w_{\pi_2 B^{-1}(a^{-1}_0(x),0)}(y)}(x), w_{\pi_2 B^{-1}(a^{-1}_0(x),0)}(y) \right)+O(\delta^2),$$
+% therefore,
+% $$A \circ H^{-1}(x,y)=\left(x, h(a^{-1}_{\beta(x,y)}(x),  \beta(x,y) \right)  +O(\delta^2), \quad \beta(x,y):= w_{\pi_2 B^{-1}(a^{-1}_0(x),0)}(y)$$
+
+% \noindent
+% We have
+% \begin{eqnarray}
+% \nonumber \bar{A}(x,y)&=& \left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n} \atop  \pi_1 A \circ B \circ \Sigma^{\bar l_n}} \right)(x, h(a^{-1}_{\beta(x,y)}(x),  \beta(x,y)) +O(\delta^2)\\
+% \nonumber &=&  \left( { \pi_1 A \circ B \circ \Sigma^{\bar l_n}\atop  \pi_1 A \circ B \circ \Sigma^{\bar l_n}} \right)(x, h(a^{-1}_{\beta(x,0)}(x),  \beta(x,0)) +O(\delta^2).
+% \end{eqnarray}
+Similarly,
+\begin{eqnarray}
+\nonumber \bar{B}(x,y)&=& H \circ B \circ \Sigma^{\bar m_n}\circ A \circ H^{-1}(x,y) \\
+\nonumber &=&\left( { \pi_1 A \circ B \circ \Sigma^{\bar m_n} \atop  \pi_1 A \circ B \circ \Sigma^{\bar m_n} + O(\delta) \ O\!\left({\pi_1 \Sigma^{\bar m_n}} -{\pi_2 \Sigma^{\bar m_n} }\right)} \right)(x,h(H^{-1}_{appr}(x,y)))+O(\delta^2).
+\end{eqnarray}
+
+\noindent
+We have thus proved the following:
+\begin{lem}
+\label{lem-preren}
+There exists an $n \in \NN$, and a choice of $\cU$, $Q$, and $\delta_0$ such that there exists $C>0$ such that the following holds. For every $\delta<\delta_0$ and every $\Sigma\in\cB(\cU,Q,\delta)$ the pair $p\cR^n\Sigma$ is defined, lies in $O(\hat\Omega,\hat\Gamma)$, and 
+$$\dist(p \cR^n \Sigma, \iota(\cH(\lambda_n(\hat Z_1),\lambda_n(\hat W_1))))<C \delta \left( \|\pi_1 \Sigma -\pi_2 \Sigma \|  +\delta \right).$$
+\end{lem}
+
+Let us write
+\begin{equation}
+\bar{A}(x,y)=\left( { \bar \eta_1(x)+\bar \tau_1(x,y) \atop   \bar \eta_2(x)+\bar \tau_2(x,y) } \right),
+\end{equation}
+where 
+$$\bar \eta_1(x) \equiv \pi_1 \bar{A}(x,0), \quad  \bar \eta_2(x) \equiv \pi_2 \bar{A}(x,0)$$
+are $O\left( \delta \left( \|\pi_1 \Sigma -\pi_2 \Sigma \|  +\delta \right) \right)$-close to each other, and both are $\delta$-close to $\pi_\eta p \cR^n \zeta=\eta \circ \xi \circ \zeta^{\bar l_n}$, and 
+$$\bar \tau_1(x,y) \equiv  \pi_1 \bar{A}(x,y)- \pi_1 \bar{A}(x,0), \quad \bar \tau_2(x,y)= \pi_2 \bar{A}(x,y)- \pi_2 \bar{A}(x,0),$$
+are functions whose norms are $O(\delta^2)$. Similarly,
+$$
+\nonumber \bar{B}(x,y)=\left( { \bar \xi_1(x)+\bar \pi_1x,y) \atop   \bar \xi_2(x)+\bar \pi_2(x,y) } \right),
+$$
+where
+$$\bar \xi_1(x) \equiv \pi_1 \bar{B}(x,0), \quad  \bar \xi_2(x) \equiv \pi_2 \bar{B}(x,0)$$
+are $O\left( \delta \left( \|\pi_1 \Sigma -\pi_2 \Sigma \|  +\delta \right) \right)$-close to each other, and both are $\delta$-close to $\pi_\xi p \cR^n \zeta=\eta \circ \xi \circ \zeta^{\bar m_n}$, and 
+$$\bar \pi_1(x,y) \equiv  \pi_1 \bar{B}(x,y)- \pi_1 \bar{B}(x,0), \quad \bar \pi_2(x,y)= \pi_2 \bar{B}(x,y)- \pi_2 \bar{B}(x,0),$$
+are functions whose norms are $O(\delta^2)$.
+
+
+
+
+\subsection{Critical projection} By the Argument Principle, 
+if $\delta$ is sufficiently small, then 
+%functions $\eta_1$, $\eta_2$, $\xi_1$ and $\xi_2$ have unique quadratic critical points in a small neighborhood of $0$ in $\CC$. In particular, 
+the function $\pi_1 \bar B \circ \bar A (x,0)$ has a unique critical point $c_1$ in a neighborhood of $0$. Set $T_1(x,y)=(x+c_1,y)$, then
+$$\partial_x \left(\pi_1 T_1^{-1} \circ \bar B \circ \bar A \circ T_1  \right)(0,0)=0.$$ Similarly, if $\delta$ is sufficiently small, the function $\pi_1 T_1^{-1} \circ \bar A \circ \bar B \circ T_1(x,0)$ has a unique critical point $c_2$ in a neighborhood of $0$.  Set $T_2(x,y)=(x+c_2,y)$, then
+$$\partial_x \left(\pi_1 T_2^{-1} \circ T_1^{-1} \circ \bar A \circ \bar B \circ T_1  \circ T_2 \right)(0,0)=0.$$
+
+We now set
+\begin{eqnarray}
+\nonumber \Pi_1(\bar A, \bar B)&=&(\tilde A, \tilde B):=(T_2^{-1} \circ T_1^{-1} \circ \bar A \circ T_1, T^{-1}_1 \circ \bar B \circ T_1 \circ T_2)\\
+\nonumber &=& \left( \left( \tilde \eta_1(x) + \tilde \tau_1(x,y) \atop   \tilde \eta_2(x) + \tilde \tau_2(x,y)  \right), \left( \tilde \xi_1(x) + \tilde \pi_1(x,y) \atop   \tilde \xi_2(x) + \tilde \pi_2(x,y)  \right)   \right),
+\end{eqnarray}
+where the norms of the functions $\tilde \tau_k$, $\tilde \pi_k$, $k=1,2$, are $O(\delta^2)$. 
+
+According to the discussion at the end of Section \ref{transformations}, the critical points  of the functions $\pi_1 (\bar A \circ \bar B)(x,0)$ and $\pi_1 (\bar B \circ \bar A)(x,0)$ are $O\left( \delta \left( \|\pi_1 \Sigma -\pi_2 \Sigma \|  +\delta \right) \right)$-close to each other, and therefore, 
+\begin{equation}
+\label{T2small} T_2=\text{Id}+O\left( \delta \left( \|\pi_1 \Sigma -\pi_2 \Sigma \|  +\delta \right) \right).
+\end{equation}
+At the same time, since $\pi_1 (\bar A \circ \bar B)(x,0)$  is $\delta$-close to the map $(\pi_\xi p \cR^n \zeta) \circ (\pi_\eta p \cR^n \zeta)$, $T_1=\text{Id}+O\left( \delta \right)$. Furthermore,  
+\begin{eqnarray}
+\nonumber 0&=&\partial_x (\pi_1 \tilde A \circ \tilde B)(0,0)\\
+\nonumber &=&\left( \partial_x (\pi_1 \tilde A) \circ \tilde B(0,0)\right)  \partial_x (\pi_1 \tilde B)(0,0)+\left( \partial_y (\pi_1 \tilde A) \circ \tilde B(0,0) \right) \partial_x (\pi_2 \tilde B)(0,0) \\
+\nonumber &=&O(1) \hspace{0.5mm} \partial_x (\pi_1 \tilde B)(0,0) + O(\delta^2) \implies  \partial_x (\pi_1 \tilde B)(0,0)=O(\delta^2),
+\end{eqnarray}
+and similarly for $ \partial_x (\pi_1 \tilde A)(0,0)$. We, therefore, have the following
+\begin{lem}
+\label{lem-proj1}
+There exists an $n \in \NN$, a neighborhood $\cB(\cU,Q,\delta)$ of $\zeta_*$, and $C>0$, such that:
+\begin{itemize}
+\item for every $\Sigma \in \cB(\cU,Q,\delta)$ there exists $p\cR^n\Sigma\in O(\hat\Omega,\hat\Gamma)$;
+\item the projection $\Pi_1 p\cR^n$ is a  well-defined and analytic operator  $$\cB(\cU,Q,\delta)\to O(\hat\Omega,\hat\Gamma);$$
+\item for every $\Sigma \in \cB(\cU,Q,\delta)$,
+$$\dist(\Pi_1 p \cR^n \Sigma, \iota(\cC(\lambda_n(\hat Z_1),\lambda_n(\hat W_1))))<C \delta \left( \|\pi_1 \Sigma -\pi_2 \Sigma \|  +\delta \right)$$;
+%$$\Pi_1 p \cRG^n \Sigma \in \iota(\cC(\lambda_n(\hat Z_1),\lambda_n(\hat W_1)))_{C \delta^2};$$
+\item for every $\Sigma \in \iota(\cC(\lambda_n(\hat Z_1),\lambda_n(\hat W_1)))$, the composition
+$$\Pi_1 p \cR^n \Sigma =p \cR^n \Sigma.$$
+\item for every  pair $\Sigma=(A,B)$ such that $A\circ B=B\circ A$ we have
+$$\Pi_1 p \cR^n \Sigma =T_1^{-1} \circ  p \cR^n \Sigma \circ T_1.$$
+\end{itemize}
+\end{lem}
+
+
+\subsection{An almost commutation condition, and the second projection}
+Let us set 
+$$\tl\Sigma=(\tl A,\tl B)=\Pi_1 p \cRG^n\Sigma.$$
+At the next step we will project the pair $(\tilde A, \tilde B)$ onto the subset of pairs satisfying the following almost commutation conditions:
+\begin{eqnarray} \label{commutation}
+\partial_x^i \pi_1(\tilde A \circ \tilde B(x,0) - \tilde B \circ \tilde A(x,0))\arrowvert_{x=0}&=&0, \quad i=0,2 \\
+\label{normalization} \pi_1 \tilde B(0,0)&=&1.
+\end{eqnarray}
+To that end we set 
+$$\Pi_2 (\tilde A,\tilde B)(x,y)=\left( \left( \tilde \eta_1(x) +a x^4+b x^6 + \tilde \tau_1(x,y) \atop   \tilde \eta_2(x) +a x^4+b x^6+ \tilde \tau_2(x,y)  \right), \left( \tilde \xi_1(x)+c  + \tilde \pi_1(x,y) \atop   \tilde \xi_2(x) +c +\tilde \pi_2(x,y)  \right)   \right),$$
+and require that $(\ref{commutation})$ and $(\ref{normalization})$ are satisfied for maps in the pair $\Pi_2 (\tilde A,\tilde B)(x,y)$. The following Proposition is proved below.
+\begin{prop}\label{prop:2Dprojection}
+There exists $\rho>0$ such that for all $\tl\Sigma$ in the $\rho$-neighborhood of $$\iota(\cC(\lambda_n(\hat Z_1),\lambda_n(\hat W_1)))$$
+there is a unique tuple $(a,b,c,d)$ such that the pair $ \Pi_2 (\tilde A,\tilde B)$ satisfies the equations $(\ref{commutation})$ and $(\ref{normalization})$. Moreover, in this neighborhood, the dependence of $\Pi_2$ on $\Sigma$ is analytic.  
+Furthermore, if $A\circ B=B\circ A$, then 
+$\Pi_2=\text{Id}.$
+
+Finally, if $$\Sigma=\left( \zeta \atop \zeta \right) \equiv \left(\left(\eta \atop \eta  \right), \left(\xi \atop \xi  \right)  \right) \in \iota(\cC(Z,W)), $$ then 
+$$\Pi_2 (\tl A,\tl B)=\left(\cP \hspace{0.5mm} p \cR^n\zeta \atop \cP \hspace{0.5mm} p \cR^n \zeta  \right),$$
+where $\cP$ has been defined in (\ref{Pproj}). 
+\end{prop}
+
+\begin{proof}
+Consider the following system of $3$ equations $\bF(a,b,c)=0$:
+\begin{eqnarray}
+\nonumber a&+&b-c-\\
+\nonumber &-&\left(\tilde \eta _1(\tilde \xi_1(0))-\tilde \eta_1(\tilde \xi_1(0)+c)+\tilde \tau_1(\tilde \xi_1(0), \tilde \xi_2(0))-\tilde \tau_1(\tilde \xi_1(0)+c, \tilde \xi_2(0)+c) \right)\\
+\nonumber &=& \pi_1( \tilde B \circ \tilde A(0,0)- \tilde A \circ \tilde B(0,0))\\
+%\nonumber (\tilde \xi_1'(0) +d) (4 a &+&6 b)+\\
+%\nonumber &+&\partial_2 \tilde \pi_1(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0)-\partial_2 \tilde \pi_1(\tilde \eta_1(0)+d,\tilde \eta_2(0)+d) \tilde \eta_2'(0)-\\
+%\nonumber &-&(\tilde \eta_1'(\tilde \xi_1(0)) \tilde \xi_1'(0)+\nabla \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)) \cdot (\tilde \xi_1'(0), \tilde \xi_2'(0))-\\
+%\nonumber &-&\tilde \eta_1'(\tilde \xi_1(0)+c) (\tilde \xi_1'(0)+d)-\nabla \tilde \tau_1(\tilde \xi_1(0)+c,\tilde \xi_2(0)+c) \cdot (\tilde \xi_1'(0)+d, \tilde \xi_2'(0)+d)\\
+%\nonumber & =& \pi_1( \tilde B \circ \tilde A(x,0)- \tilde A \circ \tilde B(x,0))'\arrowvert_{x=0} \\
+\nonumber \tilde \xi_1'(0)^2 (12 a &+&30 b)+\tilde \xi_1''(0) (4 a +6 b)+\\
+\nonumber &+&\tilde \eta_k''(\tilde \xi_1(0)+c) \tilde \xi_1'(0)^2+\tilde \eta_k'(\tilde \xi_1(0)+c) \tilde \xi_1''(0)-\tilde \eta_1''(\tilde \xi_1(0)) \tilde \xi_1'(0)^2-\tilde \eta_1'(\tilde \xi_1(0)) \tilde \xi_1''(0)-\\
+%\nonumber &-& \tilde \xi_1'(\tilde \eta_1(0)) \tilde \xi_1''(0)+(\tilde \xi_1'(\tilde \eta_1(0))) \tilde \xi_1''(0)+\\
+%\nonumber&+&\partial_{2,2}\tilde \pi_1(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0)^2+\nabla \tilde \pi_1(\tilde \eta_1(0),\tilde \eta_2(0)) \cdot (\tilde \eta_1''(0), \tilde \eta_2''(0))-\\
+%\nonumber&-&\partial_{2,2} \tilde \pi_1(\tilde \eta_1(0)+d,\tilde \eta_2(0)+d) \tilde \eta_2'(0)^2-\nabla \tilde \pi_1(\tilde \eta_1(0)+d,\tilde \eta_2(0)+d) \cdot (\tilde \eta_1''(0), \tilde \eta_2''(0))\\
+\nonumber&+&\sum_{i,j=1,2}\partial_{i,j}\tilde \tau_1(\tilde \xi_1(0)+c,\tilde \xi_2(0)+c) \tilde \xi_i'(0) \tilde \xi_j'(0)+\\
+\nonumber &+& \nabla \tilde \tau_1(\tilde \xi_1(0)+c,\tilde \xi_2(0)+c) \cdot (\tilde \xi_1''(0), \tilde \xi_2''(0))-\\
+\nonumber&-&\sum_{i,j=1,2}\partial_{i,j}\tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)) \tilde (\xi_i'(0)) (\tilde \xi_j'(0))+\\
+\nonumber &-& \nabla \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)) \cdot (\tilde \xi_1''(0), \tilde \xi_2''(0))\\
+\nonumber & =& \pi_1( \tilde B \circ \tilde A(x,0)- \tilde A \circ \tilde B(x,0))''\arrowvert_{x=0} \\
+\nonumber c&=&1-\tilde \xi_1(0).
+\end{eqnarray}
+Notice, that when the  equations $(\ref{commutation})$ and $(\ref{normalization})$ are satisfied this system of equations is solved by $a=b=c=0$. Furthermore, denote $\mathbf{p}=(a,b,c)$, then the derivative $D_{\mathbf p} \bF(\mathbf 0)$ is given by
+$$
+\left[
+\begin{array}{c c c }
+\vspace{4mm}
+1 & 1 & -1+\tilde n _1'(\tilde \xi_1(0)) +\rho_1 \\
+\vspace{4mm}
+%4 \vareps_1 & 6 \vareps_1& \tilde \eta_1'(\tilde \xi_1(0))+\rho_2 & \tilde \eta_1''(\tilde \xi_1(0)) \tilde \xi_1'(0)+\rho_3 \\
+%\vspace{4mm}
+12 \vareps_1^2 + 4 \tilde \xi_1''(0) & 30 \vareps_1^2 +6 \tilde \xi_1''(0) & {\tilde \eta_1'''( \tilde \xi_1(0) ) \tilde \xi_1'(0)+  \tilde \eta_1''( \tilde \xi_1(0) ) \tilde \xi_1''(0)\atop +\sum_{i,j=1,2}\rho_5^{i,j} \vareps_i \vareps_j +\rho_6}\\ 
+\vspace{4mm}
+0 & 0  & 1
+\end{array}
+\right],
+$$
+where $\vareps_i=\tilde \eta_i'(0)$, $i=1,2$, and the following are the functions with the $O(\rho^2$) norm:
+\begin{eqnarray}
+%\nonumber \rho_1&=&\partial_1 \tilde \pi_1(\tilde \eta_1(0), \tilde \eta_2(0))+\partial_2 \tilde \pi_1(\tilde \eta_1(0), \tilde \eta_2(0)),\\
+\nonumber  \rho_1&=&\partial_1 \tilde \tau_1(\tilde \xi_1(0), \tilde \xi_2(0))+\partial_2 \tilde \tau_1(\tilde \xi_1(0), \tilde \xi_2(0)),\\
+%\nonumber  \rho_{2}&=&\nabla \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)) \cdot (1,1)\\
+%\nonumber  \rho_{3}&=&\nabla \partial_1\tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0))  \cdot (\tilde \xi_1(0),\tilde \xi_2(0)) + \nabla \partial_2\tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0))  \cdot (\tilde \xi_1(0),\tilde \xi_2(0)) \\
+%\nonumber \rho_4^{i,j} &=&\partial_{i,j}\tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0))  \\
+\nonumber \rho_5^{i,j}&=&\partial_{1,i,j}\tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0))+\partial_{2,i,j}\tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0))\\
+\nonumber \rho_6&=&\nabla \partial_1 \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)) \cdot (\tilde \xi_1''(0), \tilde \xi_2''(0))+\nabla \partial_2 \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)) \cdot (\tilde \xi_1''(0), \tilde \xi_2''(0))
+%\nonumber \rho_3&=&\partial_{1,2} \tilde \pi_k(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0)+\partial_{2,2} \tilde \pi_k(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0), \\
+%\nonumber \rho_3&=&\partial_{1,2} \tilde \pi_k(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0)+\partial_{2,2} \tilde \pi_k(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0), \\
+%\nonumber  \mathbf{\rho_{4}}&=&\nabla \partial_1\tilde \tau_k(\tilde \xi_1(0),\tilde \xi_2(0))+\nabla \partial_2\tilde \tau_k(\tilde \xi_1(0),\tilde \xi_2(0)) \\
+%\nonumber \rho_{5}&=&\partial_{1,2,2} \tilde \pi_1(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0)^2+\partial_{2,2,2} \tilde \pi_1(\tilde \eta_1(0),\tilde \eta_2(0)) \tilde \eta_2'(0)^2,\\
+%\nonumber \rho_{6}&=&\nabla \partial_1 \tilde \pi_1(\tilde \eta_1(0),\tilde \eta_2(0)) \cdot (\tilde \eta_1''(0),\tilde \eta_2''(0))++\nabla \partial_2 \tilde \pi_1(\tilde \eta_1(0),\tilde \eta_2(0)) \cdot (\tilde \eta_1''(0),\tilde \eta_2''(0)),\\
+%\nonumber \rho_7^{i,j}&=& \partial_{1,i,j} \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0))+\partial_{2,i,j} \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)),\\
+%\nonumber \rho_8&=&\left(\nabla \partial_1 \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0))+\nabla \partial_2 \tilde \tau_1(\tilde \xi_1(0),\tilde \xi_2(0)) \right) \cdot (\tilde \xi_1''(0), \tilde \xi_2''(0)))
+\end{eqnarray}
+
+If $(A,B)$ is in a $\rho$-neighborhood of  $\iota(\cC(\lambda_n(\hat Z_1),\lambda_n(\hat W_1)))$, then the determinant of the above matrix is $\rho$-close to $2 \tilde \xi_1''(0)$ and is nonzero. By the Regular Value Theorem, there exists $\rho>0$ and for each such $(A,B)$, a unique triple $(a,b,c)$ such that  the  equations $(\ref{commutation})$ and $(\ref{normalization})$ are satisfied.
+\end{proof}
+
+
+\noindent
+Let us fix $n\in 2\NN$, $\cU$, $Q$, $\delta$ so that Lemma~\ref{lem-preren} and Lemma~\ref{lem-proj1} hold, and furthermore, the image 
+$\Pi_1p\cR^n\cB(\cU,Q,\delta)$ lies in the $\rho$-neighborhood of $\iota(\cC(\lambda_n(\hat Z_1),\lambda_n(\hat W_1)))$ as in Proposition~\ref{prop:2Dprojection}. We then have:
+
+\begin{prop}
+\label{small-pert2}
+For every $\Sigma \in \cB(\cU,Q,\delta)$,
+$${\rm dist}(\Pi_2\Pi_1 p \cR^n \Sigma, \iota(\cB(\lambda_n(\hat Z_1),\lambda_n(\hat W_1)))) < C \delta \left( \|\pi_1 \Sigma -\pi_2 \Sigma \|  +\delta \right).$$
+\end{prop}
+\begin{proof}
+This follows immediately from Lemma~\ref{lem-preren} and the fact that $\Pi_2\Pi_1$ is an analytic operator, which is equal to the identity on $\iota(\cB(\lambda_n(\hat Z_1),\lambda_n(\hat W_1)))$.
+\end{proof}
+
+ Let 
+%$$\Lambda_n=\left(\begin{array}{cc}\lambda_n & 1\\0& 1\\  \end{array} \right).$$
+$\ell_n=\pi_1\bar B(0,0)$ and  $L_n(x,y)=(\ell_n x, \ell_n y)$. 
+\begin{defn}
+ We define {\it the $n$-th renormalization } of a pair $\Sigma \in \cB(\cU,Q,\delta)$ as
+\begin{equation}\label{2Drenorm}
+\cRG^n \Sigma = L_n^{-1} \circ\Pi_2\circ\Pi_1\circ p\cR^n \Sigma \circ L_n.
+\end{equation}
+\end{defn}
+
+\subsection{Hyperbolicity of renormalization of 2D dissipative maps}
+Let $n$ be an even number as above. 
+We conclude this section by formulating the following theorem:
+\begin{thm}
+\label{mainthm6}
+The point $\iota(\zeta_*)$ is a fixed point of $\cRG^n$ in $O(\Omega,\Gamma)$. The linear operator
+$N=D \cRG^n \arrowvert_{\iota(\zeta_*)}$ is compact. The spectrum of $N$ coincides with the spectrum of $M^n$, where $M$ is as in Main Theorem 3. More
+specifically, $\lambda\neq 0$ is an eigenvalue of $M^n$, and $\bar v$ is a corresponding eigenvector if and only if $\lambda$ is an eigenvalue of $N$, and $D\iota(\bar v)$ is a corresponding eigenvector.
+
+\end{thm}
+\begin{proof}
+Notice, that according to  Proposition~\ref{small-pert2}
+$${\rm dist}(\left( \cRG^n\right)^2 \Sigma, \iota(\cB(l_n^{-2} \lambda_n^2(\hat Z_1),l_n^{-2} \lambda_n^2(\hat W_1)))) < C \delta^2.$$
+The claim now follows follows since
+$$\iota\circ \cRG^n=\cRG^n\circ\iota. $$
+\end{proof}
+
+
+
+
+
+
+

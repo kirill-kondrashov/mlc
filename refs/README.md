@@ -43,6 +43,8 @@ the choice is recorded in `00README.json`.
 | `kahn-lyubich-primitive` | Kahn, *A priori bounds ... I. Bounded primitive combinatorics*, arXiv:math/0609045 | Part I: bounded primitive type; length comparison; cited bounded-period theorem |
 | `kahn-lyubich-decorations` | Kahn--Lyubich, *A priori bounds ... II. Decorations*, arXiv:math/0609046 | Part II: decoration condition |
 | `kahn-lyubich-molecules` | Kahn--Lyubich, *A priori bounds ... III. Molecules*, arXiv:0712.2444 | Part III: molecule condition |
+| `martens-nowicki-invariant-measures` | Martens--Nowicki, *Invariant measures for typical quadratic maps*, arXiv:math/9606220 (Asterisque 261 (2000), 239--252) | acim criterion (summable scaling factors); typical unique SBR measure, joint with Lyubich |
+| `gaidashev-yampolsky-golden-mean` | Gaidashev--Yampolsky, *Golden mean Siegel disk universality and renormalization*, arXiv:1604.00717 (2016) | golden-mean Siegel disks; computer-assisted fixed point; no statement about local connectivity of M |
 | `kahn-lyubich-quasi-additivity` | Kahn--Lyubich, *The Quasi-Additivity Law in Conformal Geometry*, arXiv:math/0505191 (Ann. Math. 169 (2009)) | covering and quasi-additivity laws (analytic tools) |
 | `kahn-lyubich-unicritical-lc` | Kahn--Lyubich, *Local connectivity of Julia sets for unicritical polynomials*, arXiv:math/0505194 (Ann. Math. 170 (2009)) | Julia-set local connectivity for unicritical polynomials |
 | `lyubich-asterisque-261` | Lyubich, *Dynamics of quadratic polynomials, III: parapuzzle and SBR measures*, Asterisque 261 (2000), 173--200 (NUMDAM: `numdam.org/article/AST_2000__261__173_0.pdf`; not stored in `refs/`) | parapuzzles, bounded shape, fine families; checked against the PDF |

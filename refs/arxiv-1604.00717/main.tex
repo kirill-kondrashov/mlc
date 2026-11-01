@@ -1,0 +1,253 @@
+\documentclass[12pt, reqno]{amsart}
+
+\usepackage{graphicx,graphics}
+\usepackage{amsmath, amssymb, amscd, amsthm, comment, amsxtra}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[abs]{overpic}
+%\usepackage{times}
+%\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+
+\usepackage[pdftex, linktocpage=true]{hyperref}
+\bibliographystyle{amsalpha}
+\baselineskip=24pt
+\addtolength{\textwidth}{1.4in}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+
+\newtheorem{lem}[thm]{Lemma}
+
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{schw}{Schwarz Lemma}
+\newtheorem{tet}{Teichm\"uller's Theorem}
+\newtheorem{sfmc}{Strebel's Frame Mapping Condition}
+\newtheorem{sectl}{Sector Lemma}
+
+\newenvironment{pf}{\proof[\proofname]}{\endproof}
+\newenvironment{pf*}[1]{\proof[#1]}{\endproof}
+\usepackage{euscript}
+
+\usepackage[OT2,OT1]{fontenc}
+\def\cyr{\fontencoding{OT2}\fontfamily{wncyr}\selectfont}
+\def\cyi{\fontencoding{OT2}\fontfamily{wncyi}\selectfont}
+\newcommand{\cal}[1]{{\mathcal #1}}
+\newcommand{\BBB}[1]{{\mathbb #1}}
+\newcommand{\ignore}[1]{{}}
+\newcommand{\Area}{\operatorname{Area}}
+
+\newcommand{\Jac}{\operatorname{Jac}}
+
+\newcommand{\nothing}{{}}
+
+\renewcommand{\theschw}{}
+\renewcommand{\thetet}{}
+\renewcommand{\thesfmc}{}
+\renewcommand{\thesectl}{}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+
+\newcommand{\QED}{\rlap{$\sqcup$}$\sqcap$\smallskip}
+
+\theoremstyle{remark}
+\newtheorem{rem}{Remark}[section]
+\newtheorem{notation}{Notation}
+\renewcommand{\thenotation}{}
+%%\newcommand{\diam}{\operatorname{diam}}
+%%\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\meas}{\operatorname{meas}}
+\newcommand{\cl}{\operatorname{cl}}
+\renewcommand{\mod}{\operatorname{mod}}
+\newcommand{\tl}{\tilde}
+\newcommand{\wtl}{\widetilde}
+\newcommand{\eps}{\epsilon}
+\newcommand{\EE}{{\Ccal{E}}}
+\newcommand{\tw}{{{\rm\boldsymbol T}}}
+\newcommand{\Eps}{\operatorname{E}}
+\newcommand{\ps}{\operatorname{PS}}
+
+\newcommand{\ceq}{\,\displaystyle{\Large\mbox{$\sim$}}_{\text{\hspace{-14pt}\tiny conf}}\,}
+\newcommand{\ceqw}{\underset{\text{\tiny conf,W}}{\mbox{\Large$ \sim$}}}
+\newcommand{\heq}{\underset{\text{\tiny hyb}}{\mbox{\Large$ \sim$}}}
+\newcommand{\qeq}{\underset{\text{\tiny qc}}{\mbox{\Large$ \sim$}}}
+\newcommand{\hyb}{\operatorname{\it Hyb}}
+\newcommand{\ext}{\operatorname{\it Ext}}
+\newcommand{\qc}{\operatorname{\it QC}}
+\newcommand{\bE}{\operatorname{\bf E}}
+
+%%%\renewcommand{\frak}[1]{\EE}
+
+%%%%%%%
+\newcommand{\Cbb}[1]{{{\Bbb{#1}}}}
+\newcommand{\Ccal}[1]{{{\cal{#1}}}}
+%%%%%%%%%%
+\newcommand{\aaa}[1]{{{\mathbf{#1}}}}
+\newcommand{\crit}{{{\aaa C}}}
+\newcommand{\cu}{{{\aaa C}_U}}
+\newcommand{\cur}{{{\aaa C}_U^\RR}}
+\newcommand{\cv}{{{\aaa C}_V}}
+\newcommand{\pr}{{\cal P}}
+\newcommand{\hol}{{\aaa H}}
+\newcommand{\mfld}{{\aaa M}}
+\newcommand{\bran}{{{\aaa X}}}
+\newcommand{\tu}{{{\aaa B}_U}}
+\renewcommand{\k}{\kappa}
+\newcommand{\srk}{{\aaa S}_{r_1,\ldots,r_\k }}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\numberwithin{equation}{section}
+\newcommand{\thmref}[1]{Theorem~\ref{#1}}
+\newcommand{\propref}[1]{Proposition~\ref{#1}}
+\newcommand{\secref}[1]{\S\ref{#1}}
+\newcommand{\lemref}[1]{Lemma~\ref{#1}}
+\newcommand{\corref}[1]{Corollary~\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\ang}[2]{\widehat{(#1,#2)}}
+\newcommand{\C}[1]{{\Bbb C_{#1}}}
+\newcommand{\I}{P}
+\newcommand{\cQ}{{\cal Q}}
+\newcommand{\cJ}{{\cal J}}
+\newcommand{\cA}{{\cal A}}
+\newcommand{\cU}{{\cal U}}
+\newcommand{\cW}{{\cal W}}
+\newcommand{\cM}{{\cal M}}
+\newcommand{\cV}{{\cal V}}
+\newcommand{\cF}{{\cal F}}
+\newcommand{\cG}{{\cal G}}
+\newcommand{\cB}{{\aaa B}}
+\newcommand{\cT}{{\cal T}}
+\newcommand{\cI}{{\cal I}}
+\newcommand{\cN}{{\cal N}}
+\newcommand{\cP}{{\cal P}}
+\newcommand{\cC}{{\cal C}}
+\newcommand{\cH}{{\cal H}}
+\newcommand{\cR}{{\cal R}}
+\newcommand{\cL}{{\cal L}}
+\newcommand{\cD}{{\cal D}}
+\newcommand{\cE}{{\cal E}}
+\newcommand{\cS}{{\cal S}}
+\newcommand{\cY}{{\cal Y}}
+\newcommand{\cK}{{\cal K}}
+\newcommand{\PP}{{\Bbb P}}
+\newcommand{\CC}{{\Bbb C}}
+\newcommand{\RR}{{\Bbb R}}
+\newcommand{\TT}{{\Bbb T}}
+\newcommand{\ZZ}{{\Bbb Z}}
+\newcommand{\NN}{{\Bbb N}}
+\newcommand{\DD}{{\Bbb D}}
+\newcommand{\HH}{{\Bbb H}}
+\newcommand{\QQ}{{\Bbb Q}}
+\newcommand{\bA}{{\mathbf A}}
+\newcommand{\bH}{{\mathbf H}}
+\newcommand{\bT}{{\mathbf T}}
+\newcommand{\bB}{{\mathbf B}}
+\newcommand{\bC}{{\mathbf C}}
+\newcommand{\bW}{{\mathbf W}}
+\newcommand{\bY}{{\mathbf Y}}
+\newcommand{\bZ}{{\mathbf Z}}
+
+\newcommand{\cren}{\cR_{\text cyl}}
+\newcommand{\crenn}{\hat{\cR}_{\text cyl}}
+\newcommand{\ov}[1]{\overline{#1}}
+\newcommand{\sm}{\setminus}
+
+
+\newcommand{\dfe}{\operatorname{Def}^\eps}
+%%\newcommand{\df}{\operatorname{Def}}
+\newcommand{\dfer}{\operatorname{Def}^\eps_\RR}
+\newcommand{\dfr}{\operatorname{Def}_\RR}
+\newcommand{\Ker}{\operatorname{Ker}}
+
+\input{macros.tex}
+
+\begin{document}
+\addtolength{\evensidemargin}{-0.7in}
+\addtolength{\oddsidemargin}{-0.7in}
+
+
+%\usepackage{mathtimes}
+%\usepackage{graphics}
+%\usepackage{epsfig}
+%\usepackage{amssymb}
+
+%%\setlength\unitlength{1mm}
+
+%%\parskip = 6pt
+%%\parindent = 0.0in
+
+%%\hoffset=-.7in
+%%\voffset=-.7in
+%%\setlength{\textwidth}{6in}
+%%\setlength{\textheight}{8.5in}
+%%\linespread{1.3}
+
+
+
+% \baselineskip=24pt
+% \textwidth=6.55 true in
+% \textheight=8.8 true in
+% \topmargin 5mm
+% \evensidemargin 1.5cm
+% \oddsidemargin 1.5cm
+% \addtolength{\evensidemargin}{-0.7in}
+% \addtolength{\oddsidemargin}{-0.7in}
+
+
+\setcounter{tocdepth}{1}
+
+%
+\title[Siegel disk universality and renormalization]{Golden mean Siegel disk universality and renormalization}
+
+
+
+\author{Denis Gaidashev}
+\address{Denis Gaidashev, Uppsala University, Uppsala, Sweden}
+\email{gaidash@math.uu.se}
+
+\author{Michael Yampolsky}
+\address{Michael Yampolsky, University of Toronto, Toronto, Canada}
+\email{yampol@math.utoronto.edu}
+
+
+
+
+\date{\today}
+
+
+\maketitle
+
+\begin{abstract}
+We provide a computer-assisted proof of one of  the central open questions in one-dimensional renormalization theory -- universality of the golden-mean Siegel disks. We further show that for every function in the stable manifold of the golden-mean renormalization fixed point the boundary of the Siegel disk is a quasicircle which coincides with the closure of the critical orbit, and that the dynamics on the boundary of the Siegel disk is rigid. 
+
+Furthermore, we extend the renormalization from one-dimensional analytic maps with a golden-mean Siegel disk 
+to two-dimensional  dissipative H\'enon-like maps and show that the renormalization hyperbolicity result still 
+holds in this setting. 
+\end{abstract}
+
+\tableofcontents
+
+\input{intro}
+\input{symmetric}
+\input{nonsymmetric}
+\input{circle}
+\input{holomorphic}
+
+\input{dissipative}
+
+
+\input{comp_proof}
+%%%\input{conseq}
+%%%\input{appendix_M}
+
+\input{references}
+
+
+\end{document}
+
+
+
+
