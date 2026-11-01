@@ -327,6 +327,26 @@ openness is
 and the frontier identity is
 \leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{frontier_hasAttractingFixedPoint}.\par}
 
+\begin{proposition}[Multiplier map of the main cardioid]
+\label{prop:multiplier-cardioid}
+Let $\sqrt{\cdot}$ denote the principal square root, defined on $\C\setminus(-\infty,0]$ and holomorphic there.  For $c\in\mathcal H_0$ the number $1-4c$ is not in $(-\infty,0]$, and the attracting fixed point of $f_c$ has multiplier
+\[
+ \lambda(c)=1-\sqrt{1-4c}.
+\]
+The map $\lambda\colon\mathcal H_0\to\mathbb D$ is a biholomorphism, with inverse $t\mapsto t/2-t^2/4$.  This is the period-one case of the multiplier theorem in Lyubich's notes.
+\end{proposition}
+
+\begin{proof}
+Let $c\in\mathcal H_0$ with attracting fixed point of multiplier $t$, so that $|t|<1$ and $t/2-t^2/4=c$.  Then $(1-t)^2=1-4c$.  Write $s=\sqrt{1-4c}$, so $(1-t-s)(1-t+s)=0$.  If $1-t=-s$, then $t=1+s$ has real part at least $1$, since $\operatorname{Re}s\ge0$; this contradicts $|t|<1$.  Hence $t=1-s=\lambda(c)$.
+
+The point $1-4c$ lies in the slit plane: if $c$ is real then $c\in(-\tfrac34,\tfrac14)$ by Corollary~\ref{cor:real-components}, and otherwise $\operatorname{Im}(1-4c)\neq0$.  So $\lambda$ is holomorphic on $\mathcal H_0$.  For $|t|<1$ the parameter $c=t/2-t^2/4$ lies in $\mathcal H_0$, and the argument above gives $\lambda(c)=t$; this is the identity $\lambda\circ(t\mapsto t/2-t^2/4)=\mathrm{id}$.  Conversely, for $c\in\mathcal H_0$ the identity $(1-\lambda(c))^2=1-4c$ gives $\lambda(c)/2-\lambda(c)^2/4=c$; this is the identity $(t\mapsto t/2-t^2/4)\circ\lambda=\mathrm{id}$.  Both maps are holomorphic, so $\lambda$ is a biholomorphism.
+\end{proof}
+
+\paragraph{Lean correspondence.}
+The statement is
+\leanref{Mlc/Quadratic/MultiplierMap.lean}{multiplier_map_biholomorphic}, a conjunction of the mapping properties, the two inverse identities, and differentiability.  The square-root identity is \leanref{Mlc/Quadratic/MultiplierMap.lean}{mainSqrt_sq}, the sign of the real part is \leanref{Mlc/Quadratic/MultiplierMap.lean}{re_mainSqrt_nonneg}, and the identification of the multiplier is \leanref{Mlc/Quadratic/MultiplierMap.lean}{eq_mainMultiplier_of_cardioidMap}.
+
+
 \begin{proposition}[The attracting period-two component]
 \label{prop:period-two-component}
 The parameters with an attracting cycle of prime period two form

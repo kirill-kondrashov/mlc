@@ -1,0 +1,115 @@
+\chapter[Hyperbolic components beyond the quadratic family]{Source digests VI: hyperbolic components beyond the quadratic family}
+\label{ch:digests-sierpinski}
+
+This chapter digests the paper of Dudko and Luo~\cite{DudkoLuoSierpinski} on hyperbolic
+components of rational maps whose Julia sets are Sierpi\'nski carpets.  It is the
+nearest analogue, in a family of rational maps, of the question that the survey~\cite{DudkoMLC}
+lists as open for the Mandelbrot set: uniform bounded geometry of hyperbolic components.
+Statements are those of the source, up to notation; numbering is that of the source.
+
+\section{Definitions}
+\label{sec:digest-sierpinski-defs}
+
+\begin{definition}[Hyperbolic maps and components]
+\label{def:sierp-hyperbolic}
+A rational map $f$ of degree $d$ is hyperbolic if every critical point converges to an attracting periodic cycle.
+In the fixed-point-marked moduli space $\mathcal M^{\rm fm}_d=\operatorname{Rat}^{\rm fm}_d/\operatorname{PSL}_2(\C)$, a connected component
+of the open set of hyperbolic maps is a hyperbolic component $H$.
+\end{definition}
+
+\begin{definition}[Disjoint type]
+\label{def:sierp-disjoint}
+$H$ is of disjoint type if for every $[f]\in H$ each grand orbit of a Fatou component contains a unique critical orbit.
+Equivalently, every $f\in H$ has exactly $2d-2$ attracting periodic cycles.
+\end{definition}
+
+\begin{definition}[Sierpi\'nski carpet component]
+\label{def:sierp-carpet}
+$H$ is a Sierpi\'nski carpet component if $J_f$ is homeomorphic to a Sierpi\'nski carpet for every $[f]\in H$.
+\end{definition}
+
+\begin{definition}[Multiplier map]
+\label{def:sierp-multiplier}
+For $H$ of disjoint type the map $\rho\colon H\to\mathbb D^{\,2d-2}$ records the multipliers of the $2d-2$ attracting cycles.
+\end{definition}
+
+\begin{definition}[Degeneration bounded by $K$]
+\label{def:sierp-bounded-degeneration}
+$[f]$ has degeneration bounded by $K$ if it has $K$-quasiconformal pseudo-Siegel disks $\widehat Z_{i,j}$ and
+$K$-quasiconformal valuable-attracting domains $\widehat D_{i,j}$, and its pseudo-core surface
+$\widehat X_f=\widehat\C\setminus\bigl(\bigcup\operatorname{Int}\widehat D_{i,j}\cup\bigcup\operatorname{Int}\widehat Z_{i,j}\bigr)$
+satisfies $W_{\rm arc}(\widehat X_f)\le K$ and $W_{\rm loop}(\widehat X_f)\le K$.
+\end{definition}
+
+\begin{definition}[Regular and exceptional boundary; obstructed boundary]
+\label{def:sierp-boundary}
+$\partial H=\partial_{\rm reg}H\sqcup\partial_{\rm exc}H$, where $[f]\in\partial_{\rm reg}H$ if $f$ has exactly $2d-2$
+non-repelling cycles, and $[f]\in\partial_{\rm exc}H$ otherwise, when at least two of these cycles collide.  The
+obstructed boundary is $\partial^\infty H=\{\rho\in\partial\mathbb D^{2d-2}:\ \exists[f_n]\in H,\ [f_n]\to\infty,\ \rho([f_n])\to\rho\}$.
+\end{definition}
+
+\begin{remark}
+The paper states the boundedness question as Conjecture~1.1, that every Sierpi\'nski carpet hyperbolic
+component is bounded in $\mathcal M^{\rm fm}_d$.  It uses ``bounded'' in the ambient moduli space and gives no further
+formal definition.
+\end{remark}
+
+\section{Results}
+\label{sec:digest-sierpinski-results}
+
+\begin{theorem}[Dudko--Luo, Theorem~A; parameter space]
+\label{thm:sierp-A}
+If $H\subset\mathcal M^{\rm fm}_d$ is a Sierpi\'nski carpet hyperbolic component of disjoint type, then $H$ is bounded in
+$\mathcal M^{\rm fm}_d$, and $\rho\colon H\to\mathbb D^{2d-2}$ is an isomorphism that extends naturally.  In particular
+$\partial H$ is locally connected.  Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Luo, Theorem~B; dynamical plane]
+\label{thm:sierp-B}
+If $H$ is of Sierpi\'nski carpet and disjoint type, there is $\varepsilon>0$ such that every $[f]\in H$ and every non-repelling
+periodic point $x$ of period $p$ admit a quadratic-like restriction $f^p\colon U\to V$ with $x\in U\subset V$ and
+$\modulus(V\setminus U)\ge\varepsilon$.  Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Luo, Theorem~C; a priori bounds]
+\label{thm:sierp-C}
+If $H$ is of disjoint type and $[f]\in\partial H$ is eventually golden mean, then $[f]$ has degeneration bounded by a
+constant $K$ depending on $H$, on the pulled-off constant $N_{\rm Siegel}([f])$, and on the attracting multipliers.  Status: proved.
+\end{theorem}
+
+\begin{theorem}[Dudko--Luo, Theorem~1.4; precompactness]
+\label{thm:sierp-precompact}
+If $[f_n]\in\partial H$ are eventually golden mean with degeneration bounded by $K$, then a subsequence converges to some
+$[f]\in\mathcal M^{\rm fm}_d$, and $[f]$ has $2d-2$ non-repelling cycles.  Status: proved.
+\end{theorem}
+
+\begin{theorem}[Dudko--Luo, Theorem~D; bi-neutral quadratics]
+\label{thm:sierp-D}
+For $f\in\partial_{\rm reg}H_{z^2}$ with two neutral fixed points and critical postcritical sets $P_1,P_2$, the maps
+$f|_{P_1}$ and $f|_{P_2}$ have degree $1$, and $P_1,P_2$ are separated by an annulus whose modulus depends only on the
+distance between the rotation multipliers.  Status: proved.
+\end{theorem}
+
+\begin{proposition}[Dudko--Luo, Proposition~2.2; multiplier embedding]
+\label{prop:sierp-2-2}
+$\rho\colon\partial_{\rm reg}H\to\partial\mathbb D^{2d-2}$ is an embedding, and $\rho(\partial_{\rm reg}H)\cap\rho(\partial_{\rm exc}H)=\varnothing$.
+Status: proved, using multiplier transversality from the literature cited there.
+\end{proposition}
+
+\section{Relation to the Mandelbrot set and MLC}
+\label{sec:digest-sierpinski-mlc}
+
+The paper states that suitable a priori bounds for all quadratic polynomials are expected to imply MLC, citing
+\cite{DudkoLyubichNeutral} for this heuristic, and it records progress for the primitive case through earlier work of
+Kahn and Lyubich.  For the rational-map result, quadratic-like restrictions and the Douady--Hubbard straightening
+theorem give a homeomorphism $R_{\rm ql}\colon H\to\Delta\subset\operatorname{Mand}^{\,2d-2}$, where $\Delta$ is the main
+hyperbolic component of the Mandelbrot set.  The paper presents this as a dynamical refinement of
+Theorem~\ref{thm:sierp-A}, not as a proof of MLC.
+
+\section{Dependencies}
+\label{sec:digest-sierpinski-deps}
+
+The argument uses the pseudo-Siegel and renormalization bounds of the Dudko--Lyubich and Dudko--Luo--Lyubich papers;
+the quasi-additivity law and covering lemma of Kahn--Lyubich; the density results cited for geometrically finite
+degenerations; the postcritically finite Sierpi\'nski model of Pilgrim; expanding models of Dudko--Lyubich--Selinger;
+multiplier transversality from the literature cited in the paper; and the Douady--Hubbard straightening theorem.
