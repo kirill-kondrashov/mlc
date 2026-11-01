@@ -1,0 +1,489 @@
+\chapter{Source digests II: current approaches}
+\label{ch:digests-modern}
+
+This chapter continues Chapter~\ref{ch:digests-foundations}.  It digests the
+survey of Dudko and the recent papers on satellite, Feigenbaum, parabolic,
+neutral, hybrid, and decoration phenomena.  The conventions are the same: the
+definitions and results are those of the source, the status is the source's own,
+and the dependencies are stated explicitly.
+
+\section{The survey's map of approaches}
+\label{sec:digest-survey}
+
+The survey~\cite{DudkoMLC} organizes the known approaches to MLC into three
+broad regimes: the near-neutral regime, the quadratic-like regime, and the
+puzzle regime, together with a near-degenerate regime.  Its listed approaches are
+puzzles and parapuzzles, external rays and Böttcher coordinates, quadratic-like
+renormalization, sector and cylinder renormalization in the near-parabolic and
+near-Siegel cases, Molecule renormalization, a priori bounds, hybrid classes and
+laminations, rigidity, combinatorial and kneading methods, pseudo-Siegel disks,
+and virtual Julia sets.
+
+\subsection*{Definitions}
+
+\begin{definition}[Renormalization operator]
+\label{def:survey-renorm}
+For $p_c(z)=z^2+c$ and a small $\eta>0$, the renormalization is
+\[
+ [\mathcal R_\eta p_c](z)=\frac1\eta\bigl(p_c^{\,q}(\eta z+c)-c\bigr),
+\]
+where $q$ is the first return time to the $\eta$-neighbourhood of $c$.
+\end{definition}
+
+\begin{definition}[Satellite and primitive components]
+\label{def:survey-satellite}
+A hyperbolic component $\mathcal H$ is satellite if its closure is an analytic
+disk, and primitive if it is an analytic image of the filled cardioid.
+\end{definition}
+
+\begin{definition}[Renorm-expanding and renorm-balanced regimes]
+\label{def:survey-expanding}
+In the renorm-expanding regime the derivatives of all globalized branches tend to
+infinity.  In the renorm-balanced regime some branches converge geometrically to
+a polynomial or transcendental map $G=\lim_n\mathcal R^{(q_n)}_{\eta_n}p_c$.
+The regime is pure if the property holds for every sequence $\eta_n\to0$.
+\end{definition}
+
+\begin{definition}[Quadratic-like maps and hybrid classes]
+\label{def:survey-ql}
+A quadratic-like map is a degree-two branched covering $f\colon U\to V$ with
+$U\Subset V$.  Its filled Julia set is $K_f=\{z\in U:\ f^n(z)\in U\ \forall n\ge1\}$,
+and $J_f=\partial K_f$.  If $J_f$ is connected, $f$ is hybrid equivalent to a
+unique $z^2+c$ with $c\in\M$.
+\end{definition}
+
+\begin{definition}[Rotation-number sets and neutral maps]
+\label{def:survey-rotation}
+Put $\Theta=\{[0;a_1,a_2,\dots]:a_i\ge1\}$, $\Theta_{\rm bnd}=\{[0;a_i]:a_i\le M_\theta\}$,
+and $\Theta_{>N}=\{[0;a_i]:a_i>N\}$; $\overline\Theta$ allows $a_i=\infty$.
+A neutral map is $f_\theta(z)=e^{2\pi i\theta}z+z^2$.
+\end{definition}
+
+\begin{definition}[Sector, cylinder, puzzle, and Molecule renormalizations]
+\label{def:survey-other-renorm}
+Sector renormalization is the first return to the smallest sector bounded by a
+curve $\gamma$ and its image, with the sides identified dynamically.  Cylinder
+renormalization is the quotient of a Lavaurs map by a parabolic map.  Puzzle
+renormalization is the first return to a puzzle piece $Y$, restricted to the
+critical piece $Y_1$ of degree two.  The survey unifies satellite and neutral
+renormalizations as Molecule renormalization.
+\end{definition}
+
+\subsection*{Results}
+
+\begin{theorem}[Yoccoz's reduction, as presented in the survey]
+\label{thm:survey-yoccoz-reduction}
+For a parameter $c$, if nested strictly decreasing small copies $\M_n$ are chosen
+with $\bigcap_n\M_n=\{c\}$, then the survey reduces local connectivity at $c$ to a
+rigidity statement for these copies.  The survey gives this as a reduction of MLC
+to rigidity, not as a complete proof.
+\end{theorem}
+
+\begin{theorem}[Lyubich; codimension-one stability in the quadratic-like class]
+\label{thm:survey-lyubich-codim}
+There is an analytic function $\tau$ on a Banach neighbourhood such that $f$ and
+$g$ are hybrid conjugate if and only if $\tau(f)=\tau(g)$.  Status: cited.
+\end{theorem}
+
+\begin{theorem}[Quadratic-like hyperbolicity]
+\label{thm:survey-ql-hyp}
+For every bound $\bar p$ on renormalization periods there is a hyperbolic
+renormalization horseshoe with one-dimensional unstable manifolds, which attracts
+exponentially all infinitely renormalizable quadratic-like maps with periods
+$p_n\le\bar p$.  Status: stated in the survey as a theorem of its quadratic-like part.
+\end{theorem}
+
+\begin{theorem}[Near-parabolic hyperbolicity; Inou--Shishikura]
+\label{thm:survey-near-parabolic}
+Cylinder renormalization is hyperbolic for high-type $\theta$ with bounded
+partial quotients, for $N$ large.  This implies sectorial bounds.  Status: cited
+to Inou--Shishikura.  The survey does not define the set $\Theta_{\le N}$ explicitly,
+so the precise class is not recorded here.
+\end{theorem}
+
+\begin{theorem}[Pacman and Siegel hyperbolicity]
+\label{thm:survey-pacman}
+For a bounded-type periodic rotation number $\theta$, Pacman/Siegel renormalization
+is hyperbolic with one-dimensional unstable manifold.  The survey attributes this
+to Dudko, Lyubich and Sullivan, and records that the golden mean case was
+previously obtained with computer assistance by Gaidashev and Yampolsky.
+\end{theorem}
+
+\begin{theorem}[Bounded-type quadratic-like MLC; Dudko--Lyubich]
+\label{thm:survey-bounded-ql-mlc}
+For all bounded-type quadratic-like combinatorics, a priori bounds and MLC hold.
+In particular MLC holds at the period-doubling Feigenbaum parameter.  Combined with
+puzzle arguments the survey obtains MLC along a real line and along every
+Mandelbrot vein.  Status: proved in~\cite{DudkoLyubichFeigenbaum}; the veins
+statement is the survey's own consequence.
+\end{theorem}
+
+\begin{theorem}[Neutral a priori bounds; Dudko--Lyubich]
+\label{thm:survey-neutral-bounds}
+Uniform pseudo-Siegel a priori bounds hold for every neutral quadratic polynomial,
+and the nested pseudo-Siegel disks converge to the Mother Hedgehog.  Status:
+stated in the survey as a Dudko--Lyubich theorem.
+\end{theorem}
+
+\begin{theorem}[Anti-Molecule near-degenerate case]
+\label{thm:survey-anti-molecule}
+Positive-entropy near-degenerate estimates, combined with puzzle estimates, give a
+priori bounds and MLC under the anti-Molecule condition.  Status: the survey's own statement, with the condition defined in its near-degenerate part.
+\end{theorem}
+
+\subsection*{Open problems listed by the survey}
+
+\begin{openestimate}[Survey problems]
+\label{prob:survey}
+The survey lists the following as open: uniform bounded geometry of all hyperbolic
+components; uniform a priori bounds for all $c\in\partial\M$ and all scales; a
+single uniformly hyperbolic renormalization operator covering the quadratic-like,
+near-neutral, and puzzle regimes; hyperbolicity of neutral renormalization for all
+$\overline\Theta$; hyperbolicity of Molecule renormalization; pseudo-Siegel bounds
+in the remaining unbounded satellite quadratic-like cases; and a virtual Molecule
+version of the near-degenerate regime.  The survey states that the last two
+problems, together with the other arguments it lists, should imply full MLC.
+\end{openestimate}
+
+\subsection*{Logical relations stated in the survey}
+
+\begin{itemize}
+\item Bounded geometry of hyperbolic components implies MLC, by shrinking nested
+  copies and Yoccoz's reduction.
+\item Quadratic-like hyperbolicity follows from bounded-type MLC and a priori bounds
+  together with Lyubich's quadratic-like theory.
+\item The neutral a priori bounds imply a compact sectorial renormalization operator.
+\item Positive-entropy estimates and puzzle estimates give MLC in the anti-Molecule case.
+\item The Feigenbaum theorem together with puzzle arguments gives MLC along real lines
+  and Mandelbrot veins.
+\end{itemize}
+
+\section{Dudko--Lyubich: satellite parameters of bounded type}
+\label{sec:digest-satellite}
+
+The paper~\cite{DudkoLyubichSatellite} proves local connectivity of $\M$ at some
+satellite parameters of bounded type.
+
+\begin{definition}[Bounded satellite itinerary]
+\label{def:digest-bounded-satellite}
+A parameter has bounded satellite type if its renormalization itinerary, read
+through the small copies it visits, takes only finitely many maximal
+small-copy types, and all of these types are satellite.
+\end{definition}
+
+\begin{theorem}[Dudko--Lyubich, satellite case]
+\label{thm:dl-satellite}
+$\M$ is locally connected at every parameter of bounded satellite type in the
+class defined by the paper.  Status: proved in the paper.  The paper's construction
+uses a source-specific molecule surgery near parameters with periodic irrational
+rotation, and proves MLC for these classes, not for the whole satellite limb.
+\end{theorem}
+
+\section{Dudko--Lyubich: MLC at Feigenbaum points}
+\label{sec:digest-feigenbaum}
+
+The paper~\cite{DudkoLyubichFeigenbaum} treats renormalization with bounded relative
+periods, not only the primitive period-doubling case.
+
+\begin{definition}[Bounded relative periods]
+\label{def:bounded-relative}
+A parameter has bounded relative periods if the relative renormalization periods
+along its renormalization tower are bounded.  Satellite and mixed combinatorial
+types are included.
+\end{definition}
+
+\begin{theorem}[Dudko--Lyubich, Main A]
+\label{thm:dl-main-A}
+Parameters with bounded relative periods satisfy the a priori bounds that the paper
+calls beau bounds.  Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Lyubich, Main B]
+\label{thm:dl-main-B}
+MLC holds at every parameter with bounded relative periods, including the
+period-doubling Feigenbaum parameter.  Status: proved in the paper from Main~A.
+\end{theorem}
+
+\section{Kahn--Kapiamba--Lyubich: parabolically bounded primitive renormalization}
+\label{sec:digest-kkl}
+
+The paper~\cite{KahnKapiambaLyubich} proves a priori bounds and MLC for a class of
+infinitely renormalizable parameters of primitive type that can approach the cusp.
+
+\begin{definition}[Small-copy types and parabolic tails]
+\label{def:kkl-types}
+A type is prime if no intermediate proper small copy occurs in it.  For $q\ge1$
+the parabolic tail $\Phi_q$ is a prescribed surgery from the $1/q$-limb to the
+$1/(q+1)$-limb.  A family is parabolically bounded if it is a finite union of
+types and tails.
+\end{definition}
+
+\begin{theorem}[KKL, Main A]
+\label{thm:kkl-A}
+Prime primitive families satisfy the beau bounds.  Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[KKL, Main B]
+\label{thm:kkl-B}
+Beau bounds together with a bounded diameter of the puzzle Teichm\"uller space
+imply rigidity of the family.  Status: proved in the paper.  The bounded diameter
+of the parabolic tails is taken from the unpublished manuscript \emph{Elephant
+puzzles}~\cite{ElephantPuzzles}, cited as in preparation.  The present digest does
+not treat that input as established.
+\end{theorem}
+
+\begin{theorem}[KKL, Main C]
+\label{thm:kkl-C}
+Parabolically bounded families are rigid, and hence MLC holds pointwise on them.
+Status: derived in the paper from Main~B.
+\end{theorem}
+
+\section{Neutral and hybrid sources}
+\label{sec:digest-neutral-hybrid}
+
+\subsection*{Dudko--Luo--Lyubich: $\psi^\bullet$-quasi-Siegel maps}
+
+\begin{definition}[Pseudo-Siegel bounds]
+\label{def:pseudo-siegel}
+For $f_\theta(z)=e^{2\pi i\theta}z+z^2$, the pseudo-Siegel bounds are nested disks
+$\widehat Z^{-1}\supseteq\widehat Z^0\supseteq\cdots\supseteq H\ni0$, where $H$ is
+the filled postcritical set, $f_\theta$ is injective on each $\widehat Z^m$, and
+$\bigcap_m\widehat Z^m=H$.  The constants are uniform in $\theta$.
+\end{definition}
+
+\begin{definition}[$\psi^\bullet$-quasi-Siegel map]
+\label{def:psi-ql-siegel}
+A $\psi^\bullet$-quasi-Siegel map is a pair $F=(f,\iota)$ of holomorphic maps between
+disks with the properties stated in~\cite{DudkoLuoLyubichNeutral}, including that
+$f$ is a double branched cover with a unique critical point on the boundary of its
+domain of definition.
+\end{definition}
+
+\begin{theorem}[Dudko--Luo--Lyubich, Theorem~1.1 ($\psi^\bullet$-case)]
+\label{thm:dll-psi}
+If $F$ is a $\psi^\bullet$-quasi-Siegel map with an eventually golden-mean Siegel
+disk and degeneration $K_F$, there is a nested sequence of geodesic pseudo-Siegel
+disks satisfying the pseudo-Siegel bounds.  The outermost disk is a quasidisk with
+constant depending on $K_F$.  Status: proved in the paper.  Its regularization result is conditional on the
+combinatorial hypotheses stated there and is imported from an earlier
+Dudko--Lyubich paper, which the source cites.
+\end{theorem}
+
+\subsection*{Dudko--Lim: pseudo-bubbles}
+
+\begin{definition}[Bubbles and pseudo-bubbles]
+\label{def:bubbles}
+The generation-zero bubble is $B^0_\theta=\overline{f_\theta^{-1}(Z_\theta)\setminus Z_\theta}$,
+and its pseudo-bubble is the closure of the component of $f_\theta^{-1}(\operatorname{int}\widehat Z_\theta)$
+disjoint from $Z_\theta$.  A generation-$g$ bubble is a component of $f_\theta^{-g}(B^0_\theta)$,
+with the corresponding pseudo-bubble.  Its root is the unique critical point of
+$f_\theta^{g+1}$ in it.
+\end{definition}
+
+\begin{theorem}[Dudko--Lim, pseudo-bubble bounds]
+\label{thm:dl-bubbles}
+There is a universal $K>1$ such that every pseudo-bubble is a $K$-quasidisk.  If the
+root is $c_{-k}$ with $q_n\le k<q_{n+1}$, then
+\[
+ K^{-1}|c_{-k}-c_{q_n-k}|\le\operatorname{diam}(B)\le\operatorname{diam}(\widehat B)
+ \le K|c_{-k}-c_{q_n-k}|,
+\]
+and every point of $\widehat B$ lies within hyperbolic distance $K$ of the geodesic
+landing at $c_{-k}$.  Status: proved in the paper from the earlier pseudo-Siegel bounds of Dudko and
+Lyubich (cited in the source as~[DL22]) and standard Koebe and quasiconformal
+estimates.  The paper states no MLC theorem.
+\end{theorem}
+
+\subsection*{Dudko--Lim--Lyubich: rigidity of the neutral attractor}
+
+\begin{definition}[Neutral cascade and butterfly]
+\label{def:neutral-cascade}
+A neutral cascade is the limiting transcendental semigroup of a bi-infinite
+renormalization tower; its parameter semigroup is commutative and totally ordered
+by time.  A butterfly $\mathcal B_n$ is a pair of maps $F^{Q_n+Q_{n-1}}\colon\mathcal U'_n\to\mathcal W_n$
+and $F^{Q_n}\colon\mathcal U''_n\to\mathcal W_n$, with depth-$m$ enrichments and
+$\mathcal B^\infty_n=\bigcup_{m\ge n}\mathcal B^m_n$.
+\end{definition}
+
+\begin{theorem}[Conformal rigidity of bi-infinite towers]
+\label{thm:dll-conformal}
+Combinatorially equivalent bi-infinite towers in the renormalization attractor are
+conformally conjugate on definite neighbourhoods of their Mother Hedgehogs.  Status:
+proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Affine rigidity of neutral cascades]
+\label{thm:dll-affine}
+The quasiconformal conjugacy in Theorem~\ref{thm:dll-conformal} is affine.  Status:
+proved in the paper, using a dynamical-hairiness theorem and quasiconformal
+Thurston equivalence.
+\end{theorem}
+
+\subsection*{Shen: hybrid classes of generalized polynomial-like maps}
+
+\begin{definition}[Generalized polynomial-like maps, hybrid classes, criticality]
+\label{def:shen}
+A generalized polynomial-like map $f\colon U\to V$ has finite unions of Jordan disks
+$U\Subset V$ as domain and range, each component proper onto a component of $V$, and
+analytic extension across $\overline U$ with no critical point on $\partial U$.  Its
+filled Julia set is $K(f)=\{z\in U:\ f^n(z)\in U\ \forall n\ge0\}$.  The criticality of $f$ is
+$d(f)=\sum_{c\in\operatorname{Crit}(f)\cap K(f)}\operatorname{ord}(f,c)$.
+\end{definition}
+
+\begin{theorem}[Shen, Theorem~1.1]
+\label{thm:shen}
+For $f_0$ in the relevant class, the hybrid class $\mathcal H_*(f,\mathcal V)$ is,
+locally and among maps with constant criticality, an embedded complex analytic
+submanifold of the Banach space of the class, closed in $\mathcal V$, of codimension
+$d(f_0)$.  Status: proved in the paper.  The paper's proof uses a polynomial
+result of Astorg, subordination, and a generalized straightening theorem of
+Baranski.  It notes that earlier proofs for generalized polynomial-like maps relied
+on approximation by hyperbolic maps, an unresolved issue.
+\end{theorem}
+
+\section{Dudko: the decoration theorem}
+\label{sec:digest-decoration}
+
+The paper~\cite{DudkoDecoration} studies the components of $\M$ removed by a small
+copy.
+
+\begin{definition}[Small copy and decorations]
+\label{def:decoration}
+A quadratic map is Douady--Hubbard renormalizable of period $p$ if there is a
+dividing repelling cycle with associated domains $Y^p_1\Subset Y^0_1$, and $c$ does not
+escape from $Y^p_1$ under $f^p$.  The small copy $\M_s$ is the closure of the
+parameters satisfying this condition with a fixed ray pattern.  The component of
+$\M\setminus\M_s$ containing the main cardioid is big; the other components are
+decorations.
+\end{definition}
+
+\begin{theorem}[Decoration theorem]
+\label{thm:decoration}
+For every $\varepsilon>0$ there are at most finitely many connected components of
+$\M\setminus\M_s$ of diameter at least $\varepsilon$.  Status: proved in the paper
+by puzzle and parapuzzle methods.  The paper also states the same result for the
+multibrot sets $\M_d=\{c:\ J(z^d+c)\text{ connected}\}$, $d\ge2$.  It does not
+state global MLC.
+\end{theorem}
+
+\section{Kahn--Lyubich: Elephant Eyes}
+\label{sec:digest-elephant}
+
+The paper~\cite{KahnLyubichElephant} proves a priori bounds for infinitely
+renormalizable quadratic maps with elephant-eye combinatorics.
+
+\begin{definition}[Elephant-eye class]
+\label{def:elephant}
+Let $q\ge\underline q$ and $b\le\bar b$, and put $p=q+b$.  The class $\mathcal Q(\underline q,\bar b)$
+consists of renormalizable pseudo-quadratic-like maps with the following properties,
+where $\alpha$ is the dividing fixed point and $q>1$ rays land at it.
+\begin{itemize}
+\item[(E1)] The combinatorial rotation number of $\alpha$ is $1/q$.
+\item[(E2)] $K_0$ is the only little Julia set in the central sector.
+\item[(E3)] $p=q+b$, $b\le\bar b$, $q$ is unbounded, and $b<q$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Kahn--Lyubich, a priori bounds]
+\label{thm:elephant-bounds}
+For maps in $\mathcal Q(\underline q,\bar b)$ the relevant fundamental annuli have
+uniformly definite modulus; the bounds are unbranched, since the annuli avoid the
+non-central top-level little Julia sets.  The proof uses the thin--thick
+decomposition, the amplification theorem, and pull-off arguments.  Status: proved in
+the paper.  The paper has no single numbered main theorem with an explicit modulus
+constant; the result is distributed across these technical statements.
+\end{theorem}
+
+\begin{theorem}[Local connectivity and MLC at elephant-eye parameters]
+\label{thm:elephant-mlc}
+The Julia sets in the class are locally connected, by Hu--Jiang and Jiang, and MLC
+holds at the corresponding parameters, by Lyubich's machinery together with little
+Mandelbrot copies on Ecalle--Voronin cylinders.  Status: the paper's own statement,
+relying on the external results cited there.
+\end{theorem}
+
+\section{Dependency map}
+\label{sec:digests-dependencies}
+
+Table~\ref{tab:digest-dependencies} collects the dependencies stated above.  An
+entry names an input, a result that uses it, and the status of that result.
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\textwidth}@{}}
+\textbf{Result} & \textbf{Inputs used} & \textbf{Status in the source}\\
+\hline
+Yoccoz finite renormalization; boundaries of hyperbolic components &
+Puzzle and shrinking arguments &
+cited\\
+Lyubich I--III (Section~\ref{sec:digest-lyubich-1993}) &
+straightening, Yoccoz, Sullivan, Hu--Jiang--Jiang, McMullen &
+proved\\
+Survey, quadratic-like codimension one and hyperbolicity &
+Lyubich's quadratic-like theory &
+cited or stated\\
+Pacman/Siegel hyperbolicity &
+bounded-type periodic rotation numbers; Gaidashev--Yampolsky for the golden mean &
+attributed to the survey's sources\\
+Bounded-type quadratic-like MLC &
+a priori bounds; puzzle arguments &
+proved in~\cite{DudkoLyubichFeigenbaum}\\
+Satellite bounded-type MLC &
+molecule surgery near periodic irrational rotations &
+proved for the paper's class\\
+Feigenbaum Main A and B &
+beau bounds; bounded relative periods &
+proved\\
+KKL Main A, B, C &
+beau bounds; puzzle Teichm\"uller diameter; \emph{Elephant puzzles} &
+proved, with B depending on an unpublished input\\
+Pseudo-Siegel bounds (DLL) &
+regularization from an earlier paper &
+proved, conditional on stated combinatorics\\
+Pseudo-bubble bounds (DL) &
+pseudo-Siegel bounds; Koebe and quasiconformal estimates &
+proved\\
+Conformal and affine rigidity (DLL) &
+pseudo-Siegel bounds; dynamical hairiness; Thurston equivalence &
+proved\\
+Hybrid classes (Shen) &
+Astorg; subordination; Baranski straightening &
+proved\\
+Decoration theorem &
+puzzles and parapuzzles; Yoccoz's trivial-fiber result &
+proved\\
+Elephant Eyes a priori bounds &
+thin--thick decomposition; amplification; pull-off &
+proved\\
+Elephant Eyes MLC &
+Hu--Jiang, Jiang; Lyubich; Ecalle--Voronin cylinders &
+the paper's own statement\\
+\end{tabularx}
+\caption{Dependencies among the digested results.}
+\label{tab:digest-dependencies}
+\end{table}
+
+\section{What these digests do not yet cover}
+\label{sec:digests-gaps}
+
+These digests are not a complete review of the literature.  The following gaps
+are known and recorded here, so that they are not mistaken for coverage.
+\begin{itemize}
+\item The definitions of quasi-hyperbolic parameters, of the Douady--Hubbard
+  renormalization of polynomials, and of external rays are not restated in this
+  chapter.  They belong to the foundations chapter and to~\cite{DH}.
+\item Several inputs are cited but not digested: Sullivan's complex bounds, Hu--Jiang
+  and Jiang, McMullen, Inou--Shishikura, Gaidashev--Yampolsky, and the unpublished
+  \emph{Elephant puzzles}.  Their statements are used only as recorded by the
+  sources that cite them.
+\item The volumes of Lyubich's book~\cite{LyubichBook} and the papers
+  \cite{LyubichDynamics,LyubichIII} are cited in the bibliography but not digested
+  section by section.
+\item The survey's notation $\Theta_{\le N}$ is not defined explicitly in the survey, so
+  the class in its near-parabolic statement is recorded only as the survey states it.
+\item Lean formalization of these sources is not complete.  The repository contains
+  interfaces for several of the hypotheses above, as described in
+  Chapter~\ref{ch:conditional-matrix} and Appendix~\ref{ch:formal-map}.  It contains
+  no formal proof of Main A or Main B of any of the recent papers, no quasiconformal
+  surgery, and no straightening theorem.
+\end{itemize}

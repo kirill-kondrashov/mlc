@@ -10,6 +10,7 @@ import Mlc.Literature.CaseTheorems
 import Mlc.Literature.ModelAudit
 import Mlc.Literature.Review
 import Mlc.Quadratic.Complex.FirstComponents
+import Mlc.Quadratic.RealSlice
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample
 import Mlc.CertifiedOrbitApproximation

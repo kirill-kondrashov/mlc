@@ -2,6 +2,7 @@ import Mlc.Core
 import Mlc.GreenSublevelIntersectionCounterexample
 import Mlc.Literature.ModelAudit
 import Mlc.Quadratic.Complex.FirstComponents
+import Mlc.Quadratic.RealSlice
 import Lean
 
 open Lean Meta
@@ -12,7 +13,8 @@ def main : IO UInt32 := do
     { module := `Mlc.Core },
     { module := `Mlc.GreenSublevelIntersectionCounterexample },
     { module := `Mlc.Literature.ModelAudit },
-    { module := `Mlc.Quadratic.Complex.FirstComponents }
+    { module := `Mlc.Quadratic.Complex.FirstComponents },
+    { module := `Mlc.Quadratic.RealSlice }
   ] {}
 
   let name := ``MLC.mlc_conjecture
@@ -31,7 +33,8 @@ def main : IO UInt32 := do
     ``MLC.Quadratic.FirstComponents.frontier_hasAttractingFixedPoint,
     ``MLC.Quadratic.FirstComponents.frontier_hasAttractingPeriodTwoCycle,
     ``MLC.Quadratic.FirstComponents.disjoint_cardioid_period_two,
-    ``MLC.Quadratic.FirstComponents.closure_cardioid_inter_closure_period_two
+    ``MLC.Quadratic.FirstComponents.closure_cardioid_inter_closure_period_two,
+    ``MLC.Quadratic.RealSlice.ofReal_mem_mandelbrotSet_iff
   ]
 
   let coreContext : Core.Context :=
