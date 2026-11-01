@@ -270,7 +270,10 @@ The return-period predicate and derivative are
 The structures and predicates \lean{LocalLinearization},
 \lean{HasParabolicCycle}, \lean{HasSiegelCycle}, and
 \lean{HasCremerCycle} express the indicated local conditions.
-The multiplier-product calculation is a text proof here.
+The chain-rule product is formal as
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{deriv_fc_iterate};
+the invariance of this product under a change of starting point on a
+cycle remains a text argument.
 The theorem \lean{classification_complete} is an exhaustive
 priority partition with an explicit residual case; it neither
 proves MLC on each part nor classifies all renormalization types.
@@ -286,6 +289,9 @@ The parameters with an attracting fixed point form
 The boundary parametrization is
 $c(\theta)=e^{2\pi i\theta}/2-e^{4\pi i\theta}/4$.
 Its cusp $c(0)=1/4$ has fixed-point multiplier $1$.
+The parametrization is injective on the closed unit disk, an attracting
+fixed point of $f_c$ is unique when it exists, the set $\mathcal H_0$ is
+open, and its frontier is the image of the unit circle.
 \end{proposition}
 
 \begin{proof}
@@ -294,10 +300,31 @@ $c=\alpha-\alpha^2$ and its multiplier is $\lambda=2\alpha$.
 Conversely, the displayed parameter has fixed point $\lambda/2$
 with multiplier $\lambda$.  The map
 $\lambda\mapsto\lambda/2-\lambda^2/4$ is injective on the closed
-unit disk: equality at distinct arguments would force their sum
-to be $2$, which is impossible there.  Its image of the boundary
-circle therefore parametrizes the cardioid boundary.
+unit disk: for $\lambda\ne\mu$, equality forces $\lambda+\mu=2$, and
+two points of the closed disk with sum $2$ both equal $1$.
+If $\alpha\ne\beta$ are fixed points, then $\alpha+\beta=1$.  If both were
+attracting, then $2=|2\alpha+2\beta|\le|2\alpha|+|2\beta|<2$, a contradiction.
+The set $\mathcal H_0$ is the image of the open disk under a nonconstant
+polynomial, so it is open by the open-mapping theorem.  The image of the
+closed disk is compact, and the parametrization is injective there, so the
+closure of $\mathcal H_0$ is that image and its frontier is the image of the
+unit circle $\{e^{2\pi i\theta}\}$.  This gives the displayed boundary curve.
 \end{proof}
+
+{\rightskip=0pt plus 1fil
+\paragraph{Lean correspondence.}
+The attracting-fixed-point predicate is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{HasAttractingFixedPoint}.
+The description of $\mathcal H_0$ is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{hasAttractingFixedPoint_iff_mem_image}.
+Injectivity on the closed disk is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{cardioidMap_injOn_closedBall},
+uniqueness is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{attracting_fixed_point_unique},
+openness is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{isOpen_image_ball_cardioid},
+and the frontier identity is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{frontier_hasAttractingFixedPoint}.\par}
 
 \begin{proposition}[The attracting period-two component]
 \label{prop:period-two-component}
@@ -306,6 +333,8 @@ the disk
 \[
  \mathcal H_2=\{c:|c+1|<1/4\}.
 \]
+On this disk the cycle multiplier is $4(c+1)$, and the frontier of
+$\mathcal H_2$ is the circle $|c+1|=1/4$.
 \end{proposition}
 
 \begin{proof}
@@ -314,20 +343,72 @@ The factorization
  f_c^{\circ2}(z)-z
  =(z^2-z+c)(z^2+z+c+1)
 \]
-separates fixed points from period-two candidates.
-For the two roots $a,b$ of the second factor, $ab=c+1$,
-so their cycle multiplier is $4ab=4(c+1)$.
-The factors share a root, or the two candidates coincide, only
-at $c=-3/4$, which lies on the displayed disk boundary.
-Away from that parameter, the candidates form a genuine two-cycle,
-attracting exactly when $|4(c+1)|<1$.
+separates fixed points from period-two candidates.  If $z$ has prime
+period two, then $f_c(z)\ne z$ forces $z^2+z+c+1=0$.  The identity
+\[
+ z\,f_c(z)-(c+1)=(z-1)(z^2+z+c+1)
+\]
+gives $z\,f_c(z)=c+1$, and the chain rule gives the cycle multiplier
+$(f_c^{\circ2})'(z)=4z\,f_c(z)=4(c+1)$.
+Conversely, let $|c+1|<1/4$, and let $z$ be a root of $z^2+z+c+1$.  If
+$z$ were fixed, subtracting $z^2+c=z$ from the root equation would give
+$z=-1/2$, hence $c=-3/4$, contradicting $|c+1|<1/4$.  So $z$ has prime
+period two, and it is attracting because $|4(c+1)|<1$.
 \end{proof}
 
-These elementary component formulas explain the green contours in
-Figure~\ref{fig:mlc-status}; the formulas are text proofs rather
-than newly claimed Lean declarations.  They identify open covered
-regions and two classical boundaries.  They provide no
-classification of the rest of $\partial\M$.
+{\rightskip=0pt plus 1fil
+\paragraph{Lean correspondence.}
+The period-two predicate is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{HasAttractingPeriodTwoCycle}.
+The factorization is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{period_two_factorization},
+the identity $z\,f_c(z)=c+1$ is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{period_two_mul},
+the multiplier formula is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{period_two_multiplier},
+the disk description is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{hasAttractingPeriodTwoCycle_iff},
+and the frontier is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{frontier_hasAttractingPeriodTwoCycle}.\par}
+
+These formulas identify two open covered regions and their classical
+boundaries; they explain the green contours in Figure~\ref{fig:mlc-status}.
+The formal sets are defined by attracting fixed points and attracting
+period-two cycles.  Identifying them with components of the interior of
+$\M$ needs the attracting-basin argument, which is not formalized here.
+They provide no classification of the rest of $\partial\M$.
+
+\begin{proposition}[Disjointness and the root of the bulb]
+\label{prop:cardioid-bulb-contact}
+The sets $\mathcal H_0$ and $\mathcal H_2$ are disjoint.  Their closures meet
+in exactly one point, the parameter $c=-3/4$.
+\end{proposition}
+
+\begin{proof}
+Let $c=\lambda/2-\lambda^2/4$ with $|\lambda|<1$.  Then
+\[
+ 4(c+1)=5-(\lambda-1)^2.
+\]
+Since $|\lambda-1|\le|\lambda|+1<2$, the reverse triangle inequality gives
+$|4(c+1)|\ge5-|\lambda-1|^2>1$.  Hence $|c+1|>1/4$, and $c\notin\mathcal H_2$.
+
+Now let $c$ lie in both closures.  Then $c=\lambda/2-\lambda^2/4$ with
+$|\lambda|\le1$, and $|c+1|\le1/4$ gives $|5-(\lambda-1)^2|\le1$.  Hence
+$|(\lambda-1)^2|\ge4$, that is, $|\lambda-1|\ge2$.  Write $\lambda=x+iy$.  The
+two inequalities $x^2+y^2\le1$ and $(x-1)^2+y^2\ge4$ give $x\le-1$, while
+$x^2\le1$ gives $x\ge-1$.  So $x=-1$ and $y=0$, whence $c=-3/4$.
+Conversely, $\lambda=-1$ is in the closed disk and gives $c=-3/4$, and
+$|-3/4+1|=1/4$ shows that $-3/4$ lies on the bulb boundary.
+\end{proof}
+
+{\rightskip=0pt plus 1fil
+\paragraph{Lean correspondence.}
+Disjointness is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{disjoint_cardioid_period_two}.
+The common closure point is
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{closure_cardioid_inter_closure_period_two},
+which uses the closure identity
+\leanref{Mlc/Quadratic/Complex/FirstComponents.lean}{closure_image_ball_cardioid}.\par}
 
 \section{Finite observations in parameter space}
 

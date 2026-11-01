@@ -1,6 +1,7 @@
 import Mlc.Core
 import Mlc.GreenSublevelIntersectionCounterexample
 import Mlc.Literature.ModelAudit
+import Mlc.Quadratic.Complex.FirstComponents
 import Lean
 
 open Lean Meta
@@ -10,7 +11,8 @@ def main : IO UInt32 := do
   let env ← importModules #[
     { module := `Mlc.Core },
     { module := `Mlc.GreenSublevelIntersectionCounterexample },
-    { module := `Mlc.Literature.ModelAudit }
+    { module := `Mlc.Literature.ModelAudit },
+    { module := `Mlc.Quadratic.Complex.FirstComponents }
   ] {}
 
   let name := ``MLC.mlc_conjecture
@@ -23,7 +25,13 @@ def main : IO UInt32 := do
     ``MLC.Categorical.Mandelbrot.innerOrbitSet_eq_set_of_two_le,
     ``MLC.Literature.relativePeriodProduct_periodDoubling,
     ``MLC.Literature.ModelAudit.not_finitelyRenormalizable_in_frozenModel,
-    ``MLC.Literature.ModelAudit.not_nonempty_satelliteAPrioriCertificate
+    ``MLC.Literature.ModelAudit.not_nonempty_satelliteAPrioriCertificate,
+    ``MLC.Quadratic.FirstComponents.period_two_multiplier,
+    ``MLC.Quadratic.FirstComponents.attracting_fixed_point_unique,
+    ``MLC.Quadratic.FirstComponents.frontier_hasAttractingFixedPoint,
+    ``MLC.Quadratic.FirstComponents.frontier_hasAttractingPeriodTwoCycle,
+    ``MLC.Quadratic.FirstComponents.disjoint_cardioid_period_two,
+    ``MLC.Quadratic.FirstComponents.closure_cardioid_inter_closure_period_two
   ]
 
   let coreContext : Core.Context :=
