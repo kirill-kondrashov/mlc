@@ -1,0 +1,118 @@
+\section{Horizontal and vertical weight} \label{sec:restriction} \label{sec:hor-vert}
+We now return to the setting of a quadratic-like map $f\from U'\to U$.
+where $f$ is primitively renormalizable with some period $p$.
+We let $\KK$ be the cycle of the corresponding little (filled) Julia sets.
+We let $U^n = f^{-n}(U)$ (so $U^0 = U$ and $U^1 = U'$),
+and observe that $U^{n+1} \subset U^n$,
+and $f\from U^{n+1} \to U^n$ is quadratic-like.
+In what follows we will relate the canonical WAD's of these surfaces.
+For any $k, n \in \N$,
+we will think of an arc in $U^n \sm f^{-k}\KK$ as horizontal if it connects two components of $f^{-k}\KK$,
+and vertical if it connects one such component with $\di U^n$. 
+
+
+
+In this section we will prove Theorem \ref{def vertical teaser}, which relates the horizonal and vertical parts of $\Wcan(U\sm\KK)$. 
+In Section \ref{domination sec}, we will use Theorem \ref{loss-F} to obtain Theorem \ref{loss of hor weight}, 
+a loss of horizontal weight as we pass from $U \sm \KK$ to $U^{8p} \sm \KK$. 
+In Section \ref{subsec:vert-from-hor-loss}, we will use this loss of horizontal weight to obtain definitely proportional vertical weight for $U^{8p} \sm \KK$.
+In Section \ref{covering-application}, using a version of the Covering Lemma that we will state and prove in Section \ref{subsec:covering-lemma},
+we will push forward the vertical weight for $U^{8p} \sm \KK$ back to $U \sm \KK$, to prove Theorem \ref{def vertical teaser}.
+\subsection{The loss of horizontal weight in $W_\can$}\label{domination sec}
+In this subsection we will produce a system of horizontal arcs that satisfy the hypothesis of Theorem \ref{loss-F}, 
+and use that Theorem to prove Theorem \ref{loss of hor weight}. 
+
+Let $\tl \KK=f^{-1}(\KK)$.
+Then we have an embedding\footnote{The embedding here is of course the inclusion. In Sections \ref{pseudo-puzzle} and \ref{sec:conclusions} it will be replaced by an immersion, so it is good to have notation for it.}
+ $i\from U^{n+1}\sm \KK \to U^n\sm \KK$,
+a covering $f\from U^{n+1}\sm \tl \KK \to U^n\sm \KK$,
+and an inclusion $U^{n+1}\sm \tl \KK \subseteq U^{n+1}\sm \KK$,
+that together form a (non-commutative) triangle diagram.
+
+\begin{center}
+\begin{tikzcd}
+ & U^n\sm \KK \\
+U^{n+1}\sm \tl \KK  \arrow[r, "\subseteq"] \arrow[ur, "f"] & U^{n+1}\sm \KK \arrow[u, hook, "i"] \\
+\end{tikzcd}
+\end{center}
+
+For $n \in \N$, 
+we define $q_n\in \R_+$ letting $q_0 = 0$ and 
+\begin{equation}\label{q}
+                 q_{n+1}: =  3p(q_n+2).
+\end{equation}
+We observe that the $q_n$ are non-decreasing in $n$. 
+Let $X^n = W_\can^\hor (U^n\sm \KK)$ and $\hat X^n= X^n- q_n$.
+
+\begin{prop}\label{restrictions}
+  We have:
+\begin{itemize}
+
+\item [(i)] $\hat X^{n+1} \leq i^* \hat X^n;$
+
+\item [(ii)] $f^* \hat X^n\multimap \hat X^{n+1}.$
+
+\end{itemize}
+\end{prop}
+
+\begin{proof} (i)
+Since the embedding $i$ is proper on the ends corresponding to the little Julia sets $K_p(j)$,
+we have  $X^{n+1} \leq i^* X^n$ by Property C.
+This yields the desired inequality
+since the sequence $(q_n)$ is non-decreasing.
+
+\msk (ii)
+Since the covering $f$ maps $U^{n+1}$ to $U^n$ and maps $\tl\KK$ to $\KK$,
+horizontal and vertical  arcs of $U^n\sm \KK$ lift respectively to horizontal and vertical arcs
+of $U^{n+1}\sm \tl \KK$. Hence  $f^* X^n = W_\can^\hor(U^{n+1}\sm \tl\KK)$.
+
+By Property D,
+$$
+   W_\can(U^{n+1}\sm \tl\KK) \multimap W_\can^\hor (U^{n+1}\sm \KK)- 6p.
+$$
+But since the embedding  $U^{n+1}\sm \tl \KK \subset U^{n+1}\sm \KK$
+is proper on $\di U^{n+1}$, the itinerary of any horizontal path $\gamma$ in $U^{n+1}\sm \KK$
+consists only of horizontal arcs of $U^{n+1}\sm\tl\KK$.
+It follows that
+$$
+  W_\can^\hor(U^{n+1} \sm \tl\KK) \multimap W_\can^\hor (U^{n+1}\sm \KK)-6p.
+$$
+Thus,
+$
+     f^* X^n \multimap X^{n+1} - 6p.
+$
+By Corollary \ref{cor:sub-sub} (and \eqref{q}), we then have
+$$
+  f^* \hat X^n = f^* X^n - q_n \multimap X^{n+1} -6p - 3p q_n \geq \hat X^{n+1}. \qedhere
+$$
+\end{proof}
+
+We can now prove our fundamental lemma on the loss of horizontal weight under restriction:
+\begin{theorem}\label{loss of hor weight}
+  Let $f$ be a renormalizable quadratic-like map with period $p$.
+Then there exists $M=M(p)$ such that
+$$
+     \| W^h_\can(U^{8p}\sm \KK) \|_1\leq \frac{1}{3} \| W^h_\can(U\sm \KK)\|_1,
+$$
+provided $ \| W^h_\can(U\sm \KK)\|_1>M(p)$.
+\end{theorem}
+
+\begin{proof}
+As described in Section \ref{subsec:model},
+we can transfer the $\hat X^n$ to horizontal weighted arc diagrams on $\C \sm \DD$ for the critically periodic model $F$ for 
+$f$.
+By Propositon \ref{restrictions},
+these transferred $\hat X^n$ satisfy the hypotheses of Theorem \ref{loss-F},
+so we can apply that theorem to obtain that $\norm{\hat X^{8p}}_1 \le \frac14\norm{\hat X^0}_1$, 
+and therefore
+\begin{align*}
+   \| W^h_\can(U^{8p}\sm \KK) \|_1&\le \norm{\hat X^{8p}}_1 + 3pq_{8p} \\
+&\le \frac14\norm{\hat X^0}_1 + 3pq_{8p} \\
+&=    \frac{1}{4} \| W^h_\can(U\sm \KK)\|_1 + 3pq_{8p} \\
+& \le \frac{1}{3} \| W^h_\can(U\sm \KK)\|_1
+\end{align*}
+when $ \| W^h_\can(U\sm \KK)\|_1 \ge 36p q_{8p}$. 
+\end{proof}
+
+
+

@@ -97,6 +97,30 @@
       "title": "Uniform a priori bounds for neutral renormalization. Variation II: psi-bullet ql Siegel maps",
       "authors": ["Dzmitry Dudko", "Yusheng Luo", "Mikhail Lyubich"],
       "existing_pdf": "Dudko_2509.23031.pdf"
+    },
+    {
+      "key": "kahn-lyubich-primitive",
+      "arxiv_id": "math/0609045",
+      "role": "a-priori-bounds",
+      "title": "A priori bounds for some infinitely renormalizable quadratics: I. Bounded primitive combinatorics",
+      "authors": ["Jeremy Kahn"],
+      "existing_pdf": null
+    },
+    {
+      "key": "kahn-lyubich-decorations",
+      "arxiv_id": "math/0609046",
+      "role": "a-priori-bounds",
+      "title": "A priori bounds for some infinitely renormalizable quadratics: II. Decorations",
+      "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
+      "existing_pdf": null
+    },
+    {
+      "key": "kahn-lyubich-molecules",
+      "arxiv_id": "0712.2444",
+      "role": "a-priori-bounds",
+      "title": "A priori bounds for some infinitely renormalizable quadratics: III. Molecules",
+      "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
+      "existing_pdf": null
     }
   ]
 }

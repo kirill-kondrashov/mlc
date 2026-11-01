@@ -66,6 +66,7 @@ REVIEW_CHAPTERS := \
 	docs/review/19_digests_pacman_neutral.tex \
 	docs/review/20_digests_laminations_entropy.tex \
 	docs/review/21_digests_sierpinski.tex \
+	docs/review/23_digests_apriori_limbs.tex \
 	docs/review/22_approaches_map.tex
 
 docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)

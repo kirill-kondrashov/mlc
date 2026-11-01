@@ -7,6 +7,7 @@ import Mlc.Quadratic.Examples
 import Mlc.Quadratic.RealComponents
 import Mlc.Quadratic.MultiplierMap
 import Mlc.Quadratic.PeriodTwoMultiplier
+import Mlc.Quadratic.Symmetry
 import Lean
 
 open Lean Meta
@@ -22,7 +23,8 @@ def main : IO UInt32 := do
     { module := `Mlc.Quadratic.Examples },
     { module := `Mlc.Quadratic.RealComponents },
     { module := `Mlc.Quadratic.MultiplierMap },
-    { module := `Mlc.Quadratic.PeriodTwoMultiplier }
+    { module := `Mlc.Quadratic.PeriodTwoMultiplier },
+    { module := `Mlc.Quadratic.Symmetry }
   ] {}
 
   let name := ``MLC.mlc_conjecture
@@ -50,7 +52,11 @@ def main : IO UInt32 := do
     ``MLC.Quadratic.RealComponents.hasAttractingFixedPoint_ofReal_iff,
     ``MLC.Quadratic.RealComponents.hasAttractingPeriodTwoCycle_ofReal_iff,
     ``MLC.Quadratic.MultiplierMap.multiplier_map_biholomorphic,
-    ``MLC.Quadratic.PeriodTwoMultiplier.period2Multiplier_biholomorphic
+    ``MLC.Quadratic.PeriodTwoMultiplier.period2Multiplier_biholomorphic,
+    ``MLC.Quadratic.mandelbrot_conj_iff,
+    ``MLC.Quadratic.neg_mem_K_iff,
+    ``MLC.Quadratic.conj_mem_K_iff,
+    ``MLC.Quadratic.neg_mem_J_iff
   ]
 
   let coreContext : Core.Context :=

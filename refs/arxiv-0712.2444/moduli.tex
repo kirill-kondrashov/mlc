@@ -1,0 +1,650 @@
+
+\section{Improving the moduli}\label{moduli}
+
+In this section we will prove Theorem \ref{high periods thm} for $\psi$-ql maps. 
+
+Let $f_i: \BU_i' \ra \BU_i$ be a sequence of renormalizable $\psi$-ql maps
+satisfying the $\eta$-molecule condition.
+Let $p_i\to \infty$ stand for the renormalization periods of the $f_i$,
+and let $\psimod (R f_i)\to 0$.
+We need to show that 
+$$
+        \psimod (R f_i)/ \psimod (f_i)\to \infty.
+$$
+
+Let $P_{c_i}: z\mapsto z^2 + c_i$ be the straigtenings of the $f_i$.
+Without loss of generality we can assume that $c_i\to c$.
+Then the $\eta$-molecule condition implies 
+that the quadratic polynomial $P_c$ satisfies the $(\bar\r, \bar\q, \bar\n)$-condition,
+with  $\bar\r$, $\bar\q$ and $\bar\n$ depending only on $\eta $.    
+Hence all nearby maps satisfy the $(\bar\r, \bar\q, \bar\n)$-condition as well.  
+%
+% Let us consider the corresponding Yoccoz puzzle for $P_c$ as described in \S \ref{principal nest}. 
+% Since external rays landing at repelling periodic points are stable,
+% the initial levels of this puzzle persist for nearby maps $P_{c_i}$,
+% and hence for the hybrid equivalent maps $f_i$. 
+In what follows, we will fix one of these maps, $f=f_i$, with parameters $(\r,\q,\n)\leq (\bar\r, \bar\q, \bar\n)$, 
+and consider its puzzle as described in \S \ref{principal nest}.   
+All the objects under consideration (e.g., the principal nest $E^0\supset E^1\supset\dots$)
+will be assoiciated with $f$ without making it notationally explicit.
+
+
+%In this section $C$ will stand for the maximum of the constants in the Quasi-Additivity Law and the Covering Lemma. 
+
+
+\subsection{From the bottom to the top of the Principal Nest}
+
+%  Recall from \S \ref{modified nest} that $\chi$ stands for the height of the Principal Nest, 
+% so that the quadratic-like map $g_\chi: E^\chi\ra E^{\chi-1}$ represents the
+% renormalization of $f$ with little (filled) Julia set $\KK$. 
+The following result proved  \cite{decorations} (Lemma~5.3)  
+shows that if $\chi$ is big while the modulus $\psimod(E^{\chi-1}, E^\chi)$ 
+is small then  $\psimod(E^0, E^1)$ is even smaller:
+
+
+\begin{lem}\label{exp decay}
+   For any $\k\in\N$ and  $\rho\in (0,1)$, there exist $\eps>0$ and $\underline\chi\in \N$
+such that if $\chi\geq \underline\chi$ and $\psimod(E^{\chi-1}, E^\chi)<\eps$,
+then 
+$$
+   \psimod(E^0, E^1)<  \rho\, \psimod(E^{\chi-1}, E^\chi) \leq  \rho\, \mod(\BE^\chi, \KK).
+$$  
+\end{lem}
+
+\comm{******
+Let us now consider the full first return map to $E^0$,
+$$
+   g_1: \cup E^1_i\ra E^0,
+$$
+where $E^1_0=E^1$, while all other restrictions $g_1: E^1_i\ra E^0$, $i\not=0$,
+are univalent. 
+Then the composition 
+$$
+    g_1\circ\dots g_\chi: E^\chi \ra E^0.
+$$
+can be written as some iterate $g_1^l$ applied to $E^\chi$.  
+Now we will prove an analogue of Lemma \ref{exp decay} in the case when  the height $\chi$ is bounded 
+but the time $l$ is big:
+
+\begin{lem}\label{l is big}
+   For any $\rho\in (0,1)$ and $\bar\chi$, there exist $\eps>0$ and $\underline l\in \N$
+such that if $\chi\leq \bar \chi$, $l\geq \underline{l}$, 
+and $\psimod(E^{\chi-1}, K)<\eps$, then 
+$$
+   \psimod(E^0, E^1)<  \rho\, \psimod(E^\chi, K).
+$$  
+\end{lem}
+
+\begin{pf}
+   To simplify the notation, we let $g_1=g$.
+Let $K$ be the filled Julia set of the renormalization $g_\chi: E^\chi\ra E^{\chi-1}$, and let  
+$m=\underline{l}= [64/\rho]+1$.
+Let us consider the consecutive $m$ returns  
+$$
+      K_j=g^{l_j}(K)=  f^{k_j}(K), \quad j=1\dots, m,
+$$
+of  $\orb K$ to $E^1$,
+where $l_1$ is taken as the first return moment exceeding $l$. Let $\Ups_j= g^{-l_j}(E^0)|K$   \note{notation}
+be the corresponding  pullback of $E^0$. Then $\Ups_j\subset E^\chi$, 
+and the map $g^{l_j} : \Ups_k\ra E^0$ has degree $2^{\chi+j}\leq 2^{\bar\chi+m}$.  
+
+Note also that since $m <  l$ and $l$ is not bigger than the period of $K$ under $g$, 
+we have: $k_m< k_1+p<2p $. Let us define $\kappa_j$ as  $k_j$ if $k_j<p$,
+and as $k_j-p$ otherwise. 
+Then $\kappa_j$'s are pairwise different numbers in between $0$ and $p$,
+and hence the sets  $f^{\kappa_j}(E^\chi)$ are pairwise disjoint.
+
+Let us now consider the buffers $\Om_j= f^{k_j}(E^{\chi+1})$ around $K_j$.
+They are contained in  $f^{\kappa_j}(E^\chi)$ respectively, 
+and hence are pairwise disjoint. Moreover, $\deg(f^{k_j}: E^{\chi+1}\ra \Om_j)\leq 4$.
+Also, we have:
+$$
+   \psimod(\Om_j, K_j) \geq  2\, \psimod (E^{\chi+1}, K) = \psimod (E^\chi, K) \geq \psimod (\Ups_j, K),    
+$$
+which puts us in the position to apply the Covering Lemma and the Quasi-Additivity Law with $\eta=1$
+and $d=4$. By the Covering Lemma,
+$$
+  \psimod(E^0, K_j) \leq 32\, \psimod (E^\chi, K),
+ $$
+and by the Quasi-Additivity Law,
+$$
+   \psimod(E^0, E^1) \leq \frac{64}{m} \psimod(E^\chi, K)\leq \rho\,  \psimod(E^\chi, K).
+$$
+\end{pf}
+
+
+Putting the above two lemmas together, we obtain:
+
+
+ \begin{cor}\label{l is big - 2}
+   For any $\rho\in (0,1)$, there exist $\eps>0$ and $\underline l\in \N$
+such that if  $l\geq \underline{l}$, 
+and $\psimod(E^{\chi-1}, K)<\eps$, then 
+$$
+   \psimod(E^0, E^1)<  \rho\, \psimod(E^\chi, K) \leq  \rho\, \mod(\BE^\chi, K).
+$$  
+\end{cor}
+
+\begin{pf}
+  First take $\underline{\chi}$ from Lemma \ref{exp decay},
+then let $\bar\chi=\underline{\chi}$ in Lemma \ref{l is big},
+and find the corresponding $\underline l$.
+\end{pf}
+
+**********************}
+
+ \begin{cor}\label{l is big - 3}
+   For any $\k\in \N$ and $\rho\in (0,1)$, there exist $\eps>0$ and $\underline \chi\in \N$
+such that if  $\chi\geq \underline{\chi}$, 
+and $\mod(\BE^{\chi-1}, \KK)<\eps$, then for some puzzle piece $Y^m(z)$ we have:  
+$$
+   \psimod(Y^0(z), Y^m (z))<  \rho\, \mod(\BE^\chi, \KK).
+$$  
+\end{cor}
+
+\begin{pf}
+Let us apply $f^{\r(\q\n+1)}$ to the pair $(E^0, E^1)$. 
+It maps $E^1$ onto some puzzle piece $Y^m (z)$, and maps $E^0$ onto $Y^0(z)$ with degree at most 
+$2^{\r(\q\n+1)}$. 
+By Lemma \ref{psi-maps}, 
+$$
+     \psimod( Y^0(z), Y^m (z))  \leq  2^{\r(\q\n+1)}  \psimod ( E^0, E^1).
+$$
+Together with Lemma \ref{exp decay} this yields the assertion.
+\end{pf}
+
+
+\subsection{Around the stars}
+  
+We will now go back to the original map $f$. 
+Recall that $p$ stands for its renormalization period,
+$\k=\r\q\n$, and $\bl$ is introduced in Lemma \ref{single point}. 
+
+\begin{lem}\label{p is big}
+   For any $\k\in \N$ and $\rho\in (0,1)$, there exist $\eps>0$ and $\underline p\in \N$
+such that if  $p\geq \underline{p}$, 
+and $\mod(\BE^{\chi-1}, K)<\eps$, 
+then either for some puzzle piece $Y^{\bl}(z)$,  
+$$
+    0 <  \psimod(Y^0(z), Y^{\bl} (z))<  \rho\, \mod(\BE^\chi, \KK),
+$$  
+or for some periodic point $\alpha_\mu\in \balpha$, 
+$$
+    0< \psimod(S^1(\alpha_\mu), S^{\bl}(\alpha_\mu)) <  \rho\, \mod(\BE^\chi, \KK).
+$$
+
+\end{lem}
+
+\begin{pf}
+  By Corollary \ref{l is big - 3}, it is true when  $\chi\geq \underline{\chi}$,
+so assume  $\chi\leq \underline{\chi}$. 
+It will follow from the Trnasfer Principle of \S \ref{covering lemma sec}. 
+Let $E^{\chi-1} =  Y^{\tau_0}$.
+Note that
+$$
+    \deg (f^{\tau_0}|\, E^{\chi-1} ) \leq 2^{\underline{\chi}+\r(\q\n+1)},
+$$    
+so it is bounded it terms of $\k$ and $\rho$. 
+
+Let us then select the first moment $\tau\geq \tau_0$ such that $f^\tau(K)\not\subset S^{\bl}(\balpha)$.
+It is bounded by $p+\k$ (since  $f^{p+\k}(K) = f^{\k} (K)\not\subset S^{\bl}(\balpha) $).   
+
+Let   $m=[\frac{C}{\rho}]+1$, where $C$ is the constant from the Transfer Prinsiple.
+Let $s=s(\r,\q)$ be the number of puzzle pieces $Y^{\bl}(z)$ 
+in the complement of the star $S^{\bl}(\balpha)$ (see \S \ref{stars}),
+ and let  $N= \k  s m^2 $.
+Let us consider the piece of $\orb \KK$ of length $N$,    
+\begin{equation}\label{orbit}
+      f^t(\KK), \quad t=\tau, \dots, \tau+N. 
+\end{equation}
+Then one of the following options takes place:
+
+\ssk\nin (i) $m$ sets $\KK_j= f^{t_j}\KK$, $j=0,\dots, m-1$,  in the orbit (\ref{orbit})
+  belong to some puzzle piece $Y^{\bl}(z)$ 
+in the complement of the star $S^{\bl}(\balpha)$;
+
+\ssk\nin (ii)  $\k  m $ consecutive sets $f^t(\KK)$, $t=i+1,\dots i+\k m$,
+ in the orbit (\ref{orbit})
+belong to the star $S^{\bl}(\balpha)$.
+Here $i$ is selected so that that $f^i(\KK)$ does not belong to the star $S^{\bl}(\balpha)$.
+Note that $i\geq\tau\geq\tau_0$ by definition of $\tau$. 
+% Then $m$ sets $K_j= f^{i+ \k j}(K)$, $j=0,\dots, m-1$, belong to $S^\bl(\balpha)$.
+
+\msk
+Assume the first option occured. 
+Then let us consider the puzzle piece $Y^0(z)$  of depth $0$ containing $Y^{\bl}(z)$.
+By Lemma \ref{compactly conained}, $Y^{\bl}(z)\Subset Y^0(z)$.
+Let us consider if pullback $\Ups_j= f^{-t_j}(Y^0(z))|\KK$ containing $\KK$. 
+Then $\Ups_j\subset E^{\chi-1}$ (since $t_j\geq \tau_0)$). 
+
+Moreover,  the map $g^{t_j} : \Ups_j\ra Y^0(z)$ has degree bounded in terms of $\k$ and $\rho$.  
+Indeed,   $\deg (f^{\tau_0}|\, E^\chi )$ and $N$, $\bl$, $\k$ are bounded in these terms.
+Hence it is enough to show that the trajectory   
+$$
+   f^m (\Ups_j), \quad \tau_0<  m < \tau-\bl-\k,
+$$
+does not hit the critical point.
+But if $f^m(\Ups_j)\ni 0$ then  $f^{m+\k}(\Ups_j)$ would  land 
+outside $S^{\bl}(\balpha)$ (since $f^\k(0)\not \in S^\bl(\balpha)$ and $\depth f^{m+\k}(\Ups_j)\geq \bl$).
+Then $f^{m+\k}(\KK)$ would land outside $S^{\bl}(\balpha)$ as well
+contradicting the defintion of $\tau$ as the first landing moment 
+of $\orb K$ in $S^\bl(\balpha)$ after $\tau_0$. 
+
+Now,  selecting $\underline{p}$ bigger than $\k+N$,
+we bring ourselves in the position to apply the Transfer Principle
+with $Y=Y^\bl(z)$, $Z=Y^0(z)$. 
+It yields:
+$$
+   \psimod(Y^0(z), Y^{\bl}(z) ) \leq \frac{C}{m} \psimod(E^\chi, \KK)\leq \rho\,  \psimod(E^\chi, \KK).
+$$
+
+\msk Assume now the second option occured.
+Then there is a point $\alpha_\mu\in \balpha$ such that  
+$f^{i+\k j}(\KK)\subset S^\bl(\alpha_\mu)$ for  $j=1,\dots, m$,
+while $f^{i}(\KK)\subset S^\bl(\alpha_\mu')$.
+Let us pull the star $S^1(\alpha_\mu)$ back by $f^{i+\k j}$:   
+$$
+%  P_j= f^{-\k j}(S^1(\alpha))|\, K_0,\quad  
+  \Ups_j= f^{-(i+\k j)}(S^1(\alpha_\mu))|\, \KK,\quad  j=0,\dots, m-1.
+$$ 
+%By  Lemma~\ref{qn-pullbacks} (and the Telsescope Lemma), \note{formulate} $P_j\subset S^1(\alpha)$.
+Let us show that 
+\begin{equation}\label{inclusion}
+   \Ups_j\subset E^{\chi-1}. 
+\end{equation}
+We fix some $j$ and let $\Ups=\Ups_j$. 
+%Let 
+%$$
+%   S_{-n}= f^{-n}(S)|\, f^{t-n}(K),\quad  n=t,t-1, \dots, 0,
+% $$  
+% be the pullback of $S$ along the orbit of $K$; thus, $S_{-t}=\Ups$.
+% Let us find the first $n$ such that $f^{t-n}(K)$ is not contained in $S^\bl(\balpha)$.
+%In this case, $f^{t-n}(K)\subset S^\bl(\alpha_\mu')$ for some (unique) $\mu\in \Z/ \r\Z$
+%such that $f^{t-n+1}(K)\subset S^\bl(\alpha_{\mu+1})$.
+%Moreover,  $t-n\geq \tau\geq \tau_0$ by definition of $\tau$.
+%     
+We claim  that $\inter f^i(\Ups)$ does not contain any points of $\balpha$. 
+Since $\alpha_{\mu}$ is the only point of $\balpha$  inside $\inter S^1(\alpha_\mu)$, 
+it is the only point of $\balpha$ that can be inside $\inter f^i(\Ups)$. 
+If $\mu=0$ then $f^i (\KK)\subset S^\bl(\alpha')$, 
+so by Lemma~\ref{qn-pullbacks}, % and the Telescope Lemma,
+$f^i(\Ups) \subset S^1(\alpha')$, 
+which does not contain $\alpha$. 
+If $\mu\not=0$ then the points $\alpha_\mu$ and $\alpha_\mu'$ are separated by $\alpha$
+in the filled Julia set. Since $f^i(\Ups)$ is a geometric puzzle piece containing both 
+$\alpha_\mu$ and $\alpha_\mu'$, it must contain $\alpha$ as well --  contradiction.  
+The claim follows.
+
+Thus,  $f^i(\Ups)$ is a geometric puzzle piece whose interior does not contain any points of $\balpha$.
+Hence it is contained in some puzzle piece $Y^0(z)$ of zero depth. 
+Then $\Ups \subset f^{-i}(Y^0(z))|\, 0=Y^i$.
+But since $i \geq \tau_0$,  
+$
+   Y^i  \subset Y^{\tau_0} =  E^{\chi-1},
+$
+and (\ref{inclusion}) follows. 
+
+Other assumptions of the Transfer Principle 
+(with $Y=S^\bl(\alpha_\mu)$  and $Z=S^1(\alpha_\mu)$) 
+are valid for the same reason as in the first case.
+The lemma follows.
+\end{pf}
+
+\subsection{Bigons}
+
+ A geometric puzzle piece with two vertices is called a {\it bigon},
+and the corresponding pseudo-puzzle piece is called a $\psi$-bigon. 
+Given  a bigon $Y$ with vertices $v$ and $w$, 
+let $S_Y^v$ and $S_Y^w$ stand for the components of $K(f)\sm \inter Y$ containing $v$ and $w$ 
+respectively.  We let $S_Y=S^v_Y\cup S^w_Y$. 
+
+
+Recall from \S \ref{boundary} 
+that the ideal boundary of the corresponding $\psi$-puzzle piece $\BY$ comprises the outer boundery  
+$\di_O \BY$ (in the case of bigon consisting of two arcs) and the $J$-boundary
+$\di_J\BY= \di^v\BY\cup \di^w\BY$ attached to the vertices. 
+Let $\GG_\BY=\GG_\BY(v,w)$ stand (in the case of bigon)                    
+for the family of horizontal  curves in $\BY$ connecting $\di^v\BY$ to $\di^w\BY$,
+and let $\Bd_\BY(v,w)$ stand for its extremal length.    
+
+\comm{
+Let $\GG_Y=\GG_Y(v,w)$ stand for the natural projection of the family $\GG_\BY(v,w)$
+to the dynamical plane.  
+
+\begin{lem}
+  A curve $\gamma: [0,1]\ra \C$ belongs to $\GG_Y$ if and only if:
+\begin{itemize}
+  \item $\Im \gamma$ lies in the $\Dom (f^l)$ where $l$ is the depth of the equipotential
+         that bounds $Y$;  
+  \item The endpoints of $\gamma$ belong to $S_Y$ while $\inter \gamma$ does not intersect 
+         $S_Y$; 
+  \item Any arc of $\gamma$ with endpoints in $K_Y$ is trivial in $\C\sm S_Y$ 
+    in the sense that it can be contracted in $\C\sm S_Y$ 
+    rel the endpoints to an arbitrary neighborhood of $K_Y$;
+  \item $\gamma$ is non-trivial in $\C\sm S_Y$ in the sense that it cannot be contracted 
+    in $\C\sm S_Y$ 
+    to a small neighborhood of $S_Y$ rel its endpoints. 
+\end{itemize} 
+\end{lem}
+
+Given two bigons $Y$ and $P$,
+we let $P\succ Y$ if the vertices of $P$ belong to different components of $K(f)\sm Y$,
+while the equipotential depth of $P$ is higher than that of $Y$. 
+
+\begin{lem}
+  If $P\succ Y$ then the family $\GG_P$ overflows  $\GG_Y$.
+\end{lem}
+
+\begin{pf}
+Let us consider a curve $\gamma: [0,1]\ra\C$ of the family  $\GG_P$.   
+Let $w$, $z$ be the vertices of $P$  labeled so that $\gamma(0)\in S^w_P$.
+If $\gamma$ intersects $S^z_P$,
+then let $b$ be the first moment in $[0,1]$ such that  $\gamma(b)\in S^z_P$,   
+and let $a<b$ be the last moment of $[0,1]$ preceding $b$ 
+such that $\gamma(0)\in S^w_P$. 
+Then the restriction $\gamma: [a,b]\ra \C$ is a curve of the family $\GG_Y$.   
+
+If $\gamma$ does not intersect $S^z_P$ then let $a$ and $b$ 
+be respectively the first and the last moments in $[0,1]$ such that 
+$\gamma(a),\gamma(b)\in S^w_Y$.  Since the restriction $\gamma: [a,b]\ra \C$
+is trivial in $\C\sm S_P$ (i.e., contractable rel the endpoints to an arbitrary neighborhood of
+$K_P$), one of the restrictions, 
+$\gamma: [0,a]\ra \C$ or $\gamma: [b,1]\ra \C$ must be  non-trivial
+(i.e., non-contractable rel the endpoints to a small neighborhood of $S^w_P$).
+This restriction is a curve of the family $S_Y$. 
+
+\end{pf}
+
+}
+
+
+More generally, let us consider a puzzle piece $Y$ whose vertices are bi-colored, 
+i.e., they are partitioned into two non-empty subsets, $B$ and $W$. 
+This induces a natural bi-coloring of $K(f)\sm \inter Y$ and of $\di_J\BY$:
+namely, a component of these sets  attached to a black/white vertex inherits the
+corresponding color. 
+Let $\GG_\BY$ stands for the family of horizontal  curves in $\BY$ 
+connecting boundary components with different colors. 
+
+For a geometric puzzle piece $Y$, 
+let $v(Y) \subset K$ denote the set of vertices of $Y$.
+Suppose that $Y \subset Z$ are (geometric) puzzle pieces with the same equipotential depth;
+we say that $Y$ is \emph{cut out of} $Z$ if $v(Z) \subset v(Y)$,
+so that we have produced $Y$ by cutting out pieces of $Z$.
+If the vertices of $Y$ are bicolored,
+then the vertices of $Z$ are as well.
+
+\begin{lem} \label{cut out}
+  If $Y$ is cut out of $Z$,
+  and $v(Y)$ is bicolored,
+  then the family of curves $\GG_Z$ overflows $\GG_Y$.
+\end{lem}
+
+\begin{pf}
+  We prove the Lemma by induction on the cardinality of $v(Y) \sm v(Z)$.
+  First suppose that $v(Y) = v(Z) \cup \{w\}$, 
+  where $w \notin v(Z)$.
+  Let $\gamma \in \GG_Z$;
+  the two endpoints of $\gamma$ lie in differently-colored components $\di^x \BZ$, $\di^y \BZ$
+  of $\di_J \BZ$.
+  If $\gamma$ lifts to $\GG_Y$, 
+  then we are finished.
+  Otherwise, 
+  we can start lifting $\gamma$ from the endpoint (of $\gamma$)
+  that lies in the component (say $\di^x Z$) of $\di_J Z$
+  whose color is different from that of $w$.
+  Then that partial lift of $\gamma$ will connect $\di^x Y$ and $\di^w Y$
+  and hence will belong to $\GG_Y$.
+  
+  In general,
+  if $|v(Y)| > |v(Z)| + 1$,
+  we can let $Y'$ be such that 
+  $v(Y) = v(Y') \cup \{w\}$,
+  and $v(Y') \supset v(W)$.
+  Then given $\gamma \in \GG_W$,
+  we can lift part of $\gamma$ to $\GG_{Y'}$ by induction,
+  and then to $\GG_Y$ as before.
+\end{pf}
+
+Given a puzzle piece $Y$ with $v(Y)$ bicolored
+and  a bigon $P$,
+we let $P\succ Y$ if the vertices of $P$ belong to components of $K(f)\sm \inter Y$
+with different colors,
+while the equipotential depths of $P$ and $Y$ are the same. 
+
+\begin{lem}\label{overflowing}
+  If $P\succ Y$ then the family $\GG_P$ overflows  $\GG_Y$.
+\end{lem}
+
+\begin{pf}
+  Let $P'$ be the bigon whose vertices are the vertices of $Y$ that separate $\inter Y$
+  from the $v(P)$.
+  Then $\GG_{P}$ overflows $\GG_{P'}$,
+  and $\GG_{P'}$ overflows $\GG_Y$ by Lemma \ref{overflowing}.
+\end{pf}
+
+Let $\WW_Y$ stand for the width of $\GG_\BY$. 
+
+\begin{lem}\label{WW-est}
+  Let $Y$ and $P$ be two bigons such that the vertices of $f^n(P)$  are separated by $Y$ for some $n$,
+and the equipotential depth of $Y$ is $2^n$ times bigger than the equipotential depth of $P$.
+Then $\WW_Y \geq 2^{-n} \WW_P$.  
+\end{lem}
+
+\begin{pf}
+  Since the vertices of $f^n(P)$ are separted by $Y$, 
+there is a component $Z$ of $f^{-n}(Y)$
+such that $P\succ Z$. 
+By Lemma \ref{overflowing}, $\WW_P\leq \WW_Z$.   
+On the other hand, the map $f^n: Z\ra Y$ has degree at most $2^n$,
+and maps horizontal curves in $Z$ to horizontal curves in $Y$.     
+Hence $\WW_Z\leq 2^n \WW_Y$. 
+\end{pf}
+
+\begin{lem}\label{comb separation of vertices}
+   Let $Y$ be a bigon with vertices $u$ and $v$ of depths $l$ and $m$ 
+satisfying the following property:
+If $l=m$ then $f^l u\not=f^l v$. Then there exists an $n\leq \max(l,m)+\r$ such that
+$f^n u$ and $f^n v$ are separated by the puzzle piece $Y^1$. 
+\end{lem}
+ 
+\begin{pf}
+  By symmetry, we can assume that $l \le m$. 
+  Suppose that $f^m u \neq f^m v$;
+  then we can find $0 \le t < r$ such that 
+  $f^{m+t} u$ and $f^{m+t} v$ are on opposite sides of the critical point,
+  so they are separated by $Y^1$.
+  Otherwise, 
+  we must have $l < m$,
+  and then $f^{m-1} u = - f^{m-1} v$;
+  hence they are separated by $Y^1$.
+\end{pf}
+
+\subsection{Amplification}
+We can now put together all the above results of this section as follows:
+
+\begin{lem}\label{amplification}
+ For any $\k\in \N$ and $\rho\in (0,1)$, there exist $\eps>0$ and $\underline p\in \N$
+such that if  $p\geq \underline{p}$, 
+and $\mod(\BE^{\chi-1}, \KK)<\eps$, then
+$$
+     \Bd_{Y^1}(\alpha, \alpha') \leq \rho \mod(\BE^{\chi-1}, \KK) . 
+$$   
+\end{lem}
+
+\begin{pf}
+  Under our circumstances,
+  Corollary \ref{l is big - 3} and Lemma \ref{p is big} imply that there exist geometric puzzle pieces $Y\Subset Z$ 
+with the bidepth of $Z$  bounded by $(1,1)$ while the  
+bidepth of $Y$  bounded in terms of $\k$,  such that
+$$
+   \psimod(Z,Y)\leq \rho  \mod(\BE^{\chi-1}, \KK).
+$$
+For any vertex $v$ of $Z$, there exists a vertex $v'$ of $Y$ such that the rays of $\di Y$ landing at $v'$
+separate $\inter Y$ from $v$. These two rays together with the two rays landing at $v$ 
+(trancated by the equipotential of $Z$) form a bigon $B^v$. By the Parallel Law,
+there exists a vertex $v$ of $Z$ such that
+$$
+          \Bd_{B^v}(v,v')\leq N \psimod (Z,Y),
+$$                                                                 
+where $N\leq N(\r)$ is the number of vertices of $Z$.    
+By Lemma \ref{comb separation of vertices},
+there is an iterate $f^n(B^v)$ such that the vertices $f^n(v)$ and $f^n(v')$ are separated by 
+$\inter Y^1$. By Lemma \ref{WW-est}, 
+$$
+        \Bd_{Y^1} (\alpha, \alpha') \leq 2^n  \Bd_{B^v}(v,v').
+$$
+Putting  the above three estimates together, we obtain the assertion.     
+\end{pf}
+
+\begin{rem} The name ``amplification'' alludes to the extremal {\it width} which is amplified 
+  under the push-forward procedure described above.
+\end{rem} 
+
+\subsection{Separation}
+
+  The final step of our argument is to show that the vertices $\alpha$ and $\alpha'$ are
+well separated in the bigon $Y^1$. 
+
+\comm{************
+   In this section we will show that   the modulus $\Bd_{Y^1}(\alpha, \alpha')$
+that measures  the extremal distance between $L$ and $R$ is comparable
+with $\mu=\mod(\BU, K)$. 
+
+Let $Y$ be a geometric puzzle piece.  For  two vertices $v$ and $w$ of $Y$,
+ we let  
+$$
+ \BW_Y(v,w) =\WW(\GG_Y^{vw}).
+$$
+% where the family $\GG_Y(v,w)$ is introduced in \S \ref{boundary}.
+We define the {\it pseudo-conductance} of $Y$ as 
+$$
+    \BW_Y =\sup_{v,w} \BW_Y(v,w),
+$$
+where the supremum is taken over all pairs of the vertices of $Y$.        
+*******************}
+
+
+\begin{lem}\label{main separation} 
+ There exists $\kappa=\kappa(\r,\q,\n)>0$ such that   
+   $$   \Bd_{Y^1}(\alpha, \alpha') \geq \kappa \mod (\BU,K). $$
+\end{lem}
+
+\nin {\it Idea of the proof.}
+The proof is the same as the one of Proposition 5.12 in \cite{decorations},
+so we will only give an idea here. 
+
+Let $\BY$ be a $\psi$-puzzle piece, and let $v$ and $w$ be two vertices of it.
+A {\it multicurve in $\BY$ connecting $\di^v\BY$ to $\di^w\BY$} is a sequence of proper paths
+$\gamma_i$, $i=1,\dots, n$,  in $\BY$ connecting $\di^{v_{i-1}}\BY$ to $\di^{v_i}\BY$,
+where $v=v_0, v_1,\dots, v_n=w$ is a sequence of vertices in $\BY$.  
+Let $\BW_\BY(v, w)$ stand for the extremal width of the family of multicurves in $\BY$ 
+connecting $\di^v\BY$ to $\di^w\BY$.
+Let 
+$$
+    \BW_Y =\sup_{v,w} \BW_Y(v,w). 
+$$
+
+Let us estimate this width for the puzzle piece $P$ introduced in \S \ref{P-sec}.
+To this end let us consider puzzle pieces $Q^v$ from Lemma \ref{Qv}. 
+Let $r$ be the depth of these puzzle pieces,
+$T^{vw}=\cl(K_P\sm (Q^v\cup Q^w))$, and let $v'=Q^v\cap T^{vw}$, $w'=Q^w\cap T^{vw}$. 
+For any multicurve $\gamma$ in  $\BP$ connecting $\di^v \BP$ to $\di^w \BP$, 
+one of the following events can happen:
+
+\ssk\nin (i) $\gamma$ skips over $T^{vw}$;
+
+\ssk\nin (ii) $\gamma$ contains an arc $\gamma'$ connecting an equipotential of depth $r$ 
+             to $T^{vw}$;
+
+\ssk\nin (iii)  $\gamma$ contains two disjoint multicurves,
+$\de^v$ and $\de^w$, that do not cross this equipotential  and such that 
+$\de^v$ connects $\di^v\BQ^v$ to $\di^{v'}\BQ^v$, while $\de^w$ connects $\di^{w'}\BQ^w$ to $\di^w\BQ^w$. 
+
+\ssk
+It is not hard to show that the width of the first two families of multicurves is $O(\mod(\BU,K))$
+(see \S\S 5.5-5.6 of \cite{decorations} ). Concerning each family of multicurves $\de^v$ or $\de^w$
+that appear  in (iii), it is conformally equivalent to a family of multicurves connecting appropriate
+two vertices of $P$ (since $Q^v$ and $Q^w$ are conformal copies of $P$). By the Series and Parallel Laws,
+$$
+     \BW_P \leq \frac 1{2} \BW_P +O(\mod(\BU, K)),
+$$
+which implies the desired estimate. 
+
+  
+\subsection{Conclusion}\label{conclusion}
+
+Everything is now prepared for the main results.
+ Lemmas \ref{amplification} and \ref{main separation} imply:
+
+\begin{thm}[Improving of the moduli]\label{mod improve}
+For any parameters $\bar\r,\bar\q,\bar\n$ and any $\rho>0$,
+ there exist  ${\underline p} \in \N$ and $\eps>0$ with the following property.
+Let $f$ be a renormalizable $\psi$-quadratic-like map with renormalization period $p$
+satisfying the $(\bar\r, \bar\q, \bar\n)$-molecule condition, 
+and let $g$ be its first renormalization.
+Then 
+$$
+ \{ p\geq \underline p\ \ \mathrm{and}\ \psimod(g)< \eps \}  \imply \psimod (f) < \rho \mod(g).
+$$
+\end{thm}
+
+
+  Theorem \ref{mod improve},
+together with Lemma \ref{ql extension}, 
+implies Theorem \ref{high periods thm} from the Introduction. 
+The Main Theorem  follows from Theorem \ref{mod improve} combined
+with the following result  (Theorem 9.1 from \cite{K}): 
+
+\begin{thm}[Improving of the moduli: bounded period]\label{improving mod-2}
+For any $\rho\in (0,1)$, there exists $\underline p=\underline p (\rho)$ 
+such that for any $\bar p\geq \underline p$, there exists $\eps=\eps(\bar p)>0 $ with the following property.
+Let $f$ be primitively renormalizable $\psi$-quadratic-like map, 
+and let $g$ be the corresponding renormalization.
+Then
+$$
+   \{\underline p\leq p\leq \bar p\ \ \mathrm{and}\ \psimod(g) < \eps\}   \imply \psimod(f) < \rho\, \psimod(g).
+$$
+\end{thm} 
+
+
+Putting the above two theorems together, we obtain:
+
+\begin{cor}\label{improving-3}
+ For any $(\bar\r, \bar\q, \bar\n)$,   there exist an $\eps>0$ and $l\in \N$ with the following property.
+For any  infinitely renormalizable $\psi$-ql map $f$ satisfying the  $(\bar\r, \bar\q, \bar \n)$-molecule
+condition
+with renormalizations $g_n=R^n f$,
+if $\psimod(g_n)< \eps$, $n\geq l$,  then $\psimod (g_{n-l})<\frac 1{2} \psimod(g_n)$.
+\end{cor}
+
+     
+This implies the Main Theorem, in an important refined version.
+We say that a family $\MM$ of little Mandelbrot copies (and the corresponding
+renormalization combinatorics) has {\it beau}%
+\footnote{According to Dennis Sullivan, 
+   ``beau'' stands for ``bounded and eventually universal''. }
+{\it a priori} bounds
+if there exists an $\eps =\eps(\MM)>0$ and a function $N: \R_+\ra \N$
+with the following property.
+Let $f: U\ra V$ be a quadratic-like map with $\mod(V\sm U)\geq \de>0$
+that is  at least $N=N(\de)$ times renormalizable. Then for any $n\geq N$,
+the $n$-fold renormalization of $f$ can be represented  by a quadratic-like map $R^n f: U_n\ra V_n$ with
+$\mod(V_n\sm U_n)\geq \eps$.
+
+\newtheorem*{Beau}{Beau Bounds}  
+\begin{Beau}
+  For any parameters $(\bar\r, \bar\q, \bar\n)$, 
+the family of renormalization combinatorics satisfying the  $(\bar\r, \bar\q, \bar\n)$-molecule condition has
+beau a priori bounds.
+\end{Beau}
+            
+
+
+
+
+
+
+
+
+

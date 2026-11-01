@@ -1,0 +1,136 @@
+\section{Theorem \protect{\ref{thm:length-comparison}} in terms of the canonical weighted arc-diagram} 
+\label{sec:reduce-to-wcan}
+In this brief section we will prove Theorem \ref{thm:length-comparison}, given a simply stated theorem about $\Wcan(V \sm \KK_p)$ in that context. 
+We then outline the proof of this latter theorem, which is then proven in Sections \ref{Hubbard trees}--\ref{sec:hor-vert}.
+ 
+ \subsection{Horizontal and vertical arc diagrams} \label{subsec:hv}
+ 
+In further applications, the Riemann surface $S$ we worked with in Section \ref{sec:canonical} will be $V\sm \KK$,
+where $V$ is a topological disk, and $\KK$ is the union of $p$ disjoint FJ-sets
+(the cycle of small Julia sets of some quadratic-like map).
+
+Under these circumstances,
+a proper path (and the corresponding arc) in $V \sm \KK$ is called {\it horizontal} if it connects two (not necessarily distinct) components of $\KK$,
+and is called {\it vertical} if it connects a component of $\KK$ to $\di V$.
+Given an arc diagram $W$ on $V\sm \KK$, let $W^\hor$ and $W^\ver$  stand for its horizontal and vertical parts respectively,
+and let $W^{\ver+\hor}$ stand for their sum.
+In particular, we can consider  $\Wcan^\hor$, $\Wcan^\ver$ and $\Wcan^{\ver+\hor}$ for $V \sm \KK$.
+
+We can now state a theorem which will be the main result of Section \ref{sec:hor-vert}:
+\begin{theorem}\label{def vertical teaser}
+Let $f\from U'\to U$ be primitively renormalizable quadratic-like-map with period $p$,
+and let $\KK$ be its cycle of small Julia sets.
+Then there exists $M=M(p)$ such that:
+If 
+\begin{equation} \label{eq:teaser:hyp}
+\| W_\can^{\ver+\hor}(U\sm \KK)\|_1 > M
+\end{equation}
+then
+\begin{equation} \label{eq:teaser:conc}
+ \|W^\ver_\can(U\sm\KK)\|_1 \geq C^{-1} \| W^\hor_\can(U\sm \KK)\|_1,
+\end{equation}
+with an absolute constant $C>0$.
+\end{theorem}
+
+Given Theorem \ref{def vertical teaser}, we can prove Theorem \ref{thm:length-comparison}.
+\begin{proof}[Proof of Theorem \ref{thm:length-comparison}]
+In addition to the notation of Section \ref{intro:defs},
+we let $\Gamma$ be peripheral closed geodesic in $U\sm \KK_p$ homotopic to $\di U$. 
+We let $W_\can \equiv W_\can(U\sm \KK_p)$.
+
+The geodesic $\Gamma$ intersects each vertical arc once and does not intersect horizontal arcs.
+By  Corollary \ref{gamma-W},
+\begin{equation}\label{Gamma}
+  |\Gamma| \ge \pi \| W_\can^\ver\|_1 +O(1).
+\end{equation}
+
+ Let $W_\can|_j \subset W_\can^{v+h}$ be the part of $W_\can$
+supported on the arcs landing at $K_p(j)$. The geodesic $\gamma_p(j)$ does not intersect
+$W_\can - W_\can|_j$ and intersects each arc of $\supp W_\can|_j$ once or twice.
+By  Corollary \ref{gamma-W},
+\begin{equation}\label{gamma_j}
+   \pi\| W_\can|_j\|_1 + O(1) \le |\gamma_p(j)| \le 2\pi\| W_\can|_j\|_1 + O(1).
+\end{equation}
+But by the Schwarz Lemma, the geodesics $\gamma_p(j)$ have comparable lengths
+(see \cite[Theorem 9.3]{McM}):
+\begin{equation} \label{eq:compare}
+   \frac{1}{2} |\gamma_p| \leq |\gamma_p(j)| \leq |\gamma_p|.
+\end{equation}
+Putting this together with (\ref{gamma_j}), we see that all the $\| W_\can|\, j \|_1 $
+are also comparable, provided $|\gamma_p|$ is sufficiently big
+(bigger than some absolute $L_0$). Hence
+$$
+   \| W_\can|_0\|_1  \asymp \frac{1}{p} \| W_\can^{\ver+\hor}\|_1,
+$$
+and together with (\ref{gamma_j}), we obtain:
+$$
+     |\gamma_p| \asymp \frac{1}{p} \| W_\can^{\ver+\hor}\|_1.
+$$
+
+Now assume $ \| W_\can^{\ver+\hor}\|_1 > M(\bar p)$. 
+Then Theorem \ref{def vertical teaser} implies that $\| W_\can^{v+h}\|_1$ is comparable with $\| W_\can^\ver\|_1 $,
+and we can conclude
+$$
+   | \gamma_p | \leq \frac{ C }{p} \| W_\can^\ver\|_1,
+$$
+which, 
+combined with \eqref{Gamma},
+implies
+$$
+   |\gamma_p| \leq \frac{C}{p} |\Gamma|.
+$$
+We now need only observe that by the Schwarz Lemma, $|\Gamma| \leq  |\gamma|$ (since $K\supset \KK_p$).
+\end{proof}
+
+\subsection{Outline for the proof of Theorem \ref{def vertical teaser}} \label{subsec:hv-proof-outline}
+In this informal subsection we will outline the proof of Theorem \ref{def vertical teaser} that will be presented in Sections \ref{sec:entropy} and \ref{sec:hor-vert}, using the background in Section \ref{Hubbard trees}.
+For the sake of clarity we have slightly simplified the argument and altered some of the constants.
+
+
+\subsubsection{Canonical WAD's in restricted domains}
+In Section \ref{sec:hor-vert},
+we will consider the nest of the domains $U^m := f^{-m}(U)$,
+and their associated canonical WAD's $\Wcan(U^m \sm \KK_p)$.
+Let $X^m$ stand for the horizontal parts of these WAD's
+(with appropriate constants subtracted).
+We show that 
+\begin{enumerate}
+\item
+$f^* X^m\multimap X^{m+1}$ and 
+\item  $X^{m+1} \le X^m$. 
+\end{enumerate}
+
+\subsubsection{Loss of horizontal weight through alignment and entropy}
+In Section \ref{sec:entropy},
+after a discussion in Section \ref{Hubbard trees} of some dynamical properties of the Hubbard tree, 
+we show the purely combinatorial theorem\footnote{While the motivation for this combinatorial theorem relies on the construction of the $X^n$ in Section \ref{sec:hor-vert}, the proof does not.}, 
+that Properties 1 and 2 of $X^m$ above imply that 
+\begin{equation} \label{eq:prelim:reduction}
+\norm{X^{8p}}_1 \le  \frac 14\norm{X^0}_1.
+\end{equation}
+This proceeds in two stages: we first show that $X^{3p}$ is aligned with the Hubbard tree 
+of the superstable model for $f$. 
+We then observe that dynamics on the Hubbard tree is expanding (has positive entropy);
+this, 
+coupled with the alignment of $X^{3p}$ with the Hubbard tree,
+allows us to show \eqref{eq:prelim:reduction}.
+This is the main place where we use that the renormalizations are
+of primitive type.
+
+Returning to Section \ref{sec:hor-vert},
+we see that the application of the combinatorial statement \eqref{eq:prelim:reduction} to our geometric situation implies,
+assuming \eqref{eq:teaser:hyp},
+that
+ $$
+     \|W_\can^\hor(U^{8p}\sm \KK_p)\|_1 \leq \frac{1}{3} \| W^\hor_\can(U^0 \sm \KK_p) \|_1.
+$$
+
+\subsubsection{Push-forward via the Covering Lemma}
+   The horizontal width released under restrictions is turned into the vertical  width (Section \ref{subsec:vert-from-hor-loss}),
+which implies
+$$
+ \norm{W_\can(U^{8p} \sm\KK_p)}_1\geq  \frac{1}{2}\norm{W_\can^\hor(U^{8p}\sm \KK_p)}_1.
+$$
+We can then apply the Covering Lemma\cite{covering lemma} in Section \ref{covering-application} to push forward $W_\can(U^{8p} \sm\KK_p)$  by  $f^{8p}$
+and obtain \eqref{eq:teaser:conc}.
+

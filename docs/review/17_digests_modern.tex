@@ -32,8 +32,10 @@ where $q$ is the first return time to the $\eta$-neighbourhood of $c$.
 
 \begin{definition}[Satellite and primitive components]
 \label{def:survey-satellite}
-A hyperbolic component $\mathcal H$ is satellite if its closure is an analytic
-disk, and primitive if it is an analytic image of the filled cardioid.
+A hyperbolic component $\mathcal H$ is \emph{satellite} if its root has multiplier $e^{2\pi i p/q}$ with $q\ge2$,
+so that $\mathcal H$ is attached to a larger component, and \emph{primitive} if its root has multiplier $1$.  The survey
+states that satellite components have zero entropy and primitive components positive entropy (Figure~3 of the survey,
+\texttt{refs/2512.24171v1.txt}, lines 179--182).
 \end{definition}
 
 \begin{definition}[Renorm-expanding and renorm-balanced regimes]
@@ -158,85 +160,26 @@ problems, together with the other arguments it lists, should imply full MLC.
   and Mandelbrot veins.
 \end{itemize}
 
-\section{Dudko--Lyubich: satellite parameters of bounded type}
+\section{Dudko--Lyubich: satellite parameters}
 \label{sec:digest-satellite}
 
-The paper~\cite{DudkoLyubichSatellite} proves local connectivity of $\M$ at some
-satellite parameters of bounded type.
-
-\begin{definition}[Bounded satellite itinerary]
-\label{def:digest-bounded-satellite}
-A parameter has bounded satellite type if its renormalization itinerary, read
-through the small copies it visits, takes only finitely many maximal
-small-copy types, and all of these types are satellite.
-\end{definition}
-
-\begin{theorem}[Dudko--Lyubich, satellite case]
-\label{thm:dl-satellite}
-$\M$ is locally connected at every parameter of bounded satellite type in the
-class defined by the paper.  Status: proved in the paper.  The paper's construction
-uses a source-specific molecule surgery near parameters with periodic irrational
-rotation, and proves MLC for these classes, not for the whole satellite limb.
-\end{theorem}
+The satellite paper~\cite{DudkoLyubichSatellite} proves that $\M$ and the Julia sets $J_{c_n}$ are locally connected at a
+constructed sequence of infinitely renormalizable parameters of bounded satellite type, and that $J_{c_n}$ has positive area.
+The full digest, with the definitions and the scope, is in Section~\ref{sec:dl-satellite}.
 
 \section{Dudko--Lyubich: MLC at Feigenbaum points}
 \label{sec:digest-feigenbaum}
 
-The paper~\cite{DudkoLyubichFeigenbaum} treats renormalization with bounded relative
-periods, not only the primitive period-doubling case.
+The paper~\cite{DudkoLyubichFeigenbaum} proves beau bounds at every Feigenbaum parameter, that is, at every infinitely
+renormalizable parameter of bounded type, and deduces MLC there from Lyubich's rigidity theorem.  The full digest is in
+Section~\ref{sec:dl-feigenbaum}.
 
-\begin{definition}[Bounded relative periods]
-\label{def:bounded-relative}
-A parameter has bounded relative periods if the relative renormalization periods
-along its renormalization tower are bounded.  Satellite and mixed combinatorial
-types are included.
-\end{definition}
-
-\begin{theorem}[Dudko--Lyubich, Main A]
-\label{thm:dl-main-A}
-Parameters with bounded relative periods satisfy the a priori bounds that the paper
-calls beau bounds.  Status: proved in the paper.
-\end{theorem}
-
-\begin{theorem}[Dudko--Lyubich, Main B]
-\label{thm:dl-main-B}
-MLC holds at every parameter with bounded relative periods, including the
-period-doubling Feigenbaum parameter.  Status: proved in the paper from Main~A.
-\end{theorem}
-
-\section{Kahn--Kapiamba--Lyubich: parabolically bounded primitive renormalization}
+\section{Kahn--Kapiamba--Lyubich: parabolic families}
 \label{sec:digest-kkl}
 
-The paper~\cite{KahnKapiambaLyubich} proves a priori bounds and MLC for a class of
-infinitely renormalizable parameters of primitive type that can approach the cusp.
-
-\begin{definition}[Small-copy types and parabolic tails]
-\label{def:kkl-types}
-A type is prime if no intermediate proper small copy occurs in it.  For $q\ge1$
-the parabolic tail $\Phi_q$ is a prescribed surgery from the $1/q$-limb to the
-$1/(q+1)$-limb.  A family is parabolically bounded if it is a finite union of
-types and tails.
-\end{definition}
-
-\begin{theorem}[KKL, Main A]
-\label{thm:kkl-A}
-Prime primitive families satisfy the beau bounds.  Status: proved in the paper.
-\end{theorem}
-
-\begin{theorem}[KKL, Main B]
-\label{thm:kkl-B}
-Beau bounds together with a bounded diameter of the puzzle Teichm\"uller space
-imply rigidity of the family.  Status: proved in the paper.  The bounded diameter
-of the parabolic tails is taken from the unpublished manuscript \emph{Elephant
-puzzles}~\cite{ElephantPuzzles}, cited as in preparation.  The present digest does
-not treat that input as established.
-\end{theorem}
-
-\begin{theorem}[KKL, Main C]
-\label{thm:kkl-C}
-Parabolically bounded families are rigid, and hence MLC holds pointwise on them.
-Status: derived in the paper from Main~B.
-\end{theorem}
+The paper~\cite{KahnKapiambaLyubich} proves beau bounds and super-optimism for parabolically bounded families of prime
+primitive types, and MLC pointwise on these families under one input from an unpublished manuscript.  The full digest is
+in Section~\ref{sec:kkl}.
 
 \section{Neutral and hybrid sources}
 \label{sec:digest-neutral-hybrid}
@@ -369,38 +312,9 @@ state global MLC.
 \section{Kahn--Lyubich: Elephant Eyes}
 \label{sec:digest-elephant}
 
-The paper~\cite{KahnLyubichElephant} proves a priori bounds for infinitely
-renormalizable quadratic maps with elephant-eye combinatorics.
-
-\begin{definition}[Elephant-eye class]
-\label{def:elephant}
-Let $q\ge\underline q$ and $b\le\bar b$, and put $p=q+b$.  The class $\mathcal Q(\underline q,\bar b)$
-consists of renormalizable pseudo-quadratic-like maps with the following properties,
-where $\alpha$ is the dividing fixed point and $q>1$ rays land at it.
-\begin{itemize}
-\item[(E1)] The combinatorial rotation number of $\alpha$ is $1/q$.
-\item[(E2)] $K_0$ is the only little Julia set in the central sector.
-\item[(E3)] $p=q+b$, $b\le\bar b$, $q$ is unbounded, and $b<q$.
-\end{itemize}
-\end{definition}
-
-\begin{theorem}[Kahn--Lyubich, a priori bounds]
-\label{thm:elephant-bounds}
-For maps in $\mathcal Q(\underline q,\bar b)$ the relevant fundamental annuli have
-uniformly definite modulus; the bounds are unbranched, since the annuli avoid the
-non-central top-level little Julia sets.  The proof uses the thin--thick
-decomposition, the amplification theorem, and pull-off arguments.  Status: proved in
-the paper.  The paper has no single numbered main theorem with an explicit modulus
-constant; the result is distributed across these technical statements.
-\end{theorem}
-
-\begin{theorem}[Local connectivity and MLC at elephant-eye parameters]
-\label{thm:elephant-mlc}
-The Julia sets in the class are locally connected, by Hu--Jiang and Jiang, and MLC
-holds at the corresponding parameters, by Lyubich's machinery together with little
-Mandelbrot copies on Ecalle--Voronin cylinders.  Status: the paper's own statement,
-relying on the external results cited there.
-\end{theorem}
+The paper~\cite{KahnLyubichElephant} proves estimates for elephant-eye combinatorics, with $q$ unbounded and $p=q+O(1)$,
+and states local connectivity and MLC for these parameters through external inputs.  The full digest, including the status of
+its unnumbered main statement, is in Section~\ref{sec:kahn-IV}.
 
 \section{Dependency map}
 \label{sec:digests-dependencies}
@@ -472,6 +386,8 @@ are known and recorded here, so that they are not mistaken for coverage.
 \item The definitions of quasi-hyperbolic parameters, of the Douady--Hubbard
   renormalization of polynomials, and of external rays are not restated in this
   chapter.  They belong to the foundations chapter and to~\cite{DH}.
+\item Digested in Chapter~\ref{ch:digests-apriori-limbs}: the Kahn--Lyubich series on a priori bounds (Parts~I--IV), the
+  Dudko--Lyubich satellite and Feigenbaum papers, the Kahn--Kapiamba--Lyubich paper, and the Dudko--Schleicher paper on limbs.
 \item Several inputs are cited but not digested: Sullivan's complex bounds, Hu--Jiang
   and Jiang, McMullen, Inou--Shishikura, Gaidashev--Yampolsky, and the unpublished
   \emph{Elephant puzzles}.  Their statements are used only as recorded by the
@@ -480,7 +396,8 @@ are known and recorded here, so that they are not mistaken for coverage.
   \ref{ch:digests-laminations-entropy}: Milnor's lectures, Lyubich's ICTP notes, the Pacman paper of Dudko,
   Lyubich and Selinger, the neutral a priori bounds of Dudko and Lyubich, the matings-with-laminations and
   core-entropy papers, the Sierpi\'nski-carpet paper of Dudko and Luo (Chapter~\ref{ch:digests-sierpinski}), and Słodkowski's holomorphic-motion theorems.  The following are not yet digested:
-  Lyubich's online volumes I--II and the papers \cite{LyubichDynamics,LyubichIII}; the Dudko papers on
+  Lyubich's online volumes I--II (a web search found no freely available Volumes~III--IV of
+  \emph{Conformal Geometry and Dynamics of Quadratic Polynomials}), the papers \cite{LyubichDynamics,LyubichIII}; the Dudko papers on
   canonical decompositions and correspondences, which are
   indirectly related to MLC and are listed in the reference inventory; and the Bartholdi--Dudko series on
   algorithmic aspects of branched coverings, which concerns computability rather than MLC.

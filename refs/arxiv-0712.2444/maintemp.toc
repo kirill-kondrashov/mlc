@@ -1,0 +1,28 @@
+\contentsline {section}{\tocsection {}{1}{Introduction}}{1}
+\contentsline {subsection}{\tocsubsection {}{1.1}{Terminology and Notation}}{4}
+\contentsline {subsection}{\tocsubsection {}{1.2}{Acknowledgement}}{4}
+\contentsline {section}{\tocsection {}{2}{Dividing cycles, Yoccoz puzzle, and renormalization}}{4}
+\contentsline {subsection}{\tocsubsection {}{2.1}{Dividing cycles and associated Yoccoz puzzles}}{4}
+\contentsline {subsection}{\tocsubsection {}{2.2}{Renormalization associated with a dividing cycle}}{5}
+\contentsline {subsection}{\tocsubsection {}{2.3}{Molecule Condition}}{7}
+\contentsline {subsection}{\tocsubsection {}{2.4}{Combinatorial separation between $\gamma $ and ${\unhbox \voidb@x \hbox {\relax \mathversion {bold}$\alpha $} }$}}{10}
+\contentsline {subsection}{\tocsubsection {}{2.5}{A non-degenerate annulus}}{10}
+\contentsline {subsection}{\tocsubsection {}{2.6}{Buffers attached to the vertices of $P=Y^{{\@mathbf {r}}{\@mathbf {q}}({\@mathbf {n}}-1)+1}$}}{11}
+\contentsline {subsection}{\tocsubsection {}{2.7}{Modified principle nest}}{11}
+\contentsline {subsection}{\tocsubsection {}{2.8}{Stars}}{12}
+\contentsline {subsection}{\tocsubsection {}{2.9}{Geometric puzzle pieces}}{12}
+\contentsline {section}{\tocsection {}{3}{Pseudo-quadratic-like maps and pseudo-puzzle}}{13}
+\contentsline {subsection}{\tocsubsection {}{3.1}{Pseudo-quadratic-like maps}}{13}
+\contentsline {subsection}{\tocsubsection {}{3.2}{Pseudo-puzzle}}{14}
+\contentsline {subsubsection}{\tocsubsubsection {}{3.2.1}{Definitions}}{14}
+\contentsline {subsubsection}{\tocsubsubsection {}{3.2.2}{Boundary of puzzle pieces}}{15}
+\contentsline {section}{\tocsection {}{4}{Transfer Principle}}{15}
+\contentsline {section}{\tocsection {}{5}{Improving the moduli}}{17}
+\contentsline {subsection}{\tocsubsection {}{5.1}{From the bottom to the top of the Principal Nest}}{18}
+\contentsline {subsection}{\tocsubsection {}{5.2}{Around the stars}}{18}
+\contentsline {subsection}{\tocsubsection {}{5.3}{Bigons}}{20}
+\contentsline {subsection}{\tocsubsection {}{5.4}{Amplification}}{21}
+\contentsline {subsection}{\tocsubsection {}{5.5}{Separation}}{22}
+\contentsline {subsection}{\tocsubsection {}{5.6}{Conclusion}}{23}
+\contentsline {subsection}{\tocsubsection {}{5.7}{Table of notations}}{24}
+\contentsline {section}{\tocsection {}{}{References}}{24}

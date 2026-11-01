@@ -1,0 +1,588 @@
+
+\section{The canonical weighted arc diagram} \label{sec:canonical}
+In this section we introduce the canonical weighted arc-diagram for an open Riemann surface $S$ and describe a number of properties of it. 
+This combinatorial object will summarize how close the components of the ideal boundary of $S$ come together;
+and the properties will allow us to understand the nearly degenerate parts of the geometry of any complex dynamical system (of bounded topology)  
+in terms of combinatorial relations.
+
+\subsection{Proper paths and proper homotopies} \label{subsec:paths}
+We let $S$ be a Riemann surface\footnote{So, by definition, $S$ is connected. Up to Section \ref{subsubsec:valid} we use only the smooth (in fact just topological) structure of $S$.}, 
+and observe that the following are equivalent:
+\begin{enumerate}
+\item
+$S$ has finitely generated homology,
+\item
+$S$ has finite genus and finitely many ends,
+\item
+for some $n$ and $g$, $S$ is diffeomorphic to the surface of genus $g$ with $n$ points (or disjoint closed disks) removed. 
+\end{enumerate}
+If any (and therefore all) of these hold, we say that $S$ has finite topology.
+For the rest of this paper, we will assume that this is the case.
+Unless otherwise stated, we will assume that the Euler characteristic $\chi(S)$ is negative.
+
+A (proper) \emph{path} in $S$ is a proper continuous map $a \from I \to S$, where $I \subset \R$ is an open interval. 
+Unless otherwise stated, we will always assume (and require) that a path is proper. 
+Of course, if there are any paths in $S$, then $S$ is non-compact.
+We can \emph{reparametrize} a path $a\from I \to S$ by a homeomorphism $h\from J \to I$, 
+and then $a \circ h$ is a \emph{reparametrization} of $a$. 
+(Unless otherwise specified, our paths are unoriented, and the homeomorphism $h$ can be orientation-reversing.)
+We say that paths $a_0, a_1\from I \to S$ are \emph{homotopic} 
+if there exists a proper continuous map $a\from  [0, 1] \times I \to S$ such that $a_i(t) = a(i, t)$ for $i = 0, 1$ (and all $t \in I$).
+We say that a path $a\from I \to S$ is \emph{trivial} if there exists a proper continuous map $\hat a\from  [0, 1) \times I \to S$ such that 
+$\hat a(0, t) = a(t)$ for all $t \in I$. 
+We observe that if a path is trivial, then all homotopic paths are trivial as well.
+
+Let $\EE(S)$ denote the ends of $S$. 
+Suppose $a \from I \to S$ is a path, and for simplicity of notation assume that $I \subset \R$ is bounded. 
+We then have a unique continuous extension of $a$ to $a\from \cl I \to S \cup \EE(S)$, 
+where $a(\di I) \subset \EE(S)$. 
+We call $a(\di I)$ the \emph{endpoints} of $a$. 
+From this point of view the word ``endpoints'' is quite natural, 
+because each endpoint is a point in $\EE(S)$. 
+If $S \subset \chat$,
+we can identify each end of $S$ with a component of $\chat \sm S$,
+and call the appropriate such components the endpoints of $a$. 
+From this perspective it may seem somewhat misleading to use the term endpoint, because now each endpoint is a whole component of $\chat \sm S$; for example, it may be a small Julia set.
+But we've already chosen the term endpoint, so we will stick with it. 
+
+We will sometimes, by a mild abuse of notation, identify a path with its image.
+For example,
+we say that two paths are disjoint if their images are disjoint, and that a path is disjoint from some $A \subset S$ if its image is disjoint from $A$.
+
+A \emph{spine} for $S$ is a finite embedded 1-complex $A$ for which there is a deformation retract from $S$ to $A$.
+We observe that every finite-topology Riemann surface has a spine.
+Let $A$ be any spine for $S$; we observe that the following are equivalent,
+for any path $a$ (in $S$):
+\begin{enumerate}
+\item
+$a$ is trivial,
+\item
+$a$ is homotopic to a path disjoint from $A$,
+\item
+For any compact set $E \subset S$,
+$a$ is homotopic to a path disjoint from from $E$.
+\end{enumerate}
+
+We also observe the following, which should alleviate any concerns about ``wild'' paths:
+\begin{lemma} \label{lem:un-wild}
+Suppose that $A$ is a spine for $S$, and $a_0, a_1\from I \to S$ are paths,
+and $I' \subset I$, such that $a_0|_{I'} = a_1|_{I'}$ and $a_i^{-1}(A) \subset I'$ for $i = 0, 1$.
+Then $a_0$ and $a_1$ are homotopic.
+\end{lemma}
+\begin{proof}
+First suppose that $I'$ is an initial segment of $I$, and let $I''$ be the complement of $I'$ in $I$.
+Then $a_i|_{I'}$ lies in an annular neighborhood of an end of $S$;
+we can coordinatize this neighborhood as $[0, \infty) \times \R/\Z$,
+and then lift the $a_i|_{I'}$ to $[0, \infty) \times \R$, with the second coordinate going to infinity as we approach the far endpoint of $I''$.
+We then let $a_s(t) = (1-s) a_0(t) + s a_1(t)$ in these coordinates,
+and push this back down to the annular neighborhood, to obtain a proper homotopy. 
+\end{proof}
+
+A more careful argument shows that homotopic embedded paths are isotopic through embedded paths, using the same statement for paths on a compact oriented surface with boundary.
+
+\subsection{Arcs, arc diagrams, and weighted arc-diagrams} \label{subsec:arcs}
+An \emph{arc} in $S$ is a homotopy class of non-trivial \emph{embedded} paths (where we also mod out by reparametrization); 
+we often write $\alpha = [a]$ for the arc $\alpha$ represented by the path $a$.
+We say that two arcs are \emph{disjoint} if they have disjoint representatives.
+In particular, an arc is disjoint from itself\footnote{We can rule out this case by saying that the arcs are \emph{distinct} and disjoint}. 
+We let $\AAA(S)$ be the set of all non-trivial arcs on $S$.
+If $\alpha, \beta \in \AAA(S)$, 
+we let $\pair\alpha\beta$ be the minimal number of intersection points
+ of representatives of $\alpha$ and $\beta$. 
+In particular, 
+$\pair \alpha\beta = 0$ if and only if $\alpha$ and $\beta$ are disjoint.  
+We observe that an arc $\alpha$ has well-defined endpoints 
+(in $\EE(S)$,
+the set of endpoints of $S$), 
+because the endpoints of a path are homotopy-invariant. 
+
+
+An {\it arc diagram} or \emph{multi-arc} on $S$ is a set  $\ba$ of pairwise disjoint arcs $\alpha_i$ (on $S$).
+We observe that any arc diagram consists of at most $3|\chi(S)|$ distinct arcs.
+A {\it weighted arc diagram (WAD) } (or weighted multi-arc) $X$ on $S$
+is a map $X \from \AAA \to [0, \infty)$ such that any two arcs in the support of $X$ are disjoint.
+(The support of $X$, denoted $\supp X$, is the arcs $\alpha$ for which $X(\alpha) > 0$). 
+We will also think of $X$ as the formal weighted sum $\sum_\alpha X(\alpha) \alpha$ of arcs. 
+We let $\WW(S)$ stand for the set of WAD's on $S$.
+For $X=\sum w_i \alpha_i$ and $Y = \sum v_j\beta_j$,
+we let 
+$$\pair XY = \sum_{i, j} w_i v_j \pair{\alpha_i}{\beta_j}.$$
+In particular, 
+$\pair XY = 0$ if and only if no arc in $\supp X$ intersects an arc in $\supp Y$, 
+and hence $\pair XX = 0$ for any WAD $X$.
+We can think of arcs as arc-diagrams, and arc-diagrams as weighted arc-diagrams 
+(with weight one on each arc in the diagram),
+and thereby pair any two of the these objects. 
+
+When $\pair XY = 0$ we can define $X+Y$ in the obvious way.
+It is also useful to define subtraction for arc diagrams in terms of non-negative subtraction,
+where
+$
+x \nnm y = \max(x - y, 0)$.
+For any $X, Y \in \WW(S)$, we define $X-Y$ by $(X-Y)(\alpha)= X(\alpha) \nnm Y(\alpha)$.
+Likewise, for $X \in \WW(S)$ and $c \in [0, \infty)$, 
+we define $X-c$ by $(X - c)(\alpha) = X(\alpha) \nnm c$.
+
+The set $\WW(S)$ is  {\it partially ordered}:
+we say $X\leq Y$ if $X(\alpha)\leq Y(\alpha)$ for any $\alpha\in \supp X$.
+
+We will make use of two norms on the space of WAD's:
+$$
+   \| W\|_\infty= \sup_{\alpha\in \AAA} W(\alpha); \quad \|W\|_1=\sum_{\alpha\in \AAA} W(\alpha).
+$$
+
+If $f\from U\ra V$ is a finite-sheeted  holomorphic covering between two Riemann surfaces
+then there is a natural {\it pull-back} operation $f^*\from \WW(V)\ra \WW(U)$
+acting on the WAD's.
+
+
+
+
+\subsubsection{Valid WAD's} \label{subsubsec:valid}
+A {\it proper lamination} $\FF$ on $S$ is a Borel set $Z\subset S$
+explicitly realized as a union of disjoint proper paths called the {\it leaves} of $\FF$.
+Any proper lamination\footnote{In what follows, all laminations under consideration are assumed to be proper.}
+can be written $\FF = \bigcup_\alpha \FF(\alpha)$,
+where $\FF(\alpha)$ comprises the leaves of $\FF$ that represent $\alpha$.
+The arcs $\alpha\in \AAA$ for which $\FF(\alpha)$ is non-empty form an arc diagram.
+For each such $\alpha$,
+we can think of the sublamination $\FF(\alpha)$ as a path family on $S$,
+and we let  $W_\FF(\alpha)$ be the \emph{extremal width}\footnote{Defined in Section \ref{A:def}}
+$\WW(\FF(\alpha))$.
+In this way we obtain the WAD
+$W_\FF = \sum_\alpha W_\FF(\alpha)\alpha$
+corresponding to $\FF$.
+
+Note that if $f\from U\ra V$ is a finite-sheeted holomorphic covering between two Riemann surfaces
+and $\FF$ is a proper lamination on $V$ then $f^*(\FF)$ is a proper lamination on $U$
+and $W_{f^*(\FF)} = f^* (W_\FF)$.
+
+Weighted arc diagrams that are $W_\FF$ for some proper lamination $\FF$ are called {\it valid}.
+
+\subsection{The canonical foliation and weighted arc-diagram}
+\label{subsec:canonical}
+In this subsection,
+and in the rest of the paper,
+unless otherwise specified,
+we will assume that the ideal boundary $\partial S$ is non-empty. 
+
+Let us consider the universal covering $\pi\from \D\ra S$.
+Let $\Gamma$ be the Fuchsian group of deck transformations of $\pi$,
+and let $\Lambda\subset \T$ be its limit set. Since $\di S \neq \emptyset$,
+$\Lambda$ is a Cantor set. 
+We let $\hat S = \cl \D \sm \Lambda$,
+so that  $\pi$ extends to $\pi\from \hat S \to S \cup \di S$ as the universal cover. 
+We let $\di \hat S = \pi^{-1}(\di S) = \di \D \sm \Lambda$. 
+
+Let us pick  two components, $I\not= J$, of $\di \hat S$.
+The disk $\D$ with these two intervals as horizontal sides determines a quadrilateral $Q(I, J)$.
+This quadrilateral can be conformally uniformized, $\phi\from  Q(I, J)\ra {\bf Q} (a) $,
+by a standard quadrilateral ${\bf Q}(a) = [0,a]\times [0,1]$
+in such a way that $I$ and $J$ correspond to the horizontal sides of ${\bf Q}(a)$.
+The {\it vertical foliation} $ \FF(I, J)$ on $Q(I, J)$
+is the $\phi$-pullback of the standard vertical foliation  on ${\bf Q}(a)$.
+\makefigure{canonical}{The canonical foliation}
+
+Assume now that $a>2$, and let us cut off from ${\bf Q}(a) $ two side squares, $[0,1]\times [0,1]$
+and $[a-1, a]\times [0,1]$.  We call the left-over rectangle ${\bf Q}_\can(a)$,
+and we let $Q_\can( I,  J) = \phi^{-1}({\bf Q}_\can(a))$.
+The side quadrilaterals that we have cut off from $Q(I,J)$ are called its {\it buffers}.
+
+Let $\FF_\can(I, J)$ be the restriction of $ \FF(I, J)$ to $Q_\can(I, J)$.
+Obviously, for any deck transformation $\gamma \in \Gamma$, we have:
+
+\begin{equation}\label{phi}
+        \FF_\can ({\gamma (I), \gamma (J)}) = \gamma(\FF_\can (I, J)).
+\end{equation}
+
+
+\begin{lem}\label{disjointness}
+  The rectangles $Q_\can (I, J)$ are  pairwise disjoint.
+\end{lem}
+\begin{figure}
+\includegraphics[width=3in]{crossing.pdf}
+\caption{Here a leaf of $\FF_\can(I, J)$ crosses a leaf of $\FF_\can(I, J')$. (These are the solid red and blue paths.)
+This forces all paths in one buffer $B$ crossing all the paths of another buffer $B'$. (There are the dashed red and blue paths.)}
+\label{fig:crossing}
+\end{figure}
+\begin{proof}
+\def\Tt{T}
+Let us consider two rectangles, $Q \equiv Q(I, J)$ and $Q' \equiv Q(I', J')$.
+Then we can find one interval from each pair,
+say $J$ and $J'$,
+such that $J \neq J'$
+(so $J \cap J' = \emptyset$),
+and such that there is a component $\Tt$ of $\T - (J \cup J')$
+such that $\Tt \cap (I \cup I') = \emptyset$.
+
+We let $B$ be the buffer of $Q(I,J)$
+ that has a horizontal side (which is a subset of $J$) that shares an endpoint with $\Tt$;
+we define $B'$ likewise.
+Then if any vertical leaf $\gamma$ of $\FF_\can(I, J)$
+ crossed any vertical leaf $\gamma'$ of $\FF_\can(I', J')$,
+then every vertical leaf of $B$
+ would cross every vertical leaf of $B'$
+ (see Figure \ref{fig:crossing}).
+This would contradict Lemma \ref{no crossing}.
+\end{proof}
+This lemma allows us to define the {\it canonical lamination}  $\FF_\can(\hat S)$ as the union of
+the laminations $\FF_\can(I, J)$
+for all pairs of different components $I$ and $J$ of $\di\hat S$.
+By (\ref{phi}), this lamination is $\Gamma$-invariant,
+and hence it can be pushed forward to  $S$.
+ In this way we obtain the {\it canonical lamination on $S$}:
+$$
+    \FF_\can(S) =  \pi_* ( \FF_\can(\hat S) ).
+$$
+The corresponding weighted arc diagram $\alpha\mapsto W_\can(S, \alpha) $, $\alpha\in \AAA(S)$, is  called
+the {\it canonical WAD} on $S$.\footnote{We will use abbreviated notations $W_\can(S)$ or $W_\can(\alpha)$ whenever it does not lead to confusion.}
+ By definition, it is valid.
+
+We will now list several basic properties of the canonical WAD.
+The rest of the theory will be based on these properties in an
+essentially axiomatic way.
+
+\subsection{Property A: Maximality}
+For any arc $\alpha\in \AAA$,
+we let $W_{\max}(S, \alpha) \in \R_+$
+be the extremal width of the family of all proper paths $\gamma$  in $S$ representing $\alpha$.
+We then have
+
+\begin{lem}\label{max}
+   For any valid arc diagram $W$ on $S$ and arc $\alpha\in \AAA(S)$, we have
+$$
+   W(\alpha) \leq W_{\max}(S, \alpha)\leq  W_\can(S, \alpha)  + 2.
+$$
+ \end{lem}
+
+\begin{proof}
+  The first inequality follows immediately from the definition of a valid arc diagram.
+  
+Let us prove the second inequality. 
+  It is trivial for any arc $\alpha\in \AAA$ with $W_\max(\alpha)\leq 2$.
+Let us consider some arc $\alpha\in \AAA$ with $W_\max(\alpha)>2$.
+This arc connects two boundary components, $\si$ and $\om$, of $S$.
+
+The path family $\GG(\alpha)$ representing $\alpha$
+lifts to a path family $\hat \GG(\alpha)$
+consisting of all the paths in $\D$ that connect
+two appropriate arcs on $\T $,  $I$ and $J$,  covering  $\si$ and $\om$ respectively.
+Viewing $ I$ and $ J$
+as the horizontal sides of the rectangle $Q(I, J)$ based on $\bar \D$,
+we obtain the desired estimate:
+$$
+       \WW(\GG(\alpha))\leq \WW(\hat\GG(\alpha))\leq \WW(Q(I,  J) ) = W_\can(S, \alpha)+2
+$$
+(where we have made use of Lemma \ref{increase} for the first estimate).
+\end{proof}
+
+\subsection{Property B: Natural behavior under coverings}
+
+
+\begin{lem}\label{cov}
+   If $f\from U\ra V$ is a finite-degree covering then $W_\can(U)= f^* W_\can(V)$.
+\end{lem}
+
+\begin{proof}
+  Let $\pi_U\from \hat U\equiv \cl\D\sm \Lambda_U\ra U$ and $\pi_V\from \hat V\equiv \cl\D\sm \Lambda_V\ra V$
+ be the universal  coverings of $U$ and $V$, with deck transformations groups $\Gamma_U$ and $\Gamma_V$ respectively.
+Since $f$ has a finite degree,
+the group $\Gamma_U$ has a finite index in $\Gamma_V$.
+It follows that $\Lambda_U=\Lambda_V$, so that $\hat U=\hat V$.
+Hence $\FF_\can(\hat U)=  \FF_\can (\hat V)\equiv \FF$.
+Then
+$$
+ \FF_\can (U) =\FF/\Gamma_U = f^* (\FF/\Gamma_V)= f^* (\FF_\can(V)),
+$$
+and the conclusion follows.
+\end{proof}
+
+\subsection{Property C: Arcs with properly mapped endpoints}
+Recall that $\EE(S)$ is the set of ends of the Riemann surface $S$.
+Suppose that $A \in \EE(U)$ and $e\from U \to V$ is holomophic. 
+We say that $e$ is \emph{proper at $A$} if $e(x_n) \to \infty$ in $V$ whenever $(x_n) \to A$ in $U$. 
+In this case there is a unique $B \in \EE(V)$ such that $e(x_n) \to B$ whenever $x_n \to A$,
+and we write $B = e(A)$. 
+We call $A$ a \emph{proper end for $e$}. 
+
+If $r$ is a path in $U$ that connects two proper ends of $e$ (where $e\from U \to V$ is as before),
+then $e(r)$ is a path in $V$. 
+Moreover homotopic paths are mapped to homotopic paths,
+so $e(\rho)$ is defined for any arc $\rho$ on $U$ whose ends are proper for $e$. 
+The only problem is that $\rho$ may not be embedded!
+So let us now assume that $e$ is homotopic to an embedding;
+then we can be sure that $e(\rho)$ is embedded.
+
+We now state Property C for canonical WAD's:
+\begin{lem}\label{e}
+Suppose that $e\from U \to V$ is a holomorphic map between finite topology Riemann surfaces, 
+and $e$ is homotopic to an embedding. 
+Then for any arc $\alpha$ on $U$ whose endpoints are proper ends for $e$,
+$$
+     W_\can(U, \alpha)  \leq  W_\can(V)(e(\alpha)) .
+$$
+\end{lem}
+
+\begin{proof}
+The arc $\alpha$ connects two proper ends, $\si$ and $\om$,
+ and it lifts to an arc in $\hat U$ connecting
+some components $I$ and $J$ of $\di \hat U$.
+Let $Q = Q(I, J)$  as defined in Section \ref{subsec:canonical}.
+We observe that the lift of $e$ to the universal covers of $U$ and $V$ extends continuously to $I \cup J$;
+we will denote this extension of the lift by $\hat e$. 
+Let $I'=\hat e(I)$, $ J'=\hat e(J)$,
+and let $Q' = Q(I', J')$.
+Then $\hat e\from Q\ra Q'$ maps the horizontal sides of $Q$ to the corresponding horizontal sides of $Q'$.
+By Corollary \ref{Q}, $\WW(Q)\leq \WW(Q')$. But $\WW(Q)= W_\can (U, \alpha)+2$, $\WW(Q')= W_\can (V, e_*(\alpha))+2$,
+and the desired conclusion follows.
+\end{proof}
+
+We can also state the following corollary,
+which we will also call Property C.
+With $e\from U\to V$ as before,
+let $\EE_e(U)$ be the proper ends for $e$,
+and let $\EE_e(V) = e(\EE_e(U))$. 
+Let $\AA'(U)$ be the arcs with endpoints in $\EE_e(U)$,
+let $\Wcan'(U) = \Wcan(U)|_{\AA'(U)}$,
+and define $\AA'(V)$ and $\Wcan'(V)$ analogously.
+Then the map $e\from \AA'(U) \to \AA'(V)$ induces a pullback $e^*$ 
+from weighted arc-diagrams supported on $\AA'(V)$ to WAD's supported on $\AA'(U)$. 
+From Lemma \ref{e} we can immediately conclude that
+\begin{equation}
+\Wcan'(U) \le e^*\Wcan'(V). 
+\end{equation}
+
+
+
+\subsection{Property D: Domination}
+
+
+
+
+Let us now introduce an important relation between WAD's.
+We consider two Riemann surfaces, $U\subset V$.
+Given a path $\gamma$ on $V$,
+the restriction $\gamma\cap U$
+has only finitely many non-trivial components,
+$(\gamma_i)_{i=1}^n$.
+They represent a sequence of arcs on $U$,
+$I(\gamma) \equiv (\alpha_i\equiv[\gamma_i])_{i=1}^n$,
+called the {\it itinerary} of $\gamma$.
+
+
+We say that a sequence of arcs $(\alpha_i)$ on $U$ {\it arrows} an arc $\beta$ on $V$
+if there exists a path $\gamma$ representing $\beta$ such that $I(\gamma)=(\alpha_i)$.
+We will use notation $(\alpha_i) \arrow \beta$ for the arrow relation.
+
+\ssk{\it Remark.}
+   Note that the endpoint of $\gamma_i$ is connected to the beginning of $\gamma_{i+1}$
+by a path that goes through some component $K$ of $V\sm U$. In this case,
+the end of $U$ corresponding to this component is {\it not properly embedded}
+into $V$. This remark is useful as it reduces a number of possibilities of
+how the arc $\beta$ can be composed by arcs $\alpha_j$.
+\ssk
+
+
+Let us now consider two WAD's,  $X\in \WW(U)$ and $Y\in \WW(V)$.
+We say that $X$ {\it dominates} $Y$,
+written
+$$X\multimap Y,$$
+if we can write
+$$
+X\geq \sum_i \sum_j w_{ij}\alpha_{ij}, \quad Y = \sum_i v_i \beta_i
+$$
+where, for each $i$,
+$$
+(\alpha_{ij})_j \arrow \beta_i
+$$
+and
+$$
+\bigoplus_j w_{ij} \ge v_i.
+$$
+We develop the basics of the theory of domination in Appendix B. 
+
+We have defined domination so as to have the following statement:
+\begin{lem}\label{XY}
+  Given a valid WAD $Y$ on $V$, there exists a valid WAD $X$ on $U$ such that $X\multimap Y$.
+\end{lem}
+
+\begin{proof}
+Since $Y$ is valid,   $Y=W_\FF$ for some  lamination $\FF$ on $V$.
+For $\beta\in \supp W_\FF$,
+let $\FF(\beta)$ be the sublamination of $\FF$ assembled by the leaves $\gamma$
+representing the arc $\beta$.
+
+Let us consider the restriction of $\FF$ to $U$, that is, let $\HH = \FF\cap U$ and $X=W_\HH$.
+To any leaf $\gamma$ of $\FF$, let us associate its itinerary $I(\gamma)=(\alpha_j(\gamma))$
+on $U$.
+Let $\II(\beta)$ stand for the set of all non-trivial itineraries $\ba = I(\gamma)$
+corresponding to all possible leaves $\gamma$ of $\FF(\beta)$.
+By definition, $ \ba \arrow \beta$ for any $ \ba\in \II(\beta)$.
+Let $\FF(\beta, \ba)$ stand for the sublamination of $\FF(\beta)$ assembled by the leaves $\gamma$
+with itinerary $\ba$, i.e., for which $I(\gamma) = \ba$.
+
+For $\ba=(\alpha_j)\in \II(\beta)$,
+let $v(\beta,\ba) =  W(\FF(\beta,\ba))$, and
+let $w_j (\beta, \ba)$ be the width of the lamination assembled by the segments
+of $\FF(\beta, \ba) \cap U$ corresponding to $\alpha_j$.
+By the Series Law,
+$$
+   \bigoplus_j w_j (\beta, \ba)  \geq  v(\beta, \ba).
+$$
+  Moreover,
+$$
+     X =  \sum_\beta \sum_{\ba\in \II(\beta)} \sum_j  w_j(\beta, \ba) \alpha_j, \quad
+     Y = \sum_{\beta} \sum_{\ba\in \II(\beta)} v (\beta, \ba) \beta.
+$$
+This would mean that  $X\multimap Y$ if we knew that $\II(\beta)$ were finite. 
+For any $\gamma \in \FF$, 
+we let $| I(\gamma) |$ denote the length of $I(\gamma)$, i.e. the length of the sequence $(\alpha_j(\gamma))$. 
+For $n \in \N$, we let $\FF_n$ be the union on $\FF(\beta, \ba)$ over all $\beta$, and all $\ba$ with $|\ba| \le n$;
+we let $Y_n = W_{\FF_n}$. 
+Then $Y_n \to Y$ and $X \doms Y_n$ for all $n$, so $X \doms Y$ by Lemma \ref{lem:domination-closed}.
+\end{proof}
+
+\begin{rem}
+It is not so very hard to show that $|\II(\gamma)|$ varies upper semi-continuously with $\gamma$ (in each $\FF(\beta)$).
+Therefore $|\II(\gamma)|$ is bounded, and $Y = Y_n$ for some $n$. 
+\end{rem}
+
+We can now prove Property D of canonical WAD's:
+
+\begin{lem}\label{B}
+  Let $U\subset V$. Then there exists a WAD $B\in W(U)$ with $\|B\|_\infty\leq 2$ such that
+$$
+  W_\can(U) + B \multimap W_\can(V).
+$$
+\end{lem}
+
+\begin{proof}
+  Since $W_\can(V)$ is valid,
+ Lemma \ref{XY} gives us a WAD $X$ on $U$ such that $X\multimap W_\can(V)$.
+ By the Maximality Property, $X\leq W_\can(U)+2$. Hence there exists a WAD $B$ with
+ $\supp B\subset \supp X$, $\|B\|_\infty\leq 2$,  and $X\leq W_\can(U)+B$. The conclusion follows.
+\end{proof}
+
+
+
+This implies the following, which we will also call Property D. 
+
+\begin{cor}
+   Let $U\subset V$. Then
+$$
+  W_\can(U)  \multimap W_\can(V)- 6 |\chi(U)|.
+$$
+\end{cor}
+\begin{proof}
+This follows immediately from Lemma \ref{B}, Lemma \ref{lem:subtract-from-right}, and the estimate $\norm{B}_1 \le 3|\chi(U)| \norm{B}_\infty$.
+\end{proof}
+\subsection{Property E: Intersection number and hyperbolic length}
+Let $S$ be a compact Riemann surface with boundary. 
+We have defined $\Wcan(S)$, 
+and we have also defined the the weighted arc-diagram $M^S$ in Appendix C.
+We can relate $M^S$ to $\Wcan^S$ via the following:
+
+\begin{lem}\label{hyp dist vs mod}
+  Let $Q$ be a quadrilateral with horizontal sides $I_1$ and $I_2$,
+endowed with the hyperbolic metric.
+Let $\Gamma_1$ and $\Gamma_2$ be the hyperbolic geodesics in $\Pi$
+with the same endpoints as $I_1$ and $I_2$ respectively.
+Then
+$$
+    \WW(Q) = -\frac{2}{\pi} \log \dist (\Gamma_1, \Gamma_2) + O(1).
+$$
+\end{lem}
+
+
+\begin{proof}
+We can map $Q$ conformally to the infinite strip
+$$
+\Pi \equiv \{ z : 0 < \Im z < \pi \}
+$$
+such that $\Gamma_1$ and $\Gamma_2$ map to vertical transverse segments
+ with real part 0 and $d$ respectively,
+where $d \equiv \dist(\Gamma_1, \Gamma_2)$.
+Then the vertical sides of $Q$ map to
+ $J_1 \equiv [0,d] \times \{0\}$
+ and
+ $J_2 \equiv [0, d] \times \{\pi\}$.
+Then $\WW(Q)$ is equal to $\LL(\Theta)$,
+where $\Theta$ is the family of paths in $\Pi$ connecting $J_1$ and $J_2$.
+By two applications of the reflection principle (see \cite{Ahlfors:quasiconformal}),
+we find that $\LL(\Theta) = 4 \LL(\Theta')$,
+where $\Theta'$ is the family of paths connecting $J_1$ to the boundary of
+$\Pi' \equiv \{ z : |\Im z| < \pi/2 \}$.
+By the round annulus theorem\cite{towers}
+$$
+\LL(\Theta') = \frac{1}{2\pi} \log \frac {\pi/2}d + O(1) = - \frac{1}{2\pi}\log d + O(1)
+$$
+when $d$ is bounded above.
+The theorem follows.
+\end{proof}
+
+We then have the following corollary:
+
+\begin{lem} \label{two WAD's}
+For any arc $\alpha \in \AA(S)$,
+$$
+|W_{\mathrm can}^S(\alpha) -\frac{2}{\pi} M^S(\alpha)| < C_0.
+$$
+\end{lem}
+
+\begin{proof}
+Given $\alpha$,
+let us consider a lift $\tilde \alpha$ to the universal cover.
+It connects two arcs $I_1$, $I_2$ on the circle
+that cover the boundary curves of $S$ that the endpoints of $\alpha$ lie on.
+We can lift $h\from \mathbf S \to S$ to $\tilde h\from \core R \to \D$,
+where $\core R$ is the convex hull of the limit set of the deck transformation group.
+Then letting $\Gamma_1$, $\Gamma_2$ connect the endpoints
+ of $I_1$, $I_2$ respectively,
+we find that the transverse geodesic arc $\bfalpha$
+ lifts to the common perpendicular segment to $\Gamma_1$ and $\Gamma_2$.
+So $\dist(\Gamma_1, \Gamma_2) = L(\bfalpha)$,
+and the Lemma follows from Lemma \ref{hyp dist vs mod}.
+\end{proof}
+From Theorem \ref{peripheral lengths} and Lemma \ref{two WAD's} we can immediately conclude:
+\begin{corollary} \label{gamma-W}
+Let $S$ be a compact Riemann surface with boundary,
+and endow $\Int S$ with its Poincar\'e metric.
+Let $\gamma$ be a peripheral closed geodesic in $\Int S$.
+Then
+$$
+L(\gamma) = \pi \pairing{ \Wcan(S), \gamma } + O(1; \chi(S)).
+$$
+\end{corollary}
+With $S$ as in Corollary \ref{gamma-W},
+we let $\Gamma_S$ be the formal sum of the peripheral closed geodesics in $\Int S$.
+Then
+$$
+\pairing{ \Wcan(S), \Gamma_S } = 2 \norm{\Wcan(S)}_1,
+$$
+because every arc in $S$ intersects exactly two peripheral geodesics exactly once (or intersects exactly one exactly twice). 
+Therefore,
+by Corollary \ref{gamma-W},
+\begin{equation} \label{eq:vh-gamma}
+\norm{\wcan(S)}_1 = \frac\pi 2 |\Gamma| + O(1; p). 
+\end{equation}
+We can use this equation to compare the total weight of $\wcan(S)$ between two surfaces:
+\begin{theorem} \label{thm:total-increase}
+Suppose $S$ and $S'$ are finite topology Riemman surfaces,
+and there is a holomorphic map $i \from S' \to S$ that is homotopic to a homeomorphism.
+Then
+$$
+\norm{\wcan(S)}_1 \le \norm{\wcan(S')}_1 + O(1; \chi(S)).
+$$
+\end{theorem}
+\begin{proof}
+Because $i$ is homotopic to a homeomorphism,
+it bijectively maps the free homotopy classes of the peripheral geodesics of $S'$ to the same for $S$.
+Then, 
+by the Schwarz Lemma,
+because $i$ is holomorphic,
+we have $|\Gamma_{S'}| \ge |\Gamma_S|$.
+The Theorem then follows from the application of \eqref{eq:vh-gamma} to $\Gamma_{S'}$ and $\Gamma_S$. 
+\end{proof}
+
+
+

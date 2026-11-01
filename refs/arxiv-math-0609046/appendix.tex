@@ -1,0 +1,284 @@
+
+\section{Appendix: Extremal length and width}
+
+%For reader's convenience we provide below the necessary background facts concerning the
+%extremal length.
+%We will use Appendices of \cite{covering lemma,K} for reference to the needed
+%background on the conformal length.
+%Below we will add a few extra facts that are not contained in the above sources.
+
+Given a family curves $\GG$ on a Riemann surface $S$ and a conformal metric $\mu$ on $S$,
+we let $\mu(\gamma)$ be the $\mu$-length of a curve $\gamma\in \Gamma$,
+$\mu(\Gamma)$ be the infimum of these lengths,
+$\area_\mu$ be the corresponding measure, and
+ $\LL(\GG)$ and $\WW(\GG)=\LL(\GG)^{-1}$ be respectively the {\it extremal length} and {\it width} of $\GG$:
+see \cite{A} or the Appendices \cite{covering lemma,K} for the precise definitions.
+The most basic properties of these conformal invariants, the {\it Parallel} and {\it Series Laws} can
+also be found in these sources.
+
+
+\subsection{Transformation rules}
+ Both extremal length and extremal width  are conformal invariants.
+ More generally, we have:
+
+\begin{lem}\label{increase}
+   Let $f: U\ra V$ be a holomorphic map between two Riemann surfaces,
+and let $\GG$ be a family of curves on $U$. Then
+$$
+      \LL(f(\GG))\geq \LL(\GG).
+$$
+% Moreover, if $f$ is at most $d-to-1$, then
+% $$
+%   \LL (f(G)) \leq d\cdot  \LL(\GG).
+% $$
+\end{lem}
+
+ See Lemma 4.1 of \cite{covering lemma} for a proof.
+
+\begin{cor}\label{two families}
+     Under the circumstances of the previous lemma,
+let $\HH$ be a family of curves in $V$ satisfying the following lifting
+property: any curve $\gamma\in \HH$ contains an arc that lifts to some curve
+in $\GG$. Then $\LL(\HH)\geq \LL(\GG)$.
+\end{cor}
+
+ See Corollary 10.3 of \cite{K} for a proof.
+
+
+% \subsection{Extremal distance and Dirichlet integral}
+
+\msk
+ Given a compact subset $K\subset \inter U$, the {\it extremal distance}
+               $$\LL(U, K)\equiv \mod (U,K)$$
+(between $\di U$ and $K$) is defined as $\LL(\GG)$, where $\GG$ is the family of curves
+connecting $\di U$ and $K$. In case when $U$ is a topological disk and $K$ is connected,
+we obtain the usual modulus $\mod(U\sm K)$ of the annulus $U\sm K$.
+%
+%\ssk {\it Remark.} $\LL(U,K)$ can also be defined as $\LL(\GG')$ where $\GG'$ is the family of curves
+%{\it in} $U\sm K$ connecting $\di U$ to $K$. Indeed, since $\GG\supset \GG'$, $\LL(\GG)\leq \LL(\GG')$.
+%Since each curve of $\GG$ overflows some curve of $\GG'$, $\LL(\GG)\geq \LL(\GG')$.
+%One can also make a compromise and use the intermediate  family of curves in $U$ connecting $\di U$ to $K$.
+%\ssk
+%
+ We let $\WW(U,K) = \LL^{-1}(U,K)$.
+
+%\begin{lem}\label{modulus transform}
+% Let $f: U\ra V$ be a branched covering of degree $N$ between two compact Riemann surfaces with boundary.
+%Let $A$ be a compact subset of $\inter U$ and let $B=f(A)$.
+%Then
+%$$
+%   \mod(U,  A)\leq \mod(V, B) \leq N \, \mod(U,A).
+%$$
+%\end{lem}
+
+
+%\subsection{More transformation rules}
+
+%The Dirichlet integral formulation allows us to sharpen the lower bound in Lemma \ref{modulus transform}:
+
+
+\begin{lem}\label{modulus transform-2}
+ Let $f: U\ra V$ be a branched covering between two compact Riemann surfaces with boundary.
+Let $A$ be an archipelago in $U$,  $B=f(A)$, and
+assume that  $f:  A\ra B$ is a branched covering of degree $d$. Then
+$$
+      \mod(V, B) \geq d\, \mod (U,  A).
+$$
+\end{lem}
+
+See Lemma 4.3 of \cite{covering lemma} for a proof.
+
+
+% {\it Remark.} A similar estimate is still valid for an arbitrary compact set $A$,
+% and can be proved by approximating $A$ by  archipelagos.
+
+\ssk
+
+%Putting the above two lemmas together
+%(or using directly that the Dirichlet integral is transformed as the area
+%under branched coverings) we obtain:
+
+%In the case when $f: U\sm A\ra V\sm B$ is a branched covering,
+%the modulus is transformed particularly well:
+
+\begin{lem}\label{modulus transform-1}
+Let $(U,A)$ and $(V,B)$ be as above,
+and let  $f: U\sm A\ra V\sm B$ be a branched covering of degree $N$. Then
+$$
+      \mod(V, B)= N\, \mod (U,  A).
+$$
+\end{lem}
+
+See \cite{A} for a proof.
+
+
+
+\subsection{Strips and quadrilaterals}
+
+\begin{lem}\label{Pi}
+ Let us consider a horizontal strip $\Pi(h)$
+and an interval $I=(x, x+a)\subset \R$. We view $\Pi$ as a
+quadrilateral with horizontal sides $I$ and $\R+ih$.
+Then
+$$
+      \frac{h}{2a}\leq  \mod \Pi \leq \frac{h}{a},
+$$
+provided $h/a\leq 1/2$ or $\mod\Pi \leq 1/4$ (for the left-hand side inequality).
+\end{lem}
+
+\begin{proof}
+  By definition, $\mod\Pi$ is the extremal length of the family of curves connecting
+$I$ to  $\R+ih$. This family contains the family $\GG'$ of vertical curves
+in the Euclidean rectangle with horizontal sides $I$ and $I+ih$.
+Hence $\LL(\GG)\leq \LL(\GG')=h/a$.
+
+To prove the left-hand side inequality, let us consider a Euclidean rectangle
+$Q$ with vertices $x-h, x+a+h, x+a+h+ih, x-h+ih$ endowed with the Euclidean metric $\mu$.
+Any curve of $\GG$ has $\mu$-length at least $h$. Hence
+$$
+  \LL(\GG)\geq \frac{h^2}{\area_\mu(Q)}= \frac{t}{1+2t}, \quad where\ t=h/a.
+$$
+We see that $\LL(\GG)\geq t/2$ for $t\leq 1/2$,
+ while $\LL(\GG) >  1/4$ otherwise. The conclusion follows
+\end{proof}
+
+
+\begin{lem}\label{C}
+Let $\Pi$ and $I$ be as in the previous lemma.
+Let $C= \Pi/\, l\,\Z $
+be a cylinder covered by $\Pi$
+so that $I$ is embedded into the bottom of $C$.
+Then
+$$
+      \mod \Pi  \geq \frac{1}{2} \min(\mod C,\, 0.5).
+$$
+% provided $\mod \Pi\leq 1/4$.
+\end{lem}
+
+\begin{proof}
+Since the covering $\Pi\ra C$ is an embedding on $I$, we have: $a\leq l$.
+ Then by the previous lemma we obtain:
+$$
+    \mod \Pi \geq \frac{h}{2a} \geq \frac {h}{2l}= \frac{1}{2} \mod C.
+$$
+\end{proof}
+
+
+
+\comm{********
+Similar estimates hold for a cylinder in place of the strip:
+
+\begin{lem}\label{C}
+ Let us consider a flat cylinder $C$ of height $h$.
+Let $B$ and $T$ be the ``bottom'' and the ``top'' circles of $C$.
+Let  $I\subset B$ be an interval of length $a$.
+Then
+$$
+      \frac{h}{2a}\leq  \ed(I, T) \leq \frac{h}{a},
+$$
+provided $h/a\leq 1/2$ (for the left-hand side inequality).
+\end{lem}
+
+It allows us to estimate the modulus of a holomorphic rectangle
+inside an annulus:
+
+\begin{prop}\label{quadr in cyl}
+  Let $Q$ be a quadrilateral with base $I$ and top $J$,
+and let $C$ be a flat cylinder as in the previous lemma.
+Let $\phi: Q\ra A$ be a holomorphic map
+which continuously extends to $\bar Q\sm \di J$.
+Assume  that $\hat \phi$ embeds $I$ into $B$,
+maps the vertical sides of $Q$ to $B$, and maps $\inter J$ to $T$.
+Then
+$$
+   \frac{1}{2} \mod A \leq \mod Q \leq \mod A,
+$$
+provided ....
+\end{prop}
+
+\begin{proof}
+    Let  $\Pi=\{z: 0< \Im z< h\}  $
+be a strip realization of the universal covering of $C$
+such that $\R$ covers the bottom of $C$.
+Then $\phi$ lifts to a holomorphic map $\hat\phi: Q\ra \Pi$
+that embeds $I$ to $\R$, maps the vertical sides of $Q$ to $\R$,
+and maps  $J$ to $\R+ih$.
+
+Let $\HH$ be the family of vertical curves in $Q$
+that do not pass through $\di J$,
+and let $\GG$ be the family of curves in $\Pi$ that connect $I$ to $\R+ih$.
+Then any curve of $\HH$ maps to a curve of $\GG$, and vice versa,
+any curve of $\GG$ lifts to a vertical curve in $Q$.
+Thus $\hat \phi(\HH)=\GG$.
+By Lemma \ref{increase},
+$$\mod(Q)= \LL(\HH) \leq \LL(\GG).$$
+\end{proof}
+********************}
+
+\subsection{Holomorphic and embedded annuli}
+
+Let $S$ be a hyperbolic Riemann surface with boundary with a preferred component $\si$ of $\di S$.
+We assume that $S$ has finite topological type and is not the punctured disk.
+A {\it holomorphic annulus}  in $\AAA$ is a holomorphic map $A: \A(1,r) \ra S$
+that extends to a homeomorphism  $\phi: \T\ra \si$.
+We let $\mod A = \mod \A(1,r)$.
+% Let $\AAA$ stand for the family of holomorhic annuli in $S$.
+
+
+The family of holomorphic annuli contains a subfamily of {\it embedded annuli}.
+Among embedded annuli,  there is an  annulus $A_*$ of maximal modulus,
+which has nice special properties. Namely, let us uniformize $A_*$ by a flat cylinder
+$C= \Pi(h)/ \Z$. Then the quadratic differential $dz^2$ on $C$ is the pull-back of some
+quadratic differential $q$ on $S$. Moreover, the uniformization $C\ra A_*$ extends continuously
+to the upper boundary $C^+= \R+ih /\Z$ of $C$ (minus finitely many points corresponding to the punctures
+of $S$),
+and induces there an equivalence relation
+$\tau_k : \alpha_k \ra \alpha_k'$, where $(\tau_k)$ is a finite family of  isometries between pairs of
+disjoint arcs in $C^+$. The images of these arcs, $\la_k = i(\alpha_k)=i(\alpha_k')$,
+are {\it horizontal separatricies} of $q$.
+(It is a version of Strebel's Theorem, see e.g., \cite[\S 11]{GL}).
+
+\begin{lem}\label{emb vs hol}
+  For any holomorphic annulus $A: \A(1,r)\ra S$, we have:
+$$
+   \mod A\leq 16 \mod A_*.
+$$
+\end{lem}
+
+\begin{proof}
+  Let us consider a family $\GG$ of non-trivial proper curves $\gamma$ in $S$ that begin in  $\si$.%
+\footnote{``Non-trivial'' means that $\gamma$ cannot be pulled to $\si$ through a continuous
+family of proper curves.} Then  any curve $\gamma\in \GG$ contains an initial segment $\gamma'$
+that lifts to a vertical curve in $\A(1,r)$. By Corollary \ref{two families},
+\begin{equation}\label{upper bound}
+  \mod A\leq \LL(\GG).
+\end{equation}
+
+Let us now take any conformal metric $\mu$ on $S$, and let $l= \mu(\GG)$.
+For any vertical curve $\de$ in $A_*$, two possibilities can occur:
+
+\ssk\nin $\bullet$ $\de$ ends on $\di S$. Then $\de \in \GG$ and hence $\mu(\de)\geq l$.
+
+\ssk\nin $\bullet$  $\de$ ends on some separatrix $i(\alpha_k)$.
+Then there is another vertical curve $\la$
+in $A_*$ that ends at the same point as $\de$.
+The concatenation of $\de$ and $\la$ is a curve of family $\GG$.
+Hence one of the curves, $\de$ or $\la$, is ``long'',
+i.e., it has $\mu$-length at least $l/2$.
+\ssk
+
+It follows that at least one half of the vertical curves in $A_*$ are long.
+Let $I\subset C^+$ be the set of endpoints of $i^{-1}$(long curves).
+We can now proceed as in the classical Gr\"otztsch estimate.
+By the Cauchy-Schwarz Inequality,
+$$
+ h\, \area_\mu(C) = \area(C) \int_C \area_\mu\, dx\, dy   \geq  \left( \int_I dx \int_{0}^h \mu(x,y) dy\right)^2
+  \geq \left( \frac{l}{4} \right)^2,
+$$
+which implies
+$$
+  \LL_\mu(\GG)=l^2/\area_\mu(C) \leq 16 h = 16 \mod A_*.
+$$
+Since this is valid for any conformal metric $\mu$, we conclude that $\LL(\GG)\leq 16\mod A_*$.
+Together with (\ref{upper bound}), this gives us the desired estimate.
+\end{proof}

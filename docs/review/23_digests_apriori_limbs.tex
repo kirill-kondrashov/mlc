@@ -1,0 +1,985 @@
+\chapter[Source digests III]{Source digests III: a priori bounds, satellites, Feigenbaum points, and limbs}
+\label{ch:digests-apriori-limbs}
+
+This chapter digests the sources that give the strongest current results on local
+connectivity of $\M$ beyond the foundations of Chapters~\ref{ch:digests-foundations}
+and~\ref{ch:digests-modern}: the Kahn--Lyubich series on a priori bounds (Parts~I--IV),
+the Dudko--Lyubich papers on satellite parameters and on Feigenbaum points, the
+Kahn--Kapiamba--Lyubich paper on parabolically bounded primitive renormalization, and
+the Dudko--Schleicher paper on limbs.  The conventions are those of the earlier digest
+chapters.  Definitions and theorems are the source's own, numbered as the source prints
+them.  When a source does not print its main statement as a numbered theorem, we say so.
+Each digest ends with its MLC scope, which is the information used in
+Chapter~\ref{ch:approaches-map}.
+
+\section{Common framework}
+\label{sec:apriori-framework}
+
+A \emph{quadratic-like map} is a proper holomorphic map $g\colon U\to V$ of degree two
+between Jordan disks with $\overline U\subset V$ and a single critical point.  Its
+\emph{filled Julia set} is $K(g)=\{z:\ g^n(z)\in U\text{ for all }n\ge0\}$, and its
+\emph{fundamental annulus} is $V\setminus\overline U$, with modulus
+$\modulus(V\setminus\overline U)$.  A quadratic polynomial $f$ is
+\emph{$p$-renormalizable} if $f^p\colon U\to V$ is quadratic-like with connected Julia
+set, for disks $0\in U\Subset V$; the map $f^p$ is then a \emph{$p$-renormalization}.
+Its small filled Julia sets are $K_p(i)=f^i(K_p)$ for $0\le i<p$, where $K_p$ is the
+central one, and $\mathcal K_p=\bigcup_{i<p}K_p(i)$.
+
+\begin{definition}[Primitive renormalization and bounded primitive type]
+\label{def:apriori-primitive}
+A $p$-renormalization is \emph{primitive} if the small filled Julia sets
+$K_p(0),\dots,K_p(p-1)$ are pairwise disjoint.  A polynomial with primitive
+renormalizations of periods $p_0<p_1<\cdots$ has \emph{$B$-bounded primitive type} if
+\[
+\frac{p_{k+1}}{p_k}\ \le\ B\qquad\text{for every }k.
+\]
+\emph{Source:} Kahn I, \texttt{intro.tex}, lines 41--57.
+\end{definition}
+
+\begin{definition}[A priori bounds]
+\label{def:series-apriori}
+An infinitely renormalizable quadratic polynomial $f$ has \emph{a priori bounds} if there
+are $\epsilon>0$ and quadratic-like renormalizations $f^{p_k}\colon U_k\to V_k$ with
+\[
+\modulus(V_k\setminus U_k)\ \ge\ \epsilon\qquad\text{for all }k.
+\]
+\emph{Source:} Kahn I, \texttt{intro.tex}, lines 58--60.  Kahn III and Kahn--Lyubich II
+use the same notion with the annulus written as $U_n\setminus U_n'$.
+\end{definition}
+
+\begin{definition}[Beau a priori bounds]
+\label{def:apriori-beau}
+A family $\mathcal C$ of renormalization combinatorics has \emph{beau a priori bounds} if
+there is $\epsilon=\epsilon(\mathcal C)>0$ and, for every $\delta>0$, an integer
+$N(\delta)$ such that every renormalizable quadratic-like map in $\mathcal C$ whose
+initial modulus is at least $\delta$ has all renormalizations of level at least
+$N(\delta)$ with modulus at least $\epsilon$.  The threshold $N(\delta)$ may depend on the
+initial modulus, while $\epsilon$ depends only on the family.  \emph{Sources:}
+Kahn III, \texttt{moduli.tex}, lines 623--633; Dudko--Lyubich (Feigenbaum),
+\texttt{Feigen.tex}, lines 320--322; KKL, \texttt{waves-with-Misha.tex}, lines 117--123.
+\end{definition}
+
+\paragraph{The rigidity input.}
+The a priori bounds sources of this chapter (Kahn I--III, Kahn--Kapiamba--Lyubich, and
+Dudko--Lyubich at Feigenbaum points) pass from bounds to local connectivity through one cited
+input, the rigidity theorem of Lyubich (Acta Math.~178 (1997)).  The sources state it in different
+forms, and the book keeps those forms apart.  The satellite paper (Section~\ref{sec:dl-satellite})
+uses a related input for Julia sets, and the limbs paper (Section~\ref{sec:dudko-schleicher})
+does not use it.  Kahn I says that a priori bounds of
+bounded primitive type give ``the Mandelbrot set is locally connected at $c$, or
+equivalently $f_c$ is combinatorially rigid'' (\texttt{intro.tex}, lines 93--101), citing
+Lyubich's [puzzle] entry.  Kahn II and III state the same implication for the decoration
+and molecule conditions (Corollary of Kahn II, \texttt{intro.tex}, lines 123--126;
+Corollary~6.4 of Kahn III, \texttt{intro.tex}, lines 36--41).  Dudko--Lyubich deduce MLC
+at Feigenbaum points from beau bounds and the Rigidity Theorem of Lyubich.  KKL show that
+beau bounds alone do not give MLC: rigidity additionally needs a bounded puzzle
+Teichm\"uller diameter, and KKL state that Lyubich's argument needs only this weaker
+hypothesis (KKL, Theorem~B).  Throughout this chapter, ``rigidity input'' means this
+cited principle, and no digest below proves it.
+
+\section{Kahn I: bounded primitive combinatorics}
+\label{sec:kahn-I}
+
+\paragraph{Identity.}
+J.~Kahn, \emph{A priori bounds for some infinitely renormalizable quadratics: I.
+Bounded primitive combinatorics}, arXiv:math/0609045 (version~3, 2006).  The title and
+the single author are confirmed by the downloaded metadata and by the main TeX file.
+
+\paragraph{Definitions used.}
+\begin{itemize}
+\item \emph{Geodesic lengths.} For a primitive renormalization with small Julia sets
+$\mathcal K_p$, $\gamma_p$ is the closed hyperbolic geodesic surrounding $K_p$ in
+$\C\setminus\mathcal K_p$.  For a quadratic-like $g\colon U\to V$, $\gamma(g)$ is the
+core geodesic of $V\setminus K(g)$, and $|\eta|$ is hyperbolic length.
+(\texttt{intro.tex}, lines 45--51.)
+\item \emph{Pseudo-quadratic-like maps.} A pair $(i,f)\colon U'\to U$ in which $i$ is an
+immersion, $f$ is a branched covering of degree $2$, $i^{-1}(K)=f^{-1}(K)=K'$ and $K'$ is
+connected.  They carry canonical renormalizations, which is why the proof works with them;
+they are introduced in this paper and cited in later sources as ``$\psi$-ql maps''
+(\texttt{psiql2.tex}, lines 15--34).
+\item \emph{Canonical weighted arc diagram.} $W_{\rm can}=\sum_\alpha W(\alpha)\,\alpha$,
+where arcs cross thin rectangles and $W(\alpha)$ is their conformal width.  Horizontal arcs
+join components of $\mathcal K_p$; vertical arcs join $\mathcal K_p$ to $\partial V$
+(\texttt{intro.tex}, lines 229--245).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Length comparison]
+\label{thm:kahn-I-length}
+There is an absolute constant $\epsilon>0$ such that for every $p$ there is $M(p)$ with the
+following property.  If $g\colon U\to V$ is a primitively $p$-renormalizable quadratic-like
+map, then
+\[
+|\gamma_p|>M(p)\qquad\Longrightarrow\qquad |\gamma(g)|\ \ge\ \epsilon\,p\,|\gamma_p|.
+\]
+\emph{Status:} proved in the paper (source label \texttt{thm:length-comparison};
+\texttt{intro.tex}, lines 159--167; \texttt{conclusions.tex}, lines 67--69).
+\end{theorem}
+
+\begin{theorem}[Bad now, worse earlier]
+\label{thm:kahn-I-bnwe}
+There is $l\in\N$ such that for every $B$ there is $M$ with the following property.  For
+renormalization sequences of bounded primitive type $B$,
+\[
+|\gamma_{(n+l)}|>M\qquad\Longrightarrow\qquad |\gamma_{(n)}|>2\,|\gamma_{(n+l)}|.
+\]
+\emph{Status:} proved in the paper (source label \texttt{thm:bnwe};
+\texttt{conclusions.tex}, lines 137--145).
+\end{theorem}
+
+\begin{remark}
+\label{rem:kahn-I-improving}
+The bounded-period improvement used by Kahn II and Kahn III is a result of Kahn I.  In the
+present version of Kahn I it appears as the ``improving of length'' theorem
+(\texttt{conclusions.tex}, lines 74--82 and 172); Kahn II and Kahn III cite it as Theorem~9.1
+of the first arXiv version.  Its statement is recorded in
+Theorem~\ref{thm:kahn-II-bounded-period}.
+\end{remark}
+
+\begin{theorem}[Geodesic-to-modulus]
+\label{thm:kahn-I-geodesic-modulus}
+If $f\colon V'\to V$ is primitively $p$-renormalizable and $|\gamma_p|\le M$, then its
+Douady--Hubbard $p$-renormalization has modulus at least $m(M)>0$.  \emph{Status:} proved
+here; the polynomial case is due to McMullen (\emph{Complex dynamics and renormalization},
+Theorem~10.3) and to McMullen's \emph{Renormalization and 3-manifolds which fiber over the
+circle}, Theorem~4.10 (\texttt{conclusions.tex}, lines 246--258).
+\end{theorem}
+
+\begin{theorem}[Beau bounds for pseudo-quadratic-like maps]
+\label{thm:kahn-I-psi-beau}
+For every $B$ there is $M_0$, and for every $m$ there are $n_1$ and $M_1$, such that
+$|\gamma_{(n)}|\le M_1$ for all $n\in\N$ and $|\gamma_{(n)}|\le M_0$ for all $n\ge n_1$.  The
+standing hypotheses (bounded primitive type $B$ and the initial bound $m$) are those of the source
+(\texttt{conclusions.tex}, lines 186--198).
+\emph{Status:} proved (source label \texttt{thm:psi-beau};
+\texttt{conclusions.tex}, lines 186--198).
+\end{theorem}
+
+\begin{theorem}[Main Theorem, Kahn I]
+\label{thm:kahn-I-main}
+If $f$ is an infinitely renormalizable quadratic polynomial of bounded primitive type, then
+$f$ has a priori bounds.  \emph{Status:} proved in the paper (\texttt{intro.tex}, lines
+69--74).  The precise form used in the body of the paper is the following.  For every $B$
+there is $m>0$ such that every infinitely $B$-bounded primitively renormalizable quadratic
+polynomial has, at every primitive period $p_n$, a quadratic-like renormalization $V\supset V'$
+with $\modulus(V\setminus V')\ge m$ (source label \texttt{thm:a-priori-bounds};
+\texttt{conclusions.tex}, lines 279--304).
+\end{theorem}
+
+\paragraph{Proof strategy (from the source).}
+Modulus bounds are reduced to bounded lengths of the geodesics $\gamma_{(n)}$
+(\texttt{intro.tex}, lines 128--139).  The argument localizes between periods $p_{n-l}$ and
+$p_n$; bounded period ratios give at most $B^l$ relevant small Julia sets.  Pseudo-quadratic-like
+maps and canonical renormalization make the relevant lengths compare monotonically.  Canonical
+weighted arc diagrams and extremal width estimates control the vertical width, and horizontal
+weight controls vertical weight through the primitive combinatorics and an entropy theorem
+(\texttt{intro.tex}, lines 141--245; \texttt{wad.tex}, lines 83--162).
+
+\paragraph{External inputs.}
+Lyubich, \emph{Dynamics of quadratic polynomials I--II} (rigidity input, source key
+\texttt{puzzle}); McMullen, \emph{Complex dynamics and renormalization} (source key
+\texttt{McM}); McMullen, \emph{Renormalization and 3-manifolds which fiber over the circle}
+(source key \texttt{towers}); Sullivan (source key \texttt{S}, real bounded-type a priori
+bounds and the term ``beau''); Yoccoz (source key \texttt{H}, local connectivity of
+non-infinitely renormalizable Julia sets); Hu--Jiang and Jiang (source keys \texttt{HJ},
+\texttt{J}, local connectivity of $J(f_c)$).
+
+\paragraph{MLC scope.}
+The paper claims local connectivity of $\M$ at the parameters it covers, namely the
+infinitely renormalizable $c$ of bounded primitive type, equivalently combinatorial rigidity
+of $f_c$ (\texttt{intro.tex}, lines 93--101).  It does not claim MLC globally.  It also
+lists further consequences (local connectivity of $J(f_c)$ and universality statements),
+which we do not digest further (\texttt{intro.tex}, lines 102--119).
+
+\section{Kahn II: decorations}
+\label{sec:kahn-II}
+
+\paragraph{Identity.}
+J.~Kahn and M.~Lyubich, \emph{A priori bounds for some infinitely renormalizable
+quadratics: II. Decorations}, arXiv:math/0609046 (2006).  The main TeX file is
+\texttt{refs/arxiv-math-0609046/main.tex}, lines 39--41.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Decoration.} A decoration $\mathcal L$ of $\M$ is the part of $\M$ cut off by two
+external rays landing at a tip of a satellite copy of $\M$ attached to the main cardioid
+(\texttt{main.tex}, lines 49--50; \texttt{intro.tex}, lines 88--91).
+\item \emph{Escape route.} For a map that is not satellite renormalizable, let $n$ be least
+with $f^{qn}(0)\in\operatorname{int}Z^1_{\boldsymbol\kappa}$.  The escape route
+$\bar\kappa=(\kappa_1,\dots,\kappa_n=\boldsymbol\kappa)$ satisfies
+\[
+f^{qm}(0)\in Z^{\,q(n-m)+1}_{\boldsymbol\kappa_m},\qquad m=1,\dots,n
+\]
+(\texttt{kingdom.tex}, lines 337--353).
+\item \emph{Decoration condition.} An infinitely renormalizable $f$ satisfies the decoration
+condition if all little copies $M^{(n)}$ belong to finitely many decorations
+$\mathcal L_k$; equivalently, the parameters $q_n$ and $n_n$ of the escape routes are bounded
+(\texttt{kingdom.tex}, lines 501--504).
+\item \emph{Decoration class $(\bar q,\bar n)$.} A $\psi$-ql map belongs to it when every
+renormalization has decoration parameters $(\bar q_n,\bar n_n)\le(\bar q,\bar n)$
+(\texttt{moduli.tex}, lines 1335--1337).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Main Theorem, Kahn II]
+\label{thm:kahn-II-main}
+An infinitely renormalizable quadratic map satisfying the decoration condition has a priori
+bounds.  \emph{Status:} proved (\texttt{intro.tex}, lines 112--118).  The proof uses the
+bounded-period improvement (Theorem~\ref{thm:kahn-II-bounded-period}, which is Kahn I's result)
+for the regime of bounded periods.
+\end{theorem}
+
+\begin{theorem}[High-period theorem]
+\label{thm:kahn-II-high}
+Given finitely many decorations $\mathcal L_k$ there is $\underline p$ such that every
+infinitely renormalizable quadratic map satisfying the decoration condition with these
+decorations and renormalization periods $p\ge\underline p$ has a priori bounds.
+\emph{Status:} proved in the paper (\texttt{intro.tex}, lines 132--136).
+\end{theorem}
+
+\begin{theorem}[Improving the moduli, bounded decoration parameters]
+\label{thm:kahn-II-moduli}
+For every $(\bar q,\bar n)$ and $\rho>0$ there are $\underline p\in\N$ and $\epsilon>0$ such
+that the following holds.  Let $f\colon(U,K)\to(U,K)$ be a renormalizable $\psi$-ql map with
+decoration parameters at most $(\bar q,\bar n)$ and first renormalization $f'=f^p\colon(U',K')\to(U',K')$.
+If $p\ge\underline p$ and $\modulus(U'\setminus K')<\epsilon$, then
+\[
+\modulus(U\setminus K)\ <\ \rho\,\modulus(U'\setminus K').
+\]
+\emph{Status:} proved (\texttt{moduli.tex}, lines 1271--1281).
+\end{theorem}
+
+\begin{theorem}[Improving the moduli, bounded period]
+\label{thm:kahn-II-bounded-period}
+For $\rho\in(0,1)$ there is $\underline p(\rho)$ such that for every $\bar p\ge\underline p$
+there is $\epsilon(\bar p)>0$ with the following property.  If $f$ is primitively
+renormalizable, $\underline p\le p\le\bar p$ and $\modulus(U'\setminus K')<\epsilon(\bar p)$,
+then $\modulus(U\setminus K)<\rho\,\modulus(U'\setminus K')$.
+\emph{Status:} \emph{cited}, not proved in Kahn II.  The source identifies it as Theorem~9.1
+of Kahn I, which is cited as it appeared in the first arXiv version of Kahn I
+(\texttt{moduli.tex}, lines 1309--1327; Kahn I, \texttt{conclusions.tex}, lines 74--82).
+Kahn I's present version contains this result as the ``improving of length'' theorem
+(\texttt{conclusions.tex}, line 172).  We record the dependency and not the numbering.
+\end{theorem}
+
+\begin{theorem}[Corollary: geometric decay]
+\label{thm:kahn-II-decay}
+For each $(\bar q,\bar n)$ there are $\epsilon>0$ and $l\in\N$ such that for every
+infinitely renormalizable $\psi$-ql map in the decoration class $(\bar q,\bar n)$, if
+$\modulus(U_n\setminus K_n)<\epsilon$ for some $n\ge l$, then
+\[
+\modulus(U_{n-l}\setminus K_{n-l})\ <\ \tfrac12\,\modulus(U_n\setminus K_n).
+\]
+\emph{Status:} proved (\texttt{moduli.tex}, lines 1340--1346).
+\end{theorem}
+
+\begin{theorem}[Beau bounds in the decoration class]
+\label{thm:kahn-II-beau}
+For every $(\bar q,\bar n)$ the family of renormalization combinatorics in the decoration class
+$(\bar q,\bar n)$ has beau a priori bounds (Definition~\ref{def:apriori-beau}).
+\emph{Status:} proved (\texttt{moduli.tex}, lines 1423--1426).
+\end{theorem}
+
+\begin{theorem}[JLC and MLC implication]
+\label{thm:kahn-II-mlc}
+If $f_c(z)=z^2+c$ is infinitely renormalizable and satisfies the decoration condition, then
+$J(f_c)$ is locally connected and $\M$ is locally connected at $c$.
+\emph{Status:} the implication is cited from Lyubich (rigidity input,
+Section~\ref{sec:apriori-framework}); the paper does not prove it
+(\texttt{intro.tex}, lines 36--37 and 123--126).
+\end{theorem}
+
+\paragraph{Proof strategy (from the source).}
+The combinatorics are encoded by the Yoccoz puzzle and a modified principal nest
+(\texttt{intro.tex}, lines 155--166).  Ordinary quadratic-like maps are replaced by canonical
+$\psi$-ql maps with pseudo-puzzles (\texttt{intro.tex}, lines 168--179).  The Quasi-Additivity Law
+and the Covering Lemma supply the analytic estimates (\texttt{intro.tex}, lines 181--183).
+Modulus improvement for bounded decoration parameters is proved first
+(\texttt{moduli.tex}, lines 1271--1307), then combined with the bounded-period theorem to cover all
+period regimes (\texttt{moduli.tex}, lines 1309--1407).  Iteration gives beau bounds, which are
+transferred back to ordinary quadratic-like maps (\texttt{moduli.tex}, lines 1409--1440).
+
+\paragraph{External inputs.}
+Lyubich, \emph{Dynamics of quadratic polynomials I--II} (the implication above); Kahn I (the
+bounded-period theorem); Kahn--Lyubich, \emph{The quasi-additivity law in conformal geometry}
+(analytic tools); Kahn--Lyubich, \emph{Local connectivity of Julia sets for unicritical
+polynomials} (the modified principal nest); Douady--Hubbard, \emph{On the dynamics of
+polynomial-like maps} (background).  The transfer from $\psi$-ql to ordinary quadratic-like
+maps uses a ``ql extension'' lemma; the source does not say where that lemma comes from
+(\texttt{moduli.tex}, lines 1439--1440).
+
+\paragraph{MLC scope.}
+The claimed scope is quadratic, infinitely renormalizable parameters satisfying the decoration
+condition: local connectivity of $J(f_c)$ and of $\M$ at $c$ (\texttt{intro.tex}, lines 123--126).
+The source also states that its a priori bounds proof extends unchanged to higher-degree
+unicritical maps, but that the MLC implication uses quadratic geometry; for higher degree, the
+source cites Cheraghi together with Avila--Kahn--Lyubich--Shen (\texttt{intro.tex}, lines
+199--203).  It does not claim global local connectivity of $\M$.
+
+\section{Kahn III: molecules}
+\label{sec:kahn-III}
+
+\paragraph{Identity.}
+J.~Kahn and M.~Lyubich, \emph{A priori bounds for some infinitely renormalizable quadratics:
+III. Molecules}, arXiv:0712.2444 (2007).  The main TeX file is \texttt{refs/arxiv-0712.2444/main.tex},
+lines 20--22.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Molecule.} $\mathcal M$ is the closure of the union of all hyperbolic components
+obtained by iteratively attaching secondary hyperbolic components to the main cardioid; the
+source also calls it the cactus (\texttt{intro.tex}, lines 3--11).  Combinatorially (\texttt{kingdom.tex}, lines 169--176), $\mathcal M$ consists of the maps that
+are either finitely renormalizable, with every renormalization satellite and the last one having a
+non-repelling cycle, or infinitely renormalizable with every renormalization satellite.
+\item \emph{$\eta$-molecule condition.} For primitively renormalizable maps $f_i$, the associated
+copies $M$ stay $\eta$-away from $\mathcal M$.  For an infinitely primitively renormalizable $f$, the
+relative copies $\widetilde M_i$ associated to $R^if$ stay $\eta$-away
+(\texttt{kingdom.tex}, lines 195--204).
+\item \emph{Parameters $(r,q,n)$.} $r$ is the period of a dividing cycle with an $r$-ray portrait;
+$f^r$ has a repelling fixed point $\alpha$ with $q$ rays landing there; the orbit $f^{rj}(0)$ does
+not escape the central domain for $j=1,\dots,qn-1$; $n$ is the first time $f^{rqn}(0)$ escapes it
+(\texttt{kingdom.tex}, lines 208--240).
+\item \emph{$(\bar r,\bar q,\bar n)$-molecule condition.} There is a choice of $(r,q,n)$ with
+$r\le\bar r$, $q\le\bar q$, $n\le\bar n$.  The $(r,q,n)$ condition and the $\eta$-condition are
+equivalent, with quantitative dependence in both directions (\texttt{kingdom.tex}, lines 242--251).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Main Theorem, Kahn III]
+\label{thm:kahn-III-main}
+Infinitely renormalizable quadratic maps satisfying the molecule condition have a priori bounds.
+\emph{Status:} proved here, using Kahn I's bounded-period theorem (\texttt{intro.tex}, lines 28--34).
+\end{theorem}
+
+\begin{theorem}[High periods]
+\label{thm:kahn-III-high}
+Given $\eta>0$ and $\rho\in(0,1)$ there are $\bar\mu>0$ and $\underline p\in\N$ such that, if a
+period-$p$ renormalizable quadratic-like $f$ satisfies the $\eta$-molecule condition,
+$\operatorname{psimod}(Rf)<\bar\mu$ and $p\ge\underline p$, then
+\[
+\operatorname{psimod}(f)\ <\ \rho\,\operatorname{psimod}(Rf).
+\]
+Here $\operatorname{psimod}$ is the modulus of the $\psi$-ql map as defined in the source.
+\emph{Status:} proved here (\texttt{intro.tex}, lines 51--60).
+\end{theorem}
+
+\begin{theorem}[Improving moduli for a fixed molecule class]
+\label{thm:kahn-III-moduli}
+For fixed $(\bar r,\bar q,\bar n)$ and $\rho>0$ there are $\underline p$ and $\epsilon>0$ such that
+a renormalizable $\psi$-ql $f$ of period $p\ge\underline p$ satisfying the $(\bar r,\bar q,\bar n)$
+condition has $\operatorname{psimod}(f)<\rho\,\modulus(g)$ whenever its first renormalization $g$
+has $\operatorname{psimod}(g)<\epsilon$.  \emph{Status:} proved here (\texttt{moduli.tex}, lines 579--591).
+\end{theorem}
+
+\begin{theorem}[Bounded periods]
+\label{thm:kahn-III-bounded}
+The bounded-period improvement of Theorem~\ref{thm:kahn-II-bounded-period} is the input used here.
+\emph{Status:} \emph{cited}, specifically Theorem~9.1 of Kahn I, as cited in Kahn III
+(\texttt{moduli.tex}, lines 593--611).
+\end{theorem}
+
+\begin{theorem}[Corollary 6.3]
+\label{thm:kahn-III-decay}
+For fixed $(\bar r,\bar q,\bar n)$ there are $\epsilon>0$ and $l$ such that, for infinitely
+renormalizable $f$ satisfying the condition, $\operatorname{psimod}(g_n)<\epsilon$ and $n\ge l$ imply
+\[
+\operatorname{psimod}(g_{n-l})\ <\ \tfrac12\,\operatorname{psimod}(g_n).
+\]
+\emph{Status:} proved here from the two preceding theorems (\texttt{moduli.tex}, lines 613--619).
+\end{theorem}
+
+\begin{theorem}[Beau bounds for molecule classes]
+\label{thm:kahn-III-beau}
+Every family of renormalization combinatorics satisfying a fixed $(\bar r,\bar q,\bar n)$-molecule
+condition has beau a priori bounds.  \emph{Status:} proved here (\texttt{moduli.tex}, lines 635--640).
+\end{theorem}
+
+\begin{theorem}[Corollary 6.4: JLC and MLC]
+\label{thm:kahn-III-mlc}
+If $f_c(z)=z^2+c$ is infinitely renormalizable and satisfies the molecule condition, then $J(f_c)$ is
+locally connected and $\M$ is locally connected at $c$.  \emph{Status:} conditional on the rigidity
+input of Lyubich, \emph{Dynamics of quadratic polynomials I--II} (\texttt{intro.tex}, lines 36--41).
+\end{theorem}
+
+\paragraph{Proof strategy (from the source).}
+Primitive renormalizations are encoded by nested relative $\M$-copies and bounded $(r,q,n)$ data
+(\texttt{kingdom.tex}, lines 178--211).  The Yoccoz puzzle and principal nest, with $\psi$-moduli,
+supply the geometry (\texttt{intro.tex}, lines 78--100).  The high-period improvement compares the
+bottom and top principal-nest geometry (\texttt{moduli.tex}, lines 1--20).  It is combined with the
+bounded-period theorem (\texttt{moduli.tex}, lines 593--622), and iterating the improvement gives the
+uniform and beau bounds (\texttt{moduli.tex}, lines 613--640).
+
+\paragraph{External inputs.}
+Kahn I (bounded-period theorem); Kahn--Lyubich, \emph{Quasi-additivity law in conformal geometry}
+(proof machinery); Kahn--Lyubich II (analogous results and Lemma~5.3); Lyubich, \emph{Dynamics of
+quadratic polynomials I--II} (the implication for $J(f_c)$ and $\M$); Douady--Hubbard, \emph{On the
+dynamics of polynomial-like maps} (background).
+
+\paragraph{MLC scope.}
+The paper claims local connectivity of $J(f_c)$ and of $\M$ at the corresponding parameter, for
+infinitely renormalizable quadratics satisfying the molecule condition (\texttt{intro.tex}, lines
+30--41).  It does not claim global local connectivity of $\M$, nor local connectivity for all
+infinitely renormalizable quadratics (\texttt{intro.tex}, lines 12--15 and 43--48).
+
+\section{Kahn IV: elephant eyes}
+\label{sec:kahn-IV}
+
+\paragraph{Identity.}
+J.~Kahn and M.~Lyubich, \emph{A priori bounds for some infinitely renormalizable quadratics:
+IV. Elephant Eyes}, arXiv:2601.21905 (2026) \cite{KahnLyubichElephant}.  The main TeX file is
+\texttt{refs/arxiv-2601.21905/main.tex}.  The source says that the result was obtained around
+2010 and reproduced from a January 2020 version (\texttt{intro.tex}, lines 3--13).
+
+\paragraph{Scope.}
+Parts I--III treat bounded combinatorics.  Part IV treats unbounded combinatorics: arbitrary
+$1/q$-limbs with renormalization periods $p=q+O(1)$ (\texttt{intro.tex}, lines 18--29).
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Setup.} Start with an even quadratic-like map $f\colon U'\to U$ with connected Julia set
+and both fixed points repelling.  The fixed point $\beta$ is the landing point of the external
+$0$-ray; $\alpha$ is the landing point of $q>1$ rays, cyclically permuted with rotation number
+$p/q$.  These rays define sectors $S_i$ (\texttt{elcomb.tex}, lines 5--20).
+\item \emph{Elephant-eye combinatorics} $(\mathrm E1)$--$(\mathrm E3)$.  $(\mathrm E1)$: $\alpha$ has
+rotation number $1/q$; $\Upsilon'$ maps two-to-one onto $S_1$; each $S_i'$ and $Z_i'$ maps univalently
+onto $S_{i+1}$ for $i=1,\dots,q-2$; the terminal sectors map univalently onto
+$\Upsilon\cup\bigcup_iZ_i\cup(-R_i)$ (\texttt{elcomb.tex}, lines 36--47).  $(\mathrm E2)$: $K_0$ is the
+only little Julia set in $\Upsilon$ (lines 49--50).  $(\mathrm E3)$: $p=q+b$ with $b\le\bar b$ bounded,
+$q$ unbounded, and, for simplicity, $b<q$ (lines 52--59).
+\item \emph{Hubbard tree of little Julia sets.}  The tree spanned by the little Julia sets, collapsed to
+points; its vertices are the collapsed $K_i$, the fixed point $\alpha$, and branch points
+(\texttt{elcomb.tex}, lines 61--73).
+\item \emph{A priori bounds.}  The source gives no single formal definition.  Its geometric content is a
+fundamental annulus of definite modulus which avoids the non-central top-level little Julia sets
+(``unbranched''; \texttt{lc.tex}, lines 2--8).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Main estimate]
+\label{thm:kahn-IV-main-estimate}
+For every ideal marking $\mathcal I=(I_1,\dots,I_p)$ of the hyperbolic plane $\D$,
+\[
+\mathcal W(\D,\mathcal I)-O(p)\ \le\ 2\sum_{\{I_m,I_n\}}\mathcal W\{I_m,I_n\}\ \le\ \mathcal W(\D,\mathcal I),
+\]
+where the sum runs over unordered pairs.  \emph{Status:} proved in the paper
+(\texttt{canon.tex}, lines 172--183).  This is the disk case of the thin--thick decomposition that
+the abstract calls the new tool for bordered Riemann surfaces (\texttt{main.tex}, lines 34--40).
+\end{theorem}
+
+\begin{theorem}[Bounded degree]
+\label{thm:kahn-IV-bounded-degree}
+Every Hubbard-tree edge maps under $f^p$ at most two-to-one onto at most $b+1$ consecutive edges.
+\emph{Status:} proved in the paper (\texttt{elcomb.tex}, lines 168--190).
+\end{theorem}
+
+\begin{theorem}[Amplification]
+\label{thm:kahn-IV-amplification}
+For every $\lambda>1$ there are thresholds $\underline W_{\rm loc}(N)$ and $\underline p(\lambda,N,L)$ such
+that, for sufficiently large $N$ and $L$, the vertical weight satisfies $W^{\rm ver}\ge\lambda\,W_{\rm loc}$
+whenever $W_{\rm loc}\ge\underline W_{\rm loc}(N)$ and $p\ge\underline p(\lambda,N,L)$.
+\emph{Status:} proved in the paper (\texttt{confined.tex}, lines 180--196).
+\end{theorem}
+
+\begin{remark}
+\label{rem:kahn-IV-unclear}
+The macro file declares two environments, ``Main Theorem (physical version)'' and ``Main Theorem
+(dynamical version)'', but never states them (\texttt{macros.tex}, lines 17--18).  So the final
+a priori bounds statement and its constants are not recoverable as a numbered theorem from this
+TeX source.  We record only the estimates above, and the abstract's claim that the paper proves a
+priori bounds for elephant-eye combinatorics.
+\end{remark}
+
+\paragraph{Local connectivity and MLC claims.}
+The source states local connectivity of the Julia sets under consideration by citing Hu--Jiang and Jiang,
+and MLC at the corresponding parameters by Lyubich's machinery together with little Mandelbrot copies on
+Ecalle--Voronin cylinders (\texttt{lc.tex}, lines 2--17).  The external inputs are Lyubich 1997, \S\S 9.2 and 11
+(\texttt{lc.tex}, lines 9--11 and 46--50).  The source does not cite an unpublished ``Elephant puzzles''
+manuscript; the unpublished inputs it does cite are Dudko--Lyubich--Peterson, \emph{Taming the elephants}
+(in preparation) and Cheritat's work on small copies in elephants (\texttt{bib.tex}, lines 14--24).
+
+\paragraph{External inputs.}
+Lyubich, \emph{Dynamics of quadratic polynomials I--II} (\texttt{bib.tex}, lines 66--67); Kahn I, II and III
+(\texttt{bib.tex}, lines 38--59); Hu--Jiang (unpublished, 1993) and Jiang (\texttt{bib.tex}, lines 26--32);
+Douady and Lavaurs, geometric limits of parabolic bifurcations (\texttt{bib.tex}, lines 18--20 and 34--36).
+
+\paragraph{MLC scope.}
+The claim is local connectivity and MLC for elephant-eye combinatorics, with $q$ unbounded and
+$p=q+O(1)$.  It is not a claim for all infinitely renormalizable parameters, and the paper does not claim
+the full MLC conjecture (\texttt{intro.tex}, lines 18--29; \texttt{lc.tex}, lines 9--17).
+
+\paragraph{Proof strategy (from the source).}
+The combinatorics are encoded by Hubbard-tree arcs and a bounded-degree lemma for $f^p$
+(\texttt{elcomb.tex}, lines 129--190).  Canonical laminations and thin--thick decompositions are
+developed for marked hyperbolic planes and bordered Riemann surfaces (\texttt{canon.tex}, lines 150--183
+and 275--520).  Geometric widths are converted into dynamical weights (\texttt{weights.tex}, lines 1--20 and
+228--250), pull-off arguments handle bounded and unbounded combinatorics (\texttt{pulloff.tex}, lines 1--12;
+\texttt{confined.tex}, lines 1--14), and vertical weight is amplified (\texttt{confined.tex}, lines 180--196 and
+582--712).  Unbranched a priori bounds then feed the rigidity and local connectivity machinery
+(\texttt{lc.tex}, lines 2--18).
+
+\section{Dudko--Lyubich: satellite parameters}
+\label{sec:dl-satellite}
+
+\paragraph{Identity.}
+D.~Dudko and M.~Lyubich, \emph{Local connectivity of the Mandelbrot set at some satellite parameters of
+bounded type}, arXiv:1808.10425; Geometric and Functional Analysis 33 (2023), no.~4, 912--1047
+\cite{DudkoLyubichSatellite}.  The main file is \texttt{refs/arxiv-1808.10425/MLCatSatParam.tex}, whose title
+and authors are at lines 713--718.  The Feigenbaum paper cites this work under the title
+``parameter values of bounded type''; we use the arXiv title.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Infinitely renormalizable parameter.}  $c\in\bigcap_{i\ge0}\operatorname{Dom}\mathcal R_{\rm QL}^i$
+(\texttt{MLCatSatParam.tex}, lines 2238--2244).
+\item \emph{Bounded (satellite) type.}  The $\mathcal R_{\rm QL}$-orbit of $c$ lies in finitely many maximal
+small Mandelbrot copies; the type is \emph{bounded satellite type} if all these copies are satellite copies
+(lines 2243--2247).
+\item \emph{Primary satellite copies.}  For $r\in\mathbb Q\cap(0,1)$, $\mathcal M_r$ is the unique copy attached at
+the parabolic parameter $c(r)$ on the main cardioid with rotation number $r$ (lines 2250--2254).  Iterated copies
+are $\mathcal M_{r,s}:=\mathcal R_r^{-1}(\mathcal M_s)$ and $\mathcal M_{r,s,t}:=\mathcal R_{r,s}^{-1}(\mathcal M_t)$
+(lines 2254--2259).
+\item \emph{Construction.}  Fix an $\mathcal R_c$-periodic $c(\theta)\in\partial\mathcal H$ of period $m$ and a copy
+$\mathcal M_0$ near $c(\theta)$; $\mathcal M_{n-1}$ is the unique inverse image under $\mathcal R_c^m$ still near
+$c(\theta)$, so $\mathcal M_n$ shrinks to $c(\theta)$ (lines 876--893).  The associated parameter is $c_n$
+(lines 898--905).
+\item \emph{Unbranched a priori bounds.}  For infinitely many renormalizations $f_n\colon U_n\to V_n$,
+$V_n\cap\operatorname{Post}(f)\subset K(f_n)$ and $\operatorname{mod}(V_n\setminus U_n)\ge\varepsilon>0$
+(lines 2261--2269).
+\item \emph{Valuable flower.}  The combinatorial connected hull of the cycle of secondary small filled Julia sets;
+it is forward invariant and contains the postcritical set (lines 998--1002 and 7084--7095).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Main theorem of the satellite paper]
+\label{thm:dl-sat-main}
+There is a small copy $\mathcal M_0$ near $c(\theta)$ such that the map
+\[
+\mathcal R_c^m\colon\ \{c(\theta)\}\cup\bigcup_{n<0}\mathcal M_n\ \longrightarrow\
+\{c(\theta)\}\cup\bigcup_{n\le0}\mathcal M_n
+\]
+is $(1+\varepsilon)$-conformal at $c(\theta)$.  For every $n\le0$, $\bigcap_{i\ge0}\operatorname{Dom}(\mathcal R_n^i)=\{c_n\}$,
+the Julia set $J_{c_n}$ is locally connected, and $J_{c_n}$ has positive area.
+\emph{Status:} proved in the paper (\texttt{MLCatSatParam.tex}, lines 894--907).  The positive-area claim
+uses the Avila--Lyubich estimates, which are cited (lines 1017--1023).
+\end{theorem}
+
+\begin{theorem}[Valuable flowers]
+\label{thm:dl-sat-flowers}
+The quadratic polynomial $p_n(z)=z^2+c_n$ has a forward-invariant valuable flower $X_n$ containing its
+postcritical set and lying near the closed Siegel disk of $z^2+c(\theta)$ (\texttt{MLCatSatParam.tex}, lines 908--911).
+\emph{Status:} proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Ternary small copy]
+\label{thm:dl-sat-ternary}
+Near a selected ternary parabolic prepacman $\mathbf F_{r,s,f}$ there is a ternary satellite copy
+$\mathbf M_0=\mathbf M_{r,s,k}$ (\texttt{MLCatSatParam.tex}, lines 6798--6823).  \emph{Status:} proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Projection of valuable flowers]
+\label{thm:dl-sat-projection}
+For $n\ll0$ and every $\mathbf G_n\in\mathbf M_n$, the enlarged and ordinary valuable flowers project to nice
+flowers in a prescribed neighbourhood of the Siegel disk (\texttt{MLCatSatParam.tex}, lines 7084--7095).
+\emph{Status:} proved in the paper.
+\end{theorem}
+
+\paragraph{What is not proved.}
+The paper does not prove a general scaling law for primary satellite copies; the authors say that this
+remains suggested by pictures (lines 992--995 and 6818--6828).  It also says that the first partial copy
+$\mathbf M(\mathcal H_{r,s})$ is not known to be bounded or complete (lines 6818--6828).
+
+\paragraph{Proof strategy (from the source).}
+A hyperbolic pacman-renormalization unstable manifold is built near a periodic Siegel map (lines 1013--1015).
+A ternary satellite copy is built there from external rays, quadratic-like thickening, straightening and
+Yoccoz's inequality (lines 6798--6823).  Valuable flowers are built in the transcendental plane and projected
+to pacman planes (lines 998--1002), and flowers and hybrid classes are transferred through stable laminations
+to quadratic polynomials (lines 1008--1015).  Hyperbolicity and asymptotically conformal holonomy give scaling
+(lines 1013--1017).  Rigidity comes from expansion, and local connectivity of $J$ from unbranched a priori
+bounds; positive area uses the Avila--Lyubich estimates (lines 1017--1023).
+
+\paragraph{External inputs.}
+Dudko--Lyubich--Selinger, \emph{Pacman renormalization and self-similarity of the Mandelbrot set near Siegel
+parameters} (\texttt{bib.tex}, lines 57--59); Douady--Hubbard straightening (\texttt{bib.tex}, lines 49--52);
+Yoccoz's inequality; Cheraghi--Shishikura, \emph{Satellite renormalization of quadratic polynomials},
+arXiv:1509.07843 (context only); Avila--Lyubich, \emph{Lebesgue measure of Feigenbaum Julia sets} (2022), for
+positive area; Jiang, McMullen and Lyubich, for local connectivity from unbranched a priori bounds; Lomonaco--Petersen,
+for the obstruction to quasiconformal equivalence of satellite copies (\texttt{MLCatSatParam.tex}, lines 6824--6828).
+
+\paragraph{MLC scope.}
+The positive claim is local: $\M$ is locally connected at the constructed infinitely renormalizable parameters
+$c_n$ of bounded satellite type, and $J_{c_n}$ is locally connected of positive area (lines 724--730 and 894--907).
+The paper recalls that global MLC would require every connected component of the non-escaping set of
+$\mathcal R_{\rm QL}$ to be a singleton (lines 2240--2244), so it is not a proof of global MLC.
+
+\paragraph{Unclear.}
+The main TeX source has no formal definition of an ``itinerary''; the paper uses landing-time indexing $P(i)$ of
+puzzle pieces instead (lines 7095--7103).
+
+\section{MLC at Feigenbaum points (Dudko--Lyubich)}
+\label{sec:dl-feigenbaum}
+
+\paragraph{Identity.}
+D.~Dudko and M.~Lyubich, \emph{MLC at Feigenbaum points}, arXiv:2309.02107 (2023); Publications
+Math\'ematiques de l'IH\'ES 143 (2026), 97--141 \cite{DudkoLyubichFeigenbaum}.  The main file is
+\texttt{refs/arxiv-2309.02107/Feigen.tex}, whose title and authors are at lines 140--142.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Quadratic-like map and fundamental annulus.}  A holomorphic double branched covering
+$f\colon X\to Y$ between Jordan disks $X\Subset Y\subset\C$, with one critical point (usually $0$).  The fundamental
+annulus is $A=Y\setminus\overline X$, and $\modulus f:=\modulus A$ (\texttt{Feigen.tex}, lines 1679--1686).
+\item \emph{Filled Julia set and germ.}  $K(f)=\{z:\ f^n(z)\in X\ \text{for all}\ n\ge0\}$; two maps with
+connected Julia sets have the same germ if they share the filled Julia set and agree near it
+(lines 1686--1700).
+\item \emph{Hybrid conjugacy.}  A quasiconformal conjugacy $h\colon(Y,X)\to(\widetilde Y,\widetilde X)$ with
+$\bar\partial h=0$ almost everywhere on the filled Julia set (lines 1706--1711).
+\item \emph{Feigenbaum parameter.}  The paper calls the infinitely renormalizable quadratic polynomials of bounded type
+Feigenbaum parameters.  The abstract makes this explicit, and the introduction extends the name to ``all infinitely
+renormalizable parameters of bounded type'' (\texttt{Feigen.tex}, lines 150--165 and 210--216).  A Feigenbaum map is
+one with all renormalization periods bounded by some $\bar p$ (lines 308--315).
+\item \emph{Beau bounds.}  The constant $\mu>0$ depends only on $\bar p$, once $n$ is large; the threshold may
+depend on the initial modulus (lines 315--322).
+\item \emph{Renormalization conjecture.}  For every $\bar p$, $\mathcal R$ has a renormalization horseshoe
+$\mathcal A_{\bar p}$ of type-$\bar p$ Feigenbaum maps on which it acts hyperbolically with one-dimensional
+unstable foliation (lines 337--342).
+\item \emph{Self-similarity over $\mathcal I_{\bar p}$.}  The straightening map
+$\chi\colon\mathcal M^{n+1}(c)\to\mathcal M^n(\chi(c))$ is $C^{1+\delta}$-conformal at every $c\in\mathcal I_{\bar p}$,
+uniformly (lines 346--355).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Main A]
+\label{thm:dl-fei-A}
+Every Feigenbaum quadratic-like map has a priori beau bounds.  \emph{Status:} proved in the paper
+(\texttt{Feigen.tex}, lines 324--328).
+\end{theorem}
+
+\begin{theorem}[Main B]
+\label{thm:dl-fei-B}
+The Mandelbrot set is locally connected at every Feigenbaum parameter (\texttt{Feigen.tex}, lines 330--335).
+\emph{Status:} deduced from Main A and Lyubich's Rigidity Theorem (\emph{Dynamics of quadratic polynomials I--II}, cited
+in the paper as $[L_1]$; lines 3370--3374).  It is not an independent proof from scratch.
+\end{theorem}
+
+\begin{theorem}[Theorem C: renormalization conjecture]
+\label{thm:dl-fei-C}
+For every combinatorial bound $\bar p$, the Renormalization Conjecture is valid in the space of quadratic-like
+maps (\texttt{Feigen.tex}, lines 337--344).  \emph{Status:} obtained in the paper from the cited universality theorem
+of Lyubich (\emph{Feigenbaum--Coullet--Tresser universality and Milnor's hairiness conjecture}, Ann.\ of Math.\ 149
+(1999), cited as $[L_2]$) together with Sullivan, McMullen, and Avila--Lyubich (lines 337--344 and 3376--3410).  We
+record it as conditional on these inputs.
+\end{theorem}
+
+\begin{theorem}[Theorem D: self-similarity]
+\label{thm:dl-fei-D}
+For every $\bar p$, the Mandelbrot set is self-similar over $\mathcal I_{\bar p}$ (\texttt{Feigen.tex}, lines 346--360).
+\emph{Status:} deduced from Theorem C; it is not a separate direct theorem.
+\end{theorem}
+
+\begin{proposition}[Teichm\"uller contraction]
+\label{prop:dl-fei-teich}
+For every $\bar p$ there is $\Delta_{\bar p}>1$ such that an infinitely renormalizable quadratic polynomial of bounded
+type $\bar p$ has prerenormalizations $g_n=f_c^{p_n}\colon X_n\to Y_n$ with
+\begin{itemize}
+\item[(I)] $\operatorname{Width}(Y_n\setminus X_n)=O(\Delta_{\bar p}^{\,n})$, and
+\item[(II)] $Y_n\setminus K(g_n)$ is disjoint from the level-$n$ bushes.
+\end{itemize}
+\emph{Status:} proved in the paper; the source traces the idea to Sullivan (\texttt{Feigen.tex}, lines 1679--1703).
+\end{proposition}
+
+\begin{theorem}[Primitive pull-off]
+\label{thm:dl-fei-primitive}
+For bounded $\bar p$ and small $\delta$, and for $n$ sufficiently large, if $\operatorname{Width}_\bullet(F_{n,i})=K\gg1$,
+then either $\operatorname{Width}_\bullet(F)\ge 2K$, or the $n$-th renormalization is satellite and $F_{n-1}$ has a
+$\delta$-almost-periodic rectangle of width at least $K/20$ between neighbouring satellite bushes.  \emph{Status:}
+proved in the paper, refining Kahn I (\texttt{Feigen.tex}, lines 2640--2665).
+\end{theorem}
+
+\begin{theorem}[Satellite pull-off]
+\label{thm:dl-fei-satellite}
+For fixed $\bar p$ and sufficiently small $\delta$ there is $C_\delta\to\infty$ as $\delta\to0$ such that a sufficiently
+wide $\delta$-almost-periodic rectangle implies $\operatorname{Width}_\bullet(F_2)\ge C_\delta K$ or
+$\operatorname{Width}_\bullet(F)\ge C_\delta K$, with the analogous shifted alternative for $F=\mathcal R^{n\bullet}(G)$.
+\emph{Status:} proved in the paper (\texttt{Feigen.tex}, lines 2877--2908).
+\end{theorem}
+
+\begin{theorem}[$\psi^\bullet$-bounds]
+\label{thm:dl-fei-psi}
+For every $\bar p$ there are $n>1$ and $K_{\bar p}>1$ such that
+$\operatorname{Width}_\bullet\bigl[(\mathcal R^{n\bullet})^m(F)\bigr]\le K_{\bar p}$ for all sufficiently large $m$.
+\emph{Status:} proved in the paper, using both pull-off theorems and Proposition~\ref{prop:dl-fei-teich}
+(\texttt{Feigen.tex}, lines 3214--3221).
+\end{theorem}
+
+\begin{theorem}[Return to ordinary quadratic-like maps]
+\label{thm:dl-fei-ql}
+For every $\bar p$ there is $K_{\bar p}>1$ such that, for an infinitely renormalizable quadratic-like map $f$ of bounded
+type $\bar p$ and $n\gg1$, the map $f_n$ has a quadratic-like restriction $X_n\to Y_n$ with
+$\operatorname{Width}(Y_n\setminus X_n)\le K_{\bar p}$ (\texttt{Feigen.tex}, lines 3253--3254).  The transfer from
+$\psi^\bullet$- to ordinary quadratic-like maps uses lemmas stated at lines 3260--3271.
+\end{theorem}
+
+\paragraph{Proof strategy (from the source).}
+Primitive pull-off comes from thin--thick decompositions, Hubbard-tree alignment, the Grötzsch inequality and the
+Covering Lemma (\texttt{Feigen.tex}, lines 430--460).  Satellite periodic rectangles are treated separately, with
+spiralling numbers and wave estimates (lines 2908--2970).  Teichm\"uller contraction controls the growth of
+prerenormalization widths (lines 1679--1703).  The two pull-off alternatives, with $C_\delta\gg\Delta_{\bar p}$, give
+the uniform $\psi^\bullet$-bounds (lines 3214--3248).  The final statements use the Rigidity Theorem for MLC and
+universality for the renormalization conclusions (lines 330--360).
+
+\paragraph{External inputs.}
+Lyubich, \emph{Dynamics of quadratic polynomials I--II} (rigidity for Main B; \texttt{Feigen.tex}, lines 3370--3374);
+Lyubich, \emph{Feigenbaum--Coullet--Tresser universality and Milnor's hairiness conjecture} (Theorem C; lines 3376--3380);
+Sullivan, \emph{Quasiconformal homeomorphisms in dynamics, topology and geometry}, Proc.\ ICM (source of the
+Teichm\"uller contraction; lines 3415--3418); Kahn I (lines 3362--3365); Kahn--Lyubich, \emph{The quasi-additivity
+law in conformal geometry}, Ann.\ of Math.\ 169 (2009) (Covering Lemma; lines 3367--3370); the satellite paper
+(lines 3340--3344).
+
+\paragraph{MLC scope.}
+The claim is MLC at every Feigenbaum parameter in the paper's sense, that is, at every infinitely renormalizable
+quadratic polynomial of bounded type, with local connectivity of the corresponding Julia sets
+(\texttt{Feigen.tex}, lines 150--168 and 330--335).  The period-doubling point and the complex tripling renormalizations
+are the most prominent cases (abstract).  The claim does not cover unbounded combinatorics, and it is not a proof of MLC at all
+parameters.
+
+\section{Kahn--Kapiamba--Lyubich: parabolic families}
+\label{sec:kkl}
+
+\paragraph{Identity.}
+J.~Kahn, A.~Kapiamba and M.~Lyubich, \emph{MLC for parabolically bounded primitive renormalization}, arXiv:2606.27272
+(2026) \cite{KahnKapiambaLyubich}.  The main file is \texttt{refs/arxiv-2606.27272/waves-with-Misha.tex} (metadata in
+\texttt{00README.json}, lines 6--14).
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Types and prime types.}  A type is a small Mandelbrot set $M\subsetneq\M$; it is \emph{prime} if no type
+$M'$ satisfies $M\subsetneq M'\subsetneq\M$ (\texttt{waves-with-Misha.tex}, lines 111--115).  Prime types attached to
+the main hyperbolic component are satellite; all others are primitive (lines 126--132).
+\item \emph{Parabolic tail.}  $\{\Phi_n\circ\dots\circ\Phi_q(M):\ n\ge q\}$, where $M\subset\widehat M_{1/q}$ and the
+$\Phi_j$ are the selected limb insertions (lines 144--151).
+\item \emph{Parabolically bounded family.}  A finite union of types and parabolic tails (lines 149--153).  Equivalently,
+after deleting finitely many types, its renormalizations have rotation number $1/q$, each limb contains at most $B$
+small filled Julia components, and components in $\mathcal L_0$ map into $\bigcup_{|j|\le B}\mathcal L_j$
+(lines 659--668).
+\item \emph{Beau bounds} as in Definition~\ref{def:apriori-beau} (lines 117--123).
+\item \emph{Rigid family.}  MLC holds at every infinitely renormalizable quadratic polynomial in $\M$ whose combinatorics
+lie in the family (lines 160--163).
+\item \emph{Super-optimism.}  For every $M>0$ there is a finite $\mathcal C'\subset\mathcal C$ such that every renormalizable
+$\psi$-ql map $F$ with combinatorics in $\mathcal C\setminus\mathcal C'$ and $\mathcal W(\mathcal RF)\ge M$ satisfies
+$\mathcal W(F)\ge M\,\mathcal W(\mathcal RF)$ (lines 207--215 and 611--612).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Theorem A]
+\label{thm:kkl-A}
+Every parabolically bounded family of prime primitive types has beau bounds.  \emph{Status:} proved in the paper
+(\texttt{waves-with-Misha.tex}, lines 153--157).  The paper states that beau bounds alone do not establish MLC.
+\end{theorem}
+
+\begin{theorem}[Theorem B]
+\label{thm:kkl-B}
+Every family of prime primitive types with beau bounds and bounded puzzle Teichm\"uller diameter is rigid
+(lines 160--165).  \emph{Status:} the paper observes that the argument of Lyubich's 1997 paper already gives rigidity
+under this weaker hypothesis.  We record it as derived from the rigidity input of Section~\ref{sec:apriori-framework}.
+\end{theorem}
+
+\begin{theorem}[Theorem C]
+\label{thm:kkl-C}
+Every parabolically bounded family of prime primitive types is rigid (lines 167--171).  \emph{Status:} conditional on
+Theorem B and on an input from the unpublished manuscript \emph{Elephant puzzles} (Dudko--Kapiamba--Lyubich--Peterson,
+in preparation), which gives bounded puzzle Teichm\"uller diameter for parabolic tails (lines 167--171).
+\end{theorem}
+
+\begin{theorem}[Theorem D]
+\label{thm:kkl-D}
+Every parabolically bounded family of prime primitive types is super-optimistic (lines 218--221 and 693--696).
+\emph{Status:} proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Bounded optimism, cited from Kahn I]
+\label{thm:kkl-bounded-optimism}
+There is a universal $\varepsilon>0$ such that every bounded family of primitive types is $\varepsilon$-optimistic
+(lines 607--610).  \emph{Status:} cited from Kahn I (\texttt{K06} in the source).
+\end{theorem}
+
+\begin{theorem}[Asymptotic optimism]
+\label{thm:kkl-asymptotic}
+Every super-optimistic family of prime primitive types has beau bounds (lines 612--615).  \emph{Status:} proved in the
+paper, using bounded optimism.
+\end{theorem}
+
+\begin{theorem}[Value theorem]
+\label{thm:kkl-value}
+If $F$ is primitively renormalizable and periodically repelling, with core eigenvalue $\lambda_F$, then there is a
+$\lambda_F$-expanding valuation for $F$ (\texttt{value1.tex}, lines 4--19).  \emph{Status:} proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Thick--thin decomposition]
+\label{thm:kkl-thick-thin}
+For a Riemann surface $\mathcal V$ with ideal marking $\mathcal I$,
+\[
+\mathcal W(\mathcal V,\mathcal I)-O\bigl(|\chi(\mathcal V)|+|\mathcal I|\bigr)\ \le\ 2\,\|\mathcal W_{\rm can}(\mathcal V,\mathcal I)\|\ \le\ \mathcal W(\mathcal V,\mathcal I).
+\]
+\emph{Status:} cited from \texttt{KL:eyes}, which is Part IV, Section~\ref{sec:kahn-IV} (\texttt{waves-with-Misha.tex}, lines
+1964--1978).  The disk case is Theorem~\ref{thm:kahn-IV-main-estimate}.
+\end{theorem}
+
+\begin{theorem}[Wave Lemma]
+\label{thm:kkl-wave}
+If $A'$ is a wave ending at $I'$ and $f$ has degree at most $d$ on $I'$, then some wave $A\subset f_*A'$ satisfies
+$\mathcal W(A')\le\mathcal W(A)+O(1+\log d)$ (\texttt{waves-with-Misha.tex}, lines 2148--2157).  \emph{Source of the
+notion:} the wave was introduced in the Dudko--Lyubich Feigenbaum paper, and the Wave Lemma is stated there
+(\texttt{waves-with-Misha.tex}, lines 262--264).  The lemma is therefore cited from that paper.
+\end{theorem}
+
+\begin{theorem}[Wanderers theorem]
+\label{thm:kkl-wanderers}
+Let $g\colon X\to Y$ be proper holomorphic of degree $D$, let $\mathcal B\subset Y$ be a finite disjoint compact connected
+set containing the critical values, and let $\mathcal A$ run over components of $g^{-1}(\bigcup\mathcal B)$.  Given an
+oriented partial foliation $\mathcal F$ whose leaves start in $\widehat{\mathcal A}\subset\mathcal A$, end in $\mathcal A$,
+visit at least $n-1$ intermediate components and do not cross their starting component, with degree at most $d$ over
+$\mathcal B$,
+\[
+\|\mathcal W(\mathcal F)\|\ \le\ \frac{2d}{n}\,\|\mathcal W^{h+v}_{\rm can}(Y\setminus\textstyle\bigcup\mathcal B)\|
+\;+\;C\bigl(|\chi(Y)|,|\mathcal B|,D\bigr).
+\]
+\emph{Status:} proved in the paper (\texttt{waves-with-Misha.tex}, lines 2342--2361).
+\end{theorem}
+
+\paragraph{Proof strategy (from the source).}
+Parabolic tails are converted into uniformly parabolically bounded combinatorics after deleting finitely many types
+(lines 670--684).  A life-improvement theorem says that high-type near-degeneracy forces width amplification
+(lines 699--703).  Canonical laminations are analysed with the thick--thin decomposition, values, waves and translation
+geometry (lines 224--267).  Theorem D follows from life improvement and parabolic boundedness (lines 704--710), Theorem A
+from Theorem D and bounded optimism (lines 212--220), and Theorem C from A, B and the bounded puzzle Teichm\"uller diameter
+of parabolic tails (lines 163--171).
+
+\paragraph{External inputs.}
+Kahn I (bounded optimism and the $\psi$-ql machinery); Kahn--Lyubich II (the asymptotic-optimism precedent; lines 626--630);
+Kahn--Lyubich, \emph{The quasi-additivity law and the covering lemma} (covering lemma; lines 224--225 and 2342--2345);
+Lyubich, \emph{Dynamics of quadratic polynomials I--II} (rigidity; puzzle renormalization; lines 160--163 and 344--347);
+Dudko--Lyubich, Feigenbaum paper (waves and the Wave Lemma; lines 262--264); Kahn--Lyubich IV (thick--thin; \texttt{KL:eyes});
+\emph{Elephant puzzles} (unpublished; used only in Theorem C).  The source also remarks that combining its results with the
+Feigenbaum paper would give beau bounds and rigidity for families with finitely many primitive or satellite types, but this
+needs a transfer between quadratic-like and $\psi^\bullet$-quadratic-like maps that is outside its scope (lines 174--175).
+
+\paragraph{MLC scope.}
+The claim is MLC at every infinitely renormalizable quadratic polynomial in $\M$ whose combinatorics belong to a parabolically
+bounded family of prime primitive types, equivalently that these families are rigid (lines 160--171).  Theorem A alone does
+not establish MLC (lines 160--162).  Theorem C depends on the unpublished input.
+
+\section{Limbs and homeomorphisms (Dudko--Schleicher)}
+\label{sec:dudko-schleicher}
+
+\paragraph{Identity.}
+D.~Dudko and D.~Schleicher, \emph{Homeomorphisms between limbs of the Mandelbrot set}, Proc.\ Amer.\ Math.\ Soc.\ 140
+(2012), no.~6, 1947--1956 (electronically published 23 September 2011) \cite{DudkoSchleickerLimbs}.  The file is
+\texttt{refs/Dudko\_S0002-9939-2011-11047-5.pdf}.
+
+\paragraph{Context.}
+The introduction recalls that an earlier result of the paper's reference $[BF_1]$ shows that limbs with equal denominators
+are homeomorphic, and that those homeomorphisms extend to neighbourhoods of the limbs (\texttt{limbs-2011.txt}, Introduction).
+The main theorem below preserves periods of hyperbolic components, and for that reason the source notes that it cannot extend
+to neighbourhoods of the limbs.
+
+\begin{theorem}[Main Theorem]
+\label{thm:ds-main}
+For any hyperbolic component of $\M$, let $\mathcal L_{p/q}$ and $\mathcal L_{p'/q}$ be two limbs with equal denominators.  Then
+there exists a homeomorphism between them that preserves periods of hyperbolic components.  \emph{Status:} proved in the paper
+(\texttt{limbs-2011.txt}, lines 50--54).  The paper relies on the decoration theorem and on Schleicher's combinatorial
+results (Theorem~\ref{thm:ds-admissibility} below).
+\end{theorem}
+
+\begin{theorem}[Admissibility of numerators, Schleicher]
+\label{thm:ds-admissibility}
+If an angled internal address describes a combinatorial class in $\M$, then the numerators $p_k$ can be changed arbitrarily
+(coprime to $q_k$) and the modified angled internal address still describes a combinatorial class in $\M$.  \emph{Status:} cited,
+Schleicher's Theorem~2.3 as stated in the paper (\texttt{limbs-2011.txt}, lines 292--299).
+\end{theorem}
+
+\paragraph{The combinatorial model.}
+There is a combinatorial model $\M_{\rm comb}$ of the Mandelbrot set, described as a limit of the arrangements $\M_n$ of hyperbolic
+components of period up to $n$ in a certain sense, as in Douady's construction cited by the paper.  There is a canonical continuous
+projection $\pi\colon\M\to\M_{\rm comb}$ whose fibres $\pi^{-1}(c)$ are compact, connected and full (\texttt{limbs-2011.txt}, lines 56--62).
+The MLC conjecture ``can be stated as saying that $\pi$ is a homeomorphism'' (lines 62--63).  So the paper's framework expresses
+MLC as the statement that $\pi$ is a homeomorphism.
+
+\begin{theorem}[Canonical lifting]
+\label{thm:ds-lifting}
+Let $L_1,L_2\subset\M$ be two closed connected combinatorial sets.  For every continuous map
+$f'\colon\pi(L_1)\to\pi(L_2)$ that is canonical with respect to small copies of $\M$, there is a continuous map
+$f\colon L_1\to L_2$ such that the diagram with $\pi$ commutes (\texttt{limbs-2011.txt}, lines 447--450).  \emph{Status:} stated in
+the paper; canonicity of $f'$ is defined there with respect to small copies (lines 431--437).
+\end{theorem}
+
+\paragraph{MLC scope.}
+The paper proves a homeomorphism statement between limbs and a canonical lifting statement between combinatorial sets.  It does
+not claim that limbs are locally connected, and it does not prove MLC: MLC is equivalent to $\pi$ being a homeomorphism.
+
+\section{Summary of this chapter}
+\label{sec:apriori-summary}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.2\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\textwidth}@{}}
+\textbf{Source} & \textbf{Result (label in this chapter)} & \textbf{Status in the source}\\
+\hline
+Kahn I &
+Length comparison; bounded primitive type $\Rightarrow$ a priori bounds (Theorems~\ref{thm:kahn-I-length}, \ref{thm:kahn-I-main}) &
+proved\\
+Kahn II &
+Decoration condition $\Rightarrow$ a priori bounds; beau bounds in decoration classes (Theorems~\ref{thm:kahn-II-main}, \ref{thm:kahn-II-beau}) &
+proved, using the cited bounded-period theorem of Kahn I\\
+Kahn III &
+Molecule condition $\Rightarrow$ a priori bounds; beau bounds for molecule classes (Theorems~\ref{thm:kahn-III-main}, \ref{thm:kahn-III-beau}) &
+proved, using the cited bounded-period theorem of Kahn I\\
+Kahn IV &
+Main estimate, bounded degree, amplification (Theorems~\ref{thm:kahn-IV-main-estimate}--\ref{thm:kahn-IV-amplification}) &
+proved; no numbered main theorem printed in the TeX source\\
+Dudko--Lyubich, satellites &
+$\M$ and $J_{c_n}$ locally connected at constructed bounded-satellite parameters; $J_{c_n}$ of positive area (Theorem~\ref{thm:dl-sat-main}) &
+proved; positive area uses the cited Avila--Lyubich estimates\\
+Dudko--Lyubich, Feigenbaum &
+Main A: beau bounds at Feigenbaum parameters; Main B: MLC at all of them (Theorems~\ref{thm:dl-fei-A}, \ref{thm:dl-fei-B}) &
+Main A proved; Main B deduced from Main A and Lyubich's rigidity\\
+Dudko--Lyubich, Feigenbaum &
+Theorem C: renormalization conjecture for each $\bar p$ (Theorem~\ref{thm:dl-fei-C}) &
+derived from cited inputs\\
+KKL &
+Theorems A and D: beau bounds and super-optimism for parabolically bounded families (Theorems~\ref{thm:kkl-A}, \ref{thm:kkl-D}) &
+proved\\
+KKL &
+Theorems B and C: rigidity under beau bounds and bounded puzzle Teichm\"uller diameter (Theorems~\ref{thm:kkl-B}, \ref{thm:kkl-C}) &
+B derived from Lyubich's argument; C conditional on unpublished \emph{Elephant puzzles}\\
+Dudko--Schleicher &
+Homeomorphisms between limbs with equal denominators, preserving periods (Theorem~\ref{thm:ds-main}) &
+proved\\
+\end{tabularx}
+\caption{Results digested in this chapter and their status in the sources.}
+\label{tab:apriori-summary}
+\end{table}
+
+\paragraph{Logical structure.}
+The a priori bounds results form a chain.  Kahn I supplies the bounded-period improvement and the optimism machinery used by
+Kahn II, Kahn III and KKL.  Dudko--Lyubich's Feigenbaum paper supplies the waves and the $\psi^\bullet$-bounds used by KKL.  The
+thick--thin decomposition of Part IV is used by KKL.  The a priori bounds sources then pass to local connectivity through the
+rigidity input of Section~\ref{sec:apriori-framework}.  The satellite paper proves local connectivity at its constructed
+parameters by a different route, through pacman renormalization.  The limbs paper is independent of these arguments.
+
+\paragraph{Connection to the Lean development.}
+None of the theorems in this chapter is formalized.  The Lean development (see Chapter~\ref{ch:formal-map} and the Lean inventory)
+covers only elementary parts: the quadratic symmetries, the first two components, the real slice, the examples, and the multiplier
+maps.  The root statement is still conditional on the explicit \texttt{RootInput} hypothesis.
+
+\paragraph{Not covered here.}
+Hu--Jiang and Jiang are cited but not digested; their sources are not on arXiv.  Inou--Shishikura and Gaidashev--Yampolsky are cited
+elsewhere and are not digested.  The unpublished \emph{Taming the elephants} and \emph{Elephant puzzles} are not available.  Lyubich's
+Astérisque 261 paper (\emph{Dynamics of quadratic polynomials III}, bibliography key \texttt{LyubichIII}) is in the bibliography but is
+not digested in this chapter.

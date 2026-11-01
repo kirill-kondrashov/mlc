@@ -1,0 +1,181 @@
+
+\section{Appendix A: Extremal length and width}\label{apppendix: width}
+[If you have come to this section from  \cite{decorations} or \cite{molecules},
+looking for Theorem 9.1 of this paper,
+it is now known as Theorem \ref{improving of length}.]
+
+There is a wealth of sources containing background material on extremal length,
+see, e.g., the book of Ahlfors \cite{A}.
+We will briefly summarize the necessary minimum
+(see also the Appendix of \cite{covering lemma}).
+
+\subsection{Definitions} \label{A:def}
+In this section we will think of a path as a smooth map $\gamma\from I \to U$,
+where $I \subset R$ is an interval (that may be open or closed),
+and $\gamma$ is not necessarily proper.
+
+Let $\GG$ be a family of paths on a Riemann surface $U$.
+Given a (measurable) conformal metric $\mu= \mu(z) |dz|$ on $U$,
+let
+$$   \mu (\GG) = \inf_{\gamma\in \GG}  \mu (\gamma).$$
+ where $\mu(\gamma) $ stands for the $\mu$-length of $\gamma$.
+The length of $\GG$  with respect to $\mu$ is defined as
+$$
+   \LL_\mu (\GG) = \frac {\mu(\GG)^2 } {\area_\mu (U)},
+$$
+where $\area_\mu$ is an area form of $\mu$.
+Taking the supremum over all conformal metrics $\mu$, we obtain the {\it extremal length}
+$\LL(\GG)$ of the family $\GG$.
+
+  The {\it extremal width} is the inverse of the extremal length:
+$$
+ \WW(\GG)=\LL^{-1}(\GG).
+$$
+It can be also defined as follows. Consider all conformal  metrics $\mu$ such that
+$\mu(\gamma)\geq 1$ for any $\gamma\in \GG$.  Then $\WW(\GG)$ is the infimum of
+the areas $\area_\mu(U)$ of  all such metrics.
+
+
+\subsection{Electric circuit laws}\label{electric}
+We say that a family  $\GG$ of paths {\it overflows} a family $\GG'$ if
+any path of $\GG$ contains some path of $\GG$.
+Let us say that $\GG$ {\it disjointly overflows}  two families, $\GG_1$ and $\GG_2$,
+if any path of $\gamma\in \GG$ contains the disjoint union $\gamma_1\sqcup \gamma_2$
+of two paths $\gamma_i\in \HH_i$.
+
+The following crucial properties of the extremal length and width show
+that the former behaves like the resistance in electric circuits,
+while the latter behaves like conductance.
+
+\begin{serieslaw}
+Let $\GG$ be a family of paths that disjointly overflows two other families,
+                      $\GG_1$ and $\GG_2$.
+Then
+$$  \LL(\GG) \geq \LL(\GG_1) + \LL(\GG_2), $$
+or equivalently,
+$$  \WW(\GG)\leq \WW(\GG_1)\bigoplus \WW(\GG_2). $$
+\end{serieslaw}
+
+\begin{parallellaw}
+  For any two families $\GG_1$ and $\GG_2$ of paths we have:
+$$
+    \WW(\GG_1\cup \GG_2)\leq \WW(\GG_1) + \WW(\GG_2).
+$$
+If $\GG_1$ and $\GG_2$ are contained in two disjoint open sets, then
+$$
+  \WW(\GG_1\cup \GG_2) = \WW(\GG_1) + \WW(\GG_2)
+$$
+\end{parallellaw}
+
+
+
+\subsection{Transformation rules}\label{trans rules sec}
+ Both extremal length and extremal width  are conformal invariants.
+ More generally, we have:
+\begin{lem}\label{increase}
+   Let $f\from U\to V$ be a holomorphic map between two Riemann surfaces,
+and let $\GG$ be a family of paths on $U$. Then
+$$
+      \LL(f(\GG))\geq \LL(\GG).
+$$
+\end{lem}
+See Lemma 4.1 of \cite{covering lemma} for a proof.
+\begin{rem}
+We push forward \emph{parametrized} paths, so each $\gamma \in \GG$ is mapped to $f \circ \gamma \in f(\GG)$. 
+For example, if $f\from U\to V$ is a degree 2 covering map between annuli (of finite modulus), and $\GG$ is the family of closed paths that go around $U$,
+then $f(\GG)$ includes the closed paths that go twice around another closed path that goes once around $V$. 
+While the extremal length of the closed paths that go once around $V$ is $\LL(\GG)/2$,
+we actually have $\LL(f(\GG)) = 2 \LL(\GG)$ in this example.
+\end{rem}
+
+\begin{cor}\label{two families}
+     Under the circumstances of the previous lemma,
+let $\HH$ be a family of paths in $V$ satisfying the following lifting
+property: any path $\gamma\in \HH$ contains an arc that lifts to some path
+in $\GG$. Then $\LL(\HH)\geq \LL(\GG)$.
+\end{cor}
+
+\begin{proof}
+   The lifting property means that the family $\HH$
+overflows the family $f(\GG)$. Hence $\LL(\HH)\geq \LL(f(\GG))$,
+and the conclusion follows.
+\end{proof}
+
+\begin{cor}\label{Q}
+  Let $Q$ and $Q'$ be two quadrilaterals,
+and let $e\from Q\to Q'$ be a holomorphic map that maps the horizontal sides of $Q$ to the horizontal sides of $Q'$.
+Then $\WW(Q)\leq \WW(Q')$.
+\end{cor}
+
+\begin{proof}
+  Let $\GG$ (resp. $\GG'$) be the family of horizontal paths in $Q$ (resp., in $Q'$).
+ Since the horizontal sides of $Q$ are mapped to the horizontal sides of $Q'$,
+these families satisfy the lifting property of the previous Corollary.
+Hence $\LL(\GG)\leq \LL(\GG')$, and we are done.
+\end{proof}
+
+\begin{lem}\label{modulus transform-2}
+ Let $f\from U\to V$ be a branched covering between two compact Riemann surfaces with boundary.
+Let $A$ be an archipelago in $U$,  $B=f(A)$, and
+assume that  $f\from  A\to B$ is a branched covering of degree $d$. Then
+$$
+      \mod(V, B) \geq d\, \mod (U,  A).
+$$
+\end{lem}
+
+See Lemma 4.3 of \cite{covering lemma} for a proof.
+
+
+Given two compact subsets $A$ and $B$ in a Riemann surface $S$,
+let $\WW_S (A,B)$ stand for the {\it extremal width}
+between them, i.e., the extremal width of the family of paths connecting $A$ to $B$.
+
+\begin{lem}\label{modulus transform-1}
+Let $S$ and $S'$ be two compact Riemann surfaces with boundary.
+and let  $f\from S\to S'$ be a branched covering of degree $D$.
+Let $S'=A'\sqcup B'$, where $A'$ and $B'$ are closed,
+and let  $A=f^{-1}(A')$, $B=f^{-1}(B')$.
+Then
+$$
+      \WW_S(A, B)= D \, \WW (A', B').
+$$
+\end{lem}
+
+See \cite{A} for a proof.
+It makes use of the fact that
+the extremal width $\WW(A,B)$ is achieved on the {\it harmonic foliation} $\FF=\FF_S(A,B)$ connecting $A$ and $B$,
+i.e.,  the gradient foliation of the harmonic function $\om$ vanishing on $0$ and equal to $1$ on $B$.
+Hence $\WW_S(A,B)$ is equal to the $l_1$-norm of the associated  WAD $W_\FF$.
+
+\subsection{Non-Intersection Principle}\label{so principle}
+
+The following important principle says that
+two wide quadrilaterals cannot go non-trivially one across the other:
+
+\begin{lem}\label{no crossing}
+Let us consider two quadrilaterals, $Q_1$ and $Q_2$,
+endowed with the vertical foliations $\FF_1$ and $\FF_2$.
+If $\WW(Q_i)\geq 1$ then \\
+$\bullet$ either there exists a pair of disjoint leaves $\gamma_i$ of the foliations $\FF_i$;\\
+$\bullet$ or $\WW(Q_1)=\WW(Q_2)=1$, and the rectangles perfectly match in the sense that
+   the vertical sides of one of them coincide with the horizontal sides of the other.
+\end{lem}
+
+
+\begin{proof}
+  Assume that the first option is violated,
+so that, every leaf of $\FF_1$ crosses every leaf of $\FF_2$.
+  Let us uniformize our rectangles by standard rectangles,
+$\phi_i\from \BQ(a_i)\to Q_i$, where $a_i\geq 1$.
+Let $\la_i$ be the Euclidean metrics on the $\BQ(a_i)$,
+and let $\mu_i= (\phi_i)_*(\la_i)$.
+Since every vertical leave $\gamma$ of $Q_2$ crosses every vertical leaf of $Q_1$,
+$\mu_1(\gamma)\geq a_1$. Hence $a_2= \WW (Q_2)\leq 1/a_1$,
+which implies that $a_1=a_2=1$. Thus, both $\BQ(a_i)\equiv \BQ$ are the squares.
+
+Moreover, $\mu_1$ must be the extremal metric for $\FF_2$.
+Since the extremal metric is unique (up to scaling), we conclude that
+$\mu_1=\mu_2$. Hence $\phi_2^{-1}\circ \phi_1\from \BQ \to \BQ $
+is the isometry of  the square, and the conclusion follows.
+\end{proof}
+

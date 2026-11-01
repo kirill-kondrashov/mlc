@@ -1,0 +1,342 @@
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\theoremstyle{remark}
+\newtheorem{rem}{Remark}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{notation}{Notation}
+\newtheorem{exc}[thm]{Exercise}
+\newtheorem{exe}[thm]{Exercise}
+\newtheorem{problem}[thm]{Problem}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+
+\newenvironment{pf}{\begin{proof}}{\end{proof}}
+
+
+\font\nt=cmr7
+
+\def\note#1
+{\marginpar
+{\nt $\leftarrow$
+\par
+\hfuzz=20pt \hbadness=9000 \hyphenpenalty=-100 \exhyphenpenalty=-100
+\pretolerance=-1 \tolerance=9999 \doublehyphendemerits=-100000
+\finalhyphendemerits=-100000 \baselineskip=6pt
+#1}\hfuzz=1pt}
+
+\newcommand{\bignote}[1]{\begin{quote} \sf #1 \end{quote}}
+
+
+
+\newcommand{\QED}{\rlap{$\sqcup$}$\sqcap$\smallskip}
+
+\def\sss{\subsubsection}
+
+\newcommand{\di}{\partial}
+\newcommand{\dibar}{\bar\partial}
+\newcommand{\hookra}{\hookrightarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\hra}{\hookrightarrow}
+\newcommand{\imply}{\Rightarrow}
+\def\lra{\longrightarrow}
+\newcommand{\wc}{\underset{w}{\to}}
+\newcommand{\tu}{\textup}
+
+\def\ssk{\smallskip}
+\def\msk{\medskip}
+\def\bsk{\bigskip}
+\def\noi{\noindent}
+\def\nin{\noindent}
+\def\lqq{\lq\lq}
+%\def\sm{\setminus}
+\def\sm{\smallsetminus}
+\def\bolshe{\succ}
+\def\ssm{\smallsetminus}
+\def\tr{{\text{tr}}}
+
+%\renewcommand{\thenotation}{} 
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\ed}{\operatorname{d}}
+\newcommand{\Hdist}{\operatorname{H-dist}}
+%\newcommand{\det}{\operatorname{det}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\inter}{\operatorname{int}}
+\renewcommand{\mod}{\operatorname{mod}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\tl}{\tilde}
+\newcommand{\ind}{ \operatorname{ind} }
+\newcommand{\Dist}{\operatorname{Dist}}
+\newcommand{\len}{\operatorname{\l}}
+\newcommand{\Crit}{\operatorname{Crit}}
+
+\newcommand{\can}{{\mathrm{can}}}
+
+\newcommand{\lp}{\multimap}
+\newcommand{\ta}{\leadsto}
+
+\newcommand{\Area}{\operatorname{Area}}
+%\newcommand{\arg}{\operatorname{arg}}
+\newcommand{\orb}{\operatorname{orb}}
+\newcommand{\HD}{\operatorname{HD}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\length}{\operatorname{length}}
+\newcommand{\dens}{\operatorname{dens}}
+\newcommand{\meas}{\operatorname{meas}}
+\newcommand{\distM}{\operatorname{dist}_{Mon}} 
+\newcommand{\per}{\operatorname{per}}
+\newcommand{\Time}{\operatorname{Time}}
+\newcommand{\depth}{\operatorname{depth}}
+\newcommand{\bidepth}{\operatorname{bidepth}}
+
+\renewcommand{\d}{{\diamond}}
+
+\newcommand{\Dil}{\operatorname{Dil}}
+\newcommand{\Ker}{\operatorname{Ker}}
+\newcommand{\tg}{\operatorname{tg}}
+\newcommand{\codim}{\operatorname{codim}}
+\newcommand{\isom}{\approx}
+\newcommand{\comp}{\circ}
+\newcommand{\esssup}{\operatorname{ess-sup}}
+
+
+\newcommand{\SLa}{\underset{\La}{\Subset}}
+\newcommand{\SUBset}{\Subset}
+\newcommand{\SUPset}{\Supset}
+
+\newcommand{\const}{\mathrm{const}}
+\def\loc{{\mathrm{loc}}}
+\def\fib{{\mathrm{fib}}}
+\def\Graph{{\mathrm{Graph}}}
+
+\newcommand{\eps}{{\varepsilon}}
+\newcommand{\epsi}{{\epsilon}}
+\newcommand{\veps}{{\varepsilon}}
+\newcommand{\De}{{\Delta}}
+\newcommand{\de}{{\delta}}
+\newcommand{\la}{{\lambda}}
+\newcommand{\La}{{\Lambda}}
+\newcommand{\si}{{\sigma}}
+\newcommand{\Si}{{\Sigma}}
+\newcommand{\Om}{{\Omega}}
+\newcommand{\om}{{\omega}}
+
+\newcommand{\up}{{u\psi}}
+
+\newcommand{\al}{{\alpha}}
+\newcommand{\ba}{{\mbox{\boldmath$\alpha$} }}
+\newcommand{\sba}{{\mbox{\scriptsize\boldmath$\alpha$} }}
+\newcommand{\balpha}{{\mbox{\boldmath$\alpha$} }}
+\newcommand{\sbb}{{\mbox{\scriptsize\boldmath$\beta$} }}
+\newcommand{\bbe}{{\mbox{\boldmath$\beta$} }}
+\newcommand{\bga}{{\mbox{\boldmath$\gamma$} }}
+\newcommand{\sbg}{{\mbox{\scriptsize\boldmath$\gamma$} }}
+\newcommand{\bgamma}{{\mbox{\boldmath$\gamma$} }}
+\newcommand{\bk}{{\boldsymbol{\kappa}}}
+\newcommand{\bg}{{\boldsymbol{\gamma}}}
+
+\newcommand{\bare}{{\bar\eps}}
+
+\newcommand{\Ray}{{\mathcal R}}
+\newcommand{\Eq}{{\mathcal E}}
+\newcommand{\PR}{PR}
+
+\newcommand{\AAA}{{\mathcal A}}
+\newcommand{\BB}{{\mathcal B}}
+\newcommand{\CC}{{\mathcal C}}
+\newcommand{\DD}{{\mathcal D}}
+\newcommand{\EE}{{\mathcal E}}
+\newcommand{\EEE}{{\mathcal O}}
+\newcommand{\II}{{\mathcal I}}
+\newcommand{\FF}{{\mathcal F}}
+\newcommand{\GG}{{\mathcal G}}
+\newcommand{\JJ}{{\mathcal J}}
+\newcommand{\HH}{{\mathcal H}}
+\newcommand{\KK}{{\mathcal K}}
+\newcommand{\LL}{{\mathcal L}}
+\newcommand{\MM}{{\mathcal M}}
+\newcommand{\NN}{{\mathcal N}}
+\newcommand{\OO}{{\mathcal O}}
+\newcommand{\PP}{{\mathcal P}}
+\newcommand{\QQ}{{\mathcal Q}}
+\newcommand{\QM}{{\mathcal QM}}
+\newcommand{\QP}{{\mathcal QP}}
+\newcommand{\QL}{{\mathcal Q}}
+
+\newcommand{\RR}{{\mathcal R}}
+% RENEWCOMMAND
+\renewcommand{\SS}{{\mathcal S}}
+\newcommand{\TT}{{\mathcal T}}
+\newcommand{\TTT}{{\mathcal P}}
+\newcommand{\UU}{{\mathcal U}}
+\newcommand{\VV}{{\mathcal V}}
+\newcommand{\WW}{{\mathcal W}}
+\newcommand{\XX}{{\mathcal X}}
+\newcommand{\YY}{{\mathcal Y}}
+\newcommand{\ZZ}{{\mathcal Z}}
+
+
+
+\newcommand{\A}{{\mathbb A}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\bC}{{\bar{\mathbb C}}}
+\newcommand{\D}{{\mathbb D}}
+\newcommand{\Hyp}{{\mathbb H}}
+\newcommand{\J}{{\mathbb J}}
+\newcommand{\Ll}{{\mathbb L}}
+\renewcommand{\L}{{\mathbb L}}
+\newcommand{\M}{{\mathbb M}}
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\T}{{\mathbb T}}
+\newcommand{\V}{{\mathbb V}}
+\newcommand{\U}{{\mathbb U}}
+\newcommand{\W}{{\mathbb W}}
+\newcommand{\X}{{\mathbb X}}
+\newcommand{\Y}{{\mathbb Y}}
+\newcommand{\Z}{{\mathbb Z}}
+
+\newcommand{\VVV}{{\mathbf U}}
+\newcommand{\UUU}{{\mathbf U}}
+
+\newcommand{\tT}{{\mathrm{T}}}
+\newcommand{\tD}{{D}}
+\newcommand{\hyp}{{\mathrm{hyp}}}
+
+\newcommand{\f}{{\bf f}}
+\newcommand{\g}{{\bf g}}
+\newcommand{\h}{{\bf h}}
+\renewcommand{\i}{{\mathbf{ i}}}
+\renewcommand{\j}{{\bar j}}
+
+
+\newcommand{\n}{{\mathbf{n}}}
+\newcommand{\q}{{\mathbf{q}}}
+\newcommand{\p}{{\mathbf{p}}}
+\newcommand{\s}{{\mathbf{s}}}
+\newcommand{\bl}{{\boldsymbol{\lambda}}}
+% RENEWCOMMAND
+\renewcommand{\r}{{\mathbf{r}}}
+\newcommand{\bt}{{\mathbf{t}}}
+\newcommand{\psimod}{{ \mathbf{mod}\, }}
+% RENEWCOMMAND
+\renewcommand{\k}{{\mathbf{k}}}
+\newcommand{\m}{{\mathbf{m}}}
+
+\def\Bf{{\mathbf{f}}}
+\def\Bg{{\mathbf{g}}}
+\def\Bd{{\mathbf{d}}}
+\def\BG{{\mathbf{G}}}
+\def\Bh{{\mathbf{h}}}
+\def\BH{{\mathbf{H}}}
+
+\def\BA{{\mathbf{A}}}
+\def\BB{{\mathbf{B}}}
+\def\BT{{\mathbf{T}}}
+\def\Bj{{\mathbf{j}}}
+\def\Bphi{{\boldsymbol{\Phi}}}
+\def\Bpsi{{\boldsymbol{\Psi}}}
+\def\BPsi{{\boldsymbol{\Psi}}}
+\def\B0{{\mathbf{0}}}
+\def\BUps{{\boldsymbol{\Upsilon}}}
+\def\BF{{\mathbf{F}}}
+\def\BLa{{\boldsymbol{\La}}}
+\def\BP{{\mathbf{P}}}
+\def\BQ{{\mathbf{Q}}}
+\def\BS{{\mathbf{S}}}
+\def\BV{{\mathbf{V}}}
+\def\BU{{\mathbf{U}}}
+\newcommand{\BW}{{\mathbf{W}}}
+\def\BY{{\mathbf{Y}}}
+\def\BZ{{\mathbf{Z}}}
+\def\BE{{\mathbf{E}}}
+
+
+
+\def\Ups{{\Upsilon}}
+\def\BUps{{\boldsymbol{\Upsilon}}}
+\def\BLa{{\boldsymbol{\La}}}
+
+\newcommand{\Comb}{{\it Comb}}
+\newcommand{\Top}{{\it Top}}
+\newcommand{\QC}{\mathcal QC}
+\newcommand{\Def}{\mathcal Def}
+\newcommand{\Teich}{\mathcal Teich}
+%\newcommand{\QL}{{\cal{QG}}}
+\newcommand{\PPL}{{\mathcal P}{\mathcal L}}
+\newcommand{\Jac}{\operatorname{Jac}}
+% RENEWCOMMAND
+\renewcommand{\DH}{\operatorname{DH}}
+\newcommand{\Homeo}{\operatorname{Homeo}}
+\newcommand{\AC}{\operatorname{AC}}
+\newcommand{\Dom}{\operatorname{Dom}}
+\newcommand{\area}{\operatorname{area}}
+
+\newcommand{\Aff}{\operatorname{Aff}}
+\newcommand{\Euc}{\operatorname{Euc}}
+\newcommand{\MobC}{\operatorname{M\ddot{o}b}({\mathbb C}) }
+\newcommand{\PSL}{ {\cal{PSL}} }
+\newcommand{\SL}{ {\cal{SL}} }
+\newcommand{\CP}{ {\mathbb{CP}}   }
+
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\hf}{{\hat f}}
+\newcommand{\hz}{{\hat z}}
+\newcommand{\hM}{{\hat M}} 
+
+
+\renewcommand{\lq}{``}
+\renewcommand{\rq}{''}
+
+\newcommand{\fjset}{FJ-set}
+\newcommand{\from}{\mathpunct:}
+
+
+%&&&&&&&&&&    Content   &&&&&&&&
+
+
+\catcode`\@=12
+
+\def\Empty{}
+\newcommand\oplabel[1]{
+  \def\OpArg{#1} \ifx \OpArg\Empty {} \else
+  	\label{#1}
+  \fi}
+		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Insert a postscript figure using psfig.
+% Usage:	\realfig{label}{filename}{caption}
+%
+% uses psfig macros: must have \input{psfig} in the preamble to use
+% it. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\long\def\realfig#1#2#3#4{
+\begin{figure}[htbp]
+%%%\centerline{\psfig{figure=#3,height=#2}}
+\centerline{\psfig{figure=#2,width=#4}}
+\caption[#1]{#3}
+\oplabel{#1}
+\end{figure}}
+
+%&&&&&&&&&&&&       List of figures              &&&&&&&&&
+%
+%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+\newcommand{\comm}[1]{}
+\newcommand{\comment}[1]{}
+%\renewcommand{\marginpar}[1]{}
+

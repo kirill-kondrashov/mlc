@@ -1,0 +1,375 @@
+\section{Yoccoz puzzle, decorations, and the Modified Principal Nest}\label{principal nest}
+
+Let $(f_\la: U_\la'\ra U_\la)$ be a quadratic-like family over a disk $\La\subset \C$.
+Assume that this family is good enough (proper and unfolded), so that the associated
+Mandelbrot set $M=M(f_\la)$ is canonically homeomorphic to the standard Mandelbrot set (see \cite{DH}).
+In fact, most of the time we will be dealing with a single map $f=f_\la$ from our family,
+so that we will usually suppress the label $\la$  in the notation.
+(We need a one parameter family only to introduce different combinatorial types of the maps
+under consideration.)
+
+We assume that the domains $U'$ and $U$ are smooth disks,
+$f$ is even,
+and we  normalize $f$ so that $0$ is its critical point.
+% Our standing assumption is that {\it the Julia set $J(f)$ is connected
+% and both fixed points of $f$ are repelling}.
+
+We let $U^m = f^{-m}(U)$. The boundary of $U^m$ is called
+the {\it equipotential of level $m$}.
+
+
+\subsection{Top of the Yoccoz puzzle and  decorations}\label{sec: first king}
+ By means of straightening, we can define external rays for $f$. They form a foliation of $V\sm K(f)$
+orthogonal  to the equipotential $\di U$.
+ The map $f$ has one {\it non-dividing} fixed point $\beta$ (landing point of the external ray
+with angle $0$), and one {\it dividing} fixed point $\alpha$. There are $\q>1$ external rays $\RR_i$ landing at
+$\alpha$ which are cyclically permuted by the dynamics with rotation number $\p/\q$, see \cite{M-rays}
+($\p/\q$ is also called the {\it combinatorial rotation number} of $\alpha$).
+These rays divide $U$ into $\q$ (closed) topological disks $Y^0_i$ called the {\it Yoccoz puzzle pieces} of depth 0.
+Let $Y^0\equiv Y^0_0$ stand for the critical puzzle piece, i.e., the one containing 0.
+
+Let us consider  $2\q$  rays of  $f^{-1} (\cup\RR_i)$.
+They divide $U'$ into $2\q-1$ (closed) disks called Yoccoz puzzle pieces of depth 1.
+Let $Y^1$ stand for the critical puzzle piece of depth 1.
+There are also $\q-1$  puzzle pieces $Y^1_i$ of depth 1 contained in the corresponding off-critical pieces of depth 0.
+All other puzzle pieces of depth 1 will be denoted $Z_i^1$.
+They are attached to the symmetric point $\alpha'=-\alpha$.
+
+The puzzle pieces will be labeled in such a way that $f(Y_i^1) =  Y^0_{i+1}$,
+$i=0,\dots, \q-1$, and $Z^1_i= - Y^1_i$.
+We let
+$$
+   L= \bigcup_{i=1}^{\q-1} Y_i^1; \quad  R= -L= \bigcup_{i=1}^{\q-1} Z_i^1.
+$$
+
+Puzzle pieces $Y^m_j$ of depth $m$ are pullbacks of $f^{-m}(Y^0_i)$.
+They tile the neighborhood of $K(f)$ bounded by the equipotential $\di U^m $.
+Each of them is bounded by finitely many arcs of this equipotential and finitely many
+external rays of $f^{-m}(\RR_i)$.
+If $f^m(0)\not=\alpha$, then  there is one puzzle piece of depth $m$ that contains the critical point $0$.
+It is called {\it critical} and is labeled as $Y^m\equiv Y^m_0$.
+These pieces are nested around the origin:
+$$
+   Y^0\supset Y^1\supset Y^2 \dots \ni 0.
+$$
+
+Let us consider a puzzle piece $Y=Y^m_i$.
+Different arcs of $\di Y$  meet at the {\it corners} of $Y$.
+The corners where two external rays meet will be called {\it vertices} of $Y$;
+they are $f^m$-preimages of $\alpha$.
+Let $K_Y= K(f)\cap Y$. It is a closed connected set that meets the boundary $\di Y$
+at its  vertices. Moreover, the external rays meeting at a vertex $v\in \di Y$ chop off from
+$K(f)$ a continuum $S_Y^v$, the component of $K(f)\sm \inter Y$ containing $v$.
+%We let $S_Y$ be the union of these sets:
+%$$
+%    S_Y= \cup S_v(f)= K(f)\sm \inter Y.
+%$$
+
+The critical value $f^q(0)$ belongs to the puzzle piece $Y^0$.
+If in fact it belongs to $Y^1$ then the map $Y^{\q+1}\ra Y^1$ is a double branched covering.
+It is not a quadratic-like map, though, since the boundaries of $Y^1$ and $Y^{\q+1}$ overlap over four external rays
+landing at $\alpha$ and $\alpha'$. However,  by slight ``thickening'' of the domain of this map (see \cite{M}),
+it can be turned into a quadratic-like map $g$ such that
+$$
+     K(g) = \{ z:\, f^{\q m}z\in Y^1, \, m=0,1,2,\dots \}.
+$$
+
+  The map $f$ is called   {\it satellite renormalizable}
+(or, {\it immediately renormalizable})  if  the Julia set $K(g)$ is connected, i.e.,
+if the critical point never escapes $Y^1$:
+ $$
+           f^{\q m}(0)\in Y^1,\quad  m = 0,1,2\dots.
+$$
+The set of immediately renormalizable parameter values (with a given combinatorial rotation number $\p/\q$)
+assemble a {\it satellite copy $M_{\p/\q}$ of $M$} attached to the main cardioid at the parabolic point with rotation
+number $\p/\q$.  The parameters $t\in M_{\p/\q}$ for which the critical point eventually lands at $\alpha$
+(i.e., $f_t^{\q n} = \alpha'$ for some $n\in \N$) are called the {\it tips} of $M_{\p/\q}$.
+
+
+\ssk
+If $f$ is not satellite renormalizable, then
+there exists an $n\in \N$ such that $f^{\q\n}(0)$ belongs
+to some puzzle piece $\inter Z_\bk^1$.
+Let $\n$ be the smallest such $n$.
+In this case, we let
+$$
+   V^0= f^{-\n\q}(Z_\bk^1)|0= Y^{\n\q+1}.
+$$
+
+Each puzzle piece $Z^1_j$ has $2^m$ univalent pullbacks under the $2^m$-covering $f^{\q m}: Y^{\q m}\ra Y^0$,
+$m=1,\dots, \n-1$. We label these pullbacks (for all $j$) as $Z^{1+\q m}_i$.  Then
+\begin{equation}\label{escape route}
+    f^{\q m}(0) \in Z^{\q(\n-m)+1}_{\bk_m}, \quad m=1,\dots, \n,
+\end{equation}
+for some sequence $\bar\kappa = (\kappa_1,\dots, \kappa_n=\bk)$ called the
+{\it escape route} of the critical point. The escape route specifies
+the tip $t=t_{\kappa_1\dots\kappa_{\n-1}}$ of $M$ such that $f_t$ satisfies
+(\ref{escape route}) for $m<\n$, while $f^{\q\n}=\alpha'$.
+
+There are $\q$ parameter rays landing at each tip $t$ of $M_{\p/\q}$.
+They chop off $\q-1$ {\it decorations} $\LL_{\bar\kappa}$
+(the components of $M\sm \{t\}$ that do not intersect the main cardioid) from $M$.
+% \footnote{Misiurewicz limbs are also called {\it decorations} of the satellite copies.}
+The limb $\LL_{\bar\kappa}$ attached to $t$ is specified by the puzzle piece $Z^1_\bk$ containing $f^{\q\n}(0)$.
+Note that there are only finitely many decorations with bounded $\q$ and $\n$.
+
+Let $P=Y^{(\n-1)\q+1}$. The piece $P$ has $2^\n$ vertices each of which is a preimage of $\alpha$
+of some depth $\q\ m$ with $m\leq \n$ (and it takes into account {\it all} preimages of $\alpha$ in $Y^1$
+ up to depth  $\q\n$).
+\makefigure{puzzle}{The top of the Yoccoz puzzle}
+
+\ssk
+{\it Remark 2.1.}  Any $f^{\q m}$-preimage  $t\in Y^1$ of $\alpha$, $m\leq \n$,
+   can be naturally labeled by a dyadic number
+  $i/ 2^m\in \Q/\Z$ (with odd $i$). Here $\alpha$ is labeled by $0$, $\alpha'$ is labeled by $1/2$,
+  and in general, the dyadic expansion of $i$ is  $0.\,\eps_1\dots\eps_m\, 1$,
+  where $\eps_l$ is equal $+1$ or $-1$ depending on whether the rays landing at $f^{\q(l-1))}(t)$
+  are ``below'' the chord connecting $\alpha$ and $\alpha'$, or above it.%
+% \footnote{It can be said precisely in terms of the external angles of the straightening of $f_t^{\q}: Y^{\q+1}\ra Y^1$.}
+ Then the pullbacks of $Z^j$ attached to $t$ can be labeled as $Z_j(i/ 2^m)$, $j=1,\dots, \q-1$.
+  A decoration assumes labeling $Z_j(i / 2^\n) $ if $f^\q(0)\in Z_j(i/2^\n)$.
+
+\medskip
+Note that $f^\q(P)\supset P$ and  the critical value  $f^\q(0)$
+does not belong to $P$. Hence $P$ has two univalent $f^\q$-pullbacks,
+$Q_L$ and $Q_R$ (of depth $\q \n+1$),  inside $P$.
+The puzzle piece $Q_L$ is attached to the fixed point $\alpha$
+ while $Q_R$ is attached to $\alpha'$. Each of them shares two external rays with $V^0$.
+
+
+\begin{lem}\label{separating family}
+For any  vertex $v$ of $P$,
+there exists a puzzle piece $Q^v\subset P$ of depth $(2\n-1)\q+1$
+attached to the boundary rays of $P$ landing at $v$,
+ which is a univalent $f^{\n\q}$-pullback of $P$.
+Moreover, these puzzle pieces are pairwise disjoint.
+\end{lem}
+
+\begin{proof}
+% By (\ref{escape route}), the critical values of the map $f^{\n\q}$ do not belong to $P$.
+Let $g= f^\q |\, Q_L\cup Q_R$.
+The domain of $g^\n$ consists of $2^\n$ components each of which is a univalent pullback of $P$.
+Each of these components contains a single $g^\n$-preimage $v$ of $\alpha$,
+and is attached to the pair of the boundary external rays of $P$ landing at $v$.
+This is the desired puzzle piece $Q^v$.
+\end{proof}
+
+\comm{*****
+Let $a,b\in K$.
+% Let us consider a geometric puzzle piece $Y$, and let $a,b\in K_Y$.
+We say that a puzzle piece $Q$ separates
+$a$ from $b$
+if $a$ and $b$ belong to different components of $K\sm K_Q$.
+We say that a family of puzzle pieces $Q_i$ {\it doubly separates} a family of
+points $a_j\in K$, if any two points, $a_j$ and $a_k$, are separated
+by at least two puzzle piece $Q_i$.
+
+
+\begin{lem}\label{separating family}
+   There is a family $Q_i\subset Q_L\cup Q_R$
+of pairwise disjoint univalent pullbacks of
+the puzzle piece $P$ under the map $f^{\q}: Q_L\cup Q_R\ra P$
+that doubly separates all the vertices of $P$. Moreover, $\depth Q_i\leq d(\q,\n).$
+\end{lem}
+***************}
+
+Given two vertices, $v$ and $w$, of $P$,
+we let $T^{vw}_P= K_P\sm (Q^v\cup Q^w)$.
+Notice that $T^{vw}$ {\it separates} $v$ from $w$ in the sense that $v$ and $w$ belong to different components
+of $K_P\sm T_{vw}$.
+
+\subsection{Modified principle nest}
+  Given a critical puzzle piece $V$, % such that  the critical point returns to it,
+let us consider the first return $f^l 0$, $l\in \N$,  of the critical point to $V$
+(whenever it exists).
+The corresponding pullback $W= f^{-l}(V)|0$ of $V$ is called
+the {\it central domain of the first return map to $V$},
+or briefly, the {\it first child} of $V$.
+Under these circumstances, $W\subset V$ and the first return map $f^l: W\ra V$ is a double branched covering.
+
+Under the above circumstances,
+we also consider the the first moment $k\in \N$ such that $f^{kl}(0)\not\in W$
+and then the  first return $f^t(0)\in W$, $t>kl$, back to $W$ (whenever these moments are well defined).
+We call it the {\it fine return} to $W$, and the corresponding pullback $A=f^{-t}(W)|0$ the {\it fine child} of $W$.
+The map $f^t: A\ra W$ is a double branched covering. Note that if  $f^l(0)\not\in W$,
+the fine return coincides with the first return.
+
+
+In \cite{KL-high} we have constructed a {\it (Modified) Principle Nest} of critical puzzle pieces
+$$
+  E^0\Supset E^1\Supset E^1\Supset\dots\Supset E^{\chi-1}\Supset E^\chi
+$$
+and corresponding quadratic-like maps $g_n: E^n\ra E^{n-1}$. % and $G_n: E^n\ra E^{n-1}$.
+Here for odd $n$,  $E^n$ is the first child of $E^{n-1}$ and $g_n: E^n\ra E^{n-1}$ is the corresponding  first return map.
+% We will ofthen skip label $0$ on the top level of the nest, so that  $g: W\ra V$ is the map $g_0$.
+For odd $n$, $E^n$ is the fine child of $E^{n-1}$ and $g_n: E^n\ra E^{n-1}$ is the corresponding fine return map.
+We let $g\equiv g_0$.
+% The relation between $V^n$ and $W^{n-1}$ has to do with so called ``long central cascades''.
+% The precise construction does not matter, but for reader's convenience we will
+% recall below the needed combinatorial virtues of the nest.
+
+If the map $f$ is renormalizable then  the Principle Nest terminates at some odd level $\chi$.
+In this case, the last quadratic-like map $g_\chi: E^\chi\ra E^{\chi-1}$  has connected Julia set
+and represents the {\it primitive renormalization} $Rf$ of $f$.
+The renormalization level $\chi$ is also called the {\it height} of the nest.
+
+Primitively renormalizable parameter values assemble a maximal {\it primitive copy} $M'$ of
+the Mandelbrot set $M$. This copy specifies
+the {\it combinatorics} of the renormalization in question.
+In particular, it determines the parameters $\q$, $\n$, the height $\chi$,
+and the renormalization period $p$.
+
+{\it In what follows we will assume that $f$ is primitively renormalizable.}
+We let $\KK=K(\RR f)$ be the {\it little (filled) Julia set } of $f$,
+and we let $p$ be the renormalization period, i.e., $g_\chi= f^p$ so that $f^p(\KK)=\KK$.
+We let $\KK_i= f^i(\KK)$, where $i$ is taken mod $p$, which are also called ``little Julia sets''.
+
+% \subsection{Various properties of the puzzle}
+
+\msk
+It is important to note that the maps $g_n$ admit analytic {\it extensions} $\tilde E^n\ra \hat E^{n-1}$
+such that $E^n\subset \tilde E^n \subset \hat E^n\subset E^{n-1}$ and for odd $n$,
+$\hat E^n=E^{n-1}$ \cite{KL-high}, \S 2.4. For $n=0$, we let $\hat E^0 =\tilde E^0 = Y^{\q\n}$.
+Then $ f^{\q\n}: \tilde E^0 \ra Y^0$ is a branched covering of degree $2^\n$.
+
+\msk
+The following useful observation will be used many times:
+
+\begin{lem}[Telescope]\label{telescope}
+  Let $X_k$ be a sequence of topological disks, $k=0,1,\dots, m$,
+and let $\phi_k : X_k \ra \phi(X^k)$  be  branched coverings of degree $d_k$ such that
+$\phi(X_k)\supset X_{k+1}$. Let $\Phi= \phi_{n-1}\circ\dots\circ \phi_0$ (wherever it is defined),
+and let $P\subset X_0$ be a component of its domain of definition.
+Then $\Phi: P \ra V_n$ is a branched covering of degree at most $d_0\cdot\cdot\cdot d_{n-1}$.
+\end{lem}
+
+
+If the renormalization $Rf$ is also renormalizable then $f$ is called twice renormalizable,
+and $R^2 f$ stands for its second renormalization. Proceeding this way, we can define
+{\it infinitely renormalizable} maps $f$, and let $R^n f$ be their $n$-fold renormalizations.
+The {\it combinatorics} of an infinitely renormalizable map is a sequence
+of little Mandelbrot copies $M^{(n)}$ that determine the combinatorics of the renormalizations $R^n f$.
+It determines the sequence of the parameters $\q_n$, $\n_n$, the heights $\chi_n$,
+and the periods $p_n$ of the corresponding renormalizations.
+
+We say that an infinitely renormalizable $f$ satisfies the {\it decoration condition}
+if all the little copies $M^{(n)}$ belong to  finitely many decorations $\LL_k$.
+Equivalently, {\it the parameters $\q_n$ and $\n_n$ are bounded}.
+
+
+
+%  We fix some Misiurewicz limb with parameters $(\q,\n)$.
+
+
+% Given two puzzle pieces $P$ and $P'$, we say that $P'\succ P$ is $f^t(P)=P'$ for some $t$,
+% and in this case we let $t=\Time(P,P')$.
+%Given a puzzle piece $P$,
+% we let $N_P$ be the number of little Julia sets $\KK_i$ with $\depth(E^\chi) \leq i\leq p-1$ contained in $P$.
+
+\subsection{Geometric puzzle pieces}
+
+In what follows  we will deal with more general puzzle pieces.
+
+Given  a puzzle piece $Y^m_i$, let $Y^{m,l}_i$ stand for a Jordan disk bounded by the same external rays
+as $Y^m_j$ and arcs of equipotentials of level $l$ (so $Y^{m,m}_i=Y^m_i$).
+Such a  disk will be called a puzzle piece of {\it bidepth} $(m,l)$.
+
+A {\it geometric puzzle piece} of bidepth $(m,l)$ is a closed Jordan domain which is
+the union of several puzzle pieces of the same bidepth.
+As for ordinary pieces, a pullback of a geometric puzzle piece of bidepth $(m,l)$
+under some iterate $f^k$ is a geometric puzzle piece of bidepth $(m+k, l+k)$.
+Note also that if $P$ and $P'$ are geometric puzzle pieces with%
+\footnote{the inequality between bidepths is understood componentwise}
+$\bidepth P \geq \bidepth P'$
+and $K_P\subset K_{P'}$ then $P\subset P'$.
+
+The family of geometric puzzle pieces of bidepth $(m,l)$ will be called $\YY^m(l)$.
+Given a geometric puzzle piece $Y\in \YY^m(l)$, we let $Y(k)$ be the puzzle piece
+bounded by the same external rays as $Y$ truncated by the equipotential of level $k$.
+(In particular, $Y(l)=Y$.)
+
+\msk
+
+Any puzzle piece $Y\in \YY^m(l)$ admits the following combinatorial representation.
+Let $\theta_i$ be the cyclically ordered  angles of the external rays $\RR_i$ that bound $Y$.
+Let us consider the straight rays $R_i$ in $\C\sm \D$ of angles $\theta_i$
+truncated by the circle $\T_r$ of radius $r=1/2^l$.
+If two consecutive rays, $\RR_i$ and $\RR_{i+1}$, land at the same vertex of $Y$,
+let is connect $R_i$ to $R_{i+1}$ with a hyperbolic geodesic in $\D$.
+Otherwise $\RR_i$ and $\RR_{i+1}$ are connected with an equipotential arc.
+Then let us connect $R_i$ to $R_{i+1}$ with the appropriate arc of $\T_r$.
+We obtain a Jordan curve that bounds the {\it combinatorial model} $M_Y$ of $Y$.
+
+ The arcs $\om_i$ of  $\T\cap M_Y$ correspond to  the
+``external arcs'' of the Julia piece $K_Y$.
+% (which are the different approaches to $K_Y$ from $\infty$ in $\C\sm \cup \bar \RR_i$).
+ They have length $2\pi \la$, where $\la$ is called the {\it combinatorial length}
+of the corresponding external arc of $K_Y$.
+In case $Y$ is a dynamical puzzle piece,
+all the external arcs of $Y$ have  the same combinatorial length
+\begin{equation}\label{comb length}
+    \frac{2^k}{(2^\q-1)2^m}, \quad k\in \{0,1,\dots, q-1\},
+\end{equation}
+where the choice of $k$ depends on  the puzzle piece $f^m(Y)$ of depth 0
+(For instance, $k=0$ when $f^m(Y)$ contains the critical value $f(0)$,
+ while $k=q-1$ when $f^m(Y)$ contains the critical point 0.)
+
+It follows that
+for a geometric puzzle piece $Y$ of depth $m$,
+the combinatorial length of its external arcs is at least $2^{-(\q+m)}$.
+
+
+\msk
+Let us now consider a geometric puzzle piece  $Z^0=  - Y^0$ of bidepth (1,0).
+
+\begin{lem}\label{qn-pullbacks}
+  Let $z\in K(f)$,  $f^{\q\n} z \in Z^0$ and let $P = f^{-\q\n}(Z^0)|z$.
+Then $P\Subset \inter Y^0$ or  $P\Subset \inter Z^0$.
+\end{lem}
+
+\begin{proof}
+  $P$ is a geometric puzzle piece of bidepth $(\n\q+1, \n\q) $. But $E^0=Y^{\n\q+1}$ is a puzzle piece of
+depth $\n\q+1$ such that $f^{\q\n}(E^0)=Z_\bk$, where $\inter Z_\bk \cap Z^0=\emptyset$.
+It follows that $P \cap \inter E^0=\emptyset$. But $K(f)\sm \inter E^0$ consists of two $0$-symmetric
+connected components $X_L\supset L\cap K(f)$ and $X_R\supset R\cap K(f)$.
+We conclude that  $K_P$ is contained in one of these components, and hence it is contained in one of the
+sets $K_{Z^0}$ or $K_{Y^0}$. As
+ $$
+    \bidepth P\geq (1,0)=\bidepth Z^0\geq (0,0)=\bidepth Y^0,
+$$
+ $P$ is contained in one of the
+puzzle pieces $Z^0$ or $Y^0$.
+\end{proof}
+
+
+
+\subsection{Many happy returns}\label{high type}
+  Here we will summarize the combinatorial construction of \cite{KL-high}, \S 1.9,
+that will lead to the moduli improvement in the case of high type.
+
+Fix an arbitrary $m$, let $N$ be the smallest even integer which is bigger than $\log_2 m + 5$,
+and take any odd level $n\geq N$.
+Then there exists $m/2$ returns $\La_k=g^{l_k}(E^n)$  of the domain $ E^n $ to $E^{n-N}$
+with the following properties.
+For any domain $\La_k$,
+the map $\Psi_k= g^{l_k}: E^n \ra \La_k$ admits a holomorphic extension to a branched covering
+\begin{equation}\label{3 domains}
+    \Psi_k : (\Upsilon_k , \De_k, E^n) \ra (E^{n-N-1}, \La_k', \La_k)
+\end{equation}
+such that:
+
+\begin{itemize}
+
+\item [(P1)] $\deg(\Psi_k: \Upsilon_k\ra E^{n-N-1} )\leq 2^{N+m}$;
+
+\item[(P2)] $\deg(\Psi_k: \De_k\ra \La_k')\leq d^5$;
+
+
+\item [(P3)] $\Upsilon_k\subset E^{n-1}$;
+
+\item[(P4)] There is a level $i\in [n-5, n-1]$ such that each pair of disks $(\La_k', \La_k)$ is
+mapped  univalently onto  $( \hat E^i,  E^i)$ under some iterate $f^t$, $t=t(k)$;
+
+\item[(P5)] The buffers $\La_k'\Subset E^{n-N}$ are pairwise disjoint.
+
+\end{itemize}

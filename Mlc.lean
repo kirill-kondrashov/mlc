@@ -15,6 +15,7 @@ import Mlc.Quadratic.Examples
 import Mlc.Quadratic.RealComponents
 import Mlc.Quadratic.MultiplierMap
 import Mlc.Quadratic.PeriodTwoMultiplier
+import Mlc.Quadratic.Symmetry
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample
 import Mlc.CertifiedOrbitApproximation

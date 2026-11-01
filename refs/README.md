@@ -39,7 +39,11 @@ the choice is recorded in `00README.json`.
 | `dudko-mlc-2025` | Dudko, *On the MLC Conjecture...* | current status and renormalization roadmap |
 | `kahn-kapiamba-lyubich-parabolic-primitive` | *MLC for parabolically bounded primitive renormalization* | 2026 MLC case |
 | `elephant-puzzles` | Dudko--Kapiamba--Lyubich--Peterson, *Elephant puzzles*, in preparation as cited in arXiv:2606.27272v1 | puzzle Teichmuller-diameter dependency; no public manuscript specified there |
-| `kahn-lyubich-elephant-eyes` | Kahn--Lyubich, *A priori bounds ... IV. Elephant Eyes*, arXiv:2601.21905 | separate research-paper series |
+| `kahn-lyubich-elephant-eyes` | Kahn--Lyubich, *A priori bounds ... IV. Elephant Eyes*, arXiv:2601.21905 | Part IV of the a priori bounds series (elephant-eye combinatorics) |
+| `kahn-lyubich-primitive` | Kahn, *A priori bounds ... I. Bounded primitive combinatorics*, arXiv:math/0609045 | Part I: bounded primitive type; length comparison; cited bounded-period theorem |
+| `kahn-lyubich-decorations` | Kahn--Lyubich, *A priori bounds ... II. Decorations*, arXiv:math/0609046 | Part II: decoration condition |
+| `kahn-lyubich-molecules` | Kahn--Lyubich, *A priori bounds ... III. Molecules*, arXiv:0712.2444 | Part III: molecule condition |
+| `dudko-schleicher-limbs` | Dudko--Schleicher, *Homeomorphisms between limbs of the Mandelbrot set*, Proc. AMS 140 (2012), 1947--1956 | limbs with equal denominators; canonical projection to the combinatorial model |
 | `dudko-lim-neutral-bubbles` | *Uniform bounds for bubbles of neutral quadratic polynomials* | neutral geometry |
 | `dudko-lim-lyubich-neutral-rigidity` | *Rigidity of the attractor of neutral renormalization* | neutral rigidity |
 | `shen-hybrid-classes` | *Complex Analytic Structure of Hybrid Classes...* | hybrid-class analytic base |
@@ -57,6 +61,8 @@ The book now records the Gaussian-area obstruction proved in
 Classical source theorems must be formalized using genuine conformal
 modulus and graph-cut pieces; their proofs cannot supply the refuted
 frozen lower-bound certificate.
+
+Note: `math/0607155` is not Kahn's Part I; it is a different paper (Bin Zhu, generalized cluster complexes) and must not be used. Kahn's Part I is `math/0609045`.
 
 ## Storage policy
 

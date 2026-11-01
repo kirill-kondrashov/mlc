@@ -210,6 +210,33 @@ belongs to the external-coordinate theory of
 Douady--Hubbard~\cite{DH}.  It is distinct from local connectivity of
 either $J_c$ or $\M$.
 
+\begin{proposition}[Elementary symmetries]
+\label{prop:elementary-symmetries}
+For all $c,z\in\C$:
+\begin{itemize}
+\item[(i)] $-z\in K_c$ if and only if $z\in K_c$, and $-z\in J_c$ if and only if $z\in J_c$;
+\item[(ii)] $\bar z\in K_{\bar c}$ if and only if $z\in K_c$;
+\item[(iii)] $\bar c\in\M$ if and only if $c\in\M$.
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+Since $f_c(-z)=f_c(z)$, the orbits of $-z$ and $z$ agree from time one on, so one is bounded if and only if the other is.
+This gives $-z\in K_c$ if and only if $z\in K_c$.  The map $z\mapsto -z$ is a homeomorphism that preserves $K_c$, hence it
+preserves $\partial K_c=J_c$.  For (ii), $\overline{f_c(z)}=f_{\bar c}(\bar z)$, so $\overline{f_c^{\,n}(z)}=f_{\bar c}^{\,n}(\bar z)$
+for all $n$, and $|\bar w|=|w|$.  Part (iii) is (ii) at $z=0$, because $\bar 0=0$ and $0\in K_c$ exactly when $c\in\M$.
+\end{proof}
+
+\paragraph{Lean.}
+The statements are formalized in \lean{Mlc/Quadratic/Symmetry.lean}.  Part (i) for $K_c$ is
+\leanref{Mlc/Quadratic/Symmetry.lean}{neg_mem_K_iff}, and for $J_c$ it is
+\leanref{Mlc/Quadratic/Symmetry.lean}{neg_mem_J_iff}.  Part (ii) is
+\leanref{Mlc/Quadratic/Symmetry.lean}{conj_mem_K_iff}, and part (iii) is
+\leanref{Mlc/Quadratic/Symmetry.lean}{mandelbrot_conj_iff}.  The proofs go through the bounded-orbit lemmas
+\lean{boundedOrbit_neg_iff} and \lean{boundedOrbit_conj_iff}, which rest on the identities
+\lean{orbit_neg_succ} and \lean{orbit_conj}.  The audit in \lean{check_axioms.lean} lists these names and allows only
+the permitted axioms.
+
 \section{Periodic orbits, multipliers, and the first components}
 
 \begin{definition}[Periodic point and multiplier]
