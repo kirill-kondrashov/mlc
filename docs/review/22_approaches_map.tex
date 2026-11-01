@@ -1,0 +1,159 @@
+\chapter{Approaches to MLC: comparison and dependency map}
+\label{ch:approaches-map}
+
+This chapter compares the approaches to MLC that are digested in Chapters~\ref{ch:quadratic-foundations}
+and~\ref{ch:digests-foundations}--\ref{ch:digests-sierpinski}, and in the earlier chapters on the
+Lyubich renormalization, the Dudko--Lyubich cases, and the frontier.  It adds no new theorem.  For each
+approach it records the objects used, the main results and their sources, the conclusion about
+the Mandelbrot set that the sources themselves draw, and the formal status in the repository.
+The statements are summarized from the digests; the chapters cited give the definitions and the
+precise statements.
+
+\section{The approaches in one table}
+\label{sec:approaches-table}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}@{}}
+\textbf{Approach} & \textbf{Objects and main results (source)} & \textbf{MLC conclusion stated by the source} & \textbf{Formal status}\\
+\hline
+Puzzles and parapuzzles &
+Dynamical and parameter puzzle pieces; local connectivity of $J$ for non-renormalizable maps (Lyubich notes, Thms~11.5--11.6); Yoccoz's theorems (Lyubich 1993 account) &
+MLC at finitely renormalizable parameters; MLC at boundaries of hyperbolic components &
+cited; compact-closure criterion proved as a conditional endpoint\\
+External rays and B\"ottcher coordinates &
+Rays and landing (Milnor, Thms~18.1--18.2); $\M$ connected (Douady--Hubbard; notes, Thm~6.10) &
+none by itself &
+$K$ connected for $c\in\M$ proved; rays not formalized\\
+Hyperbolic components and multipliers &
+Multiplier theorem (notes, Thm~6.12); cardioid and bulb; rational analogue (Dudko--Luo, Thm~A) &
+MLC at boundaries of hyperbolic components (Yoccoz); $\partial H$ locally connected for rational analogues &
+periods~1 and~2 proved, including biholomorphic multiplier maps and real parts\\
+Quadratic-like renormalization and straightening &
+Quadratic-like maps, $Rf$, hybrid equivalence; straightening (notes, Thm~9.2); codimension-one stability (survey) &
+renormalization is the common tool of the later approaches &
+interface only\\
+A priori bounds &
+Definite moduli (Lyubich 1993, Thms~I--II); $W^+_3$ bounds (Dudko--Lyubich, Thms~1.1, 10.1); beau bounds (Feigenbaum Main~A; KKL Main~A); amplification (Kahn--Lyubich) &
+bounds for all classes, with quasiconformal conjugacy, give MLC (principle in the neutral paper, \S1.5) &
+naive lower bounds refuted in the frozen model; genuine bounds not formalized\\
+Rigidity &
+Combinatorial rigidity (Lyubich 1993, Thm~III and corollary); conformal and affine rigidity of neutral cascades (Dudko--Lim--Lyubich); KKL Mains~B, C &
+MLC at the rigid classes, as stated in each source &
+interface only\\
+Satellite and Molecule renormalization &
+Bounded satellite itinerary; MLC at bounded satellite type (Dudko--Lyubich); Molecule renormalization (survey) &
+MLC at bounded satellite type within the paper's class; Molecule hyperbolicity is open (survey) &
+interface only\\
+Feigenbaum points &
+Bounded relative periods; Mains~A, B (Dudko--Lyubich) &
+MLC at all such parameters, including the period-doubling point &
+interface only\\
+Parabolic primitive renormalization &
+Small-copy types, parabolic tails $\Phi_q$, parabolically bounded families; Mains~A--C (KKL) &
+MLC pointwise on parabolically bounded families; Main~B uses unpublished puzzle input &
+interface only\\
+Neutral renormalization &
+Pseudo-Siegel bounds, Mother Hedgehog, quasidisks (Dudko--Lyubich, Thms~1.1--1.3); $\psi^\bullet$-maps (Dudko--Luo--Lyubich); bubbles (Dudko--Lim) &
+inputs to the satellite programme; the survey states full MLC conditional on the open problems &
+none\\
+Pacman near Siegel parameters &
+Pacman renormalization; unique Siegel pacman; local connectivity of $K_f$ for standard pacmen (Dudko--Lyubich--Selinger, Thms~1.1, 3.12) &
+none for $\M$; a later work is announced for satellite parameters &
+none\\
+Decorations &
+Finitely many large components of $\M\setminus\M_s$ (Dudko, decoration theorem) &
+none &
+none\\
+Laminations and matings &
+Basilica lamination; mating $\M\cup_{S^1}L_B$ (Dudko, Thms~1.1, 1.2, Cor.~1.3) &
+$M_2$ is locally connected; $\M$ is not claimed &
+none\\
+Core entropy &
+$h$ and $\widetilde h$; continuity (Dudko--Schleicher, Thm~1.1); Tiozzo statements (Thm~4.1) &
+none &
+none\\
+Holomorphic motions and hybrid classes &
+Extension of holomorphic motions (Sło\-dkowski, Thm~1.3); axiom of choice (Thm~1.4); hybrid classes are analytic of codimension $d(f)$ (Shen, Thm~1.1) &
+none in the texts &
+none\\
+Elephant Eyes &
+Class $\mathcal Q(\underline q,\bar b)$; a priori bounds, with no single numbered theorem (Kahn--Lyubich) &
+MLC at the corresponding parameters (the paper's claim) &
+none\\
+Rational analogues &
+Sierpi\'nski carpet components of disjoint type; boundedness and $\rho$ (Dudko--Luo, Thms~A--D) &
+analogy only &
+none\\
+Categorical and conditional branch &
+Over-approximations in $\mathbf{TopCat}$; conditional roots; refuted frozen certificates (Chapter~\ref{ch:conditional-matrix}) &
+conditional MLC root, not an unconditional result &
+formal, conditional\\
+\end{tabularx}
+\caption{Approaches to MLC, the MLC conclusions stated by their sources, and their formal status.}
+\label{tab:approaches}
+\end{table}
+
+\section{How the approaches depend on one another}
+\label{sec:approaches-dependencies}
+
+The sources form a network rather than a list.  The arrows below are the dependencies stated in the sources, in the sense
+used in Table~\ref{tab:digest-dependencies}.
+
+\begin{itemize}
+\item \emph{Straightening and quadratic-like theory} is the input of Lyubich's 1993 rigidity, of the Dudko--Luo rational
+  analogue, and of the Douady--Hubbard identification of hybrid classes.
+\item \emph{Yoccoz's puzzle results} are used by Lyubich's 1993 paper, by Dudko's decoration theorem, and by the
+  survey's reduction of MLC to rigidity of nested small copies.
+\item \emph{A priori bounds} are the common hypothesis of the rigidity statements: the neutral bounds of Dudko--Lyubich feed
+  the bubble bounds of Dudko--Lim, the rigidity of neutral cascades (Dudko--Lim--Lyubich), and the $\psi^\bullet$-theory of
+  Dudko--Luo--Lyubich.
+\item \emph{Pacman renormalization} (Dudko--Lyubich--Selinger) supplies the Siegel and satellite building blocks used by
+  the satellite programme, and the survey cites it for the hyperbolicity of Pacman renormalization.
+\item \emph{Renormalization of bounded type} gives the Feigenbaum result, and together with puzzle arguments the survey's
+  MLC along real lines and veins.
+\item \emph{Unpublished input}: the bounded-diameter claim for parabolic tails, used in KKL Main~B, depends on the
+  manuscript \emph{Elephant puzzles}; the Dudko--Lyubich neutral bounds depend on earlier work of the same authors.
+\item \emph{Combinatorial invariants} (laminations, core entropy, biaccessibility) are analysed in the Douady--Hubbard
+  parameter model without assuming MLC; they yield continuity and local connectivity of $M_2$, not of $\M$.
+\item \emph{Holomorphic motions} (Słodkowski) are the extension tool of the phase--parameter technique (Chapter~\ref{ch:phase-parameter}),
+  and hybrid-class analyticity (Shen) is a complex-analytic counterpart of the straightening theory.
+\end{itemize}
+
+\section{What is proved where}
+\label{sec:approaches-status}
+
+The repository proves, without assumptions beyond the standard axioms of Lean, the following items from the list above:
+the escape criterion, the compactness and exhaustion of outer approximations, the connectedness of filled Julia sets for
+$c\in\M$, the real slice $\M\cap\R=[-2,\tfrac14]$, the cardioid and bulb with their multiplier maps and real parts, the
+exact examples $c=0$ and $c=-2$, and the obstruction in the frozen Gaussian model.  Every deep analytic theorem in
+Table~\ref{tab:approaches} is recorded only as a cited statement or as a Lean interface.  No theorem of the
+Yoccoz, Lyubich, Dudko--Lyubich, Kahn--Lyubich, Dudko--Luo--Lyubich, Pacman, Feigenbaum, or parabolic-primitive types is
+formal in the present repository, and the unconditional root $\M$ locally connected is not formal at all.
+
+\section{Open problems and the remaining gaps}
+\label{sec:approaches-open}
+
+Three kinds of gap remain, and they are listed separately so that they are not mistaken for one another.
+
+\begin{enumerate}
+\item \emph{Open mathematics.}  The survey's problems (Chapter~\ref{ch:digests-modern}, Section~\ref{sec:digest-survey}) are
+  open: uniform bounded geometry of hyperbolic components, uniform a priori bounds for all boundary parameters and all scales,
+  a single uniformly hyperbolic renormalization operator, hyperbolicity of neutral and Molecule renormalization, and the
+  pseudo-Siegel bounds in the remaining satellite cases.  The rational analogue of the first problem is Theorem~\ref{thm:sierp-A}
+  for disjoint type only.
+\item \emph{Undigested sources.}  Lyubich's online volumes I--II and the papers of Kahn (I, II, III), Hu--Jiang, Jiang,
+  Inou--Shishikura, Gaidashev--Yampolsky, and Sullivan are cited but not digested in this review.  Several of the statements
+  used above depend on them.  Dudko's papers on canonical decompositions and correspondences are indirectly related and are
+  listed in the reference inventory.
+\item \emph{Formal gaps.}  The analytic machinery needed for the deep theorems (conformal modulus, quasiconformal surgery,
+  straightening, external rays and their landing, and the puzzle theory of Yoccoz) is not in the repository.  The formal
+  root remains the conditional statement $\mathrm{MLC.mlc\_conjecture}$, which takes the explicit $\mathrm{RootInput}$
+  hypothesis; no global instance of that hypothesis is supplied.
+\end{enumerate}
+
+\paragraph{Reading route.}
+For the local picture of $\M$, read Chapter~\ref{ch:quadratic-foundations} and Chapter~\ref{ch:digests-monographs}.  For renormalization,
+read Chapters~\ref{ch:digests-foundations}, \ref{ch:digests-pacman-neutral}, and \ref{ch:digests-sierpinski}.  For combinatorial
+approaches, read Chapter~\ref{ch:digests-laminations-entropy}.  For the status of every claim, read Chapter~\ref{ch:conditional-matrix}
+and Appendix~\ref{ch:formal-map}.
