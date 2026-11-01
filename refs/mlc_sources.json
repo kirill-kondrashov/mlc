@@ -121,6 +121,22 @@
       "title": "A priori bounds for some infinitely renormalizable quadratics: III. Molecules",
       "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
       "existing_pdf": null
+    },
+    {
+      "key": "kahn-lyubich-quasi-additivity",
+      "arxiv_id": "math/0505191",
+      "role": "a-priori-bounds",
+      "title": "The Quasi-Additivity Law in Conformal Geometry",
+      "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
+      "existing_pdf": null
+    },
+    {
+      "key": "kahn-lyubich-unicritical-lc",
+      "arxiv_id": "math/0505194",
+      "role": "local-connectivity",
+      "title": "Local connectivity of Julia sets for unicritical polynomials",
+      "authors": ["Jeremy Kahn", "Mikhail Lyubich"],
+      "existing_pdf": null
     }
   ]
 }

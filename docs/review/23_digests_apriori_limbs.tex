@@ -1,4 +1,4 @@
-\chapter[Source digests III]{Source digests III: a priori bounds, satellites, Feigenbaum points, and limbs}
+\chapter[A priori bounds and limbs]{Source digests: a priori bounds, satellites, Feigenbaum points, and limbs}
 \label{ch:digests-apriori-limbs}
 
 This chapter digests the sources that give the strongest current results on local
@@ -82,7 +82,7 @@ cited principle, and no digest below proves it.
 
 \paragraph{Identity.}
 J.~Kahn, \emph{A priori bounds for some infinitely renormalizable quadratics: I.
-Bounded primitive combinatorics}, arXiv:math/0609045 (version~3, 2006).  The title and
+Bounded primitive combinatorics}, arXiv:math/0609045 (version~3, 2006) \cite{KahnPrimitive}.  The title and
 the single author are confirmed by the downloaded metadata and by the main TeX file.
 
 \paragraph{Definitions used.}
@@ -120,7 +120,7 @@ map, then
 \begin{theorem}[Bad now, worse earlier]
 \label{thm:kahn-I-bnwe}
 There is $l\in\N$ such that for every $B$ there is $M$ with the following property.  For
-renormalization sequences of bounded primitive type $B$,
+$f$ satisfying the standard assumptions of bounded primitive type $B$, and for all $n$,
 \[
 |\gamma_{(n+l)}|>M\qquad\Longrightarrow\qquad |\gamma_{(n)}|>2\,|\gamma_{(n+l)}|.
 \]
@@ -141,30 +141,40 @@ Theorem~\ref{thm:kahn-II-bounded-period}.
 \label{thm:kahn-I-geodesic-modulus}
 If $f\colon V'\to V$ is primitively $p$-renormalizable and $|\gamma_p|\le M$, then its
 Douady--Hubbard $p$-renormalization has modulus at least $m(M)>0$.  \emph{Status:} proved
-here; the polynomial case is due to McMullen (\emph{Complex dynamics and renormalization},
-Theorem~10.3) and to McMullen's \emph{Renormalization and 3-manifolds which fiber over the
-circle}, Theorem~4.10 (\texttt{conclusions.tex}, lines 246--258).
+in the paper, using the canonical renormalization.  For polynomials the statement is McMullen's Theorem~10.3 in
+\emph{Complex dynamics and renormalization} \cite{McMullenCDR}, for $M$ sufficiently small, and Theorem~4.10 in
+\emph{Renormalization and 3-manifolds which fiber over the circle} \cite{McMullenTowers}, in general, for a slightly
+different statement that readily implies this one (\texttt{conclusions.tex}, lines 246--258).
 \end{theorem}
 
 \begin{theorem}[Beau bounds for pseudo-quadratic-like maps]
 \label{thm:kahn-I-psi-beau}
-For every $B$ there is $M_0$, and for every $m$ there are $n_1$ and $M_1$, such that
-$|\gamma_{(n)}|\le M_1$ for all $n\in\N$ and $|\gamma_{(n)}|\le M_0$ for all $n\ge n_1$.  The
-standing hypotheses (bounded primitive type $B$ and the initial bound $m$) are those of the source
-(\texttt{conclusions.tex}, lines 186--198).
+For every $B$ there is $M_0$, and for every $m$ there are $n_1$ and $M_1$, such that the following holds.  If $f$
+satisfies the standard assumptions of bounded primitive type $B$ and $|\gamma(f)|\le m$, then $|\gamma_{(n)}|\le M_1$
+for all $n\in\N$, and $|\gamma_{(n)}|\le M_0$ for all $n\ge n_1$ (\texttt{conclusions.tex}, lines 186--198).
 \emph{Status:} proved (source label \texttt{thm:psi-beau};
 \texttt{conclusions.tex}, lines 186--198).
+\end{theorem}
+
+\begin{theorem}[Beau bounds for semi-quadratic-like maps]
+\label{thm:kahn-I-beau-semi}
+For all $B$ there is $M_0$ such that for all $m$ there are $n_1$ and $M_1$ with the following property.  Let
+$f\colon U'\to U$ be a semi-quadratic-like map satisfying the standard assumptions, with $|\modulus(V\setminus K)|\ge m$.
+Then (1) for all $n\in\N$ there is a quadratic-like $p_n$-renormalization $f^{p_n}\colon V'\to V$ with
+$\modulus(V\setminus V')\ge M_1$, and (2) for $n\ge n_1$ there is one with $\modulus(V\setminus V')\ge M_0$.
+\emph{Status:} proved in the paper, as an immediate consequence of the pseudo-quadratic-like beau bounds and of the
+geodesic-to-modulus theorem (source label \texttt{thm:a-priori-bounds}; \texttt{conclusions.tex}, lines 279--296).
 \end{theorem}
 
 \begin{theorem}[Main Theorem, Kahn I]
 \label{thm:kahn-I-main}
 If $f$ is an infinitely renormalizable quadratic polynomial of bounded primitive type, then
 $f$ has a priori bounds.  \emph{Status:} proved in the paper (\texttt{intro.tex}, lines
-69--74).  The precise form used in the body of the paper is the following.  For every $B$
+69--74).  The explicit form is the following.  For every $B$
 there is $m>0$ such that every infinitely $B$-bounded primitively renormalizable quadratic
 polynomial has, at every primitive period $p_n$, a quadratic-like renormalization $V\supset V'$
-with $\modulus(V\setminus V')\ge m$ (source label \texttt{thm:a-priori-bounds};
-\texttt{conclusions.tex}, lines 279--304).
+with $\modulus(V\setminus V')\ge m$ (the explicit form is stated without a label in the source;
+\texttt{conclusions.tex}, lines 298--304).
 \end{theorem}
 
 \paragraph{Proof strategy (from the source).}
@@ -186,9 +196,9 @@ non-infinitely renormalizable Julia sets); Hu--Jiang and Jiang (source keys \tex
 \texttt{J}, local connectivity of $J(f_c)$).
 
 \paragraph{MLC scope.}
-The paper claims local connectivity of $\M$ at the parameters it covers, namely the
+The paper lists as a consequence of its a priori bounds that $\M$ is locally connected at the parameters it covers, namely the
 infinitely renormalizable $c$ of bounded primitive type, equivalently combinatorial rigidity
-of $f_c$ (\texttt{intro.tex}, lines 93--101).  It does not claim MLC globally.  It also
+of $f_c$, the implication being attributed to Lyubich's rigidity theorem (\texttt{intro.tex}, lines 93--101).  The introduction also says that the class of ``high bounded type'' had been treated before, citing the same reference.  It does not claim MLC globally.  It also
 lists further consequences (local connectivity of $J(f_c)$ and universality statements),
 which we do not digest further (\texttt{intro.tex}, lines 102--119).
 
@@ -197,7 +207,7 @@ which we do not digest further (\texttt{intro.tex}, lines 102--119).
 
 \paragraph{Identity.}
 J.~Kahn and M.~Lyubich, \emph{A priori bounds for some infinitely renormalizable
-quadratics: II. Decorations}, arXiv:math/0609046 (2006).  The main TeX file is
+quadratics: II. Decorations}, arXiv:math/0609046 (2006) \cite{KahnLyubichDecorations}.  The main TeX file is
 \texttt{refs/arxiv-math-0609046/main.tex}, lines 39--41.
 
 \paragraph{Definitions.}
@@ -323,7 +333,7 @@ source cites Cheraghi together with Avila--Kahn--Lyubich--Shen (\texttt{intro.te
 
 \paragraph{Identity.}
 J.~Kahn and M.~Lyubich, \emph{A priori bounds for some infinitely renormalizable quadratics:
-III. Molecules}, arXiv:0712.2444 (2007).  The main TeX file is \texttt{refs/arxiv-0712.2444/main.tex},
+III. Molecules}, arXiv:0712.2444 (2007) \cite{KahnLyubichMolecules}.  The main TeX file is \texttt{refs/arxiv-0712.2444/main.tex},
 lines 20--22.
 
 \paragraph{Definitions.}
@@ -974,12 +984,13 @@ rigidity input of Section~\ref{sec:apriori-framework}.  The satellite paper prov
 parameters by a different route, through pacman renormalization.  The limbs paper is independent of these arguments.
 
 \paragraph{Connection to the Lean development.}
-None of the theorems in this chapter is formalized.  The Lean development (see Chapter~\ref{ch:formal-map} and the Lean inventory)
-covers only elementary parts: the quadratic symmetries, the first two components, the real slice, the examples, and the multiplier
-maps.  The root statement is still conditional on the explicit \texttt{RootInput} hypothesis.
+None of the theorems digested in this chapter is formalized.  The Lean development, described in
+Chapter~\ref{chap:lean-inventory}, covers Green functions, puzzles, renormalization interfaces, the categorical branch,
+certified approximations, and the elementary quadratic results (symmetries, first components, real slice, examples,
+and multiplier maps).  The root statement is still conditional on the explicit \texttt{RootInput} hypothesis.
 
 \paragraph{Not covered here.}
 Hu--Jiang and Jiang are cited but not digested; their sources are not on arXiv.  Inou--Shishikura and Gaidashev--Yampolsky are cited
 elsewhere and are not digested.  The unpublished \emph{Taming the elephants} and \emph{Elephant puzzles} are not available.  Lyubich's
 Astérisque 261 paper (\emph{Dynamics of quadratic polynomials III}, bibliography key \texttt{LyubichIII}) is in the bibliography but is
-not digested in this chapter.
+digested in Chapter~\ref{ch:digests-covering-parapuzzle}.

@@ -1,0 +1,65 @@
+\documentstyle[12pt,amssymb,psfig,epsfig,color]{amsart}
+\bibliographystyle{amsalpha}
+\baselineskip=24pt 
+% ***********************************************************
+% *** The following two lines take out the picture files! ***
+%\input{psfig}
+%\def\psfig#1{}
+%\usepackage[dvips]{epsfig}
+
+\input{macros.tex} 
+\input{figure_macros.tex}
+
+
+\begin{document}
+
+
+\bigskip\bigskip
+
+\title[Higher degree polynomials]{Local connectivity of Julia sets\\ for unicritical polynomials}
+\author {Jeremy Kahn and Mikhail Lyubich}
+%\thanks{
+%   This work was supported in part by the Guggenheim Fellowship, Clay Mathematics Institute, NSF, and NSERC}
+\date{April 29, 2005}
+
+%VT
+\thispagestyle{empty} 
+\input{imsmark}
+\SBIMSMark{2005/03}{April 2005}{}
+
+\begin{abstract} 
+  We prove that the Julia set $J(f)$ of 
+at most finitely renormalizable unicritical polynomial  $f:z\mapsto  z^d+c$  with all periodic points repelling 
+is locally connected. (For $d=2$ it was proved by Yoccoz around 1990.)
+It follows from {\it a priori} bounds in a modified Principle Nest of puzzle pieces. 
+The proof of {\it a priori} bounds  makes use of new analytic tools developed in \cite{covering lemma}
+that give control of moduli of annuli under maps of high degree. 
+\end{abstract}
+
+\setcounter{tocdepth}{1}
+ 
+\maketitle
+%\tableofcontents
+
+%\renewcommand{\chaptername}{Lecture}
+
+
+\input{intro}
+
+%\setcounter{chapter}{0}
+
+\input{kingdom}
+\input{covering}
+\input{bounds}
+%\input{period}
+%\input{snakes}
+\input{bib.tex}
+
+
+\end{document}
+
+
+
+
+
+
