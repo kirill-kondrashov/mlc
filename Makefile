@@ -69,6 +69,7 @@ REVIEW_CHAPTERS := \
 	docs/review/23_digests_apriori_limbs.tex \
 	docs/review/24_digests_covering_parapuzzle.tex \
 	docs/review/25_digests_siegel_renormalization.tex \
+	docs/review/26_digests_lyubich_parameter.tex \
 	docs/review/22_approaches_map.tex
 
 docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)

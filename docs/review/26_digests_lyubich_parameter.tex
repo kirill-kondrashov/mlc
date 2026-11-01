@@ -1,0 +1,250 @@
+\chapter[Parameter plane in Lyubich's monograph]{Source digests VII: the parameter plane in Lyubich's monograph}
+\label{ch:digests-lyubich-parameter}
+
+This chapter digests Section~39 (``Thurston's realization theorem'') of Chapter~5 (``Parameter plane'') of the online volumes I--II of
+Lyubich's monograph~\cite{LyubichBook}, printed pages 519--528.  The printed page numbers agree with
+the page indices of the 2023 PDF stored in \texttt{refs/}.  Statements are those of the book, up to
+notation, and numbers are the book's numbers.  Where the printed text omits or misstates a step, the
+entry says so; a reconstruction of an omitted step is labelled as ours.  The other sections of Chapter~5 are
+listed as pending in Section~\ref{sec:lyubich-volumes-map}.
+
+\section{Thurston's realization theorem (Section 39)}
+\label{sec:lyubich-thurston}
+
+Printed pages 519--528.  The section proves Thurston's realization theorem for critically periodic maps
+by an argument on the Teichm\"uller space.  A realization is a fixed point of a pullback operator.  Orbits of
+that operator either converge, or their canonical moduli decrease along an invariant multicurve.  The printed
+text ends with the contraction estimate of Lemma~\ref{lem:lyubich-39-17}; the deduction of the theorem from it
+is not written (Section~\ref{sec:lyubich-39-gaps}).
+
+\subsection*{Definitions}
+
+\begin{definition}[Critically periodic maps; realizability; printed p.~519]
+\label{def:lyubich-realizable}
+A topological double branched covering $g\colon\mathbb C\to\mathbb C$ with critical point $0$ is
+\emph{critically periodic} if $g^p(0)=0$ for some $p\ge1$.  Its postcritical set is
+$P=(g^n(0))_{n=0}^{p-1}$.  The map $g$ is \emph{realizable} if some quadratic polynomial $f_c$ lies in the
+Thurston class of $g$.  By Lemma~38.10 of the book, this realization is unique.
+\end{definition}
+
+\begin{definition}[Teichm\"uller space, moduli space, pullback operator; printed pp.~519--520]
+\label{def:lyubich-teichmuller}
+A point of the Teichm\"uller space $\mathcal T$ is a class $\tau=[h_\mu]$ of solutions
+$h_\mu\colon(\mathbb C,P)\to(\mathbb C,O_\mu)$ of the Beltrami equation for conformal structures $\mu$ on
+$\mathbb C\setminus P$.  Two structures give the same point when a complex affine map $\varphi$ satisfies
+$\varphi\circ h_\mu\simeq h_{\mu'}$ rel $P$.  The moduli space $\mathcal M$ consists of embeddings
+$P\to\mathbb C$ modulo complex affine maps, and $\pi([h_\mu])=h_\mu|_P$.  The pullback operator
+$g^*\colon\mathcal T\to\mathcal T$ sends $\tau$ to the class $\tau'$ of the solution for the pulled-back
+structure $(h\circ g)^*\sigma$.  The Lift Homotopy Theorem makes $g^*$ well defined.
+\end{definition}
+
+\begin{definition}[Canonical annuli and invariant multicurves; printed pp.~522--523]
+\label{def:lyubich-canonical-annuli}
+Lemma~18.11 and \S6.7 of the book give canonical annuli $A^n_\gamma$ on $\mathbb C\setminus O_n$, labelled by
+the components $\gamma$ of a multicurve $\mathcal G^n$ in $\mathbb R^2\setminus P$.  Put
+\[
+ \mathcal G^n(\mu)=\{\gamma\in\mathcal G^n:\ \modulus A^n_\gamma\ge\mu\},
+ \qquad
+ M_n=\max_{\gamma\in\mathcal G^n}\modulus A^n_\gamma .
+\]
+For a multicurve $\mathcal G$, the multicurve $g^*(\mathcal G)$ consists of the non-peripheral components of
+the preimages $g^{-1}(\gamma)$, $\gamma\in\mathcal G$.  A multicurve is \emph{invariant} if
+$g^*(\mathcal G)\subset\mathcal G$.
+\end{definition}
+
+\begin{definition}[Thurston matrix; printed p.~524]
+\label{def:lyubich-thurston-matrix}
+For the canonical invariant multicurve $\mathcal G$ of size $l$, the Thurston matrix
+$T=(t_{\gamma\delta})_{\gamma,\delta\in\mathcal G}$ has entries in $\{0,1,\tfrac12\}$.  We have
+$t_{\gamma\delta}=0$ unless $[\gamma]$ is a pullback $f^*[\delta]$.  In that case
+$t_{\gamma\delta}=1/\deg(f\colon\delta'\to\delta)$, where $\delta'=f^*\delta$ is homotopic to $\gamma$.
+\end{definition}
+
+\subsection*{Results}
+
+\begin{theorem}[Thurston realization; printed p.~519]
+\label{thm:lyubich-thurston-realization}
+Any critically periodic topological double branched covering $g\colon\mathbb C\to\mathbb C$ is realizable.
+\end{theorem}
+
+\begin{proposition}[Printed Proposition 39.2; p.~520]
+\label{prop:lyubich-fixed-point}
+A branched covering $g\colon(\mathbb R^2,P)\to(\mathbb R^2,P)$ is realizable if and only if the pullback
+operator $g^*\colon\mathcal T\to\mathcal T$ has a fixed point.
+\end{proposition}
+
+\paragraph{Argument as printed (pp.~520--521).}
+A realization gives a diagram of type~(39.1) with homeomorphisms $h,h'$ homotopic rel $P$.  Hence
+$[h']=[h]$, and the diagram gives $[h']=g^*[h]$, so $[h]$ is a fixed point.  Conversely, if $[h]$ is a fixed
+point, then after postcomposing $h'$ with a scaling $z\mapsto\lambda z$ we get $h'\simeq h$ rel $P$, and
+$\lambda^{-1}f$ is Thurston equivalent to $g$.  The printed converse reads ``fixed point of $f^*$''; the
+operator on $\mathcal T$ is $g^*$.
+
+\begin{lemma}[Printed Lemma 39.1; p.~520]
+\label{lem:lyubich-39-1}
+For a Riemann surface $(C,O_\tau)$ there exist only boundedly many Riemann surfaces $(\hat C,O_{\tau'})$ as
+in diagram~(39.1), bounded in terms of $p=|P|$.  If $(C,O_\tau)$ lies in a compact $K\subset\mathcal M$, then
+$(C,O_{\tau'})$ lies in a compact $K'\Subset\mathcal M$.
+\end{lemma}
+
+\begin{lemma}[Printed Lemma 39.4; p.~521]
+\label{lem:lyubich-39-4}
+For every compact $K\subset\mathcal M$ there is $\rho=\rho(K)<1$ such that $\|(Dg^*(\tau))^{\#}\|\le\rho$ for
+every $\tau\in\mathcal T$ with $\pi(\tau)\in K$.
+\end{lemma}
+
+\begin{corollary}[Printed Corollary 39.5; p.~522]
+\label{cor:lyubich-39-5}
+Let $\tau_n=(g^*)^n\tau$.  If $\pi(\tau_n)$ stays in some compact $K\subset\mathcal M$, then $(\tau_n)$
+converges to a fixed point of $g^*$.
+\end{corollary}
+
+\paragraph{Escaping orbits (printed pp.~522--526).}
+Fix $K\ge1$ such that $\tau_0$ and $\tau_1$ are $K$-quasiconformally equivalent; the printed text takes
+$K=\exp\operatorname{dist}_{\mathcal T}(\tau_0,\tau_1)$ as the best such constant.  The following lemmas
+compare the families $\mathcal G^n(\mu)$ at consecutive levels.
+
+\begin{lemma}[Printed Lemma 39.6; p.~522]
+\label{lem:lyubich-39-6}
+$\mathcal G^{n+1}(\mu)\subset\mathcal G^n(\mu/K-2)$.
+\end{lemma}
+
+\begin{lemma}[Printed Lemma 39.7; p.~522]
+\label{lem:lyubich-39-7}
+$g^*(\mathcal G^n(\mu))\subset\mathcal G^{n+1}(\mu/2-2)$.
+\end{lemma}
+
+\begin{corollary}[Printed Corollary 39.8; p.~523]
+\label{cor:lyubich-39-8}
+$g^*(\mathcal G^n(\mu))\subset\mathcal G^n(\mu/2K-4)$.
+\end{corollary}
+
+Corollary~\ref{cor:lyubich-39-8} follows from Lemmas~\ref{lem:lyubich-39-6} and~\ref{lem:lyubich-39-7}.  Their
+composition gives $g^*(\mathcal G^n(\mu))\subset\mathcal G^n(\mu/(2K)-2/K-2)$, and
+$\mu/(2K)-2/K-2\ge\mu/(2K)-4$ because $K\ge1$.  The printed form $\mu/2K-4$ is read as $\mu/(2K)-4$.
+
+\begin{lemma}[Printed Lemma 39.9; p.~523]
+\label{lem:lyubich-39-9}
+Let $L>4K$.  If $M_n>L^p$ for some $n$, then for some $\mu<L^p$ the multicurve $\mathcal G^n(\mu)$ is invariant.
+\end{lemma}
+
+\paragraph{Proof idea (printed).}
+Order the moduli of the canonical annuli above $4L$ as $\mu^n_1\ge\dots\ge\mu^n_l>4L$, where $l\le p-2$.
+Put $\mu^n_{l+1}=4L$.  If $M_n/(4L)>L^{p-2}$, the ratios $\mu^n_i/\mu^n_{i+1}$ cannot all be at most $L$,
+since their product is $M_n/(4L)$ and there are at most $p-2$ of them.  Take the largest $i$ with
+$\mu^n_i>L\mu^n_{i+1}$ and choose $\mu\in(4L,L^p)$ with $L\mu^n_{i+1}<\mu<\mu^n_i$.  Then
+$\mathcal G^n(\mu/L)=\mathcal G^n(\mu)$, and Corollary~\ref{cor:lyubich-39-8} gives
+$g^*(\mathcal G^n(\mu))\subset\mathcal G^n(\mu/L)=\mathcal G^n(\mu)$.
+
+\begin{lemma}[Printed Lemma 39.10; p.~523]
+\label{lem:lyubich-39-10}
+If in Lemma~\ref{lem:lyubich-39-9} $L>K^p$, then the multicurves $\mathcal G^{n+j}(\mu)$ are all the same for
+$j=0,1,\dots,p$.
+\end{lemma}
+
+The printed proof treats $j=0,1,\dots,p-1$ (see Section~\ref{sec:lyubich-39-gaps}).
+
+\begin{lemma}[Printed Lemma 39.11; p.~523]
+\label{lem:lyubich-39-11}
+Let $\delta'$ be a canonical Jordan curve in $\mathbb C\setminus f^{-1}(O)$.  Then there is a Jordan curve
+$\delta$ in $\mathbb C\setminus O$ with $\delta'\simeq f^*(\delta)$.  Moreover $d=\deg(f\colon\delta'\to\delta)$
+equals $2$ if $\delta'$ surrounds the critical point and $1$ otherwise.
+\end{lemma}
+
+\begin{lemma}[Printed Lemma 39.12; p.~524]
+\label{lem:lyubich-39-12}
+In the setting of Lemma~\ref{lem:lyubich-39-11},
+\[
+ d^{-1}\mu(\delta)-2\le\mu'(\delta')\le d^{-1}\mu(\delta)+2,
+\]
+where $\mu(\cdot)$ and $\mu'(\cdot)$ denote the canonical moduli at the two levels.
+\end{lemma}
+
+The printed proof uses the uniqueness of the canonical annulus in a homotopy class (Theorem~6.38 of the book).
+Exercise~39.13 offers a substitute: in the centrally symmetric case there is a symmetric annulus $B\subset A'$
+with $\modulus B\ge\modulus A'-4$.  The text states this as an exercise, not as a proved result.
+
+\begin{lemma}[Printed Lemma 39.15; p.~524]
+\label{lem:lyubich-39-15}
+Under the above circumstances $\mu'=T\cdot\mu+O(1)$, where the constant depends only on $p$ and $K$.
+\end{lemma}
+
+The printed proof cuts a canonical annulus into at most $p$ flat cylinders.  It then applies
+Lemmas~\ref{lem:lyubich-39-11} and~\ref{lem:lyubich-39-12} and the Gr\"otzsch inequality, which gives the two-sided
+estimate with error terms $(2+\mu)p$ and $2p$.  The threshold $\mu$ in the first error term is the one of
+Lemma~\ref{lem:lyubich-39-9}.
+
+\begin{lemma}[Printed Lemma 39.16; p.~526]
+\label{lem:lyubich-39-16}
+Let $g\colon(\mathbb R^2,P)\to(\mathbb R^2,P)$ be a critically periodic degree-two branched covering, and let $T$
+be the Thurston matrix of an invariant multicurve.  Then the recurrent part of $T$ is a weighted permutation
+all of whose cycles have multiplier $\tfrac12$.  Hence the spectral radius of $T$ is at most $(\tfrac12)^{1/p}$.
+\end{lemma}
+
+The printed proof shows that each cycle of curves contains exactly one degree-two step, so the block of $T$ for a
+cycle of length $n_\gamma$ has spectral radius $(\tfrac12)^{1/n_\gamma}$.  The stated bound $(\tfrac12)^{1/p}$ needs
+$n_\gamma\le p$, which the text does not justify.
+
+\begin{lemma}[Printed Lemma 39.17; p.~526]
+\label{lem:lyubich-39-17}
+There is $M=M(p,K)$ such that if $M_n\ge M$ for some $n$, then $M_{n+p}\le\tfrac34M_n$.
+\end{lemma}
+
+The printed proof cites Lemmas~39.9, 39.15 and 39.16.  Its key estimate is recorded with a misprint in
+Section~\ref{sec:lyubich-39-gaps}.
+
+\subsection*{What the printed section does not prove}
+\label{sec:lyubich-39-gaps}
+
+\begin{enumerate}
+\item \textbf{No concluding argument.}  The text ends with the proof of Lemma~\ref{lem:lyubich-39-17} and the
+  Notes (p.~527).  Theorem~\ref{thm:lyubich-thurston-realization} is not deduced.  Its ingredients are stated
+  in this section.  The text says that $M_n$ measures how far the surfaces escape in $\mathcal M$ (p.~526).  Thus
+  bounded $M_n$ would give a non-escaping orbit, Corollary~\ref{cor:lyubich-39-5} would give a fixed point, and
+  Proposition~\ref{prop:lyubich-fixed-point} would give realizability.  The deduction that $M_n$ stays bounded
+  from Lemmas~\ref{lem:lyubich-39-15} and~\ref{lem:lyubich-39-17} is ours; the printed text does not write it.
+\item \textbf{Lemma~39.10.}  The statement gives $j=0,\dots,p$, while the proof treats $j=0,\dots,p-1$.
+\item \textbf{Proof of Lemma~39.17.}  The displayed chain is $\|T^p\mu\|_\infty\le\tfrac12\|\mu_n\|_\infty=M_n$.
+  As printed, the last equality is false.  The intended inequality is $\le\tfrac12M_n$.  The proof cites
+  Lemma~39.9 for the equality of the multicurves $\mathcal G^{n+k}(\mu)$, $0\le k<p$.  That equality is
+  Lemma~\ref{lem:lyubich-39-10}, which needs $L>K^p$.
+\item \textbf{The sup-norm step.}  The passage from the spectral radius of the recurrent part (Lemma~39.16) to
+  $\|T^p\mu\|_\infty\le\tfrac12\|\mu\|_\infty$ is asserted with the phrase ``for $M$ sufficiently big''.  The text
+  does not treat the transient vertices of the graph of $T$.  The bound $l_n\le p-2$ in the proof of
+  Lemma~39.9 counts only the curves with modulus above $4L$.  It does not bound the length of transient paths.
+  We have not completed this step.
+\item \textbf{Proposition~39.2, converse.}  The printed converse says ``fixed point of $f^*$''; it should read $g^*$.
+\item \textbf{Unproved assertions in the text.}  $g^*$ is contracting in the Teichm\"uller metric (p.~522); the
+  bound $l_n\le p-2$ (p.~523); and $(f^*)^p\gamma=\gamma$ (p.~526), justified only by
+  ``$k((f^*)^n\gamma)=k(\gamma)$ for some $n$''.
+\end{enumerate}
+
+\subsection*{Notes (printed pp.~519 and 527--528)}
+
+The Notes attribute the following results.  These are the book's attributions, recorded without
+independent checking.
+
+\begin{itemize}
+\item The pullback argument was designed by Thurston, according to Sullivan's oral communication (p.~519).
+  The rigidity theorem for real Feigenbaum maps is due to Sullivan (p.~519).
+\item The first rough image of $\mathcal M$ is due to Brooks and Matelski; a finer image is due to Mandelbrot (p.~527).
+\item Levin analysed the elementary structure of $\mathcal M$ by Montel's theory of normal families (p.~527).
+\item Theorem~34.1 (connectedness of $\mathcal M$) is due to Douady and Hubbard, with an input from Sibony, in the
+  early 1980s.  The Multiplier Theorem is also due to Douady and Hubbard (p.~527).
+\item The Teichm\"uller-theoretic viewpoint is due to Sullivan (IHES preprint, 1982), developed by McMullen and
+  Sullivan (p.~527).
+\item The phase--parameter principle was formulated by Douady (p.~527).
+\item The Wake Theorem is cited to Douady--Hubbard and to Milnor (p.~527).
+\item The Fatou conjecture on density of hyperbolicity (33.7) interprets remarks of Fatou on p.~73 of his paper (p.~527).
+\item Theorem~36.2 (J-stability) was proved independently by Ma\~n\'e--Sad--Sullivan and by Lyubich (pp.~527--528).
+  The reduction of the Fatou conjecture to the no-invariant-line-fields conjecture appeared in Ma\~n\'e--Sad--Sullivan.
+  Its Kleinian analogue is due to Sullivan (p.~528).
+\item Theorem~37.31 (entropy growth) was a conjecture in the preprint of Milnor--Thurston (p.~528).
+\item Myrberg was probably the first to study hyperbolic windows in the real quadratic family (p.~528).
+\item The Thurston realization theorem became accessible through Douady--Hubbard; the spider algorithm for
+  quadratic polynomials appeared in Hubbard--Schleicher (p.~528).
+\end{itemize}
+
+\subsection*{Formal status}
+
+No Lean declaration in the repository corresponds to Section~39.  The results above are recorded as digests only.
