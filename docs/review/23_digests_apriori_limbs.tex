@@ -69,7 +69,7 @@ does not use it.  Kahn I says that a priori bounds of
 bounded primitive type give ``the Mandelbrot set is locally connected at $c$, or
 equivalently $f_c$ is combinatorially rigid'' (\texttt{intro.tex}, lines 93--101), citing
 Lyubich's [puzzle] entry.  Kahn II and III state the same implication for the decoration
-and molecule conditions (Corollary of Kahn II, \texttt{intro.tex}, lines 123--126;
+and molecule conditions (Corollary of Kahn II, \texttt{intro.tex}, lines 38--41;
 Corollary~6.4 of Kahn III, \texttt{intro.tex}, lines 36--41).  Dudko--Lyubich deduce MLC
 at Feigenbaum points from beau bounds and the Rigidity Theorem of Lyubich.  KKL show that
 beau bounds alone do not give MLC: rigidity additionally needs a bounded puzzle
@@ -170,7 +170,7 @@ geodesic-to-modulus theorem (source label \texttt{thm:a-priori-bounds}; \texttt{
 \label{thm:kahn-I-main}
 If $f$ is an infinitely renormalizable quadratic polynomial of bounded primitive type, then
 $f$ has a priori bounds.  \emph{Status:} proved in the paper (\texttt{intro.tex}, lines
-69--74).  The explicit form is the following.  For every $B$
+71--73).  The explicit form is the following.  For every $B$
 there is $m>0$ such that every infinitely $B$-bounded primitively renormalizable quadratic
 polynomial has, at every primitive period $p_n$, a quadratic-like renormalization $V\supset V'$
 with $\modulus(V\setminus V')\ge m$ (the explicit form is stated without a label in the source;
@@ -214,21 +214,21 @@ quadratics: II. Decorations}, arXiv:math/0609046 (2006) \cite{KahnLyubichDecorat
 \begin{itemize}
 \item \emph{Decoration.} A decoration $\mathcal L$ of $\M$ is the part of $\M$ cut off by two
 external rays landing at a tip of a satellite copy of $\M$ attached to the main cardioid
-(\texttt{main.tex}, lines 49--50; \texttt{intro.tex}, lines 88--91).
+(\texttt{intro.tex}, lines 3--5).
 \item \emph{Escape route.} For a map that is not satellite renormalizable, let $n$ be least
 with $f^{qn}(0)\in\operatorname{int}Z^1_{\boldsymbol\kappa}$.  The escape route
 $\bar\kappa=(\kappa_1,\dots,\kappa_n=\boldsymbol\kappa)$ satisfies
 \[
 f^{qm}(0)\in Z^{\,q(n-m)+1}_{\boldsymbol\kappa_m},\qquad m=1,\dots,n
 \]
-(\texttt{kingdom.tex}, lines 337--353).
+(\texttt{kingdom.tex}, lines 99--108).
 \item \emph{Decoration condition.} An infinitely renormalizable $f$ satisfies the decoration
 condition if all little copies $M^{(n)}$ belong to finitely many decorations
-$\mathcal L_k$; equivalently, the parameters $q_n$ and $n_n$ of the escape routes are bounded
-(\texttt{kingdom.tex}, lines 501--504).
+$\mathcal L_k$
+(\texttt{intro.tex}, lines 6--11).
 \item \emph{Decoration class $(\bar q,\bar n)$.} A $\psi$-ql map belongs to it when every
 renormalization has decoration parameters $(\bar q_n,\bar n_n)\le(\bar q,\bar n)$
-(\texttt{moduli.tex}, lines 1335--1337).
+(\texttt{moduli.tex}, lines 713--716).
 \end{itemize}
 
 \paragraph{Results.}
@@ -236,7 +236,7 @@ renormalization has decoration parameters $(\bar q_n,\bar n_n)\le(\bar q,\bar n)
 \begin{theorem}[Main Theorem, Kahn II]
 \label{thm:kahn-II-main}
 An infinitely renormalizable quadratic map satisfying the decoration condition has a priori
-bounds.  \emph{Status:} proved (\texttt{intro.tex}, lines 112--118).  The proof uses the
+bounds.  \emph{Status:} proved (\texttt{intro.tex}, lines 31--33).  The proof uses the
 bounded-period improvement (Theorem~\ref{thm:kahn-II-bounded-period}, which is Kahn I's result)
 for the regime of bounded periods.
 \end{theorem}
@@ -246,7 +246,7 @@ for the regime of bounded periods.
 Given finitely many decorations $\mathcal L_k$ there is $\underline p$ such that every
 infinitely renormalizable quadratic map satisfying the decoration condition with these
 decorations and renormalization periods $p\ge\underline p$ has a priori bounds.
-\emph{Status:} proved in the paper (\texttt{intro.tex}, lines 132--136).
+\emph{Status:} proved in the paper (\texttt{intro.tex}, lines 47--52).
 \end{theorem}
 
 \begin{theorem}[Improving the moduli, bounded decoration parameters]
@@ -258,7 +258,7 @@ If $p\ge\underline p$ and $\modulus(U'\setminus K')<\epsilon$, then
 \[
 \modulus(U\setminus K)\ <\ \rho\,\modulus(U'\setminus K').
 \]
-\emph{Status:} proved (\texttt{moduli.tex}, lines 1271--1281).
+\emph{Status:} proved (\texttt{moduli.tex}, lines 650--663).
 \end{theorem}
 
 \begin{theorem}[Improving the moduli, bounded period]
@@ -269,7 +269,7 @@ renormalizable, $\underline p\le p\le\bar p$ and $\modulus(U'\setminus K')<\epsi
 then $\modulus(U\setminus K)<\rho\,\modulus(U'\setminus K')$.
 \emph{Status:} \emph{cited}, not proved in Kahn II.  The source identifies it as Theorem~9.1
 of Kahn I, which is cited as it appeared in the first arXiv version of Kahn I
-(\texttt{moduli.tex}, lines 1309--1327; Kahn I, \texttt{conclusions.tex}, lines 74--82).
+(\texttt{moduli.tex}, lines 691--700; Kahn I, \texttt{conclusions.tex}, lines 74--82).
 Kahn I's present version contains this result as the ``improving of length'' theorem
 (\texttt{conclusions.tex}, line 172).  We record the dependency and not the numbering.
 \end{theorem}
@@ -282,14 +282,14 @@ $\modulus(U_n\setminus K_n)<\epsilon$ for some $n\ge l$, then
 \[
 \modulus(U_{n-l}\setminus K_{n-l})\ <\ \tfrac12\,\modulus(U_n\setminus K_n).
 \]
-\emph{Status:} proved (\texttt{moduli.tex}, lines 1340--1346).
+\emph{Status:} proved (\texttt{moduli.tex}, lines 719--726).
 \end{theorem}
 
 \begin{theorem}[Beau bounds in the decoration class]
 \label{thm:kahn-II-beau}
 For every $(\bar q,\bar n)$ the family of renormalization combinatorics in the decoration class
 $(\bar q,\bar n)$ has beau a priori bounds (Definition~\ref{def:apriori-beau}).
-\emph{Status:} proved (\texttt{moduli.tex}, lines 1423--1426).
+\emph{Status:} proved (\texttt{moduli.tex}, lines 801--806).
 \end{theorem}
 
 \begin{theorem}[JLC and MLC implication]
@@ -298,18 +298,18 @@ If $f_c(z)=z^2+c$ is infinitely renormalizable and satisfies the decoration cond
 $J(f_c)$ is locally connected and $\M$ is locally connected at $c$.
 \emph{Status:} the implication is cited from Lyubich (rigidity input,
 Section~\ref{sec:apriori-framework}); the paper does not prove it
-(\texttt{intro.tex}, lines 36--37 and 123--126).
+(\texttt{intro.tex}, lines 36--37 and 38--41).
 \end{theorem}
 
 \paragraph{Proof strategy (from the source).}
 The combinatorics are encoded by the Yoccoz puzzle and a modified principal nest
-(\texttt{intro.tex}, lines 155--166).  Ordinary quadratic-like maps are replaced by canonical
-$\psi$-ql maps with pseudo-puzzles (\texttt{intro.tex}, lines 168--179).  The Quasi-Additivity Law
-and the Covering Lemma supply the analytic estimates (\texttt{intro.tex}, lines 181--183).
+(\texttt{intro.tex}, lines 70--72).  Ordinary quadratic-like maps are replaced by canonical
+$\psi$-ql maps with pseudo-puzzles (\texttt{intro.tex}, lines 78--85).  The Quasi-Additivity Law
+and the Covering Lemma supply the analytic estimates (\texttt{intro.tex}, lines 92--93).
 Modulus improvement for bounded decoration parameters is proved first
-(\texttt{moduli.tex}, lines 1271--1307), then combined with the bounded-period theorem to cover all
-period regimes (\texttt{moduli.tex}, lines 1309--1407).  Iteration gives beau bounds, which are
-transferred back to ordinary quadratic-like maps (\texttt{moduli.tex}, lines 1409--1440).
+(\texttt{moduli.tex}, lines 650--663), then combined with the bounded-period theorem to cover all
+period regimes (\texttt{moduli.tex}, lines 691--700).  Iteration gives beau bounds, which are
+transferred back to ordinary quadratic-like maps (\texttt{moduli.tex}, lines 719--726 and 801--806).
 
 \paragraph{External inputs.}
 Lyubich, \emph{Dynamics of quadratic polynomials I--II} (the implication above); Kahn I (the
@@ -318,15 +318,15 @@ bounded-period theorem); Kahn--Lyubich, \emph{The quasi-additivity law in confor
 polynomials} (the modified principal nest); Douady--Hubbard, \emph{On the dynamics of
 polynomial-like maps} (background).  The transfer from $\psi$-ql to ordinary quadratic-like
 maps uses a ``ql extension'' lemma; the source does not say where that lemma comes from
-(\texttt{moduli.tex}, lines 1439--1440).
+(\texttt{moduli.tex}, line 819).
 
 \paragraph{MLC scope.}
 The claimed scope is quadratic, infinitely renormalizable parameters satisfying the decoration
-condition: local connectivity of $J(f_c)$ and of $\M$ at $c$ (\texttt{intro.tex}, lines 123--126).
+condition: local connectivity of $J(f_c)$ and of $\M$ at $c$ (\texttt{intro.tex}, lines 38--41).
 The source also states that its a priori bounds proof extends unchanged to higher-degree
 unicritical maps, but that the MLC implication uses quadratic geometry; for higher degree, the
 source cites Cheraghi together with Avila--Kahn--Lyubich--Shen (\texttt{intro.tex}, lines
-199--203).  It does not claim global local connectivity of $\M$.
+113--118).  It does not claim global local connectivity of $\M$.
 
 \section{Kahn III: molecules}
 \label{sec:kahn-III}
@@ -680,15 +680,15 @@ in the paper as $[L_1]$; lines 3370--3374).  It is not an independent proof from
 \begin{theorem}[Theorem C: renormalization conjecture]
 \label{thm:dl-fei-C}
 For every combinatorial bound $\bar p$, the Renormalization Conjecture is valid in the space of quadratic-like
-maps (\texttt{Feigen.tex}, lines 337--344).  \emph{Status:} obtained in the paper from the cited universality theorem
+maps (\texttt{Feigen.tex}, lines 341--345).  \emph{Status:} obtained in the paper from the cited universality theorem
 of Lyubich (\emph{Feigenbaum--Coullet--Tresser universality and Milnor's hairiness conjecture}, Ann.\ of Math.\ 149
-(1999), cited as $[L_2]$) together with Sullivan, McMullen, and Avila--Lyubich (lines 337--344 and 3376--3410).  We
+(1999), cited as $[L_2]$) together with Sullivan, McMullen, and Avila--Lyubich (lines 341--345 and 3376--3410).  We
 record it as conditional on these inputs.
 \end{theorem}
 
 \begin{theorem}[Theorem D: self-similarity]
 \label{thm:dl-fei-D}
-For every $\bar p$, the Mandelbrot set is self-similar over $\mathcal I_{\bar p}$ (\texttt{Feigen.tex}, lines 346--360).
+For every $\bar p$, the Mandelbrot set is self-similar over $\mathcal I_{\bar p}$ (\texttt{Feigen.tex}, lines 359--361).
 \emph{Status:} deduced from Theorem C; it is not a separate direct theorem.
 \end{theorem}
 
@@ -895,7 +895,7 @@ D.~Dudko and D.~Schleicher, \emph{Homeomorphisms between limbs of the Mandelbrot
 
 \paragraph{Context.}
 The introduction recalls that an earlier result of the paper's reference $[BF_1]$ shows that limbs with equal denominators
-are homeomorphic, and that those homeomorphisms extend to neighbourhoods of the limbs (\texttt{limbs-2011.txt}, Introduction).
+are homeomorphic, and that those homeomorphisms extend to neighbourhoods of the limbs (Introduction of the paper).
 The main theorem below preserves periods of hyperbolic components, and for that reason the source notes that it cannot extend
 to neighbourhoods of the limbs.
 
@@ -903,7 +903,7 @@ to neighbourhoods of the limbs.
 \label{thm:ds-main}
 For any hyperbolic component of $\M$, let $\mathcal L_{p/q}$ and $\mathcal L_{p'/q}$ be two limbs with equal denominators.  Then
 there exists a homeomorphism between them that preserves periods of hyperbolic components.  \emph{Status:} proved in the paper
-(\texttt{limbs-2011.txt}, lines 50--54).  The paper relies on the decoration theorem and on Schleicher's combinatorial
+(the Main Theorem in the Introduction).  The paper relies on the decoration theorem and on Schleicher's combinatorial
 results (Theorem~\ref{thm:ds-admissibility} below).
 \end{theorem}
 
@@ -911,22 +911,22 @@ results (Theorem~\ref{thm:ds-admissibility} below).
 \label{thm:ds-admissibility}
 If an angled internal address describes a combinatorial class in $\M$, then the numerators $p_k$ can be changed arbitrarily
 (coprime to $q_k$) and the modified angled internal address still describes a combinatorial class in $\M$.  \emph{Status:} cited,
-Schleicher's Theorem~2.3 as stated in the paper (\texttt{limbs-2011.txt}, lines 292--299).
+Schleicher's Theorem~2.3 as stated in the paper (Theorem~3.2 of the paper, which cites Schleicher).
 \end{theorem}
 
 \paragraph{The combinatorial model.}
 There is a combinatorial model $\M_{\rm comb}$ of the Mandelbrot set, described as a limit of the arrangements $\M_n$ of hyperbolic
 components of period up to $n$ in a certain sense, as in Douady's construction cited by the paper.  There is a canonical continuous
-projection $\pi\colon\M\to\M_{\rm comb}$ whose fibres $\pi^{-1}(c)$ are compact, connected and full (\texttt{limbs-2011.txt}, lines 56--62).
-The MLC conjecture ``can be stated as saying that $\pi$ is a homeomorphism'' (lines 62--63).  So the paper's framework expresses
+projection $\pi\colon\M\to\M_{\rm comb}$ whose fibres $\pi^{-1}(c)$ are compact, connected and full (Introduction of the paper).
+The MLC conjecture ``can be stated as saying that $\pi$ is a homeomorphism'' (Introduction of the paper).  So the paper's framework expresses
 MLC as the statement that $\pi$ is a homeomorphism.
 
 \begin{theorem}[Canonical lifting]
 \label{thm:ds-lifting}
 Let $L_1,L_2\subset\M$ be two closed connected combinatorial sets.  For every continuous map
 $f'\colon\pi(L_1)\to\pi(L_2)$ that is canonical with respect to small copies of $\M$, there is a continuous map
-$f\colon L_1\to L_2$ such that the diagram with $\pi$ commutes (\texttt{limbs-2011.txt}, lines 447--450).  \emph{Status:} stated in
-the paper; canonicity of $f'$ is defined there with respect to small copies (lines 431--437).
+$f\colon L_1\to L_2$ such that the diagram with $\pi$ commutes (Theorem~5.1 of the paper).  \emph{Status:} stated in
+the paper; canonicity of $f'$ is defined there with respect to small copies (Section~5, before Theorem~5.1).
 \end{theorem}
 
 \paragraph{MLC scope.}
