@@ -396,11 +396,11 @@ are known and recorded here, so that they are not mistaken for coverage.
   \ref{ch:digests-laminations-entropy}: Milnor's lectures, Lyubich's ICTP notes, the Pacman paper of Dudko,
   Lyubich and Selinger, the neutral a priori bounds of Dudko and Lyubich, the matings-with-laminations and
   core-entropy papers, the Sierpi\'nski-carpet paper of Dudko and Luo (Chapter~\ref{ch:digests-sierpinski}), and Słodkowski's holomorphic-motion theorems.  The following are not yet digested:
-  Lyubich's online volumes I--II (a web search found no freely available Volumes~III--IV of
+  Lyubich's online volumes I--II (mapped in Section~\ref{sec:lyubich-volumes-map}; a web search found no freely available Volumes~III--IV of
   \emph{Conformal Geometry and Dynamics of Quadratic Polynomials}), the Acta papers \cite{LyubichDynamics}; the Dudko papers on
   canonical decompositions and correspondences, which are
-  indirectly related to MLC and are listed in the reference inventory; and the Bartholdi--Dudko series on
-  algorithmic aspects of branched coverings, which concerns computability rather than MLC.
+  classified in Section~\ref{sec:adjacent-sources} as not about MLC; and the Bartholdi--Dudko series on
+  algorithmic aspects of branched coverings (Section~\ref{sec:adjacent-sources}), which concerns computability and contains one quoted MLC statement.
 \item The survey's notation $\Theta_{\le N}$ is not defined explicitly in the survey, so
   the class in its near-parabolic statement is recorded only as the survey states it.
 \item Lean formalization of these sources is not complete.  The repository contains
@@ -410,3 +410,48 @@ are known and recorded here, so that they are not mistaken for coverage.
   surgery, and no straightening theorem.  The exact examples of Milnor's lectures
   (Chapter~\ref{ch:digests-monographs}) and the real slice are formalized.
 \end{itemize}
+
+\section{Adjacent sources outside MLC proper}
+\label{sec:adjacent-sources}
+
+Several papers of Dudko and coauthors are in the reference store but are not about the Mandelbrot set.  Their
+LaTeX sources were searched for \emph{Mandelbrot}, \emph{limb}, \emph{local connectivity} and
+\emph{renormalization}, and their introductions were read.  The table records the outcome.
+
+\begin{center}\small
+\begin{tabular}{@{}P{0.36\textwidth}@{\hspace{4pt}}P{0.40\textwidth}@{\hspace{4pt}}P{0.20\textwidth}@{}}
+\textbf{Source} & \textbf{Subject} & \textbf{MLC content}\\
+\hline
+Bartholdi--Dudko, \emph{Algorithmic aspects of branched coverings}~\cite{BartholdiDudkoSurvey} and Parts I--IV~\cite{BartholdiDudkoI,BartholdiDudkoII,BartholdiDudkoIII,BartholdiDudkoIV} &
+algorithms for Thurston maps: van Kampen theorem for bisets, decidability of Thurston equivalence, erasing maps and the Birman sequence, expanding maps &
+quoted mating criterion (Theorem~\ref{thm:rees-tan-lei}) \\
+Dudko--Hlushchanka--Schleicher~\cite{DudkoHlushchankaSchleicher} &
+canonical decomposition of postcritically finite rational maps into maximal expanding quotients & none \\
+Bartholdi--Dudko--Pilgrim~\cite{BartholdiDudkoPilgrim} &
+hyperbolicity and graph attractors for correspondences on Riemann surfaces & none \\
+\end{tabular}
+\end{center}
+
+In the LaTeX sources the word Mandelbrot occurs in the mating discussions of the survey and of Parts~I and~IV, in a citation of an unpublished note in the survey, in a figure-library file, and
+and in one commented-out line of the correspondences paper.  Parts~II and~III and the canonical-decomposition
+paper contain no occurrence.
+
+\begin{theorem}[Rees and Tan Lei, as quoted by Bartholdi and Dudko]
+\label{thm:rees-tan-lei}
+Let $p$ and $q$ be hyperbolic post-critically finite quadratic polynomials.  The following are equivalent:
+(1) the topological mating $p\boxtimes q$ is isotopic to a rational map;
+(2) the map $p\triangleright q$ of the sources is a sphere map (its definition is not reproduced here);
+(3) $p$ and $q$ do not lie in conjugate primary limbs of the Mandelbrot set.
+\end{theorem}
+
+\begin{remark}
+This is the degree-two case of the geometric-mating section of the survey.  The survey also states that, in degree two,
+$p$ and $q$ have a pinching cycle of periodic angles exactly when they lie in conjugate primary limbs.  Part~IV
+\cite{BartholdiDudkoIV}, Theorem~E, gives the general-degree version and credits the degree-two criterion to Rees and
+Tan Lei (its reference list includes \cite{TanLei}).  In degree two every Thurston obstruction is a Levy obstruction, so an expanding mating is
+conjugate to a rational map; this fails in degree at least three.
+\end{remark}
+
+The theorem is a criterion for matings in terms of limbs of $\M$.  It does not decide local connectivity of $\M$.
+It is quoted here without proof as the only MLC-related statement of these sources.  Section~\ref{sec:digest-matings}
+digests Dudko's matings with laminations~\cite{DudkoMatings}.

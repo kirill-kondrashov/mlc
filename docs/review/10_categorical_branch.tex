@@ -301,6 +301,91 @@ $K$-theoretic machinery used in Efimov's papers.  Therefore the category
 interfaces organize a future realization theorem but do not prove the
 missing parameter carving.
 
+\subsection{Literature of the categorical tools}
+\label{sec:efimov-literature}
+
+The categorical interfaces above use five papers of A.~I.~Efimov
+\cite{EfimovContinuousK,EfimovInverseLimits,EfimovDevissage,EfimovRigidityMot,EfimovHeartKH}.
+A case-insensitive search of their TeX sources for \emph{Mandelbrot}, \emph{Julia},
+\emph{Green}, \emph{holomorphic motion}, \emph{Douady} and \emph{Yoccoz} returns no match,
+so these papers supply categorical tools only.  The statements below are those of the
+sources; the line numbers refer to the TeX files of the arXiv sources in \texttt{refs/}.
+
+\begin{definition}[Strongly Mittag--Leffler sequence]
+\label{def:strong-ml}
+Let $\mathcal C_0\leftarrow\mathcal C_1\leftarrow\cdots$ be an inverse sequence of dualizable
+categories over a rigid monoidal base $\mathcal E$ (in the corollary below, $\mathcal E=\mathrm{Sp}$),
+with transition functors $F_{mn}\colon\mathcal C_m\to\mathcal C_n$ ($m\ge n$) and right adjoints
+$F_{mn}^R$.  The sequence is \emph{strongly Mittag--Leffler} if
+(i) for each $n$ the system $(F_{mn}F_{mn}^R)_{m\ge n}$ is essentially constant among the
+$\mathcal E$-linear left adjoint endofunctors of $\mathcal C_n$, and
+(ii) for all $n,k$ the limit functor $\Phi_{nk}=\varprojlim_{m\ge n,k}F_{mk}F_{mn}^R\colon\mathcal C_n\to\mathcal C_k$
+is strongly continuous and has a left adjoint.
+(\texttt{def:strong\_ML}, \texttt{arxiv-2502.04123.tex}, line 2681.)
+\end{definition}
+
+\begin{description}
+\item[Sheaves on spaces~\cite{EfimovContinuousK}, lines 521--533.]
+For a localizing invariant $F\colon\mathrm{Cat}^{\mathrm{perf}}\to\mathcal T$ into a presentable
+stable category, commuting with filtered colimits, and a locally compact Hausdorff space $X$
+with a presheaf $\underline{\mathcal C}$ of dualizable categories,
+$F^{\mathrm{cont}}(\mathrm{Shv}(X;\underline{\mathcal C}))\cong\Gamma_c(X,F^{\mathrm{cont}}(\underline{\mathcal C}))$
+(Theorem \texttt{th:main\_intro}).  For a finite CW complex $X$,
+$K^{\mathrm{cont}}(\mathrm{Shv}(X;\mathcal C))\cong K^{\mathrm{cont}}(\mathcal C)^X$
+(Corollary \texttt{cor:sheaves\_on\_finite\_CW\_complexes\_intro}).
+\item[Localizing invariants of inverse limits~\cite{EfimovInverseLimits}, lines 2722--2725 and 3457--3482.]
+For a strongly Mittag--Leffler sequence over $\mathrm{Sp}$,
+$K^{\mathrm{cont}}(\varprojlim^{\mathrm{dual}}\mathcal C_n)\cong\varprojlim K^{\mathrm{cont}}(\mathcal C_n)$
+(Corollary \texttt{cor:K\_theory\_of\_limit\_of\_ML}).  Theorem \texttt{th:hom\_epi\_for\_ML} shows that
+such sequences satisfy the homological-epimorphism hypothesis.  Under that hypothesis,
+Theorem \texttt{th:local\_invar\_of\_inverse\_limits} gives, for an accessible localizing
+invariant $\Phi$, a cofiber sequence
+$\Phi^{\mathrm{cont}}(\varprojlim^{\mathrm{dual}}\mathcal C_n)\to\Phi(\prod_n\mathcal C_n^{\omega})
+\xrightarrow{\,1-\Phi(F)\,}\Phi(\prod_n\mathcal C_n^{\omega})$,
+where $F$ is the product of the transition functors on compact objects.
+\item[Dévissage and the theorem of the heart~\cite{EfimovDevissage}, lines 476--530.]
+Quillen's dévissage theorem (Theorem \texttt{th:Quillen}, quoting Quillen~\cite{Quillen}, Theorem~4):
+if a small abelian category $\mathcal A$ has a strictly full abelian subcategory $\mathcal B$,
+closed under subobjects and quotients, such that every object of $\mathcal A$ has a finite
+filtration with subquotients in $\mathcal B$, then $K_n(\mathcal B)\cong K_n(\mathcal A)$ for $n\ge0$.
+Barwick's theorem of the heart (Theorem \texttt{th:Barwick}, \cite{Barwick}): for a stable
+$\infty$-category $\mathcal T$ with a bounded $t$-structure, $K_n(\mathcal T^\heartsuit)\cong K_n(\mathcal T)$
+for $n\ge0$.  Efimov's Theorem \texttt{th:key\_construction\_intro} gives a semi-orthogonal decomposition
+$D^b(\mathcal E_{\mathcal A,\mathcal B})=\langle D^b(\mathcal B),D^b(\mathcal B)\rangle$ and a short exact sequence
+$0\to\mathcal T_{\mathcal A,\mathcal B}\to D^b(\mathcal E_{\mathcal A,\mathcal B})\to D^b(\mathcal A)\to0$,
+where $\mathcal E_{\mathcal A,\mathcal B}$ is the category of pairs $Y\subset X$ with $Y,\ X/Y\in\mathcal B$.
+Quillen's theorem follows from these two statements and Barwick's theorem.
+\item[Rigidity of localizing motives~\cite{EfimovRigidityMot}, introduction.]
+The category $\mathrm{Mot}^{\mathrm{loc}}$ of localizing motives is rigid in the sense of Gaitsgory and
+Rozenblyum, and hence dualizable (Theorem \texttt{th:rigidity\_over\_Sp\_intro}).  Consequently every
+finitary localizing invariant $\mathrm{Cat}^{\mathrm{perf}}\to\mathrm{Sp}$ has the form $K(\mathcal C\otimes-)$
+for some $\mathcal C$.  The relative version (Theorem \texttt{th:rigidity\_over\_E\_intro}) gives rigidity
+of $\mathrm{Mot}^{\mathrm{loc}}_{\mathcal E}$ for a presentable stable rigid symmetric monoidal $\mathcal E$.
+\item[Theorem of the heart for $KH$~\cite{EfimovHeartKH}, lines 530--551 and 2803--2804, 3017--3026.]
+For a small stable category $\mathcal C$ with a bounded $t$-structure, the realization functor
+$D^b(\mathcal C^\heartsuit)\to\mathcal C$ induces $KH(\mathcal C^\heartsuit)\cong KH(\mathcal C)$
+(Theorem \texttt{th:theorem\_of\_the\_heart\_for\_KH\_intro}).  Under its hypotheses, dévissage for
+coherently assembled abelian categories gives $K^{\mathrm{cont}}_j(\mathcal B)\cong K^{\mathrm{cont}}_j(\mathcal A)$
+for $j\ge-1$, and $KH^{\mathrm{cont}}(\mathcal A)\simeq KH^{\mathrm{cont}}(\mathcal B)$
+(Theorem \texttt{th:devissage\_for\_K\_and\_KH}).
+\end{description}
+
+\paragraph{Relation to the Lean interfaces.}
+The \lean{Efimov.*} interfaces above are not instances of these theorems.
+\lean{Efimov.StrongMittagLefflerData} records only stabilization clauses of
+Definition~\ref{def:strong-ml}.  \lean{Efimov.DualizablePacmanTower} records rigid monoidal levels,
+which is the notion in the rigidity theorem but not the rigidity of $\mathrm{Mot}^{\mathrm{loc}}$.
+\lean{Efimov.PacmanKTheory} is a graded additive shadow, not continuous $K$-theory, and
+\lean{Efimov.PacmanRealization} is a realization into the topological approximation category, which
+none of the five papers constructs.  Mathlib does not contain the $\infty$-categorical framework
+(presentable, dualizable, and stable categories) in which these theorems are stated.
+
+\paragraph{Relation to the connectedness step.}
+The five papers provide the categorical model side only: stable categories, $K$-theoretic invariants,
+and their comparison under limits.  The realization of such a model in $\mathrm{TopCat}/\mathbb C$ and
+the connectedness of its image require the Douady--Hubbard/Yoccoz phase--parameter input, which none
+of the five papers provides.
+
 \begin{conditionalstep}
 The correct relation to the literature is:
 \[

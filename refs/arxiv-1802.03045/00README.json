@@ -1,0 +1,14 @@
+{
+  "key": "bartholdi-dudko-branched-III",
+  "arxiv_id": "1802.03045",
+  "arxiv_version": "2",
+  "role": "adjacent",
+  "title": "Algorithmic aspects of branched coverings III/V. Erasing maps, orbispaces, and the Birman exact sequence",
+  "authors": [
+    "Laurent Bartholdi",
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-1802.03045.xml",
+  "source_archive": "arxiv-1802.03045-source.tar.gz",
+  "main_tex": "arxiv-1802.03045/bc3-erasing.tex"
+}

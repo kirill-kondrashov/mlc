@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/YxuAlJXRjWrVBWsfN5iToGP5TiE</id>
+  <title>arXiv Query: search_query=&amp;id_list=1112.4780&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:38Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1112.4780" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1112.4780v1</id>
+    <title>Matings with laminations</title>
+    <updated>2011-12-20T17:32:00Z</updated>
+    <link href="https://arxiv.org/abs/1112.4780v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1112.4780v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We give a topological description of the space of quadratic rational maps with superattractive two-cycles: its "non-escape locus" M2 (the analog of the Mandelbrot set M) is locally connected, it is the continuous image of M under a canonical map, and it can be described as M (minus the 1/2-limb), mated with the lamination of the basilica. The latter statement is a refined version of a conjecture of Ben Wittner, which in its original version requires local connectivity of M to even be stated. Our methods of mating with a lamination also apply to dynamical matings of certain non-locally connected Julia sets.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2011-12-20T17:32:00Z</published>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+  </entry>
+</feed>

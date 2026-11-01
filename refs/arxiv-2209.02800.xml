@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/j8dbeS5uPNnzN92kld6a4mKxpCA</id>
+  <title>arXiv Query: search_query=&amp;id_list=2209.02800&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:41Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2209.02800" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2209.02800v1</id>
+    <title>A canonical decomposition of postcritically finite rational maps and their maximal expanding quotients</title>
+    <updated>2022-09-06T20:06:36Z</updated>
+    <link href="https://arxiv.org/abs/2209.02800v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2209.02800v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We provide a natural canonical decomposition of postcritically finite rational maps with non-empty Fatou sets based on the topological structure of their Julia sets. The building blocks of this decomposition are maps where all Fatou components are Jordan disks with disjoint closures (Sierpiński maps), as well as those where any two Fatou components can be connected through a countable chain of Fatou components with common boundary points (crochet or Newton-like maps). We provide several alternative characterizations for our decomposition, as well as an algorithm for its effective computation. We also show that postcritically finite rational maps have dynamically natural quotients in which all crochet maps are collapsed to points, while all Sierpiński maps become small spheres; the quotient is a maximal expanding cactoid. The constructions work in the more general setup of Böttcher expanding maps, which are metric models of postcritically finite rational maps.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-09-06T20:06:36Z</published>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+    <author>
+      <name>Mikhail Hlushchanka</name>
+    </author>
+    <author>
+      <name>Dierk Schleicher</name>
+    </author>
+  </entry>
+</feed>

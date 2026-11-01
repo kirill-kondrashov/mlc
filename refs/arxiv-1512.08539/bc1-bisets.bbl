@@ -1,0 +1,174 @@
+\bib{bartholdi-dudko:bc0}{unpublished}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry V.},
+  title={Algorithmic aspects of branched coverings},
+  date={2015},
+  status={preprint},
+}
+
+\bib{bartholdi-dudko:bc2}{unpublished}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry V.},
+  title={Algorithmic aspects of branched coverings II. Spheres bisets and their decompositions},
+  date={2015},
+  status={preprint},
+}
+
+\bib{bartholdi-dudko:bc4}{unpublished}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry V.},
+  title={Algorithmic aspects of branched coverings IV. Expanding maps},
+  date={2015},
+  status={in preparation},
+}
+
+\bib{bass:covering}{article}{
+  author={Bass, Hyman},
+  title={Covering theory for graphs of groups},
+  journal={J. Pure Appl. Algebra},
+  volume={89},
+  date={1993},
+  number={1-2},
+  pages={3\ndash 47},
+  issn={0022-4049},
+  review={\MR {1239551 (94j:20028)}},
+  doi={10.1016/0022-4049(93)90085-8},
+}
+
+\bib{cheritat:shishikura}{article}{
+  author={Ch{\'e}ritat, Arnaud},
+  title={Tan Lei and Shishikura's example of non-mateable degree 3 polynomials without a Levy cycle},
+  language={English, with English and French summaries},
+  journal={Ann. Fac. Sci. Toulouse Math. (6)},
+  volume={21},
+  date={2012},
+  number={5},
+  pages={935--980},
+  issn={0240-2963},
+  review={\MR {3088263}},
+  doi={10.5802/afst.1358},
+}
+
+\bib{douady-h:edpc1}{book}{
+  author={Douady, Adrien},
+  author={Hubbard, John~H.},
+  title={\'Etude dynamique des polyn\^omes complexes. Partie I},
+  language={French},
+  series={Publications Math\'ematiques d'Orsay [Mathematical Publications of Orsay]},
+  volume={84},
+  publisher={Universit\'e de Paris-Sud, D\'epartement de Math\'ematiques, Orsay},
+  date={1984},
+  pages={75},
+  review={\MR {762431 (87f:58072a)}},
+}
+
+\bib{douady-h:edpc2}{book}{
+  author={Douady, Adrien},
+  author={Hubbard, John~H.},
+  title={\'Etude dynamique des polyn\^omes complexes. Partie II},
+  language={French},
+  series={Publications Math\'ematiques d'Orsay [Mathematical Publications of Orsay]},
+  volume={85},
+  note={With the collaboration of P. Lavaurs, Tan Lei and P. Sentenac},
+  publisher={Universit\'e de Paris-Sud, D\'epartement de Math\'ematiques, Orsay},
+  date={1985},
+  pages={v+154},
+  review={\MR {812271 (87f:58072b)}},
+}
+
+\bib{goldman:pi1lie}{article}{
+  author={Goldman, William M.},
+  title={The symplectic nature of fundamental groups of surfaces},
+  journal={Adv. in Math.},
+  volume={54},
+  date={1984},
+  number={2},
+  pages={200--225},
+  issn={0001-8708},
+  review={\MR {762512 (86i:32042)}},
+  doi={10.1016/0001-8708(84)90040-9},
+}
+
+\bib{ishii-smillie:shadowing}{article}{
+  author={Ishii, Yutaka},
+  author={Smillie, John},
+  title={Homotopy shadowing},
+  journal={Amer. J. Math.},
+  volume={132},
+  date={2010},
+  number={4},
+  pages={987--1029},
+  issn={0002-9327},
+  review={\MR {2663646 (2012d:37055)}},
+  doi={10.1353/ajm.0.0126},
+}
+
+\bib{kameyama:thurston}{article}{
+  author={Kameyama, Atsushi},
+  title={The Thurston equivalence for postcritically finite branched coverings},
+  journal={Osaka J. Math.},
+  volume={38},
+  date={2001},
+  number={3},
+  pages={565\ndash 610},
+  issn={0030-6126},
+  review={\MR {1860841 (2002h:57004)}},
+}
+
+\bib{massey:at}{book}{
+  author={Massey, William~S.},
+  title={Algebraic topology: an introduction},
+  publisher={Harcourt, Brace and World (New York)},
+  date={1967},
+}
+
+\bib{nekrashevych:ssg}{book}{
+  author={Nekrashevych, Volodymyr~V.},
+  title={Self-similar groups},
+  series={Mathematical Surveys and Monographs},
+  volume={117},
+  publisher={American Mathematical Society, Providence, RI},
+  date={2005},
+  pages={xii+231},
+  isbn={0-8218-3831-8},
+  review={\MR {2162164 (2006e:20047)}},
+  doi={10.1090/surv/117},
+}
+
+\bib{nekrashevych:combinatorialmodels}{article}{
+  author={Nekrashevych, Volodymyr},
+  title={Combinatorial models of expanding dynamical systems},
+  journal={Ergodic Theory Dynam. Systems},
+  volume={34},
+  date={2014},
+  number={3},
+  pages={938--985},
+  issn={0143-3857},
+  review={\MR {3199801}},
+  doi={10.1017/etds.2012.163},
+}
+
+\bib{poirier:trees}{article}{
+  author={Poirier, Alfredo},
+  title={Hubbard trees},
+  journal={Fund. Math.},
+  volume={208},
+  date={2010},
+  number={3},
+  pages={193--248},
+  issn={0016-2736},
+  review={\MR {2650982 (2011j:37083)}},
+  doi={10.4064/fm208-3-1},
+}
+
+\bib{serre:trees}{book}{
+  author={Serre, Jean-Pierre},
+  title={Trees},
+  publisher={Springer-Verlag},
+  address={Berlin},
+  date={1980},
+  isbn={3-540-10103-9},
+  note={Translated from the French by John Stillwell},
+  review={\MR {82c:20083}},
+}
+

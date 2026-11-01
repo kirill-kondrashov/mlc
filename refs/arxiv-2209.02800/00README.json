@@ -1,0 +1,15 @@
+{
+  "key": "dudko-hlushchanka-schleicher-canonical",
+  "arxiv_id": "2209.02800",
+  "arxiv_version": "1",
+  "role": "adjacent",
+  "title": "A canonical decomposition of postcritically finite rational maps and their maximal expanding quotients",
+  "authors": [
+    "Dzmitry Dudko",
+    "Mikhail Hlushchanka",
+    "Dierk Schleicher"
+  ],
+  "metadata": "arxiv-2209.02800.xml",
+  "source_archive": "arxiv-2209.02800-source.tar.gz",
+  "main_tex": "arxiv-2209.02800/DecompositionTheorem.tex"
+}

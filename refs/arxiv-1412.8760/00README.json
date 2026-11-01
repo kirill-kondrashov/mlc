@@ -1,0 +1,14 @@
+{
+  "key": "dudko-schleicher-core-entropy",
+  "arxiv_id": "1412.8760",
+  "arxiv_version": "2",
+  "role": "supporting",
+  "title": "Core entropy of quadratic polynomials",
+  "authors": [
+    "Dzmitry Dudko",
+    "Dierk Schleicher"
+  ],
+  "metadata": "arxiv-1412.8760.xml",
+  "source_archive": "arxiv-1412.8760-source.tar.gz",
+  "main_tex": "arxiv-1412.8760/Entropy200216.tex"
+}

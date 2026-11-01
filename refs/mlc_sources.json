@@ -153,6 +153,142 @@
       "title": "Golden mean Siegel disk universality and renormalization",
       "authors": ["Denis Gaidashev", "Michael Yampolsky"],
       "existing_pdf": null
+    },
+    {
+      "key": "dudko-lyubich-selinger-pacman",
+      "arxiv_id": "1703.01206",
+      "role": "renormalization",
+      "title": "Pacman renormalization and self-similarity of the Mandelbrot set near Siegel parameters",
+      "authors": ["Dzmitry Dudko", "Mikhail Lyubich", "Nikita Selinger"],
+      "existing_pdf": "1703.01206v3.pdf"
+    },
+    {
+      "key": "dudko-matings-laminations",
+      "arxiv_id": "1112.4780",
+      "role": "supporting",
+      "title": "Matings with laminations",
+      "authors": ["Dzmitry Dudko"],
+      "existing_pdf": "Dudko_1112.4780.pdf"
+    },
+    {
+      "key": "dudko-schleicher-core-entropy",
+      "arxiv_id": "1412.8760",
+      "role": "supporting",
+      "title": "Core entropy of quadratic polynomials",
+      "authors": ["Dzmitry Dudko", "Dierk Schleicher"],
+      "existing_pdf": "Dudko_1412.8760.pdf"
+    },
+    {
+      "key": "dudko-lyubich-neutral-uniform-bounds",
+      "arxiv_id": "2210.09280",
+      "role": "renormalization",
+      "title": "Uniform a priori bounds for neutral renormalization",
+      "authors": ["Dzmitry Dudko", "Mikhail Lyubich"],
+      "existing_pdf": "Dudko_2210.09280.pdf"
+    },
+    {
+      "key": "dudko-luo-sierpinski-carpet",
+      "arxiv_id": "2509.25658",
+      "role": "mlc-case",
+      "title": "Sierpinski carpet hyperbolic components of disjoint type are bounded",
+      "authors": ["Dzmitry Dudko", "Yusheng Luo"],
+      "existing_pdf": "Dudko_2509.25658.pdf"
+    },
+    {
+      "key": "dudko-hlushchanka-schleicher-canonical",
+      "arxiv_id": "2209.02800",
+      "role": "adjacent",
+      "title": "A canonical decomposition of postcritically finite rational maps and their maximal expanding quotients",
+      "authors": ["Dzmitry Dudko", "Mikhail Hlushchanka", "Dierk Schleicher"],
+      "existing_pdf": "Dudko_2209.02800.pdf"
+    },
+    {
+      "key": "bartholdi-dudko-pilgrim-correspondences",
+      "arxiv_id": "2407.15548",
+      "role": "adjacent",
+      "title": "Correspondences on Riemann surfaces: (non-uniform) hyperbolicity and graph attractors",
+      "authors": ["Laurent Bartholdi", "Dzmitry Dudko", "Kevin M. Pilgrim"],
+      "existing_pdf": "Dudko_2407.15548.pdf"
+    },
+    {
+      "key": "bartholdi-dudko-branched-survey",
+      "arxiv_id": "1512.05948",
+      "role": "adjacent",
+      "title": "Algorithmic aspects of branched coverings",
+      "authors": ["Laurent Bartholdi", "Dzmitry Dudko"],
+      "existing_pdf": "Dudko_1512.05948.pdf"
+    },
+    {
+      "key": "bartholdi-dudko-branched-I",
+      "arxiv_id": "1512.08539",
+      "role": "adjacent",
+      "title": "Algorithmic aspects of branched coverings I. Van Kampen's theorem for bisets",
+      "authors": ["Laurent Bartholdi", "Dzmitry Dudko"],
+      "existing_pdf": "Dudko_1512.08539.pdf"
+    },
+    {
+      "key": "bartholdi-dudko-branched-II",
+      "arxiv_id": "1603.04059",
+      "role": "adjacent",
+      "title": "Algorithmic aspects of branched coverings II/V. Sphere bisets and decidability of Thurston equivalence",
+      "authors": ["Laurent Bartholdi", "Dzmitry Dudko"],
+      "existing_pdf": "Dudko_1603.04059.pdf"
+    },
+    {
+      "key": "bartholdi-dudko-branched-III",
+      "arxiv_id": "1802.03045",
+      "role": "adjacent",
+      "title": "Algorithmic aspects of branched coverings III/V. Erasing maps, orbispaces, and the Birman exact sequence",
+      "authors": ["Laurent Bartholdi", "Dzmitry Dudko"],
+      "existing_pdf": "Dudko_1802.03045.pdf"
+    },
+    {
+      "key": "bartholdi-dudko-branched-IV",
+      "arxiv_id": "1610.02434",
+      "role": "adjacent",
+      "title": "Algorithmic aspects of branched coverings IV/V. Expanding maps",
+      "authors": ["Laurent Bartholdi", "Dzmitry Dudko"],
+      "existing_pdf": "Dudko_1610.02434.pdf"
+    },
+    {
+      "key": "efimov-continuous-k-theory",
+      "arxiv_id": "2405.12169",
+      "role": "categorical-tool",
+      "title": "K-theory and localizing invariants of large categories",
+      "authors": ["Alexander I. Efimov"],
+      "existing_pdf": null
+    },
+    {
+      "key": "efimov-inverse-limits",
+      "arxiv_id": "2502.04123",
+      "role": "categorical-tool",
+      "title": "Localizing invariants of inverse limits",
+      "authors": ["Alexander I. Efimov"],
+      "existing_pdf": null
+    },
+    {
+      "key": "efimov-devissage",
+      "arxiv_id": "2505.13260",
+      "role": "categorical-tool",
+      "title": "Some remarks on Quillen's Devissage theorem",
+      "authors": ["Alexander I. Efimov"],
+      "existing_pdf": null
+    },
+    {
+      "key": "efimov-rigidity-motives",
+      "arxiv_id": "2510.17010",
+      "role": "categorical-tool",
+      "title": "Rigidity of the category of localizing motives",
+      "authors": ["Alexander I. Efimov"],
+      "existing_pdf": null
+    },
+    {
+      "key": "efimov-theorem-of-heart-kh",
+      "arxiv_id": "2603.08653",
+      "role": "categorical-tool",
+      "title": "Theorem of the heart for Weibel's homotopy K-theory",
+      "authors": ["Alexander I. Efimov"],
+      "existing_pdf": null
     }
   ]
 }

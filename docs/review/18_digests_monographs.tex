@@ -267,3 +267,41 @@ Theorem~\ref{thm:example-zero} is
 \leanref{Mlc/Quadratic/Examples.lean}{julia_neg_two}.  The Joukowski step is
 \leanref{Mlc/Quadratic/Examples.lean}{exists_joukowski_root_outside}, and the
 unboundedness estimate is \leanref{Mlc/Quadratic/Examples.lean}{not_boundedOrbit_neg_two_of_root}.
+
+\section{Lyubich's online volumes I--II: map and plan}
+\label{sec:lyubich-volumes-map}
+
+The online book \cite{LyubichBook} is the monograph whose exposition this review follows.  The map below
+uses the 2023 PDF of 702 pages, stored in \texttt{refs/} with Git LFS.  The printed
+page numbers coincide with the PDF page indices (checked at pp.~4, 467 and~511).  The Preface (p.~5) plans four
+volumes: I, conformal and quasiconformal geometry; II, basic holomorphic dynamics; III, the complete picture
+in the real quadratic family; IV, advances in the MLC.  Only I--II are online, and the author's publication
+page lists no other volume.  The Astérisque article \cite{LyubichIII}, titled ``III'', is a separate research
+article, digested in Section~\ref{sec:lyubich-ast261}.  The 2013 ICTP manuscript is digested in
+Section~\ref{sec:digest-lyubich-notes}; the page numbers here refer only to the 2023 edition.
+
+\paragraph{The book's own MLC statements.}
+Section~38 (pp.~511--518) calls the MLC Conjecture (local connectivity of $\M$) and the Combinatorial Rigidity
+Conjecture two equivalent versions of the main open problem.  It says that combinatorial rigidity would imply
+the Fatou conjecture on the density of hyperbolicity, that the real counterparts ``have been established'' and
+will be main themes of Volume~III, and it refers forward to Theorem~47.13 for the equivalence.  These are
+recorded as the book's claims.  The proof of Theorem~47.13 has not been digested yet.
+
+\paragraph{Map.}
+\begin{center}\small
+\begin{tabular}{@{}P{0.12\textwidth}@{\hspace{4pt}}P{0.42\textwidth}@{\hspace{4pt}}P{0.20\textwidth}@{\hspace{4pt}}P{0.16\textwidth}@{}}
+\textbf{Printed pages} & \textbf{Content (section numbers; printed pages of key sections)} & \textbf{Role for MLC} & \textbf{Status here}\\
+\hline
+55--232 & Part 1, Chapters 1--2: Riemann surfaces, uniformization, extremal length, Schwarz lemma, puzzles and pinched disks (\S9), quasiconformal maps, quasicircles, removability, holomorphic motions (\S17, p.~217), Teichm\"uller spaces (\S18, p.~223) & tools for the phase--parameter technique & background; holomorphic motions only through Section~\ref{sec:digest-slodkowski} \\
+233--346 & Part 2, Chapter 3: glossary (\S19), Fatou and Julia sets (\S20), periodic motions (\S21), postcritical set (\S22), functional equations (\S23), periodic ray configurations (\S24) & basic objects & background \\
+347--460 & Chapter 4: hyperbolic, parabolic and special maps (\S\S25--27); quadratic-like maps and renormalization, first glance (\S28, p.~385); Fatou set and real dynamics (\S\S29--30); Yoccoz puzzle and its principal nest (\S31, p.~427); general combinatorial theory (\S32, p.~446) & renormalization and combinatorics & pending \\
+461--526 & Chapter 5, parameter plane: definition (\S33, p.~461); connectivity of $\M$ (\S34, p.~467); hyperbolic components (\S35, p.~475); structural stability (\S36, p.~486); limbs and wakes (\S37, p.~493); combinatorial rigidity, MLC and density of hyperbolicity (\S38, p.~511); Thurston realization (\S39, p.~519) & core & pending; first in digest order \\
+529--626 & Chapter 6: straightening (\S40, p.~529); external structure (\S41, p.~538); quadratic-like families (\S\S42--43, pp.~545, 556); complex a priori bounds (\S44, p.~569); Julia sets (\S45, p.~578); real measurable dynamics (\S46, p.~586); parapuzzle and its principal nest (\S47, p.~604); further topology and combinatorics (\S48, p.~618) & core (\S\S40--45, 47--48); real (\S46) & pending \\
+627--702 & hints (\S49), notation (\S50), index (\S51), bibliography (from p.~689) & reference & cited only \\
+\end{tabular}
+\end{center}
+
+\paragraph{Digest order.}
+Sections~33--39 (pp.~461--526) come first, then Section~47 with Theorem~47.13, then Sections~40--46 and
+Sections~28--32.  Each digest will give the book's numbers and printed pages and will be checked against the
+PDF in \texttt{refs/}.

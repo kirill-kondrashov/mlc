@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/i/YznlDnxG2xW9isWyZV8idBYWo</id>
+  <title>arXiv Query: search_query=&amp;id_list=1610.02434&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:45Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1610.02434" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1610.02434v1</id>
+    <title>Algorithmic aspects of branched coverings IV/V. Expanding maps</title>
+    <updated>2016-10-07T21:44:51Z</updated>
+    <link href="https://arxiv.org/abs/1610.02434v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1610.02434v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Thurston maps are branched self-coverings of the sphere whose critical points have finite forward orbits. We give combinatorial and algebraic characterizations of Thurston maps that are isotopic to expanding maps as "Levy-free" maps and as maps with "contracting biset".
+  We prove that every Thurston map decomposes along a unique minimal multicurve into Levy-free and finite-order pieces, and this decomposition is algorithmically computable. Each of these pieces admits a geometric structure.
+  We apply these results to matings of post-critically finite polynomials, extending a criterion by Mary Rees and Tan Lei: they are expanding if and only if they do not admit a cycle of periodic rays.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2016-10-07T21:44:51Z</published>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Laurent Bartholdi</name>
+    </author>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+  </entry>
+</feed>

@@ -1,0 +1,112 @@
+% all the definitions used in the bc? paper series
+
+\NeedsTeXFormat{LaTeX2e}[1999/06/01]
+\ProvidesPackage{bc}[2015/12/29 v0.0b macros for the bc articles]
+\DeclareOption{draft}{\bc@drafttrue}
+\newif\ifbc@draft\bc@draftfalse
+\ProcessOptions
+
+\usepackage[plainpages=false,pdfpagelabels,colorlinks]{hyperref}
+\usepackage{amssymb,latexsym,ifthen,color}
+\usepackage{mathabx,mathtools,amsrefs,bbold,mathrsfs,lineno,datetime,xr,tikz}
+\ifbc@draft
+\usepackage[color]{showkeys}
+\linenumbers
+\fi
+
+\usetikzlibrary{intersections,positioning,matrix,arrows,automata,decorations.pathreplacing,decorations.pathmorphing,decorations.markings,calc,cd}
+\tikzset{%
+  show curve controls/.style={
+    postaction={
+      decoration={
+        show path construction,
+        curveto code={
+          \draw [blue] 
+            (\tikzinputsegmentfirst) -- (\tikzinputsegmentsupporta)
+            (\tikzinputsegmentlast) -- (\tikzinputsegmentsupportb);
+          \fill [red, opacity=0.5] 
+            (\tikzinputsegmentsupporta) circle [radius=.5ex]
+            (\tikzinputsegmentsupportb) circle [radius=.5ex];
+        }
+      },
+      decorate}},
+  scc/.style={show curve controls},
+  rho/.style={->},
+  lambda/.style={decorate,decoration={snake,segment length=5pt, amplitude=1pt},->},
+  shrunksphere/.style={fill=gray!20}
+}
+\newcommand\fwdarrowonline[1]{node [pos=#1,sloped,anchor=center,draw=none,fill=none,shape=rectangle,inner sep=0pt,outer sep=0pt] {\tikz\draw[->,dash pattern=on 0pt off 2pt] (-1pt,0pt) -- (0pt,0pt);}}
+\newcommand\bckarrowonline[1]{node [pos=#1,sloped,anchor=center,draw=none,fill=none,shape=rectangle,inner sep=0pt,outer sep=0pt] {\tikz\draw[<-,dash pattern=on 0pt off 2pt] (-1pt,0pt) -- (0pt,0pt);}}
+
+\font\manfnt=manfnt\newcommand\bend{{ZZZ\manfnt\char127}}
+
+\def\cprime{$'$}
+\font\cyreight=wncyr8
+
+\let\C=\relax % zap cybersquatter
+\newcommand\C{{\mathbb C}}
+\newcommand\R{{\mathbb R}}
+\newcommand\Z{{\mathbb Z}} 
+\newcommand\N{{\mathbb N}}
+\newcommand\Q{{\mathbb Q}}
+\newcommand\F[1][p]{{\mathbb F_{#1}}}
+
+\newcommand\SL{\mathbf{SL}}
+\newcommand\GL{\mathbf{GL}}
+\newcommand\Mat{\mathbf{Mat}}
+\newcommand\one{{\mathbb1}}
+\newcommand\CC{{\mathscr C}}
+\newcommand\DD{{\mathscr D}}
+\newcommand\gf{{\mathfrak X}}
+\newcommand\gfY{{\mathfrak Y}}
+\newcommand\gfB{{\mathfrak B}}
+\newcommand\gfC{{\mathfrak C}}
+\newcommand\gfI{{\mathfrak I}}
+\newcommand\ord{\operatorname{ord}}
+\newcommand\Aut{\operatorname{Aut}}
+\newcommand\End{\operatorname{End}}
+\newcommand\Out{\operatorname{Out}}
+\newcommand\Hom{\operatorname{Hom}}
+\newcommand\lcm{\operatorname{l.c.m.}}
+\newcommand\restrict[1]{\!\downharpoonleft_{\!#1}}
+\newcommand\perm{{\stackrel{\downarrow}{\smash.}}}
+\newcommand\pair[1]{{\ll}#1{\gg}}
+\newcommand\hC{{\widehat\C}}
+\newcommand\lift[2]{{\uparrow}_{#1}^{#2}}
+\newcommand\Mod[1][\relax]{\mathbf{#1Mod}}
+\newcommand\selfmap{\righttoleftarrow}
+\newcommand{\FO}{\ensuremath{\{\operatorname{FO}\}}}
+\newcommand{\PA}{\ensuremath{\{\operatorname{PA}\}}}
+\newcommand{\Exp}{\ensuremath{\{\operatorname{Exp}\}}}
+\newcommand{\Tor}{\ensuremath{\{\operatorname{GTor/2}\}}}
+\newcommand{\IMG}{\operatorname{IMG}}
+\newcommand\FM{\uplus} % formal mating
+\newcommand\GM{\amalg} % geometric mating
+\newcommand\HT{{\mathcal T}} % Hubbard tree
+%\newcommand\subscript[2]{\prescript{}{#1}{#2}}
+%\newcommand\superscript[2]{\prescript{#1}{}{#2}}
+\newcommand\subscript[2]{\vphantom{#2}_{#1}{#2}}
+\newcommand\superscript[2]{\vphantom{#2}^{#1}{#2}}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemdef}[thm]{Lemma-Definition}
+\newtheorem{problem}[thm]{Problem}
+\theoremstyle{definition}
+\newtheorem{plaindefn}[thm]{Definition}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{exple}[thm]{Example}
+\newtheorem{exse}[thm]{Exercise}
+\theoremstyle{plain}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{scholium}[thm]{Scholium}
+\newtheorem{question}[thm]{Question}
+\newenvironment{defn}{\let\defnoldqedsymbol=\qedsymbol\def\qedsymbol{$\triangle$}\pushQED{\qed}\begin{plaindefn}}{\popQED\let\qedsymbol=\defnoldqedsymbol\end{plaindefn}}
+\newenvironment{idescription}{\let\idescriptionlabel=\descriptionlabel\def\descriptionlabel##1{\hspace{\labelsep}\textbf{\emph{##1}}}\begin{description}}{\end{description}\let\descriptionlabel=\idescriptionlabel}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+\newtheorem{maincor}[mainthm]{Corollary}
+\newtheorem{algo}[thm]{Algorithm}

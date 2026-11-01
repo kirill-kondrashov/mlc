@@ -1,0 +1,14 @@
+{
+  "key": "bartholdi-dudko-branched-II",
+  "arxiv_id": "1603.04059",
+  "arxiv_version": "4",
+  "role": "adjacent",
+  "title": "Algorithmic aspects of branched coverings II/V. Sphere bisets and decidability of Thurston equivalence",
+  "authors": [
+    "Laurent Bartholdi",
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-1603.04059.xml",
+  "source_archive": "arxiv-1603.04059-source.tar.gz",
+  "main_tex": "arxiv-1603.04059/bc2-spheres.tex"
+}

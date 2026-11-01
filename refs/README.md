@@ -33,7 +33,7 @@ the choice is recorded in `00README.json`.
 | `lyubich-dynamics-1997` | Lyubich, *Dynamics of quadratic polynomials, I--II* | renormalization and a priori bounds |
 | `lyubich-dynamics-iii` | Lyubich, *Dynamics of quadratic polynomials, III* | parapuzzles and SBR measures |
 | `lyubich-conformal-notes` | Lyubich, *Conformal Geometry and Dynamics of Quadratic Polynomials*, ICTP manuscript (2013), 256 PDF pages | existing local lecture-note version |
-| `lyubich-conformal-book` | Lyubich, *Conformal Geometry and Dynamics of Quadratic Polynomials*, online book I--II | author-maintained book manuscript |
+| `lyubich-conformal-book` | Lyubich, *Conformal Geometry and Dynamics of Quadratic Polynomials*, online book I--II | author-maintained book manuscript, 702 pages, stored as `Lyubich_book_vol_I-II_2023.pdf` (Git LFS); Volumes III--IV are announced in the preface (printed p. 5) and are not published |
 | `dudko-lyubich-satellite` | Dudko--Lyubich, some bounded-type satellite parameters | source-specific MLC construction |
 | `dudko-lyubich-feigenbaum` | Dudko--Lyubich, *MLC at Feigenbaum points* | proved MLC case |
 | `dudko-mlc-2025` | Dudko, *On the MLC Conjecture...* | current status and renormalization roadmap |
@@ -45,6 +45,15 @@ the choice is recorded in `00README.json`.
 | `kahn-lyubich-molecules` | Kahn--Lyubich, *A priori bounds ... III. Molecules*, arXiv:0712.2444 | Part III: molecule condition |
 | `martens-nowicki-invariant-measures` | Martens--Nowicki, *Invariant measures for typical quadratic maps*, arXiv:math/9606220 (Asterisque 261 (2000), 239--252) | acim criterion (summable scaling factors); typical unique SBR measure, joint with Lyubich |
 | `gaidashev-yampolsky-golden-mean` | Gaidashev--Yampolsky, *Golden mean Siegel disk universality and renormalization*, arXiv:1604.00717 (2016) | golden-mean Siegel disks; computer-assisted fixed point; no statement about local connectivity of M |
+| `dudko-lyubich-selinger-pacman` | Dudko--Lyubich--Selinger, *Pacman renormalization and self-similarity of the Mandelbrot set near Siegel parameters*, arXiv:1703.01206 | Pacman renormalization near Siegel parameters; LaTeX fetched |
+| `dudko-matings-laminations` | Dudko, *Matings with laminations*, arXiv:1112.4780 | matings and laminations; LaTeX fetched |
+| `dudko-schleicher-core-entropy` | Dudko--Schleicher, *Core entropy of quadratic polynomials*, arXiv:1412.8760 | core entropy; LaTeX fetched |
+| `dudko-lyubich-neutral-uniform-bounds` | Dudko--Lyubich, *Uniform a priori bounds for neutral renormalization*, arXiv:2210.09280 | neutral a priori bounds; LaTeX fetched |
+| `dudko-luo-sierpinski-carpet` | Dudko--Luo, *Sierpinski carpet hyperbolic components of disjoint type are bounded*, arXiv:2509.25658 | Sierpinski-carpet components; LaTeX fetched |
+| `dudko-hlushchanka-schleicher-canonical` | Dudko--Hlushchanka--Schleicher, arXiv:2209.02800 | adjacent: PCF rational maps; not about M; LaTeX fetched |
+| `bartholdi-dudko-pilgrim-correspondences` | Bartholdi--Dudko--Pilgrim, arXiv:2407.15548 | adjacent: correspondences; not about M; LaTeX fetched |
+| `bartholdi-dudko-branched-survey`, `-I`, `-II`, `-III`, `-IV` | Bartholdi--Dudko, *Algorithmic aspects of branched coverings*: survey arXiv:1512.05948 and Parts I–IV arXiv:1512.08539, 1603.04059, 1802.03045, 1610.02434 | adjacent: Thurston algorithms; quotes the Rees--Tan Lei criterion; LaTeX fetched |
+| `efimov-continuous-k-theory`, `efimov-inverse-limits`, `efimov-devissage`, `efimov-rigidity-motives`, `efimov-theorem-of-heart-kh` | Efimov, arXiv:2405.12169, 2502.04123, 2505.13260, 2510.17010, 2603.08653 | categorical tools (Section 10 of `docs/review/10_categorical_branch.tex`); no MLC content; see the legacy-layout note below |
 | `kahn-lyubich-quasi-additivity` | Kahn--Lyubich, *The Quasi-Additivity Law in Conformal Geometry*, arXiv:math/0505191 (Ann. Math. 169 (2009)) | covering and quasi-additivity laws (analytic tools) |
 | `kahn-lyubich-unicritical-lc` | Kahn--Lyubich, *Local connectivity of Julia sets for unicritical polynomials*, arXiv:math/0505194 (Ann. Math. 170 (2009)) | Julia-set local connectivity for unicritical polynomials |
 | `lyubich-asterisque-261` | Lyubich, *Dynamics of quadratic polynomials, III: parapuzzle and SBR measures*, Asterisque 261 (2000), 173--200 (NUMDAM: `numdam.org/article/AST_2000__261__173_0.pdf`; not stored in `refs/`) | parapuzzles, bounded shape, fine families; checked against the PDF |
@@ -67,6 +76,21 @@ modulus and graph-cut pieces; their proofs cannot supply the refuted
 frozen lower-bound certificate.
 
 Note: `math/0607155` is not Kahn's Part I; it is a different paper (Bin Zhu, generalized cluster complexes) and must not be used. Kahn's Part I is `math/0609045`.
+
+## Adjacent and categorical sources
+
+These entries are kept because the review classifies them; none is an MLC proof.
+
+- The five Efimov papers supply categorical tools: continuous K-theory, Mittag-Leffler limits, dévissage,
+  rigidity of localizing motives, and the theorem of the heart for KH.  Their TeX sources contain none of the
+  words Mandelbrot, Julia, Green, holomorphic motion, Douady or Yoccoz.  Their statements are in
+  `docs/review/10_categorical_branch.tex`.
+- The Bartholdi--Dudko survey and Parts I--IV, the Dudko--Hlushchanka--Schleicher paper, and the
+  Bartholdi--Dudko--Pilgrim paper concern Thurston maps and correspondences.  Their only MLC-related statement is
+  the quoted Rees--Tan Lei mating criterion, classified in `docs/review/17_digests_modern.tex`.
+- Legacy layout: `arxiv-2405.12169/` and `arxiv-2502.04123.tex` predate the fetcher's `00README.json` marker.
+  Do not run `scripts/fetch_arxiv_sources.py` for `efimov-continuous-k-theory` or `efimov-inverse-limits`: it
+  would add a second main TeX file beside the existing one.  Refresh these by hand and record the version.
 
 ## Storage policy
 

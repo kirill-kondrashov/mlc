@@ -1,0 +1,254 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{CYMT99}
+
+\bibitem[Bar22]{GAP_IMG}
+L.~Bartholdi.
+\newblock {I}{M}{G} --- {C}omputations with iterated monodromy groups.
+\newblock {\em Version 0.3.2}, 2022.
+
+\bibitem[BD17]{BD_Algo}
+L.~Bartholdi and D.~Dudko.
+\newblock Algorithmic aspects of branched coverings.
+\newblock {\em Ann. Fac. Sci. Toulouse Math. (6)}, 26(5):1219--1296, 2017.
+
+\bibitem[BD18]{BD_Exp}
+L.~Bartholdi and D.~Dudko.
+\newblock Algorithmic aspects of branched coverings {IV}/{V}. {E}xpanding maps.
+\newblock {\em Trans. Amer. Math. Soc.}, 370(11):7679--7714, 2018.
+
+\bibitem[BD21a]{BD_III}
+L.~Bartholdi and D.~Dudko.
+\newblock Algorithmic aspects of branched coverings {III/V}. {E}rasing maps,
+  orbispaces, and the {B}irman exact sequence.
+\newblock {\em Groups, Geom. Dyn.}, 15(4):1197--1265, 2021.
+
+\bibitem[BD21b]{BD_Dec}
+L.~Bartholdi and D.~Dudko.
+\newblock Algorithmic aspects of branched coverings {II}/{V}: {S}phere bisets
+  and decidability of {T}hurston equivalence.
+\newblock {\em Invent. Math.}, 223(3):895--994, 2021.
+
+\bibitem[BEK{\etalchar{+}}12]{MatingQuestions}
+X.~Buff, A.L. Epstein, S.~Koch, D.~Daniel, K.M. Pilgrim, , M.~Rees, and Tan
+  Lei.
+\newblock Questions about polynomial matings.
+\newblock In {\em Annales de la Facult{\'e} des sciences de Toulouse:
+  Math{\'e}matiques}, volume~21, pages 1149--1176, 2012.
+
+\bibitem[BFH92]{BFH_Class}
+B.~Bielefeld, Y.~Fisher, and J.H. Hubbard.
+\newblock The classification of critically preperiodic polynomials as dynamical
+  systems.
+\newblock {\em J. Amer. Math. Soc.}, 5(4):721--762, 1992.
+
+\bibitem[BKN10]{AmenabilityInBoundedGroups}
+L.~Bartholdi, V.A. Kaimanovich, and V.~Nekrashevych.
+\newblock On amenability of automata groups.
+\newblock {\em Duke Math. J.}, 154(3):575--598, 2010.
+
+\bibitem[BM17]{THEBook}
+M.~Bonk and D.~Meyer.
+\newblock {\em Expanding {T}hurston maps}.
+\newblock Math. Surveys and Monographs 225. Amer. Math. Soc., Providence, RI,
+  2017.
+
+\bibitem[BN06]{BarNekr_Twist}
+L.~Bartholdi and V.~Nekrashevych.
+\newblock Thurston equivalence of topological polynomials.
+\newblock {\em Acta Math.}, 197(1):1--51, 2006.
+
+\bibitem[CM22]{CarrascoConfDim}
+M.~Carrasco and J.M. Mackay.
+\newblock Conformal dimension of hyperbolic groups that split over elementary
+  subgroups.
+\newblock {\em Invent. Math.}, 227(2):795--854, 2022.
+
+\bibitem[CYMT99]{CanaryMinsky}
+R.~Canary, Yair Y.N.~Minsky, and E.C. Taylor.
+\newblock Spectral theory, {H}ausdorff dimension and the topology of hyperbolic
+  $3$-manifolds.
+\newblock {\em J. Geom. Anal.}, 9(1):17--40, 1999.
+
+\bibitem[DH84]{DH_Orsay}
+A.~Douady and J.H. Hubbard.
+\newblock {\em \'{E}tude dynamique des polyn\^omes complexes. {P}artie {I}},
+  volume~84 of {\em Publications Math\'ematiques d'Orsay [Mathematical
+  Publications of Orsay]}.
+\newblock Universit\'e de Paris-Sud, D\'epartement de Math\'ematiques, Orsay,
+  1984.
+
+\bibitem[DH93]{DH_Th_char}
+A.~Douady and J.H. Hubbard.
+\newblock A proof of {T}hurston's topological characterization of rational
+  functions.
+\newblock {\em Acta Math.}, 171(2):263--297, 1993.
+
+\bibitem[DMRS19]{ClassNewtonFixed}
+K.~Drach, Y.~Mikulich, J.~R{\"u}ckert, and D.~Schleicher.
+\newblock A combinatorial classification of postcritically fixed {N}ewton maps.
+\newblock {\em Ergod. Theory Dyn. Syst.}, 39(11):2983--3014, 2019.
+
+\bibitem[Dou83]{Douady_Mating}
+A.~Douady.
+\newblock Syst\`emes dynamiques holomorphes.
+\newblock In {\em Bourbaki seminar, {V}ol. 1982/83}, volume 105 of {\em
+  Ast\'erisque}, pages 39--63. Soc. Math. France, Paris, 1983.
+
+\bibitem[DS22]{NewtonRigidity}
+K.~Drach and D.~Schleicher.
+\newblock Rigidity of {N}ewton dynamics.
+\newblock {\em Adv. Math.}, 408:108591, 2022.
+
+\bibitem[GHMZ18]{Meyer_Sierp}
+Y.~Gao, P.~Ha\"{i}ssinsky, D.~Meyer, and J.~Zeng.
+\newblock Invariant {J}ordan curves of {S}ierpi\'{n}ski carpet rational maps.
+\newblock {\em Ergod. Theory Dyn. Syst.}, 38(2):583--600, 2018.
+
+\bibitem[Hlu17]{H_Thesis}
+M.~Hlushchanka.
+\newblock {\em Invariant graphs, tilings, and iterated monodromy groups}.
+\newblock PhD thesis, Jacobs University Bremen, 2017.
+
+\bibitem[HP08]{HP_Dimension}
+P.~Ha{\"\i}ssinsky and K.M. Pilgrim.
+\newblock Thurston obstructions and {A}hlfors regular conformal dimension.
+\newblock {\em J. Math. Pures Appl.}, 90(3):229--241, 2008.
+
+\bibitem[HP09]{HP_Expanding}
+P.~Ha{\"{\i}}ssinsky and K.M. Pilgrim.
+\newblock Coarse expanding conformal dynamics.
+\newblock {\em Ast\'erisque}, (325):viii+139 pp. (2010), 2009.
+
+\bibitem[HS94]{HS_Spider}
+J.H. Hubbard and D.~Schleicher.
+\newblock The spider algorithm.
+\newblock In {\em Complex dynamical systems ({C}incinnati, {OH}, 1994)},
+  volume~49 of {\em Proc. Sympos. Appl. Math.}, pages 155--180. Amer. Math.
+  Soc., Providence, RI, 1994.
+
+\bibitem[IS10]{IshiiSmillie}
+Y.~Ishii and J.~Smillie.
+\newblock Homotopy shadowing.
+\newblock {\em Amer. J. Math}, 132(4):987--1029, 2010.
+
+\bibitem[JNdlS16]{Jusch_Nekr_Salle}
+K.~Juschenko, V.~Nekrashevych, and M.~de~la Salle.
+\newblock Extensions of amenable groups by recurrent groupoids.
+\newblock {\em Invent. Math.}, 206(3):837--867, 2016.
+
+\bibitem[Kam01]{KameyamaThEq}
+A.~Kameyama.
+\newblock The {T}hurston equivalence for postcritically finite branched
+  coverings.
+\newblock {\em Osaka Journal of Mathematics}, 38(3):565--610, 2001.
+
+\bibitem[Lei92]{TanLeiMatings}
+Tan Lei.
+\newblock Matings of quadratic polynomials.
+\newblock {\em Ergod. Theory Dyn. Syst.}, 12(3):589--620, 1992.
+
+\bibitem[LMS22]{RussellDierk_Class}
+R.~Lodge, Y.~Mikulich, and D.~Schleicher.
+\newblock A classification of postcritically finite {N}ewton maps.
+\newblock {\em In the {T}radition of {T}hurston {II}}, pages 421--448, 2022.
+
+\bibitem[Mey11]{M_unmating}
+D.~Meyer.
+\newblock Unmating of rational maps, sufficient criteria and examples.
+\newblock {\em Frontiers in Complex Dynamics: In Celebration of John Milnor’s
+  80th Birthday}, pages 197--234, 2011.
+
+\bibitem[Moo25]{Moore}
+R.L. Moore.
+\newblock Concerning upper semicontinuous collections of compacta.
+\newblock {\em Trans. Amer. Math. Soc.}, 27:416--426, 1925.
+
+\bibitem[Nek05]{Nekra}
+V.~Nekrashevych.
+\newblock {\em Self-similar groups}, volume 117 of {\em Mathematical Surveys
+  and Monographs}.
+\newblock American Mathematical Society, Providence, RI, 2005.
+
+\bibitem[NPT]{NPT_Amenability}
+V.~Nekrashevych, K.M. Pilgrim, and D.~Thurston.
+\newblock On amenable iterated monodromy groups.
+\newblock Preprint, Available at
+  https://www.math.tamu.edu/{$\sim$}nekrash/Preprints/ amenableimg.pdf.
+
+\bibitem[Par20]{ParkLevy}
+I.~Park.
+\newblock Levy and {T}hurston obstructions of finite subdivision rules.
+\newblock {\em arXiv preprint arXiv:2012.00243}, 2020.
+
+\bibitem[Par21]{ParkThesis}
+I.~Park.
+\newblock {\em Julia sets with {A}hlfors regular conformal dimension one}.
+\newblock PhD thesis, Indiana University, 2021.
+
+\bibitem[Pil03]{Pilgrim_Comb}
+K.M. Pilgrim.
+\newblock {\em Combinations of complex dynamical systems}, volume 1827 of {\em
+  Lecture Notes in Mathematics}.
+\newblock Springer-Verlag, Berlin, 2003.
+
+\bibitem[PL98]{PT}
+K.M. Pilgrim and Tan Lei.
+\newblock Combining rational maps and controlling obstructions.
+\newblock {\em Ergod. Theory Dyn. Syst.}, 18(1):221--245, 1998.
+
+\bibitem[PM12]{Meyer_Mating}
+C.L. Petersen and D.~Meyer.
+\newblock On the notions of mating.
+\newblock {\em Ann. Fac. Sci. Toulouse Math. (6)}, 21(5):839--876, 2012.
+
+\bibitem[Poi10]{Poirier}
+A.~Poirier.
+\newblock Hubbard trees.
+\newblock {\em Fund. Math.}, 208(3):193--248, 2010.
+
+\bibitem[Ree92]{Rees_1}
+M.~Rees.
+\newblock A partial description of parameter space of rational maps of degree
+  two, part {I}.
+\newblock {\em Acta Math.}, 168(1-2):11--87, 1992.
+
+\bibitem[Sel12]{SelingerPullback}
+N.~Selinger.
+\newblock Thurston’s pullback map on the augmented {T}eichm{\"u}ller space
+  and applications.
+\newblock {\em Invent. Math.}, 189(1):111--142, 2012.
+
+\bibitem[Shi00]{Shishikura_Rees}
+M.~Shishikura.
+\newblock On a theorem of {M}ary {R}ees.
+\newblock {\em The {M}andelbrot {S}et, {T}heme and {V}ariations, {LMS}
+  {L}ecture {N}otes}, 274, 2000.
+
+\bibitem[SY15]{SY_Decid}
+N.~Selinger and M.~Yampolsky.
+\newblock Constructive geometrization of {T}hurston maps and decidability of
+  {T}hurston equivalence.
+\newblock {\em Arnold Math. J.}, 1(4):361--402, 2015.
+
+\bibitem[Thu20]{Dylan_Positive}
+D.P. Thurston.
+\newblock A positive characterization of rational maps.
+\newblock {\em Ann. of Math. (2)}, 192(1):1--46, 2020.
+
+\bibitem[Why42]{WhyBook}
+G.T. Whyburn.
+\newblock {\em Analytic topology}.
+\newblock AMS Colloquium Publications 28. Amer. Math. Soc., Providence, RI,
+  1942.
+
+\bibitem[Why58]{Why}
+G.T. Whyburn.
+\newblock Topological characterization of the {S}ierpi\'nski curve.
+\newblock {\em Fund. Math.}, 45:320--324, 1958.
+
+\bibitem[You48]{MonotoneMaps}
+J.W.T. Youngs.
+\newblock Homeomorphic approximations to monotone mappings.
+\newblock {\em Duke Math. J.}, 15(1):87--94, 1948.
+
+\end{thebibliography}

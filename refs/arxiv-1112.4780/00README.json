@@ -1,0 +1,13 @@
+{
+  "key": "dudko-matings-laminations",
+  "arxiv_id": "1112.4780",
+  "arxiv_version": "1",
+  "role": "supporting",
+  "title": "Matings with laminations",
+  "authors": [
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-1112.4780.xml",
+  "source_archive": "arxiv-1112.4780-source.tar.gz",
+  "main_tex": "arxiv-1112.4780/MatingsWithLaminations.tex"
+}
