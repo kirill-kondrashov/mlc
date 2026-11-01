@@ -77,6 +77,27 @@ The Lean module also contains the linear escape estimate
 \leanref{Mlc/Quadratic/RealSlice.lean}{norm_orbit_ge_of_two_lt_norm}.
 \end{remark}
 
+\begin{corollary}[Real parts of the first components; proved in this review]
+\label{cor:real-components}
+For $x\in\R$, the parameter $x$ lies in the main cardioid $\mathcal H_0$ if and only if $-\tfrac34<x<\tfrac14$, and it
+lies in the period-two disk $\mathcal H_2$ if and only if $-\tfrac54<x<-\tfrac34$.
+\end{corollary}
+
+\begin{proof}
+For $\mathcal H_2$ the condition is $|x+1|<\tfrac14$.  For $\mathcal H_0$ use the parametrization
+$t\mapsto t/2-t^2/4$ of Proposition~\ref{prop:main-cardioid}.  If $x=t/2-t^2/4$ with $|t|<1$ and $t=a+ib$, then the imaginary part is
+$b(1-a)/2=0$.  Since $|a|<1$, we get $b=0$, and then $x=(1-(1-a)^2)/4\in(-\tfrac34,\tfrac14)$.  Conversely, for
+$x\in(-\tfrac34,\tfrac14)$ put $s=\sqrt{1-4x}\in(0,2)$ and $t=1-s$; then $|t|<1$ and $t/2-t^2/4=x$.
+\end{proof}
+
+\begin{remark}
+Corollary~\ref{cor:real-components} is formalized in
+\leanref{Mlc/Quadratic/RealComponents.lean}{hasAttractingFixedPoint_ofReal_iff} and
+\leanref{Mlc/Quadratic/RealComponents.lean}{hasAttractingPeriodTwoCycle_ofReal_iff}.
+Together with the real slice, it shows that the real parameters of $\mathcal H_0$ and $\mathcal H_2$ are the open intervals
+inside $[-2,\tfrac14]$ described above.
+\end{remark}
+
 \section{Results on local connectivity cited in the sources}
 
 The sources use the following historical results as inputs.  They are cited,

@@ -12,6 +12,7 @@ import Mlc.Literature.Review
 import Mlc.Quadratic.Complex.FirstComponents
 import Mlc.Quadratic.RealSlice
 import Mlc.Quadratic.Examples
+import Mlc.Quadratic.RealComponents
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample
 import Mlc.CertifiedOrbitApproximation
