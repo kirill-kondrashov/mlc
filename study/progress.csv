@@ -1,13 +1,13 @@
-week,topic,planned_output,status,proof_level,actual_hours,evidence,next_review,reading_section,reading_hours,reading_result,algebra_topic,bridge_source
-1,Escape and compactness,First proof card,planned,,,,,Lyubich section 7 pp. 133-145,,,Commutators and characteristic lower central series,Hatcher 1.1; 1.2 as needed
-2,Model and quantifier audit,Dependency map,planned,,,,,Lyubich section 7 pp. 133-145,,,Commutators and characteristic lower central series,Hatcher 1.1; 1.2 as needed
-3,Annulus modulus,Two-sided extremal-length proof,planned,,,,,Lyubich section 7 pp. 133-145,,,Abelianization and augmentation quotient,Hatcher 1.1; 1.2 as needed
-4,Shrinking and compactness,First cycle review,planned,,,,,Lyubich section 7 pp. 133-145,,,Abelianization and augmentation quotient,Hatcher 1.1; 1.2 as needed
-5,Hyperbolic metric,Automorphism invariance calculation,planned,,,,,Lyubich section 8: boundary continuation,,,Second dimension subgroup and normality,Hatcher 1.3
-6,Schwarz-Pick,Proof and equality case,planned,,,,,Lyubich section 8: boundary continuation,,,Second dimension subgroup and normality,Hatcher 1.3
-7,Components and buffers,One reconstructed topological implication,planned,,,,,Lyubich section 10: selected potential lemma,,,Dimension filtration commutators and lower central inclusion,Hatcher 1.3
-8,Caratheodory boundary,Conditions and noninjective example,planned,,,,,Lyubich section 10: selected potential lemma,,,Dimension filtration commutators and lower central inclusion,Hatcher 1.3
-9,Potential theory,One minimum-principle proof,planned,,,,,Lyubich: reference for selected proof,,,One free-group or commutator lemma,Milnor early notes: selected sections 3 6 15-18
-10,Green function,Functional equation and bounded-orbit implication,planned,,,,,Lyubich: reference for selected proof,,,One free-group or commutator lemma,Milnor early notes: selected sections 3 6 15-18
-11,Puzzle models,Separate dynamical and parameter diagrams,planned,,,,,Lyubich section 9: puzzle definitions,,,Magnus expansion through degree 2,Milnor early notes: selected sections 3 6 15-18
-12,Quarter manuscript,Checked note and oral presentation,planned,,,,,Review selected analytic statements,,,Magnus expansion through degree 2,Milnor early notes: selected sections 3 6 15-18
+week,goal,planned_output,status,novelty_status,actual_hours,evidence,obstacle,next_action,dependency,source_read,reading_hours,external_review
+1,Audit the finite task,Audit; starting lemma; missing fields,planned,unassessed,,,,,,,,
+2,Select the theorem candidate,Exact statement; nearest result; candidate decision,planned,unassessed,,,,,,,,
+3,Decompose the proof,Dependency graph; complete definitions,planned,unassessed,,,,,,,,
+4,Validate mechanism and novelty,Checked lemma; substantive example; continuation decision,planned,unassessed,,,,,,,,
+5,Work on the main lemma,Written attempt; exact obstruction,planned,unassessed,,,,,,,,
+6,Complete or narrow the hard step,Proof of hard step or justified revised statement,planned,unassessed,,,,,,,,
+7,Assemble the argument,Connected proof draft; parameter check,planned,unassessed,,,,,,,,
+8,Review the complete proof,Full argument or explicit decision on remaining gap,planned,unassessed,,,,,,,,
+9,Write the research note,First complete manuscript draft,planned,unassessed,,,,,,,,
+10,Address feedback and computations,Revision; reproducible checks,planned,unassessed,,,,,,,,
+11,Check boundaries and assumptions,Consistent theorem and examples,planned,unassessed,,,,,,,,
+12,Present and decide the next task,Research note; talk; final status; next question,planned,unassessed,,,,,,,,
