@@ -1,0 +1,91 @@
+\documentclass[11pt,a4paper,oneside,openany]{book}
+\usepackage{amsmath,amssymb,amsthm,mathrsfs}
+\usepackage[margin=24mm,headheight=15pt]{geometry}
+\usepackage[no-math]{fontspec}
+\setmainfont{Noto Serif}
+\setsansfont{Noto Sans}
+\setmonofont[Scale=0.82]{DejaVu Sans Mono}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\usepackage{xcolor,enumitem,array,tabularx,longtable,booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{xurl}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black,citecolor=blue!55!black]{hyperref}
+\usepackage{bookmark}
+\setlength{\emergencystretch}{3em}
+\setlist{itemsep=3pt,topsep=5pt,leftmargin=*}
+\setlist[description]{style=nextline,leftmargin=0pt,labelindent=0pt,labelwidth=0pt,labelsep=0pt}
+\raggedbottom
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.18}
+\setcounter{tocdepth}{1}
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\M}{\mathcal M}
+\newcommand{\D}{\mathbb D}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\Comp}{\operatorname{Comp}}
+\newcommand{\modu}{\operatorname{mod}}
+\newcommand{\repo}[1]{\texttt{\path{#1}}}
+\newcommand{\criterion}[1]{\par\smallskip\noindent\textbf{Критерий перехода.} #1\par\smallskip}
+\newtheorem{exercise}{Задача}[chapter]
+\newtheorem{proposition}{Утверждение}[chapter]
+\theoremstyle{remark}
+\newtheorem*{warningnote}{Замечание о статусе}
+\title{От чтения к самостоятельному исследованию\\[6pt]
+\large Комплексная динамика, локальная связность\\и проверяемые математические доказательства}
+\author{Индивидуальная учебная и исследовательская программа}
+\date{6 ноября 2026 года\\Нагрузка: 12--15 часов в неделю\\Версия 1.0}
+\hypersetup{pdftitle={Учебная и исследовательская программа по комплексной динамике},pdfauthor={}}
+\begin{document}
+\frontmatter
+\maketitle
+\chapter*{Как пользоваться программой}
+\addcontentsline{toc}{chapter}{Как пользоваться программой}
+Вы уже год работаете над MLC, конспектировали формулировки из Михайлова--Пасси
+и книги Любича до с.~133, читали работы Дудко и развивали Lean-проект.
+Эта программа использует сделанное как исходный материал. Она не предполагает,
+что переписывание формулировок свидетельствует о неумении доказывать:
+это проверяется отдельными короткими заданиями.
+
+Ближайшая цель --- научиться регулярно получать законченный математический
+текст, который вы можете защитить у доски. Исследовательская цель --- выделить
+одну задачу с проверяемыми гипотезами, источниками и потенциально новым
+результатом. MLC задаёт направление, но её полное решение не является условием
+успешного завершения ближайшего этапа.
+
+Первый проход: главы~1--3 и отдельный файл \repo{first_12_weeks.md}.
+Дальше читать по текущему этапу. Раз в четыре учебные недели обновлять отчёт
+и паспорт исследования. Даты следующих этапов сдвигаются при необходимости;
+критерии качества доказательства сохраняются.
+
+Горизонт программы --- два года при 44 рабочих учебных неделях в год.
+Это 1056--1320 часов, а не обещание эквивалентности очной PhD-подготовке.
+В конце первого года принимается решение о теме и продолжении; третий год
+возможен, если этого требует результат. Условия академической защиты здесь
+не устанавливаются.
+\tableofcontents
+\mainmatter
+\input{chapters/01_position.tex}
+\input{chapters/02_research.tex}
+\input{chapters/03_workflow.tex}
+\input{chapters/04_first_quarter.tex}
+\input{chapters/05_route.tex}
+\input{chapters/06_assessment.tex}
+\input{chapters/07_sources.tex}
+\backmatter
+\chapter*{Первый рабочий день}
+\addcontentsline{toc}{chapter}{Первый рабочий день}
+За 90 минут выпишите определения локальной связности, модуля кольца и
+ограниченности критической орбиты; затем без подсказок докажите критерий
+убегания за радиус~2 для квадратичного семейства. Если доказательство не
+восстановилось, зафиксируйте точное место остановки. Во второй сессии
+сопоставьте его с первоисточником и напишите исправленную версию.
+Завершите день одной карточкой доказательства. Её качество важнее числа
+прочитанных страниц.
+\end{document}

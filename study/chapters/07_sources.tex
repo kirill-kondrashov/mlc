@@ -1,0 +1,139 @@
+\chapter{Источники и порядок чтения}
+
+\section{Основная книга и точные ориентиры}
+Основной текст --- местный файл
+\repo{refs/Lyubich_book_vol_I-II_2023.pdf}, 702 PDF-страницы.
+Названия и страницы ниже сверены по его оглавлению. Ссылка автора
+называет книгу томами I--II~\cite{LyubichBook}. Статья
+\emph{Dynamics of quadratic polynomials, I--II} --- отдельная публикация,
+её нумерацию и пагинацию с книгой не смешивать.
+
+\begin{table}[!tp]
+\centering\small
+\caption{Навигация по местному изданию Любича}
+\begin{tabularx}{\textwidth}{@{}P{0.18\textwidth}P{0.32\textwidth}Y@{}}
+\toprule
+Разделы & Печатные страницы & Роль в программе\\
+\midrule
+§§1--5 & 13--118 & Справка и точечный ремонт топологии, нормальных семейств,
+униформизации; уже пройденное не переписывать\\
+§6 & 119--132 & Экстремальная длина и ширина: доказательства, нормировки,
+конформный модуль\\
+§§7--9 & 133--162 & Гиперболическая метрика, граница Каратеодори,
+топологические модели puzzle\\
+§10 & 163--172 & Нужные результаты теории потенциала\\
+§§11--18 & 175--229 & Квазиконформная геометрия, MRMT, движения,
+пространства Тейхмюллера\\
+§§19--24 & 234--344 & Базовая динамика, функциональные уравнения,
+периодические лучи\\
+§§25, 28, 31 & 347--367; 385--398; 427--445 & Гиперболические карты,
+polynomial-like ограничения, principal nest\\
+§§33--39 & 461--528 & Параметрическая плоскость; связность,
+жёсткость, реализация; отбор нужных доказательств\\
+§§40--44 & 529--577 & Straightening, семейства и первые a priori bounds\\
+§47 & 604--617 & Parapuzzle и его principal nest\\
+§49 & 627--645 & Подсказки к упражнениям: после самостоятельной попытки\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Наличие раздела в таблице означает доступный маршрут, а не обязанность
+полностью доказать всё содержимое книги за первый год. В карточке всегда
+указывать §, номер результата и конкретную версию PDF; номера задач не
+назначаются по памяти.
+
+\section{Современные статьи: по одной цепочке}
+Обзор Дудко~\cite{DudkoSurvey} используется для ориентации. Для одного
+выбранного результата выписать: класс параметров, точные ограничения
+комбинаторики, геометрическую оценку, используемый параметрический переход
+и заключение. Затем разбирать одну зависимость за раз.
+
+Научные статьи уже находятся в \repo{refs/}; карта источников ---
+\repo{refs/README.md} и \repo{refs/mlc_sources.json}. Обзор проекта
+удобен как указатель, но при расхождении формулировок проверяется первоисточник.
+Утверждения с отмеченными в обзоре лакунами сначала проверяются по самому
+тексту, а не принимаются автоматически ни как доказанные, ни как ошибки автора.
+
+Ветки спутниковых параметров~\cite{Satellite}, Feigenbaum~\cite{Feigenbaum}
+и параболически ограниченной примитивной ренормализации~\cite{KKL}
+используются для выбора специального класса. Они не объединяются в
+универсальную MLC без проверки покрытия классов и всех дополнительных условий.
+
+Для группы B начинать с основ бисетов в~\cite{BDI}, затем при необходимости
+переходить к~\cite{BDIV}. Номера теорем из Михайлова--Пасси здесь не
+назначены: по издательской странице проверены название и авторы, а не
+каждое доказательство монографии. Собственный конспект используется для
+выбора нужной леммы и сверяется с экземпляром книги.
+
+\section{Как не утонуть в обновлениях}
+Раз в месяц выделять до 30 минут на страницы авторов и новые версии только
+выбранных работ. В журнал заносить изменившееся утверждение, а не просто
+новый PDF. Раз в квартал обновлять карту литературы. Новая статья не
+автоматически заменяет текущую задачу: сначала проверить, затрагивает ли
+она вашу гипотезу или заявленную новизну.
+
+Интернет-ссылки ниже проверены 6 ноября 2026 года. Статус препринта,
+журнальной версии и страницы автора может различаться. В доказательном
+тексте фиксировать использованную версию, а не делать вывод по свежести страницы.
+
+\begin{thebibliography}{99}
+\bibitem{LyubichBook}
+M.~Lyubich. \emph{Conformal Geometry and Dynamics of Quadratic Polynomials,
+vol.~I--II}. Online manuscript; локальная версия 2023 года.
+\href{https://www.math.stonybrook.edu/~mlyubich/book.pdf}{Книга};
+\href{https://www.math.stonybrook.edu/~mlyubich/papers/index.html}{страница автора}.
+
+\bibitem{MP}
+R.~Mikhailov, I.~B.~S.~Passi.
+\emph{Lower Central and Dimension Series of Groups}.
+Lecture Notes in Mathematics 1952, Springer, 2009.
+\href{https://link.springer.com/book/10.1007/978-3-540-85818-8}{Издательская страница и оглавление}.
+
+\bibitem{DH}
+A.~Douady, J.~H.~Hubbard.
+\emph{Exploring the Mandelbrot Set: The Orsay Notes}.
+\href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}{Авторская публикация}.
+Дополнительный источник для конкретной конструкции, не параллельный
+обязательный курс первого квартала.
+
+\bibitem{DudkoSurvey}
+D.~Dudko. \emph{On the MLC Conjecture and the Renormalization Theory
+in Complex Dynamics}. arXiv:2512.24171v1, 2025.
+\href{https://arxiv.org/abs/2512.24171}{Версия препринта}.
+Роль в плане: карта современной теории.
+
+\bibitem{Satellite}
+D.~Dudko, M.~Lyubich. \emph{Local connectivity of the Mandelbrot set
+at some satellite parameters of bounded type}.
+\href{https://arxiv.org/abs/1808.10425}{arXiv:1808.10425}.
+Локальный PDF: \repo{refs/Dudko_1808.10425.pdf}.
+
+\bibitem{Feigenbaum}
+D.~Dudko, M.~Lyubich. \emph{MLC at Feigenbaum points}.
+\href{https://arxiv.org/abs/2309.02107}{arXiv:2309.02107}.
+Локальный PDF: \repo{refs/Dudko_2309.02107.pdf}.
+
+\bibitem{KKL}
+J.~Kahn, A.~Kapiamba, M.~Lyubich.
+\emph{MLC for parabolically bounded primitive renormalization}.
+\href{https://arxiv.org/abs/2606.27272}{arXiv:2606.27272v1}, 2026.
+Локальный исходник: \repo{refs/arxiv-2606.27272/waves-with-Misha.tex}.
+
+\bibitem{BDI}
+L.~Bartholdi, D.~Dudko. \emph{Algorithmic aspects of branched coverings I.
+Van Kampen's Theorem for bisets}.
+\href{https://arxiv.org/abs/1512.08539}{arXiv:1512.08539}.
+Локальный исходник: \repo{refs/arxiv-1512.08539/bc1-bisets.tex}.
+
+\bibitem{BDIV}
+L.~Bartholdi, D.~Dudko. \emph{Algorithmic aspects of branched coverings
+IV/V. Expanding maps}.
+\href{https://arxiv.org/abs/1610.02434}{arXiv:1610.02434}.
+Локальный исходник: \repo{refs/arxiv-1610.02434/bc4-expanding.tex}.
+
+\bibitem{DudkoPage}
+D.~Dudko.
+\href{https://www.math.stonybrook.edu/~ddudko/Research}{Авторский список работ}.
+Используется для проверки актуальных названий и версий, не как
+самостоятельное доказательство теорем.
+\end{thebibliography}

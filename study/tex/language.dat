@@ -1,0 +1,7 @@
+% A private XeLaTeX format: English plus Russian UTF-8 hyphenation.
+% No system-wide TeX configuration is changed.
+english hyphen.tex
+=usenglish
+=american
+nohyphenation zerohyph.tex
+russian loadhyph-ru.tex
