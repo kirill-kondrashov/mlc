@@ -1,25 +1,27 @@
 \chapter{Литература по зависимостям задачи}
 
-\section{Первые источники для кандидата T1}
+\section{Первые источники для B1}
 \begin{enumerate}
-\item Точные определения и доказанные переходы в
-      \repo{Mlc/ParameterComponentApproximation.lean} и
-      \repo{Mlc/FiniteComponentCriterion.lean}. Результат чтения ---
-      одностраничная карта существующего аргумента и незакрытого входа.
-\item Basu--Pollack--Roy~\cite{BPRComponents}: выписать точный результат
-      об описании компонент, затем проверить его применение к \(H\) и \(K\).
-      Первое сопоставление оформить на неделе~2; подробный разбор уточнять
-      по выбранной дополнительной трудности.
-\item Basu--Pollack--Roy~\cite{BPRBook}: выбранные определения,
-      представления алгебраических чисел, методы компонент и оценки.
-      Искать конкретный используемый результат; чтение всей книги
-      в первый цикл не входит.
-\item Библиографии и продолжения ближайших работ: установить,
-      какие специальные классы и количественные оценки уже рассмотрены.
+\item Bartholdi--Dudko I~\cite{BDI}, §2: бисет, левосвободность,
+      базис, рекурсия и смена базиса. Выписать собственное соглашение
+      о произведении секций.
+\item Ранняя версия Некрашевича~\cite{NekraBook}, §2.7.3,
+      Proposition~2.7.4, с.~40--41: инвариантность нормальной подгруппы
+      и ядро действия. Согласовать левое и правое действия.
+\item Михайлов--Пасси~\cite{MP}: коммутаторы, абелианизация,
+      функториальность нижнего центрального ряда.
+      Использовать для формул факторизации и включения
+      \(\gamma_n(H_m)\subseteq D_{n,m}\).
+\item Для проверки новизны: нильпотентные факторы
+      \(L\)-представлений~\cite{NilpotentL}, структурные результаты
+      о Basilica-группах~\cite{PBasilica}.
+      Точные сопоставления с B1-R пока требуют разбора.
 \end{enumerate}
-Начать с авторской страницы Basu и свободного текста книги.
-Сохранить версию, номер теоремы и страницу. Одной аннотации достаточно
-для обнаружения предшественника; точное сведение требует полного текста.
+Состояние проверки каждого источника записано в
+\repo{research/B1_prior_art.md}. Современный контекст:
+Bartholdi--Dudko--Pilgrim~\cite{ModernBisets} и
+Miller--Steinberg~\cite{MillerSteinberg}. Их крупные теоремы
+не входят в начальные доказательства образца.
 
 \section{Резервные источники}
 \begin{center}\small
@@ -71,7 +73,7 @@ D_n(G)=\{g:g-1\in\Delta^n\}.
 
 \section{Запись результата чтения}
 Каждая читательская сессия оставляет запись в
-\repo{research/T1_prior_art.md} либо карточку используемой леммы:
+\repo{research/B1_prior_art.md} либо карточку используемой леммы:
 источник и версия, точная теорема, проверка гипотез, место применения,
 изменение постановки. Обновление литературы входит в недельные два часа.
 Библиографическая карта обновлена 6 ноября 2026 года.
@@ -177,4 +179,26 @@ Components of Semi-algebraic Sets}.
 TU/e. \emph{Discrete Algebra and Geometry: organisation profile}.
 \href{https://research.tue.nl/en/organisations/discrete-algebra-and-geometry/}{Официальный профиль группы}.
 Проверено 6 ноября 2026 года.
+\bibitem{NilpotentL}
+B.~Eick, R.~Hartung, L.~Bartholdi.
+\emph{A nilpotent quotient algorithm for L-presented groups}.
+\href{https://arxiv.org/abs/0706.3131v2}{arXiv:0706.3131v2}, 2007.
+
+\bibitem{PBasilica}
+E.~Di Domenico, G.~A.~Fernández-Alcober, M.~Noce, A.~Thillaisundaram.
+\emph{p-Basilica Groups}. Mediterranean Journal of Mathematics 19,
+article 275 (2022).
+\href{https://link.springer.com/article/10.1007/s00009-022-02187-z}{Статья}.
+
+\bibitem{ModernBisets}
+L.~Bartholdi, D.~Dudko, K.~M.~Pilgrim.
+\emph{Correspondences on Riemann surfaces and non-uniform hyperbolicity}.
+\href{https://arxiv.org/abs/2407.15548v2}{arXiv:2407.15548v2},
+версия от 15 октября 2025 года.
+
+\bibitem{MillerSteinberg}
+A.~Miller, B.~Steinberg.
+\emph{Homology and K-theory for self-similar actions of groups and groupoids}.
+\href{https://arxiv.org/abs/2409.02359v3}{arXiv:2409.02359v3},
+версия от 7 октября 2025 года.
 \end{thebibliography}

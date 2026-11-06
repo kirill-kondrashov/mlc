@@ -1,0 +1,131 @@
+{
+  "base_group": "free group F(a,b); not the faithful tree-action quotient",
+  "convention": "right action; (gh)|s = (g|s)(h|s^g)",
+  "recursion": {
+    "a": "(1,b)(01)",
+    "b": "(1,a)"
+  },
+  "commutator": {
+    "word": "a^-1 b^-1 a b",
+    "permutation": [
+      0,
+      1
+    ],
+    "sections": [
+      "b^-1 a^-1 b",
+      "a"
+    ],
+    "section_abelianizations": [
+      [
+        -1,
+        0
+      ],
+      [
+        1,
+        0
+      ]
+    ]
+  },
+  "first_level_generators": [
+    {
+      "word": "b",
+      "sections": [
+        "1",
+        "a"
+      ],
+      "portrait": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "word": "a a",
+      "sections": [
+        "b",
+        "b"
+      ],
+      "portrait": [
+        2,
+        0,
+        0,
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "word": "a b a^-1",
+      "sections": [
+        "a",
+        "1"
+      ],
+      "portrait": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "finite_portraits": [
+    {
+      "depth": 0,
+      "level_action_image_order": 1,
+      "schreier_basis_size": 2,
+      "portrait_coordinates": 2,
+      "rational_portrait_rank": 2,
+      "rational_leaf_portrait_rank": 2,
+      "independent_haar_constraints": 0,
+      "ranks_mod_primes": {
+        "101": 2,
+        "103": 2
+      }
+    },
+    {
+      "depth": 1,
+      "level_action_image_order": 2,
+      "schreier_basis_size": 3,
+      "portrait_coordinates": 6,
+      "rational_portrait_rank": 3,
+      "rational_leaf_portrait_rank": 3,
+      "independent_haar_constraints": 1,
+      "ranks_mod_primes": {
+        "101": 3,
+        "103": 3
+      }
+    },
+    {
+      "depth": 2,
+      "level_action_image_order": 8,
+      "schreier_basis_size": 9,
+      "portrait_coordinates": 14,
+      "rational_portrait_rank": 5,
+      "rational_leaf_portrait_rank": 5,
+      "independent_haar_constraints": 3,
+      "ranks_mod_primes": {
+        "101": 5,
+        "103": 5
+      }
+    },
+    {
+      "depth": 3,
+      "level_action_image_order": 64,
+      "schreier_basis_size": 65,
+      "portrait_coordinates": 30,
+      "rational_portrait_rank": 9,
+      "rational_leaf_portrait_rank": 9,
+      "independent_haar_constraints": 7,
+      "ranks_mod_primes": {
+        "101": 9,
+        "103": 9
+      }
+    }
+  ],
+  "scope": "finite exact computations; no infinite-rank formula or novelty claim"
+}
