@@ -2,7 +2,7 @@
 
 CHAPTERS := $(wildcard chapters/*.tex)
 
-all: programme.pdf first_days.pdf
+all: programme.pdf first_days.pdf novelty_audit.pdf
 
 programme.pdf: programme.tex $(CHAPTERS) .build/xelatex-ru.fmt
 	mkdir -p .build
@@ -25,6 +25,17 @@ first_days.pdf: first_days.tex .build/B1_first_days.tex .build/xelatex-ru.fmt
 	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build first_days.tex
 	cp .build/first_days.pdf first_days.pdf
 
+.build/B1_novelty_audit.tex: research/B1_novelty_audit.md tex/short_tables.lua
+	mkdir -p .build
+	pandoc --from=markdown+tex_math_dollars --to=latex --no-highlight --lua-filter=tex/short_tables.lua $< -o $@
+
+novelty_audit.pdf: novelty_audit.tex .build/B1_novelty_audit.tex .build/xelatex-ru.fmt
+	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build novelty_audit.tex
+	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build novelty_audit.tex
+	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build novelty_audit.tex
+	cp .build/novelty_audit.pdf novelty_audit.pdf
+
 clean:
 	latexmk -c -outdir=.build programme.tex
 	latexmk -c -outdir=.build first_days.tex
+	latexmk -c -outdir=.build novelty_audit.tex

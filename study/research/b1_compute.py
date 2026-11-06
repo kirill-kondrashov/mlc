@@ -70,6 +70,31 @@ def display(word):
                     for x in word) or "1"
 
 
+def power(word, exponent):
+    if exponent < 0:
+        return power(inverse(word), -exponent)
+    return reduce_word(word * exponent)
+
+
+def lift_section_pair(left, right):
+    """Lift a pair with equal b-exponent to H_1, as in the novelty audit."""
+    exponent = abelian(left)[1]
+    if abelian(right)[1] != exponent:
+        raise ValueError("The sections must have equal b-exponent")
+    result = ()
+    for word, lift_a in ((left, (1, 2, -1)), (right, (2,))):
+        b_exponent = 0
+        for letter in word:
+            if abs(letter) == 2:
+                b_exponent += 1 if letter > 0 else -1
+            else:
+                conjugator = power((1, 1), b_exponent)
+                lift = power(lift_a, 1 if letter > 0 else -1)
+                result = reduce_word(result + conjugator + lift
+                                     + inverse(conjugator))
+    return reduce_word(result + power((1, 1), exponent))
+
+
 def act(word, vertex):
     if not vertex:
         return ()
@@ -174,6 +199,10 @@ def check_identities():
                 right, end = transition(v, middle)
                 assert transition(reduce_word(u + v), s) == (
                     reduce_word(left + right), end)
+            if abelian(u)[1] == abelian(v)[1]:
+                lift = lift_section_pair(u, v)
+                assert transition(lift, 0) == (reduce_word(u), 0)
+                assert transition(lift, 1) == (reduce_word(v), 1)
     for n in range(4):
         for word in product((1, -1, 2, -2), repeat=n):
             word = tuple(word)
@@ -255,7 +284,7 @@ def main():
         expected = json.loads(Path(__file__).with_name(
             "B1_calculations.json").read_text(encoding="utf-8"))
         assert result == expected, "calculation report differs; inspect before replacing"
-        print("Verified identities, direct tree actions, exact ranks and committed report.")
+        print("Verified identities, fiber lifts, direct tree actions, exact ranks and report.")
     else:
         print(json.dumps(result, ensure_ascii=False, indent=2))
 

@@ -1,0 +1,4 @@
+claim_id,statement,proof_status,novelty_status,closest_source,comparison,evidence,research_decision,next_step
+B1-Q,Canonical quotient criterion,proved_on_paper,known_mechanism,Nekrashevych early draft Proposition 2.7.4,Opposite-side convention; direct proof in the worked example,B1_first_days.md,reference_example,Use as a dependency
+B1-R,r_m = 2^m + 1 for all m,proved_on_paper,independent_contribution_not_established,p-Basilica Groups Lemma 3.2 and Theorem 3.3,Elementary fiber-product derivation; exact published location of this formula not identified,B1_novelty_audit.md,closed_as_primary_candidate,Retain complete proof as a selection example
+B2-N,Structure of H_m / D_3m: commutator rank and integral constraints,screening_question,unassessed,p-Basilica Groups Theorem 4.1; nilpotent quotient algorithms for L-presentations,Precise reduction or additional assertion not established,B1_prior_art.md,not_selected,Fill a novelty card and attempt reduction
