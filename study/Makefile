@@ -1,10 +1,8 @@
 .PHONY: all clean
 
-CHAPTERS := $(wildcard chapters/*.tex)
-
 all: programme.pdf first_days.pdf novelty_audit.pdf
 
-programme.pdf: programme.tex $(CHAPTERS) .build/xelatex-ru.fmt
+programme.pdf: programme.tex publication_plan.tex .build/xelatex-ru.fmt
 	mkdir -p .build
 	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build programme.tex
 	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build programme.tex
