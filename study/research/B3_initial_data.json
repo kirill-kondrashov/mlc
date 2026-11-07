@@ -1,0 +1,235 @@
+{
+  "field": "Q(lambda), lambda^2-lambda+1=0; Im(lambda)>0",
+  "map": "F(z)=(z^2+lambda)/(z^2-1)",
+  "critical_cycles": [
+    [
+      "0",
+      "-lambda",
+      "1-lambda"
+    ],
+    [
+      "infinity",
+      "1"
+    ]
+  ],
+  "fibers_over_postcritical_set": [
+    {
+      "target": "0",
+      "points": [
+        {
+          "point": "1-lambda",
+          "local_degree": 1
+        },
+        {
+          "point": "lambda-1",
+          "local_degree": 1
+        }
+      ]
+    },
+    {
+      "target": "-lambda",
+      "points": [
+        {
+          "point": "0",
+          "local_degree": 2
+        }
+      ]
+    },
+    {
+      "target": "1-lambda",
+      "points": [
+        {
+          "point": "-lambda",
+          "local_degree": 1
+        },
+        {
+          "point": "lambda",
+          "local_degree": 1
+        }
+      ]
+    },
+    {
+      "target": "infinity",
+      "points": [
+        {
+          "point": "1",
+          "local_degree": 1
+        },
+        {
+          "point": "-1",
+          "local_degree": 1
+        }
+      ]
+    },
+    {
+      "target": "1",
+      "points": [
+        {
+          "point": "infinity",
+          "local_degree": 2
+        }
+      ]
+    }
+  ],
+  "forward_invariant_subset_sizes": [
+    0,
+    2,
+    3,
+    5
+  ],
+  "iterate_checks": [
+    {
+      "n": 1,
+      "degree": 2,
+      "max_fixed_local_degree": 1,
+      "two_polynomial_gluing_upper_bound": 0
+    },
+    {
+      "n": 2,
+      "degree": 4,
+      "max_fixed_local_degree": 2,
+      "two_polynomial_gluing_upper_bound": 2
+    },
+    {
+      "n": 3,
+      "degree": 8,
+      "max_fixed_local_degree": 2,
+      "two_polynomial_gluing_upper_bound": 2
+    },
+    {
+      "n": 4,
+      "degree": 16,
+      "max_fixed_local_degree": 4,
+      "two_polynomial_gluing_upper_bound": 6
+    },
+    {
+      "n": 5,
+      "degree": 32,
+      "max_fixed_local_degree": 1,
+      "two_polynomial_gluing_upper_bound": 0
+    },
+    {
+      "n": 6,
+      "degree": 64,
+      "max_fixed_local_degree": 8,
+      "two_polynomial_gluing_upper_bound": 14
+    },
+    {
+      "n": 7,
+      "degree": 128,
+      "max_fixed_local_degree": 1,
+      "two_polynomial_gluing_upper_bound": 0
+    },
+    {
+      "n": 8,
+      "degree": 256,
+      "max_fixed_local_degree": 16,
+      "two_polynomial_gluing_upper_bound": 30
+    },
+    {
+      "n": 9,
+      "degree": 512,
+      "max_fixed_local_degree": 8,
+      "two_polynomial_gluing_upper_bound": 14
+    },
+    {
+      "n": 10,
+      "degree": 1024,
+      "max_fixed_local_degree": 32,
+      "two_polynomial_gluing_upper_bound": 62
+    },
+    {
+      "n": 11,
+      "degree": 2048,
+      "max_fixed_local_degree": 1,
+      "two_polynomial_gluing_upper_bound": 0
+    },
+    {
+      "n": 12,
+      "degree": 4096,
+      "max_fixed_local_degree": 64,
+      "two_polynomial_gluing_upper_bound": 126
+    }
+  ],
+  "triangulation": {
+    "vertices": [
+      "0",
+      "1",
+      "1-lambda",
+      "-lambda",
+      "infinity"
+    ],
+    "oriented_faces": [
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        2
+      ],
+      [
+        4,
+        0,
+        1
+      ],
+      [
+        4,
+        1,
+        2
+      ],
+      [
+        4,
+        2,
+        3
+      ],
+      [
+        4,
+        3,
+        0
+      ]
+    ],
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "dual_spine_rank": 4
+  },
+  "scope": "exact initial algebra and triangulation checks; no biset sections or curve attractor computed"
+}
