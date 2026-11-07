@@ -1,5 +1,9 @@
 # Источники для B3
 
+[Адресная проверка публикационной новизны](research/B3_publication_screening.md)
+содержит полное сравнение, проверку эквивалентных форм карты,
+продолжений работ и открытого кода.
+
 ## Ближайшие результаты и проверка вклада
 
 - Bonnot–Braverman–Yampolsky,
@@ -32,6 +36,18 @@
   [*On the pullback relation on curves induced by a Thurston map*, 2021v1](https://arxiv.org/abs/2102.12402v1),
   §§3.3, 4.1: вычисление отношения и перечень известных механизмов.
   Используется как карта ссылок к первичным теоремам.
+- Koch–Pilgrim–Selinger,
+  [*Pullback invariants of Thurston maps*](https://arxiv.org/abs/1212.4568v1),
+  Theorem 7.2: оба критерия для B3 исключены в публикационной проверке.
+- Bonk–Hlushchanka–Lodge,
+  [*Thurston's pullback map, invariant covers, and the global dynamics on curves*](https://arxiv.org/abs/2411.00732v1),
+  Theorems 1–2, Corollary 6: четыре отмеченные точки.
+- Smith,
+  [*Curve attractors for marked rational maps*](https://arxiv.org/abs/2401.16636v1),
+  Theorems 1.2–1.3: четыре отмеченные точки; §6: дальнейшая стратегия.
+- Wang–Zhang,
+  [*Polynomial curve systems are exponentially decaying*, 2026v4](https://arxiv.org/abs/2601.04871v4),
+  Main Theorem: количественный контроль кривых для полиномов.
 
 ## Для ближайшего вычисления
 

@@ -1,6 +1,6 @@
 week,candidate,goal,planned_output,status,novelty_status,actual_hours,evidence,obstacle,next_action,dependency,source_read,reading_hours,external_review
-1,B3,Construct the marked biset and curve model,Full wreath recursion; peripheral checks; known equator lift,planned,strong_contraction_route_excluded_global_claim_unresolved,,,,,,,,
-2,B3,Control unbounded twists with the contraction route excluded,Trial transition graph; arbitrary-exponent formula; precise remaining gap,planned,strong_contraction_route_excluded_global_claim_unresolved,,,,,,,,
+1,B3,Construct the marked biset and curve model,Full wreath recursion; peripheral checks; known equator lift,planned,literature_novelty_supported_full_global_proof_required,,,,,,,,
+2,B3,Control unbounded twists with the contraction route excluded,Trial transition graph; arbitrary-exponent formula; precise remaining gap,planned,literature_novelty_supported_full_global_proof_required,,,,,,,,
 3,B3,Construct and check a curve height,Proposed height; proof on an unbounded family,planned,conditional_on_feasibility,,,,,,,,
 4,B3,Finish the first lemma and prepare discussion,Complete lemma; comparison; one question for a specialist,planned,conditional_on_feasibility,,,,,,,,
 5,B3,Work on the main lemma,Written attempt; exact obstruction,planned,conditional_on_feasibility,,,,,,,,
