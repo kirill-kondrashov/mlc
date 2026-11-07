@@ -20,7 +20,14 @@
   [*An algebraic formulation of Thurston's characterization of rational functions*](https://www.numdam.org/article/AFST_2012_6_21_S5_1033_0.pdf),
   Theorem 1.4, печатная с. 1039; §§5, 7: виртуальный эндоморфизм
   группы классов отображений и критерий конечного аттрактора.
-  **Применимость к нашей карте ещё нужно проверить.**
+  Для нашей карты условие сжатия ложно: $\rho(\varphi_F)\ge1$.
+  [Полное доказательство](research/B3_novelty_audit.md), §§4–6.
+- Parry–Pilgrim,
+  [*Characterizations of contracting Hurwitz bisets*, 2025v1](https://arxiv.org/abs/2506.23222v1),
+  Theorems 1.1–1.2, §§2–4, 6.5–6.6: сжатие бисета Гурвица,
+  обструкции в его полугруппе и соответствие на пространстве модулей.
+  Для B3 сильное сжатие исключено; аттрактор фиксированной карты
+  из этого результата не следует и не опровергается.
 - Pilgrim,
   [*On the pullback relation on curves induced by a Thurston map*, 2021v1](https://arxiv.org/abs/2102.12402v1),
   §§3.3, 4.1: вычисление отношения и перечень известных механизмов.
@@ -28,6 +35,11 @@
 
 ## Для ближайшего вычисления
 
+- Shepelevtseva–Timorin,
+  [*Invariant spanning trees for quadratic rational maps*, 2021v4](https://arxiv.org/abs/1808.05489v4),
+  §2.2: дерево формального mating кролика и базилики;
+  Theorem 5.6: получение бисета из дерева. Исходную модель нужно
+  согласовать с метками и базисом B3.
 - Bartholdi–Dudko I,
   [§2](https://arxiv.org/abs/1512.08539): левосвободный бисет, базис,
   рекурсия и смена базиса. Применение — получить слова секций в (C5).

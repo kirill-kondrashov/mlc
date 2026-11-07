@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-all: programme.pdf first_days.pdf novelty_audit.pdf b2_audit.pdf b3_candidate.pdf
+all: programme.pdf first_days.pdf novelty_audit.pdf b2_audit.pdf b3_candidate.pdf b3_audit.pdf
 
 programme.pdf: programme.tex publication_plan.tex .build/xelatex-ru.fmt
 	mkdir -p .build
@@ -53,9 +53,20 @@ b3_candidate.pdf: b3_candidate.tex .build/B3_candidate.tex .build/xelatex-ru.fmt
 	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build b3_candidate.tex
 	cp .build/b3_candidate.pdf b3_candidate.pdf
 
+.build/B3_novelty_audit.tex: research/B3_novelty_audit.md tex/short_tables.lua
+	mkdir -p .build
+	pandoc --from=markdown+tex_math_dollars --to=latex --no-highlight --lua-filter=tex/short_tables.lua $< -o $@
+
+b3_audit.pdf: b3_audit.tex .build/B3_novelty_audit.tex .build/xelatex-ru.fmt
+	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build b3_audit.tex
+	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build b3_audit.tex
+	xelatex -fmt=.build/xelatex-ru.fmt -interaction=batchmode -halt-on-error -file-line-error -output-directory=.build b3_audit.tex
+	cp .build/b3_audit.pdf b3_audit.pdf
+
 clean:
 	latexmk -c -outdir=.build programme.tex
 	latexmk -c -outdir=.build first_days.tex
 	latexmk -c -outdir=.build novelty_audit.tex
 	latexmk -c -outdir=.build b2_audit.tex
 	latexmk -c -outdir=.build b3_candidate.tex
+	latexmk -c -outdir=.build b3_audit.tex
