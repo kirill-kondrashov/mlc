@@ -1,15 +1,21 @@
 # Источники для текущего вопроса
 
-## Открыть сейчас
+## Проверенные ближайшие результаты
 
 - Di Domenico–Fernández-Alcober–Noce–Thillaisundaram,
   [*p-Basilica Groups*](https://link.springer.com/article/10.1007/s00009-022-02187-z).
-  Theorem 4.1 — первая проверка вопроса о третьем слое;
-  Lemma 3.2 и Theorem 3.3 — сравнение исходных групп и первого стабилизатора.
-- Eick–Hartung–Bartholdi,
+  Theorem 4.7(i), формула (4.7), с. 15 — полный образ коммутанта
+  стабилизатора уровня; Theorem 4.10(i) и Corollary 4.11, с. 17 —
+  фактор класса 2. Вместе с Lemma 3.2, Theorems 3.3 и 4.5 дают
+  [полное сведение B2-N](research/B2_novelty_audit.md).
+- Eick–Hartung, с приложением Bartholdi,
   [*A nilpotent quotient algorithm for L-presented groups*](https://arxiv.org/abs/0706.3131v2).
-  Проверить, вычисляет ли известный алгоритм нужный нам объект.
-  Точное сопоставление пока не выполнено.
+  Версия 2, §7.1, с. 8–10: обычные нильпотентные факторы Basilica-группы.
+  Объект отличается от ядра портретов `D_{3,m}`.
+- Hartung,
+  [*Approximating the Schur multiplier of certain infinitely presented groups via nilpotent quotients*](https://arxiv.org/abs/1106.1098),
+  §6, с. 11: факторы Двайера мультипликатора Шура. Объект также отличается
+  от B2-N; состояние гипотезы на 2026 год здесь не проверено.
 
 ## Для конкретного недостающего перехода
 
