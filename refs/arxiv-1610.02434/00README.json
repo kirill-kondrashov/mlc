@@ -1,0 +1,14 @@
+{
+  "key": "bartholdi-dudko-branched-IV",
+  "arxiv_id": "1610.02434",
+  "arxiv_version": "1",
+  "role": "adjacent",
+  "title": "Algorithmic aspects of branched coverings IV/V. Expanding maps",
+  "authors": [
+    "Laurent Bartholdi",
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-1610.02434.xml",
+  "source_archive": "arxiv-1610.02434-source.tar.gz",
+  "main_tex": "arxiv-1610.02434/bc4-expanding.tex"
+}

@@ -1,0 +1,620 @@
+
+\section{Pseudo-quadratic-like maps and canonical renormalization} \label{pseudo-puzzle}
+In this section we introduce the notion of a pseudo-polynomial-like map. 
+This generalization of the polynomial-like-map is the result of the \emph{canonical renormalization}, 
+which has a ``crucial property'' described in the Introduction and stated as Theorem \ref{thm:iterated-lengths};
+this, 
+along with an analog of Theorem \ref{thm:length-comparison} for pseudo-quadratic-like maps,
+will allow us to prove the Main Theorem.
+
+In Section \ref{pseudo:def} we define this new class of maps. 
+In Section \ref{psi-pl} we show that every pseudo-polynomial-like map has a polynomial-like restriction. 
+In Section \ref{pseudo-iterate} we describe how to iterate a $\psi$-polynomial-like-map. 
+In Section \ref{can renorm} we define the canonical renormalization and state and prove Theorem \ref{thm:iterated-lengths}. 
+The reader who finds the discussions in Section \ref{pseudo-iterate} and \ref{can renorm} too abstract and functorial for their tastes may prefer to skip to the end of each of these subsections, where there are more geometric perspectives. 
+\subsection{Definition} \label{pseudo:def}
+\begin{defn}
+A \emph{pseudo-polynomial-like map}\footnote{Strictly speaking,
+ we are defining a ``$\psi$-polynomial-like map with connected Julia set''.}
+(or $\psi$-polynomial-like map)
+of degree $d$ is a pair of holomorphic maps $(i, f)\from \BU'\to \BU$ and an FJ-set $K \subset \BU$ such that
+\begin{enumerate}
+\item 
+$\BU'$ and $\BU$ are disks,
+\item
+$i$ is an immersion,
+\item 
+$f$ is a degree $d$ branched cover,
+\item
+$i^{-1}(K) = f^{-1}(K)$, and, denoting this set by $K'$,
+\item
+$K'$ is connected.
+\end{enumerate}
+\end{defn}
+We will call $K$ the filled-Julia set of $(i, f)$. 
+Note that $K'$ is connected if and only if
+ all the branch values of $f$ lie in $K$.
+Also note that,
+because $f$ is proper,
+$K'$ is an \fjset.
+We will see that $K \subset \BU$ is uniquely determined by $(i, f)\from \BU' \to \BU$.
+We will also see that these conditions imply that $i\from K'\to K$ is a bijection.
+
+\begin{rem} \label{psi-plane}
+By the Uniformization Theorem,
+$\BU$ is isomorphic to either the complex plane or the unit disk.
+In the former case, 
+$\BU' = f^{-1}(\BU)$ is also the complex plane,
+and $i\from \BU'\sm K'\to \BU\sm K$ is a holomorphic map from a punctured disk to a punctured disk, 
+which then extends to the filled-in puncture by the Riemann removable singularity theorem.
+It then follows that $i$ is an isomorphism, and then $f\circ i^{-1}$ is conjugate to a polynomial. 
+\end{rem}
+
+
+\subsection{Finding a polynomial-like restriction} \label{psi-pl}
+We can now prove that every $\psi$-polynomial-like map $F$ has a polynomial-like restriction, 
+with modulus controlled by the modulus for $F$. 
+In the rest of this subsection we will assume that $d$ is an integer greater than 1,
+and all constants and functions that appear will implicitly depend on $d$ (as well as any specified parameters). 
+
+\begin{theorem}\label{ql extension}
+Let $F=(i,f)\from\BU'\to \BU$ be a $\psi$-polynomial-like map of degree $d$
+ with filled Julia set $K$.
+Then  we can find $U \subset \BU$ open, with $K \subset U$
+such that,
+letting $U' \equiv f^{-1} U \subset \BU'$,
+\begin{itemize}
+\item
+$f \from U'\to U$ is a degree d holomorphic cover,
+\item
+$i|_{U'}$ is an embedding,
+\item
+$i(U') \subset U$, and
+\item
+$\mod(U\sm i(U'))\geq \mu > 0$,
+with $\mu$ uniformly positive for bounded $d$ and $\mod(\BU\sm K))$ bounded below.
+\end{itemize}
+\end{theorem}
+
+\renewcommand{\aa}[1]{\A(1, #1)}
+\newcommand{\aaa}[1]{\A(1/#1, #1)}
+
+
+Before proving Theorem \ref{ql extension},
+let us first prove a lemma about immersions of annuli.
+
+
+\begin{lem} \label{lem:ann-immerse}
+Let $d >1$ be an integer, take $r > 1$ and let $r' = r^{1/d}$. 
+Suppose that $I\from \aa{r'} \to \aa{r}$ is a holomorphic immersion that extends continuously to $I\from \T \to \T$ of degree 1.
+Take $\rho \in (1, r)$ and let $\rho' = \rho^{1/d}$.
+\begin{enumerate}
+\item \label{ai:s}
+$I(\aa{\rho'}) \subset \aa s$,
+where $s \equiv s(\rho, r)$ and $\rho - s$ is uniformly positive on any compact subset of $\{ (r, \rho) \mid 1 < \rho < r \le \infty \}$.
+\item \label{ai:emb}
+$I|_{\aa {\rho'}}$ is an embedding for $\rho \equiv \rho(r)$ uniformly greater than 1 when $r$ is bounded away from 1.
+\end{enumerate}
+\end{lem}
+
+\begin{proof}
+For Statement \ref{ai:s},
+we can double $\aa {r'}$ and $\aa r$ over $\T$
+(to form $\aaa {r'}$ and $\aaa{r}$), and extend $I$ to $I\from \aaa{r'}\to \aaa r$ by Schwarz reflection. 
+Then the \poincare\ distance between $\T$ and $\T_{\rho'}$ in $\aa{r'}$
+ is the same as that from $\T$ to $\T_\rho$ in $\aa r$. 
+On the other hand, 
+for $(\rho, r)$ in a compact subset of $1 < \rho < r < \infty$,
+we must have uniform contraction of the \poincare\ metric, 
+which proves our desired estimate in this case.
+If $r = \infty$, 
+then $I$ is the identity, and the estimate follows.
+Finally, 
+for $(\rho, r)$ in a compact subset of $1 < \rho < r \le \infty$,
+we can imagine a sequence of such pairs $(\rho, r)$.
+If the $r$'s are bounded, we are done by our first observation,
+and if $r \to \infty$, we are done by the second.
+
+For Statement \ref{ai:emb},
+we observe that $I(\T_{\sqrt{r'}})$ is bounded away from $\T$ for $r$ bounded away from 1.
+So,
+for such $r$,
+we have $\rho$ uniformly greater than 1 such that $I(\T_{\sqrt{r'}})$ is disjoint from $\Lambda := \aa \rho$.
+Let $\Lambda'$ be the component of $I^{-1}(\Lambda)$ that is adjacent to $\T$;
+then $I\from \T \cup \Lambda' \to \T \cup \Lambda$ is a covering map;
+it must have degree 1, because $I\from \T \to \T$ does.
+Therefore $I|_{\Lambda'}$ is an embedding,
+Moreover,
+by \poincare\ contraction on $\aaa {r'}$,
+the outer boundary of $\Lambda'$ lies outside of $\aa{\rho'}$,
+and therefore $I|_{\aa{\rho'}}$ is an embedding.
+\end{proof}
+
+\begin{rem} \label{ai:both}
+Putting \eqref{ai:s} and \eqref{ai:emb} together,
+we obtain, for $r$ bounded away from 1,
+uniform $\rho$ and $s$ with $1 < s < \rho$ such that $I|_{\aa {\rho'}}$ is an embedding, 
+and $I(\aa {\rho'}) \subset \aa s$. 
+\end{rem}
+
+\begin{rem} \label{ai:extends}
+If we're given $I\from \aa{r'}\to \aa{r}$ such that $\abs{I(z)} \to 1$ as $\abs z \to 1$,
+then $I$ extends continuously to $I\from \T \to \T$ by the Reflection Principle for harmonic functions;
+see \cite{Ahlfors:complex} or \cite{Gamelin}.
+
+If moreover $I\from \aa{r'} \to \aa{r}$ is injective in a neighborhood of $\T$,
+then the extension to $\T$ is also injective, and hence has degree 1.
+For if not,
+we could find $z_0, z_1 \in \T$ with $z_0 \neq z_1$ and $I(z_0) = I(z_1)$,
+and then,
+by the Open Mapping Theorem, 
+applied to the double of $I$ over $\T$,
+every point in a neighborhood of $I(z_0)$ would be the image of a point near $z_0$ and a point near $z_1$. 
+\end{rem}
+
+\begin{proof}[Proof of Theorem \ref{ql extension}]
+We first claim that there is a neighborhood of $K''$ on which $i$ is injective.
+If not,
+then there would be sequences $z_k \to K'$ and $w_k \to K'$ such that $i(z_k) = i(w_k)$,
+and,
+passing to subsequences such that $z_k \to z$ and $w_k \to w$,
+we would have $i(z) = i(w)$.
+This would imply that $z = w$ and that $z$ is a critical point of $i$, a contradiction.
+
+We consider the annuli $\BU\sm K$ and $\BU'\sm K'$,
+and uniformize them by the round annuli:
+$$
+\phi\from \A(1,r) \to \BU \sm K, \quad \phi'\from \A(1,r') \to \BU' \sm K',\quad \text{where}\ r'=r^{1/d}.
+$$
+Let $I= \phi^{-1}\circ i\circ \phi'\from \A(1,r')\to \A(1,r)$.
+It is an immersion,
+and,
+by Remark \ref{ai:extends} and the previous paragraph,
+$I$ extends continuously to $I\from \T\to\T$,
+and the latter map has degree 1.
+
+We can then find $1 < s < \rho$ as in Remark \ref{ai:both},
+and let $U' = K' \cup \phi'(\aa {\rho'})$ and $U = K\cup \phi(\aa \rho)$. 
+\end{proof}
+
+
+
+
+\subsection{Iterating a $\psi$-polynomial-like map} \label{pseudo-iterate}
+It is not immediately obvious how to iterate a $\psi$-polynomial-like map. 
+We will first discuss the pullback in the category of complex 1-manifolds, 
+and then use the pullback to define the iteration. 
+
+\subsubsection{The pullback in the category of complex 1-manifolds}
+Given two morphisms $g\from G\to V$ and $h\from H\to V$ in a given category,
+the \emph{pullback} of these two morphisms is an object $E$ along with morphisms $\pg\from E \to G$ and $\ph\from E \to H$ 
+such that $g \circ \pg = h \circ \ph$ 
+and $(E, \pg, \ph)$ is universal in the sense that if $F$ is an object, and  $f_G\from F\to G$ and $f_H\from F\to H$ are morphisms
+and $g\circ f_G = h\circ f_H$,  then there exists a unique morphism $\phi\from F\to E$
+such that $f_G = \pg \circ \phi$ and $f_H = \ph \circ \phi$.
+\begin{center}
+\begin{tikzcd}
+F \arrow[dr, "\phi" description,  dashed]  \arrow[drr, "f_h"] \arrow[ddr, "f_g",swap] & &\\
+& E \arrow[r, "\ph"] \arrow[d, "\pg"] & H \arrow[d, "h"] \\
+&G  \arrow[r, "g"] & V \\
+\end{tikzcd}
+\end{center}
+
+This is of course old news for those who are at home in the world of  category theory, and invariably annoying for those who are not. It will help to consider two examples. In the category of sets, the pullback is just the equalizer: we let 
+$$
+E = \{ (x, y) \in G \times H \mid g(x) = h(y) \}
+$$
+and $\pi_G((x, y)) = x$ and $\pi_H((x, y)) = y$. 
+In the category of topological spaces, we topologize $E$ as a subspace of $G \times H$ with the product topology. So the underlying set of the topological pullback is just the set-theoretic pullback. 
+
+In any category, 
+if the pullback exists (even just for a given diagram),
+it is unique, 
+in the sense that if $E$ and $E'$ are both pullbacks, there is an isomorphism $\psi\from E \to E'$ that makes everything commute. 
+This follows immediately from the universal property of the pullback.
+
+Let us observe and record a few properties of the topological pullback. 
+The general principle is that a property of $g$ is inherited by $\ph$ (and likewise, by symmetry, a property of $h$ is inherited by $\pg$).
+\begin{lemma} \label{lem:XYZ}
+We have the following.
+\begin{enumerate}
+\item \label{it:proper}
+If $g$ is proper, then $\ph$ is proper.
+\item \label{it:loc-homeo}
+If $g$ is a local homeomorphism, 
+then $\ph$ is a local homeomorphism. 
+\item \label{it:homeo}
+If $g$ is a homeomorphism,
+then $\ph$ is a homeomorphism. 
+\item \label{it:set}
+If $g$ is injective (or surjective, or bijective),
+then $\ph$ is injective (or surjective, or bijective).
+\item \label{it:set2}
+For any $y \in H$, there is a natural 1-to-1 correspondence between $\ph^{-1}(\{y\})$ and $g^{-1}(\{ h(y) \})$. In particular, the two sets have the same cardinality. 
+\end{enumerate}
+\end{lemma}
+
+\begin{proof} 
+For Statement \eqref{it:proper},
+suppose $B \subset H$ is compact.
+Then
+\begin{align*}
+   \ph^{-1} (B) &= \{(x,y)\in G \times B \mid g(x) = h(y) \} \\
+ &= \{ (x,y)\in g^{-1}(h(B)) \times B \mid g(x) = h(y) \} 
+\end{align*}
+which is a closed subset of a compact set.
+
+For Statement \eqref{it:loc-homeo},
+take $(x, y) \in E$.
+Then we can find an open set $U \subset G$ such that $x \in U$ and $g|_U\from U \to g(U)$ is a homeomorphism.
+Let $\hat U = \pg^{-1} U$. 
+Then $\ph|_{\hat U}$ is a homeomorphism,
+because its inverse is $y \mapsto ((g|U)^{-1}(h(y)), y)$. 
+
+Statement \eqref{it:homeo} is essentially tautological, and holds in any category (where one of the two maps is an isomorphism).
+Statements \eqref{it:set} and\eqref{it:set2} are straightforward (and belong to the category of sets) and are left to the reader. 
+\end{proof}
+
+
+We can now state and prove a lemma on a special case of pullback in the category of complex 1-manifolds. 
+\begin{lemma} \label{lem:pullback}
+The pullback of the diagram $g\from G\to V, h\from H\to V$,
+in the category of complex 1-manifolds, 
+exists when $g$ (or symmetrically, $h$) is an immersion. 
+In this case the underlying topological space of the (Riemann surface) pullback is the topological pullback.
+\end{lemma}
+\begin{proof}
+From Statement \eqref{it:loc-homeo} in Lemma \ref{lem:XYZ},
+we have that $\ph\from E\to H$ is a local homeomorphism. 
+We can therefore pull the complex 1-manifold structure (the system of charts) on $H$ back to $E$ (by $\ph$), 
+and then $\ph$ is holomorphic. 
+
+For any $(x, y) \in E$, 
+we can proceed exactly as in the proof of Statement \eqref{it:loc-homeo} in Lemma \ref{lem:XYZ} 
+to obtain $U \subset G$ and $\hat U \subset E$ with the stated properties. 
+Then $\pg = g^{-1} \circ h \circ \ph$ on $\hat U$, as is therefore holomorphic there.
+We conclude that $\pg$ is holomorphic on $E$.
+
+It remains only to show the universal property.
+Given $F, f_G, f_H$ as before,
+there is a unique continuous map $\phi\from F \to E$ that makes the diagram above commute.
+We need only show that $\phi$ is holomorphic,
+and this follows from $\phi = (\ph|_{\hat U})^{-1} \circ f_H$ on $\phi\inv {\hat U}$ (where $\hat U$ is defined as before).
+\end{proof}
+We have written ``complex 1-manifold'' instead on ``Riemann surface" because the pullback, even in this special case, is not necessarily connected. For example, we can let $G$ and $H$ be disks in $V := \C$ with disconnected intersection; the pullback is then canonically isomorphic to $G \cap H$. 
+
+Having proven this case let us observe the following:
+\begin{lemma}
+Suppose that $g\from G \to V$ and $h\from H\to V$ are holomorphic maps of complex 1-manifolds, 
+and $g$ is an immersion and $h$  is proper of degree $d$.
+Then in the pullback (with the notation as before), $\ph$ is an immersion, and $\pg$ is proper of degree $d$. 
+Moreover the local degree of $\pg$ at each point $z$ in the pullback is equal to the local degree of $h$ at $\ph(z)$. 
+\end{lemma}
+\begin{proof}
+We have already observed that $\ph$ is a local homeomorphism, and hence an immersion.
+Likewise, by Statement \eqref{it:proper} of Lemma \ref{lem:XYZ}, we see that $\pg$ is proper. 
+Moreover, choosing any point $(x, y) \in E$ such that $h(y)$ is not a critical value of $h$, 
+we see by Statement \eqref{it:set2} (of Lemma \ref{lem:XYZ}) that $|\pg\inv {\{x\}}| = |h\inv {\{ h(y) \}}| = d$.
+Therefore the degree of $\pg$ is $d$. 
+
+The last statement then follows by considering small neighborhoods around $z$, $\pg(z)$, $\ph(z)$, and $g(\pg(z)) = h(\ph(z)$. 
+\end{proof}
+
+
+This is all that we will need in what follows, and reader may now skip to Section \ref{psiql:iterate-actual}.
+
+Let us now discuss the general case of pullbacks for complex 1-manifolds,
+as it may be of some interest and application.
+We first consider an illustrative special case,
+where $G = H = V = \D$, 
+and $g(z) = z^{ma}$ and $h(z) = z^{mb}$, with $a$ and $b$ relatively prime.
+In the case where $m$ is 1,
+we can identify the equalizer $E$ with $\D$ by sending $(x, y)$ (with $x^a = y^b$) to the unique $z \in \D$ for which $z^b = x$ and $z^a = y$.
+This of course gives us a Riemann surface structure on $E$ where the maps $\pg$ and $\ph$ are then $z \mapsto z^b$ and $z \mapsto z^a$ in our system of coordinates. 
+To see universality, we take $F, f_G, f_H$ as specified above, and obtain a continuous map $\phi\from F \to E \equiv \D$ which we need to show is homeomorphic. 
+This follows from Lemma \ref{lem:pullback} on $\phi\inv {\D \sm \{ 0 \}}$, and then follows on all of $F$ by the Riemann removable singularity theorem.
+
+In the case where $m > 1$,
+the topological (and set-theoretic) equalizer will be $m$ copies of $\D$ identified at their origins. 
+We then need to desingularize this equalizer by separating these disks, 
+and let our desired pullback be the desingularized equalizer.
+So in this case, 
+even though the topological pullback is connected,
+the pullback in the category of complex 1-manifolds has $m$ components. 
+
+More explicity we have $(x^a)^m = (y^b)^m$ 
+and therefore $x^a = \rho^k_m y^b = (\rho^k_{mb} y)^b$, where $\rho_q := e^{2 \pi i/q}$, for some $k \in 0, \ldots m-1$. 
+For each choice of $k$ we can then solve 
+$$z^b = x \quad \text{and} \quad z^a = \rho^k_{mb} y$$
+for a unique $z \in \D$.
+So our complex 1-manifold pullback $\hat E$ is a disjoint union of $m$ disks parametrized by $k \in 0, \ldots m-1$;
+we let $Z$ be the set of origins of these disks.
+Given $F, f_G, f_H$ as before, 
+we obtain a continuous $\phi\from F\to E$ as before.
+Thinking of $E$ as the quotient of $\hat E$ where $Z$ is collapsed to a point $P$,
+we see that $\phi$ maps each component\footnote{There is one component of $\phi^{-1}(E \sm P)$ for each component of $F$}
+of $\phi^{-1}(E \sm P)$ to a component of $\hat E$. 
+The Riemann removable singularity theorem then implies that $\phi$ has a unique continuous lift to $\hat \phi\from F \to \hat E$, 
+and that this lift is in fact holomorphic.
+
+We can now briefly sketch the proof of the general theorem.
+\begin{theorem}
+Pullbacks exists is the category of complex 1-manifolds.
+\end{theorem}
+\begin{proof}
+For each point $(x, y)$ in the topological pullback, we can find coordinates around $x$, $y$, and $g(x) = h(y)$ such that $g$ and $h$ become $z\mapsto z^{ma}$ and $z \mapsto z^{mb}$ as in the preliminary discussion. We can then proceed as before to make the disingularized complex 1-manifold $\hat E$, and verify the universal property as in the previous discussion.
+\end{proof}
+
+
+
+\subsubsection{Iteration} \label{psiql:iterate-actual}
+We now return to the setting of a degree $d$ $\psi$-polynomial-like map $(i, f)\from (\BU', K') \to (\BU, K)$,
+with an eye towards constructing its iterates.
+By Lemma \ref{lem:pullback},
+we can form the pullback of the diagram $i\from \BU' \to \BU$, $f\from \BU' \to \BU$,
+and we then label it as follows:
+
+\begin{center}
+\begin{tikzcd}
+\BU'' \arrow[r, "f_1"] \arrow[d, "i_1"] & \BU'  \arrow[d, "i"]\\
+\BU' \arrow[r, "f"]& \BU \\
+\end{tikzcd}
+\end{center}
+
+By Lemma \ref{lem:XYZ},
+$i_1$ is an immersion and $f_1$ is proper of degree $d$.
+We can think of $\BU''$ as the set of $(x, y) \in \BU' \times \BU'$ such that $i(x) = f(y)$,
+and then $i_1(x, y) = y$ and $f_1(x, y) = x$. 
+Since 
+$$x \in K' \iff i(x) \in K \iff f(y) \in K \iff y \in K',$$
+we see that $i_1^{-1}(K') = f_1^{-1}(K')$; we call this set $K''$. 
+
+To verify that $(i_1, f_1)\from (\BU'', K'') \to (\BU', K')$ is a degree $d$ $\psi$-polynomial-like map,
+we now need only check that $\BU''$ is a disk and $K''$ is connected. 
+Since $i\from K' \to K$ is a homeomorphism,
+$i_1\from K'' \to K'$ is as well, and therefore $K''$ is connected.
+By Lemma \ref{lem:XYZ},
+$f_1\from \BU''\to \BU'$ is proper (of degree $d$),
+and hence every component of $\BU''$ intersects $f^{-1}(K') = K''$. 
+Therefore $\BU''$ is connected.
+Moreover,
+by the same Lemma,
+$z \in \BU''$ is a critical point of $f_1$ if and only if $i_1(z)$ is a critical point of $f$, 
+and the two have the same multiplicity.
+Therefore all critical points of $f_1$ lie in $K''$,
+and $i_1$ acts as a 1-to-1 correspondence between the critical points of $f_1$ and those of $f$, preserving multiplicity.
+Hence the total number of critical points
+(counting multiplicity)
+of $f_1$ is $d-1$,
+so,
+by Riemann-Hurwitz,
+the Euler characteristic of $\BU''$ is 1,
+and hence $\BU''$ is a disk. 
+
+We have thus proven
+\begin{lemma} \label{lem:pullback-ps-plm}
+The pullback $(i_1, f_1)\from (\BU'', K'') \to (\BU', K')$ 
+of the degree $d$ $\psi$-polynomial-like map $(i, f)\from (\BU', K') \to (\BU, K)$ 
+is itself a degree $d$  $\psi$-polynomial-like map.
+\end{lemma}
+
+
+Suppose that $(i, f)\from \BU' \to \BU$ is a $\psi$-polynomial-like map,
+and $U' \subset \BU'$ and $U \subset \BU$ are such that $(i, f)\from U' \to U$ is a polynomial-like map,
+in the sense that $i(U') \Subset U$ and $i|_{U'}$ is an embedding.
+Letting $U''$ be the pullback of $(i, f)\from U' \to U$, 
+we can think of $U''$ as a subset of $\BU''$,
+and then $(i_1, f_1)\from U'' \to U'$ is a polynomial-like map.
+The result is that the polynomial-like germ of $(i_1, f_1)\from \BU''\to \BU'$ is the same as that of $(i, f)\from \BU' \to \BU$. 
+
+Let us relabel $(i, f)$ as $(i_0, f_0)\from (\BU^1, K^1) \to (\BU^0, K^0)$.
+We can then apply Lemma \ref{lem:pullback-ps-plm} to construct degree $d$ $\psi$-polynomial-like maps
+$$(i_n, f_n)\from (\BU^{n+1}, K^{n+1}) \to (\BU^n, K^n)$$ such that
+$i_n \circ f_{n+1} = f_n \circ i_{n+1}$ for all $n$. 
+By a very slight abuse of notation\footnote{or clever definition of $i$, $f$, and $K$ on the disjoint union $\bigcup_{n\in \N}\BU^n$},
+we will often just denote $i_n$, $f_n$, and $K_n$ as $i$, $f$, and $K$.
+This then allows us to refer to the iterations $i^n\from \BU^{m+n} \to \BU^{m}$ and $f^n\from \BU^{m+n} \to \BU^{m}$ (where we usually take $m=0$).
+
+\subsubsection{Some other perspectives on iteration}
+The pair $(i, f)$ provides a holomorphic map of $\BU'$ into $\BU \times \BU$, and the image of this map determines $\ff$.
+So we can think of $\ff$ as this relation, and iterate it as we iterate any relation: the $n\thh$ iterate of a relation $R \subset X \times X$ is all pairs $(x_0, x_n)$ such that there exists $(x_0, x_1, \ldots x_n)$ for which $(x_i, x_{i+1}) \in R$ for each $i$. 
+This iteration coincides with the iteration that we have defined through pullback.
+
+A related perspective is to think of $i \circ f^{-1}$ as a map from $\BU$ to $\Sym_d \BU$, the symmetric $d$-fold product of $\BU$ with itself (or unordered $d$-tuples with multiplicity).
+This map has no critical points, but it has $d-1$ ``anti-critical points'', where there image in $\Sym_d \BU$ has a point with multiplicity greater than 1. We can compose such maps by applying one map to each of the image points of the other, and taking the union. In this way the $n\thh$ iterate is a map from $\BU$ to $\Sym_{d^n}\BU$. 
+
+
+
+
+\newcommand{\hl}[1]{\hat #1}
+\subsection{Canonical Renormalization}\label{can renorm}
+We now describe a form of renormalization in the category of $\psi$-quadratic-like maps
+that has the crucial property of preserving certain moduli and hyperbolic lengths. 
+
+\subsubsection{Localization}
+Let us first consider the category of \emph{marked Riemann surfaces}, 
+which are pairs $(S, A)$, where $S$ is a Riemann surface,
+and $A \subset S$ is compact and connected, 
+and full in the sense no component of $S \sm A$ has compact closure in $S$. 
+The morphisms of this category are holomorphic maps $g\from (S, A) \to (T, B)$ such that $A=g^{-1}(B)$. 
+
+We say a marked Riemann surface is \emph{local} if every component of $S \sm A$ is an annulus. 
+In this case $S$ deformation retracts into any neighborhood of $A$.
+We observe that for every marked Riemann surface $(S, A)$ and neighborhood $V$ of $A$ there is a subsurface $U \subset V$ with $A \subset U$ such that $(U, A)$ is local. 
+We will call such a $U$ a local neighborhood. 
+
+A local marked Riemann surface $(S, A)$ for which $S \sm A$ is connected
+is exactly a pair where $S$ is a disk and $A$ is an FJ-set.
+Hence when $(i, f)\from (\BU', K') \to (\BU, K)$ is a $\psi$-polynomial-like map, 
+then  $(\BU', K')$ and  $(\BU, K)$ are local marked Riemann surfaces, and $i$ and $f$ are morphisms. 
+We will now define a functor from marked Riemann surfaces to local marked Riemann surfaces, 
+that we will use in the next subsubsection to form the canonical renormalization.
+
+We say that a morphism $g\from (S, A) \to (T, B)$
+is a \emph{local cover} if $g\from A \to B$ is a bijection, and $g\from S \sm A \to T \sm B$ is a covering. 
+
+\begin{theorem}
+For any marked Riemann surface $(S, A)$, 
+there is a unique (up to isomorphism) pair of a local marked Riemann surface $(S_A, \hat A)$ and local cover $\pi_{S,A}\from (S_A, \hat A) \to (S, A)$.
+
+For any morphism $g\from (S, A) \to (T, B)$,
+there is a unique continuous map $\hat g\from S_A \to T_B$ such that $\pi_{T, B} \circ \hat g = g \circ \pi_{T, A}$,
+and $\hat g\from (S_A, \hat A) \to (T_B, \hat B)$ is a morphism. 
+
+These operations define a functor from marked Riemann surfaces (and their morphisms) to the induced subcategory of local marked Riemann surfaces. 
+\end{theorem}
+\begin{proof}
+For simplicity,
+let us first consider the case where $S \sm A$ is connected;
+this is the only case that we will actually use to make the canonical renormalization. 
+To construct $S_A$ (and $\pi_{S, A}$),
+we take a local neighborhood $U$ of $A$,
+and take the cover $\pi'_{S, A}\from S'_A \to S \sm A$ that
+corresponds to the fundamental group of $U \sm A$. 
+Then there is a natural lift of $U \sm A$ to $S_A'$;
+we let $S_A$ be the quotient of the disjoint union of $U$ and $S_A'$ by identifying points in $U \sm A$ with their image by this lift;
+we let $\hat A \subset S_A$ be the image of $A$ by this quotient (and likewise define $\hat U \subset S_A$). 
+Then $(S_A, \hat A)$ is a local marked Riemann surface, 
+because $S_A \sm \hat A$ is isomorphic to $S'_A$,
+which has fundamental group $\Z$.
+We let $\pi_{S, A}(x) = \pi_{S, A}'(x)$ for $x \in S_A'$, and let $\pi_{S, A}$ be the inverse of the quotient map on $\hat U$.
+These definitions are consistent, and make $\pi_{S, A}$ into a local cover.  
+
+For the general case, 
+we again take a local neighborhood $U$ of $A$ and
+let $S'_A$ be the disjoint union of the annular covers of each component $E$ of $S \sm A$ induced by $E \cap U$.
+
+
+Given a morphism $g\from (S, A)\to (T, B)$,
+we let $\hat g = \pi_{T, B}|{\hat B}^{-1} \circ g \circ \pi_{S, A}$ on $A$,
+and we let $\hat g$ be the lift of $g \circ \pi_{S, A}$ (by $\pi_{T, B}$) on every component of $S_A \sm \hat A$.
+This defines $\hat g$ with $\pi_{T, B} \circ \hat g = g \circ \pi_{T, A}$,
+and we can work backwards to see that $\hat g$ is the unique continuous map with this property.
+One easily checks that $\hat g$ is a morphism.
+
+The uniqueness of the commuting map $\hat g$ implies that lift of a composition of morphisms is the composition of the lifts; this shows functoriality. Finally, to see the uniqueness of the pair $(S_A, \hat A), \pi_{S, A}$, we suppose we are given two such pairs, and lift the identity map from $(S, A)$ to itself.
+\end{proof}
+We call  $(S_A, \hat A)$ the localization of $(S, A)$, 
+and $\hat g$ the localization of $g$. 
+We observe that the maps $\pi_{S, A}$ provide a natural transformation from localization 
+(now thought of a functor from the category of marked Riemann surfaces to itself) to the identity functor.
+
+Suppose $g\from (S, A) \to (T, B)$ is a morphism of marked Riemann surfaces,
+and let $\hat g\from (S_A, \hat A) \to (T_B, \hat B)$ be its localization.
+We observe that $\hat g$ is an immersion if $g$ is an immersion,
+and that $\hat g$ is a branched cover (and $g$ is a branched cover) if $g\from S\sm A\to T \sm B$ is a covering map. 
+
+
+\newcommand{\vv}{\BU \sm B}
+\newcommand{\vvp}{\BU' \sm f^{-1}(B')}
+\subsubsection{Dynamical Localization}
+Now let us suppose that 
+\begin{itemize}
+\item
+$(i, f)\from (\BU', K') \to (\BU, K)$ is a $\psi$-polynomial-like map of degree $d$,
+\item
+$A \subset K$ is an \fjset\  (and let $A' = i^{-1}(A)$),
+\item
+$B \subset K$ is compact and $\BU \sm B$ is connected
+\item
+$A$ is a component of $B$
+\item
+$A'$ is a component of $f^{-1}(A)$
+\item 
+$i^{-1}(B') \subset f^{-1}(B)$, and
+\item
+all the branch values of $f$ lie in $B$.
+\end{itemize}
+Let $T = (\BU \sm B) \cup A$,
+let $T' = (\BU' \sm f^{-1} B) \cup A'$.
+Then $(T', A')$ and $(T, A)$ are marked Riemann surfaces,
+and the restrictions of $i$ and $f$ to $T'$ are morphisms. 
+So we can apply localization to obtain $(\hat i, \hat f)\from (T'_{A'}, \widehat{A'}) \to (T_A, \hat A)$,
+and along with the local cover $\pi_{T, A}\from (T_A, \hat A)\to (T, A)$ (and the same for $(T', A')$). 
+We let $\BV' = T'_{A'}$ and $\BV = T_A$. 
+Since $A'$ and $A$ are FJ-sets and $(\BV', \widehat{A'})$ and $(\BV, \hat A)$ are local marked Riemann surfaces,
+$\BV'$ and $\BV$ are disks.
+Moreover $\hl i$ is an immersion
+and $\hl f$ is a branched cover,
+with degree equal to the local degree $d_{A'}$ of $f$ at $A'$.
+So we have shown that $(\hl i, \hl f)\from (\BV', A') \to (\BV, A)$ is a $\psi$-polynomial-like map,
+of degree $d_{A'}$. 
+We call it the \emph{dynamical localization} of $f$ \emph{at} $A$ \emph{with the removal of} $B$. 
+Moreover, 
+since $\pi_{T,A} \from \BV \sm \hl A\to \BU \sm B$ is a covering,
+the \poincare\ length of the core curve in $\BV \sm \hl A$
+is equal to the \poincare\ length of the closed geodesic in $\BU \sm B$ that goes around $A$.
+
+
+\subsubsection{Canonical Renormalization}
+Now suppose that $(i, f)\from (\BU^1, K') \to (\BU^0, K)$ is a degree 2 $\psi$-polynomial-like map (which we will call a $\psi$-quadratic-like map).
+Suppose that $f$ has a quadratic-like restriction that is primitively renormalizable of period $p$.
+Then as before we let $K_p \subset K$ be the central small Julia set of the renormalization,
+and $\KK_p$ be the union of small Julia sets.
+We let $K_p' = i\inv{K_p}$. 
+We observe that $K_p, \KK_p$ satisfy all the conditions for $A, B$ in the previous section,
+when we replace $(i, f)$ with its iteration $(i^p, f^p)\from \BU^p \to \BU^0$. 
+So we then let $(\hl i, \hl f)\from (\BV', \hl K_p') \to (\BV, \hl K_p)$ be the dynamical localization of $f^p$ at $K_p$ with the removal of $\KK_p$. 
+We call this the \emph{canonical renormalization} of $f$ (or really $(i, f)$) of period $p$. 
+
+As we did with polynomial-like maps,
+if $(i, f)\from (\BU', K') \to (\BU, K)$ is a $\psi$-quadratic-like map,
+then we let $\gamma(f)$ be the core curve of $\BU \sm K$.
+Moreover, 
+if $f$ is $p$-renormalizable,
+we let $\gamma_p$ be the closed geodesic around $K_p$ in $\BU \sm \KK_p$. 
+We can now prove the general version of the two ``crucial properties" that we stated in Section \ref{sec:intro}.
+\begin{theorem} \label{thm:iterated-lengths}
+Suppose that $(i, f)\from \BU' \to \BU$ is a $\psi$-quadratic-like map that is primitively renormalizable with periods $p$ and also $pq$ (with $p, q > 1$).
+Let $(j, g)\from \BV' \to \BV$ be the canonical renormalization of $f$ of period $p$.
+Then 
+\begin{enumerate}
+\item
+$|\gamma(g)| = |\gamma_p(f)|$, and 
+\item
+$|\gamma_q(g)| \ge |\gamma_{pq}(f)|$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Statement (1) has already been observed in the definition of dynamical localization. 
+
+
+To prove (2),
+we consider\footnote{We will write $K(g)$, $K_q(g)$, etc., for the objects associated with $g$, and let $K$, $\KK_p$, etc., be the objects for $f$.}
+ the local cover 
+$$\pi\from (\BV, K(g)) \to ((\BU \sm \KK_p) \cup K_p, K_p)$$
+constructed for localization. 
+We claim that $\pi(\BV\sm \KK_q(g)) \subseteq \BU \sm \KK_{pq}$;
+this follows because $\pi(\BV \sm K(g)) \subseteq \BU \sm \KK_p \subseteq \BU \sm \KK_{pq}$
+and $\pi(K(g) \sm \KK_q(g)) = K_p \sm \KK_{pq}$. 
+Statement (2) then follows from the Schwarz Lemma.
+\end{proof}
+
+\subsubsection{Some other natural renormalizations} \label{satellite}
+
+In the case where $f$ is twice renormalizable,
+there is another natural renormalizations of $(i, f)\from \BU^1 \to \BU^0$ 
+that we can form as dynamical localizations of $(i^p, f^p)\from \BU^p \to \BU^0$.
+As before we let $A$ be $K_p \subset K$,
+and let $B := A \cup \KK_{pq}$, where $f$ is also renormalizable of period $pq > p$.
+We can do this even when $f$ is satellite renormalizable of period $p$;
+this may be of value in the study of that case. 
+
+There is a natural renormalization for which the $pq$-renormalization is equal to the $q$-renormalization of the $p$-renormalization (for a map that is $p$- and $pq$-renormalizable). Given $(i, f)\from \BU'\to \BU$, we let $P_f \subset \BU$ be the postcritical set. Then $\gamma_p$ (defined as before) separates $P_f \cap K_p$ from the rest of $P_f$. Choosing a base point lying inside of $\gamma_p$, we form the cover of $\BU \sm P_f$ associated to the subgroup of $\pi(\BU \sm P_f)$ represented by loops that never cross $\gamma_p$. We can then put $P_f \cap K_p$ ``back into'' this cover to form what we will call $\BV$; we can also think of $\BV$ as the disjoint union of this cover and the disk $D_p$ bounded by $\gamma_p$, quotiented by the natural embedding of $D_p \sm P_f$ into this cover. We observe that $K_p$ lifts to $\BV$; we will also call the lift $K_p$.
+
+We can do the same with $f^{-p}P_f$ to form $\BV'$, and then $f^p$ lifts to a degree 2 proper map from $\BV' \to \BV$. Moreover the immersion of $\BU' \sm f^{-p}P_f$ into $\BU \sm P_f$ lifts to an immersion of $\BV' \sm (P_f \cap K_p)$ into $\BV \sm (P_f \cap K_p)$, and this induces an immersion of $\BV'$ into $\BV$. In this way we obtain a $\psi$-quadratic-like $p$-renormalization; one then verifies that the $pq$-renormalization is the $q$-renormalization of the $p$-renormalization. 
+
+
+
+
+
+
+\subsubsection{Paths and the canonical renormalization}
+Suppose that $(i, f)\from \BU' \to \BU$ is primitively $p$-renormalizable and we want to produce the canonical renormalization $(j, g)\from \BV' \to \BV$.
+For simplicity, let us assume that $K_p$ is locally connected. 
+We can then let $\BV$ be the space of classes of paths that start on $K_p$ and end either on $K_p$ or in $\BV \sm \KK_p$, and in the former case can be deformed into $K_p$ in $V \sm (\KK_p \sm K_p)$. 
+Two paths are equivalent if they are homotopic through paths with a common terminal point, and where the initial points stay in $K_p$. 
+In $\BV$ there is a copy of $K_p$ (which we then think of as $K(g)$) given by the constant paths (which must map to a point in $K$).
+
+We form $\BV'$ in the same way, with $(\BU^0 \equiv \BU, K_p, \KK_p)$ replaced by $(\BU^p, K_p, f^{-p}(\KK_p))$. We then observe that $j:=i^p$ applied to any path for $\BV'$ is a path for $\BV$, and equivalent paths are mapped to equivalent paths. Likewise for $g := f^p$. It is not hard to see that $(j, g)\from \BV' \to \BV$ is a $\psi$-quadratic-like map, and that this definition coincides with our definition in terms of localization.
+

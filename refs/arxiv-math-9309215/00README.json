@@ -1,0 +1,13 @@
+{
+  "key": "lyubich-geometry-1993",
+  "arxiv_id": "math/9309215",
+  "arxiv_version": "1",
+  "role": "core",
+  "title": "Geometry of quadratic polynomials: moduli, rigidity and local connectivity",
+  "authors": [
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-math-9309215.xml",
+  "source_archive": "arxiv-math-9309215-source.tar.gz",
+  "main_tex": "arxiv-math-9309215/cur.tex"
+}

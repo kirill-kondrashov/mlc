@@ -1,0 +1,210 @@
+\chapter{Phase--parameter correspondence}
+\label{ch:phase-parameter}
+\label{chap:phase-parameter}
+
+\section{External-ray data}
+
+The normalized Böttcher coordinate gives a potential--angle
+parametrization of the basin of infinity.  In the formalization we separate
+the analytic parametrization from its boundary behavior.
+
+\begin{definition}[External-ray system]
+\label{def:external-ray-system}
+For a quadratic map $f_c$, an external-ray system consists of maps
+\[
+ \gamma_{c,\theta}:(0,\infty)\to\C,\qquad
+  \ell_c(\theta)\in\C,\qquad\theta\in\Theta\subseteq\R/\Z,
+\]
+such that
+\[
+ \lim_{t\to+\infty}\gamma_{c,\theta}(t)=\infty,\qquad
+ \lim_{t\to0^+}\gamma_{c,\theta}(t)=\ell_c(\theta)
+\]
+whenever the ray lands.  The dynamical relation is
+\[
+ f_c(\gamma_{c,\theta}(t))
+ =\gamma_{c,2\theta}(2t).
+\]
+The angles in $\Theta$ are the selected landing angles; the construction
+does not assume that every external ray lands.  In the potential
+parametrization one additionally has
+$G_c(\gamma_{c,\theta}(t))=t$ for $t>0$.  A finite puzzle graph uses
+only finitely many certified landing angles and their required pullbacks.
+\end{definition}
+
+\begin{remark}
+The current Lean structure \lean{ExternalRaySystem} is a preliminary
+interface with a different literal specification: it records a total
+landing map, a limit at \lean{atTop}, continuity, angle periodicity,
+and the doubling identity.  It has no potential or escape field.
+Thus it does not yet encode the positive-potential definition above.
+In particular, its name cannot be used as evidence that landing rays
+have been constructed.  A source realization must replace or strengthen
+this preliminary specification, including the correct boundary filter.
+\end{remark}
+
+\section{Holomorphic motion and the critical-value diagonal}
+
+\begin{definition}[Holomorphic motion]
+Let $\Lambda\subseteq\C$ be a parameter domain with base point
+$c_0$, and let $E\subseteq\C$.  A holomorphic motion of $E$ over
+$\Lambda$ is a map $h:\Lambda\times E\to\C$ such that
+\begin{enumerate}
+\item $h(c_0,z)=z$ for every $z\in E$;
+\item for fixed $z$, the map $c\mapsto h(c,z)$ is holomorphic;
+\item for fixed $c$, the map $z\mapsto h(c,z)$ is injective.
+\end{enumerate}
+\end{definition}
+
+Repelling periodic points move holomorphically as long as their
+multipliers avoid $1$.  Appropriate landing rays and equipotential
+markings then move over a parameter domain where their combinatorics
+persist.  The $\lambda$-lemma extends a holomorphic motion to its
+closure, with quasiconformal control after the relevant extensions.
+This is the geometric mechanism behind the marked phase--parameter
+comparison~\cite{LyubichBook,LyubichIII}.
+
+The critical value in the quadratic family is the point $c$ itself.
+Consequently one studies the diagonal relation
+\[
+ c=h(c,z),
+\]
+where $z$ ranges over a marked base dynamical piece.  Solving this
+relation and controlling its parameter domains is different from
+translating the base piece by $c$.  Properness, degree, boundary
+markings, and distortion estimates are needed to identify the resulting
+parapuzzle and compare its geometry with the dynamical puzzle.
+
+\section{Dynamical puzzle graphs}
+
+\begin{definition}[Finite dynamical graph]
+\label{def:finite-dynamical-graph}
+Choose finitely many angles whose rays land and add the equipotential arcs
+of a fixed positive potential.  Pulling this finite graph back under
+$f_c^{\circ n}$ produces a graph $\Gamma_n(c)$.  The critical puzzle piece
+is the component
+\[
+ P_n(c):=\operatorname{Comp}_0(\C\setminus\Gamma_n(c)).
+\]
+\end{definition}
+
+\begin{proposition}[Puzzle properties]
+\label{prop:puzzle-properties}
+The required finite-level data are:
+\begin{enumerate}
+\item $\Gamma_n(c)$ is closed and $P_n(c)$ is open;
+\item $0\in P_n(c)$ and $P_n(c)$ is connected;
+\item $P_{n+1}(c)\subseteq P_n(c)$;
+\item the annulus $P_n(c)\setminus\overline{P_{n+1}(c)}$ carries a
+      conformal modulus.
+\end{enumerate}
+\end{proposition}
+
+The first three properties are topological consequences or required
+features of a suitable graph construction.  The fourth is analytic and
+requires proper nesting and control of critical degeneracies.
+In the current Lean structure \lean{DynamicalPuzzleSystem}, closed
+graphs and open connected nested pieces are fields, but the equality
+between a piece and a component of the graph complement is not a field.
+Nor is there a conformal annulus-modulus field.  The structure is
+therefore preliminary data, rather than a construction of the four
+classical properties.
+
+\coveragefigure{2}{The Yoccoz strategy separates two planes.  On the left,
+conformal-modulus estimates control genuine dynamical graph-cut pieces.
+The middle arrow requires a marked phase--parameter construction.
+On the right, connected intersections with $\M$ and compact-closure
+shrinking imply pointwise MLC by
+Theorem~\ref{thm:parameter-shrinking}.  The rectangles show nesting and
+dependency only; they are neither numerical puzzle boundaries nor the
+frozen full-Green model.}{fig:yoccoz-mechanism}
+
+\section{Parameter graphs}
+
+\begin{definition}[Phase--parameter realization]
+\label{def:phase-parameter-realization}
+A phase--parameter realization at $c\in\M$ consists of parameter graphs
+$\mathcal G_n$ and parameter pieces $\mathcal P_n(c)$ such that:
+\[
+\begin{array}{ll}
+\mathcal G_n\text{ is closed},&
+\mathcal P_n(c)\text{ is open},\\
+\mathcal P_{n+1}(c)\subseteq\mathcal P_n(c),&
+c\in\mathcal P_n(c),\\
+\mathcal P_n(c)\cap\M\text{ is connected},&
+\bigcap_n\overline{\mathcal P_n(c)}=\{c\}.
+\end{array}
+\]
+The closures are compact.  The phase--parameter compatibility
+additionally identifies the finite marked combinatorial data of
+$\mathcal P_n(c)$ with those of $P_n(c)$ through the moving graphs.
+\end{definition}
+
+\begin{theorem}[Topological transport]
+\label{thm:topological-transport}
+The parameter pieces in
+Definition~\ref{def:phase-parameter-realization} imply local
+connectedness of $\M$ at $c$.  The same conclusion holds if their
+neighbourhood-basis property is supplied directly instead of derived
+from compact closure shrinking.
+\end{theorem}
+
+\begin{proof}
+In the compact closure version, apply
+Theorem~\ref{thm:parameter-shrinking}.  In the basis version, the
+connected sets $\mathcal P_n(c)\cap\M$ are neighbourhoods of $c$ in
+the subspace and refine every neighbourhood there.  This is precisely
+the connected-basis criterion.
+\end{proof}
+
+The code
+\leanref{Mlc/Literature/PhaseParameter.lean}{localConnectivity_of_phaseParameterData}
+proves the basis version: the structure supplies the field
+\lean{parameter_basis} explicitly.
+Its additional \lean{phase_parameter_compatibility} field is only a
+metric proximity condition to translated dynamical pieces.  That field
+is unused in the topological proof and does not encode holomorphic
+motion, graph combinatorics, or properness.  Those analytic properties
+must be formalized separately before interpreting a constructor as the
+classical phase--parameter theorem.
+
+\begin{conditionalstep}
+The difficult theorem is not Theorem~\ref{thm:topological-transport}, but
+the existence of the data in Definition~\ref{def:phase-parameter-realization}.
+The classical construction combines selected external-ray landing,
+graph pullbacks, holomorphic motion, properness, and identification of
+the parameter image.  The proposition
+\lean{YoccozPhaseParameterResult} currently asks for the preliminary
+Lean data at every parameter of $\M$.  Its topological conclusion is
+checked, but its name does not assert that the classical construction
+or the equivalence of the specifications has been proved.
+\end{conditionalstep}
+
+\section{The full Green-sublevel warning}
+
+For $c\in\M$ one can form the larger sets
+\[
+ \widetilde P_n(c):=
+ \{c'\in\C:G_c(c'-c)<2^{-n}\}.
+\]
+They are useful analytic neighbourhoods, but they are not automatically
+the graph-cut parapuzzle pieces of Definition~\ref{def:phase-parameter-realization}.
+In fact, the full-sublevel intersection can retain a translate of the
+filled Julia set.  Thus the implication
+\[
+ \widetilde P_n(c)\text{ connected}
+ \quad\Longrightarrow\quad
+ \mathcal P_n(c)\text{ is a valid parapuzzle}
+\]
+is invalid without a separate carving or quotient theorem.
+
+\begin{formalobligation}[Phase--parameter realization in a source class]
+\label{est:phase-parameter}
+Define the finite selected landing-ray data with the physical potential
+parameter, construct the graph-cut puzzles and their marked motions, and
+prove that the resulting parameter pieces are connected in $\M$,
+nested, and shrinking in the compact closure sense.  For a published
+MLC class this is a formalization task; a universal construction
+covering unrestricted parameters would additionally resolve an open
+mathematical problem.
+\end{formalobligation}

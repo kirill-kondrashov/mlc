@@ -1,0 +1,14 @@
+{
+  "key": "dudko-lyubich-feigenbaum",
+  "arxiv_id": "2309.02107",
+  "arxiv_version": "3",
+  "role": "mlc-case",
+  "title": "MLC at Feigenbaum points",
+  "authors": [
+    "Dzmitry Dudko",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-2309.02107.xml",
+  "source_archive": "arxiv-2309.02107-source.tar.gz",
+  "main_tex": "arxiv-2309.02107/Feigen.tex"
+}

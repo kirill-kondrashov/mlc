@@ -1,0 +1,331 @@
+
+\section{Pseudo-quadratic-like maps and pseudo-puzzle}\label{pseudo-puzzle}
+
+\subsection{Pseudo-quadratic-like maps}
+
+For a more general and detailed discussion of $\psi$-ql maps, see \cite{K}.
+
+Suppose that $\BU'$, $\BU$ are disks,
+and $i:  \BU' \to \BU$ is a holomorphic immersion,
+and $f: \BU' \to \BU$ is a degree $d$ holomorphic branched cover.
+Suppose further that there exist full continua $K \Subset \BU$ and $K'\Subset \BU'$
+such that $K' = i^{-1}(K) = f^{-1}(K)$.
+Then we say that $F=(i,f):  \BU'\ra (\BU, \BU)$  is a
+$\psi$-{\it quadratic-like}
+ ($\psi$-{\it ql}) map  with filled Julia set $K$.
+
+\begin{lem}[\cite{K}]\label{ql extension}
+Let $F=(i,f)\from\BU'\ra \BU$ be a $\psi$-ql map of degree $d$
+ with filled Julia set $K$.
+Then $i$ is an embedding in  a neighborhood of $K' \equiv f^{-1}(K)$,
+and the map  $g\equiv  f\circ i^{-1}\from U'\ra U$ near $K$ is quadratic-like.
+
+\ssk Moreover, the domains $U$ and $U'$ can be selected in such a way that
+$\mod(U\sm i(U'))\geq \mu (\mod(\BU\sm K)) >0$.
+\end{lem}
+
+
+
+There is a natural $\psi$-ql map $\BU^n\ra \BU^{n-1}$,
+the ``restriction'' of $(i,f)$ to $\BU^n$.
+Somewhat loosely, we will use the same notation $F=(i,f)$ for this restriction.
+
+ Let us normalize  the $\psi$-quadratic-like  maps under consideration
+so that $\diam K'= \diam K=1$, both $K$ and $K'$ contain 0 and 1,
+$0$ is the critical point of $f$, and $i(0)=0$.
+Let us endow the space of $\psi$-quadratic-like maps (considered up to independent rescalings in the domain and the range)
+with the Carath\'eodory topology.
+In this topology, a sequence of normalized maps $(i_n, f_n): \BU_n'\ra\BU_n$ converges to $(i,f): \BU'\ra \BU$ if
+the pointed domains $(\BU_n', 0)$ and $(\BU_n, 0)$ converge to $\BU'$ and $\BU$ respectively,
+and the maps $i_n$, $f_n$ converge respectively to $i$, $f$,
+uniformly on compact subsets of  $\BU'$.
+
+
+\begin{lem}[compare \cite{McM}]\label{compactness}
+  Let $\mu>0$. Then the space of $\psi$-PL maps $F=(i,f): \BU'\ra \BU$ such that the  Julia set $K$
+is connected and  $\mod(\BU \sm K)\geq \mu$ is compact.
+\end{lem}
+
+\begin{proof}
+ Let  $X_n= i^{-1}\{0,1\}$,  $Y_n= f^{-1}\{0,1\}$.
+Note that both sets consist of at most 2 points and are contained in $\D$.
+
+Then we can select a subsequence of domains $\BU_n'$, $\BU_n$ Carath\'eodory converging to some
+domains $\BU'$, $\BU$, while the sets $X_n$ and $Y_n$ converge in the Hausdorff metric to some sets
+$X\subset \BU'$  and $Y\subset \BU'$ that consist of at most two points and are contained in $\D$
+ (we will keep the same notation for the subsequence).
+Since  the maps $i_n| \BU_n'\sm X_n$ and $f_n| \BU_n'\sm Y_n$ do not assume values $0$ and $1$,
+they form normal families on $\BU'\sm X $. Since these families are bounded on the sets $K_n$,
+they are uniformly bounded on compact sets of $\BU'\sm (X\cup Y)$.
+By the Maximum Principle, they are normal on the whole domain $\BU'$.
+
+
+Let $i$ and $f$ be some limit functions of the sequences $i_n$ and $f_n$.
+These functions are non-constant since they assume values $0$ and $1$.
+Then $i$ is an immersion as a non-constant limit of immersions.
+Also, $f: \BU'\ra \BU$ is a branched covering of degree at most 2.
+% Let us also pass to a subsequence to make the Julia sets $K_n'$  converge in the Hausdorff metric to some set $K'$.
+Moreover,  $K'\Subset \BU$ since $\mod(\BU'\sm K')\geq \mu/2$. Hence $0\in \BU'$, and it is a critical point of $f$.
+It follows that $\deg f=2$, and we are done.
+\end{proof}
+
+
+\subsection{Pseudo-puzzle}\label{psi-puzzle}
+
+\subsubsection{Definitions}
+   Let $(i,f) : \BU'\ra \BU$ be a $\psi$-ql map.
+By Lemma~\ref{ql extension}, it admits a quadratic-like restriction $U'\ra U$ to a neighborhood of
+its (filled) Julia set  $K=K_\BU$.
+Here $U'$ is embedded to $U$, so we can identify $U'$ with $i(U')$
+and $ f: U'\ra U $ with  $f \circ i^{-1} $.
+
+Assume that $K$ is connected and both fixed points of $f$ are repelling.
+Then we can cut $U$ by external rays landing at the $\alpha$-fixed point and consider the corresponding Yoccoz puzzle.
+%
+%  Assume $f$ is renormalizable with the first pre-renormalization $g$.
+% As in \S \ref{can renorm},   let $K_i(g)$, $i=0,1,\dots, p-1$,
+% stand for  the cycle of its little Julia sets, and let $\tl K(g)=\cup K_i(g)$.
+%
+%In fact, besides {\it dynamical} puzzle pieces that appear in the puzzle,
+%we can consider {\it geometric} puzzle pieces defined as
+%unions of some dynamical pieces of the same depth.
+%%%topological disks bounded by finitely many rational rays and equipotentials.
+%In what follows we will use the term ``puzzle piece'' in this more general sense.
+
+Given a (geometric) puzzle piece $Y$ of depth $m$,
+recall that $K_Y$ stands for $Y\cap K(f)$ and  $S_Y = \cl (K(f) \sm K_Y)$.
+Let  $\YY$ stand for the space of paths $\de: [0,1] \to \BU^m \sm S_Y$
+such that:
+\begin{itemize}
+  \item $\de(0)\in Y$,
+  \item if $\de(t)\in K_Y$, then the restriction $\de|\, [0,t]$ is homotopic rel endpoints
+       to a path contained in $Y$.\footnote{This condition can be replaced with a more restrictive one:
+ After the first exit from $Y$, the path never intersect the Julia set $K(f)$
+  (though it is allowed to return back to $Y$).}
+\end{itemize}
+Let $\BY$ be the space of paths $\de\in \YY$ modulo  homotopy through $\YY$ with $\de(1)$ fixed.
+Define the projection $\pi_Y: \BY\ra \BU^m$ by  $[\de]\mapsto \de(1)$.
+% In the same way as in \S \ref{can renorm},
+One can see that $\BY$ is a Riemann surface,
+and $\pi_Y$ is an immersion such that
+   $Y$ lifts to  a disk $\hat Y\subset \BY$ which is  homeomorphically projected onto $Y$.
+ Thus, we can identify $\hat Y$ with $Y$; in particular,  $K_Y$ is embedded into $\BY$.
+%  \item $\pi_Y: \BY \sm \hat Y  \ra  V\sm (Y\cup Q_Y)$ is a covering.
+
+   The Riemann surface $\BY$ will be called the {\it pseudo-piece} (``$\psi$-piece'') associated with $Y$.
+
+\ssk The $\psi$-pieces can also be defined in a different way.
+Let us consider the topological annulus $A=\BU^m  \sm K(f)$ and its universal covering $\hat A$.
+Let $Y_i$ be the components of $Y\sm K_Y$. There are finitely many of them,
+and each $Y_i$ is simply connected. Hence they can be embedded into $\hat A$.
+Select such an embedding $e_i: Y_i\ra \hat A_i$ where $\hat A_i$ stands for a copy of $\hat A$.
+Then the $\psi$-piece is obtained by gluing the $A_i$ to $Y$ by means of $e_i$, i.e.,
+$\BY= Y \sqcup_{e_i} \hat A_i.$
+
+\begin{lem}
+  The above two definitions of $\psi$-pieces are equivalent.
+\end{lem}
+
+\begin{proof}
+  Let $\BY$ be a $\psi$-piece according to the first definition.
+The puzzle piece $Y$ is embedded into $\BY$ by
+associating to a point $y \in Y$ the constant path $\de(t)\equiv y$.
+
+Let us realize the universal covering $\hat A_i\ra A$ as the space of paths
+in $A$ that begin in $Y_i$ rel homotopy through such paths fixing the terminal endpoint.
+(This realization is legitimate since $Y_i$ is simply connected.)
+This provides us with an embedding $\phi_i: \hat A_i\ra \BY $
+
+The embeddings $\phi_i$ have disjoint images.
+Indeed, all points of $\di Y\cap K(f)$ are dividing
+and thus belong to $S_Y$. Hence, if we take two paths $\de_1: [0,1]\ra \BU^m\sm K(F)$
+and $\de_2: [0,1]\ra  \BU^m\sm K(f)  $ as above
+representing points in $\hat A_i$ and $\hat A_j$ ($i\not= j$) with a common endpoint,
+then they ``surround'' some piece of $S_Y$, and hence represent different points in $\BY$.
+
+Moreover,  the image $\phi_i(\hat A_i)$ overlaps with  $Y$ by $Y_i$.
+ Hence we obtain an embedding of $Y\sqcup_{e_i} \hat A_i$ into $\BY$.
+
+Let us show that this embedding is surjective.
+Take  a path $\de\in \tilde\YY$ representing some point of $\BY$,
+and let $\tau\in [0,1]$ be the last parameter for which $\de(\tau)\in K_Y$.
+Since the path $\de: [0,\tau]\ra \BU^m$ is trivial
+(i.e., it can be pulled to $Y$ in $\BU^m\sm S_Y$ rel endpoints),
+the restriction $\de: [\tau, 1]\ra \BU^m \sm S_Y$ (appropriately reparametrized)
+represents the same point in $\BY$ as the original path.
+Moreover, if $\tau\not=1$, we can replace it with an equivalent path
+%pull $\de(\tau)$ off the Julia set and make the path
+$\de: [\tau+\eps , 1]\ra \BU^m \sm S_Y$
+which is disjoint from the Julia set $K(f)$.
+As the latter path represents a point in some $\hat A_i$, we are done.
+\end{proof}
+
+
+
+\sss{Naturality}
+
+% The following properties follow immediately from the definitions:
+
+\begin{lem}\label{psi-maps}
+\begin{itemize}
+\item [(i)]  Consider two puzzle pieces $Y$ and $Z$ such that the map $f: Y\ra Z$ is a branched covering
+of degree $k$ (where $k=1$ or $k=2$ depending on whether $Y$ is off-critical or not).
+% Then  the inverse map $f^{-1}: Z\ra Y$ extends to a $k$-valued immersion
+Then there exists an induced map $\f: \BY \ra \BZ$
+which  is a branched covering of the same degree $k$.
+
+
+\item [(ii)] Given two puzzle pieces $Y\subset Z$, the inclusion $i: Y\ra Z$ extends to an immersion $\i: \BY\ra \BZ$.
+\end{itemize}
+\end{lem}
+
+\begin{proof}
+  Both properties follow easily from either definition of the $\psi$-pieces.
+Let us, for instance, use the second definition.
+
+(i)
+Let $\depth Y=m$, $\depth Z=m-1$. Let us consider the degree $k$ branched covering
+$$
+    f: (\BU^m, Y, K_Y) \ra (\BU^{m-1}, Z, K_Z).
+$$
+The components $Y_i$ of $Y\sm K_Y$
+are univalently mapped onto components $Z_{j(i)}$ of $Z\sm K_Z$, where the map
+$j=j(i)$ is $k$-to-1.
+This map extends to an isomorphism map $\hat A_i\ra \hat B_j $
+of the corresponding universal coverings, which glue together into a branched covering
+$\BY\ra \BZ$ of degree $k$.
+
+(ii) Let $\depth Y=m$, $\depth Z=n$.
+Let us  consider the immersion
+$$
+  i: (\BU^m, Y, K_Y) \ra (\BU^n, Z, K_Z).
+$$
+The components $Y_i$ are embedded by $i$ into some components $Z_{j(i)}$,
+where the map $j=j(i)$ is surjective but not necessarily injective.
+These embeddings extend to immersions $\hat A_i\ra \hat B_j$ that
+glue together into an immersion $\BY\ra \BZ$.
+\end{proof}
+
+\sss{Moduli}
+
+ Given two puzzle pieces $Z\Subset Y$, we let
+$$
+  \psimod (Y,Z) = \mod(\BY\sm K_Z).
+$$
+
+Lemma \ref{psi-maps} implies:
+
+\begin{lem}\label{psi-mod}
+\begin{itemize}
+  \item [(i)]  Consider two pairs of puzzle pieces $(Y',Y)$ and $(Z',Z)$
+such that the map $f: (Y',Y)\ra (Z',Z)$ is a branched covering
+of degree $k$ (on both domains).
+Then $$\psimod(Z',Z)=k\, \psimod(Y',Y).$$
+
+\item [(ii)] Given a nest of three puzzle pieces $W\subset Z\subset  Y$,
+we have $$\psimod(Z,W)\leq \psimod(Y,W).$$
+\end{itemize}
+\end{lem}
+
+
+\subsubsection{Boundary of puzzle pieces}\label{boundary}
+Let us mention in conclusion, that the ideal boundary of a pseudo-puzzle $\BY$
+is tiled by (finitely many) arcs $\lambda_i\subset \di \hat A_i$
+that cover the ideal boundary of $\BU^m$ (where $m=\depth Y$)
+and arcs $\xi_i, \eta_i \subset \di \hat A_i$ mapped onto the Julia set $J(f)$.
+The arc $\la_i$ meets each $\xi_i,\, \eta_i$ at a single boundary point
+corresponding to a path $\de: [0,1)\mapsto A$ that wraps around $K(f)$ infinitely many times,
+while $\eta_i$ meets $\xi_{i+1}$ at a vertex $v_i\in Y\cap K(f)$.
+We say  that the arcs $\la_i$ form the {\it outer boundary } (or ``$O$-boundary'')
+ $\di_O\BY$ of the puzzle piece $\BY$,
+while the arcs $\xi_i$ and $\eta_i$
+form its {\it $J$-boundary} $\di_J \BY$.
+Given a vertex $v=v_i$ of a puzzle piece $Y$, let $\di^v\BY=\eta_i\cup \xi_{i+1}$
+stand for the part of the $J$-boundary of $\BY$ attached to $v$.
+%We let $\hat S_Y^v$ be the part of the $J$-boundary
+%attached to the vertex $v$ of $Y$.
+
+Note that the immersion
+constructed in Lemma \ref{psi-maps} extends continuously to the boundary of the
+puzzle piece $\BY$.
+%  minus finitely many points where the $J$-boundary meets the $O$-boundery.
+(However, $\i(\di \BY)$ is not contained in $\di\BZ$, unless $Z=Y$.)
+In what follows we will assume this extension without further comment.
+
+
+% In what follows it will be convenient to consider possibly disconnected curves.
+A {\it multicurve} in some space $X$ is a continuous map $\gamma: \cup_{k=1}^l [s_k, t_k]\ra X$
+parametrized by a finite union of disjoint intervals $[s_k, t_k]\subset \R$.%
+\footnote{We allow that the boundary points of a  multicurve in a pseudo puzzle $\BY$ belong to  $\di_J\BY$.}
+Note that  multicurves are ordered.
+A multicurve in a puzzle piece $\BY$  is called {\it horizontal} if
+$$
+   \gamma(s_1)\in \di^{v_0} \BY, \quad  \gamma(t_k), \gamma(s_{k+1})\in \di^{v_k}\BY,\ k=1, \dots, l-1,
+                  \quad \gamma(t_l)\in \di^{v_l} \BY
+$$
+for some vertices $v_k$ of $\BY$, $k=0, \dots, l$. We say that such a multicurve ``connects''
+$\di^{v_0} \BY $ to $\di^{v_l} \BY$.
+The following statement motivates introduction of  multicurves:
+
+\begin{lem}\label{lifts}
+Let $v$ and $w$ be two vertices of a geometric puzzle piece $Y\in\YY^m(l)$.
+Then any curve $\gamma$ in $\BU^l$ connecting $S_Y^v$ to $S_Y^w$
+contains a multicurve $\gamma'$  that lifts to a multicurve  $\gamma^*$ in $\BY$
+connecting $\di_v\BY$ to $\di_w\BY$.
+\end{lem}
+
+
+
+Given two vertices $v$ and $w$ of $Y$, let $\GG_Y(v,w)$ stand for the family of horizontal multicurves in $\BY$
+connecting $\di^v(\BY)$ to $\di^w(\BY)$.
+Finally, let
+$$
+         \Bd_Y(v,w)= \LL(\GG_Y(v,w))
+$$
+stand for the extremal distance between the corresponding parts of $J$-boundary of $\BY$.
+% Then we immediately conclude:
+
+\begin{lem}\label{Bd}
+  If  $f|Y$ is univalent,
+then $\Bd_Y(v,w)=\Bd_{f(Y)}(fv, fw). $
+\end{lem}
+
+
+\comm{****************
+
+\subsection{Pseudo-summary}\label{psi-summary}
+
+   We can now recast the Summary of \S \ref{summary} in the pseudo-context.
+We start with a $u\psi$-PL map $\bf$,
+restrict it to a unicritical PL map $f$ and construct the associated dynasty of kingdoms.
+We fix an arbitrary $m$, assume that the height of the dynasty is greater than $\log_2 m +5$,
+and take some $n>\log_2 m +5$.
+Then for any domain $\La =\La_k$, we obtain  the map $\Psi=\Psi_k$ \ref{3 domains}
+satisfying properties (P1)-(P4). Applying to it the $\psi$-functor, we obtain:
+
+\begin{itemize}
+
+\item [(P1$'$)] An even-valued immersion ${\Bpsi}^{-1}: \BV^0 \ra \BUps$
+ of degree bounded by $d^{2n+m}$;
+
+\item[(P2$'$)] An even-valued immersion  ${\Bpsi}^{-1}: \BLa'\ra \BF$
+  of degree bounded by  $d^5$;
+
+\item [(P3$'$)] An immersion $\BUps\ra \BV^n$;
+
+\item[(P4$'$)] An immersion $\hat\BE^{i+1} \ra  \BLa' $  which restricts to
+   a homeomorphism $K_{E^{i+1}}\ra   K_\La$.
+
+\end{itemize}
+
+Moreover,
+
+\begin{itemize}
+\item[(P5$'$)] The images of the  immersions
+ $\BLa_k'\ra \BV$ are disjoint from the Julia pieces $K_{\La_j}$,  $k\not=j$.
+
+\item[(P6$'$)]
+There are at least $m/2$ domains $\La_k$.
+
+\end{itemize}
+******************************************}

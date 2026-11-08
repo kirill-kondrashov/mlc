@@ -1,0 +1,74 @@
+\chapter{Source policy and roadmap}
+
+\section{ArXiv sources}
+
+For every arXiv reference used in a formalization task, the repository keeps:
+\begin{enumerate}
+\item the arXiv identifier and version metadata;
+\item the compressed source archive;
+\item an extracted source tree; and
+\item the selected main \TeX{} file.
+\end{enumerate}
+The executable policy is implemented by
+\lean{scripts/fetch_arxiv_sources.py} and the manifest
+\lean{refs/mlc_sources.json}.  This is preferable to copying a single PDF:
+definitions, theorem labels, and notation can be searched directly while
+formalizing.
+
+The current manifest includes the 2025--2026 additions
+\lean{2509.23031}, \lean{2606.27272}, \lean{2609.15500},
+\lean{2609.37383}, and \lean{2610.25983}.  The review records their
+mathematical role separately from the older MLC-case papers: some are direct
+local-connectivity theorems, while others provide neutral-renormalization,
+rigidity, or hybrid-class machinery.
+The preprint \lean{2606.27272} also cites \emph{Elephant puzzles}
+as in preparation for a puzzle Teichmüller-diameter input.
+An unpublished dependency is recorded as such; no downloadable
+source archive or proof is invented for it.
+
+\section{Books and research-paper series}
+
+Lyubich's author page lists the online \emph{Conformal Geometry and
+Dynamics} book as volumes I--II.  The local 2013 ICTP notes are a
+separate manuscript version.  \emph{Dynamics of quadratic
+polynomials, III} and \emph{A priori bounds, IV: Elephant Eyes}
+belong to research-paper series, not additional volumes of that book.
+The source inventory preserves these distinctions.  The preface of volumes I--II (printed p.~5) plans
+Volumes~III (the complete picture in the real quadratic family) and~IV (advances in the MLC).  Neither is
+published, so neither is cited.
+
+\section{Removal of duplicates}
+
+The reference directory is not cleaned by filename heuristics.  A duplicate
+is removed only after matching its identifier, version, checksum, and
+provenance.  Research notes remain separate from primary sources because
+they document failed proof attempts and rejected reductions.
+
+\section{Work packages}
+
+\begin{enumerate}
+\item Normalize the source inventory and verify all arXiv versions.
+\item Replace the audited Gaussian-area proxy with genuine conformal
+      modulus and retain the obstruction theorems as regression guards.
+\item Finish the common analytic foundations: complex derivatives,
+      polynomial-like maps, Green functions, Böttcher coordinates, and
+      modulus.
+\item Replace informal puzzle objects with explicit graph-cut dynamical and
+      parameter puzzles.
+\item Formalize the phase--parameter map and its connectedness consequences.
+\item Assemble the finitely renormalizable/Yoccoz theorem.
+\item Formalize the principal nest and a priori-bound interfaces used by
+      Lyubich.
+\item Add the bounded-type satellite and Feigenbaum combinatorial predicates
+      and prove the corresponding local-connectivity implications.
+\item Revisit the global root only after the parameter-class theorems are
+      available; retain every genuinely open existence statement as an
+      explicit proposition.
+\end{enumerate}
+
+The present book increment adds mathematical foundations,
+compact-closure endpoints, and a checked model audit.  It remains
+short of complete literature coverage and of the planned full-length
+treatment.  Some frozen public interfaces require replacement,
+rather than an existence proof: the audit has established that their
+inputs are impossible.

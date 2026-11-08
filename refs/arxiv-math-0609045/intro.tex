@@ -1,0 +1,269 @@
+\newcommand{\smallheading}[1]{\msk {\it #1.}}
+\renewcommand{\smallheading}[1]{\subsubsection{#1}}
+
+
+\section{Introduction} \label{sec:intro}
+We will introduce the Main Theorem in Section \ref{intro:main}
+(and list its many consequences in Section \ref{intro:consequences}), after fixing notation in Section \ref{intro:defs}.
+We then outline the proof in Section \ref{intro:outline}, 
+and finish this section with some general notation and the acknowledgements. 
+\subsection{Definitions and notation for renormalization} \label{intro:defs}
+We review some basic definitions in order to fix notation throughout the paper. 
+With one minor but significant exception\footnote{We refer to the quadratic-like map $f^p\from U \to V$ as a ``$p$-renormalization of $f$''
+rather than a ``renormalization of $f^p$''.}, 
+the notation follows \cite{McM},
+and the reader is referred to this book for an excellent introduction to complex dynamics and renormalization.
+
+A  {\it topological disk} (or simply ``disk'') means a simply connected  domain in some Riemann surface $S$.
+A \emph{polynomial-like map} is a proper holomorphic map $g\from U \to V$ where $U \Subset V \subset \C$.
+A quadratic-like map is a polynomial-like map of degree 2.
+We denote the filled-Julia set of $g$ by $K(g)$, or just $K$ when the context is clear. 
+
+A quadratic polynomial  $f\from z\mapsto z^2+c$
+is called {\it renormalizable with period $p$}
+(or \emph{$p$-renormalizable})
+if there exist disks $U, V \in \C$ with $0 \in U$ such that $f^p\from U\to V$
+is a quadratic-like map with connected Julia set.
+This quadratic-like map is called a\footnote{We use `a' rather than `the' because the domain and range of the renormalization is not uniquely determined. 
+On the other hand, the germ of the renormalization at its filed-Julia set is uniquely determined, 
+so we (and others) will sometimes use `the' when the focus is the germ or the small Julia set. } 
+{\it renormalization} of $f$ (of period $p$).
+While $U$ and $V$ are not uniquely determined,
+the filled Julia set $K_p$ of the $p$-renormalization is determined\footnote{See Theorem 7.1 of \cite{McM}} 
+by $f$ and $p$. 
+As in \cite{McM},
+we let $K_p(i) = f^i(K_p)$ for $i = 0, \ldots, p-1$, 
+and we let $\KK_p = \bigcup_i K_p(i)$. 
+In a context where $p$ is clear we will sometimes write $\KK_p$ as $\KK$.
+We call $K_p$ the \emph{central small Julia sets};
+we call the $K_p(i)$ the small Julia sets,
+and $\KK_p$ the union of small Julia sets;
+although these are actually \emph{filled Julia sets},
+we will allow ourselves this small elision. 
+
+We say that the $p$-renormalization of $f$ is \emph{primitive} if the small Julia sets of period $p$ are pairwise disjoint.
+In this case,
+we let $\gamma_p \equiv \gamma_p(f)$ denote the closed geodesic around $K_p$ in $\C \sm \KK_p$ in the hyperbolic (\poincare) metric,
+and likewise let $\gamma_p(i)$ denote the geodesic around $K_p(i)$. 
+If $g\from U\to V$ is quadratic-like,
+we let $\gamma(g)$ (or just $\gamma$) be the core geodesic of the annulus $V \sm K(g)$. 
+If $\eta$ is any closed geodesic,
+we let $\phl \eta$ denote the length of $\eta$.
+
+If there is an infinite
+sequence of periods $p_0< p_1<\dots$ such that $f$ is primitively
+$p_k$-renormalizable then  $f$ is called {\it infinitely primitively renormalizable}.
+If additionally, there exists a $B$ such that $p_{k+1} / p_k\leq B$, $k=0,1,\dots$,
+then  $f$ is called infinitely renormalizable of $B$-bounded primitive type.
+Such a map has \emph{a priori} bounds if there exists an $\eps>0$ and
+a sequence of quadratic-like renormalizations $f^{p_k}\from U_k\to V_k$ such that
+$\mod(V_k\sm U_k)\geq \eps$.
+
+In situations where we are interested in the sequence of renormalizations of periods $p_1, p_2, \ldots$,
+we let $K_{(n)}, \KK_{(n)}, \gamma_{(n)}$ be shorthand for $K_{p_n}, \KK_{p_n}, \gamma_{p_n}$.
+The reader should pay close attention\footnote{Usually the period will be denoted by $p$ (or $q$), while the index will be $k$ or $n$, so one does not have to pay \emph{very} close attention.},
+because $K_{n}$ means the small Julia set for the period $n$ renormalization,
+while $K_{(n)}$ means the same for the $\underline{n\thh}$ renormalization.
+
+
+\subsection{Statement of the main result} \label{intro:main}
+We can now state the main result of this paper.
+\begin{mainthm}
+Let $f$ be an infinitely renormalizable
+quadratic polynomial of bounded primitive type. Then $f$ has a priori bounds.
+\end{mainthm}
+
+In subsequent papers \cite{decorations, molecules}
+the author and M. Lyubich proved a priori bounds for 
+a  class of infinitely renormalizable maps of unbounded type.
+In very recent work \cite{satellite}, D. Dudko and M. Lyubich,
+building on the work of this paper,
+remove the hypothesis of primitive renormalization, 
+to the conclude that the Main Theorem holds for all infinitely renormalizable quadratic polynomials of bounded type.
+
+
+For real quadratics of bounded type \emph{a priori} bounds were proved by Sullivan \cite{S},
+see also \cite{LS,LY,MS}.
+They were also proved for a class of complex combinatorics of ``high bounded type'' \cite{puzzle}.
+
+
+
+\subsection{Consequences} \label{intro:consequences}
+
+The \emph{a priori} bounds have numerous consequences. Let us list some of them
+(below $f_c\from c\mapsto z^2+c$ stands for an infinitely primitively renormalizable
+quadratic polynomial of bounded type):
+\begin{itemize}
+\item
+{\it The Mandelbrot set is locally connected at $c$, or equivalently,
+the polynomial $f_c$ is combinatorially rigid} (see \cite{puzzle}).
+The conjecture of local connectivity of the Mandelbrot set (the {\it MLC Conjecture})
+formulated  about 40 years ago by Douady and Hubbard  (see \cite{Orsay})
+is a central open problem in holomorphic dynamics. Previously, it was established
+for all quadratic maps which are not infinitely renormalizable (Yoccoz, see \cite{H}) and
+for the class  of infinitely renormalizable maps of high type mentioned above
+(see \cite{puzzle}).
+\item
+   {\it The Julia set $J(f_c)$ is locally connected} (see \cite{HJ,J}).
+\item
+  {\it  The Feigenbaum-Coullet-Tresser Renormalization Conjecture is valid for primitive combinatorics}.
+This conjecture was established in the work of Sullivan \cite{S}, McMullen \cite{towers}
+and Lyubich \cite{universe} assuming {\it a priori} bounds (and thus, unconditionally,
+for real maps). Now, these results become unconditional for arbitrary primitive combinatorics.
+\item
+ {\it  Universality and Hairiness of the Mandelbrot set at} $c$.
+These properties were conjectured by Milnor \cite{M} and proved in \cite{universe} for maps
+with {\it a priori} bounds.
+\item
+ {\it The Basic Trichotomy for the measure and Hausdorff dimension of the Julia set $J(f_c)$} which was established in \cite{AL}
+for maps with {\it a priori} bounds.
+\end{itemize}
+
+\subsection{Outline of the proof} \label{intro:outline}
+We will now give a brief top-down outline of the proof of the Main Theorem.
+We remind the reader that we have introduced the essential notation \emph{once and for all} in Section \ref{intro:defs}.
+
+
+\smallheading{General strategy: induction on the lengths of the hyperbolic geodesics} It has long been known\footnote{And first appeared in print as Theorem 4.10 in \cite{towers}}
+that the \emph{a priori} bounds are equivalent to the assertion that the lengths of the $\gamma_{(n)}$
+are bounded. 
+Our strategy towards this end is to show that {\it if the length of some $\gamma_{(n)}$ gets long
+then it was even longer before}:
+There exist  $M>0$ and  $l>0$
+such that
+\begin{equation} \label{eq:bad-now-worse-earlier}
+  |\gamma_{(n)}| > M \imply |\gamma_{(n-l)}| > 2M.
+\end{equation}
+
+\smallheading{Localization ``in principle''}
+The immediate and obvious difficulty in proving \eqref{eq:bad-now-worse-earlier} is that the number of components of $\KK_{(n)}$ grows exponentially with $n$, 
+and of course is unbounded as $n$ goes to infinity. 
+While there has been some success in handling an unbounded number of components,
+there is certainly a vast advantage to working with a bounded number,
+and this paper is able to make a major step forward with the help of such a localization.
+
+The central idea is that, while $n$ is unbounded, $l$ is bounded;
+because we assume $p_{k+1}/p_k \le B$ (for all $k$),
+the number of components of $\KK_{(n)}$ that are surrounded by $\gamma_{n-l}$ is then at most $B^l$.
+Moreover,
+if we let $f_{(n-l)}\equiv f^{p_{n-l}}\from U_{(n-l)} \to V_{(n-l)}$ be a renormalization of period $p_{n-l}$ of $f$,
+then this $f_{(n-l)}$ is renormalizable of period $p_n/p_{n-l}$,
+and the small Julia sets for this renormalization are exactly the components of $\KK_{(n)}$ surrounded by $\gamma_{(n-l)}$.
+\begin{figure}
+\includegraphics[width=\textwidth]{local.pdf}
+\caption{On the left we imagine $f$ is renormalizable of periods $3^k$, for $k = 1, 2, 3$. The solid red geodesic is $\gamma_{(3)}$ 
+while the dotted red geodesic is shorter than $\gamma_{(2)}$. On the right we have formed a domain $\BV_{(2)}$ on which there is a conformal dynamical system that is renormalizable just of period 3 (the ratio of the last two periods). This dynamical system, formed by the canonical renormalization, has three small Julia sets and two geodesics with the same length as their analogs on the left. To first approximation we can think of it as a quadratic-like renormalization $f_{(2)}$ of $f$.}
+\label{fig:local}
+\end{figure}
+With this in mind, 
+we will first state and prove a theorem about a primitively renormalizable quadratic-like map that will be closely related to \eqref{eq:bad-now-worse-earlier}.
+\begin{theorem} \label{thm:length-comparison}
+There exists $\epsilon > 0$, such that for all $p$ there exists $M$:
+Suppose that $g\from U \to V$ is a quadratic-like map that is primitively $p$-renormalizable.
+Then (with $\gamma \equiv \gamma(g)$ and $\gamma_p = \gamma_p(g)$), 
+\begin{equation} \label{eq:length-comparison}
+\phl{\gamma_p}> M \implies \phl{\gamma}\ge \epsilon p \phl{\gamma_p}.
+\end{equation}
+\end{theorem}
+
+Now suppose $g$ in Theorem \ref{thm:length-comparison} is the renormalization $f_{(n-l)}$ described above,
+and $V_{(n-l)}$ is taken to be ``as large as can be'', 
+and let $q = p_n/p_{n-l}$. 
+Then the $\gamma_q(g)$ in Theorem \ref{thm:length-comparison} is a ``good approximation'' of the $\gamma_{(n)}$ for the original $f$,
+and the $\gamma$ for  the $g$ in Theorem \ref{thm:length-comparison} is a ``good approximation'' of the $\gamma_{n-l}$ for the original $f$.
+We can choose $q$ \emph{large but bounded},
+and \eqref{eq:bad-now-worse-earlier} would follow from \eqref{eq:length-comparison} if these ``good approximations'' were actually equalities.
+
+To make them equalities we introduce (in Section \ref{pseudo-puzzle}) the \emph{pseudo-quadratic-like map} and the \emph{canonical renormalization}.
+A pseudo-quadratic-like map $(i, f)\from 
+\BU \to \BV$ 
+is a generalization of a quadratic-like map 
+where the inclusion from $\BU$ to $\BV$ is replaced by an immersion $i$ that has certain properties that imply the (multivalued) $f \circ i^{-1}$ has a (single-valued) quadratic-like restriction. 
+We can then,
+given our original quadratic polynomial $f$,
+define, 
+for each $n$,
+the \emph{canonical renormalization} $f_{(n)}\from \BU_{(n)}\to \BV_{(n)}$
+(really $(i_{(n)}, f_{(n)})$ but we will suppress the $i_{(n)}$ here),
+which will be a pseudo-quadratic-like map.
+Then,
+given $n$ and $l < n$,
+and letting $q = p_n/p_{n-l}$,
+we'll see that $f_{(n-l)}$ has two crucial properties:
+\begin{enumerate}
+\item
+The geodesic $\gamma(f_{(n-l)})$ (around $K(f_{(n-l)})$ in $\BV_{(n-l)} \sm K(f_{(n-l)})$) has length \emph{equal to} $\gamma_{(n-l)}$.
+\item
+$f_{(n-l)}$ is renormalizable of period $q$,
+and the geodesic $\gamma_q(f_{(n-l)})$ 
+(around $K_q(f_{(n-l)})$ in $\BV_{(n-l)} \sm \KK_q(f_{(n-l)})$) has length \emph{greater than or equal to} the length of $\gamma_{(n)}(f)$.  
+\end{enumerate}
+See Figure \ref{fig:local} for a pictorial representation of these properties.
+In Section \ref{sec:conclusions},
+we then extend Theorem \ref{thm:length-comparison} to pseudo-quadratic-like maps,
+and \eqref{eq:bad-now-worse-earlier} and our Main Theorem then follow. 
+
+
+
+
+\smallheading{Canonical weighted arc diagrams} 
+Let us now briefly discuss the proof of Theorem \ref{thm:length-comparison}.
+In Section \ref{sec:canonical} we develop the theory of the \emph{canonical weighted arc-diagram},
+which describes the ``thin rectangles'' of large conformal modulus\footnote{Here we uniformize each of the blue rectangles shown in Figure \ref{fig:thin},
+so that the short side goes to a side of length 1. The length of the image of the long side is the conformal modulus.}
+(or \emph{width})
+which we will then use to estimate $|\gamma_p|$ as the sum of conformal moduli of thin rectangles in $V \sm \KK_p$ crossed by $\gamma_p$. 
+(See Figure \ref{fig:thin}).
+\begin{figure} 
+\includegraphics[width=\textwidth]{thin.pdf}
+\caption{Here the gray blobs represent $\KK_p(f)$. The length of the red geodesic $\gamma_p$ going around $K_p(f)$ is roughly the sum of the conformal widths of the thin rectangles, shown in blue.}
+\label{fig:thin}
+\end{figure}
+
+Roughly speaking, 
+the canonical weighted-arc diagram is
+$$
+     W_\can = \sum W(\alpha)\alpha,
+$$
+where the $\alpha$ are arcs\footnote{An {\it arc} is a non-trivial homotopy class of properly embedded paths.}
+in $V\sm \KK_p$ represented by paths crossing the thin rectangles and the $W(\alpha)$ are their widths. 
+Holomorphic maps between Riemann surfaces,
+such as covering and inclusions,
+then induce relations between their canonical WAD's;
+these relations are described in Section \ref{sec:canonical}. 
+The most subtle of these relations is 
+\emph{domination}, which describes the relation between the canonical WAD's between Riemann surfaces $U \subset V$,
+and encodes the parallel and series laws for extremal length.
+
+Theorem \ref{thm:length-comparison} is then reduced (in Section \ref{subsec:hv}) to a statement about the relative weight of \emph{horizontal} and \emph{vertical} arcs in the canonical WAD on $V \sm \KK$, where the horizontal arcs are the ones that go from $\KK$ to $\KK$, and the vertical ones connect $\KK$ to $\partial V$. The idea is that the horizontal arcs contribute only to $|\gamma_p|$ while the vertical arcs contribute to $|\gamma|$; hence Theorem \ref{thm:length-comparison} comes down to showing that the total weight of the horizontal arcs is a definite proportion of the total vertical weight. 
+
+In the broadest terms, 
+this relationship between horizontal and vertical is shown using the combinatorial properties of the canonical WAD. 
+A much better and more detailed outline is given in Section \ref{subsec:hv-proof-outline};
+the reader may wish to skip to that subsection after skimming Section \ref{sec:canonical} and the preliminaries in Section \ref{sec:reduce-to-wcan}.
+The relationship itself is proven in Section \ref{sec:hor-vert},
+using a combinatorial theorem that is stated and proven in Section \ref{sec:entropy},
+after a discussion of Hubbard trees in Section \ref{Hubbard trees}.
+
+\subsection{Terminology and Notation}
+We let:\\
+$\N =\{0, 1,2,\dots\}$ be the set of natural numbers;\\
+$\D=\{z:\,  |z|<1\}$ be the unit disk, $\T_r=\{z: |z|=r\}$, $\T=\T_1$;\\
+$\A(r,R)= \{z: r<|z|<R\}$.
+
+We will say a subset $K$ of $\C$ is an \fjset\ (``filled Julia set'')
+if $K$ is compact, connected, full, and has more than one element.
+
+
+\subsection{Acknowledgments}
+The original version of this paper was written in collaboration with Mikhail Lyubich following
+the mathematical work of the author. The primary result (in particular, Theorem 9.1) of this paper
+was then combined with the main result of two subsequent papers 
+\cite{decorations,molecules}
+of Mikhail
+Lyubich and the author to form one result that was the goal of the series
+of papers of which this paper was (originally) the first.
+
+This work was partially supported by the Clay Mathematics Institute and the Simons Foundation.
+Part of it was done during the author's visit to the IMS at Stony Brook and the Fields Institute in Toronto.
+The author is thankful to these Institutions and Foundations.

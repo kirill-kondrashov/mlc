@@ -1,0 +1,220 @@
+{
+  "checked_on": "2026-11-07",
+  "scope": "Literature screening for the full B3 curve-attractor theorem; no proof of B3, no author correspondence, no execution of Pf4.",
+  "decision": "Novelty of the proposed full theorem is supported relative to the checked literature. Journal acceptance is not predicted.",
+  "downloads": [
+    {
+      "name": "pilgrim2021.pdf",
+      "url": "https://arxiv.org/pdf/2102.12402v1",
+      "bytes": 462736,
+      "sha256": "80c43f86bfb7bda1fd3ba7dfe3a88c7452c99fcef5ec4d12da93d2bc3209b3b1"
+    },
+    {
+      "name": "wu2026.pdf",
+      "url": "https://arxiv.org/pdf/2605.00633v2",
+      "bytes": 1072521,
+      "sha256": "b392667b0c210def0b1522d329580f85f1190a46bdb1552ae620c55e7d0987d8"
+    },
+    {
+      "name": "bonk_hlushchanka_lodge.pdf",
+      "url": "https://arxiv.org/pdf/2411.00732",
+      "bytes": 223654,
+      "sha256": "9be5f4c44544d8b1a112c484f710815d1a870d84c7934ee669b2ac2a49a3dc4b"
+    },
+    {
+      "name": "shepelevtseva_timorin.pdf",
+      "url": "https://arxiv.org/pdf/1808.05489v4",
+      "bytes": 2779329,
+      "sha256": "b35eb77dfc16c7717f77341c36e6c086181d9fa1287a8a9489b80b8e7be184fc"
+    },
+    {
+      "name": "pf4source.zip",
+      "url": "https://downloads.sourceforge.net/project/pf4/2.0/Pf4Source.zip",
+      "bytes": 21267171,
+      "sha256": "14b60a419738c75a8be19dad0856833bd3def10c674861a171e657b358639aa8"
+    },
+    {
+      "name": "pf4changes.pdf",
+      "url": "https://downloads.sourceforge.net/project/pf4/2.0/ChangesInPf4_2.pdf",
+      "bytes": 93489,
+      "sha256": "9f35d173a33fa289a3e0a335d92ca10acacd875b4e185d346dfbaf30bd4cc4d6"
+    }
+  ],
+  "pf4_static_inspection": {
+    "release": "2.0",
+    "zip_crc_check": "passed",
+    "archive_entries": 180,
+    "source_read": [
+      "Pf4Release2/runpf4.cpp:132-190",
+      "Pf4Release2/runpf4.cpp:242-260",
+      "Pf4Release2/runpf4.cpp:1919-1955",
+      "Pf4Release2/runpf4.cpp:931-946",
+      "Pf4Release2/draw.cpp:3219-3238",
+      "Pf4Release2/samplePf4Input.txt"
+    ],
+    "result": "The inspected input model is restricted to four marked postcritical points. It cannot represent B3 as marked.",
+    "execution": "not compiled or run",
+    "separate_five_point_implementation": "Mentioned in Parry-Pilgrim section 1.3; not identified among the linked public downloads."
+  },
+  "forward_citation_discovery": {
+    "provider": "OpenAlex",
+    "work": "W2886225760",
+    "doi": "10.1007/s40598-019-00123-w",
+    "query_url": "https://api.openalex.org/works?filter=cites%3AW2886225760%2Cto_publication_date%3A2026-11-07&per-page=100&select=id%2Cdisplay_name%2Cdoi%2Cpublication_date%2Cprimary_location",
+    "returned_count": 6,
+    "coverage": "Metadata discovery only; the returned set is not claimed to contain all citations.",
+    "results": [
+      {
+        "title": "Recognizing topological polynomials by lifting trees",
+        "doi": "https://doi.org/10.1215/00127094-2022-0043",
+        "date": "2022-10-19"
+      },
+      {
+        "title": "Invariant graphs of rational maps",
+        "doi": "https://doi.org/10.1016/j.aim.2022.108454",
+        "date": "2022-05-13"
+      },
+      {
+        "title": "A solution to the degree- d twisted rabbit problem",
+        "doi": "https://doi.org/10.1017/etds.2025.137",
+        "date": "2025-08-06"
+      },
+      {
+        "title": "Levy and Thurston obstructions of finite subdivision rules",
+        "doi": "https://doi.org/10.1017/etds.2023.115",
+        "date": "2023-12-15"
+      },
+      {
+        "title": "On elastic graph spines associated to quadratic Thurston maps",
+        "doi": "https://doi.org/10.55730/1300-0098.3154",
+        "date": "2022-01-01"
+      },
+      {
+        "title": "Critically fixed Thurston maps: classification, recognition, and twisting",
+        "doi": "https://doi.org/10.1112/plms.70129",
+        "date": "2026-03-01"
+      }
+    ]
+  },
+  "representative_queries_actually_used": [
+    "\"basilica\" \"rabbit\" \"finite global attractor\"",
+    "\"basilica\" \"rabbit\" \"pullback\" curves",
+    "\"curve attractor\" \"mating\"",
+    "\"five postcritical\" \"attractor\"",
+    "\"global attractor\" \"basilica family\"",
+    "\"a/(z^2+2z)\" \"rabbit\"",
+    "\"basilica-rabbit\" \"attractor\"",
+    "\"rabbit-basilica\" curves",
+    "\"finite global attractor\" \"spanning\"",
+    "\"invariant spanning trees\" \"attractor\" -site:researchgate.net -site:scribd.com",
+    "\"finite global attractor\" \"rational\" \"2026\""
+  ],
+  "primary_source_register": [
+    {
+      "url": "https://arxiv.org/abs/1212.4568v1",
+      "checked": "Theorem 7.2; Theorems 9.1-9.2",
+      "result": "Both criteria excluded; antecedent for auxiliary neutral-chain arguments."
+    },
+    {
+      "url": "https://arxiv.org/abs/2411.00732v1",
+      "checked": "Theorems 1-2; Corollary 6; section 4.3",
+      "result": "Four marked points required."
+    },
+    {
+      "url": "https://arxiv.org/abs/2401.16636v1",
+      "checked": "Theorems 1.2-1.3; section 6",
+      "result": "Four marked points required; general extension remains a discussion."
+    },
+    {
+      "url": "https://arxiv.org/abs/1212.2672v1",
+      "checked": "Abstract; sections 3-7",
+      "result": "Four-point boundary algorithm; cubic example."
+    },
+    {
+      "url": "https://mathcs.indstate.edu/~rlodge/LodgeThesisFinal1.pdf",
+      "checked": "Abstract; contents; example and future-work passages",
+      "result": "Cubic four-point example, not B3."
+    },
+    {
+      "url": "https://arxiv.org/abs/1906.07680",
+      "checked": "Theorem 1.1; Corollary 1.2",
+      "result": "Polynomial hypothesis."
+    },
+    {
+      "url": "https://arxiv.org/abs/2601.04871v4",
+      "checked": "Main Theorem; introduction; references",
+      "result": "Quantitative polynomial theorem."
+    },
+    {
+      "url": "https://arxiv.org/abs/2212.14759v2",
+      "checked": "Main Theorem B; introduction",
+      "result": "Critically fixed maps required."
+    },
+    {
+      "url": "https://arxiv.org/abs/2605.00633v2",
+      "checked": "Main Theorem; sections 1.1, 2.2-2.3; references",
+      "result": "Two-polynomial gluing hypotheses excluded for every iterate by earlier audit."
+    },
+    {
+      "url": "https://arxiv.org/abs/2506.23222v1",
+      "checked": "Theorems 1.1-1.2; sections 1.3, 8.2",
+      "result": "Whole-Hurwitz-biset contraction; polynomial five-point example."
+    },
+    {
+      "url": "https://arxiv.org/abs/1808.05489v4",
+      "checked": "Section 2.2; Theorem 5.6; sections 7.1-7.5; references",
+      "result": "Invariant tree and biset construction; no full B3 curve-attractor theorem found."
+    },
+    {
+      "url": "https://arxiv.org/abs/1907.02870v2",
+      "checked": "Theorem 1.1; introduction",
+      "result": "Existence of an invariant graph; not attraction of all curve classes."
+    },
+    {
+      "url": "https://arxiv.org/abs/2209.06099v1",
+      "checked": "Theorem 1.1",
+      "result": "Twisted polynomial problem."
+    },
+    {
+      "url": "https://arxiv.org/abs/2012.00243v4",
+      "checked": "Theorems 6.21, 8.6; Corollary 7.10; introduction",
+      "result": "Obstructions and rational realization, not B3 global attraction."
+    },
+    {
+      "url": "https://journals.tubitak.gov.tr/math/vol46/iss4/7/",
+      "checked": "Publisher abstract only",
+      "result": "Portrait counts, four-point elastic examples, rational-realization criterion. Full paper not reviewed."
+    },
+    {
+      "url": "https://www.numdam.org/item/AFST_2012_6_21_S5_995_0.pdf",
+      "checked": "Abstract; introduction; sections 1.3.3-1.3.4; Figure 2 p.1004",
+      "result": "Exact alternative form of B3; mating identification."
+    },
+    {
+      "url": "https://www.cajpn.org/refs/thesis/19M-Kohara.pdf",
+      "checked": "English abstract and contents only",
+      "result": "Numerical canonical obstructions of obstructed matings."
+    },
+    {
+      "url": "https://www.math.univ-toulouse.fr/~cheritat/MatMovies/RabbitBasilica/",
+      "checked": "Full page description",
+      "result": "Mating visualization, not a global curve certificate."
+    },
+    {
+      "url": "https://arxiv.org/abs/2102.12402v1",
+      "checked": "Section 4.1 and references",
+      "result": "Survey used to trace theorem families, not as evidence of present openness."
+    }
+  ],
+  "independent_symbolic_checks": {
+    "tool": "SymPy 1.14.0",
+    "arithmetic": "exact rational functions and algebraic coefficients; no floating-point tests",
+    "identities": [
+      "F(w+1)-1=(1+lambda)/(w^2+2w)",
+      "(1+lambda)^2-3(1+lambda)+3=0",
+      "R_a^3(-1)+1=(a-1)(a^2-3a+3)/(2a-3)"
+    ],
+    "result": "passed",
+    "scope": "Algebra in section 2 only; not the global curve-attractor theorem."
+  }
+}

@@ -1,0 +1,54 @@
+\noindent\textbf{Goal.} Prove MLC for a new class of quadratic parameters
+using induced-return estimates with growing losses. A possible tool is
+bisets supplemented by collar geometry.
+
+\textbf{Checked M1 reduction.} Suppose
+\[
+m_{j+1}\ge a_jm_j+u_j,\quad a_j\ge0,\quad
+u_j\ge\beta_j/d_j,\quad K_j\ge1.
+\]
+If \(\beta_j\ge\eta>0\), \(d_jK_j\le C(j+1)\), and \(m_0\ge0\),
+then \(\sum_jm_{j+1}/K_j\) diverges. If this budget is realized by
+connected parameter pieces with the separation estimate in
+\repo{mlc_bridge.pdf}, they shrink to a point and yield local connectivity.
+The numerical and topological steps are proved in \repo{../Mlc/Research/}.
+
+\section{Open statement}
+Define admissible genuine quadratic returns and prove \texttt{Realization}:
+construct parameter pieces with the stated separation budget.
+The concrete class still needs to be selected; no extension of the published
+range is established. \texttt{RootInput} separately records analytic
+realization and full \texttt{Coverage}. Full coverage concerns global MLC.
+The first paper should provide a new subclass and a witness outside an
+exactly specified published class.
+
+\section{First four sessions}
+\begin{enumerate}
+\item Reproduce the harmonic loss example and check its Lean theorems.
+It shows that a divergent budget is compatible with \(m_j\to0\).
+The numerical example does not specify a quadratic parameter.
+\item Choose genuine puzzle pieces and returns. Identify the geometric
+object represented by each \(d_j,K_j,\beta_j,m_j\). This defines a
+checkable admissibility predicate independent of MLC.
+\item Work through the Covering Lemma on an unbounded family: disks,
+collars, degrees, thresholds. Compare with existing bounded-degree blocks.
+This tests the possibility of a new analytic contribution.
+\item State the separation estimate and exhibit a parameter outside the
+specified published class. If only a reduction to a known result emerges,
+close the candidate with the reduction written out.
+\end{enumerate}
+
+\section{Workflow and reading}
+After admission: analytic lemma, existence of admissible returns,
+new parameter, application of the checked reduction, article draft,
+and discussion. Dudko's problems provide a comparison map and are not
+premises of M1. Intersections with the molecule and virtual near-Molecule
+regimes require proof.
+
+12--15 hours per week: 6 on proofs, 2 on sources, 2 on writing,
+1 on checks, 1 on the log. Devote the optional three hours to the current
+lemma. Read a proof together with its application. Slow reading with
+selective copying of statements produces a dependency map and questions.
+
+Canonical links: \repo{../README.md}; next actions:
+\repo{research_passport.md}. B3 is in the separate Pilgrim package.

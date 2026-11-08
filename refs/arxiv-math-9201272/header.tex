@@ -1,0 +1,33 @@
+%   Standard Plaintex Header File
+% Make sure we haven't already been run
+
+\ifx\HeaderIsLoaded\undefined
+\let\HeaderIsLoaded=\relax		% define HeaderIsLoaded
+
+%\magnification=1200
+\input psfig
+\def\QP{\narrower\smallskip\noindent}
+\def\ref{\hangindent=1pc \hangafter=1 \noindent}
+\def\QED{  \rlap{$\sqcup$}$\sqcap$ \smallskip}
+\def\mod{{\rm mod\;}}
+\def\Poincare{Poincar\'e }
+\def\[{$\,}
+\def\]{\,$}
+\def\C{{\bf C}}
+\def\R{{\bf R}}
+\def\Z{{\bf Z}}
+\def\Q{{\bf Q}}
+\def\={\;=\; }
+\def\lln{\smallskip\centerline{------------------------------------------------------}\smallskip}
+\font\bit=cmssi12 at 12truept
+\font\tenmsy=msym10
+\font\sevenmsy=msym7
+\textfont8=\tenmsy
+\mathchardef\ssm="7872
+\mathsurround = 1pt
+\abovedisplayskip=6pt
+\belowdisplayskip=6pt
+\parskip=2pt
+
+
+\fi		% end of \ifx\HeaderIsLoaded

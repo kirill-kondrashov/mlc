@@ -5,7 +5,7 @@ Date: 2026-02-20
 ## Downloaded into `refs/`
 
 ArXiv / open PDFs downloaded:
-- `Dudko_2512.24171.pdf` (ICM note, includes 2025/2026 status)
+- `2512.24171v1.pdf` (ICM note, includes 2025/2026 status)
 - `Dudko_2509.25658.pdf`
 - `Dudko_2509.23031.pdf`
 - `Dudko_2407.15548.pdf`
@@ -14,7 +14,7 @@ ArXiv / open PDFs downloaded:
 - `Dudko_2209.02800.pdf`
 - `Dudko_1808.10425.pdf`
 - `Dudko_1802.03045.pdf`
-- `Dudko_1703.01206.pdf`
+- `1703.01206v3.pdf`
 - `Dudko_1610.02434.pdf`
 - `Dudko_1603.04059.pdf`
 - `Dudko_1512.08539.pdf`
@@ -64,3 +64,20 @@ without circular external-ray assumptions.
 - Dudko material exists for a renormalization/classification-based MLC path.
 - No immediate direct replacement theorem was identified for the current outside-open injectivity/closed-range subgoal.
 - If we stay on the current elimination route, we still need a non-circular analytic/topological proof of Step 3/4 in the present formal model.
+
+## 2026 additions
+
+The current MLC review also tracks the newer arXiv sources:
+
+- `arxiv-2606.27272`: Kahn--Kapiamba--Lyubich, MLC for parabolically
+  bounded primitive renormalization;
+- `arxiv-2609.15500`: Dudko--Lim, uniform bounds for neutral bubbles;
+- `arxiv-2609.37383`: Dudko--Lim--Lyubich, rigidity of the neutral
+  renormalization attractor;
+- `arxiv-2610.25983`: Shen, analytic structure of generalized
+  polynomial-like hybrid classes.
+
+These sources extend the formalization target, but only the first is itself
+an MLC theorem.  The other three provide geometric, rigidity, and analytic
+machinery that still has to be connected to the parameter-plane local
+connectivity interface.

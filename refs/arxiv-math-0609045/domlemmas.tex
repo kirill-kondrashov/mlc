@@ -1,0 +1,249 @@
+\section{Appendix B: Six or seven lemmas about domination} \label{app:dom}
+\subsection{Interchanging the order of arithmetic and harmonic sum}
+We begin with an extremal problem that determines the harmonic sum:
+\begin{lemma}
+We have 
+\begin{equation} \label{eq:energy-min}
+\bigoplus_i v_i = \inf_{(w_i)} \frac{\sum_i w_i^2 v_i}{\left(\sum_i w_i\right)^2}
+\end{equation}
+where the infimum is taken over all sequences $(w_i)$ of non-negative numbers, not all zero. 
+\end{lemma}
+\begin{proof}
+We first observe that we have equality when we let $w_i = 1/v_i$. Moreover, by the Cauchy-Schwarz inequality,
+for any $(w_i)$, we have
+$$
+\left(\sum_i w_i\right)^2 \le \sum_i \frac 1{v_i} \sum_i w_i^2 v_i,
+$$
+and therefore
+$$
+\bigoplus_i v_i \le \frac{\sum_i w_i^2 v_i}{\left(\sum_i w_i\right)^2}. \qedhere
+$$
+\end{proof}
+We can also write \eqref{eq:energy-min} as 
+\begin{equation} \label{eq:energy-min-normalized}
+\bigoplus_i v_i = \inf_{\sum_i w_i = 1} \sum_i w_i^2 v_i.
+\end{equation}
+
+We can now prove an inequality on interchanging the order of harmonic and arithmetic sum. 
+\begin{lemma} \label{lem:sum-hsum}
+We have
+\begin{equation} \label{eq:sum-hsum}
+\sum_i \bigoplus_j v_{ij} \le \bigoplus_j \sum_i v_{ij}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+In light of \eqref{eq:energy-min-normalized},
+we can reduce \eqref{eq:sum-hsum}  to 
+\begin{equation}
+\inf_{\forall i, \sum_j w_{ij} = 1} \sum_{ij} w_{ij}^2 v_{ij} \le \inf_{\sum_j x_j = 1} \sum_{ij} x_j^2 v_{ij},
+\end{equation}
+which is immediate, as given any $(x_j)$, we can let $w_{ij} = x_j$ for all $i$ and $j$. 
+\end{proof}
+
+\subsection{Two fundamental properties of domination}
+If $X_1$ and $X_2$ are two weighted arc diagrams (on a surface $S$),
+we let $\norm{X_1 - X_2}_\infty$ be the supremum of $|X_1(\alpha) - X_2(\alpha)|$ over all $\alpha$.
+We can analogously define $\norm{X_1- X_2}_1$. 
+We observe that $\norm{X_1 - X_2}_\infty \le \norm{X_1 - X_2}_1 \le 6|\chi(S)| \norm{X_1 - X_2}_\infty$,
+so the topology on $\WW(S)$ defined by the two norms is the same.
+We call it the strong topology on $\WW(S)$, 
+where the weak topology is given by the product topology on $[0, \infty)^{\AA(S)} \supset \WW(S)$. 
+We observe that $X_n \to X$ strongly implies $X_n \to X$ weakly.
+We also observe that the converse holds if there is a finite set $E$ of arcs such that $\supp X_n \subset E$ for all $n$. 
+
+Here now is our first fundamental lemma:
+\begin{lemma} \label{lem:domination-closed}
+Suppose $X_n \doms Y_n$ and $X_n\to X$ strongly and $Y_n \to Y$ weakly. Then $X \doms Y$. 
+\end{lemma}
+
+This follows almost immediately from the following more simply stated lemma.
+\begin{lemma} \label{lem:y-minus-epsilon}
+Suppose $X \doms Y-\epsilon$ for all $\epsilon > 0$. Then $X \doms Y$. 
+\end{lemma}
+
+\begin{proof}[Proof of Lemma \ref{lem:y-minus-epsilon}]
+If $(\alpha_j)$ and $(\alpha'_k)$ are two sequences of arcs, 
+we say that $(\alpha_j) \prec (\alpha'_k)$ if $\sum_j \alpha_j \le \sum_k \alpha'_k$ and the two sums are not equal.
+We say that $(\alpha_j)_j$ \emph{efficiently arrows} $\beta$ if $(\alpha_j) \to \beta$ and there is no $(\alpha'_k)$ such that $(\alpha'_k) \prec (\alpha_j)$ and $(\alpha'_k) \to \beta$.
+We can define the relation ``$X$ efficiently dominates $Y$'' by replacing $(\alpha_j) \to \beta$ with ``$(\alpha_j)$ efficiently arrows $\beta$'' in the definition of domination. 
+We then observe that $X \doms Y$ actually implies that $X$ efficiently dominates $Y$,
+because we can replace each summand in the domination relation with one that comes from the efficient domination. 
+
+We now claim that for every $\beta \in \supp Y$, 
+there are only finitely many sequences $(\alpha_j)$ (taken from the support of $X$) that efficiently arrow $\beta$.
+To see this, let us consider the set of sums $\sum_j \alpha_j$ taken over all sequences $(\alpha_j)$ that arrow $\beta$.
+Each such sum is an element of the free abelian monoid over the support of $X$, which is of course isomorphic to $\N^m$ for some $m$. 
+We claim that \emph{any} subset of $\N^m$ has only finitely many minimal elements, which of course would imply the former claim.
+
+To see this latter claim (which is a well-known property of $\N^m$) for a subset $T$ of $\N^m$,
+we first observe that,
+by induction on $m$,
+there are,
+for each $i \in 1,\ldots, m$ and $k \in \N$,
+only finitely many minimal elements $(n_1, \ldots, n_m)$ of $T$ for which $n_i =k$.
+Now take any $(n_1, \ldots, n_m)$ of $T$;
+any minimal element $(n'_1, \ldots, n'_m)$ must have $n'_i = k$ for some $i \in 1, \ldots, m$ and $k \le n_i$. 
+
+So now suppose that $X \doms Z$, and hence that $X$ \emph{efficiently dominates} $Z$.
+Then, in light of the finiteness of efficiently arrowing sequences $(\alpha_j)$ (for each $\beta \in \supp Z$),
+and applying Lemma \ref{lem:sum-hsum},
+we can write $X \ge \sum X_{\ba_i, \beta_i}$ and $Y = \sum v_i \beta_i$,
+where $X_{\ba_i, \beta_i} = \sum_j w_{ij} \ba_i(j)$ and $\ba_i = (\ba_i(j))_j$ efficiently arrows $\beta_i$ (and $\oplus_j w_{ij} \ge v_i$),
+and  $(\ba_i)$ is a fixed finite sequence of sequences of arcs, only depending on $\supp Z$.
+
+So now suppose that $X \doms Y -\epsilon$ for all $\epsilon$.
+Then, for each $\epsilon$, we can find $X^\epsilon_{\ba_i, \beta_i}$ that organize the efficient domination of $X$ over $Y - \epsilon$.
+We then pass to a subsequence of $\epsilon$ such that each of these terms converge. 
+\end{proof}
+
+
+Our next lemma states that domination is transitive.
+\begin{lemma} \label{lem:dom-trans}
+Suppose $X \doms Y$ and $Y \doms Z$. 
+Then $X \doms Z$.
+\end{lemma}
+Before proving Lemma \ref{lem:dom-trans},
+we will need a simple sublemma, which is left to the reader. 
+\begin{lemma} \label{lem:dom-split}
+Suppose that $X \doms Y$ and $Y = \sum Y_k$.
+Then we can find $X_k$ such that $X \ge \sum X_k$ and $X_k \doms Y_k$ for each $k$.
+\end{lemma}
+\begin{proof}[Proof of Lemma \ref{lem:dom-trans}]
+By Lemma \ref{lem:dom-split},
+we can reduce to the case where 
+\begin{enumerate}
+\item
+$Z = w \gamma$,
+\item
+$Y = \sum v_i \beta_i$,
+\item
+$X = \sum u_{ij} \alpha_{ij}$,
+\item
+$(\beta_i) \to \gamma$ and $\oplus_i v_i \ge w$, and
+\item
+for each $i$, $(\alpha_{ij})_j \to \beta_i$ and $\oplus_j  u_{ij} \ge v_i$. 
+\end{enumerate}
+We then have
+$(\alpha_{ij})_{(i, j)} \to \gamma$ (where we use the lexical order on the $(i, j)$),
+and $$\bigoplus_{ij} u_{ij} = \bigoplus_i (\bigoplus_j u_{ij}) \ge \bigoplus_i v_i \ge w.$$
+Therefore $X \doms Z$. 
+\end{proof}
+
+\subsection{Two additional inequalities for domination}
+For $X = \sum w_i \alpha_i \in \WW(U)$, and $A$ a component of $\di U$, let 
+$$X|_A = \sum_i (\# \di \alpha_i \cap \di A) w_i,$$
+where of course,
+for each $i$,
+$\# \di \alpha_i \cap \di AU \in 0, 1, 2$. 
+\begin{lemma} \label{lem:dom-restr}
+Suppose $X \doms Y$, where $X \in \WW(U)$ and $Y \in \WW(V)$, let $A$ be a component of $\di U$,
+and assume $A$ is a component of $\di  V$.
+Then $X|_A \ge Y|_A$. 
+\end{lemma}
+\begin{proof}
+We can reduce to the case where $X = \sum_i  w_i \alpha_i$, $Y = v \beta$, $(\alpha_i) \to \beta$, and $\oplus_i w_i \ge v$. 
+If $(\# \di \beta \cap \di A) = 1$, then there must be some $\alpha_i$ with $(\# \di \alpha_i \cap \di A) = 1$ and, moreover, $w_i \ge v$. The case where $(\# \di \beta \cap \di A) = 2$ is similar. 
+\end{proof}
+
+
+\begin{lemma} \label{lem:in-each}
+Suppose that $X \doms Y$,
+and $\beta \in \supp Y$.
+Suppose that there are disjoint subsets $E_1, \ldots, E_n$ of $\supp X$,
+such that whenever $(\alpha_j) \to \beta$, 
+then there is an $\alpha_j$ in each of the $E_k$.
+Then 
+$$
+Y(\beta) \le \bigoplus_k \norm{X|_{E_k}}.
+$$
+\end{lemma}
+\begin{proof}
+We have $Y(\beta) = \sum w_i$ and $X \ge \sum X_i$,  
+where for each $i$, 
+$X_i =  \sum v_{ij} \alpha_{ij}$,
+$(\alpha_{ij})_j \to \beta$, and $\oplus_j v_{ij} \ge w_i$. 
+Then,
+for each $i$,
+we have
+$$
+w_i \le \bigoplus_k \norm{X_i|_{E_k}}.
+$$
+Therefore, applying \eqref{eq:sum-hsum},
+$$
+Y(\beta) \le \sum_i \bigoplus_k \norm{X|_{E_k}} \le \bigoplus_k \sum_i \norm{X_i|_{E_k}} \le \bigoplus_k \norm{X|_{E_k}}. 
+\qedhere
+$$
+\end{proof}
+
+\subsection{Addition and subtraction and domination}
+\begin{lem} \label{minus b}
+If
+$$\bigoplus ( x_i + b_i ) \ge y,$$
+then
+$$\bigoplus x_i \ge y - \sum b_i.$$
+\end{lem}
+
+\begin{proof}
+$$
+  \frac {\partial}{\partial x_i}\bigoplus x_k = \frac{(\bigoplus x_k)^2}{x_i^2} \le 1.
+$$
+Therefore
+$$
+\bigoplus (x_i + b_i) \le \bigoplus x_i \; + \; \sum b_i. \qedhere
+$$
+\end{proof}
+
+\begin{lem} \label{lem:subtract-from-right}
+If $X + B \lollypop Y$,
+then $X \lollypop Y - \norm{B_1}_1$.
+\end{lem}
+
+\begin{proof}
+Now suppose $X + B \lollypop Y$.
+Formally we can write
+$X + B \ge \sum_i T_i$, $Y = \sum Y_i$,
+where
+$T_i = \sum_j w_{ij} \alpha_{ij}$,
+$Y_i = v_i \beta_i$,
+and
+\begin{equation} \label{arrow}
+(\alpha_{ij})_j \rightarrow \beta_i,
+\end{equation}
+and
+$$\bigoplus_j w_{ij} > v_i.$$
+By the general theory of positive vectors in $\R^n$,
+we can write
+$T_i = X_i + B_i$,
+where $X \ge \sum X_i$,
+and $B \ge \sum B_i$.
+So writing
+$X_i = \sum_j w^X_{ij} \alpha_{ij}$,
+and
+$B_i = \sum_j w^B_{ij} \alpha_{ij}$,
+we obtain
+$$\bigoplus_j (w^X_{ij} + w^B_{ij}) \ge v_i,$$
+so, by Lemma \ref{minus b},
+$$\bigoplus_j w^X_{ij} \ge v_i - \norm{B_i}_1,$$
+and therefore (using (\ref{arrow}))
+$$
+X \ge \sum_i X_i \;\lollypop\; \sum_i (v_i - \norm{B_i}_1)\beta_i \;\ge\; Y - \norm{B}_1. \qedhere
+$$
+\end{proof}
+We then have the following corollary to Lemma \ref{lem:subtract-from-right}.
+\begin{cor} \label{cor:sub-sub}
+Suppose $U \subset V$, $m \in \R^+$, $X \in \WW(U)$,  $Y \in \WW(V)$,
+and 
+$$
+X  \multimap Y.
+$$
+Then 
+$$
+X -m \multimap Y- 3 |\chi(U)| m.
+$$
+\end{cor}
+\begin{proof}
+We have some WAD $B$ on $U$ such that $X = (X - m) + B$, and $\norm{B}_\infty \le m$ (and hence $\norm{B}_1 \le 3 |\chi(U)| m$).   
+\end{proof}
+
+
+

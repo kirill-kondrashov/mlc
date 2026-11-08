@@ -1,0 +1,676 @@
+\input header
+\input ras.tex
+
+\footline={\hss\tenrm 17-\folio\hss}\pageno=1
+
+\centerline{\bf POLYNOMIAL MAPS}\bigskip
+
+\centerline{\bf \S17. The Filled Julia Set.}\bigskip
+
+Let \[f:\hat\C\to\hat\C\] be a polynomial map of degree \[d\ge 2\], say
+$$	f(z)=a_dz^d+\cdots+a_1z+a_0	$$
+with \[a_d\ne 0\]. Then \[f\] has a superattracting fixed point at infinity.
+In particular, there exists a constant \[k=k_f\] so that any point \[z\]
+with \[|z|>k_f\] belongs to the basin of attraction of infinity.
+
+{\bf Definition.} The complement of the attractive basin of infinity, that
+is the set of all points \[z\in\C\] with bounded forward orbit under \[f\],
+is called the {\bit filled Julia set} \[K=K(f)\].
+
+{\QP{\bf 17.1. Lemma.} {\it This filled Julia set \[K\] is a compact set
+consisting of Julia set \[J\]
+together with all of the bounded components of the complement \[\C\ssm J\].
+These bounded components $($if any$)$ are all simply connected.
+The Julia set \[J\] is equal to the topological boundary \[\partial K\].
+}\medskip}
+
+{\bf Proof.} (Compare Problem 4-1.)
+If \[z\] is a boundary point of \[K\], then \[z\] itself has
+bounded orbit, but points arbitrarily close have orbits which converge to
+the point at infinity. Thus the family of iterates of \[f\] cannot be normal
+in any neighborhood, hence \[z\in J\]. Conversely, if \[z\in J\], then
+\[z\] has bounded orbit, but it follows from 4.6 that points arbitrarily
+close to \[f\] have unbounded orbit, which therefore converges to infinity.
+Thus \[J=\partial K\subset K\], and it follows that the unbounded component
+of the complement \[\C\ssm J\] consists of points attracted to infinity. But if
+\[z\] belongs to a bounded component of \[\C\ssm J\], then it
+follows from the Maximum Modulus Principle that every point in the orbit
+of \[z\] belongs to the closed disk of radius \[k_f\], hence \[z\in K\].
+Finally, any bounded component \[U\] of \[\C\ssm J\] must be simply connected,
+since for any Jordan
+curve \[\Gamma\subset U\] the entire bounded component of \[\C\ssm \Gamma\] must
+also be contained in \[U\], again by the Maximum Modulus Principle.
+\QED
+
+It follows from the B\"ottcher
+Theorem \S6.7 that exists a new coordinate \[w=\phi(z)\]
+which is defined throughout some neighborhood \[|z|>c_f\] of infinity, with
+\[w\to\infty\] as \[z\to\infty\], and which satisfies
+$$	\phi\circ f\circ\phi^{-1}(w)\;=\; w^d	\,. $$
+Further, \[\phi\] is unique up to multiplication with a \[(d-1)$-st root
+of unity.\smallskip
+
+The function \[G(z)=\log|\phi(z)|\] is called the canonical {\bit potential
+function} or {\bit Green's function}$\,$ for \[K(f)\]. Note the identity
+$$	G(z)\;=\;G(f(z))/d\,.	\eqno (*)	$$
+Although we have so far defined \[G\] only in a neighborhood of infinity,
+there is one and only one extension to all of \[\C\] which is continuous
+and satisfies (*). In fact we define \[G(z)=0\] for \[z\in K(f)\], and
+\[G(z)=G(f^{\circ n}(z))/d^n\] otherwise, where \[n\] is large enough so
+that \[|f^{\circ n}(z)|>c_f\]. Alternatively, we can simply set
+$$	G(z)\;=\;\lim_{n\to\infty}\, \log^+|f^{\circ n}(z)|/d^n\,, $$
+where \[\log^+(x)=\log(x)\] for \[x\ge 1\] and \[\log^+(x)=0\] for
+\[0\le x\le 1\].
+Note that \[G\] is a smooth real analytic function outside of the Julia set
+\[J\], but is only continuous at points of \[J\].
+The verification of these facts will be left to the reader.
+
+The lines
+\[|\phi(z)|={\rm constant}>0\] are called {\bit equipotential curves}.
+Their orthogonal trajectories, that is the images under \[\phi^{-1}\]
+of the radial lines extending out towards infinity from the unit disk
+are called {\bit external rays} for \[f\]. Both of these families of
+curves are clearly
+smooth except at critical points of \[G\]. {\it Note that a point \[z\in
+\C\ssm K\] is a critical point of \[G\] if and only if it is a {\bit pre-critical
+point} of \[f\], that is a critical point of some iterate \[f\circ\cdots
+\circ f\].} Again proofs are easily supplied.
+
+For each \[r>1\] let \[V(r)\] be the compact region with boundary consisting
+of all \[z\] with \[G(z)\le\log(r)\]. Evidently the boundary \[\partial
+V(r)\] is just the equipotential curve \[\{z:G(z)=\log r\}\].
+
+{\QP{\bf 17.2. Lemma.} \it Suppose that there are no critical points of \[G\]
+$($or pre-critical points of \[f\,)\] on the
+boundary \[\partial V(r)\]. If \[m\ge 0\] is the algebraic number of critical
+points of \[G\] in the complement \[\C\ssm V(r)\], then \[V(r)\] is a disjoint
+union of \[m+1\] closed topological disks, each of which intersects the
+Julia set \[J(f)\].\medskip}
+
+{\bf Proof.} If \[\partial V(r)\] contains no critical points (or equivalently
+if \[\log r\] is a regular value of the map \[G\]), then evidently \[V(r)\]
+is a smooth compact manifold with boundary. Each component must be a
+closed topological disk. For otherwise, the complement \[\C\ssm V(r)\] would
+have a bounded component, which is impossible since the function \[G\]
+would have to take its maximum on the boundary of such a component. Similarly,
+the minimum value of \[G\] on each component of \[V(r)\] must occur at
+a point of \[K(f)\]. Hence each such component must intersect the Julia set
+\[\partial K(f)\].
+
+Given \[r>1\] as above, let us choose \[n\] so large that the region
+\[V(r^{d^n})\] is a single topological disk. It will be convenient to
+set \[s=r^{d^n}\]. Then the composition \[f^{\circ n}
+\] maps \[V(r)\] onto \[V(s)\] by a \[d^n$-fold branched covering map.
+According to the Riemann-Hurwitz formula, \S5.1, the algebraic number
+of branch points of \[f^{\circ n}\] in \[V(r)\] is equal to \[d^n\chi(V(
+s))-\chi(V(r))=d^n-\chi(V(r))\],
+where in our case \[\chi\] is just the number of
+connected components. If \[m\] is the number of branch points of \[f^{\circ n}
+\] outside of \[V(r)\], then, since the total number of branch points is
+\[d^n-1\], we can write this formula as
+$$	d^n-1-m\;=\; d^n-\chi(V(r))\,,	$$
+or in other words \[\chi(V(r))=m+1\]. This completes the proof,
+since critical points of \[G\] are the same as critical points of
+\[f^{\circ n}\] for large \[n\].\QED
+
+Following Brown, a compact set in Euclidean space is said to be$\,$ {\bit
+cellular} $\,$ if it is equal to the intersection of a nested sequence
+of closed embedded topological disks, each of which contains the next
+in its interior. The following result is essentially due to Fatou and Julia.
+
+{\QP{\bf 17.3. Theorem.} {\it For a polynomial map \[f\] of degree \[d\ge 2\],
+there are just two mutually exclusive possibilities: If the
+filled Julia set \[K\] contains all of the finite critical points of \[f\],
+then \[K\] and \[J=\partial K\] are connected, and in fact \[K\] is a cellular
+set. Furthermore, the B\"ottcher map near infinity extends to a conformal isomorphism
+$$	\phi\;:\;\C\ssm K\;\;\buildrel\approx\over\longrightarrow\;\; \C\ssm\bar D\,.	$$
+On the other hand, if \[f\]
+has at least one critical point in \[\C\ssm K\], then both \[J\] and \[K\]
+have uncountably many connected components.}\medskip}
+
+{\bf Proof of 17.3.} If \[K\] contains all of the finite critical points,
+then it follows from 17.2 that \[K\] is the intersection of a strictly nested
+family of embedded disks \[V(r)\]. Thus \[K\] is cellular, and hence connected.
+Furthermore, the proof shows that each \[\C\ssm V(r)\] is a \[d^n$-fold unramified
+covering of some \[\C\ssm V(s)\], which is isomorphic to \[\C\ssm\bar D_s\] under
+the B\"ottcher map. We can then lift to a B\"ottcher isomorphism
+\[\C\ssm V(r)\buildrel\approx\over\to\C\ssm\bar D_r\] which is compatible near
+infinity and satisfies
+$$	\phi(f(z))=\phi(z)^d\,.	$$
+Passing to the limit as \[r\to 1\], we see that \[\phi\] can be defined
+throughout \[\C\ssm K\]. Finally, note that the Julia set
+\[J\] can be expressed as the intersection of the closures of the bounded
+connected annuli \[\phi^{-1}(\{w:1<|w|<r\})\]; hence \[J\] is also connected.
+
+Conversely, if \[f\] has at least one critical point in \[\C\ssm K\], then the
+argument above shows that some \[V(r)\] has two or more connected components,
+and that each of these components
+intersects the subsets \[J\subset K\subset V(r)\]. Thus \[J\] has uncountably
+many components by 11.3. The analogous proof for \[K\] will be left to the
+reader.\QED
+
+For information on the structure of \[K\] when it is not connected,
+see Branner \& Hubbard, Blanchard.
+As an immediate consequence of Carath\'eodory's Theorem 16.6
+we have the following.
+(Note that a compact set which has infinitely many components clearly cannot
+be locally connected.)
+
+{\QP{\bf 17.4. Corollary.} {\it With \[f\] as above, the following three conditions
+are equivalent:
+
+$(a)$ The set \[J(f)\] is locally connected.
+
+$(b)$ The set \[K(f)\] is locally connected.
+
+$(c)$ K(f) is connected, and the inverse Riemann mapping \[\psi:\hat\C\ssm\bar
+D\buildrel\approx\over\to\hat\C\ssm K\] extends continuously over the boundary,
+yielding a continuous map from the unit circle onto \[J\] satisfying
+the identity \[f(\psi(w))=\psi(w^d)\].}\medskip}
+
+\noindent Following Douady and Hubbard, we have the following.
+
+{\QP{\bf 17.5. Theorem.} {\it If the polynomial map \[f\] is hyperbolic or
+subhyperbolic,
+with \[K(f)\] connected, then \[K(f)\] is locally connected.}\medskip}
+
+For non locally connected examples, see 18.6.\smallskip
+
+{\bf Proof of 17.5.} We may assume that there is a smooth Riemannian metric
+or orbifold metric
+whose restriction to some small neighborhood \[U\] of \[J\] is strictly
+increasing under \[f\],
+say by a factor of at least \[k>1\]. Choose \[r>1\] small enough so that
+the neighborhood \[V(r)\] of \S17.2 is contained in \[K\cup U\], and let
+\[s=\root d\of r\]. Consider the (half-closed) annulus
+$$	A_0\;=\; V(r)\ssm V(s)\,,	$$
+which is isomorphic under \[\phi\] to the ``round'' annulus \[\bar D_r\ssm\bar
+D_s\]. Then \[V(r)\ssm K\] can be expressed as the countable
+union \[A_0\cup A_1\cup
+\cdots\], where \[A_n\] is the annulus \[f^{-n}(A_0)\]. Similarly,
+\[\bar D_r\ssm\bar D_1\] is the union of a corresponding family of round
+annuli.
+
+Each radial line segment in \[\bar D_r\ssm\bar D_s\] corresponds
+to a smooth curve in \[A_0\], which is a segment of some external ray.
+Let \[\ell_0\] be the
+maximum of the lengths of these curve segments in \[A_0\], and let \[\ell_n\] be the
+maximum length of the corresponding curve segments in \[A_n\]. Since \[f^{\circ n}\]
+maps \[A_n\] onto \[A_0\], preserving this foliation by external rays,
+and stretching all distances by at least \[k^n\], it follows that
+\[\ell_n\le\ell_0/k^n\]. Therefore, the total length of any external ray
+intersected with \[V(r)\] is uniformly bounded by the quantity\break \[\;\ell_0
+(1+k^{-1}+k^{-2}+\cdots)\;=\;\ell_0
+/(k-1)\;<\;\infty\,\]. It then follows easily that the maps
+$$	e^{i\theta}\;\mapsto\;\psi(re^{i\theta})	$$
+from the unit circle onto \[\partial V(r)\]
+converge uniformly as \[r\to 1\] to the required limit mapping, which
+carries the unit circle continuously onto the Julia set.\QED
+\vfil\eject % \bigskip\bigskip
+
+\footline={\hss\tenrm 18-\folio\hss}\pageno=1
+
+
+\centerline{\bf \S18. External Rays and Periodic Points.}\bigskip
+
+To fix our ideas and simplify the discussion, let us assume
+that the filled Julia set \[K\] is connected. (For the general case, see
+[DH2].) By 17.3 the complement \[\C\ssm K\]
+is isomorphic to the complement \[\C\ssm\bar D\] under a conformal isomorphism
+$$	\phi:\C\ssm K\;\buildrel\approx\over\longrightarrow\;\C\ssm\bar D	$$
+which is compatible with the dynamics:
+$$	\phi(f(z))\;=\;\phi(z)^d\,.	$$
+Here \[\phi\] is unique up to multiplication by a \[(d-1)$-st root of unity.
+In practice, it is customary to make a linear change of coordinates so that
+the polynomial \[f\] is {\bit monic}, ie., has leading coefficient equal to
+\[+1\]. There is then a preferred choice of B\"ottcher coordinate \[w=
+\phi(z)\], determined by the requirement that \[\;w/z\to 1\] as \[|z|\to
+\infty\].\smallskip
+
+{\bf Definition.} Let \[\psi:\C\ssm\bar D\buildrel\approx\over\to\C\ssm K\] be the inverse map.
+The image under \[\psi\] of a radial line
+$$	\{re^{2\pi it}:r>1\}	$$
+in \[\C\ssm\bar D\] is called the {\bit external ray} \[\;R_t\]
+at {\bit angle} \[t\] in \[\C\ssm K\]. Note that our {\it angles} are elements of
+\[\R/\Z\], measured in fractions of a full turn and not in radians. Evidently
+$$	f(R_t)\;=\;R_{dt}	\,.	$$
+That is: {\it \[f\] maps the external ray at angle \[t\] to the external ray
+at angle \[dt\].} In particular, if \[t\] is a fraction of the form \[m/
+(d-1)\] then \[f(R_t)=R_t\].\smallskip
+
+By definition, the external ray \[R_t\] {\bit lands} at some point
+\[z_t\], which necessarily belongs to the Julia set \[J\], if the points
+\[\psi(re^{2\pi it})\in \C\] tend to a well defined limit \[z_t\] as \[r\to
+1\]. If \[J\], or equivalently \[K\], is locally connected, then according to
+17.4 {\it every} external ray lands, at a point \[z_t\] which depends
+continuously on \[t\]. Douady and Hubbard call the resulting parametrization
+\[t\mapsto z_t\] the {\bit Carath\'eodory loop} on the Julia set.
+However, in this section we will usually not assume that \[J\] is locally
+connected.\smallskip
+
+{\bf Remark.} A priori, it is possible that every external ray may land
+even if \[K\]
+is not locally connected. An example of a compact set (but not a filled Julia
+set) with this property is shown in Figure 16. Evidently, in such a case,
+the correspondence \[t\mapsto z_t\] cannot be continuous.\smallskip
+\midinsert
+\insertRaster comb.ps pixels 512 by 513 scaled 225
+\bigskip
+\centerline{Figure 16. The double comb \[\;[0,2]\times\{0\,,\,\pm 2^{-n}\}\;
+\cup\;0\times[-1,1]\]}
+\medskip\vfil
+\endinsert
+%\eject
+
+{\bf Definition.} An external ray \[R_t\] will be called {\bit rational}
+if its angle \[t\in\R/\Z\] is rational, and {\bit periodic} if
+\[t\] is periodic under multiplication by the degree \[d\],
+so that \[\;d^nt\equiv t \;(\mod 1)\] for some \[n\ge 1\].\smallskip
+
+Note that \[R_t\] is eventually periodic
+under  multiplication by \[d\] if and only if \[t\] is rational, and
+is periodic if and only if the number \[t\] is
+rational with denominator relatively prime to \[d\].
+(If \[t\] is rational with denominator \[m\], then
+the successive images of
+\[R_t\] under \[f\] have angles \[dt\,,\,d^2t\,,\,d^3t\,,\,\ldots\;
+{\rm (mod\;1
+)}\;\;\] with denominators dividing \[m\]. Since there are only finitely
+many such fractions modulo 1, this sequence must eventually repeat.\break
+% Using ???, it follows that the corresponding sequence
+% $$	z_t\buildrel f\over\mapsto z_{dt}\buildrel f\over\mapsto z_{d^2t}
+%	\buildrel f\over\mapsto\cdots	$$
+%is also eventually periodic. 
+In the special case where \[m\] is relatively
+prime to \[d\], the fractions with denominator \[m\] are permuted under
+multiplication by \[d\] modulo 1, so the landing point \[z_t\] is
+actually periodic.)\smallskip
+
+%(Conversely, if \[z_t\] is periodic, then the denominator \[m\]
+%must be relatively prime to \[d\]. For otherwise we could find
+%two distinct fractions of the form \[d^nt\] modulo 1 which have the same
+%image under multiplication by \[d\] modulo 1. Hence we could find
+%two distinct external rays landing at
+%points on the orbit of \[z_t\], with a common image under \[f\]. But
+%this is impossible: Since \[z_t\] is in the Julia set, it cannot belong to
+%a superattractive orbit. Therefore, \[f\] is a local diffeomorphism near the
+%orbit of \[z_t\].)\smallskip
+
+The following result is due to Sullivan, Douady and Hubbard.
+We do not assume local connectivity.
+
+{\QP{\bf 18.1. Theorem.} \it If \[K(f)\] is connected, then every periodic
+external ray lands at a periodic point which is either repelling or
+parabolic.\medskip}
+
+\noindent The converse result, due to Douady and Yoccoz, is more difficult:
+
+{\QP{\bf 18.2. Theorem.} \it Still assuming that \[K(f)\] is connected,
+every repelling or parabolic periodic point is the landing point of at
+least one external ray, which is necessarily periodic.\medskip}
+
+In fact we will only prove the parabolic case. For the repelling case, which
+is quite similar, the reader is referred to Petersen.
+Here is a complementary result.
+
+{\QP{\bf 18.3. Lemma.} \it If a periodic ray lands at \[z_t\], then only
+finitely many external rays, all periodic of the same period, can land
+at \[z_t\].\medskip}
+
+\noindent The following is an immediate consequence of 18.1.
+
+\midinsert
+\vfil
+\insertRaster cubicj-rays.ps pixels 480 by 960 scaled 350
+\bigskip
+\centerline{Figure 17. Julia set for \[z\mapsto z^3-iz^2+z\]}
+\centerline{with some external rays and equipotentials indicated.}
+\vfil
+\bigskip
+\endinsert
+
+{\QP{\bf 18.4. Corollary.} \it If \[t\] is rational but not periodic,
+then \[R_t\] lands at a point \[z_t\] which is eventually periodic
+but not periodic.\medskip}
+
+As an example, Figure 17 shows the Julia set for the cubic map \[f(z)=z^3-
+iz^2+z\].
+Here the rays \[R_0\] and \[R_{1/2}\] are mapped into themselves by \[f\].
+Both must land at the parabolic fixed point \[z=0\], since the only other
+fixed point, at \[z=i\], is superattracting and hence does not belong
+to the Julia set. On the other hand,
+the \[1/6\,,\,1/3\,,\, 2/3\] and \[5/6\] rays have denominator divisible
+by 3. These four rays land at the two disjoint pre-images of zero.\smallskip
+
+The following result of Sullivan and Douady is closely related.
+(Sullivan 1983. For an independent proof, see Lyubich, p. 85.)
+
+{\QP\bf 18.5. Theorem. {\it If the Julia set \[J\] of a polynomial map \[f\]
+is locally connected, then every periodic point in \[J\] is either
+repelling or parabolic.}\medskip}
+
+Recall from \S8
+that a {\bit Cremer point} can be characterized as a periodic point which
+belongs to the Julia set but is neither repelling nor parabolic. Thus
+the following is a completely equivalent formulation.
+
+{\QP\bf 18.6. Corollary. {\it If \[f\] is a polynomial map with a Cremer
+point, then the Julia set \[J(f)\] is not locally connected.}\medskip}
+
+\noindent The proofs begin as follows.
+
+{\QP{\bf 18.7. Lemma.} {\it The ray \[R_t\] lands at a single point \[z_t\]
+of the Julia set if and only if \[R_{dt}\] lands at a single point
+\[z_{dt}\]. Furthermore, the image \[f(z_t)\] is necessarily equal to
+\[z_{dt}\].}\medskip}
+\eject
+
+{\bf Proof.} The set \[L(t)\] consisting of all limit points of
+\[\psi(re^{2\pi it})\] as \[r\] tends to 1 from above
+is certainly compact and connected, with \[f(L(t))=L(dt)
+\].  It follows easily that \[L(t)\] is a single point if and only if
+\[L(dt)\] is a single point.\QED
+
+Thus if the ray \[R_t\] is periodic, and if \[R_t\] lands at a point \[z_t\],
+then it follows that \[z_t\] is a periodic point of \[f\].\smallskip
+
+{\bf Proof of 18.3.}
+First consider the special case \[t=0\]. Then \[f\] maps the ray \[R_0\] to
+itself, hence \[f(z_0)=z_0\]. If another ray \[R_s\] also lands at \[z_0\],
+then we will prove that \[s\] is a rational number of the form \[j/(d-1)\].
+This will show that there are
+at most \[d-1\] external rays landing at \[z_0\], and that they
+are all periodic (and in fact fixed) under multiplication by \[d\], since
+the numbers \[s=j/(d-1)\] are exactly the solutions to the congruence
+\[s\equiv ds\;({\rm mod}\; 1)\] where \[d\] is the degree.
+
+If a ray \[R_s\] which is not of
+this form lands at \[z_0\], then we have \[s\not\equiv ds\;({\rm mod}\; 1)\].
+Define a sequence of angles \[0\le s_n<1\] by the condition that \[s_0\equiv
+s\] and \[s_{n+1}\equiv ds_n\] modulo 1. By hypothesis, the numbers \[0\,,
+\,s_0\] and \[s_1\] are distinct.
+ Suppose, to fix our ideas, that
+\[0<s_0<s_1<1\]. Since \[f\] is a local diffeomorphism near \[z_0\], it must
+preserve the cyclic order of the rays landing at \[z_0\]. Thus the images of
+\[0\,,\,s_0\] and \[s_1\] must satisfy \[0<s_1<s_2<1\]. Continuing
+inductively, it follows that \[0<s_0<s_1<s_2<\cdots<1\]. Thus the \[s_n\]
+must converge to some angle \[s_\infty\], which is necessarily a fixed point
+of the map \[s\mapsto ds\;({\rm mod}\; 1)\]. But this is impossible, since
+this map has only strictly repelling fixed points.
+
+More generally, if \[R_t\] is any ray which is mapped into itself by \[f\],
+so that \[t=j/(d-1)\], then we can translate all angles by \[-t\] and apply
+the argument above.
+The proof in the general case now follows easily. We can
+replace \[f\] by some iterate \[g=f^{\circ n}\], where \[d^ns\equiv s\;({\rm
+mod}\; 1)\] so that \[g(R_s)=R_s\]. The argument then proceeds as above.
+This proves 18.3.\QED
+
+The proof of 18.1 begins as follows. We will make
+use of the \Poincare metric on \[\C\ssm K\]. {\it Note first that the map \[f\] is
+a local isometry for this metric.} In fact the
+universal covering of \[\C\ssm\bar D\] is isomorphic to the right half-plane
+\[\{W=U+iV:U>0\}\] under the exponential map, and the map \[f\] on \[\C\ssm K\]
+corresponds to the \[d$-th power map on \[\C\ssm\bar D\], which corresponds
+to the automorphism \[W\mapsto dW\] on this right half-plane.\smallskip
+
+We suppose that \[t\] has denominator prime to \[d\], so that some
+iterate \[g=f^{\circ n}\] maps \[R_t\] to itself.
+This ray \[R_t\] can be expressed as a union
+$$	R_t\;=\;\cdots\cup S(-1)\cup S(0)\cup S(1)\cup\cdots	$$
+of finite segments, where \[g\] maps
+each \[S(j)\] isomorphically onto \[S(j+1)\]. In fact let \[S(j)\] correspond
+under \[\phi\] to the set of \[re^{2\pi i t}\] with \[d^{jn}\le\log r\le
+d^{(j+1)n}\]. Thus the \[S(j)\] all have the same \Poincare length. But as
+\[j\to-\infty\] the segments \[S(j)\] converge towards the boundary \[J\]
+of \[\C\ssm K\]. Hence, according to \S2.4, the Euclidean length of \[S(j)\]
+must converge to zero. This means that any limit point of the sequence
+of sets \[S(j)\], as \[j\to-\infty\], must be a fixed point of \[g\].
+But, as noted in the proof of 18.7,
+the set of all limit points must be connected.
+Since \[g\] has only finitely many fixed points, this proves that the ray
+\[R_t\] lands at a single fixed point \[z_t\]
+of the map \[g=f^{\circ n}\].\smallskip
+
+Now let us apply the Snail Lemma of \S13.
+After translating coordinates so that
+our fixed landing point lies at the origin, the map \[g\] and the path
+\[x\mapsto \psi(\exp(d^{nx}+2\pi it))\] will satisfies the hypothesis of 13.3.
+Hence it follows that this fixed point \[z_t\] of \[g\] is either repelling,
+or parabolic with multiplier \[g'(z_t)=1\]. In terms of the original map
+\[f\], it follows that \[z_t\] is a periodic point, and that its periodic
+orbit is either repelling or has a root of unity as multiplier. This proves
+18.1.\QED
+
+{\bf Proof of 18.4.} Consider a rational angle \[t\] with denominator which
+is not relatively prime to \[d\]. In this case the multiple \[dt\] will
+have smaller denominator,
+but the sequence of angles \[d^nt\] modulo 1 must certainly be eventually
+periodic. Thus some forward image \[f^{\circ n}R_t\] must have a
+well defined landing point. But this implies that \[R_t\] itself has
+a well defined landing point by 18.7.\QED
+
+The proof of 18.5 and 18.6 will be based on 18.1, together with the
+following. Let \[n\ge 2\] be an integer.
+
+{\QP\bf 18.8. Lemma. {\it Let \[L\subset \R/\Z\] be a compact set which is
+mapped homeomorphically onto itself by the map \[t\mapsto nt (\mod 1)\].
+Then \[L\] is finite.}\medskip}
+
+{\bf Proof.} In fact we will prove the following more general
+statement. Let \[X\] be a compact metric space with distance function
+\[\rho(x,y)\], and let \[h:X\to X\] be a homeomorphism which is expanding
+in the following sense: There should exist numbers \[\epsilon>0\] and \[k>1\]
+so that
+$$	\rho(h(x),h(y))\;\ge\;k\rho(x,y)	$$
+whenever \[\rho(x,y)<\epsilon\]. Then we will show that \[X\] is finite.
+Evidently this hypothesis is satisfied with \[X=L\subset\R/\Z\], so
+this argument will prove 18.8.
+
+Since \[h^{-1}\] is uniformly continuous, we can choose \[\delta>0\] so that
+\[\rho(x,y)<\epsilon\] whenever \[\rho(h(x),h(y))<\delta\]. But this
+implies that \[\rho(x,y)<\delta/k\]. Since \[X\] is compact, we can choose
+some finite number, say \[n\], of balls of radius \[\delta\] which cover
+\[X\]. Applying \[h^{-p}\], we obtain \[n\] balls of radius \[\delta/k^p\]
+which cover \[X\]. Since \[p\] can be arbitrarily large, this proves that
+\[X\] can have at most \[n\] distinct points.\QED
+
+{\bf Proof of 18.5.}
+Let \[z_0\] be any periodic point. After
+replacing the given polynomial map by some iterate, we may assume that
+\[z_0\] is fixed by \[f\]. Furthermore, after a linear
+change of coordinates, we may assume that \[f\] is monic.
+Since \[J(f)\] is locally connected, according to 17.4 the inverse Riemann map
+$$	\psi\,:\,\hat\C\ssm\bar D\;\buildrel\approx\over\longrightarrow
+	\; \hat\C\ssm K(f)	$$
+extends continuously over the boundary, yielding a map from the unit
+circle onto \[J(f)\]
+which semi-conjugates  the \[d$-th power map on the circle to the map \[f\]
+on \[J(f)\]. In other words, identifying the unit circle with \[\R/\Z\],
+we have a map
+$$	\Psi:\R/\Z\;\to\; J(f)	$$
+which satisfies \[\Psi(dt)=f(\Psi(t))\], where \[d\] is the degree. Let
+\[X\] be the compact set \[\Psi^{-1}(z_0)\subset\R/\Z\]. Since \[z_0\]
+is fixed by \[f\], it follows immediately that the map\break \[t\mapsto td
+(\mod 1)\] carries \[X\] homeomorphically onto itself. Hence \[X\] is
+finite by 18.8, and the conclusion follows.\QED
+
+We will prove the parabolic case of Theorem 18.2 in the following slightly
+sharper form.
+For the proof in the repelling case, the reader is referred to Petersen.
+
+{\QP{\bf 18.9. Theorem.} \it Let \[f\] be a polynomial of degree \[d\ge 2\]
+with  \[K(f)\]  connected,
+and let  \[z_0\]  be a parabolic fixed point
+with multiplier \[\lambda=1\]. Then for each repelling petal
+\[P\]  at  \[z_0\]  there exists at least one
+external ray \[R_t\] which lands at \[z_0\] through \[P\], 
+where the angle \[t\] is a rational number of the form \[m/(d-1)\],
+so that \[R_t\] is mapped onto itself by \[f\].\medskip}
+
+Very roughly, we will show that
+the basin \[\C\ssm K\] of the point at infinity corresponds to a union
+of one or more annuli in the \'Ecalle cylinder \[P/f\]. Each of these
+annuli contains a unique simple closed geodesic \[\Gamma\] (think of
+placing a rubber band around a napkin ring); and \[\Gamma\]
+will lift to the required external ray in \[\C\ssm K\]. Before giving
+details, let us look at two examples.
+\smallskip
+
+{\bf Example 1.} Consider the map \[f(z)=z^2+\exp(2\pi i\cdot 3/7)z\] of
+Figure 8. Here the seventh iterate is a map of degree \[2^7=128\] with
+seven repelling petals about the origin. Hence there must be at least
+seven external rays landing at the origin, and their angles must be
+rational numbers of the form \[m/127\], so as to map into themselves
+under multiplication by 128 modulo 1. In fact a little experimentation
+shows that only the ray with angle \[21/127\] and its successive iterates
+under doubling modulo 1 will fit in the right order around the origin.
+(Compare Goldberg.) Thus there are just seven rays which land at zero,
+one in each repelling petal. The numerators of the corresponding angles
+are \[21\,,\,37\,,\, 41\,,\, 42\,,\,74\,,\,
+82\,,\,84\].\smallskip
+
+{\bf Example 2.} Now consider the cubic map \[f(z)
+=z^3-iz^2+z\] of Figure 17. Evidently there is only one repelling petal
+at the parabolic fixed point \[z=0\]. Yet we saw above (following 18.4)
+that the two rays \[R_0\]
+and \[R_{1/2}\] must both land at this point.\smallskip
+
+The proof of 18.9 begins as follows.
+According to \S7.7, there is an essentially unique map \[\beta=\alpha^{-1}\]
+which is defined and univalent in some left half-plane \[{\cal R}(w) < c\],
+taking
+values in the repelling petal \[ P\], and which satisfies the Abel equation
+\[\beta(w+1) = f(\beta(w))\] or equivalently:
+$$	\beta(w) = f(\beta(w-1)) \,. $$
+As in 7.11, we can extend to an analytic map from  \[\C\]  to  \[\C\]
+satisfying this same equation
+by setting  \[\;\beta(w) = f^{\circ n}(\beta(w-n))\;\] for large  \[n\].
+{\bf Definition:} Let  \[K_P\]  be the inverse
+image of  \[K = K(f)\]  under  \[\beta\]. Since \[K\] is closed and
+\[f$-invariant, it follows that \[K_P\]  is closed and periodic:
+\[K_P = K_P+1\]. Furthermore, it is not hard to show that \[K_P\] contains
+all points \[w=u+iv\] with \[|v|\] large. For points which are
+far from the real axis must correspond, under \[\beta\], to points
+which belong to one of the two neighboring attracting petals of \[f\].
+
+{\QP{\bf 18.10. Yoccoz Lemma.} \it Each component \[U\] of \[C\ssm K_P\]
+is a universal covering of \[C\ssm K\] with projection map \[\beta\].\medskip}
+\eject
+
+{\bf Proof.} Consider the topological space \[E\] consisting of all
+left infinite sequences \[{\bf w}=(\,\ldots\,,\,w_{-2}\,,\,w_{-1}\,,\,w_0)\] of points in the
+Fatou set \[\C\ssm J\] satisfying
+$$	\cdots\buildrel f\over\mapsto w_{-2}\buildrel f\over\mapsto w_{-1}
+	\buildrel f\over\mapsto w_0	$$
+and \[\;\lim_{\,n\to-\infty}\, w_n\,=\,z_0\]. We can give each component of
+\[E\] the structure of a Riemann surface in such a way that the projection \[
+\pi:(\,\ldots\,,\, w_{-1}\,,\,w_0)\mapsto w_0\] is a local
+conformal isomorphism.
+In fact, for any such \[{\bf w}\], we can choose
+\[N<0\] so that \[w_n\] belongs to some fixed repelling petal \[P\] for \[n
+\le N\]. The coordinate \[w_N\in P\] then serves as a local uniformizing
+parameter for \[E\], and \[\pi\] corresponds to the map \[f^{|N|}:w_N\mapsto
+w_0\]. (It is important here that there are no critical points
+in the finite part of the Fatou set.)
+
+To show that \[\pi:E\to \C\ssm K\] is actually a covering map, we
+start with any simply connected neighborhood \[V\] of \[\pi({\bf w})=w_0\] in
+\[\C\ssm K\]. Then we can find a unique single valued branch \[f_0^{-n}\]
+of \[f^{-n}\] on \[V\] which maps \[w_0\] to \[w_{-n}\]. These maps
+\[f_0^{-n}\] must constitute a normal family on \[V\], since they take
+values in \[\C\ssm K\]. Since
+the sequence \[f_0^{-n}\] converges uniformly to \[z_0\] throughout some
+small neighborhood of \[w_0\], it follows easily that this sequence
+converges to \[z_0\] throughout the given neighborhood \[V\]. Thus for each
+\[w\in V\] the sequence \[\;{\bf w}(w)=\big(\,\cdots\,,\, f_0^{-2}(w)\,,\,
+f_0^{-1}(w)\,,\,w\big)\;\] belongs to \[E\], hence \[V\] is evenly covered
+under the projection \[\pi\].
+
+It is not difficult to check
+that \[\C\ssm K_P\] embeds naturally as an open and closed subset of
+our covering space \[E\]. But each component \[U\] of \[\C\ssm K_P\] is simply
+connected. For otherwise, there would be a compact component of \[\C\ssm U\]
+which, after left translation by a large integer, would embed into a compact
+of \[K\] in the petal \[P\]. This is impossible, since \[K\] is connected.
+Thus each such \[U\] is a universal covering surface of \[\C\ssm K\].\QED
+
+{\bf Remark.} Although \[U\] is a universal covering of \[\C\ssm K\], the proof
+does not tell us just how the free cyclic group of deck transformations acts
+on \[U\]. We will show in 18.12
+that there is also a natural action of the free cyclic
+group \[\Z\] by integer translations of \[U\], but that action
+is quite different, and has a quotient surface \[U/\Z\] which is an annulus,
+naturally embedded in the \'Ecalle cylinder \[P/f\].\smallskip
+
+Let \[\hat G=G\circ\beta\] be the potential function on \[\C\ssm K\] lifted to \[\C\ssm K_P\], so
+that\break
+\[\hat G(w+1) = \hat G(w)d\] where \[d\] is the degree. Let \[\hat G_0\] be the maximum
+value of \[\hat G\] on the imaginary axis, attained say at \[w_0\]. Then
+\[\hat G(w)\le G_0\] for \[{\cal R}(w)\le 0\] by the maximum modulus principle
+for harmonic maps, hence
+$$	 G(w) \le d^n\hat G_0 \qquad{\rm  whenever}\qquad   {\cal R}(w)
+ \le n .\eqno	(*)$$
+
+{\QP{\bf 18.11. Lemma.} \it The real part of \[w\] must take values tending
+to \[\infty\] within each component \[U\].\medskip}
+
+\noindent This follows, since \[\hat G\] must be unbounded on each \[U\]
+by 18.10.\QED
+
+{\QP{\bf 18.12. Main Lemma.} \it Each such component \[U\] is periodic:
+\[\;U = U+1\].\medskip}
+
+{\bf Proof.}
+Otherwise the translates \[U-n\] would have to be pairwise disjoint. First
+consider the component \[U\] on which the maximum \[\hat G_0\] is attained.
+Let \[k_n\] be the vertical width of the intersection of \[U-n\] with the
+imaginary axis. Then the sum of \[k_n\] is finite, so \[k_n\] tends to
+zero as \[n \to +\infty\]. But \[k_n\] is also the vertical width of the
+intersection of \[U\] with the line \[\;{\cal R}(w) = n\,\]. {\it Since these
+numbers tend to zero, the \Poincare distance of the imaginary axis from
+\[\;{\cal R}(w) = n\;\] within \[U\] must grow more than linearly with \[n\].}
+\smallskip
+
+On the other hand, an orthogonal trajectory of the curves \[\;\hat G
+= {\rm constant}\,\],
+of \Poincare arclength \[n \log(d)\] within \[U\], will get from \[w_0\] on the
+imaginary axis to a point \[w_n\] with
+\[\hat G(w_n) = (d^n)\hat G_0\]. By $(*)$ above, the real
+part of \[w_n\] is \[\ge n\]. Thus this distance grows at most linearly
+with \[n\]. This contradiction proves the Main Lemma 18.12 when \[w_0\] belongs
+to \[U\]. To get a proof for arbitrary \[U\], we must simply use the union of
+translates \[U-n\] in place of the entire open set \[C\ssm K_P\] in the
+argument above. This proves 18.12.\QED
+
+{\bf Proof of Theorem 18.9.}
+We know that each component \[U\] of \[\C\ssm K_P\]
+is a universal covering of \[\C\ssm K\], and that the unit translation \[w\mapsto
+w+1\] of \[U\] corresponds to the map \[f\] on \[\C\ssm K\].
+Furthermore, it follows easily from Corollary 7.5 that the complement
+\[\C\ssm K_P\] is non-vacuous, so that there exists at least one such component
+\[U\]. Since the imaginary
+coordinate is bounded throughout \[U\], the quotient \[U/\Z\] is clearly
+an annulus. Hence it has a unique simple closed geodesic with respect to
+the Poincar\'e metric. (Compare Problem 2-3.
+We can model the annulus as the upper half-plane
+\[H\] modulo the identification \[w\sim t_0w\] for some fixed \[t_0>1\]. The
+imaginary axis in \[H\] then covers the unique closed geodesic.)\smallskip
+
+This closed geodesic \[\Gamma\subset U/\Z\] lifts to an infinite
+\[\Z$-invariant geodesic \[\tilde\Gamma\subset U\], and hence to an
+infinite \[f$-invariant geodesic \[\Gamma'=\beta(\tilde\Gamma)\] in
+\[\C\ssm K\]. In the negative direction, this geodesic \[\Gamma'\]
+converges to the parabolic
+fixed point \[z_0\]. For \[\beta\] was constructed in such a way that for
+any compact subset \[L\subset U\] the images \[\beta(L-n)\] converge to \[z
+_0\] as \[n\to\infty\]. On the other hand, in the positive direction
+\[\Gamma'\] converges to the point at infinity, since every compact subset
+\[L\subset U\] has the property that the images \[\beta(L+n)=f^{\circ n}
+\circ\beta(L)\] converge to \[\infty\] as \[n\to\infty\]. But a \Poincare
+geodesic in \[\C\ssm K\] which leads to the point at infinity is necessarily
+an external ray.\QED
+\vfill
+
+%\rightline{jwm, version of 9-4-91}
+\end

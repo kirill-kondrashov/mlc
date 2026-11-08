@@ -1,0 +1,15 @@
+{
+  "key": "dudko-lyubich-selinger-pacman",
+  "arxiv_id": "1703.01206",
+  "arxiv_version": "3",
+  "role": "renormalization",
+  "title": "Pacman renormalization and self-similarity of the Mandelbrot set near Siegel parameters",
+  "authors": [
+    "Dzmitry Dudko",
+    "Mikhail Lyubich",
+    "Nikita Selinger"
+  ],
+  "metadata": "arxiv-1703.01206.xml",
+  "source_archive": "arxiv-1703.01206-source.tar.gz",
+  "main_tex": "arxiv-1703.01206/Pacmen.tex"
+}

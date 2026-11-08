@@ -1,0 +1,14 @@
+{
+  "key": "martens-nowicki-invariant-measures",
+  "arxiv_id": "math/9606220",
+  "arxiv_version": "2",
+  "role": "supporting",
+  "title": "Invariant measures for typical quadratic maps",
+  "authors": [
+    "Marco Martens",
+    "Tomasz Nowicki"
+  ],
+  "metadata": "arxiv-math-9606220.xml",
+  "source_archive": "arxiv-math-9606220-source.tar.gz",
+  "main_tex": "arxiv-math-9606220/oldamstex.tex"
+}

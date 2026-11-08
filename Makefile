@@ -1,4 +1,4 @@
-.PHONY: all build check cache clean graphs serve proof-pdf factorization-figure check-uniform
+.PHONY: all build check cache clean graphs serve proof-pdf review-pdf mlc-status-figure factorization-figure check-uniform
 
 # Default target
 all: check
@@ -12,10 +12,8 @@ cache:
 build:
 	lake build
 
-# Check axioms
-# Depends on build implicitly via lake, but we can make it explicit if we want make to handle it.
-# However, lake handles its own dependencies well.
-check:
+# The audit imports compiled project modules.
+check: build
 	lake env lean --run check_axioms.lean
 
 check-uniform:
@@ -38,6 +36,49 @@ PROOF_CHAPTERS := \
 	docs/chapters/06_approximation_theorem.tex
 
 proof-pdf: docs/uniform_geometric_mlc.pdf
+
+review-pdf: docs/mlc_review.pdf
+
+MLC_STATUS_FIGURE := docs/figures/mlc_status_render.pdf
+
+REVIEW_CHAPTERS := \
+	docs/review/00_reading_guide.tex \
+	docs/review/01_scope_and_status.tex \
+	docs/review/13_quadratic_foundations.tex \
+	docs/review/14_topological_foundations.tex \
+	docs/review/02_foundational_machinery.tex \
+	docs/review/03_known_results.tex \
+	docs/review/04_formalization_map.tex \
+	docs/review/05_source_policy_and_roadmap.tex \
+	docs/review/06_phase_parameter.tex \
+	docs/review/07_lyubich_renormalization.tex \
+	docs/review/08_dudko_cases.tex \
+	docs/review/09_combinatorial_contracts.tex \
+	docs/review/10_categorical_branch.tex \
+	docs/review/11_lean_inventory.tex \
+	docs/review/12_conditional_theorem_matrix.tex \
+	docs/review/15_frozen_model_audit.tex \
+	docs/review/16_digests_foundations.tex \
+	docs/review/17_digests_modern.tex \
+	docs/review/18_digests_monographs.tex \
+	docs/review/19_digests_pacman_neutral.tex \
+	docs/review/20_digests_laminations_entropy.tex \
+	docs/review/21_digests_sierpinski.tex \
+	docs/review/23_digests_apriori_limbs.tex \
+	docs/review/24_digests_covering_parapuzzle.tex \
+	docs/review/25_digests_siegel_renormalization.tex \
+	docs/review/26_digests_lyubich_parameter.tex \
+	docs/review/22_approaches_map.tex
+
+docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
+
+$(MLC_STATUS_FIGURE): scripts/generate_mlc_status_figure.py scripts/pyproject.toml scripts/poetry.lock
+	cd scripts && poetry run python generate_mlc_status_figure.py --output ../docs/figures/mlc_status_render.pdf
+
+mlc-status-figure: $(MLC_STATUS_FIGURE)
 
 docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(PROOF_CHAPTERS) $(FACTOR_FIGURES)
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
@@ -73,3 +114,4 @@ auto-build: .cache_marker
 clean:
 	rm -f docs/proof.aux docs/proof.log docs/proof.out docs/proof.toc .cache_marker
 	rm -f docs/uniform_geometric_mlc.aux docs/uniform_geometric_mlc.log docs/uniform_geometric_mlc.out docs/uniform_geometric_mlc.toc docs/uniform_geometric_mlc.build.log
+	rm -f docs/mlc_review.aux docs/mlc_review.log docs/mlc_review.out docs/mlc_review.toc docs/mlc_review.lof

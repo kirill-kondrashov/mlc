@@ -1,0 +1,14 @@
+{
+  "key": "kahn-lyubich-quasi-additivity",
+  "arxiv_id": "math/0505191",
+  "arxiv_version": "2",
+  "role": "a-priori-bounds",
+  "title": "The Quasi-Additivity Law in Conformal Geometry",
+  "authors": [
+    "Jeremy Kahn",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-math-0505191.xml",
+  "source_archive": "arxiv-math-0505191-source.tar.gz",
+  "main_tex": "arxiv-math-0505191/main.tex"
+}

@@ -16,7 +16,8 @@ open Molecule Complex Topology Set Filter
 
 noncomputable section
 
-/-- Primitive renormalizable parameters in the root-facing interface. -/
+/-- Legacy root-facing local-connectivity predicate. This is the conclusion
+itself, rather than a combinatorial definition of primitive renormalization. -/
 def PrimitiveRenormalizable (c : ℂ) : Prop :=
   ∀ (hc : c ∈ MLC.Quadratic.MandelbrotSet)
     (U : Set MLC.Quadratic.MandelbrotSet),
@@ -166,14 +167,16 @@ theorem parameterToBMol_spec (c : ℂ) :
 noncomputable def parameterToBMol (c : ℂ) : BMol :=
   Classical.choose (parameterToBMol_spec c)
 
-/-- The finitely renormalizable side of the root dichotomy. -/
+/-- Legacy weighted-area nonsummability predicate. `Literature.ModelAudit`
+proves that it has no instances; it is not combinatorial finite renormalization. -/
 abbrev FinitelyRenormalizable := NonRenormalizable
 
 /-- Summability of the full quadratic puzzle-annulus modulus sequence. -/
 def PuzzleModulusSummable (c : ℂ) : Prop :=
   Summable (fun n => MLC.Quadratic.modulus (MLC.Quadratic.PuzzleAnnulus c n))
 
-/-- The infinitely renormalizable side, represented by modulus summability. -/
+/-- Legacy summability package, distinct from genuine infinite renormalization.
+Its weighted-area field holds for every parameter by `Literature.ModelAudit`. -/
 structure InfinitelyRenormalizable (c : ℂ) : Prop where
   /-- The puzzle modulus sequence is summable. -/
   puzzleModulusSummable : PuzzleModulusSummable c

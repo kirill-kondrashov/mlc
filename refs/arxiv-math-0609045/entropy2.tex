@@ -1,0 +1,220 @@
+\section{Loss of horizontal weight} \label{sec:entropy} \label{sec:loss-hor}
+In this section we prove the following purely combinatorial theorem,
+which will be used to prove Theorem \ref{loss of hor weight} and ultimately Theorem \ref{def vertical teaser}. 
+\begin{theorem}\label{loss-F}
+Suppose $F(z) = z^2 + c$ is critically periodic of period $p$.
+Let $\DD$ be the closure of the union of immediate attracting basins, and assume that $\DD$ is a union of disjoint closed Jordan domains.
+Suppose that $X^n$, for $n \in \N$, are horizontal weighted arc diagrams on $\C \sm \DD$ such that
+\begin{enumerate}
+\item
+$X^{n+1} \le X^n$, and 
+\item
+$F^*X^n \multimap X^{n+1}$
+\end{enumerate}
+for each $n \in \N$. 
+Then
+$$
+     \| X^{8p}\|_1\leq \frac{1}{2} \| X^0 \|_1.
+$$
+\end{theorem}
+
+
+Throughout this section,
+we assume that the $\hx n$ (for $n = 0, \ldots, 8p$) are  horizontal weighted arc diagrams on $\C \sm \DD$
+that satisfy Hypotheses 1 and 2 in Theorem \ref{loss-F}.
+
+\subsection{Topological arrow}
+  Let us consider two Riemann surfaces, $U\subset V$,
+and let $\bal$ and $\bbe$ be multiarcs on $U$ and $V$  respectively.
+We say that $\bal$ {\it topologically arrows} $\bbe$, $\bal\ta\bbe$,
+if for any arc $\beta\in \bbe$
+there is a sequence $(\alpha_k)$ of arcs
+ with $\alpha_k \in \bal$ for each $k$,
+and $(\alpha_k) \arrow \beta$.
+
+A basic example comes from two WAD's, $X\in W(U)$ and $Y\in W(V)$,
+such that $X\dominate Y$. Then  $\supp X \ta \supp Y$,
+as follows immediately from the definitions.
+So in the setting of this section, we have $$F^*\supp \hx {n} = \supp F^*\hx {n} \ta \supp \hx {n+1}$$ for each $n$. 
+
+\subsection{An invariant horizontal arc diagram}
+
+
+Let us say that a horizontal arc diagram $\bal$ on  $\C\sm \DD$ is {\it invariant} if
+$$
+   F^*\bal \ta \bal $$
+
+\begin{prop}\label{invariance}
+  There exists $n\leq 3p$ such that the horizontal arc diagram $\bal^n = \supp  \hx n$ is invariant.
+\end{prop}
+
+\begin{proof}
+  Since $ \hx {n+1} \leq  \hx n$, we have
+$\bal^{n+1}\subset \bal^n$.
+Since $|\bal^0|\leq 3p$, there exists an  $n\leq 3p$ such that $\bal^{n+1}=\bal^n$. We take this $n$ as our desired $n$. 
+Then, as we have already observed, we have $F^* \bal^n \ta \bal^{n+1} = \bal^n$.
+\end{proof}
+
+\subsection{Alignment with the Hubbard tree}
+\newcommand{\bbb}{\boldsymbol \beta}
+We begin with a lemma relating topological arrow (of horizontal arc diagrams) and vertical arcs. 
+We observe that we can think of any vertical arc $\gamma$ in $\C \sm F^{-1}\DD$ landing at a disk in $\DD$ as a (unique and well-defined) vertical arc in $\C \sm \DD$.
+\begin{lem} \label{lem:ta-int}
+Suppose that 
+\begin{itemize}
+\item
+$\bal$ is a horizontal arc diagram on $\C \sm F^{-1}\DD$,
+\item
+$\bbb$ is a horizontal arc diagram on $\C \sm \DD$, and 
+\item
+$\bal \ta \bbb$.
+\end{itemize}
+Suppose that $\gamma$ is a vertical arc on $\C \sm F^{-1}\DD$, landing at a disk in $\DD$, such that $\bal$ does not intersect $\gamma$.
+Then $\bbb$ does not intersect $\gamma$.
+\end{lem}
+\begin{proof}
+For every arc $\beta \in \bbb$, 
+we can find a representing path $b$ such that the restriction of $b$ to $\C \sm F\inv\DD$ is a union of disjoint paths representing arcs in $\bal$. 
+We can then realize $\gamma$ as a path (in $\C \sm F\inv\DD$)
+ that does not intersect any of these $\bal$-representing paths. 
+Therefore $\beta$ does not intersect $\gamma$.
+
+We conclude that $\bbb$ does not intersect $\gamma$.
+\end{proof}
+
+\begin{lem}\label{H-perp}
+  Any invariant horizontal arc diagram  $\bal$
+is aligned with the Hubbard tree.
+\end{lem}
+
+\begin{proof}
+Let  $\bal$ be an invariant horizontal arc diagram for a superattracting polynomial $F$,
+and think of it for the moment as a union of actual paths,
+each of which extends continuously to a map of a closed interval into $\C \sm \Int \DD$. 
+Let $\De$ be the unbounded component of $\C\sm (\bal \cup \DD$).
+If $\di \De$ were a subset of $\bal$,
+then $\bal$ would contain a closed loop, which is absurd.
+Therefore $\DD \cap \di\De$ is non-empty,
+and we can find a path $b$ in $\De$ connecting $\infty$ to $\DD$. 
+It represents a vertical arc $\beta_0$ such that  $\langle\bal, \beta_0\rangle=0$.
+
+Now suppose that $\beta$ is any vertical arc for which $\langle\bal, \beta\rangle=0$,
+and $\beta'$ is any lift of $\beta$ (that lands at a disk in $\DD$).
+Then $\langle F^*\bal, \beta'\rangle=0$,
+and, 
+by Lemma \ref{lem:ta-int} and our assumption that $F^*\bal \ta \bal$,
+we have $\langle \bal, \beta'\rangle=0$.
+We conclude that $\pair\bal{F^*\beta} = 0$.
+
+By induction,
+we then have 
+$\pair\bal{F^{*l}\beta} = 0$ for all $l$,
+and hence, 
+by Lemma \ref{lem:pull-to-get-Hperp},
+$\pair\bal{\BH^\perp} = 0$. 
+We conclude that $\bal \subset \BH$. 
+\end{proof}
+Putting this together with Proposition \ref{invariance} and Hypothesis 1 for the $\hx n$,
+we obtain:
+
+\begin{cor}\label{alignment}
+  For any  $n\geq 3p$, the horizontal arc diagram $\bal^n = \supp  \hx n$ is
+aligned with the Hubbard tree $H$.
+\end{cor}
+
+
+\subsection{The entropy argument}
+We continue with the proof of Theorem \ref{loss-F},
+where now we know that $\hx n$ is aligned with the Hubbard tree for each $n \ge 3p$. 
+We first observe
+\begin{lemma} \label{lem:dom-iter}
+Under our standing assumption that $F^* \hx n \doms \hx {n+1}$,  we in fact have 
+$F^{l*} \hx n \doms \hx {n+l}$ for all $n \in \N$ and $l \in Z^+$.
+\end{lemma}
+\begin{proof}
+We proceed by induction,
+assuming that $F^{l*} \hx n \doms \hx {n+l}$ and proving $F^{(l+1)*} \hx n \doms \hx {n+l + 1}$. 
+We first observe that the assumption implies $$F^{(l+1)*} \hx n \doms F^* \hx {n+l},$$ 
+and of course $$F^* \hx {n+l} \doms \hx {n+l+1}$$ by our standing assumption.
+So we are finished by Lemma \ref{lem:dom-trans}.
+\end{proof}
+
+We then have, using the definition of $X|_D$ given in the preamble to Lemma \ref{lem:dom-restr},
+\begin{lemma} \label{lem:res-iter}
+Under our standing assumption,
+$$\hx {n+l}|D_i \le (\deg F^l|D_i)\, \hx n|D_{i+l \bmod p}.$$
+\end{lemma}
+\begin{proof}
+We have $F^{l*}\hx n|D_i = (\deg F^l|D_i)\, \hx n|D_{i+l \bmod p}$.
+Moreover $F^{l*}\hx n \doms \hx {n+l}$ by Lemma \ref{lem:dom-iter}.
+The Lemma then follows, by Lemma \ref{lem:dom-restr}.
+\end{proof}
+\begin{cor} \label{cor:sup-inf}
+We have 
+$$
+\sup_i \hx {3n}|_{D_i} \le 2 \inf_i \hx {2n}|_{D_i} \le 2 \inf_i \hx 0|_{D_i}.
+$$
+\end{cor}
+\begin{rem}
+Lemma \ref{lem:res-iter} and its corollary is closely related to Theorem 9.3 of \cite{McM},
+which relates the lengths of the hyperbolic geodesics around the small Julia sets of a given period. 
+\end{rem}
+We now have the following lemma, which is central to our entropy argument:
+\begin{lemma} \label{lem:entropy-center}
+For every $l \in \Z^+$, and $\beta \in \supp \hx {(3+l) p}$,
+we have
+$$
+\hx {(3+l) p}(\beta) \le 2^{-l} \sup_i \hx {3p}|_{D_i}.
+$$
+\end{lemma}
+\begin{proof}
+We have $\supp X^{(3+l)p} \subseteq \BH^{lp}$ because $\supp X^{3p} \subseteq \BH$.
+
+Suppose that $\beta$ connects $D_-$ and $D_+$.
+By Lemma \ref{lem:into-flags},
+there is a unique vertex-injective path in $\BH^{lp}$ connecting $D_-$ to $D_+$. 
+We let the vertices of this path be $D'_0 = D_-, D'_1, \ldots, D'_n = D_+$,
+and let the edges be $\gamma_0, \ldots, \gamma_{n-1}$,
+where of course $D'_k \in \DD^{lp}$ and $\gamma_k \in \BH^{lp}$ for each $k$.
+Moreover, 
+by the same Lemma,
+whenever $(\alpha_i) \to \beta$,
+we can find, for each $k$, an $i$ such that $\alpha_i \in \Flag(D'_k, \gamma_k; \BH^{lp})$.
+We also observe that $n \ge 2^{lp}$ by Corollary \ref{cor:shortest-lp}.
+
+Choosing $k \in 0, \ldots, n-1$,
+letting $j \in 0, \ldots, p-1$ be such that $F^{lp}(D'_k) = D_j$, and
+letting $\eta$ be $F^{lp}(\gamma_k)$,
+we observe that 
+$$F^{lp}\from \Flag(D'_k, \gamma_k; \BH^{lp}) \to \Flag(D_j, \eta; \BH)$$
+is a bijection.
+Hence, 
+$$
+\norm{F^{lp*}\hx {3p}|_{\Flag(D'_k, \gamma_k; \BH^{lp})}}_1 = \norm{\hx {3p}|_{\Flag(D_j, \eta; \BH)}}_1
+\le {\hx {3p}|_{D_i}} \le \sup_i {\hx {3p}|_{D_i}}.
+$$
+
+We then apply Lemma \ref{lem:in-each},
+note the lower bound on $n$, and observe that $\bigoplus_{i=0}^{n-1} w_i \le w/n$ when $w_i \le w$ for each $i$.
+\end{proof}
+
+We can now prove Theorem \ref{loss-F}.
+\begin{proof}
+By Lemma \ref{lem:entropy-center} and Corollary \ref{cor:sup-inf},
+letting $l = 5$, 
+we have 
+$$
+\hx {8p}(\beta) \le  2^{-5} \sup_i \hx {3p}|_{D_i} \le 2^{-4}\inf_i \hx {0}|_{D_i}.
+$$
+The arc diagram $\supp \hx {8p} \cup \BH^\perp$ has at most $3p$ arcs and $\BH^\perp$ has at least $p$ arcs,
+so $\hx{8p}$ has at most $2p$ arcs. 
+We can then conclude
+$$
+\norm{\hx {8p}}_1 \le 2p \cdot 2^{-4} \inf_i \hx{0}|_{D_i} = \frac p 8 \inf_i \hx{0}|_{D_i}.
+$$
+On the other hand, 
+$$
+2\norm{\hx 0}_1 = \sum_i \hx 0|_{D_i} \ge p \inf_i \hx 0|_{D_i}. \qedhere
+$$
+\end{proof}
+

@@ -1,0 +1,67 @@
+\section{Holomorphic pairs}
+\label{sec:holomorphic}
+
+Let $\eta: \Omega_1 \mapsto \Sigma$ and $\xi: \Omega_2 \mapsto \Sigma$ be two univalent maps  between quasidisks in $\field{C}$, with $\Omega_i \in \Sigma$. Suppose $\eta$ and $\xi$ have homeomorphic extensions to the boundary of domains $\Omega_i$ and $\Sigma$. Following \cite{McM} we call such a pair $\zeta=(\eta,\xi)$ a holomorphic pair if
+\begin{itemize}
+\item[1)] $\Sigma \setminus \overline{\Omega_1 \cup \Omega_2}$ is a quasidisk;
+\item[2)] $\overline{\Omega_i} \cap \partial \Sigma=I_i$ is an arc; 
+\item[3)] $\eta(I_1) \subset I_1 \cup I_2$ and $\xi(I_2) \subset I_1 \cup I_2$; 
+\item[4)] $\overline{\Omega_1} \cap \overline{\Omega_2}=\{ c\}$, a single point.
+\end{itemize}
+
+
+We refer the reader to \cite{McM} and \cite{Ya3} for a detailed discussion of McMullen holomorphic pairs.
+ 
+Let  $\hat\zeta$ denote the McMullen renormalization fixed point constructed in \cite{McM}.  As before, let $$P_{\theta_*}(z)=z^2+e^{2\pi i{\theta_*}}z,\text{ where }\theta_*=(\sqrt{5}-1)/2,$$ and let $\zeta_1=(P^2_{\theta_*}|_{X},P_{\theta_*}|_Y)$ be the McMullen holomorphic pair corresponding to the first pre-renormalization of $P_{\theta_*}$. As was shown in \cite{McM}, $$\cR^n\zeta_1\to\hat\zeta$$ geometrically fast.
+
+\begin{figure}[htb]
+\centerline{\includegraphics[width=0.6\textwidth]{mcmpair.pdf}}
+\caption{\label{fig-mcmpair}The domains of the McMullen holomorphic pair extension of $\zeta_*$.}
+\end{figure}
+
+We use rigorous computer-assisted estimates to prove the following:
+\begin{prop}
+\label{prop:mcm-extension}
+There exists a neighborhood $W \subset C(Z_1,W_1)$, such that for all $\zeta \in W^s(\zeta_*) \cap W$, the pair $\cP^3 \zeta$ has  an extension to a McMullen holomorphic pair 
+$$\tl \zeta=(\tl \xi:\Omega_1\to\Sigma, \tl \eta:\Omega_2\to\Sigma).$$
+\end{prop}
+We use rigorous computer-assisted techniques to construct the domains $\Sigma$, $\Omega_1$, $\Omega_2$ (see Fig. \ref{fig-mcmpair}); the Jordanness of these domains follows from \thmref{mainthm4}.
+
+Following \cite{McM}, define the filled Julia set of a McMullen holomorphic pair as 
+$$K(\tl \zeta)=\cap_{n>0} \tl \zeta^{-n} (\Omega_1 \cup \Omega_2).$$
+
+Given a subset $\Lambda \subset \field{C}$, we say that $z$ is a {\it measurable $\delta$-deep point} of $\Lambda$ if for some $\delta>0$, 
+$${\rm area}(B_r(z)-\Lambda)=O(r^{2+\delta}).$$
+
+Combining \propref{prop:mcm-extension} with a standard pull-back argument as well as the results of \cite{McM}, we have:
+\begin{thm}
+\label{mainthm5}
+For every $\zeta \in W^s(\zeta_*) \cap W$  the McMullen holomorphic pair extension  $\tl \zeta$ of $\cP^3 \zeta$ is quasiconformally conjugate to $\hat \zeta$, this conjugacy is conformal on ${\rm int}(K(\tl \zeta))$.
+\end{thm}
+
+
+As a consequence of the above theorem, we have the following.
+\begin{cor}
+\label{cor1}
+The critical point $0$ is a measurable deep point if $K(\tl \zeta)$.
+\end{cor}
+\begin{proof}
+By the results of \cite{McM}, $0$ is a measurable deep point of $K(\hat \zeta)$, and this property is preserved under a quasiconformal conjugacy. 
+\end{proof}
+
+We say that a quasiconformal map $\phi$ of subset of $\field{C}$ is $C^{1+\alpha}$-conformal at point $z$ if $\phi'(z)$ exists and 
+$$\phi(z+t)=\phi(z)+\phi'(z) t+O(|t|^{1+\alpha}).$$
+
+\begin{cor}
+Let $h$ be the conjugacy from \thmref{mainthm5}. Then $h$ is $C^{1+\alpha}$-conformal at $0$.
+\end{cor}
+\begin{proof}
+By Corollary $\ref{cor1}$ point $0$ is the measurable $\delta$-deep point of the measurable set ${\rm int}(K(\tl \zeta)$, while by \thmref{mainthm5} $h$ is a $K$-quasiconformal map, conformal on ${\rm int}(K(\tl \zeta)$.
+
+By the Boundary Conformality Theorem (see Theorem 2.25 in \cite{McMBook}), there exists $\alpha=\alpha(K,\delta)$ such that $h$ is $C^{1+\alpha}$-conformal.
+\end{proof}
+
+\begin{cor}
+The maps of the holomorphic pairs $\zeta_*$ and $\hat\zeta$ are analytic continuations of each other.
+$$\cR^n\zeta_1\to\zeta_*,$$ geometrically fast in the uniform metric, where defined.
+\end{cor}

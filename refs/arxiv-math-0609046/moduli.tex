@@ -1,0 +1,820 @@
+
+\section{Improving the moduli}\label{moduli}
+
+In this section $C$ will stand for the maximum of the constants in the Quasi-Additivity Law and the Covering Lemma.
+
+\subsection{High type}
+
+Let us begin with a simple estimate that compares moduli on consecutive odd levels of the Principal Nest:
+
+\begin{lem}\label{simple}
+For any odd $n$, we have:
+ $$  \psimod(E^{n-3}, E^{n-2})\leq 4\, \psimod(E^{n-1}, E^n) $$
+and
+  $$ \psimod(Y^0, R) \leq 2^{\n+1}\, \psimod(E^0, E^1).$$
+\end{lem}
+
+\begin{proof}
+By Lemma \ref{psi-mod},
+$$
+   \psimod(\hat E^{n-1}, E^{n-1}) = 2\, \psimod(\tilde E^n, E^n) \leq 2\, \psimod(E^{n-1}, E^n)
+$$
+and
+$$
+   \psimod(\hat E^{n-1}, E^{n-1}) \geq \psimod(\tilde E^{n-1}, E^{n-1} )
+$$
+$$
+=\frac{1}{2}\, \psimod(\hat E^{n-2}, E^{n-2})=
+                                     \frac{1}{2}\,  \psimod(E^{n-3}, E^{n-2}),
+$$
+and the first estimate follows.
+
+The second estimate is similar. The puzzle piece $E^1\equiv Y^m$
+is mapped with degree 2 onto $E^0$, and this map admits degree 2 extension
+$\tilde E^1\ra Y^{q\n}\equiv \hat E^0$, where $\tilde E^1 = Y^{m-1}$.
+Then $E^0$ is mapped onto $Z^1_\kappa$ by degree 2 map $f^{q\n}$.
+This map admits degree $2^{\n}$ extension $Y^{\q\n}\ra Y^0$.
+It follows that
+$$
+   \psimod(Y^0, R)\leq \psimod(Y^0, Z^1_\kappa)
+$$
+$$
+  = 2^{\n+1}\,\psimod(Y^{m-1}, E^1)\leq 2^{\n+1}\, \psimod(E^0, E^1).
+$$
+\end{proof}
+
+The following  lemma tells us that if some principal  modulus is very small then it
+should be even smaller on some preceding level of the Principal Nest:
+
+\begin{lem}\label{growth-lem}
+There exist absolute  $N\in \N$ and $\eps>0$  such that:
+If on some odd level $n\geq N$, $  \psimod  (E^{n-1}, E^n ) <\eps $,
+then on some previous odd level $n-s\in [n-N, n-1]$ we have:
+\begin{equation}\label{decrease}
+    \psimod  (E^{n-s-1},  E^{n-s} ) <  \frac{1}{2}\, \psimod( E^{n-1},  E^n ).
+\end{equation}
+\end{lem}
+
+
+\begin{proof}
+Let us fix some integer $m >  C^3 2^{28}$.
+% where $C$ is the maximum of  constants in the Quasi-Additivity and Quasi-Invariance Laws.
+Let $N$ be the smallest odd integer that is bigger than $\log_2 m + 5$.
+Take any odd level $n\geq N$. For each $k$,
+let us consider the associated 3-domain branched covering $\Psi_k$ (\ref{3 domains})
+$$
+   \Psi_k: (\Upsilon_k, \De_k, E^n) \ra (E^{n-N}, \La_k', \La_k).
+$$
+% Set $\eta=1/4$ for the Covering Lemma.
+Let us consider two cases:
+
+\msk {\it Case 1.} Assume that for some domain $\La_k$,
+$$
+  \psimod (\La_k', \La_k)\leq  \frac{1}{4}\, \psimod (E^{n-1},  E^n).
+$$
+         By Property (P4) and Lemma \ref{psi-mod},
+$\psimod(\La_k' ,  \La_k) = \psimod (\hat E^i, E^i)$.
+If $i$ is odd then $\hat E^i= E^{i-1}$,
+ and   we obtain the desired estimate with $s=n-i\in [1, 5]$:
+$$
+  \psimod (E^{n-1}, E^n) \geq 4\, \psimod ( E^{i-1}, E^i).
+$$
+If $i$ is even, then
+$$
+     \psimod (\hat E^i, E^i) \geq \psimod(\tilde E^i, E^i) = \frac{1}{2} \psimod ( \hat E^{i-1}, E^{i-1})=
+                              \frac{1}{2} \psimod ( E^{i-2}, E^{i-1}),
+$$
+and we conclude that
+$$
+     \psimod (E^{n-1}, E^n) \geq 2\, \psimod ( E^{i-2}, E^{i-1}).
+$$
+
+
+\msk{\it Case 2.} Assume that for all $\La_k$,
+\begin{equation}\label{1/2}
+  \psimod (\La_k', \La_k) \geq \frac{1}{4} \psimod (E^{n-1},  E^n)\geq \frac{1}{4} \psimod(\Upsilon_k, E^n)
+\end{equation}
+(where the second estimate follows from the inclusion $\Upsilon_k\subset E^{n-1}$).
+By Lemma \ref{psi-maps}, there exists a natural covering map
+$$
+   \boldsymbol{\Psi}_k: (\boldsymbol{\Upsilon}_k, K_{\De_k}, K_{E^n} )\ra (\BE^{n-N-1}, K_{\La_k'}, K_{\La_k}),
+$$
+and  a natural immersion $ i: \boldsymbol{\La}_k'  \ra \BE^{n-N} $.
+Note that $i(\boldsymbol{\La}_k')\sm K_{\La_k'}$ does not contain the critical values of $\boldsymbol{\Psi}_k$,
+since the latter are contained in the Julia set $K(f)$.
+Moreover, equation (\ref{1/2}) provides us with the Collar Assumption
+that allows us to apply the Covering Lemma to the map $\boldsymbol{\Psi}_k$.
+%    $\boldsymbol{\La}_k'$ in the role of $\BB'$).
+If $\eps$ is sufficiently small, it yields:
+\begin{equation}\label{outer mod}
+  \psimod (E^{n-N-1},  \La_k) \leq C 2^{12} \psimod(\Upsilon_k,  E^n) \leq C\, 2^{12}\, \psimod(E^{n-1}, E^n).
+\end{equation}
+Estimates (\ref{1/2}) and (\ref{outer mod}) show that the Quasi-Additivity Law is applicable
+to the family of islands $K_{\La_k}$ in $\BE^{n-N-1}$
+with $\eta^{-1}= C 2^{14}$.
+ Since there are at least $m/2$ domains $\La_k\subset \La_k'\subset E^{n-N}$,
+it implies:
+$$
+      \psimod(E^{n-N-1}, E^{n-N}) \leq \frac{C^3 2^{27} \, \psimod(E^{n-1}, E^n )}  {m}  < \frac{1}{2}\, \psimod(E^{n-1}, E^n),
+$$
+and we are done.
+\end{proof}
+
+
+\begin{lem}\label{exp decay}
+   There exist absolute constants $C>0$, $\rho\in (0,1)$ and $\eps>0$
+such that if for some odd $n$,  $\psimod(E^{n-1}, E^n)<\eps$,
+then
+$$
+   \psimod(E^0, E^1)< C \rho^n \psimod(E^{n-1}, E^n).
+$$
+and
+$$
+   \psimod(Y^0, R)\leq  C 2^\n \rho^n \psimod(E^{n-1}, E^n).
+$$
+\end{lem}
+
+\begin{proof}
+  By Lemma \ref{growth-lem},
+there exists an odd level $l<N$ such that
+$$
+   \psimod(E^{l-1}, E^l) \leq \left(\frac{1}{2}\right)^{[n/N]},
+$$
+which together with Lemma \ref{simple} implies the desired estimates.
+\end{proof}
+
+\subsection{Frequent $R$-returns}
+
+ Let us consider the map
+\begin{equation}\label{l}
+    f^l= f^{q\n+1} \circ g_1\circ\dots  \circ g_{\chi-1}\, :\, E^{\chi-1}\ra Y^0
+\end{equation}
+and the trajectory $\OO= \{\KK_i\}_{i=l}^{l+p-1}$
+of the little Julia set $\KK$. Let $i_1, i_2,\dots$ be the moments in $\OO$
+for which $\KK_i\subset  R$.
+
+\begin{lem}\label{frequent returns}
+Let $\rho>0$,  $\bar\chi\in \N$.
+Take some integer $m\geq C^3 2^{30}/\rho$, and let $\underline p= m^2\q\n$.
+Assume that the little Julia set frequently visits $R$:
+\begin{equation}\label{frequent visits}
+    i_{k+1}- i_k \leq m\q\n ,\quad k=1,2,\dots, m.
+\end{equation}
+If $\chi\leq \bar\chi$ while $p\geq \underline p$,
+then
+$$
+  \psimod (Y^0, R) \leq \rho \mod(\BE^{\chi-1}, \KK),
+$$
+provided $\mod(\BE^{\chi-1}, \KK)< \eps(\n; \bar\chi, \rho)$.
+\end{lem}
+
+\begin{proof}
+The map (\ref{l})
+has degree  $2^\chi\leq 2^{\bar\chi}$. By Lemma 2.9 of \cite{KL-high}, \note{formulate separately}
+ $\deg (f^l |\, E^\chi)\leq 32$,  and hence $l\leq 5p$.
+
+
+ By (\ref{frequent visits}),   $i_m-i_1 < m^2 \q \n \leq p $,
+so the moments $i_k$ are pairwise non-congruent mod $p$.
+Hence the little Julia sets $\KK_{i_1}, \dots, \KK_{i_m}$
+are all distinct.
+
+Since $\OO$ has length $p$, there is only one critical Julia set in $\OO$.
+Hence $\deg(f^{i_k}: \KK\ra \KK_{i_k}) $ is at most 64, so that $i_k\leq 6p$,
+$k=1,\dots, m$.
+
+On the other hand, $\KK_{i_k}$ is contained  in  a puzzle piece in $R$
+which is mapped under $f^{i_{k+1}-i_k}$ onto $Y^0$ with degree at most $2^{m\n}$. \note{lemma}
+It follows by the Telescope Lemma \ref{telescope} that there is a puzzle piece $\Upsilon_k\subset E^{\chi-1}$
+which is mapped under $f^{i_k}$ onto $Y^0$ with degree at most $2^{\bar\chi+km\n}\leq 2^{\bar\chi + m^2\n}\equiv D$.
+
+We would like to apply the Covering Lemma to the corresponding map
+$$
+   \f^{i_k}: (\boldsymbol{\Upsilon}_k, \KK)\ra  (\BY^0, \KK_{i_k})
+$$
+of degree at most $D$.
+To this end we need collars around $\KK_{i_k}$.
+Let $\Om$ be the critical pullback of  $E^\chi$ under $f^{6p}$.
+% Let $i_k\equiv j_k\;  \mod p$, where $j_1<j_2<\dots< j_m$, $0< j_1 <p$, and $ j_m<j_1+p$.
+ Then we let $\La_k' = f^{i_k}(\Om))$.
+Since the moments $i_k$ are pairwise non-congruent mod $p$ and $i_k\leq 6p$,
+ the puzzle pieces $\La_k'$ are contained in different domains of the orbit
+$f^t(E^\chi)$, $t=0,1\dots, p-1$. Hence they are pairwise disjoint.
+Moreover, by Lemma \ref{psi-mod},
+\begin{equation}\label{collars again}
+  \mod(\BLa_k', \KK_{i_k})\geq  \mod(\boldsymbol{\Om}, \KK)= \frac{1}{4} \mod(\BE^{\chi-1}, \KK) \geq  \frac{1}{4} \mod(\BUps_k, \KK).
+\end{equation}
+This provides us with the desired Collar Assumption.
+  By the Covering Lemma,
+$$
+  \mod(\BY^0,\KK_{i_k})\leq C 2^{14} \mod(\BUps_k, \KK)\leq C 2^{14} \mod(\BE^{\chi-1}, \KK) .
+$$
+The last two estimates show that
+the Quasi-Additivity Law is applicable to the family of islands $\KK_{i_k}$ in $\BY^0$
+(with $\eta^{-1}= C2^{16}$):
+$$
+   \psimod (Y^0, R) \leq \frac{C^3 2^{30} \mod(\BE^{\chi-1}, \KK)}{m}\leq \rho \mod(\BE^{\chi-1}, \KK),
+$$
+provided $\mod(\BE^{\chi-1}, \KK)< \eps(D) = \eps(\n; \bar\chi, \rho)$
+and we are done.
+\end{proof}
+
+%Robespierre
+\subsection{Many consecutive returns to $L$}\label{Robespier}
+
+Here the set-up is the same as in the previous section,
+but we will assume that there is a gap in returns of the little Julia sets to $R$:
+
+
+\begin{lem}\label{Robespier lem}
+Let $\rho$,  $\bar\chi$, $m$, and $\underline p$ be as in Lemma \ref{frequent returns}.
+Assume there is $k\leq m$ such that
+\begin{equation}\label{unfrequent visits}
+    i_{k+1}- i_k > m\q\n .
+\end{equation}
+If $\chi\leq \bar\chi$ while $p\geq \underline p$,
+then
+$$
+  \psimod (Z^0, L) \leq \rho \mod(\BE^{\chi-1}, \KK),
+$$
+provided $\mod(\BE^{\chi-1}, \KK)< \eps(\n; \q, \bar\chi)$.
+\end{lem}
+
+
+\begin{proof}
+Under our assumption (\ref{unfrequent visits})
+the Julia set returns frequently to $L$:
+$$
+        \KK_{i_k+ j \q\n} \subset L, \quad j=1,\dots, m.
+$$
+Let $P_j \ni f^{i_k}z $ be the pullback of $Z^0$ under $f^{j \q\n}$.
+By Lemma \ref{qn-pullbacks} and the Telescope Lemma,
+$P_j\subset Y^0$.
+
+Let $\Ups_j$ be the further pullback of $P_j$ under $f^{i_k}$,
+and let
+$$
+    \Psi_j= f^{i_k+j\q\n}: \Ups_j\ra Z^0.
+$$
+Then $\Ups_j\subset E^{\chi-1}$ and $\deg \Psi_j\leq 2^{\bar\chi+\underline p}$.
+
+The rest of the argument is the same as for Lemma \ref{frequent returns}:
+the Covering Lemma implies that for $j=1,\dots, m$,
+$$
+    \mod (\BZ_0, \KK_{i_k+j\q\n}) \leq C 2^{14} \mod(\BUps_k, \KK)\leq  C 2^{14} \mod(\BE^{\chi-1}, \KK) ,
+$$
+and by the Quasi-Additivity Law,
+$$
+  \psimod(Z^0, L) \leq \frac{C^3 2^{30} \mod(\BE^{\chi-1}, \KK)}{m}\leq \rho \mod(\BE^{\chi-1}, \KK).
+$$
+\end{proof}
+
+Note that by symmetry, $\psimod(Z^0, L) = \psimod(Y^0, R)$.
+Putting together Lemmas \ref{exp decay}, \ref{frequent returns} and \ref{Robespier lem},
+we obtain:
+
+\begin{cor}\label{R-L dist}
+For any parameters $\q,\n$ of a decoration and any $\rho>0$,
+ there exists  $\underline p \in \N$ and $\eps>0$ such that
+$$
+  \psimod (Y^0, R) \leq \rho \mod(\BE^{\chi-1}, \KK),
+$$
+provided  $p\geq \underline p$ and $\mod(\BE^{\chi-1}, \KK)< \eps$.
+\end{cor}
+
+
+% \subsection{Extremal distance between $L$ and $R$}
+%Let $\DD(L,R)$ stand for the {\it extremal distance} between $K_L$ and $K_R$ in $\BU$.
+
+\subsection{Comparison of $\psimod(Y^0, R)$ with $\Bd_{Y^1}(\alpha, \alpha')$}
+
+  Let  $$\mu := \min (\psimod(U, K), 1/2) .$$
+
+
+\begin{lem}\label{observe}
+    $$\Bd_{Y^1}(\alpha, \alpha')\leq \psimod (Y^0, R) \ominus \frac{1}{2} \mu.$$
+\end{lem}
+
+\begin{proof}
+  The boundary of $\BY^0$ consists of two parts (see the end of \S \ref{psi-puzzle}):
+the $J$-boundary $\di_J\BY^0 = \xi\cup\eta$ attached to $\alpha$ and the outer  arc $\la=\di_O\BY^0$
+that covers the ideal boundary of $\BU$.
+Let $\GG^h$ stand for the family of curves in the annulus $\BY^0\sm K_R$  connecting $K_R$ to the $J$-boundary,
+while $\GG^v$ stand for the family of curves in the same annulus  connecting $K_R$ to $\la$.
+By the Parallel Law,
+$$
+   \LL(\GG^h) \leq \psimod (Y^0, R) \ominus \LL(\GG^v).
+$$
+Let $\Pi$ stand for the rectangle uniformizing  $\BY^0\sm K_{Y^0}$ whose horizontal sides
+correspond to  $K_{Y^0}$ and $\la$,
+and vertical sides correspond to $\xi$ and $\eta$.
+We let $\om$ be the horizontal side of $\Pi$ corresponding to $K_{Y^0}$.
+Since any curve of the family $\GG^v$
+overflows some curve connecting $K_{Y^0}$ to $\la$ in $\BY^0\sm K_{Y^0}$
+(and thus representing a vertical curve in $\Pi$), we have:
+$$
+\LL (\GG^v) \geq \mod \Pi.
+$$
+But by definition of the pseudo-puzzle,
+the domain $\BY^0\sm K_{Y^0}$  covers the annulus $\BU\sm K$
+extending to an embedding on $K_{Y^0}$. Let us uniformize $\BU\sm K$ by a
+round annulus $\A$. It follows that the rectangle $\Pi$ covers $\A$ in such a way that
+$\om\subset \di\Pi $ is embedded into $\di \A$.
+By Lemma~\ref{C} from the Appendix,
+$$
+   \mod \Pi \geq \frac{\mu}{2}.
+$$
+Putting the above three estimates together, we obtain:
+\begin{equation}\label{pl}
+  \LL(\GG^h) \leq \psimod (Y^0, R) \ominus \frac{\mu}{2}.
+\end{equation}
+
+On the other hand,
+let us consider the family $\HH$ of horizontal curves in the puzzle piece $\BY^1$
+connecting $\di_\alpha\BY^1$ to $\di_{\alpha'} \BY^1$.
+Let $\phi: \BY^1\ra \BY^0$ be the natural immersion.
+Under $\phi$,
+the boundary $\di_\alpha \BY^1$ is mapped homeomorphically onto $\di_\alpha \BY^0$.
+It follows that any curve $\gamma$ of $\GG^h$ contains an arc
+that can be lifted by $\phi$ to some curve of $\HH$.
+Indeed, orient $\gamma$ so that it begins on $\di_\alpha\BY^0$.
+Then a maximal lift of $\gamma$ that begins on $\di_\alpha\BY^1$
+must end on $\di_{\alpha'} \BY^1$.
+
+By Corollary \ref{two families}, $ \LL(\HH)\leq \LL(\GG^h)$.
+Together with (\ref{pl}), this yields the desired inequality.
+\end{proof}
+
+\subsection{Skipping over}
+  In this section we will show that not many curves can skip some piece of the Julia set.
+
+Let $Y\in \YY^m(l)$ be a geometric puzzle piece of bidepth $(m,l)$,
+and let $A$ be a component of $Y\sm K_Y$. Let $\di_J \hat A = \di_J \BY \cap \hat A $.
+Recall that it consists of two components.
+Let $\CC_A$ stand for the family of curves in $\hat A$
+connecting  different  components of $\di_J \hat A$,
+and let
+$$
+  \Bd_A = \LL(\CC_A).
+$$
+
+Let $\displaystyle{\frac{1}{2\pi}\log r= 2^{-(m+\q)}\mu}$.
+Then the annulus $\BU^{m+\q}\sm K$ can be uniformized by the round annulus
+$\A(1,r)$, and under this uniformization,
+the set $K_Y$ gets represented on the unit circle $\T$ as the union of arcs $\om_i$
+of length
+\begin{equation}\label{om}
+    |\om_i|  \geq 2\pi\cdot 2^{-(\q+m)} .
+\end{equation}
+Indeed, the covering map $\Bf^{m+\q}: \BU^{m+\q} \sm K\ra \BU\sm K$
+is turned into $z\mapsto z^{2^{m+\q}}$ under the above uniformization of $\BU^{m+\q} \sm K$
+and the uniformization of $\BU\sm K$ by $\A(1, e^{2\pi\mu})$ (appropriately normalized).
+Since under this map, every arc $\om_i$ covers the whole circle,
+the length of $\om_i$  is at least $2\pi$ times its combinatorial length (\ref{comb length}).
+
+\begin{lem}\label{m-m}
+  Let  $Y\in \YY^m(m+\q)$ be a geometric puzzle piece of bidepth $(m,m+\q)$,
+and let $A$ be a component of $Y\sm K_Y$. Then
+$$
+   \Bd_A \geq \frac{1}{\mu}.
+$$
+\end{lem}
+
+\begin{proof}
+%  The set $\BY\sm K_Y$ consists of two components, $\hat A_+$ and $\hat A_-$,
+% each of which is the universal covering of $\BU^m \sm K$. Accordingly,
+%the family $\GG_Y'$ splits into two disjoint families, $\GG_Y^+$ and $\GG_Y^-$.
+%
+%Fix some $\eps\in \{\pm\} $.
+We can uniformize $\hat A$ by the horizontal  strip $\Pi=\Pi(2^{-(m+\q)})\mu$
+ in such a way that the upper boundary
+of $\Pi$ covers the $O$-boundary of $\BU^{m+\q}$, and the group of deck transformations is generated by
+the translation $z\mapsto z+1$. By (\ref{om}),
+the Julia set $K_Y\subset \di A$ is represented
+as an interval $I$ on $\R$ of length at least $2^{-(\q+m)}$.
+
+Let us view $\Pi$ as a quadrilateral with horizontal sides $I$ and the top of $\Pi$.
+Then
+$$
+   \LL(\CC_A)= \frac{1}{\mod \Pi} \geq \frac{1}{\mu },
+$$
+where the last estimate comes from the simple right-hand side estimate  of Lemma \ref{Pi},
+and we are done.
+%
+%The desired estimate follows now from the Parallel Law:
+%$$
+%     \LL(\GG_Y')= \LL(\GG_Y^+)\oplus \LL(\GG_Y^-).
+%$$
+\end{proof}
+
+\begin{lem}\label{m-0}
+  Let $Y\in \YY^m(0)$ be a geometric puzzle piece of bidepth $(m,0)$,
+and let  $A$ be a connected component of $Y\sm K_Y$.
+Then
+$$
+   \Bd_A \geq \frac{\mu}{2^{m+\q+2}}.
+$$
+\end{lem}
+
+\begin{proof}
+Let $A(m+\q)$ be the component of $Y(m+\q)\sm K_Y$ contained in $A$,
+and let $\phi: \hat A(m+\q)\ra \hat A$ be the natural immersion.
+It extends to the identity on $K_Y\cap \di \hat A(m+\q)$.
+
+ Let us realize   $\hat A$ as the strip $\Pi(\mu)$ that covers $\BU \sm K$,
+with the group of deck transformations generated by $z\mapsto z+1$.
+% Fix some $\eps\in \{\pm\} $.
+Let us consider the interval $I \subset \R$  representing $K_Y\cap \di A$,
+and let $J$ be the left-adjacent interval of length 1.
+
+Let us orient the curves $\gamma\in \CC_A$ so that they begin on the left-hand side of $I$.
+% and end on the right-hand side of $I$.
+Then any curve $\gamma\in \CC_A$ contains the maximal initial arc $\gamma'$ that can be lifted
+by $\phi$ to a curve $\gamma^*$ in  $\hat A(m+\q)$.
+Accordingly,  we can split the family of curves $\gamma\in \CC_A$ into three subfamilies:
+\begin{itemize}
+  \item $\HH_1$ consists of the curves $\gamma$ such that $\gamma'=\gamma$;
+   then  $\gamma^*\in \CC_{A(m+\q)}$;
+
+  \item $\HH_2$ consist of the curves that begin in $J$ and whose
+lift $\gamma^*$ terminates on the $O$-boundary of $\hat A(m+\q)$;
+
+   \item $\HH_3$ consists of the curves that begin on  the left-hand side of $J$.
+\end{itemize}
+
+Let us estimate the extremal length of each of these families.
+
+Since $\HH_1 = \phi (\CC_{A(m+\q)})$,
+$$
+  \LL(\HH_1)\geq \LL(\CC_{A(m+\q)})\geq \frac{1}{\mu},
+$$
+where the first estimate follows from Lemma \ref{increase}, and the second follows from
+Lemma \ref{m-m}.
+
+Let $\TT$ be the family of curves in $\hat A(m+\q)$ that begin on $J$ and end on the
+$O$-boundary of $\hat A(m+\q)$. By Corollary \ref{two families} and Lemma \ref{Pi},
+$$
+   \LL(\HH_2)\geq \LL(\TT)\geq \frac{\mu}{2^{m+\q+1}}.
+$$
+% (since $2^{-(m+\q)}\mu < 1/2$).
+
+To estimate the extremal length of $\HH_3$, endow the rectangle
+$Q=J \times [0,\mu]\subset \Pi(\mu)$ with the Euclidean metric $\la$.
+Since  any curve $\gamma\in \HH_3$ horizontally overflows $Q$,
+it has $\la$-length at least 1. Hence
+$$
+   \LL(\HH_3)\geq \frac{1}{\area Q}= \frac{1}{\mu}.
+$$
+
+Incorporating the last three estimates into the Parallel Law, we obtain the desired:
+$$
+    \LL(\CC_Y^\eps) \geq \frac{1}{\mu + 2^{m+\q+1}\mu^{-1} +\mu}\geq \frac{\mu}{2^{m+\q+ 2}}.
+$$
+%provided $\mu\leq 1$.
+%
+%Applying the Parallel Law again, $\LL(\GG_Y')= \LL(\GG_Y^+)\oplus \LL(\GG_Y^-)$,
+% we obtain the desired estimate.
+\end{proof}
+
+ Let us consider two vertices,  $v$ and $w$, of a geometric puzzle piece $Y$.
+   Let $Z\subset Y$ be a  puzzle piece of depth $m$ that separates $v$ from $w$.
+We say that a multicurve in $\BY$ connecting $\di^v \BY$ to $\di^w\BY $ {\it skips over} $K_Z$
+if one of its components does not cross $K_Z$.
+
+\begin{cor}\label{separating pieces}
+Under the above circumstances,
+let $\TT$ be be the family of multicurves in $\BY$ connecting $\di^v \BY$ to $\di^w\BY $
+that skip over   $K_Z$.
+Then
+$$
+  \LL(\TT)\geq \frac{\mu}{2^{2 m+\q+2} }.
+$$
+\end{cor}
+
+\begin{proof}
+  The piece $Z$ has at most $2^m$ components $A_i$ of $Z\sm K_Z$.
+If a multicurve $\gamma$ in $\BY$ that skips over $K_Z$
+then it contains an arc $\gamma'$ that lifts to
+a curve $\gamma^*$ in some family $\GG_{A_j}$.
+Let $\CC_j$ be the corresponding subfamily of $\TT$.
+By Lemma \ref{m-0} (together with Corollary \ref{two families}),
+$$
+    \LL(\CC_j) \geq \Bd_{A_j} \geq \frac{\mu}{2^{m+\q+2}}.
+$$
+The Parallel Law concludes the proof.
+\end{proof}
+
+
+
+ Let us now  consider the puzzle piece $P=Y^{(\n-1)\q+1}$,
+together with the corresponding pseudo-piece $\BP$,
+and the family of puzzle pieces $Q^v\subset P$
+from   Lemma \ref{separating family}.
+Recall that $T^{vw}= K_P\sm (Q^v\cup Q^w)$.
+Given two vertices $v$ and $w$ of $P$,
+let $\hat\GG_P^{vw}$ stand for the family of multicurves in $\BP$ connecting $\di_v \BP$ to
+$\di_w\BP$ that {\it do not  skip over} $T_{vw}$.
+By Corollary \ref{separating pieces},
+\begin{equation}\label{T^vw}
+  \LL(\GG\sm \hat\GG_P^{vw}) \geq C^{-1} \mu,
+\end{equation}
+where here and below, $C$ stands for a  constant that depend only on $\q$ and $\n$.
+
+
+
+
+\subsection{Separation between $L$ and $R$}
+
+   In this section we will show that   the modulus $\Bd_{Y^1}(\alpha, \alpha')$
+that measures  the extremal distance between $L$ and $R$ is comparable
+with $\mu$.
+
+Let $Y$ be a geometric puzzle piece.  For  two vertices $v$ and $w$ of $Y$,
+ we let
+$$
+ \BW_Y(v,w) =\WW(\GG_Y^{vw}).
+$$
+% where the family $\GG_Y(v,w)$ is introduced in \S \ref{boundary}.
+We define the {\it pseudo-conductance} of $Y$ as
+$$
+    \BW_Y =\sup_{v,w} \BW_Y(v,w),
+$$
+where the supremum is taken over all pairs of the vertices of $Y$.
+
+\begin{lem}
+  For the puzzle piece $P=Y^{(\n-1)\q+1}$ we have:
+   $$   W_P\leq \frac{C} {\mu}. $$
+\end{lem}
+
+\begin{proof}
+    Along with the above conductance of $P$, let us consider
+$$
+    \hat\BW_P(v,w) =\WW(\hat\GG_P^{vw});\quad \hat\BW_P =\sup_{v,w} \hat\BW_P(v,w).
+ $$
+By (\ref{T^vw}),
+\begin{equation}\label{hat}
+    \BW_P \leq \hat\BW_P + \frac{C}{\mu}.
+\end{equation}
+
+Take a pair of vertices, $v$ and $w$.
+Let $Q^v\cap T^{vw}=\{v'\}$ and  $Q^w\cap T^{vw}= \{w'\}$.
+Recall that depth of the puzzle pieces $Q^v$ and $Q^w$ is equal to $r=(2\n-1)\q+1$,
+and so depends only on $\q$ and $\n$. Let $\EE^r$ be the lift of the equipotential of level $r$
+to $\BP$.
+
+For any horizontal multicurve $\gamma\in \hat\GG_P^{vw}$,
+one of the following two  possibilities can occur:
+
+\ssk\nin $\bullet$
+  $\gamma$ crosses the equipotential $\EE^r$, and hence it contains an arc $\gamma'$ connecting $\EE^r$
+to $T^{vw}$; By Lemma \ref{C} and the Parallel Law,
+the width of this family of curves is bounded by $2^{r+\n} / \mu$ (here $2^{\n-1}$
+is a bound on the number of connected components of $P\sm K_P$);
+
+\ssk\nin $\bullet$
+ contains two disjoint multicurves,
+$\de^v$ and $\de^w$, that do not cross $\EE^r$ and such that $\de^v$ connects $\di^v\BP$ to $T^{vw}$,
+while $\de^w$ connects $T^{vw}$ to $\di^w\BP$. Then $\de^v$ contains a multicurve that can
+be lifted to a horizontal multicurve in $\BQ^v$ connecting $\di^v\BQ^v$ to $\di^{v'}\BQ^v$,
+ an similarly for  $\de^w$.
+
+\ssk
+By the Series and Parallel Laws,
+$$
+     \hat\BW_P(v,w) \leq \BW_{Q^v}(v, v') \oplus \BW_{Q^w}(w,w')+ \frac{2^{r+\n}}{\mu}
+           \leq \BW_{Q^v} \oplus \BW_{Q^w}+\frac{2^{r+\n}}{\mu}.
+$$
+But $\BW(Q^v)=\BW(Q^w)= \BW(P)$  since $Q^v$ and $Q^w$ are univalent pullbacks of $P$.
+Hence
+$$
+   \BW_{Q^v}\oplus \BW_{Q^w}  \leq \frac{1}{2} \BW_P.
+$$
+Putting the last two estimates together and taking the supremum over all pairs of vertices $(v,w)$ of $P$,
+we conclude that
+$$
+   \hat\BW_P\leq \frac{1}{2}\BW_P + \frac{2^{r+\n}}{\mu}.
+$$
+ Together with  (\ref{hat}) it yields:
+$$
+   \BW_P\leq \frac{1}{2} \BW_P + \frac{C}{\mu},
+$$
+and the conclusion follows.
+\end{proof}
+
+\begin{prop}\label{separation prop}
+  $\Bd_{Y^1}(\alpha, \alpha') \geq C^{-1}\mu. $
+\end{prop}
+
+\begin{proof}
+   Since the map $f^{(\n-1)\q}: \BP\ra \BY^1$ is a branched covering
+that maps $\di_0\BP$ to  $\di_0\BY^1$, any curve
+$\gamma\in \GG_{Y^1}^{\alpha \alpha'}$ can be lifted to a curve
+$\gamma^*\in \cup\GG_P^{vw}$, where the union is taken over all pairs of vertices of $P$.
+Hence
+$$
+ \LL (\GG_{Y^1}^{\alpha \alpha'}) \geq \bigoplus_{v,w} \LL(\GG_P^{vw})\geq \frac{1}{N\BW_P},
+$$
+where $N$ is the number of pairs $(v,w)$.
+The conclusion follows.
+\end{proof}
+
+ Lemma \ref{observe} and Proposition~\ref{separation prop} imply:
+
+\begin{cor}\label{mu vs Y-R}
+   $\displaystyle{\frac{\mu}{2} \leq C\, \psimod (Y^0, R).}$
+\end{cor}
+
+
+\begin{cor}\label{slow change}
+Let $f: (\BU, K)\ra (\BU, K)$ be a renormalizable $\psi$-quadratic-like map
+with decoration  parameters $(\q, \n)$,
+and let $f'=f^p : (\BU', K')\ra (\BU',K')$ be its first renormalization.
+Then
+$$
+      \min\{ \mod (\BU, K), 1/2\} \leq C\,  \mod(\BU', K'),
+$$
+where $C=C(\q,\n)$.
+\end{cor}
+
+\begin{proof}
+  This follows from Lemma \ref{simple} and Corollary \ref{mu vs Y-R}
+by noticing that $(\BE^{\chi-1}, \KK) = (\BU', K')$.
+\end{proof}
+
+
+\subsection{Conclusion}\label{conclusion}
+
+Everything is now prepared for the main results.
+ Corollary \ref{R-L dist} and Corollary \ref{mu vs Y-R} imply:
+
+\begin{thm}[Improving of the moduli: bounded decoration parameters]\label{mod improve}
+For any parameters $\bar\q,\bar\n$ and any $\rho>0$,
+ there exist  ${\underline p} \in \N$ and $\eps>0$ with the following property.
+Let $f: (\BU, K)\ra (\BU, K)$ be a renormalizable $\psi$-quadratic-like map
+with  decoration parameters $(\q,\n)\leq (\bar\q, \bar\n)$,
+and let $f'=f^p : (\BU', K')\ra (\BU',K')$ be its first renormalization.
+Then
+$$
+ \{ p\geq \underline p\ \ \mathrm{and}\ \mod(\BU', K')< \eps \}  \imply \mod (\BU, K) < \rho \mod(\BU', K').
+$$
+\end{thm}
+
+%\begin{proof}
+%It follows from  Corollary \ref{R-L dist} and Corollary \ref{mu vs Y-R}
+%by noticing that $(\BE^{\chi-1}, \KK) = (\BU', K')$.
+%\end{proof}
+
+
+
+
+
+\begin{rem}  The logic of this theorem can be adjusted so that it would sound more
+like an ``improvement in the future'' rather than ``worsening in the past'':
+
+{\it  For any parameters $\bar\q, \bar\n$ of a Misuirewicz limb,
+ there exists  $\underline p \in \N$ and $\eps>0$ such that
+$$
+    \mod(\BU', K') \geq   2\,  \mod (\BU, K)
+$$
+provided  $p\geq \underline p$ and $\mod (\BU, K) < \eps/2$.}
+\end{rem}
+
+
+\msk
+  Theorem \ref{mod improve},
+together with Lemma \ref{ql extension},
+implies Theorem \ref{high periods thm} from the Introduction.
+
+To derive the Main Theorem, we will combine Theorem \ref{mod improve}
+with the following result  (Theorem 9.1 from \cite{K}):
+
+\begin{thm}[Improving of the moduli: bounded period]\label{improving mod-2}
+For any $\rho\in (0,1)$, there exists $\underline p=\underline p (\rho)$
+such that for any $\bar p\geq \underline p$, there exists $\eps=\eps(\bar p)>0 $ with the following property.
+Let $f: (\BU,K)\to (\BU,K)$ be primitively renormalizable $\psi$-quadratic-like map,
+% with  $\underline p\leq p\leq \bar p$.
+and let $f'=f^p = (\BU',K') \ra (\BU',K')$ be the corresponding renormalization.
+Then
+% Let $\gamma$ and $\gamma'$ be the geodesics associated with $f$ and $R^s f$ respectively.\\
+$$
+   \{\underline p\leq p\leq \bar p\ \ \mathrm{and}\ \mod(\BU'\sm K') < \eps\}   \imply \mod(\BU\sm K) < \rho \mod(\BU'\sm K').
+$$
+\end{thm}
+
+\begin{rem}
+  Unlike Theorem \ref{mod improve}, in Theorem \ref{improving mod-2} the map
+$f'$  {\it is not necessarily the first renormalization of} $f$.
+On the other hand, in Theorem  \ref{improving mod-2},
+the scale $\eps$ {\it depends on the upper bound} $\bar p$,
+while in Theorem \ref{mod improve} it does not.
+\end{rem}
+
+
+We say that an infinitely renormalizable $\psi$-ql map $f$
+belongs to the {\it decoration class} $(\bar\q, \bar\n)$ if the decoration parameters $(\bar\q_n, \bar\n_n)$
+of the renormalizations $R^n f$ are all bounded by $(\bar\q, \bar\n)$.
+
+Let us now put the above two theorems together:
+
+\begin{cor}\label{improving-3}
+ For any $(\bar\q, \bar\n)$,   there exist an $\eps>0$ and $l\in \N$ with the following property.
+For any  infinitely renormalizable $\psi$-ql map $f$  of decoration class $(\bar\q, \bar \n)$
+with renormalizations $R^n f: (\BU_n, K_n) \ra (\BU_n, K_n)$,
+if $\mod(\BU_n\sm K_n)< \eps$, $n\geq l$,  then $\mod (\BU_{n-l}\sm K_{n-l})<\mod(\BU_n\sm K_n) /2$.
+\end{cor}
+
+
+
+\begin{proof}
+  Given an infinitely renormalizable $\psi$-ql map $f$ with renormalizations
+$R^n f: (\BU_n, K_n)\ra (\BU_n\sm K_n)$, we let $\mu_n(f)= \mod (\BU_n, K_n).$
+Arguing by contradiction, we find a sequence $f_i$ of infinitely renormalizable $\psi$-ql maps
+of decoration class $(\bar\q, \bar\n)$ and sequences $\eps_i\to 0$ and $n(i) \to \infty$
+such that:
+
+\ssk\nin P1:
+   $\mu_{n(i)}(f_i) <\eps_i$;
+
+\ssk\nin P2:
+  $ \mu_{n(i)}(f_i) < 2 \mu_k (f_i)$,  $k=0,1,\dots,  n(i)-1 $.
+\ssk
+
+
+Let $R^n f_i $ be the renormalization of $R^{n-1} f_i$ with period $p_n(f_i)$.
+Applying  then the diagonal process,  we can also assume the following property:
+
+
+\ssk\nin P3:
+   $p_{n(i)-s}(f_i)\to \pi_s\in \N \cup \{\infty\}$ for  $s=0,1, \dots$.
+\ssk
+
+We  let $\bar s \in \Z_{\geq 0} \cup\{\infty\}$ be the first moment for which $\pi_s=\infty$
+(with understanding that $\bar s=\infty$ if such a moment does not exist).
+
+Let us consider two cases:
+
+\ssk
+{\it Case 1}: $\bar s<\infty$.
+Applying consecutively Corollary \ref{slow change}, we conclude that for sufficiently big $i$,
+$$
+   \mu_{n(i)-s}(f_i) \leq C^s \mu_{n(i)}(f_i), \quad s\leq \bar s.
+$$
+Let $\rho\in (0, 1/2 C^{\bar s})$.
+By Theorem \ref{mod improve}, for all sufficiently big $i$,
+$$
+   \mu_{n(i)-\bar s-1}(f_i) \leq \rho\,  \mu_{n(i)-\bar s}(f_i).
+$$
+ Putting the last two estimates together, we conclude that for all sufficiently big $i$,
+$$
+   \mu_{n(i)-\bar s-1}(f_i) < \frac{1}{2} \mu_{n(i)}(f_i),
+$$
+  contradicting assumption (P2).
+
+\ssk
+{\it Case 2}: $\bar s=\infty$.
+  Take an $s$ such that
+$$
+   \bar p\equiv \pi_0 \pi_1\dots \pi_s > \underline p,
+$$
+where $\underline p = \underline p(1/2)$ comes from Theorem \ref{improving mod-2}.
+By this theorem, for sufficiently big $i$,
+$$
+   \mu_{n(i)- s - 1}(i) < \frac{1}{2} \mu_{n(i)}(i),
+$$
+contradicting again assumption (P2).
+\end{proof}
+
+
+We are ready to prove the Main Theorem, in an important refined version.
+We say that a family $\MM$ of little Mandelbrot copies (and the corresponding
+renormalization combinatorics) has {\it beau}%
+\footnote{According to Dennis Sullivan,
+   ``beau'' stands for ``bounded and eventually universal''. }
+{\it a priori} bounds
+if there exists an $\eps =\eps(\MM)>0$ and a function $N: \R_+\ra \N$
+with the following property.
+Let $f: U\ra V$ be a quadratic-like map with $\mod(V\sm U)\geq \de>0$
+that is  at least $N=N(\de)$ times renormalizable. Then for any $n\geq N$,
+the $n$-fold renormalization of $f$ can be represented  by a quadratic-like map $R^n f: U_n\ra V_n$ with
+$\mod(V_n\sm U_n)\geq \eps$.
+
+\begin{bbrmt}
+%\proclaim Beau Bounds (Refined Main Theorem).
+  For any parameters $(\bar\q, \bar\n)$,
+the family of renormalization combinatorics of decoration class $(\bar\q, \bar\n)$ has
+beau a priori bounds.
+\end{bbrmt}
+
+\begin{proof}
+   Let $\eps>0$ and $l$ come from Corollary \ref{improving-3},
+and $C>0$ comes from  Corollary \ref{slow change}.
+We will use notation $\mu_n(f)$ from the proof of Corollary \ref{improving-3}.
+Assume that for some $\de>0$, there is a sequence of $\psi$-ql maps $f_i$ in question with $\mu_0(f_i)\geq \de$,
+while $\mu_{n(i)}(f_i)<\eps$, where $n(i)\to \infty$. Let $n(i)=k_i l+r_i$ where $0\leq r_i<l$.
+Then by  Corollaries \ref{improving-3} and \ref{slow change},
+$$
+   \mu_0(f_i)\leq C^l \eps /2^{r_i} \to 0\quad {\mathrm as}\ i\to \infty.
+$$
+This contradiction proves the beau bounds for the moduli $\mu_n(f)$ of $\psi$-ql maps.
+The beau bounds for ordinary quadratic-like maps follow by Lemma \ref{ql extension}.
+\end{proof}

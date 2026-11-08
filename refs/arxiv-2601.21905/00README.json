@@ -1,0 +1,14 @@
+{
+  "key": "kahn-lyubich-elephant-eyes",
+  "arxiv_id": "2601.21905",
+  "arxiv_version": "1",
+  "role": "supporting",
+  "title": "A priori bounds for some infinitely renormalizable quadratic: IV. Elephant Eyes",
+  "authors": [
+    "Jeremy Kahn",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-2601.21905.xml",
+  "source_archive": "arxiv-2601.21905-source.tar.gz",
+  "main_tex": "arxiv-2601.21905/main.tex"
+}

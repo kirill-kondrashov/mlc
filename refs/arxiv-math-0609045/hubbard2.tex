@@ -1,0 +1,344 @@
+\section{Some properties of Hubbard trees}\label{Hubbard trees}
+In this section we will introduce the superstable model $F$ for a renormalizable map $f$ of period $p$.
+We will then relate the Hubbard tree for $F$ to arcs of the kind we studied in Section \ref{sec:canonical},
+and show that it has certain simple dynamical properties. We will then use these properties in Section \ref{sec:entropy} to complete the proof of Theorem \ref{loss-F}.
+
+\subsection{The superstable model} \label{subsec:model}
+\newcommand{\cdd}{{\DD}}
+
+Suppose that $f\from \C\to \C$ is a given by $f(z) = z^2 + c$,
+and $f$ is primitively renormalizable of period $p$ and $\KK\equiv \KK_p$ is the union of small Julia sets of $f$.
+Then $c$ belongs to a \emph{small Mandelbrot set} $M_{c_0}$,
+where $F(z) = z^2 + c_0$ has an superattracting periodic cycle of period $p$.
+We call $F$ the {\it superstable model}  for $f$.
+Let $\OO=\{F^k (0)\}_{k=0}^{p-1}$ be the superattracting cycle of $F$,
+and $\DD$ be the closure of the immediate attracting basin for the superattracting cycle for $F$;
+it is also the union of small Julia sets of the primitively $p$-renormalizable map $F$.
+Then we can write $\DD = \bigcup_{j=0}^{p-1} D_j$,
+where $D_j$ is the component of $\DD$ containing $F^j(0)$.
+We observe that the $D_j$'s are disjoint closed Jordan domains.
+
+The proof of the following lemma is left to the reader;
+it can be proven using the similarity of the Yoccoz puzzles of $f$ and $F$,
+or using Thurston's theorem \cite{DH-Thurston},
+and the collapsing of the $\KK$, as in \cite[Appendix B]{McM}.
+\begin{lemma}
+There is a homeomorphism $h\from \C\sm \cdd \to \C \sm \KK$ that  lifts to 
+$\tilde h \from \C \sm F^{-1} \cdd \to \C \sm f^{-1} \KK$ such that
+$h \sim \tilde h$ on $\C \sm F^{-1} \cdd$. 
+Moreover, 
+$F$ and $h$ (up to isotopy) are characterized by this property.
+\end{lemma}
+We call $h$ a \emph{Thurston equivalence} between $F$ and $f$, because it is essentially the same as the object of the same name described in \cite{DH-Thurston}.
+
+Similarly,
+if $f\from U' \to U$ is a $p$-renormalizable quadratic-like map (with union of small Julia sets $\KK$),
+then we can find a critically periodic $F$ as above and a Thurston equivalence $h\from \C \sm {\DD} \to U \sm \KK$
+(lifting to $\tilde h \from \C \sm F^{-1}  \DD \to U' \sm f^{-1} \KK$ such that
+$h \sim \tilde h$ on $\C \sm F^{-1} \cdd$).
+
+If $\alpha$ is an arc on $U \sm \KK$,
+we can \emph{transfer} $\alpha$  to the arc $h^{-1}(\alpha)$ on $\C \sm \cdd$. 
+We can likewise transfer arc-diagrams and weighted arc-diagrams;
+we observe that all the combinatorial relations studied in Section \ref{sec:canonical}
+are preserved under transfer. 
+
+
+\subsection{The Hubbard tree}
+In the remainder of this section we will work exclusively with the superstable model $F$,
+with the ultimate aim of proving certain combinatorial properties for the dynamics of arcs on $\C \sm \DD$.
+
+Given a set $X\subset K(F)$, the {\it path hull} $\Hull(X)$ of $X$ is defined as the smallest
+path connected closed subset of $K(F)$ containing $X$ such that $\Hull(X) \sm X$ intersects any component
+of $\inter K(F)$ in the union of internal rays.  The {\it Hubbard tree} $H\equiv H_F$
+is defined as the path hull of the basin $\DD$.
+It is invariant under $F$; in fact, $F(H)=H$.
+We observe that $H$ is simply connected, and therefore 
+the closure of every component of $H \sm \cdd$ is an embedded and simply connected 1-complex in $\C \sm \DD$
+that intersects each $D_j$ in at most one point.
+
+If $D$ is a component of $\DD$,
+the \emph{valence} of $D$ (in $H$) is the number of components of $H \sm  \DD$ whose closures intersect $D$. 
+The \emph{cut number} of $D$ is the number of components of $H \sm  D$. 
+We observe that the valence of each $D$ is equal to its cut number.
+
+We close with one lemma:
+\begin{lem}\label{valence}
+The valence of $D_1$ is 1 and the valence of $D_p = D_0$ is 2. 
+The valence of $D_i$ is non-decreasing in $i$ for $i = 1, \ldots, p$. 
+Therefore the valence of any disk $D_j$ of the Hubbard tree is at most~2.
+\end{lem}
+\begin{proof}
+Because $F$ is locally injective at $D_i$, for $0 < i < p$,
+the valence of $D_i$ is at most that of $D_{i+1}$. 
+Similarly the valence of $D_0$ is at most twice that of $D_1$.
+But some $D_i$ has valence 1 because the Hubbard tree is a tree. 
+It follows that $D_1$ has valence 1, and $D_0$ has valence at most 2.
+But some $D_i$ has valence 2, because the Hubbard tree is connected and non-trivial. 
+Therefore $D_p = D_0$ has valence 2.  
+\end{proof}
+
+
+\subsection{Disked trees, aligned arcs, and trees of complete graphs}
+We will now properly define a disked tree, and then define the graph of aligned arcs in a disked tree, and see that it is a tree of complete graphs. 
+
+\begin{defn}
+A \emph{disked tree} $H$ is a connected, locally connected, and simply connected compact subset of $\C$, 
+such that there is a set $\{ D_i \}$ of disjoint closed Jordan domains (with union  $\DD = \bigcup_i D_i$), 
+such that $\DD \subset H$ and $H \setminus \DD$ has finitely many components $H_k$,
+and the closure of each $H_k$ is an embedded finite 1-complex. 
+\end{defn}
+We call the $D_i$'s the \emph{disks} of $H$.
+We observe that the Hubbard tree $H_F$ of our critically periodic $F$ is a disked tree, with disks $\{D_j\}_{j=0}^{p-1}$. 
+
+
+We say that a (proper) injective path in $\C \sm \DD$
+is {\it aligned} with a disked tree $H$
+if it lies in one of the 1-complexes $H_k$.
+We say an arc in $\C \sm \DD$ is aligned with $H$ if it is represented by a path that is aligned with $H$.
+Let $\BH$ stand for the family of the aligned paths/arcs.
+(Since there is a natural one-to-one correspondence between the aligned arcs and
+the aligned paths, we will not distinguish notationally these families).
+We can think of $\BH$ as a graph where the vertices are the $D_i$ and the edges are these aligned arcs. 
+See Figure \ref{fig:variants} for an example.
+\begin{figure}
+\includegraphics{variants.pdf}
+\caption{A: We are given a disked tree. B: We can form the associated tree of complete graphs. C: Any path (of red arcs) between the two hollow disks must include at least one each of the dotted, dashed, and dashed-and-dotted arcs. This illustrates Lemma \ref{lem:into-flags}.}
+\label{fig:variants}
+\end{figure}
+
+For each component $H_k$ of $H$, we let $\partial H_k$ be the set of $D_i$'s on which an endpoint of $H_k$ lies.
+Because $H_k$ is path connected, 
+every pair of $D_i$'s in $\partial H_k$ can be connected by a path lying in $H_k$, 
+and hence in $\BH$. 
+Because $H_k$ is simply connected, 
+there is a unique such path,
+so there is a unique arc in $\BH$ that connects this pair.
+In this way we see that $\BH$ canonically contains a complete graph on $\partial H_k$;
+we also see that it is the union (over all $k$) of these complete graphs.
+
+The simple connectivity of $H$ also implies that for any disk $D$,
+the number of complete graphs (in $\BH$) that $D$ belongs to is equal to the number of components of $\BH - D$, 
+with a natural one-to-one correspondence between them.
+We will call a union of edge-disjoint complete graphs with this property a \emph{tree of complete graphs}, in analogy to a tree, 
+where for each vertex $v$ of the tree, there is exactly one component of the tree minus $v$ for each edge with $v$ as an endpoint.
+
+Just as we can build every tree by starting with graphs consisting of a single edge connecting two vertices and then repeatedly joining disjoint graphs at a vertex (of each),
+we can build every tree of disjoint graphs by starting with a collection of complete graphs and repeatedly joining disjoint graphs at a vertex. 
+
+Suppose $\BG$ is a tree of complete graphs,
+$v$ is a vertex of $\BG$, and $G \subset \BG$ is a complete graph in $G$ that has $v$ as a vertex.
+Then the \emph{flag} $\Flag(v, G)$ is the set of edges of $G$ that have $v$ as an endpoint.
+We observe that if $e$ is an edge of $\BG$ that has $v$ as an endpoint, 
+there is a unique complete graph $G(e)$ of $\BG$ such that $e$ is an edge of $G$.
+So we let $\Flag(v, e)$ be $\Flag(v, G(e))$. 
+
+We then observe the following, which is left as a simple exercise for the reader.
+See Figure \ref{fig:variants} for an illustration.
+\begin{lemma}\label{lem:into-flags}
+Suppose $\BG$ is a tree of complete graphs,
+and $v$ and $w$ are distinct vertices of $\BG$.
+Then there is a unique vertex-injective path in $\BG$ connecting $v$ and $w$.
+Denoting the vertices of this path by $v_0 = v, v_1, \ldots v_n = w$,
+and the edges by $e_0, e_1, \ldots, e_{n-1}$ (so each $e_i$ connects $v_i$ and $v_{i+1}$),
+we find that the flags $\Flag(v_i, e_i)$ are disjoint (for $i = 0,\ldots, n-1$),
+and every path connecting $v$ and $w$ has an edge in each of these flags. 
+\end{lemma}
+
+
+
+
+
+
+\subsection{Lifts of horizontal and vertical arcs}
+For the rest of this section,
+we return to the setting of a superstable quadratic polynomial $F$,
+along with its disked tree $H$ and associated tree of complete graphs $\BH$. 
+As we defined in Section \ref{subsec:hv},
+a horizontal path or arc for $\C \sm \DD$ is one that connects two components of $\DD$,
+and a vertical path or arc connects a component of $\DD$ to $\infty$. 
+If a vertical path connects $D \in \DD$ to $\infty$, we will say that the path \emph{lands} at $D$. 
+
+Suppose $\gamma_0$ and $\gamma_1$ are (by definition proper) paths in $\C \sm \DD$ and $F(\gamma_1) = \gamma_0$.
+We say then that $\gamma_1$ is a \emph{proper lift} of $\gamma_0$.
+If $\alpha_0 = [\gamma_0]$ and $\alpha_1 = [\gamma_1]$ are the associated arcs,
+we say that $\alpha_1$ is a lift (by $F$) of $\alpha_0$. 
+(Another point of view is that $\gamma_0$ has two lifts that are paths in $\C \sm F^{-1}\DD$,
+but we keep only the lifts that have endpoints in  $\DD$.)
+We observe that if $\alpha_0$ is horizontal, it can have only one lift; it may also have no lifts. 
+If $\alpha_0$ is vertical, 
+then it has exactly one lift, 
+unless it lands at $D_1$, 
+in which case it has two. 
+
+
+\subsection{An expanding metric}
+Recall that $\OO = \{ F^i(0)\}_{i = 0}^{p-1}$ is the critical cycle for $F$.
+We let $\rho_F$ be the Poincar\'e metric on $\C \sm \OO$.
+We observe that $F\from \C \sm F^{-1}(\OO) \to \C \sm \OO$ is expanding for this metric,
+and uniformly expanding on compact sets.
+In particular,
+for any bounded set $E$,
+we see that $F$ is uniformly expanding on $E \sm F^{-1} \DD$. 
+If $p$ is a rectifiable path in $\C \sm \OO$,
+we let $|p|$ be the length of $p$ in this metric. 
+
+We can then conclude:
+\begin{lemma} \label{lem:contract-lifts}
+Suppose that $p$ is a rectifiable path in $\C \sm \DD$ with (at least) one endpoint in $\cl\DD$,
+and $q$ is a lift of $p$, in the sense that $F(q) = p$.
+Then 
+\begin{equation}
+|q| \le \lambda |p|,
+\end{equation}
+where $\lambda < 1$ depends only on an upper bound for $|p|$. 
+\end{lemma}
+
+\subsection{No periodic horizontal arcs}
+An arc $\alpha$ is called {\it periodic} if there is a sequence $\alpha_0, \ldots, \alpha_l$ such that $\alpha_l = \alpha_0$,
+and each $\alpha_{i+1}$ is a lift of $\alpha_i$. 
+
+We then have the following. 
+\begin{lem}[see \cite{P}, Theorem 5.8]\label{no inv hor arcs}
+ Periodic horizontal arcs do not exist.
+\end{lem}
+
+\begin{proof}
+For every horizontal arc $\alpha$,
+we let $|\alpha|$ be the infimum of lengths of paths representing $\alpha$,
+(with respect to the Poincar\'e metric on $\C\sm \OO$).
+It follows from Lemma \ref{lem:contract-lifts}
+that if $\alpha'$ is a lift of $\alpha$,
+then $|\alpha'| < |\alpha|$. 
+Then given a cycle $\alpha_0, \ldots, \alpha_l = \alpha_0$ of lifts, 
+we have an obvious contradiction. 
+\end{proof}
+
+\subsection{Trees $H^l$ and the associated objects.}\label{H-l}
+For any  $l\in \N$, we can define the following objects:
+\begin{itemize}
+\item
+  $\DD^l= F^{-l}(\DD)$;
+\item
+$H^l=F^{-l}(H)$, a disked tree whose disks are the components of $\DD^l$;
+\item
+$\BH^l$, the tree of complete graphs formed by the paths (or arcs) aligned with $H^l$. 
+\end{itemize}
+We observe that $H^{l+k} = F^{k*}H^l$ and $\BH^{l+k} = F^{k*}\BH^l$ for all $k, l \in \N$.
+We also observe that every path $\gamma$ in $\BH^l$ is a uniquely determined concatenation of paths $(\gamma_i)$ in $\BH^{k+l}$,
+in the sense that the intersection of $\gamma$ with $\C - \DD^{l +k}$ is the union of the (mutually disjoint) $\gamma_i$'s. 
+
+Finally,
+we observe that every complete graph in $\BH^l$ maps bijectively (by $F^l$) to a complete graph in $\BH$, and hence every flag $\Flag(v, e)$ in $\BH^l$ maps bijectively to $\Flag(F^l(v), F^l(e))$, a flag in $\BH$. 
+
+\subsection{Expansion property}
+  Let us consider a $|\BH| \times |\BH| $ matrix $M=M(F)$ defined as follows:
+$M_{\gamma\de}=n$ if $\gamma$ contains $n$ disjoint segments $\gamma_i\in F^{-1}\BH$
+such that  $F\gamma_i=\de$. One can easily check that, 
+applying the same construction to the map $F^k$,
+we obtain the matrix $M^k$.
+
+\begin{lem}\label{expansion}
+   For any $\gamma\in \BH$, we have $\displaystyle{\sum_\de M^p_{\gamma\de}\geq 2}$.
+\end{lem}
+
+\begin{proof}
+If not,
+then $\gamma$ (thought of as a path) would intersect no disk in $\DD^p$. 
+This would imply that $F^p$, 
+which maps each component of $\DD$ to itself,
+maps $\gamma$ injectively to the unique path in $\BH$ that connects the endpoints of $\gamma$.
+This would contradict Lemma \ref{no inv hor arcs}.
+\end{proof}
+
+We have the following two immediate corollaries:
+\begin{cor}
+   For any $\gamma\in \BH$, we have $\displaystyle{\sum_\de M^{pl}_{\gamma\de}\geq 2^l}$.
+
+\end{cor}
+
+\begin{cor} \label{cor:shortest-lp}
+The shortest path in $\BH^{pl}$ connecting the endpoints of an arc in $\BH$ has length at least $2^l$. 
+\end{cor}
+
+
+\subsection{Lifting vertical arcs}
+
+Let $\BH^\perp$ be the arc diagram consisting  of vertical  arcs in $\C\sm \DD$
+that do not intersect the Hubbard tree $H$ (up to homotopy).
+We observe that a horizontal arc on $\C \sm \DD$ lies in $\BH$ if and only if it does not intersect $\BH^\perp$. 
+
+For any vertical arc $\beta$, 
+we let $F^*\beta$ denote the set of lifts of $\beta$. 
+Likewise for any nonempty set $\boldsymbol{\beta}$ of disjoint vertical arcs,
+we let $F^*\boldsymbol{\beta}$ be the union of $F^*\beta$ over all $\beta \in \boldsymbol{\beta}$. 
+We observe that $F^*\boldsymbol{\beta}$ will also be a nonempty set of disjoint vertical arcs. 
+We observe that $F^*\BH^\perp = \BH^\perp$. 
+We let $F^{l*}(\beta)$ be the result of $l$ iterations of $F^*$.
+
+We will prove the following in this subsection. 
+\begin{lemma} \label{lem:pull-to-get-Hperp}
+For any vertical arc $\beta$, we have 
+$$
+\BH^\perp \subset \bigcup_{l \in \N} F^{*l}\beta. 
+$$
+\end{lemma}
+
+Let us first define $|\beta|$ for any vertical arc $\beta$.
+For any vertical path $b$,
+we let $\underline b$ be the portion of $b$ from where it leaves from $\DD$ to the last place it intersects the actual Hubbard tree $H_F$. 
+Then $\underline b$ is a bounded segment. 
+We let $|\beta|$ be the infimum\footnote{This is finite by Lemma \ref{lem:un-wild}.}
+of $|\underline b|$ over all representatives $b$ for $\beta$ (in $\C \sm \DD$).
+We then observe the following.
+\begin{enumerate}
+\item
+$|\beta|  = 0$ if and only if $\beta \in \BH^\perp$.
+\item \label{it:contract}
+If $\beta'$ is a lift of $\beta$, then $|\beta'| \le \lambda |\beta|$ for $\lambda < 1$ depending only on an upper bound for $|\beta|$.
+\item \label{it:eta}
+There is an $\eta > 0$ such that if $|\beta| < \eta$, then $\beta \in \BH^\perp$.
+\end{enumerate}
+
+We can now take our first step towards Lemma \ref{lem:pull-to-get-Hperp}. 
+\begin{lem}\label{lem:eventually-H-perp}
+For any vertical arc $\beta$ there exists an $n$ such that $F^{n*}\beta \subset \BH^\perp$. 
+\end{lem}
+
+\begin{proof}[Proof of Lemma \ref{lem:eventually-H-perp}]
+Given $\beta$
+take $\lambda = \lambda(|\beta|) < 1$ satisfying Property \ref{it:contract} above, and
+let $n$ be the least integer greater than $\log_\lambda(\eta/|\beta|)$, where $\eta$ is given by Property \ref{it:eta}. 
+
+Then if $\beta_0 = \beta, \beta_1, \ldots, \beta_n$ is a sequence of vertical arcs such that each $\beta_{i+1}$ is a lift of $\beta_i$,
+we have $|\beta_n| \le \lambda^n |\beta| < \eta$, and hence $\beta_n \in \BH^\perp$. 
+\end{proof}
+
+We also observe
+\begin{lemma} \label{lem:vert-to-vert}
+If $\beta \in \BH^\perp$,
+then $\bigcup_{k < 2p} F^{k*}\beta \supset \BH^\perp$.
+\end{lemma}
+
+\newcommand{\bhp}{\BH^\perp}
+\begin{proof}
+For each $k \in 0, \ldots, p-1, p$,
+we let $\bhp_k$ be the vertical arcs in $\bhp$ that land on $D_k$ (with $D_p = D_0$).
+We observe that $F^*\bhp_k = \bhp_{k-1}$ (for $k >0$),
+that $|\bhp_k|$ is either 1 or 2 for each $k$, 
+and that $|\bhp_k|$ is increasing in $k$ for $k \in [1, p]$,
+and therefore $|\bhp_0| = 2$ and $|\bhp_1| = 1$.
+
+Let $m < p$ be such that $\beta \in \bhp_m$.
+We then have $F^{(m-1)*}\beta \subset \bhp_1$, 
+and hence $F^{(m-1)*}\beta = \bhp_1$,
+and therefore $F^{m*}\beta = \bhp_0= \bhp_p$, 
+and $F^{m+p - k}\beta = \bhp_k$. 
+\end{proof}
+
+Putting together Lemmas \ref{lem:eventually-H-perp} and \ref{lem:vert-to-vert}, we immediately obtain Lemma \ref{lem:pull-to-get-Hperp}.
+
+
+
+
+

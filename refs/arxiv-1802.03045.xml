@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/pena583lbxukb4ZzQBi72+XdLiE</id>
+  <title>arXiv Query: search_query=&amp;id_list=1802.03045&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:44Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1802.03045" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1802.03045v2</id>
+    <title>Algorithmic aspects of branched coverings III/V. Erasing maps, orbispaces, and the Birman exact sequence</title>
+    <updated>2018-02-13T06:40:11Z</updated>
+    <link href="https://arxiv.org/abs/1802.03045v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1802.03045v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Let $\tilde f\colon(S^2,\tilde A)\to(S^2,\tilde A)$ be a Thurston map and let $M(\tilde f)$ be its mapping class biset: isotopy classes rel $\tilde A$ of maps obtained by pre- and post-composing $\tilde f$ by the mapping class group of $(S^2,\tilde A)$. Let $A\subseteq\tilde A$ be an $\tilde f$-invariant subset, and let $f\colon(S^2,A)\to(S^2,A)$ be the induced map. We give an analogue of the Birman short exact sequence: just as the mapping class group $\mathrm{Mod}(S^2,\tilde A)$ is an iterated extension of $\mathrm{Mod}(S^2,A)$ by fundamental groups of punctured spheres, $M(\tilde f)$ is an iterated extension of $M(f)$ by the dynamical biset of $f$.
+  Thurston equivalence of Thurston maps classically reduces to a conjugacy problem in mapping class bisets. Our short exact sequence of mapping class bisets allows us to reduce in polynomial time the conjugacy problem in $M(\tilde f)$ to that in $M(f)$. In case $\tilde f$ is geometric (either expanding or doubly covered by a hyperbolic torus endomorphism) we show that the dynamical biset $B(f)$ together with a "portrait of bisets" induced by $\tilde A$ is a complete conjugacy invariant of $\tilde f$.
+  Along the way, we give a complete description of bisets of $(2,2,2,2)$-maps as a crossed product of bisets of torus endomorphisms by the cyclic group of order $2$, and we show that non-cyclic orbisphere bisets have no automorphism.
+  We finally give explicit, efficient algorithms that solve the conjugacy and centralizer problems for bisets of expanding or torus maps.</summary>
+    <category term="math.GR" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2018-02-08T20:54:43Z</published>
+    <arxiv:comment>v2 fixes some broken references</arxiv:comment>
+    <arxiv:primary_category term="math.GR"/>
+    <author>
+      <name>Laurent Bartholdi</name>
+    </author>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+  </entry>
+</feed>

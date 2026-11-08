@@ -1,0 +1,172 @@
+
+\section{Pull-off Argument: bounded combinatorics}
+
+
+Below $f: U'\ra U$ is a renormalizable $\psi$-quadratic like map, and
+ $p$ is  its renormalization period. 
+Let $U^n$ stands for the range of $f^n$ 
+ (so $U^n= f^{-(n-1)}(U)$ in the genuine quadratic-like case). 
+Let $\AAA$ be the canonical WAD on $U\sm \KK$ 
+and $\AAA^n$ be the one on $U^n\sm \KK$. 
+
+\subsection{Fast pull-off}
+
+\begin{lem}\label{sym vert arcs} 
+% Let $\AAA$ be an invariant horizontal arc diagram. 
+There exists a pair of symmetric vertical arcs in $U^p\sm f^{-1}\KK$ landing on $K_0$
+that do not cross $\AAA^p$. 
+Moreover, $f(\gamma^\pm)$ does not cross $\AAA^{p-1}$.  
+\end{lem}
+
+\begin{proof}
+
+  There exists a vertical arc $\gamma_m$ in $U\sm \KK$  with some $0< m\leq p$ landing on $K_m$
+that does not cross $\AAA$.
+To see it, realize $\AAA$ as a planar graph, %  with vertices $K_i$ and $\bC \sm U$,
+go from $\di U$ down to a small neighborhood of some arc $\alpha\in \AAA$,  
+and then follow this arc in an appropriate direction until you land on some $K_m$. 
+
+Pulling $\gamma_m$  back by $f^m$,
+we obtain a  pair of symmetric vertical  arcs $\gamma^\pm$
+in $U^m \sm \KK$ landing on $K_0$,
+They do not cross  $\AAA^m$ since $f^*(\AAA)$ domaintes $\AAA$. 
+ Restricting the domain  $U^m$ further to $U^p$, we obtain the desired pair of arcs. 
+  
+\end{proof}
+
+
+\begin{lem}\label{in p steps}
+Let $\alpha\in \AAA^p$ be a horizontal arc. 
+Then it pulls off in less than $p$ iterated pullbacks. 
+\end{lem}
+
+\begin{proof}
+  If $\alpha\in \AAA$ is a horizontal arc and $f^* \alpha$ is a legitimate pullback (i.e., with both ends landing on $\KK$)
+if exists, then $f^\#\alpha:= i_* (f^*\alpha)\in \AAA$, where 
+$$
+    i: U'\sm f^{-1}(\KK) \ra U\sm \KK
+$$
+is the natural immersion. 
+Indeed,  letting $\beta=f^* \alpha$, we have $ \WW(\beta) = \WW(\alpha) $  
+since the covering 
+$$
+   f:  U' \sm f^{-1}(\KK) \ra U \sm \KK 
+$$
+induces an isomorphism between  the corresponding rectangles on the universal covering spaces. 
+Furthermore, $\WW(i_* \beta)\geq  \WW(\beta)$ since the immersion $i$ induces an immersion between
+the corresponding rectangles (on the universal covering space)
+ that homeomorphically maps the horizontal sides of one to the
+horizontal sides of the other. Thus, if $\WW(\alpha) > 2$ then $\WW(f^\# \alpha) >2$,
+which characterizes the canonical arcs. 
+
+Of course, the same applies to $\AAA^p$ instead of $\AAA$.  
+
+% Let $f^\#(\alpha) = i_*\circ f^*(\alpha) $ whenever $f^*\alpha$ is a legitimate pullback. 
+Assume first we have a string of $3p$ legitimate pullbacks  $\alpha_m= (f^\#)^m \alpha$. 
+Since $\AAA$ contains at most $3p-1$ arcs, two of these arcs are equal: $\alpha_m= \alpha_{m+n}$, $n>0$.
+Then $\alpha_m =  (f^\#)^n \alpha_m$, which is impossible by Pilgrim's Lemma.   
+
+So $\alpha$ must get pulled off in less than $3p$ steps. Assume now it pulls off in more than $p-1$ steps. 
+Let $\alpha_m$, $m\geq p$,   be the last legitimate arc, and  let it land on $K_{i+1}$ and $K_{j+1}$. 
+Then one of the arcs $f^* \alpha_m$ lands on $K_i$ \& $K_j'$ (and the other lands on  $K_j$ \& $K_i'$). 
+Since $\alpha_m$ does not cross $f(\gamma^\pm)$, $f^*\alpha_m$ does not cross $\gamma^\pm$. 
+Hence $K_i$ and $K_j'$ lie on the same side of $\Gamma:= \gamma^+\cup K_0\cup \gamma^-$,
+and thus $K_i$ and $K_j$ lie on the opposite sides of it.  
+
+But the arc $\alpha_{m-p}$ shares  the endpoints  with  $\alpha_m$, 
+hence $\alpha_{m-p+1}$ (being legitimate) lands on $K_i$ and $K_j$. 
+Hence it must cross $\Gamma$ -- contradiction.    
+\end{proof}
+
+\subsection{Newborn vertical weight}
+
+
+\begin{lem}\label{def vert}
+For any $p$, if $\WW_\loc$ is sufficiently big then 
+the amount of newborn vertical weight in $U^{p+1}\sm \KK$ is at least 4\% of $\WW(K_1)$. 
+\end{lem}
+
+\begin{proof}
+  Let $\WW_i=\WW(K_i)$ be the local weight around $K_i$ in $U^p\sm \KK$.
+Each of these is  essentially localized on the CAD (up to an additive constant depending on $p$),
+as long as $\WW_\loc$ is sufficiently big. 
+
+Let $\nu$ be the total weight in $U^p\sm \KK$ of the horizontal arcs that are pulled off under $f^*$
+(i.e., both their lifts are illegitimate).
+By Lemma \ref{in p steps},  any horizontal arc $\alpha$ in $U^p$  landing on $K_0$ is pulled off in less than $p$ steps.
+Let $\beta(\alpha) = (f^\#)^m \alpha$ be the last legitimate pullback of $\alpha$, $m<p-1$.
+%considered as an arc in  $U^{p+m})\sm f^{-m}(\KK)$, 
+%and let $\beta(\alpha)= i_* (f^m)^*\alpha$, where $i:  U^{p+m} \sm f^{-m} \KK \ra U^p\sm \KK$ is the natural immersion. 
+%Then $\WW(\beta) \geq \WW(\alpha)$.  
+%Indeed,  $ \WW(\alpha_m) = \WW(\alpha) $  
+%since the covering 
+% $$
+%   f^m:  U^{p+m}\sm f^{-m}(\KK) \ra U^p\sm \KK 
+%$$
+% induces an isomorphism between  the corresponding rectangles on the universal covering spaces. 
+% Furthermore, $\WW(\alpha_m)\leq \WW(\beta)$ since the immersion $i$ induces an immersion between
+% the corresponding rectangles that homeomorphically maps the horizontal sides of one to the
+% horizontal sides of the other.  
+
+The correspondence  $\alpha\mapsto \beta$ is at most  two-to-one.
+Indeed, if $\beta(\alpha)= \beta(\alpha')$ then $\alpha$ lands on $K_0$ and $K_l$ with some $l>0$,
+while $\alpha'$ lands on $K_0$ and $K_{-l}$, and $(f^\#)^l \alpha =\alpha'$ (up to re-labeling the arcs).  
+Hence we have:
+$$
+    \nu \geq \sum \beta(\alpha) \geq  \frac 12 \sum \alpha = \frac 12 \WW_0   -  O(1).    
+$$
+The total pulled-off weight available for composing new horizontal arcs on $U^{p+1}$   is $2 \nu + \WW_1$,
+hence the new horizontal weight is bounded by  
+$ (2\nu + W_1) /  4 $. 
+%Since we have lost  $\nu$  of the old horizontal weightgot lost,
+So, by restricting $U^p$ to $U^{p+1}$, we have lost at least
+\begin{equation}\label{hor loss}
+  \nu -  \frac 14 (2\nu + \WW_1)  = \frac 12 \nu - \frac 14 \WW_1 \geq \frac 14 (\WW_0 - \WW_1) - O(1)
+\end{equation}
+of the horizontal weight. This creates as much of the vertical weight in $U^{p+1}\sm \KK$.  
+If $\WW_0-\WW_1> \WW_1/5$, the last estimate implies the desired.
+
+ Otherwise, we can use a rougher bound for the newborn  horizontal weight:
+$$
+     (\WW_0-\WW_1) + \frac 12 \nu \leq \frac 15 \WW_1 + \frac 12 \nu,
+$$  
+so the horizontal loss is at least
+$$
+  \nu-  (\frac 15 \WW_1 + \frac 12 \nu) = \frac 12 \nu - \frac 15 \WW_1 \geq \frac 14 \WW_1 -  \frac 15 \WW_1, 
+$$
+and we are done. 
+\end{proof}
+
+\begin{cor}\label{lots of vert}
+For any $p$, if $\WW_\loc$ is sufficiently big then 
+there is a definite  vertical weight in $U^{2p}\sm \KK$ (independently of $p$).
+\end{cor}
+
+\begin{proof}
+  We can assume that the total horizontal weight in $U\sm \KK$ is of order $p\WW_\loc\sim \WW(\AAA)$
+  (for otherwise there is nothing to prove). By the previous lemma
+  (or rather, its proof) \note{need this?}  
+by restricting  $U^{p+n}$ to $U^{p+n+1}$ we loose at least $c/p$-th part of the horizontal weight
+(as long as it stays definite),
+with an absolute $c$ (``4\%''). Hence by  $p$ restrictions we loose
+at least $c/2$-th part \note{OK?}
+of the total horizontal weight, thus creating as much of the vertical weight. 
+\end{proof}
+
+\comm{****
+\subsection{Localization}
+
+ We will now show that a definite (in scale of  $\WW_\loc$) newborn vertical weight is localized
+at bounded number of little Julia sets.
+
+Let us say that an arc $\alpha\in \AAA$ is {\it light } if $\WW(\alpha)< \xi\, \WW_1  (= 0.1\% \, \WW_1$); otherwise it is {\it heavy}. 
+Since $\AAA$ is supported on a planar graph, there exist some vertex $K_s$ of valence $\leq 6$.
+Light arcs at this vertex can weigh at most $5\xi \WW_s\hor+10 $.  If we pull the heavy  arcs around,
+they get pulled off in at most $p$ iterates. Similarly to  (\ref{hor loss}),  
+in this process we loose te least
+$$
+   \frac 14  ( (1-5\xi)\,  \WW_s  - \WW_1) - O(1)
+$$
+of  the horizontal weight. Moreover, this weight is localized at $\leq 6$ places. So, {\it  we win as long as $\WW_s$ is
+definitely  bigger than $\WW_1$.}  
+*****}

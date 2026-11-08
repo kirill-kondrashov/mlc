@@ -1,0 +1,227 @@
+\chapter{Audit of the frozen puzzle and modulus models}
+\label{chap:frozen-audit}
+
+The purpose of a formal proof is to check a mathematical statement with
+its intended definitions.  Checking an implication and identifying it
+with a named theorem are separate obligations.  This chapter makes the
+distinction concrete for the inherited puzzle layer.  The obstruction
+below is proved in Lean; the dependency itself is left pinned and
+unchanged so that the audit remains reproducible.
+
+\section{Two different quantities called modulus}
+
+The classical conformal modulus of the round annulus
+\[
+ A(r,R)=\{z:r<|z|<R\},\qquad 0<r<R,
+\]
+is
+\[
+ \modulus A(r,R)=\frac{1}{2\pi}\log\frac Rr.
+\]
+It is invariant under conformal isomorphisms, in particular under a
+simultaneous rescaling of $r$ and $R$.
+
+In the pinned Yoccoz dependency, however, the declarations
+\lean{MLC.Quadratic.weight} and \lean{MLC.Quadratic.modulus} are
+\[
+ w(z)=e^{-|z|^2},\qquad
+ \weightedarea(A)=\int_A e^{-|z|^2}\,dA(z).
+\]
+The defining file is
+\lean{Yoccoz/Quadratic/Complex/Groetzsch.lean} at the revision recorded
+in \lean{lake-manifest.json}.  Its own comment describes the quantity
+as a proxy.  The formalization must preserve that qualification.
+
+Weighted area is additive on disjoint measurable sets and is bounded by
+the finite integral over $\C$.  It is not conformally invariant: moving
+a fixed disk far from the origin makes its weighted area tend to zero.
+Consequently, a finite-union identity for this quantity does not prove a
+classical conformal-modulus identity.
+
+\begin{proposition}[A round-annulus comparison]
+For $A_n=A(2^{-(n+1)},2^{-n})$,
+\[
+ \modulus(A_n)=\frac{\log2}{2\pi},
+\]
+whereas
+\[
+ \weightedarea(A_n)
+ =\pi\left(e^{-4^{-(n+1)}}-e^{-4^{-n}}\right).
+\]
+Thus the conformal-modulus series diverges and the weighted-area series
+converges.
+\end{proposition}
+
+\begin{proof}
+The conformal formula follows from the ratio of the radii.
+Polar coordinates give
+\[
+ \weightedarea(A(r,R))
+ =2\pi\int_r^R e^{-t^2}t\,dt
+ =\pi(e^{-r^2}-e^{-R^2}).
+\]
+The displayed weighted-area series telescopes to
+$\pi(1-e^{-1})$.  Its convergence is compatible with the singleton
+intersection of the nested closed disks.
+\end{proof}
+
+This example shows that even the simplest classical shrinking mechanism
+cannot be recovered by replacing conformal modulus with the present
+weighted area.
+
+\section{A universal summability obstruction}
+
+\begin{theorem}[Weighted areas of nested differences]
+\label{thm:weighted-summability}
+Let $(P_n)$ be any nested sequence of measurable subsets of $\C$.
+Then
+\[
+ \sum_{n\ge0}\weightedarea(P_n\setminus P_{n+1})<\infty.
+\]
+Neither connectedness nor a hypothesis on the intersection is needed.
+\end{theorem}
+
+\begin{proof}
+The sets $A_n=P_n\setminus P_{n+1}$ are pairwise disjoint.
+Indeed, if $i<j$, then $P_j\subseteq P_{i+1}$, so a point of $A_j$
+cannot lie in $A_i$.  Finite additivity and nonnegativity give
+\[
+ 0\le\sum_{n<N}\weightedarea(A_n)
+   =\weightedarea\left(\bigcup_{n<N}A_n\right)
+   \le\weightedarea(\C)<\infty.
+\]
+The nonnegative partial sums are bounded, so the series converges.
+\end{proof}
+
+\paragraph{Lean correspondence.}
+The bound and summability theorem are
+\leanref{Mlc/Literature/ModelAudit.lean}{weightedArea_le_total} and
+\leanref{Mlc/Literature/ModelAudit.lean}{summable_weightedArea_differences}.
+The proof uses the dependency's actual integral definition and its
+integrability theorem.  It introduces no conformal-modulus axiom.
+
+The frozen pieces are
+\[
+ P_n^{\rm fr}(c)=
+ \operatorname{Comp}_0\{z:G_c(z)<2^{-n}\}.
+\]
+They are components of full Green sublevels, with no landing-ray graph
+removed.  They are open and nested.  Hence
+Theorem~\ref{thm:weighted-summability} applies to their differences for
+every parameter, including parameters outside $\M$.
+
+\begin{corollary}[The legacy finite class is empty]
+\label{cor:empty-frozen-class}
+For every $c\in\C$, the series
+\[
+ \sum_n\weightedarea
+       (P_n^{\rm fr}(c)\setminus P_{n+1}^{\rm fr}(c))
+\]
+is summable.  Consequently the predicate currently named
+\lean{MLC.FinitelyRenormalizable} is false for every $c$.
+\end{corollary}
+
+\begin{proof}
+The first assertion is the preceding theorem.  The second follows by
+unfolding the definitions: \lean{FinitelyRenormalizable} abbreviates
+\lean{NonRenormalizable}, and the latter is precisely the negation
+of summability of this weighted-area sequence.
+\end{proof}
+
+\begin{samepage}
+The exact declarations are
+\begin{center}\small
+\leanref{Mlc/Literature/ModelAudit.lean}{frozen_puzzle_modulus_summable}\\
+\leanref{Mlc/Literature/ModelAudit.lean}{not_finitelyRenormalizable_in_frozenModel}.
+\end{center}
+\end{samepage}
+Thus the implication named \lean{yoccoz_puzzle_shrinkage} is valid
+as a Lean proposition, but its premise has no witnesses.  The same is
+true of family statements indexed by this legacy predicate.  A
+successful axiom audit alone would not reveal this semantic problem.
+
+\section{The principal-nest certificate is also obstructed}
+
+Taking a monotone subsequence $P_{d_n}^{\rm fr}(c)$ gives another
+nested measurable family.  Its successive differences therefore have
+summable weighted areas, independently of how the depths were selected.
+
+\begin{corollary}[No positive uniform proxy bound]
+\label{cor:no-frozen-certificate}
+There is no $\mu>0$ uniformly bounded above by all the weighted areas
+of the frozen puzzle annuli.  The analogous lower-bound field of
+\lean{SatelliteAPrioriCertificate} also has no instances.
+\end{corollary}
+
+\begin{proof}
+A summable real sequence tends to zero, which excludes a fixed positive
+lower bound.  Apply this first to all consecutive depths and then to the
+monotone depths of the proposed satellite tower.
+\end{proof}
+
+The formal statements are
+\lean{no_uniform_lower_bound_frozen_puzzleAnnuli},
+\lean{frozen_principalNest_modulus_summable}, and
+\leanref{Mlc/Literature/ModelAudit.lean}{not_nonempty_satelliteAPrioriCertificate}.
+This is a refuted input with the present definitions.  It cannot be
+listed merely as an estimate that might later be supplied by a
+published a priori-bound theorem.
+
+\section{Other names that require a semantic audit}
+
+The legacy declarations retain their names for compatibility with the
+current root-facing code.  Their mathematical meanings are:
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}P{0.38\textwidth}Y@{}}
+\textbf{Declaration} & \textbf{Actual content}\\
+\hline
+\lean{PrimitiveRenormalizable} &
+The pointwise connected-neighbourhood conclusion itself, quantified
+over membership in $\M$; no primitive polynomial-like restriction is
+constructed.\\
+\lean{FinitelyRenormalizable} &
+Nonsummability of frozen Gaussian annulus areas; the predicate is empty.\\
+\lean{InfinitelyRenormalizable} &
+Summability of the same sequence, so its field is satisfiable for every
+parameter; it does not classify genuine infinite renormalization.\\
+\lean{ParaPuzzlePieceAt} &
+A translation of a dynamical Green-sublevel component, rather than a
+parameter cell defined by moving landing rays.\\
+\lean{cumulativeDepth} &
+An additive indexing sum; original return periods instead multiply.\\
+\end{tabularx}
+\end{center}
+
+These observations concern the formal models.  They do not refute
+Yoccoz's, Lyubich's, or Dudko--Lyubich's results.
+The generic \lean{ParameterPuzzleBasis} and
+\lean{LiteratureMLCData} interfaces avoid prescribing the frozen sets,
+so their topological endpoint theorems remain useful.  They still need
+constructors from the actual source hypotheses.
+
+\section{What remains sound, and what must be replaced}
+
+The escape-radius identities, compact outer approximation, component
+intersection theorem, uniform-buffer implication, and continuous
+retraction theorem use their stated orbit and topological definitions.
+Their proofs do not turn Gaussian area into conformal modulus.
+Likewise, categorical image/intersection identities express genuine
+topological facts.  These remain available as endpoints for future
+analytic constructions.
+
+\begin{formalobligation}[A genuine conformal puzzle layer]
+Introduce ring domains with their boundary markings and conformal modulus;
+prove its invariance, the serial Grötzsch inequality, and the shrinking
+criterion.  Construct landing-ray graph cuts and their pullback puzzle
+domains.  Define finite and infinite renormalization by marked
+polynomial-like restrictions, and prove the geometric estimates from
+those definitions.  Finally realize the associated parameter pieces and
+apply Theorem~\ref{thm:parameter-shrinking}.
+\end{formalobligation}
+
+The analytic chapter states the classical objects and results with these
+meanings.  The conditional theorem matrix records which current Lean
+arrows are model-independent and which have refuted frozen premises.
+This keeps a readable mathematical narrative while exposing the exact
+distance between the existing code and the published literature.

@@ -1,0 +1,902 @@
+\input header
+\input ras
+\def\rot{{\rm rot}}
+\def\Rot{{\rm Rot}}
+
+\footline={\hss\tenrm 12-\folio\hss}\pageno=1
+
+\centerline{\bf STRUCTURE OF THE FATOU SET}\bigskip
+
+\centerline{\bf \S12. Herman Rings.}\medskip
+
+The next two sections will be surveys only, with no proofs for several
+major statements. This section
+will describe a close relative of the Siegel disk.\smallskip
+
+{\bf Definition.} A component \[U\] of the Fatou set \[\hat\C\ssm J(f)\] is
+called a
+{\bit Herman ring} if \[U\] is conformally isomorphic to some annulus
+\[{\cal A}_r=\{z:1<|z|<r\}\], and if \[f\] (or some itterate of \[f\])
+corresponds to an irrational rotation of this annulus.
+
+{\bf Remark.} These objects are sometimes called
+``Arnold-Herman rings'', since the existence of some examples would follow 
+easily from Arnold's work in 1965.
+Siegel disks and Herman rings are often collectively called
+``{\bit rotation domains}''.
+
+There are two known methods for constructing Herman rings. The original
+method, due to Herman, is based on a careful analysis of real analytic
+diffeomorphisms of the circle, as first studied by Arnold. An alternative
+method, due to Shishikura, uses quasiconformal
+surgery to cut and paste together two Siegel disks in order to fabricate
+such a ring.
+
+The original method can be outlined as follows. (Compare [S1], [He1].)
+First a
+number of definitions. If \[f:\R/\Z\to \R/\Z\] is an orientation
+preserving homeomorphism, then we can lift to a homeomorphism \[F:\R\to\R\]
+which satisfies the identity \[F(t+1)=F(t)+1\], and
+is uniquely defined up to addition of an integer constant.\smallskip
+
+{\bf Definition.} Following Poincar\'e, the {\bit rotation number}
+of the lifted map \[F\] is defined to be the real number
+$$	\Rot(F)\;=\;\lim_{n\to\infty}\; {F^{\circ n}(t_0)\over n}	$$
+for any constant \[t_0\],
+while the rotation number \[\;\rot(f)\in\R/\Z\;\] of the circle map \[f\]
+is the residue class of \[\Rot(F)\] modulo 1.\smallskip
+
+It is well known that this construction is well defined, and invariant
+under orientation preserving topological conjugacy, and that it has
+the following properties. (Compare Coddington and Levinson, or de Melo.)
+
+{\QP{\bf 12.1. Lemma.} {\it The homeomorphism \[f\]
+has a periodic point with period \[q\] if and only if its rotation number
+is rational with denominator \[q\].}\smallskip}
+
+{\QP{\bf 12.2. Denjoy's Theorem.} {\it If \[f\] is smooth of class \[C^2\],
+and if the rotation number \[\rho=\rot(f)\]
+is irrational, then \[f\] is topologically conjugate to the rotation
+\[t\;\mapsto\; t+\rho\;\;(\mod 1)\].}\smallskip}
+
+{\QP{\bf 12.3. Lemma.} {\it Consider a one-parameter family of lifted
+maps of the form
+$$	F_\alpha(t)\;=\;F_0(t)+\alpha\,.	$$
+Then the rotation number \[\Rot(F_\alpha)\] increases
+continuously and monotonically with \[\alpha\], increasing by \[+1\] as
+\[\alpha\] increases by \[+1\,.\;\;(\]However, this dependence is not strictly
+monotone. Rather, there is an interval of constancy corresponding to each
+rational value of \[\Rot(F_\alpha)\,.\,)\]}\medskip}
+\eject
+
+In the real analytic case, Denjoy's Theorem has an analog which
+can be stated as follows. Recall from \S8 that a real number \[\xi\]
+is said to be {\bit Diophantine\/} if there exist a (large) number \[n\]
+and a (small) number \[\epsilon\] so that the distance of \[\xi\] from
+every rational number \[p/q\] satisfies \[|\xi-p/q|>
+\epsilon/q^n\]. The following
+was proved in a local version by Arnold, and
+sharpened first by Herman and then by Yoccoz.
+
+{\QP{\bf 12.4. Herman-Yoccoz Theorem.} \it If \[f\] is a real analytic
+diffeomorphism of \[\R/\Z\] and if the rotation number \[\rho\] is
+Diophantine, then \[f\] is real analytically conjugate
+to the rotation \[\;t\;\mapsto\; t+\rho\;\;(\mod 1)\].\medskip}
+
+I will not attempt to give a proof. (In the \[C^\infty\] case, Herman
+and Yoccoz prove a\break corresponding
+if and only if statement: {\it Every \[C^\infty\] diffeomorphism
+with rotation number \[\rho\] is
+\[C^\infty$-conjugate to a rotation if and only if \[\rho\] is
+Diophantine.}) % However, as far as I know,
+%no such sharp result is known in the real analytic case.
+\smallskip
+
+Next we will need the concept of a {\bit Blaschke product}. (Compare Problems
+1-2 and 5-1.) Given any constant \[a\in\hat\C\]
+with \[|a|\ne 1\], it is not difficult to show that there is one and only
+one fractional linear transformation \[z\mapsto\beta_a(z)\] which maps the
+unit circle \[\partial D\] onto itself fixing the base point \[z=1\],
+and which maps \[a\] to \[\beta_a(a)=0\]. For example \[\beta_0(z)=z\],
+\[\beta_\infty(z)=1/z\], and in general
+$$	\beta_a(z)\;=\; {1-\bar a\over 1-a}\cdot{z-a\over 1-\bar a z}	$$
+whenever \[a\ne\infty\].
+If \[|a|<1\], then \[\beta_a\] preserves
+orientation on the circle, and maps the unit disk into itself. On the other
+hand, if \[|a|>1\], then \[\beta_a\] reverses orientation on \[\partial D\]
+and maps \[D\] to its complement.
+
+{\QP{\bf 12.5. Lemma.} \it A rational map of degree \[d\]
+carries the unit circle into itself if and only if it
+can be written as a {\bit ``Blaschke product''}
+$$	f(z)\;=\;e^{2\pi it}\beta_{a_1}(z)\cdots\beta_{a_d}(z)	\eqno (*) $$
+for some constants \[e^{2\pi it}\in\partial D\] and \[a_1\,,\,\ldots\,,\,a_d
+\in\hat\C\ssm \partial D\].\medskip}
+
+Here the \[a_i\] must satisfy the conditions that \[a_j\bar a_k\ne 1\]
+for all \[j\] and \[k\]. For if \[a\bar b=1\], then a brief computation shows
+that \[\beta_a(z)\beta_b(z)\equiv 1\]. Evidently the expression in 12.5 is
+unique, since the constants \[\;e^{2\pi it}=f(1)\;\] and \[\;\{a_1\,,\,\ldots
+\,,\,a_d\}\,=\,f^{-1}(0)\;\] are uniquely determined by \[f\]. The proof of
+12.5 is not difficult: Given \[f\], one simply chooses any solution to the
+equation \[f(a)=0\], then divides \[f(z)\] by \[\beta_a(z)\] to obtain
+a rational map of lower degree, and continues inductively.\QED
+
+Such a Blaschke product carries the unit disk into itself if
+and only if all of the \[a_j\] satisfy \[|a_j|<1\]. (Compare Problems 5-1,
+12-3.) However, we will rather be
+interested in the mixed case, where some of the \[a_j\] are inside the unit
+disk and some are outside.
+
+{\QP\bf 12.6. Theorem. {\it For any odd degree \[d\ge 3\] we can choose a Blaschke
+product \[f\] of degree \[d\] which carries the unit circle \[\partial D\] into
+itself by a diffeomorphism with any desired rotation number \[\rho\]. If
+this rotation number \[\rho\] is Diophantine, then \[f\] possesses a Herman
+ring.}\medskip}\break
+
+{\bf Proof Outline.} Let 
+\[d=2n+1\], and choose the \[a_j\] so that \[n+1\] of them are close to
+zero while
+the remaining \[n\] are close to \[\infty\]. Then it is easy to check that
+the Blaschke product \[z\mapsto\beta_{a_1}(z)\cdots\beta_{a_d}(z)\] is
+\[C^1$-close to the identity map on the unit circle \[\partial D\].
+In particular, it induces an orientation
+preserving diffeomorphism of \[\partial D\]. Now multiplying by
+\[e^{2\pi it}\] and using 12.3, we can adjust the rotation number to be any
+desired constant. If this rotation number \[\rho\]
+is Diophantine, then there
+is a real analytic diffeomorphism \[h\] of \[\partial D\] which conjugates
+\[f\] to the rotation \[z\mapsto e^{2\pi i\rho}z\]. Since \[h\] is real
+analytic, it extends to a complex analytic diffeomorphism on some small
+neighborhood of \[\partial D\], and the conclusion follows.\QED
+
+As an example, Figure 12 shows the Julia set for the cubic rational map\break
+\[f(z)\,=\,e^{2\pi it}z^2(z-4)/(1-4z)\;\] with zeros at \[0,\,0,\,4\], where
+the constant
+\[t=.6151732\cdots\] is adjusted so that the rotation number will be equal to
+\[(\sqrt 5 -1)/2\].
+There is a critical point near the center of this picture, with a
+Herman ring to its left, surrounding the
+superattractive basin about the origin in the left center.
+This is the simplest kind
+of example one can find, since Shishikura has shown that such a ring can
+exist only if the degree \[d\] is at
+least three, and since it is easy to check that a polynomial map cannot
+have any Herman ring. (Problem 12-1 or \S17.1.)
+\midinsert
+\vfill
+\insertRaster herm-ring.ps pixels 960 by 576 scaled 400
+\bigskip\bigskip
+\centerline{Figure 12. Julia set for a cubic rational map possessing
+a Herman ring.}
+\vfill
+\endinsert
+
+\eject
+
+The rings constructed in this way are very special in that they are symmetric
+about the unit circle, with \[f(1/\bar z)=1/\bar f(z)\]. However
+Herman's original construction, based on work of Helson and Sarason,
+was more flexible.
+% Furthermore, the
+%rotation number is necessarily Diophantine. 
+Shishikura's more general
+construction also avoids the need for symmetry. Furthermore
+Shishikura's construction makes it clear that the possible rotation
+numbers for Herman rings are exactly the same as the possible
+rotation numbers for Siegel disks. In particular, any number satisfying
+the Bryuno condition of \S8.4 can occur. The idea is roughly
+that one starts with two rational maps having
+Siegel disks with rotation numbers \[+\rho\] and \[-\rho\] respectively.
+One cuts out a small concentric disk from each, and then glues the resulting
+boundaries together. After making corresponding modifications at each of the
+infinitely many iterated pre-images of each of the Siegel disks, Shishikura
+applies
+the Morrey-Ahlfors-Bers Measurable Riemann Mapping Theorem in order to
+conjugate the resulting topological picture to an actual rational map.\medskip
+
+Although Herman rings do not contain any critical
+points, none-the-less they are closely associated with critical points.
+
+{\QP\bf 12.7. Lemma. {\it If \[U\] is a
+Herman ring, then every boundary point of \[U\]
+belongs to the closure of the orbit of some critical point. The boundary
+\[\partial U\]
+has two connected components, each of which is an infinite set.}\medskip}
+
+\noindent The proof is almost identical to the proof of 11.4.\QED % \medskip
+\lln
+
+{\bf Problem 12-1.} Using the maximum modulus principle, show that no
+polynomial map can have a Herman ring.\smallskip
+
+
+{\bf Problem 12-2.} For any Blaschke product \[f:\hat\C\to\hat\C\] show that
+\[z\] is a critical point of \[f\] if and only if \[1/\bar z\] is a critical
+point,
+and show that \[z\] is a zero of \[f\] if and only if \[1/\bar z\] is a pole.
+\smallskip
+
+{\bf Problem 12-3.} A holomorphic map \[f:D\to D\] is said to be {\bit
+proper} if the inverse image of any compact subset of \[D\] is compact.
+Show that any proper holomorphic map from \[D\] onto itself can be expressed
+uniquely as a Blaschke product $(*)$, with \[a_j\in D\].\smallskip
+
+{\bf Problem 12-4.} Show that the rotation number \[\rot(f)\], as well as its
+continued fraction expansion, can be deduced directly from the cyclic order
+relations on a single orbit, without passing to the universal covering, as
+follows. Let \[0=t_0\mapsto t_1\mapsto t_2\mapsto\cdots\] be the orbit of
+zero, where we can choose representatives modulo 1 so that \[t_1\le t_j<
+t_1+1\] for all \[j\]. Let us define \[t_j\] to be a ``closest return on the
+left'' if \[t_j<0\], and if none of the numbers \[t_k\] with \[k<j\]
+belong to the open interval \[(t_j\,,\,0)\]. Similarly, \[t_j\] is a ``closest
+return on the right'' if the interval \[(0,t_j)\] does not contain any
+\[t_k\] with \[k<j\]. If the sequence \[t_1\,,\,t_2\,,\,\ldots\] contains
+first \[n_1\] closest returns on the left then \[n_2\] closest returns on
+the right, and so on, show that \[\;	\rot(f)\;=\;1/(n_1+(1/n_2+1/(n_3
++\cdots)))\]. (Compare Appendix C.)\smallskip
+\vfil\eject % \bigskip\bigskip
+
+\footline={\hss\tenrm 13-\folio\hss}\pageno=1
+
+\centerline{\bf \S13. The Sullivan Classification of Fatou Components.}
+\medskip
+
+The results in this section are due in part to Fatou and Julia, but
+with very major contributions by Sullivan.\smallskip
+
+By a {\bit Fatou component}
+we will mean any connected component of the Fatou set\break \[\hat\C\ssm J(f)\].
+Evidently \[f\] carries each Fatou component \[U\] onto some Fatou
+component \[U'\] by a proper holomorphic map. First consider the special case
+\[U=U'\].
+
+{\QP\bf 13.1. Theorem. {\it If \[f\] maps the Fatou component \[U\] onto
+itself, then there are just four possibilities, as follows. Either \[U\]
+is the immediate attractive basin of an attracting fixed point, or of one
+petal of a parabolic fixed point, or else \[U\] is a Siegel disk or
+Herman ring.}\medskip}
+
+Here we are lumping together the case of a superattracting fixed point, with
+multiplier \[\lambda=0\], and the case of an ordinary attracting fixed
+point, with \[\lambda\ne 0\]. Note that immediate attractive basins
+always contain critical points by 10.2 and 10.3, while rotation domains
+(that is Siegel disks and Herman rings)
+evidently cannot contain critical points.\smallskip
+
+Much of the proof of 13.1 has already been carried out in \S4. In fact,
+according to 4.3 and 4.4, a priori there are just four possibilities.
+Either:
+
+(a) \[U\] contains an attractive fixed point;
+
+(b) all orbits in \[U\] converge to a boundary fixed point;
+
+(c) \[f\] is an automorphism of finite order; or
+
+(d) \[f\] is conjugate to an irrational rotation of a disk, punctured
+disk, or annulus.
+
+\noindent In Case (a) we are done. Case (c) cannot occur, since our
+standing hypothesis that the degree is two or more guarantees that there
+are only countably many periodic points. In Case (d) we cannot have a
+punctured disk, since the puncture point would have to be a fixed point
+belonging to the Fatou set, so that we would just have a Siegel disk
+with its center point incorrectly removed. Thus, in order to prove 13.1,
+we need only show that the boundary fixed point  in Case (b)
+must be parabolic. But
+this boundary fixed point certainly cannot be an attracting point or a
+Siegel point, since it belongs
+to the Julia set. Furthermore, it cannot be repelling, since it attracts
+all orbits in \[U\]. The only other possibility, which we must exclude,
+is that it might be a Cremer point.\smallskip
+
+The proof will be based on the following statement, which is
+due to Douady and Sullivan. (Compare Sullivan [S1], or Douady-Hubbard [DH2,
+p. 70]. For a more classical alternative, see Lyubich [L1, p. 72].)
+Let
+$$	f(z)\;=\;\lambda z+a_2z^2+a_3z^3+\cdots	$$
+be a map
+which is defined and holomorphic in some neighborhood \[U\] of the origin,
+and which has
+a fixed point with multiplier \[\lambda\] at \[z=0\]. By a {\bit path
+converging to the origin} in \[U\] we will mean a continuous map \[p:(0,\infty)
+\to U\ssm\{0\}\], where \[(0,\infty)\] is the open interval consisting
+of all positive real numbers, satisfying the condition that \[p(t)\]
+tends to zero as \[t\to\infty\].
+\eject
+
+{\QP{\bf 13.2. Snail Lemma.} {\it Let \[\;p:(0,\infty)\to U\ssm\{0\}\;\]
+be a path which converges to the origin, and suppose that \[f\] maps \[p\]
+into itself so that \[f(p(t))=p(t+1)\]. Then either the origin is
+either an attracting or a parabolic fixed point. More precisely, the
+multiplier \[\lambda\] satisfies either \[|\lambda|<1\] or \[\lambda=1\].}
+\medskip}
+
+\noindent Replacing \[f\] by \[f^{-1}\], we obtain the following
+completely equivalent formulation, which will be useful in \S18.
+
+{\QP{\bf 13.3. Corollary.} {\it If \[\;p:(0,\infty)\to U\ssm\{0\}\;\]
+is a path which
+converges to the origin, with \[f(p(t))=p(t-1)\] for \[t>1\], then either
+\[|\lambda|>1\] or \[\lambda=1\].}\medskip}
+
+{\bf Proof of 13.2.}
+By hypothesis, the orbit \[p(0)\mapsto p(1)\mapsto
+p(2)\mapsto\cdots\;\] in \[\;U\ssm\{0\}\;\] converges towards the origin. Thus
+the origin certainly cannot be a repelling fixed point: we must have
+\[|\lambda|\le 1\]. Let us assume that \[|\lambda|=1\] with
+\[\lambda\ne 1\], and show that this hypothesis leads to a contradiction.
+
+The intuitive idea can be described as follows.
+As the path \[t\mapsto p(t)\] winds closer and closer to the origin,
+the behavior of the map \[f\] on \[p(t)\] is more and more dominated by the
+linear term \[z\mapsto\lambda z\]. Thus \[p(t+1)\approx \lambda p(t)\]
+for large \[t\],
+and the image must resemble a very tight spiral as shown in Figure 13.
+Draw a radial segment \[E\] joining two turns of this spiral, as shown.
+Then the region \[V\] bounded by \[E\] together with a segment of the
+spiral will be mapped strictly into itself by \[f\]. Therefore, by the
+Schwarz Lemma, the fixed point of \[f\] at the point \[0\in V\] must be
+strictly attracting; which contradicts the hypothesis that \[|\lambda|=1\].
+\midinsert
+\hbox to \hsize{
+\hfil
+\hbox{\RasterBox {snail-1.ps} {640} {480} {350}}
+\hskip -1in
+\hbox{\RasterBox {snail-2.ps} {640} {480} {350}}
+\hfil
+}
+\smallskip
+\centerline{Figure 13. Diagram in the \[z$-plane (left) and in the
+\[Z=\log(z)\] plane (right).}
+\endinsert % \vfil\eject
+
+In order to fill in the details of this argument, it is convenient
+to set \[Z=\log z\], and to lift \[p\] to a continuous path
+\[Z=P(t)=X(t)+iY(t)\], with \[e^{P(t)}=p(t)\]. Then evidently as \[t\to\infty\] we have
+\[X(t)\to -\infty\] and
+$$	P(t+1)\;=\;P(t)+ic+o(1)	\;.$$
+Here \[ic\] is a pure imaginary constant with
+\[e^{ic}=\lambda\], and \[o(1)\] stands for a remainder term which tends to
+zero. Similarly, we can lift \[f\] to a map \[Z\mapsto F(Z)\]
+which is defined on some left half-plane  \[X<{\rm constant}\], and which
+satisfies
+$$	F(Z)\;=\;Z+ic+o(1)	$$
+as the real part \[X={\cal R}(Z)\] tends to \[-\infty\], with the same
+non-zero constant \[\,ic\]. Suppose, to fix our ideas, that \[c>0\]. Then,
+for \[Z=X+iY\] within some half-plane \[X<X_0\], we may assume that \[F\]
+is univalent, and that the
+imaginary part \[Y\] increases by at least \[c/2\] under each iteration
+of \[F\]. Choose \[t_0\] large enough so that \[X(t)<X_0\] for \[t\ge t_0\].
+Then the path \[t\mapsto P(t)\] cuts the half-plane \[Y>Y(t_0)\] into two
+or more connected components. Let \[V_0\] be that component whose intersection
+with each horizontal line is unbounded to the left. Thus \[V_0\] is
+contained in the quarter-plane \[X<X_0\,,\;Y>Y(t_0)\]. Evidently \[F\] maps
+\[V_0\] diffeomorphically into itself. Furthermore, the imaginary part of
+\[X+iY\] increases by at least \[c/2\] under each iteration, hence the real
+part must decrease towards \[-\infty\] under iteration.
+
+Let \[V=\exp(V_0)\cup\{0\}\] be the corresponding open set in the \[z$-plane.
+Then it follows that \[f\] maps \[V\] into itself,
+and that every orbit of \[f\] in \[V\] converges towards the origin.
+Since the open set \[V\] is Hyperbolic, it follows by the
+Schwarz Lemma that the origin is an attractive fixed point; which
+contradicts our hypothesis that \[|\lambda|=1\].\QED
+
+To prove 13.3, we simply note that the orbit
+$$	\cdots\mapsto p(2)\mapsto p(1)\mapsto p(0)	$$
+is repelled by the origin, so the multiplier \[\lambda\] cannot be zero.
+Hence \[f^{-1}\] is defined and holomorphic near the origin. Applying
+13.2 to \[f^{-1}\], the conclusion follows.\QED
+
+{\bf Proof of 13.1.} Let \[U\] be a Fatou component which is mapped into
+itself by \[f\] in such a way that all orbits converge to a boundary fixed
+point \[w_0\]. Choose any base point \[z_0\] in \[U\], and choose any
+path \[p:[0,1]\to U\] from \[p(0)=z_0\] to \[p(1)=f(z_0)\]. Extending for
+all \[t\ge 0\] by setting \[p(t+1)=f(p(t)\], we obtain a path in \[U\]
+which converges to the boundary point \[w_0\] as \[t\to\infty\]. Therefore,
+according to 13.2, the fixed point \[w_0\] must be either parabolic or
+attracting. But \[w_0\] belongs to the Julia set, and hence cannot be
+attracting.\QED\smallskip
+%  \advancepageno
+
+Thus we have classified the Fatou components which are mapped onto themselves
+by \[f\]. There is a completely analogous description of Fatou components
+which cycle periodically under \[f\]. These are just the Fatou components
+which are fixed by some iterate of \[f\]. Hence each such component is
+either
+
+(1) the immediate attractive basin for some attracting periodic  point,
+
+(2) the immediate attractive basin for some petal of a parabolic periodic
+point,
+
+(3) one member of a cycle of Siegel disks, or
+
+(4) one member of a cycle of Herman rings.
+
+\noindent In Cases (3) and (4), the topological type of the domain \[U\]
+is specified by this description.
+In Cases (1) and (2) it can be described as follows.
+
+{\QP{\bf 13.4. Lemma.} \it Every immediate attractive basin is either simply
+connected or infinitely connected.\medskip}
+
+{\bf Proof.} If \[U\] were a non-simply-connected region of finite
+connectivity, then it would have a finite Euler characteristic \[\chi(U)
+\le 0\]. By 10.2 or 10.3, f maps \[U\] onto itself by a branched covering
+map with at least
+one branch point, and hence with degree \[n\ge 2\]. But the precise
+number of branch points, counted with multiplicity, is equal to
+\[(n-1)\chi(U)\le 0\] by the Riemann-Hurwitz formula of \S5.1. This
+contradiction completes the proof.\QED	
+
+Sullivan showed that there can be at most a finite number of such periodic
+Fatou components. {\it In fact, according to Shishikura, there can be at most 2d-2
+distinct cycles of Fatou components.}\smallskip
+
+In order to complete the picture, we need the fundamental theorem
+that there are no ``wandering'' Fatou components. (Compare [S2], [C].)
+
+{\QP{\bf 13.5. Theorem of Sullivan.} \it Every Fatou component \[U\] is
+eventually periodic. That is, there necessarily exist integers \[n\ge 0\]
+and \[p\ge 1\] so that the \[n$-th forward image \[f^{\circ n}(U)\] is
+mapped onto itself by \[f^{\circ p}\].\medskip}
+
+Thus every Fatou component is a preimage, under some iterate of \[f\],
+of one of the four types described above.
+The proof, by quasiconformal deformation, is beyond the scope of these notes.
+Roughly speaking, if a wandering Fatou component were to exist, then one
+could construct an infinite dimensional space of deformations, all of which
+would have to be rational maps of the same degree. But the space of
+rational maps of fixed degree is finite dimensional.\smallskip
+
+Recall from \S11.6
+that \[f\] is {\bit post critically finite\/} (or a {\bit Thurston map\/})
+if every critical orbit is finite. Combining 13.1 and
+13.4 with 11.6 and 12.7, we easily obtain the following. (Compare Problem 5-7.)
+
+{\QP{\bf 13.6. Corollary.} \it If a post critically finite
+rational map has no superattractive
+periodic orbit, then its Julia set is the entire sphere \[\hat\C\].\medskip}
+
+\noindent We will give a different proof for this statement in 14.6.\lln
+% \eject
+We can sharpen the defining property of the Fatou set as follows.\smallskip
+
+{\bf Problem 13-1.} If \[V\] is a connected open subset of the Fatou
+set \[\hat\C\ssm J\], show that the set of all limits of
+successive iterates \[f^{\circ n}|V\] as \[n\to\infty\] is either
+(1) a finite set of constant maps from \[V\] into an attracting or
+parabolic periodic orbit, or (2) a one-parameter family of maps,
+consisting of all compositions
+\[R_\theta\circ f^{\circ k}|V\] where \[f^{\circ k}\] is some fixed
+iterate with values in a rotation domain and \[R_\theta\] is the rotation
+of this domain through angle \[\theta\].
+\bigskip
+
+
+
+
+\vfil\eject
+\footline={\hss\tenrm 14-\folio\hss}\pageno=1
+
+\centerline{\bf \S14. Sub-hyperbolic and hyperbolic Maps.}\bigskip
+
+This section will discuss two important classes of rational maps. The
+exposition will be based on Douady-Hubbard [DH2].\smallskip
+
+First some standard definitions from the theory of smooth dynamical systems.
+Let \[f:M\to M\] be a \[C^1$-smooth map from a smooth
+Riemannian manifold to itself, and let\break \[X\subset M\] be a compact
+\[f$-invariant
+compact subset, \[f(X)\subset X\]. Let\break \[Df_x:T_xM\to T_{f(x)}M\],
+or briefly \[Df\], be the {\bit first
+derivative map} at \[x\], that is the induced linear map on the tangent
+space at
+\[x\], and let \[\|v\|\] be the Riemannian norm of a vector \[v\in T_xM\].
+By definition, the map \[f\] is {\bit expanding}
+on \[X\] if the length of any tangent vector at a point of \[X\]
+expands exponentially under iteration of \[Df\], that is, if there
+exist constants \[c>0\] and \[k>1\] so that
+$$	\|Df^{\circ n}(v)\|\;\ge\; ck^n\|v\|	$$
+for every \[x\in X\] and \[v\in T_xM\], and every \[n\ge 0\]. Since \[X\]
+is compact, a completely
+equivalent requirement is that there exists some fixed \[n\ge 1\] so that
+$$	\|Df^{\circ n}(v)\|\;>\;\|v\|	$$
+for all non-zero tangent vectors \[v\] over \[X\]. Similarly, \[f\] is {\bit
+contracting} on \[X\] if there are constants
+\[c>0\] and \[k<1\] so that \[\|Df^{\circ n}(v)\|\;\le\;ck^{n}\|v\|\,\].
+It is not difficult to check that
+these conditions do not depend on the particular choice of Riemannian metric.
+\smallskip
+
+In the higher dimensional case, a map is called {\bit hyperbolic} on \[X\]
+if the tangent space of \[M\]
+restricted to \[X\] splits as the Whitney sum of two sub-bundles, each
+invariant under \[Df\], so that \[Df\] is expanding on one sub-bundle and
+contracting on the other. In the
+one-dimensional case, this concept simplifies as follows.
+
+{\bf Definition:} Let \[f\]
+be a holomorphic map from a Riemann surface to itself, and let \[X\] be a
+compact \[f$-invariant subset. The map \[f\] is
+{\bit hyperbolic} on \[X\] if \[f\] is expanding on \[X\] or contracting
+on \[X\], or if \[X\] is the disjoint union
+of a compact \[f$-invariant subset \[X^+\] on which \[f\] is expanding
+and a compact \[f$-invariant subset \[X^-\] on which \[f\] is contracting.
+
+{\QP{\bf 14.1. Theorem.} {\it For a rational map \[f:\hat\C\to\hat\C\] of
+degree \[d\ge 2\], the following two conditions are equivalent:
+
+$(1)$ \[f\] is expanding and hence hyperbolic on its Julia set \[J\].
+
+$(2)$ The forward orbit of each critical point of \[f\] converges
+towards some attracting periodic orbit.}\medskip}
+%$(4)$ The {\bit postcritical set} \[P\], that is the union of the forward
+%orbits of the critical points, has closure \[\bar P\] which is disjoint
+%from the Julia set \[J\].
+
+Map satisfying these conditions are briefly called {\bit hyperbolic}
+rational maps.  As examples, Figures 1a, 1b, 1d and 5 show the Julia sets of
+hyperbolic maps, but the other figures do not.
+{\bf Caution:} This use of the word ``hyperbolic'' has
+nothing to do with the concept of ``Hyperbolic Riemann surface'',
+which we write with a capital {\bit H}. (Compare \S2.)\eject % \smallskip
+
+The proof that \[(1)\Rightarrow (2)\] proceeds as follows. We suppose
+given some smooth Riemannian metric on \[\hat\C\] so that the lengths of
+tangent vectors to \[\hat\C\] at points of \[J\] increase exponentially under
+iteration of \[Df\]. After replacing \[f\] by some fixed iterate \[f^
+{\circ p}\] (or alternatively after carefully modifying the metric), we may
+assume that \[\|Df(v)\|\ge k\|v\|\] for all tangent vectors at points
+within some neighborhood \[V\] of
+\[J\], where \[k>1\]. In particular, there can be no critical points within
+this neighborhood \[V\].
+
+{\QP{\bf 14.2. Lemma.} \it If there exists such an expanding metric in a
+neighborhood of the\break Julia set, then every orbit outside of the Julia set
+converges towards an attracting periodic orbit.\medskip}
+
+{\bf Proof.} We first show that there exists a constant
+\[\epsilon>0\] so that the neighborhood \[N_\epsilon\], consisting of all
+points at Riemannian distance less than \[\epsilon\] from \[J\], has the
+following property:
+
+{\QP \it If we iterate the mapping \[f\] starting at any point which
+belongs to the neighborhood \[N_\epsilon\] but not to \[J\], then the
+distance from \[J\] will be multiplied by
+\[k\] or more at each iteration until we leave the set \[N_\epsilon\].
+Furthermore, no point outside of \[N_\epsilon\] maps into \[N_\epsilon\].
+\smallskip}
+
+\noindent
+In fact we need only choose \[\epsilon\] small enough so that the neighborhood
+\[N_\epsilon\] is contained in \[V\], but disjoint from the compact set
+\[f(\hat\C\ssm V)\]. It then follows that \[f^{-1}(N_\epsilon)\subset V\]. In
+fact we will prove the stronger statement that \[f^{-1}(N_\epsilon)\subset
+N_{\epsilon/k}\subset N_\epsilon\]. For if \[f(z)\in N_\epsilon\], then
+\[f(z)\] can be joined
+to \[J\] within \[N_\epsilon\] by a geodesic of length equal to the
+Riemannian distance \[\rho(f(z),J)<\epsilon\]. We can then lift this back to
+a smooth curve which joins \[z\] to \[J\] within \[V\]. The length of
+this pulled back curve is evidently \[\le\rho(f(z),J)/k<\epsilon/k\].
+
+Since \[f^{-1}(N_\epsilon)\subset N_\epsilon\], it follows that the
+complementary compact set \[L=\hat\C\ssm N_\epsilon\] satisfies \[f(L)
+\subset L\].
+We have shown that every orbit which starts outside of \[J\] must eventually
+be absorbed by this invariant set \[L\].
+Since \[L\] is a compact subset of the Fatou set
+\[\hat\C\ssm J\], it must be covered by finitely many of the connected components
+of \[\hat\C\ssm J\]. Let \[U_1\,,\,\cdots\,,\, U_p\] be those components
+of \[\hat\C\ssm J\] which intersect \[L\]. Since \[f(L)\subset
+L\], it follows that \[f\] carries each one of these \[U_i\] onto some
+\[U_j\]. As we follows such an orbit, we must eventually reach a component
+\[U_j\] which is mapped onto itself by some iterate \[f^{\circ q}\].
+
+Now let us examine the four possibilities for such a map \[f^{\circ q}:U_j\to
+U_j\], as listed in Theorem 3.1.
+This map cannot be a rotation of \[U_j\], or an automorphism
+of finite order, since all orbits in \[U_j\]
+are eventually absorbed by the compact subset \[L\cap U_j\]. Similarly,
+orbits cannot diverge to infinity with
+respect to the \Poincare metric on \[U_j\]. Thus the only
+possibility is that all orbits of \[f^{\circ q}\] within \[U_j\]
+converge to an attracting fixed point of \[f^{\circ q}\]. This proves
+the Lemma, and hence completes the proof that
+\[(1)\Rightarrow (2)\].\smallskip
+
+{\bf Proof that \[(2)\Rightarrow (1)\].} Let \[P\] be the {\bit post-critical
+set}, that is the union of the forward orbits of the critical points.
+Then Condition (2) clearly implies that the closure \[\bar P\] is disjoint
+from the Julia set. Conversely, if \[\bar P\cap J=\emptyset\], then we
+will construct an expanding metric near the Julia set. Let
+\[U\] be the open set \[\hat\C\ssm \bar P\]. Since
+\[f(\bar P)\subset\bar P\], we have \[f^{-1}(U)\subset U\].
+There are no critical points in \[U\], so it follows that \[f^{-1}\]
+lifts to a single valued analytic function from the universal covering
+surface \[\tilde U\] into itself. But \[U\] contains the Julia set, which
+contains at least one repelling fixed point. Therefore this inverse map
+on \[\tilde U\] can be chosen so as to contain an attracting fixed point.
+If \[\tilde U\] is isomorphic to the unit disk, then this implies that
+\[f^{-1}\] strictly contracts the \Poincare metric on \[\tilde U\], so that
+\[f\] must strictly increase the \Poincare metric on \[U\]. This proves that
+\[f\] is expanding on the compact subset \[J\subset U\].
+On the other hand, if \[\tilde U\] is not isomorphic to \[D\], then the
+complement \[\bar P=\hat\C\ssm U\] can contain at most two points. It is then
+easy to check that \[f\]
+must be conjugate to a map of the form \[z\mapsto z^{\pm d}\].
+In this case, clearly \[f\] is expanding with respect to the Euclidian metric
+on \[U\]. Thus \[(2)\Rightarrow (1)\], which completes the proof.\QED
+
+One invariant set of particular interest is the ``non-wandering set''
+of \[f\]. By definition, a point is {\bit wandering} if it has a
+neighborhood \[U\] so that the forward images \[f(U)\,,\, f^{\circ 2}(U)\,,\,
+\ldots\] are all disjoint from \[U\]. Otherwise, it is {\bit non-wandering}.
+The closed set consisting of all non-wandering points is called
+the {\bit non-wandering set} \[\Omega=\Omega(f)\]. The map \[f\] is said to
+satisfy Smale's {\bit Axiom A} if \[f\] is
+hyperbolic on \[\Omega\], and if \[\Omega\] is precisely equal to the
+closure of the set of periodic points.
+
+{\QP{\bf 14.3. Corollary.} \it A rational map satisfies Axiom A
+if and only if it is hyperbolic.\medskip}
+
+The proof is straightforward,
+since we know by \S11 that the repelling periodic points are dense in the
+Julia set. Details will be left to the reader. (Compare Problem 14-1.)
+\QED
+
+{\bf Remark.} These hyperbolic maps have other extremely important properties.
+If \[f\] is hyperbolic, then every nearby map is also hyperbolic. Furthermore,
+according to Ma\~n\'e, Sad, Sullivan, and also Lyubich, the Julia set \[J(f)\]
+varies continuously under a deformation of \[f\] through hyperbolic maps.
+In the non-hyperbolic case, a small change in \[f\] may well lead to a drastic
+alteration of \[J(f)\]. It is generally conjectured that every rational map
+can be approximated arbitrarily closely by a hyperbolic map.
+\medskip
+
+
+Douady and Hubbard, using ideas of Thurston, also consider a wider class
+of mapping which they call {\bit sub-hyperbolic}. The only change in the
+definition is that the Riemannian metric is now allowed to have a finite
+number of relatively mild singularities,
+like that of the metric \[|d\root n\of z |\] at the origin. Such singularities
+have the property that the Riemannian distance between points still tends to
+zero as the points approach each other.\smallskip
+
+{\bf Definition.} A conformal metric on a Riemann surface, with the
+expression  \[\gamma(z)|dz|\] in terms of a local uniformizing parameter
+\[z\], will be called an {\bit orbifold metric} if the function \[\gamma(z)\]
+is smooth and non-zero except at a locally finite collection of points
+\[a_1\,,\,a_2\,,\,\ldots\;\]
+where it blows up in the following special way. There should be
+integers \[\nu_j\ge 2\] called the {\bit ramification indices} at the points
+\[a_j\] with the following property. If we take a local branched covering
+by setting \[z(w)=a_j+w^{\nu_j}\], then the induced metric \[\gamma(z(w))
+|(dz/dw)dw|\] on the \[w$-plane should be smooth and non-singular throughout
+some neighborhood of the origin.
+
+The rational map \[f\] is {\bit
+sub-hyperbolic} if it is expanding with respect to some orbifold metric
+on a neighborhood of its Julia set.
+\eject
+
+{\QP{\bf 14.4. Theorem.} \it A rational map is sub-hyperbolic if and only if:
+
+$(\alpha)$ every critical orbit in the Julia set is eventually periodic,
+and
+
+$(\beta)$ every critical orbit outside of the Julia set converges to an
+attracting periodic orbit.\medskip}
+
+(Compare 11.7.) As examples, Figures 1-5 show sub-hyperbolic maps,
+but 8-10, 12, 17 do not.
+
+The proof in one direction is completely analogous to
+the proof above. If \[f\] is expanding with respect to some orbifold metric,
+defined near the Julia set, then, just as in 14.2 above, every orbit
+outside the Julia
+set \[J\] will be pushed away from \[J\], and can only converge to an
+attractive periodic orbit. On the other hand, if \[\omega\] is a critical
+point inside the Julia set, then every post-critical
+point \[f^{\circ n}(\omega)\,,\; n>0\], must be one of the singular
+points  \[a_j\] for our
+orbifold metric, since the map \[f^{\circ n}\] is critical, and yet is required
+to be expanding, at the point \[\omega\]. Thus the forward
+orbit of \[\omega\] cannot have any limit points, and hence must be finite.
+\smallskip
+
+For the proof in the other direction, we must introduce the concept of the
+``universal branched covering'' of an orbifold. Compare Appendix E.
+For our purposes, an
+{\bit orbifold} \[(S,\,\nu)\] will just mean a Riemann surface
+\[S\], together with a locally finite collection of marked points \[a_j\],
+each of which is assigned
+a {\bit ramification index} \[\nu_j=\nu(a_j)\ge 2\] as above. For any
+point \[z\] which is not one of the \[a_j\] we set \[\nu(z)=1\].\smallskip
+
+{\bf Definition.} To every rational
+map \[f\] which satisfies Conditions ($\alpha$) and ($\beta$) of Theorem
+14.4, we assign
+the {\bit canonical orbifold} \[(S,\,\nu)\] as follows. As underlying
+Riemann surface \[S\] we take the Riemann sphere \[\hat\C\] with all
+attracting periodic orbits removed. As ramified points \[a_j\] we take
+all strictly {\bit post-critical} points, that is, all points which have
+the form \[a_j=f^{\circ n}(\omega)\] for some \[n>0\], where \[\omega\] is
+a critical point of \[f\]. Using ($\alpha$) and ($\beta$), we see easily that this
+collection of points \[a_j\] is locally finite in \[S\] (although perhaps
+not in \[\hat\C\]). In order to specify the corresponding ramification indices
+\[\nu_j=\nu(a_j)\], we will need another definition.
+If \[f(z_1)=z_2\], with local power series development
+$$	f(z)=z_2+c(z-z_1)^n+({\rm higher\;terms})\,,	 $$
+where \[c\ne 0\] and \[n\ge 1\],
+then the integer \[n=n(f\,,\,z_1)\] is called the {\bit local degree} or the
+{\bit branch index} of \[f\] at \[z_1\].
+{\it Now choose the \[\nu(a_j)\ge 2\] to be the smallest integers which
+satisfy the following:}
+
+{\QP{\bf Condition ($\ast$).} For any \[z\in S\],
+the ramification index \[\nu(f(z))\] at the image point must be a multiple
+of the product \[n(f\,,\,z)\nu(z)\]. \medskip}
+
+\noindent
+In fact, to construct these integers \[\nu(a_j)\]
+we simply consider all critical pre-images
+$$	f^{\circ m}(\omega)=a_j\,,\quad f'(\omega)=0\,,	$$
+and let \[\nu(a_j)\] be the least common multiple of the corresponding
+branch indices\break \[n(f^{\circ m}\,,\,\omega)\]. Since we have removed all
+attracting periodic orbits, it is not difficult to
+check that this least common multiple is finite,
+and that it provides a minimal solution to the required condition $(\ast)\].
+\smallskip
+
+As in Appendix E, we consider the {\bit universal covering surface}
+$$	\tilde S_\nu\;\to\; (S\,,\,\nu)	$$
+for this canonical orbifold, that is the unique regular branched
+covering of \[S\] which has the given \[\nu\] as ramification function,
+and which is simply connected. In order
+to determine the geometry of \[\tilde S_\nu\], we introduce
+the {\bit orbifold Euler characteristic}
+$$	\chi(S\,,\,\nu)\;=\;\chi(S)+\sum({1\over\nu(a_j)}-1)\;=\;2-k+
+	\sum({1\over\nu(a_j)}-1)\,,	$$
+to be summed over all ramified points, where \[k\] is the number of
+attracting periodic points. According to Lemma E.1 in the Appendix,
+such a universal covering nearly always exists; and the few pathological
+cases where it does not exist necessarily have Euler characteristic \[\chi
+(S\,,\,\nu)>0\].
+Furthermore, by E.4, the surface \[\tilde S_\nu\] is either Spherical,
+Hyperbolic, or Euclidean according as \[\chi(S\,,\,\nu)\] is positive,
+negative, or zero.\smallskip
+
+Still assuming Conditions ($\alpha$) and ($\beta$) of 14.4, we will
+prove the following.
+
+{\QP{\bf 14.5. Lemma.} \it This canonical orbifold has Euler
+characteristic
+\[\chi(S\,,\,\nu)\le 0\].\break Hence its universal covering \[\tilde
+S_\nu\]
+has either a unique \Poincare ~metric or a\break
+Euclidean metric which is unique
+up to a scale change. In either case, there is an induced orbifold metric
+on \[S\], and \[f\] is expanding with respect to this orbifold metric
+throughout any compact subset of \[S\].\medskip}
+
+Evidently this will complete the proof of Theorem 14.4.
+In the Euclidean case, the proof yields much more. Let \[z\] be a uniformizing
+parameter on the covering surface \[\tilde S_\nu\cong\C\].
+
+{\QP{\bf 14.6. Theorem.} \it If \[\chi(S\,,\,\nu)=0\], then \[f\] induces
+a linear isomorphism\break \[z\mapsto az+b\] from the Euclidean covering space
+\[\tilde S_\nu\cong \C\] onto itself. In this case, the Julia set is
+either a circle or line segment, or the entire Riemann sphere. The
+coefficient of expansion \[|a|\] satisfies \[|a|=d\] in the first two
+cases, and \[|a|=\sqrt d\] in the last case, where \[d\] is the degree
+of \[f\].\medskip}
+
+(Caution: The coefficient \[a\] itself is not uniquely determined; for
+the lifting of \[f\] to the covering surface is determined only up to
+composition with a deck transformation. The deck transformations
+may well have fixed points, since we are dealing with a branched covering,
+but necessarily
+have the form \[z\mapsto \omega z+c\] where \[\omega\] is some root of unity.)
+\smallskip
+
+{\bf Proof of 14.5.} First note that Condition ($\ast$) above is exactly
+what is needed in order to assert that \[f^{-1}\] lifts, locally at least,
+to a holomorphic map from the universal covering \[\tilde S_\nu\] to
+itself. But since \[\tilde S_\nu\] is simply connected, there is then no
+obstruction to constructing a globally lifted inverse
+$$	\tilde f^{-1}\,:\, \tilde S_\nu\;\to\;\tilde S_\nu\,.	$$
+The proof now divides into three cases.\smallskip
+
+{\bf Spherical Case.} Note that the composition
+$$	\tilde S_\nu\;\buildrel \tilde f^{-1}\over\longrightarrow\;
+	\tilde S_\nu\;\buildrel p\over\longrightarrow\;S\;\buildrel
+	 f\over\longrightarrow\;S $$
+always coincides with the projection map \[p:\tilde S_\nu\to S\].
+If \[\tilde S_\nu\] were Spherical, then this composition
+would have a well defined
+degree, which would have to be at least \[d\] times the degree of \[p\]. This
+is impossible, hence the Spherical case cannot occur.\smallskip
+
+{\bf Hyperbolic Case.} If \[\tilde S_\nu\] is Hyperbolic, then it has a
+uniquely defined Poincar\'e metric, and the proof proceeds just as in the
+proof that \[(2)\Rightarrow (1)\] in 14.1 above.\smallskip
+
+{\bf Euclidean Case.} Suppose that \[\tilde S_\nu\] is Euclidean, or
+equivalently that \[\chi(S\,,\,\nu)=0\].
+Construct a new orbifold \[(S'\,,\,\mu)\] as follows. Let \[S'\subset S\]
+be the open set \[S\] with all immediate pre-images of attracting periodic
+points removed, and define \[\mu=f^*(\nu)\] by the formula
+$$	\mu(z)\;=\; \nu(f(z))/n(f\,,\,z)	$$
+where \[n(f\,,\,z)\] is the branch index.
+Note that \[\mu(z)\ge\nu(z)\] for all \[z\in S'\]. Evidently it follows
+that
+$$	\chi(S'\,,\,\mu)\;\le\; \chi(S\,,\,\nu)	$$
+with equality only if \[S'=S\] and \[\mu=\nu\]. But by Lemma E.2, since the
+map\break \[f:(S'\,,\,\mu)\to(S\,,\,\nu)\] is a ``$d$-fold covering'' of
+orbifolds, we conclude that \[f\] induces an isomorphism \[\tilde S'_\mu
+\to\tilde S_\nu\] of universal
+covering surfaces, and also that the Riemann-Hurwitz formula takes the form
+$$	\chi(S'\,,\,\mu)\;=\;\chi(S\,,\,\nu)d\,.	$$
+Thus \[\chi(S'\,,\,\mu)\] is also zero. We conclude that
+\[S'=S\] and \[\mu=\nu\], so that \[f\] must lift to a (necessarily linear)
+isomorphism from the Euclidean covering space \[\tilde S_\nu\] to itself.
+Further details will be left to the reader. This completes the proof
+of 14.4 through 14.6.\QED
+
+As a corollary, we obtain another proof of 13.6.
+We continue to assume that every
+critical orbit either converges to an attracting orbit or is eventually
+periodic, according as it belongs to the Fatou set or the Julia set.
+
+{\QP{\bf 14.7. Corollary.} \it If \[f\] is sub-hyperbolic with
+no attracting periodic orbits,
+so that \[S\] is the entire Riemann sphere, then \[f\] is expanding on the
+entire sphere, and it follows that \[J(f)\] is the entire sphere.
+\medskip}
+
+\lln
+
+{\bf Problem 14-1.} Using the results of \S13, show that the non-wandering
+set for a rational map \[f\] is the (disjoint) union of its Julia set,
+its rotation domains (if any), and
+its set of attracting periodic points.\smallskip
+
+{\bf Problem 14-2.} Show that the Julia set for the rational map \[z\mapsto
+(1-2/z)^{2n}\] is the entire Riemann sphere. Show that the orbifold
+metric for this example is Euclidean when \[n=1\], but is Hyperbolic
+for \[n>1\].\smallskip
+
+{\bf Problem 14-3.} For any sub-hyperbolic map whose
+canonical orbifold metric is\break Euclidean,
+show that every periodic orbit outside of the finite post-critical set has
+multiplier \[\lambda\] satisfying \[|\lambda|=d^{p/\delta}\] where
+\[d\] is the degree,
+\[p\] is the period, and \[\delta\] is the dimension (1 or 2) of the Julia
+set.\smallskip
+
+{\bf Problem 14-4.} A rational map \[f\] is said to be {\bit expansive}
+in a neighborhood of its Julia set if there exists \[\epsilon>0\] so that,
+for any two points \[x\ne y\] whose orbits remain in the neighborhood forever,
+there exists some \[n\ge 0\] so that \[f^{\circ n}(x)\] and \[f^{\circ n}(y)\]
+have distance greater than \[\epsilon\]. Using Sullivan's results from \S13,
+show that this condition is satisfied if and only if \[f\] is hyperbolic.
+(However, a map with a parabolic fixed point may be expansive on the Julia set
+itself.)
+
+\vfill
+%\rightline{jwm, version of 9-2-91}
+\end
+
+
+
+
+
+
+
+
+

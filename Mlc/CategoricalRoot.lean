@@ -1,4 +1,5 @@
 import Mlc.ParameterComponentApproximation
+import Mlc.Research.Programme
 import Mathlib.Topology.Connected.LocallyConnected
 
 namespace MLC
@@ -11,12 +12,16 @@ noncomputable section
 abbrev mandelbrotSet : Set ℂ :=
   MLC.Quadratic.MandelbrotSet
 
-/-- The explicit mathematical input for the repaired MLC root. This is a
-    proposition supplied by a parameter-dynamical argument; it is not an
-    axiom declaration. -/
-structure RootInput : Prop where
-  uniformOuterBuffer :
-    ParameterComponent.MandelbrotUniformOuterBuffer
+/-- The active root exposes the research system, its analytic realization,
+and the separate global coverage obligation. No Dudko conjecture is assumed. -/
+structure RootInput where
+  system : Research.CandidateSystem
+  realization : system.Realization
+  coverage : system.Coverage
+
+theorem RootInput.locallyConnectedSpace (h : RootInput) :
+    LocallyConnectedSpace mandelbrotSet :=
+  h.system.locallyConnectedSpace_of_realization_coverage h.realization h.coverage
 
 namespace Categorical
 
@@ -45,14 +50,13 @@ theorem categorical_mlc_conjecture
     (h : MLC.RootInput) :
     MLCConjecture := by
   change LocallyConnectedSpace MLC.mandelbrotSet
-  exact ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer
-    h.uniformOuterBuffer
+  exact h.locallyConnectedSpace
 
 /-- Convenience form of the repaired categorical root theorem. -/
 theorem categorical_mlc_conjecture_of_uniformOuterBuffer
     (hbuffer : ParameterComponent.MandelbrotUniformOuterBuffer) :
     MLCConjecture :=
-  categorical_mlc_conjecture ⟨hbuffer⟩
+  ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer hbuffer
 
 /-- The usual and categorical root propositions are equivalent. -/
 theorem mlc_conjecture_iff_categorical :

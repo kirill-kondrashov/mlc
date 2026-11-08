@@ -1,0 +1,770 @@
+\subsection{Geometry, Combinatorics, and a Contradiction} \label{align:ggc}
+%\jktodo{For the rest of this section:}
+%\jktodo{Check to see if there's any deprecated notation}
+%\jktodo{Clean and tighten and see other to do boxes}
+%\jktodo{We have to deal with it being a $\psi$-quadratic-like map, with an immersion}
+
+In this subsection we will state a geometric proposition and a combinatorial one, and immediately conclude Lemma \ref{lem:hammer}. We let $G = (g, \jj) = (f^\per, \iota_\per)$ be the $\per\thh$ iterate of $F$. 
+
+We say that $X = \wcan^{h+v}(\UU \sm \KK)$ is \emph{$(L, \epsilon)$-well-controlled} \index{weighted arc diagram (WAD)!well-controlled} if there is a good set of arcs in the translation region, each of combinatorial length at most $L$, that have $1 - \epsilon$ of the total weight of $X$.  In this case we say that an arc in $\supp X$ is good if belongs to the good set of arcs, and that it is \emph{bad} if it does not.  We let $X^g$ denote restriction of $X$ to the good arcs. 
+
+For any interval $I\subset \R$ and  WAD $Z$ on $\UU \sm \KK$, we let $Z|_I$ be the restriction of $Z$ to the arcs that lie entirely in the subsurface $U_I$. We will say that $I$ lies in the translation region when $I\subset (\bound, q-\bound)$.
+
+Here is our geometric proposition. It says that when $X$ is well-controlled, there is an interval $I$ in the translation region such that $X^g|I$ is nearly self-dominating. 
+%\jktodo{Are we clear on the assumption of being aligned with the Hubbard tree, etc.?}
+\begin{prop}  \label{prop:interval-self-dominating}
+For all $\delta> 0$:
+Suppose that $X$ is $(L, \epsilon)$-well-controlled
+for $\epsilon \smallgiven{\bound, \delta}$ and $q, \WW(\RR F) \largegiven{\bound, \delta, L}$.
+% For $L_1 \largegiven{L, \bound, \delta}$ and $q, \wstd \largegiven{L_1, L, \bound, \delta}$, 
+Then there is an interval $I$ in the translation region and a WAD $Y \le X^g|_I$ such that 
+\begin{equation} \label{eq:interval-self-dominating-dominated}
+g^*(X^g|_I) \dominates Y
+\end{equation}
+and 
+\begin{equation} \label{eq:interval-self-dominating-control}
+\norm{X^g|_I - Y} \le \delta \norm{X^g|_I}.
+\end{equation}
+\end{prop}
+
+We will prove Proposition \ref{prop:interval-self-dominating} in Sections \ref{align:interval} through \ref{align:immersion}.
+
+Here is our complementary combinatorial proposition, which asserts that there can be no nearly self-dominating horizontal WAD with combinatorially bounded support. 
+\begin{prop} \label{prop:no-near-self-dominating}
+For $\delta \smallgiven{L, \bound}$,
+there are no WAD's $Z$ and $Y$ with $Y \le Z$ such that 
+$g^*Z \dominates Y$ and $\norm{Z - Y} \le \delta \norm{Z}$,
+and for all $\alpha \in \supp Z$,
+\begin{itemize}
+\item
+$\alpha$ is horizontal,
+\item
+$\alpha$ lies in translation region, and
+\item
+the combinatorial length of $\alpha$ is at most $L$.
+\end{itemize}
+\end{prop}
+
+We prove	Proposition \ref{prop:no-near-self-dominating} in Section \ref{align:value}, 
+after preparation in Section \ref{align:Hubbard-weights}.
+
+Assuming Propositions \ref{prop:interval-self-dominating} and \ref{prop:no-near-self-dominating},
+we can immediately prove Lemma \ref{lem:hammer}.
+
+\begin{proof}[Proof of Lemma \ref{lem:hammer}]
+Given $L$, 
+we choose a $\delta \smallgiven{L, \bound}$ as in Proposition \ref{prop:no-near-self-dominating},
+and $\epsilon \smallgiven{\bound, \delta}$ as in Proposition \ref{prop:interval-self-dominating}.
+Given $f$ that is $(\epsilon, L)$-well-controlled,
+we  let $I$ and $Y$ be then as given in Proposition \ref{prop:interval-self-dominating}.
+Then $X^g|_I$ and $Y$ satisfy the hypotheses for $Z$ and $Y$, 
+respectively,
+in Proposition \ref{prop:no-near-self-dominating}.
+This is a contradiction.
+\end{proof}
+
+
+
+\subsection{The eigenvalues and eigenweights of our Hubbard trees} \label{align:Hubbard-weights}
+We now recall the the concepts of cross sections and cloning from  Appendix \ref{app:clones}
+and the linear transformation $T_F$ from Section \ref{sec:hubbard trees}; we will use the results there to bound the eigenvalue $\lambda_F^\per$ of $T_F^\per$ and corresponding eigenweights of $\TT$.
+We will use the bound on the eigenweights in Section \ref{align:value} to prove Proposition \ref{prop:no-near-self-dominating}.
+Along the way we prove some combinatorial statements that will be used in Section \ref{align:interval}. 
+
+\begin{lemma} \label{lem:get-around}
+There is some $N = N(\bound)$ such that, when $q \largegiven{\bound}$,  $$\LL_0 \subset \bigcup_{i=1}^{N-1} f^{-i}\left(\overline{\LL_{[1, \bound]}}\right).$$ 
+\end{lemma}
+\begin{proof}
+Recall that $K_0$ denotes the central small Julia set, and $K_i = f^i(K_0)$.
+Let $\alpha_F'$ denote the second pre-image of $\alpha_F$, and let $\LL_{(0, q)}'$ denote the component of $F^{-1}(\LL_{(0, q)})$ containing $\alpha_F'$. We set $C=F^{-1}(\LL_1)$.
+For simplicity we assume that $\FK$ is locally connected, the general case can be handled similarly.
+
+
+For $K_i \subset \LL_{(0, q)}$, let $\gamma_i$ be the path in $\TT$ from $K_i$ to $\alpha_F$.
+For $K_i \subset \LL_{(0, q)}'$, let $\gamma_i$ be the path in $\TT$ from $K_i$ to $\alpha'$.
+For $K_i\subset C$, let $\gamma_i = \emptyset$. 
+Thus $f(\gamma_i) \subset C \cup \gamma_{i+1}$ for all $i$.
+Therefore, by induction,
+for any $z \in \gamma_i$,
+we have 
+\begin{equation} \label{eq:get-around-1}
+\gamma_i \subset F^{-k}(\gamma_{i+k}) \cup \bigcup_{j=1}^{k} F^{-j}(C)\subset F^{-k}(\gamma_{i+k}) \cup \bigcup_{j=2}^{k+1} F^{-j}(\LL_1)
+\end{equation}
+for all $k \ge 1$. 
+%and $f(\gamma_i) \subset \gamma_{i+1}$ when $K_{i+1} \not\subset L_0$. 
+%So, 
+%for any $i$ for which $K_i \in L_0$, $f^k(\gamma_i) \subset C \cup L_1 \cup \ldots \cup L_{k-1} \cup \gamma_{i+k}$ by induction, 
+%and $f^k(\gamma_i) \subset L_1 \cup \ldots \cup L_{k-1} \cup \gamma_{i+k}$ when $K_{k+i} \not\subset C$. 
+
+For some set $I_0\subset \Z/\per\Z$ of cardinality at most $\bound$, we can write 
+$$\LL_0 \subset C\cup \bigcup_{i \in I_0} K_i \cup \gamma_i.$$
+We leave it as an exercise for the reader to show that, 
+for each $i \in I_0$,
+there is an $n_i \le \bound^2$ such that $F^{n_i}(K_i) \subset L_1 \cup \ldots \cup L_{\bound}$.
+The lemma then follows from \eqref{eq:get-around-1},  taking $N = \bound^2 + 1$.
+\end{proof}
+
+\begin{cor} \label{cor:cross-section}
+Suppose that $F$ is parabolically $\bound$-bounded, 
+with rotation number $1/(2 \bound + 2)$. 
+Then $E(\TT) \cap \LL_{b+1}$ is a cross section for the push-forward $T_F$, for paths of length $N = N(\bound)$. 
+\end{cor}
+\begin{proof}
+We take $N = \bound^2 + 2 \bound + 3$. 
+For any point $z \in \TT$, 
+$w:=F^k(z) \in \LL_0$ for some $k \le 2 \bound + 1$,
+and,
+by Lemma \ref{lem:get-around},
+$F^l(w) \in \LL_1 \cup \ldots \cup \LL_{\bound}$ for some $l \le \bound^2 + 1$. 
+Therefore $F^m(z) \in L_{\bound + 1}$ for some $m \le \bound^2  + 2\bound + 2 < N$. 
+\end{proof}
+
+\begin{cor} \label{cor:bounded-gamma}
+For suitable $N = N(\bound)$, 
+and each $m \in  (N+b + 1, q-N-b-1)$, 
+we have $f^\per(\LL_m) \subset \LL_{[m-N, m+N]}$. 
+\end{cor}
+
+
+
+
+\begin{prop} \label{prop:eigenweights}
+{Suppose that $F$ is parabolically $\bound$-bounded. 
+Let $v$ and $w$ be eigenweights for $T_F$ and $T_F^\top$ respectively with eigenvalue $\lambda_F$.
+For any $\alpha, \beta \in E(\TT)$ that lie in the translation region, 
+$v_f(\alpha)/v_f(\beta) \le C(\bound)$ and $w_f(\alpha)/w_f(\beta) \le C(\bound)$. Moreover, $2 \le \lambda_f^\per \le C(\bound)$.}
+\end{prop}
+
+\begin{proof}
+There are finitely many parabolically $\bound$-bounded renormalization types with $q = 2 \bound + 2$;
+by Lemma \ref{lem:get-around},
+$\TT \cap L_{\bound + 1}$ is a cross section for the push-forward map on $E(\TT)$;
+the dynamics on $\TT$ for any $q > 2\bound +2$ is then the result of cloning of $\TT \cap L_{\bound + 1}$. 
+Therefore,
+by Theorem \ref{thm:clone-eigen},
+$\lambda_F^{q - (2 \bound + 2)}$ converges, and hence is bounded, for each series of clones,
+and therefore $\lambda_F^\per$ is bounded as well, since $\per \le \bound q$. 
+On the other hand,
+$\lambda_F^\per \ge 2$ for any prime and primitive renormalization type,
+because each edge $e$ of $\TT$ is mapped by $F^p$ to a sequence of edges in $\TT$ with the same edges as $e$, and the sequence of edges cannot be just $e$, so therefore it has length at least 2.
+
+Finally,
+for $\alpha, \beta \in \TT \cap L_{\bound+1}$, 
+we have $v(\alpha)/v(\beta)$ converges as $q \to \infty$ in each sequence of clones, and hence it is bounded.
+On the other hand if $\alpha, \beta$ lie in the translation region, and are clones of the same edge, 
+then $v(\alpha)/v(\beta) = \lambda_F^k$ for some $|k| \le q$, and is hence bounded.
+The same applies to $w(\alpha)/w(\beta)$,
+because the transpose of the clones are the clones of the transpose.
+\end{proof}
+
+
+\begin{comment}
+
+    We let $\bgg_f$ be the tree of complete graphs associated to $\TT$, as in \cite{kahn2023boundsI}.
+    Each arc $\alpha$ in $\bgg_f$ maps to an injective concatenation of arcs $\beta_i$ in $\bgg_f$;
+    this concatenation is uniquely determined by requiring that no two $\beta_i$'s are in the same complete graph.
+    This induces $f_*\from \R^{\bgg_f} \to \R^{\bgg_f}$.
+    For each arc $\alpha$ in $\bgg_f$ there is a unique injective path in $\TT$ that connects the endpoints of $\alpha$. This induces a natural map $j\from \R^{\bgg_f} \to \R^{\E(\TT)}$.
+    
+    \begin{lemma} \label{lem:semi-conj}
+    We have $f_* \circ j = j \circ f_*$ as maps from $\R^{\bgg_f}$ to $\R^\etf$.
+    \end{lemma}
+    \begin{proof}
+    Suppose $\alpha \in \bgg_f$, and $(\beta_i) \to f(\alpha)$, with each $\beta_i \in \bgg_f$,
+    and each $\beta_i$ lies in a different complete graph. 
+    Then the paths in $\TT$ associated to distinct $\beta_i$'s are disjoint, so the concatenation of these paths is injective. Hence the the path (as a set of edges) in $\TT$ connecting the endpoints of $f(\alpha)$ is the disjoint union of the paths in $\TT$ connecting the $\beta_i$.
+    \end{proof}
+    
+    \begin{cor} \label{cor:same-eigen}
+    The two $f_*$'s have the same Perron-Froebinius eigenvalue, and that $j$ maps the associated eigenvector for one to the eigenvector for the other. 
+    \end{cor}
+    
+    
+    
+    \begin{lemma} \label{lem:gt2}
+    Whenever $f_*$ is primitive, $\lambda_F \ge 2$. For $\bound $-bounded combinatorics (and rotation number $1/q$), we have $\lambda_F \le C(\bound )$. 
+    \end{lemma}
+    \begin{proof}
+    By Corollary \ref{cor:same-eigen},
+    we can prove this for $f_*\from \R^{\bgg_f} \to \R^{\bgg_f}$ and then conclude the same result for $f_* \from \R^\etf \to \R^\etf$. 
+    
+    For every edge $\alpha \in \bgg_f$,
+    we can think of $g(\alpha)$ as a (not necessarily injective) concatenation of edges in $\bgg_f$; 
+    the endpoints of $g(\alpha)$ are then the same as those of $\alpha$.
+    On the other hand,
+    no edge in $\bgg_f$ maps to itself, 
+    so $g(\alpha)$ is a concatenation of at least two edges.
+    This implies that $\lambda_F \ge 2$. 
+    
+    Likewise every edge of $\bgg_f$ maps to a bounded concatenation, because, by Lemma \ref{lem:get-around}, it spends all but a bounded amount of its time in the translation region. 
+    \end{proof}
+    
+    
+    \begin{lemma}
+    For $\bound $-bounded combinatorics (and maybe primitive $f$), the ratio of eigenweights for edges of the Hubbard tree is bounded in terms of $\bound $. 
+    \end{lemma}
+    \begin{proof}
+    This follows from Lemma \ref{lem:get-around} and the discussion in Section \ref{align:clones}.
+    \end{proof}
+
+\end{comment}
+
+\subsection{No near self-domination} \label{align:value}
+
+%We first need to compare two notions of combinatorial length. Given an arc $\alpha$ in $\UU \sm \KK$, we let $|\alpha|$ be the combinatorial length of $\alpha$ as defined in Section \ref{align:segments1}, and recall that $\pair{\alpha}{Z}$ is the number of times $\alpha$ intersects $Z$ in minimal position.
+We can now use the results of Section \ref{align:Hubbard-weights} and the theory of values from Section \ref{sec:value} to prove Proposition \ref{prop:no-near-self-dominating}.
+\begin{proof}[Proof of Proposition \ref{prop:no-near-self-dominating}]
+
+By Theorem \ref{thm:value}, there is an $\lambda_F$-expanding value $\val$ for $F$.
+
+Suppose that $Z$ and $Y$ satisfy the hypotheses of the Proposition.
+As $\lambda_F^\per \ge 2$, we have
+\begin{equation} \label{eq:vals}
+\frac12 \val(Z) \ge \val(g^*Z)\ge \val(Y).
+\end{equation}
+
+
+On the other hand,
+our definition of combinatorial length and Lemma \ref{lem:compare} imply
+
+$\pair{\alpha}{\hperp}
+ \leq 2 \bound L$ 
+for all $\alpha \in \supp Z$. 
+Hence,  by Proposition \ref{prop:value estimate}, we can choose $\val$ so that
+%\jktodo{Why is $\bound $ in this estimate?? We should explain how to control the value with the norm (and vice versa).}
+\begin{align*}
+\val(Z - Y) 
+&\le 4 \bound^2 L^2 u_{\max}^2 \norm{Z - Y} \\
+&\le 4 \delta  \bound^2 L^2  u_{\max}^2 \norm{Z} \\
+& \le 4\delta  \bound^2 L^2 \frac{u_{\max}^2}{u_{\min}^2} \val(Z).
+\end{align*}
+where  $v$ and $w$ are eigenweights for $T_F$ and $T_F^\top$ with eigenvalue $\lambda_F$ and $u_{\min}$ and $u_{\max}$ are minimum and maximum respectively of $v(\alpha)\sqrt{w(\alpha)}$ over all $\alpha$ in the translation region.
+By Proposition \ref{prop:eigenweights},
+\begin{equation}
+ \frac{u_{\max}^2}{u_{\min}^2} \le \max_{\alpha, \beta} \frac{v_f(\alpha)^2 w_f(\alpha)}{v_f(\beta)^2 w_f(\beta)} \le C(\bound).
+\end{equation}
+When
+\begin{equation} \label{eq:delta-control}
+4 \delta \bound^2 L^2 \frac{u_{\max}^2}{u_{\min}^2} < \frac12, 
+\end{equation}
+we obtain $\val(Z - Y) < \frac12 \val(Z)$, a contradiction to \eqref{eq:vals}.
+\end{proof}
+
+
+\subsection{The subsurface and WAD for an interval} \label{align:interval}
+We now turn to the proof of Proposition \ref{prop:interval-self-dominating}, which will occupy the rest of this section.
+Because the full return map $g$ has uncontrolled degree, 
+we need to lift $g$ to a subsurface cover (defined later in this subsection) where we can then control the degree. 
+In this subsection, 
+we describe how to effectively restrict $g$ to an interval and then how to lift that restriction to the subsurface cover. 
+We begin this subsection with a combinatorial discussion where we can think of $f$ (and hence $g$) as a quadratic-like map, or even a quadratic polynomial, as in Section \ref{align:Hubbard-weights}. We then move to a more geometric discussion, where we are compelled to consider our given $\psi$-quadratic-like map $F$ and its $\per\thh$ iterate $G = (g, \jj)$. 
+
+For any interval $I\subset \R$, we recall from Section \ref{sec:limbs}
+that $U_I$ is a neighborhood of the limbs $\FL_I$ up to isotopy rel $\KK$. 
+We observe that,
+for any subsurface $U$ of $\UU$ defined rel $\KK$ (and whose boundary is disjoint from $\KK$), 
+any component of $g\invp U$ is defined rel $g\invp \KK$, and hence defined rel $\KK$. 
+This then determines the combinatorics of the lifts to the associated covers. 
+
+If $I\subset \R$ is an interval of  length at least $2r+1$, let $\shrink I r$ denote the interval with the intervals of length $r$ on each side of $I$ removed; 
+if the length of $I$ is smaller we let $\shrink I r$ be the empty interval.
+If $K_i$ is a small Julia set, and $K_i \subset L_m$, we let $\NN_{r, s}(K_i) = \bigcup_{j=m-r}^{m+s} L_j$. 
+For any subset $Z$ of a Riemann surface (or any Hausdorff topological space),
+we let $Z|_a$ be the component of $a \in Z$ that contains $a$;
+we have the same definition for $Z|_A$, where $A\subset Z$ is connected. 
+
+We begin with the following two combinatorial lemmas.
+\begin{lemma}
+There is a component $\hat U_I$ of $g\invp {U_I}$ that contains $U_{\shrink I r}$, for $r = r(\bound )$. 
+We also have $\hat U_I \subset U_I$ (in the sense of subsurfaces rel $\KK$). 
+\end{lemma}
+
+\begin{proof}
+Let $r$ be the $N=N(\bound)$ defined as in Corollary \ref{cor:bounded-gamma}.
+Then by that Corollary,
+$g(\TT \cap U_{\shrink I r}) \subset U_I$. 
+Hence there is a component $\hat U_I$ of $g\invp{U_I}$ that contains $\TT \cap U_{\shrink I r}$; 
+up to isotopy rel $\KK$, this component contains $U_{\shrink I r}$. 
+
+On the other hand, we observe that, for any $K_i$,
+$$ f\invp{\NN_{r, s}(K_i)}|_{K_{i-1}} \subset \NN_{r, s}(K_{i-1}).$$
+It follows by induction that $f^{-j}(\NN_{r, s}(K_i))|_{K_{i-j}} \subset \NN_{r, s}(K_{i-j})$, 
+and hence that $f^{-\per}(\NN_{r, s}(K_i))|_{K_i} \subset \NN_{r, s}(K_i)$. 
+This implies that $\hat U_I \subset U_I$. 
+\end{proof}
+
+\begin{lemma} \label{lem:pullback-degree}
+Suppose $f$ is an $\per$-renormalizable quadratic polynomial (or ($\psi$-)quadratic-like) map. Suppose that $U$ is a simply connected subsurface of the range of $f$ that is simply connected such that $\dd U$ is disjoint from $\KK$, and $V$ is any component of $f^{-\per}(U)$. Then the degree of $f^\per|_V$ is at most $2^m$, where $m$ is the number of components of $\KK \cap U$.
+\end{lemma}
+\begin{proof}
+We let $V_0 = V$ and inductively let $V_{i+1} = f(V_i)$, so $V_\per = U$. 
+Then each $V_i$ is connected, so $f\from V_i \to V_{i+1}$ has degree 1 or 2, with the latter occurring if and only if the critical point $c$ of $f$ lies in $V_i \cap \KK$. 
+If it does,
+then $f^{\per - i}(c)$ lies in $\KK \cap U$,
+and each such $i$
+requires a different component of $\KK \cap U$. 
+\end{proof}
+
+
+
+If $Q$ is a surface and $H \subset Q$ is a subsurface, 
+we say the \emph{subsurface cover} of $Q$ for $H$ is the cover corresponding to $i_*\pi_1(H)$, 
+where $i\from H \to Q$ is the inclusion. 
+We can lift $i$ to a map $\hat \imath$ from $H$ to the subsurface cover,
+and every end of $H$ that is proper for $i$ will be proper for $\hat \imath$. 
+In particular every arc in $H$ has a natural lift to the subsurface cover.
+Any continuous map $h\from (\hat Q, \hat H) \to (Q, H)$ then lifts to a map,
+from the subsurface cover of $\hat Q$ for $\hat H$,
+to the subsurface cover for $Q$ for $H$,
+and immersions lift to immersions.
+
+Recalling the definition of localization from Section \ref{sec:localization}, we let $V_I$ be the localization for $U_I$ in $\UU\sm \KK$ with all the components of $\KK\cap U_I$ filled in; we also denote by $\KK_I$ the copy of $\KK_I$ in $V_I$. 
+We likewise define $\hat V_I$ 
+to be the localization of $\hat U_I$ in $g^{-1}(\UU\sm \KK)$ with all the components of $g^{-1}(\KK)\cap \hat U_I$ filled in; we also denote by $g^{-1}(\KK_I)$ the copy of $g^{-1}(\KK_I)$ inside $\hat V_I$. We let $\hat\KK_I$ denote the components of $g\inv(\KK_I) \cap \hat V_I$ 
+that correspond to components of $\KK$.
+We let $X_I = \wcan^{h+v}(V_I \sm \KK_I)$ and $\hat X_I = \wcan^{h+v}(\hat V_I \sm \hat\KK_I)$.
+
+We then have 
+\begin{itemize}
+\item
+a branched cover $g\from \hat V_I \to V_I$ with degree bounded in terms of $\bound$ and $|I|$,
+\item
+an inclusion
+\begin{equation} \label{eq:inclusion}
+\hat V_I \sm g\inv\KK_I \subset \hat V_I \sm \hat \KK_I,
+\end{equation}
+and 
+\item
+the immersion $\jj\from \UU^\per \to \UU$ 
+restricts to an immersion $\jj\from \UU^\per \sm g\inv\KK \to \UU\sm \KK$, 
+% of $\hat U_I$ into $U_I$ 
+which lifts, 
+via the inclusion $ \hat U_I \subset U_I$,
+to an immersion 
+\begin{equation} \label{eq:immersion}
+i \from \hat V_I \sm \hat \KK_I \to V_I \sm \KK_I
+\end{equation}
+that is proper on the ends of $\hat V_I \sm \hat \KK_I$ corresponding to  $\hat\KK_I$. 
+\end{itemize}
+We will study the effect of \eqref{eq:inclusion} in Section \ref{align:good-by-good} and the effect of \eqref{eq:immersion} in Section \ref{align:immersion}, where
+%Now $g\invp{V_I}$ actually has many components; we claim that there is one component that has ``most'' of the components of $\KK_I$, in the sense of missing only some that are a combinatorially bounded (in terms of $\bound $) distance from the endpoints of $I$. 
+we then connect the relations in the covers $\hat V_I$ and $V_I$ to those in $\UU \sm \KK$ and complete the proof of Proposition \ref{prop:interval-self-dominating}.
+
+
+%The latter is in turn dominated by the canonical WAD for $\hat V_I \sm \hat\KK_I$ (where $\hat \KK_I$ is the lift of $\hat U_I\cap g\invp \KK$), and this latter WAD is $g\invp {X_I}$. So in summary we have
+%\begin{equation}
+%g\invp {X_I} \dominates \hat X_I \dominates X_I.
+%\end{equation}
+\subsection{Typical intervals in the translation region} \label{align:typical}
+\emph{We assume for the rest of this section that $X$ is $(L, \epsilon)$-well controlled}.
+
+In this subsection we define a ``typical'' interval in the translation region, and show that they exist. As the name suggests, these are intervals $I$ where anomalies that are rare in the translation region are rare in $I$.
+
+We fix $I$ and let $X\good_I \le X_I$ denote the portion of $X_I$ that is supported on the lift of good arcs, of combinatorial length at most $L$,
+\emph{that lie entirely in $U_I$},
+and let $X\bad_I := X_I - X\good_I$. We observe that every good arc is horizontal, so $X\bad_I$ contains all the vertical arcs in $X_I$. 
+\begin{lemma} \label{lem:I-typical}
+For  $L_1 \largegiven{\epsilon, L}$ and $\WW(\RR F) \largegiven \epsilon$, we can choose $I$ in the translation region with $|I| = L_1$,
+such that 
+\begin{equation} \label{eq:I-typical}
+\norm{X\bad_I} <  3\epsilon L_1 \WW(\RR F).
+\end{equation}
+\end{lemma}
+\begin{proof}
+For a given interval $I$ of length $L_1$, there are three kinds of contributions to $X\bad_I$:
+\begin{enumerate}
+\item \label{it:bad}
+Weighted arcs in $X^b$ that have at least one endpoint in $U_I$,
+\item \label{it:outside}
+arcs of $X^g$ that go from $U_I$ to outside $U_I$, and
+\item \label{it:ghost}
+``ghost vertical'', in the sense of weight of $X^v_I$ that does not appear in $X$. 
+This has an upper bound of 
+\begin{equation}
+\sum_{K_i \subset U_I} W(K_i) - X|_{K_i}
+\end{equation}
+where $X|_{K_i}$ is the (weighted) intersection number of $X$ with a curve going around $K_i$ (as in \cite{K06}).	
+\end{enumerate}
+The contribution from \ref{it:bad} is, \emph{on average}, at most $\epsilon L_1\wstd$.
+Case \ref{it:outside} contributes at most $4L\wstd$, 
+because now our good arcs have combinatorial length at most $L$, 
+so only those that start outside of $\shrink I L$ can go outside of $I$.
+Finally,
+the terms $W(K_i) - X|_{K_i}$ are each universally bounded, \emph{on average}, so the contribution from \ref{it:ghost} is $O(L_1)$ for a typical interval. 
+
+For $q > L_1$, we can find a set of disjoint intervals of length $L_1$ that together cover at least half of the translation interval. 
+Then one of these intervals will be typical in the sense that the total from Cases \ref{it:bad} and \ref{it:ghost} will be no more than twice the  average amounts stated above. 
+
+Taking $L_1 \largergiven{} L/\epsilon$ and $\wstd \largergiven{} 1/\epsilon$, we obtain \eqref{eq:I-typical}.
+\end{proof}
+
+We will call an interval $I$ that satisfies \eqref{eq:I-typical} a \emph{typical} interval.
+We observe that for any interval, $\norm{X_I} \asymp |I| \wstd$, and $\norm{X^g_I} \asymp \norm{X_I}$ when $X$ is $\epsilon, L$-controlled.
+
+\subsection{Good arcs are mostly dominated by good arcs} \label{align:good-by-good}
+%\jktodo{We might want to estimate errors in terms of multiples of the standard width}
+In this subsection,
+which is the heart of the proof of Proposition \ref{prop:interval-self-dominating},
+ we study the inclusion \eqref{eq:inclusion} and show that most of $X_I$ is dominated by $g^*X^g_I$. 
+%We're working now in the assumptions of Lemma \ref{lem:hammer}, and we're assuming that we've chosen an interval $I$ that's nearly typical with respect to the weight on the other arcs, so the total weight of  is at most $\epsilon$ times the total weight of $X_I$. 
+\begin{prop} \label{prop:most-well-dominated}
+For $\epsilon \smallgiven{\bound, \delta}$,
+when $I$ is a typical interval of length $L_1$,
+we can find $\hat Y_I \le \hat X_I$ with 
+\begin{equation} \label{eq:most-well-dominated}
+\norm{\hat X_I - \hat Y_I} \le \delta\norm{X_I}
+\end{equation}
+such that 
+\begin{equation} \label{eq:most-well-dominated-dominated}
+g^*X^g_I \dominates \hat Y_I
+\end{equation}
+in the inclusion \eqref{eq:inclusion}.
+\end{prop}
+\begin{proof}
+From \cite{K06},
+we have $g^*\wcan(V_I \sm \KK_I)\dominates\wcan(\hat V_I \sm \hat\KK_I) - C(L_1)$.
+Moreover horizontal arcs can only be realized as a concatenation of horizontal arcs,
+and vertical as a concatenation of horizontal and vertical. 
+So we have
+$g^*X_I \dominates \hat X_I - C(L_1)$. 
+For the sake of the next paragraph we orient the arcs of $X^h_I$ arbitrarily,
+and we orient the arcs of $X^v_I$ from $\KK_I$ to $\dd V_I$. 
+
+As a witness to this domination,
+we can find sequences $(Y_i)$ and $(Z_i)$ of WAD's (with the same index set), such that
+\begin{equation} \label{eq:witness}
+g^*X_I \ge \sum_i Y_i \text{ and } \hat X_I = \sum_i Z_i
+\end{equation}
+and $Y_i = \sum_j w_{ij} \alpha_{ij}$ and $Z_i = v_i \beta_i$,
+and $Y_i \dominates Z_i$ in the elementary sense that $\sum_j v_{ij}^{-1} \le w_i^{-1}$ and $(\alpha_{ij})_j \to \beta$. 
+It is important in this setting to require that the $\alpha_{ij}$'s appear 
+\emph{in order along the associated representative of $\beta_i$} in $(\alpha_{ij})_j$.
+
+We let $\hat X\vg_I$ be the portion of $\hat X_I$ that is dominated by $g^*X\good_I$,
+so $X\vg_I = \sum_{Y_i \le g^*{X\good_I}} Z_i$. 
+We let $\hat X\gb_I = \hat X_I - \hat X\vg_I$. 
+(The superscript $gb\kern-3pt\dominates$ here suggests an arc that is dominated by a sequence of good and bad arcs (with at least one bad arc). 
+We observe that $\hat X\gb_I$ includes all weight on the vertical arcs).  
+Our goal is to show that 
+\begin{equation} \label{eq:gb+v}
+\norm{\hat X\gb_I} \le \delta \norm{X_I}
+\end{equation}
+for $\epsilon \smallgiven{\bound, \delta}$ and $\norm{X_I} \largegiven{\bound, \delta, L_1}$;
+we can then let $\hat Y_I = \hat X\vg_I$ and conclude \eqref{eq:most-well-dominated}.
+%In the rest of this proof We will  suppress the subscript $I$ in $X\good_I$, etc., except when we want to specifically emphasize some dependence on $I$.
+
+To see \eqref{eq:gb+v},
+we let $\hat X\gb_k$ be the sum of all $Z_i$'s where the first $j$ for which $\alpha_{ij}$ is not a pullback by $g$ of a good arc is equal to $k$. 
+
+We observe that 
+\begin{equation} \label{eq:kis1}
+\norm{\hat X\gb_1} \le 4 \norm{X_I\bv} + C(\bound , L_1),
+\end{equation} 
+because each oriented bad (or vertical) arc from a given small Julia set has at most 2 preimages by $g$ that start at the same small Julia set (and there are two ways of orienting each arc). 
+%There are at most $6\bound$ \emph{good} arcs with an endpoint at a given small Julia set, and hence at most $12\bound$ preimages by $g$ that start at the same. 
+%Moreover,
+%suppose that $\alpha, \alpha' \in \supp g^*X_I^g$ are oriented arcs that map to distinct arcs in the same (oriented) translation class. 
+%Then, 
+%if $\alpha$ and $\alpha'$ both start on components of $\hat\KK_I$,
+%they are related by translation and therefore start on different components of $\hat\KK_I$.
+
+Let $E$ be a component $E$ of $\KK$ in $V_I$.
+Then there are at most $6\bound$ (oriented) good arcs that end at $E$.
+Each such arc starts at another component $E'$ of $\KK$,
+and has two pullbacks by $g$ that start at $E'$; 
+these are actually the only pullbacks by $g$ that start at any component of $\KK$.
+We conclude that there are at most $12\bound$ components of $g\invp E$ in $\hat V_I$
+that are connected to a component of $\KK$ by an arc in $\supp g^*X_I^g$. 
+
+So we obtain 
+\begin{equation}
+\norm{\hat X\gb_2} \le 24\bound \norm{X_I\bv} + C(\bound , L_1).
+\end{equation}
+Similarly,
+for each $E$ as before,
+there are at most $(6\bound)^k$ ways of walking backwards along a sequence of $k$ oriented arcs,
+starting the backward walk from $E$.
+We therefore obtain
+\begin{equation} \label{eq:genk}
+\norm{\hat X\gb_{k+1}} \le 4(6\bound )^k \norm{X_I\bv} + C(\bound, k, L_1)
+\end{equation}
+ for each $k\ge 1$. 
+
+Finally,
+letting $X\gb_{\ge m} = \sum_{k = m}^\infty X\gb_k$, we have
+\begin{equation} \label{eq:applywand}
+\norm{\hat X\gb_{\ge m}} \le \frac{4}{m} \norm{X_I}
+\end{equation}
+by the Wanderers Theorem (\ref{thm:wanderers}).
+Taking $m = \ceil{12/\delta}$ and $\epsilon < \frac19\delta / (12\bound)^m$ and $\wstd\largegiven{m, L_1, \delta}$, and applying \eqref{eq:kis1}, \eqref{eq:genk}, and \eqref{eq:applywand},
+we obtain \eqref{eq:gb+v}.
+%\jktodo{Should we be more explicit about how to get \eqref{eq:gb+v}, including the usual games with the variables?}
+\end{proof}
+
+%\begin{trem}
+%With $\epsilon$ more work we can remove the dependence of $\epsilon$ on $L$ in Proposition \ref{prop:most-well-dominated}. This would allow us to likewise remove the same dependence in Proposition \ref{prop:interval-self-dominating}, but we would still not be able to remove that dependence in \ref{lem:hammer}, because $\delta$ depends on $L$ in Proposition \ref{prop:no-near-self-dominating}, and $\epsilon$ will have to depend on $\delta$. 
+%\end{trem}
+
+
+\subsection{From $\hat Y_I$ to $Y_I$ (and $Y_I$ to $Y$)} \label{align:immersion}
+In this brief and final subsection we study the effect of the inclusion \eqref{eq:immersion},
+and combine that with Proposition \ref{prop:most-well-dominated} to prove Proposition \ref{prop:interval-self-dominating}.
+
+First, we have the following fact for relating weighted arc diagrams under by immersions:
+\begin{theorem} \label{thm:immer-decomp}
+Suppose that $i\from V' \to V$ is a holomorphic immersion of finite topology open Riemann surfaces, and $E'$ is a set of ends of $V'$ such that $i$ is proper, and has degree 1, at each end in $E'$.
+Suppose that $Y$ is a valid WAD on $V$, 
+such that all arcs in $Y$ have (at least) one endpoint in $E := i(E')$. 
+Then there exists $Y'$ valid on $V'$ such that we can write 
+\begin{equation} \label{eq:immer-decomp}
+Y' \ge \sum_i v_i \beta'_i \qquad Y = \sum v_i \beta_i,
+\end{equation}
+and,
+for each $i$,
+either
+\begin{itemize}
+\item
+both endponts of $\beta'_i$ lie in $E'$ and $i_*\beta'_i = \beta_i$,
+\item
+one endpoint of $\beta'_i$ lies in $E'$ and the other endpoint does not. 
+\end{itemize}
+\end{theorem}
+
+
+\begin{proof}
+Since $Y$ is valid, is the WAD for a partial proper foliation $F$ on $V$. 
+We can orient the leaves of $F$ such that each leaf $\ell$ begins on an end in $E$.
+We can then lift $\ell$, 
+starting from an end in $E'$, 
+until it leaves $V'$; we thereby obtain a proper leaf $\ell'$ in $V'$.
+If the other endpoint of $\ell'$ lies in $E'$, 
+then $i(\ell') = \ell$. 
+
+We assemble the leaves $\ell'$ above into a partial proper foliation $F'$ on $V'$, and let $Y' = \WW(F')$.
+We can also divide up $F$ into the leaves $\ell$ of a given homotopy class, and then further subdivide by the homotopy class of the resulting $\ell'$. In this way we can form the divisions of $Y$ and $Y'$ given in \eqref{eq:immer-decomp}, and, by the previous paragraph, it has the desired properties. 
+\end{proof}
+
+We call \eqref{eq:immer-decomp} a witness for Theorem \ref{thm:immer-decomp}.
+
+%\subsubsection{An immersion that is proper except at one end} \label{subsec:imm-proper}
+%\jktodo{There should be a general statement (and proof) about immersions that are proper at some ends}
+
+%We let $\hat \KK_I$ be $\KK_I \cap \hat U_I$. 
+%
+%We have a localization $i \from \hat V_I \to V_I$ (of the immersion $i_n\from U^\p \to U^0$).  This induces a relationship between $\hat X_I := \wcan(\hat V_I \sm \hat\KK_I)$ and $X_I= \wcan(V_I \sm \KK_I)$ which, as in domination, we can write as a sum of elementary relationships between $Y_i$ and $Z_i$ (with $X_I = \sum_i Z_i$ and $\hat X_i \ge \sum_i Y_i)$, where each $Z_i = v_i \beta_i$, and 
+%\begin{enumerate}
+%\item
+%$Y_i$ is a single arc $v_i \hat \beta_i$, and $\hat \beta_i$ is a lift of $\beta_i$ (which is then unique up to isotopy), or
+%%\item
+%%$Y_i = 0$, and $\beta_i$ can be realized as an arc that does not lie in the image of a map $i'\from \hat V_I \sm \hat\KK_I \to V_I \sm \KK_I$ that is homotopic to the restriction of $i$ to the same domain and codomain, or
+%\item
+%$Y_i = 0$, and up to homotopy $\beta_i$ does not lie in the image of $i'\from \hat V_I \sm \hat\KK_I \to V_I \sm \KK_I$ that is homotopic to the restriction of $i$ to the same domain and codomain, or
+%\item
+%$Y_i$ is a weighted sum of two vertical arcs (and possibly some other stuff we can throw away), and each of these vertical arcs has weight at least $v_i$. 
+%\end{enumerate}
+
+%We also have the inclusion of $g^{-1}(V_I \sm \KK_I)$ into $V_I \sm \hat \KK_I$, which induces $g\invp {X_I} \dominates \hat X_I$.
+
+
+%\jktodo{Make a lemma relating $\hat X\gb_I$ and $X\gb_I$}
+\begin{proof}[Proof of Proposition \ref{prop:interval-self-dominating}]
+We choose $\epsilon$ and $L_1$ as in Proposition \ref{prop:most-well-dominated},
+with $\delta$ replaced by $\delta/2$;
+we can also require that $L_1$ satisfy the hypothesis of Proposition \ref{lem:I-typical}
+and  $L_1 > 8r$.
+We can then choose a typical interval $I$ of length $L_1$ and then apply Proposition \ref{prop:most-well-dominated} to obtain a WAD $\hat Y_I$ on $\hat V_I \sm \hat \KK_I$ that satisfies \eqref{eq:most-well-dominated} (with $\delta$ replaced by $\delta/2$) and \eqref{eq:most-well-dominated-dominated}.
+
+We let $X_I'$ be the portion of $X_I$ that is supported on arcs with at least one endpoint of $i(\hat\KK_I)$.
+We can then apply Theorem \ref{thm:immer-decomp} to the immersion $i\from \hat V_I \sm \hat\KK_I \to V_I \sm \KK_I$,
+letting $Y$ in that theorem be $X_I'$. 
+We can then write $X'_I = X''_I+ Y_I$,
+where 
+\begin{itemize}
+\item
+$Y_I = i_*\hat Y_I$, and
+\item
+in the witness of Theorem \ref{thm:immer-decomp},
+$X''_I$ corresponds to something less than or equal to $\hat X_I - \hat Y_I$. 
+\end{itemize}
+
+Then $\norm{X''_I} \le \norm{\hat X_I - \hat Y_I}$.
+Moreover $\norm{X_I - X_I''} \le 4r \wstd$.
+Combining these two inequalities with \eqref{eq:most-well-dominated},
+we obtain
+\begin{equation} \label{eq:what-we-wanted}
+\norm{X_I - Y_I} \le \delta \norm{X_I}.
+\end{equation}
+
+Finally,
+we observe that $Y_I$ is a lift of a (unique) WAD $Y$ on $\UU \sm \KK$, 
+and $g^*(X^g|_I) \dominates Y$,
+and $\norm{X|_I - Y} \le \norm{X_I - Y_I}$, so,
+using the observation at the end of Section \ref{align:typical},
+we obtain \eqref{eq:interval-self-dominating-control}.
+\end{proof}
+
+%We  let $X\vg_I$ be ``the portion of $X_I$ dominated by $g^*X\good_I$'', which more precisely is the portion of $X_I$ corresponding to $\hat X\good_I$ by Case 1 of Section \ref{subsec:imm-proper}. 
+%We likewise let $X_I\gdomg$ be the portion of $X_I^g$ corresponding to $\hat X\good I$ (by Case 1). 
+%We let $X\gb_I = X_I - X\vg_I$ and $X\gbg_I = X_I - X\gdomg_I$; then $X\gbg_I \le X\gb_I$. 
+
+%Given \eqref{eq:gb+v}, we can apply the discussion in Section \ref{subsec:imm-proper} to obtain
+%\begin{equation}
+%\norm{X\gb_I} \le \delta{X_I}
+%\end{equation}
+%when $X_I, I \largegiven{\bound , L, \delta}$ and $\epsilon \smallgiven{\bound , L, \delta, |I|}$. 
+%To do so, 
+%we consider an element $Z_i = v_i \beta_i$ and consider each of the three cases for $Y_i$ enumerated in \ref{subsec:imm-proper}.
+%In the first case $Y_i = v_i \beta_i$ and $Y_i$ contributes to $\hat X\gb_I$. 
+%In the second case $\beta_i$ has both endpoints outside of $\hat \KK_I$. 
+%The total norm of such $Z_i$ is $O(\wstd)$ since $\KK_{\shrink I r} \subset  \hat\KK_I$. 
+%In the third case $Y_i$ contributes $2 v_i$ to $\hat X^v$. 
+%So the first and third cases directly contribute to $\hat X\gb_I$, while the second case is small compared to $\norm{X_I}$ when $|I|$ is large.
+
+
+
+%We should first discuss a peculiarity of the definition of domination as it appears in \cite{\bound oundsI}. 
+%If $U \subset V$ are Riemann surfaces (where now we use the notation of \cite{\bound oundsI}, independent of all other notation), 
+%and the inclusion is not $\pi_1$-surjective, then there may be non-trivial paths in $V$ that lie entirely outside of $U$. (Or that restrict to a sequence of trivial paths in $U$). 
+
+%
+%
+%\subsection{The old discussion of the proof of Lemma \ref{lem:hammer}}
+%
+%\jktodo{It should be possible to prove a statement without the $k$'s that just uses a bound on the combinatorial length of the dominant good arcs, and then put that together with Lemma \ref{lem:questing-very-good} to prove the result}
+%
+%Let $g = f_k^{\per_k}$;
+%and let $Z\equiv Z_k$ be the cleverly weighted bivertical duals  to the Hubbard tree (which determine the associated notion of length and theory of value);
+%we have 
+%\begin{equation} \label{eq:lambda-value}
+%V_Z(f_k^*(X)) \le \lambda^{-1} V_Z(X)
+%\end{equation}
+%for all weighted arc-diagrams $X$.
+%
+%
+%For any interval $I$ of limbs in the translation region,
+%let $X_I$ be the canonical weighted arc-diagram restricted to $I$,
+%and let $X'_I$ be the further restriction to $G_k(N)$.
+%What we now want to show is that for every $\epsilon > 0$, 
+%and sufficiently large typical interval $I$, 
+%there exists $X''_I \le X'_I$ such that
+%\begin{equation} \label{eq:eps-value}
+%V_Z(g^*X''_I) \ge (1 - \epsilon) V_Z(X''_I).
+%\end{equation}
+%To do this it is enough to show that for all $\epsilon > 0$
+%there is $X''_I \le X'_I$ such that 
+%\begin{equation} \label{eq:eps-dominates}
+%g^*X'_I \dominates X''_I,
+%\end{equation}
+%where $X''_I \le X'_I$ and $\norm{X''} \ge (1 - \epsilon) \norm X$;
+%the boundedness of combinatorial lengths in $X'$ then implies the corresponding statement for weight.
+%
+%To show \eqref{eq:eps-dominates},
+%we look at the subsurface corresponding to $I$ and its associated cover and lift of $f_k$ to that cover.
+%We have $f^*X_J \dominates X'_I$, 
+%where $J \supset I$ is a bounded extension on both ends.
+%%Now most of $X|_J$ by weight lies in $X'$.
+%%So most of weight of $X'$ is dominated by $f^*X'$;
+%%we call this so-dominated part $X''$. 
+%%Then we have $f^*X''$ dominates most of $X''$;
+%%and we can relate the two by value.
+%
+%We now want to see that most of the weight of $X'_I$ is dominated by $g^*X'_J$;
+%this follows if we can show that only a small portion of $X'_I$ (by weight) can be dominated by concatenations 
+%(in the domination witness)
+%that use any arc from $g^*(X_J \sm X'_J)$. 
+%We first observe that the first (and also last) arc in each concatenation must generally be in $X'$, 
+%because $X'$ has most of the weight at each small $J$.
+%We can likewise see the same for the second arc, because there's a bounded number of new $J$'s in each limb connected by an arc in $X'$ to an old $J$.
+%Likewise for the third arc and so forth.
+%Finally, 
+%by the Wanderers Theorem,
+%there's generally a bounded number of arcs in the concatenation.
+%
+%Somewhat more quantitatively,
+%for concatenations of length at most $m$,
+%there's at most $m (6\bound )^m$ preimages by $g$ of any arc in $g^*(X_J \sm X'_J)$ (the ``bad arcs'')
+%that can appear as \emph{the first bad arc in the concatenation}.
+%Therefore, 
+%if $\norm{X_J \sm X'_J} \le (3m (6\bound )^m)^{-1} \norm{X'_J}$,
+%at most $\epsilon/3$ can be dominated by such a concatenation.
+%On the other hand,
+%if $m > 20/\epsilon$,
+%we can apply the Wanderers Theorem to say that at most $\epsilon/3$ of the weight of $X'_I$ can be dominated by concatenations of length greater than $m$. 
+%
+
+%We don't need the following, but it is worth observing:
+%\begin{cor}
+%Every questing sequence is very good.
+%\end{cor}
+%\begin{proof}
+%If not,
+%then for all $L$ there exists $\epsilon(L) > 0$ such that there are infinitely many elements of the sequence without an $L$-bounded good set with $1-\epsilon$ of the total width.
+%\end{proof}
+
+
+\begin{comment}
+
+\subsection{Proof using a limit}
+
+The keystone to the proof of Proposition \ref{prop:controlled WAD 2} is an  invariant arc diagram in the ``combinatorial geometric limit":
+\begin{lemma} \label{lem:FX-X}
+Suppose that we have a \emph{sequence} of maps $f_k$ (where we will subsequently suppress the $k$ for all things depending on $f_k$, except when we take a subsequence or a limit), where the hypotheses for Proposition \ref{prop:controlled WAD 2} hold, but the conclusion fails. Then we can extract a limiting translation-invariant arc-diagram $X$ for the combinatorial limit $g$ of $f^q$ on the translation region, such that 
+\begin{equation}
+g^*X \dominates X.
+\end{equation}
+\end{lemma}
+We emphasize here that when we write $A \dominates B$ for an inclusion $U \subset V$ where $U$ has infinite topology (but $V$ has finite topology), we may have countably many elementary dominations $A_i \dominates B_i$,
+but each elementary domination uses a \emph{finite} concatenation. 
+\begin{proof}[Sketch of Proof]
+We first claim that we can pass to a subsequence and find an $N$ and a sequence of intervals $J_k$ in the translation regions for their respective $f_k$ such that $\sup_{K \in J_k} \WW(\FF_{N}|K)/\WW(\FF|K) \to 0$, 
+while the length of $J_k$ goes to infinity. 
+To see this, 
+we first observe that there's an $n_1$ for which we get at 
+
+We can use \eqref{eq:wad2} to find a large interval in the translation region where most of the weight at each small Julia set comes from $\FF_n$. More precisely, $\forall \epsilon \ \exists n\  \forall L$, there is an interval $J$ of length $L$ where $1-\epsilon$ of the weight of every small Julia set in that interval comes from $\FF \sm \FF_n$.  
+These arcs from $\FF \sm \FF_n$ lie in the translation region,
+they not only intersect $T$ less than $n$ times, 
+but each segment between intersections is combinatorially bounded (by the old segment estimates),
+so the arcs are fully combinatorially bounded. 
+Let's denote by $X_J$ the arcs landing at small Julia sets in $J$, and by $X_J^n$ the arcs from $\FF \sm \FF_n$. 
+
+
+
+Now we imagine pushing them forward by $f^q$; this nearly returns back to the same interval. 
+By the Covering Lemma,
+most of the weight of the pushed-forward arcs does not escape from this interval;
+the Wanderers' Theorem implies that most of the weight pushes forward to bounded length concatenations. 
+Therefore $1-\delta$ of the weight in $X_J^n$ is just pushed forward to be a not-so-long concatenation of arcs in $X_J^n$. 
+
+We let $\epsilon$ go to 0; we can then choose $L\equiv L(\epsilon, n)$ such that the $\delta$ above goes to 0. 
+\end{proof}
+
+
+We will then also prove
+\begin{theorem}
+There is no nonzero weighted arc diagram $X$ such that 
+$$ g^*X \dominates X.$$
+\end{theorem}
+
+\subsection{Proof without going to a limit}
+We want to show, with the assumption of Proposition \ref{prop:controlled WAD 2},  that we have the following:
+\begin{lemma}
+For all $\epsilon > 0$, 
+there exists $M$ such that for any interval $I$ in the translation region of combinatorial length at least $M$,
+we have 
+\begin{equation}
+\frac{\text{total weight of arcs contained in $I$}}{\text{total weight of arcs that intersect $I$}} > 1 -  \epsilon.
+\end{equation}
+\end{lemma}
+
+Letting $X$ be our canonical weighted arc-diagram,
+we can form $X|_I$, which, with a typical choice of $I$, 
+will be the canonical weighted arc-diagram for the cover associated to $I$.
+We can then pull this cover back by $f^q$, and get one ``main component'' that covers an interval $J$ that is missing a bounded number of fundamental domains on both sides of $I$.
+We then claim that for $M \equiv M(\epsilon)$ sufficiently large,
+\begin{equation}
+f^{q*}(X|_I) \dominates X|_J.	
+\end{equation}
+
+\end{comment}
+

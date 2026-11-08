@@ -2,6 +2,30 @@
 
 Utility scripts and Poetry entry points for graph generation and local serving.
 
+The interactive graph uses the same site generator and renderer as `main`:
+
+```sh
+make graphs
+make serve
+```
+
+`export_dependencies.lean` supplies constants from elaborated types and proofs.
+Generation checks reachability, acyclicity and the axiom frontier, then writes
+`site/` with HTML, JavaScript and JSON. No static graph image is generated.
+
+## Literature sources
+
+The reproducible arXiv source fetcher is independent of the Poetry package:
+
+```sh
+python scripts/fetch_arxiv_sources.py
+```
+
+Use `--key dudko-lyubich-feigenbaum` to fetch one manifest entry, or
+`--force` to refresh an already extracted source tree.  It stores the
+compressed archive, metadata, extracted TeX, and a small `00README.json`
+marker under `refs/`.
+
 ## Factorization figures
 
 Install the optional plotting dependency and regenerate the global

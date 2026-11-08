@@ -15,7 +15,7 @@ theorem mlc_conjecture
 theorem mlc_conjecture_of_uniformOuterBuffer
     (hbuffer : ParameterComponent.MandelbrotUniformOuterBuffer) :
     LocallyConnectedSpace mandelbrotSet :=
-  mlc_conjecture ⟨hbuffer⟩
+  ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer hbuffer
 
 end
 

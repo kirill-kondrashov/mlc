@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/+ulVdxiTh8Akua34bAk7cKlkiFY</id>
+  <title>arXiv Query: search_query=&amp;id_list=0712.2444&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T08:56:31Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=0712.2444" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/0712.2444v1</id>
+    <title>A priori bounds for some infinitely renormalizable quadratics: III. Molecules</title>
+    <updated>2007-12-14T20:27:38Z</updated>
+    <link href="https://arxiv.org/abs/0712.2444v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/0712.2444v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>  In this paper we prove {\it a priori bounds} for infinitely renormalizable quadratic polynomials satisfying a ``molecule condition''. Roughly speaking, this condition ensures that the renormalization combinatorics stay away from the satellite types. These {\it a priori bounds} imply local connectivity of the corresponding Julia sets and the Mandelbrot set at the corresponding parameter values.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2007-12-14T20:27:38Z</published>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Jeremy Kahn</name>
+    </author>
+    <author>
+      <name>Mikhail Lyubich</name>
+    </author>
+  </entry>
+</feed>

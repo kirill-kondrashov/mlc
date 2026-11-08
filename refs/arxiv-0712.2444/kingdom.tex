@@ -1,0 +1,635 @@
+\section{Dividing cycles, Yoccoz puzzle, and renormalization}\label{principal nest}
+
+Let $(f: U'\ra U)$ be a quadratic-like map.
+We assume that the domains $U'$ and $U$ are smooth disks,
+$f$ is even,  
+and we  normalize $f$ so that $0$ is its critical point.  
+% Our standing assumption is that {\it the Julia set $J(f)$ is connected 
+% and both fixed points of $f$ are repelling}.                      
+We let $U^m = f^{-m}(U)$. The boundary of $U^m$ is called  
+the {\it equipotential of depth $m$}.   
+
+By means of straightening, we can define external rays for $f$. They form a foliation of $U\sm K(f)$
+transversal   to the equipotential $\di U$. Each ray is labeled by its {\it external angle}. 
+These rays will play purely combinatorial role, so particular choice of the straightening
+is not important. 
+  
+\subsection{Dividing cycles and associated Yoccoz puzzles}\label{sec: first king} 
+
+  Let us consider a repelling periodic point $\gamma$ of period $\bt$ and the correspoding cycle 
+$\bgamma=\{f^k\gamma\}_{k=0}^\bt$. This point (and the cycle) is called {\it dividing}
+if there exist at least two rays landing at it.  
+For instance, the landing point of the zero ray is a non-dividing fixed point, 
+while the other fixed point is dividing (if repelling). 
+
+{\it In what follows, we assume that $\gamma$ is dividing.}
+Let $\RR(\gamma)$ (resp., $\RR(\bgamma)$) stand for the family of rays landing at $\gamma$ (resp., $\bgamma$).
+Let ${\bf s} =\# \RR(\gamma)$ and let $\r= \bt\s= \# \RR(\bgamma)$. 
+These rays divide $U$ into $\bt(\s-1)+1$ closed topological disks $Y^0(j)\equiv Y^0_\sbg(j)$ called 
+{\it Yoccoz puzzle pieces of depth $0$}.     
+
+
+{\it Yoccoz puzzle pieces $Y^m(j)\equiv Y^m_\sbg(j)$ of depth $m$} are  defined as the 
+pullbacks of $Y^0(i)$ under $f^m$. 
+They tile the neighborhood of $K(f)$ bounded by the equipotential $\di U^m $.
+Each of them is bounded by finitely many arcs of this equipotential and finitely many  
+external rays of $f^{-m}(\RR(\bgamma))$. 
+We will also use notation $ Y^m(z)$ for the puzzle piece $Y^m(j)$ containing $z$ in its interior. 
+If $f^m(0)\not\in \bgamma$, then there is a well defined {\it critical} puzzle piece  $Y^m\equiv Y^m(0)$.
+The critical puzzle pieces are nested around the origin:
+$$
+   Y^0\supset Y^1\supset Y^2 \dots \ni 0. 
+$$
+Notice that all $Y^m$, $m\geq 1$, are symmetric with respect to the origin.  
+
+
+Let us take a closer look at some puzzle piece $Y=Y^m(i)$.
+Different arcs of $\di Y$  meet at the {\it corners} of $Y$.
+The corners where two external rays meet will be called {\it vertices} of $Y$;
+they are $f^m$-preimages of $\bgamma$.
+Let $K_Y= K(f)\cap Y$. It is a closed connected set that meets the boundary $\di Y$
+at its  vertices. Moreover, the external rays meeting at a vertex $v\in \di Y$ chop off from
+$K(f)$ a continuum $S_Y^v$, the component of $K(f)\sm \inter Y$ containing $v$. 
+
+Let $\YY_\sbg$ stand for the family of all puzzle pieces $Y_\sbg^m(j)$. 
+
+Let us finish with an obvious observation that will be constantly exploited:
+
+\begin{lem}\label{Subset}
+  If a puzzle piece $Y^n(z)$ of $\YY_\bgamma$ does not touch the cycle $\bgamma$
+then $Y^n(z)\Subset Y^0(z)$.
+\end{lem}
+
+\subsection{Renormalization associated with a dividing cycle}\label{renorm-sec}
+
+\begin{lem}[see \cite{Th,M-rays}]\label{cv pp}
+  The puzzle piece $X^0 \equiv Y^0(f(0))$ of $\YY_\bgamma$ 
+containing the critical value has only one vertex, 
+and thus is bounded by only two external rays (and one equipotential).
+\end{lem} 
+  
+In what follows, 
+$\gamma$ will denote the point of the cycle $\bgamma$ such that $f(\gamma)$ is the vertex of $X^0$.
+Notice that $f(0)\in \inter X^0$ for otherwise $f(0)=f(\gamma)$, which is impossible since $0$ is the
+only preimage of $f(0)$. 
+
+Since the critical puzzle piece $Y^1$ is the pullback of $X^0$ under $f$, it has two vertices, 
+$\gamma$ and $\gamma'= -\gamma$, and is bounded by four rays,
+two of them landing at $\gamma$ and two landing at $\gamma'$.%
+\footnote{We will usually say that ``a puzzle piece is bounded by several external rays'' 
+without mentioning equipotentials that also form part of its boundary.} 
+
+\begin{lem}(see \cite{D})
+  Let $X^\r \equiv Y^\r (j)\subset X^0$  be the puzzle piece attached to the boundary of $X^0$.
+Then $f^\r : X^\r \ra X^0$ is a double branched covering.
+\end{lem}
+ 
+\begin{pf}
+    Let $\CC^0$ be the union of the two rays that bound $X^0$,
+and let $\CC^\r  $ be $\CC^0$ cut by the equipotential $\di U^\r$.
+Let us orient $\CC^0$ and then induce the orientation to $\CC^\r $.
+    Since $f^\r : \CC^\r \ra \CC^0$ is an orientation preserving homeomorphism, 
+it maps $X^\r $ onto $X^0$. 
+
+Since for $m=1,\dots, \r - 1$,  the arcs $f^m(\CC^\r)\subset \di (f^m X^\r )$ are disjoint  from
+$\inter X^0$, the puzzle pieces $f^m X^\r $ are not contained in $X^0$.
+Since they have a bigger depth than $X^0$, they are disjoint from $\inter X^0$.
+It follows that all the puzzle pieces $f^m (X^\r )$, $m=0,1,\dots, \r -1$, 
+have pairwise disjoint interiors. 
+(Otherwise $f^m(X^\r)\supset f^n (X^\r)$ for some $ \r> m > n\geq 0$,
+and applying $f^{\r-m}$, we would conclude that $X^0\supset f^{\r-n+m} (X^\r)$.)    
+
+Moreover, the puzzle piece  $f^{\r-1}X^\r=Y^1$ is  critical
+since $Y^1$ is the only pullback of $X^0$ under $f$. 
+Hence the puzzle pieces $f^m(X^\r)$, $m=0,1,\dots, \r-2$, do not contain $0$. 
+It follows that  $\deg(f^\r : X^\r \ra X^0)=2$.
+\end{pf}
+
+\makefigure{pullback}{}
+
+\begin{cor}\label{renorm}
+  If $f(0)\in \inter X^\r $ then the puzzle piece $Y^{\r+1}$ has four vertices,
+and the map $f^\r : Y^{\r+1}\ra Y^1$ is a double branched covering.  
+\end{cor}
+
+   Let $\Theta(\bgamma)\subset \T$ be the set of external angles of the rays of $\RR(\bgamma)$.
+There is a natural equivalence relation on $\Theta(\bgamma)\subset \T$:
+two angles are equivalent if the corresponding rays land at the same periodic point. 
+Let us consider the hyperbolic convex hulls of these equivalence classes 
+(in the disk $\D$ viewed as the hyperbolic plane). 
+The union of the boundaries of these convex hulls 
+is a  finite lamination $\PP=\PP(\bgamma)$ in $\D$ which is also called the 
+{\it periodic ray portrait}. One can characterize all possible ray portraits that appear in this way
+(see \cite{M-rays}). 
+
+
+\begin{definition} 
+A map $f$ is called $\PP$-{\it renormalizable} 
+(or, ``renormalizable with combinatorics $\PP$'')
+if $f(0)\in \inter X^\r$ and $f^{\r m}(0)\in  Y^{\r+1}$  
+for all $m=0,1,2,\dots$. 
+In this case, the double covering $f^\r : Y^{\r+1}\ra Y^1$ is called
+the {\it renormalization} $R_\PP f = R_\sbg f$ of $f$ (associated with the cycle $\bgamma$).
+The corresponding {\it  little (filled) Julia set} $\KK = K(R f)$ 
+is defined as 
+$$
+        \{ z: f^{\r m}z\in Y^{\r + 1} ,\quad  m=0,1,2\dots\}
+$$
+If the little Julia sets $f^m \KK$, $k=0,1\dots, \r-1$, 
+are pairwise disjoint, then the renormalization is called {\it primitive};
+otherwise it is called {\it satellite}. 
+
+In case $\bgamma$ is the dividing fixed point of $f$,
+the map  is also called {\it immediately renormalizable}.
+(This is a particular case of the satellite renormalization.)
+\end{definition}
+
+
+
+\begin{rem} The above  definition of renormalization is not quite standard since the map 
+$R_\sbg f$ is not quadratic-like. To obtain the usual notion of renormalization, 
+one should thicken the domain of $R_\sbg f$  a bit to make it quadratic-like (see \cite{D,M}). 
+This thickenning does not change the Julia set, so $K(Rf)$ possesses all the properties of 
+quadratic-like Julia sets. In particular, it has two fixed points, one of which is either
+non-repelling or dividing.
+
+Note also that in the case when $f^r(0)=\gamma'$ the puzzle piece
+$Y^{\r+1}$ degenerates (is pinched at $0$), but this does not effect any of 
+further considerations. 
+\end{rem}
+
+Given a periodic ray portrait $\PP$, 
+the set of parameters $c\in \C$ for which the quadratic polynomial $P_c$ is $\PP$-renormalizable form a 
+{\it little copy} $M_\PP$ of the Mandelbrot set (``$M$-copy''). Thus, there is one-to-one correspondence
+between the admissible ray portraits and the little M-copies.
+So, one can encode the combinatorics of the renormalization by the little $M$-copies themselves. 
+
+\subsection{Molecule Condition}
+
+The  molecule $\MM$ defined in the Introduction consists of the quadratic maps which are:
+
+\nin\ssk $\bullet$
+ either finitely many times renormalizable, all these renormalizations are satellite,
+  and the last renormalization has a non-repelling cycle;
+
+\nin\ssk $\bullet$
+  or  infinitely many times renormalizable, with all the renormalizations satellite.
+
+\ssk The molecule condition that we are about to introduce will  ensure that our map $f$
+  has frequent ``qualified'' primitive renormalizations.
+Though  $f$ is allowed to be satellite renormalizable once in a while,
+{\it we will   record only the primitive renormalizations}.
+They  are naturlly ordered according to their periods,
+$1=p_0 <p_1<p_2<\dots$, where  $p_i$ is a multiple of $p_{i-1}$. 
+% Moreover, the corresponding $M$-copies $M_i$ are nested:
+% $M=M_0\supset M_1\supset M_2\supset\dots$ 
+
+Along with these ``absolute'' periods of the primitive renormalizations,
+we will consider {\it relative periods} $\tl p_i = p_i/p_{i-1}$ and the corresponding $M$-copies
+$\tl M_i$ that encode the combinatorics of $R^i f$ as the renormalization of $R^{i-1} f$. 
+% Any sequence of relative $M$-copies $M_i$ can appear as such combinatorics. 
+
+% The renormalization level $i$ is called {\it satellite} if $R^{i-1} f$ is immediately renormalizable;
+% otherwise it is called primitive. 
+
+Given an $\eta>0$, we say that a sequence of primitively renormalizable quadratic-like maps $f_i$
+satisfies the $\eta$-{\it molecule condition}
+if the corresponding  $M$-copies $M_i$  stay $\eta$-away from the molecule $\MM$ 
+(the latter is defined in the Introduction).
+We say that $\{f_i\}$ satisfies the {\it molecule condition} if it does it for some $\eta>0$.
+    
+An infinitely primitively  renormalizable map $f$  satisfies the $\eta$-molecule condition
+if the sequence of its primitive renormalizations $R^i f$ does
+(i.e.,  the corresponding relative copies $\tl M_i$ stay $\eta$-away from the molecule $\MM$).   
+(And similarly, for  the non-quantified molecule condition.)
+
+\msk There is, however, a more specific combinatorial way to describe the molecule condition. 
+
+Let us consider a quadratic-like map $f$ with straightening $P_c$, $c\in M$.
+We are going to associate  to  $f$ (in some combinatorial region, and with some choice involved)
+three combinatorial parameters, $(\r,\q,\n)$ (``period, valence, and escaping time'')
+whose boundedness will be equivalent to the molecule condition.
+ 
+\ssk
+{\it Assume first that $f$ admits a dividing cycle $\bgamma$ with the ray portrait $\PP$
+with $\r$ rays}. 
+This happens if and only if $c$ belongs to the parabolic limb of $M$ cut off by
+two external rays landing at an appropriate parabolic point. 
+%(where an attracting cycle of period
+%$\bt$ bifurcates into an attracting cycle of period $\bt\s=\r$).  
+%However, unlike $f_*$, {\it the map  $f$ is not necessarily $\PP(\bgamma$)-renormalizable}. 
+
+\ssk
+On the central domain of $\C\sm (\RR(\bgamma)\cup \RR(\gamma'))$,
+$f^\r$ has a unique fixed poin $\alpha$. 
+{\it Next, we assume that $\alpha$ is repelling and there are $\q$ rays landing at it.} 
+
+\ssk {\it Assume next that the finite orbit $f^{\r j(0)}$, $j=1,\dots, \q\n-1$,
+      does not escape the central domain of  $\C\sm (\RR(\gamma)\cup \RR(\gamma'))$}.
+       This happens if and only if 
+  $c$ lies outside certain {\it decorations} (see \cite{decorations})
+  of the above parabolic limb. In particular, this happens if $f$ is
+  {\it satellite  $\PP(\gamma$)-renormalizable}.   
+
+\ssk {\it Finally, assume that  $\n$ is the first moment $n$ such that  $f^{\r\q n}(0)$ escapes the
+  central domain of $\C\sm (\RR(\alpha)\cup \RR(\alpha'))$}. 
+   This happens if and only if 
+  $c$ belongs to the union  of $2^\n$ {\it decorations} 
+  inside the above parabolic limb. In particular, the map $f$ 
+  {\it is not  $\PP(\balpha$)-renormalizable}.   
+
+\ssk 
+ Under the above assumptions, 
+%  we have well defined parameters $(\r,\q,\n)$ associated with $f$.
+  we say that $f$ satisfies the $(\bar\r, \bar\q, \bar\n)$-{\it molecule condition} if
+  there is a choice of $(\r, \q,\n)$ with $\r\leq \bar\r$, $\q\leq \bar \q$ and $\n\leq \bar \n$.  
+
+
+\begin{lem}
+     The $(\r,\q,\n)$-molecule condition is equivalent to the $\eta$-molecule condition.%
+\footnote{In the sense that if $f$ satisfies $(\r,\q,\n)$-molecule condition then it satisfies
+ $\eta$-molecule condition with some $\eta=\eta(\r,\q,\n)$, and the other way around.}  
+\end{lem}
+
+\begin{pf}
+  If $f$ satisfies $(\r,\q,\n)$-molecule condition then $c$ belongs to the finite union of decorations.
+Each of them does not intersect the molecule $\MM$, so $c$ stays some distance $\eta$ away from $\MM$. 
+
+Vice versa, assume there is a sequence of maps $f_i$ satisfying the $\eta$-molecule condition,
+but with  $(\r,\q,\n)\to \infty$ for any choice of $(\r,\q,\n)$.
+Let us select a convergent subsequence $c_i\to c$. Since $c\not\in \MM$, 
+there can be only finitely many hyperbolic components $H_0,H_1,\dots,H_m$ of $\MM$
+such that $H_0$ is bounded by the main cardioid, $H_{k+1}$ bifurcates from $H_k$,
+and $f$ is $m$ times immediately  renormalizable with the corresponding combinatorics.   
+Let us consider the two rays landing at the last bifurcation point (where $H_m$ is attached to $H_{m-1}$),
+and the corresponding parabolic limb of the Mandelbrot set.%
+\footnote{If $m=0$ then we consider the whole Mandelbrot set. } 
+This parabolic point has certain period $\r$. 
+
+Since the quadratic polynomial $P_c$ is not immediately renormalizable any more,
+the corresponding cycle $\balpha$ is repelling with $\q$ rays landing at each of  its periodic points,
+and there is some escaping time $\n$. 
+So, $P_c$ satisfies $(\r,\q,\n)$-molecule condition.
+Since this condition is stable under perturbations, $P_{c_i}$ satisfy it as well -- contradiction.  
+\end{pf}
+
+%{\it In what follows we assume that $\r\leq \bar\r$, $\q\leq \bar \q$ and $\n\leq \bar \n$ for
+%some bounds $\bar\r$, $\bar\q$ and $\bar \n$ fixed throughout the paper.  
+%All the constants will depend on these bounds, unless otherwise is explicitly stated.}
+
+{\it In what follows we assume that parameters $\r,\q,\n$ are well defined for a map $f$ under consideration,}
+so in particular, we have two dividing cycles, $\bgamma$ and $\balpha$. 
+We let $\k=\r\q\n$.
+Let us state for the record the following well-known combinatorial property:
+
+\begin{lem}\label{zeta}
+   The point $\zeta=f^\k(0)$ is separated from $\alpha$ and $0$ by the rays landing at $\alpha'$.%
+\footnote{while the latter two points are not separated.}
+\end{lem}
+
+ \subsection{Combinatorial separation between $\gamma$ and $\balpha$}\label{comb sep} 
+  
+%  Assume now that $f$ is renormalizable with combinatoics $\PP$ associated with a dividing
+%cycle $\bgamma$, but the renormalization $g =  R_\sbg f$ is not immediately renormalizable.
+%Let $\alpha$ be the dividing fixed point of $g$, let $\balpha$ be its cycle (of period $\r$), 
+%and let $\alpha'=-\alpha$.
+
+Along with the puzzle $\YY_\sbg$ associated with $\bgamma$, let us consider the puzzle $\YY_\sba$
+associated with $\balpha$. 
+The critical puzzle piece $Y_\sba^1$ has two vertices, $\alpha$ and $\alpha'$,
+and is bounded by four external rays landing at these vertices. Let $\CC$ 
+be the union of the two external rays of $\di Y^1_\sba$ landing at $\alpha$, 
+and let $\CC'$  be the symmetric pair of external rays landing at $\alpha'$. 
+     
+Recall that $\bt$ stands for the period of $\bgamma$ and $\s$ stands for $\# \RR(\bgamma)$. 
+
+\begin{lem}\label{separation}
+  There exist inverse branches $f^{-\bt m} |\, \CC'$, $m=0,1,\dots, \s-1$, 
+such that the union of the arcs $f^{-\bt m} (\CC')$  separates $\gamma$ from 
+the cycle $\balpha$ and the co-cycle $\balpha'$
+(except that $\alpha'\in \CC'$). 
+%Moreover, the puzzle piece $Y_\sba^{}(\gamma)$ has $\s$ vertices, and is bounded by
+%the arcs  $f^{-\bt m} (\CC')$ (approperiately cut) and appropriate equipotentials.
+\end{lem}
+
+\begin{pf}
+Let us pull the puzzle piece $Y_\sbg^1$ along the orbit $\bgamma$ 
+(or equivalently, along the orbit  $\balpha$). 
+By Corollary \ref{renorm}, 
+the corresponding  inverse branches 
+$$
+   f^{-m} : Y^1_\sbg \ra f^{-m}(Y^1_\sbg) = f^{\r-m} Y^{\r+1}_\sbg,\quad  m=0,1,\dots, \r-1,
+$$ 
+have disjoint interiors.  
+Hence each of these puzzle pieces contains exactly one point of $\balpha$. 
+Moreover, non of these puzzle pieces except $Y^1_\sbg$ may intersect $\balpha'$
+(for otherwise, its image would contain two points of $\balpha$).   
+
+It follows from standard properties of quadratic maps 
+that the arc $\CC'$ {\it separates} 
+$\gamma$ (which is the non-dividing fixed point of $R_\sbg f$) from $\gamma'$ and
+$\alpha$ (which is the dividing fixed point of $R_\sbg f$). 
+Hence the arcs $f^{-\bt m} (\CC')$, 
+separate $\gamma$ from  $f^{-\bt m}(\gamma')$ and $f^{-\bt m}(\alpha)$. 
+
+Since each of the puzzle pieces $f^{-\bt m} ( Y^1_\sbg)$,  $m=0,1,\dots, \s-1$, has two vertices
+($\gamma$ and $f^{-\bt m}(\gamma')$) and  their union forms a neighborhood of $\gamma$,
+the rest of the Julia set is separated from $\gamma$ by the union of arcs
+$f^{-\bt m}(\CC')$, $m=0,1,\dots, \s-1$. 
+It follows that this union separates $\gamma$ from the whole cycle $\balpha$, 
+and from the co-cycle $\balpha'$. 
+\end{pf}
+
+Together with Lemma \ref{Subset} this yields: 
+
+\begin{cor} We have:
+  $Y_\sba^{\r}(\gamma) \SUBset Y^0_\sba (\gamma)$ % \note{In fact, $\r-\bt+1$}
+\end{cor}
+
+
+\begin{pf}
+   The puzzle piece $Y_\sba^{\r}(\gamma)$ contains $\gamma$ and does not cross the arcs 
+$f^{-\bt m} (\CC')$, $m=0,1,\dots, \s-1$, from Lemma \ref{separation}.
+Hence it does not intersect $\balpha$, and the the conclusion follows from Lemma \ref{Subset}.
+\end{pf}
+
+
+ \subsection{A non-degenerate annulus} 
+%Let $\q = \# \RR(\alpha)$. 
+%{\it Let us assume that the map $g=R_\sbg f$ is not immediately renormalizable.}
+%Then there is an $\n$ such that $\zeta = g^{\q \n}(0)=f^{\r\q\n}(0)$ is separated from $\alpha$ by $\CC'$.
+%Let $\r\q\n= \k$. 
+
+ {\it In what follows we will be dealing only with the puzzle $\YY_\ba$, so we will skip the label $\ba$
+in notation.} 
+  
+Since by Lemma \ref{zeta}, the point $\zeta =f^\k (0)$ is separated from $\alpha$ by $\CC'$,
+the union of arcs $f^{-\bt m} (\CC')$, $m=0,1,\dots, \s-1$, from Lemma \ref{separation}
+separates $\zeta$ from the whole cycle $\balpha$.
+By Lemma \ref{Subset},  $Y^{\r}(\zeta)\Subset Y^0(\zeta)$.
+Pulling this back by $ f^\k$,  we conclude:
+
+\begin{lem}
+We have: 
+       $Y^{\k+\r} \Subset  Y^\k$.
+\end{lem}
+
+We let $E^0= Y^{\k+\r}$. 
+
+\subsection{Buffers attached to the vertices of $P=Y^{\r\q (\n-1)+1}$}\label{P-sec}
+
+
+ Let us consider a nest of critical puzzle pieces
+$$
+   Y^1 \supset  Y^{ \r\q +1 } \supset Y^{2\r\q+1 } \supset\dots \supset Y^{\r\q (\n-1)+1} = P. 
+$$
+ Since $f^{\r\q} : Y^{\r\q+1}\ra Y^1 $ is a double branched covering such that
+$$
+   f^{\r\q m}(0)\in Y^1, \quad m=0,1,\dots, \n-1,
+$$
+the puzzle piece $Y^{\r\q k+1}$  is mapped by 
+ $f^{\r\q}$ onto $Y^{\r\q (k-1)+1}$ as a double branched covering, $k=1\dots,\n-1 $. 
+However, since $f^\k(0)=f^{\r\q\n}(0)\not\in Y^1$, there are two non-critical puzzle pieces of depth 
+$\k+1$ mapped univalently onto $P$ under $g^{\q}$.  
+One of these puzzle pieces, called $Q_L$, is attached to the point $\alpha$,
+another one, called $Q_R$, is attached to $\alpha'$.
+The following Lemma is similar to Lemma  2.1 of \cite{decorations}:
+
+\begin{lem}\label{Qv}
+ For any vertex of $P$, there exists a puzzle piece $Q^v\subset P$ of
+ depth $\r(2\n-1)\q + 1$ attached to the boundary rays of $P$ landing at $v$
+ which is a univalent $f^\k$-pullback of $P$. Moreover, these puzzle pieces are
+ pairwise disjoint.
+\end{lem}
+
+
+\subsection{Modified principle nest}\label{modified nest}
+Until now, the combinatorics of the puzzle depended only on the parameters $(\r,\q,\n)$.
+Now we will dive  into the deeper waters.
+
+Let $l$ be the first return time of $0$ to $\inter E^0$ and let $E^1= Y^{\k+ \r +l}$
+be the pullback of $E^0$ along the orbit $\{f^m (0)\}_{m=0}^l$.
+Then $f^l: E^1\ra E^0$ is a double branched covering.
+
+\begin{cor}\label{non-degenerate annulus}
+     We have: $E^1\SUBset  E^0$.
+\end{cor}
+
+\begin{pf}
+  Since $\{f^m(0)\}_{m=1}^{\r-1}$ is disjoint from $Y_\sbg^1\supset Y_\sba^1 \supset E^0$,
+we have: $l\geq \r$. Hence 
+$$
+      f^l(E^0)\supset f^\r(E^0) \Supset E^0 = f^l(E^1),
+$$
+and the conclusion follows. 
+%$E^1\subset Y^{\r\q\n+r}\SUBset E^0$.
+\end{pf}  
+
+ 
+Given two critical puzzle pieces $E^1\subset \inter E^0$, we can construct 
+the {\it (Modified) Principle Nest} of critical puzzle pieces 
+$$
+  E^0\SUPset E^1\SUPset E^1\SUPset\dots\SUPset E^{\chi-1}\SUPset E^\chi 
+$$
+as described in  in \cite{KL-high}.                        
+It comes together with quadratic-like maps $g_n: E^n\ra E^{n-1}$. 
+
+If the map $f$ is renormalizable then  the Principle Nest terminates at some level $\chi$. 
+In this case, the last quadratic-like map $g_\chi: E^\chi\ra E^{\chi-1}$  has connected Julia set
+that coincides with  the Julia set of the  renormalization $R_\sbb f$, where
+$\bbe$ is the $f$-orbit of the non-dividing fixed point $\beta$ of $g_\chi$.  
+The renormalization level $\chi$ is also called the {\it height} of the nest. 
+
+
+% Let $S_i$, $i=i,\dots, l$, be the components of $K(f)\sm \inter Y^0$. 
+
+
+
+\subsection{Stars}\label{stars}
+
+% Let $\r\q\n= \k$. 
+
+Given a vertex $v$ of some puzzle piece of depts $n$,
+let $S^n(v)$ stand for the union of the puzzle pieces of depth $n$ attached to $v$
+(the ``star'' of $v$).
+Given a finite set ${\bf v}=\{v_j\}$ of vertices $v_j$, we let
+$$
+       S^n({\bf v})=\bigcup_j S^n(v_j). 
+$$
+
+  Let us begin with an obvious observation that follows from Lemma~\ref{Subset}:
+
+\begin{lem}\label{compactly conained}
+  If a puzzle piece $Y^n(z)$ is not contained in $S^n(\balpha)$
+then $Y^n(z)\Subset Y^0(z)$.
+\end{lem}
+
+
+\begin{lem}\label{single point}
+  For $\bl=\k + 1+2\r$, the stars $S^{\bl}(\alpha_j)$ do not overlap and do not contain the critical point. 
+\end{lem}
+
+\begin{pf}
+Let us consider the  curves $\CC$ and $f^{-\bt m} \CC'$, $m=1,\dots, \s-1$,  from Lemma \ref{separation}. 
+They separate $\alpha'$ from all points of $\balpha\cup \balpha'\sm \{\alpha\}$. 
+Furthermore, since $f^{\k}(0)$ is separated from $0$ by $\CC'$,
+there is a lift $\Gamma$ of $\CC'$ under $f^{\k}$ that separates $\alpha'$ from $0$ 
+and hence from $\alpha$.  It follows that the curves $\Gamma$ and $f^{-\bt m} \CC'$, $m=1,\dots, \s-1$,
+separate $\alpha'$ from all points of $\balpha\cup \balpha'$. 
+Since the maximal depth of these curves is  $\bl=\k +1$ (which is the depth of $\Gamma$),
+the star $S^{\k+1}(\alpha')$ does not overlap with the interior of the stars $S^{\k+1}(a)$
+for all  other $a\in \balpha\cup\balpha'$.
+
+By symmetry, the same is true for the star $S^{\k+1}(\alpha)$.
+Since these stars  do not contain $0$,
+the pullback of $S^{\k+1+\r}(\alpha)$  under $f^\r$ (along $\balpha$) is compactly contained in 
+its interior, $\inter S^{\k+1+\r}(\alpha)$.
+It follows that $S^{\k+1+\r}(\alpha)$ does overlap with the stars
+$S^{\k+1}(a)$ for all  other $a\in \balpha\cup\balpha'$.
+
+Pulling this star once more around $\balpha$, 
+we obtain a disjoint family of stars.
+Hence all the stars $S^{\k+1+2\r}(a)$,  $a\in \balpha\cup\balpha'$,
+are pairwise disjoint. 
+\end{pf}
+
+% \bignote{Add to the next section: $S^\bl(\alpha) \Subset S^1(\alpha)$.}
+
+
+\subsection{Geometric puzzle pieces}
+
+In what follows  we will deal with more general puzzle pieces.
+
+Given  a puzzle piece $Y$, of depth $m$, 
+let $Y[l]$ stand for a Jordan disk bounded by the same external rays
+as $Y$ and arcs of equipotentials of level $l$ (so $Y[m]=Y$).
+Such a  disk will be called a puzzle piece of {\it bidepth} $(m,l)$.
+  
+A {\it geometric puzzle piece} of bidepth $(m,l)$ is a closed Jordan domain which is 
+the union of several puzzle pieces of the same bidepth. 
+As for ordinary pieces, a pullback of a geometric puzzle piece of bidepth $(m,l)$ 
+under some iterate $f^k$ is a geometric puzzle piece of bidepth $(m+k, l+k)$.
+Note also that if $P$ and $P'$ are geometric puzzle pieces with%
+\footnote{the inequality between bidepths is understood componentwise}
+$\bidepth P \geq \bidepth P'$ 
+and $K_P\subset K_{P'}$ then $P\subset P'$.
+
+The family of geometric puzzle pieces of bidepth $(m,l)$ will be called $\YY^m[l]$.
+%Given a geometric puzzle piece $Y\in \YY^m[l]$, we let $Y[k]$ be the puzzle piece
+%bounded by the same external rays as $Y$ truncated by the equipotential of level $k$. 
+%(In particular, $Y[l]=Y$.)
+
+Stars give examples of geometric puzzle pieces. 
+Note that pullback of a star is a geometric puzzle piece as well 
+but it is a star only if the pullback is univalent.
+
+
+\comm{*******************8
+Any puzzle piece $Y\in \YY^m[l]$ admits the following combinatorial representation.
+Let $\theta_i$ be the cyclically ordered  angles of the external rays $\RR_i$ that bound $Y$. 
+Let us consider the straight rays $R_i$ in $\C\sm \D$ of angles $\theta_i$
+truncated by the circle $\T_r$ of radius $r=1/2^l$. 
+If two consecutive rays, $\RR_i$ and $\RR_{i+1}$, land at the same vertex of $Y$,
+let is connect $R_i$ to $R_{i+1}$ with a hyperbolic geodesic in $\D$. 
+Otherwise $\RR_i$ and $\RR_{i+1}$ are connected with an equipotential arc. 
+Then let us connect $R_i$ to $R_{i+1}$ with the appropriate arc of $\T_r$.
+We obtain a Jordan curve that bounds the {\it combinatorial model} $M_Y$ of $Y$.
+
+ The arcs $\om_i$ of  $\T\cap M_Y$ correspond to  the 
+``external arcs'' of the Julia piece $K_Y$.  
+% (which are the different approaches to $K_Y$ from $\infty$ in $\C\sm \cup \bar \RR_i$).
+ They have length $2\pi \la$, where $\la$ is called the {\it combinatorial length}
+of the corresponding external arc of $K_Y$. 
+For a geometric puzzle piece $Y$ of depth $m$,
+the combinatorial length of its external arcs is at least $c(\PP)2^{-m}$,
+where $c(\PP)$ is the minimum of the combinatorial lengths of the external arcs of the
+puzzle pieces of depth 0. 
+******************************************}
+
+\msk
+% Let $Z=S^1(\alpha)$. 
+%Let $L= S^1(\alpha)\sm \inter Y^1$ and $R=-L = S^1(\alpha')\sm \inter Y^1 $. 
+
+\begin{lem}\label{qn-pullbacks}
+  Given a point $z\in \inter S^1(\alpha)\cup \inter S^1(\alpha')$ such that $f^{\k} z \in\inter S^1(\alpha)$,
+let $P = f^{-\k}(S^1(\alpha))|z$.  Then $P\subset S^1(\alpha)$ or $P\subset S^1(\alpha')$.
+\end{lem}
+
+\begin{pf}
+  Notice that $\alpha$ and $\alpha'$ are the only points of $\balpha\cup \balpha'$ 
+contained in $\inter S^1(\alpha)\cup \inter S^1(\alpha')$.
+Since $f^{\k}$ maps $\tl\balpha=\balpha\cup \balpha'\sm \{\alpha, \alpha'\}$
+to $\balpha\sm \{\alpha\}$,
+no point of $\tl\balpha$ is contained in $\inter P$.
+Hence $P$ is contained in $ S^1(\alpha)\cup  S^1(\alpha')$.
+%Hence $K_P$ is contained in the closure of some component of $K(f)\sm \tl\balpha$. 
+%Since $z\in L$, it must be the closure of the component containing $\alpha$, 
+%i.e.,  $K_L\cup K_{Y^1}\cup K_R$.  Hence 
+%$$P \subset L\cup Y^1\cup R.$$ 
+
+But by construction of $Y^{\k+1}$, the interior of $f^\k (Y^{\k+1})$ does not overlap with $S^1(\alpha)$.
+Hence $\inter Y^{\k+1}$ does not overlap with $P$. 
+But $S^1(\alpha)\cup S^1(\alpha')\sm  \inter Y^{\k +1}$ 
+consists of two components, one inside $S^1(\alpha)$ and the other inside $S^1(\alpha')$. 
+Since $P$ is connected, it is contained in one of them.
+\end{pf}
+
+\comm{*********************
+
+Let us now consider the following geometric puzzle pieces:
+\begin{itemize}
+\item puzzle piece $Z^0=  - Y^0$;
+\item  puzzle piece $R$  
+   bounded by the arcs $f^{-\bt m} (\CC')$, $m=0,1,\dots, \s-1$, from Lemma \ref{separation} 
+   and the equipotential of level one; 
+\item the symmetric puzzle piece $L=-R$.
+\end{itemize}
+
+
+\begin{lem}\label{qn-pullbacks}
+  Let $z\not\in S^{3\r}(\balpha)$,  $g^{\q\n} z \in\inter Z^0$ and let $P = g^{-\q\n}(Z^0)|z$. 
+Then $P\Subset \inter Y^0$ or  $P\Subset \inter Z^0$.
+\end{lem}
+
+\begin{pf}
+  $P$ is a geometric puzzle piece of bidepth $(\r\n\q+1, \r\n\q) $.
+ But the puzzle piece $Y^{\r\n\q+1}$ is mapped under $g^{\n\q}$ into  $R$, 
+  and $R \cap Z^0=\emptyset$.
+It follows that $P \cap \inter Y^{\r\n\q+1}=\emptyset$. 
+But $K(f)\sm \inter Y^{\r\q\n+1}$ consists of two $0$-symmetric 
+connected components $X_L\supset L\cap K(f)$ and $X_R\supset R\cap K(f)$. 
+We conclude that  $K_P$ is contained in one of these components, and hence it is contained in one of the
+sets $K_{Z^0}$ or $K_{Y^0}$. As
+ $$
+    \bidepth P\geq (1,0)=\bidepth Z^0\geq (0,0)=\bidepth Y^0,
+$$ 
+ $P$ is contained in one of the
+puzzle pieces $Z^0$ or $Y^0$. 
+\end{pf}
+*******************************}
+ 
+\comm{*************
+\begin{lem}\label{returns to L}
+  If  $z \in S^{3\r} (\balpha)$ then $f^k z\in L$
+for some $k\leq 2\r$. 
+\end{lem}
+
+\begin{pf}
+   If $z\in S^{3\r}(\alpha_j)$, then 
+$
+  \zeta=f^{\r-j}z\in S^{2\r}(\alpha)\subset L\cup Y^\r .
+$
+But if $\zeta\in Y^\r$ then $f^\r \zeta\in L$.    
+\end{pf}
+**************************}
+
+
+% \section {Geometric separation between $\ba$ and $\ba'$}
+
+
+
+
+
+
+
+

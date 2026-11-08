@@ -1,0 +1,278 @@
+\section{Renormalization for almost commuting holomorphic pairs}\label{sec:ACM}
+We are now going to use Main Theorem 1 to extend our hyperbolicity result to a.c. pairs in $\cB(Z,W)$.
+
+Let us state several useful lemmas first.
+\begin{lemma}
+\label{lem-cpt1}
+Let $Z'\Supset Z$, $W'\Supset W$, $a\in Z$, $b\in W$, and $C>0$. Let $S$ denote the subset of $\cH(Z',W')$ consisting of the pairs $(\eta,\xi)$
+with $|\eta'(a)|<C$ and $|\xi'(b)|<C$. Then $S$ is pre-compact in $\cH(Z,W)$.
+\end{lemma}
+\begin{proof}
+This is an immediate corollary of Koebe Distortion and Arzel{\`a}-Ascoli Theorems.
+\end{proof} 
+
+The next statement is a direct analogue of Proposition \ref{prop-proj}:
+\begin{prop}
+\label{prop-proj2}
+There exists an open neighborhood $\cU$ of $\cB(Z,W)$ in $\cC(Z,W)$ such that the following holds.
+Suppose that a pair of maps $(\eta,\xi) \in \cU$. Then there exists a unique triple of complex numbers $a$, $b$, $c$ such that 
+\begin{eqnarray}
+\cP (\eta,\xi)(z)\equiv\left( \eta(z)+a z^4+b z^6, \xi(z)+c \right)\in\cB(Z,W).
+\end{eqnarray}
+Moreover, the dependence of the numbers $a$, $b$, and $c$ on $(\eta,\xi)\in\cU$ is analytic.
+\end{prop}
+\begin{proof}
+The computation is even simpler than before. Again, 
+\begin{equation}\label{eq:newFs1a}
+c=1-\xi(0).
+\end{equation}
+Furthermore, the commutation conditions reduce to:
+$$\left\{ \begin{array}{c}a+b=\xi(\eta(0)) +c -\eta(1),\\
+4a+6b=\xi'(\eta(0))\eta''(0)/\xi''(0)-\eta'(1)\end{array}\right.$$
+Therefore, if $(\phi,\psi)$ is a small perturbation of  an a.c. pair $(\eta,\xi)$, then this set of equations has a unique solution $(a,b,c)$ which depends on $(\eta,\xi)$ analytically.
+\end{proof}
+
+To define renormalization of pairs $(\eta,\xi)\in\cC(Z,W)$ without a condition of quadratic symmetry, we note that every 
+such pair can be decomposed as 
+\begin{equation}\label{def:acm}
+\zeta=(\eta,\xi)=(\phi \circ q_2 \circ \alpha,  \psi \circ q_2 \circ \beta),
+\end{equation}
+where $\alpha$ and $\beta$ are holomorphic on $Z$ and $W$ respectively, and satisfy 
+\begin{equation}\label{def:tangenttox}
+\alpha(x)=x+O(x^2), \quad \beta(x)=x+O(x^2).
+\end{equation}
+Let us denote $\cW(Z)$ the space of holomoprhic maps in $Z\ni 0$ with the property $\alpha(x)=x+O(x^2)$ -- this is clearly an (affine) Banach submanifold of the space $\cH(Z)$.
+Let $\cU(Z)\subset \cW(Z)$ consist of maps with $|\alpha'(z)|>0$ for $z\in Z$, and let $\cU(Z,W)\equiv \cU(Z)\times\cU(W)$.
+Following Martens \cite{Mar}, we introduce:
+
+\begin{definition}
+The {\it nonlinearity operator} $N: \cU(Z) \mapsto \cH(Z)$
+is defined as
+$$N[\alpha]=D \log{  D \alpha }={\alpha'' \over \alpha'},$$
+so that $N[\alpha](x)$ is the nonlinearity of $\alpha$ at the point $x$.
+\end{definition}
+
+\noindent
+The following Lemma results from a straightforward computation.
+
+\begin{lemma}
+The nonlinearity operator $N:\cU(Z)\to N(\cU(Z))$ is a bijection onto its image, the inverse being defined as 
+\begin{equation}\label{inv_non_op}
+N^{-1}[\alpha](x)= \int_0^x \exp\left\{\int_0^z\alpha(w) d w  \right\} d z,
+\end{equation}
+where the integrals are taken along any Jordan arc contained in $Z$ with the endpoints $0$ and $x$.
+\end{lemma}
+
+\noindent
+Let us denote $$\cS(Z)\equiv N^{-1}(\cH(Z))\subset \cU(Z)\text{, and }\cS(Z,W)\equiv \cS(Z)\times\cS(W).$$
+The identification of $\cS(Z)$ with its image under $N$ induces a Banach space structure with the 
+{\it nonlinearity norm}:
+\begin{equation}
+\label{n_lnorm}\|\alpha\|_N=\sup_{x \in Z} \left|N[\alpha](x) \right|\text{ for }(\alpha,\beta)\in \cS(Z),
+\end{equation}
+and a linear structure given by 
+\begin{equation} 
+\label{nl_lin_struct} a \pmb{\cdot} \alpha \pmb{+} b \pmb{\cdot} \beta=N^{-1}[a  N[\alpha]+b  N[\beta]],\text{ for }a,b\in\CC.
+\end{equation}
+
+For $\eps>0$ let us denote $\cS(Z,W,\eps)$ the $\eps$-ball
+$$\cS(Z,W,\eps)=\{(\alpha,\beta)\in\cS(Z,W)\;|\;\max(||\alpha||_N,||\beta||_N)<\eps\}.$$
+Let $U$, $V$ be two subdomains of $\CC$ and let $$Z\Supset q_2^{-1}(U),\;W\Supset q_2^{-1}(V).$$
+Let $\eps>0$ be sufficiently small, so that for every $(\alpha,\beta)\in \cS(Z,W,\eps)$ we have 
+\begin{equation}\label{eq:domains}
+\alpha(Z)\Supset q_2^{-1}(U),\;\beta(W)\Supset q_2^{-1}(V).
+\end{equation} 
+We denote $$\cE(U,V,Z,W,\eps)\equiv \cE(U,V)\times \cS(Z,W,\eps).$$
+Every pair $(\phi,\psi)\in\cE(U,V)$, $(\alpha,\beta)\in \cS(Z,W,\eps)$  naturally corresponds to  
+\begin{equation}
+\label{comp-pair}
+\zeta=(\eta,\xi)\equiv (\phi\circ q_2\circ \alpha,\psi\circ q_2\circ \beta),
+\end{equation}
+and we will use the notations interchangeably.
+We let $\cM(U,V,Z,W,\eps)\subset\cE(U,V,Z,W,\eps)$ be the subset consisting of almost commuting pairs (\ref{comp-pair}).
+
+Similarly, we let
+$$\cL_1(U,V,Z,W,\eps)\equiv \cL_1(U,V)\times \cS(Z,W,\eps),$$
+and again identify a point in this Banach manifold with a pair $(\eta,\xi)$ via (\ref{comp-pair}). 
+Consider a natural metric on this product  given by 
+\begin{equation}
+\label{eq:unorm}d_{1,N}(\zeta_1,\zeta_2)=\|(\phi_1,\psi_1)-(\phi_2,\psi_2)\|_1+\|(\alpha_1,\beta_1) \pmb{-} (\alpha_2,\beta_2)\|_N.
+\end{equation}
+%%(the difference  in the second norm here is defined according to the linear sturcture in  $\cS(Z,W)$). 
+We let $\cA(U,V,Z,W,\eps)\subset\cL_1(U,V,Z,W,\eps)$ be the subset consisting of almost commuting pairs. 
+
+
+Recall, that for any two $\alpha_i$, $i=1,2$, in  $S(Z)$,
+\begin{equation}\label{n3a}
+e^{-\| \alpha_1  \pmb{-} \alpha_2 \|_N } \le \left| { \alpha_1'(x) \over  \alpha_2'(x)} \right|  \le e^{\| \alpha_1 \pmb{-} \alpha_2 \|_N } \quad  {\rm and} \quad  {1 \over C} e^{-\| \alpha_i \|_N } \le \left| \alpha_i'(x) \right| \le C e^{\| \alpha_i \|_N },
+\end{equation}
+where $C$ depends only on the domain $Z$ and its image $\alpha_i(Z)$ (notice, that the difference  $\alpha_1  \pmb{-} \alpha_2$ above is defined as $(\ref{nl_lin_struct})$). Therefore,
+\begin{equation}\label{n3}
+|\alpha_1(z)-\alpha_2(z)|=\left| \int_0^z \alpha_1'(z) \left(1-{\alpha_2'(z) \over \alpha_1'(z) }  \right)  d z  \right| \le  C  e^{\| \alpha_1 \|_N } \left(e^{\| \alpha_1 \pmb{-}\alpha_2 \|_N }  -1 \right),   
+\end{equation}
+where, the constant depends on the domains $Z$ and its image $\alpha_i(Z)$.
+
+
+Notice, that if $+$ and $\| \cdot \|$ are the usual operations of addition and the norm in $\cH(Z,W)$, then, whenever $q_2(\alpha_i(Z)) \Subset U$  and $0 \in \alpha_i(Z)$,  and  $\alpha \in \cS(Z)$ with $||\alpha||_N<\eps$,  according to $(\ref{n3})$,
+\begin{eqnarray}
+\nonumber \|\eta_1 -\eta_2 \| & = & \| \phi_1 \circ q_2 \circ \alpha_1 -  \phi_2 \circ q_2 \circ \alpha_2   \| \\
+\nonumber &=&   \| (\phi_1-\phi_2) \circ q_2 \circ \alpha_1 +(\phi_2 \circ q_2 \circ \alpha_1 - \phi_2 \circ q_2 \circ \alpha_2)   \|  \\
+\nonumber &\le&  \| \phi_1-\phi_2 \|+  \sup_{z \in \alpha_1(Z) \cup \alpha_2(Z)}\{\phi_2'(z^2) 2 z    \}   \|(\alpha_1 -  \alpha_2)   \| \\
+\nonumber &\le&   \| \phi_1-\phi_2 \|_1+  C \| \alpha_1 \pmb{-} \alpha_2\|_N,
+\end{eqnarray}
+where $C$ depends on the domains, their images and $\epsilon$. A similar conclusion holds for  $\|\eta_1 -\eta_2 \|$. Therefore, if two pairs $\zeta_1$, $\zeta_2$ of the form (\ref{comp-pair}) belong to $\cA(U,V,Z,W,\eps)$, then
+\begin{equation} \label{eq:normsbounds}
+\|\zeta_1-\zeta_2 \| \le C \ d_{1,N}(\zeta_1,\zeta_2).
+\end{equation}
+%%This fact will be used in Section $\ref{sec:resultsACHP}$ to conclude renormalization convergence in the uniform metric.
+
+We remark, that completely analogously to Proposition \ref{prop-submfld1}, we have the following:
+\begin{prop}
+\label{prop-submfld2} Let $\cW\subset \cE(U,V)$  be an open set in which $\psi'(0)\neq 0$ (for instance, small open neighborhoods
+ of a pair of factors in which $\psi$ is locally univalent at the origin).
+Then, for $\eps>0$ small enough, the  space  $(\cM(U,V)\cap \cW)\times\cS(Z,W,\eps)$ is a Banach submanifold of $\cE(U,V,Z,W,\eps)$.
+\end{prop}
+\begin{proof}
+Indeed,
+the commutation conditions (\ref{eq:accond0}) and (\ref{eq:accond1}) for the a.c.h. pairs do not change, while the condition (\ref{eq:accond2}) becomes:
+$$\phi'\left(\left(\alpha(\psi(0))\right)^2 \right)  \alpha(\psi (0))  \alpha'(\psi(0)) \psi'(0)-\psi'(\beta(\phi(0))^2)  \beta(\phi (0)) \beta'(\phi(0))  \phi'(0)=0.$$
+This condition is a perturbation of the condition (\ref{eq:accond2}). Therefore, if $\eps$ is sufficiently small, then the determinant $(\ref{eq:determinant})$ is non-zero.
+\end{proof}
+
+
+Consider a renormalizable a.c. pair (\ref{comp-pair}) (in the sense of the Definition \ref{def:renormalizability}).
+
+Its renormalization is given by 
+\begin{eqnarray}
+\nonumber \cR (\eta,\xi)&=&\left(c \circ \lambda^{-1} \circ \eta \circ \xi \circ \lambda \circ c  ,  c \circ \lambda^{-1} \circ \eta \circ \lambda \circ c \right)\\
+\nonumber &=& \left(c \circ \lambda^{-1} \circ \phi \circ q_2 \circ \alpha \circ \psi \circ q_2  \circ \beta \circ \lambda \circ c  ,  c \circ \lambda^{-1} \circ \phi \circ q_2  \circ \alpha \circ \lambda \circ c \right) \\
+\nonumber &=& \left(\left\{c  \hspace{-0.4mm} \circ \hspace{-0.4mm} \lambda^{-1} \! \! \circ \hspace{-0.4mm} \phi \hspace{-0.4mm} \circ \hspace{-0.4mm} q_2 \hspace{-0.4mm} \circ \hspace{-0.4mm} \alpha \hspace{-0.4mm} \circ \hspace{-0.4mm} \psi \hspace{-0.4mm} \circ \hspace{-0.4mm} \lambda^2 \hspace{-0.4mm} \circ \hspace{-0.4mm} c \hspace{-0.4mm} \right\} \! \circ \hspace{-0.4mm} q_2 \hspace{-0.4mm} \circ  \! \left\{ \hspace{-0.4mm} c \hspace{-0.4mm} \circ \hspace{-0.4mm} \lambda^{-1} \! \! \circ \hspace{-0.4mm} \beta \hspace{-0.4mm} \circ \hspace{-0.4mm} \lambda \hspace{-0.4mm} \circ \hspace{-0.4mm} c \hspace{-0.4mm} \right\}\right. , \\
+\nonumber &\phantom{=}& \left. \ \left\{ \hspace{-0.4mm} c \hspace{-0.4mm} \circ \hspace{-0.4mm} \lambda^{-1} \! \! \circ \hspace{-0.4mm} \phi \hspace{-0.4mm}\circ \hspace{-0.4mm} \lambda^2 \hspace{-0.4mm} \circ \hspace{-0.4mm} c \hspace{-0.4mm} \right\} \! \circ  \hspace{-0.4mm} q_2 \hspace{-0.4mm} \circ \! \left\{ \hspace{-0.4mm} c \hspace{-0.4mm} \circ  \hspace{-0.4mm}  \lambda^{-1}\! \!  \circ \hspace{-0.4mm} \alpha \hspace{-0.4mm} \circ \hspace{-0.4mm} \lambda \hspace{-0.4mm} \circ \hspace{-0.4mm} c \hspace{-0.1mm} \right\}\right) \\
+\label{eq:tildezeta} &=& \left( \tilde{\phi} \circ q_2 \circ \tilde{\alpha}, \tilde{\psi} \circ q_2 \circ \tilde{\beta} \right).
+\end{eqnarray}
+Note that $\tilde{\alpha}$ and $\tilde{\beta}$ are again tangent to the identity at the origin.
+
+We further set
+\begin{equation}
+\cRG(\eta,\xi)=P \circ \cR(\eta,\xi),
+\end{equation}
+where $P$ is the projection on the almost commuting subspace (Proposition \ref{prop-proj2}).
+
+\noindent
+Using the same notation as for symmetric almost commuting pairs should not lead to any confusion since, by Proposition~\ref{prop-proj2} the two definitions of $\cRG$ coincide for a symmetric renormalizable pair.
+
+
+We have 
+$$N[\tilde{\alpha}]=\overline{ \lambda N[\beta] \circ \lambda \circ c}, \quad N[\tilde{\beta}]=\overline{ \lambda N[\alpha] \circ \lambda \circ c}.$$
+Therefore, the inclusions $(\ref{eq:inclusion1})$-$(\ref{eq:inclusion3})$ imply that
+\begin{eqnarray}
+\label{2nd-coord-shrink}
+\|(\tilde{\alpha},\tilde{\beta} )\|_N \le |\lambda| \|(\alpha,\beta) \|_N. 
+\end{eqnarray}
+
+
+
+Therefore, if  $\zeta_1=(\phi \circ q_2, \psi \circ q_2)$ and $\zeta_2=(\phi \circ q_2 \circ \alpha, \psi \circ q_2 \circ \beta)$ are renormalizable  pairs, then
+\begin{eqnarray}
+\nonumber d_{1,N}(\cR \zeta_1,\cR \zeta_2)\!\! & \!\! = \!\! & \!\! \|(c \circ \lambda^{-1} \circ \phi \circ q_2 \circ \psi \circ \lambda^2 \circ c   -  c \circ \lambda^{-1} \circ \phi \circ q_2 \circ \alpha \circ \psi \circ \lambda^2 \circ c  ,0)\|_1+\\ 
+\nonumber &\phantom{=}&\phantom{\!\! \|(c \circ \lambda^{-1} \circ \phi \circ q_2 \circ \psi \circ \lambda^2 \circ c}+\|(\tilde{\alpha},\tilde{\beta})\|_N \\
+ \label{eqnren1} & <& C \| \alpha \|_N +|\lambda| \|(\alpha,\beta) \|_N,
+\end{eqnarray}
+where $C$ depends on the domains and the function $\phi$, and
+\begin{eqnarray}\label{eq:lambdaNnorm1}
+\nonumber d_{1,N}((\tilde{\phi} \! \circ \! q_2,\tilde{\psi} \! \circ \! q_2) ,\cR \zeta_1 )\!\!&\!\!=\!\!&\!\! \|(c \! \circ \! \lambda^{-1} \!  \circ \!  \phi \!  \circ  \! q_2 \! \circ \! \psi \! \circ \!   \lambda^2 \!  \circ \! c   \! - \! c \!  \circ \!  \lambda^{-1} \!  \circ \!  \phi \!  \circ \!  q_2 \! \circ \!  \alpha \!   \circ \!  \psi \!  \circ \!  \lambda^2 \!  \circ  \!  c,0)\|_1  \\
+\nonumber &<& C \| \alpha \|_N.
+\end{eqnarray}
+
+As a consequence, let $B_r((\phi_0,\psi_0))$ be as in \thmref{mainthm1}. Then there exist $\eps>0$ and $\gamma\in(0,1)$ such that  for all $\zeta$ with $||(\alpha,\beta)||_{N}<\eps$ and $(\phi,\psi) \in B_r((\phi_0,\psi_0))$ we have:
+\begin{equation}\label{eq:lambdaNnorm2}
+d_{1,N}((\tilde{\phi} \circ q_2,\tilde{\psi} \circ q_2),\cR \zeta) \le \gamma \|(\alpha,\beta)\|_N.
+\end{equation}
+
+%The proof of the following Theorem follows that of Theorems $\ref{thm:renbounds}$, $\ref{thm:convergence}$, $\ref{thm:strconvergence}$ and $\ref{thm:spectrum}$  in Sections $\ref{sec:RenACM}$ and $\ref{sec:infrenorm}$ practically verbatim:
+
+\subsection{Hyperbolicity of renormalization for non-symmetric pairs}
+Let $\upsilon$ be the forgetful map from $\cA(U,V,Z,W)$ to $\cA_1(U,V)$ sending
+$$(\phi,\psi,\alpha,\beta)\mapsto (\phi,\psi).$$
+Denote $\iota$ its one-sided inverse: the natural inclusion of $\cA_1(U,V)$ into $\cA(U,V,Z,W)$ given by
+$$(\phi,\psi)\mapsto(\phi,\psi,\text{Id},\text{Id}).$$
+Let $U$, $V$, $\tl U$, $\tl V$  be as in \thmref{mainthm1}, and let $(\phi_*,\psi_*)$ be the hyperbolic fixed point of $\cRG$ in
+$\cA_1(U,V)$ constructed in this theorem. 
+%Let us set $\tl Z\equiv q^{-1}(\tl U)$, $\tl W\equiv q^{-1}(\tl V)$.
+Clearly, 
+$$\zeta_*\equiv (\phi_*,\psi_*,\text{Id},\text{Id})$$
+is a fixed point of $\cRG$ in 
+$$\cA\equiv \cA(U,V,Z,W).$$
+Let  $L\equiv  D \cRG|_{(\phi_*,\psi_*)} \circ c$, where $c$ is the complex conjugation, as before.
+
+We prove:
+\begin{thm}\label{mainthm2} 
+There exist topological disks $\tl Z \Supset Z$ and $\tl W \Supset W$,  neighborhood $\cW$ of $\zeta_*$ in  $\cA(U,V,Z,W)$,  such that the following holds.
+
+\begin{itemize}
+\item[$(i)$] The transformation $\cRG$ is an anti-analytic operator from $\cW$ to $\cA(\tl U,\tl V,\tl Z, \tl W)$.
+\item[$(ii)$] The differential $D \cRG|_{\zeta_*}$ is a compact anti-linear operator in $T_{\zeta_*}\cA(U,V,Z,W)$. The operator $L=D\cRG|_{\zeta_*} \circ c$ has a single eigenvalue outside the closed unit disk, which coincides with the unstable eigenvalue of the operator $K$, constructed in \thmref{mainthm1}. The rest of the spectrum lies incide the open unit disk.
+\end{itemize}
+\end{thm}
+
+\begin{proof} $\phantom{a}$ \\
+\medskip
+\noindent $(i)$ We recall that by $(\ref{eq:domains})$
+$$\alpha(Z)\Supset q_2^{-1}(U),\;\beta(W)\Supset q_2^{-1}(V).$$
+ By  part  $(iii)$   of  \thmref{mainthm1}, there exists  $\cW \subset \cA(U,V,Z,W)$ such that  $\cRG \zeta$  for every $\zeta \in \cW$  extends analytically to some $\tl Z  \cup \tl W$, such that
+$$\alpha(\tl Z)\Supset q_2^{-1}(\tl U),\;\beta(\tl W) \Supset q_2^{-1}(\tl V).$$
+
+
+\noindent $(ii)$  Compactness of $D\cRG_{\zeta_*}$ follows from part $(i)$ and Lemma~\ref{lem-cpt1}. By the Spectral Theory of compact operators, every element of the spectrum of the operator $L$, except the origin,  is an isolated eigenvalue. Let us first note that if $\mu\in\text{sp}(L)$ and $|\mu|\geq 1$ then every corresponding eigenvector has a form:
+$$((\bar u,\bar v), (0, 0)).$$
+In other words, all eigenvectors which are not stable must lie in the tangent space to the natural inclusion 
+$\iota(\cA_1(U,V))$. 
+Indeed, since the projection $P$  analytically depends on the pair (Proposition~\ref{prop-proj2}), and coincides with the identity on almost commuting pairs, if $\cW$ is sufficiently small, then there exists $\lambda_* <\tl \lambda <1$ such that  the inequality (\ref{2nd-coord-shrink}) holds for $(\hat{\alpha},\hat{\beta})$ with $\tl \lambda$, where 
+$$\cRG \zeta=( \hat{\phi} \circ q_2 \circ \hat{\alpha}, \hat{\psi} \circ q_2 \circ \hat{\beta}).$$ 
+Hence the part of the spectrum of $L$ with non-zero $(\alpha,\beta)$-coordinates must lie in the disk $\{|z|<\lambda\}$.
+
+Finally, the spectrum of the operator $L \arrowvert_{T_{\zeta_*}\iota(A_1(U,V))}$, coincides with that of $K$ from \thmref{mainthm1}, and the rest of the claim follows.
+
+%Now suppose $\bar\upsilon=((\bar u,\bar v), (0, 0))$ is a tangent vector to $\iota(\cA_1(U,V))$, and consider an analytic family 
+%$$\zeta_t=\zeta_*+t\bar\upsilon+o(t).$$
+%According to the equation (\ref{eqnren1}), we have
+%$$\cR(\zeta_t)=\zeta_*+t(D\cR|_{(\phi_*,\psi_*)}(\bar u,\bar v),(0,0))+o(t).$$
+%Since each of the coefficients of the polynomial in the projection $P$ depends on $t$ analytically, with the constant term equal to zero, the same is true for $\cRG$:
+%$$\cRG(\zeta_t)=\zeta_*+t(D\cRG|_{(\phi_*,\psi_*)}(\bar u,\bar v),(0,0))+o(t).$$
+\end{proof}
+
+
+Recall, that $\cC(Z,W)$ denotes the Banach submanifold of $\cH(Z,W)$ given by the linear conditions 
+$$\eta'(0)=\xi'(0)=0,$$ and that $\cB(Z,W)$ is the submanifold of $\cC(Z,W)$ consisting of almost commuting pairs. We reformulate Theorem\ref{mainthm2}  using the uniform norms as follows:
+
+\begin{thm}\label{mainthm3} Let $Z$, $W$, $\tl Z$ and $\tl W$ be as in Theorem~\ref{mainthm2}. There exist a pair of topological disks $Z_1$ and $W_1$,
+\begin{equation} \label{eq:ZWs}
+\tl Z\Supset Z_1 \Supset Z, \quad \tl W \Supset W_1 \Supset W,
+\end{equation}
+such that
+\begin{itemize}
+\item[$(i)$]   The operator $\cRG$ is an anti-analytic operator from an open neighborhood of $\zeta_*$ in $\cC(Z_1,W_1)$ to $\cC(\tl Z, \tl W)$. 
+\item[$(ii)$]  The differential $D \cRG \arrowvert_{\zeta_*}$ is a compact anti-linear operator. Denote $M\equiv D {\cRG} \arrowvert_{\zeta_*}\circ c$. Then $M$ has a single simple eigenvalue outside of the closed unit disk, and the rest of the spectrum of $M$ lies inside the open unit disk.
+\end{itemize}
+\end{thm}
+\begin{proof} $\phantom{oo}$\\
+\noindent $(i)$  By part $(1)$ of  Proposition $\ref{norm-equiv}$ the map $\cRG(\zeta) \in  \cC(\tl Z,\tl W)$ whenever $\zeta \in \cW \subset \cA(U,V,Z,W)$.  Choose any topological disks $Z_1$ and $W_1$ satisfying $(\ref{eq:ZWs})$, and such that, additionally, $q_2(Z_1) \Subset U$, $q_2(W_1) \Subset V$.
+
+Let $\zeta \in C(Z_1,W_1)$ and $h \in C(Z_1,W_1)$, then by part $(2)$ of  Proposition $\ref{norm-equiv}$, $\zeta+t h$ is in $\cA(U,V,Z,W)$, and by part $(i)$ of  Theorem~\ref{mainthm2},
+% there exists an anti-linear operator $D \cRG \arrowvert_\zeta$, such that 
+$\cRG(\zeta) + t D \cRG \arrowvert_\zeta h \in \cA(\tl U, \tl V, \tl Z,\tl W)$, and 
+$$ d_{1,N} \left( \cRG(\zeta+t h), \cRG(\zeta) + t D \cRG \arrowvert_\zeta h \right)=\eps(\zeta,h,t)=o(t).$$
+
+By $(\ref{eq:normsbounds})$, 
+$$  \| \cRG(\zeta+t h) -\left(\cRG(\zeta) + t D \cRG \arrowvert_\zeta h \right) \| \le C \ d_{1,N} \left( \cRG(\zeta+t h), \cRG(\zeta) + t D \cRG \arrowvert_\zeta h \right)=o(t),$$
+where $\| \cdot \|$ is the norm in $C(\tl Z, \tl W)$ and   $d_{1,N}$ is the distance in $\cA(\tl U, \tl V,\tl Z, \tl W)$, and we see that $\cRG$ is analytic from $C(Z_1,W_1)$ to $C(\tl Z, \tl W)$.
+
+\medskip
+
+\noindent $(ii)$ Compactness of $D_{\zeta_*}\cRG$ follows by  Lemma~\ref{lem-cpt1}. By the Spectral Theory of compact operators, every element of the spectrum of the operator $M$, except the origin,  is an isolated eigenvalue. Let $\bar v\in\cC(Z_1,W_1)$ be an eigenvector of $M$ such that the corresponding eigenvalue $\lambda$ is non-zero. By \thmref{mainthm1}, the vector $\bar v$ has an analytic continuation to $(\tl Z,\tl W)$. Let us represent $\bar v$ as a decomposition
+$$\bar v=(\phi_1\circ q\circ\alpha_1,\psi_1\circ q\circ \beta_1),$$
+ where the conformal maps $\alpha_1$ and $\beta_1$ are defined in $\tl Z$, $\tl W$, and therefore have finite nonlinearity norms in $Z_1$, $W_1$. Since $M\bar v=\lambda\bar v$, the same considerations as in the 
+proof of Theorem\ref{mainthm2} imply that 
+$$\alpha_1=\beta_1=\text{Id}.$$
+%The remainder of the theorem follows immediately from Proposition~\ref{norm-equiv}.
+\end{proof}

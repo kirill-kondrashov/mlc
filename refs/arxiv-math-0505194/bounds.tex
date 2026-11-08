@@ -1,0 +1,76 @@
+
+\section{A priori bounds}
+
+The following  lemma tells us that if some principal  modulus is very small then it
+should be even smaller on some preceding level:
+
+\begin{lem}\label{growth-lem}
+There exist $n=n(d)\in \N$ and $\eps=\eps(d,n)>0$  such that: 
+If on some level $q\geq n$, $  \mod( V^q\sm W^q ) <\eps $, 
+then on some previous level $p<q$ we have:
+\begin{equation}\label{decrease}
+    \mod  (V^p \sm W^p) <  \frac{1}{2} \mod( V^q\sm W^q ).   
+\end{equation}
+\end{lem}
+
+\begin{pf}
+We will use the set-up of \S \ref{summary}, except that the base GPL map $g$ will not be $g_0$
+but rather $g_s$ on some deeper level.
+Let us fix some $m > 16 C^3 d^{23}$,
+where $C$ is the maximum of  constants in the First and Second Covering Lemmas.
+Let $q> n > \log_2 m+ 5$. 
+We take $g = g_{q-n}$ as the base map
+and consider the associated 3-domain branched covering $\Psi=\Psi_k$ (\ref{3 domains}) 
+$$
+   \Psi: (\Upsilon, F, W^q) \ra (V^{q-n}, \La', \La),  
+$$
+where $\La=\La_k$ is one of the domains of the orbit $O_i$.  
+Set $\eta=1/2d$ for the First Covering Lemma. 
+Let us consider two cases:
+
+\msk {\it Case 1.} Assume that for some domain $\La\in O_i$, 
+$$
+  \mod (\La'\sm \La)< \frac{1}{2d} \mod (V^q\sm W^q).
+$$
+%Since $F\subset V^q$, we have
+%\begin{equation}\label{latter mod}
+%   \mod (F\sm W^q) \leq \mod (V^q\sm W^q).
+%\end{equation}
+         By Property (P4), 
+$\mod(\La' \sm \La) = \mod (\hat E^{i-1}\sm  E^{i-1})$, which is equal to either
+$\mod(V^{(i-2)/2}\sm W^{(i-2)/2})$ (if $i$ is even) or to
+$$
+   \mod(\De^{(i-3)/2}\sm A^{(i-3)/2}) \geq \frac{1}{d} \mod (V^{(i-3)/2}\sm W^{(i-3)/2})  \quad \mbox{if $i$ is odd. }
+$$   
+In both cases we conclude that (\ref{decrease}) holds  for   
+$p$ which  is equal  to either $(i-2)/2$ or $(i-3)/2$.
+(Note that $p<q$ since by construction of the  buffers, $i-1 <  2q+1$.)     
+
+\msk{\it Case 2.} Assume that for all $\La_k\in O_i$, 
+\begin{equation}\label{1/2}
+  \mod (\La_k'\sm \La_k) \geq \frac{1}{2d} \mod (V^q\sm W^q).
+\end{equation}
+Then  the  Covering Lemma is applicable to every map $\Psi = \Psi_k$, 
+provided $\eps=\eps(d,n)$ is sufficiently small. 
+It yields:
+\begin{equation}\label{outer mod}
+  \mod (V^{q-n}\sm \La_k) \leq 2C d^{11} \mod(\Upsilon\sm W^q) \leq 2C d^{11} \mod(V^q\sm W^q). 
+\end{equation}
+Estimates (\ref{1/2}) and (\ref{outer mod}) show that the Quasi-Additivity Law is applicable
+with $\eta=1/4Cd^{12}$.
+ Since there are at least $m$ domains $\La_k\subset \La_k'\subset W^{n-q}$ in the orbit $O_i$,
+it implies:
+$$
+      \mod(V^{n-q}\sm W^{n-q}) \leq \frac{8 C^3 d^{23}}{m} \mod(V^q\sm W^q) < \frac{1}{2} \mod(V^q\sm W^q),
+$$
+and we are done.  
+\end{pf}
+
+
+Lemma \ref{growth-lem} immediately yields Theorem B from the Introduction.
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/1RlfIz1/nr/dnbPurH/K3VR43aI</id>
+  <title>arXiv Query: search_query=&amp;id_list=1512.08539&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:44Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1512.08539" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1512.08539v1</id>
+    <title>Algorithmic aspects of branched coverings I. Van Kampen's Theorem for bisets</title>
+    <updated>2015-12-28T21:54:30Z</updated>
+    <link href="https://arxiv.org/abs/1512.08539v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1512.08539v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We develop a general theory of "bisets": sets with two commuting group actions. They naturally encode topological correspondences. Just as van Kampen's theorem decomposes into a graph of groups the fundamental group of a space given with a cover, we prove analogously that the biset of a correspondence decomposes into a "graph of bisets": a graph with bisets at its vertices, given with some natural maps. The "fundamental biset" of the graph of bisets recovers the original biset. We apply these results to decompose the biset of a Thurston map (a branched self-covering of the sphere whose critical points have finite orbits) into a graph of bisets. This graph closely parallels the theory of Hubbard trees. This is the first part of a series of five articles, whose main goal is to prove algorithmic decidability of combinatorial equivalence of Thurston maps.</summary>
+    <category term="math.GR" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2015-12-28T21:54:30Z</published>
+    <arxiv:primary_category term="math.GR"/>
+    <author>
+      <name>Laurent Bartholdi</name>
+    </author>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+  </entry>
+</feed>

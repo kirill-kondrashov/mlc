@@ -1,0 +1,663 @@
+\input header
+
+\footline={\hss\tenrm D-\folio\hss}\pageno=1
+
+{\bf Appendix D. Remarks Concerning Two Complex Variables.}\bigskip
+
+Many of the arguments in these lectures are strictly
+one-dimen\-sional. In fact several of our underlying principles
+break down completely in the two variable case.\smallskip
+
+In order to illustrate these differences, it is useful to consider the
+family of (generalized)
+{\bit H\'enon maps}, which can be described as follows. Choose a complex
+constant
+\[\delta\ne 0\] and a polynomial map \[f:\C\to\C\] of degree \[d\ge 2\],
+and consider doubly infinite sequences of complex numbers \[\;\ldots\,,\,
+z_{-1}\,,\,z_0\,,\,z_1\,,\,z_2\,,\,\ldots\;\] satisfying the recurrence
+relation
+$$	z_{n+1}-f(z_n)+\delta\,z_{n-1}\;=\;0\,.	$$
+Evidently we can solve for \[(z_n\,,\,z_{n+1})\] as a polynomial function
+\[\;F(z_{n-1}\,,\,z_n)\,\], where the transformation
+\[\;\;F(z_{n-1}\,,\,z_n)\,=\,(z_n\,,\, f(z_n)-\delta z_{n-1})\;\;\] has Jacobian matrix
+$$	\left[\matrix{0 & 1\cr -\delta & f'(z_n)\cr}\right] $$
+with constant determinant \[\delta\], and with trace \[f'(z_n)\]. Similarly
+we can solve for\break \[(z_{n-1}\,,\,z_n)\] as a polynomial function
+\[F^{-1}(z_n\,,\,z_{n+1})\]. As an example, consider the quad\-ratic polynomial
+\[f(z)=z^2+\lambda z\], having a
+fixed point of multiplier \[\lambda\] at the origin. Then
+$$	F(x\,,\,y)\;=\; (y\,,\; y^2+\lambda y-\delta x)\,,
+	\eqno (*) $$
+where \[x\] and \[y\] are complex variables. This map
+has a fixed point at \[(0,0)\], where the eigenvalues \[\lambda_1\] and
+\[\lambda_2\] of the Jacobian matrix satisfy \[\lambda_1+\lambda_2=\lambda\]
+and \[\lambda_1\lambda_2=\delta\]. Evidently, by the appropriate choice
+of \[\lambda\] and \[\delta\], we can realize any desired non-zero
+\[\lambda_1\] and \[\lambda_2\]. If \[\lambda_1\ne\lambda_2\], then we
+can diagonalize this Jacobian matrix by a linear change of coordinates.
+\smallskip
+
+{\QP{\bf Lemma D.1.} \it Consider any holomorphic transformation
+\[F(x,y)=(x',y')\] in two complex variables, with
+$$	x'=\lambda_1 x +{\cal O}
+	(|x^2|+|y^2|)\,,\quad y'=\lambda_2 y+{\cal O}(|x^2|+|y^2|)	$$
+as \[(x,y)\to(0,0)\].
+If the eigenvalues \[\lambda_1\] and \[\lambda_2\] of the derivative
+at the\break origin satisfy \[1>|\lambda_1|\ge
+|\lambda_2|>|\lambda_1^2|\], then \[F\] is conjugate, under a local\break
+holomorphic change of coordinates, to the linear map \[L(u,v)=(\lambda_1
+u\,,\,\lambda_2v)\].\medskip}
+
+{\bf Proof.} We must show that there exists a change of coordinates \[(u,v)=\phi(x,y)\],
+defined and holomorphic throughout a neighborhood of the origin,
+so that \[\phi\circ F\circ\phi^{-1}=L\]. As in the proof of the Ko$\!$enigs
+Theorem, \S6.1, we first choose a constant \[c\] so that\break
+\[1>c>|\lambda_1|\ge|\lambda_2|>c^2\]. To any orbit
+$$	(x_0\,,\,y_0)\buildrel F\over\mapsto(x_1\,,\,y_1)
+	\buildrel F\over\mapsto\cdots	$$
+near the origin, we associate the sequence of points
+$$	(u_n\,,\,v_n)\;=\;L^{-n}(x_n\,,\,y_n)\;=\;(x_n/\lambda_1^n\,,\,y_n
+	/\lambda_2^n)	$$
+and show, using Taylor's Theorem, that it converges geometrically to the
+required limit \[\phi(x_0\,,\,y_0)\], with
+successive differences bounded by a constant times \[(c^2/\lambda_2)^n\].
+Details will be left to the reader.\QED
+
+{\bf Remarks.} Some such restriction on the eigenvalues is essential.
+As an example, for the map
+$$	f(x,y)\;=\;(\lambda x,\,\lambda^2 y+x^2)\,,	$$
+with eigenvalues \[\lambda\] and \[\lambda^2\],
+there is no such local holomorphic change of coordinates. (Problem D-1.)
+For a much sharper statement as to when linearization is possible,
+even when one or both eigenvalues lie on the unit circle, compare Zehnder.
+
+
+\smallskip
+
+Now consider a H\'enon map \[F:\C^2\buildrel \approx\over\to\C^2\] as
+in $(*)$ above,
+with eigenvalues satisfying the conditions of D.1. Let \[\Omega\] be the
+attractive basin of the origin. We claim that \[\phi\] extends
+to a global diffeomorphism \[\Phi:\Omega\buildrel \approx\over\to\C^2\].
+In fact, for any \[(x,y)\in\Omega\] we set \[\Phi(x,y)=L^{-n}\circ\phi\circ
+F^{\circ n}(x,y)\]. If \[n\] is sufficiently large, then \[F^n(x,y)\] is
+close to the origin, so that this expression is defined. Similarly,
+\[\Phi^{-1}(u,v)=F^{-n}\circ\phi^{-1}\circ L^{\circ n}\] is well defined
+for large \[n\]. This shows that
+\[\Phi\] is a holomorphic diffeomorphism with holomorphic inverse.\smallskip
+
+%***
+
+%For suitable choice of \[\lambda_1\] and \[\lambda_2\] in the unit disk,
+%it can shown ??? that \[F\] is locally conjugate to the linear map
+%\[\;L:(w_1\,,\,w_2)\mapsto(\lambda_1w_1\,,\,\lambda_2w_2)\,\]. {\it Since
+%\[F\] is a
+%global diffeomorphism, it follows easily that the attractive basin \[B\]
+%of the origin is analytically diffeomorphic to the entire coordinate space
+%\[\C^2\] under a diffeomorphism \[\phi:B \buildrel \approx\over\longrightarrow
+%\C^2\] which satisfies \[\phi\circ F=L\circ\phi\].} (Compare \S6.2.)
+%\smallskip
+
+%***
+
+Note that this basin \[\Omega\] is not the entire space \[\C^2\]. For example, if \[
+|z_1|\] is sufficiently large compared with \[|z_0|\], and if
+$$	(z_0\,,\,z_1)\buildrel F\over\mapsto (z_1\,,\,z_2)\buildrel
+	 F\over\mapsto (z_2\,,\,z_3)\buildrel F\over\mapsto\cdots	$$
+then it is not difficult to check that \[\;|z_1|<|z_2|<|z_3|<\cdots\,\],
+so that \[(z_0\,,\,z_1)\] is not in \[\Omega\].
+{\it Thus we have constructed:\smallskip
+
+$(1)$ a proper subset \[\Omega\subset\C^2\] which is analytically diffeomorphic to
+all of \[\C^2\], and\smallskip
+
+$(2)$ a non-linear map with an attractive basin which contains no critical
+points.}\smallskip
+
+\noindent Evidently neither phenomenon can occur in one complex variable.
+Open sets satisfying (1) are called {\bit Fatou-Bieberbach domains} since they
+were first constructed by Fatou, by an easy argument similar to that given
+here, and then later independently by Bieberbach, who had a much more
+difficult construction.\smallskip
+
+The proof that there are only finitely many attracting cycles
+also breaks down in two variables. Compare Newhouse.
+\lln
+
+{\bf Problem D-1.} For the map \[F(x,y)=(\lambda x\,,\,\lambda^2 y+x^2)\],
+where \[\lambda\ne 0\,,\,1\], show that there is only one smooth
+\[F$-invariant curve through the origin, namely \[x=0\]. By way of contrast,
+for the associated linear map \[L(x,y)=(\lambda x\,,\,\lambda^2 y)\]
+note that there are infinitely many \[F$-invariant curves \[y=cx^2\].
+Conclude that \[F\] is not locally holomorphically conjugate to a linear map.
+
+\vfil\eject % \bigskip\bigskip
+\footline={\hss\tenrm E-\folio\hss}\pageno=1
+
+\centerline{\bf Appendix E. Branched Coverings and Orbifolds.}\bigskip
+
+This will be an outline of definitions and results, without proofs.
+(See the list of references at the end.)
+We will use ``branch point'' as a synonym for ``critical point''
+and ``ramified point'' as a synonym for ``critical value''. Thus if
+\[f(z_0)=w_0\] with \[f'(z_0)=0\], then \[z_0\] is called a {\bit branch
+point} and the image \[f(z_0)=w_0\] is called a {\bit ramified point}.
+More precisely, if
+$$	f(z)\;=\;w_0+c(z-z_0)^n+({\rm higher\; terms})\,,	$$
+with \[n\ge 1\] and
+\[c\ne 0\], then the integer \[n=n(z_0)\] is called the {\bit branch index}
+or the {\bit local degree} of \[f\] at
+the point \[z_0\]. Thus \[n(z)\ge 2\] if \[z\] is a branch point,
+and \[n(z)=1\] otherwise.
+
+A holomorphic map \[p:S'\to S\] between Riemann surfaces is called a
+{\bit covering map} if each point of \[S\] has a connected
+neighborhood \[U\] which is {\bit evenly covered}, in that each connected
+component of \[p^{-1}(U)\subset S'\] maps onto \[U\] by a conformal
+isomorphism. A map \[p:S'\to S\] is {\bit proper} if the inverse image
+\[p^{-1}(K)\] of any compact subset of \[S\] is a compact subset of \[S'\].
+Note that every proper map is finite-to-one, and has a well
+defined finite degree \[d\ge 1\]. Such a map may also be called a
+\[d$-{\bit fold branched covering}. On the other hand, a covering
+map may well be infinite-to-one. Combining these two concepts,
+we obtain the following more general concept.\smallskip
+
+{\bf Definition.} A holomorphic map \[p:S'\to S\] between Riemann surfaces
+will be called a {\bit branched covering map} if every point of \[S\] has
+a connected neighborhood \[U\] so that each connected component of \[p^{-1}
+(U)\] maps onto \[U\] by a proper map.\smallskip
+
+Such a branched covering is said to be {\bit regular} or
+{\bit normal} if there exists a group \[\Gamma\] of conformal automorphisms
+of \[S'\], so that two points \[z_1\] and \[z_2\] of \[S'\] have the same
+image in \[S\] if and only if there is a group element \[\gamma\] with
+\[\gamma(z_1)=z_2\]. In this case we can identify \[S\] with the quotient
+manifold \[S'/\Gamma\]. In fact it is not difficult to check that the
+conformal structure of such a quotient manifold is uniquely determined.
+This \[\Gamma\] is called the group of {\bit deck transformations} of the
+covering.
+
+Regular branched covering maps have several special properties. For
+example, each ramified point is isolated,
+so that the set of all ramified points is a discrete subset of \[S\].
+Furthermore, the branch index \[n(z)\] depends only on the target point
+\[f(z)\], that is, \[n(z_1)=n(z_2)\]
+whenever \[f(z_1)=f(z_2)\]. Thus we can define the {\bit ramification
+function} \[\nu:S\to\{1,\,2,\,3,\,\ldots\}\] by setting \[\nu(w)\] equal
+to the common value of \[n(z)\] for all points \[z\] in the pre-image
+\[f^{-1}(w)\]. By definition, \[\nu(w)\ge 2\] if \[w\] is a ramified
+point, and \[\nu(w)=1\] otherwise.\smallskip
+
+{\bf Definition.} A pair \[(S,\nu)\] consisting of a Riemann surface \[S\]
+and a ``ramification function'' \[\nu:S\to\{1,\,2,\,3,\,\ldots\}\] which
+takes the value \[\nu(w)=1\] except at isolated points
+will be called a Riemann surface {\bit orbifold}.
+
+(Remark: Thurston's general concept of orbifold
+involves a structure which is locally modeled on the quotient of a coordinate
+space by a finite group. However, in the Riemann surface case only
+cyclic groups can occur, so a simpler definition can be used.)
+
+{\bf Definition.}  If \[S'\] is simply connected, then a regular branched
+covering \[p:S'\to S\] with ramification function \[\nu\]
+will be called the {\bit universal covering}
+for the orbifold \[(S,\,\nu)\]. We will use the notation \[\tilde S_\nu\to S\]
+for this universal branched covering. The associated
+group \[\Gamma\] of deck transformations is called the {\bit fundamental
+group} \[\pi_1(S,\,\nu)\] of the orbifold.
+
+{\QP{\bf Lemma E.1.} \it With the following exceptions, every
+Riemann surface orbifold
+\[(S,\,\nu)\] has a universal covering surface \[\tilde S_\nu\]
+which is unique up to conformal isomorphism over \[S\]. The only exceptions
+are given by:
+
+(1) a surface \[S\approx\hat\C\]
+with just one ramified point, or
+
+(2) a surface \[S\approx\hat\C\] with two ramified points
+for which \[\nu(w_1)\ne\nu(w_2)\].
+
+\noindent
+In these exceptional cases, no such universal covering exists.\medskip}
+
+By definition,
+the {\bit Euler characteristic} of an orbifold \[(S,\,\nu)\] is
+the rational number
+$$      \chi(S,\,\nu)\;=\;\chi(S)+\sum \big({1\over\nu(w_j)}-1\big)\,, $$
+to be summed over all ramified points, where \[\chi(S)\] is the usual
+Euler characteristic of \[S\]. Intuitively speaking,
+each ramified point \[w_j\] makes a contribution of \[+1\] to the usual
+Euler characteristic \[\chi(S)\], but a smaller contribution of \[1/\nu(w_j)\]
+to the orbifold Euler characteristic. Thus \[\chi(S,\,\nu)<\chi(S)\le 2\],
+or more precisely
+$$	\chi(S)-r\;<\; \chi(S,\,\nu)\;\le\;\chi(S)-r/2	$$
+where \[r\] is the number of ramified points. {\it As an example, if
+\[\chi(S,\,\nu)
+\ge 0\], with at least one ramified point, then it follows that \[\chi(S)>0\],
+so the base surface \[S\] can only be \[D,\,\C\] or \[\hat \C\], up
+to isomorphism.} Compare E.5 below.
+
+If there are infinitely
+many ramified points, note that we must set \[\chi(S,\,\nu)=
+-\infty\]. Similarly, if \[S\] is
+a surface which is not of finite type, then we must set\break
+\[\chi(S,\,\nu)=\chi(S)=-\infty\].\smallskip
+
+If \[S'\] and \[S\] are provided with ramification functions \[\mu\] and
+\[\nu\] respectively, then a branched covering map \[f:S'\to S\] is said
+to yield
+a {\bit covering map \[(S'\,,\,\mu)\to(S\,,\,\nu)\] between orbifolds}
+if the identity
+$$      n(z)\mu(z)\;=\;\nu(f(z))       $$ 
+is satisfied for all \[z\in S'\],
+% if \[n(z)\nu'(z)\] is a multiple of \[\nu(f(z))\] for each \[z\in S'\],
+where \[n(z)\] is the branch index.
+% Similarly, we say that \[f^{-1}\]
+%is {\bit locally holomorphic} between orbifolds if \[\nu(f(z)\] is a
+% multiple of \[n(z)\nu'(z)\], and that \[f\] is a {\bit covering map} of
+As an example, the universal covering map \[\tilde S_\nu\to
+(S\,,\,\nu)\] is always a covering map of orbifolds, where \[\tilde S_\nu\]
+is provided with the trivial ramification function \[\mu\equiv 1\].
+
+{\QP\bf Lemma E.2. {\it \[f:(S'\,,\,\mu)\to(S\,,\,\nu)\] is a covering map
+between orbifolds if and only if it lifts to a conformal isomorphism from the
+universal covering \[\tilde S'_\mu\] onto \[\tilde S_\nu\].
+If \[f\] is a covering in this sense, and has finite degree \[d\],
+then the Riemann-Hurwitz formula of \S5.1 takes the form
+$$	\chi(S'\,,\,\mu)\;=\; \chi(S\,,\,\nu)d\,.		$$
+In particular, if the universal covering of \[(S\,,\,\nu)\] is a covering
+of finite degree \[d\], then \[\;\chi(\tilde S_\nu)=\chi(S,\,\nu)d\].}
+\medskip}
+
+\noindent The fundamental group and the Euler characteristic
+% of any Riemann surface orbifold 
+are related to each other as follows.
+
+\smallskip
+
+{\QP{\bf Lemma E.3.} \it Let \[(S,\,\nu)\] be any Riemann surface orbifold
+which possesses a universal covering:
+
+If \[\chi(S,\,\nu)>0\], then the fundamental
+group \[\pi_1(S,\,\nu)\] is finite.
+
+If \[\chi(S,\,\nu)=0\], then the fundamental group contains either \[\Z\]
+or \[\Z\oplus\Z\] as a subgroup of finite index.
+
+If \[\chi(S,\,\nu)<0\], then the fundamental
+group contains a non-abelian free product \[\Z *\Z\], and hence cannot contain
+any abelian subgroup of finite index.\medskip}
+
+\noindent
+The Euler characteristic and the geometry of \[\tilde S_\nu\] are related
+as follows.
+
+{\QP{\bf Lemma E.4.} \it Suppose that \[S\] is obtained from a compact
+Riemann surface by
+removing at most a finite number of points. Then \[\tilde S_\nu\] is
+either spherical, hyperbolic or Euclidean according as \[\chi(S\,,\,\nu)\]
+is positive, negative or zero.\medskip}
+
+{\bf Remark.} In all other cases, that is whenever \[S\] is
+not isomorphic to a finitely punctured compact surface, \[S\] is
+hyperbolic, and it follows that the universal covering
+\[\tilde S_\nu\] must also be hyperbolic.
+
+{\bf Examples.} If \[S=\C\] with two ramified
+points \[\nu(1)=\nu(-1)=2\], then the map\break
+\[z\mapsto\cos(2\pi z)\] provides
+a universal covering \[\C\to (\C,\,\nu)\]. The Euler characteristic
+\[\chi(\C,\,\nu)\] is zero, and the fundamental group \[\pi_1(S,\,\nu)\]
+consists of all transformations of the form \[\gamma:z\mapsto  n\pm z\].
+
+For \[S=\hat\C\] with three ramified points \[\nu(0)=\nu(1)=\nu(
+\infty)=2\],
+the rational map \[\pi(z)=-4z^2/(z^2-1)^2\] provides a
+universal covering \[\hat\C\to(\hat\C,\,\nu)\]. In this case we have
+\[\chi(\hat\C,\,\nu)=1/2\], and
+the degree is equal to \[\chi(\hat\C)/\chi(\hat\C,\,\nu)=4\].
+The fundamental group consists of all transformations \[\gamma:z\mapsto
+\pm z^{\pm 1}\].
+
+For \[S=\hat\C\] with four ramified points of index \[\nu(w_j)=2\], then the
+torus \[T\] described in \S5 provides a regular 2-fold branched covering.
+Its universal covering \[\tilde T\] can be identified with the
+universal covering of \[(\hat\C,\,\nu)\]. In this case, the Euler
+characteristic \[\chi(\hat\C,\,\nu)\] is zero.\smallskip
+
+
+{\bf Remark E.5.} There are relatively few cases in which \[\chi(S\,,\,
+\nu)\ge 0\]. In fact all of these cases can be listed quite explicitly
+as follows. The unramified cases are very well known, namely
+the sphere, plane or disk with \[\chi>0\]; and the punctured
+plane or disk, and the infinite families consisting of annuli and tori,
+all with \[\chi=0\].
+
+ By the ``ramification indices'' we will
+mean the list of values of the ramification function at the \[r\]
+ramified points,
+ordered for example so that \[\nu(w_1)\le\cdots\le\nu(w_r)\].
+
+If \[\chi(\hat\C,\,\nu)>0\] with \[r>0\],
+then the ramification indices must be either
+\[(n,n)\] or \[(2,2,n)\] for some \[n\ge 2\], or \[(2,3,3)\,,\, (2,3,4)\]
+or \[(2,3,5)\]. These five possibilities correspond to the five types of
+finite rotation groups of the 2-sphere; namely to the cyclic,
+dihedral, tetrahedral, octahedral and icosahedral groups respectively.
+
+If \[\chi(\hat\C,\,\nu)=0\], then the ramification indices must be either
+\[(2,4,4)\], \[(2,3,6)\], \[(3,3,3)\] or \[(2,2,2,2)\].
+These correspond to the automorphism groups of the tilings of \[\C\] by
+squares, equilateral triangles, alternately colored equilateral triangles,
+and parallelograms respectively. In the parallelogram case, note that there
+is actually a one
+complex parameter family of distinct possible shapes, corresponding to the
+cross-ratio of the four ramified points.
+
+Similarly, if \[\chi(\C,\,\nu)\] or \[\chi(D,\,\nu)\] is strictly positive,
+then we must have \[r\le1\]; while if \[\chi(\C,\,\nu)\] or \[\chi(D,\,\nu)\]
+is zero, then we must have \[r=2\] with ramification  indices \[(2,2)\].
+This is the complete list.
+
+
+\vfill
+\eject % \bigskip\bigskip
+
+
+\footline={\hss\tenrm F-\folio\hss}\pageno=1
+
+\centerline{\bf Appendix F. Parameter Space.}\bigskip
+
+A very important part of complex dynamics, which has barely been mentioned in
+these notes, is the study of parametrized families of mappings. As an example,
+consider the family of all quadratic polynomial maps. A priori, a quadratic
+polynomial is specified by three complex parameters; however
+any such polynomial can be put into the unique normal form
+$$	f(z)\;=\;z^2+c \eqno (1)	$$
+by an affine change of coordinates. (Other normal forms which have been used
+are\break \[	\omega\;\mapsto\;\omega^2+\lambda \omega\],
+with a preferred fixed point of multiplier \[\lambda\] at the origin, or
+$$	w\; \mapsto\;\lambda w (1-w) \eqno (2) $$
+which is more or less equivalent provided that
+\[\lambda\ne 0\]. Here \[4c=\lambda(2-\lambda)\] and\break
+ \[\omega=z-\lambda/2=-\lambda w\].) Using such a normal form, we can make
+a computer picture in the
+{\bit parameter space} consisting of all complex constants \[c\] or \[\lambda
+\]. Each pixel in such a picture, corresponding to a small square in the
+parameter space, is to be assigned some color, perhaps only black or white,
+which depends on the dynamics of the corresponding quadratic map.
+
+The first crude pictures of this type were made by Brooks and Matelski,
+as part of a study of Kleinian groups. They used the normal form (1), and
+introduced the open set consisting
+of all points of the \[c$-plane for which the corresponding quadratic map
+has an attracting periodic orbit in the finite plane.
+I will use the notation \[{\cal H}\] (standing
+for ``hyperbolic'') for this Brooks-Matelski set.
+At about the same time,
+Hubbard (unpublished) made much better pictures of a quite different
+parameter space arising from Newton's method for cubics. Mandelbrot,
+perhaps inspired by Hubbard, made corresponding pictures for quadratic
+polynomials, using the normal form (2) and also a variant of (1).
+In order to avoid confusion, let me translate all of Mandelbrot's
+definitions to the normal form (1).
+He introduced two different sets, which I will call \[Q\subset
+M\]. Mandelbrot did not give these sets
+different names, since he believed that they were identical. By definition,
+a parameter value \[c\] belongs to \[Q\] if the corresponding filled Julia set
+contains an interior point, and belongs to \[M\] if its filled Julia
+set contains the critical point \[z=0\] (or equivalently is connected).
+The Brooks-Matelski set
+\[{\cal H}\] is a subset of \[Q\subset M\]. Mandelbrot made quite good computer
+pictures, which seemed to show a number of isolated ``islands''. Therefore,
+he conjectured that \[Q\] [or \[M\]] has many distinct connected components.
+(The editors of the journal thought that his islands were specks of dirt,
+and carefully removed them from the pictures.) Mandelbrot also described
+an important smaller set \[{\cal L}\subset Q\] which he believed to be the
+principal connected component of \[Q\]. This set \[{\cal L}\]
+consists of a central cardioid
+\[{\cal L}_0\] with some (but not all) boundary points included,
+together with countably many smaller nearly-round disks which are pasted on
+inductively, in an explicitly described pattern.\smallskip
+
+Although Mandelbrot's statements in this first paper
+were not completely right, he deserves a great
+deal of credit for being the first to point out the extremely complicated
+geometry associated with the parameter space for quadratic maps.
+His major achievement has been to demonstrate
+to a very wide audience that such complicated ``fractal''
+objects play an important role in a number of mathematical sciences.
+\smallskip
+
+The first real mathematical breakthrough came with Douady and Hubbard's work in
+1982. They introduced the name {\bit Mandelbrot set} for the compact set
+\[M\] described above, and
+provided a firm foundation for its mathematical study,
+proving for example that \[M\] is connected with connected complement.
+(Meanwhile,
+Mandelbrot had decided empirically that his isolated islands were actually
+connected to the mainland by very thin filaments.)
+Already in this first paper, they showed that each hyperbolic component
+of the interior of \[M\] can be canonically
+parametrized, and showed that the boundary \[\partial M\] can be profitably
+studied by following external rays.\smallskip
+
+It may be of interest to compare the three sets \[{\cal H}\subset Q\subset M\]
+in parameter space. They are certainly different since \[{\cal H}\] is open,
+\[M\] is compact, and \[Q\] is neither.
+Using Sullivan's work (\S13), we can say that
+\[Q\] consists of \[{\cal H}\] together with a very sparse set of boundary
+points, namely those for which the corresponding map has
+either a parabolic orbit or
+a Siegel disk. Quite likely, there is no difference between these three sets
+as far as computer graphics are concerned, since it is widely
+conjectured{\bf *} that the Brooks-Matelski set \[{\cal H}\]
+is equal to the interior of \[M\], and that
+\[M\] is equal to the closure
+of \[{\cal H}\]. However, as far as practical computing is concerned, it should
+be noted that it is quite easy to
+test (at least roughly)
+whether a parameter value belongs to \[M\], but somewhat harder to decide
+whether it belongs to \[{\cal H}\] (compare \S10.5), and very difficult
+to decide
+whether it belongs to \[Q\]. (Compare Appendix G. Here I am only speaking of
+approximate tests. To decide precisely whether a given point belongs to
+\[M\] or to whether a given point belongs to \[{\cal H}\] may be very
+difficult. As a specific example, I have no idea whether or not the point
+\[c=-1.5\] belongs to \[{\cal H}\].)\smallskip
+
+Another important development came in 1983, with
+the work of Ma\~n\'e, Sad and Sullivan on stability of the Julia set
+\[J(f)\] under deformation of \[f\]. (Compare the discussion following \S14.3.)
+These results were obtained independently by Lyubich.
+The study of parameter space for
+higher degree polynomials began some five years later with the work of
+Branner and Hubbard. Using the normal form
+$$	f(z)\;=\;z^3-3a^2z+b\,, $$
+with the two critical points at \[z=\pm a\], they proved that the {\bit cubic
+connectedness locus}, consisting of all parameter pairs \[(a,b)\] for which
+\[J(f)\] is connected, is a {\bit cellular set}. (Compare \S17.3.)
+In particular, this set is compact and connected. A corresponding result for
+polynomials of higher degree has recently been obtained by Lavaurs.
+Parameter space studies for rational maps are more awkward,
+since there is no obvious normal form. However, an important beginning
+has been made by Rees. All of these studies are very new, and much remains
+to be done.\smallskip
+
+Here are two problems for the reader.
+\vfil
+\noindent ------------
+
+\noindent {\bf *} Douady and Hubbard have shown that these conjectures are true
+if the set \[M\] is locally connected. Recent work of Yoccoz lends very
+strong support to the belief that \[M\] is indeed locally connected.
+\eject
+
+{\bf Problem F-1.} Show that every polynomial map of degree \[d\ge 2\]
+is conjugate, under an
+affine change of coordinates, to one in the ``Fatou normal form''
+$$	f(z)\;=\; z^d + a_{d-2}z^{d-2}+\cdots+a_1z+a_0\,.	$$
+Let \[P(d)\cong\C^{d-1}\] be the space of all such maps.
+Show that the cyclic group \[Z(d-1)\] of \[(d-1)$-st roots of unity acts on
+\[P(d)\] by linear conjugation, replacing \[f(z)\] by \[f(\omega z)/\omega\],
+and show that the quotient \[P(d)/Z(d-1)\] can be identified with the
+``moduli space'' of degree \[d\] polynomials up to affine conjugation.
+If \[d\ge 4\], show that this moduli space is not a manifold.\smallskip
+
+{\bf Problem F-2.} Show that every quadratic rational map is conjugate, under
+a fractional linear change of coordinates, for example to one in the form
+$$	f(z)\;=\;1+(z^2-1)/(az^2-b) $$
+where \[a\ne b\],
+with critical points at zero and \[\infty\] and a fixed point at \[z=1\].
+(In general this form is not unique, since such a
+map actually has three fixed points, and since the roles of zero and infinity
+can be interchanged.)% Show that the moduli space of quadratic rational maps
+%up to fractional linear change of coordinates has just one non-manifold point,
+%namely \[z\mapsto 1/z^2\].\smallskip
+
+
+\vfil\eject
+\footline={\hss\tenrm G-\folio\hss}\pageno=1
+
+\centerline{\bf Appendix G. Remarks on Computer Graphics.}\medskip
+
+In order to make a computer picture of some complicated compact set
+\[L\subset\C\], for example a Julia set,
+we must compute a matrix of small
+integers, where the \[(i,j)$-th entry describes the color (perhaps
+only black or white) which is assigned to the \[(i,j)$-th ``pixel'' of
+the computer screen. Each pixel represents a small square in the complex plane,
+and the color which is assigned must tell
+us something about intersection of \[L\] with this square.
+
+In the case of a quadratic Julia set \[J(f)\], one very fast method
+involves following iterates of the inverse map \[f^{-1}\],
+taking all possible branches. (Compare \S3.9.) As Mandelbrot points out,
+this method yields an excellent
+picture of the outer parts of the \[J(f)\] but shows very little detail in
+the inner parts. If we think of the electrostatic field produced by
+an electric charge on \[J(f)\], this method will emphasize only those parts of
+the Julia set at which ``lines of force'' (or ``external rays'' in the language
+of \S18) tend to land.
+
+A slower but much better procedure for plotting \[J(f)\] involves
+iterating the map \[f\] for some large number (perhaps 50 to 50000) of times,
+starting at the midpoint of each pixel. If the orbit ``escapes'' from
+a large disk after \[n\] iterations, then the corresponding pixel is
+assigned a color which depends on \[n\]. In more refined versions of
+this method, one computes not only the value of the \[n$-th iterate of \[f\]
+but also the absolute value of its derivative. Compare the discussion
+below. Similar remarks apply to the {\bit Mandelbrot set} \[M\], as defined
+by Douady and Hubbard. (Compare
+Appendix F). In this case one takes the quadratic map
+corresponding to the midpoint of the square and follows the orbit of its
+critical point.
+
+{\bf Remark.}
+In order to understand some of the limitations of this method, consider
+the situation near a fixed point \[f(z_0)=z_0\] in the Julia set.
+First consider the repelling
+case, with multiplier say of absolute value two. If we start at at point
+\[z\] at distance \[1/1000\] from \[z_0\], then the distance from
+\[z_0\] will roughly double with each iteration. Hence, after only ten
+iterations the image of \[z\] will move substantially away from \[z_0\].
+The result will be a computer picture which is quite sharp and accurate
+near \[z_0\]. (Figures 3, 4.)
+
+Now suppose that we try to construct a picture for \[z\mapsto z+z^4\] by
+the same method. Again start with a point \[z\in J\] at a distance of
+\[\epsilon\approx 1/1000\] from the fixed point at zero. Examining
+the proof of 7.2, we see that the associated coordinate \[w_0=- 1/
+3z_0^{\,3}\], which increases by one under each iteration, is roughly
+equal to \[-1/3\epsilon^3\approx 300,000,000\]. {\it Thus
+we would have to follow such an orbit for some \[300,000,000\]
+iterations in order
+to escape from a neighborhood of \[z=0\].} The result in practice will be a
+false picture which shows everything near the origin to be in the Fatou set.
+(This difficulty was eliminated in Figure 8 by using a special computer
+program, which extrapolated iterates of \[f\] in order to distinguish
+different Fatou components. Similarly, Figures
+10, 12 were plotted with special purpose programs.)
+
+For the fixed points of Cremer type, the situation is much worse. As far
+as I know, no useful
+computer picture of such a point has ever been produced!\smallskip
+
+Many Julia sets are made up of very fine filaments. For such sets, it
+is essential to make some kind of distance estimate in order to obtain
+a sharp picture. For all of the center points of our pixels will quite likely
+lie outside of these filaments, and hence correspond to escaping orbits.
+But a good distance estimate can tell us that our pixel intersects the
+\break
+
+\noindent
+set \[J(f)\], even though its center point is outside. In the case of
+the Mandelbrot set \[M\], this procedure is even more important, since \[M\]
+contains both large regions and also very fine filaments. Indeed,
+it was precisely the difficulty of seeing such filaments which led
+to Mandelbrot's incorrect belief that \[M\] has many components.
+
+Here is an example of how first derivatives can be used to make such
+distance estimates, following Fisher.
+Consider a rational map \[f:\hat\C\to\hat\C\] with a superattractive
+fixed point at the origin. Let \[\Omega\] be the basin of attraction
+of this fixed point. Let us assume, to simplify the discussion, that this
+basin is connected, simply connected,\break and
+contains no other critical point of \[f\]. Then it is not difficult to
+show that the B\"otk$\!$her coordinate of \S6.7 can be defined throughout
+\[\Omega\], and yields a conformal isomorphism
+\[\;\phi:\Omega\to D\;\] with \[\;\phi(f(z))=\phi(z)^n\,\].
+Define the {\bit canonical potential function}\break
+\[G:\Omega-\{0\}\to \R\;\] by
+$$	G(z)=\log|\phi(z)|<0\,.	$$
+(Compare \S17.) Denoting the gradient vector of \[G\] by \[G'\], we will show
+that:\smallskip
+
+(1) {\it the function \[G\] and the norm \[\| G' \|= |\phi'(z)/
+\phi(z)|\] are easy to compute, and}\smallskip
+
+(2) {\it the distance of \[z\] from the boundary of \[\Omega\]
+can be computed, up to a factor\break
+\indent of two, from a knowledge of \[G\] and \[\| G' \|\].}\smallskip
+
+\noindent
+In fact, for any orbit \[z_0\mapsto z_1\mapsto\cdots\] in \[\Omega\], it is easy
+to check that
+$$	G(z_0)=\lim_{k\to\infty}\log|z_k|/n^k\,.	$$
+Since the convergence is locally uniform, we can also write
+$$	\|G'(z_0)\|=\lim_{k\to\infty}{|dz_k/dz_0|\over n^k|z_k|}\,.	$$
+In both cases, the successive terms can easily be computed
+inductively, and
+we obtain good approximations by iterating until \[|z_k|\]
+is small. (If many iterations do not yield any small \[z_k\], then we must
+assume that \[z_0\ne \Omega\], and set \[G=0\].)
+
+Setting \[\phi(z)=w\], a brief computation shows that
+the \Poincare metric on \[\Omega\] can be written as
+$$	{2|dw|\over 1-|w|^2}\;=\; {2|\phi'(z)dz|\over 1-|\phi(z)|^2}\;
+	=\;{\|G'(z)dz\|\over |\sinh G(z)|}\;.	$$
+As an immediate consequence of the Quarter Theorem, \S A.7, A.8, we
+obtain the following.
+
+{\QP {\bf Corollary.} {\it The distance between \[z\] and the
+boundary of \[\Omega\] is equal to\break
+\[|\sinh( G)|/\|G'\|\], up to a factor of two.}\medskip}
+
+\noindent If \[z\] is very close to \[\partial \Omega\], then \[G\] is small and
+this distance estimate is very close to the ratio \[|G|/\|G'\|\]. It is
+interesting to note that this is just the step size which would be
+prescribed if we tried to solve the equation \[G(z)=0\] by Newton's method.
+\smallskip
+
+There are similar estimates in the case of a superattractive fixed point
+at infinity, or in other words for the basin \[\C\ssm K(f)\] of a polynomial
+map. For further information, the reader is referred to
+Fisher, to Milnor [M5], and to Peitgen.
+
+\vfill
+\rightline{jwm, version of 9-4-91}
+\end
+
+
+

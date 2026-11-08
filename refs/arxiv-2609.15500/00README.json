@@ -1,0 +1,14 @@
+{
+  "key": "dudko-lim-neutral-bubbles",
+  "arxiv_id": "2609.15500",
+  "arxiv_version": "1",
+  "role": "renormalization",
+  "title": "Uniform bounds for bubbles of neutral quadratic polynomials",
+  "authors": [
+    "Dzmitry Dudko",
+    "Willie Rush Lim"
+  ],
+  "metadata": "arxiv-2609.15500.xml",
+  "source_archive": "arxiv-2609.15500-source.tar.gz",
+  "main_tex": "arxiv-2609.15500/main.tex"
+}

@@ -1,0 +1,456 @@
+\documentclass[11pt,a4paper,oneside,openany]{book}
+\makeatletter
+\renewcommand{\@pnumwidth}{2.4em}
+\makeatother
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage[margin=27mm]{geometry}
+\usepackage[no-math]{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\setmainfont{Noto Serif}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+\usepackage[hypcap=false]{caption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage{mdframed}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,unicode=true]{hyperref}
+\setlength{\emergencystretch}{3em}
+\sloppy
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\setcounter{tocdepth}{1}
+\hypersetup{
+  pdftitle={The Mandelbrot Local Connectivity Problem},
+  pdfsubject={Dynamics, literature, and the audited boundary of the Lean formalization}
+}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\M}{\mathcal M}
+\newcommand{\D}{\mathbb D}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Kc}{K_c}
+\newcommand{\Jc}{J_c}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\modulus}{\operatorname{mod}}
+\newcommand{\Prop}{\operatorname{Prop}}
+\newcommand{\LocallyConnectedSpace}{\operatorname{LocallyConnectedSpace}}
+\newcommand{\lean}[1]{\textup{\path{#1}}}
+\newcommand{\leanref}[2]{%
+  \href{https://github.com/kirill-kondrashov/mlc/blob/systematize/#1}{\textup{\nolinkurl{#2}}}}
+\newcommand{\weightedarea}{m_{\mathrm G}}
+\newcommand{\coveragefigure}[3]{%
+  \clearpage
+  \begin{landscape}
+  \thispagestyle{plain}
+  \begin{center}
+  \includegraphics[page=#1,width=0.94\linewidth,height=0.78\textheight,keepaspectratio]{docs/figures/mlc_status_render.pdf}
+  \captionof{figure}{#2}
+  \label{#3}
+  \end{center}
+  \end{landscape}
+  \clearpage}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{formalobligation}[theorem]{Formalization obligation}
+\newtheorem{openestimate}[theorem]{Open problem}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem*{conjecture}{Conjecture}
+
+\definecolor{conditionalblue}{RGB}{28,76,132}
+\newenvironment{conditionalstep}
+  {\begin{mdframed}[
+     linecolor=conditionalblue,
+     linewidth=1.2pt,
+     leftline=true,
+     rightline=false,
+     topline=false,
+     bottomline=false,
+     leftmargin=0pt,
+     rightmargin=0pt,
+     innerleftmargin=8pt,
+     innerrightmargin=0pt,
+     innertopmargin=2pt,
+     innerbottommargin=2pt,
+     skipabove=\medskipamount,
+     skipbelow=\medskipamount,
+     backgroundcolor=white,
+     nobreak=false
+   ]\begingroup\color{conditionalblue}\small}
+  {\endgroup\end{mdframed}}
+
+\title{The Mandelbrot Local Connectivity Problem:\\
+Dynamics, Literature, and Formal Proofs}
+\author{}
+\date{Working manuscript --- 30 October 2026}
+
+\begin{document}
+\frontmatter
+\maketitle
+\input{review/00_reading_guide.tex}
+\tableofcontents
+\listoffigures
+\clearpage
+
+\mainmatter
+\part{The problem and its elementary foundations}
+\input{review/01_scope_and_status.tex}
+\input{review/13_quadratic_foundations.tex}
+\input{review/14_topological_foundations.tex}
+
+\part{Analytic and combinatorial machinery}
+\input{review/02_foundational_machinery.tex}
+\input{review/06_phase_parameter.tex}
+\input{review/07_lyubich_renormalization.tex}
+\input{review/09_combinatorial_contracts.tex}
+\part{Published results and the remaining frontier}
+\input{review/03_known_results.tex}
+\input{review/08_dudko_cases.tex}
+\input{review/16_digests_foundations.tex}
+\input{review/17_digests_modern.tex}
+\input{review/18_digests_monographs.tex}
+\input{review/19_digests_pacman_neutral.tex}
+\input{review/20_digests_laminations_entropy.tex}
+\input{review/21_digests_sierpinski.tex}
+\input{review/23_digests_apriori_limbs.tex}
+\input{review/24_digests_covering_parapuzzle.tex}
+\input{review/25_digests_siegel_renormalization.tex}
+\input{review/26_digests_lyubich_parameter.tex}
+\input{review/22_approaches_map.tex}
+
+\part{Formal proof architecture and its audit}
+\input{review/15_frozen_model_audit.tex}
+\input{review/10_categorical_branch.tex}
+\input{review/12_conditional_theorem_matrix.tex}
+
+\appendix
+\input{review/04_formalization_map.tex}
+\input{review/11_lean_inventory.tex}
+\input{review/05_source_policy_and_roadmap.tex}
+
+\backmatter
+\renewcommand{\bibname}{References}
+\addcontentsline{toc}{chapter}{References}
+\begin{thebibliography}{99}\small
+\bibitem{DH}
+A.~Douady and J.~H.~Hubbard,
+\emph{Exploring the Mandelbrot Set: The Orsay Notes}.
+\href{https://pi.math.cornell.edu/~hubbard/OrsayEnglish.pdf}{PDF}.
+
+\bibitem{DHPolynomialLike}
+A.~Douady and J.~H.~Hubbard,
+\emph{On the dynamics of polynomial-like mappings},
+Annales scientifiques de l'École Normale Supérieure (4) 18
+(1985), no.~2, pp.~287--343.
+\href{https://www.numdam.org/item/ASENS_1985_4_18_2_287_0/}
+{Article page}.
+
+\bibitem{Yoccoz}
+J.-C.~Yoccoz,
+\emph{Theorème de Siegel, nombres de Bruno et polynômes quadratiques},
+Astérisque 231 (1995), pp.~1--88.
+\href{https://www.numdam.org/book-part/AST_1995__231__1_0/}{Article page}.
+
+\bibitem{HubbardYoccoz}
+J.~H.~Hubbard,
+\emph{Local connectivity of Julia sets and bifurcation loci:
+three theorems of J.-C.~Yoccoz},
+in \emph{Topological Methods in Modern Mathematics},
+Publish or Perish (1993), pp.~467--511.
+
+\bibitem{LyubichBook}
+M.~Lyubich,
+\emph{Conformal Geometry and Dynamics of Quadratic Polynomials,
+vol.~I--II}, online manuscript (702 pages, PDF dated 2023); Volumes~III--IV are announced in its preface and are not published.
+\href{https://www.math.stonybrook.edu/~mlyubich/book.pdf}{Author's manuscript};
+\href{https://www.math.stonybrook.edu/~mlyubich/papers/index.html}
+{author's publication list}.
+
+\bibitem{LyubichNotes}
+M.~Lyubich,
+\emph{Conformal Geometry and Dynamics of Quadratic Polynomials},
+ICTP lecture manuscript (2013), 256 PDF pages.
+\href{https://indico.ictp.it/event/a12182/session/2/contribution/1/material/0/0.pdf}
+{ICTP copy}.
+
+\bibitem{LyubichGeometry}
+M.~Lyubich,
+\emph{Geometry of quadratic polynomials: moduli, rigidity and local
+connectivity}, arXiv:math/9309215.
+\href{https://arxiv.org/abs/math/9309215}{arXiv}.
+
+\bibitem{LyubichDynamics}
+M.~Lyubich,
+\emph{Dynamics of quadratic polynomials, I--II},
+Acta Mathematica 178 (1997), no.~2, pp.~185--297.
+\href{https://doi.org/10.1007/BF02392694}{DOI}.
+
+\bibitem{LyubichIII}
+M.~Lyubich,
+\emph{Dynamics of quadratic polynomials, III: parapuzzle and SBR measures},
+Astérisque 261 (2000), pp.~173--200.
+\href{https://numdam.org/item/AST_2000__261__173_0/}{Article page}.
+
+\bibitem{DudkoLyubichSatellite}
+D.~Dudko and M.~Lyubich,
+\emph{Local connectivity of the Mandelbrot set at some satellite parameters
+of bounded type}, Geometric and Functional Analysis 33 (2023), no.~4,
+pp.~912--1047.
+\href{https://arxiv.org/abs/1808.10425}{arXiv}.
+
+\bibitem{DudkoLyubichFeigenbaum}
+D.~Dudko and M.~Lyubich,
+\emph{MLC at Feigenbaum points}, Publications Mathématiques de l'IHÉS 143
+(2026), pp.~97--141.
+\href{https://arxiv.org/abs/2309.02107}{arXiv}.
+
+\bibitem{DudkoMLC}
+D.~Dudko,
+\emph{On the MLC Conjecture and the Renormalization Theory in Complex
+Dynamics}, arXiv:2512.24171.
+\href{https://arxiv.org/abs/2512.24171}{arXiv}.
+
+\bibitem{KahnKapiambaLyubich}
+J.~Kahn, A.~Kapiamba, and M.~Lyubich,
+\emph{MLC for parabolically bounded primitive renormalization},
+arXiv:2606.27272.
+\href{https://arxiv.org/abs/2606.27272}{arXiv}.
+
+\bibitem{ElephantPuzzles}
+D.~Dudko, A.~Kapiamba, M.~Lyubich, and C.~Peterson,
+\emph{Elephant puzzles}, in preparation, as cited in
+arXiv:2606.27272v1.  No publicly archived manuscript is
+specified by that source.
+
+\bibitem{KahnLyubichElephant}
+J.~Kahn and M.~Lyubich,
+\emph{A priori bounds for some infinitely renormalizable quadratic: IV.
+Elephant Eyes}, arXiv:2601.21905.
+\href{https://arxiv.org/abs/2601.21905}{arXiv}.
+
+\bibitem{DudkoLimBubbles}
+D.~Dudko and W.~R.~Lim,
+\emph{Uniform bounds for bubbles of neutral quadratic polynomials},
+arXiv:2609.15500.
+\href{https://arxiv.org/abs/2609.15500}{arXiv}.
+
+\bibitem{DudkoLimLyubichRigidity}
+D.~Dudko, W.~R.~Lim, and M.~Lyubich,
+\emph{Rigidity of the attractor of neutral renormalization},
+arXiv:2609.37383.
+\href{https://arxiv.org/abs/2609.37383}{arXiv}.
+
+\bibitem{ShenHybrid}
+W.~Shen,
+\emph{Complex Analytic Structure of Hybrid Classes of Generalized
+Polynomial-like Mappings}, arXiv:2610.25983.
+\href{https://arxiv.org/abs/2610.25983}{arXiv}.
+
+\bibitem{DudkoLuoLyubichNeutral}
+D.~Dudko, Y.~Luo, and M.~Lyubich,
+\emph{Uniform a priori bounds for neutral renormalization. Variation II:
+\(\psi^\bullet\)-ql Siegel maps}, arXiv:2509.23031.
+\href{https://arxiv.org/abs/2509.23031}{arXiv}.
+\bibitem{DudkoDecoration}
+D.~Dudko, \emph{The decoration theorem for Mandelbrot sets}, arXiv:1004.0633.
+\href{https://arxiv.org/abs/1004.0633}{arXiv}.
+
+\bibitem{Milnor}
+J.~Milnor, \emph{Dynamics in One Complex Variable}, third edition,
+Annals of Mathematics Studies 160, Princeton University Press, 2006.
+An earlier version is arXiv:math/9201272.
+
+\bibitem{DudkoLyubichSelinger}
+D.~Dudko, M.~Lyubich and N.~Selinger, \emph{Pacman renormalization and self-similarity of the
+Mandelbrot set near Siegel parameters}, arXiv:1703.01206.
+\href{https://arxiv.org/abs/1703.01206}{arXiv}.
+
+\bibitem{DudkoLyubichNeutral}
+D.~Dudko and M.~Lyubich, \emph{Uniform a priori bounds for neutral renormalization}, arXiv:2210.09280.
+\href{https://arxiv.org/abs/2210.09280}{arXiv}.
+
+\bibitem{DudkoMatings}
+D.~Dudko, \emph{Matings with laminations}, arXiv:1112.4780.
+\href{https://arxiv.org/abs/1112.4780}{arXiv}.
+
+\bibitem{DudkoSchleicher}
+D.~Dudko and D.~Schleicher, \emph{Core entropy of quadratic polynomials}, arXiv:1412.8760.
+\href{https://arxiv.org/abs/1412.8760}{arXiv}.
+
+\bibitem{Slodkowski}
+Z.~S\l{}odkowski, \emph{Holomorphic motions and polynomial hulls}, Proc.\ Amer.\ Math.\ Soc.\ 111 (1991), 347--355.
+
+\bibitem{DudkoLuoSierpinski}
+D.~Dudko and Y.~Luo, \emph{Sierpi\'nski carpet hyperbolic components of disjoint type are bounded}, arXiv:2509.25658.
+\href{https://arxiv.org/abs/2509.25658}{arXiv}.
+
+\bibitem{KahnPrimitive}
+J.~Kahn,
+\emph{A priori bounds for some infinitely renormalizable quadratics: I. Bounded primitive combinatorics}, arXiv:math/0609045 (2006).
+\href{https://arxiv.org/abs/math/0609045}{arXiv}.
+
+\bibitem{KahnLyubichDecorations}
+J.~Kahn and M.~Lyubich,
+\emph{A priori bounds for some infinitely renormalizable quadratics: II. Decorations}, arXiv:math/0609046 (2006).
+\href{https://arxiv.org/abs/math/0609046}{arXiv}.
+
+\bibitem{KahnLyubichMolecules}
+J.~Kahn and M.~Lyubich,
+\emph{A priori bounds for some infinitely renormalizable quadratics: III. Molecules}, arXiv:0712.2444 (2007).
+\href{https://arxiv.org/abs/0712.2444}{arXiv}.
+
+\bibitem{KahnLyubichQA}
+J.~Kahn and M.~Lyubich,
+\emph{The quasi-additivity law in conformal geometry}, Ann.\ of Math.\ 169 (2009), 561--593, arXiv:math/0505191.
+\href{https://arxiv.org/abs/math/0505191}{arXiv};
+\href{https://doi.org/10.4007/annals.2009.169.561}{DOI}.
+
+\bibitem{KahnLyubichUnicritical}
+J.~Kahn and M.~Lyubich,
+\emph{Local connectivity of Julia sets for unicritical polynomials}, Ann.\ of Math.\ 170 (2009), 413--426, arXiv:math/0505194.
+\href{https://arxiv.org/abs/math/0505194}{arXiv};
+\href{https://doi.org/10.4007/annals.2009.170.413}{DOI}.
+
+\bibitem{LyubichUniversality}
+M.~Lyubich,
+\emph{Feigenbaum--Coullet--Tresser universality and Milnor's hairiness conjecture}, Ann.\ of Math.\ 149 (1999), 319--420.
+
+\bibitem{DudkoSchleickerLimbs}
+D.~Dudko and D.~Schleicher,
+\emph{Homeomorphisms between limbs of the Mandelbrot set}, Proc.\ Amer.\ Math.\ Soc.\ 140 (2012), no.~6, 1947--1956.
+\href{https://doi.org/10.1090/S0002-9939-2011-11047-5}{DOI}.
+
+\bibitem{McMullenCDR}
+C.~McMullen,
+\emph{Complex Dynamics and Renormalization}, Annals of Mathematics Studies 135, Princeton University Press, 1994.
+
+\bibitem{McMullenTowers}
+C.~McMullen,
+\emph{Renormalization and 3-Manifolds Which Fiber over the Circle}, Annals of Mathematics Studies 142, Princeton University Press, 1996.
+
+\bibitem{Ahlfors}
+L.~Ahlfors,
+\emph{Conformal Invariants: Topics in Geometric Function Theory}, McGraw--Hill, 1973.
+
+\bibitem{LevinStrien}
+G.~Levin and S.~van Strien,
+\emph{Local connectivity of Julia sets of real polynomials}, Ann.\ of Math.\ 147 (1998), 471--541.
+
+\bibitem{BenedicksCarleson}
+M.~Benedicks and L.~Carleson,
+\emph{On iterations of $1-ax^2$ on $(-1,1)$}, Ann.\ of Math.\ 122 (1985), 1--25.
+
+\bibitem{LyubichQuasiQuadratic}
+M.~Lyubich,
+\emph{Combinatorics, geometry and attractors of quasi-quadratic maps}, Ann.\ of Math.\ 140 (1994), 347--404.
+
+\bibitem{MartensNowicki}
+M.~Martens and T.~Nowicki,
+\emph{Invariant measures for typical quadratic maps}, Ast\'erisque 261 (2000), 239--252, arXiv:math/9606220.
+\href{https://arxiv.org/abs/math/9606220}{arXiv}.
+
+\bibitem{DouadyICM}
+A.~Douady,
+\emph{Chirurgie sur les applications holomorphes}, Proc.\ International Congress of Mathematicians, Berkeley 1986, 724--738.
+
+\bibitem{NowickiVanStrien}
+T.~Nowicki and S.~van Strien,
+\emph{Absolutely continuous measures under a summability condition}, Invent.\ Math.\ 93 (1988), 619--635.
+
+\bibitem{GaYaGoldenMean}
+D.~Gaidashev and M.~Yampolsky,
+\emph{Golden mean Siegel disk universality and renormalization}, arXiv:1604.00717 (2016).
+\href{https://arxiv.org/abs/1604.00717}{arXiv}.
+
+\bibitem{EfimovContinuousK}
+A.~I.~Efimov,
+\emph{K-theory and localizing invariants of large categories}, arXiv:2405.12169 (2024).
+\href{https://arxiv.org/abs/2405.12169}{arXiv}.
+
+\bibitem{EfimovInverseLimits}
+A.~I.~Efimov,
+\emph{Localizing invariants of inverse limits}, arXiv:2502.04123 (2025).
+\href{https://arxiv.org/abs/2502.04123}{arXiv}.
+
+\bibitem{EfimovDevissage}
+A.~I.~Efimov,
+\emph{Some remarks on Quillen's D\'evissage theorem}, arXiv:2505.13260 (2025).
+\href{https://arxiv.org/abs/2505.13260}{arXiv}.
+
+\bibitem{EfimovRigidityMot}
+A.~I.~Efimov,
+\emph{Rigidity of the category of localizing motives}, arXiv:2510.17010 (2025).
+\href{https://arxiv.org/abs/2510.17010}{arXiv}.
+
+\bibitem{EfimovHeartKH}
+A.~I.~Efimov,
+\emph{Theorem of the heart for Weibel's homotopy $K$-theory}, arXiv:2603.08653 (2026).
+\href{https://arxiv.org/abs/2603.08653}{arXiv}.
+
+\bibitem{Quillen}
+D.~Quillen,
+\emph{Higher algebraic $K$-theory. I}, in: Algebraic $K$-theory I: Higher $K$-theories, Lecture Notes in Math. 341, Springer, 1973.
+
+\bibitem{Barwick}
+C.~Barwick,
+\emph{On exact $\infty$-categories and the theorem of the heart}, Compos. Math. 151 (2015), no. 11, 2160--2186.
+
+\bibitem{BartholdiDudkoSurvey}
+L.~Bartholdi and D.~Dudko,
+\emph{Algorithmic aspects of branched coverings}, arXiv:1512.05948.
+\href{https://arxiv.org/abs/1512.05948}{arXiv}.
+
+\bibitem{BartholdiDudkoI}
+L.~Bartholdi and D.~Dudko,
+\emph{Algorithmic aspects of branched coverings I. Van Kampen's theorem for bisets}, arXiv:1512.08539.
+\href{https://arxiv.org/abs/1512.08539}{arXiv}.
+
+\bibitem{BartholdiDudkoII}
+L.~Bartholdi and D.~Dudko,
+\emph{Algorithmic aspects of branched coverings II/V. Sphere bisets and decidability of Thurston equivalence}, arXiv:1603.04059.
+\href{https://arxiv.org/abs/1603.04059}{arXiv}.
+
+\bibitem{BartholdiDudkoIII}
+L.~Bartholdi and D.~Dudko,
+\emph{Algorithmic aspects of branched coverings III/V. Erasing maps, orbispaces, and the Birman exact sequence}, arXiv:1802.03045.
+\href{https://arxiv.org/abs/1802.03045}{arXiv}.
+
+\bibitem{BartholdiDudkoIV}
+L.~Bartholdi and D.~Dudko,
+\emph{Algorithmic aspects of branched coverings IV/V. Expanding maps}, arXiv:1610.02434.
+\href{https://arxiv.org/abs/1610.02434}{arXiv}.
+
+\bibitem{DudkoHlushchankaSchleicher}
+D.~Dudko, M.~Hlushchanka and D.~Schleicher,
+\emph{A canonical decomposition of postcritically finite rational maps and their maximal expanding quotients}, arXiv:2209.02800.
+\href{https://arxiv.org/abs/2209.02800}{arXiv}.
+
+\bibitem{BartholdiDudkoPilgrim}
+L.~Bartholdi, D.~Dudko and K.~M.~Pilgrim,
+\emph{Correspondences on Riemann surfaces: (non-uniform) hyperbolicity and graph attractors}, arXiv:2407.15548.
+\href{https://arxiv.org/abs/2407.15548}{arXiv}.
+
+\bibitem{TanLei}
+Tan Lei,
+\emph{Questions about polynomial matings}, Ann. Fac. Sci. Toulouse Math. (6) 21 (2012), no. 5, 1149--1176.
+
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,13 @@
+{
+  "key": "milnor-dynamics-1992",
+  "arxiv_id": "math/9201272",
+  "arxiv_version": "1",
+  "role": "exposition",
+  "title": "Dynamics in One Complex Variable",
+  "authors": [
+    "John Milnor"
+  ],
+  "metadata": "arxiv-math-9201272.xml",
+  "source_archive": "arxiv-math-9201272-source.tar.gz",
+  "main_tex": "arxiv-math-9201272/cdref.tex"
+}

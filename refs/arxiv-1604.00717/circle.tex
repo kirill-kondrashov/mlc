@@ -1,0 +1,119 @@
+\section{Invariant quasi-arc}
+\label{sec:quasiarc}
+
+
+\begin{thm}
+\label{mainthm4}
+Consider a pair $\zeta\in W^s(\zeta_*) \subset C(Z_1,W_1)$. Assume further that $\zeta=(\eta,\xi)$ is a commuting, rather than approximately commuting, pair, that is
+$$\eta\circ\xi(z)=\xi\circ\eta(z)$$
+in a neighborhood of $0$ for the analytic continuations of the two maps. This means that successive pre-renormalizations of $\zeta$
+are compositions of iterates of $\eta$ and $\xi$.
+Then there exists a $\zeta$-invariant Jordan arc $\gamma\ni 0$ such that
+the restriction of $\zeta$ to $\gamma$ is quasi-symmetrically conjugate to the pair $H$ by a conjugacy that maps $0$ to $0$.
+\end{thm}
+The proof follows the work of Stirnemann \cite{Stir}. We start by introducing a convenient notation of multi-indices below.
+
+\subsection{Dynamical partition and multi-indices}
+Consider the space $\cI$ of multi-indices $\bar s=(a_1,b_1,a_2,b_2,\ldots,a_n,b_n)$ where $a_j\in \NN$ for $2\leq n$, $a_1\in\NN\cup\{0\}$,
+$b_j\in\NN$ for $1\leq j\leq n-1$, and $b_n\in\NN\cup\{0\}$. 
+We introduce a partial ordering on multi-indices:
+$\bar s\succ \bar t$ if $\bar s=(a_1,b_1,a_2,b_2,\ldots,a_n,b_n)$, $\bar t=(a_1,b_1,\ldots,a_k,b_k,c,d)$, where $k<n$ and 
+either $c< a_{k+1}$ and $ d=0$ or $c=a_{k+1}$ and $d< b_{k+1}$. For such a pair, we also define
+$$\bar q\equiv \bar s\ominus \bar t:$$
+\begin{itemize}
+\item in the case when $d=0$, $\bar q=(a_{k+1}-c,b_{k+1},\ldots, a_n,b_n)$;
+\item in the other case, $\bar q=(0,b_{k+1}-d,a_{k+1},b_{k+2},\ldots, a_n,b_n).$
+\end{itemize}
+
+For a pair of maps $\zeta=(\eta,\xi)$ and $\bar s $ as above we will denote 
+$$\zeta^{\bar s}\equiv\xi^{b_n}\circ\eta^{a_n}\circ\cdots\circ\xi^{b_2}\circ\eta^{a_2}\circ\xi^{b_1}\circ \eta^{a_1}.$$
+Similarly, 
+$$\zeta^{-\bar s}\equiv (\zeta^{\bar s})^{-1}=(\eta^{a_1})^{-1}\circ(\xi^{b_1})^{-1}\circ\cdots\circ(\eta^{a_n})^{-1}\circ (\xi^{b_n})^{-1}.$$
+
+Consider a pair $\zeta\in W^s(\zeta_*)$. 
+
+Consider the $n$-th pre-renormalization of $\zeta$:
+$$p\cR^n\zeta=\zeta_{n}=(\eta_{n}|_{Z_n},\xi_{n}|_{W_n}).$$
+We define  $\bar s_n,\bar t_n\in\cI$ to be such that
+$$\eta_{n}=\zeta_{n}^{\bar s_n},\text{ and }\xi_{n}=\zeta_{n}^{\bar t_n}.$$
+
+Let $T:\RR\to\RR$ be the translation $x\mapsto x+\theta_*$, with $\theta_*=(\sqrt{5}-1)/2$. Define
+$$f(x)=T^2(x)-1\text{ and }g(x)=T(x)-1,$$
+and set  $$I=[g(0),0],\; J=[0,f(0)],\text{ and }H=(f|_I,g|_J).$$ Define $H_n=(f_n,g_n)=(H^{\bar s_n},H^{\bar t_n})$, and set 
+$$I_n=[0,g_n(0)],\;J_n=[0,f_n(0)].$$
+
+Now consider the collection of intervals
+$$\cP_n\equiv \{H^{\bar w}(I_n)\text{ for all }\bar w\prec \bar s_n\text{ and }H^{\bar w}(J_n)\text{ for all }\bar w\prec \bar t_n\}.$$
+It is easy to see that:
+\begin{itemize}
+\item[(a)] $\underset{T\in\cP_n}\cup T=I\cup J$;
+\item[(b)] for any two distinct elements $T_1$ and $T_2$ of $\cP_n$, the interiors of $T_1$ and $T_2$ are disjoint.
+\end{itemize}
+In view of the above, we call $\cP_n$ the $n$-th dynamical partition of the segment $I\cup J$.
+
+%Let $\zeta$ be in  $W^s(\zeta_*) \subset C(Z_1,W_1)$, $\zeta_n= set 
+%$$Z_n=\lambda_n Z_1, \quad W_n=\lambda_n W_1,$$
+
+Consider the sequence of domains $$\cV_n \equiv \{\zeta^{\bar w}(Z_n)\text{ for all }\bar w\prec \bar s_n\text{ and }\zeta^{\bar w}(W_n)\text{ for all }\bar w\prec \bar t_n\}.$$
+
+By analogy with the above definition (and somewhat abusing the notation) we call $\cV_n$ the $n$-th dynamical partition of the pair $\zeta$.
+
+
+
+
+\begin{figure}
+\centering
+% If not, use
+\vspace{2mm}       % Give the correct figure height in cm
+\begin{tabular}{c c c} 
+\includegraphics[height=50mm,width=45mm, angle=-90]{partition1.pdf} & \includegraphics[height=50mm,width=45mm, angle=-90]{partition2.pdf}  &  \includegraphics[height=50mm,width=45mm,angle=-90]{partition3.pdf}
+\end{tabular}
+\caption{Partitions: a)  $\cV_1$,  b) $\cV_2$, c) $\cV_3$}
+\label{fig:partitions}       % Give a unique label
+\end{figure}
+
+\noindent
+Let us prove the following Lemma:
+\begin{lemma}
+\label{lem-dyn-part}
+There exist $K>1$, $k\in\NN$,  and $C>0$ such that the following properties hold.
+\begin{enumerate}
+\item For every $n$ and every $W\in\cV_n$, the domain $W$ is a $K$-bounded distortion image of one of the sets $D_1^*=\eta_*(Z_1)$ or $B_n^*=\xi_*(W_1)$.
+\item Let $T_{n+k}$ be an interval in the dynamical partition $\cP_{n+k}$ which is contained inside the interval  $S_n\in\cP_n$.
+Let $P_{n+k} \in \cV_{n+k}$ and  $Q_n\in \cV_n$ be the elements with the same multi-indices as $T_{n+k}$ and $S_n$. Then
+$P_{n+k}\Subset Q_n$ and $$\operatorname{mod}(Q_n\setminus P_{n+k})>C.$$
+\item Let $Q_1$ and $Q_2$ belong to the $n$-th partition $\cV_n$ and $Q_1\cap Q_2\neq\emptyset$. Then $Q_1$ is $K$-commensurable with $Q_2$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+To fix the ideas, let us assume that $W=\zeta^{\bar w}(Z_n)$ and that $W \neq Z_n$.  Consider the domain $D_n=\eta_n(Z_n)$.  Set $\bar q=\bar s_n \ominus \bar w$,  and consider the univalent  inverse branch $\psi=\zeta^{-\bar q}$ which maps $D_n$ to $W$. 
+
+Since $\eta_n$ extends to a strictly larger domain $\tl Z_n$ as a $2$-to-$1$ branched covering map, the branch $\psi$ has a conformal extension to $\tl D_n \Supset D_n$. Since $\zeta \in W^s(\zeta_*)$, the sets $D_n$ and $\tl D_n$ are close to being linear rescalings of the domains $D_1^*=\zeta_*(Z_1)$ and $\tl D_1^*=\zeta_*(\tl Z)$, and therefore,  $\operatorname{mod}(\tl D_n \setminus  D_n)$ is universally  bounded. 
+
+The first claim now follows immediately from Koebe Distortion Theorem applied to $\zeta^{-\bar q}$. 
+
+The second claim follows from the fact that $Z_{n+1}$ is a linearly scaled copy of $Z_n$ with an asymptotically constant scaling factor (and similarly for $W_{n+1}$ and $W_n$. 
+
+
+
+Finally, the last claim follows from  commensurability of $Z_n$ and $W_n$ and Koebe Distortion Theorem.
+\end{proof}
+
+ \begin{proof}[Proof of \thmref{mainthm4}.] Denote $\Delta_n^0=J_n$ and $\Delta_n^1=I_n$. Let $T_n \in \cP_n$ be a nested sequence  $T_n\supset T_{n+1}$ with  $T_n=H^{\bar w_n}(\Delta_n^{\omega_n})$, where $\omega_n \in \{0,1\}$.
+ 
+Denote $Q_n^0=Z_n$ and $Q_n^1=W_n$. Let $P_n \in \cV_n$ the corresponding sequence for $\zeta$: $P_n \cap P_{n+1} \ne 0$ and $P_n=\zeta^{\bar w_n}(Q_n^{\omega_n})$. 
+
+By \lemref{lem-dyn-part} part (2),  $\diam(P_n)\to 0$.
+%%while the collection $\{P_n\}$ has a finite intersection property. 
+Therefore, $\cap P_n$ is a unique point $y$. Finally,  set $x=\cap T_n$, and $\varphi(x) \equiv y$. 
+
+By \lemref{lem-dyn-part} (1) and (2), the map $\varphi$ is a  topological conjugacy. By \lemref{lem-dyn-part} (3), it is quasi-symmetric.
+ \end{proof}
+
+% \begin{proof}[Proof of \thmref{mainthm4}.] Let $W_n\in\cV_n$ be a nested sequence: $W_n\Supset W_{n+1}$. By \lemref{lem-dyn-part},
+% $\diam(W_n)\to 0$. Let $y=\cap W_n$. If $W_n=\zeta^{\bar w}(U_n)$ then set $T_n=H^{\bar w}(I_n)$ and similarly if $W_n=\zeta^{\bar w}(V_n)$,
+%   set $T_n=H^{\bar w}(J_n)$. Let $x=\cap T_n$. Set $\varphi(x)\equiv y$. By \lemref{lem-dyn-part} (1) and (2), the map $\varphi$ is a 
+% topological conjugacy. By \lemref{lem-dyn-part} (3), it is quasi-symmetric.
+
+% \end{proof}
+

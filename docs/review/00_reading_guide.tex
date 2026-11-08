@@ -1,0 +1,135 @@
+\chapter{Preface and reading guide}
+
+This manuscript studies one question: how can analytic control of quadratic
+dynamics produce connected neighbourhoods in the Mandelbrot parameter
+plane?  The mathematical account and the Lean development are presented
+together, but their completion levels are recorded separately.  Published
+theorems remain mathematical theorems before their proofs are formalized;
+conversely, a checked Lean implication represents a published theorem only
+after its definitions and hypotheses have been identified with the
+objects in the source.
+
+The exposition follows the progression of Lyubich's conformal-geometry
+manuscripts~\cite{LyubichBook,LyubichNotes}: elementary dynamics, topology,
+external coordinates, puzzles, and renormalization.  The categorical
+approaches are discussed after those foundations, so that their geometric
+inputs can be compared with the literature.  Basic real and complex
+analysis are prerequisites; the dynamical objects, neighbourhood
+conditions, and renormalization terminology used in the argument are
+introduced in the text.
+
+\section*{Four routes through the book}
+\addcontentsline{toc}{section}{Four routes through the book}
+
+Part~I defines the quadratic family and the local-connectivity target,
+proves the escape criterion, and develops the compactness and component
+arguments used by every later route.  Part~II introduces external
+coordinates and the phase--parameter problem before discussing
+renormalization and its discrete bookkeeping.  Part~III compares the
+published parameter classes and separates direct MLC conclusions from
+supporting geometric and rigidity results.  Part~IV audits the current
+formal models and then explains the conditional categorical and
+certificate-based roots.
+
+The appendices are reference material: a dependency map, a declaration
+inventory, and the source policy.  File numbers in
+\lean{docs/review/} record the history of the manuscript; chapter numbers
+and cross-references follow the mathematical order in the master file.
+Thus no mathematical dependency should be inferred from a filename.
+
+\section*{Reading a theorem together with its code}
+\addcontentsline{toc}{section}{Reading a theorem together with its code}
+
+The book uses the following distinctions throughout.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}P{0.25\textwidth}Y@{}}
+\textbf{Status} & \textbf{Meaning}\\
+\hline
+Kernel-checked &
+The exact Lean proposition follows from its stated hypotheses and audited
+dependencies.  The meaning of every definition still matters.\\
+Literature theorem &
+A cited paper proves the mathematical result.  The corresponding Lean
+proof may remain incomplete.\\
+Conditional interface &
+The code checks the implication from supplied data.  Constructing those
+data is a separate task.\\
+Formalization obligation &
+A construction or proof still has to be implemented.  Within a published
+parameter class this may already be known mathematics.\\
+Open mathematical problem &
+The cited literature supplies no proof in the stated generality.\\
+Refuted model input &
+A counterexample or a general obstruction prevents the proposed data from
+existing with their present definitions.\\
+\end{tabularx}
+\end{center}
+
+Each substantial bridge is stated mathematically before its Lean
+correspondence is given.  A linked declaration name opens the containing
+source file on the working branch.  The file and the declaration name
+together identify the formal statement; the pinned dependency revisions
+are recorded by \lean{lake-manifest.json}.  Long identifiers are allowed to
+break across lines rather than widening the text block.
+
+\begin{conditionalstep}
+The present audit finds an important mismatch in the inherited puzzle
+model.  Its declaration \lean{Quadratic.modulus} is the integral of a
+Gaussian weight, whereas the literature uses conformal annulus modulus.
+The former is denoted by $\weightedarea$ in this book.  Its values on
+nested differences always form a summable series.
+Chapter~\ref{chap:frozen-audit} proves and formalizes this obstruction.
+Consequently, the legacy theorem named
+\lean{yoccoz_puzzle_shrinkage} is a checked implication with an impossible
+premise, rather than a completed formalization of Yoccoz's theorem.
+\end{conditionalstep}
+
+\section*{Notation}
+\addcontentsline{toc}{section}{Notation}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}P{0.28\textwidth}Y@{}}
+\textbf{Symbol} & \textbf{Meaning}\\
+\hline
+$f_c,\ p_n(c)$ & $z\mapsto z^2+c$, and its critical orbit
+$f_c^{\circ n}(0)$.\\
+$K_c,\ J_c,\ \M$ & Filled Julia set, its boundary, and the bounded
+critical-orbit locus.\\
+$B(x,r),\ \overline B(x,r)$ & Open and closed Euclidean balls.\\
+$\overline A,\ \partial A,\ \operatorname{int}A$ &
+Closure, boundary, and interior in the stated ambient space.\\
+$\mathcal N_X(x)$ & Neighbourhood filter in the space $X$.\\
+$\operatorname{Comp}_x(A)$ & Connected component of $A$ containing $x$,
+when $x\in A$.\\
+$O_N$ & Compact finite-orbit outer approximation of $\M$.\\
+$G_c,\ \phi_c,\ \Phi$ & Dynamical Green function, dynamical Böttcher
+coordinate, and parameter external uniformization.\\
+$P_n(c,z),\ \mathcal P_n(c)$ & Graph-cut dynamical and parameter puzzle
+pieces; these symbols refer to the literature construction.\\
+$\modulus(A)$ & Conformal modulus of a ring domain.\\
+$\weightedarea(A)$ & Gaussian weighted area in the legacy Lean model.\\
+$U\Subset V$ & $\overline U$ is compact and contained in $V$.\\
+$d_n,\ T_n$ & Additive bookkeeping depth and multiplicative original
+return period, respectively.\\
+\end{tabularx}
+\end{center}
+
+\section*{Manuscripts, papers, and version boundaries}
+\addcontentsline{toc}{section}{Manuscripts, papers, and version boundaries}
+
+The author's publication page lists the online book as volumes I--II.
+The repository also contains a distinct 2013 ICTP manuscript under the
+same main title.  The article \emph{Dynamics of quadratic polynomials,
+III: parapuzzle and SBR measures} is a research paper, rather than a third
+volume of that book.  The ``IV'' in Kahn--Lyubich's \emph{Elephant Eyes}
+belongs to the separate \emph{A priori bounds} series.  No further book
+volume is inferred from either numbering scheme.
+
+The literature boundary is reviewed as of 30 October 2026.
+Dudko's survey~\cite{DudkoMLC} provides the overall renormalization
+roadmap; the 2026 papers are cited individually where their hypotheses and
+conclusions enter.  The target remains a full book with full formal
+coverage.  This working manuscript records the material currently
+developed and the remaining obligations, without treating its length,
+source inventory, or theorem names as evidence of completion.

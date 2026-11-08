@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/PCzkwXSf3bY92RWUiPSvv94960I</id>
+  <title>arXiv Query: search_query=&amp;id_list=2509.23031&amp;start=0&amp;max_results=10</title>
+  <updated>2026-10-24T09:35:33Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2509.23031" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2509.23031v2</id>
+    <title>Uniform a priori bounds for neutral renormalization. Variation II: $ψ^\bullet$-ql Siegel maps</title>
+    <updated>2025-10-01T03:15:49Z</updated>
+    <link href="https://arxiv.org/abs/2509.23031v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2509.23031v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We extend uniform pseudo-Siegel bounds for neutral quadratic polynomials to $ψ^\bullet$-quadratic-like Siegel maps. In this form, the bounds are compatible with the $ψ$-quadratic-like renormalization theory and are easily transferable to various families of rational maps. The main theorem states that the degeneration of a Siegel disk is equidistributed among combinatorial intervals. This provides a precise description of how the $ψ^\bullet$-quadratic-like structure degenerates around the Siegel disk on all geometric scales except on the ``transitional scales'' between two specific combinatorial levels.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-09-27T01:03:52Z</published>
+    <arxiv:comment>56 pages, 10 figures</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+    <author>
+      <name>Yusheng Luo</name>
+    </author>
+    <author>
+      <name>Mikhail Lyubich</name>
+    </author>
+  </entry>
+</feed>

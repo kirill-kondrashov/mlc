@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/pzidtuEx/0cxSYL8iKBqyeggaAM</id>
+  <title>arXiv Query: search_query=&amp;id_list=math/0505194&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:29:11Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=math/0505194" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/math/0505194v1</id>
+    <title>Local connectivity of Julia sets for unicritical polynomials</title>
+    <updated>2005-05-10T17:51:57Z</updated>
+    <link href="https://arxiv.org/abs/math/0505194v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/math/0505194v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>  We prove that the Julia set $J(f)$ of at most finitely renormalizable unicritical polynomial $f:z\mapsto z^d+c$ with all periodic points repelling is locally connected. (For $d=2$ it was proved by Yoccoz around 1990.) It follows from a priori bounds in a modified Principle Nest of puzzle pieces. The proof of a priori bounds makes use of new analytic tools developed in math.DS/0505191 that give control of moduli of annuli under maps of high degree.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2005-05-10T17:51:57Z</published>
+    <arxiv:comment>LaTeX, 14 pages, 1 figure</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Jeremy Kahn</name>
+    </author>
+    <author>
+      <name>Mikhail Lyubich</name>
+    </author>
+  </entry>
+</feed>

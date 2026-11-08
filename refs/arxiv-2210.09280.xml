@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/5ZobsVAmNTzpFmeJ0PL16nSSDVc</id>
+  <title>arXiv Query: search_query=&amp;id_list=2210.09280&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:40Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2210.09280" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2210.09280v2</id>
+    <title>Uniform a priori bounds for neutral renormalization</title>
+    <updated>2024-12-30T17:01:50Z</updated>
+    <link href="https://arxiv.org/abs/2210.09280v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2210.09280v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We prove uniform ``pseudo-Siegel'' a priori bounds for Siegel disks of bounded type that give a uniform control of oscillations of their boundaries in all scales. As a consequence, we construct the Mother Hedgehog controlling the postcritical set for any quadratic polynomial with a neutral periodic point and show that this hedgehog has a star-like structure. Pseudo-Siegel bounds imply uniform a priori bounds of the Sector Renormalization, which gives an opportunity to extend Siegel/Pacman Renormalization Theory and Near-Parabolic Renormalization Theory to all near-neutral quadratic polynomials. Various applications beyond quadratic polynomials are also underway.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-10-17T17:37:28Z</published>
+    <arxiv:comment>v2 adds references to further developments</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+    <author>
+      <name>Mikhail Lyubich</name>
+    </author>
+  </entry>
+</feed>

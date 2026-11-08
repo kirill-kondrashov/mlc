@@ -1,0 +1,1084 @@
+\input header
+\input ras
+\def\GO{{G\!O}}
+\def\TF{{\cal E}}
+\def\T{{\bf T}}
+
+\footline={\hss\tenrm 3-\folio\hss}\pageno=1
+
+\centerline{\bf THE JULIA SET}\medskip
+
+\centerline{\bf \S3. Fatou and Julia: Dynamics on the Riemann Sphere.}\bigskip
+
+The local study of iterated holomorphic mappings, in a neighborhood of
+a fixed point, was quite well developed in the late $19^{th}$ century.
+(Compare \S\S6,7.) However, except for one very simple case studied
+by Cayley, nothing was known about the global behavior of iterated
+holomorphic maps
+until 1906, when Pierre Fatou described the following startling example.
+For the map \[z\mapsto z^2/(z^2+2)\], he showed that
+almost every orbit under iteration
+converges to zero, even though there is a Cantor set of exceptional points
+for which the orbit remains bounded away from zero. (Problem 3-6.)
+This aroused great interest. After a hiatus dug
+the first world war, the subject was taken up in depth by Fatou, and also
+by Gaston Julia and others such as S. Latt\'es and J. F. Ritt. The most
+fundamental and incisive contributions were those of Fatou himself,
+although Julia developed much closely related material at more or less the
+same time. Julia, who had been badly wounded
+during the war, was awarded the ``Grand Prix des Sciences math\'ematiques''
+by the Paris Academy of Sciences in 1918 for his work.\medskip
+
+{\bf Definition.} Let \[S\] be a Riemann surface, let \[f:S\to S\]
+be a non-constant holomorphic mapping, and let \[f^{\circ n}:S\to S\] be its
+\[n$-fold iterate.
+Fixing some point \[z_0\in S\], we have the following basic dichotomy: {\it
+If there exists some neighborhood \[U\] of \[z_0\] so that the sequence of
+iterates \[\{f^{\circ n}\}\] restricted to \[U\] forms a normal family, then
+we say that \[z_0\] is a {\bit regular\/} or {\bit normal\/} point, or that
+\[z_0\] belongs to the {\bit Fatou set\/} of \[f\]. Otherwise, if no such
+neighborhood exists, we say that \[z_0\] belongs
+to the {\bit Julia set\/} \[J=J(f)\].} (For sharper formulations of this
+dichotomy in the rational case, see \S11.8 and Problem 13-1.)\smallskip
+
+Thus, by its very definition, the Julia set \[J\] is a closed subset of
+\[S\], while the Fatou set \[S\ssm J\] is the complementary open
+subset. (The choice
+as to which of these two sets should be named after Julia and which after
+Fatou is rather arbitrary. The term ``Julia set'' is firmly established,
+but the Fatou set is often called by other names, such as ``stable set''
+or ``normal set''.) {\it
+Roughly speaking,
+\[z_0\] belongs to the Fatou set if dynamics in some neighborhood of \[z_0\]
+is relatively tame, and belongs to the Julia set, if dynamics in every
+neighborhood of \[z_0\] is more wild.}\smallskip
+
+The classical example, and the one which we will emphasize, is the
+case where \[S\] is the Riemann sphere \[\hat\C=\C\cup\infty\].
+Any holomorphic map \[f:\hat\C\to \hat\C\] on the Riemann sphere
+can be expressed as a rational
+function, that is as the quotient \[f(z)=p(z)/q(z)\] of two polynomials.
+Here we may assume that \[p(z)\] and \[q(z)\] have no common roots.
+The {\bit degree} \[d\] of \[f=p/q\] is then equal to the maximum of the
+degrees of \[p\] and \[q\]. In particular, for almost every choice of constant
+\[c\in\hat\C\] the equation \[f(z)=c\] has exactly \[d\] distinct solutions
+in \[\hat\C\]. (For every choice of \[c\] it has at
+least one solution, since we assume that \[d>0\].)\smallskip
+
+As a simple example, consider the squaring map \[s:z\mapsto z^2\] on
+\[\hat\C\]. The entire open disk \[D\] is contained in the Fatou set of
+\[s\], since successive iterates on any compact subset converge uniformly
+to zero. Similarly the exterior \[\hat\C\ssm \bar D\] is contained in the
+Fatou set, since the iterates of \[s\] converge to the constant function
+\[z\mapsto\infty\] outside of \[\bar D\]. On the other hand, if \[z_0\]
+belongs to the unit circle, then in any neighborhood of \[z_0\]
+any limit of iterates \[s^{\circ n}\] would necessarily
+have a jump discontinuity as we cross the unit circle.
+This shows that the Julia set \[J(s)\] is precisely equal to the unit circle.
+\smallskip
+
+Such smooth Julia sets are rather exceptional. (Compare \S5.)
+See Figure 1 for some much more typical examples of Julia sets for polynomial
+mappings. Figure 1a
+shows a rather wild Jordan curve,
+Figure 1b a rather thick Cantor set, Figure 1c a ``dendrite'', 
+and Figure 1d a more complicated example, the ``airplane'', with a
+superattracting period 3 orbit. (Further examples of Julia sets are shown
+in Figures 2-5, 8-10, 12, and 17.)
+
+\pageinsert % \eject
+
+\vfil
+\insertRaster qj_quasicircle.ps pixels 720 by 900 scaled 320
+\smallskip
+
+\centerline{Figure 1a. A simple closed curve,}
+\centerline{Julia set for \[z\mapsto z^2+(.99+.14i)z\].}
+\vfil
+\insertRaster qj_cantor.ps pixels 960 by 540 scaled 320
+\smallskip
+\centerline{Figure 1b. A totally disconnected Julia set,}
+\centerline{\[z\mapsto z^2+(-.765+.12i)\].}
+\vfil
+\endinsert % \eject
+
+\pageinsert
+\vfil
+\insertRaster qj_i.ps pixels 960 by 960 scaled 400
+\smallskip
+
+\centerline{Figure 1c. A ``dendrite'', Julia set for \[z\mapsto z^2+i\].}
+\vfil%\endinsert % \eject
+
+
+\insertRaster qj_airplane.ps pixels 960 by 240 scaled 400
+\smallskip
+\centerline{Figure 1d. Julia set for \[z\mapsto z^2-1.75488\ldots\],
+the ``airplane''.}
+\vfil\endinsert % \eject
+
+\smallskip
+
+We will also need the following concept.\smallskip
+
+{\bf Definition.} By the {\bit grand orbit} of a point
+\[z\] under \[f:S\to S\] we mean the
+set \[\GO(z,f)\] consisting of all points \[z'\in S\] whose orbits
+eventually intersect the orbit of \[z\]. Thus \[z\] and \[z'\] have the same
+grand orbit if and only if \[f^{\circ m}(z)=f^{\circ n}(z')\] for some
+choice of \[m\ge 0\] and \[n\ge 0\].\smallskip
+
+Here are some basic properties of the Julia set.
+
+{\QP{\bf 3.1. Lemma.} {\it The Julia set \[J(f)\] of a
+holomorphic map \[f:S\to S\] is {\bit fully invariant}
+under \[f\]. That is,
+if \[z\] belongs to \[J(f)\], then the entire grand orbit \[\GO(z,f)\]
+is contained in \[J(f)\].}\medskip}
+
+Evidently it suffices to prove that \[z\in J(f)\] if and only
+if \[f(z)\in J(f)\].
+A completely equivalent statement is that the Fatou set is fully invariant.
+The proof, making use of the fact that a non-constant holomorphic map
+takes open sets to open sets, is completely straightforward
+and will be left to the reader.\QED
+
+It follows that the Julia set possesses a great deal of {\bit
+self-similarity\/}: {\it Whenever\break
+\[f(z_1)=z_2\] in \[J(f)\], with derivative \[f'(z_1)\ne 0\], there
+is an induced conformal\break isomorphism from a neighborhood \[N_1\] of \[z_1\]
+to a neighborhood \[N_2\] of \[z_2\] which takes \[N_1\cap J(f)\] precisely
+onto \[N_2\cap J(f)\].} (Compare Problem 3-7.)
+
+{\QP {\bf 3.2. Lemma.} {\it For any \[n>0\], the Julia set \[J(f^{\circ n})
+\] of the \[n$-fold iterate coincides with the Julia set \[J(f)\].}\medskip}
+
+\noindent Again, the proof will be left to the reader.\QED
+
+Now consider a {\bit periodic orbit\/} or ``{\bit cycle\/}''
+$$	f\;:\;z_0\mapsto z_1\mapsto\;\cdots\;\mapsto z_{n-1}
+	\mapsto z_n=z_0\,. $$
+If the points \[z_1\,,\,\ldots\,,\,z_n\]
+are all distinct, then the integer \[n\ge 1\] is called the {\bit period\/}.
+If the Riemann surface \[S\] is \[\C\] (or an open subset
+of \[\C\]), then the derivative
+$$	\lambda\= (f^{\circ n})'(z_i)\=f'(z_1)\cdot f'(z_2)\cdots
+	 f'(z_n) $$
+is a well defined complex number called the {\bit multiplier~} or the
+{\bit eigenvalue~}  of this periodic orbit. More generally, for
+self-maps of an arbitrary Riemann surface the multiplier of a periodic
+orbit can be defined using a local coordinate chart around any point of the
+orbit. By definition, a
+periodic orbit is either {\bit attracting~} or {\bit repelling~}
+or {\bit indifferent\/} (\[=\]{\bit neutral~}) according as its multiplier
+satisfies \[|\lambda|<1\] or \[|\lambda|>1\] or \[|\lambda|=1\]. The orbit
+is called {\bit superattracting~} if \[\lambda=0\].
+
+{\bf Caution:} In the special case where the point at infinity is periodic
+under a rational map,
+\[f^{\circ n}(\infty)=\infty\], this definition may be confusing.
+The multiplier \[\lambda\] is {\it
+not\/} equal to the limit as \[z\to\infty\] of the derivative of \[f^{\circ n}
+(z)\], but is rather equal to
+the reciprocal of this number. In fact if we introduce
+the local uniformizing parameter \[w=1/z\] for \[z\] near \[\infty\],
+then it is easy to check that the derivative of \[w\mapsto 1/f(1/w)\]
+at \[w=0\] is
+equal to \[\lim_{z\to\infty} 1/(f^{\circ n})'(z)\]. As an
+example, if \[f(z)=2z\] then
+\[\infty\] is an attracting fixed point with multiplier \[\lambda=1/2\].
+
+In the
+case of an attracting periodic orbit, we can define the {\bit basin of
+attraction~} to be the open set \[\Omega\subset S\] consisting of all
+points \[z\in S\] for which the successive iterates \[f^{\circ n}(z)\,,\,
+f^{\circ 2n}(z)\,,\,\ldots\] converge towards some point of the periodic
+orbit. In particular, this basin of attraction is defined
+in the superattracting case. \smallskip
+
+{\QP{\bf 3.3. Theorem.} {\it  Every attracting periodic orbit is contained
+in the Fatou set. In fact the entire basin of
+attraction \[\Omega\] for an attracting periodic orbit is contained in the
+Fatou set. However the {\bit boundary} \[\partial \Omega\] is contained in the
+Julia set, and every repelling periodic orbit is contained in the Julia set.}
+\medskip}
+
+{\bf Proof.} In view of 3.2, we need only consider the case of a fixed
+point \[f(z_0)=z_0\]. If \[z_0\] is attracting, then it follows
+from Taylor's Theorem that the successive iterates of
+\[f\], restricted to a small neighborhood of \[z_0\], converge uniformly
+to the constant function \[z\mapsto z_0\]. The corresponding statement for
+any compact subset of the basin \[\Omega\] then follows easily.
+On the other hand, around a
+boundary point of this basin, that is a point which belongs to
+the closure \[\bar \Omega\] but not to \[\Omega\] itself, it is clear that no
+sequence of iterates can converge to a continuous limit. (See Problem
+3-2 for a sharper statement.) If \[z_0\] is repelling, then
+no sequence of iterates can converge uniformly near \[z_0\], since the
+derivative \[df^{\circ n}(z)/dz\] at \[z_0\] takes the value \[\lambda^n\],
+which diverges to infinity as \[n\to\infty\]. (Compare \S1.4.)\QED
+
+The case of an indifferent periodic point is much more difficult. (Compare
+\S\S7, 8.) One particularly important case is the following.\smallskip
+
+{\bf Definition.} A periodic point \[f^{\circ n}(z_0)=z_0\] is called
+{\bit parabolic~} if the multiplier \[\lambda\] at \[z_0\] is equal to
+\[+1\], yet \[f^{\circ n}\] is not the identity map, or more generally
+if \[\lambda\] is a root of unity, yet no iterate of \[f\] is the identity
+map.
+
+As an example, the two fixed points of the rational map \[f(z)=z/(z-1)\]
+both have multiplier equal to \[-1\]. These do not count as parabolic
+points since \[f\circ f(z)\] is identically equal to \[z\]. This exclusion
+is necessary so that the following assertion will be true.
+
+{\QP{\bf 3.4. Lemma.} \it Every parabolic periodic point belongs to the Julia
+set.\medskip}
+
+{\bf Proof.} Let \[w\] be a local uniformizing parameter, with \[w=0\]
+corresponding to the periodic point. Then some iterate \[f^{\circ m}\]
+corresponds to a local mapping of the \[w$-plane with
+power series expansion of the form \[\;w\,\mapsto\, w+a_kw^k+a_{k+1}w^{k+1}+
+\cdots\,\], where \[k\ge 2\,,\;\; a_k\ne 0\]. It follows that \[f^{\circ mp}\]
+corresponds to a power series \[w\mapsto w+pa_kw^k+\cdots\]. Thus the \[k$-th
+derivatives of \[f^{\circ mp}\] diverge as \[p\to\infty\].
+It follows from 1.4 that
+no subsequence can converge locally uniformly.\QED
+
+Now and for the rest of \S3,
+let us specialize to the case of a rational map \[f:\hat\C\to\hat\C\] of
+degree \[d\ge 2\].
+
+{\QP{\bf 3.5. Lemma.} {\it If \[f\] is rational of degree two or more, then the
+Julia set \[J(f)\] is non-vacuous.}\medskip}
+
+{\bf Proof.} If \[J(f)\] were vacuous, then some sequence of iterates
+\[f^{\circ n(j)}\] would converge, uniformly over the entire sphere \[\bar
+\C\], to a holomorphic limit \[g:\hat\C\to\hat\C\]. (Here we are using the
+fact that normality is a local property: Problem 2-5.) A standard topological
+argument would then show that the degree of \[f^{\circ n(j)}\] is equal to the
+degree of \[g\] for large \[j\]. But the degree of \[f^{\circ n}\] is equal to
+\[d^n\], which diverges to infinity as \[n\to\infty\].\QED
+
+A different, more constructive proof of this Lemma will be given in \S9.5.
+\smallskip
+
+{\bf Definition.} A point \[z\in \hat\C\] is called
+{\bit grand orbit finite} or (to use the classical terminology)
+{\bit exceptional}$\,$ under \[f\] if its grand orbit \[\GO(z,f)\subset\hat
+\C\] is a finite set. Using Montel's Theorem, we prove the following.
+
+{\QP{\bf 3.6. Lemma.} {\it If \[f\] is rational of
+degree two or more, then the set
+\[\TF(f)\] of grand orbit finite points can have at most two elements. These
+grand orbit finite points,
+if they exist, must always be critical points of \[f\], and must belong
+to the Fatou set.}\medskip}
+
+{\bf Proof.} (Compare Problem 3-3.)
+Note that \[f\] maps any grand orbit \[\GO(z,f)\] onto
+itself. Hence, any finite grand orbit must constitute a single
+periodic orbit under \[f\]. Each point \[z\] in this finite orbit must
+be critical (and in fact
+\[(d-1)$-fold critical, where \[d\] is the degree), since otherwise
+\[f(z)\] would have two or more pre-images. Therefore, such an
+orbit must be attracting, and hence contained in the Fatou set.
+
+If there were three distinct grand orbit finite points, then the union of the
+grand orbits of these points would form a finite set whose complement
+\[U\] in \[\hat\C\] would be Hyperbolic, with \[f(U)= U\]. Therefore,
+the set of iterates of \[f\] restricted to \[U\] would be normal by Montel's
+Theorem. Thus both \[U\] and its complement would be contained in the
+Fatou set, contradicting 3.5.\QED
+
+{\QP{\bf 3.7. Lemma.} {\it Let \[z_1\] be any point of the Julia set
+\[J(f)\subset\hat\C\]. If \[N\]
+is a sufficiently small neighborhood of \[z_1\], then the union \[U\] of the
+forward images \[f^{\circ n}(N)\] is precisely equal to the complement
+\[\hat\C\ssm\TF(f)\] of the set of grand orbit finite points.}\medskip}
+
+In particular, this union \[U\] contains the Julia set \[J(f)\].
+(In \S11.2 we will see that just one forward image \[f^{\circ n}(N)\] actually
+contains the entire Julia set, provided that \[n\] is sufficiently large.)
+
+{\bf Proof of 3.7.} Let \[E\] be the complementary set \[\hat\C\ssm U\].
+We have \[f(U)\subset U\], or equivalently \[f^{-1}(E)\subset E\], by the
+construction. Since \[U\] intersects the Julia set, it follows from Montel's
+Theorem that its complement \[E\] has at most two points. Now since \[E\] is
+finite and \[f\] is onto, a counting argument shows that \[f^{-1}(E)=E\],
+hence \[E\] is contained in the set \[\TF(f)\] of grand orbit
+finite points. If the initial neighborhood \[N\]
+is small enough to be disjoint from \[\TF(f)\], then it follows that
+\[E=\TF(f)\].\QED
+
+{\QP{\bf 3.8. Corollary.} {\it If the Julia set contains an interior point
+\[z_1\], then it must be equal to the entire Riemann sphere.}\medskip}
+
+For if we choose a neighborhood \[N\subset J\], then 3.7 shows that the
+union \[U\subset J\] of forward images of \[N\] is everywhere dense on
+\[\hat\C\].\QED
+
+{\QP{\bf 3.9. Theorem.} {\it
+If \[z_0\in J(f)\], then the set of all iterated pre-images
+$$	\{z\;:\; f^{\circ n}(z)=z_0\quad{\rm for\;some\quad} n\ge0\}	$$
+is everywhere dense in \[J(f)\]. In particular, it follows that the
+grand orbit\break \[\GO
+(z_0\,,f)\] is everywhere dense in \[J(f)\].}\medskip}
+
+For \[z_0\] is not a grand orbit finite point, so 3.7 shows that every point
+\[z_1\in J(f)\] can be approximated arbitrarily closely by points \[z\]
+whose forward orbits contain \[z_0\].\QED
+
+This Theorem suggests an algorithm for computing pictures of the
+Julia set: Starting with any \[z_0\in J(f)\], first compute all pre-images
+\[f(z_1)=z_0\], then compute all pre-images \[f(z_2)=z_1\], and so on, thus
+eventually coming arbitrarily close to every point of \[J(f)\]. This method
+is most often used in the quadratic case, since quadratic equations are very
+easy to solve. The method is very insensitive to round-off errors; since
+\[f\] tends to be expanding on its Julia set, so that \[f^{-1}\] tends to be
+contracting. (Compare Problem 3-4. ??)
+
+{\QP {\bf 3.10. Corollary. } {\it If \[f\] has degree two or more, then
+\[J(f)\] has no isolated points.}\medskip}
+
+{\bf Proof.} Since \[J(f)\] is fully invariant, it follows from 3.5 and 3.6
+that \[J(f)\] must be an infinite set. Hence it contains at least one
+limit point \[z_0\]. Now the iterated pre-images of \[z_0\] form a dense set
+of non-isolated points in \[J(f)\].\QED
+
+A property of a point of \[J\] is said to be true for {\bit generic}
+\[z\in J\] if it is true for all points in some countable intersection
+of dense open subsets \[U_i\cap J\subset J\]. (Compare \S8. Here the notation
+is supposed to indicate that the \[U_i\] are open subsets of \[\hat\C\]
+and that the closure of \[U_i\cap J\] is equal to \[J\].) By Baire's
+Theorem, any such countable intersection is itself a dense subset of \[J\].
+
+{\QP{\bf 3.11. Corollary.} \it For generic \[z\in J(f)\], the forward orbit
+\hfil\break \[\{z\,,\,f(z)\,,\,f^{\circ 2}(z)\,,\,\ldots\;\}\;\] is everywhere
+dense in \[J(f)\].\medskip}
+
+{\bf Proof.} Let \[\{B_j\}\] be a countable collection of open sets
+forming a basis for the topology of \[\hat\C\]. For each \[B_j\] which
+intersects \[J=J(f)\], let \[U_j\] be the union of the iterated pre-images
+\[f^{-n}(B_j)\] for \[n\ge 0\]. Then it follows from 3.9 that the closure
+of \[U_j\cap J\] is equal to the entire Julia set \[J\], and the conclusion
+follows.\QED
+\pageinsert
+\vfil
+\insertRaster cubicj_example.ps pixels 960 by 1120 scaled 400
+\bigskip\bigskip
+\centerline{Figure 2. Julia set for \[f(z)=z^3+{12\over 25}z+{116\over 125}i\].}
+\vfil
+\endinsert
+
+We will continue the study of rational Julia sets in \S11.
+%Here are some problems for the reader.
+\lln\smallskip
+
+
+{\bf Concluding problems.}\smallskip
+
+{\bf Problem 3-1.} If \[f:\hat\C\to\hat\C\] is rational of degree \[d=1\],
+show that the Julia set \[J(f)\] is either vacuous, or
+consists of a a single repelling or parabolic fixed point.
+
+{\bf Problem 3-2.} If \[\Omega\subset\hat\C\]
+is the basin of attraction for an attracting
+periodic orbit, show that the boundary \[\partial \Omega=\bar\Omega\ssm
+\Omega\] is equal to the entire Julia set. (Compare Theorem 3.3.) Here it
+is essential that we include all connected components of this basin.\smallskip
+
+{\bf Problem 3-3.} Show that a rational map \[f\] is actually a polynomial
+if and only if the point at infinity is a grand orbit finite fixed
+point for \[f\]. Show that \[f\] has both zero and
+infinity as grand orbit finite points if and only if \[f(z)=\alpha z^n\], where
+\[n\] can be any non-zero integer, negative or positive, and where
+\[\alpha\ne 0\]. Conclude that
+a rational map has grand orbit finite points if and only if it is conjugate,
+under some fractional linear change of coordinates, either to a polynomial
+or to the map \[z\mapsto 1/z^d\] for some \[d\ge 2\].\smallskip
+
+{\bf Problem 3-4.} Using a hand calculator if necessary, decide what maps to
+what in Figure 1d.\smallskip
+
+{\bf Problem 3-5.} If
+\[f(z)=z^2-6\], show that \[J(f)\] is a Cantor set contained in the intervals
+\[[-3,-\sqrt 3]\cup[\sqrt 3,3]\]. More precisely, show that a point
+in \[J(f)\] with\break orbit
+\[z_0\mapsto z_1\mapsto\cdots\] is uniquely determined by the sequence of
+signs \[z_j/|z_j|=\pm 1\].\smallskip
+
+{\bf Problem 3-6.} For Fatou's function \[f(z)=z^2/(2+z^2)\], show that
+the entire completed real axis \[\R\cup\infty\] is contained in the basin
+of attraction of the origin. Show that \[J(f)\] is a Cantor set. More
+precisely, given any infinite sequence of signs \[\epsilon_0\,,\,\epsilon_1\,
+,\,\ldots\] show that there is one and only one point \[z=z(\epsilon_0\,,\,
+\epsilon_1\,,\,\ldots)\] which satisfies the condition that \[f^{\circ n}
+(z)\] is uniformly bounded away from zero, and
+belongs to the half-plane \[\epsilon_n H\] for each \[n\ge 0\]. To
+this end, consider the branch \[g(z)=\sqrt{2z/(1-z)}\] of \[f^{-1}\],
+mapping \[\hat\C\ssm [0,1]\] onto the upper half-plane \[H\]. Starting with
+any \[z_0\not\in[0,1]\], show that the successive images  \[\epsilon_0g(
+\epsilon_1g(\cdots \epsilon_ng(z_0)\cdots))\] converge to the required
+point \[z\in J(f)\]. Since a Cantor set cannot separate the plane, show that
+the basin of attraction of the origin is equal to \[\hat\C\ssm J(f)\].
+\smallskip
+
+{\bf Problem 3-7. Self-similarity.} With rare exceptions, any shape which is observed about
+one point of the Julia set will be observed infinitely often, throughout the
+Julia set. More precisely, for two points \[z\] and \[z'\] of \[J=J(f)\],
+let us say that \[(J,z)\] is {\bit locally conformally isomorphic} to
+\[(J,z')\]
+if there exists a conformal isomorphism from a neighborhood \[N\] of \[z\]
+onto a neighborhood \[N'\] of \[z'\] which carries \[z\] to \[z'\] and
+\[J\cap N\] onto \[J\cap N'\]. For all but finitely many \[z_0\in J\],
+show that the set of \[z\] for which \[(J,z)\] is locally conformally
+isomorphic to \[(J,z_0)\] is everywhere dense in \[J\].
+
+As an example, consider the polynomial map \[f(z)=z^3+.48\,z+.928\,i\]
+of Figure 2, and explain why the fixed point \[.8\,i\] looks different
+from all other points of the Julia set. (See also Example 2 of \S5.)
+How many pre-images does this point have?
+\vfill
+
+%\rightline{jwm, version of 8-1-91}
+\eject
+
+
+\footline={\hss\tenrm 4-\folio\hss}\pageno=1
+
+\centerline{\bf \S4. Dynamics on Other Riemann Surfaces.}\bigskip
+
+This section will try to say something about the theory of iterated
+holomorphic
+mappings on an arbitrary Riemann surface. However we will
+concentrate on the easy cases, and simply
+refer to the literature for the hard cases.
+It turns out that there are only three
+Riemann surfaces \[S\] for which the study of iterated mappings
+is really difficult, namely
+the sphere \[\hat\C\], the plane \[\C\], and the punctured plane
+\[\C\ssm\{0\}\].\smallskip
+
+The theory of iterated holomorphic mappings from the {\bit Riemann
+sphere\/} \[\hat \C\] to itself has been outlined in \S3, and
+will form the main goal of all of the subsequent
+sections.\smallskip
+
+We can distinguish two different classes of holomorphic maps from the {\bit
+complex
+plane\/} \[\C\] to itself. A {\bit polynomial map\/} of \[\C\] extends uniquely
+over the Riemann sphere \[\hat\C\]. Hence the theory of polynomial
+mappings can be subsumed as a special case of the theory of rational maps
+of \[\hat\C\]. (See especially \S\S17-18.) On the other hand,
+{\bit transcendental mappings\/} from \[\C\] to itself form an essential
+distinct and more difficult subject of study. Such mappings have
+been studied for more than sixty years by
+many authors, starting with Fatou himself. Even iteration of the exponential
+map \[\exp:\C\to\C\] provides a number of quite challenging problems.
+(See for example Lyubich, and Rees.) A
+proof that the Julia set \[J(\exp)\]
+is the entire plane \[\C\] is included in Devaney [Dv1].
+Further information about iterated transcendental functions may be found
+for example in
+Baker, Devaney [Dv2], Goldberg \& Keen, and in
+Eremenko \& Lyubich.\smallskip
+
+The study of iterated maps from
+the {\bit punctured plane\/} \[\C\ssm\{0\}\] to itself is also a difficult and
+interesting subject. (See for example Keen.)
+\smallskip
+
+For all of the uncountably many other Riemann surfaces, it turns out
+that the possible dynamical behavior
+is very restricted, and fairly easy to describe.
+We must distinguish two very different cases according as the surface
+is a {\bit torus\/} or is {\bit Hyperbolic\/}. First consider the case of
+a torus \[{\bf T}=\C/\Lambda\], where \[\Lambda\] is a lattice in \[\C\].
+
+{\QP{\bf 4.1. Theorem.} \it Every holomorphic map
+\[f:{\bf T}\to{\bf T}\] is an affine map,\break
+\[f(z)\equiv \alpha z+c \;\;(\mod\Lambda)\].
+The corresponding Julia set \[J(f)\] is either the empty set or the
+entire torus according as \[|\alpha|\le 1\] or \[|\alpha|>1\].\medskip}
+
+Proofs will be given at the end of this section.
+Here the possible values for the derivative \[\alpha\] are sharply restricted.
+(Problem 4-1.) The dynamics of such iterated affine maps on the torus are
+of some interest. (See Problem 4-3, as well as Example 3 of \S5.)
+However, the possibilities are so limited
+that this study cannot be considered very difficult.\smallskip
+
+Finally, suppose that \[S\] is Hyperbolic. Then we will see that
+any holomorphic self-map behaves in a rather dull manner under iteration.
+In particular, the Julia set is alway vacuous.
+Consider first the special case of the
+unit disk. The following was proved by Denjoy
+in 1926, sharpening an earlier result by Wolff.
+
+{\QP {\bf 4.2. Theorem.} {\it Let \[f:D\to D\] be any
+holomorphic map. Then either
+
+$(1)$ \[f\] is a ``rotation'' about some fixed point \[z_0\in D\], or else
+
+$(2)$ the successive iterates \[f^{\circ n}\] converge, uniformly on
+compact subsets of \[D\], to a constant function \[z\mapsto c_0\in \bar D\].}
+\medskip}
+
+Here the notation \[f^{\circ n}\] stands for the \[n$-fold composition
+\[f\circ\cdots\circ f\] mapping \[D\] into itself. Note that the
+limiting value \[\lim_{n\to\infty}\,f^{\circ n}(z)\] may belong to the
+boundary \[\partial D\]. Similar statements hold for maps of the upper
+half-plane \[H\] to itself. As examples, if \[f(w)=2w\] or if \[f(w)=w+i\]
+for \[w\in H\], then evidently \[\lim_{n\to\infty}\,f^{\circ n}(w)\] is
+equal to
+the boundary point \[+\infty\] for every \[w\in H\]. (Here we must measure
+convergence with respect to the spherical metric on the compact set
+\[\bar H\subset\hat\C\].)\smallskip
+
+The corresponding assertion for an arbitrary Hyperbolic surface
+is only slightly more complicated to state.
+First some definitions. If \[f:S\to S\], then the sequence of points
+\[\;z\mapsto f(z)\mapsto
+f^{\circ 2}(z)\mapsto\cdots\;\] is called the {\bit orbit} of the point
+\[z\in S\]. A
+fixed point \[f(z_0)=z_0\] is said to be {\bit attracting} if the derivative
+\[\lambda=f'(z_0)\] satisfies \[|\lambda|<1\]. (To be more precise, we
+must first choose some local coordinate in a neighborhood of the fixed point,
+and compute this derivative in terms of this local coordinate. We will be
+careless about this, since in practice our Riemann surfaces will usually
+be open subsets of \[\C\].) For such an attracting fixed point, the
+{\bit basin of attraction} \[\Omega=\Omega(z_0)\]
+is defined to be the set of all
+points \[z\in S\] for which the orbit \[z\mapsto f(z)\mapsto f^{\circ 2}(z)
+\cdots\] converges towards \[z_0\]. It is not difficult
+to check that \[\Omega\] is an open subset of \[S\] and that \[z_0\in
+\Omega\].
+
+{\QP {\bf 4.3. Theorem.} {\it If \[S\] is a Hyperbolic Riemann surface,
+then for every holomorphic map \[f:S\to S\] the Julia set \[J(f)\]
+is vacuous. Furthermore either:
+
+\noindent \[(a)\] every orbit converges
+towards a unique attracting fixed point \[f(z_0)=z_0\],
+
+\noindent\[(b)\] every orbit diverges to infinity with respect to the
+\Poincare metric on \[S\],
+
+\noindent \[(c)\] \[f\] is an automorphism of finite order, or
+
+\noindent\[(d)\] \[S\] is isomorphic either to a disk \[D\], a punctured
+disk \[D\ssm\{0\}\], or an annulus
+$$	{\cal A}_r\;=\;\{z:1<|z|<r\}\,,	$$
+and \[f\]
+corresponds to an irrational rotation \[z\mapsto e^{2\pi i t}z\] with
+\[t\not\in{\bf Q}\].}\medskip}
+
+\noindent
+Evidently these four possibilities are mutually exclusive.
+Much later, in \S13, we will want to apply this Theorem to the case
+where \[S\] in an open subset of the sphere \[\hat\C\] and \[f\] is a
+rational map carrying \[S\] into itself. In this case, as in 4.2, it
+is convenient to study limiting values which belong to the closure of \[S\].
+We can then sharpen the statement in Case (b) as follows.
+
+{\QP{\bf 4.4. Addendum.} {\it Suppose that \[U\] is a Hyperbolic open
+subset of \[\hat\C\] and that \[f:U\to U\] extends holomorphically throughout
+a neighborhood of the closure \[\bar U\].
+Then in Case $(b)$ above, all orbits in \[U\]
+must converge within \[\hat\C\] to a single boundary fixed point
+$$	f(\hat z)=\hat z\;\in\;\partial U\,.	$$
+This convergence is uniform on compact subsets of \[U\].}\medskip}
+
+\noindent (In the special case where \[U\] is the standard unit disk, of course
+we have this same result without the extra hypothesis
+that \[f\] extends over the boundary.)\medskip
+
+Now let us begin the proofs.\smallskip
+
+{\bf Proof of Lemma 4.1.} To fix our ideas, suppose that \[{\bf T}=\C/\Lambda\]
+where the lattice \[\Lambda
+\subset\C\] is spanned by the two numbers \[1\] and \[\tau\], and where
+\[\tau\not\in\R\]. Any holomorphic map \[f:{\bf T}\to {\bf T}\] lifts to a holomorphic
+map \[F:\C\to\C\] on the universal covering surface. Note first that there
+exist two lattice elements \[\lambda_1\,,\,\lambda_2\in\Lambda\] so that
+$$	F(z+1)\;=\;F(z)+\lambda_1\,,\quad F(z+\tau)\;=\;F(z)+\lambda_2	$$
+for every \[z\in\C\]. For example we certainly have \[F(z+1)\equiv F(z)\;\;
+(\mod\Lambda)\], and the difference function \[F(z+1)-F(z)\in\Lambda\] must
+be constant since \[\C\] is connected and the target space \[\Lambda\] is
+discrete.
+Now let \[g(z)=F(z)-\lambda_1 z\], so that \[g(z+1)=g(z)\]. Then
+$$	g(z+\tau)\;=\;g(z)+(\lambda_2-\lambda_1\tau)\,.	$$
+Thus \[g\] gives rise to a map from
+the torus \[{\bf T}\] to the infinite cylinder
+$$ 	\C/(\lambda_2-\lambda_1\tau)\Z\;\;\cong\;\;\C\ssm\{0\}\;,	$$
+or from the torus
+to \[\C\] itself if \[\;\lambda_2-\lambda_1\tau=0\]. Using Liouville's
+Theorem or the Maximum Modulus Principle, we see easily that \[g\] must be
+constant Thus \[g(z)\equiv c\], and\break \[F(z)=\lambda_1 z+c\]
+as required. The computation of \[J(f)\] will be left as an
+exercise. (See Problems 4-2 and 4-3 below.) \QED\smallskip
+
+We will skip over 4.2 for the moment.
+The proof of Theorem 4.3 begins as follows. If we are not
+in Case (b), then some orbit \[z_0\mapsto z_1
+\mapsto\cdots\] must possess an accumulation point \[\hat z\in S\]. That is, we
+can find integers \[n(1)<n(2)<\cdots\] so that the sequence \[\{z_{n(i)}\}\]
+converges to \[\hat z\]. Consider the sequence of maps \[f^{\circ(
+n(i+1)-n(i))}\], carrying \[z_{n(i)}\] to \[z_{n(i+1)}\].
+By Montel's Theorem, in the version 2.6, there exists some subsequence
+which converges, uniformly on compact subsets, to a holomorphic map
+\[h:S\to S\]. Evidently \[h(\hat z)=\hat z\].\smallskip
+
+{\it First suppose that \[f\] strictly contracts the \Poincare metric.} Then
+\[h\] must
+also contract the \Poincare metric, hence \[h\] cannot have two distinct
+fixed points. But \[f\] and \[h\] commute, since \[h\] is a limit of
+iterates of \[f\]; hence \[f\] must map fixed points of \[h\] to fixed
+points of \[h\]. Therefore the unique fixed point \[\hat z\] of \[h\]
+must also be a fixed point of \[f\].
+This fixed point is attracting, since \[f\] contracts the \Poincare metric.
+{\it It follows that every orbit under \[f\] converges to \[\hat z\],
+so that we are in Case $(a)$ of 4.3}. For otherwise,
+if \[z'\] were the closest point which did not belong to the attractive
+basin of \[\hat z\], then the \Poincare distance \[\rho(\hat z\,,\,z')\] could
+not strictly decrease under the map \[f\].\smallskip
+
+{\it Suppose, on the other hand, that \[f\] preserves the \Poincare metric.}
+Still assuming that \[f\] has an orbit with a finite limit point, we will
+prove the following.
+
+{\QP\bf 4.5. Lemma. {\it
+Under these hypotheses, some sequence of iterates \[f^{\circ m(i)}\]
+converges, uniformly on compact subsets, to the identity map of \[S\].
+It follows that \[f\] is necessarily an automorphism
+of \[S\].}\medskip}
+
+{\bf Proof.} Since \[f\] preserves the \Poincare metric, it
+lifts to an isometry from the universal covering \[\tilde S\]
+to itself. It follows easily that \[f\] is either an automorphism
+or a covering map from \[S\] onto \[S\]. On the other hand,
+we know that some sequence of iterates of \[f\] converges to a
+map \[h\] which has a fixed point. We can lift \[h\] to a map \[H:
+\tilde S\to\tilde S\] which has a corresponding fixed point.
+Since \[H\] must also preserve
+the \Poincare metric, it follows that \[H\] can only be a rotation about
+this fixed point. Therefore, some sequence
+of iterates of \[h\] converges to the identity map \[\iota\] of \[S\].
+It then follows
+easily that some sequence of iterates of \[f\] converges to \[\iota\]. Therefore
+\[f\] is one-to-one. For if \[f(z)=f(z')\], then \[f^{\circ m}(z)
+=f^{\circ m}(z')\], and passing to the limit we have \[\iota(z)=\iota(z')\],
+or in other words \[z=z'\].
+Since a one-to-one covering map is clearly a conformal isomorphism,
+this proves the Lemma.\QED
+
+To complete the proof of 4.3, we must prove the following.
+
+{\QP{\bf 4.6. Lemma.} \it If an automorphism \[f\] of a Hyperbolic surface
+\[S\] has iterates \[f^{\circ m}\] which are
+arbitrarily close to the identity map
+(uniformly on compact subsets), then either \[f\]
+has finite order, or else \[S\] is isomorphic to \[D\] or \[D\ssm\{0\}\]
+or to an annulus, and \[f\] corresponds to
+an irrational rotation.\medskip}
+
+(For this Lemma, we don't really need the hypothesis that \[S\] is Hyperbolic.
+In the non-Hyperbolic case, the corresponding statement would be that
+\[S\] is isomorphic to either \[\C\] or \[\C\ssm\{0\}\] or \[\hat\C\],
+and that \[f\] corresponds to an irrational rotation.)\smallskip
+
+Before proving 4.6, it
+will be convenient to briefly consider the more general situation of
+a map \[f:S\to S'\] between different Riemann surfaces, where \[S\cong\tilde S
+/\Gamma\] and \[S'\cong\tilde S'/\Gamma'\]. Such a map \[f\] lifts to a map
+\[F:\tilde S\to\tilde S'\] which is unique up to composition with elements
+of the group \[\Gamma'\] of deck transformations of the target space.
+As in the proof of 4.1,
+to each deck transformation \[\gamma\in\Gamma\] there corresponds one and only
+one deck transformation \[\gamma'\in\Gamma'\] so that the identity
+$$	F(\gamma(z))\;=\;\gamma'(F(z))	$$
+holds for all \[z\in S\]. In fact the correspondence \[\gamma\mapsto\gamma'\]
+is a group homomorphism, which can be identified with the ``induced
+homomorphism'' \[f_*:\pi_1(S)\to\pi_1(S')\] between fundamental groups.
+
+We are interested in the special case \[S=S'\], with universal covering
+\[\tilde S\] isomorphic to the unit disk \[D\]. It will be convenient to
+choose some compact disk \[K\subset S\] and a corresponding compact disk \[K^*\]
+in the universal covering surface \[\tilde S\]. If \[f^{\circ m(j)}\] is
+uniformly close to the identity map on \[K\], note
+that the lifted map \[F^{\circ m(j)}\] may be far from the identity map on
+\[K^*\]. However, there must exist some deck transformation
+\[\gamma_j\] so that the composition \[F_j=\gamma_j\circ F^{\circ m(j)}\]
+is uniformly close to the identity on \[K^*\].\smallskip
+
+We will also need the following.
+
+{\QP{\bf 4.7. Lemma.} {\it Let \[\Gamma\subset G\] be any discrete
+subgroup of a topological group \[G\]. Then for each \[\gamma\in\Gamma\]
+there exist a neighborhood \[N\] of the identity in
+\[G\] so that elements \[g\in N\] satisfy \[\;g\circ\gamma\circ
+g^{-1}\in\Gamma\;\] only if they commute with \[\gamma\].}\medskip}
+
+The proof is straightforward.\QED
+
+{\bf Proof of 4.6.} By the discussion above, we have a sequence of
+automorphisms\break
+\[\;F_j\,=\,\gamma_j\circ F^{\circ m(j)}\,\in\, G(\tilde S)\;\]
+which converge locally uniformly to
+the identity automorphism. Furthermore, for each fixed \[\gamma_0\in\Gamma\]
+and each \[F_j\]
+there is a corresponding \[\gamma'_j\] so that
+$$	F_j\circ\gamma_0\;=\gamma'_j\circ F_j\,.	$$
+By 4.7, it follows that \[F_j\] commutes with \[\gamma_0\] for large \[j\].
+
+Now let us identify \[G(\tilde S)\] with the automorphism group \[G(D)\],
+which operates not only on the open disk \[D\] but also
+on the closed disk \[\bar D\]. By 1.15 we know that
+two non-identity elements of \[G(D)\] commute if and only if they have exactly
+the same fixed points in \[\bar D\]. Thus, if we fix some non-identity
+\[\gamma\in\Gamma\], and if we exclude the case where some \[F_j\] is actually
+equal to the identity automorphism, then we can say that
+\[\gamma\] has exactly the same fixed points as
+\[F_j\] for \[j\] sufficiently large. {\it This implies that all non-identity
+elements of \[\Gamma\] have the same fixed points, so that \[\Gamma\] is a
+commutative group.} Evidently, either \[\Gamma\] is trivial and \[S\cong D\],
+or \[\Gamma\] is free cyclic and \[S\] is an annulus or punctured disk.
+(Compare Problem 2-3.) Further details are straightforward, and will be left
+to the reader.\QED
+
+{\bf Proof of Addendum 4.4.}
+Starting at some arbitrary point \[z_0\] in the connected open set
+\[U\subset\hat\C\], choose a path \[p:[0,1]\to U\] from the point
+\[z_0=p(0)\] to \[f(z_0)=p(1)\], and continue
+this path inductively for all \[t\ge 0\] by setting \[p(t+1)=f(p(t))\].
+By hypothesis, the orbit \[p(0)\mapsto p(1)\mapsto p(2)\mapsto\cdots\]
+converges to infinity with respect to the \Poincare metric on \[U\].
+Hence it must tend to the boundary of the open set \[U\], with respect to
+the spherical metric. Let \[\delta\] be the diameter
+of the image \[p[0,1]\]
+in the \Poincare metric for \[U\]. Then each successive image \[p[n,\,n+1]\]
+must also have diameter less than \[\delta\]. Since these sets converge
+to the boundary of \[U\], it follows that the diameter of \[p[n,\,n+1]\] in
+the spherical metric must tend to zero as \[n\to\infty\]. (\S2.4.)
+Since \[f(p(t))=
+p(t+1)\], this implies that every accumulation point of the path \[p(t)\]
+as \[t\to \infty\] must be a fixed point of \[f\]. It is not difficult
+to check that the set of all such accumulation points must be a connected
+subset of the boundary \[\partial U\]. But our hypothesis that \[f\]
+continues holomorphically throughout a neighborhood of the closure \[\bar U\]
+guarantees that \[f\] can have only finitely many fixed points in \[\bar U\].
+This proves that the path \[p(t)\] converges to just one fixed point \[f(\hat z)
+=\hat z\in\partial U\]. Thus the orbit of \[z_0\] converges to \[\hat z\]
+in the spherical metric. Using 2.2 and 2.4, it follows easily that every
+orbit in \[U\] converges to \[\hat z\], and that this convergence is
+uniform on compact subsets of \[U\].\QED
+
+{\bf Proof of the Denjoy-Wolff Theorem 4.2.} We
+now assume that \[S\] is the unit disk \[D\subset\C\],
+but do not assume that \[f\] can be continued outside of the open disk.
+The following argument is taken from a
+lecture of Beardon, as communicated to me by Shishikura. For any \[\epsilon
+>0\], let us approximate \[f\] by the map \[z\mapsto (1-\epsilon)f(z)\]
+from \[D\] into a proper subset of itself.
+Then it is not difficult to check that there is one and only one fixed
+point \[z_\epsilon=(1-\epsilon)f(z_\epsilon)\]. If \[f\] itself has no fixed
+point, then these \[z_\epsilon\] must tend to the boundary of the disk
+as \[\epsilon\to 0\].
+Let \[r(\epsilon)\] be the \Poincare distance of \[z_\epsilon\] from the
+origin, and consider the closed neighborhood \[N_{r(\epsilon)}(z_\epsilon
+\,,\,\rho_D)\], which contains the origin as a boundary point. By Pick's
+Theorem 1.10, this neighborhood is necessarily carried into itself by the map
+\[z \mapsto(1-\epsilon)f(z)\]. These neighborhoods are actually round disks
+(although with a different center point) with respect to the Euclidean metric.
+(Problem 1-8.)
+After passing to a subsequence as \[\epsilon
+\to 0\], we may assume that these disks \[N_{r(\epsilon)}(z_\epsilon
+\,,\,\rho_D)\] tend to a limit disk \[N_0\], bounded  by a circle (known as a
+``horocircle'') which is tangent to the boundary of \[D\] at a single
+point \[\hat z\]. Now \[f\] must map \[N_0\] into itself, hence the entire
+orbit of \[0\] under \[f\] must be contained in \[N_0\]. Therefore, if
+this orbit has no limit point in the open disk \[D\], then it must
+converge towards the point of tangency
+\[\hat z\]. The argument now proceeds as in 4.4.\QED
+\smallskip
+
+\lln
+
+We conclude with problems for the reader.
+\medskip
+
+{\bf Problem 4-1.} Given some torus \[\T=\C/\Lambda\] and some \[\alpha\in\C\],
+show that there exists a holomorphic map \[f(z)\equiv
+\alpha z+c\] from \[\T\] to itself with derivative
+\[\alpha\] if and only if
+\[\alpha\Lambda\subset\Lambda\]. Evidently an arbitrary rational
+integer \[\alpha
+\in\Z\] will satisfy this condition. Show that there exists such a map with
+derivative \[\alpha\not\in\Z\]
+if and only the ratio of two generators of \[\Lambda\] satisfies a quadratic
+equation with integer coefficients. Such a torus is said to admit
+``{\bit complex multiplications\/}''.\smallskip
+
+{\bf Problem 4-2.} If \[|\alpha|=1\] but \[\alpha\ne 1\], show that \[f\] is
+an automorphism of finite order, and in fact of order either 2, 3, 4, or 6.
+Conclude that \[J(f)\] is vacuous.
+Show that all four cases can occur, for suitably chosen \[\Lambda\].
+\smallskip
+
+{\bf Problem 4-3.} If \[\alpha\ne 0\], show that any equation of the form
+\[f(z)=z_0\] has exactly \[|\alpha|^2\] solutions \[z\in\T\].
+If \[\alpha\ne 1\], show that \[f\]
+has exactly \[|\alpha-1|^2\] fixed points. (In particular, both
+\[|\alpha|^2\] and \[|\alpha-1|^2\] are
+necessarily integers.) More generally, if \[|\alpha|>1\]
+show that the equation \[f^{\circ n}(z)=z\] has exactly \[|\alpha^n-1|^2\]
+solutions in \[\T\]. Show that the periodic points of \[f\]
+are everywhere dense in \[\T\] whenever \[\alpha\ne 0\].
+Conclude that the Julia set \[J(f)\] is the entire torus whenever
+\[|\alpha|>1\].
+\smallskip
+
+{\bf Problem 4-4.} On the other hand, show that a map from a Hyperbolic
+surface to itself can have at most one periodic point
+(necessarily a fixed point), unless every point
+is periodic.
+\vfill\bigskip
+%\rightline{jwm, version of 8-28-91}
+
+
+\eject
+
+\footline={\hss\tenrm 5-\folio\hss}\pageno=1
+
+
+\centerline{\bf \S5. Smooth Julia Sets.}\medskip
+
+Most Julia sets tend to be complicated fractal subsets of \[\hat\C\].
+(Compare Brohlin [Br]. We will give a very partial explanation for this fact
+in \S6.3.) This section, however,
+will be devoted to three exceptional Julia sets which are actually smooth
+manifolds.\smallskip
+
+{\bf Example 1: the Circle.} As discussed already in \S3,
+the unit circle appears as Julia set for the mapping
+\[z\mapsto z^{\pm n}\] for any \[n\ge 2\]. Other rational
+maps with this same Julia set are described in Problem 5-1. Similarly,
+the real axis \[\R\cup\infty\], as the image of the unit circle under
+a conformal automorphism, can appear as a Julia set. (Problem 5-2.)\smallskip
+
+{\bf Example 2: the Interval.} Following Ulam and Von Neumann,
+consider the map \[f(z)= z^2-2\], which carries the closed interval
+\[I=[-2,\,2]\] onto itself. We will show that the Julia set \[J(f)\] is
+equal to this interval \[I\], and that every point outside of \[I\]
+belongs to the attractive basin \[\Omega(\infty)\] of the point at infinity.
+(For higher degree maps with this same property, see Problem 5-3.)
+For \[z_0\in I\], it is easy to check
+that both solutions of the equation \[f(z)=z_0\] belong to this interval \[I\].
+Since \[I\] contains a repelling fixed point \[z=2\], it follows from
+Theorem 3.9 that \[I\] contains the entire Julia set \[J(f)\]. On the other
+hand, the basin \[\Omega(\infty)\] is a neighborhood of infinity
+whose boundary \[\partial\Omega(\infty)\] is contained in \[J(f)\subset I\]
+by Theorem 3.3. Hence everything outside of \[J(f)\] must belong to this
+basin. Since \[f(I)\subset I\], it follows that \[J(f)=I\].
+
+Here is a more constructive proof that \[J(f)=I\]. We make use of the
+substitution\break
+\[g(w)=w+w^{-1}\], which carries the unit circle in a two-to-one
+manner onto \[I=[-2,\,2]\]. For \[z_0\ne I\], the equation \[g(w)
+=z_0\] has two solutions, one of which lies inside the unit circle and one
+of which lies outside. Hence \[g\] maps the exterior of the closed unit disk
+isomorphically onto the complement \[\C\ssm I\].
+Since the squaring map in the \[w$-plane is related to \[f\] by the identity
+$$	g(w^2)=g(w)^2-2=f(g(z))\,,	$$
+it follows easily that the orbit of \[z\] under \[f\] either remains
+bounded or diverges to infinity according as \[z\] does or does not belong to
+this interval. Again using 3.3, it follows that that \[J(f)=I\].\QED
+
+{\bf Example 3: all of \[\hat\C\].} The rest of this section will describe
+an example constructed by S. Latt\`es, shortly before his death in 1918. Given
+any lattice \[\Lambda\subset \C\]
+we can form the quotient torus \[\T=\C/\Lambda\], as in \S4.
+Thus \[\T\] is a compact
+Riemann surface, and is also an additive Lie group. Note that the automorphism
+\[z\mapsto -z\] of this surface has just four fixed points. For example, if
+\[\Lambda=\Z+\tau\Z\] is the lattice with basis \[1\] and \[\tau\],
+where \[\tau\not\in\R\],
+then the four fixed points are \[0,\,1/2,\,\tau/2,\] and \[(1+\tau)/2\] modulo
+\[\Lambda\].
+
+Now form a new Riemann
+surface \[S\] as a quotient of \[\T\] by identifying each \[z\in T\] with
+\[-z\]. Evidently \[S\] inherits the structure of a Riemann surface (although
+it loses the group structure). In fact we can use \[(z-z_j)^2\] as a local
+uniformizing parameter for \[S\] near each of the four fixed points \[z_j\].
+Thus the natural map \[\T\to S\] is two-to-one, except at the four ramification
+points. To compute the genus of \[S\], we use the following.\eject
+
+{\QP {\bf 5.1. Riemann-Hurwitz Formula.} {\it Let \[\T\to S\] be a branched
+covering map from one compact Riemann surface onto another. Then the number of
+branch points, counted with multiplicity, is equal to \[\chi(S)d-
+\chi(T)\], where \[\chi\] is the Euler characteristic and \[d\] is the
+degree.}\medskip}
+
+{\bf Sketch of Proof.} Choose some triangulation of \[S\] which includes
+all critical
+values (that is all images of ramification points) as vertices; and let
+\[a_n(S)\] be the number of\break
+\[n$-simplexes, so that \[\chi(S)=a_2(S)-a_1(S)
++a_0(S)\]. In general, each simplex of \[S\] lifts to \[d\] distinct
+simplices in \[\T\]. However, if \[v\] is a critical value, then there
+are too few pre-images of \[v\]. The number of missing pre-images is precisely
+the number of ramification points over \[v\], each counted with an
+appropriate multiplicity; and the conclusion follows. %\QED
+\rlap{$\sqcup$}$\sqcap$
+
+{\bf Remark.} This proof works also for Riemann surfaces with smooth
+boundary. The Formula remains true for proper maps between non-compact
+Riemann surfaces, as can be verified, for example, by means of
+a direct limit argument.\smallskip
+
+In our example, since \[\T\] is a torus with Euler characteristic
+\[\chi(T)=0\],
+and since there are exactly four simple branch points, we conclude
+that \[2\chi(S)-\chi(T)=4\], or \[\chi(S)=2\]. {\it Using the standard
+formula \[\chi=2-2g\], we conclude that \[S\] is a surface of
+genus zero, isomorphic to the Riemann sphere.} (Remark: The projection
+map from \[\T\] to the sphere \[S\] is, up to a choice of normalization,
+known as the {\bit Weierstrass \[\wp$-function}.)\smallskip
+
+Now consider the doubling map \[z\mapsto 2z\] on \[\T\]. This commutes with
+multiplication by \[-1\], and hence induces a map \[f:S\to S\].
+Since the doubling map has degree four, it follows that \[f\] is a rational
+map of degree four. (More generally, in place of the doubling map, we could
+use any linear map which carries the lattice \[\Lambda\] into itself,
+as in Problem 4-1.)
+
+{\QP {\bf 5.2. Latt\`es Theorem.} {\it The Julia set for this rational map \[f\] is
+the entire sphere \[S\].}\medskip}
+
+{\bf Proof.} Evidently the doubling map on \[\T\] has the property that
+periodic points are everywhere dense. For example, if \[r\] and \[s\]
+are any rational numbers with odd denominator, then \[r+s\tau\] is periodic.
+These periodic orbits are all repelling, since the multiplier is a
+power of two. Evidently \[f\] inherits the same property, and the conclusion
+follows by \S3.3. (Alternatively, given a small open set \[U\subset S\],
+it is not difficult to show that \[f^{\circ n}(U)\] is equal to the entire
+sphere \[S\] whenever \[n\] is sufficiently large. Hence no sequence of
+iterates of \[f\] can converge to a limit on any open set.)\QED
+
+In order to pin down just which rational map \[f\] has these properties,
+we must first label the points of \[S\]. The four branch
+points on \[\T\] map to four ``ramification points''
+on \[S\], which will play a special role. Let us choose a conformal
+isomorphism from \[S\] onto \[\hat\C\] which maps the first three of these
+points to \[\infty\,,\,0\,,\,1\] respectively. The fourth ramification point
+must then map to some \[a\in\C\ssm\{0\,,\,1\}\]. In this way we construct a
+projection map \[\pi:T\to\hat\C\] of degree two, which satisfies
+\[\pi(-z)=\pi(z)\], and which has critical values
+$$	\pi(0)=\infty\,,\;\; \pi(1/2)=0\,,\;\; \pi(\tau/2)=1\,,\;\;
+	\pi((1+\tau)/2)=a\,.	 $$
+Here \[a\] can be any number distinct from \[0\,,\,1\,,\,\infty\]. In
+fact, given \[a\in\C\ssm\{0\,,\,1\}\], it is not difficult to show that
+there is one and only one branched covering \[ \T' \to \hat\C\]
+of degree two with precisely
+\[\{\infty\,,\,0\,,\,1\,,\,a\}\] as ramification points. (Compare Appendix E.)
+The Riemann-Hurwitz formula shows that
+this branched covering space \[\T'\] is a torus, necessarily isomorphic to
+\[\C/(\Z+\tau\Z)\] for some \[\tau\not\in\R\]. The unique deck transformation
+which interchanges the two pre-images of any point must preserve the linear
+structure, and hence be multiplication by \[-1\].
+
+Now the doubling map on \[\T\] corresponds under \[\pi\] to a specific
+rational map\break \[f_a:\hat\C\to\hat\C\], where
+$$	f_a(\pi(z))=\pi(2z)\,,	$$
+and where \[J(f_a)=\hat\C\] by 5.2.
+A precise computation of this map \[f_a\] is described in
+Problem 5-5 below.\smallskip
+
+{\bf Remark.} Mary Rees has proved the existence
+of many more rational maps with \[J(f)=\hat\C\]. (See also Herman.)
+For any degree \[d\ge 2\],
+let \[{\rm Rat}(d)\] be the complex manifold consisting of all rational
+maps of degree \[d\]. Rees shows that there is a subset of \[{\rm Rat}(d)\]
+of positive measure consisting of maps \[f\] which are ``ergodic". By
+definition, this means that any measurable subset of \[\hat\C\] which
+is fully invariant under \[f\] must either have full measure or measure zero.
+It can be shown that any ergodic map must necessarily have \[J(f)=\hat\C\].
+\smallskip
+
+We will study these smooth Julia sets further in \S14.7.
+\lln
+
+{\bf Concluding problems.}\smallskip
+
+{\bf Problem 5-1.} For any \[a\in D\] the map \[\phi_a(z)=(z-a)/(1-\bar
+a z)\] carries the unit disk isomorphically onto itself. (Problem 1-2.)
+A finite product of the form
+$$	f(z)\;=\; e^{i\theta}
+\phi_{a_1}(z) \phi_{a_2}(z)\cdots\phi_{a_n}(z) $$
+with \[a_j\in D\] is
+called a {\bit Blaschke product} of degree \[n\]. Evidently any such \[f\]
+is a rational map which carries \[D\] onto \[D\]. If \[n\ge 2\], and if
+one of the factors is \[\phi_0(z)=z\] so that \[f\] has a fixed
+point at the origin, show that the Julia set \[J(f)
+=J(1/f)\]
+is the unit circle.\smallskip
+
+{\bf Problem 5-2.} Newton's method applied to the polynomial equation\break
+\[f(z)=z^2+1=0\] yields the rational map
+$$	\nu(z)\;=\;z-f(z)/f'(z)\;=\; {\textstyle{1\over 2}}(z-1/z)	$$
+from \[\hat\C=\C\cup\infty\] to itself.
+Show that \[J(\nu)=\R\cup\infty\].\smallskip
+
+{\bf Problem 5-3.} The {\bit monic Tchebycheff polynomials}
+$$	P_1(z)=z\;,\quad P_2(z)=z^2-2\;,\quad P_3(z)=z^3-3z\;,\;\ldots	$$
+can be defined inductively
+by the formula \[P_{n+1}(z)+P_{n-1}(z)=zP_n(z)\].
+Show that \[P_n(w+w^{-1})
+=w^n+w^{-n}\], or equivalently that \[P_n(2\cos\theta)\;=\;2\cos(n\theta)\],
+and show that \[P_m\circ P_n=P_{mn}\]. For \[n\ge 2\] show that
+the Julia set of \[\pm P_n\] is the interval \[[-2,\,2]\].  For \[n\ge
+3\] show that \[P_n\] has \[n-1\] distinct critical points but only two
+critical values, namely \[\pm 2\].\smallskip
+
+{\bf Problem 5-4.} Show that the Julia sets studied in this section
+have the following extraordinary property.
+(Compare Problems 14-2, 14-1.) For all but one or two of the
+periodic orbits
+\[z_0\mapsto z_1\mapsto\cdots\mapsto z_n=z_0\], the multiplier
+\[\lambda=f'(z_1)\cdot\cdots\cdot f'(z_n)\] satisfies \[|\lambda|=d^n\] when \[J\]
+is 1-dimensional, or \[|\lambda|=d^{n/2}\] when \[J=\hat\C\],
+where \[d\] is the degree.\smallskip
+
+{\bf Problem 5-5.} For the torus \[\T=\C/(\Z+\tau\Z)\] of Example 3, show that
+the involution \[z\mapsto z+\,\scriptstyle{1/ 2}\] of \[\T\] corresponds
+under \[\pi\] to the involution
+\[w\mapsto a/w\] of \[\hat\C\], with fixed points \[w=\pm\sqrt{a}\].
+Show that the rational map \[f=f_a\] has poles at \[\infty\,,\,0\,,\,1\,,
+\,a\] and double zeros at \[\pm\sqrt{a}\].  Show that \[f\] has a fixed
+point of multiplier \[\lambda=4\] at infinity, and conclude that
+$$	f(w)\;=\;{(w^2-a)^2 \over 4w(w-1)(w-a)}\,\;.	$$
+As an example, if \[a=-1\] then
+$$	f(w)\;=\;{(w^2+1)^2\over 4w(w^2-1)}\,\;.	$$
+Show that the correspondence \[\;\tau\mapsto a=a(\tau)\in\C\ssm\{0,1\}\;\]
+satisfies the equations
+$$	a(\tau+1)=1/a(\tau)\;,\quad a(-1/\tau)=1-a(\tau)\;,	$$
+and also \[\;a(-\bar\tau)=\bar a(\tau)\,\]. Conclude, for example, that
+\[\;a(i)=1/2\,\], and that\break \[a((1+i)/2)=-1\]. (This correspondence
+\[\tau\mapsto
+a(\tau)\] is an example of an ``elliptic modular function'', and provides
+an explicit representation of the upper half-plane \[H\] as a universal
+covering of the thrice punctured sphere \[\C\ssm\{0,1\}\]. Compare Ahlfors
+[A1, pp.269-274].)\smallskip
+
+{\bf Problem 5-6.} For each of the six critical points \[\omega\] of \[f\],
+show that \[f(f(\omega))\] is the repelling fixed point at infinity.
+(According to \S13.5, the fact that each critical orbit terminates
+on a repelling cycle is enough to imply that \[J(f)=\hat\C\].)
+% \bigskip\bigskip
+
+
+\vfill
+%\rightline{jwm, version of 8-28-91}
+\end

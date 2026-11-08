@@ -1,0 +1,14 @@
+{
+  "key": "kahn-lyubich-unicritical-lc",
+  "arxiv_id": "math/0505194",
+  "arxiv_version": "1",
+  "role": "local-connectivity",
+  "title": "Local connectivity of Julia sets for unicritical polynomials",
+  "authors": [
+    "Jeremy Kahn",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-math-0505194.xml",
+  "source_archive": "arxiv-math-0505194-source.tar.gz",
+  "main_tex": "arxiv-math-0505194/main.tex"
+}

@@ -65,9 +65,10 @@ theorem uniformOuterBuffer_of_finiteComponentCriterion
   refine ⟨P.r, P.r_pos, lt_trans P.r_small hk, P.δ, P.δ_pos, P.δ_lt_r, ?_⟩
   exact P.control c hc hci
 
-theorem rootInput_of_finiteComponentCriterion
-    (h : FiniteComponentCriterion) : MLC.RootInput :=
-  ⟨uniformOuterBuffer_of_finiteComponentCriterion h⟩
+theorem locallyConnectedSpace_of_finiteComponentCriterion
+    (h : FiniteComponentCriterion) : LocallyConnectedSpace MLC.mandelbrotSet :=
+  MLC.ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer
+    (uniformOuterBuffer_of_finiteComponentCriterion h)
 
 end
 end FiniteComponent
