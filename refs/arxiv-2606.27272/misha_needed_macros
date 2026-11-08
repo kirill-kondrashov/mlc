@@ -1,0 +1,166 @@
+
+%\newcommand{\bJ}{\mathfrak{J}}
+%
+%\newcommand{\BI}{\I}
+%\newcommand{\BJ}{\J}
+%\newcommand{\BPi}{\mathbf \Pi}
+
+
+\newcommand{\tT}{{\mathrm{T}}}
+\newcommand{\tD}{{D}}
+\newcommand{\hyp}{{\mathrm{hyp}}}
+\newcommand{\cusp}{{\mathrm{cusp}}}
+
+\newcommand{\fix}{{b}}
+\newcommand{\cxfix}{{\xi}}
+\newcommand{\LINV}{L_{\rm inv}}
+\newcommand{\LLINV}{{\mathcal L}_{\rm inv}}
+\newcommand{\f}{{\bf f}}
+\newcommand{\g}{{\bf g}}
+\newcommand{\h}{{\bf h}}
+\renewcommand{\i}{{\bar i}}
+\renewcommand{\j}{{\bar j}}
+
+\newcommand{\geoD}{{\boldsymbol{\gamma}}}
+
+
+%\newcommand{\k}{\kappa}
+
+
+
+\newcommand{\Bf}{{\mathbf{f}}}
+\newcommand{\Bg}{{\mathbf{g}}}
+\newcommand{\Bh}{{\mathbf{h}}}
+\newcommand{\Bi}{{\mathbf{i}}}
+\def\BJ{{\mathbf{J}}}
+\def\Bl{{\mathbf{l}}}
+\def\Bm{{\mathbf{m}}}
+\def\Bn{{\mathbf{n}}}
+
+
+\def\Bj{{\mathbf{j}}}
+\def\BJ{{\mathbf{J}}}
+\def\Bphi{{\mathbf{\Phi}}}
+\def\Bpsi{{\mathbf{\Psi}}}
+\newcommand\Bom{\boldsymbol{\om}}
+
+
+
+\newcommand{\BD}{{\mathbf{D}}}
+\newcommand{\BE}{{\boldsymbol{E}}}
+\newcommand{\BF}{{\boldsymbol{F}}}
+\newcommand{\BG}{{\mathbf{G}}}
+\def\BH{{\mathbf{H}}}
+\newcommand{\BI}{{\mathbf{I}}}
+\newcommand{\BL}{\mathbf{L}}
+\def\B0{{\mathbf{0}}}
+\newcommand{\BP}{{\mathbf{P}}}
+\newcommand{\BS}{{\boldsymbol{S}}}
+\newcommand{\BW}{{\mathbf{W}}}
+\newcommand{\BV}{{\mathbf{V}}}
+\newcommand{\BOM}{{\boldsymbol{\Om}}}
+
+
+
+\newcommand{\BPi}{{\boldsymbol{\Pi}}}
+\def\BUps{{\boldsymbol{\Upsilon}}}
+\def\BLa{{\boldsymbol{\La}}}
+\def\BGa{{\boldsymbol\Gamma}}
+\def\BDe{{\boldsymbol\Delta}}
+\def\BUps{{\boldsymbol\Upsilon}}
+\def\BThe{{\boldsymbol\Theta}}
+\def\BOm{{\boldsymbol \Om}}
+\def\BPsi{{\boldsymbol\Psi}}
+
+\def\Baleph{{\boldsymbol\aleph}}
+
+\newcommand{\Bw}{{\mathbf{w}}}
+\newcommand{\Bal}{{\boldsymbol{\alpha}}}
+\newcommand{\Bde}{{\boldsymbol{\delta}}}
+\newcommand{\Bga}{{\boldsymbol{\gamma}}}
+\newcommand{\Bsi}{{\boldsymbol{\sigma}}}
+\newcommand{\Bla}{{\boldsymbol{\lambda}}}
+\def\Be{\mathbf{e}}
+\def\Dia{{\Diamond}}
+
+\def\SB{{\boldsymbol{\BB}}}
+
+\def\ext{{\mathrm{ex}}}
+\def\mouth{\operatorname{mouth}}
+\def\tail{\operatorname{tail}}
+
+\newcommand{\eps}{{\epsilon}}
+\newcommand{\epsi}{{\epsilon}}
+\newcommand{\veps}{{\varepsilon}}
+
+\newcommand{\ctg}{\operatorname{ctg}}
+%\renewcommand{\thenotation}{} 
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\Hdist}{\operatorname{H-dist}}
+%\newcommand{\det}{\operatorname{det}}
+%\newcommand{\cl}{\operatorname{cl}}
+%\newcommand{\inter}{\operatorname{int}}
+%\renewcommand{\mod}{\operatorname{mod}}
+%\newcommand{\card}{\operatorname{card}}
+%\newcommand{\tl}{\tilde}
+%\newcommand{\ind}{ \operatorname{ind} }
+%\newcommand{\Dist}{\operatorname{Dist}}
+%\newcommand{\Graph}{\operatorname{Graph}}
+%\newcommand{\len}{\operatorname{\l}}
+%\newcommand{\vol}{\operatorname{vol}}
+
+\newcommand{\rank}{\rm rank}
+\newcommand{\di}{\partial}
+\newcommand{\dibar}{\bar\partial}
+\newcommand{\hookra}{\hookrightarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\hra}{\hookrightarrow}
+\newcommand{\imply}{\Rightarrow}
+\def\lra{\longrightarrow}
+\newcommand{\wc}{\underset{w}{\to}}
+\newcommand{\tu}{\textup}
+
+\newcommand{\Ga}{{\Gamma}}
+\newcommand{\De}{{\Delta}}
+\newcommand{\de}{{\delta}}
+\newcommand{\la}{{\lambda}}
+\newcommand{\La}{{\Lambda}}
+\newcommand{\si}{{\sigma}}
+\newcommand{\Si}{{\Sigma}}
+\newcommand{\Om}{{\Omega}}
+\newcommand{\om}{{\omega}}
+\newcommand{\Ups}{{\Upsilon}}
+
+\newcommand{\al}{{\alpha}}
+\newcommand{\ba}{{\mbox{\boldmath$\alpha$} }}
+\newcommand{\be}{{\beta}}
+\newcommand{\bbe}{{\mbox{\boldmath$\beta$} }}
+\newcommand{\bk}{{\boldsymbol{\kappa}}}
+\newcommand{\bg}{{\boldsymbol{\gamma}}}
+
+\newcommand{\ol}{\overline}
+\newcommand{\ul}{\underline}
+
+% \newcommand{\pp}{{\partial}}
+\newcommand{\pp}{{\mathfrak{p}}}
+\newcommand{\qq}{{\mathfrak{q}}}
+
+\def\ssk{\smallskip}
+\def\msk{\medskip}
+\def\bsk{\bigskip}
+\def\noi{\noindent}
+\def\nin{\noindent}
+\def\lqq{\lq\lq}
+
+\newcommand{\lo}{{\mathrm{lo}}}
+\newcommand{\lobr}{{\mathrm{lo-br}}}
+\newcommand{\sh}{{\mathrm{sh}}}
+\newcommand{\sei}{{\mathrm{si}}}
+\newcommand{\pe}{{\mathrm{pe}}}
+
+\newcommand{\Bk}{\mathbf k}
+
+\newcommand{\can}{\operatorname{can}}
+
+

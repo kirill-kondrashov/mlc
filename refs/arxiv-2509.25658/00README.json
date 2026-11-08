@@ -1,0 +1,14 @@
+{
+  "key": "dudko-luo-sierpinski-carpet",
+  "arxiv_id": "2509.25658",
+  "arxiv_version": "1",
+  "role": "mlc-case",
+  "title": "Sierpinski carpet hyperbolic components of disjoint type are bounded",
+  "authors": [
+    "Dzmitry Dudko",
+    "Yusheng Luo"
+  ],
+  "metadata": "arxiv-2509.25658.xml",
+  "source_archive": "arxiv-2509.25658-source.tar.gz",
+  "main_tex": "arxiv-2509.25658/main.tex"
+}

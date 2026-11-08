@@ -1,0 +1,646 @@
+
+\section{A computer-assisted proof of renormalization hyperbolicity}
+\label{sec:pfmain1}
+
+\subsection{Contraction Mapping Principle}
+
+Our proof of the existence of a fixed point $\zeta^*=(\eta_*,\xi_*)$ is a computer implementation of the Contraction Mapping Principle for the Newton map for the operator $\cRG$ in the space  $\cA_1(U,V)$.
+
+
+Let $\cF$ be an operator analytic in some neighborhood $\cN$ in a Banach space $\cZ$, which has a fixed point $\zeta_*$ in this space,
+ and whose differential $D|_{\zeta_*} \cF$ is a hyperbolic linear map in $\cN$.  Suppose, that one knows an approximation
+of the fixed point  $\zeta_0 \approx \zeta_*$.
+ Set
+$$M \equiv \left[ \field{I}-L_0 \right]^{-1},$$
+where $L_0$ is an approximation of $D \cF[\zeta_0]$. For all $\zeta$, such that $\zeta_0+M \zeta \in \cN$, set
+$$N_{\cF,L_0}[\zeta]=\zeta+\cF[\zeta_0+M \zeta]-(\zeta_0+M \zeta).$$
+
+
+Notice, that if $\hat\zeta$ is a fixed point of $N_{\cF,L_0}$, then $\zeta^*=\zeta_0+M \hat\zeta$ is a fixed point of $\cF$.    
+
+
+The operator $\field{I}-L_0$ is indeed invertible if $L_0$ is close to $D \cF[\zeta_0]$, since $D \cF$ is hyperbolic at $\zeta_0$. If $\zeta_0$ is a reasonably good approximation of the true fixed point of $\cF$, then the operator $N_{\cF,L_0}$ is expected to be a strong contraction in a neighborhood of $0$:
+\begin{eqnarray}
+\nonumber D N_{\cF,L_0}[\zeta] &=& \field{I} +D \cF[\zeta_0+M \zeta] \cdot M -M= \left[ M^{-1} +D \cF[\zeta_0+M \zeta]  -\field{I} \right] \cdot M \\
+\nonumber &=& \left[\field{I}-L_0  +D \cF [\zeta_0+M \zeta]  -\field{I} \right] \cdot M = \left[ D \cF [\zeta_0+M \zeta] - L_0 \right] \cdot M.
+\end{eqnarray}
+
+The last expression is typically small in a small neighborhood of $0$, if the norm of $M$ is not too large (if $M$ is large, one might have to find a better approximation $\zeta_0$ and take a smaller neighborhood of $0$).  The following well-known version of the contraction mapping theorem specifies a sufficient condition for the existence of a fixed point $\hat\zeta$:
+
+
+\begin{cmp}
+Let $\cN$ be an open subset of a Banach space $\cZ$.
+Suppose that  $N_{\cF,L_0}$ is a well-defined  analytic operator from  $\cN$ to $\cZ$. Let $\zeta_0\in \cN$ and $B_\delta(\zeta_0) \subset \cN$ be such that
+$$\| D N_{\cF,L_0}[\zeta]\| \le  \cD <1, $$
+for any $\zeta \in  B_\delta(\zeta_0)$, and
+$$\|N_{\cF,L_0}[\zeta_0]-\zeta_0\|\le \epsilon.$$
+
+If $\epsilon < (1-\cD) \delta$ then the operator $N_{\cF,L_0}$ has a fixed point $\hat\zeta$ in $B_\delta(\zeta_0)$, such that
+$$\| \hat\zeta-\zeta_0\| \le {\epsilon \over 1-\cD }.$$
+\end{cmp}
+
+In practice, for a computer-assisted proof, the linear map $L_0$ is always chosen as a finite-dimensional approximation of $D \cF[\zeta_0]$.
+
+\subsection{Differential of the renormalization operator}
+
+We will now compute the action of the differential $D \cRG(\phi,\psi)$ on a vector $(u,v) \in T_{(\phi,\psi)} \cA_1(U,V)$. First, 
+let $a$, $b$, and $c$ be the coefficients of the projection $\cP$ considered as functions of the pair $(\phi,\psi)$. Then the differential
+%%denote $D c (u,v)$, $D a (u,v)$ and  $D b (u,v)$ actions of derivatives of $c$, $a$, $b$ as functions of $(\phi,\psi)$ on a vector $(u,v)$, then 
+\begin{equation}
+D \cP(\phi,\psi) (u,v)=(u,v)+( Da (u,v) z^2+Db (u,v) z^3, Dc (u,v)). 
+\end{equation}
+The differential $D c (u,v)$ can be found easily from the equation $(\ref{eq:newFs1})$:
+$$D c(u,v)=-v(0),$$
+while   $D a (u,v)$ and  $D b (u,v)$ are found by differentiating the system $(\ref{eq:newFs2})$:
+\begin{eqnarray} \label{eq:newFs3}
+A \cdot \left[
+\begin{array}{c}
+a \\
+b
+\end{array}
+\right]+B \cdot \left[
+\begin{array}{c}
+D a (u,v) \\
+D b (u,v)
+\end{array}
+\right]=\left[
+\begin{array}{c}
+c_1 \\
+c_2
+\end{array}
+\right],
+\end{eqnarray}
+where $$A=\left[ a_{11} \  a_{12}  \atop a_{21}  \  a_{22} \right]$$ with
+\begin{eqnarray}
+\nonumber a_{11}&=&4 \hat{\psi}(0)^{3}(v(0)+ Dc (u,v))=0, \\
+\nonumber a_{12}&=&6 \hat{\psi}(0)^{5}(v(0)+ Dc (u,v))=0, \\
+\nonumber a_{21}&=&6 \hat{\psi}(0)^{2}  \hat{\psi}'(0) (v(0)+ Dc (u,v))+ 2 \hat{\psi}(0)^{3} v'(0)=2 \hat{\psi}(0)^{3} v'(0), \\ 
+\nonumber a_{22}&=&15 \hat{\psi}(0)^{4} \hat{\psi}'(0)(v(0)+ Dc (u,v))+3 \hat{\psi}(0)^{5} v'(0)= 3 \hat{\psi}(0)^{5} v'(0) \Rightarrow \\
+\nonumber A &=&\left[
+\begin{array}{c c}
+0 \quad  & \quad 0   \\
+2 \hat{\psi}(0)^{3} v'(0) \quad  & \quad 3 \hat{\psi}(0)^{5} v'(0)
+\end{array}
+\right], \\
+\nonumber  B&=&  \left[
+\begin{array}{c c}
+\hat{\psi}(0)^{4} \quad  & \quad \hat{\psi}(0)^{6}   \\
+ 2 \hat{\psi}(0)^{3}  \hat{\psi}'(0) \quad  & \quad  3 \hat{\psi}(0)^{5} \hat{\psi}'(0)
+\end{array}
+\right],\\
+\nonumber c_1&=&(v(\phi(0)^2)+ Dc (u,v))+2 \hat{\psi}'(\phi(0)^2) \phi(0) u(0) \\
+\nonumber &\phantom{=}& \phantom{(v(\phi(0)^2)}- u(\hat{\psi}(0)^2)-2 \phi'(\hat{\psi}(0)^2)\hat{\psi}(0) (v(0)+ Dc (u,v)) \\
+ \nonumber &=&(v(\phi(0)^2)+ Dc (u,v))+2 \hat{\psi}'(\phi(0)^2) \phi(0) u(0) - u(\hat{\psi}(0)^2)
+\end{eqnarray}
+\begin{eqnarray} \label{eq:matrices}
+\nonumber c_2&=&v'(\phi(0)^2) \phi(0) \phi'(0)+2 \hat{\psi}''(\phi(0)^2) \phi(0)^2 \phi'(0) u(0)+\hat{\psi}'(\phi(0)^2) u(0) \phi'(0)+\\
+\nonumber &\phantom{=}& \phantom{v'(\phi(0)^2) \phi(0) \phi'(0)}+ \hat{\psi}'(\phi(0)^2) \phi(0) u'(0)-u'(\hat{\psi}(0)^2) \hat{\psi}(0) \hat{\psi}'(0) -\\
+\nonumber &\phantom{=}& \phantom{v'(\phi(0)^2) \phi(0) \phi'(0)}-2 \phi''(\hat{\psi}(0)^2) \hat{\psi}(0)^2 \hat{\psi}'(0) (v(0)+ Dc (u,v)) \\
+\nonumber &\phantom{=}&\phantom{v'(\phi(0)^2) \phi(0) \phi'(0)}-\phi'(\hat{\psi}(0)^2) (v(0)+ Dc (u,v)) \hat{\psi}'(0)-\phi'(\hat{\psi}(0)^2) \hat{\psi}(0) v'(0) \\
+\nonumber &=&v'(\phi(0)^2) \phi(0) \phi'(0)+2 \hat{\psi}''(\phi(0)^2) \phi(0)^2 \phi'(0) u(0)+\hat{\psi}'(\phi(0)^2) u(0) \phi'(0)+ \\
+\nonumber &\phantom{=}& \phantom{v'(\phi(0)^2) \phi(0) \phi'(0)} +  \hat{\psi}'(\phi(0)^2) \phi(0) u'(0)-u'(\hat{\psi}(0)^2) \hat{\psi}(0) \hat{\psi}'(0)- \\
+\nonumber &\phantom{=}& \phantom{v'(\phi(0)^2) \phi(0) \phi'(0)} - \phi'(\hat{\psi}(0)^2) \hat{\psi}(0) v'(0) \\
+\nonumber &=&\left(v'(\phi(0)^2) +2 \hat{\psi}''(\phi(0)^2) \phi(0) u(0) \right)\phi(0) \phi'(0)  + \\
+\nonumber  &\phantom{=}&\phantom{\left(v'(\phi(0)^2) \right.}   + \hat{\psi}'(\phi(0)^2) \left(u(0) \phi'(0)+\phi(0) u'(0) \right)-\\
+\nonumber  &\phantom{=}&\phantom{\left(v'(\phi(0)^2) \right.}  - u'(\hat{\psi}(0)^2) \hat{\psi}(0) \hat{\psi}'(0)-\phi'(\hat{\psi}(0)^2) \hat{\psi}(0) v'(0).
+\end{eqnarray}
+The action of the differential of the operator $\cRG$ on a vector $(u,v)$, therefore, is given by
+$$D \cRG (\phi,\psi) (u,v)=(\tilde{u},\tilde{v})+( Da (\tilde{u},\tilde{v}) z^2+Db (\tilde{u},\tilde{v}) z^3, -\tilde{v}(0)),$$
+where  $Da (\tilde{u},\tilde{v})$ and  $Db (\tilde{u},\tilde{v})$ are the solutions of the system $(\ref{eq:newFs3})$ for the functions  $\tilde{u}$ and $\tilde{v}$ given by
+\begin{eqnarray}
+\nonumber \tilde{u}&:=&\Pi_\phi D \cR(\phi,\psi) (u,v)\\
+\nonumber &=& c \circ \left\{\left( \left(\lambda^{-1} \circ \phi \circ q_2 \right)' \circ \psi \circ \lambda^2 \right) \cdot v \circ  \lambda^2 + \lambda^{-1} \circ u \circ q_2 \circ \psi \circ \lambda^2 -\right.\\
+\nonumber  &\phantom{=}& \phantom{c \circ \left.\left( \left(\lambda^{-1} \circ \phi \circ q_2 \right)' \circ \psi \circ \lambda^2 \right) \cdot v \circ  \lambda^2  \ \right.} -  {v(0) \over \lambda^2} \circ \phi \circ q_2 \circ \psi \circ \lambda^2  + \\
+\nonumber  &\phantom{=}& \phantom{c \circ \left.\left( \left(\lambda^{-1} \circ \phi \circ q_2 \right)' \circ \psi \circ \lambda^2 \right) \cdot v \circ  \lambda^2 \  \right. }  \left. + 2 \left(\left( \phi \circ q_2 \circ \psi \right)' \circ \lambda^2  \right) \cdot D \la v \right\} \circ c, \\
+\nonumber \tilde{v}&:=&\Pi_\psi   D \cR(\phi,\psi) (u,v)= c \circ \left\{ \lambda^{-1} \circ u \circ \lambda^2+{v(0) \over \lambda^2} \circ \phi \circ \lambda^2 +\left( \phi' \circ \lambda^2\right) \cdot D \la v \right\}  \circ c,
+\end{eqnarray}
+here $\Pi_{\phi/\psi}$ denote the projections on the corresponding components of the pair, and  $D \la v(z):=v(0) z$.
+
+
+We remark, that the action $D \cR(\phi,\psi)(u,v)$ is of the form $c \circ L (u,v) \circ c$, where $L$ is a linear map and $c$ is the complex conjugation. Therefore, the differential $ D \cR(\phi,\psi)$ is an {{\it anti-linear}} map.
+
+
+
+\subsection{Existence of the renormalization fixed point}
+
+A direct application of the Contraction Mapping Principle, in the form stated above, with the operator $\cRG$ acting on $\cA_1(U,V)$ is impossible: the map $\I - L_0$, being neither linear nor anti-linear on $T_{(\phi,\psi)}\cA_1(U,V)$, does not admit a matrix representation in $GL(N,\C)$ (here, $L_0$ is assumed to be an approximation of the action of $D \cRG(\phi,\psi)$ on some $N$-dimensional subspace of  $T_{(\phi,\psi)}\cA_1(U,V)$).
+
+One way to circumvent this problem is to consider the linear operator $D \cRG \circ c$, where $c$ is complex conjugation. We, however, take a different approach, and think of $\cA_1(U,V)$ as a {\it real} Banach space, and expand its elements into
+%%in the Banach  space $\tilde{\cH}(U,V) \approx \cH(U,V)$ 
+{\it real-valued} vectors over the basis
+\begin{eqnarray}
+\nonumber \cL:&=&\left\{ \{ (l_\phi^k,0) \}_{k=0}^\infty,\{(0,l_\psi^k)\}_{k=0}^\infty,\{(i l_\phi^k,0)\}_{k=0}^\infty,\{(0,i l_\psi^k)\}_{k=0}^\infty \right\}\\
+\nonumber &=&:\left\{ \{ u_k \}_{k=0}^\infty,\{v_k\}_{k=0}^\infty,\{\upsilon_k\}_{k=0}^\infty,\{w_k\}_{k=0}^\infty \right\},
+\end{eqnarray}
+where 
+$$l_\phi(z)={z-c_\phi \over r_\phi}, \quad l_\psi(z)={z-c_\psi \over r_\psi}.$$
+%%equipped with the $l_1$-norm $(\ref{eq:l1norm})$ with respect to which the space is complete.
+
+This real Banach space will be referred to as  $\tilde{\cA}_1(U,V)$.
+
+Of course, the space  $\tilde{\cA}_1(U,V)$ has a linear complex structure defined on it, specifically, 
+$$J(u_k)= \upsilon_k, \  J(\upsilon_k)= -u_k, \ J(v_k)= w_k, \  J(w_k)= -\upsilon_k,$$
+which, however, will play no role in our computation of the differential.
+
+Notice, that by definition, balls $B_r((\phi,\psi))$ in both spaces   $\tilde{\cA}_1(U,V)$ and  $\cA_1(U,V)$ coincide.
+
+In this setting, an approximation $L$  of the action of the  differential $D \cRG(\phi,\psi)$ on an $N$-dimensional subspace of  $T_{(\phi,\psi)} \tilde{\cA}_1(U,V)$ admits a representation in $GL(N,\R)$.
+
+To construct an approximation of the differential of renormalization, we first find an  approximate renormalization fixed point by renormalizing several times the pair $(\id,p_\theta)$, where $p_\theta$ is the conjugate $ l_\psi \circ P_\theta \circ l_\psi^{-1} $ of the quadratic polynomial $P_\theta=e^{2 \pi i \theta} z  -0.5 e^{2 \pi i \theta} z^2$, $\theta=(\sqrt{5}-1)/2$, by the linear transformation $l_\psi$.  The resultant pair is referred to as $(\phi_a,\psi_a)$.
+
+A linear approximation $L_a$ of the action of the renormalization differential  $D \cRG(\phi_a,\psi_a)$ is constructed on the span
+$${\rm span} \left\{ \{ (l_\phi^k,0) \}_{k=0}^{N_1},\{(0,l_\psi^k)\}_{k=0}^{N_2},\{(i l_\phi^k,0)\}_{k=0}^{N_1},\{(0,i l_\psi^k)\}_{k=0}^{N_2} \right\},$$
+where 
+$$N_1=120, \quad N_2=160,$$
+and is of the form 
+$$L_a=\left[ \begin{array}{c c c c}
+M_{1 1} & M_{1 2} & M_{1 3} & M_{1 4} \\
+M_{2 1} & M_{2 2} & M_{2 3} & M_{2 4} \\
+M_{3 1} & M_{3 2} & M_{3 3} & M_{3 4} \\
+M_{4 1} & M_{4 2} & M_{4 3} & M_{4 4}
+\end{array}
+\right],
+$$
+where the matrices in the first column above are the following projections of the action of the differential:
+\begin{itemize}
+\item[$\bullet$] $M_{1 1}$ is the $(N_1+1) \times (N_1+1)$ matrix of columns $ \left[ \Re P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) u_k \right]$,
+\item[$\bullet$] $M_{3 1}$ is the $(N_1+1) \times (N_1+1)$ matrix of columns $ \left[ \Im P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) u_k \right]$,
+\item[$\bullet$] $M_{2 1}$ is the $(N_1+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Re P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) u_k \right]$,
+\item[$\bullet$] $M_{4 1}$ is the $(N_1+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Im P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) u_k \right]$,
+\end{itemize}
+the matrices in the third column above are  the following projections of the action of the differential:
+\begin{itemize}
+\item[$\bullet$] $M_{1 3}$ is the $(N_1+1) \times (N_1+1)$ matrix of columns $ \left[ \Re P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) \upsilon_k \right]$,
+\item[$\bullet$] $M_{3 3}$ is the $(N_1+1) \times (N_1+1)$ matrix of columns $ \left[ \Im P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) \upsilon_k \right]$,
+\item[$\bullet$] $M_{2 3}$ is the $(N_1+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Re P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) \upsilon_k \right]$,
+\item[$\bullet$] $M_{4 3}$ is the $(N_1+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Im P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) \upsilon_k \right]$,
+\end{itemize}
+the matrices in the second column above are  the following projections of the action of the differential:
+\begin{itemize}
+\item[$\bullet$] $M_{1 2}$ is the $(N_2+1) \times (N_1+1)$ matrix of columns $ \left[ \Re P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) v_k \right]$,
+\item[$\bullet$] $M_{3 2}$ is the $(N_2+1) \times (N_1+1)$ matrix of columns $ \left[ \Im P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) v_k \right]$,
+\item[$\bullet$] $M_{2 2}$ is the $(N_2+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Re P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) v_k \right]$,
+\item[$\bullet$] $M_{4 2}$ is the $(N_2+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Im P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) v_k \right]$,
+\end{itemize}
+the matrices in the forth column above are  the following projections of the action of the differential:
+\begin{itemize}
+\item[$\bullet$] $M_{1 4}$ is the $(N_2+1) \times (N_1+1)$ matrix of columns $ \left[ \Re P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) w_k \right]$,
+\item[$\bullet$] $M_{3 4}$ is the $(N_2+1) \times (N_1+1)$ matrix of columns $ \left[ \Im P_{N_1} \Pi_\phi  D \cRG(\phi_a,\psi_a) w_k \right]$,
+\item[$\bullet$] $M_{2 4}$ is the $(N_2+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Re P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) w_k \right]$,
+\item[$\bullet$] $M_{4 4}$ is the $(N_2+1) \times (N_2+1)$ matrix of columns
+$ \left[ \Im P_{N_2} \Pi_\psi  D \cRG(\phi_a,\psi_a) w_k \right]$.
+\end{itemize}
+
+
+The Newton map $N_{\cRG,L_a}$ is now iterated until a good approximation $(\phi_0,\psi_0)$ of the renormalization fixed point is found. After that, a $2(N_1+1)+2(N_2+1)$ by $2(N_1+1)+2(N_2+1)$ matrix $L_0$ approximating the action of the differential $D \cRG(\phi_0,\psi_0)$ on $T_{(\phi_0,\psi_0)} \tilde{\cA}_1(U,V)$, is constructed.
+
+
+This linear map $L_0$ is used in the following Theorem:
+
+\begin{thm}\label{mainthmA} $\phantom{aaa}$\\
+There exists a pair of polynomials $(\phi_0,\psi_0) \in \tilde{\cA}_1(U,V)$, where  $U=\D_{r_\phi}(c_\phi)$ and   $V=\D_{r_\psi}(c_\psi)$  are as in the Main Theorem 1, such that the operator $\cRG$ is analytic and compact in $B_r((\phi_0,\psi_0))$ in $\tilde{\cA}_1(U,V)$, $r=6.6610992 \cdot 10^{-11}$.
+
+Furthermore, the Newton map $N_{\cRG,L_0}$ admits the following bounds:
+\begin{itemize}
+\item[$i)$] $\|(\phi_0,\psi_0)-N_{\cRG,L_0}(\phi_0,\psi_0)  \|_1 < \eps=1.33221983054516078 \cdot 10^{-11}$;
+\item[$ii)$] $\| D N_{\cRG,L_0}(\phi,\psi)\| < \cD=0.287850876998644962$ for all $(\phi,\psi) \in B_\delta(  (\phi_0,\psi_0)  )$, $\delta=2.90241954016095172 10^{-11}$.
+\end{itemize}
+Therefore,
+$$\epsilon < (1-\cD) \delta < -7.34735699562457612 \cdot 10^{-12}<0,$$
+and the operator $N_{\cRG,L_0}$ has a fixed point in $B_\delta( (\phi_0,\psi_0) ) \subset \tilde{\cA}_1(U,V)$, while $\cRG$ has a fixed point  $(\phi_*,\psi_*)$ in  $B_r((\phi_0,\psi_0))$ in $\cA_1(U,V)$.
+\end{thm}
+
+\noindent
+The compactness of $\cRG$ and $D|_{\zeta_*}\cRG$ follow from:
+%The invariance of the fixed pair under renormalization allows one continue the domain of definition, analyticity and univalence of the maps $\phi_*$ and $\psi_*$.
+
+\begin{prop}  \label{prop:renorm_compactness}
+There exists $r'<r$ such that every  $(\phi, \psi) \in  B_{r'}((\phi_*,\psi_*))$  is in $\tilde{\cA}_1(\tU,\tV)$, where $\tU \supset \fD_{\tr_\phi} (\tc_\phi)$ and  $\tV \supset \fD_{\tr_\psi}(\tc_\psi)$, with $\tr_\phi=0.937$, $\tr_\psi=0.874$,  $\tc_\phi=0.6+i 0.09$ and $\tc_\psi=c_\psi$. 
+\end{prop}
+
+
+
+
+
+
+
+% \subsection{Limiting dynamics for the quadratic polynomial}
+
+
+% In a neighborhood of $0$, the map 
+% $$z \mapsto \bar{z}^\theta.$$
+% conjugates $R_\theta^{q_n}$ to $R_\theta^{q_{n+1}}$ for all $n \ge N$. C. McMullen introduced in \cite{McM} the mapping
+% $$\psi(z)=\phi^{-1}(\overline{\phi(z)}^\alpha),$$
+% where $\phi$ is the conformal isomorphism of the unit disk with $\sd$, normalized such that $\phi(0)=0$, $0$ being the critical point of $\qp$, and proves  that there exists a neighborhood $U$ of $0$, and a constant $\epsilon$ such that  $\psi$ is well defined on $U \cap \overline{\sd}$, conjugates $\qp^{q_n}$ to $\qp^{q_{n+1}}$, and is $C^{1+\epsilon}$-conformal or anticonformal:
+% $$\psi(z)= \lambda \overline{z} + O(|z|^{1+\epsilon}),$$
+% here, $\lambda=\psi'(0)$ is the scaling ratio.
+
+% The linearization of $\psi$ at $0$ will be called $\Lambda$:
+% $$\Lambda(z)=\lambda \overline{z}.$$
+
+% Among other results in \cite{McM}, McMullen proves the following 
+% \begin{proposition}
+% There exist two open topological disks $W_0 \subset \fC$ and $W_1 \subset \fC$, and two $\sigma$-proper branched coverings of $g_i: W_i \mapsto \fC$, $i=0,1$, such that
+% $$g_i= \lim_{n \rightarrow \infty} \Lambda^{-n} \circ \qp^{q_n +i} \circ \Lambda^n,$$
+% where the limit converges uniformly and exponentially on compact subsets of $W_i$.
+% \end{proposition}
+
+
+% To demonstrate that $(g_0,g_1)=\zeta^*$ it is, therefore, enough to show that there exists an iterate $n$, such that $\cRG^n (\qp^2,\qp) \in B_r((\phi_0,\psi_0))$. This is done by a straightforward computation.
+
+% \begin{lemma}\label{lem:qpconvergence}
+% $\cRG^{12}((\qp^2,\qp) \in B_r((\phi_0,\psi_0))$, and, therefore, $\cRG^n ((\qp^2,\qp) \rightarrow \zeta^*$. 
+% \end{lemma}
+
+
+
+\subsection{Existence of an unstable subspace}
+Let $\lambda_*$ be as in the Main Theorem 1. 
+We introduce an analytic operator
+\begin{equation}
+\cR_*(\eta,\xi)=\left(c \circ \lambda_*^{-1} \circ \eta \circ \xi \circ \lambda_* \circ c, c \circ \lambda_*^{-1} \circ \eta  \circ \lambda_*   \circ c \right),
+\end{equation}
+whose difference from $\cR$ is that the scaling factor $\lambda_*$ is fixed, rather than dependent on the pair $(\eta,\xi)$.
+Of course, $\zeta_*$ is a fixed point of $\cR_*$. 
+
+The following is easy to show:
+\begin{lemma}
+\label{difference-spectrum}
+The spectra of the linear operators $D\cR_*^2|_{\zeta_*}$ and $D\cR^2|_{\zeta_*}$ satisfy
+$$\text{sp}(D\cR_*^2|_{\zeta_*})=\text{sp}(D\cR^2|_{\zeta_*})\cup\{ 1\}.$$
+\end{lemma}
+
+Trivially, the map $\lambda_* \circ c$ where $\lambda_*=\lambda(\zeta^*)$ admits two invariant lines $l_+$ and $l_-$, which are perpendicular to each other.
+ Specifically,
+from  the invariance condition  $\lambda_* \circ c (x+a i x)=t (x+a i x)$ we have
+\begin{eqnarray}
+\nonumber \lambda_* \circ c (x+a i x)&=&\left( \Re(\lambda_*) x+ a \Im(\lambda_*) x \right)+i \left( \Im(\lambda_*) x- a \Re(\lambda_*) x \right)=t (x +a i x) \\
+\nonumber &\implies& a \Re(\lambda_*) + a^2 \Im(\lambda_*)= \Im(\lambda_*) - a \Re(\lambda_*) \\
+\nonumber &\implies&  a^2 \Im(\lambda_*) +2 a \Re(\lambda_*) - \Im(\lambda_*)=0 \\
+\label{eq:apm} &\implies& a_\pm={ -\Re(\lambda_*) \pm |\lambda_*| \over \Im(\lambda_*)}.  
+\end{eqnarray}
+%Since $\Im(\lambda_*) \Re(\lambda_*) \ne 0$, $\lambda_* \circ c$ admits two distinct invariant lines, which will be denoted 
+%Let us denote these two lines $l_+$ and $l_-$. $l_\pm(t)=t v_\pm$, $v_\pm$ being unit vectors in the direction of $l_\pm$. It is elementary to check that $\lambda_*(c(v_\pm))=\pm v_\pm$. The lines $l_+$ and $l_-$ are perpendicular to each other.
+
+
+\begin{figure}[t]
+\centering
+% If not, use
+\vspace{2mm}       % Give the correct figure height in cm
+\includegraphics[height=7.0cm,width=6cm,angle=-90]{Inv_Lines.pdf}
+\caption{Invariant lines: $l_+$ in blue and $l_-$ in red.}
+\label{fig:lines} 
+\end{figure}
+
+
+
+Let $u(z)=\phi_u(z^2)$ and $v(z)=\psi_v(z^2)$ be analytic vector fields, such that $(\phi_u,\psi_v)$ is in $T_{(\phi_*,\psi_*)} \cA_1(U,V)$. 
+Consider the action of the differential $D \cR_*(\zeta_*)(u,v)$
+on a pair of such  fields   $(u_0,v_0)$, contained in some cone fields: $u_0(z) \in \cC_{u_0}(z)$ and $v_0(x) \in \cC_{v_0}(z)$:
+\begin{equation}\label{eq:diraction}
+(u_1,v_1):=(D \cR_*(\zeta_*)(u_0,v_0)= c \circ \lambda_*^{-1} \circ \left(u_0 \circ \xi_* + (\eta'_* \circ \xi_* ) \cdot v_0, u_0   \right) \circ \lambda_* \circ c.
+\end{equation}
+
+Clearly, $v_1 \in C_{v_0}(z)$, whenever $u_0(z) \in \cC_{u_0}(z)$,  if we set 
+\begin{eqnarray} \label{eq:Cbetaw}
+C_{v_0}(z):=c\left(\lambda_*^{-1}\left(C_{u_0}(\lambda_*(c(z)))\right)\right).
+\end{eqnarray}
+To find a pair of invariant cone fields, it is, therefore, sufficient to construct a cone field $C_{u_0}(z)$ invariant under the operator
+\begin{equation}\label{eq:uoperator}
+\cT(u):=c \circ \lambda_*^{-1} \circ \left(u \circ \xi_* \circ \lambda_* \circ c  +  (\eta'_* \circ \xi_* \circ \lambda_* \circ c ) \cdot (c \circ \lambda_*^{-1} \circ  u \circ |\lambda_*|^2) \right),
+\end{equation}
+and define $C_{v_0}(z)$ as in $(\ref{eq:Cbetaw})$. Notice that
+\begin{eqnarray}
+\label{eq:uoperator0} \cT(u)(0)&=&c \circ \lambda_*^{-1} \circ \left(u(\xi_*(0))  +  \eta'_*(\xi_*(0)) \cdot (c \circ \lambda_*^{-1} \circ  u(0) \right), \\
+\label{eq:uoperator2n}\cT(u)(|\lambda|^{2n}) &=&c \circ \lambda_*^{-1} \circ(u(\xi_*(\lambda_*(c (|\lambda|^{2n}))))  +  \\
+\nonumber &\phantom{=}& \phantom{c \circ \lambda_*^{-1}} + \eta'_*(\xi_*(\lambda_*(c(|\lambda|^{2n}) ))) \cdot (c \circ \lambda_*^{-1} \circ  u (|\lambda|^{2(n+1)}))),\\
+\label{eq:uoperatorxi0} \cT(u)\circ \xi_*(0)&=&c \circ \lambda_*^{-1} \circ \left(u(|\lambda_*|^2) + \eta'_*(|\lambda_*|^2) \cdot (c \circ \lambda_*^{-1} \circ  u(|\lambda_*|^2) \right).
+\end{eqnarray}
+
+We will now proceed to construct a cone field $C_{u}$ which is invariant under the operator $\cT$ at points $|\lambda|^{2n}$, $n=0, \ldots, \infty$, and $0$. To that end, as formulas $(\ref{eq:uoperator0})-(\ref{eq:uoperatorxi0})$ suggest,  we will require bounds on derivatives of $\eta_*'$ at a sequence of points, as well as bounds on the images of the set $\lambda_*(c(|\lambda_*|^{2n}(Z)))$ under $\xi_*$.
+
+
+\begin{lemma}\label{lem:conebounds}
+The following bounds hold for the fixed point pair $\zeta_*$.
+\begin{itemize}
+\item[$1)$] $\eta_*'(\xi_*(0))=|\lambda_*|^{-2}$,
+\item[$2)$] $|\arg(\eta_*'(|\lambda_*|^2)| <1.062$
+\item[$3)$] $\sum_{n=1}^\infty |\arg(\eta_*'(\xi_*(\lambda_*(c(|\lambda_*|^{2n} )))))|<0.075=:\epsilon$,
+\item[$4)$]  $| \arg(u(\xi_*(\lambda_*(|\lambda_*|^2))))-\arg(u(\xi_*(0)))   |<1.066$ and \\
+$| \arg(u(\xi_*(\lambda_*(\bar{z}))))-\arg(u(\xi_*(0)))   |<0.398=\varepsilon$ for all $z \in [0,|\lambda_*|^4]$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+
+Notice that for the fixed point pair $\zeta_*=(\eta_*,\xi_*)$,
+\begin{eqnarray}
+\nonumber \eta_*' &=& c \circ \left( \eta'_* \circ \xi_* \cdot \xi_*'\right) \circ \lambda_* \circ c= c \circ \left( \eta'_* \circ \xi_* \cdot (c \circ \lambda_* \circ \eta_* \circ \lambda_* \circ c)'  \right) \circ \lambda_* \circ c\\
+\label{eq:univbound} &=&\overline{\eta_*' \xi_* \circ \lambda_* \circ c} \cdot \left(\eta_*' \circ |\lambda_*|^2 \right)=\eta_*'  \implies  \overline{\eta_*' \xi_* \circ \lambda_* \circ c} = |\lambda_*|^{-2} { \phi_*'(z^2) \over \phi'_*(|\lambda_*|^4 z^2)}.
+\end{eqnarray}
+In particular, Claim $1)$ follows.
+ 
+Consider the conformal transformation of $D_{\tr_\phi}(\tc_\phi)$, where $\tr_\phi$ and $\tc_\phi$ are as in Proposition $\ref{prop:renorm_compactness}$, onto the unit disk which maps the point $|\lambda_*|^4 z^2$ to zero:
+$$ t^{-1}:=m \circ l, \quad l(x)={x  - \tc_\phi \over \tr_\phi}, \quad m(x):={x-l(|\lambda|^4 z^2) \over 1 - \overline{l(|\lambda|^4 z^2)} x}.$$
+The function 
+$$f(x)={ \phi_*(t(x)) -\phi_*(t(0))  \over \partial_x \phi_*(t(x))\arrowvert_{x=0} }$$
+is univalent on a unit disk, normalized so that $f(0)=0$ and $f'(0)=1$, and
+$$f'(t^{-1}(z^2))= { \phi_*'(z^2)   \over  \phi_*'(|\lambda|^4 z^2)  } {t'( (t^{-1}(z^2) ) \over t'(0)}.$$
+We can now use  a classical distortion bound:
+$$|\arg(f'(z))|<4 \arcsin{|z|},\ { \rm whenever} \ |z| <{1 \over \sqrt{2}},$$
+in the class $\cS$ of functions $f$ univalent on $\fD$ and normalized so that $f(0)=0$, $f'(0)=1$, to get
+\begin{eqnarray}
+\nonumber && \left| \arg \left( { \phi_*'(z^2)   \over  \phi_*'(|\lambda|^4 z^2)  } {t'( (t^{-1}(z^2) )) \over t'(0) } \right) \right| = \\
+\nonumber &&\phantom{aaaa}= \left| \arg \left( { \phi_*'(z^2)   \over  \phi_*'(|\lambda|^4 z^2)  } \right) +  \arg \left( \left( \tr_\phi^2-\overline{(|\lambda_*|^4 |z|^2 -\tc_\phi)}  (z^2-\tc_\phi) \right)^2 \right) \right| \\
+\nonumber  &&\phantom{aaaa}= \left|\arg \left(t^{-1} (z^2) \right) \right| < 4 \arcsin\left( \left|\tr_\phi {1-|\lambda_*|^4 \over \tr^2_\phi-\overline{( |\lambda_*|^4 z^2-\tc_\phi  )}(z^2-\tc_\phi) }  |z|^2  \right|  \right).
+\end{eqnarray}
+Therefore,
+\begin{eqnarray}
+\nonumber | \arg{ \left( \eta_*'(\xi_*(\lambda_* c(z))) \right) }| &<&  4 \arcsin\left( \left|\tr_\phi{1-|\lambda_*|^4 \over \tr^2_\phi-\overline{( |\lambda_*|^4 z^2-\tc_\phi  )}(z^2-\tc_\phi) }  |z|^2  \right|  \right) \\
+\label{eq:univbound1} &+& \left| \arg \left( \left( \tr_\phi^2-\overline{(|\lambda_*|^4 |z|^2 -\tc_\phi)}  (z^2-\tc_\phi) \right)^2 \right) \right|.
+\end{eqnarray}
+The bound in part $3)$ of the Lemma is obtain by evaluating first ten terms in the sum on a computer, and then estimating the remainder using simpler bounds on $\arcsin$ and $\arg$ functions in formula $(\ref{eq:univbound1})$. 
+  
+To demonstrate  the fourth claim, we first recall  the classical rotation bound
+$$ \left|\arg{\left( { f(w) \over w      }   \right)}  \right|<\ln {1+|w| \over 1-|w|}$$
+in the class $\cS$. In our case, $u=\varphi \circ q_2$  where  $\varphi$ is univalent on $\fD_{r_\phi}(c_\phi)$. Let $l(z)$ be the affine transformation that maps $\fD$ onto $\fD_{r_\phi}(c_\phi)$, set $a=l^{-1}(1)$, and let $M_\gamma(w)=(\gamma w +a )/(1+\bar{a} \gamma w)$, $|\gamma|=1$,   be the fractional linear transformation that preserves the unit disk and  maps $0$ into $a$. Consider the family 
+$$f_\gamma(w)={ \varphi(l(M_\gamma(w)))-\varphi(1)  \over \varphi'(1) r_{\phi} \gamma (1-|a|^2)},$$
+whose members are in $\cS$. Let point $w$ be the preimage in $\fD$  of some $\xi_*(\lambda_*(\bar{z}))$ under $l \circ M$, 
+$$  \left| \arg{ \left( { f_\gamma(w) \over w }  \right)}  \right|=\left|\arg{\left( { \varphi(l(M_\gamma(w)))-\varphi(1)   \over  \varphi'(1) \gamma w} \right) } \right|<\ln {1+|w| \over 1-|w|}.$$ 
+Now, for every $w \in \fD$ there is a choice of $\gamma=\gamma(w)$, such that  $ \varphi'(1) \gamma w \in \fR$, then
+$$\left|\arg{ \left( \varphi(l(M_\gamma(w)))-\varphi(1) \right)  } \right|<\ln {1+|w| \over 1-|w|}.$$
+A computer implementation of this bound results in the bounds in part $4)$.
+
+Part $2)$ has been found directly on the computer.
+
+\flushright $\square$
+\end{proof}
+
+
+We will now demonstrate existence of an invariant cone field $C$.
+
+
+
+\begin{prop}\label{prop:unstable_dir} 
+The spectral radii of the linear operators $D \cR_*^2(\zeta_*)$ and $D \cRG^2(\zeta_*)$ are larger than $1$. 
+\end{prop} 
+\begin{proof}
+First, rewrite the equation $(\ref{eq:uoperatorxi0})$ as 
+$$\cT(u)\circ \xi_*(0)=c \circ \lambda_*^{-1} \circ \left(u(|\lambda_*|^2) + c \circ \tilde{\lambda}_*^{-1} \circ  u(|\lambda_*|^2) \right), \quad \tilde{\lambda}_*= {\lambda_* \over \overline{\eta'_*(|\lambda_*|^2)}}.$$
+Similarly to $(\ref{eq:apm})$, set  
+$$\tilde{a}_\pm={ -\Re(\tilde{\lambda}_*) \pm |\tilde{\lambda}_*| \over \Im(\tilde{\lambda}_*)},$$
+and let $\tilde{v}_\pm$ be the unit vectors of the invariant lines $\tilde{l}_\pm=(t+i \tilde{a}_\pm t)$ under the map $\tilde{\lambda}_* \circ c$.
+
+Given a vector $v \in \fC$ and a positive $\alpha< \pi/2$, we denote a cone
+$$C(v,\alpha)=\{x \in \fC \setminus \{0\}: |\arg(v)-\arg(x)| \le \alpha \} \cup \{0\}.$$
+
+\medskip
+
+\noindent  {\it Step 1)} We assume that cone field $\cC_u$ has some particular values at points $0$, $|\lambda_*|^2$ and $1$, and demonstrate that $\cT(\cC_u)(0) \subset {\rm Int} \ \cC_u(0)$ and $\cT(\cC_u)(1) \subset {\rm Int} \ \cC_u(1)$.
+
+
+We make the following assumptions:
+\begin{eqnarray}
+\label{eq:conel2} \cC_u(|\lambda_*|^2)&:=&C(\tilde{v}_+,\alpha(|\lambda_*|^2)), \quad \alpha(|\lambda_*|^2)=\arccos(0.5967), \\
+\label{eq:conel1} \cC_u(1)&:=&c(\lambda_*(C(\tilde{v}_+,\alpha(|\lambda_*|^2))))=:C(c(\lambda_*(\tilde{v}_+)),\alpha(1)))), \\
+\label{eq:cone0} \cC_u(0)&:=&C(\tilde{v}_+,\alpha(0)), \quad \alpha(0)=\arccos(0.71).
+\end{eqnarray}
+
+
+
+The cone $C(\tilde{v}_+,\alpha(|\lambda_*|^2))$ is invariant under the map $c \circ \tilde{\lambda}_*^{-1}$, therefore for any $u(z)$ such that $u(|\lambda_*|^2) \in C(\tilde{v}_+,\alpha(|\lambda_*|^2))$, we have that  
+$$\cT(u)\circ \xi_*(0) \in c(\lambda_*^{-1}(C(\tilde{v}_+,\alpha(|\lambda_*|^2))))=: C(c(\lambda_*^{-1}(\tilde{v}_+)),\alpha(1)),$$  
+and, according to $(\ref{eq:uoperatorxi0})$, $\cT(u)(1) \in  \cC_u(1)$ whenever $u(|\lambda_*|^2) \in \cC_u(\lambda_*|^2)$. Additionally, the boundary $\partial \cC_u(|\lambda_*|^2)$ is a union of two lines, call them $l$ and $r$ and , and  the map $c \circ \tilde{\lambda}_*^{-1}$ interchanges them: $c \circ \tilde{\lambda}_*^{-1}(l)=r$ and   $c \circ \tilde{\lambda}_*^{-1}(r)=l$. Therefore, if $u(|\lambda_*|^2) \ne 0$ is in $\partial \cC_u(|\lambda_*|^2)=$, say $u(|\lambda_*|^2)\parallel l$, then $c \circ \tilde{\lambda}_*^{-1}(u(|\lambda_*|^2)) \parallel r$ and  $u(|\lambda_*|^2)+ c \circ \tilde{\lambda}_*^{-1}(u(|\lambda_*|^2)) \in {\rm Int} \ \cC_u(|\lambda_*|^2)$, and therefore, $\cT(\cC_u)(1) \in  {\rm Int} \ \cC_u(1)$.
+
+
+We verify on the computer that  the cone $c(\lambda_*^{-1}(C(c(\lambda_*^{-1}(\tilde{v}_+)),\alpha(1))))$ is contained in  ${\rm Int} \ C(\tilde{v}_+,\alpha(0))$ (see Fig. \ref{fig:fields}). According to $(\ref{eq:uoperator0})$, this, together with the invariance of $\cC_u(0)$ under the map $c \circ \lambda_*^{-1} \circ c \circ \lambda_*^{-1}$ implies that $\cT(\cC_u)(0) \subset {\rm Int} \ \cC_u(0)$.
+
+
+\begin{figure}
+\centering
+% If not, use
+\vspace{2mm}       % Give the correct figure height in cm
+\begin{tabular}{c c} 
+\includegraphics[height=6cm,width=5.2cm,angle=-90]{Inv_Lines_1.pdf}  &  \includegraphics[height=6cm,width=5.2cm,angle=-90]{Inv_Lines_2.pdf}   \\
+$a)$ & $b)$ \\
+ \includegraphics[height=6cm,width=5.2cm,angle=-90]{Inv_Lines_3.pdf}  &  \includegraphics[height=6cm,width=5.2cm,angle=-90]{Inv_Lines_4.pdf}   \\
+$c)$ & $d)$
+\end{tabular}
+\caption{The invariant lines $l_+$, $l_-$ and $\tilde{l}_+$ are drawn in blue, red and magenta, respectively.  $a)$ The cone $C(\tilde{v}_+,\alpha(|\lambda_*|^2))$ is between cyan and green lines.  b)  The cone  $C(c(\lambda_*(\tilde{v}_+)),\alpha(1)):=c(\lambda_*(C(\tilde{v}_+,\alpha(|\lambda_*|^2))))$ is between cyan and green lines. c) The image of the cone $C(c(\lambda_*(\tilde{v}_+)),\alpha(1))$  under $c \circ \lambda_*$ (orange to black) is contained in the cone $\cC_u(0)$ (green to cyan). d) $\varepsilon$-thickening (yellow and violet) of the  image of the cone $C(c(\lambda_*(\tilde{v}_+)),\alpha(1))$  under $c \circ \lambda_*$ (orange to black) is, again,  contained in the cone $\cC_u(0)$ (green to cyan)}
+\label{fig:fields}       % Give a unique label
+\end{figure}
+
+
+
+\medskip
+
+\noindent  {\it Step 2)} We continue to make assumptions on the field $\cC(z)$:
+\begin{equation}
+\label{eq:conesdef} \cC_u(|\lambda_*|^{2 n})=C(\tilde{v}_+,\alpha(0)+  \sum_{i=n}^\infty |\arg(\eta_*'(\xi_*(\lambda_*(c(|\lambda_*|^{2i} )))))|), \quad n=2,3, \ldots .
+\end{equation}
+
+By the bound in part 4) in Lemma \ref{lem:conebounds},  $u(\xi_*(\lambda_*|\lambda_*|^{2n}))$, $n=2,3, \ldots$ is in $C(c(\lambda_*(\tilde{v}_+)) , \alpha(1)+\varepsilon)$, $\varepsilon=0.398$ as in part 4) of Lemma \ref{lem:conebounds}, whenever $u(\xi_*(0)) \in C(c(\lambda_*(\tilde{v}_+)),\alpha(1))$. We verify on the computer that 
+\begin{equation}\label{eq:cone1}
+c(\lambda_*^{-1}(C(c(\lambda_*(\tilde{v}_+)),\alpha(1)+\varepsilon))) \subset {\rm Int} \ \cC_u(0):= {\rm Int} \ C(\tilde{v}_+,\alpha(0))
+\end{equation}
+(see Fig. \ref{fig:fields}). Furthermore,
+\begin{eqnarray}
+\nonumber  c \circ \lambda_*^{-1} \! \! & \! \! \circ  \!  \! & \! \! \left( \eta'_*(\xi_*(\lambda_*(c(|\lambda|^{2n}) )) \cdot (c \circ \lambda_*^{-1} \circ  u (|\lambda|^{2(n+1)})) \right) \in \\ 
+\label{eq:cone2}  \! \! &\! \! \in \! \! & \! \! C(\tilde{v}_+,\alpha(0)+\sum_{i=n}^\infty |\arg(\eta_*'(\xi_*(\lambda_*(c(|\lambda_*|^{2i} )))))|)
+\end{eqnarray}
+whenever  
+$$u (|\lambda|^{2(n+1)}) \in C(\tilde{v}_+,\alpha(0)+\sum_{i=n+1}^\infty |\arg(\eta_*'(\xi_*(\lambda_*(c(|\lambda_*|^{2i} )))))|).$$
+Conditions $(\ref{eq:cone1})$ and $(\ref{eq:cone2})$ imply that $\cT(u)(|\lambda_*|^{2 n})$, given by $(\ref{eq:uoperator2n})$,  is in ${\rm Int} \ \cC_u(|\lambda_*|^{2 n})$, as defined in $(\ref{eq:conesdef})$ whenever $u(|\lambda_*|^{2 (n+1)}) \in \cC_u(|\lambda_*|^{2 (n+1)})$, $n=1,2, \ldots$. Since $\arccos(0.5967) - \arccos(0.71)>0.075$, the cone  $\cT(\cC_u)(|\lambda_*|^{2})$, according to $(\ref{eq:cone2})$, is contained in ${\rm Int} \ \cC_u(|\lambda_*|^2)$ as defined in $(\ref{eq:conel2})$. This demonstrates invariance of cones $\cC(|\lambda_*|^{2 n})$ for all $n=1,2, \ldots$.
+
+\medskip
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  begin ignore
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ignore{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent  {\it Step 3)}  We will now demonstrate that the operator $D \cR_*(\zeta_*)$ has an eigenvalue outside the unit circle which corresponds to an eigenvector which is not tangent to the manifold of almost commutative pairs, that is, not an eigenvector in $T_{\zeta_*} \cM(U,V)$.
+
+The equation $(\ref{eq:uoperator0})$ together with part $1)$  of Lemma $\ref{lem:conebounds}$, and the fact that $\alpha(0)<\pi/4$,  implies that 
+$$|\cT(u)(0)|  \ge  {1 \over |\lambda_*|^4} |u(0)|.$$
+In particular, this implies that $\cT$ maps a vector field $u$ which are non-zero in a neighborhood of point $0$ into a field which is non-zero on some neighborhood of $0$, and which, furthrmore, there exists a neighborhood $\tilde{Z}$ of $0$ and $1 < \mu_u  \le {|\lambda_*|^{-4}}$, such that
+%whenever $u(z) \in \cC_u(z)$ is non-zero in a neighborhood of $0$. In particular, this implies that $D \cR_*(\zeta_*)$ maps a pair $(u,v)$ of vector fields, which are non-zero in a neighborhood of point $0$ into a pair which is non-zero on some neighborhood of $0$, and which, furthrmore, is stretched in a neighborhood of $0$: there exists a neighborhood $\tilde{Z}$ of $0$ and $1 < \mu_u  \le {1 \over |\lambda_*|^4}$, such that
+\begin{equation}
+\label{eq:expansion}  |\cT(u)(z)| \ge \mu_u |u(z)|
+\end{equation}
+for all $z \in \tilde{Z}$.
+
+By a standard result (see, e.g. Proposition 6.2.12 and Corollary 6.2.13 in \cite{KH}), expansion of non-zero vectors in $\cC_u(z)$ for $z \in \tilde{Z}$   and   the   invariance condition $\cT(\cC_u) \subset {\rm Int} \ \cC_u$ on the set $\tilde{Z} \cap E$, where $E=\{|\lambda_*|^{2n}\}_{n=0}^\infty \cup 0$, implies that any  analytic direction field in $\cC_u(z)$ converges under the operator $\cT$ in $\tilde{Z} \cap E$ to a  analytic invariant direction field for $\cT$.  Since the set $\tilde{Z} \cap E$ contains a limit point $0$,  any  analytic direction field in $\cC_u(z)$ in $Z$ converges under the operator $\cT$ in all of $Z$. 
+
+
+ % Indeed, let $u$ and $w$ be any two analytic non-zero vector fields in $Z$, such that $u(|\lambda_*|^{2 n}), w(|\lambda_*|^{2 n}) \in \cC(|\lambda_*|^{2 n})$, $n=0,1, \ldots$ and $u(0), w(0) \in \cC_u(0)$,  Then, since the property of being non-zero in a neighborhood of $0$ is preserved by $\cT$,  both sequences $\arg\left(\cT^n(u)(z)/\|\cT^n(u)\|_1\right)$ and $\arg\left( \cT^n(w)(z)/\|\cT^n(w)\|_1 \right)$  are sequences of bounded real-analytic functions on some neighborhoods $\tilde{Z} \subset Z$ and $W \subset W$ of $0$, and converge uniformly on $Z'$ and $W'$. The functions $a_\infty(z)=\lim_{n \rightarrow \infty}\arg\left( \cT^n(u)(z)/\|\cT^n(u)\|_1 \right)$ and $b_\infty(z)=\lim_{n \rightarrow \infty}\arg\left( \cT^n(w)(z)/\|\cT^n(w)\|_1 \right)$, real-analytic on $Z'$ and $W'$, respectively,  coincide on a set with a limit point, and therefore, have to coincide everywhere on $Z' \cup W'$.
+
+
+The equation $(\ref{eq:expansion})$ implies the claim about the spectrum. Since $D \cR_*^2(\zeta_*)$ is a compact operator whose spectrum, outside of $0$, consists of eigenvalues, the largest eigenvalue is larger than $\mu_u$. 
+
+Notice, that this eigenvector $(u_*,v_*)$ can  not lie in $T_{\zeta_*}\cM(U,V)$ since both $u_*(0)$ and $v_*(0)=c \circ \lambda^{1}_* u_*(0)$ are non-zero.
+
+It is easy to show that the spectrum of the operator $\cR_*$ differs from that of $\cR$ by a single neutral eigenvalue $\delta=1$ (see Subsection \ref{subsec:coord_changes}). In particular, the expanding parts of the spectra coincide.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end ignore
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\medskip
+
+\noindent  {\it Step 3)}  Assume now, that $u(z)=a z^2+b z^4 + \ldots \in \cC(z)$ is non-zero in some punctured neighborhoods $U \setminus \{ 0\}$ of $0$ and  $V \setminus \{1\}$ of $1$. Then, the equation $(\ref{eq:uoperator0})$ together with part $1)$  of Lemma $\ref{lem:conebounds}$, and the fact that $\alpha(|\lambda_*|^{2 n})<\pi/4$,  implies that 
+\begin{equation}
+\label{eq:cT2n} |\cT(u)(|\lambda_*|^{2 n})| > {1 \over |\lambda_*|^4} |u( |\lambda_*|^2 |\lambda_*|^{2n})| + \gamma {1 \over |\lambda_*|}  |u(\xi_*(\lambda_* |\lambda_*|^{2 n}))|,
+\end{equation}
+for some $\gamma>0$. Since $u(z)=O(z^2)$ in a neighborhood of $0$ and $u(1+z)=O(z)$ in a neighborhood of $1$, there exists $C>0$ such that $\left||u(z)|-{1 \over 2} |u''(0)||z|^2 \right|<C |z|^4$ and $\left| |u(\xi_*(z))|-2|u'(1)||\psi'(0)||z| \right|<C |z|^2$ for sufficiently small $z$. Therefore, according to $(\ref{eq:cT2n})$, for sufficiently large $n$,
+\begin{eqnarray}
+\nonumber |\cT(u)(|\lambda_*|^{2 n})| \!\! & \!\!> \!\!&  \!\! \left\{ \! {1 \over 2} |u''(0)||\lambda_*|^{4 n} \! \!-C |\lambda_*|^4 |\lambda_*|^{8 n} \! \right\}\!+\! \gamma \left\{ 2|u'(1)||\psi'(0)||\lambda_*|^{2 n} \!\!-C |\lambda_*||\lambda_*|^{4 n}   \right\}, \\
+\nonumber  \!\!& \!\!= \!\!&  \!\!\left\{ {1 \over 2} |u''(0)||\lambda_*|^{4 n} +C |\lambda_*|^{8 n}  \right\}+ \gamma \left\{ 2|u'(1)||\psi'(0)||\lambda_*|^{2 n} -C |\lambda_*||\lambda_*|^{4 n} - \right. \\
+\nonumber  \!\!& \!\!\phantom{=} \!\!&  \!\!\phantom{\left\{ {1 \over 2} |u''(0)||\lambda_*|^{4 n} +C |\lambda_*|^{8 n}  \right\}}- \left. C(1+|\lambda_*|^4)  |\lambda_*|^{8 n} \right\} \\
+\nonumber  \!\!& \!\!> \!\!& \!\! |u(|\lambda_*|^{2 n})|\!+\! \gamma \tilde{C} |\lambda_*|^{2 n},
+\end{eqnarray}
+for some constant $\tilde{C}>0$. Therefore, $\cT$ strictly increases the uniform norm of $u$ on small neighborhoods of $0$.  The corresponding statement in the norm $||\cdot ||_1$ follows from \propref{norm-equiv}.
+
+
+We remark, that $D \cR_*(\zeta_*)(u,v)= D \cR(\zeta_*)(u,v)$ whenever $v(0)=0$. Furthermore for such $(u,v)$, we have on a neighborhood of $0$
+$$D \cRG(\zeta_*)(u,v)(z)=(\tilde{u},\tilde{v})(z)+(D a(\tilde{u},\tilde{v}) z^4 + D b(\tilde{u},\tilde{v}) z^6,0),$$
+where $(\tilde{u},\tilde{v})=D \cR_*(\zeta_*)(u,v)$. Therefore, for the operator $\cT$ is modified as follows:
+$$\cT(u)(z):=c \circ \lambda_*^{-1} \circ \left(u(\xi_*(\lambda_*(c(z))))  +  \eta'_*(\xi_*(\lambda_*(c(z)))) \cdot (c \circ \lambda_*^{-1} \circ  u(|\lambda_*|^2 z )) \right) +O(z^4),
+$$
+and the constructed cones $\cC_u(|\lambda_*|^{2 {n}}) \times \cC_v(|\lambda_*|^{2 n})$ and $\cC_u(0) \times \cC_v(0)$ remain invariant  under the action of the differential $D \cRG(\zeta_*)$ for large $n$ (small neighborhood of zero). An analytic direction field in a punctured neighborhood of zero converges on this neighborhood under the action of $\cT$, and, hence, converges everywhere on $Z$.
+\flushright $\square$
+\end{proof}
+
+
+
+
+% Furthermore, consider a family $\zeta^t_*=(\eta^t_*,\xi^t_*)=(\eta_*+t u_*, \xi_* + t v_*)$, where $(u_*,v_*)$ is an expanding eigenvector of  $\cR$.  Notice that $\zeta^t_*$ is tangent to the almost commuting submanifold $\cM(Z,W)$:
+%$$(\eta^t_* \circ \xi^t_*)^{(n)}(0)-(\xi^t_* \circ \eta^t_*)^{(n)}(0)=\left( t (u_* \circ \xi_* + ( \eta'_* \circ \xi_*(0) ) \cdot v_*$$
+
+
+
+%  $n=0,1,2$, then so is the pair $\tilde{\zeta}_t:=\cR(\zeta_t)$. Indeed, according to $(\ref{eq:rcommute0})$ 
+% \begin{eqnarray}
+% \nonumber (\tilde{\eta}_t \circ \tilde{\xi}_t)(0)-(\tilde{\xi}_t \circ \tilde{\eta}_t)(0)&=& \left(c \circ \lambda^{-1} \circ \eta_t \circ \xi_t  \circ \eta_t \right)(0)-\left(c \circ \lambda^{-1} \circ \eta_t  \circ \eta_t \circ \xi_t \right)(0) \\
+% \label{eq:tangency0}&=&  \left(c \circ \lambda^{-1} \circ \eta_t \circ \xi_t  \circ \eta_t \right)(0)-\left(c \circ \lambda^{-1} \circ \eta_t  \circ \xi_t \circ \eta_t \right)(0)+O(t^2)=O(t^2),
+% \end{eqnarray}
+% and similarly for equations $(\ref{eq:rcommute1})$ and $(\ref{eq:rcommute2})$. Therefore, $D \cR(\zeta_*)$ maps ${T_{\zeta_*} \cM(Z,W)}$ to itself, and $\sigma(D \cR(\zeta_*) \arrowvert_{T_{\zeta_*} \cM(Z,W)})= \sigma(D \cRG(\zeta_*) \arrowvert_{T_{\zeta_*} \cE(Z,W)})$. Therefore, to demonstrate that the spectral radius of $D \cRG(\zeta_*)$ is larger than $1$, it is sufficient to show that there exist a vector field $(u,v)$ in ${T_{\zeta_*} \cM(Z,W)}$ with values in $C(z) \times c(\lambda_*^{-1}(C(\lambda_* \bar{z})))$.
+
+% \begin{proof}
+% First, we write out the condition  $(\eta_t \circ \xi_t)(0)-(\xi_t \circ \eta_t)(0)=O(t^2)$ of tangency  in more detail:
+% \begin{eqnarray}
+% \nonumber O(t^2)&=&(\eta_t \circ \xi_t)(0)-(\xi_t \circ \eta_t)(0)  \\
+% \nonumber &=&   \eta_* \circ \xi_* (0) + t u \circ \xi_*(0) + t \eta'_* \circ \xi_*(0) \cdot v(0)-\xi_* \circ \eta_* (0) - t v \circ \eta_*(0) - t \xi'_* \circ \eta_*(0) \cdot u(0) + O(t^2) \implies \\
+% \label{eq:tangency00}  &\implies&  u \circ \xi_*(0) + \eta'_* \circ \xi_*(0) \cdot v(0) - v \circ \eta_*(0)-  \xi'_* \circ \eta_*(0) \cdot u(0) = 0.
+% \end{eqnarray}
+
+% Consider a vector field $(u,v) \in T_{\zeta_*} \cM(Z,W)$,  such that $u(|\lambda_*|^{2 n})=a_n \tilde{v}_+$, $n=1,2, \ldots$,   $u(1)=a_0 c \circ \lambda_*^{-1} \circ  \tilde{v}_+$, and  $v(\bar{\lambda}_*^{-1} |\lambda|^{2n})=b_n c \circ \lambda_*^{-1} \tilde{v}_+$,  $n=0,1, \ldots$,     where $a_n$ and $b_n$  are some  real positive numbers. The condition $(\ref{eq:tangency00})$ becomes for these vector fields
+% \begin{eqnarray}
+%  a_0  c \circ \lambda_*^{-1} \circ \tilde{v}_+  + |\lambda_*|^{-2}  b_\infty c \circ \lambda_*^{-1} \tilde{v}_+ - b_1  c \circ \lambda_*^{-1} \circ  \tilde{v}_+ -  \xi'_* \circ \eta_*(0) \cdot a_\infty \tilde{v}_+ = 0.
+% \end{eqnarray}
+% Notice, that the commutation condition $k$ implies
+% $$\xi'_* \circ \eta_*(0) \phi_*(0)  \phi'_*(0)= \eta_*' \circ \xi_*(0) \psi_*(0) \psi'_*(0)= |\lambda_*|^{-2}   \psi'_*(0)  \implies \xi'_* \circ \eta_*(0)=|\lambda_*|^{-2} \lambda_*^{-1}  {\psi'_*(0) \over \phi'_*(0)}= \lambda_*^{-2} {\overline{\phi'_*(0)} \over \phi'_*(0)}$$
+% \end{proof}
+
+
+  
+
+
+
+
+
+
+
+\subsection{Renormalization hyperbolicity}
+
+
+To diagonalize the differential, we first find numerically eigenvalues and eigenvectors of the matrix $L_0$. It is elementary to check that the anti-linearity of the renormalization differential implies that the eigenvalues of $L_0$ come in pairs: if $\lambda$ is an eigenvalue, then so is $-\lambda$:
+\begin{lemma} \label{lem:spectra}
+Let $\sigma$  be the spectrum of the linear operator $D \cRG[(\phi_*,\psi_*)] \circ c$ on $T \cA_1(U,V)$. Then the spectrum of the linear operator $D \cRG[(\phi_*,\psi_*)]$ in $T \tilde{\cA}_1(U,V)$ is 
+$$\tilde{\sigma}=-\sigma \cup \sigma.$$
+\end{lemma} 
+We verify numerically, that the matrix $L_0$ has $2(N_1+1)+2(N_2+1)$ eigenvalues, some of which have a multiplicity larger than $1$. We compute all real  eigenvalues, together with their eigenvectors, and the complex pairs, together with their eigenplanes, numerically using the standard linear algebra procedure in ADA. 
+
+
+At the next step, we choose the first $E \equiv 2(E_1+1)+2(E_2+1)$ eigenvectors $e_i$, $E=30$ and $E_2=20$, as the basis in the following linear subspace:
+$${\rm span} \left\{ \{ (l_\phi^k,0) \}_{k=0}^{E_1},\{(0,l_\psi^k)\}_{k=0}^{E_2},\{(i l_\phi^k,0)\}_{k=0}^{E_1},\{(0,i l_\psi^k)\}_{k=0}^{E_2} \right\},$$ 
+keeping 
+$$\left\{ \{ (l_\phi^k,0) \}_{k=E_1+1}^{N_1},\{(0,l_\psi^k)\}_{k=E_2+1}^{N_2},\{(i l_\phi^k,0)\}_{k=E_1+1}^{N_1},\{(0,i l_\psi^k)\}_{k=E_1+1}^{N_2} \right\}$$ 
+as the remaining basis vectors. The new basis will be referred to as $\cE$. 
+
+To find the linear transformation from the basis $\cL$ to $\cE$, we first find the inverse $B^{-1}$ the matrix $B=\left[ \cE \right]$ numerically, and then find a bound on the inverse using a Newton method in the equation $B B^{-1}=\I$. 
+
+Finally, we consider a projection of the bound $D$ on operator $D \cRG$ in  $B_r$ on the complimentary subspace to the span of the approximate eigenvectors $e_0$ and $e_1$ which numerically span the expanding subspace:
+$$T=(I-S_0 -S_1) D (\I -S_0 -S1), \quad S_i=\left[
+\begin{array}{c}
+e_i^0  B^{-1}_i \cr
+e_i^1  B^{-1}_i \cr
+\ldots   \cr
+e_i^N  B^{-1}_i \cr
+\end{array}
+\right], 
+$$
+where $e_i^k$ are the $k$-th component of the $i$-th eigenvector, and $B^{-1}_i$ stands for the $i$-th row of the matrix $B$. We compute rigorously that
+$$\| T^3 \| <1,$$ 
+which implies that the stable subspace of $D \cRG[(\phi_*,\psi_*)]$ in $T_{(\phi^*,\psi^*)} \tilde{A}_1(U,V)$ has real codimension two.  This together with Proposition \ref{prop:unstable_dir} implies Part (v) of the Main Theorem 1.  
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% begin ignore
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ignore{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Renormalization spectrum associated with the coordinate changes}\label{subsec:coord_changes}
+ 
+In this section we will consider the part of the renormalization spectrum associated with the coordinate changes. Let $\sigma$ be a generator of a coordinate transformation, then
+\begin{equation} \label{eq:change} (\id +t \sigma)^{-1} \circ \eta \circ (\id +t \eps \sigma)=\eta+t h_{\eta,\sigma}+O(t^2), \ {\rm where} \ h_{\eta,\sigma} = -\sigma \circ \eta + \eta' \cdot \sigma.
+\end{equation}
+
+Consider the operator  
+$$\cR_* (\eta,\xi)=(\las^{-1} \circ \eta \circ \xi \circ \las, \las^{-1} \circ \eta \circ \las),$$
+where $\las=-|\eta_*(0)|$. Then
+\begin{eqnarray}
+\nonumber D \cR_*(\eta_*,\xi_*) \left(h_{\eta_*,\sigma},h_{\xi_*,\sigma}\right)&=&( \las^{-1} \circ \left(-\sigma \circ \eta_* \circ \xi_*  +(\eta_* \circ \xi_*)' \cdot \sigma  \right) \circ \las, \\
+\nonumber &\phantom{=}&\phantom{(} \las^{-1} \circ \left(-\sigma \circ \eta_*  +\eta_*' \cdot \sigma  \right) \circ \las ) \\
+\nonumber &=&( - \las^{-1} \circ \sigma \circ \las \circ \eta_*  +\eta_*' \cdot (\las^{-1} \sigma  \circ \las), \\
+\nonumber &\phantom{=}&\phantom{(} -\las^{-1} \circ \sigma \circ \las \circ \xi_*  +\xi_*' \cdot (\las^{-1} \circ \sigma  \circ \las) ) \\
+\nonumber &=&  \left(h_{\eta_*,\las^{-1} \circ \sigma \circ \las},h_{\xi_*, \las^{-1} \circ \sigma \circ \las} \right),
+\end{eqnarray}
+and is equal to $\kappa \left(h_{\eta_*,\sigma},h_{\xi_*,\sigma}\right)$ whenever 
+$$\las^{-1} \circ \sigma \circ \las= \kappa \sigma.$$
+Consider monomial generators $\sigma_k(z)=z^k$, corresponding to the eigenvectors
+$$e_k=\left(h_{\eta_*,\sigma_k},h_{\xi_*,\sigma_k}\right),$$ 
+then
+$$\las^{-1} \circ \sigma_k \circ \las= \las^{k-1} \sigma_k, $$
+In particular, the constant generator of translations, $\sigma_0(z)=1$, corresponds to an expanding eigenvector of the operator $D \cR_*$, while the generator of rescalings $\sigma_1(z)=z$ corresponds to a neutral eigendirection of $D \cR_*$. At the same time $\span\{e_1\}$ is the null eigenspace for the operator $D \cR$ in $T_{(\eta_*,\xi_*)}\cE(U,V)$.
+
+Perturbations in the  directions of the eigenvectors $e_k$, $k \ge 1$, preserve the class of a.c.s. pairs. Indeed, let $\tilde{\eta}=(\id +\eps \sigma_k)^{-1} \circ \eta \circ  (\id +\eps \sigma_k)$ and $\tilde{\xi}=(\id +\eps \sigma_k)^{-1} \circ \xi \circ  (\id +\eps \sigma_k)$, then $(\ref{eq:accond})$ implies
+\begin{eqnarray}
+\nonumber \tilde{\eta} \circ \tilde{\xi}(0)&=& -\sigma_k \circ \eta \circ \xi(0)  + (\eta \circ \xi) '(0) \cdot \sigma_k(0) +O(\eps^2)\\
+\nonumber &=&-\sigma_k \circ \xi \circ \eta(0)  + (\xi \circ \eta) '(0) \cdot \sigma_k(0) +O(\eps^2)\\
+\nonumber &=&\tilde{\xi} \circ \tilde{\eta}(0)+O(\eps^2) \\
+\nonumber (\tilde{\eta} \circ \tilde{\xi})'(0)&=& -\sigma_k' \circ \eta \circ \xi(0) \cdot  (\eta \circ \xi)'(0)    + (\eta \circ \xi) ''(0) \cdot \sigma_k(0)+ (\eta \circ \xi) '(0) \cdot \sigma_k'(0)+\\
+\nonumber &\phantom{=}& \phantom{-\sigma_k' \circ \eta \circ \xi(0) \cdot  (\eta \circ \xi)'(0)    + (\eta \circ \xi) ''(0) \cdot \sigma_k(0)} + O(\eps^2) \\
+\nonumber &=&(\tilde{\xi} \circ \tilde{\eta})'(0)+O(\eps^2),
+\end{eqnarray}
+\begin{eqnarray}
+\nonumber (\tilde{\eta} \circ \tilde{\xi})''(0)&=& -\sigma_k'' \circ \eta \circ \xi(0) \cdot  ((\eta \circ \xi)'(0))^2-\sigma_k' \circ \eta \circ \xi(0) \cdot  (\eta \circ \xi)''(0)   \\
+\nonumber &\phantom{=}&+ (\eta \circ \xi) '''(0) \cdot \sigma_k(0)+2 (\eta \circ \xi) ''(0) \cdot \sigma_k'(0)+ (\eta \circ \xi) '(0) \cdot \sigma_k''(0)+O(\eps^2)\\
+\nonumber &=&(\tilde{\xi} \circ \tilde{\eta})''(0)+O(\eps^2), \\
+\nonumber (\tilde{\eta} \circ \tilde{\xi})'''(0)&=& -\sigma_k''' \circ \eta \circ \xi(0) \cdot  ((\eta \circ \xi)'(0))^3-3 \sigma_k'' \circ \eta \circ \xi(0) \cdot (\eta \circ \xi)'(0) \cdot  (\eta \circ \xi)''0) -\\\nonumber &\phantom{=}& -\sigma_k' \circ \eta \circ \xi(0) \cdot  (\eta \circ \xi)'''(0)  + (\eta \circ \xi)^{(4)}(0) \cdot \sigma_k(0) +\\
+\nonumber &\phantom{=}& +3 (\eta \circ \xi) '''(0) \cdot \sigma_k'(0)+3 (\eta \circ \xi) ''(0) \cdot \sigma_k''(0)+\\
+\nonumber &\phantom{=}& +(\eta \circ \xi) '(0) \cdot \sigma_k'''(0) +O(\eps^2) \\
+\nonumber &=&(\tilde{\xi} \circ \tilde{\eta})'''(0)+\left\{ \left( (\eta \circ \xi)^{(4)}(0)-(\xi \circ \eta)^{(4)}(0) \right) \cdot \sigma_k(0) \right\}+O(\eps^2). 
+\end{eqnarray}
+In the last expression in parenthesis $\sigma_k(0)=0$ for all $k > 0$, but is non-zero for $k=0$. Therefore, the eigenvector $e_0$, corresponding to translations of coordinates, is the only eigendirection of $D \cR_*$ in $T_{(\eta_*,\xi_*)}\cE(U,V)$  associated with coordinate changes which does not lie in the tangent space $T_{(\eta_*,\xi_*)}\cM(U,V)$ at $(\eta_*,\xi_*)$ to the manifold of a.c.s. pairs.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% end ignore
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

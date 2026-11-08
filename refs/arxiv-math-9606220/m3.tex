@@ -1,0 +1,247 @@
+\bigskip
+\centerline{\bf 3. Derivatives along Recurrent  Orbits}
+\bigskip
+
+\flushpar
+Let $\rho_n=\min\{\frac{1}{\sigma_{n-1}},\frac{1}{\sigma_n}\}$.
+In this section we will prove 
+
+\proclaim{Proposition 3.1} There exist  $n_0\ge 1$, $\theta<1$ and $C>0$ with 
+the following property. If $n\ge n_0$, 
+$x\in U_{n+1}$ and $R_n^i(x)\notin U_{n+1}$ for $i\le s$
+then
+$$
+|Df^T(f(x))|\ge C\cdot \rho_n \cdot \theta^{-(s-1)},
+$$
+where $R^s_n(x)=f^T(x)$.
+\endproclaim
+
+\flushpar
+In [VT] a similar estimate in the case $s=1$ was obtained for circle 
+homeomorphisms with irrational rotation number of bounded type.
+The proof of Proposition 3.1 will use the following Lemmas 
+and notation. Fix
+$x\in U_{n+1}$ according to the Proposition, say $R_n^i(x)=f^{t_i}(x)$ with
+$i\le s$.
+
+\proclaim{Lemma 3.2} For each $i\le s$ there exists an interval $S_i\ni f(x)$
+such that
+$$
+f^{t_i-1}:S_i\to U_n
+$$ 
+is monotone and onto.
+\endproclaim
+
+\demo{Proof} Lemma 2.2 applied to $U_{n+1}\in \Cal{U}_n$ states the existence 
+of $S_1$. Assume that $S_i\ni x$
+exists. Then $f^{t_i-1}: S_i\to U_n$ monotone and onto. Moreover 
+$f^{t_i-1}(f(x))\in I_{i+1}\in \Cal{U}_n$. Because 
+$f^{t_i-1}(f(x))\notin U_{n+1}$ we have that $I_{i+1}\ne U_{n+1}$ and 
+$R_n:I_{i+1}\to U_n$ is monotone and onto. Now let 
+$S_{i+1}=f^{-(t_i-1)}(I_{i+1})\cap S_i$.
+\hfill\hfill\qed $\,\,$ (Lemma 3.2)
+\enddemo
+
+\flushpar
+Observe that $f^{t_{i-1}-1}(S_i)=I_i\in \Cal{U}_n$.
+
+\proclaim{Lemma 3.3} There exist $n_0\ge 1$ and $K<\infty$ with the 
+following property. If the distortion of
+$$
+f^{t_i-1}:S_i\to U_n \text{ with } n\ge n_0
+$$ 
+is bigger than $K$ then
+$$
+I_i\subset (-\frac34 \cdot u_n, \frac34 \cdot u_n).
+$$
+\endproclaim
+
+\demo{Proof} Lemma 2.2 states that $f^{t_1}:S_1\to U_n$ has a monotone 
+extension up to $U_{n-1}$, the map is essentially linear for big enough $n$. 
+Hence $i\ge 2$.
+Consider the following decomposition
+$$
+f^{t_i-1}|S_i=f^{t_{i}-t_{i-1}-1}|f(I_i)\circ 
+              f|I_i\circ
+              f^{t_{i-1}-1}|S_i.
+$$ 
+The factor $f^{t_{i-1}-1}|S_i$ has a monotone extension up to 
+$U_n$. In particular, for big enough $n$, it
+is essentially linear. This is because the image $I_i$
+has a small hyperbolic length within $U_n$ (Lemma 2.3). The factor
+$f^{t_{i}-t_{i-1}-1}|f(I_i)$
+has a monotone extension up to $U_{n-1}$ (Lemma 2.2), it is also essentially
+linear. The distortion of $f^{t_i-1}|S_i$ can only be caused by the factor
+$f|I_i$, $I_i$ has to be very close to $0$. There is some $n_0$
+such that $I_i\subset (-\frac34 \cdot u_n, \frac34\cdot u_n)$, 
+whenever $n\ge n_0$.
+Here we used Lemma 2.3 which states that $I_i$ has also very small hyperbolic 
+length within $U_n$.
+\hfill\hfill\qed $\,\,$ (Lemma 3.3)
+\enddemo
+
+\proclaim{Lemma 3.4} For any $\theta<1$ there exist $n_0\ge 1$ and 
+$C<\infty$ such that 
+$$
+|S_i|\le C\cdot u_{n+1}^\alpha \cdot \theta^{i-1},
+$$
+whenever $n\ge n_0$ and $i\ge 2$.
+\endproclaim
+
+\demo{Proof} Observe that $f(0)\in S_1\supset S_2\supset\dots\supset S_i$
+and $S_i\subset f(U_{n+1})\subset S_1$, $i\ge 2$.
+Let $L_j\subset S_1$ be the connected component of $S_1-S_j$ with
+$L_j\subset f(U_{n+1})$, $2\le j\le i$.  For $n$ big enough we get 
+from the proof of Lemma 3.2 and from Lemma 2.3 that the hyperbolic length of 
+$S_j$ within $S_{j-1}$ is very small, $2\le j\le i$. It is easily seen that
+this implies 
+$$
+\aligned
+|S_i|&\le C\cdot \theta^{i-1}\cdot |L_i|\\
+   &\le C\cdot \theta^{i-1}\cdot |f(U_{n+1})|\\
+   &\le C\cdot \theta^{i-1}\cdot u_{n+1}^\alpha.
+\endaligned
+$$
+\hfill\hfill\qed $\,\,$ (Lemma 3.4)
+\enddemo
+
+\proclaim{Lemma 3.5} There exist $n_0\ge 1$ and  $C>0$ such that the following 
+holds for $n\ge n_0$. If $|R_n(U_{n+1})|=|f^{t_1}(U_{n+1})|\ge 
+\frac{1}{10} u_n$ then
+$$
+|Df^{t_1-1}_{|S_1}|\ge C\cdot \frac{u_n}{u_{n+1}^\alpha}.
+$$
+If $|R_n(U_{n+1})|<\frac{1}{10} u_n$ then
+$$
+|Df^{t_1-1}_{|S_1}|\ge C\cdot \frac{u_{n-1}}{u_n^\alpha}.
+$$
+\endproclaim
+
+\demo{Proof} Consider the map $f^{t_1-1}: S_1\to U_n$. From Lemma 2.2 we know 
+that this map has a monotone extension up to $U_{n-1}$. The map is essentially
+linear because $u_{n-1}>>u_n$ whenever $n$ is big enough. 
+The derivative $|Df^{t_1-1}_{|S_1}|$ is
+essentially constant and can be estimated by
+$$
+|Df^{t_1-1}_{|S_1}|\ge C\frac{|R_n(U_{n+1})|}{|f(U_{n+1})|}
+                        \ge C\frac{u_n}{u_{n+1}^\alpha}.
+$$
+Here we used that $|R_n(U_{n+1})|\ge \frac{1}{10} u_n$.
+Now consider the other case: 
+$|R_n(U_{n+1})|< \frac{1}{10} u_n$. Let $K\supset f(U_{n+1})$
+be the interval which is mapped monotonically onto $U_{n-1}$:
+$f^{t_1-1}:K\to U_{n-1}$. Observe that $f^{-1}(K)\subset U_n$. This follows 
+from the fact that the orbit of $f(u_n)$ never hits $U_{n-1}$, which was 
+observed in section 2. Let $K'\subset K$
+be such that $f^{t_1-1}: K'\to (-\frac34 \cdot u_{n-1}, 
+                                 \frac34\cdot u_{n-1})$ is monotone and onto.
+This map 
+has uniform bounded distortion because it has a monotone extension up to
+$U_{n-1}$. Let $K''=f^{-1}(K')\subset U_n$. The derivative  
+$|Df^{t_1-1}_{|S_1}|$ can be estimated by
+$$
+|Df^{t_1-1}_{|S_1}|\ge C\frac{|f^{t_1}(K'')|}{|f(K'')|}
+                        \ge C \frac{u_{n-1}}{u_n^\alpha}.
+$$
+\hfill\hfill\qed $\,\,$ (Lemma 3.5) 
+\enddemo
+
+\demo{Proof of Proposition 3.1} Assume first that $s=1$. 
+This is an application of the previous Lemma 3.5. If 
+$|R_n(U_{n+1})|\ge \frac{1}{10} u_n$ then
+$$
+|Df^{t_1}(f(x))|\ge C\cdot \frac{u_n}{u_{n+1}^\alpha}\cdot u_{n+1}^{\alpha-1}=
+   C\cdot \frac{u_n}{u_{n+1}}\ge C\cdot \rho_n,
+$$
+where we used that $R_n(x)\notin U_{n+1}$.
+
+\flushpar
+In the other case when $|R_n(U_{n+1})|< \frac{1}{10} u_n$, we have 
+$$
+|Df^{t_1}(f(x))|\ge C\cdot \frac{u_{n-1}}{u_n^\alpha}\cdot u_n^{\alpha-1}
+             =   C\cdot \frac{u_{n-1}}{u_{n}}\ge C\cdot \rho_n,
+$$
+where we used that in this case $f^{t_1-1}(x)\in R_n(U_{n+1})$
+which is close to the boundary of $U_{n}$. The case with $s=1$ is finished. 
+
+\bigskip
+
+\flushpar
+Now assume that $s\ge 2$. The proof will be split in two 
+cases. Let $n\ge n_0\ge 1$ be big enough such that Lemma 3.3 and 3.4 can be 
+applied. Let $K<\infty$ be the constant from Lemma 3.3 and $\theta<1$
+the constant from Lemma 3.4.
+ 
+\demo{Case I ( $f^T(0)=R_n^s(0)\in (-\frac34\cdot u_n,\frac34\cdot u_n)$)} Let 
+$H\subset S_s$ be such that
+$f^{T-1}=f^{t_s-1}:H\to (-\frac34 \cdot u_n, \frac34 \cdot u_n)$ is onto. 
+This map has a monotone extension up to $U_n$. Hence it has a uniformly 
+bounded distortion,
+$$
+\aligned
+|Df^T(f(x))|&\ge C\cdot \frac{|f^{T-1}(H)|}{|H|}\cdot u_{n+1}^{\alpha-1}\\
+            &\ge C\cdot \frac{u_n}{|S_s|}\cdot u_{n+1}^{\alpha-1}\\
+            &\ge C\cdot \frac{u_n}
+                             {\theta^{s-1}\cdot u_{n+1}^\alpha}
+                  \cdot u_{n+1}^{\alpha-1}\\
+            &\ge C\cdot \rho_n\cdot \theta^{-(s-1)}.
+\endaligned
+$$
+\enddemo
+
+\demo{Case II ( $f^T(0)=R_n^s(0)\notin (-\frac34\cdot u_n,\frac34\cdot u_n)$)} 
+If the 
+distortion of $f^{T-1}:S_s\to U_n$ is bounded by $K$ then we can give the same
+argument as in case I:
+$$
+\aligned
+|Df^T(f(x))|&\ge C\cdot \frac{|U_n|}{|S_s|}\cdot u_{n+1}^{\alpha-1}\\
+            &\ge C\cdot \frac{u_n}
+                             {\theta^{s-1}\cdot u_{n+1}^\alpha}
+                  \cdot u_{n+1}^{\alpha-1}\\
+            &\ge C\cdot \rho_n\cdot \theta^{-(s-1)}.
+\endaligned
+$$
+Now let us assume that this distortion is bigger than $K$. Apply 
+Lemma 3.3, which states $I_s\subset (-\frac34\cdot u_n,\frac34\cdot u_n)$. Then
+$$
+\aligned
+|Df^{T}(f(0))|&=|Df^{t_{s-1}}(f(0))|\cdot |Df^{T-t_{s-1}}(f^{t_{s-1}}(f(0))|\\
+              &\ge C\cdot \rho_n\cdot \theta^{-(s-2)}\cdot
+                   |Df^{T-t_{s-1}}(f^{t_{s-1}}(f(0))|.
+\endaligned
+$$
+For $s-1\ge 1$ we get this estimate from case I: 
+$R_n^{s-1}(0)\in I_s\subset (-\frac34 \cdot u_n,\frac34\cdot u_n)$. 
+When $s-1=1$ it follows from the Proof of Proposition 3.1 for $s=1$. 
+
+\flushpar
+The last factor can be
+estimated by using the fact that $f^{T-t_{s-1}-1}:f(I_s)\to U_n$ has a monotone
+extension up to $U_{n-1}$, see Lemma 2.2. It is essentially linear and its
+derivative can be estimated
+$$
+|Df^{T-t_{s-1}-1}|_{f(I_s)}|\ge C\cdot \frac{|U_n|}{|f(I_s)|}
+                            \ge C\frac{|U_n|}{\epsilon\cdot |f(U_n)|},
+$$
+where $\epsilon>0$ is given by Lemma 2.3. By taking $n_0\ge 1$ big enough we
+can assume that $\epsilon>0$ is arbitrarily small.
+
+\flushpar
+Observe
+that $|Df(f^{T-1}(f(0))|\ge C\cdot u_{n}^{\alpha-1}$ which follows from the 
+fact that $|f^{T-1}(f(0))|\ge \frac34\cdot u_n$. 
+We can finish the estimate for $|Df^{T}(f(0))|$ by observing that
+$$
+\aligned
+|Df^{T-t_{s-1}}(f^{t_{s-1}}(f(0))|
+&= 
+|Df^{T-t_{s-1}-1}(f^{t_{s-1}}(f(0))|\cdot |Df(f^{T-1}(f(0))|\\
+&\ge C\cdot \frac{|U_n|}{\epsilon\cdot |f(U_n)|}\cdot u_n^{\alpha-1}\\
+&\ge C\cdot \frac{u_n}{\epsilon \cdot u_n^\alpha}\cdot u_n^{\alpha-1}
+\ge C\cdot \frac{1}{\epsilon}\ge \frac{1}{\theta}.
+\endaligned
+$$	 
+\hfill\hfill\qed $\,\,$ (Proposition 3.1)
+\enddemo
+\enddemo

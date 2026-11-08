@@ -1,5 +1,15 @@
 import Mlc.Core
+import Mlc.Research.Examples
 import Mlc.GreenSublevelIntersectionCounterexample
+import Mlc.Literature.ModelAudit
+import Mlc.Literature.NestedCopies
+import Mlc.Quadratic.Complex.FirstComponents
+import Mlc.Quadratic.RealSlice
+import Mlc.Quadratic.Examples
+import Mlc.Quadratic.RealComponents
+import Mlc.Quadratic.MultiplierMap
+import Mlc.Quadratic.PeriodTwoMultiplier
+import Mlc.Quadratic.Symmetry
 import Lean
 
 open Lean Meta
@@ -8,7 +18,17 @@ def main : IO UInt32 := do
   initSearchPath (← findSysroot)
   let env ← importModules #[
     { module := `Mlc.Core },
-    { module := `Mlc.GreenSublevelIntersectionCounterexample }
+    { module := `Mlc.Research.Examples },
+    { module := `Mlc.GreenSublevelIntersectionCounterexample },
+    { module := `Mlc.Literature.ModelAudit },
+    { module := `Mlc.Literature.NestedCopies },
+    { module := `Mlc.Quadratic.Complex.FirstComponents },
+    { module := `Mlc.Quadratic.RealSlice },
+    { module := `Mlc.Quadratic.Examples },
+    { module := `Mlc.Quadratic.RealComponents },
+    { module := `Mlc.Quadratic.MultiplierMap },
+    { module := `Mlc.Quadratic.PeriodTwoMultiplier },
+    { module := `Mlc.Quadratic.Symmetry }
   ] {}
 
   let name := ``MLC.mlc_conjecture
@@ -16,6 +36,34 @@ def main : IO UInt32 := do
   let negationName := ``MLC.not_greenSublevelIntersectionCategoricalData
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice]
+  let literatureNames := #[
+    ``MLC.Literature.localConnectivity_of_compact_parameterPieces,
+    ``MLC.Categorical.Mandelbrot.innerOrbitSet_eq_set_of_two_le,
+    ``MLC.Literature.relativePeriodProduct_periodDoubling,
+    ``MLC.Literature.ModelAudit.not_finitelyRenormalizable_in_frozenModel,
+    ``MLC.Literature.ModelAudit.not_nonempty_satelliteAPrioriCertificate,
+    ``MLC.Quadratic.FirstComponents.period_two_multiplier,
+    ``MLC.Quadratic.FirstComponents.attracting_fixed_point_unique,
+    ``MLC.Quadratic.FirstComponents.frontier_hasAttractingFixedPoint,
+    ``MLC.Quadratic.FirstComponents.frontier_hasAttractingPeriodTwoCycle,
+    ``MLC.Quadratic.FirstComponents.disjoint_cardioid_period_two,
+    ``MLC.Quadratic.FirstComponents.closure_cardioid_inter_closure_period_two,
+    ``MLC.Quadratic.RealSlice.ofReal_mem_mandelbrotSet_iff,
+    ``MLC.Quadratic.Examples.filledJulia_zero,
+    ``MLC.Quadratic.Examples.julia_zero,
+    ``MLC.Quadratic.Examples.filledJulia_neg_two,
+    ``MLC.Quadratic.Examples.julia_neg_two,
+    ``MLC.Quadratic.RealComponents.hasAttractingFixedPoint_ofReal_iff,
+    ``MLC.Quadratic.RealComponents.hasAttractingPeriodTwoCycle_ofReal_iff,
+    ``MLC.Quadratic.MultiplierMap.multiplier_map_biholomorphic,
+    ``MLC.Quadratic.PeriodTwoMultiplier.period2Multiplier_biholomorphic,
+    ``MLC.Quadratic.mandelbrot_conj_iff,
+    ``MLC.Quadratic.neg_mem_K_iff,
+    ``MLC.Quadratic.conj_mem_K_iff,
+    ``MLC.Quadratic.neg_mem_J_iff,
+    ``MLC.Literature.subsingleton_iInter_of_diam_tendsto_zero,
+    ``MLC.Literature.exists_unique_mem_iInter_of_antitone
+  ]
 
   let coreContext : Core.Context :=
     { fileName := "<check_axioms>", fileMap := default }
@@ -27,6 +75,15 @@ def main : IO UInt32 := do
     pure (rootAxioms, categoricalAxioms)
   let negationMetaM : MetaM (Array Name) :=
     Lean.collectAxioms negationName
+  let literatureMetaM : MetaM (Array (Name × Array Name)) := do
+    let mut results := #[]
+    for declaration in literatureNames do
+      results := results.push (declaration, ← Lean.collectAxioms declaration)
+    for (declaration, info) in env.constants.toList do
+      if (`MLC.Research).isPrefixOf declaration then
+        if info matches .thmInfo _ then
+          results := results.push (declaration, ← Lean.collectAxioms declaration)
+    pure results
 
   try
     let (((axioms, categoricalAxioms), _), _) ←
@@ -35,6 +92,9 @@ def main : IO UInt32 := do
     let ((negationAxioms, _), _) ←
       (negationMetaM.run).run coreContext coreState |>.toIO
         (fun _ => IO.userError "Negation axiom check failed")
+    let ((literatureAxioms, _), _) ←
+      (literatureMetaM.run).run coreContext coreState |>.toIO
+        (fun _ => IO.userError "Literature axiom check failed")
 
     let axiomsList := axioms.toList
     let categoricalAxiomsList := categoricalAxioms.toList
@@ -69,13 +129,22 @@ def main : IO UInt32 := do
       IO.println s!"- {ax}"
 
     IO.println
-      "The root theorems require the explicit `MLC.RootInput` hypothesis."
+      "Conditional root: M1 realization and global coverage; admissibility remains to be specified."
     if negationAxioms.contains ``sorryAx then
       IO.println s!"❌ The proof of '{negationName}' relies on 'sorry'!"
     else
       IO.println s!"✅ The proof of '{negationName}' is free of 'sorry'."
 
-    if rootViolation || negationViolation then
+    let mut literatureViolation := false
+    for (declaration, declarationAxioms) in literatureAxioms do
+      let forbidden := unexpected declarationAxioms.toList
+      if !forbidden.isEmpty then
+        literatureViolation := true
+        IO.println s!"❌ Unexpected axioms for '{declaration}': {forbidden}"
+    if !literatureViolation then
+      IO.println "✅ Research theorems, literature foundations and model audit use only ground axioms."
+
+    if rootViolation || negationViolation || literatureViolation then
       IO.println "❌ Axiom frontier violation for `MLC.mlc_conjecture`."
       for ax in unexpected axiomsList do
         IO.println s!"- Unexpected axiom: {ax}"

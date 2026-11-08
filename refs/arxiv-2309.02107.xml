@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/zMlRSTHpl/ZNSk7cypave6bfKYU</id>
+  <title>arXiv Query: search_query=&amp;id_list=2309.02107&amp;start=0&amp;max_results=10</title>
+  <updated>2026-10-24T07:31:23Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2309.02107" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2309.02107v3</id>
+    <title>MLC at Feigenbaum points</title>
+    <updated>2025-12-29T21:42:58Z</updated>
+    <link href="https://arxiv.org/abs/2309.02107v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2309.02107v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We prove a priori bounds for Feigenbaum quadratic polynomials, i.e., infinitely renormalizable polynomials $f_c: z\mapsto z^2+c$ of bounded type. It implies local connectivity of the corresponding Julia sets $J(f_c)$ and MLC (local connectivity of the Mandelbrot set) at the corresponding parameters $c$. It also yields the scaling Universality, dynamical and parameter, for the corresponding combinatorics. The MLC Conjecture was open for the most classical period-doubling Feigenbaum parameter as well as for the complex tripling renormalizations. Universality for the latter was conjectured by Goldberg-Khanin-Sinai in the early 1980s.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2023-09-05T10:26:57Z</published>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+    <author>
+      <name>Mikhail Lyubich</name>
+    </author>
+  </entry>
+</feed>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/MzbkT0hetvW8V9QrUuf2L6s/0gE</id>
+  <title>arXiv Query: search_query=&amp;id_list=math/0609045&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T08:58:21Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=math/0609045" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/math/0609045v3</id>
+    <title>A priori bounds for some infinitely renormalizable quadratics: I. Bounded primitive combinatorics</title>
+    <updated>2023-12-28T23:51:18Z</updated>
+    <link href="https://arxiv.org/abs/math/0609045v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/math/0609045v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We prove the a priori bounds for infinitely renormalizable quadratic polynomials for which we can find an infinite sequence of primitive renormalizations such that the ratios of the periods of successive renormalizations is bounded. This implies the local connectivity of the Mandelbrot set at the corresponding points.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2006-09-01T21:59:29Z</published>
+    <arxiv:comment>LaTeX, 63 pages, 5 figures</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Jeremy Kahn</name>
+    </author>
+  </entry>
+</feed>

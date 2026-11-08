@@ -1,0 +1,580 @@
+% \bib, bibdiv, biblist are defined by the amsrefs package.
+\begin{bibdiv}
+\begin{biblist}
+
+\bib{MR3781419}{article}{
+      author={Bartholdi, Laurent},
+      author={Dudko, Dzmitry},
+       title={Algorithmic aspects of branched coverings {I}/{V}. {V}an
+  {K}ampen's theorem for bisets},
+        date={2018},
+        ISSN={1661-7207},
+     journal={Groups Geom. Dyn.},
+      volume={12},
+      number={1},
+       pages={121\ndash 172},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.4171/GGD/441},
+      review={\MR{3781419}},
+}
+
+\bib{BD4}{article}{
+      author={Bartholdi, Laurent},
+      author={Dudko, Dzmitry},
+       title={Algorithmic aspects of branched coverings {IV}/{V}. {E}xpanding
+  maps},
+        date={2018},
+        ISSN={0002-9947,1088-6850},
+     journal={Trans. Amer. Math. Soc.},
+      volume={370},
+      number={11},
+       pages={7679\ndash 7714},
+         url={https://doi.org/10.1090/tran/7199},
+      review={\MR{3852445}},
+}
+
+\bib{MR4213769}{article}{
+      author={Bartholdi, Laurent},
+      author={Dudko, Dzmitry},
+       title={Algorithmic aspects of branched coverings {II}/{V}: sphere bisets
+  and decidability of {T}hurston equivalence},
+        date={2021},
+        ISSN={0020-9910},
+     journal={Invent. Math.},
+      volume={223},
+      number={3},
+       pages={895\ndash 994},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1007/s00222-020-00995-2},
+      review={\MR{4213769}},
+}
+
+\bib{bartholdi:nekrashevych:twisted}{article}{
+      author={Bartholdi, Laurent},
+      author={Nekrashevych, Volodymyr},
+       title={Thurston equivalence of topological polynomials},
+        date={2006},
+        ISSN={0001-5962},
+     journal={Acta Math.},
+      volume={197},
+      number={1},
+       pages={1\ndash 51},
+      review={\MR{MR2285317}},
+}
+
+\bib{MR4510015}{article}{
+      author={Belk, James},
+      author={Lanier, Justin},
+      author={Margalit, Dan},
+      author={Winarski, Rebecca~R.},
+       title={Recognizing topological polynomials by lifting trees},
+        date={2022},
+        ISSN={0012-7094},
+     journal={Duke Math. J.},
+      volume={171},
+      number={17},
+       pages={3401\ndash 3480},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1215/00127094-2022-0043},
+      review={\MR{4510015}},
+}
+
+\bib{Belk:2023aa}{article}{
+      author={Belk, James},
+      author={Margalit, Dan},
+      author={Winarski, Rebecca~R.},
+       title={Thurston's theorem and the nielsen-thurston classification via
+  teichm{\"u}ller's theorem},
+        date={202309},
+      eprint={2309.06993},
+         url={https://arxiv.org/pdf/2309.06993.pdf},
+}
+
+\bib{MR3727134}{book}{
+      author={Bonk, Mario},
+      author={Meyer, Daniel},
+       title={Expanding {T}hurston maps},
+      series={Mathematical Surveys and Monographs},
+   publisher={American Mathematical Society, Providence, RI},
+        date={2017},
+      volume={225},
+        ISBN={978-0-8218-7554-4},
+         url={https://doi.org/10.1090/surv/225},
+      review={\MR{3727134}},
+}
+
+\bib{MR2508269}{incollection}{
+      author={Buff, Xavier},
+      author={Epstein, Adam},
+      author={Koch, Sarah},
+      author={Pilgrim, Kevin},
+       title={On {T}hurston's pullback map},
+        date={2009},
+   booktitle={Complex dynamics},
+   publisher={A K Peters, Wellesley, MA},
+       pages={561\ndash 583},
+         url={http://dx.doi.org/10.1201/b10617-20},
+      review={\MR{2508269 (2010g:37071)}},
+}
+
+\bib{MR1168195}{article}{
+      author={Bullett, Shaun},
+       title={Critically finite correspondences and subgroups of the modular
+  group},
+        date={1992},
+        ISSN={0024-6115},
+     journal={Proc. London Math. Soc. (3)},
+      volume={65},
+      number={2},
+       pages={423\ndash 448},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1112/plms/s3-65.2.423},
+      review={\MR{1168195}},
+}
+
+\bib{MR4071411}{article}{
+      author={Bullett, Shaun},
+      author={Lomonaco, Luna},
+       title={Mating quadratic maps with the modular group {II}},
+        date={2020},
+        ISSN={0020-9910},
+     journal={Invent. Math.},
+      volume={220},
+      number={1},
+       pages={185\ndash 210},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1007/s00222-019-00927-9},
+      review={\MR{4071411}},
+}
+
+\bib{MR4505392}{article}{
+      author={Bullett, Shaun},
+      author={Lomonaco, Luna},
+       title={Dynamics of modular matings},
+        date={2022},
+        ISSN={0001-8708},
+     journal={Adv. Math.},
+      volume={410},
+      number={part B},
+       pages={Paper No. 108758, 43},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1016/j.aim.2022.108758},
+      review={\MR{4505392}},
+}
+
+\bib{MR1370680}{incollection}{
+      author={Bullett, Shaun},
+      author={Penrose, Christopher},
+       title={Dynamics of holomorphic correspondences},
+        date={1995},
+   booktitle={X{I}th {I}nternational {C}ongress of {M}athematical {P}hysics
+  ({P}aris, 1994)},
+   publisher={Int. Press, Cambridge, MA},
+       pages={261\ndash 272},
+  url={https://mathscinet-ams-org.proxyiub.uits.iu.edu/mathscinet-getitem?mr=1370680},
+      review={\MR{1370680}},
+}
+
+\bib{kmp:fixed}{article}{
+      author={Cordwell, Kristin},
+      author={Gilbertson, Selina},
+      author={Nuechterlein, Nicholas},
+      author={Pilgrim, Kevin~M.},
+      author={Pinella, Samantha},
+       title={On the classification of critically fixed rational maps},
+        date={2015},
+        ISSN={1088-4173},
+     journal={Conform. Geom. Dyn.},
+      volume={19},
+       pages={51\ndash 94},
+  url={http://dx.doi.org.proxyiub.uits.iu.edu/10.1090/S1088-4173-2015-00275-1},
+      review={\MR{3323420}},
+}
+
+\bib{MR4423808}{article}{
+      author={Cui, Guizhen},
+      author={Gao, Yan},
+      author={Zeng, Jinsong},
+       title={Invariant graphs of rational maps},
+        date={2022},
+        ISSN={0001-8708},
+     journal={Adv. Math.},
+      volume={404},
+      number={part B},
+       pages={Paper No. 108454, 50},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1016/j.aim.2022.108454},
+      review={\MR{4423808}},
+}
+
+\bib{cui2024invariantgraphsjuliasets}{misc}{
+      author={Cui, Guizhen},
+      author={Gao, Yan},
+      author={Zeng, Jinsong},
+       title={Invariant graphs in julia sets and decompositions of rational
+  maps},
+        date={2024},
+         url={https://arxiv.org/abs/2408.12371},
+        note={https://arxiv.org/abs/2408.12371},
+}
+
+\bib{MR4104599}{article}{
+      author={Dinh, Tien-Cuong},
+      author={Kaufmann, Lucas},
+      author={Wu, Hao},
+       title={Dynamics of holomorphic correspondences on {R}iemann surfaces},
+        date={2020},
+        ISSN={0129-167X},
+     journal={Internat. J. Math.},
+      volume={31},
+      number={5},
+       pages={2050036, 21},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1142/S0129167X20500366},
+      review={\MR{4104599}},
+}
+
+\bib{MR3667901}{article}{
+      author={Dinh, Tien-Cuong},
+      author={Sibony, Nessim},
+       title={Equidistribution problems in complex dynamics of higher
+  dimension},
+        date={2017},
+        ISSN={0129-167X,1793-6519},
+     journal={Internat. J. Math.},
+      volume={28},
+      number={7},
+       pages={1750057, 31},
+         url={https://doi.org/10.1142/S0129167X17500574},
+      review={\MR{3667901}},
+}
+
+\bib{MR1251582}{article}{
+      author={Douady, Adrien},
+      author={Hubbard, John~H.},
+       title={A proof of {T}hurston's topological characterization of rational
+  functions},
+        date={1993},
+        ISSN={0001-5962},
+     journal={Acta Math.},
+      volume={171},
+      number={2},
+       pages={263\ndash 297},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1007/BF02392534},
+      review={\MR{1251582}},
+}
+
+\bib{farb:margalit:mcg}{book}{
+      author={Farb, Benson},
+      author={Margalit, Dan},
+       title={A primer on mapping class groups},
+      series={Princeton Mathematical Series},
+   publisher={Princeton University Press},
+     address={Princeton, NJ},
+        date={2012},
+      volume={49},
+        ISBN={978-0-691-14794-9},
+      review={\MR{2850125 (2012h:57032)}},
+}
+
+\bib{kmp:origami}{article}{
+      author={Floyd, William},
+      author={Kelsey, Gregory},
+      author={Koch, Sarah},
+      author={Lodge, Russell},
+      author={Parry, Walter},
+      author={Pilgrim, Kevin~M.},
+      author={Saenz, Edgar},
+       title={Origami, affine maps, and complex dynamics},
+        date={2016},
+     journal={Arnold Mathematical Journal},
+      volume={3},
+      number={3},
+       pages={365\ndash 395},
+      eprint={1612.06449},
+         url={https://arxiv.org/abs/1612.06449},
+}
+
+\bib{MR4278340}{article}{
+      author={Floyd, William},
+      author={Parry, Walter},
+      author={Pilgrim, Kevin~M.},
+       title={Rationality is decidable for nearly {E}uclidean {T}hurston maps},
+        date={2021},
+        ISSN={0046-5755},
+     journal={Geom. Dedicata},
+      volume={213},
+       pages={487\ndash 512},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1007/s10711-020-00593-9},
+      review={\MR{4278340}},
+}
+
+\bib{MR3774834}{article}{
+      author={Gao, Yan},
+      author={Ha\"{\i}ssinsky, Peter},
+      author={Meyer, Daniel},
+      author={Zeng, Jinsong},
+       title={Invariant {J}ordan curves of {S}ierpi\'{n}ski carpet rational
+  maps},
+        date={2018},
+        ISSN={0143-3857},
+     journal={Ergodic Theory Dynam. Systems},
+      volume={38},
+      number={2},
+       pages={583\ndash 600},
+         url={https://doi.org/10.1017/etds.2016.47},
+      review={\MR{3774834}},
+}
+
+\bib{Hlushchanka:2019aa}{article}{
+      author={Hlushchanka, Mikhail},
+       title={Tischler graphs of critically fixed rational maps and their
+  applications},
+        date={201904},
+      eprint={1904.04759},
+         url={https://arxiv.org/pdf/1904.04759.pdf},
+}
+
+\bib{Hlushchanka:2022aa}{article}{
+      author={Hlushchanka, Mikhail},
+      author={Prochorov, Nikolai},
+       title={Critically fixed thurston maps: classification, recognition, and
+  twisting},
+        date={202212},
+      eprint={2212.14759},
+         url={https://arxiv.org/pdf/2212.14759.pdf},
+}
+
+\bib{HSS}{article}{
+      author={Hubbard, John},
+      author={Schleicher, Dierk},
+      author={Shishikura, Mitsuhiro},
+       title={Exponential {T}hurston maps and limits of quadratic
+  differentials},
+        date={2009},
+        ISSN={0894-0347,1088-6834},
+     journal={J. Amer. Math. Soc.},
+      volume={22},
+      number={1},
+       pages={77\ndash 117},
+         url={https://doi.org/10.1090/S0894-0347-08-00609-7},
+      review={\MR{2449055}},
+}
+
+\bib{kmp:kps}{article}{
+      author={Koch, Sarah},
+      author={Pilgrim, Kevin~M.},
+      author={Selinger, Nikita},
+       title={Pullback invariants of {T}hurston maps},
+        date={2016},
+        ISSN={0002-9947},
+     journal={Trans. Amer. Math. Soc.},
+      volume={368},
+      number={7},
+       pages={4621\ndash 4655},
+         url={http://dx.doi.org/10.1090/tran/6482},
+      review={\MR{3456156}},
+}
+
+\bib{MR3063048}{article}{
+      author={Lodge, Russell},
+       title={Boundary values of the {T}hurston pullback map},
+        date={2013},
+     journal={Conform. Geom. Dyn.},
+      volume={17},
+       pages={77\ndash 118},
+  url={https://doi-org.proxyiub.uits.iu.edu/10.1090/S1088-4173-2013-00255-5},
+      review={\MR{3063048}},
+}
+
+\bib{MR4543152}{article}{
+      author={Lodge, Russell},
+      author={Lyubich, Mikhail},
+      author={Merenkov, Sergei},
+      author={Mukherjee, Sabyasachi},
+       title={On dynamical gaskets generated by rational maps, {K}leinian
+  groups, and {S}chwarz reflections},
+        date={2023},
+     journal={Conform. Geom. Dyn.},
+      volume={27},
+       pages={1\ndash 54},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1090/ecgd/379},
+      review={\MR{4543152}},
+}
+
+\bib{ctm:renorm}{book}{
+      author={McMullen, Curtis~T.},
+       title={Complex dynamics and renormalization},
+   publisher={Princeton University Press},
+     address={Princeton, NJ},
+        date={1994},
+        ISBN={0-691-02982-2; 0-691-02981-4},
+      review={\MR{96b:58097}},
+}
+
+\bib{milnor:dynamics}{book}{
+      author={Milnor, John},
+       title={Dynamics in one complex variable},
+     edition={Third},
+      series={Annals of Mathematics Studies},
+   publisher={Princeton University Press},
+     address={Princeton, NJ},
+        date={2006},
+      volume={160},
+        ISBN={978-0-691-12488-9; 0-691-12488-4},
+      review={\MR{MR2193309 (2006g:37070)}},
+}
+
+\bib{MR1390649}{article}{
+      author={Minsky, Yair~N.},
+       title={Extremal length estimates and product regions in
+  {T}eichm\"{u}ller space},
+        date={1996},
+        ISSN={0012-7094},
+     journal={Duke Math. J.},
+      volume={83},
+      number={2},
+       pages={249\ndash 286},
+  url={https://doi-org.proxyiub.uits.iu.edu/10.1215/S0012-7094-96-08310-6},
+      review={\MR{1390649}},
+}
+
+\bib{MR3199801}{article}{
+      author={Nekrashevych, Volodymyr},
+       title={Combinatorial models of expanding dynamical systems},
+        date={2014},
+        ISSN={0143-3857},
+     journal={Ergodic Theory Dynam. Systems},
+      volume={34},
+      number={3},
+       pages={938\ndash 985},
+         url={http://dx.doi.org/10.1017/etds.2012.163},
+      review={\MR{3199801}},
+}
+
+\bib{MR2020454}{book}{
+      author={Pilgrim, Kevin~M.},
+       title={Combinations of complex dynamical systems},
+      series={Lecture Notes in Mathematics},
+   publisher={Springer-Verlag, Berlin},
+        date={2003},
+      volume={1827},
+        ISBN={3-540-20173-4},
+         url={https://doi.org/10.1007/b14147},
+      review={\MR{2020454}},
+}
+
+\bib{kmp:tw:published}{article}{
+      author={Pilgrim, Kevin~M.},
+       title={An algebraic formulation of {T}hurston's characterization of
+  rational functions},
+        date={2012},
+        ISSN={0240-2963},
+     journal={Ann. Fac. Sci. Toulouse Math. (6)},
+      volume={21},
+      number={5},
+       pages={1033\ndash 1068},
+         url={http://dx.doi.org/10.5802/afst.1361},
+      review={\MR{3088266}},
+}
+
+\bib{MR4472056}{incollection}{
+      author={Pilgrim, Kevin~M.},
+       title={On the pullback relation on curves induced by a {T}hurston map},
+        date={[2022] \copyright 2022},
+   booktitle={In the tradition of {T}hurston {II}. {G}eometry and groups},
+   publisher={Springer, Cham},
+       pages={385\ndash 399},
+  url={https://doi-org.proxyiub.uits.iu.edu/10.1007/978-3-030-97560-9_11},
+      review={\MR{4472056}},
+}
+
+\bib{MR2650982}{article}{
+      author={Poirier, Alfredo},
+       title={Hubbard trees},
+        date={2010},
+        ISSN={0016-2736},
+     journal={Fund. Math.},
+      volume={208},
+      number={3},
+       pages={193\ndash 248},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.4064/fm208-3-1},
+      review={\MR{2650982}},
+}
+
+\bib{selinger:pullback}{article}{
+      author={Selinger, Nikita},
+       title={Thurston's pullback map on the augmented {T}eichm\"uller space
+  and applications},
+        date={2012},
+        ISSN={0020-9910},
+     journal={Invent. Math.},
+      volume={189},
+      number={1},
+       pages={111\ndash 142},
+         url={http://dx.doi.org/10.1007/s00222-011-0362-3},
+      review={\MR{2929084}},
+}
+
+\bib{MR3071467}{article}{
+      author={Selinger, Nikita},
+       title={Topological characterization of canonical {T}hurston
+  obstructions},
+        date={2013},
+        ISSN={1930-5311},
+     journal={J. Mod. Dyn.},
+      volume={7},
+      number={1},
+       pages={99\ndash 117},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.3934/jmd.2013.7.99},
+      review={\MR{3071467}},
+}
+
+\bib{MR3443373}{article}{
+      author={Selinger, Nikita},
+      author={Yampolsky, Michael},
+       title={Constructive geometrization of {T}hurston maps},
+        date={2015},
+        ISSN={0706-1994},
+     journal={C. R. Math. Acad. Sci. Soc. R. Can.},
+      volume={37},
+      number={3},
+       pages={100\ndash 113},
+      review={\MR{3443373}},
+}
+
+\bib{MR3434502}{article}{
+      author={Selinger, Nikita},
+      author={Yampolsky, Michael},
+       title={Constructive geometrization of {T}hurston maps and decidability
+  of {T}hurston equivalence},
+        date={2015},
+        ISSN={2199-6792},
+     journal={Arnold Math. J.},
+      volume={1},
+      number={4},
+       pages={361\ndash 402},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1007/s40598-015-0024-4},
+      review={\MR{3434502}},
+}
+
+\bib{MR4068871}{article}{
+      author={Shepelevtseva, Anastasia},
+      author={Timorin, Vladlen},
+       title={Invariant spanning trees for quadratic rational maps},
+        date={2019},
+        ISSN={2199-6792},
+     journal={Arnold Math. J.},
+      volume={5},
+      number={4},
+       pages={435\ndash 481},
+         url={https://doi-org.proxyiub.uits.iu.edu/10.1007/s40598-019-00123-w},
+      review={\MR{4068871}},
+}
+
+\bib{zbMATH07239271}{article}{
+      author={Thurston, Dylan},
+       title={A positive characterization of rational maps},
+    language={English},
+        date={2020},
+        ISSN={0003-486X},
+     journal={Ann. Math. (2)},
+      volume={192},
+      number={1},
+       pages={1\ndash 46},
+}
+
+\end{biblist}
+\end{bibdiv}

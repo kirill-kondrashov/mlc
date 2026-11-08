@@ -1,0 +1,15 @@
+{
+  "key": "bartholdi-dudko-pilgrim-correspondences",
+  "arxiv_id": "2407.15548",
+  "arxiv_version": "2",
+  "role": "adjacent",
+  "title": "Correspondences on Riemann surfaces: (non-uniform) hyperbolicity and graph attractors",
+  "authors": [
+    "Laurent Bartholdi",
+    "Dzmitry Dudko",
+    "Kevin M. Pilgrim"
+  ],
+  "metadata": "arxiv-2407.15548.xml",
+  "source_archive": "arxiv-2407.15548-source.tar.gz",
+  "main_tex": "arxiv-2407.15548/lc.tex"
+}

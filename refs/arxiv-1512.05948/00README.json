@@ -1,0 +1,14 @@
+{
+  "key": "bartholdi-dudko-branched-survey",
+  "arxiv_id": "1512.05948",
+  "arxiv_version": "3",
+  "role": "adjacent",
+  "title": "Algorithmic aspects of branched coverings",
+  "authors": [
+    "Laurent Bartholdi",
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-1512.05948.xml",
+  "source_archive": "arxiv-1512.05948-source.tar.gz",
+  "main_tex": "arxiv-1512.05948/bc0-announcement.tex"
+}

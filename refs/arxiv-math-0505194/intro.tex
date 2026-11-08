@@ -1,0 +1,110 @@
+
+\section{Introduction}\label{intro}
+
+\subsection{Statement of  the results}  
+
+About 15 years ago Yoccoz proved that the Julia set of at most finitely many renormalizable quadratic polynomial
+$f: z\mapsto z^2+c$ with all periodic points repelling is locally connected (see \cite{H,M}).
+In this paper, we generalize this result to higher degree unicritical polynomials: 
+
+\proclaim Theorem A. 
+The Julia set $J(f)$ of 
+at most finitely renormalizable unicritical polynomial  $f: z\mapsto  z^d+c$  with all periodic points repelling 
+is locally connected.
+
+This result follows from {\it a priori} bounds in an appropriate 
+``Modified Principle Nest''  of puzzle pieces,
+$$
+  E^0\Supset E^1\Supset\dots \ni 0: 
+$$
+
+\proclaim Theorem B. The (modified) principal moduli stay away from zero:
+$$
+    \mod(E^{i-1}\sm E^i)\geq \mu > 0.
+$$
+
+These {\it a priori} bounds imply that the puzzle pieces $E^i$ shrink to the critical point,
+which yields Theorem A by a standard argument.%
+
+
+\subsection{Techniques}
+
+As usual in holomorphic dynamics, our proof has two sides: combinatorial and analytic.
+Our combinatorial tool is a refined  Principal Nest techniques of \cite{puzzle}, 
+while the analytic tool is a recently established
+Quasi-Invariance Law (Covering Lemma) in conformal geometry \cite{covering lemma}.  
+Let us briefly comment on both sides. 
+
+The puzzle machinery was introduced to holomorphic dynamics by Branner and Hubbard \cite{BH}
+(in the context of cubic polynomials with one escaping critical point) and
+Yoccoz \cite{H,M} (in the context of quadratic polynomials). 
+The idea is to tile shrinking neighborhoods
+of the Julia set into topological disks called {\it puzzle pieces}, 
+and to translate the dynamics on $J(f)$ to the combinatorics of these tilings.
+
+An efficient way to describe these combinatorics is given by
+the {\it Principal nest} of puzzle pieces around the origin,
+$V^0\supset V^1\supset\dots V^n\dots\ni 0$, which is inductively constructed so that 
+the first return maps $f^{n_i}: V^{i}\ra V^{i-1}$ are unicritical branched coverings
+ \cite{puzzle}. 
+It turns out that this nest is not quite suitable for our purposes, 
+so we modify it slightly to obtain  
+a {\it dynasty of kingdom map}, see \S \ref{principal nest}. 
+
+We then observe that since the return times in the dynasty grow exponentially,
+one can send some puzzle piece $E^{i-1}$ 
+to the top level by an appropriate composition $\Psi$ of the kingdom maps, 
+while the next puzzle piece, $E^i$, will go at most five levels up ({\it time inequality}).
+Thus, the map $\Psi|\, E^i$ has a bounded degree, which 
+puts us in a position to apply the analytic techniques of \cite{covering lemma}.
+ 
+The puzzle bears  complete information about the Julia set only if
+the puzzle pieces shrink to points, so this is a key geometric issue of the theory.
+To handle this issue,  Branner \& Hubbard and Yoccoz made use of the 
+Series Law from conformal geometry.%
+\footnote{also called  the   Gr\"otzsch Inequality.}
+It was immediately realized, however, that this method would not work for higher degree polynomials,
+so that in the higher degree case the problem has remained open since then.
+
+A new analytic tool that we exploit is a Covering Lemma (Quasi-Invariance Law) in conformal geometry \cite{covering lemma}
+which roughly asserts that given a branched covering $g: U\ra V$ of degree $N$ which restricts to a branched covering
+$g: A\ra B$ of degree $d$ such that $\mod (U\sm A) $ is small (depending on $N$), 
+then, under a certain ``Collar Assumption'',  $ \mod(V\sm B)$  is  comparable with  $d^2 \mod(U\sm A)$  
+(independently of $N$) -- see \S \ref{covering lemma sec} for the precise statement.    
+
+The Covering Lemma allows us to transfer moduli information from deep levels of the dynasty to 
+shallow ones, and to argue that if on some deep levels the moduli are small, then they must be even 
+smaller on  shallow ones. This certainly implies that, in fact, the moduli can never  be too small (Theorem B).
+
+\ssk
+Note in conclusion that
+for real $c$, Theorem A  was proved before by Levin \& van Strien \cite{LS}.
+The method  used in \cite{LS} exploited real symmetry in a substantial way. 
+
+\ssk In the forthcoming notes (joint with A. Avila and W. Shen)
+      our {\it a priori} bounds will be used to prove {\it rigidity} of the 
+      unicritical polynomials under consideration.
+
+\subsection{Terminology and Notation}   
+
+  A {\it topological disk} means a simply connected  domain in $\C$.
+ 
+  We let $\orb(z)\equiv \orb_g(z)= (g^n z)_{n=0}^\infty$ be the {\it orbit} of $z$ under a map $g$.
+
+  Given a map $g: U\ra V$ and a domain $D\subset V$, 
+components of $g^{-1}(D)$ are called {\it pullbacks}  of $D$ under $g$. 
+Given a connected set $X\subset g^{-1}(D)$, we let $g^{-1} (D)|X$ be the pullback of $D$
+containing $X$.    
+
+Given a subset $W\subset V$, the {\it first landing map} $H$ to $W$ is defined (on the set of points $z$
+whose orbits intersect $W$) as follows:  $H(z)= f^l z$, where $l\geq 0$ is the first moment for which
+$f^l z\in W$.
+
+We say that a map $g: U\ra V$ is {\it unicritical} if it has one critical point
+(of arbitrary local degree)
+
+
+\msk {\bf Acknowledgment.}
+ We thank Artur Avila for careful reading the manuscript and making a number of useful comments.
+We also thank all the Foundations that have supported this work: 
+the Guggenheim Fellowship, Clay Mathematics Institute, NSF, and NSERC.

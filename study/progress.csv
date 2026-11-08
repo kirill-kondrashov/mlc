@@ -1,0 +1,13 @@
+week,candidate,goal,planned_output,status,novelty_status,actual_hours,evidence,obstacle,next_action,dependency,source_read,reading_hours,external_review
+1,M1,Specify genuine quadratic returns,Return class; biset-branch-annulus dictionary; degrees; collars; long example,planned,not_established,,,,,,,,
+2,M1,Select and audit a quantitative estimate,Exact claim; constants; comparison; parameter-shrinking implication,planned,not_established,,,,,,,,
+3,M1,Prove the first unbounded case,Written estimate for an unbounded return family,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+4,M1,Finish a lemma for discussion,Complete lemma; source comparison,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+5,M1,Prove the main geometric estimate,Collar and branching analysis,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+6,M1,Complete or narrow the claim,Proof or justified restricted class,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+7,M1,Control phase-parameter transfer,Distortion constants and divergent modulus sum,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+8,M1,Complete the MLC application,Shrinking; connected parameter pieces; exact parameter coverage,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+9,M1,Draft the article,Connected theorem and proof manuscript,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+10,M1,Address objections,Revised proof and reproducible calculations,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+11,M1,Review constants and scope,Checked hypotheses and bibliography,conditional_on_admission,requires_new_precise_estimate,,,,,,,,
+12,M1,Prepare publication,Revised manuscript; preprint and submission decision,conditional_on_admission,requires_new_precise_estimate,,,,,,,,

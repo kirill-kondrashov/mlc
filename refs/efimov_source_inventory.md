@@ -25,5 +25,6 @@ The author search was cross-checked against Alexander I. Efimov's
 and the arXiv author feed on 2026-09-04. The arXiv feed identifies
 `2603.08653v2` as the newest relevant result in the downloaded set.
 
-The mathematical comparison with the MLC frontier is in
-`bridge_between_pacman_renormalization_and_noncommutative_motives.md`.
+The archived mathematical comparison is in
+`docs/review/10_categorical_branch.tex`; the active frontier is described
+in the root `README.md`.

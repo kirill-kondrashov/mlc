@@ -1,0 +1,209 @@
+\renewcommand{\S}{\mathbf S}
+
+\section{Appendix C: Estimates in hyperbolic geometry}
+
+In this appendix we will describe how to measure the geometry of a surface
+ using transverse geodesic arcs.
+We will then show how to compute the lengths of peripheral closed geodesics of the surface
+ using these measurements.
+
+Suppose $T$ is a compact hyperbolic surface with geodesic boundary.
+The following lemma appears as the Corollary to section 3.3 of \cite{Ab}:
+
+\begin{lem} \label{margulis}
+There is an $\ezero > 0$ such that any two distinct closed geodesics on $T$ of length at most $\ezero$
+ are simple and disjoint.
+\end{lem}
+
+Let $\S$ be a compact hyperbolic surface with geodesic boundary.
+Then a \emph{transverse geodesic arc} for $\S$
+ is a proper path of minimal length in its proper homotopy class.
+If $\bfalpha$ is a path on $\S$,
+it is a transverse geodesic arc if and only if
+ it is a geodesic arc that meets $\partial \S$ orthogonally,
+or,
+equivalently,
+the double of $\bfalpha \cup \overline \bfalpha$
+ in $\S \cup \overline \S$
+is a closed geodesic.
+
+Let $S$ be a compact Riemann surface with boundary,
+and endow $\Int S$ with its Poincar\'e metric.
+The peripheral geodesics on $\Int S$ bound a compact surface
+$\S$ with geodesic boundary,
+called the \emph{convex core} of $S$.
+There is a homeomorphism $h\from \S \to S$
+that is isotopic through embeddings to the inclusion $\S \subset S$.
+We can then form a weighted arc diagram $M^S$ on $S$ as follows:
+ for $\alpha \in \AA(S)$,
+we find the transverse geodesic arc $\bfalpha$ for $\S$
+such that $h(\bfalpha) \sim \alpha$.
+Then we let $M^S(\alpha) = - \log L(\bfalpha)$ if
+ $L(\bfalpha) < \ezero/2$,
+and $M^S(\alpha) = 0$ otherwise.
+Then $M^S$ is supported on a set of disjoint arcs,
+so $M^S$ is a weighted arc-diagram for $S$.
+We let
+$\M^S = \bigcup\{ \bfalpha : L(\bfalpha) < \ezero/2 \}$,
+so $\M^S \subset  \S$ is the union of the short transverse geodesic arcs of $\S$.
+
+We will call a non-peripheral simple closed geodesic
+ a \emph{dividing} geodesic.
+The following result appears in \cite{Ab}:
+
+\begin{lem} \label{abikoff}
+Let $T$ be a compact hyperbolic Riemann surface with bounded-length geodesic boundary.
+Then either $T$ is a pair of pants,
+or there is a bounded-length dividing geodesic on $T$.
+\end{lem}
+
+We say that a hyperbolic surface $T$ is \emph{symmetric}
+ if it admits an isometric orientation-reversing involution,
+which we will denote by complex conjugation: ``$z \mapsto \overline z$''.
+Then we let $E_T = \{ z \in T : z = \overline z \}$,
+ and $E_T$ will be a union of (simple) closed geodesics and transverse geodesic arcs.
+($E_T$ depends implicitly on on the choice of involution.
+Whenever we say ``symmetric hyperbolic surface'' we will mean
+ ``symmetric hyperbolic surface and choice of involution.'')
+Note that $T \sm E_T$ has two components,
+call them $A_T$ and $\overline{A_T}$,
+which are mapped to each other by $z \mapsto \overline z$.
+We prove a symmetric version of Lemma \ref{abikoff}:
+
+\begin{lem} \label{symmetric abikoff}
+Every symmetric compact hyperbolic surface $T$ with \break bounded-length geodesic boundary
+ has a bounded-length symmetric pair of pants decomposition.
+\end{lem}
+\begin{proof}
+It suffices to find a single bounded-length symmetric dividing geodesic on the surface,
+or a symmetric pair of disjoint bounded-length dividing geodesics,
+because then we can cut the surface $T$ along that geodesic or pair of geodesics,
+and repeat.
+
+By Theorem \ref{abikoff},
+unless $T$ is a pair of pants,
+there is a dividing geodesic $\gamma$ of bounded length on $T$.
+If $\gamma \cap E_T = \emptyset$,
+then $\gamma \cap \overline \gamma = \emptyset$,
+and we are done.
+Likewise, if $\gamma \subset E_T$,
+then $\gamma$ is symmetric,
+and we are done.
+Otherwise,
+let $\eta$ be a component of $\gamma \cap \Cl A_T$.
+Then $\eta \cup \overline \eta$
+is a non-trivial non-peripheral simple closed curve
+so we let $\tau$ be the dividing
+ geodesic homotopic to $\eta$.
+Then $L(\tau) \le 2 L(\eta) < 2 L(\gamma)$,
+so $\tau$ is the desired object.
+\end{proof}
+
+We now prove two basic estimates on transverse geodesic arcs on pairs of pants.
+We denote by
+$[x, y, z, r, s, t]$
+the right-angled hyperbolic hexagon
+with lengths $x, y, z, r, s, t$ in that order.
+We will omit lengths that are not specified,
+so for example $[a,,b,,c,]$
+denotes the right-angled hexagon with alternating side lengths $a$, $b$, and $c$.
+We first estimate the length of one side in a hyperbolic right-angled hexagon,
+in terms of the lengths of three alternating sides:
+\begin{lem}\label{fenchel}
+Let $[a, c', b, , c, ,]$ be a hyperbolic right-angled hexagon,
+and suppose that $a, b, c \le r$.
+Then $c' = -\log a - \log b + O(1;r)$.\footnote{Notation $O(1;r)$ stands for a quantity  bounded
+     in terms of  $r$. }
+\end{lem}
+\begin{proof}
+We use the formula (from \cite{Fenchel:Elementary}):
+\begin{equation}\label{hexagon}
+\cosh c' = \frac{\cosh c + \cosh a \cosh b}{\sinh a \sinh b}
+         = e^{O(1; r)} \frac 1 {ab}
+\end{equation}
+and recall that $\cosh^{-1} x = \log x + O(1; t)$
+whenever $x \ge t > 0$.
+\end{proof}
+We let $\PP(a, b, c)$ denote the pair of pants with cuff lengths $a$, $b$, and $c$.
+\begin{lemma}
+We have the following two estimates:
+\begin{enumerate}
+\item
+If $P = \PP(a, b, c)$ is a pair of pants,
+and $\gamma$ is the transverse geodesic arc that connects $a$ and $b$,
+then
+$$
+|\gamma| = -\log a - \log b + O(1),
+$$
+for $a, b, c \le C_0$.
+\item
+If $\gamma$ is the transverse geodesic arc that connects $a$ and $a$ in $P(a, b, b)$,
+then
+$$
+|\gamma| = - 2 \log a + O(1)
+$$
+for $a, b \le C_0$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We prove each of the above:
+\begin{enumerate}
+\item
+We cut $P$ along the three pairwise transversals
+into two right-angled hexagons.
+By formula (\ref{hexagon}) these hexagons are equal,
+and hence each has type
+$[a/2, \gamma,b/2, \, , c/2, \,]$.
+Apply now Lemma \ref{fenchel}.
+
+\item
+We let $\eta$ be the transversal from the length $a$ cuff to one other.
+Then we cut along $\eta$ and $\gamma$ to obtain the right-angled hexagon
+$[a/4, \gamma, a/4, \eta, b, \eta]$,
+and then apply Lemma \ref{fenchel}. \qedhere
+\end{enumerate}
+\end{proof}
+
+Given a closed geodesic $\gamma$ and an arc $\alpha\in \AAA$,
+let
+$\pairing{ \gamma, \alpha }$
+stand for the intersection number of $\gamma$ with $\alpha$,
+i.e.,
+the minimal number of intersections of $\gamma$ with the paths representing $\alpha$.
+Given a weighted arc diagram $W=\sum W(\alpha)\alpha$,
+we can define the intersection number
+$\pairing{ \gamma, W }=\sum W(\alpha)\pairing{ \gamma, \alpha }$
+by linearity.
+We can now prove the main theorem of this appendix:
+\begin{thm} \label{peripheral lengths}
+Let $S$ be a compact Riemann surface with boundary,
+and endow $\Int S$ with its Poincar\'e metric.
+Suppose that $\gamma$ is a peripheral closed geodesic for $S$.
+Then
+$$
+L(\gamma) = 2 \left< M^S, \gamma \right> + O(1; \chi(S)).
+$$
+\end{thm}
+
+\begin{proof}
+We let $\S$ be the convex core of $S$.
+We find a symmetric bounded-length pair of pants decomposition for $\S \cup \overline \S$
+extending $\M^S\cup \bar \M^S$.
+Then we can write $\gamma = \bigcup t_i$,
+where the segments $t_i$ are interior-disjoint,
+and each is a transverse arc of one of the pairs of pants.
+Then $L(t_i) = -\log a_i - \log b_i + O(1)$,
+where $a_i$ and $b_i$ are the lengths of the cuffs that $\gamma$ connects
+(possibly the same cuff).
+Therefore
+$$
+L(\gamma) = 2 \sum - \log a_i + O(1)
+$$
+where the $a_i$ are the lengths of the cuffs that $\gamma$ crosses,
+counted with multiplicity.
+But
+\begin{equation}
+2 \sum -\log a_i = 2 \left< M^S, \gamma \right> + O(1). \qedhere
+\end{equation}
+\end{proof}
+

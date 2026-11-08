@@ -1,0 +1,13 @@
+{
+  "key": "kahn-lyubich-primitive",
+  "arxiv_id": "math/0609045",
+  "arxiv_version": "3",
+  "role": "a-priori-bounds",
+  "title": "A priori bounds for some infinitely renormalizable quadratics: I. Bounded primitive combinatorics",
+  "authors": [
+    "Jeremy Kahn"
+  ],
+  "metadata": "arxiv-math-0609045.xml",
+  "source_archive": "arxiv-math-0609045-source.tar.gz",
+  "main_tex": "arxiv-math-0609045/main.tex"
+}

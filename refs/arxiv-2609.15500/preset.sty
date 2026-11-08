@@ -1,0 +1,111 @@
+\ProvidesPackage{Preset}
+
+% Packages
+\RequirePackage{
+amsmath
+,amsfonts
+,amssymb
+,amsthm
+,caption
+,enumitem
+% ,float
+,graphicx
+,mathtools
+,marginnote
+,multirow
+,hyphenat
+,yfonts
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{thmx}{Theorem}
+\renewcommand{\thethmx}{\Alph{thmx}}
+\newtheorem{corx}[thmx]{Corollary}
+\newtheorem{conj}[thmx]{Conjecture}
+\newtheorem{ques}[thmx]{Question}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+\newtheorem*{claim}{Claim}
+\newtheorem*{claim1}{Claim 1}
+\newtheorem*{claim2}{Claim 2}
+\newtheorem*{claim3}{Claim 3}
+\newtheorem*{claim4}{Claim 4}
+\newtheorem*{claim5}{Claim 5}
+\newtheorem*{claim6}{Claim 6}
+\newtheorem*{claim7}{Claim 7}
+\newtheorem*{claim8}{Claim 8}
+\newtheorem*{claim9}{Claim 9}
+\newtheorem*{case1}{Case 1}
+\newtheorem*{case2}{Case 2}
+\newtheorem*{case3}{Case 3}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+%    Absolute value notation
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\dime}[1]{\textup{dim}\left( #1 \right)}
+
+\providecommand*{\B}{\ensuremath{\mathbb{B}}}
+\providecommand*{\C}{\ensuremath{\mathbb{C}}}
+\providecommand*{\comb}{\textnormal{comb}}
+\providecommand*{\CP}{\textnormal{CP}}
+\providecommand*{\CV}{\textnormal{CV}}
+\providecommand*{\RS}{\ensuremath{\hat{\mathbb{C}}}}
+\providecommand*{\D}{\ensuremath{\mathbb{D}}}
+\providecommand*{\diam}{\textnormal{diam}}
+\providecommand*{\dist}{\textnormal{dist}}
+\providecommand*{\Dom}{\textnormal{Dom}}
+\providecommand*{\Id}{\textnormal{Id}}
+\providecommand*{\M}{\ensuremath{\mathbb{M}}}
+\providecommand*{\Mbold}{\ensuremath{\mathbf{M}}}
+\providecommand*{\modu}{\textnormal{mod}}
+\providecommand*{\new}{\textnormal{new}}
+\providecommand*{\N}{\ensuremath{\mathbb{N}}}
+\providecommand*{\Q}{\ensuremath{\mathbb{Q}}}
+\providecommand*{\R}{\ensuremath{\mathbb{R}}}
+\providecommand*{\UHP}{\ensuremath{\mathbb{H}}}
+\providecommand*{\res}{\textnormal{res}}
+\providecommand*{\renorm}{\ensuremath{\mathcal{R}}}
+\providecommand*{\rot}{\textnormal{rot}}
+\providecommand*{\T}{\ensuremath{\mathbb{T}}}
+\providecommand*{\Z}{\ensuremath{\mathbb{Z}}}
+
+\providecommand*{\ext}{\textnormal{ext}}
+\providecommand*{\fext}{\ensuremath{\mathsf{f}_{\ext}}}
+\providecommand*{\Bub}{\ensuremath{\mathsf{B}}}
+\providecommand*{\crit}{\ensuremath{\mathsf{c}}}
+\providecommand*{\Rext}{\ensuremath{\mathsf{R}}}
+\providecommand*{\Next}{\ensuremath{\mathsf{N}}}
+\providecommand*{\Uext}{\ensuremath{\mathsf{U}}}
+
+\providecommand*{\TBC}{\textcolor{red}{[ADD MORE]}}
+
+% To access the 'figures' folder
+% \graphicspath{ {figures/} }
+
+
+% To adjust the caption
+% \captionsetup[figure]{font=small,justification=centering}
+
+
+
+\DeclareFontFamily{U}{mathb}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathb}{m}{n}{ <5> <6> <7> <8> <9> <10> gen * mathb <10.95> mathb10 <12> <14.4> <17.28> <20.74> <24.88> mathb12 }{}
+\DeclareSymbolFont{mathb}{U}{mathb}{m}{n}
+\DeclareFontSubstitution{U}{mathb}{m}{n}
+\DeclareMathSymbol{\selfmap}{3}{mathb}{"FD}
+
+
+\newcommand{\qq}{q}%{\mathfrak{q}}
+\newcommand{\pp}{p}%{\mathfrak{p}}
+\newcommand{\reminder}[1]{\textsl{$\lhd\rhd$#1$\lhd\rhd$}\marginpar{$\lhd\rhd\lhd\rhd\lhd\rhd$}}
+\newcommand{\hide}[1]{}

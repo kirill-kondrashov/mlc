@@ -1,0 +1,82 @@
+\documentclass[12pt]{amsart}
+\usepackage{graphicx,color}
+\usepackage{amssymb}
+\usepackage{tikz-cd}
+\let\temp\emptyset
+\usepackage{mathabx}
+\let\emptyset\temp
+\usepackage{verbatim}
+\usepackage[colorlinks=false]{hyperref}
+\usepackage[textsize=small]{todonotes}
+\bibliographystyle{amsalpha}
+
+\usepackage{enumitem}
+\usepackage[margin=1.5in]{geometry}
+
+
+\setlist{leftmargin=2em}
+
+
+\newtheorem*{mainthm}{Main Theorem}
+\newtheorem*{qal}{Quasi-Additivity Law}
+\newtheorem*{covlem}{Covering Lemma}
+\newtheorem*{serieslaw}{Series Law}
+\newtheorem*{parallellaw}{Parallel Law}
+
+\newcommand{\loudnote}[1]{\textbf{#1}}
+\newcommand{\jktodo}[1]{\draftlines{1}\todo[color=red!40,inline]{#1}}
+\newcommand{\margintodo}[1]{\todo[color=red!40]{#1}}
+
+\newcommand{\draftlines}[1]{\vskip#1em}
+
+
+
+
+
+
+
+
+\author {Jeremy Kahn}
+\title[bounds for bounded-primitive type]{A priori bounds for some\\
+   infinitely renormalizable quadratics:\\
+   {\small I. Bounded primitive combinatorics}}
+\input{macros.tex}
+\input{figure_macros.tex}
+\input{local_macros.tex}
+\thanks{
+   This work was supported in part by Sloan Research Fellowship
+ and NSF grants DMS-8920768 and DMS-9022140.}
+\date{\today}
+
+
+\begin{document}
+
+
+
+\maketitle
+
+\begin{abstract}
+	We prove the \emph{a priori} bounds for infinitely renormalizable quadratic polynomials for which we can find an infinite sequence of primitive renormalizations such that the ratios of the periods of successive renormalizations is bounded.
+\end{abstract}
+
+
+\tableofcontents
+
+\input{intro}
+
+
+\input{wad}
+\input{hyp-wad}
+\input{hubbard2}
+\input{entropy2}
+\input{pullback}
+\input{push}
+\input{psiql2}
+\input{conclusions}
+\input{appendix}
+\input{domlemmas}
+\input{hyp-appendix}
+\input{bib}
+\end{document}
+
+\typeout{get arXiv to do 4 passes: Label(s) may have changed. Rerun}

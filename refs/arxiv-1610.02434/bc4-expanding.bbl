@@ -1,0 +1,269 @@
+\bib{bartholdi-h-n:aglt}{article}{
+  author={Bartholdi, Laurent},
+  author={Henriques, Andr\'e G.},
+  author={Nekrashevych, Volodymyr V.},
+  title={Automata, groups, limit spaces and tilings},
+  date={2006},
+  journal={J. Algebra},
+  volume={305},
+  number={2},
+  pages={629\ndash 663},
+  review={\MR {2266846 (2008a:20070)}},
+  doi={10.1016/j.jalgebra.2005.10.022},
+  eprint={arXiv:math/0412373},
+}
+
+\bib{bartholdi-dudko:bc0}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings},
+  date={2015},
+  eprint={arXiv:cs/1512.05948},
+  status={submitted},
+}
+
+\bib{bartholdi-dudko:bc1}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings I. Van Kampen's theorem for bisets},
+  date={2015},
+  eprint={arXiv:cs/1512.08539},
+  status={submitted},
+}
+
+\bib{bartholdi-dudko:bc2}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings II. Sphere bisets and their decompositions},
+  date={2016},
+  eprint={arXiv:math/1603.04059},
+  status={submitted},
+}
+
+\bib{bartholdi-dudko:bc3}{unpublished}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings III. Erasing maps and orbispaces},
+  date={2015},
+  status={in preparation},
+}
+
+\bib{bonk-meyer:etm}{article}{
+  author={Bonk, Mario},
+  author={Meyer, Daniel},
+  title={Expanding Thurston maps},
+  date={2010},
+  eprint={arXiv:1009.3647},
+}
+
+\bib{buff+:questionsaboutmatings}{article}{
+  author={Buff, Xavier},
+  author={Epstein, Adam L.},
+  author={Koch, Sarah},
+  author={Meyer, Daniel},
+  author={Pilgrim, Kevin},
+  author={Rees, Mary},
+  author={Lei, Tan},
+  title={Questions about polynomial matings},
+  language={English, with English and French summaries},
+  journal={Ann. Fac. Sci. Toulouse Math. (6)},
+  volume={21},
+  date={2012},
+  number={5},
+  pages={1149--1176},
+  issn={0240-2963},
+  review={\MR {3088270}},
+  doi={10.5802/afst.1365},
+}
+
+\bib{douady-h:thurston}{article}{
+  author={Douady, Adrien},
+  author={Hubbard, John~H.},
+  title={A proof of Thurston's topological characterization of rational functions},
+  journal={Acta Math.},
+  volume={171},
+  date={1993},
+  number={2},
+  pages={263\ndash 297},
+  issn={0001-5962},
+  review={\MR {1251582 (94j:58143)}},
+}
+
+\bib{farb-margalit:mcg}{book}{
+  author={Farb, Benson},
+  author={Margalit, Dan},
+  title={A primer on mapping class groups},
+  series={Princeton Mathematical Series},
+  volume={49},
+  publisher={Princeton University Press},
+  place={Princeton, NJ},
+  date={2012},
+  pages={xiv+472},
+  isbn={978-0-691-14794-9},
+  review={\MR {2850125}},
+}
+
+\bib{griffiths-harris:pag}{book}{
+  author={Griffiths, Phillip},
+  author={Harris, Joseph},
+  title={Principles of algebraic geometry},
+  note={Pure and Applied Mathematics},
+  publisher={Wiley-Interscience [John Wiley \& Sons], New York},
+  date={1978},
+  pages={xii+813},
+  isbn={0-471-32792-1},
+  review={\MR {507725 (80b:14001)}},
+}
+
+\bib{haissinsky-pilgrim:cxc}{article}{
+  author={Ha{\"{\i }}ssinsky, Peter},
+  author={Pilgrim, Kevin~M.},
+  title={Coarse expanding conformal dynamics},
+  language={English, with English and French summaries},
+  journal={Ast\'erisque},
+  number={325},
+  date={2009},
+  pages={viii+139 pp. (2010)},
+  issn={0303-1179},
+  isbn={978-2-85629-266-2},
+  review={\MR {2662902 (2011k:37076)}},
+}
+
+\bib{haissinsky-pilgrim:algebraic}{article}{
+  author={Ha{\"{\i }}ssinsky, Peter},
+  author={Pilgrim, Kevin M.},
+  title={An algebraic characterization of expanding Thurston maps},
+  journal={J. Mod. Dyn.},
+  volume={6},
+  date={2012},
+  number={4},
+  pages={451--476},
+  issn={1930-5311},
+  review={\MR {3008406}},
+}
+
+\bib{harvey:curvecomplex}{article}{
+  author={Harvey, W. J.},
+  title={Boundary structure of the modular group},
+  conference={ title={Riemann surfaces and related topics: Proceedings of the 1978 Stony Brook Conference}, address={State Univ. New York, Stony Brook, N.Y.}, date={1978}, },
+  book={ series={Ann. of Math. Stud.}, volume={97}, publisher={Princeton Univ. Press, Princeton, N.J.}, },
+  date={1981},
+  pages={245--251},
+  review={\MR {624817}},
+}
+
+\bib{kameyama:thurston}{article}{
+  author={Kameyama, Atsushi},
+  title={The Thurston equivalence for postcritically finite branched coverings},
+  journal={Osaka J. Math.},
+  volume={38},
+  date={2001},
+  number={3},
+  pages={565\ndash 610},
+  issn={0030-6126},
+  review={\MR {1860841 (2002h:57004)}},
+}
+
+\bib{moore:sphere}{article}{
+  author={Moore, Robert L.},
+  title={Concerning upper semi-continuous collections of continua},
+  journal={Trans. Amer. Math. Soc.},
+  volume={27},
+  date={1925},
+  number={4},
+  pages={416--428},
+  issn={0002-9947},
+  review={\MR {1501320}},
+  doi={10.2307/1989234},
+}
+
+\bib{nekrashevych:ssg}{book}{
+  author={Nekrashevych, Volodymyr~V.},
+  title={Self-similar groups},
+  series={Mathematical Surveys and Monographs},
+  volume={117},
+  publisher={American Mathematical Society, Providence, RI},
+  date={2005},
+  pages={xii+231},
+  isbn={0-8218-3831-8},
+  review={\MR {2162164 (2006e:20047)}},
+  doi={10.1090/surv/117},
+}
+
+\bib{pilgrim:cto}{article}{
+  author={Pilgrim, Kevin~M.},
+  title={Canonical Thurston obstructions},
+  journal={Adv. Math.},
+  volume={158},
+  date={2001},
+  number={2},
+  pages={154\ndash 168},
+  issn={0001-8708},
+  review={\MR {1822682 (2001m:57004)}},
+  doi={10.1006/aima.2000.1971},
+}
+
+\bib{pilgrim:combinations}{book}{
+  author={Pilgrim, Kevin~M.},
+  title={Combinations of complex dynamical systems},
+  series={Lecture Notes in Mathematics},
+  volume={1827},
+  publisher={Springer-Verlag},
+  place={Berlin},
+  date={2003},
+  pages={x+118},
+  isbn={3-540-20173-4},
+  review={\MR {2020454 (2004m:37087)}},
+}
+
+\bib{selinger:augts}{article}{
+  author={Selinger, Nikita},
+  title={Thurston's pullback map on the augmented Teichm\"uller space and applications},
+  journal={Invent. Math.},
+  volume={189},
+  date={2012},
+  number={1},
+  pages={111\ndash 142},
+  issn={0020-9910},
+  review={\MR {2929084}},
+  doi={10.1007/s00222-011-0362-3},
+}
+
+\bib{selinger-yampolsky:geometrization}{article}{
+  author={Selinger, Nikita},
+  author={Yampolsky, Michael},
+  title={Constructive geometrization of Thurston maps and decidability of Thurston equivalence},
+  date={2013},
+  eprint={arXiv:1310.1492},
+}
+
+\bib{shishikura-t:matings}{article}{
+  author={Shishikura, Mitsuhiro},
+  author={Lei, Tan},
+  title={A family of cubic rational maps and matings of cubic polynomials},
+  journal={Experiment. Math.},
+  volume={9},
+  date={2000},
+  number={1},
+  pages={29\ndash 53},
+  issn={1058-6458},
+  review={\MR {1758798 (2001c:37042)}},
+}
+
+\bib{tan:matings}{article}{
+  author={Tan, Lei},
+  title={Matings of quadratic polynomials},
+  journal={Ergodic Theory Dynam. Systems},
+  volume={12},
+  year={1992},
+  number={3},
+  pages={589\ndash 620},
+}
+
+\bib{wittner:phd}{thesis}{
+  author={Wittner, Ben},
+  title={On the bifurcation loci of rational maps of degree two},
+  type={Ph.D. Thesis},
+  date={1988},
+}
+

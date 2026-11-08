@@ -1,0 +1,55 @@
+
+
+\section{Quasi-Additivity Law and Covering Lemma}\label{covering lemma sec}
+
+Let us now formulate two analytic results
+which will play a crucial role in what follows.
+The first one appeares in \S 2.10.3 of \cite{covering lemma}:
+
+\begin{qal}
+%\proclaim Quasi-Additivity Law.
+    Fix some $\eta\in (0,1)$.
+Let $\BV$ be a topological disk,  let  $K_i\Subset \BV $, $i=1,\dots, m$,
+be pairwise disjoint full compact continua,
+and let $\phi_i: \A(1,r_i)\ra \BV \sm   \cup K_j$
+be holomorphic annuli such that each $\phi_i$ is
+an  embedding of some proper collar of $\T$  to a proper collar of $\di K_i$.
+Then there exists a $\de_0 > 0$ (depending on $\eta$ and $m$) such that: \\
+If  for some $\de\in (0, \de_0)$,
+$\mod (\BV, K_i) < \de$ while $\log r_i > 2\pi \eta\de$  for all $i$,
+then
+$$
+  \mod(\BV,  \cup K_i ) < \frac{2 \eta^{-1} \de}{m}.
+$$
+\end{qal}
+
+
+
+
+The next result appears in \S 3.1.5 of \cite{covering lemma}:
+
+\begin{covlem}
+%\proclaim Covering Lemma.
+Fix some  $\eta\in (0,1)$. Let us consider
+two topological disks $\BU$ and $\BV$, two full continua $A'\subset \BU$ and $B'\subset \BV$,
+and two compact subsets, $A\Subset A'$ and $B\Subset B'$, of topological type bounded by $T$.%
+\footnote{In applications, $A$ and $B$ will be full continua, so $T=1$. }
+\\
+  Let $f:\BU \ra \BV$ be a branched covering of degree $D$ such that
+$A'$ is a component of $f^{-1}(B')$, and $A$ is the union of some components of $f^{-1}(B)$.
+Let $d=\deg(f : A'\ra B')$.\\
+Let $B'$ be also embedded into another topological disk $\BB'$.
+Assume $\BB'$ is immersed into
+$\BV$ by a map $i$  in such a way that $i|\, B'=\id$, $i^{-1}(B')=B'$,
+ and $i(\BB') \sm B'$ does not contain the critical values of $f$.  \\
+Under the following  ``Collar Assumption'':
+$$
+   \mod(\BB', B) > \eta \mod(\BU,  A),
+$$
+if
+$$ \mod(\BU, A) < \eps(\eta,T, D) $$
+ then
+$$
+      \mod (\BV, B)  <  2 \eta^{-1} d^2 \mod(\BU,  A).
+$$
+\end{covlem}

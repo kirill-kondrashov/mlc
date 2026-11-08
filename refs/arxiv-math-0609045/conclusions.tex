@@ -1,0 +1,306 @@
+\renewcommand{\BU}{\mathbf U}
+\section{\emph{A priori} and beau bounds for bounded-primitive renormalization} \label{sec:conclusions}
+We will begin this section by updating Theorems \ref{def vertical teaser} and \ref{thm:length-comparison} to the setting of $\psi$-quadratic-like maps.
+We will then use the updated results to prove the \emph{a priori} and ``beau'' bounds for infinitely renormalizable maps of bounded-primitive type. 
+This will be first expressed in the language of hyperbolic lengths of the geodesics around the small Julia sets,
+and then in the form of the official modulus of quadratic-like maps that are formed as the renormalizations. 
+\subsection{Estimates of extremal width and hyperbolic length for renormalizable $\psi$-quadratic-like maps}
+Let us first prove the generalization of Theorem \ref{def vertical teaser} to $\psi$-quadratic-like maps:
+\begin{theorem}\label{thm:pseudo-hor-ver}
+Let $(i, f)\from \BU'\to \BU$ be a primitively renormalizable $\psi$-quadratic-like-map with period $p$
+(and  $\KK$ is its cycle of little Julia sets).
+If $\| W_\can^{\ver+\hor}(\BU\sm \KK)\|_1 > M(p)$ then
+$$
+   \|W^\ver_\can(\BU\sm\KK)\|_1 \geq C^{-1} \| W^\hor_\can(\BU\sm \KK)\|_1,
+$$
+where $M(p)$ depends only on $p$, and $C>0$ is an absolute constant.
+\end{theorem}
+\begin{proof}
+We let $\BU^0 = \BU$, $\BU^1 = \BU'$, $f_0 = f$, and $i_0 = i$. 
+As described in Section \ref{pseudo-iterate},
+we can form disks $\BU^n$ and $\psi$-quadratic-like maps $(i, f)\from \BU^{n+1} \to \BU^n$.
+Moreover these all have the same quadratic-like germ,
+and are hence all $p$-renormalizable.
+For each $n \in \N$,
+we let $K^n \subset U^n$ be the central filled-Julia set of this map,
+and let $\KK^n \equiv \KK_p^n \subset K^n$ be the union of small Julia sets (of the $p$-renormalization).
+by a slight abuse of notation, 
+we will just denote these by $K$ and $\KK \equiv \KK_p$.
+We then have 
+(with the slight abuse of notation described at the end of Section \ref{psi-pl}),
+\begin{enumerate}
+\item
+a covering $f\from \BU^{n+1} \sm f^{-1} \KK \to \BU^n \sm \KK$,
+\item
+an inclusion $\BU^{n+1} \sm f^{-1} \KK \hookrightarrow \BU^{n+1} \sm \KK$, and
+\item
+an immersion $i\from\BU^{n+1} \sm \KK \to \BU^n \sm \KK$.
+\end{enumerate}
+The one significant change from the quadratic-like to the $\psi$-quadratic-like setting is the third map, 
+which was previously an embedding, and is now an immersion. 
+
+Now we need only go through Section \ref{sec:hor-vert} and see what needs to be changed.
+In Section \ref{domination sec} we need only update the proof of Proposition \ref{restrictions} for the $\psi$-quadratic-like setting;
+the proof of the updated Theorem \ref{loss of hor weight} is then identical. 
+So we need only verify Properties (i) and (ii) of Proposition \ref{restrictions}.
+Property (ii) follows just as before, 
+because we use only the covering $f\from \BU^{n+1} \sm f^{-1} \KK \to \BU^n \sm \KK$ and the inclusion $\BU^{n+1} \sm f^{-1} \KK \hookrightarrow \BU^{n+1} \sm \KK$.
+For Property (i) we need only observe that the immersion $i\from\BU^{n+1} \sm \KK \to \BU^n \sm \KK$ is still proper on the ends corresponding to $\KK$,
+and Lemma \ref{e} applies to immersions as well as embeddings.
+
+For Lemma \ref{increase of the total},
+we can replace the inclusion $U^n \sm \KK \subset U \sm \KK$ 
+with the immersion $i_n\from \BU^n \sm \KK \to \BU \sm \KK$;
+this is still homotopic to a homeomorphism, 
+so we can apply Theorem \ref{thm:total-increase} as before.
+In a similar vein,
+examining the proof of Theorem \ref{def vertical teaser} in Section \ref{covering-application},
+we find that we need only replace $f^n\from U^n\to U$ with $f^n\from \BU^n \to \BU$,
+where now this $f^n$ is the iteration described at the end of Section \ref{psi-pl}.
+\end{proof}
+We can now state and prove the version of Theorem \ref{thm:length-comparison} for a primitively $p$-renormalizable $\psi$-quadratic-like map $\ff \equiv (i, f)\from \BU' \to \BU$,
+with $K$, $\KK$ defined as before, and geodesics $\gamma$ around $K$ and $\gamma_p$ around the central small Julia set in $\BU \sm \KK$:
+\begin{theorem} \label{thm:pseudo-lengths}
+Suppose that $\ff$ is a $\psi$-quadratic-like map that is primitively $p$-renormalizable.
+Then, with the notation as described just above,
+\begin{equation} \label{eq:pseudo-length-comparison}
+|\gamma_p|> M(p) \implies |\gamma| \ge \epsilon p\, |\gamma_p|,
+\end{equation}
+where $M(p)$ depends only on $p$, and $\epsilon > 0$ is an absolute constant. 
+\end{theorem}
+
+\begin{proof}
+This follows from Theorem \ref{thm:pseudo-hor-ver} in exactly\footnote{The proof of \eqref{eq:compare} (as Theorem 9.3 of \cite{McM}) can be readily adapted to $\psi$-quadratic-like maps.}
+ the same way that Theorem \ref{thm:length-comparison} follows from Theorem \ref{def vertical teaser}. 
+\end{proof}
+
+The following is one of the main results of this paper. 
+It is cited as Theorem 9.1 (as it appeared in the first arXiv version)
+in \cite{decorations} and \cite{molecules}.
+
+
+\begin{theorem}\label{improving of length}
+For any $C \in \R^+$, there exists $\underline p$ such that for any $\bar p\geq \underline p$,
+there exists $L(\bar p)$ with the following property.
+Let $(i, f)\from \BU'\to \BU$ be primitively renormalizable $\psi$-quadratic-like map
+with period $p$ such that  $\underline p\leq p\leq \bar p$.
+Let $(j, g)\from \BV' \to \BV$ be the canonical renormalization of $f$ of period $p$.
+Then (with the same notation as Theorem \ref{thm:iterated-lengths})
+$$
+   |\gamma(g)| > L(\bar p)\imply |\gamma(f)| > C |\gamma(g)|.
+$$
+\end{theorem}
+
+We can now use Theorem \ref{thm:pseudo-lengths} to prove Theorem \ref{improving of length}.
+\begin{proof}[Proof of Theorem \ref{improving of length}]
+Given $C$, 
+we let $\underline p = \lceil C/\epsilon \rceil$, 
+where $\epsilon > 0$ is given by Theorem \ref{thm:pseudo-lengths}.
+Then,
+given $\bar p$,
+we let $L(\bar p)$ be the maximum of $M(p)$ in Theorem \ref{thm:pseudo-lengths},
+taken over all $p$ with $\underline p \le p \le \bar p$. 
+Then
+given the primitively $p$-renormalizable map $\ff$,
+and letting $\gamma$ and $\gamma_p$ be as in Theorem \ref{eq:pseudo-length-comparison},
+we have
+\begin{align*} \label{eq:new-comparision}
+|\gamma_p|> L(\bar p)& \implies 
+|\gamma_p|> M(p) \implies 
+|\gamma| \ge \epsilon p\, |\gamma_p|\\ 
+& \implies
+|\gamma| \ge \epsilon \underline p\, |\gamma_p| \implies
+|\gamma| \ge C |\gamma_p|,
+\end{align*}
+where we have used \eqref{eq:pseudo-length-comparison} and our definitions of $L(\bar p)$ and $\underline p$.
+Theorem \ref{improving of length} then follows from this and the first part of Theorem \ref{thm:iterated-lengths}.
+\end{proof}
+
+
+
+
+\subsection{\emph{A priori} and beau bounds for bounded-primitive renormalization}
+We can now prove our ``if it's bad now, it was worse earlier'' statement for geodesics around the central small Julia sets.
+
+We will have the following ``standard assumptions'' for this subsection.
+We let $\ff$ be a $\psi$-quadratic-like map that is primitively renormalizable of periods $p_1\divides p_2\divides \ldots$,
+with $1 < p_{k+1} / p_k \le B$ for all $k$.
+The sequence of periods may be infinite,
+or it may be finite,
+in which case the results apply only when they refer to the $k$ for which $p_k$ exists. 
+As explained in Section \ref{intro:defs},
+we let $\gamma_{(k)}$ be the geodesic around $K_{p_k}(0)$ in $\C \sm \KK_{p_k}$;
+we also let $\gamma_{(0)} = \gamma(\ff)$.
+(If $\ff$ is a quadratic polynomial, then $\gamma_0$ does not exist, but we can let $| \gamma_0 | = 0$ and all results still apply.)
+
+We can now prove a precise and general version of \eqref{eq:bad-now-worse-earlier}.
+\begin{theorem} \label{thm:bnwe}
+There exists $l$ such that for all $B$ there exists $M$:
+Suppose that $\ff$ satisfies our standard assumptions.
+Then,
+for all $n$,
+\begin{equation} \label{eq:bnwe}
+|\gamma_{(n+l)}| > M \implies |\gamma_{(n)}| > 2|\gamma_{(n+l)}|.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Choose $l$ such that $2^l \ge \underline p$, 
+where $\underline p$ is given by Theorem \ref{improving of length} when we take $C := 2$.
+Let $\bar p = B^l$,
+and let $M = L(\bar p)$ in Theorem \ref{improving of length}. 
+We claim that \eqref{eq:bnwe} holds for these choices (and all $n$).
+To see this,
+suppose that $|\gamma_{(n+l)}| > M$,
+and let $\bgg \equiv (i, g)\from \BU' \to \BU$ be the canonical renormalization of $\ff$ of period $p_n$.
+Let $q = p_{n+l}/p_n$;
+then $\bgg$ is $q$-renormalizable,
+and by Theorem \ref{thm:iterated-lengths},
+we have 
+\begin{equation} \label{eq:from-it}
+|\gamma_{(n)}| = |\gamma(\bgg)| \text{ and } |\gamma_q(\bgg)| \ge |\gamma_{(n+l)}| > M.
+\end{equation}
+Since $\bar p \ge q \ge 2^l \ge \underline p$,
+we can then apply Theorem \ref{improving of length} to $\bgg$ to obtain
+$$
+|\gamma(\bgg)| \ge 2 |\gamma_q(\bgg)|, 
+$$
+which combined with \eqref{eq:from-it} yields \eqref{eq:bnwe}.
+\end{proof}
+
+As a complement to Theorem \ref{thm:bnwe},
+we observe that we can control the result of bounded-period renormalization. 
+\begin{lemma} \label{lem:local-bound}
+For all $P$ and $m > 0$ there is an $M \equiv M(m, P)$ such that 
+if $\ff$ is a primitively renormalizable $\psi$-quadratic-like map of period $p \le P$ with $\gamma(\ff) \le m$,
+then $|\gamma_p(\ff)| \le M$.
+\end{lemma}
+\begin{proof}
+By Theorem \ref{thm:pseudo-lengths},
+we have either $|\gamma_p| \le M(P)$ or $| \gamma_p | \le Pm /\epsilon$ for a universal $\epsilon$.
+\end{proof}
+
+Dennis Sullivan \cite{S} invented the term ``beau'', meaning \emph{bounded and eventually universally}\footnote{``beau'' looks and sounds a lot better than ``baeu''}. 
+This is an extension and improvement on the \emph{a priori} bounds,
+as the reader shall see in a moment. 
+Here is the beau bounds for bounded-primitive renormalization, 
+expressed in terms of the geodesics $\gamma_k$ around the central small Julia sets.
+\begin{theorem} \label{thm:psi-beau}
+For all $B$ there exists $M_0$ such that for all $m$ there exists $n_1$ and $M_1$:
+Suppose $\ff$ satisfies our standard assumptions, and $| \gamma(\ff) | \le m$.
+Then,
+\begin{enumerate}
+\item
+for all $n\in \N$, $|\gamma_{(n)}| \le M_1$, and
+\item
+for $n \ge n_1$, $|\gamma_{(n)}| \le M_0$. 
+\end{enumerate}
+\end{theorem}
+
+\newcommand{\mlong}{M_{\text{long}}}
+\newcommand{\mshort}{M_{\text{short}}}
+
+The first statement says that $| \gamma_{(n)} |$ is bounded in terms of $| \gamma(\ff) |$ (and $B$),
+while the second statement says that $| \gamma_{(n)} |$ is eventually universally bounded (depending only on $B$),
+with the number of renormalizations needed to become universally bounded depending on $| \gamma(\ff) |$. 
+
+\begin{proof}
+We take $l$ as in Theorem \ref{thm:bnwe},
+and given $B$,
+we let $\mlong$ be the $M(B)$ in Theorem \ref{thm:bnwe} 
+and let $\mshort$ be $M(m, B^l)$ in Lemma \ref{lem:local-bound}.
+($\mlong$ controls the long-term behavior, while $\mshort$ controls the short term.)
+
+Let us first now Statement (1).
+We take $M_1$ to be the greater value of $\mlong$ and $\mshort$.
+Now suppose there were an $n$ with $|\gamma_{(n)}| > M_1$;
+we take the least such value of $n$.
+If $n \le l$ then $p_n \le B^l$,
+and we contradict Lemma \ref{lem:local-bound}.
+If $n > l$, 
+then $|\gamma_{{(n-l)}}| \ge 2|\gamma_{(n)}|$ by Theorem \ref{thm:bnwe},
+so $n$ was not minimal. 
+This concludes the proof of (1).
+
+For Statement (2) we take $M_0$ to be $\mlong$, which depends only on $B$.
+We observe that we can rewrite Theorem \ref{thm:bnwe} as
+\begin{equation} \label{eq:better}
+| \gamma_{(n + l)} | \le \max(M_0, \frac12 | \gamma_{(n)} |).
+\end{equation}
+We let $n_1 = \ceil{1 + \log_2(M_0/\mshort)}\cdot l$. 
+Now given $n \ge n_1$,
+we can write $n = a + b l$,
+where $a \le l$ and $b \ge \log_2(M_0/\mshort)$.
+By Lemma \ref{lem:local-bound},
+we have $| \gamma_{(a)} | \le \mshort$;
+a simple induction with \eqref{eq:better} then implies that $| \gamma_{(a + kl)} | \le \max(M_0, 2^{-k} \mshort)$.
+Letting $k = b$, we obtain our desired bound.
+\end{proof}
+
+\subsection{Quadratic polynomials and quadratic-like renormalization}
+In this final subsection we return to the setting of quadratic polynomials and quadratic-like maps,
+in order to derive the statements that will be more familiar (and sometimes more uto the reader. 
+
+It will be convenient to define a \emph{semi-quadratic-like map} (with connected Julia set) to be a $\psi$-quadratic like map where the immersion is an embedding. In this case we can write it as $f\from U \to V$,
+where $f$ is proper of degree 2 and $U \subset V$,
+and the filled-Julia set $K \subset U$ is an FJ-set with $f^{-1}(K) = K$. 
+Both quadratic-like maps and quadratic polynomials are semi-quadratic-like,
+and indeed the main application of this terminology is to include both of these cases. 
+
+In the case where $f$ is a quadratic polynomial,
+the following is proven as Theorem 10.3 in \cite{McM} in the case where $M$ is sufficiently small,
+and as Theorem 4.10 in \cite{towers} in general (for $f$ a with a slightly different statement that readily implies ours).
+The proof here is fundamentally the same, but written with the machinery of the canonical renormalization.
+\begin{theorem} \label{thm:gamma-to-modulus}
+Suppose $f\from V' \to V$ is a primitively $p$-renomalizable semi-quadratic-like map,
+and $|\gamma_p| \le M$.
+Then $f$ has a (Douady-Hubbard) renormalization of period $p$ and modulus at least $m > 0$, for $m \equiv m(M)$. 
+\end{theorem}
+\begin{proof}
+Let $V_p \subset V$ be the (open) disk bounded by $\gamma_p$;
+and let $V'_p$ be $V_p$ pulled back along $\KK_p$,
+so $V'_p$ is the unique component of $f^{-p}V_p$ that contains $K_p$.
+Then $f^p\from V'_p \to V_p$ is a degree 2 cover;
+we claim that $\cl{V'_p} \subset V_p$,
+and that $\mod(V_p, V'_p) > m(M)$;
+this would then complete the proof of the Theorem.
+We let $A_p = V_p \sm K_p$ and $A'_p = V'_p \sm K_p$;
+we need only show the outer boundary $\dout A'_p$  of $A'_p$ lies in $A_p$,
+with a definite modulus between $\dout A'_p$ and $\dout A_p$.  
+
+Now let $(i, g)\from \BU_p' \to \BU_p$ be the canonical renormalization of $f$ of period $p$.
+We will also denote by $A_p$ and $A'_p$ their lifts to $\BU_p$ and $\BU'_p$ respectively. 
+Then $g\from A'_p \to A_p$ is a degree 2 covering,
+and $i\from A'_p \to A_p$ is an immersion that is degree 1 on the inner ideal boundary of $\di A'_p$
+(see Remark \ref{ai:extends} and the proof of Theorem \ref{ql extension}). 
+The inclusion $i(A'_p) \subset A_p$ (and lower bound on separating modulus) then follows from \eqref{ai:s} in Lemma \ref{lem:ann-immerse}.
+\end{proof}
+ 
+We can now state and prove the beau bounds for (semi-)quadratic-like maps and quadratic-like renormalization.
+\begin{theorem} \label{thm:a-priori-bounds}
+For all $B$ there exists $M_0$ such that for all $m$ there exists $n_1$ and $M_1$:
+Suppose that $f\from U' \to U$ is a semi-quadratic-like-map that satisfies our standard assumptions, and $\abs{\mod(V \sm K)} \ge m$.
+Then,
+\begin{enumerate}
+\item
+for all $n\in \N$, 
+we can find a quadratic-like $p_n$-renormalization $f^{p_n}\from V' \to V$ with $\mod(V\sm V') \ge M_1$, and 
+\item
+for $n \ge n_1$, 
+we can find a quadratic-like $p_n$-renormalization $f^{p_n}\from V' \to V$ with $\mod(V\sm V') \ge M_0$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+This follows immediately from Theorems \ref{thm:psi-beau} and \ref{thm:gamma-to-modulus}.
+\end{proof}
+Applied to quadratic-like maps, this is the standard statement of the beau bounds.
+
+We conclude with a complete and explicit statement of the \emph{a priori} bounds,
+which is an immediate corollary of Statement (1) of Theorem \ref{thm:a-priori-bounds}.
+\begin{theorem}
+For all $B$ there exists $m > 0$:
+Let $f\from \C\to \C$ be an infinitely $B$-bounded primitively renormalizable quadratic polynomial,
+with primitive periods $p_1 \divides p_2 \ldots$. 
+Then for all $n$, there is a quadratic-like $p_n$-renormalization $f^{p_n}\from V' \to V$ with $\mod(V \sm V') \ge m$. 
+\end{theorem}
+ 

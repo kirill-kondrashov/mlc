@@ -1,0 +1,12 @@
+\newcommand{\softnote}[1]{\emph{#1}}
+\newcommand{\loudnote}[1]{\textbf{#1}}
+
+\setlength{\marginparwidth}{2cm} 
+\usepackage[textsize=small]{todonotes}
+\newcommand{\jktodo}[2][inline]{\todo[color=red!40,#1]{#2}}
+\newcommand{\aktodo}[2][inline]{\todo[color=blue!40,#1]{#2}}
+
+\newcommand{\jkheader}[1]{\smallskip\jktodo{#1}\kern-1em}
+
+\newcommand{\ann}[1]%{\marginpar{\scriptstyle #1}}
+{\jktodo[]{#1}}

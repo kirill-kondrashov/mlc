@@ -1,0 +1,29 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=23mm]{geometry}
+\usepackage[no-math]{fontspec}
+\setmainfont{Noto Serif}
+\setsansfont{Noto Sans}
+\setmonofont[Scale=0.82]{DejaVu Sans Mono}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\usepackage{xcolor,enumitem,array,tabularx,booktabs}
+\usepackage{xurl}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\usepackage{bookmark}
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1.8ex plus .3ex minus .2ex}{.7ex plus .2ex}
+\setlength{\emergencystretch}{3em}
+\setlist{itemsep=4pt,topsep=5pt,leftmargin=*}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.15}
+\newcommand{\repo}[1]{\texttt{\path{#1}}}
+\hypersetup{pdftitle={MLC: first-paper programme},pdfauthor={}}
+\begin{document}
+\begin{center}
+{\LARGE\bfseries MLC: first-paper programme}\par\smallskip
+8 November 2026 · Version 4.1 · 12--15 hours per week
+\end{center}
+\input{publication_plan.tex}
+\end{document}

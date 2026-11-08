@@ -1,0 +1,108 @@
+{
+  "sample_family_identities_checked": 24,
+  "moduli_cover_degree": 4,
+  "fixed_marking": [
+    "-lambda",
+    "1-lambda"
+  ],
+  "obstructed_hurwitz_representative_cover": {
+    "s": "101/100",
+    "t": "-99/100",
+    "x": "9801/10000",
+    "y": "400/201",
+    "target_curve_center": "1",
+    "target_curve_radius": "1/4",
+    "source_lemniscate_radius": "199/2500",
+    "target_two_point_side_labels": [
+      "a1",
+      "b1"
+    ],
+    "source_positive_disk_labels": [
+      "a1",
+      "b1"
+    ],
+    "source_negative_disk_labels": [
+      "a2"
+    ],
+    "source_annulus_labels": [
+      "a0",
+      "b0"
+    ],
+    "boundary_degrees": [
+      1,
+      1
+    ]
+  },
+  "all_marked_point_distributions": [
+    {
+      "critical_values_on_two_point_side": 0,
+      "marked_points_in_two_disks": [
+        0,
+        2
+      ],
+      "essential_preimage_count": 1,
+      "essential_degree_if_present": 1
+    },
+    {
+      "critical_values_on_two_point_side": 0,
+      "marked_points_in_two_disks": [
+        1,
+        1
+      ],
+      "essential_preimage_count": 0,
+      "essential_degree_if_present": null
+    },
+    {
+      "critical_values_on_two_point_side": 0,
+      "marked_points_in_two_disks": [
+        2,
+        0
+      ],
+      "essential_preimage_count": 1,
+      "essential_degree_if_present": 1
+    },
+    {
+      "critical_values_on_two_point_side": 2,
+      "marked_points_in_two_disks": [
+        0,
+        3
+      ],
+      "essential_preimage_count": 1,
+      "essential_degree_if_present": 1
+    },
+    {
+      "critical_values_on_two_point_side": 2,
+      "marked_points_in_two_disks": [
+        1,
+        2
+      ],
+      "essential_preimage_count": 1,
+      "essential_degree_if_present": 1
+    },
+    {
+      "critical_values_on_two_point_side": 2,
+      "marked_points_in_two_disks": [
+        2,
+        1
+      ],
+      "essential_preimage_count": 1,
+      "essential_degree_if_present": 1
+    },
+    {
+      "critical_values_on_two_point_side": 2,
+      "marked_points_in_two_disks": [
+        3,
+        0
+      ],
+      "essential_preimage_count": 1,
+      "essential_degree_if_present": 1
+    },
+    {
+      "critical_values_on_two_point_side": 1,
+      "marked_points_in_connected_disk": 2,
+      "essential_preimage_count": 1,
+      "essential_degree_if_present": 2
+    }
+  ],
+  "scope": "exact algebra and possible marked-point counts only; Hurwitz markings, arbitrary parent chains and rho>=1 are proved in the Markdown; no full dynamical-biset recursion or global curve attractor computed"
+}

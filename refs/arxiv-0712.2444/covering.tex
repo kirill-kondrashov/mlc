@@ -1,0 +1,131 @@
+
+
+\section{Transfer Principle}
+\label{covering lemma sec}
+
+Let us now formulate two analytic results
+which will play a crucial role in what follows.
+The first one appeares in \S 2.10.3 of \cite{covering lemma}:
+
+\newtheorem*{QA}{Quasi-Additivity Law}
+\begin{QA}
+    Fix some $\eta\in (0,1)$.
+Let $\BV$ be a topological disk,  let  $K_i\Subset \BV $, $i=1,\dots, m$,
+be pairwise disjoint full compact continua, 
+and let $\phi_i: \A(1,r_i)\ra \BV \sm   \cup K_j$ 
+be holomorphic annuli such that each $\phi_i$ is
+an  embedding of some proper collar of $\T$  to a proper collar of $\di K_i$.
+Then there exists a $\de_0 > 0$ (depending on $\eta$ and $m$) such that: \\
+If  for some $\de\in (0, \de_0)$,
+$\mod (\BV, K_i) < \de$ while $\log r_i > 2\pi \eta\de$  for all $i$,
+then
+$$
+  \mod(\BV,  \cup K_i ) < \frac{2 \eta^{-1} \de}{m}.
+$$
+\end{QA}
+
+
+
+The next result appears in \S 3.1.5 of \cite{covering lemma}:
+
+\newtheorem*{Covering}{Covering Lemma}
+\begin{Covering}
+Fix some  $\eta\in (0,1)$. Let us consider
+two topological disks $\BU$ and $\BV$, two full continua $A'\subset \BU$ and $B'\subset \BV$,
+and two full compact continua $A\Subset A'$ and $B\Subset B'$.
+
+  Let $f:\BU \ra \BV$ be a branched covering of degree $D$ such that
+$A'$ is a component of $f^{-1}(B')$, and $A$ is the union of some components of $f^{-1}(B)$.
+Let $d=\deg(f : A'\ra B')$.\\
+Let $B'$ be also embedded into another topological disk $\BB'$.
+Assume $\BB'$ is immersed into
+$\BV$ by a map $i$  in such a way that $i|\, B'=\id$, $i^{-1}(B')=B'$,
+ and $i(\BB') \sm B'$ does not contain the critical values of $f$.  \\
+Under the following  ``Collar Assumption'':
+$$
+   \mod(\BB', B) > \eta \mod(\BU,  A),
+$$
+if 
+$$ \mod(\BU, A) < \eps(\eta, D) $$
+ then
+$$
+      \mod (\BV, B)  <  2 \eta^{-1} d^2 \mod(\BU,  A). 
+$$
+\end{Covering}  
+
+  We will now apply these two geometric results to a dynamical situation.
+  Recall from \S \ref{modified nest} that $\chi$ stands for the height of the Principal Nest, 
+so that the quadratic-like map $g_\chi: E^\chi\ra E^{\chi-1}$ represents the
+renormalization of $f$ with the filled Julia set $\KK$.
+
+\makefigure{transfer}{The Transfer Principle}
+
+\newtheorem*{Transfer}{Transfer Principle}
+\begin{Transfer}
+  Suppose there are two geometric puzzle pieces 
+$Y\Subset Z$ with $\depth Z< \depth E^{\chi-1}$,  % \note{be careful}
+and a sequence of moments of time $0<t_1<t_2<\dots <t_m$ such that:
+\begin{itemize}
+\item $t_m-t_1< p$ and $t_m<2p$;
+\item   $f^{t_i}(\KK)\subset Y$;
+\item $\Ups_i = f^{-t_i}(Z)|\, \KK \subset E^{\chi-1}$;
+\item $\deg (f^{t_i}: \Ups_i\ra Z)\leq D$.
+\end{itemize}
+  Then there exist an absolute constant $C$ and $\eps=\eps(D)$ such that
+$$
+   \psimod(Z,Y)<  \frac{C}{m}\, \psimod(E^\chi, \KK),
+$$
+provided $\psimod(E^\chi, \KK) < \eps$.  
+\end{Transfer}
+
+
+\begin{pf}
+Let $\KK_j=f^{t_j}(\KK)$.
+We want to apply the Covering Lemma to the maps $f^{t_j}: (\Ups_j, \KK) \ra (Z,\KK_j )$. 
+As the buffer around $\KK$ we take $E^{\chi+1}$.
+Since
+$$
+   \depth E^{\chi+1}= \depth E^{\chi-1}+2p >\depth Z + t_j = \depth \Ups_j,
+$$
+we have $E^{\chi+1}\subset \Ups_j$ for any $j=1,\dots, m$. 
+
+We let $\Om_j= f^{t_j}(E^{\chi+1})$
+be the corresponding buffer around $\KK_j$.
+Then $\deg(f^{t_j}: E^{\chi+1}\ra \Om_j)\leq 4$ since $t_j<2p$.
+Moreover, 
+\begin{equation}\label{bla-bla}
+   \psimod(\Om_j, K_j) \geq  2\, \psimod (E^{\chi+1}, \KK) = \frac 1{2} \psimod (E^{\chi-1}, \KK) 
+          \geq \frac 1{2} \psimod (\Ups_j, \KK),    
+\end{equation}
+which puts us in the position to apply the Covering Lemma with $\eta=1/2$
+and $d=4$. It yields: 
+\begin{equation}\label{comparable mod}
+  \psimod(Z, \KK_j) \leq 2^6\, \psimod (E^{\chi-1}, \KK)= 2^7 \, \psimod (E^\chi, \KK),
+\end{equation}
+provided $\psimod(E^\chi,\KK)<\eps(D)$. 
+
+Let us define $k_j$ as  $t_j$ if $t_j<p$,
+and as $t_j-p$ otherwise. 
+Then $k_j$'s are pairwise different numbers in between $0$ and $p$,
+and hence the sets  $f^{k_j}(E^\chi)$ are pairwise disjoint.
+Since $\Om_j\subset f^{k_j}(E^\chi)$, the buffers $\Om_j$ are pairwise disjoint as well.  
+Moreover, by (\ref{bla-bla})
+$$
+  \psimod(\Om_j, \KK_j)\geq  \psimod(E^\chi, \KK),
+$$
+which, together with (\ref{comparable mod}), 
+puts us into a position to apply the Quasi-Additivity Law with $\eta=2^{-7}$. 
+It yields
+$$
+   \psimod(Z, Y) \leq \frac{2^{15}}{m} \psimod(E^\chi, \KK), 
+$$
+provided $\psimod(E^\chi,\KK)<\eps(D)$.
+\end{pf}
+
+
+
+
+
+
+
+

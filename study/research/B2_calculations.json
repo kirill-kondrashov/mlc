@@ -1,0 +1,36 @@
+{
+  "convention": "(x,y,z)(u,v,w)=(x+u,y+v,z+w+x*v)",
+  "levels": [
+    {
+      "depth": 0,
+      "abelian_rank": 2,
+      "independent_integral_commutator_witnesses": 1,
+      "hirsch_length": 3
+    },
+    {
+      "depth": 1,
+      "abelian_rank": 3,
+      "independent_integral_commutator_witnesses": 2,
+      "hirsch_length": 5
+    },
+    {
+      "depth": 2,
+      "abelian_rank": 5,
+      "independent_integral_commutator_witnesses": 4,
+      "hirsch_length": 9
+    },
+    {
+      "depth": 3,
+      "abelian_rank": 9,
+      "independent_integral_commutator_witnesses": 8,
+      "hirsch_length": 17
+    }
+  ],
+  "class_three_boundary_word": "commutator(b, a*b*a^-1)",
+  "boundary_magnus_degree_three": {
+    "BBA": -1,
+    "BAB": 2,
+    "ABB": -1
+  },
+  "scope": "exact finite checks; the all-depth proof and source reduction are separate"
+}

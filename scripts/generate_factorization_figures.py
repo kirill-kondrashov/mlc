@@ -249,7 +249,7 @@ def make_global_figure(
     ax.set_ylabel(r"$\operatorname{Im} c$", fontsize=12)
     ax.tick_params(labelsize=11, length=3, pad=3)
     ax.set_title(
-        rf"Окрестность граничной точки $c_0=\frac{{1}}{{4}}$ ($N={N}$, $L={L}$)",
+        rf"Neighborhood of the boundary point $c_0=\frac{{1}}{{4}}$ ($N={N}$, $L={L}$)",
         fontsize=14,
         pad=9,
     )
@@ -271,17 +271,17 @@ def make_global_figure(
                 color=LEVEL_L_EDGE,
                 linestyle="--",
                 linewidth=1.1,
-                label=rf"граница выборки $O_{{{L}}}$",
+                label=rf"sample boundary of $O_{{{L}}}$",
             ),
             Patch(
                 facecolor=TARGET_COLOR,
                 edgecolor="none",
-                label=rf"часть среза $F_{{{N}}}\setminus X_{{{L}}}$",
+                label=rf"slice portion $F_{{{N}}}\setminus X_{{{L}}}$",
             ),
             Patch(
                 facecolor=SOURCE_COLOR,
                 edgecolor="none",
-                label=rf"вложенный срез $X_{{{L}}}$",
+                label=rf"nested slice $X_{{{L}}}$",
             ),
         ],
         loc="upper right",
@@ -294,7 +294,7 @@ def make_global_figure(
     save_pdf(
         fig,
         output_dir / "factorization-global-levels.pdf",
-        "Конечные уровни и локальные окна факторизации",
+        "Finite levels and local factorization windows",
         "Global parameter-plane context for the finite-level example",
     )
 
@@ -376,7 +376,7 @@ def make_slices_figure(output_dir: Path) -> None:
     ax.set_xticks(np.linspace(local_x[0], local_x[-1], 5))
     ax.set_yticks(np.linspace(local_y[0], local_y[-1], 5))
     ax.set_title(
-        rf"Срезы $X_{{{SLICE_L}}}\subset F_{{{SLICE_N}}}$ при $c_0=\frac{{1}}{{4}}$",
+        rf"Slices $X_{{{SLICE_L}}}\subset F_{{{SLICE_N}}}$ at $c_0=\frac{{1}}{{4}}$",
         fontsize=16,
         pad=9,
     )
@@ -390,7 +390,7 @@ def make_slices_figure(output_dir: Path) -> None:
             Patch(
                 facecolor=SOURCE_COLOR,
                 edgecolor="none",
-                label=rf"вложенный срез $X_{{{SLICE_L}}}$",
+                label=rf"nested slice $X_{{{SLICE_L}}}$",
             ),
             Line2D(
                 [0],
@@ -418,7 +418,7 @@ def make_slices_figure(output_dir: Path) -> None:
     save_pdf(
         fig,
         output_dir / "factorization-slices.pdf",
-        "Локальные срезы у граничной точки c0=1/4",
+        "Local slices at the boundary point c0=1/4",
         "Grid samples of nested parameter slices near the main cardioid cusp",
     )
 
@@ -435,7 +435,7 @@ def make_orbit_figure(output_dir: Path) -> None:
         color=MARKER_COLOR,
         linewidth=1.0,
         linestyle="--",
-        label=r"параболическая неподвижная точка $\frac{1}{2}$",
+        label=r"parabolic fixed point $\frac{1}{2}$",
         zorder=1,
     )
     ax.plot(
@@ -486,11 +486,11 @@ def make_orbit_figure(output_dir: Path) -> None:
     ax.set_xlim(-0.5, 18.5)
     ax.set_ylim(-0.02, 0.58)
     ax.set_xticks([0, 4, 8, 12, 16])
-    ax.set_xlabel(r"номер итерации $n$", fontsize=10)
+    ax.set_xlabel(r"iteration number $n$", fontsize=10)
     ax.set_ylabel(r"$p_n(c_0)$", fontsize=10)
     ax.tick_params(labelsize=9, length=3, pad=3)
     ax.set_title(
-        r"Орбита при граничном параметре $c_0=\frac{1}{4}$",
+        r"Orbit at the boundary parameter $c_0=\frac{1}{4}$",
         fontsize=11,
         pad=9,
     )
@@ -498,7 +498,7 @@ def make_orbit_figure(output_dir: Path) -> None:
     save_pdf(
         fig,
         output_dir / "factorization-critical-orbit.pdf",
-        "Критическая орбита при граничном c0=1/4",
+        "Critical orbit at boundary c0=1/4",
         "The critical orbit converges to the parabolic fixed point 1/2",
     )
 
@@ -620,14 +620,14 @@ def make_target_figure(
     ax.set_xticks(np.linspace(local_bounds[0], local_bounds[1], 5))
     ax.set_yticks(np.linspace(local_bounds[2], local_bounds[3], 5))
     ax.set_title(
-        rf"Внешний срез $F_{{{N}}}$ у точки $c_0=\frac{{1}}{{4}}$",
+        rf"Outer slice $F_{{{N}}}$ at $c_0=\frac{{1}}{{4}}$",
         fontsize=13,
         pad=8,
     )
     save_pdf(
         fig,
         output_dir / "factorization-target.pdf",
-        "Срезы около граничной точки c0=1/4",
+        "Slices near the boundary point c0=1/4",
         "The finite local slices near the cusp parameter 1/4",
     )
 
@@ -781,7 +781,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
 
     left = axes[0]
     left.text(
-        5, 5.68, r"а) Промежуточная глубина $\ell$", fontsize=11.5,
+        5, 5.68, r"a) Intermediate depth $\ell$", fontsize=11.5,
         ha="center",
         va="center",
     )
@@ -812,7 +812,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
     right.text(
         5,
         5.68,
-        r"б) Достаточная глубина $L>\ell$",
+        r"b) Sufficient depth $L>\ell$",
         fontsize=11.5,
         ha="center",
         va="center",
@@ -861,7 +861,7 @@ def make_component_geometry_figure(output_dir: Path) -> None:
     save_pdf(
         fig,
         output_dir / "factorization-component-geometry.pdf",
-        "Геометрическое ограничение на компоненты при увеличении глубины",
+        "Geometric component control as depth increases",
         "Shallow and deep slices with component images before and after the theorem bound",
     )
 

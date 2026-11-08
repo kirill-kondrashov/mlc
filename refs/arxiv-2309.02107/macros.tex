@@ -1,0 +1,543 @@
+
+
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{obs}[thm]{Observation}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{exc}[thm]{Exercise}
+\newtheorem{exe}[thm]{Exercise}
+\newtheorem{problem}[thm]{Problem}
+
+\newtheorem{defn}[thm]{Definition}
+
+\theoremstyle{plain}
+\newtheorem*{thmA}{Main Theorem (physical version)}
+\newtheorem*{thmB}{Main Theorem (dynamical version)}
+\newtheorem*{thmC}{Theorem (Global Lee-Yang-Fisher Current)}
+\newtheorem*{thmRIG}{Local Rigidity Theorem}
+\newtheorem*{LY Theorem}{Lee-Yang Theorem}
+\newtheorem*{LY Theorem2}{General Lee-Yang Theorem}
+\newtheorem*{LY TheoremBC}{Lee-Yang Theorem with Boundary Conditions}
+\newtheorem*{LY Theorem2BC}{General Lee-Yang Theorem with Boundary Conditions}
+\newtheorem*{conj}{Conjecture}
+
+\numberwithin{equation}{section}
+%\numberwithin{figure}{section}
+
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\Rmig}{R} %the Migdal-Kadinoff renormalization in U,V,W coords.
+\newcommand{\Cmig}{C} %the invariant ``cylinder'' for \Rmig
+\newcommand{\Cmigbl}{C_0}
+\newcommand{\TOPmig}{\mathrm{T}} %the invariant ``cylinder'' for \Rmig
+\newcommand{\BOTTOMmig}{\mathrm{B}} %the invariant ``cylinder'' for \Rmig
+%fixed points:
+\newcommand{\FIXmig}{b} %the fixed points on the invariant ``cylinder'' for \Rmig
+\newcommand{\CFIXmig}{e} %the complex attacting fixed points for \Rmig
+%indeterminant points:
+\newcommand{\INDmig}{a} %the indeterminant points for \Rmig
+\newcommand{\Smig}{S} %the principal locus for \Rmig, i.e. the line U+2V+W=0
+
+\newcommand{\thin} {{\mathrm{thin}}}
+\newcommand{\thick} {{ \mathrm{thick}}}
+\newcommand{\loc}{{\mathrm {loc}}}
+\newcommand{\hor}{{\mathrm {hor}}}
+\newcommand{\ver}{{\mathrm {ver}}}
+\newcommand{\ess}{{\mathrm{ess}}}
+\newcommand{\ness}{{\mathrm{ne}}}
+\newcommand{\pro}{{\mathrm{pr}}}
+
+\newcommand{\locflux} {\WW^\perp_\loc}
+
+\newcommand{\re}{{\mathrm{(r)}}}
+\newcommand{\essre}{{\mathrm{ess(r)}}}
+\newcommand{\nere}{{\mathrm{ne(r)}}}
+\newcommand{\verre}{{\mathrm{ver(r)}}}
+
+\newcommand{\Cyl}{{\mathrm{Cyl}}}
+\newcommand{\hsubset}{{ \,\underset{h}{\subset}\, }    }
+\newcommand{\hsupset}{{ \, \underset{h}{\supset} \, }     }
+
+% \newcommand{\lp}{\multimap}
+\newcommand{\lp}{{\,\mathrm {dominates}\,}}
+
+
+
+\newcommand{\Rphys}{\mathcal R} %the Physical renormalization in Z,T,S coords.
+\newcommand{\Cphys}{\mathcal C} %the invariant cylinder for \Rphys
+\newcommand{\Solid}{\mathcal{SC}}
+\newcommand{\Solidmig}{SC}
+\newcommand{\Secphys}{\Pi}
+\newcommand{\Secmig}{P}
+\newcommand{\TOPphys}{\mathcal T} %Top the invariant cylinder for \Rphys
+\newcommand{\Cphystl}{{\mathcal C}_1}
+\newcommand{\Cphysbl}{{\mathcal C}_0}
+\newcommand{\Cphyslow}{{\mathcal C}_*}
+\newcommand{\BOTTOMphys}{\mathcal B} %Top the invariant cylinder for \Rphys
+%fixed points:
+\newcommand{\FIXphys}{\beta} %the fixed points on the invariant cylinder for \Rphys
+\newcommand{\CFIXphys}{\eta} %the complex attacting fixed points for \Rphys
+%indeterminant points:
+\newcommand{\INDphys}{\alpha} %the indeterminant points for \Rmig
+\newcommand{\Sphys}{\mathcal S} %the principal locus for \Rphys, i.e. the curve line z^2+2zt+1=0
+\newcommand{\Icurve}{\mathcal G} %image of the indeterminacy pts
+\newcommand{\Imig}{G} 
+\newcommand{\PI}{{\mathcal A}}
+\newcommand{\crittemps}{{\mathscr C}} %The set of all critical tempuratures
+\newcommand{\epoints}{{\mathscr E}} %The set of all endpoints of high-tempurature hairs
+
+
+\newcommand{\Line}{L}
+\newcommand{\Lzero}{L_0}
+\newcommand{\Lone}{L_1}
+\newcommand{\Ltwo}{L_2}
+\newcommand{\Lthree}{L_3}
+\newcommand{\Lfour}{L_4}
+
+\newcommand{\LLzero}{\LL_0}
+\newcommand{\LLone}{\LL_1}
+
+\newcommand{\Div}{{\rm Div}}
+\newcommand{\Tongue}{\Upsilon}
+
+\newcommand{\Par}{{{\mathcal P}}}
+\newcommand{\inv}{{\iota}}
+
+\newcommand{\leg}{{\mathrm {leg}}}
+\newcommand{\il}{{\mathrm {il}}}
+
+\newcommand{\Mconv}{{\rm M}}
+\newcommand{\Hconv}{{\rm H}}
+\newcommand{\tconv}{{\rm t}}
+
+\newcommand{\Weight}{W}
+
+\newcommand{\KSQRT}{\widehat \KK}
+
+\newcommand{\ex}{{\mathrm{exc}}}
+\newcommand{\out}{{\mathrm{out}}}
+
+\newcommand{\vertbondpp}{\, \underset{\oplus}{\overset{\oplus}{|}} \, }
+\newcommand{\vertbondpm}{\, \underset{\ominus}{\overset{\oplus}{|}} \,}
+\newcommand{\vertbondmp}{\, \underset{\oplus}{\overset{\ominus}{|}} \, }
+\newcommand{\vertbondmm}{\, \underset{\ominus}{\overset{\ominus}{|}} \, }
+
+%\newcommand{\vertpp}{\, \underset{\oplus}{\overset{\oplus}{ \Diamond} } \, }
+%\newcommand{\vertpm}{\, \underset{\ominus}{\overset{\oplus}{\Diamond}} \, }
+%\newcommand{\vertmp}{\, \underset{\oplus}{\overset{\ominus}{\Diamond}} \, }
+%\newcommand{\vertmm}{\, \underset{\ominus}{\overset{\ominus}{\Diamond}}\,}
+
+\font\nt=cmr7
+
+\def\note#1
+{\marginpar
+{\nt $\leftarrow$
+\par
+\hfuzz=20pt \hbadness=9000 \hyphenpenalty=-100 \exhyphenpenalty=-100
+\pretolerance=-1 \tolerance=9999 \doublehyphendemerits=-100000
+\finalhyphendemerits=-100000 \baselineskip=6pt
+#1}\hfuzz=1pt}
+
+% \def\note#1{}
+
+\newcommand{\bignote}[1]{\begin{quote} \sf #1 \end{quote}}
+
+% \long\def\bignote#1{}
+
+
+% \centerline{NEW MACROS (2019) } 
+
+\newcommand{\lobr}{{\mathrm{lo-br}}}
+\newcommand{\sh}{{\mathrm{sh}}}
+\newcommand{\sei}{{\mathrm{si}}}
+\newcommand{\pe}{{\mathrm{pe}}}
+
+\newcommand{\ol}{\overline}
+\newcommand{\ul}{\underline}
+
+% \newcommand{\pp}{{\partial}}
+\newcommand{\pp}{{\mathfrak{p}}}
+\newcommand{\qq}{{\mathfrak{q}}}
+\newcommand{\bb}{{\mathfrak{b}}}
+
+
+
+\newcommand{\Kfilled}{{\mathcal {K} }}
+\newcommand{\Sec} {{{S}}}
+\newcommand{\Zec} {{{Z}}}
+% \newcommand{\Zay}{{\mathcal{?}}}
+% \newcommand{\Hub}{\TT}
+
+% \centerline{OLD MACROS continued} 
+
+
+
+
+
+
+%Commands specific to the renormalization operators:
+
+%% %% NEW MACROS (originated in Dec 2020)
+
+\newcommand{\Jul}{{\mathrm{J}}}
+\newcommand{\Mandel}{{\mathcal{M}}}
+%\newcommand{\Hub} {{T}} 
+\newcommand{\KK}{{\mathcal T}}
+%\newcommand{\Post}{{\overline{\PP}}}
+\newcommand{\Bouq}{{B}}
+% \newcommand{\Bouq}{{\mathcal {B} }}
+% \newcommand{\Bouq}{{T}}
+
+\newcommand{\base}{{\circ}}
+\newcommand{\com}{{\mathrm{com}}}
+%\newcommand{\per}{{p}}
+\newcommand{\perb}{{q}}
+\newcommand{\lo}{{\mathrm{lo}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\newcommand{\QED}{\rlap{$\sqcup$}$\sqcap$\smallskip}
+
+\def\sss{\subsubsection}
+
+\newcommand{\correspond}{\Psi}
+\newcommand{\conjugacy}{\psi}
+
+\newcommand{\rank}{\rm rank}
+\newcommand{\di}{\partial}
+\newcommand{\dibar}{\bar\partial}
+\newcommand{\hookra}{\hookrightarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\hra}{\hookrightarrow}
+\newcommand{\imply}{\Rightarrow}
+\def\lra{\longrightarrow}
+\newcommand{\wc}{\underset{w}{\to}}
+\newcommand{\tu}{\textup}
+
+%\newcommand{\hor}{{ah}}
+%\newcommand{\ver}{{av}}
+
+
+
+\def\ssk{\smallskip}
+\def\msk{\medskip}
+\def\bsk{\bigskip}
+\def\noi{\noindent}
+\def\nin{\noindent}
+\def\lqq{\lq\lq}
+\def\sm{\setminus}
+% \def\sm{\smallsetminus}
+\def\bolshe{\succ}
+\def\ssm{\smallsetminus}
+\def\tr{{\text{tr}}}
+\def\Crit{{\mathrm{Crit}}}
+
+\newcommand{\ctg}{\operatorname{ctg}}
+%\renewcommand{\thenotation}{} 
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\Hdist}{\operatorname{H-dist}}
+%\newcommand{\det}{\operatorname{det}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\inter}{\operatorname{int}}
+\renewcommand{\mod}{\operatorname{mod}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\tl}{\tilde}
+\newcommand{\ind}{ \operatorname{ind} }
+\newcommand{\Dist}{\operatorname{Dist}}
+\newcommand{\Graph}{\operatorname{Graph}}
+\newcommand{\len}{\operatorname{\l}}
+\newcommand{\vol}{\operatorname{vol}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+%\newcommand{\arg}{\operatorname{arg}}
+\newcommand{\orb}{\operatorname{orb}}
+\newcommand{\HD}{\operatorname{HD}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\length}{\operatorname{length}}
+\newcommand{\dens}{\operatorname{dens}}
+\newcommand{\meas}{\operatorname{meas}}
+\newcommand{\area}{\operatorname{area}}
+%\newcommand{\per}{\operatorname{per}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\renewcommand{\d}{{\diamond}}
+
+\newcommand{\lef}{{\mathrm{left}}}
+\newcommand{\righ}{{\mathrm{right}}}
+
+\newcommand{\Dil}{\operatorname{Dil}}
+\newcommand{\Ker}{\operatorname{Ker}}
+\newcommand{\tg}{\operatorname{tg}}
+\newcommand{\codim}{\operatorname{codim}}
+\newcommand{\isom}{\approx}
+\newcommand{\comp}{\circ}
+\newcommand{\esssup}{\operatorname{ess-sup}}
+\newcommand{\Rat}{{\mathrm{Rat}}}
+\newcommand{\hot}{{\mathrm{h.o.t.}}}
+\newcommand{\Conf}{{\mathrm{Conf}}}
+% \newcommand{\Top}{{\mathrm{T}}}
+%\newcommand{\Bottom}{{\mathrm{B}}}
+
+\newcommand{\SLa}{\underset{\La}{\Subset}}
+
+\newcommand{\const}{\mathrm{const}}
+\def\loc{{\mathrm{loc}}}
+\def\fib{{\mathrm{fib}}}
+\def \br{{\mathrm{br}}}
+
+\newcommand{\eps}{{\epsilon}}
+\newcommand{\epsi}{{\epsilon}}
+\newcommand{\veps}{{\varepsilon}}
+
+\newcommand{\Ga}{{\Gamma}}
+\newcommand{\De}{{\Delta}}
+\newcommand{\de}{{\delta}}
+\newcommand{\la}{{\lambda}}
+\newcommand{\La}{{\Lambda}}
+\newcommand{\si}{{\sigma}}
+\newcommand{\Si}{{\Sigma}}
+\newcommand{\Om}{{\Omega}}
+\newcommand{\om}{{\omega}}
+\newcommand{\Ups}{{\Upsilon}}
+
+\newcommand{\al}{{\alpha}}
+\newcommand{\ba}{{\mbox{\boldmath$\alpha$} }}
+\newcommand{\be}{{\beta}}
+\newcommand{\bbe}{{\mbox{\boldmath$\beta$} }}
+\newcommand{\bk}{{\boldsymbol{\kappa}}}
+\newcommand{\bg}{{\boldsymbol{\gamma}}}
+
+\newcommand{\bare}{{\bar\eps}}
+
+\newcommand{\Ray}{{\mathcal R}}
+\newcommand{\Eq}{{\mathcal E}}
+\newcommand{\PR}{PR}
+
+\newcommand{\AAA}{{\mathcal A}}
+\newcommand{\BB}{{\mathcal B}}
+\newcommand{\CC}{{\mathcal C}}
+\newcommand{\DD}{{\mathcal D}}
+\newcommand{\EE}{{\mathcal E}}
+\newcommand{\EEE}{{\mathcal O}}
+\newcommand{\II}{{\mathcal I}}
+\newcommand{\FF}{{\mathcal F}}
+\newcommand{\GG}{{\mathcal G}}
+\newcommand{\JJ}{{\mathcal J}}
+\newcommand{\HH}{{\mathcal H}}
+% \newcommand{\KK}{{\mathcal K}}
+\newcommand{\LL}{{\mathcal L}}
+\newcommand{\MM}{{\mathcal M}}
+\newcommand{\NN}{{\mathcal N}}
+\newcommand{\OO}{{\mathcal O}}
+\newcommand{\PP}{{\mathcal P}}
+\newcommand{\QQ}{{\mathcal Q}}
+\newcommand{\QM}{{\mathcal QM}}
+\newcommand{\QP}{{\mathcal QP}}
+\newcommand{\QL}{{\mathcal Q}}
+
+\newcommand{\RR}{{\mathcal R}}
+\newcommand{\SSS}{{\mathcal S}}
+\newcommand{\TT}{{\mathcal T}}
+\newcommand{\TTT}{{\mathcal P}}
+\newcommand{\UU}{{\mathcal U}}
+\newcommand{\VV}{{\mathcal V}}
+\newcommand{\WW}{{\mathcal W}}
+\newcommand{\XX}{{\mathcal X}}
+\newcommand{\YY}{{\mathcal Y}}
+\newcommand{\ZZ}{{\mathcal Z}}
+
+\newcommand{\AS}{{\mathcal{AS}}}
+\newcommand{\SAS}{{\mathcal{SAS}}}
+
+\newcommand{\A}{{\Bbb A}}
+\newcommand{\BBB}{{\Bbb B}}
+\newcommand{\C}{{\Bbb C}}
+\newcommand{\bC}{{\bar{\Bbb C}}}
+\newcommand{\D}{{\Bbb D}}
+\newcommand{\Hyp}{{\Bbb H}}
+\newcommand{\J}{{\Bbb J}}
+\newcommand{\Ll}{{\Bbb L}}
+\renewcommand{\L}{{\Bbb L}}
+\newcommand{\M}{{\Bbb M}}
+\newcommand{\N}{{\Bbb N}}
+\newcommand{\Q}{{\Bbb Q}}
+\newcommand{\R}{{\Bbb R}}
+\newcommand{\T}{{\Bbb T}}
+\newcommand{\V}{{\Bbb V}}
+\newcommand{\U}{{\Bbb U}}
+\newcommand{\W}{{\Bbb W}}
+\newcommand{\X}{{\Bbb X}}
+\newcommand{\Z}{{\Bbb Z}}
+
+
+
+\newcommand{\tT}{{\mathrm{T}}}
+\newcommand{\tD}{{D}}
+\newcommand{\hyp}{{\mathrm{hyp}}}
+\newcommand{\cusp}{{\mathrm{cusp}}}
+
+\newcommand{\fix}{{b}}
+\newcommand{\cxfix}{{\xi}}
+\newcommand{\LINV}{L_{\rm inv}}
+\newcommand{\LLINV}{{\mathcal L}_{\rm inv}}
+\newcommand{\f}{{\bf f}}
+\newcommand{\g}{{\bf g}}
+\newcommand{\h}{{\bf h}}
+\renewcommand{\i}{{\bar i}}
+\renewcommand{\j}{{\bar j}}
+
+\newcommand{\geoD}{{\boldsymbol{\gamma}}}
+
+
+%\newcommand{\k}{\kappa}
+
+
+
+\newcommand{\Bf}{{\mathbf{f}}}
+\newcommand{\Bg}{{\mathbf{g}}}
+\newcommand{\Bh}{{\mathbf{h}}}
+\newcommand{\Bi}{{\mathbf{i}}}
+\def\BJ{{\mathbf{J}}}
+\def\Bl{{\mathbf{l}}}
+\def\Bm{{\mathbf{m}}}
+\def\Bn{{\mathbf{n}}}
+
+
+\def\Bj{{\mathbf{j}}}
+\def\BJ{{\mathbf{J}}}
+\def\Bphi{{\mathbf{\Phi}}}
+\def\Bpsi{{\mathbf{\Psi}}}
+\newcommand\Bom{\boldsymbol{\om}}
+
+
+
+\newcommand{\BD}{{\boldsymbol{D}}}
+\newcommand{\BE}{{\boldsymbol{E}}}
+\newcommand{\BF}{{\boldsymbol{F}}}
+\newcommand{\BG}{{\mathbf{G}}}
+\def\BH{{\mathbf{H}}}
+\newcommand{\BI}{{\boldsymbol{I}}}
+\newcommand{\BK}{\mathbf{K}}
+\newcommand{\BL}{\mathbf{L}}
+\def\B0{{\mathbf{0}}}
+\newcommand{\BP}{{\boldsymbol{P}}}
+\newcommand{\BS}{{\boldsymbol{S}}}
+\def\BT{{\mathbf{T}}}
+\newcommand{\BW}{{\mathbf{W}}}
+\newcommand{\BV}{{\mathbf{V}}}
+\newcommand{\BOM}{{\boldsymbol{\Om}}}
+
+
+
+\newcommand{\BPi}{{\boldsymbol{\Pi}}}
+\def\BUps{{\boldsymbol{\Upsilon}}}
+\def\BLa{{\boldsymbol{\La}}}
+\def\BGa{{\boldsymbol\Gamma}}
+\def\BDe{{\boldsymbol\Delta}}
+\def\BUps{{\boldsymbol\Upsilon}}
+\def\BThe{{\boldsymbol\Theta}}
+\def\BOm{{\boldsymbol \Om}}
+\def\BPsi{{\boldsymbol\Psi}}
+
+\def\Baleph{{\boldsymbol\aleph}}
+
+\newcommand{\Bw}{{\mathbf{w}}}
+\newcommand{\Bal}{{\boldsymbol{\alpha}}}
+\newcommand{\Bde}{{\boldsymbol{\delta}}}
+\newcommand{\Bga}{{\boldsymbol{\gamma}}}
+\newcommand{\Bsi}{{\boldsymbol{\sigma}}}
+\newcommand{\Bla}{{\boldsymbol{\lambda}}}
+\def\Be{\mathbf{e}}
+\def\Dia{{\Diamond}}
+
+\def\SB{{\boldsymbol{\BB}}}
+
+\def\ext{{\mathrm{ex}}}
+\def\mouth{\operatorname{mouth}}
+\def\tail{\operatorname{tail}}
+
+\newcommand{\Comb}{{\it Comb}}
+\newcommand{\Top}{{\operatorname{Top}}}
+\newcommand{\Bottom}{{\operatorname{Bot}}}
+\newcommand{\QC}{\mathcal QC}
+\newcommand{\Def}{\mathcal Def}
+\newcommand{\Teich}{\mathcal Teich}
+%\newcommand{\QL}{{\mathcal{QG}}}
+\newcommand{\PPL}{{\mathcal P}{\mathcal L}}
+\newcommand{\Jac}{\operatorname{Jac}}
+%\newcommand{\DH}{\operatorname{DH}}
+\newcommand{\Homeo}{\operatorname{Homeo}}
+\newcommand{\AC}{\operatorname{AC}}
+\newcommand{\Dom}{\operatorname{Dom}}
+\newcommand{\ord}{\operatorname{ord}}
+
+
+\newcommand{\Hol}{{\rm Hol}}
+
+\newcommand{\Aff}{\operatorname{Aff}}
+\newcommand{\Euc}{\operatorname{Euc}}
+\newcommand{\MobC}{\operatorname{M\ddot{o}b}({\Bbb C}) }
+\newcommand{\PSL}{ {\mathcal{PSL}} }
+\newcommand{\SL}{ {\mathcal{SL}} }
+\newcommand{\CP}{ {\Bbb{CP}}   }
+
+
+\newcommand{\hf}{{\hat f}}
+\newcommand{\hz}{{\hat z}}
+\newcommand{\hM}{{\hat M}} 
+
+
+\renewcommand{\lq}{``}
+\renewcommand{\rq}{''}
+
+\newcommand{\Ch}{\textrm{Ch}}
+% \newcommand{\Ch}{{\textrm{\cyr CH} }}
+
+
+%&&&&&&&&&&    Content   &&&&&&&&
+
+
+\catcode`\@=12
+
+\def\Empty{}
+\newcommand\oplabel[1]{
+  \def\OpArg{#1} \ifx \OpArg\Empty {} \else
+  	\label{#1}
+  \fi}
+		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Insert a postscript figure using psfig.
+% Usage:	\realfig{label}{filename}{caption}
+%
+% uses psfig macros: must have \input{psfig} in the preamble to use
+% it. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\long\def\realfig#1#2#3#4{
+\begin{figure}[htbp]
+%%%\centerline{\psfig{figure=#3,height=#2}}
+\centerline{\psfig{figure=#2,width=#4}}
+\caption[#1]{#3}
+\oplabel{#1}
+\end{figure}}
+
+%&&&&&&&&&&&&       List of figures              &&&&&&&&&
+%
+%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+\newcommand{\comm}[1]{}
+\newcommand{\comment}[1]{}
+%\renewcommand{\marginpar}[1]{}
+
+
+

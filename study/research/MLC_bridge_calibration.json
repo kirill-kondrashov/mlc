@@ -1,0 +1,44 @@
+{
+  "scope": "Finite rational calibrations only; no quadratic return class or MLC instance",
+  "reset_cycle": {
+    "vertices": [
+      "A",
+      "B"
+    ],
+    "eventual_lower_bound": "1/6",
+    "values_from_zero": [
+      "0",
+      "0",
+      "1/3",
+      "1/6",
+      "1/2",
+      "1/4",
+      "7/12",
+      "7/24",
+      "5/8",
+      "5/16",
+      "31/48"
+    ]
+  },
+  "branching_lower_bound": "1/112",
+  "zero_self_loop_rejected": true,
+  "two_edge_zero_cycle_rejected": true,
+  "expanding_zero_loop_rejected_but_divergence_possible": true,
+  "z_squared_annuli": {
+    "normalized_first_moduli": [
+      "1/2",
+      "1/4",
+      "1/8",
+      "1/16",
+      "1/32",
+      "1/64"
+    ],
+    "normalized_infinite_sum": "1",
+    "intersection": "closed unit disk"
+  },
+  "growing_distortion": {
+    "b_j": "1",
+    "K_j": "2^j",
+    "infinite_sum": "2"
+  }
+}

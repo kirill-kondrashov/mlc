@@ -1,0 +1,311 @@
+\chapter{Source digests I: foundations and Lyubich's geometry}
+\label{ch:digests-foundations}
+
+This chapter and the next state, source by source, the definitions and the
+theorems on which the approaches to MLC rest.  Each section gives the
+definitions the source uses, the results it states, the status the source
+assigns to each result, and the other sources it depends on.  The statements
+are those of the source, up to notation.  Where a statement is proved in this
+review rather than in the source, this is said explicitly.  Lean
+correspondences, when they exist, are given at the end of a section; a Lean
+declaration is never a substitute for the mathematical statement.
+
+\section{Notation and the quadratic family}
+
+For $c\in\C$ let $f_c(z)=z^2+c$, and write $f_c^{n}$ for its $n$-th iterate.
+Put
+\begin{align*}
+ \Kc&=\{z\in\C:\ \sup_{n\ge0}|f_c^n(z)|<\infty\},\\
+ \Jc&=\partial\Kc,\\
+ \M&=\{c\in\C:\ 0\text{ has a bounded forward orbit under }f_c\}.
+\end{align*}
+The classical equivalence $c\in\M\Leftrightarrow\Kc$ is connected is the
+starting point of the subject; the statements below use both descriptions.
+
+\begin{definition}[Quadratic family, critical orbit, MLC]
+\label{def:mlc-statement}
+The critical orbit of $f_c$ is $p_n(c)=f_c^n(0)$.  A point $c\in\M$ is a point of
+local connectivity of $\M$ if $\M$ is locally connected at $c$.  The Mandelbrot
+set is locally connected, $\M$ being $\LocallyConnectedSpace$, if this holds at
+every point.  This last statement is the MLC conjecture.
+\end{definition}
+
+\begin{theorem}[Douady--Hubbard; compactness and connectedness]
+\label{thm:dh-compact-connected}
+$\M$ is a compact connected subset of $\C$.  Moreover $\M\subset\{|c|\le2\}$.
+\end{theorem}
+
+\begin{remark}
+In the review, the inclusion $\M\subset\{|c|\le2\}$ is proved in
+Chapter~\ref{ch:quadratic-foundations}, and the compactness of finite outer
+approximations is formalized in Lean.  Connectedness of $\M$ is cited from
+Douady and Hubbard~\cite{DH}; the review does not formalize it.
+\end{remark}
+
+\begin{theorem}[Real slice; proved in this review]
+\label{thm:real-slice}
+For $x\in\R$ one has $x\in\M$ if and only if $-2\le x\le\tfrac14$.
+\end{theorem}
+
+\begin{proof}
+Let $r_n=f_x^n(0)$ for real $x$; then $r_{n+1}=r_n^2+x$ is real.
+
+(i) \emph{Escape for $|x|>2$.}  Let $a=|x|>2$ and $\delta=a(a-2)>0$.  Then
+$|f_x(z)|\ge|z|^2-a$ always, and $t^2-a-t\ge a^2-2a=\delta$ whenever $t\ge a$,
+since $t^2-t-a^2+a=(t-a)(t+a-1)\ge0$.  Induction gives
+$|f_x^{n+1}(0)|\ge a+n\delta$, so the orbit is unbounded.  The same argument
+works for every complex $c$ with $|c|>2$; this is the escape part of
+Chapter~\ref{ch:quadratic-foundations}.
+
+(ii) \emph{Growth for $x>\tfrac14$.}  One has $r_{n+1}-r_n-(x-\tfrac14)=(r_n-\tfrac12)^2\ge0$,
+so $r_n\ge n(x-\tfrac14)\to\infty$.
+
+(iii) \emph{Invariant interval for $-2\le x\le\tfrac14$.}  Let $s=\sqrt{1-4x}\in[0,3]$
+and $\beta=(1+s)/2$.  Then $\beta^2+x=\beta$, and $x+\beta=(3-s)(1+s)/4\ge0$, so
+$-\beta\le x$.  If $|t|\le\beta$ then $t^2+x\le\beta^2+x=\beta$ and
+$t^2+x\ge x\ge-\beta$.  Thus $[-\beta,\beta]$ is invariant, contains $0$, and
+$\beta\le2$.  The orbit of $0$ is bounded by $2$.
+
+Parts (i)--(iii) give the equivalence.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:real-slice} is classical; it is proved here by the argument
+above, and the proof is formalized in
+\leanref{Mlc/Quadratic/RealSlice.lean}{ofReal_mem_mandelbrotSet_iff}.
+The Lean module also contains the linear escape estimate
+\leanref{Mlc/Quadratic/RealSlice.lean}{norm_orbit_ge_of_two_lt_norm}.
+\end{remark}
+
+\begin{corollary}[Real parts of the first components; proved in this review]
+\label{cor:real-components}
+For $x\in\R$, the parameter $x$ lies in the main cardioid $\mathcal H_0$ if and only if $-\tfrac34<x<\tfrac14$, and it
+lies in the period-two disk $\mathcal H_2$ if and only if $-\tfrac54<x<-\tfrac34$.
+\end{corollary}
+
+\begin{proof}
+For $\mathcal H_2$ the condition is $|x+1|<\tfrac14$.  For $\mathcal H_0$ use the parametrization
+$t\mapsto t/2-t^2/4$ of Proposition~\ref{prop:main-cardioid}.  If $x=t/2-t^2/4$ with $|t|<1$ and $t=a+ib$, then the imaginary part is
+$b(1-a)/2=0$.  Since $|a|<1$, we get $b=0$, and then $x=(1-(1-a)^2)/4\in(-\tfrac34,\tfrac14)$.  Conversely, for
+$x\in(-\tfrac34,\tfrac14)$ put $s=\sqrt{1-4x}\in(0,2)$ and $t=1-s$; then $|t|<1$ and $t/2-t^2/4=x$.
+\end{proof}
+
+\begin{remark}
+Corollary~\ref{cor:real-components} is formalized in
+\leanref{Mlc/Quadratic/RealComponents.lean}{hasAttractingFixedPoint_ofReal_iff} and
+\leanref{Mlc/Quadratic/RealComponents.lean}{hasAttractingPeriodTwoCycle_ofReal_iff}.
+Together with the real slice, it shows that the real parameters of $\mathcal H_0$ and $\mathcal H_2$ are the open intervals
+inside $[-2,\tfrac14]$ described above.
+\end{remark}
+
+\section{Results on local connectivity cited in the sources}
+
+The sources use the following historical results as inputs.  They are cited,
+not proved here.  The statements follow the account in Lyubich's
+paper~\cite{LyubichGeometry}, whose abstract records the attribution.
+
+\begin{theorem}[Douady--Hubbard; quasi-hyperbolic points]
+\label{thm:dh-quasihyperbolic}
+$\M$ is locally connected at every quasi-hyperbolic parameter in the sense of
+Douady and Hubbard~\cite{DH}.  Status: cited.
+\end{theorem}
+
+\begin{remark}
+The definition of quasi-hyperbolic parameters is not restated here; the
+review's definition list does not yet include it.  This is one of the gaps listed
+in Section~\ref{sec:digests-gaps}.
+\end{remark}
+
+\begin{theorem}[Yoccoz; boundaries of hyperbolic components]
+\label{thm:yoccoz-hyperbolic-boundary}
+$\M$ is locally connected at every point of the boundary of a hyperbolic
+component.  Status: cited, attributed to Yoccoz in~\cite{LyubichGeometry}.
+\end{theorem}
+
+\begin{theorem}[Yoccoz; finitely renormalizable parameters]
+\label{thm:yoccoz-finite-renormalization}
+MLC holds at every finitely renormalizable parameter $c\in\M$.  Status: cited,
+attributed to Yoccoz in~\cite{LyubichGeometry} and in the survey~\cite{DudkoMLC}.
+The renormalization used here is the Douady--Hubbard renormalization of
+polynomials; its definition belongs to Chapter~\ref{ch:quadratic-foundations} and to the
+survey~\cite{DudkoMLC}.
+\end{theorem}
+
+\begin{remark}
+Theorems~\ref{thm:dh-quasihyperbolic}, \ref{thm:yoccoz-hyperbolic-boundary} and
+\ref{thm:yoccoz-finite-renormalization} are the reason that MLC is open only at
+infinitely renormalizable parameters outside the cases treated in the later
+sources.  The survey~\cite{DudkoMLC} gives the same reduction in its Introduction.
+\end{remark}
+
+\section{Lyubich 1993: moduli, rigidity, and local connectivity}
+\label{sec:digest-lyubich-1993}
+
+Lyubich's paper~\cite{LyubichGeometry} is the first systematic use of complex
+a priori bounds for a class of infinitely renormalizable quadratic polynomials.
+Its stated aim is MLC at some infinitely renormalizable parameters, under two
+combinatorial assumptions (C1, C2 below).
+
+\subsection*{Definitions}
+
+\begin{definition}[Quadratic-like map]
+\label{def:quadratic-like}
+A quadratic-like map is a proper holomorphic map $f\colon U'\to U$ of degree two
+between topological disks with $\overline{U'}\subset U$.  Its filled Julia set is
+$K_f=\{z\in U':\ f^n(z)\in U'\ \forall n\}$, and $J_f=\partial K_f$.
+\end{definition}
+
+\begin{definition}[Principal nest and quadratic-like renormalization]
+\label{def:digest-principal-nest}
+The principal nest is a sequence $V^0\supset V^1\supset\cdots$ of critical
+puzzle pieces, where $V^{n+1}$ is obtained by pulling $V^n$ back along the first
+return of the critical point.  If the first return map $f^{\pi(t)}\colon V^{t+1}\to V^t$
+is itself quadratic-like, then $f$ is quadratic-like renormalizable and
+$Rf=f^{\pi(t)}\colon V^{t+1}\to V^t$.  Iterating gives $R^nf$.
+\end{definition}
+
+\begin{definition}[Central returns and combinatorial type]
+\label{def:combinatorial-type}
+A return at level $n$ is central if the first return map sends the critical point
+into $V^n$.  Consecutive central returns form a cascade.  The combinatorial type
+of $f$ is the number $\kappa(f)$ of levels with non-central return.
+\end{definition}
+
+\begin{definition}[Combinatorial rotation number]
+\label{def:rotation-number-lyubich}
+If $p$ external rays land at the dividing fixed point $\alpha$ and are cyclically
+permuted with rotation number $q/p$, the combinatorial rotation number of $\alpha$
+is $q/p$.  Assumption (C1) below concerns these numbers.
+\end{definition}
+
+\begin{definition}[Definite modulus]
+\label{def:definite-modulus}
+A quadratic-like map has definite modulus $\bar\mu>0$ if
+$\modulus(U\setminus\overline{U'})\ge\bar\mu$.
+\end{definition}
+
+\begin{definition}[Class $\mathcal F$]
+\label{def:class-F}
+$\mathcal F$ consists of the quadratic-like maps with infinitely many
+quadratic-like renormalizations such that
+\begin{itemize}
+\item[(C1)] all renormalization hybrid classes lie in finitely many truncated secondary
+  Mandelbrot limbs, so that the combinatorial rotation numbers are bounded;
+\item[(C2)] every $\kappa(R^mf)$ is sufficiently high, depending on those limbs.
+\end{itemize}
+The threshold in (C2) is not quantified in the source.
+\end{definition}
+
+\begin{definition}[Hybrid equivalence and combinatorial equivalence]
+\label{def:hybrid-equivalence}
+Two quadratic-like maps are hybrid equivalent if they are conjugate by a
+quasiconformal map $h$ with $\bar\partial h=0$ almost everywhere on the filled
+Julia set.  Two maps are combinatorially equivalent if they induce the same
+equivalence relation on rational external-ray arguments.  A quadratic polynomial
+is combinatorially rigid if its combinatorial class consists of a single
+quadratic polynomial.
+\end{definition}
+
+\begin{definition}[Removable compact set; robust polynomial]
+\label{def:removable-robust}
+A compact set $K\subset\overline{\C}$ is removable if every conformal embedding of
+$U\setminus K$ extends conformally across $K$.  A map is robust if, for arbitrarily
+large $m$, there is an annulus in $\C\setminus\omega(c)$ of definite modulus,
+homotopic rel.\ $\omega(c)$ to a Jordan curve enclosing $J(R^mf)$ and containing
+no point of $\omega(c)\setminus J(R^mf)$.  Here $\omega(c)$ is the $\omega$-limit
+set of the critical point.
+\end{definition}
+
+\subsection*{Results}
+
+\begin{lemma}[Lemma~0]
+\label{lem:lyubich-zero}
+$V^1\Subset V^0$.  Status: proved in~\cite{LyubichGeometry}.
+\end{lemma}
+
+\begin{theorem}[Lyubich, Theorem~I]
+\label{thm:lyubich-I}
+Let $f$ be quadratic-like with definite modulus and with internal class in a
+fixed finite family of truncated secondary limbs.  Let $n(k)$ count the levels
+with non-central return that precede the $k$-th quadratic-like level.  Then
+$\mu_{n(k)+1}=\modulus(V^{n(k)}\setminus V^{n(k)+1})$ grows uniformly linearly
+in $k$.  Status: proved in the source (Section~3), using Lemmas~1--10 and cited
+distortion and geometry estimates.
+\end{theorem}
+
+\begin{theorem}[Lyubich, Theorem~II]
+\label{thm:lyubich-II}
+For every $f\in\mathcal F$, all quadratic-like renormalizations $R^nf$ have
+definite moduli.  Status: proved in the source from Theorem~\ref{thm:lyubich-I}
+and Lemma~11.
+\end{theorem}
+
+\begin{corollary}[Lyubich, Corollary~IIa]
+\label{cor:lyubich-IIa}
+For $f\in\mathcal F$ the set $\omega(c)$ is a removable Cantor set.  Status:
+derived in the source from Theorem~\ref{thm:lyubich-II} and an annulus-removability
+criterion.
+\end{corollary}
+
+\begin{corollary}[Lyubich, Corollary~IIb]
+\label{cor:lyubich-IIb}
+For $f\in\mathcal F$ the Julia set $J(f)$ is locally connected.  Status: derived
+in the source from Theorem~\ref{thm:lyubich-II}, citing Hu--Jiang and Jiang.
+\end{corollary}
+
+\begin{corollary}[Lyubich, Corollary~IIc]
+\label{cor:lyubich-IIc}
+Every $f\in\mathcal F$ is robust.  Status: derived in the source from
+Theorem~\ref{thm:lyubich-II}.  The implication ``robust $\Rightarrow$ no invariant
+line fields'' is cited to McMullen.
+\end{corollary}
+
+\begin{theorem}[Lyubich, Theorem~III]
+\label{thm:lyubich-III}
+If $f,\tilde f\in\mathcal F$ are combinatorially equivalent, then they are
+quasiconformally conjugate.  Status: proved in the source by the pull-back
+argument of its Section~4.
+\end{theorem}
+
+\begin{corollary}[Lyubich, combinatorial rigidity]
+\label{cor:lyubich-rigidity}
+Every quadratic polynomial $z^2+c$ in $\mathcal F$ is combinatorially rigid.
+Consequently MLC holds at $c$.  Status: proved in the source from
+Theorem~\ref{thm:lyubich-III} and the standard argument that a closed
+combinatorial class is either open or a singleton quasiconformal class.
+\end{corollary}
+
+\begin{theorem}[Lyubich, Theorem~D; real maps]
+\label{thm:lyubich-D}
+For the class of real maps of fixed $q$-renormalizable type with initial modulus
+at least $\bar\mu$, either the renormalized modulus satisfies
+$\modulus(Rf)\ge\bar\mu$, or the real geometry is essentially bounded until the
+next quadratic-like level.  Status: proved in Section~5 with Sullivan's and real
+bounds as inputs.
+\end{theorem}
+
+\subsection*{Dependencies and connections}
+
+The source uses:
+the Douady--Hubbard straightening theorem, to identify each hybrid class with a unique
+polynomial representative~\cite{DHPolynomialLike};
+Yoccoz's puzzle and shrinking theorem, for non-renormalizable nests~\cite{HubbardYoccoz};
+Sullivan's complex bounds and sector lemma;
+Hu--Jiang and Jiang, for local connectivity from a priori bounds;
+McMullen, for robustness and the absence of invariant line fields;
+and Lyubich's own papers on generalized polynomial-like maps, real geometry, and
+non-quadratic-like complex bounds~\cite{LyubichDynamics}.
+
+Theorem~\ref{thm:lyubich-I} is the analytic core: definite moduli are preserved
+under renormalization in the class.  Theorem~\ref{thm:lyubich-III} transfers
+combinatorial information to conformal information, and the rigidity corollary
+gives MLC at the corresponding parameters.  The later sources replace the
+hypotheses (C1), (C2) by other combinatorial conditions; see
+Chapter~\ref{ch:digests-modern}.
+
+\subsection*{Formal status}
+
+No statement of this section is formalized.  The repository has no conformal
+modulus, no quasiconformal conjugacy, and no straightening theorem.  Lyubich's
+hypotheses appear in the repository only as interface data, as described in
+Chapter~\ref{ch:conditional-matrix} and Appendix~\ref{ch:formal-map}.

@@ -1,0 +1,262 @@
+\chapter[Laminations, entropy, and holomorphic motions]{Source digests V: laminations, core entropy, and holomorphic motions}
+\label{ch:digests-laminations-entropy}
+
+This chapter digests three sources that the combinatorial and phase--parameter
+approaches use: Dudko's \emph{Matings with laminations}~\cite{DudkoMatings}, the
+Dudko--Schleicher paper on core entropy~\cite{DudkoSchleicher}, and Słodkowski's
+theorem on holomorphic motions~\cite{Slodkowski}.  Statements are those of the sources,
+up to notation; numbering is that of the source.
+
+\section{Matings with laminations}
+\label{sec:digest-matings}
+
+\subsection*{Definitions}
+
+\begin{definition}[Mandelbrot set and the rational slice $V_2$]
+\label{def:matings-mandelbrot}
+The Mandelbrot set is $\M=\{c:\ J(z^2+c)\text{ is connected}\}$.  The space $V_2$ is the
+set of quadratic rational maps with a superattracting cycle of period two; each element
+is uniquely of the form $g_a(z)=a/(z^2+2)$ with $a\in\C\setminus\{0\}$.  The nonescaping
+locus $M_2\subset V_2$ consists of the parameters for which the second critical point is not
+in the attracting basin of the superattracting $2$-cycle.
+\end{definition}
+
+\begin{definition}[Basilica lamination]
+\label{def:basilica-lamination}
+A collection $L_B$ of leaves in $\overline{\mathbb D}$ satisfies:
+(1) each leaf joins points $\frac{a}{3\cdot2^n},\frac{b}{3\cdot2^n}\in S^1$, with $a,b$ coprime to $6$,
+and each such point lies on exactly one leaf; (2) $\{\tfrac13,\tfrac23\}$ and $\{\tfrac56,\tfrac16\}$
+are joined; (3) if $\{a,b\}\neq\{\tfrac13,\tfrac23\}$ is joined, the pairs among $\{a,b,\tfrac a2,\tfrac b2\}$
+lying in the same component of $S^1\setminus\{\tfrac13,\tfrac56\}$ are also joined; (4) leaf diameters tend to $0$.
+The quotients are $K'_B=\mathbb D/L_B$ and $J'_B=S^1/L_B$.  The depth of the leaf
+$\langle\frac{a}{3\cdot2^n},\frac{b}{3\cdot2^n}\rangle$ is $n$.
+\end{definition}
+
+\begin{definition}[$z^2$-invariant lamination]
+\label{def:matings-invariant}
+$L_B$ is $z^2$-invariant if its leaves are simple curves and every leaf other than
+$\langle\frac13,\frac23\rangle$ is an iterated preimage of $\langle\frac56,\frac16\rangle$ under $z\mapsto z^2$.
+\end{definition}
+
+\begin{definition}[Parameter lamination and mating]
+\label{def:matings-parameter}
+Using the parameter B\"ottcher map $B$, the parameter lamination is
+$\overline L_B=\bigcup_{\ell\in L_B}\bigl((1/z)\circ B\bigr)^{-1}(\ell\cap\mathbb D)$.  Let $W_B$ be the
+closed disk bounded by $\langle\frac13,\frac23\rangle$ and containing the Basilica limb.  Distinct
+$c_1,c_2$ are equivalent if both lie in $W_B$, or lie on the same parameter leaf.  The mating is
+$\M\cup_{S^1}L_B=(\M\cup_{S^1}\mathbb D)/L_B=V_1/L_B$, with quotient map $m\colon V_1\to V'_2$ and
+$M'_2=m(\M)$.
+\end{definition}
+
+\begin{remark}
+The paper does not define general laminations, quadratic lamination spaces, critical chords,
+polygons, or gaps in the abstract sense; its laminations are the Basilica lamination and its leaves.
+\end{remark}
+
+\subsection*{Results}
+
+\begin{theorem}[Dudko, Theorem~1.1]
+\label{thm:matings-1-1}
+The restriction $m|_\M\colon\M\to M'_2$ is canonical, independent of the choice of leaves.  $M'_2$ is
+locally connected, and the quotients $V'_2(L_B)$ are homeomorphic, by homeomorphisms that preserve $M'_2$.
+Status: proved in the paper (refined as its Proposition~3.8).
+\end{theorem}
+
+\begin{theorem}[Dudko, Theorem~1.2]
+\label{thm:matings-1-2}
+$\M\cup_{S^1}L_B$ is homeomorphic to $V_2$, preserving parapuzzle combinatorics and agreeing with the
+straightening maps on every small Mandelbrot copy; the homeomorphism is unique over $M_2$.  Status: proved.
+\end{theorem}
+
+\begin{corollary}[Dudko, Corollary~1.3]
+\label{cor:matings-1-3}
+$M_2$ is locally connected and is a continuous image of $\M$.  Status: proved.
+\end{corollary}
+
+\begin{theorem}[Dudko, Theorem~1.4]
+\label{thm:matings-1-4}
+If $c\in\M\setminus W_B$ is not on the boundary of a hyperbolic component and is not four-times
+renormalizable, then $f_c\cup_{S^1}L_B$ is well defined and topologically conjugate to $g_{m(c)}$.  If
+$J_c$ is locally connected, then $f_c\cup_{S^1}L_B=f_c\cup_{S^1}f_B$.  Status: proved.
+\end{theorem}
+
+\begin{proposition}[Dudko, Propositions~3.2--3.4 and~3.8]
+\label{prop:matings-3}
+A small Mandelbrot copy $\M_H\not\subset W_B$ is bounded on the left (respectively right) by $L_B$
+exactly when some $n$ satisfies $\frac56<2^n\phi_1<\frac16$ (respectively $\frac56<2^n\phi_2<\frac16$).  Every
+such copy is bounded on at least one side, and satellite copies on both sides.  There is a generalized
+decoration tiling of $\M_H$ in which each component of $V_1\setminus\widehat\M$ and each leaf of
+$L_B\setminus W_B$ meets at most three pieces.  The boundaries of the components of $V_1\setminus\widehat\M$
+contain no infinitely renormalizable parameter; these boundaries and $\widehat\M$ are locally connected;
+the diameters of the complementary components tend to $0$.  Status: proved.
+\end{proposition}
+
+\subsection*{Relation to MLC}
+
+The original mating construction of Wittner requires local connectivity of $\partial\M$.  The paper's
+replacement by $\M\cup_{S^1}L_B$ does not.  Its principal consequence is Corollary~\ref{cor:matings-1-3}:
+$M_2$ is locally connected.  The paper does not prove local connectivity of $\M$.
+
+\subsection*{Dependencies}
+
+The paper uses the Douady--Hubbard parameter B\"ottcher isomorphism $\C\setminus\M\cong\C\setminus\overline{\mathbb D}$
+and the correspondence theorem for dynamic and parameter rays; Moore's quotient theorem; the extension of
+homeomorphisms between locally connected planar continua; Yoccoz's puzzle and fiber results, the decoration theorem,
+and Thurston rigidity; and earlier Basilica mating results of several authors.
+
+\section{Core entropy}
+\label{sec:digest-core-entropy}
+
+\subsection*{Definitions}
+
+\begin{definition}[Lamination core entropy]
+\label{def:core-lamination}
+For the invariant quadratic lamination $L_\vartheta$ let $N_\vartheta(n)$ count the generation-$n$
+precritical leaves that lie in the backward orbit of the preferred major leaf and separate the
+$\alpha$-gap from its negative.  Then $h(\vartheta)=\limsup_{n}\frac1n\log N_\vartheta(n)$.  If the
+$\alpha$-gap is an infinite polygon, $h(\vartheta)=0$.
+\end{definition}
+
+\begin{definition}[Core entropy of a quadratic polynomial]
+\label{def:core-polynomial}
+For $c\in\M$ the critical ray pair is $\operatorname{RP}(\vartheta/2,(1+\vartheta)/2)$, where $\vartheta$ is an
+external parameter angle.  A generation-$n$ precritical ray pair is a backward iterate taking $n$ iterates to the
+critical ray pair (or to the characteristic periodic ray pair in the Fatou case).  If $\widetilde N_c(n)$ counts those
+that separate the $\alpha$-fixed point from its negative, then $\widetilde h(c)=\limsup_n\frac1n\log\widetilde N_c(n)$.
+\end{definition}
+
+\begin{definition}[Entropy on $S^1$ and on $\M$]
+\label{def:core-functions}
+$h\colon S^1\to[0,\log2]$ is the lamination entropy, and $\widetilde h\colon\M\to[0,\log2]$ is obtained from the
+projection $\M\to\M_{\rm abs}$ to the abstract Mandelbrot set, so that $\widetilde h=h\circ\pi$.  If the parameter ray at
+angle $\vartheta$ lands or accumulates at $c$, then $h(\vartheta)=\widetilde h(c)$.
+\end{definition}
+
+\begin{definition}[Hubbard tree and topological entropy]
+\label{def:core-hubbard}
+For a postcritically finite polynomial, the Hubbard tree $H$ is the minimal tree in the filled Julia set connecting
+the postcritical set.  If $M_{ij}\in\{0,1,2\}$ counts how often the edge $e_i$ covers $e_j$, then the classical core
+entropy is $h_{\rm top}(p_c|H)=\log\lambda(M)$, where $\lambda(M)$ is the leading eigenvalue.
+\end{definition}
+
+\subsection*{Results}
+
+\begin{theorem}[Dudko--Schleicher, Theorem~1.1; continuity]
+\label{thm:core-1-1}
+Both $h\colon S^1\to[0,\log2]$ and $\widetilde h\colon\M\to[0,\log2]$ are continuous.  Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Schleicher, Theorem~1.2 and~4.1; maxima]
+\label{thm:core-4-1}
+As stated in the paper, and proved there: (1) every dyadic angle is an isolated local maximum of $h$;
+(2) every local maximum is dyadic; (3) in every wake the unique global maximum occurs at the dyadic angle with
+least denominator; (4) for each $n$, $N_\vartheta(n)$ is maximized in a wake at the dyadic of least generation.
+These statements are the conjectures of Tiozzo in the form given by the paper.
+\end{theorem}
+
+\begin{corollary}[Dudko--Schleicher, Corollary~4.2]
+\label{cor:core-4-2}
+$\widetilde h$ has isolated local maxima exactly at the parameters $c(k/2^q)$.  Status: proved in the paper.
+\end{corollary}
+
+\begin{theorem}[Dudko--Schleicher, Theorem~4.3; minima]
+\label{thm:core-4-3}
+$h$ has an isolated local minimum at $\vartheta$ exactly when three rational parameter rays land at one
+Misiurewicz--Thurston parameter with equal odd denominators; $\widetilde h$ has no isolated local minimum.
+Status: proved in the paper; the printed inequality in the plain-text version was partly corrupted, so the
+statement follows the displayed theorem formulation.
+\end{theorem}
+
+\begin{theorem}[Dudko--Schleicher, Theorem~2.4; correspondence]
+\label{thm:core-2-4}
+A rational dynamical ray pair is characteristic if and only if the corresponding parameter rays land together
+and separate $c$ from $0$.  Status: proved.
+\end{theorem}
+
+\begin{theorem}[Dudko--Schleicher, Lemma~2.5; monotonicity]
+\label{thm:core-2-5}
+If $c\prec\widetilde c$, then $N_c(n)\le N_{\widetilde c}(n)$ for all $n$, and $h(c)\le h(\widetilde c)$.  Status: proved.
+\end{theorem}
+
+\begin{theorem}[Dudko--Schleicher, Theorems~5.7--5.9; continuity along veins]
+\label{thm:core-5}
+Entropy is continuous at hyperbolic-component angles; continuity along a vein implies continuity in a neighbourhood of
+each point of the vein; hence $h$ is continuous everywhere.  Status: proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Dudko--Schleicher, Theorem~A.3; biaccessibility]
+\label{thm:core-a-3}
+$\widetilde h(c)=B_{\rm top}(c)\log2$ and $h(\vartheta)=B_{\rm comb}(\vartheta)\log2$, where $B_{\rm top}$ and $B_{\rm comb}$ are
+the topological and combinatorial biaccessibility dimensions.  Corollary~A.5: $h_{\rm top}(T_c)=\widetilde h(c)$ whenever the
+tree $T_c$ is compact.  Status: proved in the paper.
+\end{theorem}
+
+\subsection*{Relation to MLC}
+
+The paper does not prove local connectivity of $\M$.  It treats parameters whose rays need not land, and it works in the
+abstract Mandelbrot set to avoid assuming MLC.  The entropy function extends continuously to all parameters.  Positive
+entropy is related to biaccessibility dimension (Theorem~\ref{thm:core-a-3}); the paper does not assert that positive
+entropy implies MLC.  The paper records known consequences of Yoccoz puzzles along dyadic veins and treats general MLC as open.
+
+\subsection*{Dependencies}
+
+Thurston's invariant laminations and correspondence theorem; Milnor's parameter rays; the Douady--Hubbard branch theorem and
+pinched-disk model; Yoccoz's theorem and puzzles; Tiozzo's continuity results and conjectures; Jung's appendix; Bruin--Schleicher's
+dimension results; and Furstenberg's relation between entropy and dimension.
+
+\section{Holomorphic motions}
+\label{sec:digest-slodkowski}
+
+Słodkowski's paper~\cite{Slodkowski} does not mention the Mandelbrot set.  It is included because the
+holomorphic-motion arguments of the phase--parameter approach rely on it (Chapter~\ref{ch:phase-parameter}).
+
+\subsection*{Definitions}
+
+\begin{definition}[Holomorphic motion]
+\label{def:holomorphic-motion}
+Let $E\subset\C$.  A holomorphic motion of $E$ parametrized by the unit disk $\D$ is a map $f\colon\D\times E\to\C$ such that:
+(a) for each $w\in E$, $z\mapsto f(z,w)$ is holomorphic on $\D$; (b) for each $z\in\D$, $w\mapsto f_z(w)=f(z,w)$ is injective; (c) $f_0$ is the identity on $E$.
+\end{definition}
+
+\begin{definition}[Analytic disk, trace, polynomial hull]
+\label{def:holomorphic-trace}
+An analytic disk is the graph of a holomorphic map $\D\to\C$.  The trace of a motion is
+$\{(z,f_z(w)):z\in\D,\ w\in E\}\subset\D\times\C$.  The polynomial hull $h(X)$ of a compact set $X$ is the usual polynomially convex hull.
+\end{definition}
+
+\subsection*{Results}
+
+\begin{lemma}[Lambda lemma; cited from Mañé--Sad--Sullivan]
+\label{lem:lambda-lemma}
+A holomorphic motion is jointly continuous and extends continuously to $\overline{\D}\times\overline E$.  Its injections
+$F_z$ are quasiconformal.  Status: cited.
+\end{lemma}
+
+\begin{theorem}[Słodkowski, Theorem~1.2; cited from the author's earlier work]
+\label{thm:slodkowski-1-2}
+Let $X\subset\partial\D\times\C$ be compact with connected fibres $X(\zeta)$ for all $\zeta\in\partial\D$, and suppose
+$h(X)\cap(\D\times\C)\neq\varnothing$.  Then $h(X)\setminus X$ is a union of analytic disks, and the topological boundary of
+$h(X)\setminus X$ in $\D\times\C$ is a union of mutually disjoint analytic disks.  Status: cited.
+\end{theorem}
+
+\begin{theorem}[Słodkowski, Theorem~1.3; extension]
+\label{thm:slodkowski-1-3}
+Every holomorphic motion $f\colon\D\times E\to\C$ of an arbitrary subset $E\subset\C$ extends to a holomorphic motion
+$F\colon\D\times\C\to\C$ of all of $\C$.  Status: proved in the paper.  The earlier results of Sullivan--Thurston and of
+Bers--Royden gave extensions over smaller disks, with radius $r$ unspecified and $r=3$ respectively; the paper obtains
+$r=1$.
+\end{theorem}
+
+\begin{theorem}[Słodkowski, Theorem~1.4; holomorphic axiom of choice]
+\label{thm:slodkowski-1-4}
+Let $f(z,w)=f_z(w)$ be a holomorphic motion of $E\subset\C$ parametrized by $z\in\D$.  For every point $a\notin E$ there is a
+holomorphic map $g\colon\D\to\C$ with $g(0)=a$ and $g(z)\notin f_z(E)$ for every $z\in\D$.  Status: proved in the paper for
+finite sets (its Section~2), and sketched in general in its Section~3.  The paper notes that the axiom of choice gives the
+extension theorem by a known argument of Sullivan and Thurston.
+\end{theorem}
+
+\subsection*{Relation to MLC}
+
+The text contains no statement about the Mandelbrot set.  Its role for MLC is technical: it supplies the extension of holomorphic motions
+used when the phase--parameter correspondence is built from the trace of a motion, which the review treats in
+Chapter~\ref{ch:phase-parameter}.

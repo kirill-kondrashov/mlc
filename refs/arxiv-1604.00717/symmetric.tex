@@ -1,0 +1,369 @@
+\section{Almost commuting pairs and definition of renormalization}
+\label{sec:symmetric}
+
+
+Renormalization of maps with Siegel disks is commonly defined in the language of commuting pairs of analytic maps (cf. \cite{McM,Ya3}). There is, however, no natural structure of a Banach manifold on pairs of commuting holomorphic maps. This has led the second author to introduce the notion of {\it cylinder renormalization operator} $\cR_{\text{cyl}}$ for Siegel maps in \cite{Ya3}, and state renormalization hyperbolicity results for $\cR_{\text{cyl}}$. In this paper we use a different approach, going back to the work of Stirnemann \cite{Stir}, and consider {\it almost commuting pairs}. 
+
+For a topological disk $Z\ni 0$ denote $\cH(Z)$ the Banach space of holomorphic functions $f$ in $Z$ with the uniform norm:
+\begin{equation}
+\label{eq:unorm1}\| f\|=\sup_{z \in Z} |f|,
+\end{equation}
+and set $\cH(Z,W)\equiv \cH(Z)\times\cH(W)$.
+We will typically use the notation $(\eta,\xi)$ for an element of $\cH(Z,W)$.
+
+We let $\cC(Z,W)$ denote the Banach submanifold of $\cH(Z,W)$ given by the linear conditions 
+$$\eta'(0)=\xi'(0)=0.$$
+We say that a pair $(\eta,\xi)\in\cC(Z,W)$ is  {\it almost commuting to order $k\geq 0$} if the following holds:  
+\begin{equation}\label{eq:accond}
+(\eta \circ \xi)^{(n)}(0)=(\xi \circ \eta)^{(n)}(0)), \ 0\leq n\leq k;\; \eta''(0)>0;\;\xi''(0)>0,\;\text{ and }\xi(0)=1.
+\end{equation}
+The following is immediate:
+\begin{prop}
+Let $\zeta=(\eta,\xi)\in\cC(Z,W)$ be a pair such that $\xi(0)=1$. Then $\zeta$ is almost commuting to order $k$ if and only if the commutator 
+\begin{equation}\label{eq:commutator}
+[\eta,\xi]\equiv \eta\circ \xi(z)-\xi\circ\eta(z)=o(z^k).
+\end{equation}
+\end{prop}
+
+
+In the case $k=2$, we will simply call the pair {\it almost commuting (or a.c.)}; almost commuting pairs will be the principal subject of this paper.
+We denote $\cB(Z,W)$ the subset of $\cC(Z,W)$ consisting of a.c. pairs.  
+
+Let $c(z)$ denote the operation of complex conjugation: $c(z)=\bar{z}$. 
+Let $(\phi,\psi)\in\cE(U,V)$ and, as usual, set $\eta=\phi\circ q_2$, $\xi=\psi\circ q_2$. 
+
+
+\begin{definition}\label{def:renormalizability} 
+We will say that the  pair $(\eta,\xi)\in\cH(Z,W)$ is {\it renormalizable}, if 
+\begin{eqnarray}
+\label{eq:inclusion1} \lambda(c(W)) &\Subset& Z, \\
+\label{eq:inclusion2} \lambda(c(Z)) &\Subset& W, \\
+\label{eq:inclusion3} \xi(\lambda(c(Z))) &\Subset& Z,
+\end{eqnarray}
+where $\lambda(z)=\xi(0) \cdot z$. The renormalization of a pair $(\eta,\xi)$ will be defined as 
+\begin{equation}\label{eq:renpairs}
+\cR (\eta,\xi)=\left(c \circ \lambda^{-1} \circ \eta \circ \xi \circ \lambda \circ c  ,  c \circ \lambda^{-1} \circ \eta \circ \lambda \circ c \right).
+\end{equation}
+\end{definition}
+
+We note:
+\begin{prop}
+\label{prop-m-invt}
+For every $k\geq 2$, 
+renormalization preserves the set of pairs which almost commute to order $k$.
+\end{prop}
+\begin{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%% ignore start
+\ignore{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ Indeed,  using the relation $\partial_z c(\eta(\bar{z}))=c(\partial_{\bar{z}}\eta(\bar{z}))=c(\eta'(\bar{z}))$, the set of conditions $(\ref{eq:accond})$ for the renormalized pair $(\tilde{\eta},\tilde{\xi})$ becomes
+\begin{eqnarray}
+\nonumber (\tilde{\eta} \circ \tilde{\xi})(0)&-&(\tilde{\xi} \circ \tilde{\eta})(0)=\\
+\nonumber &=& \left(c \circ \lambda^{-1} \circ \eta \circ \xi  \circ \eta \circ \lambda \circ c\right)(0)-\left(c \circ \lambda^{-1} \circ \eta  \circ \eta \circ \xi \circ \lambda \circ c \right)(0)\\
+\nonumber &=& \left(c \circ \lambda^{-1} \circ \eta \circ \xi  \circ \eta \right)(0)-\left(c \circ \lambda^{-1} \circ \eta  \circ \eta \circ \xi \right)(0)\\
+\label{eq:rcommute0} & =& 0 \quad \underline{{\rm by} \ \eta(\xi(0))=\xi(\eta(0))}, \\
+\nonumber  (\tilde{\eta} \circ \tilde{\xi})'(0)&-&(\tilde{\xi} \circ \tilde{\eta})'(0)=\\
+\nonumber &=& \left(c \circ \lambda^{-1} \circ \eta \circ \xi \circ \eta \circ  \lambda \circ c \right)'(0)- \left(c \circ \lambda^{-1} \circ \eta \circ \eta \circ \xi \circ \lambda \circ c \right)'(0)\\
+ \nonumber &=& c \left( \eta' \circ \xi(\eta(0)) \cdot (\xi \circ \eta)'(0) \right) - c \left( \eta' \circ \eta(\xi(0)) \cdot (\eta \circ \xi)'(0) \right) \\
+ \label{eq:rcommute1}  &=&0  \quad \underline{{\rm by} \ \eta(\xi(0))=\xi(\eta(0)) \ {\rm and} \ (\eta \circ \xi)'(0)=(\xi \circ \eta)'(0)},\\
+\nonumber  (\tilde{\eta} \circ \tilde{\xi})''(0)&-&(\tilde{\xi} \circ \tilde{\eta})''(0)=\\
+\nonumber &=& \left(c \circ \lambda^{-1} \circ \eta \circ \xi \circ \eta \circ  \lambda \circ c \right)''(0)- \left(c \circ \lambda^{-1} \circ \eta \circ \eta \circ \xi \circ \lambda \circ c \right)''(0)\\
+ \nonumber &=& c \left( \eta' \circ \xi(\eta(0)) \cdot (\xi \circ \eta)''(0) \right) - c \left( \eta' \circ \eta(\xi(0)) \cdot (\eta \circ \xi)''(0) \right) \\
+ \nonumber  &\phantom{=}& \phantom{c \left( \eta' \circ \xi(\eta(0)) \cdot (\xi \circ \eta)''(0) \right)} + c \left( \eta'' \circ \xi(\eta(0)) \cdot ((\xi \circ \eta)'(0))^2 \right) \\
+\nonumber  &\phantom{=}& \phantom{c \left( \eta' \circ \xi(\eta(0)) \cdot (\xi \circ \eta)''(0) \right)} - c \left( \eta'' \circ \eta(\xi(0)) \cdot ((\eta \circ \xi)'(0))^2 \right) \\
+\label{eq:rcommute2}  &=&0  \quad \underline{{\rm by} \ (\eta \circ \xi)^{(n)}(0)=(\xi \circ \eta)^{(n)}(0), \ n=0,1,2.}
+\end{eqnarray}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ignore end
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Suppose  (\ref{eq:commutator}) holds for $\zeta=(\eta,\xi)$. Consider the commutator of $\eta\circ \xi$ and $\eta$:
+$$\eta\circ\xi\circ\eta(z)-\eta^2(z)\circ\xi(z)=\eta(\xi\circ\eta(z))-\eta(\eta\circ\xi(z)).$$
+Denoting $x=\xi\circ\eta(z)$ and $y=\eta\circ\xi(z),$ we have
+$$\eta(x)-\eta(y)=\eta'(x)(x-y)+o(x-y).$$
+Thus, 
+$$\eta\circ\xi\circ\eta(z)-\eta^2(z)\circ\xi(z)=o(z^k),$$
+and hence $\cR\zeta$ is almost commuting to order $k$.
+%%Additionally, $\tilde{\xi}(0)=\lambda^{-1} \eta(0)=1$ by the definition of the rescaling $\la$.
+\end{proof}
+
+
+\section{Renormalization of almost commuting symmetric pairs}\label{sec:ACSM}
+In this section we work with the same definitions as Stirnemann~\cite{Stir}, within a class of almost commuting pairs $\cM$ with a quadratic symmetry condition. The class $\cM$ is too narrow for generalizations, and we will expand it in the following section -- however, the results we prove for $\cM$ will form a basis of  further discussion. 
+
+
+
+%%
+%%%\begin{definition}\label{defn:ACHP} 
+
+
+Let $U$ and $V$ be two simply-connected domains containing the origin. Set $$q_2(z)=z^2$$ and let 
+$$Z\equiv q^{-1}_2(U),\;W\equiv q^{-1}_2(V).$$
+We denote $\cE(U,V)$ the subset of $\cH(Z,W)$ consisting of all pairs which factor as 
+\begin{equation}\label{eq:factors}
+\eta=\phi\circ q_2,\;\xi=\psi\circ q_2,
+\end{equation}
+where $\phi$ and $\psi$ are holomorphic functions on $U$ and $V$ respectively. We will identify $\cE(U,V)$ with the Banach space $\cH(Z,W)$, and will use the notation $(\eta,\xi)$ and $(\phi,\psi)$ for a pair in $\cE(U,V)$interchangeably, whenever it does not cause any ambiguity.  We will refer to $(\phi,\psi)$ as {\it factors} of $(\eta,\xi)$.
+
+We say that $(\eta,\xi)\in\cE(U,V)$ is an {\it almost commuting symmetric (a.c.s.) pair} if $(\eta,\xi)\in\cB(Z,W)$.
+In this case, we will call the maps $\phi$ and $\psi$ {\it a.c.s. factors}. 
+We will denote $\cM(U,V)\subset \cE(U,V)$ the set of a.c.s. factors (again equipped with the uniform norm coming from $\cH(U,V)$).
+
+
+We note:
+
+\begin{prop}
+\label{prop-submfld1} Let $\cW\subset \cE(U,V)$  be an open set in which $\psi'(0)\neq 0$ (for instance, small open neighborhoods
+ of a pair of factors in which $\psi$ is locally univalent at the origin).
+Then the  space  $\cM(U,V)\cap \cW$ is a Banach submanifold of $\cE(U,V)$.
+\end{prop}
+\begin{proof}
+
+We would like to write out the commutation conditions $(\ref{eq:accond})$ at $0$ up to order $2$. First, we remark that 
+\begin{eqnarray}
+\label{eq:1der} \eta'(0)&=&\phi'(0) q_2'(0)=0,  \hspace{43mm}  \xi'(0)=\psi'(0)  q_2'(0)=0,\\
+\label{eq:2der} \eta''(0)&=&\phi''(0) (q'_2(0))^2 +\phi'(0) q_2''(0)=2 \phi'(0), \quad  \xi''(0)=2 \psi'(0),
+%\label{eq:3der} \eta'''(0)&=&\phi'''(0) (q'_2(0))^3 + 3 \phi''(0) q_2'(0) q_2''(0) +  \phi'(0) q_2'''(0)=0, \\
+%\label{eq:4der} \eta^{(4)}(0)&=& 3 \phi''(0) q''_2(0)^2   =12 \phi''(0),  \hspace{19.5mm}   \xi^{(4)}(0)=12 \psi''(0),
+\end{eqnarray}
+and that 
+\begin{eqnarray}
+\label{eq:2etaxider} (\eta \circ \xi)''(0)&=&\eta' \circ \xi(0) \cdot \xi''(0)=4 \phi' \circ q_2 \circ \psi(0) \cdot \psi (0) \cdot \psi'(0), \\
+\label{eq:2xietader} (\xi \circ \eta)''(0)&=&4 \psi' \circ q_2 \circ \phi(0) \cdot \phi (0) \cdot \phi'(0),
+\end{eqnarray}
+
+
+{ The first of the equations $(\ref{eq:accond})$, the equation  for $n=0$}, is simply
+\begin{equation}\label{eq:accond0}
+\eta \circ \xi(0) -\xi \circ \eta(0)=0 \Rightarrow \phi(\psi(0)^2)-\psi(\phi(0)^2)=0.
+\end{equation}
+
+{ The second of the equations $(\ref{eq:accond})$, the equation  for $n=1$}, becomes
+\begin{equation}\label{eq:accond1}
+\eta' \circ \xi(0) \cdot \xi'(0) -\xi' \circ \eta(0) \cdot \eta'(0)=0,
+\end{equation}
+which is automatically satisfied  because of the condition $(\ref{eq:1der})$.
+
+{ The third of the equations $(\ref{eq:accond})$, the equation  for $n=2$}, becomes
+\begin{equation}\label{eq:accond2}
+ (\eta \circ \xi)''(0) -(\xi \circ \eta)''(0)=0 \Rightarrow \phi'(\psi(0)^2)  \psi (0)  \psi'(0)-\psi'(\phi(0)^2)  \phi (0)  \phi'(0)=0.
+\end{equation}
+
+
+Let us write $\phi$ and $\psi$ as power series centered at $0$:
+$$\phi(z)=\sum_{i=0}^\infty \hat\phi_i z^i\text{, and } \psi(z)=\sum_{i=0}^\infty \hat\psi_i z^i.$$ 
+
+Set
+$q(z)=\phi(z)-\hat \phi_2 z^2 -\hat \phi_3 z^3$,    $s(z)=\psi(z)-\hat\psi_0$. We obviously have a parametrization of
+$\cE(U,V)$ by the analytic coordinates $$(\hat \phi_2,\hat \phi_3, \hat\psi_0,q(z),s(z)).$$ 
+We will show that the set of a.c.s. pairs is parametrized by the coordinates
+other than $\hat\phi_2$, $\hat\phi_3$, $\hat\psi_0$. 
+%%
+%%We would like to show that for the a.c.s. pairs, the components $\phi_2$, $\phi_3$ and $\psi_0$ can be parametrized by  functions $n$ and $s$. 
+To that end consider the set of conditions $(\ref{eq:accond0})$, $(\ref{eq:accond2})$, together with $\psi(0)=1$:,  which define
+$\cM(U,V)$ as a subset of $\cH(U,V)$ and write them in coordinates:
+\begin{equation} \label{classF}
+F(\hat\phi_2,\hat\phi_3,\hat\psi_0; q,s)=0,
+\end{equation}
+where $F: \cH(U,V) \to  \fR^3$ is given by 
+\begin{eqnarray}
+\nonumber F_1(\hat\phi_2,\hat\phi_3, \hat\psi_0; q, s)&=&\phi(\psi(0)^2) - \psi(\phi(0)^2) \\
+\nonumber     &=&q((s(0)+\hat\psi_0)^2) +\hat\phi_2 (s(0)+\hat\psi_0)^{4}+ \hat\phi_3 (s(0)+\hat\psi_0)^{6}- s(q(0)^2)-\hat\psi_0 \\
+\nonumber   F_2(\hat\phi_2,\hat\phi_3, \hat\psi_0; q,s)&=&\phi'(\psi(0)^2) \psi(0) \psi'(0) - \psi'(\phi(0)^2) \phi(0) \phi'(0) \\
+\nonumber     &=&\left(q'(\psi(0)^2)+2 \hat\phi_2 (s(0)+\hat\psi_0)^{2}+3 \hat\phi_3 (s(0)+\hat\psi_0)^{4} \right) \psi(0) \psi'(0) - \\
+\nonumber  &\phantom{=}&  - s'(q(0)^2) q(0) q'(0) \\
+\nonumber      F_3(\hat\phi_2,\hat\phi_3, \hat\psi_0; q, s)&=&\psi(0)-1=s(0)+\hat\psi_0-1.
+\end{eqnarray}
+Consider the differential of the above equations with respect to the first three coordinates:
+\begin{equation}\label{eq:determinant}
+\left| \! \!
+\begin{array}{c c c}
+\psi(0)^{4}   &  \psi(0)^{6} &  2 \phi'(\psi(0)^2) \psi(0)-1   \\
+ 2 \psi(0)^{3}  \psi'(0)  &   3 \psi(0)^{5} \psi'(0)  &   2 \phi''(\psi(0)^2) \psi(0)^{2} \psi'(0)+ \phi'(\psi(0)^2) \psi'(0) \\
+ 0  &   0  &  1
+\end{array}
+\! \! \right|=\psi(0)^{9} \psi'(0).
+\end{equation}
+Since $\psi(0)\approx 1$ on an open neighborhood of $\cM(U,V)$, the determinant is close to $\psi'(0)$, and hence is non-zero.
+By the Regular Value Theorem (see e.g. \cite{ArBo}), the set $F^{-1}(0)$ is an analytic submanifold, parametrized by $q$ and $s$. 
+
+\end{proof}
+
+
+
+\subsection{Renormalization for a.c.s. pairs}\label{sec:RenACFM}
+
+If a pair $(\eta,\xi)\in\cE(U,V)$ is renormalizable, we can write the renormalization in terms of its factors as follows:
+\begin{equation}
+\label{eq:renfactors}\cR(\phi,\psi)=\left(c \circ \lambda^{-1} \circ \phi \circ q_2 \circ \psi \circ \lambda^2 \circ c  ,  c \circ \lambda^{-1} \circ \phi \circ \lambda^2 \circ c \right).
+\end{equation}
+We will use one and the same symbol $\cR$ for both the renormalization operator $(\ref{eq:renpairs})$  acting on pairs $(\eta,\xi)$ and the operator $(\ref{eq:renfactors})$ acting on the factors; the domain of the operator $\cR$ will be always clear from the context.
+
+
+
+
+
+%%\subsection{Projection on the commuting subspace}\label{sec:projcommsubspace}
+According to Proposition \ref{prop-m-invt}, the Banach  submanifold $\cM(U,V)$ is invariant under the renormalization operator. Our hyperbolicity result
+holds for the restriction of $\cR$ to this submanifold: otherwise, the codimension of the strong stable manifold of the operator $\cR$ will be greater than one (and hence, the universality statement will not hold). However, for the purposes of a computer-assisted proof, the restriction
+$\cR|_{\cM(U,V)}$ is not a good object to work with, since we do not have an explicit analytic parametrization of $\cM(U,V)$.
+Therefore, we will borrow a page from the work of Stirnemann~\cite{Stir}, and define an extension of $\cR$ from $\cM(U,V)$ which maps
+$$\cE(U,V)\cap \cU\to\cM(U,V), \text{ where }\cU \text{ is an open neighborhood of }\cM(U,V).$$
+Namely, we prove the following:
+%%We would like to adjust the constant coefficient of $\xi$ and the 
+%%coefficients  at $z^4$ and $z^6$ of $\eta$ so that the new pair would be $\cM(Z,W)$.   
+%%
+\begin{prop}
+\label{prop-proj}
+There exists an open neighborhood $\cU$ of $\cM(U,V)$ in $\cE(U,V)$ such that the following holds.
+Suppose that a pair of maps $(\eta,\xi) \in \cU$. Then there exists a unique triple of complex numbers $a$, $b$, $c$ such that 
+\begin{eqnarray}
+\label{Pproj}
+\cP (\eta,\xi)(z)\equiv\left( \eta(z)+a z^4+b z^6, \xi(z)+c \right)\in\cM(U,V).
+\end{eqnarray}
+Moreover, the dependence of the numbers $a$, $b$, and $c$ on $(\eta,\xi)\in\cU$ is analytic.
+\end{prop}
+\begin{proof}
+Set 
+ $\hat{\phi}(z)=\phi(z)+a z^2+b z^3$ and $\hat{\psi}(z)=\psi(z)+c$.
+We would like $(\hat{\phi},\hat{\psi})$ to satisfy the set of conditions  $(\ref{eq:accond0})$, $(\ref{eq:accond2})$ together with $\hat{\psi}(0)=1$. We immediately have
+\begin{equation}\label{eq:newFs1}
+c=1-\psi(0).
+\end{equation}
+Furthermore, the linearization of equations  $(\ref{eq:accond0})$ and $(\ref{eq:accond2})$ for $a$ and $b$ results in
+\begin{equation} \label{eq:newFs2}
+\left[\!
+\begin{array}{c c}
+\hat{\psi}(0)^{4} \  & \ \hat{\psi}(0)^{6}   \\
+ 2 \hat{\psi}(0)^{3}  \hat{\psi}'(0)   &   3 \hat{\psi}(0)^{5} \hat{\psi}'(0)
+\end{array}
+\!\right]\! \cdot \!
+\left[\!
+\begin{array}{c}
+a \\
+b
+\end{array}
+\!\right]\!=\!
+\left[\!
+\begin{array}{c}
+\hat{\psi}(\phi(0)^2)-\phi(\hat{\psi}(0)^2) \\
+\hat{\psi}'(\phi(0)^2) \phi(0) \phi'(0)-\phi'(\hat{\psi}(0)^2) \hat{\psi}(0) \hat{\psi}'(0)
+\end{array}
+\!\right]
+\end{equation}
+The determinant of this linear system  is equal to
+\begin{equation}\label{eq:newJac}
+(\psi(0)+c)^{9} \psi'(0)=(1+c)^{9} \psi'(0).
+\end{equation}
+Therefore, if $(\phi,\psi)$ is small perturbation of a.c.s. factors $(\phi,\psi)$ of an a.c.s. pair $(\eta,\xi)$, then the determinant $(\ref{eq:newJac})$ is nonzero, and the set of equations $(\ref{eq:accond0})$, $(\ref{eq:accond2})$ and $(\ref{eq:newFs1})$ for the pair $\cP (\eta,\xi)$ has a unique solution $(a,b,c)$ which depends on $(\eta,\xi)$ analytically.
+
+\end{proof}
+
+\begin{defn}
+We set $$\cRG\equiv \cP \circ \cR.$$
+\end{defn}
+By Propositions \ref{prop-m-invt} and \ref{prop-proj},
+\begin{cor}
+The operator $\cRG:\cU\to\cM(U,V)$ is analytic. Moreover, it coincides with $\cR$ on the submanifold $\cM(U,V)$.
+\end{cor}
+
+
+\subsection{Statement of results}\label{sec:resultsACSP}
+
+
+\begin{figure}
+\centering
+% If not, use
+\vspace{2mm}       % Give the correct figure height in cm
+\begin{tabular}{c c} 
+\includegraphics[height=7cm,angle=-90]{Diffeoparts_Doms.pdf} \quad & \quad \includegraphics[height=7cm,angle=-90]{Maps_Doms.pdf}
+\end{tabular}
+\caption{a) Domains $U$ and $V$ (light blue and red) together with the domains of definition of the renormalization fixed point $(\phi^*,\psi^*)$ (dark blue and red); b) Domains $Z$ and $W$ (light blue and red) together with the domains for the fixed point $\zeta^*$ (dark blue and red)}
+\label{fig:domains}       % Give a unique label
+\end{figure}
+
+
+Let us specialize to the case when $U$ and $V$ are two disks. Hereafter an
+open disk of radius $r$ centered at $z$ in $\fC$ will be denoted by $\fD_r(z)$, and the unit disk will be denoted by $\fD$.
+We let
+$$U=\D_{r_\phi}(c_\phi)\ni 0\text{ and  }V=\D_{r_\psi}(c_\psi)\ni 0.$$
+It will be useful for us to introduce a weighted-$l_1$ Banach norm on a.c.s factors defined in $U$ and $V$ (cf. \cite{GaYa}). Namely, 
+we let
+ $$\phi_j\equiv\frac{\phi^{(j)}(c_\phi)r_\phi^j}{j!}\text{ and }\psi_j\equiv\frac{\psi^{(j)}(c_\psi)r_\psi^j}{j!},$$
+and let 
+$\cL_1$ denote the Banach space of pairs $(\phi,\psi)$ 
+with the norm
+$$||(\phi,\psi)||_1\equiv \sum_{i=1}^\infty \left(  | \Re \phi_i|+| \Im \phi_i|   +  |\Re   \psi_i|+|  \Im \psi_i|    \right).$$
+%%\begin{eqnarray}
+%%\label{eq:phiform} \phi(z)&=&\sum_{i=0}^\infty \phi_i \left( {z-c_\phi \over r_\phi}  \right)^i, \\
+%%\label{eq:psiform} \psi(z)&=&\sum_{i=0}^\infty \psi_i \left( {z-c_\psi \over r_\psi}  \right)^i,
+%%\end{eqnarray}
+We further  let $\cA_1(U,V)$ be the set of all a.c.s. pairs $(\phi,\psi)$ in $\cL_1$.
+
+\begin{prop} 
+\label{norm-equiv}
+We note that: 
+\begin{enumerate}
+\item Let $(\phi,\psi)$ in $\cL_1$. Then $(\phi,\psi)$ in $\cE(U,V)$ and $$||(\phi,\psi)||\leq ||(\phi,\psi)||_1.$$
+
+\item Let $M>1$ and let $\phi$, $\psi$ be two bounded analytic functions in $\DD_{Mr_\phi}(c_\phi)$, $\DD_{Mr_\psi}(c_\psi)$ respectively. Then
+$$||(\eta,\xi)||_1<\frac{2M}{M-1}(\sup_{\DD_{Mr_\phi}(c_\phi)}|\phi|+\sup_{\DD_{Mr_\psi}(c_\psi)}|\psi|).$$
+\end{enumerate}
+\end{prop}
+
+
+
+In the statement below we make the following specific choice of centers and radii of the domains $U$, $V$:
+\begin{eqnarray}
+\nonumber c_\phi&=& \phantom{+} 0.5672961438978619-0.1229664702397770 \cdot i , \quad r_\phi=0.636, \\
+\nonumber  c_\psi &=&-0.2188497414079558 -0.2328147240271490 \cdot i, \quad r_\psi= 0.3640985354093064.   
+\end{eqnarray}
+
+
+
+\begin{thm} $\phantom{aaa}$\\
+\label{mainthm1}
+Let $U$ and $V$ be as above. Then there exists a pair of polynomials $(\phi_0,\psi_0) \in \cA_1(U,V)$
+such that the following holds:
+\begin{itemize}
+\item[(i)] the operator $\cRG$ is anti-analytic in $B_r((\phi_0,\psi_0))$ in $\cA_1(U,V)$, $r=6.6610992 \cdot 10^{-11}$;
+\item[(ii)] there exists a pair $(\phi_*,\psi_*)$ in  $B_r((\phi_0,\psi_0))$ which is fixed by $\cRG$;
+\item[(iii)] the functions $\phi_*$ and $\psi_*$ extend analytically and univalently to some domains  $\tU \supset \fD_{\tr_\phi} (\tc_\phi) \Supset U$ and $\tV \supset \fD_{\tr_\psi}(\tc_\psi) \Supset V$, respectively, with $\tr_\phi=0.937$, $\tr_\psi=0.874$,   $\tc_\phi=0.6+i 0.09$ and $\tc_\psi=c_\psi$;
+\item[(iv)] the differential $D\cRG|_{(\phi_*,\psi_*)}$ is a compact anti-linear operator;
+\item[(v)] the compact linear operator $K\equiv  D \cRG|_{(\phi_*,\psi_*)} \circ c$ (where $c$ is complex conjugation) has a single simple 
+eigenvalue outside the closed unit disk, and the rest of the spectrum lies inside the open unit disk.
+%%$$\lambda_1 \in \left(2.61, 2.62 \right).$$
+\item[(vi)] the scaling factor $\lambda_*=\eta_*(0)\approx 0.220265-i0.708481.$
+\end{itemize}
+\end{thm}
+
+%%Existence of a local unstable manifold $\cW^u(\zeta^*)$ of dimension $1$ and a local stable $\cW^s(\zeta^*)$ of codimension $1$ in $B_r((\phi_0,\psi_0))$ follows immediately.
+
+
+\noindent
+The following was proved in \cite{Bur}:
+\begin{prop}
+\label{fixed-pt-commute}
+The renormalization fixed point $\zeta_*=(\eta_*,\xi_*)$ is commuting:
+$$\eta_*\circ\xi_*=\xi_*\circ\eta_*,$$
+where defined.
+\end{prop}
+
+\begin{proof}
+
+Let us assume the contrary, so that
+$$[\eta_*,\xi_*](z) = az^k+o(z^k),\text{ where }k\geq 3\text{ and }a\neq 0.$$
+Let us first calculate the constant 
+$$C=\eta_*'(\eta_*\circ \xi_*(0)).$$
+To that end, we start with one of the two fixed point equations for $\zeta_*$ in the form
+$$\eta_*\circ\psi_*(z)=c\circ \lambda_*^{-1}\circ\eta_*\circ\xi_* \circ\phi_*(\lambda_*^2\bar{z}).$$
+Differentiating the above equation, and using the equality of the expressions (\ref{eq:2etaxider}) and (\ref{eq:2xietader}),
+we obtain $$C=\lambda_*^{-1}.$$
+Now, write
+\begin{eqnarray}
+\nonumber [c\circ \! \lambda_*^{-1}\eta_*\circ\xi_* \circ \lambda_* \circ c,c \circ \! \lambda_*^{-1}\eta_* \circ \lambda_* \circ c](z)\!\!&\!\!=\!\!&\!\!c\circ \! \lambda_*^{-1}\eta_*(\xi_*\circ\eta_*(\lambda_* \bar z))-c\circ \! \lambda_*^{-1}\eta_*(\eta_*\circ\xi_*(\lambda_* \bar z))\\
+\nonumber \!\!& \!\! = \!\!& \!\!c(\lambda_*^{-1}C a (\lambda_*\bar z)^k)+o((\lambda_*\bar z)^k) \\
+\nonumber \!\!& \!\! = \!\!& \!\!\bar{a} \bar{\lambda}_*^{k-2} z^k+o((\lambda_*\bar z)^k).
+\end{eqnarray}
+Since $$|\lambda_*^{k-2}|\leq|\lambda_*| < 1,$$
+we have arrived at a contradiction.
+\end{proof}

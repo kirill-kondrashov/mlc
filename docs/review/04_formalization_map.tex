@@ -1,0 +1,160 @@
+\chapter{Formalization map}
+\label{ch:formal-map}
+
+\section{The dependency graph}
+
+The intended Lean dependency graph is:
+\[
+\begin{array}{c}
+\text{complex analysis and topology}\\
+\downarrow\\
+\text{quadratic dynamics, Green functions, Böttcher coordinates}\\
+\downarrow\\
+\text{puzzles and parapuzzles}\\
+\downarrow\\
+\text{modulus, a priori bounds, renormalization}\\
+\downarrow\\
+\text{phase--parameter correspondence}\\
+\downarrow\\
+\text{local connectedness at a parameter class}\\
+\downarrow\\
+\text{global MLC}.
+\end{array}
+\]
+Each downward arrow is a separate proof obligation; the diagram is
+an intended mathematical architecture.  A result may be
+imported from an existing Lean dependency only when its exact hypotheses and
+conclusion match the statement used here.
+
+\section{Current Lean status}
+
+\begin{center}\small
+\begin{tabularx}{0.98\textwidth}{@{}P{0.25\textwidth}@{\hspace{8pt}}Y@{\hspace{8pt}}P{0.13\textwidth}@{}}
+\textbf{Layer} & \textbf{Current content} & \textbf{Status}\\
+\hline
+Orbit and outer approximations &
+Escape criterion, compact finite stages, and exact intersection. &
+proved\\
+Periods one and two &
+Multiplier product, cardioid and period-two parametrizations, frontiers,
+uniqueness of attracting fixed points, disjointness, and the common root $-3/4$. &
+proved\\
+Real slice of $\M$ &
+$\M\cap\R=[-2,1/4]$, with escape and invariant-interval estimates. &
+proved\\
+Multiplier map on the period-two disk &
+affine biholomorphism $c\mapsto4(c+1)$ onto $\mathbb D$. &
+proved\\
+Multiplier map on $\mathcal H_0$ &
+biholomorphism onto $\mathbb D$ with explicit branch $1-\sqrt{1-4c}$. &
+proved\\
+Real parameters of $\mathcal H_0$ and $\mathcal H_2$ &
+$\mathcal H_0\cap\R=(-\tfrac34,\tfrac14)$ and $\mathcal H_2\cap\R=(-\tfrac54,-\tfrac34)$. &
+proved\\
+Exact examples for $c=0$ and $c=-2$ &
+$K(0)$ is the closed disk and $J(0)$ the circle; $K(-2)=J(-2)=[-2,2]$. &
+proved\\
+Local component criterion &
+Uniform outer buffer implies local connectedness. &
+proved conditionally\\
+Frozen modulus audit &
+Gaussian nested differences are summable; the legacy finite class is empty. &
+proved obstruction\\
+Classical Yoccoz shrinking &
+Graph cuts and conformal-modulus estimates. &
+pending\\
+Parameter parapuzzles &
+Connected induced pieces and a basis interface. &
+partial\\
+Phase--parameter contracts &
+External rays, dynamical graphs, parameter graphs, and topological transport. &
+interface\\
+Categorical branch &
+TopCat over-approximations, conditional roots, carving interfaces, and the
+refuted frozen Green-sublevel proposal. &
+mixed\\
+Renormalization towers &
+Discrete indices and frozen weighted-area contracts; positive lower-bound
+certificate refuted. &
+model audit\\
+Bounded-type satellite and Feigenbaum cases &
+Named literature interfaces and source ledger. &
+open formalization\\
+Parabolically bounded primitive renormalization &
+Thin--Thick, Value Calculus, Wanderers, and Wave Lemma inputs. &
+open formalization\\
+Neutral renormalization &
+Bubble bounds, attractor rigidity, and hybrid-class geometry. &
+open formalization\\
+Dudko--Lyubich/KKL case certificates &
+Source-specific class predicates plus connected shrinking parameter pieces. &
+interface\\
+Combinatorial profiles &
+Coarse type labels, additive depth, multiplicative return period,
+and nonnegative-series arithmetic. &
+proved arithmetic\\
+Global MLC &
+Target \lean{LocallyConnectedSpace M}. &
+open\\
+\end{tabularx}
+\end{center}
+
+The module \lean{Mlc.Literature.Review} is deliberately conservative:
+\begin{itemize}
+\item \lean{yoccoz_puzzle_shrinkage} is a theorem of the frozen
+      model with an impossible premise;
+\item \lean{FinitelyRenormalizableMLC} concerns the same empty
+      legacy class;
+\item \lean{BoundedTypeSatelliteMLC} and \lean{FeigenbaumMLC}
+      are parameterized targets whose actual source-class
+      definitions still have to be implemented.
+\end{itemize}
+No external paper is silently converted into an axiom.
+
+The legacy structure \lean{ParaPuzzleCertificate} is tied to the
+frozen full-sublevel pieces.  Its connectedness and singleton-intersection fields
+imply local connectivity through the theorem
+\begin{center}
+\lean{localConnectivity_of_paraPuzzleCertificate}.
+\end{center}
+Its corresponding family proposition is
+\begin{center}
+\lean{YoccozParameterPuzzleResult},
+\end{center}
+quantified over every $c\in\M$.  Unlike the finite family in
+Chapter~\ref{chap:theorem-matrix}, it is not indexed by the empty
+legacy finite class.
+Its frozen-piece existence requirement is separate from the
+classical graph-cut construction and cannot be supplied merely by
+citing a Yoccoz theorem.
+
+The new module \lean{Mlc.Literature.Foundations} gives typed names for the
+quadratic map, orbit, filled Julia set, Julia set, and Mandelbrot set.  Its
+main structural interfaces are:
+\begin{itemize}
+\item \lean{ParameterPuzzleBasis};
+\item \lean{APrioriBounds};
+\item \lean{RenormalizationMLCInterface}.
+\end{itemize}
+These records specify the shape of required data, rather than
+constructing those data or identifying an arbitrary real-valued
+field with conformal modulus.
+The constructor
+\leanref{Mlc/Literature/Foundations.lean}{ParameterPuzzleBasis.of_compactClosure}
+supplies the topological basis from actual compact parameter pieces.
+The audit in
+\leanref{Mlc/Literature/ModelAudit.lean}{summable_weightedArea_differences}
+separately explains why the inherited analytic model must be replaced.
+
+\section{The current conditional root}
+
+The existing root is
+\[
+\mathrm{BUF}(\M,O)\Longrightarrow\mathrm{MLC}(\M),
+\]
+implemented by
+\lean{MLC.mlc_conjecture_of_uniformOuterBuffer}.  The alternative uniform
+geometric route and the finite-component route are useful independent
+interfaces, but their existence hypotheses remain open.  The review keeps
+these routes visible because they are possible formalization targets, not
+because they have already proved MLC.

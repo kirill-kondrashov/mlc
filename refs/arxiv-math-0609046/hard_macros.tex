@@ -1,0 +1,35 @@
+%&&&&&&&&&&    Content   &&&&&&&&
+
+
+\catcode`\@=12
+
+\def\Empty{}
+\newcommand\oplabel[1]{
+  \def\OpArg{#1} \ifx \OpArg\Empty {} \else
+  	\label{#1}
+  \fi}
+		
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Insert a postscript figure using psfig.
+% Usage:	\realfig{label}{filename}{caption}
+%
+% uses psfig macros: must have \input{psfig} in the preamble to use
+% it. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\long\def\realfig#1#2#3#4{
+\begin{figure}[htbp]
+%%%\centerline{\psfig{figure=#3,height=#2}}
+\centerline{\psfig{figure=#2,width=#4}}
+\caption[#1]{#3}
+\oplabel{#1}
+\end{figure}}
+
+%&&&&&&&&&&&&       List of figures              &&&&&&&&&
+%
+%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+\newcommand{\comm}[1]{}
+\newcommand{\comment}[1]{}
+%\renewcommand{\marginpar}[1]{}
+

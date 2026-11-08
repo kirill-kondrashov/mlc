@@ -1,0 +1,119 @@
+\begin{theindex}
+
+  \item \emph{a priori} bounds, \hyperpage{2}
+
+  \indexspace
+
+  \item dichotomy
+    \subitem tame case, \hyperpage{21}
+      \subsubitem aligned with $\TT$, \hyperpage{21}
+      \subsubitem bounded flux, \hyperpage{21}
+    \subitem wave case, \hyperpage{21}
+
+  \indexspace
+
+  \item family $\CC$ of types
+    \subitem beau bounds, \hyperpage{3}
+    \subitem bounded puzzle Teichm\"uller diameter, \hyperpage{56}
+    \subitem combinatorially rigid, \hyperpage{56}
+    \subitem optimistic (BNWE), \hyperpage{17}
+    \subitem parabolic tail, \hyperpage{19}
+    \subitem parabolically bounded, \hyperpage{19}
+    \subitem super-optimistic (BNMWE), \hyperpage{18}
+
+  \indexspace
+
+  \item high-type-near-degenerate (HTND), \hyperpage{20}
+  \item Hubbard tree $\TT$, \hyperpage{13}
+    \subitem bivertical Hubbard arc-diagram $\HH^\biv$, \hyperpage{14}
+    \subitem core eigenvalue $\lambda_F$ of $T_F$, \hyperpage{13}
+    \subitem edges $E(\TT)$, \hyperpage{13}
+    \subitem horizontal Hubbard arc-diagram $\HH^\hor$, \hyperpage{14}
+    \subitem limbs $\LL_j$ and $\LL_I$, \hyperpage{13}
+    \subitem vertical Hubbard arc-diagram $\HH^\ver$, \hyperpage{14}
+    \subitem vertices $V(\TT)$, \hyperpage{13}
+
+  \indexspace
+
+  \item ideal marking $(\VV, \II)$, \hyperpage{56}
+    \subitem arc, \hyperpage{57}
+      \subsubitem flux, \hyperpage{58}
+    \subitem induced marking, \hyperpage{57}
+    \subitem lamination, \hyperpage{57}
+      \subsubitem ends, \hyperpage{57}
+      \subsubitem localized, \hyperpage{57}
+      \subsubitem subordinate, \hyperpage{57}
+    \subitem partial marking, \hyperpage{57}
+    \subitem refinement, \hyperpage{57}
+      \subsubitem minor, \hyperpage{57}
+
+  \indexspace
+
+  \item localization, \hyperpage{11}
+
+  \indexspace
+
+  \item Mandelbrot set $\MM$, \hyperpage{8}
+    \subitem combinatorial type $M\subset \MM$, \hyperpage{2}
+      \subsubitem prime, \hyperpage{2}
+    \subitem limb $\hat M_{p/q}$, \hyperpage{3}
+    \subitem limb-insertion, \hyperpage{19}
+
+  \indexspace
+
+  \item pseudo-quadratic-like ($\psi$-ql) map, \hyperpage{10}
+    \subitem amplification, \hyperpage{12}
+    \subitem combinatorial rotation number, \hyperpage{12}
+    \subitem filled Julia set $\FK$, \hyperpage{10}
+      \subsubitem $\alpha_F$, \hyperpage{12}
+      \subsubitem $\beta_F$, \hyperpage{12}
+      \subsubitem limbs $\FL_j$ and $\FL_I$, \hyperpage{12}
+    \subitem iterates, \hyperpage{11}
+    \subitem periodically repelling, \hyperpage{11}
+    \subitem renormalization $\RR F$, \hyperpage{12}
+      \subsubitem cycle of small filled Julia sets $\KK$, 
+		\hyperpage{12}
+    \subitem subsurface $U_I$, \hyperpage{12}
+    \subitem width $\WW(F)$, \hyperpage{10}
+
+  \indexspace
+
+  \item subsurface cover, \hyperpage{11}
+
+  \indexspace
+
+  \item Thick-thin decomposition, \hyperpage{60}
+  \item translation marking, \hyperpage{65}
+    \subitem inner $(\FF_\inbr, \II_\inbr)$, \hyperpage{27}
+    \subitem long arcs, \hyperpage{65}
+    \subitem outer $(\FF_\outbr, \II_\outbr)$, \hyperpage{28}
+    \subitem standard width, \hyperpage{65}
+  \item translation region, \hyperpage{24}
+    \subitem combinatorial length, \hyperpage{25}
+    \subitem good arcs, \hyperpage{25}
+    \subitem long segment, \hyperpage{28}
+    \subitem translation class, \hyperpage{24}
+
+  \indexspace
+
+  \item Wanderers Theorem, \hyperpage{68}
+  \item waves, \hyperpage{57}
+    \subitem base, \hyperpage{57}
+    \subitem breakable part, \hyperpage{45}
+    \subitem controllable, \hyperpage{39}
+    \subitem crest, \hyperpage{57}
+    \subitem critical visit, \hyperpage{40}
+    \subitem ends, \hyperpage{57}
+    \subitem localized, \hyperpage{57}
+    \subitem short, \hyperpage{40}
+    \subitem short pushforward, \hyperpage{51}
+    \subitem terminal, \hyperpage{39}
+    \subitem unbreakable part, \hyperpage{44}
+    \subitem wide, \hyperpage{39}
+  \item weighted arc diagram (WAD), \hyperpage{58}
+    \subitem canonical, \hyperpage{59}
+    \subitem domination $\dominates$, \hyperpage{63}
+    \subitem expanding valuation, \hyperpage{15}
+    \subitem well-controlled, \hyperpage{30}
+
+\end{theindex}

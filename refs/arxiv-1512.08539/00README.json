@@ -1,0 +1,14 @@
+{
+  "key": "bartholdi-dudko-branched-I",
+  "arxiv_id": "1512.08539",
+  "arxiv_version": "1",
+  "role": "adjacent",
+  "title": "Algorithmic aspects of branched coverings I. Van Kampen's theorem for bisets",
+  "authors": [
+    "Laurent Bartholdi",
+    "Dzmitry Dudko"
+  ],
+  "metadata": "arxiv-1512.08539.xml",
+  "source_archive": "arxiv-1512.08539-source.tar.gz",
+  "main_tex": "arxiv-1512.08539/bc1-bisets.tex"
+}

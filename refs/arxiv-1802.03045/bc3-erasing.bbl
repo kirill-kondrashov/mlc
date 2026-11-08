@@ -1,0 +1,329 @@
+\bib{bartholdi-n:thurston}{article}{
+  author={Bartholdi, Laurent},
+  author={Nekrashevych, Volodymyr V.},
+  title={Thurston equivalence of topological polynomials},
+  journal={Acta Math.},
+  date={2006},
+  volume={197},
+  number={1},
+  pages={1\ndash 51},
+  review={\MR {2285317 (2008c:37072)}},
+  doi={10.1007/s11511-006-0007-3},
+  eprint={arXiv:math.DS/0510082},
+}
+
+\bib{bartholdi-dudko:bc0}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings},
+  date={2017},
+  eprint={arXiv:cs/1512.05948},
+  journal={Ann. Fac. Sci. Toulouse},
+  series={6},
+  number={5},
+  pages={1219\ndash 1296},
+  doi={10.5802/afst.1566},
+}
+
+\bib{bartholdi-dudko:bc1}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings I/V. Van Kampen's theorem for bisets},
+  date={December 2015},
+  eprint={arXiv:cs/1512.08539},
+  status={to appear},
+  doi={},
+  journal={Groups Geom. Dyn.},
+}
+
+\bib{bartholdi-dudko:bc4}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings IV/V. Expanding maps},
+  date={October 2016},
+  eprint={arXiv:math/1610.02434},
+  status={to appear},
+  doi={10.1090/tran/7199},
+  journal={Trans. Amer. Math. Soc.},
+}
+
+\bib{bartholdi-dudko:bc2}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings II/V. Sphere bisets and their decompositions},
+  date={2016},
+  eprint={arXiv:math/1603.04059},
+  status={submitted},
+}
+
+\bib{bartholdi-dudko:bc5}{unpublished}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings V/V. Symbolic and floating-point algorithms},
+  date={2017},
+  status={in preparation},
+}
+
+\bib{calvez:NT}{article}{
+  author={Calvez, Matthieu},
+  title={Fast Nielsen-Thurston classification of braids},
+  journal={Algebr. Geom. Topol.},
+  volume={14},
+  date={2014},
+  number={3},
+  pages={1745--1758},
+  issn={1472-2747},
+  review={\MR {3212582}},
+  doi={10.2140/agt.2014.14.1745},
+}
+
+\bib{cannon-floyd-parry-pilgrim:net}{article}{
+  author={Cannon, James~W.},
+  author={Floyd, William~J.},
+  author={Parry, Walter~R.},
+  author={Pilgrim, Kevin~M.},
+  title={Nearly Euclidean Thurston maps},
+  journal={Conform. Geom. Dyn.},
+  volume={16},
+  date={2012},
+  pages={209--255},
+  issn={1088-4173},
+  review={\MR {2958932}},
+  doi={10.1090/S1088-4173-2012-00248-2},
+}
+
+\bib{farb-margalit:mcg}{book}{
+  author={Farb, Benson},
+  author={Margalit, Dan},
+  title={A primer on mapping class groups},
+  series={Princeton Mathematical Series},
+  volume={49},
+  publisher={Princeton University Press},
+  place={Princeton, NJ},
+  date={2012},
+  pages={xiv+472},
+  isbn={978-0-691-14794-9},
+  review={\MR {2850125}},
+}
+
+\bib{grunewald:conjugacyarithmetic}{article}{
+  author={Grunewald, Fritz J.},
+  title={Solution of the conjugacy problem in certain arithmetic groups},
+  conference={ title={Word problems, II (Conf. on Decision Problems in Algebra, Oxford, 1976)}, },
+  book={ series={Stud. Logic Foundations Math.}, volume={95}, publisher={North-Holland, Amsterdam-New York}, },
+  date={1980},
+  pages={101--139},
+  review={\MR {579942 (81h:20054)}},
+}
+
+\bib{hemion:homeos}{article}{
+  author={Hemion, Geoffrey},
+  title={On the classification of homeomorphisms of $2$-manifolds and the classification of $3$-manifolds},
+  journal={Acta Math.},
+  volume={142},
+  date={1979},
+  number={1-2},
+  pages={123\ndash 155},
+  issn={0001-5962},
+  review={\MR {512214 (80f:57003)}},
+  doi={10.1007/BF02395059},
+}
+
+\bib{hubbard-s:spider}{article}{
+  author={Hubbard, John~H.},
+  author={Schleicher, Dierk},
+  title={The spider algorithm},
+  conference={ title={Complex dynamical systems}, address={Cincinnati, OH}, date={1994}, },
+  book={ series={Proc. Sympos. Appl. Math.}, volume={49}, publisher={Amer. Math. Soc.}, place={Providence, RI}, },
+  date={1994},
+  pages={155\ndash 180},
+  review={\MR {1315537}},
+}
+
+\bib{ishii-smillie:shadowing}{article}{
+  author={Ishii, Yutaka},
+  author={Smillie, John},
+  title={Homotopy shadowing},
+  journal={Amer. J. Math.},
+  volume={132},
+  date={2010},
+  number={4},
+  pages={987--1029},
+  issn={0002-9327},
+  review={\MR {2663646 (2012d:37055)}},
+  doi={10.1353/ajm.0.0126},
+}
+
+\bib{koberda-mangahas:detectNT}{article}{
+  author={Koberda, Thomas},
+  author={Mangahas, Johanna},
+  title={An effective algebraic detection of the Nielsen-Thurston classification of mapping classes},
+  journal={J. Topol. Anal.},
+  volume={7},
+  date={2015},
+  number={1},
+  pages={1--21},
+  issn={1793-5253},
+  review={\MR {3284387}},
+  doi={10.1142/S1793525315500016},
+}
+
+\bib{levinson:decomposablebraids}{article}{
+  author={Levinson, Henry W.},
+  title={Decomposable braids and linkages},
+  journal={Trans. Amer. Math. Soc.},
+  volume={178},
+  date={1973},
+  pages={111--126},
+  issn={0002-9947},
+  review={\MR {0324684}},
+  doi={10.2307/1996692},
+}
+
+\bib{lodge:pullback}{article}{
+  author={Lodge, Russell},
+  title={Boundary values of the Thurston pullback map},
+  journal={Conform. Geom. Dyn.},
+  volume={17},
+  date={2013},
+  pages={77--118},
+  issn={1088-4173},
+  review={\MR {3063048}},
+  doi={10.1090/S1088-4173-2013-00255-5},
+}
+
+\bib{masur-minsky:gcc2}{article}{
+  author={Masur, H. A.},
+  author={Minsky, Y. N.},
+  title={Geometry of the complex of curves. II. Hierarchical structure},
+  journal={Geom. Funct. Anal.},
+  volume={10},
+  date={2000},
+  number={4},
+  pages={902--974},
+  issn={1016-443X},
+  review={\MR {1791145}},
+  doi={10.1007/PL00001643},
+}
+
+\bib{nekrashevych:ssg}{book}{
+  author={Nekrashevych, Volodymyr~V.},
+  title={Self-similar groups},
+  series={Mathematical Surveys and Monographs},
+  volume={117},
+  publisher={American Mathematical Society, Providence, RI},
+  date={2005},
+  pages={xii+231},
+  isbn={0-8218-3831-8},
+  review={\MR {2162164 (2006e:20047)}},
+  doi={10.1090/surv/117},
+}
+
+\bib{nekrashevych:combinatorialmodels}{article}{
+  author={Nekrashevych, Volodymyr},
+  title={Combinatorial models of expanding dynamical systems},
+  journal={Ergodic Theory Dynam. Systems},
+  volume={34},
+  date={2014},
+  number={3},
+  pages={938--985},
+  issn={0143-3857},
+  review={\MR {3199801}},
+  doi={10.1017/etds.2012.163},
+}
+
+\bib{pilgrim:combinations}{book}{
+  author={Pilgrim, Kevin~M.},
+  title={Combinations of complex dynamical systems},
+  series={Lecture Notes in Mathematics},
+  volume={1827},
+  publisher={Springer-Verlag},
+  place={Berlin},
+  date={2003},
+  pages={x+118},
+  isbn={3-540-20173-4},
+  review={\MR {2020454 (2004m:37087)}},
+}
+
+\bib{poirier:portraits}{article}{
+  author={Poirier, Alfredo},
+  title={Critical portraits for postcritically finite polynomials},
+  journal={Fund. Math.},
+  volume={203},
+  date={2009},
+  number={2},
+  pages={107\ndash 163},
+  issn={0016-2736},
+  review={\MR {2496235 (2010c:37095)}},
+  doi={10.4064/fm203-2-2},
+}
+
+\bib{selinger:canonical}{article}{
+  author={Selinger, Nikita},
+  title={Topological characterization of canonical Thurston obstructions},
+  journal={J. Mod. Dyn.},
+  volume={7},
+  date={2013},
+  number={1},
+  pages={99--117},
+  issn={1930-5311},
+  review={\MR {3071467}},
+  doi={10.3934/jmd.2013.7.99},
+}
+
+\bib{selinger-yampolsky:geometrization}{article}{
+  author={Selinger, Nikita},
+  author={Yampolsky, Michael},
+  title={Constructive geometrization of Thurston maps and decidability of Thurston equivalence},
+  journal={Arnold Math. J.},
+  volume={1},
+  date={2015},
+  number={4},
+  pages={361--402},
+  issn={2199-6792},
+  review={\MR {3434502}},
+  doi={10.1007/s40598-015-0024-4},
+  eprint={arXiv:1310.1492},
+}
+
+\bib{tao:linearbound}{article}{
+  author={Tao, Jing},
+  title={Linearly bounded conjugator property for mapping class groups},
+  journal={Geom. Funct. Anal.},
+  volume={23},
+  date={2013},
+  number={1},
+  pages={415--466},
+  issn={1016-443X},
+  review={\MR {3037904}},
+  doi={10.1007/s00039-012-0206-3},
+}
+
+\bib{thurston:surfaces}{article}{
+  author={Thurston, William~P.},
+  title={On the geometry and dynamics of diffeomorphisms of surfaces},
+  journal={Bull. Amer. Math. Soc. (N.S.)},
+  volume={19},
+  date={1988},
+  number={2},
+  pages={417\ndash 431},
+  issn={0273-0979},
+  review={\MR {956596 (89k:57023)}},
+  doi={10.1090/S0273-0979-1988-15685-6},
+}
+
+\bib{zieschang-vogt-coldewey:spdg}{book}{
+  author={Zieschang, Heiner},
+  author={Vogt, Elmar},
+  author={Coldewey, Hans-Dieter},
+  title={Surfaces and planar discontinuous groups},
+  series={Lecture Notes in Mathematics},
+  volume={835},
+  note={Translated from the German by John Stillwell},
+  publisher={Springer, Berlin},
+  date={1980},
+  pages={x+334},
+  isbn={3-540-10024-5},
+  review={\MR {606743 (82h:57002)}},
+}
+

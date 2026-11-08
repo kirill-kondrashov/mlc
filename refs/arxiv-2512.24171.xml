@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/a5FRbuSpbywnQPc9duR+oQvRWFk</id>
+  <title>arXiv Query: search_query=&amp;id_list=2512.24171&amp;start=0&amp;max_results=10</title>
+  <updated>2026-10-24T07:31:23Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2512.24171" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2512.24171v1</id>
+    <title>On the MLC Conjecture and the Renormalization Theory in Complex Dynamics</title>
+    <updated>2025-12-30T12:07:23Z</updated>
+    <link href="https://arxiv.org/abs/2512.24171v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2512.24171v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In this Note, we present recent developments in the Renormalization Theory of quadratic polynomials and discuss their applications, with an emphasis on the MLC conjecture, the problem of local connectivity of the Mandelbrot set, and on its geometric counterparts.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-12-30T12:07:23Z</published>
+    <arxiv:comment>To appear in the Proceedings of the ICM 2026</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+  </entry>
+</feed>

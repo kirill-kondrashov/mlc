@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/hy4Aq7agi04PVuX/5xh+IwfbIb4</id>
+  <title>arXiv Query: search_query=&amp;id_list=1703.01206&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:37Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1703.01206" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1703.01206v3</id>
+    <title>Pacman renormalization and self-similarity of the Mandelbrot set near Siegel parameters</title>
+    <updated>2019-12-29T17:22:53Z</updated>
+    <link href="https://arxiv.org/abs/1703.01206v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1703.01206v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>In the 1980s Branner and Douady discovered a surgery relating various limbs of the Mandelbrot set. We put this surgery in the framework of "Pacman Renormalization Theory" that combines features of quadratic-like and Siegel renormalizations. We show that Siegel renormalization periodic points (constructed by McMullen in the 1990s) can be promoted to pacman renormalization periodic points. Then we prove that these periodic points are hyperbolic with one-dimensional unstable manifold. As a consequence, we obtain the scaling laws for the centers of satellite components of the Mandelbrot set near the corresponding Siegel parameters.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2017-03-03T15:30:17Z</published>
+    <arxiv:comment>wrt version 1: Appendix B is revised -- the proof of Theorem B.8 is simplified</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+    <author>
+      <name>Mikhail Lyubich</name>
+    </author>
+    <author>
+      <name>Nikita Selinger</name>
+    </author>
+  </entry>
+</feed>

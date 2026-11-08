@@ -1,0 +1,19 @@
+\def\makefigure#1#2{\begin{figure}[htbp]
+\begin{center}
+\makeabbrevs
+\input{figures/#12.pstex_t}
+\caption{#2}
+\label{#1}
+\end{center}
+\end{figure}}
+\def\makeabbrevs{%
+\def\tA##1{$A_{##1}$}%
+\def\ta##1{$a_{##1}^{-1}$}%
+\def\tb##1{$b_{##1}^{-1}$}%
+\def\o{\omega}\def\g{\gamma}\def\G{\Gamma}\def\h{\hat}\def\d{\delta}\def\D{\Delta}%
+\def\O{\Omega}\def\b{\beta}\def\l{\lambda}\def\s{\sigma}\def\a{\alpha}}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End: 

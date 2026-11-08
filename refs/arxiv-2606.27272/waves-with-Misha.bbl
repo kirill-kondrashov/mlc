@@ -1,0 +1,891 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\preamble{%
+\def\cprime{$'$}%
+}
+
+
+\refsection{0}
+  \datalist[entry]{anyt/global//global/global/global}
+    \entry{AL22}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=37691cc64e86b6bb8961cbbf4b1d5d68}{%
+           family={Avila},
+           familyi={A\bibinitperiod},
+           given={Artur},
+           giveni={A\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{67bd683d55ee80be5367556c9004aded}
+      \strng{fullhash}{67bd683d55ee80be5367556c9004aded}
+      \strng{fullhashraw}{67bd683d55ee80be5367556c9004aded}
+      \strng{bibnamehash}{67bd683d55ee80be5367556c9004aded}
+      \strng{authorbibnamehash}{67bd683d55ee80be5367556c9004aded}
+      \strng{authornamehash}{67bd683d55ee80be5367556c9004aded}
+      \strng{authorfullhash}{67bd683d55ee80be5367556c9004aded}
+      \strng{authorfullhashraw}{67bd683d55ee80be5367556c9004aded}
+      \field{labelalpha}{AL22}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0003-486X,1939-8980}
+      \field{journaltitle}{Ann. of Math. (2)}
+      \field{number}{1}
+      \field{title}{Lebesgue measure of {F}eigenbaum {J}ulia sets}
+      \field{volume}{195}
+      \field{year}{2022}
+      \field{pages}{1\bibrangedash 88}
+      \range{pages}{88}
+      \verb{doi}
+      \verb 10.4007/annals.2022.195.1.1
+      \endverb
+      \verb{urlraw}
+      \verb https://doi-org.ezp-prod1.hul.harvard.edu/10.4007/annals.2022.195.1.1
+      \endverb
+      \verb{url}
+      \verb https://doi-org.ezp-prod1.hul.harvard.edu/10.4007/annals.2022.195.1.1
+      \endverb
+    \endentry
+    \entry{BC12}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=6181a0a1b87a773ebe3229251e1e6dff}{%
+           family={Buff},
+           familyi={B\bibinitperiod},
+           given={Xavier},
+           giveni={X\bibinitperiod}}}%
+        {{hash=7b792dbba70bc45457d01b55132e02c9}{%
+           family={Chéritat},
+           familyi={C\bibinitperiod},
+           given={Arnaud},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{b232de03ac63f719d8e5d632b6caf1dd}
+      \strng{fullhash}{b232de03ac63f719d8e5d632b6caf1dd}
+      \strng{fullhashraw}{b232de03ac63f719d8e5d632b6caf1dd}
+      \strng{bibnamehash}{b232de03ac63f719d8e5d632b6caf1dd}
+      \strng{authorbibnamehash}{b232de03ac63f719d8e5d632b6caf1dd}
+      \strng{authornamehash}{b232de03ac63f719d8e5d632b6caf1dd}
+      \strng{authorfullhash}{b232de03ac63f719d8e5d632b6caf1dd}
+      \strng{authorfullhashraw}{b232de03ac63f719d8e5d632b6caf1dd}
+      \field{labelalpha}{BC12}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0003-486X,1939-8980}
+      \field{journaltitle}{Ann. of Math. (2)}
+      \field{number}{2}
+      \field{title}{Quadratic {J}ulia sets with positive area}
+      \field{volume}{176}
+      \field{year}{2012}
+      \field{pages}{673\bibrangedash 746}
+      \range{pages}{74}
+      \verb{doi}
+      \verb 10.4007/annals.2012.176.2.1
+      \endverb
+      \verb{urlraw}
+      \verb https://doi-org.ezp-prod1.hul.harvard.edu/10.4007/annals.2012.176.2.1
+      \endverb
+      \verb{url}
+      \verb https://doi-org.ezp-prod1.hul.harvard.edu/10.4007/annals.2012.176.2.1
+      \endverb
+    \endentry
+    \entry{BD86}{incollection}{}{}
+      \name{author}{2}{}{%
+        {{hash=8a79e1e36906ea0f0dbbf5f36d71b414}{%
+           family={Branner},
+           familyi={B\bibinitperiod},
+           given={Bodil},
+           giveni={B\bibinitperiod}}}%
+        {{hash=b2541098261741f88fc53e5fd08db8da}{%
+           family={Douady},
+           familyi={D\bibinitperiod},
+           given={Adrien},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer, Berlin}%
+      }
+      \strng{namehash}{6111eb10b9037d7db177badedbd98e04}
+      \strng{fullhash}{6111eb10b9037d7db177badedbd98e04}
+      \strng{fullhashraw}{6111eb10b9037d7db177badedbd98e04}
+      \strng{bibnamehash}{6111eb10b9037d7db177badedbd98e04}
+      \strng{authorbibnamehash}{6111eb10b9037d7db177badedbd98e04}
+      \strng{authornamehash}{6111eb10b9037d7db177badedbd98e04}
+      \strng{authorfullhash}{6111eb10b9037d7db177badedbd98e04}
+      \strng{authorfullhashraw}{6111eb10b9037d7db177badedbd98e04}
+      \field{labelalpha}{BD88}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Holomorphic dynamics ({M}exico, 1986)}
+      \field{isbn}{3-540-50226-2}
+      \field{series}{Lecture Notes in Math.}
+      \field{title}{Surgery on complex polynomials}
+      \field{volume}{1345}
+      \field{year}{1988}
+      \field{pages}{11\bibrangedash 72}
+      \range{pages}{62}
+      \verb{doi}
+      \verb 10.1007/BFb0081395
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/BFb0081395
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/BFb0081395
+      \endverb
+    \endentry
+    \entry{CS_satellite}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=e000a06414ff01b326d8beb1a311feb8}{%
+           family={Cheraghi},
+           familyi={C\bibinitperiod},
+           given={Davoud},
+           giveni={D\bibinitperiod}}}%
+        {{hash=5292910a0bdb60dc2d7ed3b8b2ae0ace}{%
+           family={Shishikura},
+           familyi={S\bibinitperiod},
+           given={Mitshurio},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \strng{fullhash}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \strng{fullhashraw}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \strng{bibnamehash}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \strng{authorbibnamehash}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \strng{authornamehash}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \strng{authorfullhash}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \strng{authorfullhashraw}{20a55a1115556af97c9ce5ffd5b9d20d}
+      \field{labelalpha}{CS15}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eid}{arXiv.1509.07843}
+      \field{eprintclass}{math.DS}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{arXiv e-prints}
+      \field{month}{9}
+      \field{title}{{Satellite renormalization of quadratic polynomials}}
+      \field{year}{2015}
+      \field{pages}{arXiv.1509.07843}
+      \range{pages}{-1}
+      \verb{eprint}
+      \verb 1509.07843
+      \endverb
+      \keyw{Mathematics - Dynamical Systems}
+    \endentry
+    \entry{Orsay}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=bf7c44795579d1953f27a400d515bd36}{%
+           family={Douady},
+           familyi={D\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=cfab0db92a0af783e38cbae80f08ddaa}{%
+           family={Hubbard},
+           familyi={H\bibinitperiod},
+           given={J.\bibnamedelimi H.},
+           giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Université de Paris-Sud, Département de Mathématiques, Orsay}%
+      }
+      \strng{namehash}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \strng{fullhash}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \strng{fullhashraw}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \strng{bibnamehash}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \strng{authorbibnamehash}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \strng{authornamehash}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \strng{authorfullhash}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \strng{authorfullhashraw}{cdd2939369a6c3be6e3278f9ea6bf89d}
+      \field{labelalpha}{DH85}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{With the collaboration of P. Lavaurs, Tan Lei and P. Sentenac}
+      \field{series}{Publications Mathématiques d'Orsay [Mathematical Publications of Orsay]}
+      \field{title}{Étude dynamique des polynômes complexes.}
+      \field{volume}{85}
+      \field{year}{1985}
+      \field{pages}{v+154}
+      \range{pages}{-1}
+    \endentry
+    \entry{DKL:virtual}{unpublished}{}{}
+      \name{author}{3}{}{%
+        {{hash=20e01c77a3e17edc7cb52d508a99f43f}{%
+           family={Dudko},
+           familyi={D\bibinitperiod},
+           given={Dzmitry},
+           giveni={D\bibinitperiod}}}%
+        {{hash=b87c5a5ba3a77bc8753301e5011247fc}{%
+           family={Kahn},
+           familyi={K\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{9c5a7d220c73818e6da716ecfdd93be0}
+      \strng{fullhash}{9c5a7d220c73818e6da716ecfdd93be0}
+      \strng{fullhashraw}{9c5a7d220c73818e6da716ecfdd93be0}
+      \strng{bibnamehash}{9c5a7d220c73818e6da716ecfdd93be0}
+      \strng{authorbibnamehash}{9c5a7d220c73818e6da716ecfdd93be0}
+      \strng{authornamehash}{9c5a7d220c73818e6da716ecfdd93be0}
+      \strng{authorfullhash}{9c5a7d220c73818e6da716ecfdd93be0}
+      \strng{authorfullhashraw}{9c5a7d220c73818e6da716ecfdd93be0}
+      \field{labelalpha}{DKL}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{In preparation}
+      \field{title}{Virtual renormalization: interpolating between primitive and satelite regimes}
+    \endentry
+    \entry{DKLP:elephants}{unpublished}{}{}
+      \name{author}{4}{}{%
+        {{hash=20e01c77a3e17edc7cb52d508a99f43f}{%
+           family={Dudko},
+           familyi={D\bibinitperiod},
+           given={Dzmitry},
+           giveni={D\bibinitperiod}}}%
+        {{hash=74bf902601b143bab6ca739d182a0798}{%
+           family={Kapiamba},
+           familyi={K\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+        {{hash=ad87a70ecc77b218415882f256cc1c91}{%
+           family={Peterson},
+           familyi={P\bibinitperiod},
+           given={Carsten},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{5125541594d786af4b1d5bfb2c2e034b}
+      \strng{fullhash}{81fc1268d8ee70e850514b2099916f9b}
+      \strng{fullhashraw}{81fc1268d8ee70e850514b2099916f9b}
+      \strng{bibnamehash}{5125541594d786af4b1d5bfb2c2e034b}
+      \strng{authorbibnamehash}{5125541594d786af4b1d5bfb2c2e034b}
+      \strng{authornamehash}{5125541594d786af4b1d5bfb2c2e034b}
+      \strng{authorfullhash}{81fc1268d8ee70e850514b2099916f9b}
+      \strng{authorfullhashraw}{81fc1268d8ee70e850514b2099916f9b}
+      \field{labelalpha}{DKLP}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{In preparation}
+      \field{title}{Elephant puzzles}
+    \endentry
+    \entry{DL_pacmen}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=20e01c77a3e17edc7cb52d508a99f43f}{%
+           family={Dudko},
+           familyi={D\bibinitperiod},
+           given={Dzmitry},
+           giveni={D\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{fullhash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{fullhashraw}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{bibnamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorbibnamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authornamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorfullhash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorfullhashraw}{a28a30ff18a5f52351d5140c1f9f7422}
+      \field{extraname}{1}
+      \field{labelalpha}{DL23}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1016-443X,1420-8970}
+      \field{journaltitle}{Geom. Funct. Anal.}
+      \field{number}{4}
+      \field{title}{Local connectivity of the {M}andelbrot set at some satellite parameters of bounded type}
+      \field{volume}{33}
+      \field{year}{2023}
+      \field{pages}{912\bibrangedash 1047}
+      \range{pages}{136}
+      \verb{doi}
+      \verb 10.1007/s00039-023-00637-8
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s00039-023-00637-8
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s00039-023-00637-8
+      \endverb
+    \endentry
+    \entry{dudko2023mlcfeigenbaumpoints}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=20e01c77a3e17edc7cb52d508a99f43f}{%
+           family={Dudko},
+           familyi={D\bibinitperiod},
+           given={Dzmitry},
+           giveni={D\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{fullhash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{fullhashraw}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{bibnamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorbibnamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authornamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorfullhash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorfullhashraw}{a28a30ff18a5f52351d5140c1f9f7422}
+      \field{extraname}{2}
+      \field{labelalpha}{DL23}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.DS}
+      \field{eprinttype}{arXiv}
+      \field{title}{{MLC at Feigenbaum points}}
+      \field{year}{2023}
+      \verb{eprint}
+      \verb 2309.02107
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2309.02107
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2309.02107
+      \endverb
+    \endentry
+    \entry{DLneutral}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=20e01c77a3e17edc7cb52d508a99f43f}{%
+           family={Dudko},
+           familyi={D\bibinitperiod},
+           given={Dzmitry},
+           giveni={D\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{fullhash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{fullhashraw}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{bibnamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorbibnamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authornamehash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorfullhash}{a28a30ff18a5f52351d5140c1f9f7422}
+      \strng{authorfullhashraw}{a28a30ff18a5f52351d5140c1f9f7422}
+      \field{extraname}{3}
+      \field{labelalpha}{DL24}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.DS}
+      \field{eprinttype}{arXiv}
+      \field{title}{Uniform a priori bounds for neutral renormalization}
+      \field{year}{2024}
+      \verb{eprint}
+      \verb 2210.09280
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2210.09280
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2210.09280
+      \endverb
+    \endentry
+    \entry{DLS_pacman}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=20e01c77a3e17edc7cb52d508a99f43f}{%
+           family={Dudko},
+           familyi={D\bibinitperiod},
+           given={Dzmitry},
+           giveni={D\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+        {{hash=a14b589288af9adafe849dde0ddbefc2}{%
+           family={Selinger},
+           familyi={S\bibinitperiod},
+           given={Nikita},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{4ac802d6122951ddc81030bf9783f7c0}
+      \strng{fullhash}{4ac802d6122951ddc81030bf9783f7c0}
+      \strng{fullhashraw}{4ac802d6122951ddc81030bf9783f7c0}
+      \strng{bibnamehash}{4ac802d6122951ddc81030bf9783f7c0}
+      \strng{authorbibnamehash}{4ac802d6122951ddc81030bf9783f7c0}
+      \strng{authornamehash}{4ac802d6122951ddc81030bf9783f7c0}
+      \strng{authorfullhash}{4ac802d6122951ddc81030bf9783f7c0}
+      \strng{authorfullhashraw}{4ac802d6122951ddc81030bf9783f7c0}
+      \field{labelalpha}{DLS20}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0894-0347,1088-6834}
+      \field{journaltitle}{J. Amer. Math. Soc.}
+      \field{number}{3}
+      \field{title}{Pacman renormalization and self-similarity of the {M}andelbrot set near {S}iegel parameters}
+      \field{volume}{33}
+      \field{year}{2020}
+      \field{pages}{653\bibrangedash 733}
+      \range{pages}{81}
+      \verb{doi}
+      \verb 10.1090/jams/942
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1090/jams/942
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1090/jams/942
+      \endverb
+    \endentry
+    \entry{dudkoMLC}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=20e01c77a3e17edc7cb52d508a99f43f}{%
+           family={Dudko},
+           familyi={D\bibinitperiod},
+           given={Dzmitry},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{20e01c77a3e17edc7cb52d508a99f43f}
+      \strng{fullhash}{20e01c77a3e17edc7cb52d508a99f43f}
+      \strng{fullhashraw}{20e01c77a3e17edc7cb52d508a99f43f}
+      \strng{bibnamehash}{20e01c77a3e17edc7cb52d508a99f43f}
+      \strng{authorbibnamehash}{20e01c77a3e17edc7cb52d508a99f43f}
+      \strng{authornamehash}{20e01c77a3e17edc7cb52d508a99f43f}
+      \strng{authorfullhash}{20e01c77a3e17edc7cb52d508a99f43f}
+      \strng{authorfullhashraw}{20e01c77a3e17edc7cb52d508a99f43f}
+      \field{labelalpha}{Dud25}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.DS}
+      \field{eprinttype}{arXiv}
+      \field{title}{On the MLC Conjecture and the Renormalization Theory in Complex Dynamics}
+      \field{year}{2025}
+      \verb{eprint}
+      \verb 2512.24171
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2512.24171
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2512.24171
+      \endverb
+    \endentry
+    \entry{Hubbard-Yoccoz}{incollection}{}{}
+      \name{author}{1}{}{%
+        {{hash=cfab0db92a0af783e38cbae80f08ddaa}{%
+           family={Hubbard},
+           familyi={H\bibinitperiod},
+           given={J.\bibnamedelimi H.},
+           giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Publish or Perish, Houston, TX}%
+      }
+      \strng{namehash}{cfab0db92a0af783e38cbae80f08ddaa}
+      \strng{fullhash}{cfab0db92a0af783e38cbae80f08ddaa}
+      \strng{fullhashraw}{cfab0db92a0af783e38cbae80f08ddaa}
+      \strng{bibnamehash}{cfab0db92a0af783e38cbae80f08ddaa}
+      \strng{authorbibnamehash}{cfab0db92a0af783e38cbae80f08ddaa}
+      \strng{authornamehash}{cfab0db92a0af783e38cbae80f08ddaa}
+      \strng{authorfullhash}{cfab0db92a0af783e38cbae80f08ddaa}
+      \strng{authorfullhashraw}{cfab0db92a0af783e38cbae80f08ddaa}
+      \field{labelalpha}{Hub93}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Topological methods in modern mathematics ({S}tony {B}rook, {NY}, 1991)}
+      \field{title}{Local connectivity of {J}ulia sets and bifurcation loci: three theorems of {J}.-{C}. {Y}occoz}
+      \field{year}{1993}
+      \field{pages}{467\bibrangedash 511}
+      \range{pages}{45}
+    \endentry
+    \entry{IS}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=b91b87409a5f0a3234d7211973c0f0e2}{%
+           family={Inou},
+           familyi={I\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod}}}%
+        {{hash=98fd87627d39afd6a4659b267605a28b}{%
+           family={Shishikura},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{5f407441627f959f7cfc618a0f1c25a1}
+      \strng{fullhash}{5f407441627f959f7cfc618a0f1c25a1}
+      \strng{fullhashraw}{5f407441627f959f7cfc618a0f1c25a1}
+      \strng{bibnamehash}{5f407441627f959f7cfc618a0f1c25a1}
+      \strng{authorbibnamehash}{5f407441627f959f7cfc618a0f1c25a1}
+      \strng{authornamehash}{5f407441627f959f7cfc618a0f1c25a1}
+      \strng{authorfullhash}{5f407441627f959f7cfc618a0f1c25a1}
+      \strng{authorfullhashraw}{5f407441627f959f7cfc618a0f1c25a1}
+      \field{labelalpha}{IS08}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Manuscript}
+      \field{title}{The renormalization for parabolic fixed points and their perturbation}
+      \field{year}{2008}
+    \endentry
+    \entry{K06}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b87c5a5ba3a77bc8753301e5011247fc}{%
+           family={Kahn},
+           familyi={K\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{b87c5a5ba3a77bc8753301e5011247fc}
+      \strng{fullhash}{b87c5a5ba3a77bc8753301e5011247fc}
+      \strng{fullhashraw}{b87c5a5ba3a77bc8753301e5011247fc}
+      \strng{bibnamehash}{b87c5a5ba3a77bc8753301e5011247fc}
+      \strng{authorbibnamehash}{b87c5a5ba3a77bc8753301e5011247fc}
+      \strng{authornamehash}{b87c5a5ba3a77bc8753301e5011247fc}
+      \strng{authorfullhash}{b87c5a5ba3a77bc8753301e5011247fc}
+      \strng{authorfullhashraw}{b87c5a5ba3a77bc8753301e5011247fc}
+      \field{labelalpha}{Kah06}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.DS}
+      \field{eprinttype}{arXiv}
+      \field{title}{A priori bounds for some infinitely renormalizable quadratics: I. Bounded primitive combinatorics}
+      \field{year}{2006}
+      \verb{eprint}
+      \verb math/0609045
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/math/0609045
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/math/0609045
+      \endverb
+    \endentry
+    \entry{KL:decorations}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=b87c5a5ba3a77bc8753301e5011247fc}{%
+           family={Kahn},
+           familyi={K\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{99b499222507c616399bb4d3e526af31}
+      \strng{fullhash}{99b499222507c616399bb4d3e526af31}
+      \strng{fullhashraw}{99b499222507c616399bb4d3e526af31}
+      \strng{bibnamehash}{99b499222507c616399bb4d3e526af31}
+      \strng{authorbibnamehash}{99b499222507c616399bb4d3e526af31}
+      \strng{authornamehash}{99b499222507c616399bb4d3e526af31}
+      \strng{authorfullhash}{99b499222507c616399bb4d3e526af31}
+      \strng{authorfullhashraw}{99b499222507c616399bb4d3e526af31}
+      \field{extraname}{1}
+      \field{labelalpha}{KL08}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0012-9593}
+      \field{journaltitle}{Ann. Sci. Éc. Norm. Supér. (4)}
+      \field{number}{1}
+      \field{title}{A priori bounds for some infinitely renormalizable quadratics. {II}. {D}ecorations}
+      \field{volume}{41}
+      \field{year}{2008}
+      \field{pages}{57\bibrangedash 84}
+      \range{pages}{28}
+    \endentry
+    \entry{KL:QA}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=b87c5a5ba3a77bc8753301e5011247fc}{%
+           family={Kahn},
+           familyi={K\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=fb14db0dcc29709af5b6fb394895010d}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikahil},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{44fadf486a3b2359b525b975aaec6936}
+      \strng{fullhash}{44fadf486a3b2359b525b975aaec6936}
+      \strng{fullhashraw}{44fadf486a3b2359b525b975aaec6936}
+      \strng{bibnamehash}{44fadf486a3b2359b525b975aaec6936}
+      \strng{authorbibnamehash}{44fadf486a3b2359b525b975aaec6936}
+      \strng{authornamehash}{44fadf486a3b2359b525b975aaec6936}
+      \strng{authorfullhash}{44fadf486a3b2359b525b975aaec6936}
+      \strng{authorfullhashraw}{44fadf486a3b2359b525b975aaec6936}
+      \field{extraname}{2}
+      \field{labelalpha}{KL09}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extraalpha}{1}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0003-486X}
+      \field{journaltitle}{Ann. of Math. (2)}
+      \field{number}{2}
+      \field{title}{The quasi-additivity law in conformal geometry}
+      \field{volume}{169}
+      \field{year}{2009}
+      \field{pages}{561\bibrangedash 593}
+      \range{pages}{33}
+      \verb{doi}
+      \verb 10.4007/annals.2009.169.561
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.4007/annals.2009.169.561
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.4007/annals.2009.169.561
+      \endverb
+    \endentry
+    \entry{KL:molecules}{incollection}{}{}
+      \name{author}{2}{}{%
+        {{hash=b87c5a5ba3a77bc8753301e5011247fc}{%
+           family={Kahn},
+           familyi={K\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Wellesley, MA}%
+      }
+      \list{publisher}{1}{%
+        {A K Peters}%
+      }
+      \strng{namehash}{99b499222507c616399bb4d3e526af31}
+      \strng{fullhash}{99b499222507c616399bb4d3e526af31}
+      \strng{fullhashraw}{99b499222507c616399bb4d3e526af31}
+      \strng{bibnamehash}{99b499222507c616399bb4d3e526af31}
+      \strng{authorbibnamehash}{99b499222507c616399bb4d3e526af31}
+      \strng{authornamehash}{99b499222507c616399bb4d3e526af31}
+      \strng{authorfullhash}{99b499222507c616399bb4d3e526af31}
+      \strng{authorfullhashraw}{99b499222507c616399bb4d3e526af31}
+      \field{extraname}{3}
+      \field{labelalpha}{KL09}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extraalpha}{2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Complex dynamics}
+      \field{title}{A priori bounds for some infinitely renormalizable quadratics. {III}. {M}olecules}
+      \field{year}{2009}
+      \field{pages}{229\bibrangedash 254}
+      \range{pages}{26}
+    \endentry
+    \entry{KL:eyes}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=b87c5a5ba3a77bc8753301e5011247fc}{%
+           family={Kahn},
+           familyi={K\bibinitperiod},
+           given={Jeremy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=b53e5fa87a822109c8a071a8f6a78c15}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Misha},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{541105114ee7fa786b4a11f80c6c9d73}
+      \strng{fullhash}{541105114ee7fa786b4a11f80c6c9d73}
+      \strng{fullhashraw}{541105114ee7fa786b4a11f80c6c9d73}
+      \strng{bibnamehash}{541105114ee7fa786b4a11f80c6c9d73}
+      \strng{authorbibnamehash}{541105114ee7fa786b4a11f80c6c9d73}
+      \strng{authornamehash}{541105114ee7fa786b4a11f80c6c9d73}
+      \strng{authorfullhash}{541105114ee7fa786b4a11f80c6c9d73}
+      \strng{authorfullhashraw}{541105114ee7fa786b4a11f80c6c9d73}
+      \field{extraname}{4}
+      \field{labelalpha}{KL26}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.DS}
+      \field{eprinttype}{arXiv}
+      \field{title}{A priori bounds for some infinitely renormalizable quadratic: IV. Elephant Eyes}
+      \field{year}{2026}
+      \verb{eprint}
+      \verb 2601.21905
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2601.21905
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2601.21905
+      \endverb
+    \endentry
+    \entry{lyubich1997dynamics}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=215453b3713a8d194259b86c1c4c773c}{%
+           family={Lyubich},
+           familyi={L\bibinitperiod},
+           given={Mikhail},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {International Press of Boston}%
+      }
+      \strng{namehash}{215453b3713a8d194259b86c1c4c773c}
+      \strng{fullhash}{215453b3713a8d194259b86c1c4c773c}
+      \strng{fullhashraw}{215453b3713a8d194259b86c1c4c773c}
+      \strng{bibnamehash}{215453b3713a8d194259b86c1c4c773c}
+      \strng{authorbibnamehash}{215453b3713a8d194259b86c1c4c773c}
+      \strng{authornamehash}{215453b3713a8d194259b86c1c4c773c}
+      \strng{authorfullhash}{215453b3713a8d194259b86c1c4c773c}
+      \strng{authorfullhashraw}{215453b3713a8d194259b86c1c4c773c}
+      \field{labelalpha}{Lyu97}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Acta Mathematica}
+      \field{number}{2}
+      \field{title}{{ Dynamics of quadratic polynomials, I--II}}
+      \field{volume}{178}
+      \field{year}{1997}
+      \field{pages}{185\bibrangedash 297}
+      \range{pages}{113}
+    \endentry
+    \entry{McMullen94}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=424c782e057b66c3eae5081bc696616b}{%
+           family={McMullen},
+           familyi={M\bibinitperiod},
+           given={Curtis\bibnamedelima T.},
+           giveni={C\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University Press, Princeton, NJ}%
+      }
+      \strng{namehash}{424c782e057b66c3eae5081bc696616b}
+      \strng{fullhash}{424c782e057b66c3eae5081bc696616b}
+      \strng{fullhashraw}{424c782e057b66c3eae5081bc696616b}
+      \strng{bibnamehash}{424c782e057b66c3eae5081bc696616b}
+      \strng{authorbibnamehash}{424c782e057b66c3eae5081bc696616b}
+      \strng{authornamehash}{424c782e057b66c3eae5081bc696616b}
+      \strng{authorfullhash}{424c782e057b66c3eae5081bc696616b}
+      \strng{authorfullhashraw}{424c782e057b66c3eae5081bc696616b}
+      \field{labelalpha}{McM94}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{0-691-02982-2; 0-691-02981-4}
+      \field{series}{Annals of Mathematics Studies}
+      \field{title}{Complex dynamics and renormalization}
+      \field{volume}{135}
+      \field{year}{1994}
+      \field{pages}{x+214}
+      \range{pages}{-1}
+    \endentry
+    \entry{Milnor}{inbook}{}{}
+      \name{author}{1}{}{%
+        {{hash=6ed546ba346b01635423d8131e45906b}{%
+           family={Milnor},
+           familyi={M\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=ba4e3e9201ab6898a149fcddf75308c4}{%
+           family={Lei},
+           familyi={L\bibinitperiod},
+           given={TanEditor},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{6ed546ba346b01635423d8131e45906b}
+      \strng{fullhash}{6ed546ba346b01635423d8131e45906b}
+      \strng{fullhashraw}{6ed546ba346b01635423d8131e45906b}
+      \strng{bibnamehash}{6ed546ba346b01635423d8131e45906b}
+      \strng{authorbibnamehash}{6ed546ba346b01635423d8131e45906b}
+      \strng{authornamehash}{6ed546ba346b01635423d8131e45906b}
+      \strng{authorfullhash}{6ed546ba346b01635423d8131e45906b}
+      \strng{authorfullhashraw}{6ed546ba346b01635423d8131e45906b}
+      \strng{editorbibnamehash}{ba4e3e9201ab6898a149fcddf75308c4}
+      \strng{editornamehash}{ba4e3e9201ab6898a149fcddf75308c4}
+      \strng{editorfullhash}{ba4e3e9201ab6898a149fcddf75308c4}
+      \strng{editorfullhashraw}{ba4e3e9201ab6898a149fcddf75308c4}
+      \field{labelalpha}{Mil00}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{The Mandelbrot Set, Theme and Variations}
+      \field{series}{London Mathematical Society Lecture Note Series}
+      \field{title}{Local connectivity of Julia sets: expository lectures}
+      \field{year}{2000}
+      \field{pages}{67\bibrangedash 116}
+      \range{pages}{50}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,247 @@
+
+\section{Elephant eye combinatorics}
+
+We will use \cite{Book} for reference.
+
+\sss{Description of the combinatorics}
+
+Let $f: U' \ra U$ be an even  quadratic-like map with connected Julia set
+$\Jul\equiv \Jul_f$ 
+and both fixed points repelling.
+Then one of these fixed point, called $\beta$, is the landing point of
+the external $0$-ray,
+while the other one, called $\alpha$, is the landing point of $\qq>1$
+external rays $\Ray_i$ that a cyclically permuted with
+some combinatorial rotation number $\pp/\qq$.
+These rays partition $U$ into $\qq$ sectors $\Sec_i$ attached to $\alpha$,
+counted anti-clockwise beginning with $S_0\ni 0$. 
+See  \cite[\S 24.4]{Book}.
+
+
+The symmetric rays $-\Ray_i$ land at the preimage $-\alpha$ of
+$\alpha$.  Together with the rays $\Ray_i$, they partition $U$ into $2\qq-1$ domains: the
+central one $\Ups$, the above $\qq-1$ sectors $\Sec_i$ attached to $\alpha$,
+and symmetric sectors $\Zec_i$ attached to $-\alpha$.   
+The intersections of these sets with $U'$ will be marked with
+``prime'': $\Ups_i':= \Ups\cap U'$, etc.   
+
+Assume that the map $f$ is renormalizable with period $p$ and little
+(filled) Julia sets $K_n$, $n=0,1,\dots, p-1$, where $K_0\ni 0$
+(see \cite[\S 28.4]{Book}).  We let $\Kfilled:= \bigcup K_n$.  
+
+\msk
+For the class of {\em elephant eye combinatorics} we assume:
+
+\ssk\nin E1. The combinatorial rotation number of $\alpha$ is $1/\qq$.
+  Then the domain $\Ups'$ is mapped onto $\Sec_1$ as a double covering,
+  each $\Sec_i'$ and $\Zec_i'$ is univalently  mapped onto
+  $\Sec_{i+1}$ for $i=1,\dots, \qq-2$, while each $\Sec_{\qq-1}$ and $\Zec_{\qq-1}$ is
+  univalently mapped onto $\Ups \cup \bigcup \Zec_i\cup (-\Ray_i)$.
+
+  
+  \ssk\nin E2.
+  $K_0$ is the only little Julia set contained in $\Ups$.
+
+  \ssk\nin E3. $p= \qq+ \bb$, where $\bb$ is bounded by some $\bar \bb$
+  (but $\qq$ is unbounded!).   We will also assume for simplicity that
+    $\bb< \qq$. 
+
+    \ssk Note that under these assumptions,
+     each sector $S_i$, $i=1,\dots, \qq-\bb$,
+    contains a single little Julia set, $K_i$.
+    
+  \sss{Hubbard tree}
+
+  An efficient  way of describing the renormalization combinatorics is
+  in terms of the Hubbard tree $\Hub\equiv \Hub_f$ (see \cite[]{Book}).
+  Roughly speaking, it is the tree spanned by  the little Julia sets
+  $K_i$ (collapsed to points) 
+  inside the  big one.
+  The vertices of the $\Hub$ are the collapsed $K_i$
+(to which we will still refer as ``$K_i$''), together with the
+$\alpha$-fixed point   and  all branched points.
+(Note that for $\qq>2$, $\alpha$ is also a branched point.)%  
+\footnote{The subtlety of the precise definition  has to do with the
+  possibility  that $\Kfilled  $ can be non-locally-connected.}
+
+
+\comm{*******
+  Let $\Hub_i$, $i\in \Z/\qq\Z $ be the limbs of $\Hub $ attached to
+  the $\alpha$-fixed point. We also let
+
+  \ssk\nin $\bullet$
+  $[K_i,K_j]\subset \Hub$
+ be the arc of the tree connecting $K_i$ to $K_j$
+(more generally, we can consider the span $[T_1, T_2, \dots, T_k]$ 
+of any family of subtrees);
+
+  \ssk\nin $\bullet$
+  $\Hub^\bullet\subset \Hub_0$ be  
+  the span of  $-\alpha$ and  all little Julia sets contained in
+  $\bigcup \Zec_i$;
+%   limb attached to $0$ and containing $\-\alpha$;
+
+  \ssk \nin $\bullet$
+    $\Hub^\#\subset \Hub$ be the span of $\alpha$ and all $K_i$ with $i>\qq$ contained in
+    $\bigcup \Sec_i$. 
+
+  Under the Elephant eye combinatorics, we have: 
+
+ \ssk \nin $\bullet$    
+    for $i\not=0$,  $\Hub_i$ is   homeomorphically mapped onto $\Hub_{i+1}$;
+
+\ssk\nin 
+$\Hub^\bullet$ is  homeomorphically mapped onto
+****************}
+
+\bignote{An interesting combinatorial lemma is hidden here} 
+
+\comm{*********
+\begin{lem}
+  For $0< n< p$, let $\gamma_n$ be the arc of $\Hub$ connecting
+  $K_n$ to either $\alpha$ or $-\alpha$ (depending on whether
+  $K_n\subset \bigcup \Sec_i$ or $K_n\subset \bigcup \Zec_i$). 
+If $K_m\in \gamma_n $, $0< m<p$, then 
+ under the Elephant eye assumption, $m>n$.  
+\end{lem}
+
+\begin{proof}
+  Let us consider the maximal   $n$   for which the statement is
+  violated.
+
+  Assume first that $n< p-1$ and
+  $K_n \not\subset  \Sec_{\qq-1}\cup \Zec_{\qq-1} $.
+Then the arc $\gamma_n$ is homeomorphically mapped onto
+$\gamma_{n+1}\ni K_{m+1}$,
+with  $m+1< n+1< p$,
+contradicting the maximality property of $n$. 
+
+\bignote{OK not to  distinguish notation for a set $K_n$ from
+  a vertex $K_n$?} 
+
+If $n=p-1$, then the arc $\gamma_n$ is homeomorphically mapped onto
+  the arc $[\alpha, K_0]$ containing $K_{m+1}$.
+  On the other hand,  by Assumption E2,  $[\alpha, K_0]$ does not
+  contain any little Julia sets inside. 
+
+Finally, assume $n< p-1$ but $K_n \subset \Sec_{\qq-1} \cup \Zec_{\qq-1}$.
+All the more,  $m< p-1$, so by Assumption E2,  $K_{m+1}$ must be contained
+in some lateral sector $\Zec_j$.
+Then the arc $\gamma_n$ is homeomorphically mapped onto an arc
+$\de\subset \Hub$ connecting $\alpha$ to $-\alpha$,
+entering $\Zec_j$, and then proceeding to
+$K_{m+1}$ and further  to $K_n$, without ever exiting $\Zec_j$. 
+It follows that its piece from $-\alpha$ to  $K_{n+1}$ is equal to $\gamma_{n+1}$,
+and moreover, it contains  $ K_{m+1}$.
+This is a  contradiction once again. 
+\end{proof}
+***************************}
+
+For $ n\not= 0\ \mod \, p$, let $\gamma_n$ be the arc of $\Hub$ connecting
+  $K_n$ to either $\alpha$ or $-\alpha$ (depending on whether
+  $K_n\subset \bigcup \Sec_i$ or $K_n\subset \bigcup \Zec_i$).%
+\footnote{We tacitly assume E2, though the discussion can be easily
+ extended  to the general case.} 
+We also let $\gamma_0^+$ be the arc of $\Hub$ connecting $K_0$ to
+$\alpha$, while  $\gamma_0^-$ be the arc  connecting $K_0$ to
+$-\alpha$. We let $\gamma_0$ be the concatenation of these two,
+i.e., the arc connecting $\alpha$ to $\alpha_-$.
+We have the following transformation scheme for these arcs:
+
+\ssk\nin $\bullet$
+   Each $\gamma_0^\pm$ is homeomorphically  mapped by $f$ onto $\gamma_1$;
+  
+   \ssk\nin $\bullet$
+   If $0< n< p-1$ and $K_n \not\subset  \Sec_{\qq-1}\cup \Zec_{\qq-1}$,
+   then  $\gamma_n $ is homeomorphically  mapped by $f$ onto $\gamma_{n+1}$;
+
+\ssk\nin $\bullet$
+    If $0< n< p-1$ and $K_n \subset  \Sec_{\qq-1}\cup \Zec_{\qq-1}$,
+   then  $\gamma_n $ is homeomorphically  mapped by $f$ onto
+   $\gamma_{n+1}\cup \gamma_0$; 
+
+ If $n = p-1$ (and hence $K_n \subset  \Sec_{\qq-1}\cup \Zec_{\qq-1}$
+   then  $\gamma_n $ is homeomorphically  mapped by $f$ onto
+   $ \gamma_0^+$.
+
+
+\begin{lem}\label{bounded deg}
+  Under the Elephant eye assumption,
+  any edge $\gamma$ of  $\Hub$ is mapped under $f^p$ at most two-to-one
+ into the union of at most $\bb+ 1$ consecutive  edges.
+\end{lem}
+
+\begin{proof}
+It is sufficient to show this for the arcs $\gamma_n$, $0< n < p $, and for
+$\gamma_0^\pm$, which  follows from the following observations:
+
+\ssk\nin $\bullet$
+Each arc $\gamma_0^\pm$ and each arc $\gamma_n$,
+$1\leq n  \leq  \qq-2 $,  is mapped  under $f^{\qq-n-1}$
+homeomorphically onto $\gamma_{\qq-1}$;
+
+\ssk\nin $\bullet$
+By induction, for $\qq-1 \leq n \leq  p-1 $,  and $k\le \bb$,
+the arc $\gamma_n$   is mapped at most two-to-one by
+$f^k$  into $\gamma_{n+k}\cup  \displaystyle { \bigcup_{0 \leq i\leq
+    k-1}\gamma_i }$, and therefore
+
+\ssk\nin $\bullet$
+For $\qq-1 \leq n \leq  p-1 $,   the arc $\gamma_n$   is mapped under
+$f^{\bb} $ at most two-to-one  into $\displaystyle { \bigcup_{0 \leq i\leq   \bb}\gamma_i }$.
+\end{proof}
+
+\subsubsection{Translation domains}
+
+\bignote{Define them here?}
+
+Let us consider a topological disk $\Om $  inside the translation region
+which is the union of $2N+1$ consecutive sectors
+$\Sec_n$, $1\leq  l-N \leq  n\leq l+N\leq \qq-1$.
+Ler $\Om'$ be its pullback of $\Om_l$ under $f^p$ based at $K_l$,
+i.e., the connected component of $f^{-p} (\Om)$ containing $K$. 
+Let us also consider the arcs $\de_n\subset \Om$
+connecting $\KK_n$ to $\KK_{n+1}$ and aligned with the Hubbard tree
+(that is,  homotopic to the  concatenation of the edges $\gamma_n$ and
+$\gamma_{n+1}$ considered  above). 
+
+\begin{lem}\label{J-sets don't pull off}
+ % There exsists $\bb'$ (depending on $\bb$ only) such that
+Under the above circumstances, $\Om'$ contains the little Julia sets $K_n$,
+ $   l- N + \bb \leq n\leq l+ N-\bb'$, and the arcs $\de_n$ connecting
+ them.  
+\end{lem}
+
+\begin{proof}
+Assume inductively in $k=0,1,\dots$ that the assertion is true for all
+$\KK_n$ on combinatorial distance at most  $k$ from $\KK_l$.
+Let for definiteness $n=l+k \geq l$ (and $n<\qq- \bb$). 
+By Lemma \ref{bounded deg},  the  image $\om_n= f^p(\de_n) $ is contained in the
+union of arcs $\de_{n+j}$, $  |j|\leq \bb$, so it is contsined in
+  $\Om$.  It follows that $\de_n$ is the lift of $\om_n\subset \Om$
+  based at $\KK_n$. Hence $\de_n$ is contained in $\Om'$, and so is $\KK_{n+1}$.  
+\end{proof}
+
+
+
+\begin{lem}\label{interesting moments}
+ Let $(f^n)^* \Om\not\supset K_1$  %  $n\leq 3p$,
+ be a pullback  of $\Om$
+ containing a horizontal arc $\alpha$
+ with endpoints on combinatorial distance at
+most $N-\bb$ from  the base set $\KK_{l-N}$.
+Then   $f^* \alpha$  does not pull off.
+\end{lem}
+ 
+\begin{proof}
+Let the arc $\alpha$ lands on $K_i$ and $K_j$. By Lemma \ref{J-sets
+  don't pull off}, none of these  Julia sets get lost under the pullback
+(i.e.,  both of them are contained in $(f^{n+1})^*\, \Om$).
+Let $\beta= f^* \alpha$ be the lift of $\alpha$ that begins on $K_{i-1}$. 
+If it pulls off then  it ends on $K_{j-1}'$,
+implying$K_{j-1}'\subset ( f^{n+1})^*  \Om$. 
+
+Since  $( f^n)^* \Om $ does not contain $K_1$, 
+the map $f: ( f^{n+1})^*\, \Om \ra ( f^n)^*\,  \Om $ is univalent. 
+It follows that $K_{j-1}\not\subset ( f^{n+1})^*\,  \Om $ -- contradiction. 
+\end{proof}

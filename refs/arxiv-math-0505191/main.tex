@@ -1,0 +1,84 @@
+\documentstyle[12pt,amssymb,psfig,epsfig,color]{amsart}
+\bibliographystyle{amsalpha}
+\baselineskip=24pt 
+% ***********************************************************
+% *** The following two lines take out the picture files! ***
+%\input{psfig}
+%\def\psfig#1{}
+%\usepackage[dvips]{epsfig}
+
+\input{macros.tex} 
+\input{figures/figure_macros.tex}
+
+
+
+\begin{document}
+
+
+\bigskip\bigskip
+
+\title[Quasi-Additivity Law]{The Quasi-Additivity Law \\ in Conformal Geometry }
+\author {Jeremy Kahn and Mikhail Lyubich}
+\address{Stony Brook University and University of Toronto} 
+%\thanks{
+%   This work was supported in part by the Guggenheim Fellowship, Clay Mathematics Institute, NSF, and NSERC}
+\date{\today}
+
+
+\begin{abstract} 
+On a Riemann surface $S$ of finite type containing a family of $N$ disjoint disks $D_i$ (``islands''),
+we consider several natural conformal invariants measuring the distance from the islands to $\di S$ 
+and separation between different islands. In a near degenerate situation we
+establish a relation between them called the Quasi-Additivity Law.
+We then  generalize it to a  Quasi-Invariance Law 
+providing us with a transformation rule of the moduli in question under
+covering maps.    
+This rule (and in particular, its special case  called the  Covering Lemma) 
+has important applications in holomorphic dynamics which will be addressed in the forthcoming notes. 
+\end{abstract}
+
+
+\comm{
+We consider a Riemann surface $S$ of finite type containing a family of $N$ disjoint disks $D_i$,
+and prove  the following Quasi-Additivity Law:
+If the total extremal width $\sum \WW(S\sm D_i)$ is big enough (depending on $N$)
+then it is comparable  with the extremal width $\WW (S,\,  \cup D_i)$
+(under a certain ``separation assumption'') .  
+
+We also consider a branched covering  $f: U\ra V$ of degree $N$ between two disks
+that restricts to a map $\La\ra B$ of degree $d$ on some disk $\La \Subset U$.
+We derive from the Quasi-Additivity Law that if $\mod(U\sm \La)$ is sufficiently small,  
+then (under a ``collar assumption'')
+the modulus is {\it quasi-invariant} under $f$, namely
+$\mod(V\sm B)$ is comparable with  $d^2 \mod(U\sm \La)$.
+
+This {\it Covering Lemma} has important consequences in holomorphic dynamics which will
+be discussed in the forthcoming notes. 
+}
+
+\setcounter{tocdepth}{1}
+ 
+\maketitle
+%\tableofcontents
+
+%\renewcommand{\chaptername}{Lecture}
+
+
+%\input{intro}
+
+%\setcounter{chapter}{0}
+
+%\input{kingdom}
+\input{covering}
+%\input{bounds}
+%\input{snakes}
+\input{bib.tex}
+
+
+\end{document}
+
+
+
+
+
+

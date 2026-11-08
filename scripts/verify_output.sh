@@ -31,6 +31,10 @@ fi
 
 # Print the full output for debugging/logs
 cat "$ACTUAL"
+if [ "$EXIT_CODE" -ne 0 ]; then
+    rm -f "$EXPECTED" "$ACTUAL" "$ACTUAL_CLEAN"
+    exit "$EXIT_CODE"
+fi
 
 # Extract the stable summary block from actual output:
 # - start at the success line

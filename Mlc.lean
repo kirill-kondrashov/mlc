@@ -1,5 +1,23 @@
 -- This module serves as the root of the concise MLC library.
 import Mlc.Core
+import Mlc.Research.Examples
+import Mlc.Literature.Foundations
+import Mlc.Literature.PhaseParameter
+import Mlc.Literature.Renormalization
+import Mlc.Literature.Dudko
+import Mlc.Literature.Combinatorics
+import Mlc.Literature.Categorical
+import Mlc.Literature.CaseTheorems
+import Mlc.Literature.ModelAudit
+import Mlc.Literature.Review
+import Mlc.Literature.NestedCopies
+import Mlc.Quadratic.Complex.FirstComponents
+import Mlc.Quadratic.RealSlice
+import Mlc.Quadratic.Examples
+import Mlc.Quadratic.RealComponents
+import Mlc.Quadratic.MultiplierMap
+import Mlc.Quadratic.PeriodTwoMultiplier
+import Mlc.Quadratic.Symmetry
 import Mlc.EfimovCategoricalBridge
 import Mlc.GreenSublevelIntersectionCounterexample
 import Mlc.CertifiedOrbitApproximation

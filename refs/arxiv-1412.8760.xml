@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/vQISsrVdWKvfvj9geLdiQPh1y6s</id>
+  <title>arXiv Query: search_query=&amp;id_list=1412.8760&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:39Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1412.8760" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1412.8760v2</id>
+    <title>Core entropy of quadratic polymonials</title>
+    <updated>2016-02-20T23:38:00Z</updated>
+    <link href="https://arxiv.org/abs/1412.8760v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1412.8760v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We give a combinatorial definition of "core entropy" for quadratic polynomials as the growth exponent of the number of certain precritical points in the Julia set (those that separate the $α$ fixed point from its negative). This notion extends known definitions that work in cases when the polynomial is postcritically finite or when the topology of the Julia set has good properties, and it applies to all quadratic polynomials in the Mandelbrot set.
+  We prove that core entropy is continuous as a function of the complex parameter. In fact, we model the Julia set as an invariant quadratic lamination in the sense of Thurston: this depends on the external angle of a parameter in the boundary of the Mandelbrot set, and one can define core entropy directly from the angle in combinatorial terms. As such, core entropy is continuous as a function of the external angle.
+  Moreover, we prove a conjecture of Giulio Tiozzo about local and global maxima of core entropy as a function of external angles: local maxima are exactly dyadic angles, and the unique global maximum within any wake occurs at the dyadic angle of lowest denominator. We also describe where local minima occur.
+  An appendix by Wolf Jung relates different concepts of core entropy and biaccessibility dimension and thus shows that biaccessibility dimension is continuous as well.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2014-12-30T20:43:40Z</published>
+    <arxiv:comment>55 pages, 5 figures. Revised version, some proofs elaborated. With an appendix by Wolf Jung</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+    <author>
+      <name>Dierk Schleicher</name>
+    </author>
+  </entry>
+</feed>

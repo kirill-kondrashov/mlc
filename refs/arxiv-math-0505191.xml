@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/ElIOOLxoE6YxV2+iyVnKUMnQMhg</id>
+  <title>arXiv Query: search_query=&amp;id_list=math/0505191&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:29:10Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=math/0505191" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/math/0505191v2</id>
+    <title>The Quasi-Additivity Law in Conformal Geometry</title>
+    <updated>2007-01-30T22:47:30Z</updated>
+    <link href="https://arxiv.org/abs/math/0505191v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/math/0505191v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>  On a Riemann surface $S$ of finite type containing a family of $N$ disjoint disks $D_i$ (``islands''), we consider several natural conformal invariants measuring the distance from the islands to $\di S$ and separation between different islands. In a near degenerate situation we establish a relation between them called the Quasi-Additivity Law. We then generalize it to a Quasi-Invariance Law providing us with a transformation rule of the moduli in question under covering maps. This rule (and in particular, its special case called the Covering Lemma) has important applications in holomorphic dynamics which will be addressed in the forthcoming notes.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2005-05-10T17:19:21Z</published>
+    <arxiv:comment>LaTeX, 36 pages, 7 figures</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Jeremy Kahn</name>
+    </author>
+    <author>
+      <name>Mikhail Lyubich</name>
+    </author>
+  </entry>
+</feed>

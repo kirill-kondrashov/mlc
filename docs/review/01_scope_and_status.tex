@@ -1,0 +1,103 @@
+\chapter{The problem, theorem coverage, and the open frontier}
+\label{chap:scope}
+
+\section{The target and the two planes}
+
+Let
+\[
+ f_c(z)=z^2+c,\qquad p_0(c)=0,\qquad p_{n+1}(c)=f_c(p_n(c)),
+\]
+and let
+\[
+ \M=\{c\in\C:\sup_n |p_n(c)|<\infty\}
+\]
+be the Mandelbrot set.  The global MLC conjecture is
+\[
+ \mathsf{MLC}:\qquad \LocallyConnectedSpace(\M).
+\]
+The pointwise statement asks that, for a specified $c\in\M$, every
+neighbourhood of $c$ in $\M$ contain a connected neighbourhood of $c$.
+The global statement quantifies over all such parameters.
+Chapter~\ref{chap:quadratic-foundations} develops the orbit definitions
+and escape criterion; Chapter~\ref{chap:topological-foundations} gives
+the precise neighbourhood formulation and its proved endpoint lemmas.
+
+The first distinction of this review is therefore:
+\begin{enumerate}
+\item a theorem about a parameter class;
+\item a theorem about local connectivity of the corresponding Julia set;
+\item a theorem about local connectivity of the Mandelbrot set at those
+      parameters; and
+\item the global statement $\mathsf{MLC}$.
+\end{enumerate}
+These statements are related by the phase--parameter machinery, but they are
+not interchangeable.  The Lean declarations
+\lean{Mlc.Literature.MandelbrotLocallyConnectedAt} and
+\lean{Mlc.Literature.GlobalMLC} keep this distinction explicit.
+
+\section{What a theorem-coverage picture can show}
+
+\input{figures/mlc_status_schematic.tex}
+
+Figure~\ref{fig:mlc-status} gives the global geometric context.
+The Yoccoz mechanism, the infinite-renormalization cases, and the
+unresolved-coverage question have separate figures in their respective
+chapters.  This separation keeps the theorem hypotheses and the visual
+evidence on the same page.
+
+Open subsets of the plane are locally connected, so interior parameters
+have an elementary local argument.  The boundary classes are instead
+described by dynamical or combinatorial conditions.  A ``bounded-type''
+class is not an entire coloured bulb, and a Feigenbaum class is not
+identified by the apparent texture of a rendered pixel.
+
+\begin{definition}[Coverage relative to a theorem list]
+Let $\mathscr C_j\subseteq\partial\M$ be the parameter classes in a
+specified list of published pointwise MLC theorems, with all of their
+source hypotheses retained.  Define
+\[
+ \mathscr K=\bigcup_j\mathscr C_j,\qquad
+ \mathscr U_{\rm cov}=\partial\M\setminus\mathscr K.
+\]
+\end{definition}
+
+This is a set-theoretic record of what that list asserts.  Membership in
+$\mathscr U_{\rm cov}$ means only that the list provides no applicable
+theorem.  It neither asserts failure of local connectivity nor rules out
+coverage by another theorem.  Computing this complement at every pixel
+would require an exact parameter-classification procedure that the
+renderer does not provide.
+
+\begin{conditionalstep}
+There is no established set of counterexamples to MLC to colour in the
+picture.  The unresolved illustration displays numerical small-scale
+geometry alongside the remaining analytic obligations.  Its colour
+denotes finite-time orbit behaviour, while its caption describes the
+proof frontier.
+\end{conditionalstep}
+
+\section{What remains open}
+
+The full conjecture remains open.  The main unresolved frontier is the
+parameter-plane control needed for general infinitely renormalizable
+quadratics, in particular cases with unbounded combinatorics.  Recent
+bounded-type satellite and Feigenbaum results enlarge the proved set of
+parameters, but do not supply a uniform theorem for every boundary
+parameter.
+
+For a covered literature class, the remaining task may be formalization
+of an already published analytic argument.  For unrestricted parameters,
+the missing analytic argument can also be an open mathematical problem.
+These are different kinds of incompleteness.
+
+The current Lean root proves the implication
+\[
+ \mathrm{BUF}(\M,O)\Longrightarrow\mathsf{MLC},
+\]
+with the buffer retained as a hypothesis.  Generic graph-cut certificate
+interfaces and topological transport theorems are also available.
+Chapter~\ref{chap:frozen-audit} explains why the inherited
+Gaussian-area puzzle model contributes no instances of its purported
+finite-renormalization class.  That obstruction reduces the claimed
+formal coverage, while leaving the independently proved topological
+implications intact.

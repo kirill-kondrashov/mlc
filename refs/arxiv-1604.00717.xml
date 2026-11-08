@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/EougU3fSlbQwK0h7DKpStUrMBUg</id>
+  <title>arXiv Query: search_query=&amp;id_list=1604.00717&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:47:02Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1604.00717" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1604.00717v4</id>
+    <title>Golden mean Siegel disk universality and renormalization</title>
+    <updated>2016-08-11T18:24:08Z</updated>
+    <link href="https://arxiv.org/abs/1604.00717v4" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1604.00717v4" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We provide a computer-assisted proof of one of the central open questions in one-dimensional renormalization theory -- universality of the golden-mean Siegel disks. We further show that for every function in the stable manifold of the golden-mean renormalization fixed point the boundary of the Siegel disk is a quasicircle which coincides with the closure of the critical orbit, and that the dynamics on the boundary of the Siegel disk is rigid.
+  Furthermore, we extend the renormalization from one-dimensional analytic maps with a golden-mean Siegel disk to two-dimensional dissipative Hénon-like maps and show that the renormalization hyperbolicity result still holds in this setting.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2016-04-04T01:43:45Z</published>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Denis Gaidashev</name>
+    </author>
+    <author>
+      <name>Michael Yampolsky</name>
+    </author>
+  </entry>
+</feed>

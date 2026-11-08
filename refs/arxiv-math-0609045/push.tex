@@ -1,0 +1,187 @@
+
+\subsection{Vertical weight from the loss of horizontal} \label{subsec:vert-from-hor-loss}
+We can now use Theorem \ref{loss of hor weight} to show that the vertical weight at level $8p$ is a definite proportion of the total weight at level 0. 
+
+We first observe
+\begin{lem}\label{increase of the total}
+ For any $n\in \N$,
+we have:
+$$
+  \| W_\can^{\ver+\hor}(U \sm \KK)\|_1 \leq \| W_\can^{\ver+\hor}(U^n \sm \KK)\|_1+ C(p).
+$$
+\end{lem}
+\begin{proof}
+This follows immediately from Theorem \ref{thm:total-increase},
+because $U^n \sm \KK \subset U \sm \KK$,
+and the inclusion is homotopic to a homeomorphism. 
+\end{proof}
+
+Combining Theorem \ref{loss of hor weight} with Lemma \ref{increase of the total}, we immediately obtain:
+\begin{lemma} \label{separation property}
+ Let $f$ be a renormalizable quadratic-like map with period $p$.
+Then there exists $M=M(p)$ such that
+$$
+     \| W^\ver_\can(U^{8p}\sm \KK)\|_1 \geq  \frac{1}{2}  \| W_\can^{\ver+\hor}(U \sm \KK) \|_1 ,
+$$
+provided $ \| W_\can^h (U\sm \KK)\|_1>M(p)$.
+\end{lemma}
+
+\subsection{A suitable version of the Covering Lemma} \label{subsec:covering-lemma}
+We will now state (and prove) a version of the Covering Lemma\cite{covering lemma} in the language of the canonical weighted arc diagram. In the next subsection, we will use Theorem \ref{thm:covering} to ``push forward'' the $\wcan^\ver(U^{8p} \sm \KK)$ 
+to get a lower bound on $\wcan^\ver(U \sm \KK)$ and thereby prove Theorem \ref{def vertical teaser}.
+
+As Theorem \ref{thm:covering} is simply a restatement of the Quasi-Invariance Law of \cite{covering lemma}, the reader may wish to read the statement of this Theorem and then skip to the next section. 
+\begin{theorem} \label{thm:covering}
+Suppose that 
+\begin{itemize}
+\item
+$U$ and $V$ are simply connected Riemann surfaces,
+\item
+$A = \bigcup_{i=1}^p A_i$ is a union of $p$ disjoint compact connected full subsets of $U$,
+\item
+$B = \bigcup_{i=1}^n B_i$ is the same on $V$,
+and 
+\item
+$f\from U\to V$ is a holomorphic branched cover of degree $D$,
+\end{itemize}
+such that 
+\begin{itemize}
+\item
+all the critical values of $f$ lie in $B$,
+\item
+for each $i$,
+$A_i$ is a component of $f^{-1}B_i$,
+and 
+\item
+the degree of $f|_{A_i}$ is $d$
+(in the sense that $A_i$ and $B_i$ have open neighborhoods $A_i'$ and $B_i'$ such that $f\from A_i'\to B_i'$ is a degree $d$ branched cover).
+\end{itemize}
+Suppose further that 
+\begin{equation} \label{eq:covering-compare}
+\norm{\wcan^\ver(U \sm A)}_1 \ge \epsilon \norm{\wcan^{\ver + \hor}(V \sm B)}_1,
+\end{equation}
+and 
+\begin{equation} \label{eq:covering-large}
+\norm{\wcan^\ver(U \sm A)}_1 \ge M(\epsilon, D, p)
+\end{equation}
+Then 
+\begin{equation} \label{eq:covering-conclude}
+\norm{\wcan^\ver(U \sm A)}_1 \le \frac{12d^2}{\epsilon}\norm{\wcan^\ver{V \sm A}}_1.
+\end{equation}
+\end{theorem}
+
+Before proving this theorem,
+let us review the notation of \cite{covering lemma} and relate it to $\Wcan(U \sm A)$.
+Accordingly, 
+let $U$ and $A$ be as in the statement of Theorem \ref{thm:covering}.
+We then define three numbers determined by $U$ and $A$:
+$$
+  X = \WW(U,\, \bigcup_{j=1}^N A_j);
+$$
+
+\begin{equation}\label{Y}
+   Y = \sum_{j=1}^N \WW(U, A_j),
+\end{equation}
+
+$$
+   Z = \sum_{j=1}^N  \WW ( U \sm \bigcup_{k \not= j } A_k ,\, A_j ).
+$$
+
+It is easy to see that $X\leq Y\leq Z$.
+We further claim that
+\begin{equation} \label{eq:X-bounds}
+\wcan^\ver(U \sm A) \le X \le \wcan^\ver(U \sm A) + 4p
+\end{equation}
+and
+\begin{equation} \label{eq:Z-bounds}
+\wcan^{2\hor + \ver}(U \sm A) \le Z \le  \wcan^{2\hor + \ver}(U \sm A) + 4p^2
+\end{equation}
+To see the lower bound for $X$ in \eqref{eq:X-bounds},
+we need only observe that every vertical leaf in the canonical lamination for $U \sm A$ contributes to the defining width for $X$,
+so $X$ is at least the total width of this vertical lamination.
+To see the upper bound,
+we consider the extremal foliation $\FF_X$ for the defining path family for $X$.
+Then the leaves of $\FF_X$ can lie in at most $2p$ homotopy classes $\alpha_i$,
+and 
+$$
+W(\FF_X|_{\alpha_i}) \le \wcan(U \sm A,\alpha_i) + 2
+$$
+by maximality. 
+The derivation of \eqref{eq:Z-bounds} is similar and left as an exercise for the reader. 
+
+We can now reduce Theorem \ref{thm:covering} to the version of the Quasi-Invariance Law stated in Section 3.1.1 of \cite{covering lemma}.
+\begin{proof}[Proof of Theorem \ref{thm:covering}]
+We wish to think of the setting of our Theorem as an instance of the setting of the QI Law stated in Section 3 of \cite{covering lemma},
+and specialized in Section 3.1.1. 
+So we apply the latter,
+letting $U$ and $V$ in \cite{covering lemma} be our $U$ and $V$,
+letting $\Lambda_j' = \Lambda_j$ be our $A_j$,
+and letting $B_j' = B_j$ be our $B_j$.
+Then the $Y_U$ in Section 3.1.1 of \cite{covering lemma} is our $Y(U, A)$; we will use only that it is at least $X(U, A)$.
+\emph{Because the critical values of $f$ lie in $B$},
+the $Z_V = Z_V\{B_j, B_j', CV\}$ in Section 3.1.1 is simply our $Z(V, B)$,
+and of course $X_V$ in \cite{covering lemma} is our $X(V, B)$. 
+
+The context and direction of the two inequalities in Section 3.1.1 of \cite{covering lemma} are such that we can replace $Y_U$ with $X_U$ in them. 
+We can then derive,
+assuming $\norm{W^\ver(U\sm A)} \ge 4p^\epsilon$,
+\begin{align*}
+Z_V &\le \norm{\wcan^{2\hor+\ver}(V \sm B)}_1 + 4p^2 \quad&\text{by \eqref{eq:Z-bounds}} \\
+&\le 2 \norm{\wcan^{\hor+\ver}(V \sm B)}_1 + 4p^2 \\
+&\le \frac3\epsilon \norm{\wcan^\ver(U \sm A)}_1 &\text{by \eqref{eq:covering-compare}}\\
+&\le \frac3\epsilon X_U &\text{by \eqref{eq:X-bounds}}. 
+\end{align*}
+This is the separation assumption (with $\xi :=  3/\epsilon$) in Section 3.1.1 of \cite{covering lemma};
+we can then conclude,
+assuming \eqref{eq:covering-large} (which implies $X_U \ge K(\xi, p, D)$),
+$$
+X_U \le \frac{6d^2}\epsilon X_V,
+$$
+which implies
+$$
+\norm{\wcan^\ver(U \sm A)}_1 \le \frac{6d^2}\epsilon(\norm{\wcan^\ver(V \sm B)}_1 + 4 p).
+$$
+Assuming then that $\wcan^\ver(U \sm A) \ge 48d^2p/\epsilon$,
+we obtain \eqref{eq:covering-conclude}.
+\end{proof}
+
+\subsection{Vertical part has a definite weight} \label{covering-application}
+We can now prove Theorem \ref{def vertical teaser}:
+\begin{proof}[Proof of Theorem \ref{def vertical teaser}]
+   If $\| W_\can^\ver (U\sm \KK)\|_1 \geq \| W_\can^\hor (U\sm \KK)\|_1 $,
+there is nothing to prove. So, we assume that the opposite inequality holds,
+and then
+$$
+   \| W_\can^\hor (U\sm \KK)\|_1 > \frac{1}{2} \| W_\can^{\ver+\hor} (U\sm \KK)\|_1.
+$$
+Then taking $M=M(p)$ as in Corollary \ref{separation property},
+we conclude that
+\begin{equation}\label{separation for f^n}
+     \| W^\ver_\can(U^{8p}\sm \KK)\|_1 \geq  \frac{1}{2}  \| W_\can^{\ver+\hor}(U \sm \KK) \|_1 ,
+\end{equation}
+provided  $\| W_\can (U\sm \KK)\|_1>2M$.
+
+We are now ready to apply Theorem \ref{thm:covering} 
+to the map $f^{8p}\from U^{8p} \to U$,
+where we let $A = B = \KK$.
+We observe that all the topological hypotheses are satisfied, 
+with $d = 2^{8}$ and $D = 2^{8p}$, 
+and also \eqref{eq:covering-compare} holds with $\epsilon = 1/2$.
+Moreover,
+taking $\normone{\wcan^{\hor+\ver}(U \sm \KK)}$ sufficiently large and applying Lemma \ref{increase of the total},
+we have 
+$$
+\normone{\wcan^{\hor+\ver}(U^{8p} \sm \KK)} \ge \normone{\wcan^{\hor+\ver}(U \sm \KK)} - C(p) \ge M(\epsilon, D, p),
+$$
+as required in \eqref{eq:covering-large}.
+We then obtain,
+as our form of \eqref{eq:covering-conclude},
+\begin{align*}
+\normone{\wcan^{\ver}(U \sm \KK)} &\ge (24 \cdot 2^{16})^{-1} \normone{\wcan^{\ver}(U^{8p} \sm \KK)}.
+\end{align*}
+The Lemma then follows from this and Lemma \ref{separation property}.
+\end{proof}
+
+
+
+

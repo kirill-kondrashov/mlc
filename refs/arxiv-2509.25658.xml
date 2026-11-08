@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/MujiXu5Y1JeNE3VrKYPYOxmeRh0</id>
+  <title>arXiv Query: search_query=&amp;id_list=2509.25658&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:41Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2509.25658" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2509.25658v1</id>
+    <title>Sierpinski carpet hyperbolic components of disjoint type are bounded</title>
+    <updated>2025-09-30T01:56:17Z</updated>
+    <link href="https://arxiv.org/abs/2509.25658v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2509.25658v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>We establish certain uniform a priori bounds for hyperbolic components of disjoint type. As an application, we will prove that Sierpinski carpet hyperbolic components of disjoint type are bounded. Furthermore, we show that for each map $f$ on the closure of such a hyperbolic component, there exists a quadratic-like restriction around every non-repelling periodic point. Extensions of these results to non-Sierpinski configurations are underway. As a prototype example, we describe the post-critical set of any map on the boundary of the hyperbolic component of $z^2$.</summary>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.GT" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-09-30T01:56:17Z</published>
+    <arxiv:comment>68 pages, 8 figures</arxiv:comment>
+    <arxiv:primary_category term="math.DS"/>
+    <author>
+      <name>Dzimitry Dudko</name>
+    </author>
+    <author>
+      <name>Yusheng Luo</name>
+    </author>
+  </entry>
+</feed>

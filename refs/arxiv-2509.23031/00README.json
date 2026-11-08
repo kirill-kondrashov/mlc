@@ -1,0 +1,15 @@
+{
+  "key": "dudko-luo-lyubich-neutral-bounds",
+  "arxiv_id": "2509.23031",
+  "arxiv_version": "2",
+  "role": "renormalization",
+  "title": "Uniform a priori bounds for neutral renormalization. Variation II: psi-bullet ql Siegel maps",
+  "authors": [
+    "Dzmitry Dudko",
+    "Yusheng Luo",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-2509.23031.xml",
+  "source_archive": "arxiv-2509.23031-source.tar.gz",
+  "main_tex": "arxiv-2509.23031/main.tex"
+}

@@ -1,0 +1,308 @@
+\chapter{Dudko--Lyubich and current MLC cases}
+\label{chap:current-cases}
+
+\section{A common theorem shape}
+
+The recent literature proves local connectivity for different
+renormalization classes.  Their analytic arguments are not identical, but
+the formal end point is uniform:
+\[
+ \text{class predicate}
+\ +\ \text{connected shrinking parameter pieces}
+\ \Longrightarrow\ \text{MLC at }c.
+\]
+The Lean structure \lean{LiteratureMLCData} records this common shape.  Its
+fields are:
+\begin{enumerate}
+\item membership in the source-specific parameter class;
+\item a connected shrinking \lean{ParameterPuzzleBasis};
+\item a source key identifying the analytic theorem that produced the data.
+\end{enumerate}
+The theorem
+\lean{localConnectivity_of_literatureMLCData} is proved once and reused by
+the source-specific certificates.
+
+\section{Bounded-type satellite parameters}
+
+\begin{definition}[Bounded-type satellite parameters]
+\label{def:bounded-satellite}
+On a maximal small Mandelbrot copy $M_s$, let
+$\mathcal R_{\rm ql}|_{M_s}:M_s\to\M$ be its canonical
+straightening homeomorphism.  These branches define a partial
+renormalization map.  A parameter is infinitely renormalizable when
+all its forward renormalization iterates are defined.
+It has bounded type when those iterates belong to a finite collection
+of maximal small copies.  It has bounded satellite type when the
+copies in that itinerary are satellite.
+\end{definition}
+
+This is the source definition in the quadratic-like renormalization
+section of~\cite{DudkoLyubichSatellite}.  It involves actual marked
+copies and straightening branches, not an arbitrary bounded sequence
+of integers.
+
+\subsection{The source-specific construction}
+
+The fixed-point multiplier parametrizes the main cardioid boundary:
+\[
+ c(\theta)=\frac{e^{2\pi i\theta}}2
+              -\frac{e^{4\pi i\theta}}4.
+\]
+The molecule map acts on the rotation number by
+\[
+ F(\theta)=
+ \begin{cases}
+ \theta/(1-\theta),&0<\theta\le1/2,\\
+ (2\theta-1)/\theta,&1/2\le\theta<1,
+ \end{cases}
+\]
+with values read modulo $1$.  Dudko--Lyubich fix an appropriate
+periodic irrational rotation number for this map.  Near its Siegel
+parameter $c(\theta)$, they construct a small copy $M_0$ and its
+prescribed inverse molecule iterates $M_n$, $n<0$, which accumulate
+at $c(\theta)$.  Each copy has a straightening branch $\chi_n$.
+The theorem produces singleton renormalization nonescaping sets
+\[
+ \bigcap_{j\ge0}\operatorname{Dom}(\chi_n^{\circ j})=\{c_n\}
+\]
+and hence rigidity and pointwise MLC at the selected $c_n$.
+The construction also gives local connectivity and positive area for
+the corresponding Julia sets.  These Julia-set conclusions are
+additional statements, rather than alternative definitions of MLC.
+
+\begin{theorem}[Dudko--Lyubich satellite MLC]
+\label{thm:dudko-lyubich-satellite}
+For the bounded-type satellite class covered by Dudko--Lyubich, the
+Mandelbrot set is locally connected at every parameter in the class.
+\end{theorem}
+
+The hypotheses select the parameters constructed in the paper; the
+2018--2023 theorem is not a theorem about every point of a satellite
+limb.  Its pacman/molecule mechanism is also distinct from the later
+all-bounded-combinatorics result.
+
+The formal certificate is
+\lean{BoundedTypeSatelliteCertificate}.  Its class predicate is a parameter,
+because the combinatorial definition of bounded type has to be built from
+the renormalization tower rather than guessed from a period sequence.
+Once the analytic proof constructs the parameter-puzzle basis, the theorem
+\lean{localConnectivity_of_boundedTypeSatelliteCertificate} gives the
+topological conclusion.
+
+\coveragefigure{3}{The $1/3$ attachment gives a recognizable
+satellite-limb context.  The marked attachment point itself is
+parabolic.  The infinitely renormalizable parameters of the
+Dudko--Lyubich construction are selected by their renormalization
+itinerary and analytic construction; this figure does not assert
+coverage of the entire displayed bulb or limb.}{fig:bounded-satellite}
+
+\section{Feigenbaum points}
+
+\begin{definition}[Feigenbaum class]
+\label{def:feigenbaum-class}
+A Feigenbaum quadratic-like map is an infinitely renormalizable
+quadratic-like map for which the relative renormalization periods
+satisfy
+\[
+ \exists\overline p\in\N\quad\forall n,\qquad 2\le p_n\le\overline p.
+\]
+A Feigenbaum parameter is a parameter of the quadratic family with
+this property.  A priori bounds are a conclusion of the main theorem,
+rather than an extra assumption in this definition.
+\end{definition}
+
+\begin{theorem}[Dudko--Lyubich Feigenbaum MLC]
+\label{thm:dudko-lyubich-feigenbaum}
+Every Feigenbaum quadratic-like map has beau a priori bounds.
+The Mandelbrot set is locally connected at every Feigenbaum parameter.
+\end{theorem}
+
+These are Main Theorems A and B of
+\cite{DudkoLyubichFeigenbaum}.  The second conclusion uses the
+rigidity theorem together with the analytic bounds.  The class
+includes primitive, satellite, and mixed bounded combinatorics.
+Period doubling is the satellite example with $p_n=2$; its original
+return periods are $2^n$, while its additive bookkeeping depths
+would be $2n$.
+
+The Lean endpoint is
+\lean{FeigenbaumCertificate}.  The certificate deliberately does not
+identify ``Feigenbaum'' with an informal numerical address: the exact
+combinatorics must be supplied as the predicate $\mathsf{Fbg}$.
+The current one-label discrete profile is insufficient to encode the
+whole mixed class.  Linking the source definition to marked
+polynomial-like towers remains a formalization obligation.
+
+\coveragefigure{4}{The period-doubling accumulation parameter
+$c_*\approx-1.401155189092$ is a concrete covered example.
+The theorem in~\cite{DudkoLyubichFeigenbaum} covers all bounded
+renormalization combinatorics, beyond this one real parameter and
+beyond pure period doubling.  The marker is a numerical location
+reference, while its theorem coverage comes from the source.}{fig:feigenbaum-case}
+
+\section{Parabolically bounded primitive renormalization}
+
+Kahn--Kapiamba--Lyubich prove MLC for a class of infinitely renormalizable
+primitive parameters which may approach the cusp.  Their geometric tools
+include:
+\begin{itemize}
+\item the Thin--Thick Decomposition;
+\item Value Calculus;
+\item the Wanderers Theorem;
+\item the Wave Lemma.
+\end{itemize}
+These estimates control degeneration that is not covered by a fixed
+compactness assumption on the renormalization types.
+
+\begin{definition}[Prime type and parabolic tail]
+A type is a small Mandelbrot copy $M\subsetneq\M$ with its
+renormalization period.  It is prime if no intermediate proper copy
+contains it strictly.  Prime satellite types attach directly to the
+main cardioid at rational-multiplier roots; the other prime types
+are primitive.
+
+Let $\Phi_q$ be the source-defined Branner--Douady surgery embedding
+from the $1/q$ limb to the $1/(q+1)$ limb.  A parabolic tail is a
+family
+\[
+ \{\Phi_n\circ\Phi_{n-1}\circ\cdots\circ\Phi_q(M):n\ge q\}
+\]
+for the marked initial type allowed by that construction.
+A family is parabolically bounded if it is a finite union of
+individual types and such tails.
+\end{definition}
+
+The embeddings are specific marked surgeries, not arbitrary
+topological embeddings of limbs.  Proximity to the cusp, or an
+unbounded period sequence alone, does not define the class.
+
+\begin{definition}[Puzzle Teichmüller diameter]
+For a prime primitive type $M$, choose its source-defined
+renormalization puzzle level $n(M)$.  For two polynomials $f,g$ of
+that type, their external markings give a canonical homeomorphism
+between the level-$n(M)$ puzzle graphs.  Put
+\[
+ d_M(f,g)=\inf_h\frac12\log K(h),\qquad
+ \Delta(M)=\sup_{f,g}d_M(f,g),
+\]
+where $h:\C\to\C$ ranges over quasiconformal homeomorphisms
+extending that marked graph map.  A family $\mathcal C$ has bounded
+puzzle Teichmüller diameter if
+$\sup_{M\in\mathcal C}\Delta(M)<\infty$.
+\end{definition}
+
+The definitions and the following chain are extracted from the main
+results and rigidity section of
+\cite{KahnKapiambaLyubich}.  They retain the additional geometric
+hypothesis required to pass from bounds to MLC:
+\[
+ \begin{gathered}
+ \text{parabolically bounded prime primitive family}\\
+ \Downarrow\quad\text{Theorem A}\\
+ \text{beau conformal a priori bounds}\\
+ \text{together with bounded puzzle Teichmüller diameter}\\
+ \Downarrow\quad\text{Theorem B}\\
+ \text{rigidity and pointwise MLC}.
+ \end{gathered}
+\]
+
+\begin{theorem}[Parabolically bounded primitive MLC]
+\label{thm:parabolic-primitive-mlc}
+For every parabolically bounded family of prime primitive types,
+$\M$ is locally connected at all infinitely renormalizable parameters
+with combinatorics in that family.
+\end{theorem}
+
+The formal endpoint is
+\lean{ParabolicallyBoundedPrimitiveCertificate}.  The missing work is the
+formal definition of the class and the formalization of the four geometric
+tools, the puzzle Teichmüller comparison, and the parameter-puzzle basis.
+
+This is Theorem C of the preprint.  Its source version attributes
+bounded puzzle Teichmüller diameter of parabolic tails to
+\emph{Elephant puzzles}~\cite{ElephantPuzzles}, listed there as in
+preparation.  The review records this provenance explicitly; it must
+not be silently identified with Kahn--Lyubich's distinct
+\emph{Elephant Eyes} paper.
+
+\coveragefigure{5}{The main cusp $c=1/4$ locates the geometric
+degeneration addressed by primitive parabolic tails.  The covered
+family is a finite union of source-defined types and tails, with the
+prime primitive restriction, rather than every nearby parameter.
+Theorems A--C of~\cite{KahnKapiambaLyubich} separate a priori bounds,
+the marked puzzle comparison, and rigidity.}{fig:primitive-parabolic}
+
+\section{Elephant-eye a priori bounds}
+
+Kahn--Lyubich's
+\lean{arXiv:2601.21905} develops a priori bounds for another family of
+infinitely renormalizable quadratics whose little Mandelbrot copies can
+approach a cusp.  This paper is not entered in the ledger as a standalone
+MLC theorem unless its exact parameter-plane conclusion is extracted and
+formalized.  Its role in the current program is more precise:
+\[
+\begin{gathered}
+\text{bordered-surface geometry}\\
+\Longrightarrow\ \text{uniform thin--thick control}\\
+\Longrightarrow\ \text{candidate principal-nest bounds}.
+\end{gathered}
+\]
+The resulting analytic data can feed the same certificate
+\begin{center}
+\lean{ParabolicallyBoundedPrimitiveCertificate}
+\end{center}
+or a future
+source-specific certificate, but the class predicate and parameter-puzzle
+construction must remain explicit.
+
+\section{Neutral renormalization}
+
+The neutral regime is not an MLC theorem by itself.  The recent papers
+\lean{arXiv:2609.15500} and \lean{arXiv:2609.37383} provide machinery:
+bubble bounds, pseudo-bubbles, neutral cascades, butterfly bounds, and
+rigidity of neutral towers.  The analytic role of these results is:
+\[
+\text{neutral geometry}
+\Longrightarrow
+\text{controlled renormalization}
+\Longrightarrow
+\text{parameter-puzzle data}.
+\]
+The hybrid-class theorem \lean{arXiv:2610.25983} supplies an analytic
+parameter-space layer for generalized polynomial-like maps, but it does not
+by itself assert MLC.
+
+\begin{formalobligation}[Neutral-to-parameter bridge]
+\label{est:neutral-parameter}
+Formalize bubble and neutral-cascade geometry, state the rigidity theorem for
+marked towers, and construct the connected shrinking parameter pieces needed
+by \lean{NeutralRenormalizationCertificate}.
+The current papers provide geometry and rigidity inputs.  A universal
+neutral-to-parameter MLC conclusion is a further mathematical
+assertion and is not included merely by defining this certificate.
+\end{formalobligation}
+
+\section{Status of the current contracts}
+
+\begin{center}\small
+\begin{tabular}{@{}P{0.23\textwidth}@{\hspace{4pt}}P{0.58\textwidth}@{\hspace{4pt}}P{0.12\textwidth}@{}}
+\textbf{Class} & \textbf{Lean contract} & \textbf{Status}\\
+\hline
+Bounded-type satellite &
+\lean{BoundedTypeSatelliteCertificate} &
+interface\\
+Feigenbaum &
+\lean{FeigenbaumCertificate} &
+interface\\
+Parabolic primitive &
+\lean{ParabolicallyBoundedPrimitiveCertificate} &
+interface\\
+Neutral renormalization &
+\lean{NeutralRenormalizationCertificate} &
+machinery open\\
+\end{tabular}
+\end{center}
+
+The certificates prevent a common formalization error: proving a generic
+topological lemma and then silently treating the published analytic estimate
+as if it had already been verified in Lean.

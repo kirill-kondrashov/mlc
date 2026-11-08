@@ -1,0 +1,575 @@
+\input header
+\input ras.tex
+\def\caratheodory{Carath\'eodory }
+\footline={\hss\tenrm 15-\folio\hss}\pageno=1
+
+\centerline{\bf CARATH\'EODORY THEORY}\bigskip
+
+\centerline{\bf \S15. Prime Ends.}\medskip
+
+Let \[U\] be a simply connected subset of \[\hat\C\] such that the complement
+\[\hat\C-U\] is infinite. Then the Riemann Mapping Theorem asserts that
+there is a conformal isomorphism
+$$	\phi:U \buildrel \approx\over\longrightarrow D\,.	$$
+In some cases, \[\phi\] will extend to a homeomorphism from the closure
+\[\bar U\] onto the closed disk \[\bar D\]. (Compare Figures 1a and 14a,
+together with \S16.7.)
+However, this is certainly not true in general, since
+the boundary \[\partial U\] may be an extremely complicated object.
+As an example, Figure 14b shows a region \[U\] such that one point of
+\[\partial U\] corresponds to a Cantor set of distinct points of the circle
+\[\partial D\], and Figures 14c, 14d show examples
+for which an entire interval
+of points of \[\partial U\] corresponds to a single point of the circle.
+An effective analysis of the relationship between the compact
+set \[\partial U\] and the boundary circle \[\partial D\] was carried out
+by \caratheodory in 1913, and will be described here.\smallskip
+
+\midinsert
+\hbox to \hsize{
+\hfil
+\hbox{\RasterBox {fig14a.ps} {480} {480} {400}}
+\hbox{\RasterBox {fig14b.ps} {480} {480} {400}}
+\hfil
+}
+\vskip -.5in
+\hbox to \hsize{
+\hfil
+\hbox{\RasterBox {fig14c.ps} {480} {480} {400}}
+\hbox{\RasterBox {fig14d.ps} {480} {480} {400}}
+\hfil
+}
+
+\centerline{Figure 14. The boundaries of
+four simply connected regions in \[\C\].}
+\vfil
+\endinsert
+
+The final construction will be purely topological, but we must first
+use analytic methods, as in Appendix B,
+to prove several lemmas about the existence of short arcs.
+Let \[I=(0,\delta)\] be an open interval of real numbers, and let \[I^2\subset
+\C\] be the open square, consisting of all \[z=x+iy\] with \[x,\,y\in I\].
+We will always use the spherical metric on \[\hat\C\] when measuring
+either arclengths or areas. Recall from \S1(6) that this metric has the form
+\[ds=\eta(z)|dz|\] with \[\eta>0\]. (In fact
+\[\eta(z)=2/(1+|z|^2)\].) Setting \[z=x+iy\], the corresponding spherical
+area element on \[\hat\C\] can be written as \[dA=\eta^2(z)
+dxdy\], with total area \[\int\!\!\int dA=4\pi<\infty\].
+
+{\QP{\bf 15.1. Lemma.} {\it If \[f:I^2\to V\] is a conformal isomorphism
+from the open square onto an open subset of \[\hat\C\], then for
+Lebesgue almost every \[x\in I\] the arc \[f(x\times I)\]
+has finite spherical arclength.}\medskip}
+
+{\bf Proof.} (Compare B.1 in the Appendix.)
+The length \[L(x)\] of this image \[f(x\times I)\]
+can be expressed as \[\int_I\, |\eta f'|dy\]
+where the function \[\eta\] is to be evaluated at \[f(x+iy)\],
+while the area of \[V\] can be expressed as \[A=\int_I\, a(x)dx\] with
+\[a(x)=\int_I\, |\eta f'|^2dy\]. By the Schwarz inequality we have
+$$      \bigl(\int_I 1\cdot |\eta f'|\;dy\,\bigr)^2\;\le \;\bigl(
+	\int_I 1^2dy\bigr)\cdot\bigl(\int_I |\eta f'|^2 dy\bigr)\,, $$
+or in other words \[L(x)^2\le \delta a(x)\]. Since the integral of \[a(x)\] is
+finite, it follows that \[a(x)\] is finite almost everywhere, hence
+\[L(x)\] is finite almost everywhere.\QED
+
+Here is a more quantitative version of this statement. Again let
+\[A\] be the spherical area of \[f(I^2)=V\].
+
+{\QP{\bf 15.2. Lemma.} {\it With \[f:I^2\buildrel \approx\over\to
+V\] as above, the length \[L(x)\] of the curve \[f(x\times I)\] satisfies
+\[L(x)<2\sqrt A\] for more than half of the points \[x\in I\]. Similarly, the
+length of \[f(I\times
+y)\] is less than \[2\sqrt A\] for more than half of the points
+\[y\in I\].}\medskip}
+
+
+{\bf Proof.} We must show that the Lebesgue measure of
+\[S=\{x\in I:L(x)\ge 2\sqrt{A}\}\] satisfies \[\ell(S)<{1\over 2}
+\ell(I)={1\over 2}\delta\]. It is clear that \[4A\ell(S)=(2\sqrt A)^2
+\ell(S)\le\int_I L(x)^2dx\].
+On the other hand, the
+discussion above shows that \[\int_I L(x)^2dx\le\delta A\]. Combining these
+two inequalities and dividing by \[4A\], we obtain \[\ell(S)\le\delta/4\],
+as required.\QED
+
+Now consider a simply connected open set \[U\subset\hat \C\] and some
+choice of Riemann map \[\phi:U\to D\], with inverse \[\psi:D\to U\].
+
+{\QP{\bf 15.3. Theorem.} {\it For almost every point \[e^{i\theta}\] of
+the circle \[\partial D\] the radial line \[r\mapsto re^{i\theta}\]
+maps under \[\psi\] to a curve of finite spherical
+length in \[U\]. In particular, the radial limit
+$$	\lim_{r\to 1}\; \psi(re^{i\theta})\in\partial U	$$
+exists for Lebesgue almost every \[\theta\]. Furthermore, if we fix
+\[\theta\], then for Lebesgue almost every \[\theta'\] the radial limit
+of \[\psi(re^{i\theta'})\] is different from the radial limit of \[\psi(r
+e^{i\theta})\].}\medskip}
+
+\eject
+We will say briefly that almost every image curve \[r\mapsto\psi
+(re^{i\theta})\]
+in \[U\] {\bit lands} at some single point of \[\partial U\], and that
+different values of \[\theta\] almost always correspond to distinct
+landing points.
+
+{\bf Remark.} The first part of this Lemma is the univalent version of a
+basic {\bit Theorem of Fatou}, which
+Carath\'eodory used as the starting point of his theory. Fatou's Theorem
+says that any bounded holomorphic function on \[D\] has radial limits
+in almost all directions, whether or not it is univalent. (See for example
+Hoffman, p. 38.) However the univalent case is all that we will need,
+and is easier to prove than the general theorem.\smallskip
+
+{\bf Proof of 15.3.}
+Map the upper half-plane onto \[D-\{0\}\] by the exponential
+map \[w\mapsto e^{iw}\]. In terms of polar coordinates \[r,\,\theta\] in
+\[D\], this means that we set \[w=\theta-i\log r\], so that \[e^{iw}=r
+e^{i\theta}\]. Applying the argument of 15.1
+to the composition \[w\mapsto \psi(e^{iw})\], we see that \[\psi\] has
+radial limits in almost all directions \[e^{i\theta}\].
+
+If this map \[\psi\] is bounded, then a
+Theorem of F. and M. Riesz asserts that any
+given radial limit can occur only for a set of directions \[e^{i\theta}\]
+of measure zero. A proof may be found in Appendix A, Theorem A.3. Now for any
+univalent \[\psi\], we can reduce to the bounded case in two steps,
+as follows. First suppose that
+the image \[\psi(D)=U\] omits an entire neighborhood of some point \[z_0\]
+of \[\hat\C\]. Then by composing \[\psi\] with a fractional linear
+transformation which carries \[z_0\] to \[\infty\], we reduce to the
+bounded case. In general, \[\psi(D)\] must omit at least two values,
+which we may take to be \[0\] and \[\infty\]. Then
+\[\sqrt \psi\] can be defined as a single valued function which omits an
+entire open set of points; and we are reduced to the previous case.\QED
+
+Similarly, using the change of coordinates \[z=e^{iw}\] together
+with 15.2, we obtain the following. Let \[\psi:D\buildrel\approx\over
+\to U\] as above.
+
+{\QP{\bf 15.4. Lemma.} {\it Any point of \[\partial D\] has a nested
+sequence of neighborhoods\break
+\[{\cal N}_1\supset{\cal N}_2\supset\cdots\] in \[\bar D\] with the following
+properties:
+
+\ref $(1)\] each boundary \[\overline{{\cal N}_k}\cap\overline{D-{\cal N}_k}\]
+consists of an open arc \[{\cal A}_k\]
+in the interior of \[D\] together with two end points in \[\partial D\],
+
+\ref $(2)\] these boundaries \[\bar{\cal A}_k\] are pairwise disjoint,
+
+\ref
+$(3)\] both \[{\cal A}_k\] and its image \[\psi({\cal A}_k)\subset U\] have
+finite length which tends to zero as \[k\to\infty\], and
+
+\ref $(4)\] each image arc \[\psi({\cal A}_k)\] has two distinct boundary
+points in \[\partial U\], and the\break
+\hbox{\kern .8em} closures \[\overline{\psi({\cal A}_k)}\]
+are pairwise disjoint.}\medskip}
+
+{\bf Proof.} We choose a neighborhood bounded by two short radial line
+segments going out to the boundary of \[D\] together with an arc of a
+circle \[|z|={\rm constant}\]. Using 15.2 we see that the image of such
+a curve \[{\cal A}\] can have length less than any given epsilon, and using
+the last part of 15.3 we see that \[{\cal A}\] can be chosen so that the
+two endpoints of \[\psi({\cal A})\] in \[\partial U\] are distinct,
+and so that successive arcs have distinct endpoints.\QED
+
+Conversely, let us start with an embedded arc \[\alpha:[0,1)\to U\] which
+lands at a point \[z_0\] of \[\partial U\]. That is, we suppose
+that \[\lim_{t\to 1}\, \alpha(t)=z_0\].
+\eject
+
+{\QP{\bf 15.5. Theorem.} {\it Any arc in \[U\] which lands at one point
+\[z_0\] of \[\partial U\] corresponds, under the Riemann map,
+to an arc in \[D\] which lands at one point of \[\partial D\].
+Furthermore, arcs which land at distinct points of \[\partial U\] necessarily
+correspond to arcs which land at distinct points of \[\partial D\].}\medskip}
+
+{\bf Proof.}
+If the image arc \[t\mapsto \phi(\alpha(t))\] did not land at a single
+point of \[D\], then it would have to oscillate back and forth (or round
+and round), accumulating
+towards some connected set of limit points on \[\partial D\]. It would then
+follow, for some set of \[e^{i\theta}\in \partial D\]
+of positive measure, that the radial
+limit of \[\psi(re^{i\theta})\] could only be \[z_0\], which is impossible
+by the Riesz Theorem.
+
+If arcs landing at two distinct points
+of \[\partial U\] corresponded to arcs landing at a single point of \[\partial
+D\]. Then, using 15.4, we could cut both of these arcs by the image of an arc
+which is arbitrarily short and arbitrarily close to the
+boundary both in \[D\] and in \[U\]. Evidently this is impossible.\QED
+
+Using these simple facts, \caratheodory showed that we can reconstruct the
+topology of the closed disk \[\bar D\] from the topology of the embedding
+of \[U\] into \[\bar U\]. There are a number of possible variations on his
+basic definitions. (Compare Ahlfors [1973], Epstein, Ohtsuka.)
+We will make use of a variation which is fairly close to the original
+construction.\smallskip
+
+A {\bit transverse arc} (or ``crosscut'') in \[U\] is a set
+\[A\subset\bar U\] which is homeomorphic to the closed interval \[[0,1]\],
+and which intersects the boundary \[\partial U\] only in the two end
+points of the interval.\smallskip
+
+Note that it is very easy to construct examples of transverse arcs.
+For example we can start with any short line segment inside \[U\] and extend
+in both directions until it first hits the boundary.
+
+{\QP {\bf 15.6. Lemma.} {\it Any transverse arc \[A\] cuts \[U\] into two
+connected components.}\medskip}
+
+{\bf Proof.} The quotient space \[\bar U/\partial U\], in which the boundary
+is identified to a point, is evidently homeomorphic to the 2-sphere. Since
+\[A\] corresponds to a Jordan curve in this quotient 2-sphere, the
+conclusion follows from the Jordan Curve Theorem. (See for example
+Munkres.)\QED
+
+It will be convenient to distinguish these two components of \[U-A\]
+by choosing some base point \[b_0\in U\].
+Then for any transverse arc \[A\] which is disjoint from \[b_0\] we
+define the  neighborhood \[N(A)\] which is ``cut off'' by \[A\] to be the
+component of \[U-A\] which does not contain \[b_0\].\smallskip
+
+{\bf Definition.}
+A {\bit fundamental chain} is a infinite sequence \[A_1\,,\, A_2\,,\,\ldots\]
+of disjoint transverse arcs with the property that the corresponding
+neighborhoods are nested:
+$$	 N(A_1)\supset N(A_2)\supset N(A_3)\supset\cdots\,,	$$
+and with the property that the diameter of \[A_i\] tends to zero as
+\[i\to\infty\].\smallskip
+
+Note however that the neighborhoods \[N(A_i)\] are not required to become
+small as \[i\to\infty\]. (Compare Figure 14c, d.)
+By the {\bit impression} (or {\bit support})
+of a fundamental chain \[\{A_i\}\] we mean
+the intersection of the closures \[\bar N(A_i)\]. It is not difficult to
+check that this impression is always a compact connected subset
+of \[\partial U\].
+Evidently the impression consists of a single point if and only if the
+diameter of \[N(A_i)\] tends to zero as \[i\to\infty\].\smallskip
+
+Two such fundamental chains \[\{A_i\}\] and \[\{A'_j\}\] are said to be
+{\bit equivalent} if each \[N(A_i)\] contains some
+\[N(A'_j)\] and each \[N(A'_j)\] contains some \[N(A_i)\]. An equivalence
+class of fundamental chains is also called a {\bit prime end} \[{\cal E}\]
+in \[U\], or a point in the {\bit \caratheodory boundary} of \[U\].
+
+Two fundamental chains \[\{A_i\}\] and \[\{A'_j\}\] are said to be
+{\bit disjoint} if
+\[	N(A_i)\cap N(A'_j)=\emptyset	\]
+for some \[i\] and \[j\].
+
+{\QP{\bf 15.7. Lemma.} {\it Any two fundamental chains are either equivalent
+or disjoint.}\medskip}
+
+{\bf Proof.} Given \[A_i\] we can choose \[j\] large enough so that the
+diameter of \[A'_j\] is less than the distance between \[A_i\] and
+\[A_{i+1}\]. It then follows easily that \[N(A'_j)\] must be either
+contained in \[N(A_i)\] or disjoint from \[N(A_{i+1})\].\QED
+
+We can now define the {\bit \caratheodory completion} \[\hat U\] of \[U\]
+to be the disjoint union of the set \[U\] and the set of all prime ends of
+\[U\], topologized as follows. For any transverse arc \[A\subset \bar U-
+\{b_0\}\] we define the neighborhood \[{\cal N}_A\] to be
+the neighborhood \[N(A)\subset U\] together with the set consisting of all
+prime ends \[{\cal E}\] for which some representative fundamental chain
+\[\{A_i\}\] satisfies \[A_1=A\]. These neighborhoods \[{\cal N}_A\],
+together with the open subsets of \[U\], form a basis for the required
+topology.
+
+{\QP{\bf 15.8. Lemma.} {\it In the case of the unit disk \[D\], the
+identity map of \[D\] extends uniquely to a homeomorphism between the closure
+\[\bar D\subset\C\] and the \caratheodory completion \[\hat D\].}
+\medskip}
+
+(Compare 16.7.) In particular, the prime ends of \[D\]
+are in one-to-one correspondence with the points of \[\partial D\].
+More precisely, the impression of any prime end of \[D\] is a single point of
+\[\partial D\], and
+each point of \[\partial D\] is the impression of one and only one
+prime end. The proof is not difficult.\QED
+
+For an arbitrary simply connected and Hyperbolic
+\[U\subset\hat\C\] we now have the following.
+
+{\QP{\bf 15.9. Theorem.} {\it The Riemann map \[\phi:U\to D\] extends
+uniquely to a homeomorphism between the completion \[\hat U\] and the
+completion \[\hat D\cong\bar D\].}\medskip}
+
+{\bf Proof.} It follows immediately from 15.5 that every transverse arc
+in \[U\] corresponds to a transverse arc in \[D\], and that disjoint
+transverse arcs correspond to disjoint transverse arcs. Thus every end
+in \[U\] gives rise to an end in \[D\]. On the other hand,
+given any point of \[\partial D\], we can find a nested sequence of
+neighborhoods in \[\bar D\], each bounded by a figure consisting of two
+radial segments and an arc which is completely inside \[D\]. As in 15.4,
+we can choose these figures so as to correspond to transverse arcs in
+\[\bar U\] which are pairwise disjoint, with lengths converging to zero.
+The resulting fundamental chain in \[U\] determines the required prime end.
+Further details will be left to the reader.\QED
+\eject
+\footline={\hss\tenrm 16-\folio\hss}\pageno=1
+
+
+\centerline{\bf \S16. Local Connectivity.}\bigskip
+
+This will be a continuation of the preceeding section, describing
+Carath\'eodory's theory in the locally connected case. First a number
+of definitions and well known lemmas.
+We will always assume that our topological spaces are Hausdorff.
+By definition, a topological space \[X\] is {\bit locally connected} at
+the point \[x\in X\] if there exist arbitrarily small connected neighborhoods
+of \[x\] in \[X\].
+
+Here our ``neighborhoods'' are not required to be open subsets
+of \[X\], but only to be sets which contain a (relatively) open set
+containing \[x\]. Unfortunately, some authors make a slightly different
+definition by considering only open neighborhoods. Let us say
+that \[X\] is {\bit openly locally connected} at a point \[x\] if there exist
+arbitrarily small connected open neighborhoods of \[x\] in \[X\]. This
+is a stronger condition (compare Problem 16-1); however we have the following.
+
+{\QP{\bf 16.1. Lemma.} \it The space \[X\] is locally connected at every point
+\[x\in X\] if and only if every open subset of \[X\] is a union of
+connected open subsets of \[X\].\medskip}
+
+\noindent If this conditions is satisfied, then evidently
+\[X\] is openly locally connected at every point.
+Such spaces are simply said to be {\bit locally connected}.
+The proof is straightforward, and will be left to the reader.\QED
+
+{\bf 16.2. Remark.} If \[X\] is compact metric, with distance
+function \[\rho(x,x')\], then an equivalent condition is that:
+
+{\narrower\smallskip\noindent\it
+For any \[\epsilon>0\] there exists \[\delta>0\] so that any two points
+with distance\break \[\rho(x,x')<\delta\] are contained in a connected set of
+diameter less than \[\epsilon\].\smallskip}
+
+\noindent Again the proof is straightforward, and will be omitted.\smallskip
+
+The space \[X\] is {\bit path connected}$\, $ if there exists a continuous
+map from the unit interval \[[0,1]\] into \[X\] which joins any two given
+points. It is {\bit arcwise connected}$\,$ if there is a topological embedding
+of \[[0,1]\] into \[X\] which joins any two given distinct points.
+
+{\QP{\bf 16.3. Lemma.} {\it A space is path connected if and only if it
+is arcwise connected.}\medskip}
+
+\noindent (Recall that all spaces must be Hausdorff.)
+Proofs will be deferred until the end of this section.
+There is a corresponding concept of {\bit ``locally path connected''} or
+equivalently {\bit ``locally arcwise connected''}.
+In general, a connected space need not be path connected (Figure 14d). However:
+
+{\QP{\bf 16.4. Lemma.} {\it If a compact metric space \[X\] is locally
+connected, then it is locally path connected. Hence every connected
+component of \[X\] is actually path connected.}\medskip}
+
+\noindent We will also need the following statement.
+
+{\QP{\bf 16.5. Lemma.} {\it Any continuous image of a compact locally
+connected space is compact and locally connected.}\medskip}
+
+\noindent The following is the principal result of this section. Let \[U\subset
+\hat\C\] be an open set which is conformally isomorphic to the unit disk.
+\eject
+
+{\QP{\bf 16.6. Theorem of Carath\'eodory.} {\it The inverse Riemann map
+\[\psi:D\buildrel
+\approx\over\to U\] extends continuously to a map from the
+closed disk \[\bar D\] onto \[\bar U\] if and only if the boundary \[\partial
+U\] is locally connected, or if and only if the complement \[\hat\C-U\]
+is locally connected.}\medskip}
+
+\noindent \caratheodory also proved the following.
+
+{\QP{\bf 16.7. Theorem.} {\it If the boundary of \[U\] is a Jordan curve, then
+the Riemann map extends to a homeomorphism from the closure \[\bar U\]
+onto the closed disk \[\bar D\].}\bigskip}
+
+\noindent The proofs begin as follows.\smallskip
+
+{\bf Proof of 16.3.} Let \[f=f_0:[0,1]\to X\] be any continuous path with\break
+\[f(0)\ne f(1)\]. We must construct an embedded arc \[A\subset X\] from
+\[f(0)\] to \[f(1)\].
+Choose a closed subinterval \[I_1=[a_1\,,\,b_1]\subset [0,1]\] whose
+length \[0\le\ell(I_1)=b_1-a_1<1\] is as large as possible, subject to the
+condition that \[f(a_1)=f(b_1)\]. Now,
+among all subintervals of \[[0,1]\] which are disjoint from \[I_1\],
+choose an interval \[I_2=[a_2\,,\,b_2]\]  of maximal length subject to
+the condition \[f(a_2)=f(b_2)\].
+Continue this process inductively, constructing disjoint subintervals
+of maximal lengths \[\;\ell(I_1)\ge\ell(I_2)\ge\cdots\ge 0\;\] subject to
+the condition that \[f\]
+is constant on the boundary of each \[ I_j\].
+
+Let \[\alpha:[0,1]\to X\] be
+the unique map which is constant on each closed interval \[I_j\], and which
+coincides with \[f\] outside of these subintervals. Thus \[\alpha(t)\] must
+coincide with \[f(t)\] for \[t\in\partial I_j\].
+Then it is easy to check
+that \[\alpha\] is continuous, and that for each point\break
+\[x\in \alpha([0,1])\] the
+preimage \[\;\alpha^{-1}(x)\subset[0,1]\;\] is a (possibly degenerate) closed
+interval of real numbers. {\it We will show that these conditions,
+with \[\alpha\] non-constant,
+imply that the image \[A=\alpha([0,1])\subset X\;\] is an embedded arc
+joining \[\alpha(0)\] to \[\alpha(1)\].}
+
+Choose a countable dense subset \[\{t_1\,,\, t_2\,,\,\ldots\}\subset[0,1]\].
+Define a total ordering of the image \[A\] by specifying
+that \[\alpha(s)<\alpha(t)\] if and only if \[\alpha(s)\] and \[\alpha(t)\]
+are distinct points with \[s<t\].
+An order preserving homeomorphism \[h:[0,1]\buildrel\approx\over
+\to A\] can now be constructed inductively as follows.
+We must set \[h(0)=\alpha(0)\] and \[h(1)=\alpha(1)\]. For each
+dyadic fraction \[0<m/2^k<1\] with \[m\] odd, let us assume inductively that
+\[h((m-1)/2^k)\] and \[h((m+1)/2^k)\] have already been defined. Then choose
+the smallest index \[j\] so that
+$$	h\big({m-1\over 2^k}\big)\;<\;\alpha(t_j)\;<\;h\big({m+1\over2^k}\big)	$$
+and set \[h(m/2^k)=\alpha(t_j)\]. It is not difficult to check that the \[h\]
+constructed in this way on dyadic fractions extends uniquely to an order
+preserving map from \[[0,1]\] to \[A\], which is necessarily a
+homeomorphism.\QED
+
+{\bf Proof of 16.4.} Let \[X\] be compact metric and locally connected.
+Given \[\epsilon>0\], it follows from 16.2 that we can choose a
+sequence of numbers \[\delta_n>0\] so
+that any two points with distance \[\rho(x,x')<\delta_n\] are contained in
+a connected set of diameter less than \[\epsilon/2^n\]. {\it We will prove
+that any two points
+\[x(0)\] and \[x(1)\] with distance \[\rho(x(0),x(1))
+<\delta_0\] can be joined by a path of diameter at most
+\[4\epsilon\].} The plan of attack is as follows. We will choose a sequence
+of denominators \[1=k_0<k_1<k_2<\cdots\], each of which divides the next.
+Also, for each fraction of the form \[i/k_n\] between 0 and 1 we will
+choose an intermediate point \[x(i/k_n)\]. These are to satisfy two
+conditions:
+
+{\narrower\smallskip\noindent
+(1) Any two consecutive fractions \[i/k_n\] and \[(i+1)/k_n\] must correspond
+to points \[x(i/k_n)\] and \[x((i+1)/k_n)\] which have distance less
+than \[\delta_n\] from each other.\smallskip}
+
+\noindent
+Hence any two such points are contained in a connected set \[C(i,k_n)\]
+which has diameter less than \[\epsilon/2^n\]. The second condition is that:
+
+{\QP
+(2) Each point of the form \[x(j/k_{n+1})\], where \[j/k_{n+1}\] lies between
+\[i/k_n\] and \[(i+1)/k_n\], must belong to this set \[C(i,k_n)\], and
+hence have distance less than \[\epsilon/2^n\] from \[x(i/k_n)\]
+and from \[x((i+1)/k_n)\].\smallskip}
+
+\noindent The construction of such denominators \[k_n\] and intermediate
+points \[x(i/k_n)\], by induction on \[n\], is completely straightforward,
+and will be left to the reader. Thus we may assume that \[x(r)\] has been
+defined for a dense set of rational numbers \[r\] in the unit interval.
+
+Next we will prove that this densely defined correspondence \[\;r\mapsto x(r)
+\;\] is uniformly continuous. Let \[r\] and \[r'\] be any two rational numbers
+for which \[x(r)\] and \[x(r')\] are defined. Suppose
+that \[|r-r'|<1/k_n\]. Then choosing \[i/k_n\] as close as possible to both
+\[r\] and \[r'\],
+it is easy to show that \[x(r)\] and \[x(r')\] have distance less
+than \[2\epsilon/2^n\] from \[x(i/k_n)\]. Hence they have distance less than
+\[4\epsilon/2^n\] from each other. This proves uniform continuity; and it
+follows that there is a unique continuous extension \[t\mapsto x(t)\]
+which is defined for all \[t\in[0,1]\]. In this way, we have constructed the
+required path of diameter \[\le 4\epsilon\] from \[x(0)\] to \[x(1)\].
+Thus \[X\] is locally path connected; and the rest of the
+argument is straightforward.\QED
+
+{\bf Proof of 16.5.} Let \[f(X)=Y\] where \[X\] is compact and locally
+connected. Then \[Y\] is clearly compact, and we must show that it is
+locally.connected. Given any point \[y\in Y\] and open neighborhood \[V\subset Y\],
+choose a smaller neighborhood \[U\] with \[\bar U\subset V\].
+Then \[f^{-1}(V)\] is a union of disjoint connected open sets, and finitely
+many of these connected open sets, say \[V_1\,,\,\ldots\,,\,V_q\],
+will suffice to cover the compact subset \[K=f^{-1}(\bar U)\]. Let \[N\]
+be the union of those \[f(V_i)\] which contain the given point \[y\].
+Evidently \[N\] is connected and contained in \[V\]. In order to prove
+that \[N\] is a neighborhood of \[y\], let \[L\] be the union of those compact
+images \[f(K\cap V_i)\] which do not contain \[y\]. Then \[U-L\] is
+an open neighborhood of \[y\] which is contained in \[N\]. Thus \[N\subset V
+\] is a connected neighborhood of \[y\], which proves that
+\[Y\] is locally connected.\QED
+
+{\bf Proof of Theorem 16.6.} We will always use the spherical metric on
+\[\hat\C\]. If either \[\partial U\] or \[\hat\C-U\] is
+locally connected, then given \[\epsilon\] we can choose \[\delta\] so
+that any two points of distance less than \[\delta\] in \[\partial U\] are
+joined by an arc \[A\] of diameter less than \[\epsilon\] in \[\hat\C-U\].
+Now suppose that we start with some point \[w_0\in\partial D\]. According to
+Lemma 15.4, we can find a neighborhood of diameter less than \[\delta\] in
+\[\bar D\] which is bounded by an arc which maps under \[\psi:D\buildrel
+\approx\over\to U\] to an arc \[A'\subset U\] which has length less than \[\delta\].
+Furthermore, we can choose this arc so that its two endpoints in \[\partial
+U\] are distinct. Let \[A\subset\hat\C-U\] be an arc in the complement which
+has diameter less than \[\epsilon\], and has the same endpoints. Then the union \[A\cup A'\] is a Jordan
+curve of diameter less than \[\epsilon+\delta\] in \[\hat\C\]. Hence it
+bounds a region of diameter less than \[\epsilon+\delta\]. Now as \[\epsilon
+\to 0\] this region must converge to a point in \[\partial U\], which
+we define to be \[\psi(w_0)\]. Thus we have constructed a function from the
+closed disk \[\bar D\] to \[\bar U\] which extends \[\psi:D\to U\]. It
+is not difficult to check that this extension is continuous.
+
+Conversely, if \[\psi\] extends continuously over \[\bar D\], the the boundary
+\[\partial U\] is a continuous image of the circle \[\partial D\]. Hence
+it follows from Lemma 16.5 that \[\partial U\] is locally connected. To
+see that \[\hat\C-U\] must also be locally connected, let \[N\] be an
+arbitrarily small connected neighborhood of a point \[z\] within \[\partial U\].
+Choose \[\delta>0\] so that the \[\delta$-neighborhood of \[z\] within
+\[\partial U\] is contained in \[N\]. Then the \[\delta$-neighborhood of \[z\]
+within \[\hat\C-U\], together with \[N\], is clearly also connected. Therefore
+\[\hat\C-U\] is locally connected.\QED
+
+{\bf Proof of Theorem 16.7.} If \[\partial U\] is a Jordan curve, that is
+a homeomorphic image of the circle, then we certainly have a continuous
+extension \[\psi:\bar D\to \bar U\] by the preceeding theorem. Suppose that
+two distinct points of the circle \[\partial D\] mapped to the same point \[z_0\]
+of \[\partial U\]. Then the straight
+line segment \[A\] joining these two points in \[\bar
+D\] would map to a Jordan curve \[\Gamma\subset\hat\C\] under \[\psi\].
+Such a Jordan curve must separate \[\hat\C\] into two components, of
+which \[\Gamma\] is the common boundary. Note that
+the two components of \[D-A\] must map into the two distinct components
+of \[\hat\C-\Gamma\] under \[\psi\]. Since
+\[\Gamma\] intersects the Jordan curve \[\partial U\] in a single point
+\[z_0\], it follows that the entire connected set \[\partial U-\{z_0\}\]
+must be contained in just one of the two connected components of
+\[\hat\C-\Gamma\].
+But this means that one of the two components of \[D-A\] must
+map into the other component of \[\hat\C-\Gamma\], which is disjoint from
+\[\partial U\]. Hence all of the corresponding  boundary points in
+\[\partial D\] can only map to the single point
+\[z_0\in\Gamma\cap\partial U\] under \[\psi\]. This is impossible by
+the Riesz Theorem A.3 of Appendix A.\QED\lln
+
+{\bf Problem 16-1.} Let \[X\subset\C\] be the compact connected set which
+is obtained from the unit interval \[[0,1]\] by drawing line segments from
+\[1\] to the points \[{1\over 2}(1+i/n)\] for\break
+\[n=1\,,\,2\,,\,3\,,\,\ldots\]
+and then adjoining the successive images of this configuration under the map
+\[z\mapsto z/2\]. (Figure 15.)
+Show that \[X\] is locally connected at the origin,
+but not openly locally connected.\vfil
+\midinsert
+\insertRaster wbroom.ps pixels 1152 by 450 scaled 300
+\bigskip
+\centerline{Figure 15. The witch's broom.}
+\endinsert
+\vfil
+
+% \rightline{Milnor, Conformal Dynamics Lectures \S15,16 draft, 1-21-90}
+\end
+
+
+
+
+

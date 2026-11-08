@@ -1,0 +1,135 @@
+\bigskip
+\centerline{\bf 2. Central Intervals}
+\bigskip
+
+\flushpar
+Throughout the following sections
+we will fix an $S-$unimodal map $f:[-1,1]\to [-1,1]$ with critical exponent 
+$\alpha>1$ and without periodic attractors. Furthermore assume that the 
+critical orbit is recurrent. 
+
+\flushpar
+The set of nice points is
+$$
+\Cal{N}=\{x\in [-1,1]| \forall i\ge 0 \text{  } f^i(x)\notin (-|x|,|x|)\}
+$$ 
+This set is closed and not empty. For example the fixed point of $f$ in 
+$(0,1)$ is in $\Cal{N}$. 
+
+\flushpar
+For $x\in \Cal{N}$ let $D_x\subset U_x=(-|x|,|x|)$ 
+be the set of points whose orbit returns to $U_x$. The first return map to 
+$U_x$ is denoted by 
+$$
+R_x:D_x\to U_x.
+$$
+
+\flushpar
+The next Lemma is a straightforward consequence of
+the fact that 
+the boundary of each $U_x$ is formed by  nice points.
+
+\proclaim{Lemma 2.1([M])} For every $x\in \Cal{N}$ there exists a collection of
+pairwise dispoint intervals $\Cal{U}_x$ with
+\parindent=15pt
+\item{1)} $I\subset U_x$ for all $I\in \Cal{U}_x$,
+\item{2)} $\bigcup_{I\in \Cal{U}_x} I =D_x$,
+\item{3)} if $I\in \Cal{U}_x$ and $0\notin I$ then
+$R_x:I\to U_x$  
+is monotone and onto,
+\item{4)} if $I\in \Cal{U}_x$ and $0\in I$ then 
+$
+R_x:I\to U_x
+$
+is $2$ to $1$ onto the image. Moreover $R_x(\partial I)= \{x\} 
+\text{ or } \{-x\}$.
+\endproclaim
+
+\flushpar
+Define the function $\psi:\Cal{N}\to\Cal{N}$ by
+$$
+\psi(x)=\partial V_x\cap(0,1),
+$$
+where $V_x\in \Cal{U}_x$ is the {\it central} interval: $0\in V_x$. Say
+$R_x|_{V_x}=f^{q_x}$ and observe that
+$$
+\{f(\psi(x), f^2(\psi(x)), \dots, f^{q_x}(\psi(x))=x\}\cap U_x=\emptyset
+$$
+which follows from the fact that $R_x:D_x\to U_x$ is the first return map.
+In particular $\psi(x)\in \Cal{N}$ and we can consider the 
+first return map to $V_x$. It will also satisfy Lemma 2.1.
+
+\flushpar
+Choose $u_1\in \Cal{N}$
+and consider the sequence $u_{n}=\psi(u_{n-1})$ with $n\ge 1$. Use the 
+simplified notation $\Cal{U}_n$ for $\Cal{U}_{u_n}$ and denote the first
+return maps by
+$$
+R_n:D_n\to U_n
+$$
+instead of $R_{u_n}:D_{u_n}\to U_{u_n}$. All these first return maps 
+have the  properties stated in Lemma 2.1. Observe that $|U_n|=2u_n$. 
+
+\bigskip
+
+\flushpar
+Let $\sigma_n=\frac{u_{n+1}}{u_n}$, $n\ge 1$. We call $\sigma_n$ the 
+{\it scaling factor} of level $n$. We will assume that
+$$
+\sigma_n\to 0.
+$$
+However, the main Proposition 3.1, can also be proved by using only an 
+a priori bound on the scaling factors. The assumption $\sigma_n\to 0$ will
+make the exposition less cumbersome.
+
+\proclaim{Lemma 2.2} 
+If $I\in \Cal{U}_n$ and $R_n|_I=f^t$ then there exists an interval 
+$J\supset f(I)$ such that 
+$$
+f^{t-1}:J\to U_{n-1}
+$$ 
+is monotone onto. In particular all the maps $f^{t-1}: f(I) \to U_n$, 
+$I\in \Cal{U}_n$ have uniformly bounded distortion. Moreover these maps will
+be essentially linear when $n\to \infty$. 
+\endproclaim
+
+\demo{Proof} 
+Let $I\in \Cal{U}_n$ with $R_n|I=f^t$ and let 
+$J\supset f(I)$ be the maximal interval
+on which $f^{t-1}$ is monotone. The maximality implies the existence of $i<t-1$
+such that $0\in \partial f^i(J)$. Observe that $f^i(f(I))\cap U_n=\emptyset$,
+the first return happens after $t-1>i$ steps. 
+So $u_n \text{ (or } -u_n\text{)}\in
+f^i(J)$. We observed before that the orbit of $f(u_n)$ never enters $U_{n-1}$,
+$f^{t-1}(J)\supset U_{n-1}$.
+\hfill\hfill\qed $\,\,$ (Lemma 2.2)
+\enddemo
+
+\proclaim{Lemma 2.3} For $\epsilon>0$ there exists $n_0\ge 1$ such that 
+the hyperbolic length of any $I\in\Cal{U}_n$ is small,
+$$
+\text{hyp}(I,U_n)\le \epsilon \text{ and also } 
+\frac{|f(I)|}{|f(U_n)|}\le \epsilon,
+$$
+whenever $n\ge n_0$.
+\endproclaim
+
+\demo{Proof} Let $I\in \Cal{U}_n$, say $R_n|I=f^t|I$. 
+The previous Lemma states the existence of an interval $J\supset f(I)$ 
+such that $f^{t-1}:(J,f(I))\to (U_{n-1},U_n)$ is monotone onto. For $n$ large
+we see that $U_n$ is a very small middle interval in $U_{n-1}$, it has a very
+small hyperbolic length. Because the map $f$ has negative Schwarzian
+derivative we get that $f(I)\subset J$ has a very small hyperbolic length.
+Observe that $f^{-1}(J)\subset U_n$. Otherwise the orbit of $u_n$ would pass 
+through $U_{m-1}$. However this is impossible: we saw before that the orbit 
+of $\psi(x)=u_n$ does not cross $U_x=U_{n-1}$.
+The Lemma will be proved by pulling back the pair $(J,f(I))$ one step more.
+\hfill\hfill\qed $\,\,$ (Lemma 2.3)
+\enddemo
+
+
+
+
+
+
+

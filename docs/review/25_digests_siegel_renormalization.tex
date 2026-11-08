@@ -1,0 +1,90 @@
+\chapter[Siegel-disk renormalization]{Source digest: golden-mean Siegel disks and renormalization}
+\label{ch:digests-siegel}
+
+This chapter digests the paper of Gaidashev and Yampolsky on golden-mean Siegel disks \cite{GaYaGoldenMean}.  It belongs to
+the Siegel-disk neighbourhood of the approaches to MLC (Chapter~\ref{ch:approaches-map}), but it is not a result about the
+local connectivity of $\M$: it concerns the boundaries of Siegel disks of quadratic polynomials with golden-mean rotation
+number, and the renormalization that describes them.  The conventions are those of the earlier digest chapters.
+
+\section{Setting}
+\label{sec:siegel-setting}
+
+\paragraph{Identity.}
+D.~Gaidashev and M.~Yampolsky, \emph{Golden mean Siegel disk universality and renormalization}, arXiv:1604.00717 (2016).  The
+title and authors are confirmed by the metadata and by \texttt{refs/arxiv-1604.00717/main.tex}, lines 203--209.  The statements
+are in the files \texttt{intro.tex}, \texttt{symmetric.tex}, \texttt{circle.tex}, \texttt{dissipative.tex}, which the main file
+inputs.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{The golden-mean polynomial.}  $P_\theta(z)=z^2+e^{2\pi i\theta}z$ with $\theta=(\sqrt5-1)/2$ (\texttt{intro.tex},
+lines 4--7).
+\item \emph{The Siegel disk.}  $\Delta_\theta$ is the maximal neighbourhood of $0$ in which a conformal change of coordinates
+linearizes $P_\theta$ to $w\mapsto e^{2\pi i\theta}w$ (\texttt{intro.tex}, lines 9--12).  By the results of Douady, Ghys, Herman and
+Shishikura, its boundary is a Jordan curve through the unique critical point, so it coincides with the postcritical set
+(lines 12--14).
+\item \emph{Renormalization.}  Widom's renormalization blows up a part of $\partial\Delta_\theta$ near the critical point; the
+renormalization fixed point is conjectured to be hyperbolic with one-dimensional unstable direction (\texttt{intro.tex}, lines
+22--27).  The present paper works with almost commuting holomorphic pairs (\texttt{intro.tex}, lines 53--55).
+\end{itemize}
+
+\paragraph{History stated in the source.}
+MacKay and Percival extended the conjecture to other rotation numbers (1986).  Stirnemann gave a computer-assisted proof of the
+existence of a fixed point with golden-mean Siegel disk (1994).  McMullen proved asymptotic self-similarity of golden-mean Siegel
+disks in the quadratic family, using holomorphic commuting pairs of de~Faria, with geometric convergence of renormalizations to a
+fixed point (1998) (\texttt{intro.tex}, lines 29--41).  The cylinder renormalization of Yampolsky and the results of Inou--Shishikura
+treat rotation numbers of high type, and do not cover the golden-mean case (lines 47--52).
+
+\section{Results of the paper}
+\label{sec:siegel-results}
+
+\begin{theorem}[Computer-assisted renormalization fixed point]
+\label{thm:gy-main1}
+There exists a pair of polynomials $(\phi_0,\psi_0)$ in a space $\mathcal A_1(U,V)$ such that: the renormalization operator is
+anti-analytic in a ball $B_r((\phi_0,\psi_0))$, with $r=6.6610992\cdot10^{-11}$; there is a pair $(\phi_*,\psi_*)$ in that ball that is
+fixed by the operator; and $\phi_*$ and $\psi_*$ extend analytically and univalently to explicit domains containing $U$ and $V$
+(\texttt{symmetric.tex}, lines 324--333).  \emph{Status:} proved with computer assistance; the constants are the source's numerical
+bounds, and the proof is in the computer-assisted section (\texttt{intro.tex}, line 93).
+\end{theorem}
+
+\begin{theorem}[Quasi-arc postcritical sets]
+\label{thm:gy-main4}
+The postcritical set of an almost commuting pair in the stable manifold of the renormalization fixed point $\zeta_*$ is an
+invariant quasi-arc (\texttt{circle.tex}, around line 6; the abstract).  \emph{Status:} proved in the paper.  Together with
+McMullen's theory of holomorphic pairs, this gives the statement that for every map in the stable manifold of the golden-mean fixed
+point the Siegel disk is a quasidisk whose boundary coincides with the closure of the critical orbit (abstract; \texttt{intro.tex}, lines 74--76).
+\end{theorem}
+
+\begin{theorem}[Two-dimensional dissipative maps]
+\label{thm:gy-main6}
+The point $\iota(\zeta_*)$ is a fixed point of $\mathcal R^n$, where $n$ is an even number and $\mathcal R$ is the renormalization of
+the dissipative extension; the linear operator $N=D\mathcal R^n|_{\iota(\zeta_*)}$ is compact, and its spectrum coincides with the
+spectrum of the operator $M^n$ of the paper's Main Theorem~3 (\texttt{dissipative.tex}, lines 334--339).  \emph{Status:} proved in the
+paper.  The source says that these results give the hyperbolicity of renormalization for H\'enon-like maps, which is used in a
+forthcoming joint paper with Radu (\texttt{intro.tex}, lines 77--80).
+\end{theorem}
+
+\section{Status and scope}
+\label{sec:siegel-scope}
+
+\paragraph{Status.}
+The fixed-point and hyperbolicity conclusions for analytic one-dimensional maps rest on the computer-assisted proof of
+Theorem~\ref{thm:gy-main1}.  The two-dimensional statement, Theorem~\ref{thm:gy-main6}, is proved in the paper with the same
+renormalization operator.
+
+\paragraph{MLC relevance.}
+The paper contains no statement about the local connectivity of $\M$ or about the connectedness of Julia sets of a family.  Its
+quasi-arc conclusion concerns the Siegel disk of individual maps in a stable manifold, and it is not a statement that $\M$ is
+locally connected at any parameter.  The chapter therefore records the result in the Siegel row of the approaches map only as an
+input to the Siegel-disk programme.
+
+\section{External inputs}
+\label{sec:siegel-inputs}
+
+Siegel's linearization theorem; Douady, Ghys, Herman and Shishikura on the boundary of Siegel disks; Widom's renormalization
+(1983) and the MacKay--Percival conjecture (1986); Stirnemann's computer-assisted fixed point (1994); McMullen's
+self-similarity and holomorphic commuting pairs (1998); de~Faria's commuting pairs; the cylinder renormalization of Yampolsky
+(critical circle maps); the Inou--Shishikura results for high-type rotation numbers; the earlier numerical paper of
+Gaidashev--Yampolsky; de~Carvalho--Lyubich--Martens for the Feigenbaum renormalization on H\'enon-like maps, which the paper
+extends to Siegel renormalization; and the forthcoming Gaidashev--Radu--Yampolsky paper on the Siegel disk of H\'enon-like maps
+(\texttt{intro.tex}, lines 9--80).

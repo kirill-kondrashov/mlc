@@ -125,6 +125,15 @@ lemma set_subset_outerOrbitSet (N : ℕ) :
   intro n hn
   exact Set.mem_iInter.mp hc' n
 
+/-- The orbit-bound exhaustion already equals the target at every bound at least two.
+It is a witness system, rather than a finite-time inner certification scheme. -/
+theorem innerOrbitSet_eq_set_of_two_le {N : ℕ} (hN : 2 ≤ N) :
+    innerOrbitSet N = set := by
+  apply Subset.antisymm (innerOrbitSet_subset_set N)
+  intro c hc n
+  exact le_trans ((set_subset_outerOrbitSet n hc).2 n le_rfl)
+    (by exact_mod_cast hN)
+
 lemma isClosed_outerOrbitSet (N : ℕ) :
     IsClosed (outerOrbitSet N) := by
   let U : Set ℂ :=

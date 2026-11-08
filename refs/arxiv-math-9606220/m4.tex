@@ -1,0 +1,149 @@
+\bigskip
+\centerline{\bf 4. Telemann Decomposition of the Critical Orbit}
+\bigskip
+
+\flushpar
+In this section we will prove Theorem B. Let $f$ be a unimodal
+map such that 
+$$
+\sum_{n\ge 1} \sigma_n^{1/\alpha}<\infty.
+$$
+The existence of an absolutely continuous invariant probability
+measure follows from [NS] in where it was shown that  Summability 
+Condition on Derivatives
+$$
+\sum_{k\ge 1}|Df^k(f(0))|^{-\frac1\alpha}<\infty
+$$
+is 
+sufficient for the existence of absolutely continuous invariant 
+probability measures.
+
+\flushpar
+In the sequel we will prove that the summability of scaling factors
+implies the Summability Condition of derivatives. 
+Choose $n_0\ge 1$ big enough such that Proposition 3.1 can be applied
+and moreover
+$$
+a=\sum_{{n\ge n_0} \atop {s\ge 0}}\frac{\theta^{\frac1\alpha\cdot s}}
+                                     {(C\cdot\rho_n)^{\frac{1}{\alpha}}}= 
+\frac{1}{1-\theta^{\frac1\alpha}} \sum_{n\ge n_0} 
+\frac{1}{(C\cdot \rho_n)^\frac1\alpha}< 1,
+$$
+where $C$ and $\theta$ are the constants from Proposition 3.1.
+
+\flushpar
+Fix $k\ge 1$. The estimate for $|Df^k(f(0))|$ is based on the {\it Telemann 
+decomposition} of the critical orbit up to time $k$. Consider the 
+orbit of $f(0)$ up to time $k-1$. Let $m\ge 0$
+be such that $U_{n_0+m}$ is the smallest central interval
+which is crossed by this piece of the orbit:
+$$
+n_0+m=\max\{j\ge 0| \exists 0<i\le k \text{  }f^i(0)\in U_j\}
+$$
+and the last moment of crossing is denoted by
+$$
+k_m=\max\{1\le j\le k| f^j(0)\in U_{n_0+m}\}.
+$$
+The moments $k_m\le k_{m-1}\le \dots k_1\le k_0$ are such that $k_i$
+is the last moment that the orbit hits $U_{n_0+i}$:
+if $\{k_i<j\le k|f^j(0)\in U_{n_0+i-1}\}=\emptyset$ then $k_{i-1}=k_i$
+otherwise
+$$
+k_{i-1}=\max\{k_i<j\le k|f^j(0)\in U_{n_0+i-1}\} \text{ with } 1\le i\le m.
+$$
+Let $r(k)=k-k_0$ and if $k_{i-1}\ne k_i$ then
+$$
+s_{i-1}(k)=\#\{k_i<j\le k_{i-1}|f^j(0)\in U_{n_0+i-1}\} \text{,  } 
+1\le i\le m,
+$$
+the number of returns trough $U_{n_0+i-1}$.
+
+\bigskip
+
+\flushpar
+The chain-rule applied to $Df^k(f(0))$ gives
+$$
+Df^k(f(0))=Df^{r(k)}(f^{k_0}(f(0)))\cdot
+Df^{k_m}(f(0))\cdot
+\prod_{i=0}^{m-1} Df^{k_i-k_{i+1}}(f^{k_{i+1}}(f(0))).
+$$
+The first factor can be estimated by using 
+
+\proclaim{Proposition 4.1 ([G],[Ma])} Given $n_0\ge 1$ 
+there exist constants $C>0$ and 
+$\lambda>1$ such that 
+$$
+|Df^r(x)|\ge C\lambda^r,
+$$
+whenever $f^i(x)\notin U_{n_0}$ with $i\le r$.
+\endproclaim
+
+\flushpar
+The other factors can be estimated by Proposition 3.1. 
+The decomposition was 
+set up to make Proposition 3.1 applicable to the factors:
+$$
+\aligned
+|Df^k(f(0))|^{-\frac1\alpha}&
+\le  \{ C\lambda^{r(k)}\cdot 
+\prod_{ {i\le m} \atop  {k_i\ne k_{i+1}} }^{m} 
+C\cdot \rho_{i}\cdot \theta^{-(s_i(k)-1)} \}^{-\frac1\alpha}\\
+&\le  C(\frac{1}{\lambda^\frac1\alpha})^{r(k)}\cdot 
+\prod_{ {i\le m} \atop  {k_i\ne k_{i+1}} }^{m} 
+\frac{ (\theta^{\frac1\alpha})^{s_i(k)-1}}
+     {(C\cdot \rho_{i})^{\frac1\alpha}}\\
+\endaligned
+$$
+
+\proclaim{Lemma 4.2} Let $s_i,r$ and $s'_i,r'$ correspond to the Teleman 
+decomposition of respectively $k$ and $k'$. If $k\ne k'$ then $r\ne r'$ or
+$s_i\ne s'_i$ for some $i\ge 0$.
+\endproclaim
+
+\demo{Proof} Assume that $r=r'$ and $s_i=s'_i$ for all $i\ge 1$. We have to 
+show 
+that $k=k'$. Observe that $f^{k_m}(0)=R_{n_0+m}^{s_m}(0)$ but also
+$f^{k'_m}(0)=R_{n_0+m}^{s'_m}(0)=R_{n_0+m}^{s_m}(0)$. So $k_m=k'_m$. Now
+repeat this argument to show that $k_i=k'_i$ for $0\le i\le m$. In particular
+we get $k_0=k'_0$. So
+$$
+k'=k'_0+r'=k_0+r=k.
+$$
+\hfill\hfill\qed $\,\,$ (Lemma 4.2)
+\enddemo
+
+\bigskip
+\centerline{\bf Proof of the Summability Condition for Derivatives}
+\bigskip
+
+\flushpar
+The number $a<1$ was defined in the beginning of this section. Let 
+$\beta=\frac1\alpha$. 
+$$
+\aligned
+\sum_{k\ge 0} |Df^k(f(0))|^{-\frac1\alpha}
+&=\sum_{r\ge 0}\sum_{{k\ge 0}\atop {r(k)=r}  } |Df^k(f(0))|^{-\frac1\alpha}\\
+&\le \sum_{r\ge 0}  C(\frac{1}{\lambda^\beta})^{r}\cdot
+  \sum_{{k\ge 0} \atop {r(k)=r}} 
+\prod_{{0\le i\le m} \atop {k_i\ne k_{i+1}} } 
+\frac{ (\theta^{\beta})^{s_i(k)-1}}{(C\cdot \rho_{i})^{\beta}}.
+\endaligned
+$$
+Now observe that for each $r$ there are no two  products appearing in the 
+second sum which are formed with the same factors, Lemma 4.2. 
+The sum of all possible different products
+can be estimated by $1+a+a^2+a^3+\dots$. Hence  
+$$
+\aligned
+\sum_{k\ge 0} |Df^k(f(0))|^{-\frac1\alpha}
+&\le \sum_{r\ge 0}  C(\frac{1}{\lambda^\beta})^{r}\cdot 
+(1+a+a^2+a^3+\dots)\\
+&\le \frac{1}{1-a} \sum_{r\ge 0}  C(\frac{1}{\lambda^\beta})^{r}\\
+&\le C\cdot \frac{1}{1-a} \cdot \frac{1}{1-\frac{1}{\lambda^{\beta}}}
+<\infty.
+\endaligned
+$$
+
+
+
+

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/8lv9pWMxYfqFqvvNK5wOoveOfbs</id>
+  <title>arXiv Query: search_query=&amp;id_list=1512.05948&amp;start=0&amp;max_results=10</title>
+  <updated>2026-11-01T09:54:43Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1512.05948" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1512.05948v3</id>
+    <title>Algorithmic aspects of branched coverings</title>
+    <updated>2017-06-19T08:54:57Z</updated>
+    <link href="https://arxiv.org/abs/1512.05948v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1512.05948v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>This is the announcement, and the long summary, of a series of articles on the algorithmic study of Thurston maps. We describe branched coverings of the sphere in terms of group-theoretical objects called bisets, and develop a theory of decompositions of bisets.
+  We introduce a canonical "Levy" decomposition of an arbitrary Thurston map into homeomorphisms, metrically-expanding maps and maps doubly covered by torus endomorphisms. The homeomorphisms decompose themselves into finite-order and pseudo-Anosov maps, and the expanding maps decompose themselves into rational maps.
+  As an outcome, we prove that it is decidable when two Thurston maps are equivalent. We also show that the decompositions above are computable, both in theory and in practice.</summary>
+    <category term="cs.CC" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.DS" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="math.GR" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2015-12-18T13:38:15Z</published>
+    <arxiv:comment>60-page announcement of 5-part text, to apper in Ann. Fac. Sci. Toulouse. Minor typos corrected, and major rewrite of section 7.8, which was studying a different map than claimed</arxiv:comment>
+    <arxiv:primary_category term="cs.CC"/>
+    <author>
+      <name>Laurent Bartholdi</name>
+    </author>
+    <author>
+      <name>Dzmitry Dudko</name>
+    </author>
+  </entry>
+</feed>

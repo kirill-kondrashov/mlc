@@ -2,7 +2,8 @@
 """Generate rooted dependency graph pages.
 
 The graph is declaration-level and cross-file (all `Mlc/*.lean`).
-Edges are textual usage edges: source declaration body references target name.
+Edges come from constants in elaborated Lean types and proof terms.
+Generated projection/constructor paths are collapsed to source declarations.
 Output layout:
   site/
     index.html
@@ -22,6 +23,7 @@ import re
 import shutil
 import subprocess
 from collections import deque
+from graphlib import CycleError, TopologicalSorter
 
 
 DECL_RE = re.compile(
@@ -39,11 +41,12 @@ EMBEDDED_AXIOMS = ("Quot.sound", "propext", "Classical.choice")
 # comparison point.
 MISSING_AXIOMS: tuple[str, ...] = ()
 ALTERNATIVE_GRAPH_SYMBOLS: tuple[str, ...] = ()
-CONSTRUCTION_SYMBOLS = (
-    "MLC.preconnected_nhds_of_shrink_of_connected_at",
-    "MLC.para_puzzle_piece_inter_mandelbrot_connected_proved",
-    "MLC.PrincipalNestTarget.paraPuzzle_shrink_of_uniformConformalLowerBoundTarget",
-)
+CONSTRUCTION_SYMBOLS: tuple[str, ...] = ()
+OPEN_OBLIGATIONS = {
+    "MLC.Research.CandidateSystem.Realization",
+    "MLC.Research.CandidateSystem.Coverage",
+}
+
 
 
 def graph_slug(fq_name: str) -> str:
@@ -206,82 +209,40 @@ def is_external_candidate_token(token: str) -> bool:
 
 
 def build_full_graph(repo_root: Path) -> tuple[dict[str, Decl], dict[str, set[str]]]:
-    lean_files = sorted((repo_root / "Mlc").rglob("*.lean"))
-    all_decls: list[Decl] = []
-    stripped_by_file: dict[str, list[str]] = {}
-
-    for f in lean_files:
-        decls, stripped = parse_decls_from_file(f, repo_root)
-        all_decls.extend(decls)
-        stripped_by_file[str(f.relative_to(repo_root))] = stripped
-
-    # Add embedded/core axioms so they can appear as explicit nodes in the graph.
-    existing = {d.fq_name for d in all_decls}
-    for ax_name in EMBEDDED_AXIOMS:
-        if ax_name in existing:
-            continue
-        short = ax_name.split(".")[-1]
-        all_decls.append(
-            Decl(
-                kind="axiom",
-                name=short,
-                fq_name=ax_name,
-                file="[embedded]",
-                line=0,
-                end_line=0,
-            )
-        )
-
+    """Kernel dependency export; comments and unresolved short names add no edges."""
     fq_index: dict[str, Decl] = {}
-    for d in all_decls:
-        if d.fq_name not in fq_index:
-            fq_index[d.fq_name] = d
-
-    short_index: dict[str, list[Decl]] = {}
-    suffix_index: dict[str, list[Decl]] = {}
-    for d in all_decls:
-        short_index.setdefault(d.name, []).append(d)
-        parts = d.fq_name.split(".")
-        for i in range(len(parts)):
-            suffix = ".".join(parts[i:])
-            suffix_index.setdefault(suffix, []).append(d)
-
-    edges: dict[str, set[str]] = {d.fq_name: set() for d in all_decls}
-    external_decls: dict[str, Decl] = {}
-    for src in all_decls:
-        if src.file not in stripped_by_file:
-            continue
-        lines = stripped_by_file[src.file]
-        body = "\n".join(lines[src.line - 1 : src.end_line])
-        tokens = set(TOKEN_RE.findall(body))
-        for tok in tokens:
-            cands = resolve_token(tok, src, fq_index, short_index, suffix_index)
-            if cands:
-                for dst in cands:
-                    if dst.fq_name == src.fq_name:
-                        continue
-                    edges[src.fq_name].add(dst.fq_name)
+    for path in sorted((repo_root / "Mlc").rglob("*.lean")):
+        decls, _ = parse_decls_from_file(path, repo_root)
+        for decl in decls:
+            fq_index.setdefault(decl.fq_name, decl)
+    proc = subprocess.run(
+        ["lake", "env", "lean", "--run", "export_dependencies.lean"],
+        cwd=repo_root, text=True, capture_output=True, check=False,
+    )
+    if proc.returncode:
+        raise RuntimeError("Lean dependency export failed:\n" + proc.stdout + proc.stderr)
+    rows = json.loads(proc.stdout)
+    raw = {row["name"]: set(row["dependencies"]) for row in rows}
+    # Retain only declarations actually present in the checked environment.
+    fq_index = {name: decl for name, decl in fq_index.items() if name in raw}
+    edges: dict[str, set[str]] = {name: set() for name in fq_index}
+    for name in fq_index:
+        pending = list(raw.get(name, ()))
+        seen = {name}
+        while pending:
+            dep = pending.pop()
+            if dep in seen:
                 continue
-            if not is_external_candidate_token(tok):
-                continue
-            if tok == src.fq_name:
-                continue
-            if tok not in external_decls and tok not in fq_index:
-                external_decls[tok] = Decl(
-                    kind="external",
-                    name=tok.split(".")[-1],
-                    fq_name=tok,
-                    file="[external]",
-                    line=0,
-                    end_line=0,
-                )
-            if tok in external_decls or tok in fq_index:
-                edges[src.fq_name].add(tok)
-
-    for ext in external_decls.values():
-        fq_index[ext.fq_name] = ext
-        edges.setdefault(ext.fq_name, set())
-
+            seen.add(dep)
+            if dep in fq_index:
+                edges[name].add(dep)
+            elif dep in raw:
+                # Autogenerated structure projections/constructors are not
+                # theorem nodes; preserve their dependencies by contraction.
+                pending.extend(raw[dep])
+    for name in EMBEDDED_AXIOMS:
+        fq_index[name] = Decl("axiom", name.split(".")[-1], name, "[Lean core]", 0, 0)
+        edges[name] = set()
     return fq_index, edges
 
 
@@ -842,7 +803,7 @@ function renderLegend() {{
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.constructionEdge}}"></span>Construction route</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.coreAxiomFill}};border-color:${{state.palette.coreAxiomRing}}"></span>Core axiom</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.axiomFill}};border-color:${{state.palette.axiomRing}}"></span>Project axiom</span>
-    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.missingAxiomFill}};border-color:${{state.palette.missingAxiomRing}}"></span>Missing axiom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.missingAxiomFill}};border-color:${{state.palette.missingAxiomRing}}"></span>Open research obligation</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.rootFill}};border-color:${{state.palette.rootRing}}"></span>Root: mlc_conjecture</span>
     <span class="legend-item"><span class="legend-dot" style="background:${{state.palette.missingLink}}"></span>Missing connection</span>
   `;
@@ -2002,10 +1963,8 @@ def graph_page_js() -> str:
       <span class="legend-item"><span class="legend-dot" style="background:#8ecae6"></span>Lemma</span>
       <span class="legend-item"><span class="legend-dot" style="background:#9ca3af"></span>Other declaration</span>
       <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Root</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing axiom</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Open research obligation</span>
       <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Core axiom</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#0ea5e9"></span>Construction route</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Missing connection</span>
       <span class="legend-item">→ Directed dependency</span>
     `;
   }
@@ -2234,7 +2193,7 @@ def graph_page_js() -> str:
       const p = fibonacciPoint(i, nodes.length);
       const world = n.id === rootId ? [0, 0, sphereRadius] : V3.scale(p, sphereRadius);
       const isRoot = n.id === rootId;
-      const isMissing = n.axiom_tier === "missing";
+      const isMissing = n.axiom_tier === "missing" || n.proof_status === "open";
       const isCore = n.axiom_tier === "core";
       let c = kindColor(n.kind);
       if (isRoot) c = COLORS.root;
@@ -3368,7 +3327,8 @@ def graph_page_js() -> str:
     if (summaryEl) {
       const counts =
         `${declCount} declarations, ${edgeCount} edges, ` +
-        `${theoremCount} theorems, ${defCount} definitions`;
+        `${theoremCount} theorems, ${defCount} definitions; Lean proof dependencies` +
+        (payload.conditional_root ? `; conditional on M1 realization and global coverage` : ``);
       if (!hasWebGL) {
         summaryEl.textContent = webglStatusMessage
           ? `${counts} | ${webglStatusMessage} | CPU 3D mode available`
@@ -3642,12 +3602,6 @@ def build_payload(
     extra_edges: list[dict[str, str]] | None = None,
 ) -> dict[str, object]:
     reachable, depth = rooted_closure(root_decl.fq_name, edges)
-    edges.setdefault(root_decl.fq_name, set())
-    for ax_name in EMBEDDED_AXIOMS:
-        if ax_name in fq_index:
-            reachable.add(ax_name)
-            depth.setdefault(ax_name, 1)
-            edges[root_decl.fq_name].add(ax_name)
 
     if extra_nodes:
         extra_depth = max(depth.values(), default=0) + 1
@@ -3674,6 +3628,7 @@ def build_payload(
                 "fq_name": d.fq_name,
                 "kind": d.kind,
                 "axiom_tier": axiom_tier,
+                "proof_status": "open" if d.fq_name in OPEN_OBLIGATIONS else "checked",
                 "file": d.file,
                 "line": d.line,
                 "span": d.span,
@@ -3702,6 +3657,8 @@ def build_payload(
 
     return {
         "root": root_decl.fq_name,
+        "dependency_source": "Lean elaborated types and proof terms",
+        "conditional_root": root_decl.fq_name == "MLC.mlc_conjecture",
         "nodes": nodes,
         "edges": edge_payload,
     }
@@ -3725,82 +3682,32 @@ def write_graph(output_root: Path, slug: str, title: str, payload: dict[str, obj
     return f"{slug}/index.html"
 
 
-def drop_embedded_axioms(payload: dict[str, object]) -> dict[str, object]:
-    embedded = set(EMBEDDED_AXIOMS)
-    nodes = [
-        node for node in payload["nodes"]
-        if node.get("fq_name") not in embedded
-    ]
-    keep = {node["id"] for node in nodes}
-    edges = [
-        edge for edge in payload["edges"]
-        if edge.get("source") in keep and edge.get("target") in keep
-    ]
-    out = dict(payload)
-    out["nodes"] = nodes
-    out["edges"] = edges
-    return out
-
-
-def align_root_project_axiom_tiers(
-    payload: dict[str, object], semantic_frontier: set[str]
-) -> dict[str, object]:
-    frontier = set(semantic_frontier) - set(EMBEDDED_AXIOMS)
-    nodes = []
-    for node in payload["nodes"]:
-        updated = dict(node)
-        if updated.get("kind") == "axiom" and updated.get("axiom_tier") == "project":
-            if updated.get("fq_name") not in frontier:
-                updated["axiom_tier"] = "none"
-        nodes.append(updated)
-    out = dict(payload)
-    out["nodes"] = nodes
-    return out
-
-
-def retain_only_semantic_root_axioms(
-    payload: dict[str, object], semantic_frontier: set[str]
-) -> dict[str, object]:
-    frontier = set(semantic_frontier) - set(EMBEDDED_AXIOMS)
-    nodes = [
-        node for node in payload["nodes"]
-        if not (
-            node.get("kind") == "axiom"
-            and node.get("fq_name") not in frontier
-        )
-    ]
-    keep = {node["id"] for node in nodes}
-    edges = [
-        edge for edge in payload["edges"]
-        if edge.get("source") in keep and edge.get("target") in keep
-    ]
-    out = dict(payload)
-    out["nodes"] = nodes
-    out["edges"] = edges
-    return out
-
-
-def assert_semantic_root_axioms_rendered(
-    payload: dict[str, object], semantic_frontier: set[str]
-) -> None:
-    frontier = set(semantic_frontier) - set(EMBEDDED_AXIOMS)
-    node_ids = {node["id"] for node in payload["nodes"]}
-    edge_pairs = {(edge["source"], edge["target"]) for edge in payload["edges"]}
-    root = payload["root"]
-
-    missing_nodes = sorted(frontier - node_ids)
-    missing_edges = sorted(
-        ax_name for ax_name in frontier
-        if (root, ax_name) not in edge_pairs
-    )
-
-    if missing_nodes or missing_edges:
-        details: list[str] = []
-        if missing_nodes:
-            details.append("missing semantic axiom nodes: " + ", ".join(missing_nodes))
-        if missing_edges:
-            details.append("missing root-to-axiom edges: " + ", ".join(missing_edges))
-        raise RuntimeError("Incomplete root axiom graph render: " + "; ".join(details))
+def validate_research_graph(payload: dict[str, object]) -> None:
+    nodes = {node["id"]: node for node in payload["nodes"]}
+    adjacency = {name: set() for name in nodes}
+    for edge in payload["edges"]:
+        if edge["source"] not in nodes or edge["target"] not in nodes:
+            raise RuntimeError("Graph edge has an unknown endpoint")
+        adjacency[edge["source"]].add(edge["target"])
+    reachable, _ = rooted_closure(payload["root"], adjacency)
+    if reachable != set(nodes):
+        raise RuntimeError("The root graph contains disconnected declarations")
+    try:
+        tuple(TopologicalSorter(adjacency).static_order())
+    except CycleError as exc:
+        raise RuntimeError("The declaration dependency graph has a cycle") from exc
+    axioms = {name for name, node in nodes.items() if node["kind"] == "axiom"}
+    if axioms != set(EMBEDDED_AXIOMS):
+        raise RuntimeError("Unexpected ground axiom frontier")
+    if not OPEN_OBLIGATIONS <= reachable:
+        raise RuntimeError("M1 realization or global coverage is hidden from the graph")
+    theorem_count = sum(node["kind"] in {"theorem", "lemma"} for node in nodes.values())
+    if theorem_count < 40:
+        raise RuntimeError("The research reduction has fewer than forty connected theorems")
+    forbidden = {"MLC.Quadratic.yoccoz_theorem_conformal",
+                 "MLC.UniformGeometry.mandelbrot_locallyConnected_of_squareTower"}
+    if forbidden & reachable:
+        raise RuntimeError("A frozen-model or archived route entered the active root")
 
 
 def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
@@ -3816,8 +3723,6 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     if root_decl.fq_name == "MLC.mlc_conjecture":
         axiom_frontier = collect_axioms_from_check_axioms(repo_root)
         for ax_name in sorted(axiom_frontier):
-            if ax_name in EMBEDDED_AXIOMS:
-                continue
             if ax_name not in fq_index:
                 fq_index[ax_name] = Decl(
                     kind="axiom",
@@ -3858,10 +3763,12 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
         extra_edges=root_extra_edges,
     )
     if root_decl.fq_name == "MLC.mlc_conjecture":
-        root_payload = drop_embedded_axioms(root_payload)
-        root_payload = align_root_project_axiom_tiers(root_payload, axiom_frontier)
-        root_payload = retain_only_semantic_root_axioms(root_payload, axiom_frontier)
-        assert_semantic_root_axioms_rendered(root_payload, axiom_frontier)
+        unexpected = axiom_frontier - set(EMBEDDED_AXIOMS)
+        if unexpected:
+            raise RuntimeError("Unexpected kernel axioms: " + ", ".join(sorted(unexpected)))
+        root_payload["kernel_axioms"] = sorted(axiom_frontier)
+        root_payload["open_obligations"] = sorted(OPEN_OBLIGATIONS)
+        validate_research_graph(root_payload)
     root_href = write_graph(
         output_root,
         "mlc_conjecture",

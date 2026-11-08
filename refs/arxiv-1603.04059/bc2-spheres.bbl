@@ -1,0 +1,479 @@
+\bib{bartholdi-n:thurston}{article}{
+  author={Bartholdi, Laurent},
+  author={Nekrashevych, Volodymyr V.},
+  title={Thurston equivalence of topological polynomials},
+  journal={Acta Math.},
+  date={2006},
+  volume={197},
+  number={1},
+  pages={1\ndash 51},
+  review={\MR {2285317 (2008c:37072)}},
+  doi={10.1007/s11511-006-0007-3},
+  eprint={arXiv:math.DS/0510082},
+}
+
+\bib{bartholdi-dudko:bc0}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings},
+  date={2017},
+  eprint={arXiv:cs/1512.05948},
+  journal={Ann. Fac. Sci. Toulouse},
+  series={6},
+  number={5},
+  pages={1219\ndash 1296},
+  doi={10.5802/afst.1566},
+}
+
+\bib{bartholdi-dudko:bc1}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings I/V. Van Kampen's theorem for bisets},
+  journal={Groups Geom. Dyn.},
+  volume={12},
+  date={2018},
+  number={1},
+  pages={121--172},
+  issn={1661-7207},
+  review={\MR {3781419}},
+  doi={10.4171/GGD/441},
+  eprint={arXiv:cs/1512.08539},
+}
+
+\bib{bartholdi-dudko:bc4}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings IV/V. Expanding maps},
+  date={2016},
+  eprint={arXiv:math/1610.02434},
+  status={to appear},
+  doi={10.1090/tran/7199},
+  journal={Trans. Amer. Math. Soc.},
+}
+
+\bib{bartholdi:wordorder}{article}{
+  author={Bartholdi, Laurent},
+  author={Mitrofanov, Ivan},
+  title={The word and order problems for self-similar and automata groups},
+  date={2017},
+  status={submitted},
+  eprint={arXiv:math/1710.10109},
+}
+
+\bib{bartholdi-dudko:bc3}{article}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings III/V. Erasing maps, orbispaces, and the Birman exact sequence},
+  date={2018},
+  status={submitted},
+  eprint={arXiv:math/1802.03045},
+}
+
+\bib{bartholdi-dudko:bc5}{unpublished}{
+  author={Bartholdi, Laurent},
+  author={Dudko, Dzmitry},
+  title={Algorithmic aspects of branched coverings V/V. Symbolic and floating-point algorithms},
+  date={2017},
+  status={in preparation},
+}
+
+\bib{bartholdi-buff:compactification}{unpublished}{
+  author={Bartholdi, Laurent},
+  author={Buff, Xavier},
+  title={Hurwitz space and its compactification},
+  date={2016},
+  status={preprint},
+}
+
+\bib{bell-webb:poly}{article}{
+  author={Bell, Mark C.},
+  author={Webb, Richard C. H.},
+  title={Polynomial-time algorithms for the curve graph},
+  year={2016},
+  eprint={arXiv:math/1609.09392},
+}
+
+\bib{bestvina-h:tt}{article}{
+  author={Bestvina, Mladen},
+  author={Handel, Michael},
+  title={Train-tracks for surface homeomorphisms},
+  journal={Topology},
+  volume={34},
+  date={1995},
+  number={1},
+  pages={109\ndash 140},
+  issn={0040-9383},
+  review={\MR {1308491 (96d:57014)}},
+  doi={10.1016/0040-9383(94)E0009-9},
+}
+
+\bib{birman-series:sccs}{article}{
+  author={Birman, Joan~S.},
+  author={Series, Caroline},
+  title={An algorithm for simple curves on surfaces},
+  journal={J. London Math. Soc. (2)},
+  volume={29},
+  date={1984},
+  number={2},
+  pages={331\ndash 342},
+  issn={0024-6107},
+  review={\MR {744104 (85m:57002)}},
+  doi={10.1112/jlms/s2-29.2.331},
+}
+
+\bib{bonnot-braverman-yampolsky:thurstondecidable}{article}{
+  author={Bonnot, Sylvain},
+  author={Braverman, Mark},
+  author={Yampolsky, Michael},
+  title={Thurston equivalence to a rational map is decidable},
+  language={English, with English and Russian summaries},
+  journal={Mosc. Math. J.},
+  volume={12},
+  date={2012},
+  number={4},
+  pages={747--763, 884},
+  issn={1609-3321},
+  review={\MR {3076853}},
+}
+
+\bib{calvez:NT}{article}{
+  author={Calvez, Matthieu},
+  title={Fast Nielsen-Thurston classification of braids},
+  journal={Algebr. Geom. Topol.},
+  volume={14},
+  date={2014},
+  number={3},
+  pages={1745--1758},
+  issn={1472-2747},
+  review={\MR {3212582}},
+  doi={10.2140/agt.2014.14.1745},
+}
+
+\bib{cohen-lustig:intersectionnumbers}{article}{
+  author={Cohen, Marshall},
+  author={Lustig, Martin},
+  title={Paths of geodesics and geometric intersection numbers. I},
+  conference={ title={Combinatorial group theory and topology}, address={Alta, Utah}, date={1984}, },
+  book={ series={Ann. of Math. Stud.}, volume={111}, publisher={Princeton Univ. Press}, place={Princeton, NJ}, },
+  date={1987},
+  pages={479\ndash 500},
+  review={\MR {895629 (88m:57016)}},
+}
+
+\bib{douady-h:edpc1}{book}{
+  author={Douady, Adrien},
+  author={Hubbard, John~H.},
+  title={\'Etude dynamique des polyn\^omes complexes. Partie I},
+  language={French},
+  series={Publications Math\'ematiques d'Orsay [Mathematical Publications of Orsay]},
+  volume={84},
+  publisher={Universit\'e de Paris-Sud, D\'epartement de Math\'ematiques, Orsay},
+  date={1984},
+  pages={75},
+  review={\MR {762431 (87f:58072a)}},
+}
+
+\bib{douady-h:edpc2}{book}{
+  author={Douady, Adrien},
+  author={Hubbard, John~H.},
+  title={\'Etude dynamique des polyn\^omes complexes. Partie II},
+  language={French},
+  series={Publications Math\'ematiques d'Orsay [Mathematical Publications of Orsay]},
+  volume={85},
+  note={With the collaboration of P. Lavaurs, Tan Lei and P. Sentenac},
+  publisher={Universit\'e de Paris-Sud, D\'epartement de Math\'ematiques, Orsay},
+  date={1985},
+  pages={v+154},
+  review={\MR {812271 (87f:58072b)}},
+}
+
+\bib{douady-h:thurston}{article}{
+  author={Douady, Adrien},
+  author={Hubbard, John~H.},
+  title={A proof of Thurston's topological characterization of rational functions},
+  journal={Acta Math.},
+  volume={171},
+  date={1993},
+  number={2},
+  pages={263\ndash 297},
+  issn={0001-5962},
+  review={\MR {1251582 (94j:58143)}},
+}
+
+\bib{epstein:isotopies}{article}{
+  author={Epstein, David B.~A.},
+  title={Curves on $2$-manifolds and isotopies},
+  journal={Acta Math.},
+  volume={115},
+  date={1966},
+  pages={83--107},
+  issn={0001-5962},
+  review={\MR {0214087 (35 \#4938)}},
+}
+
+\bib{farb-margalit:mcg}{book}{
+  author={Farb, Benson},
+  author={Margalit, Dan},
+  title={A primer on mapping class groups},
+  series={Princeton Mathematical Series},
+  volume={49},
+  publisher={Princeton University Press},
+  place={Princeton, NJ},
+  date={2012},
+  pages={xiv+472},
+  isbn={978-0-691-14794-9},
+  review={\MR {2850125}},
+}
+
+\bib{gap4:manual}{manual}{
+  title={GAP --- Groups, Algorithms, and Programming, Version 4.4.10},
+  label={GAP08},
+  author={The GAP~Group},
+  date={2008},
+  url={\texttt {http://www.gap-system.org}},
+}
+
+\bib{harpe:ggt}{book}{
+  author={Harpe, Pierre~{de la}},
+  title={Topics in geometric group theory},
+  publisher={University of Chicago Press},
+  address={Chicago, IL},
+  date={2000},
+  isbn={0-226-31719-6; 0-226-31721-8},
+  review={\MR {2001i:20081}},
+}
+
+\bib{hemion:homeos}{article}{
+  author={Hemion, Geoffrey},
+  title={On the classification of homeomorphisms of $2$-manifolds and the classification of $3$-manifolds},
+  journal={Acta Math.},
+  volume={142},
+  date={1979},
+  number={1-2},
+  pages={123\ndash 155},
+  issn={0001-5962},
+  review={\MR {512214 (80f:57003)}},
+  doi={10.1007/BF02395059},
+}
+
+\bib{hurwitz:ramifiedsurfaces}{article}{
+  author={Hurwitz, Adolf},
+  title={Ueber Riemann'sche Fl\"achen mit gegebenen Verzweigungspunkten},
+  language={German},
+  journal={Math. Ann.},
+  volume={39},
+  date={1891},
+  number={1},
+  pages={1\ndash 60},
+  issn={0025-5831},
+  review={\MR {1510692}},
+  doi={10.1007/BF01199469},
+}
+
+\bib{kameyama:thurston}{article}{
+  author={Kameyama, Atsushi},
+  title={The Thurston equivalence for postcritically finite branched coverings},
+  journal={Osaka J. Math.},
+  volume={38},
+  date={2001},
+  number={3},
+  pages={565\ndash 610},
+  issn={0030-6126},
+  review={\MR {1860841 (2002h:57004)}},
+}
+
+\bib{koch:teichmuller-cfe}{article}{
+  author={Koch, Sarah},
+  title={Teichm\"uller theory and critically finite endomorphisms},
+  journal={Adv. Math.},
+  volume={248},
+  date={2013},
+  pages={573--617},
+  issn={0001-8708},
+  review={\MR {3107522}},
+  doi={10.1016/j.aim.2013.08.019},
+}
+
+\bib{koch-pilgrim-selinger:pullback}{article}{
+  author={Koch, Sarah~C.},
+  author={Pilgrim, Kevin~M.},
+  author={Selinger, Nikita},
+  title={Pullback invariants of Thurston maps},
+  eprint={arXiv:math/1212.4568},
+  date={2015},
+  journal={Trans. Amer. Math. Soc.},
+  doi={10.1090/tran/6482},
+}
+
+\bib{lando-zvonkin:graphsonsurfaces}{book}{
+  author={Lando, Sergei K.},
+  author={Zvonkin, Alexander K.},
+  title={Graphs on surfaces and their applications},
+  series={Encyclopaedia of Mathematical Sciences},
+  volume={141},
+  note={With an appendix by Don B. Zagier; Low-Dimensional Topology, II},
+  publisher={Springer-Verlag, Berlin},
+  date={2004},
+  pages={xvi+455},
+  isbn={3-540-00203-0},
+  review={\MR {2036721}},
+  doi={10.1007/978-3-540-38361-1},
+}
+
+\bib{magnus-k-s:cgt}{book}{
+  author={Magnus, Wilhelm},
+  author={Karrass, Abraham},
+  author={Solitar, Donald},
+  title={Combinatorial group theory: Presentations of groups in terms of generators and relators},
+  publisher={Interscience (New York)},
+  date={1966},
+}
+
+\bib{margalit+mccammond:braid}{article}{
+  author={Margalit, Dan},
+  author={McCammond, Jon},
+  title={Geometric presentations for the pure braid group},
+  journal={J. Knot Theory Ramifications},
+  volume={18},
+  date={2009},
+  number={1},
+  pages={1--20},
+  issn={0218-2165},
+  review={\MR {2490001 (2010a:20086)}},
+  doi={10.1142/S0218216509006859},
+}
+
+\bib{mcmullen:renormalization}{book}{
+  author={McMullen, Curtis~T.},
+  title={Complex dynamics and renormalization},
+  series={Annals of Mathematics Studies},
+  volume={135},
+  publisher={Princeton University Press},
+  place={Princeton, NJ},
+  date={1994},
+  pages={x+214},
+  isbn={0-691-02982-2},
+  isbn={0-691-02981-4},
+  review={\MR {1312365 (96b:58097)}},
+}
+
+\bib{nekrashevych:ssg}{book}{
+  author={Nekrashevych, Volodymyr~V.},
+  title={Self-similar groups},
+  series={Mathematical Surveys and Monographs},
+  volume={117},
+  publisher={American Mathematical Society, Providence, RI},
+  date={2005},
+  pages={xii+231},
+  isbn={0-8218-3831-8},
+  review={\MR {2162164 (2006e:20047)}},
+  doi={10.1090/surv/117},
+}
+
+\bib{nielsen:surfaces}{article}{
+  author={Nielsen, Jakob},
+  title={Surface transformation classes of algebraically finite type},
+  journal={Danske Vid. Selsk. Math.-Phys. Medd.},
+  volume={21},
+  date={1944},
+  number={2},
+  pages={89},
+  review={\MR {0015791 (7,469c)}},
+}
+
+\bib{pilgrim:combinations}{book}{
+  author={Pilgrim, Kevin~M.},
+  title={Combinations of complex dynamical systems},
+  series={Lecture Notes in Mathematics},
+  volume={1827},
+  publisher={Springer-Verlag},
+  place={Berlin},
+  date={2003},
+  pages={x+118},
+  isbn={3-540-20173-4},
+  review={\MR {2020454 (2004m:37087)}},
+}
+
+\bib{rips-sela:jsj}{article}{
+  author={Rips, Eliyahu},
+  author={Sela, Zlil},
+  title={Cyclic splittings of finitely presented groups and the canonical JSJ decomposition},
+  journal={Ann. of Math. (2)},
+  volume={146},
+  date={1997},
+  number={1},
+  pages={53\ndash 109},
+  issn={0003-486X},
+  review={\MR {1469317 (98m:20044)}},
+  doi={10.2307/2951832},
+}
+
+\bib{selinger:augts}{article}{
+  author={Selinger, Nikita},
+  title={Thurston's pullback map on the augmented Teichm\"uller space and applications},
+  journal={Invent. Math.},
+  volume={189},
+  date={2012},
+  number={1},
+  pages={111\ndash 142},
+  issn={0020-9910},
+  review={\MR {2929084}},
+  doi={10.1007/s00222-011-0362-3},
+}
+
+\bib{selinger:canonical}{article}{
+  author={Selinger, Nikita},
+  title={Topological characterization of canonical Thurston obstructions},
+  journal={J. Mod. Dyn.},
+  volume={7},
+  date={2013},
+  number={1},
+  pages={99--117},
+  issn={1930-5311},
+  review={\MR {3071467}},
+  doi={10.3934/jmd.2013.7.99},
+}
+
+\bib{selinger-yampolsky:geometrization}{article}{
+  author={Selinger, Nikita},
+  author={Yampolsky, Michael},
+  title={Constructive geometrization of Thurston maps and decidability of Thurston equivalence},
+  journal={Arnold Math. J.},
+  volume={1},
+  date={2015},
+  number={4},
+  pages={361--402},
+  issn={2199-6792},
+  review={\MR {3434502}},
+  doi={10.1007/s40598-015-0024-4},
+  eprint={arXiv:1310.1492},
+}
+
+\bib{thurston:surfaces}{article}{
+  author={Thurston, William~P.},
+  title={On the geometry and dynamics of diffeomorphisms of surfaces},
+  journal={Bull. Amer. Math. Soc. (N.S.)},
+  volume={19},
+  date={1988},
+  number={2},
+  pages={417\ndash 431},
+  issn={0273-0979},
+  review={\MR {956596 (89k:57023)}},
+  doi={10.1090/S0273-0979-1988-15685-6},
+}
+
+\bib{zieschang-vogt-coldewey:spdg}{book}{
+  author={Zieschang, Heiner},
+  author={Vogt, Elmar},
+  author={Coldewey, Hans-Dieter},
+  title={Surfaces and planar discontinuous groups},
+  series={Lecture Notes in Mathematics},
+  volume={835},
+  note={Translated from the German by John Stillwell},
+  publisher={Springer, Berlin},
+  date={1980},
+  pages={x+334},
+  isbn={3-540-10024-5},
+  review={\MR {606743 (82h:57002)}},
+}
+

@@ -1,0 +1,441 @@
+\chapter[Covering laws and parapuzzles]{Source digests: covering laws, unicritical local connectivity, and parapuzzles}
+\label{ch:digests-covering-parapuzzle}
+
+This chapter continues Chapter~\ref{ch:digests-apriori-limbs}.  It digests three sources that
+supply analytic and combinatorial inputs to the a priori bounds programme: the Kahn--Lyubich
+quasi-additivity law and covering lemma, which are the analytic tools behind several of the
+a priori bounds papers; the Kahn--Lyubich theorem on local connectivity of Julia sets of
+unicritical polynomials; and Lyubich's Asterisque volume on parapuzzles and SBR measures, which
+contains a local connectivity theorem for the Mandelbrot set under a hypothesis on families of
+copies called \emph{fineness}.  The conventions are those of the earlier digest chapters.
+Statements are the sources' own.  The Kahn--Lyubich laws are printed without numbers, so we
+name them and do not invent numbers.
+
+\section{Quasi-additivity law and covering lemma}
+\label{sec:kl-qa}
+
+\paragraph{Identity.}
+J.~Kahn and M.~Lyubich, \emph{The quasi-additivity law in conformal geometry},
+arXiv:math/0505191 (2005), Ann.\ of Math.\ 169 (2009), 561--593, DOI
+10.4007/annals.2009.169.561 \cite{KahnLyubichQA}.  The title and authors are confirmed by the main
+file \texttt{refs/arxiv-math-0505191/main.tex}, lines 17--22.  The proofs are in
+\texttt{covering.tex}.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Extremal length and width.}  For a family $\Gamma$ of curves on a Riemann surface $U$ and
+a conformal metric $\mu$ on $U$, put $\mu(\Gamma)=\inf_{\gamma\in\Gamma}\mu(\gamma)$ and
+$\mathcal L_\mu(\Gamma)=\mu(\Gamma)^2/\mu^2(U)$.  The extremal length is
+$\mathcal L(\Gamma)=\sup_\mu\mathcal L_\mu(\Gamma)$, and the extremal width is
+$\mathcal W(\Gamma)=\mathcal L(\Gamma)^{-1}$ (\texttt{covering.tex}, lines 1658--1688).
+\item \emph{Moduli of a compact set.}  For a compact $K\Subset\operatorname{int}S$ in a surface $S$,
+$\mathcal L(S,K)=\modulus(S,K)$ is the extremal length of the curves joining $\partial S$ to $K$, and
+$\mathcal W(S,K)=\mathcal L(S,K)^{-1}$ (\texttt{covering.tex}, lines 32--38 and 1825--1840).
+\item \emph{Archipelagos and islands.}  An open archipelago is an open subset of $S$ whose closure is a
+finite-type Riemann surface with smooth boundary; its components are its islands (\texttt{covering.tex},
+lines 40--43).  For disjoint archipelagos $A_j$ the topological complexity is
+$\operatorname{Top}_S\{A_j\}=-\chi(S)+\sum_j\#\operatorname{Comp}\,\partial A_j$ (lines 44--48).
+\item \emph{The three moduli.}  For disjoint archipelagos $A_1,\dots,A_N$ in $S$ put
+\[
+X=\mathcal W\Bigl(S,\bigcup_jA_j\Bigr),\qquad
+Y=\sum_j\mathcal W(S,A_j),\qquad
+Z=\sum_j\mathcal W\Bigl(S\setminus\bigcup_{k\neq j}A_k,\,A_j\Bigr).
+\]
+The source notes the relations $X\le Y\le Z$ and $Y\le NX$ (\texttt{covering.tex}, lines 50--59).
+\item \emph{Separation.}  The archipelagos are $\xi$-separated if $Z\le\xi Y$ (\texttt{covering.tex},
+lines 91--94).
+\end{itemize}
+
+\paragraph{Results.}  The source prints the laws below as unnumbered statements.
+
+\begin{theorem}[Quasi-additivity law]
+\label{thm:kl-qa-law}
+There exists $K$, depending only on the topological complexity of the family of archipelagos, such that
+\[
+Y\ \ge\ K\qquad\Longrightarrow\qquad Y^2\ \le\ 2\,XZ.
+\]
+\emph{Status:} proved in the paper; the proof occupies most of it (\texttt{covering.tex}, lines 60--70).
+The source remarks that the constant $2$ may be replaced by any $C>4/3$, and that $C<32/27$ would not work
+(lines 70--73).
+\end{theorem}
+
+\begin{theorem}[Quasi-additivity law with separation]
+\label{thm:kl-qa-sep}
+Assume that the archipelagos $A_j\Subset\operatorname{int}S$ are $\xi$-separated.  Then there is $K$,
+depending only on $\xi$ and the topological complexity, such that
+\[
+Y\ \ge\ K\qquad\Longrightarrow\qquad Y\ \le\ 2\,\xi\,X.
+\]
+\emph{Status:} an immediate corollary of Theorem~\ref{thm:kl-qa-law} in the paper
+(\texttt{covering.tex}, lines 91--110).
+\end{theorem}
+
+\begin{theorem}[Covering lemma]
+\label{thm:kl-covering}
+Fix $\eta\in(0,1]$.  Let $U\supset\Lambda'\supset\Lambda$ and $V\supset B'\supset B$ be nests of Jordan disks,
+and let $f\colon(U,\Lambda',\Lambda)\to(V,B',B)$ be a branched covering with $D=\deg(U\to V)$ and
+$d=\deg(\Lambda'\to B')$.  Suppose the collar assumption
+\[
+\modulus(B'\setminus B)\ >\ \eta\,\modulus(U\setminus\Lambda)
+\]
+holds.  Then there is $\epsilon=\epsilon(\eta,D)>0$ such that
+\[
+0<\modulus(U\setminus\Lambda)<\epsilon
+\qquad\Longrightarrow\qquad
+\modulus(V\setminus B)\ <\ 2\,\eta^{-1}d^2\,\modulus(U\setminus\Lambda).
+\]
+\emph{Status:} proved in the paper (\texttt{covering.tex}, lines 120--151).  A general estimate gives
+$\modulus(V\setminus B)\le D\,\modulus(U\setminus\Lambda)$ without the collar assumption, which is why the
+collar assumption is what makes the two moduli comparable.
+\end{theorem}
+
+\begin{proposition}[Quasi-invariance and holomorphic collars]
+\label{prop:kl-quasi-invariance}
+The quasi-additivity comparison of Theorem~\ref{thm:kl-qa-law} survives a branched covering of degree $D$,
+in a form involving the degrees $d_j$ of the restrictions to the islands; the constant depends on the
+topological complexity of the target archipelagos and on $D$.  The paper also proves the covering lemma with a
+\emph{holomorphic} collar that excludes the critical values, with the same bound as in
+Theorem~\ref{thm:kl-covering}.  \emph{Status:} proved in the paper; the precise formulations are in
+\texttt{covering.tex}, lines 1415--1433 (quasi-invariance) and 1632--1655 (holomorphic collar).
+\end{proposition}
+
+\paragraph{Proof strategy (from the source).}
+Leaves of a harmonic foliation are encoded by routes and associated rectangles (\texttt{covering.tex}, lines
+175--226).  Buffers and a small-overlapping principle control the overlaps (lines 943--1029).  Truncated
+rectangles are bounded by $Z$, and the initial ones by $X$ (lines 1030--1100).  The series law and an arithmetic
+inequality give $(1-\delta)^2Y^2\le\frac43XZ$ (lines 1206--1264).  For the quasi-invariance law, one passes to a
+Galois cover: a degree-$N$ branched covering factors through a Galois branched covering of degree at most $N!$
+(lines 1351--1359), and the archipelagos are lifted and compared (lines 1351--1510).
+
+\paragraph{External inputs.}
+Ahlfors, \emph{Conformal Invariants} (1973), for extremal length and the Dirichlet-integral facts used
+(\texttt{covering.tex}, lines 1658--1663 and 1841--1848).  The coset-action argument for the Galois cover is
+elementary and is not cited externally (lines 1360--1380).  Later dynamical applications are to Kahn (2006),
+Kahn--Lyubich (2005/2006), Kozlovski--van Strien (2006), and Qiu--Yin (2006) (\texttt{bib.tex}, lines 6--25).
+
+\paragraph{Use in the MLC literature.}
+The introduction says that the covering lemma is used to extend Yoccoz's theorem to higher-degree unicritical
+maps, and to prove a priori bounds, hence local connectivity of $\M$, for some infinitely renormalizable quadratic
+maps (\texttt{covering.tex}, lines 8--16).  Specifically, the basic covering lemma is used in the unicritical paper of
+Section~\ref{sec:kl-unicritical}; the holomorphic-collar version in Kahn--Lyubich II; and the quasi-invariance law
+with critical values inside the marked archipelagos in Kahn I (\texttt{covering.tex}, lines 1650--1655).
+\emph{Scope:} the paper proves analytic laws only.  It does not claim MLC, and it says that the dynamical
+consequences are addressed in forthcoming notes (\texttt{main.tex}, lines 23--42; \texttt{covering.tex},
+lines 8--16).
+
+\section{Local connectivity of Julia sets for unicritical polynomials}
+\label{sec:kl-unicritical}
+
+\paragraph{Identity.}
+J.~Kahn and M.~Lyubich, \emph{Local connectivity of Julia sets for unicritical polynomials},
+arXiv:math/0505194 (2005), Ann.\ of Math.\ 170 (2009), 413--426, DOI 10.4007/annals.2009.170.413
+\cite{KahnLyubichUnicritical}.  The title and authors are confirmed by the main file
+\texttt{refs/arxiv-math-0505194/main.tex}, lines 19--20.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{Unicritical polynomials.}  The maps are $f\colon z\mapsto z^d+c$ with $d\ge2$ (\texttt{intro.tex},
+lines 6--12).  No other normalization is used.
+\item \emph{GPL maps.}  A generalized polynomial-like map is a holomorphic map $g\colon\bigcup_iW_i\to V$, where $V$
+is a topological disk, the $W_i\Subset V$ are disjoint topological disks, every restriction $g|_{W_i}$ is a
+branched covering, and all but finitely many of these restrictions have degree one (\texttt{kingdom.tex},
+lines 4--9).  A GPL map is \emph{unicritical} if it has one critical point, of arbitrary local degree (\texttt{intro.tex},
+lines 72--73).
+\item \emph{Puzzle pieces.}  The puzzle pieces of depth $n$ are the components of $g^{-n}(V)$; those containing the
+critical point $0$ are critical puzzle pieces (\texttt{kingdom.tex}, lines 39--41).
+\item \emph{Principal nest.}  A sequence of critical puzzle pieces $V^0\supset V^1\supset\cdots\ni0$, chosen inductively
+so that the first-return maps $f^{n_i}\colon V^i\to V^{i-1}$ are unicritical branched coverings (\texttt{intro.tex},
+lines 43--46).
+\item \emph{Modified principal nest.}  A nest $E^0\supset E^1\supset\cdots\ni0$ of associated domains, built from kingdom
+maps with enlargements and buffers (\texttt{intro.tex}, lines 15--19; \texttt{kingdom.tex}, lines 426--438).  A kingdom
+map has nested disks $W\supset U\supset A\ni0$ together with subjects and men, and it is ramified only at $0$
+(\texttt{kingdom.tex}, lines 67--84).
+\item \emph{At most finitely renormalizable.}  After finitely many satellite or primitive renormalizations one reaches a
+non-renormalizable quadratic-like map (\texttt{kingdom.tex}, lines 287--295).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Local connectivity for unicritical polynomials]
+\label{thm:kl-unicritical-A}
+The Julia set $J(f)$ of an at most finitely renormalizable unicritical polynomial $f\colon z\mapsto z^d+c$ with all
+periodic points repelling is locally connected.  \emph{Status:} proved in the paper, for every unicritical degree $d$
+(\texttt{intro.tex}, lines 1--13).
+\end{theorem}
+
+\begin{theorem}[A priori bounds in the modified principal nest]
+\label{thm:kl-unicritical-B}
+The modified principal moduli stay away from zero:
+\[
+\modulus(E^{i-1}\setminus E^i)\ \ge\ \mu\ >\ 0.
+\]
+\emph{Status:} proved in the paper (\texttt{intro.tex}, lines 17--24), via Lemma~\ref{lem:kl-growth} below.  The source
+then says that these bounds force the puzzle pieces $E^i$ to shrink to the critical point, which yields
+Theorem~\ref{thm:kl-unicritical-A} by a standard argument (\texttt{intro.tex}, lines 25--27).
+\end{theorem}
+
+\begin{lemma}[Growth lemma]
+\label{lem:kl-growth}
+There exist $n=n(d)\in\N$ and $\epsilon=\epsilon(d,n)>0$ such that the following holds.  If on some level $q\ge n$
+\[
+\modulus(V^q\setminus W^q)<\epsilon,
+\]
+then on some previous level $p<q$
+\[
+\modulus(V^p\setminus W^p)\ <\ \tfrac12\,\modulus(V^q\setminus W^q).
+\]
+\emph{Status:} proved in the paper (\texttt{bounds.tex}, lines 4--14).  Its proof uses the Quasi-Additivity Law applied to
+many disjoint domains; this is the decisive step (\texttt{bounds.tex}, lines 45--68).
+\end{lemma}
+
+\begin{lemma}[Time inequalities]
+\label{lem:kl-times}
+The travel times $t_n$ and the auxiliary times $T_n$, $s_n$ of the source satisfy $t_n\ge T_{n-1}$, $T_n\ge s_n$ and
+$s_n\ge2s_{n-1}$ (\texttt{kingdom.tex}, lines 490--507).  Consequently $t_n=\operatorname{Time}(W^n,V^n)\ge2^{n-1}$
+(Corollary ``growth'', \texttt{kingdom.tex}, lines 535--539).  \emph{Status:} proved in the paper.
+\end{lemma}
+
+\paragraph{Proof strategy (from the source).}
+The argument reduces a finitely renormalizable polynomial to a non-renormalizable member of its renormalization
+dynasty (\texttt{kingdom.tex}, lines 287--295).  It builds the modified principal nest from kingdom maps (lines
+103--152).  Exponential growth of return times and the time inequality give bounded-degree pullbacks
+(\texttt{intro.tex}, lines 52--59).  The Covering Lemma of Section~\ref{sec:kl-qa} transfers small-modulus estimates
+between levels (\texttt{intro.tex}, lines 63--77), and the Quasi-Additivity Law gives the growth lemma.
+
+\paragraph{External inputs.}
+Yoccoz's quadratic local connectivity theorem, cited through Hubbard and Milnor (\texttt{intro.tex}, lines 6--8).
+Lyubich, \emph{Dynamics of quadratic polynomials I--II}, for the principal-nest and puzzle machinery (\texttt{intro.tex},
+lines 43--49).  The Quasi-Additivity Law and the Covering Lemma of Kahn--Lyubich (Section~\ref{sec:kl-qa}), which the paper
+states as inputs and does not reprove (\texttt{covering.tex}, lines 7--32).  Branner--Hubbard (puzzle machinery, 1992),
+Douady--Hubbard (polynomial-like maps, 1985), and Levin--van Strien (local connectivity of real polynomials, 1998)
+(\texttt{intro.tex}, lines 38--40 and 79--81; \texttt{bib.tex}).
+
+\paragraph{MLC scope.}
+Theorem~\ref{thm:kl-unicritical-A} is a theorem about Julia sets, not about $\M$.  For $d=2$ and at most finitely
+renormalizable parameters it reproduces Yoccoz's theorem, which is the known part of MLC (Chapter~\ref{ch:digests-foundations}).
+The paper contains no statement that $\M$ is locally connected, and it does not claim the MLC conjecture.
+
+\section{Parapuzzles and SBR measures}
+\label{sec:lyubich-ast261}
+
+\paragraph{Identity.}
+M.~Lyubich, \emph{Dynamics of quadratic polynomials, III: parapuzzle and SBR measures}, Asterisque 261 (2000),
+173--200 \cite{LyubichIII}.  The article is in the Asterisque archive at NUMDAM, \texttt{numdam.org/item?id=AST\_2000\_\_261\_\_173\_0};
+the statements below were checked against that PDF, and page references are to its journal pages.  The PDF is not
+stored in \texttt{refs/}; its URL is the canonical location.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{SBR measure.}  A measure $\mu$ is SBR (Sinai--Bowen--Ruelle) if
+\[
+\frac1n\sum_{k=0}^{n-1}f^k_*\delta_x\ \longrightarrow\ \mu
+\]
+for $x$ in a set of positive Lebesgue measure (the source's equation (1.1)).  For a real quadratic map $P_c$, $c\in[-2,1/4]$,
+the SBR measure is taken on the invariant interval $I_c$.
+\item \emph{Quadratic-like and DH families.}  A quadratic-like family over a parameter disk $D$ is a fibrewise
+quadratic-like family with a holomorphic motion respecting the boundary dynamics.  A DH family has a single tube $V_0$
+(pp.~175--176).  For such a family $f$ the
+Mandelbrot set of the family is $\M(f)=\{\lambda\in D:\ J(f_\lambda)\text{ is connected}\}$ (p.~176).
+\item \emph{Bounded shape.}  A copy $M'$ of the Mandelbrot set has $(K,\epsilon)$-\emph{bounded shape} if its straightening
+extends to a $K$-quasiconformal map on the $(\epsilon\operatorname{diam}M')$-neighbourhood of $M'$ (p.~174).
+\item \emph{Fine family.}  A family $\mathcal C$ of Mandelbrot copies is \emph{fine} if all copies of each specified
+combinatorial type in $\mathcal C$ have uniformly bounded shape (p.~198).  The examples given are the family of
+maximal copies with big height, and the family of real maximal copies with big essential period (p.~199).
+\item \emph{Parapuzzle pieces and principal nest.}  The first tiling is made of the sets
+$A_1(\lambda)=\{\lambda\in O:\ f^p_\lambda(0)\in L^*_\lambda\}$, where $O$ is a Misiurewicz wake and $L^*_\lambda$ is the tile
+containing the critical value (p.~186).  The principal parapuzzle nest $A^0\supset A^1(\lambda)\supset A^2(\lambda)\supset\cdots$
+is finite if and only if $\lambda$ is renormalizable, and its principal parameter moduli are
+$\modulus(A^l(\lambda)\setminus A^{l+1}(\lambda))$ (p.~191).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Parameter moduli grow linearly]
+\label{thm:ast-A}
+Let $(f,h)$ be a proper DH quadratic-like family with winding number $1$ over $D$, and let $O\subset D$ be a Misiurewicz
+wake.  Then for every $\lambda\in\M(f)\cap O$ and every $l$,
+\[
+\modulus\bigl(A^l(\lambda)\setminus A^{l+1}(\lambda)\bigr)\ >\ Bl,
+\]
+where $B>0$ depends only on $O$ and on $\modulus(f)$ (p.~191).  The source states a second
+inequality of the same type, $\modulus(A^l(\lambda)\setminus H^l(\lambda))>Bl$, with a set $H^l(\lambda)$ whose symbol the OCR
+renders imperfectly.  \emph{Status:} proved in the paper; it is the main geometric result of its Section~4.
+\end{theorem}
+
+\begin{theorem}[Theorem C: bounded shape of Mandelbrot copies]
+\label{thm:ast-C}
+For every Misiurewicz wake $O$, the maximal Mandelbrot copies contained in $O$ have bounded shape.  In particular all maximal
+real Mandelbrot copies, except the doubling one, have bounded shape.  Moreover a real copy $M'$ has $(K,\epsilon)$-bounded shape
+with $K\to1$ and $\epsilon\to\infty$ as the essential period $p_e(M')\to\infty$ (p.~175).
+\emph{Status:} proved in the paper.
+\end{theorem}
+
+\begin{theorem}[Theorem B, joint with Martens and Nowicki]
+\label{thm:ast-B}
+Lebesgue almost every real quadratic map $P_c(z)=z^2+c$ which is non-hyperbolic and at most finitely renormalizable has a
+finite absolutely continuous invariant measure (p.~174).  \emph{Status:} proved in the paper
+from Theorem~\ref{thm:ast-A} (through Theorem~5.1 below), the Martens--Nowicki summability criterion (Section~\ref{sec:martens-nowicki}), and Lyubich's exponential
+decay of scaling factors in the quasi-quadratic case \cite{LyubichQuasiQuadratic}.
+\end{theorem}
+
+\begin{corollary}[SBR measures for almost every real parameter]
+\label{cor:ast-sbr}
+For almost all $c\in[-2,1/4]$ the quadratic polynomial $P_c$ has a unique SBR measure on its invariant interval $I_c$
+(p.~174).  \emph{Status:} derived in the paper from Theorem~\ref{thm:ast-B}.  The
+the uniqueness of the SBR measure is the Martens--Nowicki Theorem~\ref{thm:mn-A}, stated jointly with Lyubich (Section~\ref{sec:martens-nowicki}).
+\end{corollary}
+
+\begin{theorem}[Theorem 5.1: real non-renormalizable parameters]
+\label{thm:ast-5-1}
+Let $\mathcal M_{\mathbb R}\subset[-2,-3/4)$ be the non-renormalizable real parameters, and let $\mathcal M_C\subset\mathcal M_{\mathbb R}$
+be those whose principal nest contains only finitely many nontrivial central cascades.  Then $\mathcal M_{\mathbb R}$ has positive
+Lebesgue measure, and $\mathcal M_C$ has full measure in $\mathcal M_{\mathbb R}$ (p.~196).
+\emph{Status:} proved in the paper; the positive-measure part is known from Benedicks--Carleson and Jakobson, and the full-measure
+part is new in the source.
+\end{theorem}
+
+\begin{proposition}[Local connectivity on fine families]
+\label{prop:ast-fine}
+Let $\mathcal C$ be a fine family of Mandelbrot copies, and let $\mathcal E_{\mathcal C}$ be the set of infinitely renormalizable
+parameters whose combinatorics $(M_0,M_1,\dots)$ satisfy $M_n\in\mathcal C$.  Then $\M$ is locally connected at every point of
+$\mathcal E_{\mathcal C}$, and $\mathcal E_{\mathcal C}$ has zero Lebesgue measure (pp.~198--199).
+\emph{Status:} proved in the paper, conditional on the fineness of $\mathcal C$.  The topological step of the proof (nested copies with diameters tending to zero meet in one point) is formalized as \leanref{Mlc/Literature/NestedCopies.lean}{exists_unique_mem_iInter_of_antitone}; bounded shape and fineness are not formalized.
+\end{proposition}
+
+\paragraph{Proof strategy (from the source).}
+Holomorphic motions and transverse quasiconformality transfer the dynamical puzzle geometry to parameter space.  The initial
+parapuzzle tiling is built in Misiurewicz wakes from critical-value itineraries (pp.~185--186).  Each tile is renormalized
+inductively to give the principal parapuzzle nest (p.~191).  Parameter annuli are compared with dynamical annuli by uniformly
+quasiconformal pseudo-conjugacies, and linear modulus growth gives Theorem~\ref{thm:ast-A}.  For the real line, the central
+cascades are estimated, and Borel--Cantelli together with the Martens--Nowicki criterion gives Theorem~\ref{thm:ast-B}.
+
+\paragraph{External inputs.}
+Lyubich, \emph{Dynamics of quadratic polynomials I--II} (Acta Math.\ 178 (1997)), quoted for a modulus estimate in
+Section~4 and for the essential period (\cite{LyubichDynamics}).  Lyubich, \emph{Combinatorics, geometry and attractors of quasi-quadratic maps}
+(Ann.\ of Math.\ 140 (1994)) \cite{LyubichQuasiQuadratic}.  Martens and Nowicki, \emph{Invariant measures for Lebesgue typical
+quadratic maps}, in the same Asterisque volume \cite{MartensNowicki}.  Douady--Hubbard, \emph{On the dynamics of polynomial-like maps}
+(1985) \cite{DHPolynomialLike}.  Douady's ICM report \emph{Chirurgie sur les applications holomorphes} (1986) \cite{DouadyICM}, for the
+winding-number fact used in Section~3.  Benedicks--Carleson (Ann.\ of Math.\ 122 (1985)) \cite{BenedicksCarleson} and Jakobson
+(positive measure of real parameters; cited in the source as Jacobson [J]).  Holomorphic motions and quasiconformal extension:
+Slodkowski, Man\'e--Sad--Sullivan, Sullivan--Thurston, and Bers--Royden, as cited in the source.
+
+\paragraph{MLC relevance.}
+The paper proves local connectivity of $\M$ only at points of $\mathcal E_{\mathcal C}$ for a fine family $\mathcal C$ of
+Mandelbrot copies (Proposition~\ref{prop:ast-fine}).  It does not prove MLC.  The author conjectures that the family of real maximal
+copies is fine, which would give bounded shape for all real copies.  Theorem~\ref{thm:ast-C} gives bounded shape for the maximal real copies other than the doubling one, but fineness is only conjectured.  He remarks that
+fineness of the full family of complex maximal copies would imply MLC, and says that he is not sure whether this holds (p.~199).  Julia-set local connectivity enters only as cited background.
+
+\section{The Martens--Nowicki criterion}
+\label{sec:martens-nowicki}
+
+\paragraph{Identity.}
+M.~Martens and T.~Nowicki, \emph{Invariant measures for typical quadratic maps}, arXiv:math/9606220, Asterisque 261
+(2000), 239--252 \cite{MartensNowicki}.  The title and authors are confirmed by the metadata and by
+\texttt{refs/arxiv-math-9606220/main.tex}, lines 15--31; the journal pages are those listed by NUMDAM, since the
+source files do not give them.
+
+\paragraph{Definitions.}
+\begin{itemize}
+\item \emph{$S$-unimodal maps.}  A map $f\colon[-1,1]\to[-1,1]$ is $S$-unimodal with critical exponent $\alpha$ if it is
+$C^3$, $f(\pm1)=-1$, $Df>0$ on $x<0$, $Df<0$ on $x>0$, $Df(0)=0$, $Sf<0$, and near $0$ it is $x\mapsto|x|^\alpha$ up to a
+differentiable change of coordinates, with $\alpha>1$ (\texttt{main.tex}, lines 838--849).  The quadratic family is
+$q_t(x)=-2tx^2+2t-1$ (lines 67--72).
+\item \emph{Nice points and first returns.}  $\mathcal N=\{x:\ f^i(x)\notin(-|x|,|x|)\text{ for all }i\ge0\}$ (lines 253--258).
+For $x\in\mathcal N$ put $U_x=(-|x|,|x|)$; the points of $U_x$ that return to $U_x$ form $D_x$, and the first-return map is
+$R_x\colon D_x\to U_x$ (lines 260--264).  The central component $V_x\subset D_x$ contains $0$, and $\psi(x)=\partial V_x\cap(0,1)$
+(lines 286--305).
+\item \emph{Scaling factors.}  Choose $u_1\in\mathcal N$, put $u_n=\psi(u_{n-1})$ and $U_n=(-u_n,u_n)$; then $U_{n+1}$ is the
+central component of $D_n$ (lines 306--317).  The scaling factor of level $n$ is $\sigma_n=u_{n+1}/u_n$ (lines 319--328).
+\end{itemize}
+
+\paragraph{Results.}
+
+\begin{theorem}[Martens--Nowicki, Theorem B]
+\label{thm:mn-B}
+If an $S$-unimodal map with critical exponent $\alpha>1$ has summable scaling factors,
+\[
+\sum_{n\ge1}\sigma_n^{1/\alpha}\ <\ \infty,
+\]
+then it has an absolutely continuous invariant probability measure (\texttt{main.tex}, lines 191--199).  \emph{Status:}
+proved in the paper, using the Nowicki--van Strien summability criterion \cite{NowickiVanStrien} (lines 633--645).
+\end{theorem}
+
+\begin{corollary}[Martens--Nowicki, Corollary]
+\label{cor:mn-finite}
+A quadratic map with only finitely many central returns has an absolutely continuous invariant probability measure
+(\texttt{main.tex}, lines 201--204).  \emph{Status:} derived from Theorem~\ref{thm:mn-B} together with a renormalization
+input that the paper cites.
+\end{corollary}
+
+\begin{theorem}[Martens--Nowicki, Theorem A, joint with Lyubich]
+\label{thm:mn-A}
+A typical quadratic map has a unique SBR measure.  More precisely, for parameters in $\mathcal P$ the support of the SBR
+measure is the periodic attractor; for parameters in $\mathcal R$ it is a Cantor set; for parameters in $\mathcal M$ it is
+absolutely continuous and supported on the orbit of a periodic interval; and $\mathcal P\cup\mathcal R\cup\mathcal M$ has
+full Lebesgue measure (\texttt{main.tex}, lines 121--145).  \emph{Status:} stated in the paper as joint with Lyubich.  The
+paper derives it from Theorem~\ref{thm:mn-B} and from Lyubich's result that for almost every parameter in $\mathcal I$ the
+map has only finitely many central returns (lines 215--223).
+\end{theorem}
+
+\paragraph{Proof strategy (from the source).}
+\begin{itemize}
+\item Proposition~3.1: small scaling factors give derivative growth along the critical orbit (\texttt{main.tex}, lines 386--401).
+\item The Nowicki--van Strien summability criterion turns this growth into an absolutely continuous invariant measure
+(lines 633--645).
+\item A Teleman-type decomposition of the critical orbit splits the derivative sum; the outside pieces are estimated
+exponentially by Proposition~4.1 (cited from Guckenheimer and Ma\~n\'e) and the return pieces by Proposition~3.1 (lines 661--724).
+\item Lemma~4.2 shows that distinct decompositions cannot have the same data, so the products decay geometrically and the sum
+converges (lines 725--763).
+\end{itemize}
+
+\paragraph{External inputs.}
+Nowicki--van Strien, \emph{Absolutely continuous measures under a summability condition}, Invent.\ Math.\ 93 (1988)
+\cite{NowickiVanStrien}; Martens, \emph{Interval dynamics} (thesis, 1990), for distortion (\texttt{main.tex}, lines 179--181);
+Lyubich, \emph{Combinatorics, geometry and attractors of quasi-quadratic maps} \cite{LyubichQuasiQuadratic}, for the exponential
+decay of scaling factors (lines 181--187); Lyubich--Milnor, \emph{The Fibonacci unimodal map}, J.\ Amer.\ Math.\ Soc.\ 6 (1993),
+425--457 (lines 181--187); Guckenheimer and Ma\~n\'e, for Proposition~4.1; and Lyubich's parapuzzle preprint, cited as [L4] in the
+paper's bibliography (\texttt{Dynamics of Quadratic Polynomials, III: Parapuzzles}, Stony Brook preprint).
+
+\paragraph{Relation to Lyubich's Theorem B.}
+Lyubich's Astérisque paper uses the criterion in the following form: together with the exponential decay of scaling factors
+in the quasi-quadratic case, the criterion gives an absolutely continuous invariant measure once the principal nest is eventually
+free from central cascades (Section~\ref{sec:lyubich-ast261}).  Theorem~\ref{thm:ast-5-1} supplies this condition for a set of full
+measure among the non-renormalizable real parameters.  The bibliography entry [L4] of the Martens--Nowicki paper has the title of
+the parapuzzle paper of Part~III; we identify it with the Astérisque paper by this title series, which is our identification and
+not a statement of the source.
+
+\paragraph{Scope.}
+The paper does not claim that every non-hyperbolic quadratic map has an absolutely continuous invariant measure; it notes that
+for parameters in $\mathcal I$ large enough there are maps without one (\texttt{main.tex}, lines 213--216).  The uniqueness statement
+of Theorem~\ref{thm:mn-A} concerns typical parameters only.
+
+\section{Summary of this chapter}
+\label{sec:digests-iv-summary}
+
+\begin{table}[ht]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.2\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\textwidth}@{}}
+\textbf{Source} & \textbf{Result (label in this chapter)} & \textbf{Status in the source}\\
+\hline
+Kahn--Lyubich, quasi-additivity &
+Quasi-additivity law; law with separation; covering lemma (Theorems~\ref{thm:kl-qa-law}--\ref{thm:kl-covering}) &
+proved (the laws are unnumbered in the source)\\
+Kahn--Lyubich, unicritical &
+Local connectivity of Julia sets of at most finitely renormalizable unicritical polynomials (Theorem~\ref{thm:kl-unicritical-A}) &
+proved for every degree $d$; no statement about $\M$\\
+Lyubich, Asterisque 261 &
+Linear growth of parameter moduli (Theorem~\ref{thm:ast-A}); bounded shape of copies (Theorem~\ref{thm:ast-C}) &
+proved\\
+Lyubich, Asterisque 261 &
+$\M$ locally connected on $\mathcal E_{\mathcal C}$ for a fine family (Proposition~\ref{prop:ast-fine}) &
+proved, conditional on fineness\\
+\end{tabularx}
+\caption{Results digested in this chapter and their status in the sources.}
+\label{tab:digests-iv-summary}
+\end{table}
+
+\paragraph{Logical role.}
+The covering laws of Section~\ref{sec:kl-qa} are the analytic tools of the Kahn--Lyubich unicritical theorem (Section~\ref{sec:kl-unicritical}) and of the a priori bounds series of Chapter~\ref{ch:digests-apriori-limbs}.  In the parapuzzle paper, the parameter analogue of the same moduli growth gives local connectivity of $\M$ on fine families; the fineness hypothesis is the point where that paper's argument meets the open problem.
+
+\paragraph{Not covered here.}
+Martens and Nowicki's criterion for absolutely continuous invariant measures is cited, not digested.  Lyubich's 1994 Annals paper \cite{LyubichQuasiQuadratic} and the Acta papers \cite{LyubichDynamics} are cited, not digested in this chapter.  The Lean development formalizes only the topological step of Proposition~\ref{prop:ast-fine} (nested copies with shrinking diameters meet in one point, \leanref{Mlc/Literature/NestedCopies.lean}{subsingleton_iInter_of_diam_tendsto_zero}); the statements of this chapter otherwise have no Lean counterpart.

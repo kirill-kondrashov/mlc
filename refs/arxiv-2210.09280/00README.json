@@ -1,0 +1,14 @@
+{
+  "key": "dudko-lyubich-neutral-uniform-bounds",
+  "arxiv_id": "2210.09280",
+  "arxiv_version": "2",
+  "role": "renormalization",
+  "title": "Uniform a priori bounds for neutral renormalization",
+  "authors": [
+    "Dzmitry Dudko",
+    "Mikhail Lyubich"
+  ],
+  "metadata": "arxiv-2210.09280.xml",
+  "source_archive": "arxiv-2210.09280-source.tar.gz",
+  "main_tex": "arxiv-2210.09280/PseudoSiegelBounds.tex"
+}
