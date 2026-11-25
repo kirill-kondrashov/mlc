@@ -1,0 +1,215 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=22mm,headheight=15pt]{geometry}
+\usepackage[no-math]{fontspec}
+\setmainfont{Noto Serif}
+\setsansfont{Noto Sans}
+\setmonofont[Scale=0.82]{DejaVu Sans Mono}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\usepackage{amsmath,amssymb}
+\usepackage{array,booktabs,graphicx,xcolor}
+\usepackage{xurl}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\usepackage{bookmark}
+\usepackage{enumitem}
+\setlist{itemsep=3pt,topsep=4pt,leftmargin=*}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\setlength{\emergencystretch}{3em}
+
+\title{MLC proof progress and the virtual-Molecule roadmap}
+\author{Lean formalization status report}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Verified state}
+
+The repository contains a checked conditional reduction
+\[
+  \begin{aligned}
+  &\texttt{Problem43PseudoSiegelAPrioriBoundsData}\\
+  &\land\texttt{Problem44VirtualMoleculeData}\\
+  &\Longrightarrow
+  \texttt{LocallyConnectedSpace}(M).
+  \end{aligned}
+\]
+The checked proof uses only \texttt{propext}, \texttt{Quot.sound}, and
+\texttt{Classical.choice}. It contains no project \texttt{axiom},
+\texttt{sorry}, or \texttt{admit}.
+
+The currently proved foundation includes:
+
+\begin{itemize}
+  \item compactness and connectedness of the filled Julia set \(K_c\) for
+        \(c\in M\);
+  \item \(J_c\subseteq K_c\);
+  \item a generic theorem producing an inclusion-minimal compact connected
+        hull in a compact continuum;
+  \item phase-indexed finite critical-orbit windows and partially invariant
+        virtual hull data;
+  \item transfer of a virtual separation estimate to the parameter-side
+        separation estimate on connected nests;
+  \item compactness of \(M\), the inclusion \(M\subseteq
+        \overline{B(0,2)}\), and the residual outer-area envelope \(4\pi\).
+\end{itemize}
+
+The two remaining root obligations are genuine mathematical existence
+statements:
+
+\begin{enumerate}
+  \item pseudo-Siegel a priori realization for all remaining unbounded
+        satellite quadratic-like cases;
+  \item virtual-Molecule completion at every uncovered boundary parameter by
+        finite-return, connected virtual Julia hulls with a divergent a priori
+        separation budget.
+\end{enumerate}
+
+\section{Progress dashboard}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=\linewidth]{docs/mlc_progress_figure.pdf}
+  \caption{Commit history and route-planning priors. The upper-left curve is a
+  Lean formalization-debt proxy. Route probabilities and impact ranges are
+  explicitly planning estimates; they are not mathematical probabilities or
+  proved reductions.}
+  \label{fig:progress}
+\end{figure}
+
+The formalization-debt proxy is
+\[
+  D_{\mathrm{Lean}}
+  =
+  \frac{\text{number of open root obligations}}
+       {1+\text{achieved milestone weight}}.
+\]
+It is an audit gate rather than a measure of the Mandelbrot residual set.
+The commit hook rejects a proof-progress commit when this value does not
+strictly decrease.
+
+\section{Coverage-Uncertainty Profile}
+
+Let \(R_t\subseteq\partial M\) be the parameters without a verified
+local-connectivity certificate at stage \(t\). The area component is
+\[
+  A_t=\frac{\mu^*(R_t)}{4\pi}.
+\]
+At the present stage, \(A_t\leq1\) is unconditional and the actual value is
+unknown. The next verified numerical gate is a hundredfold improvement:
+\[
+  \mu^*(R_t)\leq \frac{4\pi}{100}=\frac{\pi}{25},
+  \qquad
+  A_t\leq 0.01.
+\]
+This requires a certified class partition or covering estimate. Finer
+numerical sampling is not a proof.
+
+Area alone cannot measure all progress. The report therefore uses the
+\emph{Coverage-Uncertainty Profile}
+\[
+  (A_t,C_t,K_t,B_t),
+\]
+where:
+
+\begin{itemize}
+  \item \(C_t\) is a weighted count of parameter classes outside the verified
+        coverage ledger;
+  \item \(K_t\) is a weighted complexity term for unresolved return depth and
+        relative period;
+  \item \(B_t\) is a weighted deficit for missing quantitative separation
+        budgets.
+\end{itemize}
+
+Each component is nonincreasing when a class certificate is retained. For a
+catalogued class \(C_i\), completion strictly decreases the class component
+by at least its assigned weight. This profile is entropy-inspired
+bookkeeping; it is not thermodynamic or information-theoretic entropy.
+
+\section{Route priors}
+
+The chart uses broad planning priors for four routes over a sustained
+multi-year effort:
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{0.44\linewidth}cc}
+\toprule
+Route & Expected residual reduction & Success prior \\
+\midrule
+Problem 4.3: remaining unbounded satellite pseudo-Siegel bounds &
+\(10\)--\(30\%\) & \(12\%\) \\
+Problem 4.4: virtual bounded-period satellite interpolation &
+\(24\)--\(46\%\) & \(20\%\) \\
+Problem 4.4: virtual near-neutral interpolation &
+\(18\)--\(42\%\) & \(12\%\) \\
+Unified phase-parameter transfer conditional on genuine geometry &
+\(38\)--\(72\%\) & \(45\%\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These ranges are not independent calibrated probabilities. Their purpose is
+to prioritize theorem acquisition and estimate which route can produce the
+largest measurable reduction. They must be revised after every proved class.
+
+\section{Mathematical frontier}
+
+\subsection{Combinatorial renormalization}
+
+Formalize primitive and satellite copies, relative periods, the finite
+chain \(M^{(0)}\supsetneq\cdots\supsetneq M^{(n)}\), \(1/2\)-decorations,
+bounded-period profiles, virtual bounded-type profiles, and virtual
+near-neutral profiles.
+
+\subsection{Dynamical and geometric data}
+
+Construct genuine small Julia sets, phase-indexed first-return domains,
+critical-orbit windows, branch degree, distortion, collars, partial
+invariance, and hulls inside \(J_c\). Prove the actual hull and return
+estimates rather than storing them as abstract fields.
+
+\subsection{Width and parameter transfer}
+
+Formalize conformal modulus, Gr\"otzsch, quasi-additivity, the Wave Lemma,
+and the Covering Lemma with all degree and topology-dependent thresholds.
+Then construct moving parameter puzzles, holomorphic motion, winding-number
+control, and a divergent parameter-side budget.
+
+\subsection{Coverage theorem}
+
+For the final candidate system \(A\), prove
+\[
+  \forall c\in M,\quad
+  c\in\operatorname{int}M
+  \;\lor\;
+  A.\mathrm{Eligible}(c)
+  \;\lor\;
+  \operatorname{Nonempty}
+  (\mathrm{VirtualMoleculeAPrioriControl}\ c).
+\]
+This is the first unconditional topological milestone. It still has to be
+assembled with the concrete Problem 4.3 realization before full MLC follows.
+
+\section{Completion criteria}
+
+The next accepted progress commits must establish, in order:
+
+\begin{enumerate}
+  \item a strict decrease of the formalization-debt proxy;
+  \item an explicit class predicate independent of local connectedness;
+  \item a concrete geometric witness for that class;
+  \item a proved parameter realization and separation budget;
+  \item a residual outer-measure update or another rigorous component of the
+        Coverage-Uncertainty Profile;
+  \item a strict graph, axiom, and build audit.
+\end{enumerate}
+
+The terminal commit must discharge both open root obligations and instantiate
+`RootInput` without an additional input argument.
+
+\end{document}

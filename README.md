@@ -2,6 +2,20 @@
 
 [Interactive dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
+The long-term research plan is recorded in the
+[roadmap](ROADMAP.md). The short mathematical status report is maintained as
+[`docs/mlc_progress.tex`](docs/mlc_progress.tex); run `make report-pdf` to build it.
+
+## Progress dashboard
+
+![MLC progress history and route planning chart](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/progress.svg)
+
+The upper-left curve tracks a reproducible Lean formalization-debt proxy by
+commit. The route chart records planning priors and expected residual-class
+reductions; it does not assert a theorem or a calibrated probability. The same
+high-resolution chart is available in the **Progress** tab of the interactive
+graph.
+
 This repository contains the active Lean reduction of Mandelbrot local
 connectedness to the two open problems identified by Dudko at the end of
 [arXiv:2512.24171 §4](https://arxiv.org/abs/2512.24171):
@@ -29,6 +43,7 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 | Return-budget arithmetic | [ReturnBudget.lean](Mlc/Research/ReturnBudget.lean) |
 | Connected parameter nests | [ParameterGeometry.lean](Mlc/Research/ParameterGeometry.lean) |
 | Candidate-system reduction | [Programme.lean](Mlc/Research/Programme.lean) |
+| Mandelbrot escape and compactness | [MandelbrotCompact.lean](Mlc/MandelbrotCompact.lean) |
 | Filled Julia compactness and connectedness | [FilledJuliaConnected.lean](Mlc/FilledJuliaConnected.lean) |
 | Minimal connected hulls | [ConnectedHull.lean](Mlc/Research/ConnectedHull.lean) |
 | Virtual Julia sets and a priori transfer | [VirtualMolecule.lean](Mlc/Research/VirtualMolecule.lean) |
@@ -39,8 +54,10 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 ```bash
 make build
 make check
+make install-hooks
 make graphs
 make serve
+make report-pdf
 ```
 
 The local graph is served at

@@ -62,10 +62,64 @@ VIRTUAL_MOLECULE_PROGRAMME = {
     "MLC.Research.VirtualPhaseParameter",
     "MLC.Research.VirtualPhaseParameter.parameterSeparationEstimate",
     "MLC.Research.VirtualMoleculeAPrioriControl",
+    "MLC.Quadratic.mandelbrot_subset_closedBall",
+    "MLC.Quadratic.isCompact_mandelbrot",
+    "MLC.Research.CandidateSystem.VirtualMoleculeResidual",
+    "MLC.Research.CandidateSystem.residualOuterArea",
+    "MLC.Research.CandidateSystem.residualOuterArea_le_four_pi",
     "MLC.Research.CandidateSystem.VirtualMoleculeCompletion",
     "MLC.Research.CandidateSystem.withVirtualMolecule_realization",
     "MLC.Research.CandidateSystem.withVirtualMolecule_coverage_iff_completion",
 }
+PROGRESS_BASE_COMMIT = "de8b11c"
+PROGRESS_MILESTONES = (
+    ("Conditional root", "MLC.mlc_conjecture", 1),
+    ("Harmonic budget", "UnboundedBudget", 1),
+    ("Connected parameter nest", "ConnectedNest", 1),
+    ("Virtual-Molecule bridge", "VirtualMoleculeAPrioriControl", 2),
+    ("Filled-Julia topology", "filled_julia_set_connected_proved", 2),
+    ("Minimal connected hull", "exists_minimal_connected_hull", 2),
+    ("Mandelbrot compactness", "isCompact_mandelbrot", 1),
+    ("Residual-area envelope", "residualOuterArea_le_four_pi", 1),
+)
+PROGRESS_ROUTES = (
+    {
+        "id": "1",
+        "name": "Problem 4.3: unbounded satellite pseudo-Siegel control",
+        "impact": 0.20,
+        "range": (0.10, 0.30),
+        "probability": 0.12,
+        "color": "#38bdf8",
+        "next": "Build the remaining pseudo-Siegel a priori realization.",
+    },
+    {
+        "id": "2",
+        "name": "Problem 4.4: virtual bounded-period satellite interpolation",
+        "impact": 0.34,
+        "range": (0.24, 0.46),
+        "probability": 0.20,
+        "color": "#a78bfa",
+        "next": "Prove collars, hulls in J, and a divergent transfer budget.",
+    },
+    {
+        "id": "3",
+        "name": "Problem 4.4: virtual near-neutral interpolation",
+        "impact": 0.29,
+        "range": (0.18, 0.42),
+        "probability": 0.12,
+        "color": "#f59e0b",
+        "next": "Formalize finite-return regularization and near-neutral charts.",
+    },
+    {
+        "id": "4",
+        "name": "Unified phase-parameter transfer, conditional on genuine geometry",
+        "impact": 0.58,
+        "range": (0.38, 0.72),
+        "probability": 0.45,
+        "color": "#22c55e",
+        "next": "Build a global winding/holonomy theorem for all residual classes.",
+    },
+)
 
 
 
@@ -1579,6 +1633,25 @@ def graph_page_html_v2(title: str) -> str:
       border-radius: 4px;
       padding: 0 4px;
     }}
+    .progress-panel {{
+      display: none;
+      padding: 18px;
+      overflow: auto;
+      min-height: 0;
+      background: var(--canvas-bg);
+    }}
+    .progress-panel img {{
+      display: block;
+      width: 100%;
+      height: auto;
+      min-width: 1200px;
+      background: #07111f;
+    }}
+    .progress-note {{
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }}
   </style>
 </head>
 <body>
@@ -1598,15 +1671,24 @@ def graph_page_html_v2(title: str) -> str:
     </label>
     <button id="fitBtn" type="button">Fit Camera</button>
     <button id="modeBtn" type="button">Mode: 2D</button>
+    <button id="progressBtn" type="button">View: Progress</button>
     <button id="themeBtn" type="button">Theme</button>
     <div id="legend" class="legend"></div>
   </div>
-  <div class="content">
+  <div class="content" id="graphPanel">
     <div class="view-help">
       <h2 id="viewHelpTitle">View guide</h2>
       <div id="viewHelpBody"></div>
     </div>
     <div id="scene"><canvas id="canvas3d"></canvas><canvas id="canvas2d"></canvas><div id="hover"></div></div>
+  </div>
+  <div class="progress-panel" id="progressPanel">
+    <img src="progress.svg" alt="MLC progress history and research-route planning chart">
+    <p class="progress-note">
+      The horizontal commit history tracks the Lean formalization-debt proxy.
+      The route chart uses explicit planning priors and does not represent
+      proved measure reductions.
+    </p>
   </div>
 </div>
 <script src="graph.js"></script>
@@ -1618,16 +1700,29 @@ def graph_page_html_v2(title: str) -> str:
 def graph_page_js() -> str:
     return """(function () {
   const sceneEl = document.getElementById("scene");
+  const graphPanelEl = document.getElementById("graphPanel");
+  const progressPanelEl = document.getElementById("progressPanel");
   const summaryEl = document.getElementById("summary");
   const legendEl = document.getElementById("legend");
   const searchEl = document.getElementById("search");
   const view2dSel = document.getElementById("view2dSel");
   const fitBtn = document.getElementById("fitBtn");
   const modeBtn = document.getElementById("modeBtn");
+  const progressBtn = document.getElementById("progressBtn");
   const themeBtn = document.getElementById("themeBtn");
   const hoverEl = document.getElementById("hover");
   const viewHelpTitleEl = document.getElementById("viewHelpTitle");
   const viewHelpBodyEl = document.getElementById("viewHelpBody");
+  let progressVisible = false;
+
+  function setProgressVisible(next) {
+    progressVisible = Boolean(next);
+    if (graphPanelEl) graphPanelEl.style.display = progressVisible ? "none" : "grid";
+    if (progressPanelEl) progressPanelEl.style.display = progressVisible ? "block" : "none";
+    if (progressBtn) progressBtn.textContent = progressVisible ? "View: Graph" : "View: Progress";
+    if (!progressVisible) setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
+  }
+
   const THEME_KEY = "mlc_graph_theme";
   const MODE_KEY = "mlc_graph_mode_v2";
   const VIEW2D_KEY = "mlc_graph_2d_view_v2";
@@ -3324,6 +3419,10 @@ def graph_page_js() -> str:
       });
       modeBtn.textContent = modeButtonText();
     }
+    if (progressBtn) {
+      progressBtn.addEventListener("click", () => setProgressVisible(!progressVisible));
+      progressBtn.textContent = "View: Progress";
+    }
     if (themeBtn) {
       themeBtn.addEventListener("click", () => {
         const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
@@ -3702,6 +3801,399 @@ def write_graph(output_root: Path, slug: str, title: str, payload: dict[str, obj
     return f"{slug}/index.html"
 
 
+def progress_metrics_from_text(lean_text: str) -> dict[str, object]:
+    achieved = [
+        {"label": label, "weight": weight}
+        for label, symbol, weight in PROGRESS_MILESTONES
+        if symbol in lean_text
+    ]
+    achieved_weight = sum(item["weight"] for item in achieved)
+    open_frontier = 2 if (
+        "Problem43PseudoSiegelAPrioriBoundsData" in lean_text
+        and "Problem44VirtualMoleculeData" in lean_text
+    ) else 0
+    debt = 100.0 * open_frontier / max(1.0, 1.0 + achieved_weight)
+    return {
+        "debt_percent": debt,
+        "open_frontier": open_frontier,
+        "milestone_weight": achieved_weight,
+        "milestones": [item["label"] for item in achieved],
+    }
+
+
+def progress_metrics_from_ref(repo_root: Path, ref: str) -> dict[str, object]:
+    proc = subprocess.run(
+        ["git", "grep", "-h", "", ref, "--", "Mlc/**/*.lean", "Mlc/*.lean"],
+        cwd=repo_root,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if proc.returncode not in (0, 1):
+        raise RuntimeError(f"Cannot read Lean progress from git ref {ref}")
+    return progress_metrics_from_text(proc.stdout)
+
+
+def progress_metrics_from_worktree(repo_root: Path) -> dict[str, object]:
+    text = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted((repo_root / "Mlc").rglob("*.lean"))
+    )
+    return progress_metrics_from_text(text)
+
+
+def staged_progress_metrics(repo_root: Path) -> dict[str, object]:
+    proc = subprocess.run(
+        ["git", "write-tree"],
+        cwd=repo_root,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError("Cannot inspect the staged tree")
+    return progress_metrics_from_ref(repo_root, proc.stdout.strip())
+
+
+def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
+    base = PROGRESS_BASE_COMMIT
+    try:
+        subprocess.run(
+            ["git", "cat-file", "-e", f"{base}^{{commit}}"],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+        )
+        log = subprocess.run(
+            [
+                "git",
+                "rev-list",
+                "--reverse",
+                "--first-parent",
+                f"{base}^..HEAD",
+            ],
+            cwd=repo_root,
+            check=False,
+            text=True,
+            capture_output=True,
+        )
+    except subprocess.CalledProcessError:
+        log = subprocess.run(
+            ["git", "rev-list", "--reverse", "--first-parent", "-12", "HEAD"],
+            cwd=repo_root,
+            check=False,
+            text=True,
+            capture_output=True,
+        )
+    history: list[dict[str, object]] = []
+    for ref in [line for line in log.stdout.splitlines() if line]:
+        meta = subprocess.run(
+            ["git", "show", "-s", "--format=%h%x09%ct%x09%s", ref],
+            cwd=repo_root,
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout.strip()
+        short, timestamp, subject = meta.split("\t", 2)
+        history.append(
+            {
+                "sha": short,
+                "timestamp": int(timestamp),
+                "subject": subject,
+                **progress_metrics_from_ref(repo_root, ref),
+            }
+        )
+    if history:
+        working = progress_metrics_from_worktree(repo_root)
+        head = progress_metrics_from_ref(repo_root, "HEAD")
+        if abs(float(working["debt_percent"]) - float(head["debt_percent"])) > 1e-12:
+            history.append(
+                {
+                    "sha": "worktree",
+                    "timestamp": int(history[-1]["timestamp"]) + 1,
+                    "subject": "Uncommitted progress",
+                    **working,
+                }
+            )
+    return history
+
+
+def svg_escape(text: object) -> str:
+    return html.escape(str(text), quote=True)
+
+
+def progress_svg(repo_root: Path) -> str:
+    history = commit_progress_history(repo_root)
+    width, height = 1840, 1080
+    left, top, plot_w, plot_h = 110, 120, 940, 390
+    scatter_left, scatter_top, scatter_w, scatter_h = 1160, 120, 620, 390
+    table_x, table_y, table_w = 110, 620, 1670
+
+    def text(
+        x: float,
+        y: float,
+        body: object,
+        *,
+        size: int = 22,
+        color: str = "#dbe7ff",
+        anchor: str = "start",
+        weight: int = 400,
+    ) -> str:
+        return (
+            f'<text x="{x:.1f}" y="{y:.1f}" fill="{color}" '
+            f'font-size="{size}" font-weight="{weight}" text-anchor="{anchor}" '
+            f'font-family="IBM Plex Sans, Segoe UI, sans-serif">'
+            f"{svg_escape(body)}</text>"
+        )
+
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" role="img" '
+        f'aria-label="MLC progress history and route planning chart">',
+        '<rect width="100%" height="100%" fill="#07111f"/>',
+        text(55, 58, "MLC uncertainty and proof-progress dashboard", size=32, weight=700),
+        text(
+            1785,
+            58,
+            "Route values are planning priors, not theorems",
+            size=18,
+            color="#94a3b8",
+            anchor="end",
+        ),
+        text(left, 96, "Formalization frontier debt by commit", size=24, weight=600),
+        text(
+            left + plot_w,
+            96,
+            "Proof-progress commits require a strict decrease",
+            size=18,
+            color="#94a3b8",
+            anchor="end",
+        ),
+    ]
+
+    grid_color = "#23324b"
+    for pct in (0, 20, 40, 60, 80, 100):
+        y = top + plot_h - pct / 100.0 * plot_h
+        parts.append(
+            f'<line x1="{left}" y1="{y:.1f}" x2="{left + plot_w}" y2="{y:.1f}" '
+            f'stroke="{grid_color}" stroke-width="1"/>'
+        )
+        parts.append(
+            text(left - 16, y + 7, f"{pct}%", size=17, color="#94a3b8", anchor="end")
+        )
+
+    points = []
+    for i, entry in enumerate(history):
+        x = left if len(history) == 1 else left + i * plot_w / max(1, len(history) - 1)
+        debt = float(entry["debt_percent"])
+        y = top + plot_h - max(0.0, min(100.0, debt)) / 100.0 * plot_h
+        points.append((x, y, entry))
+    if len(points) >= 2:
+        polyline = " ".join(f"{x:.1f},{y:.1f}" for x, y, _ in points)
+        parts.append(
+            f'<polyline points="{polyline}" fill="none" stroke="#22d3ee" '
+            f'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+        )
+    for x, y, entry in points:
+        fill = "#f59e0b" if entry["sha"] == "worktree" else "#38bdf8"
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="8" fill="{fill}" '
+            f'stroke="#07111f" stroke-width="3"/>'
+        )
+        parts.append(
+            text(x, top + plot_h + 27, entry["sha"], size=16, color="#cbd5e1", anchor="middle")
+        )
+        parts.append(
+            text(
+                x,
+                y - 16,
+                f'{entry["debt_percent"]:.1f}%',
+                size=17,
+                color=fill,
+                anchor="middle",
+                weight=600,
+            )
+        )
+
+    history_y = 568
+    parts.append(text(table_x, history_y - 12, "Commit history", size=20, weight=600))
+    slot_w = plot_w / max(1, len(points))
+    max_subject_chars = max(10, min(38, int(slot_w / 8)))
+    for i, (_, _, entry) in enumerate(points):
+        x = left + i * slot_w
+        label = str(entry["subject"])
+        if len(label) > max_subject_chars:
+            label = label[: max_subject_chars - 1] + "…"
+        parts.append(text(
+            x,
+            history_y + 16,
+            f'{entry["sha"]}: {label}',
+            size=14,
+            color="#94a3b8",
+        ))
+
+    parts.append(text(scatter_left, 96, "Next-route planning priors", size=24, weight=600))
+    parts.append(
+        text(
+            scatter_left + scatter_w,
+            96,
+            "Expected residual reduction vs. closure chance",
+            size=18,
+            color="#94a3b8",
+            anchor="end",
+        )
+    )
+    for pct in (0, 20, 40, 60, 80, 100):
+        x = scatter_left + pct / 100.0 * scatter_w
+        parts.append(
+            f'<line x1="{x:.1f}" y1="{scatter_top}" x2="{x:.1f}" '
+            f'y2="{scatter_top + scatter_h}" stroke="{grid_color}" stroke-width="1"/>'
+        )
+        parts.append(
+            text(
+                x,
+                scatter_top + scatter_h + 26,
+                f"{pct}%",
+                size=15,
+                color="#94a3b8",
+                anchor="middle",
+            )
+        )
+    for pct in (0, 10, 20, 30, 40, 50, 60):
+        y = scatter_top + scatter_h - pct / 60.0 * scatter_h
+        parts.append(
+            f'<line x1="{scatter_left}" y1="{y:.1f}" '
+            f'x2="{scatter_left + scatter_w}" y2="{y:.1f}" '
+            f'stroke="{grid_color}" stroke-width="1"/>'
+        )
+        parts.append(
+            text(scatter_left - 14, y + 6, f"{pct}%", size=15, color="#94a3b8", anchor="end")
+        )
+    parts.append(
+        text(
+            scatter_left + scatter_w / 2,
+            scatter_top + scatter_h + 58,
+            "Expected reduction of the current residual set",
+            size=17,
+            color="#cbd5e1",
+            anchor="middle",
+        )
+    )
+    parts.append(
+        f'<text x="{scatter_left - 72}" y="{scatter_top + scatter_h / 2:.1f}" '
+        f'fill="#cbd5e1" font-size="17" text-anchor="middle" '
+        f'font-family="IBM Plex Sans, Segoe UI, sans-serif" '
+        f'transform="rotate(-90 {scatter_left - 72} '
+        f'{scatter_top + scatter_h / 2:.1f})">Planning success probability</text>'
+    )
+    for route in PROGRESS_ROUTES:
+        x0 = scatter_left + route["range"][0] / 1.00 * scatter_w
+        x1 = scatter_left + route["range"][1] / 1.00 * scatter_w
+        x = scatter_left + route["impact"] / 1.00 * scatter_w
+        y = scatter_top + scatter_h - route["probability"] / 0.60 * scatter_h
+        parts.append(
+            f'<line x1="{x0:.1f}" y1="{y:.1f}" x2="{x1:.1f}" y2="{y:.1f}" '
+            f'stroke="{route["color"]}" stroke-width="3"/>'
+        )
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{route["color"]}" '
+            f'stroke="#f8fafc" stroke-width="2"/>'
+        )
+        parts.append(text(x, y + 5, route["id"], size=16, color="#07111f", anchor="middle", weight=800))
+    target_x = scatter_left + 0.99 * scatter_w
+    parts.append(
+        f'<line x1="{target_x:.1f}" y1="{scatter_top}" x2="{target_x:.1f}" '
+        f'y2="{scatter_top + scatter_h}" stroke="#f43f5e" stroke-width="3" '
+        f'stroke-dasharray="9 7"/>'
+    )
+    parts.append(text(
+        target_x - 8,
+        scatter_top + 18,
+        "100× q target",
+        size=16,
+        color="#fb7185",
+        anchor="end",
+        weight=700,
+    ))
+
+    parts.append(text(table_x, table_y, "Route priorities and proof obligations", size=25, weight=600))
+    row_h = 72
+    header_y = table_y + 48
+    parts.append(
+        f'<rect x="{table_x}" y="{header_y}" width="{table_w}" height="44" '
+        f'rx="6" fill="#111c30"/>'
+    )
+    parts.append(text(table_x + 24, header_y + 29, "Route", size=18, weight=600))
+    parts.append(text(table_x + 650, header_y + 29, "Expected q reduction", size=18, weight=600))
+    parts.append(text(table_x + 900, header_y + 29, "Success prior", size=18, weight=600))
+    parts.append(text(table_x + 1080, header_y + 29, "Next theorem", size=18, weight=600))
+    for i, route in enumerate(PROGRESS_ROUTES):
+        y = header_y + 48 + i * row_h
+        fill = "#0c1728" if i % 2 == 0 else "#091323"
+        parts.append(
+            f'<rect x="{table_x}" y="{y}" width="{table_w}" height="{row_h - 4}" '
+            f'fill="{fill}"/>'
+        )
+        parts.append(
+            text(table_x + 24, y + 29, f'{route["id"]}. {route["name"]}', size=17)
+        )
+        parts.append(
+            text(
+                table_x + 650,
+                y + 29,
+                f'{route["range"][0] * 100:.0f}–{route["range"][1] * 100:.0f}%',
+                size=18,
+                color=route["color"],
+                weight=600,
+            )
+        )
+        parts.append(
+            text(
+                table_x + 900,
+                y + 29,
+                f'{route["probability"] * 100:.0f}%',
+                size=18,
+                color=route["color"],
+                weight=600,
+            )
+        )
+        parts.append(
+            text(table_x + 1080, y + 29, route["next"], size=16, color="#cbd5e1")
+        )
+        parts.append(
+            text(
+                table_x + 24,
+                y + 54,
+                "Planning prior; revise after each proved class.",
+                size=14,
+                color="#64748b",
+            )
+        )
+
+    parts.append(
+        text(
+            55,
+            height - 48,
+            "Formalization debt = 2 open root obligations / "
+            "(1 + achieved milestone weight). It gates proof-progress commits.",
+            size=17,
+            color="#94a3b8",
+        )
+    )
+    parts.append(
+        text(
+            width - 55,
+            height - 48,
+            "The residual area q is unknown; 1.0 is only the disk-radius envelope.",
+            size=17,
+            color="#94a3b8",
+            anchor="end",
+        )
+    )
+    parts.append("</svg>")
+    return "\n".join(parts)
+
+
 def validate_research_graph(
     payload: dict[str, object], declarations: dict[str, Decl]
 ) -> None:
@@ -3848,6 +4340,10 @@ def _generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None
 
     (output_root / "index.html").write_text(
         index_html(links),
+        encoding="utf-8",
+    )
+    (output_root / "mlc_conjecture" / "progress.svg").write_text(
+        progress_svg(repo_root),
         encoding="utf-8",
     )
 

@@ -7,3 +7,4 @@ output*.txt
 *.log
 *.out
 *.aux
+/docs/*.pdf

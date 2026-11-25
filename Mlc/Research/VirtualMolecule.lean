@@ -1,7 +1,9 @@
 import Mlc.Research.Programme
 import Mlc.Research.ConnectedHull
 import Mlc.FilledJuliaConnected
+import Mlc.MandelbrotCompact
 import Mathlib.Topology.Connected.TotallyDisconnected
+import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 
 /-!
 # The virtual-Molecule programme
@@ -28,7 +30,7 @@ programme must construct.
 
 namespace MLC.Research
 
-open Set Filter Topology Metric
+open Set Filter Topology Metric MeasureTheory
 
 noncomputable section
 
@@ -190,12 +192,49 @@ theorem CandidateSystem.withVirtualMolecule_realization
   · rcases hVirtual with ⟨V, rfl⟩
     exact ⟨V.parameterRealization⟩
 
-/-- Completion of the virtual-Molecule branch: every boundary parameter is
-    already covered by Problem 4.3 or admits a virtual-Julia a priori control. -/
-def CandidateSystem.VirtualMoleculeCompletion (A : CandidateSystem) : Prop :=
-  ∀ c ∈ MLC.Quadratic.MandelbrotSet,
-    c ∈ interior MLC.Quadratic.MandelbrotSet ∨
-      A.Eligible c ∨ Nonempty (VirtualMoleculeAPrioriControl c)
+/-- Parameters still outside every proved or virtual-Molecule class. -/
+def CandidateSystem.VirtualMoleculeResidual (A : CandidateSystem) : Set ℂ :=
+  {c | c ∈ MLC.Quadratic.MandelbrotSet ∧
+    c ∉ interior MLC.Quadratic.MandelbrotSet ∧
+    ¬ A.Eligible c ∧
+    ¬ Nonempty (VirtualMoleculeAPrioriControl c)}
+
+/-- Outer area of the unresolved virtual-Molecule boundary class. -/
+noncomputable def CandidateSystem.residualOuterArea
+    (A : CandidateSystem) : ENNReal :=
+  volume A.VirtualMoleculeResidual
+
+theorem CandidateSystem.residualSubsetClosedBall (A : CandidateSystem) :
+    A.VirtualMoleculeResidual ⊆ Metric.closedBall (0 : ℂ) 2 := by
+  intro c hc
+  exact MLC.Quadratic.mandelbrot_subset_closedBall hc.1
+
+theorem CandidateSystem.residualOuterArea_le_four_pi (A : CandidateSystem) :
+    A.residualOuterArea ≤
+      ENNReal.ofReal (2 : ℝ) ^ 2 * (NNReal.pi : ENNReal) := by
+  have hmono :
+      volume A.VirtualMoleculeResidual ≤
+        volume (Metric.closedBall (0 : ℂ) 2) :=
+    MeasureTheory.measure_mono (A.residualSubsetClosedBall)
+  rw [Complex.volume_closedBall] at hmono
+  simpa [CandidateSystem.residualOuterArea, ENNReal.ofReal_mul,
+    ENNReal.ofReal_pow] using hmono
+
+structure CandidateSystem.VirtualMoleculeCompletion
+    (A : CandidateSystem) : Prop where
+  /-- Completion of the virtual-Molecule branch: every boundary parameter is
+      already covered by Problem 4.3 or admits a virtual-Julia a priori
+      control. -/
+  classes :
+    ∀ c ∈ MLC.Quadratic.MandelbrotSet,
+      c ∈ interior MLC.Quadratic.MandelbrotSet ∨
+        A.Eligible c ∨ Nonempty (VirtualMoleculeAPrioriControl c)
+  mandelbrot_compact : IsCompact MLC.Quadratic.MandelbrotSet :=
+    MLC.Quadratic.isCompact_mandelbrot
+  residual_area_bound :
+    A.residualOuterArea ≤
+      ENNReal.ofReal (2 : ℝ) ^ 2 * (NNReal.pi : ENNReal) :=
+    A.residualOuterArea_le_four_pi
 
 /-- The completion above is exactly global coverage of the extended
     candidate system. -/
@@ -203,7 +242,12 @@ theorem CandidateSystem.withVirtualMolecule_coverage_iff_completion
     (A : CandidateSystem) :
     A.withVirtualMolecule.Coverage ↔ A.VirtualMoleculeCompletion := by
   constructor
-  · intro hCoverage c hc
+  · intro hCoverage
+    refine
+      { classes := ?_
+        mandelbrot_compact := MLC.Quadratic.isCompact_mandelbrot
+        residual_area_bound := A.residualOuterArea_le_four_pi }
+    intro c hc
     rcases hCoverage c hc with hInterior | hEligible
     · exact Or.inl hInterior
     rcases hEligible with ⟨b, hAdmissible, hControl⟩
@@ -212,7 +256,7 @@ theorem CandidateSystem.withVirtualMolecule_coverage_iff_completion
     · rcases hVirtual with ⟨V, -⟩
       exact Or.inr (Or.inr ⟨V⟩)
   · intro hCompletion c hc
-    rcases hCompletion c hc with hInterior | hResidual
+    rcases hCompletion.classes c hc with hInterior | hResidual
     · exact Or.inl hInterior
     right
     rcases hResidual with hBase | hVirtual
