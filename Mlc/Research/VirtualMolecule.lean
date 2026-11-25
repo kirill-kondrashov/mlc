@@ -1,4 +1,6 @@
 import Mlc.Research.Programme
+import Mlc.Research.ConnectedHull
+import Mlc.FilledJuliaConnected
 import Mathlib.Topology.Connected.TotallyDisconnected
 
 /-!
@@ -33,22 +35,29 @@ noncomputable section
 /-- First-return depths associated with the levels of a virtual-Molecule
     tower. -/
 structure FirstReturnSchedule where
-  depth : ℕ → ℕ
-  positive : ∀ n, 0 < depth n
-  strictly_increasing : StrictMono depth
+  start : ℕ → ℕ
+  stop : ℕ → ℕ
+  start_le_stop : ∀ n, start n ≤ stop n
+  disjoint_successive :
+    ∀ n, stop n < start (n + 1)
 
-/-- The critical-orbit segment ending at the prescribed first return. -/
-def CriticalOrbitPrefix
+/-- The critical-orbit window ending at the prescribed first return. -/
+def CriticalOrbitWindow
     (c : ℂ) (returns : FirstReturnSchedule) (n : ℕ) : Set ℂ :=
-  {z | ∃ k ≤ returns.depth n, z = MLC.Quadratic.orbit c 0 k}
+  MLC.Quadratic.orbit c 0 '' Set.Icc (returns.start n) (returns.stop n)
 
-/-- Partially invariant virtual Julia sets for the quadratic polynomial
-    `f_c`.  `smallJulia n` is the Cantor source, while `carrier n` is the
-    connected hull retained inside `J_c`. -/
+def FirstReturnSchedule.origin
+    (returns : FirstReturnSchedule) (c : ℂ) (n : ℕ) : ℂ :=
+  MLC.Quadratic.orbit c 0 (returns.start n)
+
+/-- Partially invariant virtual Julia data for the quadratic polynomial
+    `f_c`. The carrier is not assumed: it is chosen as an inclusion-minimal
+    continuum hull inside `J_c` of the Cantor small Julia set together with
+    the finite critical-return window. -/
 structure VirtualJuliaNest (c : ℂ) where
   smallJulia : ℕ → Set ℂ
-  carrier : ℕ → Set ℂ
   returns : FirstReturnSchedule
+  parameter_mem : c ∈ MLC.Quadratic.MandelbrotSet
   smallJulia_nonempty : ∀ n, (smallJulia n).Nonempty
   smallJulia_compact : ∀ n, IsCompact (smallJulia n)
   smallJulia_totallyDisconnected :
@@ -56,16 +65,39 @@ structure VirtualJuliaNest (c : ℂ) where
   smallJulia_no_isolated :
     ∀ n x, x ∈ smallJulia n →
       x ∈ closure (smallJulia n \ {x})
-  smallJulia_subset_carrier : ∀ n, smallJulia n ⊆ carrier n
-  carrier_subset_julia : ∀ n, carrier n ⊆ MLC.Quadratic.J c
-  carrier_connected : ∀ n, IsConnected (carrier n)
-  carrier_compact : ∀ n, IsCompact (carrier n)
-  nested : ∀ n, carrier (n + 1) ⊆ carrier n
-  partially_invariant :
-    ∀ n, MapsTo ((MLC.Quadratic.fc c)^[returns.depth n])
-      (carrier n) (carrier n)
-  critical_prefix_subset :
-    ∀ n, CriticalOrbitPrefix c returns n ⊆ carrier n
+  smallJulia_subset_julia :
+    ∀ n, smallJulia n ⊆ MLC.Quadratic.J c
+  critical_window_subset_julia :
+    ∀ n, CriticalOrbitWindow c returns n ⊆ MLC.Quadratic.J c
+  invariantPart : ℕ → Set ℂ
+  critical_window_subset_invariant :
+    ∀ n, CriticalOrbitWindow c returns n ⊆ invariantPart n
+
+def VirtualJuliaNest.generatingSet
+    {c : ℂ} (V : VirtualJuliaNest c) (n : ℕ) : Set ℂ :=
+  V.smallJulia n ∪ CriticalOrbitWindow c V.returns n
+
+noncomputable def VirtualJuliaNest.carrier
+    {c : ℂ} (V : VirtualJuliaNest c) (n : ℕ) : Set ℂ :=
+  Classical.choose
+    (exists_minimal_connected_hull
+      (C := MLC.Quadratic.K c) (A := V.generatingSet n)
+      (MLC.Quadratic.filled_julia_set_compact c)
+      (MLC.Quadratic.filled_julia_set_connected_proved V.parameter_mem)
+      (V.smallJulia_nonempty n |>.mono Set.subset_union_left)
+      (Set.union_subset
+        ((V.smallJulia_subset_julia n).trans (MLC.Quadratic.julia_subset_filled_julia c))
+        ((V.critical_window_subset_julia n).trans
+          (MLC.Quadratic.julia_subset_filled_julia c))))
+
+def VirtualJuliaNest.HullWithinJulia
+    {c : ℂ} (V : VirtualJuliaNest c) : Prop :=
+  ∀ n, V.carrier n ⊆ MLC.Quadratic.J c
+
+def VirtualJuliaNest.PartialInvariance
+    {c : ℂ} (V : VirtualJuliaNest c) : Prop :=
+  ∀ n, MapsTo ((MLC.Quadratic.fc c)^[V.returns.stop n - V.returns.start n])
+    (V.invariantPart n) (V.carrier n)
 
 /-- Dynamical separation control on the virtual hulls. This is the concrete
     a priori budget that must eventually be extracted from the near-degenerate
@@ -73,7 +105,8 @@ structure VirtualJuliaNest (c : ℂ) where
 def VirtualJuliaNest.SeparationEstimate
     {c : ℂ} (V : VirtualJuliaNest c) (cost : ℕ → ℝ) : Prop :=
   ∀ ε > (0 : ℝ), ∃ C : ℝ, ∀ n z, z ∈ closure (V.carrier n) →
-    ε ≤ dist z 0 → (∑ j ∈ Finset.range n, cost j) ≤ C
+    ε ≤ dist z (V.returns.origin c n) →
+      (∑ j ∈ Finset.range n, cost j) ≤ C
 
 /-- A phase--parameter realization from connected parameter pieces into
     virtual Julia hulls. -/
@@ -83,12 +116,13 @@ structure VirtualPhaseParameter
   chart : ℕ → ℂ → ℂ
   continuous_chart : ∀ n, Continuous (chart n)
   mapsTo_carrier : ∀ n, MapsTo (chart n) (D.piece n) (V.carrier n)
-  chart_center : ∀ n, chart n c = 0
+  chart_center : ∀ n, chart n c = V.returns.origin c n
   parameterDistanceBound : ℝ
   parameterDistanceBound_pos : 0 < parameterDistanceBound
   parameterDistance_le :
     ∀ n z, z ∈ closure (D.piece n) →
-      dist z c ≤ parameterDistanceBound * dist (chart n z) 0
+      dist z c ≤
+        parameterDistanceBound * dist (chart n z) (V.returns.origin c n)
 
 /-- A dynamical separation estimate transfers through a phase--parameter
     realization to the parameter nest. -/
@@ -108,7 +142,8 @@ theorem VirtualPhaseParameter.parameterSeparationEstimate
       P.chart n z ∈ closure (V.carrier n) :=
     (P.mapsTo_carrier n).closure (P.continuous_chart n) hz
   have hDynamicalDistance :
-      ε / P.parameterDistanceBound ≤ dist (P.chart n z) 0 := by
+      ε / P.parameterDistanceBound ≤
+        dist (P.chart n z) (V.returns.origin c n) := by
     rw [div_le_iff₀ P.parameterDistanceBound_pos]
     rw [mul_comm]
     exact hDistance.trans (P.parameterDistance_le n z hz)
@@ -118,8 +153,9 @@ theorem VirtualPhaseParameter.parameterSeparationEstimate
     programme. The checked MLC kernel needs precisely its return budget and
     parameter-side separation estimate. -/
 structure VirtualMoleculeAPrioriControl (c : ℂ) where
-  parameter_mem : c ∈ MLC.Quadratic.MandelbrotSet
   virtualJulia : VirtualJuliaNest c
+  hullWithinJulia : virtualJulia.HullWithinJulia
+  partialInvariance : virtualJulia.PartialInvariance
   budget : ReturnBudget
   parameterNest : ConnectedNest MLC.Quadratic.MandelbrotSet c
   phaseParameter : VirtualPhaseParameter c virtualJulia parameterNest

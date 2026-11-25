@@ -29,6 +29,8 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 | Return-budget arithmetic | [ReturnBudget.lean](Mlc/Research/ReturnBudget.lean) |
 | Connected parameter nests | [ParameterGeometry.lean](Mlc/Research/ParameterGeometry.lean) |
 | Candidate-system reduction | [Programme.lean](Mlc/Research/Programme.lean) |
+| Filled Julia compactness and connectedness | [FilledJuliaConnected.lean](Mlc/FilledJuliaConnected.lean) |
+| Minimal connected hulls | [ConnectedHull.lean](Mlc/Research/ConnectedHull.lean) |
 | Virtual Julia sets and a priori transfer | [VirtualMolecule.lean](Mlc/Research/VirtualMolecule.lean) |
 | Problems 4.3 and 4.4 | [Dudko.lean](Mlc/Dudko.lean) |
 | Categorical root | [CategoricalRoot.lean](Mlc/CategoricalRoot.lean) |

@@ -48,7 +48,16 @@ OPEN_OBLIGATIONS = {
     "MLC.Problem44VirtualMoleculeData",
 }
 VIRTUAL_MOLECULE_PROGRAMME = {
+    "MLC.Quadratic.filled_julia_set_compact",
+    "MLC.Quadratic.filled_julia_set_connected_proved",
+    "MLC.Quadratic.julia_subset_filled_julia",
+    "MLC.Research.directed_intersection_continuum",
+    "MLC.Research.exists_minimal_connected_hull",
+    "MLC.Research.FirstReturnSchedule",
+    "MLC.Research.CriticalOrbitWindow",
     "MLC.Research.VirtualJuliaNest",
+    "MLC.Research.VirtualJuliaNest.carrier",
+    "MLC.Research.VirtualJuliaNest.PartialInvariance",
     "MLC.Research.VirtualJuliaNest.SeparationEstimate",
     "MLC.Research.VirtualPhaseParameter",
     "MLC.Research.VirtualPhaseParameter.parameterSeparationEstimate",
