@@ -42,16 +42,8 @@ def partialCost (n : ℕ) : ℝ := ∑ j ∈ range n, b.cost j
 theorem distortion_pos (n : ℕ) : 0 < b.distortion n :=
   lt_of_lt_of_le zero_lt_one (b.distortion_ge_one n)
 
-theorem degree_ne_zero (n : ℕ) : b.degree n ≠ 0 := ne_of_gt (b.degree_pos n)
-
-theorem distortion_ne_zero (n : ℕ) : b.distortion n ≠ 0 :=
-  ne_of_gt (b.distortion_pos n)
-
 theorem loss_pos (n : ℕ) : 0 < b.loss n :=
   mul_pos (b.degree_pos n) (b.distortion_pos n)
-
-theorem weight_pos (n : ℕ) : 0 < b.weight n :=
-  div_pos (b.collar_pos n) (b.loss_pos n)
 
 theorem injection_pos (n : ℕ) : 0 < b.injection n :=
   lt_of_lt_of_le (div_pos (b.collar_pos n) (b.degree_pos n)) (b.injection_ge n)
@@ -74,9 +66,6 @@ theorem step_ge_collar_div_degree (n : ℕ) :
     b.collar n / b.degree n ≤ b.modulus (n + 1) :=
   (b.injection_ge n).trans (b.step_ge_injection n)
 
-theorem cost_nonneg (n : ℕ) : 0 ≤ b.cost n :=
-  div_nonneg (b.modulus_nonneg (n + 1)) (le_of_lt (b.distortion_pos n))
-
 theorem weight_eq_iterated_div (n : ℕ) :
     b.weight n = (b.collar n / b.degree n) / b.distortion n := by
   simp only [weight, loss, div_div]
@@ -85,21 +74,6 @@ theorem cost_ge_weight (n : ℕ) : b.weight n ≤ b.cost n := by
   rw [b.weight_eq_iterated_div]
   exact div_le_div_of_nonneg_right (b.step_ge_collar_div_degree n)
     (le_of_lt (b.distortion_pos n))
-
-theorem cost_pos (n : ℕ) : 0 < b.cost n :=
-  (b.weight_pos n).trans_le (b.cost_ge_weight n)
-
-theorem partialCost_zero : b.partialCost 0 = 0 := by simp [partialCost]
-
-theorem partialCost_succ (n : ℕ) :
-    b.partialCost (n + 1) = b.partialCost n + b.cost n := by
-  simp [partialCost, sum_range_succ]
-
-theorem partialCost_mono : Monotone b.partialCost := by
-  apply monotone_nat_of_le_succ
-  intro n
-  rw [b.partialCost_succ]
-  exact le_add_of_nonneg_right (b.cost_nonneg n)
 
 theorem partialCost_ge_weights (n : ℕ) :
     (∑ j ∈ range n, b.weight j) ≤ b.partialCost n :=

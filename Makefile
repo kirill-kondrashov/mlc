@@ -1,117 +1,25 @@
-.PHONY: all build check cache clean graphs serve proof-pdf review-pdf mlc-status-figure factorization-figure check-uniform
+.PHONY: all build check cache clean graphs serve
 
-# Default target
 all: check
 
-# Get Mathlib cache. 
-# This is useful when dependencies (lake-manifest.json) change.
 cache:
 	lake exe cache get
 
-# Build the project
 build:
 	lake build
 
-# The audit imports compiled project modules.
 check: build
 	lake env lean --run check_axioms.lean
 
-check-uniform:
-	lake build Mlc.UniformGeometricRoot Mlc.UniformGeometricVertexControl Mlc.TrappingRegionObstruction Mlc.FiniteTrappingRegions
-	lake env lean --run check_uniform_program.lean
-
-FACTOR_FIGURES := \
-	docs/figures/factorization-global-levels.pdf \
-	docs/figures/factorization-slices.pdf \
-	docs/figures/factorization-critical-orbit.pdf \
-	docs/figures/factorization-target.pdf \
-	docs/figures/factorization-component-geometry.pdf
-
-PROOF_CHAPTERS := \
-	docs/chapters/01_mlc_equivalences.tex \
-	docs/chapters/02_factorization_lemma.tex \
-	docs/chapters/03_am_hypothesis.tex \
-	docs/chapters/04_gc_hypothesis.tex \
-	docs/chapters/05_mlc_factorization_connection.tex \
-	docs/chapters/06_approximation_theorem.tex
-
-proof-pdf: docs/uniform_geometric_mlc.pdf
-
-review-pdf: docs/mlc_review.pdf
-
-MLC_STATUS_FIGURE := docs/figures/mlc_status_render.pdf
-
-REVIEW_CHAPTERS := \
-	docs/review/00_reading_guide.tex \
-	docs/review/01_scope_and_status.tex \
-	docs/review/13_quadratic_foundations.tex \
-	docs/review/14_topological_foundations.tex \
-	docs/review/02_foundational_machinery.tex \
-	docs/review/03_known_results.tex \
-	docs/review/04_formalization_map.tex \
-	docs/review/05_source_policy_and_roadmap.tex \
-	docs/review/06_phase_parameter.tex \
-	docs/review/07_lyubich_renormalization.tex \
-	docs/review/08_dudko_cases.tex \
-	docs/review/09_combinatorial_contracts.tex \
-	docs/review/10_categorical_branch.tex \
-	docs/review/11_lean_inventory.tex \
-	docs/review/12_conditional_theorem_matrix.tex \
-	docs/review/15_frozen_model_audit.tex \
-	docs/review/16_digests_foundations.tex \
-	docs/review/17_digests_modern.tex \
-	docs/review/18_digests_monographs.tex \
-	docs/review/19_digests_pacman_neutral.tex \
-	docs/review/20_digests_laminations_entropy.tex \
-	docs/review/21_digests_sierpinski.tex \
-	docs/review/23_digests_apriori_limbs.tex \
-	docs/review/24_digests_covering_parapuzzle.tex \
-	docs/review/25_digests_siegel_renormalization.tex \
-	docs/review/26_digests_lyubich_parameter.tex \
-	docs/review/22_approaches_map.tex
-
-docs/mlc_review.pdf: docs/mlc_review.tex $(REVIEW_CHAPTERS) docs/figures/mlc_status_schematic.tex $(MLC_STATUS_FIGURE)
-	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-
-$(MLC_STATUS_FIGURE): scripts/generate_mlc_status_figure.py scripts/pyproject.toml scripts/poetry.lock
-	cd scripts && poetry run python generate_mlc_status_figure.py --output ../docs/figures/mlc_status_render.pdf
-
-mlc-status-figure: $(MLC_STATUS_FIGURE)
-
-docs/uniform_geometric_mlc.pdf: docs/uniform_geometric_mlc.tex $(PROOF_CHAPTERS) $(FACTOR_FIGURES)
-	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs $<
-
-$(FACTOR_FIGURES) &: scripts/generate_factorization_figures.py scripts/pyproject.toml scripts/poetry.lock
-	cd scripts && poetry run python generate_factorization_figures.py --output-dir ../docs/figures
-
-factorization-figure:
-	cd scripts && poetry run python generate_factorization_figures.py --output-dir ../docs/figures
-
-# Build static dependency-graph pages under site/
 graphs: build
-	cd scripts && poetry run python generate_dependency_graph_site.py --output site
+	python3 scripts/generate_dependency_graph_site.py --output site
 
-# Serve the generated graph site locally over HTTP
 serve: graphs
-	cd scripts && poetry run python serve_graph_site.py --directory ../site --port 8000
+	python3 scripts/serve_graph_site.py --directory site --port 8000
 
-# A target that ensures cache is fetched if lake-manifest.json is newer than a marker file
-# This attempts to satisfy "getting cache on change of files"
 .cache_marker: lake-manifest.json lean-toolchain
 	lake exe cache get
 	touch .cache_marker
 
-# Use this target if you want automatic caching based on file changes
-auto-build: .cache_marker
-	lake build
-	lake exe check_axioms
-
-# Clean build artifacts
 clean:
-	rm -f docs/proof.aux docs/proof.log docs/proof.out docs/proof.toc .cache_marker
-	rm -f docs/uniform_geometric_mlc.aux docs/uniform_geometric_mlc.log docs/uniform_geometric_mlc.out docs/uniform_geometric_mlc.toc docs/uniform_geometric_mlc.build.log
-	rm -f docs/mlc_review.aux docs/mlc_review.log docs/mlc_review.out docs/mlc_review.toc docs/mlc_review.lof
+	rm -f .cache_marker

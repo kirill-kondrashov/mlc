@@ -11,12 +11,6 @@ theorem mlc_conjecture
   Categorical.mlc_conjecture_iff_categorical.mpr
     (Categorical.categorical_mlc_conjecture h)
 
-/-- Convenience form of the repaired compatibility root theorem. -/
-theorem mlc_conjecture_of_uniformOuterBuffer
-    (hbuffer : ParameterComponent.MandelbrotUniformOuterBuffer) :
-    LocallyConnectedSpace mandelbrotSet :=
-  ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer hbuffer
-
 end
 
 end MLC

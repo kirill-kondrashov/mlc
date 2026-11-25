@@ -1,167 +1,88 @@
 import Mlc.Core
-import Mlc.Research.Examples
-import Mlc.GreenSublevelIntersectionCounterexample
-import Mlc.Literature.ModelAudit
-import Mlc.Literature.NestedCopies
-import Mlc.Quadratic.Complex.FirstComponents
-import Mlc.Quadratic.RealSlice
-import Mlc.Quadratic.Examples
-import Mlc.Quadratic.RealComponents
-import Mlc.Quadratic.MultiplierMap
-import Mlc.Quadratic.PeriodTwoMultiplier
-import Mlc.Quadratic.Symmetry
 import Lean
 
 open Lean Meta
 
 def main : IO UInt32 := do
   initSearchPath (← findSysroot)
-  let env ← importModules #[
-    { module := `Mlc.Core },
-    { module := `Mlc.Research.Examples },
-    { module := `Mlc.GreenSublevelIntersectionCounterexample },
-    { module := `Mlc.Literature.ModelAudit },
-    { module := `Mlc.Literature.NestedCopies },
-    { module := `Mlc.Quadratic.Complex.FirstComponents },
-    { module := `Mlc.Quadratic.RealSlice },
-    { module := `Mlc.Quadratic.Examples },
-    { module := `Mlc.Quadratic.RealComponents },
-    { module := `Mlc.Quadratic.MultiplierMap },
-    { module := `Mlc.Quadratic.PeriodTwoMultiplier },
-    { module := `Mlc.Quadratic.Symmetry }
-  ] {}
+  let env ← importModules #[{ module := `Mlc.Core }] {}
 
-  let name := ``MLC.mlc_conjecture
+  let rootName := ``MLC.mlc_conjecture
   let categoricalName := ``MLC.Categorical.categorical_mlc_conjecture
-  let negationName := ``MLC.not_greenSublevelIntersectionCategoricalData
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice]
-  let literatureNames := #[
-    ``MLC.Dudko.Problem44VirtualMoleculeData.coverage,
-    ``MLC.Dudko.DudkoFrontierInput.locallyConnectedSpace,
-    ``MLC.Literature.localConnectivity_of_compact_parameterPieces,
-    ``MLC.Categorical.Mandelbrot.innerOrbitSet_eq_set_of_two_le,
-    ``MLC.Literature.relativePeriodProduct_periodDoubling,
-    ``MLC.Literature.ModelAudit.not_finitelyRenormalizable_in_frozenModel,
-    ``MLC.Literature.ModelAudit.not_nonempty_satelliteAPrioriCertificate,
-    ``MLC.Quadratic.FirstComponents.period_two_multiplier,
-    ``MLC.Quadratic.FirstComponents.attracting_fixed_point_unique,
-    ``MLC.Quadratic.FirstComponents.frontier_hasAttractingFixedPoint,
-    ``MLC.Quadratic.FirstComponents.frontier_hasAttractingPeriodTwoCycle,
-    ``MLC.Quadratic.FirstComponents.disjoint_cardioid_period_two,
-    ``MLC.Quadratic.FirstComponents.closure_cardioid_inter_closure_period_two,
-    ``MLC.Quadratic.RealSlice.ofReal_mem_mandelbrotSet_iff,
-    ``MLC.Quadratic.Examples.filledJulia_zero,
-    ``MLC.Quadratic.Examples.julia_zero,
-    ``MLC.Quadratic.Examples.filledJulia_neg_two,
-    ``MLC.Quadratic.Examples.julia_neg_two,
-    ``MLC.Quadratic.RealComponents.hasAttractingFixedPoint_ofReal_iff,
-    ``MLC.Quadratic.RealComponents.hasAttractingPeriodTwoCycle_ofReal_iff,
-    ``MLC.Quadratic.MultiplierMap.multiplier_map_biholomorphic,
-    ``MLC.Quadratic.PeriodTwoMultiplier.period2Multiplier_biholomorphic,
-    ``MLC.Quadratic.mandelbrot_conj_iff,
-    ``MLC.Quadratic.neg_mem_K_iff,
-    ``MLC.Quadratic.conj_mem_K_iff,
-    ``MLC.Quadratic.neg_mem_J_iff,
-    ``MLC.Literature.subsingleton_iInter_of_diam_tendsto_zero,
-    ``MLC.Literature.exists_unique_mem_iInter_of_antitone
+  let coreDeclarations := #[
+    ``MLC.Problem44VirtualMoleculeData.coverage,
+    ``MLC.mlc_of_problem43_problem44,
+    ``MLC.RootInput.locallyConnectedSpace
   ]
 
   let coreContext : Core.Context :=
     { fileName := "<check_axioms>", fileMap := default }
   let coreState : Core.State := { env := env }
 
-  let rootMetaM : MetaM (Array Name × Array Name) := do
-    let rootAxioms ← Lean.collectAxioms name
+  let audit : MetaM (Array Name × Array Name × Array (Name × Array Name)) := do
+    let rootAxioms ← Lean.collectAxioms rootName
     let categoricalAxioms ← Lean.collectAxioms categoricalName
-    pure (rootAxioms, categoricalAxioms)
-  let negationMetaM : MetaM (Array Name) :=
-    Lean.collectAxioms negationName
-  let literatureMetaM : MetaM (Array (Name × Array Name)) := do
-    let mut results := #[]
-    for declaration in literatureNames do
-      results := results.push (declaration, ← Lean.collectAxioms declaration)
+    let mut checked := #[]
+    for declaration in coreDeclarations do
+      checked := checked.push (declaration, ← Lean.collectAxioms declaration)
     for (declaration, info) in env.constants.toList do
       if (`MLC.Research).isPrefixOf declaration then
         if info matches .thmInfo _ then
-          results := results.push (declaration, ← Lean.collectAxioms declaration)
-    pure results
+          checked := checked.push (declaration, ← Lean.collectAxioms declaration)
+    pure (rootAxioms, categoricalAxioms, checked)
 
   try
-    let (((axioms, categoricalAxioms), _), _) ←
-      (rootMetaM.run).run coreContext coreState |>.toIO
+    let (((rootAxioms, categoricalAxioms, checkedAxioms), _), _) ←
+      (audit.run).run coreContext coreState |>.toIO
         (fun _ => IO.userError "Axiom check failed")
-    let ((negationAxioms, _), _) ←
-      (negationMetaM.run).run coreContext coreState |>.toIO
-        (fun _ => IO.userError "Negation axiom check failed")
-    let ((literatureAxioms, _), _) ←
-      (literatureMetaM.run).run coreContext coreState |>.toIO
-        (fun _ => IO.userError "Literature axiom check failed")
 
-    let axiomsList := axioms.toList
-    let categoricalAxiomsList := categoricalAxioms.toList
-    let negationAxiomsList := negationAxioms.toList
     let unexpected (actual : List Name) :=
       actual.filter (fun ax => !(expectedAxioms.contains ax))
     let missing (actual : List Name) :=
       expectedAxioms.filter (fun ax => !(actual.contains ax))
     let sameAxiomSet :=
-      axiomsList.all (fun ax => categoricalAxioms.contains ax) &&
-        categoricalAxiomsList.all (fun ax => axioms.contains ax)
+      rootAxioms.toList.all (fun ax => categoricalAxioms.contains ax) &&
+        categoricalAxioms.toList.all (fun ax => rootAxioms.contains ax)
     let rootViolation :=
-      !(unexpected axiomsList).isEmpty ||
-        !(missing axiomsList).isEmpty ||
-        !(unexpected categoricalAxiomsList).isEmpty ||
-        !(missing categoricalAxiomsList).isEmpty ||
+      !(unexpected rootAxioms.toList).isEmpty ||
+        !(missing rootAxioms.toList).isEmpty ||
+        !(unexpected categoricalAxioms.toList).isEmpty ||
+        !(missing categoricalAxioms.toList).isEmpty ||
         !sameAxiomSet ||
-        axioms.contains ``sorryAx ||
+        rootAxioms.contains ``sorryAx ||
         categoricalAxioms.contains ``sorryAx
-    let negationViolation :=
-      !(unexpected negationAxiomsList).isEmpty ||
-        !(missing negationAxiomsList).isEmpty ||
-        negationAxioms.contains ``sorryAx
+    let checkedViolation :=
+      checkedAxioms.any fun (_, axioms) =>
+        !(unexpected axioms.toList).isEmpty || axioms.contains ``sorryAx
 
-    if axioms.contains ``sorryAx then
-      IO.println s!"❌ The proof of '{name}' relies on 'sorry'!"
+    if rootAxioms.contains ``sorryAx then
+      IO.println s!"❌ The proof of '{rootName}' relies on 'sorry'!"
     else
-      IO.println s!"✅ The proof of '{name}' is free of 'sorry'."
+      IO.println s!"✅ The proof of '{rootName}' is free of 'sorry'."
 
     IO.println "All axioms used:"
-    for ax in axiomsList do
+    for ax in rootAxioms do
       IO.println s!"- {ax}"
 
-    IO.println
-      "Conditional root: Dudko Problems 4.3 and 4.4 are explicit root inputs."
-    if negationAxioms.contains ``sorryAx then
-      IO.println s!"❌ The proof of '{negationName}' relies on 'sorry'!"
+    IO.println "Conditional root: Dudko Problems 4.3 and 4.4 are explicit root inputs."
+    if checkedViolation then
+      IO.println "❌ A reachable Lean declaration uses an unexpected axiom."
+      for (declaration, axioms) in checkedAxioms do
+        for ax in unexpected axioms.toList do
+          IO.println s!"- Unexpected axiom in '{declaration}': {ax}"
     else
-      IO.println s!"✅ The proof of '{negationName}' is free of 'sorry'."
+      IO.println "✅ Every reachable research theorem uses only ground axioms."
 
-    let mut literatureViolation := false
-    for (declaration, declarationAxioms) in literatureAxioms do
-      let forbidden := unexpected declarationAxioms.toList
-      if !forbidden.isEmpty then
-        literatureViolation := true
-        IO.println s!"❌ Unexpected axioms for '{declaration}': {forbidden}"
-    if !literatureViolation then
-      IO.println "✅ Research theorems, literature foundations and model audit use only ground axioms."
-
-    if rootViolation || negationViolation || literatureViolation then
+    if rootViolation || checkedViolation then
       IO.println "❌ Axiom frontier violation for `MLC.mlc_conjecture`."
-      for ax in unexpected axiomsList do
-        IO.println s!"- Unexpected axiom: {ax}"
-      for ax in missing axiomsList do
-        IO.println s!"- Missing required axiom: {ax}"
-      for ax in unexpected categoricalAxiomsList do
-        IO.println s!"- Unexpected categorical-root axiom: {ax}"
-      for ax in missing categoricalAxiomsList do
-        IO.println s!"- Missing categorical-root axiom: {ax}"
-      for ax in unexpected negationAxiomsList do
-        IO.println s!"- Unexpected negation axiom: {ax}"
-      for ax in missing negationAxiomsList do
-        IO.println s!"- Missing negation axiom: {ax}"
+      for ax in unexpected rootAxioms.toList do
+        IO.println s!"- Unexpected root axiom: {ax}"
+      for ax in missing rootAxioms.toList do
+        IO.println s!"- Missing root axiom: {ax}"
       if !sameAxiomSet then
-        IO.println "❌ The categorical root and compatibility root use different axiom sets."
+        IO.println "❌ The categorical and compatibility roots use different axiom sets."
       return (1 : UInt32)
     else
       return (0 : UInt32)

@@ -1,10 +1,8 @@
-import Mlc.ParameterComponentApproximation
-import Mlc.CategoricalResidual
+import Mlc.Dudko
 import Mathlib.Topology.Connected.LocallyConnected
+import Mathlib.Topology.Category.TopCat.Basic
 
 namespace MLC
-
-open Quadratic
 
 noncomputable section
 
@@ -20,9 +18,7 @@ structure RootInput where
 
 theorem RootInput.locallyConnectedSpace (h : RootInput) :
     LocallyConnectedSpace mandelbrotSet :=
-  Dudko.DudkoFrontierInput.locallyConnectedSpace
-    { problem43 := h.problem43
-      problem44 := h.problem44 }
+  mlc_of_problem43_problem44 h.problem43 h.problem44
 
 namespace Categorical
 
@@ -52,12 +48,6 @@ theorem categorical_mlc_conjecture
     MLCConjecture := by
   change LocallyConnectedSpace MLC.mandelbrotSet
   exact h.locallyConnectedSpace
-
-/-- Convenience form of the repaired categorical root theorem. -/
-theorem categorical_mlc_conjecture_of_uniformOuterBuffer
-    (hbuffer : ParameterComponent.MandelbrotUniformOuterBuffer) :
-    MLCConjecture :=
-  ParameterComponent.mandelbrot_locallyConnected_of_uniformOuterBuffer hbuffer
 
 /-- The usual and categorical root propositions are equivalent. -/
 theorem mlc_conjecture_iff_categorical :

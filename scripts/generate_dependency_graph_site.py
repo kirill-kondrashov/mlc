@@ -43,8 +43,8 @@ MISSING_AXIOMS: tuple[str, ...] = ()
 ALTERNATIVE_GRAPH_SYMBOLS: tuple[str, ...] = ()
 CONSTRUCTION_SYMBOLS: tuple[str, ...] = ()
 OPEN_OBLIGATIONS = {
-    "MLC.Dudko.Problem43PseudoSiegelAPrioriBoundsData",
-    "MLC.Dudko.Problem44VirtualMoleculeData",
+    "MLC.Problem43PseudoSiegelAPrioriBoundsData",
+    "MLC.Problem44VirtualMoleculeData",
 }
 
 
@@ -3682,7 +3682,9 @@ def write_graph(output_root: Path, slug: str, title: str, payload: dict[str, obj
     return f"{slug}/index.html"
 
 
-def validate_research_graph(payload: dict[str, object]) -> None:
+def validate_research_graph(
+    payload: dict[str, object], declarations: dict[str, Decl]
+) -> None:
     nodes = {node["id"]: node for node in payload["nodes"]}
     adjacency = {name: set() for name in nodes}
     for edge in payload["edges"]:
@@ -3692,6 +3694,13 @@ def validate_research_graph(payload: dict[str, object]) -> None:
     reachable, _ = rooted_closure(payload["root"], adjacency)
     if reachable != set(nodes):
         raise RuntimeError("The root graph contains disconnected declarations")
+    local_declarations = set(declarations) - set(EMBEDDED_AXIOMS)
+    disconnected_declarations = sorted(local_declarations - reachable)
+    if disconnected_declarations:
+        raise RuntimeError(
+            "Disconnected Lean declarations: "
+            + ", ".join(disconnected_declarations)
+        )
     try:
         tuple(TopologicalSorter(adjacency).static_order())
     except CycleError as exc:
@@ -3711,12 +3720,6 @@ def validate_research_graph(payload: dict[str, object]) -> None:
     theorem_count = sum(node["kind"] in {"theorem", "lemma"} for node in nodes.values())
     if theorem_count < 40:
         raise RuntimeError("The research reduction has fewer than forty connected theorems")
-    forbidden = {"MLC.Quadratic.yoccoz_theorem_conformal",
-                 "MLC.UniformGeometry.mandelbrot_locallyConnected_of_squareTower"}
-    if forbidden & reachable:
-        raise RuntimeError("A frozen-model or archived route entered the active root")
-
-
 def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     fq_index, edges = build_full_graph(repo_root)
 
@@ -3775,7 +3778,7 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
             raise RuntimeError("Unexpected kernel axioms: " + ", ".join(sorted(unexpected)))
         root_payload["kernel_axioms"] = sorted(axiom_frontier)
         root_payload["open_obligations"] = sorted(OPEN_OBLIGATIONS)
-        validate_research_graph(root_payload)
+        validate_research_graph(root_payload, fq_index)
     root_href = write_graph(
         output_root,
         "mlc_conjecture",
