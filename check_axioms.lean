@@ -37,6 +37,8 @@ def main : IO UInt32 := do
   let expectedAxioms : List Name :=
     [``Quot.sound, ``propext, ``Classical.choice]
   let literatureNames := #[
+    ``MLC.Dudko.Problem44VirtualMoleculeData.coverage,
+    ``MLC.Dudko.DudkoFrontierInput.locallyConnectedSpace,
     ``MLC.Literature.localConnectivity_of_compact_parameterPieces,
     ``MLC.Categorical.Mandelbrot.innerOrbitSet_eq_set_of_two_le,
     ``MLC.Literature.relativePeriodProduct_periodDoubling,
@@ -129,7 +131,7 @@ def main : IO UInt32 := do
       IO.println s!"- {ax}"
 
     IO.println
-      "Conditional root: M1 realization and global coverage; admissibility remains to be specified."
+      "Conditional root: Dudko Problems 4.3 and 4.4 are explicit root inputs."
     if negationAxioms.contains ``sorryAx then
       IO.println s!"❌ The proof of '{negationName}' relies on 'sorry'!"
     else

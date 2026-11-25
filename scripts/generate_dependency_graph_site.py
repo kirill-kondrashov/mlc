@@ -43,8 +43,8 @@ MISSING_AXIOMS: tuple[str, ...] = ()
 ALTERNATIVE_GRAPH_SYMBOLS: tuple[str, ...] = ()
 CONSTRUCTION_SYMBOLS: tuple[str, ...] = ()
 OPEN_OBLIGATIONS = {
-    "MLC.Research.CandidateSystem.Realization",
-    "MLC.Research.CandidateSystem.Coverage",
+    "MLC.Dudko.Problem43PseudoSiegelAPrioriBoundsData",
+    "MLC.Dudko.Problem44VirtualMoleculeData",
 }
 
 
@@ -3699,8 +3699,15 @@ def validate_research_graph(payload: dict[str, object]) -> None:
     axioms = {name for name, node in nodes.items() if node["kind"] == "axiom"}
     if axioms != set(EMBEDDED_AXIOMS):
         raise RuntimeError("Unexpected ground axiom frontier")
+    open_nodes = {
+        name for name, node in nodes.items() if node["proof_status"] == "open"
+    }
+    if open_nodes != set(OPEN_OBLIGATIONS):
+        raise RuntimeError(
+            "The root must expose exactly Dudko Problems 4.3 and 4.4"
+        )
     if not OPEN_OBLIGATIONS <= reachable:
-        raise RuntimeError("M1 realization or global coverage is hidden from the graph")
+        raise RuntimeError("A Dudko frontier problem is hidden from the graph")
     theorem_count = sum(node["kind"] in {"theorem", "lemma"} for node in nodes.values())
     if theorem_count < 40:
         raise RuntimeError("The research reduction has fewer than forty connected theorems")

@@ -1,5 +1,5 @@
 import Mlc.ParameterComponentApproximation
-import Mlc.Research.Programme
+import Mlc.CategoricalResidual
 import Mathlib.Topology.Connected.LocallyConnected
 
 namespace MLC
@@ -12,16 +12,17 @@ noncomputable section
 abbrev mandelbrotSet : Set ℂ :=
   MLC.Quadratic.MandelbrotSet
 
-/-- The active root exposes the research system, its analytic realization,
-and the separate global coverage obligation. No Dudko conjecture is assumed. -/
+/-- The active root exposes exactly the two open problems identified by Dudko:
+    pseudo-Siegel a priori bounds and virtual-Molecule interpolation. -/
 structure RootInput where
-  system : Research.CandidateSystem
-  realization : system.Realization
-  coverage : system.Coverage
+  problem43 : Problem43PseudoSiegelAPrioriBoundsData
+  problem44 : Problem44VirtualMoleculeData problem43
 
 theorem RootInput.locallyConnectedSpace (h : RootInput) :
     LocallyConnectedSpace mandelbrotSet :=
-  h.system.locallyConnectedSpace_of_realization_coverage h.realization h.coverage
+  Dudko.DudkoFrontierInput.locallyConnectedSpace
+    { problem43 := h.problem43
+      problem44 := h.problem44 }
 
 namespace Categorical
 
