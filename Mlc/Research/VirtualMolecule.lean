@@ -2,6 +2,7 @@ import Mlc.Research.Programme
 import Mlc.Research.ConnectedHull
 import Mlc.FilledJuliaConnected
 import Mlc.MandelbrotCompact
+import Mlc.GridCertified
 import Mathlib.Topology.Connected.TotallyDisconnected
 import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 
@@ -256,6 +257,19 @@ theorem CandidateSystem.residualOuterArea_le_sixty_three_pi_over_sixteen
   simpa [CandidateSystem.residualOuterArea,
     ENNReal.sub_mul (fun _ _ => ENNReal.coe_ne_top)] using hmono
 
+theorem CandidateSystem.residualSubsetUnresolved (A : CandidateSystem) :
+    A.VirtualMoleculeResidual ⊆ MLC.Certified.Unresolved :=
+  fun _ hc => ⟨hc.1, hc.2.1⟩
+
+/-- The checked grid bound: the residual area is at most the certified area of
+the non-interior part of the Mandelbrot set. -/
+theorem CandidateSystem.residualOuterArea_le_grid (A : CandidateSystem) :
+    A.residualOuterArea ≤
+      ENNReal.ofReal
+        (2 * (MLC.Certified.gridCells : ℝ) / 4 ^ MLC.Certified.gridDepth) :=
+  (MeasureTheory.measure_mono A.residualSubsetUnresolved).trans
+    MLC.Certified.unresolved_volume_le_grid
+
 structure CandidateSystem.VirtualMoleculeCompletion
     (A : CandidateSystem) : Prop where
   /-- Completion of the virtual-Molecule branch: every boundary parameter is
@@ -276,6 +290,11 @@ structure CandidateSystem.VirtualMoleculeCompletion
     A.residualOuterArea ≤
       ENNReal.ofReal (2 : ℝ) ^ 2 * (NNReal.pi : ENNReal) :=
     A.residualOuterArea_le_four_pi
+  grid_area_bound :
+    A.residualOuterArea ≤
+      ENNReal.ofReal
+        (2 * (MLC.Certified.gridCells : ℝ) / 4 ^ MLC.Certified.gridDepth) :=
+    A.residualOuterArea_le_grid
 
 /-- The completion above is exactly global coverage of the extended
     candidate system. -/

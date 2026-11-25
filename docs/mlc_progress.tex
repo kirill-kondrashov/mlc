@@ -8,7 +8,7 @@
 \usepackage{polyglossia}
 \setdefaultlanguage{english}
 \usepackage{amsmath,amssymb}
-\usepackage{array,booktabs,graphicx,xcolor}
+\usepackage{array,booktabs,graphicx,tabularx,xcolor}
 \usepackage{xurl}
 \usepackage[unicode,colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
 \usepackage{bookmark}
@@ -56,8 +56,10 @@ The currently proved foundation includes:
   \item compactness of \(M\), the inclusion \(M\subseteq
         \overline{B(0,2)}\), and the certified interior inclusion
         \(B(0,1/4)\subseteq\operatorname{int}M\);
-  \item the residual outer-area envelope
-        \(63\pi/16\), or \(63/64\) of the disk envelope.
+  \item a kernel-checked dyadic grid of depth 7: squares proved outside
+        \(M\) or inside \(M\) are removed, giving
+        \(\mu^*(M\setminus\operatorname{int}M)\leq 2\cdot14333/4^{7}
+        \approx 1.750\), or \(13.9\%\) of the disk envelope.
 \end{itemize}
 
 The two remaining root obligations are genuine mathematical existence
@@ -73,15 +75,46 @@ statements:
 
 \section{Progress dashboard}
 
-\begin{figure}[p]
+The headline number is the certified resolved share
+\[
+  1-A_t=1-\frac{\mu^*(R_t)}{4\pi},
+\]
+where \(R_t\subseteq M\) is the unresolved set: the parameters without a
+proved local-connectivity certificate at commit \(t\). A parameter is resolved
+when it lies outside \(M\) or in \(\operatorname{int}M\), where local
+connectivity is automatic. The value \(0\%\) means that nothing is resolved;
+\(100\%\) means \(\mu^*(R_t)=0\). Table~\ref{tab:commits} lists every commit
+after the merge base with \texttt{origin/main}, together with the resolved
+share and the result that raised it. Figure~\ref{fig:map} marks on \(M\) the
+parameters that each commit certified.
+
+\begin{table}[ht]
+  \centering\footnotesize
+  \input{docs/mlc_progress_commits.tex}
+  \caption{Commits relative to \texttt{origin/main}. The date is printed only
+  when it changes. The resolved share is \(1-A_t\), where \(A_t\) is the
+  certified upper bound on \(\mu^*(R_t)/(4\pi)\).}
+  \label{tab:commits}
+\end{table}
+
+\begin{figure}[ht]
   \centering
-  \includegraphics[width=\linewidth]{docs/mlc_progress_figure.pdf}
-  \caption{Commit history and route-planning priors. The upper-left curve is a
-  Lean formalization-debt proxy. Route probabilities and impact ranges are
-  explicitly planning estimates; they are not mathematical probabilities or
-  proved reductions.}
-  \label{fig:progress}
+  \includegraphics[width=0.74\linewidth]{docs/mlc_progress_map.pdf}
+  \caption{Parameter plane \(c=x+iy\). Grey: numerical rendering of \(M\)
+  (illustration only, not part of the proof). A colour marks the parameters
+  certified by the commit with the same colour in Table~\ref{tab:commits};
+  the dashed circle is the envelope \(|c|=2\).}
+  \label{fig:map}
 \end{figure}
+
+\paragraph{What the value $100\%$ means.}
+MLC means \(R=\varnothing\), hence \(A=0\) and the resolved share is
+\(100\%\). The converse fails: a nonempty \(R\) of measure zero also gives
+\(100\%\). Moreover \(R\subseteq\partial M\), because local connectivity is
+automatic at interior points, and the area of \(\partial M\) is itself
+unknown; MLC is not known to decide it, since a locally connected planar
+continuum can have a boundary of positive area (an Osgood curve). Completion
+is therefore tracked by the open root obligations, not by the share alone.
 
 The formalization-debt proxy is
 \[
@@ -91,8 +124,16 @@ The formalization-debt proxy is
        {1+\text{achieved milestone weight}}.
 \]
 It is an audit gate rather than a measure of the Mandelbrot residual set.
-The commit hook rejects a proof-progress commit unless both this value and the
-certified residual-area envelope strictly decrease.
+The commit hook rejects a proof-progress commit unless this value strictly
+decreases and the certified resolved share strictly increases.
+
+\begin{table}[ht]
+  \centering\footnotesize
+  \input{docs/mlc_progress_routes.tex}
+  \caption{Route-planning priors. Ranges and priors are planning estimates;
+  they are not theorems and not calibrated probabilities.}
+  \label{tab:routes}
+\end{table}
 
 \section{Coverage-Uncertainty Profile}
 
@@ -103,7 +144,7 @@ local-connectivity certificate at stage \(t\). The area component is
 \]
 The checked bound is
 \[
-  A_t\leq\frac{63}{64}=0.984375.
+  A_t\leq\frac{2\cdot 14333}{4^{7}}\cdot\frac{1}{4\pi}\approx 0.1392.
 \]
 The actual value remains unknown. The next verified numerical gate is a
 hundredfold improvement from the original disk envelope:
@@ -207,7 +248,8 @@ assembled with the concrete Problem 4.3 realization before full MLC follows.
 The next accepted progress commits must establish, in order:
 
 \begin{enumerate}
-  \item a strict decrease of the certified residual-area envelope and the
+  \item a strict increase of the certified resolved share (a strict decrease
+        of the residual-area envelope) and a strict decrease of the
         formalization-debt proxy;
   \item an explicit class predicate independent of local connectedness;
   \item a concrete geometric witness for that class;

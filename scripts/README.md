@@ -12,13 +12,28 @@ make serve
 
 `export_dependencies.lean` supplies constants from elaborated types and proofs.
 Generation checks reachability, acyclicity and the axiom frontier, then writes
-`site/` with HTML, JavaScript, JSON, and `progress.svg`.
+`site/` with HTML, JavaScript, JSON, and the progress files.
 
-The **Progress** tab uses the same SVG embedded by the LaTeX report. It contains
-commit history for the formalization-debt proxy and a separate planning chart
-for candidate proof routes. Route probabilities are explicitly planning
-priors, not mathematical claims.
+`progress_report.py` computes the progress numbers from Git history. The
+**Progress** tab shows the certified resolved share `100% − μ*(R) / 4π` of the
+unresolved set `R` as a number, a table of the commits after the merge base
+with `origin/main` (date, commit, description, share, and what it resolved),
+and a vector map of `M` marking the parameters certified by each commit. The
+same data feeds `docs/mlc_progress.tex` through `progress_commits.tex`,
+`progress_routes.tex`, and `progress_map.svg`. Route probabilities are planning
+priors, not mathematical claims. The share `100%` corresponds to `R = ∅` (MLC),
+but a nonempty `R` of measure zero would also give it, so the share is read
+with the count of open root obligations.
 
 The repository hook runs `scripts/check_progress.py`. A staged proof-progress
-commit must strictly decrease both the dependency-graph milestone debt and the
-certified residual-area upper envelope before Git accepts it.
+commit must strictly decrease the dependency-graph milestone debt and strictly
+increase the certified resolved share before Git accepts it.
+
+`generate_grid_tiles.py` regenerates `Mlc/GridTiles/Part*.lean` and
+`Mlc/GridCertified.lean` from the parameters in `Mlc/GridParams.lean`. It asks
+`grid_tile_values.lean` for the cost and unresolved-cell count of every root
+square, distributes the expensive squares over independent modules (each
+checked by `decide +kernel`), and writes the aggregating theorem. The progress
+tooling reads `gridCells` and `gridFuel` from these files.
+`export_grid_regions.lean` (repository root) lists the certified squares for
+the map in the Progress tab.

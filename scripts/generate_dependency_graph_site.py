@@ -26,6 +26,8 @@ import tempfile
 from collections import deque
 from graphlib import CycleError, TopologicalSorter
 
+from progress_report import PROGRESS_CSS, write_progress_assets
+
 
 DECL_RE = re.compile(
     r"^\s*(?:(?:noncomputable|private|protected|unsafe|partial|mutual)\s+)*"
@@ -71,57 +73,6 @@ VIRTUAL_MOLECULE_PROGRAMME = {
     "MLC.Research.CandidateSystem.withVirtualMolecule_realization",
     "MLC.Research.CandidateSystem.withVirtualMolecule_coverage_iff_completion",
 }
-PROGRESS_MILESTONES = (
-    ("Conditional root", "MLC.mlc_conjecture", 1),
-    ("Harmonic budget", "UnboundedBudget", 1),
-    ("Connected parameter nest", "ConnectedNest", 1),
-    ("Virtual-Molecule bridge", "VirtualMoleculeAPrioriControl", 2),
-    ("Filled-Julia topology", "filled_julia_set_connected_proved", 2),
-    ("Minimal connected hull", "exists_minimal_connected_hull", 2),
-    ("Mandelbrot compactness", "isCompact_mandelbrot", 1),
-    ("Residual-area envelope", "residualOuterArea_le_four_pi", 1),
-    ("Certified interior parameter ball", "ball_quarter_subset_interior_mandelbrot", 1),
-    ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
-)
-PROGRESS_ROUTES = (
-    {
-        "id": "1",
-        "name": "Problem 4.3: unbounded satellite pseudo-Siegel control",
-        "impact": 0.20,
-        "range": (0.10, 0.30),
-        "probability": 0.12,
-        "color": "#38bdf8",
-        "next": "Build the remaining pseudo-Siegel a priori realization.",
-    },
-    {
-        "id": "2",
-        "name": "Problem 4.4: virtual bounded-period satellite interpolation",
-        "impact": 0.34,
-        "range": (0.24, 0.46),
-        "probability": 0.20,
-        "color": "#a78bfa",
-        "next": "Prove collars, hulls in J, and a divergent transfer budget.",
-    },
-    {
-        "id": "3",
-        "name": "Problem 4.4: virtual near-neutral interpolation",
-        "impact": 0.29,
-        "range": (0.18, 0.42),
-        "probability": 0.12,
-        "color": "#f59e0b",
-        "next": "Formalize finite-return regularization and near-neutral charts.",
-    },
-    {
-        "id": "4",
-        "name": "Unified phase-parameter transfer, conditional on genuine geometry",
-        "impact": 0.58,
-        "range": (0.38, 0.72),
-        "probability": 0.45,
-        "color": "#22c55e",
-        "next": "Build a global winding/holonomy theorem for all residual classes.",
-    },
-)
-
 
 
 def graph_slug(fq_name: str) -> str:
@@ -1405,6 +1356,7 @@ loadGraph().then(start).catch((err) => {{
 
 def graph_page_html_v2(title: str) -> str:
     esc_title = html.escape(title)
+    progress_css = PROGRESS_CSS
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -1636,26 +1588,12 @@ def graph_page_html_v2(title: str) -> str:
     }}
     .progress-panel {{
       display: none;
-      padding: 18px;
+      padding: 22px 26px 40px;
       overflow: auto;
       min-height: 0;
-      background: var(--canvas-bg);
+      background: var(--bg);
     }}
-    .progress-graphic {{
-      overflow: auto;
-    }}
-    .progress-graphic svg {{
-      display: block;
-      width: max(100%, 1200px);
-      height: auto;
-      min-width: 1200px;
-      background: #07111f;
-    }}
-    .progress-note {{
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }}
+    {progress_css}
   </style>
 </head>
 <body>
@@ -1687,19 +1625,7 @@ def graph_page_html_v2(title: str) -> str:
     <div id="scene"><canvas id="canvas3d"></canvas><canvas id="canvas2d"></canvas><div id="hover"></div></div>
   </div>
   <div class="progress-panel" id="progressPanel">
-    <div
-      class="progress-graphic"
-      id="progressGraphic"
-      role="img"
-      aria-label="Vector progress chart">
-      Loading progress chart…
-    </div>
-    <p class="progress-note">
-      The horizontal history is the certified upper bound on the outer area of
-      the unresolved local-connectivity set, normalized by 4π. The route
-      panel uses explicit planning priors and does not represent proved
-      reductions. Every label is part of the inline SVG and remains selectable.
-    </p>
+    <div id="progressGraphic">Loading progress…</div>
   </div>
 </div>
 <script src="graph.js"></script>
@@ -1726,23 +1652,23 @@ def graph_page_js() -> str:
   const viewHelpTitleEl = document.getElementById("viewHelpTitle");
   const viewHelpBodyEl = document.getElementById("viewHelpBody");
   let progressVisible = false;
-  let progressLoaded = false;
 
   async function loadProgressGraphic() {
-    if (progressLoaded || !progressGraphicEl) return;
-    progressLoaded = true;
+    if (!progressGraphicEl) return;
     try {
-      const response = await fetch("progress.svg");
-      if (!response.ok) throw new Error("Failed to load progress.svg");
+      const response = await fetch("progress_fragment.html", { cache: "no-store" });
+      if (!response.ok) throw new Error("Failed to load progress_fragment.html");
       progressGraphicEl.innerHTML = await response.text();
     } catch (err) {
-      progressLoaded = false;
       progressGraphicEl.textContent = String(err && err.message ? err.message : err);
     }
   }
 
   function setProgressVisible(next) {
     progressVisible = Boolean(next);
+    if (window.history && history.replaceState) {
+      history.replaceState(null, "", progressVisible ? "#progress" : location.pathname + location.search);
+    }
     if (graphPanelEl) graphPanelEl.style.display = progressVisible ? "none" : "grid";
     if (progressPanelEl) progressPanelEl.style.display = progressVisible ? "block" : "none";
     if (progressBtn) progressBtn.textContent = progressVisible ? "View: Graph" : "View: Progress";
@@ -3449,6 +3375,7 @@ def graph_page_js() -> str:
     if (progressBtn) {
       progressBtn.addEventListener("click", () => setProgressVisible(!progressVisible));
       progressBtn.textContent = "View: Progress";
+      if (location.hash === "#progress") setProgressVisible(true);
     }
     if (themeBtn) {
       themeBtn.addEventListener("click", () => {
@@ -3828,443 +3755,6 @@ def write_graph(output_root: Path, slug: str, title: str, payload: dict[str, obj
     return f"{slug}/index.html"
 
 
-def progress_metrics_from_text(lean_text: str) -> dict[str, object]:
-    achieved = [
-        {"label": label, "weight": weight}
-        for label, symbol, weight in PROGRESS_MILESTONES
-        if symbol in lean_text
-    ]
-    achieved_weight = sum(item["weight"] for item in achieved)
-    open_frontier = 2 if (
-        "Problem43PseudoSiegelAPrioriBoundsData" in lean_text
-        and "Problem44VirtualMoleculeData" in lean_text
-    ) else 0
-    debt = 100.0 * open_frontier / max(1.0, 1.0 + achieved_weight)
-    if "mlc_conjecture_unconditional" in lean_text:
-        area_upper_percent = 0.0
-    elif "ball_quarter_subset_interior_mandelbrot" in lean_text:
-        area_upper_percent = 100.0 * 63.0 / 64.0
-    else:
-        area_upper_percent = 100.0
-    return {
-        "debt_percent": debt,
-        "area_upper_percent": area_upper_percent,
-        "open_frontier": open_frontier,
-        "milestone_weight": achieved_weight,
-        "milestones": [item["label"] for item in achieved],
-    }
-
-
-def progress_metrics_from_ref(repo_root: Path, ref: str) -> dict[str, object]:
-    proc = subprocess.run(
-        ["git", "grep", "-h", "", ref, "--", "Mlc/**/*.lean", "Mlc/*.lean"],
-        cwd=repo_root,
-        check=False,
-        text=True,
-        capture_output=True,
-    )
-    if proc.returncode not in (0, 1):
-        raise RuntimeError(f"Cannot read Lean progress from git ref {ref}")
-    return progress_metrics_from_text(proc.stdout)
-
-
-def progress_metrics_from_worktree(repo_root: Path) -> dict[str, object]:
-    text = "\n".join(
-        path.read_text(encoding="utf-8")
-        for path in sorted((repo_root / "Mlc").rglob("*.lean"))
-    )
-    return progress_metrics_from_text(text)
-
-
-def staged_progress_metrics(repo_root: Path) -> dict[str, object]:
-    proc = subprocess.run(
-        ["git", "write-tree"],
-        cwd=repo_root,
-        check=False,
-        text=True,
-        capture_output=True,
-    )
-    if proc.returncode != 0:
-        raise RuntimeError("Cannot inspect the staged tree")
-    return progress_metrics_from_ref(repo_root, proc.stdout.strip())
-
-
-def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
-    try:
-        base = subprocess.run(
-            ["git", "merge-base", "HEAD", "main"],
-            cwd=repo_root,
-            check=True,
-            text=True,
-            capture_output=True,
-        ).stdout.strip()
-        subprocess.run(
-            ["git", "cat-file", "-e", f"{base}^{{commit}}"],
-            cwd=repo_root,
-            check=True,
-            capture_output=True,
-        )
-        log = subprocess.run(
-            [
-                "git",
-                "rev-list",
-                "--reverse",
-                "--first-parent",
-                f"{base}^..HEAD",
-            ],
-            cwd=repo_root,
-            check=False,
-            text=True,
-            capture_output=True,
-        )
-        refs = [line for line in log.stdout.splitlines() if line]
-    except subprocess.CalledProcessError:
-        log = subprocess.run(
-            ["git", "rev-list", "--reverse", "--first-parent", "-12", "HEAD"],
-            cwd=repo_root,
-            check=False,
-            text=True,
-            capture_output=True,
-        )
-        refs = [line for line in log.stdout.splitlines() if line]
-    history: list[dict[str, object]] = []
-    for ref in refs:
-        meta = subprocess.run(
-            ["git", "show", "-s", "--format=%h%x09%ct%x09%s", ref],
-            cwd=repo_root,
-            check=True,
-            text=True,
-            capture_output=True,
-        ).stdout.strip()
-        short, timestamp, subject = meta.split("\t", 2)
-        history.append(
-            {
-                "sha": short,
-                "timestamp": int(timestamp),
-                "subject": subject,
-                **progress_metrics_from_ref(repo_root, ref),
-            }
-        )
-    if history:
-        working = progress_metrics_from_worktree(repo_root)
-        head = progress_metrics_from_ref(repo_root, "HEAD")
-        if (
-            abs(float(working["debt_percent"]) - float(head["debt_percent"])) > 1e-12
-            or abs(
-                float(working["area_upper_percent"])
-                - float(head["area_upper_percent"])
-            ) > 1e-12
-        ):
-            history.append(
-                {
-                    "sha": "worktree",
-                    "timestamp": int(history[-1]["timestamp"]) + 1,
-                    "subject": "Uncommitted progress",
-                    **working,
-                }
-            )
-    return history
-
-
-def svg_escape(text: object) -> str:
-    return html.escape(str(text), quote=True)
-
-
-def progress_svg(repo_root: Path) -> str:
-    history = commit_progress_history(repo_root)
-    width, height = 1840, 1200
-    left, top, plot_w, plot_h = 110, 155, 940, 340
-    scatter_left, scatter_top, scatter_w, scatter_h = 1160, 155, 620, 340
-    table_x, table_y, table_w = 110, 650, 1670
-
-    def text(
-        x: float,
-        y: float,
-        body: object,
-        *,
-        size: int = 22,
-        color: str = "#dbe7ff",
-        anchor: str = "start",
-        weight: int = 400,
-    ) -> str:
-        return (
-            f'<text x="{x:.1f}" y="{y:.1f}" fill="{color}" '
-            f'font-size="{size}" font-weight="{weight}" text-anchor="{anchor}" '
-            f'font-family="IBM Plex Sans, Segoe UI, sans-serif">'
-            f"{svg_escape(body)}</text>"
-        )
-
-    parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" role="img" '
-        f'aria-label="MLC progress history and route planning chart">',
-        '<rect width="100%" height="100%" fill="#07111f"/>',
-        text(55, 58, "MLC uncertainty and proof-progress dashboard", size=32, weight=700),
-        text(
-            1785,
-            58,
-            "Route values are planning priors, not theorems",
-            size=18,
-            color="#94a3b8",
-            anchor="end",
-        ),
-        text(
-            left,
-            96,
-            "Certified outer-area upper bound for the unresolved LC set",
-            size=24,
-            weight=600,
-        ),
-        text(
-            left + plot_w,
-            126,
-            "Target: 1.00% of disk area, a 100× reduction",
-            size=18,
-            color="#94a3b8",
-            anchor="end",
-        ),
-    ]
-
-    grid_color = "#23324b"
-    for pct in (0, 20, 40, 60, 80, 100):
-        y = top + plot_h - pct / 100.0 * plot_h
-        parts.append(
-            f'<line x1="{left}" y1="{y:.1f}" x2="{left + plot_w}" y2="{y:.1f}" '
-            f'stroke="{grid_color}" stroke-width="1"/>'
-        )
-        parts.append(
-            text(left - 16, y + 7, f"{pct}%", size=17, color="#94a3b8", anchor="end")
-        )
-
-    points = []
-    for i, entry in enumerate(history):
-        x = left if len(history) == 1 else left + i * plot_w / max(1, len(history) - 1)
-        area_bound = float(entry["area_upper_percent"])
-        y = top + plot_h - max(0.0, min(100.0, area_bound)) / 100.0 * plot_h
-        points.append((x, y, entry))
-    if len(points) >= 2:
-        polyline = " ".join(f"{x:.1f},{y:.1f}" for x, y, _ in points)
-        parts.append(
-            f'<polyline points="{polyline}" fill="none" stroke="#22d3ee" '
-            f'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
-        )
-    for x, y, entry in points:
-        fill = "#f59e0b" if entry["sha"] == "worktree" else "#38bdf8"
-        parts.append(
-            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="8" fill="{fill}" '
-            f'stroke="#07111f" stroke-width="3"/>'
-        )
-        parts.append(
-            text(x, top + plot_h + 27, entry["sha"], size=16, color="#cbd5e1", anchor="middle")
-        )
-        parts.append(
-            text(
-                x,
-                y + 20 if float(entry["area_upper_percent"]) > 95.0 else y - 16,
-                f'{entry["area_upper_percent"]:.3f}%',
-                size=17,
-                color=fill,
-                anchor="middle",
-                weight=600,
-            )
-        )
-
-    target_y = top + plot_h - 1.0 / 100.0 * plot_h
-    parts.append(
-            f'<line x1="{left}" y1="{target_y:.1f}" x2="{left + plot_w}" '
-            f'y2="{target_y:.1f}" stroke="#f43f5e" stroke-width="3" '
-            f'stroke-dasharray="9 7"/>'
-    )
-    parts.append(text(
-            left + plot_w - 8,
-            target_y - 8,
-            "100× target: 1.00% of disk area",
-            size=16,
-            color="#fb7185",
-            anchor="end",
-            weight=700,
-    ))
-
-    history_y = 555
-    parts.append(text(table_x, history_y - 12, "Commit history", size=20, weight=600))
-    slot_w = plot_w / max(1, len(points))
-    max_subject_chars = max(10, min(38, int(slot_w / 8)))
-    for i, (_, _, entry) in enumerate(points):
-        x = left + (i + 0.5) * slot_w
-        label = str(entry["subject"])
-        if len(label) > max_subject_chars:
-            label = label[: max_subject_chars - 1] + "…"
-        parts.append(text(
-            x,
-            history_y + 16,
-            f'{entry["sha"]}: {label}',
-            size=14,
-            color="#94a3b8",
-            anchor="middle",
-        ))
-
-    parts.append(text(scatter_left, 96, "Next-route planning priors", size=24, weight=600))
-    parts.append(
-        text(
-            scatter_left + scatter_w,
-            126,
-            "Expected residual reduction vs. closure chance",
-            size=18,
-            color="#94a3b8",
-            anchor="end",
-        )
-    )
-    for pct in (0, 20, 40, 60, 80, 100):
-        x = scatter_left + pct / 100.0 * scatter_w
-        parts.append(
-            f'<line x1="{x:.1f}" y1="{scatter_top}" x2="{x:.1f}" '
-            f'y2="{scatter_top + scatter_h}" stroke="{grid_color}" stroke-width="1"/>'
-        )
-        parts.append(
-            text(
-                x,
-                scatter_top + scatter_h + 26,
-                f"{pct}%",
-                size=15,
-                color="#94a3b8",
-                anchor="middle",
-            )
-        )
-    for pct in (0, 10, 20, 30, 40, 50, 60):
-        y = scatter_top + scatter_h - pct / 60.0 * scatter_h
-        parts.append(
-            f'<line x1="{scatter_left}" y1="{y:.1f}" '
-            f'x2="{scatter_left + scatter_w}" y2="{y:.1f}" '
-            f'stroke="{grid_color}" stroke-width="1"/>'
-        )
-        parts.append(
-            text(scatter_left - 14, y + 6, f"{pct}%", size=15, color="#94a3b8", anchor="end")
-        )
-    parts.append(
-        text(
-            scatter_left + scatter_w / 2,
-            scatter_top + scatter_h + 58,
-            "Expected reduction of the current residual set",
-            size=17,
-            color="#cbd5e1",
-            anchor="middle",
-        )
-    )
-    parts.append(
-        f'<text x="{scatter_left - 72}" y="{scatter_top + scatter_h / 2:.1f}" '
-        f'fill="#cbd5e1" font-size="17" text-anchor="middle" '
-        f'font-family="IBM Plex Sans, Segoe UI, sans-serif" '
-        f'transform="rotate(-90 {scatter_left - 72} '
-        f'{scatter_top + scatter_h / 2:.1f})">Planning success probability</text>'
-    )
-    for route in PROGRESS_ROUTES:
-        x0 = scatter_left + route["range"][0] / 1.00 * scatter_w
-        x1 = scatter_left + route["range"][1] / 1.00 * scatter_w
-        x = scatter_left + route["impact"] / 1.00 * scatter_w
-        y = scatter_top + scatter_h - route["probability"] / 0.60 * scatter_h
-        parts.append(
-            f'<line x1="{x0:.1f}" y1="{y:.1f}" x2="{x1:.1f}" y2="{y:.1f}" '
-            f'stroke="{route["color"]}" stroke-width="3"/>'
-        )
-        parts.append(
-            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{route["color"]}" '
-            f'stroke="#f8fafc" stroke-width="2"/>'
-        )
-        parts.append(text(x, y + 5, route["id"], size=16, color="#07111f", anchor="middle", weight=800))
-    target_x = scatter_left + 0.99 * scatter_w
-    parts.append(
-        f'<line x1="{target_x:.1f}" y1="{scatter_top}" x2="{target_x:.1f}" '
-        f'y2="{scatter_top + scatter_h}" stroke="#f43f5e" stroke-width="3" '
-        f'stroke-dasharray="9 7"/>'
-    )
-    parts.append(text(
-        target_x - 8,
-        scatter_top + 18,
-        "100× q target",
-        size=16,
-        color="#fb7185",
-        anchor="end",
-        weight=700,
-    ))
-
-    parts.append(text(table_x, table_y, "Route priorities and proof obligations", size=25, weight=600))
-    row_h = 72
-    header_y = table_y + 48
-    parts.append(
-        f'<rect x="{table_x}" y="{header_y}" width="{table_w}" height="44" '
-        f'rx="6" fill="#111c30"/>'
-    )
-    parts.append(text(table_x + 24, header_y + 29, "Route", size=18, weight=600))
-    parts.append(text(table_x + 650, header_y + 29, "Expected q reduction", size=18, weight=600))
-    parts.append(text(table_x + 900, header_y + 29, "Success prior", size=18, weight=600))
-    parts.append(text(table_x + 1080, header_y + 29, "Next theorem", size=18, weight=600))
-    for i, route in enumerate(PROGRESS_ROUTES):
-        y = header_y + 48 + i * row_h
-        fill = "#0c1728" if i % 2 == 0 else "#091323"
-        parts.append(
-            f'<rect x="{table_x}" y="{y}" width="{table_w}" height="{row_h - 4}" '
-            f'fill="{fill}"/>'
-        )
-        parts.append(
-            text(table_x + 24, y + 29, f'{route["id"]}. {route["name"]}', size=17)
-        )
-        parts.append(
-            text(
-                table_x + 650,
-                y + 29,
-                f'{route["range"][0] * 100:.0f}–{route["range"][1] * 100:.0f}%',
-                size=18,
-                color=route["color"],
-                weight=600,
-            )
-        )
-        parts.append(
-            text(
-                table_x + 900,
-                y + 29,
-                f'{route["probability"] * 100:.0f}%',
-                size=18,
-                color=route["color"],
-                weight=600,
-            )
-        )
-        parts.append(
-            text(table_x + 1080, y + 29, route["next"], size=16, color="#cbd5e1")
-        )
-        parts.append(
-            text(
-                table_x + 24,
-                y + 54,
-                "Planning prior; revise after each proved class.",
-                size=14,
-                color="#64748b",
-            )
-        )
-
-    parts.append(
-        text(
-            55,
-            height - 48,
-            "The plotted quantity is μ*(R) / μ(closedBall(0,2)); the smaller "
-            "formalization-debt proxy is the commit gate.",
-            size=17,
-            color="#94a3b8",
-        )
-    )
-    parts.append(
-        text(
-            width - 55,
-            height - 48,
-            "The residual area q is unknown; 1.0 is only the disk-radius envelope.",
-            size=17,
-            color="#94a3b8",
-            anchor="end",
-        )
-    )
-    parts.append("</svg>")
-    return "\n".join(parts)
-
-
 def validate_research_graph(
     payload: dict[str, object], declarations: dict[str, Decl]
 ) -> None:
@@ -4413,10 +3903,7 @@ def _generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None
         index_html(links),
         encoding="utf-8",
     )
-    (output_root / "mlc_conjecture" / "progress.svg").write_text(
-        progress_svg(repo_root),
-        encoding="utf-8",
-    )
+    write_progress_assets(repo_root, output_root / "mlc_conjecture")
 
 
 def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:

@@ -196,16 +196,21 @@ Define the normalized outer-measure indicator
 q(R) = μ*(R) / (4π).
 ```
 
-The only unconditional envelope is `q(R) ≤ 1`, because the Mandelbrot set is
-contained in the closed disk of radius two. The current checked envelope is
+The trivial envelope is `q(R) ≤ 1`, because the Mandelbrot set is contained
+in the closed disk of radius two. The current kernel-checked envelope comes from
+the dyadic grid of `Mlc/GridCertificate.lean`: squares proved outside `M` by
+fixed-point ball arithmetic, or inside `M` by a periodic trapping disk, are
+removed, and the remaining 14333 cells of side `2^-7` in the upper
+half-plane (the lower half is the mirror image) cover `M ∖ int M`:
 
 ```text
-μ*(R) ≤ 4π - π/16 = 63π/16
-q(R) ≤ 63/64 = 0.984375.
+R ⊆ M ∖ int M
+μ*(R) ≤ 2 · 14333 / 4^7 ≈ 1.7496
+q(R) ≤ 0.1392.
 ```
 
-The strict decrease comes from the proved inclusion
-`ball(0,1/4) ⊆ interior M`. The actual residual value remains unknown. A later
+This bound holds for every candidate system and uses no unproved input. The
+actual residual value remains unknown. A later
 theorem covering class `C` must prove
 
 ```text
@@ -223,8 +228,9 @@ q(R) ≤ 0.01.
 
 This target requires certified coverage of parameter classes, not a finer
 sampling estimate. No commit is accepted as proof progress unless the certified
-residual-area envelope and the repository's formalization-debt proxy both
-strictly decrease. The latter is
+resolved share strictly increases (the residual-area envelope strictly
+decreases) and the repository's formalization-debt proxy strictly decreases.
+The latter is
 
 ```text
 2 / (1 + achieved milestone weight),
@@ -244,8 +250,23 @@ reported with:
 - the number of open root declarations;
 - the axiom frontier.
 
-README progress graphics should display the proven upper envelope and the
-current `unknown` value. They must avoid a fabricated decreasing area curve.
+The Progress tab, the README and the status report show the **resolved share**
+`100% − q(R)` as a number in a table of the commits after the merge base with
+`origin/main`, each with the result that raised it. `0%` means nothing is
+resolved, so a larger number is better. They contain no fabricated curve.
+
+### Reading the value 100%
+
+`R` is the set of parameters of `M` without a proved local-connectivity
+certificate, so `R = ∅` exactly when MLC is proved, and then `μ*(R) = 0`, i.e.
+a resolved share of `100%`. The converse fails: a nonempty `R` of measure zero
+also has `μ*(R) = 0`. The inclusion `R ⊆ ∂M` holds because local connectivity
+is automatic at interior points, and the area of `∂M` is unknown, so a covering
+argument alone cannot push the unresolved bound below that unknown value. MLC
+is not known to decide the area of `∂M`, since a locally connected planar
+continuum can have a boundary of positive area. Completion is therefore read
+from the open root obligations and the existence of
+`mlc_conjecture_unconditional`, never from the share alone.
 
 ### Coverage-Uncertainty Profile
 

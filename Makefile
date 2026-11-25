@@ -25,7 +25,9 @@ serve: graphs
 
 report-pdf: graphs
 	mkdir -p docs
-	inkscape site/mlc_conjecture/progress.svg --export-filename=docs/mlc_progress_figure.pdf
+	cp site/mlc_conjecture/progress_commits.tex docs/mlc_progress_commits.tex
+	cp site/mlc_conjecture/progress_routes.tex docs/mlc_progress_routes.tex
+	inkscape site/mlc_conjecture/progress_map.svg --export-filename=docs/mlc_progress_map.pdf
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs docs/mlc_progress.tex
 	xelatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=docs docs/mlc_progress.tex
 
@@ -36,4 +38,5 @@ report-pdf: graphs
 clean:
 	rm -f .cache_marker
 	rm -f docs/mlc_progress.aux docs/mlc_progress.log docs/mlc_progress.out docs/mlc_progress.toc
-	rm -f docs/mlc_progress.pdf docs/mlc_progress_figure.pdf
+	rm -f docs/mlc_progress.pdf docs/mlc_progress_map.pdf
+	rm -f docs/mlc_progress_commits.tex docs/mlc_progress_routes.tex

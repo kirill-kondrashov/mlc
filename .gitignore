@@ -8,3 +8,5 @@ output*.txt
 *.out
 *.aux
 /docs/*.pdf
+/docs/mlc_progress_commits.tex
+/docs/mlc_progress_routes.tex
