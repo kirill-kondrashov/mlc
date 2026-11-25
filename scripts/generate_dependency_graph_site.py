@@ -71,7 +71,6 @@ VIRTUAL_MOLECULE_PROGRAMME = {
     "MLC.Research.CandidateSystem.withVirtualMolecule_realization",
     "MLC.Research.CandidateSystem.withVirtualMolecule_coverage_iff_completion",
 }
-PROGRESS_BASE_COMMIT = "de8b11c"
 PROGRESS_MILESTONES = (
     ("Conditional root", "MLC.mlc_conjecture", 1),
     ("Harmonic budget", "UnboundedBudget", 1),
@@ -81,6 +80,8 @@ PROGRESS_MILESTONES = (
     ("Minimal connected hull", "exists_minimal_connected_hull", 2),
     ("Mandelbrot compactness", "isCompact_mandelbrot", 1),
     ("Residual-area envelope", "residualOuterArea_le_four_pi", 1),
+    ("Certified interior parameter ball", "ball_quarter_subset_interior_mandelbrot", 1),
+    ("Unconditional MLC", "mlc_conjecture_unconditional", 8),
 )
 PROGRESS_ROUTES = (
     {
@@ -1640,9 +1641,12 @@ def graph_page_html_v2(title: str) -> str:
       min-height: 0;
       background: var(--canvas-bg);
     }}
-    .progress-panel img {{
+    .progress-graphic {{
+      overflow: auto;
+    }}
+    .progress-graphic svg {{
       display: block;
-      width: 100%;
+      width: max(100%, 1200px);
       height: auto;
       min-width: 1200px;
       background: #07111f;
@@ -1683,11 +1687,18 @@ def graph_page_html_v2(title: str) -> str:
     <div id="scene"><canvas id="canvas3d"></canvas><canvas id="canvas2d"></canvas><div id="hover"></div></div>
   </div>
   <div class="progress-panel" id="progressPanel">
-    <img src="progress.svg" alt="MLC progress history and research-route planning chart">
+    <div
+      class="progress-graphic"
+      id="progressGraphic"
+      role="img"
+      aria-label="Vector progress chart">
+      Loading progress chart…
+    </div>
     <p class="progress-note">
-      The horizontal commit history tracks the Lean formalization-debt proxy.
-      The route chart uses explicit planning priors and does not represent
-      proved measure reductions.
+      The horizontal history is the certified upper bound on the outer area of
+      the unresolved local-connectivity set, normalized by 4π. The route
+      panel uses explicit planning priors and does not represent proved
+      reductions. Every label is part of the inline SVG and remains selectable.
     </p>
   </div>
 </div>
@@ -1702,6 +1713,7 @@ def graph_page_js() -> str:
   const sceneEl = document.getElementById("scene");
   const graphPanelEl = document.getElementById("graphPanel");
   const progressPanelEl = document.getElementById("progressPanel");
+  const progressGraphicEl = document.getElementById("progressGraphic");
   const summaryEl = document.getElementById("summary");
   const legendEl = document.getElementById("legend");
   const searchEl = document.getElementById("search");
@@ -1714,13 +1726,28 @@ def graph_page_js() -> str:
   const viewHelpTitleEl = document.getElementById("viewHelpTitle");
   const viewHelpBodyEl = document.getElementById("viewHelpBody");
   let progressVisible = false;
+  let progressLoaded = false;
+
+  async function loadProgressGraphic() {
+    if (progressLoaded || !progressGraphicEl) return;
+    progressLoaded = true;
+    try {
+      const response = await fetch("progress.svg");
+      if (!response.ok) throw new Error("Failed to load progress.svg");
+      progressGraphicEl.innerHTML = await response.text();
+    } catch (err) {
+      progressLoaded = false;
+      progressGraphicEl.textContent = String(err && err.message ? err.message : err);
+    }
+  }
 
   function setProgressVisible(next) {
     progressVisible = Boolean(next);
     if (graphPanelEl) graphPanelEl.style.display = progressVisible ? "none" : "grid";
     if (progressPanelEl) progressPanelEl.style.display = progressVisible ? "block" : "none";
     if (progressBtn) progressBtn.textContent = progressVisible ? "View: Graph" : "View: Progress";
-    if (!progressVisible) setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
+    if (progressVisible) loadProgressGraphic();
+    else setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
   }
 
   const THEME_KEY = "mlc_graph_theme";
@@ -3813,8 +3840,15 @@ def progress_metrics_from_text(lean_text: str) -> dict[str, object]:
         and "Problem44VirtualMoleculeData" in lean_text
     ) else 0
     debt = 100.0 * open_frontier / max(1.0, 1.0 + achieved_weight)
+    if "mlc_conjecture_unconditional" in lean_text:
+        area_upper_percent = 0.0
+    elif "ball_quarter_subset_interior_mandelbrot" in lean_text:
+        area_upper_percent = 100.0 * 63.0 / 64.0
+    else:
+        area_upper_percent = 100.0
     return {
         "debt_percent": debt,
+        "area_upper_percent": area_upper_percent,
         "open_frontier": open_frontier,
         "milestone_weight": achieved_weight,
         "milestones": [item["label"] for item in achieved],
@@ -3856,8 +3890,14 @@ def staged_progress_metrics(repo_root: Path) -> dict[str, object]:
 
 
 def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
-    base = PROGRESS_BASE_COMMIT
     try:
+        base = subprocess.run(
+            ["git", "merge-base", "HEAD", "main"],
+            cwd=repo_root,
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout.strip()
         subprocess.run(
             ["git", "cat-file", "-e", f"{base}^{{commit}}"],
             cwd=repo_root,
@@ -3877,6 +3917,7 @@ def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
             text=True,
             capture_output=True,
         )
+        refs = [line for line in log.stdout.splitlines() if line]
     except subprocess.CalledProcessError:
         log = subprocess.run(
             ["git", "rev-list", "--reverse", "--first-parent", "-12", "HEAD"],
@@ -3885,8 +3926,9 @@ def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
             text=True,
             capture_output=True,
         )
+        refs = [line for line in log.stdout.splitlines() if line]
     history: list[dict[str, object]] = []
-    for ref in [line for line in log.stdout.splitlines() if line]:
+    for ref in refs:
         meta = subprocess.run(
             ["git", "show", "-s", "--format=%h%x09%ct%x09%s", ref],
             cwd=repo_root,
@@ -3906,7 +3948,13 @@ def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
     if history:
         working = progress_metrics_from_worktree(repo_root)
         head = progress_metrics_from_ref(repo_root, "HEAD")
-        if abs(float(working["debt_percent"]) - float(head["debt_percent"])) > 1e-12:
+        if (
+            abs(float(working["debt_percent"]) - float(head["debt_percent"])) > 1e-12
+            or abs(
+                float(working["area_upper_percent"])
+                - float(head["area_upper_percent"])
+            ) > 1e-12
+        ):
             history.append(
                 {
                     "sha": "worktree",
@@ -3924,10 +3972,10 @@ def svg_escape(text: object) -> str:
 
 def progress_svg(repo_root: Path) -> str:
     history = commit_progress_history(repo_root)
-    width, height = 1840, 1080
-    left, top, plot_w, plot_h = 110, 120, 940, 390
-    scatter_left, scatter_top, scatter_w, scatter_h = 1160, 120, 620, 390
-    table_x, table_y, table_w = 110, 620, 1670
+    width, height = 1840, 1200
+    left, top, plot_w, plot_h = 110, 155, 940, 340
+    scatter_left, scatter_top, scatter_w, scatter_h = 1160, 155, 620, 340
+    table_x, table_y, table_w = 110, 650, 1670
 
     def text(
         x: float,
@@ -3960,11 +4008,17 @@ def progress_svg(repo_root: Path) -> str:
             color="#94a3b8",
             anchor="end",
         ),
-        text(left, 96, "Formalization frontier debt by commit", size=24, weight=600),
+        text(
+            left,
+            96,
+            "Certified outer-area upper bound for the unresolved LC set",
+            size=24,
+            weight=600,
+        ),
         text(
             left + plot_w,
-            96,
-            "Proof-progress commits require a strict decrease",
+            126,
+            "Target: 1.00% of disk area, a 100× reduction",
             size=18,
             color="#94a3b8",
             anchor="end",
@@ -3985,8 +4039,8 @@ def progress_svg(repo_root: Path) -> str:
     points = []
     for i, entry in enumerate(history):
         x = left if len(history) == 1 else left + i * plot_w / max(1, len(history) - 1)
-        debt = float(entry["debt_percent"])
-        y = top + plot_h - max(0.0, min(100.0, debt)) / 100.0 * plot_h
+        area_bound = float(entry["area_upper_percent"])
+        y = top + plot_h - max(0.0, min(100.0, area_bound)) / 100.0 * plot_h
         points.append((x, y, entry))
     if len(points) >= 2:
         polyline = " ".join(f"{x:.1f},{y:.1f}" for x, y, _ in points)
@@ -4006,8 +4060,8 @@ def progress_svg(repo_root: Path) -> str:
         parts.append(
             text(
                 x,
-                y - 16,
-                f'{entry["debt_percent"]:.1f}%',
+                y + 20 if float(entry["area_upper_percent"]) > 95.0 else y - 16,
+                f'{entry["area_upper_percent"]:.3f}%',
                 size=17,
                 color=fill,
                 anchor="middle",
@@ -4015,12 +4069,28 @@ def progress_svg(repo_root: Path) -> str:
             )
         )
 
-    history_y = 568
+    target_y = top + plot_h - 1.0 / 100.0 * plot_h
+    parts.append(
+            f'<line x1="{left}" y1="{target_y:.1f}" x2="{left + plot_w}" '
+            f'y2="{target_y:.1f}" stroke="#f43f5e" stroke-width="3" '
+            f'stroke-dasharray="9 7"/>'
+    )
+    parts.append(text(
+            left + plot_w - 8,
+            target_y - 8,
+            "100× target: 1.00% of disk area",
+            size=16,
+            color="#fb7185",
+            anchor="end",
+            weight=700,
+    ))
+
+    history_y = 555
     parts.append(text(table_x, history_y - 12, "Commit history", size=20, weight=600))
     slot_w = plot_w / max(1, len(points))
     max_subject_chars = max(10, min(38, int(slot_w / 8)))
     for i, (_, _, entry) in enumerate(points):
-        x = left + i * slot_w
+        x = left + (i + 0.5) * slot_w
         label = str(entry["subject"])
         if len(label) > max_subject_chars:
             label = label[: max_subject_chars - 1] + "…"
@@ -4030,13 +4100,14 @@ def progress_svg(repo_root: Path) -> str:
             f'{entry["sha"]}: {label}',
             size=14,
             color="#94a3b8",
+            anchor="middle",
         ))
 
     parts.append(text(scatter_left, 96, "Next-route planning priors", size=24, weight=600))
     parts.append(
         text(
             scatter_left + scatter_w,
-            96,
+            126,
             "Expected residual reduction vs. closure chance",
             size=18,
             color="#94a3b8",
@@ -4174,8 +4245,8 @@ def progress_svg(repo_root: Path) -> str:
         text(
             55,
             height - 48,
-            "Formalization debt = 2 open root obligations / "
-            "(1 + achieved milestone weight). It gates proof-progress commits.",
+            "The plotted quantity is μ*(R) / μ(closedBall(0,2)); the smaller "
+            "formalization-debt proxy is the commit gate.",
             size=17,
             color="#94a3b8",
         )

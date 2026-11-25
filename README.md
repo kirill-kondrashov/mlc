@@ -10,11 +10,12 @@ The long-term research plan is recorded in the
 
 ![MLC progress history and route planning chart](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/progress.svg)
 
-The upper-left curve tracks a reproducible Lean formalization-debt proxy by
-commit. The route chart records planning priors and expected residual-class
-reductions; it does not assert a theorem or a calibrated probability. The same
-high-resolution chart is available in the **Progress** tab of the interactive
-graph.
+The upper-left curve tracks the certified outer-area upper bound for the
+parameter class without a local-connectivity certificate. The route chart
+records planning priors and expected residual-class reductions; it does not
+assert a theorem or a calibrated probability. A separate formalization-debt
+proxy gates commits. The same high-resolution chart is available in the
+**Progress** tab of the interactive graph.
 
 This repository contains the active Lean reduction of Mandelbrot local
 connectedness to the two open problems identified by Dudko at the end of

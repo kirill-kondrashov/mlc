@@ -197,8 +197,16 @@ q(R) = μ*(R) / (4π).
 ```
 
 The only unconditional envelope is `q(R) ≤ 1`, because the Mandelbrot set is
-contained in the closed disk of radius two. The actual value is currently
-unknown. A later theorem covering class `C` must prove
+contained in the closed disk of radius two. The current checked envelope is
+
+```text
+μ*(R) ≤ 4π - π/16 = 63π/16
+q(R) ≤ 63/64 = 0.984375.
+```
+
+The strict decrease comes from the proved inclusion
+`ball(0,1/4) ⊆ interior M`. The actual residual value remains unknown. A later
+theorem covering class `C` must prove
 
 ```text
 R_next = R \ C
@@ -214,8 +222,9 @@ q(R) ≤ 0.01.
 ```
 
 This target requires certified coverage of parameter classes, not a finer
-sampling estimate. No commit is accepted as proof progress unless the
-repository's formalization-debt proxy strictly decreases. The latter is
+sampling estimate. No commit is accepted as proof progress unless the certified
+residual-area envelope and the repository's formalization-debt proxy both
+strictly decrease. The latter is
 
 ```text
 2 / (1 + achieved milestone weight),

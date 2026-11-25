@@ -20,5 +20,5 @@ for candidate proof routes. Route probabilities are explicitly planning
 priors, not mathematical claims.
 
 The repository hook runs `scripts/check_progress.py`. A staged proof-progress
-commit must strictly decrease the dependency-graph milestone debt before Git
-accepts it.
+commit must strictly decrease both the dependency-graph milestone debt and the
+certified residual-area upper envelope before Git accepts it.

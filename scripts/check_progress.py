@@ -18,11 +18,15 @@ def main() -> int:
     staged = staged_progress_metrics(repo_root)
     head_debt = float(head["debt_percent"])
     staged_debt = float(staged["debt_percent"])
+    head_area = float(head["area_upper_percent"])
+    staged_area = float(staged["area_upper_percent"])
     print(f"Formalization frontier debt: {head_debt:.3f}% -> {staged_debt:.3f}%")
-    if staged_debt >= head_debt:
+    print(f"Certified residual-area envelope: {head_area:.3f}% -> {staged_area:.3f}%")
+    if staged_debt >= head_debt or staged_area >= head_area:
         print(
-            "Refusing commit: staged Lean changes do not strictly decrease "
-            "the formalization-debt proxy.",
+            "Refusing commit: staged Lean changes must strictly decrease both "
+            "the formalization-debt proxy and the certified residual-area "
+            "envelope.",
             file=sys.stderr,
         )
         return 1

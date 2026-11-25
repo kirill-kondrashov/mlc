@@ -54,7 +54,10 @@ The currently proved foundation includes:
   \item transfer of a virtual separation estimate to the parameter-side
         separation estimate on connected nests;
   \item compactness of \(M\), the inclusion \(M\subseteq
-        \overline{B(0,2)}\), and the residual outer-area envelope \(4\pi\).
+        \overline{B(0,2)}\), and the certified interior inclusion
+        \(B(0,1/4)\subseteq\operatorname{int}M\);
+  \item the residual outer-area envelope
+        \(63\pi/16\), or \(63/64\) of the disk envelope.
 \end{itemize}
 
 The two remaining root obligations are genuine mathematical existence
@@ -88,8 +91,8 @@ The formalization-debt proxy is
        {1+\text{achieved milestone weight}}.
 \]
 It is an audit gate rather than a measure of the Mandelbrot residual set.
-The commit hook rejects a proof-progress commit when this value does not
-strictly decrease.
+The commit hook rejects a proof-progress commit unless both this value and the
+certified residual-area envelope strictly decrease.
 
 \section{Coverage-Uncertainty Profile}
 
@@ -98,8 +101,12 @@ local-connectivity certificate at stage \(t\). The area component is
 \[
   A_t=\frac{\mu^*(R_t)}{4\pi}.
 \]
-At the present stage, \(A_t\leq1\) is unconditional and the actual value is
-unknown. The next verified numerical gate is a hundredfold improvement:
+The checked bound is
+\[
+  A_t\leq\frac{63}{64}=0.984375.
+\]
+The actual value remains unknown. The next verified numerical gate is a
+hundredfold improvement from the original disk envelope:
 \[
   \mu^*(R_t)\leq \frac{4\pi}{100}=\frac{\pi}{25},
   \qquad
@@ -200,7 +207,8 @@ assembled with the concrete Problem 4.3 realization before full MLC follows.
 The next accepted progress commits must establish, in order:
 
 \begin{enumerate}
-  \item a strict decrease of the formalization-debt proxy;
+  \item a strict decrease of the certified residual-area envelope and the
+        formalization-debt proxy;
   \item an explicit class predicate independent of local connectedness;
   \item a concrete geometric witness for that class;
   \item a proved parameter realization and separation budget;

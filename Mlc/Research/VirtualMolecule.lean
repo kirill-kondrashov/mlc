@@ -209,6 +209,16 @@ theorem CandidateSystem.residualSubsetClosedBall (A : CandidateSystem) :
   intro c hc
   exact MLC.Quadratic.mandelbrot_subset_closedBall hc.1
 
+theorem CandidateSystem.residualSubsetClosedBallMinusQuarter
+    (A : CandidateSystem) :
+    A.VirtualMoleculeResidual ⊆
+      Metric.closedBall (0 : ℂ) 2 \ Metric.ball (0 : ℂ) (1 / 4 : ℝ) := by
+  intro c hc
+  refine ⟨A.residualSubsetClosedBall hc, ?_⟩
+  intro hc_ball
+  exact hc.2.1
+    (MLC.Quadratic.ball_quarter_subset_interior_mandelbrot hc_ball)
+
 theorem CandidateSystem.residualOuterArea_le_four_pi (A : CandidateSystem) :
     A.residualOuterArea ≤
       ENNReal.ofReal (2 : ℝ) ^ 2 * (NNReal.pi : ENNReal) := by
@@ -219,6 +229,32 @@ theorem CandidateSystem.residualOuterArea_le_four_pi (A : CandidateSystem) :
   rw [Complex.volume_closedBall] at hmono
   simpa [CandidateSystem.residualOuterArea, ENNReal.ofReal_mul,
     ENNReal.ofReal_pow] using hmono
+
+theorem CandidateSystem.residualOuterArea_le_sixty_three_pi_over_sixteen
+    (A : CandidateSystem) :
+    A.residualOuterArea ≤
+      (ENNReal.ofReal (2 : ℝ) ^ 2 - ENNReal.ofReal (1 / 4 : ℝ) ^ 2) *
+        (NNReal.pi : ENNReal) := by
+  have hball :
+      Metric.ball (0 : ℂ) (1 / 4 : ℝ) ⊆
+        Metric.closedBall (0 : ℂ) 2 :=
+    ball_subset_closedBall.trans
+      (Metric.closedBall_subset_closedBall (by norm_num))
+  have hmono :
+      volume A.VirtualMoleculeResidual ≤
+        volume (Metric.closedBall (0 : ℂ) 2 \
+          Metric.ball (0 : ℂ) (1 / 4 : ℝ)) :=
+    MeasureTheory.measure_mono (A.residualSubsetClosedBallMinusQuarter)
+  rw [MeasureTheory.measure_diff hball
+      Metric.isOpen_ball.measurableSet.nullMeasurableSet
+      (by
+        rw [Complex.volume_ball]
+        apply ENNReal.mul_ne_top
+        · exact ENNReal.pow_ne_top ENNReal.ofReal_ne_top
+        · exact ENNReal.coe_ne_top),
+    Complex.volume_closedBall, Complex.volume_ball] at hmono
+  simpa [CandidateSystem.residualOuterArea,
+    ENNReal.sub_mul (fun _ _ => ENNReal.coe_ne_top)] using hmono
 
 structure CandidateSystem.VirtualMoleculeCompletion
     (A : CandidateSystem) : Prop where
@@ -233,6 +269,11 @@ structure CandidateSystem.VirtualMoleculeCompletion
     MLC.Quadratic.isCompact_mandelbrot
   residual_area_bound :
     A.residualOuterArea ≤
+      (ENNReal.ofReal (2 : ℝ) ^ 2 - ENNReal.ofReal (1 / 4 : ℝ) ^ 2) *
+        (NNReal.pi : ENNReal) :=
+    A.residualOuterArea_le_sixty_three_pi_over_sixteen
+  coarse_area_bound :
+    A.residualOuterArea ≤
       ENNReal.ofReal (2 : ℝ) ^ 2 * (NNReal.pi : ENNReal) :=
     A.residualOuterArea_le_four_pi
 
@@ -246,7 +287,9 @@ theorem CandidateSystem.withVirtualMolecule_coverage_iff_completion
     refine
       { classes := ?_
         mandelbrot_compact := MLC.Quadratic.isCompact_mandelbrot
-        residual_area_bound := A.residualOuterArea_le_four_pi }
+        residual_area_bound :=
+          A.residualOuterArea_le_sixty_three_pi_over_sixteen
+        coarse_area_bound := A.residualOuterArea_le_four_pi }
     intro c hc
     rcases hCoverage c hc with hInterior | hEligible
     · exact Or.inl hInterior

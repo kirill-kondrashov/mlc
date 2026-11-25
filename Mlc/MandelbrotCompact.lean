@@ -145,6 +145,32 @@ theorem mandelbrot_subset_closedBall :
   push_neg at hnot
   exact parameter_gt_two_escapes hnot hc
 
+theorem ball_quarter_subset_mandelbrot :
+    Metric.ball (0 : ℂ) (1 / 4 : ℝ) ⊆ MandelbrotSet := by
+  intro c hc
+  have hc_norm : ‖c‖ < (1 / 4 : ℝ) := by
+    simpa [Metric.mem_ball, dist_zero_right] using hc
+  refine ⟨(1 / 2 : ℝ), ?_⟩
+  intro n
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      rw [orbit_succ]
+      change ‖orbit c 0 n ^ 2 + c‖ ≤ (1 / 2 : ℝ)
+      calc
+        ‖orbit c 0 n ^ 2 + c‖ ≤ ‖orbit c 0 n ^ 2‖ + ‖c‖ :=
+          norm_add_le _ _
+        _ = ‖orbit c 0 n‖ ^ 2 + ‖c‖ := by rw [Complex.norm_pow]
+        _ ≤ (1 / 2 : ℝ) ^ 2 + (1 / 4 : ℝ) := by
+          have hnonneg : 0 ≤ ‖orbit c 0 n‖ := norm_nonneg _
+          nlinarith [ih, le_of_lt hc_norm]
+        _ = (1 / 2 : ℝ) := by norm_num
+
+theorem ball_quarter_subset_interior_mandelbrot :
+    Metric.ball (0 : ℂ) (1 / 4 : ℝ) ⊆ interior MandelbrotSet :=
+  interior_maximal ball_quarter_subset_mandelbrot Metric.isOpen_ball
+
 theorem mandelbrot_eq_inter :
     MandelbrotSet =
       ⋂ n, {c : ℂ | ‖orbit c 0 n‖ ≤ (2 : ℝ)} := by
