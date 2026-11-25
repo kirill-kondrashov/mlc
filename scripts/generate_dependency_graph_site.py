@@ -22,6 +22,7 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
 from collections import deque
 from graphlib import CycleError, TopologicalSorter
 
@@ -3736,11 +3737,11 @@ def validate_research_graph(
     theorem_count = sum(node["kind"] in {"theorem", "lemma"} for node in nodes.values())
     if theorem_count < 40:
         raise RuntimeError("The research reduction has fewer than forty connected theorems")
-def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
+
+
+def _generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
     fq_index, edges = build_full_graph(repo_root)
 
-    if output_root.exists():
-        shutil.rmtree(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
 
     root_decl = resolve_root_decl(root_symbol, fq_index)
@@ -3840,6 +3841,33 @@ def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
         index_html(links),
         encoding="utf-8",
     )
+
+
+def generate_site(repo_root: Path, output_root: Path, root_symbol: str) -> None:
+    output_root.parent.mkdir(parents=True, exist_ok=True)
+    previous_root = output_root.with_name(f".{output_root.name}.previous")
+    if previous_root.exists():
+        if output_root.exists():
+            shutil.rmtree(previous_root)
+        else:
+            previous_root.rename(output_root)
+
+    with tempfile.TemporaryDirectory(
+        prefix=f".{output_root.name}.staging-", dir=output_root.parent
+    ) as staging:
+        staging_root = Path(staging)
+        _generate_site(repo_root, staging_root, root_symbol)
+        if output_root.exists():
+            output_root.rename(previous_root)
+        try:
+            staging_root.rename(output_root)
+        except BaseException:
+            if previous_root.exists() and not output_root.exists():
+                previous_root.rename(output_root)
+            raise
+
+    if previous_root.exists():
+        shutil.rmtree(previous_root)
 
 
 def main() -> None:

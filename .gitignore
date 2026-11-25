@@ -1,5 +1,6 @@
 /.lake/
 /site/
+/.site.*
 /.cache_marker
 __pycache__/
 output*.txt
