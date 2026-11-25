@@ -46,6 +46,16 @@ OPEN_OBLIGATIONS = {
     "MLC.Problem43PseudoSiegelAPrioriBoundsData",
     "MLC.Problem44VirtualMoleculeData",
 }
+VIRTUAL_MOLECULE_PROGRAMME = {
+    "MLC.Research.VirtualJuliaNest",
+    "MLC.Research.VirtualJuliaNest.SeparationEstimate",
+    "MLC.Research.VirtualPhaseParameter",
+    "MLC.Research.VirtualPhaseParameter.parameterSeparationEstimate",
+    "MLC.Research.VirtualMoleculeAPrioriControl",
+    "MLC.Research.CandidateSystem.VirtualMoleculeCompletion",
+    "MLC.Research.CandidateSystem.withVirtualMolecule_realization",
+    "MLC.Research.CandidateSystem.withVirtualMolecule_coverage_iff_completion",
+}
 
 
 
@@ -3717,6 +3727,12 @@ def validate_research_graph(
         )
     if not OPEN_OBLIGATIONS <= reachable:
         raise RuntimeError("A Dudko frontier problem is hidden from the graph")
+    missing_programme = sorted(VIRTUAL_MOLECULE_PROGRAMME - reachable)
+    if missing_programme:
+        raise RuntimeError(
+            "The virtual-Molecule programme is disconnected: "
+            + ", ".join(missing_programme)
+        )
     theorem_count = sum(node["kind"] in {"theorem", "lemma"} for node in nodes.values())
     if theorem_count < 40:
         raise RuntimeError("The research reduction has fewer than forty connected theorems")

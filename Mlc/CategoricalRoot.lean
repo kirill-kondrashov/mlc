@@ -11,7 +11,7 @@ abbrev mandelbrotSet : Set ℂ :=
   MLC.Quadratic.MandelbrotSet
 
 /-- The active root exposes exactly the two open problems identified by Dudko:
-    pseudo-Siegel a priori bounds and virtual-Molecule interpolation. -/
+    pseudo-Siegel a priori bounds and virtual-Molecule a priori completion. -/
 structure RootInput where
   problem43 : Problem43PseudoSiegelAPrioriBoundsData
   problem44 : Problem44VirtualMoleculeData problem43
