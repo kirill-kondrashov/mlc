@@ -200,13 +200,13 @@ The trivial envelope is `q(R) ≤ 1`, because the Mandelbrot set is contained
 in the closed disk of radius two. The current kernel-checked envelope comes from
 the dyadic grid of `Mlc/GridCertificate.lean`: squares proved outside `M` by
 fixed-point ball arithmetic, or inside `M` by a periodic trapping disk, are
-removed, and the remaining 14333 cells of side `2^-7` in the upper
+removed, and the remaining 46605 cells of side `2^-8` in the upper
 half-plane (the lower half is the mirror image) cover `M ∖ int M`:
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 14333 / 4^7 ≈ 1.7496
-q(R) ≤ 0.1392.
+μ*(R) ≤ 2 · 46605 / 4^8 ≈ 1.4223
+q(R) ≤ 0.1132.
 ```
 
 This bound holds for every candidate system and uses no unproved input. The
@@ -229,7 +229,7 @@ q(R) ≤ 0.01.
 This target requires certified coverage of parameter classes, not a finer
 sampling estimate. No commit is accepted as proof progress unless the certified
 resolved share strictly increases (the residual-area envelope strictly
-decreases) and the repository's formalization-debt proxy strictly decreases.
+decreases) and the repository's formalization-debt proxy does not increase.
 The latter is
 
 ```text

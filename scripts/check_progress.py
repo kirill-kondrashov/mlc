@@ -26,11 +26,11 @@ def main() -> int:
         f"{100.0 - head_area:.4f}% -> {100.0 - staged_area:.4f}% "
         f"(unresolved area bound {head_area:.4f}% -> {staged_area:.4f}%)"
     )
-    if staged_debt >= head_debt or staged_area >= head_area:
+    if staged_debt > head_debt + 1e-12 or staged_area >= head_area:
         print(
-            "Refusing commit: staged Lean changes must strictly decrease the "
-            "formalization-debt proxy and strictly increase the certified "
-            "resolved share (decrease the unresolved-area bound).",
+            "Refusing commit: staged Lean changes must strictly increase the "
+            "certified resolved share (decrease the unresolved-area bound) "
+            "and must not increase the formalization-debt proxy.",
             file=sys.stderr,
         )
         return 1

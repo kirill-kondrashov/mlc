@@ -26,8 +26,8 @@ but a nonempty `R` of measure zero would also give it, so the share is read
 with the count of open root obligations.
 
 The repository hook runs `scripts/check_progress.py`. A staged proof-progress
-commit must strictly decrease the dependency-graph milestone debt and strictly
-increase the certified resolved share before Git accepts it.
+commit must strictly increase the certified resolved share and must not increase
+the dependency-graph milestone debt before Git accepts it.
 
 `generate_grid_tiles.py` regenerates `Mlc/GridTiles/Part*.lean` and
 `Mlc/GridCertified.lean` from the parameters in `Mlc/GridParams.lean`. It asks

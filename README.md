@@ -69,10 +69,12 @@ unresolved finest cells therefore cover `M ∖ int M`, and the same count bounds
 the area of every residual set by `unresolved_volume_le_grid`. The upper
 half-plane is classified and the lower half follows by conjugation symmetry.
 The count is checked by kernel reduction (`decide +kernel`, no `native_decide`).
-The expensive root squares are checked in independent generated modules
-`Mlc/GridTiles/Part*.lean`, which Lake builds in parallel; regenerate them with
+The expensive root squares are checked in generated modules
+`Mlc/GridTiles/Part*.lean`, arranged in eight import chains so that at most
+eight kernel checks run at once; regenerate them with
 `python3 scripts/generate_grid_tiles.py` after changing `Mlc/GridParams.lean`.
-A full check takes roughly 13 CPU minutes and 3--4 GB of memory per module.
+The depth-8 check takes roughly 85 CPU minutes (about 15 minutes of wall time
+on 22 cores) and 3--5 GB of memory per running module.
 
 ```bash
 make build

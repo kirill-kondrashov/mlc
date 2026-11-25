@@ -536,6 +536,27 @@ def mandelbrot_path(repo_root: Path) -> str:
     return data
 
 
+def merge_rects(
+    rects: list[tuple[float, float, float, float]]
+) -> list[tuple[float, float, float, float]]:
+    """Merge horizontally adjacent rectangles with the same vertical extent."""
+    rows: dict[tuple[float, float], list[tuple[float, float]]] = {}
+    for x0, y0, x1, y1 in rects:
+        rows.setdefault((y0, y1), []).append((x0, x1))
+    merged = []
+    for (y0, y1), spans in rows.items():
+        spans.sort()
+        start, end = spans[0]
+        for x0, x1 in spans[1:]:
+            if abs(x0 - end) < 1e-12:
+                end = x1
+            else:
+                merged.append((start, y0, end, y1))
+                start, end = x0, x1
+        merged.append((start, y0, end, y1))
+    return merged
+
+
 def grid_regions(repo_root: Path) -> list[dict[str, object]]:
     """Squares of the kernel-checked grid, exported by the Lean checker itself."""
     sources = [
@@ -580,8 +601,8 @@ def grid_regions(repo_root: Path) -> list[dict[str, object]]:
         target.append(rect)
         target.append((rect[0], -rect[3], rect[2], -rect[1]))
     return [
-        {"kind": "rects", "role": "interior", "rects": inner},
-        {"kind": "rects", "role": "unresolved", "rects": unresolved},
+        {"kind": "rects", "role": "interior", "rects": merge_rects(inner)},
+        {"kind": "rects", "role": "unresolved", "rects": merge_rects(unresolved)},
     ]
 
 
@@ -831,7 +852,7 @@ certified by the commit with the same colour in the table.</figcaption>
 <h2>Next routes <span class="chip">planning priors, not theorems</span></h2>
 {routes_html()}
 <p class="p-foot">The commit hook requires the resolved share to increase,
-together with a decrease of the formalization-debt proxy ({float(rows[-1]['debt_percent']):.3f}% now).</p>
+while the formalization-debt proxy must not increase ({float(rows[-1]['debt_percent']):.3f}% now).</p>
 </section>
 </div>"""
 

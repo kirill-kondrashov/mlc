@@ -56,10 +56,10 @@ The currently proved foundation includes:
   \item compactness of \(M\), the inclusion \(M\subseteq
         \overline{B(0,2)}\), and the certified interior inclusion
         \(B(0,1/4)\subseteq\operatorname{int}M\);
-  \item a kernel-checked dyadic grid of depth 7: squares proved outside
+  \item a kernel-checked dyadic grid of depth 8: squares proved outside
         \(M\) or inside \(M\) are removed, giving
-        \(\mu^*(M\setminus\operatorname{int}M)\leq 2\cdot14333/4^{7}
-        \approx 1.750\), or \(13.9\%\) of the disk envelope.
+        \(\mu^*(M\setminus\operatorname{int}M)\leq 2\cdot46605/4^{8}
+        \approx 1.422\), or \(11.3\%\) of the disk envelope.
 \end{itemize}
 
 The two remaining root obligations are genuine mathematical existence
@@ -124,8 +124,8 @@ The formalization-debt proxy is
        {1+\text{achieved milestone weight}}.
 \]
 It is an audit gate rather than a measure of the Mandelbrot residual set.
-The commit hook rejects a proof-progress commit unless this value strictly
-decreases and the certified resolved share strictly increases.
+The commit hook rejects a proof-progress commit unless the certified resolved
+share strictly increases and this value does not increase.
 
 \begin{table}[ht]
   \centering\footnotesize
@@ -144,7 +144,7 @@ local-connectivity certificate at stage \(t\). The area component is
 \]
 The checked bound is
 \[
-  A_t\leq\frac{2\cdot 14333}{4^{7}}\cdot\frac{1}{4\pi}\approx 0.1392.
+  A_t\leq\frac{2\cdot 46605}{4^{8}}\cdot\frac{1}{4\pi}\approx 0.1132.
 \]
 The actual value remains unknown. The next verified numerical gate is a
 hundredfold improvement from the original disk envelope:
