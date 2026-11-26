@@ -3,7 +3,7 @@
 Utility scripts for Lean dependency-graph generation, progress reporting, and
 local serving. They use only the Python standard library.
 
-The interactive graph uses the same site generator and renderer as `main`:
+The interactive graph is one 2D figure, the proof spine (`spine_graph.py`):
 
 ```sh
 make graphs
@@ -11,8 +11,11 @@ make serve
 ```
 
 `export_dependencies.lean` supplies constants from elaborated types and proofs.
-Generation checks reachability, acyclicity and the axiom frontier, then writes
-`site/` with HTML, JavaScript, JSON, and the progress files.
+Generation checks reachability, acyclicity and the axiom frontier, checks that
+the milestones of the spine form a consistent order in the graph, then writes
+`site/` with one HTML page (an inline SVG of about 200 elements, laid out by the
+generator) and the progress files. The page has hover tracing, a side panel, a
+search over the declarations, zoom, category filters, and the **Progress** tab.
 
 `progress_report.py` computes the progress numbers from Git history. The
 **Progress** tab shows the certified resolved share `100% − μ*(R) / 4π` of the

@@ -1,6 +1,6 @@
 # Mandelbrot Local Connectivity in Lean 4
 
-[Interactive dependency graph](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
+[Interactive proof spine](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/)
 
 The long-term research plan is recorded in the
 [roadmap](ROADMAP.md). The short mathematical status report is maintained as
@@ -47,6 +47,18 @@ uncovered boundary parameter.
 Every declaration in `Mlc/` is required by the rooted dependency graph. The
 generator fails if a local declaration becomes disconnected or if an open
 frontier other than Problems 4.3 and 4.4 is exposed.
+
+The graph is drawn as one 2D figure, the proof spine. The spine climbs from the
+three kernel axioms at the bottom to the statement of MLC at the top (the head).
+Its ten vertebrae are milestone theorems of the library, in an order that the
+generator checks against the dependency graph. Every other declaration hangs on
+the branch of the lowest vertebra that needs it. The tips of the branches are
+the two open problems of the root (red), the targets of Dudko's programme that
+are not formalized (amber, dashed: Conjecture 3.6, the area of `∂M`, the virtual
+subcases of Problem 4.4), the kernel-checked grid (cyan), and the checked
+lemmas (green). Hover a node to light its way to the head, click it for the
+statement, the Lean name and its declarations, and use the search to find any
+declaration.
 
 | Purpose | Source |
 | --- | --- |
