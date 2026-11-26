@@ -160,8 +160,8 @@ GRID_PALETTE = (
     "#f87171",
     "#6366f1",
 )
-TARGET_PERCENT = 1.0  # stretch goal: a hundredfold reduction of the unresolved area
-MIN_TARGET_PERCENT = 5.0  # required: a twentyfold reduction, i.e. a 95% resolved share
+TARGET_PERCENT = 1.0  # second gate: a hundredfold reduction of the unresolved area
+MIN_TARGET_PERCENT = 5.0  # first gate: a twentyfold reduction, i.e. a 95% resolved share
 MAP_WINDOW = (-2.3, 0.8, -1.4, 1.4)
 MAP_GRID = (620, 560)
 MAP_ITERATIONS = 120
@@ -358,11 +358,14 @@ def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
         short, stamp, subject = _git(
             repo_root, "show", "-s", "--format=%h%x09%ct%x09%s", ref
         ).split("\t", 2)
+        message = _git(repo_root, "show", "-s", "--format=%B", ref)
+        noted = re.search(r"(?m)^Area-note:\s*(.+)$", message)
         rows.append(
             {
                 "sha": short,
                 "timestamp": int(stamp),
                 "subject": subject,
+                "area_note": noted.group(1).strip() if noted else "",
                 "baseline": index == 0,
                 "baseline_name": base_name,
                 **progress_metrics_from_ref(repo_root, ref),
@@ -447,7 +450,9 @@ def annotate_rows(rows: list[dict[str, object]]) -> None:
                         "verifies. "
                     )
                 else:
-                    lead = "Finer certified grid. "
+                    lead = (
+                        f"{row['area_note']} " if row.get("area_note") else "Finer certified grid. "
+                    )
                 reasons = (
                     (reasons + " " if steps else lead)
                     + f"Depth {grid['depth']}: {grid['cells']} unresolved cells of "
@@ -1266,8 +1271,16 @@ def stats_html(rows: list[dict[str, object]]) -> str:
     base = rows[0]
     area = float(current["area_upper_percent"])
     open_roots = int(current["open_frontier"])
-    least = 100.0 - MIN_TARGET_PERCENT
-    stretch = 100.0 - TARGET_PERCENT
+    gates = tuple(
+        (100.0 - percent, 100.0 / percent)
+        for percent in (MIN_TARGET_PERCENT, TARGET_PERCENT)
+    )
+    reached = [gate for gate in gates if resolved_percent(area) >= gate[0]]
+    ahead = [gate for gate in gates if resolved_percent(area) < gate[0]]
+    gate_text = ", ".join(
+        [f"{share:.0f}% (×{factor:.0f}) reached" for share, factor in reached]
+        + [f"{share:.0f}% (×{factor:.0f}) next" for share, factor in ahead[:1]]
+    )
     tiles = (
         (
             "primary",
@@ -1285,9 +1298,8 @@ def stats_html(rows: list[dict[str, object]]) -> str:
         (
             "",
             "Target",
-            f"≥ {least:.0f}%",
-            f"a ×{100.0 / MIN_TARGET_PERCENT:.0f} reduction of the unresolved "
-            f"area; stretch goal {stretch:.0f}% (×{100.0 / TARGET_PERCENT:.0f})",
+            "100%",
+            f"unresolved area $0$. Gates: {gate_text}",
         ),
         (
             "",

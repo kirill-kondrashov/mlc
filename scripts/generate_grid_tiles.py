@@ -25,7 +25,7 @@ import argparse
 import re
 import subprocess
 
-CHAINS = 8  # import chains: at most this many modules are checked at once
+CHAINS = 12  # import chains: at most this many modules are checked at once
 MODULE_COST = 4000.0  # kernel work of a module, in steps of the model
 MODULE_HINTS = 6000  # hints of a module
 LADDER = 40  # Lean: ladderLen

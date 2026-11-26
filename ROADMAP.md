@@ -203,16 +203,16 @@ orbit (center, derivative at the center, remainder) certifies a square as
 outside `M` when the model leaves the disk of radius 2, and as inside `M` when a
 moving disk centered at the model returns into itself, which gives a bounded
 critical orbit for every parameter of the square. These squares are removed, and
-the remaining 67609 cells of side `2^-9` in the upper half-plane (the lower half
+the remaining 224189 cells of side `2^-10` in the upper half-plane (the lower half
 is the mirror image) cover `M ∖ int M`:
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 67609 / 4^9 ≈ 0.5158
-q(R) ≤ 0.0410.
+μ*(R) ≤ 2 · 224189 / 4^10 ≈ 0.4276
+q(R) ≤ 0.0340.
 ```
 
-The resolved share is therefore at least `95.89%`, a 24-fold reduction of the
+The resolved share is therefore at least `96.59%`, a 29-fold reduction of the
 unresolved area. The earlier classifier with disk enclosures stopped at `11.2%`
 (`q(R) ≤ 0.1117`): the disks lose the phases of the derivative, so squares at a
 few cell widths from `M` stay unresolved, and a fixed trapping disk needs a
