@@ -89,8 +89,9 @@ refining some blocks leaves the other modules unchanged and Lake keeps their
 builds. The modules are produced by `python3 scripts/refine_grid.py` and
 `python3 scripts/generate_grid_tiles.py`. The depth-11 grid took about 7 CPU
 hours (about 40 minutes of wall time on 22 cores); refining the blocks with
-`Re c < -3/4` to depth 12 took about 16 minutes more, and the blocks with
-`-3/4 ≤ Re c < 0` about 24 minutes. A running module needs
+`Re c < -3/4` to depth 12 took about 16 minutes more, the blocks with
+`-3/4 ≤ Re c < 0` about 24 minutes, and the blocks with `Re c ≥ 0` about 14
+minutes. A running module needs
 about 2.5 GB of memory, and Lake runs as many modules at once as the machine has
 cores, so a machine with little memory needs fewer parallel jobs.
 
