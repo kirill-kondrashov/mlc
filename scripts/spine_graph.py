@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import html
 import json
+import math
 import re
 import subprocess
 import textwrap
@@ -38,6 +39,25 @@ MIN_LEAF_H = 62.0
 HEAD_W, HEAD_H = 500.0, 128.0
 MIN_BUD = 3  # smaller groups of declarations are listed in the vertebra panel only
 TILE_NAME = re.compile(r"^MLC\.Certified\.(tiles|part|w)_\d+_\d+$")
+# Declaration kinds of the Lean source, grouped for the counts of the figure.
+KIND_GROUP = {
+    "theorem": "thm",
+    "lemma": "lem",
+    "def": "def",
+    "abbrev": "def",
+    "instance": "def",
+    "structure": "str",
+    "class": "str",
+    "axiom": "ax",
+}
+STAT_KEYS = ("thm", "lem", "def", "str", "ax")
+KIND_WORDS = {
+    "thm": ("theorem", "theorems"),
+    "lem": ("lemma", "lemmas"),
+    "def": ("definition", "definitions"),
+    "str": ("structure", "structures"),
+    "ax": ("axiom", "axioms"),
+}
 GRID_FILES = {
     "Mlc/GridCertified.lean": "tiles",
     "Mlc/GridTiles/*": "tiles",
@@ -207,6 +227,42 @@ def prior(identifier: str) -> str:
     return f"{float(route(identifier)['probability']) * 100:.0f}%"
 
 
+def new_stats() -> dict[str, int]:
+    """Counts of declarations: by kind, in all (n), generated (gen*), and lines of source."""
+    return {
+        **{key: 0 for key in STAT_KEYS},
+        "n": 0,
+        "gen": 0,
+        "gen_thm": 0,
+        "gen_def": 0,
+        "lines": 0,
+    }
+
+
+def add_stats(total: dict[str, int], names, fq_index) -> dict[str, int]:
+    """Add the declarations of ``names`` to ``total``; generated ones count apart from lines."""
+    for name in names:
+        decl = fq_index[name]
+        group = KIND_GROUP.get(decl.kind, "def")
+        total[group] += 1
+        total["n"] += 1
+        if TILE_NAME.match(name):
+            total["gen"] += 1
+            total["gen_thm" if group == "thm" else "gen_def"] += 1
+        else:
+            total["lines"] += max(1, decl.end_line - decl.line + 1)
+    return total
+
+
+STAT_WORDS = {"thm": "thm", "lem": "lem", "def": "def", "str": "struct"}
+
+
+def stat_line(stats: dict[str, int]) -> str:
+    """``17 thm · 4 lem · 2 def``: the non-zero counts by kind."""
+    parts = [f"{stats[key]:,} {word}" for key, word in STAT_WORDS.items() if stats[key]]
+    return " · ".join(parts)
+
+
 @dataclass
 class Node:
     id: str
@@ -222,6 +278,9 @@ class Node:
     parent: str = ""
     side: int = 0
     below: bool = False  # drawn under its parent instead of beyond it
+    stats: dict[str, int] = field(default_factory=lambda: new_stats())
+    level: dict[str, int] = field(default_factory=lambda: new_stats())
+    stat: str = ""
     children: list["Node"] = field(default_factory=list)
     members: list[dict[str, object]] = field(default_factory=list)
     x: float = 0.0
@@ -386,12 +445,20 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     for node in vertebrae:
         node.members.append(member_row(fq_index[node.lean]))
     head.members.append(member_row(head_decl))
+    for node in [*vertebrae, head]:
+        add_stats(node.stats, [node.lean], fq_index)
 
     def owner_node(index: int) -> Node:
         return head if index == len(SPINE) else vertebrae[index]
 
     def owner_key(owner: Node) -> str:
         return owner.id.split(":", 1)[-1]
+
+    # Totals of a level: the milestone with everything that first hangs on it.
+    for index, owner in enumerate([*vertebrae, head]):
+        add_stats(owner.level, [owner.lean], fq_index)
+    for name, index in owner_index.items():
+        add_stats(owner_node(index).level, [name], fq_index)
 
     # Groups of declarations: (owner, file) -> names
     groups: dict[tuple[int, str], list[str]] = {}
@@ -405,6 +472,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
     search: list[dict[str, object]] = []
 
     def register(names: list[str], owner: Node) -> None:
+        add_stats(owner.stats, names, fq_index)
         for name in sorted(names):
             if TILE_NAME.match(name):
                 continue
@@ -463,7 +531,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
                 kind="bud",
                 cat="checked",
                 title=title,
-                sub=f"{sub}\u00a0·\u00a0{len(names)}",
+                sub=sub,
                 text=f"Declarations of {file} that the milestone "
                 f"“{owner.title}” needs first.",
                 file=file,
@@ -476,8 +544,6 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
 
     for part, node in grid_nodes.items():
         node.members.sort(key=lambda row: (str(row["f"]), int(row["l"])))
-        if part != "tiles":
-            node.sub = f"{node.sub}\u00a0·\u00a0{node.count}"
     if "tiles" in grid_nodes:
         tiles = grid_nodes["tiles"]
         percent = 100.0 - float(metrics.get("area_upper_percent", 100.0))
@@ -487,9 +553,11 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             else tiles.sub
         )
         tiles.text = (
-            "Generated Lean modules hold the certificates of the dyadic grid. The "
-            "kernel checks every certificate and counts the unresolved cells; "
-            f"{tiles.count:,} generated declarations. "
+            f"The grid is stored as {tile_modules:,} Lean modules generated by a script. "
+            "Each module lists squares of the grid with their certificates (one "
+            "definition) and proves, by kernel computation, how many unresolved cells "
+            "they leave (one theorem); the aggregator adds one more theorem per module. "
+            f"Together they are {tiles.stats['gen']:,} of the declarations of the library. "
             f"Unresolved area ≤ {float(grid.get('area', 0.0)):.4f}, "
             f"which is {percent:.3f}% of the envelope 4π resolved. "
             "The limit of finer grids is the area of ∂M, whose vanishing is the open "
@@ -558,6 +626,7 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
             )
         )
         problem.members.append(member_row(fq_index[name]))
+        add_stats(problem.stats, [name], fq_index)
         search.append({**problem.members[0], "o": problem.id})
         problem_nodes[name] = problem
 
@@ -682,24 +751,41 @@ def build_model(fq_index, edges, reachable, axioms, metrics, repo_root: Path) ->
         )
     )
     # Text layout and the heights of the nodes.
+    for index, node in enumerate([*vertebrae, head]):
+        hand = node.level["n"] - node.level["gen"]
+        node.stat = f"{hand:,} declarations · {node.level['lines']:,} lines" + (
+            f" + {node.level['gen']:,} generated" if node.level["gen"] else ""
+        )
+    for node in nodes.values():
+        if node.kind == "bud":
+            node.stat = stat_line(node.stats)
     for node in nodes.values():
         if node.kind == "vertebra":
             node.lines = wrap(node.title, 30, 1)
             node.sublines = wrap(node.sub, 40, 3)
-            node.h = 16 + 19 * len(node.lines) + 15 * len(node.sublines) + 6
+            node.h = 16 + 19 * len(node.lines) + 15 * len(node.sublines) + 17
         elif node.kind == "head":
             node.w, node.h = HEAD_W, HEAD_H
         else:
             node.lines = wrap(node.title, 23, 2)
             node.sublines = wrap(node.sub, 29, 2)
             node.h = 14 + 17 * len(node.lines) + 14 * len(node.sublines) + 6
+            if node.stat:
+                node.h += 15
             if node.kind == "ground":
                 node.w = 168.0
 
+    totals = add_stats(new_stats(), list(fq_index), fq_index)
+    generated_bytes = sum(
+        path.stat().st_size for path in (repo_root / "Mlc" / "GridTiles").glob("G*.lean")
+    )
+    aggregator = repo_root / "Mlc" / "GridCertified.lean"
+    if aggregator.is_file():
+        generated_bytes += aggregator.stat().st_size
     parameters = {
         "tile_modules": tile_modules,
-        "declarations": len([n for n in fq_index if not TILE_NAME.match(n)]),
-        "generated": len([n for n in fq_index if TILE_NAME.match(n)]),
+        "totals": totals,
+        "generated_mb": generated_bytes / 1e6,
     }
     return {
         "nodes": nodes,
@@ -823,7 +909,10 @@ def path_to_head(model: dict[str, object], node: Node) -> list[str]:
 def text_block(node: Node, title_size: float, sub_size: float) -> str:
     title_lh = title_size + 3
     sub_lh = sub_size + 2.5
+    stat_lh = 14.0
     total = title_lh * len(node.lines) + sub_lh * len(node.sublines)
+    if node.stat:
+        total += stat_lh + 2
     y = node.y - total / 2 + title_size
     out = []
     for line in node.lines:
@@ -839,7 +928,49 @@ def text_block(node: Node, title_size: float, sub_size: float) -> str:
             f"{html.escape(line)}</text>"
         )
         y += sub_lh
+    if node.stat:
+        out.append(
+            f'<text class="st" x="{node.x:.1f}" y="{y + 3:.1f}" font-size="{sub_size - 0.5}">'
+            f"{html.escape(node.stat)}</text>"
+        )
     return "".join(out)
+
+
+def compact(count: int) -> str:
+    """``15k`` for 15074, ``1.2k`` for 1234, the number itself below a thousand."""
+    if count >= 10000:
+        return f"{round(count / 1000)}k"
+    if count >= 1000:
+        return f"{count / 1000:.1f}k"
+    return str(count)
+
+
+def stats_title(stats: dict[str, int], what: str) -> str:
+    """Tooltip of a bubble: the count with the split by kind."""
+    kinds = ", ".join(
+        f"{stats[key]:,} {KIND_WORDS[key][0 if stats[key] == 1 else 1]}"
+        for key in STAT_KEYS
+        if stats[key]
+    )
+    return f"{stats['n']:,} {what}: {kinds}"
+
+
+def bubble(node: Node, stats: dict[str, int], what: str) -> str:
+    """A badge on the outer top corner of a node; its radius grows with the log of the count."""
+    count = stats["n"]
+    if count <= 0:
+        return ""
+    radius = 8.5 + 3.4 * math.log10(1 + count)
+    outward = node.side or (-1 if node.kind == "vertebra" else 1)
+    cx = node.x + outward * (node.w / 2 - 4)
+    cy = node.y - node.h / 2 + 3
+    label = compact(count)
+    size = 10.5 if len(label) <= 3 else 9.5
+    return (
+        f'<g class="bubble"><title>{html.escape(stats_title(stats, what))}</title>'
+        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{radius:.1f}"/>'
+        f'<text x="{cx:.1f}" y="{cy + size * 0.36:.1f}" font-size="{size}">{label}</text></g>'
+    )
 
 
 def node_svg(model: dict[str, object], node: Node) -> str:
@@ -864,7 +995,8 @@ def node_svg(model: dict[str, object], node: Node) -> str:
             f'<text class="cond" x="{node.x:.1f}" y="{node.y + 49:.1f}" font-size="12">'
             "conditional on Problems 4.3 and 4.4</text>"
         )
-        return f"<g {attrs}>{shape}{body}</g>"
+        everything = bubble(node, model["parameters"]["totals"], "declarations in the library")
+        return f"<g {attrs}>{shape}{body}{everything}</g>"
     radius = 14 if node.kind == "vertebra" else 12
     shape = (
         f'<rect class="shape" x="{node.x - node.w / 2:.1f}" y="{node.y - node.h / 2:.1f}" '
@@ -876,8 +1008,11 @@ def node_svg(model: dict[str, object], node: Node) -> str:
         body += (
             f'<text class="num" x="{node.x - node.w / 2 + 15:.1f}" y="{node.y + 4:.1f}">{number}</text>'
         )
+        body += bubble(node, node.level, "declarations on this level")
     else:
         body = text_block(node, 13.5, 11.5)
+        if node.kind == "bud":
+            body += bubble(node, node.stats, "declarations")
     return f"<g {attrs}>{shape}{body}</g>"
 
 
@@ -940,11 +1075,22 @@ LEGEND = (
 
 def model_json(model: dict[str, object], width: float, height: float) -> str:
     nodes: dict[str, Node] = model["nodes"]
+    vertebrae: list[Node] = model["vertebrae"]
+    head: Node = model["head"]
+    parameters = model["parameters"]
+    levels = [
+        {"id": node.id, "title": node.title, "stats": node.level}
+        for node in [head, *vertebrae[::-1]]
+    ]
     payload = {
         "width": width,
         "height": height,
         "base": model["base_url"],
         "commit": model["commit"],
+        "totals": parameters["totals"],
+        "modules": parameters["tile_modules"],
+        "generated_mb": round(parameters["generated_mb"], 1),
+        "levels": levels,
         "nodes": {
             node.id: {
                 "id": node.id,
@@ -957,6 +1103,8 @@ def model_json(model: dict[str, object], width: float, height: float) -> str:
                 "file": node.file,
                 "line": node.line,
                 "count": node.count,
+                "stats": node.stats,
+                "level": node.level if node.kind in ("vertebra", "head") else None,
                 "path": path_to_head(model, node),
                 "members": node.members[:120],
                 "more": max(0, len(node.members) - 120),
@@ -1070,6 +1218,22 @@ body { margin: 0; font-family: "IBM Plex Sans", "Segoe UI", sans-serif; backgrou
 #spine .node .m { fill: var(--muted); text-anchor: middle; font-family: "IBM Plex Mono", "SFMono-Regular", monospace; }
 #spine .node .num { fill: var(--n); font-size: 13px; font-weight: 700; text-anchor: middle; opacity: 0.85; }
 #spine .node .cond { fill: var(--informal); text-anchor: middle; font-weight: 600; }
+#spine .node .st { fill: var(--n); text-anchor: middle; font-weight: 600; }
+#spine .bubble circle { fill: var(--n); stroke: var(--stage); stroke-width: 2.2; }
+#spine .bubble text { fill: var(--bg); font-weight: 700; text-anchor: middle; }
+.zoombox { display: inline-flex; gap: 6px; }
+.progress-mode .spine-only { display: none !important; }
+.panel table.scale { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+.panel table.scale th { text-align: right; font-weight: 600; color: var(--muted); padding: 2px 4px; font-size: 11px; }
+.panel table.scale th:first-child, .panel table.scale td:first-child { text-align: left; }
+.panel table.scale td { padding: 3px 4px; border-top: 1px solid var(--border); text-align: right; font-variant-numeric: tabular-nums; vertical-align: top; }
+.panel table.scale tr[data-go] { cursor: pointer; }
+.panel table.scale tr[data-go]:hover { background: var(--button-bg); }
+.panel .bar { height: 4px; border-radius: 2px; background: var(--border); margin-top: 3px; }
+.panel .bar i { display: block; height: 100%; border-radius: 2px; background: var(--spine); }
+.panel .gen { color: var(--muted); font-size: 10.5px; }
+.panel ul.facts { margin: 6px 0; padding: 0; list-style: none; }
+.panel ul.facts li { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; border-bottom: 1px dotted var(--border); }
 #spine .node .head-t { font-size: 30px; font-weight: 700; letter-spacing: 0.06em; }
 #spine .node.cat-informal .shape { stroke-dasharray: 7 4; }
 #spine .node.cat-open .shape { stroke-width: 2.8; filter: drop-shadow(0 0 5px var(--n)); animation: pulse 2.6s ease-in-out infinite; }
@@ -1202,6 +1366,44 @@ SCRIPT = r"""
     return `${data.base}/blob/${data.commit}/${file}${line ? "#L" + line : ""}`;
   }
 
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+
+  // Counts of declarations, by kind and by source, for the overview and for a node.
+  function factsList(s) {
+    const rows = [
+      ["Theorems", s.thm], ["Lemmas", s.lem], ["Definitions", s.def], ["Structures", s.str], ["Axioms", s.ax],
+    ].filter((r) => r[1]).map((r) => `<li><span>${r[0]}</span><b>${fmt(r[1])}</b></li>`);
+    if (s.lines) rows.push(`<li><span>Lines of Lean (hand-written)</span><b>${fmt(s.lines)}</b></li>`);
+    if (s.gen) rows.push(`<li><span>Generated by a script</span><b>${fmt(s.gen)}</b></li>`);
+    return `<ul class="facts">${rows.join("")}</ul>`;
+  }
+
+  function scaleSection() {
+    const t = data.totals;
+    const hand = t.n - t.gen;
+    const rows = data.levels.map((lv) => {
+      const s = lv.stats;
+      return { id: lv.id, title: lv.title, hand: s.n - s.gen, thm: s.thm - s.gen_thm, lem: s.lem, lines: s.lines, gen: s.gen };
+    });
+    const peak = Math.max(1, ...rows.map((r) => r.hand));
+    const body = rows.map((r) => `<tr data-go="${esc(r.id)}"><td>${esc(r.title)}
+      <div class="bar"><i style="width:${(100 * r.hand / peak).toFixed(1)}%"></i></div></td>
+      <td>${fmt(r.hand)}</td><td>${fmt(r.thm)}</td><td>${fmt(r.lem)}</td><td>${fmt(r.lines)}</td></tr>`).join("");
+    return `
+      <h3>Scale of the formalization</h3>
+      <p><b>${fmt(t.n)}</b> declarations: ${fmt(t.thm)} theorems, ${fmt(t.lem)} lemmas,
+      ${fmt(t.def + t.str + t.ax)} definitions, structures and axioms.</p>
+      <p><b>${fmt(hand)}</b> are written by hand (${fmt(t.thm - t.gen_thm)} theorems, ${fmt(t.lem)} lemmas,
+      ${fmt(t.lines)} lines of Lean). The other <b>${fmt(t.gen)}</b> are generated: ${fmt(data.modules)} modules
+      (${data.generated_mb} MB) with the certificates of the kernel-checked grid, ${fmt(t.gen_thm)} theorems and
+      ${fmt(t.gen_def)} definitions that the kernel evaluates.</p>
+      <p class="hint">The bubble on a node counts the declarations that hang on it; its size grows
+      with the logarithm of the count. A level is a vertebra with everything that first hangs on it.</p>
+      <table class="scale"><thead><tr><th>Level (top to bottom)</th><th>By hand</th><th>Thm</th><th>Lem</th><th>Lines</th></tr></thead>
+      <tbody>${body}</tbody></table>
+      <p class="hint">The grid adds ${fmt(t.gen)} generated declarations to the level “Completion ⇔ coverage”.</p>`;
+  }
+
   function overview(keepHash) {
     selected = null;
     if (!keepHash && window.history && history.replaceState) {
@@ -1217,7 +1419,9 @@ SCRIPT = r"""
       the <b style="color:var(--open)">open problems</b> of the root and the
       <b style="color:var(--informal)">targets of Dudko's programme</b> that are not formalized.</p>
       <p class="hint">Hover a node to light its way to the head. Click it for the statement, the Lean name
-      and the declarations behind it. Search finds any declaration. Ctrl and the wheel zoom; drag moves.</p>`;
+      and the declarations behind it. Search finds any declaration. Ctrl and the wheel zoom; drag moves.</p>
+      ${scaleSection()}`;
+    panel.querySelectorAll("tr[data-go]").forEach((tr) => tr.addEventListener("click", () => select(tr.dataset.go)));
   }
 
   function select(id, focusName) {
@@ -1243,6 +1447,9 @@ SCRIPT = r"""
       ? `<p><code>${esc(node.file)}${node.line ? ":" + node.line : ""}</code>${link ? ` · <a href="${esc(link)}" target="_blank" rel="noopener">source</a>` : ""}</p>` : "";
     const lean = node.lean ? `<p>Lean: <code>${esc(node.lean)}</code></p>` : "";
     const count = node.count ? `<p class="hint">${node.count.toLocaleString()} declarations in this group.</p>` : "";
+    const scale = node.level
+      ? `<h3>This level with its branches</h3>${factsList(node.level)}`
+      : (node.stats && node.stats.n > 1 ? `<h3>Declarations by kind</h3>${factsList(node.stats)}` : "");
     const rows = node.members.map((m) => {
       const hit = focusName && m.n === focusName ? " class=\"hit\"" : "";
       return `<li${hit}><span class="k">${esc(m.k)}</span>${esc(m.n)}<br><span class="hint">${esc(m.f)}:${m.l}</span></li>`;
@@ -1255,7 +1462,7 @@ SCRIPT = r"""
       <span class="badge cat-${esc(node.cat)}">${esc(CAT_NAME[node.cat] || node.cat)}</span>
       <h2>${esc(node.title)}</h2>
       <p class="hint">${esc(KIND_NAME[node.kind] || "")}${node.sub && node.kind !== "vertebra" ? " · " + esc(node.sub) : ""}</p>
-      ${node.text ? `<p>${esc(node.text)}</p>` : ""}${lean}${where}${count}${members}${trailHtml}`;
+      ${node.text ? `<p>${esc(node.text)}</p>` : ""}${lean}${where}${count}${scale}${members}${trailHtml}`;
     const hit = panel.querySelector("li.hit");
     if (hit) hit.scrollIntoView({ block: "center" });
     panel.querySelectorAll("[data-go]").forEach((li) => li.addEventListener("click", () => select(li.dataset.go)));
@@ -1355,6 +1562,7 @@ SCRIPT = r"""
   function setProgress(visible) {
     graphPanelEl.style.display = visible ? "none" : "grid";
     progressPanelEl.style.display = visible ? "block" : "none";
+    document.body.classList.toggle("progress-mode", visible);
     progressBtn.textContent = visible ? "View: Spine" : "View: Progress";
     if (window.history && history.replaceState) {
       history.replaceState(null, "", visible ? "#progress" : location.pathname + location.search);
@@ -1387,11 +1595,14 @@ def spine_page_html(title: str, model: dict[str, object], metrics: dict[str, obj
     svg = render_svg(model, width, height)
     data = model_json(model, width, height)
     percent = 100.0 - float(metrics.get("area_upper_percent", 100.0))
-    parameters = model["parameters"]
+    totals = model["parameters"]["totals"]
+    by_hand = totals["n"] - totals["gen"]
+    other = totals["def"] + totals["str"] + totals["ax"]
     summary = (
         f"Resolved share {percent:.3f}% · {int(metrics.get('open_frontier', 0))} open problems · "
-        f"{parameters['declarations']} declarations"
-        + (f" and {parameters['generated']:,} generated tile declarations" if parameters["generated"] else "")
+        f"{totals['n']:,} declarations: {totals['thm']:,} theorems, {totals['lem']:,} lemmas, "
+        f"{other:,} definitions, structures and axioms · {by_hand:,} written by hand, "
+        f"{totals['gen']:,} generated (the certificates of the grid)"
     )
     chips = "".join(
         f'<li><button type="button" data-cat="{cat}" aria-pressed="true">'
@@ -1414,18 +1625,20 @@ def spine_page_html(title: str, model: dict[str, object], metrics: dict[str, obj
   <header class="toolbar">
     <h1>{html.escape(title)}</h1>
     <span class="meta" id="summary">{html.escape(summary)}</span>
-    <label class="search">Search
+    <label class="search spine-only">Search
       <input id="search" type="search" placeholder="declaration name" autocomplete="off">
       <ul id="results" hidden></ul>
     </label>
     <div class="btns">
-      <button id="zoomOut" type="button" title="Zoom out">−</button>
-      <button id="zoomIn" type="button" title="Zoom in">+</button>
-      <button id="fitBtn" type="button" title="Fit the figure to the width">Fit</button>
+      <span class="zoombox spine-only">
+        <button id="zoomOut" type="button" title="Zoom out">−</button>
+        <button id="zoomIn" type="button" title="Zoom in">+</button>
+        <button id="fitBtn" type="button" title="Fit the figure to the width">Fit</button>
+      </span>
       <button id="progressBtn" type="button">View: Progress</button>
       <button id="themeBtn" type="button">Theme</button>
     </div>
-    <ul class="legend" id="legend">{chips}</ul>
+    <ul class="legend spine-only" id="legend">{chips}</ul>
   </header>
   <main class="content" id="graphPanel">
     <div class="stage" id="stage">{svg}</div>

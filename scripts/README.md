@@ -15,7 +15,9 @@ Generation checks reachability, acyclicity and the axiom frontier, checks that
 the milestones of the spine form a consistent order in the graph, then writes
 `site/` with one HTML page (an inline SVG of about 200 elements, laid out by the
 generator) and the progress files. The page has hover tracing, a side panel, a
-search over the declarations, zoom, category filters, and the **Progress** tab.
+search over the declarations, zoom, category filters, the counts of theorems,
+lemmas and declarations by level of the spine, and the **Progress** tab (the
+controls of the figure disappear there).
 
 `progress_report.py` computes the progress numbers from Git history. The
 **Progress** tab shows the certified resolved share `100% − μ*(R) / 4π` of the

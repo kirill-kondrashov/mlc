@@ -58,7 +58,11 @@ are not formalized (amber, dashed: Conjecture 3.6, the area of `∂M`, the virtu
 subcases of Problem 4.4), the kernel-checked grid (cyan), and the checked
 lemmas (green). Hover a node to light its way to the head, click it for the
 statement, the Lean name and its declarations, and use the search to find any
-declaration.
+declaration. The bubble on a node counts the declarations that hang on it (its
+size grows with the logarithm of the count), the line under a node splits them
+into theorems, lemmas, definitions and structures, and the side panel gives the
+totals of the library, the share written by hand and the share generated for the
+grid certificates, and a table by level of the spine.
 
 | Purpose | Source |
 | --- | --- |
