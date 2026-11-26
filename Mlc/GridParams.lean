@@ -1,21 +1,16 @@
 /-!
 # Parameters of the checked grid
 
-`gridPmax` is the largest period scanned by the trapping test, `gridJ` the
-number of critical-orbit steps before it, and `gridFuel` the number of
-subdivisions below the root squares of side `1/8`.
+`gridFuel` is the number of subdivisions below the root squares of side `1/8`.
+The search program `scripts/grid_hints.lean` found the certificates for these
+parameters with inside certificates of periods up to 8 and at most 640 model
+steps; the kernel checks every certificate and does not use these limits.
 -/
 
 namespace MLC.Certified
 
-/-- Maximal period scanned by the trapping test. -/
-def gridPmax : Nat := 6
-
-/-- Number of critical-orbit steps before the trapping test. -/
-def gridJ : Nat := 20
-
 /-- Number of subdivisions below the root squares of side `1/8`. -/
-def gridFuel : Nat := 5
+def gridFuel : Nat := 6
 
 /-- Depth of the finest cells, `3 + gridFuel`. -/
 def gridDepth : Nat := 3 + gridFuel

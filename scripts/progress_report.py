@@ -3,15 +3,19 @@
 
 The unresolved set R is the set of parameters c in the Mandelbrot set M at
 which no local-connectivity certificate has been proved. The dashboard reports
-the resolved share 100% - mu*(R)/(4 pi) of the envelope: 0% means nothing is
-resolved, 100% means mu*(R) = 0. MLC means R is empty, which gives 100%. The
-converse fails: a measure-zero R may be nonempty, so the share is always read
-together with the number of open root obligations. The commit gate works on
-the equivalent upper bound mu*(R)/(4 pi).
+the resolved share 100% - mu*(R)/(4 pi) of the envelope; 100% means
+mu*(R) = 0. MLC means R is empty, which gives 100%. The converse fails: a
+measure-zero R may be nonempty, so the share is always read together with the
+number of open root obligations. The commit gate works on the equivalent upper
+bound mu*(R)/(4 pi).
+
+The baseline is the state of the literature: the first commit of the history
+whose formal root (``RootInput``) is exactly Dudko's Problems 4.3 and 4.4. Its
+row lists the two open problems; later rows show what each commit resolved.
 
 Lean sources are read from Git history. The module renders
 
-* the commit table relative to ``origin/main``,
+* the commit table after the literature baseline,
 * the route-planning table,
 * a vector map of M showing the parameters certified by each commit,
 * LaTeX fragments used by the status report.
@@ -22,11 +26,13 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 import argparse
+import functools
 import hashlib
 import html
 import math
 import re
 import subprocess
+import sys
 import time
 
 PROGRESS_MILESTONES = (
@@ -53,12 +59,12 @@ AREA_STEPS = (
     {
         "symbol": "residualOuterArea_le_four_pi",
         "percent": 100.0,
-        "exact": "4π",
+        "exact": r"4\pi",
         "color": "#94a3b8",
         "title": "Disk envelope",
         "reason": (
-            "Proved M ⊆ {|c| ≤ 2}, so the unresolved set lies in the disk "
-            "of area 4π (the normalization; the resolved share stays 0%)."
+            r"Proved $M\subseteq\{|c|\le 2\}$, so the unresolved set lies in "
+            r"the disk of area $4\pi$ (the normalization of the area scale)."
         ),
         "regions": [
             {"kind": "disk", "cx": 0.0, "cy": 0.0, "r": 2.0, "role": "envelope"}
@@ -67,13 +73,13 @@ AREA_STEPS = (
     {
         "symbol": "ball_quarter_subset_interior_mandelbrot",
         "percent": 100.0 * 63.0 / 64.0,
-        "exact": "63π/16",
+        "exact": r"63\pi/16",
         "color": "#22c55e",
-        "title": "Interior disk |c| < 1/4",
+        "title": r"Interior disk $|c|<1/4$",
         "reason": (
-            "Proved B(0,1/4) ⊆ int M. Local connectivity is automatic at "
-            "interior points, so this disk is resolved: unresolved area "
-            "4π → 63π/16."
+            r"Proved $B(0,1/4)\subseteq\operatorname{int}M$. Local "
+            r"connectivity is automatic at interior points, so this disk is "
+            r"resolved: unresolved area $4\pi\to 63\pi/16$."
         ),
         "regions": [
             {"kind": "disk", "cx": 0.0, "cy": 0.0, "r": 0.25, "role": "interior"}
@@ -86,9 +92,9 @@ AREA_STEPS = (
         "color": "#38bdf8",
         "title": "Kernel-checked grid",
         "reason": (
-            "A kernel-checked dyadic grid removes the squares proved outside M "
-            "(ball-arithmetic escape test) or inside M (periodic trapping "
-            "disk). The remaining cells cover M ∖ int M."
+            "A kernel-checked dyadic grid removes the squares proved outside $M$ "
+            "(ball-arithmetic escape test) or inside $M$ (periodic trapping "
+            r"disk). The remaining cells cover $M\setminus\operatorname{int}M$."
         ),
         "regions": [],
     },
@@ -118,7 +124,7 @@ PROGRESS_ROUTES = (
         "range": (0.24, 0.46),
         "probability": 0.20,
         "color": "#a78bfa",
-        "next": "Prove collars, hulls in J, and a divergent transfer budget.",
+        "next": r"Prove collars, hulls in $J$, and a divergent transfer budget.",
     },
     {
         "id": "3",
@@ -142,7 +148,20 @@ OPEN_ROOT_SYMBOLS = (
     "Problem43PseudoSiegelAPrioriBoundsData",
     "Problem44VirtualMoleculeData",
 )
-TARGET_PERCENT = 1.0
+# Colours of the successive grid commits; the first is the colour of the
+# "Kernel-checked grid" step. Orange is reserved for the unresolved cells.
+GRID_PALETTE = (
+    "#38bdf8",
+    "#a78bfa",
+    "#f472b6",
+    "#2dd4bf",
+    "#e879f9",
+    "#a3e635",
+    "#f87171",
+    "#6366f1",
+)
+TARGET_PERCENT = 1.0  # stretch goal: a hundredfold reduction of the unresolved area
+MIN_TARGET_PERCENT = 5.0  # required: a twentyfold reduction, i.e. a 95% resolved share
 MAP_WINDOW = (-2.3, 0.8, -1.4, 1.4)
 MAP_GRID = (620, 560)
 MAP_ITERATIONS = 120
@@ -153,23 +172,36 @@ GRID_SYMBOL = "unresolved_volume_le_grid"
 ROOT_LEVEL = 3  # the root squares have side 2^-3
 
 
+def _lean_nat(name: str, lean_text: str) -> int | None:
+    found = re.search(rf"def {name}\s*:\s*(?:ℕ|Nat)\s*:=\s*(\d+)", lean_text)
+    return int(found.group(1)) if found else None
+
+
 def grid_bound(lean_text: str) -> dict[str, object] | None:
     """Area bound proved by the kernel-checked grid, read from the Lean source."""
     if GRID_SYMBOL not in lean_text:
         return None
-    cells = re.search(r"def gridCells\s*:\s*(?:ℕ|Nat)\s*:=\s*(\d+)", lean_text)
-    fuel = re.search(r"def gridFuel\s*:\s*(?:ℕ|Nat)\s*:=\s*(\d+)", lean_text)
-    if not (cells and fuel):
+    cells, fuel, pmax, steps = (
+        _lean_nat(name, lean_text)
+        for name in ("gridCells", "gridFuel", "gridPmax", "gridJ")
+    )
+    hints = "def gridTiles" in lean_text
+    # Only the classifier of the first grids has search parameters in the source.
+    if cells is None or fuel is None or (not hints and None in (pmax, steps)):
         return None
-    depth = int(fuel.group(1)) + ROOT_LEVEL
-    n, d = int(cells.group(1)), depth
+    depth = fuel + ROOT_LEVEL
+    n, d = cells, depth
     area = 2.0 * n / 4**d
     return {
+        "format": "hints" if hints else "classifier",
         "cells": n,
         "depth": d,
+        "fuel": fuel,
+        "pmax": pmax,
+        "J": steps,
         "area": area,
         "percent": 100.0 * area / (4.0 * math.pi),
-        "exact": f"2·{n}/4^{d}",
+        "exact": rf"2\cdot {n}/4^{{{d}}}",
     }
 
 
@@ -190,7 +222,7 @@ def progress_metrics_from_text(lean_text: str) -> dict[str, object]:
         step["symbol"] for step in AREA_STEPS if step["symbol"] in lean_text
     ]
     area_percent = 100.0
-    area_exact = "4π"
+    area_exact = r"4\pi"
     for step in AREA_STEPS:
         if step["symbol"] in area_symbols and step["percent"] is not None:
             if float(step["percent"]) < area_percent:
@@ -256,27 +288,62 @@ def _git(repo_root: Path, *args: str) -> str:
     ).stdout.strip()
 
 
-def baseline_reference(repo_root: Path) -> tuple[str, str]:
-    """Return the merge base with origin/main (falling back to main)."""
-    for name in ("origin/main", "main"):
-        found = subprocess.run(
-            ["git", "rev-parse", "--verify", "--quiet", f"{name}^{{commit}}"],
-            cwd=repo_root,
-            check=False,
-            capture_output=True,
-        )
-        if found.returncode == 0:
-            return _git(repo_root, "merge-base", "HEAD", name), name
-    raise RuntimeError("Neither origin/main nor main is available")
+def has_literature_root(repo_root: Path, ref: str) -> bool:
+    """The formal root of ``ref`` has exactly Dudko's two open problems as fields."""
+    proc = subprocess.run(
+        ["git", "grep", "-h", "-A4", "-E", r"^structure RootInput\b", ref, "--", "Mlc"],
+        cwd=repo_root,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        return False
+    fields: list[str] = []
+    inside = False
+    for line in proc.stdout.splitlines():
+        if line.startswith("structure RootInput"):
+            inside = True
+            continue
+        field = re.match(r"[ \t]+\w+\s*:\s*(\w+)", line)
+        if inside and field:
+            fields.append(field.group(1))
+        elif inside:
+            break
+    return fields == list(OPEN_ROOT_SYMBOLS)
+
+
+def literature_baseline(repo_root: Path) -> str:
+    """The first commit of the history whose formal root is exactly Dudko's
+    Problems 4.3 and 4.4: the state of the literature (MLC follows from them).
+
+    The test is monotone along the first-parent history, so a binary search
+    finds the commit.
+    """
+    history = _git(repo_root, "rev-list", "--reverse", "--first-parent", "HEAD").splitlines()
+    if not history or not has_literature_root(repo_root, history[-1]):
+        raise RuntimeError("The root of HEAD is not Dudko's Problems 4.3 and 4.4")
+    low, high = 0, len(history) - 1
+    while low < high:
+        mid = (low + high) // 2
+        if has_literature_root(repo_root, history[mid]):
+            high = mid
+        else:
+            low = mid + 1
+    return history[low]
 
 
 def _step_by_symbol(symbol: str) -> dict[str, object]:
     return next(step for step in AREA_STEPS if step["symbol"] == symbol)
 
 
+LITERATURE_NAME = "the literature baseline"
+
+
 def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
     try:
-        base, base_name = baseline_reference(repo_root)
+        base = literature_baseline(repo_root)
+        base_name = LITERATURE_NAME
         chain = _git(
             repo_root, "rev-list", "--reverse", "--first-parent", f"{base}..HEAD"
         ).splitlines()
@@ -328,6 +395,7 @@ def commit_progress_history(repo_root: Path) -> list[dict[str, object]]:
 def annotate_rows(rows: list[dict[str, object]]) -> None:
     previous: dict[str, object] | None = None
     previous_date = None
+    grid_commits = 0
     for row in rows:
         moment = datetime.fromtimestamp(int(row["timestamp"]))
         date = moment.strftime("%Y-%m-%d")
@@ -338,9 +406,9 @@ def annotate_rows(rows: list[dict[str, object]]) -> None:
             row["delta"] = None
             row["steps"] = []
             row["note"] = (
-                f"Baseline ({row['baseline_name']}): nothing is resolved yet. "
-                "The unresolved set is only known to lie in the disk |c| ≤ 2 "
-                "of area 4π."
+                "State of the literature: MLC follows from Dudko's Problems 4.3 "
+                "and 4.4, which remain open. The unresolved set $R$ is only "
+                r"known to lie in the disk $|c|\le 2$ of area $4\pi$."
             )
         else:
             new_symbols = [
@@ -357,12 +425,35 @@ def annotate_rows(rows: list[dict[str, object]]) -> None:
             reasons = " ".join(str(step["reason"]) for step in steps)
             grid = row.get("grid")
             if grid is not None and delta < -EPS:
+                row["layer"] = {
+                    "color": GRID_PALETTE[grid_commits % len(GRID_PALETTE)],
+                    "grid": grid,
+                    "sha": row["sha"],
+                }
+                grid_commits += 1
+                before = previous.get("grid")
+                if grid.get("format") == "hints" and (
+                    before is None or before.get("format") != "hints"
+                ):
+                    lead = (
+                        "First-order Taylor models of the critical orbit replace the "
+                        "disk enclosures: a square is outside $M$ when the model "
+                        "leaves the disk $|z|\\le 2$, and inside $M$ when a moving "
+                        "disk around the model returns into itself. The unresolved "
+                        "layer at a hyperbolic component is then as thin as the "
+                        "cells, while the disk enclosures needed a layer of "
+                        "thickness $\\sqrt{s}$ for cells of side $s$. A search "
+                        "program writes the certificates as hints that the kernel "
+                        "verifies. "
+                    )
+                else:
+                    lead = "Finer certified grid. "
                 reasons = (
-                    (reasons + " " if steps else "Finer certified grid. ")
+                    (reasons + " " if steps else lead)
                     + f"Depth {grid['depth']}: {grid['cells']} unresolved cells of "
-                    f"side 2^-{grid['depth']} in the upper half-plane (the lower half "
-                    f"is the mirror image), unresolved area ≤ {grid['exact']} ≈ "
-                    f"{grid['area']:.3f}."
+                    f"side $2^{{-{grid['depth']}}}$ in the upper half-plane (the "
+                    "lower half is the mirror image), unresolved area "
+                    rf"$\le {grid['exact']}\approx {grid['area']:.3f}$."
                 )
             if delta < -EPS:
                 row["note"] = reasons
@@ -409,7 +500,187 @@ def esc(value: object) -> str:
     return html.escape(str(value), quote=True)
 
 
+# Text with TeX math. Math is written between dollar signs in TeX syntax and
+# rendered once as TeX (``tex_rich``) and once as MathML (``html_rich``), so both
+# outputs typeset the same formulas.
+MATH_TOKEN = re.compile(r"\\[A-Za-z]+|\\.|.", re.S)
+MATH_OPERATORS = {
+    "le": "≤",
+    "leq": "≤",
+    "ge": "≥",
+    "geq": "≥",
+    "approx": "≈",
+    "subseteq": "⊆",
+    "setminus": "∖",
+    "to": "→",
+    "cdot": "⋅",
+    "times": "×",
+    "in": "∈",
+}
+MATH_IDENTIFIERS = {
+    "pi": "π",
+    "mu": "μ",
+    "partial": "∂",
+    "varnothing": "∅",
+    "infty": "∞",
+}
+MATH_SPACES = {",": "0.1667em", " ": "0.2778em"}
+DIGITS = "0123456789"
+
+
+def _ml_argument(tokens: list[str], pos: int) -> tuple[str, int]:
+    """A script or radicand: a braced group or a single token."""
+    while pos < len(tokens) and tokens[pos] == " ":
+        pos += 1
+    if pos >= len(tokens):
+        raise ValueError("Missing argument in TeX math")
+    if tokens[pos] == "{":
+        items, pos = _ml_sequence(tokens, pos + 1, True)
+        return "<mrow>" + "".join(items) + "</mrow>", pos
+    items, _ = _ml_sequence([tokens[pos]], 0, False)
+    return "".join(items), pos + 1
+
+
+def _ml_sequence(
+    tokens: list[str], pos: int = 0, nested: bool = False
+) -> tuple[list[str], int]:
+    """MathML elements of a TeX math token list (a subset of TeX)."""
+    items: list[str] = []
+    while pos < len(tokens):
+        token = tokens[pos]
+        pos += 1
+        if token == "}":
+            if not nested:
+                raise ValueError("Unbalanced } in TeX math")
+            return items, pos
+        if token == "{":
+            inner, pos = _ml_sequence(tokens, pos, True)
+            items.append("<mrow>" + "".join(inner) + "</mrow>")
+        elif token in ("^", "_"):
+            base = items.pop() if items else "<mrow></mrow>"
+            first, pos = _ml_argument(tokens, pos)
+            other = "_" if token == "^" else "^"
+            second = None
+            if pos < len(tokens) and tokens[pos] == other:
+                second, pos = _ml_argument(tokens, pos + 1)
+            sup, sub = (first, second) if token == "^" else (second, first)
+            if sup is not None and sub is not None:
+                items.append(f"<msubsup>{base}{sub}{sup}</msubsup>")
+            elif sup is not None:
+                items.append(f"<msup>{base}{sup}</msup>")
+            else:
+                items.append(f"<msub>{base}{sub}</msub>")
+        elif token == " ":
+            continue
+        elif token in (r"\operatorname", r"\mathrm", r"\text"):
+            if pos >= len(tokens) or tokens[pos] != "{" or "}" not in tokens[pos:]:
+                raise ValueError(f"{token} needs a braced argument")
+            end = tokens.index("}", pos)
+            text = html.escape("".join(tokens[pos + 1 : end]))
+            pos = end + 1
+            if token == r"\text":
+                items.append(f"<mtext>{text}</mtext>")
+            else:
+                items.append(f'<mi mathvariant="normal">{text}</mi>')
+                if token == r"\operatorname":
+                    items.append('<mspace width="0.1667em"></mspace>')
+        elif token == r"\sqrt":
+            radicand, pos = _ml_argument(tokens, pos)
+            items.append(f"<msqrt>{radicand}</msqrt>")
+        elif len(token) > 1 and token[0] == "\\" and token[1].isalpha():
+            name = token[1:]
+            if name in MATH_OPERATORS:
+                items.append(f"<mo>{MATH_OPERATORS[name]}</mo>")
+            elif name in MATH_IDENTIFIERS:
+                items.append(f"<mi>{MATH_IDENTIFIERS[name]}</mi>")
+            else:
+                raise ValueError(f"Unsupported TeX command {token}")
+        elif token[0] == "\\":
+            name = token[1:]
+            if name in MATH_SPACES:
+                items.append(f'<mspace width="{MATH_SPACES[name]}"></mspace>')
+            elif name in ("{", "}"):
+                items.append(f'<mo stretchy="false">{name}</mo>')
+            elif name == "%":
+                items.append('<mi mathvariant="normal">%</mi>')
+            else:
+                raise ValueError(f"Unsupported TeX escape {token}")
+        elif token in DIGITS:
+            number = token
+            while pos < len(tokens) and (
+                tokens[pos] in DIGITS
+                or (tokens[pos] == "." and pos + 1 < len(tokens) and tokens[pos + 1] in DIGITS)
+            ):
+                number += tokens[pos]
+                pos += 1
+            items.append(f"<mn>{number}</mn>")
+        elif token in ("+", "-"):
+            symbol = "−" if token == "-" else "+"
+            form = "" if _binary_operator(tokens, pos - 1) else ' form="prefix"'
+            items.append(f"<mo{form}>{symbol}</mo>")
+        elif token in ("=", "<", ">", ","):
+            items.append(f"<mo>{html.escape(token)}</mo>")
+        elif token in ("(", ")", "[", "]"):
+            items.append(f'<mo stretchy="false">{token}</mo>')
+        elif token == "|":
+            items.append('<mo stretchy="false" lspace="0" rspace="0">|</mo>')
+        elif token == "/":
+            items.append('<mo lspace="0" rspace="0">/</mo>')
+        elif token == "*":
+            items.append("<mo>∗</mo>")
+        elif token.isalpha():
+            items.append(f"<mi>{token}</mi>")
+        else:
+            raise ValueError(f"Unsupported TeX token {token!r}")
+    if nested:
+        raise ValueError("Unbalanced { in TeX math")
+    return items, pos
+
+
+def _binary_operator(tokens: list[str], index: int) -> bool:
+    """A + or - after an operand is binary; elsewhere it is a sign."""
+    j = index - 1
+    while j >= 0 and tokens[j] == " ":
+        j -= 1
+    if j < 0:
+        return False
+    before = tokens[j]
+    if before in ("(", "[", "{", "^", "_", ",", "=", "<", ">", "+", "-"):
+        return False
+    return not (before.startswith("\\") and before[1:] in MATH_OPERATORS)
+
+
+def _split_math(text: str) -> list[str]:
+    parts = re.split(r"(?<!\\)\$", text)
+    if len(parts) % 2 == 0:
+        raise ValueError(f"Unbalanced $ in {text!r}")
+    return parts
+
+
+def html_rich(text: object) -> str:
+    """HTML for a text whose ``$...$`` parts are TeX math, typeset as MathML."""
+    out = []
+    for index, part in enumerate(_split_math(str(text))):
+        if index % 2:
+            items, _ = _ml_sequence(MATH_TOKEN.findall(part))
+            out.append(f'<math class="tex">{"".join(items)}</math>')
+        else:
+            out.append(esc(part))
+    return "".join(out)
+
+
+def tex_rich(text: object) -> str:
+    """LaTeX for a text whose ``$...$`` parts are TeX math."""
+    return "".join(
+        f"${part}$" if index % 2 else tex_escape(part)
+        for index, part in enumerate(_split_math(str(text)))
+    )
+
+
 def swatch_color(row: dict[str, object]) -> str | None:
+    layer = row.get("layer")
+    if layer is not None:
+        return str(layer["color"])
     for step in row["steps"]:
         if step["regions"]:
             return str(step["color"])
@@ -424,6 +695,22 @@ def row_kind(row: dict[str, object]) -> str:
     if row["delta"] is not None and row["delta"] < -EPS:
         return "drop"
     return "step" if row["steps"] else "idle"
+
+
+def share_label(row: dict[str, object]) -> tuple[str, str]:
+    """Headline and detail (rich text) of the resolved-share cell.
+
+    The baseline is the literature state, where Dudko's two problems are open;
+    a commit that resolves nothing beyond it shows a dash instead of 0%.
+    """
+    if row["baseline"]:
+        return "Open", "Dudko 4.3 and 4.4"
+    area = float(row["area_upper_percent"])
+    resolved = resolved_percent(area)
+    if resolved <= EPS:
+        return "—", ""
+    detail = rf"unresolved $\le {exact_area_text(row)}\approx {area_value(area):.3f}$"
+    return format_percent(resolved), detail
 
 
 def commit_table_html(rows: list[dict[str, object]]) -> str:
@@ -448,22 +735,21 @@ def commit_table_html(rows: list[dict[str, object]]) -> str:
             else ""
         )
         tag = ' <span class="chip">baseline</span>' if kind == "baseline" else ""
-        area = float(row["area_upper_percent"])
+        headline, detail = share_label(row)
         delta = format_delta(row["delta"])
         chip = (
             f'<span class="chip down">{esc(delta)}</span>'
             if kind == "drop" and delta
             else ""
         )
-        note = "—" if kind == "idle" else esc(row["note"])
+        sub = f'<span class="sub">{html_rich(detail)}</span>' if detail else ""
+        note = "—" if kind == "idle" else html_rich(row["note"])
         out.append(
             f'<tr class="{kind}">'
             f'<td class="c-time">{esc(row["time"])}</td>'
             f'<td class="c-sha">{dot}<code>{esc(row["sha"])}</code>{tag}</td>'
             f'<td class="c-desc">{esc(row["subject"])}</td>'
-            f'<td class="c-area"><b>{esc(format_percent(resolved_percent(area)))}</b>'
-            f'<span class="sub">unresolved ≤ {esc(exact_area_text(row))} ≈ '
-            f"{area_value(area):.3f}</span>{chip}</td>"
+            f'<td class="c-area"><b>{esc(headline)}</b>{sub}{chip}</td>'
             f'<td class="c-note">{note}</td></tr>'
         )
     out.append("</tbody></table>")
@@ -477,32 +763,111 @@ def routes_html() -> str:
         cards.append(
             f'<div class="route" style="--route:{esc(route["color"])}">'
             f'<div class="route-name"><span class="route-id">{esc(route["id"])}'
-            f"</span>{esc(route['name'])}</div>"
+            f"</span>{html_rich(route['name'])}</div>"
             '<dl class="route-facts">'
             f"<div><dt>Planned reduction</dt><dd>{low * 100:.0f}–{high * 100:.0f}%</dd></div>"
             f"<div><dt>Planning prior</dt><dd>{route['probability'] * 100:.0f}%</dd></div>"
             "</dl>"
-            f'<p class="route-next"><span>Next theorem</span>{esc(route["next"])}</p>'
+            f'<p class="route-next"><span>Next theorem</span>{html_rich(route["next"])}</p>'
             "</div>"
         )
     return f'<div class="routes">{"".join(cards)}</div>'
 
 
-def mandelbrot_path(repo_root: Path) -> str:
-    """Vector path of a numerical rendering of M (illustration only)."""
+def _contour_path(mask: list[list[bool]]) -> str:
+    """Border of a pixel mask by marching squares.
+
+    The vertices are the midpoints between neighbouring pixel centres; the
+    result is a set of closed polylines in pixel units.
+    """
+    ny, nx = len(mask), len(mask[0])
+
+    def inside(i: int, t: int) -> bool:
+        return 0 <= t < ny and 0 <= i < nx and mask[t][i]
+
+    neighbours: dict[tuple[int, int], list[tuple[int, int]]] = {}
+
+    def link(p: tuple[int, int], q: tuple[int, int]) -> None:
+        neighbours.setdefault(p, []).append(q)
+        neighbours.setdefault(q, []).append(p)
+
+    for t in range(-1, ny):
+        for i in range(-1, nx):
+            case = (
+                inside(i, t)
+                + 2 * inside(i + 1, t)
+                + 4 * inside(i + 1, t + 1)
+                + 8 * inside(i, t + 1)
+            )
+            if case in (0, 15):
+                continue
+            top = (2 * i + 2, 2 * t + 1)
+            right = (2 * i + 3, 2 * t + 2)
+            bottom = (2 * i + 2, 2 * t + 3)
+            left = (2 * i + 1, 2 * t + 2)
+            if case in (1, 14):
+                link(left, top)
+            elif case in (2, 13):
+                link(top, right)
+            elif case in (4, 11):
+                link(right, bottom)
+            elif case in (8, 7):
+                link(bottom, left)
+            elif case in (3, 12):
+                link(left, right)
+            elif case in (6, 9):
+                link(top, bottom)
+            elif case == 5:
+                link(left, top)
+                link(right, bottom)
+            else:
+                link(top, right)
+                link(bottom, left)
+
+    visited: set[tuple[int, int]] = set()
+    loops = []
+    for start in neighbours:
+        if start in visited:
+            continue
+        loop = []
+        previous, current = None, start
+        while True:
+            visited.add(current)
+            loop.append(current)
+            first, second = neighbours[current]
+            following = first if first != previous else second
+            previous, current = current, following
+            if current == start:
+                break
+        corners = [
+            loop[k]
+            for k in range(len(loop))
+            if (loop[k][0] - loop[k - 1][0]) * (loop[(k + 1) % len(loop)][1] - loop[k][1])
+            != (loop[k][1] - loop[k - 1][1]) * (loop[(k + 1) % len(loop)][0] - loop[k][0])
+        ]
+        if len(corners) >= 3:
+            loops.append(corners)
+    parts = []
+    for corners in loops:
+        points = " ".join(f"{x / 2:g} {y / 2:g}" for x, y in corners[1:])
+        parts.append(f"M{corners[0][0] / 2:g} {corners[0][1] / 2:g}L{points}Z")
+    return "".join(parts)
+
+
+def mandelbrot_border(repo_root: Path) -> str:
+    """Vector path of the border of a numerical rendering of M (illustration only)."""
     nx, ny = MAP_GRID
     cache_dir = repo_root / ".lake" / "progress-cache"
-    cache = cache_dir / f"mandelbrot_{nx}x{ny}_{MAP_ITERATIONS}.txt"
+    cache = cache_dir / f"mandelbrot_border_{nx}x{ny}_{MAP_ITERATIONS}.txt"
     if cache.exists():
         return cache.read_text(encoding="utf-8")
     x0, x1, y0, y1 = MAP_WINDOW
     dx = (x1 - x0) / nx
     dy = (y1 - y0) / ny
-    rows: list[list[tuple[int, int]]] = []
+    upper: list[list[bool]] = []
     for t in range(ny // 2):
         ci = y1 - (t + 0.5) * dy
-        runs: list[tuple[int, int]] = []
-        start = -1
+        row: list[bool] = []
         for i in range(nx):
             cr = x0 + (i + 0.5) * dx
             q = (cr - 0.25) ** 2 + ci * ci
@@ -517,20 +882,9 @@ def mandelbrot_path(repo_root: Path) -> str:
                     if zr * zr + zi * zi > 4.0:
                         inside = False
                         break
-            if inside and start < 0:
-                start = i
-            elif not inside and start >= 0:
-                runs.append((start, i - start))
-                start = -1
-        if start >= 0:
-            runs.append((start, nx - start))
-        rows.append(runs)
-    parts = []
-    for t, runs in enumerate(rows):
-        for start, width in runs:
-            parts.append(f"M{start} {t}h{width}v1h-{width}z")
-            parts.append(f"M{start} {ny - 1 - t}h{width}v1h-{width}z")
-    data = "".join(parts)
+            row.append(inside)
+        upper.append(row)
+    data = _contour_path(upper + upper[::-1])
     cache_dir.mkdir(parents=True, exist_ok=True)
     cache.write_text(data, encoding="utf-8")
     return data
@@ -557,17 +911,16 @@ def merge_rects(
     return merged
 
 
-def grid_regions(repo_root: Path) -> list[dict[str, object]]:
-    """Squares of the kernel-checked grid, exported by the Lean checker itself."""
-    sources = [
-        repo_root / "Mlc" / "GridDefs.lean",
-        repo_root / "Mlc" / "GridParams.lean",
-        repo_root / "export_grid_regions.lean",
-    ]
+@functools.lru_cache(maxsize=None)
+def _grid_regions(
+    repo_root: Path, pmax: int, steps: int, fuel: int, cells: int
+) -> tuple[dict[str, object], ...]:
+    sources = [repo_root / "export_grid_regions.lean"]
     if not all(path.exists() for path in sources):
-        return []
+        return ()
+    params = [str(pmax), str(steps), str(fuel)]
     digest = hashlib.sha256(
-        b"".join(path.read_bytes() for path in sources)
+        b"".join(path.read_bytes() for path in sources) + "/".join(params).encode()
     ).hexdigest()[:16]
     cache_dir = repo_root / ".lake" / "progress-cache"
     cache = cache_dir / f"grid_regions_{digest}.txt"
@@ -575,14 +928,14 @@ def grid_regions(repo_root: Path) -> list[dict[str, object]]:
         text = cache.read_text(encoding="utf-8")
     else:
         proc = subprocess.run(
-            ["lake", "env", "lean", "--run", "export_grid_regions.lean"],
+            ["lake", "env", "lean", "--run", "export_grid_regions.lean", *params],
             cwd=repo_root,
             check=False,
             text=True,
             capture_output=True,
         )
         if proc.returncode != 0:
-            return []
+            return ()
         text = proc.stdout
         cache_dir.mkdir(parents=True, exist_ok=True)
         cache.write_text(text, encoding="utf-8")
@@ -600,10 +953,136 @@ def grid_regions(repo_root: Path) -> list[dict[str, object]]:
         target = inner if tag == "I" else unresolved
         target.append(rect)
         target.append((rect[0], -rect[3], rect[2], -rect[1]))
-    return [
+    count = len(unresolved) // 2
+    if count != cells:
+        print(
+            f"warning: the grid with parameters {params} leaves {count} unresolved "
+            f"cells; its commit proved {cells}, so its regions are omitted",
+            file=sys.stderr,
+        )
+        return ()
+    return (
         {"kind": "rects", "role": "interior", "rects": merge_rects(inner)},
         {"kind": "rects", "role": "unresolved", "rects": merge_rects(unresolved)},
+    )
+
+
+TILE_ENTRY = re.compile(r"\(⟨(-?\d+), (-?\d+), (\d+)⟩,\s*\[([^\]]*)\]\)")
+
+
+def tile_texts(repo_root: Path, sha: str) -> list[str]:
+    """The tile modules of a commit (or of the working tree)."""
+    if sha == "worktree":
+        return [
+            path.read_text(encoding="utf-8")
+            for path in sorted((repo_root / "Mlc" / "GridTiles").glob("Part*.lean"))
+        ]
+    names = _git(
+        repo_root, "ls-tree", "-r", "--name-only", sha, "--", "Mlc/GridTiles"
+    ).splitlines()
+    return [
+        subprocess.run(
+            ["git", "show", f"{sha}:{name}"],
+            cwd=repo_root,
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+        for name in names
     ]
+
+
+def hint_squares(
+    texts: list[str], depth: int
+) -> tuple[list[tuple[int, int, int]], list[tuple[int, int, int]], int]:
+    """Replay the hint streams of the tile modules (``verifyTree``): the squares
+    certified inside M, the unresolved squares and the number of unresolved
+    finest cells."""
+    inside: list[tuple[int, int, int]] = []
+    unresolved: list[tuple[int, int, int]] = []
+    cells = 0
+    for text in texts:
+        for entry in TILE_ENTRY.finditer(text):
+            x, y, k = int(entry[1]), int(entry[2]), int(entry[3])
+            hints = [int(v) for v in entry[4].split(",") if v.strip()]
+            position = [0]
+
+            def walk(x: int, y: int, k: int) -> None:
+                nonlocal cells
+                fuel = depth - k
+                index = position[0]
+                position[0] += 1
+                hint = hints[index] if index < len(hints) else 0
+                if hint == 0 or (hint == 1 and fuel == 0):
+                    unresolved.append((x, y, k))
+                    cells += 4**fuel
+                elif hint == 1:
+                    for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
+                        walk(2 * x + dx, 2 * y + dy, k + 1)
+                elif hint % 2 == 1:
+                    inside.append((x, y, k))
+
+            walk(x, y, k)
+    return inside, unresolved, cells
+
+
+def squares_to_regions(
+    inside: list[tuple[int, int, int]], unresolved: list[tuple[int, int, int]]
+) -> tuple[dict[str, object], ...]:
+    """Map regions (upper half and its mirror image) of lists of squares."""
+    inner: list[tuple[float, float, float, float]] = []
+    outer: list[tuple[float, float, float, float]] = []
+    for squares, target in ((inside, inner), (unresolved, outer)):
+        for x, y, k in squares:
+            scale = 2.0**k
+            rect = (x / scale, y / scale, (x + 1) / scale, (y + 1) / scale)
+            target.append(rect)
+            target.append((rect[0], -rect[3], rect[2], -rect[1]))
+    return (
+        {"kind": "rects", "role": "interior", "rects": merge_rects(inner)},
+        {"kind": "rects", "role": "unresolved", "rects": merge_rects(outer)},
+    )
+
+
+@functools.lru_cache(maxsize=None)
+def _hint_regions(
+    repo_root: Path, sha: str, depth: int, cells: int
+) -> tuple[dict[str, object], ...]:
+    inside, unresolved, found = hint_squares(tile_texts(repo_root, sha), depth)
+    if found != cells:
+        print(
+            f"warning: the tiles of {sha} leave {found} unresolved cells; the commit "
+            f"proved {cells}, so its regions are omitted",
+            file=sys.stderr,
+        )
+        return ()
+    return squares_to_regions(inside, unresolved)
+
+
+def grid_regions(
+    repo_root: Path, grid: dict[str, object], sha: str
+) -> list[dict[str, object]]:
+    """Squares of the grid of one commit.
+
+    A grid of hints is replayed from the tile modules of the commit. An older
+    grid, found by the classifier of the first commits, is reproduced by the
+    Lean exporter (a copy of that classifier) with the parameters of the commit.
+    In both cases the number of unresolved cells must equal the count that the
+    commit proved; otherwise no regions are returned.
+    """
+    if grid.get("format") == "hints":
+        return list(
+            _hint_regions(repo_root, sha, int(grid["depth"]), int(grid["cells"]))
+        )
+    return list(
+        _grid_regions(
+            repo_root,
+            int(grid["pmax"]),
+            int(grid["J"]),
+            int(grid["fuel"]),
+            int(grid["cells"]),
+        )
+    )
 
 
 def grid_point(x: float, y: float) -> tuple[float, float]:
@@ -640,6 +1119,68 @@ def region_svg(region: dict[str, object], color: str) -> str:
     raise ValueError(f"Unknown region kind {region['kind']}")
 
 
+MAP_MEANING = {
+    "envelope": "bounding envelope (dashed)",
+    "interior": "certified inside $M$",
+    "exterior": "certified outside $M$",
+}
+
+
+def map_layers(
+    repo_root: Path, rows: list[dict[str, object]]
+) -> list[dict[str, object]]:
+    """One layer per commit that certifies a region, oldest first.
+
+    A commit contributes the regions of its step or, for a grid commit, the
+    interior squares of its own grid, each in the colour of its table row. The
+    unresolved cells of the latest grid join that layer.
+    """
+    layers: list[dict[str, object]] = []
+    for row in rows:
+        for step in row["steps"]:
+            if step["regions"]:
+                roles = sorted({str(region["role"]) for region in step["regions"]})
+                meaning = ", ".join(MAP_MEANING[role] for role in roles)
+                layers.append(
+                    {
+                        "sha": row["sha"],
+                        "color": str(step["color"]),
+                        "title": f"{step['title']} · {meaning}",
+                        "regions": list(step["regions"]),
+                    }
+                )
+        layer = row.get("layer")
+        if layer is not None:
+            grid = layer["grid"]
+            regions = grid_regions(repo_root, grid, str(layer["sha"]))
+            if regions:
+                how = (
+                    "Taylor-model certificates"
+                    if grid.get("format") == "hints"
+                    else f"periods up to {grid['pmax']}, {grid['J']} orbit steps"
+                )
+                layers.append(
+                    {
+                        "sha": row["sha"],
+                        "color": str(layer["color"]),
+                        "title": (
+                            f"Kernel-checked grid of depth {grid['depth']}: {how} · "
+                            + MAP_MEANING["interior"]
+                        ),
+                        "regions": regions[:1],
+                        "unresolved": regions[1],
+                    }
+                )
+    grid_layers = [layer for layer in layers if "unresolved" in layer]
+    for layer in grid_layers[:-1]:
+        del layer["unresolved"]
+    if grid_layers:
+        latest = grid_layers[-1]
+        latest["regions"] = [latest.pop("unresolved"), *latest["regions"]]
+        latest["has_unresolved"] = True
+    return layers
+
+
 def parameter_map_svg(repo_root: Path, rows: list[dict[str, object]]) -> str:
     """Map of M; every colour marks the parameters certified by one commit."""
     nx, ny = MAP_GRID
@@ -647,25 +1188,13 @@ def parameter_map_svg(repo_root: Path, rows: list[dict[str, object]]) -> str:
     margin_left, margin_bottom, margin_top, margin_right = 46, 44, 10, 10
     total_w = nx + margin_left + margin_right
     total_h = ny + margin_top + margin_bottom
-    achieved: list[dict[str, object]] = []
-    for row in rows:
-        achieved.extend(step for step in row["steps"] if step["regions"])
-    layers = []
-    for step in achieved:
-        for region in step["regions"]:
-            layers.append(region_svg(region, str(step["color"])))
-    grid_step = next(
-        (
-            step
-            for row in rows
-            for step in row["steps"]
-            if step["symbol"] == GRID_SYMBOL
-        ),
-        None,
-    )
-    if grid_step is not None:
-        for region in grid_regions(repo_root):
-            layers.append(region_svg(region, str(grid_step["color"])))
+    # A newer commit certifies a larger area, so its layer is painted first;
+    # every older, smaller layer is painted over it and stays visible.
+    layers = [
+        region_svg(region, str(layer["color"]))
+        for layer in reversed(map_layers(repo_root, rows))
+        for region in layer["regions"]
+    ]
     grid = []
     labels = []
     for value in (-2, -1, 0):
@@ -690,51 +1219,45 @@ def parameter_map_svg(repo_root: Path, rows: list[dict[str, object]]) -> str:
         )
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" '
+        f'xmlns:xlink="http://www.w3.org/1999/xlink" '
         f'viewBox="{-margin_left} {-margin_top} {total_w} {total_h}" '
         f'role="img" aria-label="Parameter plane with the certified regions" '
         f'font-family="IBM Plex Sans, Segoe UI, sans-serif">'
         f'<rect x="{-margin_left}" y="{-margin_top}" width="{total_w}" '
         f'height="{total_h}" fill="#07111f"/>'
         f'<defs><clipPath id="mapFrame"><rect width="{nx}" height="{ny}"/>'
-        f"</clipPath></defs>"
+        f'</clipPath><path id="mapBorder" fill="none" stroke-linejoin="round" '
+        f'd="{mandelbrot_border(repo_root)}"/></defs>'
         f'<g clip-path="url(#mapFrame)">{"".join(grid)}'
-        f'<path d="{mandelbrot_path(repo_root)}" fill="#9fb3d1" '
-        f'fill-opacity="0.5" shape-rendering="crispEdges"/>'
-        f'{"".join(layers)}</g>'
+        f'{"".join(layers)}'
+        f'<use href="#mapBorder" xlink:href="#mapBorder" stroke="#07111f" '
+        f'stroke-opacity="0.6" stroke-width="3.8"/>'
+        f'<use href="#mapBorder" xlink:href="#mapBorder" stroke="#f8fafc" '
+        f'stroke-width="1.8"/></g>'
         f'<rect width="{nx}" height="{ny}" fill="none" stroke="#475569" '
         f'stroke-width="1.5"/>{"".join(labels)}</svg>'
     )
 
 
-def map_legend_html(rows: list[dict[str, object]]) -> str:
-    meaning = {
-        "envelope": "bounding envelope (dashed)",
-        "interior": "certified inside M",
-        "exterior": "certified outside M",
-    }
+def map_legend_html(repo_root: Path, rows: list[dict[str, object]]) -> str:
     items = []
-    for row in rows:
-        for step in row["steps"]:
-            if step["symbol"] == GRID_SYMBOL:
-                items.append(
-                    f'<li><span class="swatch" style="background:{esc(step["color"])}">'
-                    f'</span><code>{esc(row["sha"])}</code>'
-                    f"<span>{esc(step['title'])} · certified inside M</span></li>"
-                )
-                items.append(
-                    '<li><span class="swatch" style="background:#f59e0b"></span>'
-                    "<span>unresolved cells of the current grid</span></li>"
-                )
-                continue
-            if not step["regions"]:
-                continue
-            roles = sorted({region["role"] for region in step["regions"]})
-            text = ", ".join(meaning[role] for role in roles)
-            items.append(
-                f'<li><span class="swatch" style="background:{esc(step["color"])}">'
-                f'</span><code>{esc(row["sha"])}</code>'
-                f'<span>{esc(step["title"])} · {esc(text)}</span></li>'
-            )
+    layers = map_layers(repo_root, rows)
+    for layer in layers:
+        items.append(
+            f'<li><span class="swatch" style="background:{esc(layer["color"])}">'
+            f'</span><code>{esc(layer["sha"])}</code>'
+            f'<span>{html_rich(layer["title"])}</span></li>'
+        )
+    if any(layer.get("has_unresolved") for layer in layers):
+        items.append(
+            '<li><span class="swatch" style="background:#f59e0b"></span>'
+            "<span>unresolved cells of the current grid</span></li>"
+        )
+    items.append(
+        '<li><span class="swatch outline"></span>'
+        f'<span>{html_rich("numerical outline of the border of $M$ (illustration)")}'
+        "</span></li>"
+    )
     return f'<ul class="map-legend">{"".join(items)}</ul>'
 
 
@@ -743,25 +1266,28 @@ def stats_html(rows: list[dict[str, object]]) -> str:
     base = rows[0]
     area = float(current["area_upper_percent"])
     open_roots = int(current["open_frontier"])
+    least = 100.0 - MIN_TARGET_PERCENT
+    stretch = 100.0 - TARGET_PERCENT
     tiles = (
         (
             "primary",
-            "Certified resolved share of the 4π envelope",
+            r"Certified resolved share of the $4\pi$ envelope",
             format_percent(resolved_percent(area)),
-            f"unresolved area ≤ {format_percent(area)} of 4π "
-            f"({exact_area_text(current)} ≈ {area_value(area):.3f})",
+            rf"unresolved area $\le$ {format_percent(area)} of $4\pi$ "
+            rf"(${exact_area_text(current)}\approx {area_value(area):.3f}$)",
         ),
         (
             "",
             "Unresolved-area reduction",
             format_factor(area),
-            f"baseline {base['sha']} on {base['baseline_name']}",
+            f"baseline {base['sha']}: Dudko's Problems 4.3 and 4.4 open",
         ),
         (
             "",
             "Target",
-            f"≥ {100.0 - TARGET_PERCENT:.0f}%",
-            "a ×100 reduction of the unresolved area",
+            f"≥ {least:.0f}%",
+            f"a ×{100.0 / MIN_TARGET_PERCENT:.0f} reduction of the unresolved "
+            f"area; stretch goal {stretch:.0f}% (×{100.0 / TARGET_PERCENT:.0f})",
         ),
         (
             "",
@@ -771,9 +1297,9 @@ def stats_html(rows: list[dict[str, object]]) -> str:
         ),
     )
     cells = "".join(
-        f'<div class="stat {kind}"><div class="stat-label">{esc(label)}</div>'
+        f'<div class="stat {kind}"><div class="stat-label">{html_rich(label)}</div>'
         f'<div class="stat-value">{esc(value)}</div>'
-        f'<div class="stat-sub">{esc(sub)}</div></div>'
+        f'<div class="stat-sub">{html_rich(sub)}</div></div>'
         for kind, label, value, sub in tiles
     )
     return f'<div class="stats">{cells}</div>'
@@ -806,26 +1332,34 @@ def profile_html(rows: list[dict[str, object]]) -> str:
         '<p class="p-foot">Each share is 100% minus the corresponding component. '
         "Only the area component has moved; the class, complexity and budget "
         "components stay at the conservative value 0% until a class "
-        "certificate exists. The profile is a planning dashboard, not an "
-        "entropy.</p></section>"
+        "certificate exists. Overall is the mean of the four shares.</p></section>"
     )
 
 
 def callout_html() -> str:
-    return (
-        '<aside class="callout"><b>How to read the number.</b> The resolved '
-        "share is 100% − μ*(R) / 4π: the part of the envelope certified to be "
-        "outside M or at interior points of M, where local connectivity is "
-        "automatic. R is the unresolved set. MLC means R = ∅, which gives "
-        "100%. The converse fails: a nonempty R of measure zero also gives "
-        "100%, and the area of ∂M is itself unknown. Read the share together "
-        "with the open problems.</aside>"
+    text = (
+        r"The resolved share is $100\%-\mu^*(R)/4\pi$: the part of the envelope "
+        r"certified to be outside $M$ or at interior points of $M$, where local "
+        r"connectivity is automatic. $R$ is the unresolved set. MLC means "
+        r"$R=\varnothing$, which gives $100\%$. The converse fails: a nonempty "
+        r"$R$ of measure zero also gives $100\%$, and the area of $\partial M$ "
+        r"is itself unknown. Read the share together with the open problems. "
+        r"The baseline is the state of the literature, where Dudko's Problems "
+        r"4.3 and 4.4 are open."
     )
+    return f'<aside class="callout"><b>How to read the number.</b> {html_rich(text)}</aside>'
 
 
 def progress_fragment_html(repo_root: Path, rows: list[dict[str, object]]) -> str:
     svg = parameter_map_svg(repo_root, rows)
-    origin = esc(rows[0]["baseline_name"])
+    baseline = esc(rows[0]["sha"])
+    caption = html_rich(
+        "Parameter plane $c=x+iy$. White outline: numerical rendering of the "
+        "border of $M$ (an illustration that the Lean proof does not use). A "
+        "colour marks the parameters certified by the commit with the same "
+        "colour in the table. The layers are stacked from the newest, largest "
+        "region at the bottom to the oldest on top."
+    )
     return f"""<div class="progress-section">
 <div class="p-hero">
 <div class="p-hero-left">
@@ -834,22 +1368,20 @@ def progress_fragment_html(repo_root: Path, rows: list[dict[str, object]]) -> st
 {callout_html()}
 </div>
 <figure class="p-card p-map">
-<h2>Certified region on M</h2>
+<h2>{html_rich("Certified region on $M$")}</h2>
 {svg}
-{map_legend_html(rows)}
-<figcaption>Parameter plane c = x + iy. Grey: numerical rendering of M
-(illustration only, not part of the proof). A colour marks the parameters
-certified by the commit with the same colour in the table.</figcaption>
+{map_legend_html(repo_root, rows)}
+<figcaption>{caption}</figcaption>
 </figure>
 </div>
 <section class="p-card">
-<h2>Commits after the merge base with <code>{origin}</code></h2>
+<h2>Commits after the literature baseline <code>{baseline}</code></h2>
 <div class="table-wrap">
 {commit_table_html(rows)}
 </div>
 </section>
 <section class="p-card">
-<h2>Next routes <span class="chip">planning priors, not theorems</span></h2>
+<h2>Next routes <span class="chip">planning priors</span></h2>
 {routes_html()}
 <p class="p-foot">The commit hook requires the resolved share to increase,
 while the formalization-debt proxy must not increase ({float(rows[-1]['debt_percent']):.3f}% now).</p>
@@ -947,6 +1479,12 @@ PROGRESS_CSS = """
   display: inline-block; width: 11px; height: 11px; margin-right: 7px;
   border-radius: 3px; vertical-align: -1px;
 }
+.swatch.outline { background: #07111f; box-shadow: inset 0 0 0 2px #f8fafc; }
+math.tex {
+  white-space: nowrap; text-transform: none; letter-spacing: normal;
+  font-family: "STIX Two Math", "Latin Modern Math", "Cambria Math", "DejaVu Math TeX Gyre", math;
+  font-size: 1.1em;
+}
 .p-map svg { display: block; width: 100%; height: auto; border-radius: 8px; }
 .p-map figcaption { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
 .map-legend { list-style: none; margin: 12px 0 0; padding: 0; font-size: 13px; }
@@ -967,7 +1505,7 @@ PROGRESS_CSS = """
 .route-facts dt { font-size: 11.5px; color: var(--muted); }
 .route-facts dd { margin: 0; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .route-next { margin: 0; font-size: 13px; color: var(--muted); }
-.route-next span {
+.route-next > span:first-child {
   display: block; font-size: 11.5px; letter-spacing: 0.06em;
   text-transform: uppercase; margin-bottom: 2px;
 }
@@ -1038,23 +1576,21 @@ def tex_swatch(color: str | None) -> str:
 
 
 def commits_tex(rows: list[dict[str, object]]) -> str:
-    lines = [
-        r"\begin{tabularx}{\linewidth}"
-        r"{@{}>{\raggedright\arraybackslash}p{19mm}l>{\raggedright\arraybackslash}X"
-        r">{\raggedleft\arraybackslash}p{23mm}>{\raggedright\arraybackslash}X@{}}",
-        r"\toprule",
-        r"When & Commit & Description & Resolved share & What it resolved \\",
-        r"\midrule",
-    ]
+    """Rows of the commits table. The environment (``xltabular``, which breaks
+    across pages) with its header and footer is in ``docs/mlc_progress.tex``."""
+    lines = []
     for row in rows:
         when = tex_escape(row["time"])
         if row["date"]:
             when = tex_escape(row["date"]) + r"\newline " + when
-        area = float(row["area_upper_percent"])
+        headline, _ = share_label(row)
         delta = format_delta(row["delta"])
-        area_cell = tex_escape(format_percent(resolved_percent(area)))
-        if delta:
-            area_cell += r"\newline{\scriptsize " + tex_escape(delta) + "}"
+        share_cell = tex_escape(headline)
+        if row["baseline"]:
+            share_cell += r"\newline{\scriptsize Dudko 4.3, 4.4}"
+        elif delta:
+            share_cell += r"\newline{\scriptsize " + tex_escape(delta) + "}"
+        note = "---" if row_kind(row) == "idle" else tex_rich(row["note"])
         lines.append(
             " & ".join(
                 [
@@ -1064,13 +1600,12 @@ def commits_tex(rows: list[dict[str, object]]) -> str:
                     + tex_escape(row["sha"])
                     + "}",
                     tex_escape(row["subject"]),
-                    area_cell,
-                    tex_escape(row["note"]),
+                    share_cell,
+                    note,
                 ]
             )
             + r" \\"
         )
-    lines += [r"\bottomrule", r"\end{tabularx}"]
     return "\n".join(lines) + "\n"
 
 
@@ -1088,10 +1623,10 @@ def routes_tex() -> str:
             " & ".join(
                 [
                     tex_swatch(str(route["color"])) + tex_escape(route["id"]),
-                    tex_escape(route["name"]),
+                    tex_rich(route["name"]),
                     f"{low * 100:.0f}--{high * 100:.0f}" + r"\%",
                     f"{route['probability'] * 100:.0f}" + r"\%",
-                    tex_escape(route["next"]),
+                    tex_rich(route["next"]),
                 ]
             )
             + r" \\"

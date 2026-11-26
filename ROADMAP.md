@@ -34,7 +34,7 @@ Each iteration follows the same cycle:
 5. Add one class to coverage only after its parameter realization has been
    proved and all graph checks pass.
 
-Line count is not a milestone. A successful cycle must replace a mathematical
+A successful cycle must replace a mathematical
 field or open predicate by a proof, a theorem constructor, or a strict logical
 classification.
 
@@ -149,7 +149,7 @@ for the actual candidate system `A`.
 ## Route planning priors
 
 The live graph and LaTeX report use the following broad planning ranges. They
-are research-management priors, not mathematical probabilities:
+are research-management priors:
 
 | Route | Expected relative residual reduction | Success prior |
 | --- | ---: | ---: |
@@ -198,16 +198,27 @@ q(R) = μ*(R) / (4π).
 
 The trivial envelope is `q(R) ≤ 1`, because the Mandelbrot set is contained
 in the closed disk of radius two. The current kernel-checked envelope comes from
-the dyadic grid of `Mlc/GridCertificate.lean`: squares proved outside `M` by
-fixed-point ball arithmetic, or inside `M` by a periodic trapping disk, are
-removed, and the remaining 46011 cells of side `2^-8` in the upper
-half-plane (the lower half is the mirror image) cover `M ∖ int M`:
+the dyadic grid of `Mlc/GridCertified.lean`. A first-order model of the critical
+orbit (center, derivative at the center, remainder) certifies a square as
+outside `M` when the model leaves the disk of radius 2, and as inside `M` when a
+moving disk centered at the model returns into itself, which gives a bounded
+critical orbit for every parameter of the square. These squares are removed, and
+the remaining 67609 cells of side `2^-9` in the upper half-plane (the lower half
+is the mirror image) cover `M ∖ int M`:
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 46011 / 4^8 ≈ 1.4041
-q(R) ≤ 0.1117.
+μ*(R) ≤ 2 · 67609 / 4^9 ≈ 0.5158
+q(R) ≤ 0.0410.
 ```
+
+The resolved share is therefore at least `95.89%`, a 24-fold reduction of the
+unresolved area. The earlier classifier with disk enclosures stopped at `11.2%`
+(`q(R) ≤ 0.1117`): the disks lose the phases of the derivative, so squares at a
+few cell widths from `M` stay unresolved, and a fixed trapping disk needs a
+cell of side `s` to lie at distance about `√s` from the boundary of a
+hyperbolic component, while the moving disk needs only a distance proportional
+to `s`.
 
 This bound holds for every candidate system and uses no unproved input. The
 actual residual value remains unknown. A later
@@ -219,15 +230,15 @@ R_next = R \ C
 ```
 
 The next numerical research gate is a verified 100-fold reduction of the
-global envelope:
+global envelope (the 20-fold gate `q(R) ≤ 0.05` is reached):
 
 ```text
 μ*(R) ≤ 4π / 100 = π / 25 ≈ 0.125664
 q(R) ≤ 0.01.
 ```
 
-This target requires certified coverage of parameter classes, not a finer
-sampling estimate. No commit is accepted as proof progress unless the certified
+This target requires certified coverage of parameter classes. No commit is
+accepted as proof progress unless the certified
 resolved share strictly increases (the residual-area envelope strictly
 decreases) and the repository's formalization-debt proxy does not increase.
 The latter is
@@ -251,9 +262,10 @@ reported with:
 - the axiom frontier.
 
 The Progress tab, the README and the status report show the **resolved share**
-`100% − q(R)` as a number in a table of the commits after the merge base with
-`origin/main`, each with the result that raised it. `0%` means nothing is
-resolved, so a larger number is better. They contain no fabricated curve.
+`100% − q(R)` as a number in a table of the commits after the literature
+baseline, each with the result that raised it. The baseline is the first commit
+whose formal root is exactly Dudko's Problems 4.3 and 4.4; its row lists the two
+open problems, and a larger share is better.
 
 ### Reading the value 100%
 
@@ -270,9 +282,8 @@ from the open root obligations and the existence of
 
 ### Coverage-Uncertainty Profile
 
-The name **Coverage-Uncertainty Profile** is preferred to entropy. It is a
-dashboard invariant, inspired by entropy-style bookkeeping, but it is not a
-thermodynamic or information-theoretic entropy.
+The **Coverage-Uncertainty Profile** is a dashboard invariant. Its components
+record how much of the parameter space remains uncertain.
 
 For a fixed parameter-class catalogue `Cᵢ`, class weights `wᵢ` with sum one,
 and verified coverage `W`, define:

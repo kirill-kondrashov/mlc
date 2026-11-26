@@ -1567,6 +1567,34 @@ def graph_page_html_v2(title: str) -> str:
       font-size: 12px;
       color: var(--muted);
     }}
+    .view-help-figure .vh-legend {{
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 5px;
+      color: var(--text);
+    }}
+    .view-help-figure .vh-legend li {{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 3px 6px;
+    }}
+    .vh-dot {{
+      flex: none;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 1px solid var(--legend-dot-border);
+    }}
+    .vh-mark {{
+      font-size: 12px;
+      color: var(--text);
+    }}
+    .vh-kind {{
+      color: var(--muted);
+    }}
     @media (max-width: 760px) {{
       .content {{
         grid-template-columns: 1fr;
@@ -1580,6 +1608,7 @@ def graph_page_html_v2(title: str) -> str:
     .view-help code {{
       font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
       font-size: 12px;
+      overflow-wrap: anywhere;
       color: var(--text);
       background: color-mix(in srgb, var(--button-bg) 88%, transparent);
       border: 1px solid var(--border);
@@ -1767,9 +1796,10 @@ def graph_page_js() -> str:
     return String(node?.label || node?.id || "");
   }
 
-  function guideSvgLabel(node) {
-    const s = guideNodeLabel(node);
-    return s.length > 22 ? `${s.slice(0, 21)}…` : s;
+  const GUIDE_MARKS = ["R", "A", "B", "C", "D", "E", "F"];
+
+  function guideMark(index) {
+    return GUIDE_MARKS[index] || String(index);
   }
 
   function kindNoun(kind) {
@@ -1801,6 +1831,13 @@ def graph_page_js() -> str:
     const deps = example.dependencies;
     const ordered = [root, ...deps];
     const positions = {};
+    const kindLanes = {};
+    if (viewKey === "kind") {
+      const present = KIND_LANE_ORDER.filter((k) => ordered.some((n) => String(n.kind || "") === k));
+      present.forEach((k, i) => {
+        kindLanes[k] = present.length === 1 ? 130 : 56 + i * (148 / (present.length - 1));
+      });
+    }
     if (viewKey === "layered") {
       positions[root.id] = { x: 130, y: 30 };
       const xs = deps.length === 1 ? [130] : deps.length === 2 ? [92, 168] : [72, 130, 188];
@@ -1810,11 +1847,13 @@ def graph_page_js() -> str:
       const pts = [{ x: 182, y: 60 }, { x: 103, y: 131 }, { x: 70, y: 58 }];
       deps.forEach((n, i) => { positions[n.id] = pts[i] || { x: 190, y: 108 }; });
     } else if (viewKey === "kind") {
-      const laneY = { theorem: 34, lemma: 68, def: 100, abbrev: 100, axiom: 134 };
-      const xs = [68, 144, 206];
-      positions[root.id] = { x: 66, y: laneY[String(root.kind || "")] || 34 };
-      deps.forEach((n, i) => {
-        positions[n.id] = { x: xs[i] || (140 + i * 30), y: laneY[String(n.kind || "")] || 68 };
+      positions[root.id] = { x: 130, y: 36 };
+      const taken = {};
+      deps.forEach((n) => {
+        const kind = String(n.kind || "");
+        const slot = taken[kind] || 0;
+        taken[kind] = slot + 1;
+        positions[n.id] = { x: (kindLanes[kind] ?? 130) + slot * 24, y: 118 };
       });
     } else if (viewKey === "columns") {
       positions[root.id] = { x: 48, y: 84 };
@@ -1842,13 +1881,12 @@ def graph_page_js() -> str:
         <circle cx="130" cy="84" r="18" fill="none" stroke="${grid}" stroke-width="1.2"/>
         <circle cx="130" cy="84" r="56" fill="none" stroke="${grid}" stroke-width="1.2"/>`;
     } else if (viewKey === "kind") {
-      decorations = `
-        <text x="10" y="24" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">theorem</text>
-        <text x="10" y="92" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">def / abbrev</text>
-        <text x="10" y="146" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">axiom</text>
-        <line x1="20" y1="34" x2="244" y2="34" stroke="${grid}" stroke-width="1"/>
-        <line x1="20" y1="100" x2="244" y2="100" stroke="${grid}" stroke-width="1"/>
-        <line x1="20" y1="134" x2="244" y2="134" stroke="${grid}" stroke-width="1"/>`;
+      const lanes = Object.keys(kindLanes).map((k) => `
+        <text x="${kindLanes[k]}" y="14" text-anchor="middle" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">${escapeHtml(k)}</text>
+        <line x1="${kindLanes[k]}" y1="20" x2="${kindLanes[k]}" y2="158" stroke="${grid}" stroke-width="1"/>`).join("");
+      decorations = `${lanes}
+        <text x="6" y="40" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">0</text>
+        <text x="6" y="122" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">1</text>`;
     } else if (viewKey === "columns") {
       decorations = `
         <text x="34" y="20" font-size="10" fill="${stroke}" font-family="IBM Plex Sans, Segoe UI, sans-serif">distance 0</text>
@@ -1864,13 +1902,23 @@ def graph_page_js() -> str:
       const b = positions[n.id];
       return `<path d="M ${a.x} ${a.y} L ${b.x} ${b.y}" fill="none" stroke="${stroke}" stroke-width="2" marker-end="url(#${markerId})"/>`;
     }).join("");
-    const nodesSvg = ordered.map((n) => {
+    const nodesSvg = ordered.map((n, i) => {
       const p = positions[n.id];
       const isRoot = n.id === root.id;
       const r = isRoot ? 11 : 9;
       return `
         <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${rgb01ToCss(n.color, 1)}" stroke="${isRoot ? "#22c55e" : "#f8fafc"}" stroke-width="${isRoot ? 2.4 : 1.2}"/>
-        <text x="${p.x}" y="${p.y + 4}" text-anchor="middle" font-size="9" fill="#07111f" font-family="IBM Plex Sans, Segoe UI, sans-serif">${escapeHtml(guideSvgLabel(n))}</text>`;
+        <text x="${p.x}" y="${p.y + 4}" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff" stroke="#07111f" stroke-width="2.4" stroke-linejoin="round" paint-order="stroke" font-family="IBM Plex Sans, Segoe UI, sans-serif">${guideMark(i)}</text>`;
+    }).join("");
+    const legendHtml = ordered.map((n, i) => {
+      const isRoot = n.id === root.id;
+      return `
+          <li>
+            <span class="vh-dot" style="background:${rgb01ToCss(n.color, 1)}"></span>
+            <b class="vh-mark">${guideMark(i)}</b>
+            <code>${escapeHtml(guideNodeLabel(n))}</code>
+            <span class="vh-kind">${kindNoun(n.kind)}${isRoot ? ", root" : ""}</span>
+          </li>`;
     }).join("");
     return `
       <figure class="view-help-figure">
@@ -1885,7 +1933,11 @@ def graph_page_js() -> str:
           ${edgesSvg}
           ${nodesSvg}
         </svg>
-        <figcaption>Highlighted fragment from the current graph.</figcaption>
+        <figcaption>
+          Highlighted fragment from the current graph.
+          <ul class="vh-legend">${legendHtml}
+          </ul>
+        </figcaption>
       </figure>`;
   }
 
@@ -1896,7 +1948,7 @@ def graph_page_js() -> str:
       case "radial":
         return "Here the radial coordinate is the ring index from the root. Direct dependencies of the root are shown on the first ring. The angular coordinate has no semantic meaning.";
       case "kind":
-        return "Here the vertical lane is the declaration kind. In this fragment the highlighted nodes include a theorem, an abbreviation, and an axiom. Graph distance is not a coordinate in this view.";
+        return "Here each vertical lane is one declaration kind, and the vertical coordinate is the graph distance from the root: 0 for the root, 1 for its direct dependencies. Horizontal position inside a lane is only packing.";
       case "columns":
         return "Here the horizontal coordinate is the displayed depth. Graph distance 1 from the root is shown in the first column. Vertical position inside one column is only packing.";
       case "spiral":

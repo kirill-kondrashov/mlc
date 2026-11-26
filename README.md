@@ -9,19 +9,22 @@ The long-term research plan is recorded in the
 ## Progress dashboard
 
 The [progress table](https://kirill-kondrashov.github.io/mlc/mlc_conjecture/progress.html)
-lists every commit after the merge base with `origin/main`: date and time,
-commit, description, the certified resolved share, and the result that raised
-it. The resolved share is `100% − μ*(R) / 4π`, where `R` is the set of
-parameters of the Mandelbrot set without a proved local-connectivity
-certificate; a parameter is resolved when it lies outside `M` or in the
-interior of `M`. `0%` means nothing is resolved. A map of `M` marks the
-parameters certified by each commit. The same table is in the **Progress** tab
-of the interactive graph and in `docs/mlc_progress.tex`.
+lists every commit after the literature baseline: date and time, commit,
+description, the certified resolved share, and the result that raised it. The
+baseline is the first commit whose formal root is exactly Dudko's Problems 4.3
+and 4.4 (MLC follows from them and both stay open); its row shows the open
+problems instead of a percentage. The resolved share is `100% − μ*(R) / 4π`,
+where `R` is the set of parameters of the Mandelbrot set without a proved
+local-connectivity certificate; a parameter is resolved when it lies outside
+`M` or in the interior of `M`. A map of `M` marks the parameters certified by
+each commit, one colour per commit, stacked from the newest region at the
+bottom to the oldest on top. The same table is in the **Progress** tab of the
+interactive graph and in `docs/mlc_progress.tex`.
 
 MLC means `R = ∅`, which gives `100%`. The converse fails: a nonempty `R` of
 measure zero also gives `100%`, and the area of `∂M` is itself unknown. The
-share is therefore read together with the open root obligations, not as a
-proof of completion. A separate formalization-debt proxy gates commits.
+share is therefore read together with the open root obligations. A separate
+formalization-debt proxy gates commits.
 
 This repository contains the active Lean reduction of Mandelbrot local
 connectedness to the two open problems identified by Dudko at the end of
@@ -54,8 +57,8 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 | Filled Julia compactness and connectedness | [FilledJuliaConnected.lean](Mlc/FilledJuliaConnected.lean) |
 | Minimal connected hulls | [ConnectedHull.lean](Mlc/Research/ConnectedHull.lean) |
 | Virtual Julia sets and a priori transfer | [VirtualMolecule.lean](Mlc/Research/VirtualMolecule.lean) |
-| Fixed-point ball arithmetic and dyadic classifier | [GridDefs.lean](Mlc/GridDefs.lean) |
-| Soundness of the grid and the area bound | [GridCertificate.lean](Mlc/GridCertificate.lean) |
+| Fixed-point models of the critical orbit and the certificates | [GridDefs.lean](Mlc/GridDefs.lean) |
+| Soundness of the models, the certificates and the area bound | [GridCertificate.lean](Mlc/GridCertificate.lean), [GridTMCertificate.lean](Mlc/GridTMCertificate.lean) |
 | Grid parameters and checked count | [GridParams.lean](Mlc/GridParams.lean), [GridCertified.lean](Mlc/GridCertified.lean) |
 | Problems 4.3 and 4.4 | [Dudko.lean](Mlc/Dudko.lean) |
 | Categorical root | [CategoricalRoot.lean](Mlc/CategoricalRoot.lean) |
@@ -63,19 +66,28 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 
 ### Kernel-checked area bound
 
-`Mlc/GridDefs.lean` defines the fixed-point critical-orbit enclosures and the
-classifier of dyadic squares; `Mlc/GridCertificate.lean` proves that a square
-whose enclosure escapes the disk of radius 2, or traps the orbit in a periodic
-invariant disk, lies outside `M` or inside `M`. The unresolved finest cells
-therefore cover `M ∖ int M`, and the same count bounds the area of every
-residual set by `unresolved_volume_le_grid`. The upper half-plane is classified
-and the lower half follows by conjugation symmetry. The count is checked by
-kernel reduction (`decide +kernel`, no `native_decide`) in the generated modules
+`Mlc/GridDefs.lean` defines fixed-point first-order models of the critical
+orbit: for every parameter `c` of a square, the `n`-th iterate lies within `e`
+of `m + d (c - c₀)`, where `d` is the derivative at the center `c₀`. The model
+follows the phases of the derivative and stays sharp where a disk enclosure
+grows by large factors. A square lies outside `M` if the model leaves the disk
+of radius 2 after `n` steps, and inside `M` if a moving disk centered at the
+model returns into itself after `p` steps, so that every parameter of the square
+has a bounded critical orbit. A search program, `scripts/grid_hints.lean`, finds
+these certificates and writes them as streams of hints. The kernel verifies
+every hint (`Sq.certify`) and counts the unresolved finest cells
+(`verifyTree`); `Mlc/GridTMCertificate.lean` proves that the verified squares
+lie outside `M` or inside `M`. The unresolved finest cells therefore cover
+`M ∖ int M`, and the same count bounds the area of every residual set by
+`unresolved_volume_le_grid`. The upper half-plane is covered by tiles and the
+lower half follows by conjugation symmetry. The count is checked by kernel
+reduction (`decide +kernel`, no `native_decide`) in the generated modules
 `Mlc/GridTiles/Part*.lean`, which import only `Mlc.GridDefs`, are arranged in
 eight import chains (at most eight kernel checks run at once), and are produced
 by `python3 scripts/generate_grid_tiles.py` from `Mlc/GridParams.lean`. The
-depth-8 check takes roughly 60--80 CPU minutes (about 10 minutes of wall time on
-22 cores) and a few GB of memory per running module.
+depth-9 check takes about 90 CPU minutes (about 12 minutes of wall time
+on 22 cores) and about 2 GB of memory per running module; a smaller machine
+needs fewer import chains (`CHAINS` in the generator).
 
 ```bash
 make build

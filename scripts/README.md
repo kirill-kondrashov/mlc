@@ -16,25 +16,41 @@ Generation checks reachability, acyclicity and the axiom frontier, then writes
 
 `progress_report.py` computes the progress numbers from Git history. The
 **Progress** tab shows the certified resolved share `100% − μ*(R) / 4π` of the
-unresolved set `R` as a number, a table of the commits after the merge base
-with `origin/main` (date, commit, description, share, and what it resolved),
-and a vector map of `M` marking the parameters certified by each commit. The
-same data feeds `docs/mlc_progress.tex` through `progress_commits.tex`,
+unresolved set `R` as a number, a table of the commits after the literature
+baseline (date, commit, description, share, and what it resolved), and a vector
+map of `M` marking the parameters certified by each commit. The literature
+baseline is the first commit of the history whose `RootInput` has exactly the
+fields `Problem43PseudoSiegelAPrioriBoundsData` and
+`Problem44VirtualMoleculeData`, found by a binary search over the first-parent
+history; its row lists the two open problems. Every grid commit gets its own
+colour: `export_grid_regions.lean pmax J fuel` reproduces the squares of its
+grid, and the report uses them only when the number of unresolved cells equals
+the count that the commit proved. Texts with formulas are written with
+`$...$` TeX math and rendered as TeX for the report and as HTML for the page.
+The same data feeds `docs/mlc_progress.tex` through `progress_commits.tex`,
 `progress_routes.tex`, and `progress_map.svg`. Route probabilities are planning
-priors, not mathematical claims. The share `100%` corresponds to `R = ∅` (MLC),
-but a nonempty `R` of measure zero would also give it, so the share is read
-with the count of open root obligations.
+priors. The share `100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of
+measure zero would also give it, so the share is read with the count of open
+root obligations.
 
 The repository hook runs `scripts/check_progress.py`. A staged proof-progress
 commit must strictly increase the certified resolved share and must not increase
 the dependency-graph milestone debt before Git accepts it.
 
-`generate_grid_tiles.py` regenerates `Mlc/GridTiles/Part*.lean` and
-`Mlc/GridCertified.lean` from the parameters in `Mlc/GridParams.lean`; the tiles
-import only the computational module `Mlc/GridDefs.lean`. It asks
-`grid_tile_values.lean` for the cost and unresolved-cell count of every root
-square, distributes the expensive squares over independent modules (each
-checked by `decide +kernel`), and writes the aggregating theorem. The progress
-tooling reads `gridCells` and `gridFuel` from these files.
-`export_grid_regions.lean` (repository root) lists the certified squares for
-the map in the Progress tab.
+`grid_hints.lean` is the search program of the certified grid. For every root
+square of side `1/8` it subdivides the squares that it cannot certify and
+writes a stream of natural numbers, the hints: `0` marks an unresolved finest
+cell, `1` a split, and a larger number a certificate (outside `M` after `n`
+steps of the first-order model, or inside `M` by a moving disk of period `p`).
+`generate_grid_tiles.py` runs the search in parallel (or reads its output with
+`--hints`), cuts the streams into tiles of bounded kernel cost, distributes the
+tiles over independent modules `Mlc/GridTiles/Part*.lean` (eight import chains
+bound the number of kernel checks that run at once, and each running module
+needs a few GB of memory), and writes `Mlc/GridCertified.lean`, which sums the
+counts of the modules and proves the area bound. The parameters are in
+`Mlc/GridParams.lean`. The kernel checks every certificate, so the search needs
+no proof. The progress tooling reads `gridCells` and `gridFuel` from these files
+and replays the hint streams of every commit to draw the certified region on
+the map in the Progress tab. `export_grid_regions.lean` (repository root) holds
+a copy of the first classifier, imports nothing from `Mlc`, and reproduces the
+regions of the earlier grids.
