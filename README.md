@@ -54,7 +54,8 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 | Filled Julia compactness and connectedness | [FilledJuliaConnected.lean](Mlc/FilledJuliaConnected.lean) |
 | Minimal connected hulls | [ConnectedHull.lean](Mlc/Research/ConnectedHull.lean) |
 | Virtual Julia sets and a priori transfer | [VirtualMolecule.lean](Mlc/Research/VirtualMolecule.lean) |
-| Fixed-point ball arithmetic, dyadic grid, area bound | [GridCertificate.lean](Mlc/GridCertificate.lean) |
+| Fixed-point ball arithmetic and dyadic classifier | [GridDefs.lean](Mlc/GridDefs.lean) |
+| Soundness of the grid and the area bound | [GridCertificate.lean](Mlc/GridCertificate.lean) |
 | Grid parameters and checked count | [GridParams.lean](Mlc/GridParams.lean), [GridCertified.lean](Mlc/GridCertified.lean) |
 | Problems 4.3 and 4.4 | [Dudko.lean](Mlc/Dudko.lean) |
 | Categorical root | [CategoricalRoot.lean](Mlc/CategoricalRoot.lean) |
@@ -62,19 +63,19 @@ frontier other than Problems 4.3 and 4.4 is exposed.
 
 ### Kernel-checked area bound
 
-`Mlc/GridCertificate.lean` proves that every dyadic square whose critical-orbit
-enclosure (fixed-point ball arithmetic) escapes the disk of radius 2, or traps
-the orbit in a periodic invariant disk, lies outside `M` or inside `M`; the
-unresolved finest cells therefore cover `M ∖ int M`, and the same count bounds
-the area of every residual set by `unresolved_volume_le_grid`. The upper
-half-plane is classified and the lower half follows by conjugation symmetry.
-The count is checked by kernel reduction (`decide +kernel`, no `native_decide`).
-The expensive root squares are checked in generated modules
-`Mlc/GridTiles/Part*.lean`, arranged in eight import chains so that at most
-eight kernel checks run at once; regenerate them with
-`python3 scripts/generate_grid_tiles.py` after changing `Mlc/GridParams.lean`.
-The depth-8 check takes roughly 85 CPU minutes (about 15 minutes of wall time
-on 22 cores) and 3--5 GB of memory per running module.
+`Mlc/GridDefs.lean` defines the fixed-point critical-orbit enclosures and the
+classifier of dyadic squares; `Mlc/GridCertificate.lean` proves that a square
+whose enclosure escapes the disk of radius 2, or traps the orbit in a periodic
+invariant disk, lies outside `M` or inside `M`. The unresolved finest cells
+therefore cover `M ∖ int M`, and the same count bounds the area of every
+residual set by `unresolved_volume_le_grid`. The upper half-plane is classified
+and the lower half follows by conjugation symmetry. The count is checked by
+kernel reduction (`decide +kernel`, no `native_decide`) in the generated modules
+`Mlc/GridTiles/Part*.lean`, which import only `Mlc.GridDefs`, are arranged in
+eight import chains (at most eight kernel checks run at once), and are produced
+by `python3 scripts/generate_grid_tiles.py` from `Mlc/GridParams.lean`. The
+depth-8 check takes roughly 60--80 CPU minutes (about 10 minutes of wall time on
+22 cores) and a few GB of memory per running module.
 
 ```bash
 make build

@@ -1,4 +1,4 @@
-import Mlc.GridCertificate
+import Mlc.GridDefs
 import Mlc.GridParams
 import Mlc.GridTiles.Part24
 
@@ -12,13 +12,13 @@ run at the same time (each retains about 1 MB per classifier call).
 namespace MLC.Certified
 
 set_option maxRecDepth 100000000 in
-theorem tile_m5_5 :
-    cells gridPmax gridJ gridFuel ⟨-5, 5, 3⟩ = 698 := by
+theorem tile_m11_1 :
+    cells gridPmax gridJ gridFuel ⟨-11, 1, 3⟩ = 613 := by
   decide +kernel
 
 set_option maxRecDepth 100000000 in
-theorem tile_m2_7 :
-    cells gridPmax gridJ gridFuel ⟨-2, 7, 3⟩ = 610 := by
+theorem tile_m2_9 :
+    cells gridPmax gridJ gridFuel ⟨-2, 9, 3⟩ = 18 := by
   decide +kernel
 
 end MLC.Certified

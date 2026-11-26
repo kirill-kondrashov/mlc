@@ -1,4 +1,4 @@
-import Mlc.GridCertificate
+import Mlc.GridDefs
 import Mlc.GridParams
 
 /-!
@@ -16,23 +16,13 @@ theorem tile_m10_2 :
   decide +kernel
 
 set_option maxRecDepth 100000000 in
-theorem tile_m7_6 :
-    cells gridPmax gridJ gridFuel ⟨-7, 6, 3⟩ = 0 := by
+theorem tile_m1_2 :
+    cells gridPmax gridJ gridFuel ⟨-1, 2, 3⟩ = 0 := by
   decide +kernel
 
 set_option maxRecDepth 100000000 in
-theorem tile_m5_6 :
-    cells gridPmax gridJ gridFuel ⟨-5, 6, 3⟩ = 0 := by
-  decide +kernel
-
-set_option maxRecDepth 100000000 in
-theorem tile_m3_9 :
-    cells gridPmax gridJ gridFuel ⟨-3, 9, 3⟩ = 0 := by
-  decide +kernel
-
-set_option maxRecDepth 100000000 in
-theorem tile_p3_3 :
-    cells gridPmax gridJ gridFuel ⟨3, 3, 3⟩ = 251 := by
+theorem tile_p2_6 :
+    cells gridPmax gridJ gridFuel ⟨2, 6, 3⟩ = 0 := by
   decide +kernel
 
 end MLC.Certified

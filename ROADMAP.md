@@ -200,13 +200,13 @@ The trivial envelope is `q(R) ≤ 1`, because the Mandelbrot set is contained
 in the closed disk of radius two. The current kernel-checked envelope comes from
 the dyadic grid of `Mlc/GridCertificate.lean`: squares proved outside `M` by
 fixed-point ball arithmetic, or inside `M` by a periodic trapping disk, are
-removed, and the remaining 46605 cells of side `2^-8` in the upper
+removed, and the remaining 46011 cells of side `2^-8` in the upper
 half-plane (the lower half is the mirror image) cover `M ∖ int M`:
 
 ```text
 R ⊆ M ∖ int M
-μ*(R) ≤ 2 · 46605 / 4^8 ≈ 1.4223
-q(R) ≤ 0.1132.
+μ*(R) ≤ 2 · 46011 / 4^8 ≈ 1.4041
+q(R) ≤ 0.1117.
 ```
 
 This bound holds for every candidate system and uses no unproved input. The

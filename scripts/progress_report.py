@@ -560,8 +560,8 @@ def merge_rects(
 def grid_regions(repo_root: Path) -> list[dict[str, object]]:
     """Squares of the kernel-checked grid, exported by the Lean checker itself."""
     sources = [
-        repo_root / "Mlc" / "GridCertificate.lean",
-        repo_root / "Mlc" / "GridCertified.lean",
+        repo_root / "Mlc" / "GridDefs.lean",
+        repo_root / "Mlc" / "GridParams.lean",
         repo_root / "export_grid_regions.lean",
     ]
     if not all(path.exists() for path in sources):

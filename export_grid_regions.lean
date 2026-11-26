@@ -1,4 +1,4 @@
-import Mlc.GridCertified
+import Mlc.GridDefs
 import Mlc.GridParams
 
 /-!

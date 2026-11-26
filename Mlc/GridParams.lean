@@ -9,7 +9,7 @@ subdivisions below the root squares of side `1/8`.
 namespace MLC.Certified
 
 /-- Maximal period scanned by the trapping test. -/
-def gridPmax : Nat := 4
+def gridPmax : Nat := 6
 
 /-- Number of critical-orbit steps before the trapping test. -/
 def gridJ : Nat := 20

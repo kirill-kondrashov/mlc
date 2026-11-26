@@ -30,7 +30,8 @@ commit must strictly increase the certified resolved share and must not increase
 the dependency-graph milestone debt before Git accepts it.
 
 `generate_grid_tiles.py` regenerates `Mlc/GridTiles/Part*.lean` and
-`Mlc/GridCertified.lean` from the parameters in `Mlc/GridParams.lean`. It asks
+`Mlc/GridCertified.lean` from the parameters in `Mlc/GridParams.lean`; the tiles
+import only the computational module `Mlc/GridDefs.lean`. It asks
 `grid_tile_values.lean` for the cost and unresolved-cell count of every root
 square, distributes the expensive squares over independent modules (each
 checked by `decide +kernel`), and writes the aggregating theorem. The progress
