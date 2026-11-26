@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """Generate the kernel-check modules of the certified grid.
 
-The search program ``scripts/grid_hints.lean`` subdivides the upper half of the
-box ``[-2, 2]^2`` and writes, for every root square of side ``1/8``, a stream of
-hints (``0`` unresolved finest cell, ``1`` split, ``h >= 2`` certificate). This
-script cuts the streams into *tiles* (subtrees of bounded cost), distributes the
-tiles over independent modules ``Mlc/GridTiles/PartN.lean`` (Lake builds
-independent modules in parallel) and writes ``Mlc/GridCertified.lean``, which
-combines the per-module equalities into the final bound.
+The search program ``scripts/grid_hints.lean`` (driven by ``scripts/refine_grid.py``)
+subdivides the unresolved cells of the upper half of the box ``[-2, 2]^2`` and
+writes, for every root square of side ``1/8``, a stream of hints (``0``
+unresolved finest cell, ``1`` split, ``h >= 2`` certificate). This script cuts
+the streams into *tiles* (subtrees of bounded cost), distributes the tiles over
+independent modules ``Mlc/GridTiles/PartN.lean`` (Lake builds independent
+modules in parallel) and writes ``Mlc/GridCertified.lean``, which combines the
+per-module equalities into the final bound.
 
 The kernel evaluates ``cellsH`` on every tile, so the hints are not trusted: a
 wrong certificate only enlarges the count, and the count of every module is
 checked by ``decide +kernel``.
 
-    python3 scripts/generate_grid_tiles.py                 # run the search first
-    python3 scripts/generate_grid_tiles.py --hints FILE    # reuse its output
+    python3 scripts/generate_grid_tiles.py --hints FILE    # FILE: output of refine_grid.py
 """
 
 from __future__ import annotations
@@ -23,7 +23,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import argparse
 import re
-import subprocess
 
 CHAINS = 12  # import chains: at most this many modules are checked at once
 MODULE_COST = 4000.0  # kernel work of a module, in steps of the model
@@ -94,28 +93,6 @@ def collect_tiles(node: Node, limit: float, out: list[Node]) -> None:
             collect_tiles(child, limit, out)
 
 
-def run_search(repo: Path, fuel: int, pmax: int, steps: int, jobs: int) -> list[str]:
-    procs = [
-        subprocess.Popen(
-            [
-                "lake", "env", "lean", "--run", "scripts/grid_hints.lean",
-                str(fuel), str(pmax), str(steps), str(i), str(jobs),
-            ],
-            cwd=repo,
-            text=True,
-            stdout=subprocess.PIPE,
-        )
-        for i in range(jobs)
-    ]
-    lines: list[str] = []
-    for proc in procs:
-        out, _ = proc.communicate()
-        if proc.returncode != 0:
-            raise RuntimeError("the search failed")
-        lines += out.splitlines()
-    return lines
-
-
 def write_if_changed(path: Path, text: str) -> None:
     """Keep the modification time of unchanged files, so that Lake keeps their builds."""
     if not path.exists() or path.read_text(encoding="utf-8") != text:
@@ -136,18 +113,14 @@ def format_list(values: list[int], indent: str) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--hints", type=Path, help="output of the search program")
-    parser.add_argument("--pmax", type=int, default=8)
-    parser.add_argument("--steps", type=int, default=640)
-    parser.add_argument("--jobs", type=int, default=20)
+    parser.add_argument(
+        "--hints", type=Path, required=True, help="output of scripts/refine_grid.py"
+    )
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[1]
     params = (repo / "Mlc" / "GridParams.lean").read_text(encoding="utf-8")
     fuel = int(re.search(r"def gridFuel : Nat := (\d+)", params).group(1))
-    if args.hints:
-        lines = args.hints.read_text(encoding="utf-8").splitlines()
-    else:
-        lines = run_search(repo, fuel, args.pmax, args.steps, args.jobs)
+    lines = args.hints.read_text(encoding="utf-8").splitlines()
     roots: dict[tuple[int, int], tuple[int, list[int]]] = {}
     for line in lines:
         fields = line.split()

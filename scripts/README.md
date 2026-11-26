@@ -37,20 +37,25 @@ The repository hook runs `scripts/check_progress.py`. A staged proof-progress
 commit must strictly increase the certified resolved share and must not increase
 the dependency-graph milestone debt before Git accepts it.
 
-`grid_hints.lean` is the search program of the certified grid. For every root
-square of side `1/8` it subdivides the squares that it cannot certify and
+`grid_hints.lean` is the search program of the certified grid, compiled natively
+by `lake build gridhints`. It subdivides squares that it cannot certify and
 writes a stream of natural numbers, the hints: `0` marks an unresolved finest
 cell, `1` a split, and a larger number a certificate (outside `M` after `n`
 steps of the first-order model, or inside `M` by a moving disk of period `p`).
-`generate_grid_tiles.py` runs the search in parallel (or reads its output with
-`--hints`), cuts the streams into tiles of bounded kernel cost, distributes the
-tiles over independent modules `Mlc/GridTiles/Part*.lean` (eight import chains
+`refine_grid.py` reads the tiles of the current grid, runs the search on its
+unresolved finest cells in parallel (one level deeper), and writes the new hint
+streams; inside certificates are limited to `--cap` steps, because the kernel
+pays one step of the model for each step of a certificate. After raising
+`gridFuel` in `Mlc/GridParams.lean`, `generate_grid_tiles.py --hints FILE` cuts
+the streams into tiles of bounded kernel cost, distributes the
+tiles over independent modules `Mlc/GridTiles/Part*.lean` (twelve import chains
 bound the number of kernel checks that run at once, and each running module
 needs a few GB of memory), and writes `Mlc/GridCertified.lean`, which sums the
-counts of the modules and proves the area bound. The parameters are in
-`Mlc/GridParams.lean`. The kernel checks every certificate, so the search needs
-no proof. The progress tooling reads `gridCells` and `gridFuel` from these files
-and replays the hint streams of every commit to draw the certified region on
-the map in the Progress tab. `export_grid_regions.lean` (repository root) holds
-a copy of the first classifier, imports nothing from `Mlc`, and reproduces the
-regions of the earlier grids.
+counts of the modules and proves the area bound. The kernel checks every
+certificate, so the search needs no proof. The progress tooling reads `gridCells`
+and `gridFuel` from these files and replays the hint streams of every commit to
+draw the certified region on the map in the Progress tab. The note of a grid
+commit in the table is the line `Area-note:` of its commit message.
+`export_grid_regions.lean` (repository root) holds a copy of the first
+classifier, imports nothing from `Mlc`, and reproduces the regions of the
+earlier grids.

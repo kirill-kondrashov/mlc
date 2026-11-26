@@ -72,11 +72,23 @@ def root_streams(tiles: list[tuple[int, int, int, list[int]]]) -> dict[tuple[int
     return streams
 
 
+def expand(x, y, k, fuel, on_leaf):
+    """The stream of an unresolved leaf: its finest cells (``fuel`` levels below) are
+    replaced one by one by ``on_leaf``, so that a leaf of a coarser level (all its cells
+    stayed unresolved) is refined like the others."""
+    if fuel == 0:
+        return on_leaf(x, y, k)
+    out = [1]
+    for dx, dy in CHILDREN:
+        out += expand(2 * x + dx, 2 * y + dy, k + 1, fuel - 1, on_leaf)
+    return out
+
+
 def walk(stream, pos, x, y, k, fuel, on_leaf):
-    """Rebuild the subtree of ``(x, y, k)``; ``on_leaf`` replaces the finest leaves."""
+    """Rebuild the subtree of ``(x, y, k)``; ``on_leaf`` replaces the finest cells."""
     hint = stream[pos]
     if hint == 0 or (hint == 1 and fuel == 0):
-        return on_leaf(x, y, k, fuel), pos + 1
+        return expand(x, y, k, fuel, on_leaf), pos + 1
     if hint >= 2:
         return [hint], pos + 1
     out = [1]
@@ -120,9 +132,8 @@ def main() -> None:
 
     leaves: list[tuple[int, int, int]] = []
 
-    def collect(x, y, k, f):
-        if f == 0:
-            leaves.append((x, y, k))
+    def collect(x, y, k):
+        leaves.append((x, y, k))
         return [0]
 
     for (x, y), stream in streams.items():
@@ -134,33 +145,33 @@ def main() -> None:
     work.mkdir(parents=True, exist_ok=True)
     leaf_file = work / "leaves.txt"
     leaf_file.write_text("".join(f"{x} {y} {k}\n" for x, y, k in leaves), encoding="utf-8")
-    procs = [
-        subprocess.Popen(
-            [
-                str(binary), "1", str(args.pmax), str(args.steps), str(args.cap), "0",
-                str(i), str(args.jobs), str(leaf_file),
-            ],
-            text=True,
-            stdout=subprocess.PIPE,
-        )
-        for i in range(args.jobs)
-    ]
+    outputs = [work / f"search_{i}.txt" for i in range(args.jobs)]
+    procs = []
+    for i, path in enumerate(outputs):
+        with path.open("w", encoding="utf-8") as handle:
+            procs.append(
+                subprocess.Popen(
+                    [
+                        str(binary), "1", str(args.pmax), str(args.steps), str(args.cap), "0",
+                        str(i), str(args.jobs), str(leaf_file),
+                    ],
+                    text=True,
+                    stdout=handle,
+                )
+            )
     refined: dict[tuple[int, int, int], list[int]] = {}
-    for proc in procs:
-        out, _ = proc.communicate()
-        if proc.returncode != 0:
+    for proc, path in zip(procs, outputs):
+        if proc.wait() != 0:
             sys.exit("the search failed")
-        for line in out.splitlines():
+        for line in path.read_text(encoding="utf-8").splitlines():
             fields = line.split()
             if fields and fields[0] == "L":
                 hints = [int(v) for v in fields[5:]]
-                if hints[0] == 1 and not any(hints[1:]):
-                    hints = [0]
                 refined[(int(fields[1]), int(fields[2]), int(fields[3]))] = hints
     assert len(refined) == len(leaves), "missing refinements"
 
-    def replace(x, y, k, f):
-        return refined[(x, y, k)] if f == 0 else [0]
+    def replace(x, y, k):
+        return refined[(x, y, k)]
 
     lines = []
     new_total = 0

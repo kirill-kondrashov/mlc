@@ -12,10 +12,10 @@ the number of kernel checks that run at the same time.
 namespace MLC.Certified
 
 def partTiles_594 : List (Sq × List ℕ) :=
-  [(⟨-27, 93, 7⟩,
-    [1, 154003, 82329, 133527, 72089]),
-  (⟨-13, 46, 6⟩,
-    [1, 71843, 28569, 51607, 25767])]
+  [(⟨-92, 15, 7⟩,
+    [1, 1, 204889, 163933, 204891, 163933, 143611, 1, 204891, 164413, 204891, 204889, 153691]),
+  (⟨-91, 15, 7⟩,
+    [1, 122971, 102491, 122971, 102651])]
 
 set_option maxRecDepth 100000000 in
 theorem part_594 :

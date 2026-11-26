@@ -11,7 +11,7 @@ raises `gridFuel` by one.
 namespace MLC.Certified
 
 /-- Number of subdivisions below the root squares of side `1/8`. -/
-def gridFuel : Nat := 7
+def gridFuel : Nat := 8
 
 /-- Depth of the finest cells, `3 + gridFuel`. -/
 def gridDepth : Nat := 3 + gridFuel

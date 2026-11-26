@@ -12,13 +12,12 @@ the number of kernel checks that run at the same time.
 namespace MLC.Certified
 
 def partTiles_641 : List (Sq × List ℕ) :=
-  [(⟨-3, 79, 7⟩,
-    [1, 1, 143533, 143773, 164013, 164253, 1, 153773, 153773, 204969, 204969, 1, 204971, 204971,
-     245923, 0, 1, 204971, 245927, 0, 0])]
+  [(⟨-87, 30, 7⟩,
+    [1, 153851, 123371, 164329, 133611])]
 
 set_option maxRecDepth 100000000 in
 theorem part_641 :
-    (partTiles_641.map fun p => cellsH (gridDepth - p.1.k) p.1 p.2).sum = 12 := by
+    (partTiles_641.map fun p => cellsH (gridDepth - p.1.k) p.1 p.2).sum = 0 := by
   decide +kernel
 
 end MLC.Certified

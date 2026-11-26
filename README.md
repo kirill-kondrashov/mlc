@@ -83,9 +83,10 @@ lie outside `M` or inside `M`. The unresolved finest cells therefore cover
 lower half follows by conjugation symmetry. The count is checked by kernel
 reduction (`decide +kernel`, no `native_decide`) in the generated modules
 `Mlc/GridTiles/Part*.lean`, which import only `Mlc.GridDefs`, are arranged in
-eight import chains (at most eight kernel checks run at once), and are produced
-by `python3 scripts/generate_grid_tiles.py` from `Mlc/GridParams.lean`. The
-depth-10 check takes about 2 CPU hours (about 13 minutes of wall time
+twelve import chains (at most twelve kernel checks run at once), and are produced
+by `python3 scripts/refine_grid.py` and `python3 scripts/generate_grid_tiles.py`
+from `Mlc/GridParams.lean`. The
+depth-11 check takes about 7 CPU hours (about 40 minutes of wall time
 on 22 cores) and about 2.5 GB of memory per running module; a smaller machine
 needs fewer import chains (`CHAINS` in the generator).
 
