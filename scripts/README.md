@@ -33,9 +33,10 @@ priors. The share `100%` corresponds to `R = ∅` (MLC), but a nonempty `R` of
 measure zero would also give it, so the share is read with the count of open
 root obligations.
 
-The repository hook runs `scripts/check_progress.py`. A staged proof-progress
-commit must strictly increase the certified resolved share and must not increase
-the dependency-graph milestone debt before Git accepts it.
+The repository hook runs `scripts/check_progress.py`. A commit that stages Lean
+sources (`Mlc.lean`, `Mlc/**/*.lean`) must strictly increase the certified
+resolved share and must not increase the dependency-graph milestone debt before
+Git accepts it; commits that stage only documents and scripts pass unchecked.
 
 `grid_hints.lean` is the search program of the certified grid, compiled natively
 by `lake build gridhints`. It subdivides squares that it cannot certify and

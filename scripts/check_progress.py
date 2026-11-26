@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
 import sys
 
 from progress_report import (
@@ -12,8 +13,27 @@ from progress_report import (
 )
 
 
+def staged_lean_sources(repo_root: Path) -> list[str]:
+    """Staged paths of the Lean proof (``Mlc.lean`` and ``Mlc/**/*.lean``)."""
+    proc = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--no-renames"],
+        cwd=repo_root,
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    return [
+        path
+        for path in proc.stdout.splitlines()
+        if path.endswith(".lean") and (path.startswith("Mlc/") or path == "Mlc.lean")
+    ]
+
+
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[1]
+    if not staged_lean_sources(repo_root):
+        print("No staged Lean sources: the progress check applies to proof changes.")
+        return 0
     head = progress_metrics_from_ref(repo_root, "HEAD")
     staged = staged_progress_metrics(repo_root)
     head_debt = float(head["debt_percent"])

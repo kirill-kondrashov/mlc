@@ -1222,12 +1222,14 @@ def map_layers(
                 depth_text = (
                     f"{grid['finest']}" if grid.get("format") == "blocks" else f"{grid['depth']}"
                 )
+                staged = re.match(r"Depth \d+ for (.+?)\.(?:\s|$)", str(row.get("area_note", "")))
+                region_text = f" for {staged.group(1)}" if staged else ""
                 layers.append(
                     {
                         "sha": row["sha"],
                         "color": str(layer["color"]),
                         "title": (
-                            f"Kernel-checked grid of depth {depth_text}: {how} · "
+                            f"Kernel-checked grid of depth {depth_text}{region_text}: {how} · "
                             + MAP_MEANING["interior"]
                         ),
                         "regions": regions[:1],
